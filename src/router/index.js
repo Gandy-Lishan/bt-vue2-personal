@@ -1,0 +1,44 @@
+import Vue from 'vue'
+import Router from 'vue-router'
+import Login from '../components/login.vue'
+import Home from '../components/home.vue'
+import Welcome from '../components/welcome.vue'
+import Users from '../components/user/Users.vue'
+import Signal from '../components/signal.vue'
+import OpenDialog from '../components/openDialog.vue'
+import Favorite from '../components/user/favorite.vue'
+import CustomSignal from '../components/user/custom.vue'
+// import { component } from 'vue/types/umd'
+Vue.use(Router)
+const router = new Router({
+  routes: [
+    { path: '/', redirect: '/login' },
+    { path: '/login', component: Login },
+    {
+      path: '/home',
+      component: Home,
+      redirect: '/welcome',
+      children: [
+        { path: '/welcome', component: Welcome},
+        { path: '/users', component: Users },
+        { path: '/signal', component: Signal },
+        { path: '/openDialog', component: OpenDialog },
+        { path: '/favorite', component: Favorite },
+        { path: '/custom', component: CustomSignal }
+      ]
+    },
+  ]
+})
+// 挂载路由导航守卫
+// 路由导航守卫控制访问权限
+// router.beforeEach((to, from, next) => {
+// to代表将要访问的路径
+// from表示从哪个路径跳转过来
+// next是一个函数，表示放行 next()放行 next('/login')强制跳转的路径
+// 获取token
+//   if (to.path === '/login') return next()
+//   const tokenStr = window.sessionStorage.getItem('token')
+//   if (!tokenStr) return next('/login')
+//   next()
+// })
+export default router
