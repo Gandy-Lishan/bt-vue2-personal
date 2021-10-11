@@ -68,7 +68,6 @@ export default {
   methods: {
     // 点击重置按钮，重置表单
     resetLoginForm() {
-      console.log(this.$refs.loginFormRef)
       // this.$refs.loginFormRef.resetFields()
       this.$router.push('/welcome')
       this.$message.success('登录成功')

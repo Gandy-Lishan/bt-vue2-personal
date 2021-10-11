@@ -145,7 +145,6 @@ export default {
       const lists = this.open_formdata
       this.initialFromData['name'] = lists.name
       this.initialFromData['description'] = lists.description
-      console.log('intial_formDate',this.initialFromData)
       const res = await this.$http.get('/demo/condition/', {
         params: {id: id}
       })

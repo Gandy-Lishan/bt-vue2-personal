@@ -3,11 +3,10 @@ import Router from 'vue-router'
 import Login from '../components/login.vue'
 import Home from '../components/home.vue'
 import Welcome from '../components/welcome.vue'
-import Users from '../components/user/Users.vue'
-import Signal from '../components/signal.vue'
-import OpenDialog from '../components/openDialog.vue'
-import Favorite from '../components/user/favorite.vue'
-import CustomSignal from '../components/user/custom.vue'
+import Signal from '../components/signal/signal_index/signal.vue'
+import OpenDialog from '../components/signal/signal_components/openDialog.vue'
+import Favorite from '../components/signal/signal_index/favorite.vue'
+import CustomSignal from '../components/signal/signal_index/custom.vue'
 // import { component } from 'vue/types/umd'
 Vue.use(Router)
 const router = new Router({
@@ -20,7 +19,6 @@ const router = new Router({
       redirect: '/welcome',
       children: [
         { path: '/welcome', component: Welcome},
-        { path: '/users', component: Users },
         { path: '/signal', component: Signal },
         { path: '/openDialog', component: OpenDialog },
         { path: '/favorite', component: Favorite },

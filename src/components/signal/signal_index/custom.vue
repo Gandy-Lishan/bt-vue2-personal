@@ -5,18 +5,12 @@
     <el-card>
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '#' }">Signals</el-breadcrumb-item>
-        <el-breadcrumb-item>Favorite Signals</el-breadcrumb-item>
+        <el-breadcrumb-item>Custom Signals</el-breadcrumb-item>
       </el-breadcrumb>
       <!-- 表格区域 -->
-      <el-table :data="favoriteList" border stripe size="mini">
+      <el-table :data="customList" border stripe size="mini">
         <el-table-column label="" type="index" align="center"></el-table-column>
         <el-table-column label="type" prop="type" align="center" width="80px">
-        </el-table-column>
-        <el-table-column label="source" prop="user" align="center" width="80px">
-          <template slot-scope="scope">
-            <span v-if="scope.row.user === 'admin'">system</span>
-            <span v-else>custom</span>
-          </template>
         </el-table-column>
         <el-table-column
           label="analysis basis"
@@ -40,6 +34,20 @@
         ></el-table-column>
         <el-table-column label="frequency" prop="frequency" align="center">
         </el-table-column>
+        <el-table-column label="delete" align="center">
+          <template slot-scope="scope">
+          <span v-if="scope.row.favorites" @click="deleteCustomSignal(scope.row)">
+            <i class="el-icon-delete"></i>
+          </span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center">
+          <template slot-scope="scope">
+            <el-button @click="showDialog(scope.row.id, scope.row)"
+              >open</el-button
+            >
+          </template>
+      </el-table-column>
         <!-- <el-table-column
           label="winrate percentage"
           prop="winrate_percentage"
@@ -50,18 +58,10 @@
           prop="risk_reward_ratio"
           align="center"
         ></el-table-column> -->
-        <el-table-column align="center">
-        <template slot-scope="scope">
-          <el-button @click="showDialog(scope.row.id, scope.row)"
-            >open</el-button
-          >
-        </template>
-      </el-table-column>
       </el-table>
-      <!-- 若表格数据过多可以增加分页区域 -->
       <el-pagination
         @current-change="handleCurrentChange"
-        :current-page="page"
+        :current-page="this.queryInfo.page"
         :page-size="10"
         layout="total, prev, pager, next, jumper"
         :total="total"
@@ -72,33 +72,44 @@
   </div>
 </template>
 <script>
-import openFavorite from '../openFavorite.vue'
+import openFavorite from '../signal_components/openFavorite.vue'
 export default {
   data() {
     return {
-      page: 1,
       total: 0,
-      favoriteList: [],
+      customList: [],
+      queryInfo: {
+        page: 1
+      },
       dialogFormVisible: false
     }
   },
   created() {
-    this.getFavoriteList()
+    this.getCustomList("custom_signal")
   },
   methods: {
-    async getFavoriteList() {
-      const { data: res } = await this.$http.get('/demo/signal/?favorites=true')
+    async getCustomList(user) {
+      this.queryInfo.user = user
+      const { data: res } = await this.$http.get('/demo/signal/', {
+        params: this.queryInfo
+      })
       // if (res.meta.status !== 200) {
       //   return this.$message.error('获取信号列表失败')
       // }
-      console.log('favorite',res)
-      this.favoriteList = res.results
-      console.log('favoriteList', this.favoriteList)
+      this.customList = res.results
       this.total = res.count
     },
     handleCurrentChange(newpage) {
-      this.page = newpage
-      this.getFavoriteList()
+      this.queryInfo.page = newpage
+      this.getCustomList("custom_signal")
+    },
+    async deleteCustomSignal(row){
+      const { data: res } = await this.$http.delete('/demo/signal/'+row.id+"/")
+      this.$message.success({
+           message: 'Successfully deleted',
+           duration: 1000
+         })
+       this.getCustomList("custom_signal")
     },
     showDialog(id,params){
       this.$refs.child.openDialog(id,params)

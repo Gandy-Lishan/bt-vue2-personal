@@ -175,9 +175,7 @@
 </div>
 </template>
 <script>
-
-import CustomDialog from './custom_dialog/index.vue'
-import signalTable from "./signalTable"
+import signalTable from "../signal_components/signalTable.vue"
 export default {
   name: 'signal',
   data() {
@@ -255,7 +253,6 @@ export default {
       //   return this.$message.error('获取信号列表失败')
       // }
       this.signalList = res.results
-      console.log(this.signalList)
       if(res.results.length <= 0){
         this.loading = false
          this.$message.success({
@@ -297,7 +294,6 @@ export default {
                   username: 'demo01',
                   password: 'admin123456'
                 }})
-                console.log('create',res);
                 this.getSignallist()
                 this.dialogFormVisible = false
                 this.$message.success({
@@ -339,7 +335,7 @@ export default {
     const addFavoritesData = row
     const vm = this
     if(addFavoritesData.favorites){
-    this.$http.put('/demo/signal/'+row.id+"/",vm.$qs.stringify(addFavoritesData)).then(res => {console.log(res)}).catch(error => {console.log(error);})
+    this.$http.put('/demo/signal/'+row.id+"/",vm.$qs.stringify(addFavoritesData)).then(res => {}).catch(error => {console.log(error);})
     }
   },
   removeFavorites(row){
