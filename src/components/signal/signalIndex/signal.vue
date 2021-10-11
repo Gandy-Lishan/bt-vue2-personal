@@ -175,7 +175,7 @@
 </div>
 </template>
 <script>
-import signalTable from "../signal_components/signalTable.vue"
+import signalTable from "../signalComponents/signalTable.vue"
 export default {
   name: 'signal',
   data() {

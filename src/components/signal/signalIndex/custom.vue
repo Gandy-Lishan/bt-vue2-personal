@@ -72,7 +72,7 @@
   </div>
 </template>
 <script>
-import openFavorite from '../signal_components/openFavorite.vue'
+import openFavorite from '../signalComponents/openFavorite.vue'
 export default {
   data() {
     return {
