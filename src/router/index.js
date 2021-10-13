@@ -7,7 +7,10 @@ import Signal from '../components/signal/signalIndex/signal.vue'
 import OpenDialog from '../components/signal/signalComponents/openDialog.vue'
 import Favorite from '../components/signal/signalIndex/favorite.vue'
 import CustomSignal from '../components/signal/signalIndex/custom.vue'
-// import { component } from 'vue/types/umd'
+import FavoriteStrategies from '../components/stategy/strategyIndex/favoriteStrategies.vue'
+import OpenedStrategy from '../components/stategy/strategyIndex/openedStrategy.vue'
+import SystemStrategies from '../components/stategy/strategyIndex/systemStrategies.vue'
+import NewStrategy from '../components/stategy/strategyIndex/newStrategy.vue'
 Vue.use(Router)
 const router = new Router({
   routes: [
@@ -22,7 +25,11 @@ const router = new Router({
         { path: '/signal', component: Signal },
         { path: '/openDialog', component: OpenDialog },
         { path: '/favorite', component: Favorite },
-        { path: '/custom', component: CustomSignal }
+        { path: '/custom', component: CustomSignal },
+        { path: '/favoriteStrategies', component: FavoriteStrategies },
+        { path: '/openedStrategy', component: OpenedStrategy },
+        { path: '/newStrategy', component: NewStrategy },
+        { path: '/systemStrategies', component: SystemStrategies },
       ]
     },
   ]

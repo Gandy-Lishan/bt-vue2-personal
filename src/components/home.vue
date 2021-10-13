@@ -101,6 +101,32 @@ export default {
               path: 'custom'
             }
           ]
+        },
+        {
+          id: 1,
+          authName: 'Strategy',
+          children: [
+            {
+              id: 0,
+              authName: 'Opened Strategy',
+              path: 'openedStrategy'
+            },
+            {
+              id: 1,
+              authName: 'New Strategy',
+              path: 'newStrategy'
+            },
+            {
+              id: 2,
+              authName: 'System Strategies',
+              path: 'systemStrategies'
+            },
+            {
+              id: 3,
+              authName: 'My Favorite Strategies',
+              path: 'favoriteStrategies'
+            }
+          ]
         }
       ],
       isCollapse: false,
