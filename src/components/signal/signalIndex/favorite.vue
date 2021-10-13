@@ -50,6 +50,13 @@
           prop="risk_reward_ratio"
           align="center"
         ></el-table-column> -->
+        <el-table-column label="delete" align="center">
+          <template slot-scope="scope">
+          <span v-if="scope.row.favorites" @click="deleteFavoriteSignal(scope.row)">
+            <i class="el-icon-delete"></i>
+          </span>
+          </template>
+        </el-table-column>
         <el-table-column align="center">
         <template slot-scope="scope">
           <el-button @click="showDialog(scope.row.id, scope.row)"
@@ -102,6 +109,14 @@ export default {
     showDialog(id,params){
       this.$refs.child.openDialog(id,params)
       this.dialogFormVisible = true
+    },
+    async deleteFavoriteSignal(row){
+      const { data: res } = await this.$http.delete('/demo/signal/'+row.id+"/")
+      this.$message.success({
+           message: 'Successfully deleted',
+           duration: 1000
+         })
+       this.getFavoriteList()
     }
   },
   components: {
