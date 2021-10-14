@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-table :data="signalList" border stripe size="mini">
-      <el-table-column label="" type="index" align="center"></el-table-column>
+      <el-table-column label="" align="center" prop="id" width="40px"></el-table-column>
       <el-table-column
         label="favorite"
         align="center"
-        width="55px"
+        width="70px"
         prop="favorites"
       >
         <!-- <template slot-scope="scope">
@@ -27,6 +27,7 @@
         label="analysis basis"
         prop="analysis_basis"
         align="center"
+        width="110px"
       ></el-table-column>
       <el-table-column
         label="name"
@@ -43,7 +44,7 @@
         prop="description"
         align="center"
       ></el-table-column>
-      <el-table-column label="frequency" prop="frequency" align="center">
+      <el-table-column label="frequency" prop="frequency" align="center" width="100px">
       </el-table-column>
       <!-- <el-table-column
         label="winrate percentage"
@@ -55,7 +56,7 @@
         prop="risk_reward_ratio"
         align="center"
       ></el-table-column> -->
-      <el-table-column align="center">
+      <el-table-column align="center" width="100px">
         <template slot-scope="scope">
           <el-button @click="openDialog(scope.row.id, scope.row)"
             >open</el-button
@@ -111,7 +112,7 @@ export default {
     removeFavorites(row) {
       this.$emit('removeFavorites', row)
     },
-  },
+  }
 }
 </script>
 <style scoped>

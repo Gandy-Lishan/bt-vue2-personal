@@ -25,3 +25,6 @@ html, body, #app {
 .right .el-form div .el-form-item .el-form-item__content{
   margin-left: 0px !important;
 }
+.el-dialog__wrapper .el-dialog{
+  width: 900px !important;
+}

@@ -6,7 +6,8 @@
           <el-breadcrumb-item>New Stategy</el-breadcrumb-item>
       </el-breadcrumb>
       <!-- signalDialog -->
-      <signal-dialog :dialogTableVisible="dialogTableVisible" @openSignalDialog='openSignalDialog'></signal-dialog>
+      <signal-dialog :type="entryType"  :dialogTableVisible="entryDialogTableVisible" @openDialog="openEntryDialog" @setEntryData='setEntryData'></signal-dialog>
+      <signal-dialog :type="exitType"  :dialogTableVisible="exitDialogTableVisible" @openDialog="openExitDialog" @setEntryData='setExitData'></signal-dialog>
       <div class="btns">
         <el-row>
           <el-button size="mini">Back</el-button>
@@ -41,7 +42,7 @@
         <div class="entryForm">
           <el-form ref="form" :model="entryFormdata" label-width="90px" label-position="left">
             <el-form-item label="Action" size="mini">
-                <el-select v-model="entryFormdata.valueEntry" >
+                <el-select v-model="entryType" @change="selectEntryAction(entryFormdata.valueEntry)" placeholder="Please select">
                   <el-option
                     v-for="item in entryFormdata.actionEntry"
                     :key="item.value"
@@ -51,16 +52,18 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="Entry" size="mini">
-                <el-button class="entryBtn" @click="openSignalDialog">{{entryFormdata.entry[0].label}}</el-button>
+                <el-button class="entryBtn" v-on:click="openEntryDialog">{{entryFormdata.entry[0].label}}</el-button>
             </el-form-item>
+                  <!-- entryDataForm -->
+              <entry-data-form  ref="entryDataFrom" :entryData="entryData"></entry-data-form>
           </el-form>
         </div>
         <div class="exitForm">
           <el-form ref="form" :model="entryFormdata" label-width="90px" label-position="left">
             <el-form-item label="Action" size="mini">
-              <el-select v-model="entryFormdata.valueExit">
+              <el-select v-model="exitType"  @change="selectExitAction(entryFormdata.valueExit)" placeholder="Pleace select">
                 <el-option
-                  v-for="(item, index) in entryFormdata.actionExit"
+                  v-for="(item, index) in entryFormdata.exit"
                   :key="index"
                   :label="item.label"
                   :value="item.value">
@@ -68,8 +71,10 @@
               </el-select>
             </el-form-item>
             <el-form-item label="Exit" size="mini">
-              <el-button class="entryBtn">{{entryFormdata.entry[0].label}}</el-button>
+              <el-button class="entryBtn" v-on:click="openExitDialog">{{entryFormdata.entry[0].label}}</el-button>
             </el-form-item>
+              <!-- exitDataForm -->
+              <exit-data-form ref="exitDataFrom" :exitData="exitData"></exit-data-form>
           </el-form>
         </div>
       </div>
@@ -78,6 +83,8 @@
 </template>
 <script>
 import signalDialog from '../strategyComponents/signalDialog.vue'
+import entryDataForm from '../strategyComponents/entryDataForm.vue'
+import exitDataForm from '../strategyComponents/exitDataForm.vue'
 export default {
    name: 'newStategy',
   data() {
@@ -102,61 +109,100 @@ export default {
         name: '',
         discription: ''
       },
+      entryType: '',
+      exitType: '',
       entryFormdata: {
         entry: [{
           label: 'Browse from signal List',
           value: 'Browse from signal List'
         }],
-        actionEntry: [{label:'Long',value: '1'},{label:'Short',value: '2'}],
-        actionExit: [{label:'Long',value: '1'},{label:'Short',value: '2'}],
-        valueEntry: 'Long',
-        valueExit: 'Short'
+        actionEntry: [{label:'Long',value: 'long'},{label:'Short',value: 'short'}],
+        actionExit: [{label:'Long',value: 'long'},{label:'Short',value: 'short'},{label:'Shortexit',value: 'shortexit'},{label:'Longexit',value: 'longexit'}],
+        valueEntry: '',
+        valueExit: '',
+      exit:[],
         },
-        dialogTableVisible: false
+        entryData:{},
+        exitData: {},
+        entryDialogTableVisible: false,
+        exitDialogTableVisible:false
       }
     },
   methods: {
-    openSignalDialog() {
-      this.dialogTableVisible = true
-      console.log('opened');
+    async setEntryData(data){
+       const res = await this.$http.get('/demo/condition/', {
+        params: {id: data.id}
+      })
+      data.conditions = res.data.results;
+      this.entryData = data;
+      // this.$refs.entryDataFrom.openDialog(data);
+    },
+    async setExitData(data){
+      const res = await this.$http.get('/demo/condition/', {
+        params: {id: data.id}
+      });
+      data.conditions = res.data.results;
+      this.exitData = data;
+;
+    },
+    openEntryDialog() {
+      this.entryDialogTableVisible  = !this.entryDialogTableVisible
+    },
+    openExitDialog() {
+      this.exitDialogTableVisible  = !this.exitDialogTableVisible
+    },
+    selectEntryAction(value) {
+      var data = {
+        long:[{label:'Longexit',value: 'longexit'},{label:'Short',value: 'short'}],
+        short:[{label:'Shortexit',value: 'shortexit'},{label:'Long',value: 'long'}]
+      }
+      this.valueEntry = value
+      console.log(value);
+      if(value === 'long'){
+        this.entryFormdata.exit = data.long
+      }else{
+        this.entryFormdata.exit = data.short
+      }
+      this.entryFormdata.valueExit = ""
+    },
+    selectExitAction(value) {
+      console.log(value);
     }
   },
   components: {
-    'signal-dialog': signalDialog
+    'signal-dialog': signalDialog,
+    'entry-data-form': entryDataForm,
+    'exit-data-form': exitDataForm
   }
 }
 </script>
 <style scoped>
 .btns{
   position: absolute;
-  left: 825px;
+  left: 997px;
   top: 102px;
 }
 .newStategyForm{
   display: flex;
-  width: 900px;
   margin: 0 auto;
   margin-top: 40px;
 }
 .nameForm{
-  width: 273px;
+  width: 353px;
   margin-right: 20px;
   border: 1px solid #666;
-  flex-grow: 1;
   padding: 10px;
 }
 .entryForm{
-  width: 273px;
+  width: 353px;
   padding: 50px 0px 0px 0px;
-  flex-grow: 1;
   padding: 10px;
   border: 1px solid #666;
   margin-right: 20px
 }
 .exitForm{
-  width: 273px;
+  width: 353px;
   padding: 50px 0px 0px 0px;
-  flex-grow: 1;
   padding: 10px;
   border: 1px solid #666;
 }

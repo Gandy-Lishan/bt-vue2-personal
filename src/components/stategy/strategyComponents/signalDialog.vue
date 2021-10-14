@@ -1,12 +1,30 @@
 <template>
-  <el-dialog title="signalList" :visible.sync="dialogTableVisible">
+<div class="signalDialog">
+  <el-dialog @open='getList' title="signalList" :visible.sync="dialogTableVisible" :before-close='closeDialog'>
     <el-table :data="signalList" border stripe size="mini">
-      <el-table-column label="type" prop="type" align="center">
+      <el-table-column  width="50px">
+          <!-- <template slot-scope="scope">
+          <el-checkbox  v-model="value" :label="scope.row.id" change="checkEntry(scope)"></el-checkbox>
+          </template> -->
+          <template slot-scope="scope">
+            <el-radio v-model="radio" @change="checkEntry(scope.row)" :label="scope.row.id">{{ '' }}</el-radio>
+              <!-- <el-radio-group v-model="radio">
+    <el-radio :label="scope.row.id">{{""}}</el-radio>
+  </el-radio-group> -->
+          </template>
+      </el-table-column>
+      <!-- <el-table-column label="select">
+        <template slot-scope="scope">
+          <el-button @click="selectSignal(scope.row)"></el-button>
+        </template>
+      </el-table-column> -->
+      <el-table-column label="type" prop="type" align="center" width="60px">
       </el-table-column>
        <el-table-column
         label="analysis basis"
         prop="analysis_basis"
         align="center"
+        width="105px"
       ></el-table-column>
       <el-table-column
         label="name"
@@ -18,40 +36,47 @@
         prop="used_indicators"
         align="center"
       ></el-table-column>
-      <el-table-column label="frequency" prop="frequency" align="center">
+      <el-table-column label="frequency" prop="frequency" align="center" width="80px">
       </el-table-column>
     </el-table>
 </el-dialog>
+</div>
 </template>
 <script>
 export default {
-    props: {
-      dialogTableVisible: Boolean
-    },
+  props: {
+      dialogTableVisible: Boolean,
+      type: String
+       },
+  name: 'signal-dialog',
   data(){
     return {
-      signalList: [],
-      user: ''
+      signalList: [{entryChecked: false}],
+      queryInfo: {
+        type: this.type
+      },
+      radio: ""
     }
   },
-  created() {
-    this.getSignallist("system")
-  },
   methods: {
+    getList(){
+      this.getSignallist("system");
+    },
     async getSignallist(user) {
       this.signalList = []
+      console.log("aaa");
       this.loading = true
-      this.user = user
+      this.queryInfo.type = this.type
+      this.queryInfo.user = user
       const { data: res } = await this.$http.get('/demo/signal/',
        {
         params: this.queryInfo
       }
       )
-      console.log('11111',res);
       // if (res.status !== 200) {
       //   return this.$message.error('获取信号列表失败')
       // }
-      this.signalList = res.results
+      this.signalList = this.signalList.concat(res.results)
       if(res.results.length <= 0){
         this.loading = false
          this.$message.success({
@@ -59,10 +84,24 @@ export default {
            duration: 1000
          })
       }
-      this.total = res.count
+      // this.total = res.count
       this.loading = false
 
-    }
+    },
+    closeDialog(){
+      this.$emit('openDialog')
+    },
+    checkEntry(scope){
+      this.$emit("setEntryData",(scope))
+      this.closeDialog()
+      this.signalList.entryChecked = !this.signalList.entryChecked
+      // console.log(id);
+    },
+    // selectSignal(row){
+    //   console.log(row);
+    // }
   }
 }
 </script>
+<style scoped>
+</style>

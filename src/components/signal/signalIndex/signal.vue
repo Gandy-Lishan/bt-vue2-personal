@@ -271,6 +271,7 @@ export default {
     },
     getFilterList(even) {
       this.queryInfo.type = even.name
+      this.queryInfo.page = 1
       this.getSignallist("system")
     },
     // 提交表单：验证提交的是否与原来的相等以及value的值是否为空
