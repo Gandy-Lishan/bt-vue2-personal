@@ -109,9 +109,9 @@ export default {
           })
       
     },
-    removeFavorites(row) {
-      this.$emit('removeFavorites', row)
-    },
+    // removeFavorites(row) {
+    //   this.$emit('removeFavorites', row)
+    // },
   }
 }
 </script>

@@ -11,7 +11,7 @@
       <div class="btns">
         <el-row>
           <el-button size="mini">Back</el-button>
-          <el-button size="mini">Save</el-button>
+          <el-button size="mini" @click="saveStrategyData">Save</el-button>
           <el-button size="mini">Apply in main chart</el-button>
           <el-button size="mini">Backtest Strategy</el-button>
         </el-row>
@@ -20,15 +20,16 @@
         <div class="nameForm">
           <p>Name/Description</p>
           <el-form
-            ref="form"
+           :rules="nameFormdataRules"
+            ref="nameForm"
             :model="nameFormdata"
             label-width="80px"
             label-position="left"
           >
-            <el-form-item label="Name:">
+            <el-form-item label="Name:" prop="name">
               <el-input v-model="nameFormdata.name"  size="mini"></el-input>
             </el-form-item>
-            <el-form-item label="Description:">
+            <el-form-item label="Description:" prop="description">
               <el-input
                 v-model="nameFormdata.description"
                 size="mini"
@@ -40,9 +41,9 @@
           </el-form>
         </div>
         <div class="entryForm">
-          <el-form ref="form" :model="entryFormdata" label-width="90px" label-position="left">
+          <el-form ref="entryForm" :model="entryFormdata" label-width="90px" label-position="left">
             <el-form-item label="Action" size="mini">
-                <el-select v-model="entryType" @change="selectEntryAction(entryFormdata.valueEntry)" placeholder="Please select">
+                <el-select v-model="entryType" @change="selectEntryAction(entryType)" placeholder="Please select">
                   <el-option
                     v-for="item in entryFormdata.actionEntry"
                     :key="item.value"
@@ -59,9 +60,9 @@
           </el-form>
         </div>
         <div class="exitForm">
-          <el-form ref="form" :model="entryFormdata" label-width="90px" label-position="left">
+          <el-form ref="exitForm" :model="entryFormdata" label-width="90px" label-position="left">
             <el-form-item label="Action" size="mini">
-              <el-select v-model="exitType"  @change="selectExitAction(entryFormdata.valueExit)" placeholder="Pleace select">
+              <el-select v-model="exitType"  @change="selectExitAction(exitType)" placeholder="Pleace select">
                 <el-option
                   v-for="(item, index) in entryFormdata.exit"
                   :key="index"
@@ -89,25 +90,23 @@ export default {
    name: 'newStategy',
   data() {
     const validateName = (rule, value, callback) => {
-      if (value === '') {
+      if (value === '' | (value === undefined)) {
         callback(new Error('Enter name is empty'))
-      }
-      if(value === this.nameFormdata.name){
-        callback(new Error('Name already exists'))
       }
     }
     const validateDes = (rule, value, callback) => {
       if ((value === '') | (value === undefined)) {
         callback(new Error('Input description is empty'))
       }
-      if(value === this.nameFormdata.description){
-        callback(new Error('Discription already exists'))
-      }
     }
     return {
       nameFormdata: {
         name: '',
-        discription: ''
+        description: ''
+      },
+      nameFormdataRules: {
+        name: [{ validator: validateName, trigger: 'blur' }],
+        description: [{ validator: validateDes, trigger: 'blur' }]
       },
       entryType: '',
       exitType: '',
@@ -121,6 +120,10 @@ export default {
         valueEntry: '',
         valueExit: '',
       exit:[],
+        },
+        strategyData:{ 
+        signal_entry: {},
+        signal_exit: {},
         },
         entryData:{},
         exitData: {},
@@ -157,7 +160,6 @@ export default {
         short:[{label:'Shortexit',value: 'shortexit'},{label:'Long',value: 'long'}]
       }
       this.valueEntry = value
-      console.log(value);
       if(value === 'long'){
         this.entryFormdata.exit = data.long
       }else{
@@ -166,7 +168,51 @@ export default {
       this.entryFormdata.valueExit = ""
     },
     selectExitAction(value) {
-      console.log(value);
+      this.valueExit = value
+    },
+    saveStrategyData() {
+      const nameForm = this.nameFormdata
+      this.strategyData.name = this.nameFormdata.name
+      this.strategyData.description = this.nameFormdata.description
+      this.strategyData.signal_entry = this.entryData
+      this.strategyData.signal_exit = this.exitData
+      this.strategyData.signal_entry.entryAction = this.valueEntry
+      this.strategyData.signal_exit.exitAction = this.valueExit
+      var params =
+          {name: this.strategyData.name,
+          description: this.strategyData.description,
+          signal_entry: JSON.stringify(this.strategyData.signal_entry),
+          signal_exit: JSON.stringify(this.strategyData.signal_exit),
+          user: ''
+          }
+      if((this.valueEntry === '' || this.valueExit === '') || (this.valueEntry === undefined || this.valueExit === undefined)){
+            this.$message.error({
+            message: 'Please select action',
+            duration: 1000
+          })
+          return
+      }
+      if(this.entryData.id === undefined){
+          this.$message.error({
+            message: 'Please select entry signal',
+            duration: 1000
+          })
+           return
+      }
+      if(this.exitData.id === undefined){
+          this.$message.error({
+            message: 'Please select exit signal',
+            duration: 1000
+          })
+           return
+      }
+    const vm = this
+    this.$http.post('/demo/strategies/',vm.$qs.stringify(params),{auth:{
+        username: 'sentimentrader_backtest_api',
+        password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+      }}).then(res => {console.log(res);}).catch(error => {
+      console.log(error);
+      })
     }
   },
   components: {

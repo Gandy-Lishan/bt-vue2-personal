@@ -23,7 +23,7 @@
               resize="none"
             ></el-input>
           </el-form-item>
-          <el-form-item label="Type:">
+          <el-form-item label="Type:" width="150px">
             <el-input
               v-model="open_formdata.type"
               size="mini"

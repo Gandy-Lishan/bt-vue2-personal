@@ -81,6 +81,10 @@
 <script>
 import openFavorite from '../signalComponents/openFavorite.vue'
 export default {
+  name: 'favorite',
+    components: {
+    'open-favorite': openFavorite
+  },
   data() {
     return {
       page: 1,
@@ -98,8 +102,7 @@ export default {
       // if (res.meta.status !== 200) {
       //   return this.$message.error('获取信号列表失败')
       // }
-      this.favoriteList = res.results
-      console.log('favoriteList', this.favoriteList)
+      this.favoriteList = res.results 
       this.total = res.count
     },
     handleCurrentChange(newpage) {
@@ -119,9 +122,7 @@ export default {
        this.getFavoriteList()
     }
   },
-  components: {
-    'open-favorite': openFavorite
-  }
+
 }
 </script>
 <style lang="less" scoped></style>

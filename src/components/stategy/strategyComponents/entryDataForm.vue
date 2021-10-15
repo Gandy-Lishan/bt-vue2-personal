@@ -23,7 +23,7 @@
               resize="none"
             ></el-input>
           </el-form-item>
-          <el-form-item label="Type:">
+          <el-form-item label="Type:" label-width="90px">
             <el-input
               v-model="open_formdata.type"
               size="mini"
@@ -143,19 +143,8 @@ watch:{
       this.conditionList = vm.entryData.conditions;
       this.open_formdata = vm.entryData
       Object.assign(vm.entryData,this.open_formdata)
-      // const lists = this.open_formdata
-      console.log("aaa");
       this.initialFromData['name'] = this.entryData.name
       this.initialFromData['description'] = this.entryData.description
-      // const res = await this.$http.get('/demo/condition/', {
-      //   params: {id: id}
-      // })
-      // if(res.status !== 200) return
-      // this.conditionList = res.data.results
-      // this.dialogFormVisible = true
-      // this.conditionList.forEach((item,index)=> {
-      //   window.sessionStorage.setItem('value', item.value)
-      // })
     },
     async submitForm() {
       let vm = this;

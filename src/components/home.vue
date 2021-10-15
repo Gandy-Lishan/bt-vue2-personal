@@ -123,8 +123,8 @@ export default {
             },
             {
               id: 3,
-              authName: 'My Favorite Strategies',
-              path: 'favoriteStrategies'
+              authName: 'My Strategies',
+              path: 'myStrategies'
             }
           ]
         }

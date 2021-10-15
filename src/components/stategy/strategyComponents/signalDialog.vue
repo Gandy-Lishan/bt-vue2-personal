@@ -1,8 +1,16 @@
 <template>
 <div class="signalDialog">
   <el-dialog @open='getList' title="signalList" :visible.sync="dialogTableVisible" :before-close='closeDialog'>
+   <el-pagination
+      @current-change="handleCurrentChange"
+      :current-page="queryInfo.page"
+      :page-size="10"
+      layout="total, prev, pager, next"
+      :total="total"
+    >
+    </el-pagination>
     <el-table :data="signalList" border stripe size="mini">
-      <el-table-column  width="50px">
+      <el-table-column  width="35px">
           <!-- <template slot-scope="scope">
           <el-checkbox  v-model="value" :label="scope.row.id" change="checkEntry(scope)"></el-checkbox>
           </template> -->
@@ -18,7 +26,7 @@
           <el-button @click="selectSignal(scope.row)"></el-button>
         </template>
       </el-table-column> -->
-      <el-table-column label="type" prop="type" align="center" width="60px">
+      <el-table-column label="type" prop="type" align="center" width="80px">
       </el-table-column>
        <el-table-column
         label="analysis basis"
@@ -53,9 +61,11 @@ export default {
     return {
       signalList: [{entryChecked: false}],
       queryInfo: {
-        type: this.type
+        type: this.type,
+        page: 1
       },
-      radio: ""
+      radio: "",
+      total: 0
     }
   },
   methods: {
@@ -77,6 +87,7 @@ export default {
       //   return this.$message.error('获取信号列表失败')
       // }
       this.signalList = this.signalList.concat(res.results)
+      this.total = res.count
       if(res.results.length <= 0){
         this.loading = false
          this.$message.success({
@@ -96,6 +107,10 @@ export default {
       this.closeDialog()
       this.signalList.entryChecked = !this.signalList.entryChecked
       // console.log(id);
+    },
+    handleCurrentChange(newpage) {
+      this.queryInfo.page = newpage
+      this.getSignallist("system")
     },
     // selectSignal(row){
     //   console.log(row);

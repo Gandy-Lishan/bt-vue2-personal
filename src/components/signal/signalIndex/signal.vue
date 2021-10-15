@@ -339,9 +339,9 @@ export default {
     this.$http.put('/demo/signal/'+row.id+"/",vm.$qs.stringify(addFavoritesData)).then(res => {}).catch(error => {console.log(error);})
     }
   },
-  removeFavorites(row){
-    row.favorites = !row.favorites
-  }
+  // removeFavorites(row){
+  //   row.favorites = !row.favorites
+  // }
   },
   components:{signalTable},
   resetForm(formdata) {

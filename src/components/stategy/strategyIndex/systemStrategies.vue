@@ -66,6 +66,7 @@
 </template>
 <script>
 export default {
+  name:'systemStrategies',
   data() {
     return {
       page: 1,

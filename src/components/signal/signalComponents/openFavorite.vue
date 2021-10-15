@@ -103,7 +103,7 @@
 </template>
 <script>
 export default {
-  // name: 'openDialog',
+  name: 'openFavorite',
   props: {
     dialogFormVisible: Boolean
   },
@@ -170,10 +170,10 @@ export default {
         if(submitFormDate['value'] !== ''){
                 formData.conditions = JSON.stringify(conditions)
                 const {data:res} = await vm.$http.post("/demo/create_signal/",vm.$qs.stringify(formData),{auth:{
-                  // username: 'sentimentrader_backtest_api',
-                  // password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-                  username: 'demo01',
-                  password: 'admin123456'
+                  username: 'sentimentrader_backtest_api',
+                  password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+                  // username: 'demo01',
+                  // password: 'admin123456'
                 }})
                 // this.getFavoritelist()
                 this.$emit('getFavoritelist')
