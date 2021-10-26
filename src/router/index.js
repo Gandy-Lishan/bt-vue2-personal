@@ -4,13 +4,14 @@ import Login from '../components/login.vue'
 import Home from '../components/home.vue'
 import Welcome from '../components/welcome.vue'
 import Signal from '../components/signal/signalIndex/signal.vue'
-import OpenDialog from '../components/signal/signalComponents/openDialog.vue'
 import Favorite from '../components/signal/signalIndex/favorite.vue'
 import CustomSignal from '../components/signal/signalIndex/custom.vue'
 import myStrategies from '../components/stategy/strategyIndex/myStrategies.vue'
 import OpenedStrategy from '../components/stategy/strategyIndex/openedStrategy.vue'
 import SystemStrategies from '../components/stategy/strategyIndex/systemStrategies.vue'
 import NewStrategy from '../components/stategy/strategyIndex/newStrategy.vue'
+import NewBacktest from '../components/backtest/backestIndex/newBacktest.vue'
+import CurrentBacktests from '../components/backtest/backestIndex/currentBacktests.vue'
 Vue.use(Router)
 const router = new Router({
   routes: [
@@ -23,13 +24,13 @@ const router = new Router({
       children: [
         { path: '/welcome', component: Welcome},
         { path: '/signal', component: Signal },
-        { path: '/openDialog', component: OpenDialog },
         { path: '/favorite', component: Favorite },
         { path: '/custom', component: CustomSignal },
         { path: '/myStrategies', component: myStrategies },
         { path: '/openedStrategy', component: OpenedStrategy },
         { path: '/newStrategy', component: NewStrategy },
-        { path: '/systemStrategies', component: SystemStrategies },
+        { path: '/newBacktest', component: NewBacktest },
+        { path: '/currentBacktests', component: CurrentBacktests },
       ]
     },
   ]

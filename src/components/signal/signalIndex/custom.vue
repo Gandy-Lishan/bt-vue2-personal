@@ -68,7 +68,8 @@
       >
       </el-pagination>
     </el-card>
-    <open-favorite :dialogFormVisible="dialogFormVisible" ref="child"></open-favorite>
+    <!-- edited -->
+    <open-favorite :dialogFormVisible.sync="dialogFormVisible" ref="child"></open-favorite>
   </div>
 </template>
 <script>
@@ -97,6 +98,7 @@ export default {
       //   return this.$message.error('获取信号列表失败')
       // }
       this.customList = res.results
+      console.log(this.customList[0].type)
       this.total = res.count
     },
     handleCurrentChange(newpage) {

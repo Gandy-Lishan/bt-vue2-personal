@@ -1,6 +1,6 @@
 <template>
 <div>
-    <el-dialog :visible.sync="dialogFormVisible">
+<el-dialog :visible="dialogFormVisible" :show-close="false">
     <div class="header">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">Signal</el-breadcrumb-item>
@@ -9,80 +9,159 @@
     </div>
     <div class="main">
       <div class="left">
-        <p>Name/Description:</p>
-        <el-form
-          ref="leftForm"
-          :model="open_formdata"
-          :rules="openFormRules"
-          label-width="80px"
-          label-position="left"
-        >
-          <el-form-item label="Name:" prop="name">
-            <el-input v-model="open_formdata.name"  size="mini"></el-input>
-          </el-form-item>
-          <el-form-item label="Description:" prop="description">
-            <el-input
-              v-model="open_formdata.description"
-              size="mini"
-              type="textarea"
-              :autosize="{ minRows: 2, maxRows: 8 }"
-              resize="none"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="Type:">
-            <el-input
-              v-model="open_formdata.type"
-              size="mini"
-              disabled
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="Frequency:">
-            <el-input
-              v-model="open_formdata.frequency"
-              size="mini"
-              disabled
-            ></el-input>
-          </el-form-item>
-        </el-form>
+        <div><p style="font-weight: bold;">Name/Description:</p></div>
+        <div class="lForm">
+          <el-form
+            ref="leftForm"
+            :model="open_formdata"
+            :rules="openFormRules"
+            label-width="80px"
+            label-position="left"
+          >
+            <el-form-item label="Name:" prop="name">
+              <el-input v-model="open_formdata.name"  size="mini"></el-input>
+            </el-form-item>
+            <el-form-item label="Description:" prop="description">
+              <el-input
+                v-model="open_formdata.description"
+                size="mini"
+                type="textarea"
+                :autosize="{ minRows: 2, maxRows: 8 }"
+                resize="none"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="Type:">
+              <el-input
+                v-model="open_formdata.type"
+                size="mini"
+                disabled
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="Frequency:">
+              <el-input
+                v-model="open_formdata.frequency"
+                size="mini"
+                disabled
+              ></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
       </div>
       <div class="right">
         <!-- <el-form ref="form" v-for="(item, index) in conditionList" :key="index" :model="item" label-width="90px" label-position="left"> -->
-          <el-form ref="rightForm"  label-width="90px" label-position="left">
+        <el-form ref="rightForm" label-width="90px" label-position="left">
           <div v-for="(item, index) in conditionList" :key='index'>
-            <el-form-item label="condition_description:" size="mini">
-            <el-input
-              v-model="conditionList[index].condition_description"
-              size="mini"
-              disabled
-            ></el-input>
+            <!-- 必需 -->
+            <el-form-item label="Condition_description:" size="mini">
+              <el-input
+                v-model="conditionList[index].condition_description"
+                size="mini"
+                disabled
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="Parameter:" size="mini">
+              <el-input
+                v-model="conditionList[index].parameter"
+                size="mini"
+                disabled
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="Condition:" size="mini">
+              <el-input
+                v-model="conditions[conditionList[index].condition]"
+                size="mini"
+                disabled
+              ></el-input>
+            </el-form-item>
+            <!-- 变动输入框 -->
+            <el-form-item v-if="'judgement' in conditionList[index]" label="Judgement:" size="mini">
+              <el-input
+                v-model="conditionList[index].judgement"
+                size="mini"
+              ></el-input>
+            </el-form-item>
+            <el-form-item v-if="'fast_ma' in conditionList[index]" label="FastMA:" size="mini">
+              <el-input
+                v-model="conditionList[index].fast_ma"
+                size="mini"
+              ></el-input>
+            </el-form-item>
+            <el-form-item v-if="'middle_ma' in conditionList[index]" label="MiddleMA:" size="mini">
+              <el-input
+                v-model="conditionList[index].middle_ma"
+                size="mini"
+              ></el-input>
+            </el-form-item>
+            <el-form-item v-if="'low_ma' in conditionList[index]" label="LowMA:" size="mini">
+              <el-input
+                v-model="conditionList[index].low_ma"
+                size="mini"
+              ></el-input>
+            </el-form-item>
+            <el-form-item v-if="'macd_fast' in conditionList[index]" label="MACDFast:" size="mini">
+              <el-input
+                v-model="conditionList[index].macd_fast"
+                size="mini"
+              ></el-input>
+            </el-form-item>
+            <el-form-item v-if="'macd_slow' in conditionList[index]" label="MACDSlow:" size="mini">
+              <el-input
+                v-model="conditionList[index].macd_slow"
+                size="mini"
+              ></el-input>
+            </el-form-item>
+            <el-form-item v-if="'macd_sig' in conditionList[index]" label="MACDSig:" size="mini">
+              <el-input
+                v-model="conditionList[index].macd_sig"
+                size="mini"
+              ></el-input>
+            </el-form-item>
+            <el-form-item v-if="'str_value' in conditionList[index]" label="Str_value:" size="mini">
+              <el-input
+                v-model="conditionList[index].str_value"
+                size="mini"
+                type="textarea"
+                :autosize="{ minRows: 2, maxRows: 8 }"
+                resize="none"
+              ></el-input>
+            </el-form-item>
+            <el-form-item v-if="'value' in conditionList[index]" label="Value:" size="mini">
+              <el-input
+                v-model="conditionList[index].value"
+                size="mini"
+              ></el-input>
+            </el-form-item>
+            <el-form-item v-if="'period' in conditionList[index]" label="Period:" size="mini">
+              <el-input
+                v-model="conditionList[index].period"
+                size="mini"
+              ></el-input>
           </el-form-item>
-          <el-form-item label="parameter:" size="mini">
-            <el-input
-              v-model="conditionList[index].parameter"
-              size="mini"
-              disabled
-            ></el-input>
+          <el-form-item v-if="'atr_multiplier' in conditionList[index]" label="ATR_multiplier:" size="mini">
+              <el-input
+                v-model="conditionList[index].atr_multiplier"
+                size="mini"
+              ></el-input>
           </el-form-item>
-          <el-form-item label="condition:" size="mini">
-            <el-input
-              v-model="conditions[conditionList[index].condition]"
-              size="mini"
-              disabled
-            ></el-input>
+          <el-form-item v-if="'atr_period' in conditionList[index]" label="ATR_period:" size="mini">
+              <el-input
+                v-model="conditionList[index].atr_period"
+                size="mini"
+              ></el-input>
           </el-form-item>
-           <el-form-item label="value:" size="mini">
-            <el-input
-              v-model="conditionList[index].value"
-              size="mini"
-            ></el-input>
+          <el-form-item v-if="'sd' in conditionList[index]" label="SD:" size="mini">
+              <el-input
+                v-model="conditionList[index].sd"
+                size="mini"
+              ></el-input>
           </el-form-item>
-          <el-form-item v-if="index !== (conditionList.length - 1)" label="combination:" size="mini">
-            <el-radio-group disabled v-model="open_formdata.combination">
-              <el-radio :label="0">AND</el-radio>
-              <el-radio :label="1">OR</el-radio>
-              <el-radio :label="2">SUM</el-radio>
-            </el-radio-group>
-          </el-form-item>
+            <el-form-item v-if="index !== (conditionList.length - 1)" label="Combination:" size="mini">
+              <el-radio-group v-model="open_formdata.combination">
+                <el-radio :label="0">AND</el-radio>
+                <el-radio :label="1">OR</el-radio>
+                <el-radio :label="2">SUM</el-radio>
+              </el-radio-group>
+            </el-form-item>
           </div>
         </el-form>
       </div>
@@ -125,16 +204,19 @@ export default {
     conditions:[">","<","CrossAbove","CrossBelow",],
     combinations:["AND","OR","SUM",],
     conditionList: [],
+    initialConditionList: [],
     open_formdata: {},
     initialFromData: {}
   }
   },
   methods: {
     clearDate() {
-      this.conditionList = []
-      this.open_formdata = {}
+      this.conditionList = this.initialConditionList
+      
+      this.open_formdata = this.initialFromData
+      console.log(this.open_formdata)
       this.submitFormDate = []
-      this.dialogFormVisible = false
+      this.$emit("update:dialogFormVisible",false);
     },
     resetForm(formdata) {
       this.$refs[formdata].resetFields();
@@ -150,7 +232,9 @@ export default {
       })
       if(res.status !== 200) return
       this.conditionList = res.data.results
-      this.dialogFormVisible = true
+      // dialogFormVisible 双向绑定
+      //this.dialogFormVisible = true
+      this.$emit("update:dialogFormVisible",true)
       this.conditionList.forEach((item,index)=> {
         window.sessionStorage.setItem('value', item.value)
       })
@@ -176,12 +260,13 @@ export default {
                   // password: 'admin123456'
                 }})
                 // this.getFavoritelist()
-                this.$emit('getFavoritelist')
-                this.dialogFormVisible = false
+                this.$emit("call-father")
+                //this.dialogFormVisible = false
+                this.$emit("update:dialogFormVisible",false)
                 this.$message.success({
-            message: 'Saved successfully',
-            duration: 1000
-          })
+                  message: 'Saved successfully',
+                  duration: 1000
+                })
         }else{
           this.$message.error({
             message: 'The value of value entered is empty',
@@ -200,6 +285,7 @@ export default {
 </script>
 <style scoped>
 .container {
+  width: 600px;
   background-color: #fff;
   border-radius: 3px;
   position: absolute;
@@ -211,24 +297,37 @@ export default {
 }
 .btns {
   position: absolute;
-  left: 474px;
-  top: 48px;
+  left: 695px;
+  top: 23px;
 }
 .main {
-  width: 600px;
   display: flex;
 }
 .left {
-  width: 150px;
+  width: 273px;
   margin-right: 20px;
   border: 1px solid #666;
   flex-grow: 1;
   padding: 10px;
+
+  display: flex;
+  flex-direction: column;
 }
 .right {
-  width: 150px;
+  width: 273px;
+  padding: 50px 0px 0px 0px;
   flex-grow: 1;
   padding: 10px;
   border: 1px solid #666;
+}
+.lForm{
+  flex:1;
+}
+
+.el-form--label-left{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 </style>

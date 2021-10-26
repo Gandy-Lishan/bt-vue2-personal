@@ -30,7 +30,7 @@
           </el-input>
         </el-form-item>
         <!-- 按钮 -->
-        <el-form-item class="btns">
+        <el-form-item class="submitBtns">
           <el-button type="primary" @click="login">登录</el-button>
           <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
@@ -118,7 +118,7 @@ export default {
     background-color: #eee;
   }
 }
-.btns {
+.submitBtns {
   display: flex;
   justify-content: flex-end;
 }

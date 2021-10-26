@@ -1,6 +1,5 @@
 <template>
   <div>
-    <router-view></router-view>
     <!-- 面包屑导航区域 -->
     <el-card>
       <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -68,14 +67,19 @@
       <!-- 若表格数据过多可以增加分页区域 -->
       <el-pagination
         @current-change="handleCurrentChange"
-        :current-page="page"
+        :current-page="queryInfo.page"
         :page-size="10"
         layout="total, prev, pager, next, jumper"
         :total="total"
       >
       </el-pagination>
     </el-card>
-    <open-favorite :dialogFormVisible="dialogFormVisible" ref="child"></open-favorite>
+    <open-favorite 
+        @call-father="getFavoriteList"
+        :dialogFormVisible.sync="dialogFormVisible" 
+        ref="child"
+    >
+    </open-favorite>
   </div>
 </template>
 <script>
@@ -87,10 +91,13 @@ export default {
   },
   data() {
     return {
-      page: 1,
       total: 0,
       favoriteList: [],
-      dialogFormVisible: false
+      dialogFormVisible: false,
+      queryInfo: {
+        // 当前的页数
+        page: 1,
+      },
     }
   },
   created() {
@@ -98,7 +105,11 @@ export default {
   },
   methods: {
     async getFavoriteList() {
-      const { data: res } = await this.$http.get('/demo/signal/?favorites=true')
+      const { data: res } = await this.$http.get('/demo/signal/?favorites=true',
+        {
+          params: this.queryInfo
+        }
+      )
       // if (res.meta.status !== 200) {
       //   return this.$message.error('获取信号列表失败')
       // }
@@ -106,12 +117,12 @@ export default {
       this.total = res.count
     },
     handleCurrentChange(newpage) {
-      this.page = newpage
+      this.queryInfo.page = newpage
       this.getFavoriteList()
     },
     showDialog(id,params){
       this.$refs.child.openDialog(id,params)
-      this.dialogFormVisible = true
+      //this.dialogFormVisible = true
     },
     async deleteFavoriteSignal(row){
       const { data: res } = await this.$http.delete('/demo/signal/'+row.id+"/")

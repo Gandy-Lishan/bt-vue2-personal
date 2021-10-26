@@ -76,12 +76,13 @@ export default {
   
   methods: {
     openDialog(id, row) {
-      this.$emit('openDialog', id, row)
+      this.$emit('showDialog', id, row)
     },
     addFavorites(row) {
       row.favorites = !row.favorites
       const addFavoritesData = row
       let vm = this
+      //qs.stringify()将对象 序列化成URL的形式，以&进行拼接
       this.$http
           .put(
             '/demo/signal/' + row.id + '/',

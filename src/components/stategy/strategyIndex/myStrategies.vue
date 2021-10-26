@@ -23,7 +23,7 @@
           align="center"
         >
         </el-table-column>
-                <el-table-column
+        <el-table-column
           label="exit_name"
           prop="signal_exit.name"
           align="center"
@@ -115,9 +115,6 @@ export default {
   methods: {
     async getStrategyList() {
       const { data: res } = await this.$http.get('/demo/strategies/')
-      // if (res.meta.status !== 200) {
-      //   return this.$message.error('获取信号列表失败')
-      // }
       this.strategyList = res.results
       console.log('strategyList', this.strategyList)
       this.total = res.count
@@ -126,15 +123,6 @@ export default {
         this.strategyList[i].signal_exit = JSON.parse(this.strategyList[i].signal_exit)
         
       }
-      // this.strategyList.forEach(item => {
-      //   this.signal_entry.push(JSON.parse(item.signal_entry))
-      //   this.signal_exit.push(JSON.parse(item.signal_exit))
-      // })
-      // const entry = this.signal_entry
-      // const exit = this.signal_exit
-      // this.strategyList.entryData = entry
-      // this.strategyList.exitData = exit
-      // console.log('srtatttegy',this.strategyList);
     },
     handleCurrentChange(newpage) {
       this.page = newpage

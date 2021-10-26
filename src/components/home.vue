@@ -108,26 +108,32 @@ export default {
           children: [
             {
               id: 0,
-              authName: 'Opened Strategy',
-              path: 'openedStrategy'
-            },
-            {
-              id: 1,
               authName: 'New Strategy',
               path: 'newStrategy'
             },
             {
-              id: 2,
-              authName: 'System Strategies',
-              path: 'systemStrategies'
-            },
-            {
-              id: 3,
+              id: 1,
               authName: 'My Strategies',
               path: 'myStrategies'
             }
           ]
-        }
+        },
+        {
+          id: 2,
+          authName: 'Backtest',
+          children: [
+            {
+              id: 0,
+              authName: 'New Backtest',
+              path: 'newBacktest'
+            },
+            {
+              id: 1,
+              authName: 'Current Backtests',
+              path: 'currentBacktests'
+            }
+          ]
+        },
       ],
       isCollapse: false,
       activePath: ''
