@@ -69,11 +69,11 @@
       </el-pagination>
     </el-card>
     <!-- edited -->
-    <open-favorite :dialogFormVisible.sync="dialogFormVisible" ref="child"></open-favorite>
+    <open-custom @call-father="getCustomList" :dialogFormVisible.sync="dialogFormVisible" ref="child"></open-custom>
   </div>
 </template>
 <script>
-import openFavorite from '../signalComponents/openFavorite.vue'
+import openCustom from '../signalComponents/openCustom.vue'
 export default {
   data() {
     return {
@@ -98,7 +98,6 @@ export default {
       //   return this.$message.error('获取信号列表失败')
       // }
       this.customList = res.results
-      console.log(this.customList[0].type)
       this.total = res.count
     },
     handleCurrentChange(newpage) {
@@ -119,7 +118,7 @@ export default {
     }
   },
   components: {
-    'open-favorite': openFavorite
+    'open-custom': openCustom
   }
 }
 </script>
