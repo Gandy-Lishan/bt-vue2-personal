@@ -11,11 +11,8 @@
         <el-tabs v-loading="loading" v-model="queryInfo.type" @tab-click="getFilterList">
           <el-tab-pane label="long" name="long">
             <!-- long 表格区域 -->
-<<<<<<< HEAD
-            <signal-table @openDialog="openDialog" :page="page" :signalList="signalList" @addFavorites="addFavorites"></signal-table>
-=======
+            <!-- <signal-table @openDialog="openDialog" :page="page" :signalList="signalList" @addFavorites="addFavorites"></signal-table> -->
             <signal-table @showDialog="showDialog" :signalList="signalList" @addFavorites="addFavorites"></signal-table>
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
            
             <!-- 若表格数据过多可以增加分页区域 -->
            <el-pagination
@@ -30,12 +27,8 @@
           </el-tab-pane>
           <el-tab-pane label="short" name="short">
             <!-- short 表格区域 -->
-<<<<<<< HEAD
-            <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table>
-=======
+            <!-- <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table> -->
             <signal-table @showDialog="showDialog" :signalList="signalList"></signal-table>
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
-  
             <!-- 若表格数据过多可以增加分页区域 -->
             <el-pagination
             
@@ -49,11 +42,8 @@
           </el-tab-pane>
           <el-tab-pane label="longexit" name="longexit">
             <!-- longexit 表格区域 -->
-<<<<<<< HEAD
-            <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table>
-=======
+            <!-- <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table> -->
             <signal-table @showDialog="showDialog" :signalList="signalList"></signal-table>
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
            
             <!-- 若表格数据过多可以增加分页区域 -->
             <el-pagination
@@ -67,11 +57,8 @@
           </el-tab-pane>
           <el-tab-pane label="shortexit" name="shortexit">
             <!-- shortexit 表格区域 -->
-<<<<<<< HEAD
-            <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table>
-=======
+            <!-- <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table> -->
             <signal-table @showDialog="showDialog" :signalList="signalList"></signal-table>
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
    
             <!-- 若表格数据过多可以增加分页区域 -->
            <el-pagination
@@ -120,12 +107,10 @@ export default {
         // 当前每页显示多少条数据
         // pagesize: 5
       },
-<<<<<<< HEAD
       page: 0,
       conditions:[">","<","CrossAbove","CrossBelow",],
       combinations:["AND","OR","SUM",],
-=======
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
+
       signalList: [],
       total: 0,
       //saveActive: true,

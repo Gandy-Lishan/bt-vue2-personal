@@ -61,12 +61,6 @@
             <el-form-item label="Cash:" prop="cash">
               <el-input v-model="backtestFormdata.cash" size="mini"></el-input>
             </el-form-item>
-<<<<<<< HEAD
-            </el-form>
-        </div>
-        <div class="strategyForm">
-          <p class="pText">Strategy</p>
-=======
             <el-form-item label="Note:" prop="note">
               <el-input v-model="backtestFormdata.note" size="mini"></el-input>
             </el-form-item>
@@ -74,17 +68,12 @@
         </div>
         <div class="strategyForm">
           <p class="pText">Stategy</p>
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
           <el-form
             :model="strategyFormdata"
             label-width="80px"
             label-position="left"
           >
-<<<<<<< HEAD
-            <el-form-item label="Strategy:" size="mini">
-=======
             <el-form-item label="Symbol:" size="mini">
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
               <el-button class="LisBtns" @click="openStrategyDialog"
                 >Browse from Strategy List</el-button
               >
@@ -125,15 +114,8 @@
               <el-date-picker
                 v-model="testPeriodFormdata.starDate"
                 type="date"
-<<<<<<< HEAD
-                unlink-panels
-                placeholder="Please select a start date"
-                format="yyyy-MM-dd"
-                value-format="yyyy-MM-dd"
-=======
                 placeholder="Please select a start date"
                 @change="getStarDate(testPeriodFormdata.starDate)"
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
               >
               </el-date-picker>
             </el-form-item>
@@ -141,23 +123,12 @@
               <el-date-picker
                 v-model="testPeriodFormdata.endDate"
                 type="date"
-<<<<<<< HEAD
-                unlink-panels
-                placeholder="Please select a end date"
-                format="yyyy-MM-dd"
-                value-format="yyyy-MM-dd"
-              >
-              </el-date-picker>
-            </el-form-item>
-            <!-- <div class="advansedBox">
-=======
                 placeholder="Please select a end date"
                 @change="getStarDate(testPeriodFormdata.endDate)"
               >
               </el-date-picker>
             </el-form-item>
             <div class="advansedBox">
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
               <div class="advanceRadio">
                 <el-form-item>
                   <el-checkbox
@@ -182,10 +153,7 @@
                 label="observaion period"
                 prop="observaionPeriod"
                 class="advancedLabel"
-<<<<<<< HEAD
-=======
                 style="margin-right=10px"
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
               >
                 <el-input
                   class="advancedInput"
@@ -193,11 +161,7 @@
                   size="mini"
                 ></el-input>
               </el-form-item>
-<<<<<<< HEAD
-            </div> -->
-=======
             </div>
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
           </el-form>
         </div>
         <div class="newStrategyForm">
@@ -281,10 +245,7 @@
 <script>
 import symbolDialog from '../backtestComponents/symbolDialog.vue'
 import strategyDialog from '../backtestComponents/strategyDialog.vue'
-<<<<<<< HEAD
-=======
 import { timestampToTime } from '../../../tools/formatDate.js'
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
 export default {
   name: 'newBacktest',
   data() {
@@ -363,12 +324,6 @@ export default {
       this.moneyManagementFormdata.radio = idx
       console.log(this.moneyManagementFormdata.radio);
     },
-<<<<<<< HEAD
-    saveNewBacktestFormdata() {
-      this.newBacktestFormdata.stock = this.symbolFormdata.symbolName
-      this.newBacktestFormdata.name = this.backtestFormdata.backtestName
-      this.newBacktestFormdata.note = 'my note'
-=======
     getStarDate(date) {
       this.testPeriodFormdata.starDate = date
     },
@@ -379,20 +334,14 @@ export default {
       this.newBacktestFormdata.stock = this.symbolFormdata.symbolName
       this.newBacktestFormdata.name = this.backtestFormdata.backtestName
       this.newBacktestFormdata.note = this.backtestFormdata.note
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
       this.newBacktestFormdata.description = this.backtestFormdata.description
       this.newBacktestFormdata.cash = this.backtestFormdata.cash
       this.newBacktestFormdata.cashalloc = this.moneyManagementFormdata.value
       this.newBacktestFormdata.commision = this.commisionFormdata.commission
       this.newBacktestFormdata.slippage = this.commisionFormdata.slippage
       this.newBacktestFormdata.riskfreerate = this.commisionFormdata.slippage
-<<<<<<< HEAD
-      this.newBacktestFormdata.fromdate = this.testPeriodFormdata.starDate
-      this.newBacktestFormdata.todate = this.testPeriodFormdata.endDate
-=======
       this.newBacktestFormdata.fromdate = timestampToTime(this.testPeriodFormdata.starDate)
       this.newBacktestFormdata.todate = timestampToTime(this.testPeriodFormdata.endDate)
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
       this.newBacktestFormdata.status = 0
       this.newBacktestFormdata.strategy = this.strategyFormdata.id
       const params =  this.newBacktestFormdata

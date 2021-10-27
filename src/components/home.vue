@@ -110,56 +110,11 @@ export default {
               id: 0,
               authName: 'New Strategy',
               path: 'newStrategy'
-<<<<<<< HEAD
             },
             {
               id: 1,
               authName: 'My Strategies',
               path: 'myStrategies'
-            }
-          ]
-        },
-        {
-          id: 2,
-          authName: 'Backtest',
-          children: [
-            {
-              id: 0,
-              authName: 'New Backtest',
-              path: 'newBacktest'
-            },
-            {
-              id: 1,
-              authName: 'Current Backtests',
-              path: 'currentBacktests'
-            }
-          ]
-        },
-        {
-          id: 3,
-          authName: 'Porfolio',
-          children: [
-            {
-              id: 0,
-              authName: 'My Porfolios',
-              path: 'myPorfolios'
-            },
-            {
-              id: 1,
-              authName: 'New Porfolio',
-              path: 'newPorfolio'
-            },
-            {
-              id: 2,
-              authName: 'Opened Porfolio',
-              path: 'openedPorfolio'
-=======
-            },
-            {
-              id: 1,
-              authName: 'My Strategies',
-              path: 'myStrategies'
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
             }
           ]
         },

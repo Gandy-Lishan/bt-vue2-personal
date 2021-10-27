@@ -35,13 +35,10 @@ const router = new Router({
         { path: '/newStrategy', component: NewStrategy },
         { path: '/newBacktest', component: NewBacktest },
         { path: '/currentBacktests', component: CurrentBacktests },
-<<<<<<< HEAD
         { path: '/myPorfolios', component: MyPorfolios },
         { path: '/newPorfolio', component: NewPorfolio },
         { path: '/openedPorfolio', component: OpenedPorfolio },
         { path: '/porfolioNewBacktest', component: PorfolioNewBacktest }
-=======
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
       ]
     }
   ]
