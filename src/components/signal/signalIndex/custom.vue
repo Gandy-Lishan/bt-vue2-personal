@@ -8,8 +8,8 @@
         <el-breadcrumb-item>Custom Signals</el-breadcrumb-item>
       </el-breadcrumb>
       <!-- 表格区域 -->
-      <el-table :data="customList" border stripe size="mini">
-        <el-table-column label="" type="index" align="center"></el-table-column>
+      <el-table :data="customList" border stripe size="mini" v-loading="loading">
+        <el-table-column label="" align="center" type="index" :index="orderIndex" width="40px"></el-table-column>
         <el-table-column label="type" prop="type" align="center" width="80px">
         </el-table-column>
         <el-table-column
@@ -93,7 +93,8 @@ export default {
       queryInfo: {
         page: 1
       },
-      dialogFormVisible: false
+      dialogFormVisible: false,
+      loading: false
     }
   },
   created() {
@@ -101,15 +102,21 @@ export default {
   },
   methods: {
     async getCustomList(user) {
+      this.loading = true
       this.queryInfo.user = user
       const { data: res } = await this.$http.get('/demo/signal/', {
         params: this.queryInfo
       })
-      // if (res.meta.status !== 200) {
-      //   return this.$message.error('获取信号列表失败')
-      // }
       this.customList = res.results
+      if(res.results.length <= 0){
+        this.loading = false
+         this.$message.success({
+           message: 'The list of signals is empty',
+           duration: 1000
+         })
+      }
       this.total = res.count
+      this.loading = false
     },
     handleCurrentChange(newpage) {
       this.queryInfo.page = newpage
@@ -126,6 +133,14 @@ export default {
     showDialog(id,params){
       this.$refs.child.openDialog(id,params)
       this.dialogFormVisible = true
+    },
+    orderIndex(index) {
+      if (this.queryInfo.page !== 0){
+      return ((this.queryInfo.page-1) * 10) + (index +1)
+
+      }else{
+        return (0 * 10) + (index +1)
+      }
     }
   },
   components: {

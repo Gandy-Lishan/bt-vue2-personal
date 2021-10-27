@@ -61,9 +61,9 @@
             <el-form-item label="Cash:" prop="cash">
               <el-input v-model="backtestFormdata.cash" size="mini"></el-input>
             </el-form-item>
-            <el-form-item label="Note:" prop="note">
-              <el-input v-model="backtestFormdata.note" size="mini"></el-input>
-            </el-form-item>
+            <!-- <el-form-item label="Note:" prop="note"> -->
+              <!-- <el-input v-model="backtestFormdata.note" size="mini"></el-input>
+            </el-form-item> -->
             </el-form>
         </div>
         <div class="strategyForm">
@@ -124,11 +124,11 @@
                 v-model="testPeriodFormdata.endDate"
                 type="date"
                 placeholder="Please select a end date"
-                @change="getStarDate(testPeriodFormdata.endDate)"
+                @change="getEndDate(testPeriodFormdata.endDate)"
               >
               </el-date-picker>
             </el-form-item>
-            <div class="advansedBox">
+            <!-- <div class="advansedBox">
               <div class="advanceRadio">
                 <el-form-item>
                   <el-checkbox
@@ -161,7 +161,7 @@
                   size="mini"
                 ></el-input>
               </el-form-item>
-            </div>
+            </div> -->
           </el-form>
         </div>
         <div class="newStrategyForm">
@@ -333,7 +333,7 @@ export default {
     saveNewBacktestFormdata() {
       this.newBacktestFormdata.stock = this.symbolFormdata.symbolName
       this.newBacktestFormdata.name = this.backtestFormdata.backtestName
-      this.newBacktestFormdata.note = this.backtestFormdata.note
+      this.newBacktestFormdata.note = 'my note'
       this.newBacktestFormdata.description = this.backtestFormdata.description
       this.newBacktestFormdata.cash = this.backtestFormdata.cash
       this.newBacktestFormdata.cashalloc = this.moneyManagementFormdata.value

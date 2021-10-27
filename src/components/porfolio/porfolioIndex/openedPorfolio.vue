@@ -84,8 +84,17 @@
      </el-table-column>
     
       </el-table>
-      <img :src="'data:image/jpg;base64,'+ img_data"></img>
     </el-card>
+      <el-dialog
+    title="Backtest Result"
+    :visible.sync="dialogVisible"
+    width="30%">
+      <img :src="'data:image/jpg;base64,'+ img_data"></img>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">cancle</el-button>
+      <el-button type="primary" @click="dialogVisible = false">confirm</el-button>
+    </span>
+  </el-dialog>
   </div>
 </template>
 <script>
@@ -95,7 +104,8 @@ export default {
   data() {
     return{
       porfolioList: [],
-      img_data:""
+      img_data:"",
+      dialogVisible: false
     }
   },
   computed: {
@@ -126,6 +136,9 @@ export default {
           const imageUrl = URL.createObjectURL(blob);
           // this.img_data=imageUrl;
           this.img_data = res.data
+          if(this.img_data !== ''){
+            this.dialogVisible = !this.dialogVisible
+          }
 
       }).catch(error => {
         console.log(error);

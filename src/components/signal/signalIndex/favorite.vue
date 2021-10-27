@@ -7,8 +7,8 @@
         <el-breadcrumb-item>Favorite Signals</el-breadcrumb-item>
       </el-breadcrumb>
       <!-- 表格区域 -->
-      <el-table :data="favoriteList" border stripe size="mini">
-        <el-table-column label="" type="index" align="center"></el-table-column>
+      <el-table :data="favoriteList" border stripe size="mini" v-loading="loading">
+        <el-table-column label="" align="center" type="index" :index="orderIndex" width="40px"></el-table-column>
         <el-table-column label="type" prop="type" align="center" width="80px">
         </el-table-column>
         <el-table-column label="source" prop="user" align="center" width="80px">
@@ -109,6 +109,7 @@ export default {
         // 当前的页数
         page: 1,
       },
+      loading: false
     }
   },
   created() {
@@ -116,16 +117,22 @@ export default {
   },
   methods: {
     async getFavoriteList() {
+      this.loading = true
       const { data: res } = await this.$http.get('/demo/signal/?favorites=true',
         {
           params: this.queryInfo
         }
       )
-      // if (res.meta.status !== 200) {
-      //   return this.$message.error('获取信号列表失败')
-      // }
       this.favoriteList = res.results 
+      if(res.results.length <= 0){
+        this.loading = false
+         this.$message.success({
+           message: 'The list of signals is empty',
+           duration: 1000
+         })
+      }
       this.total = res.count
+      this.loading = false
     },
     handleCurrentChange(newpage) {
       this.queryInfo.page = newpage
@@ -143,6 +150,14 @@ export default {
            duration: 1000
          })
        this.getFavoriteList()
+    },
+    orderIndex(index) {
+      if (this.queryInfo.page !== 0){
+      return ((this.queryInfo.page-1) * 10) + (index +1)
+
+      }else{
+        return (0 * 10) + (index +1)
+      }
     }
   },
 

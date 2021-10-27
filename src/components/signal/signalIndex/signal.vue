@@ -12,7 +12,7 @@
           <el-tab-pane label="long" name="long">
             <!-- long 表格区域 -->
             <!-- <signal-table @openDialog="openDialog" :page="page" :signalList="signalList" @addFavorites="addFavorites"></signal-table> -->
-            <signal-table @showDialog="showDialog" :signalList="signalList" @addFavorites="addFavorites"></signal-table>
+            <signal-table @showDialog="showDialog" :signalList="signalList" @addFavorites="addFavorites" :page="page"></signal-table>
            
             <!-- 若表格数据过多可以增加分页区域 -->
            <el-pagination
@@ -28,7 +28,7 @@
           <el-tab-pane label="short" name="short">
             <!-- short 表格区域 -->
             <!-- <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table> -->
-            <signal-table @showDialog="showDialog" :signalList="signalList"></signal-table>
+            <signal-table :page="page" @showDialog="showDialog" :signalList="signalList"></signal-table>
             <!-- 若表格数据过多可以增加分页区域 -->
             <el-pagination
             
@@ -43,7 +43,7 @@
           <el-tab-pane label="longexit" name="longexit">
             <!-- longexit 表格区域 -->
             <!-- <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table> -->
-            <signal-table @showDialog="showDialog" :signalList="signalList"></signal-table>
+            <signal-table :page="page" @showDialog="showDialog" :signalList="signalList"></signal-table>
            
             <!-- 若表格数据过多可以增加分页区域 -->
             <el-pagination
@@ -58,7 +58,7 @@
           <el-tab-pane label="shortexit" name="shortexit">
             <!-- shortexit 表格区域 -->
             <!-- <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table> -->
-            <signal-table @showDialog="showDialog" :signalList="signalList"></signal-table>
+            <signal-table :page="page" @showDialog="showDialog" :signalList="signalList"></signal-table>
    
             <!-- 若表格数据过多可以增加分页区域 -->
            <el-pagination
@@ -133,7 +133,6 @@ export default {
     },
     
     async getSignallist(user) {
-      this.signalList = []
       this.loading = true
       this.queryInfo.user = user
       const { data: res } = await this.$http.get('/demo/signal/',
@@ -141,10 +140,7 @@ export default {
         params: this.queryInfo
       }
       )
-      // if (res.status !== 200) {
-      //   return this.$message.error('获取信号列表失败')
-      // }
-      this.signalList = res.results
+        this.signalList = res.results
       if(res.results.length <= 0){
         this.loading = false
          this.$message.success({

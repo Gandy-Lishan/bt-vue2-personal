@@ -6,7 +6,7 @@
         <el-breadcrumb-item>My Stategies</el-breadcrumb-item>
       </el-breadcrumb>
       <!-- 表格区域 -->
-      <el-table :data="strategyList" border stripe size="mini">
+      <el-table :data="strategyList" border stripe size="mini" v-loading="loading">
         <el-table-column
           label="name"
           prop="name"
@@ -24,11 +24,7 @@
         >
         </el-table-column>
         <el-table-column
-<<<<<<< HEAD
           label="exit signal"
-=======
-          label="exit_name"
->>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
           prop="signal_exit.name"
           align="center"
         >
@@ -51,10 +47,10 @@
         ></el-table-column> -->
         <!-- <el-table-column align="center" label="action">
         <template slot-scope="scope"> -->
-          <!-- <el-button @click="showDialog(scope.row.id, scope.row)"
+        <!-- <el-button @click="showDialog(scope.row.id, scope.row)"
             >open</el-button
           > -->
-            <!-- <el-select v-model="value" clearable placeholder="请选择">
+        <!-- <el-select v-model="value" clearable placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -64,21 +60,38 @@
             </el-select>
         </template>
       </el-table-column> -->
-      <el-table-column align="center">
+        <el-table-column align="center">
           <template slot-scope="scope">
-          <!-- <span @click="deleteStrategySignal(scope.row)">
+            <!-- <span @click="deleteStrategySignal(scope.row)">
             <i class="el-icon-delete"></i>
           </span> -->
-          <el-button type="primary" icon="el-icon-edit" circle size="mini" style="{margin-right:10px}" @click="showStrategyDialog"></el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              size="mini"
+              style="
+                 {
+                  margin-right: 10px;
+                }
+              "
+              @click="showStrategyDialog"
+            ></el-button>
             <el-popconfirm
-            confirm-button-text='continue'
-            cancel-button-text='cancel'
-            icon="el-icon-info"
-            icon-color="red"
-            title="Are you sure you want to delete it?"
-            @confirm="deleteStrategySignal(scope.row)"
+              confirm-button-text="continue"
+              cancel-button-text="cancel"
+              icon="el-icon-info"
+              icon-color="red"
+              title="Are you sure you want to delete it?"
+              @confirm="deleteStrategySignal(scope.row)"
             >
-                <el-button type="danger" icon="el-icon-delete" circle slot="reference" size="mini"></el-button>
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                circle
+                slot="reference"
+                size="mini"
+              ></el-button>
             </el-popconfirm>
           </template>
         </el-table-column>
@@ -93,13 +106,20 @@
       >
       </el-pagination>
     </el-card>
-    <open-favorite :dialogFormVisible="dialogFormVisible" ref="child"></open-favorite>
-    <strategy-dialog :dialogTableVisible="dialogTableVisible"></strategy-dialog>
+    <open-favorite
+      :dialogFormVisible="dialogFormVisible"
+      ref="child"
+    ></open-favorite>
+    <strategy-dialog
+      :dialogTableVisible="dialogTableVisible"
+      @closeDialog="closeDialog"
+    ></strategy-dialog>
   </div>
 </template>
 <script>
-import openFavorite from '../../signal/signalComponents/openFavorite.vue';
+import openFavorite from '../../signal/signalComponents/openFavorite.vue'
 import strategyDialog from '../strategyComponents/strategyDialog.vue'
+import eventBus from './eventBus/event.js'
 export default {
   name: 'favoriteStrategies',
   data() {
@@ -109,63 +129,100 @@ export default {
       total: 0,
       strategyList: [],
       dialogFormVisible: false,
-      options: [{
+      options: [
+        {
           value: 'open',
-          label: 'Open'
-        }, {
+          label: 'Open',
+        },
+        {
           value: 'chart',
-          label: 'Apply in main chart'
-        }, {
+          label: 'Apply in main chart',
+        },
+        {
           value: 'remove',
-          label: 'Remove from favorites'
-        }, {
+          label: 'Remove from favorites',
+        },
+        {
           value: 'backtest',
-          label: 'Backtest Strategy'
-        }],
-        value: '',
-        signal_entry: [],
-        signal_exit: []
+          label: 'Backtest Strategy',
+        },
+      ],
+      value: '',
+      signal_entry: [],
+      signal_exit: [],
+      loading: false
     }
   },
   created() {
     this.getStrategyList()
+
+    this.UpdataList()
   },
   methods: {
+    closeDialog() {
+      this.dialogTableVisible = !this.dialogTableVisible
+    },
+    UpdataList() {
+      eventBus.eventVue.$on('UpdateMyStrategyList', (data) => {
+        this.getStrategyList
+        console.log(data)
+      })
+    },
     async getStrategyList() {
+      this.loading = true
       const { data: res } = await this.$http.get('/demo/strategies/')
       this.strategyList = res.results
-      console.log('strategyList', this.strategyList)
+      if(res.results.length <= 0){
+        this.loading = false
+         this.$message.success({
+           message: 'The list of signals is empty',
+           duration: 1000
+         })
+      }
       this.total = res.count
+      this.loading = false
       for (let i = 0; i < this.strategyList.length; i++) {
-        this.strategyList[i].signal_entry = JSON.parse(this.strategyList[i].signal_entry)
-        this.strategyList[i].signal_exit = JSON.parse(this.strategyList[i].signal_exit)
-        
+        this.strategyList[i].signal_entry = JSON.parse(
+          this.strategyList[i].signal_entry
+        )
+        this.strategyList[i].signal_exit = JSON.parse(
+          this.strategyList[i].signal_exit
+        )
       }
     },
     handleCurrentChange(newpage) {
       this.page = newpage
       this.getstrategyList()
     },
-    showDialog(id,params){
-      this.$refs.child.openDialog(id,params)
+    showDialog(id, params) {
+      this.$refs.child.openDialog(id, params)
       this.dialogFormVisible = true
     },
-    async deleteStrategySignal(row){
-      const { data: res } = await this.$http.delete('/demo/strategies/'+row.id+"/")
+    async deleteStrategySignal(row) {
+      const { data: res } = await this.$http.delete(
+        '/demo/strategies/' + row.id + '/'
+      )
       this.$message.success({
-           message: 'Successfully deleted',
-           duration: 1000
-         })
-       this.getStrategyList()
+        message: 'Successfully deleted',
+        duration: 1000,
+      })
+      this.getStrategyList()
     },
     showStrategyDialog() {
       this.dialogTableVisible = !this.dialogTableVisible
-    }
+    },
   },
-  components:{
+  components: {
     'open-favorite': openFavorite,
-    'strategy-dialog': strategyDialog
-  }
+    'strategy-dialog': strategyDialog,
+  },
 }
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.cell .el-button {
+  margin-right: 10px;
+}
+.strategyDialog .el-dialog__wrapper .el-dialog {
+  width: 1120px !important;
+}
+</style>

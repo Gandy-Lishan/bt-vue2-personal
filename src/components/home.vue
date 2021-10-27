@@ -133,6 +133,26 @@ export default {
               path: 'currentBacktests'
             }
           ]
+        },{
+          id: 3,
+          authName: 'Porfolio',
+          children: [
+            {
+              id: 0,
+              authName: 'My Porfolio',
+              path: 'myPorfolios'
+            },
+            {
+              id: 1,
+              authName: 'Opened Porfolio',
+              path: 'openedPorfolio'
+            },
+            {
+              id: 2,
+              authName: 'New Porfolio',
+              path: 'newPorfolio'
+            }
+          ]
         },
       ],
       isCollapse: false,

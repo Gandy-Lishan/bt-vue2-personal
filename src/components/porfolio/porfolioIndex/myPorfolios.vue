@@ -5,7 +5,7 @@
         <el-breadcrumb-item :to="{ path: '#' }">Porfolios</el-breadcrumb-item>
         <el-breadcrumb-item>My Porfolio</el-breadcrumb-item>
       </el-breadcrumb>
-      <el-table :data="myPorfolioList" border stripe size="mini">
+      <el-table :data="myPorfolioList" border stripe size="mini" v-loading="loading">
         <el-table-column label="index" type="index" align="center" width="100px">
         </el-table-column>
         <el-table-column
@@ -56,7 +56,15 @@
         </el-select> -->
       <el-row>
         <el-button type="primary" plain size="mini" @click="openPorfolio(scope.row)">Open</el-button>
-        <el-button type="danger" plain size="mini" @click="runBacktests(scope.row)">Backtest</el-button>
+        <el-popconfirm
+          confirm-button-text='continue'
+          cancel-button-text='cancel'
+          icon="el-icon-info"
+          icon-color="red"
+          title="Bulk sending is temporarily not supported"
+        >
+        <el-button type="danger" plain size="mini" @click="runBacktests(scope.row)" slot="reference">Backtest</el-button>
+        </el-popconfirm>
       </el-row>
       </template>
      </el-table-column>
@@ -69,25 +77,19 @@ export default {
   name: 'newPofolio',
   data() {
     return{
-      myPorfolioList: []
-    }
-  },
-  created(){
+      myPorfolioList: [],
+      loading: false
+  }},
+  created() {
     this.getPorfolioList()
   },
   methods: {
-    // selectSymbol(val,row){
-    //   // this.value = val
-    //   console.log(val);
-    //   if(val === 0){
-    //     this.$router.push('/openedPorfolio')
-    //     this.$store.commit('getNewPorfolioInputsValues',row)
-    //   }
-    // },
     async getPorfolioList() {
+      this.loading = true
       const res = await this.$http.get('/demo/porfolio/')
       if(res.status === 200){
         this.myPorfolioList = res.data.results
+        this.loading = false
       }
     },
     openPorfolio(row) {
@@ -103,7 +105,7 @@ export default {
       const params = {
         backtests: backtestIdArr
       }
-      this.$http.post('/rundev/runbacktest/',this.$qs.stringify(params),{auth:{
+      this.$http.post('/rundev/runporfolio/',this.$qs.stringify(params),{auth:{
         username: 'sentimentrader_backtest_api',
         password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
       }}).then(res => {console.log(res);}).catch(error => {
@@ -118,5 +120,8 @@ export default {
   position: absolute;
   left: 800px;
   top: 90px;
+}
+.el-popover__reference-wrapper .el-button{
+  margin-left: 10px;
 }
 </style>

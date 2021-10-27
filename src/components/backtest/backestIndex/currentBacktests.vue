@@ -81,6 +81,16 @@
       >
       </el-pagination> -->
     </el-card>
+    <el-dialog
+        title="Backtest Result"
+        :visible.sync="dialogVisible"
+        width="30%">
+          <img :src="'data:image/jpg;base64,'+ img_data"></img>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">cancle</el-button>
+          <el-button type="primary" @click="dialogVisible = false">confirm</el-button>
+        </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -92,7 +102,9 @@ export default {
       strategyName: '',
       checkList: [],
       checked: false,
-      backtestId: []
+      backtestId: [],
+      dialogVisible: false,
+      img_data: ''
     }
   },
   created() {
@@ -110,8 +122,13 @@ export default {
       const res = await this.$http.get('/demo/backtest/')
       if(res.status === 200){
         this.backtestList = res.data.results
+      }else{
+           this.$message.success({
+           message: 'The list of signals is empty',
+           duration: 1000
+         })
+         this.loading = false                                                                                                                                                                                                                        
       }
-      console.log('backtestList', this.backtestList);
     },
     async deleteBacktest(id){
       const { data: res } = await this.$http.delete('/demo/backtest/'+id+"/")
@@ -128,7 +145,11 @@ export default {
       this.$http.post('/rundev/runbacktest/',this.$qs.stringify(params),{auth:{
         username: 'sentimentrader_backtest_api',
         password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-      }}).then(res => {console.log(res);}).catch(error => {
+      }}).then(res => {console.log(res);
+      this.img_data = res.data
+      if(res.data !== ''){
+        this.dialogVisible = !this.dialogVisible
+      }}).catch(error => {
         console.log(error);
       })
     },

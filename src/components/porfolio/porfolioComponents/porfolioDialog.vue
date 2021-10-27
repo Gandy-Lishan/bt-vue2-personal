@@ -166,7 +166,7 @@
             label-width="80px"
             label-position="left"
           >
-            <el-form-item label="Commission" prop="commossion">
+            <el-form-item label="Commission" prop="commission">
               <el-input
                 v-model="commisionFormdata.commission"
                 size="mini"
@@ -327,7 +327,7 @@ export default {
       this.newBacktestFormdata.description = this.backtestFormdata.description
       this.newBacktestFormdata.cash = this.backtestFormdata.cash
       this.newBacktestFormdata.cashalloc = this.moneyManagementFormdata.value
-      this.newBacktestFormdata.commossion = this.commisionFormdata.commission
+      this.newBacktestFormdata.commission = this.commisionFormdata.commission
       this.newBacktestFormdata.slippage = this.commisionFormdata.slippage
       this.newBacktestFormdata.riskfreerate = this.commisionFormdata.slippage
       this.newBacktestFormdata.fromdate = this.testPeriodFormdata.starDate

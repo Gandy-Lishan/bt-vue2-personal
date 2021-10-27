@@ -83,3 +83,14 @@ label{
   white-space: nowrap;
   width: 81px !important;
 }
+.strategyDialog .el-dialog__wrapper .el-dialog{
+  width: 1120px !important;
+}
+.strategyBtns{
+  position: absolute;
+  left: 1031px;
+  top: 50px
+}
+.porfolioDialog .el-dialog__wrapper .el-dialog{
+  width: 1180px !important;
+}

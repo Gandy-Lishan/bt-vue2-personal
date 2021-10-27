@@ -1,7 +1,7 @@
 <template>
   <div class="strategyDialog">
-    <el-dialog :visible.sync="dialogTableVisible">
-      <div class="btns">
+    <el-dialog :visible.sync="dialogTableVisible" :before-close="closeDialog">
+      <div class="strategyBtns">
           <el-button size="mini" @click="saveStrategyData">Save</el-button>
       </div>
       <div class="newStategyForm">
@@ -125,6 +125,9 @@ export default {
       }
     },
   methods: {
+    closeDialog(){
+      this.$emit('closeDialog')
+    },
     async setEntryData(data){
        const res = await this.$http.get('/demo/condition/', {
         params: {id: data.id}

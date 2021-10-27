@@ -86,6 +86,7 @@
 import signalDialog from '../strategyComponents/signalDialog.vue'
 import entryDataForm from '../strategyComponents/entryDataForm.vue'
 import exitDataForm from '../strategyComponents/exitDataForm.vue'
+import eventBus from './eventBus/event.js'
 export default {
    name: 'newStategy',
   data() {
@@ -213,7 +214,10 @@ export default {
       }}).then(res => {if(res.status === 201){this.$message.success({
             message: 'The save was successful',
             duration: 1000
-          });this.$router.push('/myStrategies')}else{this.$message.error({
+          });
+          this.$router.push('/myStrategies');
+          eventBus.eventVue.$emit('UpdateMyStrategyList',"aaa")
+          }else{this.$message.error({
             message: 'The save failed',
             duration: 1000
           })}}).catch(error => {
