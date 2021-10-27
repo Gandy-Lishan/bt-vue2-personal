@@ -1,9 +1,11 @@
 /* 全局样式表 */
-html, body, #app {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
 }
 .el-breadcrumb {
   margin-bottom: 15px;
@@ -19,12 +21,67 @@ html, body, #app {
 .el-pagination {
   margin-top: 15px;
 }
-.right .el-form div .el-form-item .el-form-item__label{
+.right .el-form div .el-form-item .el-form-item__label {
   width: 136px !important;
 }
-.right .el-form div .el-form-item .el-form-item__content{
+.right .el-form div .el-form-item .el-form-item__content {
   margin-left: 0px !important;
 }
-.el-dialog__wrapper .el-dialog{
+.el-dialog__wrapper .el-dialog {
   width: 660px !important;
+}
+.moneyManagementForm .el-form-item__label {
+  white-space: nowrap;
+}
+.testPeriodForm
+  .advansedBox
+  .advanceRadio
+  .el-form-item
+  .el-form-item__content {
+  margin-left: 10px !important;
+}
+.moneyAdvance .advanceRadio .el-form-item .el-form-item__content {
+  margin-left: 20px !important;
+}
+.moneyManagementForm .el-form .el-form-item .el-form-item__label {
+  margin-right: 25px;
+}
+.advansedBox .advancedLabel .el-form-item__label {
+  white-space: nowrap;
+  width: 90px !important;
+  margin-left: 10px;
+}
+.advansedBox
+  .advancedLabel
+  .el-form-item__content
+  .advancedInput
+  .el-input__inner {
+  width: 95%;
+}
+.newPorfolioBtns {
+  position: absolute;
+  left: 975 !important;
+  top: 90px;
+}
+.newStrategyForm .el-form .el-form-item .el-form-item__label {
+  white-space: nowrap;
+  width: 81px !important;
+}
+.newPorfolioInputs .el-input__inner {
+  width: 110%;
+  margin-left: 5px;
+}
+.el-table .cell {
+  white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+}
+.el-table__row td .cell .el-button{
+  margin: 0px 3px;
+}
+.porfolioDialog .el-dialog__wrapper .el-dialog{
+  width: 1200px !important
+}
+.strategyDialog .el-dialog__wrapper .el-dialog{
+  width: 1195px !important;
 }

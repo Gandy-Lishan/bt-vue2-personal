@@ -25,6 +25,14 @@ module.exports = {
                 pathRewrite:{
                     "^/demo":"/demo"
                 }
+            },
+            "/rundev":{
+                target: "http://10.131.3.74:8000",
+                // ws:true,
+                changeOrigin:true,
+                pathRewrite:{
+                    "^/rundev":"/rundev"
+                }
             }
         }
     }

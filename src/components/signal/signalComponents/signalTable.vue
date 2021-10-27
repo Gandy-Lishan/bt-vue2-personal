@@ -1,7 +1,12 @@
 <template>
   <div>
     <el-table :data="signalList" border stripe size="mini">
-      <el-table-column label="" align="center" prop="id" width="40px"></el-table-column>
+      <!-- <el-table-column label="" align="center" prop="id" width="40px"></el-table-column> -->
+      <el-table-column label="" align="center" type="index" :index="orderIndex" width="40px">
+          <!-- <template slot-scope="scope">
+            <div v-text="(page * 10) + scope.$index"></div>
+          </template> -->
+      </el-table-column>
       <el-table-column
         label="favorite"
         align="center"
@@ -72,8 +77,8 @@ export default {
   name: 'signalTable',
   props: {
     signalList: Array,
+    page: Number
   },
-  
   methods: {
     openDialog(id, row) {
       this.$emit('openDialog', id, row)
@@ -89,7 +94,6 @@ export default {
           )
           .then((res) => {
             if (res.status == 200){
-
               this.signalList[row.id].favorites != this.signalList[row.id].favorites
               if(res.data.favorites){
                 this.$message.success({
@@ -101,14 +105,20 @@ export default {
                 message: 'Removed to favorites',
                 duration: 1000
               })
-              }
-            }
+              }}
           })
           .catch((error) => {
             console.log(error)
           })
-      
     },
+    orderIndex(index) {
+      if (this.page !== 0){
+      return ((this.page-1) * 10) + (index +1)
+
+      }else{
+        return (0 * 10) + (index +1)
+      }
+    }
     // removeFavorites(row) {
     //   this.$emit('removeFavorites', row)
     // },

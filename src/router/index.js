@@ -11,6 +11,12 @@ import myStrategies from '../components/stategy/strategyIndex/myStrategies.vue'
 import OpenedStrategy from '../components/stategy/strategyIndex/openedStrategy.vue'
 import SystemStrategies from '../components/stategy/strategyIndex/systemStrategies.vue'
 import NewStrategy from '../components/stategy/strategyIndex/newStrategy.vue'
+import NewBacktest from '../components/backtest/backestIndex/newBacktest.vue'
+import CurrentBacktests from '../components/backtest/backestIndex/currentBacktests.vue'
+import MyPorfolios from '../components/porfolio/porfolioIndex/myPorfolios.vue'
+import NewPorfolio from '../components/porfolio/porfolioIndex/newPorfolio.vue'
+import OpenedPorfolio from '../components/porfolio/porfolioIndex/openedPorfolio.vue'
+import PorfolioNewBacktest from '../components/porfolio/porfolioComponents/porfolioNewBacktest.vue'
 Vue.use(Router)
 const router = new Router({
   routes: [
@@ -21,7 +27,7 @@ const router = new Router({
       component: Home,
       redirect: '/welcome',
       children: [
-        { path: '/welcome', component: Welcome},
+        { path: '/welcome', component: Welcome },
         { path: '/signal', component: Signal },
         { path: '/openDialog', component: OpenDialog },
         { path: '/favorite', component: Favorite },
@@ -29,9 +35,14 @@ const router = new Router({
         { path: '/myStrategies', component: myStrategies },
         { path: '/openedStrategy', component: OpenedStrategy },
         { path: '/newStrategy', component: NewStrategy },
-        { path: '/systemStrategies', component: SystemStrategies },
+        { path: '/newBacktest', component: NewBacktest },
+        { path: '/currentBacktests', component: CurrentBacktests },
+        { path: '/myPorfolios', component: MyPorfolios },
+        { path: '/newPorfolio', component: NewPorfolio },
+        { path: '/openedPorfolio', component: OpenedPorfolio },
+        { path: '/porfolioNewBacktest', component: PorfolioNewBacktest }
       ]
-    },
+    }
   ]
 })
 // 挂载路由导航守卫

@@ -4,6 +4,7 @@ import router from './router'
 import ElementUI, { Message } from 'element-ui'
 import qs from "querystring"
 import 'element-ui/lib/theme-chalk/index.css'
+import locale from '../node_modules/element-ui/lib/locale/lang/en'
 // 导入全局样式表
 import './assets/css/global.css'
 // 导入字体图标
@@ -11,6 +12,7 @@ import './assets/fonts/iconfont.css'
 // 导入全局样式表
 import './assets/style/global.css'
 import axios from "axios"
+import store from './store/store'
 // 配置请求根路径
 axios.defaults.baseURL = ''
 // 请求拦截器，挂载请求头
@@ -23,12 +25,13 @@ axios.interceptors.request.use(config => {
   return config
 })
 Vue.prototype.$qs= qs
-Vue.use(ElementUI)
+Vue.use(ElementUI, { locale })
 Vue.prototype.$http = axios
 Vue.prototype.$message = Message
 Vue.config.productionTip = false
 
 new Vue({
+  store,
   router,
   render: h => h(App)
 }).$mount('#app')

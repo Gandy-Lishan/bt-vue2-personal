@@ -50,11 +50,22 @@
           prop="risk_reward_ratio"
           align="center"
         ></el-table-column> -->
-        <el-table-column label="delete" align="center">
+        <el-table-column align="center" width="100px">
           <template slot-scope="scope">
-          <span v-if="scope.row.favorites" @click="deleteFavoriteSignal(scope.row)">
-            <i class="el-icon-delete"></i>
-          </span>
+          <!-- <span v-if="scope.row.favorites" @click="deleteFavoriteSignal(scope.row)"> -->
+            <!-- <i class="el-icon-delete"></i> -->
+            <el-popconfirm
+            confirm-button-text='continue'
+            cancel-button-text='cancel'
+            icon="el-icon-info"
+            icon-color="red"
+            title="Are you sure you want to delete it?"
+            @confirm="deleteFavoriteSignal(scope.row)"
+            >
+              <!-- <el-button type="danger" icon="el-icon-delete" circle size="mini"></el-button> -->
+              <el-button type="danger" icon="el-icon-delete" circle v-if="scope.row.favorites" size="mini" slot="reference"></el-button>
+            </el-popconfirm>
+          <!-- </span> -->
           </template>
         </el-table-column>
         <el-table-column align="center">
@@ -115,6 +126,7 @@ export default {
     },
     async deleteFavoriteSignal(row){
       const { data: res } = await this.$http.delete('/demo/signal/'+row.id+"/")
+      console.log('deleteFav',res);
       this.$message.success({
            message: 'Successfully deleted',
            duration: 1000

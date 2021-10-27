@@ -34,11 +34,21 @@
         ></el-table-column>
         <el-table-column label="frequency" prop="frequency" align="center">
         </el-table-column>
-        <el-table-column label="delete" align="center">
+        <el-table-column align="center" width="100px">
           <template slot-scope="scope">
-          <span v-if="scope.row.favorites" @click="deleteCustomSignal(scope.row)">
+          <!-- <span v-if="scope.row.favorites" @click="deleteCustomSignal(scope.row)">
             <i class="el-icon-delete"></i>
-          </span>
+          </span> -->
+            <el-popconfirm
+            confirm-button-text='continue'
+            cancel-button-text='cancel'
+            icon="el-icon-info"
+            icon-color="red"
+            title="Are you sure you want to delete it?"
+            @confirm="deleteCustomSignal(scope.row)"
+            >
+               <el-button type="danger" icon="el-icon-delete" circle v-if="scope.row.favorites" size="mini" slot="reference"></el-button>
+            </el-popconfirm>
           </template>
         </el-table-column>
         <el-table-column align="center">
@@ -74,6 +84,7 @@
 <script>
 import openFavorite from '../signalComponents/openFavorite.vue'
 export default {
+  name: 'custom',
   data() {
     return {
       total: 0,

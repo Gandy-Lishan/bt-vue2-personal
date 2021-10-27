@@ -12,7 +12,7 @@
         <el-tabs v-loading="loading" v-model="queryInfo.type" @tab-click="getFilterList">
           <el-tab-pane label="long" name="long">
             <!-- long 表格区域 -->
-            <signal-table @openDialog="openDialog" :signalList="signalList" @addFavorites="addFavorites"></signal-table>
+            <signal-table @openDialog="openDialog" :page="page" :signalList="signalList" @addFavorites="addFavorites"></signal-table>
            
             <!-- 若表格数据过多可以增加分页区域 -->
            <el-pagination
@@ -27,7 +27,7 @@
           </el-tab-pane>
           <el-tab-pane label="short" name="short">
             <!-- short 表格区域 -->
-            <signal-table @openDialog="openDialog" :signalList="signalList"></signal-table>
+            <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table>
   
             <!-- 若表格数据过多可以增加分页区域 -->
             <el-pagination
@@ -42,7 +42,7 @@
           </el-tab-pane>
           <el-tab-pane label="longexit" name="longexit">
             <!-- longexit 表格区域 -->
-            <signal-table @openDialog="openDialog" :signalList="signalList"></signal-table>
+            <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table>
            
             <!-- 若表格数据过多可以增加分页区域 -->
             <el-pagination
@@ -56,7 +56,7 @@
           </el-tab-pane>
           <el-tab-pane label="shortexit" name="shortexit">
             <!-- shortexit 表格区域 -->
-            <signal-table @openDialog="openDialog" :signalList="signalList"></signal-table>
+            <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table>
    
             <!-- 若表格数据过多可以增加分页区域 -->
            <el-pagination
@@ -197,6 +197,7 @@ export default {
         // 当前每页显示多少条数据
         // pagesize: 5
       },
+      page: 0,
       conditions:[">","<","CrossAbove","CrossBelow",],
       combinations:["AND","OR","SUM",],
       signalList: [],
@@ -267,9 +268,17 @@ export default {
 
     handleCurrentChange(newpage) {
       this.queryInfo.page = newpage
-      this.getSignallist("system")
+      console.log(newpage);
+      if(1< newpage < 4){
+        this.page = newpage
+      }
+      if(newpage == 1){
+        this.page = 0
+      }
+        this.getSignallist("system")
     },
     getFilterList(even) {
+      this.page = 0
       this.queryInfo.type = even.name
       this.queryInfo.page = 1
       this.getSignallist("system")

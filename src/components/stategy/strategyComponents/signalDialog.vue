@@ -16,9 +16,6 @@
           </template> -->
           <template slot-scope="scope">
             <el-radio v-model="radio" @change="checkEntry(scope.row)" :label="scope.row.id">{{ '' }}</el-radio>
-              <!-- <el-radio-group v-model="radio">
-    <el-radio :label="scope.row.id">{{""}}</el-radio>
-  </el-radio-group> -->
           </template>
       </el-table-column>
       <!-- <el-table-column label="select">

@@ -18,13 +18,13 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          label="entry_name"
+          label="entry signal"
           prop="signal_entry.name"
           align="center"
         >
         </el-table-column>
-                <el-table-column
-          label="exit_name"
+        <el-table-column
+          label="exit signal"
           prop="signal_exit.name"
           align="center"
         >
@@ -60,11 +60,22 @@
             </el-select>
         </template>
       </el-table-column> -->
-      <el-table-column label="delete" align="center">
+      <el-table-column align="center">
           <template slot-scope="scope">
-          <span @click="deleteStrategySignal(scope.row)">
+          <!-- <span @click="deleteStrategySignal(scope.row)">
             <i class="el-icon-delete"></i>
-          </span>
+          </span> -->
+          <el-button type="primary" icon="el-icon-edit" circle size="mini" style="{margin-right:10px}" @click="showStrategyDialog"></el-button>
+            <el-popconfirm
+            confirm-button-text='continue'
+            cancel-button-text='cancel'
+            icon="el-icon-info"
+            icon-color="red"
+            title="Are you sure you want to delete it?"
+            @confirm="deleteStrategySignal(scope.row)"
+            >
+                <el-button type="danger" icon="el-icon-delete" circle slot="reference" size="mini"></el-button>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -79,14 +90,17 @@
       </el-pagination>
     </el-card>
     <open-favorite :dialogFormVisible="dialogFormVisible" ref="child"></open-favorite>
+    <strategy-dialog :dialogTableVisible="dialogTableVisible"></strategy-dialog>
   </div>
 </template>
 <script>
 import openFavorite from '../../signal/signalComponents/openFavorite.vue';
+import strategyDialog from '../strategyComponents/strategyDialog.vue'
 export default {
   name: 'favoriteStrategies',
   data() {
     return {
+      dialogTableVisible: false,
       page: 1,
       total: 0,
       strategyList: [],
@@ -115,9 +129,6 @@ export default {
   methods: {
     async getStrategyList() {
       const { data: res } = await this.$http.get('/demo/strategies/')
-      // if (res.meta.status !== 200) {
-      //   return this.$message.error('获取信号列表失败')
-      // }
       this.strategyList = res.results
       console.log('strategyList', this.strategyList)
       this.total = res.count
@@ -126,15 +137,6 @@ export default {
         this.strategyList[i].signal_exit = JSON.parse(this.strategyList[i].signal_exit)
         
       }
-      // this.strategyList.forEach(item => {
-      //   this.signal_entry.push(JSON.parse(item.signal_entry))
-      //   this.signal_exit.push(JSON.parse(item.signal_exit))
-      // })
-      // const entry = this.signal_entry
-      // const exit = this.signal_exit
-      // this.strategyList.entryData = entry
-      // this.strategyList.exitData = exit
-      // console.log('srtatttegy',this.strategyList);
     },
     handleCurrentChange(newpage) {
       this.page = newpage
@@ -151,10 +153,14 @@ export default {
            duration: 1000
          })
        this.getStrategyList()
+    },
+    showStrategyDialog() {
+      this.dialogTableVisible = !this.dialogTableVisible
     }
   },
   components:{
-    'open-favorite': openFavorite
+    'open-favorite': openFavorite,
+    'strategy-dialog': strategyDialog
   }
 }
 </script>
