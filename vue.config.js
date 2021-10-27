@@ -11,6 +11,20 @@ module.exports = {
         config.resolve.alias
             .set("assets", resolve("src/assets"))
             .set("styles", resolve("src/assets/styles"))
+
+        // config.module
+        //     .rule('file-loader')
+        //     .test(/\.(jpg|gif|png|svg|cur)$/)
+        //     .use('file-loader')
+        //     .loader('file-loader')
+        //     .end()
+
+        // config.module
+        //     .rule('sass-loader')
+        //     .test(/\.(s)?css$/)
+        //     .use('sass-loader')
+        //     .loader('sass-loader')
+        //     .end()
     },
     devServer: {
         // open:true,

@@ -78,11 +78,12 @@
       >
       </el-pagination>
     </el-card>
-    <open-favorite :dialogFormVisible="dialogFormVisible" ref="child"></open-favorite>
+    <!-- edited -->
+    <open-custom @call-father="getCustomList" :dialogFormVisible.sync="dialogFormVisible" ref="child"></open-custom>
   </div>
 </template>
 <script>
-import openFavorite from '../signalComponents/openFavorite.vue'
+import openCustom from '../signalComponents/openCustom.vue'
 export default {
   name: 'custom',
   data() {
@@ -128,7 +129,7 @@ export default {
     }
   },
   components: {
-    'open-favorite': openFavorite
+    'open-custom': openCustom
   }
 }
 </script>

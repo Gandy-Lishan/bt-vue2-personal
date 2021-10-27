@@ -67,6 +67,7 @@
           >
           <el-button type="danger" icon="el-icon-delete" circle slot="reference" size="mini"></el-button>
           </el-popconfirm>
+
         </template>
         </el-table-column>
       </el-table>
@@ -114,7 +115,6 @@ export default {
     },
     async deleteBacktest(id){
       const { data: res } = await this.$http.delete('/demo/backtest/'+id+"/")
-      console.log(res);
       this.$message.success({
            message: 'Successfully deleted',
            duration: 1000

@@ -1,6 +1,10 @@
 <template>
 <div class="symbolDialog">
+<<<<<<< HEAD
   <el-dialog title="symbolList" :modal=false :visible.sync="symbolDialogVisible" :before-close='closeDialog'>
+=======
+  <el-dialog title="symbolList" :visible.sync="symbolDialogVisible" :before-close='closeDialog'>
+>>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
    <!-- <el-pagination
       @current-change="handleCurrentChange"
       :current-page="queryInfo.page"

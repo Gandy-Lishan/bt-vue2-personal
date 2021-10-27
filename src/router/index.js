@@ -4,7 +4,6 @@ import Login from '../components/login.vue'
 import Home from '../components/home.vue'
 import Welcome from '../components/welcome.vue'
 import Signal from '../components/signal/signalIndex/signal.vue'
-import OpenDialog from '../components/signal/signalComponents/openDialog.vue'
 import Favorite from '../components/signal/signalIndex/favorite.vue'
 import CustomSignal from '../components/signal/signalIndex/custom.vue'
 import myStrategies from '../components/stategy/strategyIndex/myStrategies.vue'
@@ -29,7 +28,6 @@ const router = new Router({
       children: [
         { path: '/welcome', component: Welcome },
         { path: '/signal', component: Signal },
-        { path: '/openDialog', component: OpenDialog },
         { path: '/favorite', component: Favorite },
         { path: '/custom', component: CustomSignal },
         { path: '/myStrategies', component: myStrategies },
@@ -37,10 +35,13 @@ const router = new Router({
         { path: '/newStrategy', component: NewStrategy },
         { path: '/newBacktest', component: NewBacktest },
         { path: '/currentBacktests', component: CurrentBacktests },
+<<<<<<< HEAD
         { path: '/myPorfolios', component: MyPorfolios },
         { path: '/newPorfolio', component: NewPorfolio },
         { path: '/openedPorfolio', component: OpenedPorfolio },
         { path: '/porfolioNewBacktest', component: PorfolioNewBacktest }
+=======
+>>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
       ]
     }
   ]

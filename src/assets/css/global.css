@@ -7,6 +7,8 @@ body,
   padding: 0;
   font-family: sans-serif;
 }
+
+
 .el-breadcrumb {
   margin-bottom: 15px;
   font-size: 12px;
@@ -18,9 +20,23 @@ body,
   margin-top: 15px;
   font-size: 12px;
 }
+
+
+/* edited */
+.el-table .cell{
+  word-break: keep-all;
+}
+
+
+/* edited */
+label{
+  word-break: keep-all;
+}
+
 .el-pagination {
   margin-top: 15px;
 }
+<<<<<<< HEAD
 .right .el-form div .el-form-item .el-form-item__label {
   width: 136px !important;
 }
@@ -84,4 +100,52 @@ body,
 }
 .strategyDialog .el-dialog__wrapper .el-dialog{
   width: 1195px !important;
+=======
+
+/* edited */
+/* .right .el-form div .el-form-item .el-form-item__label{
+  width: 136px !important;
+} */
+
+/* edited */
+.right .el-form div .el-form-item .el-form-item__content{
+  margin-left: 160px !important;
+}
+.el-dialog{
+  margin-top: 10vh !important;
+}
+
+/* edited */
+.el-dialog__wrapper{
+  overflow-y: hidden !important;
+}
+
+/* edited */
+.el-dialog__wrapper .el-dialog{
+  width: 860px !important;
+}
+.moneyManagementForm .el-form-item__label{
+  white-space: nowrap;
+}
+.testPeriodForm .advansedBox .advanceRadio .el-form-item .el-form-item__content{
+  margin-left: 10px !important;
+}
+.moneyAdvance .advanceRadio .el-form-item .el-form-item__content{
+  margin-left: 20px !important;
+}
+.moneyManagementForm .el-form .el-form-item .el-form-item__label{
+  margin-right: 25px;
+}
+.advansedBox .advancedLabel .el-form-item__label{
+  white-space: nowrap;
+  width: 90px !important;
+  margin-left: 10px;
+ }
+.advansedBox .advancedLabel .el-form-item__content .advancedInput .el-input__inner{
+ width: 95%;
+}
+.newStrategyForm .el-form .el-form-item .el-form-item__label{
+  white-space: nowrap;
+  width: 81px !important;
+>>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
 }

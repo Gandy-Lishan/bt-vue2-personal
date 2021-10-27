@@ -24,7 +24,11 @@
         >
         </el-table-column>
         <el-table-column
+<<<<<<< HEAD
           label="exit signal"
+=======
+          label="exit_name"
+>>>>>>> 2c510e8bbe6cabc2845cb26d722e3c9ad8f0cd70
           prop="signal_exit.name"
           align="center"
         >
