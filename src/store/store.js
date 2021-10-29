@@ -9,7 +9,9 @@ export default new Vuex.Store({
       inputOriginalAssetValue: ''
     },
     openedPorfolioBacktests: [],
-    count: 1
+    count: 1,
+    porfolioCash: '11',
+    savePorfolioData: []
   },
   mutations: {
     getNewPorfolioInputsValues(state,row) {
@@ -17,6 +19,9 @@ export default new Vuex.Store({
       state.newPorfolioInputsValues.inputDescriptionValue = row.description
       state.newPorfolioInputsValues.inputOriginalAssetValue = row.original_asset
       state.openedPorfolioBacktests = row.backtests
+    },
+    getSavePorfolioData(state,list){
+      state.savePorfolioData = list
     }
   },
   actions: {}

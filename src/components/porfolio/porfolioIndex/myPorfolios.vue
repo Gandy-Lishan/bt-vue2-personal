@@ -68,6 +68,24 @@
       </el-row>
       </template>
      </el-table-column>
+     
+        <el-table-column
+        align="center"
+        width="100px"
+      >
+      <template slot-scope="scope">
+        <el-popconfirm
+        confirm-button-text='continue'
+        cancel-button-text='cancel'
+        icon="el-icon-info"
+        icon-color="red"
+        title="Are you sure you want to delete it?"
+        @confirm="deleteMyPorfolio(scope.row)"
+        >
+            <el-button type="danger" icon="el-icon-delete" circle size="mini" slot="reference"></el-button>
+        </el-popconfirm>
+      </template>
+      </el-table-column>
       </el-table>
     </el-card>
   </div>
@@ -94,7 +112,6 @@ export default {
     },
     openPorfolio(row) {
       this.$router.push('/openedPorfolio')
-      console.log('row',row);
         this.$store.commit('getNewPorfolioInputsValues',row)
     },
     runBacktests(row){
@@ -111,6 +128,16 @@ export default {
       }}).then(res => {console.log(res);}).catch(error => {
         console.log(error);
       })
+    },
+    async deleteMyPorfolio(row){
+      const res = await this.$http.delete('/demo/porfolio/'+ row.id + '/')
+      if(res.status === 204){
+         this.$message.success({
+           message: 'Successfully deleted',
+           duration: 1000
+         })
+         this.getPorfolioList()
+      }
     }
   }
 }

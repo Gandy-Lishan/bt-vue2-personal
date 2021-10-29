@@ -29,53 +29,15 @@
           align="center"
         >
         </el-table-column>
-        <!-- <el-table-column label="source" prop="user" align="center" width="80px">
-          <template slot-scope="scope">
-            <span v-if="scope.row.user === 'admin'">system</span>
-            <span v-else>custom</span>
-          </template>
-        </el-table-column> -->
-        <!-- <el-table-column
-          label="winrate percentage"
-          prop="winrate_percentage"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          label="risk-reward ratio"
-          prop="risk_reward_ratio"
-          align="center"
-        ></el-table-column> -->
-        <!-- <el-table-column align="center" label="action">
-        <template slot-scope="scope"> -->
-        <!-- <el-button @click="showDialog(scope.row.id, scope.row)"
-            >open</el-button
-          > -->
-        <!-- <el-select v-model="value" clearable placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-        </template>
-      </el-table-column> -->
         <el-table-column align="center">
           <template slot-scope="scope">
-            <!-- <span @click="deleteStrategySignal(scope.row)">
-            <i class="el-icon-delete"></i>
-          </span> -->
             <el-button
               type="primary"
               icon="el-icon-edit"
               circle
               size="mini"
-              style="
-                 {
-                  margin-right: 10px;
-                }
-              "
-              @click="showStrategyDialog"
+              style="margin-right: 10px;"
+              @click="showStrategyDialog(scope.row)"
             ></el-button>
             <el-popconfirm
               confirm-button-text="continue"
@@ -113,6 +75,7 @@
     <strategy-dialog
       :dialogTableVisible="dialogTableVisible"
       @closeDialog="closeDialog"
+      :editData="editData"
     ></strategy-dialog>
   </div>
 </template>
@@ -150,7 +113,8 @@ export default {
       value: '',
       signal_entry: [],
       signal_exit: [],
-      loading: false
+      loading: false,
+      editData: {}
     }
   },
   created() {
@@ -165,7 +129,6 @@ export default {
     UpdataList() {
       eventBus.eventVue.$on('UpdateMyStrategyList', (data) => {
         this.getStrategyList
-        console.log(data)
       })
     },
     async getStrategyList() {
@@ -174,10 +137,6 @@ export default {
       this.strategyList = res.results
       if(res.results.length <= 0){
         this.loading = false
-         this.$message.success({
-           message: 'The list of signals is empty',
-           duration: 1000
-         })
       }
       this.total = res.count
       this.loading = false
@@ -208,8 +167,9 @@ export default {
       })
       this.getStrategyList()
     },
-    showStrategyDialog() {
+    showStrategyDialog(row) {
       this.dialogTableVisible = !this.dialogTableVisible
+      this.editData = row
     },
   },
   components: {

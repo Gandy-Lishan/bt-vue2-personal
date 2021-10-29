@@ -13,6 +13,8 @@ import './assets/fonts/iconfont.css'
 import './assets/style/global.css'
 import axios from "axios"
 import store from './store/store'
+import VueDirectiveImagePreviewer from "vue-directive-image-previewer"
+import "vue-directive-image-previewer/dist/assets/style.css"
 // 配置请求根路径
 axios.defaults.baseURL = ''
 // 请求拦截器，挂载请求头
@@ -29,7 +31,10 @@ Vue.use(ElementUI, { locale })
 Vue.prototype.$http = axios
 Vue.prototype.$message = Message
 Vue.config.productionTip = false
-
+Vue.use(VueDirectiveImagePreviewer,{
+  zIndex:9999,
+  previewSize:3
+})
 new Vue({
   store,
   router,

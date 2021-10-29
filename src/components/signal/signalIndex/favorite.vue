@@ -39,20 +39,16 @@
         ></el-table-column>
         <el-table-column label="frequency" prop="frequency" align="center">
         </el-table-column>
-        <!-- <el-table-column
-          label="winrate percentage"
-          prop="winrate_percentage"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          label="risk-reward ratio"
-          prop="risk_reward_ratio"
-          align="center"
-        ></el-table-column> -->
         <el-table-column align="center" width="100px">
           <template slot-scope="scope">
-          <!-- <span v-if="scope.row.favorites" @click="deleteFavoriteSignal(scope.row)"> -->
-            <!-- <i class="el-icon-delete"></i> -->
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              size="mini"
+              style="margin-right: 10px;"
+              @click="showDialog(scope.row.id, scope.row)"
+            ></el-button>
             <el-popconfirm
             confirm-button-text='continue'
             cancel-button-text='cancel'
@@ -61,19 +57,11 @@
             title="Are you sure you want to delete it?"
             @confirm="deleteFavoriteSignal(scope.row)"
             >
-              <!-- <el-button type="danger" icon="el-icon-delete" circle size="mini"></el-button> -->
               <el-button type="danger" icon="el-icon-delete" circle v-if="scope.row.favorites" size="mini" slot="reference"></el-button>
             </el-popconfirm>
           <!-- </span> -->
           </template>
         </el-table-column>
-        <el-table-column align="center">
-        <template slot-scope="scope">
-          <el-button @click="showDialog(scope.row.id, scope.row)"
-            >open</el-button
-          >
-        </template>
-      </el-table-column>
       </el-table>
       <!-- 若表格数据过多可以增加分页区域 -->
       <el-pagination
@@ -126,10 +114,6 @@ export default {
       this.favoriteList = res.results 
       if(res.results.length <= 0){
         this.loading = false
-         this.$message.success({
-           message: 'The list of signals is empty',
-           duration: 1000
-         })
       }
       this.total = res.count
       this.loading = false
@@ -140,11 +124,9 @@ export default {
     },
     showDialog(id,params){
       this.$refs.child.openDialog(id,params)
-      //this.dialogFormVisible = true
     },
     async deleteFavoriteSignal(row){
       const { data: res } = await this.$http.delete('/demo/signal/'+row.id+"/")
-      console.log('deleteFav',res);
       this.$message.success({
            message: 'Successfully deleted',
            duration: 1000

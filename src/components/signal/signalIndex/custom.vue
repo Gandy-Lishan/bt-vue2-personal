@@ -13,6 +13,21 @@
         <el-table-column label="type" prop="type" align="center" width="80px">
         </el-table-column>
         <el-table-column
+        label="favorite"
+        align="center"
+        width="70px"
+        prop="favorites"
+      >
+        <template slot-scope="scope">
+          <span v-if="scope.row.favorites" @click="addFavorites(scope.row)">
+            <i class="el-icon-star-on"></i>
+          </span>
+          <span v-else @click="addFavorites(scope.row)">
+            <i class="el-icon-star-off"></i>
+          </span>
+        </template>
+      </el-table-column>
+        <el-table-column
           label="analysis basis"
           prop="analysis_basis"
           align="center"
@@ -36,9 +51,14 @@
         </el-table-column>
         <el-table-column align="center" width="100px">
           <template slot-scope="scope">
-          <!-- <span v-if="scope.row.favorites" @click="deleteCustomSignal(scope.row)">
-            <i class="el-icon-delete"></i>
-          </span> -->
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              size="mini"
+              style="margin-right: 10px;"
+              @click="showDialog(scope.row.id, scope.row)"
+            ></el-button>
             <el-popconfirm
             confirm-button-text='continue'
             cancel-button-text='cancel'
@@ -47,27 +67,10 @@
             title="Are you sure you want to delete it?"
             @confirm="deleteCustomSignal(scope.row)"
             >
-               <el-button type="danger" icon="el-icon-delete" circle v-if="scope.row.favorites" size="mini" slot="reference"></el-button>
+               <el-button type="danger" icon="el-icon-delete" circle size="mini" slot="reference"></el-button>
             </el-popconfirm>
           </template>
         </el-table-column>
-        <el-table-column align="center">
-          <template slot-scope="scope">
-            <el-button @click="showDialog(scope.row.id, scope.row)"
-              >open</el-button
-            >
-          </template>
-      </el-table-column>
-        <!-- <el-table-column
-          label="winrate percentage"
-          prop="winrate_percentage"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          label="risk-reward ratio"
-          prop="risk_reward_ratio"
-          align="center"
-        ></el-table-column> -->
       </el-table>
       <el-pagination
         @current-change="handleCurrentChange"
@@ -110,13 +113,38 @@ export default {
       this.customList = res.results
       if(res.results.length <= 0){
         this.loading = false
-         this.$message.success({
-           message: 'The list of signals is empty',
-           duration: 1000
-         })
       }
       this.total = res.count
       this.loading = false
+    },
+        addFavorites(row) {
+      row.favorites = !row.favorites
+      const addFavoritesData = row
+      let vm = this
+      //qs.stringify()将对象 序列化成URL的形式，以&进行拼接
+      this.$http
+          .put(
+            '/demo/signal/' + row.id + '/',
+            vm.$qs.stringify(addFavoritesData)
+          )
+          .then((res) => {
+            if (res.status == 200){
+              this.signalList[row.id].favorites != this.signalList[row.id].favorites
+              if(res.data.favorites){
+                this.$message.success({
+                message: 'Added to my favorite',
+                duration: 1000
+              })
+              }else {
+                this.$message.success({
+                message: 'Removed to favorites',
+                duration: 1000
+              })
+              }}
+          })
+          .catch((error) => {
+            console.log(error)
+          })
     },
     handleCurrentChange(newpage) {
       this.queryInfo.page = newpage

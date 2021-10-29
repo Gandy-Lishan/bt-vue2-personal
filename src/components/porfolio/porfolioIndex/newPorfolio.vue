@@ -4,7 +4,9 @@
       <div class="newPorfolioBtns">
         <el-row>
           <el-button size="mini">Back</el-button>
-          <el-button size="mini" @click="createPorfolioItems">Save</el-button>
+          <el-button size="mini" @click="createPorfolioItems" type="primary"
+            >Save Porfolio</el-button
+          >
           <el-button size="mini">Backtest Porfolio</el-button>
           <el-button size="mini">Optimize Porfolio</el-button>
         </el-row>
@@ -40,7 +42,7 @@
               size="mini"
               @click="showDialog()"
               class="addPorfolioItem"
-              >Add</el-button
+              >Add Strategy</el-button
             >
           </el-row>
         </el-form>
@@ -58,11 +60,11 @@
           prop="stock"
           align="center"
         ></el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           label="percentage"
           prop="percentage"
           align="center"
-        ></el-table-column>
+        ></el-table-column> -->
         <el-table-column
           label="strategy"
           prop="strategy"
@@ -83,22 +85,34 @@
           prop="status"
           align="center"
         ></el-table-column>
-        <el-table-column align="center" label="action">
-          <!-- <el-button type="danger" icon="el-icon-delete" circle @click="deleteNewPorfolio" size="mini"></el-button> -->
-          <el-row>
-            <el-button type="primary" plain size="mini" @click="showDialog()"
-              >Add</el-button
+        <el-table-column align="center" width="100px">
+          <template slot-scope="scope">
+            <el-popconfirm
+              confirm-button-text="continue"
+              cancel-button-text="cancel"
+              icon="el-icon-info"
+              icon-color="red"
+              title="Are you sure you want to delete it?"
+              @confirm="deletePorfolioItem(scope)"
             >
-            <el-button type="danger" plain size="mini">Delete</el-button>
-          </el-row>
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                circle
+                size="mini"
+                slot="reference"
+              ></el-button>
+            </el-popconfirm>
+          </template>
         </el-table-column>
       </el-table>
-
-      <porfolio-dialog
-        :dialogFormVisible="dialogFormVisible"
-        @showDialog="showDialog"
-        @submitBacktestData="submitBacktestData"
-      ></porfolio-dialog>
+      <div class="strategyDailogBox">
+        <porfolio-dialog
+          :dialogFormVisible="dialogFormVisible"
+          @showDialog="showDialog"
+          @submitBacktestData="submitBacktestData"
+        ></porfolio-dialog>
+      </div>
     </el-card>
   </div>
 </template>
@@ -130,7 +144,16 @@ export default {
     }
   },
   created() {
-    // this.getPorfolioList()
+    // this.submitBacktestData();
+    let vm = this
+    var a = vm.$store.state.savePorfolioData
+    if (a.length !== 0) {
+      for (var i = 0; i < a.length; i++) {
+        a[i].strategy = a[i]['strategy'].id
+        this.submitBacktestData(a[i])
+      }
+    }
+    vm.$store.state.savePorfolioData = []
   },
   methods: {
     deleteNewPorfolio() {
@@ -141,6 +164,9 @@ export default {
         '/demo/porfolio/' + this.porfolioId + '/'
       )
       this.porfolioList = res.data.results
+      // this.porfolioList.forEach(item => {
+      //   item.percentage = this.porfolioCash
+      // })
     },
     showDialog() {
       this.dialogFormVisible = !this.dialogFormVisible
@@ -151,6 +177,12 @@ export default {
       params.description = this.newPorfolioInputsValues.inputDescriptionValue
       params.original_asset =
         this.newPorfolioInputsValues.inputOriginalAssetValue
+      let percentageList = []
+      this.backtestList.forEach((item) => {
+        item.cash = item.cash
+        // percentageList.push(Math.round(Number(item.cash)/Number(params.original_asset)))
+      })
+      console.log('percentageList', this.backtestList)
       var porfolioId
 
       this.$http
@@ -161,13 +193,12 @@ export default {
           },
         })
         .then((res) => {
-          console.log('backtestList',this.backtestList);
-          if(this.backtestList.length !== 0){
-            console.log("aaa");
+          if (this.backtestList.length !== 0) {
+            console.log('aaa')
             porfolioId = res.data.id
             params.backtests = JSON.stringify(this.backtestList)
             params.id = porfolioId
-            
+
             this.$http
               .put(
                 '/demo/porfolio/' + porfolioId + '/',
@@ -179,18 +210,23 @@ export default {
                   },
                 }
               )
-              .then((res) => console.log(res))
+              .then((res) => {
+                if (res.status === 200) {
+                  this.$router.push('/myPorfolios')
+                }
+              })
           }
         })
         .catch((error) => {
           console.error()
         })
-      // this.getPorfolioList()
-      // const backtestList = this.backtestList
     },
     submitBacktestData(backtestArr) {
-      this.backtestList = backtestArr
-      console.log('backtestArr', backtestArr)
+      this.backtestList.push(backtestArr)
+    },
+    deletePorfolioItem(scope) {
+      const rowIndex = scope.$index
+      this.backtestList.splice(rowIndex, 1)
     },
   },
   components: {

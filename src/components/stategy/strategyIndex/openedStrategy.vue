@@ -222,11 +222,6 @@ export default {
         }
       }
     },
-  created() {
-    // this.entryFormdata = this.$route.query.params
-    // get conditions
-    console.log("hello");
-  },
   methods: {
     submitForm(form) {
       if (
