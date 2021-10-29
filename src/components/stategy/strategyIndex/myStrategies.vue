@@ -40,8 +40,8 @@
               @click="showStrategyDialog(scope.row)"
             ></el-button>
             <el-popconfirm
-              confirm-button-text="continue"
-              cancel-button-text="cancel"
+              confirm-button-text="yes"
+              cancel-button-text="no"
               icon="el-icon-info"
               icon-color="red"
               title="Are you sure you want to delete it?"
@@ -76,6 +76,8 @@
       :dialogTableVisible="dialogTableVisible"
       @closeDialog="closeDialog"
       :editData="editData"
+      @getStrategyList="getStrategyList"
+      :myStrategyItemId="myStrategyItemId"
     ></strategy-dialog>
   </div>
 </template>
@@ -88,6 +90,7 @@ export default {
   data() {
     return {
       dialogTableVisible: false,
+      myStrategyItemId: 0,
       page: 1,
       total: 0,
       strategyList: [],
@@ -169,6 +172,7 @@ export default {
     },
     showStrategyDialog(row) {
       this.dialogTableVisible = !this.dialogTableVisible
+      this.myStrategyItemId = row.id
       this.editData = row
     },
   },

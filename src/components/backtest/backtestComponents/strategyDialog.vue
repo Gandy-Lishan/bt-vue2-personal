@@ -1,28 +1,12 @@
 <template>
 <div class="strategyDialog">
   <el-dialog title="strategyList" :modal=false :visible.sync="strategyDialogVisible" :before-close='closeDialog'>
-   <!-- <el-pagination
-      @current-change="handleCurrentChange"
-      :current-page="queryInfo.page"
-      :page-size="10"
-      layout="total, prev, pager, next"
-      :total="total"
-    >
-    </el-pagination> -->
     <el-table :data="strategyList" border stripe size="mini">
       <el-table-column  width="35px">
-          <!-- <template slot-scope="scope">
-          <el-checkbox  v-model="value" :label="scope.row.id" change="checkEntry(scope)"></el-checkbox>
-          </template> -->
           <template slot-scope="scope">
             <el-radio v-model="radio" @change="checkEntry(scope.row)" :label="scope.row.name">{{ '' }}</el-radio>
           </template>
       </el-table-column>
-      <!-- <el-table-column label="select">
-        <template slot-scope="scope">
-          <el-button @click="selectsymbol(scope.row)"></el-button>
-        </template>
-      </el-table-column> -->
       <el-table-column label="name" prop="name" align="center" width="80px">
       </el-table-column>
        <el-table-column

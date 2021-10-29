@@ -64,7 +64,7 @@
             </el-form>
         </div>
         <div class="strategyForm">
-          <p class="pText">Stategy</p>
+          <p class="pText"></p>
           <el-form
             :model="strategyFormdata"
             label-width="80px"
@@ -106,7 +106,7 @@
             label-width="80px"
             label-position="left"
           >
-            <el-form-item label="Start data" size="mini">
+            <el-form-item label="Start date" size="mini">
               <!-- <el-button class="LisBtns">Browse from Calenda</el-button> -->
               <el-date-picker
                 v-model="testPeriodFormdata.starDate"
@@ -118,7 +118,7 @@
               >
               </el-date-picker>
             </el-form-item>
-            <el-form-item label="End data" size="mini">
+            <el-form-item label="End date" size="mini">
               <el-date-picker
                 v-model="testPeriodFormdata.endDate"
                 type="date"

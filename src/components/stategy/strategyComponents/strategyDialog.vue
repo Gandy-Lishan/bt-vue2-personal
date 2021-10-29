@@ -2,7 +2,7 @@
   <div class="strategyDialog">
     <el-dialog :visible.sync="dialogTableVisible" :before-close="closeDialog" @opened="getEditData">
       <div class="strategyBtns">
-          <el-button size="mini" @click="saveStrategyData">Save</el-button>
+          <el-button size="mini" @click="saveStrategyData" type="primary">Save</el-button>
       </div>
       <div class="newStategyForm">
         <div class="nameForm">
@@ -41,7 +41,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="Entry" size="mini">
-                <el-button class="entryBtn" v-on:click="openEntryDialog">{{entryFormdata.entry[0].label}}</el-button>
+                <el-button class="entryBtn" v-on:click="openEntryDialog" type="success" plain>{{entryFormdata.entry[0].label}}</el-button>
             </el-form-item>
                   <!-- entryDataForm -->
               <entry-data-form  ref="entryDataFrom" :entryData="entryData"></entry-data-form>
@@ -60,7 +60,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="Exit" size="mini">
-              <el-button class="entryBtn" v-on:click="openExitDialog">{{entryFormdata.entry[0].label}}</el-button>
+              <el-button class="entryBtn" v-on:click="openExitDialog" type="success" plain>{{entryFormdata.entry[0].label}}</el-button>
             </el-form-item>
               <!-- exitDataForm -->
               <exit-data-form ref="exitDataFrom" :exitData="exitData"></exit-data-form>
@@ -80,7 +80,8 @@ export default {
    name: 'strategyDialog',
    props: {
      dialogTableVisible: Boolean,
-     editData: Object
+     editData: Object,
+     myStrategyItemId: Number
    },
   data() {
     const validateName = (rule, value, callback) => {
@@ -205,18 +206,38 @@ export default {
            return
       }
     const vm = this
-    this.$http.post('/demo/strategies/',vm.$qs.stringify(params),{auth:{
-        username: 'sentimentrader_backtest_api',
-        password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-      }}).then(res => {if(res.status === 201){this.$message.success({
-            message: 'The save was successful',
-            duration: 1000
-          });this.$router.push('/myStrategies')}else{this.$message.error({
-            message: 'The save failed',
-            duration: 1000
-          })}}).catch(error => {
-      console.log(error);
+    this.$http.put('/demo/strategies/' + this.myStrategyItemId + '/',vm.$qs.stringify(params))
+    .then(res => {
+      if(res.status === 200){
+        this.$message.success({
+        message: 'The modification was successful deleted',
+        duration: 1000,
       })
+      this.$emit('getStrategyList')
+      this.$emit('closeDialog')
+      }else{
+        this.$message.error({
+        message: 'The modification failed',
+        duration: 1000,
+      })
+        this.$emit('closeDialog')
+      }
+    })
+    // this.$http.post('/demo/strategies/',vm.$qs.stringify(params),{auth:{
+    //     username: 'sentimentrader_backtest_api',
+    //     password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+    //   }}).then(res => {if(res.status === 201){this.$message.success({
+    //         message: 'The save was successful',
+    //         duration: 1000
+    //       })
+    //       this.$emit('getStrategyList')
+    //       this.$emit('closeDialog')
+    //       }else{this.$message.error({
+    //         message: 'The save failed',
+    //         duration: 1000
+    //       })}}).catch(error => {
+    //   console.log(error);
+    //   })
     },
     getEditData(){
       this.loading = true

@@ -2,8 +2,8 @@
   <div>
     <el-card>
       <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '#' }">Stategies</el-breadcrumb-item>
-          <el-breadcrumb-item>New Stategy</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '#' }">Strategies</el-breadcrumb-item>
+          <el-breadcrumb-item>New Strategy</el-breadcrumb-item>
       </el-breadcrumb>
       <!-- signalDialog -->
       <signal-dialog :type="entryType"  :dialogTableVisible="entryDialogTableVisible" @openDialog="openEntryDialog" @setEntryData='setEntryData'></signal-dialog>
@@ -53,7 +53,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="Entry" size="mini">
-                <el-button class="entryBtn" v-on:click="openEntryDialog" type="info">{{entryFormdata.entry[0].label}}</el-button>
+                <el-button class="entryBtn" v-on:click="openEntryDialog" type="success" plain>{{entryFormdata.entry[0].label}}</el-button>
             </el-form-item>
                   <!-- entryDataForm -->
               <entry-data-form  ref="entryDataFrom" :entryData="entryData"></entry-data-form>
@@ -72,7 +72,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="Exit" size="mini">
-              <el-button class="entryBtn" v-on:click="openExitDialog" type="info">{{entryFormdata.entry[0].label}}</el-button>
+              <el-button class="entryBtn" v-on:click="openExitDialog" type="success" plain>{{entryFormdata.entry[0].label}}</el-button>
             </el-form-item>
               <!-- exitDataForm -->
               <exit-data-form ref="exitDataFrom" :exitData="exitData"></exit-data-form>

@@ -60,8 +60,8 @@
               @click="showDialog(scope.row.id, scope.row)"
             ></el-button>
             <el-popconfirm
-            confirm-button-text='continue'
-            cancel-button-text='cancel'
+            confirm-button-text='yes'
+            cancel-button-text='no'
             icon="el-icon-info"
             icon-color="red"
             title="Are you sure you want to delete it?"
@@ -117,7 +117,7 @@ export default {
       this.total = res.count
       this.loading = false
     },
-        addFavorites(row) {
+    addFavorites(row) {
       row.favorites = !row.favorites
       const addFavoritesData = row
       let vm = this

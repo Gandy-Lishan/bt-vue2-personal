@@ -59,7 +59,7 @@
       ></el-table-column> -->
       <el-table-column align="center" width="100px">
         <template slot-scope="scope">
-          <el-button @click="openDialog(scope.row.id, scope.row)" type="primary"
+          <el-button size="mini" @click="openDialog(scope.row.id, scope.row)" type="primary"
             >open</el-button
           >
         </template>

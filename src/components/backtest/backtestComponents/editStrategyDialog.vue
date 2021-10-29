@@ -26,7 +26,7 @@
             label-position="left"
           >
             <el-form-item label="Symbol:" size="mini">
-              <el-button class="LisBtns" @click="openSymbolDialog"
+              <el-button class="LisBtns" @click="openSymbolDialog" type="success" plain
                 >Browse from Symbol List</el-button
               >
             </el-form-item>
@@ -63,7 +63,7 @@
             label-position="left"
           >
             <el-form-item label="Strategy:" size="mini">
-              <el-button class="LisBtns" @click="openStrategyDialog"
+              <el-button class="LisBtns" @click="openStrategyDialog" type="success" plain
                 >Browse from Strategy List</el-button
               >
             </el-form-item>
@@ -79,16 +79,6 @@
                 resize="none"
               ></el-input>
             </el-form-item>
-            <!-- <el-form-item label="Exit option" prop="options">
-                <el-select size="mini" v-model="strategyFormdata.value" placeholder="Pleace select">
-                  <el-option
-                    v-for="(item,index) in strategyFormdata.options"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-            </el-form-item> -->
           </el-form>
         </div>
         <div class="testPeriodForm">
@@ -98,8 +88,7 @@
             label-width="80px"
             label-position="left"
           >
-            <el-form-item label="Start data" size="mini">
-              <!-- <el-button class="LisBtns">Browse from Calenda</el-button> -->
+            <el-form-item label="Start date" size="mini">
               <el-date-picker
                 v-model="testPeriodFormdata.starDate"
                 type="date"
@@ -110,7 +99,7 @@
               >
               </el-date-picker>
             </el-form-item>
-            <el-form-item label="End data" size="mini">
+            <el-form-item label="End date" size="mini">
               <el-date-picker
                 v-model="testPeriodFormdata.endDate"
                 type="date"
@@ -202,13 +191,14 @@
         </div>
 </template>
 <script>
-import symbolDialog from '../../backtest/backtestComponents/symbolDialog.vue'
-import strategyDialog from '../../backtest/backtestComponents/strategyDialog.vue'
+import symbolDialog from './symbolDialog.vue'
+import strategyDialog from './strategyDialog.vue'
 export default {
   name: 'newBacktest',
   props: {
     dialogFormVisible: Boolean,
-    editData: Object
+    editData: Object,
+    backtestItemId: Number
   },
   data() {
     return {
@@ -300,42 +290,50 @@ export default {
       this.newBacktestFormdata.todate = this.testPeriodFormdata.endDate
       this.newBacktestFormdata.status = 0
       this.newBacktestFormdata.strategy = this.strategyFormdata.id
-      //  this.newBacktestFormdata.percentage = this.backtestFormdata.percentage
-      const params =  this.newBacktestFormdata
       const backtestArr = []
       backtestArr.push(params)
       this.$emit('submitBacktestData', backtestArr)
-      this.closeDialog()
-      this.$http.post('/demo/porfolioItem/',this.$qs.stringify(params),{auth:{
-        username: 'sentimentrader_backtest_api',
-        password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-      }}).then( res => {
-        const backtestId = res.data.id
-        vm.$emit('createPorfolioItems', backtestId)
-        if(res.status === 201){
-           this.$message.success({
-           message: 'The save was successful',
-           duration: 1000
+      this.newBacktestFormdata.id = this.backtestItemId
+      const params =  this.newBacktestFormdata
+      this.$http.put('/demo/backtest/' + this.backtestItemId + '/',vm.$qs.stringify(params))
+      .then(res => {
+        if(res.status === 200){
+        this.$message.success({
+        message: 'The modification was successful deleted',
+        duration: 1000,
          })
-        //  this.$router.push('/currentBacktests')
-        }
-      }).catch( error => { console.log(error) })
+        this.$emit('getBacktestList')
+        }else{
+        this.$message.error({
+        message: 'The modification failed',
+        duration: 1000,
+      })
+        this.$emit('closeDialog')
+      }
+      })
+      this.$emit('closeBacktestDialog')
     },
     closeDialog(){
       this.$emit('closeBacktestDialog')
     },
     getEditData() {
+      // get basic data
       this.backtestFormdata.backtestName = this.editData.name
       this.backtestFormdata.description = this.editData.description
       this.symbolFormdata.symbolName = this.editData.stock
       this.backtestFormdata.cash = this.editData.cash
-      this.strategyFormdata.name = this.editData.strategy.name
-      this.strategyFormdata.description = this.editData.strategy.description
       this.testPeriodFormdata.starDate = this.editData.fromdate
       this.testPeriodFormdata.endDate = this.editData.todate
       this.commissionFormdata.commission = this.editData.commission
       this.commissionFormdata.slippage = this.editData.slippage
       this.moneyManagementFormdata.value = this.editData.cashalloc
+
+      // get strategy datta
+      this.strategyFormdata = this.editData.strategy
+      this.strategyFormdata = this.editData.strategy
+
+
+
     }
   }
 }

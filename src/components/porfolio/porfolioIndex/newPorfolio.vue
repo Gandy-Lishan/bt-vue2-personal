@@ -88,8 +88,8 @@
         <el-table-column align="center" width="100px">
           <template slot-scope="scope">
             <el-popconfirm
-              confirm-button-text="continue"
-              cancel-button-text="cancel"
+              confirm-button-text="yes"
+              cancel-button-text="no"
               icon="el-icon-info"
               icon-color="red"
               title="Are you sure you want to delete it?"

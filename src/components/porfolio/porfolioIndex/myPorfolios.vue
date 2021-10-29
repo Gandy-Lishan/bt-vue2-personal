@@ -57,8 +57,8 @@
       <el-row>
         <el-button type="primary" plain size="mini" @click="openPorfolio(scope.row)">Open</el-button>
         <el-popconfirm
-          confirm-button-text='continue'
-          cancel-button-text='cancel'
+          confirm-button-text='yes'
+          cancel-button-text='no'
           icon="el-icon-info"
           icon-color="red"
           title="Bulk sending is temporarily not supported"
@@ -75,8 +75,8 @@
       >
       <template slot-scope="scope">
         <el-popconfirm
-        confirm-button-text='continue'
-        cancel-button-text='cancel'
+        confirm-button-text='yes'
+        cancel-button-text='no'
         icon="el-icon-info"
         icon-color="red"
         title="Are you sure you want to delete it?"

@@ -34,7 +34,7 @@
             label-position="left"
           >
             <el-form-item label="Symbol:" size="mini">
-              <el-button class="LisBtns" @click="openSymbolDialog" type="info"
+              <el-button class="LisBtns" @click="openSymbolDialog" type="success" plain
                 >Browse from Symbol List</el-button
               >
             </el-form-item>
@@ -67,14 +67,14 @@
             </el-form>
         </div>
         <div class="strategyForm">
-          <p class="pText">Stategy</p>
+          <p class="pText">Strategy</p>
           <el-form
             :model="strategyFormdata"
             label-width="80px"
             label-position="left"
           >
             <el-form-item label="Symbol:" size="mini">
-              <el-button class="LisBtns" @click="openStrategyDialog" type="info"
+              <el-button class="LisBtns" @click="openStrategyDialog" type="success" plain
                 >Browse from Strategy List</el-button
               >
             </el-form-item>
@@ -90,16 +90,6 @@
                 resize="none"
               ></el-input>
             </el-form-item>
-            <!-- <el-form-item label="Exit option" prop="options">
-                <el-select size="mini" v-model="strategyFormdata.value" placeholder="Pleace select">
-                  <el-option
-                    v-for="(item,index) in strategyFormdata.options"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-            </el-form-item> -->
           </el-form>
         </div>
         <div class="testPeriodForm">
@@ -109,8 +99,7 @@
             label-width="80px"
             label-position="left"
           >
-            <el-form-item label="Start data" size="mini">
-              <!-- <el-button class="LisBtns">Browse from Calenda</el-button> -->
+            <el-form-item label="Start date" size="mini">
               <el-date-picker
                 v-model="testPeriodFormdata.starDate"
                 type="date"
@@ -119,7 +108,7 @@
               >
               </el-date-picker>
             </el-form-item>
-            <el-form-item label="End data" size="mini">
+            <el-form-item label="End date" size="mini">
               <el-date-picker
                 v-model="testPeriodFormdata.endDate"
                 type="date"
@@ -128,40 +117,6 @@
               >
               </el-date-picker>
             </el-form-item>
-            <!-- <div class="advansedBox">
-              <div class="advanceRadio">
-                <el-form-item>
-                  <el-checkbox
-                    v-model="testPeriodFormdata.checked"
-                    @change="getAdvancedValue(testPeriodFormdata.checked)"
-                    >Advanced</el-checkbox
-                  >
-                </el-form-item>
-              </div>
-              <el-form-item
-                label="lookback period"
-                prop="lookPeriod"
-                class="advancedLabel"
-              >
-                <el-input
-                  class="advancedInput"
-                  v-model="testPeriodFormdata.lookPeriod"
-                  size="mini"
-                ></el-input>
-              </el-form-item>
-              <el-form-item
-                label="observaion period"
-                prop="observaionPeriod"
-                class="advancedLabel"
-                style="margin-right=10px"
-              >
-                <el-input
-                  class="advancedInput"
-                  v-model="testPeriodFormdata.observaionPeriod"
-                  size="mini"
-                ></el-input>
-              </el-form-item>
-            </div> -->
           </el-form>
         </div>
         <div class="newStrategyForm">

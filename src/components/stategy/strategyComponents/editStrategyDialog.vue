@@ -4,7 +4,7 @@
     <el-card>
       <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '#' }">Stategies</el-breadcrumb-item>
-          <el-breadcrumb-item>New Stategy</el-breadcrumb-item>
+          <el-breadcrumb-item>New Strategy</el-breadcrumb-item>
       </el-breadcrumb>
       <!-- signalDialog -->
       <signal-dialog :type="entryType"  :dialogTableVisible="entryDialogTableVisible" @openDialog="openEntryDialog" @setEntryData='setEntryData'></signal-dialog>

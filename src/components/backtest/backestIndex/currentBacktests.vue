@@ -7,7 +7,7 @@
       </el-breadcrumb>
       <!-- 表格区域 -->
       <el-button @click="test" type="primary">Run Backtests</el-button>
-      <el-button @click="savePorfolio">Save Porfolio</el-button>
+      <el-button @click="savePorfolio" type="primary" plain>Save Porfolio</el-button>
       <el-table :data="backtestList" border stripe size="mini" v-loading='loading' @selection-change="isChecked">
         <el-table-column
           label="select"
@@ -42,13 +42,13 @@
           align="center"
         >
         </el-table-column>
-      <el-table-column label="strategy name" align="center" prop="strategy.name" width="85px">
+      <el-table-column label="strategy name" align="center" prop="strategy.name">
         <template></template>
         </el-table-column>
       <el-table-column label="backtest period" prop="backtestPeriod" align="center">
           <template slot-scope="scope">
-            <el-button size="mini">{{scope.row.fromdate}}</el-button>
-            <el-button size="mini">{{scope.row.todate}}</el-button>
+            <el-button size="mini" type="info" plain>{{scope.row.fromdate}}</el-button>
+            <el-button size="mini" type="info" plain>{{scope.row.todate}}</el-button>
           </template>
       </el-table-column>
       <el-table-column label="status" prop="status" align="center" width="150px">
@@ -64,8 +64,8 @@
               @click="showDialog(scope.row)"
             ></el-button>
           <el-popconfirm
-            confirm-button-text='continue'
-            cancel-button-text='cancel'
+            confirm-button-text='yes'
+            cancel-button-text='no'
             icon="el-icon-info"
             icon-color="red"
             title="Are you sure you want to delete it?"
@@ -77,35 +77,44 @@
         </template>
         </el-table-column>
       </el-table>
-      <!-- 若表格数据过多可以增加分页区域 -->
-      <!-- <el-pagination
-        @current-change="handleCurrentChange"
-        :current-page="page"
-        :page-size="10"
-        layout="total, prev, pager, next, jumper"
-        :total="total"
-      >
-      </el-pagination> -->
     </el-card>
     <el-dialog
         title="Backtest Result"
         :visible.sync="dialogVisible"
         width="30%">
-          <img v-image-preview width="100%" height="100%" :src="'data:image/jpg;base64,'+ img_data"></img>
+          <el-table :data="backtestResultList" border stripe size="mini" v-loading="loading">
+             <el-table-column
+          label="Date"
+          prop="Date"
+          align="center"
+        ></el-table-column>
+         <el-table-column
+          label="order"
+          prop="order"
+          align="center"
+        ></el-table-column>
+         <el-table-column
+          label="price"
+          prop="price"
+          align="center"
+        ></el-table-column>
+          </el-table>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">cancle</el-button>
           <el-button type="primary" @click="dialogVisible = false">confirm</el-button>
         </span>
     </el-dialog>
-    <porfolio-dialog
+    <edit-strategy-dialog
         :dialogFormVisible="dialogFormVisible"
         @closeBacktestDialog="closeBacktestDialog"
         :editData="editData"
-      ></porfolio-dialog>
+        @getBacktestList="getBacktestList"
+        :backtestItemId="backtestItemId"
+      ></edit-strategy-dialog>
   </div>
 </template>
 <script>
-import porfolioDialog from '../backtestComponents/porfolioDialog.vue'
+import editStrategyDialog from '../backtestComponents/editStrategyDialog.vue'
 export default {
   name: 'currentBacktest',
   data() {
@@ -120,7 +129,10 @@ export default {
      dialogFormVisible: false,
      editData: {},
      loading: false,
-     currentBacktestList: []
+     currentBacktestList: [],
+     backtestItemId: 0,
+     backtestResultList: [],
+     loading: false
     }
   },
   created() {
@@ -128,7 +140,7 @@ export default {
     this.getStrategyName()
   },
   components: {
-    'porfolio-dialog': porfolioDialog
+    'edit-strategy-dialog': editStrategyDialog
   },
   methods: {
     selectBacktest(scope){
@@ -158,15 +170,20 @@ export default {
       var params = {
         backtests: this.backtestId
       }
+      this.loading = true
+      console.log('params',this.$qs.stringify(params));
       this.$http.post('/rundev/runbacktest/',this.$qs.stringify(params),{auth:{
         username: 'sentimentrader_backtest_api',
         password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
       }}).then(res => {
+        this.backtestResultList = res.data.result
       this.img_data = res.data
       if(res.data !== ''){
+        this.loading = false
         this.dialogVisible = !this.dialogVisible
       }}).catch(error => {
-        console.log(error);
+        console.log(error)
+        this.loading = false
       })
     },
     savePorfolio(){
@@ -189,6 +206,7 @@ export default {
     showDialog(row) {
       this.dialogFormVisible = !this.dialogFormVisible
       this.editData = row
+      this.backtestItemId = row.id
     },
     closeBacktestDialog(){
       this.dialogFormVisible = false
