@@ -43,11 +43,13 @@ label{
 } */
 
 /* edited */
-.right .el-form div .el-form-item .el-form-item__content{
+/* .right .el-form div .el-form-item .el-form-item__content{
   margin-left: 160px !important;
-}
-.el-dialog{
-  margin-top: 10vh !important;
+} */
+
+
+.mDialog .el-dialog{
+  margin-top: 2vh !important;
 }
 
 /* edited */
@@ -58,6 +60,10 @@ label{
 /* edited */
 .el-dialog__wrapper .el-dialog{
   width: 860px !important;
+}
+
+.el-form-item{
+  display: flex;
 }
 .moneyManagementForm .el-form-item__label{
   white-space: nowrap;

@@ -106,12 +106,13 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="strategyDailogBox">
-        <porfolio-dialog
-          :dialogFormVisible="dialogFormVisible"
-          @showDialog="showDialog"
-          @submitBacktestData="submitBacktestData"
-        ></porfolio-dialog>
+      <div class="mDialog">
+      <porfolio-dialog
+        :dialogFormVisible="dialogFormVisible"
+        @showDialog="showDialog"
+        @submitBacktestData="submitBacktestData"
+      ></porfolio-dialog>
+
       </div>
     </el-card>
   </div>

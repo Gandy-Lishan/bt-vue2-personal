@@ -18,7 +18,7 @@
         align="center"
       >
       <template slot-scope="scope">
-        <span v-for="(val,key) in scope.row.backtests">{{val.stock}},</span>
+        <span v-for="(val,key) in scope.row.backtests" :key="key">{{val.stock}},</span>
       </template>
       </el-table-column>
       <el-table-column

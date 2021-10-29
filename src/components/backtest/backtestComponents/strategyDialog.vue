@@ -1,7 +1,11 @@
 <template>
 <div class="strategyDialog">
   <el-dialog title="strategyList" :modal=false :visible.sync="strategyDialogVisible" :before-close='closeDialog'>
-    <el-table :data="strategyList" border stripe size="mini">
+
+    <div class="search-Box">
+      <el-input   placeholder="enter name or description" icon="search"  class="search"  v-model="search"></el-input>
+    </div>
+    <el-table :data="tables" border stripe size="mini">
       <el-table-column  width="35px">
           <template slot-scope="scope">
             <el-radio v-model="radio" @change="checkEntry(scope.row)" :label="scope.row.name">{{ '' }}</el-radio>
@@ -40,6 +44,7 @@ export default {
   name: 'symbolDialog',
   data(){
     return {
+      search: '',
       strategyList: [],
       entryChecked: false,
       radio: '',
@@ -47,6 +52,22 @@ export default {
   },
   created() {
     this.getStrategyList()
+  },
+  computed:{
+    tables(){
+      if(this.search == ''){
+        return this.strategyList
+      }
+      var search=this.search;
+      if(search){
+        return  this.strategyList.filter( item => {
+          return Object.keys(item ).some(function(key){
+            return String(item [key]).toLowerCase().indexOf(search) > -1
+          })
+        })
+      }
+      return this.tableData
+    }
   },
   methods: {
     async getStrategyList() {

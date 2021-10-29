@@ -73,49 +73,114 @@
               ></el-input>
             </el-form-item>
             <!-- 变动输入框,对所有的indicator判断是否存在 -->
-            <el-form-item v-if="'judgement' in conditionList[index]" label="Judgement:" size="mini">
+            <!-- <el-form-item v-if="'judgement' in conditionList[index]" label="Judgement:" size="mini">
               <el-input
                 v-model="conditionList[index].judgement"
                 size="mini"
               ></el-input>
-            </el-form-item>
-            <el-form-item v-if="'fast_ma' in conditionList[index]" label="FastMA:" size="mini">
+            </el-form-item> -->
+            <el-form-item 
+              v-if='["Two Moving Average CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Two Moving Average CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Three Moving Average CrossBelow"].indexOf(conditionList[index].condition_description) === 0' 
+              label="FastMA:" 
+              size="mini"
+            >
               <el-input
                 v-model="conditionList[index].fast_ma"
                 size="mini"
               ></el-input>
             </el-form-item>
-            <el-form-item v-if="'middle_ma' in conditionList[index]" label="MiddleMA:" size="mini">
+            <el-form-item 
+              v-if='["Three Moving Average CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Two Moving Average CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Three Moving Average CrossBelow"].indexOf(conditionList[index].condition_description) === 0'  
+              label="MiddleMA:" 
+              size="mini"
+            >
               <el-input
                 v-model="conditionList[index].middle_ma"
                 size="mini"
               ></el-input>
             </el-form-item>
-            <el-form-item v-if="'low_ma' in conditionList[index]" label="LowMA:" size="mini">
+            <el-form-item 
+              v-if='["Two Moving Average CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Three Moving Average CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Two Moving Average CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Three Moving Average CrossBelow"].indexOf(conditionList[index].condition_description) === 0'  
+              label="LowMA:" 
+              size="mini"
+            >
               <el-input
                 v-model="conditionList[index].low_ma"
                 size="mini"
               ></el-input>
             </el-form-item>
-            <el-form-item v-if="'macd_fast' in conditionList[index]" label="MACDFast:" size="mini">
+            <el-form-item 
+              v-if='["MACD CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["MACD CrossBelow"].indexOf(conditionList[index].condition_description) === 0'  
+              label="MACDFast:" 
+              size="mini"
+            >
               <el-input
                 v-model="conditionList[index].macd_fast"
                 size="mini"
               ></el-input>
             </el-form-item>
-            <el-form-item v-if="'macd_slow' in conditionList[index]" label="MACDSlow:" size="mini">
+            <el-form-item 
+              v-if='["MACD CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["MACD CrossBelow"].indexOf(conditionList[index].condition_description) === 0'  
+              label="MACDSlow:" 
+              size="mini"
+            >
               <el-input
                 v-model="conditionList[index].macd_slow"
                 size="mini"
               ></el-input>
             </el-form-item>
-            <el-form-item v-if="'macd_sig' in conditionList[index]" label="MACDSig:" size="mini">
+            <el-form-item 
+              v-if='["MACD CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["MACD CrossBelow"].indexOf(conditionList[index].condition_description) === 0'  
+              label="MACDSig:" 
+              size="mini"
+            >
               <el-input
                 v-model="conditionList[index].macd_sig"
                 size="mini"
               ></el-input>
             </el-form-item>
-            <el-form-item v-if="'str_value' in conditionList[index]" label="Str_value:" size="mini">
+            <el-form-item 
+              v-if='["price lower Low"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Accumulation & Distribution Higher"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Price Higher High"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Accumulation & Distribution Lower"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["ATR trailing stop (Close) line CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["ATR trailing stop (High）line CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["ATR trailing stop (Close) line CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Above Bollinger Upper Band"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Below Bollinger Lower Band"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Bollinger Band Width Greater"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Bollinger Band Width Less"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["EMA200 Less"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["EMA200 Greater"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Chandelier Exits CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Chandelier Exits CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["NAsdAQ Composite / S&P 500 Greater"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["S&P 500 Moving Average Greater"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Moving Average CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Moving Average CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Stay Above Moving Average"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Stay Below Moving Average"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Touch Above Moving Average"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Touch Below Moving Average"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Breakout Support"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Breakout Resistance"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Bollinger Upper Band CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Bollinger Lower Band CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Triple Tap Trend Reversal Divergence"].indexOf(conditionList[index].condition_description) === 0'  
+              label="Str_value:" 
+              size="mini"
+            >
               <el-input
                 v-model="conditionList[index].str_value"
                 size="mini"
@@ -124,36 +189,158 @@
                 resize="none"
               ></el-input>
             </el-form-item>
-            <el-form-item v-if="'value' in conditionList[index]" label="Value:" size="mini">
+            <el-form-item 
+              v-if='["Parabolic SAR CrossAbove"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Parabolic SAR CrossBelow"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["price lower Low"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Accumulation & Distribution Higher"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Price Higher High"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Accumulation & Distribution Lower"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["ATR trailing stop (Close) line CrossAbove"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["ATR trailing stop (High）line CrossAbove"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["ATR trailing stop (Close) line CrossBelow"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["MACD CrossAbove"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["MACD CrossBelow"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Above Bollinger Upper Band"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Below Bollinger Lower Band"].indexOf(conditionList[index].condition_description) === -1 &&     
+                    ["Bollinger Band Width Greater"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Bollinger Band Width Less"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["EMA200 Less"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["EMA200 Greater"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Chandelier Exits CrossAbove"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Chandelier Exits CrossBelow"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["NAsdAQ Composite / S&P 500 Greater"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["S&P 500 Moving Average Greater"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Moving Average CrossBelow"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Moving Average CrossAbove"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Two Moving Average CrossAbove"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Two Moving Average CrossBelow"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Three Moving Average CrossAbove"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Three Moving Average CrossBelow"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Stop Loss and Take profit"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Stay Above Moving Average"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Stay Below Moving Average"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Touch Above Moving Average"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Touch Below Moving Average"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Breakout Support"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Breakout Resistance"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Bollinger Upper Band CrossBelow"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Bollinger Lower Band CrossAbove"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["Triple Tap Trend Reversal Divergence"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["stay how many days in the market"].indexOf(conditionList[index].condition_description) === -1'
+              label="Value:" 
+              size="mini"
+            >
               <el-input
                 v-model="conditionList[index].value"
                 size="mini"
               ></el-input>
             </el-form-item>
-            <el-form-item v-if="'period' in conditionList[index]" label="Period:" size="mini">
+            <el-form-item 
+              v-if='["Parabolic SAR CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Parabolic SAR CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["ATR trailing stop (Close) line CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Bollinger Band Width Less"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["CMFI CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["CMFI CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Moving Average CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Moving Average CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Stay Above Moving Average"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["Stay Below Moving Average"].indexOf(conditionList[index].condition_description) === 0 ||
+                    ["stay how many days in the market"].indexOf(conditionList[index].condition_description) === 0'  
+              label="Period:" 
+              size="mini">
               <el-input
                 v-model="conditionList[index].period"
                 size="mini"
               ></el-input>
           </el-form-item>
-          <el-form-item v-if="'atr_multiplier' in conditionList[index]" label="ATR_multiplier:" size="mini">
+          <el-form-item 
+            v-if='["ATR trailing stop (Close) line CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                  ["ATR trailing stop (High）line CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                  ["ATR trailing stop (Close) line CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
+                  ["Chandelier Exits CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                  ["Chandelier Exits CrossBelow"].indexOf(conditionList[index].condition_description) === 0'  
+            label="ATR_multiplier:" 
+            size="mini"
+          >
               <el-input
                 v-model="conditionList[index].atr_multiplier"
                 size="mini"
               ></el-input>
           </el-form-item>
-          <el-form-item v-if="'atr_period' in conditionList[index]" label="ATR_period:" size="mini">
+          <el-form-item 
+            v-if='["ATR trailing stop (Close) line CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                  ["ATR trailing stop (High）line CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                  ["ATR trailing stop (Close) line CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
+                  ["Chandelier Exits CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                  ["Chandelier Exits CrossBelow"].indexOf(conditionList[index].condition_description) === 0'  
+            label="ATR_period:" 
+            size="mini"
+          >
               <el-input
                 v-model="conditionList[index].atr_period"
                 size="mini"
               ></el-input>
           </el-form-item>
-          <el-form-item v-if="'sd' in conditionList[index]" label="SD:" size="mini">
+          <el-form-item 
+            v-if='["Above Bollinger Upper Band"].indexOf(conditionList[index].condition_description) === 0 ||
+                  ["Below Bollinger Lower Band"].indexOf(conditionList[index].condition_description) === 0'   
+            label="SD:" 
+            size="mini"
+          >
               <el-input
                 v-model="conditionList[index].sd"
                 size="mini"
               ></el-input>
           </el-form-item>
+
+          <el-form-item 
+            v-if='["Parabolic SAR CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
+                  ["Parabolic SAR CrossAbove"].indexOf(conditionList[index].condition_description) === 0'   
+            label="Max_step:" 
+            size="mini"
+          >
+              <el-input
+                v-model="conditionList[index].max_step"
+                size="mini"
+              ></el-input>
+          </el-form-item>
+
+          <el-form-item 
+            v-if='["Parabolic SAR CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
+                  ["Parabolic SAR CrossAbove"].indexOf(conditionList[index].condition_description) === 0'   
+            label="Acceleration_factor:" 
+            size="mini"
+          >
+              <el-input
+                v-model="conditionList[index].acceleration_factor"
+                size="mini"
+              ></el-input>
+          </el-form-item>
+
+          <el-form-item 
+            v-if='["Stop Loss and Take profit"].indexOf(conditionList[index].condition_description) === 0'   
+            label="Stop_loss:" 
+            size="mini"
+          >
+              <el-input
+                v-model="conditionList[index].stop_loss"
+                size="mini"
+              ></el-input>
+          </el-form-item>
+
+          <el-form-item 
+            v-if='["Stop Loss and Take profit"].indexOf(conditionList[index].condition_description) === 0'   
+            label="Take_profit:" 
+            size="mini"
+          >
+              <el-input
+                v-model="conditionList[index].take_profit"
+                size="mini"
+              ></el-input>
+          </el-form-item>
+          
             <el-form-item v-if="index !== (conditionList.length - 1)" label="Combination:" size="mini">
               <el-radio-group v-model="open_formdata.combination">
                 <el-radio :label="0">AND</el-radio>
@@ -182,6 +369,7 @@
 <script>
 export default {
   name: 'openDialog',
+
   data() {
     const validateName = (rule, value, callback) => {
       if (value === '') {

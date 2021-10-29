@@ -1,12 +1,8 @@
 <template>
   <div class="porfolioDialog">
-  <el-dialog :visible.sync="dialogFormVisible" class="spec-dialog" @open="initData" :modal=false :before-close='closeDialog' title="strategyDialog">
+  <el-dialog :visible.sync="dialogFormVisible" :modal=true :close-on-press-escape=true :before-close='closeDialog' title="strategyDialog">
+
     <!-- symbol-dialog -->
-      <symbol-dialog
-        :symbolDialogVisible="symbolDialogVisible"
-        @openSymbolDialog="openSymbolDialog"
-        @setSymbolData="setSymbolData"
-      ></symbol-dialog>
     <!-- stratetgyDialog -->
     <strategy-dialog
       :strategyDialogVisible="strategyDialogVisible"
@@ -25,13 +21,22 @@
             label-width="80px"
             label-position="left"
           >
-            <el-form-item label="Symbol:" size="mini">
-              <el-button class="LisBtns" @click="openSymbolDialog"
-                >Browse from Symbol List</el-button
-              >
-            </el-form-item>
-            <el-form-item label="Symbol name:" prop="symbolName">
-              <el-input v-model="symbolFormdata.symbolName" size="mini"></el-input>
+            <el-form-item label="Symbol name:" prop="symbolName" size="mini">
+              <el-select
+                  v-model="symbolFormdata.symbolName"
+                  filterable
+                  remote
+                  reserve-keyword
+                  placeholder="enter keywords"
+                  :remote-method="remoteMethod"
+                  :loading="loading">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+              </el-select>
             </el-form-item>
           </el-form>
           <el-form
@@ -205,14 +210,20 @@
         </div>
 </template>
 <script>
-import {mapState} from "../../../store/store.js"
-import symbolDialog from '../../backtest/backtestComponents/symbolDialog.vue'
+
 import strategyDialog from '../../backtest/backtestComponents/strategyDialog.vue'
 export default {
   name: 'newBacktest',
   props: {dialogFormVisible: Boolean},
   data() {
     return {
+      options: [],
+      value: {},
+      list: [],
+      loading: false,
+      symbolList: [],
+      indexList: [],
+
       symbolFormdata: {},
       backtestFormdata: {
         backtestName: '',
@@ -252,36 +263,78 @@ export default {
         radio: '',
         cashAllocationArray: ['All Cash','Buy Gold Fund','Buy Real Estate Fund']
       },
-      symbolDialogVisible: false,
       strategyDialogVisible: false,
       newBacktestFormdata: {}
     }
   },
   components: {
-    'symbol-dialog': symbolDialog,
     'strategy-dialog': strategyDialog,
   },
-  // computed:{
-  //   ...mapState(['porfolioCash'])
-  // },
-  methods: {
-
-
-    initData(){
-    this.commissionFormdata = this.$options.data().commissionFormdata
-    this.testPeriodFormdata = this.$options.data().testPeriodFormdata
-    this.strategyFormdata = this.$options.data().strategyFormdata
-    this.backtestFormdata = this.$options.data().backtestFormdata
-    this.symbolFormdata = this.$options.data().symbolFormdata
+// <<<<<<< HEAD
+  computed: {
+    listSet(){
+      return this.symbolList.map(item => {
+        return { value: `${item.stock}`, label: `${item.stock}` };
+      });
     },
-    openSymbolDialog() {
-      this.symbolDialogVisible = !this.symbolDialogVisible
+    indexSet(){
+      return this.indexList.map(item => {
+        return { value: `${item.symbol}`, label: `${item.symbol}` };
+      });
+    }
+  },
+  created(){
+
+  },
+  methods: {
+    async getSymbolListt(){
+
+    },
+    async remoteMethod(query) {
+        if (query !== '') {
+          this.loading = true;
+          await this.$http.get('https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks?=ABMD',
+          {auth:{
+            username: 'sentimentrader_backtest_api',
+            password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+          }}
+          ).then(res => {
+            this.symbolList = res.data
+          }).catch(error => {
+            console.log(error);
+          })
+
+          await this.$http.get('https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
+          {auth:{
+            username: 'sentimentrader_backtest_api',
+            password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+          }}
+          ).then(res => {
+            this.indexList = res.data
+          }).catch(error => {
+            console.log(error);
+          })
+          
+          
+
+          setTimeout(() => {
+            this.loading = false;
+            var symbolListTemp = this.listSet.filter(item => {
+              return item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 || 
+                      item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+            });
+            var IndexListTemp = this.indexSet.filter(item => {
+              return item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 || 
+                      item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+            });
+            this.options = symbolListTemp.concat(IndexListTemp)
+          }, 200);
+        } else {
+          this.options = [];
+        }
     },
     openStrategyDialog() {
       this.strategyDialogVisible = !this.strategyDialogVisible
-    },
-    setSymbolData(data) {
-      this.symbolFormdata = data
     },
     setStrategyData(data) {
       this.strategyFormdata = data
@@ -328,7 +381,9 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
+
+
 .pText {
   font-size: 15px;
   margin: 0px 0px 30px 0px;
@@ -353,11 +408,18 @@ export default {
   border: 1px solid #666;
 }
 .newBackestForm {
-  display: flex;
-  margin-top: 40px;
-  width: 1500px;
-  flex-wrap: wrap;
+    overflow: scroll;
+    display: flex;
+    margin-top: 40px;
+    width: 1500px;
+    flex-wrap: wrap;
+    height: 80vh;
 }
+
+.newBackestForm::-webkit-scrollbar {
+    display: none;
+}
+
 .moneyAdvance {
   border: 1px solid #666;
 }
@@ -365,6 +427,7 @@ export default {
   display: flex;
   padding: 10px;
 }
+
 .spec-dialog .el-dialog__body {
   padding: 3px 30px;
   overflow-y: auto;

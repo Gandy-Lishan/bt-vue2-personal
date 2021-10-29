@@ -6,9 +6,12 @@
         <el-breadcrumb-item>Currrent Backtests</el-breadcrumb-item>
       </el-breadcrumb>
       <!-- 表格区域 -->
+
+
       <el-button @click="test" type="primary">Run Backtests</el-button>
       <el-button @click="savePorfolio" type="primary" plain>Save Porfolio</el-button>
       <el-table :data="backtestList" border stripe size="mini" v-loading='loading' @selection-change="isChecked">
+
         <el-table-column
           label="select"
           align="center"
@@ -55,6 +58,7 @@
       </el-table-column>
       <el-table-column align="center" width="100px">
         <template slot-scope="scope">
+
             <el-button
               type="primary"
               icon="el-icon-edit"
@@ -63,6 +67,7 @@
               style="margin-right: 10px;"
               @click="showDialog(scope.row)"
             ></el-button>
+
           <el-popconfirm
             confirm-button-text='yes'
             cancel-button-text='no'
@@ -202,6 +207,7 @@ export default {
     async getStrategyName() {
       const id = this.backtestList
       const res = await this.$http.get('/demo/strategies' + id + '/')
+
     },
     showDialog(row) {
       this.dialogFormVisible = !this.dialogFormVisible
