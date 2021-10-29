@@ -6,11 +6,6 @@
         <el-breadcrumb-item>New Backtest</el-breadcrumb-item>
       </el-breadcrumb>
       <!-- symbol-dialog -->
-      <symbol-dialog
-        :symbolDialogVisible="symbolDialogVisible"
-        @openSymbolDialog="openSymbolDialog"
-        @setSymbolData="setSymbolData"
-      ></symbol-dialog>
       <!-- stratetgyDialog -->
       <strategy-dialog
         :strategyDialogVisible="strategyDialogVisible"
@@ -33,13 +28,22 @@
             label-width="80px"
             label-position="left"
           >
-            <el-form-item label="Symbol:" size="mini">
-              <el-button class="LisBtns" @click="openSymbolDialog"
-                >Browse from Symbol List</el-button
-              >
-            </el-form-item>
-            <el-form-item label="Symbol name:" prop="symbolName">
-              <el-input v-model="symbolFormdata.symbolName" size="mini"></el-input>
+            <el-form-item label="Symbol name:" prop="symbolName" size="mini">
+              <el-select
+                  v-model="symbolFormdata.symbolName"
+                  filterable
+                  remote
+                  reserve-keyword
+                  placeholder="enter keywords"
+                  :remote-method="remoteMethod"
+                  :loading="loading">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+              </el-select>
             </el-form-item>
           </el-form>
           <el-form
@@ -243,13 +247,19 @@
   </div>
 </template>
 <script>
-import symbolDialog from '../backtestComponents/symbolDialog.vue'
 import strategyDialog from '../backtestComponents/strategyDialog.vue'
 import { timestampToTime } from '../../../tools/formatDate.js'
 export default {
   name: 'newBacktest',
   data() {
     return {
+      options: [],
+      value: {},
+      list: [],
+      loading: false,
+      symbolList: [],
+      indexList: [],
+
       symbolFormdata: {},
       backtestFormdata: {
         backtestName: '',
@@ -289,24 +299,71 @@ export default {
         radio: '',
         cashAllocationArray: ['All Cash','Buy Gold Fund','Buy Real Estate Fund']
       },
-      symbolDialogVisible: false,
       strategyDialogVisible: false,
       newBacktestFormdata: {}
     }
   },
   components: {
-    'symbol-dialog': symbolDialog,
     'strategy-dialog': strategyDialog,
   },
+  computed: {
+    listSet(){
+      return this.symbolList.map(item => {
+        return { value: `${item.stock}`, label: `${item.stock}` };
+      });
+    },
+    indexSet(){
+      return this.indexList.map(item => {
+        return { value: `${item.symbol}`, label: `${item.symbol}` };
+      });
+    }
+  },
   methods: {
-    openSymbolDialog() {
-      this.symbolDialogVisible = !this.symbolDialogVisible
+    async remoteMethod(query) {
+        if (query !== '') {
+          this.loading = true;
+          await this.$http.get('https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks?=ABMD',
+          {auth:{
+            username: 'sentimentrader_backtest_api',
+            password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+          }}
+          ).then(res => {
+            this.symbolList = res.data
+          }).catch(error => {
+            console.log(error);
+          })
+
+          await this.$http.get('https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
+          {auth:{
+            username: 'sentimentrader_backtest_api',
+            password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+          }}
+          ).then(res => {
+            this.indexList = res.data
+          }).catch(error => {
+            console.log(error);
+          })
+          
+          
+
+          setTimeout(() => {
+            this.loading = false;
+            var symbolListTemp = this.listSet.filter(item => {
+              return item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 || 
+                      item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+            });
+            var IndexListTemp = this.indexSet.filter(item => {
+              return item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 || 
+                      item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+            });
+            this.options = symbolListTemp.concat(IndexListTemp)
+          }, 200);
+        } else {
+          this.options = [];
+        }
     },
     openStrategyDialog() {
       this.strategyDialogVisible = !this.strategyDialogVisible
-    },
-    setSymbolData(data) {
-      this.symbolFormdata = data
     },
     setStrategyData(data) {
       this.strategyFormdata = data

@@ -153,4 +153,5 @@ export default {
   left: 800px;
   top: 90px;
 }
+
 </style>

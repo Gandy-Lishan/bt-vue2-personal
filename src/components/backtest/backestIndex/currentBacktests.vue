@@ -7,6 +7,7 @@
       </el-breadcrumb>
       <!-- 表格区域 -->
       <el-button @click="test">Run Backtests</el-button>
+      <el-button @click="test">Save to Porfolio</el-button>
       <el-table :data="backtestList" border stripe size="mini" @selection-change="isChecked">
         <el-table-column
           label="select"
@@ -57,6 +58,7 @@
           <!-- <span @click="deleteBacktest(scope.row.id)">
             <i class="el-icon-delete"></i>
           </span> -->
+          
           <el-popconfirm
             confirm-button-text='continue'
             cancel-button-text='cancel'
@@ -116,7 +118,6 @@ export default {
       this.$emit("setEntryData",(scope))
       this.closeDialog()
       this.signalList.entryChecked = !this.signalList.entryChecked
-      // console.log(id);
     },
     async getBacktestList() {
       const res = await this.$http.get('/demo/backtest/')
@@ -164,7 +165,6 @@ export default {
     async getStrategyName() {
       const id = this.backtestList
       const res = await this.$http.get('/demo/strategies' + id + '/')
-      console.log('33333',res);
     }
   }
 }

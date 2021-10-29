@@ -1,46 +1,25 @@
 <template>
 <div class="symbolDialog">
   <el-dialog title="symbolList" :visible.sync="symbolDialogVisible" :before-close='closeDialog'>
-   <!-- <el-pagination
-      @current-change="handleCurrentChange"
-      :current-page="queryInfo.page"
-      :page-size="10"
-      layout="total, prev, pager, next"
-      :total="total"
-    >
-    </el-pagination> -->
-    <el-table :data="symbolList" border stripe size="mini">
-      <el-table-column  width="35px">
-          <!-- <template slot-scope="scope">
-          <el-checkbox  v-model="value" :label="scope.row.id" change="checkEntry(scope)"></el-checkbox>
-          </template> -->
-          <template slot-scope="scope">
-            <el-radio v-model="radio" @change="checkEntry(scope.row)" :label="scope.row.name">{{ '' }}</el-radio>
+          <template>
+            <!-- <el-radio v-model="radio" @change="checkEntry(scope.row)" :label="scope.row.name">{{ '' }}</el-radio> -->
+            <el-select
+            @change="changeHandler"
+              v-model="value"
+              filterable
+              remote
+              reserve-keyword
+              placeholder="请输入关键词"
+              :remote-method="remoteMethod"
+              :loading="loading">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </template>
-      </el-table-column>
-      <!-- <el-table-column label="select">
-        <template slot-scope="scope">
-          <el-button @click="selectsymbol(scope.row)"></el-button>
-        </template>
-      </el-table-column> -->
-      <el-table-column label="name" prop="symbolName" align="center" >
-      </el-table-column>
-       <!-- <el-table-column
-        label="description"
-        prop="description" 
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        label="cash"
-        prop="cash"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        label="note"
-        prop="note"
-        align="center"
-      ></el-table-column> -->
-    </el-table>
 </el-dialog>
 </div>
 </template>
@@ -52,19 +31,24 @@ export default {
   name: 'symbolDialog',
   data(){
     return {
-      symbolList: [{
-        symbolName: 'AAPL'
-      },
-      {
-        symbolName: 'APG'
-      }],
-        entryChecked: false,
-      // queryInfo: {
-      //   type: this.type,
-      //   page: 1
-      // },
-      radio: '',
-      // total: 0
+        options: [],
+        value: {},
+        list: [],
+        loading: false,
+        symbolList: []
+    }
+  },
+  mounted() {
+      this.list = this.symbolList.map(item => {
+        return { value: `name:${item.stock}`, label: `stock:${item.stock}` };
+      });
+      //console.log(this.list)
+    },
+  computed: {
+    listSet(){
+      return this.symbolList.map(item => {
+        return { value: `${item.stock}`, label: `stock:${item.stock}` };
+      });
     }
   },
   methods: {
@@ -98,14 +82,45 @@ export default {
     //   this.loading = false
 
     // },
-    closeDialog(){
-      this.$emit('openSymbolDialog')
-    },
-    checkEntry(scope){
-      this.$emit("setSymbolData",(scope))
+    changeHandler(){
       this.closeDialog()
-      this.entryChecked = !this.entryChecked
     },
+    async remoteMethod(query) {
+        if (query !== '') {
+          this.loading = true;
+          const res = await this.$http.get('https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks?=ABMD',
+          {auth:{
+            username: 'sentimentrader_backtest_api',
+            password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+          }}
+          ).then(res => {
+            this.symbolList = res.data
+          }).catch(error => {
+            console.log(error);
+          })
+          
+
+          setTimeout(() => {
+            this.loading = false;
+            this.options = this.listSet.filter(item => {
+              return item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 || 
+                      item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+            });
+          }, 200);
+        } else {
+          this.options = [];
+        }
+        //console.log(this.options)
+    },
+    closeDialog(){
+      this.symbolFormdata.symbolName = this.value
+      console.log(this.value)
+    },
+    // checkEntry(scope){
+    //   this.$emit("setSymbolData",(scope))
+    //   this.closeDialog()
+    //   this.entryChecked = !this.entryChecked
+    // },
     handleCurrentChange(newpage) {
       this.queryInfo.page = newpage
       this.getsymbollist("system")

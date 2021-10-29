@@ -93,12 +93,13 @@
           </el-row>
         </el-table-column>
       </el-table>
-
+      <div class="mDialog">
       <porfolio-dialog
         :dialogFormVisible="dialogFormVisible"
         @showDialog="showDialog"
         @submitBacktestData="submitBacktestData"
       ></porfolio-dialog>
+      </div>
     </el-card>
   </div>
 </template>
