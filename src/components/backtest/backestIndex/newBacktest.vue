@@ -16,7 +16,7 @@
       <div class="btns">
         <el-row>
           <el-button size="mini">Back</el-button>
-          <el-button size="mini" @click="saveNewBacktestFormdata">Save</el-button>
+          <el-button size="mini" @click="saveNewBacktestFormdata" type="primary">Save</el-button>
           <el-button size="mini">Save and Run Backtest</el-button>
         </el-row>
       </div>
@@ -44,6 +44,15 @@
                     :value="item.value">
                   </el-option>
               </el-select>
+<!-- =======
+            <el-form-item label="Symbol:" size="mini">
+              <el-button class="LisBtns" @click="openSymbolDialog" type="info"
+                >Browse from Symbol List</el-button
+              >
+            </el-form-item>
+            <el-form-item label="Symbol name:" prop="symbolName">
+              <el-input v-model="symbolFormdata.symbolName" size="mini"></el-input>
+>>>>>>> 964816bf9cbdb3a9f7aa311b53db730f23de8702 -->
             </el-form-item>
           </el-form>
           <el-form
@@ -78,7 +87,7 @@
             label-position="left"
           >
             <el-form-item label="Symbol:" size="mini">
-              <el-button class="LisBtns" @click="openStrategyDialog"
+              <el-button class="LisBtns" @click="openStrategyDialog" type="info"
                 >Browse from Strategy List</el-button
               >
             </el-form-item>
@@ -171,19 +180,19 @@
         <div class="newStrategyForm">
           <p class="pText">Commission/slippage</p>
           <el-form
-            :model="commisionFormdata"
+            :model="commissionFormdata"
             label-width="80px"
             label-position="left"
           >
             <el-form-item label="Commission" prop="commission">
               <el-input
-                v-model="commisionFormdata.commission"
+                v-model="commissionFormdata.commission"
                 size="mini"
               ></el-input>
             </el-form-item>
             <el-form-item label="Slippage" prop="slippage">
               <el-input
-                v-model="commisionFormdata.slippage"
+                v-model="commissionFormdata.slippage"
                 size="mini"
               ></el-input>
             </el-form-item>
@@ -275,8 +284,8 @@ export default {
         endDate: '',
         checked: false,
       },
-      commisionFormdata: {
-        commision: '',
+      commissionFormdata: {
+        commission: '',
         slippage: '',
       },
       moneyManagementFormdata: {
@@ -379,7 +388,6 @@ export default {
     },
     getCashAllocationValue(idx) {
       this.moneyManagementFormdata.radio = idx
-      console.log(this.moneyManagementFormdata.radio);
     },
     getStarDate(date) {
       this.testPeriodFormdata.starDate = date
@@ -394,20 +402,18 @@ export default {
       this.newBacktestFormdata.description = this.backtestFormdata.description
       this.newBacktestFormdata.cash = this.backtestFormdata.cash
       this.newBacktestFormdata.cashalloc = this.moneyManagementFormdata.value
-      this.newBacktestFormdata.commision = this.commisionFormdata.commission
-      this.newBacktestFormdata.slippage = this.commisionFormdata.slippage
-      this.newBacktestFormdata.riskfreerate = this.commisionFormdata.slippage
+      this.newBacktestFormdata.commission = this.commissionFormdata.commission
+      this.newBacktestFormdata.slippage = this.commissionFormdata.slippage
+      this.newBacktestFormdata.riskfreerate = this.commissionFormdata.slippage
       this.newBacktestFormdata.fromdate = timestampToTime(this.testPeriodFormdata.starDate)
       this.newBacktestFormdata.todate = timestampToTime(this.testPeriodFormdata.endDate)
       this.newBacktestFormdata.status = 0
       this.newBacktestFormdata.strategy = this.strategyFormdata.id
       const params =  this.newBacktestFormdata
-      console.log('tijiao',this.newBacktestFormdata);
       this.$http.post('/demo/backtest/',this.$qs.stringify(params),{auth:{
         username: 'sentimentrader_backtest_api',
         password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
       }}).then( res => {
-        console.log(res);
         if(res.status === 201){
            this.$message.success({
            message: 'The save was successful',

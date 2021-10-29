@@ -9,7 +9,7 @@
               filterable
               remote
               reserve-keyword
-              placeholder="请输入关键词"
+              placeholder="please enter symbol name"
               :remote-method="remoteMethod"
               :loading="loading">
               <el-option
@@ -20,6 +20,7 @@
               </el-option>
             </el-select>
           </template>
+
 </el-dialog>
 </div>
 </template>
@@ -52,37 +53,9 @@ export default {
     }
   },
   methods: {
-    // getList(){
-    //   this.getsymbollist("system");
-    // },
-    // async getsymbollist(user) {
-    //   this.symbolList = []
-    //   console.log("aaa");
-    //   this.loading = true
-    //   this.queryInfo.type = this.type
-    //   this.queryInfo.user = user
-    //   const { data: res } = await this.$http.get('/demo/symbol/',
-    //    {
-    //     params: this.queryInfo
-    //   }
-    //   )
-    //   // if (res.status !== 200) {
-    //   //   return this.$message.error('获取信号列表失败')
-    //   // }
-    //   this.symbolList = this.symbolList.concat(res.results)
-    //   this.total = res.count
-    //   if(res.results.length <= 0){
-    //     this.loading = false
-    //      this.$message.success({
-    //        message: 'The list of symbols is empty',
-    //        duration: 1000
-    //      })
-    //   }
-    //   // this.total = res.count
-    //   this.loading = false
 
-    // },
     changeHandler(){
+
       this.closeDialog()
     },
     async remoteMethod(query) {

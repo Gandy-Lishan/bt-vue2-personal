@@ -1,6 +1,6 @@
 <template>
   <div class="strategyDialog">
-    <el-dialog :visible.sync="dialogTableVisible" :before-close="closeDialog">
+    <el-dialog :visible.sync="dialogTableVisible" :before-close="closeDialog" @opened="getEditData">
       <div class="strategyBtns">
           <el-button size="mini" @click="saveStrategyData">Save</el-button>
       </div>
@@ -79,7 +79,8 @@ import exitDataForm from './exitDataForm.vue'
 export default {
    name: 'strategyDialog',
    props: {
-     dialogTableVisible: Boolean
+     dialogTableVisible: Boolean,
+     editData: Object
    },
   data() {
     const validateName = (rule, value, callback) => {
@@ -121,7 +122,8 @@ export default {
         entryData:{},
         exitData: {},
         entryDialogTableVisible: false,
-        exitDialogTableVisible:false
+        exitDialogTableVisible:false,
+        loading: false
       }
     },
   methods: {
@@ -215,6 +217,15 @@ export default {
           })}}).catch(error => {
       console.log(error);
       })
+    },
+    getEditData(){
+      this.loading = true
+      this.nameFormdata.name = this.editData.name
+      this.nameFormdata.description = this.editData.description
+      this.valueEntry = this.editData.signal_entry.type
+      this.valueExit = this.editData.signal_exit.type
+      this.entryData = this.editData.signal_entry
+      this.exitData = this.editData.signal_exit
     }
   },
   components: {

@@ -48,7 +48,6 @@
         </div>
       </div>
       <div class="right">
-        <!-- <el-form ref="form" v-for="(item, index) in conditionList" :key="index" :model="item" label-width="90px" label-position="left"> -->
         <el-form ref="rightForm" label-width="90px" label-position="left">
           <div v-for="(item, index) in conditionList" :key='index'>
             <!-- 必需 -->
@@ -401,7 +400,6 @@ export default {
       this.conditionList = this.initialConditionList
       
       this.open_formdata = this.initialFromData
-      console.log(this.open_formdata)
       this.submitFormDate = []
       this.$emit("update:dialogFormVisible",false);
     },
@@ -419,8 +417,6 @@ export default {
       })
       if(res.status !== 200) return
       this.conditionList = res.data.results
-      // dialogFormVisible 双向绑定
-      //this.dialogFormVisible = true
       this.$emit("update:dialogFormVisible",true)
       this.conditionList.forEach((item,index)=> {
         window.sessionStorage.setItem('value', item.value)
@@ -430,7 +426,6 @@ export default {
       let vm = this;
       const conditions = vm.conditionList
       let formData = vm.open_formdata
-      // 提交的 ['name','description','value'] 组成的数组 submitFormDate
       const submitFormDate = {};
       submitFormDate['name'] = formData.name
       submitFormDate['description'] = formData.description
@@ -443,12 +438,8 @@ export default {
                 const {data:res} = await vm.$http.post("/demo/create_signal/",vm.$qs.stringify(formData),{auth:{
                   username: 'sentimentrader_backtest_api',
                   password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-                  // username: 'demo01',
-                  // password: 'admin123456'
                 }})
-                // this.getFavoritelist()
                 this.$emit("call-father","custom_signal")
-                //this.dialogFormVisible = false
                 this.$emit("update:dialogFormVisible",false)
                 this.$message.success({
                   message: 'Saved successfully',

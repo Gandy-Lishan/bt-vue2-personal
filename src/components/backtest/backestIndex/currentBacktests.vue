@@ -6,9 +6,12 @@
         <el-breadcrumb-item>Currrent Backtests</el-breadcrumb-item>
       </el-breadcrumb>
       <!-- 表格区域 -->
-      <el-button @click="test">Run Backtests</el-button>
-      <el-button @click="test">Save to Porfolio</el-button>
-      <el-table :data="backtestList" border stripe size="mini" @selection-change="isChecked">
+
+
+      <el-button @click="test" type="primary">Run Backtests</el-button>
+      <el-button @click="savePorfolio">Save Porfolio</el-button>
+      <el-table :data="backtestList" border stripe size="mini" v-loading='loading' @selection-change="isChecked">
+
         <el-table-column
           label="select"
           align="center"
@@ -55,10 +58,16 @@
       </el-table-column>
       <el-table-column align="center" width="100px">
         <template slot-scope="scope">
-          <!-- <span @click="deleteBacktest(scope.row.id)">
-            <i class="el-icon-delete"></i>
-          </span> -->
-          
+
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              size="mini"
+              style="margin-right: 10px;"
+              @click="showDialog(scope.row)"
+            ></el-button>
+
           <el-popconfirm
             confirm-button-text='continue'
             cancel-button-text='cancel'
@@ -87,15 +96,21 @@
         title="Backtest Result"
         :visible.sync="dialogVisible"
         width="30%">
-          <img :src="'data:image/jpg;base64,'+ img_data"></img>
+          <img v-image-preview width="100%" height="100%" :src="'data:image/jpg;base64,'+ img_data"></img>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">cancle</el-button>
           <el-button type="primary" @click="dialogVisible = false">confirm</el-button>
         </span>
     </el-dialog>
+    <porfolio-dialog
+        :dialogFormVisible="dialogFormVisible"
+        @closeBacktestDialog="closeBacktestDialog"
+        :editData="editData"
+      ></porfolio-dialog>
   </div>
 </template>
 <script>
+import porfolioDialog from '../backtestComponents/porfolioDialog.vue'
 export default {
   name: 'currentBacktest',
   data() {
@@ -106,12 +121,19 @@ export default {
       checked: false,
       backtestId: [],
       dialogVisible: false,
-      img_data: ''
+      img_data: '',
+     dialogFormVisible: false,
+     editData: {},
+     loading: false,
+     currentBacktestList: []
     }
   },
   created() {
     this.getBacktestList()
     this.getStrategyName()
+  },
+  components: {
+    'porfolio-dialog': porfolioDialog
   },
   methods: {
     selectBacktest(scope){
@@ -120,14 +142,12 @@ export default {
       this.signalList.entryChecked = !this.signalList.entryChecked
     },
     async getBacktestList() {
+      this.loading = true
       const res = await this.$http.get('/demo/backtest/')
       if(res.status === 200){
         this.backtestList = res.data.results
+        this.loading = false
       }else{
-           this.$message.success({
-           message: 'The list of signals is empty',
-           duration: 1000
-         })
          this.loading = false                                                                                                                                                                                                                        
       }
     },
@@ -146,7 +166,7 @@ export default {
       this.$http.post('/rundev/runbacktest/',this.$qs.stringify(params),{auth:{
         username: 'sentimentrader_backtest_api',
         password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-      }}).then(res => {console.log(res);
+      }}).then(res => {
       this.img_data = res.data
       if(res.data !== ''){
         this.dialogVisible = !this.dialogVisible
@@ -154,8 +174,13 @@ export default {
         console.log(error);
       })
     },
+    savePorfolio(){
+      this.$store.commit('getSavePorfolioData',this.currentBacktestList)
+      this.$router.push('/newporfolio',)
+    },
     isChecked(val){
       let backtests = [];
+      this.currentBacktestList = val
       val.forEach(element => {
         backtests.push(element.id)
       });
@@ -165,6 +190,14 @@ export default {
     async getStrategyName() {
       const id = this.backtestList
       const res = await this.$http.get('/demo/strategies' + id + '/')
+
+    },
+    showDialog(row) {
+      this.dialogFormVisible = !this.dialogFormVisible
+      this.editData = row
+    },
+    closeBacktestDialog(){
+      this.dialogFormVisible = false
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
 <div>
-<el-dialog :visible="dialogFormVisible" :show-close="false" close="clearDate">
+<el-dialog :visible="dialogFormVisible" :show-close="false" close="clearDate" >
     <div class="header">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">Signal</el-breadcrumb-item>
@@ -48,7 +48,6 @@
         </div>
       </div>
       <div class="right">
-        <!-- <el-form ref="form" v-for="(item, index) in conditionList" :key="index" :model="item" label-width="90px" label-position="left"> -->
         <el-form ref="rightForm" label-width="90px" label-position="left">
           <div v-for="(item, index) in conditionList" :key='index'>
             <!-- 必需 -->
@@ -372,65 +371,21 @@ export default {
   name: 'openDialog',
 
   data() {
-
-    /* new */
     const validateName = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('Enter name is empty'))
       }
-      // if(value === this.open_formdata.name){
-      //   callback(new Error('Name already exists'))
-      // }
     }
     const validateDes = (rule, value, callback) => {
       if ((value === '') | (value === undefined)) {
         callback(new Error('Input description is empty'))
       }
-      // if(value === this.open_formdata.description){
-      //   callback(new Error('Discription already exists'))
-      // }
     }
     return {
       conditions:[">","<","CrossAbove","CrossBelow",],
       combinations:["AND","OR","SUM",],
 
-      conditionList: [
-        // {
-        //   "signal": 51,
-        //   "condition_description": "Bollinger Band Width Less",
-        //   "parameter": "Bollinger Band Width Value",
-        //   "condition": 1,
-        //   "str_value": "Last Bollinger Band Width Value"
-        // },
-        // {
-        //   "signal": 51,
-        //   "condition_description": "Bollinger Band Width Less",
-        //   "parameter": "Bollinger Band Width Value",
-        //   "condition": 1,
-        //   "str_value": "Bollinger Band Width Value lowest in the past 120 days",
-        //   "period": 120
-        // }
-      ],
-
-      // conditionList: [
-      //   {
-      //     "signal": 52,
-      //     "condition_description": "CMFI CrossAbove",
-      //     "parameter": "CMFI Value",
-      //     "condition": 2,
-      //     "value": 0,
-      //     "period": 21
-      //   },
-      //   {
-      //     "signal": 52,
-      //     "condition_description": "EMA200 Less",
-      //     "parameter": "EMA200 Value",
-      //     "condition": 1,
-      //     "str_value": "price"
-      //   }
-      // ],
-
-
+      conditionList: [],
       /* new */
       initialConditionList: [],
       open_formdata: {},

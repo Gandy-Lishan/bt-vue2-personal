@@ -13,10 +13,6 @@
         width="70px"
         prop="favorites"
       >
-        <!-- <template slot-scope="scope">
-                  <i v-if="scope.row.favorite" class="el-icon-star-on"></i>
-                  <i v-else class="el-icon-star-off"></i>
-                </template> -->
         <template slot-scope="scope">
           <span v-if="scope.row.favorites" @click="addFavorites(scope.row)">
             <i class="el-icon-star-on"></i>
@@ -63,7 +59,7 @@
       ></el-table-column> -->
       <el-table-column align="center" width="100px">
         <template slot-scope="scope">
-          <el-button @click="openDialog(scope.row.id, scope.row)"
+          <el-button @click="openDialog(scope.row.id, scope.row)" type="primary"
             >open</el-button
           >
         </template>

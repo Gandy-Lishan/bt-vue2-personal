@@ -4,7 +4,7 @@
       <div class="newPorfolioBtns">
         <el-row>
           <el-button size="mini">Back</el-button>
-          <el-button size="mini">Save</el-button>
+          <el-button size="mini" type="primary">Save</el-button>
           <el-button size="mini">Backtest Porfolio</el-button>
           <el-button size="mini">Optimize Porfolio</el-button>
         </el-row>
@@ -38,8 +38,8 @@
         width="110px"
       ></el-table-column>
       <el-table-column
-        label="percentage"
-        prop="percentage"
+        label="cash"
+        prop="cash"
         align="center"
       ></el-table-column>
       <el-table-column

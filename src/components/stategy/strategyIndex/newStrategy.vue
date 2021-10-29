@@ -11,7 +11,7 @@
       <div class="btns">
         <el-row>
           <el-button size="mini">Back</el-button>
-          <el-button size="mini" @click="saveStrategyData">Save</el-button>
+          <el-button size="mini" @click="saveStrategyData" type="primary">Save</el-button>
           <el-button size="mini">Apply in main chart</el-button>
           <el-button size="mini">Backtest Strategy</el-button>
         </el-row>
@@ -53,7 +53,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="Entry" size="mini">
-                <el-button class="entryBtn" v-on:click="openEntryDialog">{{entryFormdata.entry[0].label}}</el-button>
+                <el-button class="entryBtn" v-on:click="openEntryDialog" type="info">{{entryFormdata.entry[0].label}}</el-button>
             </el-form-item>
                   <!-- entryDataForm -->
               <entry-data-form  ref="entryDataFrom" :entryData="entryData"></entry-data-form>
@@ -72,7 +72,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="Exit" size="mini">
-              <el-button class="entryBtn" v-on:click="openExitDialog">{{entryFormdata.entry[0].label}}</el-button>
+              <el-button class="entryBtn" v-on:click="openExitDialog" type="info">{{entryFormdata.entry[0].label}}</el-button>
             </el-form-item>
               <!-- exitDataForm -->
               <exit-data-form ref="exitDataFrom" :exitData="exitData"></exit-data-form>

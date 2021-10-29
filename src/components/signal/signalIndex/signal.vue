@@ -11,7 +11,6 @@
         <el-tabs v-loading="loading" v-model="queryInfo.type" @tab-click="getFilterList">
           <el-tab-pane label="long" name="long">
             <!-- long 表格区域 -->
-            <!-- <signal-table @openDialog="openDialog" :page="page" :signalList="signalList" @addFavorites="addFavorites"></signal-table> -->
             <signal-table @showDialog="showDialog" :signalList="signalList" @addFavorites="addFavorites" :page="page"></signal-table>
            
             <!-- 若表格数据过多可以增加分页区域 -->
@@ -27,9 +26,7 @@
           </el-tab-pane>
           <el-tab-pane label="short" name="short">
             <!-- short 表格区域 -->
-            <!-- <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table> -->
             <signal-table :page="page" @showDialog="showDialog" :signalList="signalList"></signal-table>
-            <!-- 若表格数据过多可以增加分页区域 -->
             <el-pagination
             
               @current-change="handleCurrentChange"
@@ -42,7 +39,6 @@
           </el-tab-pane>
           <el-tab-pane label="longexit" name="longexit">
             <!-- longexit 表格区域 -->
-            <!-- <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table> -->
             <signal-table :page="page" @showDialog="showDialog" :signalList="signalList"></signal-table>
            
             <!-- 若表格数据过多可以增加分页区域 -->
@@ -56,12 +52,19 @@
             </el-pagination>
           </el-tab-pane>
           <el-tab-pane label="shortexit" name="shortexit">
-            <!-- shortexit 表格区域 -->
-            <!-- <signal-table @openDialog="openDialog" :page="page" :signalList="signalList"></signal-table> -->
             <signal-table :page="page" @showDialog="showDialog" :signalList="signalList"></signal-table>
-   
-            <!-- 若表格数据过多可以增加分页区域 -->
            <el-pagination
+              @current-change="handleCurrentChange"
+              :current-page="queryInfo.page"
+              :page-size="10"
+              layout="total, prev, pager, next, jumper"
+              :total="total"
+            >
+            </el-pagination>
+          </el-tab-pane>
+                    <el-tab-pane label="neutral" name="neutral">
+            <signal-table :page="page" @showDialog="showDialog" :signalList="signalList"></signal-table>
+            <el-pagination
               @current-change="handleCurrentChange"
               :current-page="queryInfo.page"
               :page-size="10"
@@ -88,16 +91,6 @@ import openDialog from '../signalComponents/openDialog.vue'
 export default {
   name: 'signal',
   data() {
-    /* 删除一部分重复的已从本文件中独立出去的代码 */
-    //  const validateName = (rule, value, callback) => {
-    //   const nameStr = window.sessionStorage.getItem('name')
-    //   if (value === '') {
-    //     callback(new Error('Enter name is empty'))
-    //   }
-    // }
-    // const validateDes = (rule, value, callback) => {
-    //   if ((value === '') | (value === undefined)) {callback(new Error('Input description is empty'))}
-    // }
     return {
       // 获取signal列表的参数对象
       queryInfo: {
@@ -143,10 +136,6 @@ export default {
         this.signalList = res.results
       if(res.results.length <= 0){
         this.loading = false
-         this.$message.success({
-           message: 'The list of signals is empty',
-           duration: 1000
-         })
       }
       this.total = res.count
       this.loading = false
@@ -155,7 +144,6 @@ export default {
 
     handleCurrentChange(newpage) {
       this.queryInfo.page = newpage
-      console.log(newpage);
       if(1< newpage < 4){
         this.page = newpage
       }
@@ -186,9 +174,6 @@ export default {
       this.$http.put('/demo/signal/'+row.id+"/",vm.$qs.stringify(addFavoritesData)).then(res => {}).catch(error => {console.log(error);})
     }
   },
-  // removeFavorites(row){
-  //   row.favorites = !row.favorites
-  // }
   },
   components:{
     'signal-table':signalTable,

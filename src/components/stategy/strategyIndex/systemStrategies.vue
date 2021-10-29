@@ -99,7 +99,6 @@ export default {
       //   return this.$message.error('获取信号列表失败')
       // }
       this.favoriteList = res.results
-      console.log('favoriteList', this.favoriteList)
       this.total = res.count
     },
     handleCurrentChange(newpage) {

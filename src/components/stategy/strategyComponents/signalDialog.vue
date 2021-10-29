@@ -1,6 +1,6 @@
 <template>
 <div class="signalDialog">
-  <el-dialog @open='getList' title="signalList" :visible.sync="dialogTableVisible" :before-close='closeDialog'>
+  <el-dialog @open='getList' title="signalList" :modal=false :visible.sync="dialogTableVisible" :before-close='closeDialog' v-loading="loading">
    <el-pagination
       @current-change="handleCurrentChange"
       :current-page="queryInfo.page"
@@ -62,56 +62,68 @@ export default {
         page: 1
       },
       radio: "",
-      total: 0
+      total: 0,
+      loading: false,
+      favoriteList: [],
+      customList: []
     }
   },
   methods: {
     getList(){
       this.getSignallist("system");
     },
-    async getSignallist(user) {
+    async getSignallist(users) {
       this.signalList = []
-      console.log("aaa");
       this.loading = true
       this.queryInfo.type = this.type
-      this.queryInfo.user = user
-      const { data: res } = await this.$http.get('/demo/signal/',
+      this.queryInfo.analysis_basis = 'sentiment'
+      this.queryInfo.user = users
+      const { data: favoriteRes } = await this.$http.get('/demo/signal/',
+        {
+          params: { page: 1,
+          type: this.type,
+          favorites: true,
+          analysis_basis: 'sentiment' }
+        }
+      )
+      const { data: customRes } = await this.$http.get('/demo/signal/', {
+        params: {
+          page: 1,
+          user: "custom_signal",
+          type: this.type,
+          analysis_basis: 'sentiment'
+        }
+      })
+      const { data: systemRes } = await this.$http.get('/demo/signal/',
        {
         params: this.queryInfo
       }
       )
-      // if (res.status !== 200) {
-      //   return this.$message.error('获取信号列表失败')
-      // }
-      this.signalList = this.signalList.concat(res.results)
-      this.total = res.count
-      if(res.results.length <= 0){
+      this.customList = customRes.results
+      this.favoriteList = favoriteRes.results 
+      this.signalList = this.signalList.concat(systemRes.results,favoriteRes.results,customRes.results)
+      if(this.signalList.length !== 0){
         this.loading = false
-         this.$message.success({
-           message: 'The list of signals is empty',
-           duration: 1000
-         })
       }
-      // this.total = res.count
-      this.loading = false
+      this.total = systemRes.count + favoriteRes.count + customRes.count
+      if(this.signalList.length <= 0){
+        this.loading = false
+      }
 
     },
     closeDialog(){
-      this.$emit('openDialog')
+      this.$emit('openDialog'),
+      this.queryInfo.page = 1
     },
     checkEntry(scope){
       this.$emit("setEntryData",(scope))
       this.closeDialog()
       this.signalList.entryChecked = !this.signalList.entryChecked
-      // console.log(id);
     },
     handleCurrentChange(newpage) {
       this.queryInfo.page = newpage
       this.getSignallist("system")
-    },
-    // selectSignal(row){
-    //   console.log(row);
-    // }
+    }
   }
 }
 </script>

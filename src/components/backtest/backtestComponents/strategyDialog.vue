@@ -1,6 +1,6 @@
 <template>
 <div class="strategyDialog">
-  <el-dialog title="strategyList" :visible.sync="strategyDialogVisible" :before-close='closeDialog'>
+  <el-dialog title="strategyList" :modal=false :visible.sync="strategyDialogVisible" :before-close='closeDialog'>
    <!-- <el-pagination
       @current-change="handleCurrentChange"
       :current-page="queryInfo.page"

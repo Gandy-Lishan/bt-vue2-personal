@@ -1,6 +1,7 @@
 <template>
   <div class="porfolioDialog">
   <el-dialog :visible.sync="dialogFormVisible" :modal=true :close-on-press-escape=true :before-close='closeDialog' title="porfolioDialog">
+
     <!-- symbol-dialog -->
     <!-- stratetgyDialog -->
     <strategy-dialog
@@ -57,9 +58,9 @@
             <el-form-item label="Cash:" prop="cash">
               <el-input v-model="backtestFormdata.cash" size="mini"></el-input>
             </el-form-item>
-            <el-form-item label="Percentage:" prop="percentage">
+            <!-- <el-form-item label="Percentage:" prop="percentage">
               <el-input v-model="backtestFormdata.percentage" size="mini"></el-input>
-            </el-form-item>
+            </el-form-item> -->
             </el-form>
         </div>
         <div class="strategyForm">
@@ -128,57 +129,24 @@
               >
               </el-date-picker>
             </el-form-item>
-            <!-- <div class="advansedBox">
-              <div class="advanceRadio">
-                <el-form-item>
-                  <el-checkbox
-                    v-model="testPeriodFormdata.checked"
-                    @change="getAdvancedValue(testPeriodFormdata.checked)"
-                    >Advanced</el-checkbox
-                  >
-                </el-form-item>
-              </div>
-              <el-form-item
-                label="lookback period"
-                prop="lookPeriod"
-                class="advancedLabel"
-              >
-                <el-input
-                  class="advancedInput"
-                  v-model="testPeriodFormdata.lookPeriod"
-                  size="mini"
-                ></el-input>
-              </el-form-item>
-              <el-form-item
-                label="observaion period"
-                prop="observaionPeriod"
-                class="advancedLabel"
-              >
-                <el-input
-                  class="advancedInput"
-                  v-model="testPeriodFormdata.observaionPeriod"
-                  size="mini"
-                ></el-input>
-              </el-form-item>
-            </div> -->
           </el-form>
         </div>
         <div class="newStrategyForm">
           <p class="pText">Commission/slippage</p>
           <el-form
-            :model="commisionFormdata"
+            :model="commissionFormdata"
             label-width="80px"
             label-position="left"
           >
             <el-form-item label="Commission" prop="commission">
               <el-input
-                v-model="commisionFormdata.commission"
+                v-model="commissionFormdata.commission"
                 size="mini"
               ></el-input>
             </el-form-item>
             <el-form-item label="Slippage" prop="slippage">
               <el-input
-                v-model="commisionFormdata.slippage"
+                v-model="commissionFormdata.slippage"
                 size="mini"
               ></el-input>
             </el-form-item>
@@ -242,6 +210,7 @@
         </div>
 </template>
 <script>
+
 import strategyDialog from '../../backtest/backtestComponents/strategyDialog.vue'
 export default {
   name: 'newBacktest',
@@ -269,8 +238,8 @@ export default {
         endDate: '',
         checked: false,
       },
-      commisionFormdata: {
-        commision: '',
+      commissionFormdata: {
+        commission: '',
         slippage: '',
       },
       moneyManagementFormdata: {
@@ -300,6 +269,7 @@ export default {
   components: {
     'strategy-dialog': strategyDialog,
   },
+// <<<<<<< HEAD
   computed: {
     listSet(){
       return this.symbolList.map(item => {
@@ -334,6 +304,23 @@ export default {
           this.options = [];
         }
         //console.log(this.options)
+// =======
+//   // computed:{
+//   //   ...mapState(['porfolioCash'])
+//   // },
+//   methods: {
+
+
+//     initData(){
+//     this.commissionFormdata = this.$options.data().commissionFormdata
+//     this.testPeriodFormdata = this.$options.data().testPeriodFormdata
+//     this.strategyFormdata = this.$options.data().strategyFormdata
+//     this.backtestFormdata = this.$options.data().backtestFormdata
+//     this.symbolFormdata = this.$options.data().symbolFormdata
+//     },
+//     openSymbolDialog() {
+//       this.symbolDialogVisible = !this.symbolDialogVisible
+// >>>>>>> 964816bf9cbdb3a9f7aa311b53db730f23de8702
     },
     openStrategyDialog() {
       this.strategyDialogVisible = !this.strategyDialogVisible
@@ -362,34 +349,20 @@ export default {
       this.newBacktestFormdata.description = this.backtestFormdata.description
       this.newBacktestFormdata.cash = this.backtestFormdata.cash
       this.newBacktestFormdata.cashalloc = this.moneyManagementFormdata.value
-      this.newBacktestFormdata.commission = this.commisionFormdata.commission
-      this.newBacktestFormdata.slippage = this.commisionFormdata.slippage
-      this.newBacktestFormdata.riskfreerate = this.commisionFormdata.slippage
+      this.newBacktestFormdata.commission = this.commissionFormdata.commission
+      this.newBacktestFormdata.slippage = this.commissionFormdata.slippage
+      this.newBacktestFormdata.riskfreerate = this.commissionFormdata.slippage
       this.newBacktestFormdata.fromdate = this.testPeriodFormdata.starDate
       this.newBacktestFormdata.todate = this.testPeriodFormdata.endDate
       this.newBacktestFormdata.status = 0
       this.newBacktestFormdata.strategy = this.strategyFormdata.id
-       this.newBacktestFormdata.percentage = this.backtestFormdata.percentage
-      const params =  this.newBacktestFormdata
-      const backtestArr = []
-      backtestArr.push(params)
-      console.log('tijiao',backtestArr);
-      this.$emit('submitBacktestData', backtestArr)
+      // this.newBacktestFormdata.percentage = this.backtestFormdata.percentage
+      var params =  this.newBacktestFormdata
+
+
+      this.$emit('submitBacktestData', params)
       this.closeDialog()
-      this.$http.post('/demo/porfolioItem/',this.$qs.stringify(params),{auth:{
-        username: 'sentimentrader_backtest_api',
-        password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-      }}).then( res => {
-        const backtestId = res.data.id
-        vm.$emit('createPorfolioItems', backtestId)
-        if(res.status === 201){
-           this.$message.success({
-           message: 'The save was successful',
-           duration: 1000
-         })
-        //  this.$router.push('/currentBacktests')
-        }
-      }).catch( error => { console.log(error) })
+
     },
     closeDialog(){
       this.$emit('showDialog')
@@ -444,4 +417,9 @@ export default {
   padding: 10px;
 }
 
+.spec-dialog .el-dialog__body {
+  padding: 3px 30px;
+  overflow-y: auto;
+  height: calc(100vh - 140px);
+}
 </style>
