@@ -1,8 +1,6 @@
 <template>
   <div class="porfolioDialog">
   <el-dialog :visible.sync="dialogFormVisible" :modal=true :close-on-press-escape=true :before-close='closeDialog' title="strategyDialog">
-
-    <!-- symbol-dialog -->
     <!-- stratetgyDialog -->
     <strategy-dialog
       :strategyDialogVisible="strategyDialogVisible"

@@ -76,13 +76,12 @@
         </el-select> -->
         <template slot-scope="scope">
         <el-row>
-          <el-button type="primary" plain size="mini">Open</el-button>
+          <el-button type="primary" plain size="mini" @click="showBacktestDialogVisible(scope.row)">Open</el-button>
           <el-button type="danger" plain size="mini" @click="runBacktest(scope.row.id)">Backtest</el-button>
          
         </el-row>
         </template>
      </el-table-column>
-    
       </el-table>
     </el-card>
       <el-dialog
@@ -95,17 +94,22 @@
       <el-button type="primary" @click="dialogVisible = false">confirm</el-button>
     </span>
   </el-dialog>
+  <backtest-dialog :backtestDialogVisible="backtestDialogVisible" :openBacktestFormdata="openBacktestFormdata" @showBacktestDialog="closeBacktestDialog()"></backtest-dialog>
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
+import backtestDialog from '../porfolioComponents/backtestDialog.vue'
 export default {
+  components: { backtestDialog },
   name: 'newPofolio',
   data() {
     return{
       porfolioList: [],
       img_data:"",
-      dialogVisible: false
+      dialogVisible: false,
+      openBacktestFormdata: {},
+      backtestDialogVisible: false
     }
   },
   computed: {
@@ -143,6 +147,13 @@ export default {
       }).catch(error => {
         console.log(error);
       })
+    },
+    showBacktestDialogVisible(row){
+      this.openBacktestFormdata = row
+      this.backtestDialogVisible = !this.backtestDialogVisible
+    },
+    closeBacktestDialog(){
+      this.backtestDialogVisible = !this.backtestDialogVisible 
     }
 }
 }
