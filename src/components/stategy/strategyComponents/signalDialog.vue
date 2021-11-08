@@ -80,7 +80,7 @@ export default {
       this.queryInfo.user = users
       const { data: favoriteRes } = await this.$http.get('/demo/signal/',
         {
-          params: { page: 1,
+          params: { page: this.queryInfo.page,
           type: this.type,
           favorites: true,
           analysis_basis: 'sentiment' }
@@ -88,7 +88,7 @@ export default {
       )
       const { data: customRes } = await this.$http.get('/demo/signal/', {
         params: {
-          page: 1,
+          page: this.queryInfo.page,
           user: "custom_signal",
           type: this.type,
           analysis_basis: 'sentiment'
@@ -121,6 +121,7 @@ export default {
       this.signalList.entryChecked = !this.signalList.entryChecked
     },
     handleCurrentChange(newpage) {
+      console.log('newpage',newpage);
       this.queryInfo.page = newpage
       this.getSignallist("system")
     }

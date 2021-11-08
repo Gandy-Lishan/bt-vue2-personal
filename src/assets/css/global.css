@@ -5,7 +5,8 @@ body,
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  font-size: 16px;
 }
 
 
@@ -99,4 +100,63 @@ label{
 }
 .porfolioDialog .el-dialog__wrapper .el-dialog{
   width: 1180px !important;
+}
+.signalLeftForm .el-form .el-form-item .el-form-item__label{
+  width: 80px !important;
+}
+.signalLeftForm .el-form .el-form-item .el-form-item__content .el-input .el-input__inner{
+  width: 177%;
+}
+.signalRight .el-form .el-form-item .el-form-item__content .el-input .el-input__inner{
+  width: 177%;
+}
+.signalRight .el-form-item .el-form-item__content .selectBox .el-select .el-input .el-input__inner{
+  width: 100%;
+}
+.signalLeft .el-form-item .el-form-item__content .selectBox .el-select .el-input .el-input__inner{
+  width: 100%;
+}
+.signalRight .el-form-item .el-form-item__content .searchBox .el-input .el-input__inner{
+  width: 155%;
+}
+.signalLeftForm .el-form .el-form-item__content .el-textarea .el-textarea__inner{
+  width: 163%;
+}
+
+.backtest_container .el-form .el-form-item{
+  flex-wrap: wrap;
+}
+.backtest_container .dateNote .el-form-item .el-form-item__label{
+  width: 361px;
+}
+.backtest_container .el-form .el-form-item .el-form-item__content .el-input .el-input__inner{
+  width: 145%;
+}
+.backtest_container .el-form-item .el-form-item__content .selectBox .el-select .el-input .el-input__inner{
+  width: 100%;
+}
+.backtest_container .el-form-item .el-form-item__content .el-date-editor .el-input__inner{
+  width: 100% !important;
+}
+.backtest_container .el-form .el-form-item__content .el-textarea .el-textarea__inner{
+  width: 135%;
+}
+.el-tabs--card>.el-tabs__header .el-tabs__nav{
+  border-top: 1px solid #6c6c6c;
+  border-right: 1px solid #6c6c6c;
+  border-left: 1px solid #6c6c6c;
+  border-bottom: none;}
+.el-tabs__nav-scroll{
+  border-bottom: 1px solid #6c6c6c ;
+}
+.footerTagbar .el-tabs__item:hover, .mainTagbar .el-tabs__item:hover{
+  color: #fff;
+}
+.footerTagbar .el-tabs__item, .mainTagbar .el-tabs__item{
+  color: #303133;
+  background-color: grey;
+}
+.footerTagbar .el-tabs__item.is-active, .mainTagbar .el-tabs__item.is-active{
+  background-color: #fff;
+  color: #303133;
 }

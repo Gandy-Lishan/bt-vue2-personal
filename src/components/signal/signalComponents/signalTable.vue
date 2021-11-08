@@ -77,6 +77,7 @@ export default {
   },
   methods: {
     openDialog(id, row) {
+      console.log('row',row);
       this.$emit('showDialog', id, row)
     },
     addFavorites(row) {

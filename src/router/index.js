@@ -16,6 +16,7 @@ import MyPorfolios from '../components/porfolio/porfolioIndex/myPorfolios.vue'
 import NewPorfolio from '../components/porfolio/porfolioIndex/newPorfolio.vue'
 import OpenedPorfolio from '../components/porfolio/porfolioIndex/openedPorfolio.vue'
 import PorfolioNewBacktest from '../components/porfolio/porfolioComponents/porfolioNewBacktest.vue'
+import SentimentHome from '../components/sentiment/SentimentHome.vue'
 Vue.use(Router)
 const router = new Router({
   routes: [
@@ -40,7 +41,8 @@ const router = new Router({
         { path: '/openedPorfolio', component: OpenedPorfolio },
         { path: '/porfolioNewBacktest', component: PorfolioNewBacktest }
       ]
-    }
+    },
+    { path: '/sentimentHome', component: SentimentHome },
   ]
 })
 // 挂载路由导航守卫
