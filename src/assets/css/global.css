@@ -104,6 +104,9 @@ label{
 .signalLeftForm .el-form .el-form-item .el-form-item__label{
   width: 80px !important;
 }
+.signalLeftForm .el-form .analysis-basis .el-form-item .el-form-item__label{
+  width: 105px !important;
+}
 .signalLeftForm .el-form .el-form-item .el-form-item__content .el-input .el-input__inner{
   width: 177%;
 }
@@ -159,4 +162,32 @@ label{
 .footerTagbar .el-tabs__item.is-active, .mainTagbar .el-tabs__item.is-active{
   background-color: #fff;
   color: #303133;
+}
+.strategyContainer .el-form .el-form-item .el-form-item__content .el-input .el-input__inner{
+  width: 159%;
+}
+.strategyContainer .el-form .el-form-item__content .el-textarea .el-textarea__inner{
+  width: 147%;
+}
+/* favorite data btn */
+.favoriteForm_container .el-table .el-table__body-wrapper .el-table__body tbody .el-table__row .el-table_1_column_5 .cell .dataBox .el-button.el-button--info.el-button--mini.is-plain{
+  margin-bottom: 5px !important
+ }
+.favoriteForm_container .el-table .el-table__body-wrapper .el-table__body tbody .el-table__row .el-table_1_column_5 .cell .dataBox .el-button+.el-button{
+ margin: 0px !important
+}
+.el-tooltip .el-popover__reference-wrapper button.el-button.el-button--danger.el-button--mini.is-circle.el-popover__reference{
+  margin-left: 10px;
+}
+button.el-button.el-tooltip.item.el-button--warning.el-button--mini.is-circle{
+  margin-left: 10px;
+}
+.backtest_container .el-form .el-form-item .el-form-item__content .enterSymbolBox .el-select .el-input .el-input__inner{
+  width: 136%;
+}
+.backtest_container .el-form .dateNote .el-form-item .el-form-item__content .el-input .el-input__inner{
+  width: 126%;
+}
+.backtest_container .dateNote .el-form-item .el-form-item__label {
+  width: 136px;
 }

@@ -196,6 +196,7 @@ export default {
       this.$router.push('/newporfolio',)
     },
     isChecked(val){
+      console.log(val);
       let backtests = [];
       this.currentBacktestList = val
       val.forEach(element => {

@@ -342,6 +342,7 @@ export default {
       this.testPeriodFormdata.endDate = date
     },
     saveNewBacktestFormdata() {
+      // this.newBacktestFormdata.sizeAllocation = this.moneyManagementFormdata.value
       this.newBacktestFormdata.stock = this.symbolFormdata.symbolName
       this.newBacktestFormdata.name = this.backtestFormdata.backtestName
       this.newBacktestFormdata.note = 'my note'
@@ -356,6 +357,7 @@ export default {
       this.newBacktestFormdata.status = 0
       this.newBacktestFormdata.strategy = this.strategyFormdata.id
       const params =  this.newBacktestFormdata
+      console.log('tijiao',this.newBacktestFormdata);
       this.$http.post('/demo/backtest/',this.$qs.stringify(params),{auth:{
         username: 'sentimentrader_backtest_api',
         password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'

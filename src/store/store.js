@@ -11,7 +11,13 @@ export default new Vuex.Store({
     openedPorfolioBacktests: [],
     count: 1,
     porfolioCash: '11',
-    savePorfolioData: []
+    savePorfolioData: [],
+    favoriteBacktestRowData: {},
+    editStrategyData: {},
+    indicators: {
+      entry: '',
+      exit: ''
+    }
   },
   mutations: {
     getNewPorfolioInputsValues(state,row) {
@@ -22,6 +28,19 @@ export default new Vuex.Store({
     },
     getSavePorfolioData(state,list){
       state.savePorfolioData = list
+    },
+    getRunBacktestData(state, row){
+      state.favoriteBacktestRowData = row
+      console.log('storeRow',row);
+    },
+    getEditBacktestData(state, row) {
+      state.editStrategyData = row
+    },
+    getEntryIndicators(state, val){
+      this.state.indicators.entry = val
+    },
+    getExitIndicators(state, val){
+      this.state.indicators.exit = val
     }
   },
   actions: {}

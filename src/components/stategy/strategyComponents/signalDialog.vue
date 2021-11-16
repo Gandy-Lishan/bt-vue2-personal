@@ -78,34 +78,24 @@ export default {
       this.queryInfo.type = this.type
       this.queryInfo.analysis_basis = 'sentiment'
       this.queryInfo.user = users
-      const { data: favoriteRes } = await this.$http.get('/demo/signal/',
-        {
-          params: { page: this.queryInfo.page,
-          type: this.type,
-          favorites: true,
-          analysis_basis: 'sentiment' }
-        }
-      )
-      const { data: customRes } = await this.$http.get('/demo/signal/', {
+      const { data: signalRes } = await this.$http.get('/demo/signal/', {
         params: {
           page: this.queryInfo.page,
-          user: "custom_signal",
           type: this.type,
           analysis_basis: 'sentiment'
         }
-      })
-      const { data: systemRes } = await this.$http.get('/demo/signal/',
-       {
-        params: this.queryInfo
-      }
-      )
-      this.customList = customRes.results
-      this.favoriteList = favoriteRes.results 
-      this.signalList = this.signalList.concat(systemRes.results,favoriteRes.results,customRes.results)
+      },{auth:{
+                  username: 'sentimentrader_backtest_api',
+                  password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+                  // username: 'demo01',
+                  // password: 'admin123456'
+                }})
+      this.signalList = signalRes.results
       if(this.signalList.length !== 0){
         this.loading = false
       }
-      this.total = systemRes.count + favoriteRes.count + customRes.count
+      // this.total = systemRes.count + favoriteRes.count + customRes.count
+      this.total = signalRes.count
       if(this.signalList.length <= 0){
         this.loading = false
       }
@@ -117,6 +107,7 @@ export default {
     },
     checkEntry(scope){
       this.$emit("setEntryData",(scope))
+      console.log('scope',scope);
       this.closeDialog()
       this.signalList.entryChecked = !this.signalList.entryChecked
     },
