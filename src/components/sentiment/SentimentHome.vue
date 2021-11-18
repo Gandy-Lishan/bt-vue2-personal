@@ -2,14 +2,16 @@
   <div class="home_container" id="content">
     <div class="home_box">
       <header class="header">
+        
         <img src="../../assets/logo.png" alt="logo">
         <p>SentimentTrader Backtest Engine</p>
         <p>This is on Sentimentrader.com. It is an indicator page that is shown AAPL and AAPL Optix (lets assume that at least).  A user now wants to
-backtest this setup. There could be multiple indicators on this chart - some might be our sentiment indicators, some could be technical
-indicators</p>
-        <div class="chart_box">
-           <img src="../../assets/chart.png" alt="chart">
+        backtest this setup. There could be multiple indicators on this chart - some might be our sentiment indicators, some could be technical
+        indicators</p>
+        <div class="chart_box" id="chart_box">
+          <chart width=100% height=100%></chart>
         </div>
+        <!-- <el-button type="info" @click="enterfullscreen">Full screen</el-button> -->
       </header>
       <main class="main">
         <div class="mainTagbar">
@@ -21,8 +23,8 @@ indicators</p>
                     <el-col :span="16">
                     <div class="entryBtns">
                       <el-button type="info">Clear Entry Signal</el-button>
-                      <el-button type="primary">Save Entry Signal</el-button>
-                      <el-button type="warning">Load Entry Signal</el-button>
+                      <el-button type="primary" @click="showmMarker">Save Entry Signal</el-button>
+                      <el-button type="warning" @click="passIndicator">Load Entry Signal</el-button>
                     </div>
                     </el-col>
                   </el-row>
@@ -34,8 +36,8 @@ indicators</p>
                     <el-col :span="16">
                     <div class="entryBtns">
                       <el-button type="info">Clear Entry Signal</el-button>
-                      <el-button type="primary">Save Entry Signal</el-button>
-                      <el-button type="warning">Load Entry Signal</el-button>
+                      <el-button type="primary" @click="showmMarker">Save Entry Signal</el-button>
+                      <el-button type="warning" @click="passIndicator">Load Entry Signal</el-button>
                     </div>
                     </el-col>
                   </el-row>
@@ -62,13 +64,19 @@ indicators</p>
   </div>
 </template>
 <script>
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import chart from "../chart/index.vue"
 import signalForm from './components/signalForm.vue'
 import backtestSetupForm from './components/backtestSutupForm.vue'
 import backtestResultForm from './components/backtestResultForm.vue'
 import favoriteForm from './components/favoriteForm.vue'
+//import {showmMarker} from '../chart/resources'
+// ChartIQ library resources
+
 export default {
   data(){
   return{
+    //a: 0,
     currentTag: 'first',
     signalFormData:{
     id: 1,
@@ -99,6 +107,33 @@ export default {
       value: '',
       ma: ''
     },
+    indicatorList:['etf_spy','etf_qqq','st_combined'],
+    dataSet:[
+      {
+        DT:"2016-06-05",
+        Type: "BUY",
+        Price: 22.25,
+        Indicator: "Smart Money Confidence"
+      },
+      {
+        DT:"2016-08-08",
+        Type: "SELL",
+        Price: 22.70,
+        Indicator: "Smart Money Confidence"
+      } ,
+      {
+        DT:"2016-09-05",
+        Type: "BUY",
+        Price: 21.90,
+        Indicator: "Dumb Money Confidence"
+      },
+      {
+        DT:"2016-10-02",
+        Type: "SELL",
+        Price: 25.59,
+        Indicator: "Dumb Money Confidence"
+      } 
+    ],
     activeName: 'first',
     activeTag: 'first',
   }},
@@ -106,9 +141,39 @@ export default {
     'signal-form': signalForm,
     'backtest-setup-form': backtestSetupForm,
     'backtest-result-form': backtestResultForm,
-    'favorite-form': favoriteForm
+    'favorite-form': favoriteForm,
+    "chart":chart
+  },
+  mounted(){
+    // // respond messages from chartiq
+    // this.iframeWin = this.$refs.iframe.contentWindow;
+    // window.addEventListener(
+    //   "message",
+    //   function(event){
+    //     if(event.origin != "http://127.0.0.1:8080"){
+    //       return;
+    //     }
+    //     console.log('message from child', event.data);
+    //   },
+    //   false
+    // );
   },
   methods: {
+  
+  // send messages to chartiq
+  passIndicator(){    
+    CIQ.addIndicators(this.indicatorList).then(
+      this.$message({
+          message: 'Loading sucess',
+          type: 'success'
+        })
+    )
+  },
+  // show mMarker from /resouces
+  showmMarker(){
+    CIQ.loadChart(this.dataSet)
+	  CIQ.addMarker()
+  },
   handleClick(tab, event) {
     console.log(tab, event);
   },
@@ -130,6 +195,7 @@ export default {
   }
 </script>
 <style lang="less" scoped>
+
 .home_container{
   height: 100%;
   width: 100%;
@@ -152,8 +218,9 @@ export default {
     font-weight: lighter;
     color: #333333;
   }
-  .chart_box img{
+  .chart_box{
     width: 100%;
+    height: 65vh
   }
   margin-bottom: 80px;
 }
