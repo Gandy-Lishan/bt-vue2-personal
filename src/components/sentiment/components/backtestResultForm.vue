@@ -73,7 +73,7 @@
             </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="Backtest History:" prop="backtestHistory">
+          <!-- <el-form-item label="Backtest History:" prop="backtestHistory">
             <div class="selectBox">
               <el-select size="mini" @change="getBacktestHistory(backtestSetupFormdata.historyValue)" v-model="backtestSetupFormdata.historyValue" placeholder="Pleace select">
                 <el-option
@@ -85,9 +85,6 @@
               </el-select>
             </div>
           </el-form-item>
-          <div class="dateNote">
-            <el-form-item label="Custom Dates for Backtest (Choose Custom in dropdown)"></el-form-item>
-          </div>
             <el-form-item label="Start date" size="mini">
               <el-date-picker
                 v-model="backtestSetupFormdata.starDate"
@@ -103,6 +100,51 @@
                 placeholder="Please select a end date"
               >
               </el-date-picker>
+            </el-form-item> -->
+                      <el-form-item label="Backtest History:" prop="backtestHistory">
+            <div class="selectBox">
+              <el-select size="mini" @change="getBacktestHistory(backtestSetupFormdata.historyValue)" v-model="backtestSetupFormdata.historyValue" placeholder="Pleace select">
+                <el-option
+                  v-for="item in backtestSetupFormdata.historyOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </div>
+          </el-form-item>
+          <div class="dateNote">
+            <el-form-item label="Start date" size="mini">
+              <el-date-picker
+                v-if="backtestSetupFormdata.historyValue === 22"
+                v-model="backtestSetupFormdata.starDate"
+                type="date"
+                placeholder="Please select a start date"
+              >
+              </el-date-picker>
+              <el-input
+              v-else
+              disabled
+              v-model="backtestSetupFormdata.starDate"
+              placeholder="Please select a start date">
+              </el-input>
+            </el-form-item>
+          </div>
+            <el-form-item label="End date" size="mini">
+              <el-date-picker
+                v-if="backtestSetupFormdata.historyValue === 22"
+                v-model="backtestSetupFormdata.endDate"
+                type="date"
+                placeholder="Please select a end date"
+                @change="getEndDate(backtestSetupFormdata.endDate)"
+              >
+              </el-date-picker>
+              <el-input
+                v-else
+                disabled
+                v-model="backtestSetupFormdata.endDate"
+                placeholder="Please select a end date">
+              </el-input>
             </el-form-item>
             <div class="setupBtns">
               <el-row>
@@ -144,36 +186,36 @@ export default {
           label: 'All In / When Out, (buy AGG)'
         }],
         historyOptions: [{
-          value: 0,
+          value: 1,
           label: '1 Year'
         }, {
-          value: 1,
+          value: 2,
           label: '2 Year'
         }, {
-          value: 2,
-          label: '3 Year'
-        }, {
           value: 3,
-          label: '4 Year'
+          label: '3 Year'
         }, {
           value: 4,
           label: '4 Year'
-        },{
+        }, {
           value: 5,
+          label: '5 Year'
+        },{
+          value: 10,
           label: '10 Year'
         },
         {
-          value: 6,
+          value: 15,
           label: '15 Year'
         },
         {
-          value: 7,
+          value: 20,
           label: '20 Year'
         },{
-          value: 8,
+          value: 21,
           label: 'All History'
         },{
-          value: 9,
+          value: 22,
           label: 'Custom...'
         },
         ],
@@ -190,6 +232,10 @@ export default {
     }
   },
  created(){
+    this.backtestSetupFormdata.endDate = timestampToTime(new Date())
+    const str = this.backtestSetupFormdata.endDate.split('-')
+    str[0] = (Number(str[0]) - Number(this.backtestSetupFormdata.historyValue)) + ''
+    this.backtestSetupFormdata.starDate = str.join('-')
     this.getData()
   },
   components: {
@@ -207,6 +253,23 @@ export default {
       });
     }},
   methods: {
+    getEndDate(date){
+      this.backtestSetupFormdata.endDate = date
+      const endDate = timestampToTime(date)
+      const str = endDate.split('-')
+      str[0] = (Number(str[0]) - Number(this.backtestSetupFormdata.historyValue)) + ''
+      this.backtestSetupFormdata.starDate = str.join('-')
+    },
+    getBacktestHistory(val) {
+      this.backtestSetupFormdata.historyValue = val
+      if(val <= 20){
+      const str = this.backtestSetupFormdata.endDate.split('-')
+      str[0] = (Number(str[0]) - Number(this.backtestSetupFormdata.historyValue)) + ''
+      this.backtestSetupFormdata.starDate = str.join('-')}
+      if(val === 21){
+        this.backtestSetupFormdata.starDate = ''
+      }
+    },
     getBacktestHistory(val) {
       this.backtestSetupFormdata.historyValue = val
     },
@@ -291,6 +354,8 @@ export default {
     },
     getData() {
       const data = this.$store.state.favoriteBacktestRowData
+      this.backtestId = data.id
+      console.log('backtestSutup[Results',data);
       if(data.length !== 0){
       this.backtestSetupFormdata.name = data.name
       this.backtestSetupFormdata.description = data.description

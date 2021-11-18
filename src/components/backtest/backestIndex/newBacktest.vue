@@ -357,7 +357,7 @@ export default {
       this.newBacktestFormdata.status = 0
       this.newBacktestFormdata.strategy = this.strategyFormdata.id
       const params =  this.newBacktestFormdata
-      console.log('tijiao',this.newBacktestFormdata);
+      console.log('tijiao',this.newBacktestFormdata);ss
       this.$http.post('/demo/backtest/',this.$qs.stringify(params),{auth:{
         username: 'sentimentrader_backtest_api',
         password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'

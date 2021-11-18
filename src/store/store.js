@@ -14,10 +14,15 @@ export default new Vuex.Store({
     savePorfolioData: [],
     favoriteBacktestRowData: {},
     editStrategyData: {},
+    strategyEntryData: {},
+    strategyExitData: {},
     indicators: {
       entry: '',
       exit: ''
-    }
+    },
+    customExitType: [],
+    exitOption: [],
+    strategyId: ''
   },
   mutations: {
     getNewPorfolioInputsValues(state,row) {
@@ -31,17 +36,61 @@ export default new Vuex.Store({
     },
     getRunBacktestData(state, row){
       state.favoriteBacktestRowData = row
-      console.log('storeRow',row);
     },
     getEditBacktestData(state, row) {
       state.editStrategyData = row
     },
     getEntryIndicators(state, val){
-      this.state.indicators.entry = val
+      state.indicators.entry = val
     },
     getExitIndicators(state, val){
-      this.state.indicators.exit = val
+      state.indicators.exit = val
+    },
+    getEntryData(state, val){
+      state.strategyEntryData = val
+      console.log('entryData',val);
+    },
+    getExitData(state, val) {
+      state.strategyExitData = val
+      console.log('exitData',val);
+    },
+    getCustomExitType(state, val) {
+      const data = {
+        long: [
+          { label: 'Longexit', value: 'longexit' },
+          { label: 'Short', value: 'short' },
+        ],
+        short: [
+          { label: 'Shortexit', value: 'shortexit' },
+          { label: 'Long', value: 'long' },
+        ],
+      }
+      if (val === 'long') {
+        state.customExitType = data.long
+      } else {
+        state.customExitType = data.short
+      }
+    },
+    getExitOption(state ,val) {
+      const data = {
+        long: [
+          { label: 'Longexit', value: 'longexit' },
+          { label: 'Short', value: 'short' },
+        ],
+        short: [
+          { label: 'Shortexit', value: 'shortexit' },
+          { label: 'Long', value: 'long' },
+        ],
+      }
+      if (val === 'long') {
+        state.exitOption = data.long
+        console.log(state.exitOption);
+      } else {
+        state.exitOption = data.short
+      }
+    },
+    getStrategyId(state, id){
+      state.strategyId = id
     }
   },
-  actions: {}
 })

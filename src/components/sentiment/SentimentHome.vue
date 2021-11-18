@@ -18,8 +18,8 @@
       <main class="main">
         <div class="mainTagbar">
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-            <el-tab-pane label="Entry Signal" name="first">
-              <p style="font-weight: bold">Entry Signal</p>
+            <el-tab-pane label="Entry Criteria" name="first">
+              <p style="font-weight: bold">Entry Criteria</p>
               <signal-form
                 :signalFormTagName="signalFormTagName"
                 ref="child"
@@ -31,8 +31,8 @@
                 @goToStrategyForm="goToStrategyForm"
               ></signal-form>
             </el-tab-pane>
-            <el-tab-pane label="Exit Signal" name="second">
-              <p style="font-weight: bold">Exit Signal</p>
+            <el-tab-pane label="Exit Criteria" name="second">
+              <p style="font-weight: bold">Exit Criteria</p>
               <signal-form
                 :signalFormTagName="signalFormTagName"
                 ref="child"
@@ -44,10 +44,10 @@
                 @goToStrategyForm="goToStrategyForm"
               ></signal-form>
             </el-tab-pane>
-            <el-tab-pane label="New Strategy" name="third">
+            <!-- <el-tab-pane label="New Strategy" name="third">
               <p class="strategyNote">New Strategy</p>
               <new-strategy-form ref="strategyChild" :strategyEntryData="strategyEntryData" :strategyExitData="strategyExitData" @updateStrategylist="updateStrategylist"></new-strategy-form>
-            </el-tab-pane>
+            </el-tab-pane> -->
           </el-tabs>
         </div>
       </main>
@@ -63,6 +63,9 @@
             <el-tab-pane label="Favorites" name="third">
               <favorite-form ref="favoriteChild" @getResultTry="getResultTry" @getBacktestDataTry="getBacktestDataTry" @goTobacktestSetupForm="goTobacktestSetupForm" @goBacktestResultForm="goBacktestResultForm"></favorite-form>
             </el-tab-pane>
+            <el-tab-pane label="Strategies" name="fourth">
+              <strategy-form ref="strategyChild"></strategy-form>
+            </el-tab-pane>
           </el-tabs>
         </div>
       </footer>
@@ -75,6 +78,7 @@ import backtestSetupForm from './components/backtestSutupForm.vue'
 import backtestResultForm from './components/backtestResultForm.vue'
 import favoriteForm from './components/favoriteForm.vue'
 import newStrategyForm from './components/newStrategyForm.vue'
+import strategyForm from './components/strategyForm.vue'
 export default {
   data() {
     return {
@@ -93,6 +97,7 @@ export default {
     'backtest-result-form': backtestResultForm,
     'favorite-form': favoriteForm,
     'new-strategy-form': newStrategyForm,
+    'strategy-form': strategyForm
   },
   methods: {
     handleClick(tab, event) {

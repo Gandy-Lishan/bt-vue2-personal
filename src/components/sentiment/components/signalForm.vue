@@ -6,7 +6,7 @@
         <div><p>Name/Description:</p></div>
         <div class="signalLeftForm">
           <!-- signal-dialog -->
-          <signal-dialog :type="entryType"  :dialogTableVisible="entryDialogTableVisible" @openDialog="openEntryDialog" @setEntryData='setEntryData'></signal-dialog>
+          <signal-dialog :type="entryType"  :dialogTableVisible="entryDialogTableVisible" @openDialog="openEntryDialog" @setEntryData='setEntryData' ></signal-dialog>
           <signal-dialog :type="exitType"  :dialogTableVisible="exitDialogTableVisible" @openDialog="openExitDialog" @setEntryData='setExitData'></signal-dialog>
           <el-form 
             v-if="signalFormTagName === 'first'"
@@ -17,22 +17,10 @@
           >
           <div class="analysis-basis">
             <el-form-item label="Analysis Basis:" size="mini">
-              <el-radio v-model="typeRadio" label="1">sentiment</el-radio>
-              <el-radio v-model="typeRadio" label="2">technical</el-radio>
+              <el-radio v-model="entryTypeRadio" label="1">sentiment</el-radio>
+              <el-radio v-model="entryTypeRadio" label="2">technical</el-radio>
             </el-form-item>
           </div>
-            <el-form-item label="Action" size="mini">
-              <div class="selectBox">
-                <el-select v-model="entryType" @change="selectEntryAction(entryType)" placeholder="Please select">
-                  <el-option
-                    v-for="item in entryFormdata.actionEntry"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select> 
-              </div>
-            </el-form-item>
             <!-- <el-form-item label="Entry" size="mini">
                 <el-button class="entryBtn" v-on:click="openEntryDialog" type="success" plain>{{entryFormdata.entry[0].label}}</el-button>
             </el-form-item> -->
@@ -48,12 +36,7 @@
                 resize="none"
               ></el-input>
             </el-form-item>
-            <el-form-item label="Type:" size="mini">
-              <!-- <el-input
-                v-model="entryData.type"
-                size="mini"
-                disabled
-              ></el-input> -->
+            <!-- <el-form-item label="Type:" size="mini">
               <div class="selectBox">
                 <el-select v-model="entryData.type" @change="selectTypeAction(entryData.type)" placeholder="Please select">
                   <el-option
@@ -63,6 +46,18 @@
                     :value="item.value">
                   </el-option>
                 </el-select>
+              </div>
+            </el-form-item> -->
+            <el-form-item label="Type" size="mini">
+              <div class="selectBox">
+                <el-select v-model="entryType" @change="selectEntryAction(entryType)" placeholder="Please select">
+                  <el-option
+                    v-for="item in entryFormdata.actionEntry"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select> 
               </div>
             </el-form-item>
             <el-form-item label="Frequency:" size="mini">
@@ -97,22 +92,10 @@
           >
           <div class="analysis-basis">
             <el-form-item label="Analysis Basis:" size="mini">
-              <el-radio v-model="typeRadio" label="1">sentiment</el-radio>
-              <el-radio v-model="typeRadio" label="2">technical</el-radio>
+              <el-radio v-model="exitTypeRadio" label="1">sentiment</el-radio>
+              <el-radio v-model="exitTypeRadio" label="2">technical</el-radio>
             </el-form-item>
           </div>
-            <el-form-item label="Action" size="mini">
-              <div class="selectBox">
-                <el-select v-model="exitType" @change="selectExitAction(exitType)" placeholder="Please select">
-                  <el-option
-                    v-for="(item, index) in exitLabel"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-              </div>
-            </el-form-item>
             <!-- <el-form-item label="Exit" size="mini">
                 <el-button class="entryBtn" v-on:click="openExitDialog" type="success" plain>{{entryFormdata.entry[0].label}}</el-button>
             </el-form-item> -->
@@ -128,19 +111,48 @@
                 resize="none"
               ></el-input>
             </el-form-item>
-            <el-form-item label="Type:">
-              <el-input
-                v-model="exitData.type"
-                size="mini"
-                disabled
-              ></el-input>
+            
+            <el-form-item label="Type" size="mini">
+              <div class="selectBox">
+                <el-select v-model="exitType" @change="selectExitAction(exitType)" placeholder="Please select">
+                  <el-option
+                    v-for="(item, index) in this.$store.state.exitOption"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </div>
             </el-form-item>
-            <el-form-item label="Frequency:">
-              <el-input
+            <!-- <el-form-item label="Type:" size="mini">
+              </el-input>
+              <div class="selectBox">
+                <el-select v-model="exitData.type" placeholder="Please select">
+                  <el-option
+                    v-for="item in this.$store.state.customExitType"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </div>
+            </el-form-item> -->
+            <el-form-item label="Frequency:" size="mini">
+              <!-- <el-input
                 v-model="exitData.frequency"
                 size="mini"
                 disabled
-              ></el-input>
+              ></el-input> -->
+              <div class="selectBox">
+                <el-select v-model="exitData.frequency" @change="selectFrequencyAction(entryData.frequency)" placeholder="Please select">
+                  <el-option
+                    v-for="item in entryFormdata.frequencyOption"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </div>
             </el-form-item>
           </el-form>
         </div>
@@ -154,7 +166,6 @@
                   size="mini"
                   @input="searchAction($event)"
                   @focus="showSearchList"
-                  @blur="hideSearchList"
                   placeholder="Please enter the indicator"
                 >
                 <i slot="prefix" class="el-input__icon el-icon-search"                                                                                                                                                                                                                                                                                                                     ></i>
@@ -163,7 +174,7 @@
                 <ul v-show="isSelected" style="height:300px;overflow-y:scroll">
                   <li  class="search-item border-bottom" v-for="(item, index) in indicatorsSearchResults"
                   :key="index"
-                  @click="selectEntrySymbol(item.chart_name)"
+                  @click="selectEntrySymbol(item.chart_name,item.url)"
                   >
                   {{item.chart_name}}
                   </li>
@@ -177,7 +188,6 @@
                   @input="searchAction($event)"
                   placeholder="Please enter the indicator"
                   @focus="showSearchList"
-                  @blur="hideSearchList"
                 >
                 <i slot="prefix" class="el-input__icon el-icon-search"                                                                                                                                                                                                                                                                                                                     ></i>
                 </el-input>
@@ -185,7 +195,7 @@
                 <ul v-show="isSelected" style="height:300px;overflow-y:scroll">
                   <li  class="search-item border-bottom" v-for="(item, index) in indicatorsSearchResults"
                   :key="index"
-                  @click="selectExitSymbol(item.chart_name)">
+                  @click="selectExitSymbol(item.chart_name,item.url)">
                   {{item.chart_name}}
                   </li>
                 </ul>
@@ -200,11 +210,11 @@
               <el-input
                 v-model="conditionList[index].condition_description"
                 size="mini"
-                disabled
               ></el-input>
             </el-form-item>
             <el-form-item label="Parameter:" size="mini">
-              <el-radio v-model="parameterRadio" label="1">{{conditionList[index].parameter}}</el-radio>
+              <el-radio v-model="parameterRadio" label="1" v-if="conditionList[index].parameter == ''">{{conditionList[index].originParameter}}</el-radio>
+              <el-radio v-model="parameterRadio" label="1" v-else>{{conditionList[index].parameter}}</el-radio>
               <el-radio v-model="parameterRadio" label="2">sentiment SMA</el-radio>
             </el-form-item>
             <el-form-item v-if="parameterRadio == '2'" label="MA:" size="mini">
@@ -221,20 +231,20 @@
             </el-form-item>
             <el-form-item  label="Condition:" size="mini">
               <div class="selectBox">
-                <el-select v-model="conditions[conditionList[index].condition]" v-if="parameterRadio == '1'" filterable placeholder="Please select condiction">
+                <el-select @change="getconditionOption(conditionList[index].condition)" v-model="conditionList[index].condition" v-if="parameterRadio == '1'" filterable placeholder="Please select condition">
                       <el-option
                           v-for="(item,index) in conditions"
-                          :key="index"
-                          :label="item"
-                          :value="item">
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
                         </el-option>
                 </el-select>
-                <el-select v-model="conditionsOption" v-else filterable placeholder="Please select condiction" >
+                <el-select v-model="conditionsOption" v-else filterable placeholder="Please select condition" @change="getMaconditionOption(conditionsOption)">
                       <el-option
                           v-for="(item,index) in parameterConditions"
-                          :key="index"
-                          :label="item"
-                          :value="item">
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
                         </el-option>
                 </el-select>
               </div>
@@ -532,6 +542,7 @@
 import loginFormateVue from '../../../loginFormate.vue'
 import signalDialog from '../../stategy/strategyComponents/signalDialog.vue'
 import { throttle } from '../../../tools/throttle.js'
+import { mapState } from 'vuex'
 export default {
   props: { signalFormTagName: String, exitLabel: Array },
   data() {
@@ -561,13 +572,15 @@ export default {
           { type: 'number', message: 'Please enter number', trigger: 'blur' },
         ],
       },
-      conditions: ['>', '<', 'CrossAbove', 'CrossBelow'],
-      parameterConditions: ['sentiment crossAbove','sentiment crossBelow'],
+      submitEntrycondition: {},
+      conditions: [{value: 0,label:'>'}, {value: 1,label:'<'}, {value: 2,label:'CrossAbove'}, {value: 3,label:'CrossBelow'}],
+      parameterConditions: [{value: 4, label:'sentiment crossAbove'},{value: 5, label:'sentiment crossBelow'}],
       conditionsOption: '',
       combinations: ['AND', 'OR', 'SUM'],
       conditionList: [
         {
           condition_description: '',
+          originParameter: 'sentiment value',
           parameter: '',
           maValue: '',
           condition: '',
@@ -603,6 +616,9 @@ export default {
         valueExit: '',
         exit: [],
       },
+      exitFormData: {
+        exitTypeOption: this.$store.state.customExitType
+      },
       options: [
         {
           value: 5,
@@ -632,16 +648,21 @@ export default {
       indicatorsName: '',
       timeout:  null,
       parameterRadio: '1',
-      typeRadio: '1',
+      entryTypeRadio: '1',
+      exitTypeRadio: '1',
       indicatorsList: [],
       indicatorsSearchResults: [],
       indicatorsEntryValue: '',
       indicatorsExitValue: '',
+      conditionData: {},
       isSelected: true
     }
   },
   components: {
     'signal-dialog': signalDialog,
+  },
+  computed: {
+    ...mapState(['strategyEntryData','strategyExitData'])
   },
   created() {
     this.getIndicatorsList()
@@ -693,36 +714,6 @@ export default {
       this.conditionList = res.data.results
       this.exitData = data
     },
-    selectEntryAction(value) {
-      const data = {
-        long: [
-          { label: 'Longexit', value: 'longexit' },
-          { label: 'Short', value: 'short' },
-        ],
-        short: [
-          { label: 'Shortexit', value: 'shortexit' },
-          { label: 'Long', value: 'long' },
-        ],
-      }
-      this.valueEntry = value
-      if (this.valueEntry === 'long') {
-        this.entryFormdata.exit = data.long
-      } else {
-        this.entryFormdata.exit = data.short
-      }
-      this.$emit('getExitLabel', this.entryFormdata.exit)
-    },
-    selectTypeAction(val) {
-      this.entryData.type = val
-      console.log(this.entryData.type);
-    },
-    selectFrequencyAction(val) {
-      this.entryData.frequency = val
-      console.log(this.entryData.frequency);
-    },
-    selectExitAction(value) {
-      this.valueExit = value
-    },
     loadAll() {
       return [
         {"value":'5'},
@@ -737,84 +728,183 @@ export default {
     },
     async submitEntryFormData() {
       let vm =this
-      const conditions = vm.conditionList
-      let formData = vm.entryData
-      // 提交的 ['name','description','value'] 组成的数组 submitFormData
-      const submitFormData = {};
-      submitFormData['name'] = formData.name
-      submitFormData['description'] = formData.description
-      conditions.forEach((item, index) => {
-        submitFormData['value'] = item.value
+      vm.submitEntrycondition.name = vm.entryData.name
+      vm.submitEntrycondition.description = vm.entryData.description
+      const analysisBasisArr = ['sentiment','technical']
+      // const conditionOptionArr = ['>','<', 'CrossAbove','CrossBelow', 'sentiment crossAbove', 'sentiment crossBelow']
+      vm.submitEntrycondition.analysis_basis = analysisBasisArr[vm.entryTypeRadio - 1]
+      vm.submitEntrycondition.used_indicators = vm.indicatorsEntryValue
+      // vm.submitEntrycondition.type = vm.entryData.entryType
+      vm.submitEntrycondition.frequency = vm.entryData.frequency
+      vm.conditionList.forEach(item => {
+        vm.conditionData.condition_description=item.condition_description
+        // this.conditionData.condition = conditionOptionArr.indexOf(item.condition)
+        vm.conditionData.condition  = item.condition
+        vm.conditionData.value= item.value + ''
+        if(vm.parameterRadio == 1){
+        if(item.parameter == ''){
+          vm.conditionData.parameter= 'sentiment value'
+        }else{
+          vm.conditionData.parameter = item.parameter
+        }}
+        if(vm.parameterRadio == 2){
+          vm.conditionData.parameter = 'sentiment SMA'
+          vm.conditionData.maValue = vm.maValue
+          // this.conditionData.condition = conditionOptionArr.indexOf(this.conditionsOption)
+        }
       })
+      
+      // const conditions = vm.conditionList
+      const conditions = []
+      conditions.push(vm.conditionData)
+      // let formData = vm.entryData
+      var formData = vm.submitEntrycondition;
+      formData.conditions = JSON.stringify(conditions)
       //检查有无改动
-      if(submitFormData['name'] !== this.initialEntryFromData['name'] && submitFormData['description'] !== this.initialEntryFromData['description']){
-        if(submitFormData['value'] !== ''){
-                formData.conditions = JSON.stringify(conditions)
+        if(conditions['value'] !== ''){
+            const {data:res} = await vm.$http.post("/demo/create_signal/",vm.$qs.stringify(formData),{auth:{
+              // username: 'sentimentrader_backtest_api',
+              // password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+              username: 'demo01',
+              password: 'admin123456'
+            }})
+            if(res.status == 200){
+            this.$emit('sendEntryData',formData)
+            this.$store.commit('getEntryData',formData)
+            this.$emit('getExitLabel', this.entryFormdata.exit)
+            this.$message.success({
+              message: 'Saved successfully',
+              duration: 1000
+            })
+            this.$emit('goToExitSignalForm')}
+        }else{
+          this.$message.error({
+           message: 'The value of value entered is empty',
+           duration: 1000
+         })
+        }
+    },
+    async submitExitFormData() {
+      let vm =this
+      const analysisBasisArr = ['sentiment','technical']
+      const submitExitData = {}
+      submitExitData.name = vm.exitData.name
+      submitExitData.description = vm.exitData.description
+      submitExitData.analysis_basis = analysisBasisArr[vm.exitTypeRadio - 1]
+      submitExitData.type = vm.exitType
+      submitExitData.frequency = vm.exitData.frequency
+      submitExitData.used_indicators = vm.indicatorsExitValue
+      console.log('22222',submitExitData);
+      const conditionData = {}
+      vm.conditionList.forEach(item => {
+        conditionData.condition_description=item.condition_description
+        // this.conditionData.condition = conditionOptionArr.indexOf(item.condition)
+        conditionData.condition  = item.condition
+        conditionData.value= item.value + ''
+        if(vm.parameterRadio == 1){
+        if(item.parameter == ''){
+          conditionData.parameter= 'sentiment value'
+        }else{
+          conditionData.parameter = item.parameter
+        }}
+        if(vm.parameterRadio == 2){
+          conditionData.parameter = 'sentiment SMA'
+          conditionData.maValue = vm.maValue
+          // this.conditionData.condition = conditionOptionArr.indexOf(this.conditionsOption)
+        }
+      })
+      console.log('3333',conditionData);
+      // submitExitData.name = 
+      const conditions = []
+      conditions.push(conditionData)
+      // let formData = vm.entryData
+      const formData = submitExitData;
+      formData.conditions = JSON.stringify(conditions)
+      // let formData = vm.exitData
+      // 提交的 ['name','description','value'] 组成的数组 submitFormData
+      //检查有无改动
+        if(submitExitData['name'] !== ''){
                 const {data:res} = await vm.$http.post("/demo/create_signal/",vm.$qs.stringify(formData),{auth:{
                   // username: 'sentimentrader_backtest_api',
                   // password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
                   username: 'demo01',
                   password: 'admin123456'
                 }})
-                this.$emit('sendEntryData',this.entryData)
-                this.$emit('getExitLabel', this.entryFormdata.exit)
+                if(res.status === 200){
+                this.$emit('sendExitData',vm.exitData)
+                this.$store.commit('getExitData', formData)
                 this.$message.success({
                   message: 'Saved successfully',
                   duration: 1000
                 })
-         this.$emit('goToExitSignalForm')
+                }
+        //  this.$emit('goToStrategyForm')
+        this.saveStrategy()
+        console.log('entryData',this.$store.state.strategyEntryData);
+        console.log('exitData',this.$store.state.strategyExitData);
         }else{
           this.$message.error({
-           message: 'The value of value entered is empty',
+           message: 'The save failed',
            duration: 1000
          })
         }
-      }else {
-        this.$message.error({
-           message: 'The entered name and discription already exist',
-           duration: 1000
-         })
-      }
+
     },
-    async submitExitFormData() {
-      let vm =this
-      const conditions = vm.conditionList
-      let formData = vm.exitData
-      // 提交的 ['name','description','value'] 组成的数组 submitFormData
-      const submitFormData = {};
-      submitFormData['name'] = formData.name
-      submitFormData['description'] = formData.description
-      conditions.forEach((item, index) => {
-        submitFormData['value'] = item.value
-      })
-      //检查有无改动
-      if(submitFormData['name'] !== this.initialExitFromData['name'] && submitFormData['description'] !== this.initialExitFromData['description']){
-        if(submitFormData['value'] !== ''){
-                formData.conditions = JSON.stringify(conditions)
-                const {data:res} = await vm.$http.post("/demo/create_signal/",vm.$qs.stringify(formData),{auth:{
-                  // username: 'sentimentrader_backtest_api',
-                  // password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-                  username: 'demo01',
-                  password: 'admin123456'
-                }})
-                this.$emit('sendExitData',this.exitData)
-                this.$message.success({
-           message: 'Saved successfully',
-           duration: 1000
-         })
-         this.$emit('goToStrategyForm')
-        }else{
-          this.$message.error({
-           message: 'The value of value entered is empty',
-           duration: 1000
-         })
-        }
-      }else {
-        this.$message.error({
-           message: 'The entered name and discription already exist',
-           duration: 1000
-         })
+    saveStrategy() {
+      // console.log('strategyentry',this.strategyEntryData);
+      // console.log('strategyexit',this.strategyExitData);
+      const entryData = this.$store.state.strategyEntryData
+      const exitData = this.$store.state.strategyExitData
+      const submitStrategyData = {}
+      submitStrategyData.name = Math.random().toString(36).slice(-8)
+      submitStrategyData.description = Math.random().toString(36)
+      submitStrategyData.signal_entry = entryData
+      submitStrategyData.signal_exit = exitData
+      submitStrategyData.signal_entry.entryAction = entryData.type
+      submitStrategyData.signal_exit.exitAction = exitData.type
+      var params =
+          {name: submitStrategyData.name,
+          description: submitStrategyData.description,
+          signal_entry: JSON.stringify(submitStrategyData.signal_entry),
+          signal_exit: JSON.stringify(submitStrategyData.signal_exit),
+          user: ''
+          }
+      if((params.name === '' || params.description === '') || (params.name === undefined || params.description === undefined)){
+            this.$message.error({
+            message: 'Please enter name or description',
+            duration: 1000
+          })
+          return
       }
+      if(entryData.name === undefined){
+          this.$message.error({
+            message: 'Please select entry signal',
+            duration: 1000
+          })
+           return
+      }
+      if(exitData.name === undefined){
+          this.$message.error({
+            message: 'Please select exit signal',
+            duration: 1000
+          })
+           return
+      }
+    const vm = this
+    this.$http.post('/demo/strategies/',vm.$qs.stringify(params),{auth:{
+        username: 'sentimentrader_backtest_api',
+        password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+      }}).then(res => {
+        vm.$store.commit('getStrategyId',res.data.id)
+        if(res.status === 201){
+          this.$emit("updateStrategylist")
+          // eventBus.eventVue.$emit('UpdateMyStrategyList',"aaa")
+          }else{this.$message.error({
+            message: 'The save failed',
+            duration: 1000
+          })}}).catch(error => {
+      console.error(error);
+      })
     },
     maValueChange(val){
       this.conditionList.maValue = val
@@ -840,14 +930,14 @@ export default {
             return item
         })
       }, 500),
-      selectEntrySymbol(name) {
+      selectEntrySymbol(name,url) {
             this.indicatorsEntryValue = name
-            this.$store.commit('getEntryIndicators',name)
+            this.$store.commit('getEntryIndicators',url)
             this.isSelected = false
          },
-      selectExitSymbol(name) {
+      selectExitSymbol(name,url) {
             this.indicatorsExitValue = name
-            this.$store.commit('getExitIndicators',name)
+            this.$store.commit('getExitIndicators',url)
             this.isSelected = false
          },
       showSearchList() {
@@ -855,10 +945,52 @@ export default {
       },
       hideSearchList() {
         this.isSelected = false
-      }
+      },
+      // getOptionValue
+      selectTypeAction(val) {
+      // this.entryData.type = val
+      this.submitEntrycondition.type = val
+      this.$store.commit('getCustomExitType',val)
+    },
+    selectFrequencyAction(val) {
+      // this.entryData.frequency = val
+      this.submitEntrycondition.frequency = val
+    },
+    getconditionOption(val){
+      this.conditionData.condition = val
+    },
+    selectEntryAction(value) {
+      this.submitEntrycondition.type = value
+      // const data = {
+      //   long: [
+      //     { label: 'Longexit', value: 'longexit' },
+      //     { label: 'Short', value: 'short' },
+      //   ],
+      //   short: [
+      //     { label: 'Shortexit', value: 'shortexit' },
+      //     { label: 'Long', value: 'long' },
+      //   ],
+      // }
+      // this.valueEntry = value
+      // if (this.valueEntry === 'long') {
+      //   this.entryFormdata.exit = data.long
+      // } else {
+      //   this.entryFormdata.exit = data.short
+      // }
+      this.$emit('getExitLabel', this.entryFormdata.exit)
+      this.$store.commit('getExitOption', value)
+    },
+    selectExitAction(value) {
+      this.submitEntrycondition.exitAction = this.exitType
+      this.valueExit = value
+    },
+    getMaconditionOption(val) {
+      this.conditionData.condition = val
+    }
   },
 }
 </script>
+
 <style lang="less" scoped>
 .main {
   display: flex;

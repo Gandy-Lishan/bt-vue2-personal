@@ -319,7 +319,8 @@ export default {
       strategyFormData.fromdate = vm.backtestSetupFormdata.starDate
       strategyFormData.todate = vm.backtestSetupFormdata.endDate
       strategyFormData.status = 0
-      strategyFormData.strategy = vm.strategyFormdata.id
+      strategyFormData.strategy = vm.$store.state.strategyId
+      console.log('strategyFormData',strategyFormData);
       const params =  strategyFormData
             this.$http.post('/demo/backtest/',this.$qs.stringify(params),{auth:{
         username: 'sentimentrader_backtest_api',

@@ -107,7 +107,6 @@ export default {
     },
     checkEntry(scope){
       this.$emit("setEntryData",(scope))
-      console.log('scope',scope);
       this.closeDialog()
       this.signalList.entryChecked = !this.signalList.entryChecked
     },
