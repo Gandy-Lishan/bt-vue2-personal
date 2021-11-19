@@ -6,8 +6,8 @@
         <div><p>Name/Description:</p></div>
         <div class="signalLeftForm">
           <!-- signal-dialog -->
-          <signal-dialog :type="entryType"  :dialogTableVisible="entryDialogTableVisible" @openDialog="openEntryDialog" @setEntryData='setEntryData' ></signal-dialog>
-          <signal-dialog :type="exitType"  :dialogTableVisible="exitDialogTableVisible" @openDialog="openExitDialog" @setEntryData='setExitData'></signal-dialog>
+          <signal-dialog :type="entryType" :entryTypeRadio="entryTypeRadio"  :dialogTableVisible="entryDialogTableVisible" @openDialog="openEntryDialog" @setEntryData='setEntryData' ></signal-dialog>
+          <signal-dialog :type="exitType" :entryTypeRadio="exitTypeRadio"  :dialogTableVisible="exitDialogTableVisible" @openDialog="openExitDialog" @setEntryData='setExitData'></signal-dialog>
           <el-form 
             v-if="signalFormTagName === 'first'"
             ref="entryForm"
@@ -18,7 +18,7 @@
           <div class="analysis-basis">
             <el-form-item label="Analysis Basis:" size="mini">
               <el-radio v-model="entryTypeRadio" label="1">sentiment</el-radio>
-              <el-radio v-model="entryTypeRadio" label="2">technical</el-radio>
+              <el-radio v-model="entryTypeRadio" label="2" disabled>technical</el-radio>
             </el-form-item>
           </div>
             <!-- <el-form-item label="Entry" size="mini">
@@ -93,7 +93,7 @@
           <div class="analysis-basis">
             <el-form-item label="Analysis Basis:" size="mini">
               <el-radio v-model="exitTypeRadio" label="1">sentiment</el-radio>
-              <el-radio v-model="exitTypeRadio" label="2">technical</el-radio>
+              <el-radio v-model="exitTypeRadio" label="2" disabled>technical</el-radio>
             </el-form-item>
           </div>
             <!-- <el-form-item label="Exit" size="mini">
@@ -171,7 +171,7 @@
                 <i slot="prefix" class="el-input__icon el-icon-search"                                                                                                                                                                                                                                                                                                                     ></i>
                 </el-input>
                 <div class="search-content">
-                <ul v-show="isSelected" style="height:300px;overflow-y:scroll">
+                <ul v-show="isSelected" style="height:250px;overflow-y:scroll">
                   <li  class="search-item border-bottom" v-for="(item, index) in indicatorsSearchResults"
                   :key="index"
                   @click="selectEntrySymbol(item.chart_name,item.url)"
@@ -192,7 +192,7 @@
                 <i slot="prefix" class="el-input__icon el-icon-search"                                                                                                                                                                                                                                                                                                                     ></i>
                 </el-input>
                 <div class="search-content">
-                <ul v-show="isSelected" style="height:300px;overflow-y:scroll">
+                <ul v-show="isSelected" style="height:250px;overflow-y:scroll">
                   <li  class="search-item border-bottom" v-for="(item, index) in indicatorsSearchResults"
                   :key="index"
                   @click="selectExitSymbol(item.chart_name,item.url)">
@@ -682,6 +682,7 @@ export default {
             password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
           }}).then( res => {
             this.indicatorsList = res.data
+            this.$store.commit('getIndicatorsList', res.data)
           })
     },
     openExitDialog() {
@@ -689,6 +690,12 @@ export default {
       this.isSelected = false
     },
     setEntryData(data) {
+      // console.log('data',data);
+      // console.log(this.$store.state.indicatorsList);
+      const result = this.$store.state.indicatorsList.find((value,index)=>{
+        return value.chart_name = data.used_indicators
+      })
+      this.$store.commit('getEntryIndicators',result.url)
       let vm = this
       const res =  this.$http.get('/demo/condition/', {
         params: { id: data.id },
@@ -707,6 +714,10 @@ export default {
       const res = await this.$http.get('/demo/condition/', {
         params: { id: data.id },
       })
+       const result = this.$store.state.indicatorsList.find((value,index)=>{
+        return value.chart_name = data.used_indicators
+      })
+      this.$store.commit('getExitIndicators',result.url)
       this.initialExitFromData.name = data.name
       this.initialExitFromData.description = data.description
       this.indicatorsExitValue = data.used_indicators
@@ -776,7 +787,8 @@ export default {
               message: 'Saved successfully',
               duration: 1000
             })
-            this.$emit('goToExitSignalForm')}
+            // this.$emit('goToExitSignalForm')
+            }
         }else{
           this.$message.error({
            message: 'The value of value entered is empty',

@@ -32,6 +32,7 @@
                   filterable
                   remote
                   reserve-keyword
+                  @change="getSymbolName(backtestSetupFormdata.symbolName)"
                   placeholder="enter keywords"
                   :remote-method="remoteMethod"
                   :loading="loading">
@@ -291,8 +292,10 @@ export default {
         this.backtestSetupFormdata.starDate = ''
       }
     },
+    getSymbolName(val) {
+      this.$store.commit('getSymbolName',val)
+    },
     getEditBacktestData() {
-      console.log('2222',this.$store.state.editStrategyData);
       const data = this.$store.state.editStrategyData
       const vm = this
       vm.backtestSetupFormdata.name = data.name

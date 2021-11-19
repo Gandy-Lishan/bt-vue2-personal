@@ -51,7 +51,8 @@
 export default {
   props: {
       dialogTableVisible: Boolean,
-      type: String
+      type: String,
+      entryTypeRadio: String
        },
   name: 'signal-dialog',
   data(){
@@ -73,6 +74,13 @@ export default {
       this.getSignallist("system");
     },
     async getSignallist(users) {
+      let analysisBasis
+      if(this.entryTypeRadio === '1'){
+        analysisBasis = 'sentiment'
+      }
+      if(this.entryTypeRadio === '2'){
+        analysisBasis = 'technical'
+      }
       this.signalList = []
       this.loading = true
       this.queryInfo.type = this.type

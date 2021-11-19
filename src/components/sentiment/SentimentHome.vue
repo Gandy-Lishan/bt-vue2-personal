@@ -59,6 +59,7 @@
             </el-tab-pane>
             <el-tab-pane label="Backtest Results" name="second">
               <backtest-result-form ref="resultChild" @goToBacktestFavoriteForm="goToBacktestFavoriteForm"></backtest-result-form>
+                  <backtest-performance></backtest-performance>
             </el-tab-pane>
             <el-tab-pane label="Favorites" name="third">
               <favorite-form ref="favoriteChild" @getResultTry="getResultTry" @getBacktestDataTry="getBacktestDataTry" @goTobacktestSetupForm="goTobacktestSetupForm" @goBacktestResultForm="goBacktestResultForm"></favorite-form>
@@ -79,6 +80,7 @@ import backtestResultForm from './components/backtestResultForm.vue'
 import favoriteForm from './components/favoriteForm.vue'
 import newStrategyForm from './components/newStrategyForm.vue'
 import strategyForm from './components/strategyForm.vue'
+import backtestPerformance from './components/backtestPerformance.vue'
 export default {
   data() {
     return {
@@ -97,7 +99,8 @@ export default {
     'backtest-result-form': backtestResultForm,
     'favorite-form': favoriteForm,
     'new-strategy-form': newStrategyForm,
-    'strategy-form': strategyForm
+    'strategy-form': strategyForm,
+    'backtest-performance': backtestPerformance
   },
   methods: {
     handleClick(tab, event) {

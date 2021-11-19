@@ -89,6 +89,7 @@
         </el-table>
       </div>
     </el-col>
+    <el-button @click="checkBacktest">ddeded</el-button>
   </el-row>
 </template>
 <script>
@@ -130,28 +131,51 @@ export default {
         this.loading = false                                                                                                                                                                                                                        
     }
   },
+  checkBacktest() {
+    let vm = this
+    vm.chatSocket.send(JSON.stringify({
+                'message': 'heihei'
+            }));
+  },
   runbacktest(row) {
-    let arr = []
-    arr.push(row.id)
-    this.backtestId= arr
-     var params = {
-        backtests: this.backtestId
-      }
-      this.loading = true
-      this.$http.post('/rundev/runbacktest/',this.$qs.stringify(params),{auth:{
-        username: 'sentimentrader_backtest_api',
-        password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-      }}).then(res => {
-        this.backtestResultList = res.data.result
-      this.img_data = res.data
-      if(res.data !== ''){
-        this.loading = false
-        this.dialogVisible = !this.dialogVisible
-        // this.$emit('goBacktestResultForm')
-      }}).catch(error => {
-        console.log(error)
-        this.loading = false
-      })
+    let vm = this;
+    vm.chatSocket = new WebSocket(
+            'ws://'
+            + '10.131.3.74:8001'
+            + '/ws/chat/'
+            + row.id + '/'
+        );
+  vm.chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+           vm.$message.success(data.message+'true');
+        };
+
+        vm.chatSocket.onclose = function(e) { 
+          vm.$message.error('false');
+        };
+
+
+    // let arr = []
+    // arr.push(row.id)
+    // this.backtestId= arr
+    //  var params = {
+    //     backtests: this.backtestId
+    //   }
+    //   this.loading = true
+    //   this.$http.post('/rundev/runbacktest/',this.$qs.stringify(params),{auth:{
+    //     username: 'sentimentrader_backtest_api',
+    //     password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+    //   }}).then(res => {
+    //     this.backtestResultList = res.data.result
+    //   this.img_data = res.data
+    //   if(res.data !== ''){
+    //     this.loading = false
+    //     this.dialogVisible = !this.dialogVisible
+    //     // this.$emit('goBacktestResultForm')
+    //   }}).catch(error => {
+    //     console.log(error)
+    //     this.loading = false
+    //   })
   },
   async getStrategyName() {
     const id = this.backtestList
