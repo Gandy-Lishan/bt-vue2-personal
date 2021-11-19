@@ -48,6 +48,7 @@
 </div>
 </template>
 <script>
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
   props: {
       dialogTableVisible: Boolean,
@@ -106,6 +107,22 @@ export default {
       this.queryInfo.page = 1
     },
     checkEntry(scope){
+      console.log(scope)
+      let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
+      for(var i=0;i<indicatorsList.length;i++){
+        if(indicatorsList[i]==''){
+          indicatorsList.splice(i,1)
+          i--;
+        }
+      }
+      console.log(indicatorsList)
+      CIQ.addIndicators(indicatorsList).then(
+        this.$message({
+            message: 'Loading sucess',
+            type: 'success'
+          })
+      )
+
       this.$emit("setEntryData",(scope))
       this.closeDialog()
       this.signalList.entryChecked = !this.signalList.entryChecked

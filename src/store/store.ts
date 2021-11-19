@@ -18,10 +18,10 @@ export default new Vuex.Store({
     strategyExitData: {},
     indicators: {
       entry: '',
-      exit: ''
+      exit: '',
     },
-    customExitType: [],
-    exitOption: [],
+    customExitType: [{label: "string", value: "string"}],
+    exitOption: [{label: "string", value: "string"}],
     strategyId: ''
   },
   mutations: {

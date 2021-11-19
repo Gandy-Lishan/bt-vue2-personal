@@ -21,6 +21,7 @@
               <el-radio v-model="entryTypeRadio" label="2">technical</el-radio>
             </el-form-item>
           </div>
+          
             <!-- <el-form-item label="Entry" size="mini">
                 <el-button class="entryBtn" v-on:click="openEntryDialog" type="success" plain>{{entryFormdata.entry[0].label}}</el-button>
             </el-form-item> -->
@@ -77,7 +78,7 @@
                 </el-select>
               </div>
             </el-form-item>
-          </el-form-item>
+  
         </el-form>
           
 
@@ -116,7 +117,7 @@
               <div class="selectBox">
                 <el-select v-model="exitType" @change="selectExitAction(exitType)" placeholder="Please select">
                   <el-option
-                    v-for="(item, index) in this.$store.state.exitOption"
+                    v-for="(item) in this.$store.state.exitOption"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value">
@@ -163,7 +164,7 @@
               <div v-if="signalFormTagName === 'first'" class="searchBox">
                 <el-input
                   v-model="indicatorsEntryValue"
-                  size="mini"
+                  size="mini" 
                   @input="searchAction($event)"
                   @focus="showSearchList"
                   placeholder="Please enter the indicator"
@@ -233,7 +234,7 @@
               <div class="selectBox">
                 <el-select @change="getconditionOption(conditionList[index].condition)" v-model="conditionList[index].condition" v-if="parameterRadio == '1'" filterable placeholder="Please select condition">
                       <el-option
-                          v-for="(item,index) in conditions"
+                          v-for="(item) in conditions"
                           :key="item.value"
                           :label="item.label"
                           :value="item.value">
@@ -241,7 +242,7 @@
                 </el-select>
                 <el-select v-model="conditionsOption" v-else filterable placeholder="Please select condition" @change="getMaconditionOption(conditionsOption)">
                       <el-option
-                          v-for="(item,index) in parameterConditions"
+                          v-for="(item) in parameterConditions"
                           :key="item.value"
                           :label="item.label"
                           :value="item.value">
@@ -536,13 +537,13 @@
     </div>
     </el-col>
 </el-row>
-  </el-row>
 </template>
 <script>
 import loginFormateVue from '../../../loginFormate.vue'
 import signalDialog from '../../stategy/strategyComponents/signalDialog.vue'
 import { throttle } from '../../../tools/throttle.js'
-import { mapState } from 'vuex'
+import { mapState, Store } from 'vuex'
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
   props: { signalFormTagName: String, exitLabel: Array },
   data() {
@@ -671,6 +672,7 @@ export default {
       this.restaurants = this.loadAll();
     },
   methods: {
+    // send messages to chartiq
     openEntryDialog() {
       this.entryDialogTableVisible = !this.entryDialogTableVisible
       this.isSelected = false
@@ -685,6 +687,20 @@ export default {
           })
     },
     openExitDialog() {
+      let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
+      for(var i=0;i<indicatorsList.length;i++){
+        if(indicatorsList[i]==''){
+          indicatorsList.splice(i,1)
+          i--;
+        }
+      }
+      console.log(indicatorsList)
+      CIQ.addIndicators(indicatorsList).then(
+        this.$message({
+            message: 'Loading sucess',
+            type: 'success'
+          })
+      )
       this.exitDialogTableVisible = !this.exitDialogTableVisible
       this.isSelected = false
     },
@@ -932,11 +948,28 @@ export default {
       }, 500),
       selectEntrySymbol(name,url) {
             this.indicatorsEntryValue = name
+            console.log(url)
             this.$store.commit('getEntryIndicators',url)
             this.isSelected = false
+
+            let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
+            for(var i=0;i<indicatorsList.length;i++){
+              if(indicatorsList[i]==''){
+                indicatorsList.splice(i,1)
+                i--;
+              }
+            }
+            console.log(indicatorsList)
+            CIQ.addIndicators(indicatorsList).then(
+              this.$message({
+                  message: 'Loading sucess',
+                  type: 'success'
+                })
+            )
          },
       selectExitSymbol(name,url) {
             this.indicatorsExitValue = name
+            console.log(url)
             this.$store.commit('getExitIndicators',url)
             this.isSelected = false
          },

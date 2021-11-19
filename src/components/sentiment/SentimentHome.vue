@@ -2,18 +2,17 @@
   <div class="home_container" id="content">
     <div class="home_box">
       <header class="header">
-        <img src="../../assets/logo.png" alt="logo" />
+ 
+        <img src="../../assets/logo.png" alt="logo">
         <p>SentimentTrader Backtest Engine</p>
-        <p>
-          This is on Sentimentrader.com. It is an indicator page that is shown
-          AAPL and AAPL Optix (lets assume that at least).  A user now wants to
-          backtest this setup. There could be multiple indicators on this chart
-          - some might be our sentiment indicators, some could be technical
-          indicators
-        </p>
-        <div class="chart_box">
-          <img src="../../assets/chart.png" alt="chart" />
+        <p>This is on Sentimentrader.com. It is an indicator page that is shown AAPL and AAPL Optix (lets assume that at least).  A user now wants to
+        backtest this setup. There could be multiple indicators on this chart - some might be our sentiment indicators, some could be technical
+        indicators</p>
+        <div class="chart_box" id="chart_box">
+          <chart width=100% height=100%></chart>
+
         </div>
+        <!-- <el-button type="info" @click="enterfullscreen">Full screen</el-button> -->
       </header>
       <main class="main">
         <div class="mainTagbar">
@@ -50,6 +49,7 @@
             </el-tab-pane> -->
           </el-tabs>
         </div>
+
       </main>
       <footer class="footer">
         <div class="footerTagbar">
@@ -73,6 +73,8 @@
   </div>
 </template>
 <script>
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import chart from "../chart/index.vue"
 import signalForm from './components/signalForm.vue'
 import backtestSetupForm from './components/backtestSutupForm.vue'
 import backtestResultForm from './components/backtestResultForm.vue'
@@ -89,9 +91,43 @@ export default {
       exitLabel: [],
       strategyEntryData: {},
       strategyExitData: {},
+      currentTag: 'first',
+    // dataSet:[
+    //   {
+    //     DT:"2016-06-05",
+    //     Type: "BUY",
+    //     Price: 22.25,
+    //     Indicator: "Smart Money Confidence"
+    //   },
+    //   {
+    //     DT:"2016-08-08",
+    //     Type: "SELL",
+    //     Price: 22.70,
+    //     Indicator: "Smart Money Confidence"
+    //   } ,
+    //   {
+    //     DT:"2016-09-05",
+    //     Type: "BUY",
+    //     Price: 21.90,
+    //     Indicator: "Dumb Money Confidence"
+    //   },
+    //   {
+    //     DT:"2016-10-02",
+    //     Type: "SELL",
+    //     Price: 25.59,
+    //     Indicator: "Dumb Money Confidence"
+    //   } 
+    // ],
+    activeName: 'first',
+    activeTag: 'first',
     }
   },
+
+//import {showmMarker} from '../chart/resources'
+// ChartIQ library resources
+
   components: {
+    "chart":chart,
     'signal-form': signalForm,
     'backtest-setup-form': backtestSetupForm,
     'backtest-result-form': backtestResultForm,
@@ -151,11 +187,18 @@ export default {
     },
     updateFavoriteList() {
       this.$refs.favoriteChild.getBacktestList()
-    }
-  },
+    },
+
+    // show mMarker from /resouces
+    showmMarker(){
+      CIQ.loadChart(this.dataSet)
+      CIQ.addMarker()
+    },
+  }
 }
 </script>
 <style lang="less" scoped>
+
 .home_container {
   height: 100%;
   width: 100%;
@@ -178,11 +221,14 @@ export default {
     font-weight: lighter;
     color: #333333;
   }
-  .chart_box img {
+
+  .chart_box{
     width: 100%;
+    height: 65vh
   }
   margin-bottom: 80px;
 }
+
 .left,
 .right {
   border: 3px solid #adadad;
