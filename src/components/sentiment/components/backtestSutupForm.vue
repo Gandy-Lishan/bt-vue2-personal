@@ -319,8 +319,14 @@ export default {
       strategyFormData.commission = vm.backtestSetupFormdata.commission
       strategyFormData.slippage = vm.backtestSetupFormdata.slippage
       strategyFormData.riskfreerate = vm.backtestSetupFormdata.slippage
-      strategyFormData.fromdate = vm.backtestSetupFormdata.starDate
-      strategyFormData.todate = vm.backtestSetupFormdata.endDate
+      strategyFormData.cashalloc = 1
+      if(this.backtestSetupFormdata.historyValue === 22){
+        strategyFormData.fromdate = timestampToTime(vm.backtestSetupFormdata.starDate)
+        strategyFormData.todate = timestampToTime(vm.backtestSetupFormdata.endDate)
+      }else {
+        strategyFormData.fromdate = vm.backtestSetupFormdata.starDate
+        strategyFormData.todate = vm.backtestSetupFormdata.endDate
+      }
       strategyFormData.status = 0
       strategyFormData.strategy = vm.$store.state.strategyId
       console.log('strategyFormData',strategyFormData);

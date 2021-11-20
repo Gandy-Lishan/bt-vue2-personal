@@ -25,6 +25,12 @@
       </el-table-column> -->
       <el-table-column label="type" prop="type" align="center" width="80px">
       </el-table-column>
+        <el-table-column label="source" prop="user" align="center" width="80px">
+          <template slot-scope="scope">
+            <span v-if="scope.row.user === 'admin'">system</span>
+            <span v-else>custom</span>
+          </template>
+        </el-table-column>
        <el-table-column
         label="analysis basis"
         prop="analysis_basis"

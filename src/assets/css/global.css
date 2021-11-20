@@ -191,3 +191,11 @@ button.el-button.el-tooltip.item.el-button--warning.el-button--mini.is-circle{
 .backtest_container .dateNote .el-form-item .el-form-item__label {
   width: 136px;
 }
+.summaryContainer .el-table thead{
+  color:#575757;
+  font-size: 17px;
+}
+.summaryContainer .el-table{
+  color: #343434;
+  font-size: 25px;
+}

@@ -690,11 +690,17 @@ export default {
       this.isSelected = false
     },
     setEntryData(data) {
-      // console.log('data',data);
-      // console.log(this.$store.state.indicatorsList);
-      const result = this.$store.state.indicatorsList.find((value,index)=>{
-        return value.chart_name = data.used_indicators
+      console.log('data',data);
+      console.log(this.$store.state.indicatorsList);
+      let result
+      this.$store.state.indicatorsList.forEach((value,index)=>{
+         if(value.chart_name == data.used_indicators){
+           result = value
+         }
       })
+      // let result = this.$store.state.indicatorsList.filter(item => {
+      //   item.chart_name == data.used_indicators
+      // })
       this.$store.commit('getEntryIndicators',result.url)
       let vm = this
       const res =  this.$http.get('/demo/condition/', {
@@ -704,6 +710,7 @@ export default {
         this.initialEntryFromData.value = res.data.results.value
       })
       vm.entryData = data
+      vm.entryType = data.type
       this.initialEntryFromData.name = data.name
       this.initialEntryFromData.description = data.description
       this.indicatorsEntryValue = data.used_indicators
@@ -711,6 +718,7 @@ export default {
       // this.$refs.entryDataFrom.openDialog(data);
     },
     async setExitData(data) {
+      let vm = this
       const res = await this.$http.get('/demo/condition/', {
         params: { id: data.id },
       })
@@ -718,6 +726,7 @@ export default {
         return value.chart_name = data.used_indicators
       })
       this.$store.commit('getExitIndicators',result.url)
+      vm.exitType = data.type
       this.initialExitFromData.name = data.name
       this.initialExitFromData.description = data.description
       this.indicatorsExitValue = data.used_indicators
@@ -938,7 +947,7 @@ export default {
       searchAction: throttle(function(e) {
         const inputValue = e
         this.indicatorsSearchResults = this.indicatorsList.filter( item => {
-          if(item.chart_name.includes(inputValue))
+          if(item.chart_name.toLowerCase().includes(inputValue.toLowerCase()))
             return item
         })
       }, 500),
