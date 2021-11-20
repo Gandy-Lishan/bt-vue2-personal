@@ -52,7 +52,8 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
   props: {
       dialogTableVisible: Boolean,
-      type: String
+      type: String,
+      entryTypeRadio: String
        },
   name: 'signal-dialog',
   data(){
@@ -74,6 +75,13 @@ export default {
       this.getSignallist("system");
     },
     async getSignallist(users) {
+      let analysisBasis
+      if(this.entryTypeRadio === '1'){
+        analysisBasis = 'sentiment'
+      }
+      if(this.entryTypeRadio === '2'){
+        analysisBasis = 'technical'
+      }
       this.signalList = []
       this.loading = true
       this.queryInfo.type = this.type
@@ -107,22 +115,6 @@ export default {
       this.queryInfo.page = 1
     },
     checkEntry(scope){
-      console.log(scope)
-      let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
-      for(var i=0;i<indicatorsList.length;i++){
-        if(indicatorsList[i]==''){
-          indicatorsList.splice(i,1)
-          i--;
-        }
-      }
-      console.log(indicatorsList)
-      CIQ.addIndicators(indicatorsList).then(
-        this.$message({
-            message: 'Loading sucess',
-            type: 'success'
-          })
-      )
-
       this.$emit("setEntryData",(scope))
       this.closeDialog()
       this.signalList.entryChecked = !this.signalList.entryChecked

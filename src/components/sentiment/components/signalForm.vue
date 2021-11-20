@@ -683,28 +683,46 @@ export default {
             username: 'sentimentrader_backtest_api',
             password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
           }}).then( res => {
-            this.indicatorsList = res.data
+            this.indicatorsList = res.data 
+            this.$store.commit("getIndicatorsList",this.indicatorsList)
           })
     },
     openExitDialog() {
-      let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
-      for(var i=0;i<indicatorsList.length;i++){
-        if(indicatorsList[i]==''){
-          indicatorsList.splice(i,1)
-          i--;
-        }
-      }
-      console.log(indicatorsList)
-      CIQ.addIndicators(indicatorsList).then(
-        this.$message({
-            message: 'Loading sucess',
-            type: 'success'
-          })
-      )
       this.exitDialogTableVisible = !this.exitDialogTableVisible
       this.isSelected = false
     },
     setEntryData(data) {
+      // console.log('data',data);
+      // console.log(this.$store.state.indicatorsList);
+      let result
+      //console.log(data.used_indicators.toString())
+      this.$store.state.indicatorsList.forEach((value,index)=>{ 
+        if(value.chart_name.toString().indexOf(data.used_indicators.toString())!== -1){
+          result = value
+        }
+      })
+      //console.log(result)
+      if(result.url !== undefined){
+      //console.log('url',result.url)
+      this.$store.commit('getEntryIndicators',result.url)
+
+      let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
+          for(var i=0;i<indicatorsList.length;i++){
+            if(indicatorsList[i]==''){
+              indicatorsList.splice(i,1)
+              i--;
+            }
+          }
+          console.log(indicatorsList)
+          CIQ.addIndicators(indicatorsList).then(
+            this.$message({
+                message: 'Loading sucess',
+                type: 'success'
+              })
+          )
+      }else{
+        return
+      }
       let vm = this
       const res =  this.$http.get('/demo/condition/', {
         params: { id: data.id },
@@ -720,9 +738,37 @@ export default {
       // this.$refs.entryDataFrom.openDialog(data);
     },
     async setExitData(data) {
+      console.log('data',data)
       const res = await this.$http.get('/demo/condition/', {
         params: { id: data.id },
       })
+      let result
+      this.$store.state.indicatorsList.forEach((value,index)=>{
+        if(value.chart_name.toString().indexOf(data.used_indicators.toString())!== -1){
+          result = value
+        }
+      })
+      if(result.url !== undefined){
+      console.log('url',result.url)
+      this.$store.commit('getExitIndicators',result.url)
+
+      let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
+          for(var i=0;i<indicatorsList.length;i++){
+            if(indicatorsList[i]==''){
+              indicatorsList.splice(i,1)
+              i--;
+            }
+          }
+          console.log(indicatorsList)
+          CIQ.addIndicators(indicatorsList).then(
+            this.$message({
+                message: 'Loading sucess',
+                type: 'success'
+              })
+          )
+      }else{
+        return
+      }
       this.initialExitFromData.name = data.name
       this.initialExitFromData.description = data.description
       this.indicatorsExitValue = data.used_indicators
@@ -952,26 +998,41 @@ export default {
             this.$store.commit('getEntryIndicators',url)
             this.isSelected = false
 
-            let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
-            for(var i=0;i<indicatorsList.length;i++){
-              if(indicatorsList[i]==''){
-                indicatorsList.splice(i,1)
-                i--;
-              }
+          let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
+          for(var i=0;i<indicatorsList.length;i++){
+            if(indicatorsList[i]==''){
+              indicatorsList.splice(i,1)
+              i--;
             }
-            console.log(indicatorsList)
-            CIQ.addIndicators(indicatorsList).then(
-              this.$message({
-                  message: 'Loading sucess',
-                  type: 'success'
-                })
-            )
+          }
+          console.log(indicatorsList)
+          CIQ.addIndicators(indicatorsList).then(
+            this.$message({
+                message: 'Loading sucess',
+                type: 'success'
+              })
+          )
          },
       selectExitSymbol(name,url) {
             this.indicatorsExitValue = name
             console.log(url)
             this.$store.commit('getExitIndicators',url)
             this.isSelected = false
+
+          let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
+          for(var i=0;i<indicatorsList.length;i++){
+            if(indicatorsList[i]==''){
+              indicatorsList.splice(i,1)
+              i--;
+            }
+          }
+          console.log(indicatorsList)
+          CIQ.addIndicators(indicatorsList).then(
+            this.$message({
+                message: 'Loading sucess',
+                type: 'success'
+              })
+          )            
          },
       showSearchList() {
         this.isSelected = true

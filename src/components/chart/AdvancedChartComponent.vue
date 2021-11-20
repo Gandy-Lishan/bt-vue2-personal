@@ -76,9 +76,9 @@
 			<div class="ciq-menu-section">
 				<div class="ciq-dropdowns">
 					<!-- customized features -->
-					<cq-menu class="ciq-indicators-search">
+					<!-- <cq-menu class="ciq-indicators-search">
 						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
-					</cq-menu>
+					</cq-menu> -->
 					<cq-menu class="ciq-menu ciq-period">
 						<span
 							><cq-clickable stxbind="Layout.periodicity"
@@ -112,7 +112,7 @@
 						</cq-menu-dropdown>
 					</cq-menu>
 
-					<cq-menu class="ciq-menu ciq-studies collapse" cq-focus="input">
+					<!-- <cq-menu class="ciq-menu ciq-studies collapse" cq-focus="input">
 						<span>Studies</span>
 						<cq-menu-dropdown>
 							<cq-study-legend cq-no-close>
@@ -154,9 +154,9 @@
 								<cq-studies></cq-studies>
 							</cq-scroll>
 						</cq-menu-dropdown>
-					</cq-menu>
+					</cq-menu> -->
 
-					<cq-menu class="ciq-menu stx-markers collapse">
+					<!-- <cq-menu class="ciq-menu stx-markers collapse">
 						<span>Events</span>
 						<cq-menu-dropdown>
 							<cq-heading>Chart Events</cq-heading>
@@ -212,7 +212,7 @@
 								></cq-item>
 							</div>
 						</cq-menu-dropdown>
-					</cq-menu>
+					</cq-menu> -->
 
 					<cq-menu class="ciq-menu ciq-preferences collapse">
 						<span></span>
@@ -426,9 +426,9 @@ export default class AdvancedChartComponent extends Vue {
 			outZone: CIQ.stxx.displayZone,
 			});
 			
-			for (var studyInstanceName in CIQ.stxx.layout.studies) {
-				CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
-			}
+			// for (var studyInstanceName in CIQ.stxx.layout.studies) {
+			// 	CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
+			// }
 			
 			CIQ.studys = []
 			for (var study in CIQ.Studies.studyLibrary) {

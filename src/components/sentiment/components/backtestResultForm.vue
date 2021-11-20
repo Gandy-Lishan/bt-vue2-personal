@@ -1,4 +1,5 @@
 <template>
+<div class="backtest-result-container">
 <el-row>
   <el-col :span="24">
     <!-- stratrgy-dialog -->
@@ -43,11 +44,11 @@
               </el-select>
               </div>
             </el-form-item>
-            <el-form-item label="Strategy:" size="mini">
+            <!-- <el-form-item label="Strategy:" size="mini">
               <el-button class="LisBtns" @click="openStrategyDialog" type="success" plain
                 >Browse from Strategy List</el-button
               >
-            </el-form-item>
+            </el-form-item> -->
         </el-col>
         <el-col :span="8">
             <el-form-item label="Starting Capital:" prop="startingCapital">
@@ -101,7 +102,7 @@
               >
               </el-date-picker>
             </el-form-item> -->
-                      <el-form-item label="Backtest History:" prop="backtestHistory">
+          <!-- <el-form-item label="Backtest History:" prop="backtestHistory">
             <div class="selectBox">
               <el-select size="mini" @change="getBacktestHistory(backtestSetupFormdata.historyValue)" v-model="backtestSetupFormdata.historyValue" placeholder="Pleace select">
                 <el-option
@@ -112,7 +113,7 @@
                 </el-option>
               </el-select>
             </div>
-          </el-form-item>
+          </el-form-item> -->
           <div class="dateNote">
             <el-form-item label="Start date" size="mini">
               <el-date-picker
@@ -148,17 +149,20 @@
             </el-form-item>
             <div class="setupBtns">
               <el-row>
-                <el-button type="primary" @click="saveBacktest">Save Backtest</el-button>
+                <!-- <el-button type="primary" @click="saveBacktest">Save Backtest</el-button> -->
               </el-row>
             </div>
         </el-col>
       </el-form>
     </div>
+    <!-- <backtest-performance></backtest-performance> -->
   </el-col>
 </el-row>
+</div>
 </template>
 <script>
 import strategyDialog from '../../backtest/backtestComponents/strategyDialog.vue'
+import backtestPerformance from './backtestPerformance.vue'
 import { timestampToTime } from '../../../tools/formatDate.js'
 export default {
   data() {
@@ -239,7 +243,8 @@ export default {
     this.getData()
   },
   components: {
-    'strategy-dialog': strategyDialog
+    'strategy-dialog': strategyDialog,
+    'backtest-performance': backtestPerformance
   },
   computed: {
     listSet(){
@@ -379,5 +384,10 @@ export default {
 }
 .setupBtns button{
   margin: 10px 32px 0px 32px;
+}
+.backtest-result-container {
+  padding-bottom: 1.25rem;
+  margin-bottom: 4.25rem;
+  border-bottom: 1px solid #6c6c6c;
 }
 </style>>

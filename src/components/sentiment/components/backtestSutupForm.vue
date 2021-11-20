@@ -29,9 +29,11 @@
               <div class="enterSymbolBox">
               <el-select
                   v-model="backtestSetupFormdata.symbolName"
+                  id="symbolName"
                   filterable
                   remote
                   reserve-keyword
+                  @change="getSymbolName(backtestSetupFormdata.symbolName)"
                   placeholder="enter keywords"
                   :remote-method="remoteMethod"
                   :loading="loading">
@@ -136,6 +138,7 @@
 <script>
 import strategyDialog from '../../backtest/backtestComponents/strategyDialog.vue'
 import { timestampToTime } from '../../../tools/formatDate.js'
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
   data() {
     return{
@@ -291,8 +294,24 @@ export default {
         this.backtestSetupFormdata.starDate = ''
       }
     },
+    getSymbolName(val) {
+      this.$store.commit('getSymbolName',val)
+      
+      for (var studyInstanceName in CIQ.stxx.layout.studies) {
+          CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
+      }
+
+      var indicatorList =[]
+      if(window.sessionStorage.getItem('indicatorsList')){
+          indicatorList = window.sessionStorage.getItem('indicatorsList').split(',')
+          indicatorList = eval('(' + indicatorList + ')')
+      }else{
+          indicatorList = [val]
+      }
+
+      CIQ.addSymbol(indicatorList,val)
+    },
     getEditBacktestData() {
-      console.log('2222',this.$store.state.editStrategyData);
       const data = this.$store.state.editStrategyData
       const vm = this
       vm.backtestSetupFormdata.name = data.name

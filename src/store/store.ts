@@ -22,7 +22,10 @@ export default new Vuex.Store({
     },
     customExitType: [{label: "string", value: "string"}],
     exitOption: [{label: "string", value: "string"}],
-    strategyId: ''
+    strategyId: '',
+    indicatorsList: [],
+    symbolName: ''
+
   },
   mutations: {
     getNewPorfolioInputsValues(state,row) {
@@ -91,6 +94,12 @@ export default new Vuex.Store({
     },
     getStrategyId(state, id){
       state.strategyId = id
+    },
+    getIndicatorsList(state, data){
+      state.indicatorsList = data
+    },
+    getSymbolName(state, val) {
+      state.symbolName = val
     }
   },
 })
