@@ -186,7 +186,7 @@ button.el-button.el-tooltip.item.el-button--warning.el-button--mini.is-circle{
   width: 136%;
 }
 .backtest_container .el-form .dateNote .el-form-item .el-form-item__content .el-input .el-input__inner{
-  width: 126%;
+  width: 144%;
 }
 .backtest_container .dateNote .el-form-item .el-form-item__label {
   width: 136px;
@@ -198,4 +198,12 @@ button.el-button.el-tooltip.item.el-button--warning.el-button--mini.is-circle{
 .summaryContainer .el-table{
   color: #343434;
   font-size: 25px;
+}
+.trades-container .el-table thead{
+  color:#4a4a4a;
+  font-size: 24px;
+}
+.trades-container .el-table{
+  color: #575757;
+  font-size: 17px;
 }

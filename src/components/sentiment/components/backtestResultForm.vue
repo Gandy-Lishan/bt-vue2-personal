@@ -360,7 +360,6 @@ export default {
     getData() {
       const data = this.$store.state.favoriteBacktestRowData
       this.backtestId = data.id
-      console.log('backtestSutup[Results',data);
       if(data.length !== 0){
       this.backtestSetupFormdata.name = data.name
       this.backtestSetupFormdata.description = data.description

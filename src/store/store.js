@@ -24,7 +24,8 @@ export default new Vuex.Store({
     customExitType: [],
     exitOption: [],
     strategyId: '',
-    symbolName: ''
+    symbolName: '',
+    trades: []
   },
   mutations: {
     getNewPorfolioInputsValues(state,row) {
@@ -100,6 +101,9 @@ export default new Vuex.Store({
     },
     getSymbolName(state, val) {
       state.symbolName = val
+    },
+    getTradesData(state, data) {
+      state.trades = data
     }
   },
 })

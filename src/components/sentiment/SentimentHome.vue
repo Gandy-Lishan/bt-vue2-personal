@@ -59,10 +59,10 @@
             </el-tab-pane>
             <el-tab-pane label="Backtest Results" name="second">
               <backtest-result-form ref="resultChild" @goToBacktestFavoriteForm="goToBacktestFavoriteForm"></backtest-result-form>
-                  <backtest-performance></backtest-performance>
+                  <backtest-performance ref="performanceChild"></backtest-performance>
             </el-tab-pane>
             <el-tab-pane label="Favorites" name="third">
-              <favorite-form ref="favoriteChild" @getResultTry="getResultTry" @getBacktestDataTry="getBacktestDataTry" @goTobacktestSetupForm="goTobacktestSetupForm" @goBacktestResultForm="goBacktestResultForm"></favorite-form>
+              <favorite-form @getPerformanceData="getPerformanceData" ref="favoriteChild" @getResultTry="getResultTry" @getBacktestDataTry="getBacktestDataTry" @goTobacktestSetupForm="goTobacktestSetupForm" @goBacktestResultForm="goBacktestResultForm"></favorite-form>
             </el-tab-pane>
             <el-tab-pane label="Strategies" name="fourth">
               <strategy-form ref="strategyChild"></strategy-form>
@@ -154,6 +154,9 @@ export default {
     },
     updateFavoriteList() {
       this.$refs.favoriteChild.getBacktestList()
+    },
+    getPerformanceData() {
+      this.$refs.performanceChild.getResultData()
     }
   },
 }
