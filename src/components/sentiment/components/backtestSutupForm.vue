@@ -214,6 +214,9 @@ export default {
     'strategy-dialog': strategyDialog
   },
   created() {
+    // preload data
+    this.getData()
+
     this.backtestSetupFormdata.endDate = timestampToTime(new Date())
     const str = this.backtestSetupFormdata.endDate.split('-')
       str[0] = (Number(str[0]) - Number(this.backtestSetupFormdata.historyValue)) + ''
@@ -232,33 +235,32 @@ export default {
     }
   },
   methods: {
-      async remoteMethod(query) {
-        if (query !== '') {
-          this.loading = true;
-          await this.$http.get('https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks?=ABMD',
-          {auth:{
-            username: 'sentimentrader_backtest_api',
-            password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-          }}
-          ).then(res => {
-            this.symbolList = res.data
-          }).catch(error => {
-            console.log(error);
+      async getData(){
+          await this.$http.get('https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks',
+              {auth:{
+                username: 'sentimentrader_backtest_api',
+                password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+              }}
+              ).then(res => {
+                this.symbolList = res.data
+              }).catch(error => {
+                console.log(error);
           })
 
           await this.$http.get('https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
-          {auth:{
-            username: 'sentimentrader_backtest_api',
-            password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-          }}
-          ).then(res => {
-            this.indexList = res.data
-          }).catch(error => {
-            console.log(error);
+              {auth:{
+                username: 'sentimentrader_backtest_api',
+                password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+              }}
+              ).then(res => {
+                this.indexList = res.data
+              }).catch(error => {
+                console.log(error);
           })
-          
-          
-
+      },
+      async remoteMethod(query) {
+        if (query !== '') {
+          this.loading = true;
           setTimeout(() => {
             this.loading = false;
             var symbolListTemp = this.listSet.filter(item => {
@@ -297,9 +299,9 @@ export default {
     getSymbolName(val) {
       this.$store.commit('getSymbolName',val)
       
-      for (var studyInstanceName in CIQ.stxx.layout.studies) {
-          CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
-      }
+      // for (var studyInstanceName in CIQ.stxx.layout.studies) {
+      //     CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
+      // }
 
       var indicatorList =[]
       if(window.sessionStorage.getItem('indicatorsList')){
@@ -335,8 +337,14 @@ export default {
       strategyFormData.commission = vm.backtestSetupFormdata.commission
       strategyFormData.slippage = vm.backtestSetupFormdata.slippage
       strategyFormData.riskfreerate = vm.backtestSetupFormdata.slippage
-      strategyFormData.fromdate = vm.backtestSetupFormdata.starDate
-      strategyFormData.todate = vm.backtestSetupFormdata.endDate
+      strategyFormData.cashalloc = 1
+      if(this.backtestSetupFormdata.historyValue === 22){
+        strategyFormData.fromdate = timestampToTime(vm.backtestSetupFormdata.starDate)
+        strategyFormData.todate = timestampToTime(vm.backtestSetupFormdata.endDate)
+      }else {
+        strategyFormData.fromdate = vm.backtestSetupFormdata.starDate
+        strategyFormData.todate = vm.backtestSetupFormdata.endDate
+      }
       strategyFormData.status = 0
       strategyFormData.strategy = vm.$store.state.strategyId
       console.log('strategyFormData',strategyFormData);

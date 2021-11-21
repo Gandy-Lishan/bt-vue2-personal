@@ -45,6 +45,7 @@ export default new Vuex.Store({
     },
     getEntryIndicators(state, val){
       state.indicators.entry = val
+      console.log('url',val);
     },
     getExitIndicators(state, val){
       state.indicators.exit = val

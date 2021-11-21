@@ -672,10 +672,25 @@ export default {
       this.restaurants = this.loadAll();
     },
   methods: {
+    clearFormValidate(){
+      this.$nextTick(()=>{
+        try{
+          this.$refs['entryForm'].clearValidate()      
+        }catch(e){
+        }  
+         try{
+          this.$refs['exitForm'].clearValidate() 
+        }catch(e){
+        }  
+        
+      })
+    },
     // send messages to chartiq
     openEntryDialog() {
       this.entryDialogTableVisible = !this.entryDialogTableVisible
       this.isSelected = false
+
+      this.clearFormValidate()    
     },
     getIndicatorsList() {
       this.$http.get('https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
@@ -690,6 +705,8 @@ export default {
     openExitDialog() {
       this.exitDialogTableVisible = !this.exitDialogTableVisible
       this.isSelected = false
+
+      this.clearFormValidate()    
     },
     setEntryData(data) {
       // console.log('data',data);
@@ -704,6 +721,7 @@ export default {
       //console.log(result)
       if(result.url !== undefined){
       //console.log('url',result.url)
+
       this.$store.commit('getEntryIndicators',result.url)
 
       let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
@@ -731,6 +749,7 @@ export default {
         this.initialEntryFromData.value = res.data.results.value
       })
       vm.entryData = data
+      vm.entryType = data.type
       this.initialEntryFromData.name = data.name
       this.initialEntryFromData.description = data.description
       this.indicatorsEntryValue = data.used_indicators
@@ -738,7 +757,8 @@ export default {
       // this.$refs.entryDataFrom.openDialog(data);
     },
     async setExitData(data) {
-      console.log('data',data)
+      let vm = this
+
       const res = await this.$http.get('/demo/condition/', {
         params: { id: data.id },
       })
@@ -760,15 +780,22 @@ export default {
             }
           }
           console.log(indicatorsList)
-          CIQ.addIndicators(indicatorsList).then(
-            this.$message({
+          // CIQ.addIndicators(indicatorsList).then(
+          //   this.$message({
+          //       message: 'Loading sucess',
+          //       type: 'success'
+          //     })
+          // )
+          CIQ.addIndicators(indicatorsList)
+          this.$message({
                 message: 'Loading sucess',
                 type: 'success'
-              })
-          )
+          })
       }else{
         return
       }
+
+      vm.exitType = data.type
       this.initialExitFromData.name = data.name
       this.initialExitFromData.description = data.description
       this.indicatorsExitValue = data.used_indicators
@@ -787,6 +814,7 @@ export default {
     },
     clearEntryFormData() {
       console.log('clear', this.entryData)
+      this.clearFormValidate()    
     },
     async submitEntryFormData() {
       let vm =this
@@ -845,6 +873,8 @@ export default {
            duration: 1000
          })
         }
+      
+      this.clearFormValidate()    
     },
     async submitExitFormData() {
       let vm =this
@@ -911,6 +941,7 @@ export default {
          })
         }
 
+      this.clearFormValidate()    
     },
     saveStrategy() {
       // console.log('strategyentry',this.strategyEntryData);
@@ -988,7 +1019,7 @@ export default {
       searchAction: throttle(function(e) {
         const inputValue = e
         this.indicatorsSearchResults = this.indicatorsList.filter( item => {
-          if(item.chart_name.includes(inputValue))
+          if(item.chart_name.toLowerCase().includes(inputValue.toLowerCase()))
             return item
         })
       }, 500),

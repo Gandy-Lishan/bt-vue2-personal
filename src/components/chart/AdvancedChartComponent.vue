@@ -112,7 +112,7 @@
 						</cq-menu-dropdown>
 					</cq-menu>
 
-					<!-- <cq-menu class="ciq-menu ciq-studies collapse" cq-focus="input">
+					<cq-menu class="ciq-menu ciq-studies collapse" cq-focus="input">
 						<span>Studies</span>
 						<cq-menu-dropdown>
 							<cq-study-legend cq-no-close>
@@ -154,7 +154,7 @@
 								<cq-studies></cq-studies>
 							</cq-scroll>
 						</cq-menu-dropdown>
-					</cq-menu> -->
+					</cq-menu>
 
 					<!-- <cq-menu class="ciq-menu stx-markers collapse">
 						<span>Events</span>

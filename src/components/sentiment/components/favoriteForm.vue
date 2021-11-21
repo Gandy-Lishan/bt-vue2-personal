@@ -3,100 +3,146 @@
     <el-col :span="24">
       <div class="favoriteForm_container">
         <el-table :data="backtestList">
+          <el-table-column label="Backtest Name" align="center" prop="name">
+          </el-table-column>
+          <el-table-column label="Symbol" align="center" prop="stock">
+          </el-table-column>
           <el-table-column
-          label="Backtest Name"
-          align="center"
-          prop="name"
+            label="Entry Signal"
+            align="center"
+            prop="strategy.signal_entry.name"
           >
           </el-table-column>
           <el-table-column
-          label="Symbol"
-          align="center"
-          prop="stock"
+            label="Exit Signal"
+            align="center"
+            prop="strategy.signal_entry.name"
           >
           </el-table-column>
           <el-table-column
-          label="Entry Signal"
-          align="center"
-          prop="strategy.signal_entry.name"
+            label="backtest period"
+            prop="BacktestPeriod"
+            align="center"
           >
+            <template slot-scope="scope">
+              <div class="dataBox">
+                <el-button size="mini" type="info" plain>{{
+                  scope.row.fromdate
+                }}</el-button>
+                <el-button size="mini" type="info" plain>{{
+                  scope.row.todate
+                }}</el-button>
+              </div>
+            </template>
           </el-table-column>
-          <el-table-column
-          label="Exit Signal"
-          align="center"
-          prop="strategy.signal_entry.name"
-          >
+          <el-table-column label="Status" align="center">
+            <template slot-scope="scope">
+              <span v-if="scope.row.status == 0">Waiting</span>
+              <span v-else-if="scope.row.status == 1">Running</span>
+              <span v-else-if="scope.row.status == 2">Completed</span>
+            </template>
           </el-table-column>
-          <el-table-column label="backtest period" prop="BacktestPeriod" align="center">
-              <template slot-scope="scope">
-                <div class="dataBox">
-                      <el-button size="mini" type="info" plain>{{scope.row.fromdate}}</el-button>
-                      <el-button size="mini" type="info" plain>{{scope.row.todate}}</el-button>
-                </div>
-              </template>
+          <el-table-column label="GAGR" align="center" prop="GAGR">
           </el-table-column>
-          <el-table-column
-          label="Status"
-          align="center"
-          prop="status"
-          >
+          <el-table-column label="Max DD" align="center" prop="maxDD">
           </el-table-column>
-          <el-table-column
-          label="GAGR"
-          align="center"
-          prop="GAGR"
-          >
-          </el-table-column>
-          <el-table-column
-          label="Max DD"
-          align="center"
-          prop="maxDD"
-          >
-          </el-table-column>
-          <el-table-column
-          align="center"
-          width="300px"
-          >
-          <template slot-scope="scope">
-          <el-row>
-            <el-tooltip class="item" effect="light" content="run" placement="bottom-start">
-              <el-button type="success" icon="el-icon-caret-right" circle size="mini" @click="runbacktest(scope.row)"></el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="light" content="edit" placement="bottom-start">
-              <el-button type="primary" icon="el-icon-edit" circle size="mini" @click="editBacktest(scope.row)"></el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="light" content="copy" placement="bottom-start">
-              <el-button type="info" icon="el-icon-copy-document" circle size="mini" @click="copyBacktest(scope.row)"></el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="light" content="delete" placement="bottom-start">
-            <el-popconfirm
-              confirm-button-text='yes'
-              cancel-button-text='no'
-              icon="el-icon-info"
-              icon-color="red"
-              title="Are you sure you want to delete it?"
-              @confirm="deleteBacktest(scope.row.id)"
-            >
-              <el-button type="danger" icon="el-icon-delete" circle size="mini" slot="reference"></el-button>
-            </el-popconfirm>
-            </el-tooltip>
-            <el-tooltip class="item" effect="light" content="view results" placement="bottom-start">
-              <el-button type="warning" icon="el-icon-view" circle size="mini" @click="viewBacktestResults(scope.row)"></el-button>
-            </el-tooltip>
-          </el-row>
-          </template>
+          <el-table-column align="center" width="300px">
+            <template slot-scope="scope">
+              <el-row>
+                <el-tooltip
+                  class="item"
+                  effect="light"
+                  content="run"
+                  placement="bottom-start"
+                >
+                  <el-button
+                    type="success"
+                    icon="el-icon-caret-right"
+                    circle
+                    size="mini"
+                    @click="runbacktest(scope.row)"
+                  ></el-button>
+                </el-tooltip>
+                <el-tooltip
+                  class="item"
+                  effect="light"
+                  content="edit"
+                  placement="bottom-start"
+                >
+                  <el-button
+                    type="primary"
+                    icon="el-icon-edit"
+                    circle
+                    size="mini"
+                    @click="editBacktest(scope.row)"
+                  ></el-button>
+                </el-tooltip>
+                <el-tooltip
+                  class="item"
+                  effect="light"
+                  content="copy"
+                  placement="bottom-start"
+                >
+                  <el-button
+                    type="info"
+                    icon="el-icon-copy-document"
+                    circle
+                    size="mini"
+                    @click="copyBacktest(scope.row)"
+                  ></el-button>
+                </el-tooltip>
+                <el-tooltip
+                  class="item"
+                  effect="light"
+                  content="delete"
+                  placement="bottom-start"
+                >
+                  <el-popconfirm
+                    confirm-button-text="yes"
+                    cancel-button-text="no"
+                    icon="el-icon-info"
+                    icon-color="red"
+                    title="Are you sure you want to delete it?"
+                    @confirm="deleteBacktest(scope.row.id)"
+                  >
+                    <el-button
+                      type="danger"
+                      icon="el-icon-delete"
+                      circle
+                      size="mini"
+                      slot="reference"
+                    ></el-button>
+                  </el-popconfirm>
+                </el-tooltip>
+                <el-tooltip
+                  class="item"
+                  effect="light"
+                  content="view results"
+                  placement="bottom-start"
+                >
+                  <el-button
+                    type="warning"
+                    icon="el-icon-view"
+                    circle
+                    size="mini"
+                    @click="viewBacktestResults(scope.row)"
+                  ></el-button>
+                </el-tooltip>
+              </el-row>
+            </template>
           </el-table-column>
         </el-table>
       </div>
     </el-col>
     <el-button @click="checkBacktest">ddeded</el-button>
+     <el-button @click="closeWeb">guanbi</el-button>
   </el-row>
 </template>
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
   data() {
-    return{
+    return {
       backtestList: [],
       strategyName: '',
       checkList: [],
@@ -110,121 +156,137 @@ export default {
       backtestResultList: [],
       loading: false,
       editData: {},
-    dataSet:[
-      {
-        DT:"2020-06-05",
-        Type: "BUY",
-        Price: 22.25,
-        Indicator: "Smart Money Confidence"
-      },
-      {
-        DT:"2020-08-08",
-        Type: "SELL",
-        Price: 22.70,
-        Indicator: "Smart Money Confidence"
-      } ,
-      {
-        DT:"2020-09-05",
-        Type: "BUY",
-        Price: 21.90,
-        Indicator: "Dumb Money Confidence"
-      },
-      {
-        DT:"2020-10-02",
-        Type: "SELL",
-        Price: 25.59,
-        Indicator: "Dumb Money Confidence"
-      } 
-    ],
+      dataSet:[
+        {
+          DT:"2020-06-05",
+          Type: "BUY",
+          Price: 22.25,
+          Indicator: "Smart Money Confidence"
+        },
+        {
+          DT:"2020-08-08",
+          Type: "SELL",
+          Price: 22.70,
+          Indicator: "Smart Money Confidence"
+        } ,
+        {
+          DT:"2020-09-05",
+          Type: "BUY",
+          Price: 21.90,
+          Indicator: "Dumb Money Confidence"
+        },
+        {
+          DT:"2020-10-02",
+          Type: "SELL",
+          Price: 25.59,
+          Indicator: "Dumb Money Confidence"
+        } 
+      ],
     }
   },
   created() {
     this.getBacktestList()
     this.getStrategyName()
   },
-  methods:{
+  methods: {
     async getBacktestList() {
-    this.loading = true
-    const res = await this.$http.get('/demo/backtest/')
-    if(res.status === 200){
-      const arr = res.data.results
-      this.loading = false
-      arr.forEach(item => {
-        item.strategy.signal_entry = JSON.parse(item.strategy.signal_entry)
-        item.strategy.signal_exit = JSON.parse(item.strategy.signal_exit)
-      })
-      this.backtestList = arr
-    }else{
-        this.loading = false                                                                                                                                                                                                                        
-    }
-  },
-  checkBacktest() {
-    let vm = this
-    vm.chatSocket.send(JSON.stringify({
-                'message': 'heihei'
-            }));
-  },
-  runbacktest(row) {
-    let vm = this;
-    vm.chatSocket = new WebSocket(
-            'ws://'
-            + '10.131.3.74:8001'
-            + '/ws/chat/'
-            + row.id + '/'
-        );
-  vm.chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-           vm.$message.success(data.message+'true');
-        };
+      this.loading = true
+      const res = await this.$http.get('/demo/backtest/')
+      if (res.status === 200) {
+        const arr = res.data.results
+        this.loading = false
+        arr.forEach((item) => {
+          item.strategy.signal_entry = JSON.parse(item.strategy.signal_entry)
+          item.strategy.signal_exit = JSON.parse(item.strategy.signal_exit)
+        })
+        this.backtestList = arr
+      } else {
+        this.loading = false
+      }
+    },
+    checkBacktest() {
+      let vm = this
+      vm.chatSocket.send(
+        JSON.stringify({
+          message: vm.rowid,
+        })
+      )
+    },
+    runbacktest(row) {
+      let vm = this
+      vm.rowid = row.id
+      console.log("sadas");
+        vm.chatSocket = new WebSocket(
+          'ws://' + '10.131.3.74:8000' + '/ws/chat/' + row.id + '/'
+        )
+      
 
-        vm.chatSocket.onclose = function(e) { 
-          vm.$message.error('false');
-        };
+      vm.chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data)
+        console.log('status',data.message)
+        // vm.getBacktestList()
+        // chatSocket.close()
+        // if(data.message.indexOf(vm.rowid) !== -1){
+        //    vm.chatSocket.close()
+        //    vm.chatSocket = undefined
+        // }
+      }
 
+      vm.chatSocket.onclose = function (e) {
+        const vm = this
+        vm.$message.error('false')
+        // chatSocket.close()
+      }
 
-    // let arr = []
-    // arr.push(row.id)
-    // this.backtestId= arr
-    //  var params = {
-    //     backtests: this.backtestId
-    //   }
-    //   this.loading = true
-    //   this.$http.post('/rundev/runbacktest/',this.$qs.stringify(params),{auth:{
-    //     username: 'sentimentrader_backtest_api',
-    //     password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-    //   }}).then(res => {
-    //     this.backtestResultList = res.data.result
-    //   this.img_data = res.data
-    //   if(res.data !== ''){
-    //     this.loading = false
-    //     this.dialogVisible = !this.dialogVisible
-    //     // this.$emit('goBacktestResultForm')
-    //   }}).catch(error => {
-    //     console.log(error)
-    //     this.loading = false
-    //   })
-  },
-  async getStrategyName() {
-    const id = this.backtestList
-    const res = await this.$http.get('/demo/strategies' + id + '/')
-  },
-  editBacktest(row){
+      // let arr = []
+      // arr.push(row.id)
+      // this.backtestId= arr
+      //  var params = {
+      //     backtests: this.backtestId
+      //   }
+      //   this.loading = true
+      //   this.$http.post('/rundev/runbacktest/',this.$qs.stringify(params),{auth:{
+      //     username: 'sentimentrader_backtest_api',
+      //     password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+      //   }}).then(res => {
+      //     this.backtestResultList = res.data.result
+      //   this.img_data = res.data
+      //   if(res.data !== ''){
+      //     this.loading = false
+      //     this.dialogVisible = !this.dialogVisible
+      //     // this.$emit('goBacktestResultForm')
+      //   }}).catch(error => {
+      //     console.log(error)
+      //     this.loading = false
+      //   })
+    },
+    closeWeb() {
+      const vm = this
+      vm.chatSocket.close()
+    },
+    async getStrategyName() {
+      const id = this.backtestList
+      const res = await this.$http.get('/demo/strategies' + id + '/')
+    },
+    editBacktest(row) {
       // this.editData = row
       // this.backtestItemId = row.id
-      this.$store.commit('getEditBacktestData',row)
+      this.$store.commit('getEditBacktestData', row)
       this.$emit('getBacktestDataTry')
       this.$emit('goTobacktestSetupForm')
       // this.$emit('getEditBacktestData',row)
-  },
-  async deleteBacktest(id){
-    const { data: res } = await this.$http.delete('/demo/backtest/'+id+"/")
-    this.$message.success({
-          message: 'Successfully deleted',
-          duration: 1000
-        })
-    this.getBacktestList()
-  },
-  copyBacktest(row){
+    },
+    async deleteBacktest(id) {
+      const { data: res } = await this.$http.delete(
+        '/demo/backtest/' + id + '/'
+      )
+      this.$message.success({
+        message: 'Successfully deleted',
+        duration: 1000,
+      })
+      this.getBacktestList()
+    },
+    copyBacktest(row) {
       const strategyFormData = {}
       let currentBacktestData = {}
       currentBacktestData = row
@@ -242,33 +304,41 @@ export default {
       strategyFormData.todate = currentBacktestData.todate
       strategyFormData.status = 0
       strategyFormData.strategy = currentBacktestData.strategy.id
-      const params =  strategyFormData
-      this.$http.post('/demo/backtest/',this.$qs.stringify(params),{auth:{
-        username: 'sentimentrader_backtest_api',
-        password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-      }}).then( res => {
-        if(res.status === 201){
-           this.$message.success({
-           message: 'The replication was successful',
-           duration: 1000
-         })
-        //  this.$router.push('/currentBacktests')
-        this.getBacktestList()
-        }
-      }).catch( error => { console.log(error) })
-  },
-  viewBacktestResults(row) {
-    this.$store.commit('getRunBacktestData', row)
-    this.$emit('getResultTry')
-    this.$emit('goBacktestResultForm')
-    this.showmMarker()
-  
-  },
+      const params = strategyFormData
+      this.$http
+        .post('/demo/backtest/', this.$qs.stringify(params), {
+          auth: {
+            username: 'sentimentrader_backtest_api',
+            password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx',
+          },
+        })
+        .then((res) => {
+          if (res.status === 201) {
+            this.$message.success({
+              message: 'The replication was successful',
+              duration: 1000,
+            })
+            //  this.$router.push('/currentBacktests')
+            this.getBacktestList()
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    viewBacktestResults(row) {
+      this.$store.commit('getRunBacktestData', row)
+      this.$emit('getResultTry')
+      this.$emit('goBacktestResultForm')
+      this.showmMarker()
+    
+    },
   // show mMarker from /resouces
     showmMarker(){
       CIQ.loadChart(this.dataSet)
       CIQ.addMarker()
     },
+  },
 }
-}
+
 </script>
