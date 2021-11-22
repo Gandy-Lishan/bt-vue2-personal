@@ -709,8 +709,17 @@ export default {
       this.clearFormValidate()    
     },
     setEntryData(data) {
-      // console.log('data',data);
-      // console.log(this.$store.state.indicatorsList);
+      console.log(this.$store.state.indicatorsList);
+      this.mask = document.createElement('div')
+      this.mask.style.width = window.innerWidth + 'px'
+      this.mask.style.height = window.innerHeight + 'px'
+      this.mask.style.background = '#fff'
+      this.mask.style.position = 'fixed'
+      this.mask.style.opacity = '.1'
+      this.mask.style.top = '0'
+      this.mask.style.left = '0'
+      this.mask.style.zIndex = '10086'
+      document.body.appendChild(this.mask)
       let result
       //console.log(data.used_indicators.toString())
       this.$store.state.indicatorsList.forEach((value,index)=>{ 
@@ -718,10 +727,7 @@ export default {
           result = value
         }
       })
-      //console.log(result)
       if(result.url !== undefined){
-      //console.log('url',result.url)
-
       this.$store.commit('getEntryIndicators',result.url)
 
       let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
@@ -731,11 +737,12 @@ export default {
               i--;
             }
           }
-          CIQ.addIndicators(indicatorsList).then(
-            this.$message({
-                message: 'Loading sucess',
-                type: 'success'
-              })
+          CIQ.addIndicators(indicatorsList).then( 
+              document.body.removeChild(this.mask)
+              // this.$message({
+              //   message: 'Loading sucess',
+              //   type: 'success'
+              // })
           )
       }else{
         return

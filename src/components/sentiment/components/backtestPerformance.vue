@@ -296,6 +296,7 @@ export default {
         vm.monthReturnImgUrl = data.returnsHeatmapFileURL
         vm.annualReturnImgUrl = data.annualReturnsFileURL
         vm.tradesData = initalData["Trades"]
+        console.log(initalData)
         this.loadMarker(initalData)
         // vm.$store.commit('getTradesData',initalData[])
         vm.loading = false}
