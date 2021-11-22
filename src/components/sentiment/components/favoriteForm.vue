@@ -16,7 +16,7 @@
           <el-table-column
             label="Exit Signal"
             align="center"
-            prop="strategy.signal_entry.name"
+            prop="strategy.signal_exit.name"
           >
           </el-table-column>
           <el-table-column
@@ -184,42 +184,39 @@ export default {
       )
     },
     runbacktest(row) {
+      this.loading = true
       let vm = this
       vm.rowid = row.id
-      if(vm.chatSocket){
-        vm.chatSocket.close()
-      }
+      // if(vm.chatSocket){
+      //   vm.chatSocket.close()
+      // }
       if(row.status !== 2){
         vm.chatSocket = new WebSocket(
           'ws://' + '10.131.3.74:8000' + '/ws/chat/' + row.id + '/'
         )
-      vm.chatSocket.onmessage = function (e) {
-        const data = JSON.parse(e.data)
-          vm.loading = true
-          if(data.message === '200') {
+        vm.chatSocket.onopen = function(e){
+        vm.timer = setInterval(() => {
+        vm.$http.get('demo/backtest/' + row.id + '/').then(res => {
+          console.log(res.data.status)
+          if(res.data.status === 2){
+            clearInterval(vm.timer)
             vm.getBacktestList()
-            vm.loading = false
             vm.$message.success('Run backtest is successful, click the view results button to see the results.')
-            vm.chatSocket.close()
-          }else{
-            vm.$message.error('Error requesting, please try again')
             vm.loading = false
           }
-      }
+          }
+        ) 
+        },1000)
+        }
+        vm.chatSocket.onerror = function(e){
+          vm.$message.error('Error requesting, please try again')
+            vm.loading = false
+        }
       }else {
+        vm.loading = false
         vm.$message.error('The policy is complete')
-      }
-
-      // chatSocket.onclose = function (e) {
-      //   const vm = this
-      //   const data = JSON.parse(e.data)
-      //   console.log('error',data.message);
-      //   if(data.message === 404){
-      //     this.loading = false
-      //   vm.$message.error('Error requesting, please try again')
-      //   }
-      // }
-    },
+        
+      }}, 
     closeWeb() {
       const vm = this
       vm.chatSocket.close()
@@ -253,7 +250,7 @@ export default {
           })
         }
       }).catch( error => {
-        console.warn(error);
+        console.log(error);
           this.$message.error({
           message: 'The deletion failed',
           duration: 1000,
@@ -298,15 +295,16 @@ export default {
           }
         })
         .catch((error) => {
-          console.warn(error);
+          console.log(error)
         })
     },
     viewBacktestResults(row) {
       this.$store.commit('getRunBacktestData', row)
       this.$emit('getResultTry')
       this.$emit('getPerformanceData')
-      this.$emit('goBacktestResultForm') 
+      this.$emit('goBacktestResultForm')
     },
+
   },
 }
 

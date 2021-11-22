@@ -1,5 +1,6 @@
 import { CIQ } from 'chartiq/js/componentUI'
-
+declare module "element-ui";
+declare module 'element-ui/lib/locale/lang/en';
 declare module 'chartiq/js/componentUI' {
 	export namespace CIQ {
 		let dialog: boolean

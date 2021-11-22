@@ -4,7 +4,8 @@ import router from './router'
 import ElementUI, { Message } from 'element-ui'
 import qs from "querystring"
 import 'element-ui/lib/theme-chalk/index.css'
-//import locale from '../node_modules/element-ui/lib/locale/lang/en'
+// import locale from '../node_modules/element-ui/lib/locale/lang/en.js'
+import en from './tools/en.js'
 // 导入全局样式表
 import './assets/css/global.css'
 // 导入字体图标
@@ -15,6 +16,8 @@ import axios from "axios"
 import store from './store/store'
 //import VueDirectiveImagePreviewer from "vue-directive-image-previewer"
 import "vue-directive-image-previewer/dist/assets/style.css"
+import locale from 'element-ui/lib/locale/lang/en'
+
 // 配置请求根路径
 axios.defaults.baseURL = ''
 // 请求拦截器，挂载请求头
@@ -26,8 +29,9 @@ axios.interceptors.request.use(config => {
   }
   return config
 })
+// const encode = require("../node_modules/element-ui/lib/locale/lang/en")
 Vue.prototype.$qs= qs
-Vue.use(ElementUI)
+Vue.use(ElementUI,{ locale })
 Vue.prototype.$http = axios
 Vue.prototype.$message = Message
 Vue.config.productionTip = false

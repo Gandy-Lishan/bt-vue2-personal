@@ -13,6 +13,7 @@
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"sourceMap": true,
+		"typeRoots": ["src/@type","./node_modules/@types"],
 		"baseUrl": ".",
 		"types": ["webpack-env"],
 		"paths": {
@@ -27,5 +28,5 @@
 		"tests/**/*.ts",
 		"tests/**/*.tsx"
 	],
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules","src/@type/**/*"]
 }

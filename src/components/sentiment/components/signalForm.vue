@@ -870,6 +870,7 @@ export default {
               message: 'Saved successfully',
               duration: 1000
             })
+            // this.signalFormTagName = 'second'
             // this.$emit('goToExitSignalForm')
             }
         }else{
@@ -1082,6 +1083,7 @@ export default {
       this.conditionData.condition = val
     },
     selectEntryAction(value) {
+      console.log(value)
       this.submitEntrycondition.type = value
       // const data = {
       //   long: [
