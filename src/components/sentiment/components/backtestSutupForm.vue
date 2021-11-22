@@ -78,6 +78,28 @@
             </el-form-item>
         </el-col>
         <el-col :span="8">
+          
+          <el-form-item label="Benchmark:" prop="benchmark" size="mini">
+              <div class="enterSymbolBox">
+              <!-- <el-select
+                  v-model="backtestSetupFormdata.symbolName"
+                  filterable
+                  remote
+                  reserve-keyword
+                  @change="getSymbolName(backtestSetupFormdata.symbolName)"
+                  placeholder="enter keywords"
+                  :remote-method="remoteMethod"
+                  :loading="loading">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+              </el-select> -->
+              <el-input v-model="backtestSetupFormdata.symbolName" disabled></el-input>
+              </div>
+            </el-form-item>
           <el-form-item label="Backtest History:" prop="backtestHistory">
             <div class="selectBox">
               <el-select size="mini" @change="getBacktestHistory(backtestSetupFormdata.historyValue)" v-model="backtestSetupFormdata.historyValue" placeholder="Pleace select">
@@ -97,6 +119,7 @@
                 v-model="backtestSetupFormdata.starDate"
                 type="date"
                 placeholder="Please select a start date"
+                @change="getStarDate(backtestSetupFormdata.starDate)"
               >
               </el-date-picker>
               <el-input
@@ -291,7 +314,8 @@ export default {
       if(val <= 20){
       const str = this.backtestSetupFormdata.endDate.split('-')
       str[0] = (Number(str[0]) - Number(this.backtestSetupFormdata.historyValue)) + ''
-      this.backtestSetupFormdata.starDate = str.join('-')}
+      this.backtestSetupFormdata.starDate = str.join('-')
+      }
       if(val === 21){
         this.backtestSetupFormdata.starDate = ''
       }
@@ -369,10 +393,17 @@ export default {
     },
     getEndDate(date){
       this.backtestSetupFormdata.endDate = date
-      const endDate = timestampToTime(date)
-      const str = endDate.split('-')
-      str[0] = (Number(str[0]) - Number(this.backtestSetupFormdata.historyValue)) + ''
-      this.backtestSetupFormdata.starDate = str.join('-')
+      // const endDate = timestampToTime(date)
+      // const str = endDate.split('-')
+      // str[0] = (Number(str[0]) - Number(this.backtestSetupFormdata.historyValue)) + ''
+      // this.backtestSetupFormdata.endDate = str.join('-')
+    },
+    getStarDate(date){
+      this.backtestSetupFormdata.starDate = date
+      // const starDate = timestampToTime(date)
+      // const str = starDate.split('-')
+      // str[0] = (Number(str[0]) - Number(this.backtestSetupFormdata.historyValue)) + ''
+      // this.backtestSetupFormdata.starDate = str.join('-')
     }
   }
 }

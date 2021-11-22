@@ -125,8 +125,8 @@ export default {
       this.$http.post('/rundev/runporfolio/',this.$qs.stringify(params),{auth:{
         username: 'sentimentrader_backtest_api',
         password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-      }}).then(res => {console.log(res);}).catch(error => {
-        console.log(error);
+      }}).then(res => {}).catch(error => {
+        console.warn(error);
       })
     },
     async deleteMyPorfolio(row){

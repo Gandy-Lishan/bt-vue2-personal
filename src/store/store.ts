@@ -24,8 +24,8 @@ export default new Vuex.Store({
     exitOption: [{label: "string", value: "string"}],
     strategyId: '',
     indicatorsList: [],
-    symbolName: ''
-
+    symbolName: '',
+    trades: []
   },
   mutations: {
     getNewPorfolioInputsValues(state,row) {
@@ -45,18 +45,15 @@ export default new Vuex.Store({
     },
     getEntryIndicators(state, val){
       state.indicators.entry = val
-      console.log('url',val);
     },
     getExitIndicators(state, val){
       state.indicators.exit = val
     },
     getEntryData(state, val){
       state.strategyEntryData = val
-      console.log('entryData',val);
     },
     getExitData(state, val) {
       state.strategyExitData = val
-      console.log('exitData',val);
     },
     getCustomExitType(state, val) {
       const data = {
@@ -88,7 +85,6 @@ export default new Vuex.Store({
       }
       if (val === 'long') {
         state.exitOption = data.long
-        console.log(state.exitOption);
       } else {
         state.exitOption = data.short
       }
@@ -101,6 +97,9 @@ export default new Vuex.Store({
     },
     getSymbolName(state, val) {
       state.symbolName = val
+    },
+    getTradesData(state, data) {
+      state.trades = data
     }
   },
 })

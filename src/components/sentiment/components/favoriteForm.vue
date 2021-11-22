@@ -2,7 +2,7 @@
   <el-row>
     <el-col :span="24">
       <div class="favoriteForm_container">
-        <el-table :data="backtestList">
+        <el-table :data="backtestList" v-loading="loading">
           <el-table-column label="Backtest Name" align="center" prop="name">
           </el-table-column>
           <el-table-column label="Symbol" align="center" prop="stock">
@@ -23,6 +23,7 @@
             label="backtest period"
             prop="BacktestPeriod"
             align="center"
+            width="219px"
           >
             <template slot-scope="scope">
               <div class="dataBox">
@@ -42,10 +43,10 @@
               <span v-else-if="scope.row.status == 2">Completed</span>
             </template>
           </el-table-column>
-          <el-table-column label="GAGR" align="center" prop="GAGR">
+          <!-- <el-table-column label="GAGR" align="center" prop="GAGR">
           </el-table-column>
           <el-table-column label="Max DD" align="center" prop="maxDD">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column align="center" width="300px">
             <template slot-scope="scope">
               <el-row>
@@ -134,8 +135,6 @@
         </el-table>
       </div>
     </el-col>
-    <el-button @click="checkBacktest">ddeded</el-button>
-     <el-button @click="closeWeb">guanbi</el-button>
   </el-row>
 </template>
 <script>
@@ -154,7 +153,6 @@ export default {
       currentBacktestList: [],
       backtestItemId: 0,
       backtestResultList: [],
-      loading: false,
       editData: {},
       dataSet:[
         {
@@ -206,7 +204,7 @@ export default {
     },
     checkBacktest() {
       let vm = this
-      vm.chatSocket.send(
+      chatSocket.send(
         JSON.stringify({
           message: vm.rowid,
         })
@@ -215,50 +213,41 @@ export default {
     runbacktest(row) {
       let vm = this
       vm.rowid = row.id
-      console.log("sadas");
+      if(vm.chatSocket){
+        vm.chatSocket.close()
+      }
+      if(row.status !== 2){
         vm.chatSocket = new WebSocket(
           'ws://' + '10.131.3.74:8000' + '/ws/chat/' + row.id + '/'
         )
-      
-
       vm.chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data)
-        console.log('status',data.message)
-        // vm.getBacktestList()
-        // chatSocket.close()
-        // if(data.message.indexOf(vm.rowid) !== -1){
-        //    vm.chatSocket.close()
-        //    vm.chatSocket = undefined
-        // }
+        console.log('status',data)
+        console.log('zhuangtsi',row.status);
+          vm.loading = true
+          if(data.message === '200') {
+            vm.getBacktestList()
+            vm.loading = false
+            vm.$message.success('Run backtest is successful, click the view results button to see the results.')
+            vm.chatSocket.close()
+          }else{
+            vm.$message.error('Error requesting, please try again')
+            vm.loading = false
+          }
+      }
+      }else {
+        vm.$message.error('The policy is complete')
       }
 
-      vm.chatSocket.onclose = function (e) {
-        const vm = this
-        vm.$message.error('false')
-        // chatSocket.close()
-      }
-
-      // let arr = []
-      // arr.push(row.id)
-      // this.backtestId= arr
-      //  var params = {
-      //     backtests: this.backtestId
+      // chatSocket.onclose = function (e) {
+      //   const vm = this
+      //   const data = JSON.parse(e.data)
+      //   console.log('error',data.message);
+      //   if(data.message === 404){
+      //     this.loading = false
+      //   vm.$message.error('Error requesting, please try again')
       //   }
-      //   this.loading = true
-      //   this.$http.post('/rundev/runbacktest/',this.$qs.stringify(params),{auth:{
-      //     username: 'sentimentrader_backtest_api',
-      //     password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-      //   }}).then(res => {
-      //     this.backtestResultList = res.data.result
-      //   this.img_data = res.data
-      //   if(res.data !== ''){
-      //     this.loading = false
-      //     this.dialogVisible = !this.dialogVisible
-      //     // this.$emit('goBacktestResultForm')
-      //   }}).catch(error => {
-      //     console.log(error)
-      //     this.loading = false
-      //   })
+      // }
     },
     closeWeb() {
       const vm = this
@@ -276,15 +265,30 @@ export default {
       this.$emit('goTobacktestSetupForm')
       // this.$emit('getEditBacktestData',row)
     },
-    async deleteBacktest(id) {
-      const { data: res } = await this.$http.delete(
+    deleteBacktest(id) {
+    this.$http.delete(
         '/demo/backtest/' + id + '/'
-      )
-      this.$message.success({
-        message: 'Successfully deleted',
-        duration: 1000,
+      ).then(res => {
+      if(res.status == 204){
+        this.$message.success({
+          message: 'Successfully deleted',
+          duration: 1000,
+        })
+        this.getBacktestList()
+        }else{
+          this.$message.error({
+          message: 'The deletion failed',
+          duration: 1000,
+          })
+        }
+      }).catch( error => {
+        console.log(error);
+          this.$message.error({
+          message: 'The deletion failed',
+          duration: 1000,
+          })
       })
-      this.getBacktestList()
+
     },
     copyBacktest(row) {
       const strategyFormData = {}
@@ -329,6 +333,7 @@ export default {
     viewBacktestResults(row) {
       this.$store.commit('getRunBacktestData', row)
       this.$emit('getResultTry')
+      this.$emit('getPerformanceData')
       this.$emit('goBacktestResultForm')
       this.showmMarker()
     

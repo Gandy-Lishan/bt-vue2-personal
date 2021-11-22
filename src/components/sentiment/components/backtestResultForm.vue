@@ -114,6 +114,27 @@
               </el-select>
             </div>
           </el-form-item> -->
+          <el-form-item label="Benchmark:" prop="benchmark" size="mini">
+              <div class="enterSymbolBox">
+              <!-- <el-select
+                  v-model="backtestSetupFormdata.symbolName"
+                  filterable
+                  remote
+                  reserve-keyword
+                  @change="getSymbolName(backtestSetupFormdata.symbolName)"
+                  placeholder="enter keywords"
+                  :remote-method="remoteMethod"
+                  :loading="loading">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+              </el-select> -->
+              <el-input v-model="backtestSetupFormdata.symbolName" disabled></el-input>
+              </div>
+            </el-form-item>
           <div class="dateNote">
             <el-form-item label="Start date" size="mini">
               <el-date-picker
@@ -360,7 +381,6 @@ export default {
     getData() {
       const data = this.$store.state.favoriteBacktestRowData
       this.backtestId = data.id
-      console.log('backtestSutup[Results',data);
       if(data.length !== 0){
       this.backtestSetupFormdata.name = data.name
       this.backtestSetupFormdata.description = data.description

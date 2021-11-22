@@ -160,7 +160,7 @@
       </div>
       <div class="signalRight">
         <el-form label-position="left" label-width="80px">
-            <el-form-item label="Indicators:" size="mini">
+            <el-form-item label="Used_Indicators:" size="mini">
               <div v-if="signalFormTagName === 'first'" class="searchBox">
                 <el-input
                   v-model="indicatorsEntryValue"
@@ -172,7 +172,7 @@
                 <i slot="prefix" class="el-input__icon el-icon-search"                                                                                                                                                                                                                                                                                                                     ></i>
                 </el-input>
                 <div class="search-content">
-                <ul v-show="isSelected" style="height:300px;overflow-y:scroll">
+                <ul v-show="isSelected" style="height:250px;overflow-y:scroll">
                   <li  class="search-item border-bottom" v-for="(item, index) in indicatorsSearchResults"
                   :key="index"
                   @click="selectEntrySymbol(item.chart_name,item.url)"
@@ -193,7 +193,7 @@
                 <i slot="prefix" class="el-input__icon el-icon-search"                                                                                                                                                                                                                                                                                                                     ></i>
                 </el-input>
                 <div class="search-content">
-                <ul v-show="isSelected" style="height:300px;overflow-y:scroll">
+                <ul v-show="isSelected" style="height:250px;overflow-y:scroll">
                   <li  class="search-item border-bottom" v-for="(item, index) in indicatorsSearchResults"
                   :key="index"
                   @click="selectExitSymbol(item.chart_name,item.url)">

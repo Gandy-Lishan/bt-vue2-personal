@@ -1,5 +1,5 @@
 <template>
-   <el-tabs v-model="activePerTag" type="card" @tab-click="handleClick">
+   <el-tabs v-model="activePerTag" type="card" @tab-click="handleClick" v-loading="loading">
     <el-tab-pane label="Summary" name="first">
       <div class="summaryContainer">
     <el-table
@@ -43,12 +43,12 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="stdDev"
+        prop="standardDeviation"
         label="STD. DEV"
         align="center">
         <template slot-scope="scope">
-          <span v-if="scope.row.stdDev >= 0">{{ scope.row.stdDev }}</span>
-          <span v-else style="color: red">{{scope.row.stdDev}}</span>
+          <span v-if="scope.row.standardDeviation >= 0">{{ scope.row.standardDeviation }}</span>
+          <span v-else style="color: red">{{scope.row.standardDeviation}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -96,12 +96,12 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="maxRisk"
+        prop="drawDown"
         label="MAX RISK"
         align="center">
         <template slot-scope="scope">
-          <span v-if="scope.row.maxRisk >= 0">{{ scope.row.maxRisk + '%' }}</span>
-          <span v-else style="color: red">{{scope.row.maxRisk + '%'}}</span>
+          <span v-if="scope.row.drawDown >= 0">{{ scope.row.drawDown + '%' }}</span>
+          <span v-else style="color: red">{{scope.row.drawDown + '%'}}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -163,35 +163,88 @@
         </div>
       </div>
     </el-tab-pane>
-    <el-tab-pane label="Trades" name="second">Trades</el-tab-pane>
+    <el-tab-pane label="Trades" name="second">
+    <div class="trades-container">
+    <el-table
+      :data="tradesData"
+      style="width: 100%">
+      <el-table-column
+        prop="Date"
+        label="Date"
+        align="center">
+      </el-table-column>
+      <el-table-column
+        prop="Symbol"
+        label="Symbol"
+        align="center">
+      </el-table-column>
+      <el-table-column
+        prop="Indicator"
+        label="Indicator"
+        align="center">
+      </el-table-column>
+      <el-table-column
+        prop="TradePrice"
+        label="TradePrice"
+        align="center">
+      </el-table-column>
+      <el-table-column
+        prop="TradeStatus"
+        label="TradeStatus"
+        align="center">
+      </el-table-column>
+      <el-table-column
+        prop="CurrentValue"
+        label="CurrentValue"
+        align="center">
+      </el-table-column>
+    </el-table>
+  </div>
+    </el-tab-pane>
     <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane>
    </el-tabs>
 </template>
 <script>
-import formateData from '../../../../../responseData/eb_test_response.json'
 export default {
   data() {
     return {
       activePerTag: 'first',
-      formateData,
       tableData: [],
       returnImgUrl: '',
       drawDownImgUrl: '',
       monthReturnImgUrl: '',
-      annualReturnImgUrl: ''
+      annualReturnImgUrl: '',
+      loading: false,
+      tradesData: []
     }
   },
   created() {
-    this.getData()
+    this.getResultData()
   },
   methods: {
     handleClick(tab, event) {
         console.log(tab, event);
       },
-      getData() {
-        let initalData = this.formateData
+      getResultData() {
+        let vm = this
+        vm.loading = true
+        let initalData = {}
         let data = {}
-        data.uuid = initalData["UUID"]
+        let id = this.$store.state.favoriteBacktestRowData.id
+        console.log('id',id);
+        let arr=[]
+        arr.push(id)
+        let params = {
+          backtests: arr
+        }
+        vm.$http.post('rundev/runbacktest/',this.$qs.stringify(params),{auth:{
+          username: 'sentimentrader_backtest_api',
+          password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+        }}).then( res => {
+          if(res.status == 200){
+         initalData = res.data
+         console.log(initalData);
+         data.uuid = initalData["UUID"]
         data.symbol = initalData["Symbol"]
         data.frequency = initalData["Frequency"]
         data.totalTrades = initalData["Total Trades"]
@@ -232,11 +285,19 @@ export default {
         data.annualReturnsFileURL = initalData["Annual Returns File URL"]
         data.returnsheatmapImageUploadedURL = initalData["Returns Heatmap Image Uploaded"]
         data.returnsHeatmapFileURL = initalData["Returns Heatmap File URL"]
-        this.tableData.push(data)
-        this.returnImgUrl = data.returnsFileURL
-        this.drawDownImgUrl = data.ddFileURL
-        this.monthReturnImgUrl = data.returnsHeatmapFileURL
-        this.annualReturnImgUrl = data.annualReturnsFileURL
+        vm.tableData = []
+        vm.tableData.push(data)
+        vm.returnImgUrl = data.returnsFileURL
+        vm.drawDownImgUrl = data.ddFileURL
+        vm.monthReturnImgUrl = data.returnsHeatmapFileURL
+        vm.annualReturnImgUrl = data.annualReturnsFileURL
+        vm.tradesData = initalData["Trades"]
+        // vm.$store.commit('getTradesData',initalData[])
+        vm.loading = false}
+        }).catch( error => {
+          console.log(error);
+          vm.loading = false
+        })
       }
   }
 }

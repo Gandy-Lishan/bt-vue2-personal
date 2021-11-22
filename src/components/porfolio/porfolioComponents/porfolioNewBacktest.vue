@@ -322,7 +322,6 @@ export default {
     },
     getCashAllocationValue(idx) {
       this.moneyManagementFormdata.radio = idx
-      console.log(this.moneyManagementFormdata.radio);
     },
     saveNewBacktestFormdata() {
       this.newBacktestFormdata.stock = this.symbolFormdata.symbolName
@@ -343,7 +342,6 @@ export default {
         username: 'sentimentrader_backtest_api',
         password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
       }}).then( res => {
-        console.log(res);
         if(res.status === 201){
            this.$message.success({
            message: 'The save was successful',
@@ -351,7 +349,7 @@ export default {
          })
          this.$router.push('/currentBacktests')
         }
-      }).catch( error => { console.log(error) })
+      }).catch( error => { console.warn(error); })
     }
   },
 }
