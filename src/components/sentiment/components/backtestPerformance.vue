@@ -205,6 +205,7 @@
    </el-tabs>
 </template>
 <script>
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
   data() {
     return {
@@ -223,15 +224,19 @@ export default {
   },
   methods: {
     handleClick(tab, event) {
-        console.log(tab, event);
       },
+      loadMarker(tradeData){
+        console.log(tradeData.markerSet)
+        CIQ.loadChart(tradeData.markerSet)
+        CIQ.addMarker()
+      },
+
       getResultData() {
         let vm = this
         vm.loading = true
         let initalData = {}
         let data = {}
         let id = this.$store.state.favoriteBacktestRowData.id
-        console.log('id',id);
         let arr=[]
         arr.push(id)
         let params = {
@@ -243,7 +248,6 @@ export default {
         }}).then( res => {
           if(res.status == 200){
          initalData = res.data
-         console.log(initalData);
          data.uuid = initalData["UUID"]
         data.symbol = initalData["Symbol"]
         data.frequency = initalData["Frequency"]
@@ -292,10 +296,10 @@ export default {
         vm.monthReturnImgUrl = data.returnsHeatmapFileURL
         vm.annualReturnImgUrl = data.annualReturnsFileURL
         vm.tradesData = initalData["Trades"]
+        this.loadMarker(initalData)
         // vm.$store.commit('getTradesData',initalData[])
         vm.loading = false}
         }).catch( error => {
-          console.log(error);
           vm.loading = false
         })
       }

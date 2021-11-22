@@ -220,7 +220,7 @@ export default {
             message: 'The save failed',
             duration: 1000
           })}}).catch(error => {
-      console.log(error);
+      console.warn(error);
       })
     }
   },

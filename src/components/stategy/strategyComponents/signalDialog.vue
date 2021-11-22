@@ -126,7 +126,6 @@ export default {
       this.signalList.entryChecked = !this.signalList.entryChecked
     },
     handleCurrentChange(newpage) {
-      console.log('newpage',newpage);
       this.queryInfo.page = newpage
       this.getSignallist("system")
     }

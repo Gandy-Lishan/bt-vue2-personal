@@ -133,8 +133,6 @@ export default {
   },
   methods: {
     saveStrategy() {
-      console.log('strategyentry',this.strategyEntryData);
-      console.log('strategyexit',this.strategyExitData);
       const submitStrategyData = {}
       submitStrategyData.name = this.strategyData.name
       submitStrategyData.description = this.strategyData.description
@@ -184,7 +182,7 @@ export default {
             message: 'The save failed',
             duration: 1000
           })}}).catch(error => {
-      console.log(error);
+      console.warn(error);
       })
     }
   }

@@ -176,7 +176,7 @@ export default {
         backtests: this.backtestId
       }
       this.loading = true
-      console.log('params',this.$qs.stringify(params));
+      //console.log('params',this.$qs.stringify(params));
       this.$http.post('/rundev/runbacktest/',this.$qs.stringify(params),{auth:{
         username: 'sentimentrader_backtest_api',
         password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
@@ -187,7 +187,7 @@ export default {
         this.loading = false
         this.dialogVisible = !this.dialogVisible
       }}).catch(error => {
-        console.log(error)
+        console.warn(error)
         this.loading = false
       })
     },
@@ -196,7 +196,7 @@ export default {
       this.$router.push('/newporfolio',)
     },
     isChecked(val){
-      console.log(val);
+      //console.log(val);
       let backtests = [];
       this.currentBacktestList = val
       val.forEach(element => {

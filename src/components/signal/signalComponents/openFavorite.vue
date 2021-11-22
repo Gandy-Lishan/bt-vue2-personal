@@ -401,7 +401,6 @@ export default {
       this.conditionList = this.initialConditionList
       
       this.open_formdata = this.initialFromData
-      console.log(this.open_formdata)
       this.submitFormDate = []
       this.$emit("update:dialogFormVisible",false);
     },

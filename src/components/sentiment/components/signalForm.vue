@@ -591,7 +591,7 @@ export default {
       initialEntryFromData: {},
       initialExitFromData: {},
       maValue: '',
-      entryType: '',
+      entryType: 'short',
       exitType: '',
       entryFormdata: {
         entry: [
@@ -731,7 +731,6 @@ export default {
               i--;
             }
           }
-          console.log(indicatorsList)
           CIQ.addIndicators(indicatorsList).then(
             this.$message({
                 message: 'Loading sucess',
@@ -769,7 +768,7 @@ export default {
         }
       })
       if(result.url !== undefined){
-      console.log('url',result.url)
+
       this.$store.commit('getExitIndicators',result.url)
 
       let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
@@ -779,7 +778,6 @@ export default {
               i--;
             }
           }
-          console.log(indicatorsList)
           // CIQ.addIndicators(indicatorsList).then(
           //   this.$message({
           //       message: 'Loading sucess',
@@ -813,7 +811,6 @@ export default {
       ]
     },
     clearEntryFormData() {
-      console.log('clear', this.entryData)
       this.clearFormValidate()    
     },
     async submitEntryFormData() {
@@ -866,7 +863,8 @@ export default {
               message: 'Saved successfully',
               duration: 1000
             })
-            this.$emit('goToExitSignalForm')}
+            // this.$emit('goToExitSignalForm')
+            }
         }else{
           this.$message.error({
            message: 'The value of value entered is empty',
@@ -886,7 +884,6 @@ export default {
       submitExitData.type = vm.exitType
       submitExitData.frequency = vm.exitData.frequency
       submitExitData.used_indicators = vm.indicatorsExitValue
-      console.log('22222',submitExitData);
       const conditionData = {}
       vm.conditionList.forEach(item => {
         conditionData.condition_description=item.condition_description
@@ -905,7 +902,6 @@ export default {
           // this.conditionData.condition = conditionOptionArr.indexOf(this.conditionsOption)
         }
       })
-      console.log('3333',conditionData);
       // submitExitData.name = 
       const conditions = []
       conditions.push(conditionData)
@@ -932,8 +928,6 @@ export default {
                 }
         //  this.$emit('goToStrategyForm')
         this.saveStrategy()
-        console.log('entryData',this.$store.state.strategyEntryData);
-        console.log('exitData',this.$store.state.strategyExitData);
         }else{
           this.$message.error({
            message: 'The save failed',
@@ -1025,7 +1019,6 @@ export default {
       }, 500),
       selectEntrySymbol(name,url) {
             this.indicatorsEntryValue = name
-            console.log(url)
             this.$store.commit('getEntryIndicators',url)
             this.isSelected = false
 
@@ -1036,7 +1029,6 @@ export default {
               i--;
             }
           }
-          console.log(indicatorsList)
           CIQ.addIndicators(indicatorsList).then(
             this.$message({
                 message: 'Loading sucess',
@@ -1046,7 +1038,6 @@ export default {
          },
       selectExitSymbol(name,url) {
             this.indicatorsExitValue = name
-            console.log(url)
             this.$store.commit('getExitIndicators',url)
             this.isSelected = false
 
@@ -1057,7 +1048,6 @@ export default {
               i--;
             }
           }
-          console.log(indicatorsList)
           CIQ.addIndicators(indicatorsList).then(
             this.$message({
                 message: 'Loading sucess',

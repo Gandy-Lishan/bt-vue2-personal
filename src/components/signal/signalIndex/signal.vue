@@ -171,7 +171,7 @@ export default {
       const addFavoritesData = row
       const vm = this
       if(addFavoritesData.favorites){
-      this.$http.put('/demo/signal/'+row.id+"/",vm.$qs.stringify(addFavoritesData)).then(res => {}).catch(error => {console.log(error);})
+      this.$http.put('/demo/signal/'+row.id+"/",vm.$qs.stringify(addFavoritesData)).then(res => {}).catch(error => {console.warn(error);})
     }
   },
   },

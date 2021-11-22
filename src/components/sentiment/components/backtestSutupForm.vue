@@ -267,7 +267,7 @@ export default {
               ).then(res => {
                 this.symbolList = res.data
               }).catch(error => {
-                console.log(error);
+                console.warn(error);
           })
 
           await this.$http.get('https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
@@ -278,7 +278,7 @@ export default {
               ).then(res => {
                 this.indexList = res.data
               }).catch(error => {
-                console.log(error);
+                console.warn(error);
           })
       },
       async remoteMethod(query) {
@@ -371,13 +371,11 @@ export default {
       }
       strategyFormData.status = 0
       strategyFormData.strategy = vm.$store.state.strategyId
-      console.log('strategyFormData',strategyFormData);
       const params =  strategyFormData
             this.$http.post('/demo/backtest/',this.$qs.stringify(params),{auth:{
         username: 'sentimentrader_backtest_api',
         password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
       }}).then( res => {
-        console.log('res',res);
         if(res.status === 201){
            this.$message.success({
            message: 'The save was successful',
@@ -386,7 +384,7 @@ export default {
         this.$emit('updateFavoriteList')
         this.$emit('goToBacktestFavoriteForm')
         }
-      }).catch( error => { console.log(error) })
+      }).catch( error => { console.warn(error); })
     },
     updataStrategylist() {
       this.$refs.strategyDialog.getStrategyList()

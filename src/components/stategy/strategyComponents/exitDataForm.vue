@@ -144,7 +144,6 @@ watch:{
       this.open_formdata = vm.exitData
       Object.assign(vm.exitData,this.open_formdata)
       // const lists = this.open_formdata
-      console.log("aaa");
       this.initialFromData['name'] = this.exitData.name
       this.initialFromData['description'] = this.exitData.description
       // const res = await this.$http.get('/demo/condition/', {

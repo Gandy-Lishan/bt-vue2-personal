@@ -121,7 +121,6 @@ export default {
   methods: {
     selectSymbol(val){
       // this.value = val
-      console.log(val);
       if(val === 0){
         this.$router.push('/newBacktest')
       }
@@ -145,7 +144,7 @@ export default {
           }
 
       }).catch(error => {
-        console.log(error);
+        console.warn(error);
       })
     },
     showBacktestDialogVisible(row){

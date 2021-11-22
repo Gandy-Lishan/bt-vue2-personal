@@ -158,7 +158,6 @@ export default {
   },
   methods: {
     deleteNewPorfolio() {
-      console.log('delete')
     },
     async getPorfolioList() {
       const res = await this.$http.get(
@@ -183,7 +182,6 @@ export default {
         item.cash = item.cash
         // percentageList.push(Math.round(Number(item.cash)/Number(params.original_asset)))
       })
-      console.log('percentageList', this.backtestList)
       var porfolioId
 
       this.$http
@@ -195,7 +193,6 @@ export default {
         })
         .then((res) => {
           if (this.backtestList.length !== 0) {
-            console.log('aaa')
             porfolioId = res.data.id
             params.backtests = JSON.stringify(this.backtestList)
             params.id = porfolioId

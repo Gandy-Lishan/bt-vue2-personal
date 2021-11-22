@@ -69,7 +69,7 @@ export default {
           ).then(res => {
             this.symbolList = res.data
           }).catch(error => {
-            console.log(error);
+            console.warn(error);
           })
           
 
@@ -87,7 +87,6 @@ export default {
     },
     closeDialog(){
       this.symbolFormdata.symbolName = this.value
-      console.log(this.value)
     },
     // checkEntry(scope){
     //   this.$emit("setSymbolData",(scope))

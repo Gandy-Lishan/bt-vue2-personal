@@ -422,7 +422,6 @@ export default {
       this.conditionList = res.data.results
       /* new */
       this.initialConditionList = this.conditionList
-      console.log(this.conditionList);
 
       //同步更新Visible为true
       this.$emit("update:dialogFormVisible",true)

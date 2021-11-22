@@ -285,7 +285,7 @@ export default {
           ).then(res => {
             this.symbolList = res.data
           }).catch(error => {
-            console.log(error);
+            console.warn(error);
           })
 
           await this.$http.get('https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
@@ -357,7 +357,7 @@ export default {
       this.newBacktestFormdata.status = 0
       this.newBacktestFormdata.strategy = this.strategyFormdata.id
       const params =  this.newBacktestFormdata
-      console.log('tijiao',this.newBacktestFormdata);ss
+      //console.log('tijiao',this.newBacktestFormdata);ss
       this.$http.post('/demo/backtest/',this.$qs.stringify(params),{auth:{
         username: 'sentimentrader_backtest_api',
         password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
@@ -369,7 +369,7 @@ export default {
          })
          this.$router.push('/currentBacktests')
         }
-      }).catch( error => { console.log(error) })
+      }).catch( error => { console.warn(error) })
     }
   },
 }

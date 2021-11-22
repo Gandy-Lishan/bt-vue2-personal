@@ -138,7 +138,6 @@
   </el-row>
 </template>
 <script>
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
   data() {
     return {
@@ -154,32 +153,6 @@ export default {
       backtestItemId: 0,
       backtestResultList: [],
       editData: {},
-      dataSet:[
-        {
-          DT:"2020-06-05",
-          Type: "BUY",
-          Price: 22.25,
-          Indicator: "Smart Money Confidence"
-        },
-        {
-          DT:"2020-08-08",
-          Type: "SELL",
-          Price: 22.70,
-          Indicator: "Smart Money Confidence"
-        } ,
-        {
-          DT:"2020-09-05",
-          Type: "BUY",
-          Price: 21.90,
-          Indicator: "Dumb Money Confidence"
-        },
-        {
-          DT:"2020-10-02",
-          Type: "SELL",
-          Price: 25.59,
-          Indicator: "Dumb Money Confidence"
-        } 
-      ],
     }
   },
   created() {
@@ -222,8 +195,6 @@ export default {
         )
       vm.chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data)
-        console.log('status',data)
-        console.log('zhuangtsi',row.status);
           vm.loading = true
           if(data.message === '200') {
             vm.getBacktestList()
@@ -282,7 +253,7 @@ export default {
           })
         }
       }).catch( error => {
-        console.log(error);
+        console.warn(error);
           this.$message.error({
           message: 'The deletion failed',
           duration: 1000,
@@ -327,21 +298,14 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error)
+          console.warn(error);
         })
     },
     viewBacktestResults(row) {
       this.$store.commit('getRunBacktestData', row)
       this.$emit('getResultTry')
       this.$emit('getPerformanceData')
-      this.$emit('goBacktestResultForm')
-      this.showmMarker()
-    
-    },
-  // show mMarker from /resouces
-    showmMarker(){
-      CIQ.loadChart(this.dataSet)
-      CIQ.addMarker()
+      this.$emit('goBacktestResultForm') 
     },
   },
 }
