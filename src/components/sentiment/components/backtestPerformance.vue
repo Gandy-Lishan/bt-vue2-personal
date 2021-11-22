@@ -170,33 +170,27 @@
       style="width: 100%">
       <el-table-column
         prop="Date"
-        label="Date"
-        align="center">
-      </el-table-column>
-      <el-table-column
-        prop="Symbol"
-        label="Symbol"
-        align="center">
-      </el-table-column>
-      <el-table-column
-        prop="Indicator"
-        label="Indicator"
+        label="Trades Date"
         align="center">
       </el-table-column>
       <el-table-column
         prop="TradePrice"
-        label="TradePrice"
+        label="Symbol Close"
         align="center">
       </el-table-column>
       <el-table-column
-        prop="TradeStatus"
-        label="TradeStatus"
+        prop="indicator_close"
+        label="Indicator Close"
         align="center">
       </el-table-column>
       <el-table-column
-        prop="CurrentValue"
-        label="CurrentValue"
+        prop="Return"
+        label="Return"
         align="center">
+        <template slot-scope="scope">
+        <span v-if="scope.row.Return >= 0" >{{ (scope.row.Return * 100).toFixed(2) }}%</span>
+        <span v-else style="color: red" >{{ (scope.row.Return * 100).toFixed(2) }}%</span>
+        </template>
       </el-table-column>
     </el-table>
   </div>
@@ -205,6 +199,8 @@
    </el-tabs>
 </template>
 <script>
+
+import keepTwoDecimal from "../../../tools/keepTwoDecimal.js"
 export default {
   data() {
     return {
@@ -242,7 +238,12 @@ export default {
           password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
         }}).then( res => {
           if(res.status == 200){
+            if(typeof(res.data) == String) {
+              JSON.parse(res.data)
+            }
+            console.log('dddddd',res.data)
          initalData = res.data
+         console.log('res',res)
          console.log(initalData);
          data.uuid = initalData["UUID"]
         data.symbol = initalData["Symbol"]
@@ -286,6 +287,7 @@ export default {
         data.returnsheatmapImageUploadedURL = initalData["Returns Heatmap Image Uploaded"]
         data.returnsHeatmapFileURL = initalData["Returns Heatmap File URL"]
         vm.tableData = []
+        console.log('data',data)
         vm.tableData.push(data)
         vm.returnImgUrl = data.returnsFileURL
         vm.drawDownImgUrl = data.ddFileURL

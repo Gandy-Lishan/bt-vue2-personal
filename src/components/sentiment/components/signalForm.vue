@@ -866,7 +866,9 @@ export default {
               message: 'Saved successfully',
               duration: 1000
             })
-            this.$emit('goToExitSignalForm')}
+            // this.signalFormTagName = 'second'
+            // this.$emit('goToExitSignalForm')
+            }
         }else{
           this.$message.error({
            message: 'The value of value entered is empty',
@@ -1085,6 +1087,7 @@ export default {
       this.conditionData.condition = val
     },
     selectEntryAction(value) {
+      console.log(value)
       this.submitEntrycondition.type = value
       // const data = {
       //   long: [

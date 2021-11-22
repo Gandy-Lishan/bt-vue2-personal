@@ -211,33 +211,56 @@ export default {
       )
     },
     runbacktest(row) {
+      this.loading = true
       let vm = this
       vm.rowid = row.id
-      if(vm.chatSocket){
-        vm.chatSocket.close()
-      }
+      // if(vm.chatSocket){
+      //   vm.chatSocket.close()
+      // }
       if(row.status !== 2){
         vm.chatSocket = new WebSocket(
           'ws://' + '10.131.3.74:8000' + '/ws/chat/' + row.id + '/'
         )
-      vm.chatSocket.onmessage = function (e) {
-        const data = JSON.parse(e.data)
-        console.log('status',data)
-        console.log('zhuangtsi',row.status);
-          vm.loading = true
-          if(data.message === '200') {
+        vm.chatSocket.onopen = function(e){
+        vm.timer = setInterval(() => {
+        vm.$http.get('demo/backtest/' + row.id + '/').then(res => {
+          console.log(res.data.status)
+          if(res.data.status === 2){
+            clearInterval(vm.timer)
             vm.getBacktestList()
-            vm.loading = false
             vm.$message.success('Run backtest is successful, click the view results button to see the results.')
-            vm.chatSocket.close()
-          }else{
-            vm.$message.error('Error requesting, please try again')
             vm.loading = false
           }
-      }
+          }
+        ) 
+        },1000)
+        }
+        vm.chatSocket.onerror = function(e){
+          vm.$message.error('Error requesting, please try again')
+            vm.loading = false
+        }
       }else {
         vm.$message.error('The policy is complete')
       }
+
+      // vm.chatSocket.onmessage = function (e) {
+      //   const data = JSON.parse(e.data)
+      //   console.log('status',data)
+      //   console.log('zhuangtsi',row.status);
+      //     vm.loading = true
+      //     if(data.message === '200') {
+      //       vm.getBacktestList()
+      //       vm.loading = false
+      //       vm.$message.success('Run backtest is successful, click the view results button to see the results.')
+      //       vm.chatSocket.close()
+      //     }else{
+      //       vm.$message.error('Error requesting, please try again')
+      //       vm.loading = false
+      //     }
+      // }
+      // }else {
+      //   vm.$message.error('The policy is complete')
+      // }
 
       // chatSocket.onclose = function (e) {
       //   const vm = this
