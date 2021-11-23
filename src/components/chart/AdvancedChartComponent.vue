@@ -432,7 +432,7 @@ export default class AdvancedChartComponent extends Vue {
 			
 			CIQ.studys = []
 			for (var study in CIQ.Studies.studyLibrary) {
-				//console.log(study)
+				////(study)
 				CIQ.studys.push(study)
 			}
 			
@@ -450,7 +450,7 @@ export default class AdvancedChartComponent extends Vue {
 			
 			//let showMarkers = CIQ.UI.Markers.prototype.showMarkers
 			// var mas = CIQ.Studies.movingAverageHelper(CIQ.stxx, "options");
-			// console.log(mas);
+			// //(mas);
 
 		}, 0)
 				

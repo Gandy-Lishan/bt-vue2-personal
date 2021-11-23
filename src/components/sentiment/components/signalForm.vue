@@ -709,7 +709,7 @@ export default {
       this.clearFormValidate()    
     },
     setEntryData(data) {
-      console.log(this.$store.state.indicatorsList);
+      //(this.$store.state.indicatorsList);
       // this.mask = document.createElement('div')
       // this.mask.className="masks"
       // this.mask.style.width = window.innerWidth + 'px'
@@ -722,7 +722,7 @@ export default {
       // this.mask.style.zIndex = '10000'
       // document.body.appendChild(this.mask)
       let result
-      //console.log(data.used_indicators.toString())
+      ////(data.used_indicators.toString())
       this.$store.state.indicatorsList.forEach((value,index)=>{ 
         if(value.chart_name.toString().indexOf(data.used_indicators.toString())!== -1){
           result = value
@@ -760,7 +760,7 @@ export default {
         vm.conditionList = res.data.results
         this.initialEntryFromData.value = res.data.results.value
       })
-      console.log('data',data)
+      //('data',data)
       vm.entryData = data
       vm.entryType = data.type
       this.initialEntryFromData.name = data.name
@@ -956,8 +956,8 @@ export default {
       this.clearFormValidate()    
     },
     saveStrategy() {
-      // console.log('strategyentry',this.strategyEntryData);
-      // console.log('strategyexit',this.strategyExitData);
+      // //('strategyentry',this.strategyEntryData);
+      // //('strategyexit',this.strategyExitData);
       const entryData = this.$store.state.strategyEntryData
       const exitData = this.$store.state.strategyExitData
       const submitStrategyData = {}
@@ -1099,7 +1099,7 @@ export default {
       this.conditionData.condition = val
     },
     selectEntryAction(value) {
-      console.log(value)
+      //(value)
       this.submitEntrycondition.type = value
       // const data = {
       //   long: [

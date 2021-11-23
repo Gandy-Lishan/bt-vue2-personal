@@ -376,7 +376,7 @@ export default {
       //    })
       //    this.$router.push('/currentBacktests')
       //   }
-      // }).catch( error => { console.log(error) })
+      // }).catch( error => { //(error) })
     },
     closeDialog(){
       this.$emit('showBacktestDialog')

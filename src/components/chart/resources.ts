@@ -78,7 +78,7 @@ import 'chartiq/plugins/timespanevent/examples/timeSpanEventSample' /* if using 
 
 // Creates a complete customised configuration object
 function getConfig() {
-	//console.log(marker.MarkersSample.prototype.showmMarker('mMarker'))
+	////(marker.MarkersSample.prototype.showmMarker('mMarker'))
 	return defaultConfig({
 		quoteFeed: quoteFeed,
 		forecastQuoteFeed: forecastQuoteFeed, // uncomment to enable forecast quote feed simulator
