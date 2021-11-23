@@ -14,13 +14,14 @@
         label-position="left">
         <el-col :span="8">
             <el-form-item label="Name:" prop="name">
-              <el-input v-model="backtestSetupFormdata.name"  size="mini"></el-input>
+              <el-input v-model="backtestSetupFormdata.name" disabled  size="mini"></el-input>
             </el-form-item>
             <el-form-item label="Description:" prop="description">
               <el-input
                 v-model="backtestSetupFormdata.description"
                 size="mini"
                 type="textarea"
+                disabled
                 :autosize="{ minRows: 6, maxRows: 6 }"
                 resize="none"
               ></el-input>
@@ -28,6 +29,7 @@
             <el-form-item label="Symbol name:" prop="symbolName" size="mini">
               <div class="enterSymbolBox">
               <el-select
+                  disabled
                   v-model="backtestSetupFormdata.symbolName"
                   filterable
                   remote
@@ -52,17 +54,17 @@
         </el-col>
         <el-col :span="8">
             <el-form-item label="Starting Capital:" prop="startingCapital">
-              <el-input v-model="backtestSetupFormdata.startingCapital"  size="mini"></el-input>
+              <el-input v-model="backtestSetupFormdata.startingCapital" disabled  size="mini"></el-input>
             </el-form-item>
             <el-form-item label="Commission:" prop="commission">
-              <el-input v-model="backtestSetupFormdata.commission"  size="mini"></el-input>
+              <el-input v-model="backtestSetupFormdata.commission" disabled size="mini"></el-input>
             </el-form-item>
             <el-form-item label="Slippage:" prop="slippage">
-              <el-input v-model="backtestSetupFormdata.slippage"  size="mini"></el-input>
+              <el-input v-model="backtestSetupFormdata.slippage"  disabled size="mini"></el-input>
             </el-form-item>
             <el-form-item label="Money Management:" prop="moneyManagement">
               <div class="selectBox">
-                <el-select size="mini" v-model="backtestSetupFormdata.value" placeholder="Pleace select">
+                <el-select size="mini" v-model="backtestSetupFormdata.value" disabled placeholder="Pleace select">
                       <el-option
                         v-for="item in backtestSetupFormdata.options"
                         :key="item.value"
@@ -394,6 +396,19 @@ export default {
       // this.backtestSetupFormdata.historyValue = data.historyValue
       // this.backtestSetupFormdata.value = data.value
       }
+    },
+    clearResultData() {
+      this.backtestSetupFormdata.name = ''
+      this.backtestSetupFormdata.description = ''
+      this.backtestSetupFormdata.startingCapital = ''
+      this.backtestSetupFormdata.commission = ''
+      this.backtestSetupFormdata.slippage = ''
+      this.backtestSetupFormdata.backtestHistory = ''
+      this.backtestSetupFormdata.value = 0
+      this.backtestSetupFormdata.historyValue = 0
+      this.backtestSetupFormdata.starDate = ''
+      this.backtestSetupFormdata.endDate = ''
+      this.backtestSetupFormdata.symbolName = ''
     }
   }
 }

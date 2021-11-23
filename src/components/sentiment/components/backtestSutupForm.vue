@@ -148,8 +148,10 @@
             </el-form-item>
             <div class="setupBtns">
               <el-row>
+                <el-col :offset="6">
                 <el-button type="primary" @click="saveBacktest">Save Backtest</el-button>
-                <el-button type="primary">Run Backtest</el-button>
+                <!-- <el-button type="primary">Run Backtest</el-button> -->
+                </el-col>
               </el-row>
             </div>
         </el-col>
@@ -224,6 +226,7 @@ export default {
         starDate: '',
         endDate: '',
         symbolName: '',
+        initSymbolName: ''
       },
       strategyDialogVisible: false,
       strategyFormdata: {},
@@ -336,7 +339,8 @@ export default {
     },
     getSymbolName(val) {
       this.$store.commit('getSymbolName',val)
-      
+      this.$emit('resetResultData')
+      this.$emit('resetPerformanceData')
       // for (var studyInstanceName in CIQ.stxx.layout.studies) {
       //     CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
       // }

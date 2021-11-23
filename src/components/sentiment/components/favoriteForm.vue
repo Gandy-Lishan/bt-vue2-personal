@@ -39,7 +39,7 @@
           <el-table-column label="Status" align="center">
             <template slot-scope="scope">
               <span v-if="scope.row.status == 0">Waiting</span>
-              <span v-else-if="scope.row.status == 1">Running</span>
+              <span v-else-if="scope.row.status == 1"><img src="../../../assets/loading.gif" width="25px"></img></span>
               <span v-else-if="scope.row.status == 2">Completed</span>
             </template>
           </el-table-column>
@@ -184,13 +184,13 @@ export default {
       )
     },
     runbacktest(row) {
-      //this.loading = true
       let vm = this
       vm.rowid = row.id
       // if(vm.chatSocket){
       //   vm.chatSocket.close()
       // }
       if(row.status !== 2){
+        row.status = 1
         vm.chatSocket = new WebSocket(
           'ws://' + '10.131.3.74:8000' + '/ws/chat/' + row.id + '/'
         )
@@ -202,15 +202,14 @@ export default {
             clearInterval(vm.timer)
             vm.getBacktestList()
             vm.$message.success('Run backtest is successful, click the view results button to see the results.')
-            vm.loading = false
           }
           }
         ) 
-        },1000)
+        },3000)
         }
         vm.chatSocket.onerror = function(e){
           vm.$message.error('Error requesting, please try again')
-            vm.loading = false
+          row.status = 0
         }
       }else {
         vm.loading = false

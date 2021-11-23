@@ -55,7 +55,7 @@
         <div class="footerTagbar">
           <el-tabs v-model="activeTag" type="card" @tab-click="handleTagClick">
             <el-tab-pane label="Backtest Setup" name="first">
-              <backtest-setup-form ref="child" @goToBacktestFavoriteForm="goToBacktestFavoriteForm" @updateFavoriteList="updateFavoriteList"></backtest-setup-form>
+              <backtest-setup-form ref="child" @resetResultData="resetResultData" @resetPerformanceData="resetPerformanceData" @goToBacktestFavoriteForm="goToBacktestFavoriteForm" @updateFavoriteList="updateFavoriteList"></backtest-setup-form>
             </el-tab-pane>
             <el-tab-pane label="Backtest Results" name="second">
               <backtest-result-form ref="resultChild" @goToBacktestFavoriteForm="goToBacktestFavoriteForm"></backtest-result-form>
@@ -146,10 +146,10 @@ export default {
       const tags = document.querySelector('.main')
       if (tab.name === 'second' || tab.name === 'third') {
         tags.style.display = 'none'
-        this.returnTop()
+        // this.returnTop()
       } else {
         tags.style.display = 'block'
-        this.returnTop()
+        // this.returnTop()
       }
     },
     returnTop() {
@@ -198,6 +198,12 @@ export default {
     },
     getPerformanceData() {
       this.$refs.performanceChild.getResultData()
+    },
+    resetResultData() {
+      this.$refs.resultChild.clearResultData()
+    },
+    resetPerformanceData() {
+      this.$refs.performanceChild.clearPerformanceData()
     }
   }
   }
