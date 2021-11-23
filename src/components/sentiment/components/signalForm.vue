@@ -754,6 +754,7 @@ export default {
         vm.conditionList = res.data.results
         this.initialEntryFromData.value = res.data.results.value
       })
+      console.log('data',data)
       vm.entryData = data
       vm.entryType = data.type
       this.initialEntryFromData.name = data.name
@@ -799,14 +800,14 @@ export default {
       }else{
         return
       }
-
+  
+      this.exitData = data
       vm.exitType = data.type
       this.initialExitFromData.name = data.name
       this.initialExitFromData.description = data.description
       this.indicatorsExitValue = data.used_indicators
       this.initialExitFromData.value = res.data.results.value
       this.conditionList = res.data.results
-      this.exitData = data
     },
     loadAll() {
       return [
