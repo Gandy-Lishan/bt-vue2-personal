@@ -184,7 +184,7 @@ export default {
       )
     },
     runbacktest(row) {
-      this.loading = true
+      //this.loading = true
       let vm = this
       vm.rowid = row.id
       // if(vm.chatSocket){

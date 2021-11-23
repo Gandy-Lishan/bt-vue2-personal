@@ -237,13 +237,27 @@ export default {
     'strategy-dialog': strategyDialog
   },
   created() {
-    // preload data
     this.getData()
-
     this.backtestSetupFormdata.endDate = timestampToTime(new Date())
     const str = this.backtestSetupFormdata.endDate.split('-')
-      str[0] = (Number(str[0]) - Number(this.backtestSetupFormdata.historyValue)) + ''
-      this.backtestSetupFormdata.starDate = str.join('-')
+    str[0] = (Number(str[0]) - Number(this.backtestSetupFormdata.historyValue)) + ''
+    this.backtestSetupFormdata.starDate = str.join('-')
+
+      var that = this
+      var utils = function () { 
+        let vm = this; 
+        vm.setSymbol = function (symbol) { 
+          that.backtestSetupFormdata.symbolName = symbol
+        }
+        vm.b = function () { alert('b'); } 
+      } 
+      return window.utils = new utils(); 
+
+    // preload data
+    
+
+    
+
   },
   computed: {
     listSet(){
