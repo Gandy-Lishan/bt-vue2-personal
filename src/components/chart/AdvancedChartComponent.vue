@@ -49,7 +49,7 @@
 					</cq-info-toggle-dropdown>
 
 					<cq-info-toggle-dropdown>
-						<cq-toggle class="ciq-HU" cq-member="headsUp">
+						<cq-toggle class="ciq-HU" id="ciq-HU" cq-member="headsUp">
 							<span></span>
 							<cq-tooltip>Info</cq-tooltip>
 						</cq-toggle>
@@ -57,13 +57,14 @@
 						<cq-menu class="ciq-menu toggle-options collapse tooltip-ui">
 							<span></span>
 							<cq-menu-dropdown>
+								<cq-item cq-member="headsUp-floating"
+									>Show Tooltip<span class="ciq-radio"><span></span></span
+								></cq-item>
 								<cq-item cq-member="headsUp-dynamic"
 									>Show Dynamic Callout<span class="ciq-radio"
 										><span></span></span
 								></cq-item>
-								<cq-item cq-member="headsUp-floating"
-									>Show Tooltip<span class="ciq-radio"><span></span></span
-								></cq-item>
+								
 							</cq-menu-dropdown>
 						</cq-menu>
 					</cq-info-toggle-dropdown>
@@ -75,10 +76,6 @@
 
 			<div class="ciq-menu-section">
 				<div class="ciq-dropdowns">
-					<!-- customized features -->
-					<!-- <cq-menu class="ciq-indicators-search">
-						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
-					</cq-menu> -->
 					<cq-menu class="ciq-menu ciq-period">
 						<span
 							><cq-clickable stxbind="Layout.periodicity"
@@ -89,13 +86,17 @@
 							<cq-menu-container cq-name="menuPeriodicity"></cq-menu-container>
 						</cq-menu-dropdown>
 					</cq-menu>
+					<!-- customized features -->
+					<cq-menu class="ciq-indicators-search">
+						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
+					</cq-menu>
 
-					<cq-menu class="ciq-menu ciq-views collapse">
+					<!-- <cq-menu class="ciq-menu ciq-views collapse">
 						<span>Views</span>
 						<cq-menu-dropdown>
 							<cq-views></cq-views>
 						</cq-menu-dropdown>
-					</cq-menu>
+					</cq-menu> -->
 
 					<cq-menu class="ciq-menu ciq-display collapse">
 						<span>Display</span>
@@ -104,11 +105,11 @@
 								<cq-heading>Chart Style</cq-heading>
 								<cq-menu-container cq-name="menuChartStyle"></cq-menu-container>
 							</cq-menu-dropdown-section>
-							<cq-menu-dropdown-section class="chart-aggregations">
+							<!-- <cq-menu-dropdown-section class="chart-aggregations">
 								<cq-menu-container
 									cq-name="menuChartAggregates"
 								></cq-menu-container>
-							</cq-menu-dropdown-section>
+							</cq-menu-dropdown-section> -->
 						</cq-menu-dropdown>
 					</cq-menu>
 
@@ -340,9 +341,9 @@
 						<!-- <cq-chartcontrol-group class="full-screen-show" cq-marker=""></cq-chartcontrol-group> -->
 						<cq-sentiment-lookup></cq-sentiment-lookup>
 
-						<cq-comparison-lookup></cq-comparison-lookup>
+						<!-- <cq-comparison-lookup></cq-comparison-lookup> -->
 
-						<cq-comparison-favorite></cq-comparison-favorite>
+						<!-- <cq-comparison-favorite></cq-comparison-favorite> -->
 
 						<cq-chart-legend></cq-chart-legend>
 
@@ -371,6 +372,7 @@
 				stxtap="Layout.toggleHelp()"
 				title="Toggle Interactive Help"
 			></div>
+			<span class="watermark">sentimentrader.com</span>
 			<cq-show-range></cq-show-range>
 		</div>
 
@@ -435,14 +437,9 @@ export default class AdvancedChartComponent extends Vue {
 				////(study)
 				CIQ.studys.push(study)
 			}
-			
+			console.log(CIQ.stxx.panels['chart'].yAxis)
 
 			CIQ.stxx.setTimeZone("Asia/Hong_Kong", "America/New_York");
-
-			CIQ.ChartEngine.prototype.prepend("draw", function () {
-			// create persistence by forcing it  be called in every animation frame.
-				CIQ.stxx.watermark("chart", { h: "bottom", v: "left", text: "sentimentrader.com" });
-			});
 
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
 
@@ -467,6 +464,7 @@ export default class AdvancedChartComponent extends Vue {
 		const chart = new CIQ.UI.Chart()
 		const uiContext = chart.createChartAndUI({ container, config })
 
+		
 		return uiContext
 	}
 }

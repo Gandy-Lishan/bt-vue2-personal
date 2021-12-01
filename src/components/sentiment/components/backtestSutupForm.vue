@@ -345,15 +345,9 @@ export default {
       //     CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
       // }
 
-      var indicatorList =[]
-      if(window.sessionStorage.getItem('indicatorsList')){
-          indicatorList = window.sessionStorage.getItem('indicatorsList').split(',')
-          indicatorList = eval('(' + indicatorList + ')')
-      }else{
-          indicatorList = [val]
-      }
-
-      CIQ.addSymbol(indicatorList,val)
+      CIQ.addSymbol(val)
+      // remove markers when symbol changes
+      CIQ.hideMarker()
     },
     getEditBacktestData() {
       const data = this.$store.state.editStrategyData

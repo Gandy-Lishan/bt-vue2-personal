@@ -229,10 +229,8 @@ export default {
     handleClick(tab, event) {
       },
       loadMarker(tradeData){
-        //(tradeData.markerSet)
         CIQ.loadChart(tradeData.markerSet)
         CIQ.addMarker()
-        //CIQ.hideMarker()
       },
 
       getResultData() {

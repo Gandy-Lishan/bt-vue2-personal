@@ -666,6 +666,7 @@ export default {
     ...mapState(['strategyEntryData','strategyExitData'])
   },
   created() {
+    console.log('signalFrom created')
     this.getIndicatorsList()
   },
   mounted() {
@@ -731,18 +732,7 @@ export default {
       if(result.url !== undefined){
       this.$store.commit('getEntryIndicators',result.url)
 
-      let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
-          if(indicatorsList[0]==indicatorsList[1]){
-            indicatorsList.pop()
-          }
-          // filter empty item
-          for(var i=0;i<indicatorsList.length;i++){
-            if(indicatorsList[i]==''){
-              indicatorsList.splice(i,1)
-              i--;
-            }
-          }
-          CIQ.addIndicators(indicatorsList).then( 
+          CIQ.addIndicators().then( 
               //document.body.removeChild(this.mask)
           ).then(
             this.$message({
@@ -785,23 +775,13 @@ export default {
 
       this.$store.commit('getExitIndicators',result.url)
 
-      let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
-          if(indicatorsList[0]==indicatorsList[1]){
-            indicatorsList.pop()
-          }
-          for(var i=0;i<indicatorsList.length;i++){
-            if(indicatorsList[i]==''){
-              indicatorsList.splice(i,1)
-              i--;
-            }
-          }
           // CIQ.addIndicators(indicatorsList).then(
           //   this.$message({
           //       message: 'Load sucess',
           //       type: 'success'
           //     })
           // )
-          CIQ.addIndicators(indicatorsList)
+          CIQ.addIndicators()
           this.$message({
                 message: 'Load sucess',
                 type: 'success'

@@ -17,9 +17,13 @@ export default new Vuex.Store({
     strategyEntryData: {},
     strategyExitData: {},
     indicators: {
-      entry: '',
-      exit: '',
+      formIndicators: {
+        entry: '',
+        exit: '',
+      },
+      extraIndicators: [],
     },
+    
     customExitType: [{label: "longexit", value: "longexit"},
     {label: "short", value: "short"}],
     exitOption:  [{label: "longexit", value: "longexit"},
@@ -46,10 +50,13 @@ export default new Vuex.Store({
       state.editStrategyData = row
     },
     getEntryIndicators(state, val){
-      state.indicators.entry = val
+      state.indicators.formIndicators.entry = val
     },
     getExitIndicators(state, val){
-      state.indicators.exit = val
+      state.indicators.formIndicators.exit = val
+    },
+    getExtraIndicators(state, val){
+      state.indicators.extraIndicators = val
     },
     getEntryData(state, val){
       state.strategyEntryData = val

@@ -5,9 +5,9 @@
  
         <img src="../../assets/logo.png" alt="logo">
         <p>SentimentTrader Backtest Engine</p>
-        <p>This is on Sentimentrader.com. It is an indicator page that is shown AAPL and AAPL Optix (lets assume that at least).  A user now wants to
+        <!-- <p>This is on Sentimentrader.com. It is an indicator page that is shown AAPL and AAPL Optix (lets assume that at least).  A user now wants to
         backtest this setup. There could be multiple indicators on this chart - some might be our sentiment indicators, some could be technical
-        indicators</p>
+        indicators</p> -->
         <div class="chart_box" id="chart_box">
           <chart width=100% height=100%></chart>
 
@@ -228,8 +228,9 @@ export default {
     color: #6c6c6c;
   }
   p:first-of-type {
-    font-size: 2rem;
-    margin: 0px;
+    text-align: center;
+    font-size: 3rem;
+    margin: 50px 0 50px 0;
     font-weight: lighter;
     color: #333333;
   }

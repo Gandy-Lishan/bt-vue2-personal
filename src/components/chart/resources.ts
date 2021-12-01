@@ -140,37 +140,5 @@ function getCustomConfig({
 	return config
 }
 
-// function showmMarker(){
-// 	let dataSet = [
-// 		{
-// 			DT:"2016-06-05",
-// 			Type: "BUY",
-// 			Price: 22.25,
-// 			Indicator: "AAPL"
-// 		},
-// 		{
-// 			DT:"2016-08-08",
-// 			Type: "SELL",
-// 			Price: 22.70,
-// 			Indicator: "AAPL"
-// 		} ,
-// 		{
-// 			DT:"2016-09-05",
-// 			Type: "BUY",
-// 			Price: 21.90,
-// 			Indicator: "BCO"
-// 		},
-// 		{
-// 			DT:"2016-10-02",
-// 			Type: "SELL",
-// 			Price: 25.59,
-// 			Indicator: "BCO"
-// 		} 
-// 	]
-// 	CIQ.loadChart(dataSet)
-// 	CIQ.addMarker()
-// 	//CIQ.UI.Markers.prototype.showMarkers('mMarker')
-// }
-
 export { getConfig, getCustomConfig, marker}
 
