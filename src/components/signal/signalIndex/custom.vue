@@ -102,6 +102,7 @@ export default {
   },
   created() {
     this.getCustomList("custom_signal")
+  
   },
   methods: {
     async getCustomList(user) {

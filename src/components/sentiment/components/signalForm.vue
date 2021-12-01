@@ -1,13 +1,13 @@
 <template>
 <el-row>
-  <el-col :span="18">
+  <el-col :span="20">
       <div class="main">
       <div class="signalLeft">
         <div><p>Name/Description:</p></div>
         <div class="signalLeftForm">
           <!-- signal-dialog -->
-          <signal-dialog :type="entryType"  :dialogTableVisible="entryDialogTableVisible" @openDialog="openEntryDialog" @setEntryData='setEntryData' ></signal-dialog>
-          <signal-dialog :type="exitType"  :dialogTableVisible="exitDialogTableVisible" @openDialog="openExitDialog" @setEntryData='setExitData'></signal-dialog>
+          <signal-dialog :type="entryType"  :dialogTableVisible="entryDialogTableVisible" :entryTypeRadio="entryTypeRadio" @openDialog="openEntryDialog" @setEntryData='setEntryData' ></signal-dialog>
+          <signal-dialog :type="exitType"  :dialogTableVisible="exitDialogTableVisible" :entryTypeRadio="entryTypeRadio" @openDialog="openExitDialog" @setEntryData='setExitData'></signal-dialog>
           <el-form 
             v-if="signalFormTagName === 'first'"
             ref="entryForm"
@@ -15,12 +15,12 @@
             :rules="signalFormRules"
             label-position="left"
           >
-          <div class="analysis-basis">
-            <el-form-item label="Analysis Basis:" size="mini">
+          <!-- <div class="analysis-basis">
+            <el-form-item label="Analysis Basis:" size="mini" prop="entryTypeRadio">
               <el-radio v-model="entryTypeRadio" label="1">sentiment</el-radio>
               <el-radio v-model="entryTypeRadio" label="2">technical</el-radio>
             </el-form-item>
-          </div>
+          </div> -->
           
             <!-- <el-form-item label="Entry" size="mini">
                 <el-button class="entryBtn" v-on:click="openEntryDialog" type="success" plain>{{entryFormdata.entry[0].label}}</el-button>
@@ -49,9 +49,9 @@
                 </el-select>
               </div>
             </el-form-item> -->
-            <el-form-item label="Type" size="mini">
+            <el-form-item label="Direction:" size="mini" prop="entryType">
               <div class="selectBox">
-                <el-select v-model="entryType" @change="selectEntryAction(entryType)" placeholder="Please select">
+                <el-select v-model="entryType"  @change="selectEntryAction(entryType)" placeholder="Please select">
                   <el-option
                     v-for="item in entryFormdata.actionEntry"
                     :key="item.value"
@@ -61,7 +61,7 @@
                 </el-select> 
               </div>
             </el-form-item>
-            <el-form-item label="Frequency:" size="mini">
+            <el-form-item label="Frequency:" size="mini" prop="frequency">
               <!-- <el-input
                 v-model="entryData.frequency"
                 size="mini"
@@ -91,12 +91,12 @@
             :rules="signalFormRules"
             label-position="left"
           >
-          <div class="analysis-basis">
+          <!-- <div class="analysis-basis">
             <el-form-item label="Analysis Basis:" size="mini">
               <el-radio v-model="exitTypeRadio" label="1">sentiment</el-radio>
               <el-radio v-model="exitTypeRadio" label="2">technical</el-radio>
             </el-form-item>
-          </div>
+          </div> -->
             <!-- <el-form-item label="Exit" size="mini">
                 <el-button class="entryBtn" v-on:click="openExitDialog" type="success" plain>{{entryFormdata.entry[0].label}}</el-button>
             </el-form-item> -->
@@ -113,7 +113,7 @@
               ></el-input>
             </el-form-item>
             
-            <el-form-item label="Type" size="mini">
+            <el-form-item label="Direction:" size="mini">
               <div class="selectBox">
                 <el-select v-model="exitType" @change="selectExitAction(exitType)" placeholder="Please select">
                   <el-option
@@ -159,20 +159,25 @@
         </div>
       </div>
       <div class="signalRight">
-        <el-form label-position="left" label-width="80px">
-            <el-form-item label="Used_Indicators:" size="mini">
+        <el-form label-position="left" ref="signalRight" label-width="80px">
+          <div class="radioBox">
+            <div @click="changeState1(),resetData()">
+          <el-radio v-model="entryTypeRadio" label="Sentiment_Indicators:" style="{position: relative;left:0px;top:19px}"></el-radio></div>
+            <el-form-item label="" size="mini"
+                  prop="indicatorsEntryValue">
               <div v-if="signalFormTagName === 'first'" class="searchBox">
                 <el-input
                   v-model="indicatorsEntryValue"
                   size="mini" 
                   @input="searchAction($event)"
+                  :disabled="isCheckedIndicators"
                   @focus="showSearchList"
                   placeholder="Please enter the indicator"
                 >
                 <i slot="prefix" class="el-input__icon el-icon-search"                                                                                                                                                                                                                                                                                                                     ></i>
                 </el-input>
                 <div class="search-content">
-                <ul v-show="isSelected" style="height:250px;overflow-y:scroll">
+                <ul v-show="isSelected" style="height:250px;overflow-y:scroll" v-if="entryTypeRadio ==='Sentiment_Indicators:'">
                   <li  class="search-item border-bottom" v-for="(item, index) in indicatorsSearchResults"
                   :key="index"
                   @click="selectEntrySymbol(item.chart_name,item.url)"
@@ -184,16 +189,18 @@
               </div>
               <div v-else class="searchBox">
                 <el-input
+                  prop="indicatorsExitValue"
                   v-model="indicatorsExitValue"
                   size="mini"
+                  :disabled="isCheckedIndicators"
                   @input="searchAction($event)"
-                  placeholder="Please enter the indicator"
+                  placeholder="Please enter the sentiment indicator"
                   @focus="showSearchList"
                 >
                 <i slot="prefix" class="el-input__icon el-icon-search"                                                                                                                                                                                                                                                                                                                     ></i>
                 </el-input>
                 <div class="search-content">
-                <ul v-show="isSelected" style="height:250px;overflow-y:scroll">
+                <ul v-show="isSelected" style="height:250px;overflow-y:scroll" v-if="entryTypeRadio ==='Sentiment_Indicators:'">
                   <li  class="search-item border-bottom" v-for="(item, index) in indicatorsSearchResults"
                   :key="index"
                   @click="selectExitSymbol(item.chart_name,item.url)">
@@ -203,6 +210,22 @@
                 </div>
               </div>
             </el-form-item>
+            <div @click="changeState2(),resetData()">
+            <el-radio v-model="entryTypeRadio" label="Technical_Indicators:"></el-radio></div>
+            <el-form-item label="" size="mini" prop="techIndicator">
+              <!-- <el-input v-model="techIndicators"
+                  size="mini" :disabled="!isCheckedIndicators"></el-input> -->
+                  <el-autocomplete
+                    :disabled="!isCheckedIndicators"
+                    class="inline-input"
+                    v-model="techIndicators"
+                    :fetch-suggestions="querySearch"
+                    placeholder="Please enter the technical indicator"
+                    @select="handleTechSelect"
+                  ></el-autocomplete>
+            </el-form-item>
+            </el-form-item>
+        </div>
         </el-form>
         <el-form ref="rightForm" label-position="left" label-width="80px" :rules="conditionsFormRules">
           <div v-for="(item, index) in conditionList" :key='index'>
@@ -214,12 +237,14 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="Parameter:" size="mini">
-              <el-radio v-model="parameterRadio" label="1" v-if="conditionList[index].parameter == ''">{{conditionList[index].originParameter}}</el-radio>
+              <el-radio v-model="parameterRadio" label="1" v-if="conditionList[index].parameter == '' & entryTypeRadio === 'Sentiment_Indicators:'">sentiment value</el-radio>
+              <el-radio v-model="parameterRadio" label="1" v-else-if="conditionList[index].parameter == '' & entryTypeRadio === 'Technical_Indicators:'">technical value</el-radio>
               <el-radio v-model="parameterRadio" label="1" v-else>{{conditionList[index].parameter}}</el-radio>
-              <el-radio v-model="parameterRadio" label="2">sentiment SMA</el-radio>
+              <el-radio v-model="parameterRadio" label="2" v-if="entryTypeRadio === 'Sentiment_Indicators:'">sentiment moving average</el-radio>
             </el-form-item>
-            <el-form-item v-if="parameterRadio == '2'" label="MA:" size="mini">
-              <div class="selectBox">
+            <el-form-item v-if="parameterRadio == '2'" label="Moving average period
+:" size="mini">
+              <!-- <div class="selectBox">
                       <el-autocomplete
                       class="inline-input"
                       v-model="maValue"
@@ -228,7 +253,8 @@
                       @select="handleSelect"
                       @change="maValueChange"
                     ></el-autocomplete>
-              </div>
+              </div> -->
+              <el-input v-model="maValue"></el-input>
             </el-form-item>
             <el-form-item  label="Condition:" size="mini">
               <div class="selectBox">
@@ -400,10 +426,11 @@
                     ["Triple Tap Trend Reversal Divergence"].indexOf(conditionList[index].condition_description) === -1 &&
                     ["stay how many days in the market"].indexOf(conditionList[index].condition_description) === -1'
               label="Value:"
-              prop="value" 
+              prop="value"
               size="mini">
               <el-input
                 v-model="conditionList[index].value"
+                @input="validateValue(conditionList[index].value)" 
                 size="mini"
               ></el-input>
             </el-form-item>
@@ -531,7 +558,7 @@
       <el-button type="warning" v-on:click="openEntryDialog">Load Entry Signal</el-button>
     </div>
     <div class="entryBtns" v-else>
-      <el-button type="info">Clear Exit Signal</el-button>
+      <el-button type="info" @click="clearExitFormData">Clear Exit Signal</el-button>
       <el-button type="primary" @click="submitExitFormData()">Save Exit Signal</el-button>
       <el-button type="warning" v-on:click="openExitDialog">Load Exit Signal</el-button>
     </div>
@@ -550,7 +577,11 @@ export default {
     return {
       restaurants: [],
       entryData: {},
-      exitData: {},
+      exitData: {
+        name: '',
+        description: '',
+        frequency: ''
+      },
       // Form validation rules
       signalFormRules: {
         name: [
@@ -649,14 +680,16 @@ export default {
       indicatorsName: '',
       timeout:  null,
       parameterRadio: '1',
-      entryTypeRadio: '1',
-      exitTypeRadio: '1',
+      entryTypeRadio: 'Sentiment_Indicators:',
+      exitTypeRadio: 'Technical_Indicators:',
       indicatorsList: [],
       indicatorsSearchResults: [],
       indicatorsEntryValue: '',
       indicatorsExitValue: '',
       conditionData: {},
-      isSelected: true
+      isSelected: true,
+      techIndicators: '',
+      isCheckedIndicators: false
     }
   },
   components: {
@@ -705,24 +738,11 @@ export default {
     openExitDialog() {
       this.exitDialogTableVisible = !this.exitDialogTableVisible
       this.isSelected = false
-
       this.clearFormValidate()    
     },
     setEntryData(data) {
-      console.log(this.$store.state.indicatorsList);
-      // this.mask = document.createElement('div')
-      // this.mask.className="masks"
-      // this.mask.style.width = window.innerWidth + 'px'
-      // this.mask.style.height = window.innerHeight + 'px'
-      // this.mask.style.background = '#fff'
-      // this.mask.style.position = 'fixed'
-      // this.mask.style.opacity = '0.8'
-      // this.mask.style.top = '0'
-      // this.mask.style.left = '0'
-      // this.mask.style.zIndex = '10000'
-      // document.body.appendChild(this.mask)
+      if(this.entryTypeRadio === 'Sentiment_Indicators:'){
       let result
-      //console.log(data.used_indicators.toString())
       this.$store.state.indicatorsList.forEach((value,index)=>{ 
         if(value.chart_name.toString().indexOf(data.used_indicators.toString())!== -1){
           result = value
@@ -735,7 +755,6 @@ export default {
           if(indicatorsList[0]==indicatorsList[1]){
             indicatorsList.pop()
           }
-          // filter empty item
           for(var i=0;i<indicatorsList.length;i++){
             if(indicatorsList[i]==''){
               indicatorsList.splice(i,1)
@@ -743,38 +762,40 @@ export default {
             }
           }
           CIQ.addIndicators(indicatorsList).then( 
-              //document.body.removeChild(this.mask)
           ).then(
             this.$message({
                 message: 'Load sucess',
                 type: 'success'
               })
           )
-      }else{
-        return
+      }
       }
       let vm = this
       const res =  this.$http.get('/demo/condition/', {
         params: { id: data.id },
       }).then(res =>{
+        if(res.status == 200){
         vm.conditionList = res.data.results
-        this.initialEntryFromData.value = res.data.results.value
+        this.initialEntryFromData.value = res.data.results.value}
       })
       console.log('data',data)
       vm.entryData = data
       vm.entryType = data.type
       this.initialEntryFromData.name = data.name
       this.initialEntryFromData.description = data.description
-      this.indicatorsEntryValue = data.used_indicators
-      // window.sessionStorage.setItem('entryData', vm.entryData)
-      // this.$refs.entryDataFrom.openDialog(data);
+      if(vm.entryTypeRadio === 'Sentiment_Indicators:'){
+      this.indicatorsEntryValue = data.used_indicators}else{
+        vm.techIndicators = data.used_indicators
+      }
     },
     async setExitData(data) {
+      console.log('data',data);
       let vm = this
 
       const res = await this.$http.get('/demo/condition/', {
         params: { id: data.id },
       })
+      if(this.entryTypeRadio === 'Sentiment_Indicators:'){
       let result
       this.$store.state.indicatorsList.forEach((value,index)=>{
         if(value.chart_name.toString().indexOf(data.used_indicators.toString())!== -1){
@@ -808,43 +829,114 @@ export default {
           })
       }else{
         return
+        }
       }
   
       this.exitData = data
       vm.exitType = data.type
       this.initialExitFromData.name = data.name
       this.initialExitFromData.description = data.description
-      this.indicatorsExitValue = data.used_indicators
+      if(vm.entryTypeRadio === 'Sentiment_Indicators:'){
+      this.indicatorsExitValue = data.used_indicators}else{
+        vm.techIndicators = data.used_indicators
+      }
+      // this.indicatorsExitValue = data.used_indicators
       this.initialExitFromData.value = res.data.results.value
       this.conditionList = res.data.results
     },
     loadAll() {
       return [
-        {"value":'5'},
-        {"value":'10'},
-        {"value":'15'},
-        {"value":'30'},
-        {"value":'60'},
+        {"value":'Commodity Channel Index'},
+        {"value":'Relative Strength Index'},
+        {"value":'MACD'},
+        {"value":'Moving Average'}
       ]
     },
     clearEntryFormData() {
-      this.clearFormValidate()    
+      this.entryTypeRadio = 'Sentiment_Indicators:'
+      this.clearFormValidate()
+      this.entryData.name  = ''
+      this.entryData.description  = ''
+      this.entryType = ''
+      this.entryData.frequency = ''
+      this.indicatorsEntryValue = ''
+      const data = this.conditionList
+      // this.conditionList = []
+      data.forEach(item => {
+        item.parameter = ''
+        item.condition_description = ''
+        this.maValue = ''
+        item.condition = ''
+        item.value = ''
+        this.conditionsOption = ''
+        this.parameterRadio = '1'
+        this.techIndicators = ''
+      })
+      // if(this.$refs.entryForm.resetFields() == undefined){
+      //   return
+      //  }
+      // this.$refs.entryForm.resetFields()
+    },
+    clearExitFormData() {
+      this.entryTypeRadio = 'Sentiment_Indicators:'
+      this.clearFormValidate()
+      this.exitData.name  = ''
+      this.exitData.description  = ''
+      this.exitType = ''
+      this.exitData.frequency = ''
+      this.indicatorsExitValue = ''
+      const data = this.conditionList
+      this.techIndicators = ''
+      data.forEach(item => {
+        item.parameter = ''
+        item.condition_description = ''
+        this.maValue = ''
+        item.condition = ''
+        item.value = ''
+        this.conditionsOption = ''
+        this.parameterRadio = '1'
+      })
+      // if(this.$refs.exitForm.resetFields() == undefined){
+      //   return
+      // }
+      // this.$refs.exitForm.resetFields()
     },
     async submitEntryFormData() {
-      let vm =this
+      console.log('entryData',this.entryData);
+      console.log('condiction',this.conditionList);
+      let vm = this
       vm.submitEntrycondition.name = vm.entryData.name
       vm.submitEntrycondition.description = vm.entryData.description
-      const analysisBasisArr = ['sentiment','technical']
-      // const conditionOptionArr = ['>','<', 'CrossAbove','CrossBelow', 'sentiment crossAbove', 'sentiment crossBelow']
-      vm.submitEntrycondition.analysis_basis = analysisBasisArr[vm.entryTypeRadio - 1]
-      vm.submitEntrycondition.used_indicators = vm.indicatorsEntryValue
+      const arr = ['Sentiment_Indicators:','Technical_Indicators:']
+      const analysisBasisArr = ['sentiment', 'technical']
+      let index = arr.indexOf(vm.entryTypeRadio)
+      vm.submitEntrycondition.analysis_basis = analysisBasisArr[index]
+      if(vm.entryTypeRadio === 'Sentiment_Indicators:'){
+      vm.submitEntrycondition.used_indicators = vm.indicatorsEntryValue}else{
+        vm.submitEntrycondition.used_indicators = vm.techIndicators
+        vm.submitEntrycondition.analysis_basis = 'technical'
+      }
       // vm.submitEntrycondition.type = vm.entryData.entryType
       vm.submitEntrycondition.frequency = vm.entryData.frequency
       vm.conditionList.forEach(item => {
         vm.conditionData.condition_description=item.condition_description
         // this.conditionData.condition = conditionOptionArr.indexOf(item.condition)
         vm.conditionData.condition  = item.condition
+        if(item.macd_fast&&item.macd_slow&&item.macd_sig){
+          vm.conditionData.macd_fast  = item.macd_fast
+          vm.conditionData.macd_slow  = item.macd_slow
+          vm.conditionData.macd_sig  = item.macd_sig
+        }
+        if(item.str_value){
+          vm.conditionData.str_value  = item.str_value
+        }
+        if(item.period){
+          vm.conditionData.period  = item.period
+        }
+        if(item.value){
         vm.conditionData.value= item.value + ''
+        }
+        console.log('chuanshushujv',vm.conditionData);
         if(vm.parameterRadio == 1){
         if(item.parameter == ''){
           vm.conditionData.parameter= 'sentiment value'
@@ -852,7 +944,7 @@ export default {
           vm.conditionData.parameter = item.parameter
         }}
         if(vm.parameterRadio == 2){
-          vm.conditionData.parameter = 'sentiment SMA'
+          vm.conditionData.parameter = 'sentiment moving average'
           vm.conditionData.maValue = vm.maValue
           // this.conditionData.condition = conditionOptionArr.indexOf(this.conditionsOption)
         }
@@ -898,16 +990,37 @@ export default {
       const submitExitData = {}
       submitExitData.name = vm.exitData.name
       submitExitData.description = vm.exitData.description
-      submitExitData.analysis_basis = analysisBasisArr[vm.exitTypeRadio - 1]
+      // submitExitData.analysis_basis = analysisBasisArr[vm.exitTypeRadio - 1]
       submitExitData.type = vm.exitType
       submitExitData.frequency = vm.exitData.frequency
       submitExitData.used_indicators = vm.indicatorsExitValue
+      if(vm.entryTypeRadio === 'Sentiment_Indicators:'){
+        submitExitData.analysis_basis = 'sentiment'
+        submitExitData.used_indicators = vm.indicatorsExitValue}else{
+        submitExitData.used_indicators = vm.techIndicators
+        submitExitData.analysis_basis = 'technical'
+      }
       const conditionData = {}
-      vm.conditionList.forEach(item => {
+      console.log('condictionList',vm.conditionList);
+      const submitConditionData = vm.conditionList
+      submitConditionData.forEach(item => {
         conditionData.condition_description=item.condition_description
         // this.conditionData.condition = conditionOptionArr.indexOf(item.condition)
         conditionData.condition  = item.condition
+        if(item.macd_fast&&item.macd_slow&&item.macd_sig){
+         conditionData.macd_fast  = item.macd_fast
+          conditionData.macd_slow  = item.macd_slow
+          conditionData.macd_sig  = item.macd_sig
+        }
+        if(item.str_value){
+          conditionData.str_value  = item.str_value
+        }
+        if(item.period){
+          conditionData.period  = item.period
+        }
+        if(item.value){
         conditionData.value= item.value + ''
+        }
         if(vm.parameterRadio == 1){
         if(item.parameter == ''){
           conditionData.parameter= 'sentiment value'
@@ -915,11 +1028,12 @@ export default {
           conditionData.parameter = item.parameter
         }}
         if(vm.parameterRadio == 2){
-          conditionData.parameter = 'sentiment SMA'
+          conditionData.parameter = 'sentiment moving average'
           conditionData.maValue = vm.maValue
           // this.conditionData.condition = conditionOptionArr.indexOf(this.conditionsOption)
         }
       })
+       console.log('chuanshushujv',conditionData);
       // submitExitData.name = 
       const conditions = []
       conditions.push(conditionData)
@@ -1025,8 +1139,53 @@ export default {
           return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
         };
       },
-      handleSelect(item) {
-        this.conditionList.maValue = item.value
+      handleTechSelect(item) {
+        const vm = this
+        vm.techIndicators = item.value
+        const used_indicators = JSON.stringify([item.value])
+      vm.$http.get('/demo/signal/',{
+          params: {
+            page: 1,
+            type: vm.entryType,
+            user: 'system',
+            analysis_basis: 'technical',
+            used_indicators: used_indicators
+          }
+        },{
+          auth:{
+                  username: 'sentimentrader_backtest_api',
+                  password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+                }
+        }).then(res => {
+          console.log('res',res);
+          let conductionId
+           res.data.results.forEach(item => {
+            conductionId = item.id
+          })
+          console.log('ifd',conductionId);
+        this.$http.get('/demo/condition/', {
+        params: { id: conductionId },
+      }).then(val => {
+        const initData = val.data.results
+        initData.forEach(item => {
+          item.value = ''
+          item.condition = ''
+          if(item.macd_fast&&item.macd_slow&&item.macd_sig){
+            item.macd_fast = ''
+            item.macd_slow = ''
+            item.macd_sig =''
+          }
+          if(item.str_value){
+            item.str_value = ''
+          }
+          if(item.period){
+            item.period = ''
+          }
+        })
+        vm.conditionList = initData
+        console.log('val',val);
+      })
+        })
       },
       searchAction: throttle(function(e) {
         const inputValue = e
@@ -1126,6 +1285,44 @@ export default {
     },
     getMaconditionOption(val) {
       this.conditionData.condition = val
+    },
+    resetData() {
+      this.techIndicators = ''
+      // this.clearEntryFormData()
+      this.entryTypeRadio = 'Sentiment_Indicators:'
+      this.clearFormValidate()
+      this.indicatorsEntryValue = ''
+      this.indicatorsExitValue = ''
+      const data = this.conditionList
+      // this.conditionList = []
+      data.forEach(item => {
+        item.parameter = ''
+        item.condition_description = ''
+        this.maValue = ''
+        item.condition = ''
+        item.value = ''
+        this.conditionsOption = ''
+        this.parameterRadio = '1'
+        this.techIndicators = ''
+      })
+    },
+    changeState1() {
+      this.isCheckedIndicators = false
+    },
+    changeState2() {
+      this.isCheckedIndicators = true
+    },
+    validateValue(e){
+      e = e.replace(/(^\s*) | (\s*$)/g,"")
+      const reg = /[^\d.]/g
+      e = e.replace(reg, "")
+      e= e.replace(/^\./g, "")
+      e = e
+      .replace(".","$#$")
+      .replace(/\./g,"")
+      .replace("$#$", ".");
+      e = e.replace(/^(\-)*(\d+)\.(\d\d).*$/,"$1$2.$3")
+
     }
   },
 }

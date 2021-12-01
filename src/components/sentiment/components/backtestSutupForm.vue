@@ -25,7 +25,7 @@
                 resize="none"
               ></el-input>
             </el-form-item>
-            <el-form-item label="Symbol name:" prop="symbolName" size="mini">
+            <el-form-item label="Symbol:" prop="symbolName" size="mini">
               <div class="enterSymbolBox">
               <el-select
                   v-model="backtestSetupFormdata.symbolName"
@@ -54,17 +54,18 @@
         </el-col>
         <el-col :span="8">
             <el-form-item label="Starting Capital:" prop="startingCapital">
-              <el-input v-model="backtestSetupFormdata.startingCapital"  size="mini"></el-input>
+              <el-input v-model="backtestSetupFormdata.startingCapital"  size="mini"
+              @focus="setStartingCapital()" @blur="getStartingCapital()" ></el-input>
             </el-form-item>
             <el-form-item label="Commission:" prop="commission">
-              <el-input v-model="backtestSetupFormdata.commission"  size="mini"></el-input>
+              <el-input v-model="backtestSetupFormdata.commission"  size="mini" @focus="setCommission()" @blur="getCommission()" ></el-input>
             </el-form-item>
             <el-form-item label="Slippage:" prop="slippage">
-              <el-input v-model="backtestSetupFormdata.slippage"  size="mini"></el-input>
+              <el-input v-model="backtestSetupFormdata.slippage"  size="mini" @focus="setSlippage()" @blur="getSlippage()"></el-input>
             </el-form-item>
             <el-form-item label="Money Management:" prop="moneyManagement">
               <div class="selectBox">
-                <el-select size="mini" v-model="backtestSetupFormdata.value" 
+                <el-select size="mini" v-model="backtestSetupFormdata.value"
                         @change="getSizeAllocationValue(backtestSetupFormdata.value)" placeholder="Pleace select">
                       <el-option
                         v-for="item in backtestSetupFormdata.options"
@@ -125,8 +126,7 @@
               <el-input
               v-else
               disabled
-              v-model="backtestSetupFormdata.starDate"
-              placeholder="Please select a start date">
+              v-model="backtestSetupFormdata.starDate">
               </el-input>
             </el-form-item>
           </div>
@@ -170,25 +170,27 @@ export default {
       backtestSetupFormdata: {
         name: '',
         description: '',
-        startingCapital: '',
-        commission: '',
-        slippage: '',
+        startingCapital: '100000',
+        commission: '0.001',
+        slippage: '0.001',
         backtestHistory: '',
         value: 0,
         historyValue: 1,
         options: [{
           value: 0,
           label: 'All In / All Out (CASH)'
-        }, {
-          value: 1,
-          label: 'All In / When Out, (buy TLT)'
-        }, {
-          value: 2,
-          label: 'All In / When Out, (buy GLD)'
-        }, {
-          value: 3,
-          label: 'All In / When Out, (buy AGG)'
-        }],
+        }, 
+        // {
+        //   value: 1,
+        //   label: 'All In / When Out, (buy TLT)'
+        // }, {
+        //   value: 2,
+        //   label: 'All In / When Out, (buy GLD)'
+        // }, {
+        //   value: 3,
+        //   label: 'All In / When Out, (buy AGG)'
+        // }
+        ],
         historyOptions: [{
           value: 1,
           label: '1 Year'
@@ -262,6 +264,20 @@ export default {
     
 
   },
+watch: {
+backtestSetupFormdata: {
+		handler(newVal, oldVal) {
+      console.log('new',newVal.symbolName);
+      console.log('state',this.$store.state.symbolName);
+      if(newVal.symbolName !== this.$store.state.symbolName){
+      this.$emit('resetResultData')
+      this.$emit('resetPerformanceData')
+      }
+		},
+		immediate: true,
+    deep: true
+	}
+},
   computed: {
     listSet(){
       return this.symbolList.map(item => {
@@ -358,6 +374,7 @@ export default {
     getEditBacktestData() {
       const data = this.$store.state.editStrategyData
       const vm = this
+      vm.backtestSetupFormdata.uuid = data.id
       vm.backtestSetupFormdata.name = data.name
       vm.backtestSetupFormdata.description = data.description
       vm.backtestSetupFormdata.symbolName = data.stock
@@ -371,6 +388,8 @@ export default {
       const vm = this
       const strategyFormData = {}
       // strategyFormdata.sizeAllocation = vm.backtestSetupFormdata.value
+      if(vm.backtestSetupFormdata.uuid){
+      strategyFormData.uuid = vm.backtestSetupFormdata.uuid}
       strategyFormData.stock = vm.backtestSetupFormdata.symbolName
       strategyFormData.name = vm.backtestSetupFormdata.name
       strategyFormData.description = vm.backtestSetupFormdata.description
@@ -380,6 +399,7 @@ export default {
       strategyFormData.slippage = vm.backtestSetupFormdata.slippage
       strategyFormData.riskfreerate = vm.backtestSetupFormdata.slippage
       strategyFormData.cashalloc = 1
+      console.log('tijiao',strategyFormData);
       if(this.backtestSetupFormdata.historyValue === 22){
         strategyFormData.fromdate = timestampToTime(vm.backtestSetupFormdata.starDate)
         strategyFormData.todate = timestampToTime(vm.backtestSetupFormdata.endDate)
@@ -420,6 +440,24 @@ export default {
       // const str = starDate.split('-')
       // str[0] = (Number(str[0]) - Number(this.backtestSetupFormdata.historyValue)) + ''
       // this.backtestSetupFormdata.starDate = str.join('-')
+    },
+    setStartingCapital() {
+      if (this.backtestSetupFormdata.startingCapital == '100000'){this.backtestSetupFormdata.startingCapital =''}
+    },
+    getStartingCapital() {
+      if (this.backtestSetupFormdata.startingCapital ==''){this.backtestSetupFormdata.startingCapital='100000'}
+    },
+    setCommission() {
+      if (this.backtestSetupFormdata.commission == '0.001'){this.backtestSetupFormdata.commission =''}
+    },
+    getCommission() {
+      if (this.backtestSetupFormdata.commission ==''){this.backtestSetupFormdata.commission='0.001'}
+    },
+    setSlippage() {
+      if (this.backtestSetupFormdata.slippage == '0.001'){this.backtestSetupFormdata.slippage =''}
+    },
+    getSlippage() {
+      if (this.backtestSetupFormdata.slippage ==''){this.backtestSetupFormdata.slippage='0.001'}
     }
   }
 }

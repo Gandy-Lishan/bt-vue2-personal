@@ -124,6 +124,16 @@
                   <el-button
                     type="warning"
                     icon="el-icon-view"
+                    v-if="scope.row.status == 2"
+                    circle
+                    size="mini"
+                    @click="viewBacktestResults(scope.row)"
+                  ></el-button>
+                  <el-button
+                    type="warning"
+                    icon="el-icon-view"
+                    v-else
+                    disabled
                     circle
                     size="mini"
                     @click="viewBacktestResults(scope.row)"
@@ -263,7 +273,7 @@ export default {
       currentBacktestData = row
       // strategyFormdata.sizeAllocation = currentBacktestData.value
       strategyFormData.stock = currentBacktestData.stock
-      strategyFormData.name = currentBacktestData.name
+      strategyFormData.name = currentBacktestData.name + '(copy)'
       strategyFormData.description = currentBacktestData.description
       strategyFormData.note = 'my note'
       strategyFormData.cash = currentBacktestData.cash + ''
