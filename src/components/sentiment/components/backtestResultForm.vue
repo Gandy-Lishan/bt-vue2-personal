@@ -202,16 +202,18 @@ export default {
         options: [{
           value: 0,
           label: 'All In / All Out (CASH)'
-        }, {
-          value: 1,
-          label: 'All In / When Out, (buy TLT)'
-        }, {
-          value: 2,
-          label: 'All In / When Out, (buy GLD)'
-        }, {
-          value: 3,
-          label: 'All In / When Out, (buy AGG)'
-        }],
+        }, 
+        // {
+        //   value: 1,
+        //   label: 'All In / When Out, (buy TLT)'
+        // }, {
+        //   value: 2,
+        //   label: 'All In / When Out, (buy GLD)'
+        // }, {
+        //   value: 3,
+        //   label: 'All In / When Out, (buy AGG)'
+        // }
+        ],
         historyOptions: [{
           value: 1,
           label: '1 Year'

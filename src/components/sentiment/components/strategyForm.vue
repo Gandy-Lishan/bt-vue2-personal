@@ -36,23 +36,8 @@
             <el-tooltip class="item" effect="light" content="run" placement="bottom-start">
               <el-button type="success" icon="el-icon-caret-right" circle size="mini" @click="runbacktest(scope.row)"></el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="light" content="edit" placement="bottom-start">
-              <el-button type="primary" icon="el-icon-edit" circle size="mini" @click="editBacktest(scope.row)"></el-button>
-            </el-tooltip>
             <el-tooltip class="item" effect="light" content="copy" placement="bottom-start">
               <el-button type="info" icon="el-icon-copy-document" circle size="mini" @click="copyBacktest(scope.row)"></el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="light" content="delete" placement="bottom-start">
-            <el-popconfirm
-              confirm-button-text='yes'
-              cancel-button-text='no'
-              icon="el-icon-info"
-              icon-color="red"
-              title="Are you sure you want to delete it?"
-              @confirm="deleteBacktest(scope.row.id)"
-            >
-              <el-button type="danger" icon="el-icon-delete" circle size="mini" slot="reference"></el-button>
-            </el-popconfirm>
             </el-tooltip>
             <el-tooltip class="item" effect="light" content="view results" placement="bottom-start">
               <el-button type="warning" icon="el-icon-view" circle size="mini" @click="viewBacktestResults(scope.row)"></el-button>
@@ -84,6 +69,30 @@ export default {
         }
       ]
     }
+  },
+  created() {
+    this.getStrategyList()
+  },
+  methods: {
+      async getStrategyList() {
+      this.loading = true
+      const { data: res } = await this.$http.get('/demo/strategies/')
+      console.log(res);
+      // this.strategyList = res.results
+      // if(res.results.length <= 0){
+      //   this.loading = false
+      // }
+      // this.total = res.count
+      // this.loading = false
+      // for (let i = 0; i < this.strategyList.length; i++) {
+      //   this.strategyList[i].signal_entry = JSON.parse(
+      //     this.strategyList[i].signal_entry
+      //   )
+      //   this.strategyList[i].signal_exit = JSON.parse(
+      //     this.strategyList[i].signal_exit
+      //   )
+      // }
+    },
   }
 }
 </script>
