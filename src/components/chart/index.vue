@@ -55,13 +55,13 @@ export default class AdvancedWrapper extends Vue {
 		// 	channelSubscribe(
 		// 		channels.breakpoint,
 		// 		(value: any) => {
-		// 			console.log('channels.breakpoint', value)
+		// 			//('channels.breakpoint', value)
 		// 		},
 		// 		chartEngine
 		// 	)
 		// Layout listener example, see parameters at https://documentation.chartiq.com/global.html#layoutEventListener
 		// uiContext.stx.addEventListener('layout', ({ layout }: any) => {
-		// 	console.log('layout changed', layout)
+		// 	//('layout changed', layout)
 		// })
 		// Simulate L2 data using https://documentation.chartiq.com/CIQ.ChartEngine.html#updateCurrentMarketData
 		// Requires import 'chartiq/examples/feeds/L2_simulator'

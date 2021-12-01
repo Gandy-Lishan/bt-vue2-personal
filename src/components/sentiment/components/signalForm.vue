@@ -778,7 +778,7 @@ export default {
         vm.conditionList = res.data.results
         this.initialEntryFromData.value = res.data.results.value}
       })
-      console.log('data',data)
+      //('data',data)
       vm.entryData = data
       vm.entryType = data.type
       this.initialEntryFromData.name = data.name
@@ -1070,8 +1070,8 @@ export default {
       this.clearFormValidate()    
     },
     saveStrategy() {
-      // console.log('strategyentry',this.strategyEntryData);
-      // console.log('strategyexit',this.strategyExitData);
+      // //('strategyentry',this.strategyEntryData);
+      // //('strategyexit',this.strategyExitData);
       const entryData = this.$store.state.strategyEntryData
       const exitData = this.$store.state.strategyExitData
       const submitStrategyData = {}
@@ -1258,7 +1258,7 @@ export default {
       this.conditionData.condition = val
     },
     selectEntryAction(value) {
-      console.log(value)
+      //(value)
       this.submitEntrycondition.type = value
       // const data = {
       //   long: [

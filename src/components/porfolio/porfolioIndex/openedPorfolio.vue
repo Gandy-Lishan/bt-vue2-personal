@@ -133,7 +133,7 @@ export default {
         username: 'sentimentrader_backtest_api',
         password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
       }}).then(res => {
-        // console.log(res.data);
+        // //(res.data);
           // this.img_data = "data:image/png;base64," + res.data
           let blob = new Blob([res.data],{type:"image/jpg"});
           const imageUrl = URL.createObjectURL(blob);

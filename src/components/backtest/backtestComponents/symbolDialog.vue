@@ -43,7 +43,7 @@ export default {
       this.list = this.symbolList.map(item => {
         return { value: `name:${item.stock}`, label: `stock:${item.stock}` };
       });
-      //console.log(this.list)
+      ////(this.list)
     },
   computed: {
     listSet(){
@@ -83,7 +83,7 @@ export default {
         } else {
           this.options = [];
         }
-        //console.log(this.options)
+        ////(this.options)
     },
     closeDialog(){
       this.symbolFormdata.symbolName = this.value

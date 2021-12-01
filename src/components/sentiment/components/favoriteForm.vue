@@ -207,7 +207,7 @@ export default {
         vm.chatSocket.onopen = function(e){
         vm.timer = setInterval(() => {
         vm.$http.get('demo/backtest/' + row.id + '/').then(res => {
-          console.log(res.data.status)
+          //(res.data.status)
           if(res.data.status === 2){
             clearInterval(vm.timer)
             vm.getBacktestList()
@@ -259,7 +259,7 @@ export default {
           })
         }
       }).catch( error => {
-        console.log(error);
+        //(error);
           this.$message.error({
           message: 'The deletion failed',
           duration: 1000,
@@ -304,7 +304,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error)
+          //(error)
         })
     },
     viewBacktestResults(row) {

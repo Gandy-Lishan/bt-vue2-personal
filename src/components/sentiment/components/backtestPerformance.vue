@@ -229,9 +229,10 @@ export default {
     handleClick(tab, event) {
       },
       loadMarker(tradeData){
-        console.log(tradeData.markerSet)
+        //(tradeData.markerSet)
         CIQ.loadChart(tradeData.markerSet)
         CIQ.addMarker()
+        //CIQ.hideMarker()
       },
 
       getResultData() {
@@ -253,7 +254,7 @@ export default {
             if(typeof(res.data) == String) {
               JSON.parse(res.data)
             }
-            console.log('dddddd',res.data)
+            //('dddddd',res.data)
          initalData = res.data
 
          data.uuid = initalData["UUID"]
@@ -298,14 +299,14 @@ export default {
         data.returnsheatmapImageUploadedURL = initalData["Returns Heatmap Image Uploaded"]
         data.returnsHeatmapFileURL = initalData["Returns Heatmap File URL"]
         vm.tableData = []
-        console.log('data',data)
+        //('data',data)
         vm.tableData.push(data)
         vm.returnImgUrl = data.returnsFileURL
         vm.drawDownImgUrl = data.ddFileURL
         vm.monthReturnImgUrl = data.returnsHeatmapFileURL
         vm.annualReturnImgUrl = data.annualReturnsFileURL
         vm.tradesData = initalData["Trades"]
-        console.log(initalData)
+        //(initalData)
         this.loadMarker(initalData)
         // vm.$store.commit('getTradesData',initalData[])
         vm.loading = false}
