@@ -224,7 +224,6 @@
                     @select="handleTechSelect"
                   ></el-autocomplete>
             </el-form-item>
-            </el-form-item>
         </div>
         </el-form>
         <el-form ref="rightForm" label-position="left" label-width="80px" :rules="conditionsFormRules">
