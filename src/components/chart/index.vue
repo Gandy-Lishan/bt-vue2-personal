@@ -11,9 +11,10 @@
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import AdvancedChartComponent from './AdvancedChartComponent.vue'
 import { getCustomConfig } from './resources' // ChartIQ library resources
+import store from '../../store/store'
 
 // @ts-ignore
-import { CIQ } from 'chartiq/js/componentUI' // Required for types in chartInitialized
+import { CIQ } from 'chartiq/js/components' // Required for types in chartInitialized
 
 @Component({
 	components: {
@@ -47,7 +48,7 @@ export default class AdvancedWrapper extends Vue {
 		uiContext: CIQ.UI.Context
 		config: any
 	}) {
-
+		CIQ.store = store;
 		// Methods for capturing state changes in chart engine and UI
 		// 	Channel subscribe example to listen to breakpoint changes
 		// 	const { channels } = config

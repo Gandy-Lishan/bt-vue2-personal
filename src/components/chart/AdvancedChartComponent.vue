@@ -437,7 +437,7 @@ export default class AdvancedChartComponent extends Vue {
 				////(study)
 				CIQ.studys.push(study)
 			}
-			console.log(CIQ.stxx.panels['chart'].yAxis)
+			//console.log(CIQ.stxx.panels['chart'].yAxis)
 
 			CIQ.stxx.setTimeZone("Asia/Hong_Kong", "America/New_York");
 
