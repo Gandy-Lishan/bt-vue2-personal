@@ -208,10 +208,16 @@ export default {
         vm.timer = setInterval(() => {
         vm.$http.get('demo/backtest/' + row.id + '/').then(res => {
           //(res.data.status)
+          console.log('current status',res.data.status);
           if(res.data.status === 2){
             clearInterval(vm.timer)
             vm.getBacktestList()
             vm.$message.success('Run backtest is successful, click the view results button to see the results.')
+          }
+          if(res.data.status === 0){
+            vm.clearInterval(vm.timer)
+            vm.getBacktestList()
+            vm.$message.error('The run failed, please try again.')
           }
           }
         ) 
@@ -237,6 +243,7 @@ export default {
     editBacktest(row) {
       // this.editData = row
       // this.backtestItemId = row.id
+      console.log(row);
       this.$store.commit('getEditBacktestData', row)
       this.$emit('getBacktestDataTry')
       this.$emit('goTobacktestSetupForm')
@@ -279,7 +286,7 @@ export default {
       strategyFormData.cash = currentBacktestData.cash + ''
       strategyFormData.commission = currentBacktestData.commission + ''
       strategyFormData.slippage = currentBacktestData.slippage + ''
-      strategyFormData.cashalloc = 0
+      strategyFormData.cashalloc = 1.0
       strategyFormData.riskfreerate = currentBacktestData.slippage + ''
       strategyFormData.fromdate = currentBacktestData.fromdate
       strategyFormData.todate = currentBacktestData.todate

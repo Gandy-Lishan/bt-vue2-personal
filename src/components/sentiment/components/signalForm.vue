@@ -140,12 +140,12 @@
             </el-form-item> -->
             <el-form-item label="Frequency:" size="mini">
               <!-- <el-input
-                v-model="exitData.frequency"
+                v-model="$store.state.exitFrequency"
                 size="mini"
                 disabled
               ></el-input> -->
               <div class="selectBox">
-                <el-select v-model="exitData.frequency" @change="selectFrequencyAction(entryData.frequency)" placeholder="Please select">
+                <el-select v-model="$store.state.exitFrequency" @change="selectFrequencyAction(exitData.frequency)" placeholder="Please select" disabled>
                   <el-option
                     v-for="item in entryFormdata.frequencyOption"
                     :key="item.value"
@@ -255,7 +255,7 @@
               </div> -->
               <el-input v-model="maValue"></el-input>
             </el-form-item>
-            <el-form-item  label="Condition:" size="mini">
+            <el-form-item  label="Condition:" size="mini" v-if="hideCondition">
               <div class="selectBox">
                 <el-select @change="getconditionOption(conditionList[index].condition)" v-model="conditionList[index].condition" v-if="parameterRadio == '1'" filterable placeholder="Please select condition">
                       <el-option
@@ -345,7 +345,7 @@
                 size="mini"
               ></el-input>
             </el-form-item>
-            <el-form-item 
+            <!-- <el-form-item 
               v-if='["price lower Low"].indexOf(conditionList[index].condition_description) === 0 ||
                     ["Accumulation & Distribution Higher"].indexOf(conditionList[index].condition_description) === 0 ||
                     ["Price Higher High"].indexOf(conditionList[index].condition_description) === 0 ||
@@ -374,7 +374,7 @@
                     ["Bollinger Upper Band CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
                     ["Bollinger Lower Band CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
                     ["Triple Tap Trend Reversal Divergence"].indexOf(conditionList[index].condition_description) === 0'  
-              label="Str_value:" 
+              label="Str_value:"
               size="mini"
             >
               <el-input
@@ -384,7 +384,7 @@
                 :autosize="{ minRows: 2, maxRows: 8 }"
                 resize="none"
               ></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item 
               v-if='["Parabolic SAR CrossAbove"].indexOf(conditionList[index].condition_description) === -1 &&
                     ["Parabolic SAR CrossBelow"].indexOf(conditionList[index].condition_description) === -1 &&
@@ -393,7 +393,7 @@
                     ["Price Higher High"].indexOf(conditionList[index].condition_description) === -1 &&
                     ["Accumulation & Distribution Lower"].indexOf(conditionList[index].condition_description) === -1 &&
                     ["ATR trailing stop (Close) line CrossAbove"].indexOf(conditionList[index].condition_description) === -1 &&
-                    ["ATR trailing stop (High）line CrossAbove"].indexOf(conditionList[index].condition_description) === -1 &&
+                    ["ATR trailing stop (High) line CrossAbove"].indexOf(conditionList[index].condition_description) === -1 &&
                     ["ATR trailing stop (Close) line CrossBelow"].indexOf(conditionList[index].condition_description) === -1 &&
                     ["MACD CrossAbove"].indexOf(conditionList[index].condition_description) === -1 &&
                     ["MACD CrossBelow"].indexOf(conditionList[index].condition_description) === -1 &&
@@ -454,7 +454,7 @@
           </el-form-item>
           <el-form-item 
             v-if='["ATR trailing stop (Close) line CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
-                  ["ATR trailing stop (High）line CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                  ["ATR trailing stop (High) line CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
                   ["ATR trailing stop (Close) line CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
                   ["Chandelier Exits CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
                   ["Chandelier Exits CrossBelow"].indexOf(conditionList[index].condition_description) === 0'  
@@ -468,7 +468,7 @@
           </el-form-item>
           <el-form-item 
             v-if='["ATR trailing stop (Close) line CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
-                  ["ATR trailing stop (High）line CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
+                  ["ATR trailing stop (High) line CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
                   ["ATR trailing stop (Close) line CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
                   ["Chandelier Exits CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
                   ["Chandelier Exits CrossBelow"].indexOf(conditionList[index].condition_description) === 0'  
@@ -688,7 +688,10 @@ export default {
       conditionData: {},
       isSelected: true,
       techIndicators: '',
-      isCheckedIndicators: false
+      isCheckedIndicators: false,
+      hideCondition: true,
+      initTechCondiction: 0,
+      maCondition: ''
     }
   },
   components: {
@@ -702,7 +705,7 @@ export default {
     this.getIndicatorsList()
   },
   mounted() {
-      this.restaurants = this.loadAll();
+      this.restaurants = this.loadShortLong();
     },
   methods: {
     clearFormValidate(){
@@ -833,12 +836,30 @@ export default {
       this.initialExitFromData.value = res.data.results.value
       this.conditionList = res.data.results
     },
-    loadAll() {
+    loadShortLong() {
       return [
         {"value":'Commodity Channel Index'},
         {"value":'Relative Strength Index'},
         {"value":'MACD'},
-        {"value":'Moving Average'}
+        {"value":'Moving Average'},
+      ]
+    },
+    loadShorExit() {
+      return [
+        {"value":'profit/loss exit signal'},
+        {"value":'time-in-market exit signal'},
+        {"value":'ATR Trailing Stops (Close)'},
+        {"value":'ATR Trailing Stops (Low)'},
+        {"value":'Parabolic SAR'},
+      ]
+    },
+    loadLongExit() {
+      return [
+        {"value":'profit/loss exit signal'},
+        {"value":'time-in-market exit signal'},
+        {"value":'ATR Trailing Stops (Close)'},
+        {"value":'ATR Trailing Stops (High)'},
+        {"value":'Parabolic SAR'},
       ]
     },
     clearEntryFormData() {
@@ -861,6 +882,7 @@ export default {
         this.parameterRadio = '1'
         this.techIndicators = ''
       })
+      this.$store.commit('clearEntrySignal')
       // if(this.$refs.entryForm.resetFields() == undefined){
       //   return
       //  }
@@ -885,6 +907,7 @@ export default {
         this.conditionsOption = ''
         this.parameterRadio = '1'
       })
+       this.$store.commit('clearExitSignal')
       // if(this.$refs.exitForm.resetFields() == undefined){
       //   return
       // }
@@ -896,6 +919,7 @@ export default {
       let vm = this
       vm.submitEntrycondition.name = vm.entryData.name
       vm.submitEntrycondition.description = vm.entryData.description
+      vm.submitEntrycondition.type = vm.entryType
       const arr = ['Sentiment_Indicators:','Technical_Indicators:']
       const analysisBasisArr = ['sentiment', 'technical']
       let index = arr.indexOf(vm.entryTypeRadio)
@@ -910,7 +934,10 @@ export default {
       vm.conditionList.forEach(item => {
         vm.conditionData.condition_description=item.condition_description
         // this.conditionData.condition = conditionOptionArr.indexOf(item.condition)
-        vm.conditionData.condition  = item.condition
+        if(vm.parameterRadio === '2'){
+          vm.conditionData.condition = vm.maCondition
+        }else{
+        vm.conditionData.condition  = item.condition}
         if(item.macd_fast&&item.macd_slow&&item.macd_sig){
           vm.conditionData.macd_fast  = item.macd_fast
           vm.conditionData.macd_slow  = item.macd_slow
@@ -919,8 +946,14 @@ export default {
         if(item.str_value){
           vm.conditionData.str_value  = item.str_value
         }
+        if(item.max_step){
+          vm.conditionData.max_step  = item.max_step
+        }
         if(item.period){
           vm.conditionData.period  = item.period
+        }
+        if(item.acceleration_factor){
+          vm.conditionData.acceleration_factor  = item.acceleration_factor
         }
         if(item.value){
         vm.conditionData.value= item.value + ''
@@ -995,7 +1028,10 @@ export default {
       submitConditionData.forEach(item => {
         conditionData.condition_description=item.condition_description
         // this.conditionData.condition = conditionOptionArr.indexOf(item.condition)
-        conditionData.condition  = item.condition
+        if(vm.hideCondition === false){
+          conditionData.condition = vm.initTechCondiction
+        }else{
+        conditionData.condition  = item.condition}
         if(item.macd_fast&&item.macd_slow&&item.macd_sig){
          conditionData.macd_fast  = item.macd_fast
           conditionData.macd_slow  = item.macd_slow
@@ -1006,6 +1042,27 @@ export default {
         }
         if(item.period){
           conditionData.period  = item.period
+        }
+        if(item.max_step){
+          conditionData.max_step  = item.max_step
+        }
+        if(item.atr_period){
+          conditionData.atr_period  = item.atr_period
+        }
+        if(item.atr_multiplier){
+          conditionData.atr_multiplier  = item.atr_multiplier
+        }
+        if(item.stop_loss){
+          conditionData.stop_loss  = item.stop_loss
+        }
+        if(item.take_profit){
+          conditionData.take_profit  = item.take_profit
+        }
+        if(item.acceleration_factor){
+          conditionData.acceleration_factor  = item.acceleration_factor
+        }
+        if(item.acceleration_factor){
+          conditionData.acceleration_factor  = item.acceleration_factor
         }
         if(item.value){
         conditionData.value= item.value + ''
@@ -1146,33 +1203,19 @@ export default {
                   password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
                 }
         }).then(res => {
-          console.log('res',res);
           let conductionId
            res.data.results.forEach(item => {
             conductionId = item.id
           })
-          console.log('ifd',conductionId);
         this.$http.get('/demo/condition/', {
         params: { id: conductionId },
       }).then(val => {
-        const initData = val.data.results
-        initData.forEach(item => {
-          item.value = ''
-          item.condition = ''
-          if(item.macd_fast&&item.macd_slow&&item.macd_sig){
-            item.macd_fast = ''
-            item.macd_slow = ''
-            item.macd_sig =''
+        const initData = val.data.results                           
+          if(vm.exitType == 'longexit' | vm.exitType == 'shortexit'){
+            vm.hideCondition = false
           }
-          if(item.str_value){
-            item.str_value = ''
-          }
-          if(item.period){
-            item.period = ''
-          }
-        })
+          vm.initTechCondiction = initData[0].condition
         vm.conditionList = initData
-        console.log('val',val);
       })
         })
       },
@@ -1240,8 +1283,10 @@ export default {
       this.$store.commit('getCustomExitType',val)
     },
     selectFrequencyAction(val) {
-      // this.entryData.frequency = val
+      this.entryData.frequency = val
       this.submitEntrycondition.frequency = val
+      this.exitData.frequency = val
+      this.$store.commit('getFrequency',val)
     },
     getconditionOption(val){
       this.conditionData.condition = val
@@ -1271,9 +1316,19 @@ export default {
     selectExitAction(value) {
       this.submitEntrycondition.exitAction = this.exitType
       this.valueExit = value
+      if(value === 'short' | value === 'long'){
+        this.restaurants = this.loadShortLong()
+      }
+      if(value === 'longexit'){
+        this.restaurants = this.loadLongExit()
+      }
+      if(value === 'shortexit'){
+        this.restaurants = this.loadShorExit()
+      }
     },
     getMaconditionOption(val) {
       this.conditionData.condition = val
+      this.maCondition = val
     },
     resetData() {
       this.techIndicators = ''

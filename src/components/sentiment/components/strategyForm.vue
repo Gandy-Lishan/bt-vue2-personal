@@ -28,6 +28,23 @@
           >
           </el-table-column>
           <el-table-column
+          label="Backtest Period"
+          align="center"
+          prop="backtestPeriod"
+          width="219px"
+          >
+            <template slot-scope="scope">
+              <div class="dataBox">
+                <el-button size="mini" type="info" plain>{{
+                  scope.row.fromdate
+                }}</el-button>
+                <el-button size="mini" type="info" plain>{{
+                  scope.row.todate
+                }}</el-button>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
           align="center"
           width="300px"
           >
@@ -59,13 +76,17 @@ export default {
           name: 'Short Term Combined Model',
           symbol: 'SPY',
           entrySignal: '<= -10',
-          exitSignal: '>= 13.5'
+          exitSignal: '>= 13.5',
+          fromdate: '2000-1-2',
+          todate: '2021-12-3'
         },
         {
           name: 'Macro Index Model',
           symbol: 'SPY',
           entrySignal: '>= 0.7',
-          exitSignal: '< 0.7'
+          exitSignal: '< 0.7',
+          fromdate: '2002-1-2',
+          todate: '2021-12-3'
         }
       ]
     }

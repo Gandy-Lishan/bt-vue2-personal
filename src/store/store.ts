@@ -22,6 +22,7 @@ export default new Vuex.Store({
         exit: '',
       },
       extraIndicators: [],
+      exitFrequency: ''
     },
     
     customExitType: [{label: "longexit", value: "longexit"},
@@ -109,6 +110,15 @@ export default new Vuex.Store({
     },
     getTradesData(state, data) {
       state.trades = data
+    },
+    getFrequency(state,val){
+      state.exitFrequency = val
+    },
+    clearEntrySignal(state, val){
+      state.indicators.formIndicators.entry = ''
+    },
+    clearExitSignal(state, val){
+      state.indicators.formIndicators.exit = ''
     }
   },
 })
