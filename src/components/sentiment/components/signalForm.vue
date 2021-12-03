@@ -253,7 +253,7 @@
                       @change="maValueChange"
                     ></el-autocomplete>
               </div> -->
-              <el-input v-model="maValue"></el-input>
+              <el-input v-model="maValue" @blur="renderMA(maValue)"></el-input>
             </el-form-item>
             <el-form-item  label="Condition:" size="mini">
               <div class="selectBox">
@@ -705,6 +705,15 @@ export default {
       this.restaurants = this.loadAll();
     },
   methods: {
+    renderMA(ma){
+      let result
+      this.$store.state.indicatorsList.forEach((value,index)=>{ 
+        if(value.chart_name.toString().indexOf(this.indicatorsEntryValue.toString())!== -1){
+          result = value
+        }
+      })
+      CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{Period: ma,display:"ST MA",Field: result.url});
+    },
     clearFormValidate(){
       this.$nextTick(()=>{
         try{
@@ -750,22 +759,11 @@ export default {
       })
       if(result.url !== undefined){
       this.$store.commit('getEntryIndicators',result.url)
-
-      let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
-          if(indicatorsList[0]==indicatorsList[1]){
-            indicatorsList.pop()
-          }
-          for(var i=0;i<indicatorsList.length;i++){
-            if(indicatorsList[i]==''){
-              indicatorsList.splice(i,1)
-              i--;
-            }
-          }
-          CIQ.addIndicators(indicatorsList).then(
+          CIQ.addIndicators().then(
             this.$message({
-                message: 'Load sucess',
-                type: 'success'
-              })
+                  message: 'Load sucess',
+                  type: 'success'
+            })
           )
       }
       }
@@ -804,18 +802,12 @@ export default {
       if(result.url !== undefined){
 
       this.$store.commit('getExitIndicators',result.url)
-
-          // CIQ.addIndicators(indicatorsList).then(
-          //   this.$message({
-          //       message: 'Load sucess',
-          //       type: 'success'
-          //     })
-          // )
-          CIQ.addIndicators()
-          this.$message({
-                message: 'Load sucess',
-                type: 'success'
-          })
+          CIQ.addIndicators().then(
+            this.$message({
+                  message: 'Load sucess',
+                  type: 'success'
+            })
+          )
       }else{
         return
         }
@@ -961,8 +953,13 @@ export default {
               message: 'Saved successfully',
               duration: 1000
             })
-            // this.signalFormTagName = 'second'
-            // this.$emit('goToExitSignalForm')
+            CIQ.addIndicators(vm.maValue).then(
+            this.$message({
+                  message: 'Load sucess',
+                  type: 'success'
+            })
+          )
+
             }
         }else{
           this.$message.error({
@@ -1188,21 +1185,11 @@ export default {
             this.$store.commit('getEntryIndicators',url)
             this.isSelected = false
 
-          let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
-          if(indicatorsList[0]==indicatorsList[1]){
-            indicatorsList.pop()
-          }
-          for(var i=0;i<indicatorsList.length;i++){
-            if(indicatorsList[i]==''){
-              indicatorsList.splice(i,1)
-              i--;
-            }
-          }
-          CIQ.addIndicators(indicatorsList).then(
+          CIQ.addIndicators().then(
             this.$message({
-                message: 'Load sucess',
-                type: 'success'
-              })
+                  message: 'Load sucess',
+                  type: 'success'
+            })
           )
          },
       selectExitSymbol(name,url) {
@@ -1210,22 +1197,12 @@ export default {
             this.$store.commit('getExitIndicators',url)
             this.isSelected = false
 
-          let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
-          if(indicatorsList[0]==indicatorsList[1]){
-            indicatorsList.pop()
-          }
-          for(var i=0;i<indicatorsList.length;i++){
-            if(indicatorsList[i]==''){
-              indicatorsList.splice(i,1)
-              i--;
-            }
-          }
-          CIQ.addIndicators(indicatorsList).then(
+          CIQ.addIndicators().then(
             this.$message({
-                message: 'Load sucess',
-                type: 'success'
-              })
-          )            
+                  message: 'Load sucess',
+                  type: 'success'
+            })
+          )    
          },
       showSearchList() {
         this.isSelected = true

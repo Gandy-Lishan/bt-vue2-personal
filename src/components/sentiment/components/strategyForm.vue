@@ -77,7 +77,6 @@ export default {
       async getStrategyList() {
       this.loading = true
       const { data: res } = await this.$http.get('/demo/strategies/')
-      console.log(res);
       // this.strategyList = res.results
       // if(res.results.length <= 0){
       //   this.loading = false

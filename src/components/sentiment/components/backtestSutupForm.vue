@@ -267,8 +267,8 @@ export default {
 watch: {
 backtestSetupFormdata: {
 		handler(newVal, oldVal) {
-      console.log('new',newVal.symbolName);
-      console.log('state',this.$store.state.symbolName);
+      // console.log('new',newVal.symbolName);
+      // console.log('state',this.$store.state.symbolName);
       if(newVal.symbolName !== this.$store.state.symbolName){
       this.$emit('resetResultData')
       this.$emit('resetPerformanceData')
