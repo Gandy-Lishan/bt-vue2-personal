@@ -82,12 +82,12 @@
           
           <el-form-item label="Benchmark:" prop="benchmark" size="mini">
               <div class="enterSymbolBox">
-              <!-- <el-select
-                  v-model="backtestSetupFormdata.symbolName"
+              <el-select
+                  v-model="backtestSetupFormdata.benchmark"
                   filterable
                   remote
                   reserve-keyword
-                  @change="getSymbolName(backtestSetupFormdata.symbolName)"
+                  @change="getBenchName(backtestSetupFormdata.benchmark)"
                   placeholder="enter keywords"
                   :remote-method="remoteMethod"
                   :loading="loading">
@@ -97,8 +97,8 @@
                     :label="item.label"
                     :value="item.value">
                   </el-option>
-              </el-select> -->
-              <el-input v-model="backtestSetupFormdata.symbolName" disabled></el-input>
+              </el-select>
+              <!-- <el-input v-model="backtestSetupFormdata.symbolName" disabled></el-input> -->
               </div>
             </el-form-item>
           <el-form-item label="Backtest History:" prop="backtestHistory">
@@ -175,6 +175,7 @@ export default {
         slippage: '0.001',
         backtestHistory: '',
         value: 0,
+        benchmark: '',
         historyValue: 1,
         options: [{
           value: 0,
@@ -355,6 +356,7 @@ backtestSetupFormdata: {
     },
     getSymbolName(val) {
       this.$store.commit('getSymbolName',val)
+      this.backtestSetupFormdata.benchmark = val
       this.$emit('resetResultData')
       this.$emit('resetPerformanceData')
       // for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -365,12 +367,17 @@ backtestSetupFormdata: {
       // remove markers when symbol changes
       CIQ.hideMarker()
     },
+    getBenchName(val) {
+      this.backtestSetupFormdata.benchmark = val
+    },
     getEditBacktestData() {
       const data = this.$store.state.editStrategyData
+      this.$emit('setEditSignalData',data)
       const vm = this
       vm.backtestSetupFormdata.uuid = data.id
       vm.backtestSetupFormdata.name = data.name
       vm.backtestSetupFormdata.description = data.description
+      vm.backtestSetupFormdata.benchmark = data.stock
       vm.backtestSetupFormdata.symbolName = data.stock
       vm.backtestSetupFormdata.startingCapital = data.cash
       vm.backtestSetupFormdata.commission = data.commission
@@ -392,7 +399,7 @@ backtestSetupFormdata: {
       strategyFormData.commission = vm.backtestSetupFormdata.commission
       strategyFormData.slippage = vm.backtestSetupFormdata.slippage
       strategyFormData.riskfreerate = vm.backtestSetupFormdata.slippage
-      strategyFormData.cashalloc = 1
+      strategyFormData.cashalloc = 1.0
       console.log('tijiao',strategyFormData);
       if(this.backtestSetupFormdata.historyValue === 22){
         strategyFormData.fromdate = timestampToTime(vm.backtestSetupFormdata.starDate)

@@ -166,7 +166,14 @@ export default {
       }
       if(this.entryTypeRadio === 'Technical_Indicators:'){
         analysisBasis = 'technical'
-        used_indicators = JSON.stringify(['Commodity Channel Index','Relative Strength Index','MACD','Moving Average'])
+        if(this.type === 'longexit'){
+          used_indicators = JSON.stringify(['Commodity Channel Index','Relative Strength Index','MACD','Moving Average',
+        'profit/loss exit signal','time-in-market exit signal','ATR Trailing Stops (Close)','Parabolic SAR',
+        'ATR Trailing Stops (High)'])}else{
+          used_indicators = JSON.stringify(['Commodity Channel Index','Relative Strength Index','MACD','Moving Average',
+        'profit/loss exit signal','time-in-market exit signal','ATR Trailing Stops (Close)','Parabolic SAR',
+        'ATR Trailing Stops (Low)'])
+        }
       }
       this.signalList = []
       this.loading = true
@@ -200,7 +207,7 @@ export default {
           }
         })
         this.signalList = newArr
-        this.total = newArr.length
+        this.total = signalRes.count
       }
       if(this.signalList.length !== 0){
         this.loading = false
@@ -220,7 +227,14 @@ export default {
       }
       if(this.entryTypeRadio === 'Technical_Indicators:'){
         analysisBasis = 'technical'
-        used_indicators = ['Commodity Channel Index','Relative Strength Index','MACD','Moving Average']
+        if(this.type === 'longexit'){
+          used_indicators = JSON.stringify(['Commodity Channel Index','Relative Strength Index','MACD','Moving Average',
+        'profit/loss exit signal','time-in-market exit signal','ATR Trailing Stops (Close)','Parabolic SAR',
+        'ATR Trailing Stops (High)'])}else{
+          used_indicators = JSON.stringify(['Commodity Channel Index','Relative Strength Index','MACD','Moving Average',
+        'profit/loss exit signal','time-in-market exit signal','ATR Trailing Stops (Close)','Parabolic SAR',
+        'ATR Trailing Stops (Low)'])
+        }
       }
       this.loading = true
       this.customInfo.type = this.type
