@@ -2,9 +2,8 @@
   <div class="home_container" id="content">
     <div class="home_box">
       <header class="header">
- 
-        <img src="../../assets/logo.png" alt="logo">
-        <p>SentimentTrader Backtest Engine</p>
+        <el-row><el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="2"><img src="../../assets/logo.png" alt="logo"></el-col></el-row>
+        <el-row type="flex" justify="center"><el-col><p>SentimentTrader Backtest Engine</p></el-col></el-row>
         <!-- <p>This is on Sentimentrader.com. It is an indicator page that is shown AAPL and AAPL Optix (lets assume that at least).  A user now wants to
         backtest this setup. There could be multiple indicators on this chart - some might be our sentiment indicators, some could be technical
         indicators</p> -->
@@ -215,6 +214,22 @@ export default {
 
 </script>
 <style lang="less" scoped>
+@media (min-width:768px)and(max-width:992px){
+  // sm size
+  .header {
+    p:first-of-type {
+      font-size: 2.5rem !important;
+    }
+  }
+}
+@media (max-width:767px){
+  // xs size
+  .header {
+    p:first-of-type {
+      font-size: 1.5rem !important;
+    }
+  }
+}
 
 .home_container {
   height: 100%;
@@ -222,11 +237,15 @@ export default {
   font-size: 16px;
   .home_box {
     height: 100%;
-    width: 85.71rem;
-    margin: 0px auto;
+    //width: 85.71rem;
+    margin: 0px 50px;
   }
 }
+
 .header {
+  img{
+    width:100%;
+  }
   p {
     margin: 1.14rem 0 1.14rem 0px;
     font-style: italic;
@@ -241,7 +260,7 @@ export default {
   }
 
   .chart_box{
-    width: 100vw;
+    width: 100%;
     height: 65vh
   }
   margin-bottom: 80px;

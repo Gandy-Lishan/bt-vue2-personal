@@ -16,5 +16,6 @@ export default {
 @import '../node_modules/chartiq/st-development/css/ST-chartiq.css';
 #app {
   overflow:auto;
+  overflow-x:hidden;
 }
 </style>
