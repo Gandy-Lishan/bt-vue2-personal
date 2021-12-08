@@ -22,6 +22,7 @@ export default new Vuex.Store({
         exit: '',
       },
       extraIndicators: [],
+      technicalIndicators: [],
       exitFrequency: ''
     },
     
@@ -32,7 +33,8 @@ export default new Vuex.Store({
     strategyId: '',
     indicatorsList: [],
     symbolName: '',
-    trades: []
+    trades: [],
+    activatedMA: [{period: 21, url: ""}],
   },
   mutations: {
     getNewPorfolioInputsValues(state,row) {
@@ -112,13 +114,19 @@ export default new Vuex.Store({
       state.trades = data
     },
     getFrequency(state,val){
-      state.exitFrequency = val
+      state.indicators.exitFrequency = val
+    },
+    getMA(state,val){
+      state.activatedMA = val
     },
     clearEntrySignal(state, val){
       state.indicators.formIndicators.entry = ''
     },
     clearExitSignal(state, val){
       state.indicators.formIndicators.exit = ''
+    },
+    getTechnicalIndicators(state, val){
+      state.indicators.technicalIndicators = val
     }
   },
 })

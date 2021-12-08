@@ -49,6 +49,7 @@ export default class AdvancedWrapper extends Vue {
 		config: any
 	}) {
 		CIQ.store = store;
+		CIQ.vue = Vue;
 		// Methods for capturing state changes in chart engine and UI
 		// 	Channel subscribe example to listen to breakpoint changes
 		// 	const { channels } = config

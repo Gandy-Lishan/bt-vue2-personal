@@ -253,7 +253,7 @@
                       @change="maValueChange"
                     ></el-autocomplete>
               </div> -->
-              <el-input v-model="maValue" @blur="renderMA(maValue)"></el-input>
+              <el-input v-model="maValue" @blur="renderMA(maValue)" @keyup.enter.native="renderMA(maValue)"></el-input>
             </el-form-item>
             <el-form-item  label="Condition:" size="mini" v-if="hideCondition">
               <div class="selectBox">
@@ -701,7 +701,6 @@ export default {
     ...mapState(['strategyEntryData','strategyExitData'])
   },
   created() {
-    console.log('signalFrom created')
     this.getIndicatorsList()
   },
   mounted() {
@@ -711,12 +710,40 @@ export default {
     renderMA(ma){
       let result
       this.$store.state.indicatorsList.forEach((value,index)=>{ 
-        if(value.chart_name.toString().indexOf(this.indicatorsEntryValue.toString())!== -1){
-          result = value
+        if(this.indicatorsEntryValue){
+          if(value.chart_name.toString().indexOf(this.indicatorsEntryValue.toString())!== -1){
+            result = value
+          }
+        }else{
+          if(value.chart_name.toString().indexOf(this.indicatorsExitValue.toString())!== -1){
+            result = value
+          }
         }
+        
       })
-      CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{Period: ma,display:"ST MA",Field: result.url});
+      for (var studyInstanceName in CIQ.stxx.layout.studies) {
+        if(CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url){
+          CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
+        }
+      }
+      var sd = CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{Period: ma,display:"ST MA",Field: result.url});
+      // keep current MA 
+      var objMA = { period: ma, url: result.url}
+      var activatedMAList = this.$store.state.activatedMA
+
+      // remove current MA attached to an indicator
+              var MAListIndex = activatedMAList.findIndex(item=>item.url==result.url)
+              if(MAListIndex!=-1){
+                  activatedMAList.splice(MAListIndex,1)
+              }	
+      activatedMAList.push(objMA)
+      // const set = new Set(activatedMAList)
+      // activatedMAList = [...set]
+      this.$store.commit("getMA",activatedMAList)
+
+      console.log(this.$store.state.activatedMA)
     },
+
     clearFormValidate(){
       this.$nextTick(()=>{
         try{
@@ -761,13 +788,17 @@ export default {
         }
       })
       if(result.url !== undefined){
+              // remove MA
+							var activatedMAList = this.$store.state.activatedMA
+              var MAListIndex = activatedMAList.findIndex(item=>item.url==this.$store.state.indicators.formIndicators.entry)
+              if(MAListIndex!=-1){
+                  activatedMAList.splice(MAListIndex,1)
+              }	
+							// const set = new Set(activatedMAList)
+							// activatedMAList = [...set]
+							this.$store.commit("getMA",activatedMAList)
       this.$store.commit('getEntryIndicators',result.url)
-          CIQ.addIndicators().then(
-            this.$message({
-                  message: 'Load sucess',
-                  type: 'success'
-            })
-          )
+          CIQ.addIndicators()
       }
       }
       let vm = this
@@ -789,7 +820,6 @@ export default {
       }
     },
     async setExitData(data) {
-      console.log('data',data);
       let vm = this
 
       const res = await this.$http.get('/demo/condition/', {
@@ -803,14 +833,18 @@ export default {
         }
       })
       if(result.url !== undefined){
-
+              // remove MA
+							var activatedMAList = this.$store.state.activatedMA
+              var MAListIndex = activatedMAList.findIndex(item=>item.url==this.$store.state.indicators.formIndicators.exit)
+              if(MAListIndex!=-1){
+                  activatedMAList.splice(MAListIndex,1)
+              }	
+							// const set = new Set(activatedMAList)
+							// activatedMAList = [...set]
+							this.$store.commit("getMA",activatedMAList)
       this.$store.commit('getExitIndicators',result.url)
-          CIQ.addIndicators().then(
-            this.$message({
-                  message: 'Load sucess',
-                  type: 'success'
-            })
-          )
+          CIQ.addIndicators()
+   
       }else{
         return
         }
@@ -875,6 +909,9 @@ export default {
         this.techIndicators = ''
       })
       this.$store.commit('clearEntrySignal')
+
+      CIQ.addIndicators()
+     
       // if(this.$refs.entryForm.resetFields() == undefined){
       //   return
       //  }
@@ -986,13 +1023,7 @@ export default {
               message: 'Saved successfully',
               duration: 1000
             })
-            CIQ.addIndicators(vm.maValue).then(
-            this.$message({
-                  message: 'Load sucess',
-                  type: 'success'
-            })
-          )
-
+            CIQ.addIndicators(vm.maValue)
             }
         }else{
           this.$message.error({
@@ -1185,6 +1216,16 @@ export default {
       handleTechSelect(item) {
         const vm = this
         vm.techIndicators = item.value
+
+        //这里还没加MA所以先不清除已有的MA
+                let techIndicators = []
+                techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
+                techIndicators.push(vm.techIndicators)
+
+                console.log(techIndicators)
+                CIQ.store.commit('getTechnicalIndicators',techIndicators)
+        CIQ.addTechIndicators()
+
         const used_indicators = JSON.stringify([item.value])
       vm.$http.get('/demo/signal/',{
           params: {
@@ -1224,28 +1265,39 @@ export default {
         })
       }, 500),
       selectEntrySymbol(name,url) {
+            // remove MA
+						var activatedMAList = this.$store.state.activatedMA
+            var MAListIndex = activatedMAList.findIndex(item=>item.url==this.$store.state.indicators.formIndicators.entry)
+            if(MAListIndex!=-1){
+                activatedMAList.splice(MAListIndex,1)
+            }	
+
+						this.$store.commit("getMA",activatedMAList)
+
             this.indicatorsEntryValue = name
             this.$store.commit('getEntryIndicators',url)
             this.isSelected = false
-
-          CIQ.addIndicators().then(
-            this.$message({
-                  message: 'Load sucess',
-                  type: 'success'
-            })
-          )
+            
+          CIQ.addIndicators()
+      
          },
       selectExitSymbol(name,url) {
-            this.indicatorsExitValue = name
-            this.$store.commit('getExitIndicators',url)
-            this.isSelected = false
+          // remove MA
+					var activatedMAList = this.$store.state.activatedMA
+          var MAListIndex = activatedMAList.findIndex(item=>item.url==this.$store.state.indicators.formIndicators.exit)
+          if(MAListIndex!=-1){
+              activatedMAList.splice(MAListIndex,1)
+          }	
 
-          CIQ.addIndicators().then(
-            this.$message({
-                  message: 'Load sucess',
-                  type: 'success'
-            })
-          )    
+					this.$store.commit("getMA",activatedMAList)
+
+          this.indicatorsExitValue = name
+          console.log(this.indicatorsExitValue)
+          this.$store.commit('getExitIndicators',url)
+          this.isSelected = false
+
+          CIQ.addIndicators()
+             
          },
       showSearchList() {
         this.isSelected = true
