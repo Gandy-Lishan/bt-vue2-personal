@@ -48,7 +48,7 @@
 						</cq-menu>
 					</cq-info-toggle-dropdown>
 
-					<cq-info-toggle-dropdown>
+					<!-- <cq-info-toggle-dropdown>
 						<cq-toggle class="ciq-HU" id="ciq-HU" cq-member="headsUp">
 							<span></span>
 							<cq-tooltip>Info</cq-tooltip>
@@ -67,7 +67,7 @@
 								
 							</cq-menu-dropdown>
 						</cq-menu>
-					</cq-info-toggle-dropdown>
+					</cq-info-toggle-dropdown> -->
 					<cq-toggle class="ciq-DT tableview-ui" cq-member="tableView"
 						><span></span><cq-tooltip>Table View</cq-tooltip></cq-toggle
 					>
@@ -442,7 +442,7 @@ export default class AdvancedChartComponent extends Vue {
 			CIQ.stxx.setTimeZone("Asia/Hong_Kong", "America/New_York");
 
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
-
+			CIQ.stxx.layout.headsUp = "floating";
 			//CIQ.UI.Markers.prototype.showMarkers('mMarker')
 			
 			//let showMarkers = CIQ.UI.Markers.prototype.showMarkers

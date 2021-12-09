@@ -21,10 +21,11 @@ export default new Vuex.Store({
         entry: '',
         exit: '',
       },
-      extraIndicators: []
+      extraIndicators: [],
+      technicalIndicators: [],
+      exitFrequency: ''
     },
-    customExitType: [{label: "short", value: "short"},{label: "longexit", value: "longexit"}
-    ],
+    customExitType: [{label: "short", value: "short"},{label: "longexit", value: "longexit"}],
     exitOption:  [{label: "longexit", value: "longexit"},
     {label: "short", value: "short"}],
     strategyId: '',
@@ -36,7 +37,8 @@ export default new Vuex.Store({
     saveConditionFormdata: {},
     exitFrequency: '',
     entryType: 'long',
-    exitTechType: ''
+    exitTechType: '',
+    activatedMA: [{period: 21, url: ""}],
   },
   mutations: {
     getNewPorfolioInputsValues(state,row) {
@@ -116,7 +118,10 @@ export default new Vuex.Store({
       state.trades = data
     },
     getFrequency(state,val){
-      state.exitFrequency = val
+      state.indicators.exitFrequency = val
+    },
+    getMA(state,val){
+      state.activatedMA = val
     },
     clearEntrySignal(state, val){
       state.indicators.formIndicators.entry = ''
@@ -128,7 +133,6 @@ export default new Vuex.Store({
       state.indicatorRadio = val
     },
     getConditionData(state, val){
-      state.conditionData = {}
       state.conditionData = val
     },
     saveCondictionData(state, val){
@@ -139,6 +143,8 @@ export default new Vuex.Store({
     },
     getEntryType(state, val){
       state.entryType = val
-    }
-  },
-})
+    },
+    getTechnicalIndicators(state, val){
+    state.indicators.technicalIndicators = val
+    },
+}})

@@ -225,7 +225,7 @@ export default {
   }
 
   .chart_box{
-    width: 100%;
+    width: 100vw;
     height: 65vh
   }
   margin-bottom: 80px;
