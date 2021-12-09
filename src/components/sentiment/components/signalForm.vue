@@ -1558,12 +1558,6 @@ export default {
   //flex-grow: 1;
   border: 2px solid #6c6c6c;
 }
-.signalLeft .el-form-item__content{
-  flex:0.8;
-}
-.signalRight .el-form-item__content{
-  flex:0.8;
-}
 
 .signalLeftForm {
   flex: 1;

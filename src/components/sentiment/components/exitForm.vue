@@ -1,8 +1,7 @@
 <template>
 	<div class="form-container">
-		<el-row>
-			<el-col :span="20">
-				<div class="signal-container">
+		<el-row type="flex" class="main">
+			<el-col :xs="24" :sm="12" :md="10" :lg="10" :xl="10">
 					<div class="signalLeft">
 						<div><p>Name/Description:</p></div>
 						<div class="signalLeftForm">
@@ -56,27 +55,27 @@
 							</el-form>
 						</div>
 					</div>
+			</el-col>
+			<el-col :xs="24" :sm="12" :md="14" :lg="14" :xl="14">		
 					<div class="condition-container">
 						<exit-condition ref="conditionChild" :conditionFormData.sync="conditionFormData"></exit-condition>
 					</div>
-				</div>
 			</el-col>
 		</el-row>
-		<el-row>
-			<el-col :span="16">
-				<div class="exitBtns">
-					<el-button type="info" @click="clearExitFormData"
-						>Clear Exit Signal</el-button
-					>
+				<el-row class="entryBtns" type="flex">
+					<el-col :xs="12" :sm="12" :md="8" :lg="8" :xl="8">
+						<el-button type="info" @click="clearExitFormData"
+							>Clear Exit Signal</el-button>
+					</el-col>
+					<el-col :xs="12" :sm="12" :md="8" :lg="8" :xl="8">
 					<el-button type="primary" @click="saveExitFormData()"
-						>Save Exit Signal</el-button
-					>
+						>Save Exit Signal</el-button>
+					</el-col>
+					<el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
 					<el-button type="warning" v-on:click="openExitDialog"
-						>Load Exit Signal</el-button
-					>
-				</div>
-			</el-col>
-		</el-row>
+						>Load Exit Signal</el-button>
+					</el-col>
+				</el-row>
 	</div>
 </template>
 <script>
@@ -230,25 +229,53 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.form-container {
-	margin-top: 20px;
+
+@media (min-width:768px)and(max-width:992px){
+  // sm size
 }
-.signal-container {
-	display: flex;
-	flex-direction: row;
+@media (max-width:767px){
+  // xs size
+  .el-button--warning{
+    width: 90% !important;
+  }
+}
+
+.main {
+  margin-top: 20px;
+  flex-wrap: wrap;
+  // el-form-item__content{
+  //   flex:0.8;
+  // }
 }
 .signalLeft {
-	margin-right: 20px;
+	margin: 20px 20px;
 	border: 2px solid #6c6c6c;
 	border-radius: 10px;
 	flex-grow: 1;
 	padding: 10px;
+	
+}
+
+.signalLeft .el-form-item__content{
+  flex:0.8;
+}
+.signalRight .el-form-item__content{
+  flex:0.8;
+}
+
+.signalLeftForm {
+  flex: 1;
 }
 .el-form .el-form-item .el-form-item__label {
 	width: 80px !important;
 }
-.exitBtns button {
-	margin: 30px 75px 0px 75px;
+.entryBtns{
+  flex-wrap: wrap;
+}
+.entryBtns button{
+  display: block;
+  width:80%;
+  margin: 10px auto;
 }
 .condition-container {
 	flex-grow: 1;

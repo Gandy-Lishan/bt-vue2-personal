@@ -74,19 +74,22 @@
 					</div>
 					</el-col>
 		</el-row>	
-			<el-col :xs="24" :sm="12" :md="14" :lg="14" :xl="14">
-				<div class="entryBtns">
-					<el-button type="info" @click="clearEntryFormData"
-						>Clear Entry Signal</el-button
-					>
+
+				<el-row class="entryBtns" type="flex">
+					<el-col :xs="12" :sm="12" :md="8" :lg="8" :xl="8">
+						<el-button type="info" @click="clearEntryFormData"
+							>Clear Entry Signal</el-button>
+					</el-col>
+					<el-col :xs="12" :sm="12" :md="8" :lg="8" :xl="8">
 					<el-button type="primary" @click="saveEntryFormData()"
-						>Save Entry Signal</el-button
-					>
+						>Save Entry Signal</el-button>
+					</el-col>
+					<el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
 					<el-button type="warning" v-on:click="openEntryDialog"
-						>Load Entry Signal</el-button
-					>
-				</div>
-			</el-col>
+						>Load Entry Signal</el-button>
+					</el-col>
+				</el-row>
+
 		
 
 
@@ -249,18 +252,18 @@ export default {
   // }
 }
 .signalLeft {
-	margin-right: 20px;
+	margin: 20px 20px;
 	border: 2px solid #6c6c6c;
 	border-radius: 10px;
 	flex-grow: 1;
 	padding: 10px;
+	
 }
 
-.signalLeft .el-form-item__content{
-  flex:0.8;
-}
+.signalLeft .el-form .el-form-item .el-form-item__content{
+  flex:1;}
 .signalRight .el-form-item__content{
-  flex:0.8;
+  flex:1;
 }
 
 .signalLeftForm {

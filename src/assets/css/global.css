@@ -109,27 +109,34 @@ label{
   width: 105px !important;
 }
 
-/* .signalLeftForm .el-form .el-form-item .el-form-item__content .el-input .el-input__inner{
-  width: 177%;
+/* .signalLeft .el-form-item__content{
+  flex:0.8;
+}
+.signalRight .el-form-item__content{
+  flex:0.8;
+} */
 
-.signalRight .el-form .el-form-item .el-form-item__content .el-input .el-input__inner{
-  width: 177%;
+.signalLeftForm .el-form .el-form-item .el-form-item__content{
+  flex:0.8;}
+
+.signalRight .el-form .el-form-item .el-form-item__content{
+  flex:0.8;
 }
 .signalRight .el-form-item .el-form-item__content .selectBox .el-select .el-input .el-input__inner{
-  width: 100%;
+  flex:0.8;
 }
 .signalLeft .el-form-item .el-form-item__content .selectBox .el-select .el-input .el-input__inner{
-  width: 100%;
+  flex:0.8;
 }
 .signalLeft .el-form-item .el-form-item__content .selectBox  .el-input .el-input__inner{
-  width: 114%;
+  flex:0.8;
 }
-.signalRight .el-form-item .el-form-item__content .searchBox .el-input .el-input__inner{
-  width: 158%;
+.signalRight .el-form-item .el-form-item__content{
+  flex:0.8;
 }
 .signalLeftForm .el-form .el-form-item__content .el-textarea .el-textarea__inner{
-  width: 163%;
-} */
+  flex:0.8;
+}
 
 .backtest_container .el-form .el-form-item{
   flex-wrap: wrap;

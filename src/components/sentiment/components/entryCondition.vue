@@ -931,7 +931,7 @@ export default {
 .signalRight {
 	  margin: 20px 20px;
 		border-radius: 10px;
-		padding: 65px 10px 10px 10px;
+		padding: 10px 10px 10px 10px;
 		//flex-grow: 1;
 		border: 2px solid #6c6c6c;
 }
