@@ -68,6 +68,7 @@
   </el-row>
 </template>
 <script>
+import { timestampToTime } from '../../../tools/formatDate.js'
 export default {
   data() {
     return {
@@ -78,7 +79,7 @@ export default {
           entrySignal: '<= -10',
           exitSignal: '>= 13.5',
           fromdate: '2000-1-2',
-          todate: '2021-12-3'
+          todate: ''
         },
         {
           name: 'Macro Index Model',
@@ -86,12 +87,13 @@ export default {
           entrySignal: '>= 0.7',
           exitSignal: '< 0.7',
           fromdate: '2002-1-2',
-          todate: '2021-12-3'
+          todate: ''
         }
       ]
     }
   },
   created() {
+    this.getToDate()
     this.getStrategyList()
   },
   methods: {
@@ -113,6 +115,12 @@ export default {
       //   )
       // }
     },
+    getToDate() {
+      const date = new Date()
+      date.setDate(date.getDate() - 1)
+      const yesterday = timestampToTime(date)
+      this.strategyList.forEach(item => item.todate = yesterday)
+    }
   }
 }
 </script>

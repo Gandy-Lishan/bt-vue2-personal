@@ -39,7 +39,7 @@
           <el-table-column label="Status" align="center">
             <template slot-scope="scope">
               <span v-if="scope.row.status == 0">Waiting</span>
-              <span v-else-if="scope.row.status == 1"><img src="../../../assets/loading.gif" width="25px"></img></span>
+              <span v-else-if="scope.row.status == 1"><img src="../../../assets/loading.gif" width="25px"/></span>
               <span v-else-if="scope.row.status == 2">Completed</span>
             </template>
           </el-table-column>
@@ -225,11 +225,10 @@ export default {
         vm.loading = false
         vm.$message.error('The policy is complete')
         
-    }}, 
-    closeWeb() {
-      const vm = this
-      vm.chatSocket.close()
-    },
+
+
+      }}, 
+
     async getStrategyName() {
       const id = this.backtestList
       const res = await this.$http.get('/demo/strategies' + id + '/')
@@ -237,7 +236,6 @@ export default {
     editBacktest(row) {
       // this.editData = row
       // this.backtestItemId = row.id
-      console.log(row);
       this.$store.commit('getEditBacktestData', row)
       this.$emit('getBacktestDataTry')
       this.$emit('goTobacktestSetupForm')

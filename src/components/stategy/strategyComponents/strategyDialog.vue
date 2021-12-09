@@ -73,7 +73,7 @@
   </div>
 </template>
 <script>
-import signalDialog from './signalDialog.vue'
+import signalDialog from './entrySignalDialog.vue'
 import entryDataForm from './entryDataForm.vue'
 import exitDataForm from './exitDataForm.vue'
 export default {

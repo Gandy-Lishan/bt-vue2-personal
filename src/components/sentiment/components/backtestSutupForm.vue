@@ -254,6 +254,7 @@ export default {
         let vm = this; 
         vm.setSymbol = function (symbol) { 
           that.backtestSetupFormdata.symbolName = symbol
+          that.backtestSetupFormdata.benchmark = symbol
         }
         vm.b = function () { alert('b'); } 
       } 
@@ -459,6 +460,19 @@ backtestSetupFormdata: {
     },
     getSlippage() {
       if (this.backtestSetupFormdata.slippage ==''){this.backtestSetupFormdata.slippage='0.001'}
+    },
+    setEditBacktestData() {
+      const data = this.$store.state.editStrategyData
+      this.backtestSetupFormdata.uuid = data.id
+      this.backtestSetupFormdata.name = data.name
+      this.backtestSetupFormdata.description = data.description
+      this.backtestSetupFormdata.benchmark = data.stock
+      this.backtestSetupFormdata.symbolName = data.stock
+      this.backtestSetupFormdata.startingCapital = data.cash
+      this.backtestSetupFormdata.commission = data.commission
+      this.backtestSetupFormdata.slippage = data.slippage
+      this.backtestSetupFormdata.starDate = data.fromdate
+      this.backtestSetupFormdata.endDate = data.todate
     }
   }
 }

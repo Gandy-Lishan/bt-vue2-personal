@@ -25,15 +25,19 @@ export default new Vuex.Store({
       technicalIndicators: [],
       exitFrequency: ''
     },
-    
-    customExitType: [{label: "longexit", value: "longexit"},
-    {label: "short", value: "short"}],
+    customExitType: [{label: "short", value: "short"},{label: "longexit", value: "longexit"}],
     exitOption:  [{label: "longexit", value: "longexit"},
     {label: "short", value: "short"}],
     strategyId: '',
     indicatorsList: [],
     symbolName: '',
     trades: [],
+    indicatorRadio: 'Sentiment_Indicators:',
+    conditionData: {},
+    saveConditionFormdata: {},
+    exitFrequency: '',
+    entryType: 'long',
+    exitTechType: '',
     activatedMA: [{period: 21, url: ""}],
   },
   mutations: {
@@ -67,15 +71,15 @@ export default new Vuex.Store({
     getExitData(state, val) {
       state.strategyExitData = val
     },
-    getCustomExitType(state, val) {
+    getExitType(state, val) {
       const data = {
         long: [
-          { label: 'Longexit', value: 'longexit' },
           { label: 'Short', value: 'short' },
+          { label: 'Longexit', value: 'longexit' }
         ],
         short: [
-          { label: 'Shortexit', value: 'shortexit' },
           { label: 'Long', value: 'long' },
+          { label: 'Shortexit', value: 'shortexit' }
         ],
       }
       if (val === 'long') {
@@ -87,12 +91,12 @@ export default new Vuex.Store({
     getExitOption(state ,val) {
       const data = {
         long: [
-          { label: 'Longexit', value: 'longexit' },
           { label: 'Short', value: 'short' },
+          { label: 'Longexit', value: 'longexit' }
         ],
         short: [
-          { label: 'Shortexit', value: 'shortexit' },
           { label: 'Long', value: 'long' },
+          { label: 'Shortexit', value: 'shortexit' }
         ],
       }
       if (val === 'long') {
@@ -114,7 +118,7 @@ export default new Vuex.Store({
       state.trades = data
     },
     getFrequency(state,val){
-      state.indicators.exitFrequency = val
+      state.exitFrequency = val
     },
     getMA(state,val){
       state.activatedMA = val
@@ -125,8 +129,22 @@ export default new Vuex.Store({
     clearExitSignal(state, val){
       state.indicators.formIndicators.exit = ''
     },
+    getIndicatorRadio(state, val){
+      state.indicatorRadio = val
+    },
+    getConditionData(state, val){
+      state.conditionData = val
+    },
+    saveCondictionData(state, val){
+      state.saveConditionFormdata = val
+    },
+    getExitTechList(state,val){
+      state.exitTechType = val
+    },
+    getEntryType(state, val){
+      state.entryType = val
+    },
     getTechnicalIndicators(state, val){
-      state.indicators.technicalIndicators = val
-    }
-  },
-})
+    state.indicators.technicalIndicators = val
+    },
+}})

@@ -83,7 +83,7 @@
   </div>
 </template>
 <script>
-import signalDialog from '../strategyComponents/signalDialog.vue'
+import signalDialog from '../strategyComponents/entrySignalDialog.vue'
 import entryDataForm from '../strategyComponents/entryDataForm.vue'
 import exitDataForm from '../strategyComponents/exitDataForm.vue'
 import eventBus from './eventBus/event.js'

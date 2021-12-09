@@ -124,21 +124,21 @@
 </div>
 </template>
 <script>
+import { Store } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
   props: {
       dialogTableVisible: Boolean,
       type: String,
-      entryTypeRadio: String
        },
-  name: 'signal-dialog',
+  name: 'signalDialog',
   data(){
     return {
       signalList: [{entryChecked: false}],
       queryInfo: {
-        type: this.type,
         page: 1
       },
+      indicatorRadio: this.$store.state.indicatorRadio,
       radio: "",
       total: 0,
       loading: false,
@@ -147,7 +147,6 @@ export default {
       activeName: 'first',
       customTotal: 0,
       customInfo: {
-        type: this.type,
         page: 1
       },
     }
@@ -160,30 +159,27 @@ export default {
     async getSignallist(users) {
       let analysisBasis
       let used_indicators
-      if(this.entryTypeRadio === 'Sentiment_Indicators:'){
+      let indicatorRadio = this.$store.state.indicatorRadio
+      let type
+      if(this.type){
+        type = this.type
+      }else{
+        type = JSON.stringify(['long','short'])
+      }
+      if(indicatorRadio === 'Sentiment_Indicators:'){
         analysisBasis = 'sentiment'
         used_indicators = ''
       }
-      if(this.entryTypeRadio === 'Technical_Indicators:'){
+      if(indicatorRadio === 'Technical_Indicators:'){
         analysisBasis = 'technical'
-        if(this.type === 'longexit'){
-          used_indicators = JSON.stringify(['Commodity Channel Index','Relative Strength Index','MACD','Moving Average',
-        'profit/loss exit signal','time-in-market exit signal','ATR Trailing Stops (Close)','Parabolic SAR',
-        'ATR Trailing Stops (High)'])}else{
-          used_indicators = JSON.stringify(['Commodity Channel Index','Relative Strength Index','MACD','Moving Average',
-        'profit/loss exit signal','time-in-market exit signal','ATR Trailing Stops (Close)','Parabolic SAR',
-        'ATR Trailing Stops (Low)'])
-        }
+        used_indicators = JSON.stringify(['Commodity Channel Index', 'Relative Strength Index', 'MACD', 'Moving Average'])
       }
       this.signalList = []
       this.loading = true
-      this.queryInfo.type = this.type
-      this.queryInfo.analysis_basis = 'sentiment'
-      this.queryInfo.user = users
       const { data: signalRes } = await this.$http.get('/demo/signal/', {
         params: {
           page: this.queryInfo.page,
-          type: this.type,
+          type: type,
           user: users,
           analysis_basis: analysisBasis,
           used_indicators: used_indicators
@@ -194,21 +190,8 @@ export default {
                   // username: 'demo01',
                   // password: 'admin123456'
                 }})
-      if(analysisBasis == 'sentiment'){
        this.signalList = signalRes.results
        this.total = signalRes.count
-      }
-      else{
-        const arr = signalRes.results
-        const newArr = []
-        arr.forEach(item => {
-          if(item.type !== 'neutral'){
-            newArr.push(item)
-          }
-        })
-        this.signalList = newArr
-        this.total = signalRes.count
-      }
       if(this.signalList.length !== 0){
         this.loading = false
       }
@@ -221,27 +204,25 @@ export default {
     async getCustomList(user) {
       let analysisBasis
       let used_indicators
-      if(this.entryTypeRadio === 'Sentiment_Indicators:'){
+      let indicatorRadio = this.$store.state.indicatorRadio
+      let type
+      if(typeof(this.type) === 'string'){
+        type = this.type
+      }else{
+        type = JSON.stringify(['long','short'])
+      }
+      if(indicatorRadio === 'Sentiment_Indicators:'){
         analysisBasis = 'sentiment'
         used_indicators = ''
       }
-      if(this.entryTypeRadio === 'Technical_Indicators:'){
+      if(indicatorRadio === 'Technical_Indicators:'){
         analysisBasis = 'technical'
-        if(this.type === 'longexit'){
-          used_indicators = JSON.stringify(['Commodity Channel Index','Relative Strength Index','MACD','Moving Average',
-        'profit/loss exit signal','time-in-market exit signal','ATR Trailing Stops (Close)','Parabolic SAR',
-        'ATR Trailing Stops (High)'])}else{
-          used_indicators = JSON.stringify(['Commodity Channel Index','Relative Strength Index','MACD','Moving Average',
-        'profit/loss exit signal','time-in-market exit signal','ATR Trailing Stops (Close)','Parabolic SAR',
-        'ATR Trailing Stops (Low)'])
-        }
+          used_indicators = JSON.stringify(['Commodity Channel Index', 'Relative Strength Index', 'MACD', 'Moving Average'])
       }
       this.loading = true
-      this.customInfo.type = this.type
-      this.customInfo.user = user
       const { data: res } = await this.$http.get('/demo/signal/', {
         params: {
-          type: this.customInfo.type,
+          type: type,
           page: this.customInfo.page,
           user: user,
           analysis_basis: analysisBasis,
@@ -249,20 +230,8 @@ export default {
 
         }
       })
-      if(analysisBasis == 'sentiment'){
        this.customList = res.results
        this.customTotal = res.count
-      }else{
-        const arr = res.results
-        const newArr = []
-        arr.forEach(item => {
-          if(item.type !== 'neutral'){
-            newArr.push(item)
-          }
-        })
-        this.customList = newArr
-        this.customTotal = newArr.length
-      }
       if(res.results.length <= 0){
         this.loading = false
       }
@@ -273,7 +242,8 @@ export default {
       this.queryInfo.page = 1
     },
     checkEntry(scope){
-      this.$emit("setEntryData",(scope))
+      this.$emit("setEntryData",scope)
+      this.$store.commit('getConditionData',scope)
       this.closeDialog()
       this.signalList.entryChecked = !this.signalList.entryChecked
     },
