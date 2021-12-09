@@ -1,6 +1,7 @@
 <template>
 <el-row>
   <el-col :span="20">
+    <button @click="tryIt">设置数据设置数据</button>
       <div class="main">
       <div class="signalLeft">
         <div><p>Name/Description:</p></div>
@@ -161,9 +162,9 @@
       <div class="signalRight">
         <el-form label-position="left" ref="signalRight" label-width="80px">
           <div class="radioBox">
-            <div @click="changeState1(),resetData()">
+          <div @click="changeState1(),resetData()">
           <el-radio v-model="entryTypeRadio" label="Sentiment_Indicators:" style="{position: relative;left:0px;top:19px}"></el-radio></div>
-            <el-form-item label="" size="mini"
+            <!-- <el-form-item label="" size="mini"
                   prop="indicatorsEntryValue">
               <div v-if="signalFormTagName === 'first'" class="searchBox">
                 <el-input
@@ -209,20 +210,50 @@
                 </ul>
                 </div>
               </div>
-            </el-form-item>
+            </el-form-item> -->
+            
+          <el-form-item>
+            <div class="searchBox">
+              <el-autocomplete
+                v-if="signalFormTagName === 'first'"
+                prefix-icon="el-icon-search"
+                class="inline-input"
+                v-model="indicator11"
+                :disabled="isCheckedIndicators"
+                :fetch-suggestions="indicatorSearch11"
+                placeholder="Please enter the sentiment indicator"
+                @select="handleSelect11"
+                size="mini"
+                highlight-first-item
+              ></el-autocomplete>
+              <el-autocomplete
+                v-else
+                class="inline-input"
+                prefix-icon="el-icon-search"
+                v-model="indicator11"
+                :disabled="isCheckedIndicators"
+                :fetch-suggestions="indicatorSearch11"
+                placeholder="Please enter the technical indicator"
+                @select="handleSelect1122"
+                highlight-first-item
+                size="mini"
+              ></el-autocomplete>
+            </div>
+          </el-form-item>
             <div @click="changeState2(),resetData()">
             <el-radio v-model="entryTypeRadio" label="Technical_Indicators:"></el-radio></div>
             <el-form-item label="" size="mini" prop="techIndicator">
-              <!-- <el-input v-model="techIndicators"
-                  size="mini" :disabled="!isCheckedIndicators"></el-input> -->
+               <div class="searchBox">
                   <el-autocomplete
                     :disabled="!isCheckedIndicators"
                     class="inline-input"
+                    prefix-icon="el-icon-search"
                     v-model="techIndicators"
                     :fetch-suggestions="querySearch"
                     placeholder="Please enter the technical indicator"
                     @select="handleTechSelect"
                   ></el-autocomplete>
+               </div>
             </el-form-item>
         </div>
         </el-form>
@@ -566,7 +597,7 @@
 </template>
 <script>
 import loginFormateVue from '../../../loginFormate.vue'
-import signalDialog from '../../stategy/strategyComponents/signalDialog.vue'
+import signalDialog from '../../stategy/strategyComponents/entrySignalDialog.vue'
 import { throttle } from '../../../tools/throttle.js'
 import { mapState, Store } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
@@ -604,8 +635,8 @@ export default {
         ],
       },
       submitEntrycondition: {},
-      conditions: [{value: 0,label:'>'}, {value: 1,label:'<'}, {value: 2,label:'CrossAbove'}, {value: 3,label:'CrossBelow'}],
-      parameterConditions: [{value: 4, label:'sentiment crossAbove'},{value: 5, label:'sentiment crossBelow'}],
+      conditions: [{value: 0,label:'>'}, {value: 1,label:'='},{value: 2,label:'<'}, {value: 3,label:'CrossAbove'}, {value: 4,label:'CrossBelow'}],
+      parameterConditions: [{value: 5, label:'sentiment crossAbove'},{value: 6, label:'sentiment crossBelow'}],
       conditionsOption: '',
       combinations: ['AND', 'OR', 'SUM'],
       conditionList: [
@@ -631,8 +662,8 @@ export default {
           },
         ],
         actionEntry: [
-          { label: 'Long', value: 'long' },
-          { label: 'Short', value: 'short' },
+          { label: 'long', value: 'long' },
+          { label: 'short', value: 'short' },
         ],
         entryTypeOption: [
           { label: 'long', value: 'long'},
@@ -640,7 +671,7 @@ export default {
         ],
         frequencyOption: [
           { label: 'daily',value: 'daily' },
-          { label: 'weekly',value: 'weekly' },
+          { label: 'weekly',value: 'wee+kly' },
           { label: 'monthly',value: 'monthly' },
         ],
         valueEntry: '',
@@ -691,7 +722,11 @@ export default {
       isCheckedIndicators: false,
       hideCondition: true,
       initTechCondiction: 0,
-      maCondition: ''
+      maCondition: '',
+      // indicator-search
+      restaurants11: [],
+        indicator11: '',
+        timeout11:  null
     }
   },
   components: {
@@ -706,6 +741,7 @@ export default {
   },
   mounted() {
       this.restaurants = this.loadShortLong();
+      this.loadAll11()
     },
   methods: {
     clearFormValidate(){
@@ -725,7 +761,6 @@ export default {
     openEntryDialog() {
       this.entryDialogTableVisible = !this.entryDialogTableVisible
       this.isSelected = false
-
       this.clearFormValidate()    
     },
     getIndicatorsList() {
@@ -744,10 +779,11 @@ export default {
       this.clearFormValidate()    
     },
     setEntryData(data) {
+      this.$store.commit('getConditionData',data)
       if(this.entryTypeRadio === 'Sentiment_Indicators:'){
       let result
       this.$store.state.indicatorsList.forEach((value,index)=>{ 
-        if(value.chart_name.toString().indexOf(data.used_indicators.toString())!== -1){
+        if(value.chart_name.indexOf(data.used_indicators)!== -1){
           result = value
         }
       })
@@ -786,7 +822,9 @@ export default {
       this.initialEntryFromData.name = data.name
       this.initialEntryFromData.description = data.description
       if(vm.entryTypeRadio === 'Sentiment_Indicators:'){
-      this.indicatorsEntryValue = data.used_indicators}else{
+      this.indicatorsEntryValue = data.used_indicators
+      this.indicator11 = data.used_indicators
+      }else{
         vm.techIndicators = data.used_indicators
       }
     },
@@ -1116,8 +1154,6 @@ export default {
       this.clearFormValidate()    
     },
     saveStrategy() {
-      // //('strategyentry',this.strategyEntryData);
-      // //('strategyexit',this.strategyExitData);
       const entryData = this.$store.state.strategyEntryData
       const exitData = this.$store.state.strategyExitData
       const submitStrategyData = {}
@@ -1189,7 +1225,7 @@ export default {
         const vm = this
         vm.techIndicators = item.value
         const used_indicators = JSON.stringify([item.value])
-      vm.$http.get('/demo/signal/',{
+        vm.$http.get('/demo/signal/',{
           params: {
             page: 1,
             type: vm.entryType,
@@ -1366,8 +1402,150 @@ export default {
       .replace(/\./g,"")
       .replace("$#$", ".");
       e = e.replace(/^(\-)*(\d+)\.(\d\d).*$/,"$1$2.$3")
+    },
+    // indicators-search
+     indicatorSearch11(queryString, cb) {
+        var restaurants11 = this.restaurants11;
+        var results = queryString ? restaurants11.filter(this.createStateFilter11(queryString)) : restaurants11;
 
-    }
+        clearTimeout(this.timeout11);
+        this.timeout11 = setTimeout(() => {
+          cb(results);
+        }, 3000 * Math.random());
+      },
+      createStateFilter11(queryString) {
+        return (state) => {
+          return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+      handleSelect11(item) {
+        this.indicatorsEntryValue = item.value
+        this.$store.commit('getEntryIndicators',item.url)
+
+        let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
+          if(indicatorsList[0]==indicatorsList[1]){
+            indicatorsList.pop()
+          }
+          for(var i=0;i<indicatorsList.length;i++){
+            if(indicatorsList[i]==''){
+              indicatorsList.splice(i,1)
+              i--;
+            }
+          }
+          CIQ.addIndicators(indicatorsList).then(
+            this.$message({
+                message: 'Load sucess',
+                type: 'success'
+              })
+          )
+      },
+      handleSelect1122(item) {
+        this.indicatorsExitValue = item.value
+        this.$store.commit('getExitIndicators',item.url)
+
+        let indicatorsList = [this.$store.state.indicators.entry,this.$store.state.indicators.exit]
+          if(indicatorsList[0]==indicatorsList[1]){
+            indicatorsList.pop()
+          }
+          for(var i=0;i<indicatorsList.length;i++){
+            if(indicatorsList[i]==''){
+              indicatorsList.splice(i,1)
+              i--;
+            }
+          }
+          CIQ.addIndicators(indicatorsList).then(
+            this.$message({
+                message: 'Load sucess',
+                type: 'success'
+              })
+          )
+      },
+      async loadAll11() {
+        const vm = this
+        const res = await vm.$http.get('https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+        {auth:{
+              username: 'sentimentrader_backtest_api',
+              password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+            }})
+        vm.restaurants11 = res.data.map(obj=>{return{value:obj.chart_name, url:obj.url}});
+        this.$store.commit("getIndicatorsList",this.indicatorsList)
+      },
+      getEditBacktestData() {
+        const data = this.$store.state.editStrategyData
+        const entryData = data.strategy.signal_entry
+        const exitData = data.strategy.signal_exit
+        console.log('entryData',entryData);
+        console.log('exitData',exitData);
+
+      },
+      tryIt() {
+        const data = this.$store.state.editStrategyData
+        const entryData = data.strategy.signal_entry
+        const exitData = data.strategy.signal_exit
+        console.log('entryData',entryData);
+        console.log('exitData',exitData);
+        this.entryData = {}
+        this.entryData.name = entryData.name
+        this.entryData.description = entryData.description
+        this.entryType = entryData.type
+        this.entryData.frequency = entryData.frequency
+        const conditions = JSON.parse(entryData.conditions)
+        console.log(this.conditionList);
+        this.exitData.description = exitData.description
+        if(entryData.analysis_basis === 'technical') {
+          this.entryTypeRadio = 'Technical_Indicators:'
+          this.techIndicators = entryData.used_indicators
+          const vm = this
+          const used_indicators = JSON.stringify([this.techIndicators])
+          vm.$http.get('/demo/signal/',{
+            params: {
+              page: 1,
+              type: vm.entryType,
+              user: 'system',
+              analysis_basis: 'technical',
+              used_indicators: used_indicators
+            }
+          },{
+            auth:{
+                    username: 'sentimentrader_backtest_api',
+                    password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+                  }
+          }).then(res => {
+            let conductionId
+            res.data.results.forEach(item => {
+              conductionId = item.id
+            })
+          this.$http.get('/demo/condition/', {
+          params: { id: conductionId },
+        }).then(val => {
+          const initData = val.data.results                           
+            if(vm.exitType == 'longexit' | vm.exitType == 'shortexit'){
+              vm.hideCondition = false
+            }
+            vm.initTechCondiction = initData[0].condition
+          vm.conditionList = initData
+        })
+          })
+          }else {
+            this.entryTypeRadio = 'Sentiment_Indicators:'
+            this.indicator11 = entryData.used_indicators
+            conditions.forEach(item => {
+              this.conditionList.forEach(val => {
+              val.condition_description = item.condition_description
+              val.condition = item.condition
+              val.acceleration_factor = item.acceleration_factor
+              val.macd_fast = item.macd_fast
+              val.macd_sig = item.macd_sig
+              val.macd_slow = item.macd_slow
+              val.max_step = item.max_step
+              val.parameter = item.parameter
+              val.period = item.period
+              val.str_value = item.str_value
+              val.value = item.value
+              })
+            })
+          }
+      }
   },
 }
 </script>

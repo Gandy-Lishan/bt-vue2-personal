@@ -196,46 +196,36 @@ export default {
     runbacktest(row) {
       let vm = this
       vm.rowid = row.id
-      // if(vm.chatSocket){
-      //   vm.chatSocket.close()
-      // }
+      vm.clearInterval = clearInterval()
       if(row.status !== 2){
+        
         row.status = 1
-        vm.chatSocket = new WebSocket(
-          'ws://' + '10.131.3.74:8000' + '/ws/chat/' + row.id + '/'
-        )
-        vm.chatSocket.onopen = function(e){
-        vm.timer = setInterval(() => {
-        vm.$http.get('demo/backtest/' + row.id + '/').then(res => {
+        vm.$http.get('rundev/runbacktest/?backtests=' + row.id).then(res => {
+          if (res.status==200){
+            vm.timer = setInterval(() => {
+        vm.$http.get('demo/backtest/' + row.id + "/").then(res => {
           //(res.data.status)
           console.log('current status',res.data.status);
           if(res.data.status === 2){
             clearInterval(vm.timer)
             vm.getBacktestList()
             vm.$message.success('Run backtest is successful, click the view results button to see the results.')
-          }
-          if(res.data.status === 0){
-            vm.clearInterval(vm.timer)
+          }else if (res.data.status == 0){
+            clearInterval(vm.timer)
             vm.getBacktestList()
             vm.$message.error('The run failed, please try again.')
           }
           }
         ) 
         },3000)
-        }
-        vm.chatSocket.onerror = function(e){
-          vm.$message.error('Error requesting, please try again')
-          row.status = 0
-        }
+          }
+        })
+       
       }else {
         vm.loading = false
         vm.$message.error('The policy is complete')
         
       }}, 
-    closeWeb() {
-      const vm = this
-      vm.chatSocket.close()
-    },
     async getStrategyName() {
       const id = this.backtestList
       const res = await this.$http.get('/demo/strategies' + id + '/')
@@ -243,7 +233,6 @@ export default {
     editBacktest(row) {
       // this.editData = row
       // this.backtestItemId = row.id
-      console.log(row);
       this.$store.commit('getEditBacktestData', row)
       this.$emit('getBacktestDataTry')
       this.$emit('goTobacktestSetupForm')

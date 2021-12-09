@@ -17,7 +17,7 @@
       <main class="main">
         <div class="mainTagbar">
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-            <el-tab-pane label="Entry Criteria" name="first">
+            <!-- <el-tab-pane label="Entry Criteria" name="first">
               <p style="font-weight: bold">Entry Criteria</p>
               <signal-form
                 :signalFormTagName="signalFormTagName"
@@ -42,11 +42,15 @@
                 @goToExitSignalForm="goToExitSignalForm"
                 @goToStrategyForm="goToStrategyForm"
               ></signal-form>
-            </el-tab-pane>
-            <!-- <el-tab-pane label="New Strategy" name="third">
-              <p class="strategyNote">New Strategy</p>
-              <new-strategy-form ref="strategyChild" :strategyEntryData="strategyEntryData" :strategyExitData="strategyExitData" @updateStrategylist="updateStrategylist"></new-strategy-form>
             </el-tab-pane> -->
+            <el-tab-pane label="Entry Criteria" name="first">
+              <p style="font-weight: bold">Entry Criteria</p>
+              <entry-form @clearExitType="clearExitType" @goToExitFormData="goToExitFormData"></entry-form>
+            </el-tab-pane>
+            <el-tab-pane label="Exit Criteria" name="second">
+              <p style="font-weight: bold">Exit Criteria</p>
+              <exit-form ref="exitFormChild"></exit-form>
+            </el-tab-pane>
           </el-tabs>
         </div>
 
@@ -55,7 +59,7 @@
         <div class="footerTagbar">
           <el-tabs v-model="activeTag" type="card" @tab-click="handleTagClick">
             <el-tab-pane label="Backtest Setup" name="first">
-              <backtest-setup-form ref="child" @setEditSignalData="setEditSignalData" @resetResultData="resetResultData" @resetPerformanceData="resetPerformanceData" @goToBacktestFavoriteForm="goToBacktestFavoriteForm" @updateFavoriteList="updateFavoriteList"></backtest-setup-form>
+              <backtest-setup-form ref="setupChild" @setEditSignalData="setEditSignalData" @resetResultData="resetResultData" @resetPerformanceData="resetPerformanceData" @goToBacktestFavoriteForm="goToBacktestFavoriteForm" @updateFavoriteList="updateFavoriteList"></backtest-setup-form>
             </el-tab-pane>
             <el-tab-pane label="Backtest Results" name="second">
               <backtest-result-form ref="resultChild" @goToBacktestFavoriteForm="goToBacktestFavoriteForm"></backtest-result-form>
@@ -83,6 +87,9 @@ import favoriteForm from './components/favoriteForm.vue'
 import newStrategyForm from './components/newStrategyForm.vue'
 import strategyForm from './components/strategyForm.vue'
 import backtestPerformance from './components/backtestPerformance.vue'
+// test
+import entryForm from './components/entryForm.vue'
+import exitForm from './components/exitForm.vue'
 export default {
   data() {
     return {
@@ -94,40 +101,10 @@ export default {
       strategyEntryData: {},
       strategyExitData: {},
       currentTag: 'first',
-    // dataSet:[
-    //   {
-    //     DT:"2016-06-05",
-    //     Type: "BUY",
-    //     Price: 22.25,
-    //     Indicator: "Smart Money Confidence"
-    //   },
-    //   {
-    //     DT:"2016-08-08",
-    //     Type: "SELL",
-    //     Price: 22.70,
-    //     Indicator: "Smart Money Confidence"
-    //   } ,
-    //   {
-    //     DT:"2016-09-05",
-    //     Type: "BUY",
-    //     Price: 21.90,
-    //     Indicator: "Dumb Money Confidence"
-    //   },
-    //   {
-    //     DT:"2016-10-02",
-    //     Type: "SELL",
-    //     Price: 25.59,
-    //     Indicator: "Dumb Money Confidence"
-    //   } 
-    // ],
     activeName: 'first',
     activeTag: 'first',
     }
   },
-
-//import {showmMarker} from '../chart/resources'
-// ChartIQ library resources
-
   components: {
     "chart":chart,
     'signal-form': signalForm,
@@ -136,7 +113,9 @@ export default {
     'favorite-form': favoriteForm,
     'new-strategy-form': newStrategyForm,
     'strategy-form': strategyForm,
-    'backtest-performance': backtestPerformance
+    'backtest-performance': backtestPerformance,
+    'entry-form': entryForm,
+    'exit-form': exitForm
   },
   methods: {
     handleClick(tab, event) {
@@ -172,8 +151,9 @@ export default {
     },
     goTobacktestSetupForm() {
       this.activeTag = 'first'
+      this.$refs.setupChild.setEditBacktestData()
     },
-    goToExitSignalForm() {
+    goToExitFormData() {
       this.activeName = 'second'
     },
     goToStrategyForm() {
@@ -209,7 +189,11 @@ export default {
     },
     resetPerformanceData() {
       this.$refs.performanceChild.clearPerformanceData()
-    }
+    },
+    // clear exitType
+    clearExitType() {
+      this.$refs.exitFormChild.clearExitType()
+    },
   }
   }
 

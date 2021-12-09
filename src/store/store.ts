@@ -21,18 +21,22 @@ export default new Vuex.Store({
         entry: '',
         exit: '',
       },
-      extraIndicators: [],
-      exitFrequency: ''
+      extraIndicators: []
     },
-    
-    customExitType: [{label: "longexit", value: "longexit"},
-    {label: "short", value: "short"}],
+    customExitType: [{label: "short", value: "short"},{label: "longexit", value: "longexit"}
+    ],
     exitOption:  [{label: "longexit", value: "longexit"},
     {label: "short", value: "short"}],
     strategyId: '',
     indicatorsList: [],
     symbolName: '',
-    trades: []
+    trades: [],
+    indicatorRadio: 'Sentiment_Indicators:',
+    conditionData: {},
+    saveConditionFormdata: {},
+    exitFrequency: '',
+    entryType: 'long',
+    exitTechType: ''
   },
   mutations: {
     getNewPorfolioInputsValues(state,row) {
@@ -65,15 +69,15 @@ export default new Vuex.Store({
     getExitData(state, val) {
       state.strategyExitData = val
     },
-    getCustomExitType(state, val) {
+    getExitType(state, val) {
       const data = {
         long: [
-          { label: 'Longexit', value: 'longexit' },
           { label: 'Short', value: 'short' },
+          { label: 'Longexit', value: 'longexit' }
         ],
         short: [
-          { label: 'Shortexit', value: 'shortexit' },
           { label: 'Long', value: 'long' },
+          { label: 'Shortexit', value: 'shortexit' }
         ],
       }
       if (val === 'long') {
@@ -85,12 +89,12 @@ export default new Vuex.Store({
     getExitOption(state ,val) {
       const data = {
         long: [
-          { label: 'Longexit', value: 'longexit' },
           { label: 'Short', value: 'short' },
+          { label: 'Longexit', value: 'longexit' }
         ],
         short: [
-          { label: 'Shortexit', value: 'shortexit' },
           { label: 'Long', value: 'long' },
+          { label: 'Shortexit', value: 'shortexit' }
         ],
       }
       if (val === 'long') {
@@ -119,6 +123,22 @@ export default new Vuex.Store({
     },
     clearExitSignal(state, val){
       state.indicators.formIndicators.exit = ''
+    },
+    getIndicatorRadio(state, val){
+      state.indicatorRadio = val
+    },
+    getConditionData(state, val){
+      state.conditionData = {}
+      state.conditionData = val
+    },
+    saveCondictionData(state, val){
+      state.saveConditionFormdata = val
+    },
+    getExitTechList(state,val){
+      state.exitTechType = val
+    },
+    getEntryType(state, val){
+      state.entryType = val
     }
   },
 })
