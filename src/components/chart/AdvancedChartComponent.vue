@@ -28,7 +28,7 @@
 						<span></span><cq-tooltip>Draw</cq-tooltip>
 					</cq-toggle>
 					<cq-info-toggle-dropdown>
-						<cq-toggle class="ciq-CH" cq-member="crosshair">
+						<cq-toggle id="mStudies" class="ciq-CH" cq-member="crosshair">
 							<span></span>
 							<cq-tooltip>Crosshair (Alt + \)</cq-tooltip>
 						</cq-toggle>
