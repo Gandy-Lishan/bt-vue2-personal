@@ -648,20 +648,17 @@ export default {
 				if (this.sentimentIndicator) {
 					if (value.chart_name.indexOf(this.sentimentIndicator) !== -1) {
 						result = value
-						console.log('result')
-						console.log(result)
 					}
 				} else {
 					if (value.chart_name.indexOf(this.sentimentIndicator) !== -1) {
 						result = value
-						console.log('result')
-						console.log(result)
 					}
 				}
 			})
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				if (
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
+					
 				) {
 					CIQ.Studies.removeStudy(
 						CIQ.stxx,
@@ -722,20 +719,6 @@ export default {
 				)
 			}
 		},
-		handleSentimentSelect(item) {
-			this.sentimentIndicator = item.value
-			// remove MA
-			var activatedMAList = this.$store.state.activatedMA
-			var MAListIndex = activatedMAList.findIndex(
-				(item) => item.url == this.$store.state.indicators.formIndicators.entry
-			)
-			if (MAListIndex != -1) {
-				activatedMAList.splice(MAListIndex, 1)
-			}
-			this.$store.commit('getMA', activatedMAList)
-			this.$store.commit('getEntryIndicators', item.url)
-			CIQ.addIndicators()
-		},
 		// technical search
 		indicatorTechnicalSearch(queryString, cb) {
 			var technicaltIndicatorList = this.technicaltIndicatorList
@@ -756,18 +739,42 @@ export default {
 				)
 			}
 		},
+		handleSentimentSelect(item) {
+			this.sentimentIndicator = item.value
+			// remove MA
+			var activatedMAList = this.$store.state.activatedMA
+			var MAListIndex = activatedMAList.findIndex(
+				(item) => item.url == this.$store.state.indicators.formIndicators.entry
+			)
+			if (MAListIndex != -1) {
+				activatedMAList.splice(MAListIndex, 1)
+			}
+			this.$store.commit('getMA', activatedMAList)
+			this.$store.commit('getEntryIndicators', item.url)
+			CIQ.addIndicators()
+		},
 		handleTechnicalSelect(item) {
 			const vm = this
 			vm.technicalIndicator = item.value
 
 			//这里还没加MA所以先不清除已有的MA
-			let techIndicators = []
-			techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
-			techIndicators.push(vm.techIndicators)
-
-			console.log(techIndicators)
-			CIQ.store.commit('getTechnicalIndicators', techIndicators)
-			CIQ.addTechIndicators()
+			for (var field in CIQ.Studies.studyLibrary) {
+				if(CIQ.Studies.studyLibrary[field].name == item.value){
+										console.log(CIQ.Studies.studyLibrary[field])
+						this.$store.commit('getEntryIndicators', field)
+						// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
+						let techIndicators = []
+						techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
+						techIndicators.push(field)
+						this.$store.commit('getTechnicalIndicators',techIndicators)
+						console.log(field)
+				}
+			}
+			CIQ.addIndicators()
+			// remove MA from Vuex after loading Tech
+			var activatedMAList = CIQ.store.state.activatedMA
+			activatedMAList.splice(activatedMAList.findIndex(item=>item.url==field),1)
+			CIQ.store.commit("getMA",activatedMAList)
 
 			const used_indicators = JSON.stringify([item.value])
 			vm.$http

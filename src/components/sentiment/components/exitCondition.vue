@@ -135,15 +135,9 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['Two Moving Average CrossAbove'].indexOf(
+						['Two Moving Average CrossAbove','Two Moving Average CrossBelow','Three Moving Average CrossBelow'].indexOf(
 							conditionList[index].condition_description
-						) === 0 ||
-						['Two Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Three Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0
+						) !== -1
 					"
 					label="FastMA:"
 					size="mini"
@@ -755,6 +749,26 @@ export default {
 		handleTechnicalSelect(item) {
 			const vm = this
 			vm.technicalIndicator = item.value
+
+			//这里还没加MA所以先不清除已有的MA
+			for (var field in CIQ.Studies.studyLibrary) {
+				if(CIQ.Studies.studyLibrary[field].name == item.value){
+
+						this.$store.commit('getExitIndicators', field)
+						// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
+						let techIndicators = []
+						techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
+						techIndicators.push(field)
+						this.$store.commit('getTechnicalIndicators',techIndicators)
+						console.log(field)
+				}
+			}
+			CIQ.addIndicators()
+            // remove MA from Vuex after loading Tech
+			var activatedMAList = CIQ.store.state.activatedMA
+			activatedMAList.splice(activatedMAList.findIndex(item=>item.url==field),1)
+			CIQ.store.commit("getMA",activatedMAList)
+			
 			let type = vm.$store.state.exitTechType
 			const used_indicators = JSON.stringify([item.value])
 			vm.$http
@@ -871,8 +885,6 @@ export default {
 					if (MAListIndex != -1) {
 						activatedMAList.splice(MAListIndex, 1)
 					}
-					// const set = new Set(activatedMAList)
-					// activatedMAList = [...set]
 					this.$store.commit('getMA', activatedMAList)
 					this.$store.commit('getExitIndicators', result.url)
 					CIQ.addIndicators()
