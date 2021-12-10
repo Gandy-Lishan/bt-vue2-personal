@@ -120,7 +120,7 @@ label{
   flex:0.8;}
 
 .signalRight .el-form .el-form-item .el-form-item__content{
-  flex:0.8;
+  flex:0.6;
 }
 .signalRight .el-form-item .el-form-item__content .selectBox .el-select .el-input .el-input__inner{
   flex:0.8;
@@ -242,8 +242,21 @@ button.el-button.el-tooltip.item.el-button--warning.el-button--mini.is-circle{
   top: 21px
 }
 .signalRight .ma-container .el-form-item .el-form-item__label{
-  width: 151px !important;
+  width: 156px !important;
 }
 .signalRight .ma-container .el-form-item .el-form-item__content{
   margin-left: 10px !important;
 }
+.entryBtnsBox .saveBtn {
+  margin-left: 10px;
+ color: #67C23A;
+}
+.entryBtnsBox .loadBtn {
+  color: #409EFF;
+ }
+ .entryBtnsBox .removeBtn {
+  color: #F56C6C;
+ }
+ .clearBtn .el-button{
+  color: #F56C6C;
+ }

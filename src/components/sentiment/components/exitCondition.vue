@@ -1,5 +1,7 @@
 <template>
 	<div class="signalRight">
+		<el-tabs v-model="activeName" type="card">
+			<el-tab-pane label="Signal" name="first">
 		<el-form label-position="left" ref="signalRight">
 			<div class="radioBox">
 				<div @click="changeSentimentChecked(), resetFormData()">
@@ -55,12 +57,14 @@
 		<el-form ref="rightForm" label-position="left" label-width="80px">
 			<div v-for="(item, index) in conditionList" :key="index">
 				<!-- 必需 -->
-				<el-form-item label="Condition_description:" size="mini" v-show="false">
+				<div class="ma-container">
+				<el-form-item label="Signal Description:" size="mini" >
 					<el-input
 						v-model="conditionList[index].condition_description"
 						size="mini"
 					></el-input>
 				</el-form-item>
+				</div>
 				<el-form-item label="Parameter:" size="mini">
 					<el-radio
 						v-model="parameterRadio"
@@ -247,6 +251,7 @@
 						size="mini"
 					></el-input>
 				</el-form-item>
+				<!-- ???? -->
 				<el-form-item
 					v-if="
 						['Parabolic SAR CrossAbove'].indexOf(
@@ -362,7 +367,10 @@
 						) === -1 &&
 						['stay how many days in the market'].indexOf(
 							conditionList[index].condition_description
-						) === -1
+						) === -1 
+						&& ((['ATR trailing stop (Low) line CrossBelow'].indexOf(
+							conditionList[index].condition_description
+						) === -1) && myType === 'shortexit')
 					"
 					label="Value:"
 					prop="value"
@@ -374,6 +382,7 @@
 						size="mini"
 					></el-input>
 				</el-form-item>
+				<!-- longexit ATR(Close) technical -->
 				<el-form-item
 					v-if="
 						['Parabolic SAR CrossAbove'].indexOf(
@@ -384,7 +393,7 @@
 						) === 0 ||
 						['ATR trailing stop (Close) line CrossAbove'].indexOf(
 							conditionList[index].condition_description
-						) === 0 ||
+						) === 0 && (myType !== 'longexit') ||
 						['Bollinger Band Width Less'].indexOf(
 							conditionList[index].condition_description
 						) === 0 ||
@@ -434,6 +443,9 @@
 						) === 0 ||
 						['Chandelier Exits CrossBelow'].indexOf(
 							conditionList[index].condition_description
+						) === 0 ||
+												['ATR trailing stop (Low) line CrossBelow'].indexOf(
+							conditionList[index].condition_description
 						) === 0
 					"
 					label="ATR_multiplier:"
@@ -460,7 +472,9 @@
 						) === 0 ||
 						['Chandelier Exits CrossBelow'].indexOf(
 							conditionList[index].condition_description
-						) === 0
+						) === 0 || ['ATR trailing stop (Low) line CrossBelow'].indexOf(
+							conditionList[index].condition_description
+						) === 0 
 					"
 					label="ATR_period:"
 					size="mini"
@@ -531,7 +545,7 @@
 					size="mini"
 				>
 					<el-input
-						v-model="conditionList[index].stop_loss"
+						v-model="conditionList[index].stop_loss*100 + '%'"
 						size="mini"
 					></el-input>
 				</el-form-item>
@@ -546,7 +560,7 @@
 					size="mini"
 				>
 					<el-input
-						v-model="conditionList[index].take_profit"
+						v-model="conditionList[index].take_profit*100 + '%'"
 						size="mini"
 					></el-input>
 				</el-form-item>
@@ -564,6 +578,8 @@
 				</el-form-item>
 			</div>
 		</el-form>
+					</el-tab-pane>
+		</el-tabs>
 	</div>
 </template>
 <script>
@@ -572,7 +588,8 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
 	name: 'condition',
 	props: {
-		conditionFormData: Object
+		conditionFormData: Object,
+		myType: String
 	},
 	data() {
 		return {
@@ -607,7 +624,8 @@ export default {
 				{ value: 4, label: 'CrossBelow' }
 			],
 			combinationArr: ['AND', 'OR', 'SUM'],
-			combination: ''
+			combination: '',
+			activeName:'first',
 		}
 	},
 	created() {
@@ -801,12 +819,12 @@ export default {
 		changeSentimentChecked() {
 			this.isCheckedIndicators = false
 			this.indicatorRadio = 'Sentiment_Indicators:'
-			this.$store.commit('getIndicatorRadio', this.indicatorRadio)
+			this.$store.commit('getExitIndicatorRadio', this.indicatorRadio)
 		},
 		changeTechnicalChecked() {
 			this.isCheckedIndicators = true
 			this.indicatorRadio = 'Technical_Indicators:'
-			this.$store.commit('getIndicatorRadio', this.indicatorRadio)
+			this.$store.commit('getExitIndicatorRadio', this.indicatorRadio)
 		},
 		// change indicator, reset form data
 		resetFormData() {
@@ -828,7 +846,7 @@ export default {
 		},
 		clearConditionData() {
 			this.indicatorRadio = 'Sentiment_Indicators:'
-			this.$store.commit('getIndicatorRadio', 'Sentiment_Indicators:')
+			this.$store.commit('getExitIndicatorRadio', 'Sentiment_Indicators:')
 			this.isCheckedIndicators = false
 			const data = this.conditionList
 			for (var key in data) {
@@ -940,6 +958,18 @@ export default {
 				{ value: 'ATR Trailing Stops (Low)' },
 				{ value: 'Parabolic SAR' }
 			]
+		},
+		// show edit backtest condition data
+		setConditionEditData() {
+			const data = this.$store.state.editBacktestData.strategy.signal_exit
+			if(data.analysis_basis === 'sentiment'){
+				this.indicatorRadio === 'Sentiment_Indicators:'
+				this.sentimentIndicator === data.used_indicators
+			}else{
+				this.indicatorRadio === 'Technical_Indicators:'
+				this.technicalIndicator = data.used_indicators
+			}
+			this.conditionList = data.conditions
 		}
 	}
 }
@@ -948,7 +978,7 @@ export default {
 .signalRight {
 	  margin: 20px 20px;
 		border-radius: 10px;
-		padding: 10px 10px 10px 10px;
+		padding: 20px;
 		//flex-grow: 1;
 		border: 2px solid #6c6c6c;
 }

@@ -58,24 +58,21 @@
 			</el-col>
 			<el-col :xs="24" :sm="12" :md="14" :lg="14" :xl="14">		
 					<div class="condition-container">
-						<exit-condition ref="conditionChild" :conditionFormData.sync="conditionFormData"></exit-condition>
+						<exit-condition ref="conditionChild" :conditionFormData.sync="conditionFormData" :myType="myExitType"></exit-condition>
+						<div class="entryBtnsBox">
+						<el-button class="saveBtn"  round @click="saveExitFormData()"
+							>Save Signal</el-button
+						>
+						<el-button class="loadBtn" round v-on:click="openExitDialog"
+							>Load Signal</el-button
+						>
+						<el-button class="removeBtn" round @click="removeExitFormData"
+							>Remove Signal</el-button
+						>
+					</div>
 					</div>
 			</el-col>
 		</el-row>
-				<el-row class="entryBtns" type="flex">
-					<el-col :xs="12" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-button type="info" @click="clearExitFormData"
-							>Clear Exit Signal</el-button>
-					</el-col>
-					<el-col :xs="12" :sm="12" :md="8" :lg="8" :xl="8">
-					<el-button type="primary" @click="saveExitFormData()"
-						>Save Exit Signal</el-button>
-					</el-col>
-					<el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
-					<el-button type="warning" v-on:click="openExitDialog"
-						>Load Exit Signal</el-button>
-					</el-col>
-				</el-row>
 	</div>
 </template>
 <script>
@@ -115,7 +112,8 @@ export default {
 				{ label: 'Monthly', value: 'Monthly' }
 			],
 			dialogTableVisible: false,
-      conditionFormData: {}
+      conditionFormData: {},
+			myExitType: ''
 		}
 	},
 	components: { 'exit-condition': exitCondition, 'exit-signal-dialog': exitSignalDialog },
@@ -127,6 +125,9 @@ export default {
       this.exitData.exitType  = ''
       this.$refs.conditionChild.clearConditionData()
 		},
+			removeExitFormData() {
+			this.$refs.conditionChild.clearConditionData()
+		},	
 		async saveExitFormData() {
       this.$refs.conditionChild.getConditionData()
       console.log('condition',this.$store.state.saveConditionFormdata);
@@ -187,6 +188,7 @@ export default {
 		},
     selectExitAction(val) {
       this.$store.commit('getExitTechList',val)
+			this.myExitType = val
       this.$refs.conditionChild.getTechDrapDownList()
     },
     // clear exitType
@@ -224,7 +226,20 @@ export default {
           })}}).catch(error => {
       console.error(error);
       })
-    }
+    },
+		// show edit backtest data
+		getBacktestEditData() {
+			const editData = this.$store.state.editBacktestData
+			if(Object.keys(editData).length !== 0){
+			const data = editData.strategy.signal_exit
+      this.exitData.name = data.name
+			this.exitData.description = data.description
+			this.$store.commit('getFrequency',data.frequency)
+      this.exitData.frequency = data.frequency
+      this.exitData.exitType = data.type
+			this.$refs.conditionChild.setConditionEditData()
+			}
+		}
 	}
 }
 </script>
@@ -282,5 +297,17 @@ export default {
 }
 .active {
 	background-color: 666;
+}
+.condition-container{
+	position: relative;
+}
+.entryBtnsBox{
+	position: absolute;
+	top: 122px;
+	left: 722px;
+	display: flex;
+	flex-direction: column;
+	height: 200px;
+	justify-content: space-between
 }
 </style>

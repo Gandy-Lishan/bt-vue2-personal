@@ -13,7 +13,7 @@ export default new Vuex.Store({
     porfolioCash: '11',
     savePorfolioData: [],
     favoriteBacktestRowData: {},
-    editStrategyData: {},
+    editBacktestData: {},
     strategyEntryData: {},
     strategyExitData: {},
     indicators: {
@@ -23,7 +23,6 @@ export default new Vuex.Store({
       },
       extraIndicators: [],
       technicalIndicators: [],
-      exitFrequency: ''
     },
     customExitType: [{label: "short", value: "short"},{label: "longexit", value: "longexit"}],
     exitOption:  [{label: "longexit", value: "longexit"},
@@ -32,13 +31,16 @@ export default new Vuex.Store({
     indicatorsList: [],
     symbolName: '',
     trades: [],
-    indicatorRadio: 'Sentiment_Indicators:',
+    entryIndicatorRadio: 'Sentiment_Indicators:',
+    exitIndicatorRadio: 'Sentiment_Indicators:',
     conditionData: {},
     saveConditionFormdata: {},
     exitFrequency: '',
     entryType: 'long',
     exitTechType: '',
     activatedMA: [{period: 21, url: ""}],
+    editBacktestSetUpData: {},
+    isShowExitForm: true
   },
   mutations: {
     getNewPorfolioInputsValues(state,row) {
@@ -53,8 +55,8 @@ export default new Vuex.Store({
     getRunBacktestData(state, row){
       state.favoriteBacktestRowData = row
     },
-    getEditBacktestData(state, row) {
-      state.editStrategyData = row
+    getBacktestEditData(state, row) {
+      state.editBacktestData = row
     },
     getEntryIndicators(state, val){
       state.indicators.formIndicators.entry = val
@@ -129,8 +131,11 @@ export default new Vuex.Store({
     clearExitSignal(state, val){
       state.indicators.formIndicators.exit = ''
     },
-    getIndicatorRadio(state, val){
-      state.indicatorRadio = val
+    getEntryIndicatorRadio(state, val){
+      state.entryIndicatorRadio = val
+    },
+    getExitIndicatorRadio(state, val){
+      state.exitIndicatorRadio = val
     },
     getConditionData(state, val){
       state.conditionData = val
@@ -147,4 +152,11 @@ export default new Vuex.Store({
     getTechnicalIndicators(state, val){
     state.indicators.technicalIndicators = val
     },
+    getBacktestetUpEditData(state, row){
+      state.editBacktestSetUpData = row
+    },
+    // show exit form when save entrySignal
+    showExitFormData(state, val){
+      state.isShowExitForm = val
+    }
 }})
