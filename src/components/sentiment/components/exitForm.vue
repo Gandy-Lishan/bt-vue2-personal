@@ -140,7 +140,8 @@ export default {
 			this.exitData.exitType = ''
 			this.$refs.conditionChild.clearConditionData()
 
-			
+		    this.$store.commit('getExitIndicators','')
+			CIQ.addIndicators()
 		},
 		async saveExitFormData() {
 			this.$refs.conditionChild.getConditionData()

@@ -879,7 +879,8 @@ export default {
 						result = value
 					}
 				})
-				if (result.url !== undefined) {
+				try{
+                if (result.url !== undefined) {
 					// remove MA
 					var activatedMAList = this.$store.state.activatedMA
 					var MAListIndex = activatedMAList.findIndex(
@@ -897,8 +898,11 @@ export default {
 				} else {
 					return
 				}
+				}catch(err){}
+				
 			}
-			const res = this.$http
+			if (data.id !== undefined){
+const res = this.$http
 				.get('/demo/condition/', {
 					params: { id: data.id }
 				})
@@ -907,6 +911,9 @@ export default {
 						vm.conditionList = res.data.results
 					}
 				})
+			}
+
+			
 			//('data',data)
 			if (vm.indicatorRadio === 'Sentiment_Indicators:') {
 				this.sentimentIndicator = data.used_indicators

@@ -149,15 +149,9 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['Three Moving Average CrossAbove'].indexOf(
+						['Three Moving Average CrossAbove','Two Moving Average CrossBelow','Three Moving Average CrossBelow'].indexOf(
 							conditionList[index].condition_description
-						) === 0 ||
-						['Two Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Three Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0
+						) !== -1
 					"
 					label="MiddleMA:"
 					size="mini"
@@ -169,18 +163,9 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['Two Moving Average CrossAbove'].indexOf(
+						['Two Moving Average CrossAbove','Three Moving Average CrossAbove','Two Moving Average CrossBelow','Three Moving Average CrossBelow'].indexOf(
 							conditionList[index].condition_description
-						) === 0 ||
-						['Three Moving Average CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Two Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Three Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0
+						) !== -1
 					"
 					label="LowMA:"
 					size="mini"
@@ -192,12 +177,9 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['MACD CrossAbove'].indexOf(
+						['MACD CrossAbove','MACD CrossBelow'].indexOf(
 							conditionList[index].condition_description
-						) === 0 ||
-						['MACD CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0
+						) !== -1
 					"
 					label="MACDFast:"
 					size="mini"
@@ -209,12 +191,9 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['MACD CrossAbove'].indexOf(
+						['MACD CrossAbove','MACD CrossBelow'].indexOf(
 							conditionList[index].condition_description
-						) === 0 ||
-						['MACD CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0
+						) !== -1
 					"
 					label="MACDSlow:"
 					size="mini"
@@ -226,12 +205,9 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['MACD CrossAbove'].indexOf(
+						['MACD CrossAbove','MACD CrossBelow'].indexOf(
 							conditionList[index].condition_description
-						) === 0 ||
-						['MACD CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0
+						) !== -1
 					"
 					label="MACDSig:"
 					size="mini"
@@ -607,6 +583,8 @@ export default {
 	created() {
 		this.loadSentimentList()
 		this.technicaltIndicatorList = this.loadLongExit()
+
+		console.log(this.conditionList)
 	},
 	watch: {
 		conditionFormData: {
@@ -768,7 +746,7 @@ export default {
 			var activatedMAList = CIQ.store.state.activatedMA
 			activatedMAList.splice(activatedMAList.findIndex(item=>item.url==field),1)
 			CIQ.store.commit("getMA",activatedMAList)
-			
+
 			let type = vm.$store.state.exitTechType
 			const used_indicators = JSON.stringify([item.value])
 			vm.$http
@@ -875,6 +853,7 @@ export default {
 						result = value
 					}
 				})
+				try{
 				if (result.url !== undefined) {
 					// remove MA
 					var activatedMAList = this.$store.state.activatedMA
@@ -891,16 +870,21 @@ export default {
 				} else {
 					return
 				}
+				}catch(err){}
 			}
-			const res = this.$http
+			if (data.id !== undefined){
+const res = this.$http
 				.get('/demo/condition/', {
 					params: { id: data.id }
 				})
 				.then((res) => {
 					if (res.status == 200) {
 						vm.conditionList = res.data.results
+						console.log('conditionList: '+vm.conditionList)
 					}
 				})
+			}
+			
 			//('data',data)
 			if (vm.indicatorRadio === 'Sentiment_Indicators:') {
 				this.sentimentIndicator = data.used_indicators
