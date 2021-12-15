@@ -437,9 +437,10 @@ export default class AdvancedChartComponent extends Vue {
 				////(study)
 				CIQ.studys.push(study)
 			}
+			
 			//console.log(CIQ.stxx.panels['chart'].yAxis)
 
-			CIQ.stxx.setTimeZone("Asia/Hong_Kong", "America/New_York");
+			//CIQ.stxx.setTimeZone("Asia/Hong_Kong", "America/New_York");
 
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
 			CIQ.stxx.layout.headsUp = "floating";
@@ -448,7 +449,7 @@ export default class AdvancedChartComponent extends Vue {
 			//let showMarkers = CIQ.UI.Markers.prototype.showMarkers
 			// var mas = CIQ.Studies.movingAverageHelper(CIQ.stxx, "options");
 			// //(mas);
-
+           
 		}, 0)
 				
 	}

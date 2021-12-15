@@ -671,6 +671,7 @@ export default {
 				display: 'ST MA',
 				Field: result.url
 			})
+
 			// keep current MA
 			var objMA = { period: ma, url: result.url }
 			var activatedMAList = this.$store.state.activatedMA
@@ -692,7 +693,7 @@ export default {
 		// load short and long technical list
 		loadShortLong() {
 			return [
-				{ value: 'Commodity Channel Index' },
+				{ value: 'Commodity Channel Index ' },
 				{ value: 'Relative Strength Index' },
 				{ value: 'MACD' },
 				{ value: 'Moving Average' }
@@ -760,14 +761,14 @@ export default {
 			//这里还没加MA所以先不清除已有的MA
 			for (var field in CIQ.Studies.studyLibrary) {
 				if(CIQ.Studies.studyLibrary[field].name == item.value){
-										console.log(CIQ.Studies.studyLibrary[field])
+										//console.log(CIQ.Studies.studyLibrary[field])
 						this.$store.commit('getEntryIndicators', field)
 						// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
 						let techIndicators = []
 						techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
 						techIndicators.push(field)
 						this.$store.commit('getTechnicalIndicators',techIndicators)
-						console.log(field)
+						//console.log(field)
 				}
 			}
 			CIQ.addIndicators()
