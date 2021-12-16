@@ -422,8 +422,6 @@ export default {
 	created() {
 		this.loadSentimentList()
 		this.technicaltIndicatorList = this.loadLongExit()
-
-		console.log(this.conditionList)
 	},
 	watch: {
 		conditionFormData: {
@@ -453,7 +451,6 @@ export default {
 			this.$store.commit('getIndicatorsList', res.data)
 		},
 		renderMA(ma) {
-			console.log('renderMa')
 			let result
 			this.$store.state.indicatorsList.forEach((value, index) => {
 				if (this.sentimentIndicator) {
@@ -545,6 +542,7 @@ export default {
 		},
 		// technical search
 		indicatorTechnicalSearch(queryString, cb) {
+			//this.technicaltIndicatorList = this.$store.state.builtinList.map(item=>{return {value: item.value}})
 			var technicaltIndicatorList = this.technicaltIndicatorList
 			var results = queryString
 				? technicaltIndicatorList.filter(
@@ -587,6 +585,10 @@ export default {
 			CIQ.store.commit("getMA",activatedMAList)
 
 			let type = vm.$store.state.exitTechType
+			
+			if(item.value=="Commodity Channel Index "){
+				item.value = "Commodity Channel Index"
+			}
 			const used_indicators = JSON.stringify([item.value])
 			vm.$http
 				.get(
@@ -719,7 +721,7 @@ const res = this.$http
 				.then((res) => {
 					if (res.status == 200) {
 						vm.conditionList = res.data.results
-						console.log('conditionList: '+vm.conditionList)
+						//console.log('conditionList: '+vm.conditionList)
 					}
 				})
 			}

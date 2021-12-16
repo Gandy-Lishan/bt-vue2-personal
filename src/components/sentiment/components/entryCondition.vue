@@ -611,6 +611,7 @@ export default {
 		}
 	},
 	mounted() {
+		
 		this.loadSentimentList()
 		this.technicaltIndicatorList = this.loadShortLong()
 	},
@@ -636,13 +637,13 @@ export default {
 					}
 				}
 			)
+
 			vm.sentimentIndicatorList = res.data.map((obj) => {
 				return { value: obj.chart_name, url: obj.url }
 			})
 			this.$store.commit('getIndicatorsList', res.data)
 		},
 		renderMA(ma) {
-			console.log('renderMa')
 			let result
 			this.$store.state.indicatorsList.forEach((value, index) => {
 				if (this.sentimentIndicator) {
@@ -694,7 +695,7 @@ export default {
 		loadShortLong() {
 			return [
 				{ value: 'Commodity Channel Index ' },
-				{ value: 'Relative Strength Index' },
+				{ value: 'Relative Strength Index' }, 
 				{ value: 'MACD' },
 				{ value: 'Moving Average' }
 			]
@@ -722,7 +723,9 @@ export default {
 		},
 		// technical search
 		indicatorTechnicalSearch(queryString, cb) {
+			//this.technicaltIndicatorList = this.$store.state.builtinList.map(item=>{return {value: item.value}})
 			var technicaltIndicatorList = this.technicaltIndicatorList
+
 			var results = queryString
 				? technicaltIndicatorList.filter(
 						this.createTechnicalFilter(queryString)
@@ -733,6 +736,7 @@ export default {
 		},
 		createTechnicalFilter(queryString) {
 			return (technicaltIndicatorList) => {
+
 				return (
 					technicaltIndicatorList.value
 						.toLowerCase()
@@ -777,7 +781,12 @@ export default {
 			activatedMAList.splice(activatedMAList.findIndex(item=>item.url==field),1)
 			CIQ.store.commit("getMA",activatedMAList)
 
+            if(item.value=="Commodity Channel Index "){
+				item.value = "Commodity Channel Index"
+			}
 			const used_indicators = JSON.stringify([item.value])
+
+			console.log(used_indicators)
 			vm.$http
 				.get(
 					'/demo/signal/',
@@ -799,6 +808,7 @@ export default {
 				)
 				.then((res) => {
 					let conductionId
+					console.log(res)
 					res.data.results.forEach((item) => {
 						conductionId = item.id
 					})
@@ -895,6 +905,7 @@ export default {
 					// activatedMAList = [...set]
 					this.$store.commit('getMA', activatedMAList)
 					this.$store.commit('getEntryIndicators', result.url)
+					
 					CIQ.addIndicators()
 				} else {
 					return
@@ -903,13 +914,15 @@ export default {
 				
 			}
 			if (data.id !== undefined){
-const res = this.$http
+
+                const res = this.$http
 				.get('/demo/condition/', {
 					params: { id: data.id }
 				})
 				.then((res) => {
 					if (res.status == 200) {
 						vm.conditionList = res.data.results
+						
 					}
 				})
 			}
