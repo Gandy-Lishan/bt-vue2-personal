@@ -8,6 +8,14 @@ export default new Vuex.Store({
       inputDescriptionValue: '',
       inputOriginalAssetValue: ''
     },
+    backtestInfo:{
+        entry: {
+        signals: [{name:111}]
+      },
+    exit: {
+        signals: [{}]
+      }
+    },
     openedPorfolioBacktests: [],
     count: 1,
     porfolioCash: '11',
@@ -31,16 +39,17 @@ export default new Vuex.Store({
     indicatorsList: [],
     symbolName: '',
     trades: [],
-    entryIndicatorRadio: 'Sentiment_Indicators:',
+    entryIndicatorRadio: 'sentiment',
     exitIndicatorRadio: 'Sentiment_Indicators:',
     conditionData: {},
     saveConditionFormdata: {},
     exitFrequency: '',
-    entryType: 'long',
+    entryType: '',
     exitTechType: '',
     activatedMA: [{period: 21, url: ""}],
     editBacktestSetUpData: {},
-    isShowExitForm: true
+    isShowExitForm: true,
+    tabIndex: 0
   },
   mutations: {
     getNewPorfolioInputsValues(state,row) {
@@ -158,5 +167,56 @@ export default new Vuex.Store({
     // show exit form when save entrySignal
     showExitFormData(state, val){
       state.isShowExitForm = val
+    },
+    addSignal(state, val){
+      state.backtestInfo[val]['signals'].push({})
+    },
+    moveSignal(state,val){
+      console.log('list',state.backtestInfo.entry.signals)
+      state.backtestInfo[val]['signals'].slice(state.tabIndex,1)
+    },
+    setEntryData(state, obj) {
+      // console.log(obj);
+      // if(obj.criteria === 'entry'){
+      //   const index = obj.index
+      //   delete obj.index
+      //   delete obj.criteria
+      //   state.backtestInfo.entry.signals[index] = obj
+      // }
+      var index = obj.index;
+      state.tabIndex = index
+      var criteria = obj.criteria
+      delete obj.index
+      delete obj.criteria
+      console.log("index",index);
+      console.log("criteria",criteria);
+      if (index !== "" && criteria !== ""){
+        var data = state.backtestInfo[criteria]["signals"][index]
+        data = Object.assign(data,obj)
+        state.backtestInfo[criteria]["signals"][index] = data
+        console.log(data);
+        
+      }
+    },
+    setFd(state, obj){
+      let criteria = obj.criteria
+      delete obj.index
+      delete obj.criteria
+      for(let key in obj){
+        if(obj[key]){
+          state.backtestInfo[criteria][key] = obj[key]
+        }
+      }
+      console.log('rrrr',state.backtestInfo.entry);
+    },
+    deleteIndicator(state,val){
+      state.backtestInfo[val.criteria].signals[val.index].sentimentIndicator = ''
+      state.backtestInfo[val.criteria].signals[val.index].technicalIndicator = ''
     }
-}})
+},
+actions: {
+  Try(context, val){
+    context.commit('setEntryData', val)
+  }
+}
+})

@@ -35,6 +35,7 @@ Vue.use(ElementUI,{ locale })
 Vue.prototype.$http = axios
 Vue.prototype.$message = Message
 Vue.config.productionTip = false
+axios.defaults.withCredentials = true
 // Vue.use(VueDirectiveImagePreviewer,{
 //   zIndex:9999,
 //   previewSize:3
