@@ -167,6 +167,8 @@ export default {
 		},
 		removeEntryFormData() {
 			this.$refs.conditionChild.clearConditionData()
+			this.$store.commit('getEntryIndicators','')
+			CIQ.addIndicators()
 		},
 		async saveEntryFormData() {
 			this.$refs.conditionChild.getConditionData()
@@ -255,6 +257,9 @@ export default {
 				this.entryData.entryType = data.type
 				this.$refs.conditionChild.setConditionEditData()
 			}
+		},
+		selectFrequencyAction(val) {
+			this.$store.commit('getFrequency', val)
 		}
 	}
 }

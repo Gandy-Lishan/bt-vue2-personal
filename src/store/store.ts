@@ -37,6 +37,7 @@ export default new Vuex.Store({
     {label: "short", value: "short"}],
     strategyId: '',
     indicatorsList: [],
+    builtinList:[],
     symbolName: '',
     trades: [],
     entryIndicatorRadio: 'sentiment',
@@ -121,6 +122,9 @@ export default new Vuex.Store({
     },
     getIndicatorsList(state, data){
       state.indicatorsList = data
+    },
+    getBuiltinList(state,data){
+      state.builtinList = data
     },
     getSymbolName(state, val) {
       state.symbolName = val

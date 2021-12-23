@@ -384,6 +384,9 @@
 			<cq-dialog class="description">
 				<cq-study-context></cq-study-context>
 			</cq-dialog>
+			<cq-dialog class="description">
+				<cq-study-context-default></cq-study-context-default>
+			</cq-dialog>
 		</cq-dialogs>
 
 		<cq-side-panel></cq-side-panel>
@@ -437,9 +440,10 @@ export default class AdvancedChartComponent extends Vue {
 				////(study)
 				CIQ.studys.push(study)
 			}
+			
 			//console.log(CIQ.stxx.panels['chart'].yAxis)
 
-			CIQ.stxx.setTimeZone("Asia/Hong_Kong", "America/New_York");
+			//CIQ.stxx.setTimeZone("Asia/Hong_Kong", "America/New_York");
 
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
 			CIQ.stxx.layout.headsUp = "floating";
@@ -448,7 +452,7 @@ export default class AdvancedChartComponent extends Vue {
 			//let showMarkers = CIQ.UI.Markers.prototype.showMarkers
 			// var mas = CIQ.Studies.movingAverageHelper(CIQ.stxx, "options");
 			// //(mas);
-
+           
 		}, 0)
 				
 	}

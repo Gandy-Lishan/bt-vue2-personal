@@ -139,15 +139,9 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['Two Moving Average CrossAbove'].indexOf(
+						['Two Moving Average CrossAbove','Two Moving Average CrossBelow','Three Moving Average CrossBelow'].indexOf(
 							conditionList[index].condition_description
-						) === 0 ||
-						['Two Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Three Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0
+						) !== -1
 					"
 					label="FastMA:"
 					size="mini"
@@ -159,15 +153,9 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['Three Moving Average CrossAbove'].indexOf(
+						['Three Moving Average CrossAbove','Two Moving Average CrossBelow','Three Moving Average CrossBelow'].indexOf(
 							conditionList[index].condition_description
-						) === 0 ||
-						['Two Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Three Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0
+						) !== -1
 					"
 					label="MiddleMA:"
 					size="mini"
@@ -179,18 +167,9 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['Two Moving Average CrossAbove'].indexOf(
+						['Two Moving Average CrossAbove','Three Moving Average CrossAbove','Two Moving Average CrossBelow','Three Moving Average CrossBelow'].indexOf(
 							conditionList[index].condition_description
-						) === 0 ||
-						['Three Moving Average CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Two Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Three Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0
+						) !== -1
 					"
 					label="LowMA:"
 					size="mini"
@@ -202,12 +181,9 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['MACD CrossAbove'].indexOf(
+						['MACD CrossAbove','MACD CrossBelow'].indexOf(
 							conditionList[index].condition_description
-						) === 0 ||
-						['MACD CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0
+						) !== -1
 					"
 					label="MACDFast:"
 					size="mini"
@@ -219,12 +195,9 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['MACD CrossAbove'].indexOf(
+						['MACD CrossAbove','MACD CrossBelow'].indexOf(
 							conditionList[index].condition_description
-						) === 0 ||
-						['MACD CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0
+						) !== -1
 					"
 					label="MACDSlow:"
 					size="mini"
@@ -236,12 +209,9 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['MACD CrossAbove'].indexOf(
+						['MACD CrossAbove','MACD CrossBelow'].indexOf(
 							conditionList[index].condition_description
-						) === 0 ||
-						['MACD CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0
+						) !== -1
 					"
 					label="MACDSig:"
 					size="mini"
@@ -254,118 +224,16 @@
 				<!-- ???? -->
 				<el-form-item
 					v-if="
-						['Parabolic SAR CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Parabolic SAR CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['price lower Low'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Accumulation & Distribution Higher'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Price Higher High'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Accumulation & Distribution Lower'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['ATR trailing stop (Close) line CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['ATR trailing stop (High) line CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['ATR trailing stop (Close) line CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['MACD CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['MACD CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Above Bollinger Upper Band'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Below Bollinger Lower Band'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Bollinger Band Width Greater'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Bollinger Band Width Less'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['EMA200 Less'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['EMA200 Greater'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Chandelier Exits CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Chandelier Exits CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['NAsdAQ Composite / S&P 500 Greater'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['S&P 500 Moving Average Greater'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Moving Average CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Two Moving Average CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Two Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Three Moving Average CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Three Moving Average CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Stop Loss and Take profit'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Stay Above Moving Average'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Stay Below Moving Average'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Touch Above Moving Average'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Touch Below Moving Average'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Breakout Support'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Breakout Resistance'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Bollinger Upper Band CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Bollinger Lower Band CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['Triple Tap Trend Reversal Divergence'].indexOf(
-							conditionList[index].condition_description
-						) === -1 &&
-						['stay how many days in the market'].indexOf(
+						['Parabolic SAR CrossAbove','Parabolic SAR CrossBelow','price lower Low','Accumulation & Distribution Higher',
+						'Price Higher High','Accumulation & Distribution Lower','ATR trailing stop (Close) line CrossAbove',
+						'ATR trailing stop (High) line CrossAbove','ATR trailing stop (Close) line CrossBelow','MACD CrossAbove',
+						'MACD CrossBelow','Above Bollinger Upper Band','Below Bollinger Lower Band','Bollinger Band Width Greater',
+						'Bollinger Band Width Less','EMA200 Less','EMA200 Greater','Chandelier Exits CrossAbove','Chandelier Exits CrossBelow',
+						'NAsdAQ Composite / S&P 500 Greater','S&P 500 Moving Average Greater','Moving Average CrossBelow','Moving Average CrossAbove',
+						'Two Moving Average CrossAbove','Two Moving Average CrossBelow','Three Moving Average CrossAbove','Three Moving Average CrossBelow',
+						'Stop Loss and Take profit','Stay Above Moving Average','Stay Below Moving Average','Touch Above Moving Average','Touch Below Moving Average',
+						'Breakout Support','Breakout Resistance','Bollinger Upper Band CrossBelow','Bollinger Lower Band CrossAbove','Triple Tap Trend Reversal Divergence',
+						'stay how many days in the market'].indexOf(
 							conditionList[index].condition_description
 						) === -1 
 						&& ((['ATR trailing stop (Low) line CrossBelow'].indexOf(
@@ -415,7 +283,9 @@
 						['Stay Below Moving Average'].indexOf(
 							conditionList[index].condition_description
 						) === 0 ||
-						['stay how many days in the market'].indexOf(
+						['Parabolic SAR CrossAbove','Parabolic SAR CrossBelow','ATR trailing stop (Close) line CrossAbove',
+						'Bollinger Band Width Less','CMFI CrossAbove','CMFI CrossBelow','Moving Average CrossBelow',
+						'Moving Average CrossAbove','Stay Above Moving Average','Stay Below Moving Average','stay how many days in the market'].indexOf(
 							conditionList[index].condition_description
 						) === 0
 					"
@@ -429,19 +299,8 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['ATR trailing stop (Close) line CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['ATR trailing stop (High) line CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['ATR trailing stop (Close) line CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Chandelier Exits CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Chandelier Exits CrossBelow'].indexOf(
+						['ATR trailing stop (Close) line CrossAbove','ATR trailing stop (High) line CrossAbove',
+						'ATR trailing stop (Close) line CrossBelow','Chandelier Exits CrossAbove','Chandelier Exits CrossBelow'].indexOf(
 							conditionList[index].condition_description
 						) === 0 ||
 												['ATR trailing stop (Low) line CrossBelow'].indexOf(
@@ -458,19 +317,8 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['ATR trailing stop (Close) line CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['ATR trailing stop (High) line CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['ATR trailing stop (Close) line CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Chandelier Exits CrossAbove'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Chandelier Exits CrossBelow'].indexOf(
+						['ATR trailing stop (Close) line CrossAbove','ATR trailing stop (High) line CrossAbove',
+						'ATR trailing stop (Close) line CrossBelow','Chandelier Exits CrossAbove','Chandelier Exits CrossBelow'].indexOf(
 							conditionList[index].condition_description
 						) === 0 || ['ATR trailing stop (Low) line CrossBelow'].indexOf(
 							conditionList[index].condition_description
@@ -486,10 +334,7 @@
 				</el-form-item>
 				<el-form-item
 					v-if="
-						['Above Bollinger Upper Band'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Below Bollinger Lower Band'].indexOf(
+						['Above Bollinger Upper Band','Below Bollinger Lower Band'].indexOf(
 							conditionList[index].condition_description
 						) === 0
 					"
@@ -501,10 +346,7 @@
 
 				<el-form-item
 					v-if="
-						['Parabolic SAR CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Parabolic SAR CrossAbove'].indexOf(
+						['Parabolic SAR CrossBelow','Parabolic SAR CrossAbove'].indexOf(
 							conditionList[index].condition_description
 						) === 0
 					"
@@ -519,10 +361,7 @@
 
 				<el-form-item
 					v-if="
-						['Parabolic SAR CrossBelow'].indexOf(
-							conditionList[index].condition_description
-						) === 0 ||
-						['Parabolic SAR CrossAbove'].indexOf(
+						['Parabolic SAR CrossBelow','Parabolic SAR CrossAbove'].indexOf(
 							conditionList[index].condition_description
 						) === 0
 					"
@@ -545,7 +384,7 @@
 					size="mini"
 				>
 					<el-input
-						v-model="conditionList[index].stop_loss*100 + '%'"
+						v-model="conditionList[index].stop_loss"
 						size="mini"
 					></el-input>
 				</el-form-item>
@@ -560,7 +399,7 @@
 					size="mini"
 				>
 					<el-input
-						v-model="conditionList[index].take_profit*100 + '%'"
+						v-model="conditionList[index].take_profit"
 						size="mini"
 					></el-input>
 				</el-form-item>
@@ -660,7 +499,6 @@ export default {
 			this.$store.commit('getIndicatorsList', res.data)
 		},
 		renderMA(ma) {
-			console.log('renderMa')
 			let result
 			this.$store.state.indicatorsList.forEach((value, index) => {
 				if (this.sentimentIndicator) {
@@ -752,6 +590,7 @@ export default {
 		},
 		// technical search
 		indicatorTechnicalSearch(queryString, cb) {
+			//this.technicaltIndicatorList = this.$store.state.builtinList.map(item=>{return {value: item.value}})
 			var technicaltIndicatorList = this.technicaltIndicatorList
 			var results = queryString
 				? technicaltIndicatorList.filter(
@@ -773,7 +612,31 @@ export default {
 		handleTechnicalSelect(item) {
 			const vm = this
 			vm.technicalIndicator = item.value
+
+			//这里还没加MA所以先不清除已有的MA
+			for (var field in CIQ.Studies.studyLibrary) {
+				if(CIQ.Studies.studyLibrary[field].name == item.value){
+
+						this.$store.commit('getExitIndicators', field)
+						// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
+						let techIndicators = []
+						techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
+						techIndicators.push(field)
+						this.$store.commit('getTechnicalIndicators',techIndicators)
+						console.log(field)
+				}
+			}
+			CIQ.addIndicators()
+            // remove MA from Vuex after loading Tech
+			var activatedMAList = CIQ.store.state.activatedMA
+			activatedMAList.splice(activatedMAList.findIndex(item=>item.url==field),1)
+			CIQ.store.commit("getMA",activatedMAList)
+
 			let type = vm.$store.state.exitTechType
+			
+			if(item.value=="Commodity Channel Index "){
+				item.value = "Commodity Channel Index"
+			}
 			const used_indicators = JSON.stringify([item.value])
 			vm.$http
 				.get(
@@ -879,6 +742,7 @@ export default {
 						result = value
 					}
 				})
+				try{
 				if (result.url !== undefined) {
 					// remove MA
 					var activatedMAList = this.$store.state.activatedMA
@@ -889,24 +753,27 @@ export default {
 					if (MAListIndex != -1) {
 						activatedMAList.splice(MAListIndex, 1)
 					}
-					// const set = new Set(activatedMAList)
-					// activatedMAList = [...set]
 					this.$store.commit('getMA', activatedMAList)
 					this.$store.commit('getExitIndicators', result.url)
 					CIQ.addIndicators()
 				} else {
 					return
 				}
+				}catch(err){}
 			}
-			const res = this.$http
+			if (data.id !== undefined){
+const res = this.$http
 				.get('/demo/condition/', {
 					params: { id: data.id }
 				})
 				.then((res) => {
 					if (res.status == 200) {
 						vm.conditionList = res.data.results
+						//console.log('conditionList: '+vm.conditionList)
 					}
 				})
+			}
+			
 			//('data',data)
 			if (vm.indicatorRadio === 'Sentiment_Indicators:') {
 				this.sentimentIndicator = data.used_indicators

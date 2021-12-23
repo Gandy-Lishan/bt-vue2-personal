@@ -685,6 +685,7 @@ export default {
 		}
 	},
 	mounted() {
+		
 		this.loadSentimentList()
 		this.technicaltIndicatorList = this.loadShortLong()
 	},
@@ -710,32 +711,29 @@ export default {
 					}
 				}
 			)
+
 			vm.sentimentIndicatorList = res.data.map((obj) => {
 				return { value: obj.chart_name, url: obj.url }
 			})
 			this.$store.commit('getIndicatorsList', res.data)
 		},
 		renderMA(ma) {
-			console.log('renderMa')
 			let result
 			this.$store.state.indicatorsList.forEach((value, index) => {
 				if (this.sentimentIndicator) {
 					if (value.chart_name.indexOf(this.sentimentIndicator) !== -1) {
 						result = value
-						console.log('result')
-						console.log(result)
 					}
 				} else {
 					if (value.chart_name.indexOf(this.sentimentIndicator) !== -1) {
 						result = value
-						console.log('result')
-						console.log(result)
 					}
 				}
 			})
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				if (
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
+					
 				) {
 					CIQ.Studies.removeStudy(
 						CIQ.stxx,
@@ -748,6 +746,7 @@ export default {
 				display: 'ST MA',
 				Field: result.url
 			})
+
 			// keep current MA
 			var objMA = { period: ma, url: result.url }
 			var activatedMAList = this.$store.state.activatedMA
@@ -769,8 +768,8 @@ export default {
 		// load short and long technical list
 		loadShortLong() {
 			return [
-				{ value: 'Commodity Channel Index' },
-				{ value: 'Relative Strength Index' },
+				{ value: 'Commodity Channel Index ' },
+				{ value: 'Relative Strength Index' }, 
 				{ value: 'MACD' },
 				{ value: 'Moving Average' }
 			]
@@ -796,6 +795,29 @@ export default {
 				)
 			}
 		},
+		// technical search
+		indicatorTechnicalSearch(queryString, cb) {
+			//this.technicaltIndicatorList = this.$store.state.builtinList.map(item=>{return {value: item.value}})
+			var technicaltIndicatorList = this.technicaltIndicatorList
+
+			var results = queryString
+				? technicaltIndicatorList.filter(
+						this.createTechnicalFilter(queryString)
+				  )
+				: technicaltIndicatorList
+			// 调用 callback 返回建议列表的数据
+			cb(results)
+		},
+		createTechnicalFilter(queryString) {
+			return (technicaltIndicatorList) => {
+
+				return (
+					technicaltIndicatorList.value
+						.toLowerCase()
+						.indexOf(queryString.toLowerCase()) === 0
+				)
+			}
+		},
 		handleSentimentSelect(item) {
 			this.sentimentIndicator = item.value
 			// remove MA
@@ -810,40 +832,35 @@ export default {
 			this.$store.commit('getEntryIndicators', item.url)
 			CIQ.addIndicators()
 		},
-		// technical search
-		indicatorTechnicalSearch(queryString, cb) {
-			var technicaltIndicatorList = this.technicaltIndicatorList
-			var results = queryString
-				? technicaltIndicatorList.filter(
-						this.createTechnicalFilter(queryString)
-				  )
-				: technicaltIndicatorList
-			// 调用 callback 返回建议列表的数据
-			cb(results)
-		},
-		createTechnicalFilter(queryString) {
-			return (technicaltIndicatorList) => {
-				return (
-					technicaltIndicatorList.value
-						.toLowerCase()
-						.indexOf(queryString.toLowerCase()) === 0
-				)
-			}
-		},
 		handleTechnicalSelect(item) {
 			const vm = this
 			vm.technicalIndicator = item.value
 
 			//这里还没加MA所以先不清除已有的MA
-			let techIndicators = []
-			techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
-			techIndicators.push(vm.techIndicators)
+			for (var field in CIQ.Studies.studyLibrary) {
+				if(CIQ.Studies.studyLibrary[field].name == item.value){
+										//console.log(CIQ.Studies.studyLibrary[field])
+						this.$store.commit('getEntryIndicators', field)
+						// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
+						let techIndicators = []
+						techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
+						techIndicators.push(field)
+						this.$store.commit('getTechnicalIndicators',techIndicators)
+						//console.log(field)
+				}
+			}
+			CIQ.addIndicators()
+			// remove MA from Vuex after loading Tech
+			var activatedMAList = CIQ.store.state.activatedMA
+			activatedMAList.splice(activatedMAList.findIndex(item=>item.url==field),1)
+			CIQ.store.commit("getMA",activatedMAList)
 
-			console.log(techIndicators)
-			CIQ.store.commit('getTechnicalIndicators', techIndicators)
-			CIQ.addTechIndicators()
-
+            if(item.value=="Commodity Channel Index "){
+				item.value = "Commodity Channel Index"
+			}
 			const used_indicators = JSON.stringify([item.value])
+
+			console.log(used_indicators)
 			vm.$http
 				.get(
 					'/demo/signal/',
@@ -865,6 +882,7 @@ export default {
 				)
 				.then((res) => {
 					let conductionId
+					console.log(res)
 					res.data.results.forEach((item) => {
 						conductionId = item.id
 					})
@@ -943,7 +961,8 @@ export default {
 						result = value
 					}
 				})
-				if (result.url !== undefined) {
+				try{
+                if (result.url !== undefined) {
 					// remove MA
 					var activatedMAList = this.$store.state.activatedMA
 					var MAListIndex = activatedMAList.findIndex(
@@ -957,20 +976,29 @@ export default {
 					// activatedMAList = [...set]
 					this.$store.commit('getMA', activatedMAList)
 					this.$store.commit('getEntryIndicators', result.url)
+					
 					CIQ.addIndicators()
 				} else {
 					return
 				}
+				}catch(err){}
+				
 			}
-			const res = this.$http
+			if (data.id !== undefined){
+
+                const res = this.$http
 				.get('/demo/condition/', {
 					params: { id: data.id }
 				})
 				.then((res) => {
 					if (res.status == 200) {
 						vm.conditionList = res.data.results
+						
 					}
 				})
+			}
+
+			
 			//('data',data)
 			if (vm.indicatorRadio === 'Sentiment_Indicators:') {
 				this.sentimentIndicator = data.used_indicators
