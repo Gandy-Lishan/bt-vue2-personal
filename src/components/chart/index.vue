@@ -12,6 +12,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import AdvancedChartComponent from './AdvancedChartComponent.vue'
 import { getCustomConfig } from './resources' // ChartIQ library resources
 import store from '../../store/store'
+import axios from "axios"
 
 // @ts-ignore
 import { CIQ } from 'chartiq/js/components' // Required for types in chartInitialized
@@ -37,6 +38,29 @@ export default class AdvancedWrapper extends Vue {
 		this.config = getCustomConfig({ symbol, chartId, onChartReady, restore })
 	}
 
+	// async testIndicators(url,indicators) {
+		
+		// for ( var  i = 0; i < indicators.length; i++) {
+        //     url += `${i==0?'&indicator=':`&indicator_${i+1}=`}`+indicators[i];
+        // }
+		// 	const res = await axios.get(
+		// 		url,
+		// 		{
+		// 			auth: {
+		// 				username: 'sentimentrader_backtest_api',
+		// 				password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+		// 			},
+		// 		}
+		// 	)
+
+		// 	// var sentimentIndicatorList = res.data.map((obj) => {
+		// 	// 	return { value: obj.chart_name, url: obj.url }
+		// 	// })
+			
+		// 	if(res.data.length!=0){
+		// 		console.log(res)
+		// 	}	
+	// }
 	chartInitialized({
 		/* eslint-disable */
 		chartEngine,
@@ -50,8 +74,24 @@ export default class AdvancedWrapper extends Vue {
 	}) {
 		CIQ.store = store;
 		CIQ.vue = Vue;
-		// refresh page
+		// refresh pag
 		CIQ.addIndicators()
+		
+		// console.log("length of indicatorList: ",CIQ.store.state.indexsList.length)
+		// for (var i = 0; i < CIQ.store.state.indexsList.length; i++) {
+        //                 var fields = CIQ.store.state.indexsList[i];
+        //                 var item = {
+        //                     symbol: fields.symbol,
+        //                     name: fields.name,
+        //                     exchDisp: " "
+        //                 };
+		// 				//console.log(item)
+		// 				this.testIndicators(
+		// 					"https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/pair_data?symbol=AAOI",
+		// 					[item.symbol]
+		// 				)
+		// }
+
 		// Methods for capturing state changes in chart engine and UI
 		// 	Channel subscribe example to listen to breakpoint changes
 		// 	const { channels } = config

@@ -40,8 +40,25 @@ export default new Vuex.Store({
     entryType: 'long',
     exitTechType: '',
     activatedMA: [{period: 21, url: ""}],
+    favoriteList:[],
+    // indicators look up
+    allSymbolsList: [],
+    stocksList: [],
+    indexsList: [],
   },
   mutations: {
+    getFavoriteList(state,list){
+      state.favoriteList = list 
+    },
+    getAllSymbolsList(state,list){
+      state.allSymbolsList = list
+    },
+    getStocksList(state,list){
+      state.stocksList = list
+    },
+    getIndexsList(state,list){
+      state.indexsList = list
+    },
     getNewPorfolioInputsValues(state,row) {
       state.newPorfolioInputsValues.inputNameValue = row.name
       state.newPorfolioInputsValues.inputDescriptionValue = row.description

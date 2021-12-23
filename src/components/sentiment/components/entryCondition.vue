@@ -611,7 +611,7 @@ export default {
 		}
 	},
 	mounted() {
-		
+		this.$cookies.set("username","test")
 		this.loadSentimentList()
 		this.technicaltIndicatorList = this.loadShortLong()
 	},
@@ -695,7 +695,7 @@ export default {
 		loadShortLong() {
 			return [
 				{ value: 'Commodity Channel Index ' },
-				{ value: 'Relative Strength Index' }, 
+				{ value: 'RSI' }, 
 				{ value: 'MACD' },
 				{ value: 'Moving Average' }
 			]
@@ -786,7 +786,7 @@ export default {
 			}
 			const used_indicators = JSON.stringify([item.value])
 
-			console.log(used_indicators)
+			//console.log(used_indicators)
 			vm.$http
 				.get(
 					'/demo/signal/',
@@ -883,8 +883,10 @@ export default {
 			const data = this.conditionFormData
 			const allSymbolList = this.$store.state.indicatorsList
 			let vm = this
+			 
 			if (this.indicatorRadio === 'Sentiment_Indicators:') {
 				let result
+				//console.log(data.used_indicators)
 				allSymbolList.forEach((value, index) => {
 					if (value.chart_name.indexOf(data.used_indicators) !== -1) {
 						result = value
