@@ -18,7 +18,7 @@
 				</el-form-item>
 				<div><h2 class="note">Criteria Direction/Frequency</h2></div>
 				<el-form-item label="Direction:" prop="entryType">
-					<el-radio-group v-model="fd.type" @change="getEntryType">
+					<el-radio-group v-model="fd.direction" @change="getEntryDirection">
 						<el-radio label="Long">Long</el-radio>
 						<el-radio label="Short">Short</el-radio>
 					</el-radio-group>
@@ -54,8 +54,10 @@ export default {
 		return {
 			fd: {
 				description: '',
-				type: '',
-				frequency: ''
+				direction: '',
+				frequency: '',
+				relation: 0,
+    			score: 0,
 			},
 			// Form validation rules
 			signalFormRules: {
@@ -91,8 +93,8 @@ export default {
 		'condition-tab': conditionTab
 	},
 	methods: {
-		getEntryType(e) {
-			this.$store.commit('getEntryType', e)
+		getEntryDirection(e) {
+			this.$store.commit('getEntryDirection', e)
 		},
 		getFrequency(e) {
 			this.$store.commit('getFrequency', e)

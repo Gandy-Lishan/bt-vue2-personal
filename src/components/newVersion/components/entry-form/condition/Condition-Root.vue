@@ -2,7 +2,6 @@
 	<div class="condition-form">
 		<!-- signal-dialog -->
 		<signal-dialog :dialogTableVisible="dialogTableVisible" @openSignalDialog="openSignalDialog"></signal-dialog>
-		{{'qqqq' + tabIndex}}
 		<el-form label-position="left">
 			<div class="signalIndicatorBox">
 				<div class="indicatorBox">
@@ -61,6 +60,7 @@
 			<div class="btnBox">
 				<el-button round>Save Signal for Future Use</el-button>
 				<el-button round @click="openSignalDialog">Load Signal for From Databse</el-button>
+			    <el-button round v-if="criteria === 'exit'" @click="saveBacktest">Save Backtesst</el-button>
 			</div>
 		</el-form>
 	</div>
@@ -79,6 +79,8 @@ import rsiDefault from './indicator-default-setting/Rsi-default.vue'
 import rsiConditionForm from './technical/Rsi-Condition-Form.vue'
 import signalDialog from './signallist/Signal-Dialog.vue'
 import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
+import SignalCode from "@/tools/codeTool.js"
+import loginFormateVue from '@/loginFormate.vue'
 export default {
 	extends: base,
 	// props: {
@@ -131,6 +133,32 @@ export default {
 		},
 		openSignalDialog() {
 			this.dialogTableVisible = !this.dialogTableVisible
+	},
+	saveBacktest() {
+		console.log('save data',this.$store.state.backtestInfo);
+		console.log('save entry',this.$store.state.backtestInfo.entry);
+		const signalList = this.$store.state.backtestInfo.entry.signals
+		const signalObj = []
+		signalList.forEach(item => {
+				if(item.sentimentIndicator){
+					item.indicator = item.sentimentIndicator
+					item.analysis = 'Sentiment'
+					delete item.technicalIndicator
+					delete item.sentimentIndicator
+				}
+				if(item.technicalIndicator){
+					item.indicator = item.technicalIndicator
+					item.analysis = 'Technical'
+					delete item.technicalIndicator
+					delete item.sentimentIndicator
+				}
+		})
+		const b = new SignalCode()
+		for (var i in signalList){
+         b.encode(signalList[i])
+		 console.log(b.encode(signalList[i]));
+        }
+		console.log('解码',); 
 	}
 }
 }

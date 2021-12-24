@@ -25,7 +25,12 @@
           <el-button @click="selectSignal(scope.row)"></el-button>
         </template>
       </el-table-column> -->
-      <el-table-column label="type" prop="type" align="center" width="80px">
+      <el-table-column
+        label="description"
+        prop="description"
+        align="center"
+      ></el-table-column>
+      <el-table-column label="analysis babel" prop="analysis" align="center" width="80px">
       </el-table-column>
         <el-table-column label="source" prop="user" align="center" width="80px">
           <template slot-scope="scope">
@@ -33,22 +38,6 @@
             <span v-else>custom</span>
           </template>
         </el-table-column>
-       <el-table-column
-        label="analysis basis"
-        prop="analysis_basis"
-        align="center"
-        width="105px"
-      ></el-table-column>
-      <el-table-column
-        label="name"
-        prop="name"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        label="used indicators"
-        prop="used_indicators"
-        align="center"
-      ></el-table-column>
       <el-table-column label="frequency" prop="frequency" align="center" width="80px">
       </el-table-column>
     </el-table>
@@ -76,30 +65,19 @@
           <el-button @click="selectSignal(scope.row)"></el-button>
         </template>
       </el-table-column> -->
-      <el-table-column label="type" prop="type" align="center" width="80px">
-      </el-table-column>
+      <el-table-column label="description" prop="description" align="center" width="80px">
+             <el-table-column
+        label="analysis basis"
+        prop="analysis"
+        align="center"
+        width="105px"
+      ></el-table-column></el-table-column>
         <el-table-column label="source" prop="user" align="center" width="80px">
           <template slot-scope="scope">
             <span v-if="scope.row.user === 'admin'">system</span>
             <span v-else>custom</span>
           </template>
         </el-table-column>
-       <el-table-column
-        label="analysis basis"
-        prop="analysis_basis"
-        align="center"
-        width="105px"
-      ></el-table-column>
-      <el-table-column
-        label="name"
-        prop="name"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        label="used indicators"
-        prop="used_indicators"
-        align="center"
-      ></el-table-column>
       <el-table-column label="frequency" prop="frequency" align="center" width="80px">
       </el-table-column>
       <el-table-column align="center" width="50px">
@@ -126,6 +104,7 @@
 <script>
 import { Store } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import SignalCode from '@/tools/codeTool.js'
 export default {
   props: {
       dialogTableVisible: Boolean,
@@ -155,6 +134,7 @@ export default {
       this.getCustomList("custom_signal")
     },
     async getSignallist(users) {
+            const user = users
       let analysisBasis = this.$store.state.entryIndicatorRadio
       let indicator
       let type = this.$store.state.entryType
@@ -170,11 +150,11 @@ export default {
       console.log(type,analysisBasis,indicator);
       this.signalList = []
       this.loading = true
-      const { data: signalRes } = await this.$http.get('/demo/signal/', {
+      const { data: signalRes } = await this.$http.get('/dev/signal/', {
         params: {
           page: this.queryInfo.page,
           type: type,
-          user: users,
+          user: user,
           analysis: analysisBasis,
           indicator: indicator
         }
@@ -184,13 +164,15 @@ export default {
       if(this.signalList.length !== 0){
         this.loading = false
       }
+      console.log(signalRes);
       // this.total = systemRes.count + favoriteRes.count + customRes.count
       if(this.signalList.length <= 0){
         this.loading = false
       }
 
     },
-    async getCustomList(user) {
+    async getCustomList(users) {
+      const user = users
             let analysisBasis = this.$store.state.entryIndicatorRadio
       let indicator
       let type = this.$store.state.entryType
@@ -210,7 +192,7 @@ export default {
         params: {
           page: this.queryInfo.page,
           type: type,
-          user: users,
+          user: user,
           analysis: analysisBasis,
           indicator: indicator
         }
@@ -227,6 +209,9 @@ export default {
       this.queryInfo.page = 1
     },
     checkEntry(scope){
+      console.log('scope',scope)
+      const a = new SignalCode()
+      console.log('decode',a.decode(scope.code));
       this.$emit("setEntryData",scope)
       this.$store.commit('getConditionData',scope)
       this.closeDialog()

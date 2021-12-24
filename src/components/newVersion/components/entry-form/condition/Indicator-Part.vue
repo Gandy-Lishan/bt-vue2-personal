@@ -127,8 +127,12 @@ export default {
 			}
 		},
 		handleSentimentSelect(item) {
+			const obj = {}
+			obj.criteria = this.criteria
+			obj.index = this.tabIndex
+			obj.value = item.value
+			this.$store.commit("getSentiValue", obj)
 			this.si.sentimentIndicator = item.value
-
 			console.log(item)
 			// remove MA
 			var activatedMAList = this.$store.state.activatedMA
@@ -143,6 +147,12 @@ export default {
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
+			const obj = {}
+			obj.criteria = this.criteria
+			obj.index = this.tabIndex
+			obj.value = item.value
+			this.$store.commit("getTechValue", obj)
+			this.si.technicalIndicator = item.value
 			const vm = this
 			let val = item.value
 			const set = new Set([
@@ -167,40 +177,40 @@ export default {
 			CIQ.addTechIndicators()
 
 			const used_indicators = JSON.stringify([item.value])
-			vm.$http
-				.get(
-					'/demo/signal/',
-					{
-						params: {
-							page: 1,
-							type: vm.$store.state.entryType,
-							user: 'system',
-							analysis_basis: 'technical',
-							used_indicators: used_indicators
-						}
-					},
-					{
-						auth: {
-							username: 'sentimentrader_backtest_api',
-							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-						}
-					}
-				)
-				.then((res) => {
-					let conductionId
-					res.data.results.forEach((item) => {
-						conductionId = item.id
-					})
-					this.$http
-						.get('/demo/condition/', {
-							params: { id: conductionId }
-						})
-						.then((val) => {
-							const initData = val.data.results
-							vm.initTechCondiction = initData[0].condition
-							vm.conditionList = initData
-						})
-				})
+			// vm.$http
+			// 	.get(
+			// 		'/demo/signal/',
+			// 		{
+			// 			params: {
+			// 				page: 1,
+			// 				type: vm.$store.state.entryType,
+			// 				user: 'system',
+			// 				analysis_basis: 'technical',
+			// 				used_indicators: used_indicators
+			// 			}
+			// 		},
+			// 		{
+			// 			auth: {
+			// 				username: 'sentimentrader_backtest_api',
+			// 				password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+			// 			}
+			// 		}
+			// 	)
+			// 	.then((res) => {
+			// 		let conductionId
+			// 		res.data.results.forEach((item) => {
+			// 			conductionId = item.id
+			// 		})
+			// 		this.$http
+			// 			.get('/demo/condition/', {
+			// 				params: { id: conductionId }
+			// 			})
+			// 			.then((val) => {
+			// 				const initData = val.data.results
+			// 				vm.initTechCondiction = initData[0].condition
+			// 				vm.conditionList = initData
+			// 			})
+			// 	})
 		},
 		changeIndicatorChecked() {
 			this.isCheckedIndicators = !this.isCheckedIndicators

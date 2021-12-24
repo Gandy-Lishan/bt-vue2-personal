@@ -10,9 +10,13 @@ export default new Vuex.Store({
     },
     backtestInfo:{
         entry: {
-        signals: [{name:111}]
+          direction: '',
+          frequency: '',
+        signals: [{}]
       },
     exit: {
+      direction: '',
+      frequency: '',
         signals: [{}]
       }
     },
@@ -45,12 +49,17 @@ export default new Vuex.Store({
     conditionData: {},
     saveConditionFormdata: {},
     exitFrequency: '',
-    entryType: '',
+    entryDirection: '',
     exitTechType: '',
     activatedMA: [{period: 21, url: ""}],
     editBacktestSetUpData: {},
     isShowExitForm: true,
     tabIndex: 0
+  },
+  getters:{
+    getBacktestEntry: (state)=>{
+      return state.backtestInfo.entry
+    }
   },
   mutations: {
     getNewPorfolioInputsValues(state,row) {
@@ -159,8 +168,9 @@ export default new Vuex.Store({
     getExitTechList(state,val){
       state.exitTechType = val
     },
-    getEntryType(state, val){
-      state.entryType = val
+    getEntryDirection(state, val){
+      state.entryDirection = val
+      
     },
     getTechnicalIndicators(state, val){
     state.indicators.technicalIndicators = val
@@ -176,7 +186,6 @@ export default new Vuex.Store({
       state.backtestInfo[val]['signals'].push({})
     },
     moveSignal(state,val){
-      console.log('list',state.backtestInfo.entry.signals)
       state.backtestInfo[val]['signals'].slice(state.tabIndex,1)
     },
     setEntryData(state, obj) {
@@ -192,13 +201,10 @@ export default new Vuex.Store({
       var criteria = obj.criteria
       delete obj.index
       delete obj.criteria
-      console.log("index",index);
-      console.log("criteria",criteria);
       if (index !== "" && criteria !== ""){
         var data = state.backtestInfo[criteria]["signals"][index]
         data = Object.assign(data,obj)
         state.backtestInfo[criteria]["signals"][index] = data
-        console.log(data);
         
       }
     },
@@ -211,11 +217,25 @@ export default new Vuex.Store({
           state.backtestInfo[criteria][key] = obj[key]
         }
       }
-      console.log('rrrr',state.backtestInfo.entry);
+    },
+    setBd(state, obj){
+      for(let key in obj) {
+        if(obj) {
+          state.backtestInfo[key] = obj[key]
+        }
+      }
+      
+      
     },
     deleteIndicator(state,val){
       state.backtestInfo[val.criteria].signals[val.index].sentimentIndicator = ''
       state.backtestInfo[val.criteria].signals[val.index].technicalIndicator = ''
+    },
+    getTechValue(state, obj){
+      state.backtestInfo[obj.criteria].signals[obj.index].technicalIndicator = obj.value
+    },
+    getSentiValue(state, obj) {
+      state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator = obj.value
     }
 },
 actions: {

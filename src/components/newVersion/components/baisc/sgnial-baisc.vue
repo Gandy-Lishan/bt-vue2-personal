@@ -8,7 +8,10 @@ export default {
         data() {
             return {
                 ids:{},
-                sc:{}
+                sc:{},
+				si: {},
+				fd: {},
+				bd: {}
             }
         },
      	watch: {
@@ -53,10 +56,24 @@ export default {
 					newVal.criteria = this.criteria
 					this.$store.commit('setFd', newVal)
 				}
+				
 			},
 			immediate: true,
 			deep: true
+		},
+		// backtest data
+		bd: {
+			handler(newVal) {
+				if(newVal) {
+					this.$store.commit('setBd', newVal)
+				}
+			},
+			
+			immediate: true,
+			deep: true
 		}
+	},
+	methods: {
 	}
     }
 </script>

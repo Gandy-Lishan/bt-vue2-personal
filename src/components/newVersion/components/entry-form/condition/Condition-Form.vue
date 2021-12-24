@@ -153,57 +153,5 @@ export default {
 	justify-content: space-around;
 }
 }
-@media (min-width: 900px) and (max-width: 1599px) {
-	.sentimentConditionBox {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	margin-bottom: 10px;
-}
-.sentimentConditionBox .el-radio {
-	line-height: 35px;
-}
-.sentimentConditionBox .el-select .el-input {
-	flex: 1;
-}
-.sentimentConditionBox .el-select {
-	flex: 0.4;
-	margin-left: 5px;
-}
-.sentimentConditionBox .el-input {
-	flex: 0.2;
-	margin-left: 5px;
-}
-.sentimentConditionBox .sentimentConditionItem {
-	display: flex;
-	justify-content: flex-start;
-}
-.sentimentConditionBox .sentimentMABox {
-	display: flex;
-	justify-content: flex-start;
-}
-.sentimentConditionBox .sentimentMABox .el-select {
-	flex: 0.4;
-}
-.sentimentConditionBox .sentimentMABox .el-input {
-	flex: 0.2;
-}
-.sentimentConditionBox .sentimentMABox .el-input:first-child {
-	margin-right: 5px;
-}
-.sentimentConditionBox .el-radio {
-	margin-right: 2px;
-}
-.signal-condition-box {
-	padding-bottom: 10px;
-	border-bottom: 1px solid black;
-}
-.signalDescriptionBox {
-	display: flex;
-	align-items: center;
-	padding-bottom: 10px;
-	border-bottom: 1px solid black;
-	justify-content: space-around;
-}
-}
+ 
 </style>

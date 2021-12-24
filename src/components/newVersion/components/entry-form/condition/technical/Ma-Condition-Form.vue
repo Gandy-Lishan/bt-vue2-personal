@@ -3,12 +3,13 @@
 		<div class="signal-condition-box">
 			<div><h2 class="note">Signal Condition</h2></div>
 			<div class="sentimentConditionBox">
-				<el-radio v-model="conditionRadio" label="Symbol Close"> </el-radio>
+				<el-radio v-model="conditionRadio" label="Symbol Close" @change="getConditionRadio"> </el-radio>
 				<div class="sentimentConditionItem">
 					<el-select
-						v-model="condition"
+						v-model="maCondition"
 						filterable
 						placeholder="Please select condition"
+						@change="getConditionValue"
 					>
 						<el-option
 							v-for="item in conditions"
@@ -28,11 +29,11 @@
 				</div>
 			</div>
 			<div class="sentimentConditionBox">
-				<el-radio v-model="conditionRadio" label="Moving Average"> </el-radio>
+				<el-radio v-model="conditionRadio" label="Moving Average" @change="getConditionRadio"> </el-radio>
 				<div class="sentimentMABox">
-					<el-input v-model="ma_period" placeholder="Input Period"></el-input>
+					<el-input v-model="sc.ma_period" placeholder="Input Period"></el-input>
 					<el-select
-						v-model="maCondition"
+						v-model="sc.condition"
 						filterable
 						placeholder="Please select condition"
 					>
@@ -54,7 +55,7 @@
 		<div class="signalDescriptionBox">
 			<div><h2 class="note">Signal Description</h2></div>
 			<el-button plain style="margin: 5px 0px 5px 0px"
-				>Moving Average 5 CrossAbove Moving Average 20</el-button
+				>{{ des.sentimentIndicator + des.technicalIndicator +conditions[sc.condition].label+ "Moving Average" +des.value}}</el-button
 			>
 		</div>
 	</div>
@@ -73,13 +74,30 @@ export default {
 				{ value: 3, label: 'CrossAbove' },
 				{ value: 4, label: 'CrossBelow' }
 			],
+	sc:{
       condition: 3,
       ma_period: 5,
+	  period: ''},
       period_1: '',
       period_2: 20,
-      condition: 3,
-      maCondition: 3
+	  maCondition: 3,
+	  des: this.$store.state.backtestInfo[this.criteria].signals[this.tabIndex]
     }
+  },
+  methods: {
+	  getConditionRadio(val) {
+		  if(val === "Moving Average") {
+			  delete this.sc.ma_period
+			  this.sc.period = this.period_1
+			  this.sc.condition = this.maCondition
+		  }else if(val === "Symbol Close"){
+			  this.sc.period = this.period_2
+			  this.sc.ma_period = 5
+		  }
+	  },
+	  getConditionValue(val) {
+		  this.sc.condition = val
+	  }
   }
 }
 </script>

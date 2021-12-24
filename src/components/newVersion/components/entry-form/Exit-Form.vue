@@ -18,7 +18,7 @@
 				</el-form-item>
 				<div><h2 class="note">Criteria Direction/Frequency</h2></div>
 				<el-form-item label="Direction:" prop="entryType">
-					<el-radio-group v-model="fd.type" disabled>
+					<el-radio-group v-model="fd.direction" disabled>
 						<el-radio label="Long">Long</el-radio>
 						<el-radio label="Short">Short</el-radio>
 					</el-radio-group>
@@ -43,9 +43,9 @@
 	</div>
 </template>
 <script>
-import { Store } from 'vuex'
+import { Store, mapGetters } from 'vuex'
 import conditionTab from './condition/Condition-Tab.vue'
-import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
+import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 export default {
 	extends: base,
 	// props: {
@@ -55,8 +55,10 @@ export default {
 		return {
 			fd: {
 				description: '',
-				type: this.$store.state.entryType,
-				frequency: this.$store.state.exitFrequency
+				direction: '',
+				frequency: '',
+                relation: 0,
+    			score: 0,
 			},
 			// Form validation rules
 			signalFormRules: {
@@ -85,19 +87,35 @@ export default {
 				{ label: 'Monthly', value: 'Monthly' }
 			],
 			dialogTableVisible: false,
-			conditionFormData: {},
+			conditionFormData: {}
+		}
+	},
+	computed: {
+		...mapGetters(['getBacktestEntry']),
+		exitCondition() {
+			return this.getBacktestEntry
+		}
+    },
+	watch: {
+		exitCondition: {
+			handler(newVal) {
+				// 数据变化后，绑定 direction， frequency
+				console.log('数据变化', newVal)
+                if(newVal.direction === 'Long'){
+                    this.fd.direction = 'Short'
+                }else if(newVal.direction === 'Short'){
+                    this.fd.direction = 'Long'
+                }
+                this.fd.frequency = newVal.frequency
+			},
+			immediate: true,
+			deep: true
 		}
 	},
 	components: {
 		'condition-tab': conditionTab
 	},
 	methods: {
-		getEntryType(e) {
-			this.$store.commit('getEntryType', e)
-		},
-		getFrequency(e) {
-			this.$store.commit('getFrequency', e)
-		}
 	}
 }
 </script>

@@ -349,7 +349,7 @@ class SignalCode {
 // var ids = new SignalDecodeIDS()
 // console.log(ids.decode("EO20/EP80"));
 // console.log(sc.decode("SVMA20/3/20"));
-a = new SignalCode()
+const a = new SignalCode()
 
 a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SVMA20/3/20")
 a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SV/3/20")
@@ -433,4 +433,5 @@ var tmp = [
 for (var i in tmp){
     a.encode(tmp[i])
 }
+export default SignalCode
     
