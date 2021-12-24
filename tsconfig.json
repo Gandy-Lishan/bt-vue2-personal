@@ -1,5 +1,7 @@
 {
 	"compilerOptions": {
+		"suppressImplicitAnyIndexErrors": true,
+		"noImplicitAny": true,
 		"target": "esnext",
 		"module": "esnext",
 		"strict": true,

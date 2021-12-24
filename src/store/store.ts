@@ -9,10 +9,10 @@ export default new Vuex.Store({
       inputOriginalAssetValue: ''
     },
     backtestInfo:{
-        entry: {
-        signals: [{name:111}]
+        "entry": {
+        signals: [{}]
       },
-    exit: {
+    "exit":{
         signals: [{}]
       }
     },
