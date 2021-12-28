@@ -14,6 +14,7 @@
 						:autosize="{ minRows: 3, maxRows: 10 }"
 						resize="none"
 						placeholder="Please enter the description"
+						@input="getDes"
 					></el-input>
 				</el-form-item>
 				<div><h2 class="note">Criteria Direction/Frequency</h2></div>
@@ -38,27 +39,35 @@
 			</div>
 		</div>
 		<div class="signalRight">
+			<div class="btns">
+				<el-button round @click="saveBacktest">Save Backtesst</el-button>
+			</div>
 			<condition-tab :criteria="criteria"></condition-tab>
 		</div>
 	</div>
 </template>
 <script>
 import { Store, mapGetters } from 'vuex'
+import SignalCode from '@/tools/codeTool.js'
 import conditionTab from './condition/Condition-Tab.vue'
-import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
+import form_base from '@/components/newVersion/components/baisc/from.vue'
 export default {
-	extends: base,
-	// props: {
-	// 	criteria: String
-	// },
+	extends: form_base,
+	props: {
+		fdLoad: Object
+	},
 	data() {
 		return {
+			obj: {
+				Long: 'Short',
+				Short: 'Long'
+			},
 			fd: {
 				description: '',
 				direction: '',
 				frequency: '',
-                relation: 0,
-    			score: 0,
+				relation: 0,
+				score: 0
 			},
 			// Form validation rules
 			signalFormRules: {
@@ -91,31 +100,151 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['getBacktestEntry']),
-		exitCondition() {
-			return this.getBacktestEntry
+		...mapGetters(['getBacktestEntryFrequency', 'getBacktestEntryDirection']),
+		exitFrequency() {
+			return this.getBacktestEntryFrequency
+		},
+		exitDirection() {
+			return this.getBacktestEntryDirection
 		}
-    },
+	},
 	watch: {
-		exitCondition: {
+		// exitDirection: {
+		// 	handler(newVal) {
+		// 		// 数据变化后，绑定 direction， frequency
+		// 		this.fd.direction = newVal
+		// 		console.log('数据变化', newVal)
+		// 		if (newVal=== 'Long') {
+		// 			this.fd.direction = 'Short'
+		// 		} else if (newVal === 'Short') {
+		// 			this.fd.direction = 'Long'
+		// 		}
+		// 	},
+		// 	immediate: true
+		// },
+		// exitFrequency: {
+		// 	handler(newVal) {
+		// 		this.fd.frequency = newVal.frequency
+		// 	},
+
+		// 	immediate: true
+		// },
+		fdLoad: {
 			handler(newVal) {
-				// 数据变化后，绑定 direction， frequency
-				console.log('数据变化', newVal)
-                if(newVal.direction === 'Long'){
-                    this.fd.direction = 'Short'
-                }else if(newVal.direction === 'Short'){
-                    this.fd.direction = 'Long'
-                }
-                this.fd.frequency = newVal.frequency
+				var obj = {
+					Long: 'Short',
+					Short: 'Long'
+				}
+				// this.fd = newVal
+
+				this.fd['direction'] = obj[newVal['direction']]
+				this.fd['frequency'] = newVal['frequency']
+				this.fd.criteria = "exit"
+				this.$store.commit("setFd",this.fd)
+				// console.log();
 			},
 			immediate: true,
 			deep: true
 		}
 	},
+	mounted() {
+		this.$cookies.set('username', 'test')
+	},
 	components: {
 		'condition-tab': conditionTab
 	},
 	methods: {
+		saveBacktest() {
+			console.log('save data', this.$store.state.backtestInfo)
+			const backtestData = this.$store.state.backtestInfo
+			const signalEntryList = backtestData.entry.signals
+			const signalExitList = backtestData.exit.signals
+	
+			signalEntryList.forEach((item) => {
+				if (item.sentimentIndicator) {
+					item.indicator = item.sentimentIndicator
+					item.analysis = 'Sentiment'
+					delete item.technicalIndicator
+					delete item.sentimentIndicator
+				}
+				if (item.technicalIndicator) {
+					item.indicator = item.technicalIndicator
+					item.analysis = 'Technical'
+					delete item.technicalIndicator
+					delete item.sentimentIndicator
+				}
+			})
+			signalExitList.forEach((item) => {
+				if (item.sentimentIndicator) {
+					item.indicator = item.sentimentIndicator
+					item.analysis = 'Sentiment'
+					delete item.technicalIndicator
+					delete item.sentimentIndicator
+				}
+				if (item.technicalIndicator) {
+					item.indicator = item.technicalIndicator
+					item.analysis = 'Technical'
+					delete item.technicalIndicator
+					delete item.sentimentIndicator
+				}
+			})
+			const b = new SignalCode()
+			var entry_signal_list = []
+			var exit_signal_list  = []
+			delete backtestData.entry.signals
+			for (var i in signalEntryList) {
+				let code = b.encode(signalEntryList[i])
+				var singal = {
+					"code":code,
+				}
+				entry_signal_list.push(singal)
+				// backtestData.entry = {signalList}
+				// backtestData.entry = [{description: 'entry test', code: ""}]
+				// backtestData.entry[0].code = code
+			}
+			delete backtestData.exit.signals
+			for (var i in signalExitList) {
+				let code = b.encode(signalExitList[i])
+				var singal = {
+					"code":code,
+				}
+				exit_signal_list.push(singal)
+
+				// delete backtestData.exit.description
+				// delete backtestData.exit.frequency
+				// backtestData.exit = [{description: 'exit test', code: ""}]
+				// backtestData.exit[0].code = code
+			}
+			let entry = {
+				description : backtestData.entry.description,
+				direction : backtestData.entry.direction,
+				frequency : backtestData.entry.frequency,
+				signals : entry_signal_list,
+
+			}
+			let exit  = {
+				description : backtestData.exit.description,
+				direction : backtestData.exit.direction,
+				frequency : backtestData.exit.frequency,
+				signals : exit_signal_list,
+
+			}
+			delete backtestData.entry
+			delete backtestData.exit
+
+			backtestData.entry = JSON.stringify(entry)
+			backtestData.exit = JSON.stringify(exit)
+
+			console.log('保存的backtest信息', backtestData)
+			 this.$http.post('/dev/backtest/',this.$qs.stringify(backtestData),{
+					withCredentials: true
+				}).then(res => {console.log("相应数据", res);})
+		},
+		getDes(val) {
+		this.fd.description = val
+		this.fd.criteria = "exit"
+		this.$store.commit("setFd",this.fd)
+	},
 	}
 }
 </script>
@@ -144,6 +273,14 @@ export default {
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+	.btns {
+		position: absolute;
+		top: -66px;
+		left: 502px;
+	}
+	.signalRight {
+		position: relative;
 	}
 }
 @media (min-width: 900px) and (max-width: 1599px) {

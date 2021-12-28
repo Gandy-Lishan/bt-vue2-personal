@@ -25,7 +25,7 @@
 		<div class="signalDescriptionBox">
 			<div><h2 class="note">Signal Description</h2></div>
 			<el-button plain style="margin: 5px 0px 5px 0px"
-				>{{ des.sentimentIndicator + des.technicalIndicator +conditions[sc.condition].label+des.value}}</el-button
+				>{{ des.technicalIndicator +conditions[sc.condition].label+des.value}}</el-button
 			>
 		</div>
 	</div>
@@ -51,6 +51,14 @@ export default {
 			},
 			des: this.$store.state.backtestInfo[this.criteria].signals[this.tabIndex]
 		}
+	},
+	methods: {
+		setScLoad(val) {
+		 for(let key in val){
+			 val[key] = Number(val[key])
+		 }
+		 this.sc = val
+	}
 	}
 }
 </script>

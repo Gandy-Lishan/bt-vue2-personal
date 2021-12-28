@@ -239,15 +239,13 @@ export default {
         let initalData = {}
         let data = {}
         let id = this.$store.state.favoriteBacktestRowData.id
-        let arr=[]
-        arr.push(id)
+        // let arr=[]
+        // arr.push(id)
         let params = {
-          backtests: arr
+          uuid: id
         }
-        vm.$http.post('rundev/runbacktest/',this.$qs.stringify(params),{auth:{
-          username: 'sentimentrader_backtest_api',
-          password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-        }}).then( res => {
+        if(!id){return}
+        vm.$http.get('/dev/report/?uuid='+id).then( res => {
           if(res.status == 200){
             if(typeof(res.data) == String) {
               JSON.parse(res.data)

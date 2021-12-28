@@ -14,6 +14,7 @@
 						:autosize="{ minRows: 3, maxRows: 10 }"
 						resize="none"
 						placeholder="Please enter the description"
+						@input="getDes"
 					></el-input>
 				</el-form-item>
 				<div><h2 class="note">Criteria Direction/Frequency</h2></div>
@@ -44,12 +45,13 @@
 </template>
 <script>
 import conditionTab from './condition/Condition-Tab.vue'
-import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
+// import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
+import form_base from "@/components/newVersion/components/baisc/from.vue"
 export default {
-	extends: base,
-	// props: {
-	// 	criteria: String
-	// },
+	extends: form_base,
+	props: {
+		fdLoad: Object
+	},
 	data() {
 		return {
 			fd: {
@@ -58,6 +60,7 @@ export default {
 				frequency: '',
 				relation: 0,
     			score: 0,
+				criteria: "entry"
 			},
 			// Form validation rules
 			signalFormRules: {
@@ -89,6 +92,15 @@ export default {
 			conditionFormData: {},
 		}
 	},
+	watch: {
+		fdLoad: {
+			handler(newVal) {
+				this.fd = newVal
+			},
+			immediate: true,
+			deep: true
+		}
+	},
 	components: {
 		'condition-tab': conditionTab
 	},
@@ -98,8 +110,25 @@ export default {
 		},
 		getFrequency(e) {
 			this.$store.commit('getFrequency', e)
-		}
-	}
+		},
+		
+	getDes(val) {
+		this.fd.description = val
+		this.fd.criteria = "entry"
+		this.$store.commit("setFd",this.fd)
+	},
+	getEntryDirection(val) {
+		this.fd.direction = val
+		this.fd.criteria = "entry"
+		this.$store.commit("setFd",this.fd)
+	},
+	getFrequency(val) {
+		console.log(val);
+		this.fd.frequency = val
+		this.fd.criteria = "entry"
+		this.$store.commit("setFd",this.fd)
+	},
+	}, 
 }
 </script>
 <style lang="less" scoped>

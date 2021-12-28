@@ -26,7 +26,6 @@ export default {
             period: 20}
 		}
 	},
-	methods: {}
 }
 </script>
 <style lang="less" scoped>

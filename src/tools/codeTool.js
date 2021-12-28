@@ -287,10 +287,10 @@ class SignalCode {
                 }
             }
             else if (val["indicator"] == "Commodity Channel Index") {
-                re_str += "CCI/" + val["condition"] + "/" + val["value"]
+                re_str += "CCIV/" + val["condition"] + "/" + val["value"]
             }
             else if (val["indicator"] == "Relative Strength Index") {
-                re_str += "RSI/" + val["condition"] + "/" + val["value"]
+                re_str += "RSIV/" + val["condition"] + "/" + val["value"]
             }
         }
         else if (val["analysis"] === "Exit") {
@@ -334,8 +334,14 @@ class SignalCode {
             if (typeof (sc) === "string" || typeof (ids) === "string" || typeof (indicator) === "string") {
                 tmp = "The input parameters of the Signal Condition maybe error!"
             } else {
-                var tmp = Object.assign(indicator, ids)
+                var tmp = {}
+                tmp["ids"] = ids
+                tmp["sc"] = sc
+                tmp["indicator"] = indicator
+                tmp = Object.assign(tmp, indicator)
+                tmp = Object.assign(tmp, ids)
                 tmp = Object.assign(tmp, sc)
+               
             }
 
 

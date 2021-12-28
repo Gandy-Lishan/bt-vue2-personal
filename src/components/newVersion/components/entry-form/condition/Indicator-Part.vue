@@ -47,7 +47,7 @@
 	</div>
 </template>
 <script>
-import { Store } from 'vuex'
+import { Store, mapGetters } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
 export default {
@@ -131,6 +131,7 @@ export default {
 			obj.criteria = this.criteria
 			obj.index = this.tabIndex
 			obj.value = item.value
+			this.$store.commit("clearSignal", obj)
 			this.$store.commit("getSentiValue", obj)
 			this.si.sentimentIndicator = item.value
 			console.log(item)
@@ -151,6 +152,7 @@ export default {
 			obj.criteria = this.criteria
 			obj.index = this.tabIndex
 			obj.value = item.value
+			this.$store.commit("clearSignal", obj)
 			this.$store.commit("getTechValue", obj)
 			this.si.technicalIndicator = item.value
 			const vm = this
@@ -239,31 +241,40 @@ export default {
 				{ value: 'MACD' },
 				{ value: 'Moving Average' }
 			]
+		},
+		setIndicatorRadio(obj) {
+			this.indicatorRadio = obj.radio
+			if(obj.sentimentIndicator){
+				this.si.sentimentIndicator = obj.sentimentIndicator
+			}else if(obj.technicalIndicator) {
+				this.si.technicalIndicator = obj.technicalIndicator
+				this.isCheckedIndicators = true
+			}
 		}
 	}
 }
 </script>
 <style lang="less" scoped>
-@media only screen and (min-width: 1600px){
-.radioBox {
-	display: flex;
-}
-.radioBox .indicatorSearchBox {
-	flex: 1;
-}
-.radioBox .el-radio {
-	line-height: 35px;
-}
+@media only screen and (min-width: 1600px) {
+	.radioBox {
+		display: flex;
+	}
+	.radioBox .indicatorSearchBox {
+		flex: 1;
+	}
+	.radioBox .el-radio {
+		line-height: 35px;
+	}
 }
 @media (min-width: 900px) and (max-width: 1599px) {
 	.radioBox {
-	display: flex;
-}
-.radioBox .indicatorSearchBox {
-	flex: 1;
-}
-.radioBox .el-radio {
-	line-height: 35px;
-}
+		display: flex;
+	}
+	.radioBox .indicatorSearchBox {
+		flex: 1;
+	}
+	.radioBox .el-radio {
+		line-height: 35px;
+	}
 }
 </style>

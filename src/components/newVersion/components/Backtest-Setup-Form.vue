@@ -86,15 +86,7 @@
 					<el-col :span="8">
 						<el-form-item label="Benchmark:" prop="benchmark">
 							<div class="enterSymbolBox">
-								<el-select v-model="bd.benchmark">
-									<el-option
-										v-for="item in options"
-										:key="item.value"
-										:label="item.label"
-										:value="item.value"
-									>
-									</el-option>
-								</el-select>
+								<el-input v-model="bd.benchmark"></el-input>
 							</div>
 						</el-form-item>
 						<el-form-item label="Backtest History:" prop="backtestHistory">
@@ -118,7 +110,7 @@
 							<el-form-item label="Start date">
 								<el-date-picker
 									v-if="historyValue === 22"
-									v-model="bd.star_date"
+									v-model="bd.start_date"
 									type="date"
 									placeholder="Please select a start date"
 								>
@@ -126,7 +118,7 @@
 								<el-input
 									v-else
 									disabled
-									v-model="bd.star_date"
+									v-model="bd.start_date"
 								>
 								</el-input>
 							</el-form-item>
@@ -172,15 +164,15 @@ export default {
 				uuid: 'UUID',
 				name: '',
 				description: '',
-				symbol: '',
-				benchmark: '',
+				symbol: 'AAPL',
+				benchmark: 'AAPL',
 				strategy: 'Signal',
 				capital: 100000.0,
 				capital_alloc: 1.0,
 				commission: 0.001,
 				win_rate: 0.0,
 				slippage: 0.001,
-				star_date: '',
+				start_date: '',
 				end_date: ''
 			},
 			historyOptions: [
@@ -274,7 +266,7 @@ export default {
 			this.bd.end_date = timestampToTime(new Date())
 			const str = this.bd.end_date.split('-')
 			str[0] = Number(str[0]) - Number(this.historyValue) + ''
-			this.bd.star_date = str.join('-')
+			this.bd.start_date = str.join('-')
 
 			var that = this
 			var utils = function () {
@@ -353,10 +345,10 @@ export default {
 				const str = this.bd.end_date.split('-')
 				str[0] =
 					Number(str[0]) - Number(this.historyValue) + ''
-				this.bd.star_date = str.join('-')
+				this.bd.start_date = str.join('-')
 			}
 			if (val === 21) {
-				this.bd.star_date = ''
+				this.bd.start_date = ''
 			}
 		}
 	}

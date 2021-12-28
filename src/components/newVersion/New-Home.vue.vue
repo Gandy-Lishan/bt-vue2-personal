@@ -26,14 +26,14 @@
 										<h1 class="titleTxt">Entry Criteria</h1>
 										<el-button class="clearBtn" round>Clear Form</el-button>
 									</div>
-									<entry-form ref="entryFormChild" :criteria="'entry'"></entry-form>
+									<entry-form ref="entryFormChild" :criteria="'entry'" :fdLoad="fdLoad"></entry-form>
 								</el-tab-pane>
 								<el-tab-pane label="Exit Criteria" name="first-child-n3">
 									<div class="clearBox">
 										<h1 class="titleTxt">Exit Criteria</h1>
 										<el-button class="clearBtn" round>Clear Form</el-button>
 									</div>
-									<exit-form ref="exitFormChild" :criteria="'exit'"></exit-form>
+									<exit-form ref="exitFormChild" :criteria="'exit'" :fdLoad="fdLoad"></exit-form>
 								</el-tab-pane>
 							</el-tabs>
 						</el-tab-pane>
@@ -46,7 +46,7 @@
 							></backtest-performance>
 						</el-tab-pane>
 						<el-tab-pane label="Favorites" name="third">
-							<favorite-form ref="favoriteChild"></favorite-form>
+							<favorite-form ref="favoriteChild" @goBacktestResultForm="goBacktestResultForm"></favorite-form>
 						</el-tab-pane>
 						<el-tab-pane label="Strategies" name="fourth">
 							<strategy-form ref="strategyChild"></strategy-form>
@@ -55,10 +55,12 @@
 				</div>
 			</main>
 		</div>
+		<div class="try"></div>
 	</div>
 </template>
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import{ Store, mapGetters } from "vuex"
 import chart from '../chart/index.vue'
 import backtestSetupForm from './components/Backtest-Setup-Form.vue'
 import backtestResultForm from './components/Backtest-Result-Form.vue'
@@ -71,7 +73,8 @@ export default {
 	data() {
 		return {
 			activeName: 'first',
-			activeTag: 'first-child-n1'
+			activeTag: 'first-child-n1',
+			fdLoad: {}
 		}
 	},
 	components: {
@@ -83,6 +86,33 @@ export default {
 		'strategy-form': strategyFrom,
 		'entry-form': entryForm,
 		'exit-form': exitForm
+	},
+	computed: {
+		...mapGetters(["getDialogFdData"]),
+		fdDialogData() {
+			return this.getDialogFdData
+		}
+	},
+	watch: {
+		fdDialogData: {
+			handler(newVal) {
+				if(newVal.criteria === "entry"){
+					delete newVal.criteria
+					this.fdLoad = newVal
+				}else if(newVal.criteria === "exit"){
+					delete newVal.criteria
+					this.fdLoad = newVal
+				}
+			},
+			immediate: true,
+			deep: true
+		}
+	},
+	methods: {
+		goBacktestResultForm() {
+			this.activeName = "second"
+			this.$refs.performanceChild.getResultData()
+		}
 	}
 }
 </script>

@@ -103,9 +103,11 @@
 </template>
 <script>
 import { Store } from 'vuex'
+import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import SignalCode from '@/tools/codeTool.js'
 export default {
+	extends: base,
   props: {
       dialogTableVisible: Boolean,
        },
@@ -153,7 +155,7 @@ export default {
       const { data: signalRes } = await this.$http.get('/dev/signal/', {
         params: {
           page: this.queryInfo.page,
-          type: type,
+          direction: type,
           user: user,
           analysis: analysisBasis,
           indicator: indicator
@@ -188,10 +190,10 @@ export default {
       console.log(type,analysisBasis,indicator);
       this.signalList = []
       this.loading = true
-      const { data: res } = await this.$http.get('/demo/signal/', {
+      const { data: res } = await this.$http.get('/dev/signal/', {
         params: {
           page: this.queryInfo.page,
-          type: type,
+          direction: type,
           user: user,
           analysis: analysisBasis,
           indicator: indicator
@@ -210,19 +212,35 @@ export default {
     },
     checkEntry(scope){
       console.log('scope',scope)
-      const a = new SignalCode()
-      console.log('decode',a.decode(scope.code));
-      this.$emit("setEntryData",scope)
-      this.$store.commit('getConditionData',scope)
-      this.closeDialog()
-      this.signalList.entryChecked = !this.signalList.entryChecked
+        const obj = scope
+        const a = new SignalCode()
+        obj.code = a.decode(obj.code)
+        obj.criteria = this.criteria
+        obj.index = this.tabIndex
+        console.log("1111",obj);
+        const newObj = {fd: {},si: {}}
+        // form detail
+        newObj.fd.description = obj.description
+        newObj.fd.direction = obj.direction
+        newObj.fd.frequency = obj.frequency
+        // signal indicator
+        if(obj.code.analysis === "Technical"){
+          newObj.si.technicalIndicator = obj.code.indicator
+          newObj.si.sentimentIndicator = ""
+        }else if(obj.code.analysis === "Sentiment") {
+          newObj.si.sentimentIndicator = obj.code.indicator
+          newObj.si.technicalIndicator = ""
+        }
+        this.$store.commit('setSignalDialogData',obj)
+        this.closeDialog()
+        this.signalList.entryChecked = !this.signalList.entryChecked
     },
     handleCurrentChange(newpage) {
       this.queryInfo.page = newpage
       this.getSignallist("system")
     },
     async deleteFavoriteSignal(row){
-      const { data: res } = await this.$http.delete('/demo/signal/'+row.id+"/")
+      const { data: res } = await this.$http.delete('/dev/signal/'+row.id+"/")
       this.$message.success({
            message: 'Successfully deleted',
            duration: 1000

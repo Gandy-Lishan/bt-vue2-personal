@@ -6,7 +6,7 @@
 				<el-radio v-model="conditionRadio" label="RSI Value"> </el-radio>
 				<div class="sentimentConditionItem">
 					<el-select
-						v-model="condition"
+						v-model="sc.condition"
 						filterable
 						placeholder="Please select condition"
 					>
@@ -18,14 +18,14 @@
 						>
 						</el-option>
 					</el-select>
-					<el-input v-model="value" placeholder="Input Value"></el-input>
+					<el-input v-model="sc.value" placeholder="Input Value"></el-input>
 				</div>
 			</div>
 		</div>
 		<div class="signalDescriptionBox">
 			<div><h2 class="note">Signal Description</h2></div>
 			<el-button plain style="margin: 5px 0px 5px 0px"
-				>Relative Strength Index CrossAbove 30</el-button
+				>{{ des.technicalIndicator +conditions[sc.condition].label+des.value}}</el-button
 			>
 		</div>
 	</div>
@@ -44,9 +44,18 @@ export default {
 				{ value: 3, label: 'CrossAbove' },
 				{ value: 4, label: 'CrossBelow' }
 			],
-			condition: 3,
-			value: 30
+			sc: {condition: 3,
+			value: 30},
+			des: this.$store.state.backtestInfo[this.criteria].signals[this.tabIndex]
 		}
+	},
+	methods: {
+	 setScLoad(val) {
+		 for(let key in val){
+			 val[key] = Number(val[key])
+		 }
+		 this.sc = val
+	}
 	}
 }
 </script>
@@ -94,4 +103,57 @@ export default {
 	justify-content: space-around;
 	border-bottom: 1px solid black;
 }}
+@media (min-width: 900px) and (max-width: 1599px) {
+	.sentimentConditionBox {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+.sentimentConditionBox .el-radio {
+	line-height: 35px;
+}
+.sentimentConditionBox .el-select .el-input {
+	flex: 1;
+}
+.sentimentConditionBox .el-select {
+	flex: 0.4;
+	margin-left: 5px;
+}
+.sentimentConditionBox .el-input {
+	flex: 0.2;
+	margin-left: 5px;
+}
+.sentimentConditionBox .sentimentConditionItem {
+	display: flex;
+	justify-content: flex-start;
+}
+.sentimentConditionBox .sentimentMABox {
+	display: flex;
+	justify-content: flex-start;
+}
+.sentimentConditionBox .sentimentMABox .el-select {
+	flex: 0.4;
+}
+.sentimentConditionBox .sentimentMABox .el-input {
+	flex: 0.2;
+}
+.sentimentConditionBox .sentimentMABox .el-input:first-child {
+	margin-right: 5px;
+}
+.sentimentConditionBox .el-radio {
+	margin-right: 2px;
+}
+.signal-condition-box {
+	padding-bottom: 10px;
+	border-bottom: 1px solid black;
+}
+.signalDescriptionBox {
+	display: flex;
+	align-items: center;
+	padding-bottom: 10px;
+	border-bottom: 1px solid black;
+	justify-content: space-around;
+}
+}
 </style>

@@ -1,24 +1,26 @@
 
 <script>
 export default {
-    props: {
-        tabIndex: Number,
-        criteria: String
-        },
-        data() {
-            return {
-                ids:{},
-                sc:{},
-				si: {},
-				fd: {},
-				bd: {}
-            }
-        },
-     	watch: {
+	props: {
+		tabIndex: Number,
+		criteria: String,
+		idsLoad: Object,
+		scLoad: Object,
+	},
+	data() {
+		return {
+			ids: {},
+			sc: {},
+			si: {},
+			fd: {},
+			bd: {}
+		}
+	},
+	watch: {
 		ids: {
 			handler(newVal) {
 				if (newVal) {
-					newVal.index = this.tabIndex;
+					newVal.index = this.tabIndex
 					newVal.criteria = this.criteria
 					this.$store.dispatch('Try', newVal)
 				}
@@ -26,10 +28,10 @@ export default {
 			immediate: true,
 			deep: true
 		},
-        sc: {
+		sc: {
 			handler(newVal) {
 				if (newVal) {
-					newVal.index = this.tabIndex;
+					newVal.index = this.tabIndex
 					newVal.criteria = this.criteria
 					this.$store.dispatch('Try', newVal)
 				}
@@ -40,7 +42,7 @@ export default {
 		si: {
 			handler(newVal) {
 				if (newVal) {
-					newVal.index = this.tabIndex;
+					newVal.index = this.tabIndex
 					newVal.criteria = this.criteria
 					this.$store.dispatch('Try', newVal)
 				}
@@ -49,31 +51,50 @@ export default {
 			deep: true
 		},
 		// form detail
-		fd: {
+
+		// backtest data
+		bd: {
 			handler(newVal) {
 				if (newVal) {
-					newVal.index = this.tabIndex;
-					newVal.criteria = this.criteria
-					this.$store.commit('setFd', newVal)
+					this.$store.commit('setBd', newVal)
 				}
-				
+			},
+
+			immediate: true,
+			deep: true
+		},
+
+		idsLoad: {
+			handler(newVal) {
+				if (newVal) {
+					console.log('dialog数据', newVal)
+					this.setIdsLoad(newVal)
+				}
 			},
 			immediate: true,
 			deep: true
 		},
-		// backtest data
-		bd: {
+		scLoad: {
 			handler(newVal) {
-				if(newVal) {
-					this.$store.commit('setBd', newVal)
+				if (newVal) {
+					console.log('dialog数据', newVal)
+					this.setScLoad(newVal)
 				}
 			},
-			
 			immediate: true,
 			deep: true
 		}
 	},
 	methods: {
+		setIdsLoad(val) {
+		for(let key in val){
+			// moving average 不一样
+			if(Number(val[key])!= NaN){
+			  val[key] = Number(val[key])
+			}
+		 }
+		  this.ids = val
+	  }
 	}
-    }
+}
 </script>

@@ -16,10 +16,6 @@ import { Store } from 'vuex'
 import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
 export default {
 	extends: base,
-	// props: {
-	// 	tabIndex: Number,
-	// 	criteria: String
-	// },
 	data() {
 		return {
 			ids: {
@@ -27,9 +23,6 @@ export default {
 				extreme_pessimism: ''
 			}
 		}
-	},
-	methods: {
-
 	}
 }
 </script>

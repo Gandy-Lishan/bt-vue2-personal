@@ -5,6 +5,9 @@
 .el-form-item__label {
 	font-weight: 500;
 }
+.el-tab-pane .el-tabs {
+	overflow: auto;
+}
 .btnBox .el-button:nth-child(1), .signalBtnBox .el-button{
 	color: #910012;
 }
@@ -185,8 +188,11 @@
 	}
 	.el-table .cell {
 		white-space: nowrap;
-		overflow: hidden;
+		overflow: visible;
 		text-overflow: ellipsis;
+   }
+   .cell .el-row .el-button {
+	   margin-left: 5px;
    }
 }
 @media (min-width: 900px) and (max-width: 1599px) {
