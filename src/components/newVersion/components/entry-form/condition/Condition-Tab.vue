@@ -14,7 +14,7 @@
 			@edit="handleTabsEdit"
 			@tab-remove="handleTabsRemove"
 		>
-			<el-tab-pane
+			<el-tab-pane style="height:80vh;overflow-y:auto;overflow-x:hidden;"
 				:key="key"
 				v-for="(val,key) in editableTabs"
 				:label="val.title"

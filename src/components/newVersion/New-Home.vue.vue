@@ -13,39 +13,42 @@
 					<chart width="100%" height="100%"></chart>
 				</div> -->
 			</header>
-			<main class="main">
-				<div class="mainTagbar">
-					<el-tabs v-model="activeName" type="card">
-						<el-tab-pane label="Backtest Setup" name="first">
+			<main class="main" style="height:80vh">
+				<div class="mainTagbar" style="height:100%">
+					<el-tabs  v-model="activeName" type="card"  style="height:100%">
+						<el-tab-pane style="height:90%;overflow-y:scroll;overflow-x:hidden;"  label="Backtest Setup" name="first">
 							<el-tabs v-model="activeTag" type="card">
-								<el-tab-pane label="Backtest Data" name="first-child-n1">
+								<el-tab-pane style="height:90%;overflow-y:auto;overflow-x:hidden;" label="Backtest Data" name="first-child-n1">
 									<backtest-setup-form ref="setupChild"></backtest-setup-form>
 								</el-tab-pane>
-								<el-tab-pane label="Entry Criteria" name="first-child-n2">
+								<el-tab-pane style="height:90%;overflow-y:auto;overflow-x:hidden;"  label="Entry Criteria" name="first-child-n2">
 									<div class="clearBox">
 										<h1 class="titleTxt">Entry Criteria</h1>
 										<el-button class="clearBtn" round>Clear Form</el-button>
 									</div>
-									<entry-form ref="entryFormChild" :criteria="'entry'" :fdLoad="fdLoad"></entry-form>
+									<entry-form 
+										ref="entryFormChild"
+										:criteria="'entry'"
+										:fdLoad="fdLoad"
+									></entry-form>
 								</el-tab-pane>
-								<el-tab-pane label="Exit Criteria" name="first-child-n3">
+								<el-tab-pane style="height:90%;overflow-y:auto;overflow-x:hidden;" label="Exit Criteria" name="first-child-n3">
 									<div class="clearBox">
 										<h1 class="titleTxt">Exit Criteria</h1>
 										<el-button class="clearBtn" round>Clear Form</el-button>
 									</div>
-									<exit-form ref="exitFormChild" :criteria="'exit'" :fdLoad="fdLoad"></exit-form>
+									<exit-form style="height:90%;overflow-y:auto;overflow-x:hidden;" ref="exitFormChild" :criteria="'exit'"  :fdLoad="fdLoad"></exit-form>
 								</el-tab-pane>
 							</el-tabs>
 						</el-tab-pane>
-						<el-tab-pane label="Backtest Results" name="second">
-							<backtest-result-form
-								ref="resultChild"
-							></backtest-result-form>
+						<el-tab-pane style="height:90%;overflow-y:auto;overflow-x:hidden;" label="Backtest Results" name="second">
+							<backtest-result-form :backtestResult="backtestResult"  ref="resultChild"></backtest-result-form>
 							<backtest-performance
+							@setBacktestResult="setBacktestResult"
 								ref="performanceChild"
 							></backtest-performance>
 						</el-tab-pane>
-						<el-tab-pane label="Favorites" name="third">
+						<el-tab-pane style="height:90%;overflow-y:auto;overflow-x:hidden;" label="Favorites" name="third">
 							<favorite-form ref="favoriteChild" @goBacktestResultForm="goBacktestResultForm"></favorite-form>
 						</el-tab-pane>
 						<el-tab-pane label="Strategies" name="fourth">
@@ -72,6 +75,7 @@ import exitForm from '@/components/newVersion/components/entry-form/Exit-Form.vu
 export default {
 	data() {
 		return {
+			backtestResult:{},
 			activeName: 'first',
 			activeTag: 'first-child-n1',
 			fdLoad: {}
@@ -108,41 +112,52 @@ export default {
 			deep: true
 		}
 	},
+	mounted(){
+		console.log('mounted')
+		var node = document.getElementsByClassName("el-tabs__content")[0]
+		node.style.height = "100%"
+	},
 	methods: {
 		goBacktestResultForm() {
 			this.activeName = "second"
 			this.$refs.performanceChild.getResultData()
+		},
+		setBacktestResult(data){
+
+			this.backtestResult = data	
 		}
 	}
 }
 </script>
 <style lang="less" scoped>
+
 @media only screen and (min-width: 1600px) {
-.clearBox {
-	margin-bottom: 20px;
-	display: flex;
-	.el-button{
-		align-self: center;
-		margin-left: 20px;
-		color: #D9001B;
+	.clearBox {
+		margin-bottom: 20px;
+		display: flex;
+		.el-button {
+			align-self: center;
+			margin-left: 20px;
+			color: #d9001b;
+		}
+	}
+	.titleTxt {
+		font-weight: bold;
 	}
 }
-.titleTxt{
-	font-weight: bold;
-}
-}@media (min-width: 900px) and (max-width: 1599px) {
-.clearBox {
-	margin-bottom: 20px;
-	display: flex;
-	.el-button{
-		align-self: center;
-		margin-left: 20px;
-		color: #D9001B;
+@media (min-width: 900px) and (max-width: 1599px) {
+	.clearBox {
+		margin-bottom: 20px;
+		display: flex;
+		.el-button {
+			align-self: center;
+			margin-left: 20px;
+			color: #d9001b;
+		}
 	}
-}
-.titleTxt{
-	font-weight: bold;
-	font-size: 16px;
-}
+	.titleTxt {
+		font-weight: bold;
+		font-size: 16px;
+	}
 }
 </style>

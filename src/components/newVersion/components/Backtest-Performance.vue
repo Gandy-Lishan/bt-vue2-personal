@@ -252,7 +252,7 @@ export default {
             }
             //('dddddd',res.data)
          initalData = res.data
-
+        // -------------------------------------  text ----------------
          data.uuid = initalData["UUID"]
         data.symbol = initalData["Symbol"]
         data.frequency = initalData["Frequency"]
@@ -302,6 +302,17 @@ export default {
         vm.monthReturnImgUrl = data.returnsHeatmapFileURL
         vm.annualReturnImgUrl = data.annualReturnsFileURL
         vm.tradesData = initalData["Trades"]
+
+        // ---------------------------------------- end ----------------------------------
+
+        // ----------------------- backtest result-------------------------------
+
+        this.$emit("setBacktestResult",initalData["basic"])
+
+
+
+        // ------------------------------ end -----------------------------------
+
         //(initalData)
         this.loadMarker(initalData)
         // vm.$store.commit('getTradesData',initalData[])

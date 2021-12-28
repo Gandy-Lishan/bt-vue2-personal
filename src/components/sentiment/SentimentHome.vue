@@ -122,7 +122,8 @@ export default {
 		'backtest-performance': backtestPerformance,
 		'entry-form': entryForm,
 		'exit-form': exitForm
-	},
+	}
+	,
 	methods: {
 		handleClick(tab, event) {
 			this.signalFormTagName = tab.name

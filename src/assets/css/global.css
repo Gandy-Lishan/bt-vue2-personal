@@ -2,6 +2,9 @@
 	width: 100%;
 	height: 100%;
 }
+#el-tab-pane{
+	overflow-y:scroll;
+}
 .el-form-item__label {
 	font-weight: 500;
 }
@@ -101,6 +104,7 @@
 		.el-form-item
 		.el-form-item__content {
 		flex: 1;
+		display: grid;
 	}
 	.condition-form
 		.signalIndicatorBox
@@ -361,7 +365,7 @@
 	}
 	.el-table .cell {
 		white-space: nowrap;
-		overflow: hidden;
+	
 		text-overflow: ellipsis;
    }
 }

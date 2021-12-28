@@ -5,26 +5,26 @@
     <div class="backtest_container">
       <el-form
         ref="backtestSetupForm" 
-        :model="backtestSetupFormdata"
+        :model="backtestResult"
         label-position="left">
         <el-col :span="8">
             <el-form-item label="Name:" prop="name">
-              <el-input v-model="backtestSetupFormdata.name" disabled></el-input>
+              <el-input v-model="backtestResult.name" disabled></el-input>
             </el-form-item>
             <el-form-item label="Description:" prop="description">
               <el-input
-                v-model="backtestSetupFormdata.description"
+                v-model="backtestResult.description"
                 type="textarea"
                 disabled
                 :autosize="{ minRows: 6, maxRows: 6 }"
                 resize="none"
               ></el-input>
             </el-form-item>
-            <el-form-item label="Symbol name:" prop="symbolName">
+            <el-form-item label="Symbol name:" prop="symbol">
               <div class="enterSymbolBox">
               <el-select
                   disabled
-                  v-model="backtestSetupFormdata.symbolName"
+                  v-model="backtestResult.symbol"
                   filterable
                   remote
                   reserve-keyword
@@ -42,20 +42,20 @@
             </el-form-item>
         </el-col>
         <el-col :span="8">
-            <el-form-item label="Starting Capital:" prop="startingCapital">
-              <el-input v-model="backtestSetupFormdata.startingCapital" disabled></el-input>
+            <el-form-item label="Starting Capital:" prop="capital">
+              <el-input v-model="backtestResult.capital" disabled></el-input>
             </el-form-item>
             <el-form-item label="Commission:" prop="commission">
-              <el-input v-model="backtestSetupFormdata.commission" disabled></el-input>
+              <el-input v-model="backtestResult.commission" disabled></el-input>
             </el-form-item>
             <el-form-item label="Slippage:" prop="slippage">
-              <el-input v-model="backtestSetupFormdata.slippage"  disabled></el-input>
+              <el-input v-model="backtestResult.slippage"  disabled></el-input>
             </el-form-item>
             <el-form-item label="Money Management:" prop="moneyManagement">
               <div class="selectBox">
-                <el-select v-model="backtestSetupFormdata.value" disabled placeholder="Pleace select">
+                <el-select v-model="backtestResult.value" disabled placeholder="Pleace select">
                       <el-option
-                        v-for="item in backtestSetupFormdata.options"
+                        v-for="item in backtestResult.options"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
@@ -67,14 +67,14 @@
         <el-col :span="8">
           <el-form-item label="Benchmark:" prop="benchmark">
               <div class="enterSymbolBox">
-              <el-input v-model="backtestSetupFormdata.symbolName" disabled></el-input>
+              <el-input v-model="backtestResult.benchmark" disabled></el-input>
               </div>
             </el-form-item>
           <div class="dateNote">
             <el-form-item label="Start date">
               <el-date-picker
-                v-if="backtestSetupFormdata.historyValue === 22"
-                v-model="backtestSetupFormdata.starDate"
+                v-if="backtestResult.historyValue === 22"
+                v-model="backtestResult.start_date"
                 type="date"
                 placeholder="Please select a start date"
               >
@@ -82,24 +82,24 @@
               <el-input
               v-else
               disabled
-              v-model="backtestSetupFormdata.starDate"
+              v-model="backtestResult.start_date"
               placeholder="Please select a start date">
               </el-input>
             </el-form-item>
           </div>
             <el-form-item label="End date">
               <el-date-picker
-                v-if="backtestSetupFormdata.historyValue === 22"
-                v-model="backtestSetupFormdata.endDate"
+                v-if="backtestResult.historyValue === 22"
+                v-model="backtestResult.end_date"
                 type="date"
                 placeholder="Please select a end date"
-                @change="getEndDate(backtestSetupFormdata.endDate)"
+                @change="getEndDate(backtestResult.endDate)"
               >
               </el-date-picker>
               <el-input
                 v-else
                 disabled
-                v-model="backtestSetupFormdata.endDate"
+                v-model="backtestResult.end_date"
                 placeholder="Please select a end date">
               </el-input>
             </el-form-item>
@@ -113,70 +113,73 @@
 <script>
 import { timestampToTime } from '../../../tools/formatDate.js'
 export default {
+  props:{
+    backtestResult:Object
+  },
   data() {
     return{
-      backtestSetupFormdata: {
-        name: '',
-        description: '',
-        startingCapital: '',
-        commission: '',
-        slippage: '',
-        backtestHistory: '',
-        value: 0,
-        historyValue: 0,
-        options: [{
-          value: 0,
-          label: 'All In / All Out (CASH)'
-        }, 
-        // {
-        //   value: 1,
-        //   label: 'All In / When Out, (buy TLT)'
-        // }, {
-        //   value: 2,
-        //   label: 'All In / When Out, (buy GLD)'
-        // }, {
-        //   value: 3,
-        //   label: 'All In / When Out, (buy AGG)'
-        // }
-        ],
-        historyOptions: [{
-          value: 1,
-          label: '1 Year'
-        }, {
-          value: 2,
-          label: '2 Year'
-        }, {
-          value: 3,
-          label: '3 Year'
-        }, {
-          value: 4,
-          label: '4 Year'
-        }, {
-          value: 5,
-          label: '5 Year'
-        },{
-          value: 10,
-          label: '10 Year'
-        },
-        {
-          value: 15,
-          label: '15 Year'
-        },
-        {
-          value: 20,
-          label: '20 Year'
-        },{
-          value: 21,
-          label: 'All History'
-        },{
-          value: 22,
-          label: 'Custom...'
-        },
-        ],
-        starDate: '',
-        endDate: '',
-        symbolName: ''
-      },
+      // backtestResult: {
+      //   name: '',
+      //   description: '',
+      //   startingCapital: '',
+      //   commission: '',
+      //   slippage: '',
+      //   backtestHistory: '',
+      //   value: 0,
+      //   historyValue: 0,
+      //   options: [{
+      //     value: 0,
+      //     label: 'All In / All Out (CASH)'
+      //   }, 
+      //   // {
+      //   //   value: 1,
+      //   //   label: 'All In / When Out, (buy TLT)'
+      //   // }, {
+      //   //   value: 2,
+      //   //   label: 'All In / When Out, (buy GLD)'
+      //   // }, {
+      //   //   value: 3,
+      //   //   label: 'All In / When Out, (buy AGG)'
+      //   // }
+      //   ],
+      //   historyOptions: [{
+      //     value: 1,
+      //     label: '1 Year'
+      //   }, {
+      //     value: 2,
+      //     label: '2 Year'
+      //   }, {
+      //     value: 3,
+      //     label: '3 Year'
+      //   }, {
+      //     value: 4,
+      //     label: '4 Year'
+      //   }, {
+      //     value: 5,
+      //     label: '5 Year'
+      //   },{
+      //     value: 10,
+      //     label: '10 Year'
+      //   },
+      //   {
+      //     value: 15,
+      //     label: '15 Year'
+      //   },
+      //   {
+      //     value: 20,
+      //     label: '20 Year'
+      //   },{
+      //     value: 21,
+      //     label: 'All History'
+      //   },{
+      //     value: 22,
+      //     label: 'Custom...'
+      //   },
+      //   ],
+      //   starDate: '',
+      //   endDate: '',
+      //   symbolName: ''
+      // },
       strategyFormdata: {},
       symbolList: [],
       indexList: [],
@@ -185,10 +188,10 @@ export default {
     }
   },
  created(){
-    this.backtestSetupFormdata.endDate = timestampToTime(new Date())
-    const str = this.backtestSetupFormdata.endDate.split('-')
-    str[0] = (Number(str[0]) - Number(this.backtestSetupFormdata.historyValue)) + ''
-    this.backtestSetupFormdata.starDate = str.join('-')
+    this.backtestResult.endDate = timestampToTime(new Date())
+    const str = this.backtestResult.endDate.split('-')
+    str[0] = (Number(str[0]) - Number(this.backtestResult.historyValue)) + ''
+    this.backtestResult.starDate = str.join('-')
     this.getData()
   },
   computed: {
@@ -204,38 +207,38 @@ export default {
     }},
   methods: {
     getEndDate(date){
-      this.backtestSetupFormdata.endDate = date
+      this.backtestResult.endDate = date
       const endDate = timestampToTime(date)
       const str = endDate.split('-')
-      str[0] = (Number(str[0]) - Number(this.backtestSetupFormdata.historyValue)) + ''
-      this.backtestSetupFormdata.starDate = str.join('-')
+      str[0] = (Number(str[0]) - Number(this.backtestResult.historyValue)) + ''
+      this.backtestResult.starDate = str.join('-')
     },
     getBacktestHistory(val) {
-      this.backtestSetupFormdata.historyValue = val
+      this.backtestResult.historyValue = val
       if(val <= 20){
-      const str = this.backtestSetupFormdata.endDate.split('-')
-      str[0] = (Number(str[0]) - Number(this.backtestSetupFormdata.historyValue)) + ''
-      this.backtestSetupFormdata.starDate = str.join('-')}
+      const str = this.backtestResult.endDate.split('-')
+      str[0] = (Number(str[0]) - Number(this.backtestResult.historyValue)) + ''
+      this.backtestResult.starDate = str.join('-')}
       if(val === 21){
-        this.backtestSetupFormdata.starDate = ''
+        this.backtestResult.starDate = ''
       }
     },
     getBacktestHistory(val) {
-      this.backtestSetupFormdata.historyValue = val
+      this.backtestResult.historyValue = val
     },
     saveBacktest() {
       const vm = this
       const strategyFormData = {}
-      strategyFormData.stock = vm.backtestSetupFormdata.symbolName
-      strategyFormData.name = vm.backtestSetupFormdata.name
-      strategyFormData.description = vm.backtestSetupFormdata.description
+      strategyFormData.stock = vm.backtestResult.symbolName
+      strategyFormData.name = vm.backtestResult.name
+      strategyFormData.description = vm.backtestResult.description
       strategyFormData.note = 'my note'
-      strategyFormData.cash = vm.backtestSetupFormdata.startingCapital
-      strategyFormData.commission = vm.backtestSetupFormdata.commission
-      strategyFormData.slippage = vm.backtestSetupFormdata.slippage
-      strategyFormData.riskfreerate = vm.backtestSetupFormdata.slippage
-      strategyFormData.fromdate = timestampToTime(vm.backtestSetupFormdata.starDate)
-      strategyFormData.todate = timestampToTime(vm.backtestSetupFormdata.endDate)
+      strategyFormData.cash = vm.backtestResult.startingCapital
+      strategyFormData.commission = vm.backtestResult.commission
+      strategyFormData.slippage = vm.backtestResult.slippage
+      strategyFormData.riskfreerate = vm.backtestResult.slippage
+      strategyFormData.fromdate = timestampToTime(vm.backtestResult.starDate)
+      strategyFormData.todate = timestampToTime(vm.backtestResult.endDate)
       strategyFormData.status = 0
       strategyFormData.strategy = vm.strategyFormdata.id
       const params =  strategyFormData
@@ -302,29 +305,29 @@ export default {
       const data = this.$store.state.favoriteBacktestRowData
       this.backtestId = data.id
       if(data.length !== 0){
-      this.backtestSetupFormdata.name = data.name
-      this.backtestSetupFormdata.description = data.description
-      this.backtestSetupFormdata.symbolName = data.stock
+      this.backtestResult.name = data.name
+      this.backtestResult.description = data.description
+      this.backtestResult.symbolName = data.stock
       this.strategyFormdata = data.strategy
-      this.backtestSetupFormdata.startingCapital = data.cash
-      this.backtestSetupFormdata.commission = data.commission
-      this.backtestSetupFormdata.slippage = data.slippage
-      this.backtestSetupFormdata.starDate = data.fromdate
-      this.backtestSetupFormdata.endDate = data.todate
+      this.backtestResult.startingCapital = data.cash
+      this.backtestResult.commission = data.commission
+      this.backtestResult.slippage = data.slippage
+      this.backtestResult.starDate = data.fromdate
+      this.backtestResult.endDate = data.todate
       }
     },
     clearResultData() {
-      this.backtestSetupFormdata.name = ''
-      this.backtestSetupFormdata.description = ''
-      this.backtestSetupFormdata.startingCapital = ''
-      this.backtestSetupFormdata.commission = ''
-      this.backtestSetupFormdata.slippage = ''
-      this.backtestSetupFormdata.backtestHistory = ''
-      this.backtestSetupFormdata.value = 0
-      this.backtestSetupFormdata.historyValue = 0
-      this.backtestSetupFormdata.starDate = ''
-      this.backtestSetupFormdata.endDate = ''
-      this.backtestSetupFormdata.symbolName = ''
+      this.backtestResult.name = ''
+      this.backtestResult.description = ''
+      this.backtestResult.startingCapital = ''
+      this.backtestResult.commission = ''
+      this.backtestResult.slippage = ''
+      this.backtestResult.backtestHistory = ''
+      this.backtestResult.value = 0
+      this.backtestResult.historyValue = 0
+      this.backtestResult.starDate = ''
+      this.backtestResult.endDate = ''
+      this.backtestResult.symbolName = ''
     }
   }
 }
