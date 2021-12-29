@@ -236,10 +236,14 @@ export default {
     editBacktest(row) {
       // this.editData = row
       // this.backtestItemId = row.id
-      this.$store.commit('getEditBacktestData', row)
-      this.$emit('getBacktestDataTry')
+      let vm = this
+      this.$store.commit('getBacktestetUpEditData',row)
       this.$emit('goTobacktestSetupForm')
-      // this.$emit('getEditBacktestData',row)
+      this.$http.get('/rundev/report?backtests=' + row.id).then(res => {
+        vm.$store.commit('getBacktestEditData',res.data)
+        vm.$emit('goToEntryFormData')
+        vm.$store.commit('showExitFormData', false)
+      })
     },
     deleteBacktest(id) {
     this.$http.delete(

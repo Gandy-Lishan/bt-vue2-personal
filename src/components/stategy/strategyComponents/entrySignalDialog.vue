@@ -138,7 +138,6 @@ export default {
       queryInfo: {
         page: 1
       },
-      indicatorRadio: this.$store.state.indicatorRadio,
       radio: "",
       total: 0,
       loading: false,
@@ -159,7 +158,7 @@ export default {
     async getSignallist(users) {
       let analysisBasis
       let used_indicators
-      let indicatorRadio = this.$store.state.indicatorRadio
+      let indicatorRadio = this.$store.state.entryIndicatorRadio
       let type
       if(this.type){
         type = this.type
@@ -204,7 +203,7 @@ export default {
     async getCustomList(user) {
       let analysisBasis
       let used_indicators
-      let indicatorRadio = this.$store.state.indicatorRadio
+      let indicatorRadio = this.$store.state.entryIndicatorRadio
       let type
       if(typeof(this.type) === 'string'){
         type = this.type

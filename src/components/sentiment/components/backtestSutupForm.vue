@@ -462,7 +462,7 @@ backtestSetupFormdata: {
       if (this.backtestSetupFormdata.slippage ==''){this.backtestSetupFormdata.slippage='0.001'}
     },
     setEditBacktestData() {
-      const data = this.$store.state.editStrategyData
+      const data = this.$store.state.editBacktestSetUpData
       this.backtestSetupFormdata.uuid = data.id
       this.backtestSetupFormdata.name = data.name
       this.backtestSetupFormdata.description = data.description

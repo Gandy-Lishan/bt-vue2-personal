@@ -1,5 +1,7 @@
 <template>
 	<div class="signalRight">
+		<el-tabs v-model="activeName" type="card">
+			<el-tab-pane label="Signal" name="first">
 		<el-form label-position="left" ref="signalRight">
 			<div class="radioBox">
 				<div @click="changeSentimentChecked(), resetFormData()">
@@ -55,12 +57,14 @@
 		<el-form ref="rightForm" label-position="left" label-width="80px">
 			<div v-for="(item, index) in conditionList" :key="index">
 				<!-- 必需 -->
-				<el-form-item label="Condition_description:" size="mini" v-show="false">
+				<div class="ma-container">
+				<el-form-item label="Signal Description:" size="mini" >
 					<el-input
 						v-model="conditionList[index].condition_description"
 						size="mini"
 					></el-input>
 				</el-form-item>
+				</div>
 				<el-form-item label="Parameter:" size="mini">
 					<el-radio
 						v-model="parameterRadio"
@@ -101,11 +105,52 @@
 						<el-input v-model="maValue" @blur="renderMA(maValue)"></el-input>
 					</el-form-item>
 				</div>
-				<el-form-item label="Condition:" size="mini" v-if="hideCondition">
+						<!-- longexit ATR(High) technical -->
+				<el-form-item label="Condition:" size="mini" v-if="!(indicatorRadio === 'Technical_Indicators:' & myType === 'longexit' & ['ATR trailing stop (High) line CrossAbove'].indexOf(
+							conditionList[index].condition_description
+						) !== -1)">
 					<div class="selectBox">
+						<!-- long MACD technical -->
+						<el-select
+							v-model="conditionsOption"
+							v-if="indicatorRadio === 'Technical_Indicators:' & myType === 'long' & ['MACD CrossAbove'].indexOf(
+							conditionList[index].condition_description
+						) !== -1"
+							filterable
+							placeholder="Please select condition"
+						>
+							<el-option
+								v-for="item in longMACDConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+						<!-- short MACD technical -->
+						<el-select
+							v-model="conditionsOption"
+							v-else-if="indicatorRadio === 'Technical_Indicators:' & myType === 'short' & ['MACD CrossBelow'].indexOf(
+							conditionList[index].condition_description
+						) !== -1"
+							filterable
+							placeholder="Please select condition"
+						>
+							<el-option
+								v-for="item in longMACDConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
 						<el-select
 							v-model="conditionList[index].condition"
-							v-if="parameterRadio == '1'"
+							v-else-if="parameterRadio == '1' && !(indicatorRadio === 'Technical_Indicators:' & myType === 'long' & ['MACD CrossAbove'].indexOf(
+							conditionList[index].condition_description
+						) !== -1) && !(indicatorRadio === 'Technical_Indicators:' & myType === 'short' & ['MACD CrossBelow'].indexOf(
+							conditionList[index].condition_description
+						) !== -1)"
 							filterable
 							placeholder="Please select condition"
 						>
@@ -119,7 +164,7 @@
 						</el-select>
 						<el-select
 							v-model="conditionsOption"
-							v-else
+							v-if="parameterRadio == '2'"
 							filterable
 							placeholder="Please select condition"
 						>
@@ -132,6 +177,30 @@
 							</el-option>
 						</el-select>
 					</div>
+				</el-form-item>
+				<!-- long Moving Average technical -->
+				<el-form-item
+					v-if="indicatorRadio === 'Technical_Indicators:' & myType === 'long' & ['Moving Average CrossAbove'].indexOf(
+							conditionList[index].condition_description
+						) !== -1"
+					size="mini"
+					label="Str_value">
+					<el-input
+						v-model="conditionList[index].str_value"
+						size="mini">
+					</el-input>
+				</el-form-item>
+				<!-- short Moving Average technical -->
+								<el-form-item
+					v-if="indicatorRadio === 'Technical_Indicators:' & myType === 'short' & ['Moving Average CrossBelow'].indexOf(
+							conditionList[index].condition_description
+						) !== -1"
+					size="mini"
+					label="Str_value">
+					<el-input
+						v-model="conditionList[index].str_value"
+						size="mini">
+					</el-input>
 				</el-form-item>
 				<el-form-item
 					v-if="
@@ -564,6 +633,8 @@
 				</el-form-item>
 			</div>
 		</el-form>
+			</el-tab-pane>
+		</el-tabs>
 	</div>
 </template>
 <script>
@@ -572,7 +643,8 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
 	name: 'condition',
 	props: {
-		conditionFormData: Object
+		conditionFormData: Object,
+		myType: String
 	},
 	data() {
 		return {
@@ -594,7 +666,6 @@ export default {
 			conditionsOption: '',
 			parameterRadio: '1',
 			maValue: '',
-			hideCondition: true,
 			parameterConditions: [
 				{ value: 5, label: 'sentiment crossAbove' },
 				{ value: 6, label: 'sentiment crossBelow' }
@@ -606,8 +677,11 @@ export default {
 				{ value: 3, label: 'CrossAbove' },
 				{ value: 4, label: 'CrossBelow' }
 			],
+			longMACDConditions: [				{ value: 3, label: 'CrossAbove' },
+				{ value: 4, label: 'CrossBelow' }],
 			combinationArr: ['AND', 'OR', 'SUM'],
-			combination: ''
+			combination: '',
+			activeName: 'first',
 		}
 	},
 	mounted() {
@@ -818,9 +892,6 @@ export default {
 						})
 						.then((val) => {
 							const initData = val.data.results
-							if ((vm.exitType == 'longexit') | (vm.exitType == 'shortexit')) {
-								vm.hideCondition = false
-							}
 							vm.initTechCondiction = initData[0].condition
 							vm.conditionList = initData
 						})
@@ -830,12 +901,12 @@ export default {
 		changeSentimentChecked() {
 			this.isCheckedIndicators = false
 			this.indicatorRadio = 'Sentiment_Indicators:'
-			this.$store.commit('getIndicatorRadio', this.indicatorRadio)
+			this.$store.commit('getEntryIndicatorRadio', this.indicatorRadio)
 		},
 		changeTechnicalChecked() {
 			this.isCheckedIndicators = true
 			this.indicatorRadio = 'Technical_Indicators:'
-			this.$store.commit('getIndicatorRadio', this.indicatorRadio)
+			this.$store.commit('getEntryIndicatorRadio', this.indicatorRadio)
 		},
 		// change indicator, reset form data
 		resetFormData() {
@@ -857,7 +928,7 @@ export default {
 		},
 		clearConditionData() {
 			this.indicatorRadio = 'Sentiment_Indicators:'
-			this.$store.commit('getIndicatorRadio', 'Sentiment_Indicators:')
+			this.$store.commit('getEntryIndicatorRadio', 'Sentiment_Indicators:')
 			this.isCheckedIndicators = false
 			const data = this.conditionList
 			for (var key in data) {
@@ -953,6 +1024,18 @@ export default {
 				data.conditionList[0].maValue = this.maValue
 			}
 			this.$store.commit('saveCondictionData', data)
+		},
+		// show edit backtest condition data
+		setConditionEditData() {
+			const data = this.$store.state.editBacktestData.strategy.signal_entry
+			if(data.analysis_basis === 'sentiment'){
+				this.indicatorRadio === 'Sentiment_Indicators:'
+				this.sentimentIndicator === data.used_indicators
+			}else{
+				this.indicatorRadio === 'Technical_Indicators:'
+				this.technicalIndicator = data.used_indicators
+			}
+			this.conditionList = data.conditions
 		}
 	}
 }
@@ -961,7 +1044,7 @@ export default {
 .signalRight {
 	  margin: 20px 20px;
 		border-radius: 10px;
-		padding: 10px 10px 10px 10px;
+		padding: 20px;
 		//flex-grow: 1;
 		border: 2px solid #6c6c6c;
 }

@@ -15,7 +15,9 @@ export default {
 @import '../node_modules/chartiq/css/chartiq.css'; // Chart UI
 @import '../node_modules/chartiq/st-development/css/ST-chartiq.css';
 #app {
-  overflow:auto;
+  height:100vh;
+  overflow-y:auto;
   overflow-x:hidden;
+  
 }
 </style>

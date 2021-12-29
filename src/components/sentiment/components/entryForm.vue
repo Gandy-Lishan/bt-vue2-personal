@@ -73,26 +73,20 @@
 					<entry-condition
 						ref="conditionChild"
 						:conditionFormData.sync="conditionFormData"
+						:myType="entryType"
 					></entry-condition>
+					<div class="entryBtnsBox">
+						<el-button class="saveBtn"  round @click="saveEntryFormData()"
+							>Save Signal</el-button
+						>
+						<el-button class="loadBtn" round v-on:click="openEntryDialog"
+							>Load Signal</el-button
+						>
+						<el-button class="removeBtn" round @click="removeEntryFormData"
+							>Remove Signal</el-button
+						>
+					</div>
 				</div>
-			</el-col>
-		</el-row>
-
-		<el-row class="entryBtns" type="flex">
-			<el-col :xs="12" :sm="12" :md="8" :lg="8" :xl="8">
-				<el-button type="info" @click="clearEntryFormData"
-					>Clear Entry Signal</el-button
-				>
-			</el-col>
-			<el-col :xs="12" :sm="12" :md="8" :lg="8" :xl="8">
-				<el-button type="primary" @click="saveEntryFormData()"
-					>Save Entry Signal</el-button
-				>
-			</el-col>
-			<el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
-				<el-button type="warning" v-on:click="openEntryDialog"
-					>Load Entry Signal</el-button
-				>
 			</el-col>
 		</el-row>
 	</div>
@@ -139,7 +133,8 @@ export default {
 				{ label: 'Monthly', value: 'Monthly' }
 			],
 			dialogTableVisible: false,
-			conditionFormData: {}
+			conditionFormData: {},
+			entryType: ''
 		}
 	},
 	components: {
@@ -169,7 +164,9 @@ export default {
 			this.entryData.frequency = ''
 			this.entryData.entryType = ''
 			this.$refs.conditionChild.clearConditionData()
-
+		},
+		removeEntryFormData() {
+			this.$refs.conditionChild.clearConditionData()
 			this.$store.commit('getEntryIndicators','')
 			CIQ.addIndicators()
 		},
@@ -215,6 +212,7 @@ export default {
 					message: 'Saved successfully',
 					duration: 1000
 				})
+				this.$store.commit('showExitFormData', false)
 				this.$emit('goToExitFormData')
 			} else {
 				this.$message.error({
@@ -231,6 +229,9 @@ export default {
 			this.entryData.description = data.description
 			this.entryData.frequency = data.frequency
 			this.entryData.entryType = data.type
+			this.$store.commit('getEntryType', data.type)
+			this.$store.commit('getExitType', data.type)
+			this.$store.commit('getFrequency', data.frequency)
 			this.conditionFormData = {}
 			this.conditionFormData = data
 			// console.log('condictionData', this.conditionFormData);
@@ -240,6 +241,22 @@ export default {
 			this.$store.commit('getExitType', val)
 			// clear exitType
 			this.$emit('clearExitType')
+			this.entryType = val
+		},
+		selectFrequencyAction(val) {
+			this.$store.commit('getFrequency', val)
+		},
+		// show edit backtest data
+		getBacktestEditData() {
+			const editData = this.$store.state.editBacktestData
+			if (Object.keys(editData).length !== 0) {
+				const data = editData.strategy.signal_entry
+				this.entryData.name = data.name
+				this.entryData.description = data.description
+				this.entryData.frequency = data.frequency
+				this.entryData.entryType = data.type
+				this.$refs.conditionChild.setConditionEditData()
+			}
 		},
 		selectFrequencyAction(val) {
 			this.$store.commit('getFrequency', val)
@@ -299,5 +316,17 @@ export default {
 }
 .active {
 	background-color: 666;
+}
+.condition-container{
+	position: relative;
+}
+.entryBtnsBox{
+	position: absolute;
+	top: 122px;
+	left: 722px;
+	display: flex;
+	flex-direction: column;
+	height: 200px;
+	justify-content: space-between
 }
 </style>

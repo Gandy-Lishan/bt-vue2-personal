@@ -83,7 +83,14 @@ module.exports = {
                     "^/rundev":"/rundev"
                 }
             },
-            
+            "/dev":{
+                target: "http://10.131.3.74:8000",
+                // ws:true,
+                changeOrigin:true,
+                pathRewrite:{
+                    "^/dev":"/dev"
+                }
+            }
         }
     }
 }

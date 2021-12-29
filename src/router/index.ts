@@ -17,11 +17,12 @@ import NewPorfolio from '../components/porfolio/porfolioIndex/newPorfolio.vue'
 import OpenedPorfolio from '../components/porfolio/porfolioIndex/openedPorfolio.vue'
 import PorfolioNewBacktest from '../components/porfolio/porfolioComponents/porfolioNewBacktest.vue'
 import SentimentHome from '../components/sentiment/SentimentHome.vue'
+import NewHome from '../components/newVersion/New-Home.vue'
 Vue.use(Router)
 const router = new Router({
   routes: [
-    { path: '/', redirect: '/login' },
-    { path: '/login', component: Login },
+    { path: '/', redirect: '/newHome' },
+    { path: '/newHome', component: NewHome },
     {
       path: '/home',
       component: Home,
@@ -42,7 +43,7 @@ const router = new Router({
         { path: '/porfolioNewBacktest', component: PorfolioNewBacktest }
       ]
     },
-    { path: '/sentimentHome', component: SentimentHome },
+    { path: '/sentimentHome', component: SentimentHome }
   ]
 })
 // 挂载路由导航守卫
