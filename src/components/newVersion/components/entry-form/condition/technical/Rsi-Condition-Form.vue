@@ -18,14 +18,14 @@
 						>
 						</el-option>
 					</el-select>
-					<el-input v-model="sc.value" placeholder="Input Value"></el-input>
+					<el-input v-model="sc.value" placeholder="Input Value" oninput ="value=value.replace(/[^\d]/g,'')"></el-input>
 				</div>
 			</div>
 		</div>
 		<div class="signalDescriptionBox">
 			<div><h2 class="note">Signal Description</h2></div>
 			<el-button plain style="margin: 5px 0px 5px 0px"
-				>{{ des.technicalIndicator +conditions[sc.condition].label+des.value}}</el-button
+				>{{ des.technicalIndicator + "&nbsp;&nbsp;"+ conditions[sc.condition].label+ "&nbsp;&nbsp;"+ des.value}}</el-button
 			>
 		</div>
 	</div>

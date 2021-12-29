@@ -7,13 +7,6 @@
 						<el-radio label="EMA">Exponential moving average</el-radio>
 					</el-radio-group>
 					</div>
-					<!-- <el-radio
-						v-model="ma_category"
-						label="Simple moving average"
-						style="margin-bottom: 30px"
-					></el-radio>
-					<el-radio v-model="ma_category" label="Exponential moving average">
-					</el-radio> -->
 				</div>
 </template>
 <script>

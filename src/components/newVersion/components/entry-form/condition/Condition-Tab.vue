@@ -2,16 +2,17 @@
 	<div class="condition-tab">
 		<div class="signal-relation-box" v-if="editableTabs.length > 1">
 			<span style="font-weight: 400; margin-right: 10px">Signal Relation:</span>
-			<el-radio-group v-model="radio">
+			<!-- <el-radio-group v-model="radio">
 				<el-radio :label="0">AND</el-radio>
 				<el-radio :label="1">OR</el-radio>
-			</el-radio-group>
+			</el-radio-group> -->
 		</div>
+		<!-- 暂时删除了 editabled -->
 		<el-tabs
 			v-model="editableTabsValue"
 			type="card"
-			editable
 			@edit="handleTabsEdit"
+			disabled
 			@tab-remove="handleTabsRemove"
 		>
 			<el-tab-pane style="height:80vh;overflow-y:auto;overflow-x:hidden;"

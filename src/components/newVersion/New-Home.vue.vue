@@ -9,47 +9,89 @@
 				<el-row type="flex" justify="center"
 					><el-col><p>SentimentTrader Backtest Engine</p></el-col></el-row
 				>
-				<!-- <div class="chart_box" id="chart_box">
+				<div class="chart_box" id="chart_box">
 					<chart width="100%" height="100%"></chart>
-				</div> -->
+				</div>
 			</header>
-			<main class="main" style="height:80vh">
-				<div class="mainTagbar" style="height:100%">
-					<el-tabs  v-model="activeName" type="card"  style="height:100%">
-						<el-tab-pane style="height:90%;overflow-y:scroll;overflow-x:hidden;"  label="Backtest Setup" name="first">
+			<main class="main" style="height: 80vh">
+				<div class="mainTagbar" style="height: 100%">
+					<el-tabs v-model="activeName" type="card" style="height: 100%">
+						<el-tab-pane
+							style="height: 90%; overflow-y: scroll; overflow-x: hidden"
+							label="Backtest Setup"
+							name="first"
+						>
 							<el-tabs v-model="activeTag" type="card">
-								<el-tab-pane style="height:90%;overflow-y:auto;overflow-x:hidden;" label="Backtest Data" name="first-child-n1">
+								<el-tab-pane
+									style="height: 90%; overflow-y: auto; overflow-x: hidden"
+									label="Backtest Data"
+									name="first-child-n1"
+								>
 									<backtest-setup-form ref="setupChild"></backtest-setup-form>
 								</el-tab-pane>
-								<el-tab-pane style="height:90%;overflow-y:auto;overflow-x:hidden;"  label="Entry Criteria" name="first-child-n2">
-									<div class="clearBox">
+								<el-tab-pane
+									style="height: 90%; overflow-y: auto; overflow-x: hidden"
+									label="Entry Criteria"
+									name="first-child-n2"
+								>
+									<div class="clearEntryBox">
 										<h1 class="titleTxt">Entry Criteria</h1>
 										<el-button class="clearBtn" round>Clear Form</el-button>
 									</div>
-									<entry-form 
+									<entry-form
 										ref="entryFormChild"
 										:criteria="'entry'"
 										:fdLoad="fdLoad"
 									></entry-form>
 								</el-tab-pane>
-								<el-tab-pane style="height:90%;overflow-y:auto;overflow-x:hidden;" label="Exit Criteria" name="first-child-n3">
+								<el-tab-pane
+									style="height: 90%; overflow-y: auto; overflow-x: hidden"
+									label="Exit Criteria"
+									name="first-child-n3"
+								>
 									<div class="clearBox">
-										<h1 class="titleTxt">Exit Criteria</h1>
-										<el-button class="clearBtn" round>Clear Form</el-button>
+										<div class="clearBoxItem">
+											<h1 class="titleTxt">Exit Criteria</h1>
+											<el-button class="clearBtn" round>Clear Form</el-button>
+										</div>
+										<div class="backtestBtns">
+											<el-button round @click="saveBacktest"
+												>Save Backtest</el-button
+											>
+										</div>
 									</div>
-									<exit-form style="height:90%;overflow-y:auto;overflow-x:hidden;" ref="exitFormChild" :criteria="'exit'"  :fdLoad="fdLoad"></exit-form>
+									<exit-form
+										style="height: 90%; overflow-y: auto; overflow-x: hidden"
+										ref="exitFormChild"
+										:criteria="'exit'"
+										:fdLoad="fdLoad"
+									></exit-form>
 								</el-tab-pane>
 							</el-tabs>
 						</el-tab-pane>
-						<el-tab-pane style="height:90%;overflow-y:auto;overflow-x:hidden;" label="Backtest Results" name="second">
-							<backtest-result-form :backtestResult="backtestResult"  ref="resultChild"></backtest-result-form>
+						<el-tab-pane
+							style="height: 90%; overflow-y: auto; overflow-x: hidden"
+							label="Backtest Results"
+							name="second"
+						>
+							<backtest-result-form
+								:backtestResult="backtestResult"
+								ref="resultChild"
+							></backtest-result-form>
 							<backtest-performance
-							@setBacktestResult="setBacktestResult"
+								@setBacktestResult="setBacktestResult"
 								ref="performanceChild"
 							></backtest-performance>
 						</el-tab-pane>
-						<el-tab-pane style="height:90%;overflow-y:auto;overflow-x:hidden;" label="Favorites" name="third">
-							<favorite-form ref="favoriteChild" @goBacktestResultForm="goBacktestResultForm"></favorite-form>
+						<el-tab-pane
+							style="height: 90%; overflow-y: auto; overflow-x: hidden"
+							label="Favorites"
+							name="third"
+						>
+							<favorite-form
+								ref="favoriteChild"
+								@goBacktestResultForm="goBacktestResultForm"
+							></favorite-form>
 						</el-tab-pane>
 						<el-tab-pane label="Strategies" name="fourth">
 							<strategy-form ref="strategyChild"></strategy-form>
@@ -63,7 +105,8 @@
 </template>
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import{ Store, mapGetters } from "vuex"
+import { Store, mapGetters } from 'vuex'
+import SignalCode from '@/tools/codeTool.js'
 import chart from '../chart/index.vue'
 import backtestSetupForm from './components/Backtest-Setup-Form.vue'
 import backtestResultForm from './components/Backtest-Result-Form.vue'
@@ -75,7 +118,7 @@ import exitForm from '@/components/newVersion/components/entry-form/Exit-Form.vu
 export default {
 	data() {
 		return {
-			backtestResult:{},
+			backtestResult: {},
 			activeName: 'first',
 			activeTag: 'first-child-n1',
 			fdLoad: {}
@@ -92,7 +135,7 @@ export default {
 		'exit-form': exitForm
 	},
 	computed: {
-		...mapGetters(["getDialogFdData"]),
+		...mapGetters(['getDialogFdData']),
 		fdDialogData() {
 			return this.getDialogFdData
 		}
@@ -100,10 +143,10 @@ export default {
 	watch: {
 		fdDialogData: {
 			handler(newVal) {
-				if(newVal.criteria === "entry"){
+				if (newVal.criteria === 'entry') {
 					delete newVal.criteria
 					this.fdLoad = newVal
-				}else if(newVal.criteria === "exit"){
+				} else if (newVal.criteria === 'exit') {
 					delete newVal.criteria
 					this.fdLoad = newVal
 				}
@@ -112,29 +155,176 @@ export default {
 			deep: true
 		}
 	},
-	mounted(){
+	mounted() {
 		console.log('mounted')
-		var node = document.getElementsByClassName("el-tabs__content")[0]
-		node.style.height = "100%"
+		var node = document.getElementsByClassName('el-tabs__content')[0]
+		node.style.height = '100%'
 	},
 	methods: {
 		goBacktestResultForm() {
-			this.activeName = "second"
+			this.activeName = 'second'
 			this.$refs.performanceChild.getResultData()
 		},
-		setBacktestResult(data){
+		setBacktestResult(data) {
+			this.backtestResult = data
+		},
+		saveBacktest() {
+			console.log('save data', this.$store.state.backtestInfo)
+			const backtestData = this.$store.state.backtestInfo
+			const signalEntryList = backtestData.entry.signals
+			const signalExitList = backtestData.exit.signals
 
-			this.backtestResult = data	
+			signalEntryList.forEach((item) => {
+				if (item.sentimentIndicator) {
+					item.indicator = item.sentimentIndicator
+					item.analysis = 'Sentiment'
+					delete item.technicalIndicator
+					delete item.sentimentIndicator
+				}
+				if (item.technicalIndicator) {
+					item.indicator = item.technicalIndicator
+					item.analysis = 'Technical'
+					delete item.technicalIndicator
+					delete item.sentimentIndicator
+				}
+			})
+			signalExitList.forEach((item) => {
+				if (item.sentimentIndicator) {
+					item.indicator = item.sentimentIndicator
+					item.analysis = 'Sentiment'
+					delete item.technicalIndicator
+					delete item.sentimentIndicator
+				}
+				if (item.technicalIndicator) {
+					item.indicator = item.technicalIndicator
+					item.analysis = 'Technical'
+					delete item.technicalIndicator
+					delete item.sentimentIndicator
+				}
+			})
+			const b = new SignalCode()
+			var entry_signal_list = []
+			var exit_signal_list = []
+			delete backtestData.entry.signals
+			for (var i in signalEntryList) {
+				let code = b.encode(signalEntryList[i])
+				var singal = {
+					code: code
+				}
+				entry_signal_list.push(singal)
+				// backtestData.entry = {signalList}
+				// backtestData.entry = [{description: 'entry test', code: ""}]
+				// backtestData.entry[0].code = code
+			}
+			delete backtestData.exit.signals
+			for (var i in signalExitList) {
+				let code = b.encode(signalExitList[i])
+				var singal = {
+					code: code
+				}
+				exit_signal_list.push(singal)
+
+				// delete backtestData.exit.description
+				// delete backtestData.exit.frequency
+				// backtestData.exit = [{description: 'exit test', code: ""}]
+				// backtestData.exit[0].code = code
+			}
+			let entry = {
+				description: backtestData.entry.description,
+				direction: backtestData.entry.direction,
+				frequency: backtestData.entry.frequency,
+				signals: entry_signal_list
+			}
+			let exit = {
+				description: backtestData.exit.description,
+				direction: backtestData.exit.direction,
+				frequency: backtestData.exit.frequency,
+				signals: exit_signal_list
+			}
+			delete backtestData.entry
+			delete backtestData.exit
+
+			backtestData.entry = JSON.stringify(entry)
+			backtestData.exit = JSON.stringify(exit)
+
+			console.log('保存的backtest信息', backtestData)
+			this.$http
+				.post('/dev/backtest/', this.$qs.stringify(backtestData), {
+					withCredentials: true
+				})
+				.then((res) => {
+					if (res.status === 201) {
+						this.$message.success('Save successfully')
+					} else {
+						this.$message.success('Save failed')
+					}
+				})
 		}
 	}
 }
 </script>
 <style lang="less" scoped>
-
 @media only screen and (min-width: 1600px) {
+	.home_container {
+		height: 100%;
+		width: 100%;
+		font-size: 16px;
+		.home_box {
+			height: 100%;
+			// width: 90rem;
+			margin: 0px 30rem;
+		}
+	}
+	.header {
+		img {
+			width: 100%;
+		}
+		p {
+			margin: 1.14rem 0 1.14rem 0px;
+			font-style: italic;
+			color: #6c6c6c;
+		}
+		p:first-of-type {
+			text-align: center;
+			font-size: 3rem;
+			margin: 50px 0 50px 0;
+			font-weight: lighter;
+			color: #333333;
+		}
+
+		.chart_box {
+			width: 100%;
+			height: 65vh;
+		}
+		margin-bottom: 80px;
+	}
 	.clearBox {
 		margin-bottom: 20px;
 		display: flex;
+		justify-content: space-between;
+		.clearBoxItem {
+			display: flex;
+			.el-button {
+				align-self: center;
+				margin-left: 20px;
+				color: #d9001b;
+			}
+		}
+		.backtestBtns {
+			display: flex;
+			width: 50%;
+			justify-content: flex-end;
+			align-items: center;
+			margin-right: 10px;
+			.el-button {
+				color: #456e02;
+			}
+		}
+	}
+	.clearEntryBox {
+		display: flex;
+		margin-bottom: 20px;
+		justify-content: flex-start;
 		.el-button {
 			align-self: center;
 			margin-left: 20px;
