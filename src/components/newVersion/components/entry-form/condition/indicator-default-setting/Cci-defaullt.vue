@@ -9,7 +9,7 @@
 			<el-input v-model="ids.over_sold_bound" oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"></el-input>
 		</el-form-item>
 		<el-form-item label="Period">
-			<el-input v-model="ids.period" oninput ="value=value.replace(/[^\d]/g,'')"></el-input>
+			<el-input v-model="ids.period" oninput ="value=value.replace(/[^-?\d]/g,'')"></el-input>
 		</el-form-item>
 		</div>
 	</div>

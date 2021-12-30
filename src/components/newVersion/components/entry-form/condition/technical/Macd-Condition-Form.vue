@@ -26,7 +26,7 @@
 					</el-select>
 					<el-input
 						v-model="value"
-						oninput="value=value.replace(/[^0-9.]/g,'')"
+						oninput="value=value.replace(/[-+]?[^0-9.]/g,'')"
 						placeholder="Input Value"
 						@input="getMaValue"
 					></el-input>

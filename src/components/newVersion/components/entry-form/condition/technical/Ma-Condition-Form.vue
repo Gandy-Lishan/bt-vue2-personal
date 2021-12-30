@@ -25,7 +25,7 @@
 					<el-input
 						v-model="period_1"
 						@input="getSCvalue"
-						oninput ="value=value.replace(/[^\d]/g,'')"
+						oninput ="value=value.replace(/[-+]?[^\d]/g,'')"
 						placeholder="Input Period"
 					></el-input>
 				</div>
@@ -33,7 +33,7 @@
 			<div class="sentimentConditionBox">
 				<el-radio v-model="conditionRadio" label="Moving Average" @change="getConditionRadio"> </el-radio>
 				<div class="sentimentMABox">
-					<el-input v-model="sc.ma_period" placeholder="Input Period" oninput ="value=value.replace(/[^\d]/g,'')"></el-input>
+					<el-input v-model="sc.ma_period" placeholder="Input Period" oninput ="value=value.replace(/[-+]?[^\d]/g,'')"></el-input>
 					<el-select
 						v-model="sc.condition"
 						filterable
@@ -50,7 +50,7 @@
 					<span style="font-weight: 500; margin-left: 10px; line-height: 30px; font-size: 15px"
 						>Moving Average</span
 					>
-					<el-input v-model="period_2" placeholder="Input Period" @input="getMaValue" oninput ="value=value.replace(/[^\d]/g,'')"></el-input>
+					<el-input v-model="period_2" placeholder="Input Period" @input="getMaValue" oninput ="value=value.replace(/[-+]?[^\d]/g,'')"></el-input>
 				</div>
 			</div>
 		</div>
