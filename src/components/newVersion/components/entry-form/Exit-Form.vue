@@ -61,8 +61,8 @@ export default {
 			},
 			fd: {
 				description: '',
-				direction: '',
-				frequency: '',
+				direction: 'Short',
+				frequency: 'Daily',
 				relation: 0,
 				score: 0
 			},

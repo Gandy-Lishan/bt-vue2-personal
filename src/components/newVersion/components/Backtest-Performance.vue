@@ -196,18 +196,23 @@
         align="center">
       </el-table-column>
       <el-table-column
+        prop="Indicator"
+        label="Indicator"
+        align="center">
+      </el-table-column>
+      <el-table-column
         prop="TradePrice"
         label="Symbol Close"
         align="center">
       </el-table-column>
       <el-table-column
         prop="indicator_close"
-        label="Indicator Close"
+        label="Indicator Value"
         align="center">
       </el-table-column>
       <el-table-column
         prop="Return"
-        label="Return"
+        label="Daily Return"
         align="center">
         <template slot-scope="scope">
         <span v-if="scope.row.Return >= 0" >{{ (scope.row.Return * 100).toFixed(2) }}%</span>

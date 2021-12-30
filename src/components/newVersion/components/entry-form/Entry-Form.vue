@@ -117,7 +117,6 @@ export default {
 		getFrequency(e) {
 			this.$store.commit('getFrequency', e)
 		},
-		
 	getDes: throttle(function(val) {
 		this.fd.description = val
 		this.fd.criteria = "entry"
