@@ -173,6 +173,9 @@ export default {
 		this.getBacktestList()
 		this.getStrategyName()
 	},
+  	mounted(){
+		this.$cookies.set('username', 'test')
+	},
 	methods: {
 		async getBacktestList() {
 			this.loading = true
@@ -273,44 +276,30 @@ export default {
 				})
 		},
 		copyBacktest(row) {
-			const strategyFormData = {}
-			let currentBacktestData = {}
-			currentBacktestData = row
-			// strategyFormdata.sizeAllocation = currentBacktestData.value
-			strategyFormData.stock = currentBacktestData.stock
-			strategyFormData.name = currentBacktestData.name + '(copy)'
-			strategyFormData.description = currentBacktestData.description
-			strategyFormData.note = 'my note'
-			strategyFormData.cash = currentBacktestData.cash + ''
-			strategyFormData.commission = currentBacktestData.commission + ''
-			strategyFormData.slippage = currentBacktestData.slippage + ''
-			strategyFormData.cashalloc = 1.0
-			strategyFormData.riskfreerate = currentBacktestData.slippage + ''
-			strategyFormData.fromdate = currentBacktestData.fromdate
-			strategyFormData.todate = currentBacktestData.todate
-			strategyFormData.status = 0
-			strategyFormData.strategy = currentBacktestData.strategy.id
-			const params = strategyFormData
-			this.$http
-				.post('/demo/backtest/', this.$qs.stringify(params), {
-					auth: {
-						username: 'sentimentrader_backtest_api',
-						password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-					}
+      console.log("行",row);
+      let params = {}
+      this.$http.get('/dev/seeparams/' + row.id + '/').then(res => {
+        params = res.data
+        params.entry = JSON.parse(params.entry)
+        params.exit = JSON.parse(params.exit)
+        params.user = params.user_id
+        delete params.uuid
+        delete params.results
+        delete params.user_id
+        console.log(params);
+        this.$http
+				.post('/dev/backtest/', this.$qs.stringify(params), {
+					withCredentials: true
 				})
 				.then((res) => {
 					if (res.status === 201) {
-						this.$message.success({
-							message: 'The replication was successful',
-							duration: 1000
-						})
-						//  this.$router.push('/currentBacktests')
-						this.getBacktestList()
+						this.$message.success('Copy successfully')
+					} else {
+						this.$message.success('Copy failed')
 					}
 				})
-				.catch((error) => {
-					//(error)
-				})
+      }
+      )
 		},
 		viewBacktestResults(row) {
 			this.$store.commit('getRunBacktestData', row)

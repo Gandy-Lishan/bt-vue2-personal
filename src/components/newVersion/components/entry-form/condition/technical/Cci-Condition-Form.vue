@@ -3,7 +3,7 @@
 		<div class="signal-condition-box">
 			<div><h2 class="note">Signal Condition</h2></div>
 			<div class="sentimentConditionBox">
-				<el-radio v-model="conditionRadio" label="RSI Value"> </el-radio>
+				<el-radio v-model="conditionRadio" label="CCI Value"> </el-radio>
 				<div class="sentimentConditionItem">
 					<el-select
 						v-model="sc.condition"
@@ -37,7 +37,7 @@ export default {
 	extends: base,
 	data() {
 		return {
-				conditionRadio: 'RSI Value',
+				conditionRadio: 'CCI Value',
 				conditions: [
 					{ value: 0, label: '>' },
 					{ value: 1, label: '=' },

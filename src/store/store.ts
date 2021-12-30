@@ -260,7 +260,7 @@ export default new Vuex.Store({
         for(let key in obj) {
           console.log("99999999999",obj[key]);
           
-          if(obj[key] !==''){
+          if(obj[key] !=='' && obj[key] !== undefined){
             newData[key]=obj[key]
           }
         }
