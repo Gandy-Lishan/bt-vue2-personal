@@ -33,12 +33,12 @@
 				</el-form-item>
 			</el-form>
 			<div class="signalBtnBox">
-				<el-button round style="width: 100%"
+				<el-button round style="width: 100%" @click="showSignal"
 					>Click Here to Add Criteria Signal</el-button
 				>
 			</div>
 		</div>
-		<div class="signalRight">
+		<div class="signalRight" :class="signalVisiable ? 'active': ''">
 			<condition-tab @goToFavorite="goToFavorite" :criteria="criteria"></condition-tab>
 		</div>
 	</div>
@@ -66,6 +66,7 @@ export default {
 				relation: 0,
 				score: 0
 			},
+			signalVisiable: true,
 			// Form validation rules
 			signalFormRules: {
 				name: [
@@ -158,11 +159,17 @@ export default {
 	},
 	goToFavorite() {
 		this.$emit("goToFavorite")
+	},
+	showSignal() {
+		this.signalVisiable = !this.signalVisiable
 	}
 	}
 }
 </script>
 <style lang="less" scoped>
+.active{
+	display: none;
+}
 @media only screen and (min-width: 1600px) {
 	.entry-form-container {
 		display: flex;

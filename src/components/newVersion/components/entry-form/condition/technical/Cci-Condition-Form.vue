@@ -37,7 +37,7 @@ export default {
 	extends: base,
 	data() {
 		return {
-				conditionRadio: 'RSI Value',
+				conditionRadio: 'CCI Value',
 				conditions: [
 					{ value: 0, label: '>' },
 					{ value: 1, label: '=' },

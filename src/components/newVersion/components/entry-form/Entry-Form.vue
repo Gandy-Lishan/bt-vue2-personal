@@ -35,12 +35,12 @@
 				</el-form-item>
 			</el-form>
 			<div class="signalBtnBox">
-				<el-button round style="width: 100%"
+				<el-button round style="width: 100%" @click="showSignal"
 					>Click Here to Add Criteria Signal</el-button
 				>
 			</div>
 		</div>
-		<div class="signalRight">
+		<div class="signalRight"  :class="signalVisiable ? 'active': ''">
 			<condition-tab :criteria="criteria"></condition-tab>
 		</div>
 	</div>
@@ -62,12 +62,13 @@ export default {
 		return {
 			fd: {
 				description: '',
-				direction: 'Long',
-				frequency: 'Daily',
+				direction: '',
+				frequency: '',
 				relation: 0,
     			score: 0,
 				criteria: "entry"
 			},
+			signalVisiable: true,
 			// Form validation rules
 			signalFormRules: {
 				name: [
@@ -117,7 +118,6 @@ export default {
 		getFrequency(e) {
 			this.$store.commit('getFrequency', e)
 		},
-		
 	getDes: throttle(function(val) {
 		this.fd.description = val
 		this.fd.criteria = "entry"
@@ -134,10 +134,16 @@ export default {
 		this.fd.criteria = "entry"
 		this.$store.commit("setFd",this.fd)
 	},
+	showSignal() {
+		this.signalVisiable = !this.signalVisiable
+	}
 	}, 
 }
 </script>
 <style lang="less" scoped>
+.active{
+	display: none;
+}
 @media only screen and (min-width: 1600px) {
 	.entry-form-container {
 		display: flex;
