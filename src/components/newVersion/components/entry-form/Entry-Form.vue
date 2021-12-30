@@ -62,8 +62,8 @@ export default {
 		return {
 			fd: {
 				description: '',
-				direction: 'Long',
-				frequency: 'Daily',
+				direction: '',
+				frequency: '',
 				relation: 0,
     			score: 0,
 				criteria: "entry"
@@ -117,7 +117,6 @@ export default {
 		getFrequency(e) {
 			this.$store.commit('getFrequency', e)
 		},
-		
 	getDes: throttle(function(val) {
 		this.fd.description = val
 		this.fd.criteria = "entry"

@@ -6,7 +6,7 @@ export default {
 		tabIndex: Number,
 		criteria: String,
 		idsLoad: Object,
-		scLoad: Object,
+		scLoad: Object
 	},
 	data() {
 		return {
@@ -17,8 +17,8 @@ export default {
 			bd: {}
 		}
 	},
-		computed: {
-		...mapGetters(["getExtremeValue"]),
+	computed: {
+		...mapGetters(['getExtremeValue']),
 		extremeValue() {
 			return this.getExtremeValue
 		}
@@ -26,10 +26,10 @@ export default {
 	watch: {
 		ids: {
 			handler(newVal) {
-				    console.log("ids55555555555", newVal);
-					newVal.index = this.tabIndex
-					newVal.criteria = this.criteria
-					this.$store.dispatch('Try', newVal)
+				console.log('ids55555555555', newVal)
+				newVal.index = this.tabIndex
+				newVal.criteria = this.criteria
+				this.$store.dispatch('Try', newVal)
 			},
 			immediate: true,
 			deep: true
@@ -94,7 +94,7 @@ export default {
 			handler(newVal) {
 				this.ids.extreme_optimism = newVal.extremeOptimism
 				this.ids.extreme_pessimism = newVal.extremePessimism
-				console.log("测试",newVal);
+				console.log('测试', newVal)
 			},
 			immediate: true,
 			deep: true
@@ -102,14 +102,14 @@ export default {
 	},
 	methods: {
 		setIdsLoad(val) {
-		for(let key in val){
-			// moving average 不一样
-			if(Number(val[key])!= NaN){
-			  val[key] = Number(val[key])
+			for (let key in val) {
+				// moving average 不一样
+				if (Number(val[key]) != NaN) {
+					val[key] = Number(val[key])
+				}
 			}
-		 }
-		  this.ids = val
-	  }
+			this.ids = val
+		}
 	}
 }
 </script>
