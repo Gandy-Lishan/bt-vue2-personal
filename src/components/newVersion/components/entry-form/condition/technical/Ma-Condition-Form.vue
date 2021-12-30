@@ -78,8 +78,8 @@ export default {
 			],
 	sc:{
       condition: 3,
-      ma_period: 5,
-	  period: 20},
+      ma_period: "",
+	  period: ""},
       period_1: '',
       period_2: 20,
 	  maCondition: 3,

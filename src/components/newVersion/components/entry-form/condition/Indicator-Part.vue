@@ -134,6 +134,7 @@ export default {
 			this.$store.commit("clearSignal", obj)
 			this.$store.commit("getSentiValue", obj)
 			this.si.sentimentIndicator = item.value
+			this.$emit("getSentiVal",item.value)
 			console.log(item)
 			// remove MA
 			var activatedMAList = this.$store.state.activatedMA

@@ -1,5 +1,6 @@
 
 <script>
+import { Store, mapGetters } from 'vuex'
 export default {
 	props: {
 		tabIndex: Number,
@@ -16,14 +17,19 @@ export default {
 			bd: {}
 		}
 	},
+		computed: {
+		...mapGetters(["getExtremeValue"]),
+		extremeValue() {
+			return this.getExtremeValue
+		}
+	},
 	watch: {
 		ids: {
 			handler(newVal) {
-				if (newVal) {
+				    console.log("ids55555555555", newVal);
 					newVal.index = this.tabIndex
 					newVal.criteria = this.criteria
 					this.$store.dispatch('Try', newVal)
-				}
 			},
 			immediate: true,
 			deep: true
@@ -80,6 +86,15 @@ export default {
 					console.log('dialog数据', newVal)
 					this.setScLoad(newVal)
 				}
+			},
+			immediate: true,
+			deep: true
+		},
+		extremeValue: {
+			handler(newVal) {
+				this.ids.extreme_optimism = newVal.extremeOptimism
+				this.ids.extreme_pessimism = newVal.extremePessimism
+				console.log("测试",newVal);
 			},
 			immediate: true,
 			deep: true

@@ -41,6 +41,7 @@
 					<el-table-column align="center" width="300px">
 						<template slot-scope="scope">
 							<el-row>
+                <el-button type="success" icon="el-icon-check" circle @click="showDes(scope.row)" size="mini"></el-button>
 								<el-tooltip
 									class="item"
 									effect="light"
@@ -203,11 +204,12 @@ export default {
 			if (row.status !== 2) {
 				row.status = 1
 				vm.$http.post('dev/runbacktest/?uuid=' + row.id).then((res) => {
+          console.log("外层",res);
 					if (res.status == 200) {
 						vm.timer = setInterval(() => {
-							vm.$http.get('dev/backtest/?uuid=' + row.id).then((res) => {
+							vm.$http.get('dev/status/' + row.id + "/").then((res) => {
 								//(res.data.status)
-								console.log('current status', res)
+								console.log("内层",res);
 								if (res.data.status === 2) {
 									clearInterval(vm.timer)
 									vm.getBacktestList()
@@ -247,7 +249,7 @@ export default {
 		},
 		deleteBacktest(id) {
 			this.$http
-				.delete('/demo/backtest/' + id + '/')
+				.delete('/dev/backtest/' + id + '/')
 				.then((res) => {
 					if (res.status == 204) {
 						this.$message.success({
@@ -312,13 +314,34 @@ export default {
 		},
 		viewBacktestResults(row) {
 			this.$store.commit('getRunBacktestData', row)
-      console.log(row);
 			this.$emit('goBacktestResultForm')
 		},
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
-		}
+		},
+    showDes(row) {
+      const datades = {}
+      let vm = this
+      	vm.$http.get('/dev/seeparams/' + row.id + '/').then(res => {
+          console.log("详情");
+          const des = res.data
+          let str = ``
+          for(let key in des) {
+            str = str + '<p>'+`${key}:  ${des[key]}` +'</p>'
+          }
+       vm.$alert(str, '标题名称', {
+          confirmButtonText: '确定',
+          dangerouslyUseHTMLString: true,
+          callback: action => {
+            vm.$message({
+              type: 'info',
+              message: `action: ${ action }`
+            });
+          }
+        })
+        })
+    }
 	}
 }
 </script>

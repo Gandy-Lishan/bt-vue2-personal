@@ -19,14 +19,19 @@
 						>
 						</el-option>
 					</el-select>
+					
+				<el-tooltip class="item" effect="light" content="Please enter a number from 0 to 1" placement="bottom">
 					<el-input v-model="value_1" placeholder="Input Value" @input="getInputValue"  oninput="value=value.replace(/[^0-9.]/g,'')" ></el-input>
+				</el-tooltip>
 				</div>
 			</div>
 			<div class="sentimentConditionBox">
 				<el-radio v-model="conditionRadio" label="Sentiment Moving Average" @change="getValue">
 				</el-radio>
 				<div class="sentimentMABox">
+					<el-tooltip class="item" effect="light" content="Please enter number" placement="bottom">
 					<el-input @change="setPeriod" placeholder="Input Period" oninput ="value=value.replace(/[^\d]/g,'')" v-model="sc.period"></el-input>
+					</el-tooltip>
 					<el-select
 						v-model="maCondition"
 						filterable
@@ -41,14 +46,16 @@
 						>
 						</el-option>
 					</el-select>
+					<el-tooltip class="item" effect="light" content="Please enter a number from 0 to 1" placement="bottom">
 					<el-input v-model="value_2" placeholder="Input Value" @input="getInputValue"  oninput="value=value.replace(/[^0-9.]/g,'')" ></el-input>
+					</el-tooltip>
 				</div>
 			</div>
 		</div>
 		<div class="signalDescriptionBox">
 			<div><h2 class="note">Signal Description</h2></div>
 			<el-button plain style="margin: 5px 0px 5px 0px"
-				>{{ des.sentimentIndicator + "&nbsp;&nbsp;"+ conditions[sc.condition].label + "&nbsp;&nbsp;" +  des.value}}</el-button
+				>{{ sentiVal + "&nbsp;&nbsp;"+ sc.period + "&nbsp;&nbsp;"+ conditions[sc.condition].label + "&nbsp;&nbsp;" +  sc.value}}</el-button
 			>
 		</div>
 	</div>
@@ -58,6 +65,7 @@ import { Store, mapGetters } from 'vuex'
 import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
 export default {
 	extends: base,
+	props: {sentiVal: String},
 	data() {
 		return {
 			conditions: [
@@ -69,14 +77,21 @@ export default {
 			],
 			sc: {
 				condition: 3,
-				value: 20,
-				period: 1,
+				value: "",
+				period: '',
 			},
-			value_1: 20,
-			value_2: 20,
+			value_1: "",
+			value_2: "",
 			maCondition: 3,
 			conditionRadio: 'Sentiment Value',
 			des: this.$store.state.backtestInfo[this.criteria].signals[this.tabIndex]
+		}
+	},
+	watch: {
+		sentiVal: {
+			handler(newVal) {
+				this.sentiVal = newVal
+			}
 		}
 	},
 	methods: {
@@ -93,7 +108,12 @@ export default {
 			},
 			getInputValue(val) {
 				if(this.conditionRadio === 'Sentiment Value'){
-				this.sc.value = val}
+					const res = /^(1|0(\.\d{1,2})?)$/
+					console.log("增则",res.test(val));
+					if(res.test(val)){
+						
+				this.sc.value = val
+					}}
 			},
 			getConditionVal(val) {
 				if(this.conditionRadio === 'Sentiment Moving Average'){

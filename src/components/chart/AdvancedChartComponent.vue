@@ -16,17 +16,23 @@
 				</cq-toggle>
 			</div>
 
-			<cq-menu class="ciq-search">
+			<!-- <cq-menu class="ciq-search">
 				<cq-lookup cq-keystroke-claim cq-uppercase></cq-lookup>
-			</cq-menu>
+			</cq-menu> -->
 
 			<!-- any entry in this div will be shown in the side navigation bar in break-sm mode -->
 			<cq-side-nav cq-on="sidenavOn">
 				<div class="icon-toggles ciq-toggles">
-					<cq-toggle class="ciq-draw" cq-member="drawing">
+					<cq-menu class="ciq-search">
+						<cq-lookup cq-keystroke-claim cq-uppercase></cq-lookup>
+					</cq-menu>
+					<!-- <cq-toggle class="ciq-draw" cq-member="drawing">
 						<cq-help help-id="drawing_tools_toggle"></cq-help>
 						<span></span><cq-tooltip>Draw</cq-tooltip>
-					</cq-toggle>
+					</cq-toggle> -->
+					<cq-menu class="ciq-indicators-search">
+						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
+					</cq-menu>
 					<cq-info-toggle-dropdown>
 						<cq-toggle id="mStudies" class="ciq-CH" cq-member="crosshair">
 							<span></span>
@@ -68,9 +74,9 @@
 							</cq-menu-dropdown>
 						</cq-menu>
 					</cq-info-toggle-dropdown> -->
-					<cq-toggle class="ciq-DT tableview-ui" cq-member="tableView"
+					<!-- <cq-toggle class="ciq-DT tableview-ui" cq-member="tableView"
 						><span></span><cq-tooltip>Table View</cq-tooltip></cq-toggle
-					>
+					> -->
 				</div>
 			</cq-side-nav>
 
@@ -87,9 +93,9 @@
 						</cq-menu-dropdown>
 					</cq-menu>
 					<!-- customized features -->
-					<cq-menu class="ciq-indicators-search">
+					<!-- <cq-menu class="ciq-indicators-search">
 						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
-					</cq-menu>
+					</cq-menu> -->
 
 					<!-- <cq-menu class="ciq-menu ciq-views collapse">
 						<span>Views</span>
@@ -324,7 +330,7 @@
 
 					<div class="chartContainer">
 						<!-- stx-hu-tooltip is required only if addon tooltip is used and customization is required -->
-						<stx-hu-tooltip>
+						<stx-hu-sttooltip>
 							<stx-hu-tooltip-field field="DT">
 								<stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
 								<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
@@ -333,7 +339,7 @@
 								<stx-hu-tooltip-field-name></stx-hu-tooltip-field-name>
 								<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
 							</stx-hu-tooltip-field>
-						</stx-hu-tooltip>
+						</stx-hu-sttooltip>
 
 						<cq-chart-title cq-marker cq-browser-tab></cq-chart-title>
 
@@ -405,17 +411,19 @@ import { getCustomConfig, marker } from './resources' // ChartIQ library resourc
 
 @Component({})
 export default class AdvancedChartComponent extends Vue {
+	
 	@Prop() config: any
 	@Prop({ type: Function, default: ({}) => {} }) chartInitialized!: Function
 
 	@Ref('container') container!: HTMLElement
 
 	stx: CIQ.ChartEngine | undefined
-
+	
+	
 	mounted() {
 		const config = this.config || getCustomConfig()
 		const container = this.container
-
+		
 		portalizeContextDialogs(container)
 		// Delay the call to createChartAndUI so any other AdvancedChart components on the page
 		// have a chance to call portalizeContextDialogs
@@ -463,6 +471,8 @@ export default class AdvancedChartComponent extends Vue {
 		//this.stx?.destroy()
 	}
 
+	
+
 	createChartAndUI(config: any) {
 		const container = this.container
 		const chart = new CIQ.UI.Chart()
@@ -471,6 +481,7 @@ export default class AdvancedChartComponent extends Vue {
 		
 		return uiContext
 	}
+	
 }
 
 /**

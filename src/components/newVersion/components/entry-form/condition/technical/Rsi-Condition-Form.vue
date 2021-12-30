@@ -45,7 +45,7 @@ export default {
 				{ value: 4, label: 'CrossBelow' }
 			],
 			sc: {condition: 3,
-			value: 30},
+			value: ""},
 			des: this.$store.state.backtestInfo[this.criteria].signals[this.tabIndex]
 		}
 	},

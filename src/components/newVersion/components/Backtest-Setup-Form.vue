@@ -1,13 +1,12 @@
 <template>
 	<el-row>
-		<el-col :span="24">
 			<div class="backtest_container">
 				<el-form
 					ref="backtestSetupForm"
 					:model="bd"
 					label-position="left"
 				>
-					<el-col :span="8">
+					<el-col :xs="20" :sm="24" :md="12" :lg="8" :xl="8">
 						<el-form-item label="Name:" prop="name">
 							<el-input v-model="bd.name"></el-input>
 						</el-form-item>
@@ -43,7 +42,7 @@
 							</div>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<el-col :xs="20" :sm="24" :md="12" :lg="8" :xl="8">
 						<el-form-item label="Starting Capital:" prop="startingCapital">
 							<el-input
 								v-model="bd.capital"
@@ -83,7 +82,7 @@
 							</div>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<el-col :xs="20" :sm="24" :md="12" :lg="8" :xl="8">
 						<el-form-item label="Benchmark:" prop="benchmark">
 							<div class="enterSymbolBox">
 								<el-input v-model="bd.benchmark"></el-input>
@@ -139,17 +138,9 @@
 							>
 							</el-input>
 						</el-form-item>
-						<div class="setupBtns">
-							<el-row>
-								<el-col :offset="6">
-									<el-button type="primary">Save Backtest</el-button>
-								</el-col>
-							</el-row>
-						</div>
 					</el-col>
 				</el-form>
 			</div>
-		</el-col>
 	</el-row>
 </template>
 <script>
@@ -357,8 +348,5 @@ export default {
 <style lang="less" scoped>
 .backtest_container {
 	margin-top: 40px;
-}
-.setupBtns button {
-	margin: 10px 32px 0px 32px;
 }
 </style>

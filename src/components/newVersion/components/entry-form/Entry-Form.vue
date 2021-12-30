@@ -1,4 +1,6 @@
 <template>
+		<el-row>
+			<el-col :span="24">
 	<div class="entry-form-container">
 		<div class="signalLeft">
 			<el-form :model="fd" label-width="80px" label-position="left">
@@ -42,11 +44,15 @@
 			<condition-tab :criteria="criteria"></condition-tab>
 		</div>
 	</div>
+	
+			</el-col>
+		</el-row>
 </template>
 <script>
 import conditionTab from './condition/Condition-Tab.vue'
 // import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
 import form_base from "@/components/newVersion/components/baisc/from.vue"
+import {throttle} from "@/tools/throttle.js"
 export default {
 	extends: form_base,
 	props: {
@@ -112,11 +118,11 @@ export default {
 			this.$store.commit('getFrequency', e)
 		},
 		
-	getDes(val) {
+	getDes: throttle(function(val) {
 		this.fd.description = val
 		this.fd.criteria = "entry"
 		this.$store.commit("setFd",this.fd)
-	},
+	}, 3000),
 	getEntryDirection(val) {
 		this.fd.direction = val
 		this.fd.criteria = "entry"

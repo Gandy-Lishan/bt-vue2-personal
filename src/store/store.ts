@@ -40,6 +40,10 @@ export default new Vuex.Store({
       extraIndicators: [],
       technicalIndicators: [],
     },
+    extremeValue: {
+      extremeOptimism: undefined,
+      extremePessimism: undefined,
+    },
     customExitType: [{label: "short", value: "short"},{label: "longexit", value: "longexit"}],
     exitOption:  [{label: "longexit", value: "longexit"},
     {label: "short", value: "short"}],
@@ -56,6 +60,11 @@ export default new Vuex.Store({
     entryDirection: '',
     exitTechType: '',
     activatedMA: [{period: 21, url: ""}],
+    favoriteList:[],
+    // indicators look up
+    allSymbolsList: [],
+    stocksList: [],
+    indexsList: [],
     editBacktestSetUpData: {},
     isShowExitForm: true,
     tabIndex: 0,
@@ -73,14 +82,40 @@ export default new Vuex.Store({
       
       return obj[state.backtestInfo.entry.direction]
     },
+    getExtremeValue: (state) => {
+      return state.extremeValue
+    },
     getSignalDialogData: (state)=> {
       return state.signalDialogData
     },
     getDialogFdData: (state,) => {
       return state.fdDialogData
+    },
+    getSentimentIndicator: (state) => {
+      return state.backtestInfo
     }
   },
   mutations: {
+    getExtremeValue: (state,item)=>{
+      console.log(11111);
+      
+      state.extremeValue = {
+          extremeOptimism: item.extremeOptimism,
+          extremePessimism: item.extremePessimism
+      }
+    },
+    getFavoriteList(state,list){
+      state.favoriteList = list 
+    },
+    getAllSymbolsList(state,list){
+      state.allSymbolsList = list
+    },
+    getStocksList(state,list){
+      state.stocksList = list
+    },
+    getIndexsList(state,list){
+      state.indexsList = list
+    },
     getNewPorfolioInputsValues(state,row) {
       state.newPorfolioInputsValues.inputNameValue = row.name
       state.newPorfolioInputsValues.inputDescriptionValue = row.description
@@ -208,13 +243,6 @@ export default new Vuex.Store({
       state.backtestInfo[val]['signals'].slice(state.tabIndex,1)
     },
     setEntryData(state, obj) {
-      // console.log(obj);
-      // if(obj.criteria === 'entry'){
-      //   const index = obj.index
-      //   delete obj.index
-      //   delete obj.criteria
-      //   state.backtestInfo.entry.signals[index] = obj
-      // }
       var index = obj.index;
       state.tabIndex = index
       var criteria = obj.criteria
@@ -230,7 +258,9 @@ export default new Vuex.Store({
         var data = state.backtestInfo[criteria]["signals"][index]
         const newData = {}
         for(let key in obj) {
-          if(obj[key]){
+          console.log("99999999999",obj[key]);
+          
+          if(obj[key] !==''){
             newData[key]=obj[key]
           }
         }
@@ -270,6 +300,8 @@ export default new Vuex.Store({
     },
     getSentiValue(state, obj) {
       state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator = obj.value
+      console.log("选择后的senitment",state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator);
+      
     },
     // 用于单选框 切换时删除不必要字段
     delete(state,obj) {

@@ -12,7 +12,7 @@
 	</div>
 </template>
 <script>
-import { Store } from 'vuex'
+import { Store, mapGetters } from 'vuex'
 import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
 export default {
 	extends: base,
@@ -23,7 +23,7 @@ export default {
 				extreme_pessimism: ''
 			}
 		}
-	}
+	},
 }
 </script>
 <style lang="less" scoped>

@@ -22,9 +22,9 @@ extends: base,
   data() {
     return {
 ids:{
-      over_bought_bound: 70,
-      over_sold_bound: 30,
-      period: 14}
+      over_bought_bound: "",
+      over_sold_bound: "",
+      period: ""}
     }
   }
 }

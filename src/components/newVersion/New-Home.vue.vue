@@ -13,14 +13,10 @@
 					<chart width="100%" height="100%"></chart>
 				</div>
 			</header>
-			<main class="main" style="height: 80vh">
-				<div class="mainTagbar" style="height: 100%">
-					<el-tabs v-model="activeName" type="card" style="height: 100%">
-						<el-tab-pane
-							style="height: 90%; overflow-y: scroll; overflow-x: hidden"
-							label="Backtest Setup"
-							name="first"
-						>
+			<main class="main" style="padding-bottom: 50px;">
+				<div class="mainTagbar">
+					<el-tabs  v-model="activeName" type="card">
+						<el-tab-pane style="height:90%;overflow-x:hidden;"  label="Backtest Setup" name="first">
 							<el-tabs v-model="activeTag" type="card">
 								<el-tab-pane
 									style="height: 90%; overflow-y: auto; overflow-x: hidden"
@@ -65,6 +61,7 @@
 										ref="exitFormChild"
 										:criteria="'exit'"
 										:fdLoad="fdLoad"
+										@goToFavorite="goToFavorite"
 									></exit-form>
 								</el-tab-pane>
 							</el-tabs>
@@ -124,6 +121,9 @@ export default {
 			fdLoad: {}
 		}
 	},
+	mounted(){
+		this.$cookies.set('username', 'test')
+	},
 	components: {
 		chart: chart,
 		'backtest-setup-form': backtestSetupForm,
@@ -155,15 +155,14 @@ export default {
 			deep: true
 		}
 	},
-	mounted() {
-		console.log('mounted')
-		var node = document.getElementsByClassName('el-tabs__content')[0]
-		node.style.height = '100%'
-	},
 	methods: {
 		goBacktestResultForm() {
 			this.activeName = 'second'
 			this.$refs.performanceChild.getResultData()
+		},
+		goToFavorite() {
+			this.activeName = 'third'
+			this.$refs.favoriteChild.getBacktestList()
 		},
 		setBacktestResult(data) {
 			this.backtestResult = data
@@ -317,7 +316,7 @@ export default {
 			align-items: center;
 			margin-right: 10px;
 			.el-button {
-				color: #456e02;
+				color: #0000FF;
 			}
 		}
 	}
@@ -349,5 +348,62 @@ export default {
 		font-weight: bold;
 		font-size: 16px;
 	}
+}
+
+@media (min-width: 768px) and(max-width:992px) {
+	// sm size
+	.header {
+		p:first-of-type {
+			font-size: 2.5rem !important;
+		}
+	}
+}
+@media (max-width: 767px) {
+	// xs size
+	.header {
+		p:first-of-type {
+			font-size: 1.5rem !important;
+		}
+	}
+}	
+
+.home_container {
+	height: 100%;
+	width: 100%;
+	font-size: 16px;
+	.home_box {
+		height: 100%;
+		// width: 90rem;
+		margin: 0px 30rem;
+	}
+}
+
+p {
+	font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+		'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+}
+
+.header {
+	img {
+		width: 100%;
+	}
+	p {
+		margin: 1.14rem 0 1.14rem 0px;
+		font-style: italic;
+		color: #6c6c6c;
+	}
+	p:first-of-type {
+		text-align: center;
+		font-size: 3rem;
+		margin: 50px 0 50px 0;
+		font-weight: lighter;
+		color: #333333;
+	}
+
+	.chart_box {
+		width: 100%;
+		height: 65vh;
+	}
+	margin-bottom: 80px;
 }
 </style>

@@ -174,10 +174,25 @@
     <div class="trades-container">
     <el-table
       :data="tradesData"
-      style="width: 100%">
+      style="width: 100%"
+      border
+      :span-method="objectSpanMethod">
+        <el-table-column
+        prop="trade_number"
+        label="Trade Number"
+        align="center">
+        <template slot-scope="scope">
+          {{Number(scope.row.trade_number) + 1}}
+        </template>
+      </el-table-column>
       <el-table-column
         prop="Date"
         label="Trades Date"
+        align="center">
+      </el-table-column>
+        <el-table-column
+        prop="TradeStatus"
+        label="Operate"
         align="center">
       </el-table-column>
       <el-table-column
@@ -302,15 +317,14 @@ export default {
         vm.monthReturnImgUrl = data.returnsHeatmapFileURL
         vm.annualReturnImgUrl = data.annualReturnsFileURL
         vm.tradesData = initalData["Trades"]
+        console.log("所有",initalData);
+        console.log("列表数据",vm.tradesData );
 
         // ---------------------------------------- end ----------------------------------
 
         // ----------------------- backtest result-------------------------------
 
         this.$emit("setBacktestResult",initalData["basic"])
-
-
-
         // ------------------------------ end -----------------------------------
 
         //(initalData)
@@ -328,6 +342,21 @@ export default {
         this.drawDownImgUrl = ''
         this.monthReturnImgUrl = ''
         this.annualReturnImgUrl = ''
+      },
+       objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+        if (columnIndex === 0) {
+          if (rowIndex % 2 === 0) {
+            return {
+              rowspan: 2,
+              colspan: 1
+            };
+          } else {
+            return {
+              rowspan: 0,
+              colspan: 0
+            };
+          }
+        }
       }
   }
 }

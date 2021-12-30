@@ -39,7 +39,7 @@
 			</div>
 		</div>
 		<div class="signalRight">
-			<condition-tab :criteria="criteria"></condition-tab>
+			<condition-tab @goToFavorite="goToFavorite" :criteria="criteria"></condition-tab>
 		</div>
 	</div>
 </template>
@@ -156,6 +156,9 @@ export default {
 		this.fd.criteria = "exit"
 		this.$store.commit("setFd",this.fd)
 	},
+	goToFavorite() {
+		this.$emit("goToFavorite")
+	}
 	}
 }
 </script>

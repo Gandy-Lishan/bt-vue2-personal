@@ -47,7 +47,7 @@ export default {
 				],
 			sc: {
 				condition: 3,
-				value: -200
+				value: ""
 			},
 			des: this.$store.state.backtestInfo[this.criteria].signals[this.tabIndex]
 		}

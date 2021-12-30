@@ -16,6 +16,7 @@
 						@getIndicatorRadio="getIndicatorRadio"
 						@getTechIndiValue="getTechIndiValue"
 						@clearTechIndiValue="clearTechIndiValue"
+						@getSentiVal="getSentiVal"
 						:tabIndex="tabIndex"
 						:criteria="criteria"
 						ref="indicatorPart"
@@ -62,6 +63,7 @@
 			<!-- sentiment condition form -->
 			<condition-form
 				v-if="indicatorRadio === 'sentiment'"
+				:sentiVal="sentiVal"
 				:tabIndex="tabIndex"
 				:scLoad="scLoad"
 				:criteria="criteria"
@@ -136,7 +138,8 @@ export default {
 			techIndiValue: '',
 			dialogTableVisible: false,
 			idsLoad: {},
-			scLoad: {}
+			scLoad: {},
+			sentiVal: ""
 		}
 	},
 	mounted() {
@@ -247,6 +250,9 @@ export default {
 			}
 			console.log('解码')
 		},
+		getSentiVal(val) {
+			this.sentiVal = val
+		},
 		saveSignal() {
 			const a = new SignalCode()
 			const obj = this.$store.state.backtestInfo[this.criteria]
@@ -284,6 +290,7 @@ export default {
 				.then((res) => {
 					if (res.status === 201) {
 						vm.$message.success('Save successfully')
+						vm.$emit('goToFavorite')
 					} else {
 						vm.$message.error('Save failed')
 					}

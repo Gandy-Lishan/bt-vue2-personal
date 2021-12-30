@@ -5,6 +5,9 @@
 #el-tab-pane{
 	overflow-y:scroll;
 }
+.el-table td.el-table__cell, .el-table th.el-table__cell.is-leaf{
+	border-bottom: 2px solid #D6E5EC;
+}
 .el-form-item__label {
 	font-weight: 500;
 }
@@ -368,4 +371,10 @@
 	
 		text-overflow: ellipsis;
    }
+}
+@media only screen and (max-width: 900px){
+	.home-box {
+		width: 90%;
+		margin: 0px auto;
+	}
 }

@@ -15,13 +15,13 @@
 			disabled
 			@tab-remove="handleTabsRemove"
 		>
-			<el-tab-pane style="height:80vh;overflow-y:auto;overflow-x:hidden;"
+			<el-tab-pane style="margin-bottom:20px;overflow-y:auto;overflow-x:hidden;"
 				:key="key"
 				v-for="(val,key) in editableTabs"
 				:label="val.title"
 				:name="val.name"
 			>
-				<condition-root :tabIndex="key" :criteria="criteria"></condition-root>
+				<condition-root @goToFavorite="goToFavorite" :tabIndex="key" :criteria="criteria"></condition-root>
 			</el-tab-pane>
 		</el-tabs>
 	</div>
@@ -88,6 +88,9 @@ export default {
 			if (this.editableTabs.length == 0) {
 				this.tabIndex = 0
 			}
+		},
+		goToFavorite() {
+			this.$emit("goToFavorite")
 		}
 	}
 }

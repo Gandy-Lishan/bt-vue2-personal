@@ -18,6 +18,7 @@ import store from './store/store'
 import "vue-directive-image-previewer/dist/assets/style.css"
 import locale from 'element-ui/lib/locale/lang/en'
 import VueCookies from 'vue-cookies'
+
 Vue.use(VueCookies)
 // 配置请求根路径
 axios.defaults.baseURL = ''
@@ -36,7 +37,6 @@ Vue.use(ElementUI,{ locale })
 Vue.prototype.$http = axios
 Vue.prototype.$message = Message
 Vue.config.productionTip = false
-// axios.defaults.withCredentials = true
 // Vue.use(VueDirectiveImagePreviewer,{
 //   zIndex:9999,
 //   previewSize:3
