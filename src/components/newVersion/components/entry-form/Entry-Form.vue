@@ -62,8 +62,8 @@ export default {
 		return {
 			fd: {
 				description: '',
-				direction: '',
-				frequency: '',
+				direction: 'Long',
+				frequency: 'Daily',
 				relation: 0,
     			score: 0,
 				criteria: "entry"
