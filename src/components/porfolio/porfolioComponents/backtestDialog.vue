@@ -388,14 +388,14 @@ export default {
       this.backtestFormdata.backtestName = this.openBacktestFormdata.name
       this.backtestFormdata.description = this.openBacktestFormdata.description
       this.strategyFormdata.id = this.openBacktestFormdata.strategy
-      this.$http.get('/demo/strategies/' + this.openBacktestFormdata.strategy + '/').then(
-        res => {if(res.status === 200){
-          this.strategyFormdata.name = res.data.name
-          this.strategyFormdata.description = res.data.description
-          this.strategyFormdata.signal_entry = res.data.signal_entry
-          this.strategyFormdata.signal_exit = res.data.signal_exit
-        }}
-      )
+      // this.$http.get('/demo/strategies/' + this.openBacktestFormdata.strategy + '/').then(
+      //   res => {if(res.status === 200){
+      //     this.strategyFormdata.name = res.data.name
+      //     this.strategyFormdata.description = res.data.description
+      //     this.strategyFormdata.signal_entry = res.data.signal_entry
+      //     this.strategyFormdata.signal_exit = res.data.signal_exit
+      //   }}
+      // )
       this.testPeriodFormdata.endDate = this.openBacktestFormdata.todate
       this.testPeriodFormdata.starDate = this.openBacktestFormdata.fromdate
       this.commissionFormdata.commission = this.openBacktestFormdata.commission

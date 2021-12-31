@@ -34,7 +34,7 @@
       </el-table-column>
         <el-table-column label="source" prop="user" align="center" width="80px">
           <template slot-scope="scope">
-            <span v-if="scope.row.user === 'admin'">system</span>
+            <span v-if="scope.row.user === 'system'">system</span>
             <span v-else>custom</span>
           </template>
         </el-table-column>
@@ -139,7 +139,8 @@ export default {
             const user = users
       let analysisBasis = this.$store.state.entryIndicatorRadio
       let indicator
-      let type = this.$store.state.entryType
+      let type = this.$store.state.entryDirection
+      console.log("类型",type);
     if(this.type){
         type = JSON.stringify(['Long','Short'])}
       if(analysisBasis === 'sentiment'){
@@ -149,7 +150,7 @@ export default {
         indicator = JSON.stringify(['Commodity Channel Index', 'Relative Strength Index', 'MACD', 'Moving Average'])
       }
       
-      console.log(type,analysisBasis,indicator);
+      //console.log(type,analysisBasis,indicator);
       this.signalList = []
       this.loading = true
       const { data: signalRes } = await this.$http.get('/dev/signal/', {
@@ -187,7 +188,7 @@ export default {
         indicator = JSON.stringify(['Commodity Channel Index', 'Relative Strength Index', 'MACD', 'Moving Average'])
       }
       
-      console.log(type,analysisBasis,indicator);
+      //console.log(type,analysisBasis,indicator);
       this.signalList = []
       this.loading = true
       const { data: res } = await this.$http.get('/dev/signal/', {

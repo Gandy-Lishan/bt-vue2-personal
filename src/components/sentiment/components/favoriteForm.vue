@@ -231,7 +231,7 @@ export default {
 
     async getStrategyName() {
       const id = this.backtestList
-      const res = await this.$http.get('/demo/strategies' + id + '/')
+      // const res = await this.$http.get('/demo/strategies' + id + '/')
     },
     editBacktest(row) {
       // this.editData = row
@@ -240,7 +240,6 @@ export default {
       this.$store.commit('getBacktestetUpEditData',row)
       this.$emit('goTobacktestSetupForm')
       this.$http.get('/rundev/report?backtests=' + row.id).then(res => {
-        vm.$store.commit('getBacktestEditData',res.data)
         vm.$emit('goToEntryFormData')
         vm.$store.commit('showExitFormData', false)
       })

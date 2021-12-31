@@ -633,7 +633,6 @@ export default {
 			CIQ.store.commit("getMA",activatedMAList)
 
 			let type = vm.$store.state.exitTechType
-			
 			if(item.value=="Commodity Channel Index "){
 				item.value = "Commodity Channel Index"
 			}

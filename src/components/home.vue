@@ -189,6 +189,7 @@ export default {
 <style lang="less" scoped>
 .home-container {
   height: 100%;
+  font-size: 16px;
 }
 .el-header {
   background-color: #373d41;

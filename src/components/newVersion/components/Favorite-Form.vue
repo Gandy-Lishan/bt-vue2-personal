@@ -3,17 +3,18 @@
 		<el-col :span="24">
 			<div class="favoriteForm_container">
 				<el-table :data="backtestList" v-loading="loading">
-					<el-table-column label="Name" align="center" prop="name">
+					<el-table-column label="Name" align="center" prop="name" show-overflow-tooltip="true">
 					</el-table-column>
-					<el-table-column label="Symbol" align="center" prop="symbol">
+					<el-table-column label="Symbol" align="center" prop="symbol" show-overflow-tooltip="true">
 					</el-table-column>
 					<el-table-column
 						label="description"
 						align="center"
+            show-overflow-tooltip="true"
 						prop="description"
 					>
 					</el-table-column>
-					<el-table-column>
+					<el-table-column show-overflow-tooltip="true">
 						<template slot-scope="scope">
 							<div class="dataBox">
 								<el-button size="mini" type="info" plain>{{
@@ -41,6 +42,7 @@
 					<el-table-column align="center" width="300px">
 						<template slot-scope="scope">
 							<el-row>
+								<el-button type="warning" icon="el-icon-star-off" circle @click="sendBack(scope.row)" size="mini"></el-button>
                 <el-button type="success" icon="el-icon-check" circle @click="showDes(scope.row)" size="mini"></el-button>
 								<el-tooltip
 									class="item"
@@ -177,18 +179,23 @@ export default {
 		this.$cookies.set('username', 'test')
 	},
 	methods: {
-		async getBacktestList() {
+		async getBacktestList(strategy) {
 			this.loading = true
+			const params = {
+				page: this.queryInfo.page
+			}
 			const res = await this.$http.get(
-				'/dev/backtest/?page=' + this.queryInfo.page
+				'/dev/backtest/?page'+ this.queryInfo.page
 			)
 			if (res.status === 200) {
 				console.log(res)
 				this.loading = false
 				this.backtestList = res.data.results
 				this.queryInfo.total = res.data.count
+				this.$emit("goToFavoritePage")
 			} else {
 				this.loading = false
+				this.$emit("goToFavoritePage")
 			}
 		},
 		checkBacktest() {
@@ -236,19 +243,10 @@ export default {
 
 		async getStrategyName() {
 			const id = this.backtestList
-			const res = await this.$http.get('/demo/strategies' + id + '/')
+			// const res = await this.$http.get('/demo/strategies' + id + '/')
 		},
 		editBacktest(row) {
-			// this.editData = row
-			// this.backtestItemId = row.id
-			let vm = this
-			this.$store.commit('getBacktestetUpEditData', row)
-			this.$emit('goTobacktestSetupForm')
-			this.$http.get('/rundev/report?backtests=' + row.id).then((res) => {
-				vm.$store.commit('getBacktestEditData', res.data)
-				vm.$emit('goToEntryFormData')
-				vm.$store.commit('showExitFormData', false)
-			})
+			this.$emit('goTobacktestSetupForm',row.id)
 		},
 		deleteBacktest(id) {
 			this.$http
@@ -280,12 +278,12 @@ export default {
       let params = {}
       this.$http.get('/dev/seeparams/' + row.id + '/').then(res => {
         params = res.data
-        params.entry = JSON.parse(params.entry)
-        params.exit = JSON.parse(params.exit)
-        params.user = params.user_id
+        params.name = params.name + '(copy)'
         delete params.uuid
         delete params.results
         delete params.user_id
+        delete params.status
+        delete params.backtest_id
         console.log(params);
         this.$http
 				.post('/dev/backtest/', this.$qs.stringify(params), {
@@ -294,6 +292,7 @@ export default {
 				.then((res) => {
 					if (res.status === 201) {
 						this.$message.success('Copy successfully')
+            this.getBacktestList()
 					} else {
 						this.$message.success('Copy failed')
 					}
@@ -303,7 +302,7 @@ export default {
 		},
 		viewBacktestResults(row) {
 			this.$store.commit('getRunBacktestData', row)
-			this.$emit('goBacktestResultForm')
+			this.$emit('goBacktestResultForm',row)
 		},
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
@@ -330,7 +329,35 @@ export default {
           }
         })
         })
-    }
+    },
+	sendBack(row) {
+		let vm = this
+		this.$http.post('/dev/seeparams/' + row.id + '/').then(res => {
+			 const des = res.data
+			 let str = ``
+          for(let key in des) {
+            str = str + '<p>'+`${key}:  ${des[key]}` +'</p>'
+          }
+		  str = str + "<h3>FinalResult:</h3>"
+		  for(let key in des.FinalResult){
+			  str = str + '<p>'+`${key}:  ${des.FinalResult[key]}` +'</p>'
+		  }
+		  str = str + "<h3>FinalResult.AnnualReturn:</h3>"
+		for(let key in des.FinalResult.AnnualReturn){
+			  str = str + '<p>'+`${key}:  ${des.FinalResult.AnnualReturn[key]}` +'</p>'
+		  }
+       vm.$alert(str, '标题名称', {
+          confirmButtonText: '确定',
+          dangerouslyUseHTMLString: true,
+          callback: action => {
+            vm.$message({
+              type: 'info',
+              message: `action: ${ action }`
+            });
+          }
+        })
+		})
+	}
 	}
 }
 </script>

@@ -1,62 +1,74 @@
 <template>
-		<el-row>
-			<el-col :span="24">
-	<div class="entry-form-container">
-		<div class="signalLeft">
-			<el-form :model="fd" label-width="80px" label-position="left">
-				<div><h2 class="note">Criteria Entry Description</h2></div>
-				<el-form-item
-					label="Description:"
-					prop="description"
-					class="border-set"
-				>
-					<el-input
-						v-model="fd.description"
-						type="textarea"
-						:autosize="{ minRows: 3, maxRows: 10 }"
-						resize="none"
-						placeholder="Please enter the description"
-						@input="getDes"
-					></el-input>
-				</el-form-item>
-				<div><h2 class="note">Criteria Direction/Frequency</h2></div>
-				<el-form-item label="Direction:" prop="entryType">
-					<el-radio-group v-model="fd.direction" @change="getEntryDirection">
-						<el-radio label="Long">Long</el-radio>
-						<el-radio label="Short">Short</el-radio>
-					</el-radio-group>
-				</el-form-item>
-				<el-form-item label="Frequency:" prop="frequency" class="border-set">
-					<el-radio-group v-model="fd.frequency" @change="getFrequency">
-						<el-radio label="Daily">Daily</el-radio>
-						<el-radio label="Weeckly">Weeckly</el-radio>
-						<el-radio label="Monthly">Monthly</el-radio>
-					</el-radio-group>
-				</el-form-item>
-			</el-form>
-			<div class="signalBtnBox">
-				<el-button round style="width: 100%" @click="showSignal"
-					>Click Here to Add Criteria Signal</el-button
-				>
+	<el-row>
+		<el-col :span="24">
+			<div class="entry-form-container">
+				<div class="signalLeft">
+					<el-form :model="fd" label-width="80px" label-position="left">
+						<div><h2 class="note">Criteria Entry Description</h2></div>
+						<el-form-item
+							label="Description:"
+							prop="description"
+							class="border-set"
+						>
+							<el-input
+								v-model="fd.description"
+								type="textarea"
+								:autosize="{ minRows: 3, maxRows: 10 }"
+								resize="none"
+								placeholder="Please enter the description"
+								@input="getDes"
+							></el-input>
+						</el-form-item>
+						<div><h2 class="note">Criteria Direction/Frequency</h2></div>
+						<el-form-item label="Direction:" prop="entryType">
+							<el-radio-group
+								v-model="fd.direction"
+								@change="getEntryDirection"
+							>
+								<el-radio label="Long">Long</el-radio>
+								<el-radio label="Short">Short</el-radio>
+							</el-radio-group>
+						</el-form-item>
+						<el-form-item
+							label="Frequency:"
+							prop="frequency"
+							class="border-set"
+						>
+							<el-radio-group v-model="fd.frequency" @change="getFrequency">
+								<el-radio label="Daily">Daily</el-radio>
+								<el-radio label="Weeckly">Weeckly</el-radio>
+								<el-radio label="Monthly">Monthly</el-radio>
+							</el-radio-group>
+						</el-form-item>
+					</el-form>
+					<div class="signalBtnBox">
+						<el-button round style="width: 100%" @click="showSignal"
+							>Click Here to Add Criteria Signal</el-button
+						>
+					</div>
+				</div>
+				<div class="signalRight" :class="signalVisiable ? 'active' : ''">
+					<condition-tab
+						:entrySignalEditData="entrySignalEditData"
+						:criteria="criteria"
+					></condition-tab>
+				</div>
 			</div>
-		</div>
-		<div class="signalRight"  :class="signalVisiable ? 'active': ''">
-			<condition-tab :criteria="criteria"></condition-tab>
-		</div>
-	</div>
-	
-			</el-col>
-		</el-row>
+		</el-col>
+	</el-row>
 </template>
 <script>
 import conditionTab from './condition/Condition-Tab.vue'
+import { Store, mapGetters } from 'vuex'
 // import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
-import form_base from "@/components/newVersion/components/baisc/from.vue"
-import {throttle} from "@/tools/throttle.js"
+import SignalCode, { SingaCode } from '@/tools/codeTool'
+import form_base from '@/components/newVersion/components/baisc/from.vue'
+import { throttle } from '@/tools/throttle.js'
 export default {
 	extends: form_base,
 	props: {
-		fdLoad: Object
+		fdLoad: Object,
+		editData: Object
 	},
 	data() {
 		return {
@@ -65,9 +77,10 @@ export default {
 				direction: '',
 				frequency: '',
 				relation: 0,
-    			score: 0,
-				criteria: "entry"
+				score: 0,
+				criteria: 'entry'
 			},
+			entrySignalEditData: {},
 			signalVisiable: true,
 			// Form validation rules
 			signalFormRules: {
@@ -96,10 +109,28 @@ export default {
 				{ label: 'Monthly', value: 'Monthly' }
 			],
 			dialogTableVisible: false,
-			conditionFormData: {},
+			conditionFormData: {}
+		}
+	},
+	inject: ['editBacktestData'],
+	computed:{
+		getEditBacktestData(){
+			return this.editBacktestData()
 		}
 	},
 	watch: {
+		getEditBacktestData: {
+			handler(newVal) {
+				console.log("entry-inject11111",newVal);
+				const data = newVal.entry
+				this.fd.description = data.description
+				this.fd.direction = data.direction
+				this.fd.frequency = data.frequency
+			},
+			immediate: true,
+			deep: true
+		},
+
 		fdLoad: {
 			handler(newVal) {
 				this.fd = newVal
@@ -112,36 +143,35 @@ export default {
 		'condition-tab': conditionTab
 	},
 	methods: {
-		getEntryDirection(e) {
-			this.$store.commit('getEntryDirection', e)
+		getEntryDirection(val) {
+			this.$store.commit('getEntryDirection', val)
+
+			this.fd.direction = val
+			this.fd.criteria = 'entry'
+			this.$store.commit('setFd', this.fd)
 		},
 		getFrequency(e) {
 			this.$store.commit('getFrequency', e)
 		},
-	getDes: throttle(function(val) {
-		this.fd.description = val
-		this.fd.criteria = "entry"
-		this.$store.commit("setFd",this.fd)
-	}, 3000),
-	getEntryDirection(val) {
-		this.fd.direction = val
-		this.fd.criteria = "entry"
-		this.$store.commit("setFd",this.fd)
-	},
-	getFrequency(val) {
-		console.log(val);
-		this.fd.frequency = val
-		this.fd.criteria = "entry"
-		this.$store.commit("setFd",this.fd)
-	},
-	showSignal() {
-		this.signalVisiable = !this.signalVisiable
+		getDes: throttle(function (val) {
+			this.fd.description = val
+			this.fd.criteria = 'entry'
+			this.$store.commit('setFd', this.fd)
+		}, 3000),
+		getFrequency(val) {
+			console.log(val)
+			this.fd.frequency = val
+			this.fd.criteria = 'entry'
+			this.$store.commit('setFd', this.fd)
+		},
+		showSignal() {
+			this.signalVisiable = !this.signalVisiable
+		}
 	}
-	}, 
 }
 </script>
 <style lang="less" scoped>
-.active{
+.active {
 	display: none;
 }
 @media only screen and (min-width: 1600px) {

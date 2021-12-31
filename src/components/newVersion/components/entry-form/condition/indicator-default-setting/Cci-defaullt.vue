@@ -21,8 +21,8 @@ export default {
 	data() {
 		return {
 			ids: {
-			over_bought_bound: 200,
-			over_sold_bound: -200,
+			over_bought_bound: 100,
+			over_sold_bound: -100,
             period: 20}
 		}
 	},

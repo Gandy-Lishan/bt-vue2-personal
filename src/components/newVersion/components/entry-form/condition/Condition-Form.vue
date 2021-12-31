@@ -55,12 +55,13 @@
 		<div class="signalDescriptionBox">
 			<div><h2 class="note">Signal Description</h2></div>
 			<el-button plain style="margin: 5px 0px 5px 0px"
-				>{{ sentiVal + "&nbsp;&nbsp;"+ sc.period + "&nbsp;&nbsp;"+ conditions[sc.condition].label + "&nbsp;&nbsp;" +  sc.value}}</el-button
+				>{{ `${sentiVal}&nbsp;&nbsp;${sc.period?sc.period:''}&nbsp;&nbsp;${conditions[sc.condition].label}&nbsp;&nbsp;${sc.value}`}}</el-button
 			>
 		</div>
 	</div>
 </template>
 <script>
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
 import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
 export default {
@@ -96,7 +97,6 @@ export default {
 	},
 	methods: {
 		getValue(val) {
-			this.sc = {}
 			if(val === 'Sentiment Value'){
 				if(this.value_1)
 				{
@@ -108,12 +108,9 @@ export default {
 			},
 			getInputValue(val) {
 				if(this.conditionRadio === 'Sentiment Value'){
-					const res = /^(1|0(\.\d{1,2})?)$/
-					console.log("增则",res.test(val));
-					if(res.test(val)){
-						
-				this.sc.value = val
-					}}
+				this.sc.value = val}else if(this.conditionRadio === 'Sentiment Moving Average') {
+					this.sc.value = val
+				}
 			},
 			getConditionVal(val) {
 				if(this.conditionRadio === 'Sentiment Moving Average'){
@@ -123,6 +120,52 @@ export default {
 				if(this.conditionRadio === 'Sentiment Moving Average'){
 				  this.sc.period = val
 				}
+				let result
+				this.$store.state.indicatorsList.forEach((value, index) => {
+					if (this.sentiVal) {
+						if (value.chart_name.indexOf(this.sentiVal) !== -1) {
+							result = value
+						}
+					} else {
+						if (value.chart_name.indexOf(this.sentiVal) !== -1) {
+							result = value
+						}
+					}
+				})
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					if (
+						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
+						
+					) {
+						CIQ.Studies.removeStudy(
+							CIQ.stxx,
+							CIQ.stxx.layout.studies[studyInstanceName]
+						)
+					}
+				}
+				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
+					Period: val,
+					display: 'ST MA',
+					Field: result.url
+				})
+
+				// keep current MA
+				var objMA = { period: val, url: result.url }
+				var activatedMAList = this.$store.state.activatedMA
+
+				// remove current MA attached to an indicator
+				var MAListIndex = activatedMAList.findIndex(
+					(item) => item.url == result.url
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				activatedMAList.push(objMA)
+				// const set = new Set(activatedMAList)
+				// activatedMAList = [...set]
+				this.$store.commit('getMA', activatedMAList)
+
+				console.log(this.$store.state.activatedMA)
 			},
 		setScLoad(val) {
 		 for(let key in val){

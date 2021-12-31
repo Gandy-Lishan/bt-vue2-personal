@@ -26,7 +26,7 @@ export default {
 	watch: {
 		ids: {
 			handler(newVal) {
-				console.log('ids55555555555', newVal)
+				//console.log('ids55555555555', newVal)
 				newVal.index = this.tabIndex
 				newVal.criteria = this.criteria
 				this.$store.dispatch('Try', newVal)
@@ -72,9 +72,10 @@ export default {
 
 		idsLoad: {
 			handler(newVal) {
+				const vm = this
 				if (newVal) {
 					console.log('dialog数据', newVal)
-					this.setIdsLoad(newVal)
+					vm.setIdsLoad(newVal)
 				}
 			},
 			immediate: true,
@@ -82,9 +83,10 @@ export default {
 		},
 		scLoad: {
 			handler(newVal) {
+				const vm = this
 				if (newVal) {
 					console.log('dialog数据', newVal)
-					this.setScLoad(newVal)
+					vm.setScLoad(newVal)
 				}
 			},
 			immediate: true,
@@ -94,7 +96,10 @@ export default {
 			handler(newVal) {
 				this.ids.extreme_optimism = newVal.extremeOptimism
 				this.ids.extreme_pessimism = newVal.extremePessimism
-				console.log('测试', newVal)
+				this.ids.over_bought_bound = newVal.extremeOptimism
+				this.ids.over_sold_bound = newVal.extremePessimism
+				this.ids.SlowMA = newVal.extremeOptimism
+				this.ids.FastMA = newVal.extremePessimism
 			},
 			immediate: true,
 			deep: true

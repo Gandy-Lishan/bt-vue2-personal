@@ -136,7 +136,7 @@ export default {
     },
     async getStrategyList() {
       this.loading = true
-      const { data: res } = await this.$http.get('/demo/strategies/')
+      // const { data: res } = await this.$http.get('/demo/strategies/')
       this.strategyList = res.results
       if(res.results.length <= 0){
         this.loading = false
@@ -161,9 +161,9 @@ export default {
       this.dialogFormVisible = true
     },
     async deleteStrategySignal(row) {
-      const { data: res } = await this.$http.delete(
-        '/demo/strategies/' + row.id + '/'
-      )
+      // const { data: res } = await this.$http.delete(
+      //   '/demo/strategies/' + row.id + '/'
+      // )
       this.$message.success({
         message: 'Successfully deleted',
         duration: 1000,

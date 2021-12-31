@@ -45,19 +45,24 @@
 			</div>
 		</el-form-item>
 	</div>
+	
 </template>
 <script>
 import { Store, mapGetters } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
+import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 export default {
 	extends: base,
+	props: {
+		indicatorEditData: Object
+	},
 	data() {
 		return {
 			indicatorRadio: 'Sentiment Indicators',
 			si: {
-			sentimentIndicator: '',
-			technicalIndicator: ''},
+				sentimentIndicator: '',
+				technicalIndicator: ''
+			},
 			isCheckedIndicators: false,
 			sentimentIndicatorList: [],
 			technicaltIndicatorList: []
@@ -66,6 +71,32 @@ export default {
 	mounted() {
 		this.loadSentimentList()
 		this.technicaltIndicatorList = this.loadShortLong()
+	},
+	watch: {
+		indicatorEditData: {
+			handler(newVal) {
+				console.log('传顺的数据包', newVal)
+				if (newVal.sentimentIndicator) {
+					this.indicatorRadio = 'Sentiment Indicators'
+					this.si.sentimentIndicator = newVal.sentimentIndicator
+					const obj = {}
+					obj.criteria = this.criteria
+					obj.index = this.tabIndex
+					obj.value = newVal.sentimentIndicator
+					this.$store.commit('getSentiValue', obj)
+				} else if (newVal.technicalIndicator) {
+					this.indicatorRadio = 'Technical Indicators'
+					this.si.technicalIndicator = newVal.technicalIndicator
+					const obj = {}
+					obj.criteria = this.criteria
+					obj.index = this.tabIndex
+					obj.value = newVal.technicalIndicator
+					this.$store.commit('getTechValue', obj)
+				}
+			},
+			immediate: true,
+			deep: true
+		}
 	},
 	methods: {
 		//  load sentiment list
@@ -131,21 +162,32 @@ export default {
 			obj.criteria = this.criteria
 			obj.index = this.tabIndex
 			obj.value = item.value
-			this.$store.commit("clearSignal", obj)
-			this.$store.commit("getSentiValue", obj)
+			this.$store.commit('clearSignal', obj)
+			this.$store.commit('getSentiValue', obj)
 			this.si.sentimentIndicator = item.value
-			this.$emit("getSentiVal",item.value)
-			console.log(item)
+			this.$emit('getSentiVal', item.value)
 			// remove MA
 			var activatedMAList = this.$store.state.activatedMA
-			var MAListIndex = activatedMAList.findIndex(
-				(item) => item.url == this.$store.state.indicators.formIndicators.entry
-			)
-			if (MAListIndex != -1) {
-				activatedMAList.splice(MAListIndex, 1)
+			if(obj.criteria == "entry"){
+				var MAListIndex = activatedMAList.findIndex(
+					(item) => item.url == this.$store.state.indicators.formIndicators.entry
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				this.$store.commit('getEntryIndicators', item.url)
+			}else{
+				var MAListIndex = activatedMAList.findIndex(
+					(item) => item.url == this.$store.state.indicators.formIndicators.exit
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				this.$store.commit('getExitIndicators', item.url)
 			}
-			this.$store.commit('getMA', activatedMAList)
-			this.$store.commit('getEntryIndicators', item.url)
+			
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
@@ -153,79 +195,52 @@ export default {
 			obj.criteria = this.criteria
 			obj.index = this.tabIndex
 			obj.value = item.value
-			this.$store.commit("clearSignal", obj)
-			this.$store.commit("getTechValue", obj)
+			this.$store.commit('clearSignal', obj)
+			this.$store.commit('getTechValue', obj)
 			this.si.technicalIndicator = item.value
 			const vm = this
 			let val = item.value
 			const set = new Set([
-				['Commodity Channel Index', 'CCI'],
-				['Relative Strength Index', 'RSI'],
-				['Moving Average', 'MA'],
-				['MACD', 'MACD'],
+				['Commodity Channel Index', 'ST CCI'],
+				['Relative Strength Index', 'rsi'],
+				['Moving Average', 'ma'],
+				['MACD', 'macd'],
 			])
 			const newMap = new Map(set)
 			for(let item of newMap.entries()){
 			  if(val === item[0]){
+				  console.log(item)
 				  this.$emit("getTechIndiValue", item[1])
+					//这里还没加MA所以先不清除已有的MA
+					if(obj.criteria == "entry"){
+						this.$store.commit('getEntryIndicators', item[1])
+					}else{
+						this.$store.commit('getExitIndicators', item[1])
+					}
+					// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
+					let techIndicators = []
+					techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
+					techIndicators.push(item[1])
+					this.$store.commit('getTechnicalIndicators',techIndicators)
+					CIQ.addIndicators()
+					// remove MA from Vuex after loading Tech
+					var activatedMAList = CIQ.store.state.activatedMA
+					activatedMAList.splice(activatedMAList.findIndex(item=>item.url==item[1]),1)
+					CIQ.store.commit("getMA",activatedMAList)
             }}
 			vm.si.technicalIndicator = item.value
-			//这里还没加MA所以先不清除已有的MA
-			let techIndicators = []
-			techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
-			techIndicators.push(vm.techIndicators)
-
-			console.log(techIndicators)
-			CIQ.store.commit('getTechnicalIndicators', techIndicators)
-			CIQ.addTechIndicators()
-
-			const used_indicators = JSON.stringify([item.value])
-			// vm.$http
-			// 	.get(
-			// 		'/demo/signal/',
-			// 		{
-			// 			params: {
-			// 				page: 1,
-			// 				type: vm.$store.state.entryType,
-			// 				user: 'system',
-			// 				analysis_basis: 'technical',
-			// 				used_indicators: used_indicators
-			// 			}
-			// 		},
-			// 		{
-			// 			auth: {
-			// 				username: 'sentimentrader_backtest_api',
-			// 				password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-			// 			}
-			// 		}
-			// 	)
-			// 	.then((res) => {
-			// 		let conductionId
-			// 		res.data.results.forEach((item) => {
-			// 			conductionId = item.id
-			// 		})
-			// 		this.$http
-			// 			.get('/demo/condition/', {
-			// 				params: { id: conductionId }
-			// 			})
-			// 			.then((val) => {
-			// 				const initData = val.data.results
-			// 				vm.initTechCondiction = initData[0].condition
-			// 				vm.conditionList = initData
-			// 			})
-			// 	})
 		},
 		changeIndicatorChecked() {
 			this.isCheckedIndicators = !this.isCheckedIndicators
 			const arr = ['Sentiment Indicators', 'Technical Indicators']
 			// 清空 technical 当前选中的 indicator 值
-				this.si.sentimentIndicator = ''
-				this.si.technicalIndicator = ''
-				const obj = {}
-				obj.criteria = this.criteria
-				obj.index = this.tabIndex
-				this.$store.commit('deleteIndicator',obj)
-			this.$emit("clearTechIndiValue")
+			this.si.sentimentIndicator = ''
+			this.si.technicalIndicator = ''
+			const obj = {}
+			obj.criteria = this.criteria
+			obj.index = this.tabIndex
+			this.$store.commit('deleteIndicator', obj)
+			this.$emit('clearTechIndiValue')
 			if (this.indicatorRadio === arr[0]) {
 				this.$emit('getIndicatorRadio', 'sentiment')
 				this.$store.commit('getEntryIndicatorRadio', 'sentiment')
@@ -245,9 +260,9 @@ export default {
 		},
 		setIndicatorRadio(obj) {
 			this.indicatorRadio = obj.radio
-			if(obj.sentimentIndicator){
+			if (obj.sentimentIndicator) {
 				this.si.sentimentIndicator = obj.sentimentIndicator
-			}else if(obj.technicalIndicator) {
+			} else if (obj.technicalIndicator) {
 				this.si.technicalIndicator = obj.technicalIndicator
 				this.isCheckedIndicators = true
 			}
