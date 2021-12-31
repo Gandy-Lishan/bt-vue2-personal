@@ -32,7 +32,7 @@
 				<!-- technical default setting-->
 				<!-- cci -->
 				<cci-default
-					v-if="indicatorRadio === 'technical' && techIndiValue === 'CCI'"
+					v-if="indicatorRadio === 'technical' && techIndiValue === 'ST CCI'"
 					:tabIndex="tabIndex"
 					:idsLoad="idsLoad"
 					:criteria="criteria"
@@ -70,7 +70,7 @@
 			></condition-form>
 			<!-- technical cci condition form -->
 			<cci-condition-form
-				v-if="indicatorRadio === 'technical' && techIndiValue === 'CCI'"
+				v-if="indicatorRadio === 'technical' && techIndiValue === 'ST CCI'"
 				:tabIndex="tabIndex"
 				:criteria="criteria"
 				:scLoad="scLoad"
@@ -154,7 +154,7 @@ export default {
 	watch: {
 		signalDialogData: {
 			handler(newVal) {
-				console.log('弹框中的数据', newVal)
+				//console.log('弹框中的数据', newVal)
 				const fd = {}
 				fd.description = newVal.description
 				fd.direction = newVal.direction
@@ -172,7 +172,7 @@ export default {
 					const arr = [
 						{ label: 'Moving Average', value: 'MA' },
 						{ label: 'MACD', value: 'MACD' },
-						{ label: 'Commodity Channel Index', value: 'CCI' },
+						{ label: 'Commodity Channel Index', value: 'ST CCI' },
 						{ label: 'Relative Strength Index', value: 'RSI' }
 					]
 					arr.forEach((item) => {

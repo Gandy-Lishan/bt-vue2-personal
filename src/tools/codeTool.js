@@ -318,7 +318,7 @@ class SignalCode {
     }
     encode(val) {
         var s = this.re_indicator(val) + this.re_ids(val) + this.re_sc(val)
-        console.log(s)
+        //console.log(s)
         return s
     }
     decode(val) {
@@ -346,7 +346,7 @@ class SignalCode {
 
 
         }
-        console.log(tmp);
+        //console.log(tmp);
         return tmp
     }
 
