@@ -150,7 +150,7 @@ export default {
         indicator = JSON.stringify(['Commodity Channel Index', 'Relative Strength Index', 'MACD', 'Moving Average'])
       }
       
-      console.log(type,analysisBasis,indicator);
+      //console.log(type,analysisBasis,indicator);
       this.signalList = []
       this.loading = true
       const { data: signalRes } = await this.$http.get('/dev/signal/', {
@@ -188,7 +188,7 @@ export default {
         indicator = JSON.stringify(['Commodity Channel Index', 'Relative Strength Index', 'MACD', 'Moving Average'])
       }
       
-      console.log(type,analysisBasis,indicator);
+      //console.log(type,analysisBasis,indicator);
       this.signalList = []
       this.loading = true
       const { data: res } = await this.$http.get('/dev/signal/', {

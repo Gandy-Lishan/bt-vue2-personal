@@ -769,7 +769,7 @@ export default {
 		loadShortLong() {
 			return [
 				{ value: 'Commodity Channel Index ' },
-				{ value: 'RSI' }, 
+				{ value: 'Relative Strength Index' }, 
 				{ value: 'MACD' },
 				{ value: 'Moving Average' }
 			]

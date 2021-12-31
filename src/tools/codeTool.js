@@ -318,7 +318,7 @@ class SignalCode {
     }
     encode(val) {
         var s = this.re_indicator(val) + this.re_ids(val) + this.re_sc(val)
-        console.log(s)
+        //console.log(s)
         return s
     }
     decode(val) {
@@ -346,7 +346,7 @@ class SignalCode {
 
 
         }
-        console.log(tmp);
+        //console.log(tmp);
         return tmp
     }
 
@@ -357,87 +357,98 @@ class SignalCode {
 // console.log(sc.decode("SVMA20/3/20"));
 const a = new SignalCode()
 
-a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SVMA20/3/20")
-a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SV/3/20")
-a.decode("TI:MA;IDS:EMA;SC:SCMA/3/MA20")
-a.decode("TI:MA;IDS:SMA;SC:MAMA5/3/MA20")
-a.decode("TI:MACD;IDS:SlowMA25/FastMA25/SL9;SC:MACDV/3/0")
-a.decode("TI:MACD;IDS:SlowMA25/FastMA25/SL9;SC:MACDV/3/MACDSL")
-a.decode("TI:Commodity Channel Index;IDS:OBB20/OSB80/Period20;SC:CCIV/3/10.0")
-a.decode("TI:Commodity Channel Index;IDS:OBB20/OSB80/Period20;SC:CCIV/4/90.0")
-a.decode("TI:Relative Strength Index;IDS:OBB200/OSB-200/Period20.000;SC:RSIV/3/-200.00")
-a.decode("TI:Relative Strength Index;IDS:OBB200/OSB-200/Period20;SC:RSIV/4/200.00")
-var tmp = [
-    {
-    'analysis': 'Sentiment', 
-    'indicator': 'Smart Money Confidence', 
-    'extreme_optimism': '20', 
-    'extreme_pessimism': '80', 
-    'period': '20', 
-    'condition': '3', 
-    'value': '20'
-},{
-    'analysis': 'Sentiment', 
-    'indicator': 'Smart Money Confidence', 
-    'extreme_optimism': '20', 
-    'extreme_pessimism': '80', 
-    'condition': '3', 
-    'value': '20',
-},{
-    'analysis': 'Technical', 
-    'indicator': 'Moving Average', 
-    'ma_category': 'EMA', 
-    'period': '20', 
-    'condition': '3'
-},{
-    'analysis': 'Technical', 
-    'indicator': 'Moving Average', 
-    'ma_category': 'SMA', 
-    'ma_period': '5',
-    'period': '20', 
-    'condition': '3'
-},{
-    'analysis': 'Technical', 
-    'indicator': 'MACD', 
-    'SlowMA': '25',
-    'FastMA': '12',
-    'SL': '9',
-    'value': '0', 
-    'condition': '3'
-},{
-    'analysis': 'Technical', 
-    'indicator': 'MACD', 
-    'SlowMA': '25',
-    'FastMA': '12',
-    'SL': '9',
-    'value': 'MACDSL', 
-    'condition': '3'
-},{
-    'analysis': 'Technical', 
-    'indicator': 'Commodity Channel Index', 
-    'over_bought_bound': '200',
-    'over_sold_bound': '-200',
-    'value': '200', 
-    'condition': '3',
-    'period': '20'
-},{
-    'analysis': 'Technical', 
-    'indicator': 'Relative Strength Index', 
-    'over_bought_bound': '90',
-    'over_sold_bound': '10',
-    'value': '10', 
-    'condition': '3',
-    'period': '20'
-},{
-    "indicator":"RC",
-    'analysis': 'Exit', 
-    'take_profit': '20',
-    'time_in_market': '180',
-    'atr_period': '7',
-    'atr_multiplier': '2.5'
-}]
-for (var i in tmp){
-    a.encode(tmp[i])
-}
+// a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SVMA20/3/20")
+// a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SV/3/20")
+// a.decode("TI:MA;IDS:EMA;SC:SCMA/3/MA20")
+// a.decode("TI:MA;IDS:SMA;SC:MAMA5/3/MA20")
+// a.decode("TI:MACD;IDS:SlowMA25/FastMA25/SL9;SC:MACDV/3/0")
+// a.decode("TI:MACD;IDS:SlowMA25/FastMA25/SL9;SC:MACDV/3/MACDSL")
+// a.decode("TI:Commodity Channel Index;IDS:OBB20/OSB80/Period20;SC:CCIV/3/10.0")
+// a.decode("TI:Commodity Channel Index;IDS:OBB20/OSB80/Period20;SC:CCIV/4/90.0")
+// a.decode("TI:RSI;IDS:OBB200/OSB-200/Period20.000;SC:RSIV/3/-200.00")
+// a.decode("TI:RSI;IDS:OBB200/OSB-200/Period20;SC:RSIV/4/200.00")
+// var tmp = [
+//     {
+//     'analysis': 'Sentiment', 
+//     'indicator': 'Smart Money Confidence', 
+//     'extreme_optimism': '20', 
+//     'extreme_pessimism': '80', 
+//     'period': '20', 
+//     'condition': '3', 
+//     'value': '20'
+// },{
+//     'analysis': 'Sentiment', 
+//     'indicator': 'Smart Money Confidence', 
+//     'extreme_optimism': '20', 
+//     'extreme_pessimism': '80', 
+//     'condition': '3', 
+//     'value': '20',
+// },{
+//     'analysis': 'Technical', 
+//     'indicator': 'Moving Average', 
+//     'ma_category': 'EMA', 
+//     'period': '20', 
+//     'condition': '3'
+// },{
+//     'analysis': 'Technical', 
+//     'indicator': 'Moving Average', 
+//     'ma_category': 'SMA', 
+//     'ma_period': '5',
+//     'period': '20', 
+//     'condition': '3'
+// },{
+//     'analysis': 'Technical', 
+//     'indicator': 'MACD', 
+//     'SlowMA': '25',
+//     'FastMA': '12',
+//     'SL': '9',
+//     'value': '0', 
+//     'condition': '3'
+// },{
+//     'analysis': 'Technical', 
+//     'indicator': 'MACD', 
+//     'SlowMA': '25',
+//     'FastMA': '12',
+//     'SL': '9',
+//     'value': 'MACDSL', 
+//     'condition': '3'
+// },{
+//     'analysis': 'Technical', 
+//     'indicator': 'Commodity Channel Index', 
+//     'over_bought_bound': '200',
+//     'over_sold_bound': '-200',
+//     'value': '200', 
+//     'condition': '3',
+//     'period': '20'
+// },{
+//     'analysis': 'Technical', 
+//     'indicator': 'Relative Strength Index', 
+//     'over_bought_bound': '90',
+//     'over_sold_bound': '10',
+//     'value': '10', 
+//     'condition': '3',
+//     'period': '20'
+// },{
+//     "indicator":"RC",
+//     'analysis': 'Exit', 
+//     'take_profit': '20',
+//     'time_in_market': '180',
+//     'atr_period': '7',
+//     'atr_multiplier': '2.5'
+// }]
+// for (var i in tmp){
+//     a.encode(tmp[i])
+// }
+// var tmp = {
+//     "over_bought_bound": 80,
+//     "over_sold_bound": 20,
+//     "period": 14,
+//     "condition": 4,
+//     "value": "80",
+//     "indicator": "Relative Strength Index",
+//     "analysis": "Technical"
+// }
+// console.log(a.encode(tmp));
+
 export default SignalCode
     

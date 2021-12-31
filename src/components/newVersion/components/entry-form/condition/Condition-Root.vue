@@ -33,28 +33,28 @@
 				<!-- technical default setting-->
 				<!-- cci -->
 				<cci-default
-					v-if="indicatorRadio === 'technical' && techIndiValue === 'CCI'"
+					v-if="indicatorRadio === 'technical' && techIndiValue === 'ST CCI'"
 					:tabIndex="tabIndex"
 					:idsLoad="idsLoad"
 					:criteria="criteria"
 				></cci-default>
 				<!-- ma -->
 				<ma-default
-					v-if="indicatorRadio === 'technical' && techIndiValue === 'MA'"
+					v-if="indicatorRadio === 'technical' && techIndiValue === 'ma'"
 					:tabIndex="tabIndex"
 					:idsLoad="idsLoad"
 					:criteria="criteria"
 				></ma-default>
 				<!-- macd -->
 				<macd-default
-					v-if="indicatorRadio === 'technical' && techIndiValue === 'MACD'"
+					v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
 					:tabIndex="tabIndex"
 					:idsLoad="idsLoad"
 					:criteria="criteria"
 				></macd-default>
 				<!-- rsi -->
 				<rsi-default
-					v-if="indicatorRadio === 'technical' && techIndiValue === 'RSI'"
+					v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
 					:tabIndex="tabIndex"
 					:scLoad="scLoad"
 					:idsLoad="idsLoad"
@@ -71,28 +71,28 @@
 			></condition-form>
 			<!-- technical cci condition form -->
 			<cci-condition-form
-				v-if="indicatorRadio === 'technical' && techIndiValue === 'CCI'"
+				v-if="indicatorRadio === 'technical' && techIndiValue === 'ST CCI'"
 				:tabIndex="tabIndex"
 				:criteria="criteria"
 				:scLoad="scLoad"
 			></cci-condition-form>
 			<!-- ma -->
 			<ma-condition-form
-				v-if="indicatorRadio === 'technical' && techIndiValue === 'MA'"
+				v-if="indicatorRadio === 'technical' && techIndiValue === 'ma'"
 				:tabIndex="tabIndex"
 				:criteria="criteria"
 				:scLoad="scLoad"
 			></ma-condition-form>
 			<!-- macd -->
 			<macd-condition-form
-				v-if="indicatorRadio === 'technical' && techIndiValue === 'MACD'"
+				v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
 				:tabIndex="tabIndex"
 				:scLoad="scLoad"
 				:criteria="criteria"
 			></macd-condition-form>
 			<!-- rsi -->
 			<rsi-condition-form
-				v-if="indicatorRadio === 'technical' && techIndiValue === 'RSI'"
+				v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
 				:tabIndex="tabIndex"
 				:criteria="criteria"
 				:scLoad="scLoad"
@@ -156,7 +156,7 @@ export default {
 	watch: {
 		signalDialogData: {
 			handler(newVal) {
-				console.log('弹框中的数据', newVal)
+				//console.log('弹框中的数据', newVal)
 				const fd = {}
 				fd.description = newVal.description
 				fd.direction = newVal.direction
@@ -172,10 +172,10 @@ export default {
 					obj.technicalIndicator = newVal.code.indicator
 					this.$refs.indicatorPart.setIndicatorRadio(obj)
 					const arr = [
-						{ label: 'Moving Average', value: 'MA' },
-						{ label: 'MACD', value: 'MACD' },
-						{ label: 'Commodity Channel Index', value: 'CCI' },
-						{ label: 'Relative Strength Index', value: 'RSI' }
+						{ label: 'Moving Average', value: 'ma' },
+						{ label: 'MACD', value: 'macd' },
+						{ label: 'Commodity Channel Index', value: 'ST CCI' },
+						{ label: 'Relative Strength Index', value: 'rsi' }
 					]
 					arr.forEach((item) => {
 						if (item.label === newVal.code.indicator) {

@@ -42,6 +42,7 @@
 					<el-table-column align="center" width="300px">
 						<template slot-scope="scope">
 							<el-row>
+								<el-button type="warning" icon="el-icon-star-off" circle @click="sendBack(scope.row)" size="mini"></el-button>
                 <el-button type="success" icon="el-icon-check" circle @click="showDes(scope.row)" size="mini"></el-button>
 								<el-tooltip
 									class="item"
@@ -328,7 +329,35 @@ export default {
           }
         })
         })
-    }
+    },
+	sendBack(row) {
+		let vm = this
+		this.$http.post('/dev/seeparams/' + row.id + '/').then(res => {
+			 const des = res.data
+			 let str = ``
+          for(let key in des) {
+            str = str + '<p>'+`${key}:  ${des[key]}` +'</p>'
+          }
+		  str = str + "<h3>FinalResult:</h3>"
+		  for(let key in des.FinalResult){
+			  str = str + '<p>'+`${key}:  ${des.FinalResult[key]}` +'</p>'
+		  }
+		  str = str + "<h3>FinalResult.AnnualReturn:</h3>"
+		for(let key in des.FinalResult.AnnualReturn){
+			  str = str + '<p>'+`${key}:  ${des.FinalResult.AnnualReturn[key]}` +'</p>'
+		  }
+       vm.$alert(str, '标题名称', {
+          confirmButtonText: '确定',
+          dangerouslyUseHTMLString: true,
+          callback: action => {
+            vm.$message({
+              type: 'info',
+              message: `action: ${ action }`
+            });
+          }
+        })
+		})
+	}
 	}
 }
 </script>

@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       ids: {
-      SlowMA: 25,
+      SlowMA: 26,
       FastMA: 12,
       SL: 9
       }

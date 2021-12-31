@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
+    
     newPorfolioInputsValues:{
       inputNameValue: '',
       inputDescriptionValue: '',
@@ -44,6 +45,21 @@ export default new Vuex.Store({
       extremeOptimism: undefined,
       extremePessimism: undefined,
     },
+    // cciDefault: {
+    //   over_bought_bound: undefined,
+		// 	over_sold_bound: undefined,
+    //   period: undefined
+    // },
+    // macdDefault: {
+    //   SlowMA: undefined,
+    //   FastMA: undefined,
+    //   SL: undefined
+    // },
+    // rsiDefault: {
+    //   over_bought_bound: undefined,
+		// 	over_sold_bound: undefined,
+    //   period: undefined
+    // },
     customExitType: [{label: "short", value: "short"},{label: "longexit", value: "longexit"}],
     exitOption:  [{label: "longexit", value: "longexit"},
     {label: "short", value: "short"}],
@@ -99,8 +115,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    
     getExtremeValue: (state,item)=>{
-      console.log(11111);
+      //console.log(11111);
       
       state.extremeValue = {
           extremeOptimism: item.extremeOptimism,
@@ -258,7 +275,7 @@ export default new Vuex.Store({
         var data = state.backtestInfo[criteria]["signals"][index]
         const newData = {}
         for(let key in obj) {
-          console.log("99999999999",obj[key]);
+          //console.log("99999999999",obj[key]);
           
           if(obj[key] !=='' && obj[key] !== undefined){
             newData[key]=obj[key]
@@ -266,8 +283,10 @@ export default new Vuex.Store({
         }
         data = Object.assign(data,newData)
         state.backtestInfo[criteria]["signals"][index] = data
+        console.log("监听数据", state.backtestInfo[criteria]["signals"][index]);
+        
       }
-      console.log(state.backtestInfo.entry.signals);
+      //console.log(state.backtestInfo.entry.signals);
       
     },
     setFd(state, obj){
@@ -279,7 +298,7 @@ export default new Vuex.Store({
           state.backtestInfo[criteria][key] = obj[key]
         }
       }
-      console.log("backtest",state.backtestInfo.exit);
+     // console.log("backtest",state.backtestInfo.exit);
       
     },
     setBd(state, obj){
@@ -300,7 +319,7 @@ export default new Vuex.Store({
     },
     getSentiValue(state, obj) {
       state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator = obj.value
-      console.log("选择后的senitment",state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator);
+      //console.log("选择后的senitment",state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator);
       
     },
     // 用于单选框 切换时删除不必要字段
@@ -314,7 +333,6 @@ export default new Vuex.Store({
     },
     setSignalDialogFd(state, fd) {
       state.fdDialogData = fd
-      console.log("fdddddddd",fd);
     },
     goToFavoritePage(state) {
       state.goToFavoritePage = !state.goToFavoritePage

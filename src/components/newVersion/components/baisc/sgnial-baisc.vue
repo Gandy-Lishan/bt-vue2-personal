@@ -26,7 +26,7 @@ export default {
 	watch: {
 		ids: {
 			handler(newVal) {
-				console.log('ids55555555555', newVal)
+				//console.log('ids55555555555', newVal)
 				newVal.index = this.tabIndex
 				newVal.criteria = this.criteria
 				this.$store.dispatch('Try', newVal)
@@ -100,7 +100,6 @@ export default {
 				this.ids.over_sold_bound = newVal.extremePessimism
 				this.ids.SlowMA = newVal.extremeOptimism
 				this.ids.FastMA = newVal.extremePessimism
-				console.log('测试', newVal)
 			},
 			immediate: true,
 			deep: true

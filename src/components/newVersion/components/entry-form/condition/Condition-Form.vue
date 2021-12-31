@@ -61,6 +61,7 @@
 	</div>
 </template>
 <script>
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
 import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
 export default {
@@ -119,6 +120,52 @@ export default {
 				if(this.conditionRadio === 'Sentiment Moving Average'){
 				  this.sc.period = val
 				}
+				let result
+				this.$store.state.indicatorsList.forEach((value, index) => {
+					if (this.sentiVal) {
+						if (value.chart_name.indexOf(this.sentiVal) !== -1) {
+							result = value
+						}
+					} else {
+						if (value.chart_name.indexOf(this.sentiVal) !== -1) {
+							result = value
+						}
+					}
+				})
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					if (
+						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
+						
+					) {
+						CIQ.Studies.removeStudy(
+							CIQ.stxx,
+							CIQ.stxx.layout.studies[studyInstanceName]
+						)
+					}
+				}
+				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
+					Period: val,
+					display: 'ST MA',
+					Field: result.url
+				})
+
+				// keep current MA
+				var objMA = { period: val, url: result.url }
+				var activatedMAList = this.$store.state.activatedMA
+
+				// remove current MA attached to an indicator
+				var MAListIndex = activatedMAList.findIndex(
+					(item) => item.url == result.url
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				activatedMAList.push(objMA)
+				// const set = new Set(activatedMAList)
+				// activatedMAList = [...set]
+				this.$store.commit('getMA', activatedMAList)
+
+				console.log(this.$store.state.activatedMA)
 			},
 		setScLoad(val) {
 		 for(let key in val){
