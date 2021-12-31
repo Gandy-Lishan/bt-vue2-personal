@@ -3,7 +3,6 @@
 		<el-col :span="24">
 			<div class="entry-form-container">
 				<div class="signalLeft">
-					{{editEntryData}}
 					<el-form :model="fd" label-width="80px" label-position="left">
 						<div><h2 class="note">Criteria Entry Description</h2></div>
 						<el-form-item
@@ -71,7 +70,6 @@ export default {
 		fdLoad: Object,
 		editData: Object
 	},
-	inject: ['editEntryData'],
 	data() {
 		return {
 			fd: {
@@ -114,28 +112,25 @@ export default {
 			conditionFormData: {}
 		}
 	},
+	inject: ['editBacktestData'],
+	computed:{
+		getEditBacktestData(){
+			return this.editBacktestData()
+		}
+	},
 	watch: {
-		"this.editEntryData": {
+		getEditBacktestData: {
 			handler(newVal) {
-				console.log("inject",newVal);
+				console.log("entry-inject11111",newVal);
+				const data = newVal.entry
+				this.fd.description = data.description
+				this.fd.direction = data.direction
+				this.fd.frequency = data.frequency
 			},
 			immediate: true,
 			deep: true
 		},
-		editData: {
-			handler(newVal) {
-				console.log('entryData', newVal)
-				var code = new SignalCode()
-				this.fd = Object.assign(this.fd, newVal)
-				for (var i = 0; i < this.fd.signals.length; i++) {
-					var tmp = code.decode(this.fd.signals[i].code)
-					this.fd.signals[i] = Object.assign(this.fd.signals[i], tmp)
-				}
-				this.entrySignalEditData = newVal
-			},
-			immediate: true,
-			deep: true
-		},
+
 		fdLoad: {
 			handler(newVal) {
 				this.fd = newVal

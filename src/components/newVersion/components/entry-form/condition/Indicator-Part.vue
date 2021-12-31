@@ -49,15 +49,19 @@
 <script>
 import { Store, mapGetters } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
+import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 export default {
 	extends: base,
+	props: {
+		indicatorEditData: Object
+	},
 	data() {
 		return {
 			indicatorRadio: 'Sentiment Indicators',
 			si: {
-			sentimentIndicator: '',
-			technicalIndicator: ''},
+				sentimentIndicator: '',
+				technicalIndicator: ''
+			},
 			isCheckedIndicators: false,
 			sentimentIndicatorList: [],
 			technicaltIndicatorList: []
@@ -66,6 +70,32 @@ export default {
 	mounted() {
 		this.loadSentimentList()
 		this.technicaltIndicatorList = this.loadShortLong()
+	},
+	watch: {
+		indicatorEditData: {
+			handler(newVal) {
+				console.log('传顺的数据包', newVal)
+				if (newVal.sentimentIndicator) {
+					this.indicatorRadio = 'Sentiment Indicators'
+					this.si.sentimentIndicator = newVal.sentimentIndicator
+					const obj = {}
+					obj.criteria = this.criteria
+					obj.index = this.tabIndex
+					obj.value = newVal.sentimentIndicator
+					this.$store.commit('getSentiValue', obj)
+				} else if (newVal.technicalIndicator) {
+					this.indicatorRadio = 'Technical Indicators'
+					this.si.technicalIndicator = newVal.technicalIndicator
+					const obj = {}
+					obj.criteria = this.criteria
+					obj.index = this.tabIndex
+					obj.value = newVal.technicalIndicator
+					this.$store.commit('getTechValue', obj)
+				}
+			},
+			immediate: true,
+			deep: true
+		}
 	},
 	methods: {
 		//  load sentiment list
@@ -131,10 +161,10 @@ export default {
 			obj.criteria = this.criteria
 			obj.index = this.tabIndex
 			obj.value = item.value
-			this.$store.commit("clearSignal", obj)
-			this.$store.commit("getSentiValue", obj)
+			this.$store.commit('clearSignal', obj)
+			this.$store.commit('getSentiValue', obj)
 			this.si.sentimentIndicator = item.value
-			this.$emit("getSentiVal",item.value)
+			this.$emit('getSentiVal', item.value)
 			console.log(item)
 			// remove MA
 			var activatedMAList = this.$store.state.activatedMA
@@ -153,8 +183,8 @@ export default {
 			obj.criteria = this.criteria
 			obj.index = this.tabIndex
 			obj.value = item.value
-			this.$store.commit("clearSignal", obj)
-			this.$store.commit("getTechValue", obj)
+			this.$store.commit('clearSignal', obj)
+			this.$store.commit('getTechValue', obj)
 			this.si.technicalIndicator = item.value
 			const vm = this
 			let val = item.value
@@ -162,13 +192,14 @@ export default {
 				['Commodity Channel Index', 'CCI'],
 				['Relative Strength Index', 'RSI'],
 				['Moving Average', 'MA'],
-				['MACD', 'MACD'],
+				['MACD', 'MACD']
 			])
 			const newMap = new Map(set)
-			for(let item of newMap.entries()){
-			  if(val === item[0]){
-				  this.$emit("getTechIndiValue", item[1])
-            }}
+			for (let item of newMap.entries()) {
+				if (val === item[0]) {
+					this.$emit('getTechIndiValue', item[1])
+				}
+			}
 			vm.si.technicalIndicator = item.value
 			//这里还没加MA所以先不清除已有的MA
 			let techIndicators = []
@@ -219,13 +250,13 @@ export default {
 			this.isCheckedIndicators = !this.isCheckedIndicators
 			const arr = ['Sentiment Indicators', 'Technical Indicators']
 			// 清空 technical 当前选中的 indicator 值
-				this.si.sentimentIndicator = ''
-				this.si.technicalIndicator = ''
-				const obj = {}
-				obj.criteria = this.criteria
-				obj.index = this.tabIndex
-				this.$store.commit('deleteIndicator',obj)
-			this.$emit("clearTechIndiValue")
+			this.si.sentimentIndicator = ''
+			this.si.technicalIndicator = ''
+			const obj = {}
+			obj.criteria = this.criteria
+			obj.index = this.tabIndex
+			this.$store.commit('deleteIndicator', obj)
+			this.$emit('clearTechIndiValue')
 			if (this.indicatorRadio === arr[0]) {
 				this.$emit('getIndicatorRadio', 'sentiment')
 				this.$store.commit('getEntryIndicatorRadio', 'sentiment')
@@ -245,9 +276,9 @@ export default {
 		},
 		setIndicatorRadio(obj) {
 			this.indicatorRadio = obj.radio
-			if(obj.sentimentIndicator){
+			if (obj.sentimentIndicator) {
 				this.si.sentimentIndicator = obj.sentimentIndicator
-			}else if(obj.technicalIndicator) {
+			} else if (obj.technicalIndicator) {
 				this.si.technicalIndicator = obj.technicalIndicator
 				this.isCheckedIndicators = true
 			}

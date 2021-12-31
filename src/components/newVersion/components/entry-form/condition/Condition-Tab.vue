@@ -1,14 +1,15 @@
 <template>
 	<div class="condition-tab">
 		<div class="signal-relation-box" v-if="editableTabs.length > 1">
-			<span style="font-weight: 400; margin-right: 10px">Signal Relation:{{editData}}</span>
+			<span style="font-weight: 400; margin-right: 10px"
+				>Signal Relation:</span
+			>
 			<!-- <el-radio-group v-model="radio">
 				<el-radio :label="0">AND</el-radio>
 				<el-radio :label="1">OR</el-radio>
 			</el-radio-group> -->
 		</div>
 		<!-- 暂时删除了 editabled -->
-		{{entrySignalEditData}}
 		<el-tabs
 			v-model="editableTabsValue"
 			type="card"
@@ -40,23 +41,21 @@ export default {
 	// extends: base,
 	props: {
 		criteria: String,
-		entrySignalEditData: Object
+	},
+	inject: ['editEntryData'],
+	computed: {
+		getEditEntryData() {
+			return this.editEntryData()
+		}
 	},
 	watch: {
-		entrySignalEditData: {
+		getEditEntryData: {
 			handler(newVal) {
-				console.log('1111111', newVal)
-				this.editableTabs = [
-					{
-						title: 'Signal 1',
-						name: '1',
-						content: 'Tab 1 content'
-					}
-				]
+				console.log('condition-inject', newVal)
 			},
 			immediate: true,
 			deep: true
-		}
+		},
 	},
 	data() {
 		return {
@@ -75,7 +74,6 @@ export default {
 	components: {
 		'condition-root': conditionRoot
 	},
-	
 	methods: {
 		handleTabsEdit(targetName, action) {
 			if (action === 'add') {

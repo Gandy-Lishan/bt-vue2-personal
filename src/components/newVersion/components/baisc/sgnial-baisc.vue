@@ -96,6 +96,10 @@ export default {
 			handler(newVal) {
 				this.ids.extreme_optimism = newVal.extremeOptimism
 				this.ids.extreme_pessimism = newVal.extremePessimism
+				this.ids.over_bought_bound = newVal.extremeOptimism
+				this.ids.over_sold_bound = newVal.extremePessimism
+				this.ids.SlowMA = newVal.extremeOptimism
+				this.ids.FastMA = newVal.extremePessimism
 				console.log('测试', newVal)
 			},
 			immediate: true,

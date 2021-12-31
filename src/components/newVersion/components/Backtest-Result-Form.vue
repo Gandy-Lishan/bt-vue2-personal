@@ -93,7 +93,6 @@
                 v-model="backtestResult.end_date"
                 type="date"
                 placeholder="Please select a end date"
-                @change="getEndDate(backtestResult.endDate)"
               >
               </el-date-picker>
               <el-input
@@ -118,68 +117,6 @@ export default {
   },
   data() {
     return{
-      // backtestResult: {
-      //   name: '',
-      //   description: '',
-      //   startingCapital: '',
-      //   commission: '',
-      //   slippage: '',
-      //   backtestHistory: '',
-      //   value: 0,
-      //   historyValue: 0,
-      //   options: [{
-      //     value: 0,
-      //     label: 'All In / All Out (CASH)'
-      //   }, 
-      //   // {
-      //   //   value: 1,
-      //   //   label: 'All In / When Out, (buy TLT)'
-      //   // }, {
-      //   //   value: 2,
-      //   //   label: 'All In / When Out, (buy GLD)'
-      //   // }, {
-      //   //   value: 3,
-      //   //   label: 'All In / When Out, (buy AGG)'
-      //   // }
-      //   ],
-      //   historyOptions: [{
-      //     value: 1,
-      //     label: '1 Year'
-      //   }, {
-      //     value: 2,
-      //     label: '2 Year'
-      //   }, {
-      //     value: 3,
-      //     label: '3 Year'
-      //   }, {
-      //     value: 4,
-      //     label: '4 Year'
-      //   }, {
-      //     value: 5,
-      //     label: '5 Year'
-      //   },{
-      //     value: 10,
-      //     label: '10 Year'
-      //   },
-      //   {
-      //     value: 15,
-      //     label: '15 Year'
-      //   },
-      //   {
-      //     value: 20,
-      //     label: '20 Year'
-      //   },{
-      //     value: 21,
-      //     label: 'All History'
-      //   },{
-      //     value: 22,
-      //     label: 'Custom...'
-      //   },
-      //   ],
-      //   starDate: '',
-      //   endDate: '',
-      //   symbolName: ''
-      // },
       strategyFormdata: {},
       symbolList: [],
       indexList: [],
@@ -192,7 +129,15 @@ export default {
     const str = this.backtestResult.endDate.split('-')
     str[0] = (Number(str[0]) - Number(this.backtestResult.historyValue)) + ''
     this.backtestResult.starDate = str.join('-')
-    this.getData()
+  },
+  watch: {
+    "this.$store.state.favoriteBacktestRowData": {
+      handle(newVal) {
+      console.log("结果",newVal);
+    },
+    immediate: true,
+    deep: true
+    }
   },
   computed: {
     listSet(){
@@ -312,8 +257,8 @@ export default {
       this.backtestResult.startingCapital = data.cash
       this.backtestResult.commission = data.commission
       this.backtestResult.slippage = data.slippage
-      this.backtestResult.starDate = data.fromdate
-      this.backtestResult.endDate = data.todate
+      this.backtestResult.starDate = data.start_date
+      this.backtestResult.endDate = data.end_date
       }
     },
     clearResultData() {

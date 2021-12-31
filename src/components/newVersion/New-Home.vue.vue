@@ -38,7 +38,7 @@
 										ref="entryFormChild"
 										:criteria="'entry'"
 										:fdLoad="fdLoad"
-										:editData="backtestEditData"
+						
 									></entry-form>
 								</el-tab-pane>
 								<el-tab-pane
@@ -63,7 +63,7 @@
 										:criteria="'exit'"
 										:fdLoad="fdLoad"
 										@goToFavorite="goToFavorite"
-										:editData="backtestEditData"
+					
 									></exit-form>
 								</el-tab-pane>
 							</el-tabs>
@@ -123,14 +123,14 @@ export default {
 			activeTag: 'first-child-n1',
 			fdLoad: {},
 			backtestEditData: {
-				entry:{singals:[]},
-				exit:{singals:[]}
-			}
+			},
+			pubilcEditData: {entry:{singals:[]},
+				exit:{singals:[]}}
 		}
 	},
 	provide() {
 		return {
-			editEntryData: JSON.stringify(this.backtestEditData)
+			editBacktestData: () => this.pubilcEditData
 		}
 	},
 	mounted(){
@@ -178,7 +178,8 @@ export default {
 		}
 	},
 	methods: {
-		goBacktestResultForm() {
+		goBacktestResultForm(row) {
+			this.backtestResultData = row
 			this.activeName = 'second'
 			this.$refs.performanceChild.getResultData()
 		},
@@ -285,10 +286,12 @@ export default {
 		},
 		goTobacktestSetupForm(id) {
 			// backtestEditData
+			this.activeTag = "first-child-n1"
+			console.log(8888888);
 			this.backtestEditData = {}
-			console.log('976876',this.backtestEditData);
 			this.$http.get('/dev/seeparams/' + id + '/').then(res => {
 				let data = res.data
+				console.log("res.data",data);
 				data.old_uuid = id
 				data.entry = JSON.parse(data.entry)
 				data.exit = JSON.parse(data.exit)
@@ -297,7 +300,8 @@ export default {
 				delete data.backtest_id
 				delete data.user_id
 				delete data.uuid
-				console.log("编辑的数据",data);
+				this.pubilcEditData = Object.assign(this.pubilcEditData,data)
+
 				this.backtestEditData = data
 			})
 			this.activeName = "first"

@@ -55,7 +55,7 @@
 		<div class="signalDescriptionBox">
 			<div><h2 class="note">Signal Description</h2></div>
 			<el-button plain style="margin: 5px 0px 5px 0px"
-				>{{ sentiVal + "&nbsp;&nbsp;"+ sc.period + "&nbsp;&nbsp;"+ conditions[sc.condition].label + "&nbsp;&nbsp;" +  sc.value}}</el-button
+				>{{ `${sentiVal}&nbsp;&nbsp;${sc.period?sc.period:''}&nbsp;&nbsp;${conditions[sc.condition].label}&nbsp;&nbsp;${sc.value}`}}</el-button
 			>
 		</div>
 	</div>
@@ -107,12 +107,9 @@ export default {
 			},
 			getInputValue(val) {
 				if(this.conditionRadio === 'Sentiment Value'){
-					const res = /^(1|0(\.\d{1,2})?)$/
-					console.log("增则",res.test(val));
-					if(res.test(val)){
-						
-				this.sc.value = val
-					}}
+				this.sc.value = val}else if(this.conditionRadio === 'Sentiment Moving Average') {
+					this.sc.value = val
+				}
 			},
 			getConditionVal(val) {
 				if(this.conditionRadio === 'Sentiment Moving Average'){

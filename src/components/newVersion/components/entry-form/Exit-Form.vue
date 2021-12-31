@@ -38,8 +38,11 @@
 				>
 			</div>
 		</div>
-		<div class="signalRight" :class="signalVisiable ? 'active': ''">
-			<condition-tab @goToFavorite="goToFavorite" :criteria="criteria"></condition-tab>
+		<div class="signalRight" :class="signalVisiable ? 'active' : ''">
+			<condition-tab
+				@goToFavorite="goToFavorite"
+				:criteria="criteria"
+			></condition-tab>
 		</div>
 	</div>
 </template>
@@ -97,36 +100,24 @@ export default {
 			conditionFormData: {}
 		}
 	},
+	inject: ['editBacktestData'],
 	computed: {
-		...mapGetters(['getBacktestEntryFrequency', 'getBacktestEntryDirection']),
-		exitFrequency() {
-			return this.getBacktestEntryFrequency
-		},
-		exitDirection() {
-			return this.getBacktestEntryDirection
+		getEditBacktestData() {
+			return this.editBacktestData()
 		}
 	},
 	watch: {
-		// exitDirection: {
-		// 	handler(newVal) {
-		// 		// 数据变化后，绑定 direction， frequency
-		// 		this.fd.direction = newVal
-		// 		console.log('数据变化', newVal)
-		// 		if (newVal=== 'Long') {
-		// 			this.fd.direction = 'Short'
-		// 		} else if (newVal === 'Short') {
-		// 			this.fd.direction = 'Long'
-		// 		}
-		// 	},
-		// 	immediate: true
-		// },
-		// exitFrequency: {
-		// 	handler(newVal) {
-		// 		this.fd.frequency = newVal.frequency
-		// 	},
-
-		// 	immediate: true
-		// },
+		getEditBacktestData: {
+			handler(newVal) {
+				console.log('exit-inject11111', newVal)
+				const data = newVal.exit
+				this.fd.description = data.description
+				this.fd.direction = data.direction
+				this.fd.frequency = data.frequency
+			},
+			immediate: true,
+			deep: true
+		},
 		fdLoad: {
 			handler(newVal) {
 				var obj = {
@@ -137,8 +128,8 @@ export default {
 
 				this.fd['direction'] = obj[newVal['direction']]
 				this.fd['frequency'] = newVal['frequency']
-				this.fd.criteria = "exit"
-				this.$store.commit("setFd",this.fd)
+				this.fd.criteria = 'exit'
+				this.$store.commit('setFd', this.fd)
 				// console.log();
 			},
 			immediate: true,
@@ -153,21 +144,21 @@ export default {
 	},
 	methods: {
 		getDes(val) {
-		this.fd.description = val
-		this.fd.criteria = "exit"
-		this.$store.commit("setFd",this.fd)
-	},
-	goToFavorite() {
-		this.$emit("goToFavorite")
-	},
-	showSignal() {
-		this.signalVisiable = !this.signalVisiable
-	}
+			this.fd.description = val
+			this.fd.criteria = 'exit'
+			this.$store.commit('setFd', this.fd)
+		},
+		goToFavorite() {
+			this.$emit('goToFavorite')
+		},
+		showSignal() {
+			this.signalVisiable = !this.signalVisiable
+		}
 	}
 }
 </script>
 <style lang="less" scoped>
-.active{
+.active {
 	display: none;
 }
 @media only screen and (min-width: 1600px) {

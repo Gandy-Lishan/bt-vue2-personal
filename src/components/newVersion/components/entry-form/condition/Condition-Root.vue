@@ -16,6 +16,7 @@
 						@getIndicatorRadio="getIndicatorRadio"
 						@getTechIndiValue="getTechIndiValue"
 						@clearTechIndiValue="clearTechIndiValue"
+						:indicatorEditData= "indicatorEditData"
 						@getSentiVal="getSentiVal"
 						:tabIndex="tabIndex"
 						:criteria="criteria"
@@ -55,7 +56,7 @@
 				<rsi-default
 					v-if="indicatorRadio === 'technical' && techIndiValue === 'RSI'"
 					:tabIndex="tabIndex"
-				    :scLoad="scLoad"
+					:scLoad="scLoad"
 					:idsLoad="idsLoad"
 					:criteria="criteria"
 				></rsi-default>
@@ -126,10 +127,6 @@ import { Store, mapGetters } from 'vuex'
 import loginFormateVue from '@/loginFormate.vue'
 export default {
 	extends: base,
-	// props: {
-	// 	tabIndex: Number,
-	// 	criteria: String
-	// },
 	data() {
 		return {
 			indicatorRadio: 'sentiment',
@@ -139,9 +136,11 @@ export default {
 			dialogTableVisible: false,
 			idsLoad: {},
 			scLoad: {},
-			sentiVal: "",
+			sentiVal: '',
+			indicatorEditData: {}
 		}
 	},
+	inject: ['editBacktestData'],
 	mounted() {
 		this.$cookies.set('username', 'test')
 	},
@@ -149,6 +148,9 @@ export default {
 		...mapGetters(['getSignalDialogData']),
 		signalDialogData() {
 			return this.getSignalDialogData
+		},
+		getEditBacktestData() {
+			return this.editBacktestData()
 		}
 	},
 	watch: {
@@ -160,7 +162,7 @@ export default {
 				fd.direction = newVal.direction
 				fd.frequency = newVal.frequency
 				fd.criteria = newVal.criteria
-				this.$store.commit("setSignalDialogFd",fd)
+				this.$store.commit('setSignalDialogFd', fd)
 				this.idsLoad = newVal.code.ids
 				this.scLoad = newVal.code.sc
 				if (newVal.code.analysis === 'Technical') {
@@ -189,7 +191,30 @@ export default {
 					this.$refs.indicatorPart.setIndicatorRadio(obj)
 				}
 			},
-			
+
+			immediate: true,
+			deep: true
+		},
+		getEditBacktestData: {
+			handler(newVal) {
+				this.indicatorEditData = {}
+				var signalCode = new SignalCode()
+				var code = newVal[this.criteria]["signals"][this.tabIndex]["code"]
+				code = signalCode.decode(code)
+				console.log("test",code);
+				this.idsLoad = code.ids
+				this.scLoad = code.sc
+				if(code.analysis === "Sentiment"){
+					this.sentimentIndicator = code.indicator
+				this.indicatorEditData.sentimentIndicator = code.indicator
+					this.indicatorRadio = "sentiment"
+					this.sentiVal = code.indicator
+				}else if(code.analysis === "Technical") {
+					this.technicalIndicator = code.indicator
+					this.indicatorRadio = "technical"
+					this.indicatorEditData.technicalIndicator = code.indicator
+				}
+			},
 			immediate: true,
 			deep: true
 		}
@@ -254,10 +279,10 @@ export default {
 			this.sentiVal = val
 		},
 		saveSignal() {
-			console.log(4444444444);
+			console.log(4444444444)
 			const a = new SignalCode()
 			const obj = this.$store.state.backtestInfo[this.criteria]
-			console.log("vuex中的數據",obj);
+			console.log('vuex中的數據', obj)
 			const signalList = this.$store.state.backtestInfo[this.criteria].signals
 			signalList.forEach((item) => {
 				if (item.sentimentIndicator) {
