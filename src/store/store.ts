@@ -24,12 +24,12 @@ export default new Vuex.Store({
         technicalIndicator: ''}]
       }
     },
+    goToFavoritePage: false,
     openedPorfolioBacktests: [],
     count: 1,
     porfolioCash: '11',
     savePorfolioData: [],
     favoriteBacktestRowData: {},
-    editBacktestData: {},
     strategyEntryData: {},
     strategyExitData: {},
     indicators: {
@@ -82,6 +82,9 @@ export default new Vuex.Store({
       
       return obj[state.backtestInfo.entry.direction]
     },
+    getGoToFavoritePage: (state) => {
+      return state.goToFavoritePage
+    },
     getExtremeValue: (state) => {
       return state.extremeValue
     },
@@ -127,9 +130,6 @@ export default new Vuex.Store({
     },
     getRunBacktestData(state, row){
       state.favoriteBacktestRowData = row
-    },
-    getBacktestEditData(state, row) {
-      state.editBacktestData = row
     },
     getEntryIndicators(state, val){
       state.indicators.formIndicators.entry = val
@@ -315,7 +315,9 @@ export default new Vuex.Store({
     setSignalDialogFd(state, fd) {
       state.fdDialogData = fd
       console.log("fdddddddd",fd);
-      
+    },
+    goToFavoritePage(state) {
+      state.goToFavoritePage = !state.goToFavoritePage
     }
 },
 actions: {

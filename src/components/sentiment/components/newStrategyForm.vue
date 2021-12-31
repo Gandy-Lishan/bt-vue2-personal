@@ -169,21 +169,6 @@ export default {
            return
       }
     const vm = this
-    this.$http.post('/demo/strategies/',vm.$qs.stringify(params),{auth:{
-        username: 'sentimentrader_backtest_api',
-        password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-      }}).then(res => {if(res.status === 201){this.$message.success({
-            message: 'The save was successful',
-            duration: 1000
-          })
-          this.$emit("updateStrategylist")
-          // eventBus.eventVue.$emit('UpdateMyStrategyList',"aaa")
-          }else{this.$message.error({
-            message: 'The save failed',
-            duration: 1000
-          })}}).catch(error => {
-      console.warn(error);
-      })
     }
   }
 }

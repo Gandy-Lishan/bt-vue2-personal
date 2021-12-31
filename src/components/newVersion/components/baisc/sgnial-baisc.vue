@@ -72,9 +72,10 @@ export default {
 
 		idsLoad: {
 			handler(newVal) {
+				const vm = this
 				if (newVal) {
 					console.log('dialog数据', newVal)
-					this.setIdsLoad(newVal)
+					vm.setIdsLoad(newVal)
 				}
 			},
 			immediate: true,
@@ -82,9 +83,10 @@ export default {
 		},
 		scLoad: {
 			handler(newVal) {
+				const vm = this
 				if (newVal) {
 					console.log('dialog数据', newVal)
-					this.setScLoad(newVal)
+					vm.setScLoad(newVal)
 				}
 			},
 			immediate: true,

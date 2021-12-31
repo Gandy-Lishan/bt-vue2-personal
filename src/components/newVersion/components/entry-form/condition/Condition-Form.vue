@@ -96,7 +96,6 @@ export default {
 	},
 	methods: {
 		getValue(val) {
-			this.sc = {}
 			if(val === 'Sentiment Value'){
 				if(this.value_1)
 				{

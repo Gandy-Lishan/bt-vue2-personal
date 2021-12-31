@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     async getStrategyList() {
-      const { data: res } = await this.$http.get('/demo/strategies/')
+      // const { data: res } = await this.$http.get('/demo/strategies/')
       this.strategyList = res.results
       this.total = res.count
       for (let i = 0; i < this.strategyList.length; i++) {

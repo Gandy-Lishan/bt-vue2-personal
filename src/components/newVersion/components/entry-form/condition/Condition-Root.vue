@@ -139,7 +139,7 @@ export default {
 			dialogTableVisible: false,
 			idsLoad: {},
 			scLoad: {},
-			sentiVal: ""
+			sentiVal: "",
 		}
 	},
 	mounted() {
@@ -254,8 +254,10 @@ export default {
 			this.sentiVal = val
 		},
 		saveSignal() {
+			console.log(4444444444);
 			const a = new SignalCode()
 			const obj = this.$store.state.backtestInfo[this.criteria]
+			console.log("vuex中的數據",obj);
 			const signalList = this.$store.state.backtestInfo[this.criteria].signals
 			signalList.forEach((item) => {
 				if (item.sentimentIndicator) {

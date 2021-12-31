@@ -23,7 +23,7 @@
 									label="Backtest Data"
 									name="first-child-n1"
 								>
-									<backtest-setup-form ref="setupChild"></backtest-setup-form>
+									<backtest-setup-form ref="setupChild" :backtestEditData="backtestEditData"></backtest-setup-form>
 								</el-tab-pane>
 								<el-tab-pane
 									style="height: 90%; overflow-y: auto; overflow-x: hidden"
@@ -38,6 +38,7 @@
 										ref="entryFormChild"
 										:criteria="'entry'"
 										:fdLoad="fdLoad"
+										:editData="backtestEditData"
 									></entry-form>
 								</el-tab-pane>
 								<el-tab-pane
@@ -62,6 +63,7 @@
 										:criteria="'exit'"
 										:fdLoad="fdLoad"
 										@goToFavorite="goToFavorite"
+										:editData="backtestEditData"
 									></exit-form>
 								</el-tab-pane>
 							</el-tabs>
@@ -88,6 +90,7 @@
 							<favorite-form
 								ref="favoriteChild"
 								@goBacktestResultForm="goBacktestResultForm"
+								@goTobacktestSetupForm="goTobacktestSetupForm"
 							></favorite-form>
 						</el-tab-pane>
 						<el-tab-pane label="Strategies" name="fourth">
@@ -118,7 +121,16 @@ export default {
 			backtestResult: {},
 			activeName: 'first',
 			activeTag: 'first-child-n1',
-			fdLoad: {}
+			fdLoad: {},
+			backtestEditData: {
+				entry:{singals:[]},
+				exit:{singals:[]}
+			}
+		}
+	},
+	provide() {
+		return {
+			editEntryData: JSON.stringify(this.backtestEditData)
 		}
 	},
 	mounted(){
@@ -135,9 +147,12 @@ export default {
 		'exit-form': exitForm
 	},
 	computed: {
-		...mapGetters(['getDialogFdData']),
+		...mapGetters(['getDialogFdData',"getGoToFavoritePage"]),
 		fdDialogData() {
 			return this.getDialogFdData
+		},
+		goToFavoritePage() {
+			return this.getGoToFavoritePage
 		}
 	},
 	watch: {
@@ -153,6 +168,13 @@ export default {
 			},
 			immediate: true,
 			deep: true
+		},
+		goToFavoritePage: {
+			handler(newVal) {
+				if(newVal) {
+					this.activeName = "third"
+				}
+			}
 		}
 	},
 	methods: {
@@ -254,10 +276,31 @@ export default {
 				.then((res) => {
 					if (res.status === 201) {
 						this.$message.success('Save successfully')
+						this.$emit("goToFavoritePage")
+						this.$refs.favoriteChild.getBacktestList('system')
 					} else {
 						this.$message.success('Save failed')
 					}
 				})
+		},
+		goTobacktestSetupForm(id) {
+			// backtestEditData
+			this.backtestEditData = {}
+			console.log('976876',this.backtestEditData);
+			this.$http.get('/dev/seeparams/' + id + '/').then(res => {
+				let data = res.data
+				data.old_uuid = id
+				data.entry = JSON.parse(data.entry)
+				data.exit = JSON.parse(data.exit)
+				delete data.results
+				delete data.status
+				delete data.backtest_id
+				delete data.user_id
+				delete data.uuid
+				console.log("编辑的数据",data);
+				this.backtestEditData = data
+			})
+			this.activeName = "first"
 		}
 	}
 }

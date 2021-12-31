@@ -207,7 +207,7 @@ export default {
     },
     async getStrategyName() {
       const id = this.backtestList
-      const res = await this.$http.get('/demo/strategies' + id + '/')
+      // const res = await this.$http.get('/demo/strategies' + id + '/')
 
     },
     showDialog(row) {

@@ -232,18 +232,18 @@ export default {
         signal_exit: JSON.stringify(data.signal_exit),
         user: ''
       }
-    this.$http.post('/demo/strategies/',vm.$qs.stringify(params),{auth:{
-        username: 'sentimentrader_backtest_api',
-        password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-      }}).then(res => {
-        vm.$store.commit('getStrategyId',res.data.id)
-        if(res.status === 201){
-          }else{this.$message.error({
-            message: 'The save failed',
-            duration: 1000
-          })}}).catch(error => {
-      console.error(error);
-      })
+    // this.$http.post('/demo/strategies/',vm.$qs.stringify(params),{auth:{
+    //     username: 'sentimentrader_backtest_api',
+    //     password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+    //   }}).then(res => {
+    //     vm.$store.commit('getStrategyId',res.data.id)
+    //     if(res.status === 201){
+    //       }else{this.$message.error({
+    //         message: 'The save failed',
+    //         duration: 1000
+    //       })}}).catch(error => {
+    //   console.error(error);
+    //   })
     },
 		// show edit backtest data
 		getBacktestEditData() {
