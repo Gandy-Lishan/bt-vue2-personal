@@ -8,11 +8,11 @@
                     <span style="font-weight: 500; margin-left: 10px; line-height: 30px; font-size: 15px"
 						>multiplier:</span
 					>
-					<el-input v-model="sc.atr_multiplier" placeholder="Input Period" oninput ="value=value.replace(/[^\d]/g,'')"></el-input>
+					<el-input v-model="sc.atr_multiplier" placeholder="Input Period" oninput ="value=value.replace(/[-+]?[^\d]/g,'')"></el-input>
 					<span style="font-weight: 500; margin-left: 10px; line-height: 30px; font-size: 15px"
 						>period:</span
 					>
-					<el-input v-model="sc.atr_period" placeholder="Input Period" oninput ="value=value.replace(/[^\d]/g,'')"></el-input>
+					<el-input v-model="sc.atr_period" placeholder="Input Period" oninput ="value=value.replace(/[-+]?[^\d]/g,'')"></el-input>
 				</div>
 			</div>
 		</div>

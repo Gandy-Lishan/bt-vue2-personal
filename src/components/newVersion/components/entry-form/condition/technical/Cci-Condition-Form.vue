@@ -18,7 +18,7 @@
 						>
 						</el-option>
 					</el-select>
-					<el-input v-model="sc.value" oninput="value=value.replace(/[^0-9.]/g,'')"  placeholder="Input Value"></el-input>
+					<el-input v-model="sc.value" oninput="value=value.replace(/[^-?0-9.]/g,'')"  placeholder="Input Value"></el-input>
 				</div>
 			</div>
 		</div>

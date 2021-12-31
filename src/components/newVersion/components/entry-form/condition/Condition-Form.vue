@@ -21,7 +21,7 @@
 					</el-select>
 					
 				<el-tooltip class="item" effect="light" content="Please enter a number from 0 to 1" placement="bottom">
-					<el-input v-model="value_1" placeholder="Input Value" @input="getInputValue"  oninput="value=value.replace(/[^0-9.]/g,'')" ></el-input>
+					<el-input v-model="value_1" placeholder="Input Value" @input="getInputValue"  oninput="value=value.replace(/[-+]?[^0-9.]/g,'')" ></el-input>
 				</el-tooltip>
 				</div>
 			</div>
@@ -30,7 +30,7 @@
 				</el-radio>
 				<div class="sentimentMABox">
 					<el-tooltip class="item" effect="light" content="Please enter number" placement="bottom">
-					<el-input @change="setPeriod" placeholder="Input Period" oninput ="value=value.replace(/[^\d]/g,'')" v-model="sc.period"></el-input>
+					<el-input @change="setPeriod" placeholder="Input Period" oninput ="value=value.replace(/[-+]?[^\d]/g,'')" v-model="sc.period"></el-input>
 					</el-tooltip>
 					<el-select
 						v-model="maCondition"
