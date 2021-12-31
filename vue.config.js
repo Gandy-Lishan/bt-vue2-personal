@@ -14,6 +14,7 @@ module.exports = {
 				/* import.meta support for webpack 4 */
 				{
 					test: /\.js$/,
+                    include: path.resolve(__dirname, 'node_modules/cesium/Source'),
 					loader: require.resolve('@open-wc/webpack-import-meta-loader')
 				}
 			]

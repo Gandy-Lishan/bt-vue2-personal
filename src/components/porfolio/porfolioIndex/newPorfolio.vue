@@ -178,10 +178,13 @@ export default {
       params.original_asset =
         this.newPorfolioInputsValues.inputOriginalAssetValue
       let percentageList = []
-      this.backtestList.forEach((item) => {
+      if(this.backtestList){
+this.backtestList.forEach((item) => {
         item.cash = item.cash
         // percentageList.push(Math.round(Number(item.cash)/Number(params.original_asset)))
       })
+      }
+      
       var porfolioId
 
       this.$http
