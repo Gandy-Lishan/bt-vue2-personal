@@ -39,21 +39,21 @@
 				></cci-default>
 				<!-- ma -->
 				<ma-default
-					v-if="indicatorRadio === 'technical' && techIndiValue === 'MA'"
+					v-if="indicatorRadio === 'technical' && techIndiValue === 'ma'"
 					:tabIndex="tabIndex"
 					:idsLoad="idsLoad"
 					:criteria="criteria"
 				></ma-default>
 				<!-- macd -->
 				<macd-default
-					v-if="indicatorRadio === 'technical' && techIndiValue === 'MACD'"
+					v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
 					:tabIndex="tabIndex"
 					:idsLoad="idsLoad"
 					:criteria="criteria"
 				></macd-default>
 				<!-- rsi -->
 				<rsi-default
-					v-if="indicatorRadio === 'technical' && techIndiValue === 'RSI'"
+					v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
 					:tabIndex="tabIndex"
 				    :scLoad="scLoad"
 					:idsLoad="idsLoad"
@@ -77,21 +77,21 @@
 			></cci-condition-form>
 			<!-- ma -->
 			<ma-condition-form
-				v-if="indicatorRadio === 'technical' && techIndiValue === 'MA'"
+				v-if="indicatorRadio === 'technical' && techIndiValue === 'ma'"
 				:tabIndex="tabIndex"
 				:criteria="criteria"
 				:scLoad="scLoad"
 			></ma-condition-form>
 			<!-- macd -->
 			<macd-condition-form
-				v-if="indicatorRadio === 'technical' && techIndiValue === 'MACD'"
+				v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
 				:tabIndex="tabIndex"
 				:scLoad="scLoad"
 				:criteria="criteria"
 			></macd-condition-form>
 			<!-- rsi -->
 			<rsi-condition-form
-				v-if="indicatorRadio === 'technical' && techIndiValue === 'RSI'"
+				v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
 				:tabIndex="tabIndex"
 				:criteria="criteria"
 				:scLoad="scLoad"
@@ -139,7 +139,7 @@ export default {
 			dialogTableVisible: false,
 			idsLoad: {},
 			scLoad: {},
-			sentiVal: ""
+			sentiVal: "",
 		}
 	},
 	mounted() {
@@ -170,10 +170,10 @@ export default {
 					obj.technicalIndicator = newVal.code.indicator
 					this.$refs.indicatorPart.setIndicatorRadio(obj)
 					const arr = [
-						{ label: 'Moving Average', value: 'MA' },
-						{ label: 'MACD', value: 'MACD' },
+						{ label: 'Moving Average', value: 'ma' },
+						{ label: 'MACD', value: 'macd' },
 						{ label: 'Commodity Channel Index', value: 'ST CCI' },
-						{ label: 'Relative Strength Index', value: 'RSI' }
+						{ label: 'Relative Strength Index', value: 'rsi' }
 					]
 					arr.forEach((item) => {
 						if (item.label === newVal.code.indicator) {
@@ -254,8 +254,10 @@ export default {
 			this.sentiVal = val
 		},
 		saveSignal() {
+			console.log(4444444444);
 			const a = new SignalCode()
 			const obj = this.$store.state.backtestInfo[this.criteria]
+			console.log("vuex中的數據",obj);
 			const signalList = this.$store.state.backtestInfo[this.criteria].signals
 			signalList.forEach((item) => {
 				if (item.sentimentIndicator) {

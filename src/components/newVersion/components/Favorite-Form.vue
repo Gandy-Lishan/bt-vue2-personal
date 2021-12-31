@@ -3,17 +3,18 @@
 		<el-col :span="24">
 			<div class="favoriteForm_container">
 				<el-table :data="backtestList" v-loading="loading">
-					<el-table-column label="Name" align="center" prop="name">
+					<el-table-column label="Name" align="center" prop="name" show-overflow-tooltip=true>
 					</el-table-column>
-					<el-table-column label="Symbol" align="center" prop="symbol">
+					<el-table-column label="Symbol" align="center" prop="symbol" show-overflow-tooltip=true>
 					</el-table-column>
 					<el-table-column
 						label="description"
 						align="center"
+            show-overflow-tooltip=true
 						prop="description"
 					>
 					</el-table-column>
-					<el-table-column>
+					<el-table-column show-overflow-tooltip=true>
 						<template slot-scope="scope">
 							<div class="dataBox">
 								<el-button size="mini" type="info" plain>{{
@@ -173,19 +174,27 @@ export default {
 		this.getBacktestList()
 		this.getStrategyName()
 	},
+  	mounted(){
+		this.$cookies.set('username', 'test')
+	},
 	methods: {
-		async getBacktestList() {
+		async getBacktestList(strategy) {
 			this.loading = true
+			const params = {
+				page: this.queryInfo.page
+			}
 			const res = await this.$http.get(
-				'/dev/backtest/?page=' + this.queryInfo.page
+				'/dev/backtest/?page'+ this.queryInfo.page
 			)
 			if (res.status === 200) {
 				console.log(res)
 				this.loading = false
 				this.backtestList = res.data.results
 				this.queryInfo.total = res.data.count
+				this.$emit("goToFavoritePage")
 			} else {
 				this.loading = false
+				this.$emit("goToFavoritePage")
 			}
 		},
 		checkBacktest() {
@@ -233,19 +242,10 @@ export default {
 
 		async getStrategyName() {
 			const id = this.backtestList
-			const res = await this.$http.get('/demo/strategies' + id + '/')
+			// const res = await this.$http.get('/demo/strategies' + id + '/')
 		},
 		editBacktest(row) {
-			// this.editData = row
-			// this.backtestItemId = row.id
-			let vm = this
-			this.$store.commit('getBacktestetUpEditData', row)
-			this.$emit('goTobacktestSetupForm')
-			this.$http.get('/rundev/report?backtests=' + row.id).then((res) => {
-				vm.$store.commit('getBacktestEditData', res.data)
-				vm.$emit('goToEntryFormData')
-				vm.$store.commit('showExitFormData', false)
-			})
+			this.$emit('goTobacktestSetupForm',row.id)
 		},
 		deleteBacktest(id) {
 			this.$http
@@ -273,44 +273,31 @@ export default {
 				})
 		},
 		copyBacktest(row) {
-			const strategyFormData = {}
-			let currentBacktestData = {}
-			currentBacktestData = row
-			// strategyFormdata.sizeAllocation = currentBacktestData.value
-			strategyFormData.stock = currentBacktestData.stock
-			strategyFormData.name = currentBacktestData.name + '(copy)'
-			strategyFormData.description = currentBacktestData.description
-			strategyFormData.note = 'my note'
-			strategyFormData.cash = currentBacktestData.cash + ''
-			strategyFormData.commission = currentBacktestData.commission + ''
-			strategyFormData.slippage = currentBacktestData.slippage + ''
-			strategyFormData.cashalloc = 1.0
-			strategyFormData.riskfreerate = currentBacktestData.slippage + ''
-			strategyFormData.fromdate = currentBacktestData.fromdate
-			strategyFormData.todate = currentBacktestData.todate
-			strategyFormData.status = 0
-			strategyFormData.strategy = currentBacktestData.strategy.id
-			const params = strategyFormData
-			this.$http
-				.post('/demo/backtest/', this.$qs.stringify(params), {
-					auth: {
-						username: 'sentimentrader_backtest_api',
-						password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-					}
+      console.log("行",row);
+      let params = {}
+      this.$http.get('/dev/seeparams/' + row.id + '/').then(res => {
+        params = res.data
+        params.name = params.name + '(copy)'
+        delete params.uuid
+        delete params.results
+        delete params.user_id
+        delete params.status
+        delete params.backtest_id
+        console.log(params);
+        this.$http
+				.post('/dev/backtest/', this.$qs.stringify(params), {
+					withCredentials: true
 				})
 				.then((res) => {
 					if (res.status === 201) {
-						this.$message.success({
-							message: 'The replication was successful',
-							duration: 1000
-						})
-						//  this.$router.push('/currentBacktests')
-						this.getBacktestList()
+						this.$message.success('Copy successfully')
+            this.getBacktestList()
+					} else {
+						this.$message.success('Copy failed')
 					}
 				})
-				.catch((error) => {
-					//(error)
-				})
+      }
+      )
 		},
 		viewBacktestResults(row) {
 			this.$store.commit('getRunBacktestData', row)

@@ -99,7 +99,7 @@ export default {
   methods: {
       async getStrategyList() {
       this.loading = true
-      const { data: res } = await this.$http.get('/demo/strategies/')
+      // const { data: res } = await this.$http.get('/demo/strategies/')
       // this.strategyList = res.results
       // if(res.results.length <= 0){
       //   this.loading = false

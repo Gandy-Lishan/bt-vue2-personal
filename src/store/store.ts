@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
-    indicatorListIncludesTech: [],
+    
     newPorfolioInputsValues:{
       inputNameValue: '',
       inputDescriptionValue: '',
@@ -25,12 +25,12 @@ export default new Vuex.Store({
         technicalIndicator: ''}]
       }
     },
+    goToFavoritePage: false,
     openedPorfolioBacktests: [],
     count: 1,
     porfolioCash: '11',
     savePorfolioData: [],
     favoriteBacktestRowData: {},
-    editBacktestData: {},
     strategyEntryData: {},
     strategyExitData: {},
     indicators: {
@@ -45,6 +45,21 @@ export default new Vuex.Store({
       extremeOptimism: undefined,
       extremePessimism: undefined,
     },
+    // cciDefault: {
+    //   over_bought_bound: undefined,
+		// 	over_sold_bound: undefined,
+    //   period: undefined
+    // },
+    // macdDefault: {
+    //   SlowMA: undefined,
+    //   FastMA: undefined,
+    //   SL: undefined
+    // },
+    // rsiDefault: {
+    //   over_bought_bound: undefined,
+		// 	over_sold_bound: undefined,
+    //   period: undefined
+    // },
     customExitType: [{label: "short", value: "short"},{label: "longexit", value: "longexit"}],
     exitOption:  [{label: "longexit", value: "longexit"},
     {label: "short", value: "short"}],
@@ -83,6 +98,9 @@ export default new Vuex.Store({
       
       return obj[state.backtestInfo.entry.direction]
     },
+    getGoToFavoritePage: (state) => {
+      return state.goToFavoritePage
+    },
     getExtremeValue: (state) => {
       return state.extremeValue
     },
@@ -97,9 +115,7 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    getIndicatorListIncludesTech(state,list){
-      state.indicatorListIncludesTech = list
-    },
+    
     getExtremeValue: (state,item)=>{
       //console.log(11111);
       
@@ -131,9 +147,6 @@ export default new Vuex.Store({
     },
     getRunBacktestData(state, row){
       state.favoriteBacktestRowData = row
-    },
-    getBacktestEditData(state, row) {
-      state.editBacktestData = row
     },
     getEntryIndicators(state, val){
       state.indicators.formIndicators.entry = val
@@ -264,7 +277,7 @@ export default new Vuex.Store({
         for(let key in obj) {
           //console.log("99999999999",obj[key]);
           
-          if(obj[key] !==''){
+          if(obj[key] !=='' && obj[key] !== undefined){
             newData[key]=obj[key]
           }
         }
@@ -318,8 +331,9 @@ export default new Vuex.Store({
     },
     setSignalDialogFd(state, fd) {
       state.fdDialogData = fd
-      //console.log("fdddddddd",fd);
-      
+    },
+    goToFavoritePage(state) {
+      state.goToFavoritePage = !state.goToFavoritePage
     }
 },
 actions: {

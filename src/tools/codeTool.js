@@ -289,7 +289,7 @@ class SignalCode {
             else if (val["indicator"] == "Commodity Channel Index") {
                 re_str += "CCIV/" + val["condition"] + "/" + val["value"]
             }
-            else if (val["indicator"] == "Relative Strength Index") {
+            else if (val["indicator"] == "RSI") {
                 re_str += "RSIV/" + val["condition"] + "/" + val["value"]
             }
         }
@@ -365,8 +365,8 @@ a.decode("TI:MACD;IDS:SlowMA25/FastMA25/SL9;SC:MACDV/3/0")
 a.decode("TI:MACD;IDS:SlowMA25/FastMA25/SL9;SC:MACDV/3/MACDSL")
 a.decode("TI:Commodity Channel Index;IDS:OBB20/OSB80/Period20;SC:CCIV/3/10.0")
 a.decode("TI:Commodity Channel Index;IDS:OBB20/OSB80/Period20;SC:CCIV/4/90.0")
-a.decode("TI:Relative Strength Index;IDS:OBB200/OSB-200/Period20.000;SC:RSIV/3/-200.00")
-a.decode("TI:Relative Strength Index;IDS:OBB200/OSB-200/Period20;SC:RSIV/4/200.00")
+a.decode("TI:RSI;IDS:OBB200/OSB-200/Period20.000;SC:RSIV/3/-200.00")
+a.decode("TI:RSI;IDS:OBB200/OSB-200/Period20;SC:RSIV/4/200.00")
 var tmp = [
     {
     'analysis': 'Sentiment', 

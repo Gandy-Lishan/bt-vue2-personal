@@ -1,21 +1,17 @@
 <template>
   				<div class="extremumBox">
 					<div><h3 class="miniNote">Indicator Default Setting</h3></div>
-          <div class="noColor">
+					<div class="extremumItemBox">
 					<el-form-item label="Slow moving average">
 						<el-input v-model="ids.SlowMA"></el-input>
 					</el-form-item>
-          </div>
-          <div class="noColor">
 					<el-form-item label="Fast moving average">
 						<el-input v-model="ids.FastMA"></el-input>
 					</el-form-item>
-          </div>
-          <div class="noColor">
 					<el-form-item label="Signal line">
 						<el-input  v-model="ids.SL"></el-input>
 					</el-form-item>
-          </div>
+					</div>
 				</div>
 </template>
 <script>
@@ -25,9 +21,9 @@ export default {
   data() {
     return {
       ids: {
-      SlowMA: "",
-      FastMA: "",
-      SL: ""
+      SlowMA: 26,
+      FastMA: 12,
+      SL: 9
       }
     }
   }

@@ -3,7 +3,7 @@
 		<div class="signal-condition-box">
 			<div><h2 class="note">Signal Condition</h2></div>
 			<div class="sentimentConditionBox">
-				<el-radio v-model="conditionRadio" label="RSI Value"> </el-radio>
+				<el-radio v-model="conditionRadio" label="CCI Value"> </el-radio>
 				<div class="sentimentConditionItem">
 					<el-select
 						v-model="sc.condition"
@@ -18,14 +18,14 @@
 						>
 						</el-option>
 					</el-select>
-					<el-input v-model="sc.value" oninput="value=value.replace(/[^0-9.]/g,'')"  placeholder="Input Value"></el-input>
+					<el-input v-model="sc.value" oninput="value=value.replace(/[^-?0-9.]/g,'')"  placeholder="Input Value"></el-input>
 				</div>
 			</div>
 		</div>
 		<div class="signalDescriptionBox">
 			<div><h2 class="note">Signal Description</h2></div>
 			<el-button plain style="margin: 5px 0px 5px 0px"
-				>{{ des.technicalIndicator + "&nbsp;&nbsp;"+ conditions[sc.condition].label + "&nbsp;&nbsp;" + des.value}}</el-button
+				>{{ des.technicalIndicator + "&nbsp;&nbsp;"+ conditions[sc.condition].label + "&nbsp;&nbsp;" + sc.value}}</el-button
 			>
 		</div>
 	</div>
@@ -37,7 +37,7 @@ export default {
 	extends: base,
 	data() {
 		return {
-				conditionRadio: 'RSI Value',
+				conditionRadio: 'CCI Value',
 				conditions: [
 					{ value: 0, label: '>' },
 					{ value: 1, label: '=' },

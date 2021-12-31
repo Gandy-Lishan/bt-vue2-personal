@@ -198,7 +198,8 @@
       <el-table-column
         prop="Indicator"
         label="Indicator"
-        align="center">
+        align="center"
+        show-overflow-tooltip=true>
       </el-table-column>
       <el-table-column
         prop="TradePrice"

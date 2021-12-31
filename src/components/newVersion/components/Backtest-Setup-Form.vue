@@ -145,14 +145,15 @@
 </template>
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { Store, mapGetters} from "vuex"
 import { timestampToTime } from '@/tools/formatDate.js'
 import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
 export default {
   extends: base,
+  props: {backtestEditData: Object},
 	data() {
 		return {
 			bd: {
-				uuid: 'UUID',
 				name: '',
 				description: '',
 				symbol: 'AAPL',
@@ -236,6 +237,20 @@ export default {
 			return this.indexList.map((item) => {
 				return { value: `${item.symbol}`, label: `${item.symbol}` }
 			})
+		}
+	},
+	watch: {
+		backtestEditData: {
+			handler(newVal) {
+				delete newVal.entry
+				delete newVal.exit
+				delete newVal.user_id
+				delete newVal.status
+				delete newVal.results
+				delete newVal.uuid
+				this.bd = Object.assign(this.bd,newVal)
+				console.log(this.bd);
+			}
 		}
 	},
 	methods: {
