@@ -90,7 +90,7 @@ export default {
 			],
 			sc: {
 				condition: 3,
-				value: 'SL'
+				value: 'MACDSL'
 			},
 			maCondition: 3,
 			slCondition: 3,
@@ -103,7 +103,7 @@ export default {
 		getConditionRadio(val) {
 			console.log(this.conditionRadio)
 			if (val === 'MACD SL') {
-				this.sc.value = 'SL'
+				this.sc.value = 'MACDSL'
 			} else if (val === 'MACD Value') {
 				this.sc.value = this.value
 			}
@@ -126,7 +126,7 @@ export default {
 					val[key] = Number(val[key])
 				}
 			}
-			if(val.value === "SL") {
+			if(val.value === "MACDSL") {
 				this.conditionRadio = "MACD SL"
 			}else {
 				this.conditionRadio = "MACD Value"

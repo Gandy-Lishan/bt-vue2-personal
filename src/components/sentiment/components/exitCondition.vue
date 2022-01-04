@@ -143,7 +143,7 @@
 							conditionList[index].condition_description
 						) !== -1
 					"
-					label="FastMA:"
+					label="MACDFast:"
 					size="mini"
 				>
 					<el-input

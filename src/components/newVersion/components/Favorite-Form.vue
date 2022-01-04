@@ -185,7 +185,7 @@ export default {
 				page: this.queryInfo.page
 			}
 			const res = await this.$http.get(
-				'/dev/backtest/?page'+ this.queryInfo.page
+				'/dev/backtest/?page='+ this.queryInfo.page
 			)
 			if (res.status === 200) {
 				console.log(res)
