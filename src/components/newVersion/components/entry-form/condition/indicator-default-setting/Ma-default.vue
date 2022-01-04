@@ -2,7 +2,7 @@
 	<div class="extremumBox">
 		<div><h3 class="miniNote">Indicator Default Setting</h3></div>
 		<div class="extremumItemBox">
-			<el-radio-group v-model="ids.ma_category" @change="getMaRadio">
+			<el-radio-group v-model="ids.ma_category">
 				<el-radio label="SMA" style="margin-bottom: 30px"
 					>Simple moving average</el-radio
 				>
@@ -20,11 +20,6 @@ export default {
 			ids: {
 				ma_category: 'SMA'
 			}
-		}
-	},
-	methods: {
-		getMaRadio(val) {
-			this.ids.ma_category = val
 		}
 	}
 }

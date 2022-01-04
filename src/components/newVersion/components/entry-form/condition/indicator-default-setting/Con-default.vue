@@ -3,10 +3,10 @@
 		<div><h3 class="miniNote">Indicator Default Setting</h3></div>
 		<div class="extremumItemBox">
 			<el-form-item label="Extreme Optimism">
-				<el-input v-model="ids.extreme_optimism" oninput="value=value.replace(/[^0-9.]/g,'')"></el-input>
+				<el-input v-model="ids.extreme_optimism" oninput="value=value.replace(/[^\-?\d.]/g,'')"></el-input>
 			</el-form-item>
 			<el-form-item label="Extreme Pessimism">
-				<el-input v-model="ids.extreme_pessimism" oninput="value=value.replace(/[^0-9.]/g,'')"></el-input>
+				<el-input v-model="ids.extreme_pessimism" oninput="value=value.replace(/^\-?\d.]/g,'')"></el-input>
 			</el-form-item>
 		</div>
 	</div>

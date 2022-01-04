@@ -11,10 +11,10 @@
 				</el-radio>
 				<div class="sentimentConditionItem">
 					<el-select
-						v-model="maCondition"
+						:disabled="disabled"
+						v-model="sc.condition"
 						filterable
 						placeholder="Please select condition"
-						@change="getConditionVal"
 					>
 						<el-option
 							v-for="item in conditions"
@@ -25,10 +25,10 @@
 						</el-option>
 					</el-select>
 					<el-input
-						v-model="value"
-						oninput="value=value.replace(/[-+]?[^0-9.]/g,'')"
+						:disabled="disabled"
+						v-model="sc.value"
+						oninput="value=value.replace(/[^0-9]/g,'')"
 						placeholder="Input Value"
-						@input="getMaValue"
 					></el-input>
 				</div>
 			</div>
@@ -41,10 +41,10 @@
 				</el-radio>
 				<div class="sentimentMABox">
 					<el-select
-						v-model="slCondition"
+						:disabled="!disabled"
+						v-model="sc.condition"
 						filterable
 						placeholder="Please select condition"
-						@change="getConditionVal"
 					>
 						<el-option
 							v-for="item in conditions"
@@ -70,7 +70,7 @@
 		<div class="signalDescriptionBox">
 			<div><h2 class="note">Signal Description</h2></div>
 			<el-button plain style="margin: 5px 0px 5px 0px">{{
-				des.technicalIndicator + "&nbsp;&nbsp;"+ conditions[sc.condition].label + "&nbsp;&nbsp;"+ sc.value
+				techVal + "&nbsp;&nbsp;"+ conditions[sc.condition].label + "&nbsp;&nbsp;"+ sc.value
 			}}</el-button>
 		</div>
 	</div>
@@ -79,6 +79,7 @@
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 export default {
 	extends: base,
+		props: { techVal: String },
 	data() {
 		return {
 			conditions: [
@@ -90,34 +91,28 @@ export default {
 			],
 			sc: {
 				condition: 3,
-				value: 'SL'
+				value: 0
 			},
-			maCondition: 3,
-			slCondition: 3,
-			value: 0,
-			conditionRadio: 'MACD SL',
+			disabled: false,
+			conditionRadio: 'MACD Value',
 			des: this.$store.state.backtestInfo[this.criteria].signals[this.tabIndex]
+		}
+	},
+		watch: {
+		techVal: {
+			handler(newVal) {
+				this.techVal = newVal
+			}
 		}
 	},
 	methods: {
 		getConditionRadio(val) {
-			console.log(this.conditionRadio)
 			if (val === 'MACD SL') {
-				this.sc.value = 'SL'
+				this.sc.value = 'MACDSL'
+				this.disabled = !this.disabled
 			} else if (val === 'MACD Value') {
-				this.sc.value = this.value
-			}
-		},
-		getConditionVal(val) {
-			if (this.conditionRadio === 'MACD Value') {
-				this.sc.condition = this.maCondition
-			} else if (this.conditionRadio === 'MACD SL') {
-				this.sc.condition = this.slCondition
-			}
-		},
-		getMaValue(val) {
-			if (this.conditionRadio === 'MACD Value') {
-				this.sc.value = val
+				this.sc.value = 0
+				this.disabled = !this.disabled
 			}
 		},
 		setScLoad(val) {
@@ -128,8 +123,10 @@ export default {
 			}
 			if(val.value === "SL") {
 				this.conditionRadio = "MACD SL"
+				this.disabled = true
 			}else {
 				this.conditionRadio = "MACD Value"
+				this.disabled = false
 			}
 			this.sc = val
 		}

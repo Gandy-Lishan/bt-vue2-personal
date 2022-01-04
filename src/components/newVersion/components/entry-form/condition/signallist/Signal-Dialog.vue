@@ -30,12 +30,17 @@
         prop="description"
         align="center"
       ></el-table-column>
+            <el-table-column
+        label="direction"
+        prop="direction"
+        align="center"
+      ></el-table-column>
       <el-table-column label="analysis babel" prop="analysis" align="center" width="80px">
       </el-table-column>
         <el-table-column label="source" prop="user" align="center" width="80px">
           <template slot-scope="scope">
-            <span v-if="scope.row.user === 'system'">system</span>
-            <span v-else>custom</span>
+            <span v-if="scope.row.user === 'system'">System</span>
+            <span v-else>Custom</span>
           </template>
         </el-table-column>
       <el-table-column label="frequency" prop="frequency" align="center" width="80px">
@@ -53,18 +58,10 @@
     </el-pagination>
      <el-table :data="customList" border stripe size="mini">
       <el-table-column  width="35px">
-          <!-- <template slot-scope="scope">
-          <el-checkbox  v-model="value" :label="scope.row.id" change="checkEntry(scope)"></el-checkbox>
-          </template> -->
           <template slot-scope="scope">
             <el-radio v-model="radio" @change="checkEntry(scope.row)" :label="scope.row.id">{{ '' }}</el-radio>
           </template>
       </el-table-column>
-      <!-- <el-table-column label="select">
-        <template slot-scope="scope">
-          <el-button @click="selectSignal(scope.row)"></el-button>
-        </template>
-      </el-table-column> -->
       <el-table-column label="description" prop="description" align="center" width="80px">
              <el-table-column
         label="analysis basis"
@@ -136,13 +133,20 @@ export default {
       this.getCustomList("custom_signal")
     },
     async getSignallist(users) {
-            const user = users
+      console.log("9999999999999");
+      const user = users
       let analysisBasis = this.$store.state.entryIndicatorRadio
       let indicator
       let type = this.$store.state.entryDirection
-      console.log("类型",type);
-    if(this.type){
+    if(!type){
         type = JSON.stringify(['Long','Short'])}
+        if(this.criteria === 'exit' && type) {
+          if(type === "Long") {
+            type = "Short"
+          }else if(type === "Short") {
+            type = "Long"
+          }
+        }
       if(analysisBasis === 'sentiment'){
         indicator = ''
       }

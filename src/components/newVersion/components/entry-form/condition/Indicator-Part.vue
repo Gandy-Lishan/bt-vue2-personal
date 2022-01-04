@@ -91,7 +91,7 @@ export default {
 					obj.criteria = this.criteria
 					obj.index = this.tabIndex
 					obj.value = newVal.technicalIndicator
-					this.$store.commit('getTechValue', obj)
+					this.$store.commit('getTechVal', obj)
 				}
 			},
 			immediate: true,
@@ -163,7 +163,6 @@ export default {
 			obj.index = this.tabIndex
 			obj.value = item.value
 			this.$store.commit('clearSignal', obj)
-			this.$store.commit('getSentiValue', obj)
 			this.si.sentimentIndicator = item.value
 			this.$emit('getSentiVal', item.value)
 			// remove MA
@@ -196,8 +195,8 @@ export default {
 			obj.index = this.tabIndex
 			obj.value = item.value
 			this.$store.commit('clearSignal', obj)
-			this.$store.commit('getTechValue', obj)
 			this.si.technicalIndicator = item.value
+			this.$emit('getTechVal', item.value)
 			const vm = this
 			let val = item.value
 			const set = new Set([
