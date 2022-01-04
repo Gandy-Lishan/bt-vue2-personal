@@ -84,7 +84,7 @@
               v-if='["Two Moving Average CrossAbove"].indexOf(conditionList[index].condition_description) === 0 ||
                     ["Two Moving Average CrossBelow"].indexOf(conditionList[index].condition_description) === 0 ||
                     ["Three Moving Average CrossBelow"].indexOf(conditionList[index].condition_description) === 0' 
-              label="FastMA:" 
+              label="MACDFast:" 
               size="mini"
             >
               <el-input

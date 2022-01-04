@@ -50,9 +50,9 @@ export default new Vuex.Store({
     //   period: undefined
     // },
     // macdDefault: {
-    //   SlowMA: undefined,
-    //   FastMA: undefined,
-    //   SL: undefined
+    //   MACDSlow: undefined,
+    //   MACDFast: undefined,
+    //   MACDSL: undefined
     // },
     // rsiDefault: {
     //   over_bought_bound: undefined,

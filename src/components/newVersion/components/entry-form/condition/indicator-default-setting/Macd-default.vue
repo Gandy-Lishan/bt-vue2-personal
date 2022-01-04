@@ -3,6 +3,7 @@
 					<div><h3 class="miniNote">Indicator Default Setting</h3></div>
 					<div class="extremumItemBox">
 					<el-form-item label="Slow moving average">
+<<<<<<< HEAD
 						<el-input v-model="ids.SlowMA" oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"></el-input>
 					</el-form-item>
 					<el-form-item label="Fast moving average">
@@ -10,6 +11,15 @@
 					</el-form-item>
 					<el-form-item label="Signal line">
 						<el-input  v-model="ids.SL" oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"></el-input>
+=======
+						<el-input v-model="ids.MACDSlow"></el-input>
+					</el-form-item>
+					<el-form-item label="Fast moving average">
+						<el-input v-model="ids.MACDFast"></el-input>
+					</el-form-item>
+					<el-form-item label="Signal line">
+						<el-input  v-model="ids.MACDSL"></el-input>
+>>>>>>> 676d03eda07ef03394689e59cade45c67e66fd17
 					</el-form-item>
 					</div>
 				</div>
@@ -21,9 +31,9 @@ export default {
   data() {
     return {
       ids: {
-      SlowMA: 26,
-      FastMA: 12,
-      SL: 9
+      MACDSlow: 26,
+      MACDFast: 12,
+      MACDSL: 9
       }
     }
   },
