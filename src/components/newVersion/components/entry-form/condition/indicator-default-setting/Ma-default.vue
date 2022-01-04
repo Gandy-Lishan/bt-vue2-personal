@@ -13,6 +13,7 @@
 </template>
 <script>
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
 	extends: base,
 	data() {
@@ -24,7 +25,27 @@ export default {
 	},
 	methods: {
 		getMaRadio(val) {
+			console.log(val)
 			this.ids.ma_category = val
+			if(val == 'SMA'){
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					var sd = CIQ.stxx.layout.studies[studyInstanceName];
+					if(sd.type == "ma"){
+						let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
+						console.log(dialogHelper.sd)
+						dialogHelper.updateStudy({ inputs: { Type: "simple" } });
+					}
+				}	
+			}else if(val == 'EMA'){
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					var sd = CIQ.stxx.layout.studies[studyInstanceName];
+					if(sd.type == "ma"){
+						let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
+						console.log(dialogHelper.sd)
+						dialogHelper.updateStudy({ inputs: { Type: "exponential" } });
+					}
+				}	
+			}
 		}
 	}
 }

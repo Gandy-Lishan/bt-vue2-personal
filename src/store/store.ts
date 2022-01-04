@@ -283,7 +283,7 @@ export default new Vuex.Store({
         }
         data = Object.assign(data,newData)
         state.backtestInfo[criteria]["signals"][index] = data
-        console.log("监听数据", state.backtestInfo[criteria]["signals"][index]);
+        //console.log("监听数据", state.backtestInfo[criteria]["signals"][index]);
         
       }
       //console.log(state.backtestInfo.entry.signals);

@@ -121,7 +121,7 @@ export default {
 	watch: {
 		getEditBacktestData: {
 			handler(newVal) {
-				console.log("entry-inject11111",newVal);
+				//console.log("entry-inject11111",newVal);
 				const data = newVal.entry
 				this.fd.description = data.description
 				this.fd.direction = data.direction
@@ -159,7 +159,7 @@ export default {
 			this.$store.commit('setFd', this.fd)
 		}, 3000),
 		getFrequency(val) {
-			console.log(val)
+			//console.log(val)
 			this.fd.frequency = val
 			this.fd.criteria = 'entry'
 			this.$store.commit('setFd', this.fd)
