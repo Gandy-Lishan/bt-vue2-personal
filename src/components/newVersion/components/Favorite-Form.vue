@@ -183,11 +183,7 @@ export default {
 			this.loading = true
 			let page = this.queryInfo.page
 			const res = await this.$http.get(
-<<<<<<< HEAD
 				'/dev/backtest/?page='+ page
-=======
-				'/dev/backtest/?page='+ this.queryInfo.page
->>>>>>> 676d03eda07ef03394689e59cade45c67e66fd17
 			)
 			if (res.status === 200) {
 				console.log(res)

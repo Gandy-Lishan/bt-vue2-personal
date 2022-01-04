@@ -91,11 +91,7 @@ export default {
 			],
 			sc: {
 				condition: 3,
-<<<<<<< HEAD
 				value: 0
-=======
-				value: 'MACDSL'
->>>>>>> 676d03eda07ef03394689e59cade45c67e66fd17
 			},
 			disabled: false,
 			conditionRadio: 'MACD Value',
@@ -113,10 +109,7 @@ export default {
 		getConditionRadio(val) {
 			if (val === 'MACD SL') {
 				this.sc.value = 'MACDSL'
-<<<<<<< HEAD
 				this.disabled = !this.disabled
-=======
->>>>>>> 676d03eda07ef03394689e59cade45c67e66fd17
 			} else if (val === 'MACD Value') {
 				this.sc.value = 0
 				this.disabled = !this.disabled
