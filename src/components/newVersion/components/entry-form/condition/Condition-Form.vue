@@ -1,7 +1,16 @@
 <template>
 	<div>
 		<div class="signal-condition-box">
-			<div><h2 class="note">Signal Condition</h2></div>
+			<div>
+				<h2 class="note">Signal Condition</h2>
+				<el-tooltip
+					class="item"
+					effect="dark"
+					content="please refer to the above Extreme Optimism / Extreme Pessimism to enter a number"
+					placement="bottom-start"
+					><i class="iconfont icon-tishi"></i
+				></el-tooltip>
+			</div>
 			<div class="sentimentConditionBox">
 				<el-radio
 					v-model="conditionRadio"
@@ -31,10 +40,10 @@
 						placement="bottom"
 					>
 						<el-input
-					       :disabled="disabled"
+							:disabled="disabled"
 							v-model="sc.value"
 							placeholder="Input Value"
-							oninput="value=value.replace(/[-+]?[^0-9.]/g,'')"
+							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 						></el-input>
 					</el-tooltip>
 				</div>
@@ -55,7 +64,7 @@
 					>
 						<el-input
 							@change="setPeriod"
-					        :disabled="!disabled"
+							:disabled="!disabled"
 							placeholder="Input Period"
 							oninput="value=value.replace(/[^\d]/g,'')"
 							v-model="sc.period"
@@ -64,7 +73,7 @@
 					<el-select
 						v-model="sc.condition"
 						filterable
-					    :disabled="!disabled"
+						:disabled="!disabled"
 						placeholder="Please select condition"
 					>
 						<el-option
@@ -82,17 +91,26 @@
 						placement="bottom"
 					>
 						<el-input
-						   :disabled="!disabled"
+							:disabled="!disabled"
 							v-model="sc.value"
 							placeholder="Input Value"
-							oninput="value=value.replace(/[^0-9.]/g,'')"
+							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 						></el-input>
 					</el-tooltip>
 				</div>
 			</div>
 		</div>
 		<div class="signalDescriptionBox">
-			<div><h2 class="note">Signal Description</h2></div>
+			<div>
+				<h2 class="note">Signal Description</h2>
+				<el-tooltip
+					class="item"
+					effect="dark"
+					content="Your signal description"
+					placement="bottom-start"
+					><i class="iconfont icon-tishi"></i
+				></el-tooltip>
+			</div>
 			<el-button plain style="margin: 5px 0px 5px 0px">{{
 				`${sentiVal}&nbsp;&nbsp;${sc.period ? sc.period : ''}&nbsp;&nbsp;${
 					conditions[sc.condition].label
@@ -105,6 +123,7 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
+import deepClone1 from '@/tools/deepClone.js'
 export default {
 	extends: base,
 	props: { sentiVal: String },
@@ -123,11 +142,23 @@ export default {
 				period: ''
 			},
 			disabled: false,
-			conditionRadio: 'Sentiment Value',
-			des: this.$store.state.backtestInfo[this.criteria].signals[this.tabIndex]
+			conditionRadio: 'Sentiment Value'
+		}
+	},
+	computed: {
+		...mapGetters(['getIsClearForm']),
+		isClearForm() {
+			return this.getIsClearForm
 		}
 	},
 	watch: {
+		isClearForm: {
+			handler(newVal) {
+				let init = deepClone1(this.$options.data())
+				Object.assign(this.$data, init)
+				console.log('conditionForm', Object.assign(this.$data, init))
+			}
+		},
 		sentiVal: {
 			handler(newVal) {
 				this.sentiVal = newVal
@@ -137,7 +168,7 @@ export default {
 	methods: {
 		getConditionRadio(val) {
 			if (val === 'Sentiment Value') {
-				if("period" in this.sc) {
+				if ('period' in this.sc) {
 					delete this.sc.period
 				}
 				this.disabled = !this.disabled
@@ -222,6 +253,9 @@ export default {
 	}
 	.sentimentConditionBox .el-radio {
 		line-height: 35px;
+	}
+	.note {
+		display: inline-block;
 	}
 	.sentimentConditionBox .el-select .el-input {
 		flex: 1;

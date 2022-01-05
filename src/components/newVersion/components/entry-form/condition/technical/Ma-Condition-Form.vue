@@ -1,7 +1,16 @@
 <template>
 	<div>
 		<div class="signal-condition-box">
-			<div><h2 class="note">Signal Condition</h2></div>
+			<div>
+				<h2 class="note">Signal Condition</h2>
+				<el-tooltip
+					class="item"
+					effect="dark"
+					content="please refer to the above Extreme Optimism / Extreme Pessimism to enter a number"
+					placement="bottom-start"
+					><i class="iconfont icon-tishi"></i
+				></el-tooltip>
+			</div>
 			<div class="sentimentConditionBox">
 				<el-radio
 					v-model="conditionRadio"
@@ -38,7 +47,7 @@
 						v-model="sc.period"
 						:disabled="disabled"
 						@input="getSCvalue"
-						oninput="value=value.replace(/[-+]?[^\d]/g,'')"
+						oninput="value=value.replace(/[^\d]/g,'')"
 						placeholder="Input Period"
 					></el-input>
 				</div>
@@ -55,7 +64,7 @@
 						:disabled="!disabled"
 						v-model="sc.ma_period"
 						placeholder="Input Period"
-						oninput="value=value.replace(/[-+]?[^\d]/g,'')"
+						oninput="value=value.replace(/[^\d]/g,'')"
 					></el-input>
 					<el-select
 						v-model="sc.condition"
@@ -85,13 +94,22 @@
 						:disabled="!disabled"
 						placeholder="Input Period"
 						@input="getMaValue"
-						oninput="value=value.replace(/[-+]?[^\d]/g,'')"
+						oninput="value=value.replace(/[^\d]/g,'')"
 					></el-input>
 				</div>
 			</div>
 		</div>
 		<div class="signalDescriptionBox">
-			<div><h2 class="note">Signal Description</h2></div>
+			<div>
+				<h2 class="note">Signal Description</h2>
+				<el-tooltip
+					class="item"
+					effect="dark"
+					content="Your signal description"
+					placement="bottom-start"
+					><i class="iconfont icon-tishi"></i
+				></el-tooltip>
+			</div>
 			<el-button plain style="margin: 5px 0px 5px 0px">{{
 				techVal +
 				'&nbsp;&nbsp;' +
@@ -140,11 +158,11 @@ export default {
 		getConditionRadio(val) {
 			console.log(val)
 			if (val === 'Symbol Close') {
-				if("ma_period" in this.sc) {
-				 delete this.sc.ma_period
+				if ('ma_period' in this.sc) {
+					delete this.sc.ma_period
 				}
 				this.disabled = !this.disabled
-			} else if(val === 'Moving Average'){
+			} else if (val === 'Moving Average') {
 				this.sc.ma_period = 5
 				this.disabled = !this.disabled
 			}
@@ -185,6 +203,9 @@ export default {
 </script>
 <style lang="less" scoped>
 @media only screen and (min-width: 1600px) {
+	.note {
+		display: inline-block;
+	}
 	.sentimentConditionBox {
 		display: flex;
 		justify-content: space-between;
@@ -231,6 +252,9 @@ export default {
 }
 
 @media (min-width: 900px) and (max-width: 1599px) {
+	.note {
+		display: inline-block;
+	}
 	.sentimentConditionBox {
 		display: flex;
 		flex-direction: column;

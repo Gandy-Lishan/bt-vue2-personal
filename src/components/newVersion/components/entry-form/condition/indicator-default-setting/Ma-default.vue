@@ -1,6 +1,15 @@
 <template>
 	<div class="extremumBox">
-		<div><h3 class="miniNote">Indicator Default Setting</h3></div>
+		<div>
+			<h3 class="miniNote">Indicator Default Setting</h3>
+			<el-tooltip
+				class="item"
+				effect="dark"
+				content="Indicator Default Setting"
+				placement="bottom-start"
+				><i class="iconfont icon-tishi"></i
+			></el-tooltip>
+		</div>
 		<div class="extremumItemBox">
 			<el-radio-group v-model="ids.ma_category">
 				<el-radio label="SMA" style="margin-bottom: 30px"
@@ -33,11 +42,17 @@ export default {
 		margin-left: 10px;
 		flex: 0.6;
 	}
+	.miniNote {
+		display: inline-block;
+	}
 }
 @media (min-width: 900px) and (max-width: 1599px) {
 	.extremumBox .el-radio-group {
 		display: flex;
 		justify-content: space-between;
+	}
+	.miniNote {
+		display: inline-block;
 	}
 }
 </style>

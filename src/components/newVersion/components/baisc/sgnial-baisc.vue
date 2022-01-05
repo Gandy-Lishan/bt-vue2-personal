@@ -18,12 +18,24 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['getExtremeValue']),
+		...mapGetters(['getExtremeValue', 'getIsClearForm']),
 		extremeValue() {
 			return this.getExtremeValue
+		},
+		isClearForm() {
+			return this.getIsClearForm
 		}
 	},
 	watch: {
+		isClearForm: {
+			handler(newVal) {
+				let init = this.$options.data()
+				this.ids = {
+					extreme_optimism: '',
+					extreme_pessimism: ''
+				}
+			}
+		},
 		ids: {
 			handler(newVal) {
 				//console.log('ids55555555555', newVal)
@@ -57,7 +69,6 @@ export default {
 			deep: true
 		},
 		// form detail
-
 		// backtest data
 		bd: {
 			handler(newVal) {
@@ -74,7 +85,6 @@ export default {
 			handler(newVal) {
 				const vm = this
 				if (newVal) {
-					console.log('dialog数据', newVal)
 					vm.setIdsLoad(newVal)
 				}
 			},

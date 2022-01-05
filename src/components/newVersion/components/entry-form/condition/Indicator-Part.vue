@@ -45,12 +45,12 @@
 			</div>
 		</el-form-item>
 	</div>
-	
 </template>
 <script>
 import { Store, mapGetters } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
+import deepClone1 from '@/tools/deepClone.js'
 export default {
 	extends: base,
 	props: {
@@ -64,15 +64,25 @@ export default {
 				technicalIndicator: ''
 			},
 			isCheckedIndicators: false,
-			sentimentIndicatorList: [],
-			technicaltIndicatorList: []
+			sentimentIndicatorList: []
 		}
 	},
 	mounted() {
 		this.loadSentimentList()
-		this.technicaltIndicatorList = this.loadShortLong()
+	},
+	computed: {
+		...mapGetters(['getIsClearForm']),
+		isClearForm() {
+			return this.getIsClearForm
+		}
 	},
 	watch: {
+		isClearForm: {
+			handler(newVal) {
+				let init = deepClone1(this.$options.data())
+				Object.assign(this.$data, init)
+			}
+		},
 		indicatorEditData: {
 			handler(newVal) {
 				console.log('传顺的数据包', newVal)
@@ -139,7 +149,7 @@ export default {
 		},
 		// technical search
 		indicatorTechnicalSearch(queryString, cb) {
-			var technicaltIndicatorList = this.technicaltIndicatorList
+			var technicaltIndicatorList = this.loadShortLong()
 			var results = queryString
 				? technicaltIndicatorList.filter(
 						this.createTechnicalFilter(queryString)
@@ -167,16 +177,17 @@ export default {
 			this.$emit('getSentiVal', item.value)
 			// remove MA
 			var activatedMAList = this.$store.state.activatedMA
-			if(obj.criteria == "entry"){
+			if (obj.criteria == 'entry') {
 				var MAListIndex = activatedMAList.findIndex(
-					(item) => item.url == this.$store.state.indicators.formIndicators.entry
+					(item) =>
+						item.url == this.$store.state.indicators.formIndicators.entry
 				)
 				if (MAListIndex != -1) {
 					activatedMAList.splice(MAListIndex, 1)
 				}
 				this.$store.commit('getMA', activatedMAList)
 				this.$store.commit('getEntryIndicators', item.url)
-			}else{
+			} else {
 				var MAListIndex = activatedMAList.findIndex(
 					(item) => item.url == this.$store.state.indicators.formIndicators.exit
 				)
@@ -186,7 +197,7 @@ export default {
 				this.$store.commit('getMA', activatedMAList)
 				this.$store.commit('getExitIndicators', item.url)
 			}
-			
+
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
@@ -203,30 +214,34 @@ export default {
 				['Commodity Channel Index', 'ST CCI'],
 				['Relative Strength Index', 'rsi'],
 				['Moving Average', 'ma'],
-				['MACD', 'macd'],
+				['MACD', 'macd']
 			])
 			const newMap = new Map(set)
-			for(let item of newMap.entries()){
-			  if(val === item[0]){
-				  console.log(item)
-				  this.$emit("getTechIndiValue", item[1])
+			for (let item of newMap.entries()) {
+				if (val === item[0]) {
+					console.log(item)
+					this.$emit('getTechIndiValue', item[1])
 					//这里还没加MA所以先不清除已有的MA
-					if(obj.criteria == "entry"){
+					if (obj.criteria == 'entry') {
 						this.$store.commit('getEntryIndicators', item[1])
-					}else{
+					} else {
 						this.$store.commit('getExitIndicators', item[1])
 					}
 					// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
 					let techIndicators = []
 					techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
 					techIndicators.push(item[1])
-					this.$store.commit('getTechnicalIndicators',techIndicators)
+					this.$store.commit('getTechnicalIndicators', techIndicators)
 					CIQ.addIndicators()
 					// remove MA from Vuex after loading Tech
 					var activatedMAList = CIQ.store.state.activatedMA
-					activatedMAList.splice(activatedMAList.findIndex(item=>item.url==item[1]),1)
-					CIQ.store.commit("getMA",activatedMAList)
-            }}
+					activatedMAList.splice(
+						activatedMAList.findIndex((item) => item.url == item[1]),
+						1
+					)
+					CIQ.store.commit('getMA', activatedMAList)
+				}
+			}
 			vm.si.technicalIndicator = item.value
 		},
 		changeIndicatorChecked() {

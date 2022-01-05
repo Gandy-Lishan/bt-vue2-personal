@@ -39,7 +39,9 @@
 								>
 									<div class="clearEntryBox">
 										<h1 class="titleTxt">Entry Criteria</h1>
-										<el-button class="clearBtn" round>Clear Form</el-button>
+										<el-button class="clearBtn" round @click="clearForm"
+											>Clear Form</el-button
+										>
 									</div>
 									<entry-form
 										ref="entryFormChild"
@@ -57,7 +59,10 @@
 											<h1 class="titleTxt">Exit Criteria</h1>
 											<el-button class="clearBtn" round>Clear Form</el-button>
 										</div>
-										<div class="backtestBtns">
+										<div
+											class="backtestBtns"
+											:class="backtestBtnVisabled ? 'active' : ''"
+										>
 											<el-button round @click="saveBacktest"
 												>Save Backtest</el-button
 											>
@@ -66,6 +71,7 @@
 									<exit-form
 										style="height: 90%; overflow-y: auto; overflow-x: hidden"
 										ref="exitFormChild"
+										@showBacktestBtn="showBacktestBtn"
 										:criteria="'exit'"
 										:fdLoad="fdLoad"
 										@goToFavorite="goToFavorite"
@@ -129,7 +135,8 @@ export default {
 			activeTag: 'first-child-n1',
 			fdLoad: {},
 			backtestEditData: {},
-			pubilcEditData: { entry: { singals: [] }, exit: { singals: [] } }
+			pubilcEditData: { entry: { singals: [] }, exit: { singals: [] } },
+			backtestBtnVisabled: true
 		}
 	},
 	provide() {
@@ -139,6 +146,20 @@ export default {
 	},
 	mounted() {
 		this.$cookies.set('username', 'test')
+		// 监听用户按下 tab 键
+		let vm = this
+		document.onkeydown = function (e) {
+			let keyNum = window.event ? e.keyCode : e.which
+			if (keyNum == 9) {
+				let num = vm.activeTag.substr(vm.activeTag.length - 1, 1)
+				if (num >= 1 && num < 3) {
+					num++
+					vm.activeTag = vm.activeTag.slice(0, 13) + num
+				} else if (num == 3) {
+					vm.activeTag = 'first-child-n1'
+				}
+			}
+		}
 	},
 	components: {
 		chart: chart,
@@ -186,6 +207,9 @@ export default {
 		},
 		saveBacktest() {
 			let vm = this
+			this.$message.success('Save successfully')
+			vm.goToFavorite()
+			this.$refs.favoriteChild.getBacktestList('system')
 			const backtestData = deepClone1(this.$store.state.backtestInfo)
 			const signalEntryList = deepClone1(backtestData.entry.signals)
 			const signalExitList = deepClone1(backtestData.exit.signals)
@@ -261,7 +285,6 @@ export default {
 				.then((res) => {
 					if (res.status === 201) {
 						this.$message.success('Save successfully')
-
 						vm.goToFavorite()
 						this.$refs.favoriteChild.getBacktestList('system')
 					} else {
@@ -290,10 +313,19 @@ export default {
 			})
 			this.activeName = 'first'
 		},
+		showBacktestBtn() {
+			this.backtestBtnVisabled = !this.backtestBtnVisabled
+		},
+		clearForm() {
+			this.$store.commit('tryClear')
+		}
 	}
 }
 </script>
 <style lang="less" scoped>
+.active {
+	display: none;
+}
 @media only screen and (min-width: 1600px) {
 	.home_container {
 		height: 100%;

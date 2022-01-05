@@ -196,7 +196,7 @@
 	}
 	.el-table .cell {
 		white-space: nowrap;
-		overflow: visible;
+		overflow:  hidden;
 		text-overflow: ellipsis;
    }
    .cell .el-row .el-button {
