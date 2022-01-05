@@ -25,7 +25,7 @@ export default {
 	},
 	methods: {
 		getMaRadio(val) {
-			console.log(val)
+			//console.log(val)
 			this.ids.ma_category = val
 			if(val == 'SMA'){
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {

@@ -3,13 +3,13 @@ class SignalDecodeIDS {
         this.ids_dict = [this.slow_fast_sl, this.eo_ep, this.over_bought_sold_bound_period]
     }
     slow_fast_sl(val) {
-        var re = /^SlowMA(-?0?\d*?\.?\d*?)\/FastMA(-?0?\d*?\.?\d*?)\/SL(-?0?\d*?\.?\d*?)$/
+        var re = /^MACDSlow(-?0?\d*?\.?\d*?)\/MACDFast(-?0?\d*?\.?\d*?)\/MACDSL(-?0?\d*?\.?\d*?)$/
         if (val.search(re) == -1) return false
         // var array = val.match(re)
         var data = {
-            "SlowMA": RegExp.$1,
-            "FastMA": RegExp.$2,
-            "SL": RegExp.$3
+            "MACDSlow": RegExp.$1,
+            "MACDFast": RegExp.$2,
+            "MACDSL": RegExp.$3
         }
         return data
     }
@@ -60,7 +60,7 @@ class SignalDecodeIDS {
 
 // let a = new SignalDecodeIDS();
 // a.decode("EO120/EP20")
-// a.decode("SlowMA26/FastMA12/SL9")
+// a.decode("MACDSlow26/MACDFast12/MACDSL9")
 class SignalDecodeSC {
     constructor() {
         this.sc_dict = [
@@ -252,8 +252,8 @@ class SignalCode {
         var re_str = "IDS:"
         if (val_keys.indexOf("extreme_optimism") !== -1 && val_keys.indexOf("extreme_pessimism") !== -1) {
             re_str += "EO" + val["extreme_optimism"] + "/EP" + val["extreme_pessimism"];
-        } else if (val_keys.indexOf("SlowMA") !== -1 && val_keys.indexOf("FastMA") !== -1 && val_keys.indexOf("SL") !== -1) {
-            re_str += "SlowMA" + val["SlowMA"] + "/FastMA" + val["FastMA"] + "/SL" + val["SL"];
+        } else if (val_keys.indexOf("MACDSlow") !== -1 && val_keys.indexOf("MACDFast") !== -1 && val_keys.indexOf("MACDSL") !== -1) {
+            re_str += "MACDSlow" + val["MACDSlow"] + "/MACDFast" + val["MACDFast"] + "/MACDSL" + val["MACDSL"];
         } else if (val_keys.indexOf("ma_category") !== -1) {
             re_str += val["ma_category"]
         } else if (val_keys.indexOf("over_bought_bound") !== -1 && val_keys.indexOf("over_sold_bound") !== -1 && val_keys.indexOf("period") !== -1) {
@@ -361,8 +361,8 @@ const a = new SignalCode()
 // a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SV/3/20")
 // a.decode("TI:MA;IDS:EMA;SC:SCMA/3/MA20")
 // a.decode("TI:MA;IDS:SMA;SC:MAMA5/3/MA20")
-// a.decode("TI:MACD;IDS:SlowMA25/FastMA25/SL9;SC:MACDV/3/0")
-// a.decode("TI:MACD;IDS:SlowMA25/FastMA25/SL9;SC:MACDV/3/MACDSL")
+// a.decode("TI:MACD;IDS:MACDSlow25/MACDFast25/SL9;SC:MACDV/3/0")
+// a.decode("TI:MACD;IDS:MACDSlow25/MACDFast25/SL9;SC:MACDV/3/MACDSL")
 // a.decode("TI:Commodity Channel Index;IDS:OBB20/OSB80/Period20;SC:CCIV/3/10.0")
 // a.decode("TI:Commodity Channel Index;IDS:OBB20/OSB80/Period20;SC:CCIV/4/90.0")
 // a.decode("TI:RSI;IDS:OBB200/OSB-200/Period20.000;SC:RSIV/3/-200.00")
@@ -399,17 +399,17 @@ const a = new SignalCode()
 // },{
 //     'analysis': 'Technical', 
 //     'indicator': 'MACD', 
-//     'SlowMA': '25',
-//     'FastMA': '12',
-//     'SL': '9',
+//     'MACDSlow': '25',
+//     'MACDFast': '12',
+//     'MACDSL': '9',
 //     'value': '0', 
 //     'condition': '3'
 // },{
 //     'analysis': 'Technical', 
 //     'indicator': 'MACD', 
-//     'SlowMA': '25',
-//     'FastMA': '12',
-//     'SL': '9',
+//     'MACDSlow': '25',
+//     'MACDFast': '12',
+//     'MACDSL': '9',
 //     'value': 'MACDSL', 
 //     'condition': '3'
 // },{

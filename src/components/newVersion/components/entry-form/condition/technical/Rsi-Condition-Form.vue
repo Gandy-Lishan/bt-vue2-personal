@@ -25,7 +25,7 @@
 		<div class="signalDescriptionBox">
 			<div><h2 class="note">Signal Description</h2></div>
 			<el-button plain style="margin: 5px 0px 5px 0px"
-				>{{ des.technicalIndicator + "&nbsp;&nbsp;"+ conditions[sc.condition].label+ "&nbsp;&nbsp;"+ sc.value}}</el-button
+				>{{ techVal + "&nbsp;&nbsp;"+ conditions[sc.condition].label+ "&nbsp;&nbsp;"+ sc.value}}</el-button
 			>
 		</div>
 	</div>
@@ -34,6 +34,7 @@
 import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
 export default {
 	extends: base,
+	props: { techVal: String },
 	data() {
 		return {
 			conditionRadio: 'RSI Value',
@@ -45,8 +46,15 @@ export default {
 				{ value: 4, label: 'CrossBelow' }
 			],
 			sc: {condition: 3,
-			value: ""},
+			value: 30},
 			des: this.$store.state.backtestInfo[this.criteria].signals[this.tabIndex]
+		}
+	},
+		watch: {
+		techVal: {
+			handler(newVal) {
+				this.techVal = newVal
+			}
 		}
 	},
 	methods: {

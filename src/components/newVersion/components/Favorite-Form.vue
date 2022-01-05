@@ -3,18 +3,17 @@
 		<el-col :span="24">
 			<div class="favoriteForm_container">
 				<el-table :data="backtestList" v-loading="loading">
-					<el-table-column label="Name" align="center" prop="name" show-overflow-tooltip="true">
+					<el-table-column label="Name" align="center" prop="name">
 					</el-table-column>
-					<el-table-column label="Symbol" align="center" prop="symbol" show-overflow-tooltip="true">
+					<el-table-column label="Symbol" align="center" prop="symbol">
 					</el-table-column>
 					<el-table-column
 						label="description"
 						align="center"
-            show-overflow-tooltip="true"
 						prop="description"
 					>
 					</el-table-column>
-					<el-table-column show-overflow-tooltip="true">
+					<el-table-column>
 						<template slot-scope="scope">
 							<div class="dataBox">
 								<el-button size="mini" type="info" plain>{{
@@ -180,22 +179,19 @@ export default {
 	},
 	methods: {
 		async getBacktestList(strategy) {
+			console.log(111);
 			this.loading = true
-			const params = {
-				page: this.queryInfo.page
-			}
+			let page = this.queryInfo.page
 			const res = await this.$http.get(
-				'/dev/backtest/?page'+ this.queryInfo.page
+				'/dev/backtest/?page='+ page
 			)
 			if (res.status === 200) {
 				console.log(res)
 				this.loading = false
 				this.backtestList = res.data.results
 				this.queryInfo.total = res.data.count
-				this.$emit("goToFavoritePage")
 			} else {
 				this.loading = false
-				this.$emit("goToFavoritePage")
 			}
 		},
 		checkBacktest() {
@@ -301,11 +297,13 @@ export default {
       )
 		},
 		viewBacktestResults(row) {
+			console.log(row);
 			this.$store.commit('getRunBacktestData', row)
 			this.$emit('goBacktestResultForm',row)
 		},
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
+			console.log("当前页数",this.queryInfo.page);
 			this.getBacktestList()
 		},
     showDes(row) {

@@ -13,17 +13,24 @@
 					<chart width="100%" height="100%"></chart>
 				</div>
 			</header>
-			<main class="main" style="padding-bottom: 50px;">
+			<main class="main" style="padding-bottom: 50px">
 				<div class="mainTagbar">
-					<el-tabs  v-model="activeName" type="card">
-						<el-tab-pane style="height:90%;overflow-x:hidden;"  label="Backtest Setup" name="first">
+					<el-tabs v-model="activeName" type="card">
+						<el-tab-pane
+							style="height: 90%; overflow-x: hidden"
+							label="Backtest Setup"
+							name="first"
+						>
 							<el-tabs v-model="activeTag" type="card">
 								<el-tab-pane
 									style="height: 90%; overflow-y: auto; overflow-x: hidden"
 									label="Backtest Data"
 									name="first-child-n1"
 								>
-									<backtest-setup-form ref="setupChild" :backtestEditData="backtestEditData"></backtest-setup-form>
+									<backtest-setup-form
+										ref="setupChild"
+										:backtestEditData="backtestEditData"
+									></backtest-setup-form>
 								</el-tab-pane>
 								<el-tab-pane
 									style="height: 90%; overflow-y: auto; overflow-x: hidden"
@@ -38,7 +45,6 @@
 										ref="entryFormChild"
 										:criteria="'entry'"
 										:fdLoad="fdLoad"
-						
 									></entry-form>
 								</el-tab-pane>
 								<el-tab-pane
@@ -63,7 +69,6 @@
 										:criteria="'exit'"
 										:fdLoad="fdLoad"
 										@goToFavorite="goToFavorite"
-					
 									></exit-form>
 								</el-tab-pane>
 							</el-tabs>
@@ -115,6 +120,7 @@ import strategyFrom from './components/Strategy-Form.vue'
 import backtestPerformance from './components/Backtest-Performance.vue'
 import entryForm from './components/entry-form/Entry-Form.vue'
 import exitForm from '@/components/newVersion/components/entry-form/Exit-Form.vue'
+import deepClone1 from '@/tools/deepClone.js'
 export default {
 	data() {
 		return {
@@ -122,10 +128,8 @@ export default {
 			activeName: 'first',
 			activeTag: 'first-child-n1',
 			fdLoad: {},
-			backtestEditData: {
-			},
-			pubilcEditData: {entry:{singals:[]},
-				exit:{singals:[]}}
+			backtestEditData: {},
+			pubilcEditData: { entry: { singals: [] }, exit: { singals: [] } }
 		}
 	},
 	provide() {
@@ -133,7 +137,7 @@ export default {
 			editBacktestData: () => this.pubilcEditData
 		}
 	},
-	mounted(){
+	mounted() {
 		this.$cookies.set('username', 'test')
 	},
 	components: {
@@ -147,12 +151,9 @@ export default {
 		'exit-form': exitForm
 	},
 	computed: {
-		...mapGetters(['getDialogFdData',"getGoToFavoritePage"]),
+		...mapGetters(['getDialogFdData']),
 		fdDialogData() {
 			return this.getDialogFdData
-		},
-		goToFavoritePage() {
-			return this.getGoToFavoritePage
 		}
 	},
 	watch: {
@@ -168,13 +169,6 @@ export default {
 			},
 			immediate: true,
 			deep: true
-		},
-		goToFavoritePage: {
-			handler(newVal) {
-				if(newVal) {
-					this.activeName = "third"
-				}
-			}
 		}
 	},
 	methods: {
@@ -191,10 +185,10 @@ export default {
 			this.backtestResult = data
 		},
 		saveBacktest() {
-			console.log('save data', this.$store.state.backtestInfo)
-			const backtestData = this.$store.state.backtestInfo
-			const signalEntryList = backtestData.entry.signals
-			const signalExitList = backtestData.exit.signals
+			let vm = this
+			const backtestData = deepClone1(this.$store.state.backtestInfo)
+			const signalEntryList = deepClone1(backtestData.entry.signals)
+			const signalExitList = deepClone1(backtestData.exit.signals)
 
 			signalEntryList.forEach((item) => {
 				if (item.sentimentIndicator) {
@@ -234,9 +228,6 @@ export default {
 					code: code
 				}
 				entry_signal_list.push(singal)
-				// backtestData.entry = {signalList}
-				// backtestData.entry = [{description: 'entry test', code: ""}]
-				// backtestData.entry[0].code = code
 			}
 			delete backtestData.exit.signals
 			for (var i in signalExitList) {
@@ -245,11 +236,6 @@ export default {
 					code: code
 				}
 				exit_signal_list.push(singal)
-
-				// delete backtestData.exit.description
-				// delete backtestData.exit.frequency
-				// backtestData.exit = [{description: 'exit test', code: ""}]
-				// backtestData.exit[0].code = code
 			}
 			let entry = {
 				description: backtestData.entry.description,
@@ -268,8 +254,6 @@ export default {
 
 			backtestData.entry = JSON.stringify(entry)
 			backtestData.exit = JSON.stringify(exit)
-
-			console.log('保存的backtest信息', backtestData)
 			this.$http
 				.post('/dev/backtest/', this.$qs.stringify(backtestData), {
 					withCredentials: true
@@ -277,7 +261,8 @@ export default {
 				.then((res) => {
 					if (res.status === 201) {
 						this.$message.success('Save successfully')
-						this.$emit("goToFavoritePage")
+
+						vm.goToFavorite()
 						this.$refs.favoriteChild.getBacktestList('system')
 					} else {
 						this.$message.success('Save failed')
@@ -286,12 +271,11 @@ export default {
 		},
 		goTobacktestSetupForm(id) {
 			// backtestEditData
-			this.activeTag = "first-child-n1"
-			console.log(8888888);
+			this.activeTag = 'first-child-n1'
 			this.backtestEditData = {}
-			this.$http.get('/dev/seeparams/' + id + '/').then(res => {
+			this.$http.get('/dev/seeparams/' + id + '/').then((res) => {
 				let data = res.data
-				console.log("res.data",data);
+				console.log('res.data', data)
 				data.old_uuid = id
 				data.entry = JSON.parse(data.entry)
 				data.exit = JSON.parse(data.exit)
@@ -300,12 +284,12 @@ export default {
 				delete data.backtest_id
 				delete data.user_id
 				delete data.uuid
-				this.pubilcEditData = Object.assign(this.pubilcEditData,data)
+				this.pubilcEditData = Object.assign(this.pubilcEditData, data)
 
 				this.backtestEditData = data
 			})
-			this.activeName = "first"
-		}
+			this.activeName = 'first'
+		},
 	}
 }
 </script>
@@ -363,7 +347,7 @@ export default {
 			align-items: center;
 			margin-right: 10px;
 			.el-button {
-				color: #0000FF;
+				color: #0000ff;
 			}
 		}
 	}
@@ -412,7 +396,7 @@ export default {
 			font-size: 1.5rem !important;
 		}
 	}
-}	
+}
 
 .home_container {
 	height: 100%;

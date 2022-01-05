@@ -16,8 +16,9 @@
 						@getIndicatorRadio="getIndicatorRadio"
 						@getTechIndiValue="getTechIndiValue"
 						@clearTechIndiValue="clearTechIndiValue"
-						:indicatorEditData= "indicatorEditData"
+						:indicatorEditData="indicatorEditData"
 						@getSentiVal="getSentiVal"
+						@getTechVal="getTechVal"
 						:tabIndex="tabIndex"
 						:criteria="criteria"
 						ref="indicatorPart"
@@ -73,12 +74,14 @@
 			<cci-condition-form
 				v-if="indicatorRadio === 'technical' && techIndiValue === 'ST CCI'"
 				:tabIndex="tabIndex"
+				:techVal="techVal"
 				:criteria="criteria"
 				:scLoad="scLoad"
 			></cci-condition-form>
 			<!-- ma -->
 			<ma-condition-form
 				v-if="indicatorRadio === 'technical' && techIndiValue === 'ma'"
+				:techVal="techVal"
 				:tabIndex="tabIndex"
 				:criteria="criteria"
 				:scLoad="scLoad"
@@ -86,6 +89,7 @@
 			<!-- macd -->
 			<macd-condition-form
 				v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
+				:techVal="techVal"
 				:tabIndex="tabIndex"
 				:scLoad="scLoad"
 				:criteria="criteria"
@@ -95,6 +99,7 @@
 				v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
 				:tabIndex="tabIndex"
 				:criteria="criteria"
+				:techVal="techVal"
 				:scLoad="scLoad"
 			></rsi-condition-form>
 			<div class="btnBox">
@@ -137,6 +142,7 @@ export default {
 			idsLoad: {},
 			scLoad: {},
 			sentiVal: '',
+			techVal: '',
 			indicatorEditData: {}
 		}
 	},
@@ -199,19 +205,20 @@ export default {
 			handler(newVal) {
 				this.indicatorEditData = {}
 				var signalCode = new SignalCode()
-				var code = newVal[this.criteria]["signals"][this.tabIndex]["code"]
+				var code = newVal[this.criteria]['signals'][this.tabIndex]['code']
 				code = signalCode.decode(code)
-				console.log("test",code);
+				console.log('test', code)
 				this.idsLoad = code.ids
 				this.scLoad = code.sc
-				if(code.analysis === "Sentiment"){
+				if (code.analysis === 'Sentiment') {
 					this.sentimentIndicator = code.indicator
-				this.indicatorEditData.sentimentIndicator = code.indicator
-					this.indicatorRadio = "sentiment"
+					this.indicatorEditData.sentimentIndicator = code.indicator
+					this.indicatorRadio = 'sentiment'
 					this.sentiVal = code.indicator
-				}else if(code.analysis === "Technical") {
+				} else if (code.analysis === 'Technical') {
 					this.technicalIndicator = code.indicator
-					this.indicatorRadio = "technical"
+					this.indicatorRadio = 'technical'
+					this.techVal = code.indicator
 					this.indicatorEditData.technicalIndicator = code.indicator
 				}
 			},
@@ -277,6 +284,19 @@ export default {
 		},
 		getSentiVal(val) {
 			this.sentiVal = val
+			const obj = {}
+			obj.criteria = this.criteria
+			obj.index = this.tabIndex
+			obj.value = val
+			this.$store.commit('getSentiValue', obj)
+		},
+		getTechVal(val) {
+			this.techVal = val
+			const obj = {}
+			obj.criteria = this.criteria
+			obj.index = this.tabIndex
+			obj.value = val
+			this.$store.commit('getTechValue', obj)
 		},
 		saveSignal() {
 			console.log(4444444444)
