@@ -205,6 +205,7 @@ export default {
 						let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
 						console.log(dialogHelper.sd)
 						dialogHelper.updateStudy({ inputs: { Period: val } });
+						console.log(CIQ.Studies.studyLibrary)
 					}
 			}	
 		},
