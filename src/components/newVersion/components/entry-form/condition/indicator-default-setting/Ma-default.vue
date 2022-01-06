@@ -27,33 +27,123 @@ export default {
 	extends: base,
 	data() {
 		return {
+			conditionRadio: 'Symbol Close',
 			ids: {
 				ma_category: 'SMA'
 			}
 		}
 	},
+	computed: {
+		data () {
+			return this.$store.state.conditionRadio
+		}
+	},
+	watch: {
+		data (val) {
+			this.conditionRadio = val
+		}	
+	},
 	methods: {
 		getMaRadio(val) {
 			//console.log(val)
 			this.ids.ma_category = val
+			CIQ.store.commit("setMaRadio",val)
+
 			if(val == 'SMA'){
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName];
-					if(sd.type == "ma"){
-						let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
-						console.log(dialogHelper.sd)
-						dialogHelper.updateStudy({ inputs: { Type: "simple" } });
+					if(sd.type == 'ma'){
+						// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
+						// dialogHelper.updateStudy({ inputs: { Period: val } });
+
+						var replaceStudy = {
+							name: "Moving Average",
+							overlay: true,
+							calculateFN: CIQ.Studies.calculateMovingAverage,
+							inputs: { Period: CIQ.store.state.maPeriod?CIQ.store.state.maPeriod:50, Field: "field", Type: "simple", Offset: 0 },
+							outputs: { MA: "#FF0000" }
+						}
+						CIQ.Studies.studyLibrary[sd.type] = replaceStudy
+						var st = CIQ.Studies.replaceStudy(
+							CIQ.stxx,
+							sd.inputs.id,
+							sd.type,
+						);
+						console.log('replaced study: ',st)
 					}
-				}	
+				}		
 			}else if(val == 'EMA'){
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName];
-					if(sd.type == "ma"){
-						let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
-						console.log(dialogHelper.sd)
-						dialogHelper.updateStudy({ inputs: { Type: "exponential" } });
+					if(sd.type == 'ma'){
+						// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
+						// dialogHelper.updateStudy({ inputs: { Period: val } });
+
+						// var st = CIQ.Studies.replaceStudy(
+						// 	CIQ.stxx,
+						// 	sd.inputs.id,
+						// 	sd.type,
+						// 	{Type: "exponential"}
+						// );
+						// console.log('replaced study: ',st)
+						
+						var replaceStudy = {
+							name: "Moving Average",
+							overlay: true,
+							calculateFN: CIQ.Studies.calculateMovingAverage,
+							inputs: { Period: CIQ.store.state.maPeriod?CIQ.store.state.maPeriod:50, Field: "field", Type: "exponential", Offset: 0 },
+							outputs: { MA: "#FF0000" }
+						}
+						CIQ.Studies.studyLibrary[sd.type] = replaceStudy
+						var st = CIQ.Studies.replaceStudy(
+							CIQ.stxx,
+							sd.inputs.id,
+							sd.type,
+						);
+						console.log('replaced study: ',st)
 					}
-				}	
+				}		
+			}
+			if(this.conditionRadio == 'Moving Average'){
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					var sd = CIQ.stxx.layout.studies[studyInstanceName];
+					if(sd.type == 'ST MA' && sd.panel == 'chart'){
+						// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
+						// dialogHelper.updateStudy({ inputs: { Period: val } });
+
+						// 刷新附属ma
+						var replaceStudy = {
+							name: "Moving Average ",
+							overlay: true,
+							calculateFN: CIQ.Studies.calculateSTMovingAverage,
+							inputs: { Period: CIQ.store.state.stMaPeriod?CIQ.store.state.stMaPeriod:5, Field: "field", Type: this.ids.ma_category=="SMA"?"simple":"exponential", Offset: 0 },
+							outputs: { MA: "#FF000" },
+						}
+						CIQ.Studies.studyLibrary[sd.type] = replaceStudy
+						var st = CIQ.Studies.replaceStudy(
+							CIQ.stxx,
+							sd.inputs.id,
+							sd.type,
+						);
+						console.log('replaced st ma: ',st)
+					}
+				}
+				// keep current MA
+					var objMA = { period: CIQ.store.state.stMaPeriod?CIQ.store.state.stMaPeriod:5, url: 'ma', type: this.ids.ma_category}
+					var activatedMAList = this.$store.state.activatedMA
+
+					// remove current MA attached to an indicator
+					var MAListIndex = activatedMAList.findIndex(
+						(item) => item.url == 'ma'
+					)
+					if (MAListIndex != -1) {
+						activatedMAList.splice(MAListIndex, 1)
+					}
+					activatedMAList.push(objMA)
+
+					this.$store.commit('getMA', activatedMAList)
+
+					console.log(this.$store.state.activatedMA)
 			}
 		}
 	}

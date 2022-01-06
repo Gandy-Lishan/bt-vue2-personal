@@ -85,7 +85,6 @@ export default {
 		},
 		indicatorEditData: {
 			handler(newVal) {
-				console.log('传顺的数据包', newVal)
 				if (newVal.sentimentIndicator) {
 					this.indicatorRadio = 'Sentiment Indicators'
 					this.si.sentimentIndicator = newVal.sentimentIndicator
@@ -101,7 +100,7 @@ export default {
 					obj.criteria = this.criteria
 					obj.index = this.tabIndex
 					obj.value = newVal.technicalIndicator
-					this.$store.commit('getTechVal', obj)
+					this.$store.commit('getTechValue', obj)
 				}
 			},
 			immediate: true,
@@ -276,8 +275,17 @@ export default {
 			this.indicatorRadio = obj.radio
 			if (obj.sentimentIndicator) {
 				this.si.sentimentIndicator = obj.sentimentIndicator
+				this.$emit('getSentiVal', obj.sentimentIndicator)
+				const obj = obj
+				obj.value = obj.sentimentIndicator
+                this.$store.commit('getSentiValue', obj)
+				this.isCheckedIndicators = false
 			} else if (obj.technicalIndicator) {
 				this.si.technicalIndicator = obj.technicalIndicator
+				this.$emit('getTechVal', obj.technicalIndicator)
+				const obj = obj
+				obj.value = obj.technicalIndicator
+                this.$store.commit('getTechValue', obj)
 				this.isCheckedIndicators = true
 			}
 		}

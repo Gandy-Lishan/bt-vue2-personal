@@ -20,6 +20,9 @@ import locale from 'element-ui/lib/locale/lang/en'
 import '@/assets/iconfont/iconfont.css'
 import VueCookies from 'vue-cookies'
 
+import Direction from 'vue-direction-key'
+Vue.use(Direction)
+
 Vue.use(VueCookies)
 // 配置请求根路径
 axios.defaults.baseURL = ''

@@ -146,20 +146,6 @@ export default {
 	},
 	mounted() {
 		this.$cookies.set('username', 'test')
-		// 监听用户按下 tab 键
-		let vm = this
-		document.onkeydown = function (e) {
-			let keyNum = window.event ? e.keyCode : e.which
-			if (keyNum == 9) {
-				let num = vm.activeTag.substr(vm.activeTag.length - 1, 1)
-				if (num >= 1 && num < 3) {
-					num++
-					vm.activeTag = vm.activeTag.slice(0, 13) + num
-				} else if (num == 3) {
-					vm.activeTag = 'first-child-n1'
-				}
-			}
-		}
 	},
 	components: {
 		chart: chart,

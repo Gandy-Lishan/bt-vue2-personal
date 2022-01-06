@@ -198,6 +198,8 @@ export default {
 					const obj = {}
 					obj.radio = 'Technical Indicators'
 					obj.technicalIndicator = newVal.code.indicator
+					obj.criteria = this.criteria
+					obj.index = this.tabIndex
 					this.$refs.indicatorPart.setIndicatorRadio(obj)
 					const arr = [
 						{ label: 'Moving Average', value: 'ma' },
@@ -211,11 +213,12 @@ export default {
 						}
 					})
 				} else if (newVal.code.analysis === 'Sentiment') {
-					this.$refs.indicatorPart.setIndicatorRadio('Sentiment Indicators')
 					this.indicatorRadio = 'sentiment'
 					const obj = {}
 					obj.radio = 'Sentiment Indicators'
 					obj.sentimentIndicator = newVal.code.indicator
+										obj.criteria = this.criteria
+					obj.index = this.tabIndex
 					this.$refs.indicatorPart.setIndicatorRadio(obj)
 				}
 			},

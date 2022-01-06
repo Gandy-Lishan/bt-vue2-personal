@@ -273,6 +273,7 @@ export default {
             }
             //('dddddd',res.data)
          initalData = res.data
+         
         // -------------------------------------  text ----------------
          data.uuid = initalData["UUID"]
         data.symbol = initalData["Symbol"]
