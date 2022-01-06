@@ -207,8 +207,6 @@ export default {
 		},
 		saveBacktest() {
 			let vm = this
-			this.$message.success('Save successfully')
-			vm.goToFavorite()
 			this.$refs.favoriteChild.getBacktestList('system')
 			const backtestData = deepClone1(this.$store.state.backtestInfo)
 			const signalEntryList = deepClone1(backtestData.entry.signals)
@@ -324,7 +322,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .active {
-	display: none;
+	display: none !important;
 }
 @media only screen and (min-width: 1600px) {
 	.home_container {
