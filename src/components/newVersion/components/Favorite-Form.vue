@@ -149,6 +149,7 @@
 	</el-row>
 </template>
 <script>
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
 	data() {
 		return {
@@ -210,12 +211,12 @@ export default {
 			if (row.status !== 2) {
 				row.status = 1
 				vm.$http.post('dev/runbacktest/?uuid=' + row.id).then((res) => {
-          console.log("外层",res);
+          //console.log("外层",res);
 					if (res.status == 200) {
 						vm.timer = setInterval(() => {
 							vm.$http.get('dev/status/' + row.id + "/").then((res) => {
 								//(res.data.status)
-								console.log("内层",res);
+								//console.log("内层",res);
 								if (res.data.status === 2) {
 									clearInterval(vm.timer)
 									vm.getBacktestList()
@@ -270,36 +271,37 @@ export default {
 				})
 		},
 		copyBacktest(row) {
-      console.log("行",row);
-      let params = {}
-      this.$http.get('/dev/seeparams/' + row.id + '/').then(res => {
-        params = res.data
-        params.name = params.name + '(copy)'
-        delete params.uuid
-        delete params.results
-        delete params.user_id
-        delete params.status
-        delete params.backtest_id
-        console.log(params);
-        this.$http
-				.post('/dev/backtest/', this.$qs.stringify(params), {
-					withCredentials: true
-				})
-				.then((res) => {
-					if (res.status === 201) {
-						this.$message.success('Copy successfully')
-            this.getBacktestList()
-					} else {
-						this.$message.success('Copy failed')
-					}
-				})
-      }
-      )
+			console.log("行",row);
+			let params = {}
+			this.$http.get('/dev/seeparams/' + row.id + '/').then(res => {
+				params = res.data
+				params.name = params.name + '(copy)'
+				delete params.uuid
+				delete params.results
+				delete params.user_id
+				delete params.status
+				delete params.backtest_id
+				console.log(params);
+				this.$http
+						.post('/dev/backtest/', this.$qs.stringify(params), {
+							withCredentials: true
+						})
+						.then((res) => {
+							if (res.status === 201) {
+								this.$message.success('Copy successfully')
+					this.getBacktestList()
+							} else {
+								this.$message.success('Copy failed')
+							}
+						})
+			}
+			)
 		},
 		viewBacktestResults(row) {
 			console.log(row);
 			this.$store.commit('getRunBacktestData', row)
 			this.$emit('goBacktestResultForm',row)
+
 		},
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
@@ -308,6 +310,8 @@ export default {
 		},
     showDes(row) {
       const datades = {}
+
+	  console.log(row)
       let vm = this
       	vm.$http.get('/dev/seeparams/' + row.id + '/').then(res => {
           console.log("详情");
