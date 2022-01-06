@@ -8,13 +8,12 @@
 				>
 					<el-col :xs="20" :sm="24" :md="12" :lg="8" :xl="8">
 						<el-form-item label="Name:" prop="name">
-							<el-input v-model="bd.name"></el-input>
+							<el-input v-model="bd.name" v-direction="{x: 0, y: 0}"></el-input>
 						</el-form-item>
 						<el-form-item label="Description:" prop="description">
 							<el-input
 								v-model="bd.description"
-								type="textarea"
-								:autosize="{ minRows: 6, maxRows: 6 }"
+								v-direction="{x: 1, y: 0}"
 								resize="none"
 							></el-input>
 						</el-form-item>
@@ -26,6 +25,7 @@
 									filterable
 									remote
 									reserve-keyword
+									automatic-dropdown	
 									@change="getSymbolName(bd.symbol)"
 									placeholder="enter keywords"
 									:remote-method="remoteMethod"
@@ -46,22 +46,19 @@
 						<el-form-item label="Starting Capital:" prop="startingCapital">
 							<el-input
 								v-model="bd.capital"
-								@focus="setStartingCapital()"
-								@blur="getStartingCapital()"
+								v-direction="{x: 2, y: 0}"
 							></el-input>
 						</el-form-item>
 						<el-form-item label="Commission:" prop="commission">
 							<el-input
 								v-model="bd.commission"
-								@focus="setCommission()"
-								@blur="getCommission()"
+								v-direction="{x: 3, y: 0}"
 							></el-input>
 						</el-form-item>
 						<el-form-item label="Slippage:" prop="slippage">
 							<el-input
 								v-model="bd.slippage"
-								@focus="setSlippage()"
-								@blur="getSlippage()"
+								v-direction="{x: 4, y: 0}"
 							></el-input>
 						</el-form-item>
 						<el-form-item label="Money Management:" prop="moneyManagement">
@@ -85,7 +82,8 @@
 					<el-col :xs="20" :sm="24" :md="12" :lg="8" :xl="8">
 						<el-form-item label="Benchmark:" prop="benchmark">
 							<div class="enterSymbolBox">
-								<el-input v-model="bd.benchmark"></el-input>
+								<el-input v-model="bd.benchmark"
+								v-direction="{x: 5, y: 0}"></el-input>
 							</div>
 						</el-form-item>
 						<el-form-item label="Backtest History:" prop="backtestHistory">
@@ -226,6 +224,16 @@ export default {
 	created() {
 		this.getSymbolList()
 		this.getEndDate()
+      let direction = this.$getDirection()
+      direction.on('keyup', function (e, val) {
+        if (e.keyCode == 9) {
+          direction.next()
+        }
+		direction.onEnd = function () {
+			direction.previous(1, 0)
+		}
+      })
+
 	},
 	computed: {
 		listSet() {
