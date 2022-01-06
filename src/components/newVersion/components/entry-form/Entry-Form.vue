@@ -4,7 +4,16 @@
 			<div class="entry-form-container">
 				<div class="signalLeft">
 					<el-form :model="fd" label-width="80px" label-position="left">
-						<div><h2 class="note">Criteria Entry Description</h2></div>
+						<div>
+							<h2 class="note">Criteria Entry Description</h2>
+							<el-tooltip
+								class="item"
+								effect="dark"
+								content="Criteria Entry Description"
+								placement="bottom-start"
+								><i class="iconfont icon-tishi"></i
+							></el-tooltip>
+						</div>
 						<el-form-item
 							label="Description:"
 							prop="description"
@@ -19,7 +28,16 @@
 								@input="getDes"
 							></el-input>
 						</el-form-item>
-						<div><h2 class="note">Criteria Direction/Frequency</h2></div>
+						<div>
+							<h2 class="note">Criteria Direction/Frequency</h2>
+							<el-tooltip
+								class="item"
+								effect="dark"
+								content="Criteria Direction/Frequency"
+								placement="bottom-start"
+								><i class="iconfont icon-tishi"></i
+							></el-tooltip>
+						</div>
 						<el-form-item label="Direction:" prop="entryType">
 							<el-radio-group
 								v-model="fd.direction"
@@ -36,7 +54,7 @@
 						>
 							<el-radio-group v-model="fd.frequency" @change="getFrequency">
 								<el-radio label="Daily">Daily</el-radio>
-								<el-radio label="Weeckly">Weeckly</el-radio>
+								<el-radio label="Weekly">Weekly</el-radio>
 								<el-radio label="Monthly">Monthly</el-radio>
 							</el-radio-group>
 						</el-form-item>
@@ -64,6 +82,7 @@ import { Store, mapGetters } from 'vuex'
 import SignalCode, { SingaCode } from '@/tools/codeTool'
 import form_base from '@/components/newVersion/components/baisc/from.vue'
 import { throttle } from '@/tools/throttle.js'
+import deepClone1 from '@/tools/deepClone.js'
 export default {
 	extends: form_base,
 	props: {
@@ -105,7 +124,7 @@ export default {
 			],
 			frequencyOption: [
 				{ label: 'Daily', value: 'Daily' },
-				{ label: 'Weekly', value: 'Weeckly' },
+				{ label: 'Weekly', value: 'Weekly' },
 				{ label: 'Monthly', value: 'Monthly' }
 			],
 			dialogTableVisible: false,
@@ -113,15 +132,26 @@ export default {
 		}
 	},
 	inject: ['editBacktestData'],
-	computed:{
-		getEditBacktestData(){
+	computed: {
+		getEditBacktestData() {
 			return this.editBacktestData()
 		}
 	},
+	computed: {
+		...mapGetters(['getIsClearForm']),
+		isClearForm() {
+			return this.getIsClearForm
+		}
+	},
 	watch: {
+		isClearForm: {
+			handler(newVal) {
+				let init = deepClone1(this.$options.data())
+				Object.assign(this.$data, init)
+			}
+		},
 		getEditBacktestData: {
 			handler(newVal) {
-				//console.log("entry-inject11111",newVal);
 				const data = newVal.entry
 				this.fd.description = data.description
 				this.fd.direction = data.direction
@@ -134,6 +164,7 @@ export default {
 		fdLoad: {
 			handler(newVal) {
 				this.fd = newVal
+				this.$store.commit('getEntryDirection', newVal.direction)
 			},
 			immediate: true,
 			deep: true
@@ -175,6 +206,9 @@ export default {
 	display: none;
 }
 @media only screen and (min-width: 1600px) {
+	.note {
+		display: inline-block;
+	}
 	.entry-form-container {
 		display: flex;
 		flex-wrap: wrap;

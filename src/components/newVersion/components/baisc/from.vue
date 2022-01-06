@@ -16,7 +16,6 @@ export default {
 				if (newVal) {
 					newVal.index = this.tabIndex
 					newVal.criteria = this.criteria
-                    console.log("fd");
 					this.$store.commit('setFd', newVal)
 				}
 			},

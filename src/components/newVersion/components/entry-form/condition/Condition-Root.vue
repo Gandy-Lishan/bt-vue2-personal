@@ -10,7 +10,16 @@
 		<el-form label-position="left">
 			<div class="signalIndicatorBox">
 				<div class="indicatorBox">
-					<div><h2 class="note">Signal Indicator</h2></div>
+					<div>
+						<h2 class="note">Signal Indicator</h2>
+						<el-tooltip
+							class="item"
+							effect="dark"
+							content="Signal Indicator"
+							placement="bottom-start"
+							><i class="iconfont icon-tishi"></i
+						></el-tooltip>
+					</div>
 					<!-- sentiment indicator part -->
 					<indicator-part
 						@getIndicatorRadio="getIndicatorRadio"
@@ -126,6 +135,7 @@ import macdConditionForm from './technical/Macd-Condition-Form.vue'
 import rsiDefault from './indicator-default-setting/Rsi-default.vue'
 import rsiConditionForm from './technical/Rsi-Condition-Form.vue'
 import signalDialog from './signallist/Signal-Dialog.vue'
+import deepClone1 from '@/tools/deepClone.js'
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 import SignalCode from '@/tools/codeTool.js'
 import { Store, mapGetters } from 'vuex'
@@ -151,7 +161,7 @@ export default {
 		this.$cookies.set('username', 'test')
 	},
 	computed: {
-		...mapGetters(['getSignalDialogData']),
+		...mapGetters(['getSignalDialogData', ' getIsClearForm']),
 		signalDialogData() {
 			return this.getSignalDialogData
 		},
@@ -160,6 +170,18 @@ export default {
 		}
 	},
 	watch: {
+		isClearForm: {
+			handler(newVal) {
+				let init = deepClone1(this.$options.data())
+				for (let key in init) {
+					if (JSON.stringify(init[key]) == '{}') {
+						delete init[key]
+					}
+				}
+				Object.assign(this.$data, init)
+				console.log('conditionRott', Object.assign(this.$data, init))
+			}
+		},
 		signalDialogData: {
 			handler(newVal) {
 				//console.log('弹框中的数据', newVal)
@@ -348,9 +370,10 @@ export default {
 </script>
 <style lang="less" scoped>
 @media only screen and (min-width: 1600px) {
-	.miniNote {
+	.note {
 		font-weight: 600;
 		margin: 0px 0px 5px 0px;
+		display: inline-block;
 	}
 	.indicatorBox {
 		flex: 1;
@@ -416,9 +439,10 @@ export default {
 	}
 }
 @media (min-width: 900px) and (max-width: 1599px) {
-	.miniNote {
+	.note {
 		font-weight: 600;
 		margin: 0px 0px 5px 0px;
+		display: inline-block;
 	}
 	.indicatorBox {
 		flex: 1;

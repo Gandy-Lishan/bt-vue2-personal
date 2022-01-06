@@ -203,9 +203,9 @@ export default {
 			)
 		},
 		runbacktest(row) {
-      console.log(row.id);
-			let vm = this
+      console.log(row.id);			let vm = this
 			vm.rowid = row.id
+			this.$message.success('Please wait while running')
 			vm.clearInterval = clearInterval()
 			if (row.status !== 2) {
 				row.status = 1

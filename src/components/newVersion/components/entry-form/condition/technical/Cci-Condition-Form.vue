@@ -1,7 +1,16 @@
 <template>
 	<div>
 		<div class="signal-condition-box">
-			<div><h2 class="note">Signal Condition</h2></div>
+			<div>
+				<h2 class="note">Signal Condition</h2>
+				<el-tooltip
+					class="item"
+					effect="dark"
+					content="please refer to the above Extreme Optimism / Extreme Pessimism to enter a number"
+					placement="bottom-start"
+					><i class="iconfont icon-tishi"></i
+				></el-tooltip>
+			</div>
 			<div class="sentimentConditionBox">
 				<el-radio v-model="conditionRadio" label="CCI Value"> </el-radio>
 				<div class="sentimentConditionItem">
@@ -27,7 +36,16 @@
 			</div>
 		</div>
 		<div class="signalDescriptionBox">
-			<div><h2 class="note">Signal Description</h2></div>
+			<div>
+				<h2 class="note">Signal Description</h2>
+				<el-tooltip
+					class="item"
+					effect="dark"
+					content="Your signal description"
+					placement="bottom-start"
+					><i class="iconfont icon-tishi"></i
+				></el-tooltip>
+			</div>
 			<el-button plain style="margin: 5px 0px 5px 0px">{{
 				techVal +
 				'&nbsp;&nbsp;' +
@@ -80,6 +98,9 @@ export default {
 </script>
 <style lang="less" scoped>
 @media only screen and (min-width: 1600px) {
+	.note {
+		display: inline-block;
+	}
 	.sentimentConditionBox {
 		display: flex;
 		justify-content: space-between;
@@ -125,6 +146,9 @@ export default {
 	}
 }
 @media (min-width: 900px) and (max-width: 1599px) {
+	.note {
+		display: inline-block;
+	}
 	.sentimentConditionBox {
 		display: flex;
 		flex-direction: column;
