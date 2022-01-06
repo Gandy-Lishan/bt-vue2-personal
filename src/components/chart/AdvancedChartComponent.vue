@@ -453,6 +453,11 @@ export default class AdvancedChartComponent extends Vue {
 
 			//CIQ.stxx.setTimeZone("Asia/Hong_Kong", "America/New_York");
 
+			CIQ.ChartEngine.prototype.prepend("draw", function () {
+			// create persistence by forcing it  be called in every animation frame.
+			CIQ.stxx.watermark("chart", { h: "bottom", v: "left", text: "sentimentrader.com" });
+			});
+
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
 			CIQ.stxx.layout.headsUp = "floating";
 			//CIQ.UI.Markers.prototype.showMarkers('mMarker')

@@ -221,8 +221,7 @@ export default {
 				activatedMAList.splice(MAListIndex, 1)
 			}
 			activatedMAList.push(objMA)
-			// const set = new Set(activatedMAList)
-			// activatedMAList = [...set]
+
 			this.$store.commit('getMA', activatedMAList)
 
 			console.log(this.$store.state.activatedMA)

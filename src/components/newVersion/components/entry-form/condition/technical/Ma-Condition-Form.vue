@@ -124,6 +124,7 @@
 </template>
 <script>
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
 	extends: base,
 	props: { techVal: String },
@@ -156,7 +157,6 @@ export default {
 	},
 	methods: {
 		getConditionRadio(val) {
-			console.log(val)
 			if (val === 'Symbol Close') {
 				if ('ma_period' in this.sc) {
 					delete this.sc.ma_period
@@ -165,6 +165,40 @@ export default {
 			} else if (val === 'Moving Average') {
 				this.sc.ma_period = 5
 				this.disabled = !this.disabled
+
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				if (
+					CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA' &&
+					CIQ.stxx.layout.studies[studyInstanceName].panel == 'chart'
+				) {
+					CIQ.Studies.removeStudy(
+						CIQ.stxx,
+						CIQ.stxx.layout.studies[studyInstanceName]
+					)
+				}
+				}
+				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
+					Type: "simple",
+					Period: 5,
+					display: 'ST MA',
+				})
+
+				// keep current MA
+				var objMA = { period: 5, url: 'ma', type: "simple"}
+				var activatedMAList = this.$store.state.activatedMA
+
+				// remove current MA attached to an indicator
+				var MAListIndex = activatedMAList.findIndex(
+					(item) => item.url == 'ma'
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				activatedMAList.push(objMA)
+
+				this.$store.commit('getMA', activatedMAList)
+
+				console.log(this.$store.state.activatedMA)
 			}
 		},
 		getConditionValue(val) {
@@ -183,6 +217,15 @@ export default {
 		},
 		getMaValue(val) {
 			this.sc.period = val
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					var sd = CIQ.stxx.layout.studies[studyInstanceName];
+					if(sd.type == "ma"){
+						let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
+						console.log(dialogHelper.sd)
+						dialogHelper.updateStudy({ inputs: { Period: val } });
+						console.log(CIQ.Studies.studyLibrary)
+					}
+			}	
 		},
 		setScLoad(val) {
 			for (let key in val) {

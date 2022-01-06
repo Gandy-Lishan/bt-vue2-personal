@@ -190,7 +190,7 @@ export default {
 			this.$store.commit('setFd', this.fd)
 		}, 3000),
 		getFrequency(val) {
-			console.log(val)
+			//console.log(val)
 			this.fd.frequency = val
 			this.fd.criteria = 'entry'
 			this.$store.commit('setFd', this.fd)
