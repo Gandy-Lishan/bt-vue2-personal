@@ -112,7 +112,7 @@
 				></el-tooltip>
 			</div>
 			<el-button plain style="margin: 5px 0px 5px 0px">{{
-				`${sentiVal}&nbsp;&nbsp;${sc.period ? sc.period : ''}&nbsp;&nbsp;${
+				`${sentiVal}&nbsp;&nbsp;${sc.period ? 'moving average' : ''}${sc.period ? sc.period : ''}&nbsp;&nbsp;${
 					conditions[sc.condition].label
 				}&nbsp;&nbsp;${sc.value}`
 			}}</el-button>

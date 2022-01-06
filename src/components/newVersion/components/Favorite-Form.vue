@@ -319,6 +319,7 @@ export default {
        vm.$alert(str, '标题名称', {
           confirmButtonText: '确定',
           dangerouslyUseHTMLString: true,
+		  lockScroll: false,
           callback: action => {
             vm.$message({
               type: 'info',

@@ -133,14 +133,12 @@ export default {
 	},
 	inject: ['editBacktestData'],
 	computed: {
-		getEditBacktestData() {
-			return this.editBacktestData()
-		}
-	},
-	computed: {
 		...mapGetters(['getIsClearForm']),
 		isClearForm() {
 			return this.getIsClearForm
+		},
+		getEditBacktestData() {
+			return this.editBacktestData()
 		}
 	},
 	watch: {
@@ -153,6 +151,7 @@ export default {
 		getEditBacktestData: {
 			handler(newVal) {
 				const data = newVal.entry
+				console.log("进厂信函",data);
 				this.fd.description = data.description
 				this.fd.direction = data.direction
 				this.fd.frequency = data.frequency

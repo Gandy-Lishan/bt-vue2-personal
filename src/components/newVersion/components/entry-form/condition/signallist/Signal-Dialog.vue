@@ -268,13 +268,11 @@ export default {
 			this.$emit('openSignalDialog'), (this.queryInfo.page = 1)
 		},
 		checkEntry(scope) {
-			console.log('scope', scope)
 			const obj = scope
 			const a = new SignalCode()
 			obj.code = a.decode(obj.code)
 			obj.criteria = this.criteria
 			obj.index = this.tabIndex
-			console.log('1111', obj)
 			const newObj = { fd: {}, si: {} }
 			// form detail
 			newObj.fd.description = obj.description
