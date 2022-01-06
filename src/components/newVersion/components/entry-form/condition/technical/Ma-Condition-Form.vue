@@ -55,6 +55,7 @@
 						:disabled="!disabled"
 						v-model="sc.ma_period"
 						placeholder="Input Period"
+						@input="getMaPeriodValue"
 						oninput="value=value.replace(/[-+]?[^\d]/g,'')"
 					></el-input>
 					<el-select
@@ -112,6 +113,9 @@ export default {
 	props: { techVal: String },
 	data() {
 		return {
+
+			period: 5,
+			maRadio: 'SMA',
 			conditionRadio: 'Symbol Close',
 			conditions: [
 				{ value: 0, label: '>' },
@@ -130,43 +134,51 @@ export default {
 			des: this.$store.state.backtestInfo[this.criteria].signals[this.tabIndex]
 		}
 	},
+	computed: {
+		data () {
+			return this.$store.state.maRadio
+		}
+	},
 	watch: {
 		techVal: {
 			handler(newVal) {
 				this.techVal = newVal
 			}
-		}
+		},
+		data (val) {
+			this.maRadio = val
+		}	
 	},
 	methods: {
 		getConditionRadio(val) {
+			this.conditionRadio = val
+			CIQ.store.commit("setConditionRadio",val)
 			if (val === 'Symbol Close') {
 				if("ma_period" in this.sc) {
 				 delete this.sc.ma_period
 				}
 				this.disabled = !this.disabled
 			} else if(val === 'Moving Average'){
-				this.sc.ma_period = 5
+				// 添加附属ma
 				this.disabled = !this.disabled
-
+			    this.sc.ma_period = this.period
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
-				if (
-					CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA' &&
-					CIQ.stxx.layout.studies[studyInstanceName].panel == 'chart'
-				) {
-					CIQ.Studies.removeStudy(
-						CIQ.stxx,
-						CIQ.stxx.layout.studies[studyInstanceName]
-					)
-				}
+					var sd = CIQ.stxx.layout.studies[studyInstanceName];
+					if(sd.type == 'ST MA' && sd.panel == 'chart'){
+						CIQ.Studies.removeStudy(
+							CIQ.stxx,
+							sd
+						)
+					}
 				}
 				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
-					Type: "simple",
-					Period: 5,
+					Type: this.maRadio=="SMA"?"simple":"exponential",
+					Period: this.sc.ma_period,
 					display: 'ST MA',
 				})
 
 				// keep current MA
-				var objMA = { period: 5, url: 'ma', type: "simple"}
+				var objMA = { period: this.sc.ma_period, url: 'ma', type: this.maRadio}
 				var activatedMAList = this.$store.state.activatedMA
 
 				// remove current MA attached to an indicator
@@ -197,16 +209,74 @@ export default {
 				this.sc.period = val
 			}
 		},
+		getMaPeriodValue(val){
+			this.period = val
+			this.sc.ma_period = this.period
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName];
+				if(sd.type == 'ST MA' && sd.panel == 'chart'){
+					// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
+					// dialogHelper.updateStudy({ inputs: { Period: val } });
+
+					// 刷新附属ma
+					var replaceStudy = {
+						name: "Moving Average ",
+						overlay: true,
+						calculateFN: CIQ.Studies.calculateSTMovingAverage,
+						inputs: { Period: val, Field: "field", Type: this.maRadio=="SMA"?"simple":"exponential", Offset: 0 },
+						outputs: { MA: "#FF000" },
+					}
+					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
+					var st = CIQ.Studies.replaceStudy(
+						CIQ.stxx,
+						sd.inputs.id,
+						sd.type,
+					);
+					console.log('replaced st ma: ',st)
+				}
+			}
+			// keep current MA
+				var objMA = { period: this.sc.ma_period, url: 'ma', type: this.maRadio}
+				var activatedMAList = this.$store.state.activatedMA
+
+				// remove current MA attached to an indicator
+				var MAListIndex = activatedMAList.findIndex(
+					(item) => item.url == 'ma'
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				activatedMAList.push(objMA)
+
+				this.$store.commit('getMA', activatedMAList)
+				this.$store.commit('getStMaPeriod',val)
+
+				console.log(this.$store.state.activatedMA)	
+		},
 		getMaValue(val) {
 			this.sc.period = val
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
-					var sd = CIQ.stxx.layout.studies[studyInstanceName];
-					if(sd.type == "ma"){
-						let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
-						console.log(dialogHelper.sd)
-						dialogHelper.updateStudy({ inputs: { Period: val } });
-						console.log(CIQ.Studies.studyLibrary)
+				var sd = CIQ.stxx.layout.studies[studyInstanceName];
+				if(sd.type == 'ma'){
+					// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
+					// dialogHelper.updateStudy({ inputs: { Period: val } });
+					var replaceStudy = {
+						name: "Moving Average",
+						overlay: true,
+						calculateFN: CIQ.Studies.calculateMovingAverage,
+						inputs: { Period: val, Field: "field", Type: this.maRadio=="SMA"?"simple":"exponential", Offset: 0 },
+						outputs: { MA: "#FF0000" }
 					}
+					//CIQ.store.commit('getReplaceStudy',replaceStudy)
+					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
+					var st = CIQ.Studies.replaceStudy(
+						CIQ.stxx,
+						sd.inputs.id,
+						sd.type,
+					);
+					CIQ.store.commit('getMaPeriod',val)
+					console.log('replaced study: ',st)
+				}
 			}	
 		},
 		setScLoad(val) {

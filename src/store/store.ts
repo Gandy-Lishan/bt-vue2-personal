@@ -3,7 +3,11 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
-    
+    conditionRadio: '',
+    maRadio: '',
+    stMaPeriod: '',
+    maPeriod: '',
+    importedLayout: '',
     newPorfolioInputsValues:{
       inputNameValue: '',
       inputDescriptionValue: '',
@@ -86,6 +90,9 @@ export default new Vuex.Store({
     fdDialogData: {}
   },
   getters:{
+    getterMaRadio: (state) =>{
+      return state.maRadio
+    },
     getBacktestEntryFrequency: (state)=>{
       return state.backtestInfo.entry.frequency
     },
@@ -111,7 +118,22 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    
+    setConditionRadio(state,val){
+      state.conditionRadio = val
+    },
+    setMaRadio(state,val){
+      state.maRadio = val
+    }
+    ,
+    getStMaPeriod(state,val){
+      state.stMaPeriod = val
+    },
+    getMaPeriod(state,val){
+      state.maPeriod = val
+    },
+    getImportedLayout(state,val){
+      state.importedLayout = val
+    },
     getExtremeValue: (state,item)=>{
       //console.log(11111);
       
