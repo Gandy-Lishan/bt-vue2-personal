@@ -35,8 +35,12 @@
 </template>
 <script>
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
+import { Store, mapGetters } from 'vuex'
 export default {
-	extends: base,
+	extends: base,	props: {
+		editIds: Object,
+		idsLoad: Object
+	},
 	data() {
 		return {
 			ids: {
@@ -44,6 +48,34 @@ export default {
 				over_sold_bound: 20,
 				period: 14
 			}
+		}
+	},	computed: {
+		...mapGetters(['getExtremeValue']),
+				extremeValue() {
+			return this.getExtremeValue
+		},
+	},
+		watch: {
+				editIds: {
+			handler(newVal) {
+			this.$set(this.ids, 'over_bought_bound', newVal.extremeOptimism)
+				this.$set(this.ids, 'over_sold_bound', newVal.extremePessimism)
+			},
+			immediate: true,
+			deep: true
+		},
+	},
+		methods: {
+		setIdsLoad(value) {
+			const rule = /^-?0?\d*?\.?\d*?$/
+			for (let key in val) {
+				// moving average 不一样
+				if(typeof val[key] != String){
+				if (val[key].search(rule) != -1) {
+					val[key] = Number(val[key])
+			}}
+			}
+			this.ids = val
 		}
 	}
 }

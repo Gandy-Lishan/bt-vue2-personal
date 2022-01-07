@@ -1,5 +1,6 @@
 import { CIQ } from 'chartiq/js/componentUI'
-
+import "vue-direction-key"
+declare module 'vue-direction-key';
 declare module 'chartiq/js/componentUI' {
 	export namespace CIQ {
 		let dialog: boolean

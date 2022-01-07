@@ -198,8 +198,7 @@
       <el-table-column
         prop="Indicator"
         label="Indicator"
-        align="center"
-        show-overflow-tooltip=true>
+        align="center">
       </el-table-column>
       <el-table-column
         prop="TradePrice"
@@ -259,10 +258,10 @@ export default {
         vm.loading = true
         let initalData = {}
         let data = {}
-        let id = this.$store.state.favoriteBacktestRowData.id
-        // let arr=[]
-        // arr.push(id)
-        let params = {
+        let id
+        if(this.$store.state.favoriteBacktestRowData.id){
+         id = this.$store.state.favoriteBacktestRowData.id
+          let params = {
           uuid: id
         }
         if(!id){return}
@@ -341,6 +340,7 @@ export default {
         }).catch( error => {
           vm.loading = false
         })
+        }
       },
       clearPerformanceData() {
         this.tableData = []

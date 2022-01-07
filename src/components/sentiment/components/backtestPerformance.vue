@@ -223,7 +223,7 @@ export default {
     }
   },
   created() {
-    this.getResultData()
+    // this.getResultData()
   },
   methods: {
     handleClick(tab, event) {

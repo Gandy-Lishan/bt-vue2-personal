@@ -57,11 +57,10 @@
 									<div class="clearBox">
 										<div class="clearBoxItem">
 											<h1 class="titleTxt">Exit Criteria</h1>
-											<el-button class="clearBtn" round>Clear Form</el-button>
+											<el-button class="clearBtn" round  @click="clearForm">Clear Form</el-button>
 										</div>
 										<div
 											class="backtestBtns"
-											:class="backtestBtnVisabled ? 'active' : ''"
 										>
 											<el-button round @click="saveBacktest"
 												>Save Backtest</el-button
@@ -206,9 +205,8 @@ export default {
 		// },
 		saveBacktest() {
 			let vm = this
-
-			this.$refs.favoriteChild.getBacktestList('system')
 			const backtestData = deepClone1(this.$store.state.backtestInfo)
+			console.log("保存的back test数据", backtestData);
 			const signalEntryList = deepClone1(backtestData.entry.signals)
 			const signalExitList = deepClone1(backtestData.exit.signals)
 
@@ -273,7 +271,6 @@ export default {
 			}
 			delete backtestData.entry
 			delete backtestData.exit
-
 			backtestData.entry = JSON.stringify(entry)
 			backtestData.exit = JSON.stringify(exit)
 
@@ -295,11 +292,14 @@ export default {
 				})
 				.then((res) => {
 					if (res.status === 201) {
-						this.$message.success('Save successfully')
+						vm.$message.success('The operation succeeded')
 						vm.goToFavorite()
-						this.$refs.favoriteChild.getBacktestList('system')
+						vm.$refs.favoriteChild.getBacktestList('system')
+						vm.$store.commit('clearBacktest')
+						vm.$store.commit('tryClear')
+						vm.backtestBtnVisabled = true
 					} else {
-						this.$message.success('Save failed')
+						this.$message.success('The operation failed')
 					}
 				})
 		},
@@ -319,7 +319,7 @@ export default {
 				delete data.user_id
 				delete data.uuid
 				this.pubilcEditData = Object.assign(this.pubilcEditData, data)
-
+				this.backtestBtnVisabled = false
 				this.backtestEditData = data
 			})
 			this.activeName = 'first'
@@ -329,6 +329,7 @@ export default {
 		},
 		clearForm() {
 			this.$store.commit('tryClear')
+			this.backtestBtnVisabled = true
 		}
 	}
 }

@@ -13,7 +13,7 @@
 						prop="description"
 					>
 					</el-table-column>
-					<el-table-column>
+					<el-table-column label="Backtest Period">
 						<template slot-scope="scope">
 							<div class="dataBox">
 								<el-button size="mini" type="info" plain>{{
@@ -27,17 +27,13 @@
 					</el-table-column>
 					<el-table-column label="Status" align="center">
 						<template slot-scope="scope">
-							<span v-if="scope.row.status == 0">Waiting</span>
+							<span v-if="scope.row.status == 0">ready to run</span>
 							<span v-else-if="scope.row.status == 1"
 								><img src="../../../assets/loading.gif" width="25px"
 							/></span>
-							<span v-else-if="scope.row.status == 2">Completed</span>
+							<span v-else-if="scope.row.status == 2">run completed</span>
 						</template>
 					</el-table-column>
-					<!-- <el-table-column label="GAGR" align="center" prop="GAGR">
-          </el-table-column>
-          <el-table-column label="Max DD" align="center" prop="maxDD">
-          </el-table-column> -->
 					<el-table-column align="center" width="300px">
 						<template slot-scope="scope">
 							<el-row>
@@ -197,7 +193,6 @@ export default {
 			let page = this.queryInfo.page
 			const res = await this.$http.get('/dev/backtest/?page=' + page)
 			if (res.status === 200) {
-				console.log(res)
 				this.loading = false
 				this.backtestList = res.data.results
 				this.queryInfo.total = res.data.count
@@ -205,24 +200,12 @@ export default {
 				this.loading = false
 			}
 		},
-		checkBacktest() {
-			let vm = this
-			chatSocket.send(
-				JSON.stringify({
-					message: vm.rowid
-				})
-			)
-		},
 		runbacktest(row) {
-			console.log(row.id)
 			let vm = this
-			vm.rowid = row.id
-			this.$message.success('Please wait while running')
 			vm.clearInterval = clearInterval()
-			if (row.status !== 2) {
+			if (row.status == 0) {
 				row.status = 1
 				vm.$http.post('dev/runbacktest/?uuid=' + row.id).then((res) => {
-					//console.log("外层",res);
 					if (res.status == 200) {
 						vm.timer = setInterval(() => {
 							vm.$http.get('dev/status/' + row.id + '/').then((res) => {
@@ -234,18 +217,24 @@ export default {
 									vm.$message.success(
 										'Run backtest is successful, click the view results button to see the results.'
 									)
-								} else if (res.data.status == 0) {
+								} else if(res.data.status === 0){
 									clearInterval(vm.timer)
 									vm.getBacktestList()
 									vm.$message.error('The run failed, please try again.')
 								}
 							})
 						}, 3000)
+					}else {
+					vm.$message.error('An error occurred on the server')
+
 					}
 				})
-			} else {
+			} else if(row.status == 2){
 				vm.loading = false
 				vm.$message.error('The policy is complete')
+			} else if(row.status == 1) {
+				vm.loading = false
+				vm.$message.error('Please wait while running')
 			}
 		},
 

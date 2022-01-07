@@ -46,7 +46,15 @@ export default new Vuex.Store({
 			extraIndicators: [],
 			technicalIndicators: []
 		},
+
 		extremeValue: [],
+
+		// extremeValue: [{
+		// 	indicator: '',
+		// 	extremeOptimism: '',
+		// 	extremePessimism: ''
+		// }],
+
 		isClearForm: false,
 		// cciDefault: {
 		//   over_bought_bound: undefined,
@@ -353,6 +361,25 @@ export default new Vuex.Store({
 				''
 			state.backtestInfo[obj.criteria].signals[obj.index].technicalIndicator =
 				''
+		},
+		clearBacktest(state) {
+			state.backtestInfo = {
+				entry: {
+					direction: '',
+					frequency: '',
+					signals: [
+						{
+							sentimentIndicator: '',
+							technicalIndicator: ''
+						}
+					]
+				},
+				exit: {
+					direction: '',
+					frequency: '',
+					signals: [{ sentimentIndicator: '', technicalIndicator: '' }]
+				}
+			}
 		},
 		setSignalDialogFd(state, fd) {
 			state.fdDialogData = fd

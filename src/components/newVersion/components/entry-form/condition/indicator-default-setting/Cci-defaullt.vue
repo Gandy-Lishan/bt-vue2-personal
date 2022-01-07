@@ -34,8 +34,13 @@
 </template>
 <script>
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
+import { Store, mapGetters } from 'vuex'
 export default {
 	extends: base,
+	props: {
+		editIds: Object,
+		idsLoad: Object
+	},
 	data() {
 		return {
 			ids: {
@@ -44,6 +49,38 @@ export default {
 				period: 20
 			}
 		}
+	},
+	watch: {
+		editIds: {
+			handler(newVal) {
+				this.ids = newVal
+			},
+			immediate: true,
+			deep: true
+		},
+		idsLoad: {
+			handler(newVal) {
+				console.log("CCI");
+				if(newVal.over_bought_bound){
+					this.setIdsLoad(newVal)
+				}
+			},
+			immediate: true,
+			deep: true
+		},
+	},
+	methods: {
+		// setIdsLoad(value) {
+		// 	const rule = /^-?0?\d*?\.?\d*?$/
+		// 	for (let key in val) {
+		// 		// moving average 不一样
+		// 		if(typeof val[key] != String){
+		// 		if (val[key].search(rule) != -1) {
+		// 			val[key] = Number(val[key])
+		// 	}}
+		// 	}
+		// 	this.ids = val
+		// }
 	}
 }
 </script>

@@ -1,6 +1,9 @@
 .el-message-box__wrapper {
 	overflow: auto !important;
 }
+.el-message-box {
+	width: 50%;
+}
 .home-container {
 	width: 100%;
 	height: 100%;
