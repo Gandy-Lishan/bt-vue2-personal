@@ -100,7 +100,8 @@ export default new Vuex.Store({
 		editBacktestSetUpData: {},
 		isShowExitForm: true,
 		tabIndex: 0,
-		fdDialogData: {}
+		fdDialogData: {},
+		sentimentIndicatorList: []
 	},
 	getters: {
 		getBacktestEntryFrequency: (state) => {
@@ -314,7 +315,7 @@ export default new Vuex.Store({
 				}
 				data = Object.assign(data, newData)
 				state.backtestInfo[criteria]['signals'][index] = data
-				//console.log('监听数据', state.backtestInfo[criteria]['signals'][index])
+				console.log('监听数据', state.backtestInfo[criteria]['signals'][index])
 			}
 			//console.log(state.backtestInfo.entry.signals);
 		},
@@ -380,6 +381,9 @@ export default new Vuex.Store({
 					signals: [{ sentimentIndicator: '', technicalIndicator: '' }]
 				}
 			}
+		},
+		getSentimentList(state,list) {
+			state.sentimentIndicatorList = list
 		},
 		setSignalDialogFd(state, fd) {
 			state.fdDialogData = fd

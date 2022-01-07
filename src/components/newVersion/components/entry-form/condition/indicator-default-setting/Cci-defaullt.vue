@@ -39,7 +39,7 @@ export default {
 	extends: base,
 	props: {
 		editIds: Object,
-		idsLoad: Object
+		idsLoad: Object,
 	},
 	data() {
 		return {

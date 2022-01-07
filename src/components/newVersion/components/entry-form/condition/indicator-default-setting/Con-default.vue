@@ -32,7 +32,7 @@ import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 export default {
 	extends: base,	props: {
 		editIds: Object,
-		sentiVal: String
+		sentiUrl: String
 	},
 	data() {
 		return {
@@ -57,17 +57,18 @@ export default {
 			deep: true
 		},
 		extremeValue: {
-			// handler(newVal) {
-			// 	newVal.forEach(item => {
-			// 		if(item.indicator){
-			// 		if(item.indicator === this.sentiVal) {
-			// 			this.$set(this.ids, 'extreme_pessimism', item.extremePessimism)
-			// 			this.$set(this.ids, 'extreme_optimism', item.extremeOptimism)
-			// 		}}
-			// 	})
-			// },
-			// immediate: true,
-			// deep: true
+			handler(newVal) {
+				console.log('999999999999999');
+				newVal.forEach(item => {
+					if(item.indicator){
+					if(item.indicator === this.sentiUrl) {
+						this.$set(this.ids, 'extreme_pessimism', item.extremePessimism)
+						this.$set(this.ids, 'extreme_optimism', item.extremeOptimism)
+					}}
+				})
+			},
+			immediate: true,
+			deep: true
 		}
 	}
 }

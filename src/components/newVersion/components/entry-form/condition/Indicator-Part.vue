@@ -126,10 +126,11 @@ export default {
 				return { value: obj.chart_name, url: obj.url }
 			})
 			this.$store.commit('getIndicatorsList', res.data)
+			this.$store.commit('getSentimentList',vm.sentimentIndicatorList)
 		},
 		// sentiment search
 		indicatorSentimentSearch(queryString, cb) {
-			var sentimentIndicatorList = this.sentimentIndicatorList
+			var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
 			var results = queryString
 				? sentimentIndicatorList.filter(
 						this.createStateSentimentFilter(queryString)
@@ -189,6 +190,7 @@ export default {
 				}
 				this.$store.commit('getMA', activatedMAList)
 				this.$store.commit('getEntryIndicators', item.url)
+				this.$emit('getSentiUrl', item.url)
 			} else {
 				var MAListIndex = activatedMAList.findIndex(
 					(item) => item.url == this.$store.state.indicators.formIndicators.exit
@@ -198,6 +200,7 @@ export default {
 				}
 				this.$store.commit('getMA', activatedMAList)
 				this.$store.commit('getExitIndicators', item.url)
+				this.$emit('getSentiUrl', item.url)
 			}
 
 			CIQ.addIndicators()

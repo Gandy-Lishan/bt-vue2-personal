@@ -10,10 +10,11 @@
 					<el-table-column
 						label="description"
 						align="center"
+						show-overflow-tooltip
 						prop="description"
 					>
 					</el-table-column>
-					<el-table-column label="Backtest Period">
+					<el-table-column label="Backtest Period" >
 						<template slot-scope="scope">
 							<div class="dataBox">
 								<el-button size="mini" type="info" plain>{{
