@@ -65,7 +65,7 @@
 						>
 					</div>
 				</div>
-				<div class="signalRight" :class="signalVisiable ? 'active' : ''">
+				<div class="signalRight">
 					<condition-tab
 						:entrySignalEditData="entrySignalEditData"
 						:criteria="criteria"
@@ -150,11 +150,13 @@ export default {
 		},
 		getEditBacktestData: {
 			handler(newVal) {
-				const data = newVal.entry
-				console.log("进厂信函",data);
-				this.fd.description = data.description
-				this.fd.direction = data.direction
-				this.fd.frequency = data.frequency
+				const data = deepClone1(newVal.entry)
+				this.$set(this.fd, 'description', data.description)
+				this.$set(this.fd, 'direction', data.direction)
+				this.$set(this.fd, 'frequency', data.frequency)
+				this.signalVisiable = false
+				this.getEntryDirection(data.direction)
+				this.getFrequency(data.frequency)
 			},
 			immediate: true,
 			deep: true

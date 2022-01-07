@@ -84,7 +84,7 @@ class SignalDecodeSC {
         return data
     }
     si_period_condition_value(val) {
-        var re = /^SVMA(-?0?\d*?\.?\d*?)\/(-?0?\d*?\.?\d*?)\/(-?0?\d*?\.?\d*?)$/
+        var re = /^SVMA(-?0?\d*?\.?\d*?)\/(-?0?\d*?\.?\d*?)\/MA(-?0?\d*?\.?\d*?)$/
         if (val.search(re) == -1) return "The input parameters of the Signal Condition maybe error!"
         // var array = val.match(re)
         var data = {
@@ -267,14 +267,14 @@ class SignalCode {
         var val_keys = Object.keys(val)
         if (val["analysis"] === "Sentiment") {
             if (val_keys.indexOf("period") !== -1) {
-                re_str += "SVMA" + val["period"] + "/" + val["condition"] + "/" + val["value"];
+                re_str += "SVMA" + val["period"] + "/" + val["condition"] + "/MA" + val["value"];
             } else if (val_keys.indexOf("period") === -1) {
                 re_str += "SV/" + val["condition"] + "/" + val["value"]
             }
         } else if (val["analysis"] === "Technical") {
             if (val["indicator"] == "Moving Average") {
                 if (val_keys.indexOf("ma_period") === -1) {
-                    re_str += "SCMA/" + val["condition"] + "/" + val["period"]
+                    re_str += "SCMA/" + val["condition"] + "/MA" + val["period"]
                 } else if (val_keys.indexOf("ma_period") !== -1) {
                     re_str += "MAMA" + val["ma_period"] + "/" + val["condition"] + "/MA" + val["period"]
                 }
@@ -362,7 +362,7 @@ const a = new SignalCode()
 // a.decode("TI:MA;IDS:EMA;SC:SCMA/3/MA20")
 // a.decode("TI:MA;IDS:SMA;SC:MAMA5/3/MA20")
 // a.decode("TI:MACD;IDS:MACDSlow25/MACDFast25/SL9;SC:MACDV/3/0")
-// a.decode("TI:MACD;IDS:MACDSlow25/MACDFast25/SL9;SC:MACDV/3/MACDSL")
+// console.log(a.decode("TI:MACD;IDS:MACDSlow25/MACDFast25/SL9;SC:MACDV/3/MACDSL"))
 // a.decode("TI:Commodity Channel Index;IDS:OBB20/OSB80/Period20;SC:CCIV/3/10.0")
 // a.decode("TI:Commodity Channel Index;IDS:OBB20/OSB80/Period20;SC:CCIV/4/90.0")
 // a.decode("TI:RSI;IDS:OBB200/OSB-200/Period20.000;SC:RSIV/3/-200.00")

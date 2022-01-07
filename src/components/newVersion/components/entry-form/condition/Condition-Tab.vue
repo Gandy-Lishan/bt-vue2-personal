@@ -42,21 +42,6 @@ export default {
 	props: {
 		criteria: String,
 	},
-	inject: ['editEntryData'],
-	computed: {
-		getEditEntryData() {
-			return this.editEntryData()
-		}
-	},
-	watch: {
-		getEditEntryData: {
-			handler(newVal) {
-				console.log('condition-inject', newVal)
-			},
-			immediate: true,
-			deep: true
-		},
-	},
 	data() {
 		return {
 			editableTabsValue: '1',

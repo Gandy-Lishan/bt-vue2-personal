@@ -56,7 +56,7 @@
 				>
 			</div>
 		</div>
-		<div class="signalRight" :class="signalVisiable ? 'active' : ''">
+		<div class="signalRight">
 			<condition-tab
 				@goToFavorite="goToFavorite"
 				:criteria="criteria"
@@ -83,8 +83,8 @@ export default {
 			},
 			fd: {
 				description: '',
-				direction: 'Short',
-				frequency: 'Daily',
+				direction: '',
+				frequency: '',
 				relation: 0,
 				score: 0
 			},
@@ -138,11 +138,11 @@ export default {
 		},
 		getEditBacktestData: {
 			handler(newVal) {
-				console.log('exit-inject11111', newVal)
 				const data = newVal.exit
 				this.fd.description = data.description
 				this.fd.direction = data.direction
 				this.fd.frequency = data.frequency
+				this.signalVisiable = false
 			},
 			immediate: true,
 			deep: true
@@ -153,8 +153,6 @@ export default {
 					Long: 'Short',
 					Short: 'Long'
 				}
-				// this.fd = newVal
-
 				this.fd['direction'] = obj[newVal['direction']]
 				this.fd['frequency'] = newVal['frequency']
 				this.fd.criteria = 'exit'

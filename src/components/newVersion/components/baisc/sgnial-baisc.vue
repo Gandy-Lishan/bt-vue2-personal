@@ -1,6 +1,7 @@
 
 <script>
 import { Store, mapGetters } from 'vuex'
+import deepClone1 from '@/tools/deepClone.js'
 export default {
 	props: {
 		tabIndex: Number,
@@ -18,10 +19,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['getExtremeValue', 'getIsClearForm']),
-		extremeValue() {
-			return this.getExtremeValue
-		},
+		...mapGetters([ 'getIsClearForm']),
 		isClearForm() {
 			return this.getIsClearForm
 		}
@@ -102,26 +100,17 @@ export default {
 			immediate: true,
 			deep: true
 		},
-		extremeValue: {
-			handler(newVal) {
-				this.ids.extreme_optimism = newVal.extremeOptimism
-				this.ids.extreme_pessimism = newVal.extremePessimism
-				this.ids.over_bought_bound = newVal.extremeOptimism
-				this.ids.over_sold_bound = newVal.extremePessimism
-				this.ids.MACDSlow = newVal.extremeOptimism
-				this.ids.MACDFast = newVal.extremePessimism
-			},
-			immediate: true,
-			deep: true
-		}
 	},
 	methods: {
-		setIdsLoad(val) {
+		setIdsLoad(value) {
+			 const val = deepClone1(value)
+			const rule = /^-?0?\d*?\.?\d*?$/
 			for (let key in val) {
 				// moving average 不一样
-				if (Number(val[key]) != NaN) {
+				if(typeof val[key] == 'string'){
+				if (val[key].search(rule) != -1) {
 					val[key] = Number(val[key])
-				}
+			}}
 			}
 			this.ids = val
 		}

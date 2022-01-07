@@ -167,7 +167,6 @@ export default {
 			this.getCustomList('custom_signal')
 		},
 		async getSignallist(users) {
-			console.log('9999999999999')
 			const user = users
 			let analysisBasis = this.$store.state.entryIndicatorRadio
 			let indicator

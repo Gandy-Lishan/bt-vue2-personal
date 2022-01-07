@@ -87,6 +87,7 @@ export default {
 			handler(newVal) {
 				if (newVal.sentimentIndicator) {
 					this.indicatorRadio = 'Sentiment Indicators'
+					this.isCheckedIndicators = false
 					this.si.sentimentIndicator = newVal.sentimentIndicator
 					const obj = {}
 					obj.criteria = this.criteria
@@ -95,6 +96,7 @@ export default {
 					this.$store.commit('getSentiValue', obj)
 				} else if (newVal.technicalIndicator) {
 					this.indicatorRadio = 'Technical Indicators'
+					this.isCheckedIndicators = true
 					this.si.technicalIndicator = newVal.technicalIndicator
 					const obj = {}
 					obj.criteria = this.criteria
@@ -176,6 +178,7 @@ export default {
 			this.$emit('getSentiVal', item.value)
 			// remove MA
 			var activatedMAList = this.$store.state.activatedMA
+			console.log('SentimentSelect MA LIST: ',activatedMAList)
 			if (obj.criteria == 'entry') {
 				var MAListIndex = activatedMAList.findIndex(
 					(item) =>
@@ -231,8 +234,11 @@ export default {
 					techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
 					techIndicators.push(item[1])
 					this.$store.commit('getTechnicalIndicators', techIndicators)
+
+					console.log("SentimentSelect MA LIST", CIQ.store.state.activatedMA)
 					CIQ.addIndicators()
 					// remove MA from Vuex after loading Tech
+					console.log(CIQ.store.state.activatedMA)
 					var activatedMAList = CIQ.store.state.activatedMA
 					activatedMAList.splice(
 						activatedMAList.findIndex((item) => item.url == item[1]),
@@ -272,20 +278,25 @@ export default {
 			]
 		},
 		setIndicatorRadio(obj) {
+			let vm = this
+			console.log("load");
 			this.indicatorRadio = obj.radio
-			if (obj.sentimentIndicator) {
-				this.si.sentimentIndicator = obj.sentimentIndicator
-				this.$emit('getSentiVal', obj.sentimentIndicator)
-				const obj = obj
-				obj.value = obj.sentimentIndicator
-                this.$store.commit('getSentiValue', obj)
+			var data = Object.assign(obj)
+			if (data.sentimentIndicator) {
+				
+				vm.si["sentimentIndicator"] = data["sentimentIndicator"]
+				vm.$set(vm.si, 'sentimentIndicator', data.sentimentIndicator)
+				this.$emit('getSentiVal', data.sentimentIndicator)
+				const sentiObj = data
+				sentiObj.value = sentiObj.sentimentIndicator
+                this.$store.commit('getSentiValue', sentiObj)
 				this.isCheckedIndicators = false
-			} else if (obj.technicalIndicator) {
-				this.si.technicalIndicator = obj.technicalIndicator
+			} else if (data.technicalIndicator) {
+				vm.$set(this.si, 'technicalIndicator', obj.technicalIndicator)
 				this.$emit('getTechVal', obj.technicalIndicator)
-				const obj = obj
-				obj.value = obj.technicalIndicator
-                this.$store.commit('getTechValue', obj)
+				const sentiObj = data
+				sentiObj.value = sentiObj.technicalIndicator
+                this.$store.commit('getTechValue', sentiObj)
 				this.isCheckedIndicators = true
 			}
 		}

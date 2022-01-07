@@ -367,8 +367,9 @@
 		<cq-attribution></cq-attribution>
 
 		<div class="ciq-footer full-screen-hide">
-			<cq-share-button></cq-share-button>
-			<div
+			<!-- <cq-share-button></cq-share-button> -->
+			<div class="reload" stxtap="Layout.reloadChart()">Clean chart</div>
+			<!-- <div
 				class="shortcuts-ui ciq-shortcut-button"
 				stxtap="Layout.showShortcuts()"
 				title="Toggle Shortcut Legend"
@@ -377,11 +378,10 @@
 				class="help-ui ciq-help-button"
 				stxtap="Layout.toggleHelp()"
 				title="Toggle Interactive Help"
-			></div>
-			<span class="watermark">sentimentrader.com</span>
+			></div> -->
+			<!-- <span class="watermark">sentimentrader.com</span> -->
 			<cq-show-range></cq-show-range>
 		</div>
-
 		<cq-dialogs>
 			<cq-dialog>
 				<cq-drawing-context></cq-drawing-context>
@@ -424,6 +424,7 @@ export default class AdvancedChartComponent extends Vue {
 		const config = this.config || getCustomConfig()
 		const container = this.container
 		
+		
 		portalizeContextDialogs(container)
 		// Delay the call to createChartAndUI so any other AdvancedChart components on the page
 		// have a chance to call portalizeContextDialogs
@@ -455,8 +456,13 @@ export default class AdvancedChartComponent extends Vue {
 
 			CIQ.ChartEngine.prototype.prepend("draw", function () {
 			// create persistence by forcing it  be called in every animation frame.
-			CIQ.stxx.watermark("chart", { h: "bottom", v: "left", text: "sentimentrader.com" });
+				//CIQ.stxx.watermark("chart", { h: "bottom", v: "left", text: "sentimentrader.com" });
+				
 			});
+			var node = document.getElementsByClassName("stx-subholder")[0]
+			var newdiv=document.createElement("div");
+			newdiv.className = 'stLogo'
+			node.appendChild(newdiv)
 
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
 			CIQ.stxx.layout.headsUp = "floating";

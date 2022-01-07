@@ -145,6 +145,7 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters} from "vuex"
 import { timestampToTime } from '@/tools/formatDate.js'
+import deepClone1 from '@/tools/deepClone.js'
 import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
 export default {
   extends: base,
@@ -245,7 +246,11 @@ export default {
 			return this.indexList.map((item) => {
 				return { value: `${item.symbol}`, label: `${item.symbol}` }
 			})
-		}
+		},
+		...mapGetters(['getIsClearForm']),
+		isClearForm() {
+			return this.getIsClearForm
+		},
 	},
 	watch: {
 		backtestEditData: {
@@ -257,9 +262,14 @@ export default {
 				delete newVal.results
 				delete newVal.uuid
 				this.bd = Object.assign(this.bd,newVal)
-				console.log(this.bd);
 			}
-		}
+		},isClearForm: {
+			handler(newVal) {
+				let init = deepClone1(this.$options.data())
+				Object.assign(this.$data, init)
+				this.getEndDate()
+			}
+		},
 	},
 	methods: {
 		getSymbolName(val) {
