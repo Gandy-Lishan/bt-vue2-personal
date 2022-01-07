@@ -30,13 +30,44 @@
 import { Store, mapGetters } from 'vuex'
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 export default {
-	extends: base,
+	extends: base,	props: {
+		editIds: Object,
+		sentiVal: String
+	},
 	data() {
 		return {
 			ids: {
 				extreme_optimism: '',
 				extreme_pessimism: ''
 			}
+		}
+	},
+	computed: {
+		...mapGetters(['getExtremeValue']),
+				extremeValue() {
+			return this.getExtremeValue
+		},
+	},
+		watch: {
+		editIds: {
+			handler(newVal) {
+				this.ids = newVal
+			},
+			immediate: true,
+			deep: true
+		},
+		extremeValue: {
+			// handler(newVal) {
+			// 	newVal.forEach(item => {
+			// 		if(item.indicator){
+			// 		if(item.indicator === this.sentiVal) {
+			// 			this.$set(this.ids, 'extreme_pessimism', item.extremePessimism)
+			// 			this.$set(this.ids, 'extreme_optimism', item.extremeOptimism)
+			// 		}}
+			// 	})
+			// },
+			// immediate: true,
+			// deep: true
 		}
 	}
 }

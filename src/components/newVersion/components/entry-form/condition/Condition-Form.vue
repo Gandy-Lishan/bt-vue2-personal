@@ -112,7 +112,7 @@
 				></el-tooltip>
 			</div>
 			<el-button plain style="margin: 5px 0px 5px 0px">{{
-				`${sentiVal}&nbsp;&nbsp;${sc.period ? 'moving average' : ''}${sc.period ? sc.period : ''}&nbsp;&nbsp;${
+				`${sentiVal}&nbsp;&nbsp;${sc.period ? 'moving average' : ''}&nbsp;&nbsp;${sc.period ? sc.period : ''}&nbsp;&nbsp;${
 					conditions[sc.condition].label
 				}&nbsp;&nbsp;${sc.value}`
 			}}</el-button>
@@ -138,7 +138,7 @@ export default {
 			],
 			sc: {
 				condition: 3,
-				value: 20,
+				value: '',
 				period: ''
 			},
 			disabled: false,
@@ -227,8 +227,12 @@ export default {
 			console.log(this.$store.state.activatedMA)
 		},
 		setScLoad(val) {
+			const rule = /^-?0?\d*?\.?\d*?$/
 			for (let key in val) {
-				val[key] = Number(val[key])
+				if(typeof val[key] == 'string'){
+				if (val[key].search(rule) != -1) {
+					val[key] = Number(val[key])
+				}}
 			}
 			if (val.period) {
 				this.conditionRadio = 'Sentiment Moving Average'

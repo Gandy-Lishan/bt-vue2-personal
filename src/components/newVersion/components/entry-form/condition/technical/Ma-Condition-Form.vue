@@ -300,8 +300,12 @@ export default {
 			}	
 		},
 		setScLoad(val) {
+			const rule = /^-?0?\d*?\.?\d*?$/
 			for (let key in val) {
-				val[key] = Number(val[key])
+				if(typeof val[key] == 'string'){
+				if (val[key].search(rule) != -1) {
+					val[key] = Number(val[key])
+				}}
 			}
 			if (val.ma_period) {
 				this.conditionRadio = 'Moving Average'

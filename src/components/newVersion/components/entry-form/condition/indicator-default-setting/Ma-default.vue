@@ -23,8 +23,12 @@
 <script>
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { Store, mapGetters } from 'vuex'
 export default {
-	extends: base,
+	extends: base,	props: {
+		editIds: Object,
+		idsLoad: Object
+	},
 	data() {
 		return {
 			conditionRadio: 'Symbol Close',
@@ -41,6 +45,13 @@ export default {
 	watch: {
 		data (val) {
 			this.conditionRadio = val
+		},
+				editIds: {
+			handler(newVal) {
+				this.ids = newVal
+			},
+			immediate: true,
+			deep: true
 		}	
 	},
 	methods: {
@@ -142,9 +153,17 @@ export default {
 					activatedMAList.push(objMA)
 
 					this.$store.commit('getMA', activatedMAList)
-
-					console.log(this.$store.state.activatedMA)
 			}
+		},
+				setIdsLoad(value) {
+			const rule = /^-?0?\d*?\.?\d*?$/
+			for (let key in val) {
+				// moving average 不一样
+				if (val[key].search(rule) == -1) {
+					this.ids.ma_category = val[key]
+			}
+			}
+			this.ids = val
 		}
 	}
 }

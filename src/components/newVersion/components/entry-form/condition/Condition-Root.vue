@@ -37,8 +37,10 @@
 				<con-default
 					v-if="indicatorRadio === 'sentiment'"
 					:tabIndex="tabIndex"
+					:sentiVal="sentiVal"
 					:criteria="criteria"
 					:idsLoad="idsLoad"
+					:editIds="editIds"
 				></con-default>
 				<!-- technical default setting-->
 				<!-- cci -->
@@ -47,12 +49,13 @@
 					:tabIndex="tabIndex"
 					:idsLoad="idsLoad"
 					:criteria="criteria"
+				    :editIds="editIds"
 				></cci-default>
 				<!-- ma -->
 				<ma-default
 					v-if="indicatorRadio === 'technical' && techIndiValue === 'ma'"
 					:tabIndex="tabIndex"
-					:idsLoad="idsLoad"
+					:editIds="editIds"
 					:criteria="criteria"
 				></ma-default>
 				<!-- macd -->
@@ -61,6 +64,7 @@
 					:tabIndex="tabIndex"
 					:idsLoad="idsLoad"
 					:criteria="criteria"
+					:editIds="editIds"
 				></macd-default>
 				<!-- rsi -->
 				<rsi-default
@@ -69,6 +73,7 @@
 					:scLoad="scLoad"
 					:idsLoad="idsLoad"
 					:criteria="criteria"
+					:editIds="editIds"
 				></rsi-default>
 			</div>
 			<!-- sentiment condition form -->
@@ -153,7 +158,8 @@ export default {
 			scLoad: {},
 			sentiVal: '',
 			techVal: '',
-			indicatorEditData: {}
+			indicatorEditData: {},
+			editIds: {},
 		}
 	},
 	inject: ['editBacktestData'],
@@ -184,8 +190,8 @@ export default {
 		},
 		signalDialogData: {
 			handler(newVal) {
-				//console.log('弹框中的数据', newVal)
 				const fd = {}
+				let vm = this;
 				fd.description = newVal.description
 				fd.direction = newVal.direction
 				fd.frequency = newVal.frequency
@@ -195,12 +201,12 @@ export default {
 				this.scLoad = newVal.code.sc
 				if (newVal.code.analysis === 'Technical') {
 					this.indicatorRadio = 'technical'
-					const obj = {}
-					obj.radio = 'Technical Indicators'
-					obj.technicalIndicator = newVal.code.indicator
-					obj.criteria = this.criteria
-					obj.index = this.tabIndex
-					this.$refs.indicatorPart.setIndicatorRadio(obj)
+					let setObj = {}
+					setObj.radio = 'Technical Indicators'
+					setObj.technicalIndicator = newVal.code.indicator
+					setObj.criteria = this.criteria
+					setObj.index = this.tabIndex
+					this.$refs.indicatorPart.setIndicatorRadio(setObj)
 					const arr = [
 						{ label: 'Moving Average', value: 'ma' },
 						{ label: 'MACD', value: 'macd' },
@@ -214,12 +220,12 @@ export default {
 					})
 				} else if (newVal.code.analysis === 'Sentiment') {
 					this.indicatorRadio = 'sentiment'
-					const obj = {}
-					obj.radio = 'Sentiment Indicators'
-					obj.sentimentIndicator = newVal.code.indicator
-										obj.criteria = this.criteria
-					obj.index = this.tabIndex
-					this.$refs.indicatorPart.setIndicatorRadio(obj)
+					let sentiObj = {}
+					sentiObj.radio = 'Sentiment Indicators'
+					sentiObj.sentimentIndicator = newVal.code.indicator
+					sentiObj.criteria = this.criteria
+					sentiObj.index = this.tabIndex
+					vm.$refs.indicatorPart.setIndicatorRadio(sentiObj)
 				}
 			},
 
@@ -228,12 +234,21 @@ export default {
 		},
 		getEditBacktestData: {
 			handler(newVal) {
+				if(newVal.entry.direction){
 				this.indicatorEditData = {}
 				var signalCode = new SignalCode()
-				var code = newVal[this.criteria]['signals'][this.tabIndex]['code']
+				const data = newVal[this.criteria]['signals']
+				if(data instanceof Array) {
+				 var code = data[this.tabIndex]['code']
+				}
 				code = signalCode.decode(code)
-				console.log('test', code)
-				this.idsLoad = code.ids
+				// this.idsLoad = code.ids
+
+
+				if(!code.ids) {
+					code.ids = {}
+				}
+				this.editIds = code.ids
 				this.scLoad = code.sc
 				if (code.analysis === 'Sentiment') {
 					this.sentimentIndicator = code.indicator
@@ -241,10 +256,23 @@ export default {
 					this.indicatorRadio = 'sentiment'
 					this.sentiVal = code.indicator
 				} else if (code.analysis === 'Technical') {
+					const arr = [
+						[ 'Moving Average', 'ma' ],
+						[ 'MACD', 'macd' ],
+						[ 'Commodity Channel Index', 'ST CCI' ],
+						[ 'Relative Strength Index', 'rsi' ]
+					]
+					let indicatorMap = new Map(arr)
+					for (let [key, value] of indicatorMap) {
+						if(code.indicator === key) {
+							this.techIndiValue = value
+						}
+                    }
 					this.technicalIndicator = code.indicator
 					this.indicatorRadio = 'technical'
 					this.techVal = code.indicator
 					this.indicatorEditData.technicalIndicator = code.indicator
+				}
 				}
 			},
 			immediate: true,
@@ -324,7 +352,6 @@ export default {
 			this.$store.commit('getTechValue', obj)
 		},
 		saveSignal() {
-			console.log(4444444444)
 			const a = new SignalCode()
 			const obj = this.$store.state.backtestInfo[this.criteria]
 			console.log('vuex中的數據', obj)

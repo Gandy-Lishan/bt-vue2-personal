@@ -130,15 +130,6 @@ export default {
     str[0] = (Number(str[0]) - Number(this.backtestResult.historyValue)) + ''
     this.backtestResult.starDate = str.join('-')
   },
-  watch: {
-    "this.$store.state.favoriteBacktestRowData": {
-      handle(newVal) {
-      console.log("结果",newVal);
-    },
-    immediate: true,
-    deep: true
-    }
-  },
   computed: {
     listSet(){
       return this.symbolList.map(item => {
