@@ -75,8 +75,11 @@ export default class AdvancedWrapper extends Vue {
 		CIQ.store = store;
 		CIQ.vue = Vue;
 		// refresh pag
+		console.log('backup vuex and clear chart first time')
+		CIQ.store.commit('setCopy',JSON.stringify(CIQ.store.state))
 		CIQ.addIndicators()
 		
+
 		// console.log("length of indicatorList: ",CIQ.store.state.indexsList.length)
 		// for (var i = 0; i < CIQ.store.state.indexsList.length; i++) {
         //                 var fields = CIQ.store.state.indexsList[i];
@@ -123,4 +126,6 @@ export default class AdvancedWrapper extends Vue {
 	border: 1px solid black;
     border-radius: 5px;
 }
+
+
 </style>

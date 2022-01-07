@@ -178,6 +178,7 @@ export default {
 			this.$emit('getSentiVal', item.value)
 			// remove MA
 			var activatedMAList = this.$store.state.activatedMA
+			console.log('SentimentSelect MA LIST: ',activatedMAList)
 			if (obj.criteria == 'entry') {
 				var MAListIndex = activatedMAList.findIndex(
 					(item) =>
@@ -233,8 +234,11 @@ export default {
 					techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
 					techIndicators.push(item[1])
 					this.$store.commit('getTechnicalIndicators', techIndicators)
+
+					console.log("SentimentSelect MA LIST", CIQ.store.state.activatedMA)
 					CIQ.addIndicators()
 					// remove MA from Vuex after loading Tech
+					console.log(CIQ.store.state.activatedMA)
 					var activatedMAList = CIQ.store.state.activatedMA
 					activatedMAList.splice(
 						activatedMAList.findIndex((item) => item.url == item[1]),
