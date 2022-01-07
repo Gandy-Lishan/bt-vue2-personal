@@ -177,6 +177,26 @@ export default {
 					delete this.sc.ma_period
 				}
 				this.disabled = !this.disabled
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					var sd = CIQ.stxx.layout.studies[studyInstanceName];
+					if(sd.type == 'ST MA' && sd.panel == 'chart'){
+						CIQ.Studies.removeStudy(
+							CIQ.stxx,
+							sd
+						)
+					}
+				}
+				
+				// remove current MA attached to an indicator
+				var activatedMAList = this.$store.state.activatedMA
+				var MAListIndex = activatedMAList.findIndex(
+					(item) => item.url == 'ma'
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				console.log(this.$store.state.activatedMA)
 
 			} else if(val === 'Moving Average'){
 				// 添加附属ma
@@ -227,6 +247,29 @@ export default {
 				obj.delete = 'ma_period'
 				this.$store.commit('delete', obj)
 				this.sc.period = val
+
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName];
+				if(sd.type == 'ma'){
+					// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
+					// dialogHelper.updateStudy({ inputs: { Period: val } });
+					var replaceStudy = {
+						name: "Moving Average",
+						overlay: true,
+						calculateFN: CIQ.Studies.calculateMovingAverage,
+						inputs: { Period: val, Field: "field", Type: this.maRadio=="SMA"?"simple":"exponential", Offset: 0 },
+						outputs: { MA: "#FF0000" }
+					}
+					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
+					var st = CIQ.Studies.replaceStudy(
+						CIQ.stxx,
+						sd.inputs.id,
+						sd.type,
+					);
+					CIQ.store.commit('getMaPeriod',val)
+					console.log('replaced study: ',st)
+				}
+			}	
 			}
 		},
 		getMaPeriodValue(val){
@@ -287,7 +330,6 @@ export default {
 						inputs: { Period: val, Field: "field", Type: this.maRadio=="SMA"?"simple":"exponential", Offset: 0 },
 						outputs: { MA: "#FF0000" }
 					}
-					//CIQ.store.commit('getReplaceStudy',replaceStudy)
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
 					var st = CIQ.Studies.replaceStudy(
 						CIQ.stxx,

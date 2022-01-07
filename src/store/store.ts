@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
+    stateCopy: {},
     conditionRadio: '',
     maRadio: '',
     stMaPeriod: '',
@@ -45,10 +46,7 @@ export default new Vuex.Store({
 			extraIndicators: [],
 			technicalIndicators: []
 		},
-		extremeValue: {
-			extremeOptimism: undefined,
-			extremePessimism: undefined
-		},
+		extremeValue: [],
 		isClearForm: false,
 		// cciDefault: {
 		//   over_bought_bound: undefined,
@@ -125,6 +123,12 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+    resetState(state,val){
+      state = val
+    },
+    setCopy(state,val){
+      state.stateCopy = val
+    },
     setConditionRadio(state,val){
       state.conditionRadio = val
     },
@@ -141,13 +145,8 @@ export default new Vuex.Store({
     getImportedLayout(state,val){
       state.importedLayout = val
     },
-		getExtremeValue: (state, item) => {
-			//console.log(11111);
-
-			state.extremeValue = {
-				extremeOptimism: item.extremeOptimism,
-				extremePessimism: item.extremePessimism
-			}
+		getExtremeValue: (state, list) => {
+			state.extremeValue = list
 		},
 		getFavoriteList(state, list) {
 			state.favoriteList = list
@@ -307,7 +306,7 @@ export default new Vuex.Store({
 				}
 				data = Object.assign(data, newData)
 				state.backtestInfo[criteria]['signals'][index] = data
-				console.log('监听数据', state.backtestInfo[criteria]['signals'][index])
+				//console.log('监听数据', state.backtestInfo[criteria]['signals'][index])
 			}
 			//console.log(state.backtestInfo.entry.signals);
 		},
