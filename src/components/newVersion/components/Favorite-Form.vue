@@ -37,8 +37,20 @@
 					<el-table-column align="center" width="300px">
 						<template slot-scope="scope">
 							<el-row>
-								<el-button type="warning" icon="el-icon-star-off" circle @click="sendBack(scope.row)" size="mini"></el-button>
-                <el-button type="success" icon="el-icon-check" circle @click="showDes(scope.row)" size="mini"></el-button>
+								<el-button
+									type="warning"
+									icon="el-icon-star-off"
+									circle
+									@click="sendBack(scope.row)"
+									size="mini"
+								></el-button>
+								<el-button
+									type="success"
+									icon="el-icon-check"
+									circle
+									@click="showDes(scope.row)"
+									size="mini"
+								></el-button>
 								<el-tooltip
 									class="item"
 									effect="light"
@@ -145,6 +157,7 @@
 	</el-row>
 </template>
 <script>
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
 	data() {
 		return {
@@ -170,17 +183,15 @@ export default {
 		this.getBacktestList()
 		this.getStrategyName()
 	},
-  	mounted(){
+	mounted() {
 		this.$cookies.set('username', 'test')
 	},
 	methods: {
 		async getBacktestList(strategy) {
-			console.log(111);
+			console.log(111)
 			this.loading = true
 			let page = this.queryInfo.page
-			const res = await this.$http.get(
-				'/dev/backtest/?page='+ page
-			)
+			const res = await this.$http.get('/dev/backtest/?page=' + page)
 			if (res.status === 200) {
 				this.loading = false
 				this.backtestList = res.data.results
@@ -189,17 +200,17 @@ export default {
 				this.loading = false
 			}
 		},
-		runbacktest(row) {	
-	  let vm = this
+		runbacktest(row) {
+			let vm = this
 			vm.clearInterval = clearInterval()
 			if (row.status == 0) {
 				row.status = 1
 				vm.$http.post('dev/runbacktest/?uuid=' + row.id).then((res) => {
 					if (res.status == 200) {
 						vm.timer = setInterval(() => {
-							vm.$http.get('dev/status/' + row.id + "/").then((res) => {
+							vm.$http.get('dev/status/' + row.id + '/').then((res) => {
 								//(res.data.status)
-								console.log("内层",res);
+								//console.log("内层",res);
 								if (res.data.status === 2) {
 									clearInterval(vm.timer)
 									vm.getBacktestList()
@@ -232,7 +243,7 @@ export default {
 			// const res = await this.$http.get('/demo/strategies' + id + '/')
 		},
 		editBacktest(row) {
-			this.$emit('goTobacktestSetupForm',row.id)
+			this.$emit('goTobacktestSetupForm', row.id)
 		},
 		deleteBacktest(id) {
 			this.$http
@@ -260,93 +271,115 @@ export default {
 				})
 		},
 		copyBacktest(row) {
-      console.log("行",row);
-      let params = {}
-      this.$http.get('/dev/seeparams/' + row.id + '/').then(res => {
-        params = res.data
-        params.name = params.name + '(copy)'
-        delete params.uuid
-        delete params.results
-        delete params.user_id
-        delete params.status
-        delete params.backtest_id
-        console.log(params);
-        this.$http
-				.post('/dev/backtest/', this.$qs.stringify(params), {
-					withCredentials: true
-				})
-				.then((res) => {
-					if (res.status === 201) {
-						this.$message.success('Copy successfully')
-            this.getBacktestList()
-					} else {
-						this.$message.success('Copy failed')
-					}
-				})
-      }
-      )
+			console.log('行', row)
+			let params = {}
+			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+				params = res.data
+				params.name = params.name + '(copy)'
+				delete params.uuid
+				delete params.results
+				delete params.user_id
+				delete params.status
+				delete params.backtest_id
+				console.log(params)
+				this.$http
+					.post('/dev/backtest/', this.$qs.stringify(params), {
+						withCredentials: true
+					})
+					.then((res) => {
+						if (res.status === 201) {
+							this.$message.success('Copy successfully')
+							this.getBacktestList()
+						} else {
+							this.$message.success('Copy failed')
+						}
+					})
+			})
 		},
 		viewBacktestResults(row) {
-			console.log(row);
+			console.log(row)
+			let vm = this
+			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+				// 恢复indicator layout
+				this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+			})
 			this.$store.commit('getRunBacktestData', row)
-			this.$emit('goBacktestResultForm',row)
+			this.$emit('goBacktestResultForm', row)
 		},
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
-			console.log("当前页数",this.queryInfo.page);
+			console.log('当前页数', this.queryInfo.page)
 			this.getBacktestList()
 		},
-    showDes(row) {
-      const datades = {}
-      let vm = this
-      	vm.$http.get('/dev/seeparams/' + row.id + '/').then(res => {
-          console.log("详情");
-          const des = res.data
-          let str = ``
-          for(let key in des) {
-            str = str + '<p>'+`${key}:  ${des[key]}` +'</p>'
-          }
-       vm.$alert(str, '标题名称', {
-          confirmButtonText: '确定',
-          dangerouslyUseHTMLString: true,
-		  lockScroll: false,
-          callback: action => {
-            vm.$message({
-              type: 'info',
-              message: `action: ${ action }`
-            });
-          }
-        })
-        })
-    },
-	sendBack(row) {
-		let vm = this
-		this.$http.post('/dev/seeparams/' + row.id + '/').then(res => {
-			 const des = res.data
-			 let str = ``
-          for(let key in des) {
-            str = str + '<p>'+`${key}:  ${des[key]}` +'</p>'
-          }
-		  str = str + "<h3>FinalResult:</h3>"
-		  for(let key in des.FinalResult){
-			  str = str + '<p>'+`${key}:  ${des.FinalResult[key]}` +'</p>'
-		  }
-		  str = str + "<h3>FinalResult.AnnualReturn:</h3>"
-		for(let key in des.FinalResult.AnnualReturn){
-			  str = str + '<p>'+`${key}:  ${des.FinalResult.AnnualReturn[key]}` +'</p>'
-		  }
-       vm.$alert(str, '标题名称', {
-          confirmButtonText: '确定',
-          dangerouslyUseHTMLString: true,
-          callback: action => {
-            vm.$message({
-              type: 'info',
-              message: `action: ${ action }`
-            });
-          }
-        })
-		})
-	}
+		restoreIndicatorLayout(data){
+			console.log(data)
+			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
+			this.$store.commit('getExitIndicators', data.formIndicators.exit)
+			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
+			this.$store.commit('getMA', data.activatedMA)
+			CIQ.addIndicators()
+		}
+		,
+		showDes(row) {
+			const datades = {}
+
+			console.log(row)
+			let vm = this
+			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+				console.log('详情')
+				const des = res.data		
+
+				let str = ``
+				for (let key in des) {
+					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
+				}
+				
+
+				vm.$alert(str, '标题名称', {
+					confirmButtonText: '确定',
+					dangerouslyUseHTMLString: true,
+					lockScroll: false,
+					callback: (action) => {
+						vm.$message({
+							type: 'info',
+							message: `action: ${action}`
+						})
+					}
+				})
+			})
+		},
+		sendBack(row) {
+			let vm = this
+			this.$http.post('/dev/seeparams/' + row.id + '/').then((res) => {
+				const des = res.data
+				let str = ``
+				for (let key in des) {
+					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
+				}
+				str = str + '<h3>FinalResult:</h3>'
+				for (let key in des.FinalResult) {
+					str = str + '<p>' + `${key}:  ${des.FinalResult[key]}` + '</p>'
+				}
+				str = str + '<h3>FinalResult.AnnualReturn:</h3>'
+				for (let key in des.FinalResult.AnnualReturn) {
+					str =
+						str +
+						'<p>' +
+						`${key}:  ${des.FinalResult.AnnualReturn[key]}` +
+						'</p>'
+				}
+				vm.$alert(str, '标题名称', {
+					confirmButtonText: '确定',
+					dangerouslyUseHTMLString: true,
+					callback: (action) => {
+						vm.$message({
+							type: 'info',
+							message: `action: ${action}`
+						})
+					}
+				})
+			})
+		}
 	}
 }
 </script>

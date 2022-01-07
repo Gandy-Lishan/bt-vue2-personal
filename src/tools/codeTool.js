@@ -276,7 +276,7 @@ class SignalCode {
                 if (val_keys.indexOf("ma_period") === -1) {
                     re_str += "SCMA/" + val["condition"] + "/" + val["period"]
                 } else if (val_keys.indexOf("ma_period") !== -1) {
-                    re_str += "MAMA" + val["ma_period"] + "/" + val["condition"] + "/" + val["period"]
+                    re_str += "MAMA" + val["ma_period"] + "/" + val["condition"] + "/MA" + val["period"]
                 }
             }
             else if (val["indicator"] == "MACD") {

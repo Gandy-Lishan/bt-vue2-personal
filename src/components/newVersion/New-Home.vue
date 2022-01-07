@@ -190,6 +190,19 @@ export default {
 		setBacktestResult(data) {
 			this.backtestResult = data
 		},
+		// async uploadIndicatorLayout(){
+		// 	var indicatorLayout = {}
+		// 	indicatorLayout.formIndicators = {
+		// 		entry: this.$store.state.indicators.formIndicators.entry,
+		// 		exit: this.$store.state.indicators.formIndicators.exit
+		// 	}
+		// 	indicatorLayout.technicalIndicators = this.$store.state.indicators.technicalIndicators
+		// 	indicatorLayout.activatedMA = this.$store.state.activatedMA
+			
+		// 	try{
+		// 		var res = await axios.put("/dev/layouts/",this.$qs.stringify.stringify(indicatorLayout),{withCredentials: true})
+		// 	}catch(err){console.error("layouts",err);}
+		// },
 		saveBacktest() {
 			let vm = this
 			const backtestData = deepClone1(this.$store.state.backtestInfo)
@@ -260,6 +273,19 @@ export default {
 			delete backtestData.exit
 			backtestData.entry = JSON.stringify(entry)
 			backtestData.exit = JSON.stringify(exit)
+
+			//上传indicator layout
+			var indicatorLayout = {}
+			indicatorLayout.formIndicators = {
+				entry: this.$store.state.indicators.formIndicators.entry,
+				exit: this.$store.state.indicators.formIndicators.exit
+			}
+			indicatorLayout.technicalIndicators = this.$store.state.indicators.technicalIndicators
+			indicatorLayout.activatedMA = this.$store.state.activatedMA
+			backtestData.indicator_layout = JSON.stringify(indicatorLayout)
+
+			console.log("backtestData: ",backtestData)
+
 			this.$http
 				.post('/dev/backtest/', this.$qs.stringify(backtestData), {
 					withCredentials: true

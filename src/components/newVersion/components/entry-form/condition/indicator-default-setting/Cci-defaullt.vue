@@ -70,17 +70,17 @@ export default {
 		},
 	},
 	methods: {
-		setIdsLoad(value) {
-			const rule = /^-?0?\d*?\.?\d*?$/
-			for (let key in val) {
-				// moving average 不一样
-				if(typeof val[key] != String){
-				if (val[key].search(rule) != -1) {
-					val[key] = Number(val[key])
-			}}
-			}
-			this.ids = val
-		}
+		// setIdsLoad(value) {
+		// 	const rule = /^-?0?\d*?\.?\d*?$/
+		// 	for (let key in val) {
+		// 		// moving average 不一样
+		// 		if(typeof val[key] != String){
+		// 		if (val[key].search(rule) != -1) {
+		// 			val[key] = Number(val[key])
+		// 	}}
+		// 	}
+		// 	this.ids = val
+		// }
 	}
 }
 </script>
