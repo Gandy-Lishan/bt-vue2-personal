@@ -155,16 +155,16 @@ export default {
 					this.$store.commit('getMA', activatedMAList)
 			}
 		},
-				setIdsLoad(value) {
-			const rule = /^-?0?\d*?\.?\d*?$/
-			for (let key in val) {
-				// moving average 不一样
-				if (val[key].search(rule) == -1) {
-					this.ids.ma_category = val[key]
-			}
-			}
-			this.ids = val
-		}
+		// 		setIdsLoad(value) {
+		// 	const rule = /^-?0?\d*?\.?\d*?$/
+		// 	for (let key in val) {
+		// 		// moving average 不一样
+		// 		if (val[key].search(rule) == -1) {
+		// 			this.ids.ma_category = val[key]
+		// 	}
+		// 	}
+		// 	this.ids = val
+		// }
 	}
 }
 </script>
