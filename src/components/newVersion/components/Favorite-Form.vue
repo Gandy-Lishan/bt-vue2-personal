@@ -206,10 +206,10 @@ export default {
 			vm.clearInterval = clearInterval()
 			if (row.status == 0) {
 				row.status = 1
-				vm.$http.post('dev/runbacktest/?uuid=' + row.id).then((res) => {
+				vm.$http.post('/dev/runbacktest/?uuid=' + row.id).then((res) => {
 					if (res.status == 200) {
 						vm.timer = setInterval(() => {
-							vm.$http.get('dev/status/' + row.id + '/').then((res) => {
+							vm.$http.get('/dev/status/' + row.id + '/').then((res) => {
 								//(res.data.status)
 								//console.log("内层",res);
 								if (res.data.status === 2) {
