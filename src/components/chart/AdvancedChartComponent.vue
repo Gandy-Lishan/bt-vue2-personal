@@ -368,7 +368,7 @@
 
 		<div class="ciq-footer full-screen-hide">
 			<!-- <cq-share-button></cq-share-button> -->
-			<div class="reload" stxtap="Layout.reloadChart()">Clean chart</div>
+			<div class="reload" stxtap="Layout.reloadChart()">Clear chart</div>
 			<!-- <div
 				class="shortcuts-ui ciq-shortcut-button"
 				stxtap="Layout.showShortcuts()"

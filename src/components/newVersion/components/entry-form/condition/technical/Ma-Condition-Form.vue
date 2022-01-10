@@ -221,11 +221,11 @@ export default {
 				var objMA = { period: this.sc.ma_period, url: 'ma', type: this.maRadio}
 				var activatedMAList = this.$store.state.activatedMA
 
-				// remove current MA attached to an indicator
-				var MAListIndex = activatedMAList.findIndex(
-					(item) => item.url == 'ma'
-				)
-				if (MAListIndex != -1) {
+					// remove current MA attached to an indicator
+					var MAListIndex = activatedMAList.findIndex(
+						(item) => item.url == 'ma'
+					)
+					if (MAListIndex != -1) {
 					activatedMAList.splice(MAListIndex, 1)
 				}
 				activatedMAList.push(objMA)

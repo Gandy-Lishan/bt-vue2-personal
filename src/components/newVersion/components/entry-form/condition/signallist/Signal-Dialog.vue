@@ -145,6 +145,13 @@ export default {
 	name: 'signalDialog',
 	data() {
 		return {
+			sentimentIndicatorList: [],
+			technicalIndicatorList: [
+				{value:'Commodity Channel Index', url:'ST CCI'},
+				{value:'Relative Strength Index', url:'rsi'},
+				{value:'Moving Average', url:'ma'},
+				{value:'MACD', url:'macd'}
+			],
 			signalList: [{ entryChecked: false }],
 			queryInfo: {
 				page: 1
@@ -161,7 +168,27 @@ export default {
 			}
 		}
 	},
+	mounted(){
+		this.loadSentimentList()
+	},
 	methods: {
+		//  load sentiment list
+		async loadSentimentList() {
+			const vm = this
+			const res = await vm.$http.get(
+				'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+				{
+					auth: {
+						username: 'sentimentrader_backtest_api',
+						password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+					}
+				}
+			)
+			vm.sentimentIndicatorList = res.data.map((obj) => {
+				return { value: obj.chart_name, url: obj.url }
+			})
+			this.$store.commit('getIndicatorsList', res.data)
+		},
 		getList() {
 			this.getSignallist('system')
 			this.getCustomList('custom_signal')
@@ -267,6 +294,7 @@ export default {
 			this.$emit('openSignalDialog'), (this.queryInfo.page = 1)
 		},
 		checkEntry(scope) {
+			console.log(scope)
 			const obj = scope
 			const a = new SignalCode()
 			obj.code = a.decode(obj.code)
@@ -288,6 +316,48 @@ export default {
 			this.$store.commit('setSignalDialogData', obj)
 			this.closeDialog()
 			this.signalList.entryChecked = !this.signalList.entryChecked
+
+			var list = this.sentimentIndicatorList.concat(this.technicalIndicatorList)
+			for(var item in list){
+				if(list[item].value == obj.indicator){
+					// remove a MA tat already exists in current criteria before loadin
+					var activatedMAList = this.$store.state.activatedMA
+					
+					if (obj.criteria == 'entry') {
+						var MAListIndex = activatedMAList.findIndex(
+							(item) =>
+								item.url == this.$store.state.indicators.formIndicators.entry
+						)
+						if (MAListIndex != -1) {
+							activatedMAList.splice(MAListIndex, 1)
+						}
+						this.$store.commit('getMA', activatedMAList)
+						this.$store.commit('getEntryIndicators', list[item].url)
+					} else {
+						var MAListIndex = activatedMAList.findIndex(
+							(item) => item.url == this.$store.state.indicators.formIndicators.exit
+						)
+						if (MAListIndex != -1) {
+							activatedMAList.splice(MAListIndex, 1)
+						}
+						this.$store.commit('getMA', activatedMAList)
+						this.$store.commit('getExitIndicators', list[item].url)
+					}
+
+					if (obj.code.analysis === 'Technical') {
+						// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
+						let techIndicators = []
+						techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
+						techIndicators.push(list[item].url)
+						this.$store.commit('getTechnicalIndicators', techIndicators)
+					}
+
+					console.log('SinalDialo MA LIST: ',CIQ.store.state.activatedMA)
+					CIQ.addIndicators()
+				}
+			}
+		
+		
 		},
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage

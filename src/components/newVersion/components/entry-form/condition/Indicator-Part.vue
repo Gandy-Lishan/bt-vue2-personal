@@ -169,6 +169,7 @@ export default {
 			}
 		},
 		handleSentimentSelect(item) {
+						
 			const obj = {}
 			obj.criteria = this.criteria
 			obj.index = this.tabIndex
@@ -176,9 +177,9 @@ export default {
 			this.$store.commit('clearSignal', obj)
 			this.si.sentimentIndicator = item.value
 			this.$emit('getSentiVal', item.value)
-			// remove MA
+			// remove a MA tat already exists in current criteria before loadin
 			var activatedMAList = this.$store.state.activatedMA
-			console.log('SentimentSelect MA LIST: ',activatedMAList)
+			
 			if (obj.criteria == 'entry') {
 				var MAListIndex = activatedMAList.findIndex(
 					(item) =>
@@ -199,10 +200,11 @@ export default {
 				this.$store.commit('getMA', activatedMAList)
 				this.$store.commit('getExitIndicators', item.url)
 			}
-
+			console.log('SentimentSelect MA LIST: ',CIQ.store.state.activatedMA)
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
+						
 			const obj = {}
 			obj.criteria = this.criteria
 			obj.index = this.tabIndex
@@ -218,33 +220,47 @@ export default {
 				['Moving Average', 'ma'],
 				['MACD', 'macd']
 			])
+
 			const newMap = new Map(set)
-			for (let item of newMap.entries()) {
-				if (val === item[0]) {
-					console.log(item)
-					this.$emit('getTechIndiValue', item[1])
-					//这里还没加MA所以先不清除已有的MA
+			for (let i of newMap.entries()) {
+				if (val === i[0]) {
+					this.$emit('getTechIndiValue', i[1])
+					// remove a MA tat already exists in current criteria before loadin
 					if (obj.criteria == 'entry') {
-						this.$store.commit('getEntryIndicators', item[1])
+						// remove MA from Vuex after loading Tech
+						var activatedMAList = CIQ.store.state.activatedMA
+
+						var MAListIndex = activatedMAList.findIndex(
+							(ma) => ma.url == this.$store.state.indicators.formIndicators.entry
+						)
+						if (MAListIndex != -1) {
+							activatedMAList.splice(MAListIndex, 1)
+						}
+						CIQ.store.commit('getMA', activatedMAList)
+						this.$store.commit('getEntryIndicators', i[1])
 					} else {
-						this.$store.commit('getExitIndicators', item[1])
+						// remove MA from Vuex after loading Tech
+						var activatedMAList = CIQ.store.state.activatedMA
+
+						var MAListIndex = activatedMAList.findIndex(
+							(ma) => ma.url == this.$store.state.indicators.formIndicators.exit
+						)
+						if (MAListIndex != -1) {
+							activatedMAList.splice(MAListIndex, 1)
+						}
+
+						CIQ.store.commit('getMA', activatedMAList)
+						this.$store.commit('getExitIndicators', i[1])
 					}
 					// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
 					let techIndicators = []
 					techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
-					techIndicators.push(item[1])
+					techIndicators.push(i[1])
 					this.$store.commit('getTechnicalIndicators', techIndicators)
 
-					console.log("SentimentSelect MA LIST", CIQ.store.state.activatedMA)
+					console.log("TechnicalSelect MA LIST", CIQ.store.state.activatedMA)
 					CIQ.addIndicators()
-					// remove MA from Vuex after loading Tech
-					console.log(CIQ.store.state.activatedMA)
-					var activatedMAList = CIQ.store.state.activatedMA
-					activatedMAList.splice(
-						activatedMAList.findIndex((item) => item.url == item[1]),
-						1
-					)
-					CIQ.store.commit('getMA', activatedMAList)
+
 				}
 			}
 			vm.si.technicalIndicator = item.value
