@@ -113,13 +113,7 @@
 				></el-tooltip>
 			</div>
 			<el-button plain style="margin: 5px 0px 5px 0px">{{
-				techVal +
-				'&nbsp;&nbsp;' +
-				conditions[sc.condition].label +
-				'&nbsp;&nbsp;' +
-				'Moving Average' +
-				'&nbsp;&nbsp;' +
-				des.period
+				`${techVal}&nbsp;&nbsp;${conditionRadio == 'Moving Average' ? 'moving average ' + sc.ma_period : ''}&nbsp;&nbsp;${conditions[sc.condition].label}&nbsp;&nbsp;Moving Average&nbsp;&nbsp;${sc.period}`
 			}}</el-button>
 		</div>
 	</div>

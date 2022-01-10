@@ -49,6 +49,11 @@ export default {
 			}
 		}
 	},
+	mounted() {
+		this.$set(this.ids,'MACDSlow',26)
+		this.$set(this.ids,'MACDFast',12)
+		this.$set(this.ids,'MACDSL',9)
+	},
 		computed: {
 		...mapGetters(['getExtremeValue']),
 				extremeValue() {

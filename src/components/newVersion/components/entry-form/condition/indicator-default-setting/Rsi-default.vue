@@ -49,7 +49,13 @@ export default {
 				period: 14
 			}
 		}
-	},	computed: {
+	},
+		mounted() {
+		this.$set(this.ids,'over_bought_bound',80)
+		this.$set(this.ids,'over_sold_bound',20)
+		this.$set(this.ids,'period',14)
+	},
+	computed: {
 		...mapGetters(['getExtremeValue']),
 				extremeValue() {
 			return this.getExtremeValue

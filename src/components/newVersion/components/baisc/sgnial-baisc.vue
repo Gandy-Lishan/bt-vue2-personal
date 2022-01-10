@@ -15,7 +15,9 @@ export default {
 			sc: {},
 			si: {},
 			fd: {},
-			bd: {}
+			bd: {},
+			// idsLoad: {},
+			// scLoad: {}
 		}
 	},
 	computed: {
@@ -81,21 +83,23 @@ export default {
 
 		idsLoad: {
 			handler(newVal) {
+				if(JSON.stringify(newVal) != '{}'){
 				const vm = this
 				if (newVal) {
 					vm.setIdsLoad(newVal)
-				}
+				}}
 			},
 			immediate: true,
 			deep: true
 		},
 		scLoad: {
 			handler(newVal) {
+				if(JSON.stringify(newVal) != '{}'){
 				const vm = this
 				if (newVal) {
 					console.log('dialog数据', newVal)
 					vm.setScLoad(newVal)
-				}
+				}}
 			},
 			immediate: true,
 			deep: true
@@ -110,9 +114,14 @@ export default {
 				if(typeof val[key] == 'string'){
 				if (val[key].search(rule) != -1) {
 					val[key] = Number(val[key])
-			}}
+			} else if (val[key].search(rule) == -1) {
+						this.ids.ma_category = val[key]
+					}}
 			}
 			this.ids = val
+		},
+		setScLoad() {
+			console.log('hello');
 		}
 	}
 }

@@ -196,6 +196,7 @@ export default {
 		},
 		signalDialogData: {
 			handler(newVal) {
+				if(JSON.stringify(newVal) !== '{}'){
 				const fd = {}
 				let vm = this;
 				fd.description = newVal.description
@@ -232,7 +233,7 @@ export default {
 					sentiObj.criteria = this.criteria
 					sentiObj.index = this.tabIndex
 					vm.$refs.indicatorPart.setIndicatorRadio(sentiObj)
-				}
+				}}
 			},
 
 			immediate: true,

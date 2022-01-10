@@ -50,6 +50,11 @@ export default {
 			}
 		}
 	},
+	mounted() {
+		this.$set(this.ids,'over_bought_bound',100)
+		this.$set(this.ids,'over_sold_bound',-100)
+		this.$set(this.ids,'period',20)
+	},
 	watch: {
 		editIds: {
 			handler(newVal) {

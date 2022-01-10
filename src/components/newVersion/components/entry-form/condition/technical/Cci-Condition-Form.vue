@@ -47,11 +47,10 @@
 				></el-tooltip>
 			</div>
 			<el-button plain style="margin: 5px 0px 5px 0px">{{
-				techVal +
-				'&nbsp;&nbsp;' +
-				conditions[sc.condition].label +
-				'&nbsp;&nbsp;' +
-				sc.value
+`${techVal}&nbsp;&nbsp;
+				${conditions[sc.condition].label}
+				&nbsp;&nbsp;${sc.value}
+				`
 			}}</el-button>
 		</div>
 	</div>

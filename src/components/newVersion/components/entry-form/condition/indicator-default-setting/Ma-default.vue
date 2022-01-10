@@ -37,6 +37,9 @@ export default {
 			}
 		}
 	},
+		mounted() {
+		this.$set(this.ids,'ma_category','SMA')
+	},
 	computed: {
 		data () {
 			return this.$store.state.conditionRadio

@@ -255,6 +255,7 @@ export default {
 	watch: {
 		backtestEditData: {
 			handler(newVal) {
+				if(JSON.stringify(newVal) != '{}'){
 				delete newVal.entry
 				delete newVal.exit
 				delete newVal.user_id
@@ -262,6 +263,12 @@ export default {
 				delete newVal.results
 				delete newVal.uuid
 				this.bd = Object.assign(this.bd,newVal)
+				var year
+				const starArr = newVal.start_date.toString().split("-")
+				const endArr = newVal.end_date.toString().split("-")
+				year = Number(endArr[0]) - Number(starArr[0])
+				this.historyValue = year
+				}
 			}
 		},isClearForm: {
 			handler(newVal) {
