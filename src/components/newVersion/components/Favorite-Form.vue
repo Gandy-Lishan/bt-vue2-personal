@@ -3,6 +3,13 @@
 		<el-col :span="24">
 			<div class="favoriteForm_container">
 				<el-table :data="backtestList" v-loading="loading">
+					<el-table-column
+        type="index"
+        align="center">
+    <template scope="scope">
+        <span>{{(queryInfo.page - 1) * 10 + scope.$index + 1}}</span>
+    </template>
+</el-table-column>
 					<el-table-column label="Name" align="center" prop="name">
 					</el-table-column>
 					<el-table-column label="Symbol" align="center" prop="symbol">
@@ -55,7 +62,7 @@
 								<el-tooltip
 									class="item"
 									effect="light"
-									content="run"
+									content="run backtest"
 									placement="bottom-start"
 								>
 									<el-button
@@ -69,7 +76,7 @@
 								<el-tooltip
 									class="item"
 									effect="light"
-									content="edit"
+									content="edit backtest"
 									placement="bottom-start"
 								>
 									<el-button
@@ -83,7 +90,7 @@
 								<el-tooltip
 									class="item"
 									effect="light"
-									content="copy"
+									content="copy backtest"
 									placement="bottom-start"
 								>
 									<el-button
@@ -97,7 +104,7 @@
 								<el-tooltip
 									class="item"
 									effect="light"
-									content="delete"
+									content="delete backtest"
 									placement="bottom-start"
 								>
 									<el-popconfirm
@@ -120,7 +127,7 @@
 								<el-tooltip
 									class="item"
 									effect="light"
-									content="view results"
+									content="view backtest results"
 									placement="bottom-start"
 								>
 									<el-button
@@ -221,7 +228,7 @@ export default {
 								} else if(res.data.status === 0){
 									clearInterval(vm.timer)
 									vm.getBacktestList()
-									vm.$message.error('The run failed, please try again.')
+									vm.$message.error('No trades, please change the parameters.')
 								}
 							})
 						}, 3000)
@@ -316,7 +323,6 @@ export default {
 		},
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
-			console.log('当前页数', this.queryInfo.page)
 			this.getBacktestList()
 		},
 		restoreIndicatorLayout(data){

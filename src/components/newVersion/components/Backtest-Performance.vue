@@ -80,6 +80,7 @@
         align="center">
         <template slot-scope="scope">
           <span v-if="scope.row.winRate >= 0">{{ scope.row.winRate + '%' }}</span>
+          <span v-else-if="isNaN(scope.row.winRate)">0</span>
           <span v-else style="color: red">{{scope.row.winRate + '%'}}</span>
         </template>
       </el-table-column>
@@ -89,6 +90,7 @@
         align="center">
         <template slot-scope="scope">
           <span v-if="scope.row.averageWin >= 0">{{ scope.row.averageWin + '%' }}</span>
+          <span v-else-if="isNaN(scope.row.averageWin)">0</span>
           <span v-else style="color: red">{{scope.row.averageWin + '%'}}</span>
         </template>
       </el-table-column>
@@ -108,6 +110,7 @@
         align="center">
         <template slot-scope="scope">
           <span v-if="scope.row.drawDown >= 0">{{ scope.row.drawDown + '%' }}</span>
+          <span v-else-if="isNaN(scope.row.drawDown)">0</span>
           <span v-else style="color: red">{{scope.row.drawDown + '%'}}</span>
         </template>
       </el-table-column>
@@ -187,7 +190,7 @@
       </el-table-column>
       <el-table-column
         prop="Date"
-        label="Trades Date"
+        label="Trade Date"
         align="center">
       </el-table-column>
         <el-table-column
@@ -202,27 +205,28 @@
       </el-table-column>
       <el-table-column
         prop="TradePrice"
-        label="Symbol Close"
+        label="Trade Price"
         align="center">
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         prop="indicator_close"
-        label="Indicator Value"
+        label="Indicator Level"
         align="center">
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         prop="Return"
-        label="Daily Return"
+        label="Total Return"
         align="center">
         <template slot-scope="scope">
-        <span v-if="scope.row.Return >= 0" >{{ (scope.row.Return * 100).toFixed(2) }}%</span>
+        <span v-if="scope.row.TradeStatus == 'BUY' && scope.$index == 0" >{{ '' }}</span>
+        <span v-else-if="scope.row.Return >= 0" >{{ (scope.row.Return * 100).toFixed(2) }}%</span>
         <span v-else style="color: red" >{{ (scope.row.Return * 100).toFixed(2) }}%</span>
         </template>
       </el-table-column>
     </el-table>
   </div>
     </el-tab-pane>
-    <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane>
+    <!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
    </el-tabs>
 </template>
 <script>
