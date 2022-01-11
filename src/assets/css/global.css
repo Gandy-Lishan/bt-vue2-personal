@@ -1,3 +1,32 @@
+.green{
+		position: absolute;
+		display: flex;
+		top: 147px;
+		left: 10px;
+		align-items: center;
+		color: #575757;
+		font-size: 1.2em;
+		font-weight: bold;
+		transition: color .20s 0s;
+}
+.green:hover{
+	color:black;
+}
+.red{
+	position: absolute;
+	display: flex;
+	top: 197px;
+	left: 10px;
+	align-items: center;
+	color: #575757;
+	font-size: 1.2em;
+	font-weight: bold;
+	transition: color .20s 0s;
+}
+.red:hover{
+	color:black;
+}
+
 .el-message-box__wrapper {
 	overflow: auto !important;
 }
