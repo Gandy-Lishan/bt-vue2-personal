@@ -1,7 +1,7 @@
 <template>
 	<cq-context ref="container">
 		<cq-color-picker></cq-color-picker>
-
+		
 		<div class="ciq-nav full-screen-hide">
 			<!-- enables the more button when in break-sm mode -->
 			<div class="sidenav-toggle ciq-toggles">
@@ -381,6 +381,7 @@
 			></div> -->
 			<!-- <span class="watermark">sentimentrader.com</span> -->
 			<cq-show-range></cq-show-range>
+			
 		</div>
 		<cq-dialogs>
 			<cq-dialog>
@@ -464,6 +465,7 @@ export default class AdvancedChartComponent extends Vue {
 			newdiv.className = 'stLogo'
 			node.appendChild(newdiv)
 
+			
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
 			CIQ.stxx.layout.headsUp = "floating";
 			//CIQ.UI.Markers.prototype.showMarkers('mMarker')
