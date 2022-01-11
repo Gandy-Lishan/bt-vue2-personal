@@ -10,10 +10,11 @@
 					<el-table-column
 						label="description"
 						align="center"
+						show-overflow-tooltip
 						prop="description"
 					>
 					</el-table-column>
-					<el-table-column label="Backtest Period">
+					<el-table-column label="Backtest Period" >
 						<template slot-scope="scope">
 							<div class="dataBox">
 								<el-button size="mini" type="info" plain>{{
@@ -205,10 +206,10 @@ export default {
 			vm.clearInterval = clearInterval()
 			if (row.status == 0) {
 				row.status = 1
-				vm.$http.post('dev/runbacktest/?uuid=' + row.id).then((res) => {
+				vm.$http.post('/dev/runbacktest/?uuid=' + row.id).then((res) => {
 					if (res.status == 200) {
 						vm.timer = setInterval(() => {
-							vm.$http.get('dev/status/' + row.id + '/').then((res) => {
+							vm.$http.get('/dev/status/' + row.id + '/').then((res) => {
 								//(res.data.status)
 								//console.log("内层",res);
 								if (res.data.status === 2) {
@@ -243,7 +244,15 @@ export default {
 			// const res = await this.$http.get('/demo/strategies' + id + '/')
 		},
 		editBacktest(row) {
-			this.$emit('goTobacktestSetupForm', row.id)
+			let vm = this
+			vm.$emit('goTobacktestSetupForm', row.id)
+			
+			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+				// 恢复indicator layout
+				this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+			})
+			this.$store.commit('getRunBacktestData', row)
+			this.$emit('goBacktestResultForm', row)
 		},
 		deleteBacktest(id) {
 			this.$http
@@ -297,7 +306,6 @@ export default {
 			})
 		},
 		viewBacktestResults(row) {
-			console.log(row)
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
@@ -312,7 +320,6 @@ export default {
 			this.getBacktestList()
 		},
 		restoreIndicatorLayout(data){
-			console.log(data)
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)

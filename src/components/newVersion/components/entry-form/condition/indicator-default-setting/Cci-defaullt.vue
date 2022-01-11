@@ -39,7 +39,7 @@ export default {
 	extends: base,
 	props: {
 		editIds: Object,
-		idsLoad: Object
+		idsLoad: Object,
 	},
 	data() {
 		return {
@@ -50,6 +50,11 @@ export default {
 			}
 		}
 	},
+	mounted() {
+		this.$set(this.ids,'over_bought_bound',100)
+		this.$set(this.ids,'over_sold_bound',-100)
+		this.$set(this.ids,'period',20)
+	},
 	watch: {
 		editIds: {
 			handler(newVal) {
@@ -58,30 +63,31 @@ export default {
 			immediate: true,
 			deep: true
 		},
-		idsLoad: {
-			handler(newVal) {
-				console.log("CCI");
-				if(newVal.over_bought_bound){
-					this.setIdsLoad(newVal)
-				}
-			},
-			immediate: true,
-			deep: true
-		},
-	},
-	methods: {
-		// setIdsLoad(value) {
-		// 	const rule = /^-?0?\d*?\.?\d*?$/
-		// 	for (let key in val) {
-		// 		// moving average 不一样
-		// 		if(typeof val[key] != String){
-		// 		if (val[key].search(rule) != -1) {
-		// 			val[key] = Number(val[key])
-		// 	}}
-		// 	}
-		// 	this.ids = val
-		// }
+		// idsLoad: {
+		// 	handler(newVal) {
+		// 		if(newVal.over_bought_bound){
+		// 			this.setIdsLoad(newVal)
+		// 		}
+		// 	},
+		// 	immediate: true,
+		// 	deep: true
+		// },
 	}
+	// methods: {
+	// 	setIdsLoad(value) {
+	// 		 const val = deepClone1(value)
+	// 			console.log('测试11111111111111');
+	// 		const rule = /^-?0?\d*?\.?\d*?$/
+	// 		for (let key in val) {
+	// 			// moving average 不一样
+	// 			if(typeof val[key] != String){
+	// 			if (val[key].search(rule) != -1) {
+	// 				val[key] = Number(val[key])
+	// 		}}
+	// 		}
+	// 		this.ids = val
+	// 	}
+	// }
 }
 </script>
 <style lang="less" scoped>

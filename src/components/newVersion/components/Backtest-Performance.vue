@@ -249,6 +249,7 @@ export default {
     handleClick(tab, event) {
       },
       loadMarker(tradeData){
+        console.log(tradeData)
         CIQ.loadChart(tradeData.markerSet)
         CIQ.addMarker()
       },

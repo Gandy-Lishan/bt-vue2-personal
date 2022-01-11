@@ -49,7 +49,13 @@ export default {
 				period: 14
 			}
 		}
-	},	computed: {
+	},
+		mounted() {
+		this.$set(this.ids,'over_bought_bound',80)
+		this.$set(this.ids,'over_sold_bound',20)
+		this.$set(this.ids,'period',14)
+	},
+	computed: {
 		...mapGetters(['getExtremeValue']),
 				extremeValue() {
 			return this.getExtremeValue
@@ -66,17 +72,17 @@ export default {
 		},
 	},
 		methods: {
-		setIdsLoad(value) {
-			const rule = /^-?0?\d*?\.?\d*?$/
-			for (let key in val) {
-				// moving average 不一样
-				if(typeof val[key] != String){
-				if (val[key].search(rule) != -1) {
-					val[key] = Number(val[key])
-			}}
-			}
-			this.ids = val
-		}
+		// setIdsLoad(value) {
+		// 	const rule = /^-?0?\d*?\.?\d*?$/
+		// 	for (let key in val) {
+		// 		// moving average 不一样
+		// 		if(typeof val[key] != String){
+		// 		if (val[key].search(rule) != -1) {
+		// 			val[key] = Number(val[key])
+		// 	}}
+		// 	}
+		// 	this.ids = val
+		// }
 	}
 }
 </script>

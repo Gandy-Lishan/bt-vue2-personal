@@ -49,6 +49,11 @@ export default {
 			}
 		}
 	},
+	mounted() {
+		this.$set(this.ids,'MACDSlow',26)
+		this.$set(this.ids,'MACDFast',12)
+		this.$set(this.ids,'MACDSL',9)
+	},
 		computed: {
 		...mapGetters(['getExtremeValue']),
 				extremeValue() {
@@ -64,32 +69,32 @@ export default {
 			immediate: true,
 			deep: true
 		},
-		idsLoad: {
-			handler(newVal) {
-				if(newVal.MACDSlow){
-					this.setIdsLoad(newVal)
-				}
-			},
-			immediate: true,
-			deep: true
-		},
+		// idsLoad: {
+		// 	handler(newVal) {
+		// 		if(newVal.MACDSlow){
+		// 			this.setIdsLoad(newVal)
+		// 		}
+		// 	},
+		// 	immediate: true,
+		// 	deep: true
+		// },
 	},
 	mounted() {
 		this.$set(this.ids, 'MACDSlow', 26)
 		this.$set(this.ids, 'MACDFast', 12)
 	},
 	methods: {
-		setIdsLoad(value) {
-			const rule = /^-?0?\d*?\.?\d*?$/
-			for (let key in val) {
-				// moving average 不一样
-				if(typeof val[key] != String){
-				if (val[key].search(rule) != -1) {
-					val[key] = Number(val[key])
-			}}
-			}
-			this.ids = val
-		}
+		// setIdsLoad(value) {
+		// 	const rule = /^-?0?\d*?\.?\d*?$/
+		// 	for (let key in val) {
+		// 		// moving average 不一样
+		// 		if(typeof val[key] != String){
+		// 		if (val[key].search(rule) != -1) {
+		// 			val[key] = Number(val[key])
+		// 	}}
+		// 	}
+		// 	this.ids = val
+		// }
 	}
 }
 </script>

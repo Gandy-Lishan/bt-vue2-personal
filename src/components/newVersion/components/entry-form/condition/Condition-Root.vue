@@ -28,6 +28,7 @@
 						:indicatorEditData="indicatorEditData"
 						@getSentiVal="getSentiVal"
 						@getTechVal="getTechVal"
+						@getSentiUrl="getSentiUrl"
 						:tabIndex="tabIndex"
 						:criteria="criteria"
 						ref="indicatorPart"
@@ -37,7 +38,7 @@
 				<con-default
 					v-if="indicatorRadio === 'sentiment'"
 					:tabIndex="tabIndex"
-					:sentiVal="sentiVal"
+					:sentiUrl="sentiUrl"
 					:criteria="criteria"
 					:idsLoad="idsLoad"
 					:editIds="editIds"
@@ -48,12 +49,14 @@
 					v-if="indicatorRadio === 'technical' && techIndiValue === 'ST CCI'"
 					:tabIndex="tabIndex"
 					:idsLoad="idsLoad"
+					
 					:criteria="criteria"
 				    :editIds="editIds"
 				></cci-default>
 				<!-- ma -->
 				<ma-default
 					v-if="indicatorRadio === 'technical' && techIndiValue === 'ma'"
+					
 					:tabIndex="tabIndex"
 					:editIds="editIds"
 					:criteria="criteria"
@@ -160,6 +163,8 @@ export default {
 			techVal: '',
 			indicatorEditData: {},
 			editIds: {},
+			sentiUrl: '',
+			techUrl: ''
 		}
 	},
 	inject: ['editBacktestData'],
@@ -190,6 +195,7 @@ export default {
 		},
 		signalDialogData: {
 			handler(newVal) {
+				if(JSON.stringify(newVal) !== '{}'){
 				const fd = {}
 				let vm = this;
 				fd.description = newVal.description
@@ -226,7 +232,7 @@ export default {
 					sentiObj.criteria = this.criteria
 					sentiObj.index = this.tabIndex
 					vm.$refs.indicatorPart.setIndicatorRadio(sentiObj)
-				}
+				}}
 			},
 
 			immediate: true,
@@ -350,6 +356,9 @@ export default {
 			obj.index = this.tabIndex
 			obj.value = val
 			this.$store.commit('getTechValue', obj)
+		},
+		getSentiUrl(val) {
+			this.sentiUrl = val
 		},
 		saveSignal() {
 			const a = new SignalCode()
