@@ -195,7 +195,7 @@
       </el-table-column>
         <el-table-column
         prop="TradeStatus"
-        label="Operate"
+        label="Action"
         align="center">
       </el-table-column>
       <el-table-column
@@ -218,7 +218,7 @@
         label="Total Return"
         align="center">
         <template slot-scope="scope">
-        <span v-if="scope.row.TradeStatus == 'BUY' && scope.$index == 0" >{{ '' }}</span>
+        <span v-if="scope.row.TradeStatus == 'BUY'">{{ '' }}</span>
         <span v-else-if="scope.row.Return >= 0" >{{ (scope.row.Return * 100).toFixed(2) }}%</span>
         <span v-else style="color: red" >{{ (scope.row.Return * 100).toFixed(2) }}%</span>
         </template>

@@ -59,11 +59,11 @@
 							</el-radio-group>
 						</el-form-item>
 					</el-form>
-					<div class="signalBtnBox">
+					<!-- <div class="signalBtnBox">
 						<el-button round style="width: 100%" @click="showSignal"
 							>Click Here to Add Criteria Signal</el-button
 						>
-					</div>
+					</div> -->
 				</div>
 				<div class="signalRight">
 					<condition-tab

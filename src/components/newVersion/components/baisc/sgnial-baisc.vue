@@ -2,6 +2,7 @@
 <script>
 import { Store, mapGetters } from 'vuex'
 import deepClone1 from '@/tools/deepClone.js'
+import {throttle} from '@/tools/throttle.js'
 export default {
 	props: {
 		tabIndex: Number,
@@ -98,7 +99,8 @@ export default {
 				const vm = this
 				if (newVal) {
 					console.log('dialog数据', newVal)
-					vm.setScLoad(newVal)
+					throttle(
+					vm.setScLoad(newVal),500)
 				}}
 			},
 			immediate: true,
