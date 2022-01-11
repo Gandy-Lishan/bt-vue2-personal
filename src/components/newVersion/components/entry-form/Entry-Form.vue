@@ -151,6 +151,7 @@ export default {
 		},
 		getEditBacktestData: {
 			handler(newVal) {
+	
 				const data = deepClone1(newVal.entry)
 				this.$set(this.fd, 'description', data.description)
 				this.$set(this.fd, 'direction', data.direction)
@@ -158,6 +159,12 @@ export default {
 				this.signalVisiable = false
 				this.getEntryDirection(data.direction)
 				this.getFrequency(data.frequency)
+				const obj = {}
+				obj.criteria = this.criteria
+				obj.description = data.description
+				obj.direction = data.direction
+				obj.frequency = data.frequency
+				this.$store.commit('setFd', obj)
 			},
 			immediate: true,
 			deep: true

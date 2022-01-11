@@ -276,14 +276,14 @@ export default {
 		},
 		editBacktest(row) {
 			let vm = this
-			vm.$emit('goTobacktestSetupForm', row.id)
-			
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
 			})
 			this.$store.commit('getRunBacktestData', row)
-			// this.$emit('goBacktestResultForm', row)
+			this.$emit('goBacktestResultForm', row)
+			
+			vm.$emit('goTobacktestSetupForm', row.id)
 		},
 		deleteBacktest(id) {
 			this.$http
@@ -337,6 +337,7 @@ export default {
 			})
 		},
 		viewBacktestResults(row) {
+			console.log("查看结果",row);
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout

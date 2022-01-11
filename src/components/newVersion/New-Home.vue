@@ -309,7 +309,6 @@ export default {
 			this.backtestEditData = {}
 			this.$http.get('/dev/seeparams/' + id + '/').then((res) => {
 				let data = res.data
-				console.log('res.data', data)
 				data.old_uuid = id
 				data.entry = JSON.parse(data.entry)
 				data.exit = JSON.parse(data.exit)

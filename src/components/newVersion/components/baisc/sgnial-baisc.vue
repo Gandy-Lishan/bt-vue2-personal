@@ -39,7 +39,6 @@ export default {
 		},
 		ids: {
 			handler(newVal) {
-				//console.log('ids55555555555', newVal)\
 				newVal.index = this.tabIndex
 				newVal.criteria = this.criteria
 				this.$store.dispatch('Try', newVal)
@@ -98,7 +97,6 @@ export default {
 				if(JSON.stringify(newVal) != '{}'){
 				const vm = this
 				if (newVal) {
-					console.log('dialog数据', newVal)
 					throttle(
 					vm.setScLoad(newVal),500)
 				}}

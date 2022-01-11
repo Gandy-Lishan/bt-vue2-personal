@@ -141,13 +141,18 @@ export default {
 		},
 		getEditBacktestData: {
 			handler(newVal) {
-				if(JSON.stringify(newVal) != '{}'){
-					console.log("退出的编辑数据");
+				console.log("退出的编辑数据8888888888");
 				const data = newVal.exit
 				this.fd.description = data.description
 				this.fd.direction = data.direction
 				this.fd.frequency = data.frequency
-				this.signalVisiable = false}
+				this.signalVisiable = false
+				const obj = {}
+				obj.criteria = this.criteria
+				obj.description = data.description
+				obj.direction = data.direction
+				obj.frequency = data.frequency
+				this.$store.commit('setFd', obj)
 			},
 			immediate: true,
 			deep: true
