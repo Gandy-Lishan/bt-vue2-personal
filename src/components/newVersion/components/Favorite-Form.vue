@@ -275,7 +275,15 @@ export default {
 			// const res = await this.$http.get('/demo/strategies' + id + '/')
 		},
 		editBacktest(row) {
-			this.$emit('goTobacktestSetupForm', row.id)
+			let vm = this
+			vm.$emit('goTobacktestSetupForm', row.id)
+			
+			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+				// 恢复indicator layout
+				this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+			})
+			this.$store.commit('getRunBacktestData', row)
+			this.$emit('goBacktestResultForm', row)
 		},
 		deleteBacktest(id) {
 			this.$http
@@ -329,7 +337,6 @@ export default {
 			})
 		},
 		viewBacktestResults(row) {
-			console.log(row)
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
@@ -342,8 +349,7 @@ export default {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
 		},
-		restoreIndicatorLayout(data) {
-			console.log(data)
+		restoreIndicatorLayout(data){
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)

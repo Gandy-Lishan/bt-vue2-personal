@@ -63,8 +63,7 @@
 				></ma-default>
 				<!-- macd -->
 				<macd-default
-					v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
-			
+					v-if="indicatorRadio === 'technical' && techIndiValue === 'ST MACD'"
 					:tabIndex="tabIndex"
 					:idsLoad="idsLoad"
 					:criteria="criteria"
@@ -72,7 +71,7 @@
 				></macd-default>
 				<!-- rsi -->
 				<rsi-default
-					v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
+					v-if="indicatorRadio === 'technical' && techIndiValue === 'ST RSI'"
 					:tabIndex="tabIndex"
 					:scLoad="scLoad"
 					:idsLoad="idsLoad"
@@ -106,7 +105,7 @@
 			></ma-condition-form>
 			<!-- macd -->
 			<macd-condition-form
-				v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
+				v-if="indicatorRadio === 'technical' && techIndiValue === 'ST MACD'"
 				:techVal="techVal"
 				:tabIndex="tabIndex"
 				:scLoad="scLoad"
@@ -114,7 +113,7 @@
 			></macd-condition-form>
 			<!-- rsi -->
 			<rsi-condition-form
-				v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
+				v-if="indicatorRadio === 'technical' && techIndiValue === 'ST RSI'"
 				:tabIndex="tabIndex"
 				:criteria="criteria"
 				:techVal="techVal"
@@ -217,9 +216,9 @@ export default {
 					this.$refs.indicatorPart.setIndicatorRadio(setObj)
 					const arr = [
 						{ label: 'Moving Average', value: 'ma' },
-						{ label: 'MACD', value: 'macd' },
+						{ label: 'MACD', value: 'ST MACD' },
 						{ label: 'Commodity Channel Index', value: 'ST CCI' },
-						{ label: 'Relative Strength Index', value: 'rsi' }
+						{ label: 'Relative Strength Index', value: 'ST RSI' }
 					]
 					arr.forEach((item) => {
 						if (item.label === newVal.code.indicator) {
@@ -266,9 +265,9 @@ export default {
 				} else if (code.analysis === 'Technical') {
 					const arr = [
 						[ 'Moving Average', 'ma' ],
-						[ 'MACD', 'macd' ],
+						[ 'MACD', 'ST MACD' ],
 						[ 'Commodity Channel Index', 'ST CCI' ],
-						[ 'Relative Strength Index', 'rsi' ]
+						[ 'Relative Strength Index', 'ST RSI' ]
 					]
 					let indicatorMap = new Map(arr)
 					for (let [key, value] of indicatorMap) {

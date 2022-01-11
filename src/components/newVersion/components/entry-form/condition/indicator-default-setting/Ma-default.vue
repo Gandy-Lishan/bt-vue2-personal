@@ -49,7 +49,7 @@ export default {
 		data (val) {
 			this.conditionRadio = val
 		},
-				editIds: {
+		editIds: {
 			handler(newVal) {
 				this.ids = newVal
 			},
