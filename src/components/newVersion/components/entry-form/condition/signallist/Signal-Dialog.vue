@@ -148,9 +148,9 @@ export default {
 			sentimentIndicatorList: [],
 			technicalIndicatorList: [
 				{value:'Commodity Channel Index', url:'ST CCI'},
-				{value:'Relative Strength Index', url:'rsi'},
+				{value:'Relative Strength Index', url:'ST MACD'},
 				{value:'Moving Average', url:'ma'},
-				{value:'MACD', url:'macd'}
+				{value:'MACD', url:'ST MACD'}
 			],
 			signalList: [{ entryChecked: false }],
 			queryInfo: {
