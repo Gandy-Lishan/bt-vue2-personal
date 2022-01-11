@@ -283,7 +283,7 @@ export default {
 				this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
 			})
 			this.$store.commit('getRunBacktestData', row)
-			this.$emit('goBacktestResultForm', row)
+			// this.$emit('goBacktestResultForm', row)
 		},
 		deleteBacktest(id) {
 			this.$http
