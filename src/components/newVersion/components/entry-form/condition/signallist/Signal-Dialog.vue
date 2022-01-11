@@ -241,7 +241,7 @@ export default {
 			if (this.signalList.length !== 0) {
 				this.loading = false
 			}
-			console.log(signalRes)
+			console.log(this.signalList)
 			// this.total = systemRes.count + favoriteRes.count + customRes.count
 			if (this.signalList.length <= 0) {
 				this.loading = false
