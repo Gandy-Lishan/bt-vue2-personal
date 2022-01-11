@@ -39,11 +39,11 @@
 							prop="description"
 							align="center"
 						></el-table-column>
-						<el-table-column
+						<!-- <el-table-column
 							label="direction"
 							prop="direction"
 							align="center"
-						></el-table-column>
+						></el-table-column> -->
 						<el-table-column
 							label="source"
 							prop="user"

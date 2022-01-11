@@ -48,7 +48,7 @@ export default {
 			return this.getExtremeValue
 		},
 	},
-		watch: {
+	watch: {
 		editIds: {
 			handler(newVal) {
 				this.ids = newVal
@@ -56,14 +56,29 @@ export default {
 			immediate: true,
 			deep: true
 		},
+		sentiUrl: {
+			handler(newVal) {
+				let vm = this
+				const arr = vm.extremeValue
+				arr.forEach(item => {
+					if(item.indicator){
+					if(item.indicator === newVal) {
+						vm.$set(vm.ids, 'extreme_pessimism', item.extremePessimism)
+						vm.$set(vm.ids, 'extreme_optimism', item.extremeOptimism)
+					}}
+				})
+			},
+						immediate: true,
+			deep: true
+		},
 		extremeValue: {
 			handler(newVal) {
-				console.log('999999999999999');
+				let vm =this;
 				newVal.forEach(item => {
 					if(item.indicator){
-					if(item.indicator === this.sentiUrl) {
-						this.$set(this.ids, 'extreme_pessimism', item.extremePessimism)
-						this.$set(this.ids, 'extreme_optimism', item.extremeOptimism)
+					if(item.indicator === vm.sentiUrl) {
+						vm.$set(vm.ids, 'extreme_pessimism', item.extremePessimism)
+						vm.$set(vm.ids, 'extreme_optimism', item.extremeOptimism)
 					}}
 				})
 			},

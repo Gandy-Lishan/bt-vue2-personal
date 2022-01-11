@@ -84,7 +84,7 @@ class SignalDecodeSC {
         return data
     }
     si_period_condition_value(val) {
-        var re = /^SVMA(-?0?\d*?\.?\d*?)\/(-?0?\d*?\.?\d*?)\/MA(-?0?\d*?\.?\d*?)$/
+        var re = /^SVMA(-?0?\d*?\.?\d*?)\/(-?0?\d*?\.?\d*?)\/(-?0?\d*?\.?\d*?)$/
         if (val.search(re) == -1) return "The input parameters of the Signal Condition maybe error!"
         // var array = val.match(re)
         var data = {
@@ -267,7 +267,7 @@ class SignalCode {
         var val_keys = Object.keys(val)
         if (val["analysis"] === "Sentiment") {
             if (val_keys.indexOf("period") !== -1) {
-                re_str += "SVMA" + val["period"] + "/" + val["condition"] + "/MA" + val["value"];
+                re_str += "SVMA" + val["period"] + "/" + val["condition"] + "/" + val["value"];
             } else if (val_keys.indexOf("period") === -1) {
                 re_str += "SV/" + val["condition"] + "/" + val["value"]
             }
@@ -282,7 +282,7 @@ class SignalCode {
             else if (val["indicator"] == "MACD") {
                 if (val["value"] == "MACDSL") {
                     re_str += "MACDV/" + val["condition"] + "/MACDSL"
-                } else if (val["value"].search(/(-?0?\d*?\.?\d*?)/) !== -1) {
+                } else if (val["value"].toString().search(/(-?0?\d*?\.?\d*?)/) !== -1) {
                     re_str += "MACDV/" + val["condition"] + "/" + val["value"]
                 }
             }

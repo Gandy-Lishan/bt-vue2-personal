@@ -113,7 +113,7 @@
 				></el-tooltip>
 			</div>
 			<el-button plain style="margin: 5px 0px 5px 0px">{{
-				`${techVal}&nbsp;&nbsp;${conditionRadio == 'Moving Average' ? 'moving average ' + sc.ma_period : ''}&nbsp;&nbsp;${conditions[sc.condition].label}&nbsp;&nbsp;Moving Average&nbsp;&nbsp;${sc.period}`
+				`${conditionRadio}&nbsp;&nbsp;${conditionRadio == 'Moving Average' ? sc.ma_period : ''}&nbsp;&nbsp;${conditions[sc.condition].label}&nbsp;&nbsp;Moving Average&nbsp;&nbsp;${sc.period}`
 			}}</el-button>
 		</div>
 	</div>
@@ -400,9 +400,9 @@ export default {
 	.signalDescriptionBox {
 		display: flex;
 		align-items: center;
+		// padding-bottom: 10px;
+		// border-bottom: 1px solid black;
 		justify-content: space-around;
-		padding-bottom: 10px;
-		border-bottom: 1px solid black;
 	}
 }
 
@@ -457,8 +457,8 @@ export default {
 	.signalDescriptionBox {
 		display: flex;
 		align-items: center;
-		padding-bottom: 10px;
-		border-bottom: 1px solid black;
+		// padding-bottom: 10px;
+		// border-bottom: 1px solid black;
 		justify-content: space-around;
 	}
 }

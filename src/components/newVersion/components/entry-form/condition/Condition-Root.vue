@@ -120,14 +120,14 @@
 				:techVal="techVal"
 				:scLoad="scLoad"
 			></rsi-condition-form>
-			<div class="btnBox">
+			<!-- <div class="btnBox">
 				<el-button round @click="saveSignal"
 					>Save Signal for Future Use</el-button
 				>
 				<el-button round @click="openSignalDialog"
 					>Load Signal for From Databse</el-button
 				>
-			</div>
+			</div> -->
 		</el-form>
 	</div>
 </template>
@@ -145,12 +145,12 @@ import rsiDefault from './indicator-default-setting/Rsi-default.vue'
 import rsiConditionForm from './technical/Rsi-Condition-Form.vue'
 import signalDialog from './signallist/Signal-Dialog.vue'
 import deepClone1 from '@/tools/deepClone.js'
-import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
+import Base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 import SignalCode from '@/tools/codeTool.js'
 import { Store, mapGetters } from 'vuex'
 import loginFormateVue from '@/loginFormate.vue'
 export default {
-	extends: base,
+	extends: Base,
 	data() {
 		return {
 			indicatorRadio: 'sentiment',
@@ -196,7 +196,8 @@ export default {
 		},
 		signalDialogData: {
 			handler(newVal) {
-				if(JSON.stringify(newVal) !== '{}'){
+				if(JSON.stringify(newVal) !== '{}' && newVal.criteria == this.criteria){
+					console.log("判断",this.criteria);
 				const fd = {}
 				let vm = this;
 				fd.description = newVal.description
@@ -399,7 +400,6 @@ export default {
 				.then((res) => {
 					if (res.status === 201) {
 						vm.$message.success('Save successfully')
-						vm.$emit('goToFavorite')
 					} else {
 						vm.$message.error('Save failed')
 					}

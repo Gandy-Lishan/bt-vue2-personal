@@ -140,8 +140,8 @@ export default {
 	.signalDescriptionBox {
 		display: flex;
 		align-items: center;
-		padding-bottom: 10px;
-		justify-content: space-around;
+		// padding-bottom: 10px;
+		// justify-content: space-around;
 		border-bottom: 1px solid black;
 	}
 }
@@ -196,8 +196,8 @@ export default {
 	.signalDescriptionBox {
 		display: flex;
 		align-items: center;
-		padding-bottom: 10px;
-		border-bottom: 1px solid black;
+		// padding-bottom: 10px;
+		// border-bottom: 1px solid black;
 		justify-content: space-around;
 	}
 }

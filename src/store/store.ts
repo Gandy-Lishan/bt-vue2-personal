@@ -307,14 +307,14 @@ export default new Vuex.Store({
 				var data = state.backtestInfo[criteria]['signals'][index]
 				const newData = {}
 				for (let key in obj) {
-					//console.log("99999999999",obj[key]);
-
 					if (obj[key] !== '' && obj[key] !== undefined) {
 						newData[key] = obj[key]
 					}
 				}
 				data = Object.assign(data, newData)
 				state.backtestInfo[criteria]['signals'][index] = data
+				console.log('当前的Direction', criteria);
+				
 				console.log('监听数据', state.backtestInfo[criteria]['signals'][index])
 			}
 			//console.log(state.backtestInfo.entry.signals);
