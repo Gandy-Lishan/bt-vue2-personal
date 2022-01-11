@@ -2,6 +2,7 @@
 <script>
 import { Store, mapGetters } from 'vuex'
 import deepClone1 from '@/tools/deepClone.js'
+import {throttle} from '@/tools/throttle.js'
 export default {
 	props: {
 		tabIndex: Number,
@@ -38,7 +39,6 @@ export default {
 		},
 		ids: {
 			handler(newVal) {
-				//console.log('ids55555555555', newVal)\
 				newVal.index = this.tabIndex
 				newVal.criteria = this.criteria
 				this.$store.dispatch('Try', newVal)
@@ -97,8 +97,8 @@ export default {
 				if(JSON.stringify(newVal) != '{}'){
 				const vm = this
 				if (newVal) {
-					console.log('dialog数据', newVal)
-					vm.setScLoad(newVal)
+					throttle(
+					vm.setScLoad(newVal),500)
 				}}
 			},
 			immediate: true,

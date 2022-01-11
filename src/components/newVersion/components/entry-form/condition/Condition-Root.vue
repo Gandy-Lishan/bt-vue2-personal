@@ -364,7 +364,6 @@ export default {
 		saveSignal() {
 			const a = new SignalCode()
 			const obj = this.$store.state.backtestInfo[this.criteria]
-			console.log('vuex中的數據', obj)
 			const signalList = this.$store.state.backtestInfo[this.criteria].signals
 			signalList.forEach((item) => {
 				if (item.sentimentIndicator) {

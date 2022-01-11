@@ -50,11 +50,11 @@
 					</el-radio-group>
 				</el-form-item>
 			</el-form>
-			<div class="signalBtnBox">
+			<!-- <div class="signalBtnBox">
 				<el-button round style="width: 100%" @click="showSignal"
 					>Click Here to Add Criteria Signal</el-button
 				>
-			</div>
+			</div> -->
 		</div>
 		<div class="signalRight">
 			<condition-tab
@@ -83,8 +83,8 @@ export default {
 			},
 			fd: {
 				description: '',
-				direction: '',
-				frequency: '',
+				direction: this.exitDirection,
+				frequency: this.$store.state.exitFrequency,
 				relation: 0,
 				score: 0
 			},
@@ -124,9 +124,12 @@ export default {
 		getEditBacktestData() {
 			return this.editBacktestData()
 		},
-		...mapGetters(['getIsClearForm']),
+		...mapGetters(['getIsClearForm','getBacktestEntryDirection']),
 		isClearForm() {
 			return this.getIsClearForm
+		},
+		exitDirection() {
+			return this.getBacktestEntryDirection
 		}
 	},
 	watch: {
@@ -138,11 +141,18 @@ export default {
 		},
 		getEditBacktestData: {
 			handler(newVal) {
+				console.log("退出的编辑数据8888888888");
 				const data = newVal.exit
 				this.fd.description = data.description
 				this.fd.direction = data.direction
 				this.fd.frequency = data.frequency
 				this.signalVisiable = false
+				const obj = {}
+				obj.criteria = this.criteria
+				obj.description = data.description
+				obj.direction = data.direction
+				obj.frequency = data.frequency
+				this.$store.commit('setFd', obj)
 			},
 			immediate: true,
 			deep: true

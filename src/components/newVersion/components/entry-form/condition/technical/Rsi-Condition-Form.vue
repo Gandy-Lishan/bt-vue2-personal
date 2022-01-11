@@ -142,7 +142,7 @@ export default {
 		align-items: center;
 		// padding-bottom: 10px;
 		// justify-content: space-around;
-		border-bottom: 1px solid black;
+		// border-bottom: 1px solid black;
 	}
 }
 @media (min-width: 900px) and (max-width: 1599px) {

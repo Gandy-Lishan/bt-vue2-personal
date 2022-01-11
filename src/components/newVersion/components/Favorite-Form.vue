@@ -3,13 +3,11 @@
 		<el-col :span="24">
 			<div class="favoriteForm_container">
 				<el-table :data="backtestList" v-loading="loading">
-					<el-table-column
-        type="index"
-        align="center">
-    <template scope="scope">
-        <span>{{(queryInfo.page - 1) * 10 + scope.$index + 1}}</span>
-    </template>
-</el-table-column>
+					<el-table-column type="index" align="center">
+						<template scope="scope">
+							<span>{{ (queryInfo.page - 1) * 10 + scope.$index + 1 }}</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="Name" align="center" prop="name">
 					</el-table-column>
 					<el-table-column label="Symbol" align="center" prop="symbol">
@@ -21,7 +19,7 @@
 						prop="description"
 					>
 					</el-table-column>
-					<el-table-column label="Backtest Period" >
+					<el-table-column label="Backtest Period">
 						<template slot-scope="scope">
 							<div class="dataBox">
 								<el-button size="mini" type="info" plain>{{
@@ -35,11 +33,12 @@
 					</el-table-column>
 					<el-table-column label="Status" align="center">
 						<template slot-scope="scope">
-							<span v-if="scope.row.status == 0">ready to run</span>
+							<span v-if="scope.row.status == 0">Ready to run</span>
 							<span v-else-if="scope.row.status == 1"
 								><img src="../../../assets/loading.gif" width="25px"
 							/></span>
-							<span v-else-if="scope.row.status == 2">run completed</span>
+							<span v-else-if="scope.row.status == 2">Run completed</span>
+							<span v-else-if="scope.row.status == 3">Invalid test</span>
 						</template>
 					</el-table-column>
 					<el-table-column align="center" width="300px">
@@ -225,24 +224,49 @@ export default {
 									vm.$message.success(
 										'Run backtest is successful, click the view results button to see the results.'
 									)
-								} else if(res.data.status === 0){
+									vm.$notify({
+										title: 'The run was successful',
+										message:
+											'Run backtest is successful, click the view results button to see the results.',
+										offset: 100,
+										type: 'success',
+										 duration: 0
+									})
+								} else if (res.data.status === 0 || res.data.status === 3) {
 									clearInterval(vm.timer)
-									vm.getBacktestList()
-									vm.$message.error('No trades, please change the parameters.')
+									vm.getBacktestList()					
+									vm.$notify({
+									title: 'No trades',
+									message: 'No trades, please change parameter.',
+									offset: 100,
+									type: 'warning'
+								})
 								}
 							})
 						}, 3000)
-					}else {
-					vm.$message.error('An error occurred on the server')
-
+					} else {
+						vm.$notify.error({
+							title: 'Error',
+							message: 'An error occurred on the server',
+							offset: 100
+						})
 					}
 				})
-			} else if(row.status == 2){
+			} else if (row.status == 2) {
 				vm.loading = false
-				vm.$message.error('The policy is complete')
-			} else if(row.status == 1) {
+				vm.$notify({
+					title: 'Complete',
+					message: 'The policy is complete',
+					offset: 100,
+					type: 'success'
+				})
+			} else if (row.status == 1) {
 				vm.loading = false
-				vm.$message.error('Please wait while running')
+				vm.$notify.info({
+					title: 'Running',
+					offset: 100,
+					message: 'Please wait while running'
+				})
 			}
 		},
 
@@ -252,14 +276,14 @@ export default {
 		},
 		editBacktest(row) {
 			let vm = this
-			vm.$emit('goTobacktestSetupForm', row.id)
-			
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
 			})
 			this.$store.commit('getRunBacktestData', row)
 			this.$emit('goBacktestResultForm', row)
+			
+			vm.$emit('goTobacktestSetupForm', row.id)
 		},
 		deleteBacktest(id) {
 			this.$http
@@ -313,6 +337,7 @@ export default {
 			})
 		},
 		viewBacktestResults(row) {
+			console.log("查看结果",row);
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
@@ -331,22 +356,19 @@ export default {
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			CIQ.addIndicators()
-		}
-		,
+		},
 		showDes(row) {
 			const datades = {}
 
 			console.log(row)
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
-				console.log('详情')
-				const des = res.data		
+				const des = res.data
 
 				let str = ``
 				for (let key in des) {
 					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
 				}
-				
 
 				vm.$alert(str, '标题名称', {
 					confirmButtonText: '确定',

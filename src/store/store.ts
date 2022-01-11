@@ -108,13 +108,18 @@ export default new Vuex.Store({
 		getBacktestEntryFrequency: (state) => {
 			return state.backtestInfo.entry.frequency
 		},
-		getBacktestEntryDirection: (state) => {
+		getBacktestEntryDirection: (state,val) => {
 			var obj = {
 				Long: 'Short',
 				Short: 'Long'
 			}
-
-			return obj[state.backtestInfo.entry.direction]
+			let data = ''
+			if(val == 'Long') {
+				data = 'Short'
+			}else if(val == 'Short') {
+				data = 'Long'
+			}
+			return data
 		},
 		getExtremeValue: (state) => {
 			return state.extremeValue

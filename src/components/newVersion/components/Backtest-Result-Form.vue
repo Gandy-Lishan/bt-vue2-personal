@@ -53,9 +53,9 @@
             </el-form-item>
             <el-form-item label="Money Management:" prop="moneyManagement">
               <div class="selectBox">
-                <el-select v-model="backtestResult.value" disabled placeholder="Pleace select">
+                <el-select v-model="value" disabled placeholder="Pleace select">
                       <el-option
-                        v-for="item in backtestResult.options"
+                        v-for="item in options"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
@@ -72,15 +72,14 @@
             </el-form-item>
           <div class="dateNote">
             <el-form-item label="Start date">
-              <el-date-picker
+              <!-- <el-date-picker
                 v-if="backtestResult.historyValue === 22"
                 v-model="backtestResult.start_date"
                 type="date"
                 placeholder="Please select a start date"
               >
-              </el-date-picker>
+              </el-date-picker> -->
               <el-input
-              v-else
               disabled
               v-model="backtestResult.start_date"
               placeholder="Please select a start date">
@@ -88,15 +87,14 @@
             </el-form-item>
           </div>
             <el-form-item label="End date">
-              <el-date-picker
+              <!-- <el-date-picker
                 v-if="backtestResult.historyValue === 22"
                 v-model="backtestResult.end_date"
                 type="date"
                 placeholder="Please select a end date"
               >
-              </el-date-picker>
+              </el-date-picker> -->
               <el-input
-                v-else
                 disabled
                 v-model="backtestResult.end_date"
                 placeholder="Please select a end date">
@@ -120,8 +118,12 @@ export default {
       strategyFormdata: {},
       symbolList: [],
       indexList: [],
-      options: [],
-      loading: false
+      options: [{
+					value: 0,
+					label: 'All In / All Out (CASH)'
+				}],
+      loading: false,
+      value: 0
     }
   },
  created(){

@@ -124,6 +124,7 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 import deepClone1 from '@/tools/deepClone.js'
+import {throttle} from '@/tools/throttle.js'
 export default {
 	extends: base,
 	props: { sentiVal: String },
@@ -226,7 +227,8 @@ export default {
 
 			console.log(this.$store.state.activatedMA)
 		},
-		setScLoad(val) {
+		
+		setScLoad:throttle(function(val) {
 			const rule = /^-?0?\d*?\.?\d*?$/
 			for (let key in val) {
 				if(typeof val[key] == 'string'){
@@ -243,7 +245,7 @@ export default {
 				this.sc = val
 				this.disabled = false
 			}
-		}
+		},1000)
 	}
 }
 </script>

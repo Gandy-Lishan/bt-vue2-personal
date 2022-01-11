@@ -59,4 +59,14 @@ const router = new Router({
 //   if (!tokenStr) return next('/login')
 //   next()
 // })
+// router.beforeEach((to, from, next) => {
+//   let host = "/[a-z]*\.sentimentradet\.com/i"
+//   if (host.search(window.document.referrer) == -1){
+//    alert("asdasd")
+//     next('/newHome')
+//   }else{
+//    alert("asdasd");
+//     next('/newHome')
+//   }
+//   })
 export default router
