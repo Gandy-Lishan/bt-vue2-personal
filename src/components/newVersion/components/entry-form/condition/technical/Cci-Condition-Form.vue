@@ -58,6 +58,7 @@
 <script>
 import { Store } from 'vuex'
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
+import { throttle } from '@/tools/throttle'
 export default {
 	extends: base,
 	props: { techVal: String },
@@ -86,7 +87,7 @@ export default {
 		}
 	},
 	methods: {
-		setScLoad(val) {
+		setScLoad: throttle(function(val) {
 			const rule = /^-?0?\d*?\.?\d*?$/
 			for (let key in val) {
 				if(typeof val[key] == 'string'){
@@ -96,7 +97,7 @@ export default {
 				}
 			}
 			this.sc = val
-		}
+		}, 1500)
 	}
 }
 </script>

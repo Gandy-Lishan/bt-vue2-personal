@@ -1,5 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import cookies from 'vue-cookies'
+
+
+
 import Home from '../components/home.vue'
 import Welcome from '../components/welcome.vue'
 import Signal from '../components/signal/signalIndex/signal.vue'
@@ -64,10 +68,17 @@ const router = new Router({
 //   next()
 // })
 router.beforeEach((to, from, next) => {
-  let host = "/[a-z]*\.sentimentradet\.com/i"
+  let host = "/[a-z]*\.sentimentrader\.com/i"
   if (host.search(window.document.referrer) == -1){
   //  alert("asdasd")
-    next()
+  // https://backtest.sentimentrader.com/user?userID=668696
+  // 1. 从访问过来的 url 获取到 userid
+  // 2. 访问后端 api '/dev/user/?userid=668696' get 参数 
+  // 3. 根据返回状态码判断后续操作
+  // 3.1 200 成功设置 cookie userid=XXX endDate=XXX     cookie.set()
+  // 3.2 403 代表认证时间超时，返回到登录页面
+  // 3.3 404 表示用户不存在，返回到登录页面
+    // next('')
   }else{
   //  alert("asdasd");
     next()

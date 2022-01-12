@@ -386,7 +386,13 @@ export default {
 			if (val === 21) {
 				this.bd.start_date = ''
 			}
-		}
+		},
+		// validateSetUpForm() {
+		// 	let data = this.fd
+		// 	for(let key in data) {
+		// 		if(data[key])
+		// 	}
+		// }
 	}
 }
 </script>
