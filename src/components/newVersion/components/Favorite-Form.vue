@@ -191,7 +191,7 @@ export default {
 		this.getStrategyName()
 	},
 	mounted() {
-		this.$cookies.set('username', 'test')
+		this.$cookies.set('userid', 'test')
 	},
 	methods: {
 		async getBacktestList(strategy) {

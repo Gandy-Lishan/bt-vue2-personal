@@ -685,7 +685,7 @@ export default {
 		}
 	},
 	mounted() {
-		this.$cookies.set("username","test")
+		this.$cookies.set("userid","test")
 		this.loadSentimentList()
 		this.technicaltIndicatorList = this.loadShortLong()
 	},

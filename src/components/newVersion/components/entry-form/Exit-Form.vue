@@ -174,7 +174,7 @@ export default {
 		}
 	},
 	mounted() {
-		this.$cookies.set('username', 'test')
+		this.$cookies.set('userid', 'test')
 	},
 	components: {
 		'condition-tab': conditionTab

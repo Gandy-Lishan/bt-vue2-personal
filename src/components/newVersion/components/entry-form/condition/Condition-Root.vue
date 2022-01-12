@@ -169,7 +169,7 @@ export default {
 	},
 	inject: ['editBacktestData'],
 	mounted() {
-		this.$cookies.set('username', 'test')
+		this.$cookies.set('userid', 'test')
 	},
 	computed: {
 		...mapGetters(['getSignalDialogData', ' getIsClearForm']),
