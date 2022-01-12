@@ -19,7 +19,8 @@
 						prop="description"
 					>
 					</el-table-column>
-					<el-table-column label="Backtest Period">
+					<el-table-column label="Backtest Period"  show-overflow-tooltip
+						align="center">
 						<template slot-scope="scope">
 							<div class="dataBox">
 								<el-button size="mini" type="info" plain>{{
@@ -191,7 +192,7 @@ export default {
 		this.getStrategyName()
 	},
 	mounted() {
-		this.$cookies.set('username', 'test')
+		this.$cookies.set('userid', 'test')
 	},
 	methods: {
 		async getBacktestList(strategy) {
@@ -282,7 +283,6 @@ export default {
 			})
 			this.$store.commit('getRunBacktestData', row)
 			this.$emit('goBacktestResultForm', row)
-			
 			vm.$emit('goTobacktestSetupForm', row.id)
 		},
 		deleteBacktest(id) {
@@ -337,13 +337,13 @@ export default {
 			})
 		},
 		viewBacktestResults(row) {
-			console.log("查看结果",row);
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
 			})
 			this.$store.commit('getRunBacktestData', row)
+			this.$emit('goTobacktestSetupForm', row.id)
 			this.$emit('goBacktestResultForm', row)
 		},
 		handleCurrentChange(newpage) {

@@ -23,3 +23,11 @@
 .icon-tishi:before {
 	content: '\e632';
 }
+.icon-xiayibu {
+	font-size: 55px;
+	color: rgb(64, 158, 255);
+}
+.icon-xiayibu:hover {
+	background-color: rgb(179, 216, 255);
+	border-radius: 10px;
+}

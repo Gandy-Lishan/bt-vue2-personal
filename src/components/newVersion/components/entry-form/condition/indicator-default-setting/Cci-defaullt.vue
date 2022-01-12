@@ -58,7 +58,9 @@ export default {
 	watch: {
 		editIds: {
 			handler(newVal) {
-				this.ids = newVal
+				this.$set(this.ids, 'over_bought_bound', newVal.over_bought_bound)
+				this.$set(this.ids, 'over_sold_bound', newVal.over_sold_bound)
+				this.$set(this.ids, 'period', newVal.period)
 			},
 			immediate: true,
 			deep: true

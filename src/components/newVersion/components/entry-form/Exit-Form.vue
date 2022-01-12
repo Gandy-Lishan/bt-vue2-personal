@@ -124,12 +124,12 @@ export default {
 		getEditBacktestData() {
 			return this.editBacktestData()
 		},
-		...mapGetters(['getIsClearForm','getBacktestEntryDirection']),
+		...mapGetters(['getIsClearForm','getBacktestExitDirection']),
 		isClearForm() {
 			return this.getIsClearForm
 		},
 		exitDirection() {
-			return this.getBacktestEntryDirection
+			return this.getBacktestExitDirection
 		}
 	},
 	watch: {
@@ -174,7 +174,7 @@ export default {
 		}
 	},
 	mounted() {
-		this.$cookies.set('username', 'test')
+		this.$cookies.set('userid', 'test')
 	},
 	components: {
 		'condition-tab': conditionTab

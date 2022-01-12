@@ -18,12 +18,16 @@ import PorfolioNewBacktest from '../components/porfolio/porfolioComponents/porfo
 import SentimentHome from '../components/sentiment/SentimentHome.vue'
 import NewHome from '../components/newVersion/New-Home.vue'
 import Login from '../components/newVersion/Login.vue'
+import Empty from '../components/newVersion/Empty.vue'
 Vue.use(Router)
 const router = new Router({
   routes: [
     { path: '/', redirect: '/login' },
     { path: '/login', component: Login },
-    { path: '/newHome', component: NewHome }
+    { path: '/newHome', component: NewHome },
+    {
+      path: '/empty',component: Empty
+    }
     // {
     //   path: '/home',
     //   component: Home,
@@ -59,14 +63,14 @@ const router = new Router({
 //   if (!tokenStr) return next('/login')
 //   next()
 // })
-// router.beforeEach((to, from, next) => {
-//   let host = "/[a-z]*\.sentimentradet\.com/i"
-//   if (host.search(window.document.referrer) == -1){
-//    alert("asdasd")
-//     next('/newHome')
-//   }else{
-//    alert("asdasd");
-//     next('/newHome')
-//   }
-//   })
+router.beforeEach((to, from, next) => {
+  let host = "/[a-z]*\.sentimentradet\.com/i"
+  if (host.search(window.document.referrer) == -1){
+  //  alert("asdasd")
+    next()
+  }else{
+  //  alert("asdasd");
+    next()
+  }
+  })
 export default router

@@ -51,7 +51,7 @@ export default {
 		},
 		editIds: {
 			handler(newVal) {
-				this.ids = newVal
+				this.$set(this.ids, 'ma_category', newVal.ma_category)
 			},
 			immediate: true,
 			deep: true

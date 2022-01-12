@@ -245,7 +245,7 @@ export default {
 				this.sc = val
 				this.disabled = false
 			}
-		},1000)
+		},1500)
 	}
 }
 </script>

@@ -41,7 +41,7 @@
 						<el-form-item label="Direction:" prop="entryType">
 							<el-radio-group
 								v-model="fd.direction"
-								@change="getEntryDirection"
+								@change="getExitDirection"
 							>
 								<el-radio label="Long">Long</el-radio>
 								<el-radio label="Short">Short</el-radio>
@@ -157,7 +157,7 @@ export default {
 				this.$set(this.fd, 'direction', data.direction)
 				this.$set(this.fd, 'frequency', data.frequency)
 				this.signalVisiable = false
-				this.getEntryDirection(data.direction)
+				this.getExitDirection(data.direction)
 				this.getFrequency(data.frequency)
 				const obj = {}
 				obj.criteria = this.criteria
@@ -173,7 +173,7 @@ export default {
 		fdLoad: {
 			handler(newVal) {
 				this.fd = newVal
-				this.$store.commit('getEntryDirection', newVal.direction)
+				this.$store.commit('getExitDirection', newVal.direction)
 			},
 			immediate: true,
 			deep: true
@@ -183,15 +183,12 @@ export default {
 		'condition-tab': conditionTab
 	},
 	methods: {
-		getEntryDirection(val) {
-			this.$store.commit('getEntryDirection', val)
+		getExitDirection(val) {
+			this.$store.commit('getExitDirection', val)
 
 			this.fd.direction = val
 			this.fd.criteria = 'entry'
 			this.$store.commit('setFd', this.fd)
-		},
-		getFrequency(e) {
-			this.$store.commit('getFrequency', e)
 		},
 		getDes: throttle(function (val) {
 			this.fd.description = val
@@ -200,6 +197,7 @@ export default {
 		}, 3000),
 		getFrequency(val) {
 			//console.log(val)
+			this.$store.commit('getFrequency', val)
 			this.fd.frequency = val
 			this.fd.criteria = 'entry'
 			this.$store.commit('setFd', this.fd)

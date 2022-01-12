@@ -38,10 +38,13 @@
 									name="first-child-n2"
 								>
 									<div class="clearEntryBox">
+										<div class="clearEntryItem">
 										<h1 class="titleTxt">Entry Criteria</h1>
 										<el-button class="clearBtn" round @click="clearForm"
 											>Clear Form</el-button
-										>
+										></div>
+										<div class="iconNextBox">
+				<i class="iconfont icon-xiayibu"></i></div>
 									</div>
 									<entry-form
 										ref="entryFormChild"
@@ -144,7 +147,7 @@ export default {
 		}
 	},
 	mounted() {
-		this.$cookies.set('username', 'test')
+		this.$cookies.set('userid', 'test')
 	},
 	components: {
 		chart: chart,
@@ -206,7 +209,6 @@ export default {
 		saveBacktest() {
 			let vm = this
 			const backtestData = deepClone1(this.$store.state.backtestInfo)
-			console.log("保存的back test数据", backtestData);
 			const signalEntryList = deepClone1(backtestData.entry.signals)
 			const signalExitList = deepClone1(backtestData.exit.signals)
 
@@ -292,14 +294,16 @@ export default {
 				})
 				.then((res) => {
 					if (res.status === 201) {
-						vm.$message.success('The operation succeeded')
+						vm.$message.success('Save successfully')
 						vm.goToFavorite()
 						vm.$refs.favoriteChild.getBacktestList('system')
 						vm.$store.commit('clearBacktest')
 						vm.$store.commit('tryClear')
+						vm.$store.commit('getExitDirection', '')
+						vm.$store.commit('getFrequency', '')
 						vm.backtestBtnVisabled = true
 					} else {
-						this.$message.success('The operation failed')
+						vm.$message.error('Save failed')
 					}
 				})
 		},
@@ -394,7 +398,10 @@ export default {
 			}
 		}
 	}
-	.clearEntryBox {
+	.clearEntryBox{
+		display: flex;
+		justify-content: space-between;
+	.clearEntryItem {
 		display: flex;
 		margin-bottom: 20px;
 		justify-content: flex-start;
@@ -403,6 +410,11 @@ export default {
 			margin-left: 20px;
 			color: #d9001b;
 		}
+	}
+	.iconNextBox{
+		align-self: center;
+		justify-content: flex-end;
+	}
 	}
 	.titleTxt {
 		font-weight: bold;
