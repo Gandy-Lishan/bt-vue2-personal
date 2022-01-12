@@ -98,7 +98,7 @@ export default {
 				const vm = this
 				if (newVal) {
 					throttle(
-					vm.setScLoad(newVal),500)
+					vm.setScLoad(newVal))
 				}}
 			},
 			immediate: true,

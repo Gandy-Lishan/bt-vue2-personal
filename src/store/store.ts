@@ -90,7 +90,7 @@ export default new Vuex.Store({
 		signalDialogData: {},
 		saveConditionFormdata: {},
 		exitFrequency: '',
-		entryDirection: '',
+		exitDirection: '',
 		exitTechType: '',
 		activatedMA: [{ period: 21, url: '' }],
 		favoriteList: [],
@@ -108,18 +108,8 @@ export default new Vuex.Store({
 		getBacktestEntryFrequency: (state) => {
 			return state.backtestInfo.entry.frequency
 		},
-		getBacktestEntryDirection: (state,val) => {
-			var obj = {
-				Long: 'Short',
-				Short: 'Long'
-			}
-			let data = ''
-			if(val == 'Long') {
-				data = 'Short'
-			}else if(val == 'Short') {
-				data = 'Long'
-			}
-			return data
+		getBacktestExitDirection: (state) => {
+			return state.exitDirection
 		},
 		getExtremeValue: (state) => {
 			return state.extremeValue
@@ -281,8 +271,16 @@ export default new Vuex.Store({
 		getExitTechList(state, val) {
 			state.exitTechType = val
 		},
-		getEntryDirection(state, val) {
-			state.entryDirection = val
+		getExitDirection(state, val) {
+			let data = ''
+			if(val == 'Long') {
+				data = 'Short'
+			}else if(val == 'Short') {
+				data = 'Long'
+			}else if(val == ''){
+				data = ''
+			}
+			state.exitDirection = data
 		},
 		getTechnicalIndicators(state, val) {
 			state.indicators.technicalIndicators = val

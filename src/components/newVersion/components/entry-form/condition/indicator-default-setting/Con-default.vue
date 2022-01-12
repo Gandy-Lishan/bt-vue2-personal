@@ -51,7 +51,8 @@ export default {
 	watch: {
 		editIds: {
 			handler(newVal) {
-				this.ids = newVal
+				this.$set(this.ids, 'extreme_optimism', newVal.extreme_optimism)
+				this.$set(this.ids, 'extreme_pessimism', newVal.extreme_pessimism)
 			},
 			immediate: true,
 			deep: true

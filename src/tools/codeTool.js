@@ -1,6 +1,10 @@
 class SignalDecodeIDS {
     constructor() {
-        this.ids_dict = [this.slow_fast_sl, this.eo_ep, this.over_bought_sold_bound_period]
+        this.ids_dict = [
+            this.slow_fast_sl, 
+            this.eo_ep, 
+            this.over_bought_sold_bound_period,
+            this.ma_category]
     }
     slow_fast_sl(val) {
         var re = /^MACDSlow(-?0?\d*?\.?\d*?)\/MACDFast(-?0?\d*?\.?\d*?)\/MACDSL(-?0?\d*?\.?\d*?)$/
@@ -35,7 +39,7 @@ class SignalDecodeIDS {
         return data
     }
     ma_category(val) {
-        re = /^(SMA|EMA)$/
+        var re = /^(SMA|EMA)$/
         if (val.search(re) == -1) return false
         // var array = val.match(re)
         var data = {
@@ -360,7 +364,7 @@ const a = new SignalCode()
 // a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SVMA20/3/20")
 // a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SV/3/20")
 // a.decode("TI:MA;IDS:EMA;SC:SCMA/3/MA20")
-// a.decode("TI:MA;IDS:SMA;SC:MAMA5/3/MA20")
+// a.decode("TI:Moving Average;IDS:SMA;SC:MAMA5/3/MA20")
 // a.decode("TI:MACD;IDS:MACDSlow25/MACDFast25/SL9;SC:MACDV/3/0")
 // console.log(a.decode("TI:MACD;IDS:MACDSlow25/MACDFast25/SL9;SC:MACDV/3/MACDSL"))
 // a.decode("TI:Commodity Channel Index;IDS:OBB20/OSB80/Period20;SC:CCIV/3/10.0")

@@ -70,8 +70,8 @@
               <el-input v-model="backtestResult.benchmark" disabled></el-input>
               </div>
             </el-form-item>
-          <div class="dateNote">
-            <el-form-item label="Start date">
+          <!-- <div class="dateNote"> -->
+            <!-- <el-form-item label="Start date"> -->
               <!-- <el-date-picker
                 v-if="backtestResult.historyValue === 22"
                 v-model="backtestResult.start_date"
@@ -79,13 +79,13 @@
                 placeholder="Please select a start date"
               >
               </el-date-picker> -->
-              <el-input
+              <!-- <el-input
               disabled
               v-model="backtestResult.start_date"
               placeholder="Please select a start date">
               </el-input>
-            </el-form-item>
-          </div>
+            </el-form-item> -->
+          <!-- </div> -->
             <el-form-item label="End date">
               <!-- <el-date-picker
                 v-if="backtestResult.historyValue === 22"

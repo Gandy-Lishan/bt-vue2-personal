@@ -241,12 +241,14 @@ export default {
 		},
 		getEditBacktestData: {
 			handler(newVal) {
+				console.log('000000000000000000000');
 				if(newVal.entry.direction){
 				this.indicatorEditData = {}
 				var signalCode = new SignalCode()
+				var code = ''
 				const data = newVal[this.criteria]['signals']
 				if(data instanceof Array) {
-				 var code = data[this.tabIndex]['code']
+				 code = data[this.tabIndex]['code']
 				}
 				code = signalCode.decode(code)
 				// this.idsLoad = code.ids

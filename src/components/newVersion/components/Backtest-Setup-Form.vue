@@ -1,6 +1,10 @@
 <template>
-	<el-row>
 			<div class="backtest_container">
+				<el-row>
+					<div class="iconNextBox">
+				<i class="iconfont icon-xiayibu"></i></div>
+				</el-row>
+	<el-row>
 				<el-form
 					ref="backtestSetupForm"
 					:model="bd"
@@ -138,8 +142,9 @@
 						</el-form-item>
 					</el-col>
 				</el-form>
+					</el-row>
 			</div>
-	</el-row>
+
 </template>
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
@@ -388,5 +393,12 @@ export default {
 <style lang="less" scoped>
 .backtest_container {
 	margin-top: 40px;
+}
+.iconNextBox{
+	display: flex;
+	align-content: center;
+	justify-content: flex-end;
+	margin-right: 100px;
+	margin-bottom: 10px;
 }
 </style>

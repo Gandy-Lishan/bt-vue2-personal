@@ -26,6 +26,7 @@
 </template>
 <script>
 import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
+import {throttle} from '@/tools/throttle.js'
 export default {
 	extends: base,
   data() {
@@ -39,7 +40,7 @@ export default {
     }
   },
   methods: {
-	setScLoad(val) {
+	setScLoad: throttle(function(val) {
 			const rule = /^-?0?\d*?\.?\d*?$/
 			for (let key in val) {
 				if(typeof val[key] == 'string'){
@@ -47,7 +48,7 @@ export default {
 					val[key] = Number(val[key])
 				}}
 			}
-	}
+	},1500)
   }
 }
 </script>

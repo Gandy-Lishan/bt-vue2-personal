@@ -197,7 +197,7 @@ export default {
 			const user = users
 			let analysisBasis = this.$store.state.entryIndicatorRadio
 			let indicator
-			let type = this.$store.state.entryDirection
+			let type = this.$store.state.exitDirection
 			if (!type) {
 				type = JSON.stringify(['Long', 'Short'])
 			}
