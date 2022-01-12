@@ -36,6 +36,7 @@ export default new Vuex.Store({
 		porfolioCash: '11',
 		savePorfolioData: [],
 		favoriteBacktestRowData: { id: 0 },
+		favoriteBacktestData: [],
 		strategyEntryData: {},
 		strategyExitData: {},
 		indicators: {
@@ -175,6 +176,9 @@ export default new Vuex.Store({
 		},
 		getRunBacktestData(state, row) {
 			state.favoriteBacktestRowData = row
+		},
+		getRunBacktestAllResult(state, list) {
+			state.favoriteBacktestData = list
 		},
 		getEntryIndicators(state, val) {
 			state.indicators.formIndicators.entry = val
