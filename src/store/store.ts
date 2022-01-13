@@ -3,12 +3,13 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
-    stateCopy: {},
-    conditionRadio: '',
-    maRadio: '',
-    stMaPeriod: '',
-    maPeriod: '',
-    importedLayout: '',
+		pairDataFreq: '',
+		stateCopy: {},
+		conditionRadio: '',
+		maRadio: '',
+		stMaPeriod: '',
+		maPeriod: '',
+		importedLayout: '',
 		newPorfolioInputsValues: {
 			inputNameValue: '',
 			inputDescriptionValue: '',
@@ -134,6 +135,9 @@ export default new Vuex.Store({
     setCopy(state,val){
       state.stateCopy = val
     },
+	setFreqency(state,val){
+		state.pairDataFreq = val
+	},
     setConditionRadio(state,val){
       state.conditionRadio = val
     },

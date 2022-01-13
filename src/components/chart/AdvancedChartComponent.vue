@@ -466,6 +466,7 @@ export default class AdvancedChartComponent extends Vue {
 			node.appendChild(newdiv)
 
 			
+			
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
 			CIQ.stxx.layout.headsUp = "floating";
 			//CIQ.UI.Markers.prototype.showMarkers('mMarker')
@@ -477,6 +478,7 @@ export default class AdvancedChartComponent extends Vue {
 		}, 0)
 				
 	}
+
 
 	beforeDestroy() {
 		// Destroy the ChartEngine instance when unloading the component.
