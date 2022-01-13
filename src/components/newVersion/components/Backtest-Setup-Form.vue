@@ -1,9 +1,5 @@
 <template>
 			<div class="backtest_container">
-				<el-row>
-					<div class="iconNextBox">
-				<i class="iconfont icon-xiayibu"></i></div>
-				</el-row>
 	<el-row>
 				<el-form
 					ref="backtestSetupForm"
@@ -387,24 +383,11 @@ export default {
 				this.bd.start_date = ''
 			}
 		},
-		// validateSetUpForm() {
-		// 	let data = this.fd
-		// 	for(let key in data) {
-		// 		if(data[key])
-		// 	}
-		// }
 	}
 }
 </script>
 <style lang="less" scoped>
 .backtest_container {
 	margin-top: 40px;
-}
-.iconNextBox{
-	display: flex;
-	align-content: center;
-	justify-content: flex-end;
-	margin-right: 100px;
-	margin-bottom: 10px;
 }
 </style>

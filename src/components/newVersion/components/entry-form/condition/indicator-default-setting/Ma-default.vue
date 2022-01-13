@@ -51,7 +51,8 @@ export default {
 		},
 		editIds: {
 			handler(newVal) {
-				this.$set(this.ids, 'ma_category', newVal.ma_category)
+				if(JSON.stringify(newVal) != '{}'){
+				this.$set(this.ids, 'ma_category', newVal.ma_category)}
 			},
 			immediate: true,
 			deep: true

@@ -59,7 +59,7 @@
 			</div>
 			<div class="btnBox">
 				<el-button round>Save Signal for Future Use</el-button>
-				<el-button round>Load Signal for From Databse</el-button>
+				<el-button round>Load Signal From Databse</el-button>
 			</div>
 		</el-form>
 	</div>

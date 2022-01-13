@@ -124,7 +124,7 @@
 					>Save Signal for Future Use</el-button
 				>
 				<el-button round @click="openSignalDialog"
-					>Load Signal for From Databse</el-button
+					>Load Signal From Databse</el-button
 				>
 			</div>
 		</el-form>
