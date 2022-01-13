@@ -10,7 +10,7 @@
 					</el-table-column>
 					<el-table-column label="Name" align="center" prop="name">
 					</el-table-column>
-					<el-table-column label="Symbol" align="center" prop="symbol">
+					<el-table-column label="Symbol" align="center" prop="symbol" width="70px">
 					</el-table-column>
 					<el-table-column
 						label="description"
@@ -199,7 +199,7 @@ export default {
 			console.log(111)
 			this.loading = true
 			let page = this.queryInfo.page
-			const res = await this.$http.get('/dev/backtest/?page=' + page)
+			const res = await this.$http.get('/dev/backtest/?ordering=create_date,status&page=' + page)
 			if (res.status === 200) {
 				this.loading = false
 				this.backtestList = res.data.results

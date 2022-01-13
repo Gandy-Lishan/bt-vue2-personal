@@ -63,10 +63,11 @@ export default {
 	watch: {
 		editIds: {
 			handler(newVal) {
+				if(JSON.stringify(newVal) != '{}'){
 				this.$set(this.ids, 'MACDSlow', newVal.MACDSlow)
 				this.$set(this.ids, 'MACDFast', newVal.MACDFast)
 				this.$set(this.ids, 'MACDSL', newVal.MACDSL)
-			},
+			}},
 			immediate: true,
 			deep: true
 		},

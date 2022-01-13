@@ -46,7 +46,7 @@
               <el-input v-model="backtestResult.capital" disabled></el-input>
             </el-form-item>
             <el-form-item label="Commission:" prop="commission">
-              <el-input v-model="backtestResult.commission" disabled></el-input>
+              <el-input v-model="backtestResult.commission" disabled oninput="this.value=this.value.replace(/^0\.[0-9]{0,4}$/,'')" ></el-input>
             </el-form-item>
             <el-form-item label="Slippage:" prop="slippage">
               <el-input v-model="backtestResult.slippage"  disabled></el-input>

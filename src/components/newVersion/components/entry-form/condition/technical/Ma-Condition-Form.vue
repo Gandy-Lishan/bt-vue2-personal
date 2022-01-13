@@ -121,6 +121,7 @@
 <script>
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import {throttle} from '@/tools/throttle.js'
 export default {
 	extends: base,
 	props: { techVal: String },
@@ -335,13 +336,16 @@ export default {
 				}
 			}	
 		},
-		setScLoad(val) {
+		setScLoad: throttle(function(val) {
+			if(JSON.stringify(val) != '{}'){
 			const rule = /^-?0?\d*?\.?\d*?$/
 			for (let key in val) {
 				if(typeof val[key] == 'string'){
 				if (val[key].search(rule) != -1) {
 					val[key] = Number(val[key])
-				}}
+				}}else if(typeof[key] == 'number') {
+					val[key] = val[key]
+				}
 			}
 			if (val.ma_period) {
 				this.conditionRadio = 'Moving Average'
@@ -352,7 +356,7 @@ export default {
 				this.disabled = false
 				this.sc = val
 			}
-		}
+		}},1500)
 	}
 }
 </script>

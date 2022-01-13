@@ -30,9 +30,14 @@
 									label="Backtest Data"
 									name="first-child-n1"
 								>
+												<el-row>
+					<div class="iconNextBox1">
+				<i class="iconfont icon-xiayibu" @click="validateSetUpForm"></i></div>
+				</el-row>
 									<backtest-setup-form
 										ref="setupChild"
 										:backtestEditData="backtestEditData"
+										@goToEntryForm="goToEntryForm"
 									></backtest-setup-form>
 								</el-tab-pane>
 								<el-tab-pane
@@ -46,8 +51,8 @@
 										<el-button class="clearBtn" round @click="clearForm"
 											>Clear Form</el-button
 										></div>
-										<div class="iconNextBox">
-				<i class="iconfont icon-xiayibu"></i></div>
+										<div class="iconNextBox2">
+				<i class="iconfont icon-xiayibu" @click="validateEntryForm"></i></div>
 									</div>
 									<entry-form
 										ref="entryFormChild"
@@ -211,7 +216,9 @@ export default {
 		// },
 		saveBacktest() {
 			let vm = this
+			
 			const backtestData = deepClone1(this.$store.state.backtestInfo)
+			// vm.validateForm(backtestData)
 			const signalEntryList = deepClone1(backtestData.entry.signals)
 			const signalExitList = deepClone1(backtestData.exit.signals)
 
@@ -310,6 +317,86 @@ export default {
 					}
 				})
 		},
+		validateForm(data) {
+			const bdData = data
+			const entryData = data.entry
+			const exitData = data.exit
+			const entryList = data.entry.signals
+			const exitList = data.exit.signals
+			delete bdData.entry
+			delete bdData.exit
+			delete entryData.signals
+			delete exitData.signals
+			let bdCheck = false
+			let entryCheck = false
+			let exitCheck = false
+			let entryListCheck = false
+			let exitListCheck = false
+			for(let key in bdData) {
+				if(!bdData[key]) {
+					if(key != 'win_rate'){
+					bdCheck = true
+					break
+				}
+			}
+		    }
+			for(let key in entryData) {
+				if(!entryData[key]) {
+					entryCheck = true
+					break
+			}
+			}
+			for(let key in exitData) {
+				if(!exitData[key]) {
+					exitCheck = true
+					break
+			}
+			}
+			entryList.forEach(item => {
+				if(item.sentimentIndicator) {
+					delete item.technicalIndicator
+				}else if(item.technicalIndicator) {
+					delete item.sentimentIndicator
+				}
+				for(let key in item) {
+					if(item[key] === '') {
+						entryListCheck = true
+					}
+				}
+			})
+			exitList.forEach(item => {
+				if(item.sentimentIndicator) {
+					delete item.technicalIndicator
+				}else if(item.technicalIndicator) {
+					delete item.sentimentIndicator
+				}
+				for(let key in item) {
+					if(item[key] === '') {
+						exitListCheck = true
+					}
+				}
+			})
+			let check = bdCheck || entryCheck || exitCheck || entryListCheck || exitListCheck
+			if(check) {
+					if(bdCheck) {
+						
+				this.$message.error('请将填全创建表单的字段');
+						this.activeTag = 'first-child-n1'
+						return
+					}
+					if(entryCheck || entryListCheck) {
+						this.$message.error('请将填全进场表单的字段');
+						this.activeTag = 'first-child-n2'
+						return
+					}
+					if(exitCheck || exitListCheck) {
+						this.$message.error('请将填全退场表单的字段');
+						this.activeTag = 'first-child-n3'
+						return
+					}
+			}
+			console.log('000000');
+		},
 		goTobacktestSetupForm(id) {
 			// backtestEditData
 			this.activeTag = 'first-child-n1'
@@ -337,8 +424,38 @@ export default {
 			this.$store.commit('tryClear')
 			this.backtestBtnVisabled = true
 		},
+
 		refreshPage() {
 			location.reload();
+		},
+		goToEntryForm() {
+			this.activeTag = 'first-child-n2'
+		},
+		validateEntryForm() {
+			// this.$refs.entryFormChild.validateEntryForm()
+			this.activeTag = 'first-child-n3'
+		},
+		validateSetUpForm() {
+					this.activeTag = 'first-child-n2'
+		// 	let data = this.bd
+		// 	let check = false
+		// 	for(let key in data) {
+		// 		if(!data[key]) {
+		// 			if(key != 'win_rate'){
+		// 			check = true
+		// 			break}
+		// 		}
+		// 	}
+		// 	if(check) {
+		// 		 this.$notify({
+        //   title: 'Field missing',
+        //   message: 'Please fill out the form completely',
+		//   offset: 100,
+        //   type: 'warning'
+        // });
+		// 	}else {
+		// 		this.$emit('goToEntryForm')
+		// 	}
 		}
 	}
 }
@@ -346,6 +463,13 @@ export default {
 <style lang="less" scoped>
 .active {
 	display: none !important;
+}
+.iconNextBox1{
+	display: flex;
+	align-content: center;
+	justify-content: flex-end;
+	margin-right: 100px;
+	margin-bottom: 10px;
 }
 @media only screen and (min-width: 1600px) {
 	.home_container {
@@ -417,7 +541,7 @@ export default {
 			color: #d9001b;
 		}
 	}
-	.iconNextBox{
+	.iconNextBox2{
 		align-self: center;
 		justify-content: flex-end;
 	}

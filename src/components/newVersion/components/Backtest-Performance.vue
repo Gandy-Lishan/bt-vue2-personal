@@ -179,7 +179,9 @@
       :data="tradesData"
       style="width: 100%"
       border
-      :span-method="objectSpanMethod">
+      :span-method="objectSpanMethod"
+      
+      :cell-style="try1">
         <el-table-column
         prop="trade_number"
         label="Trade Number"
@@ -218,7 +220,7 @@
         label="Total Return"
         align="center">
         <template slot-scope="scope">
-        <span v-if="scope.row.TradeStatus == 'BUY'">{{ '' }}</span>
+        <span v-if="scope.row.Return == 'none'">{{ '' }}</span>
         <span v-else-if="scope.row.Return >= 0" >{{ (scope.row.Return * 100).toFixed(2) }}%</span>
         <span v-else style="color: red" >{{ (scope.row.Return * 100).toFixed(2) }}%</span>
         </template>
@@ -368,6 +370,13 @@ export default {
               colspan: 0
             };
           }
+        }
+      },
+      try1({ row, column, rowIndex, columnIndex }) {
+        if(columnIndex == 5 && column.label == 'Total Return'){
+            if(rowIndex % 2 === 0) {
+              row.Return = 'none'
+            }
         }
       }
   }

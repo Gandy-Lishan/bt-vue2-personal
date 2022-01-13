@@ -157,7 +157,6 @@ export default {
 			handler(newVal) {
 				let init = deepClone1(this.$options.data())
 				Object.assign(this.$data, init)
-				console.log('conditionForm', Object.assign(this.$data, init))
 			}
 		},
 		sentiVal: {
@@ -229,12 +228,15 @@ export default {
 		},
 		
 		setScLoad:throttle(function(val) {
+			if(JSON.stringify(val) != '{}'){
 			const rule = /^-?0?\d*?\.?\d*?$/
 			for (let key in val) {
 				if(typeof val[key] == 'string'){
 				if (val[key].search(rule) != -1) {
 					val[key] = Number(val[key])
-				}}
+				}}else if(typeof[key] == 'number') {
+					val[key] = val[key]
+				}
 			}
 			if (val.period) {
 				this.conditionRadio = 'Sentiment Moving Average'
@@ -245,7 +247,7 @@ export default {
 				this.sc = val
 				this.disabled = false
 			}
-		},1500)
+		}},1500)
 	}
 }
 </script>

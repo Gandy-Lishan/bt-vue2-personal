@@ -24,10 +24,10 @@
 	content: '\e632';
 }
 .icon-xiayibu {
-	font-size: 55px;
-	color: rgb(64, 158, 255);
+	font-size: 50px;
+	color: #606266;
 }
 .icon-xiayibu:hover {
-	background-color: rgb(179, 216, 255);
+	background-color: #DCDFE6;
 	border-radius: 10px;
 }

@@ -204,7 +204,28 @@ export default {
 		},
 		showSignal() {
 			this.signalVisiable = !this.signalVisiable
-		}
+		},
+		// validateEntryForm() {
+		// 	const data = this.fd
+		// 	console.log('0000000000',this.si,this.ids,this.sc);
+		// 	let check = false
+		// 	for(let key in data) {
+		// 		if(!data[key]) {
+		// 			check = true
+		// 			break
+		// 		}
+		// 	}
+		// 	if(check) {
+		// 		 this.$notify({
+        //   title: 'Field missing',
+        //   message: 'Please fill out the form completely',
+		//   offset: 100,
+        //   type: 'warning'
+        // });
+		// }else {
+		// 		// this.$emit('goToExitForm')
+		// 	}
+		// }
 	}
 }
 </script>
