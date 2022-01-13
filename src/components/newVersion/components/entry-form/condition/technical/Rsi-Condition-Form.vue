@@ -85,16 +85,19 @@ export default {
 	},
 	methods: {
 		setScLoad: throttle(function(val) {
+			if(JSON.stringify(val) != '{}'){
 			const rule = /^-?0?\d*?\.?\d*?$/
 			for (let key in val) {
 				if(typeof val[key] == 'string'){
 				if (val[key].search(rule) != -1) {
 					val[key] = Number(val[key])
 				}
+				}else if(typeof[key] == 'number') {
+					val[key] = val[key]
 				}
 			}
 			this.sc = val
-		},1500)
+		}},1500)
 	}
 }
 </script>

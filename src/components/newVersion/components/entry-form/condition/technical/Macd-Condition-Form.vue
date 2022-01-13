@@ -44,7 +44,7 @@
 			<div class="sentimentConditionBox">
 				<el-radio
 					v-model="conditionRadio"
-					label="MACD SL"
+					label="MACD Value "
 					@change="getConditionRadio"
 				>
 				</el-radio>
@@ -89,7 +89,7 @@
 			</div>
 			<el-button plain style="margin: 5px 0px 5px 0px">{{
 								`${techVal}&nbsp;&nbsp;
-				${conditions[sc.condition].label}
+				Value&nbsp;&nbsp;${conditions[sc.condition].label}
 				&nbsp;&nbsp;${sc.value}
 				`
 			}}</el-button>
@@ -129,7 +129,7 @@ export default {
 	},
 	methods: {
 		getConditionRadio(val) {
-			if (val === 'MACD SL') {
+			if (val === 'MACD Value ') {
 				this.sc.value = 'MACDSL'
 				this.disabled = !this.disabled
 			} else if (val === 'MACD Value') {
@@ -138,22 +138,25 @@ export default {
 			}
 		},
 		setScLoad: throttle(function(val) {
+			if(JSON.stringify(val) != '{}'){
 			const rule = /^-?0?\d*?\.?\d*?$/
 			for (let key in val) {
 				if(typeof val[key] == 'string'){
 				if (val[key].search(rule) != -1) {
 					val[key] = Number(val[key])
-				}}
+				}}else if(typeof[key] == 'number') {
+					val[key] = val[key]
+				}
 			}
 			if (val.value === 'MACDSL') {
-				this.conditionRadio = 'MACD SL'
+				this.conditionRadio = 'MACD Value '
 				this.disabled = true
 			} else {
 				this.conditionRadio = 'MACD Value'
 				this.disabled = false
 			}
 			this.sc = val
-		},1500)
+		}},1500)
 	}
 }
 </script>

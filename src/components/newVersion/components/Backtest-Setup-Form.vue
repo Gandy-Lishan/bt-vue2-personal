@@ -47,18 +47,21 @@
 							<el-input
 								v-model="bd.capital"
 								v-direction="{x: 2, y: 0}"
+								@input="validateStartingCapital"
 							></el-input>
 						</el-form-item>
 						<el-form-item label="Commission:" prop="commission">
 							<el-input
 								v-model="bd.commission"
 								v-direction="{x: 3, y: 0}"
+								@input="validateCommission"
 							></el-input>
 						</el-form-item>
 						<el-form-item label="Slippage:" prop="slippage">
 							<el-input
 								v-model="bd.slippage"
 								v-direction="{x: 4, y: 0}"
+								@input="validateSlippage"
 							></el-input>
 						</el-form-item>
 						<el-form-item label="Money Management:" prop="moneyManagement">
@@ -280,6 +283,32 @@ export default {
 		},
 	},
 	methods: {
+		validateCommission(val) {
+			let re = /0\.?\d{0,4}?/g
+			if (val.search(re) !== -1){
+				this.bd.commission = val
+			}else{
+				this.bd.commission = ""
+			}
+		},
+		validateSlippage(val) {
+			let re = /0\.?\d{0,4}?/g
+			if (val.search(re) !== -1){
+				this.bd.slippage = val
+			}else{
+				this.bd.slippage = ""
+			}
+		},
+		validateStartingCapital(val) {
+			let re = /^\d+\.?\d{0,2}$/
+			if (val.search(re) !== -1){
+				this.bd.capital = val
+			}else if (val.search(/^\d+\.?\d+/) !== -1){
+				this.bd.capital = val.split(".")[0]+"." + val.split(".")[1].substring(0,2)
+			}else{
+				this.bd.capital = ""
+			}
+		},
 		getSymbolName(val) {
 			this.$store.commit('getSymbolName', val)
 			this.bd.benchmark = val

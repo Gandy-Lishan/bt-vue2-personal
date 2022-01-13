@@ -119,14 +119,14 @@
 				:techVal="techVal"
 				:scLoad="scLoad"
 			></rsi-condition-form>
-			<div class="btnBox">
+			<!-- <div class="btnBox">
 				<el-button round @click="saveSignal"
 					>Save Signal for Future Use</el-button
 				>
 				<el-button round @click="openSignalDialog"
 					>Load Signal From Databse</el-button
 				>
-			</div>
+			</div> -->
 		</el-form>
 	</div>
 </template>

@@ -7,7 +7,7 @@
 					<el-tooltip
 						class="item"
 						effect="dark"
-						content="Criteria Entry Description"
+						content="Criteria Exit Description"
 						placement="bottom-start"
 						><i class="iconfont icon-tishi"></i
 					></el-tooltip>
@@ -84,7 +84,7 @@ export default {
 			fd: {
 				description: '',
 				direction: this.exitDirection,
-				frequency: this.$store.state.exitFrequency,
+				frequency: this.exitFrequency,
 				relation: 0,
 				score: 0
 			},
@@ -124,12 +124,15 @@ export default {
 		getEditBacktestData() {
 			return this.editBacktestData()
 		},
-		...mapGetters(['getIsClearForm','getBacktestExitDirection']),
+		...mapGetters(['getIsClearForm']),
 		isClearForm() {
 			return this.getIsClearForm
 		},
 		exitDirection() {
-			return this.getBacktestExitDirection
+			return this.$store.state.exitDirection
+		},
+		exitFrequency() {
+			return this.$store.state.exitFrequency
 		}
 	},
 	watch: {
