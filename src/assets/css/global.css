@@ -1,22 +1,29 @@
 .green{
-		position: absolute;
-		display: flex;
-		top: 147px;
-		left: 10px;
-		align-items: center;
-		color: #575757;
-		font-size: 1.2em;
-		font-weight: bold;
-		transition: color .20s 0s;
+	width: 105px;
+	position: absolute;
+	display: flex;
+	padding-left: 10px;
+	padding-right: 10px;
+	top: 48px;
+	left: 218px;
+	align-items: center;
+	color: #575757;
+	font-size: 1.2em;
+	font-weight: bold;
+	transition: color .20s 0s;
 }
 .green:hover{
 	color:black;
+	background-color: rgba(145, 143, 143, 0.247);
 }
 .red{
+	width: 105px;
 	position: absolute;
 	display: flex;
-	top: 197px;
-	left: 10px;
+	padding-left: 10px;
+    padding-right: 10px;
+	top: 5px;
+    left: 218px;
 	align-items: center;
 	color: #575757;
 	font-size: 1.2em;
@@ -25,6 +32,7 @@
 }
 .red:hover{
 	color:black;
+	background-color: rgba(145, 143, 143, 0.247);
 }
 
 .el-message-box__wrapper {

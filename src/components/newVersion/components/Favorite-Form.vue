@@ -337,6 +337,8 @@ export default {
 			})
 		},
 		viewBacktestResults(row) {
+			
+			document.getElementsByClassName("ciq-period")[0].style.display = "none"
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
