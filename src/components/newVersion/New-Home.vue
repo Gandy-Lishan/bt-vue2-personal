@@ -112,7 +112,7 @@
 							></favorite-form>
 						</el-tab-pane>
 						<el-tab-pane label="Strategies" name="fourth">
-							<strategy-form ref="strategyChild"></strategy-form>
+							<strategy-form ref="strategyChild" @goToFavoriteForm="goToFavoriteForm" @goTobacktestSetupForm="goTobacktestSetupForm" @goBacktestResultForm="goBacktestResultForm"></strategy-form>
 						</el-tab-pane>
 					</el-tabs>
 				</div>
@@ -143,7 +143,8 @@ export default {
 			fdLoad: {},
 			backtestEditData: {},
 			pubilcEditData: { entry: { singals: [] }, exit: { singals: [] } },
-			backtestBtnVisabled: true
+			backtestBtnVisabled: true,
+			check: false
 		}
 	},
 	provide() {
@@ -216,6 +217,7 @@ export default {
 			
 			const backtestData = deepClone1(this.$store.state.backtestInfo)
 			// vm.validateForm(backtestData)
+			// if(!this.check){
 			const signalEntryList = deepClone1(backtestData.entry.signals)
 			const signalExitList = deepClone1(backtestData.exit.signals)
 
@@ -313,6 +315,7 @@ export default {
 						vm.$message.error('Save failed')
 					}
 				})
+				// }
 		},
 		validateForm(data) {
 			const bdData = data
@@ -373,8 +376,8 @@ export default {
 					}
 				}
 			})
-			let check = bdCheck || entryCheck || exitCheck || entryListCheck || exitListCheck
-			if(check) {
+			 this.check = bdCheck || entryCheck || exitCheck || entryListCheck || exitListCheck
+			if(this.check) {
 					if(bdCheck) {
 						
 				this.$message.error('请将填全创建表单的字段');
@@ -392,7 +395,6 @@ export default {
 						return
 					}
 			}
-			console.log('000000');
 		},
 		goTobacktestSetupForm(id) {
 			// backtestEditData
@@ -449,6 +451,10 @@ export default {
 		// 	}else {
 		// 		this.$emit('goToEntryForm')
 		// 	}
+		},
+		goToFavoriteForm() {
+			this.activeName = "third"
+			this.$refs.favoriteChild.getBacktestList()
 		}
 	}
 }

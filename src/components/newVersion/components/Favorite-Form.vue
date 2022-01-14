@@ -196,10 +196,9 @@ export default {
 	},
 	methods: {
 		async getBacktestList(strategy) {
-			console.log(111)
 			this.loading = true
 			let page = this.queryInfo.page
-			const res = await this.$http.get('/dev/backtest/?ordering=create_date,status&page=' + page)
+			const res = await this.$http.get('/dev/backtest/?ordering=status,-create_date&page=' + page)
 			if (res.status === 200) {
 				this.loading = false
 				this.backtestList = res.data.results
@@ -209,6 +208,7 @@ export default {
 			}
 		},
 		runbacktest(row) {
+			console.log('77777777777777777');
 			let vm = this
 			vm.clearInterval = clearInterval()
 			if (row.status == 0) {
@@ -311,7 +311,6 @@ export default {
 				})
 		},
 		copyBacktest(row) {
-			console.log('行', row)
 			let params = {}
 			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				params = res.data
@@ -331,7 +330,7 @@ export default {
 							this.$message.success('Copy successfully')
 							this.getBacktestList()
 						} else {
-							this.$message.success('Copy failed')
+							this.$message.error('Copy failed')
 						}
 					})
 			})

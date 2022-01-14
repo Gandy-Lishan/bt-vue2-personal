@@ -67,14 +67,11 @@ export default {
 			sentimentIndicatorList: []
 		}
 	},
-	mounted() {
-		this.loadSentimentList()
-	},
 	computed: {
 		...mapGetters(['getIsClearForm']),
 		isClearForm() {
 			return this.getIsClearForm
-		}
+		},
 	},
 	watch: {
 		isClearForm: {
@@ -113,6 +110,7 @@ export default {
 		//  load sentiment list
 		async loadSentimentList() {
 			const vm = this
+			var frequency = vm.$store.state.backtestInfo["entry"]["frequency"]
 			const res = await vm.$http.get(
 				'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
 				{
@@ -123,10 +121,13 @@ export default {
 				}
 			)
 			vm.sentimentIndicatorList = res.data.map((obj) => {
-				return { value: obj.chart_name, url: obj.url }
+				console.log(frequency.toUpperCase().indexOf(obj.updated.toUpperCase()));
+				if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1){
+				return { value: obj.chart_name, url: obj.url, updated: obj.updated }
+				}
 			})
 			this.$store.commit('getIndicatorsList', res.data)
-			this.$store.commit('getSentimentList',vm.sentimentIndicatorList)
+			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
 		},
 		// sentiment search
 		indicatorSentimentSearch(queryString, cb) {
@@ -144,9 +145,7 @@ export default {
 		},
 		createStateSentimentFilter(queryString) {
 			return (state) => {
-				return (
-					state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
-				)
+				return state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
 			}
 		},
 		// technical search
@@ -170,7 +169,6 @@ export default {
 			}
 		},
 		handleSentimentSelect(item) {
-						
 			const obj = {}
 			obj.criteria = this.criteria
 			obj.index = this.tabIndex
@@ -180,7 +178,7 @@ export default {
 			this.$emit('getSentiVal', item.value)
 			// remove a MA tat already exists in current criteria before loadin
 			var activatedMAList = this.$store.state.activatedMA
-			
+
 			if (obj.criteria == 'entry') {
 				var MAListIndex = activatedMAList.findIndex(
 					(item) =>
@@ -203,11 +201,10 @@ export default {
 				this.$store.commit('getExitIndicators', item.url)
 				this.$emit('getSentiUrl', item.url)
 			}
-			console.log('SentimentSelect MA LIST: ',CIQ.store.state.activatedMA)
+			console.log('SentimentSelect MA LIST: ', CIQ.store.state.activatedMA)
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
-						
 			const obj = {}
 			obj.criteria = this.criteria
 			obj.index = this.tabIndex
@@ -234,7 +231,8 @@ export default {
 						var activatedMAList = CIQ.store.state.activatedMA
 
 						var MAListIndex = activatedMAList.findIndex(
-							(ma) => ma.url == this.$store.state.indicators.formIndicators.entry
+							(ma) =>
+								ma.url == this.$store.state.indicators.formIndicators.entry
 						)
 						if (MAListIndex != -1) {
 							activatedMAList.splice(MAListIndex, 1)
@@ -261,9 +259,8 @@ export default {
 					techIndicators.push(i[1])
 					this.$store.commit('getTechnicalIndicators', techIndicators)
 
-					console.log("TechnicalSelect MA LIST", CIQ.store.state.activatedMA)
+					console.log('TechnicalSelect MA LIST', CIQ.store.state.activatedMA)
 					CIQ.addIndicators()
-
 				}
 			}
 			vm.si.technicalIndicator = item.value
@@ -298,24 +295,23 @@ export default {
 		},
 		setIndicatorRadio(obj) {
 			let vm = this
-			console.log("load");
+			console.log('load')
 			this.indicatorRadio = obj.radio
 			var data = Object.assign(obj)
 			if (data.sentimentIndicator) {
-				
-				vm.si["sentimentIndicator"] = data["sentimentIndicator"]
+				vm.si['sentimentIndicator'] = data['sentimentIndicator']
 				vm.$set(vm.si, 'sentimentIndicator', data.sentimentIndicator)
 				this.$emit('getSentiVal', data.sentimentIndicator)
 				const sentiObj = data
 				sentiObj.value = sentiObj.sentimentIndicator
-                this.$store.commit('getSentiValue', sentiObj)
+				this.$store.commit('getSentiValue', sentiObj)
 				this.isCheckedIndicators = false
 			} else if (data.technicalIndicator) {
 				vm.$set(this.si, 'technicalIndicator', obj.technicalIndicator)
 				this.$emit('getTechVal', obj.technicalIndicator)
 				const sentiObj = data
 				sentiObj.value = sentiObj.technicalIndicator
-                this.$store.commit('getTechValue', sentiObj)
+				this.$store.commit('getTechValue', sentiObj)
 				this.isCheckedIndicators = true
 			}
 		}

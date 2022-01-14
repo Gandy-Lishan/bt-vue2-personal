@@ -39,10 +39,7 @@
 							></el-tooltip>
 						</div>
 						<el-form-item label="Direction:" prop="entryType">
-							<el-radio-group
-								v-model="fd.direction"
-								@change="getExitDirection"
-							>
+							<el-radio-group v-model="fd.direction" @change="getExitDirection">
 								<el-radio label="Long">Long</el-radio>
 								<el-radio label="Short">Short</el-radio>
 							</el-radio-group>
@@ -97,8 +94,10 @@ export default {
 				frequency: '',
 				relation: 0,
 				score: 0,
-				criteria: 'entry'
+				criteria: 'entry',
+				
 			},
+			sentimentIndicatorList:[],
 			entrySignalEditData: {},
 			signalVisiable: true,
 			// Form validation rules
@@ -142,7 +141,6 @@ export default {
 		}
 	},
 	watch: {
-		
 		isClearForm: {
 			handler(newVal) {
 				let init = deepClone1(this.$options.data())
@@ -151,7 +149,6 @@ export default {
 		},
 		getEditBacktestData: {
 			handler(newVal) {
-	
 				const data = deepClone1(newVal.entry)
 				this.$set(this.fd, 'description', data.description)
 				this.$set(this.fd, 'direction', data.direction)
@@ -183,6 +180,33 @@ export default {
 		'condition-tab': conditionTab
 	},
 	methods: {
+		async loadSentimentList(val) {
+			const vm = this
+			var frequency = val
+			const res = await vm.$http.get(
+				'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+				{
+					auth: {
+						username: 'sentimentrader_backtest_api',
+						password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+					}
+				}
+			)
+		
+			// vm.sentimentIndicatorList = res.data.map((obj) => {
+			// 	if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1) {
+			// 		return { value: obj.chart_name, url: obj.url, updated: obj.updated }
+			// 	}
+			// })
+			vm.sentimentIndicatorList = []
+			res.data.forEach((element) => {
+				if (frequency.toUpperCase().indexOf(element.updated.toUpperCase()) !== -1) {
+					vm.sentimentIndicatorList.push({ value: element.chart_name, url: element.url, updated: element.updated }) 
+				}
+			})
+			this.$store.commit('getIndicatorsList', res.data)
+			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+		},
 		getExitDirection(val) {
 			this.$store.commit('getExitDirection', val)
 
@@ -200,11 +224,12 @@ export default {
 			this.$store.commit('getFrequency', val)
 			this.fd.frequency = val
 			this.fd.criteria = 'entry'
+			this.loadSentimentList(val)
 			this.$store.commit('setFd', this.fd)
 		},
 		showSignal() {
 			this.signalVisiable = !this.signalVisiable
-		},
+		}
 		// validateEntryForm() {
 		// 	const data = this.fd
 		// 	console.log('0000000000',this.si,this.ids,this.sc);
@@ -217,11 +242,11 @@ export default {
 		// 	}
 		// 	if(check) {
 		// 		 this.$notify({
-        //   title: 'Field missing',
-        //   message: 'Please fill out the form completely',
+		//   title: 'Field missing',
+		//   message: 'Please fill out the form completely',
 		//   offset: 100,
-        //   type: 'warning'
-        // });
+		//   type: 'warning'
+		// });
 		// }else {
 		// 		// this.$emit('goToExitForm')
 		// 	}
