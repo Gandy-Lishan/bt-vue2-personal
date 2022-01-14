@@ -50,9 +50,9 @@
 							class="border-set"
 						>
 							<el-radio-group v-model="fd.frequency" @change="getFrequency">
-								<el-radio label="Daily">Daily</el-radio>
-								<el-radio label="Weekly">Weekly</el-radio>
-								<el-radio label="Monthly">Monthly</el-radio>
+								<el-radio label="Daily" :disabled="dailyDisabled">Daily</el-radio>
+								<el-radio label="Weekly" :disabled="weeklyDisabled">Weekly</el-radio>
+								<el-radio label="Monthly" :disabled="monthlyDisabled">Monthly</el-radio>
 							</el-radio-group>
 						</el-form-item>
 					</el-form>
@@ -88,6 +88,9 @@ export default {
 	},
 	data() {
 		return {
+			dailyDisabled: false,
+			weeklyDisabled: false,
+			monthlyDisabled: false,
 			fd: {
 				description: '',
 				direction: '',
@@ -138,9 +141,25 @@ export default {
 		},
 		getEditBacktestData() {
 			return this.editBacktestData()
+		},
+		updateFreq () {
+			return this.$store.state.pairDataFreq
 		}
 	},
 	watch: {
+		updateFreq(val){
+			switch(val){
+				case "weekly": {
+					this.dailyDisabled = true
+					break
+				}
+				case "monthly": {
+					this.dailyDisabled = true
+					this.weeklyDisabled = true
+					break
+				}
+			}
+		},
 		isClearForm: {
 			handler(newVal) {
 				let init = deepClone1(this.$options.data())

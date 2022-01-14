@@ -433,6 +433,7 @@ export default class AdvancedChartComponent extends Vue {
 			const uiContext = this.createChartAndUI(config)
 			this.stx = uiContext.stx
 			CIQ.stxx = uiContext.stx
+			CIQ.periodicity = {period:1, interval:1, timeUnit:'day'}
 			var iter = CIQ.stxx.chart.market.newIterator({
 			interval: CIQ.stxx.layout.interval,
 			periodicity: CIQ.stxx.layout.periodicity,
@@ -466,6 +467,7 @@ export default class AdvancedChartComponent extends Vue {
 			node.appendChild(newdiv)
 
 			
+			
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
 			CIQ.stxx.layout.headsUp = "floating";
 			//CIQ.UI.Markers.prototype.showMarkers('mMarker')
@@ -477,6 +479,7 @@ export default class AdvancedChartComponent extends Vue {
 		}, 0)
 				
 	}
+
 
 	beforeDestroy() {
 		// Destroy the ChartEngine instance when unloading the component.
