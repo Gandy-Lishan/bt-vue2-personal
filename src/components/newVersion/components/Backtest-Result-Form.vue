@@ -206,6 +206,7 @@ export default {
             password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
           }}
           ).then(res => {
+            console.log(' remoteMethod1')
             this.symbolList = res.data
           }).catch(error => {
             console.warn(error);
@@ -217,6 +218,7 @@ export default {
             password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
           }}
           ).then(res => {
+            console.log(' remoteMethod2')
             this.indexList = res.data
           }).catch(error => {
             console.warn(error);

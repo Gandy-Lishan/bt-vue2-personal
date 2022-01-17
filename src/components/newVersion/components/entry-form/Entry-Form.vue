@@ -142,24 +142,24 @@ export default {
 		getEditBacktestData() {
 			return this.editBacktestData()
 		},
-		updateFreq () {
-			return this.$store.state.pairDataFreq
-		}
+		// updateFreq () {
+		// 	return this.$store.state.pairDataFreq
+		// }
 	},
 	watch: {
-		updateFreq(val){
-			switch(val){
-				case "weekly": {
-					this.dailyDisabled = true
-					break
-				}
-				case "monthly": {
-					this.dailyDisabled = true
-					this.weeklyDisabled = true
-					break
-				}
-			}
-		},
+		// updateFreq(val){
+		// 	switch(val){
+		// 		case "weekly": {
+		// 			this.dailyDisabled = true
+		// 			break
+		// 		}
+		// 		case "monthly": {
+		// 			this.dailyDisabled = true
+		// 			this.weeklyDisabled = true
+		// 			break
+		// 		}
+		// 	}
+		// },
 		isClearForm: {
 			handler(newVal) {
 				let init = deepClone1(this.$options.data())
@@ -203,9 +203,8 @@ export default {
 			const vm = this
 			var frequency = val
 			var indicatorList = []
-			console.log("entry-form: ",this.$store.state.indicatorsList.length)
-			if(this.$store.state.indicatorsList.length == 0){
-				console.log('no data in indicatorList from entry-form',this.$store.state.indicatorsList.length)
+			if(this.$store.state.indicatorsList.length != 0){
+				console.log('data in indicatorList from entry-form',this.$store.state.indicatorsList.length)
 				indicatorList = this.$store.state.indicatorsList
 			}else{
 				const res = await vm.$http.get(

@@ -113,8 +113,8 @@ export default {
 			var frequency = vm.$store.state.backtestInfo["entry"]["frequency"]
 			var indicatorList = []
 			
-			if(this.$store.state.indicatorsList.length == 0){
-				console.log('no data in indicatorList from indicator-part',this.$store.state.indicatorsList.length)
+			if(this.$store.state.indicatorsList.length != 0){
+				console.log('data in indicatorList from indicator-part',this.$store.state.indicatorsList.length)
 				indicatorList = this.$store.state.indicatorsList
 			}else{
 				const res = await vm.$http.get(

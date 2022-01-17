@@ -221,7 +221,9 @@ export default {
 		}
 	},
 	created() {
-		this.getSymbolList()
+		
+		this.getIndexsList()
+		this.getStocksList()
 		this.getEndDate()
 		let direction = this.$getDirection()
 		direction.on('keyup', function (e, val) {
@@ -361,40 +363,51 @@ export default {
 			}
 			return (window.utils = new utils())
 		},
-		async getSymbolList() {
-			await this.$http
-				.get(
-					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks',
-					{
-						auth: {
-							username: 'sentimentrader_backtest_api',
-							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+		async getIndexsList() {
+			if(this.$store.state.indexsList.length != 0){
+				console.log('data in indexsList from bascktest-setup',this.$store.state.indexsList.length)
+				this.indexList = this.$store.state.indexsList
+			}else{
+				await this.$http
+					.get(
+						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
+						{
+							auth: {
+								username: 'sentimentrader_backtest_api',
+								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+							}
 						}
-					}
-				)
-				.then((res) => {
-					this.symbolList = res.data
-				})
-				.catch((error) => {
-					console.warn(error)
-				})
-
-			await this.$http
-				.get(
-					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
-					{
-						auth: {
-							username: 'sentimentrader_backtest_api',
-							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+					)
+					.then((res) => {
+						this.indexList = res.data
+					})
+					.catch((error) => {
+						console.warn(error)
+					})
+			}
+		},
+		async getStocksList() {
+			if(this.$store.state.stocksList.length != 0){
+				console.log('data in stockList from bascktest-setup',this.$store.state.stocksList.length)
+				this.symbolList = this.$store.state.stocksList
+			}else{
+				await this.$http
+					.get(
+						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks',
+						{
+							auth: {
+								username: 'sentimentrader_backtest_api',
+								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+							}
 						}
-					}
-				)
-				.then((res) => {
-					this.indexList = res.data
-				})
-				.catch((error) => {
-					console.warn(error)
-				})
+					)
+					.then((res) => {
+						this.symbolList = res.data
+					})
+					.catch((error) => {
+						console.warn(error)
+					})
+			}
 		},
 		async remoteMethod(query) {
 			if (query !== '') {
