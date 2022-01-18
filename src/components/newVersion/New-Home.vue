@@ -28,13 +28,16 @@
 						</svg>
 					</div>
 				</el-row>
+
 				<div class="chart_box" id="chart_box">
 					<chart width="100%" height="100%"></chart>
 				</div>
 			</header>
 			<main class="main" style="padding-bottom: 50px">
 				<div class="mainTagbar">
+					<el-button @click="refreshPage" class="restartBtn" type="primary" icon="el-icon-refresh-right">Reset backtest</el-button>
 					<el-tabs v-model="activeName" type="card" :tab-position="tabPosition">
+
 						<el-tab-pane
 							style="height: 90%; overflow-x: hidden"
 							label="Backtest Setup"
@@ -148,6 +151,7 @@
 							></strategy-form>
 						</el-tab-pane>
 					</el-tabs>
+					
 				</div>
 			</main>
 		</div>
@@ -516,6 +520,12 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.restartBtn{
+	position: relative;
+	z-index: 1;
+	float: right;
+	width: 12rem;
+}
 .active {
 	display: none !important;
 }
