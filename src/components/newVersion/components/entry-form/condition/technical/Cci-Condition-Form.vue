@@ -47,7 +47,7 @@
 				></el-tooltip>
 			</div>
 			<el-button plain style="margin: 5px 0px 5px 0px">{{
-`${techVal}&nbsp;&nbsp;
+				`${techVal}&nbsp;&nbsp;
 				${conditions[sc.condition].label}
 				&nbsp;&nbsp;${sc.value}
 				`
@@ -87,27 +87,29 @@ export default {
 		}
 	},
 	methods: {
-		setScLoad: throttle(function(val) {if(JSON.stringify(val) != '{}'){
-			const rule = /^-?0?\d*?\.?\d*?$/
-			for (let key in val) {
-				if(typeof val[key] == 'string'){
-				if (val[key].search(rule) != -1) {
-					val[key] = Number(val[key])
+		setScLoad: throttle(function (val) {
+			if (JSON.stringify(val) != '{}') {
+				const rule = /^-?0?\d*?\.?\d*?$/
+				for (let key in val) {
+					if (typeof val[key] == 'string') {
+						if (val[key].search(rule) != -1) {
+							val[key] = Number(val[key])
+						}
+					} else if (typeof [key] == 'number') {
+						val[key] = val[key]
+					}
 				}
-				}else if(typeof[key] == 'number') {
-					val[key] = val[key]
-				}
+				this.sc = val
 			}
-			this.sc = val
-		}}, 1500)
+		}, 1500)
 	}
 }
 </script>
 <style lang="less" scoped>
+.note {
+	display: inline-block;
+}
 @media only screen and (min-width: 1600px) {
-	.note {
-		display: inline-block;
-	}
 	.sentimentConditionBox {
 		display: flex;
 		justify-content: space-between;
@@ -147,6 +149,7 @@ export default {
 	.signalDescriptionBox {
 		display: flex;
 		align-items: center;
+		flex-wrap: wrap;
 		// padding-bottom: 10px;
 		// border-bottom: 1px solid black;
 		justify-content: space-around;
@@ -203,6 +206,53 @@ export default {
 	.signalDescriptionBox {
 		display: flex;
 		align-items: center;
+		flex-wrap: wrap;
+		// padding-bottom: 10px;
+		// border-bottom: 1px solid black;
+		justify-content: space-around;
+	}
+}
+@media (min-width: 768px) and(max-width:899px) {
+	.sentimentConditionBox {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 10px;
+	}
+	.sentimentConditionBox .el-radio {
+		line-height: 35px;
+	}
+	.sentimentConditionBox .el-select .el-input {
+		flex: 1;
+	}
+	.sentimentConditionBox .el-input {
+		flex: 0.8;
+		margin-left: 5px;
+	}
+	.sentimentConditionBox .sentimentConditionItem {
+		display: flex;
+		justify-content: flex-end;
+	}
+	.sentimentConditionBox .sentimentMABox {
+		display: flex;
+		justify-content: flex-end;
+	}
+	.sentimentConditionBox .sentimentMABox .el-input {
+		flex: 1;
+	}
+	.sentimentConditionBox .sentimentMABox .el-input:first-child {
+		margin-right: 5px;
+	}
+	.sentimentConditionBox .el-radio {
+		margin-right: 2px;
+	}
+	.signal-condition-box {
+		padding-bottom: 10px;
+		border-bottom: 1px solid black;
+	}
+	.signalDescriptionBox {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
 		// padding-bottom: 10px;
 		// border-bottom: 1px solid black;
 		justify-content: space-around;

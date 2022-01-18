@@ -169,7 +169,7 @@ export default {
 		}
 	},
 	mounted(){
-		this.loadSentimentList()
+		// this.loadSentimentList()
 	},
 	methods: {
 		//  load sentiment list

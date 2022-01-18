@@ -2,7 +2,7 @@
 	<div class="backtest_container">
 		<el-row>
 			<el-form ref="backtestSetupForm" :model="bd" label-position="left">
-				<el-col :xs="20" :sm="24" :md="12" :lg="8" :xl="8">
+				<el-col :xs="20" :sm="14" :md="12" :lg="8" :xl="8">
 					<el-form-item label="Name:" prop="name">
 						<el-input v-model="bd.name" v-direction="{ x: 0, y: 0 }"></el-input>
 					</el-form-item>
@@ -38,7 +38,7 @@
 						</div>
 					</el-form-item>
 				</el-col>
-				<el-col :xs="20" :sm="24" :md="12" :lg="8" :xl="8">
+				<el-col :xs="20" :sm="14" :md="12" :lg="8" :xl="8">
 					<el-form-item label="Starting Capital:" prop="startingCapital">
 						<el-input
 							v-model="bd.capital"
@@ -51,12 +51,15 @@
 							v-model="temp.commission"
 							v-direction="{ x: 3, y: 0 }"
 							@change="getCommission"
+							suffix-icon="iconfont icon-percent"
 							@input="validateCommission"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="Slippage:" prop="slippage">
 						<el-input
-							v-model="bd.slippage"
+							v-model="temp.slippage"
+							@change="getSlippage"
+							suffix-icon="iconfont icon-percent"
 							v-direction="{ x: 4, y: 0 }"
 							@input="validateSlippage"
 						></el-input>
@@ -79,10 +82,11 @@
 						</div>
 					</el-form-item>
 				</el-col>
-				<el-col :xs="20" :sm="24" :md="12" :lg="8" :xl="8">
+				<el-col :xs="20" :sm="14" :md="12" :lg="8" :xl="8">
 					<el-form-item label="Benchmark:" prop="benchmark">
 						<div class="enterSymbolBox">
 							<el-input
+								disabled
 								v-model="bd.benchmark"
 								v-direction="{ x: 5, y: 0 }"
 							></el-input>
@@ -217,7 +221,7 @@ export default {
 			indexList: [],
 			loading: false,
 			options: [],
-			temp: { commission: '0.1' }
+			temp: { commission: '0.1', slippage: '0.1' }
 		}
 	},
 	created() {
@@ -279,12 +283,10 @@ export default {
 	},
 	methods: {
 		validateCommission(val) {
-			console.log('46474647647')
 			let list = val.split('.')
 			if (list.length === 2) {
 				let temp = ''
-				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) 
-					temp = list[0]
+				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) temp = list[0]
 				else {
 					temp = list[0].substring(0, 2)
 				}
@@ -299,7 +301,7 @@ export default {
 				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1)
 					this.bd.commission = list[0]
 				else {
-					this.temp.commission = list[0].substring(0,2)
+					this.temp.commission = list[0].substring(0, 2)
 				}
 			}
 			// let re = /[1-9]{0,2}?0?\.?\d{0,2}?/g
@@ -310,11 +312,25 @@ export default {
 			// }
 		},
 		validateSlippage(val) {
-			let re = /0\.?\d{0,4}?/g
-			if (val.search(re) !== -1) {
-				this.bd.slippage = val
-			} else {
-				this.bd.slippage = ''
+			let list = val.split('.')
+			if (list.length === 2) {
+				let temp = ''
+				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) temp = list[0]
+				else {
+					temp = list[0].substring(0, 2)
+				}
+
+				if (list[1].search(/^\d{0,3}?$/) !== -1) temp = temp + '.' + list[1]
+				else {
+					temp = temp + '.' + list[1].substring(0, 3)
+				}
+
+				this.temp.slippage = temp
+			} else if (list.length === 1) {
+				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) this.bd.slippage = list[0]
+				else {
+					this.temp.slippage = list[0].substring(0, 2)
+				}
 			}
 		},
 		validateStartingCapital(val) {
@@ -432,6 +448,9 @@ export default {
 		},
 		getCommission(val) {
 			this.bd.commission = val / 100
+		},
+		getCommission(val) {
+			this.bd.slippage = val / 100
 		}
 	}
 }
@@ -439,5 +458,10 @@ export default {
 <style lang="less" scoped>
 .backtest_container {
 	margin-top: 40px;
+}
+@media (min-width: 768px) and(max-width:899px) {
+	.backtest_container {
+		margin-top: 0px;
+	}
 }
 </style>

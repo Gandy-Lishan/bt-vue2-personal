@@ -144,7 +144,7 @@ export default {
 		},
 		getEditBacktestData: {
 			handler(newVal) {
-				console.log("退出的编辑数据8888888888");
+				console.log('退出的编辑数据8888888888')
 				const data = newVal.exit
 				this.fd.description = data.description
 				this.fd.direction = data.direction
@@ -202,6 +202,9 @@ export default {
 .active {
 	display: none;
 }
+.note {
+	display: inline-block;
+}
 @media only screen and (min-width: 1600px) {
 	.note {
 		display: inline-block;
@@ -255,6 +258,12 @@ export default {
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+}
+@media (min-width: 768px) and (max-width: 992px) {
+	.border-set {
+		border-bottom: 1px solid black;
+		padding-bottom: 15px;
 	}
 }
 </style>

@@ -36,7 +36,8 @@
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 import { Store, mapGetters } from 'vuex'
 export default {
-	extends: base,	props: {
+	extends: base,
+	props: {
 		editIds: Object,
 		idsLoad: Object
 	},
@@ -50,27 +51,28 @@ export default {
 		}
 	},
 	mounted() {
-		this.$set(this.ids,'MACDSlow',26)
-		this.$set(this.ids,'MACDFast',12)
-		this.$set(this.ids,'MACDSL',9)
+		this.$set(this.ids, 'MACDSlow', 26)
+		this.$set(this.ids, 'MACDFast', 12)
+		this.$set(this.ids, 'MACDSL', 9)
 	},
-		computed: {
+	computed: {
 		...mapGetters(['getExtremeValue']),
-				extremeValue() {
+		extremeValue() {
 			return this.getExtremeValue
-		},
+		}
 	},
 	watch: {
 		editIds: {
 			handler(newVal) {
-				if(JSON.stringify(newVal) != '{}'){
-				this.$set(this.ids, 'MACDSlow', newVal.MACDSlow)
-				this.$set(this.ids, 'MACDFast', newVal.MACDFast)
-				this.$set(this.ids, 'MACDSL', newVal.MACDSL)
-			}},
+				if (JSON.stringify(newVal) != '{}') {
+					this.$set(this.ids, 'MACDSlow', newVal.MACDSlow)
+					this.$set(this.ids, 'MACDFast', newVal.MACDFast)
+					this.$set(this.ids, 'MACDSL', newVal.MACDSL)
+				}
+			},
 			immediate: true,
 			deep: true
-		},
+		}
 		// idsLoad: {
 		// 	handler(newVal) {
 		// 		if(newVal.MACDSlow){
@@ -117,6 +119,15 @@ export default {
 	}
 	.miniNote {
 		display: inline-block;
+	}
+}
+@media (min-width: 768px) and(max-width:899px) {
+	.miniNote {
+		display: inline-block;
+	}
+	.extremumBox .el-form-item {
+		display: flex;
+		justify-content: flex-start;
 	}
 }
 </style>

@@ -10,17 +10,25 @@
 					</el-table-column>
 					<el-table-column label="Name" align="center" prop="name">
 					</el-table-column>
-					<el-table-column label="Symbol" align="center" prop="symbol" width="70px">
+					<el-table-column
+						label="Symbol"
+						align="center"
+						prop="symbol"
+						width="70px"
+					>
 					</el-table-column>
 					<el-table-column
-						label="description"
+						label="Description"
 						align="center"
 						show-overflow-tooltip
 						prop="description"
 					>
 					</el-table-column>
-					<el-table-column label="Backtest Period"  show-overflow-tooltip
-						align="center">
+					<el-table-column
+						label="Backtest Period"
+						show-overflow-tooltip
+						align="center"
+					>
 						<template slot-scope="scope">
 							<div class="dataBox">
 								<el-button size="mini" type="info" plain>{{
@@ -198,7 +206,9 @@ export default {
 		async getBacktestList(strategy) {
 			this.loading = true
 			let page = this.queryInfo.page
-			const res = await this.$http.get('/dev/backtest/?ordering=status,-create_date&page=' + page)
+			const res = await this.$http.get(
+				'/dev/backtest/?ordering=status,-create_date&page=' + page
+			)
 			if (res.status === 200) {
 				this.loading = false
 				this.backtestList = res.data.results
@@ -208,7 +218,7 @@ export default {
 			}
 		},
 		runbacktest(row) {
-			console.log('77777777777777777');
+			console.log('77777777777777777')
 			let vm = this
 			vm.clearInterval = clearInterval()
 			if (row.status == 0) {
@@ -231,17 +241,17 @@ export default {
 											'Run backtest is successful, click the view results button to see the results.',
 										offset: 100,
 										type: 'success',
-										 duration: 0
+										duration: 0
 									})
 								} else if (res.data.status === 0 || res.data.status === 3) {
 									clearInterval(vm.timer)
-									vm.getBacktestList()					
+									vm.getBacktestList()
 									vm.$notify({
-									title: 'No trades',
-									message: 'No trades, please change parameter.',
-									offset: 100,
-									type: 'warning'
-								})
+										title: 'No trades',
+										message: 'No trades, please change parameter.',
+										offset: 100,
+										type: 'warning'
+									})
 								}
 							})
 						}, 3000)
@@ -336,8 +346,7 @@ export default {
 			})
 		},
 		viewBacktestResults(row) {
-			
-			document.getElementsByClassName("ciq-period")[0].style.display = "none"
+			document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
@@ -351,7 +360,7 @@ export default {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
 		},
-		restoreIndicatorLayout(data){
+		restoreIndicatorLayout(data) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)

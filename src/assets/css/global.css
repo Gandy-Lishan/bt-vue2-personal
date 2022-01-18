@@ -1,4 +1,4 @@
-.green{
+.green {
 	width: 105px;
 	position: absolute;
 	display: flex;
@@ -10,28 +10,28 @@
 	color: #575757;
 	font-size: 1.2em;
 	font-weight: bold;
-	transition: color .20s 0s;
+	transition: color 0.2s 0s;
 }
-.green:hover{
-	color:black;
+.green:hover {
+	color: black;
 	background-color: rgba(145, 143, 143, 0.247);
 }
-.red{
+.red {
 	width: 105px;
 	position: absolute;
 	display: flex;
 	padding-left: 10px;
-    padding-right: 10px;
+	padding-right: 10px;
 	top: 5px;
-    left: 218px;
+	left: 218px;
 	align-items: center;
 	color: #575757;
 	font-size: 1.2em;
 	font-weight: bold;
-	transition: color .20s 0s;
+	transition: color 0.2s 0s;
 }
-.red:hover{
-	color:black;
+.red:hover {
+	color: black;
 	background-color: rgba(145, 143, 143, 0.247);
 }
 
@@ -46,11 +46,12 @@
 	height: 100%;
 	font-size: 16px;
 }
-#el-tab-pane{
-	overflow-y:scroll;
+#el-tab-pane {
+	overflow-y: scroll;
 }
-.el-table td.el-table__cell, .el-table th.el-table__cell.is-leaf{
-	border-bottom: 2px solid #D6E5EC;
+.el-table td.el-table__cell,
+.el-table th.el-table__cell.is-leaf {
+	border-bottom: 2px solid #d6e5ec;
 }
 .el-form-item__label {
 	font-weight: 500;
@@ -58,17 +59,18 @@
 .el-tab-pane .el-tabs {
 	overflow: auto;
 }
-.btnBox .el-button:nth-child(1), .signalBtnBox .el-button{
+.btnBox .el-button:nth-child(1),
+.signalBtnBox .el-button {
 	color: #910012;
 }
-.btnBox .el-button:nth-child(2){
-	color: #0000FF;
+.btnBox .el-button:nth-child(2) {
+	color: #0000ff;
 }
-.btnBox .el-button:nth-child(3){
-	color: #D9001B;
+.btnBox .el-button:nth-child(3) {
+	color: #d9001b;
 }
 .el-tabs__item {
-	background-color: #AAAAAA;
+	background-color: #aaaaaa;
 	font-weight: bold;
 	color: #000000;
 }
@@ -77,16 +79,16 @@
 	font-weight: bold;
 	color: #000000;
 }
-.el-tabs__item:hover{
+.el-tabs__item:hover {
 	color: #797979;
 	cursor: pointer;
 }
-@media only screen and (min-width: 1600px){
+@media only screen and (min-width: 1600px) {
 	.home-box {
 		width: 80%;
 		margin: 0px auto;
 	}
-	.el-radio__label{
+	.el-radio__label {
 		font-size: 15px !important;
 	}
 	.backtest_container .el-form-item {
@@ -160,17 +162,17 @@
 		.el-form-item__label {
 		font-size: 15px;
 		font-weight: 500;
-		color: #D9001B;
+		color: #d9001b;
 	}
 	.condition-form
-	.signalIndicatorBox
-	.extremumBox
-	.el-form-item:nth-of-type(2)
-	.el-form-item__label {
-	font-size: 15px;
-	font-weight: 500;
-	color: #456E02;
-}
+		.signalIndicatorBox
+		.extremumBox
+		.el-form-item:nth-of-type(2)
+		.el-form-item__label {
+		font-size: 15px;
+		font-weight: 500;
+		color: #456e02;
+	}
 	.condition-form
 		.signal-condition-box
 		.sentiment-value-box
@@ -231,27 +233,33 @@
 		.el-form-item__content {
 		flex: 0.5;
 	}
-	.signalIndicatorBox .indicatorBox .el-form-item .el-form-item__content .radioBox .indicatorSearchBox .el-autocomplete{
+	.signalIndicatorBox
+		.indicatorBox
+		.el-form-item
+		.el-form-item__content
+		.radioBox
+		.indicatorSearchBox
+		.el-autocomplete {
 		display: block;
 	}
-	.el-dialog__wrapper .el-dialog{
+	.el-dialog__wrapper .el-dialog {
 		width: 60% !important;
 	}
 	.el-table .cell {
 		white-space: nowrap;
-		overflow:  hidden;
+		overflow: hidden;
 		text-overflow: ellipsis;
-   }
-   .cell .el-row .el-button {
-	   margin-left: 5px;
-   }
+	}
+	.cell .el-row .el-button {
+		margin-left: 5px;
+	}
 }
 @media (min-width: 900px) and (max-width: 1599px) {
 	.home-box {
 		width: 90%;
 		margin: 0px auto;
 	}
-	.el-radio__label{
+	.el-radio__label {
 		font-size: 15px !important;
 	}
 	.backtest_container .el-form-item {
@@ -286,7 +294,7 @@
 		flex: 1;
 		padding-left: 5px;
 	}
-	.signalLeft .el-form-item:nth-child(2) .el-form-item__label{
+	.signalLeft .el-form-item:nth-child(2) .el-form-item__label {
 		flex: 1;
 	}
 	.signalLeft .el-select,
@@ -316,8 +324,9 @@
 		padding-left: 5px;
 		font-size: 15px;
 	}
-	.extremumItemBox{
+	.extremumItemBox {
 		display: flex;
+		flex-wrap: wrap;
 	}
 	.condition-form
 		.signalIndicatorBox
@@ -333,17 +342,17 @@
 		.el-form-item__label {
 		font-size: 15px;
 		font-weight: 500;
-		color: #D9001B;
+		color: #d9001b;
 	}
 	.condition-form
-	.signalIndicatorBox
-	.extremumBox
-	.el-form-item:nth-of-type(1)
-	.el-form-item__label {
-	font-size: 15px;
-	font-weight: 500;
-	color: #456E02;
-}
+		.signalIndicatorBox
+		.extremumBox
+		.el-form-item:nth-of-type(1)
+		.el-form-item__label {
+		font-size: 15px;
+		font-weight: 500;
+		color: #456e02;
+	}
 	.condition-form
 		.signal-condition-box
 		.sentiment-value-box
@@ -404,21 +413,23 @@
 		.el-form-item__content {
 		flex: 0.5;
 	}
-	.signalIndicatorBox .indicatorBox .el-form-item .el-form-item__content .radioBox .indicatorSearchBox .el-autocomplete{
+	.signalIndicatorBox
+		.indicatorBox
+		.el-form-item
+		.el-form-item__content
+		.radioBox
+		.indicatorSearchBox
+		.el-autocomplete {
 		display: block;
 	}
-	.el-dialog__wrapper .el-dialog{
+	.el-dialog__wrapper .el-dialog {
 		width: 60% !important;
 	}
 	.el-table .cell {
 		white-space: nowrap;
-	
+
 		text-overflow: ellipsis;
-   }
-}
-@media only screen and (max-width: 900px){
-	.home-box {
-		width: 90%;
-		margin: 0px auto;
 	}
+}
+@media (min-width: 768px) and(max-width:899px) {
 }

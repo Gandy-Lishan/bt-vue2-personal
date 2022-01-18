@@ -37,7 +37,8 @@
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 import { Store, mapGetters } from 'vuex'
 export default {
-	extends: base,	props: {
+	extends: base,
+	props: {
 		editIds: Object,
 		idsLoad: Object
 	},
@@ -50,30 +51,31 @@ export default {
 			}
 		}
 	},
-		mounted() {
-		this.$set(this.ids,'over_bought_bound',80)
-		this.$set(this.ids,'over_sold_bound',20)
-		this.$set(this.ids,'period',14)
+	mounted() {
+		this.$set(this.ids, 'over_bought_bound', 80)
+		this.$set(this.ids, 'over_sold_bound', 20)
+		this.$set(this.ids, 'period', 14)
 	},
 	computed: {
 		...mapGetters(['getExtremeValue']),
-				extremeValue() {
+		extremeValue() {
 			return this.getExtremeValue
-		},
+		}
 	},
-		watch: {
-			editIds: {
+	watch: {
+		editIds: {
 			handler(newVal) {
-				if(JSON.stringify(newVal) != '{}'){
-			this.$set(this.ids, 'over_bought_bound', newVal.over_bought_bound)
-				this.$set(this.ids, 'over_sold_bound', newVal.over_sold_bound)
-				this.$set(this.ids, 'period', newVal.period)
-			}},
+				if (JSON.stringify(newVal) != '{}') {
+					this.$set(this.ids, 'over_bought_bound', newVal.over_bought_bound)
+					this.$set(this.ids, 'over_sold_bound', newVal.over_sold_bound)
+					this.$set(this.ids, 'period', newVal.period)
+				}
+			},
 			immediate: true,
 			deep: true
-		},
+		}
 	},
-		methods: {
+	methods: {
 		// setIdsLoad(value) {
 		// 	const rule = /^-?0?\d*?\.?\d*?$/
 		// 	for (let key in val) {
@@ -105,6 +107,15 @@ export default {
 	}
 	.miniNote {
 		display: inline-block;
+	}
+}
+@media (min-width: 768px) and(max-width:899px) {
+	.miniNote {
+		display: inline-block;
+	}
+	.extremumBox .el-form-item {
+		display: flex;
+		justify-content: flex-start;
 	}
 }
 </style>

@@ -71,7 +71,7 @@ export default {
 		...mapGetters(['getIsClearForm']),
 		isClearForm() {
 			return this.getIsClearForm
-		},
+		}
 	},
 	watch: {
 		isClearForm: {
@@ -108,27 +108,27 @@ export default {
 	},
 	methods: {
 		//  load sentiment list
-		async loadSentimentList() {
-			const vm = this
-			var frequency = vm.$store.state.backtestInfo["entry"]["frequency"]
-			const res = await vm.$http.get(
-				'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
-				{
-					auth: {
-						username: 'sentimentrader_backtest_api',
-						password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-					}
-				}
-			)
-			vm.sentimentIndicatorList = res.data.map((obj) => {
-				console.log(frequency.toUpperCase().indexOf(obj.updated.toUpperCase()));
-				if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1){
-				return { value: obj.chart_name, url: obj.url, updated: obj.updated }
-				}
-			})
-			this.$store.commit('getIndicatorsList', res.data)
-			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
-		},
+		// async loadSentimentList() {
+		// 	const vm = this
+		// 	var frequency = vm.$store.state.backtestInfo['entry']['frequency']
+		// 	const res = await vm.$http.get(
+		// 		'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+		// 		{
+		// 			auth: {
+		// 				username: 'sentimentrader_backtest_api',
+		// 				password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+		// 			}
+		// 		}
+		// 	)
+		// 	vm.sentimentIndicatorList = res.data.map((obj) => {
+		// 		console.log(frequency.toUpperCase().indexOf(obj.updated.toUpperCase()))
+		// 		if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1) {
+		// 			return { value: obj.chart_name, url: obj.url, updated: obj.updated }
+		// 		}
+		// 	})
+		// 	this.$store.commit('getIndicatorsList', res.data)
+		// 	this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+		// },
 		// sentiment search
 		indicatorSentimentSearch(queryString, cb) {
 			var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
@@ -145,7 +145,9 @@ export default {
 		},
 		createStateSentimentFilter(queryString) {
 			return (state) => {
-				return state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+				return (
+					state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+				)
 			}
 		},
 		// technical search
@@ -339,6 +341,21 @@ export default {
 	}
 	.radioBox .el-radio {
 		line-height: 35px;
+	}
+}
+@media (min-width: 768px) and (max-width: 992px) {
+	.radioBox {
+		display: flex;
+	}
+	.radioBox .indicatorSearchBox {
+		flex: 1;
+	}
+	.radioBox .el-radio {
+		line-height: 35px;
+	}
+	.el-autocomplete {
+		display: block;
+		width: 300px;
 	}
 }
 </style>

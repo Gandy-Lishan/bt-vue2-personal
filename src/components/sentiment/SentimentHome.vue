@@ -122,8 +122,7 @@ export default {
 		'backtest-performance': backtestPerformance,
 		'entry-form': entryForm,
 		'exit-form': exitForm
-	}
-	,
+	},
 	methods: {
 		handleClick(tab, event) {
 			this.signalFormTagName = tab.name
@@ -206,14 +205,14 @@ export default {
 		clearEntryFormData() {
 			this.$refs.entryFormChild.clearEntryFormData()
 		},
-    		clearExitFormData() {
+		clearExitFormData() {
 			this.$refs.exitFormChild.clearExitFormData()
 		}
 	}
 }
 </script>
 <style lang="less" scoped>
-@media (min-width: 768px) and(max-width:992px) {
+@media (min-width: 768px) and(max-width:899px) {
 	// sm size
 	.header {
 		p:first-of-type {

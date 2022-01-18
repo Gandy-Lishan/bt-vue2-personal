@@ -9,11 +9,9 @@
 						v-model="indicatorRadio"
 						label="Sentiment_Indicators:"
 						style="
-							 {
 								position: relative;
 								left: 0px;
 								top: 30px;
-							}
 						"
 					></el-radio>
 				</div>
@@ -686,7 +684,7 @@ export default {
 	},
 	mounted() {
 		this.$cookies.set("userid","test")
-		this.loadSentimentList()
+		// this.loadSentimentList()
 		this.technicaltIndicatorList = this.loadShortLong()
 	},
 	watch: {
