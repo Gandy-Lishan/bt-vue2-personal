@@ -351,7 +351,7 @@ export default {
 			indicatorLayout.activatedMA = this.$store.state.activatedMA
 			backtestData.indicator_layout = JSON.stringify(indicatorLayout)
 
-			console.log('backtestData: ', backtestData)
+			//console.log('backtestData: ', backtestData)
 
 			this.$http
 				.post('/dev/backtest/', this.$qs.stringify(backtestData), {

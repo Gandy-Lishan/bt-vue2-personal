@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
+		backtestSymbol: '',
 		orignalFreqency: '',
 		pairDataFreq: '',
 		stateCopy: {},
@@ -130,6 +131,9 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+	getBacktestSymbol(state,val){
+		state.backtestSymbol = val
+	},
     resetState(state,val){
       state = val
     },
