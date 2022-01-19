@@ -7,7 +7,6 @@ function resolve(dir) {
 
 module.exports = {
     publicPath: "/",
-    publicPath: "",
 	configureWebpack: {
 		module: {
 			rules: [
