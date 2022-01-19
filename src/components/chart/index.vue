@@ -25,7 +25,7 @@ import { CIQ } from 'chartiq/js/components' // Required for types in chartInitia
 export default class AdvancedWrapper extends Vue {
 	@Prop({ type: String, default: '' }) symbol!: string
 	@Prop({ type: String, default: '_advanced-chart' }) chartId!: string
-	@Prop({ type: Boolean, default: true }) restore!: boolean
+	@Prop({ type: Boolean, default: false }) restore!: boolean
 
 	@Prop({ type: Function, default: ({}) => {} }) onChartReady!: Function
 
@@ -75,7 +75,7 @@ export default class AdvancedWrapper extends Vue {
 		CIQ.store = store;
 		CIQ.vue = Vue;
 		// refresh pag
-		console.log('backup vuex and clear chart first time')
+		//console.log('backup vuex and clear chart first time')
 		CIQ.store.commit('setCopy',JSON.stringify(CIQ.store.state))
 		CIQ.addIndicators()
 		

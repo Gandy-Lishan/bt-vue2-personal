@@ -196,81 +196,68 @@ export default {
 				this.backtestResult.starDate = ''
 			}
 		},
-		getBacktestHistory(val) {
-			this.backtestResult.historyValue = val
-		},
-		saveBacktest() {
-			const vm = this
-			const strategyFormData = {}
-			strategyFormData.stock = vm.backtestResult.symbolName
-			strategyFormData.name = vm.backtestResult.name
-			strategyFormData.description = vm.backtestResult.description
-			strategyFormData.note = 'my note'
-			strategyFormData.cash = vm.backtestResult.startingCapital
-			strategyFormData.commission = vm.backtestResult.commission
-			strategyFormData.slippage = vm.backtestResult.slippage
-			strategyFormData.riskfreerate = vm.backtestResult.slippage
-			strategyFormData.fromdate = timestampToTime(vm.backtestResult.starDate)
-			strategyFormData.todate = timestampToTime(vm.backtestResult.endDate)
-			strategyFormData.status = 0
-			strategyFormData.strategy = vm.strategyFormdata.id
-			const params = strategyFormData
-			this.$http
-				.post('/demo/backtest/', this.$qs.stringify(params), {
-					auth: {
-						username: 'sentimentrader_backtest_api',
-						password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-					}
-				})
-				.then((res) => {
-					if (res.status === 201) {
-						this.$message.success({
-							message: 'The save was successful',
-							duration: 1000
-						})
-						this.$emit('goToBacktestFavoriteForm')
-					}
-				})
-				.catch((error) => {
-					console.warn(error)
-				})
-		},
-		async remoteMethod(query) {
-			if (query !== '') {
-				this.loading = true
-				await this.$http
-					.get(
-						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks?=ABMD',
-						{
-							auth: {
-								username: 'sentimentrader_backtest_api',
-								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-							}
-						}
-					)
-					.then((res) => {
-						this.symbolList = res.data
-					})
-					.catch((error) => {
-						console.warn(error)
-					})
+    getEndDate(date){
+      this.backtestResult.endDate = date
+      const endDate = timestampToTime(date)
+      const str = endDate.split('-')
+      str[0] = (Number(str[0]) - Number(this.backtestResult.historyValue)) + ''
+      this.backtestResult.starDate = str.join('-')
+    },
+    saveBacktest() {
+      const vm = this
+      const strategyFormData = {}
+      strategyFormData.stock = vm.backtestResult.symbolName
+      strategyFormData.name = vm.backtestResult.name
+      strategyFormData.description = vm.backtestResult.description
+      strategyFormData.note = 'my note'
+      strategyFormData.cash = vm.backtestResult.startingCapital
+      strategyFormData.commission = vm.backtestResult.commission
+      strategyFormData.slippage = vm.backtestResult.slippage
+      strategyFormData.riskfreerate = vm.backtestResult.slippage
+      strategyFormData.fromdate = timestampToTime(vm.backtestResult.starDate)
+      strategyFormData.todate = timestampToTime(vm.backtestResult.endDate)
+      strategyFormData.status = 0
+      strategyFormData.strategy = vm.strategyFormdata.id
+      const params =  strategyFormData
+            this.$http.post('/demo/backtest/',this.$qs.stringify(params),{auth:{
+        username: 'sentimentrader_backtest_api',
+        password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+      }}).then( res => {
+        if(res.status === 201){
+          this.$message.success({
+          message: 'The save was successful',
+          duration: 1000
+        })
+        this.$emit('goToBacktestFavoriteForm')
+        }
+      }).catch( error => { console.warn(error); })
+    },
+    async remoteMethod(query) {
+        if (query !== '') {
+          this.loading = true;
+          await this.$http.get('https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks?=ABMD',
+          {auth:{
+            username: 'sentimentrader_backtest_api',
+            password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+          }}
+          ).then(res => {
+            console.log(' remoteMethod1')
+            this.symbolList = res.data
+          }).catch(error => {
+            console.warn(error);
+          })
 
-				await this.$http
-					.get(
-						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
-						{
-							auth: {
-								username: 'sentimentrader_backtest_api',
-								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-							}
-						}
-					)
-					.then((res) => {
-						this.indexList = res.data
-					})
-					.catch((error) => {
-						console.warn(error)
-					})
+          await this.$http.get('https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
+          {auth:{
+            username: 'sentimentrader_backtest_api',
+            password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+          }}
+          ).then(res => {
+            console.log(' remoteMethod2')
+            this.indexList = res.data
+          }).catch(error => {
+            console.warn(error);
+          })
 
 				setTimeout(() => {
 					this.loading = false

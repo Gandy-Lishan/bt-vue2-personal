@@ -9,7 +9,8 @@
 
 				<el-row type="flex" justify="center"
 					><el-col><p>SentimentTrader Backtest Engine</p></el-col>
-					<div class="refresh" @click="refreshPage" title="Reset backtest">
+					<!-- <div class="refresh" @click="refreshPage" title="Reset backtest"> -->
+					<!-- <div class="refresh" @click="refreshPage" title="Reset backtest">
 						<svg
 							t="1642066388852"
 							class="icon"
@@ -28,12 +29,16 @@
 						</svg>
 					</div>
 				</el-row>
+					</div> -->
+					<!-- </div> -->
+				</el-row>
 				<div class="chart_box" id="chart_box">
 					<chart width="100%" height="100%"></chart>
 				</div>
 			</header>
 			<main class="main" style="padding-bottom: 50px">
 				<div class="mainTagbar">
+					<el-button @click="refreshPage" class="restartBtn" type="primary" icon="el-icon-refresh-right">Reset backtest</el-button>
 					<el-tabs v-model="activeName" type="card" :tab-position="tabPosition">
 						<el-tab-pane
 							style="height: 90%; overflow-x: hidden"
@@ -48,7 +53,7 @@
 								>
 									<el-row>
 										<div class="iconNextBox1">
-											 <el-tooltip class="item" effect="dark" content="Next" placement="bottom">
+											<el-tooltip class="item" effect="dark" content="Next" placement="bottom">
 											<i
 												class="iconfont icon-xiayibu"
 												@click="validateSetUpForm"
@@ -80,7 +85,7 @@
 												class="iconfont icon-xiayibu"
 												@click="validateEntryForm"
 											></i>
-											</el-tooltip\>
+											</el-tooltip>
 										</div>
 									</div>
 									<entry-form
@@ -152,6 +157,7 @@
 							></strategy-form>
 						</el-tab-pane>
 					</el-tabs>
+					
 				</div>
 			</main>
 		</div>
@@ -350,9 +356,6 @@ export default {
 				this.$store.state.indicators.technicalIndicators
 			indicatorLayout.activatedMA = this.$store.state.activatedMA
 			backtestData.indicator_layout = JSON.stringify(indicatorLayout)
-
-			console.log('backtestData: ', backtestData)
-
 			this.$http
 				.post('/dev/backtest/', this.$qs.stringify(backtestData), {
 					withCredentials: true
@@ -481,7 +484,10 @@ export default {
 		},
 
 		refreshPage() {
-			location.reload()
+			if(location.href.indexOf("#reloaded") == -1){
+				location.href = location.href + "#reloaded"
+				location.reload()
+			}
 		},
 		goToEntryForm() {
 			this.activeTag = 'first-child-n2'
@@ -520,6 +526,12 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.restartBtn{
+	position: relative;
+	z-index: 1;
+	float: right;
+	width: 12rem;
+}
 .active {
 	display: none !important;
 }
@@ -601,6 +613,7 @@ export default {
 			}
 		}
 		.iconNextBox2 {
+			align-self: center;
 			justify-content: flex-end;
 			.el-button {
 				color: #409eff;
@@ -636,6 +649,7 @@ export default {
 		.clearEntryItem {
 			display: flex;
 			// margin-bottom: 20px;
+			margin-bottom: 20px;
 			justify-content: flex-start;
 			.el-button {
 				align-self: center;

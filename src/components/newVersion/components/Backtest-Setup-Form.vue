@@ -83,15 +83,6 @@
 					</el-form-item>
 				</el-col>
 				<el-col :xs="15" :sm="14" :md="12" :lg="8" :xl="8">
-					<!-- <el-form-item label="Benchmark:" prop="benchmark">
-						<div class="enterSymbolBox">
-							<el-input
-								disabled
-								v-model="bd.benchmark"
-								v-direction="{ x: 5, y: 0 }"
-							></el-input>
-						</div>
-					</el-form-item> -->
 					<el-form-item label="Benchmark:" prop="benchmark">
 						<div class="enterSymbolBox">
 							<el-select
@@ -246,7 +237,7 @@ export default {
 			loading: false,
 			options: [],
 			temp: { commission: '0.1', slippage: '0.1' },
-			      setUpFormRules: {
+		    setUpFormRules: {
         name:[{ required: true, message: 'Please enter name', trigger: 'blur' }],
         description:[{ required: true, message: 'Please enter description', trigger: 'blur' }],
         symbolName:[{ required: true, message: 'Please enter symbol', trigger: 'blur' }],
@@ -255,7 +246,9 @@ export default {
 		}
 	},
 	created() {
-		this.getSymbolList()
+		
+		this.getIndexsList()
+		this.getStocksList()
 		this.getEndDate()
 		let direction = this.$getDirection()
 		direction.on('keyup', function (e, val) {
@@ -409,40 +402,51 @@ export default {
 			}
 			return (window.utils = new utils())
 		},
-		async getSymbolList() {
-			await this.$http
-				.get(
-					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks',
-					{
-						auth: {
-							username: 'sentimentrader_backtest_api',
-							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+		async getIndexsList() {
+			if(this.$store.state.indexsList.length != 0){
+				console.log('data in indexsList from bascktest-setup',this.$store.state.indexsList.length)
+				this.indexList = this.$store.state.indexsList
+			}else{
+				await this.$http
+					.get(
+						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
+						{
+							auth: {
+								username: 'sentimentrader_backtest_api',
+								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+							}
 						}
-					}
-				)
-				.then((res) => {
-					this.symbolList = res.data
-				})
-				.catch((error) => {
-					console.warn(error)
-				})
-
-			await this.$http
-				.get(
-					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
-					{
-						auth: {
-							username: 'sentimentrader_backtest_api',
-							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+					)
+					.then((res) => {
+						this.indexList = res.data
+					})
+					.catch((error) => {
+						console.warn(error)
+					})
+			}
+		},
+		async getStocksList() {
+			if(this.$store.state.stocksList.length != 0){
+				console.log('data in stockList from bascktest-setup',this.$store.state.stocksList.length)
+				this.symbolList = this.$store.state.stocksList
+			}else{
+				await this.$http
+					.get(
+						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks',
+						{
+							auth: {
+								username: 'sentimentrader_backtest_api',
+								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+							}
 						}
-					}
-				)
-				.then((res) => {
-					this.indexList = res.data
-				})
-				.catch((error) => {
-					console.warn(error)
-				})
+					)
+					.then((res) => {
+						this.symbolList = res.data
+					})
+					.catch((error) => {
+						console.warn(error)
+					})
+			}
 		},
 		async remoteMethod(query) {
 			if (query !== '') {

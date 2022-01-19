@@ -97,8 +97,8 @@ export default {
 				total: 0
 			},
 			oldId: ''
-		}
-	},
+			}
+		},
 	created() {
 		// this.getToDate()
 		this.getStrategyList()

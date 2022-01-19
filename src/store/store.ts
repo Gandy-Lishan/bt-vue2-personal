@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
+		backtestSymbol: '',
+		orignalFreqency: '',
 		pairDataFreq: '',
 		stateCopy: {},
 		conditionRadio: '',
@@ -129,12 +131,18 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+	getBacktestSymbol(state,val){
+		state.backtestSymbol = val
+	},
     resetState(state,val){
       state = val
     },
     setCopy(state,val){
       state.stateCopy = val
     },
+	setOrignalFreqency(state,val){
+		state.orignalFreqency = val
+	},
 	setFreqency(state,val){
 		state.pairDataFreq = val
 	},

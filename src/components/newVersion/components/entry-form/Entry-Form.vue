@@ -50,13 +50,13 @@
 							class="border-set"
 						>
 							<el-radio-group v-model="fd.frequency" @change="getFrequency">
-								<el-radio label="Daily" :disabled="dailyDisabled"
+								<el-radio label="Daily"
 									>Daily</el-radio
 								>
-								<el-radio label="Weekly" :disabled="weeklyDisabled"
+								<el-radio label="Weekly"
 									>Weekly</el-radio
 								>
-								<el-radio label="Monthly" :disabled="monthlyDisabled"
+								<el-radio label="Monthly"
 									>Monthly</el-radio
 								>
 							</el-radio-group>
@@ -96,9 +96,6 @@ export default {
 	},
 	data() {
 		return {
-			dailyDisabled: false,
-			weeklyDisabled: false,
-			monthlyDisabled: false,
 			fd: {
 				description: '',
 				direction: '',
@@ -152,6 +149,13 @@ export default {
 		updateFreq() {
 			return this.$store.state.pairDataFreq
 		}
+
+		// updateFreq () {
+		// 	return this.$store.state.pairDataFreq
+		// }
+	},
+	mounted() {
+		this.getIndicatorsList()
 	},
 	mounted() {
 		this.getIndicatorsList()
@@ -170,6 +174,22 @@ export default {
 				}
 			}
 		},
+		// updateFreq(val){
+		// 	switch(val){
+		// 		case "daily": {
+		// 			this.fd.frequency = Daily
+		// 			break
+		// 		}
+		// 		case "weekly": {
+		// 			this.fd.frequency = Weekly
+		// 			break
+		// 		}
+		// 		case "monthly": {
+		// 			this.fd.frequency = Monthly
+		// 			break
+		// 		}
+		// 	}
+		// },
 		isClearForm: {
 			handler(newVal) {
 				let init = deepClone1(this.$options.data())
@@ -210,9 +230,39 @@ export default {
 		'condition-tab': conditionTab
 	},
 	methods: {
-		loadSentimentList(val) {
+		async loadSentimentList(val) {
 			const vm = this
 			var frequency = val
+			var indicatorList = []
+			if(this.$store.state.indicatorsList.length != 0){
+				//console.log('data in indicatorList from entry-form',this.$store.state.indicatorsList.length)
+				indicatorList = this.$store.state.indicatorsList
+			}else{
+				const res = await vm.$http.get(
+					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+					{
+						auth: {
+							username: 'sentimentrader_backtest_api',
+							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+						}
+					}
+				)
+				indicatorList = res.data
+			}
+			// vm.sentimentIndicatorList = res.data.map((obj) => {
+			// 	if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1) {
+			// 		return { value: obj.chart_name, url: obj.url, updated: obj.updated }
+			// 	}
+			// })
+			vm.sentimentIndicatorList = []
+			indicatorList.forEach((element) => {
+				if (frequency.toUpperCase().indexOf(element.updated.toUpperCase()) !== -1) {
+					vm.sentimentIndicatorList.push({ value: element.chart_name, url: element.url, updated: element.updated }) 
+				}
+			})
+			this.$store.commit('getIndicatorsList', indicatorList)
+			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+
 			const data = vm.$store.state.indicatorsList
 			if (frequency !== '') {
 				if (frequency == 'Daily') {

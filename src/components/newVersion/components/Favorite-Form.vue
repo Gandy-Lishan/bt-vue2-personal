@@ -350,6 +350,7 @@ export default {
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
+				this.$store.commit('getBacktestSymbol', res.data.symbol)
 				this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
 			})
 			this.$store.commit('getRunBacktestData', row)
@@ -369,12 +370,9 @@ export default {
 		},
 		showDes(row) {
 			const datades = {}
-
-			console.log(row)
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				const des = res.data
-
 				let str = ``
 				for (let key in des) {
 					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'

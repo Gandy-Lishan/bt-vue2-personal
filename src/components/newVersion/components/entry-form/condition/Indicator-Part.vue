@@ -129,6 +129,37 @@ export default {
 		// 	this.$store.commit('getIndicatorsList', res.data)
 		// 	this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
 		// },
+
+		// async loadSentimentList() {
+		// 	const vm = this
+		// 	var frequency = vm.$store.state.backtestInfo["entry"]["frequency"]
+		// 	var indicatorList = []
+			
+		// 	if(this.$store.state.indicatorsList.length != 0){
+		// 		console.log('data in indicatorList from indicator-part',this.$store.state.indicatorsList.length)
+		// 		indicatorList = this.$store.state.indicatorsList
+		// 	}else{
+		// 		const res = await vm.$http.get(
+		// 			'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+		// 			{
+		// 				auth: {
+		// 					username: 'sentimentrader_backtest_api',
+		// 					password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+		// 				}
+		// 			}
+		// 		)
+		// 		indicatorList = res.data
+		// 	}
+		// 	vm.sentimentIndicatorList = indicatorList.map((obj) => {
+		// 		console.log(frequency.toUpperCase().indexOf(obj.updated.toUpperCase()));
+		// 		if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1){
+		// 		return { value: obj.chart_name, url: obj.url, updated: obj.updated }
+		// 		}
+		// 	})
+		// 	this.$store.commit('getIndicatorsList', indicatorList)
+		// 	this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+		// },
+
 		// sentiment search
 		indicatorSentimentSearch(queryString, cb) {
 			var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
@@ -204,6 +235,12 @@ export default {
 				this.$emit('getSentiUrl', item.url)
 			}
 			console.log('SentimentSelect MA LIST: ', CIQ.store.state.activatedMA)
+
+			// avoid add indicator redundantly
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					var sd = CIQ.stxx.layout.studies[studyInstanceName]
+					if (sd.type == item.url) {return}
+            }
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
@@ -224,8 +261,10 @@ export default {
 			])
 
 			const newMap = new Map(set)
+			var url = ''
 			for (let i of newMap.entries()) {
 				if (val === i[0]) {
+					url = i[1]
 					this.$emit('getTechIndiValue', i[1])
 					// remove a MA tat already exists in current criteria before loadin
 					if (obj.criteria == 'entry') {
@@ -262,6 +301,13 @@ export default {
 					this.$store.commit('getTechnicalIndicators', techIndicators)
 
 					console.log('TechnicalSelect MA LIST', CIQ.store.state.activatedMA)
+					
+					// avoid add indicator redundantly
+					console.log(CIQ.stxx.layout.studies)
+					for (var studyInstanceName in CIQ.stxx.layout.studies) {
+						var sd = CIQ.stxx.layout.studies[studyInstanceName]
+						if (sd.type == url) {return}
+					}
 					CIQ.addIndicators()
 				}
 			}
