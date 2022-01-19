@@ -265,7 +265,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-@media (min-width: 768px) and(max-width:992px) {
+@media (min-width: 768px) and(max-width:899px) {
 	// sm size
 }
 @media (max-width: 767px) {

@@ -50,9 +50,15 @@
 							class="border-set"
 						>
 							<el-radio-group v-model="fd.frequency" @change="getFrequency">
-								<el-radio label="Daily" :disabled="dailyDisabled">Daily</el-radio>
-								<el-radio label="Weekly" :disabled="weeklyDisabled">Weekly</el-radio>
-								<el-radio label="Monthly" :disabled="monthlyDisabled">Monthly</el-radio>
+								<el-radio label="Daily" :disabled="dailyDisabled"
+									>Daily</el-radio
+								>
+								<el-radio label="Weekly" :disabled="weeklyDisabled"
+									>Weekly</el-radio
+								>
+								<el-radio label="Monthly" :disabled="monthlyDisabled"
+									>Monthly</el-radio
+								>
 							</el-radio-group>
 						</el-form-item>
 					</el-form>
@@ -78,8 +84,10 @@ import { Store, mapGetters } from 'vuex'
 // import base from "@/components/newVersion/components/baisc/sgnial-baisc.vue"
 import SignalCode, { SingaCode } from '@/tools/codeTool'
 import form_base from '@/components/newVersion/components/baisc/from.vue'
-import { throttle } from '@/tools/throttle.js'
+// import { throttle } from '@/tools/throttle.js'
 import deepClone1 from '@/tools/deepClone.js'
+const _ = require('lodash')
+const throttle = _.throttle
 export default {
 	extends: form_base,
 	props: {
@@ -97,10 +105,9 @@ export default {
 				frequency: '',
 				relation: 0,
 				score: 0,
-				criteria: 'entry',
-				
+				criteria: 'entry'
 			},
-			sentimentIndicatorList:[],
+			sentimentIndicatorList: [],
 			entrySignalEditData: {},
 			signalVisiable: true,
 			// Form validation rules
@@ -142,18 +149,21 @@ export default {
 		getEditBacktestData() {
 			return this.editBacktestData()
 		},
-		updateFreq () {
+		updateFreq() {
 			return this.$store.state.pairDataFreq
 		}
 	},
+	mounted() {
+		this.getIndicatorsList()
+	},
 	watch: {
-		updateFreq(val){
-			switch(val){
-				case "weekly": {
+		updateFreq(val) {
+			switch (val) {
+				case 'weekly': {
 					this.dailyDisabled = true
 					break
 				}
-				case "monthly": {
+				case 'monthly': {
 					this.dailyDisabled = true
 					this.weeklyDisabled = true
 					break
@@ -172,6 +182,7 @@ export default {
 				this.$set(this.fd, 'description', data.description)
 				this.$set(this.fd, 'direction', data.direction)
 				this.$set(this.fd, 'frequency', data.frequency)
+				this.loadSentimentList(data.frequency)
 				this.signalVisiable = false
 				this.getExitDirection(data.direction)
 				this.getFrequency(data.frequency)
@@ -199,9 +210,45 @@ export default {
 		'condition-tab': conditionTab
 	},
 	methods: {
-		async loadSentimentList(val) {
+		loadSentimentList(val) {
 			const vm = this
 			var frequency = val
+			const data = vm.$store.state.indicatorsList
+			if (frequency !== '') {
+				if (frequency == 'Daily') {
+					vm.setSentiList(['Daily'], data)
+				} else if (frequency == 'Weekly') {
+					vm.setSentiList(['Daily', 'Weekly'], data)
+				} else if (frequency == 'Monthly') {
+					vm.setSentiList(['Daily', 'Weekly', 'Monthly'], data)
+				}
+			}
+		},
+		getExitDirection(val) {
+			this.$store.commit('getExitDirection', val)
+
+			this.fd.direction = val
+			this.fd.criteria = 'entry'
+			this.$store.commit('setFd', this.fd)
+		},
+		setSentiList(arr, data) {
+			const vm = this
+			vm.sentimentIndicatorList = []
+			arr.forEach((fre) => {
+				data.forEach((element) => {
+					if (fre.toUpperCase().indexOf(element.updated.toUpperCase()) !== -1) {
+						vm.sentimentIndicatorList.push({
+							value: element.chart_name,
+							url: element.url,
+							updated: element.updated
+						})
+					}
+				})
+			})
+			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+		},
+		async getIndicatorsList() {
+			const vm = this
 			const res = await vm.$http.get(
 				'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
 				{
@@ -211,27 +258,7 @@ export default {
 					}
 				}
 			)
-		
-			// vm.sentimentIndicatorList = res.data.map((obj) => {
-			// 	if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1) {
-			// 		return { value: obj.chart_name, url: obj.url, updated: obj.updated }
-			// 	}
-			// })
-			vm.sentimentIndicatorList = []
-			res.data.forEach((element) => {
-				if (frequency.toUpperCase().indexOf(element.updated.toUpperCase()) !== -1) {
-					vm.sentimentIndicatorList.push({ value: element.chart_name, url: element.url, updated: element.updated }) 
-				}
-			})
 			this.$store.commit('getIndicatorsList', res.data)
-			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
-		},
-		getExitDirection(val) {
-			this.$store.commit('getExitDirection', val)
-
-			this.fd.direction = val
-			this.fd.criteria = 'entry'
-			this.$store.commit('setFd', this.fd)
 		},
 		getDes: throttle(function (val) {
 			this.fd.description = val
@@ -277,10 +304,10 @@ export default {
 .active {
 	display: none;
 }
+.note {
+	display: inline-block;
+}
 @media only screen and (min-width: 1600px) {
-	.note {
-		display: inline-block;
-	}
 	.entry-form-container {
 		display: flex;
 		flex-wrap: wrap;
@@ -330,6 +357,18 @@ export default {
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+}
+@media (min-width: 768px) and (max-width: 992px) {
+	.border-set {
+		border-bottom: 1px solid black;
+		padding-bottom: 15px;
+	}
+}
+@media (max-width: 767px) {
+	.border-set {
+		border-bottom: 1px solid black;
+		padding-bottom: 15px;
 	}
 }
 </style>

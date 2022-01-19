@@ -1,8 +1,8 @@
 <template>
 	<div class="backtest_container">
 		<el-row>
-			<el-form ref="backtestSetupForm" :model="bd" label-position="left">
-				<el-col :xs="20" :sm="24" :md="12" :lg="8" :xl="8">
+			<el-form ref="backtestSetupForm" :model="bd" label-position="left" :rules="setUpFormRules">
+				<el-col :xs="15" :sm="14" :md="12" :lg="8" :xl="8">
 					<el-form-item label="Name:" prop="name">
 						<el-input v-model="bd.name" v-direction="{ x: 0, y: 0 }"></el-input>
 					</el-form-item>
@@ -38,7 +38,7 @@
 						</div>
 					</el-form-item>
 				</el-col>
-				<el-col :xs="20" :sm="24" :md="12" :lg="8" :xl="8">
+				<el-col :xs="15" :sm="14" :md="12" :lg="8" :xl="8">
 					<el-form-item label="Starting Capital:" prop="startingCapital">
 						<el-input
 							v-model="bd.capital"
@@ -51,12 +51,15 @@
 							v-model="temp.commission"
 							v-direction="{ x: 3, y: 0 }"
 							@change="getCommission"
+							suffix-icon="iconfont icon-percent"
 							@input="validateCommission"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="Slippage:" prop="slippage">
 						<el-input
-							v-model="bd.slippage"
+							v-model="temp.slippage"
+							@change="getSlippage"
+							suffix-icon="iconfont icon-percent"
 							v-direction="{ x: 4, y: 0 }"
 							@input="validateSlippage"
 						></el-input>
@@ -79,13 +82,38 @@
 						</div>
 					</el-form-item>
 				</el-col>
-				<el-col :xs="20" :sm="24" :md="12" :lg="8" :xl="8">
-					<el-form-item label="Benchmark:" prop="benchmark">
+				<el-col :xs="15" :sm="14" :md="12" :lg="8" :xl="8">
+					<!-- <el-form-item label="Benchmark:" prop="benchmark">
 						<div class="enterSymbolBox">
 							<el-input
+								disabled
 								v-model="bd.benchmark"
 								v-direction="{ x: 5, y: 0 }"
 							></el-input>
+						</div>
+					</el-form-item> -->
+					<el-form-item label="Benchmark:" prop="benchmark">
+						<div class="enterSymbolBox">
+							<el-select
+								v-model="bd.benchmark"
+								id="symbolName"
+								filterable
+								remote
+								reserve-keyword
+								automatic-dropdown
+								@change="getBenchmark(bd.benchmark)"
+								placeholder="enter keywords"
+								:remote-method="remoteMethod"
+								:loading="loading"
+							>
+								<el-option
+									v-for="item in options"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value"
+								>
+								</el-option>
+							</el-select>
 						</div>
 					</el-form-item>
 					<el-form-item label="Backtest History:" prop="backtestHistory">
@@ -153,7 +181,7 @@ export default {
 				name: '',
 				description: '',
 				symbol: 'AAPL',
-				benchmark: 'AAPL',
+				benchmark: 'SPY',
 				strategy: 'Signal',
 				capital: 100000.0,
 				capital_alloc: 1.0,
@@ -217,7 +245,13 @@ export default {
 			indexList: [],
 			loading: false,
 			options: [],
-			temp: { commission: '0.1' }
+			temp: { commission: '0.1', slippage: '0.1' },
+			      setUpFormRules: {
+        name:[{ required: true, message: 'Please enter name', trigger: 'blur' }],
+        description:[{ required: true, message: 'Please enter description', trigger: 'blur' }],
+        symbolName:[{ required: true, message: 'Please enter symbol', trigger: 'blur' }],
+
+      }
 		}
 	},
 	created() {
@@ -279,12 +313,10 @@ export default {
 	},
 	methods: {
 		validateCommission(val) {
-			console.log('46474647647')
 			let list = val.split('.')
 			if (list.length === 2) {
 				let temp = ''
-				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) 
-					temp = list[0]
+				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) temp = list[0]
 				else {
 					temp = list[0].substring(0, 2)
 				}
@@ -299,7 +331,7 @@ export default {
 				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1)
 					this.bd.commission = list[0]
 				else {
-					this.temp.commission = list[0].substring(0,2)
+					this.temp.commission = list[0].substring(0, 2)
 				}
 			}
 			// let re = /[1-9]{0,2}?0?\.?\d{0,2}?/g
@@ -310,11 +342,25 @@ export default {
 			// }
 		},
 		validateSlippage(val) {
-			let re = /0\.?\d{0,4}?/g
-			if (val.search(re) !== -1) {
-				this.bd.slippage = val
-			} else {
-				this.bd.slippage = ''
+			let list = val.split('.')
+			if (list.length === 2) {
+				let temp = ''
+				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) temp = list[0]
+				else {
+					temp = list[0].substring(0, 2)
+				}
+
+				if (list[1].search(/^\d{0,3}?$/) !== -1) temp = temp + '.' + list[1]
+				else {
+					temp = temp + '.' + list[1].substring(0, 3)
+				}
+
+				this.temp.slippage = temp
+			} else if (list.length === 1) {
+				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) this.bd.slippage = list[0]
+				else {
+					this.temp.slippage = list[0].substring(0, 2)
+				}
 			}
 		},
 		validateStartingCapital(val) {
@@ -330,7 +376,6 @@ export default {
 		},
 		getSymbolName(val) {
 			this.$store.commit('getSymbolName', val)
-			this.bd.benchmark = val
 			// 清空 两个表单的方法
 			// this.$emit('resetResultData')
 			// this.$emit('resetPerformanceData')
@@ -341,6 +386,9 @@ export default {
 			CIQ.addSymbol(val)
 			// remove markers when symbol changes
 			CIQ.hideMarker()
+		},
+		getBenchmark(val) {
+			this.bd.benchmark = val
 		},
 		getEndDate() {
 			this.bd.end_date = timestampToTime(new Date())
@@ -353,7 +401,7 @@ export default {
 				let vm = this
 				vm.setSymbol = function (symbol) {
 					that.bd.symbol = symbol
-					that.bd.benchmark = symbol
+					// that.bd.benchmark = symbol
 				}
 				vm.b = function () {
 					alert('b')
@@ -432,12 +480,25 @@ export default {
 		},
 		getCommission(val) {
 			this.bd.commission = val / 100
+		},
+		getSlippage(val) {
+			this.bd.slippage = val / 100
 		}
 	}
 }
 </script>
 <style lang="less" scoped>
+/deep/ .el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before {
+  content: ' ';
+  width: 0px;
+  margin-right: 0px;
+}
 .backtest_container {
 	margin-top: 40px;
+}
+@media (min-width: 768px) and(max-width:899px) {
+	.backtest_container {
+		margin-top: 0px;
+	}
 }
 </style>

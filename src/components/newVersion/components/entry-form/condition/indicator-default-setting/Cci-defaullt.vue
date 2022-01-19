@@ -39,7 +39,7 @@ export default {
 	extends: base,
 	props: {
 		editIds: Object,
-		idsLoad: Object,
+		idsLoad: Object
 	},
 	data() {
 		return {
@@ -51,21 +51,22 @@ export default {
 		}
 	},
 	mounted() {
-		this.$set(this.ids,'over_bought_bound',100)
-		this.$set(this.ids,'over_sold_bound',-100)
-		this.$set(this.ids,'period',20)
+		this.$set(this.ids, 'over_bought_bound', 100)
+		this.$set(this.ids, 'over_sold_bound', -100)
+		this.$set(this.ids, 'period', 20)
 	},
 	watch: {
 		editIds: {
 			handler(newVal) {
-				if(JSON.stringify(newVal) != '{}'){
-				this.$set(this.ids, 'over_bought_bound', newVal.over_bought_bound)
-				this.$set(this.ids, 'over_sold_bound', newVal.over_sold_bound)
-				this.$set(this.ids, 'period', newVal.period)
-			}},
+				if (JSON.stringify(newVal) != '{}') {
+					this.$set(this.ids, 'over_bought_bound', newVal.over_bought_bound)
+					this.$set(this.ids, 'over_sold_bound', newVal.over_sold_bound)
+					this.$set(this.ids, 'period', newVal.period)
+				}
+			},
 			immediate: true,
 			deep: true
-		},
+		}
 		// idsLoad: {
 		// 	handler(newVal) {
 		// 		if(newVal.over_bought_bound){
@@ -110,6 +111,24 @@ export default {
 	}
 	.miniNote {
 		display: inline-block;
+	}
+}
+@media (min-width: 768px) and(max-width:899px) {
+	.miniNote {
+		display: inline-block;
+	}
+	.extremumBox .el-form-item {
+		display: flex;
+		justify-content: flex-start;
+	}
+}
+@media (max-width:767px) {
+	.miniNote {
+		display: inline-block;
+	}
+	.extremumBox .el-form-item {
+		display: flex;
+		justify-content: flex-start;
 	}
 }
 </style>

@@ -11,6 +11,7 @@
       <el-form
         ref="backtestSetupForm" 
         :model="backtestSetupFormdata"
+      :rules="setUpFormRules"
         label-position="left">
         <el-col :span="8">
             <el-form-item label="Name:" prop="name">
@@ -236,7 +237,11 @@ export default {
       symbolList: [],
       indexList: [],
       options: [],
-      loading: false
+      loading: false,
+      setUpFormRules: {
+        name:[{  message: 'Please enter name', trigger: 'blur' }],
+        description:[{  message: 'Please enter name', trigger: 'blur' }],
+      }
     }
   },
   components: {

@@ -49,14 +49,12 @@
 					v-if="indicatorRadio === 'technical' && techIndiValue === 'ST CCI'"
 					:tabIndex="tabIndex"
 					:idsLoad="idsLoad"
-					
 					:criteria="criteria"
-				    :editIds="editIds"
+					:editIds="editIds"
 				></cci-default>
 				<!-- ma -->
 				<ma-default
 					v-if="indicatorRadio === 'technical' && techIndiValue === 'ma'"
-					
 					:tabIndex="tabIndex"
 					:editIds="editIds"
 					:criteria="criteria"
@@ -195,45 +193,49 @@ export default {
 		},
 		signalDialogData: {
 			handler(newVal) {
-				if(JSON.stringify(newVal) !== '{}' && newVal.criteria == this.criteria){
-					console.log("判断",this.criteria);
-				const fd = {}
-				let vm = this;
-				fd.description = newVal.description
-				fd.direction = newVal.direction
-				fd.frequency = newVal.frequency
-				fd.criteria = newVal.criteria
-				this.$store.commit('setSignalDialogFd', fd)
-				this.idsLoad = newVal.code.ids
-				this.scLoad = newVal.code.sc
-				if (newVal.code.analysis === 'Technical') {
-					this.indicatorRadio = 'technical'
-					let setObj = {}
-					setObj.radio = 'Technical Indicators'
-					setObj.technicalIndicator = newVal.code.indicator
-					setObj.criteria = this.criteria
-					setObj.index = this.tabIndex
-					this.$refs.indicatorPart.setIndicatorRadio(setObj)
-					const arr = [
-						{ label: 'Moving Average', value: 'ma' },
-						{ label: 'MACD', value: 'ST MACD' },
-						{ label: 'Commodity Channel Index', value: 'ST CCI' },
-						{ label: 'Relative Strength Index', value: 'ST RSI' }
-					]
-					arr.forEach((item) => {
-						if (item.label === newVal.code.indicator) {
-							this.techIndiValue = item.value
-						}
-					})
-				} else if (newVal.code.analysis === 'Sentiment') {
-					this.indicatorRadio = 'sentiment'
-					let sentiObj = {}
-					sentiObj.radio = 'Sentiment Indicators'
-					sentiObj.sentimentIndicator = newVal.code.indicator
-					sentiObj.criteria = this.criteria
-					sentiObj.index = this.tabIndex
-					vm.$refs.indicatorPart.setIndicatorRadio(sentiObj)
-				}}
+				if (
+					JSON.stringify(newVal) !== '{}' &&
+					newVal.criteria == this.criteria
+				) {
+					console.log('判断', this.criteria)
+					const fd = {}
+					let vm = this
+					fd.description = newVal.description
+					fd.direction = newVal.direction
+					fd.frequency = newVal.frequency
+					fd.criteria = newVal.criteria
+					this.$store.commit('setSignalDialogFd', fd)
+					this.idsLoad = newVal.code.ids
+					this.scLoad = newVal.code.sc
+					if (newVal.code.analysis === 'Technical') {
+						this.indicatorRadio = 'technical'
+						let setObj = {}
+						setObj.radio = 'Technical Indicators'
+						setObj.technicalIndicator = newVal.code.indicator
+						setObj.criteria = this.criteria
+						setObj.index = this.tabIndex
+						this.$refs.indicatorPart.setIndicatorRadio(setObj)
+						const arr = [
+							{ label: 'Moving Average', value: 'ma' },
+							{ label: 'MACD', value: 'ST MACD' },
+							{ label: 'Commodity Channel Index', value: 'ST CCI' },
+							{ label: 'Relative Strength Index', value: 'ST RSI' }
+						]
+						arr.forEach((item) => {
+							if (item.label === newVal.code.indicator) {
+								this.techIndiValue = item.value
+							}
+						})
+					} else if (newVal.code.analysis === 'Sentiment') {
+						this.indicatorRadio = 'sentiment'
+						let sentiObj = {}
+						sentiObj.radio = 'Sentiment Indicators'
+						sentiObj.sentimentIndicator = newVal.code.indicator
+						sentiObj.criteria = this.criteria
+						sentiObj.index = this.tabIndex
+						vm.$refs.indicatorPart.setIndicatorRadio(sentiObj)
+					}
+				}
 			},
 
 			immediate: true,
@@ -241,47 +243,46 @@ export default {
 		},
 		getEditBacktestData: {
 			handler(newVal) {
-				console.log('000000000000000000000');
-				if(newVal.entry.direction){
-				this.indicatorEditData = {}
-				var signalCode = new SignalCode()
-				var code = ''
-				const data = newVal[this.criteria]['signals']
-				if(data instanceof Array) {
-				 code = data[this.tabIndex]['code']
-				}
-				code = signalCode.decode(code)
-				// this.idsLoad = code.ids
+				console.log('000000000000000000000')
+				if (newVal.entry.direction) {
+					this.indicatorEditData = {}
+					var signalCode = new SignalCode()
+					var code = ''
+					const data = newVal[this.criteria]['signals']
+					if (data instanceof Array) {
+						code = data[this.tabIndex]['code']
+					}
+					code = signalCode.decode(code)
+					// this.idsLoad = code.ids
 
-
-				if(!code.ids) {
-					code.ids = {}
-				}
-				this.editIds = code.ids
-				this.scLoad = code.sc
-				if (code.analysis === 'Sentiment') {
-					this.sentimentIndicator = code.indicator
-					this.indicatorEditData.sentimentIndicator = code.indicator
-					this.indicatorRadio = 'sentiment'
-					this.sentiVal = code.indicator
-				} else if (code.analysis === 'Technical') {
-					const arr = [
-						[ 'Moving Average', 'ma' ],
-						[ 'MACD', 'ST MACD' ],
-						[ 'Commodity Channel Index', 'ST CCI' ],
-						[ 'Relative Strength Index', 'ST RSI' ]
-					]
-					let indicatorMap = new Map(arr)
-					for (let [key, value] of indicatorMap) {
-						if(code.indicator === key) {
-							this.techIndiValue = value
+					if (!code.ids) {
+						code.ids = {}
+					}
+					this.editIds = code.ids
+					this.scLoad = code.sc
+					if (code.analysis === 'Sentiment') {
+						this.sentimentIndicator = code.indicator
+						this.indicatorEditData.sentimentIndicator = code.indicator
+						this.indicatorRadio = 'sentiment'
+						this.sentiVal = code.indicator
+					} else if (code.analysis === 'Technical') {
+						const arr = [
+							['Moving Average', 'ma'],
+							['MACD', 'ST MACD'],
+							['Commodity Channel Index', 'ST CCI'],
+							['Relative Strength Index', 'ST RSI']
+						]
+						let indicatorMap = new Map(arr)
+						for (let [key, value] of indicatorMap) {
+							if (code.indicator === key) {
+								this.techIndiValue = value
+							}
 						}
-                    }
-					this.technicalIndicator = code.indicator
-					this.indicatorRadio = 'technical'
-					this.techVal = code.indicator
-					this.indicatorEditData.technicalIndicator = code.indicator
-				}
+						this.technicalIndicator = code.indicator
+						this.indicatorRadio = 'technical'
+						this.techVal = code.indicator
+						this.indicatorEditData.technicalIndicator = code.indicator
+					}
 				}
 			},
 			immediate: true,
@@ -409,12 +410,12 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.note {
+	font-weight: 600;
+	margin: 0px 0px 5px 0px;
+	display: inline-block;
+}
 @media only screen and (min-width: 1600px) {
-	.note {
-		font-weight: 600;
-		margin: 0px 0px 5px 0px;
-		display: inline-block;
-	}
 	.indicatorBox {
 		flex: 1;
 		border-right: 1px solid black;
@@ -543,6 +544,11 @@ export default {
 		justify-content: center;
 		align-self: flex-end;
 		flex-wrap: wrap;
+	}
+}
+@media (min-width: 768px) and(max-width:899px) {
+	.signalIndicatorBox {
+		border-bottom: 1px solid black;
 	}
 }
 </style>

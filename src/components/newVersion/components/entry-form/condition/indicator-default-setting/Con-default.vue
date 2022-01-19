@@ -30,7 +30,8 @@
 import { Store, mapGetters } from 'vuex'
 import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 export default {
-	extends: base,	props: {
+	extends: base,
+	props: {
 		editIds: Object,
 		sentiUrl: String
 	},
@@ -44,17 +45,18 @@ export default {
 	},
 	computed: {
 		...mapGetters(['getExtremeValue']),
-				extremeValue() {
+		extremeValue() {
 			return this.getExtremeValue
-		},
+		}
 	},
 	watch: {
 		editIds: {
 			handler(newVal) {
-				if(JSON.stringify(newVal) != '{}'){
-				this.$set(this.ids, 'extreme_optimism', newVal.extreme_optimism)
-				this.$set(this.ids, 'extreme_pessimism', newVal.extreme_pessimism)
-			}},
+				if (JSON.stringify(newVal) != '{}') {
+					this.$set(this.ids, 'extreme_optimism', newVal.extreme_optimism)
+					this.$set(this.ids, 'extreme_pessimism', newVal.extreme_pessimism)
+				}
+			},
 			immediate: true,
 			deep: true
 		},
@@ -62,26 +64,28 @@ export default {
 			handler(newVal) {
 				let vm = this
 				const arr = vm.extremeValue
-				arr.forEach(item => {
-					if(item.indicator){
-					if(item.indicator === newVal) {
-						vm.$set(vm.ids, 'extreme_pessimism', item.extremePessimism)
-						vm.$set(vm.ids, 'extreme_optimism', item.extremeOptimism)
-					}}
+				arr.forEach((item) => {
+					if (item.indicator) {
+						if (item.indicator === newVal) {
+							vm.$set(vm.ids, 'extreme_pessimism', item.extremePessimism)
+							vm.$set(vm.ids, 'extreme_optimism', item.extremeOptimism)
+						}
+					}
 				})
 			},
-						immediate: true,
+			immediate: true,
 			deep: true
 		},
 		extremeValue: {
 			handler(newVal) {
-				let vm =this;
-				newVal.forEach(item => {
-					if(item.indicator){
-					if(item.indicator === vm.sentiUrl) {
-						vm.$set(vm.ids, 'extreme_pessimism', item.extremePessimism)
-						vm.$set(vm.ids, 'extreme_optimism', item.extremeOptimism)
-					}}
+				let vm = this
+				newVal.forEach((item) => {
+					if (item.indicator) {
+						if (item.indicator === vm.sentiUrl) {
+							vm.$set(vm.ids, 'extreme_pessimism', item.extremePessimism)
+							vm.$set(vm.ids, 'extreme_optimism', item.extremeOptimism)
+						}
+					}
 				})
 			},
 			immediate: true,
@@ -107,6 +111,24 @@ export default {
 	}
 	.miniNote {
 		display: inline-block;
+	}
+}
+@media (min-width: 768px) and(max-width:899px) {
+	.miniNote {
+		display: inline-block;
+	}
+	.extremumBox .el-form-item {
+		display: flex;
+		justify-content: flex-start;
+	}
+}
+@media (max-width:767px) {
+	.miniNote {
+		display: inline-block;
+	}
+	.extremumBox .el-form-item {
+		display: flex;
+		justify-content: flex-start;
 	}
 }
 </style>

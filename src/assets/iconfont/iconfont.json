@@ -6,6 +6,13 @@
   "description": "新版本图标",
   "glyphs": [
     {
+      "icon_id": "587027",
+      "name": "percent",
+      "font_class": "percent",
+      "unicode": "e7ac",
+      "unicode_decimal": 59308
+    },
+    {
       "icon_id": "7556181",
       "name": "下一步",
       "font_class": "xiayibu",
