@@ -360,6 +360,12 @@ export default {
 					}
 
 					console.log('SinalDialo MA LIST: ',CIQ.store.state.activatedMA)
+
+					// avoid add indicator redundantly
+					for (var studyInstanceName in CIQ.stxx.layout.studies) {
+						var sd = CIQ.stxx.layout.studies[studyInstanceName]
+						if (sd.type == list[item].url) {return}
+					}
 					CIQ.addIndicators()
 				}
 			}

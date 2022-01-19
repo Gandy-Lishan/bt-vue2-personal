@@ -9,7 +9,7 @@
 
 				<el-row type="flex" justify="center"
 					><el-col><p>SentimentTrader Backtest Engine</p></el-col>
-					<div class="refresh" @click="refreshPage" title="Reset backtest">
+					<!-- <div class="refresh" @click="refreshPage" title="Reset backtest">
 						<svg
 							t="1642066388852"
 							class="icon"
@@ -26,7 +26,7 @@
 								fill="#2372a0"
 							></path>
 						</svg>
-					</div>
+					</div> -->
 				</el-row>
 
 				<div class="chart_box" id="chart_box">
@@ -481,7 +481,10 @@ export default {
 		},
 
 		refreshPage() {
-			location.reload()
+			if(location.href.indexOf("#reloaded") == -1){
+				location.href = location.href + "#reloaded"
+				location.reload()
+			}
 		},
 		goToEntryForm() {
 			this.activeTag = 'first-child-n2'

@@ -50,13 +50,13 @@
 							class="border-set"
 						>
 							<el-radio-group v-model="fd.frequency" @change="getFrequency">
-								<el-radio label="Daily" :disabled="dailyDisabled"
+								<el-radio label="Daily"
 									>Daily</el-radio
 								>
-								<el-radio label="Weekly" :disabled="weeklyDisabled"
+								<el-radio label="Weekly"
 									>Weekly</el-radio
 								>
-								<el-radio label="Monthly" :disabled="monthlyDisabled"
+								<el-radio label="Monthly"
 									>Monthly</el-radio
 								>
 							</el-radio-group>
@@ -96,9 +96,6 @@ export default {
 	},
 	data() {
 		return {
-			dailyDisabled: false,
-			weeklyDisabled: false,
-			monthlyDisabled: false,
 			fd: {
 				description: '',
 				direction: '',
@@ -160,13 +157,16 @@ export default {
 	watch: {
 		// updateFreq(val){
 		// 	switch(val){
+		// 		case "daily": {
+		// 			this.fd.frequency = Daily
+		// 			break
+		// 		}
 		// 		case "weekly": {
-		// 			this.dailyDisabled = true
+		// 			this.fd.frequency = Weekly
 		// 			break
 		// 		}
 		// 		case "monthly": {
-		// 			this.dailyDisabled = true
-		// 			this.weeklyDisabled = true
+		// 			this.fd.frequency = Monthly
 		// 			break
 		// 		}
 		// 	}
@@ -216,7 +216,7 @@ export default {
 			var frequency = val
 			var indicatorList = []
 			if(this.$store.state.indicatorsList.length != 0){
-				console.log('data in indicatorList from entry-form',this.$store.state.indicatorsList.length)
+				//console.log('data in indicatorList from entry-form',this.$store.state.indicatorsList.length)
 				indicatorList = this.$store.state.indicatorsList
 			}else{
 				const res = await vm.$http.get(

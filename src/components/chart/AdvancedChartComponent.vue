@@ -33,7 +33,7 @@
 					<cq-menu class="ciq-indicators-search">
 						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
 					</cq-menu>
-					<cq-info-toggle-dropdown>
+					<!-- <cq-info-toggle-dropdown>
 						<cq-toggle id="mStudies" class="ciq-CH" cq-member="crosshair">
 							<span></span>
 							<cq-tooltip>Crosshair (Alt + \)</cq-tooltip>
@@ -52,7 +52,7 @@
 								></cq-item>
 							</cq-menu-dropdown>
 						</cq-menu>
-					</cq-info-toggle-dropdown>
+					</cq-info-toggle-dropdown> -->
 
 					<!-- <cq-info-toggle-dropdown>
 						<cq-toggle class="ciq-HU" id="ciq-HU" cq-member="headsUp">
@@ -423,6 +423,7 @@ export default class AdvancedChartComponent extends Vue {
 	
 	mounted() {
 		const config = this.config || getCustomConfig()
+		
 		const container = this.container
 		
 		

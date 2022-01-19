@@ -214,6 +214,12 @@ export default {
 				this.$emit('getSentiUrl', item.url)
 			}
 			console.log('SentimentSelect MA LIST: ', CIQ.store.state.activatedMA)
+
+			// avoid add indicator redundantly
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					var sd = CIQ.stxx.layout.studies[studyInstanceName]
+					if (sd.type == item.url) {return}
+            }
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
@@ -234,8 +240,10 @@ export default {
 			])
 
 			const newMap = new Map(set)
+			var url = ''
 			for (let i of newMap.entries()) {
 				if (val === i[0]) {
+					url = i[1]
 					this.$emit('getTechIndiValue', i[1])
 					// remove a MA tat already exists in current criteria before loadin
 					if (obj.criteria == 'entry') {
@@ -272,6 +280,13 @@ export default {
 					this.$store.commit('getTechnicalIndicators', techIndicators)
 
 					console.log('TechnicalSelect MA LIST', CIQ.store.state.activatedMA)
+					
+					// avoid add indicator redundantly
+					console.log(CIQ.stxx.layout.studies)
+					for (var studyInstanceName in CIQ.stxx.layout.studies) {
+						var sd = CIQ.stxx.layout.studies[studyInstanceName]
+						if (sd.type == url) {return}
+					}
 					CIQ.addIndicators()
 				}
 			}
