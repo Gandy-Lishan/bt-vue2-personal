@@ -8,17 +8,18 @@
 							<span>{{ (queryInfo.page - 1) * 10 + scope.$index + 1 }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="Name" align="center" prop="name">
+					<el-table-column label="Name" align="center" prop="name" show-overflow-tooltip>
 					</el-table-column>
-					<el-table-column label="Symbol" align="center" prop="symbol">
+					<el-table-column label="Symbol" align="center" prop="symbol" show-overflow-tooltip>
 					</el-table-column>
 					<el-table-column
 						label="Description"
 						align="center"
+						show-overflow-tooltip
 						prop="description"
 					>
 					</el-table-column>
-					<el-table-column label="Backtest Period" align="center" width="219px">
+					<el-table-column label="Backtest Period" align="center" width="219px" show-overflow-tooltip>
 						<template slot-scope="scope">
 							<div class="dataBox">
 								<el-button size="mini" type="info" plain>{{
@@ -94,9 +95,10 @@ export default {
 			queryInfo: {
 				page: 1,
 				total: 0
+			},
+			oldId: ''
 			}
-		}
-	},
+		},
 	created() {
 		// this.getToDate()
 		this.getStrategyList()
@@ -119,6 +121,8 @@ export default {
 		},
 		runbacktest(row) {
 			let vm = this
+			// 保存旧的 id
+			let oldId = row.Id
 			vm.clearInterval = clearInterval()
 			if (row.status == 0) {
 				row.status = 1

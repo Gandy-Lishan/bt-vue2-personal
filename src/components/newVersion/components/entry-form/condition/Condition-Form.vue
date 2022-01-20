@@ -36,7 +36,7 @@
 					<el-tooltip
 						class="item"
 						effect="light"
-						content="Please enter number"
+						content="Please enter Value"
 						placement="bottom"
 					>
 						<el-input
@@ -59,7 +59,7 @@
 					<el-tooltip
 						class="item"
 						effect="light"
-						content="Please enter a number"
+						content="Please enter Period"
 						placement="bottom"
 					>
 						<el-input
@@ -87,7 +87,7 @@
 					<el-tooltip
 						class="item"
 						effect="light"
-						content="Please enter a number"
+						content="Please enter Value"
 						placement="bottom"
 					>
 						<el-input
@@ -360,6 +360,52 @@ export default {
 	}
 }
 @media (min-width: 768px) and(max-width:899px) {
+	.sentimentConditionBox {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 10px;
+	}
+	.sentimentConditionBox .el-radio {
+		line-height: 35px;
+	}
+	.sentimentConditionBox .el-select .el-input {
+		flex: 1;
+	}
+	.sentimentConditionBox .el-input {
+		flex: 0.8;
+		margin-left: 5px;
+	}
+	.sentimentConditionBox .sentimentConditionItem {
+		display: flex;
+		justify-content: flex-end;
+	}
+	.sentimentConditionBox .sentimentMABox {
+		display: flex;
+		justify-content: flex-end;
+	}
+	.sentimentConditionBox .sentimentMABox .el-input {
+		flex: 1;
+	}
+	.sentimentConditionBox .sentimentMABox .el-input:first-child {
+		margin-right: 5px;
+	}
+	.sentimentConditionBox .el-radio {
+		margin-right: 2px;
+	}
+	.signal-condition-box {
+		padding-bottom: 10px;
+		border-bottom: 1px solid black;
+	}
+	.signalDescriptionBox {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		// padding-bottom: 10px;
+		// border-bottom: 1px solid black;
+		justify-content: space-around;
+	}
+}
+@media (max-width:767px) {
 	.sentimentConditionBox {
 		display: flex;
 		justify-content: space-between;

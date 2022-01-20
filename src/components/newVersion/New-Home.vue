@@ -9,6 +9,7 @@
 
 				<el-row type="flex" justify="center"
 					><el-col><p>SentimentTrader Backtest Engine</p></el-col>
+					<!-- <div class="refresh" @click="refreshPage" title="Reset backtest"> -->
 					<!-- <div class="refresh" @click="refreshPage" title="Reset backtest">
 						<svg
 							t="1642066388852"
@@ -26,9 +27,11 @@
 								fill="#2372a0"
 							></path>
 						</svg>
-					</div> -->
+					</div>
 				</el-row>
-
+					</div> -->
+					<!-- </div> -->
+				</el-row>
 				<div class="chart_box" id="chart_box">
 					<chart width="100%" height="100%"></chart>
 				</div>
@@ -37,7 +40,6 @@
 				<div class="mainTagbar">
 					<el-button @click="refreshPage" class="restartBtn" type="primary" icon="el-icon-refresh-right">Reset backtest</el-button>
 					<el-tabs v-model="activeName" type="card" :tab-position="tabPosition">
-
 						<el-tab-pane
 							style="height: 90%; overflow-x: hidden"
 							label="Backtest Setup"
@@ -51,10 +53,12 @@
 								>
 									<el-row>
 										<div class="iconNextBox1">
+											<el-tooltip class="item" effect="dark" content="Next" placement="bottom">
 											<i
 												class="iconfont icon-xiayibu"
 												@click="validateSetUpForm"
 											></i>
+											 </el-tooltip>
 										</div>
 									</el-row>
 									<backtest-setup-form
@@ -76,10 +80,12 @@
 											>
 										</div>
 										<div class="iconNextBox2">
+											<el-tooltip class="item" effect="dark" content="Next" placement="bottom">
 											<i
 												class="iconfont icon-xiayibu"
 												@click="validateEntryForm"
 											></i>
+											</el-tooltip>
 										</div>
 									</div>
 									<entry-form
@@ -350,9 +356,6 @@ export default {
 				this.$store.state.indicators.technicalIndicators
 			indicatorLayout.activatedMA = this.$store.state.activatedMA
 			backtestData.indicator_layout = JSON.stringify(indicatorLayout)
-
-			//console.log('backtestData: ', backtestData)
-
 			this.$http
 				.post('/dev/backtest/', this.$qs.stringify(backtestData), {
 					withCredentials: true
@@ -645,6 +648,7 @@ export default {
 		justify-content: space-between;
 		.clearEntryItem {
 			display: flex;
+			// margin-bottom: 20px;
 			margin-bottom: 20px;
 			justify-content: flex-start;
 			.el-button {
@@ -667,6 +671,36 @@ export default {
 	.header {
 		p:first-of-type {
 			font-size: 1.5rem !important;
+		}
+	}
+		/deep/.el-tabs__content {
+		margin: 0 auto !important;
+		overflow: hidden;
+		padding-right: 10px;
+		position: relative;
+	}
+	.titleTxt {
+		font-weight: bold;
+		display: inline-block;
+	}
+	.clearEntryBox {
+		display: flex;
+		justify-content: space-between;
+		.clearEntryItem {
+			display: flex;
+			justify-content: flex-start;
+			.el-button {
+				align-self: center;
+				margin-left: 20px;
+				color: #d9001b;
+			}
+		}
+		.iconNextBox2 {
+			align-self: center;
+			justify-content: flex-end;
+			.el-button {
+				color: #409eff;
+			}
 		}
 	}
 }

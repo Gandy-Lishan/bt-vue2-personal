@@ -130,4 +130,13 @@ export default {
 		justify-content: flex-start;
 	}
 }
+@media (max-width: 767px) {
+	.miniNote {
+		display: inline-block;
+	}
+	.extremumBox .el-form-item {
+		display: flex;
+		justify-content: flex-start;
+	}
+}
 </style>

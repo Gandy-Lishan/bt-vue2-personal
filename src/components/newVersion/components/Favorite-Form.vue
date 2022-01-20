@@ -8,7 +8,7 @@
 							<span>{{ (queryInfo.page - 1) * 10 + scope.$index + 1 }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="Name" align="center" prop="name">
+					<el-table-column label="Name" align="center" prop="name" show-overflow-tooltip>
 					</el-table-column>
 					<el-table-column
 						label="Symbol"

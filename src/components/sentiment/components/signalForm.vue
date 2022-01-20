@@ -913,7 +913,7 @@ export default {
 			},
 			conditionsFormRules: {
 				value: [
-					{ type: 'number', message: 'Please enter number', trigger: 'blur' }
+					{ type: 'number', message: 'Please enter Value', trigger: 'blur' }
 				]
 			},
 			submitEntrycondition: {},

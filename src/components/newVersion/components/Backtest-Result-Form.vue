@@ -203,19 +203,6 @@ export default {
       str[0] = (Number(str[0]) - Number(this.backtestResult.historyValue)) + ''
       this.backtestResult.starDate = str.join('-')
     },
-    getBacktestHistory(val) {
-      this.backtestResult.historyValue = val
-      if(val <= 20){
-      const str = this.backtestResult.endDate.split('-')
-      str[0] = (Number(str[0]) - Number(this.backtestResult.historyValue)) + ''
-      this.backtestResult.starDate = str.join('-')}
-      if(val === 21){
-        this.backtestResult.starDate = ''
-      }
-    },
-    getBacktestHistory(val) {
-      this.backtestResult.historyValue = val
-    },
     saveBacktest() {
       const vm = this
       const strategyFormData = {}

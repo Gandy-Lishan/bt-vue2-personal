@@ -266,4 +266,10 @@ export default {
 		padding-bottom: 15px;
 	}
 }
+@media (max-width: 767px) {
+	.border-set {
+		border-bottom: 1px solid black;
+		padding-bottom: 15px;
+	}
+}
 </style>
