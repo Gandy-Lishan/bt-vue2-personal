@@ -484,10 +484,9 @@ export default {
 		},
 
 		refreshPage() {
-			if(location.href.indexOf("#reloaded") == -1){
-				location.href = location.href + "#reloaded"
-				location.reload()
-			}
+			window.location.href=window.location.href
+			location.reload()
+
 		},
 		goToEntryForm() {
 			this.activeTag = 'first-child-n2'
