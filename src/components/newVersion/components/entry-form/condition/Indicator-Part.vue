@@ -234,7 +234,7 @@ export default {
 				this.$store.commit('getExitIndicators', item.url)
 				this.$emit('getSentiUrl', item.url)
 			}
-			console.log('SentimentSelect MA LIST: ', CIQ.store.state.activatedMA)
+			//console.log('SentimentSelect MA LIST: ', CIQ.store.state.activatedMA)
 
 			// avoid add indicator redundantly
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
