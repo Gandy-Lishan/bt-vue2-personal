@@ -233,10 +233,10 @@ export default {
 			const vm = this
 			let val = item.value
 			const set = new Set([
-				['Commodity Channel Index', 'ST CCI'],
-				['Relative Strength Index', 'ST RSI'],
+				['Commodity Channel Index', 'cci'],
+				['Relative Strength Index', 'rsi'],
 				['Moving Average', 'ma'],
-				['MACD', 'ST MACD']
+				['MACD', 'macd']
 			])
 
 			const newMap = new Map(set)
