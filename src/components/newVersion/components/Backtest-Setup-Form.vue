@@ -239,9 +239,7 @@ export default {
 			temp: { commission: '0.1', slippage: '0.1' },
 		    setUpFormRules: {
         name:[{ required: true, message: 'Please enter name', trigger: 'blur' }],
-        description:[{ required: true, message: 'Please enter description', trigger: 'blur' }],
-        symbolName:[{ required: true, message: 'Please enter symbol', trigger: 'blur' }],
-
+        description:[{ required: true, message: 'Please enter description', trigger: 'blur' }]
       }
 		}
 	},
@@ -487,6 +485,21 @@ export default {
 		},
 		getSlippage(val) {
 			this.bd.slippage = val / 100
+		},
+		validateForm(newTag, oldTag) {
+		let data = true
+		this.$refs.backtestSetupForm.validate(valid => {
+        if(!valid) {
+			this.$emit('validSetUpFail',oldTag)
+			
+			this.$message.error('Please complete the complete fields')
+			data = false
+		}
+		else if(valid){
+			this.$emit('validSetUpSuccess', newTag)
+		}
+      })
+	  return data
 		}
 	}
 }
