@@ -268,7 +268,6 @@ export default {
   components: {
     'strategy-dialog': strategyDialog,
   },
-// <<<<<<< HEAD
   computed: {
     listSet(){
       return this.symbolList.map(item => {
