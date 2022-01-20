@@ -3,7 +3,7 @@
 		<el-col :span="24">
 			<div class="entry-form-container">
 				<div class="signalLeft">
-					<el-form :model="fd" label-width="80px" label-position="left">
+					<el-form :model="fd" label-width="80px" label-position="left" :rules="entryFormRules" ref="entryForm">
 						<div>
 							<h2 class="note">Criteria Entry Description</h2>
 							<el-tooltip
@@ -38,7 +38,7 @@
 								><i class="iconfont icon-tishi"></i
 							></el-tooltip>
 						</div>
-						<el-form-item label="Direction:" prop="entryType">
+						<el-form-item label="Direction:" prop="direction">
 							<el-radio-group v-model="fd.direction" @change="getExitDirection">
 								<el-radio label="Long">Long</el-radio>
 								<el-radio label="Short">Short</el-radio>
@@ -49,7 +49,7 @@
 							prop="frequency"
 							class="border-set"
 						>
-							<el-radio-group v-model="fd.frequency" @change="getFrequency">
+							<el-radio-group v-model="fd.frequency" @change="getFrequency" prop="frequency">
 								<el-radio label="Daily"
 									>Daily</el-radio
 								>
@@ -134,7 +134,12 @@ export default {
 				{ label: 'Monthly', value: 'Monthly' }
 			],
 			dialogTableVisible: false,
-			conditionFormData: {}
+			conditionFormData: {},
+		entryFormRules: {
+        description:[{ required: true, message: 'Please enter description', trigger: 'blur' }],
+        direction:[{ required: true, message: 'Please select direction', trigger: 'blur' }],
+		frequency: [{ required: true, message: 'Please select frequency', trigger: 'blur' }],
+      }
 		}
 	},
 	inject: ['editBacktestData'],
@@ -235,11 +240,13 @@ export default {
 			// 	}
 			// })
 			vm.sentimentIndicatorList = []
+			if(frequency) {
 			indicatorList.forEach((element) => {
 				if (frequency.toUpperCase().indexOf(element.updated.toUpperCase()) !== -1) {
 					vm.sentimentIndicatorList.push({ value: element.chart_name, url: element.url, updated: element.updated }) 
 				}
 			})
+			}
 			this.$store.commit('getIndicatorsList', indicatorList)
 			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
 
@@ -305,7 +312,7 @@ export default {
 		},
 		showSignal() {
 			this.signalVisiable = !this.signalVisiable
-		}
+		},
 		// validateEntryForm() {
 		// 	const data = this.fd
 		// 	console.log('0000000000',this.si,this.ids,this.sc);
@@ -327,6 +334,19 @@ export default {
 		// 		// this.$emit('goToExitForm')
 		// 	}
 		// }
+		validateEntryForm(newTag, oldTag) {
+			let data = true
+			this.$refs.entryForm.validate(valid => {
+				if(!valid) {
+					this.$emit('validSetUpFail',oldTag)
+					this.$message.error('Please complete the complete fields')
+					data = false
+				}else {
+					this.$emit('validSetUpSuccess', newTag)
+				}
+			})
+			return data
+		}
 	}
 }
 </script>
@@ -336,6 +356,11 @@ export default {
 }
 .note {
 	display: inline-block;
+}
+/deep/ .el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before {
+  content: ' ';
+  width: 0px;
+  margin-right: 0px;
 }
 @media only screen and (min-width: 1600px) {
 	.entry-form-container {

@@ -87,10 +87,16 @@ const router = new Router({
 //   // 3. 根据返回状态码判断后续操作
 //   axios.get('/dev/user/?userid=' + userId).then(res => {
 //     console.log("相应数据",res);
-//     if(res.status === 200) {
-//       cookies.set('userId',userId)
-//     }
-//     console.log('cookie',document.cookie);
+//  if(res.status === 200) {
+// cookies.set('userId',userId)
+// }else if(res.status === 401 ){
+// 无权限
+// }else if (res.status === 403){
+// 认证时间超时
+// }else if (res.status === 404){
+ // 用户不存在
+// }
+  //     console.log('cookie',document.cookie);
 //     next('/newHome')
 //   })
 //   // 3.1 200 成功设置 cookie userid=XXX endDate=XXX     cookie.set()

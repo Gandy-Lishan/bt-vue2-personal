@@ -45,7 +45,7 @@
 							label="Backtest Setup"
 							name="first"
 						>
-							<el-tabs v-model="activeTag" type="card">
+							<el-tabs v-model="activeTag" type="card" :before-leave="leaveActiveTag">
 								<el-tab-pane
 									style="height: 1100px; overflow-y: auto; overflow-x: hidden"
 									label="Backtest Data"
@@ -65,6 +65,8 @@
 										ref="setupChild"
 										:backtestEditData="backtestEditData"
 										@goToEntryForm="goToEntryForm"
+										@validSetUpSuccess="validSetUpSuccess"
+										@validSetUpFail="validSetUpFail"
 									></backtest-setup-form>
 								</el-tab-pane>
 								<el-tab-pane
@@ -92,6 +94,8 @@
 										ref="entryFormChild"
 										:criteria="'entry'"
 										:fdLoad="fdLoad"
+										@validSetUpFail="validSetUpFail"
+										@validSetUpSuccess="validSetUpSuccess"
 									></entry-form>
 								</el-tab-pane>
 								<el-tab-pane
@@ -191,7 +195,10 @@ export default {
 			backtestBtnVisabled: true,
 			check: false,
 			tabPosition: 'top',
-			clientHeight: document.body.clientHeight
+			clientHeight: document.body.clientHeight,
+			saveEntryList: [],
+			saveExitList: [],
+			saveBacktestData: {}
 		}
 	},
 	provide() {
@@ -275,13 +282,22 @@ export default {
 		// },
 		saveBacktest() {
 			let vm = this
-
-			const backtestData = deepClone1(this.$store.state.backtestInfo)
+			let signalEntryList = []
+			let signalExitList = []
+			let backtestData = this.$store.state.backtestInfo
+				if(backtestData.entry && backtestData.exit) {
+					// 如果修改后的 entry 存在的话，将它保存起来
+					vm.saveBacktestData = this.$store.state.backtestInfo
+					vm.saveEntryList = backtestData.entry.signals
+					vm.saveExitList = backtestData.exit.signals
+					signalEntryList = deepClone1(backtestData.entry.signals)
+					signalExitList = deepClone1(backtestData.exit.signals)}else {
+						signalEntryList = vm.saveEntryList
+						signalExitList = vm.saveExitList
+						backtestData = vm.saveBacktestData
+					}
 			// vm.validateForm(backtestData)
 			// if(!this.check){
-			const signalEntryList = deepClone1(backtestData.entry.signals)
-			const signalExitList = deepClone1(backtestData.exit.signals)
-
 			signalEntryList.forEach((item) => {
 				if (item.sentimentIndicator) {
 					item.indicator = item.sentimentIndicator
@@ -375,6 +391,9 @@ export default {
 					}
 				})
 			// }
+		},
+		validateSetUpForm() {
+			this.activeTag = 'first-child-n2'
 		},
 		validateForm(data) {
 			const bdData = data
@@ -495,32 +514,26 @@ export default {
 			// this.$refs.entryFormChild.validateEntryForm()
 			this.activeTag = 'first-child-n3'
 		},
-		validateSetUpForm() {
-			this.activeTag = 'first-child-n2'
-			// 	let data = this.bd
-			// 	let check = false
-			// 	for(let key in data) {
-			// 		if(!data[key]) {
-			// 			if(key != 'win_rate'){
-			// 			check = true
-			// 			break}
-			// 		}
-			// 	}
-			// 	if(check) {
-			// 		 this.$notify({
-			//   title: 'Field missing',
-			//   message: 'Please fill out the form completely',
-			//   offset: 100,
-			//   type: 'warning'
-			// });
-			// 	}else {
-			// 		this.$emit('goToEntryForm')
-			// 	}
+		leaveActiveTag(activeName, oldActiveName) {
+			console.log('22222');
+			let vm = this
+			if(oldActiveName === 'first-child-n1'){
+			   return  vm.$refs.setupChild.validateForm(activeName, oldActiveName)
+			}else if(oldActiveName === 'first-child-n2'){
+				return vm.$refs.entryFormChild.validateEntryForm(activeName,oldActiveName)
+			}
 		},
 		goToFavoriteForm() {
 			this.activeName = 'third'
 			this.$refs.favoriteChild.getBacktestList()
-		}
+		},
+		validSetUpSuccess(newTag) {
+			this.activeTag = newTag
+		},
+		validSetUpFail(oldTag) {
+			this.activeTag = oldTag
+		},
+
 	}
 }
 </script>
