@@ -46,7 +46,7 @@
 				<!-- technical default setting-->
 				<!-- cci -->
 				<cci-default
-					v-if="indicatorRadio === 'technical' && techIndiValue === 'ST CCI'"
+					v-if="indicatorRadio === 'technical' && techIndiValue === 'cci'"
 					:tabIndex="tabIndex"
 					:idsLoad="idsLoad"
 					:criteria="criteria"
@@ -61,7 +61,7 @@
 				></ma-default>
 				<!-- macd -->
 				<macd-default
-					v-if="indicatorRadio === 'technical' && techIndiValue === 'ST MACD'"
+					v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
 					:tabIndex="tabIndex"
 					:idsLoad="idsLoad"
 					:criteria="criteria"
@@ -69,7 +69,7 @@
 				></macd-default>
 				<!-- rsi -->
 				<rsi-default
-					v-if="indicatorRadio === 'technical' && techIndiValue === 'ST RSI'"
+					v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
 					:tabIndex="tabIndex"
 					:scLoad="scLoad"
 					:idsLoad="idsLoad"
@@ -87,7 +87,7 @@
 			></condition-form>
 			<!-- technical cci condition form -->
 			<cci-condition-form
-				v-if="indicatorRadio === 'technical' && techIndiValue === 'ST CCI'"
+				v-if="indicatorRadio === 'technical' && techIndiValue === 'cci'"
 				:tabIndex="tabIndex"
 				:techVal="techVal"
 				:criteria="criteria"
@@ -103,7 +103,7 @@
 			></ma-condition-form>
 			<!-- macd -->
 			<macd-condition-form
-				v-if="indicatorRadio === 'technical' && techIndiValue === 'ST MACD'"
+				v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
 				:techVal="techVal"
 				:tabIndex="tabIndex"
 				:scLoad="scLoad"
@@ -111,7 +111,7 @@
 			></macd-condition-form>
 			<!-- rsi -->
 			<rsi-condition-form
-				v-if="indicatorRadio === 'technical' && techIndiValue === 'ST RSI'"
+				v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
 				:tabIndex="tabIndex"
 				:criteria="criteria"
 				:techVal="techVal"
@@ -217,9 +217,9 @@ export default {
 						this.$refs.indicatorPart.setIndicatorRadio(setObj)
 						const arr = [
 							{ label: 'Moving Average', value: 'ma' },
-							{ label: 'MACD', value: 'ST MACD' },
-							{ label: 'Commodity Channel Index', value: 'ST CCI' },
-							{ label: 'Relative Strength Index', value: 'ST RSI' }
+							{ label: 'MACD', value: 'macd' },
+							{ label: 'Commodity Channel Index', value: 'cci' },
+							{ label: 'Relative Strength Index', value: 'rsi' }
 						]
 						arr.forEach((item) => {
 							if (item.label === newVal.code.indicator) {
@@ -268,9 +268,9 @@ export default {
 					} else if (code.analysis === 'Technical') {
 						const arr = [
 							['Moving Average', 'ma'],
-							['MACD', 'ST MACD'],
-							['Commodity Channel Index', 'ST CCI'],
-							['Relative Strength Index', 'ST RSI']
+							['MACD', 'macd'],
+							['Commodity Channel Index', 'cci'],
+							['Relative Strength Index', 'rsi']
 						]
 						let indicatorMap = new Map(arr)
 						for (let [key, value] of indicatorMap) {
