@@ -146,10 +146,6 @@ export default {
 		getEditBacktestData() {
 			return this.editBacktestData()
 		},
-		updateFreq() {
-			return this.$store.state.pairDataFreq
-		}
-
 		// updateFreq () {
 		// 	return this.$store.state.pairDataFreq
 		// }
@@ -157,23 +153,7 @@ export default {
 	mounted() {
 		this.getIndicatorsList()
 	},
-	mounted() {
-		this.getIndicatorsList()
-	},
 	watch: {
-		updateFreq(val) {
-			switch (val) {
-				case 'weekly': {
-					this.dailyDisabled = true
-					break
-				}
-				case 'monthly': {
-					this.dailyDisabled = true
-					this.weeklyDisabled = true
-					break
-				}
-			}
-		},
 		// updateFreq(val){
 		// 	switch(val){
 		// 		case "daily": {

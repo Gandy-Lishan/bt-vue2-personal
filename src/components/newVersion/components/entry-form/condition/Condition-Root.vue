@@ -243,7 +243,6 @@ export default {
 		},
 		getEditBacktestData: {
 			handler(newVal) {
-				console.log('000000000000000000000')
 				if (newVal.entry.direction) {
 					this.indicatorEditData = {}
 					var signalCode = new SignalCode()
