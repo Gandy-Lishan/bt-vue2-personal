@@ -33,7 +33,6 @@ export default {
 				})
 		},
     loadIndexsList() {
-      
 			this.$http
 				.get(
 					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',

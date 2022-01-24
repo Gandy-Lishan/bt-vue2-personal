@@ -1,88 +1,38 @@
 <template>
 	<div class="backtest_container">
-		<el-row>
-			<el-form ref="backtestSetupForm" :model="bd" label-position="left" :rules="setUpFormRules">
-				<el-col :xs="15" :sm="14" :md="12" :lg="8" :xl="8">
-					<el-form-item label="Name:" prop="name">
-						<el-input v-model="bd.name" v-direction="{ x: 0, y: 0 }"></el-input>
-					</el-form-item>
-					<el-form-item label="Description:" prop="description">
-						<el-input
-							v-model="bd.description"
-							v-direction="{ x: 1, y: 0 }"
-							resize="none"
-						></el-input>
-					</el-form-item>
-					<el-form-item label="Symbol:" prop="symbolName">
-						<div class="enterSymbolBox">
-							<el-select
-								v-model="bd.symbol"
-								id="symbolName"
-								filterable
-								remote
-								reserve-keyword
-								automatic-dropdown
-								@change="getSymbolName(bd.symbol)"
-								placeholder="enter keywords"
-								:remote-method="remoteMethod"
-								:loading="loading"
-							>
-								<el-option
-									v-for="item in options"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value"
-								>
-								</el-option>
-							</el-select>
-						</div>
-					</el-form-item>
-				</el-col>
-				<el-col :xs="15" :sm="14" :md="12" :lg="8" :xl="8">
+		<el-form
+			ref="backtestSetupForm"
+			:model="bd"
+			label-position="left"
+			:rules="setUpFormRules"
+		>
+			<el-row>
+				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12">
 					<el-form-item label="Starting Capital:" prop="startingCapital">
 						<el-input
 							v-model="bd.capital"
-							v-direction="{ x: 2, y: 0 }"
+							v-direction="{ x: 1, y: 0 }"
 							@input="validateStartingCapital"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="Commission:" prop="commission">
 						<el-input
 							v-model="temp.commission"
-							v-direction="{ x: 3, y: 0 }"
+							v-direction="{ x: 2, y: 0 }"
 							@change="getCommission"
-							suffix-icon="iconfont icon-percent"
 							@input="validateCommission"
 						></el-input>
 					</el-form-item>
+
+					<span class="comUnitNote">(per share)</span>
 					<el-form-item label="Slippage:" prop="slippage">
 						<el-input
 							v-model="temp.slippage"
 							@change="getSlippage"
-							suffix-icon="iconfont icon-percent"
-							v-direction="{ x: 4, y: 0 }"
+							v-direction="{ x: 3, y: 0 }"
 							@input="validateSlippage"
-						></el-input>
-					</el-form-item>
-					<el-form-item label="Money Management:" prop="moneyManagement">
-						<div class="selectBox">
-							<el-select
-								v-model="mmValue"
-								@change="getSizeAllocationValue(mmValue)"
-								placeholder="Pleace select"
-							>
-								<el-option
-									v-for="item in mmOptions"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value"
-								>
-								</el-option>
-							</el-select>
-						</div>
-					</el-form-item>
-				</el-col>
-				<el-col :xs="15" :sm="14" :md="12" :lg="8" :xl="8">
+						></el-input> </el-form-item
+					><span class="sliUnitNote">(per trade)</span>
 					<el-form-item label="Benchmark:" prop="benchmark">
 						<div class="enterSymbolBox">
 							<el-select
@@ -107,12 +57,31 @@
 							</el-select>
 						</div>
 					</el-form-item>
+					<!-- <el-form-item label="Money Management:" prop="moneyManagement">
+						<div class="selectBox">
+							<el-select
+								v-model="mmValue"
+								@change="getSizeAllocationValue(mmValue)"
+								placeholder="Pleace select"
+							>
+								<el-option
+									v-for="item in mmOptions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value"
+								>
+								</el-option>
+							</el-select>
+						</div>
+					</el-form-item> -->
+				</el-col>
+				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12" :span="2">
 					<el-form-item label="Backtest History:" prop="backtestHistory">
 						<div class="selectBox">
 							<el-select
 								@change="getBacktestHistory(historyValue)"
 								v-model="historyValue"
-								placeholder="Pleace select"
+								placeholder="— Select Timeframe —"
 							>
 								<el-option
 									v-for="item in historyOptions"
@@ -124,37 +93,66 @@
 							</el-select>
 						</div>
 					</el-form-item>
-					<div class="dateNote">
-						<el-form-item label="Start date">
+					<div class="dateBox">
+						<el-form-item label="Start date:">
 							<el-date-picker
 								v-if="historyValue === 22"
 								v-model="bd.start_date"
 								type="date"
-								placeholder="Please select a start date"
+								placeholder="- Select Start Date -"
+								prop="startDate"
 							>
 							</el-date-picker>
 							<el-input v-else disabled v-model="bd.start_date"> </el-input>
 						</el-form-item>
 					</div>
-					<el-form-item label="End date">
-						<el-date-picker
-							v-if="historyValue === 22"
-							v-model="bd.end_date"
-							type="date"
-							placeholder="Please select a end date"
-						>
-						</el-date-picker>
-						<el-input
-							v-else
-							disabled
-							v-model="bd.end_date"
-							placeholder="Please select a end date"
-						>
-						</el-input>
+					<div class="dateBox">
+						<el-form-item label="End date:" prop="endDate">
+							<el-date-picker
+								v-if="historyValue === 22"
+								v-model="bd.end_date"
+								type="date"
+								placeholder="- Select End Date -"
+							>
+							</el-date-picker>
+							<el-input v-else disabled v-model="bd.end_date"> </el-input>
+						</el-form-item>
+					</div>
+					<el-form-item label="Timeframe:" prop="frequency">
+						<div class="selectBox">
+							<el-select
+								v-model="frequency"
+								placeholder="— Select Timeframe —"
+								@change="getFrequency"
+							>
+								<el-option
+									v-for="item in frequencyOptions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value"
+								>
+								</el-option>
+							</el-select>
+						</div>
 					</el-form-item>
 				</el-col>
-			</el-form>
-		</el-row>
+			</el-row>
+			<el-row>
+				<div class="nameBox border-set">
+					<el-form-item
+						label="Backtest Name:"
+						prop="name"
+						placeholder="Give the backtest a name"
+					>
+						<el-input
+							v-model="bd.name"
+							v-direction="{ x: 4, y: 0 }"
+							style="width: 720px"
+						></el-input>
+					</el-form-item>
+				</div>
+			</el-row>
+		</el-form>
 	</div>
 </template>
 <script>
@@ -162,15 +160,13 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
 import { timestampToTime } from '@/tools/formatDate.js'
 import deepClone1 from '@/tools/deepClone.js'
-import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 export default {
-	extends: base,
 	props: { backtestEditData: Object },
+	name: 'setUp',
 	data() {
 		return {
 			bd: {
 				name: '',
-				description: '',
 				symbol: 'AAPL',
 				benchmark: 'SPY',
 				strategy: 'Signal',
@@ -182,6 +178,7 @@ export default {
 				start_date: '',
 				end_date: ''
 			},
+			frequency: 'Daily',
 			historyOptions: [
 				{
 					value: 1,
@@ -224,6 +221,11 @@ export default {
 					label: 'Custom...'
 				}
 			],
+			frequencyOptions: [
+				{ value: 'Daily', label: 'Daily' },
+				{ value: 'Weekly', label: 'Weekly' },
+				{ value: 'Monthly', label: 'Monthly' }
+			],
 			mmValue: 0,
 			mmOptions: [
 				{
@@ -237,16 +239,46 @@ export default {
 			loading: false,
 			options: [],
 			temp: { commission: '0.1', slippage: '0.1' },
-		    setUpFormRules: {
-        name:[{ required: true, message: 'Please enter name', trigger: 'blur' }],
-        description:[{ required: true, message: 'Please enter description', trigger: 'blur' }]
-      }
+			setUpFormRules: {
+				name: [
+					{ required: true, message: 'Please enter name', trigger: 'blur' }
+				],
+				backtestHistory: [
+					{
+						required: true,
+						message: 'Please select history',
+						trigger: 'blur'
+					}
+				],
+				frequency: [
+					{
+						required: true,
+						message: 'Please select frequency',
+						trigger: 'blur'
+					}
+				],
+				startDate: [
+					{
+						type: 'date',
+						required: true,
+						message: 'Please select start date',
+						trigger: 'blur'
+					}
+				],
+				endDate: [
+					{
+						type: 'date',
+						required: true,
+						message: 'Please select end date',
+						trigger: 'blur'
+					}
+				]
+			}
 		}
 	},
-	created() {
-		
-		this.getIndexsList()
-		this.getStocksList()
+	mounted() {
+		// this.getIndexsList()
+		// this.getStocksList()
 		this.getEndDate()
 		let direction = this.$getDirection()
 		direction.on('keyup', function (e, val) {
@@ -278,6 +310,7 @@ export default {
 		backtestEditData: {
 			handler(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
+					this.$refs['backtestSetupForm'].clearValidate()
 					delete newVal.entry
 					delete newVal.exit
 					delete newVal.user_id
@@ -401,10 +434,10 @@ export default {
 			return (window.utils = new utils())
 		},
 		async getIndexsList() {
-			if(this.$store.state.indexsList.length != 0){
-				console.log('data in indexsList from bascktest-setup',this.$store.state.indexsList.length)
+			console.log('vuex', this.$store.state.indexsList)
+			if (this.$store.state.indexsList.length != 0) {
 				this.indexList = this.$store.state.indexsList
-			}else{
+			} else {
 				await this.$http
 					.get(
 						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
@@ -424,10 +457,10 @@ export default {
 			}
 		},
 		async getStocksList() {
-			if(this.$store.state.stocksList.length != 0){
-				console.log('data in stockList from bascktest-setup',this.$store.state.stocksList.length)
+			console.log('vuex', this.$store.state.stocksList)
+			if (this.$store.state.stocksList.length != 0) {
 				this.symbolList = this.$store.state.stocksList
-			}else{
+			} else {
 				await this.$http
 					.get(
 						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks',
@@ -487,35 +520,51 @@ export default {
 			this.bd.slippage = val / 100
 		},
 		validateForm(newTag, oldTag) {
-		let data = true
-		this.$refs.backtestSetupForm.validate(valid => {
-        if(!valid) {
-			this.$emit('validSetUpFail',oldTag)
-			
-			this.$message.error('Please complete the complete fields')
-			data = false
-		}
-		else if(valid){
-			this.$emit('validSetUpSuccess', newTag)
-		}
-      })
-	  return data
+			let data = true
+			this.$refs.backtestSetupForm.validate((valid) => {
+				if (!valid) {
+					this.$emit('validSetUpFail', oldTag)
+					this.$message.error('Please complete the complete fields')
+					data = false
+				} else if (valid) {
+					this.$emit('validSetUpSuccess', newTag)
+				}
+			})
+			return data
+		},
+		// 清除表单认证
+		clearFormValidate() {
+			this.$refs.backtestSetupForm.clearValidate()
+		},
+		getFrequency(val) {
+			this.$store.commit('getFrequency', val)
 		}
 	}
 }
 </script>
 <style lang="less" scoped>
-/deep/ .el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before {
-  content: ' ';
-  width: 0px;
-  margin-right: 0px;
+/deep/
+	.el-form-item.is-required:not(.is-no-asterisk)
+	> .el-form-item__label:before {
+	content: ' ';
+	width: 0px;
+	margin-right: 0px;
 }
-.backtest_container {
-	margin-top: 40px;
+/deep/.dateBox .el-input__icon {
+	width: 58px;
 }
-@media (min-width: 768px) and(max-width:899px) {
-	.backtest_container {
-		margin-top: 0px;
-	}
+.comUnitNote {
+	position: absolute;
+
+	left: 329px;
+	top: 56px;
+}
+.sliUnitNote {
+	position: absolute;
+	left: 329px;
+	top: 105px;
+}
+.border-set {
+	border-bottom: 1px solid #797979;
 }
 </style>

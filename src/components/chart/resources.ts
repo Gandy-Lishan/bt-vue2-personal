@@ -106,8 +106,8 @@ function getCustomConfig({
 	// Update chart configuration by modifying default configuration
 	config.chartId = chartId || '_advanced-chart'
 	config.initialSymbol = symbol || {
-		symbol: 'AAPL',
-		name: 'Apple Inc',
+		symbol: 'SPY',
+		name: 'S&P 500 ETF (SPY)',
 		exchDisp: 'NASDAQ'
 	}
 	if (typeof restore == 'boolean') config.restore = restore

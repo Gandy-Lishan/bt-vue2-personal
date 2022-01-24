@@ -346,7 +346,6 @@ export default new Vuex.Store({
 					state.backtestInfo[criteria][key] = obj[key]
 				}
 			}
-			// console.log("backtest",state.backtestInfo.exit);
 		},
 		setBd(state, obj) {
 			for (let key in obj) {

@@ -760,8 +760,6 @@ export default {
 			// const set = new Set(activatedMAList)
 			// activatedMAList = [...set]
 			this.$store.commit('getMA', activatedMAList)
-
-			console.log(this.$store.state.activatedMA)
 		},
 		// load short and long technical list
 		loadShortLong() {
@@ -880,7 +878,6 @@ export default {
 				)
 				.then((res) => {
 					let conductionId
-					console.log(res)
 					res.data.results.forEach((item) => {
 						conductionId = item.id
 					})

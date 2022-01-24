@@ -1,62 +1,79 @@
 <template>
-	<div>
-		<el-form-item>
-			<div class="radioBox">
-				<el-radio
-					v-model="indicatorRadio"
-					label="Sentiment Indicators"
-					@change="changeIndicatorChecked"
-				>
-				</el-radio>
-				<div class="indicatorSearchBox">
-					<el-autocomplete
-						prefix-icon="el-icon-search"
-						class="inline-input"
-						v-model="si.sentimentIndicator"
-						:disabled="isCheckedIndicators"
-						:fetch-suggestions="indicatorSentimentSearch"
-						placeholder="Input the sentiment indicator"
-						@select="handleSentimentSelect"
-						highlight-first-item
-					></el-autocomplete>
-				</div>
+	<div class="indicator-box">
+		<el-form :model="si" ref="siForm" :rules="siRules">
+			<div class="indicator-container">
+				<el-form-item>
+					<el-radio
+						v-model="indicatorRadio"
+						label="Sentiment Indicators"
+						@change="changeIndicatorChecked"
+					>
+					</el-radio>
+				</el-form-item>
+				<el-form-item prop="sentimentIndicator">
+					<div class="indicatorSearchBox">
+						<el-autocomplete
+							prefix-icon="el-icon-search"
+							class="inline-input"
+							v-model="si.sentimentIndicator"
+							:disabled="isCheckedIndicators"
+							:fetch-suggestions="indicatorSentimentSearch"
+							placeholder="Input the sentiment indicator"
+							@select="handleSentimentSelect"
+							highlight-first-item
+						></el-autocomplete>
+					</div>
+				</el-form-item>
 			</div>
-		</el-form-item>
-		<el-form-item>
-			<div class="radioBox">
-				<el-radio
-					v-model="indicatorRadio"
-					label="Technical Indicators"
-					@change="changeIndicatorChecked"
-				>
-				</el-radio>
-				<!-- <el-input v-model="technicalIndicator"></el-input> -->
-				<div class="indicatorSearchBox">
-					<el-autocomplete
-						:disabled="!isCheckedIndicators"
-						class="inline-input"
-						prefix-icon="el-icon-search"
-						v-model="si.technicalIndicator"
-						:fetch-suggestions="indicatorTechnicalSearch"
-						placeholder="Input the technical indicator"
-						@select="handleTechnicalSelect"
-					></el-autocomplete>
-				</div>
+			<div class="indicator-container">
+				<el-form-item>
+					<el-radio
+						v-model="indicatorRadio"
+						label="Technical Indicators"
+						@change="changeIndicatorChecked"
+					>
+					</el-radio>
+				</el-form-item>
+				<el-form-item prop="technicalIndicator">
+					<div class="indicatorSearchBox">
+						<el-autocomplete
+							:disabled="!isCheckedIndicators"
+							class="inline-input"
+							prefix-icon="el-icon-search"
+							v-model="si.technicalIndicator"
+							:fetch-suggestions="indicatorTechnicalSearch"
+							placeholder="Input the technical indicator"
+							@select="handleTechnicalSelect"
+						></el-autocomplete>
+					</div>
+				</el-form-item>
 			</div>
-		</el-form-item>
+		</el-form>
 	</div>
 </template>
 <script>
 import { Store, mapGetters } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import base from '@/components/newVersion/components/baisc/sgnial-baisc.vue'
 import deepClone1 from '@/tools/deepClone.js'
 export default {
-	extends: base,
-	props: {
-		indicatorEditData: Object
-	},
+	// props: {
+	// 	indicatorEditData: Object
+	// },
 	data() {
+		var validateSenti = (rule, value, callback) => {
+			if (!value) {
+				return callback(new Error('Please choose sentiment indicator'))
+			} else {
+				callback()
+			}
+		}
+		var validateTech = (rule, value, callback) => {
+			if (!value) {
+				return callback(new Error('Please choose technical indicator'))
+			} else {
+				callback()
+			}
+		}
 		return {
 			indicatorRadio: 'Sentiment Indicators',
 			si: {
@@ -64,7 +81,11 @@ export default {
 				technicalIndicator: ''
 			},
 			isCheckedIndicators: false,
-			sentimentIndicatorList: []
+			sentimentIndicatorList: [],
+			siRules: {
+				sentimentIndicator: [{ validator: validateSenti, change: 'blur' }],
+				technicalIndicator: [{ validator: validateTech, change: 'blur' }]
+			}
 		}
 	},
 	computed: {
@@ -79,32 +100,32 @@ export default {
 				let init = deepClone1(this.$options.data())
 				Object.assign(this.$data, init)
 			}
-		},
-		indicatorEditData: {
-			handler(newVal) {
-				if (newVal.sentimentIndicator) {
-					this.indicatorRadio = 'Sentiment Indicators'
-					this.isCheckedIndicators = false
-					this.si.sentimentIndicator = newVal.sentimentIndicator
-					const obj = {}
-					obj.criteria = this.criteria
-					obj.index = this.tabIndex
-					obj.value = newVal.sentimentIndicator
-					this.$store.commit('getSentiValue', obj)
-				} else if (newVal.technicalIndicator) {
-					this.indicatorRadio = 'Technical Indicators'
-					this.isCheckedIndicators = true
-					this.si.technicalIndicator = newVal.technicalIndicator
-					const obj = {}
-					obj.criteria = this.criteria
-					obj.index = this.tabIndex
-					obj.value = newVal.technicalIndicator
-					this.$store.commit('getTechValue', obj)
-				}
-			},
-			immediate: true,
-			deep: true
 		}
+		// indicatorEditData: {
+		// 	handler(newVal) {
+		// 		if (newVal.sentimentIndicator) {
+		// 			this.indicatorRadio = 'Sentiment Indicators'
+		// 			this.isCheckedIndicators = false
+		// 			this.si.sentimentIndicator = newVal.sentimentIndicator
+		// 			const obj = {}
+		// 			obj.criteria = this.criteria
+		// 			obj.index = this.tabIndex
+		// 			obj.value = newVal.sentimentIndicator
+		// 			this.$store.commit('getSentiValue', obj)
+		// 		} else if (newVal.technicalIndicator) {
+		// 			this.indicatorRadio = 'Technical Indicators'
+		// 			this.isCheckedIndicators = true
+		// 			this.si.technicalIndicator = newVal.technicalIndicator
+		// 			const obj = {}
+		// 			obj.criteria = this.criteria
+		// 			obj.index = this.tabIndex
+		// 			obj.value = newVal.technicalIndicator
+		// 			this.$store.commit('getTechValue', obj)
+		// 		}
+		// 	},
+		// 	immediate: true,
+		// 	deep: true
+		// }
 	},
 	methods: {
 		//  load sentiment list
@@ -134,7 +155,7 @@ export default {
 		// 	const vm = this
 		// 	var frequency = vm.$store.state.backtestInfo["entry"]["frequency"]
 		// 	var indicatorList = []
-			
+
 		// 	if(this.$store.state.indicatorsList.length != 0){
 		// 		console.log('data in indicatorList from indicator-part',this.$store.state.indicatorsList.length)
 		// 		indicatorList = this.$store.state.indicatorsList
@@ -234,13 +255,14 @@ export default {
 				this.$store.commit('getExitIndicators', item.url)
 				this.$emit('getSentiUrl', item.url)
 			}
-			//console.log('SentimentSelect MA LIST: ', CIQ.store.state.activatedMA)
 
 			// avoid add indicator redundantly
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
-					var sd = CIQ.stxx.layout.studies[studyInstanceName]
-					if (sd.type == item.url) {return}
-            }
+				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+				if (sd.type == item.url) {
+					return
+				}
+			}
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
@@ -254,10 +276,10 @@ export default {
 			const vm = this
 			let val = item.value
 			const set = new Set([
-				['Commodity Channel Index', 'cci'],
-				['Relative Strength Index', 'rsi'],
+				['Commodity Channel Index', 'ST CCI'],
+				['Relative Strength Index', 'ST RSI'],
 				['Moving Average', 'ma'],
-				['MACD', 'macd']
+				['MACD', 'ST MACD']
 			])
 
 			const newMap = new Map(set)
@@ -301,12 +323,13 @@ export default {
 					this.$store.commit('getTechnicalIndicators', techIndicators)
 
 					console.log('TechnicalSelect MA LIST', CIQ.store.state.activatedMA)
-					
+
 					// avoid add indicator redundantly
-					console.log(CIQ.stxx.layout.studies)
 					for (var studyInstanceName in CIQ.stxx.layout.studies) {
 						var sd = CIQ.stxx.layout.studies[studyInstanceName]
-						if (sd.type == url) {return}
+						if (sd.type == url) {
+							return
+						}
 					}
 					CIQ.addIndicators()
 				}
@@ -343,7 +366,6 @@ export default {
 		},
 		setIndicatorRadio(obj) {
 			let vm = this
-			console.log('load')
 			this.indicatorRadio = obj.radio
 			var data = Object.assign(obj)
 			if (data.sentimentIndicator) {
@@ -362,61 +384,35 @@ export default {
 				this.$store.commit('getTechValue', sentiObj)
 				this.isCheckedIndicators = true
 			}
+		},
+		// 当提交时校验当前表单
+		validateSiForm() {
+			let data = true
+			this.$refs['siForm'].validate((valid) => {
+				if (!valid) {
+					data = false
+				}
+			})
+			return data
+		},
+		// 当保存成功后清除校验清除校验
+		clearSiFormValidate() {
+			this.$refs.siForm.clearValidate()
 		}
 	}
 }
 </script>
 <style lang="less" scoped>
-@media only screen and (min-width: 1600px) {
-	.radioBox {
-		display: flex;
-	}
-	.radioBox .indicatorSearchBox {
-		flex: 1;
-	}
-	.radioBox .el-radio {
-		line-height: 35px;
-	}
+.indicator-container {
+	display: flex;
 }
-@media (min-width: 900px) and (max-width: 1599px) {
-	.radioBox {
-		display: flex;
-	}
-	.radioBox .indicatorSearchBox {
-		flex: 1;
-	}
-	.radioBox .el-radio {
-		line-height: 35px;
-	}
+/deep/ .el-input--prefix .el-input__inner {
+	width: 293px;
 }
-@media (min-width: 768px) and (max-width: 992px) {
-	.radioBox {
-		display: flex;
-	}
-	.radioBox .indicatorSearchBox {
-		flex: 1;
-	}
-	.radioBox .el-radio {
-		line-height: 35px;
-	}
-	.el-autocomplete {
-		display: block;
-		width: 300px;
-	}
+/deep/ .el-input__icon {
+	width: 55px;
 }
-@media (max-width: 767px) {
-	.radioBox {
-		display: flex;
-	}
-	.radioBox .indicatorSearchBox {
-		flex: 1;
-	}
-	.radioBox .el-radio {
-		line-height: 35px;
-	}
-	.el-autocomplete {
-		display: block;
-		width: 300px;
-	}
+/deep/ .el-form-item {
+	margin-bottom: 10px;
 }
 </style>
