@@ -44,13 +44,13 @@ router.beforeEach((to, from, next) => {
 //   if (!tokenStr) return next('/login')
 //   next()
 // })
-router.beforeEach((to, from, next) => {
-  // let host = "/[a-z]*\.sentimentrader\.com/"
-  let host = /.*/
-  // console.log('to from next',to, from, next);
-  console.log("log",document.referrer)
-  console.log(document.baseURI);
-next()
+// router.beforeEach((to, from, next) => {
+//   // let host = "/[a-z]*\.sentimentrader\.com/"
+//   let host = /.*/
+//   // console.log('to from next',to, from, next);
+//   console.log("log",document.referrer)
+//   console.log(document.baseURI);
+// next()
   // if (document.baseURI.search(host) !== -1){
   // //  alert("asdasd")
   // // https://backtest.sentimentrader.com/user?userID=668696
@@ -84,8 +84,8 @@ next()
 //     next()
 //   }
 //   })
-  }
-  )
+  //}
+ // )
 
 
 
