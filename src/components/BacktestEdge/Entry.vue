@@ -11,8 +11,8 @@
 				</el-form-item>
 			</div>
 		</el-form>
-		<indicator></indicator>
-		<senti></senti>
+		<indicator :criteria="'entry'"></indicator>
+		<senti :criteria="'entry'"></senti>
 	</div>
 </template>
 <script>

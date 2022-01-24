@@ -117,6 +117,9 @@
 </template>
 <script>
 export default {
+	props: {
+		criteria: String
+	},
 	data() {
 		return {
 			senti: {

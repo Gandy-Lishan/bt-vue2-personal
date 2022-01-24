@@ -17,13 +17,14 @@
 			<main class="main">
 				<el-tabs v-model="activeName" type="card" :tab-position="tabPosition">
 					<el-tab-pane label="Set up Backtest" name="first">
-						<set-up></set-up>
-						<div class="criteria-container">
-							<div class="criteria-box">
-								<entry></entry>
-								<exit></exit>
+						<div class="set-up-container">
+							<set-up></set-up>
+							<div class="criteria-container">
+								<div class="criteria-box">
+									<entry></entry>
+									<exit></exit>
+								</div>
 							</div>
-
 							<div class="backtest-btns">
 								<el-button type="danger"> Clear Form</el-button>
 								<el-button type="success">Run Backtest</el-button>
