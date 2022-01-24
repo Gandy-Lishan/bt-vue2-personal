@@ -116,6 +116,7 @@
 	</div>
 </template>
 <script>
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
 	props: {
 		criteria: String
@@ -169,6 +170,7 @@ export default {
 					}
 				}
 			})
+
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				if (
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url

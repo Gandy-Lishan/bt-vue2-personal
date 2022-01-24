@@ -293,25 +293,6 @@ export default {
 			}
 		})
 	},
-	watch: {
-		updateFreq(val) {
-			console.log('updateFreq: ', val)
-			switch (val) {
-				case 'daily': {
-					this.frequency = 'Daily'
-					break
-				}
-				case 'weekly': {
-					this.frequency = 'Weekly'
-					break
-				}
-				case 'monthly': {
-					this.frequency = 'Monthly'
-					break
-				}
-			}
-		}
-	},
 	computed: {
 		listSet() {
 			return this.symbolList.map((item) => {
@@ -332,6 +313,22 @@ export default {
 		}
 	},
 	watch: {
+		updateFreq(val) {
+			switch (val) {
+				case 'daily': {
+					this.frequency = 'Daily'
+					break
+				}
+				case 'weekly': {
+					this.frequency = 'Weekly'
+					break
+				}
+				case 'monthly': {
+					this.frequency = 'Monthly'
+					break
+				}
+			}
+		},
 		backtestEditData: {
 			handler(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
@@ -565,6 +562,25 @@ export default {
 			this.frequency = val
 			this.$store.commit('getFrequency', val)
 			this.loadSentimentList(val)
+
+			// same as setPeriodicity
+			var selectedFreq = ''
+			switch(val){
+				case "Monthly":{
+					selectedFreq = "month"
+					break;
+				}
+				case "Weekly":{
+					selectedFreq = "week"
+					break;
+				}
+				case "Daily":{
+					selectedFreq = "day"
+					break;
+				}
+				default:
+			}
+			CIQ.addIndicators(selectedFreq)
 		},
 		async loadSentimentList(val) {
 			const vm = this
