@@ -15,6 +15,13 @@
 				</div>
 			</header>
 			<main class="main">
+				<el-button
+						@click="refreshPage"
+						class="restartBtn"
+						type="primary"
+						icon="el-icon-refresh-right"
+						>Reset backtest</el-button
+				>
 				<el-tabs v-model="activeName" type="card" :tab-position="tabPosition">
 					<el-tab-pane label="Set up Backtest" name="first">
 						<div class="set-up-container">
@@ -79,10 +86,20 @@ export default {
 				_this.tabPosition = 'top'
 			}
 		}, 500)
+	},
+	methods:{
+		refreshPage() {
+			location.reload()
+		},
 	}
 }
 </script>
 <style lang="less" scoped>
+.restartBtn {
+	position: relative;
+	z-index: 1;
+	float: right;
+}
 .page-header {
 	font-size: 2rem;
     margin-left: 15px;

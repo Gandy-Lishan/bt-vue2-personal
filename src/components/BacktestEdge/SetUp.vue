@@ -314,6 +314,7 @@ export default {
 	},
 	watch: {
 		updateFreq(val) {
+
 			switch (val) {
 				case 'daily': {
 					this.frequency = 'Daily'

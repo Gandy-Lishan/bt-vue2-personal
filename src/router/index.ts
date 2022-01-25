@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import cookies from 'vue-cookies'
 import axios from 'axios'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import store from '../store/store'
 
 
 import Home from '@/components/BacktestEdge/Home.vue'
@@ -26,6 +27,7 @@ router.beforeEach((to, from, next) => {
 				}
 			}
 		).then(res=>{
+      CIQ.store = store
       console.log('init getallsymbol')
       CIQ.indicatorList = res.data
       return next()
