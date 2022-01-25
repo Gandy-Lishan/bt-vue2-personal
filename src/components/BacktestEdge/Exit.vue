@@ -10,7 +10,6 @@
 					</el-radio-group>
 				</el-form-item>
 			</div>
-		</el-form>
 		<indicator
 			:criteria="'exit'"
 			ref="indiChild"

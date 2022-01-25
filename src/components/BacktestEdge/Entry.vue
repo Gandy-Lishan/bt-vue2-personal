@@ -56,6 +56,7 @@
 			:techVal="techVal"
 			v-if="indicatorRadio === 'technical' && techIndiValue === 'ma'"
 		></ma>
+
 	</div>
 </template>
 <script>

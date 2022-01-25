@@ -94,10 +94,10 @@
 	height: 25px;
 }
 .set-up-container .backtest_container input:not([type]),
-input[type='text'],
-input[type='number'],
-input[type='date'],
-input[type='time'] {
+.set-up-container .backtest_container input[type='text'],
+.set-up-container .backtest_container input[type='number'],
+.set-up-container .backtest_container input[type='date'],
+.set-up-container .backtest_container input[type='time'] {
 	border: #000000 solid 1px;
 	padding: 0 5px 0 10px;
 	height: 25px;

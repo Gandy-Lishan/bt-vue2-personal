@@ -4,7 +4,6 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
 		backtestSymbol: '',
-		orignalFreqency: '',
 		pairDataFreq: '',
 		stateCopy: {},
 		conditionRadio: '',
@@ -140,9 +139,6 @@ export default new Vuex.Store({
     setCopy(state,val){
       state.stateCopy = val
     },
-	setOrignalFreqency(state,val){
-		state.orignalFreqency = val
-	},
 	setFreqency(state,val){
 		state.pairDataFreq = val
 	},

@@ -303,6 +303,22 @@ export default {
 		}
 	},
 	watch: {
+		updateFreq(val) {
+			switch (val) {
+				case 'daily': {
+					this.frequency = 'Daily'
+					break
+				}
+				case 'weekly': {
+					this.frequency = 'Weekly'
+					break
+				}
+				case 'monthly': {
+					this.frequency = 'Monthly'
+					break
+				}
+			}
+		},
 		backtestEditData: {
 			handler(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
@@ -649,6 +665,7 @@ export default {
 			}
 			this.$store.commit('getIndicatorsList', indicatorList)
 			CIQ.indicatorList = indicatorList
+<<<<<<< HEAD
 		},
 		saveBacktestData() {
 			let checked = true
@@ -667,6 +684,8 @@ export default {
 				checked = false
 				return checked
 			}
+=======
+>>>>>>> 83a08c06e422ae2bbab6ac5f43f937a748b59997
 		}
 	}
 }

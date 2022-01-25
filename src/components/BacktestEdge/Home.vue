@@ -8,7 +8,7 @@
 				></el-row>
 
 				<el-row type="flex" justify="center"
-					><el-col><p>BacktestEdge</p></el-col>
+					><el-col><p class="page-header">BacktestEdge</p></el-col>
 				</el-row>
 				<div class="chart_box" id="chart_box">
 					<chart width="100%" height="100%"></chart>
@@ -217,6 +217,11 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.page-header {
+	font-size: 2rem;
+    margin-left: 15px;
+    font-weight: bold;
+}
 .home-container {
 	width: 90%;
 	margin: 0 auto;

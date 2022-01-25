@@ -212,7 +212,7 @@ export default {
 			// obj.value = item.value
 			// this.$store.commit('clearSignal', obj)
 			this.si.sentimentIndicator = item.value
-			this.$emit('getSentiVal', item.value)
+			// this.$emit('getSentiVal', item.value)
 			// remove a MA tat already exists in current criteria before loadin
 			var activatedMAList = this.$store.state.activatedMA
 
@@ -343,59 +343,25 @@ export default {
 				{ value: 'Moving Average' }
 			]
 		},
-		// setIndicatorRadio(obj) {
-		// 	let vm = this
-		// 	this.indicatorRadio = obj.radio
-		// 	var data = Object.assign(obj)
-		// 	if (data.sentimentIndicator) {
-		// 		vm.si['sentimentIndicator'] = data['sentimentIndicator']
-		// 		vm.$set(vm.si, 'sentimentIndicator', data.sentimentIndicator)
-		// 		this.$emit('getSentiVal', data.sentimentIndicator)
-		// 		const sentiObj = data
-		// 		sentiObj.value = sentiObj.sentimentIndicator
-		// 		this.$store.commit('getSentiValue', sentiObj)
-		// 		this.isCheckedIndicators = false
-		// 	} else if (data.technicalIndicator) {
-		// 		vm.$set(this.si, 'technicalIndicator', obj.technicalIndicator)
-		// 		this.$emit('getTechVal', obj.technicalIndicator)
-		// 		const sentiObj = data
-		// 		sentiObj.value = sentiObj.technicalIndicator
-		// 		this.$store.commit('getTechValue', sentiObj)
-		// 		this.isCheckedIndicators = true
-		// 	}
-		// },
-		saveIndicator() {
-			let checked = true
-			if (this.indicatorRadio === 'Sentiment Indicators') {
-				if (this.si.sentimentIndicator) {
-					let obj = {}
-					obj.criteria = this.criteria
-					obj.index = 0
-					obj.value = this.si.sentimentIndicator
-					this.$store.commit('getSentiValue', obj)
-					return checked
-				} else {
-					this.$message.error(
-						'Please select' + this.criteria + 'sentiment indicator'
-					)
-					checked = false
-					return checked
-				}
-			} else if (this.indicatorRadio === 'Technical Indicators') {
-				if (this.si.technicalIndicator) {
-					let obj = {}
-					obj.criteria = this.criteria
-					obj.index = 0
-					obj.value = this.si.technicalIndicator
-					this.$store.commit('getTechValue', obj)
-					return checked
-				} else {
-					this.$message.error(
-						'Please select' + this.criteria + ' technical indicator'
-					)
-					checked = false
-					return checked
-				}
+		setIndicatorRadio(obj) {
+			let vm = this
+			this.indicatorRadio = obj.radio
+			var data = Object.assign(obj)
+			if (data.sentimentIndicator) {
+				vm.si['sentimentIndicator'] = data['sentimentIndicator']
+				vm.$set(vm.si, 'sentimentIndicator', data.sentimentIndicator)
+				this.$emit('getSentiVal', data.sentimentIndicator)
+				const sentiObj = data
+				sentiObj.value = sentiObj.sentimentIndicator
+				this.$store.commit('getSentiValue', sentiObj)
+				this.isCheckedIndicators = false
+			} else if (data.technicalIndicator) {
+				vm.$set(this.si, 'technicalIndicator', obj.technicalIndicator)
+				this.$emit('getTechVal', obj.technicalIndicator)
+				const sentiObj = data
+				sentiObj.value = sentiObj.technicalIndicator
+				this.$store.commit('getTechValue', sentiObj)
+				this.isCheckedIndicators = true
 			}
 		}
 	}
