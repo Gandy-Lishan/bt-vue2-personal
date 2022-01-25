@@ -4,27 +4,74 @@
 		<el-form :model="fd" :rules="exitFormRules" ref="exitForm">
 			<div class="radioBox">
 				<el-form-item label="Direction:" prop="direction">
-					<el-radio-group v-model="this.$store.state.exitDirection" disabled>
+					<el-radio-group v-model="fd.direction" disabled>
 						<el-radio label="Long">Long</el-radio>
 						<el-radio label="Short">Short</el-radio>
 					</el-radio-group>
 				</el-form-item>
 			</div>
 		</el-form>
-		<indicator :criteria="'exit'"></indicator>
-		<senti :criteria="'exit'"></senti>
+		<indicator
+			:criteria="'exit'"
+			ref="indiChild"
+			@getSentiUrl="getSentiUrl"
+			@getTechUrl="getTechUrl"
+			@getSentiVal="getSentiVal"
+			@getTechVal="getTechVal"
+			@getTechIndiValue="getTechIndiValue"
+			@getIndicatorRadio="getIndicatorRadio"
+		></indicator>
+		<senti
+			:criteria="'exit'"
+			ref="sentiChild"
+			:sentiUrl="sentiUrl"
+			:sentiVal="sentiVal"
+			v-if="indicatorRadio === 'sentiment'"
+		></senti>
+		<cci
+			:criteria="'exit'"
+			ref="cciChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-if="indicatorRadio === 'technical' && techIndiValue === 'cci'"
+		></cci>
+		<rsi
+			:criteria="'exit'"
+			ref="rsiChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
+		></rsi>
+		<macd
+			:criteria="'exit'"
+			ref="macdChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
+		></macd>
+		<ma
+			:criteria="'exit'"
+			ref="maChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-if="indicatorRadio === 'technical' && techIndiValue === 'ma'"
+		></ma>
 	</div>
 </template>
 <script>
-import { Store } from 'vuex'
-import indicator from '@/components/BacktestEdge/signal/indicator/indicator.vue'
-import senti from '@/components/BacktestEdge/signal/sentiment/senti/senti.vue'
+import indicator from '@/components/BacktestEdge/signal/indicator/Indicator.vue'
+import senti from '@/components/BacktestEdge/signal/sentiment/Senti.vue'
+import cci from '@/components/BacktestEdge/signal/technical/Cci.vue'
+import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
+import macd from '@/components/BacktestEdge/signal/technical/Macd.vue'
+import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
 export default {
 	name: 'exit',
+	props: { exitDirection: String },
 	data() {
 		return {
 			fd: {
-				direction: this.$store.state.exitDirection
+				direction: 'Short'
 			},
 			exitFormRules: {
 				direction: [
@@ -34,14 +81,91 @@ export default {
 						trigger: 'change'
 					}
 				]
-			}
+			},
+			sentiUrl: '',
+			techUrl: '',
+			sentiVal: '',
+			techVal: '',
+			techIndiValue: '',
+			indicatorRadio: 'sentiment'
 		}
 	},
 	components: {
 		indicator,
-		senti
+		senti,
+		cci,
+		rsi,
+		macd,
+		ma
 	},
-	methods: {}
+	watch: {
+		exitDirection: {
+			handler(newVal) {
+				if (newVal) {
+					if (newVal === 'Long') {
+						this.fd.direction = 'Short'
+					} else if (newVal === 'Short') {
+						this.fd.direction = 'Long'
+					}
+				}
+			}
+		}
+	},
+	methods: {
+		getSentiUrl(val) {
+			this.sentiUrl = val
+		},
+		getTechUrl(val) {
+			this.techUrl = val
+		},
+		getSentiVal(val) {
+			this.sentiVal = val
+		},
+		getTechVal(val) {
+			this.techVal = val
+		},
+		getTechIndiValue(val) {
+			this.techIndiValue = val
+		},
+		getIndicatorRadio(val) {
+			this.indicatorRadio = val
+		},
+		saveBacktestData() {
+			let checked = true
+			// 将选择的 indicator 保存到 vuex 中
+			let indi = this.$refs.indiChild.saveIndicator()
+			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
+			if (indi) {
+				if (this.indicatorRadio === 'sentiment') {
+					let senti = this.$refs.sentiChild.saveCondition()
+					return (checked = senti)
+				} else if (
+					this.indicatorRadio === 'technical' &&
+					this.techIndiValue === 'cci'
+				) {
+					this.$refs.cciChild.saveCondition()
+				} else if (
+					this.indicatorRadio === 'technical' &&
+					this.techIndiValue === 'rsi'
+				) {
+					this.$refs.rsiChild.saveCondition()
+				} else if (
+					this.indicatorRadio === 'technical' &&
+					this.techIndiValue === 'macd'
+				) {
+					this.$refs.macdChild.saveCondition()
+				} else if (
+					this.indicatorRadio === 'technical' &&
+					this.techIndiValue === 'ma'
+				) {
+					this.$refs.maChild.saveCondition()
+				}
+			} else {
+				checked = false
+				return checked
+			}
+		}
+	}
 }
 </script>
 <style lang="less" scoped>
@@ -72,5 +196,6 @@ export default {
 }
 .exit-container {
 	margin-bottom: 10px;
+	padding-left: 20px;
 }
 </style>

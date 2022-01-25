@@ -176,7 +176,8 @@ export default {
 				win_rate: 0.0,
 				slippage: 0.001,
 				start_date: '',
-				end_date: ''
+				end_date: '',
+				description: 'backtest'
 			},
 			frequency: 'Daily',
 			historyOptions: [
@@ -242,36 +243,6 @@ export default {
 			setUpFormRules: {
 				name: [
 					{ required: true, message: 'Please enter name', trigger: 'blur' }
-				],
-				backtestHistory: [
-					{
-						required: true,
-						message: 'Please select history',
-						trigger: 'blur'
-					}
-				],
-				frequency: [
-					{
-						required: true,
-						message: 'Please select frequency',
-						trigger: 'blur'
-					}
-				],
-				startDate: [
-					{
-						type: 'date',
-						required: true,
-						message: 'Please select start date',
-						trigger: 'blur'
-					}
-				],
-				endDate: [
-					{
-						type: 'date',
-						required: true,
-						message: 'Please select end date',
-						trigger: 'blur'
-					}
 				]
 			},
 			sentimentIndicatorList: []
@@ -695,6 +666,24 @@ export default {
 			}
 			this.$store.commit('getIndicatorsList', indicatorList)
 			CIQ.indicatorList = indicatorList
+		},
+		saveBacktestData() {
+			let checked = true
+			if (this.bd.name) {
+				if (this.bd.start_date) {
+					// 保存 backtestform 的数据
+					this.$store.commit('setBd', this.bd)
+					return checked
+				} else {
+					this.$message.error('Please select start date')
+					checked = false
+					return checked
+				}
+			} else {
+				this.$message.error('Please give the backtest name')
+				checked = false
+				return checked
+			}
 		}
 	}
 }

@@ -212,7 +212,7 @@ export default {
 			// obj.value = item.value
 			// this.$store.commit('clearSignal', obj)
 			this.si.sentimentIndicator = item.value
-			// this.$emit('getSentiVal', item.value)
+			this.$emit('getSentiVal', item.value)
 			// remove a MA tat already exists in current criteria before loadin
 			var activatedMAList = this.$store.state.activatedMA
 
@@ -322,14 +322,10 @@ export default {
 		changeIndicatorChecked() {
 			this.isCheckedIndicators = !this.isCheckedIndicators
 			const arr = ['Sentiment Indicators', 'Technical Indicators']
-			// 清空 technical 当前选中的 indicator 值
-			this.si.sentimentIndicator = ''
-			this.si.technicalIndicator = ''
-			// const obj = {}
-			// obj.criteria = this.criteria
-			// obj.index = this.tabIndex
-			// this.$store.commit('deleteIndicator', obj)
-			this.$emit('clearTechIndiValue')
+			const obj = {}
+			obj.criteria = this.criteria
+			obj.index = 0
+			this.$store.commit('deleteIndicator', obj)
 			if (this.indicatorRadio === arr[0]) {
 				this.$emit('getIndicatorRadio', 'sentiment')
 				this.$store.commit('getEntryIndicatorRadio', 'sentiment')
