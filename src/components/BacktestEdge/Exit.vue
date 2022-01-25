@@ -10,6 +10,7 @@
 					</el-radio-group>
 				</el-form-item>
 			</div>
+		</el-form>
 		<indicator
 			:criteria="'exit'"
 			ref="indiChild"
@@ -59,8 +60,8 @@
 </template>
 <script>
 import indicator from '@/components/BacktestEdge/signal/indicator/Indicator'
-import senti from '@/components/BacktestEdge/signal/sentiment/Senti'
-import cci from '@/components/BacktestEdge/signal/technical/Cci'
+import senti from '@/components/BacktestEdge/signal/sentiment/Senti.vue'
+import cci from '@/components/BacktestEdge/signal/technical/Cci.vue'
 import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
 import macd from '@/components/BacktestEdge/signal/technical/Macd.vue'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
