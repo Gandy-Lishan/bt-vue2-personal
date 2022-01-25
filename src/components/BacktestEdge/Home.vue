@@ -8,13 +8,20 @@
 				></el-row>
 
 				<el-row type="flex" justify="center"
-					><el-col><p class="page-header">BacktestEdge</p></el-col>
+					><el-col><p>BacktestEdge</p></el-col>
 				</el-row>
 				<div class="chart_box" id="chart_box">
 					<chart width="100%" height="100%"></chart>
 				</div>
 			</header>
 			<main class="main">
+				<el-button
+						@click="refreshPage"
+						class="restartBtn"
+						type="primary"
+						icon="el-icon-refresh-right"
+						>Reset backtest</el-button
+				>
 				<el-tabs v-model="activeName" type="card" :tab-position="tabPosition">
 					<el-tab-pane label="Set up Backtest" name="first">
 						<div class="set-up-container">
@@ -100,6 +107,12 @@ export default {
 	methods: {
 		setExitDirection(val) {
 			this.exitDirection = val
+		},
+		refreshPage() {
+			if (location.href.indexOf('#reloaded') == -1) {
+				location.href = location.href + '#reloaded'
+				location.reload()
+			}
 		},
 		runBacktest() {
 			let setUp = this.$refs.setUpChild.saveBacktestData()
@@ -217,10 +230,11 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.page-header {
-	font-size: 2rem;
-    margin-left: 15px;
-    font-weight: bold;
+.restartBtn {
+	position: relative;
+	z-index: 1;
+	float: right;
+	width: 12rem;
 }
 .home-container {
 	width: 90%;
@@ -229,6 +243,23 @@ export default {
 // 暂时的样式
 header {
 	margin-bottom: 20px;
+}
+.header {
+	img {
+			width: 100%;
+	}
+	p {
+		margin: 1.14rem 0 1.14rem 0px;
+		font-style: italic;
+		color: #6c6c6c;
+	}
+	p:first-of-type {
+		text-align: left;
+		font-size: 2.5rem;
+		margin: 50px 0 50px 0;
+		font-weight: lighter;
+		color: #333333;
+	}
 }
 .criteria-container {
 	padding: 10px;

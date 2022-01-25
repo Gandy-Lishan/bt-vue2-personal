@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from "axios"
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
@@ -100,6 +101,7 @@ export default new Vuex.Store({
 		allSymbolsList: [],
 		stocksList: [],
 		indexsList: [],
+
 		editBacktestSetUpData: {},
 		isShowExitForm: true,
 		tabIndex: 0,

@@ -75,8 +75,9 @@ export default class AdvancedWrapper extends Vue {
 		CIQ.store = store;
 		CIQ.vue = Vue;
 		// refresh pag
-		//console.log('backup vuex and clear chart first time')
+		
 		CIQ.store.commit('setCopy',JSON.stringify(CIQ.store.state))
+		
 		CIQ.addIndicators()
 		
 

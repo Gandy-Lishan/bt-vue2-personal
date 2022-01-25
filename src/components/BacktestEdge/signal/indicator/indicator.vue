@@ -212,7 +212,7 @@ export default {
 			// obj.value = item.value
 			// this.$store.commit('clearSignal', obj)
 			this.si.sentimentIndicator = item.value
-			// this.$emit('getSentiVal', item.value)
+			this.$emit('getSentiVal', item.value)
 			// remove a MA tat already exists in current criteria before loadin
 			var activatedMAList = this.$store.state.activatedMA
 
