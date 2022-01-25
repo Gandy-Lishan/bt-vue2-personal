@@ -93,7 +93,7 @@
 	padding-left: 132px;
 	height: 25px;
 }
-input:not([type]),
+.set-up-container .backtest_container input:not([type]),
 input[type='text'],
 input[type='number'],
 input[type='date'],

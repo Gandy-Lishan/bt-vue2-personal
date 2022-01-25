@@ -176,7 +176,8 @@ export default {
 				win_rate: 0.0,
 				slippage: 0.001,
 				start_date: '',
-				end_date: ''
+				end_date: '',
+				description: 'backtest'
 			},
 			frequency: 'Daily',
 			historyOptions: [
@@ -242,41 +243,14 @@ export default {
 			setUpFormRules: {
 				name: [
 					{ required: true, message: 'Please enter name', trigger: 'blur' }
-				],
-				backtestHistory: [
-					{
-						required: true,
-						message: 'Please select history',
-						trigger: 'blur'
-					}
-				],
-				frequency: [
-					{
-						required: true,
-						message: 'Please select frequency',
-						trigger: 'blur'
-					}
-				],
-				startDate: [
-					{
-						type: 'date',
-						required: true,
-						message: 'Please select start date',
-						trigger: 'blur'
-					}
-				],
-				endDate: [
-					{
-						type: 'date',
-						required: true,
-						message: 'Please select end date',
-						trigger: 'blur'
-					}
 				]
-			}
+			},
+			sentimentIndicatorList: []
 		}
 	},
 	mounted() {
+		this.getIndicatorsList()
+		this.loadSentimentList('Daily')
 		// this.getIndexsList()
 		// this.getStocksList()
 		this.getEndDate()
@@ -289,6 +263,25 @@ export default {
 				direction.previous(1, 0)
 			}
 		})
+	},
+	watch: {
+		updateFreq(val) {
+			console.log('updateFreq: ', val)
+			switch (val) {
+				case 'daily': {
+					this.frequency = 'Daily'
+					break
+				}
+				case 'weekly': {
+					this.frequency = 'Weekly'
+					break
+				}
+				case 'monthly': {
+					this.frequency = 'Monthly'
+					break
+				}
+			}
+		}
 	},
 	computed: {
 		listSet() {
@@ -304,6 +297,9 @@ export default {
 		...mapGetters(['getIsClearForm']),
 		isClearForm() {
 			return this.getIsClearForm
+		},
+		updateFreq() {
+			return this.$store.state.pairDataFreq
 		}
 	},
 	watch: {
@@ -537,7 +533,140 @@ export default {
 			this.$refs.backtestSetupForm.clearValidate()
 		},
 		getFrequency(val) {
+			this.frequency = val
 			this.$store.commit('getFrequency', val)
+			this.loadSentimentList(val)
+		},
+		async loadSentimentList(val) {
+			const vm = this
+			var frequency = val
+			var indicatorList = []
+
+			if (CIQ.indicatorList) {
+				if (CIQ.indicatorList.length != 0) {
+					console.log(
+						'data already in indicatorList from entry-form',
+						CIQ.indicatorList.length
+					)
+					indicatorList = this.$store.state.indicatorsList
+					indicatorList = CIQ.indicatorList
+				}
+			} else {
+				console.log(
+					'data is not in indicatorList from entry-form',
+					CIQ.indicatorList
+				)
+				const res = await vm.$http.get(
+					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+					{
+						auth: {
+							username: 'sentimentrader_backtest_api',
+							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+						}
+					}
+				)
+				indicatorList = res.data
+			}
+			// vm.sentimentIndicatorList = res.data.map((obj) => {
+			// 	if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1) {
+			// 		return { value: obj.chart_name, url: obj.url, updated: obj.updated }
+			// 	}
+			// })
+			vm.sentimentIndicatorList = []
+			if (frequency) {
+				indicatorList.forEach((element) => {
+					if (
+						frequency.toUpperCase().indexOf(element.updated.toUpperCase()) !==
+						-1
+					) {
+						vm.sentimentIndicatorList.push({
+							value: element.chart_name,
+							url: element.url,
+							updated: element.updated
+						})
+					}
+				})
+			}
+			this.$store.commit('getIndicatorsList', indicatorList)
+			CIQ.indicatorList = indicatorList
+
+			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+
+			const data = vm.$store.state.indicatorsList
+			if (frequency !== '') {
+				if (frequency == 'Daily') {
+					vm.setSentiList(['Daily'], data)
+				} else if (frequency == 'Weekly') {
+					vm.setSentiList(['Daily', 'Weekly'], data)
+				} else if (frequency == 'Monthly') {
+					vm.setSentiList(['Daily', 'Weekly', 'Monthly'], data)
+				}
+			}
+		},
+		setSentiList(arr, data) {
+			const vm = this
+			vm.sentimentIndicatorList = []
+			arr.forEach((fre) => {
+				data.forEach((element) => {
+					if (fre.toUpperCase().indexOf(element.updated.toUpperCase()) !== -1) {
+						vm.sentimentIndicatorList.push({
+							value: element.chart_name,
+							url: element.url,
+							updated: element.updated
+						})
+					}
+				})
+			})
+			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+		},
+		async getIndicatorsList() {
+			const vm = this
+			var indicatorList = []
+			if (CIQ.indicatorList) {
+				if (CIQ.indicatorList.length != 0) {
+					console.log(
+						'data already in indicatorList from entry-form',
+						CIQ.indicatorList.length
+					)
+					indicatorList = this.$store.state.indicatorsList
+					indicatorList = CIQ.indicatorList
+				}
+			} else {
+				console.log(
+					'data is not in indicatorList from entry-form',
+					CIQ.indicatorList
+				)
+				const res = await vm.$http.get(
+					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+					{
+						auth: {
+							username: 'sentimentrader_backtest_api',
+							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+						}
+					}
+				)
+				indicatorList = res.data
+			}
+			this.$store.commit('getIndicatorsList', indicatorList)
+			CIQ.indicatorList = indicatorList
+		},
+		saveBacktestData() {
+			let checked = true
+			if (this.bd.name) {
+				if (this.bd.start_date) {
+					// 保存 backtestform 的数据
+					this.$store.commit('setBd', this.bd)
+					return checked
+				} else {
+					this.$message.error('Please select start date')
+					checked = false
+					return checked
+				}
+			} else {
+				this.$message.error('Please give the backtest name')
+				checked = false
+				return checked
+			}
 		}
 	}
 }
