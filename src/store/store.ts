@@ -441,7 +441,6 @@ export default new Vuex.Store({
 			
 		},
 		saveDescription(state, desObj) {
-<<<<<<< HEAD
 			state.backtestInfo[desObj.criteria+'_description'] = desObj.description
 		},
 		initialBacktestInfo(state) {
@@ -464,9 +463,6 @@ export default new Vuex.Store({
 					signals: [{ sentimentIndicator: '', technicalIndicator: '' }]
 				}
 			}
-=======
-			state.backtestInfo[desObj.criteria].description = desObj.description
->>>>>>> e531979158ab98cb3141d540865bd195faca74d3
 		}
 
 	},
