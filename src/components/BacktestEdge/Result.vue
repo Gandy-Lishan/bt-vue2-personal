@@ -164,7 +164,7 @@ export default {
 	margin-right: 0px;
 }
 /deep/.dateBox .el-input__icon {
-	width: 17px;
+	width: 17px
 }
 .comUnitNote {
 	position: absolute;

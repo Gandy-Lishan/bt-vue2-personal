@@ -303,6 +303,23 @@ export default {
 		}
 	},
 	watch: {
+		updateFreq(val) {
+
+			switch (val) {
+				case 'daily': {
+					this.frequency = 'Daily'
+					break
+				}
+				case 'weekly': {
+					this.frequency = 'Weekly'
+					break
+				}
+				case 'monthly': {
+					this.frequency = 'Monthly'
+					break
+				}
+			}
+		},
 		backtestEditData: {
 			handler(newVal) {
 				if (JSON.stringify(newVal) != '{}') {

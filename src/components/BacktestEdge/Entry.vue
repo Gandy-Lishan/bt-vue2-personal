@@ -173,6 +173,7 @@ export default {
 				) {
 					let ma = this.$refs.maChild.saveCondition()
 					return (checked = ma)
+					this.$refs.maChild.saveCondition()
 				}
 			} else {
 				checked = false
