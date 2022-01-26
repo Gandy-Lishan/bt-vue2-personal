@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import cookies from 'vue-cookies'
 import axios from 'axios'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import store from '../store/store'
 
 
 import Home from '@/components/BacktestEdge/Home.vue'
@@ -26,6 +27,7 @@ router.beforeEach((to, from, next) => {
 				}
 			}
 		).then(res=>{
+      CIQ.store = store
       console.log('init getallsymbol')
       CIQ.indicatorList = res.data
       return next()
@@ -44,13 +46,13 @@ router.beforeEach((to, from, next) => {
 //   if (!tokenStr) return next('/login')
 //   next()
 // })
-router.beforeEach((to, from, next) => {
-  // let host = "/[a-z]*\.sentimentrader\.com/"
-  let host = /.*/
-  // console.log('to from next',to, from, next);
-  console.log("log",document.referrer)
-  console.log(document.baseURI);
-next()
+// router.beforeEach((to, from, next) => {
+//   // let host = "/[a-z]*\.sentimentrader\.com/"
+//   let host = /.*/
+//   // console.log('to from next',to, from, next);
+//   console.log("log",document.referrer)
+//   console.log(document.baseURI);
+// next()
   // if (document.baseURI.search(host) !== -1){
   // //  alert("asdasd")
   // // https://backtest.sentimentrader.com/user?userID=668696
@@ -84,8 +86,8 @@ next()
 //     next()
 //   }
 //   })
-  }
-  )
+  //}
+ // )
 
 
 
