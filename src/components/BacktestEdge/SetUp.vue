@@ -303,6 +303,23 @@ export default {
 		}
 	},
 	watch: {
+		updateFreq(val) {
+
+			switch (val) {
+				case 'daily': {
+					this.frequency = 'Daily'
+					break
+				}
+				case 'weekly': {
+					this.frequency = 'Weekly'
+					break
+				}
+				case 'monthly': {
+					this.frequency = 'Monthly'
+					break
+				}
+			}
+		},
 		backtestEditData: {
 			handler(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
@@ -672,7 +689,6 @@ export default {
 		},
 		saveBacktestData() {
 			let checked = true
-			console.log('22222')
 			if (this.bd.name) {
 				if (this.$store.state.backtestNameList.indexOf(this.bd.name) == -1) {
 					if (this.bd.start_date) {

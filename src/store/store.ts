@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from "axios"
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
 		backtestSymbol: '',
-		orignalFreqency: '',
 		pairDataFreq: '',
 		stateCopy: {},
 		conditionRadio: '',
@@ -103,6 +103,7 @@ export default new Vuex.Store({
 		allSymbolsList: [],
 		stocksList: [],
 		indexsList: [],
+
 		editBacktestSetUpData: {},
 		isShowExitForm: true,
 		tabIndex: 0,
@@ -143,9 +144,6 @@ export default new Vuex.Store({
     setCopy(state,val){
       state.stateCopy = val
     },
-	setOrignalFreqency(state,val){
-		state.orignalFreqency = val
-	},
 	setFreqency(state,val){
 		state.pairDataFreq = val
 	},
@@ -361,6 +359,14 @@ export default new Vuex.Store({
 				if (obj) {
 					state.backtestInfo[key] = obj[key]
 				}
+				// 将 backtest 名字保存起来
+				// let arr = []
+				// arr.push(obj.name)
+				// function unique (arr: Array): Array {
+				// 	return Array.from(new Set(arr))
+				//   }
+				// arr = unique(arr)
+				// state.backtestNameList = arr
 			}
 				// 将 backtest 名字保存起来
 			if(state.backtestNameList.indexOf(obj.name) == -1){

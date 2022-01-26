@@ -22,13 +22,6 @@
 						width="70px"
 					>
 					</el-table-column>
-					<!-- <el-table-column
-						label="Description"
-						align="center"
-						show-overflow-tooltip
-						prop="description"
-					>
-					</el-table-column> -->
 					<el-table-column
 						label="Entry"
 						align="center"
@@ -59,7 +52,7 @@
 							</div>
 						</template>
 					</el-table-column>
-					<!-- <el-table-column label="Status" align="center">
+					<!-- <el-table-column>
 						<template slot-scope="scope">
 							<span v-if="scope.row.status == 0">Ready to run</span>
 							<span v-else-if="scope.row.status == 1"
@@ -253,7 +246,6 @@ export default {
 					if (element.result !== '') element.result = JSON.parse(element.result)
 				})
 				this.queryInfo.total = res.data.count
-				console.log('相应的shujv', res.data.results)
 			} else {
 				this.loading = false
 			}

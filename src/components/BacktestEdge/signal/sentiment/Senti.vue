@@ -223,6 +223,7 @@ export default {
 					}
 				}
 			})
+			console.log('setperiod', this.sentiVal)
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				if (
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
