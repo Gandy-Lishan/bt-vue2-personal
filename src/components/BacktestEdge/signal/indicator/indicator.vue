@@ -56,9 +56,11 @@ import { Store, mapGetters } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import deepClone1 from '@/tools/deepClone.js'
 export default {
-	// props: {
-	// 	indicatorEditData: Object
-	// },
+	props: {
+		// indicatorEditData: Object
+		editIndiData: Object,
+		criteria: String
+	},
 	data() {
 		var validateSenti = (rule, value, callback) => {
 			if (!value) {
@@ -81,7 +83,7 @@ export default {
 				technicalIndicator: ''
 			},
 			isCheckedIndicators: false,
-			sentimentIndicatorList: [],
+			sentimentIndicatorList: this.$store.state.sentimentIndicatorList,
 			siRules: {
 				sentimentIndicator: [{ validator: validateSenti, change: 'blur' }],
 				technicalIndicator: [{ validator: validateTech, change: 'blur' }]
@@ -100,86 +102,108 @@ export default {
 				let init = deepClone1(this.$options.data())
 				Object.assign(this.$data, init)
 			}
+		},
+		editIndiData: {
+			async handler(newVal) {
+				if (JSON.stringify(newVal) != '{}') {
+					let vm = this
+					if (newVal[this.criteria].signals[0].analysis === 'Sentiment') {
+						this.$emit('getIndicatorRadio', 'sentiment')
+						this.$emit('getSentiVal', this.si.sentimentIndicator)
+						this.indicatorRadio = 'Sentiment Indicators'
+						this.isCheckedIndicators = false
+						this.si.sentimentIndicator =
+							newVal[this.criteria].signals[0].indicator
+						// 往父组件传值
+						let sentimentList = this.$store.state.sentimentIndicatorList
+						if (sentimentList.length == 0) {
+							const res = await this.$http.get(
+								'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+								{
+									auth: {
+										username: 'sentimentrader_backtest_api',
+										password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+									}
+								}
+							)
+							sentimentList = res.data.map((obj) => {
+								console.log(
+									frequency.toUpperCase().indexOf(obj.updated.toUpperCase())
+								)
+								if (
+									frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !==
+									-1
+								) {
+									if (obj.chart_name && obj.url && obj.updated) {
+										return {
+											value: obj.chart_name,
+											url: obj.url,
+											updated: obj.updated
+										}
+									}
+								}
+							})
+						}
+						let indi = this.si.sentimentIndicator
+						sentimentList.forEach((obj) => {
+							if (indi.toUpperCase() == obj.value.toUpperCase()) {
+								vm.$emit('getSentiUrl', obj.url)
+							}
+						})
+						// if(this.$store.state.sentimentIndicatorList)
+					} else if (
+						newVal[this.criteria].signals[0].analysis === 'Technical'
+					) {
+						this.$emit('getIndicatorRadio', 'technical')
+						let technicalIndicator = newVal[this.criteria].signals[0].indicator
+						let item = {}
+						item.value = technicalIndicator
+						vm.handleTechnicalSelect(item)
+						this.indicatorRadio = 'Technical Indicators'
+						this.isCheckedIndicators = true
+						this.$emit('getTechVal', vm.si.technicalIndicator)
+					}
+				}
+			},
+			deep: true
 		}
-		// indicatorEditData: {
-		// 	handler(newVal) {
-		// 		if (newVal.sentimentIndicator) {
-		// 			this.indicatorRadio = 'Sentiment Indicators'
-		// 			this.isCheckedIndicators = false
-		// 			this.si.sentimentIndicator = newVal.sentimentIndicator
-		// 			const obj = {}
-		// 			obj.criteria = this.criteria
-		// 			obj.index = this.tabIndex
-		// 			obj.value = newVal.sentimentIndicator
-		// 			this.$store.commit('getSentiValue', obj)
-		// 		} else if (newVal.technicalIndicator) {
-		// 			this.indicatorRadio = 'Technical Indicators'
-		// 			this.isCheckedIndicators = true
-		// 			this.si.technicalIndicator = newVal.technicalIndicator
-		// 			const obj = {}
-		// 			obj.criteria = this.criteria
-		// 			obj.index = this.tabIndex
-		// 			obj.value = newVal.technicalIndicator
-		// 			this.$store.commit('getTechValue', obj)
-		// 		}
-		// 	},
-		// 	immediate: true,
-		// 	deep: true
-		// }
 	},
 	methods: {
 		//  load sentiment list
-		// async loadSentimentList() {
-		// 	const vm = this
-		// 	var frequency = vm.$store.state.backtestInfo['entry']['frequency']
-		// 	const res = await vm.$http.get(
-		// 		'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
-		// 		{
-		// 			auth: {
-		// 				username: 'sentimentrader_backtest_api',
-		// 				password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-		// 			}
-		// 		}
-		// 	)
-		// 	vm.sentimentIndicatorList = res.data.map((obj) => {
-		// 		console.log(frequency.toUpperCase().indexOf(obj.updated.toUpperCase()))
-		// 		if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1) {
-		// 			return { value: obj.chart_name, url: obj.url, updated: obj.updated }
-		// 		}
-		// 	})
-		// 	this.$store.commit('getIndicatorsList', res.data)
-		// 	this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
-		// },
 
-		// async loadSentimentList() {
-		// 	const vm = this
-		// 	var frequency = vm.$store.state.backtestInfo["entry"]["frequency"]
-		// 	var indicatorList = []
+		async loadSentimentList() {
+			const vm = this
+			var frequency = vm.$store.state.backtestInfo['entry']['frequency']
+			var indicatorList = []
 
-		// 	if(this.$store.state.indicatorsList.length != 0){
-		// 		console.log('data in indicatorList from indicator-part',this.$store.state.indicatorsList.length)
-		// 		indicatorList = this.$store.state.indicatorsList
-		// 	}else{
-		// 		const res = await vm.$http.get(
-		// 			'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
-		// 			{
-		// 				auth: {
-		// 					username: 'sentimentrader_backtest_api',
-		// 					password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-		// 				}
-		// 			}
-		// 		)
-		// 		indicatorList = res.data
-		// 	}
-		// 	vm.sentimentIndicatorList = indicatorList.map((obj) => {
-		// 		console.log(frequency.toUpperCase().indexOf(obj.updated.toUpperCase()));
-		// 		if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1){
-		// 		return { value: obj.chart_name, url: obj.url, updated: obj.updated }
-		// 		}
-		// 	})
-		// 	this.$store.commit('getIndicatorsList', indicatorList)
-		// 	this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
-		// },
+			if (this.$store.state.indicatorsList.length != 0) {
+				console.log(
+					'data in indicatorList from indicator-part',
+					this.$store.state.indicatorsList.length
+				)
+				indicatorList = this.$store.state.indicatorsList
+			} else {
+				const res = await vm.$http.get(
+					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+					{
+						auth: {
+							username: 'sentimentrader_backtest_api',
+							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+						}
+					}
+				)
+				indicatorList = res.data
+			}
+			vm.sentimentIndicatorList = indicatorList.map((obj) => {
+				if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1) {
+					if (obj.chart_name && obj.url && obj.updated) {
+						return { value: obj.chart_name, url: obj.url, updated: obj.updated }
+					}
+				}
+			})
+			this.$store.commit('getIndicatorsList', indicatorList)
+			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+		},
 
 		// sentiment search
 		indicatorSentimentSearch(queryString, cb) {
@@ -223,17 +247,17 @@ export default {
 			}
 		},
 		handleSentimentSelect(item) {
-			const obj = {}
-			obj.criteria = this.criteria
-			obj.index = this.tabIndex
-			obj.value = item.value
-			this.$store.commit('clearSignal', obj)
+			// const obj = {}
+			// obj.criteria = this.criteria
+			// obj.index = this.tabIndex
+			// obj.value = item.value
+			// this.$store.commit('clearSignal', obj)
 			this.si.sentimentIndicator = item.value
 			this.$emit('getSentiVal', item.value)
 			// remove a MA tat already exists in current criteria before loadin
 			var activatedMAList = this.$store.state.activatedMA
 
-			if (obj.criteria == 'entry') {
+			if (this.criteria == 'entry') {
 				var MAListIndex = activatedMAList.findIndex(
 					(item) =>
 						item.url == this.$store.state.indicators.formIndicators.entry
@@ -266,20 +290,20 @@ export default {
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
-			const obj = {}
-			obj.criteria = this.criteria
-			obj.index = this.tabIndex
-			obj.value = item.value
-			this.$store.commit('clearSignal', obj)
+			// const obj = {}
+			// obj.criteria = this.criteria
+			// obj.index = this.tabIndex
+			// obj.value = item.value
+			// this.$store.commit('clearSignal', obj)
 			this.si.technicalIndicator = item.value
 			this.$emit('getTechVal', item.value)
 			const vm = this
 			let val = item.value
 			const set = new Set([
-				['Commodity Channel Index', 'ST CCI'],
-				['Relative Strength Index', 'ST RSI'],
+				['Commodity Channel Index', 'cci'],
+				['Relative Strength Index', 'rsi'],
 				['Moving Average', 'ma'],
-				['MACD', 'ST MACD']
+				['MACD', 'macd']
 			])
 
 			const newMap = new Map(set)
@@ -289,7 +313,7 @@ export default {
 					url = i[1]
 					this.$emit('getTechIndiValue', i[1])
 					// remove a MA tat already exists in current criteria before loadin
-					if (obj.criteria == 'entry') {
+					if (this.criteria == 'entry') {
 						// remove MA from Vuex after loading Tech
 						var activatedMAList = CIQ.store.state.activatedMA
 
@@ -339,14 +363,10 @@ export default {
 		changeIndicatorChecked() {
 			this.isCheckedIndicators = !this.isCheckedIndicators
 			const arr = ['Sentiment Indicators', 'Technical Indicators']
-			// 清空 technical 当前选中的 indicator 值
-			this.si.sentimentIndicator = ''
-			this.si.technicalIndicator = ''
 			const obj = {}
 			obj.criteria = this.criteria
-			obj.index = this.tabIndex
+			obj.index = 0
 			this.$store.commit('deleteIndicator', obj)
-			this.$emit('clearTechIndiValue')
 			if (this.indicatorRadio === arr[0]) {
 				this.$emit('getIndicatorRadio', 'sentiment')
 				this.$store.commit('getEntryIndicatorRadio', 'sentiment')
@@ -364,40 +384,60 @@ export default {
 				{ value: 'Moving Average' }
 			]
 		},
-		setIndicatorRadio(obj) {
-			let vm = this
-			this.indicatorRadio = obj.radio
-			var data = Object.assign(obj)
-			if (data.sentimentIndicator) {
-				vm.si['sentimentIndicator'] = data['sentimentIndicator']
-				vm.$set(vm.si, 'sentimentIndicator', data.sentimentIndicator)
-				this.$emit('getSentiVal', data.sentimentIndicator)
-				const sentiObj = data
-				sentiObj.value = sentiObj.sentimentIndicator
-				this.$store.commit('getSentiValue', sentiObj)
-				this.isCheckedIndicators = false
-			} else if (data.technicalIndicator) {
-				vm.$set(this.si, 'technicalIndicator', obj.technicalIndicator)
-				this.$emit('getTechVal', obj.technicalIndicator)
-				const sentiObj = data
-				sentiObj.value = sentiObj.technicalIndicator
-				this.$store.commit('getTechValue', sentiObj)
-				this.isCheckedIndicators = true
-			}
-		},
-		// 当提交时校验当前表单
-		validateSiForm() {
-			let data = true
-			this.$refs['siForm'].validate((valid) => {
-				if (!valid) {
-					data = false
+		// setIndicatorRadio(obj) {
+		// 	let vm = this
+		// 	this.indicatorRadio = obj.radio
+		// 	var data = Object.assign(obj)
+		// 	if (data.sentimentIndicator) {
+		// 		vm.si['sentimentIndicator'] = data['sentimentIndicator']
+		// 		vm.$set(vm.si, 'sentimentIndicator', data.sentimentIndicator)
+		// 		this.$emit('getSentiVal', data.sentimentIndicator)
+		// 		const sentiObj = data
+		// 		sentiObj.value = sentiObj.sentimentIndicator
+		// 		this.$store.commit('getSentiValue', sentiObj)
+		// 		this.isCheckedIndicators = false
+		// 	} else if (data.technicalIndicator) {
+		// 		vm.$set(this.si, 'technicalIndicator', obj.technicalIndicator)
+		// 		this.$emit('getTechVal', obj.technicalIndicator)
+		// 		const sentiObj = data
+		// 		sentiObj.value = sentiObj.technicalIndicator
+		// 		this.$store.commit('getTechValue', sentiObj)
+		// 		this.isCheckedIndicators = true
+		// 	}
+		// },
+		saveIndicator() {
+			let checked = true
+			if (this.indicatorRadio === 'Sentiment Indicators') {
+				if (this.si.sentimentIndicator) {
+					let obj = {}
+					obj.criteria = this.criteria
+					obj.index = 0
+					obj.value = this.si.sentimentIndicator
+					this.$store.commit('getSentiValue', obj)
+					return checked
+				} else {
+					this.$message.error(
+						'Please select' + ' ' + this.criteria + ' ' + 'sentiment indicator'
+					)
+					checked = false
+					return checked
 				}
-			})
-			return data
-		},
-		// 当保存成功后清除校验清除校验
-		clearSiFormValidate() {
-			this.$refs.siForm.clearValidate()
+			} else if (this.indicatorRadio === 'Technical Indicators') {
+				if (this.si.technicalIndicator) {
+					let obj = {}
+					obj.criteria = this.criteria
+					obj.index = 0
+					obj.value = this.si.technicalIndicator
+					this.$store.commit('getTechValue', obj)
+					return checked
+				} else {
+					this.$message.error(
+						'Please select' + ' ' + this.criteria + ' ' + ' technical indicator'
+					)
+					checked = false
+					return checked
+				}
+			}
 		}
 	}
 }
@@ -408,9 +448,10 @@ export default {
 }
 /deep/ .el-input--prefix .el-input__inner {
 	width: 293px;
+	padding-left: 30px;
 }
 /deep/ .el-input__icon {
-	width: 55px;
+	width: 60px;
 }
 /deep/ .el-form-item {
 	margin-bottom: 10px;

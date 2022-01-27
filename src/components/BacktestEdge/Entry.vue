@@ -11,14 +11,70 @@
 				</el-form-item>
 			</div>
 		</el-form>
-		<indicator></indicator>
-		<senti></senti>
+		<indicator
+			:editIndiData="editIndiData"
+			:criteria="'entry'"
+			ref="indiChild"
+			@getSentiUrl="getSentiUrl"
+			@getTechUrl="getTechUrl"
+			@getSentiVal="getSentiVal"
+			@getTechVal="getTechVal"
+			@getTechIndiValue="getTechIndiValue"
+			@getIndicatorRadio="getIndicatorRadio"
+		></indicator>
+		<senti
+			:editIndiData="editIndiData"
+			:criteria="'entry'"
+			ref="sentiChild"
+			:sentiUrl="sentiUrl"
+			:sentiVal="sentiVal"
+			v-if="indicatorRadio === 'sentiment'"
+		></senti>
+		<cci
+			:editIndiData="editIndiData"
+			:criteria="'entry'"
+			ref="cciChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-if="indicatorRadio === 'technical' && techIndiValue === 'cci'"
+		></cci>
+		<rsi
+			:editIndiData="editIndiData"
+			:criteria="'entry'"
+			ref="rsiChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
+		></rsi>
+		<macd
+			:editIndiData="editIndiData"
+			:criteria="'entry'"
+			ref="macdChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
+		></macd>
+		<ma
+			:editIndiData="editIndiData"
+			:criteria="'entry'"
+			ref="maChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-if="indicatorRadio === 'technical' && techIndiValue === 'ma'"
+		></ma>
 	</div>
 </template>
 <script>
-import indicator from '@/components/BacktestEdge/signal/indicator/indicator.vue'
-import senti from '@/components/BacktestEdge/signal/sentiment/senti/senti.vue'
+import senti from '@/components/BacktestEdge/signal/sentiment/Senti'
+import cci from '@/components/BacktestEdge/signal/technical/Cci'
+import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
+import macd from '@/components/BacktestEdge/signal/technical/Macd.vue'
+import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
+import indicator from '@/components/BacktestEdge/signal/indicator/Indicator'
+import SignalCode from '@/tools/codeTool.js'
+
 export default {
+	name: 'entry',
 	data() {
 		return {
 			fd: {
@@ -32,16 +88,113 @@ export default {
 						trigger: 'change'
 					}
 				]
-			}
+			},
+			sentiUrl: '',
+			techUrl: '',
+			sentiVal: '',
+			techVal: '',
+			techIndiValue: '',
+			indicatorRadio: 'sentiment',
+			editIndiData: {}
 		}
 	},
 	components: {
 		indicator,
-		senti
+		senti,
+		cci,
+		rsi,
+		macd,
+		ma
 	},
 	methods: {
 		getExitDirection(val) {
 			this.$store.commit('getExitDirection', val)
+			this.$emit('setExitDirection', val)
+		},
+		getSentiUrl(val) {
+			this.sentiUrl = val
+		},
+		getTechUrl(val) {
+			this.techUrl = val
+		},
+		getSentiVal(val) {
+			this.sentiVal = val
+		},
+		getTechVal(val) {
+			this.techVal = val
+		},
+		getTechIndiValue(val) {
+			this.techIndiValue = val
+		},
+		getIndicatorRadio(val) {
+			this.indicatorRadio = val
+		},
+		saveBacktestData() {
+			// 将选择的 indicator 保存到 vuex 中
+			let checked = true
+			let indi = this.$refs.indiChild.saveIndicator()
+			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
+			if (indi) {
+				if (this.indicatorRadio === 'sentiment') {
+					let senti = this.$refs.sentiChild.saveCondition()
+					return (checked = senti)
+				} else if (
+					this.indicatorRadio === 'technical' &&
+					this.techIndiValue === 'cci'
+				) {
+					let cci = this.$refs.cciChild.saveCondition()
+					return (checked = cci)
+				} else if (
+					this.indicatorRadio === 'technical' &&
+					this.techIndiValue === 'rsi'
+				) {
+					let rsi = this.$refs.rsiChild.saveCondition()
+					return (checked = rsi)
+				} else if (
+					this.indicatorRadio === 'technical' &&
+					this.techIndiValue === 'macd'
+				) {
+					let macd = this.$refs.macdChild.saveCondition()
+					return (checked = macd)
+				} else if (
+					this.indicatorRadio === 'technical' &&
+					this.techIndiValue === 'ma'
+				) {
+					let ma = this.$refs.maChild.saveCondition()
+					return (checked = ma)
+				}
+			} else {
+				checked = false
+				return checked
+			}
+		},
+		setEditData(id) {
+			let vm = this
+			this.$http.get('/dev/seeparams/' + id + '/').then((res) => {
+				let data = res.data
+				data.entry = JSON.parse(data.entry)
+				data.exit = JSON.parse(data.exit)
+				let signalCode = new SignalCode()
+				if (data.entry.signals instanceof Array) {
+					data.entry.signals[0] = signalCode.decode(
+						data.entry.signals[0]['code']
+					)
+				}
+				if (data.exit.signals instanceof Array) {
+					data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
+				}
+				vm.fd.direction = data.entry.direction
+				vm.getExitDirection(data.entry.direction)
+				let edit = {}
+				edit.entry_description = data.entry_description
+				edit.exit_description = data.exit_description
+				edit.entry = data.entry
+				edit.exit = data.exit
+				vm.editIndiData = edit
+				// if (vm.editIndiData.entry.signals[0].analysis === 'Technical') {
+				// 	this.$refs.maChild.setEditData(vm.editIndiData)
+				// }
+			})
 		}
 	}
 }
