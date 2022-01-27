@@ -161,7 +161,7 @@ import { Store, mapGetters } from 'vuex'
 import { timestampToTime } from '@/tools/formatDate.js'
 import deepClone1 from '@/tools/deepClone.js'
 export default {
-	props: { backtestEditData: Object },
+	props: { backtestEditData: Object, editFrequency: String },
 	name: 'setUp',
 	data() {
 		return {
@@ -264,6 +264,25 @@ export default {
 			}
 		})
 	},
+	watch: {
+		updateFreq(val) {
+			console.log('updateFreq: ', val)
+			switch (val) {
+				case 'daily': {
+					this.frequency = 'Daily'
+					break
+				}
+				case 'weekly': {
+					this.frequency = 'Weekly'
+					break
+				}
+				case 'monthly': {
+					this.frequency = 'Monthly'
+					break
+				}
+			}
+		}
+	},
 	computed: {
 		listSet() {
 			return this.symbolList.map((item) => {
@@ -304,7 +323,6 @@ export default {
 		backtestEditData: {
 			handler(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
-					this.$refs['backtestSetupForm'].clearValidate()
 					delete newVal.entry
 					delete newVal.exit
 					delete newVal.user_id
@@ -312,7 +330,10 @@ export default {
 					delete newVal.results
 					delete newVal.uuid
 					this.bd = Object.assign(this.bd, newVal)
+					this.frequency = this.editFrequency
+					// console.log('频率', this.frequency)
 					this.temp.commission = Number(newVal.commission) * 100
+					this.temp.slippage = Number(newVal.slippage) * 100
 					var year
 					const starArr = newVal.start_date.toString().split('-')
 					const endArr = newVal.end_date.toString().split('-')
@@ -561,10 +582,10 @@ export default {
 
 			if (CIQ.indicatorList) {
 				if (CIQ.indicatorList.length != 0) {
-					console.log(
-						'data already in indicatorList from entry-form',
-						CIQ.indicatorList.length
-					)
+					// console.log(
+					// 	'data already in indicatorList from entry-form',
+					// 	CIQ.indicatorList.length
+					// )
 					indicatorList = this.$store.state.indicatorsList
 					indicatorList = CIQ.indicatorList
 				}
@@ -641,10 +662,10 @@ export default {
 			var indicatorList = []
 			if (CIQ.indicatorList) {
 				if (CIQ.indicatorList.length != 0) {
-					console.log(
-						'data already in indicatorList from entry-form',
-						CIQ.indicatorList.length
-					)
+					// console.log(
+					// 	'data already in indicatorList from entry-form',
+					// 	CIQ.indicatorList.length
+					// )
 					indicatorList = this.$store.state.indicatorsList
 					indicatorList = CIQ.indicatorList
 				}
@@ -670,12 +691,18 @@ export default {
 		saveBacktestData() {
 			let checked = true
 			if (this.bd.name) {
-				if (this.bd.start_date) {
-					// 保存 backtestform 的数据
-					this.$store.commit('setBd', this.bd)
-					return checked
+				if (this.$store.state.backtestNameList.indexOf(this.bd.name) == -1) {
+					if (this.bd.start_date) {
+						// 保存 backtestform 的数据
+						this.$store.commit('setBd', this.bd)
+						return checked
+					} else {
+						this.$message.error('Please select start date')
+						checked = false
+						return checked
+					}
 				} else {
-					this.$message.error('Please select start date')
+					this.$message.error('The backtest name already exists')
 					checked = false
 					return checked
 				}
@@ -697,7 +724,7 @@ export default {
 	margin-right: 0px;
 }
 /deep/.dateBox .el-input__icon {
-	width: 590px;
+	width: 17px;
 }
 .comUnitNote {
 	position: absolute;

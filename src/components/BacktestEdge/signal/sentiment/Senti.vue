@@ -160,6 +160,23 @@ export default {
 			},
 			immediate: true,
 			deep: true
+		},
+		// 用于解决 entry 和 exit 选择相同 indicator 而无法展示极值的问题
+		sentiUrl: {
+			handler(newVal) {
+				if (newVal) {
+					let vm = this
+					let extremeValue = this.extremeValue
+					extremeValue.forEach((item) => {
+						if (item.indicator) {
+							if (item.indicator === newVal) {
+								vm.senti.extreme_pessimism = item.extremePessimism
+								vm.senti.extreme_optimism = item.extremeOptimism
+							}
+						}
+					})
+				}
+			}
 		}
 	},
 	methods: {
@@ -206,6 +223,7 @@ export default {
 					}
 				}
 			})
+			console.log('setperiod', this.sentiVal)
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				if (
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url

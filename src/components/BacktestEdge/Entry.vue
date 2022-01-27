@@ -12,6 +12,7 @@
 			</div>
 		</el-form>
 		<indicator
+			:editData="editData"
 			:criteria="'entry'"
 			ref="indiChild"
 			@getSentiUrl="getSentiUrl"
@@ -64,9 +65,10 @@ import cci from '@/components/BacktestEdge/signal/technical/Cci'
 import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
 import macd from '@/components/BacktestEdge/signal/technical/Macd.vue'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
-import indicator from '@/components/BacktestEdge/signal/indicator/Indicator'
+import indicator from '@/components/BacktestEdge/signal/indicator/indicator'
 export default {
 	name: 'entry',
+	props: { editBacktestData: Object },
 	data() {
 		return {
 			fd: {
@@ -86,7 +88,25 @@ export default {
 			sentiVal: '',
 			techVal: '',
 			techIndiValue: '',
-			indicatorRadio: 'sentiment'
+			indicatorRadio: 'sentiment',
+			editData: {}
+		}
+	},
+	watch: {
+		editBacktestData: {
+			handler(newVal) {
+				if (JSON.stringify(newVal) != '{}') {
+					this.fd.direction = newVal.entry.direction
+					this.getExitDirection(newVal.entry.direction)
+					console.log('传到entry的编辑数据', newVal)
+					let data = newVal
+					delete data.exit
+					delete data.exit_description
+					this.editData = data
+				}
+			},
+			immediate: true,
+			deep: true
 		}
 	},
 	components: {

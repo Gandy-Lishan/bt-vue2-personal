@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from "axios"
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
@@ -17,6 +18,8 @@ export default new Vuex.Store({
 			inputOriginalAssetValue: ''
 		},
 		backtestInfo: {
+			entry_description: '',
+			exit_description: '',
 			entry: {
 				direction: 'Long',
 				frequency: 'Daily',
@@ -100,6 +103,7 @@ export default new Vuex.Store({
 		allSymbolsList: [],
 		stocksList: [],
 		indexsList: [],
+
 		editBacktestSetUpData: {},
 		isShowExitForm: true,
 		tabIndex: 0,
@@ -364,6 +368,12 @@ export default new Vuex.Store({
 				// arr = unique(arr)
 				// state.backtestNameList = arr
 			}
+				// 将 backtest 名字保存起来
+			if(state.backtestNameList.indexOf(obj.name) == -1){
+				state.backtestNameList.push(obj.name)
+			}
+			console.log('名字',state.backtestNameList);
+			
 		},
 		deleteIndicator(state, val) {
 			state.backtestInfo[val.criteria].signals[val.index].sentimentIndicator =
@@ -393,6 +403,8 @@ export default new Vuex.Store({
 		},
 		clearBacktest(state) {
 			state.backtestInfo = {
+				entry_description: '',
+				exit_description: '',
 				entry: {
 					direction: '',
 					frequency: '',
@@ -435,10 +447,12 @@ export default new Vuex.Store({
 			
 		},
 		saveDescription(state, desObj) {
-			state.backtestInfo[desObj.criteria].description = desObj.description
+			state.backtestInfo[desObj.criteria+'_description'] = desObj.description
 		},
 		initialBacktestInfo(state) {
 			state.backtestInfo = {
+				entry_description: '',
+				exit_description: '',
 				entry: {
 					direction: 'Long',
 					frequency: 'Daily',

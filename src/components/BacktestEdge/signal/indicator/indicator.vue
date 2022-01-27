@@ -58,6 +58,7 @@ import deepClone1 from '@/tools/deepClone.js'
 export default {
 	props: {
 		// indicatorEditData: Object
+		editData: Object,
 		criteria: String
 	},
 	data() {
@@ -101,32 +102,40 @@ export default {
 				let init = deepClone1(this.$options.data())
 				Object.assign(this.$data, init)
 			}
+		},
+		editData: {
+			handler(newVal) {
+				if (JSON.stringify(newVal) != '{}') {
+					console.log('传到ids的数据', newVal)
+					if (newVal[this.criteria].signals[0].analysis === 'Sentiment') {
+						this.indicatorRadio = 'Sentiment Indicators'
+						this.isCheckedIndicators = false
+						this.si.sentimentIndicator =
+							newVal[this.criteria].signals[0].indicator
+						const obj = {}
+						obj.criteria = this.criteria
+						obj.index = 0
+						obj.value = this.si.sentimentIndicator
+						this.$store.commit('getSentiValue', obj)
+						this.handleSentimentSelect(obj)
+					} else if (
+						newVal[this.criteria].signals[0].analysis === 'Technical'
+					) {
+						this.indicatorRadio = 'Technical Indicators'
+						this.isCheckedIndicators = true
+						this.si.technicalIndicator =
+							newVal[this.criteria].signals[0].indicator
+						const obj = {}
+						obj.criteria = this.criteria
+						obj.index = 0
+						obj.value = this.si.technicalIndicator
+						this.$store.commit('getTechValue', obj)
+					}
+				}
+			},
+			immediate: true,
+			deep: true
 		}
-		// indicatorEditData: {
-		// 	handler(newVal) {
-		// 		if (newVal.sentimentIndicator) {
-		// 			this.indicatorRadio = 'Sentiment Indicators'
-		// 			this.isCheckedIndicators = false
-		// 			this.si.sentimentIndicator = newVal.sentimentIndicator
-		// 			const obj = {}
-		// 			obj.criteria = this.criteria
-		// 			obj.index = this.tabIndex
-		// 			obj.value = newVal.sentimentIndicator
-		// 			this.$store.commit('getSentiValue', obj)
-		// 		} else if (newVal.technicalIndicator) {
-		// 			this.indicatorRadio = 'Technical Indicators'
-		// 			this.isCheckedIndicators = true
-		// 			this.si.technicalIndicator = newVal.technicalIndicator
-		// 			const obj = {}
-		// 			obj.criteria = this.criteria
-		// 			obj.index = this.tabIndex
-		// 			obj.value = newVal.technicalIndicator
-		// 			this.$store.commit('getTechValue', obj)
-		// 		}
-		// 	},
-		// 	immediate: true,
-		// 	deep: true
-		// }
 	},
 	methods: {
 		//  load sentiment list
@@ -343,25 +352,59 @@ export default {
 				{ value: 'Moving Average' }
 			]
 		},
-		setIndicatorRadio(obj) {
-			let vm = this
-			this.indicatorRadio = obj.radio
-			var data = Object.assign(obj)
-			if (data.sentimentIndicator) {
-				vm.si['sentimentIndicator'] = data['sentimentIndicator']
-				vm.$set(vm.si, 'sentimentIndicator', data.sentimentIndicator)
-				this.$emit('getSentiVal', data.sentimentIndicator)
-				const sentiObj = data
-				sentiObj.value = sentiObj.sentimentIndicator
-				this.$store.commit('getSentiValue', sentiObj)
-				this.isCheckedIndicators = false
-			} else if (data.technicalIndicator) {
-				vm.$set(this.si, 'technicalIndicator', obj.technicalIndicator)
-				this.$emit('getTechVal', obj.technicalIndicator)
-				const sentiObj = data
-				sentiObj.value = sentiObj.technicalIndicator
-				this.$store.commit('getTechValue', sentiObj)
-				this.isCheckedIndicators = true
+		// setIndicatorRadio(obj) {
+		// 	let vm = this
+		// 	this.indicatorRadio = obj.radio
+		// 	var data = Object.assign(obj)
+		// 	if (data.sentimentIndicator) {
+		// 		vm.si['sentimentIndicator'] = data['sentimentIndicator']
+		// 		vm.$set(vm.si, 'sentimentIndicator', data.sentimentIndicator)
+		// 		this.$emit('getSentiVal', data.sentimentIndicator)
+		// 		const sentiObj = data
+		// 		sentiObj.value = sentiObj.sentimentIndicator
+		// 		this.$store.commit('getSentiValue', sentiObj)
+		// 		this.isCheckedIndicators = false
+		// 	} else if (data.technicalIndicator) {
+		// 		vm.$set(this.si, 'technicalIndicator', obj.technicalIndicator)
+		// 		this.$emit('getTechVal', obj.technicalIndicator)
+		// 		const sentiObj = data
+		// 		sentiObj.value = sentiObj.technicalIndicator
+		// 		this.$store.commit('getTechValue', sentiObj)
+		// 		this.isCheckedIndicators = true
+		// 	}
+		// },
+		saveIndicator() {
+			let checked = true
+			if (this.indicatorRadio === 'Sentiment Indicators') {
+				if (this.si.sentimentIndicator) {
+					let obj = {}
+					obj.criteria = this.criteria
+					obj.index = 0
+					obj.value = this.si.sentimentIndicator
+					this.$store.commit('getSentiValue', obj)
+					return checked
+				} else {
+					this.$message.error(
+						'Please select' + ' ' + this.criteria + ' ' + 'sentiment indicator'
+					)
+					checked = false
+					return checked
+				}
+			} else if (this.indicatorRadio === 'Technical Indicators') {
+				if (this.si.technicalIndicator) {
+					let obj = {}
+					obj.criteria = this.criteria
+					obj.index = 0
+					obj.value = this.si.technicalIndicator
+					this.$store.commit('getTechValue', obj)
+					return checked
+				} else {
+					this.$message.error(
+						'Please select' + ' ' + this.criteria + ' ' + ' technical indicator'
+					)
+					checked = false
+					return checked
+				}
 			}
 		}
 	}
@@ -375,7 +418,7 @@ export default {
 	width: 293px;
 }
 /deep/ .el-input__icon {
-	width: 55px;
+	width: 17px;
 }
 /deep/ .el-form-item {
 	margin-bottom: 10px;

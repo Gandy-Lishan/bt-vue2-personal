@@ -33,14 +33,14 @@
 						label="Entry"
 						align="center"
 						show-overflow-tooltip
-						prop="entry"
+						prop="entry_description"
 					>
 					</el-table-column>
 					<el-table-column
 						label="Exit"
 						align="center"
 						show-overflow-tooltip
-						prop="exit"
+						prop="exit_description"
 					>
 					</el-table-column>
 					<el-table-column
@@ -59,7 +59,7 @@
 							</div>
 						</template>
 					</el-table-column>
-					<!-- <el-table-column label="Status" align="center">
+					<!-- <el-table-column>
 						<template slot-scope="scope">
 							<span v-if="scope.row.status == 0">Ready to run</span>
 							<span v-else-if="scope.row.status == 1"
@@ -71,16 +71,22 @@
 					</el-table-column> -->
 					<el-table-column
 						align="center"
-						prop="totalTrades"
 						show-overflow-tooltip
 						label="Total Trades"
-					></el-table-column>
+					>
+						<template slot-scope="scope">
+							{{ scope.row.result['Total Trades'] }}
+						</template>
+					</el-table-column>
 					<el-table-column
 						align="center"
-						prop="totalReturn"
 						show-overflow-tooltip
 						label="Total Return"
-					></el-table-column>
+						><template slot-scope="scope">
+							{{ scope.row.result['Total Return (%)'] }}</template
+						>
+					</el-table-column>
+
 					<el-table-column align="center" width="300px">
 						<template slot-scope="scope">
 							<el-row>
@@ -244,6 +250,9 @@ export default {
 			if (res.status === 200) {
 				this.loading = false
 				this.backtestList = res.data.results
+				res.data.results.forEach((element) => {
+					if (element.result !== '') element.result = JSON.parse(element.result)
+				})
 				this.queryInfo.total = res.data.count
 			} else {
 				this.loading = false

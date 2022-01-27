@@ -25,12 +25,17 @@
 				<el-tabs v-model="activeName" type="card" :tab-position="tabPosition">
 					<el-tab-pane label="Set up Backtest" name="first">
 						<div class="set-up-container">
-							<set-up ref="setUpChild"></set-up>
+							<set-up
+								ref="setUpChild"
+								:backtestEditData="backtestEditData"
+								:editFrequency="editFrequency"
+							></set-up>
 							<div class="criteria-container">
 								<div class="criteria-box">
 									<entry
 										ref="entryChild"
 										@setExitDirection="setExitDirection"
+										:editBacktestData="pubilcEditData"
 									></entry>
 									<exit ref="exitChild" :exitDirection="exitDirection"></exit>
 								</div>
@@ -44,11 +49,23 @@
 						</div>
 					</el-tab-pane>
 					<el-tab-pane label="Backtest History" name="second"
-						><history ref="historyChild"></history
+						><history
+							ref="historyChild"
+							@goTobacktestSetupForm="goTobacktestSetupForm"
+							@goBacktestResultForm="goBacktestResultForm"
+						></history
 					></el-tab-pane>
 					<el-tab-pane label="Backtest Results" name="third"
-						><result></result>
-						<performance></performance>
+						><div class="set-up-container">
+							<result
+								:backtestEditData="backtestEditData"
+								:editFrequency="editFrequency"
+							></result>
+						</div>
+						<performance
+							ref="performanceChild"
+							:backtestEditData="backtestEditData"
+						></performance>
 					</el-tab-pane>
 					<el-tab-pane label="My Favorites" name="forth"> </el-tab-pane>
 					<el-tab-pane label="Sample Backtests" name="fifth"> </el-tab-pane>
@@ -61,6 +78,7 @@
 const _ = require('lodash')
 const throttle = _.throttle
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import deepClone1 from '@/tools/deepClone.js'
 import SignalCode from '@/tools/codeTool.js'
 import chart from '@/components/chart/index.vue'
 import setUp from '@/components/BacktestEdge/SetUp.vue'
@@ -77,9 +95,13 @@ export default {
 			activeName: 'first',
 			clientHeight: 0,
 			exitDirection: '',
-			loading: false
+			loading: false,
+			backtestEditData: {},
+			pubilcEditData: {},
+			editFrequency: ''
 		}
 	},
+
 	components: {
 		chart: chart,
 		'set-up': setUp,
@@ -207,6 +229,7 @@ export default {
 								withCredentials: true
 							})
 							.then((res) => {
+								console.log('创建后传过来的数据', res)
 								if (res.status === 201) {
 									// vm.$store.commit('clearBacktest')
 									// vm.$store.commit('tryClear')
@@ -229,6 +252,45 @@ export default {
 		},
 		goToHistoryForm() {
 			this.activeName = 'second'
+		},
+		goTobacktestSetupForm(id) {
+			// backtestEditData
+			let vm = this
+			this.activeName = 'first'
+			this.backtestEditData = {}
+			this.$http.get('/dev/seeparams/' + id + '/').then((res) => {
+				let data = res.data
+				data.old_uuid = id
+				data.entry = JSON.parse(data.entry)
+				data.exit = JSON.parse(data.exit)
+				delete data.results
+				delete data.status
+				delete data.backtest_id
+				delete data.user_id
+				delete data.uuid
+				let signalCode = new SignalCode()
+				if (data.entry.signals instanceof Array) {
+					data.entry.signals[0] = signalCode.decode(
+						data.entry.signals[0]['code']
+					)
+				}
+				if (data.exit.signals instanceof Array) {
+					data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
+				}
+				// edit 的公共数据
+				// vm.pubilcEditData = {}
+				vm.pubilcEditData.entry_description = data.entry_description
+				vm.pubilcEditData.exit_description = data.exit_description
+				vm.pubilcEditData.entry = data.entry
+				vm.pubilcEditData.exit = data.exit
+				// 拿到 frequency 的值
+				vm.editFrequency = vm.pubilcEditData.entry.frequency
+				vm.backtestEditData = data
+			})
+		},
+		goBacktestResultForm(row) {
+			this.activeName = 'third'
+			this.$refs.performanceChild.getResultData()
 		}
 	}
 }
