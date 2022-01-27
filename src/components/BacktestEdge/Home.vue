@@ -284,7 +284,6 @@ export default {
 				}
 				// edit 的公共数据
 				// vm.pubilcEditData = {}
-
 				vm.pubilcEditData.entry_description = data.entry_description
 				vm.pubilcEditData.exit_description = data.exit_description
 				vm.pubilcEditData.entry = data.entry

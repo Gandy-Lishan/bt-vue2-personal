@@ -256,7 +256,6 @@ export default {
 					if (element.result !== '') element.result = JSON.parse(element.result)
 				})
 				this.queryInfo.total = res.data.count
-				console.log('相应的shujv', res.data.results)
 			} else {
 				this.loading = false
 			}
@@ -267,7 +266,8 @@ export default {
 			vm.clearInterval = clearInterval()
 			vm.timer = setInterval(() => {
 				vm.$http.get('/dev/status/' + id + '/').then((res) => {
-					if (res.data.status === 2) {
+					console.log('状态码',res.data.status);
+					if (res.data.status !==1){
 						clearInterval(vm.timer)
 						vm.getBacktestList()
 						vm.loading = false
@@ -280,18 +280,6 @@ export default {
 							duration: 0
 						})
 					}
-					// 报错， 有交易却显示没交易
-					// else if (res.data.status === 0 || res.data.status === 3) {
-					// 	clearInterval(vm.timer)
-					// 	vm.getBacktestList()
-					// 	vm.loading = false
-					// 	vm.$notify({
-					// 		title: 'No trades',
-					// 		message: 'No trades, please change parameter.',
-					// 		offset: 100,
-					// 		type: 'warning'
-					// 	})
-					// }
 				})
 			}, 3000)
 		},
