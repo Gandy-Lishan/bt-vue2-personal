@@ -1,7 +1,7 @@
 <template>
 	<div class="indicator-box">
-		<el-form :model="si" ref="siForm" :rules="siRules">
-			<div class="indicator-container">
+		<el-form :model="si" ref="siForm">
+			<div class="indicator-container sentiBox">
 				<el-form-item>
 					<el-radio
 						v-model="indicatorRadio"
@@ -15,6 +15,7 @@
 						<el-autocomplete
 							prefix-icon="el-icon-search"
 							class="inline-input"
+							clearable
 							v-model="si.sentimentIndicator"
 							:disabled="isCheckedIndicators"
 							:fetch-suggestions="indicatorSentimentSearch"
@@ -25,7 +26,7 @@
 					</div>
 				</el-form-item>
 			</div>
-			<div class="indicator-container">
+			<div class="indicator-container techBox">
 				<el-form-item>
 					<el-radio
 						v-model="indicatorRadio"
@@ -39,6 +40,7 @@
 						<el-autocomplete
 							:disabled="!isCheckedIndicators"
 							class="inline-input"
+							clearable
 							prefix-icon="el-icon-search"
 							v-model="si.technicalIndicator"
 							:fetch-suggestions="indicatorTechnicalSearch"
@@ -58,7 +60,6 @@ import deepClone1 from '@/tools/deepClone.js'
 export default {
 	props: {
 		// indicatorEditData: Object
-		editIndiData: Object,
 		criteria: String
 	},
 	data() {
@@ -83,11 +84,7 @@ export default {
 				technicalIndicator: ''
 			},
 			isCheckedIndicators: false,
-			sentimentIndicatorList: this.$store.state.sentimentIndicatorList,
-			siRules: {
-				sentimentIndicator: [{ validator: validateSenti, change: 'blur' }],
-				technicalIndicator: [{ validator: validateTech, change: 'blur' }]
-			}
+			sentimentIndicatorList: this.$store.state.sentimentIndicatorList
 		}
 	},
 	computed: {
@@ -103,70 +100,70 @@ export default {
 				Object.assign(this.$data, init)
 			}
 		},
-		editIndiData: {
-			async handler(newVal) {
-				if (JSON.stringify(newVal) != '{}') {
-					let vm = this
-					if (newVal[this.criteria].signals[0].analysis === 'Sentiment') {
-						this.$emit('getIndicatorRadio', 'sentiment')
-						this.$emit('getSentiVal', this.si.sentimentIndicator)
-						this.indicatorRadio = 'Sentiment Indicators'
-						this.isCheckedIndicators = false
-						this.si.sentimentIndicator =
-							newVal[this.criteria].signals[0].indicator
-						// 往父组件传值
-						let sentimentList = this.$store.state.sentimentIndicatorList
-						if (sentimentList.length == 0) {
-							const res = await this.$http.get(
-								'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
-								{
-									auth: {
-										username: 'sentimentrader_backtest_api',
-										password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-									}
-								}
-							)
-							sentimentList = res.data.map((obj) => {
-								console.log(
-									frequency.toUpperCase().indexOf(obj.updated.toUpperCase())
-								)
-								if (
-									frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !==
-									-1
-								) {
-									if (obj.chart_name && obj.url && obj.updated) {
-										return {
-											value: obj.chart_name,
-											url: obj.url,
-											updated: obj.updated
-										}
-									}
-								}
-							})
-						}
-						let indi = this.si.sentimentIndicator
-						sentimentList.forEach((obj) => {
-							if (indi.toUpperCase() == obj.value.toUpperCase()) {
-								vm.$emit('getSentiUrl', obj.url)
-							}
-						})
-						// if(this.$store.state.sentimentIndicatorList)
-					} else if (
-						newVal[this.criteria].signals[0].analysis === 'Technical'
-					) {
-						this.$emit('getIndicatorRadio', 'technical')
-						let technicalIndicator = newVal[this.criteria].signals[0].indicator
-						let item = {}
-						item.value = technicalIndicator
-						vm.handleTechnicalSelect(item)
-						this.indicatorRadio = 'Technical Indicators'
-						this.isCheckedIndicators = true
-						this.$emit('getTechVal', vm.si.technicalIndicator)
-					}
-				}
-			},
-			deep: true
-		}
+		// editIndiData: {
+		// 	async handler(newVal) {
+		// 		if (JSON.stringify(newVal) != '{}') {
+		// 			let vm = this
+		// 			if (newVal[this.criteria].signals[0].analysis === 'Sentiment') {
+		// 				this.$emit('getIndicatorRadio', 'sentiment')
+		// 				this.$emit('getSentiVal', this.si.sentimentIndicator)
+		// 				this.indicatorRadio = 'Sentiment Indicators'
+		// 				this.isCheckedIndicators = false
+		// 				this.si.sentimentIndicator =
+		// 					newVal[this.criteria].signals[0].indicator
+		// 				// 往父组件传值
+		// 				let sentimentList = this.$store.state.sentimentIndicatorList
+		// 				if (sentimentList.length == 0) {
+		// 					const res = await this.$http.get(
+		// 						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+		// 						{
+		// 							auth: {
+		// 								username: 'sentimentrader_backtest_api',
+		// 								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+		// 							}
+		// 						}
+		// 					)
+		// 					sentimentList = res.data.map((obj) => {
+		// 						console.log(
+		// 							frequency.toUpperCase().indexOf(obj.updated.toUpperCase())
+		// 						)
+		// 						if (
+		// 							frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !==
+		// 							-1
+		// 						) {
+		// 							if (obj.chart_name && obj.url && obj.updated) {
+		// 								return {
+		// 									value: obj.chart_name,
+		// 									url: obj.url,
+		// 									updated: obj.updated
+		// 								}
+		// 							}
+		// 						}
+		// 					})
+		// 				}
+		// 				let indi = this.si.sentimentIndicator
+		// 				sentimentList.forEach((obj) => {
+		// 					if (indi.toUpperCase() == obj.value.toUpperCase()) {
+		// 						vm.$emit('getSentiUrl', obj.url)
+		// 					}
+		// 				})
+		// 				// if(this.$store.state.sentimentIndicatorList)
+		// 			} else if (
+		// 				newVal[this.criteria].signals[0].analysis === 'Technical'
+		// 			) {
+		// 				this.$emit('getIndicatorRadio', 'technical')
+		// 				let technicalIndicator = newVal[this.criteria].signals[0].indicator
+		// 				let item = {}
+		// 				item.value = technicalIndicator
+		// 				vm.handleTechnicalSelect(item)
+		// 				this.indicatorRadio = 'Technical Indicators'
+		// 				this.isCheckedIndicators = true
+		// 				this.$emit('getTechVal', vm.si.technicalIndicator)
+		// 			}
+		// 		}
+		// 	},
+		// 	deep: true
+		// }
 	},
 	methods: {
 		//  load sentiment list
@@ -438,6 +435,65 @@ export default {
 					return checked
 				}
 			}
+		},
+		async setEditData(newVal) {
+			if (JSON.stringify(newVal) != '{}') {
+				let vm = this
+				if (newVal[this.criteria].signals[0].analysis === 'Sentiment') {
+					this.$emit('getIndicatorRadio', 'sentiment')
+					// this.$emit('getSentiVal', this.si.sentimentIndicator)
+					this.indicatorRadio = 'Sentiment Indicators'
+					this.isCheckedIndicators = false
+					this.si.sentimentIndicator =
+						newVal[this.criteria].signals[0].indicator
+					// 往父组件传值
+					let sentimentList = this.$store.state.sentimentIndicatorList
+					if (sentimentList.length == 0) {
+						const res = await this.$http.get(
+							'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+							{
+								auth: {
+									username: 'sentimentrader_backtest_api',
+									password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+								}
+							}
+						)
+						sentimentList = res.data.map((obj) => {
+							console.log(
+								frequency.toUpperCase().indexOf(obj.updated.toUpperCase())
+							)
+							if (
+								frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !==
+								-1
+							) {
+								if (obj.chart_name && obj.url && obj.updated) {
+									return {
+										value: obj.chart_name,
+										url: obj.url,
+										updated: obj.updated
+									}
+								}
+							}
+						})
+					}
+					let indi = this.si.sentimentIndicator
+					sentimentList.forEach((obj) => {
+						if (indi.toUpperCase() == obj.value.toUpperCase()) {
+							vm.$emit('getSentiUrl', obj.url)
+						}
+					})
+					// if(this.$store.state.sentimentIndicatorList)
+				} else if (newVal[this.criteria].signals[0].analysis === 'Technical') {
+					this.$emit('getIndicatorRadio', 'technical')
+					let technicalIndicator = newVal[this.criteria].signals[0].indicator
+					let item = {}
+					item.value = technicalIndicator
+					vm.handleTechnicalSelect(item)
+					this.indicatorRadio = 'Technical Indicators'
+					this.isCheckedIndicators = true
+					// this.$emit('getTechVal', vm.si.technicalIndicator)
+				}
+			}
 		}
 	}
 }
@@ -446,8 +502,12 @@ export default {
 .indicator-container {
 	display: flex;
 }
-/deep/ .el-input--prefix .el-input__inner {
-	width: 293px;
+/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
+	width: 329px;
+	padding-left: 30px;
+}
+/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+	width: 334px;
 	padding-left: 30px;
 }
 /deep/ .el-input__icon {

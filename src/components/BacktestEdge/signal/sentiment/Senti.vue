@@ -116,7 +116,6 @@ export default {
 		criteria: String,
 		sentiUrl: String,
 		sentiVal: String,
-		editIndiData: Object
 	},
 	data() {
 		return {
@@ -159,33 +158,6 @@ export default {
 						}
 					}
 				})
-			},
-			immediate: true,
-			deep: true
-		},
-		editIndiData: {
-			handler(newVal) {
-				if (JSON.stringify(newVal) != '{}') {
-					this.description = newVal[this.criteria + '_description']
-					this.senti.extreme_optimism =
-						newVal[this.criteria].signals[0].extreme_optimism
-					this.senti.extreme_pessimism =
-						newVal[this.criteria].signals[0].extreme_pessimism
-					this.senti.condition = Number(
-						newVal[this.criteria].signals[0].condition
-					)
-					this.senti.value = newVal[this.criteria].signals[0].value
-					this.conditionRadio = 'Sentiment Value'
-					this.disabled = false
-					delete this.senti.period
-					let period = newVal[this.criteria].signals[0].period
-					if (period) {
-						this.conditionRadio = 'Sentiment Moving Average'
-						this.senti.period = period
-						this.setPeriod(period)
-						this.disabled = true
-					}
-				}
 			},
 			immediate: true,
 			deep: true

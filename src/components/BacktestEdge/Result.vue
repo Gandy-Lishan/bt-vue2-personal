@@ -1,10 +1,6 @@
 <template>
 	<div class="backtest_container result-container">
-		<el-form
-			:model="backtestEditData"
-			label-position="left"
-			:rules="setUpFormRules"
-		>
+		<el-form :model="backtestEditData" label-position="left">
 			<el-row>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12">
 					<el-form-item label="Starting Capital:" prop="startingCapital">
@@ -13,11 +9,10 @@
 					<el-form-item label="Commission:" prop="commission">
 						<el-input v-model="temp.commission" disabled></el-input>
 					</el-form-item>
-
-					<span class="comUnitNote">(per share)</span>
+					<span class="comUnitNote">(%)</span>
 					<el-form-item label="Slippage:" prop="slippage">
 						<el-input
-							v-model="temp.slippage"
+							v-model="backtestEditData.slippage"
 							disabled
 						></el-input> </el-form-item
 					><span class="sliUnitNote">(per trade)</span>
@@ -145,14 +140,9 @@ export default {
 			loading: false,
 			options: [],
 			temp: { commission: '0.1', slippage: '0.1' },
-			setUpFormRules: {
-				name: [
-					{ required: true, message: 'Please enter name', trigger: 'blur' }
-				]
-			},
 			sentimentIndicatorList: []
 		}
-	}
+	},
 }
 </script>
 <style lang="less" scoped>

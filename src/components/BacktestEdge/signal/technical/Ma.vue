@@ -121,7 +121,8 @@ export default {
 		criteria: String,
 		techUrl: String,
 		techVal: String,
-		editIndiData: Object
+		// editIndiData: Object,
+		direction: String
 	},
 	data() {
 		return {
@@ -142,34 +143,9 @@ export default {
 			disabled: false,
 			maRadio: 'SMA',
 			period: 5,
-			description: ''
-		}
-	},
-	watch: {
-		editIndiData: {
-			handler(newVal) {
-				if (JSON.stringify(newVal) != '{}') {
-					this.tech.ids = newVal[this.criteria].signals[0].ids
-					this.tech.condition = Number(
-						newVal[this.criteria].signals[0].condition
-					)
-					this.tech.period = newVal[this.criteria].signals[0].period
-					this.conditionRadio = 'Symbol Close'
-					this.disabled = false
-					this.getSCvalue(this.tech.period)
-					let ma_period = newVal[this.criteria].signals[0].ma_period
-					if (ma_period) {
-						this.conditionRadio = 'Moving Average'
-						this.disabled = true
-						this.tech.ma_period = ma_period
-						this.getMaPeriodValue(ma_period)
-						this.getMaValue(newVal[this.criteria].signals[0].period)
-					}
-					this.description = newVal[this.criteria + '_description']
-				}
-			},
-			immediate: true,
-			deep: true
+			description: '',
+
+			editTechVal: ''
 		}
 	},
 	methods: {
@@ -231,19 +207,28 @@ export default {
 			this.setDesciption()
 		},
 		setDesciption() {
+			let criteria = ''
+			if (this.criteria == 'entry') {
+				criteria = 'E:'
+			} else if (this.criteria == 'exit') {
+				criteria = 'X:'
+			}
+			let direction = this.direction + ':'
+			let techVal = this.techVal
 			let period = this.tech.period ? this.tech.period : ''
-			let ma_period =
-				this.conditionRadio == 'Moving Average' ? this.tech.ma_period : ''
+			let ma_period = this.techVal ? this.techVal : this.editTechVal
+			this.conditionRadio == 'Moving Average' ? this.tech.ma_period : ''
 			let condition = this.conditions[this.tech.condition].label
-			let description =
-				this.conditionRadio +
-				' ' +
-				ma_period +
-				' ' +
-				condition +
-				' ' +
-				this.tech.period
-			this.description = description
+			// let description =
+			// 	this.conditionRadio +
+			// 	' ' +
+			// 	ma_period +
+			// 	' ' +
+			// 	condition +
+			// 	' ' +
+			// 	this.tech.period
+			this.description = `${criteria} ${direction} ${this.conditionRadio} ${ma_period} ${condition} ${this.tech.period}`
+			console.log('描述', this.description)
 		},
 		getMaPeriodValue(val) {
 			this.period = val
@@ -499,7 +484,26 @@ export default {
 			}
 		},
 		// 设置编辑的数据
-		setEditData(editData) {}
+		setEditData(newVal) {
+			if (JSON.stringify(newVal) != '{}') {
+				this.tech.ids = newVal[this.criteria].signals[0].ids
+				this.tech.condition = Number(newVal[this.criteria].signals[0].condition)
+				this.tech.period = newVal[this.criteria].signals[0].period
+				this.conditionRadio = 'Symbol Close'
+				this.disabled = false
+				this.getSCvalue(this.tech.period)
+				let ma_period = newVal[this.criteria].signals[0].ma_period
+				if (ma_period) {
+					this.conditionRadio = 'Moving Average'
+					this.disabled = true
+					this.tech.ma_period = ma_period
+					this.getMaPeriodValue(ma_period)
+					this.getMaValue(newVal[this.criteria].signals[0].period)
+				}
+				this.editTechVal = newVal[this.criteria].signals[0].indicator
+				this.setDesciption()
+			}
+		}
 	}
 }
 </script>
@@ -521,5 +525,8 @@ export default {
 }
 /deep/.el-input--suffix .el-input__inner {
 	padding-right: 5px;
+}
+/deep/ .el-form-item__label {
+	margin-right: 36px;
 }
 </style>

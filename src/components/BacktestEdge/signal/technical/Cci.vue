@@ -68,7 +68,8 @@ export default {
 		criteria: String,
 		techUrl: String,
 		techVal: String,
-		editIndiData: Object
+		// editIndiData: Object,
+		direction: String
 	},
 	data() {
 		return {
@@ -89,32 +90,25 @@ export default {
 				{ value: 4, label: 'CrossBelow' }
 			],
 			conditionRadio: 'CCI Value',
-			description: ''
-		}
-	},
-	watch: {
-		editIndiData: {
-			handler(newVal) {
-				if (JSON.stringify(newVal) != '{}') {
-					this.tech.ids = newVal[this.criteria].signals[0].ids
-					this.tech.condition = Number(
-						newVal[this.criteria].signals[0].condition
-					)
-					this.tech.value = newVal[this.criteria].signals[0].value
-					this.description = newVal[this.criteria + '_description']
-				}
-			},
-			immediate: true,
-			deep: true
+			description: '',
+
+			editTechVal: ''
 		}
 	},
 	methods: {
 		setDesciption() {
+			let criteria = ''
+			if (this.criteria == 'entry') {
+				criteria = 'E:'
+			} else if (this.criteria == 'exit') {
+				criteria = 'X:'
+			}
+			let direction = this.direction + ':'
+			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let period = this.tech.period ? this.tech.period : ''
 			let condition = this.conditions[this.tech.condition].label
-			let description =
-				this.techVal + ' ' + period + ' ' + condition + ' ' + this.tech.value
-			this.description = description
+			this.description = `${criteria} ${direction} ${techVal} ${period} ${condition} ${this.tech.value}`
+			console.log('描述', this.description)
 		},
 		saveCondition() {
 			let checked = true
@@ -139,6 +133,15 @@ export default {
 				this.$message.error('Please Input Value')
 				checked = false
 				return checked
+			}
+		},
+		setEditData(newVal) {
+			if (JSON.stringify(newVal) != '{}') {
+				this.tech.ids = newVal[this.criteria].signals[0].ids
+				this.tech.condition = Number(newVal[this.criteria].signals[0].condition)
+				this.tech.value = newVal[this.criteria].signals[0].value
+				this.editTechVal = newVal[this.criteria].signals[0].indicator
+				this.setDesciption()
 			}
 		}
 	}

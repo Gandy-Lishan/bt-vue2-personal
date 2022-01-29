@@ -1,37 +1,25 @@
 <template>
 	<div class="backtest_container">
-		<el-form
-			ref="backtestSetupForm"
-			:model="bd"
-			label-position="left"
-			:rules="setUpFormRules"
-		>
+		<el-form ref="backtestSetupForm" :model="bd" label-position="left">
 			<el-row>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12">
 					<el-form-item label="Starting Capital:" prop="startingCapital">
 						<el-input
 							v-model="bd.capital"
-							v-direction="{ x: 1, y: 0 }"
 							@input="validateStartingCapital"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="Commission:" prop="commission">
 						<el-input
 							v-model="temp.commission"
-							v-direction="{ x: 2, y: 0 }"
 							@change="getCommission"
 							@input="validateCommission"
 						></el-input>
 					</el-form-item>
 
-					<span class="comUnitNote">(per share)</span>
+					<span class="comUnitNote">(%)</span>
 					<el-form-item label="Slippage:" prop="slippage">
-						<el-input
-							v-model="temp.slippage"
-							@change="getSlippage"
-							v-direction="{ x: 3, y: 0 }"
-							@input="validateSlippage"
-						></el-input> </el-form-item
+						<el-input v-model="bd.slippage"></el-input> </el-form-item
 					><span class="sliUnitNote">(per trade)</span>
 					<el-form-item label="Benchmark:" prop="benchmark">
 						<div class="enterSymbolBox">
@@ -144,11 +132,7 @@
 						prop="name"
 						placeholder="Give the backtest a name"
 					>
-						<el-input
-							v-model="bd.name"
-							v-direction="{ x: 4, y: 0 }"
-							style="width: 720px"
-						></el-input>
+						<el-input v-model="bd.name" style="width: 720px"></el-input>
 					</el-form-item>
 				</div>
 			</el-row>
@@ -167,14 +151,14 @@ export default {
 		return {
 			bd: {
 				name: '',
-				symbol: 'AAPL',
+				symbol: 'SPY',
 				benchmark: 'SPY',
 				strategy: 'Signal',
 				capital: 100000.0,
 				capital_alloc: 1.0,
 				commission: 0.001,
 				win_rate: 0.0,
-				slippage: 0.001,
+				slippage: 0.1,
 				start_date: '',
 				end_date: '',
 				description: 'backtest'
@@ -240,29 +224,34 @@ export default {
 			loading: false,
 			options: [],
 			temp: { commission: '0.1', slippage: '0.1' },
-			setUpFormRules: {
-				name: [
-					{ required: true, message: 'Please enter name', trigger: 'blur' }
-				]
-			},
 			sentimentIndicatorList: []
 		}
 	},
 	mounted() {
 		this.getIndicatorsList()
 		this.loadSentimentList('Daily')
-		// this.getIndexsList()
-		// this.getStocksList()
+		this.getIndexsList()
+		this.getStocksList()
 		this.getEndDate()
-		let direction = this.$getDirection()
-		direction.on('keyup', function (e, val) {
-			if (e.keyCode == 9) {
-				direction.next()
+	},
+	watch: {
+		updateFreq(val) {
+			console.log('updateFreq: ', val)
+			switch (val) {
+				case 'daily': {
+					this.frequency = 'Daily'
+					break
+				}
+				case 'weekly': {
+					this.frequency = 'Weekly'
+					break
+				}
+				case 'monthly': {
+					this.frequency = 'Monthly'
+					break
+				}
 			}
-			direction.onEnd = function () {
-				direction.previous(1, 0)
-			}
-		})
+		}
 	},
 	watch: {
 		updateFreq(val) {
@@ -330,6 +319,7 @@ export default {
 					delete newVal.results
 					delete newVal.uuid
 					this.bd = Object.assign(this.bd, newVal)
+					this.getSymbolName(newVal.symbol)
 					this.frequency = this.editFrequency
 					// console.log('频率', this.frequency)
 					this.temp.commission = Number(newVal.commission) * 100
@@ -472,7 +462,6 @@ export default {
 			}
 		},
 		async getStocksList() {
-			console.log('vuex', this.$store.state.stocksList)
 			if (this.$store.state.stocksList.length != 0) {
 				this.symbolList = this.$store.state.stocksList
 			} else {
@@ -531,9 +520,9 @@ export default {
 		getCommission(val) {
 			this.bd.commission = val / 100
 		},
-		getSlippage(val) {
-			this.bd.slippage = val / 100
-		},
+		// getSlippage(val) {
+		// 	this.bd.slippage = val / 100
+		// },
 		validateForm(newTag, oldTag) {
 			let data = true
 			this.$refs.backtestSetupForm.validate((valid) => {
@@ -689,8 +678,18 @@ export default {
 		},
 		saveBacktestData() {
 			let checked = true
+			let nameChecked = true
 			if (this.bd.name) {
-				if (this.$store.state.backtestNameList.indexOf(this.bd.name) == -1) {
+				if (!this.bd.old_uuid) {
+					let nameList = this.$store.state.backtestNameList
+					for (let i = 0; i < nameList.length; i++) {
+						if (nameList[i] == this.bd.name) {
+							nameChecked = false
+							break
+						}
+					}
+				}
+				if (nameChecked) {
 					if (this.bd.start_date) {
 						// 保存 backtestform 的数据
 						this.$store.commit('setBd', this.bd)

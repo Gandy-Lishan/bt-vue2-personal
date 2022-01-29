@@ -20,7 +20,7 @@
 					class="restartBtn"
 					type="primary"
 					icon="el-icon-refresh-right"
-					>Create new backtest</el-button
+					>Create New Backtest</el-button
 				>
 				<el-tabs v-model="activeName" type="card" :tab-position="tabPosition">
 					<el-tab-pane label="Set up Backtest" name="first">
@@ -35,9 +35,8 @@
 									<entry
 										ref="entryChild"
 										@setExitDirection="setExitDirection"
-										:editBacktestData="pubilcEditData"
 									></entry>
-									<exit ref="exitChild" :exitDirection="exitDirection"></exit>
+									<exit ref="exitChild"></exit>
 								</div>
 							</div>
 							<div class="backtest-btns">
@@ -54,6 +53,7 @@
 							@goTobacktestSetupForm="goTobacktestSetupForm"
 							@goBacktestResultForm="goBacktestResultForm"
 							@goToFavoritesForm="goToFavoritesForm"
+							@refFavoritesForm="refFavoritesForm"
 						></history
 					></el-tab-pane>
 					<el-tab-pane label="Backtest Results" name="third"
@@ -66,10 +66,18 @@
 						<performance
 							ref="performanceChild"
 							:backtestEditData="backtestEditData"
+							@errorCatchPerformance="errorCatchPerformance"
 						></performance>
 					</el-tab-pane>
 					<el-tab-pane label="My Favorites" name="forth"
-						><favorite ref="favoriteChild"></favorite
+						><favorite
+							ref="favoriteChild"
+							@refHistoryForm="refHistoryForm"
+							@refFavoritesForm="refFavoritesForm"
+							@goTobacktestSetupForm="goTobacktestSetupForm"
+							@goBacktestResultForm="goBacktestResultForm"
+							@goToFavoritesForm="goToFavoritesForm"
+						></favorite
 					></el-tab-pane>
 					<el-tab-pane label="Sample Backtests" name="fifth"
 						><sample></sample
@@ -104,8 +112,7 @@ export default {
 			exitDirection: '',
 			loading: false,
 			backtestEditData: {},
-			pubilcEditData: {},
-			editFrequency: ''
+			editFrequency: 'Daily'
 		}
 	},
 
@@ -138,7 +145,14 @@ export default {
 	},
 	methods: {
 		setExitDirection(val) {
-			this.exitDirection = val
+			let data = ''
+			if (val == 'Long') {
+				data = 'Short'
+			} else if (val == 'Short') {
+				data = 'Long'
+			}
+			// this.exitDirection = data
+			this.$refs.exitChild.setDirection(data)
 		},
 		refreshPage() {
 			location.reload()
@@ -238,9 +252,7 @@ export default {
 								withCredentials: true
 							})
 							.then((res) => {
-								console.log('创建后传过来的数据', res)
 								if (res.status === 201) {
-									vm.$message.success('Save successfully')
 									// 保存成功之后，将 backtestInfo 清空回原始的状态
 									vm.$store.commit('initialBacktestInfo')
 									vm.loading = false
@@ -250,6 +262,16 @@ export default {
 									vm.$message.error('Save failed')
 									vm.loading = false
 								}
+							})
+							.catch((error) => {
+								this.$notify.error({
+									title: 'Create New Backtest',
+									message:
+										'Please click the Create New Backtest button to a new Backtest',
+									offset: 100
+								})
+								// 初始化backtestInfo的数据
+								vm.$store.commit('initialBacktestInfo')
 							})
 					}
 				}
@@ -282,28 +304,37 @@ export default {
 				if (data.exit.signals instanceof Array) {
 					data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
 				}
-				// edit 的公共数据
-				// vm.pubilcEditData = {}
-				vm.pubilcEditData.entry_description = data.entry_description
-				vm.pubilcEditData.exit_description = data.exit_description
-				vm.pubilcEditData.entry = data.entry
-				vm.pubilcEditData.exit = data.exit
 
 				vm.$refs.entryChild.setEditData(id)
 				vm.$refs.exitChild.setEditData(id)
 				// 拿到 frequency 的值
-				vm.editFrequency = vm.pubilcEditData.entry.frequency
+				vm.editFrequency = data.entry.frequency
 				vm.$store.commit('getFrequency', vm.editFrequency)
 				vm.backtestEditData = data
 			})
 		},
 		goBacktestResultForm(row) {
 			this.activeName = 'third'
-			this.$refs.performanceChild.getResultData()
+			this.$refs.performanceChild.getResultData(row.id)
 		},
 		goToFavoritesForm() {
 			this.activeName = 'forth'
 			this.$refs.favoriteChild.getBacktestList()
+		},
+		refFavoritesForm() {
+			this.$refs.favoriteChild.getBacktestList()
+		},
+		refHistoryForm() {
+			this.$refs.historyChild.getBacktestList()
+		},
+		// 无法拿到 performance 的数据，服务端异常
+		errorCatchPerformance() {
+			this.$notify({
+				title: 'Try Another',
+				message: 'The backtest cannot request data, please change parameter',
+				offset: 100,
+				type: 'warning'
+			})
 		}
 	}
 }
@@ -316,7 +347,7 @@ export default {
 	width: 12rem;
 }
 .home-container {
-	width: 90%;
+	width: 1280px;
 	margin: 0 auto;
 }
 // 暂时的样式

@@ -259,9 +259,10 @@ export default new Vuex.Store({
 		},
 		getFrequency(state, val) {
 			state.exitFrequency = val
-			// 将频率保存到 backtestInfo 
+			// 将频率保存到 backtestInfo
+			if(typeof(state.backtestInfo.entry) == 'object' && typeof(state.backtestInfo.exit) == 'object') {
 			state.backtestInfo.entry.frequency = val
-			state.backtestInfo.exit.frequency = val
+			state.backtestInfo.exit.frequency = val}
 		},
 		getMA(state, val) {
 			state.activatedMA = val
@@ -358,25 +359,7 @@ export default new Vuex.Store({
 			for (let key in obj) {
 				if (obj) {
 					state.backtestInfo[key] = obj[key]
-				}
-				// 将 backtest 名字保存起来
-				// let arr = []
-				// arr.push(obj.name)
-				// function unique (arr: Array): Array {
-				// 	return Array.from(new Set(arr))
-				//   }
-				// arr = unique(arr)
-				// state.backtestNameList = arr
-			}
-				// 将 backtest 名字保存起来
-			if(state.backtestNameList.indexOf(obj.name) == -1){
-				state.backtestNameList.push(obj.name)
-			}
-				// 将 backtest 名字保存起来
-			if(state.backtestNameList.indexOf(obj.name) == -1){
-				state.backtestNameList.push(obj.name)
-			}
-			console.log('名字',state.backtestNameList);
+				}}
 			
 		},
 		deleteIndicator(state, val) {
@@ -473,6 +456,9 @@ export default new Vuex.Store({
 					signals: [{ sentimentIndicator: '', technicalIndicator: '' }]
 				}
 			}
+		},
+		getBacktestName(state, list) {
+          state.backtestNameList = list
 		}
 
 	},

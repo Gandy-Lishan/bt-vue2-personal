@@ -317,18 +317,14 @@ export default {
 			CIQ.loadChart(tradeData.markerSet)
 			CIQ.addMarker()
 		},
-
-		getResultData() {
+		getResultData(id) {
 			let vm = this
 			vm.loading = true
 			let initalData = {}
 			let data = {}
-			let id
+			console.log('传递过来的ID', id)
+			console.log('vuex的ID', this.$store.state.favoriteBacktestRowData.id)
 			if (this.$store.state.favoriteBacktestRowData.id) {
-				id = this.$store.state.favoriteBacktestRowData.id
-				let params = {
-					uuid: id
-				}
 				if (!id) {
 					return
 				}
@@ -409,6 +405,11 @@ export default {
 						}
 					})
 					.catch((error) => {
+						console.log('服务器报错', error)
+						// 清空数据并且进行提示
+						vm.tableData = []
+						vm.tradesData = []
+						vm.$emit('errorCatchPerformance')
 						vm.loading = false
 					})
 			}

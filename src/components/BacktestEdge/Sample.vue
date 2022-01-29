@@ -13,6 +13,7 @@
 						align="center"
 						prop="name"
 						show-overflow-tooltip
+						width="150px"
 					>
 					</el-table-column>
 					<el-table-column
@@ -30,26 +31,23 @@
 					>
 					</el-table-column> -->
 					<el-table-column
-						label="Entry"
+						label="Entry & Exit"
 						align="center"
 						show-overflow-tooltip
-						prop="entry_description"
-					>
-					</el-table-column>
-					<el-table-column
-						label="Exit"
-						align="center"
-						show-overflow-tooltip
-						prop="exit_description"
-					>
-					</el-table-column>
-					<el-table-column
-						label="Backtest Period"
-						show-overflow-tooltip
-						align="center"
 					>
 						<template slot-scope="scope">
-							<div class="dataBox">
+							<p>{{ scope.row.entry_description }}</p>
+							<p>{{ scope.row.exit_description }}</p>
+						</template>
+					</el-table-column>
+					<el-table-column
+						label="Period"
+						show-overflow-tooltip
+						align="center"
+						width="90px"
+					>
+						<template slot-scope="scope">
+							<div class="showDate">
 								<el-button size="mini" type="info" plain>{{
 									scope.row.start_date
 								}}</el-button>
@@ -73,6 +71,7 @@
 						align="center"
 						show-overflow-tooltip
 						label="Total Trades"
+						width="100px"
 					>
 						<template slot-scope="scope">
 							<span v-if="scope.row.result['Total Trades']">{{
@@ -85,6 +84,7 @@
 						align="center"
 						show-overflow-tooltip
 						label="Total Return"
+						width="97px"
 						><template slot-scope="scope">
 							<span v-if="scope.row.result['Total Return (%)']">{{
 								scope.row.result['Total Return (%)'] + '%'
@@ -92,10 +92,10 @@
 							<span v-else>{{ 0 + '%' }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column align="center" width="300px">
+					<el-table-column align="center" width="230px">
 						<template slot-scope="scope">
 							<el-row>
-								<el-tooltip
+								<!-- <el-tooltip
 									class="item"
 									effect="light"
 									content="run backtest"
@@ -108,7 +108,7 @@
 										size="mini"
 										@click="runbacktest(scope.row)"
 									></el-button>
-								</el-tooltip>
+								</el-tooltip> -->
 								<el-tooltip
 									class="item"
 									effect="light"
@@ -155,6 +155,7 @@
 </template>
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { Store } from 'vuex'
 
 export default {
 	data() {
@@ -174,7 +175,8 @@ export default {
 			queryInfo: {
 				page: 1,
 				total: 0
-			}
+			},
+			timer: ''
 		}
 	},
 	created() {
@@ -190,7 +192,6 @@ export default {
 			const res = await this.$http.get(
 				'/dev/strategy/?ordering=status,-create_date'
 			)
-			console.log('res', res)
 			if (res.status === 200) {
 				this.backtestList = res.data.results
 				this.loading = false
@@ -205,36 +206,28 @@ export default {
 			vm.loading = true
 			vm.clearInterval = clearInterval()
 			vm.timer = setInterval(() => {
-				vm.$http.get('/dev/status/' + id + '/').then((res) => {
-					if (res.data.status === 2) {
-						clearInterval(vm.timer)
-						vm.getBacktestList()
-						vm.loading = false
-						vm.$notify({
-							title: 'The run was successful',
-							message:
-								'Run backtest is successful, click the view results button to see the results.',
-							offset: 100,
-							type: 'success',
-							duration: 0
-						})
-					}
-					// 报错， 有交易却显示没交易
-					// else if (res.data.status === 0 || res.data.status === 3) {
-					// 	clearInterval(vm.timer)
-					// 	vm.getBacktestList()
-					// 	vm.loading = false
-					// 	vm.$notify({
-					// 		title: 'No trades',
-					// 		message: 'No trades, please change parameter.',
-					// 		offset: 100,
-					// 		type: 'warning'
-					// 	})
-					// }
-				})
+				console.log('id', vm.getStatus(id))
+				// if(this.getStatus)
+				// 	console.log('状态码', res.data.status)
+				// 	if (res.data.status != 1) {
+				// 		vm.getBacktestList()
+				// 		vm.loading = false
+				// 		vm.$notify({
+				// 			title: 'The run was successful',
+				// 			message:
+				// 				'Run backtest is successful, click the view results button to see the results.',
+				// 			offset: 100,
+				// 			type: 'success',
+				// 			duration: 0
+				// 		})
+				clearInterval(vm.timer)
+				// 	}
 			}, 3000)
 		},
-
+		async getStatus(id) {
+			const { res: data } = await this.$http.get('/dev/status/' + id + '/')
+			return res.data.status
+		},
 		async getStrategyName() {
 			const id = this.backtestList
 			// const res = await this.$http.get('/demo/strategies' + id + '/')
@@ -412,3 +405,21 @@ export default {
 	}
 }
 </script>
+<style lang="less" scoped>
+.showDate {
+	display: flex;
+	flex-direction: column;
+	/deep/.el-button + .el-button {
+		margin-left: 0px;
+	}
+	/deep/ .el-button--mini,
+	.el-button--mini.is-round {
+		padding: 5px 0px;
+		margin-bottom: 5px;
+	}
+}
+/deep/ .el-table .cell {
+	padding: 0px;
+	word-wrap: break-word;
+}
+</style>

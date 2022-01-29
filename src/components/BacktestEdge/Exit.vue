@@ -1,7 +1,7 @@
 <template>
 	<div class="exit-container">
 		<p class="criteria-title">Exit Criteria</p>
-		<el-form :model="fd" :rules="exitFormRules" ref="exitForm">
+		<el-form :model="fd" ref="exitForm">
 			<div class="radioBox">
 				<el-form-item label="Direction:" prop="direction">
 					<el-radio-group v-model="fd.direction" disabled>
@@ -12,7 +12,6 @@
 			</div>
 		</el-form>
 		<indicator
-			:editIndiData="editIndiData"
 			:criteria="'exit'"
 			ref="indiChild"
 			@getSentiUrl="getSentiUrl"
@@ -23,44 +22,44 @@
 			@getIndicatorRadio="getIndicatorRadio"
 		></indicator>
 		<senti
-			:editIndiData="editIndiData"
 			:criteria="'exit'"
+			:direction="fd.direction"
 			ref="sentiChild"
 			:sentiUrl="sentiUrl"
 			:sentiVal="sentiVal"
-			v-if="indicatorRadio === 'sentiment'"
+			v-show="indicatorRadio === 'sentiment'"
 		></senti>
 		<cci
-			:editIndiData="editIndiData"
+			:direction="fd.direction"
 			:criteria="'exit'"
 			ref="cciChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-if="indicatorRadio === 'technical' && techIndiValue === 'cci'"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'cci'"
 		></cci>
 		<rsi
-			:editIndiData="editIndiData"
+			:direction="fd.direction"
 			:criteria="'exit'"
 			ref="rsiChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
 		></rsi>
 		<macd
-			:editIndiData="editIndiData"
+			:direction="fd.direction"
 			:criteria="'exit'"
 			ref="macdChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'macd'"
 		></macd>
 		<ma
-			:editIndiData="editIndiData"
+			:direction="fd.direction"
 			:criteria="'exit'"
 			ref="maChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-if="indicatorRadio === 'technical' && techIndiValue === 'ma'"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'ma'"
 		></ma>
 	</div>
 </template>
@@ -80,22 +79,13 @@ export default {
 			fd: {
 				direction: 'Short'
 			},
-			exitFormRules: {
-				direction: [
-					{
-						required: true,
-						message: 'Please select direction',
-						trigger: 'change'
-					}
-				]
-			},
 			sentiUrl: '',
 			techUrl: '',
 			sentiVal: '',
 			techVal: '',
 			techIndiValue: '',
-			indicatorRadio: 'sentiment',
-			editIndiData: {}
+			indicatorRadio: 'sentiment'
+			// editIndiData: {}
 		}
 	},
 	components: {
@@ -106,19 +96,19 @@ export default {
 		macd,
 		ma
 	},
-	watch: {
-		exitDirection: {
-			handler(newVal) {
-				if (newVal) {
-					if (newVal === 'Long') {
-						this.fd.direction = 'Short'
-					} else if (newVal === 'Short') {
-						this.fd.direction = 'Long'
-					}
-				}
-			}
-		}
-	},
+	// watch: {
+	// 	exitDirection: {
+	// 		handler(newVal) {
+	// 			if (newVal) {
+	// 				if (newVal === 'Long') {
+	// 					this.fd.direction = 'Short'
+	// 				} else if (newVal === 'Short') {
+	// 					this.fd.direction = 'Long'
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// },
 	methods: {
 		getSentiUrl(val) {
 			this.sentiUrl = val
@@ -137,6 +127,9 @@ export default {
 		},
 		getIndicatorRadio(val) {
 			this.indicatorRadio = val
+		},
+		setDirection(data) {
+			this.fd.direction = data
 		},
 		saveBacktestData() {
 			let checked = true
@@ -192,13 +185,53 @@ export default {
 				if (data.exit.signals instanceof Array) {
 					data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
 				}
-				vm.fd.direction = data.entry.direction
 				let edit = {}
 				edit.entry_description = data.entry_description
 				edit.exit_description = data.exit_description
 				edit.entry = data.entry
 				edit.exit = data.exit
-				vm.editIndiData = edit
+				if (edit.exit.analysis == 'Sentiment') {
+					this.sentiVal = edit.exit.signals[0].indicator
+					console.log('exit 设置的', this.sentiVal)
+				} else if (edit.exit.analysis == 'Technical') {
+					this.techVal = edit.exit.signals[0].indicator
+				}
+				// vm.editIndiData = edit
+				console.log('编辑的退场数据', edit)
+				vm.$refs.indiChild.setEditData(edit)
+				// 判断使用那个组件
+				if (edit.exit.signals[0].analysis == 'Sentiment') {
+					vm.indicatorRadio = 'sentiment'
+					vm.$refs.sentiChild.setEditData(edit)
+				} else if (
+					edit.exit.signals[0].analysis == 'Technical' &&
+					edit.exit.signals[0].indicator == 'Commodity Channel Index'
+				) {
+					vm.indicatorRadio = 'technical'
+					vm.techIndiValue = 'cci'
+					vm.$refs.cciChild.setEditData(edit)
+				} else if (
+					edit.exit.signals[0].analysis == 'Technical' &&
+					edit.exit.signals[0].indicator == 'Relative Strength Index'
+				) {
+					vm.indicatorRadio = 'technical'
+					vm.techIndiValue = 'rsi'
+					vm.$refs.rsiChild.setEditData(edit)
+				} else if (
+					edit.exit.signals[0].analysis == 'Technical' &&
+					edit.exit.signals[0].indicator == 'Moving Average'
+				) {
+					vm.indicatorRadio = 'technical'
+					vm.techIndiValue = 'ma'
+					vm.$refs.maChild.setEditData(edit)
+				} else if (
+					edit.exit.signals[0].analysis == 'Technical' &&
+					edit.exit.signals[0].indicator == 'MACD'
+				) {
+					vm.indicatorRadio = 'technical'
+					vm.techIndiValue = 'macd'
+					vm.$refs.macdChild.setEditData(edit)
+				}
 				// if (vm.editIndiData.entry.signals[0].analysis === 'Technical') {
 				// 	this.$refs.maChild.setEditData(vm.editIndiData)
 				// }
@@ -235,6 +268,6 @@ export default {
 }
 .exit-container {
 	margin-bottom: 10px;
-	padding-left: 20px;
+	padding-left: 50px;
 }
 </style>

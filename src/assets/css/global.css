@@ -143,7 +143,7 @@
 	margin-left: 40px;
 }
 .backtest_container .nameBox input[type='text']:last-child {
-	width: 747px;
+	width: 894px;
 }
 /* .backtest_container .nameBox .el-form-item .el-form-item__label {
 	width: 135px;
@@ -174,19 +174,12 @@ input[type='date'],
 input[type='time'] {
 	width: 116px;
 }
-@media (min-width: 900px) and (max-width: 1599px) {
-	.el-radio__label {
-		font-size: 15px !important;
-	}
-	.backtest_container .el-form-item {
-		margin-right: 0 !important;
-	}
-	.el-dialog__wrapper .el-dialog {
-		width: 60% !important;
-	}
-	.el-table .cell {
-		white-space: nowrap;
-
-		text-overflow: ellipsis;
-	}
+.el-radio__label {
+	font-size: 15px !important;
+}
+.backtest_container .el-form-item {
+	margin-right: 0 !important;
+}
+.el-dialog__wrapper .el-dialog {
+	width: 60% !important;
 }

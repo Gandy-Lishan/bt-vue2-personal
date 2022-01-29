@@ -2,7 +2,13 @@
 	<el-row>
 		<el-col :span="24">
 			<div class="favoriteForm_container">
-				<el-table :data="backtestList" v-loading="loading">
+				<el-table
+					:data="backtestList"
+					v-loading="loading"
+					element-loading-text="Loading"
+					element-loading-spinner="el-icon-loading"
+					element-loading-background="rgba(0, 0, 0, 0.8)"
+				>
 					<el-table-column type="index" align="center">
 						<template scope="scope">
 							<span>{{ (queryInfo.page - 1) * 10 + scope.$index + 1 }}</span>
@@ -13,6 +19,7 @@
 						align="center"
 						prop="name"
 						show-overflow-tooltip
+						width="80px"
 					>
 					</el-table-column>
 					<el-table-column
@@ -30,26 +37,23 @@
 					>
 					</el-table-column> -->
 					<el-table-column
-						label="Entry"
+						label="Entry & Exit"
 						align="center"
 						show-overflow-tooltip
-						prop="entry_description"
-					>
-					</el-table-column>
-					<el-table-column
-						label="Exit"
-						align="center"
-						show-overflow-tooltip
-						prop="exit_description"
-					>
-					</el-table-column>
-					<el-table-column
-						label="Backtest Period"
-						show-overflow-tooltip
-						align="center"
 					>
 						<template slot-scope="scope">
-							<div class="dataBox">
+							<p>{{ scope.row.entry_description }}</p>
+							<p>{{ scope.row.exit_description }}</p>
+						</template>
+					</el-table-column>
+					<el-table-column
+						label="Period"
+						show-overflow-tooltip
+						align="center"
+						width="90px"
+					>
+						<template slot-scope="scope">
+							<div class="showDate">
 								<el-button size="mini" type="info" plain>{{
 									scope.row.start_date
 								}}</el-button>
@@ -73,6 +77,7 @@
 						align="center"
 						show-overflow-tooltip
 						label="Total Trades"
+						width="100px"
 					>
 						<template slot-scope="scope">
 							<span v-if="scope.row.result['Total Trades']">{{
@@ -85,6 +90,7 @@
 						align="center"
 						show-overflow-tooltip
 						label="Total Return"
+						width="97px"
 						><template slot-scope="scope">
 							<span v-if="scope.row.result['Total Return (%)']">{{
 								scope.row.result['Total Return (%)'] + '%'
@@ -92,9 +98,41 @@
 							<span v-else>{{ 0 + '%' }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column align="center" width="300px">
+					<el-table-column align="center" width="200px">
 						<template slot-scope="scope">
 							<el-row>
+								<el-tooltip
+									class="item"
+									effect="light"
+									content="add to favorites"
+									v-if="scope.row.favorites == false"
+									placement="bottom-start"
+								>
+									<el-button
+										v-if="scope.row.favorites == false"
+										type="warning"
+										icon="el-icon-star-off"
+										circle
+										@click="addToFavorites(scope.row)"
+										size="mini"
+									></el-button>
+								</el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="light"
+									content="remove from favorites"
+									v-if="scope.row.favorites == true"
+									placement="bottom-start"
+								>
+									<el-button
+										v-if="scope.row.favorites == true"
+										type="warning"
+										icon="el-icon-star-on"
+										circle
+										@click="moveToFavorites(scope.row)"
+										size="mini"
+									></el-button>
+								</el-tooltip>
 								<el-button
 									type="warning"
 									icon="el-icon-star-off"
@@ -109,7 +147,7 @@
 									@click="showDes(scope.row)"
 									size="mini"
 								></el-button>
-								<el-tooltip
+								<!-- <el-tooltip
 									class="item"
 									effect="light"
 									content="run backtest"
@@ -122,7 +160,7 @@
 										size="mini"
 										@click="runbacktest(scope.row)"
 									></el-button>
-								</el-tooltip>
+								</el-tooltip> -->
 								<el-tooltip
 									class="item"
 									effect="light"
@@ -137,7 +175,7 @@
 										@click="editBacktest(scope.row)"
 									></el-button>
 								</el-tooltip>
-								<el-tooltip
+								<!-- <el-tooltip
 									class="item"
 									effect="light"
 									content="copy backtest"
@@ -150,8 +188,8 @@
 										size="mini"
 										@click="copyBacktest(scope.row)"
 									></el-button>
-								</el-tooltip>
-								<el-tooltip
+								</el-tooltip> -->
+								<!-- <el-tooltip
 									class="item"
 									effect="light"
 									content="delete backtest"
@@ -162,7 +200,7 @@
 										cancel-button-text="no"
 										icon="el-icon-info"
 										icon-color="red"
-										title="Are you sure you want to delete it?"
+										title="remove from favorites"
 										@confirm="deleteBacktest(scope.row.id)"
 									>
 										<el-button
@@ -173,7 +211,7 @@
 											slot="reference"
 										></el-button>
 									</el-popconfirm>
-								</el-tooltip>
+								</el-tooltip> -->
 								<el-tooltip
 									class="item"
 									effect="light"
@@ -271,7 +309,7 @@ export default {
 								'Run backtest is successful, click the view results button to see the results.',
 							offset: 100,
 							type: 'success',
-							duration: 0
+							duration: 1000
 						})
 					}
 					// 报错， 有交易却显示没交易
@@ -309,6 +347,7 @@ export default {
 							duration: 1000
 						})
 						this.getBacktestList()
+						this.$emit('refHistoryForm')
 					} else {
 						this.$message.error({
 							message: 'The deletion failed',
@@ -426,7 +465,82 @@ export default {
 					}
 				})
 			})
+		},
+		addToFavorites(row) {
+			let vm = this
+			let params = {
+				favorites: true
+			}
+			this.$http
+				.put('/dev/backtest/' + row.id + '/', vm.$qs.stringify(params))
+				.then((res) => {
+					if (res.status === 200) {
+						this.getBacktestList()
+						this.$message.success({
+							message: 'Added to favorites',
+							duration: 1000
+						})
+
+						this.$emit('refFavoritesForm')
+						this.$emit('refHistoryForm')
+					} else {
+						this.getBacktestList()
+						this.$message.error({
+							message: 'Collection failed',
+							duration: 1000
+						})
+					}
+				})
+		},
+		moveToFavorites(row) {
+			let vm = this
+			let params = {
+				favorites: false
+			}
+			this.$http
+				.put('/dev/backtest/' + row.id + '/', vm.$qs.stringify(params))
+				.then((res) => {
+					if (res.status === 200) {
+						this.getBacktestList()
+						this.$message.success({
+							message: 'Favorite has been removed',
+							duration: 1000
+						})
+
+						this.$emit('refFavoritesForm')
+						this.$emit('refHistoryForm')
+					} else {
+						this.getBacktestList()
+						this.$message.error({
+							message: 'Remove failed',
+							duration: 1000
+						})
+					}
+				})
 		}
 	}
 }
 </script>
+<style lang="less" scoped>
+.showDate {
+	display: flex;
+	flex-direction: column;
+	/deep/.el-button + .el-button {
+		margin-left: 0px;
+	}
+	/deep/ .el-button--mini,
+	.el-button--mini.is-round {
+		margin-bottom: 5px;
+	}
+}
+/deep/ .el-table .cell {
+	padding: 0px;
+	word-wrap: break-word;
+}
+/deep/.el-button + .el-button {
+	margin-left: 0px;
+}
+/deep/ .el-button--mini.is-circle {
+	margin-right: 5px;
+}
+</style>
