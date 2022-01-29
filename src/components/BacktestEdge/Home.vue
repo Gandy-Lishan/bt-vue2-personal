@@ -20,7 +20,7 @@
 					class="restartBtn"
 					type="primary"
 					icon="el-icon-refresh-right"
-					>Reset backtest</el-button
+					>Create new backtest</el-button
 				>
 				<el-tabs v-model="activeName" type="card" :tab-position="tabPosition">
 					<el-tab-pane label="Set up Backtest" name="first">

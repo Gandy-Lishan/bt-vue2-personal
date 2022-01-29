@@ -151,6 +151,7 @@ export default {
 				let vm = this
 				newVal.forEach((item) => {
 					if (item.indicator) {
+						console.log(item)
 						if (item.indicator === vm.sentiUrl) {
 							vm.senti.extreme_pessimism = item.extremePessimism
 							vm.senti.extreme_optimism = item.extremeOptimism
