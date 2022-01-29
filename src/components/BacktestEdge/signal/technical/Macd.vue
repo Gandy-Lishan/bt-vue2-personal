@@ -105,7 +105,8 @@ export default {
 	props: {
 		criteria: String,
 		techUrl: String,
-		techVal: String
+		techVal: String,
+		editIndiData: Object
 	},
 	data() {
 		return {
@@ -130,12 +131,32 @@ export default {
 			description: ''
 		}
 	},
+	watch: {
+		editIndiData: {
+			handler(newVal) {
+				if (JSON.stringify(newVal) != '{}') {
+					this.tech.ids = newVal[this.criteria].signals[0].ids
+					this.tech.condition = Number(
+						newVal[this.criteria].signals[0].condition
+					)
+					this.disabled = false
+					this.tech.value = newVal[this.criteria].signals[0].value
+					if (this.tech.value === 'MACDSL') {
+						this.conditionRadio = 'MACD Value '
+						this.disabled = true
+					}
+					this.description = newVal[this.criteria + '_description']
+				}
+			},
+			immediate: true,
+			deep: true
+		}
+	},
 	methods: {
 		setDesciption() {
 			let condition = this.conditions[this.tech.condition].label
 			let description = this.techVal + ' ' + condition + ' ' + this.tech.value
 			this.description = description
-			console.log('tech description', description)
 		},
 		getConditionRadio(val) {
 			if (val === 'MACD Value ') {

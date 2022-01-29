@@ -572,7 +572,6 @@ export default {
 				}
 				default:
 			}
-			CIQ.filterByFrequency()
 			CIQ.addIndicators(selectedFreq)
 		},
 		async loadSentimentList(val) {
@@ -582,10 +581,10 @@ export default {
 
 			if (CIQ.indicatorList) {
 				if (CIQ.indicatorList.length != 0) {
-					// console.log(
-					// 	'data already in indicatorList from entry-form',
-					// 	CIQ.indicatorList.length
-					// )
+					console.log(
+						'data already in indicatorList from entry-form',
+						CIQ.indicatorList.length
+					)
 					indicatorList = this.$store.state.indicatorsList
 					indicatorList = CIQ.indicatorList
 				}
@@ -662,10 +661,10 @@ export default {
 			var indicatorList = []
 			if (CIQ.indicatorList) {
 				if (CIQ.indicatorList.length != 0) {
-					// console.log(
-					// 	'data already in indicatorList from entry-form',
-					// 	CIQ.indicatorList.length
-					// )
+					console.log(
+						'data already in indicatorList from entry-form',
+						CIQ.indicatorList.length
+					)
 					indicatorList = this.$store.state.indicatorsList
 					indicatorList = CIQ.indicatorList
 				}

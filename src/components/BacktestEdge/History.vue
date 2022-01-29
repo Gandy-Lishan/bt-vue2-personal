@@ -59,7 +59,7 @@
 							</div>
 						</template>
 					</el-table-column>
-					<!-- <el-table-column>
+					<!-- <el-table-column label="Status" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.status == 0">Ready to run</span>
 							<span v-else-if="scope.row.status == 1"
@@ -75,7 +75,10 @@
 						label="Total Trades"
 					>
 						<template slot-scope="scope">
-							{{ scope.row.result['Total Trades'] }}
+							<span v-if="scope.row.result['Total Trades']">{{
+								scope.row.result['Total Trades']
+							}}</span>
+							<span v-else>{{ 0 }}</span>
 						</template>
 					</el-table-column>
 					<el-table-column
@@ -83,13 +86,22 @@
 						show-overflow-tooltip
 						label="Total Return"
 						><template slot-scope="scope">
-							{{ scope.row.result['Total Return (%)'] }}</template
-						>
+							<span v-if="scope.row.result['Total Return (%)']">{{
+								scope.row.result['Total Return (%)'] + '%'
+							}}</span>
+							<span v-else>{{ 0 + '%' }}</span>
+						</template>
 					</el-table-column>
-
 					<el-table-column align="center" width="300px">
 						<template slot-scope="scope">
 							<el-row>
+								<el-button
+									plain
+									icon="el-icon-star-off"
+									circle
+									@click="addToFavorites(scope.row)"
+									size="mini"
+								></el-button>
 								<el-button
 									type="warning"
 									icon="el-icon-star-off"
@@ -178,16 +190,6 @@
 									<el-button
 										type="warning"
 										icon="el-icon-view"
-										v-if="scope.row.status == 2"
-										circle
-										size="mini"
-										@click="viewBacktestResults(scope.row)"
-									></el-button>
-									<el-button
-										type="warning"
-										icon="el-icon-view"
-										v-else
-										disabled
 										circle
 										size="mini"
 										@click="viewBacktestResults(scope.row)"
@@ -245,7 +247,7 @@ export default {
 			this.loading = true
 			let page = this.queryInfo.page
 			const res = await this.$http.get(
-				'/dev/backtest/?ordering=-create_date,status,name&page=' + page
+				'/dev/backtest/?ordering=-create_date&favorites=false&page=' + page
 			)
 			if (res.status === 200) {
 				this.loading = false
@@ -258,64 +260,28 @@ export default {
 				this.loading = false
 			}
 		},
-		runbacktest(row) {
+		refreshHistory(id) {
 			let vm = this
+			vm.loading = true
 			vm.clearInterval = clearInterval()
-			if (row.status == 0) {
-				row.status = 1
-				vm.$http.post('/dev/runbacktest/?uuid=' + row.id).then((res) => {
-					if (res.status == 200) {
-						vm.timer = setInterval(() => {
-							vm.$http.get('/dev/status/' + row.id + '/').then((res) => {
-								//(res.data.status)
-								//console.log("内层",res);
-								if (res.data.status === 2) {
-									clearInterval(vm.timer)
-									vm.getBacktestList()
-									vm.$notify({
-										title: 'The run was successful',
-										message:
-											'Run backtest is successful, click the view results button to see the results.',
-										offset: 100,
-										type: 'success',
-										duration: 0
-									})
-								} else if (res.data.status === 0 || res.data.status === 3) {
-									clearInterval(vm.timer)
-									vm.getBacktestList()
-									vm.$notify({
-										title: 'No trades',
-										message: 'No trades, please change parameter.',
-										offset: 100,
-										type: 'warning'
-									})
-								}
-							})
-						}, 3000)
-					} else {
-						vm.$notify.error({
-							title: 'Error',
-							message: 'An error occurred on the server',
-							offset: 100
+			vm.timer = setInterval(() => {
+				vm.$http.get('/dev/status/' + id + '/').then((res) => {
+					console.log('状态码',res.data.status);
+					if (res.data.status !==1){
+						clearInterval(vm.timer)
+						vm.getBacktestList()
+						vm.loading = false
+						vm.$notify({
+							title: 'The run was successful',
+							message:
+								'Run backtest is successful, click the view results button to see the results.',
+							offset: 100,
+							type: 'success',
+							duration: 0
 						})
 					}
 				})
-			} else if (row.status == 2) {
-				vm.loading = false
-				vm.$notify({
-					title: 'Complete',
-					message: 'The policy is complete',
-					offset: 100,
-					type: 'success'
-				})
-			} else if (row.status == 1) {
-				vm.loading = false
-				vm.$notify.info({
-					title: 'Running',
-					offset: 100,
-					message: 'Please wait while running'
-				})
-			}
+			}, 3000)
 		},
 
 		async getStrategyName() {
@@ -382,16 +348,24 @@ export default {
 			})
 		},
 		viewBacktestResults(row) {
-			document.getElementsByClassName('ciq-period')[0].style.display = 'none'
-			let vm = this
-			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
-				// 恢复indicator layout
-				this.$store.commit('getBacktestSymbol', res.data.symbol)
-				this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
-			})
-			this.$store.commit('getRunBacktestData', row)
-			this.$emit('goTobacktestSetupForm', row.id)
-			this.$emit('goBacktestResultForm', row)
+			if (row.result['Total Trades']) {
+				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
+				this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+					// 恢复indicator layout
+					this.$store.commit('getBacktestSymbol', res.data.symbol)
+					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+				})
+				this.$store.commit('getRunBacktestData', row)
+				this.$emit('goTobacktestSetupForm', row.id)
+				this.$emit('goBacktestResultForm', row)
+			} else {
+				this.$notify({
+					title: 'No trades',
+					message: 'No trades, please change parameter.',
+					offset: 100,
+					type: 'warning'
+				})
+			}
 		},
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
@@ -458,6 +432,31 @@ export default {
 					}
 				})
 			})
+		},
+		addToFavorites(row) {
+			let vm = this
+			let params = {
+				favorites: true
+			}
+			this.$http
+				.put('/dev/backtest/' + row.id + '/', vm.$qs.stringify(params))
+				.then((res) => {
+					if (res.status === 200) {
+						this.getBacktestList()
+						this.$message.success({
+							message: '已添加收藏',
+							duration: 1000
+						})
+
+						this.$emit('goToFavoritesForm')
+					} else {
+						this.getBacktestList()
+						this.$message.error({
+							message: '收藏失败',
+							duration: 1000
+						})
+					}
+				})
 		}
 	}
 }

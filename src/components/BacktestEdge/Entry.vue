@@ -12,7 +12,7 @@
 			</div>
 		</el-form>
 		<indicator
-			:editData="editData"
+			:editIndiData="editIndiData"
 			:criteria="'entry'"
 			ref="indiChild"
 			@getSentiUrl="getSentiUrl"
@@ -23,6 +23,7 @@
 			@getIndicatorRadio="getIndicatorRadio"
 		></indicator>
 		<senti
+			:editIndiData="editIndiData"
 			:criteria="'entry'"
 			ref="sentiChild"
 			:sentiUrl="sentiUrl"
@@ -30,6 +31,7 @@
 			v-if="indicatorRadio === 'sentiment'"
 		></senti>
 		<cci
+			:editIndiData="editIndiData"
 			:criteria="'entry'"
 			ref="cciChild"
 			:techUrl="techUrl"
@@ -37,6 +39,7 @@
 			v-if="indicatorRadio === 'technical' && techIndiValue === 'cci'"
 		></cci>
 		<rsi
+			:editIndiData="editIndiData"
 			:criteria="'entry'"
 			ref="rsiChild"
 			:techUrl="techUrl"
@@ -44,6 +47,7 @@
 			v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
 		></rsi>
 		<macd
+			:editIndiData="editIndiData"
 			:criteria="'entry'"
 			ref="macdChild"
 			:techUrl="techUrl"
@@ -51,6 +55,7 @@
 			v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
 		></macd>
 		<ma
+			:editIndiData="editIndiData"
 			:criteria="'entry'"
 			ref="maChild"
 			:techUrl="techUrl"
@@ -65,10 +70,11 @@ import cci from '@/components/BacktestEdge/signal/technical/Cci'
 import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
 import macd from '@/components/BacktestEdge/signal/technical/Macd.vue'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
-import indicator from '@/components/BacktestEdge/signal/indicator/indicator'
+import indicator from '@/components/BacktestEdge/signal/indicator/Indicator'
+import SignalCode from '@/tools/codeTool.js'
+
 export default {
 	name: 'entry',
-	props: { editBacktestData: Object },
 	data() {
 		return {
 			fd: {
@@ -89,24 +95,7 @@ export default {
 			techVal: '',
 			techIndiValue: '',
 			indicatorRadio: 'sentiment',
-			editData: {}
-		}
-	},
-	watch: {
-		editBacktestData: {
-			handler(newVal) {
-				if (JSON.stringify(newVal) != '{}') {
-					this.fd.direction = newVal.entry.direction
-					this.getExitDirection(newVal.entry.direction)
-					console.log('传到entry的编辑数据', newVal)
-					let data = newVal
-					delete data.exit
-					delete data.exit_description
-					this.editData = data
-				}
-			},
-			immediate: true,
-			deep: true
+			editIndiData: {}
 		}
 	},
 	components: {
@@ -178,6 +167,34 @@ export default {
 				checked = false
 				return checked
 			}
+		},
+		setEditData(id) {
+			let vm = this
+			this.$http.get('/dev/seeparams/' + id + '/').then((res) => {
+				let data = res.data
+				data.entry = JSON.parse(data.entry)
+				data.exit = JSON.parse(data.exit)
+				let signalCode = new SignalCode()
+				if (data.entry.signals instanceof Array) {
+					data.entry.signals[0] = signalCode.decode(
+						data.entry.signals[0]['code']
+					)
+				}
+				if (data.exit.signals instanceof Array) {
+					data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
+				}
+				vm.fd.direction = data.entry.direction
+				vm.getExitDirection(data.entry.direction)
+				let edit = {}
+				edit.entry_description = data.entry_description
+				edit.exit_description = data.exit_description
+				edit.entry = data.entry
+				edit.exit = data.exit
+				vm.editIndiData = edit
+				// if (vm.editIndiData.entry.signals[0].analysis === 'Technical') {
+				// 	this.$refs.maChild.setEditData(vm.editIndiData)
+				// }
+			})
 		}
 	}
 }

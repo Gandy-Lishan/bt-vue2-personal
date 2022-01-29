@@ -120,7 +120,8 @@ export default {
 	props: {
 		criteria: String,
 		techUrl: String,
-		techVal: String
+		techVal: String,
+		editIndiData: Object
 	},
 	data() {
 		return {
@@ -142,6 +143,33 @@ export default {
 			maRadio: 'SMA',
 			period: 5,
 			description: ''
+		}
+	},
+	watch: {
+		editIndiData: {
+			handler(newVal) {
+				if (JSON.stringify(newVal) != '{}') {
+					this.tech.ids = newVal[this.criteria].signals[0].ids
+					this.tech.condition = Number(
+						newVal[this.criteria].signals[0].condition
+					)
+					this.tech.period = newVal[this.criteria].signals[0].period
+					this.conditionRadio = 'Symbol Close'
+					this.disabled = false
+					this.getSCvalue(this.tech.period)
+					let ma_period = newVal[this.criteria].signals[0].ma_period
+					if (ma_period) {
+						this.conditionRadio = 'Moving Average'
+						this.disabled = true
+						this.tech.ma_period = ma_period
+						this.getMaPeriodValue(ma_period)
+						this.getMaValue(newVal[this.criteria].signals[0].period)
+					}
+					this.description = newVal[this.criteria + '_description']
+				}
+			},
+			immediate: true,
+			deep: true
 		}
 	},
 	methods: {
@@ -199,8 +227,6 @@ export default {
 				activatedMAList.push(objMA)
 
 				this.$store.commit('getMA', activatedMAList)
-
-				console.log(this.$store.state.activatedMA)
 			}
 			this.setDesciption()
 		},
@@ -218,7 +244,6 @@ export default {
 				' ' +
 				this.tech.period
 			this.description = description
-			console.log('tech description', description)
 		},
 		getMaPeriodValue(val) {
 			this.period = val
@@ -303,7 +328,6 @@ export default {
 						// 	sd.type,
 						// 	{Type: "exponential"}
 						// );
-						// console.log('replaced study: ',st)
 
 						var replaceStudy = {
 							name: 'Moving Average',
@@ -425,7 +449,6 @@ export default {
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
 					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
 					CIQ.store.commit('getMaPeriod', val)
-					console.log('replaced study: ', st)
 				}
 			}
 		},
@@ -474,7 +497,9 @@ export default {
 					return checked
 				}
 			}
-		}
+		},
+		// 设置编辑的数据
+		setEditData(editData) {}
 	}
 }
 </script>

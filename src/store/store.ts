@@ -372,6 +372,10 @@ export default new Vuex.Store({
 			if(state.backtestNameList.indexOf(obj.name) == -1){
 				state.backtestNameList.push(obj.name)
 			}
+				// 将 backtest 名字保存起来
+			if(state.backtestNameList.indexOf(obj.name) == -1){
+				state.backtestNameList.push(obj.name)
+			}
 			console.log('名字',state.backtestNameList);
 			
 		},

@@ -53,6 +53,7 @@
 							ref="historyChild"
 							@goTobacktestSetupForm="goTobacktestSetupForm"
 							@goBacktestResultForm="goBacktestResultForm"
+							@goToFavoritesForm="goToFavoritesForm"
 						></history
 					></el-tab-pane>
 					<el-tab-pane label="Backtest Results" name="third"
@@ -67,8 +68,12 @@
 							:backtestEditData="backtestEditData"
 						></performance>
 					</el-tab-pane>
-					<el-tab-pane label="My Favorites" name="forth"> </el-tab-pane>
-					<el-tab-pane label="Sample Backtests" name="fifth"> </el-tab-pane>
+					<el-tab-pane label="My Favorites" name="forth"
+						><favorite ref="favoriteChild"></favorite
+					></el-tab-pane>
+					<el-tab-pane label="Sample Backtests" name="fifth"
+						><sample></sample
+					></el-tab-pane>
 				</el-tabs>
 			</main>
 		</div>
@@ -87,6 +92,8 @@ import exit from '@/components/BacktestEdge/Exit.vue'
 import result from '@/components/BacktestEdge/Result.vue'
 import performance from '@/components/BacktestEdge/Performance.vue'
 import history from '@/components/BacktestEdge/History.vue'
+import favorite from '@/components/BacktestEdge/Favorite.vue'
+import sample from '@/components/BacktestEdge/Sample.vue'
 export default {
 	name: 'home',
 	data() {
@@ -109,7 +116,9 @@ export default {
 		exit,
 		result,
 		performance,
-		history
+		history,
+		favorite,
+		sample
 	},
 	mounted() {
 		this.$cookies.set('userid', 'test')
@@ -231,16 +240,12 @@ export default {
 							.then((res) => {
 								console.log('创建后传过来的数据', res)
 								if (res.status === 201) {
-									// vm.$store.commit('clearBacktest')
-									// vm.$store.commit('tryClear')
-									// vm.$store.commit('getExitDirection', '')
-									// vm.$store.commit('getFrequency', '')
 									vm.$message.success('Save successfully')
 									// 保存成功之后，将 backtestInfo 清空回原始的状态
 									vm.$store.commit('initialBacktestInfo')
 									vm.loading = false
 									vm.goToHistoryForm()
-									vm.$refs.historyChild.getBacktestList('system')
+									vm.$refs.historyChild.refreshHistory(res.data.id)
 								} else {
 									vm.$message.error('Save failed')
 									vm.loading = false
@@ -256,9 +261,9 @@ export default {
 		goTobacktestSetupForm(id) {
 			// backtestEditData
 			let vm = this
-			this.activeName = 'first'
-			this.backtestEditData = {}
-			this.$http.get('/dev/seeparams/' + id + '/').then((res) => {
+			vm.activeName = 'first'
+			vm.backtestEditData = {}
+			vm.$http.get('/dev/seeparams/' + id + '/').then((res) => {
 				let data = res.data
 				data.old_uuid = id
 				data.entry = JSON.parse(data.entry)
@@ -283,14 +288,22 @@ export default {
 				vm.pubilcEditData.exit_description = data.exit_description
 				vm.pubilcEditData.entry = data.entry
 				vm.pubilcEditData.exit = data.exit
+
+				vm.$refs.entryChild.setEditData(id)
+				vm.$refs.exitChild.setEditData(id)
 				// 拿到 frequency 的值
 				vm.editFrequency = vm.pubilcEditData.entry.frequency
+				vm.$store.commit('getFrequency', vm.editFrequency)
 				vm.backtestEditData = data
 			})
 		},
 		goBacktestResultForm(row) {
 			this.activeName = 'third'
 			this.$refs.performanceChild.getResultData()
+		},
+		goToFavoritesForm() {
+			this.activeName = 'forth'
+			this.$refs.favoriteChild.getBacktestList()
 		}
 	}
 }

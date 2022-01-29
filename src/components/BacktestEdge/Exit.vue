@@ -12,6 +12,7 @@
 			</div>
 		</el-form>
 		<indicator
+			:editIndiData="editIndiData"
 			:criteria="'exit'"
 			ref="indiChild"
 			@getSentiUrl="getSentiUrl"
@@ -22,6 +23,7 @@
 			@getIndicatorRadio="getIndicatorRadio"
 		></indicator>
 		<senti
+			:editIndiData="editIndiData"
 			:criteria="'exit'"
 			ref="sentiChild"
 			:sentiUrl="sentiUrl"
@@ -29,6 +31,7 @@
 			v-if="indicatorRadio === 'sentiment'"
 		></senti>
 		<cci
+			:editIndiData="editIndiData"
 			:criteria="'exit'"
 			ref="cciChild"
 			:techUrl="techUrl"
@@ -36,6 +39,7 @@
 			v-if="indicatorRadio === 'technical' && techIndiValue === 'cci'"
 		></cci>
 		<rsi
+			:editIndiData="editIndiData"
 			:criteria="'exit'"
 			ref="rsiChild"
 			:techUrl="techUrl"
@@ -43,6 +47,7 @@
 			v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
 		></rsi>
 		<macd
+			:editIndiData="editIndiData"
 			:criteria="'exit'"
 			ref="macdChild"
 			:techUrl="techUrl"
@@ -50,6 +55,7 @@
 			v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
 		></macd>
 		<ma
+			:editIndiData="editIndiData"
 			:criteria="'exit'"
 			ref="maChild"
 			:techUrl="techUrl"
@@ -59,11 +65,12 @@
 	</div>
 </template>
 <script>
-import indicator from '@/components/BacktestEdge/signal/indicator/indicator'
+import indicator from '@/components/BacktestEdge/signal/indicator/Indicator'
 import senti from '@/components/BacktestEdge/signal/sentiment/Senti'
 import cci from '@/components/BacktestEdge/signal/technical/Cci'
 import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
 import macd from '@/components/BacktestEdge/signal/technical/Macd.vue'
+import SignalCode from '@/tools/codeTool.js'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
 export default {
 	name: 'exit',
@@ -87,7 +94,8 @@ export default {
 			sentiVal: '',
 			techVal: '',
 			techIndiValue: '',
-			indicatorRadio: 'sentiment'
+			indicatorRadio: 'sentiment',
+			editIndiData: {}
 		}
 	},
 	components: {
@@ -168,6 +176,33 @@ export default {
 				checked = false
 				return checked
 			}
+		},
+		setEditData(id) {
+			let vm = this
+			this.$http.get('/dev/seeparams/' + id + '/').then((res) => {
+				let data = res.data
+				data.entry = JSON.parse(data.entry)
+				data.exit = JSON.parse(data.exit)
+				let signalCode = new SignalCode()
+				if (data.entry.signals instanceof Array) {
+					data.entry.signals[0] = signalCode.decode(
+						data.entry.signals[0]['code']
+					)
+				}
+				if (data.exit.signals instanceof Array) {
+					data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
+				}
+				vm.fd.direction = data.entry.direction
+				let edit = {}
+				edit.entry_description = data.entry_description
+				edit.exit_description = data.exit_description
+				edit.entry = data.entry
+				edit.exit = data.exit
+				vm.editIndiData = edit
+				// if (vm.editIndiData.entry.signals[0].analysis === 'Technical') {
+				// 	this.$refs.maChild.setEditData(vm.editIndiData)
+				// }
+			})
 		}
 	}
 }

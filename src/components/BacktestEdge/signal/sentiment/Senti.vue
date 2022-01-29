@@ -115,7 +115,8 @@ export default {
 	props: {
 		criteria: String,
 		sentiUrl: String,
-		sentiVal: String
+		sentiVal: String,
+		editIndiData: Object
 	},
 	data() {
 		return {
@@ -162,12 +163,39 @@ export default {
 			immediate: true,
 			deep: true
 		},
+		editIndiData: {
+			handler(newVal) {
+				if (JSON.stringify(newVal) != '{}') {
+					this.description = newVal[this.criteria + '_description']
+					this.senti.extreme_optimism =
+						newVal[this.criteria].signals[0].extreme_optimism
+					this.senti.extreme_pessimism =
+						newVal[this.criteria].signals[0].extreme_pessimism
+					this.senti.condition = Number(
+						newVal[this.criteria].signals[0].condition
+					)
+					this.senti.value = newVal[this.criteria].signals[0].value
+					this.conditionRadio = 'Sentiment Value'
+					this.disabled = false
+					delete this.senti.period
+					let period = newVal[this.criteria].signals[0].period
+					if (period) {
+						this.conditionRadio = 'Sentiment Moving Average'
+						this.senti.period = period
+						this.setPeriod(period)
+						this.disabled = true
+					}
+				}
+			},
+			immediate: true,
+			deep: true
+		},
 		// 用于解决 entry 和 exit 选择相同 indicator 而无法展示极值的问题
 		sentiUrl: {
 			handler(newVal) {
 				if (newVal) {
 					let vm = this
-					let extremeValue = this.extremeValue
+					let extremeValue = this.$store.state.extremeValue
 					extremeValue.forEach((item) => {
 						if (item.indicator) {
 							if (item.indicator === newVal) {
