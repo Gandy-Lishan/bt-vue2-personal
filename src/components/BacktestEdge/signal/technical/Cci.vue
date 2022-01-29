@@ -95,22 +95,6 @@ export default {
 			editTechVal: ''
 		}
 	},
-	watch: {
-		// editIndiData: {
-		// 	handler(newVal) {
-		// 		if (JSON.stringify(newVal) != '{}') {
-		// 			this.tech.ids = newVal[this.criteria].signals[0].ids
-		// 			this.tech.condition = Number(
-		// 				newVal[this.criteria].signals[0].condition
-		// 			)
-		// 			this.tech.value = newVal[this.criteria].signals[0].value
-		// 			this.setDesciption()
-		// 		}
-		// 	},
-		// 	immediate: true,
-		// 	deep: true
-		// }
-	},
 	methods: {
 		setDesciption() {
 			let criteria = ''

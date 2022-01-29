@@ -73,6 +73,7 @@ import SignalCode from '@/tools/codeTool.js'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
 export default {
 	name: 'exit',
+	props: { exitDirection: String },
 	data() {
 		return {
 			fd: {
@@ -117,7 +118,6 @@ export default {
 		},
 		getSentiVal(val) {
 			this.sentiVal = val
-			console.log('exit indicator数组传过来的', this.sentiVal)
 		},
 		getTechVal(val) {
 			this.techVal = val
@@ -130,7 +130,6 @@ export default {
 		},
 		setDirection(data) {
 			this.fd.direction = data
-			console.log('EXIT组件拿到的值', this.fd.direction)
 		},
 		saveBacktestData() {
 			let checked = true
@@ -191,7 +190,6 @@ export default {
 				edit.exit_description = data.exit_description
 				edit.entry = data.entry
 				edit.exit = data.exit
-
 				if (edit.exit.analysis == 'Sentiment') {
 					this.sentiVal = edit.exit.signals[0].indicator
 					console.log('exit 设置的', this.sentiVal)

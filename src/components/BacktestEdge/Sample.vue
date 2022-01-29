@@ -202,7 +202,6 @@ export default {
 			}
 		},
 		refreshHistory(id) {
-			console.log('id', this.getStatus(id))
 			let vm = this
 			vm.loading = true
 			vm.clearInterval = clearInterval()

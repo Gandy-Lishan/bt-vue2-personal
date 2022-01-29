@@ -9,7 +9,6 @@
 					<el-form-item label="Commission:" prop="commission">
 						<el-input v-model="temp.commission" disabled></el-input>
 					</el-form-item>
-
 					<span class="comUnitNote">(%)</span>
 					<el-form-item label="Slippage:" prop="slippage">
 						<el-input
@@ -144,22 +143,6 @@ export default {
 			sentimentIndicatorList: []
 		}
 	},
-	watch: {
-		backtestEditData: {
-			handler(newVal) {
-				console.log('RESULT 数据', newVal)
-			},
-			immediate: true,
-			deep: true
-		},
-		editFrequency: {
-			handler(newVal) {
-				console.log('Frequency 数据', newVal)
-			},
-			immediate: true,
-			deep: true
-		}
-	}
 }
 </script>
 <style lang="less" scoped>

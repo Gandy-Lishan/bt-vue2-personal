@@ -547,7 +547,7 @@ export default {
 					} else {
 						this.getBacktestList()
 						this.$message.error({
-							message: '收藏失败',
+							message: 'Remove failed',
 							duration: 1000
 						})
 					}

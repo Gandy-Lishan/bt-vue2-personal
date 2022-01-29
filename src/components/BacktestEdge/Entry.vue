@@ -22,7 +22,6 @@
 			@getIndicatorRadio="getIndicatorRadio"
 		></indicator>
 		<senti
-			:direction="fd.direction"
 			:criteria="'entry'"
 			ref="sentiChild"
 			:sentiUrl="sentiUrl"
@@ -109,7 +108,6 @@ export default {
 		},
 		getSentiVal(val) {
 			this.sentiVal = val
-			console.log('entry indicator数组传过来的', this.sentiVal)
 		},
 		getTechVal(val) {
 			this.techVal = val

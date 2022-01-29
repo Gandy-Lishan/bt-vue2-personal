@@ -4,14 +4,12 @@
 			<div class="ids-container">
 				<el-form-item label="Extreme Optimism" prop="extreme_optimism">
 					<el-input
-						disabled
 						v-model="senti.extreme_optimism"
 						oninput="value=value.replace(/[^\-?\d.]/g,'')"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="Extreme Pessimism" prop="extreme_pessimism">
 					<el-input
-						disabled
 						v-model="senti.extreme_pessimism"
 						oninput="value=value.replace(/^\-?\d.]/g,'')"
 					></el-input>
@@ -118,8 +116,6 @@ export default {
 		criteria: String,
 		sentiUrl: String,
 		sentiVal: String,
-		// editIndiData: Object,
-		direction: String
 	},
 	data() {
 		return {
@@ -140,8 +136,7 @@ export default {
 
 			disabled: false,
 			conditionRadio: 'Sentiment Value',
-			description: '',
-			editSentiVal: ''
+			description: ''
 		}
 	},
 	computed: {
@@ -166,33 +161,6 @@ export default {
 			immediate: true,
 			deep: true
 		},
-		// editIndiData: {
-		// 	handler(newVal) {
-		// 		if (JSON.stringify(newVal) != '{}') {
-		// 			this.senti.extreme_optimism =
-		// 				newVal[this.criteria].signals[0].extreme_optimism
-		// 			this.senti.extreme_pessimism =
-		// 				newVal[this.criteria].signals[0].extreme_pessimism
-		// 			this.senti.condition = Number(
-		// 				newVal[this.criteria].signals[0].condition
-		// 			)
-		// 			this.senti.value = newVal[this.criteria].signals[0].value
-		// 			this.conditionRadio = 'Sentiment Value'
-		// 			this.disabled = false
-		// 			delete this.senti.period
-		// 			let period = newVal[this.criteria].signals[0].period
-		// 			if (period) {
-		// 				this.conditionRadio = 'Sentiment Moving Average'
-		// 				this.senti.period = period
-		// 				this.setPeriod(period)
-		// 				this.disabled = true
-		// 			}
-		// 			this.setDesciption()
-		// 		}
-		// 	},
-		// 	immediate: true,
-		// 	deep: true
-		// },
 		// 用于解决 entry 和 exit 选择相同 indicator 而无法展示极值的问题
 		sentiUrl: {
 			handler(newVal) {
@@ -213,19 +181,20 @@ export default {
 	},
 	methods: {
 		setDesciption() {
-			let criteria = ''
-			if (this.criteria == 'entry') {
-				criteria = 'E:'
-			} else if (this.criteria == 'exit') {
-				criteria = 'X:'
-			}
-			let direction = this.direction + ':'
 			let ma = this.senti.period ? 'moving average' : ''
 			let period = this.senti.period ? this.senti.period : ''
 			let condition = this.conditions[this.senti.condition].label
-			let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
-			this.description = `${criteria} ${direction} ${sentiVal} ${ma} ${period} ${condition} ${this.senti.value}`
-			console.log('描述', this.description)
+			let description =
+				this.sentiVal +
+				' ' +
+				ma +
+				' ' +
+				period +
+				' ' +
+				condition +
+				' ' +
+				this.senti.value
+			this.description = description
 		},
 		getConditionRadio(val) {
 			if (val === 'Sentiment Value') {
@@ -254,6 +223,7 @@ export default {
 					}
 				}
 			})
+			console.log('setperiod', this.sentiVal)
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				if (
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
@@ -331,30 +301,6 @@ export default {
 					return checked
 				}
 			}
-		},
-		setEditData(newVal) {
-			if (JSON.stringify(newVal) != '{}') {
-				this.senti.extreme_optimism =
-					newVal[this.criteria].signals[0].extreme_optimism
-				this.senti.extreme_pessimism =
-					newVal[this.criteria].signals[0].extreme_pessimism
-				this.senti.condition = Number(
-					newVal[this.criteria].signals[0].condition
-				)
-				this.senti.value = newVal[this.criteria].signals[0].value
-				this.conditionRadio = 'Sentiment Value'
-				this.disabled = false
-				delete this.senti.period
-				let period = newVal[this.criteria].signals[0].period
-				if (period) {
-					this.conditionRadio = 'Sentiment Moving Average'
-					this.senti.period = period
-					this.setPeriod(period)
-					this.disabled = true
-				}
-				this.editSentiVal = newVal[this.criteria].signals[0].indicator
-				this.setDesciption()
-			}
 		}
 	}
 }
@@ -375,9 +321,5 @@ export default {
 }
 /deep/.el-input--suffix .el-input__inner {
 	padding-right: 5px;
-}
-
-/deep/ .el-form-item__label {
-	margin-right: 36px;
 }
 </style>

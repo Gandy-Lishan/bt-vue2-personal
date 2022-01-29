@@ -99,7 +99,7 @@ export default {
 				let init = deepClone1(this.$options.data())
 				Object.assign(this.$data, init)
 			}
-		}
+		},
 		// editIndiData: {
 		// 	async handler(newVal) {
 		// 		if (JSON.stringify(newVal) != '{}') {
