@@ -70,7 +70,7 @@ import cci from '@/components/BacktestEdge/signal/technical/Cci'
 import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
 import macd from '@/components/BacktestEdge/signal/technical/Macd.vue'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
-import indicator from '@/components/BacktestEdge/signal/indicator/Indicator'
+import indicator from '@/components/BacktestEdge/signal/indicator/indicator'
 import SignalCode from '@/tools/codeTool.js'
 
 export default {
