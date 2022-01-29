@@ -93,18 +93,39 @@
 	padding-left: 132px;
 	height: 25px;
 }
-input:not([type]),
-input[type='text'],
-input[type='number'],
-input[type='date'],
-input[type='time'] {
+.set-up-container input:not([type]),
+.set-up-container input[type='text'],
+.set-up-container input[type='number'],
+.set-up-container input[type='date'],
+.set-up-container input[type='time'] {
 	border: #000000 solid 1px;
 	padding: 0 5px 0 10px;
 	height: 25px;
 	width: 175px;
 	border-radius: unset;
 }
-
+.entry-container input:not([type]),
+.entry-container input[type='text'],
+.entry-container input[type='number'],
+.entry-container input[type='date'],
+.entry-container input[type='time'] {
+	border: #000000 solid 1px;
+	padding: 0 5px 0 10px;
+	height: 25px;
+	width: 175px;
+	border-radius: unset;
+}
+.exit-container input:not([type]),
+.exit-container input[type='text'],
+.exit-container input[type='number'],
+.exit-container input[type='date'],
+.exit-container input[type='time'] {
+	border: #000000 solid 1px;
+	padding: 0 5px 0 10px;
+	height: 25px;
+	width: 175px;
+	border-radius: unset;
+}
 .backtest_container .el-form-item .el-form-item__content .selectBox .el-select {
 	width: 320px;
 }
@@ -122,7 +143,7 @@ input[type='time'] {
 	margin-left: 40px;
 }
 .backtest_container .nameBox input[type='text']:last-child {
-	width: 747px;
+	width: 894px;
 }
 /* .backtest_container .nameBox .el-form-item .el-form-item__label {
 	width: 135px;
@@ -153,19 +174,12 @@ input[type='date'],
 input[type='time'] {
 	width: 116px;
 }
-@media (min-width: 900px) and (max-width: 1599px) {
-	.el-radio__label {
-		font-size: 15px !important;
-	}
-	.backtest_container .el-form-item {
-		margin-right: 0 !important;
-	}
-	.el-dialog__wrapper .el-dialog {
-		width: 60% !important;
-	}
-	.el-table .cell {
-		white-space: nowrap;
-
-		text-overflow: ellipsis;
-	}
+.el-radio__label {
+	font-size: 15px !important;
+}
+.backtest_container .el-form-item {
+	margin-right: 0 !important;
+}
+.el-dialog__wrapper .el-dialog {
+	width: 60% !important;
 }
