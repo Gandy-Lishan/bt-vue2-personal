@@ -66,7 +66,7 @@
 	</div>
 </template>
 <script>
-import indicator from '@/components/BacktestEdge/signal/indicator/Indicator'
+import indicator from '@/components/BacktestEdge/signal/indicator/Indicator.vue'
 import senti from '@/components/BacktestEdge/signal/sentiment/Senti'
 import cci from '@/components/BacktestEdge/signal/technical/Cci'
 import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
@@ -75,6 +75,7 @@ import SignalCode from '@/tools/codeTool.js'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
 export default {
 	name: 'exit',
+	props: { exitDirection: String },
 	data() {
 		return {
 			fd: {
@@ -121,7 +122,6 @@ export default {
 		},
 		getSentiVal(val) {
 			this.sentiVal = val
-			console.log('exit indicator数组传过来的', this.sentiVal)
 		},
 		getTechVal(val) {
 			this.techVal = val
@@ -140,7 +140,6 @@ export default {
 		},
 		setDirection(data) {
 			this.fd.direction = data
-			console.log('EXIT组件拿到的值', this.fd.direction)
 		},
 		saveBacktestData() {
 			let checked = true
@@ -149,7 +148,6 @@ export default {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			if (indi) {
 				if (this.indicatorRadio === 'sentiment') {
-					this.$refs.sentiChild.setDesciption()
 					let senti = this.$refs.sentiChild.saveCondition()
 					return (checked = senti)
 				} else if (
@@ -206,7 +204,6 @@ export default {
 				edit.exit_description = data.exit_description
 				edit.entry = data.entry
 				edit.exit = data.exit
-
 				if (edit.exit.analysis == 'Sentiment') {
 					this.sentiVal = edit.exit.signals[0].indicator
 					console.log('exit 设置的', this.sentiVal)

@@ -425,7 +425,6 @@ export default {
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
-
 					this.$store.commit('getRunBacktestData', row)
 					this.$emit('goTobacktestSetupForm', row.id)
 					this.$emit('goBacktestResultForm', row)
@@ -549,7 +548,7 @@ export default {
 					} else {
 						this.getBacktestList()
 						this.$message.error({
-							message: '收藏失败',
+							message: 'Add failed',
 							duration: 1000
 						})
 					}
