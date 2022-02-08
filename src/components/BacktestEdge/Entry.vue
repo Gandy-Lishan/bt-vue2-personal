@@ -95,6 +95,10 @@ export default {
 		macd,
 		ma
 	},
+	computed: {
+		
+	},
+	watch: {},
 	methods: {
 		getExitDirection(val) {
 			this.$store.commit('getExitDirection', val)

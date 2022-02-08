@@ -234,44 +234,6 @@ export default {
 		this.getStocksList()
 		this.getEndDate()
 	},
-	watch: {
-		updateFreq(val) {
-			console.log('updateFreq: ', val)
-			switch (val) {
-				case 'daily': {
-					this.frequency = 'Daily'
-					break
-				}
-				case 'weekly': {
-					this.frequency = 'Weekly'
-					break
-				}
-				case 'monthly': {
-					this.frequency = 'Monthly'
-					break
-				}
-			}
-		}
-	},
-	watch: {
-		updateFreq(val) {
-			console.log('updateFreq: ', val)
-			switch (val) {
-				case 'daily': {
-					this.frequency = 'Daily'
-					break
-				}
-				case 'weekly': {
-					this.frequency = 'Weekly'
-					break
-				}
-				case 'monthly': {
-					this.frequency = 'Monthly'
-					break
-				}
-			}
-		}
-	},
 	computed: {
 		listSet() {
 			return this.symbolList.map((item) => {
@@ -293,7 +255,7 @@ export default {
 	},
 	watch: {
 		updateFreq(val) {
-
+			//console.log('updateFreq: ', val)		
 			switch (val) {
 				case 'daily': {
 					this.frequency = 'Daily'
@@ -439,7 +401,7 @@ export default {
 			return (window.utils = new utils())
 		},
 		async getIndexsList() {
-			console.log('vuex', this.$store.state.indexsList)
+			//console.log('vuex', this.$store.state.indexsList)
 			if (this.$store.state.indexsList.length != 0) {
 				this.indexList = this.$store.state.indexsList
 			} else {

@@ -29,6 +29,8 @@ router.beforeEach((to, from, next) => {
 		).then(res=>{
       CIQ.store = store
       CIQ.indicatorList = res.data
+          console.log("log",document.referrer)
+    console.log(document.baseURI);
       return next()
 		})
     

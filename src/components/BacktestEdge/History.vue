@@ -424,10 +424,11 @@ export default {
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
-				})
-				this.$store.commit('getRunBacktestData', row)
+									this.$store.commit('getRunBacktestData', row)
 				this.$emit('goTobacktestSetupForm', row.id)
 				this.$emit('goBacktestResultForm', row)
+				})
+
 			} else {
 				this.$notify({
 					title: 'No trades',
@@ -446,6 +447,25 @@ export default {
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
+			var frequency = ''
+			switch(freq){
+				case "Daily": {
+					frequency = 'daily'
+					break;
+				}
+				case "Weekly": {
+					frequency = 'weekly'
+					break;
+				}
+				case "Monthly": {
+					frequency = 'monthly'
+					break;
+				}
+				default: {
+					break;
+				}
+			}
+			this.$store.commit('setRestoreFreq', frequency)
 			CIQ.addIndicators()
 		},
 		showDes(row) {

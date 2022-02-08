@@ -394,21 +394,41 @@ export default {
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)
-				this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
-			})
-			this.$store.commit('getRunBacktestData', row)
+				this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
+							this.$store.commit('getRunBacktestData', row)
 			this.$emit('goTobacktestSetupForm', row.id)
 			this.$emit('goBacktestResultForm', row)
+			})
+
 		},
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
 		},
-		restoreIndicatorLayout(data) {
+		restoreIndicatorLayout(data,freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
+			var frequency = ''
+			switch(freq){
+				case "Daily": {
+					frequency = 'daily'
+					break;
+				}
+				case "Weekly": {
+					frequency = 'weekly'
+					break;
+				}
+				case "Monthly": {
+					frequency = 'monthly'
+					break;
+				}
+				default: {
+					break;
+				}
+			}
+			this.$store.commit('setRestoreFreq', frequency)
 			CIQ.addIndicators()
 		},
 		showDes(row) {

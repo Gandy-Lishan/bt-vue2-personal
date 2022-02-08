@@ -4,6 +4,7 @@ import axios from "axios"
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
+		restoreFreq: '',
 		backtestSymbol: '',
 		pairDataFreq: '',
 		stateCopy: {},
@@ -135,6 +136,9 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+	setRestoreFreq(state,val){
+		state.restoreFreq = val
+	},
 	getBacktestSymbol(state,val){
 		state.backtestSymbol = val
 	},
