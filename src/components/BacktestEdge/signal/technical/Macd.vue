@@ -1,7 +1,7 @@
 <template>
 	<div class="senti-container">
 		<el-form :model="tech">
-			<div class="ids-container">
+			<!-- <div class="ids-container">
 				<el-form-item label="Slow moving average" prop="MACDSlow">
 					<el-input
 						v-model="tech.ids.MACDSlow"
@@ -23,7 +23,7 @@
 						oninput="this.value=this.value.replace(/[\d]/g,'')"
 					></el-input>
 				</el-form-item>
-			</div>
+			</div> -->
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio
@@ -54,7 +54,7 @@
 					<el-form-item>
 						<el-input
 							:disabled="disabled"
-							@blur="setDesciption"
+							@input="setDesciption"
 							v-model="tech.value"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 							placeholder="Input Value"
@@ -132,6 +132,27 @@ export default {
 			description: '',
 			editTechVal: ''
 		}
+	},
+	watch: {
+		// editIndiData: {
+		// 	handler(newVal) {
+		// 		if (JSON.stringify(newVal) != '{}') {
+		// 			this.tech.ids = newVal[this.criteria].signals[0].ids
+		// 			this.tech.condition = Number(
+		// 				newVal[this.criteria].signals[0].condition
+		// 			)
+		// 			this.disabled = false
+		// 			this.tech.value = newVal[this.criteria].signals[0].value
+		// 			if (this.tech.value === 'MACDSL') {
+		// 				this.conditionRadio = 'MACD Value '
+		// 				this.disabled = true
+		// 			}
+		// 			this.setDesciption()
+		// 		}
+		// 	},
+		// 	immediate: true,
+		// 	deep: true
+		// }
 	},
 	methods: {
 		setDesciption() {
@@ -211,6 +232,7 @@ export default {
 .condition-container {
 	border-top: 1px solid #797979;
 	display: flex;
+	border-top: 1px solid #797979;
 }
 /deep/ .el-input__inner {
 	padding-left: 5px;

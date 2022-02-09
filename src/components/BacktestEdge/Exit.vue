@@ -18,7 +18,9 @@
 			@getTechUrl="getTechUrl"
 			@getSentiVal="getSentiVal"
 			@getTechVal="getTechVal"
+			@getRiskVal="getRiskVal"
 			@getTechIndiValue="getTechIndiValue"
+			@getRiskIndiValue="getRiskIndiValue"
 			@getIndicatorRadio="getIndicatorRadio"
 		></indicator>
 		<senti
@@ -64,7 +66,7 @@
 	</div>
 </template>
 <script>
-import indicator from '@/components/BacktestEdge/signal/indicator/indicator'
+import indicator from '@/components/BacktestEdge/signal/indicator/Indicator.vue'
 import senti from '@/components/BacktestEdge/signal/sentiment/Senti'
 import cci from '@/components/BacktestEdge/signal/technical/Cci'
 import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
@@ -84,6 +86,8 @@ export default {
 			sentiVal: '',
 			techVal: '',
 			techIndiValue: '',
+			riskVal: '',
+			riskIndiValue: '',
 			indicatorRadio: 'sentiment'
 			// editIndiData: {}
 		}
@@ -122,8 +126,14 @@ export default {
 		getTechVal(val) {
 			this.techVal = val
 		},
+		getRiskVal(val) {
+			this.riskVal = val
+		},
 		getTechIndiValue(val) {
 			this.techIndiValue = val
+		},
+		getRiskIndiValue(val) {
+			this.riskIndiValue = val
 		},
 		getIndicatorRadio(val) {
 			this.indicatorRadio = val
@@ -144,24 +154,28 @@ export default {
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'cci'
 				) {
+					this.$refs.cciChild.setDesciption()
 					let cci = this.$refs.cciChild.saveCondition()
 					return (checked = cci)
 				} else if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'rsi'
 				) {
+					this.$refs.rsiChild.setDesciption()
 					let rsi = this.$refs.rsiChild.saveCondition()
 					return (checked = rsi)
 				} else if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'macd'
 				) {
+					this.$refs.macdChild.setDesciption()
 					let macd = this.$refs.macdChild.saveCondition()
 					return (checked = macd)
 				} else if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'ma'
 				) {
+					this.$refs.maChild.setDesciption()
 					let ma = this.$refs.maChild.saveCondition()
 					return (checked = ma)
 				}

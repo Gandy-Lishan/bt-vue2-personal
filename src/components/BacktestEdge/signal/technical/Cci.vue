@@ -1,7 +1,7 @@
 <template>
 	<div class="senti-container">
 		<el-form :model="tech">
-			<div class="ids-container">
+			<!-- <div class="ids-container">
 				<el-form-item label="OverBought bound" prop="over_bought_bound">
 					<el-input
 						v-model="tech.ids.over_bought_bound"
@@ -23,7 +23,7 @@
 						oninput="value=value.replace(/[^-?\d]/g,'')"
 					></el-input>
 				</el-form-item>
-			</div>
+			</div> -->
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio v-model="conditionRadio" label="CCI Value"></el-radio>
@@ -48,7 +48,7 @@
 				<div class="conditionInput">
 					<el-form-item>
 						<el-input
-							@blur="setDesciption"
+							@input="setDesciption"
 							v-model="tech.value"
 							oninput="value=value.replace(/[^-?0-9.]/g,'')"
 							placeholder="Input Value"
@@ -94,6 +94,28 @@ export default {
 
 			editTechVal: ''
 		}
+	},
+	// computed: {
+	// 	...mapGetters(['getterIsSavaDescription']),
+	// 	isSavaDescriptionAgain() {
+	// 		return this.getterIsSavaDescription
+	// 	}
+	// },
+	watch: {
+		// editIndiData: {
+		// 	handler(newVal) {
+		// 		if (JSON.stringify(newVal) != '{}') {
+		// 			this.tech.ids = newVal[this.criteria].signals[0].ids
+		// 			this.tech.condition = Number(
+		// 				newVal[this.criteria].signals[0].condition
+		// 			)
+		// 			this.tech.value = newVal[this.criteria].signals[0].value
+		// 			this.setDesciption()
+		// 		}
+		// 	},
+		// 	immediate: true,
+		// 	deep: true
+		// }
 	},
 	methods: {
 		setDesciption() {
@@ -159,6 +181,7 @@ export default {
 .condition-container {
 	border-top: 1px solid #797979;
 	display: flex;
+	border-top: 1px solid #797979;
 }
 /deep/ .el-input__inner {
 	padding-left: 5px;

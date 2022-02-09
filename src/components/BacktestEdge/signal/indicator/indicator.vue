@@ -17,7 +17,9 @@
 							class="inline-input"
 							clearable
 							v-model="si.sentimentIndicator"
-							:disabled="isCheckedIndicators"
+							:disabled="
+								indicatorRadio === 'Sentiment Indicators' ? false : true
+							"
 							:fetch-suggestions="indicatorSentimentSearch"
 							placeholder="Input the sentiment indicator"
 							@select="handleSentimentSelect"
@@ -38,7 +40,9 @@
 				<el-form-item prop="technicalIndicator">
 					<div class="indicatorSearchBox">
 						<el-autocomplete
-							:disabled="!isCheckedIndicators"
+							:disabled="
+								indicatorRadio === 'Technical Indicators' ? false : true
+							"
 							class="inline-input"
 							clearable
 							prefix-icon="el-icon-search"
@@ -46,6 +50,30 @@
 							:fetch-suggestions="indicatorTechnicalSearch"
 							placeholder="Input the technical indicator"
 							@select="handleTechnicalSelect"
+						></el-autocomplete>
+					</div>
+				</el-form-item>
+			</div>
+			<div class="indicator-container techBox" v-if="criteria == 'exit'">
+				<el-form-item>
+					<el-radio
+						v-model="indicatorRadio"
+						label="Risk Control"
+						@change="changeIndicatorChecked"
+					>
+					</el-radio>
+				</el-form-item>
+				<el-form-item prop="riskIndicator">
+					<div class="indicatorSearchBox">
+						<el-autocomplete
+							:disabled="indicatorRadio === 'Risk Control' ? false : true"
+							class="inline-input"
+							clearable
+							prefix-icon="el-icon-search"
+							v-model="si.riskIndicator"
+							:fetch-suggestions="indicatorRiskSearch"
+							placeholder="Input the Risk Control Indicator"
+							@select="handleRiskSelect"
 						></el-autocomplete>
 					</div>
 				</el-form-item>
@@ -81,7 +109,8 @@ export default {
 			indicatorRadio: 'Sentiment Indicators',
 			si: {
 				sentimentIndicator: '',
-				technicalIndicator: ''
+				technicalIndicator: '',
+				riskIndicator: ''
 			},
 			isCheckedIndicators: false,
 			sentimentIndicatorList: this.$store.state.sentimentIndicatorList
@@ -99,7 +128,7 @@ export default {
 				let init = deepClone1(this.$options.data())
 				Object.assign(this.$data, init)
 			}
-		},
+		}
 		// editIndiData: {
 		// 	async handler(newVal) {
 		// 		if (JSON.stringify(newVal) != '{}') {
@@ -243,6 +272,23 @@ export default {
 				)
 			}
 		},
+		indicatorRiskSearch(queryString, cb) {
+			var riskIndicatorList = this.loadRiskList()
+			var results = queryString
+				? riskIndicatorList.filter(this.createRiskFilter(queryString))
+				: riskIndicatorList
+			// 调用 callback 返回建议列表的数据
+			cb(results)
+		},
+		createRiskFilter(queryString) {
+			return (riskIndicatorList) => {
+				return (
+					riskIndicatorList.value
+						.toLowerCase()
+						.indexOf(queryString.toLowerCase()) === 0
+				)
+			}
+		},
 		handleSentimentSelect(item) {
 			// const obj = {}
 			// obj.criteria = this.criteria
@@ -357,6 +403,25 @@ export default {
 			}
 			vm.si.technicalIndicator = item.value
 		},
+		handleRiskSelect(item) {
+			this.si.riskIndicator = item.value
+			this.$emit('getRiskVal', item.value)
+			let val = item.value
+			const set = new Set([
+				['Tack Profit', 'tp'],
+				['Stop Loss', 'sl'],
+				['Time In Market', 'tim'],
+				['Profit/loss', 'pl']
+			])
+			const newMap = new Map(set)
+			var url = ''
+			for (let i of newMap.entries()) {
+				if (val === i[0]) {
+					url = i[1]
+					this.$emit('getRiskIndiValue', i[1])
+				}
+			}
+		},
 		changeIndicatorChecked() {
 			this.isCheckedIndicators = !this.isCheckedIndicators
 			const arr = ['Sentiment Indicators', 'Technical Indicators']
@@ -379,6 +444,14 @@ export default {
 				{ value: 'Relative Strength Index' },
 				{ value: 'MACD' },
 				{ value: 'Moving Average' }
+			]
+		},
+		loadRiskList() {
+			return [
+				{ value: 'Tack Profit' },
+				{ value: 'Stop Loss' },
+				{ value: 'Time In Market' },
+				{ value: 'Profit/loss' }
 			]
 		},
 		// setIndicatorRadio(obj) {
@@ -503,12 +576,16 @@ export default {
 	display: flex;
 }
 /deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
-	width: 329px;
+	width: 334px;
 	padding-left: 30px;
 }
 /deep/ .techBox .el-input--prefix .el-input__inner:first-child {
 	width: 334px;
 	padding-left: 30px;
+}
+/deep/ .el-radio__label {
+	display: inline-block;
+	width: 136px;
 }
 /deep/ .el-input__icon {
 	width: 60px;

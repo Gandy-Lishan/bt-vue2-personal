@@ -28,6 +28,7 @@ router.beforeEach((to, from, next) => {
 			}
 		).then(res=>{
       CIQ.store = store
+      console.log('init getallsymbol')
       CIQ.indicatorList = res.data
           console.log("log",document.referrer)
     console.log(document.baseURI);

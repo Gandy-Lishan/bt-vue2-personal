@@ -143,6 +143,22 @@ export default {
 			sentimentIndicatorList: []
 		}
 	},
+	watch: {
+		backtestEditData: {
+			handler(newVal) {
+				console.log('RESULT 数据', newVal)
+			},
+			immediate: true,
+			deep: true
+		},
+		editFrequency: {
+			handler(newVal) {
+				console.log('Frequency 数据', newVal)
+			},
+			immediate: true,
+			deep: true
+		}
+	}
 }
 </script>
 <style lang="less" scoped>

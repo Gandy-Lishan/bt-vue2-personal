@@ -364,10 +364,11 @@ export default {
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+
+				this.$store.commit('getRunBacktestData', row)
+				this.$emit('goBacktestResultForm', row)
+				vm.$emit('goTobacktestSetupForm', row.id)
 			})
-			this.$store.commit('getRunBacktestData', row)
-			this.$emit('goBacktestResultForm', row)
-			vm.$emit('goTobacktestSetupForm', row.id)
 		},
 		deleteBacktest(id) {
 			this.$http
@@ -424,11 +425,10 @@ export default {
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
-									this.$store.commit('getRunBacktestData', row)
-				this.$emit('goTobacktestSetupForm', row.id)
-				this.$emit('goBacktestResultForm', row)
+					this.$store.commit('getRunBacktestData', row)
+					this.$emit('goTobacktestSetupForm', row.id)
+					this.$emit('goBacktestResultForm', row)
 				})
-
 			} else {
 				this.$notify({
 					title: 'No trades',
@@ -567,7 +567,7 @@ export default {
 					} else {
 						this.getBacktestList()
 						this.$message.error({
-							message: 'Remove failed',
+							message: 'Add failed',
 							duration: 1000
 						})
 					}

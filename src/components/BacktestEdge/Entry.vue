@@ -22,6 +22,7 @@
 			@getIndicatorRadio="getIndicatorRadio"
 		></indicator>
 		<senti
+			:direction="fd.direction"
 			:criteria="'entry'"
 			ref="sentiChild"
 			:sentiUrl="sentiUrl"
@@ -68,7 +69,7 @@ import cci from '@/components/BacktestEdge/signal/technical/Cci'
 import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
 import macd from '@/components/BacktestEdge/signal/technical/Macd.vue'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
-import indicator from '@/components/BacktestEdge/signal/indicator/indicator'
+import indicator from '@/components/BacktestEdge/signal/indicator/Indicator'
 import SignalCode from '@/tools/codeTool.js'
 
 export default {
@@ -129,30 +130,35 @@ export default {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			if (indi) {
 				if (this.indicatorRadio === 'sentiment') {
+					this.$refs.sentiChild.setDesciption()
 					let senti = this.$refs.sentiChild.saveCondition()
 					return (checked = senti)
 				} else if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'cci'
 				) {
+					this.$refs.cciChild.setDesciption()
 					let cci = this.$refs.cciChild.saveCondition()
 					return (checked = cci)
 				} else if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'rsi'
 				) {
+					this.$refs.rsiChild.setDesciption()
 					let rsi = this.$refs.rsiChild.saveCondition()
 					return (checked = rsi)
 				} else if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'macd'
 				) {
+					this.$refs.macdChild.setDesciption()
 					let macd = this.$refs.macdChild.saveCondition()
 					return (checked = macd)
 				} else if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'ma'
 				) {
+					this.$refs.maChild.setDesciption()
 					let ma = this.$refs.maChild.saveCondition()
 					return (checked = ma)
 				}
