@@ -18,9 +18,11 @@ export default new Vuex.Store({
 			inputOriginalAssetValue: ''
 		},
 		backtestInfo: {
+			entry_description: '',
+			exit_description: '',
 			entry: {
-				direction: '',
-				frequency: '',
+				direction: 'Long',
+				frequency: 'Daily',
 				signals: [
 					{
 						sentimentIndicator: '',
@@ -29,9 +31,9 @@ export default new Vuex.Store({
 				]
 			},
 			exit: {
-				direction: '',
-				frequency: '',
-				signals: [{ sentimentIndicator: '', technicalIndicator: '' }]
+				direction: 'Short',
+				frequency: 'Daily',
+				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: ''}]
 			}
 		},
 		openedPorfolioBacktests: [],
@@ -105,9 +107,14 @@ export default new Vuex.Store({
 		isShowExitForm: true,
 		tabIndex: 0,
 		fdDialogData: {},
-		sentimentIndicatorList: []
+		sentimentIndicatorList: [],
+		backtestNameList: [],
+		isSavaDescription: false
 	},
 	getters: {
+		getterIsSavaDescription: (state) => {
+			return state.isSavaDescription
+		},
 		getBacktestEntryFrequency: (state) => {
 			return state.backtestInfo.entry.frequency
 		},
@@ -258,6 +265,10 @@ export default new Vuex.Store({
 		},
 		getFrequency(state, val) {
 			state.exitFrequency = val
+			// 将频率保存到 backtestInfo 
+			if(typeof(state.backtestInfo.entry) == 'object' && typeof(state.backtestInfo.exit) == 'object') {
+			state.backtestInfo.entry.frequency = val
+			state.backtestInfo.exit.frequency = val}
 		},
 		getMA(state, val) {
 			state.activatedMA = val
@@ -293,10 +304,16 @@ export default new Vuex.Store({
 				data = ''
 			}
 			state.exitDirection = data
+			// 设置 entry 和 exit 的 direction
+			state.backtestInfo.entry.direction = val
+			state.backtestInfo.exit.direction = data
 		},
 		getTechnicalIndicators(state, val) {
 			state.indicators.technicalIndicators = val
 		},
+		// getRiskIndicators(state, val) {
+		// 	state.indicators.riskIndicators = val
+		// },
 		getBacktestetUpEditData(state, row) {
 			state.editBacktestSetUpData = row
 		},
@@ -353,11 +370,14 @@ export default new Vuex.Store({
 					state.backtestInfo[key] = obj[key]
 				}
 			}
+			
 		},
 		deleteIndicator(state, val) {
 			state.backtestInfo[val.criteria].signals[val.index].sentimentIndicator =
 				''
 			state.backtestInfo[val.criteria].signals[val.index].technicalIndicator =
+				''
+			state.backtestInfo.exit.signals[val.index].riskIndicator =
 				''
 		},
 		getTechValue(state, obj) {
@@ -365,9 +385,9 @@ export default new Vuex.Store({
 				obj.value
 		},
 		getSentiValue(state, obj) {
+			console.log("再次保存后的报错",state.backtestInfo);
 			state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator =
 				obj.value
-			//console.log("选择后的senitment",state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator);
 		},
 		// 用于单选框 切换时删除不必要字段
 		delete(state, obj) {
@@ -379,9 +399,13 @@ export default new Vuex.Store({
 				''
 			state.backtestInfo[obj.criteria].signals[obj.index].technicalIndicator =
 				''
+				state.backtestInfo.exit.signals[obj.index].riskIndicator =
+				''
 		},
 		clearBacktest(state) {
 			state.backtestInfo = {
+				entry_description: '',
+				exit_description: '',
 				entry: {
 					direction: '',
 					frequency: '',
@@ -395,7 +419,7 @@ export default new Vuex.Store({
 				exit: {
 					direction: '',
 					frequency: '',
-					signals: [{ sentimentIndicator: '', technicalIndicator: '' }]
+					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
 				}
 			}
 		},
@@ -407,6 +431,51 @@ export default new Vuex.Store({
 		},
 		tryClear(state) {
 			state.isClearForm = !state.isClearForm
+		},
+		saveCondition(state, obj) {
+			let criteria = obj.criteria
+			let index = obj.index
+			delete obj.criteria
+			delete obj.index
+			let init = {sentimentIndicator: '', technicalIndicator: ''}
+			init.sentimentIndicator = state.backtestInfo[criteria].signals[index].sentimentIndicator
+			init.technicalIndicator = state.backtestInfo[criteria].signals[index].technicalIndicator
+			// 在保存之前确保只有 sentimentIndicator 以及 technicalIndicator 两个属性
+			state.backtestInfo[criteria].signals[index] = Object.assign({}, init)
+			for(let key in obj) {
+				state.backtestInfo[criteria].signals[index][key] = obj[key]
+			}
+			
+		},
+		saveDescription(state, desObj) {
+			state.backtestInfo[desObj.criteria+'_description'] = desObj.description
+		},
+		initialBacktestInfo(state) {
+			state.backtestInfo = {
+				entry_description: '',
+				exit_description: '',
+				entry: {
+					direction: 'Long',
+					frequency: 'Daily',
+					signals: [
+						{
+							sentimentIndicator: '',
+							technicalIndicator: ''
+						}
+					]
+				},
+				exit: {
+					direction: 'Short',
+					frequency: 'Daily',
+					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
+				}
+			}
+		},
+		getBacktestName(state, list) {
+          state.backtestNameList = list
+		},
+		savaDescriptionAgain(state,flag) {
+			state.isSavaDescription = flag
 		}
 	},
 	actions: {
