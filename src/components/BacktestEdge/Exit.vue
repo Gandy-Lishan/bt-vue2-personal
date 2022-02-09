@@ -113,6 +113,22 @@ export default {
 	// 		}
 	// 	}
 	// },
+	computed: {
+		updateSenti(){
+			return this.$store.state.currentSenti
+		},
+		updateTech(){
+			return this.$store.state.currentTech
+		}
+	},
+	watch: {
+		updateSenti(val){
+			this.indicatorRadio = 'sentiment'
+		},
+		updateTech(val){
+			this.indicatorRadio = 'technical'
+		},
+	},
 	methods: {
 		getSentiUrl(val) {
 			this.sentiUrl = val

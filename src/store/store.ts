@@ -4,6 +4,14 @@ import axios from "axios"
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
+		currentSenti: {
+			url: '',
+			name: ''
+		},
+		currentTech: {
+			url: '',
+			name: ''
+		},
 		restoreFreq: '',
 		backtestSymbol: '',
 		pairDataFreq: '',
@@ -140,6 +148,12 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+	setCurrentSenti(state,val){
+		state.currentSenti = val
+	},
+	setCurrentTech(state,val){
+		state.currentTech = val
+	},
 	setRestoreFreq(state,val){
 		state.restoreFreq = val
 	},

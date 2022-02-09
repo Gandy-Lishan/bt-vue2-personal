@@ -1,14 +1,14 @@
 <template>
 	<div class="senti-container">
 		<el-form :model="tech">
-			<!-- <div class="ids-container">
+			<div class="ids-container">
 				<el-radio-group v-model="tech.ids.ma_category" @change="getMaRadio">
 					<el-radio label="SMA" style="margin-bottom: 30px"
 						>Simple moving average</el-radio
 					>
 					<el-radio label="EMA">Exponential moving average</el-radio>
 				</el-radio-group>
-			</div> -->
+			</div>
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio

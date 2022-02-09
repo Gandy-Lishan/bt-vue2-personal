@@ -97,9 +97,21 @@ export default {
 		ma
 	},
 	computed: {
-		
+		updateSenti(){
+			return this.$store.state.currentSenti
+		},
+		updateTech(){
+			return this.$store.state.currentTech
+		}
 	},
-	watch: {},
+	watch: {
+		updateSenti(val){
+			this.indicatorRadio = 'sentiment'
+		},
+		updateTech(val){
+			this.indicatorRadio = 'technical'
+		},
+	},
 	methods: {
 		getExitDirection(val) {
 			this.$store.commit('getExitDirection', val)

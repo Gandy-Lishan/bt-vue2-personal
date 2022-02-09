@@ -391,10 +391,11 @@ export default {
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				let vm = this
+				
 				vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
-					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
 
 					this.$store.commit('getRunBacktestData', row)
 					this.$emit('goTobacktestSetupForm', row.id)

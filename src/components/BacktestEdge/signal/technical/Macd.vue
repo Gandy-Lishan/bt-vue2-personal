@@ -1,7 +1,7 @@
 <template>
 	<div class="senti-container">
 		<el-form :model="tech">
-			<!-- <div class="ids-container">
+			<div class="ids-container">
 				<el-form-item label="Slow moving average" prop="MACDSlow">
 					<el-input
 						v-model="tech.ids.MACDSlow"
@@ -23,7 +23,7 @@
 						oninput="this.value=this.value.replace(/[\d]/g,'')"
 					></el-input>
 				</el-form-item>
-			</div> -->
+			</div>
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio
