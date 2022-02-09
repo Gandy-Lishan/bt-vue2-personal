@@ -110,19 +110,22 @@ export default {
 		ma,
 		risk
 	},
-	// watch: {
-	// 	exitDirection: {
-	// 		handler(newVal) {
-	// 			if (newVal) {
-	// 				if (newVal === 'Long') {
-	// 					this.fd.direction = 'Short'
-	// 				} else if (newVal === 'Short') {
-	// 					this.fd.direction = 'Long'
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// },
+	computed: {
+		updateSenti(){
+			return this.$store.state.currentSenti
+		},
+		updateTech(){
+			return this.$store.state.currentTech
+		}
+	},
+	watch: {
+		updateSenti(val){
+			this.indicatorRadio = 'sentiment'
+		},
+		updateTech(val){
+			this.indicatorRadio = 'technical'
+		},
+	},
 	methods: {
 		getSentiUrl(val) {
 			this.sentiUrl = val
@@ -132,7 +135,6 @@ export default {
 		},
 		getSentiVal(val) {
 			this.sentiVal = val
-			console.log('exit indicator数组传过来的', this.sentiVal)
 		},
 		getTechVal(val) {
 			this.techVal = val
@@ -151,7 +153,6 @@ export default {
 		},
 		setDirection(data) {
 			this.fd.direction = data
-			console.log('EXIT组件拿到的值', this.fd.direction)
 		},
 		saveBacktestData() {
 			let checked = true
@@ -217,7 +218,6 @@ export default {
 				edit.exit_description = data.exit_description
 				edit.entry = data.entry
 				edit.exit = data.exit
-
 				if (edit.exit.analysis == 'Sentiment') {
 					this.sentiVal = edit.exit.signals[0].indicator
 					console.log('exit 设置的', this.sentiVal)

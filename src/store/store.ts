@@ -1,10 +1,19 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from "axios"
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
+		currentSenti: {
+			url: '',
+			name: ''
+		},
+		currentTech: {
+			url: '',
+			name: ''
+		},
+		restoreFreq: '',
 		backtestSymbol: '',
-		orignalFreqency: '',
 		pairDataFreq: '',
 		stateCopy: {},
 		conditionRadio: '',
@@ -103,6 +112,7 @@ export default new Vuex.Store({
 		allSymbolsList: [],
 		stocksList: [],
 		indexsList: [],
+
 		editBacktestSetUpData: {},
 		isShowExitForm: true,
 		tabIndex: 0,
@@ -138,6 +148,15 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+	setCurrentSenti(state,val){
+		state.currentSenti = val
+	},
+	setCurrentTech(state,val){
+		state.currentTech = val
+	},
+	setRestoreFreq(state,val){
+		state.restoreFreq = val
+	},
 	getBacktestSymbol(state,val){
 		state.backtestSymbol = val
 	},
@@ -147,9 +166,6 @@ export default new Vuex.Store({
     setCopy(state,val){
       state.stateCopy = val
     },
-	setOrignalFreqency(state,val){
-		state.orignalFreqency = val
-	},
 	setFreqency(state,val){
 		state.pairDataFreq = val
 	},
@@ -477,6 +493,7 @@ export default new Vuex.Store({
 		savaDescriptionAgain(state,flag) {
 			state.isSavaDescription = flag
 		}
+
 	},
 	actions: {
 		Try(context, val) {

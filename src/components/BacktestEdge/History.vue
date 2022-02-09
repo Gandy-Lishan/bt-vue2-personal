@@ -364,11 +364,10 @@ export default {
 		editBacktest(row) {
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
-				console.log('即将编辑的数据', res.data)
 				// 恢复indicator layout
-				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
-				}
+				console.log(res.data.indicator_layout)
+				if(res.data.indicator_layout) {
+				this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)}
 				this.$store.commit('getRunBacktestData', row)
 				this.$emit('goBacktestResultForm', row)
 				vm.$emit('goTobacktestSetupForm', row.id)
@@ -400,28 +399,6 @@ export default {
 					})
 				})
 		},
-		// async copyBacktest(row) {
-		// 	let vm = this
-		// 	try {
-		// 		const res = await this.$http.get('/dev/seeparams/' + row.id + '/')
-		// 		console.log('相应数据', res.data)
-		// 		let data = res.data
-		// 		data.name = data.name + '(copy)'
-		// 		delete data.backtest_id
-		// 		// console.log('copy', data)
-		// 		const seRes = await vm.$http.post(
-		// 			'/dev/runbt/',
-		// 			vm.$qs.stringify(data),
-		// 			{
-		// 				withCredentials: true
-		// 			}
-		// 		)
-		// 		console.log('wwwww', seRes)
-		// 		this.refreshHistory(seRes.data.id)
-		// 	} catch (error) {
-		// 		console.log(error)
-		// 	}
-		// },
 		copyBacktest(row) {
 			let params = {}
 			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
@@ -456,7 +433,7 @@ export default {
 					if (res.data.indicator_layout) {
 						this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
 					}
-
+					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
 					this.$store.commit('getRunBacktestData', row)
 					this.$emit('goTobacktestSetupForm', row.id)
 					this.$emit('goBacktestResultForm', row)
@@ -474,11 +451,31 @@ export default {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
 		},
-		restoreIndicatorLayout(data) {
+		restoreIndicatorLayout(data,freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
+			var frequency = ''
+			
+			switch(freq){
+				case "Daily": {
+					frequency = 'daily'
+					break;
+				}
+				case "Weekly": {
+					frequency = 'weekly'
+					break;
+				}
+				case "Monthly": {
+					frequency = 'monthly'
+					break;
+				}
+				default: {
+					break;
+				}
+			}
+			this.$store.commit('setRestoreFreq', frequency)
 			CIQ.addIndicators()
 		},
 		showDes(row) {
@@ -580,7 +577,7 @@ export default {
 					} else {
 						this.getBacktestList()
 						this.$message.error({
-							message: '收藏失败',
+							message: 'Add failed',
 							duration: 1000
 						})
 					}

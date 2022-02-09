@@ -120,9 +120,28 @@ export default {
 		...mapGetters(['getIsClearForm']),
 		isClearForm() {
 			return this.getIsClearForm
+		},
+		updateSenti(){
+			return this.$store.state.currentSenti
+		},
+		updateTech(){
+			return this.$store.state.currentTech
 		}
 	},
 	watch: {
+		updateSenti(val){
+			this.si.sentimentIndicator = val.name
+			this.indicatorRadio = 'Sentiment Indicators'
+		},
+		updateTech(val){
+			var builtinList = this.$store.state.builtinList
+			builtinList.find(item => {
+				if(item.url == val.url){
+					this.si.technicalIndicator = item.value
+					this.indicatorRadio = 'Technical Indicators'
+				}
+			})	
+		},
 		isClearForm: {
 			handler(newVal) {
 				let init = deepClone1(this.$options.data())

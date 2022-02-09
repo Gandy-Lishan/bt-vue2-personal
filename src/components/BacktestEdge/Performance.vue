@@ -317,7 +317,6 @@ export default {
 			CIQ.loadChart(tradeData.markerSet)
 			CIQ.addMarker()
 		},
-
 		getResultData(id) {
 			let vm = this
 			vm.loading = true
