@@ -1,37 +1,25 @@
 <template>
 	<div class="backtest_container">
-		<el-form
-			ref="backtestSetupForm"
-			:model="bd"
-			label-position="left"
-			:rules="setUpFormRules"
-		>
+		<el-form ref="backtestSetupForm" :model="bd" label-position="left">
 			<el-row>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12">
 					<el-form-item label="Starting Capital:" prop="startingCapital">
 						<el-input
 							v-model="bd.capital"
-							v-direction="{ x: 1, y: 0 }"
 							@input="validateStartingCapital"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="Commission:" prop="commission">
 						<el-input
 							v-model="temp.commission"
-							v-direction="{ x: 2, y: 0 }"
 							@change="getCommission"
 							@input="validateCommission"
 						></el-input>
 					</el-form-item>
 
-					<span class="comUnitNote">(per share)</span>
+					<span class="comUnitNote">(%)</span>
 					<el-form-item label="Slippage:" prop="slippage">
-						<el-input
-							v-model="temp.slippage"
-							@change="getSlippage"
-							v-direction="{ x: 3, y: 0 }"
-							@input="validateSlippage"
-						></el-input> </el-form-item
+						<el-input v-model="bd.slippage"></el-input> </el-form-item
 					><span class="sliUnitNote">(per trade)</span>
 					<el-form-item label="Benchmark:" prop="benchmark">
 						<div class="enterSymbolBox">
@@ -144,11 +132,7 @@
 						prop="name"
 						placeholder="Give the backtest a name"
 					>
-						<el-input
-							v-model="bd.name"
-							v-direction="{ x: 4, y: 0 }"
-							style="width: 720px"
-						></el-input>
+						<el-input v-model="bd.name" style="width: 720px"></el-input>
 					</el-form-item>
 				</div>
 			</el-row>
@@ -161,22 +145,23 @@ import { Store, mapGetters } from 'vuex'
 import { timestampToTime } from '@/tools/formatDate.js'
 import deepClone1 from '@/tools/deepClone.js'
 export default {
-	props: { backtestEditData: Object },
+	props: { backtestEditData: Object, editFrequency: String },
 	name: 'setUp',
 	data() {
 		return {
 			bd: {
 				name: '',
-				symbol: 'AAPL',
+				symbol: 'SPY',
 				benchmark: 'SPY',
 				strategy: 'Signal',
 				capital: 100000.0,
 				capital_alloc: 1.0,
 				commission: 0.001,
 				win_rate: 0.0,
-				slippage: 0.001,
+				slippage: 0.1,
 				start_date: '',
-				end_date: ''
+				end_date: '',
+				description: 'backtest'
 			},
 			frequency: 'Daily',
 			historyOptions: [
@@ -239,56 +224,34 @@ export default {
 			loading: false,
 			options: [],
 			temp: { commission: '0.1', slippage: '0.1' },
-			setUpFormRules: {
-				name: [
-					{ required: true, message: 'Please enter name', trigger: 'blur' }
-				],
-				backtestHistory: [
-					{
-						required: true,
-						message: 'Please select history',
-						trigger: 'blur'
-					}
-				],
-				frequency: [
-					{
-						required: true,
-						message: 'Please select frequency',
-						trigger: 'blur'
-					}
-				],
-				startDate: [
-					{
-						type: 'date',
-						required: true,
-						message: 'Please select start date',
-						trigger: 'blur'
-					}
-				],
-				endDate: [
-					{
-						type: 'date',
-						required: true,
-						message: 'Please select end date',
-						trigger: 'blur'
-					}
-				]
-			}
+			sentimentIndicatorList: []
 		}
 	},
 	mounted() {
-		// this.getIndexsList()
-		// this.getStocksList()
+		this.getIndicatorsList()
+		this.loadSentimentList('Daily')
+		this.getIndexsList()
+		this.getStocksList()
 		this.getEndDate()
-		let direction = this.$getDirection()
-		direction.on('keyup', function (e, val) {
-			if (e.keyCode == 9) {
-				direction.next()
+	},
+	watch: {
+		updateFreq(val) {
+			console.log('updateFreq: ', val)
+			switch (val) {
+				case 'daily': {
+					this.frequency = 'Daily'
+					break
+				}
+				case 'weekly': {
+					this.frequency = 'Weekly'
+					break
+				}
+				case 'monthly': {
+					this.frequency = 'Monthly'
+					break
+				}
 			}
-			direction.onEnd = function () {
-				direction.previous(1, 0)
-			}
-		})
+		}
 	},
 	computed: {
 		listSet() {
@@ -304,13 +267,15 @@ export default {
 		...mapGetters(['getIsClearForm']),
 		isClearForm() {
 			return this.getIsClearForm
+		},
+		updateFreq() {
+			return this.$store.state.pairDataFreq
 		}
 	},
 	watch: {
 		backtestEditData: {
 			handler(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
-					this.$refs['backtestSetupForm'].clearValidate()
 					delete newVal.entry
 					delete newVal.exit
 					delete newVal.user_id
@@ -318,7 +283,12 @@ export default {
 					delete newVal.results
 					delete newVal.uuid
 					this.bd = Object.assign(this.bd, newVal)
+					console.log('创建的数据', this.bd)
+					this.getSymbolName(newVal.symbol)
+					this.frequency = this.editFrequency
+					// console.log('频率', this.frequency)
 					this.temp.commission = Number(newVal.commission) * 100
+					this.temp.slippage = Number(newVal.slippage) * 100
 					var year
 					const starArr = newVal.start_date.toString().split('-')
 					const endArr = newVal.end_date.toString().split('-')
@@ -457,7 +427,6 @@ export default {
 			}
 		},
 		async getStocksList() {
-			console.log('vuex', this.$store.state.stocksList)
 			if (this.$store.state.stocksList.length != 0) {
 				this.symbolList = this.$store.state.stocksList
 			} else {
@@ -516,9 +485,9 @@ export default {
 		getCommission(val) {
 			this.bd.commission = val / 100
 		},
-		getSlippage(val) {
-			this.bd.slippage = val / 100
-		},
+		// getSlippage(val) {
+		// 	this.bd.slippage = val / 100
+		// },
 		validateForm(newTag, oldTag) {
 			let data = true
 			this.$refs.backtestSetupForm.validate((valid) => {
@@ -537,7 +506,175 @@ export default {
 			this.$refs.backtestSetupForm.clearValidate()
 		},
 		getFrequency(val) {
+			this.frequency = val
 			this.$store.commit('getFrequency', val)
+			this.$emit('getTimeFrame',val)
+			this.loadSentimentList(val)
+			// same as setPeriodicity
+			var selectedFreq = ''
+			switch (val) {
+				case 'Monthly': {
+					selectedFreq = 'month'
+					break
+				}
+				case 'Weekly': {
+					selectedFreq = 'week'
+					break
+				}
+				case 'Daily': {
+					selectedFreq = 'day'
+					break
+				}
+				default:
+			}
+			CIQ.addIndicators(selectedFreq)
+		},
+		async loadSentimentList(val) {
+			const vm = this
+			var frequency = val
+			var indicatorList = []
+
+			if (CIQ.indicatorList) {
+				if (CIQ.indicatorList.length != 0) {
+					console.log(
+						'data already in indicatorList from entry-form',
+						CIQ.indicatorList.length
+					)
+					indicatorList = this.$store.state.indicatorsList
+					indicatorList = CIQ.indicatorList
+				}
+			} else {
+				console.log(
+					'data is not in indicatorList from entry-form',
+					CIQ.indicatorList
+				)
+				const res = await vm.$http.get(
+					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+					{
+						auth: {
+							username: 'sentimentrader_backtest_api',
+							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+						}
+					}
+				)
+				indicatorList = res.data
+			}
+			// vm.sentimentIndicatorList = res.data.map((obj) => {
+			// 	if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1) {
+			// 		return { value: obj.chart_name, url: obj.url, updated: obj.updated }
+			// 	}
+			// })
+			vm.sentimentIndicatorList = []
+			if (frequency) {
+				indicatorList.forEach((element) => {
+					if (
+						frequency.toUpperCase().indexOf(element.updated.toUpperCase()) !==
+						-1
+					) {
+						vm.sentimentIndicatorList.push({
+							value: element.chart_name,
+							url: element.url,
+							updated: element.updated
+						})
+					}
+				})
+			}
+			this.$store.commit('getIndicatorsList', indicatorList)
+			CIQ.indicatorList = indicatorList
+
+			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+
+			const data = vm.$store.state.indicatorsList
+			if (frequency !== '') {
+				if (frequency == 'Daily') {
+					vm.setSentiList(['Daily'], data)
+				} else if (frequency == 'Weekly') {
+					vm.setSentiList(['Daily', 'Weekly'], data)
+				} else if (frequency == 'Monthly') {
+					vm.setSentiList(['Daily', 'Weekly', 'Monthly'], data)
+				}
+			}
+		},
+		setSentiList(arr, data) {
+			const vm = this
+			vm.sentimentIndicatorList = []
+			arr.forEach((fre) => {
+				data.forEach((element) => {
+					if (fre.toUpperCase().indexOf(element.updated.toUpperCase()) !== -1) {
+						vm.sentimentIndicatorList.push({
+							value: element.chart_name,
+							url: element.url,
+							updated: element.updated
+						})
+					}
+				})
+			})
+			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+		},
+		async getIndicatorsList() {
+			const vm = this
+			var indicatorList = []
+			if (CIQ.indicatorList) {
+				if (CIQ.indicatorList.length != 0) {
+					console.log(
+						'data already in indicatorList from entry-form',
+						CIQ.indicatorList.length
+					)
+					indicatorList = this.$store.state.indicatorsList
+					indicatorList = CIQ.indicatorList
+				}
+			} else {
+				console.log(
+					'data is not in indicatorList from entry-form',
+					CIQ.indicatorList
+				)
+				const res = await vm.$http.get(
+					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+					{
+						auth: {
+							username: 'sentimentrader_backtest_api',
+							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+						}
+					}
+				)
+				indicatorList = res.data
+			}
+			this.$store.commit('getIndicatorsList', indicatorList)
+			CIQ.indicatorList = indicatorList
+		},
+		saveBacktestData() {
+			let checked = true
+			let nameChecked = true
+			if (this.bd.name) {
+				if (!this.bd.old_uuid) {
+					let nameList = this.$store.state.backtestNameList
+					for (let i = 0; i < nameList.length; i++) {
+						if (nameList[i] == this.bd.name) {
+							nameChecked = false
+							break
+						}
+					}
+				}
+				if (nameChecked) {
+					if (this.bd.start_date) {
+						// 保存 backtestform 的数据
+						this.$store.commit('setBd', this.bd)
+						return checked
+					} else {
+						this.$message.error('Please select start date')
+						checked = false
+						return checked
+					}
+				} else {
+					this.$message.error('The backtest name already exists')
+					checked = false
+					return checked
+				}
+			} else {
+				this.$message.error('Please give the backtest name')
+				checked = false
+				return checked
+			}
 		}
 	}
 }
@@ -551,7 +688,7 @@ export default {
 	margin-right: 0px;
 }
 /deep/.dateBox .el-input__icon {
-	width: 58px;
+	width: 17px;
 }
 .comUnitNote {
 	position: absolute;
