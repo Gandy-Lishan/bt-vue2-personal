@@ -74,7 +74,7 @@
 	</div>
 </template>
 <script>
-import indicator from '@/components/BacktestEdge/signal/indicator/Indicator'
+import indicator from '@/components/BacktestEdge/signal/indicator/Indicator.vue'
 import senti from '@/components/BacktestEdge/signal/sentiment/Senti'
 import cci from '@/components/BacktestEdge/signal/technical/Cci'
 import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
