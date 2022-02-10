@@ -112,6 +112,8 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
+const _ = require('lodash')
+const throttle = _.throttle
 export default {
 	name: 'cci',
 	props: {
@@ -230,7 +232,7 @@ export default {
 			}
 			this.setDesciption()
 		},
-		setDesciption() {
+		setDesciption: throttle(function() {
 			let criteria = ''
 			if (this.criteria == 'entry') {
 				criteria = 'E:'
@@ -245,7 +247,7 @@ export default {
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${ma_period} ${condition} ${this.conditionRadio} ${this.tech.period}`
 			console.log('描述', this.description)
-		},
+		}, 500),
 		getMaPeriodValue(val) {
 			this.period = val
 			this.tech.ma_period = this.period
@@ -533,7 +535,6 @@ export default {
 	}
 }
 .condition-container {
-	border-top: 1px solid #797979;
 	display: flex;
 	border-top: 1px solid #797979;
 }

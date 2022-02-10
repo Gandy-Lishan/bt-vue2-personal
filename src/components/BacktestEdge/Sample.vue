@@ -129,6 +129,20 @@
 										@click="copyBacktest(scope.row)"
 									></el-button>
 								</el-tooltip>
+								<el-button
+									plain
+									icon="el-icon-s-comment"
+									circle
+									@click="sendBack(scope.row)"
+									size="mini"
+								></el-button>
+								<el-button
+									plain
+									icon="el-icon-check"
+									circle
+									@click="showDes(scope.row)"
+									size="mini"
+								></el-button>
 								<el-tooltip
 									class="item"
 									effect="light"
@@ -162,7 +176,8 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store } from 'vuex'
-
+const _ = require('lodash')
+const throttle = _.throttle
 export default {
 	data() {
 		return {
@@ -189,15 +204,67 @@ export default {
 		this.getStrategyList()
 		this.getStrategyName()
 	},
-	mounted() {
-		//this.$cookies.set('userid', 'test')
-	},
 	methods: {
+		showDes(row) {
+			const datades = {}
+			let vm = this
+			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+				const des = res.data
+				let str = ``
+				for (let key in des) {
+					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
+				}
+
+				vm.$alert(str, '标题名称', {
+					confirmButtonText: '确定',
+					dangerouslyUseHTMLString: true,
+					lockScroll: false,
+					callback: (action) => {
+						vm.$message({
+							type: 'info',
+							message: `action: ${action}`
+						})
+					}
+				})
+			})
+		},
+		sendBack(row) {
+			let vm = this
+			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+				const des = res.data
+				let str = ``
+				for (let key in des) {
+					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
+				}
+				str = str + '<h3>FinalResult:</h3>'
+				for (let key in des.FinalResult) {
+					str = str + '<p>' + `${key}:  ${des.FinalResult[key]}` + '</p>'
+				}
+				str = str + '<h3>FinalResult.AnnualReturn:</h3>'
+				for (let key in des.FinalResult.AnnualReturn) {
+					str =
+						str +
+						'<p>' +
+						`${key}:  ${des.FinalResult.AnnualReturn[key]}` +
+						'</p>'
+				}
+				vm.$alert(str, '标题名称', {
+					confirmButtonText: '确定',
+					dangerouslyUseHTMLString: true,
+					callback: (action) => {
+						vm.$message({
+							type: 'info',
+							message: `action: ${action}`
+						})
+					}
+				})
+			})
+		},
 		async getStrategyList() {
 			this.loading = true
 			let page = this.queryInfo.page
 			const res = await this.$http.get(
-				'/dev/strategy/?ordering=status,-create_date&page=' + page
+				'/dev/strategy/?ordering=name,status,-create_date&page=' + page
 			)
 			if (res.status === 200) {
 				this.backtestList = res.data.results
@@ -246,18 +313,18 @@ export default {
 			const id = this.backtestList
 			// const res = await this.$http.get('/demo/strategies' + id + '/')
 		},
-		editBacktest(row) {
+		editBacktest: throttle(function (row) {
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
 				}
 			})
 			this.$store.commit('getRunBacktestData', row)
 			this.$emit('goBacktestResultForm', row)
 			vm.$emit('goTobacktestSetupForm', row.id)
-		},
+		}, 5000),
 		deleteBacktest(id) {
 			this.$http
 				.delete('/dev/backtest/' + id + '/')
@@ -283,7 +350,7 @@ export default {
 					})
 				})
 		},
-		copyBacktest(row) {
+		copyBacktest: throttle(function (row) {
 			let params = {}
 			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				if (res.status === 200) {
@@ -313,18 +380,22 @@ export default {
 						})
 				}
 			})
-		},
-		viewBacktestResults(row) {
+		}, 5000),
+		viewBacktestResults: throttle(function (row) {
+			//console.log('sanple的id', row.id)
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
-					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+					if (res.data.indicator_layout) {
+						this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
+					}
+
+					this.$store.commit('getRunBacktestData', row)
+					this.$emit('goTobacktestSetupForm', row.id)
+					this.$emit('goBacktestResultForm', row)
 				})
-				this.$store.commit('getRunBacktestData', row)
-				this.$emit('goTobacktestSetupForm', row.id)
-				this.$emit('goBacktestResultForm', row)
 			} else {
 				this.$notify({
 					title: 'No trades',
@@ -333,16 +404,35 @@ export default {
 					type: 'warning'
 				})
 			}
-		},
+		}, 5000),
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
 			this.getStrategyList()
 		},
-		restoreIndicatorLayout(data) {
+		restoreIndicatorLayout(data,freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
+			var frequency = ''
+			switch(freq){
+				case "Daily": {
+					frequency = 'daily'
+					break;
+				}
+				case "Weekly": {
+					frequency = 'weekly'
+					break;
+				}
+				case "Monthly": {
+					frequency = 'monthly'
+					break;
+				}
+				default: {
+					break;
+				}
+			}
+			this.$store.commit('setRestoreFreq', frequency)
 			CIQ.addIndicators()
 		},
 		showDes(row) {

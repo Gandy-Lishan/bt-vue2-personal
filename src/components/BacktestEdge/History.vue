@@ -175,7 +175,6 @@
 									placement="bottom-start"
 								>
 									<el-button
-										:disabled="scope.row.status == 0"
 										type="info"
 										icon="el-icon-copy-document"
 										circle
@@ -231,7 +230,6 @@
 									placement="bottom-start"
 								>
 									<el-button
-										:disabled="scope.row.status == 0"
 										type="warning"
 										icon="el-icon-view"
 										circle
@@ -258,7 +256,8 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store } from 'vuex'
-
+const _ = require('lodash')
+const throttle = _.throttle
 export default {
 	data() {
 		return {
@@ -284,9 +283,6 @@ export default {
 	created() {
 		this.getBacktestList()
 		this.getBacktestName()
-	},
-	mounted() {
-		//this.$cookies.set('userid', 'test')
 	},
 	methods: {
 		async getBacktestList(strategy) {
@@ -361,7 +357,7 @@ export default {
 			const id = this.backtestList
 			// const res = await this.$http.get('/demo/strategies' + id + '/')
 		},
-		editBacktest(row) {
+		editBacktest: throttle(function (row) {
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
@@ -373,7 +369,7 @@ export default {
 				this.$emit('goBacktestResultForm', row)
 				vm.$emit('goTobacktestSetupForm', row.id)
 			})
-		},
+		}, 5000),
 		deleteBacktest(id) {
 			this.$http
 				.delete('/dev/backtest/' + id + '/')
@@ -400,34 +396,31 @@ export default {
 					})
 				})
 		},
-		copyBacktest(row) {
-			let params = {}
-			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
-				params = res.data
-				console.log('参数数据', res.data)
-				params.name = params.name + '(copy)'
-				delete params.uuid
-				delete params.results
-				delete params.user_id
-				delete params.status
-				delete params.backtest_id
-				this.$http
-					.post('/dev/backtest/', this.$qs.stringify(params), {
-						withCredentials: true
-					})
-					.then((res) => {
-						if (res.status === 201) {
-							this.$message.success('Copy successfully')
-							this.getBacktestList()
-						} else {
-							this.$message.error('Copy failed')
-						}
-					})
-			})
-		},
-		viewBacktestResults(row) {
-			if (row.result['Total Trades']) {
-				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
+		// async copyBacktest(row) {
+		// 	let vm = this
+		// 	try {
+		// 		const res = await this.$http.get('/dev/seeparams/' + row.id + '/')
+		// 		console.log('相应数据', res.data)
+		// 		let data = res.data
+		// 		data.name = data.name + '(copy)'
+		// 		delete data.backtest_id
+		// 		// console.log('copy', data)
+		// 		const seRes = await vm.$http.post(
+		// 			'/dev/runbt/',
+		// 			vm.$qs.stringify(data),
+		// 			{
+		// 				withCredentials: true
+		// 			}
+		// 		)
+		// 		console.log('wwwww', seRes)
+		// 		this.refreshHistory(seRes.data.id)
+		// 	} catch (error) {
+		// 		console.log(error)
+		// 	}
+		// },
+		copyBacktest: throttle(function (row) {
+			if (row.status != 0) {
+				let params = {}
 				this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
@@ -438,16 +431,71 @@ export default {
 					this.$store.commit('getRunBacktestData', row)
 					this.$emit('goTobacktestSetupForm', row.id)
 					this.$emit('goBacktestResultForm', row)
+
+					params = res.data
+					console.log('参数数据', res.data)
+					params.name = params.name + '(copy)'
+					delete params.uuid
+					delete params.results
+					delete params.user_id
+					delete params.status
+					delete params.backtest_id
+					this.$http
+						.post('/dev/backtest/', this.$qs.stringify(params), {
+							withCredentials: true
+						})
+						.then((res) => {
+							if (res.status === 201) {
+								this.$message.success('Copy successfully')
+								this.getBacktestList()
+							} else {
+								this.$message.error('Copy failed')
+							}
+						})
 				})
 			} else {
 				this.$notify({
-					title: 'No trades',
-					message: 'No trades, please change parameter.',
+					title: 'Please Edit',
+					message: 'You can copy only after editing sample backtest',
 					offset: 100,
 					type: 'warning'
 				})
 			}
-		},
+		}, 50000),
+		viewBacktestResults: throttle(function (row) {
+			if (row.status != 0) {
+				if (row.result['Total Trades']) {
+					document.getElementsByClassName('ciq-period')[0].style.display =
+						'none'
+					this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+						// 恢复indicator layout
+						this.$store.commit('getBacktestSymbol', res.data.symbol)
+						console.log(res.data)
+						if (res.data.indicator_layout) {
+							this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
+						}
+
+						this.$store.commit('getRunBacktestData', row)
+						this.$emit('goTobacktestSetupForm', row.id)
+						this.$emit('goBacktestResultForm', row)
+					})
+				} else {
+					this.$notify({
+						title: 'No trades',
+						message: 'No trades, please change parameter.',
+						offset: 100,
+						type: 'warning'
+					})
+				}
+			} else {
+				this.$notify({
+					title: 'Please Edit',
+					message: 'You can view results only after editing sample backtest',
+					offset: 100,
+					type: 'warning'
+				})
+			}
+		}, 5000),
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
@@ -533,7 +581,7 @@ export default {
 				})
 			})
 		},
-		addToFavorites(row) {
+		addToFavorites: throttle(function (row) {
 			let vm = this
 			let params = {
 				favorites: true
@@ -557,8 +605,8 @@ export default {
 						})
 					}
 				})
-		},
-		moveToFavorites(row) {
+		}, 5000),
+		moveToFavorites: throttle(function (row) {
 			let vm = this
 			let params = {
 				favorites: false
@@ -582,7 +630,7 @@ export default {
 						})
 					}
 				})
-		}
+		}, 5000)
 	}
 }
 </script>

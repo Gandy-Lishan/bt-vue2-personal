@@ -84,6 +84,8 @@
 						><sample
 							@goToHistoryForm="goToHistoryForm"
 							@refHistoryForm="refHistoryForm"
+							@goTobacktestSetupForm="goTobacktestSetupForm"
+							@goBacktestResultForm="goBacktestResultForm"
 						></sample
 					></el-tab-pane>
 				</el-tabs>
@@ -120,6 +122,11 @@ export default {
 			timeFrame: 'Daily'
 		}
 	},
+	// provide() {
+	// 	return {
+	// 		timeFrame: () => this.pubilcEditData
+	// 	}
+	// },
 	components: {
 		chart: chart,
 		'set-up': setUp,
@@ -132,7 +139,6 @@ export default {
 		sample
 	},
 	mounted() {
-		//this.$cookies.set('userid', 'test')
 		// 在DOM渲染数据时，设置下区域高度为浏览器可视区域高度．
 		this.clientHeight = document.body.clientHeight
 		// 监听window的resize事件．在浏览器窗口变化时再设置下区域高度．
@@ -164,7 +170,7 @@ export default {
 		refreshPage() {
 			location.reload()
 		},
-		runBacktest() {
+		runBacktest: throttle(function () {
 			let setUp = this.$refs.setUpChild.saveBacktestData()
 			if (setUp) {
 				let entry = this.$refs.entryChild.saveBacktestData()
@@ -292,7 +298,7 @@ export default {
 					}
 				}
 			}
-		},
+		}, 5000),
 		goToHistoryForm() {
 			this.activeName = 'second'
 		},
@@ -325,6 +331,7 @@ export default {
 				vm.$refs.exitChild.setEditData(id)
 				// 拿到 frequency 的值
 				vm.editFrequency = data.entry.frequency
+				vm.timeFrame = data.entry.frequency
 				vm.$store.commit('getFrequency', vm.editFrequency)
 				vm.backtestEditData = data
 			})

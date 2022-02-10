@@ -23,7 +23,7 @@
 						class="check-box"
 						v-if="riskIndiValue === 'tp' || riskIndiValue === 'pl'"
 					>
-						<el-checkbox label="Take Profit"></el-checkbox>
+						<el-checkbox label="Take Profit" disabled></el-checkbox>
 						<el-input
 							v-model="risk.take_profit"
 							@input="setDesciption"
@@ -35,7 +35,7 @@
 						class="check-box"
 						v-if="riskIndiValue === 'sl' || riskIndiValue === 'pl'"
 					>
-						<el-checkbox label="Stop Loss"></el-checkbox>
+						<el-checkbox label="Stop Loss" disabled></el-checkbox>
 						<el-input
 							v-model="risk.stop_loss"
 							@input="setDesciption"
@@ -43,7 +43,7 @@
 						<span class="tpNote">(%)</span>
 					</div>
 					<div class="check-box" v-if="riskIndiValue === 'tim'">
-						<el-checkbox label="Time in Market"></el-checkbox
+						<el-checkbox label="Time In Market" disabled></el-checkbox
 						><el-input
 							v-model="risk.time_in_market"
 							@input="setDesciption"
@@ -57,6 +57,8 @@
 </template>
 <script>
 import { Store, mapGetters } from 'vuex'
+const _ = require('lodash')
+const throttle = _.throttle
 export default {
 	name: 'risk',
 	inheritAttrs: true,
@@ -83,7 +85,7 @@ export default {
 				} else if (newVal == 'Weekly') {
 					this.timeFra = '(weeks)'
 				} else if (newVal == 'Monthly') {
-					this.timeFra = 'months'
+					this.timeFra = '(months)'
 				} else {
 					this.timeFra = '(days)'
 				}
@@ -98,15 +100,19 @@ export default {
 				take_profit: 20,
 				stop_loss: 5,
 				time_in_market: 120
+				// indicator: 'RC',
+				// analysis: 'Exit'
+				//     'atr_period': '7',
+				//     'atr_multiplier': '2.5'
 			},
 			description: '',
 			editRiskVal: '',
-			checkList: ['Take Profit'],
-			timeFra: 'days'
+			checkList: ['Take Profit', 'Stop Loss', 'Time In Market', 'Profit/Loss'],
+			timeFra: ''
 		}
 	},
 	methods: {
-		setDesciption() {
+		setDesciption: throttle(function () {
 			let criteria = ''
 			if (this.criteria == 'exit') {
 				criteria = 'X:'
@@ -132,41 +138,71 @@ export default {
 				this.description = `${criteria} ${direction} Profit ${value1} / Loss ${value2}`
 			}
 			console.log('描述', this.description)
+		}, 500),
+		saveCondition() {
+			let checked = true
+			// 判断有无空值
+			if (
+				this.risk.take_profit ||
+				this.risk.stop_loss ||
+				this.risk.time_in_market
+			) {
+				let risk = this.risk
+				let riskVal = this.riskVal
+				let arr = ['Take Profit', 'Stop Loss', 'Time In Market', 'Profit/Loss']
+				if (riskVal == arr[0]) {
+					delete risk.stop_loss
+					delete risk.time_in_market
+				} else if (riskVal == arr[1]) {
+					delete risk.take_profit
+					delete risk.time_in_market
+				} else if (riskVal == arr[2]) {
+					delete risk.take_profit
+					delete risk.stop_loss
+				} else if (riskVal == arr[3]) {
+					delete risk.time_in_market
+				}
+				risk.criteria = this.criteria
+				risk.index = 0
+				this.$store.commit('saveCondition', risk)
+				let desObj = {}
+				desObj.criteria = this.criteria
+				desObj.description = this.description
+				this.$store.commit('saveDescription', desObj)
+				return checked
+			} else {
+				this.$message.error('Please Input Risk Value')
+				checked = false
+				return checked
+			}
+		},
+		setEditData(newVal) {
+			console.log('编辑的RISK数据包', newVal)
+			if (JSON.stringify(newVal) != '{}') {
+				if (
+					newVal.exit.signals[0].sc.take_profit &&
+					newVal.exit.signals[0].sc.stop_loss
+				) {
+					this.editRiskVal = 'Profit/Loss'
+					this.risk.take_profit =
+						newVal[this.criteria].signals[0].sc.take_profit
+					this.risk.stop_loss = newVal[this.criteria].signals[0].sc.stop_loss
+				} else if (newVal.exit.signals[0].sc.time_in_market) {
+					this.editRiskVal = 'Time In Market'
+
+					this.risk.time_in_market =
+						newVal[this.criteria].signals[0].sc.time_in_market
+				} else if (newVal.exit.signals[0].sc.take_profit) {
+					this.editRiskVal = 'Take Profit'
+					this.risk.take_profit =
+						newVal[this.criteria].signals[0].sc.take_profit
+				} else if (newVal.exit.signals[0].sc.stop_loss) {
+					this.editRiskVal = 'Stop Loss'
+					this.risk.stop_loss = newVal[this.criteria].signals[0].sc.stop_loss
+				}
+				this.setDesciption()
+			}
 		}
-		// saveCondition() {
-		// 	let checked = true
-		// 	if (this.risk.value) {
-		// 		let ids = {
-		// 			over_bought_bound: 100,
-		// 			over_sold_bound: -100,
-		// 			period: 20
-		// 		}
-		// 		let risk = this.risk
-		// 		delete risk.ids
-		// 		risk = Object.assign(ids, risk)
-		// 		risk.criteria = this.criteria
-		// 		risk.index = 0
-		// 		this.$store.commit('saveCondition', risk)
-		// 		let desObj = {}
-		// 		desObj.criteria = this.criteria
-		// 		desObj.description = this.description
-		// 		this.$store.commit('saveDescription', desObj)
-		// 		return checked
-		// 	} else {
-		// 		this.$message.error('Please Input Value')
-		// 		checked = false
-		// 		return checked
-		// 	}
-		// },
-		// setEditData(newVal) {
-		// 	if (JSON.stringify(newVal) != '{}') {
-		// 		this.risk.ids = newVal[this.criteria].signals[0].ids
-		// 		this.risk.condition = Number(newVal[this.criteria].signals[0].condition)
-		// 		this.risk.value = newVal[this.criteria].signals[0].value
-		// 		this.editRiskVal = newVal[this.criteria].signals[0].indicator
-		// 		this.setDesciption()
-		// 	}
-		// }
 	}
 }
 </script>
@@ -205,5 +241,12 @@ export default {
 }
 /deep/.el-input--suffix .el-input__inner {
 	padding-right: 5px;
+}
+/deep/ .el-checkbox__input.is-disabled + span.el-checkbox__label {
+	color: #409eff;
+}
+/deep/ .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner {
+	color: #409eff;
+	background-color: #409eff;
 }
 </style>

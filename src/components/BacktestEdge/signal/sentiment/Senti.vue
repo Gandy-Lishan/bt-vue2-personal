@@ -112,6 +112,8 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
+const _ = require('lodash')
+const throttle = _.throttle
 export default {
 	name: 'senti',
 	props: {
@@ -212,7 +214,7 @@ export default {
 		}
 	},
 	methods: {
-		setDesciption() {
+		setDesciption: throttle(function () {
 			let criteria = ''
 			if (this.criteria == 'entry') {
 				criteria = 'E:'
@@ -226,7 +228,7 @@ export default {
 			let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
 			this.description = `${criteria} ${direction} ${sentiVal} ${ma} ${period} ${condition} ${this.senti.value}`
 			console.log('描述', this.description)
-		},
+		}, 500),
 		getConditionRadio(val) {
 			if (val === 'Sentiment Value') {
 				if ('period' in this.senti) {

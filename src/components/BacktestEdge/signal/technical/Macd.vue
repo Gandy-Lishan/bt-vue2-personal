@@ -102,6 +102,8 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
+const _ = require('lodash')
+const throttle = _.throttle
 export default {
 	name: 'cci',
 	props: {
@@ -157,7 +159,7 @@ export default {
 		// }
 	},
 	methods: {
-		setDesciption() {
+		setDesciption: throttle(function() {
 			let criteria = ''
 			if (this.criteria == 'entry') {
 				criteria = 'E:'
@@ -168,8 +170,8 @@ export default {
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${condition} ${this.tech.value}`
-			//console.log('描述', this.description)
-		},
+			console.log('描述', this.description)
+		},500),
 		getConditionRadio(val) {
 			if (val === 'MACD Value ') {
 				this.tech.value = 'MACDSL'
@@ -234,7 +236,6 @@ export default {
 .condition-container {
 	border-top: 1px solid #797979;
 	display: flex;
-	border-top: 1px solid #797979;
 }
 /deep/ .el-input__inner {
 	padding-left: 5px;

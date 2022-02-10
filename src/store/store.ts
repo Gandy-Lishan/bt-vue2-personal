@@ -400,6 +400,13 @@ export default new Vuex.Store({
 			state.backtestInfo[obj.criteria].signals[obj.index].technicalIndicator =
 				obj.value
 		},
+		getRiskValue(state, obj) {
+			console.log("vuex",obj);
+			state.backtestInfo.exit.signals[obj.index].riskIndicator =
+				obj.value
+				console.log("当前backtestInfo",state.backtestInfo);
+				
+		},
 		getSentiValue(state, obj) {
 			console.log("再次保存后的报错",state.backtestInfo);
 			state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator =
@@ -453,11 +460,17 @@ export default new Vuex.Store({
 			let index = obj.index
 			delete obj.criteria
 			delete obj.index
-			let init = {sentimentIndicator: '', technicalIndicator: ''}
+			let init = {sentimentIndicator: '', technicalIndicator: '',riskIndicator: ''}
 			init.sentimentIndicator = state.backtestInfo[criteria].signals[index].sentimentIndicator
 			init.technicalIndicator = state.backtestInfo[criteria].signals[index].technicalIndicator
+			init.riskIndicator = state.backtestInfo.exit.signals[index].riskIndicator
 			// 在保存之前确保只有 sentimentIndicator 以及 technicalIndicator 两个属性
-			state.backtestInfo[criteria].signals[index] = Object.assign({}, init)
+			if(criteria == 'exit') {
+			state.backtestInfo.exit.signals[index] = Object.assign({}, init)
+			}else if(criteria == 'entry') {
+			delete init.riskIndicator
+			state.backtestInfo.entry.signals[index] = Object.assign({}, init)
+			}
 			for(let key in obj) {
 				state.backtestInfo[criteria].signals[index][key] = obj[key]
 			}
@@ -485,6 +498,21 @@ export default new Vuex.Store({
 					frequency: 'Daily',
 					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
 				}
+			}
+			state.backtestInfo.entry =  {
+				direction: 'Long',
+				frequency: 'Daily',
+				signals: [
+					{
+						sentimentIndicator: '',
+						technicalIndicator: ''
+					}
+				]
+			}
+			state.backtestInfo.exit =  {
+				direction: 'Short',
+				frequency: 'Daily',
+				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
 			}
 		},
 		getBacktestName(state, list) {

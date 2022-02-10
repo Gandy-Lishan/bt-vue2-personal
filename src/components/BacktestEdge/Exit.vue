@@ -65,6 +65,7 @@
 		></ma>
 		<risk
 			v-show="indicatorRadio === 'risk'"
+			ref="riskChild"
 			:direction="fd.direction"
 			:criteria="'exit'"
 			:riskIndiValue="riskIndiValue"
@@ -74,7 +75,7 @@
 	</div>
 </template>
 <script>
-import indicator from '@/components/BacktestEdge/signal/indicator/Indicator.vue'
+import indicator from '@/components/BacktestEdge/signal/indicator/Indicator'
 import senti from '@/components/BacktestEdge/signal/sentiment/Senti'
 import cci from '@/components/BacktestEdge/signal/technical/Cci'
 import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
@@ -192,6 +193,11 @@ export default {
 					this.$refs.maChild.setDesciption()
 					let ma = this.$refs.maChild.saveCondition()
 					return (checked = ma)
+				} else if (this.indicatorRadio === 'risk') {
+					console.log('第一步')
+					this.$refs.riskChild.setDesciption()
+					let risk = this.$refs.riskChild.saveCondition()
+					return (checked = risk)
 				}
 			} else {
 				checked = false
@@ -218,14 +224,29 @@ export default {
 				edit.exit_description = data.exit_description
 				edit.entry = data.entry
 				edit.exit = data.exit
-				if (edit.exit.analysis == 'Sentiment') {
+				if (edit.exit.signals[0].analysis == 'Sentiment') {
 					this.sentiVal = edit.exit.signals[0].indicator
-					console.log('exit 设置的', this.sentiVal)
-				} else if (edit.exit.analysis == 'Technical') {
+				} else if (edit.exit.signals[0].analysis == 'Technical') {
 					this.techVal = edit.exit.signals[0].indicator
+				} else if (edit.exit.signals[0].analysis == 'Exit') {
+					this.$refs.indiChild.changeIndicatorChecked('Risk Control')
+					if (
+						edit.exit.signals[0].sc.take_profit &&
+						edit.exit.signals[0].sc.stop_loss
+					) {
+						this.riskVal = 'Profit/Loss'
+					} else if (edit.exit.signals[0].sc.time_in_market) {
+						this.riskVal = 'Time In Market'
+					} else if (edit.exit.signals[0].sc.take_profit) {
+						this.riskVal = 'Take Profit'
+					} else if (edit.exit.signals[0].sc.stop_loss) {
+						this.riskVal = 'Stop Loss'
+					}
+					let obj = {}
+					obj.value = this.riskVal
+					this.$refs.indiChild.handleRiskSelect(obj)
 				}
 				// vm.editIndiData = edit
-				console.log('编辑的退场数据', edit)
 				vm.$refs.indiChild.setEditData(edit)
 				// 判断使用那个组件
 				if (edit.exit.signals[0].analysis == 'Sentiment') {
@@ -259,10 +280,9 @@ export default {
 					vm.indicatorRadio = 'technical'
 					vm.techIndiValue = 'macd'
 					vm.$refs.macdChild.setEditData(edit)
+				} else if (edit.exit.signals[0].analysis == 'Exit') {
+					this.$refs.riskChild.setEditData(edit)
 				}
-				// if (vm.editIndiData.entry.signals[0].analysis === 'Technical') {
-				// 	this.$refs.maChild.setEditData(vm.editIndiData)
-				// }
 			})
 		}
 	}

@@ -244,7 +244,8 @@
 </template>
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-
+const _ = require('lodash')
+const throttle = _.throttle
 export default {
 	data() {
 		return {
@@ -268,9 +269,6 @@ export default {
 	},
 	created() {
 		this.getBacktestList()
-	},
-	mounted() {
-		//this.$cookies.set('userid', 'test')
 	},
 	methods: {
 		async getBacktestList(strategy) {
@@ -327,7 +325,7 @@ export default {
 				})
 			}, 3000)
 		},
-		editBacktest(row) {
+		editBacktest: throttle(function (row) {
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
@@ -338,7 +336,7 @@ export default {
 				this.$emit('goBacktestResultForm', row)
 				vm.$emit('goTobacktestSetupForm', row.id)
 			})
-		},
+		}, 5000),
 		deleteBacktest(id) {
 			this.$http
 				.delete('/dev/backtest/' + id + '/')
@@ -365,7 +363,7 @@ export default {
 					})
 				})
 		},
-		copyBacktest(row) {
+		copyBacktest: throttle(function (row) {
 			let params = {}
 			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				params = res.data
@@ -388,8 +386,8 @@ export default {
 						}
 					})
 			})
-		},
-		viewBacktestResults(row) {
+		}, 5000),
+		viewBacktestResults: throttle(function (row) {
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				let vm = this
@@ -412,7 +410,7 @@ export default {
 					type: 'warning'
 				})
 			}
-		},
+		}, 5000),
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
@@ -498,7 +496,7 @@ export default {
 				})
 			})
 		},
-		addToFavorites(row) {
+		addToFavorites: throttle(function (row) {
 			let vm = this
 			let params = {
 				favorites: true
@@ -523,8 +521,8 @@ export default {
 						})
 					}
 				})
-		},
-		moveToFavorites(row) {
+		}, 5000),
+		moveToFavorites: throttle(function (row) {
 			let vm = this
 			let params = {
 				favorites: false
@@ -549,7 +547,7 @@ export default {
 						})
 					}
 				})
-		}
+		}, 5000)
 	}
 }
 </script>

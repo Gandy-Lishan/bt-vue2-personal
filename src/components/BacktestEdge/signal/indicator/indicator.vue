@@ -439,11 +439,14 @@ export default {
 					url = i[1]
 					this.$emit('getRiskIndiValue', i[1])
 				}
-				this.$store.commit('getExitIndicators', 'Exit')
+				// this.$store.commit('getExitIndicators', 'Exit')
 				// this.$store.commit('getRiskIndicators', 'RC')
 			}
 		},
-		changeIndicatorChecked() {
+		changeIndicatorChecked(val) {
+			console.log('事件的值', val)
+			this.indicatorRadio = val
+			console.log('indicatorRadio', this.indicatorRadio)
 			this.isCheckedIndicators = !this.isCheckedIndicators
 			const arr = [
 				'Sentiment Indicators',
@@ -531,6 +534,21 @@ export default {
 				} else {
 					this.$message.error(
 						'Please select' + ' ' + this.criteria + ' ' + ' technical indicator'
+					)
+					checked = false
+					return checked
+				}
+			} else if (this.indicatorRadio === 'Risk Control') {
+				if (this.si.riskIndicator) {
+					let obj = {}
+					obj.criteria = 'exit'
+					obj.index = 0
+					obj.value = 'RC'
+					this.$store.commit('getRiskValue', obj)
+					return checked
+				} else {
+					this.$message.error(
+						'Please select' + ' ' + this.criteria + ' ' + ' risk indicator'
 					)
 					checked = false
 					return checked

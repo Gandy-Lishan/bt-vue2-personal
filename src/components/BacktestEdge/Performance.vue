@@ -319,7 +319,6 @@ export default {
 		},
 		getResultData(id) {
 			let vm = this
-			vm.loading = true
 			let initalData = {}
 			let data = {}
 			console.log('传递过来的ID', id)
@@ -328,6 +327,7 @@ export default {
 				if (!id) {
 					return
 				}
+				vm.loading = true
 				vm.$http
 					.get('/dev/report/?uuid=' + id)
 					.then((res) => {
