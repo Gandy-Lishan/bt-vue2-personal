@@ -302,7 +302,7 @@ export default {
 					})
 				}
 
-				console.log('history列表', res.data.results)
+				//console.log('history列表', res.data.results)
 				this.queryInfo.total = res.data.count
 			} else {
 				this.loading = false
@@ -362,11 +362,8 @@ export default {
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				console.log(res.data.indicator_layout)
-				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayout(
-						JSON.parse(res.data.indicator_layout),
-						JSON.parse(res.data.entry).frequency
-					)
+				if(res.data.indicator_layout) {
+					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
 				}
 				this.$store.commit('getRunBacktestData', row)
 				this.$emit('goBacktestResultForm', row)
@@ -421,6 +418,16 @@ export default {
 			if (row.status != 0) {
 				let params = {}
 				this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+					// 恢复indicator layout
+					this.$store.commit('getBacktestSymbol', res.data.symbol)
+					console.log(res.data)
+					if (res.data.indicator_layout) {
+						this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
+					}
+					this.$store.commit('getRunBacktestData', row)
+					this.$emit('goTobacktestSetupForm', row.id)
+					this.$emit('goBacktestResultForm', row)
+
 					params = res.data
 					console.log('参数数据', res.data)
 					params.name = params.name + '(copy)'
@@ -465,8 +472,9 @@ export default {
 					this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 						// 恢复indicator layout
 						this.$store.commit('getBacktestSymbol', res.data.symbol)
+						console.log(res.data)
 						if (res.data.indicator_layout) {
-							this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+							this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
 						}
 
 						this.$store.commit('getRunBacktestData', row)
@@ -494,7 +502,7 @@ export default {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
 		},
-		restoreIndicatorLayout(data, freq) {
+		restoreIndicatorLayout(data,freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)

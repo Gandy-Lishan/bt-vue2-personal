@@ -82,7 +82,7 @@ window.location.href = 'https://users.sentdevsite.com/login'
   }).catch(error => {
     console.log(error);
     // next('https://users.sentdevsite.com/login')
-    window.location.href='https://users.sentdevsite.com/login'
+    window.location.href = 'https://users.sentdevsite.com/login'
   })
   // 3.1 200 成功设置 cookie userid=XXX endDate=XXX     cookie.set()
   // 3.2 403 代表认证时间超时，返回到登录页面
