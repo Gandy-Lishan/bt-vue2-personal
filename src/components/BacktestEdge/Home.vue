@@ -363,7 +363,7 @@ export default {
 	width: 12rem;
 }
 .home-container {
-	width: 1280px;
+	width: 85vw;
 	margin: 0 auto;
 }
 // 暂时的样式

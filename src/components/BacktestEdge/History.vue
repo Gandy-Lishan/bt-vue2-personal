@@ -306,7 +306,7 @@ export default {
 					})
 				}
 
-				console.log('history列表', res.data.results)
+				//console.log('history列表', res.data.results)
 				this.queryInfo.total = res.data.count
 			} else {
 				this.loading = false
@@ -431,6 +431,7 @@ export default {
 				this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
+					console.log(res.data)
 					if (res.data.indicator_layout) {
 						this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
 					}
