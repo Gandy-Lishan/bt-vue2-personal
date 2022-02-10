@@ -190,7 +190,7 @@ export default {
 		this.getStrategyName()
 	},
 	mounted() {
-		this.$cookies.set('userid', 'test')
+		//this.$cookies.set('userid', 'test')
 	},
 	methods: {
 		async getStrategyList() {

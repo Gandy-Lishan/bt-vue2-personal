@@ -270,7 +270,7 @@ export default {
 		this.getBacktestList()
 	},
 	mounted() {
-		this.$cookies.set('userid', 'test')
+		//this.$cookies.set('userid', 'test')
 	},
 	methods: {
 		async getBacktestList(strategy) {
@@ -332,7 +332,7 @@ export default {
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
 				}
 				this.$store.commit('getRunBacktestData', row)
 				this.$emit('goBacktestResultForm', row)
@@ -397,7 +397,7 @@ export default {
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					if (res.data.indicator_layout) {
-						this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+						this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
 					}
 
 					this.$store.commit('getRunBacktestData', row)

@@ -132,7 +132,7 @@ export default {
 		sample
 	},
 	mounted() {
-		this.$cookies.set('userid', 'test')
+		//this.$cookies.set('userid', 'test')
 		// 在DOM渲染数据时，设置下区域高度为浏览器可视区域高度．
 		this.clientHeight = document.body.clientHeight
 		// 监听window的resize事件．在浏览器窗口变化时再设置下区域高度．

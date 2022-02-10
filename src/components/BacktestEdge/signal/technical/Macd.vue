@@ -168,7 +168,7 @@ export default {
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${condition} ${this.tech.value}`
-			console.log('描述', this.description)
+			//console.log('描述', this.description)
 		},
 		getConditionRadio(val) {
 			if (val === 'MACD Value ') {

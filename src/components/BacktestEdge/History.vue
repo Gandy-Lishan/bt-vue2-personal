@@ -286,7 +286,7 @@ export default {
 		this.getBacktestName()
 	},
 	mounted() {
-		this.$cookies.set('userid', 'test')
+		//this.$cookies.set('userid', 'test')
 	},
 	methods: {
 		async getBacktestList(strategy) {
@@ -367,7 +367,8 @@ export default {
 				// 恢复indicator layout
 				console.log(res.data.indicator_layout)
 				if(res.data.indicator_layout) {
-				this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)}
+					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
+				}
 				this.$store.commit('getRunBacktestData', row)
 				this.$emit('goBacktestResultForm', row)
 				vm.$emit('goTobacktestSetupForm', row.id)
@@ -431,9 +432,8 @@ export default {
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					if (res.data.indicator_layout) {
-						this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+						this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
 					}
-					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
 					this.$store.commit('getRunBacktestData', row)
 					this.$emit('goTobacktestSetupForm', row.id)
 					this.$emit('goBacktestResultForm', row)
@@ -457,7 +457,6 @@ export default {
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			var frequency = ''
-			
 			switch(freq){
 				case "Daily": {
 					frequency = 'daily'
