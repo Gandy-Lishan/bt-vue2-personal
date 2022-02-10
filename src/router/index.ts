@@ -27,6 +27,8 @@ router.beforeEach((to, from, next) => {
       CIQ.store = store
       console.log('init getallsymbol')
       CIQ.indicatorList = res.data
+          console.log("log",document.referrer)
+    console.log(document.baseURI);
       return next()
 		})
     
@@ -49,10 +51,6 @@ router.beforeEach((to, from, next) => {
   // console.log('to from next',to, from, next);
   console.log("log",document.referrer)
   console.log('baseURL',document.baseURI);
-  let cookie = cookies.get('userid')
-  if(cookie){
-    next()
-  }else
   if (document.baseURI.search(host) !== -1){
   //  alert("asdasd")
   // https://backtest.sentimentrader.com/user?userID=668696
@@ -61,24 +59,26 @@ router.beforeEach((to, from, next) => {
   // 2. 访问后端 api '/dev/user/?userid=668696' get 参数 
   let userId = document.baseURI.split('?')[1]
   userId = userId.split('=')[1]
+  console.log("userId",userId);
+  
   // 3. 根据返回状态码判断后续操作
   
   axios.get('/dev/user/?userid=' + userId).then(res => {
     console.log("相应数据",res);
  if(res.status === 200) {
-cookies.set('userid',userId)
+ cookies.set('userid',userId)
+ next()
 }else if(res.status === 401 ){
 //无权限
-window.location.href('https://users.sentdevsite.com/login')
+window.location.href = 'https://users.sentdevsite.com/login'
 }else if (res.status === 403){
 //认证时间超时
-window.location.href('https://users.sentdevsite.com/login')
+window.location.href = 'https://users.sentdevsite.com/login'
 }else if (res.status === 404){
 // 用户不存在
-window.location.href('https://users.sentdevsite.com/login')
+window.location.href = 'https://users.sentdevsite.com/login'
 }
    console.log('cookie',document.cookie);
-    next('/newHome')
   }).catch(error => {
     console.log(error);
     // next('https://users.sentdevsite.com/login')

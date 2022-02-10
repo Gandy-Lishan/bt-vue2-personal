@@ -166,12 +166,12 @@ export default {
 </script>
 <style lang="less" scoped>
 .ids-container {
-	display: flex;
+	// hide attributes of technical indicators
+	display: none;
 	flex-wrap: wrap;
 	.el-form-item {
 		display: inline-flex;
 	}
-	border-bottom: 1px solid #797979;
 }
 .condition-container {
 	display: flex;

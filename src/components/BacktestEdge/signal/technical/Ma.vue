@@ -232,7 +232,7 @@ export default {
 			}
 			this.setDesciption()
 		},
-		setDesciption: throttle(function() {
+		setDesciption: throttle(function () {
 			let criteria = ''
 			if (this.criteria == 'entry') {
 				criteria = 'E:'
@@ -527,16 +527,15 @@ export default {
 </script>
 <style lang="less" scoped>
 .ids-container {
-	display: flex;
+	// hide attributes of technical indicators
+	display: none;
 	flex-wrap: wrap;
 	.el-form-item {
 		display: inline-flex;
 	}
-	border-bottom: 1px solid #797979;
 }
 .condition-container {
 	display: flex;
-	border-top: 1px solid #797979;
 }
 /deep/ .el-input__inner {
 	padding-left: 5px;
