@@ -111,19 +111,22 @@ export default {
 		ma,
 		risk
 	},
-	// watch: {
-	// 	exitDirection: {
-	// 		handler(newVal) {
-	// 			if (newVal) {
-	// 				if (newVal === 'Long') {
-	// 					this.fd.direction = 'Short'
-	// 				} else if (newVal === 'Short') {
-	// 					this.fd.direction = 'Long'
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// },
+	computed: {
+		updateSenti(){
+			return this.$store.state.currentSenti
+		},
+		updateTech(){
+			return this.$store.state.currentTech
+		}
+	},
+	watch: {
+		updateSenti(val){
+			this.indicatorRadio = 'sentiment'
+		},
+		updateTech(val){
+			this.indicatorRadio = 'technical'
+		},
+	},
 	methods: {
 		getSentiUrl(val) {
 			this.sentiUrl = val
@@ -133,7 +136,6 @@ export default {
 		},
 		getSentiVal(val) {
 			this.sentiVal = val
-			console.log('exit indicator数组传过来的', this.sentiVal)
 		},
 		getTechVal(val) {
 			this.techVal = val
@@ -152,10 +154,8 @@ export default {
 		},
 		setDirection(data) {
 			this.fd.direction = data
-			console.log('EXIT组件拿到的值', this.fd.direction)
 		},
 		saveBacktestData() {
-			console.log('EXIE 保存')
 			let checked = true
 			// 将选择的 indicator 保存到 vuex 中
 			let indi = this.$refs.indiChild.saveIndicator()
@@ -224,7 +224,6 @@ export default {
 				edit.exit_description = data.exit_description
 				edit.entry = data.entry
 				edit.exit = data.exit
-				console.log('即将进入判断', edit)
 				if (edit.exit.signals[0].analysis == 'Sentiment') {
 					this.sentiVal = edit.exit.signals[0].indicator
 				} else if (edit.exit.signals[0].analysis == 'Technical') {

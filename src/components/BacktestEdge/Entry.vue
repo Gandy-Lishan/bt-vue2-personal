@@ -96,6 +96,22 @@ export default {
 		macd,
 		ma
 	},
+	computed: {
+		updateSenti(){
+			return this.$store.state.currentSenti
+		},
+		updateTech(){
+			return this.$store.state.currentTech
+		}
+	},
+	watch: {
+		updateSenti(val){
+			this.indicatorRadio = 'sentiment'
+		},
+		updateTech(val){
+			this.indicatorRadio = 'technical'
+		},
+	},
 	methods: {
 		getExitDirection(val) {
 			this.$store.commit('getExitDirection', val)
@@ -109,7 +125,6 @@ export default {
 		},
 		getSentiVal(val) {
 			this.sentiVal = val
-			console.log('entry indicator数组传过来的', this.sentiVal)
 		},
 		getTechVal(val) {
 			this.techVal = val

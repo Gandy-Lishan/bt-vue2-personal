@@ -330,7 +330,7 @@ export default {
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
 				}
 				this.$store.commit('getRunBacktestData', row)
 				this.$emit('goBacktestResultForm', row)
@@ -395,7 +395,7 @@ export default {
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					if (res.data.indicator_layout) {
-						this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+						this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
 					}
 
 					this.$store.commit('getRunBacktestData', row)
@@ -415,11 +415,30 @@ export default {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
 		},
-		restoreIndicatorLayout(data) {
+		restoreIndicatorLayout(data,freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
+			var frequency = ''
+			switch(freq){
+				case "Daily": {
+					frequency = 'daily'
+					break;
+				}
+				case "Weekly": {
+					frequency = 'weekly'
+					break;
+				}
+				case "Monthly": {
+					frequency = 'monthly'
+					break;
+				}
+				default: {
+					break;
+				}
+			}
+			this.$store.commit('setRestoreFreq', frequency)
 			CIQ.addIndicators()
 		},
 		showDes(row) {
@@ -523,7 +542,7 @@ export default {
 					} else {
 						this.getBacktestList()
 						this.$message.error({
-							message: '收藏失败',
+							message: 'Add failed',
 							duration: 1000
 						})
 					}

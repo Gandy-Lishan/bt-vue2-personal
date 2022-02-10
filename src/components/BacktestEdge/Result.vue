@@ -9,7 +9,6 @@
 					<el-form-item label="Commission:" prop="commission">
 						<el-input v-model="temp.commission" disabled></el-input>
 					</el-form-item>
-
 					<span class="comUnitNote">(%)</span>
 					<el-form-item label="Slippage:" prop="slippage">
 						<el-input

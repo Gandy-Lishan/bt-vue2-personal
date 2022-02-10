@@ -273,6 +273,23 @@ export default {
 		}
 	},
 	watch: {
+		updateFreq(val) {
+			//console.log('updateFreq: ', val)		
+			switch (val) {
+				case 'daily': {
+					this.frequency = 'Daily'
+					break
+				}
+				case 'weekly': {
+					this.frequency = 'Weekly'
+					break
+				}
+				case 'monthly': {
+					this.frequency = 'Monthly'
+					break
+				}
+			}
+		},
 		backtestEditData: {
 			handler(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
@@ -283,7 +300,6 @@ export default {
 					delete newVal.results
 					delete newVal.uuid
 					this.bd = Object.assign(this.bd, newVal)
-					console.log('创建的数据', this.bd)
 					this.getSymbolName(newVal.symbol)
 					this.frequency = this.editFrequency
 					// console.log('频率', this.frequency)
@@ -404,7 +420,7 @@ export default {
 			return (window.utils = new utils())
 		},
 		async getIndexsList() {
-			console.log('vuex', this.$store.state.indexsList)
+			//console.log('vuex', this.$store.state.indexsList)
 			if (this.$store.state.indexsList.length != 0) {
 				this.indexList = this.$store.state.indexsList
 			} else {
