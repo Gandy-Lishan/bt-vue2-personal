@@ -158,7 +158,6 @@ export default {
 			this.timeFrame = val
 		},
 		setDirection(val) {
-			console.log('zhuchang', val)
 			this.$refs.entryChild.setDirection(val)
 			let exit = ''
 			if (val == 'Long') {
@@ -374,12 +373,23 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.restartBtn {
-	position: relative;
-	z-index: 1;
-	float: right;
-	width: 12rem;
+@media screen and (max-width: 768px) {
+	.restartBtn {
+		position: relative;
+		z-index: 1;
+		width: 10rem;
+	}
 }
+@media screen and (min-width: 768px){
+	.restartBtn {
+		margin-left: 10px;
+		position: relative;
+		z-index: 1;
+		float: right;
+		width: 12rem;
+	}
+}
+
 .home-container {
 	width: 85vw;
 	margin: 0 auto;

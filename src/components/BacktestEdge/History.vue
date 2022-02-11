@@ -386,11 +386,8 @@ export default {
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				console.log(res.data.indicator_layout)
-				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayout(
-						JSON.parse(res.data.indicator_layout),
-						JSON.parse(res.data.entry).frequency
-					)
+				if(res.data.indicator_layout) {
+					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
 				}
 				this.$store.commit('getRunBacktestData', row)
 				this.$emit('goBacktestResultForm', row)
@@ -516,7 +513,7 @@ export default {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
 		},
-		restoreIndicatorLayout(data, freq) {
+		restoreIndicatorLayout(data,freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)

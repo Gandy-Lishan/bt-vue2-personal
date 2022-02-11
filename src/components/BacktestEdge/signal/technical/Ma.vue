@@ -256,6 +256,7 @@ export default {
 			console.log('描述', this.description)
 		}, 500),
 		getMaPeriodValue(val) {
+			console.log('getMaPeriodValue')
 			this.period = val
 			this.tech.ma_period = this.period
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -438,6 +439,7 @@ export default {
 			}
 		},
 		getMaValue(val) {
+			console.log('getMaValue')
 			this.tech.period = val
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
