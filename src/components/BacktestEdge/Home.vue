@@ -363,12 +363,21 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.restartBtn {
-	position: relative;
-	z-index: 1;
-	float: right;
-	width: 12rem;
+@media screen and (max-width: 780px) {
+	.restartBtn {
+		position: relative;
+		z-index: 1;
+		width: 02rem;
+	}
 }
+@media screen and (min-width: 780px){
+	.restartBtn {
+		position: relative;
+		z-index: 1;
+		width: 02rem;
+	}
+}
+
 .home-container {
 	width: 85vw;
 	margin: 0 auto;
