@@ -258,6 +258,7 @@ export default {
 			}
 		},
 		setPeriod(val) {
+			console.log('setperiod')
 			if (this.conditionRadio === 'Sentiment Moving Average') {
 				this.senti.period = val
 			}

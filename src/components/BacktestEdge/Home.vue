@@ -363,18 +363,20 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-@media screen and (max-width: 780px) {
+@media screen and (max-width: 768px) {
 	.restartBtn {
 		position: relative;
 		z-index: 1;
-		width: 02rem;
+		width: 10rem;
 	}
 }
-@media screen and (min-width: 780px){
+@media screen and (min-width: 768px){
 	.restartBtn {
+		margin-left: 10px;
 		position: relative;
 		z-index: 1;
-		width: 02rem;
+		float: right;
+		width: 12rem;
 	}
 }
 
