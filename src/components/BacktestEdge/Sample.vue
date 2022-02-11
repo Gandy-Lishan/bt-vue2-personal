@@ -330,10 +330,6 @@ export default {
 				.delete('/dev/backtest/' + id + '/')
 				.then((res) => {
 					if (res.status == 204) {
-						this.$message.success({
-							message: 'Successfully deleted',
-							duration: 1000
-						})
 						this.getStrategyList()
 					} else {
 						this.$message.error({
@@ -368,21 +364,34 @@ export default {
 						})
 						.then((res) => {
 							if (res.status === 201) {
-								this.$message.success('Copy successfully')
+								this.$notify({
+									title: 'Copy successfully',
+									message:
+										'After copying successfully, you can edit the backtest',
+									type: 'success',
+									offset: 100
+								})
 								this.$emit('goToHistoryForm')
 								this.$emit('refHistoryForm')
 							} else {
-								this.$message.error('Copy failed')
+								this.$notify.error({
+									title: 'Failed',
+									message: 'Copy failed',
+									offset: 100
+								})
 							}
 						})
 						.catch((error) => {
-							this.$message.error('The strategy has been copied')
+							this.$notify.error({
+								title: 'Has been Copied',
+								message: 'The strategy has been copied',
+								offset: 100
+							})
 						})
 				}
 			})
 		}, 5000),
 		viewBacktestResults: throttle(function (row) {
-			//console.log('sanple的id', row.id)
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {

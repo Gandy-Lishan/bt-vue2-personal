@@ -97,20 +97,20 @@ export default {
 		ma
 	},
 	computed: {
-		updateSenti(){
+		updateSenti() {
 			return this.$store.state.currentSenti
 		},
-		updateTech(){
+		updateTech() {
 			return this.$store.state.currentTech
 		}
 	},
 	watch: {
-		updateSenti(val){
+		updateSenti(val) {
 			this.indicatorRadio = 'sentiment'
 		},
-		updateTech(val){
+		updateTech(val) {
 			this.indicatorRadio = 'technical'
-		},
+		}
 	},
 	methods: {
 		getExitDirection(val) {
@@ -282,7 +282,9 @@ export default {
 	margin-bottom: 10px;
 }
 .entry-container {
-	padding-right: 50px;
+	padding-left: 50px;
+	padding-right: 10px;
+	margin-right: 50px;
 	border-right: 1px solid #797979;
 	margin-bottom: 10px;
 }

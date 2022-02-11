@@ -112,20 +112,20 @@ export default {
 		risk
 	},
 	computed: {
-		updateSenti(){
+		updateSenti() {
 			return this.$store.state.currentSenti
 		},
-		updateTech(){
+		updateTech() {
 			return this.$store.state.currentTech
 		}
 	},
 	watch: {
-		updateSenti(val){
+		updateSenti(val) {
 			this.indicatorRadio = 'sentiment'
 		},
-		updateTech(val){
+		updateTech(val) {
 			this.indicatorRadio = 'technical'
-		},
+		}
 	},
 	methods: {
 		getSentiUrl(val) {
@@ -316,6 +316,5 @@ export default {
 }
 .exit-container {
 	margin-bottom: 10px;
-	padding-left: 50px;
 }
 </style>

@@ -412,7 +412,6 @@ header {
 }
 .criteria-box {
 	display: flex;
-	align-items: baseline;
 	justify-content: center;
 	border-bottom: 1px solid #797979;
 }

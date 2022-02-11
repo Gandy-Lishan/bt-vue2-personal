@@ -342,10 +342,6 @@ export default {
 				.delete('/dev/backtest/' + id + '/')
 				.then((res) => {
 					if (res.status == 204) {
-						this.$message.success({
-							message: 'Successfully deleted',
-							duration: 1000
-						})
 						this.getBacktestList()
 						this.$emit('refHistoryForm')
 					} else {
@@ -379,7 +375,6 @@ export default {
 					})
 					.then((res) => {
 						if (res.status === 201) {
-							this.$message.success('Copy successfully')
 							this.getBacktestList()
 						} else {
 							this.$message.error('Copy failed')
@@ -421,21 +416,21 @@ export default {
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			var frequency = ''
-			switch(freq){
-				case "Daily": {
+			switch (freq) {
+				case 'Daily': {
 					frequency = 'daily'
-					break;
+					break
 				}
-				case "Weekly": {
+				case 'Weekly': {
 					frequency = 'weekly'
-					break;
+					break
 				}
-				case "Monthly": {
+				case 'Monthly': {
 					frequency = 'monthly'
-					break;
+					break
 				}
 				default: {
-					break;
+					break
 				}
 			}
 			this.$store.commit('setRestoreFreq', frequency)
@@ -506,11 +501,6 @@ export default {
 				.then((res) => {
 					if (res.status === 200) {
 						this.getBacktestList()
-						this.$message.success({
-							message: 'Added to favorites',
-							duration: 1000
-						})
-
 						this.$emit('refFavoritesForm')
 						this.$emit('refHistoryForm')
 					} else {
@@ -532,17 +522,12 @@ export default {
 				.then((res) => {
 					if (res.status === 200) {
 						this.getBacktestList()
-						this.$message.success({
-							message: 'Favorite has been removed',
-							duration: 1000
-						})
-
 						this.$emit('refFavoritesForm')
 						this.$emit('refHistoryForm')
 					} else {
 						this.getBacktestList()
 						this.$message.error({
-							message: 'Add failed',
+							message: 'removed failed',
 							duration: 1000
 						})
 					}

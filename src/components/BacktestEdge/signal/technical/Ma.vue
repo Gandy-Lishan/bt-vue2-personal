@@ -232,7 +232,7 @@ export default {
 			}
 			this.setDesciption()
 		},
-		setDesciption: throttle(function() {
+		setDesciption: throttle(function () {
 			let criteria = ''
 			if (this.criteria == 'entry') {
 				criteria = 'E:'
@@ -536,7 +536,6 @@ export default {
 }
 .condition-container {
 	display: flex;
-	border-top: 1px solid #797979;
 }
 /deep/ .el-input__inner {
 	padding-left: 5px;

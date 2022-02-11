@@ -48,6 +48,7 @@
 						<el-input
 							:disabled="disabled"
 							@input="setDesciption"
+							@change="clearNoNum"
 							v-model="senti.value"
 							placeholder="Input Value"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
@@ -214,6 +215,22 @@ export default {
 		}
 	},
 	methods: {
+		clearNoNum(value) {
+			console.log(value)
+			//先把非数字的都替换掉，除了数字和.
+			value = value.replace(/[^\d.]/g, '')
+			//保证只有出现一个.而没有多个.
+			value = value.replace(/\.{2,}/g, '.')
+			//必须保证第一个为数字而不是.
+			value = value.replace(/^\./g, '')
+			//保证.只出现一次，而不能出现两次以上
+			value = value.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
+			//只能输入两个小数
+			value = value.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3')
+			value = value.replace(/^0+\./, '0.')
+			console.log('处理过后的值', value)
+			this.senti.value = value
+		},
 		setDesciption: throttle(function () {
 			let criteria = ''
 			if (this.criteria == 'entry') {
