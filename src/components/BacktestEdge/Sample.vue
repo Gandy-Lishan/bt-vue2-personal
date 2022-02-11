@@ -318,7 +318,10 @@ export default {
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+					this.restoreIndicatorLayout(
+						JSON.parse(res.data.indicator_layout),
+						JSON.parse(res.data.entry).frequency
+					)
 				}
 			})
 			this.$store.commit('getRunBacktestData', row)
@@ -352,12 +355,11 @@ export default {
 				if (res.status === 200) {
 					params = res.data
 					params.name = params.name + '(copy)'
-					delete params.uuid
 					delete params.results
+					delete params.uuid
 					delete params.user_id
 					delete params.status
 					delete params.backtest_id
-					console.log('传递过来的参数', params)
 					this.$http
 						.post('/dev/backtest/', this.$qs.stringify(params), {
 							withCredentials: true
@@ -392,20 +394,22 @@ export default {
 			})
 		}, 5000),
 		viewBacktestResults: throttle(function (row) {
-			console.log('sanple的id', row.id)
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 					// 恢复indicator layout
-					console.log('res', res)
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					if (res.data.indicator_layout) {
-						this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout))
+						this.restoreIndicatorLayout(
+							JSON.parse(res.data.indicator_layout),
+							JSON.parse(res.data.entry).frequency
+						)
 					}
+
+					this.$store.commit('getRunBacktestData', row)
+					this.$emit('goTobacktestSetupForm', row.id)
+					this.$emit('goBacktestResultForm', row)
 				})
-				this.$store.commit('getRunBacktestData', row)
-				this.$emit('goTobacktestSetupForm', row.id)
-				this.$emit('goBacktestResultForm', row)
 			} else {
 				this.$notify({
 					title: 'No trades',
@@ -419,11 +423,30 @@ export default {
 			this.queryInfo.page = newpage
 			this.getStrategyList()
 		},
-		restoreIndicatorLayout(data) {
+		restoreIndicatorLayout(data, freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
+			var frequency = ''
+			switch (freq) {
+				case 'Daily': {
+					frequency = 'daily'
+					break
+				}
+				case 'Weekly': {
+					frequency = 'weekly'
+					break
+				}
+				case 'Monthly': {
+					frequency = 'monthly'
+					break
+				}
+				default: {
+					break
+				}
+			}
+			this.$store.commit('setRestoreFreq', frequency)
 			CIQ.addIndicators()
 		},
 		showDes(row) {

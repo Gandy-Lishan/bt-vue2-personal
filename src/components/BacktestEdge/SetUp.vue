@@ -64,7 +64,7 @@
 					</el-form-item> -->
 				</el-col>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12" :span="2">
-					<el-form-item label="Backtest History:" prop="backtestHistory">
+					<el-form-item label="Backtest Period:" prop="backtestHistory">
 						<div class="selectBox">
 							<el-select
 								@change="getBacktestHistory(historyValue)"
@@ -86,6 +86,7 @@
 							<el-date-picker
 								v-if="historyValue === 22"
 								v-model="bd.start_date"
+								@change="formateStartDate"
 								type="date"
 								placeholder="- Select Start Date -"
 								prop="startDate"
@@ -99,6 +100,7 @@
 							<el-date-picker
 								v-if="historyValue === 22"
 								v-model="bd.end_date"
+								@change="formateEndDate"
 								type="date"
 								placeholder="- Select End Date -"
 							>
@@ -126,13 +128,23 @@
 				</el-col>
 			</el-row>
 			<el-row>
-				<div class="nameBox border-set">
+				<div class="nameBox">
 					<el-form-item
 						label="Backtest Name:"
 						prop="name"
 						placeholder="Give the backtest a name"
 					>
 						<el-input v-model="bd.name" style="width: 720px"></el-input>
+					</el-form-item>
+				</div>
+			</el-row>
+			<el-row>
+				<div class="border-set">
+					<el-form-item label="Direction:" prop="direction">
+						<el-radio-group v-model="direction" @change="getDirection">
+							<el-radio label="Long">Long</el-radio>
+							<el-radio label="Short">Short</el-radio>
+						</el-radio-group>
 					</el-form-item>
 				</div>
 			</el-row>
@@ -224,7 +236,8 @@ export default {
 			loading: false,
 			options: [],
 			temp: { commission: '0.1', slippage: '0.1' },
-			sentimentIndicatorList: []
+			sentimentIndicatorList: [],
+			direction: 'Long'
 		}
 	},
 	mounted() {
@@ -274,7 +287,7 @@ export default {
 	},
 	watch: {
 		updateFreq(val) {
-			//console.log('updateFreq: ', val)		
+			//console.log('updateFreq: ', val)
 			switch (val) {
 				case 'daily': {
 					this.frequency = 'Daily'
@@ -305,11 +318,23 @@ export default {
 					// console.log('频率', this.frequency)
 					this.temp.commission = Number(newVal.commission) * 100
 					this.temp.slippage = Number(newVal.slippage) * 100
-					var year
-					const starArr = newVal.start_date.toString().split('-')
-					const endArr = newVal.end_date.toString().split('-')
-					year = Number(endArr[0]) - Number(starArr[0])
-					this.historyValue = year
+					let year
+					let month
+					let day
+					if (newVal.start_date) {
+						const starArr = newVal.start_date.toString().split('-')
+						const endArr = newVal.end_date.toString().split('-')
+						year = Number(endArr[0]) - Number(starArr[0])
+						month = Number(endArr[1]) - Number(starArr[1])
+						day = Number(endArr[2]) - Number(starArr[2])
+						if (month == 0 && day == 0) {
+							this.historyValue = year
+						} else {
+							this.historyValue = 22
+						}
+					} else {
+						this.historyValue = 21
+					}
 				}
 			}
 		},
@@ -322,6 +347,15 @@ export default {
 		}
 	},
 	methods: {
+		getDirection(val) {
+			// direction 设置到 vuex
+			this.$store.commit('getExitDirection', val)
+			// 设置 entry 和 exit 的 direction
+			this.$emit('setDirection', val)
+		},
+		setEditDirection(val) {
+			this.direction = val
+		},
 		validateCommission(val) {
 			let list = val.split('.')
 			if (list.length === 2) {
@@ -399,6 +433,15 @@ export default {
 		},
 		getBenchmark(val) {
 			this.bd.benchmark = val
+		},
+		formateStartDate(val) {
+			this.bd.start_date = timestampToTime(val)
+
+			console.log('开始时间', this.bd.start_date)
+		},
+		formateEndDate(val) {
+			this.bd.end_date = timestampToTime(val)
+			console.log('开始时间', this.bd.end_date)
 		},
 		getEndDate() {
 			this.bd.end_date = timestampToTime(new Date())
@@ -489,7 +532,9 @@ export default {
 		},
 		getBacktestHistory(val) {
 			this.historyValue = val
+			this.bd.end_date = timestampToTime(new Date())
 			if (val <= 20) {
+				this.bd.end_date = timestampToTime(new Date())
 				const str = this.bd.end_date.split('-')
 				str[0] = Number(str[0]) - Number(this.historyValue) + ''
 				this.bd.start_date = str.join('-')
@@ -524,7 +569,7 @@ export default {
 		getFrequency(val) {
 			this.frequency = val
 			this.$store.commit('getFrequency', val)
-			this.$emit('getTimeFrame',val)
+			this.$emit('getTimeFrame', val)
 			this.loadSentimentList(val)
 			// same as setPeriodicity
 			var selectedFreq = ''
@@ -672,12 +717,12 @@ export default {
 					}
 				}
 				if (nameChecked) {
-					if (this.bd.start_date) {
+					if (this.bd.end_date) {
 						// 保存 backtestform 的数据
 						this.$store.commit('setBd', this.bd)
 						return checked
 					} else {
-						this.$message.error('Please select start date')
+						this.$message.error('Please select end date')
 						checked = false
 						return checked
 					}
@@ -704,8 +749,9 @@ export default {
 	margin-right: 0px;
 }
 /deep/.dateBox .el-input__icon {
-	width: 17px;
+	width: 53px;
 }
+
 .comUnitNote {
 	position: absolute;
 

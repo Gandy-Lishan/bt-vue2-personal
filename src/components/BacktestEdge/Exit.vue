@@ -3,12 +3,12 @@
 		<p class="criteria-title">Exit Criteria</p>
 		<el-form :model="fd" ref="exitForm">
 			<div class="radioBox">
-				<el-form-item label="Direction:" prop="direction">
+				<!-- <el-form-item label="Direction:" prop="direction">
 					<el-radio-group v-model="fd.direction" disabled>
 						<el-radio label="Long">Long</el-radio>
 						<el-radio label="Short">Short</el-radio>
 					</el-radio-group>
-				</el-form-item>
+				</el-form-item> -->
 			</div>
 		</el-form>
 		<indicator
@@ -194,7 +194,6 @@ export default {
 					let ma = this.$refs.maChild.saveCondition()
 					return (checked = ma)
 				} else if (this.indicatorRadio === 'risk') {
-					console.log('第一步')
 					this.$refs.riskChild.setDesciption()
 					let risk = this.$refs.riskChild.saveCondition()
 					return (checked = risk)
@@ -237,11 +236,12 @@ export default {
 						this.riskVal = 'Profit/Loss'
 					} else if (edit.exit.signals[0].sc.time_in_market) {
 						this.riskVal = 'Time In Market'
-					} else if (edit.exit.signals[0].sc.take_profit) {
-						this.riskVal = 'Take Profit'
-					} else if (edit.exit.signals[0].sc.stop_loss) {
-						this.riskVal = 'Stop Loss'
 					}
+					// else if (edit.exit.signals[0].sc.take_profit) {
+					// 	this.riskVal = 'Take Profit'
+					// } else if (edit.exit.signals[0].sc.stop_loss) {
+					// 	this.riskVal = 'Stop Loss'
+					// }
 					let obj = {}
 					obj.value = this.riskVal
 					this.$refs.indiChild.handleRiskSelect(obj)
@@ -292,9 +292,6 @@ export default {
 .criteria-title {
 	font-size: 18px;
 	font-weight: bold;
-}
-.radioBox {
-	border-bottom: 1px solid #797979;
 }
 .radioBox .el-form-item {
 	display: flex;

@@ -159,19 +159,26 @@ export default {
 		// }
 	},
 	methods: {
-		setDesciption: throttle(function() {
+		setDesciption: throttle(function () {
 			let criteria = ''
+			let direction = ''
 			if (this.criteria == 'entry') {
 				criteria = 'E:'
+				direction = this.direction + ':'
 			} else if (this.criteria == 'exit') {
 				criteria = 'X:'
+
+				if (this.direction == 'Long') {
+					direction = 'Cover:'
+				} else if (this.direction == 'Short') {
+					direction = 'Close:'
+				}
 			}
-			let direction = this.direction + ':'
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${condition} ${this.tech.value}`
 			console.log('描述', this.description)
-		},500),
+		}, 500),
 		getConditionRadio(val) {
 			if (val === 'MACD Value ') {
 				this.tech.value = 'MACDSL'

@@ -19,10 +19,7 @@
 			</div> -->
 			<div class="condition-container">
 				<el-checkbox-group v-model="checkList">
-					<div
-						class="check-box"
-						v-if="riskIndiValue === 'tp' || riskIndiValue === 'pl'"
-					>
+					<div class="check-box" v-if="riskIndiValue === 'pl'">
 						<el-checkbox label="Take Profit" disabled></el-checkbox>
 						<el-input
 							v-model="risk.take_profit"
@@ -31,10 +28,7 @@
 
 						<span class="tpNote">(%)</span>
 					</div>
-					<div
-						class="check-box"
-						v-if="riskIndiValue === 'sl' || riskIndiValue === 'pl'"
-					>
+					<div class="check-box" v-if="riskIndiValue === 'pl'">
 						<el-checkbox label="Stop Loss" disabled></el-checkbox>
 						<el-input
 							v-model="risk.stop_loss"
@@ -114,10 +108,15 @@ export default {
 	methods: {
 		setDesciption: throttle(function () {
 			let criteria = ''
+			let direction = ''
 			if (this.criteria == 'exit') {
 				criteria = 'X:'
+				if (this.direction == 'Long') {
+					direction = 'Cover:'
+				} else if (this.direction == 'Short') {
+					direction = 'Close:'
+				}
 			}
-			let direction = this.direction + ':'
 			let riskVal = this.riskVal ? this.riskVal : this.editRiskVal
 			let value1 = ''
 			let value2 = ''

@@ -115,12 +115,18 @@ export default {
 	methods: {
 		setDesciption: throttle(function () {
 			let criteria = ''
+			let direction = ''
 			if (this.criteria == 'entry') {
 				criteria = 'E:'
+				direction = this.direction + ':'
 			} else if (this.criteria == 'exit') {
 				criteria = 'X:'
+				if (this.direction == 'Long') {
+					direction = 'Cover:'
+				} else if (this.direction == 'Short') {
+					direction = 'Close:'
+				}
 			}
-			let direction = this.direction + ':'
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let period = this.tech.period ? this.tech.period : ''
 			let condition = this.conditions[this.tech.condition].label
