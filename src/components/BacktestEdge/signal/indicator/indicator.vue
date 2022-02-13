@@ -437,8 +437,6 @@ export default {
 			this.$emit('getRiskVal', item.value)
 			let val = item.value
 			const set = new Set([
-				['Take Profit', 'tp'],
-				['Stop Loss', 'sl'],
 				['Time In Market', 'tim'],
 				['Profit/Loss', 'pl']
 			])
@@ -489,8 +487,6 @@ export default {
 		},
 		loadRiskList() {
 			return [
-				{ value: 'Take Profit' },
-				{ value: 'Stop Loss' },
 				{ value: 'Time In Market' },
 				{ value: 'Profit/Loss' }
 			]

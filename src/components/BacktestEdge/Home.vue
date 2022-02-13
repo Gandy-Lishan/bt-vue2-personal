@@ -30,6 +30,7 @@
 								:backtestEditData="backtestEditData"
 								:editFrequency="editFrequency"
 								@getTimeFrame="getTimeFrame"
+								@setDirection="setDirection"
 							></set-up>
 							<div class="criteria-container">
 								<div class="criteria-box">
@@ -115,7 +116,6 @@ export default {
 			tabPosition: 'top',
 			activeName: 'first',
 			clientHeight: 0,
-			exitDirection: '',
 			loading: false,
 			backtestEditData: {},
 			editFrequency: 'Daily',
@@ -157,6 +157,16 @@ export default {
 		getTimeFrame(val) {
 			this.timeFrame = val
 		},
+		setDirection(val) {
+			this.$refs.entryChild.setDirection(val)
+			let exit = ''
+			if (val == 'Long') {
+				exit = 'Short'
+			} else if (val == 'Short') {
+				exit = 'Long'
+			}
+			this.$refs.exitChild.setDirection(exit)
+		},
 		setExitDirection(val) {
 			let data = ''
 			if (val == 'Long') {
@@ -164,8 +174,8 @@ export default {
 			} else if (val == 'Short') {
 				data = 'Long'
 			}
-			// this.exitDirection = data
 			this.$refs.exitChild.setDirection(data)
+			this.$refs.setUpChild.setEditDirection(val)
 		},
 		refreshPage() {
 			location.reload()

@@ -318,7 +318,10 @@ export default {
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
+					this.restoreIndicatorLayout(
+						JSON.parse(res.data.indicator_layout),
+						JSON.parse(res.data.entry).frequency
+					)
 				}
 			})
 			this.$store.commit('getRunBacktestData', row)
@@ -352,12 +355,11 @@ export default {
 				if (res.status === 200) {
 					params = res.data
 					params.name = params.name + '(copy)'
-					delete params.uuid
 					delete params.results
+					delete params.uuid
 					delete params.user_id
 					delete params.status
 					delete params.backtest_id
-					console.log('传递过来的参数', params)
 					this.$http
 						.post('/dev/backtest/', this.$qs.stringify(params), {
 							withCredentials: true
@@ -399,7 +401,10 @@ export default {
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					console.log(JSON.parse(res.data.indicator_layout))
 					if (res.data.indicator_layout) {
-						this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
+						this.restoreIndicatorLayout(
+							JSON.parse(res.data.indicator_layout),
+							JSON.parse(res.data.entry).frequency
+						)
 					}
 
 					this.$store.commit('getRunBacktestData', row)
@@ -419,27 +424,27 @@ export default {
 			this.queryInfo.page = newpage
 			this.getStrategyList()
 		},
-		restoreIndicatorLayout(data,freq) {
+		restoreIndicatorLayout(data, freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			var frequency = ''
-			switch(freq){
-				case "Daily": {
+			switch (freq) {
+				case 'Daily': {
 					frequency = 'daily'
-					break;
+					break
 				}
-				case "Weekly": {
+				case 'Weekly': {
 					frequency = 'weekly'
-					break;
+					break
 				}
-				case "Monthly": {
+				case 'Monthly': {
 					frequency = 'monthly'
-					break;
+					break
 				}
 				default: {
-					break;
+					break
 				}
 			}
 			this.$store.commit('setRestoreFreq', frequency)

@@ -3,12 +3,12 @@
 		<p class="criteria-title">Entry Criteria</p>
 		<el-form :model="fd" ref="entryForm">
 			<div class="radioBox">
-				<el-form-item label="Direction:" prop="direction">
+				<!-- <el-form-item label="Direction:" prop="direction">
 					<el-radio-group v-model="fd.direction" @change="getExitDirection">
 						<el-radio label="Long">Long</el-radio>
 						<el-radio label="Short">Short</el-radio>
 					</el-radio-group>
-				</el-form-item>
+				</el-form-item> -->
 			</div>
 		</el-form>
 		<indicator
@@ -113,8 +113,11 @@ export default {
 		}
 	},
 	methods: {
+		setDirection(val) {
+			console.log('entry chang', val)
+			this.fd.direction = val
+		},
 		getExitDirection(val) {
-			this.$store.commit('getExitDirection', val)
 			this.$emit('setExitDirection', val)
 		},
 		getSentiUrl(val) {
@@ -259,9 +262,6 @@ export default {
 .criteria-title {
 	font-size: 18px;
 	font-weight: bold;
-}
-.radioBox {
-	border-bottom: 1px solid #797979;
 }
 .radioBox .el-form-item {
 	display: flex;

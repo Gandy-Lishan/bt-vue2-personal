@@ -175,6 +175,7 @@
 									placement="bottom-start"
 								>
 									<el-button
+										:disabled="scope.row.status == 0"
 										type="info"
 										icon="el-icon-copy-document"
 										circle
@@ -230,6 +231,7 @@
 									placement="bottom-start"
 								>
 									<el-button
+										:disabled="scope.row.status == 0"
 										type="warning"
 										icon="el-icon-view"
 										circle
@@ -302,7 +304,29 @@ export default {
 					})
 				}
 
-				//console.log('history列表', res.data.results)
+				console.log('history列表', this.backtestList)
+				this.queryInfo.total = res.data.count
+			} else {
+				this.loading = false
+			}
+		},
+		async getBacktestListFav(strategy) {
+			this.loadTest = 'Loading...'
+			this.loading = true
+			let page = this.queryInfo.page
+			console.log('page', this.queryInfo.page)
+			const res = await this.$http.get('/dev/backtest/?page=' + page)
+			if (res.status === 200) {
+				this.loading = false
+				this.backtestList = res.data.results
+				if (this.backtestList.length != 0) {
+					this.backtestList.forEach((element) => {
+						if (element.result !== '')
+							element.result = JSON.parse(element.result)
+					})
+				}
+
+				console.log('history列表', this.backtestList)
 				this.queryInfo.total = res.data.count
 			} else {
 				this.loading = false
@@ -415,84 +439,71 @@ export default {
 		// 	}
 		// },
 		copyBacktest: throttle(function (row) {
-			if (row.status != 0) {
-				let params = {}
+			let params = {}
+			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+				// 恢复indicator layout
+				this.$store.commit('getBacktestSymbol', res.data.symbol)
+				console.log(res.data)
+				if (res.data.indicator_layout) {
+					this.restoreIndicatorLayout(
+						JSON.parse(res.data.indicator_layout),
+						JSON.parse(res.data.entry).frequency
+					)
+				}
+				this.$store.commit('getRunBacktestData', row)
+				this.$emit('goTobacktestSetupForm', row.id)
+				this.$emit('goBacktestResultForm', row)
+
+				params = res.data
+				console.log('参数数据', res.data)
+				params.name = params.name + '(copy)'
+				delete params.uuid
+				delete params.results
+				delete params.user_id
+				delete params.status
+				delete params.backtest_id
+				this.$http
+					.post('/dev/backtest/', this.$qs.stringify(params), {
+						withCredentials: true
+					})
+					.then((res) => {
+						if (res.status === 201) {
+							this.$notify({
+								title: 'Copy successfully',
+								message:
+									'After copying successfully, you can edit the backtest',
+								type: 'success',
+								offset: 100
+							})
+							this.getBacktestList()
+						} else {
+							this.$message.error('Copy failed')
+						}
+					})
+			})
+		}, 50000),
+		viewBacktestResults: throttle(function (row) {
+			if (row.result['Total Trades']) {
+				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					console.log(res.data)
 					if (res.data.indicator_layout) {
-						this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
+						this.restoreIndicatorLayout(
+							JSON.parse(res.data.indicator_layout),
+							JSON.parse(res.data.entry).frequency
+						)
 					}
+
 					this.$store.commit('getRunBacktestData', row)
 					this.$emit('goTobacktestSetupForm', row.id)
 					this.$emit('goBacktestResultForm', row)
-
-					params = res.data
-					console.log('参数数据', res.data)
-					params.name = params.name + '(copy)'
-					delete params.uuid
-					delete params.results
-					delete params.user_id
-					delete params.status
-					delete params.backtest_id
-					this.$http
-						.post('/dev/backtest/', this.$qs.stringify(params), {
-							withCredentials: true
-						})
-						.then((res) => {
-							if (res.status === 201) {
-								this.$notify({
-									title: 'Copy successfully',
-									message:
-										'After copying successfully, you can edit the backtest',
-									type: 'success',
-									offset: 100
-								})
-								this.getBacktestList()
-							} else {
-								this.$message.error('Copy failed')
-							}
-						})
 				})
 			} else {
 				this.$notify({
-					title: 'Please Edit',
-					message: 'You can copy only after editing sample backtest',
-					offset: 100,
-					type: 'warning'
-				})
-			}
-		}, 50000),
-		viewBacktestResults: throttle(function (row) {
-			if (row.status != 0) {
-				if (row.result['Total Trades']) {
-					document.getElementsByClassName('ciq-period')[0].style.display =
-						'none'
-					this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
-						// 恢复indicator layout
-						this.$store.commit('getBacktestSymbol', res.data.symbol)
-						console.log(res.data)
-						if (res.data.indicator_layout) {
-							this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
-						}
-
-						this.$store.commit('getRunBacktestData', row)
-						this.$emit('goTobacktestSetupForm', row.id)
-						this.$emit('goBacktestResultForm', row)
-					})
-				} else {
-					this.$notify({
-						title: 'No trades',
-						message: 'No trades, please change parameter.',
-						offset: 100,
-						type: 'warning'
-					})
-				}
-			} else {
-				this.$notify({
-					title: 'Please Edit',
-					message: 'You can view results only after editing sample backtest',
+					title: 'No trades',
+					message: 'No trades, please change parameter.',
 					offset: 100,
 					type: 'warning'
 				})
@@ -592,7 +603,7 @@ export default {
 				.put('/dev/backtest/' + row.id + '/', vm.$qs.stringify(params))
 				.then((res) => {
 					if (res.status === 200) {
-						this.getBacktestList()
+						this.getBacktestListFav()
 						this.$notify({
 							title: 'Added to favorites',
 							message:
@@ -603,7 +614,7 @@ export default {
 
 						this.$emit('refFavoritesForm')
 					} else {
-						this.getBacktestList()
+						this.getBacktestListFav()
 						this.$message.error({
 							message: 'Collection failed',
 							duration: 1000
@@ -620,11 +631,11 @@ export default {
 				.put('/dev/backtest/' + row.id + '/', vm.$qs.stringify(params))
 				.then((res) => {
 					if (res.status === 200) {
-						this.getBacktestList()
+						this.getBacktestListFav()
 
 						this.$emit('refFavoritesForm')
 					} else {
-						this.getBacktestList()
+						this.getBacktestListFav()
 						this.$message.error({
 							message: 'Add failed',
 							duration: 1000

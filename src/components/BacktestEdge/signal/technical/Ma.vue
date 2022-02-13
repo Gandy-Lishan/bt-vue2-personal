@@ -236,12 +236,19 @@ export default {
 		},
 		setDesciption: throttle(function () {
 			let criteria = ''
+			let direction = ''
 			if (this.criteria == 'entry') {
 				criteria = 'E:'
+				direction = this.direction + ':'
 			} else if (this.criteria == 'exit') {
 				criteria = 'X:'
+
+				if (this.direction == 'Long') {
+					direction = 'Cover:'
+				} else if (this.direction == 'Short') {
+					direction = 'Close:'
+				}
 			}
-			let direction = this.direction + ':'
 			let techVal = this.techVal
 			let period = this.tech.period ? this.tech.period : ''
 			let ma_period = this.techVal ? this.techVal : this.editTechVal
@@ -463,8 +470,13 @@ export default {
 			let checked = true
 			console.log('保存 condition')
 			if (this.conditionRadio === 'Symbol Close') {
+				let ids = {}
 				if (this.tech.period) {
-					let ids = this.tech.ids
+					if (this.tech.ids) {
+						ids = this.tech.ids
+					} else {
+						ids = { ma_category: 'SMA' }
+					}
 					let tech = this.tech
 					delete tech.ids
 					delete tech.ma_period

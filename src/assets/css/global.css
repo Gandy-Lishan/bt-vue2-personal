@@ -126,6 +126,12 @@
 	width: 175px;
 	border-radius: unset;
 }
+
+.set-up-container .dateBox .el-date-editor input:not([type]),
+.set-up-container .dateBox .el-date-editor input[type='date'],
+.set-up-container .dateBox .el-date-editor input[type='text'] {
+	padding-left: 23px;
+}
 .backtest_container .el-form-item .el-form-item__content .selectBox .el-select {
 	width: 320px;
 }

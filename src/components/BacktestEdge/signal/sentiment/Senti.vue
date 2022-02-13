@@ -218,7 +218,7 @@ export default {
 		clearNoNum(value) {
 			console.log(value)
 			//先把非数字的都替换掉，除了数字和.
-			value = value.replace(/[^\d.]/g, '')
+			// value = value.replace(/[^\d.]/g, '')
 			//保证只有出现一个.而没有多个.
 			value = value.replace(/\.{2,}/g, '.')
 			//必须保证第一个为数字而不是.
@@ -228,17 +228,24 @@ export default {
 			//只能输入两个小数
 			value = value.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3')
 			value = value.replace(/^0+\./, '0.')
+			value = value.replace(/^\-+/g, '-')
 			console.log('处理过后的值', value)
 			this.senti.value = value
 		},
 		setDesciption: throttle(function () {
 			let criteria = ''
+			let direction = ''
 			if (this.criteria == 'entry') {
 				criteria = 'E:'
+				direction = this.direction + ':'
 			} else if (this.criteria == 'exit') {
 				criteria = 'X:'
+				if (this.direction == 'Long') {
+					direction = 'Cover:'
+				} else if (this.direction == 'Short') {
+					direction = 'Close:'
+				}
 			}
-			let direction = this.direction + ':'
 			let ma = this.senti.period ? 'moving average' : ''
 			let period = this.senti.period ? this.senti.period : ''
 			let condition = this.conditions[this.senti.condition].label
@@ -253,7 +260,6 @@ export default {
 				}
 				this.disabled = !this.disabled
 			} else if (val === 'Sentiment Moving Average') {
-				this.senti.period = ''
 				this.disabled = !this.disabled
 			}
 		},
@@ -352,26 +358,29 @@ export default {
 				}
 			}
 		},
-		 setEditData(newVal) {
-			 if (JSON.stringify(newVal) != '{}') {
-				 this.senti.extreme_optimism =
-				 newVal[this.criteria].signals[0].extreme_optimism
-				 this.senti.extreme_pessimism = newVal[this.criteria].signals[0].extreme_pessimism
-				 this.senti.condition = Number(newVal[this.criteria].signals[0].condition)
-				 this.senti.value = newVal[this.criteria].signals[0].value
-				 this.conditionRadio = 'Sentiment Value'
-				 this.senti.period = ''
-				 this.disabled = false
-				 // delete this.senti.period
-				 let period = newVal[this.criteria].signals[0].period
-				 if (period) {
-					 this.conditionRadio = 'Sentiment Moving Average'
-					 this.senti.period = period
-					 this.setPeriod(period)
-					 this.disabled = true
-				 }
-				 this.editSentiVal = newVal[this.criteria].signals[0].indicator
-				 this.setDesciption()
+		setEditData(newVal) {
+			if (JSON.stringify(newVal) != '{}') {
+				this.senti.extreme_optimism =
+					newVal[this.criteria].signals[0].extreme_optimism
+				this.senti.extreme_pessimism =
+					newVal[this.criteria].signals[0].extreme_pessimism
+				this.senti.condition = Number(
+					newVal[this.criteria].signals[0].condition
+				)
+				this.senti.value = newVal[this.criteria].signals[0].value
+				this.conditionRadio = 'Sentiment Value'
+				this.senti.period = ''
+				this.disabled = false
+				// delete this.senti.period
+				let period = newVal[this.criteria].signals[0].period
+				if (period) {
+					this.conditionRadio = 'Sentiment Moving Average'
+					this.senti.period = period
+					this.setPeriod(period)
+					this.disabled = true
+				}
+				this.editSentiVal = newVal[this.criteria].signals[0].indicator
+				this.setDesciption()
 			}
 		 }
 	}

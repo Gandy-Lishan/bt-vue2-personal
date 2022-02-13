@@ -65,9 +65,17 @@ router.beforeEach((to, from, next) => {
   
   axios.get('/dev/user/?userid=' + userId).then(res => {
     console.log("相应数据",res);
+    console.log("查询到的ID",res.data.userid);
+    console.log("过期时间",res.data.session_expiration);
  if(res.status === 200) {
- cookies.set('userid',userId)
+  let oldUserid =  cookies.get('userid')
+  if(oldUserid == res.data.userid) {
+    next()
+  }else {
+    cookies.set('userid',userId)
+    
  next()
+  }
 }else if(res.status === 401 ){
 //无权限
 window.location.href = 'https://users.sentdevsite.com/login'
