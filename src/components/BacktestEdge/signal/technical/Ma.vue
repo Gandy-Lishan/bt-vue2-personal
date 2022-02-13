@@ -45,7 +45,8 @@
 						<el-input
 							v-model="tech.period"
 							:disabled="disabled"
-							@input="getSCvalue, setDesciption"
+							@input="getSCvalue"
+							@blur="setDesciption"
 							oninput="value=value.replace(/[^\d]/g,'')"
 							placeholder="Input Period"
 						></el-input>
@@ -66,7 +67,7 @@
 							:disabled="!disabled"
 							v-model="tech.ma_period"
 							placeholder="Input Period"
-							@input="getMaPeriodValue, setDesciption"
+							@input="getMaPeriodValue"
 							oninput="value=value.replace(/[^\d]/g,'')"
 						></el-input>
 					</el-form-item>
@@ -100,7 +101,8 @@
 							v-model="tech.period"
 							:disabled="!disabled"
 							placeholder="Input Period"
-							@input="getMaValue, setDesciption"
+							@input="getMaValue"
+							@blur = "setDesciption"
 							oninput="value=value.replace(/[^\d]/g,'')"
 						></el-input>
 					</el-form-item>
@@ -249,7 +251,6 @@ export default {
 			console.log('描述', this.description)
 		}, 500),
 		getMaPeriodValue(val) {
-			console.log('getMaPeriodValue')
 			this.period = val
 			this.tech.ma_period = this.period
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -398,6 +399,7 @@ export default {
 			}
 		},
 		getSCvalue(val) {
+			console.log("getSCvalue")
 			if (this.conditionRadio === 'Symbol Close') {
 				//   delete this.sc.ma_period
 				// const obj = {}

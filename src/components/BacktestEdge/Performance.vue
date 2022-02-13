@@ -314,6 +314,7 @@ export default {
 	methods: {
 		handleClick(tab, event) {},
 		loadMarker(tradeData) {
+
 			CIQ.loadChart(tradeData.markerSet)
 			CIQ.addMarker()
 		},

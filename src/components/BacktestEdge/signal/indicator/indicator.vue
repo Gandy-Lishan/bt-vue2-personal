@@ -130,15 +130,24 @@ export default {
 	},
 	watch: {
 		updateSenti(val){
-			this.si.sentimentIndicator = val.name
-			this.indicatorRadio = 'Sentiment Indicators'
+			// this.si.sentimentIndicator = val.name
+			
+			for(var i in CIQ.indicatorList){
+				if(CIQ.indicatorList[i].chart_name == val.name){
+					this.indicatorRadio = 'Sentiment Indicators'
+					this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
+				}
+			}
 		},
 		updateTech(val){
 			var builtinList = this.$store.state.builtinList
 			builtinList.find(item => {
 				if(item.url == val.url){
-					this.si.technicalIndicator = item.value
-					this.indicatorRadio = 'Technical Indicators'
+					// this.si.technicalIndicator = item.value
+
+					// 暂时注释掉，因为大部分tech没有加到back test内
+					//this.indicatorRadio = 'Technical Indicators'
+					//this.handleTechnicalSelect({value:item.value})
 				}
 			})	
 		},
@@ -314,6 +323,7 @@ export default {
 			// obj.index = this.tabIndex
 			// obj.value = item.value
 			// this.$store.commit('clearSignal', obj)
+			console.log(this.si.sentimentIndicator)
 			this.si.sentimentIndicator = item.value
 			this.$emit('getSentiVal', item.value)
 			// remove a MA tat already exists in current criteria before loadin
