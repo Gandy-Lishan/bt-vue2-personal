@@ -42,7 +42,9 @@
 								</div>
 							</div>
 							<div class="backtest-btns">
-								<el-button type="danger"> Clear Form</el-button>
+								<el-button type="danger" @click="clearForm">
+									Clear Form</el-button
+								>
 								<el-button type="success" @click="runBacktest"
 									>Run Backtest</el-button
 								>
@@ -154,6 +156,12 @@ export default {
 		}, 500)
 	},
 	methods: {
+		// 清除set up  表单
+		clearForm() {
+			this.$refs.setUpChild.clearForm()
+			this.$refs.entryChild.clearForm()
+			this.$refs.exitChild.clearForm()
+		},
 		getTimeFrame(val) {
 			this.timeFrame = val
 		},
@@ -168,13 +176,13 @@ export default {
 			this.$refs.exitChild.setDirection(exit)
 		},
 		setExitDirection(val) {
-			let data = ''
+			let exit = ''
 			if (val == 'Long') {
-				data = 'Short'
+				exit = 'Short'
 			} else if (val == 'Short') {
-				data = 'Long'
+				exit = 'Long'
 			}
-			this.$refs.exitChild.setDirection(data)
+			this.$refs.exitChild.setDirection(exit)
 			this.$refs.setUpChild.setEditDirection(val)
 		},
 		refreshPage() {
@@ -290,6 +298,13 @@ export default {
 									vm.loading = false
 									vm.goToHistoryForm()
 									vm.$refs.historyChild.refreshHistory(res.data.id)
+									// 保存成功之后应该清除表单的所有数据
+									vm.clearForm()
+									// 并且清除 old_uuid
+									let backtestInfo = vm.$store.state.backtestInfo
+									if (backtestInfo.old_uuid) {
+										vm.$store.commit('clearBacktestUuid')
+									}
 								} else {
 									vm.$message.error('Save failed')
 									vm.loading = false
@@ -348,7 +363,7 @@ export default {
 		},
 		goBacktestResultForm(row) {
 			this.activeName = 'third'
-			this.$refs.performanceChild.getResultData(row.id)
+			this.$refs.performanceChild.getResultData(row)
 		},
 		goToFavoritesForm() {
 			this.activeName = 'forth'
@@ -380,7 +395,7 @@ export default {
 		width: 10rem;
 	}
 }
-@media screen and (min-width: 768px){
+@media screen and (min-width: 768px) {
 	.restartBtn {
 		margin-left: 10px;
 		position: relative;

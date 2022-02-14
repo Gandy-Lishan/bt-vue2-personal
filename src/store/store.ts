@@ -520,6 +520,10 @@ export default new Vuex.Store({
 		},
 		savaDescriptionAgain(state,flag) {
 			state.isSavaDescription = flag
+		},
+		clearBacktestUuid(state) {
+			if(state.backtestInfo.old_uuid) {
+			delete state.backtestInfo.old_uuid}
 		}
 
 	},

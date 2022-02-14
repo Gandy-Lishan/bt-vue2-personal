@@ -309,7 +309,7 @@ export default {
 		}
 	},
 	created() {
-		this.getResultData()
+		this.getResultData({ id: 0 })
 	},
 	methods: {
 		handleClick(tab, event) {},
@@ -317,101 +317,104 @@ export default {
 			CIQ.loadChart(tradeData.markerSet)
 			CIQ.addMarker()
 		},
-		getResultData(id) {
+		getResultData(row) {
 			let vm = this
 			let initalData = {}
 			let data = {}
-			console.log('传递过来的ID', id)
-			console.log('vuex的ID', this.$store.state.favoriteBacktestRowData.id)
-			if (this.$store.state.favoriteBacktestRowData.id) {
-				if (!id) {
-					return
-				}
-				vm.loading = true
-				vm.$http
-					.get('/dev/report/?uuid=' + id)
-					.then((res) => {
-						if (res.status == 200) {
-							if (typeof res.data == String) {
-								JSON.parse(res.data)
+			if (!row.id) {
+				return
+			}
+			if (row.status != 0) {
+				if (this.$store.state.favoriteBacktestRowData.id) {
+					vm.loading = true
+					let id = row.id
+					vm.$http
+						.get('/dev/report/?uuid=' + id)
+						.then((res) => {
+							if (res.status == 200) {
+								if (typeof res.data == String) {
+									JSON.parse(res.data)
+								}
+								//('dddddd',res.data)
+								initalData = res.data
+
+								// -------------------------------------  text ----------------
+								data.uuid = initalData['UUID']
+								data.symbol = initalData['Symbol']
+								data.frequency = initalData['Frequency']
+								data.totalTrades = initalData['Total Trades']
+								data.totalPositive = initalData['Total Positive']
+								data.totalNegative = initalData['Total Negative']
+								data.scratch = initalData['Scratch']
+								data.averageWin = initalData['Average Win %']
+								data.averageLoss = initalData['Average Loss %']
+								data.medianGain = initalData['Median Gain']
+								data.medianLoss = initalData['Median Loss']
+								data.averageReturn = initalData['Average Return']
+								data.medianReturn = initalData['Median Return']
+								data.buyHoldGain = initalData['BuyHoldGain']
+								data.winRate = initalData['Win Rate']
+								data.timeInMarket = initalData['Time in Market']
+								data.totalReturn = initalData['Total Return (%)']
+								data.tzScore = initalData['Z-score']
+								data.standardDeviation = initalData['Standard Deviation']
+								data.s3_status_response = initalData['s3_status_response']
+								data.cagr = initalData['CAGR']
+								data.annual_volatiltiy = initalData['annual_volatiltiy']
+								data.calmar_ratio = initalData['calmar_ratio']
+								data.sortino_ratio = initalData['sortino_ratio']
+								data.tail_ratio = initalData['tail_ratio']
+								data.var = initalData['VAR']
+								data.capture = initalData['capture']
+								data.alpha = initalData['alpha']
+								data.beta = initalData['beta']
+								data.information_ratio = initalData['information_ratio']
+								data.sharpeRatio = initalData['Sharpe Ratio']
+								data.drawDown = initalData['DrawDown']
+								data.drawDownPeriod = initalData['DrawDown Period']
+								data.drawDownImageUploaded =
+									initalData['DrawDown Image Uploaded']
+								data.ddFileURL = initalData['DD File URL']
+								data.returnsImageUploaded = initalData['Returns Image Uploaded']
+								data.returnsFileURL = initalData['Returns File URL']
+								data.annualReturnsImageUploaded =
+									initalData['Annual Returns Image Uploaded']
+								data.annualReturnsFileURL =
+									initalData['Annual Returns File URL']
+								data.returnsheatmapImageUploadedURL =
+									initalData['Returns Heatmap Image Uploaded']
+								data.returnsHeatmapFileURL =
+									initalData['Returns Heatmap File URL']
+								vm.tableData = []
+								//('data',data)
+								vm.tableData.push(data)
+								vm.returnImgUrl = data.returnsFileURL
+								vm.drawDownImgUrl = data.ddFileURL
+								vm.monthReturnImgUrl = data.returnsHeatmapFileURL
+								vm.annualReturnImgUrl = data.annualReturnsFileURL
+								vm.tradesData = initalData['Trades']
+								// ---------------------------------------- end ----------------------------------
+
+								// ----------------------- backtest result-------------------------------
+
+								this.$emit('setBacktestResult', initalData['basic'])
+								// ------------------------------ end -----------------------------------
+
+								//(initalData)
+								this.loadMarker(initalData)
+								// vm.$store.commit('getTradesData',initalData[])
+								vm.loading = false
 							}
-							//('dddddd',res.data)
-							initalData = res.data
-
-							// -------------------------------------  text ----------------
-							data.uuid = initalData['UUID']
-							data.symbol = initalData['Symbol']
-							data.frequency = initalData['Frequency']
-							data.totalTrades = initalData['Total Trades']
-							data.totalPositive = initalData['Total Positive']
-							data.totalNegative = initalData['Total Negative']
-							data.scratch = initalData['Scratch']
-							data.averageWin = initalData['Average Win %']
-							data.averageLoss = initalData['Average Loss %']
-							data.medianGain = initalData['Median Gain']
-							data.medianLoss = initalData['Median Loss']
-							data.averageReturn = initalData['Average Return']
-							data.medianReturn = initalData['Median Return']
-							data.buyHoldGain = initalData['BuyHoldGain']
-							data.winRate = initalData['Win Rate']
-							data.timeInMarket = initalData['Time in Market']
-							data.totalReturn = initalData['Total Return (%)']
-							data.tzScore = initalData['Z-score']
-							data.standardDeviation = initalData['Standard Deviation']
-							data.s3_status_response = initalData['s3_status_response']
-							data.cagr = initalData['CAGR']
-							data.annual_volatiltiy = initalData['annual_volatiltiy']
-							data.calmar_ratio = initalData['calmar_ratio']
-							data.sortino_ratio = initalData['sortino_ratio']
-							data.tail_ratio = initalData['tail_ratio']
-							data.var = initalData['VAR']
-							data.capture = initalData['capture']
-							data.alpha = initalData['alpha']
-							data.beta = initalData['beta']
-							data.information_ratio = initalData['information_ratio']
-							data.sharpeRatio = initalData['Sharpe Ratio']
-							data.drawDown = initalData['DrawDown']
-							data.drawDownPeriod = initalData['DrawDown Period']
-							data.drawDownImageUploaded = initalData['DrawDown Image Uploaded']
-							data.ddFileURL = initalData['DD File URL']
-							data.returnsImageUploaded = initalData['Returns Image Uploaded']
-							data.returnsFileURL = initalData['Returns File URL']
-							data.annualReturnsImageUploaded =
-								initalData['Annual Returns Image Uploaded']
-							data.annualReturnsFileURL = initalData['Annual Returns File URL']
-							data.returnsheatmapImageUploadedURL =
-								initalData['Returns Heatmap Image Uploaded']
-							data.returnsHeatmapFileURL =
-								initalData['Returns Heatmap File URL']
+						})
+						.catch((error) => {
+							console.log('服务器报错', error)
+							// 清空数据并且进行提示
 							vm.tableData = []
-							//('data',data)
-							vm.tableData.push(data)
-							vm.returnImgUrl = data.returnsFileURL
-							vm.drawDownImgUrl = data.ddFileURL
-							vm.monthReturnImgUrl = data.returnsHeatmapFileURL
-							vm.annualReturnImgUrl = data.annualReturnsFileURL
-							vm.tradesData = initalData['Trades']
-							// ---------------------------------------- end ----------------------------------
-
-							// ----------------------- backtest result-------------------------------
-
-							this.$emit('setBacktestResult', initalData['basic'])
-							// ------------------------------ end -----------------------------------
-
-							//(initalData)
-							this.loadMarker(initalData)
-							// vm.$store.commit('getTradesData',initalData[])
+							vm.tradesData = []
+							vm.$emit('errorCatchPerformance')
 							vm.loading = false
-						}
-					})
-					.catch((error) => {
-						console.log('服务器报错', error)
-						// 清空数据并且进行提示
-						vm.tableData = []
-						vm.tradesData = []
-						vm.$emit('errorCatchPerformance')
-						vm.loading = false
-					})
+						})
+				}
 			}
 		},
 		clearPerformanceData() {

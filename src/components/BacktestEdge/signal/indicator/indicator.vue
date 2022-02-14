@@ -215,7 +215,9 @@ export default {
 	},
 	methods: {
 		//  load sentiment list
-
+			clearForm() {
+			Object.assign(this.$data, this.$options.data())
+		},
 		async loadSentimentList() {
 			const vm = this
 			var frequency = vm.$store.state.backtestInfo['entry']['frequency']

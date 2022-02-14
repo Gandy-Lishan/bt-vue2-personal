@@ -73,7 +73,6 @@ router.beforeEach((to, from, next) => {
     next()
   }else {
     cookies.set('userid',userId)
-    
  next()
   }
 }else if(res.status === 401 ){
