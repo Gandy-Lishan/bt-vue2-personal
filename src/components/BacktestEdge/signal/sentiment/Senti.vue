@@ -267,7 +267,6 @@ export default {
 			}
 		},
 		setPeriod(val) {
-			console.log('setperiod')
 			if (this.conditionRadio === 'Sentiment Moving Average') {
 				this.senti.period = val
 			}
@@ -293,12 +292,13 @@ export default {
 					)
 				}
 			}
+			
 			var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
 				Period: val,
 				display: 'ST MA',
 				Field: result.url
 			})
-
+			
 			// keep current MA
 			var objMA = { period: val, url: result.url }
 			var activatedMAList = this.$store.state.activatedMA
@@ -371,6 +371,7 @@ export default {
 					newVal[this.criteria].signals[0].condition
 				)
 				this.senti.value = newVal[this.criteria].signals[0].value
+				
 				this.conditionRadio = 'Sentiment Value'
 				this.senti.period = ''
 				this.disabled = false

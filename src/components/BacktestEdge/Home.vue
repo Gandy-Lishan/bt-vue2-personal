@@ -158,9 +158,11 @@ export default {
 	methods: {
 		// 清除set up  表单
 		clearForm() {
+			CIQ.reloadChart()
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
-			this.$refs.exitChild.clearForm()
+			this.$refs.exitChild.clearForm() 
+			
 		},
 		getTimeFrame(val) {
 			this.timeFrame = val

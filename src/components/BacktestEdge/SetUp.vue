@@ -134,7 +134,7 @@
 						prop="name"
 						placeholder="Give the backtest a name"
 					>
-						<el-input v-model="bd.name" style="width: 720px"></el-input>
+						<el-input v-model="bd.name"></el-input>
 					</el-form-item>
 				</div>
 			</el-row>

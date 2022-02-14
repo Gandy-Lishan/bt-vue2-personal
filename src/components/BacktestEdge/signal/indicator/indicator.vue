@@ -130,12 +130,12 @@ export default {
 	},
 	watch: {
 		updateSenti(val){
-			// this.si.sentimentIndicator = val.name
+			this.si.sentimentIndicator = val.name
 			
 			for(var i in CIQ.indicatorList){
 				if(CIQ.indicatorList[i].chart_name == val.name){
 					this.indicatorRadio = 'Sentiment Indicators'
-					this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
+					//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
 				}
 			}
 		},
@@ -429,7 +429,7 @@ export default {
 							return
 						}
 					}
-					CIQ.addIndicators()
+					CIQ.addTechIndicators()
 				}
 			}
 			vm.si.technicalIndicator = item.value
