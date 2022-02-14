@@ -54,12 +54,27 @@
 					>
 						<template slot-scope="scope">
 							<div class="showDate">
-								<el-button size="mini" type="info" plain>{{
-									scope.row.start_date
-								}}</el-button>
-								<el-button size="mini" type="info" plain>{{
-									scope.row.end_date
-								}}</el-button>
+								<el-button
+									size="mini"
+									type="info"
+									v-if="scope.row.start_date === '1800-10-01'"
+									plain
+									>All Period</el-button
+								>
+								<el-button
+									size="mini"
+									type="info"
+									v-if="scope.row.start_date !== '1800-10-01'"
+									plain
+									>{{ scope.row.start_date }}</el-button
+								>
+								<el-button
+									size="mini"
+									type="info"
+									v-if="scope.row.start_date !== '1800-10-01'"
+									plain
+									>{{ scope.row.end_date }}</el-button
+								>
 							</div>
 						</template>
 					</el-table-column>
@@ -330,7 +345,10 @@ export default {
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
+					this.restoreIndicatorLayout(
+						JSON.parse(res.data.indicator_layout),
+						JSON.parse(res.data.entry).frequency
+					)
 				}
 				this.$store.commit('getRunBacktestData', row)
 				this.$emit('goBacktestResultForm', row)
@@ -390,7 +408,10 @@ export default {
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					if (res.data.indicator_layout) {
-						this.restoreIndicatorLayout(JSON.parse(res.data.indicator_layout),JSON.parse(res.data.entry).frequency)
+						this.restoreIndicatorLayout(
+							JSON.parse(res.data.indicator_layout),
+							JSON.parse(res.data.entry).frequency
+						)
 					}
 
 					this.$store.commit('getRunBacktestData', row)
@@ -410,11 +431,11 @@ export default {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
 		},
-		restoreIndicatorLayout(data,freq) {
+		restoreIndicatorLayout(data, freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
-			this.$store.commit('getMA', data.activatedMA)	
+			this.$store.commit('getMA', data.activatedMA)
 			var frequency = ''
 			switch (freq) {
 				case 'Daily': {
@@ -493,6 +514,7 @@ export default {
 		},
 		addToFavorites: throttle(function (row) {
 			let vm = this
+			row.favorites = true
 			let params = {
 				favorites: true
 			}
@@ -514,6 +536,7 @@ export default {
 		}, 5000),
 		moveToFavorites: throttle(function (row) {
 			let vm = this
+			row.favorites = false
 			let params = {
 				favorites: false
 			}

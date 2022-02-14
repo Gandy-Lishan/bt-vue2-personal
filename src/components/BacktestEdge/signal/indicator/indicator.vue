@@ -121,10 +121,10 @@ export default {
 		isClearForm() {
 			return this.getIsClearForm
 		},
-		updateSenti(){
+		updateSenti() {
 			return this.$store.state.currentSenti
 		},
-		updateTech(){
+		updateTech() {
 			return this.$store.state.currentTech
 		}
 	},
@@ -139,17 +139,16 @@ export default {
 				}
 			}
 		},
-		updateTech(val){
+		updateTech(val) {
 			var builtinList = this.$store.state.builtinList
-			builtinList.find(item => {
-				if(item.url == val.url){
+			builtinList.find((item) => {
+				if (item.url == val.url) {
 					// this.si.technicalIndicator = item.value
-
 					// 暂时注释掉，因为大部分tech没有加到back test内
 					//this.indicatorRadio = 'Technical Indicators'
 					//this.handleTechnicalSelect({value:item.value})
 				}
-			})	
+			})
 		},
 		isClearForm: {
 			handler(newVal) {
@@ -224,8 +223,20 @@ export default {
 	},
 	methods: {
 		//  load sentiment list
-			clearForm() {
-			Object.assign(this.$data, this.$options.data())
+		clearForm() {
+			let data = {
+				indicatorRadio: 'Sentiment Indicators',
+				si: {
+					sentimentIndicator: '',
+					technicalIndicator: '',
+					riskIndicator: ''
+				},
+				isCheckedIndicators: false,
+				sentimentIndicatorList: []
+			}
+			data.sentimentIndicatorList = this.$store.state.sentimentIndicatorList
+			Object.assign(this.$data, data)
+			console.log(this.$data)
 		},
 		async loadSentimentList() {
 			const vm = this
@@ -488,10 +499,7 @@ export default {
 			]
 		},
 		loadRiskList() {
-			return [
-				{ value: 'Time In Market' },
-				{ value: 'Profit/Loss' }
-			]
+			return [{ value: 'Time In Market' }, { value: 'Profit/Loss' }]
 		},
 		// setIndicatorRadio(obj) {
 		// 	let vm = this

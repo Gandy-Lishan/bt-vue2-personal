@@ -22,6 +22,7 @@
 						<el-select
 							v-model="tech.condition"
 							:disabled="disabled"
+							size="mini"
 							filterable
 							placeholder="Please select condition"
 						>
@@ -77,6 +78,7 @@
 						<el-select
 							v-model="tech.condition"
 							filterable
+							size="mini"
 							:disabled="!disabled"
 							placeholder="Please select condition"
 						>
@@ -102,7 +104,7 @@
 							:disabled="!disabled"
 							placeholder="Input Period"
 							@input="getMaValue"
-							@blur = "setDesciption"
+							@blur="setDesciption"
 							oninput="value=value.replace(/[^\d]/g,'')"
 						></el-input>
 					</el-form-item>
@@ -177,6 +179,9 @@ export default {
 		// }
 	},
 	methods: {
+		clearForm() {
+			Object.assign(this.$data, this.$options.data())
+		},
 		getConditionRadio(val) {
 			this.conditionRadio = val
 			CIQ.store.commit('setConditionRadio', val)
@@ -258,7 +263,7 @@ export default {
 			console.log('描述', this.description)
 		}, 500),
 		getMaPeriodValue(val) {
-			console.log("getMaPeriodValue")
+			console.log('getMaPeriodValue')
 			this.period = val
 			this.tech.ma_period = this.period
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -407,7 +412,7 @@ export default {
 			}
 		},
 		getSCvalue(val) {
-			console.log("getSCvalue")
+			console.log('getSCvalue')
 			if (this.conditionRadio === 'Symbol Close') {
 				//   delete this.sc.ma_period
 				// const obj = {}

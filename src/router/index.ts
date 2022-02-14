@@ -51,18 +51,26 @@ router.beforeEach((to, from, next) => {
   // console.log('to from next',to, from, next);
   console.log("log",document.referrer)
   console.log('baseURL',document.baseURI);
-  if (document.baseURI.search(host) !== -1){
+  let loginUrl = 'https://users.sentdevsite.com/login'
+  if (document.baseURI.search(host) != -1){
   //  alert("asdasd")
   // https://backtest.sentimentrader.com/user?userID=668696
   // 1. 从访问过来的 url 获取到 userid
   
-  // 2. 访问后端 api '/dev/user/?userid=668696' get 参数 
-  let userId = document.baseURI.split('?')[1]
+  // 2. 访问后端 api '/dev/user/?userid=668696' get 参数
+  let userId 
+  try{
+  userId = document.baseURI.split('?')[1]
   userId = userId.split('=')[1]
+}catch(error){
+    console.log(error);
+    userId = cookies.get('userid')
+    if(!userId) {
+      window.location.href = loginUrl
+    }
+  }
   console.log("userId",userId);
-  
   // 3. 根据返回状态码判断后续操作
-  
   axios.get('/dev/user/?userid=' + userId).then(res => {
     console.log("相应数据",res);
     console.log("查询到的ID",res.data.userid);
@@ -77,19 +85,19 @@ router.beforeEach((to, from, next) => {
   }
 }else if(res.status === 401 ){
 //无权限
-window.location.href = 'https://users.sentdevsite.com/login'
+window.location.href = loginUrl
 }else if (res.status === 403){
 //认证时间超时
-window.location.href = 'https://users.sentdevsite.com/login'
+window.location.href = loginUrl
 }else if (res.status === 404){
 // 用户不存在
-window.location.href = 'https://users.sentdevsite.com/login'
+window.location.href = loginUrl
 }
    console.log('cookie',document.cookie);
   }).catch(error => {
     console.log(error);
     // next('https://users.sentdevsite.com/login')
-    window.location.href = 'https://users.sentdevsite.com/login'
+    window.location.href = loginUrl
   })
   // 3.1 200 成功设置 cookie userid=XXX endDate=XXX     cookie.set()
   // 3.2 403 代表认证时间超时，返回到登录页面

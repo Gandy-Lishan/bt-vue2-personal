@@ -54,12 +54,27 @@
 					>
 						<template slot-scope="scope">
 							<div class="showDate">
-								<el-button size="mini" type="info" plain>{{
-									scope.row.start_date
-								}}</el-button>
-								<el-button size="mini" type="info" plain>{{
-									scope.row.end_date
-								}}</el-button>
+								<el-button
+									size="mini"
+									type="info"
+									v-if="scope.row.start_date === '1800-10-01'"
+									plain
+									>All Period</el-button
+								>
+								<el-button
+									size="mini"
+									type="info"
+									v-if="scope.row.start_date !== '1800-10-01'"
+									plain
+									>{{ scope.row.start_date }}</el-button
+								>
+								<el-button
+									size="mini"
+									type="info"
+									v-if="scope.row.start_date !== '1800-10-01'"
+									plain
+									>{{ scope.row.end_date }}</el-button
+								>
 							</div>
 						</template>
 					</el-table-column>

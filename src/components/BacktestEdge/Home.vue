@@ -159,6 +159,7 @@ export default {
 		// 清除set up  表单
 		clearForm() {
 			CIQ.reloadChart()
+			this.$store.commit('initialBacktestInfo')
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
 			this.$refs.exitChild.clearForm() 
