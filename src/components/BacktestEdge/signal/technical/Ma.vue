@@ -68,6 +68,7 @@
 							v-model="tech.ma_period"
 							placeholder="Input Period"
 							@input="getMaPeriodValue"
+							@blur="setDesciption"
 							oninput="value=value.replace(/[^\d]/g,'')"
 						></el-input>
 					</el-form-item>
@@ -258,6 +259,7 @@ export default {
 			console.log('描述', this.description)
 		}, 500),
 		getMaPeriodValue(val) {
+			console.log("getMaPeriodValue")
 			this.period = val
 			this.tech.ma_period = this.period
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {

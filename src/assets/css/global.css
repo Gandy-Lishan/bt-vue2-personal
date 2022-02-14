@@ -42,7 +42,8 @@
 	width: 50%;
 }
 .home-container {
-	width: 85vw;
+	padding: 0 50px;
+	overflow-x: visible;
 	height: 100%;
 	font-size: 16px;
 }
