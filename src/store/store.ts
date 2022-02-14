@@ -513,7 +513,9 @@ export default new Vuex.Store({
 				direction: 'Short',
 				frequency: 'Daily',
 				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
-			}
+			},
+			console.log("初始化 backtestInfo", state.backtestInfo);
+			
 		},
 		getBacktestName(state, list) {
           state.backtestNameList = list
@@ -523,7 +525,10 @@ export default new Vuex.Store({
 		},
 		clearBacktestUuid(state) {
 			if(state.backtestInfo.old_uuid) {
+				console.log("有旧的uuid",state.backtestInfo);
 			delete state.backtestInfo.old_uuid}
+			
+			console.log("保存成功后的backtest",state.backtestInfo);
 		}
 
 	},

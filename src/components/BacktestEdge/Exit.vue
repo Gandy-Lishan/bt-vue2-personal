@@ -132,12 +132,12 @@ export default {
 			Object.assign(this.$data, this.$options.data())
 			// 重置所有子组件的数据
 			this.$refs.indiChild.clearForm()
-			this.$refs.senti.clearForm()
-			this.$refs.cci.clearForm()
-			this.$refs.ma.clearForm()
-			this.$refs.macd.clearForm()
-			this.$refs.rsi.clearForm()
-			this.$refs.risk.clearForm()
+			this.$refs.sentiChild.clearForm()
+			this.$refs.cciChild.clearForm()
+			this.$refs.maChild.clearForm()
+			this.$refs.macdChild.clearForm()
+			this.$refs.rsiChild.clearForm()
+			this.$refs.riskChild.clearForm()
 		},
 		getSentiUrl(val) {
 			this.sentiUrl = val

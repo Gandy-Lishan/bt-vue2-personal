@@ -158,6 +158,7 @@ export default {
 	methods: {
 		// 清除set up  表单
 		clearForm() {
+			this.$store.commit('initialBacktestInfo')
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
 			this.$refs.exitChild.clearForm()

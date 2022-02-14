@@ -321,7 +321,7 @@ export default {
 					let year
 					let month
 					let day
-					if (newVal.start_date) {
+					if (newVal.start_date && newVal.start_date !== '1800-10-01') {
 						const starArr = newVal.start_date.toString().split('-')
 						const endArr = newVal.end_date.toString().split('-')
 						year = Number(endArr[0]) - Number(starArr[0])
@@ -334,6 +334,7 @@ export default {
 						}
 					} else {
 						this.historyValue = 21
+						this.bd.start_date = ''
 					}
 				}
 			}

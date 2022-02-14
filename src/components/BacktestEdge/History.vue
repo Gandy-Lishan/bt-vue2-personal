@@ -61,12 +61,27 @@
 					>
 						<template slot-scope="scope">
 							<div class="showDate">
-								<el-button size="mini" type="info" plain>{{
-									scope.row.start_date
-								}}</el-button>
-								<el-button size="mini" type="info" plain>{{
-									scope.row.end_date
-								}}</el-button>
+								<el-button
+									size="mini"
+									type="info"
+									v-if="scope.row.start_date === '1800-10-01'"
+									plain
+									>All Period</el-button
+								>
+								<el-button
+									size="mini"
+									type="info"
+									v-if="scope.row.start_date !== '1800-10-01'"
+									plain
+									>{{ scope.row.start_date }}</el-button
+								>
+								<el-button
+									size="mini"
+									type="info"
+									v-if="scope.row.start_date !== '1800-10-01'"
+									plain
+									>{{ scope.row.end_date }}</el-button
+								>
 							</div>
 						</template>
 					</el-table-column>
@@ -598,6 +613,7 @@ export default {
 		},
 		addToFavorites: throttle(function (row) {
 			let vm = this
+			row.favorites = true
 			let params = {
 				favorites: true
 			}
@@ -626,6 +642,7 @@ export default {
 		}, 5000),
 		moveToFavorites: throttle(function (row) {
 			let vm = this
+			row.favorites = false
 			let params = {
 				favorites: false
 			}
