@@ -215,6 +215,9 @@ export default {
 		}
 	},
 	methods: {
+		clearForm() {
+			Object.assign(this.$data, this.$options.data())
+		},
 		clearNoNum(value) {
 			console.log(value)
 			//先把非数字的都替换掉，除了数字和.
@@ -382,7 +385,7 @@ export default {
 				this.editSentiVal = newVal[this.criteria].signals[0].indicator
 				this.setDesciption()
 			}
-		 }
+		}
 	}
 }
 </script>

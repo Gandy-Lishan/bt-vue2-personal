@@ -350,6 +350,7 @@ export default {
 				})
 		},
 		copyBacktest: throttle(function (row) {
+			console.log('row', row)
 			let params = {}
 			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				if (res.status === 200) {
@@ -455,7 +456,7 @@ export default {
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				const des = res.data
-				
+
 				let str = ``
 				for (let key in des) {
 					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'

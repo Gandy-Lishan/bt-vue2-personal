@@ -159,6 +159,9 @@ export default {
 		// }
 	},
 	methods: {
+				clearForm() {
+			Object.assign(this.$data, this.$options.data())
+		},
 		setDesciption: throttle(function () {
 			let criteria = ''
 			let direction = ''

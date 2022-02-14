@@ -113,6 +113,17 @@ export default {
 		}
 	},
 	methods: {
+		clearForm() {
+			Object.assign(this.$data, this.$options.data())
+			// 重置所有子组件的数据
+			this.$refs.indiChild.clearForm()
+			this.$refs.senti.clearForm()
+			this.$refs.cci.clearForm()
+			this.$refs.ma.clearForm()
+			this.$refs.macd.clearForm()
+			this.$refs.rsi.clearForm()
+			this.$refs.risk.clearForm()
+		},
 		setDirection(val) {
 			console.log('entry chang', val)
 			this.fd.direction = val
@@ -198,8 +209,8 @@ export default {
 					data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
 				}
 				vm.fd.direction = data.entry.direction
+				console.log('entry的direction', vm.fd.direction)
 				vm.getExitDirection(data.entry.direction)
-				this.$emit('setExitDirection', data.entry.direction)
 				let edit = {}
 				edit.entry_description = data.entry_description
 				edit.exit_description = data.exit_description

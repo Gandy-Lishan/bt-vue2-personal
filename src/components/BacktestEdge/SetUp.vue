@@ -347,6 +347,10 @@ export default {
 		}
 	},
 	methods: {
+		clearForm() {
+			Object.assign(this.$data, this.$options.data())
+			this.getEndDate()
+		},
 		getDirection(val) {
 			// direction 设置到 vuex
 			this.$store.commit('getExitDirection', val)
@@ -355,6 +359,7 @@ export default {
 		},
 		setEditDirection(val) {
 			this.direction = val
+			console.log('setup的方向', val)
 		},
 		validateCommission(val) {
 			let list = val.split('.')
