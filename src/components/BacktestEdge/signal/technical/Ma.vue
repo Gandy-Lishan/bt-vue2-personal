@@ -68,7 +68,6 @@
 							v-model="tech.ma_period"
 							placeholder="Input Period"
 							@input="getMaPeriodValue"
-							@blur="setDesciption"
 							oninput="value=value.replace(/[^\d]/g,'')"
 						></el-input>
 					</el-form-item>
