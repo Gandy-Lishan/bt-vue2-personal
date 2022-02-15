@@ -299,7 +299,6 @@ export default {
 	},
 	created() {
 		this.getBacktestList()
-		this.getBacktestName()
 	},
 	methods: {
 		async getBacktestList(strategy) {
@@ -324,6 +323,8 @@ export default {
 			} else {
 				this.loading = false
 			}
+			
+		this.getBacktestName()
 		},
 		async getBacktestListFav(strategy) {
 			this.loadTest = 'Loading...'
@@ -346,6 +347,8 @@ export default {
 			} else {
 				this.loading = false
 			}
+			
+		this.getBacktestName()
 		},
 		async getBacktestName() {
 			const res = await this.$http.get('/dev/backtest/?ordering=-create_date')

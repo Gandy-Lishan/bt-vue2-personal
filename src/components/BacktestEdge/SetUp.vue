@@ -300,6 +300,7 @@ export default {
 					this.bd = Object.assign(this.bd, newVal)
 					this.getSymbolName(newVal.symbol)
 					this.frequency = this.editFrequency
+					this.getFrequency(this.frequency)
 					// console.log('频率', this.frequency)
 					this.temp.commission = Number(newVal.commission) * 100
 					this.temp.slippage = Number(newVal.slippage) * 100
