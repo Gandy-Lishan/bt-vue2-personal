@@ -241,40 +241,6 @@ export default {
 			Object.assign(this.$data, data)
 			console.log(this.$data)
 		},
-		async loadSentimentList() {
-			const vm = this
-			var frequency = vm.$store.state.backtestInfo['entry']['frequency']
-			var indicatorList = []
-
-			if (this.$store.state.indicatorsList.length != 0) {
-				console.log(
-					'data in indicatorList from indicator-part',
-					this.$store.state.indicatorsList.length
-				)
-				indicatorList = this.$store.state.indicatorsList
-			} else {
-				const res = await vm.$http.get(
-					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
-					{
-						auth: {
-							username: 'sentimentrader_backtest_api',
-							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-						}
-					}
-				)
-				indicatorList = res.data
-			}
-			vm.sentimentIndicatorList = indicatorList.map((obj) => {
-				if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1) {
-					if (obj.chart_name && obj.url && obj.updated) {
-						return { value: obj.chart_name, url: obj.url, updated: obj.updated }
-					}
-				}
-			})
-			this.$store.commit('getIndicatorsList', indicatorList)
-			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
-		},
-
 		// sentiment search
 		indicatorSentimentSearch(queryString, cb) {
 			var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
