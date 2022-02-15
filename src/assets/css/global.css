@@ -90,7 +90,6 @@
 	font-size: 16px;
 }
 .backtest_container .el-form-item__content {
-	width: 175px;
 	padding-left: 132px;
 	height: 25px;
 }
@@ -150,7 +149,7 @@
 	margin-left: 40px;
 }
 .backtest_container .nameBox input[type='text']:last-child {
-	width: 894px;
+	width: 80%;
 }
 /* .backtest_container .nameBox .el-form-item .el-form-item__label {
 	width: 135px;

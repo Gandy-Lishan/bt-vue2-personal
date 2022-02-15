@@ -216,9 +216,9 @@ export default {
 				edit.entry = data.entry
 				edit.exit = data.exit
 
-				if (edit.entry.analysis == 'Sentiment') {
+				if (edit.entry.signals[0].analysis == 'Sentiment') {
 					this.sentiVal = edit.entry.signals[0].indicator
-				} else if (edit.entry.analysis == 'Technical') {
+				} else if (edit.entry.signals[0].analysis == 'Technical') {
 					this.techVal = edit.entry.signals[0].indicator
 				}
 				// 监听

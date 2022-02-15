@@ -443,7 +443,7 @@ export default {
 							return
 						}
 					}
-					CIQ.addIndicators()
+					CIQ.addTechIndicators()
 				}
 			}
 			vm.si.technicalIndicator = item.value
