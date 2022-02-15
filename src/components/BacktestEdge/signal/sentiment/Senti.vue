@@ -126,6 +126,7 @@ export default {
 	},
 	data() {
 		return {
+			preload: false,
 			senti: {
 				extreme_optimism: '',
 				extreme_pessimism: '',
@@ -151,20 +152,31 @@ export default {
 		...mapGetters(['getExtremeValue']),
 		extremeValue() {
 			return this.getExtremeValue
+		},
+		updateSenti() {
+			return this.$store.state.currentSenti
 		}
 	},
 	watch: {
+		updateSenti: {
+			handler(){
+				this.preload = true
+			},
+			immediate: true,
+			deep: true
+		},
 		extremeValue: {
 			handler(newVal) {
 				let vm = this
 				newVal.forEach((item) => {
 					if (item.indicator) {
-						if (item.indicator === vm.sentiUrl) {
+						if (item.indicator === vm.sentiUrl || vm.preload == true) {
 							vm.senti.extreme_pessimism = item.extremePessimism
 							vm.senti.extreme_optimism = item.extremeOptimism
 						}
 					}
 				})
+				vm.preload = false
 			},
 			immediate: true,
 			deep: true

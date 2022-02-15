@@ -247,25 +247,6 @@ export default {
 		this.getStocksList()
 		this.getEndDate()
 	},
-	watch: {
-		updateFreq(val) {
-			console.log('updateFreq: ', val)
-			switch (val) {
-				case 'daily': {
-					this.frequency = 'Daily'
-					break
-				}
-				case 'weekly': {
-					this.frequency = 'Weekly'
-					break
-				}
-				case 'monthly': {
-					this.frequency = 'Monthly'
-					break
-				}
-			}
-		}
-	},
 	computed: {
 		listSet() {
 			return this.symbolList.map((item) => {
@@ -287,18 +268,17 @@ export default {
 	},
 	watch: {
 		updateFreq(val) {
-			//console.log('updateFreq: ', val)
 			switch (val) {
 				case 'daily': {
-					this.frequency = 'Daily'
+					this.getFrequency('Daily')
 					break
 				}
 				case 'weekly': {
-					this.frequency = 'Weekly'
+					this.getFrequency('Weekly')
 					break
 				}
 				case 'monthly': {
-					this.frequency = 'Monthly'
+					this.getFrequency('Monthly')
 					break
 				}
 			}

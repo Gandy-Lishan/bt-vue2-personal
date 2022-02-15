@@ -1,0 +1,32 @@
+[
+    {
+        "class": "A",
+        "studies":[
+            {
+                "name": "name1",
+                "url": "name1",
+                "updated": "daily"
+            },
+            {
+                "name": "name2",
+                "url": "name2",
+                "updated": "daily"
+            }
+        ]
+    },
+    {
+        "class": "B",
+        "studies":[
+            {
+                "name": "name3",
+                "url": "name3",
+                "updated": "daily"
+            },
+            {
+                "name": "name4",
+                "url": "name4",
+                "updated": "daily"
+            }
+        ]
+    }
+]

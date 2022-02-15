@@ -135,6 +135,9 @@ export default {
 			for(var i in CIQ.indicatorList){
 				if(CIQ.indicatorList[i].chart_name == val.name){
 					this.indicatorRadio = 'Sentiment Indicators'
+					// extract this statement from handleSentimentSelect
+					this.$emit('getSentiVal', CIQ.indicatorList[i].chart_name)
+					
 					//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
 				}
 			}
@@ -336,12 +339,11 @@ export default {
 			// obj.index = this.tabIndex
 			// obj.value = item.value
 			// this.$store.commit('clearSignal', obj)
-			console.log(this.si.sentimentIndicator)
+
 			this.si.sentimentIndicator = item.value
 			this.$emit('getSentiVal', item.value)
 			// remove a MA tat already exists in current criteria before loadin
 			var activatedMAList = this.$store.state.activatedMA
-
 			if (this.criteria == 'entry') {
 				var MAListIndex = activatedMAList.findIndex(
 					(item) =>
