@@ -129,11 +129,11 @@ export default {
 		}
 	},
 	watch: {
-		updateSenti(val){
+		updateSenti(val) {
 			this.si.sentimentIndicator = val.name
-			
-			for(var i in CIQ.indicatorList){
-				if(CIQ.indicatorList[i].chart_name == val.name){
+
+			for (var i in CIQ.indicatorList) {
+				if (CIQ.indicatorList[i].chart_name == val.name) {
 					this.indicatorRadio = 'Sentiment Indicators'
 					// extract this statement from handleSentimentSelect
 					this.$emit('getSentiVal', CIQ.indicatorList[i].chart_name)

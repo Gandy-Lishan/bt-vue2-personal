@@ -7,6 +7,7 @@
 						<el-input
 							v-model="bd.capital"
 							@input="validateStartingCapital"
+							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="Commission:" prop="commission">
@@ -14,12 +15,16 @@
 							v-model="temp.commission"
 							@change="getCommission"
 							@input="validateCommission"
+							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input>
 					</el-form-item>
 
 					<span class="comUnitNote">(%)</span>
 					<el-form-item label="Slippage:" prop="slippage">
-						<el-input v-model="bd.slippage"></el-input> </el-form-item
+						<el-input
+							v-model="bd.slippage"
+							oninput="value=value.replace(/[^\d.]/g,'')"
+						></el-input> </el-form-item
 					><span class="sliUnitNote">(per trade)</span>
 					<el-form-item label="Benchmark:" prop="benchmark">
 						<div class="enterSymbolBox">

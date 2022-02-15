@@ -581,24 +581,20 @@ export default {
 		},
 		sendBack(row) {
 			let vm = this
-			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+			this.$http.get('/dev/report/?uuid=' + row.id).then((res) => {
 				const des = res.data
+				console.log('查看数据', des)
 				let str = ``
 				for (let key in des) {
 					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
 				}
-				str = str + '<h3>FinalResult:</h3>'
-				for (let key in des.FinalResult) {
-					str = str + '<p>' + `${key}:  ${des.FinalResult[key]}` + '</p>'
-				}
-				str = str + '<h3>FinalResult.AnnualReturn:</h3>'
-				for (let key in des.FinalResult.AnnualReturn) {
-					str =
-						str +
-						'<p>' +
-						`${key}:  ${des.FinalResult.AnnualReturn[key]}` +
-						'</p>'
-				}
+				// for (let key in des.FinalResult.AnnualReturn) {
+				// 	str =
+				// 		str +
+				// 		'<p>' +
+				// 		`${key}:  ${des.FinalResult.AnnualReturn[key]}` +
+				// 		'</p>'
+				// }
 				vm.$alert(str, '标题名称', {
 					confirmButtonText: '确定',
 					dangerouslyUseHTMLString: true,
