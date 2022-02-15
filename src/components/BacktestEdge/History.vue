@@ -61,12 +61,27 @@
 					>
 						<template slot-scope="scope">
 							<div class="showDate">
-								<el-button size="mini" type="info" plain>{{
-									scope.row.start_date
-								}}</el-button>
-								<el-button size="mini" type="info" plain>{{
-									scope.row.end_date
-								}}</el-button>
+								<el-button
+									size="mini"
+									type="info"
+									v-if="scope.row.start_date === '1800-10-01'"
+									plain
+									>All Period</el-button
+								>
+								<el-button
+									size="mini"
+									type="info"
+									v-if="scope.row.start_date !== '1800-10-01'"
+									plain
+									>{{ scope.row.start_date }}</el-button
+								>
+								<el-button
+									size="mini"
+									type="info"
+									v-if="scope.row.start_date !== '1800-10-01'"
+									plain
+									>{{ scope.row.end_date }}</el-button
+								>
 							</div>
 						</template>
 					</el-table-column>
@@ -566,24 +581,20 @@ export default {
 		},
 		sendBack(row) {
 			let vm = this
-			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+			this.$http.get('/dev/report/?uuid=' + row.id).then((res) => {
 				const des = res.data
+				console.log('查看数据', des)
 				let str = ``
 				for (let key in des) {
 					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
 				}
-				str = str + '<h3>FinalResult:</h3>'
-				for (let key in des.FinalResult) {
-					str = str + '<p>' + `${key}:  ${des.FinalResult[key]}` + '</p>'
-				}
-				str = str + '<h3>FinalResult.AnnualReturn:</h3>'
-				for (let key in des.FinalResult.AnnualReturn) {
-					str =
-						str +
-						'<p>' +
-						`${key}:  ${des.FinalResult.AnnualReturn[key]}` +
-						'</p>'
-				}
+				// for (let key in des.FinalResult.AnnualReturn) {
+				// 	str =
+				// 		str +
+				// 		'<p>' +
+				// 		`${key}:  ${des.FinalResult.AnnualReturn[key]}` +
+				// 		'</p>'
+				// }
 				vm.$alert(str, '标题名称', {
 					confirmButtonText: '确定',
 					dangerouslyUseHTMLString: true,
@@ -598,6 +609,7 @@ export default {
 		},
 		addToFavorites: throttle(function (row) {
 			let vm = this
+			row.favorites = true
 			let params = {
 				favorites: true
 			}
@@ -626,6 +638,7 @@ export default {
 		}, 5000),
 		moveToFavorites: throttle(function (row) {
 			let vm = this
+			row.favorites = false
 			let params = {
 				favorites: false
 			}

@@ -314,7 +314,6 @@ export default {
 	methods: {
 		handleClick(tab, event) {},
 		loadMarker(tradeData) {
-
 			CIQ.loadChart(tradeData.markerSet)
 			CIQ.addMarker()
 		},
@@ -336,7 +335,7 @@ export default {
 								if (typeof res.data == String) {
 									JSON.parse(res.data)
 								}
-								//('dddddd',res.data)
+								console.log('返回数据', res.data)
 								initalData = res.data
 
 								// -------------------------------------  text ----------------
