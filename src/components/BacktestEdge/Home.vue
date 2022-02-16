@@ -311,6 +311,7 @@ export default {
 								} else {
 									vm.$message.error('Save failed')
 									vm.loading = false
+									vm.clearForm()
 								}
 							})
 							.catch((error) => {

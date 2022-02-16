@@ -108,6 +108,7 @@ export default {
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
+			this.timeFra = '(days)'
 		},
 		setDesciption: throttle(function () {
 			let criteria = ''
