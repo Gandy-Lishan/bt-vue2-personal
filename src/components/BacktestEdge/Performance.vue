@@ -26,6 +26,22 @@
 							</template>
 						</el-table-column>
 						<el-table-column
+							prop="CAGR"
+							label="Annual Return % (CAGR)"
+							align="center"
+							algin="center"
+						>
+							<template slot-scope="scope">
+								<span v-if="scope.row.CAGR >= 0">{{
+									scope.row.CAGR + '%'
+								}}</span>
+								<span v-else-if="isNaN(scope.row.CAGR)">0</span>
+								<span v-else style="color: red">{{
+									scope.row.CAGR + '%'
+								}}</span>
+							</template>
+						</el-table-column>
+						<el-table-column
 							prop="medianReturn"
 							label="MEDIAN RETURN"
 							align="center"
@@ -385,6 +401,7 @@ export default {
 									initalData['Returns Heatmap Image Uploaded']
 								data.returnsHeatmapFileURL =
 									initalData['Returns Heatmap File URL']
+								data.CAGR = initalData['CAGR']
 								vm.tableData = []
 								//('data',data)
 								vm.tableData.push(data)
