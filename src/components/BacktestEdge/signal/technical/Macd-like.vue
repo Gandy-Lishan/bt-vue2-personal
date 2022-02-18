@@ -28,14 +28,14 @@
 				<el-form-item>
 					<el-radio
 						v-model="conditionRadio"
-						label="MACD Value"
+						label="Indicator Value"
 						@change="getConditionRadio"
 					></el-radio>
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							:disabled="disabled"
+							:disabled="!(conditionRadio === 'Indicator Value')"
 							v-model="tech.condition"
 							size="mini"
 							filterable
@@ -54,7 +54,7 @@
 				<div class="conditionInput">
 					<el-form-item>
 						<el-input
-							:disabled="disabled"
+							:disabled="!(conditionRadio === 'Indicator Value')"
 							@input="setDesciption"
 							v-model="tech.value"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
@@ -67,14 +67,14 @@
 				<el-form-item>
 					<el-radio
 						v-model="conditionRadio"
-						label="MACD Value "
+						label="Indicator Value "
 						@change="getConditionRadio"
 					></el-radio>
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							:disabled="!disabled"
+							:disabled="!(conditionRadio === 'Indicator Value ')"
 							v-model="tech.condition"
 							size="mini"
 							filterable
@@ -92,7 +92,46 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item>
-						<el-button type="text"> MACD Signal line </el-button>
+						<el-button type="text"> Indicator Signal line </el-button>
+					</el-form-item>
+				</div>
+			</div>
+			<div class="condition-container">
+				<el-form-item>
+					<el-radio
+						v-model="conditionRadio"
+						label="Indicator Hist"
+						@change="getConditionRadio"
+					></el-radio>
+				</el-form-item>
+				<div class="conditionSelect">
+					<el-form-item>
+						<el-select
+							:disabled="!(conditionRadio === 'Indicator Hist')"
+							v-model="tech.condition"
+							size="mini"
+							filterable
+							placeholder="Please select condition"
+						>
+							<el-option
+								v-for="item in conditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</div>
+				<div class="conditionInput">
+					<el-form-item>
+						<el-input
+							:disabled="!(conditionRadio === 'Indicator Hist')"
+							@input="setDesciption"
+							v-model="tech.value"
+							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
+							placeholder="Input Value"
+						></el-input>
 					</el-form-item>
 				</div>
 			</div>
@@ -122,7 +161,7 @@ export default {
 					MACDSL: 9
 				},
 				condition: 3,
-				value: ''
+				value: 0
 			},
 			conditions: [
 				{ value: 0, label: '>' },
@@ -131,7 +170,7 @@ export default {
 				{ value: 3, label: 'CrossAbove' },
 				{ value: 4, label: 'CrossBelow' }
 			],
-			conditionRadio: 'MACD Value',
+			conditionRadio: 'Indicator Value',
 			disabled: false,
 			description: '',
 			editTechVal: ''
@@ -148,7 +187,7 @@ export default {
 		// 			this.disabled = false
 		// 			this.tech.value = newVal[this.criteria].signals[0].value
 		// 			if (this.tech.value === 'MACDSL') {
-		// 				this.conditionRadio = 'MACD Value '
+		// 				this.conditionRadio = ' Indicator Value '
 		// 				this.disabled = true
 		// 			}
 		// 			this.setDesciption()
@@ -183,10 +222,10 @@ export default {
 			console.log('描述', this.description)
 		}, 500),
 		getConditionRadio(val) {
-			if (val === 'MACD Value ') {
+			if (val === ' Indicator Value ') {
 				this.tech.value = 'MACDSL'
 				this.disabled = !this.disabled
-			} else if (val === 'MACD Value') {
+			} else if (val === ' Indicator Value') {
 				this.tech.value = 0
 				this.disabled = !this.disabled
 			}
@@ -194,7 +233,7 @@ export default {
 		},
 		saveCondition() {
 			let checked = true
-			if (this.tech.value) {
+			if (this.tech.value !== '') {
 				let ids = {
 					MACDSlow: 26,
 					MACDFast: 12,
@@ -224,7 +263,7 @@ export default {
 				this.disabled = false
 				this.tech.value = newVal[this.criteria].signals[0].value
 				if (this.tech.value === 'MACDSL') {
-					this.conditionRadio = 'MACD Value '
+					this.conditionRadio = ' Indicator Value '
 					this.disabled = true
 				}
 				this.editTechVal = newVal[this.criteria].signals[0].indicator
@@ -244,8 +283,10 @@ export default {
 	}
 }
 .condition-container {
-	border-top: 1px solid #797979;
 	display: flex;
+	&:first-child {
+	border-top: 1px solid #797979;
+	}
 }
 /deep/ .el-input__inner {
 	padding-left: 5px;
