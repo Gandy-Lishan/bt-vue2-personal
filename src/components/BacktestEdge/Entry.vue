@@ -137,6 +137,7 @@ export default {
 			this.techUrl = val
 		},
 		getSentiVal(val) {
+			console.log("getSentiVal(val): ",val)
 			this.sentiVal = val
 		},
 		getTechVal(val) {

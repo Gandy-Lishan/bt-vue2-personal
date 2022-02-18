@@ -246,6 +246,10 @@ export default {
 						const b = new SignalCode()
 						var entry_signal_list = []
 						var exit_signal_list = []
+						
+						var entrySignal = CIQ.indicatorList.find(item=> {return item.chart_name == backtestData.entry.signals[0].indicator})
+						var exitSignal = CIQ.indicatorList.find(item=> {return item.chart_name == backtestData.exit.signals[0].indicator})
+
 						delete backtestData.entry.signals
 						for (var i in signalEntryList) {
 							let code = b.encode(signalEntryList[i])
@@ -282,8 +286,8 @@ export default {
 						//上传indicator layout
 						var indicatorLayout = {}
 						indicatorLayout.formIndicators = {
-							entry: this.$store.state.indicators.formIndicators.entry,
-							exit: this.$store.state.indicators.formIndicators.exit
+							entry: entrySignal.url,
+							exit: exitSignal.url
 						}
 						indicatorLayout.technicalIndicators =
 							this.$store.state.indicators.technicalIndicators

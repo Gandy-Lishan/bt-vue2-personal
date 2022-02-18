@@ -579,6 +579,7 @@ export default {
 				}
 				default:
 			}
+
 			CIQ.addIndicators(selectedFreq)
 		},
 		async loadSentimentList(val) {

@@ -534,6 +534,7 @@ export default {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
+			this.$store.commit('getExtraIndicators',[])
 			this.$store.commit('getMA', data.activatedMA)
 			var frequency = ''
 			switch (freq) {
