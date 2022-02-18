@@ -66,7 +66,7 @@
 									type="info"
 									v-if="scope.row.start_date === '1800-10-01'"
 									plain
-									>All Period</el-button
+									>All History</el-button
 								>
 								<el-button
 									size="mini"
@@ -299,7 +299,6 @@ export default {
 	},
 	created() {
 		this.getBacktestList()
-		this.getBacktestName()
 	},
 	methods: {
 		async getBacktestList(strategy) {
@@ -318,18 +317,17 @@ export default {
 							element.result = JSON.parse(element.result)
 					})
 				}
-
 				console.log('history列表', this.backtestList)
 				this.queryInfo.total = res.data.count
 			} else {
 				this.loading = false
 			}
+			this.getBacktestName()
 		},
-		async getBacktestListFav(strategy) {
+		async getBacktestListFre(strategy) {
 			this.loadTest = 'Loading...'
 			this.loading = true
 			let page = this.queryInfo.page
-			console.log('page', this.queryInfo.page)
 			const res = await this.$http.get('/dev/backtest/?page=' + page)
 			if (res.status === 200) {
 				this.loading = false
@@ -340,12 +338,12 @@ export default {
 							element.result = JSON.parse(element.result)
 					})
 				}
-
-				console.log('history列表', this.backtestList)
 				this.queryInfo.total = res.data.count
 			} else {
 				this.loading = false
 			}
+
+			this.getBacktestName()
 		},
 		async getBacktestName() {
 			const res = await this.$http.get('/dev/backtest/?ordering=-create_date')
@@ -618,7 +616,7 @@ export default {
 				.put('/dev/backtest/' + row.id + '/', vm.$qs.stringify(params))
 				.then((res) => {
 					if (res.status === 200) {
-						this.getBacktestListFav()
+						this.getBacktestList()
 						this.$notify({
 							title: 'Added to favorites',
 							message:
@@ -629,7 +627,7 @@ export default {
 
 						this.$emit('refFavoritesForm')
 					} else {
-						this.getBacktestListFav()
+						this.getBacktestList()
 						this.$message.error({
 							message: 'Collection failed',
 							duration: 1000
@@ -647,11 +645,11 @@ export default {
 				.put('/dev/backtest/' + row.id + '/', vm.$qs.stringify(params))
 				.then((res) => {
 					if (res.status === 200) {
-						this.getBacktestListFav()
+						this.getBacktestList()
 
 						this.$emit('refFavoritesForm')
 					} else {
-						this.getBacktestListFav()
+						this.getBacktestList()
 						this.$message.error({
 							message: 'Add failed',
 							duration: 1000

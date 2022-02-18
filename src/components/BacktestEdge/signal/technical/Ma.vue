@@ -477,7 +477,7 @@ export default {
 			console.log('保存 condition')
 			if (this.conditionRadio === 'Symbol Close') {
 				let ids = {}
-				if (this.tech.period) {
+				if (this.tech.period !== '') {
 					if (this.tech.ids) {
 						ids = this.tech.ids
 					} else {
@@ -501,7 +501,7 @@ export default {
 					return checked
 				}
 			} else {
-				if (this.tech.period && this.tech.ma_period) {
+				if (this.tech.period!== '' && this.tech.ma_period !=='') {
 					let ids = {}
 					let tech = {}
 					tech = this.tech

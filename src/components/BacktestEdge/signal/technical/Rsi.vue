@@ -138,7 +138,7 @@ export default {
 		}, 500),
 		saveCondition() {
 			let checked = true
-			if (this.tech.value) {
+			if (this.tech.value !== '') {
 				let ids = {
 					over_bought_bound: 80,
 					over_sold_bound: 20,

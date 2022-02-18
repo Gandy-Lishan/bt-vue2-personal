@@ -161,6 +161,7 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
 import { timestampToTime } from '@/tools/formatDate.js'
 import deepClone1 from '@/tools/deepClone.js'
+const _ = require('lodash')
 export default {
 	props: { backtestEditData: Object, editFrequency: String },
 	name: 'setUp',
@@ -253,16 +254,16 @@ export default {
 		this.getEndDate()
 	},
 	computed: {
-		listSet() {
-			return this.symbolList.map((item) => {
-				return { value: `${item.stock}`, label: `${item.stock}` }
-			})
-		},
-		indexSet() {
-			return this.indexList.map((item) => {
-				return { value: `${item.symbol}`, label: `${item.symbol}` }
-			})
-		},
+		// listSet() {
+		// 	return this.symbolList.map((item) => {
+		// 		return { value: `${item.stock}`, label: `${item.stock}` }
+		// 	})
+		// },
+		// indexSet() {
+		// 	return this.indexList.map((item) => {
+		// 		return { value: `${item.symbol}`, label: `${item.symbol}` }
+		// 	})
+		// },
 		...mapGetters(['getIsClearForm']),
 		isClearForm() {
 			return this.getIsClearForm
@@ -300,6 +301,7 @@ export default {
 					this.bd = Object.assign(this.bd, newVal)
 					this.getSymbolName(newVal.symbol)
 					this.frequency = this.editFrequency
+					this.getFrequency(this.frequency)
 					// console.log('频率', this.frequency)
 					this.temp.commission = Number(newVal.commission) * 100
 					this.temp.slippage = Number(newVal.slippage) * 100
@@ -423,6 +425,7 @@ export default {
 			CIQ.hideMarker()
 		},
 		getBenchmark(val) {
+			console.log('benckmark', val)
 			this.bd.benchmark = val
 		},
 		formateStartDate(val) {
@@ -456,7 +459,9 @@ export default {
 		async getIndexsList() {
 			//console.log('vuex', this.$store.state.indexsList)
 			if (this.$store.state.indexsList.length != 0) {
-				this.indexList = this.$store.state.indexsList
+				this.indexList = this.$store.state.indexsList.map((item) => {
+					return { value: `${item.symbol}`, label: `${item.symbol}` }
+				})
 			} else {
 				await this.$http
 					.get(
@@ -469,7 +474,9 @@ export default {
 						}
 					)
 					.then((res) => {
-						this.indexList = res.data
+						this.indexList = res.data.map((item) => {
+							return { value: `${item.symbol}`, label: `${item.symbol}` }
+						})
 					})
 					.catch((error) => {
 						console.warn(error)
@@ -478,7 +485,9 @@ export default {
 		},
 		async getStocksList() {
 			if (this.$store.state.stocksList.length != 0) {
-				this.symbolList = this.$store.state.stocksList
+				this.symbolList = this.$store.state.stocksList.map((item) => {
+					return { value: `${item.stock}`, label: `${item.stock}` }
+				})
 			} else {
 				await this.$http
 					.get(
@@ -491,7 +500,9 @@ export default {
 						}
 					)
 					.then((res) => {
-						this.symbolList = res.data
+						this.symbolList = res.data.map((item) => {
+							return { value: `${item.stock}`, label: `${item.stock}` }
+						})
 					})
 					.catch((error) => {
 						console.warn(error)
@@ -503,19 +514,24 @@ export default {
 				this.loading = true
 				setTimeout(() => {
 					this.loading = false
-					var symbolListTemp = this.listSet.filter((item) => {
+					if (this.symbolList.length == 0 || this.indexList.length == 0) {
+						this.getStocksList()
+						this.getIndexsList()
+					}
+					var symbolListTemp = this.symbolList.filter((item) => {
 						return (
 							item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
 							item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
 						)
 					})
-					var IndexListTemp = this.indexSet.filter((item) => {
+					var IndexListTemp = this.indexList.filter((item) => {
 						return (
 							item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
 							item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
 						)
 					})
-					this.options = symbolListTemp.concat(IndexListTemp)
+					let options = symbolListTemp.concat(IndexListTemp)
+					this.options = _.uniqWith(options, _.isEqual)
 				}, 200)
 			} else {
 				this.options = []

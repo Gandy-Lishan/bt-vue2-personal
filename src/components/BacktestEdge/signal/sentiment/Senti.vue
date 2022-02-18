@@ -308,7 +308,7 @@ export default {
 		saveCondition() {
 			let checked = true
 			if (this.conditionRadio === 'Sentiment Value') {
-				if (this.senti.value) {
+				if (this.senti.value !=='') {
 					let senti = this.senti
 					delete senti.period
 					senti.criteria = this.criteria
@@ -327,7 +327,7 @@ export default {
 					return checked
 				}
 			} else if (this.conditionRadio === 'Sentiment Moving Average') {
-				if (this.senti.value) {
+				if (this.senti.value !== '') {
 					if (this.senti.period) {
 						let senti = this.senti
 						senti.criteria = this.criteria

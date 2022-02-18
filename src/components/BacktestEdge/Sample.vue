@@ -59,7 +59,7 @@
 									type="info"
 									v-if="scope.row.start_date === '1800-10-01'"
 									plain
-									>All Period</el-button
+									>All History</el-button
 								>
 								<el-button
 									size="mini"

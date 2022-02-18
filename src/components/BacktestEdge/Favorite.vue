@@ -59,7 +59,7 @@
 									type="info"
 									v-if="scope.row.start_date === '1800-10-01'"
 									plain
-									>All Period</el-button
+									>All History</el-button
 								>
 								<el-button
 									size="mini"
@@ -523,7 +523,6 @@ export default {
 				.then((res) => {
 					if (res.status === 200) {
 						this.getBacktestList()
-						this.$emit('refFavoritesForm')
 						this.$emit('refHistoryForm')
 					} else {
 						this.getBacktestList()
@@ -545,7 +544,6 @@ export default {
 				.then((res) => {
 					if (res.status === 200) {
 						this.getBacktestList()
-						this.$emit('refFavoritesForm')
 						this.$emit('refHistoryForm')
 					} else {
 						this.getBacktestList()
