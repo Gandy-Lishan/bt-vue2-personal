@@ -131,12 +131,13 @@ export default {
 	watch: {
 		updateSenti(val) {
 			this.si.sentimentIndicator = val.name
-
+			console.log("updateSenti",val)
 			for (var i in CIQ.indicatorList) {
 				if (CIQ.indicatorList[i].chart_name == val.name) {
 					this.indicatorRadio = 'Sentiment Indicators'
 					// extract this statement from handleSentimentSelect
 					this.$emit('getSentiVal', CIQ.indicatorList[i].chart_name)
+					this.$emit('getSentiUrl', CIQ.indicatorList[i].url)
 					
 					//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
 				}
@@ -333,13 +334,26 @@ export default {
 				this.$emit('getSentiUrl', item.url)
 			}
 
-			// avoid add indicator redundantly
+			//avoid add indicator redundantly
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (sd.type == item.url) {
+					var temp = CIQ.store.state.extremeValue
+
+					var result = []
+					var obj= {}
+					for(var i=0;i<temp.length;i++){
+						if(!obj[temp[i].indicator]){
+							result.push(temp[i])
+							obj[temp[i].indicator] = true
+						}
+					}
+
+					CIQ.store.commit("getExtremeValue", result)
 					return
 				}
 			}
+			
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
@@ -446,6 +460,7 @@ export default {
 			obj.criteria = this.criteria
 			obj.index = 0
 			this.$store.commit('deleteIndicator', obj)
+            
 			if (this.indicatorRadio === arr[0]) {
 				this.$emit('getIndicatorRadio', 'sentiment')
 				this.$store.commit('getEntryIndicatorRadio', 'sentiment')
@@ -455,6 +470,12 @@ export default {
 			} else if (this.indicatorRadio === arr[2]) {
 				this.$emit('getIndicatorRadio', 'risk')
 				this.$store.commit('getEntryIndicatorRadio', 'risk')
+
+				if(obj.criteria=="exit"){
+					CIQ.store.commit('getExitIndicators', '')
+				}else{
+					CIQ.store.commit('getExitIndicators', '')
+				}
 			}
 		},
 		// load short and long technical list

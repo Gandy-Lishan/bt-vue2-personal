@@ -61,53 +61,6 @@
 			:techVal="techVal"
 			v-show="indicatorRadio === 'technical' && techIndiValue === 'ma'"
 		></ma>
-		<!-- <bollinger-bands-like
-		:direction="fd.direction"
-			:criteria="'entry'"
-			ref="bollBandsLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"></bollinger-bands-like> -->
-		<!-- <ehler-fisher-transform-like
-		:direction="fd.direction"
-			:criteria="'entry'"
-			ref="bollBandsLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"></ehler-fisher-transform-like> -->
-		<!-- <stochastic-momentum-index-like
-			:direction="fd.direction"
-			:criteria="'entry'"
-			ref="bollBandsLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"
-		></stochastic-momentum-index-like> -->
-		<!-- <ADX-or-DMS-Like
-			:direction="fd.direction"
-			:criteria="'entry'"
-			ref="bollBandsLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"
-		></ADX-or-DMS-Like> -->
-				<!-- <elder-ray-index-like
-			:direction="fd.direction"
-			:criteria="'entry'"
-			ref="bollBandsLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"
-		></elder-ray-index-like> -->
-		<!-- <alligator-like
-			:direction="fd.direction"
-			:criteria="'entry'"
-			ref="bollBandsLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"
-		></alligator-like> -->
-				<!-- <linear-regForecast-like
-			:direction="fd.direction"
-			:criteria="'entry'"
-			ref="bollBandsLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"
-		></linear-regForecast-like> -->
 	</div>
 </template>
 <script>
@@ -118,13 +71,6 @@ import macd from '@/components/BacktestEdge/signal/technical/Macd-like.vue'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
 import indicator from '@/components/BacktestEdge/signal/indicator/Indicator'
 import SignalCode from '@/tools/codeTool.js'
-import bollingerBandsLike from '@/components/BacktestEdge/signal/technical/Bollinger-Bands-like.vue'
-import ehlerFisherTransformLike from '@/components/BacktestEdge/signal/technical/Ehler-Fisher-Transform-like.vue'
-import stochasticMomentumIndexLike from '@/components/BacktestEdge/signal/technical/Stochastic-Momentum-Index-like.vue'
-import ADXorDMSLike from '@/components/BacktestEdge/signal/technical/ADXorDMS-like.vue'
-import elderRayIndexLike from '@/components/BacktestEdge/signal/technical/Elder-Ray-Index-like.vue'
-import alligatorLike from '@/components/BacktestEdge/signal/technical/Alligator-like.vue'
-import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Linear-RegForecast-like.vue'
 export default {
 	name: 'entry',
 	data() {
@@ -147,14 +93,7 @@ export default {
 		cci,
 		rsi,
 		macd,
-		ma,
-		'bollinger-bands-like': bollingerBandsLike,
-		'ehler-fisher-transform-like': ehlerFisherTransformLike,
-		'stochastic-momentum-index-like': stochasticMomentumIndexLike,
-		'ADX-or-DMS-Like': ADXorDMSLike,
-		'elder-ray-index-like': elderRayIndexLike,
-		'alligator-like': alligatorLike,
-		'linear-regForecast-like': linearRegForecastLike
+		ma
 	},
 	computed: {
 		updateSenti() {
@@ -197,6 +136,7 @@ export default {
 			this.techUrl = val
 		},
 		getSentiVal(val) {
+			console.log("getSentiVal(val): ",val)
 			this.sentiVal = val
 		},
 		getTechVal(val) {
