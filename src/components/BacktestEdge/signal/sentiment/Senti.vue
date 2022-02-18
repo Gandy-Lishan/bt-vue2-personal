@@ -126,6 +126,7 @@ export default {
 	},
 	data() {
 		return {
+			extremeValueList:[],
 			preload: false,
 			senti: {
 				extreme_optimism: '',
@@ -153,78 +154,56 @@ export default {
 		extremeValue() {
 			return this.getExtremeValue
 		},
-		updateSenti() {
-			return this.$store.state.currentSenti
-		}
+		// updateSenti() {
+		// 	return this.$store.state.currentSenti
+		// }
 	},
 	watch: {
-		updateSenti: {
-			handler(){
-				this.preload = true
-			},
-			immediate: true,
-			deep: true
-		},
+		// updateSenti: {
+		// 	handler(val){
+		// 		console.log("updateSenti: ",val)
+		// 		this.preload = true
+		// 	},
+		// 	immediate: true,
+		// 	deep: true
+		// },
 		extremeValue: {
 			handler(newVal) {
 				let vm = this
 				newVal.forEach((item) => {
 					if (item.indicator) {
-						if (item.indicator === vm.sentiUrl || vm.preload == true) {
+						if (item.indicator === vm.sentiUrl) {
 							vm.senti.extreme_pessimism = item.extremePessimism
 							vm.senti.extreme_optimism = item.extremeOptimism
 						}
 					}
 				})
-				vm.preload = false
+				//vm.preload = false
 			},
 			immediate: true,
 			deep: true
 		},
-		// editIndiData: {
-		// 	handler(newVal) {
-		// 		if (JSON.stringify(newVal) != '{}') {
-		// 			this.senti.extreme_optimism =
-		// 				newVal[this.criteria].signals[0].extreme_optimism
-		// 			this.senti.extreme_pessimism =
-		// 				newVal[this.criteria].signals[0].extreme_pessimism
-		// 			this.senti.condition = Number(
-		// 				newVal[this.criteria].signals[0].condition
-		// 			)
-		// 			this.senti.value = newVal[this.criteria].signals[0].value
-		// 			this.conditionRadio = 'Sentiment Value'
-		// 			this.disabled = false
-		// 			delete this.senti.period
-		// 			let period = newVal[this.criteria].signals[0].period
-		// 			if (period) {
-		// 				this.conditionRadio = 'Sentiment Moving Average'
-		// 				this.senti.period = period
-		// 				this.setPeriod(period)
-		// 				this.disabled = true
-		// 			}
-		// 			this.setDesciption()
-		// 		}
-		// 	},
-		// 	immediate: true,
-		// 	deep: true
-		// },
+		
 		// 用于解决 entry 和 exit 选择相同 indicator 而无法展示极值的问题
-		sentiUrl: {
-			handler(newVal) {
-				if (newVal) {
-					let vm = this
-					let extremeValue = this.$store.state.extremeValue
-					extremeValue.forEach((item) => {
-						if (item.indicator) {
-							if (item.indicator === newVal) {
-								vm.senti.extreme_pessimism = item.extremePessimism
-								vm.senti.extreme_optimism = item.extremeOptimism
-							}
-						}
-					})
-				}
-			}
-		}
+		// sentiUrl: {
+		// 	handler(newVal) {
+				
+		// 		if (newVal) {
+		// 			let vm = this
+		// 			let extremeValue = this.extremeValueList
+		// 			console.log('sentiUrl: ',extremeValue[0])
+		// 			extremeValue.forEach((item) => {
+		// 				console.log('sentiUrl: ',item,newVal)
+		// 				if (item.indicator) {
+		// 					if (item.indicator === newVal) {
+		// 						vm.senti.extreme_pessimism = item.extremePessimism
+		// 						vm.senti.extreme_optimism = item.extremeOptimism
+		// 					}
+		// 				}
+		// 			})
+		// 		}
+		// 	}
+		// }
 	},
 	methods: {
 		clearForm() {

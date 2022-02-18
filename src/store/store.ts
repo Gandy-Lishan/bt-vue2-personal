@@ -107,7 +107,6 @@ export default new Vuex.Store({
 		exitDirection: '',
 		exitTechType: '',
 		activatedMA: [{ period: 21, url: '' }],
-		favoriteList: [],
 		// indicators look up
 		allSymbolsList: [],
 		stocksList: [],
@@ -188,9 +187,7 @@ export default new Vuex.Store({
 		getExtremeValue: (state, list) => {
 			state.extremeValue = list
 		},
-		getFavoriteList(state, list) {
-			state.favoriteList = list
-		},
+
 		getAllSymbolsList(state, list) {
 			state.allSymbolsList = list
 		},
