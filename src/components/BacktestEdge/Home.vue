@@ -247,9 +247,33 @@ export default {
 						var entry_signal_list = []
 						var exit_signal_list = []
 						
+						console.log(backtestData.exit.signals[0])
+						const set = new Set([
+							['Commodity Channel Index', 'cci'],
+							['Relative Strength Index', 'rsi'],
+							['Moving Average', 'ma'],
+							['MACD', 'macd'],
+							['RC','']
+						])
+
+						const newMap = new Map(set)
+			
 						var entrySignal = CIQ.indicatorList.find(item=> {return item.chart_name == backtestData.entry.signals[0].indicator})
 						var exitSignal = CIQ.indicatorList.find(item=> {return item.chart_name == backtestData.exit.signals[0].indicator})
-
+						if(!entrySignal){
+							for (let i of newMap.entries()) {
+								if (backtestData.entry.signals[0].indicator === i[0]) {
+									entrySignal = {url:i[1]}
+								}
+							}
+						}
+						if(!exitSignal){
+							for (let i of newMap.entries()) {
+								if (backtestData.exit.signals[0].indicator === i[0]) {
+									exitSignal = {url:i[1]}
+								}
+							}
+						}
 						delete backtestData.entry.signals
 						for (var i in signalEntryList) {
 							let code = b.encode(signalEntryList[i])
@@ -285,6 +309,7 @@ export default {
 
 						//上传indicator layout
 						var indicatorLayout = {}
+						// console.log("entry/exit: ",this.$store.state.indicators.formIndicators)
 						indicatorLayout.formIndicators = {
 							entry: entrySignal.url,
 							exit: exitSignal.url

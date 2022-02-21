@@ -309,7 +309,7 @@ export default {
 
 			this.si.sentimentIndicator = item.value
 			this.$emit('getSentiVal', item.value)
-			// remove a MA tat already exists in current criteria before loadin
+			// remove a MA tat already exists in current criteria before loading
 			var activatedMAList = this.$store.state.activatedMA
 			if (this.criteria == 'entry') {
 				var MAListIndex = activatedMAList.findIndex(
@@ -422,7 +422,7 @@ export default {
 							return
 						}
 					}
-					CIQ.addTechIndicators()
+					CIQ.addIndicators()
 				}
 			}
 			vm.si.technicalIndicator = item.value

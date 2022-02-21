@@ -118,7 +118,7 @@
 							<el-select
 								v-model="frequency"
 								placeholder="— Select Timeframe —"
-								@change="getFrequency"
+								@change="changeTimeframe"
 							>
 								<el-option
 									v-for="item in frequencyOptions"
@@ -301,7 +301,7 @@ export default {
 					this.bd = Object.assign(this.bd, newVal)
 					this.getSymbolName(newVal.symbol)
 					this.frequency = this.editFrequency
-					this.getFrequency(this.frequency)
+					this.changeTimeframe(this.frequency)
 					// console.log('频率', this.frequency)
 					this.temp.commission = Number(newVal.commission) * 100
 					this.temp.slippage = Number(newVal.slippage) * 100
@@ -573,30 +573,35 @@ export default {
 		clearFormValidate() {
 			this.$refs.backtestSetupForm.clearValidate()
 		},
+		changeTimeframe(val){
+			this.getFrequency(val)
+			CIQ.addIndicators()
+		},
 		getFrequency(val) {
+			// getFrequency will no longer call addIndicator and pass a parameter to it
 			this.frequency = val
 			this.$store.commit('getFrequency', val)
 			this.$emit('getTimeFrame', val)
 			this.loadSentimentList(val)
 			// same as setPeriodicity
-			var selectedFreq = ''
-			switch (val) {
-				case 'Monthly': {
-					selectedFreq = 'month'
-					break
-				}
-				case 'Weekly': {
-					selectedFreq = 'week'
-					break
-				}
-				case 'Daily': {
-					selectedFreq = 'day'
-					break
-				}
-				default:
-			}
+			// var selectedFreq = ''
+			// switch (val) {
+			// 	case 'Monthly': {
+			// 		selectedFreq = 'month'
+			// 		break
+			// 	}
+			// 	case 'Weekly': {
+			// 		selectedFreq = 'week'
+			// 		break
+			// 	}
+			// 	case 'Daily': {
+			// 		selectedFreq = 'day'
+			// 		break
+			// 	}
+			// 	default:
+			// }
 
-			CIQ.addIndicators(selectedFreq)
+			// CIQ.addIndicators(selectedFreq)
 		},
 		async loadSentimentList(val) {
 			const vm = this
