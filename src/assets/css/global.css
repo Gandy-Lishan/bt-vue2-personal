@@ -112,7 +112,7 @@
 	border: #000000 solid 1px;
 	padding: 0 5px 0 10px;
 	height: 25px;
-	width: 175px;
+	width: 115px;
 	border-radius: unset;
 }
 .exit-container input:not([type]),
@@ -123,7 +123,7 @@
 	border: #000000 solid 1px;
 	padding: 0 5px 0 10px;
 	height: 25px;
-	width: 175px;
+	width: 115px;
 	border-radius: unset;
 }
 
