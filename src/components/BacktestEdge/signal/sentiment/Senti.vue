@@ -289,6 +289,7 @@ export default {
 				display: 'ST MA',
 				Field: result.url
 			})
+			CIQ.exportEx()
 			
 			// keep current MA
 			var objMA = { period: val, url: result.url }

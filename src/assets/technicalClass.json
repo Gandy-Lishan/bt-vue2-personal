@@ -302,51 +302,89 @@
                 "url": "Pring Sp-K"
             },
             {
-                "name": "Prime Number Oscillator",
-                "url": "Prime Number"
+                "name": "Psychological Line",
+                "url": "PSY"
             },
             {
-                "name": "Prime Number Oscillator",
-                "url": "Prime Number"
+                "name": "QStick",
+                "url": "QStick"
             },
             {
-                "name": "Prime Number Oscillator",
-                "url": "Prime Number"
+                "name": "RAVI",
+                "url": "RAVI"
             },
             {
-                "name": "Prime Number Oscillator",
-                "url": "Prime Number"
+                "name": "Rainbow Oscillator",
+                "url": "Rainbow Osc"
             },
             {
-                "name": "Prime Number Oscillator",
-                "url": "Prime Number"
+                "name": "Relative Volatility",
+                "url": "Rel Vol"
             },
             {
-                "name": "Prime Number Oscillator",
-                "url": "Prime Number"
+                "name": "Schaff Trend Cycle",
+                "url": "Schaff"
             },
             {
-                "name": "Prime Number Oscillator",
-                "url": "Prime Number"
+                "name": "Standard Deviation",
+                "url": "STD Dev"
             },
             {
-                "name": "Prime Number Oscillator",
-                "url": "Prime Number"
+                "name": "Swing Index",
+                "url": "Swing"
             },
-
-
+            {
+                "name": "Trade Volume Index",
+                "url": "Trade Vol"
+            },
+            {
+                "name": "True Range",
+                "url": "True Range"
+            },
+            {
+                "name": "Twiggs Money Flow",
+                "url": "Twiggs"
+            },
+            {
+                "name": "Ulcer Index",
+                "url": "Ulcer"
+            },
+            {
+                "name": "Ultimate Oscillator",
+                "url": "Ultimate"
+            },
+            {
+                "name": "Vertical Horizontal Filter",
+                "url": "VT HZ Filter"
+            },
+            {
+                "name": "Volume Oscillator",
+                "url": "Vol Osc"
+            },
+            {
+                "name": "Williams %R",
+                "url": "Williams %R"
+            },
+            {
+                "name": "Commodity Channel Index",
+                "url": "cci"
+            }
         ]
     },
     {
         "class": "MACD_like",
         "studies":[
             {
-                "name": "name3",
-                "url": "name3"
+                "name": "Klinger Volume Oscillator",
+                "url": "Klinger"
             },
             {
-                "name": "name4",
-                "url": "name4"
+                "name": "Relative Vigor Index",
+                "url": "Rel Vig"
+            },
+            {
+                "name": "MACD",
+                "url": "macd"
             }
         ]
     },
@@ -354,12 +392,20 @@
         "class": "EFT_like",
         "studies":[
             {
-                "name": "name3",
-                "url": "name3"
+                "name": "Ehler Fisher Transform",
+                "url": "Ehler Fisher"
             },
             {
-                "name": "name4",
-                "url": "name4"
+                "name": "Price Momentum Oscillator",
+                "url": "PMO"
+            },
+            {
+                "name": "Pring's Know Sure Thing",
+                "url": "Pring KST"
+            },
+            {
+                "name": "Trend Intensity Index",
+                "url": "Trend Int"
             }
         ]
     },
@@ -367,25 +413,32 @@
         "class": "BollingerBands_like",
         "studies":[
             {
-                "name": "name3",
-                "url": "name3"
+                "name": "Bollinger Bands",
+                "url": "Bollinger Bands"
             },
             {
-                "name": "name4",
-                "url": "name4"
-            }
-        ]
-    },
-    {
-        "class": "BollingerBands_like",
-        "studies":[
-            {
-                "name": "name3",
-                "url": "name3"
+                "name": "Donchian Channel",
+                "url": "Donchian Channel"
             },
             {
-                "name": "name4",
-                "url": "name4"
+                "name": "Fractal Chaos Bands",
+                "url": "Fractal Chaos Bands"
+            },
+            {
+                "name": "High Low Bands",
+                "url": "High Low"
+            },
+            {
+                "name": "Keltner Channel",
+                "url": "Keltner"
+            },
+            {
+                "name": "Moving Average Envelope",
+                "url": "MA Env"
+            },
+            {
+                "name": "STARC Bands",
+                "url": "STARC Bands"
             }
         ]
     },
@@ -393,12 +446,12 @@
         "class": "Stochastics_like",
         "studies":[
             {
-                "name": "name3",
-                "url": "name3"
+                "name": "Stochastic Momentum",
+                "url": "Stch Mtm"
             },
             {
-                "name": "name4",
-                "url": "name4"
+                "name": "Stochastics",
+                "url": "Stochastics"
             }
         ]
     },
@@ -406,12 +459,12 @@
         "class": "ERI_like",
         "studies":[
             {
-                "name": "name3",
-                "url": "name3"
+                "name": "Elder Ray Index",
+                "url": "Elder Ray"
             },
             {
-                "name": "name4",
-                "url": "name4"
+                "name": "Gator Oscillator",
+                "url": "Gator"
             }
         ]
     },
@@ -419,12 +472,8 @@
         "class": "ADX_like",
         "studies":[
             {
-                "name": "name3",
-                "url": "name3"
-            },
-            {
-                "name": "name4",
-                "url": "name4"
+                "name": "ADX/DMS",
+                "url": "ADX"
             }
         ]
     },
@@ -432,12 +481,8 @@
         "class": "MovingAverage_like",
         "studies":[
             {
-                "name": "name3",
-                "url": "name3"
-            },
-            {
-                "name": "name4",
-                "url": "name4"
+                "name": "Moving Average",
+                "url": "ma"
             }
         ]
     },
@@ -445,12 +490,8 @@
         "class": "Aligator_like",
         "studies":[
             {
-                "name": "name3",
-                "url": "name3"
-            },
-            {
-                "name": "name4",
-                "url": "name4"
+                "name": "Alligator",
+                "url": "Alligator"
             }
         ]
     },
@@ -458,12 +499,12 @@
         "class": "LRF_like",
         "studies":[
             {
-                "name": "name3",
-                "url": "name3"
+                "name": "Linear Reg Forecast",
+                "url": "Lin Fcst"
             },
             {
-                "name": "name4",
-                "url": "name4"
+                "name": "Time Series Forecast",
+                "url": "Time Fcst"
             }
         ]
     },
@@ -471,12 +512,12 @@
         "class": "Trailingstop_like",
         "studies":[
             {
-                "name": "name3",
-                "url": "name3"
+                "name": "ATR Trailing Stops",
+                "url": "ATR Trailing Stop"
             },
             {
-                "name": "name4",
-                "url": "name4"
+                "name": "Parabolic SAR",
+                "url": "PSAR"
             }
         ]
     }
