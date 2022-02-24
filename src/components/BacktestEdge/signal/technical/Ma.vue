@@ -98,9 +98,9 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item prop="period">
+					<el-form-item prop="maPeriod">
 						<el-input
-							v-model="tech.period"
+							v-model="tech.maPeriod"
 							:disabled="!disabled"
 							placeholder="Input Period"
 							@input="getMaValue"
@@ -129,7 +129,6 @@ export default {
 	},
 	data() {
 		let validatePeriod = (rule, value, callback) => {
-			console.log('111', value)
 			if (!/[1-9]\d*/.test(value)) {
 				return callback(new Error('Please enter a positive integer'))
 			}
@@ -140,43 +139,38 @@ export default {
 				return callback(new Error('Please enter the correct format'))
 			}
 			callback()
-			// if (value === 0 || value === '') {
-			// 	callback(new Error('Please input period'))
-			// } else if (isNaN(value)) {
-			// 	callback(new Error('Please enter the correct format'))
-			// } else if (value) {
-			// 	const pattern = /[1-9]\d*/
-			// 	if (!pattern.test(value)) {
-			// 		callback(new Error('Please enter a positive integer'))
-			// 	} else {
-			// 		callback()
-			// 	}
-			// }
+		}
+		let validateMaPeriodRule = (rule, value, callback) => {
+			if (!/[1-9]\d*/.test(value)) {
+				return callback(new Error('Please enter a positive integer'))
+			}
+			if (value === 0 || value === '') {
+				return callback(new Error('Please input period'))
+			}
+			if (isNaN(value)) {
+				return callback(new Error('Please enter the correct format'))
+			}
+			callback()
 		}
 		let validateMaPeriod = (rule, value, callback) => {
-			if (this.conditionRadio == 'Moving Average') {
-				if (value === 0 || value === '') {
-					callback(new Error('Please input period'))
-				} else if (isNaN(value)) {
-					callback(new Error('Please enter the correct format'))
-				} else if (value) {
-					const pattern = /[1-9]\d*/
-					if (!pattern.test(value)) {
-						callback(new Error('Please enter a positive integer'))
-					} else {
-						callback()
-					}
-				}
-			} else {
-				callback()
+			if (!/[1-9]\d*/.test(value)) {
+				return callback(new Error('Please enter a positive integer'))
 			}
+			if (value === 0 || value === '') {
+				return callback(new Error('Please input period'))
+			}
+			if (isNaN(value)) {
+				return callback(new Error('Please enter the correct format'))
+			}
+			callback()
 		}
 		return {
 			tech: {
 				ids: { ma_category: 'SMA' },
 				condition: 3,
 				ma_period: 5,
-				period: 20
+				period: 20,
+				maPeriod: 20
 			},
 			conditions: [
 				{ value: 0, label: '>' },
@@ -188,12 +182,13 @@ export default {
 			conditionRadio: 'Symbol Close',
 			disabled: false,
 			maRadio: 'SMA',
-			period: 5,
+			maPeriod: 20,
 			description: '',
 			editTechVal: '',
 			rules: {
 				period: [{ validator: validatePeriod, trigger: 'blur' }],
-				ma_period: [{ validator: validateMaPeriod, trigger: 'blur' }]
+				ma_period: [{ validator: validateMaPeriod, trigger: 'blur' }],
+				maPeriod: [{ validator: validateMaPeriodRule, trigger: 'blur' }]
 			}
 		}
 	},
@@ -235,10 +230,12 @@ export default {
 		},
 		getConditionRadio(val) {
 			this.conditionRadio = val
+			this.clearFormValidate()
 			CIQ.store.commit('setConditionRadio', val)
 			if (val === 'Symbol Close') {
 				if ('ma_period' in this.tech) {
 					delete this.tech.ma_period
+					delete this.tech.maPeriod
 				}
 				this.disabled = !this.disabled
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -258,7 +255,8 @@ export default {
 			} else if (val === 'Moving Average') {
 				// 添加附属ma
 				this.disabled = !this.disabled
-				this.tech.ma_period = this.period
+				this.tech.ma_period = 5
+				this.tech.maPeriod = this.tech.period
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
 					if (sd.type == 'ST MA' && sd.panel == 'chart') {
@@ -306,17 +304,24 @@ export default {
 				}
 			}
 			let techVal = this.techVal
-			let period = this.tech.period ? this.tech.period : ''
-			let ma_period = this.techVal ? this.techVal : this.editTechVal
-			this.conditionRadio == 'Moving Average' ? this.tech.ma_period : ''
+			// let period = this.tech.period ? this.tech.period : ''
+			let period =
+				this.conditionRadio === 'Symbol Close'
+					? this.tech.period
+					: this.tech.maPeriod
+			// let ma_period = this.techVal ? this.techVal : this.editTechVal
+			let ma_period =
+				this.conditionRadio == 'Moving Average' ? this.tech.ma_period : ''
+			// this.conditionRadio == 'Moving Average' ? this.tech.ma_period : ''
 			let condition = this.conditions[this.tech.condition].label
-			this.description = `${criteria} ${direction} ${ma_period} ${condition} ${this.conditionRadio} ${this.tech.period}`
+			this.description = `${criteria} ${direction} ${this.conditionRadio} ${ma_period} ${condition} Moving Average ${period}`
 			console.log('描述', this.description)
 		}, 500),
 		getMaPeriodValue(val) {
 			console.log('getMaPeriodValue')
-			this.period = val
-			this.tech.ma_period = this.period
+			// this.period = val
+			// this.tech.ma_period = this.period
+			this.tech.ma_period = val
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (sd.type == 'ST MA' && sd.panel == 'chart') {
@@ -497,9 +502,8 @@ export default {
 				}
 			}
 		},
-		getMaValue(val) {
-			console.log('getMaValue')
-			this.tech.period = val
+		getMaValue: throttle(function (val) {
+			this.tech.maPeriod = val
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (sd.type == 'ma') {
@@ -522,7 +526,7 @@ export default {
 					CIQ.store.commit('getMaPeriod', val)
 				}
 			}
-		},
+		}, 500),
 		saveCondition() {
 			let checked = true
 			let validForm
@@ -588,9 +592,11 @@ export default {
 		// 设置编辑的数据
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
+				this.clearFormValidate()
 				this.tech.ids = newVal[this.criteria].signals[0].ids
 				this.tech.condition = Number(newVal[this.criteria].signals[0].condition)
 				this.tech.period = newVal[this.criteria].signals[0].period
+				this.tech.maPeriod = newVal[this.criteria].signals[0].period
 				this.conditionRadio = 'Symbol Close'
 				this.disabled = false
 				this.getSCvalue(this.tech.period)

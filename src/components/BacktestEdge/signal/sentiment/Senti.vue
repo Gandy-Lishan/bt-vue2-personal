@@ -376,7 +376,7 @@ export default {
 				display: 'ST MA',
 				Field: result.url
 			})
-
+			// CIQ.exportEx()
 			// keep current MA
 			var objMA = { period: val, url: result.url }
 			var activatedMAList = this.$store.state.activatedMA
@@ -395,10 +395,10 @@ export default {
 		saveCondition() {
 			let checked = true
 			let validForm
+			this.$refs.sentiForm.validate((valid) => {
+				validForm = valid
+			})
 			if (this.conditionRadio === 'Sentiment Value') {
-				this.$refs.sentiForm.validate((valid) => {
-					validForm = valid
-				})
 				if (validForm) {
 					let senti = this.senti
 					delete senti.period
@@ -422,9 +422,6 @@ export default {
 					return checked
 				}
 			} else if (this.conditionRadio === 'Sentiment Moving Average') {
-				this.$refs.sentiForm.validate((valid) => {
-					validForm = valid
-				})
 				if (validForm) {
 					// if (this.senti.period) {
 					let senti = this.senti

@@ -324,7 +324,7 @@ export default {
 
 			this.si.sentimentIndicator = item.value
 			this.$emit('getSentiVal', item.value)
-			// remove a MA tat already exists in current criteria before loadin
+			// remove a MA tat already exists in current criteria before loading
 			var activatedMAList = this.$store.state.activatedMA
 			if (this.criteria == 'entry') {
 				var MAListIndex = activatedMAList.findIndex(
@@ -364,69 +364,72 @@ export default {
 			// obj.index = this.tabIndex
 			// obj.value = item.value
 			// this.$store.commit('clearSignal', obj)
+			console.log('item', item)
+			CIQ.technicalCategory.forEach((item) => {
+				console.log(item.class)
+			})
 			this.si.technicalIndicator = item.value
+			// technical 的名字， 用于 description 显示
 			this.$emit('getTechVal', item.value)
 			const vm = this
 			let val = item.value
-			const set = new Set([
-				['Commodity Channel Index', 'cci'],
-				['Relative Strength Index', 'rsi'],
-				['Moving Average', 'ma'],
-				['MACD', 'macd']
-			])
+			// const set = new Set([
+			// 	['Commodity Channel Index', 'cci'],
+			// 	['Relative Strength Index', 'rsi'],
+			// 	['Moving Average', 'ma'],
+			// 	['MACD', 'macd']
+			// ])
+			// const newMap = new Map(set)
+			let url = item.url
+			// for (let i of newMap.entries()) {
+			// if (val === i[0]) {
+			// url = i[1]
+			this.$emit('getTechIndiValue', item.class)
+			// remove a MA tat already exists in current criteria before loadin
+			if (this.criteria == 'entry') {
+				// remove MA from Vuex after loading Tech
+				var activatedMAList = CIQ.store.state.activatedMA
 
-			const newMap = new Map(set)
-			var url = ''
-			for (let i of newMap.entries()) {
-				if (val === i[0]) {
-					url = i[1]
-					this.$emit('getTechIndiValue', i[1])
-					// remove a MA tat already exists in current criteria before loadin
-					if (this.criteria == 'entry') {
-						// remove MA from Vuex after loading Tech
-						var activatedMAList = CIQ.store.state.activatedMA
+				var MAListIndex = activatedMAList.findIndex(
+					(ma) => ma.url == this.$store.state.indicators.formIndicators.entry
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				CIQ.store.commit('getMA', activatedMAList)
+				this.$store.commit('getEntryIndicators', url)
+			} else {
+				// remove MA from Vuex after loading Tech
+				var activatedMAList = CIQ.store.state.activatedMA
 
-						var MAListIndex = activatedMAList.findIndex(
-							(ma) =>
-								ma.url == this.$store.state.indicators.formIndicators.entry
-						)
-						if (MAListIndex != -1) {
-							activatedMAList.splice(MAListIndex, 1)
-						}
-						CIQ.store.commit('getMA', activatedMAList)
-						this.$store.commit('getEntryIndicators', i[1])
-					} else {
-						// remove MA from Vuex after loading Tech
-						var activatedMAList = CIQ.store.state.activatedMA
+				var MAListIndex = activatedMAList.findIndex(
+					(ma) => ma.url == this.$store.state.indicators.formIndicators.exit
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
 
-						var MAListIndex = activatedMAList.findIndex(
-							(ma) => ma.url == this.$store.state.indicators.formIndicators.exit
-						)
-						if (MAListIndex != -1) {
-							activatedMAList.splice(MAListIndex, 1)
-						}
+				CIQ.store.commit('getMA', activatedMAList)
+				this.$store.commit('getExitIndicators', url)
+			}
+			// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
+			let techIndicators = []
+			techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
+			techIndicators.push(url)
+			this.$store.commit('getTechnicalIndicators', techIndicators)
 
-						CIQ.store.commit('getMA', activatedMAList)
-						this.$store.commit('getExitIndicators', i[1])
-					}
-					// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
-					let techIndicators = []
-					techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
-					techIndicators.push(i[1])
-					this.$store.commit('getTechnicalIndicators', techIndicators)
+			console.log('TechnicalSelect MA LIST', CIQ.store.state.activatedMA)
 
-					console.log('TechnicalSelect MA LIST', CIQ.store.state.activatedMA)
-
-					// avoid add indicator redundantly
-					for (var studyInstanceName in CIQ.stxx.layout.studies) {
-						var sd = CIQ.stxx.layout.studies[studyInstanceName]
-						if (sd.type == url) {
-							return
-						}
-					}
-					CIQ.addTechIndicators()
+			// avoid add indicator redundantly
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+				if (sd.type == url) {
+					return
 				}
 			}
+			CIQ.addIndicators()
+			// }
+			// }
 			vm.si.technicalIndicator = item.value
 		},
 		handleRiskSelect(item) {
@@ -474,12 +477,25 @@ export default {
 		},
 		// load short and long technical list
 		loadShortLong() {
-			return [
-				{ value: 'Commodity Channel Index' },
-				{ value: 'Relative Strength Index' },
-				{ value: 'MACD' },
-				{ value: 'Moving Average' }
-			]
+			const technicalList = CIQ.technicalCategory
+			let formatList = []
+			for (let i = 0; i < technicalList.length; i++) {
+				if (
+					technicalList[i].class === 'No_display_technical_indicator' ||
+					technicalList[i].class ===
+						'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
+				)
+					continue
+				technicalList[i].studies.forEach((item) => {
+					let obj = {}
+					obj.class = technicalList[i].class
+					obj.value = item.name
+					obj.url = item.url
+					formatList.push(obj)
+				})
+			}
+			console.log('加载的表单', formatList)
+			return formatList
 		},
 		loadRiskList() {
 			return [{ value: 'Time In Market' }, { value: 'Profit/Loss' }]
@@ -583,6 +599,7 @@ export default {
 		},
 		async setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
+				this.clearFormValidate()
 				let vm = this
 				if (newVal[this.criteria].signals[0].analysis === 'Sentiment') {
 					this.$emit('getIndicatorRadio', 'sentiment')

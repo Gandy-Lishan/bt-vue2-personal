@@ -201,6 +201,7 @@ export default {
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
+				this.clearFormValidate()
 				this.tech.ids = newVal[this.criteria].signals[0].ids
 				this.tech.condition = Number(newVal[this.criteria].signals[0].condition)
 				this.tech.value = newVal[this.criteria].signals[0].value

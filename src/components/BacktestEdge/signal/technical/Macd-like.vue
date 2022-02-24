@@ -52,7 +52,7 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item>
+					<el-form-item prop="value">
 						<el-input
 							:disabled="!(conditionRadio === 'Indicator Value')"
 							@input="setDesciption"
@@ -263,6 +263,7 @@ export default {
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
+				this.clearFormValidate()
 				this.tech.ids = newVal[this.criteria].signals[0].ids
 				this.tech.condition = Number(newVal[this.criteria].signals[0].condition)
 				this.disabled = false

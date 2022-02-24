@@ -37,7 +37,7 @@
 			ref="cciChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-show="indicatorRadio === 'technical' && techIndiValue === 'cci'"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'CCI_like'"
 		></cci>
 		<rsi
 			:direction="fd.direction"
@@ -53,7 +53,7 @@
 			ref="macdChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-show="indicatorRadio === 'technical' && techIndiValue === 'macd'"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'MACD_like'"
 		></macd>
 		<ma
 			:direction="fd.direction"
@@ -61,7 +61,9 @@
 			ref="maChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-show="indicatorRadio === 'technical' && techIndiValue === 'ma'"
+			v-show="
+				indicatorRadio === 'technical' && techIndiValue === 'MovingAverage_like'
+			"
 		></ma>
 		<risk
 			v-show="indicatorRadio === 'risk'"
@@ -72,57 +74,73 @@
 			:riskVal="riskVal"
 			v-bind="$attrs"
 		></risk>
-		<!-- <bollinger-bands-like
-		:direction="fd.direction"
-			:criteria="'entry'"
-			ref="bollBandsLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"></bollinger-bands-like> -->
-		<!-- <ehler-fisher-transform-like
-		:direction="fd.direction"
-			:criteria="'entry'"
-			ref="bollBandsLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"></ehler-fisher-transform-like> -->
-		<!-- <stochastic-momentum-index-like
+		<bollinger-bands-like
 			:direction="fd.direction"
 			:criteria="'entry'"
 			ref="bollBandsLikeChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-		></stochastic-momentum-index-like> -->
-		<!-- <ADX-or-DMS-Like
+			v-show="
+				indicatorRadio === 'technical' &&
+				techIndiValue === 'BollingerBands_like'
+			"
+		></bollinger-bands-like>
+		<ehler-fisher-transform-like
 			:direction="fd.direction"
 			:criteria="'entry'"
-			ref="bollBandsLikeChild"
+			ref="EFTLikeChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-		></ADX-or-DMS-Like> -->
-				<!-- <elder-ray-index-like
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'EFT_like'"
+		></ehler-fisher-transform-like>
+		<stochastic-momentum-index-like
 			:direction="fd.direction"
 			:criteria="'entry'"
-			ref="bollBandsLikeChild"
+			ref="stochasticsLikeChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-		></elder-ray-index-like> -->
-		<!-- <alligator-like
+			v-show="
+				indicatorRadio === 'technical' && techIndiValue === 'Stochastics_like'
+			"
+		></stochastic-momentum-index-like>
+		<ADX-or-DMS-Like
 			:direction="fd.direction"
 			:criteria="'entry'"
-			ref="bollBandsLikeChild"
+			ref="ADXLikeChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-		></alligator-like> -->
-				<!-- <linear-regForecast-like
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'ADX_like'"
+		></ADX-or-DMS-Like>
+		<elder-ray-index-like
 			:direction="fd.direction"
 			:criteria="'entry'"
-			ref="bollBandsLikeChild"
+			ref="ERILikeChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-		></linear-regForecast-like> -->
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'ERI_like'"
+		></elder-ray-index-like>
+		<alligator-like
+			:direction="fd.direction"
+			:criteria="'entry'"
+			ref="aligatorLikeChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-show="
+				indicatorRadio === 'technical' && techIndiValue === 'Aligator_like'
+			"
+		></alligator-like>
+		<linear-regForecast-like
+			:direction="fd.direction"
+			:criteria="'entry'"
+			ref="LRFLikeChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'LRF_like'"
+		></linear-regForecast-like>
 	</div>
 </template>
 <script>
-import indicator from '@/components/BacktestEdge/signal/indicator/Indicator'
+import indicator from '@/components/BacktestEdge/signal/indicator/indicator'
 import senti from '@/components/BacktestEdge/signal/sentiment/Senti'
 import cci from '@/components/BacktestEdge/signal/technical/Cci-like'
 import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
@@ -240,7 +258,7 @@ export default {
 					return (checked = senti)
 				} else if (
 					this.indicatorRadio === 'technical' &&
-					this.techIndiValue === 'cci'
+					this.techIndiValue === 'CCI_like'
 				) {
 					this.$refs.cciChild.setDesciption()
 					let cci = this.$refs.cciChild.saveCondition()
@@ -254,14 +272,14 @@ export default {
 					return (checked = rsi)
 				} else if (
 					this.indicatorRadio === 'technical' &&
-					this.techIndiValue === 'macd'
+					this.techIndiValue === 'MACD_like'
 				) {
 					this.$refs.macdChild.setDesciption()
 					let macd = this.$refs.macdChild.saveCondition()
 					return (checked = macd)
 				} else if (
 					this.indicatorRadio === 'technical' &&
-					this.techIndiValue === 'ma'
+					this.techIndiValue === 'MovingAverage_like'
 				) {
 					this.$refs.maChild.setDesciption()
 					let ma = this.$refs.maChild.saveCondition()
@@ -330,7 +348,7 @@ export default {
 					edit.exit.signals[0].indicator == 'Commodity Channel Index'
 				) {
 					vm.indicatorRadio = 'technical'
-					vm.techIndiValue = 'cci'
+					vm.techIndiValue = 'CCI_like'
 					vm.$refs.cciChild.setEditData(edit)
 				} else if (
 					edit.exit.signals[0].analysis == 'Technical' &&
@@ -344,14 +362,14 @@ export default {
 					edit.exit.signals[0].indicator == 'Moving Average'
 				) {
 					vm.indicatorRadio = 'technical'
-					vm.techIndiValue = 'ma'
+					vm.techIndiValue = 'MovingAverage_like'
 					vm.$refs.maChild.setEditData(edit)
 				} else if (
 					edit.exit.signals[0].analysis == 'Technical' &&
 					edit.exit.signals[0].indicator == 'MACD'
 				) {
 					vm.indicatorRadio = 'technical'
-					vm.techIndiValue = 'macd'
+					vm.techIndiValue = 'MACD_like'
 					vm.$refs.macdChild.setEditData(edit)
 				} else if (edit.exit.signals[0].analysis == 'Exit') {
 					this.$refs.riskChild.setEditData(edit)
