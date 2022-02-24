@@ -22,7 +22,12 @@
 					icon="el-icon-refresh-right"
 					>Create New Backtest</el-button
 				>
-				<el-tabs v-model="activeName" type="card" :tab-position="tabPosition">
+				<el-tabs
+					v-model="activeName"
+					type="card"
+					:tab-position="tabPosition"
+					@tab-click="handleTabClick"
+				>
 					<el-tab-pane label="Set up Backtest" name="first">
 						<div class="set-up-container">
 							<set-up
@@ -77,7 +82,6 @@
 						><favorite
 							ref="favoriteChild"
 							@refHistoryForm="refHistoryForm"
-							@refFavoritesForm="refFavoritesForm"
 							@goTobacktestSetupForm="goTobacktestSetupForm"
 							@goBacktestResultForm="goBacktestResultForm"
 							@goToFavoritesForm="goToFavoritesForm"
@@ -85,6 +89,7 @@
 					></el-tab-pane>
 					<el-tab-pane label="Sample Backtests" name="fifth"
 						><sample
+							ref="sampleChild"
 							@goToHistoryForm="goToHistoryForm"
 							@refHistoryForm="refHistoryForm"
 							@goTobacktestSetupForm="goTobacktestSetupForm"
@@ -121,7 +126,9 @@ export default {
 			loading: false,
 			backtestEditData: {},
 			editFrequency: 'Daily',
-			timeFrame: 'Daily'
+			timeFrame: 'Daily',
+			historyFlag: true,
+			favoriteFlag: true
 		}
 	},
 	// provide() {
@@ -162,8 +169,26 @@ export default {
 			this.$store.commit('initialBacktestInfo')
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
-			this.$refs.exitChild.clearForm() 
-			
+			this.$refs.exitChild.clearForm()
+		},
+		handleTabClick(tab, event) {
+			let tabName = tab.name
+			switch (tabName) {
+				case 'second':
+					if (this.historyFlag) {
+						this.$refs.historyChild.getBacktestList()
+						this.historyFlag = false
+					}
+					break
+				case 'forth':
+					if (this.favoriteFlag) {
+						this.$refs.favoriteChild.getBacktestList()
+						this.favoriteFlag = false
+					}
+					break
+				case 'fifth':
+					this.$refs.sampleChild.getStrategyList()
+			}
 		},
 		getTimeFrame(val) {
 			this.timeFrame = val
@@ -246,10 +271,6 @@ export default {
 						const b = new SignalCode()
 						var entry_signal_list = []
 						var exit_signal_list = []
-						
-						var entrySignal = CIQ.indicatorList.find(item=> {return item.chart_name == backtestData.entry.signals[0].indicator})
-						var exitSignal = CIQ.indicatorList.find(item=> {return item.chart_name == backtestData.exit.signals[0].indicator})
-
 						delete backtestData.entry.signals
 						for (var i in signalEntryList) {
 							let code = b.encode(signalEntryList[i])
@@ -286,8 +307,8 @@ export default {
 						//上传indicator layout
 						var indicatorLayout = {}
 						indicatorLayout.formIndicators = {
-							entry: entrySignal.url,
-							exit: exitSignal.url
+							entry: this.$store.state.indicators.formIndicators.entry,
+							exit: this.$store.state.indicators.formIndicators.exit
 						}
 						indicatorLayout.technicalIndicators =
 							this.$store.state.indicators.technicalIndicators

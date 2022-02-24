@@ -215,10 +215,10 @@ export default {
 			loadTest: 'Loading'
 		}
 	},
-	created() {
-		this.getStrategyList()
-		this.getStrategyName()
-	},
+	// created() {
+	// 	this.getStrategyList()
+	// 	this.getStrategyName()
+	// },
 	methods: {
 		showDes(row) {
 			const datades = {}
@@ -272,25 +272,27 @@ export default {
 			})
 		},
 		async getStrategyList() {
-			this.loading = true
-			let page = this.queryInfo.page
-			const res = await this.$http.get(
-				'/dev/strategy/?ordering=name,status,-create_date&page=' + page
-			)
-			if (res.status === 200) {
-				this.backtestList = res.data.results
-				if (this.backtestList.length != 0) {
-					this.backtestList.forEach((element) => {
-						if (element.result !== '')
-							element.result = JSON.parse(element.result)
-					})
+			if (this.backtestList.length === 0) {
+				this.loading = true
+				let page = this.queryInfo.page
+				const res = await this.$http.get(
+					'/dev/strategy/?ordering=name,status,-create_date&page=' + page
+				)
+				if (res.status === 200) {
+					this.backtestList = res.data.results
+					if (this.backtestList.length != 0) {
+						this.backtestList.forEach((element) => {
+							if (element.result !== '')
+								element.result = JSON.parse(element.result)
+						})
+					}
+					console.log('sample', this.backtestList)
+					this.queryInfo.total = res.data.count
+					this.loading = false
+				} else {
+					this.$message.error('List request failed')
+					this.loading = false
 				}
-				console.log('sample', this.backtestList)
-				this.queryInfo.total = res.data.count
-				this.loading = false
-			} else {
-				this.$message.error('List request failed')
-				this.loading = false
 			}
 		},
 		refreshHistory(id) {
@@ -319,10 +321,6 @@ export default {
 		async getStatus(id) {
 			const { res: data } = await this.$http.get('/dev/status/' + id + '/')
 			return res.data.status
-		},
-		async getStrategyName() {
-			const id = this.backtestList
-			// const res = await this.$http.get('/demo/strategies' + id + '/')
 		},
 		editBacktest: throttle(function (row) {
 			let vm = this

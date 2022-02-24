@@ -23,6 +23,7 @@
 						<el-checkbox label="Take Profit" disabled></el-checkbox>
 						<el-input
 							v-model="risk.take_profit"
+							oninput="value=value.replace(/[^\d]/g,'')"
 							@input="setDesciption"
 						></el-input>
 
@@ -33,6 +34,7 @@
 						<el-input
 							v-model="risk.stop_loss"
 							@input="setDesciption"
+							@change="validateStopLoss"
 						></el-input>
 						<span class="tpNote">(%)</span>
 					</div>
@@ -41,6 +43,7 @@
 						><el-input
 							v-model="risk.time_in_market"
 							@input="setDesciption"
+							oninput="value=value.replace(/[^\d]/g,'')"
 						></el-input>
 						<span class="tpNote">{{ timeFra }}</span>
 					</div>
@@ -109,6 +112,13 @@ export default {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 			this.timeFra = '(days)'
+		},
+		validateStopLoss(num) {
+			if (isNaN(num) || num <= 0 || num >= 101 || !/^\d+$/.test(num)) {
+				{
+					alert('提示', '请输入正确的数值,只允许输入小于等于100的正整数!')
+				}
+			}
 		},
 		setDesciption: throttle(function () {
 			let criteria = ''

@@ -1,6 +1,6 @@
 <template>
 	<div class="senti-container">
-		<el-form :model="senti">
+		<el-form :model="senti" :rules="rules" ref="sentiForm">
 			<div class="ids-container">
 				<el-form-item label="Extreme Optimism" prop="extreme_optimism">
 					<el-input
@@ -44,11 +44,10 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item>
+					<el-form-item prop="value">
 						<el-input
 							:disabled="disabled"
 							@input="setDesciption"
-							@change="clearNoNum"
 							v-model="senti.value"
 							placeholder="Input Value"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
@@ -66,7 +65,7 @@
 					</el-radio>
 				</el-form-item>
 				<div class="conditionInput">
-					<el-form-item>
+					<el-form-item prop="period">
 						<el-input
 							@change="setPeriod"
 							:disabled="!disabled"
@@ -96,7 +95,7 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item>
+					<el-form-item prop="maValue">
 						<el-input
 							:disabled="!disabled"
 							v-model="senti.value"
@@ -125,8 +124,63 @@ export default {
 		direction: String
 	},
 	data() {
+		var validateValue = (rule, value, callback) => {
+			if (this.conditionRadio == 'Sentiment Value') {
+				if (value === '') {
+					callback(new Error('Please input value'))
+				} else if (isNaN(value)) {
+					callback(new Error('Please enter the correct format'))
+				} else {
+					const pattern =
+						/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+					if (!pattern.test(value)) {
+						callback(new Error('Enter up to two decimal places'))
+					} else {
+						callback()
+					}
+				}
+			} else {
+				callback()
+			}
+		}
+		var validateMaValue = (rule, value, callback) => {
+			if (this.conditionRadio == 'Sentiment Moving Average') {
+				if (value === '') {
+					callback(new Error('Please input value'))
+				} else if (isNaN(value)) {
+					callback(new Error('Please enter the correct format'))
+				} else if (value) {
+					const pattern =
+						/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+					if (!pattern.test(value)) {
+						callback(new Error('Enter up to two decimal places'))
+					} else {
+						callback()
+					}
+				}
+			} else {
+				callback()
+			}
+		}
+		var validatePeriod = (rule, value, callback) => {
+			if (this.conditionRadio == 'Sentiment Moving Average') {
+				if (value === 0 || value === '') {
+					callback(new Error('Please input period'))
+				} else if (isNaN(value)) {
+					callback(new Error('Please enter the correct format'))
+				} else if (value) {
+					const pattern = /[1-9]\d*/
+					if (!pattern.test(value)) {
+						callback(new Error('Please enter a positive integer'))
+					} else {
+						callback()
+					}
+				}
+			} else {
+				callback()
+			}
+		}
 		return {
-			extremeValueList:[],
 			preload: false,
 			senti: {
 				extreme_optimism: '',
@@ -146,7 +200,12 @@ export default {
 			disabled: false,
 			conditionRadio: 'Sentiment Value',
 			description: '',
-			editSentiVal: ''
+			editSentiVal: '',
+			rules: {
+				value: [{ validator: validateValue, trigger: 'blur' }],
+				maValue: [{ validator: validateMaValue, trigger: 'blur' }],
+				period: [{ validator: validatePeriod, trigger: 'blur' }]
+			}
 		}
 	},
 	computed: {
@@ -154,78 +213,105 @@ export default {
 		extremeValue() {
 			return this.getExtremeValue
 		},
-		// updateSenti() {
-		// 	return this.$store.state.currentSenti
-		// }
+		updateSenti() {
+			return this.$store.state.currentSenti
+		}
 	},
 	watch: {
-		// updateSenti: {
-		// 	handler(val){
-		// 		console.log("updateSenti: ",val)
-		// 		this.preload = true
-		// 	},
-		// 	immediate: true,
-		// 	deep: true
-		// },
+		updateSenti: {
+			handler() {
+				this.preload = true
+			},
+			immediate: true,
+			deep: true
+		},
 		extremeValue: {
 			handler(newVal) {
 				let vm = this
 				newVal.forEach((item) => {
 					if (item.indicator) {
-						if (item.indicator === vm.sentiUrl) {
+						if (item.indicator === vm.sentiUrl || vm.preload == true) {
 							vm.senti.extreme_pessimism = item.extremePessimism
 							vm.senti.extreme_optimism = item.extremeOptimism
 						}
 					}
 				})
-				//vm.preload = false
+				vm.preload = false
 			},
 			immediate: true,
 			deep: true
 		},
-		
-		// 用于解决 entry 和 exit 选择相同 indicator 而无法展示极值的问题
-		// sentiUrl: {
+		// editIndiData: {
 		// 	handler(newVal) {
-				
-		// 		if (newVal) {
-		// 			let vm = this
-		// 			let extremeValue = this.extremeValueList
-		// 			console.log('sentiUrl: ',extremeValue[0])
-		// 			extremeValue.forEach((item) => {
-		// 				console.log('sentiUrl: ',item,newVal)
-		// 				if (item.indicator) {
-		// 					if (item.indicator === newVal) {
-		// 						vm.senti.extreme_pessimism = item.extremePessimism
-		// 						vm.senti.extreme_optimism = item.extremeOptimism
-		// 					}
-		// 				}
-		// 			})
+		// 		if (JSON.stringify(newVal) != '{}') {
+		// 			this.senti.extreme_optimism =
+		// 				newVal[this.criteria].signals[0].extreme_optimism
+		// 			this.senti.extreme_pessimism =
+		// 				newVal[this.criteria].signals[0].extreme_pessimism
+		// 			this.senti.condition = Number(
+		// 				newVal[this.criteria].signals[0].condition
+		// 			)
+		// 			this.senti.value = newVal[this.criteria].signals[0].value
+		// 			this.conditionRadio = 'Sentiment Value'
+		// 			this.disabled = false
+		// 			delete this.senti.period
+		// 			let period = newVal[this.criteria].signals[0].period
+		// 			if (period) {
+		// 				this.conditionRadio = 'Sentiment Moving Average'
+		// 				this.senti.period = period
+		// 				this.setPeriod(period)
+		// 				this.disabled = true
+		// 			}
+		// 			this.setDesciption()
 		// 		}
-		// 	}
-		// }
+		// 	},
+		// 	immediate: true,
+		// 	deep: true
+		// },
+		// 用于解决 entry 和 exit 选择相同 indicator 而无法展示极值的问题
+		sentiUrl: {
+			handler(newVal) {
+				if (newVal) {
+					let vm = this
+					let extremeValue = this.$store.state.extremeValue
+					extremeValue.forEach((item) => {
+						if (item.indicator) {
+							if (item.indicator === newVal) {
+								vm.senti.extreme_pessimism = item.extremePessimism
+								vm.senti.extreme_optimism = item.extremeOptimism
+							}
+						}
+					})
+				}
+			}
+		}
 	},
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
+			this.clearFormValidate()
 		},
-		clearNoNum(value) {
-			console.log(value)
-			//先把非数字的都替换掉，除了数字和.
-			// value = value.replace(/[^\d.]/g, '')
-			//保证只有出现一个.而没有多个.
-			value = value.replace(/\.{2,}/g, '.')
-			//必须保证第一个为数字而不是.
-			value = value.replace(/^\./g, '')
-			//保证.只出现一次，而不能出现两次以上
-			value = value.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
-			//只能输入两个小数
-			value = value.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3')
-			value = value.replace(/^0+\./, '0.')
-			value = value.replace(/^\-+/g, '-')
-			console.log('处理过后的值', value)
-			this.senti.value = value
+		// 清除表单认证
+		clearFormValidate() {
+			this.$refs.sentiForm.clearValidate()
 		},
+		// clearNoNum(value) {
+		// 	console.log(value)
+		// 	//先把非数字的都替换掉，除了数字和.
+		// 	// value = value.replace(/[^\d.]/g, '')
+		// 	//保证只有出现一个.而没有多个.
+		// 	value = value.replace(/\.{2,}/g, '.')
+		// 	//必须保证第一个为数字而不是.
+		// 	value = value.replace(/^\./g, '')
+		// 	//保证.只出现一次，而不能出现两次以上
+		// 	value = value.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
+		// 	//只能输入两个小数
+		// 	value = value.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3')
+		// 	value = value.replace(/^0+\./, '0.')
+		// 	value = value.replace(/^\-+/g, '-')
+		// 	console.log('处理过后的值', value)
+		// 	this.senti.value = value
+		// },
 		setDesciption: throttle(function () {
 			let criteria = ''
 			let direction = ''
@@ -248,6 +334,7 @@ export default {
 			console.log('描述', this.description)
 		}, 500),
 		getConditionRadio(val) {
+			this.clearFormValidate()
 			if (val === 'Sentiment Value') {
 				if ('period' in this.senti) {
 					delete this.senti.period
@@ -283,13 +370,13 @@ export default {
 					)
 				}
 			}
-			
+
 			var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
 				Period: val,
 				display: 'ST MA',
 				Field: result.url
 			})
-			
+
 			// keep current MA
 			var objMA = { period: val, url: result.url }
 			var activatedMAList = this.$store.state.activatedMA
@@ -307,8 +394,12 @@ export default {
 		},
 		saveCondition() {
 			let checked = true
+			let validForm
 			if (this.conditionRadio === 'Sentiment Value') {
-				if (this.senti.value !=='') {
+				this.$refs.sentiForm.validate((valid) => {
+					validForm = valid
+				})
+				if (validForm) {
 					let senti = this.senti
 					delete senti.period
 					senti.criteria = this.criteria
@@ -322,31 +413,46 @@ export default {
 					this.$store.commit('saveCondition', senti)
 					return checked
 				} else {
-					this.$message.error('Please Input Value')
+					// this.$message({
+					// 	message: 'Please Input Value',
+					// 	type: 'error',
+					// 	offset: 300
+					// })
 					checked = false
 					return checked
 				}
 			} else if (this.conditionRadio === 'Sentiment Moving Average') {
-				if (this.senti.value !== '') {
-					if (this.senti.period) {
-						let senti = this.senti
-						senti.criteria = this.criteria
-						senti.index = 0
-						// 定义一个 vuex 新事件用于保存 description
-						let desObj = {}
-						desObj.criteria = this.criteria
-						desObj.description = this.description
-						this.$store.commit('saveDescription', desObj)
-						// 定义一个 vuex 新事件用于保存 condition数据
-						this.$store.commit('saveCondition', senti)
-						return checked
-					} else {
-						this.$message.error('Please Input Period')
-						checked = false
-						return checked
-					}
+				this.$refs.sentiForm.validate((valid) => {
+					validForm = valid
+				})
+				if (validForm) {
+					// if (this.senti.period) {
+					let senti = this.senti
+					senti.criteria = this.criteria
+					senti.index = 0
+					// 定义一个 vuex 新事件用于保存 description
+					let desObj = {}
+					desObj.criteria = this.criteria
+					desObj.description = this.description
+					this.$store.commit('saveDescription', desObj)
+					// 定义一个 vuex 新事件用于保存 condition数据
+					this.$store.commit('saveCondition', senti)
+					return checked
+					// } else {
+					// 	this.$message({
+					// 		message: 'Please Input Period',
+					// 		type: 'error',
+					// 		offset: 300
+					// 	})
+					// 	checked = false
+					// 	return checked
+					// }
 				} else {
-					this.$message.error('Please Input Value')
+					// this.$message({
+					// 	message: 'Please Input Value',
+					// 	type: 'error',
+					// 	offset: 300
+					// })
 					checked = false
 					return checked
 				}
@@ -362,7 +468,7 @@ export default {
 					newVal[this.criteria].signals[0].condition
 				)
 				this.senti.value = newVal[this.criteria].signals[0].value
-				
+
 				this.conditionRadio = 'Sentiment Value'
 				this.senti.period = ''
 				this.disabled = false

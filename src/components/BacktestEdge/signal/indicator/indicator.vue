@@ -1,6 +1,6 @@
 <template>
 	<div class="indicator-box">
-		<el-form :model="si" ref="siForm">
+		<el-form :model="si" ref="siForm" :rules="rules">
 			<div class="indicator-container sentiBox">
 				<el-form-item>
 					<el-radio
@@ -92,15 +92,22 @@ export default {
 	},
 	data() {
 		var validateSenti = (rule, value, callback) => {
-			if (!value) {
-				return callback(new Error('Please choose sentiment indicator'))
+			if (!value && this.indicatorRadio == 'Sentiment Indicators') {
+				callback(new Error('Please choose sentiment indicator'))
 			} else {
 				callback()
 			}
 		}
 		var validateTech = (rule, value, callback) => {
-			if (!value) {
-				return callback(new Error('Please choose technical indicator'))
+			if (!value && this.indicatorRadio == 'Technical Indicators') {
+				callback(new Error('Please choose technical indicator'))
+			} else {
+				callback()
+			}
+		}
+		var validateRisk = (rule, value, callback) => {
+			if (!value && this.indicatorRadio == 'Risk Indicators') {
+				callback(new Error('Please choose risk indicator'))
 			} else {
 				callback()
 			}
@@ -113,7 +120,12 @@ export default {
 				riskIndicator: ''
 			},
 			isCheckedIndicators: false,
-			sentimentIndicatorList: this.$store.state.sentimentIndicatorList
+			sentimentIndicatorList: this.$store.state.sentimentIndicatorList,
+			rules: {
+				sentimentIndicator: [{ validator: validateSenti, trigger: 'change' }],
+				technicalIndicator: [{ validator: validateTech, trigger: 'change' }],
+				riskIndicator: [{ validater: validateRisk, trigger: 'change' }]
+			}
 		}
 	},
 	computed: {
@@ -131,14 +143,13 @@ export default {
 	watch: {
 		updateSenti(val) {
 			this.si.sentimentIndicator = val.name
-			console.log("updateSenti",val)
+
 			for (var i in CIQ.indicatorList) {
 				if (CIQ.indicatorList[i].chart_name == val.name) {
 					this.indicatorRadio = 'Sentiment Indicators'
 					// extract this statement from handleSentimentSelect
 					this.$emit('getSentiVal', CIQ.indicatorList[i].chart_name)
-					this.$emit('getSentiUrl', CIQ.indicatorList[i].url)
-					
+
 					//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
 				}
 			}
@@ -226,6 +237,10 @@ export default {
 		// }
 	},
 	methods: {
+		// 清除表单认证
+		clearFormValidate() {
+			this.$refs.siForm.clearValidate()
+		},
 		//  load sentiment list
 		clearForm() {
 			let data = {
@@ -240,7 +255,7 @@ export default {
 			}
 			data.sentimentIndicatorList = this.$store.state.sentimentIndicatorList
 			Object.assign(this.$data, data)
-			console.log(this.$data)
+			this.clearFormValidate()
 		},
 		// sentiment search
 		indicatorSentimentSearch(queryString, cb) {
@@ -334,26 +349,13 @@ export default {
 				this.$emit('getSentiUrl', item.url)
 			}
 
-			//avoid add indicator redundantly
+			// avoid add indicator redundantly
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (sd.type == item.url) {
-					var temp = CIQ.store.state.extremeValue
-
-					var result = []
-					var obj= {}
-					for(var i=0;i<temp.length;i++){
-						if(!obj[temp[i].indicator]){
-							result.push(temp[i])
-							obj[temp[i].indicator] = true
-						}
-					}
-
-					CIQ.store.commit("getExtremeValue", result)
 					return
 				}
 			}
-			
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
@@ -447,9 +449,8 @@ export default {
 			}
 		},
 		changeIndicatorChecked(val) {
-			console.log('事件的值', val)
 			this.indicatorRadio = val
-			console.log('indicatorRadio', this.indicatorRadio)
+			this.clearFormValidate()
 			this.isCheckedIndicators = !this.isCheckedIndicators
 			const arr = [
 				'Sentiment Indicators',
@@ -460,7 +461,6 @@ export default {
 			obj.criteria = this.criteria
 			obj.index = 0
 			this.$store.commit('deleteIndicator', obj)
-            
 			if (this.indicatorRadio === arr[0]) {
 				this.$emit('getIndicatorRadio', 'sentiment')
 				this.$store.commit('getEntryIndicatorRadio', 'sentiment')
@@ -470,12 +470,6 @@ export default {
 			} else if (this.indicatorRadio === arr[2]) {
 				this.$emit('getIndicatorRadio', 'risk')
 				this.$store.commit('getEntryIndicatorRadio', 'risk')
-
-				if(obj.criteria=="exit"){
-					CIQ.store.commit('getExitIndicators', '')
-				}else{
-					CIQ.store.commit('getExitIndicators', '')
-				}
 			}
 		},
 		// load short and long technical list
@@ -513,8 +507,12 @@ export default {
 		// },
 		saveIndicator() {
 			let checked = true
+			let validForm
 			if (this.indicatorRadio === 'Sentiment Indicators') {
-				if (this.si.sentimentIndicator) {
+				this.$refs.siForm.validate((valid) => {
+					validForm = valid
+				})
+				if (validForm) {
 					let obj = {}
 					obj.criteria = this.criteria
 					obj.index = 0
@@ -522,14 +520,24 @@ export default {
 					this.$store.commit('getSentiValue', obj)
 					return checked
 				} else {
-					this.$message.error(
-						'Please select' + ' ' + this.criteria + ' ' + 'sentiment indicator'
-					)
+					// this.$message({
+					// 	message:
+					// 		'Please select' +
+					// 		' ' +
+					// 		this.criteria +
+					// 		' ' +
+					// 		'sentiment indicator',
+					// 	type: 'error',
+					// 	offset: 300
+					// })
 					checked = false
 					return checked
 				}
 			} else if (this.indicatorRadio === 'Technical Indicators') {
-				if (this.si.technicalIndicator) {
+				this.$refs.siForm.validate((valid) => {
+					validForm = valid
+				})
+				if (validForm) {
 					let obj = {}
 					obj.criteria = this.criteria
 					obj.index = 0
@@ -537,14 +545,24 @@ export default {
 					this.$store.commit('getTechValue', obj)
 					return checked
 				} else {
-					this.$message.error(
-						'Please select' + ' ' + this.criteria + ' ' + ' technical indicator'
-					)
+					// this.$message({
+					// 	message:
+					// 		'Please select' +
+					// 		' ' +
+					// 		this.criteria +
+					// 		' ' +
+					// 		' technical indicator',
+					// 	type: 'error',
+					// 	offset: 300
+					// })
 					checked = false
 					return checked
 				}
 			} else if (this.indicatorRadio === 'Risk Control') {
-				if (this.si.riskIndicator) {
+				this.$refs.siForm.validate((valid) => {
+					validForm = valid
+				})
+				if (validForm) {
 					let obj = {}
 					obj.criteria = 'exit'
 					obj.index = 0
@@ -552,9 +570,12 @@ export default {
 					this.$store.commit('getRiskValue', obj)
 					return checked
 				} else {
-					this.$message.error(
-						'Please select' + ' ' + this.criteria + ' ' + ' risk indicator'
-					)
+					// this.$message({
+					// 	message:
+					// 		'Please select' + ' ' + this.criteria + ' ' + ' risk indicator',
+					// 	type: 'error',
+					// 	offset: 300
+					// })
 					checked = false
 					return checked
 				}

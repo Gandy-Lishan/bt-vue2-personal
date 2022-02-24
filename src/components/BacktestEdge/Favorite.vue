@@ -19,7 +19,7 @@
 						align="center"
 						prop="name"
 						show-overflow-tooltip
-						width="80px"
+						width="150px"
 					>
 					</el-table-column>
 					<el-table-column
@@ -282,9 +282,9 @@ export default {
 			}
 		}
 	},
-	created() {
-		this.getBacktestList()
-	},
+	// created() {
+	// 	this.getBacktestList()
+	// },
 	methods: {
 		async getBacktestList(strategy) {
 			this.loading = true

@@ -1,9 +1,14 @@
 <template>
 	<div class="backtest_container">
-		<el-form ref="backtestSetupForm" :model="bd" label-position="left">
+		<el-form
+			ref="backtestSetupForm"
+			:model="bd"
+			label-position="left"
+			:rules="rules"
+		>
 			<el-row>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12">
-					<el-form-item label="Starting Capital:" prop="startingCapital">
+					<el-form-item label="Starting Capital:" prop="capital">
 						<el-input
 							v-model="bd.capital"
 							@input="validateStartingCapital"
@@ -18,11 +23,12 @@
 							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input>
 					</el-form-item>
-
 					<span class="comUnitNote">(%)</span>
 					<el-form-item label="Slippage:" prop="slippage">
 						<el-input
-							v-model="bd.slippage"
+							v-model="temp.slippage"
+							@change="getSlippage"
+							@input="validateSlippage"
 							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input> </el-form-item
 					><span class="sliUnitNote">(per trade)</span>
@@ -162,10 +168,45 @@ import { Store, mapGetters } from 'vuex'
 import { timestampToTime } from '@/tools/formatDate.js'
 import deepClone1 from '@/tools/deepClone.js'
 const _ = require('lodash')
+const throttle = _.throttle
 export default {
 	props: { backtestEditData: Object, editFrequency: String },
 	name: 'setUp',
 	data() {
+		var validateCapital = (rule, value, callback) => {
+			if (value == 0 || value == '') {
+				callback(new Error('Please input starting capital'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
+				callback()
+			}
+		}
+		var validateCommissionRule = (rule, value, callback) => {
+			if (value == 0 || value == '') {
+				callback(new Error('Please input commission'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
+				callback()
+			}
+		}
+		var validateSlippageRule = (rule, value, callback) => {
+			if (value == 0 || value == '') {
+				callback(new Error('Please input slippage'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
+				callback()
+			}
+		}
+		var validateNameRule = (rule, value, callback) => {
+			if (value == '') {
+				callback(new Error('Please give a backtest name'))
+			} else {
+				callback()
+			}
+		}
 		return {
 			bd: {
 				name: '',
@@ -243,14 +284,40 @@ export default {
 			options: [],
 			temp: { commission: '0.1', slippage: '0.1' },
 			sentimentIndicatorList: [],
-			direction: 'Long'
+			direction: 'Long',
+			rules: {
+				capital: [
+					{
+						validator: validateCapital,
+						trigger: 'blur'
+					}
+				],
+				slippage: [
+					{
+						validator: validateSlippageRule,
+						trigger: 'blur'
+					}
+				],
+				commission: [
+					{
+						validator: validateCommissionRule,
+						trigger: 'blur'
+					}
+				],
+				name: [
+					{
+						validator: validateNameRule,
+						trigger: 'blur'
+					}
+				]
+			}
 		}
 	},
 	mounted() {
 		this.getIndicatorsList()
 		this.loadSentimentList('Daily')
-		this.getIndexsList()
-		this.getStocksList()
+		// this.getIndexsList()
+		// this.getStocksList()
 		this.getEndDate()
 	},
 	computed: {
@@ -336,6 +403,7 @@ export default {
 	},
 	methods: {
 		clearForm() {
+			this.clearFormValidate()
 			Object.assign(this.$data, this.$options.data())
 			this.getEndDate()
 		},
@@ -347,9 +415,8 @@ export default {
 		},
 		setEditDirection(val) {
 			this.direction = val
-			console.log('setup的方向', val)
 		},
-		validateCommission(val) {
+		validateCommission: throttle(function (val) {
 			let list = val.split('.')
 			if (list.length === 2) {
 				let temp = ''
@@ -371,14 +438,8 @@ export default {
 					this.temp.commission = list[0].substring(0, 2)
 				}
 			}
-			// let re = /[1-9]{0,2}?0?\.?\d{0,2}?/g
-			// if (val.search(re) !== -1) {
-			// 	this.bd.commission = val
-			// } else {
-			// 	this.bd.commission = ''
-			// }
-		},
-		validateSlippage(val) {
+		}, 500),
+		validateSlippage: throttle(function (val) {
 			let list = val.split('.')
 			if (list.length === 2) {
 				let temp = ''
@@ -391,7 +452,6 @@ export default {
 				else {
 					temp = temp + '.' + list[1].substring(0, 3)
 				}
-
 				this.temp.slippage = temp
 			} else if (list.length === 1) {
 				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) this.bd.slippage = list[0]
@@ -399,8 +459,8 @@ export default {
 					this.temp.slippage = list[0].substring(0, 2)
 				}
 			}
-		},
-		validateStartingCapital(val) {
+		}, 500),
+		validateStartingCapital: throttle(function (val) {
 			let re = /^\d+\.?\d{0,2}$/
 			if (val.search(re) !== -1) {
 				this.bd.capital = val
@@ -410,7 +470,7 @@ export default {
 			} else {
 				this.bd.capital = ''
 			}
-		},
+		}, 500),
 		getSymbolName(val) {
 			this.$store.commit('getSymbolName', val)
 			// 清空 两个表单的方法
@@ -425,7 +485,6 @@ export default {
 			CIQ.hideMarker()
 		},
 		getBenchmark(val) {
-			console.log('benckmark', val)
 			this.bd.benchmark = val
 		},
 		formateStartDate(val) {
@@ -550,12 +609,12 @@ export default {
 				this.bd.start_date = ''
 			}
 		},
-		getCommission(val) {
+		getCommission: throttle(function (val) {
 			this.bd.commission = val / 100
-		},
-		// getSlippage(val) {
-		// 	this.bd.slippage = val / 100
-		// },
+		}, 500),
+		getSlippage: throttle(function (val) {
+			this.bd.slippage = val / 100
+		}),
 		validateForm(newTag, oldTag) {
 			let data = true
 			this.$refs.backtestSetupForm.validate((valid) => {
@@ -595,7 +654,6 @@ export default {
 				}
 				default:
 			}
-
 			CIQ.addIndicators(selectedFreq)
 		},
 		async loadSentimentList(val) {
@@ -714,7 +772,11 @@ export default {
 		saveBacktestData() {
 			let checked = true
 			let nameChecked = true
-			if (this.bd.name) {
+			let validForm
+			this.$refs.backtestSetupForm.validate((valid) => {
+				validForm = valid
+			})
+			if (validForm) {
 				if (!this.bd.old_uuid) {
 					let nameList = this.$store.state.backtestNameList
 					for (let i = 0; i < nameList.length; i++) {
@@ -730,17 +792,29 @@ export default {
 						this.$store.commit('setBd', this.bd)
 						return checked
 					} else {
-						this.$message.error('Please select end date')
+						this.$message({
+							message: 'Please select end date',
+							type: 'error',
+							offset: 300
+						})
 						checked = false
 						return checked
 					}
 				} else {
-					this.$message.error('The backtest name already exists')
+					this.$message({
+						message: 'The backtest name already exists',
+						type: 'error',
+						offset: 300
+					})
 					checked = false
 					return checked
 				}
 			} else {
-				this.$message.error('Please give the backtest name')
+				// this.$message({
+				// 	message: 'Please give the backtest name',
+				// 	type: 'error',
+				// 	offset: 300
+				// })
 				checked = false
 				return checked
 			}

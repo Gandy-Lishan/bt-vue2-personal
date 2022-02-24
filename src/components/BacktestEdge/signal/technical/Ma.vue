@@ -1,6 +1,6 @@
 <template>
 	<div class="senti-container">
-		<el-form :model="tech">
+		<el-form :model="tech" :rules="rules" ref="form">
 			<!-- <div class="ids-container">
 				<el-radio-group v-model="tech.ids.ma_category" @change="getMaRadio">
 					<el-radio label="SMA" style="margin-bottom: 30px"
@@ -42,7 +42,7 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item>
+					<el-form-item prop="period">
 						<el-input
 							v-model="tech.period"
 							:disabled="disabled"
@@ -63,7 +63,7 @@
 					></el-radio>
 				</el-form-item>
 				<div class="conditionInput">
-					<el-form-item>
+					<el-form-item prop="ma_period">
 						<el-input
 							:disabled="!disabled"
 							v-model="tech.ma_period"
@@ -98,7 +98,7 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item>
+					<el-form-item prop="period">
 						<el-input
 							v-model="tech.period"
 							:disabled="!disabled"
@@ -119,7 +119,7 @@ import { Store, mapGetters } from 'vuex'
 const _ = require('lodash')
 const throttle = _.throttle
 export default {
-	name: 'cci',
+	name: 'ma',
 	props: {
 		criteria: String,
 		techUrl: String,
@@ -128,6 +128,49 @@ export default {
 		direction: String
 	},
 	data() {
+		let validatePeriod = (rule, value, callback) => {
+			console.log('111', value)
+			if (!/[1-9]\d*/.test(value)) {
+				return callback(new Error('Please enter a positive integer'))
+			}
+			if (value === 0 || value === '') {
+				return callback(new Error('Please input period'))
+			}
+			if (isNaN(value)) {
+				return callback(new Error('Please enter the correct format'))
+			}
+			callback()
+			// if (value === 0 || value === '') {
+			// 	callback(new Error('Please input period'))
+			// } else if (isNaN(value)) {
+			// 	callback(new Error('Please enter the correct format'))
+			// } else if (value) {
+			// 	const pattern = /[1-9]\d*/
+			// 	if (!pattern.test(value)) {
+			// 		callback(new Error('Please enter a positive integer'))
+			// 	} else {
+			// 		callback()
+			// 	}
+			// }
+		}
+		let validateMaPeriod = (rule, value, callback) => {
+			if (this.conditionRadio == 'Moving Average') {
+				if (value === 0 || value === '') {
+					callback(new Error('Please input period'))
+				} else if (isNaN(value)) {
+					callback(new Error('Please enter the correct format'))
+				} else if (value) {
+					const pattern = /[1-9]\d*/
+					if (!pattern.test(value)) {
+						callback(new Error('Please enter a positive integer'))
+					} else {
+						callback()
+					}
+				}
+			} else {
+				callback()
+			}
+		}
 		return {
 			tech: {
 				ids: { ma_category: 'SMA' },
@@ -147,8 +190,11 @@ export default {
 			maRadio: 'SMA',
 			period: 5,
 			description: '',
-
-			editTechVal: ''
+			editTechVal: '',
+			rules: {
+				period: [{ validator: validatePeriod, trigger: 'blur' }],
+				ma_period: [{ validator: validateMaPeriod, trigger: 'blur' }]
+			}
 		}
 	},
 	watch: {
@@ -181,6 +227,11 @@ export default {
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
+			this.clearFormValidate()
+		},
+		// 清除表单认证
+		clearFormValidate() {
+			this.$refs.form.clearValidate()
 		},
 		getConditionRadio(val) {
 			this.conditionRadio = val
@@ -474,10 +525,13 @@ export default {
 		},
 		saveCondition() {
 			let checked = true
-			console.log('保存 condition')
+			let validForm
+			this.$refs.form.validate((valid) => {
+				validForm = valid
+			})
 			if (this.conditionRadio === 'Symbol Close') {
 				let ids = {}
-				if (this.tech.period !== '') {
+				if (validForm) {
 					if (this.tech.ids) {
 						ids = this.tech.ids
 					} else {
@@ -496,12 +550,16 @@ export default {
 					this.$store.commit('saveDescription', desObj)
 					return checked
 				} else {
-					this.$message.error('Please Input Period')
+					// this.$message({
+					// 	message: 'Please Input Period',
+					// 	type: 'error',
+					// 	offset: 300
+					// })
 					checked = false
 					return checked
 				}
 			} else {
-				if (this.tech.period!== '' && this.tech.ma_period !=='') {
+				if (validForm) {
 					let ids = {}
 					let tech = {}
 					tech = this.tech
@@ -517,7 +575,11 @@ export default {
 					this.$store.commit('saveDescription', desObj)
 					return checked
 				} else {
-					this.$message.error('Please Input Period')
+					// this.$message({
+					// 	message: 'Please Input Period',
+					// 	type: 'error',
+					// 	offset: 300
+					// })
 					checked = false
 					return checked
 				}

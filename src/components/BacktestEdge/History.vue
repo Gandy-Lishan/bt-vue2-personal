@@ -3,6 +3,7 @@
 		<el-col :span="24">
 			<div class="favoriteForm_container">
 				<el-table
+					header-align="center"
 					:data="backtestList"
 					v-loading="loading"
 					:element-loading-text="loadTest"
@@ -19,7 +20,7 @@
 						align="center"
 						prop="name"
 						show-overflow-tooltip
-						width="80px"
+						width="150px"
 					>
 					</el-table-column>
 					<el-table-column
@@ -297,9 +298,9 @@ export default {
 			loadTest: 'Loading...'
 		}
 	},
-	created() {
-		this.getBacktestList()
-	},
+	// created() {
+	// 	this.getBacktestList()
+	// },
 	methods: {
 		async getBacktestList(strategy) {
 			this.loadTest = 'Loading...'
@@ -459,7 +460,7 @@ export default {
 			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)
-				console.log(res.data)
+				console.log('copy', res.data)
 				if (res.data.indicator_layout) {
 					this.restoreIndicatorLayout(
 						JSON.parse(res.data.indicator_layout),
@@ -472,6 +473,7 @@ export default {
 
 				params = res.data
 				params.name = params.name + '(copy)'
+				params.favorites = false
 				delete params.uuid
 				delete params.results
 				delete params.user_id
@@ -490,7 +492,9 @@ export default {
 								type: 'success',
 								offset: 100
 							})
+							console.log('复制以后的运行', res.data)
 							this.getBacktestList()
+							this.$emit('refFavoritesForm')
 						} else {
 							this.$message.error('Copy failed')
 						}
@@ -532,7 +536,6 @@ export default {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
-			this.$store.commit('getExtraIndicators',[])
 			this.$store.commit('getMA', data.activatedMA)
 			var frequency = ''
 			switch (freq) {

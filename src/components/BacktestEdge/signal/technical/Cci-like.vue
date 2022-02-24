@@ -1,6 +1,6 @@
 <template>
 	<div class="senti-container">
-		<el-form :model="tech">
+		<el-form :model="tech" :rules="rules" ref="form">
 			<!-- <div class="ids-container">
 				<el-form-item label="OverBought bound" prop="over_bought_bound">
 					<el-input
@@ -26,7 +26,10 @@
 			</div> -->
 			<div class="condition-container">
 				<el-form-item>
-					<el-radio v-model="conditionRadio" label=" Indicator Value"></el-radio>
+					<el-radio
+						v-model="conditionRadio"
+						label=" Indicator Value"
+					></el-radio>
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
@@ -46,7 +49,7 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item>
+					<el-form-item prop="value">
 						<el-input
 							@input="setDesciption"
 							v-model="tech.value"
@@ -74,6 +77,21 @@ export default {
 		direction: String
 	},
 	data() {
+		var validateValue = (rule, value, callback) => {
+			if (value === '') {
+				callback(new Error('Please input value'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
+				const pattern =
+					/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+				if (!pattern.test(value)) {
+					callback(new Error('Enter up to two decimal places'))
+				} else {
+					callback()
+				}
+			}
+		}
 		return {
 			tech: {
 				ids: {
@@ -93,8 +111,8 @@ export default {
 			],
 			conditionRadio: ' Indicator Value',
 			description: '',
-
-			editTechVal: ''
+			editTechVal: '',
+			rules: { value: [{ validator: validateValue, trigger: 'blur' }] }
 		}
 	},
 	// computed: {
@@ -120,8 +138,13 @@ export default {
 		// }
 	},
 	methods: {
-				clearForm() {
+		clearForm() {
 			Object.assign(this.$data, this.$options.data())
+			this.clearFormValidate()
+		},
+		// 清除表单认证
+		clearFormValidate() {
+			this.$refs.form.clearValidate()
 		},
 		setDesciption: throttle(function () {
 			let criteria = ''
@@ -145,7 +168,11 @@ export default {
 		}, 500),
 		saveCondition() {
 			let checked = true
-			if (this.tech.value !== '') {
+			let validForm
+			this.$refs.form.validate((valid) => {
+				validForm = valid
+			})
+			if (validForm) {
 				let ids = {
 					over_bought_bound: 100,
 					over_sold_bound: -100,
@@ -163,7 +190,11 @@ export default {
 				this.$store.commit('saveDescription', desObj)
 				return checked
 			} else {
-				this.$message.error('Please Input Value')
+				// this.$message({
+				// 	message: 'Please Input Value',
+				// 	type: 'error',
+				// 	offset: 300
+				// })
 				checked = false
 				return checked
 			}

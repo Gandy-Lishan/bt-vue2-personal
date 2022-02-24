@@ -108,7 +108,7 @@
 					<el-form-item>
 						<el-select
 							:disabled="!(conditionRadio === 'Indicator Hist')"
-							v-model="tech.condition"
+							v-model="histCondition"
 							size="mini"
 							filterable
 							placeholder="Please select condition"
@@ -173,7 +173,8 @@ export default {
 			conditionRadio: 'Indicator Value',
 			disabled: false,
 			description: '',
-			editTechVal: ''
+			editTechVal: '',
+			histCondition: 0
 		}
 	},
 	watch: {
@@ -198,7 +199,7 @@ export default {
 		// }
 	},
 	methods: {
-				clearForm() {
+		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 		},
 		setDesciption: throttle(function () {
@@ -251,7 +252,11 @@ export default {
 				this.$store.commit('saveDescription', desObj)
 				return checked
 			} else {
-				this.$message.error('Please Input Value')
+				this.$message({
+					message: 'Please Input Value',
+					type: 'error',
+					offset: 300
+				})
 				checked = false
 				return checked
 			}
@@ -285,7 +290,7 @@ export default {
 .condition-container {
 	display: flex;
 	&:first-child {
-	border-top: 1px solid #797979;
+		border-top: 1px solid #797979;
 	}
 }
 /deep/ .el-input__inner {
