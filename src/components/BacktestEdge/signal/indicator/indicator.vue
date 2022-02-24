@@ -160,7 +160,7 @@ export default {
 				if (item.url == val.url) {
 					// this.si.technicalIndicator = item.value
 					// 暂时注释掉，因为大部分tech没有加到back test内
-					//this.indicatorRadio = 'Technical Indicators'
+					this.indicatorRadio = 'Technical Indicators'
 					//this.handleTechnicalSelect({value:item.value})
 				}
 			})
