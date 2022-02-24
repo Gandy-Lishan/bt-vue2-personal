@@ -222,6 +222,7 @@ export default {
 			console.log('描述', this.description)
 		}, 500),
 		getConditionRadio(val) {
+			CIQ.store.commit('setConditionRadio',val)
 			if (val === ' Indicator Value ') {
 				this.tech.value = 'MACDSL'
 				this.disabled = !this.disabled
@@ -230,6 +231,7 @@ export default {
 				this.disabled = !this.disabled
 			}
 			this.setDesciption()
+			CIQ.exportEx()
 		},
 		saveCondition() {
 			let checked = true
