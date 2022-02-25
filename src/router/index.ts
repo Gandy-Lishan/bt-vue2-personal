@@ -52,6 +52,7 @@ let host = /.*/
 // console.log('to from next',to, from, next);
 console.log('log', document.referrer)
 console.log('baseURL', document.baseURI)
+let formateHost = location.origin
 let loginUrl = 'https://users.sentdevsite.com/login'
 if (document.baseURI.search(host) != -1) {
 	//  alert("asdasd")
@@ -63,7 +64,7 @@ if (document.baseURI.search(host) != -1) {
 		userId = document.baseURI.split('?')[1]
 		userId = userId.split('=')[1]
     cookies.set('userid',userId)
-    window.location.href = 'http://localhost:8080/home'
+    window.location.href = formateHost
 	} catch (error) {
 		console.log(error)
 		userId = cookies.get('userid')
