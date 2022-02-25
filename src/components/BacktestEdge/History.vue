@@ -311,59 +311,19 @@ export default {
 			)
 			if (res.status === 200) {
 				this.loading = false
+				let historyNameList = []
 				this.backtestList = res.data.results
 				if (this.backtestList.length != 0) {
 					this.backtestList.forEach((element) => {
+						historyNameList.push(element.name)
 						if (element.result !== '')
 							element.result = JSON.parse(element.result)
 					})
+					this.$store.commit('getBacktestName', historyNameList)
 				}
 				this.queryInfo.total = res.data.count
 			} else {
 				this.loading = false
-			}
-			this.getBacktestName()
-		},
-		async getBacktestListFre(strategy) {
-			this.loadTest = 'Loading...'
-			this.loading = true
-			let page = this.queryInfo.page
-			const res = await this.$http.get('/dev/backtest/?page=' + page)
-			if (res.status === 200) {
-				this.loading = false
-				this.backtestList = res.data.results
-				if (this.backtestList.length != 0) {
-					this.backtestList.forEach((element) => {
-						if (element.result !== '')
-							element.result = JSON.parse(element.result)
-					})
-				}
-				this.queryInfo.total = res.data.count
-			} else {
-				this.loading = false
-			}
-
-			this.getBacktestName()
-		},
-		async getBacktestName() {
-			const res = await this.$http.get('/dev/backtest/?ordering=-create_date')
-			if (res.status === 200) {
-				let historyArr = []
-				let total = res.data.count
-				if (total != 0) {
-					let times = Math.ceil(total / 10)
-
-					console.log('res.data.results', times)
-					for (let i = 1; i <= times; i++) {
-						const res = await this.$http.get(
-							'/dev/backtest/?ordering=-create_date&page=' + i
-						)
-						res.data.results.forEach((item) => {
-							historyArr.push(item.name)
-						})
-					}
-					this.$store.commit('getBacktestName', historyArr)
-				}
 			}
 		},
 		refreshHistory(id) {
