@@ -392,6 +392,9 @@ export default {
 		},
 		goTobacktestSetupForm(id) {
 			// backtestEditData
+			this.$refs.setUpChild.clearForm()
+			this.$refs.entryChild.clearForm()
+			this.$refs.exitChild.clearForm()
 			let vm = this
 			vm.activeName = 'first'
 			vm.backtestEditData = {}

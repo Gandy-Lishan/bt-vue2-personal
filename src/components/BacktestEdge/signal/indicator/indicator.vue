@@ -494,7 +494,6 @@ export default {
 					formatList.push(obj)
 				})
 			}
-			console.log('加载的表单', formatList)
 			return formatList
 		},
 		loadRiskList() {

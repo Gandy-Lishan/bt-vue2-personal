@@ -256,35 +256,40 @@ export default {
 					this.$refs.sentiChild.setDesciption()
 					let senti = this.$refs.sentiChild.saveCondition()
 					return (checked = senti)
-				} else if (
+				}
+				if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'CCI_like'
 				) {
 					this.$refs.cciChild.setDesciption()
 					let cci = this.$refs.cciChild.saveCondition()
 					return (checked = cci)
-				} else if (
+				}
+				if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'rsi'
 				) {
 					this.$refs.rsiChild.setDesciption()
 					let rsi = this.$refs.rsiChild.saveCondition()
 					return (checked = rsi)
-				} else if (
+				}
+				if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'MACD_like'
 				) {
 					this.$refs.macdChild.setDesciption()
 					let macd = this.$refs.macdChild.saveCondition()
 					return (checked = macd)
-				} else if (
+				}
+				if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'MovingAverage_like'
 				) {
 					this.$refs.maChild.setDesciption()
 					let ma = this.$refs.maChild.saveCondition()
 					return (checked = ma)
-				} else if (this.indicatorRadio === 'risk') {
+				}
+				if (this.indicatorRadio === 'risk') {
 					this.$refs.riskChild.setDesciption()
 					let risk = this.$refs.riskChild.saveCondition()
 					return (checked = risk)
@@ -316,9 +321,13 @@ export default {
 				edit.exit = data.exit
 				if (edit.exit.signals[0].analysis == 'Sentiment') {
 					this.sentiVal = edit.exit.signals[0].indicator
-				} else if (edit.exit.signals[0].analysis == 'Technical') {
+					return
+				}
+				if (edit.exit.signals[0].analysis == 'Technical') {
 					this.techVal = edit.exit.signals[0].indicator
-				} else if (edit.exit.signals[0].analysis == 'Exit') {
+					return
+				}
+				if (edit.exit.signals[0].analysis == 'Exit') {
 					this.$refs.indiChild.changeIndicatorChecked('Risk Control')
 					if (
 						edit.exit.signals[0].sc.take_profit &&
@@ -336,6 +345,7 @@ export default {
 					let obj = {}
 					obj.value = this.riskVal
 					this.$refs.indiChild.handleRiskSelect(obj)
+					return
 				}
 				// vm.editIndiData = edit
 				vm.$refs.indiChild.setEditData(edit)
@@ -343,36 +353,43 @@ export default {
 				if (edit.exit.signals[0].analysis == 'Sentiment') {
 					vm.indicatorRadio = 'sentiment'
 					vm.$refs.sentiChild.setEditData(edit)
-				} else if (
+				} 
+				if (
 					edit.exit.signals[0].analysis == 'Technical' &&
 					edit.exit.signals[0].indicator == 'Commodity Channel Index'
+					
 				) {
 					vm.indicatorRadio = 'technical'
 					vm.techIndiValue = 'CCI_like'
 					vm.$refs.cciChild.setEditData(edit)
-				} else if (
+					return
+				}  if (
 					edit.exit.signals[0].analysis == 'Technical' &&
 					edit.exit.signals[0].indicator == 'Relative Strength Index'
 				) {
 					vm.indicatorRadio = 'technical'
 					vm.techIndiValue = 'rsi'
 					vm.$refs.rsiChild.setEditData(edit)
-				} else if (
+					return
+				} if (
 					edit.exit.signals[0].analysis == 'Technical' &&
 					edit.exit.signals[0].indicator == 'Moving Average'
 				) {
 					vm.indicatorRadio = 'technical'
 					vm.techIndiValue = 'MovingAverage_like'
 					vm.$refs.maChild.setEditData(edit)
-				} else if (
+					return
+				}  if (
 					edit.exit.signals[0].analysis == 'Technical' &&
 					edit.exit.signals[0].indicator == 'MACD'
 				) {
 					vm.indicatorRadio = 'technical'
 					vm.techIndiValue = 'MACD_like'
 					vm.$refs.macdChild.setEditData(edit)
-				} else if (edit.exit.signals[0].analysis == 'Exit') {
+					return
+				} if (edit.exit.signals[0].analysis == 'Exit') {
 					this.$refs.riskChild.setEditData(edit)
+					return
 				}
 			})
 		}

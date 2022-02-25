@@ -236,28 +236,32 @@ export default {
 					this.$refs.sentiChild.setDesciption()
 					let senti = this.$refs.sentiChild.saveCondition()
 					return (checked = senti)
-				} else if (
+				}
+				if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'CCI_like'
 				) {
 					this.$refs.cciChild.setDesciption()
 					let cci = this.$refs.cciChild.saveCondition()
 					return (checked = cci)
-				} else if (
+				}
+				if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'rsi'
 				) {
 					this.$refs.rsiChild.setDesciption()
 					let rsi = this.$refs.rsiChild.saveCondition()
 					return (checked = rsi)
-				} else if (
+				}
+				if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'MACD_like'
 				) {
 					this.$refs.macdChild.setDesciption()
 					let macd = this.$refs.macdChild.saveCondition()
 					return (checked = macd)
-				} else if (
+				}
+				if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'MovingAverage_like'
 				) {
@@ -309,34 +313,43 @@ export default {
 				if (edit.entry.signals[0].analysis == 'Sentiment') {
 					vm.indicatorRadio = 'sentiment'
 					vm.$refs.sentiChild.setEditData(edit)
-				} else if (
+					return
+				}
+				if (
 					edit.entry.signals[0].analysis == 'Technical' &&
 					edit.entry.signals[0].indicator == 'Commodity Channel Index'
 				) {
 					vm.indicatorRadio = 'technical'
 					vm.techIndiValue = 'CCI_like'
 					vm.$refs.cciChild.setEditData(edit)
-				} else if (
+					return
+				}
+				if (
 					edit.entry.signals[0].analysis == 'Technical' &&
 					edit.entry.signals[0].indicator == 'Relative Strength Index'
 				) {
 					vm.indicatorRadio = 'technical'
 					vm.techIndiValue = 'rsi'
 					vm.$refs.rsiChild.setEditData(edit)
-				} else if (
+					return
+				}
+				if (
 					edit.entry.signals[0].analysis == 'Technical' &&
 					edit.entry.signals[0].indicator == 'Moving Average'
 				) {
 					vm.indicatorRadio = 'technical'
 					vm.techIndiValue = 'MovingAverage_like'
 					vm.$refs.maChild.setEditData(edit)
-				} else if (
+					return
+				}
+				if (
 					edit.entry.signals[0].analysis == 'Technical' &&
 					edit.entry.signals[0].indicator == 'MACD'
 				) {
 					vm.indicatorRadio = 'technical'
 					vm.techIndiValue = 'MACD_like'
 					vm.$refs.macdChild.setEditData(edit)
+					return
 				}
 				// if (vm.editIndiData.entry.signals[0].analysis === 'Technical') {
 				// 	this.$refs.maChild.setEditData(vm.editIndiData)
