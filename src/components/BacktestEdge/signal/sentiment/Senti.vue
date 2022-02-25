@@ -331,7 +331,6 @@ export default {
 			let condition = this.conditions[this.senti.condition].label
 			let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
 			this.description = `${criteria} ${direction} ${sentiVal} ${ma} ${period} ${condition} ${this.senti.value}`
-			console.log('描述', this.description)
 		}, 500),
 		getConditionRadio(val) {
 			this.clearFormValidate()

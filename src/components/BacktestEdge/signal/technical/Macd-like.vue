@@ -28,14 +28,14 @@
 				<el-form-item>
 					<el-radio
 						v-model="conditionRadio"
-						label="Indicator Value"
+						label="MACD Value"
 						@change="getConditionRadio"
 					></el-radio>
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							:disabled="!(conditionRadio === 'Indicator Value')"
+							:disabled="!(conditionRadio === 'MACD Value')"
 							v-model="tech.condition"
 							size="mini"
 							filterable
@@ -54,7 +54,7 @@
 				<div class="conditionInput">
 					<el-form-item prop="value">
 						<el-input
-							:disabled="!(conditionRadio === 'Indicator Value')"
+							:disabled="!(conditionRadio === 'MACD Value')"
 							@input="setDesciption"
 							v-model="tech.value"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
@@ -67,14 +67,14 @@
 				<el-form-item>
 					<el-radio
 						v-model="conditionRadio"
-						label="Indicator Value "
+						label="MACD Value "
 						@change="getConditionRadio"
 					></el-radio>
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							:disabled="!(conditionRadio === 'Indicator Value ')"
+							:disabled="!(conditionRadio === 'MACD Value ')"
 							v-model="tech.condition"
 							size="mini"
 							filterable
@@ -92,46 +92,7 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item>
-						<el-button type="text"> Indicator Signal line </el-button>
-					</el-form-item>
-				</div>
-			</div>
-			<div class="condition-container">
-				<el-form-item>
-					<el-radio
-						v-model="conditionRadio"
-						label="Indicator Hist"
-						@change="getConditionRadio"
-					></el-radio>
-				</el-form-item>
-				<div class="conditionSelect">
-					<el-form-item>
-						<el-select
-							:disabled="!(conditionRadio === 'Indicator Hist')"
-							v-model="histCondition"
-							size="mini"
-							filterable
-							placeholder="Please select condition"
-						>
-							<el-option
-								v-for="item in conditions"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value"
-							>
-							</el-option>
-						</el-select>
-					</el-form-item>
-				</div>
-				<div class="conditionInput">
-					<el-form-item>
-						<el-input
-							:disabled="!(conditionRadio === 'Indicator Hist')"
-							@input="setDesciption"
-							v-model="tech.value"
-							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
-							placeholder="Input Value"
-						></el-input>
+						<el-button type="text"> MACD Signal line </el-button>
 					</el-form-item>
 				</div>
 			</div>
@@ -170,7 +131,7 @@ export default {
 				{ value: 3, label: 'CrossAbove' },
 				{ value: 4, label: 'CrossBelow' }
 			],
-			conditionRadio: 'Indicator Value',
+			conditionRadio: 'MACD Value',
 			disabled: false,
 			description: '',
 			editTechVal: '',
@@ -188,7 +149,7 @@ export default {
 		// 			this.disabled = false
 		// 			this.tech.value = newVal[this.criteria].signals[0].value
 		// 			if (this.tech.value === 'MACDSL') {
-		// 				this.conditionRadio = ' Indicator Value '
+		// 				this.conditionRadio = ' MACD Value '
 		// 				this.disabled = true
 		// 			}
 		// 			this.setDesciption()
@@ -224,10 +185,10 @@ export default {
 		}, 500),
 		getConditionRadio(val) {
 			CIQ.store.commit('setConditionRadio',val)
-			if (val === ' Indicator Value ') {
+			if (val === ' MACD Value ') {
 				this.tech.value = 'MACDSL'
 				this.disabled = !this.disabled
-			} else if (val === ' Indicator Value') {
+			} else if (val === ' MACD Value') {
 				this.tech.value = 0
 				this.disabled = !this.disabled
 			}
@@ -271,7 +232,7 @@ export default {
 				this.disabled = false
 				this.tech.value = newVal[this.criteria].signals[0].value
 				if (this.tech.value === 'MACDSL') {
-					this.conditionRadio = ' Indicator Value '
+					this.conditionRadio = ' MACD Value '
 					this.disabled = true
 				}
 				this.editTechVal = newVal[this.criteria].signals[0].indicator

@@ -277,28 +277,24 @@ export default {
 							['Relative Strength Index', 'rsi'],
 							['Moving Average', 'ma'],
 							['MACD', 'macd'],
-							['RC', '']
+							['RC','']
 						])
 
 						const newMap = new Map(set)
-
-						var entrySignal = CIQ.indicatorList.find((item) => {
-							return item.chart_name == backtestData.entry.signals[0].indicator
-						})
-						var exitSignal = CIQ.indicatorList.find((item) => {
-							return item.chart_name == backtestData.exit.signals[0].indicator
-						})
-						if (!entrySignal) {
+			
+						var entrySignal = CIQ.indicatorList.find(item=> {return item.chart_name == backtestData.entry.signals[0].indicator})
+						var exitSignal = CIQ.indicatorList.find(item=> {return item.chart_name == backtestData.exit.signals[0].indicator})
+						if(!entrySignal){
 							for (let i of newMap.entries()) {
 								if (backtestData.entry.signals[0].indicator === i[0]) {
-									entrySignal = { url: i[1] }
+									entrySignal = {url:i[1]}
 								}
 							}
 						}
-						if (!exitSignal) {
+						if(!exitSignal){
 							for (let i of newMap.entries()) {
 								if (backtestData.exit.signals[0].indicator === i[0]) {
-									exitSignal = { url: i[1] }
+									exitSignal = {url:i[1]}
 								}
 							}
 						}
@@ -358,8 +354,6 @@ export default {
 									vm.loading = false
 									vm.goToHistoryForm()
 									vm.$refs.historyChild.refreshHistory(res.data.id)
-									// 刷新 favorite 表单
-									vm.$refs.favoriteChild.getBacktestList()
 									// 保存成功之后应该清除表单的所有数据
 									vm.clearForm()
 									// 并且清除 old_uuid

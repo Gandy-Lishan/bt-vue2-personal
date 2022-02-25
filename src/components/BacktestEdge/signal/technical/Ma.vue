@@ -315,10 +315,9 @@ export default {
 			// this.conditionRadio == 'Moving Average' ? this.tech.ma_period : ''
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${this.conditionRadio} ${ma_period} ${condition} Moving Average ${period}`
-			console.log('描述', this.description)
+			
 		}, 500),
 		getMaPeriodValue(val) {
-			console.log('getMaPeriodValue')
 			// this.period = val
 			// this.tech.ma_period = this.period
 			this.tech.ma_period = val
@@ -468,7 +467,6 @@ export default {
 			}
 		},
 		getSCvalue(val) {
-			console.log('getSCvalue')
 			if (this.conditionRadio === 'Symbol Close') {
 				//   delete this.sc.ma_period
 				// const obj = {}

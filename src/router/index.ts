@@ -25,11 +25,7 @@ router.beforeEach((to, from, next) => {
 			}
 		).then(res=>{
       CIQ.store = store
-      console.log('init getallsymbol')
       CIQ.indicatorList = res.data
-   
-          console.log("log",document.referrer)
-    console.log(document.baseURI);
       return next()
 		})
     
@@ -50,8 +46,6 @@ router.beforeEach((to, from, next) => {
  // let host = "/[a-z]*\.sentimentrader\.com/"/
 let host = /.*/
 // console.log('to from next',to, from, next);
-console.log('log', document.referrer)
-console.log('baseURL', document.baseURI)
 let formateHost = location.origin
 let loginUrl = 'https://users.sentdevsite.com/login'
 if (document.baseURI.search(host) != -1) {
@@ -78,9 +72,6 @@ if (document.baseURI.search(host) != -1) {
 	axios
 		.get('/dev/user/?userid=' + userId)
 		.then((res) => {
-			console.log('相应数据', res)
-			console.log('查询到的ID', res.data.userid)
-			console.log('过期时间', res.data.session_expiration)
 			if (res.status === 200) {
 				let oldUserid = cookies.get('userid')
 				if (oldUserid == res.data.userid) {
@@ -99,7 +90,6 @@ if (document.baseURI.search(host) != -1) {
 				// 用户不存在
 				window.location.href = loginUrl
 			}
-			console.log('cookie', document.cookie)
 		})
 		.catch((error) => {
 			console.log(error)

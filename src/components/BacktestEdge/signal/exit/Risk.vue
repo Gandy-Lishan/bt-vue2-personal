@@ -76,7 +76,6 @@ export default {
 	watch: {
 		timeFrame: {
 			handler(newVal) {
-				console.log('timeFrame', newVal)
 				if (newVal == 'Daily') {
 					this.timeFra = '(days)'
 				} else if (newVal == 'Weekly') {
@@ -150,7 +149,6 @@ export default {
 			if (value2 && riskVal == arr[3]) {
 				this.description = `${criteria} ${direction} Profit ${value1} / Loss ${value2}`
 			}
-			console.log('描述', this.description)
 		}, 500),
 		saveCondition() {
 			let checked = true
@@ -190,7 +188,6 @@ export default {
 			}
 		},
 		setEditData(newVal) {
-			console.log('编辑的RISK数据包', newVal)
 			if (JSON.stringify(newVal) != '{}') {
 				if (
 					newVal.exit.signals[0].sc.take_profit &&

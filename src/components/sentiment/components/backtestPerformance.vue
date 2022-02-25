@@ -284,7 +284,6 @@ export default {
 	methods: {
 		handleClick(tab, event) {},
 		loadMarker(tradeData) {
-			console.log('loadChart: performance')
 			CIQ.loadChart(tradeData.markerSet)
 			CIQ.addMarker()
 		},

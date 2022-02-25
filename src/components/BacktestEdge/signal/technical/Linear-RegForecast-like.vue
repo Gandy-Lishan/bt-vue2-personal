@@ -64,7 +64,7 @@ export default {
 			tech: {
 				ids: { ma_category: 'SMA' },
 				condition: 0,
-                value: ''
+				value: ''
 			},
 			conditions: [
 				{ value: 0, label: '>' },
@@ -191,10 +191,8 @@ export default {
 			this.conditionRadio == 'Moving Average' ? this.tech.ma_period : ''
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${ma_period} ${condition} ${this.conditionRadio} ${this.tech.period}`
-			console.log('描述', this.description)
 		}, 500),
 		getMaPeriodValue(val) {
-			console.log('getMaPeriodValue')
 			this.period = val
 			this.tech.ma_period = this.period
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -343,7 +341,6 @@ export default {
 			}
 		},
 		getSCvalue(val) {
-			console.log('getSCvalue')
 			if (this.conditionRadio === 'Symbol Close') {
 				//   delete this.sc.ma_period
 				// const obj = {}
@@ -378,7 +375,6 @@ export default {
 			}
 		},
 		getMaValue(val) {
-			console.log('getMaValue')
 			this.tech.period = val
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
@@ -405,7 +401,6 @@ export default {
 		},
 		saveCondition() {
 			let checked = true
-			console.log('保存 condition')
 			if (this.conditionRadio === 'Symbol Close') {
 				let ids = {}
 				if (this.tech.period) {

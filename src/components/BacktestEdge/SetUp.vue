@@ -404,10 +404,9 @@ export default {
 	},
 	methods: {
 		clearForm() {
+			this.clearFormValidate()
 			Object.assign(this.$data, this.$options.data())
 			this.getEndDate()
-
-			this.clearFormValidate()
 		},
 		getDirection(val) {
 			// direction 设置到 vuex
@@ -491,12 +490,9 @@ export default {
 		},
 		formateStartDate(val) {
 			this.bd.start_date = timestampToTime(val)
-
-			console.log('开始时间', this.bd.start_date)
 		},
 		formateEndDate(val) {
 			this.bd.end_date = timestampToTime(val)
-			console.log('开始时间', this.bd.end_date)
 		},
 		getEndDate() {
 			this.bd.end_date = timestampToTime(new Date())
@@ -688,18 +684,10 @@ export default {
 
 			if (CIQ.indicatorList) {
 				if (CIQ.indicatorList.length != 0) {
-					console.log(
-						'data already in indicatorList from entry-form',
-						CIQ.indicatorList.length
-					)
 					indicatorList = this.$store.state.indicatorsList
 					indicatorList = CIQ.indicatorList
 				}
 			} else {
-				console.log(
-					'data is not in indicatorList from entry-form',
-					CIQ.indicatorList
-				)
 				const res = await vm.$http.get(
 					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
 					{
@@ -768,18 +756,10 @@ export default {
 			var indicatorList = []
 			if (CIQ.indicatorList) {
 				if (CIQ.indicatorList.length != 0) {
-					console.log(
-						'data already in indicatorList from entry-form',
-						CIQ.indicatorList.length
-					)
 					indicatorList = this.$store.state.indicatorsList
 					indicatorList = CIQ.indicatorList
 				}
 			} else {
-				console.log(
-					'data is not in indicatorList from entry-form',
-					CIQ.indicatorList
-				)
 				const res = await vm.$http.get(
 					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
 					{

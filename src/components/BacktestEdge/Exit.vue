@@ -37,7 +37,7 @@
 			ref="cciChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-show="indicatorRadio === 'technical' && techIndiValue === 'CCI_like'"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'cci'"
 		></cci>
 		<rsi
 			:direction="fd.direction"
@@ -53,7 +53,7 @@
 			ref="macdChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-show="indicatorRadio === 'technical' && techIndiValue === 'MACD_like'"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'macd'"
 		></macd>
 		<ma
 			:direction="fd.direction"
@@ -62,7 +62,7 @@
 			:techUrl="techUrl"
 			:techVal="techVal"
 			v-show="
-				indicatorRadio === 'technical' && techIndiValue === 'MovingAverage_like'
+				indicatorRadio === 'technical' && techIndiValue === 'ma'
 			"
 		></ma>
 		<risk
@@ -74,7 +74,7 @@
 			:riskVal="riskVal"
 			v-bind="$attrs"
 		></risk>
-		<bollinger-bands-like
+		<!-- <bollinger-bands-like
 			:direction="fd.direction"
 			:criteria="'entry'"
 			ref="bollBandsLikeChild"
@@ -136,7 +136,7 @@
 			:techUrl="techUrl"
 			:techVal="techVal"
 			v-show="indicatorRadio === 'technical' && techIndiValue === 'LRF_like'"
-		></linear-regForecast-like>
+		></linear-regForecast-like> -->
 	</div>
 </template>
 <script>
@@ -244,9 +244,7 @@ export default {
 		},
 		setDirection(data) {
 			this.fd.direction = data
-			console.log('exit的direction', data)
-		},
-		saveBacktestData() {
+		},		saveBacktestData() {
 			let checked = true
 			// 将选择的 indicator 保存到 vuex 中
 			let indi = this.$refs.indiChild.saveIndicator()
@@ -256,40 +254,35 @@ export default {
 					this.$refs.sentiChild.setDesciption()
 					let senti = this.$refs.sentiChild.saveCondition()
 					return (checked = senti)
-				}
-				if (
+				} else if (
 					this.indicatorRadio === 'technical' &&
-					this.techIndiValue === 'CCI_like'
+					this.techIndiValue === 'cci'
 				) {
 					this.$refs.cciChild.setDesciption()
 					let cci = this.$refs.cciChild.saveCondition()
 					return (checked = cci)
-				}
-				if (
+				} else if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'rsi'
 				) {
 					this.$refs.rsiChild.setDesciption()
 					let rsi = this.$refs.rsiChild.saveCondition()
 					return (checked = rsi)
-				}
-				if (
+				} else if (
 					this.indicatorRadio === 'technical' &&
-					this.techIndiValue === 'MACD_like'
+					this.techIndiValue === 'macd'
 				) {
 					this.$refs.macdChild.setDesciption()
 					let macd = this.$refs.macdChild.saveCondition()
 					return (checked = macd)
-				}
-				if (
+				} else if (
 					this.indicatorRadio === 'technical' &&
-					this.techIndiValue === 'MovingAverage_like'
+					this.techIndiValue === 'ma'
 				) {
 					this.$refs.maChild.setDesciption()
 					let ma = this.$refs.maChild.saveCondition()
 					return (checked = ma)
-				}
-				if (this.indicatorRadio === 'risk') {
+				} else if (this.indicatorRadio === 'risk') {
 					this.$refs.riskChild.setDesciption()
 					let risk = this.$refs.riskChild.saveCondition()
 					return (checked = risk)
@@ -321,13 +314,9 @@ export default {
 				edit.exit = data.exit
 				if (edit.exit.signals[0].analysis == 'Sentiment') {
 					this.sentiVal = edit.exit.signals[0].indicator
-					return
-				}
-				if (edit.exit.signals[0].analysis == 'Technical') {
+				} else if (edit.exit.signals[0].analysis == 'Technical') {
 					this.techVal = edit.exit.signals[0].indicator
-					return
-				}
-				if (edit.exit.signals[0].analysis == 'Exit') {
+				} else if (edit.exit.signals[0].analysis == 'Exit') {
 					this.$refs.indiChild.changeIndicatorChecked('Risk Control')
 					if (
 						edit.exit.signals[0].sc.take_profit &&
@@ -345,7 +334,6 @@ export default {
 					let obj = {}
 					obj.value = this.riskVal
 					this.$refs.indiChild.handleRiskSelect(obj)
-					return
 				}
 				// vm.editIndiData = edit
 				vm.$refs.indiChild.setEditData(edit)
@@ -353,43 +341,36 @@ export default {
 				if (edit.exit.signals[0].analysis == 'Sentiment') {
 					vm.indicatorRadio = 'sentiment'
 					vm.$refs.sentiChild.setEditData(edit)
-				} 
-				if (
+				} else if (
 					edit.exit.signals[0].analysis == 'Technical' &&
 					edit.exit.signals[0].indicator == 'Commodity Channel Index'
-					
 				) {
 					vm.indicatorRadio = 'technical'
-					vm.techIndiValue = 'CCI_like'
+					vm.techIndiValue = 'cci'
 					vm.$refs.cciChild.setEditData(edit)
-					return
-				}  if (
+				} else if (
 					edit.exit.signals[0].analysis == 'Technical' &&
 					edit.exit.signals[0].indicator == 'Relative Strength Index'
 				) {
 					vm.indicatorRadio = 'technical'
 					vm.techIndiValue = 'rsi'
 					vm.$refs.rsiChild.setEditData(edit)
-					return
-				} if (
+				} else if (
 					edit.exit.signals[0].analysis == 'Technical' &&
 					edit.exit.signals[0].indicator == 'Moving Average'
 				) {
 					vm.indicatorRadio = 'technical'
-					vm.techIndiValue = 'MovingAverage_like'
+					vm.techIndiValue = 'ma'
 					vm.$refs.maChild.setEditData(edit)
-					return
-				}  if (
+				} else if (
 					edit.exit.signals[0].analysis == 'Technical' &&
 					edit.exit.signals[0].indicator == 'MACD'
 				) {
 					vm.indicatorRadio = 'technical'
-					vm.techIndiValue = 'MACD_like'
+					vm.techIndiValue = 'macd'
 					vm.$refs.macdChild.setEditData(edit)
-					return
-				} if (edit.exit.signals[0].analysis == 'Exit') {
+				} else if (edit.exit.signals[0].analysis == 'Exit') {
 					this.$refs.riskChild.setEditData(edit)
-					return
 				}
 			})
 		}

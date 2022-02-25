@@ -180,7 +180,6 @@ export default {
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${condition} ${this.tech.value}`
-			console.log('描述', this.description)
 		}, 500),
 		getConditionRadio(val) {
 			if (val === ' Indicator Value ') {

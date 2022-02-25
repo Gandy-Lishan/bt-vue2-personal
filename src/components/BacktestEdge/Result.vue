@@ -153,7 +153,6 @@ export default {
 		},
 		editFrequency: {
 			handler(newVal) {
-				console.log('Frequency 数据', newVal)
 			},
 			immediate: true,
 			deep: true

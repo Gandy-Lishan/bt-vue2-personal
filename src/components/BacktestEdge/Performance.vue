@@ -351,7 +351,6 @@ export default {
 								if (typeof res.data == String) {
 									JSON.parse(res.data)
 								}
-								console.log('返回数据', res.data)
 								initalData = res.data
 
 								// -------------------------------------  text ----------------
@@ -424,7 +423,7 @@ export default {
 							}
 						})
 						.catch((error) => {
-							console.log('服务器报错', error)
+							console.error('服务器报错', error)
 							// 清空数据并且进行提示
 							vm.tableData = []
 							vm.tradesData = []

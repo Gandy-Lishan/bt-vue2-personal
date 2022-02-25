@@ -118,7 +118,8 @@ export default new Vuex.Store({
 		fdDialogData: {},
 		sentimentIndicatorList: [],
 		backtestNameList: [],
-		isSavaDescription: false
+		isSavaDescription: false,
+		formateTechnicalList: []
 	},
 	getters: {
 		getterIsSavaDescription: (state) => {
@@ -362,10 +363,8 @@ export default new Vuex.Store({
 				}
 				data = Object.assign(data, newData)
 				state.backtestInfo[criteria]['signals'][index] = data
-				//console.log('监听数据', state.backtestInfo[criteria]['signals'][index])
 
 			}
-			//console.log(state.backtestInfo.entry.signals);
 		},
 		setFd(state, obj) {
 			let criteria = obj.criteria
@@ -398,14 +397,13 @@ export default new Vuex.Store({
 				obj.value
 		},
 		getRiskValue(state, obj) {
-			console.log("vuex",obj);
-			state.backtestInfo.exit.signals[obj.index].riskIndicator =
-				obj.value
-				console.log("当前backtestInfo",state.backtestInfo);
+			
+			state.backtestInfo.exit.signals[obj.index].riskIndicator = obj.value
+				
 				
 		},
 		getSentiValue(state, obj) {
-			console.log("再次保存后的报错",state.backtestInfo);
+			
 			state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator =
 				obj.value
 		},
@@ -453,6 +451,7 @@ export default new Vuex.Store({
 			state.isClearForm = !state.isClearForm
 		},
 		saveCondition(state, obj) {
+			console.log("保存 condition");
 			let criteria = obj.criteria
 			let index = obj.index
 			delete obj.criteria
@@ -471,7 +470,6 @@ export default new Vuex.Store({
 			for(let key in obj) {
 				state.backtestInfo[criteria].signals[index][key] = obj[key]
 			}
-			
 		},
 		saveDescription(state, desObj) {
 			state.backtestInfo[desObj.criteria+'_description'] = desObj.description
@@ -510,8 +508,7 @@ export default new Vuex.Store({
 				direction: 'Short',
 				frequency: 'Daily',
 				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
-			},
-			console.log("初始化 backtestInfo", state.backtestInfo);
+			}
 			
 		},
 		getBacktestName(state, list) {
@@ -522,10 +519,11 @@ export default new Vuex.Store({
 		},
 		clearBacktestUuid(state) {
 			if(state.backtestInfo.old_uuid) {
-				console.log("有旧的uuid",state.backtestInfo);
 			delete state.backtestInfo.old_uuid}
 			
-			console.log("保存成功后的backtest",state.backtestInfo);
+		},
+		saveFormatTechnicalList(state,list) {
+			state.formateTechnicalList = list
 		}
 
 	},

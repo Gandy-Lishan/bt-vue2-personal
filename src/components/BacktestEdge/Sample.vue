@@ -247,7 +247,6 @@ export default {
 			let vm = this
 			this.$http.get('/dev/report/?uuid=' + row.id).then((res) => {
 				const des = res.data
-				console.log('查看数据', des)
 				let str = ``
 				for (let key in des) {
 					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
@@ -359,7 +358,6 @@ export default {
 				})
 		},
 		copyBacktest: throttle(function (row) {
-			console.log('row', row)
 			let params = {}
 			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				if (res.status === 200) {
@@ -409,7 +407,6 @@ export default {
 				this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
-					console.log(JSON.parse(res.data.indicator_layout))
 					if (res.data.indicator_layout) {
 						this.restoreIndicatorLayout(
 							JSON.parse(res.data.indicator_layout),

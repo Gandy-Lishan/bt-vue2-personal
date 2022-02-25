@@ -35,7 +35,7 @@
 			ref="cciChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-show="indicatorRadio === 'technical' && techIndiValue === 'CCI_like'"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'cci'"
 		></cci>
 		<rsi
 			:direction="fd.direction"
@@ -51,7 +51,7 @@
 			ref="macdChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-show="indicatorRadio === 'technical' && techIndiValue === 'MACD_like'"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'macd'"
 		></macd>
 		<ma
 			:direction="fd.direction"
@@ -60,10 +60,10 @@
 			:techUrl="techUrl"
 			:techVal="techVal"
 			v-show="
-				indicatorRadio === 'technical' && techIndiValue === 'MovingAverage_like'
+				indicatorRadio === 'technical' && techIndiValue === 'ma'
 			"
 		></ma>
-		<bollinger-bands-like
+		<!-- <bollinger-bands-like
 			:direction="fd.direction"
 			:criteria="'entry'"
 			ref="bollBandsLikeChild"
@@ -125,7 +125,7 @@
 			:techUrl="techUrl"
 			:techVal="techVal"
 			v-show="indicatorRadio === 'technical' && techIndiValue === 'LRF_like'"
-		></linear-regForecast-like>
+		></linear-regForecast-like> -->
 	</div>
 </template>
 <script>
@@ -202,7 +202,6 @@ export default {
 			this.$refs.rsiChild.clearForm()
 		},
 		setDirection(val) {
-			console.log('entry chang', val)
 			this.fd.direction = val
 		},
 		getExitDirection(val) {
@@ -236,34 +235,30 @@ export default {
 					this.$refs.sentiChild.setDesciption()
 					let senti = this.$refs.sentiChild.saveCondition()
 					return (checked = senti)
-				}
-				if (
+				} else if (
 					this.indicatorRadio === 'technical' &&
-					this.techIndiValue === 'CCI_like'
+					this.techIndiValue === 'cci'
 				) {
 					this.$refs.cciChild.setDesciption()
 					let cci = this.$refs.cciChild.saveCondition()
 					return (checked = cci)
-				}
-				if (
+				} else if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'rsi'
 				) {
 					this.$refs.rsiChild.setDesciption()
 					let rsi = this.$refs.rsiChild.saveCondition()
 					return (checked = rsi)
-				}
-				if (
+				} else if (
 					this.indicatorRadio === 'technical' &&
-					this.techIndiValue === 'MACD_like'
+					this.techIndiValue === 'macd'
 				) {
 					this.$refs.macdChild.setDesciption()
 					let macd = this.$refs.macdChild.saveCondition()
 					return (checked = macd)
-				}
-				if (
+				} else if (
 					this.indicatorRadio === 'technical' &&
-					this.techIndiValue === 'MovingAverage_like'
+					this.techIndiValue === 'ma'
 				) {
 					this.$refs.maChild.setDesciption()
 					let ma = this.$refs.maChild.saveCondition()
@@ -313,43 +308,34 @@ export default {
 				if (edit.entry.signals[0].analysis == 'Sentiment') {
 					vm.indicatorRadio = 'sentiment'
 					vm.$refs.sentiChild.setEditData(edit)
-					return
-				}
-				if (
+				} else if (
 					edit.entry.signals[0].analysis == 'Technical' &&
 					edit.entry.signals[0].indicator == 'Commodity Channel Index'
 				) {
 					vm.indicatorRadio = 'technical'
-					vm.techIndiValue = 'CCI_like'
+					vm.techIndiValue = 'cci'
 					vm.$refs.cciChild.setEditData(edit)
-					return
-				}
-				if (
+				} else if (
 					edit.entry.signals[0].analysis == 'Technical' &&
 					edit.entry.signals[0].indicator == 'Relative Strength Index'
 				) {
 					vm.indicatorRadio = 'technical'
 					vm.techIndiValue = 'rsi'
 					vm.$refs.rsiChild.setEditData(edit)
-					return
-				}
-				if (
+				} else if (
 					edit.entry.signals[0].analysis == 'Technical' &&
 					edit.entry.signals[0].indicator == 'Moving Average'
 				) {
 					vm.indicatorRadio = 'technical'
-					vm.techIndiValue = 'MovingAverage_like'
+					vm.techIndiValue = 'ma'
 					vm.$refs.maChild.setEditData(edit)
-					return
-				}
-				if (
+				} else if (
 					edit.entry.signals[0].analysis == 'Technical' &&
 					edit.entry.signals[0].indicator == 'MACD'
 				) {
 					vm.indicatorRadio = 'technical'
-					vm.techIndiValue = 'MACD_like'
+					vm.techIndiValue = 'macd'
 					vm.$refs.macdChild.setEditData(edit)
-					return
 				}
 				// if (vm.editIndiData.entry.signals[0].analysis === 'Technical') {
 				// 	this.$refs.maChild.setEditData(vm.editIndiData)
