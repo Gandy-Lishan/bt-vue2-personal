@@ -1,21 +1,22 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+	<div id="app">
+		<router-view></router-view>
+	</div>
 </template>
 <script>
 export default {
-  name: 'app',
-  created(){
-    // this.loadSentimentList()
-    // this.loadIndexsList()
-    // this.loadStocksList()
-  },
-  methods:{
+	name: 'app',
+	created() {
+		// this.loadSentimentList()
+		// this.loadIndexsList()
+		// this.loadStocksList()
+	},
+	methods: {
 		loadSentimentList() {
 			const vm = this
-			
-				vm.$http.get(
+
+			vm.$http
+				.get(
 					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
 					{
 						auth: {
@@ -23,16 +24,15 @@ export default {
 							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
 						}
 					}
-				).then((res) => {
-          
-          this.$store.commit('getIndicatorsList', res.data)
-          console.log("App.vue loadSentimentList: ")
+				)
+				.then((res) => {
+					this.$store.commit('getIndicatorsList', res.data)
 				})
 				.catch((error) => {
 					console.warn(error)
 				})
 		},
-    loadIndexsList() {
+		loadIndexsList() {
 			this.$http
 				.get(
 					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
@@ -44,16 +44,13 @@ export default {
 					}
 				)
 				.then((res) => {
-          
-					this.$store.commit('getIndexsList',res.data);
-          console.log("App.vue loadIndexList: ")
+					this.$store.commit('getIndexsList', res.data)
 				})
 				.catch((error) => {
 					console.warn(error)
 				})
-    },
-    loadStocksList() {
-      
+		},
+		loadStocksList() {
 			this.$http
 				.get(
 					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks',
@@ -65,17 +62,14 @@ export default {
 					}
 				)
 				.then((res) => {
-          
-          this.$store.commit('getStocksList',res.data);
-          console.log("App.vue loadSymbolList: ")
+					this.$store.commit('getStocksList', res.data)
 				})
 				.catch((error) => {
 					console.warn(error)
 				})
-		},
-  }
+		}
+	}
 }
-
 </script>
 <style lang="scss">
 @import '../node_modules/chartiq/css/normalize.css';
@@ -84,8 +78,8 @@ export default {
 @import '../node_modules/chartiq/css/chartiq.css'; // Chart UI
 @import '../node_modules/chartiq/st-development/css/ST-chartiq.css';
 #app {
-    height: 100vh;
-    overflow-y: auto;
-    overflow-x: hidden;
+	height: 100vh;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 </style>

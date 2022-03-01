@@ -1,14 +1,14 @@
 <template>
 	<div class="exit-container">
 		<p class="criteria-title">Exit Criteria</p>
-		<el-form :model="fd" :rules="exitFormRules" ref="exitForm">
+		<el-form :model="fd" ref="exitForm">
 			<div class="radioBox">
-				<el-form-item label="Direction:" prop="direction">
+				<!-- <el-form-item label="Direction:" prop="direction">
 					<el-radio-group v-model="fd.direction" disabled>
 						<el-radio label="Long">Long</el-radio>
 						<el-radio label="Short">Short</el-radio>
 					</el-radio-group>
-				</el-form-item>
+				</el-form-item> -->
 			</div>
 		</el-form>
 		<indicator
@@ -18,76 +18,160 @@
 			@getTechUrl="getTechUrl"
 			@getSentiVal="getSentiVal"
 			@getTechVal="getTechVal"
+			@getRiskVal="getRiskVal"
 			@getTechIndiValue="getTechIndiValue"
+			@getRiskIndiValue="getRiskIndiValue"
 			@getIndicatorRadio="getIndicatorRadio"
 		></indicator>
 		<senti
 			:criteria="'exit'"
+			:direction="fd.direction"
 			ref="sentiChild"
 			:sentiUrl="sentiUrl"
 			:sentiVal="sentiVal"
-			v-if="indicatorRadio === 'sentiment'"
+			v-show="indicatorRadio === 'sentiment'"
 		></senti>
 		<cci
+			:direction="fd.direction"
 			:criteria="'exit'"
 			ref="cciChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-if="indicatorRadio === 'technical' && techIndiValue === 'cci'"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'cci'"
 		></cci>
 		<rsi
+			:direction="fd.direction"
 			:criteria="'exit'"
 			ref="rsiChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-if="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'rsi'"
 		></rsi>
 		<macd
+			:direction="fd.direction"
 			:criteria="'exit'"
 			ref="macdChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-if="indicatorRadio === 'technical' && techIndiValue === 'macd'"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'macd'"
 		></macd>
 		<ma
+			:direction="fd.direction"
 			:criteria="'exit'"
 			ref="maChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-if="indicatorRadio === 'technical' && techIndiValue === 'ma'"
+			v-show="
+				indicatorRadio === 'technical' && techIndiValue === 'ma'
+			"
 		></ma>
+		<risk
+			v-show="indicatorRadio === 'risk'"
+			ref="riskChild"
+			:direction="fd.direction"
+			:criteria="'exit'"
+			:riskIndiValue="riskIndiValue"
+			:riskVal="riskVal"
+			v-bind="$attrs"
+		></risk>
+		<!-- <bollinger-bands-like
+			:direction="fd.direction"
+			:criteria="'entry'"
+			ref="bollBandsLikeChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-show="
+				indicatorRadio === 'technical' &&
+				techIndiValue === 'BollingerBands_like'
+			"
+		></bollinger-bands-like>
+		<ehler-fisher-transform-like
+			:direction="fd.direction"
+			:criteria="'entry'"
+			ref="EFTLikeChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'EFT_like'"
+		></ehler-fisher-transform-like>
+		<stochastic-momentum-index-like
+			:direction="fd.direction"
+			:criteria="'entry'"
+			ref="stochasticsLikeChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-show="
+				indicatorRadio === 'technical' && techIndiValue === 'Stochastics_like'
+			"
+		></stochastic-momentum-index-like>
+		<ADX-or-DMS-Like
+			:direction="fd.direction"
+			:criteria="'entry'"
+			ref="ADXLikeChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'ADX_like'"
+		></ADX-or-DMS-Like>
+		<elder-ray-index-like
+			:direction="fd.direction"
+			:criteria="'entry'"
+			ref="ERILikeChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'ERI_like'"
+		></elder-ray-index-like>
+		<alligator-like
+			:direction="fd.direction"
+			:criteria="'entry'"
+			ref="aligatorLikeChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-show="
+				indicatorRadio === 'technical' && techIndiValue === 'Aligator_like'
+			"
+		></alligator-like>
+		<linear-regForecast-like
+			:direction="fd.direction"
+			:criteria="'entry'"
+			ref="LRFLikeChild"
+			:techUrl="techUrl"
+			:techVal="techVal"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'LRF_like'"
+		></linear-regForecast-like> -->
 	</div>
 </template>
 <script>
-import indicator from '@/components/BacktestEdge/signal/indicator/Indicator.vue'
-import senti from '@/components/BacktestEdge/signal/sentiment/Senti.vue'
-import cci from '@/components/BacktestEdge/signal/technical/Cci.vue'
+import indicator from '@/components/BacktestEdge/signal/indicator/indicator'
+import senti from '@/components/BacktestEdge/signal/sentiment/Senti'
+import cci from '@/components/BacktestEdge/signal/technical/Cci-like'
 import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
-import macd from '@/components/BacktestEdge/signal/technical/Macd.vue'
+import macd from '@/components/BacktestEdge/signal/technical/Macd-like.vue'
+import SignalCode from '@/tools/codeTool.js'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
+import risk from '@/components/BacktestEdge/signal/exit/Risk.vue'
+import bollingerBandsLike from '@/components/BacktestEdge/signal/technical/Bollinger-Bands-like.vue'
+import ehlerFisherTransformLike from '@/components/BacktestEdge/signal/technical/Ehler-Fisher-Transform-like.vue'
+import stochasticMomentumIndexLike from '@/components/BacktestEdge/signal/technical/Stochastic-Momentum-Index-like.vue'
+import ADXorDMSLike from '@/components/BacktestEdge/signal/technical/ADXorDMS-like.vue'
+import elderRayIndexLike from '@/components/BacktestEdge/signal/technical/Elder-Ray-Index-like.vue'
+import alligatorLike from '@/components/BacktestEdge/signal/technical/Alligator-like.vue'
+import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Linear-RegForecast-like.vue'
 export default {
 	name: 'exit',
-	props: { exitDirection: String },
+	inheritAttrs: true,
 	data() {
 		return {
 			fd: {
 				direction: 'Short'
-			},
-			exitFormRules: {
-				direction: [
-					{
-						required: true,
-						message: 'Please select direction',
-						trigger: 'change'
-					}
-				]
 			},
 			sentiUrl: '',
 			techUrl: '',
 			sentiVal: '',
 			techVal: '',
 			techIndiValue: '',
+			riskVal: '',
+			riskIndiValue: '',
 			indicatorRadio: 'sentiment'
+			// editIndiData: {}
 		}
 	},
 	components: {
@@ -96,22 +180,44 @@ export default {
 		cci,
 		rsi,
 		macd,
-		ma
+		ma,
+		risk,
+		'bollinger-bands-like': bollingerBandsLike,
+		'ehler-fisher-transform-like': ehlerFisherTransformLike,
+		'stochastic-momentum-index-like': stochasticMomentumIndexLike,
+		'ADX-or-DMS-Like': ADXorDMSLike,
+		'elder-ray-index-like': elderRayIndexLike,
+		'alligator-like': alligatorLike,
+		'linear-regForecast-like': linearRegForecastLike
+	},
+	computed: {
+		updateSenti() {
+			return this.$store.state.currentSenti
+		},
+		updateTech() {
+			return this.$store.state.currentTech
+		}
 	},
 	watch: {
-		exitDirection: {
-			handler(newVal) {
-				if (newVal) {
-					if (newVal === 'Long') {
-						this.fd.direction = 'Short'
-					} else if (newVal === 'Short') {
-						this.fd.direction = 'Long'
-					}
-				}
-			}
+		updateSenti(val) {
+			this.indicatorRadio = 'sentiment'
+		},
+		updateTech(val) {
+			this.indicatorRadio = 'technical'
 		}
 	},
 	methods: {
+		clearForm() {
+			Object.assign(this.$data, this.$options.data())
+			// 重置所有子组件的数据
+			this.$refs.indiChild.clearForm()
+			this.$refs.sentiChild.clearForm()
+			this.$refs.cciChild.clearForm()
+			this.$refs.maChild.clearForm()
+			this.$refs.macdChild.clearForm()
+			this.$refs.rsiChild.clearForm()
+			this.$refs.riskChild.clearForm()
+		},
 		getSentiUrl(val) {
 			this.sentiUrl = val
 		},
@@ -124,46 +230,149 @@ export default {
 		getTechVal(val) {
 			this.techVal = val
 		},
+		getRiskVal(val) {
+			this.riskVal = val
+		},
 		getTechIndiValue(val) {
 			this.techIndiValue = val
+		},
+		getRiskIndiValue(val) {
+			this.riskIndiValue = val
 		},
 		getIndicatorRadio(val) {
 			this.indicatorRadio = val
 		},
-		saveBacktestData() {
+		setDirection(data) {
+			this.fd.direction = data
+		},		saveBacktestData() {
 			let checked = true
 			// 将选择的 indicator 保存到 vuex 中
 			let indi = this.$refs.indiChild.saveIndicator()
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			if (indi) {
 				if (this.indicatorRadio === 'sentiment') {
+					this.$refs.sentiChild.setDesciption()
 					let senti = this.$refs.sentiChild.saveCondition()
 					return (checked = senti)
 				} else if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'cci'
 				) {
-					this.$refs.cciChild.saveCondition()
+					this.$refs.cciChild.setDesciption()
+					let cci = this.$refs.cciChild.saveCondition()
+					return (checked = cci)
 				} else if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'rsi'
 				) {
-					this.$refs.rsiChild.saveCondition()
+					this.$refs.rsiChild.setDesciption()
+					let rsi = this.$refs.rsiChild.saveCondition()
+					return (checked = rsi)
 				} else if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'macd'
 				) {
-					this.$refs.macdChild.saveCondition()
+					this.$refs.macdChild.setDesciption()
+					let macd = this.$refs.macdChild.saveCondition()
+					return (checked = macd)
 				} else if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'ma'
 				) {
-					this.$refs.maChild.saveCondition()
+					this.$refs.maChild.setDesciption()
+					let ma = this.$refs.maChild.saveCondition()
+					return (checked = ma)
+				} else if (this.indicatorRadio === 'risk') {
+					this.$refs.riskChild.setDesciption()
+					let risk = this.$refs.riskChild.saveCondition()
+					return (checked = risk)
 				}
 			} else {
 				checked = false
 				return checked
 			}
+		},
+		setEditData(id) {
+			let vm = this
+			this.$http.get('/dev/seeparams/' + id + '/').then((res) => {
+				let data = res.data
+				data.entry = JSON.parse(data.entry)
+				data.exit = JSON.parse(data.exit)
+				let signalCode = new SignalCode()
+				if (data.entry.signals instanceof Array) {
+					data.entry.signals[0] = signalCode.decode(
+						data.entry.signals[0]['code']
+					)
+				}
+				if (data.exit.signals instanceof Array) {
+					data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
+				}
+				let edit = {}
+				edit.entry_description = data.entry_description
+				edit.exit_description = data.exit_description
+				edit.entry = data.entry
+				edit.exit = data.exit
+				if (edit.exit.signals[0].analysis == 'Sentiment') {
+					this.sentiVal = edit.exit.signals[0].indicator
+				} else if (edit.exit.signals[0].analysis == 'Technical') {
+					this.techVal = edit.exit.signals[0].indicator
+				} else if (edit.exit.signals[0].analysis == 'Exit') {
+					this.$refs.indiChild.changeIndicatorChecked('Risk Control')
+					if (
+						edit.exit.signals[0].sc.take_profit &&
+						edit.exit.signals[0].sc.stop_loss
+					) {
+						this.riskVal = 'Profit/Loss'
+					} else if (edit.exit.signals[0].sc.time_in_market) {
+						this.riskVal = 'Time In Market'
+					}
+					// else if (edit.exit.signals[0].sc.take_profit) {
+					// 	this.riskVal = 'Take Profit'
+					// } else if (edit.exit.signals[0].sc.stop_loss) {
+					// 	this.riskVal = 'Stop Loss'
+					// }
+					let obj = {}
+					obj.value = this.riskVal
+					this.$refs.indiChild.handleRiskSelect(obj)
+				}
+				// vm.editIndiData = edit
+				vm.$refs.indiChild.setEditData(edit)
+				// 判断使用那个组件
+				if (edit.exit.signals[0].analysis == 'Sentiment') {
+					vm.indicatorRadio = 'sentiment'
+					vm.$refs.sentiChild.setEditData(edit)
+				} else if (
+					edit.exit.signals[0].analysis == 'Technical' &&
+					edit.exit.signals[0].indicator == 'Commodity Channel Index'
+				) {
+					vm.indicatorRadio = 'technical'
+					vm.techIndiValue = 'cci'
+					vm.$refs.cciChild.setEditData(edit)
+				} else if (
+					edit.exit.signals[0].analysis == 'Technical' &&
+					edit.exit.signals[0].indicator == 'Relative Strength Index'
+				) {
+					vm.indicatorRadio = 'technical'
+					vm.techIndiValue = 'rsi'
+					vm.$refs.rsiChild.setEditData(edit)
+				} else if (
+					edit.exit.signals[0].analysis == 'Technical' &&
+					edit.exit.signals[0].indicator == 'Moving Average'
+				) {
+					vm.indicatorRadio = 'technical'
+					vm.techIndiValue = 'ma'
+					vm.$refs.maChild.setEditData(edit)
+				} else if (
+					edit.exit.signals[0].analysis == 'Technical' &&
+					edit.exit.signals[0].indicator == 'MACD'
+				) {
+					vm.indicatorRadio = 'technical'
+					vm.techIndiValue = 'macd'
+					vm.$refs.macdChild.setEditData(edit)
+				} else if (edit.exit.signals[0].analysis == 'Exit') {
+					this.$refs.riskChild.setEditData(edit)
+				}
+			})
 		}
 	}
 }
@@ -172,9 +381,6 @@ export default {
 .criteria-title {
 	font-size: 18px;
 	font-weight: bold;
-}
-.radioBox {
-	border-bottom: 1px solid #797979;
 }
 .radioBox .el-form-item {
 	display: flex;
@@ -196,6 +402,5 @@ export default {
 }
 .exit-container {
 	margin-bottom: 10px;
-	padding-left: 20px;
 }
 </style>

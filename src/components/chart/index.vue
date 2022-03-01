@@ -79,7 +79,7 @@ export default class AdvancedWrapper extends Vue {
 		CIQ.store.commit('setCopy',JSON.stringify(CIQ.store.state))
 		
 		CIQ.addIndicators()
-		
+		CIQ.technicalCategory = config.technicalClassCategory
 
 		// console.log("length of indicatorList: ",CIQ.store.state.indexsList.length)
 		// for (var i = 0; i < CIQ.store.state.indexsList.length; i++) {

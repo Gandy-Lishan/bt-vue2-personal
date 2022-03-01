@@ -4,33 +4,32 @@
 			ref="backtestSetupForm"
 			:model="bd"
 			label-position="left"
-			:rules="setUpFormRules"
+			:rules="rules"
 		>
 			<el-row>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12">
-					<el-form-item label="Starting Capital:" prop="startingCapital">
+					<el-form-item label="Starting Capital:" prop="capital">
 						<el-input
 							v-model="bd.capital"
-							v-direction="{ x: 1, y: 0 }"
 							@input="validateStartingCapital"
+							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="Commission:" prop="commission">
 						<el-input
 							v-model="temp.commission"
-							v-direction="{ x: 2, y: 0 }"
 							@change="getCommission"
 							@input="validateCommission"
+							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input>
 					</el-form-item>
-
-					<span class="comUnitNote">(per share)</span>
+					<span class="comUnitNote">(%)</span>
 					<el-form-item label="Slippage:" prop="slippage">
 						<el-input
 							v-model="temp.slippage"
 							@change="getSlippage"
-							v-direction="{ x: 3, y: 0 }"
 							@input="validateSlippage"
+							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input> </el-form-item
 					><span class="sliUnitNote">(per trade)</span>
 					<el-form-item label="Benchmark:" prop="benchmark">
@@ -76,7 +75,7 @@
 					</el-form-item> -->
 				</el-col>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12" :span="2">
-					<el-form-item label="Backtest History:" prop="backtestHistory">
+					<el-form-item label="Backtest Period:" prop="backtestHistory">
 						<div class="selectBox">
 							<el-select
 								@change="getBacktestHistory(historyValue)"
@@ -98,6 +97,7 @@
 							<el-date-picker
 								v-if="historyValue === 22"
 								v-model="bd.start_date"
+								@change="formateStartDate"
 								type="date"
 								placeholder="- Select Start Date -"
 								prop="startDate"
@@ -111,6 +111,7 @@
 							<el-date-picker
 								v-if="historyValue === 22"
 								v-model="bd.end_date"
+								@change="formateEndDate"
 								type="date"
 								placeholder="- Select End Date -"
 							>
@@ -123,7 +124,7 @@
 							<el-select
 								v-model="frequency"
 								placeholder="— Select Timeframe —"
-								@change="getFrequency"
+								@change="changeTimeframe"
 							>
 								<el-option
 									v-for="item in frequencyOptions"
@@ -138,17 +139,23 @@
 				</el-col>
 			</el-row>
 			<el-row>
-				<div class="nameBox border-set">
+				<div class="nameBox">
 					<el-form-item
 						label="Backtest Name:"
 						prop="name"
 						placeholder="Give the backtest a name"
 					>
-						<el-input
-							v-model="bd.name"
-							v-direction="{ x: 4, y: 0 }"
-							style="width: 720px"
-						></el-input>
+						<el-input v-model="bd.name"></el-input>
+					</el-form-item>
+				</div>
+			</el-row>
+			<el-row>
+				<div class="border-set">
+					<el-form-item label="Direction:" prop="direction">
+						<el-radio-group v-model="direction" @change="getDirection">
+							<el-radio label="Long">Long</el-radio>
+							<el-radio label="Short">Short</el-radio>
+						</el-radio-group>
 					</el-form-item>
 				</div>
 			</el-row>
@@ -160,21 +167,57 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
 import { timestampToTime } from '@/tools/formatDate.js'
 import deepClone1 from '@/tools/deepClone.js'
+const _ = require('lodash')
+const throttle = _.throttle
 export default {
-	props: { backtestEditData: Object },
+	props: { backtestEditData: Object, editFrequency: String },
 	name: 'setUp',
 	data() {
+		var validateCapital = (rule, value, callback) => {
+			if (value == 0 || value == '') {
+				callback(new Error('Please input starting capital'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
+				callback()
+			}
+		}
+		var validateCommissionRule = (rule, value, callback) => {
+			if (value == 0 || value == '') {
+				callback(new Error('Please input commission'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
+				callback()
+			}
+		}
+		var validateSlippageRule = (rule, value, callback) => {
+			if (value == 0 || value == '') {
+				callback(new Error('Please input slippage'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
+				callback()
+			}
+		}
+		var validateNameRule = (rule, value, callback) => {
+			if (value == '') {
+				callback(new Error('Please give a backtest name'))
+			} else {
+				callback()
+			}
+		}
 		return {
 			bd: {
 				name: '',
-				symbol: 'AAPL',
+				symbol: 'SPY',
 				benchmark: 'SPY',
 				strategy: 'Signal',
 				capital: 100000.0,
 				capital_alloc: 1.0,
 				commission: 0.001,
 				win_rate: 0.0,
-				slippage: 0.001,
+				slippage: 0.1,
 				start_date: '',
 				end_date: '',
 				description: 'backtest'
@@ -240,12 +283,34 @@ export default {
 			loading: false,
 			options: [],
 			temp: { commission: '0.1', slippage: '0.1' },
-			setUpFormRules: {
+			sentimentIndicatorList: [],
+			direction: 'Long',
+			rules: {
+				capital: [
+					{
+						validator: validateCapital,
+						trigger: 'blur'
+					}
+				],
+				slippage: [
+					{
+						validator: validateSlippageRule,
+						trigger: 'blur'
+					}
+				],
+				commission: [
+					{
+						validator: validateCommissionRule,
+						trigger: 'blur'
+					}
+				],
 				name: [
-					{ required: true, message: 'Please enter name', trigger: 'blur' }
+					{
+						validator: validateNameRule,
+						trigger: 'blur'
+					}
 				]
-			},
-			sentimentIndicatorList: []
+			}
 		}
 	},
 	mounted() {
@@ -254,27 +319,18 @@ export default {
 		// this.getIndexsList()
 		// this.getStocksList()
 		this.getEndDate()
-		let direction = this.$getDirection()
-		direction.on('keyup', function (e, val) {
-			if (e.keyCode == 9) {
-				direction.next()
-			}
-			direction.onEnd = function () {
-				direction.previous(1, 0)
-			}
-		})
 	},
 	computed: {
-		listSet() {
-			return this.symbolList.map((item) => {
-				return { value: `${item.stock}`, label: `${item.stock}` }
-			})
-		},
-		indexSet() {
-			return this.indexList.map((item) => {
-				return { value: `${item.symbol}`, label: `${item.symbol}` }
-			})
-		},
+		// listSet() {
+		// 	return this.symbolList.map((item) => {
+		// 		return { value: `${item.stock}`, label: `${item.stock}` }
+		// 	})
+		// },
+		// indexSet() {
+		// 	return this.indexList.map((item) => {
+		// 		return { value: `${item.symbol}`, label: `${item.symbol}` }
+		// 	})
+		// },
 		...mapGetters(['getIsClearForm']),
 		isClearForm() {
 			return this.getIsClearForm
@@ -285,18 +341,17 @@ export default {
 	},
 	watch: {
 		updateFreq(val) {
-
 			switch (val) {
 				case 'daily': {
-					this.frequency = 'Daily'
+					this.getFrequency('Daily')
 					break
 				}
 				case 'weekly': {
-					this.frequency = 'Weekly'
+					this.getFrequency('Weekly')
 					break
 				}
 				case 'monthly': {
-					this.frequency = 'Monthly'
+					this.getFrequency('Monthly')
 					break
 				}
 			}
@@ -304,7 +359,7 @@ export default {
 		backtestEditData: {
 			handler(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
-					this.$refs['backtestSetupForm'].clearValidate()
+					this.clearFormValidate()
 					delete newVal.entry
 					delete newVal.exit
 					delete newVal.user_id
@@ -312,12 +367,30 @@ export default {
 					delete newVal.results
 					delete newVal.uuid
 					this.bd = Object.assign(this.bd, newVal)
+					this.getSymbolName(newVal.symbol)
+					this.frequency = this.editFrequency
+					this.changeTimeframe(this.frequency)
+					// console.log('频率', this.frequency)
 					this.temp.commission = Number(newVal.commission) * 100
-					var year
-					const starArr = newVal.start_date.toString().split('-')
-					const endArr = newVal.end_date.toString().split('-')
-					year = Number(endArr[0]) - Number(starArr[0])
-					this.historyValue = year
+					this.temp.slippage = Number(newVal.slippage) * 100
+					let year
+					let month
+					let day
+					if (newVal.start_date && newVal.start_date !== '1800-10-01') {
+						const starArr = newVal.start_date.toString().split('-')
+						const endArr = newVal.end_date.toString().split('-')
+						year = Number(endArr[0]) - Number(starArr[0])
+						month = Number(endArr[1]) - Number(starArr[1])
+						day = Number(endArr[2]) - Number(starArr[2])
+						if (month == 0 && day == 0) {
+							this.historyValue = year
+						} else {
+							this.historyValue = 22
+						}
+					} else {
+						this.historyValue = 21
+						this.bd.start_date = ''
+					}
 				}
 			}
 		},
@@ -330,7 +403,21 @@ export default {
 		}
 	},
 	methods: {
-		validateCommission(val) {
+		clearForm() {
+			this.clearFormValidate()
+			Object.assign(this.$data, this.$options.data())
+			this.getEndDate()
+		},
+		getDirection(val) {
+			// direction 设置到 vuex
+			this.$store.commit('getExitDirection', val)
+			// 设置 entry 和 exit 的 direction
+			this.$emit('setDirection', val)
+		},
+		setEditDirection(val) {
+			this.direction = val
+		},
+		validateCommission: throttle(function (val) {
 			let list = val.split('.')
 			if (list.length === 2) {
 				let temp = ''
@@ -352,14 +439,8 @@ export default {
 					this.temp.commission = list[0].substring(0, 2)
 				}
 			}
-			// let re = /[1-9]{0,2}?0?\.?\d{0,2}?/g
-			// if (val.search(re) !== -1) {
-			// 	this.bd.commission = val
-			// } else {
-			// 	this.bd.commission = ''
-			// }
-		},
-		validateSlippage(val) {
+		}, 500),
+		validateSlippage: throttle(function (val) {
 			let list = val.split('.')
 			if (list.length === 2) {
 				let temp = ''
@@ -372,7 +453,6 @@ export default {
 				else {
 					temp = temp + '.' + list[1].substring(0, 3)
 				}
-
 				this.temp.slippage = temp
 			} else if (list.length === 1) {
 				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) this.bd.slippage = list[0]
@@ -380,8 +460,8 @@ export default {
 					this.temp.slippage = list[0].substring(0, 2)
 				}
 			}
-		},
-		validateStartingCapital(val) {
+		}, 500),
+		validateStartingCapital: throttle(function (val) {
 			let re = /^\d+\.?\d{0,2}$/
 			if (val.search(re) !== -1) {
 				this.bd.capital = val
@@ -391,7 +471,7 @@ export default {
 			} else {
 				this.bd.capital = ''
 			}
-		},
+		}, 500),
 		getSymbolName(val) {
 			this.$store.commit('getSymbolName', val)
 			// 清空 两个表单的方法
@@ -407,6 +487,12 @@ export default {
 		},
 		getBenchmark(val) {
 			this.bd.benchmark = val
+		},
+		formateStartDate(val) {
+			this.bd.start_date = timestampToTime(val)
+		},
+		formateEndDate(val) {
+			this.bd.end_date = timestampToTime(val)
 		},
 		getEndDate() {
 			this.bd.end_date = timestampToTime(new Date())
@@ -428,9 +514,11 @@ export default {
 			return (window.utils = new utils())
 		},
 		async getIndexsList() {
-			console.log('vuex', this.$store.state.indexsList)
+			//console.log('vuex', this.$store.state.indexsList)
 			if (this.$store.state.indexsList.length != 0) {
-				this.indexList = this.$store.state.indexsList
+				this.indexList = this.$store.state.indexsList.map((item) => {
+					return { value: `${item.symbol}`, label: `${item.symbol}` }
+				})
 			} else {
 				await this.$http
 					.get(
@@ -443,7 +531,9 @@ export default {
 						}
 					)
 					.then((res) => {
-						this.indexList = res.data
+						this.indexList = res.data.map((item) => {
+							return { value: `${item.symbol}`, label: `${item.symbol}` }
+						})
 					})
 					.catch((error) => {
 						console.warn(error)
@@ -451,9 +541,10 @@ export default {
 			}
 		},
 		async getStocksList() {
-			console.log('vuex', this.$store.state.stocksList)
 			if (this.$store.state.stocksList.length != 0) {
-				this.symbolList = this.$store.state.stocksList
+				this.symbolList = this.$store.state.stocksList.map((item) => {
+					return { value: `${item.stock}`, label: `${item.stock}` }
+				})
 			} else {
 				await this.$http
 					.get(
@@ -466,7 +557,9 @@ export default {
 						}
 					)
 					.then((res) => {
-						this.symbolList = res.data
+						this.symbolList = res.data.map((item) => {
+							return { value: `${item.stock}`, label: `${item.stock}` }
+						})
 					})
 					.catch((error) => {
 						console.warn(error)
@@ -478,19 +571,24 @@ export default {
 				this.loading = true
 				setTimeout(() => {
 					this.loading = false
-					var symbolListTemp = this.listSet.filter((item) => {
+					if (this.symbolList.length == 0 || this.indexList.length == 0) {
+						this.getStocksList()
+						this.getIndexsList()
+					}
+					var symbolListTemp = this.symbolList.filter((item) => {
 						return (
 							item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
 							item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
 						)
 					})
-					var IndexListTemp = this.indexSet.filter((item) => {
+					var IndexListTemp = this.indexList.filter((item) => {
 						return (
 							item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
 							item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
 						)
 					})
-					this.options = symbolListTemp.concat(IndexListTemp)
+					let options = symbolListTemp.concat(IndexListTemp)
+					this.options = _.uniqWith(options, _.isEqual)
 				}, 200)
 			} else {
 				this.options = []
@@ -498,7 +596,9 @@ export default {
 		},
 		getBacktestHistory(val) {
 			this.historyValue = val
+			this.bd.end_date = timestampToTime(new Date())
 			if (val <= 20) {
+				this.bd.end_date = timestampToTime(new Date())
 				const str = this.bd.end_date.split('-')
 				str[0] = Number(str[0]) - Number(this.historyValue) + ''
 				this.bd.start_date = str.join('-')
@@ -507,12 +607,12 @@ export default {
 				this.bd.start_date = ''
 			}
 		},
-		getCommission(val) {
+		getCommission: throttle(function (val) {
 			this.bd.commission = val / 100
-		},
-		getSlippage(val) {
+		}, 500),
+		getSlippage: throttle(function (val) {
 			this.bd.slippage = val / 100
-		},
+		}),
 		validateForm(newTag, oldTag) {
 			let data = true
 			this.$refs.backtestSetupForm.validate((valid) => {
@@ -530,29 +630,35 @@ export default {
 		clearFormValidate() {
 			this.$refs.backtestSetupForm.clearValidate()
 		},
+		changeTimeframe(val) {
+			this.getFrequency(val)
+			CIQ.addIndicators()
+		},
 		getFrequency(val) {
+			// getFrequency will no longer call addIndicator and pass a parameter to it
 			this.frequency = val
 			this.$store.commit('getFrequency', val)
+			this.$emit('getTimeFrame', val)
 			this.loadSentimentList(val)
-
 			// same as setPeriodicity
-			var selectedFreq = ''
-			switch(val){
-				case "Monthly":{
-					selectedFreq = "month"
-					break;
-				}
-				case "Weekly":{
-					selectedFreq = "week"
-					break;
-				}
-				case "Daily":{
-					selectedFreq = "day"
-					break;
-				}
-				default:
-			}
-			CIQ.addIndicators(selectedFreq)
+			// var selectedFreq = ''
+			// switch (val) {
+			// 	case 'Monthly': {
+			// 		selectedFreq = 'month'
+			// 		break
+			// 	}
+			// 	case 'Weekly': {
+			// 		selectedFreq = 'week'
+			// 		break
+			// 	}
+			// 	case 'Daily': {
+			// 		selectedFreq = 'day'
+			// 		break
+			// 	}
+			// 	default:
+			// }
+			// CIQ.addIndicators(selectedFreq)
+
 		},
 		async loadSentimentList(val) {
 			const vm = this
@@ -561,18 +667,10 @@ export default {
 
 			if (CIQ.indicatorList) {
 				if (CIQ.indicatorList.length != 0) {
-					console.log(
-						'data already in indicatorList from entry-form',
-						CIQ.indicatorList.length
-					)
 					indicatorList = this.$store.state.indicatorsList
 					indicatorList = CIQ.indicatorList
 				}
 			} else {
-				console.log(
-					'data is not in indicatorList from entry-form',
-					CIQ.indicatorList
-				)
 				const res = await vm.$http.get(
 					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
 					{
@@ -641,18 +739,10 @@ export default {
 			var indicatorList = []
 			if (CIQ.indicatorList) {
 				if (CIQ.indicatorList.length != 0) {
-					console.log(
-						'data already in indicatorList from entry-form',
-						CIQ.indicatorList.length
-					)
 					indicatorList = this.$store.state.indicatorsList
 					indicatorList = CIQ.indicatorList
 				}
 			} else {
-				console.log(
-					'data is not in indicatorList from entry-form',
-					CIQ.indicatorList
-				)
 				const res = await vm.$http.get(
 					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
 					{
@@ -669,18 +759,50 @@ export default {
 		},
 		saveBacktestData() {
 			let checked = true
-			if (this.bd.name) {
-				if (this.bd.start_date) {
-					// 保存 backtestform 的数据
-					this.$store.commit('setBd', this.bd)
-					return checked
+			let nameChecked = true
+			let validForm
+			this.$refs.backtestSetupForm.validate((valid) => {
+				validForm = valid
+			})
+			if (validForm) {
+				if (!this.bd.old_uuid) {
+					let nameList = this.$store.state.backtestNameList
+					for (let i = 0; i < nameList.length; i++) {
+						if (nameList[i] == this.bd.name) {
+							nameChecked = false
+							break
+						}
+					}
+				}
+				if (nameChecked) {
+					if (this.bd.end_date) {
+						// 保存 backtestform 的数据
+						this.$store.commit('setBd', this.bd)
+						return checked
+					} else {
+						this.$message({
+							message: 'Please select end date',
+							type: 'error',
+							offset: 300
+						})
+						checked = false
+						return checked
+					}
 				} else {
-					this.$message.error('Please select start date')
+					this.$message({
+						message: 'The backtest name already exists',
+						type: 'error',
+						offset: 300
+					})
 					checked = false
 					return checked
 				}
 			} else {
-				this.$message.error('Please give the backtest name')
+				// this.$message({
+				// 	message: 'Please give the backtest name',
+				// 	type: 'error',
+				// 	offset: 300
+				// })
 				checked = false
 				return checked
 			}
@@ -697,8 +819,9 @@ export default {
 	margin-right: 0px;
 }
 /deep/.dateBox .el-input__icon {
-	width: 58px;
+	width: 53px;
 }
+
 .comUnitNote {
 	position: absolute;
 

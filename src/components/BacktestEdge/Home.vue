@@ -16,27 +16,40 @@
 			</header>
 			<main class="main">
 				<el-button
-						@click="refreshPage"
-						class="restartBtn"
-						type="primary"
-						icon="el-icon-refresh-right"
-						>Reset backtest</el-button
+					@click="refreshPage"
+					class="restartBtn"
+					type="primary"
+					icon="el-icon-refresh-right"
+					>Create New Backtest</el-button
 				>
-				<el-tabs v-model="activeName" type="card" :tab-position="tabPosition">
+				<el-tabs
+					v-model="activeName"
+					type="card"
+					:tab-position="tabPosition"
+					@tab-click="handleTabClick"
+				>
 					<el-tab-pane label="Set up Backtest" name="first">
 						<div class="set-up-container">
-							<set-up ref="setUpChild"></set-up>
+							<set-up
+								ref="setUpChild"
+								:backtestEditData="backtestEditData"
+								:editFrequency="editFrequency"
+								@getTimeFrame="getTimeFrame"
+								@setDirection="setDirection"
+							></set-up>
 							<div class="criteria-container">
 								<div class="criteria-box">
 									<entry
 										ref="entryChild"
 										@setExitDirection="setExitDirection"
 									></entry>
-									<exit ref="exitChild" :exitDirection="exitDirection"></exit>
+									<exit ref="exitChild" :timeFrame="timeFrame"></exit>
 								</div>
 							</div>
 							<div class="backtest-btns">
-								<el-button type="danger"> Clear Form</el-button>
+								<el-button type="danger" @click="clearForm">
+									Clear Form</el-button
+								>
 								<el-button type="success" @click="runBacktest"
 									>Run Backtest</el-button
 								>
@@ -44,14 +57,45 @@
 						</div>
 					</el-tab-pane>
 					<el-tab-pane label="Backtest History" name="second"
-						><history></history
+						><history
+							ref="historyChild"
+							@goTobacktestSetupForm="goTobacktestSetupForm"
+							@goBacktestResultForm="goBacktestResultForm"
+							@goToFavoritesForm="goToFavoritesForm"
+							@refFavoritesForm="refFavoritesForm"
+						></history
 					></el-tab-pane>
 					<el-tab-pane label="Backtest Results" name="third"
-						><result></result>
-						<performance></performance>
+						><div class="set-up-container">
+							<result
+								:backtestEditData="backtestEditData"
+								:editFrequency="editFrequency"
+							></result>
+						</div>
+						<performance
+							ref="performanceChild"
+							:backtestEditData="backtestEditData"
+							@errorCatchPerformance="errorCatchPerformance"
+						></performance>
 					</el-tab-pane>
-					<el-tab-pane label="Your Favorites" name="forth"> </el-tab-pane>
-					<el-tab-pane label="Sample Backtests" name="fifth"> </el-tab-pane>
+					<el-tab-pane label="My Favorites" name="forth"
+						><favorite
+							ref="favoriteChild"
+							@refHistoryForm="refHistoryForm"
+							@goTobacktestSetupForm="goTobacktestSetupForm"
+							@goBacktestResultForm="goBacktestResultForm"
+							@goToFavoritesForm="goToFavoritesForm"
+						></favorite
+					></el-tab-pane>
+					<el-tab-pane label="Sample Backtests" name="fifth"
+						><sample
+							ref="sampleChild"
+							@goToHistoryForm="goToHistoryForm"
+							@refHistoryForm="refHistoryForm"
+							@goTobacktestSetupForm="goTobacktestSetupForm"
+							@goBacktestResultForm="goBacktestResultForm"
+						></sample
+					></el-tab-pane>
 				</el-tabs>
 			</main>
 		</div>
@@ -61,6 +105,7 @@
 const _ = require('lodash')
 const throttle = _.throttle
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import deepClone1 from '@/tools/deepClone.js'
 import SignalCode from '@/tools/codeTool.js'
 import chart from '@/components/chart/index.vue'
 import setUp from '@/components/BacktestEdge/SetUp.vue'
@@ -69,6 +114,8 @@ import exit from '@/components/BacktestEdge/Exit.vue'
 import result from '@/components/BacktestEdge/Result.vue'
 import performance from '@/components/BacktestEdge/Performance.vue'
 import history from '@/components/BacktestEdge/History.vue'
+import favorite from '@/components/BacktestEdge/Favorite.vue'
+import sample from '@/components/BacktestEdge/Sample.vue'
 export default {
 	name: 'home',
 	data() {
@@ -76,9 +123,19 @@ export default {
 			tabPosition: 'top',
 			activeName: 'first',
 			clientHeight: 0,
-			exitDirection: ''
+			loading: false,
+			backtestEditData: {},
+			editFrequency: 'Daily',
+			timeFrame: 'Daily',
+			historyFlag: true,
+			favoriteFlag: true
 		}
 	},
+	// provide() {
+	// 	return {
+	// 		timeFrame: () => this.pubilcEditData
+	// 	}
+	// },
 	components: {
 		chart: chart,
 		'set-up': setUp,
@@ -86,10 +143,11 @@ export default {
 		exit,
 		result,
 		performance,
-		history
+		history,
+		favorite,
+		sample
 	},
 	mounted() {
-		this.$cookies.set('userid', 'test')
 		// 在DOM渲染数据时，设置下区域高度为浏览器可视区域高度．
 		this.clientHeight = document.body.clientHeight
 		// 监听window的resize事件．在浏览器窗口变化时再设置下区域高度．
@@ -105,22 +163,67 @@ export default {
 		}, 500)
 	},
 	methods: {
-		setExitDirection(val) {
-			this.exitDirection = val
+		// 清除set up  表单
+		clearForm() {
+			CIQ.reloadChart()
+			this.$store.commit('initialBacktestInfo')
+			this.$refs.setUpChild.clearForm()
+			this.$refs.entryChild.clearForm()
+			this.$refs.exitChild.clearForm()
 		},
-		refreshPage() {
-			if (location.href.indexOf('#reloaded') == -1) {
-				location.href = location.href + '#reloaded'
-				location.reload()
+		handleTabClick(tab, event) {
+			let tabName = tab.name
+			switch (tabName) {
+				case 'second':
+					if (this.historyFlag) {
+						this.$refs.historyChild.getBacktestList()
+						this.historyFlag = false
+					}
+					break
+				case 'forth':
+					if (this.favoriteFlag) {
+						this.$refs.favoriteChild.getBacktestList()
+						this.favoriteFlag = false
+					}
+					break
+				case 'fifth':
+					this.$refs.sampleChild.getStrategyList()
 			}
 		},
-		runBacktest() {
+		getTimeFrame(val) {
+			this.timeFrame = val
+		},
+		setDirection(val) {
+			this.$refs.entryChild.setDirection(val)
+			let exit = ''
+			if (val == 'Long') {
+				exit = 'Short'
+			} else if (val == 'Short') {
+				exit = 'Long'
+			}
+			this.$refs.exitChild.setDirection(exit)
+		},
+		setExitDirection(val) {
+			let exit = ''
+			if (val == 'Long') {
+				exit = 'Short'
+			} else if (val == 'Short') {
+				exit = 'Long'
+			}
+			this.$refs.exitChild.setDirection(exit)
+			this.$refs.setUpChild.setEditDirection(val)
+		},
+		refreshPage() {
+			location.reload()
+		},
+		runBacktest: throttle(function () {
 			let setUp = this.$refs.setUpChild.saveBacktestData()
 			if (setUp) {
 				let entry = this.$refs.entryChild.saveBacktestData()
 				if (entry) {
 					let exit = this.$refs.exitChild.saveBacktestData()
 					if (exit) {
+						this.loading = true
 						console.log('保存的backtest数据', this.$store.state.backtestInfo)
 						let vm = this
 						let signalEntryList = []
@@ -148,17 +251,53 @@ export default {
 								item.analysis = 'Sentiment'
 								delete item.technicalIndicator
 								delete item.sentimentIndicator
+								delete item.riskIndicator
 							}
 							if (item.technicalIndicator) {
 								item.indicator = item.technicalIndicator
 								item.analysis = 'Technical'
 								delete item.technicalIndicator
 								delete item.sentimentIndicator
+								delete item.riskIndicator
+							}
+							if (item.riskIndicator) {
+								item.indicator = 'RC'
+								item.analysis = 'Exit'
+								delete item.technicalIndicator
+								delete item.sentimentIndicator
+								delete item.riskIndicator
 							}
 						})
 						const b = new SignalCode()
 						var entry_signal_list = []
 						var exit_signal_list = []
+						console.log(backtestData.exit.signals[0])
+						const set = new Set([
+							['Commodity Channel Index', 'cci'],
+							['Relative Strength Index', 'rsi'],
+							['Moving Average', 'ma'],
+							['MACD', 'macd'],
+							['RC','']
+						])
+
+						const newMap = new Map(set)
+			
+						var entrySignal = CIQ.indicatorList.find(item=> {return item.chart_name == backtestData.entry.signals[0].indicator})
+						var exitSignal = CIQ.indicatorList.find(item=> {return item.chart_name == backtestData.exit.signals[0].indicator})
+						if(!entrySignal){
+							for (let i of newMap.entries()) {
+								if (backtestData.entry.signals[0].indicator === i[0]) {
+									entrySignal = {url:i[1]}
+								}
+							}
+						}
+						if(!exitSignal){
+							for (let i of newMap.entries()) {
+								if (backtestData.exit.signals[0].indicator === i[0]) {
+									exitSignal = {url:i[1]}
+								}
+							}
+						}
 						delete backtestData.entry.signals
 						for (var i in signalEntryList) {
 							let code = b.encode(signalEntryList[i])
@@ -194,6 +333,7 @@ export default {
 
 						//上传indicator layout
 						var indicatorLayout = {}
+						// console.log("entry/exit: ",this.$store.state.indicators.formIndicators)
 						indicatorLayout.formIndicators = {
 							entry: this.$store.state.indicators.formIndicators.entry,
 							exit: this.$store.state.indicators.formIndicators.exit
@@ -209,35 +349,126 @@ export default {
 							})
 							.then((res) => {
 								if (res.status === 201) {
-									// vm.loading = false
-									// vm.$store.commit('clearBacktest')
-									// vm.$store.commit('tryClear')
-									// vm.$store.commit('getExitDirection', '')
-									// vm.$store.commit('getFrequency', '')
-									vm.$message.success('Save successfully')
-									// vm.goToFavoriteForm()
-									// vm.$refs.favoriteChild.getBacktestList('system')
+									// 保存成功之后，将 backtestInfo 清空回原始的状态
+									vm.$store.commit('initialBacktestInfo')
+									vm.loading = false
+									vm.goToHistoryForm()
+									vm.$refs.historyChild.refreshHistory(res.data.id)
+									// 刷新 favorite 表单
+									vm.$refs.favoriteChild.getBacktestList()
+									// 保存成功之后应该清除表单的所有数据
+									vm.clearForm()
+									// 并且清除 old_uuid
+									let backtestInfo = vm.$store.state.backtestInfo
+									if (backtestInfo.old_uuid) {
+										vm.$store.commit('clearBacktestUuid')
+									}
 								} else {
 									vm.$message.error('Save failed')
-									// vm.loading = false
+									vm.loading = false
+									vm.clearForm()
 								}
+							})
+							.catch((error) => {
+								this.$notify.error({
+									title: 'Create New Backtest',
+									message:
+										'Please click the Create New Backtest button to a new Backtest',
+									offset: 100
+								})
+								// 初始化backtestInfo的数据
+								vm.$store.commit('initialBacktestInfo')
 							})
 					}
 				}
 			}
+		}, 5000),
+		goToHistoryForm() {
+			this.activeName = 'second'
+		},
+		goTobacktestSetupForm(id) {
+			// backtestEditData
+			this.$refs.setUpChild.clearForm()
+			this.$refs.entryChild.clearForm()
+			this.$refs.exitChild.clearForm()
+			let vm = this
+			vm.activeName = 'first'
+			vm.backtestEditData = {}
+			vm.$http.get('/dev/seeparams/' + id + '/').then((res) => {
+				let data = res.data
+				data.old_uuid = id
+				data.entry = JSON.parse(data.entry)
+				data.exit = JSON.parse(data.exit)
+				delete data.results
+				delete data.status
+				delete data.backtest_id
+				delete data.user_id
+				delete data.uuid
+				let signalCode = new SignalCode()
+				if (data.entry.signals instanceof Array) {
+					data.entry.signals[0] = signalCode.decode(
+						data.entry.signals[0]['code']
+					)
+				}
+				if (data.exit.signals instanceof Array) {
+					data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
+				}
+
+				vm.$refs.entryChild.setEditData(id)
+				vm.$refs.exitChild.setEditData(id)
+				// 拿到 frequency 的值
+				vm.editFrequency = data.entry.frequency
+				vm.timeFrame = data.entry.frequency
+				vm.$store.commit('getFrequency', vm.editFrequency)
+				vm.backtestEditData = data
+			})
+		},
+		goBacktestResultForm(row) {
+			this.activeName = 'third'
+			this.$refs.performanceChild.getResultData(row)
+		},
+		goToFavoritesForm() {
+			this.activeName = 'forth'
+			this.$refs.favoriteChild.getBacktestList()
+		},
+		refFavoritesForm() {
+			this.$refs.favoriteChild.getBacktestList()
+		},
+		refHistoryForm() {
+			this.$refs.historyChild.getBacktestList()
+		},
+		// 无法拿到 performance 的数据，服务端异常
+		errorCatchPerformance() {
+			this.$notify({
+				title: 'Try Another',
+				message: 'The backtest cannot request data, please change parameter',
+				offset: 100,
+				type: 'warning'
+			})
 		}
 	}
 }
 </script>
 <style lang="less" scoped>
-.restartBtn {
-	position: relative;
-	z-index: 1;
-	float: right;
-	width: 12rem;
+@media screen and (max-width: 768px) {
+	.restartBtn {
+		position: relative;
+		z-index: 1;
+		width: 10rem;
+	}
 }
+@media screen and (min-width: 768px) {
+	.restartBtn {
+		margin-left: 10px;
+		position: relative;
+		z-index: 1;
+		float: right;
+		width: 12rem;
+	}
+}
+
 .home-container {
-	width: 90%;
+	width: 85vw;
 	margin: 0 auto;
 }
 // 暂时的样式
@@ -246,7 +477,7 @@ header {
 }
 .header {
 	img {
-			width: 100%;
+		width: 100%;
 	}
 	p {
 		margin: 1.14rem 0 1.14rem 0px;
@@ -270,7 +501,6 @@ header {
 }
 .criteria-box {
 	display: flex;
-	align-items: center;
 	justify-content: center;
 	border-bottom: 1px solid #797979;
 }

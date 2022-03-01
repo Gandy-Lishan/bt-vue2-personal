@@ -1,0 +1,1314 @@
+[
+    {
+        "url": "model_percent_bullish",
+        "extreme_value": null
+    },
+    {
+        "url": "vol_smi",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_spx",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_spx_mini",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_spx_combo",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_ndx",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_ndx_mini",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_ndx_combo",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_djia",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_djia_mini",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_djia_combo",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_rut",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_nikkei",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_vix",
+        "extreme_value": null
+    },
+    {
+        "url": "rydex_ratio",
+        "extreme_value": null
+    },
+    {
+        "url": "rydex_assets_bull_bear_ratio",
+        "extreme_value": null
+    },
+    {
+        "url": "rydex_assets_bull_bear_ratio_l",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_bonds_eurodollar",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_bonds_two",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_bonds_five",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_bonds_ten",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_bonds_thirty",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_crb",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_aussie",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_pound",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_canada",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_euro",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_peso",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_franc",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_dollar",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_yen",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_crude",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_heating",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_natural",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_unleaded",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_copper",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_gold",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_palladium",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_platinum",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_silver",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_corn",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_oats",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_soybeans",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_wheat",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_cocoa",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_coffee",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_cotton",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_oj",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_sugar",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_cattle",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_hogs",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_energy",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_metals",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_ag",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_spy_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_qqq_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_iwm_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlu_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xly_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlv_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlp_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlb_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xle_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlf_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xli_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlk_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "vol_ounces_gld",
+        "extreme_value": null
+    },
+    {
+        "url": "vol_ounces_slv",
+        "extreme_value": null
+    },
+    {
+        "url": "survey_pension_bonds",
+        "extreme_value": null
+    },
+    {
+        "url": "survey_pension_cash",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_climaxes_sell",
+        "extreme_value": null
+    },
+    {
+        "url": "vol_shares_spy",
+        "extreme_value": null
+    },
+    {
+        "url": "vol_shares_qqq",
+        "extreme_value": null
+    },
+    {
+        "url": "vol_shares_dia",
+        "extreme_value": null
+    },
+    {
+        "url": "vol_shares_iwm",
+        "extreme_value": null
+    },
+    {
+        "url": "vol_etf_short",
+        "extreme_value": null
+    },
+    {
+        "url": "vol_etf_long",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_adline_stocks",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_spy_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_iwm_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_qqq_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_dia_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_xlf_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_xlb_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_xle_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_xli_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_xlk_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_xlp_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_xlu_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_xlv_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_vxx_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_uso_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_ung_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_tlt_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_smh_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_slv_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_rsx_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_jnk_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_ibb_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_hyg_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_gld_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_gdx_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_gdxj_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_fxi_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "etf_eem_social_per_bearish",
+        "extreme_value": null
+    },
+    {
+        "url": "sp1500_rsi_14_under_30",
+        "extreme_value": null
+    },
+    {
+        "url": "sp1500_rsi_2_under_30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_dia_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_lumber",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_bonds_ultraten",
+        "extreme_value": null
+    },
+    {
+        "url": "cot_bonds_ultrathirty",
+        "extreme_value": null
+    },
+    {
+        "url": "pc_oi_tlt",
+        "extreme_value": null
+    },
+    {
+        "url": "pc_oi_gld",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_cac_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_cac_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_cac_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_cac_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_cac_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_cac_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_dax_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_dax_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_dax_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_dax_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_dax_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_dax_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_dia_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_dia_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_dia_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_dia_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_dia_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_hsi_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_hsi_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_hsi_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_hsi_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_hsi_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_hsi_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_ibov_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_ibov_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_ibov_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_ibov_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_ibov_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_ibov_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_iwm_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_iwm_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_iwm_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_iwm_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_iwm_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_kospi_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_kospi_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_kospi_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_kospi_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_kospi_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_kospi_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_mexbol_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_mexbol_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_mexbol_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_mexbol_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_mexbol_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_mexbol_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_mxef_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_mxef_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_mxef_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_mxef_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_mxef_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_mxef_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_nky_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_nky_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_nky_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_nky_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_nky_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_nky_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_qqq_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_qqq_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_qqq_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_qqq_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_qqq_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_shcomp_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_shcomp_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_shcomp_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_shcomp_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_shcomp_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_shcomp_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_smi_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_smi_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_smi_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_smi_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_smi_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_smi_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_tsx_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_tsx_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_tsx_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_tsx_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_tsx_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_tsx_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_spy_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_spy_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_spy_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_spy_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_spy_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlb_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlb_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlb_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlb_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlb_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xle_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xle_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xle_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xle_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xle_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlf_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlf_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlf_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlf_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlf_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xli_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xli_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xli_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xli_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xli_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlk_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlk_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlk_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlk_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlk_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlp_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlp_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlp_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlp_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlp_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlu_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlu_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlu_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlu_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlu_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlv_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlv_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlv_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlv_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlv_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xly_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xly_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xly_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xly_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xly_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xly_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlv_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlu_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlp_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlk_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xli_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlf_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xle_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_xlb_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_tsx_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_smi_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_shcomp_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_qqq_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_nky_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_mxef_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_mexbol_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_kospi_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_iwm_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_ibov_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_hsi_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_ftse_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_dia_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_dax_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_cac_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_spy_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "survey_correction",
+        "extreme_value": null
+    },
+    {
+        "url": "survey_bearmarket",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "cash_margin_debt_nyse_mktcap",
+        "extreme_value": null
+    },
+    {
+        "url": "vol_firstlast",
+        "extreme_value": null
+    },
+    {
+        "url": "tedspread",
+        "extreme_value": null
+    },
+    {
+        "url": "copper_gold_ratio",
+        "extreme_value": null
+    },
+    {
+        "url": "all_country_breadth_correction",
+        "extreme_value": null
+    },
+    {
+        "url": "all_country_breadth_bear_market",
+        "extreme_value": null
+    },
+    {
+        "url": "two_ten_yield_curve",
+        "extreme_value": null
+    },
+    {
+        "url": "bbb_aaa_yield_spread",
+        "extreme_value": null
+    },
+    {
+        "url": "retail_money_market_assets",
+        "extreme_value": null
+    },
+    {
+        "url": "inst_money_market_assets",
+        "extreme_value": null
+    },
+    {
+        "url": "short_short_interest_ratio",
+        "extreme_value": null
+    },
+    {
+        "url": "short_short_interest_ratio_nas",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_adline_nhnl",
+        "extreme_value": null
+    },
+    {
+        "url": "all_country_breadth_52WLows",
+        "extreme_value": null
+    },
+    {
+        "url": "all_sector_breadth_correction",
+        "extreme_value": null
+    },
+    {
+        "url": "all_sector_breadth_bear_market",
+        "extreme_value": null
+    },
+    {
+        "url": "all_sector_breadth_52WLows",
+        "extreme_value": null
+    },
+    {
+        "url": "all_industry_breadth_correction",
+        "extreme_value": null
+    },
+    {
+        "url": "all_industry_breadth_bear_market",
+        "extreme_value": null
+    },
+    {
+        "url": "all_industry_breadth_52WLows",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_climaxes_sell_qqq",
+        "extreme_value": null
+    },
+    {
+        "url": "survey_bearmarket_ndx",
+        "extreme_value": null
+    },
+    {
+        "url": "survey_correction_ndx",
+        "extreme_value": null
+    },
+    {
+        "url": "gdx_breadth_correction",
+        "extreme_value": null
+    },
+    {
+        "url": "gdx_breadth_bear_market",
+        "extreme_value": null
+    },
+    {
+        "url": "gdx_breadth_52WLows",
+        "extreme_value": null
+    },
+    {
+        "url": "put_option_volume",
+        "extreme_value": null
+    },
+    {
+        "url": "call_option_volume",
+        "extreme_value": null
+    },
+    {
+        "url": "lasthour",
+        "extreme_value": null
+    },
+    {
+        "url": "copper_gold_rr_ratio",
+        "extreme_value": null
+    },
+    {
+        "url": "spx_ipo_rr_ratio",
+        "extreme_value": null
+    },
+    {
+        "url": "spx_beta_quality_rr_ratio",
+        "extreme_value": null
+    },
+    {
+        "url": "spx_microcap_rr_ratio",
+        "extreme_value": null
+    },
+    {
+        "url": "spx_smallcap_rr_ratio",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_ftse_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_ftse_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_ftse_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_ftse_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_ftse_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_ftse_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_nifty_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_nifty_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_nifty_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_nifty_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_nifty_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_nifty_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_nifty_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_sensex_bbdown",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_sensex_rsi30",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_sensex_nl12",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_sensex_nl4",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_sensex_ad",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_sensex_nl",
+        "extreme_value": null
+    },
+    {
+        "url": "breadth_sector_sensex_adline",
+        "extreme_value": null
+    },
+    {
+        "url": "pmi_index",
+        "extreme_value": null
+    }
+]

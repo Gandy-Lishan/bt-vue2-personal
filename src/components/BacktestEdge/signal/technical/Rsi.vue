@@ -1,7 +1,7 @@
 <template>
 	<div class="senti-container">
-		<el-form :model="tech">
-			<div class="ids-container">
+		<el-form :model="tech" :rules="rules" ref="form">
+			<!-- <div class="ids-container">
 				<el-form-item label="OverBought bound" prop="over_bought_bound">
 					<el-input
 						v-model="tech.ids.over_bought_bound"
@@ -23,7 +23,7 @@
 						oninput="value=value.replace(/[^-?\d]/g,'')"
 					></el-input>
 				</el-form-item>
-			</div>
+			</div> -->
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio v-model="conditionRadio" label="RSI Value"></el-radio>
@@ -46,9 +46,9 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item>
+					<el-form-item prop="value">
 						<el-input
-							@blur="setDesciption"
+							@input="setDesciption"
 							v-model="tech.value"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 							placeholder="Input Value"
@@ -62,14 +62,33 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
+const _ = require('lodash')
+const throttle = _.throttle
 export default {
 	name: 'cci',
 	props: {
 		criteria: String,
 		techUrl: String,
-		techVal: String
+		techVal: String,
+		// editIndiData: Object,
+		direction: String
 	},
 	data() {
+		var validateValue = (rule, value, callback) => {
+			if (value === '') {
+				callback(new Error('Please input value'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
+				const pattern =
+					/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+				if (!pattern.test(value)) {
+					callback(new Error('Enter up to two decimal places'))
+				} else {
+					callback()
+				}
+			}
+		}
 		return {
 			tech: {
 				ids: {
@@ -87,33 +106,114 @@ export default {
 				{ value: 3, label: 'CrossAbove' },
 				{ value: 4, label: 'CrossBelow' }
 			],
-			conditionRadio: 'CCI Value',
-			description: ''
+			conditionRadio: 'RSI Value',
+			description: '',
+			editTechVal: '',
+			rules: { value: [{ validator: validateValue, trigger: 'blur' }] }
 		}
 	},
+	watch: {
+		// editIndiData: {
+		// 	handler(newVal) {
+		// 		if (JSON.stringify(newVal) != '{}') {
+		// 			this.tech.ids = newVal[this.criteria].signals[0].ids
+		// 			this.tech.condition = Number(
+		// 				newVal[this.criteria].signals[0].condition
+		// 			)
+		// 			this.tech.value = newVal[this.criteria].signals[0].value
+		// 			this.setDesciption()
+		// 		}
+		// 	},
+		// 	immediate: true,
+		// 	deep: true
+		// }
+	},
 	methods: {
-		setDesciption() {
+		clearForm() {
+			Object.assign(this.$data, this.$options.data())
+			this.clearFormValidate()
+		},
+		// 清除表单认证
+		clearFormValidate() {
+			this.$refs.form.clearValidate()
+		},
+		setDesciption: throttle(function () {
+			let criteria = ''
+			let direction = ''
+			if (this.criteria == 'entry') {
+				criteria = 'E:'
+				direction = this.direction + ':'
+			} else if (this.criteria == 'exit') {
+				criteria = 'X:'
+				if (this.direction == 'Long') {
+					direction = 'Cover:'
+				} else if (this.direction == 'Short') {
+					direction = 'Close:'
+				}
+			}
+			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let period = this.tech.period ? this.tech.period : ''
 			let condition = this.conditions[this.tech.condition].label
-			let description =
-				this.techVal + ' ' + period + ' ' + condition + ' ' + this.tech.value
-			this.description = description
-			console.log('tech description', description)
+			this.description = `${criteria} ${direction} ${techVal} ${period} ${condition} ${this.tech.value}`
+			console.log('描述', this.description)
+		}, 500),
+		saveCondition() {
+			let checked = true
+			let validForm
+			this.$refs.form.validate((valid) => {
+				validForm = valid
+			})
+			if (validForm) {
+				let ids = {
+					over_bought_bound: 80,
+					over_sold_bound: 20,
+					period: 14
+				}
+				let tech = this.tech
+				delete tech.ids
+				tech = Object.assign(ids, tech)
+				tech.criteria = this.criteria
+				tech.index = 0
+				this.$store.commit('saveCondition', tech)
+				let desObj = {}
+				desObj.criteria = this.criteria
+				desObj.description = this.description
+				this.$store.commit('saveDescription', desObj)
+				return checked
+			} else {
+				// this.$message({
+				// 	message: 'Please Input Value',
+				// 	type: 'error',
+				// 	offset: 300
+				// })
+				checked = false
+				return checked
+			}
+		},
+		setEditData(newVal) {
+			if (JSON.stringify(newVal) != '{}') {
+				this.tech.ids = newVal[this.criteria].signals[0].ids
+				this.tech.condition = Number(newVal[this.criteria].signals[0].condition)
+				this.tech.value = newVal[this.criteria].signals[0].value
+				this.editTechVal = newVal[this.criteria].signals[0].indicator
+				this.setDesciption()
+			}
 		}
 	}
 }
 </script>
 <style lang="less" scoped>
 .ids-container {
-	display: flex;
+	// hide attributes of technical indicators
+	display: none;
 	flex-wrap: wrap;
 	.el-form-item {
 		display: inline-flex;
 	}
-	border-bottom: 1px solid #797979;
 }
 .condition-container {
 	display: flex;
+	border-top: 1px solid #797979;
 }
 /deep/ .el-input__inner {
 	padding-left: 5px;

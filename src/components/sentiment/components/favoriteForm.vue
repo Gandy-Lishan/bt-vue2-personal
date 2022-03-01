@@ -206,7 +206,6 @@ export default {
 						vm.timer = setInterval(() => {
 							vm.$http.get('demo/backtest/' + row.id + '/').then((res) => {
 								//(res.data.status)
-								console.log('current status', res.data.status)
 								if (res.data.status === 2) {
 									clearInterval(vm.timer)
 									vm.getBacktestList()
