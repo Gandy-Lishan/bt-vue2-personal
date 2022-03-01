@@ -358,14 +358,14 @@ export default {
 			}
 			CIQ.addIndicators()
 		},
-				handleTechnicalSelect(item) {
+		handleTechnicalSelect(item) {
 			// const obj = {}
 			// obj.criteria = this.criteria
 			// obj.index = this.tabIndex
 			// obj.value = item.value
 			// this.$store.commit('clearSignal', obj)
-			console.log("item",item);
-			console.log("technical 选择",CIQ.technicalCategory);
+			console.log('item', item)
+			console.log('technical 选择', CIQ.technicalCategory)
 			this.si.technicalIndicator = item.value
 			this.$emit('getTechVal', item.value)
 			const vm = this
@@ -512,11 +512,19 @@ export default {
 		saveIndicator() {
 			let checked = true
 			let validForm
+			let validName = false
 			if (this.indicatorRadio === 'Sentiment Indicators') {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})
-				if (validForm) {
+				let sentimentList = this.$store.state.sentimentIndicatorList
+				for (let i = 0; i < sentimentList.length; i++) {
+					if (this.si.sentimentIndicator === sentimentList[i].value) {
+						validName = true
+						break
+					}
+				}
+				if (validForm && validName) {
 					let obj = {}
 					obj.criteria = this.criteria
 					obj.index = 0
@@ -524,16 +532,13 @@ export default {
 					this.$store.commit('getSentiValue', obj)
 					return checked
 				} else {
-					// this.$message({
-					// 	message:
-					// 		'Please select' +
-					// 		' ' +
-					// 		this.criteria +
-					// 		' ' +
-					// 		'sentiment indicator',
-					// 	type: 'error',
-					// 	offset: 300
-					// })
+					if (!validName) {
+						this.$message({
+							message: 'Please select indicator from the drop-down box',
+							type: 'error',
+							offset: 300
+						})
+					}
 					checked = false
 					return checked
 				}
@@ -541,7 +546,14 @@ export default {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})
-				if (validForm) {
+				let formateList = this.loadShortLong()
+				for (let i = 0; i < formateList.length; i++) {
+					if (this.si.technicalIndicator === formateList[i].value) {
+						validName = true
+						break
+					}
+				}
+				if (validForm && validName) {
 					let obj = {}
 					obj.criteria = this.criteria
 					obj.index = 0
@@ -549,16 +561,13 @@ export default {
 					this.$store.commit('getTechValue', obj)
 					return checked
 				} else {
-					// this.$message({
-					// 	message:
-					// 		'Please select' +
-					// 		' ' +
-					// 		this.criteria +
-					// 		' ' +
-					// 		' technical indicator',
-					// 	type: 'error',
-					// 	offset: 300
-					// })
+					if (!validName) {
+						this.$message({
+							message: 'Please select indicator from the drop-down box',
+							type: 'error',
+							offset: 300
+						})
+					}
 					checked = false
 					return checked
 				}
@@ -566,7 +575,14 @@ export default {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})
-				if (validForm) {
+				let formateList = this.loadRiskList()
+				for (let i = 0; i < formateList.length; i++) {
+					if (this.si.riskIndicator === formateList[i].value) {
+						validName = true
+						break
+					}
+				}
+				if (validForm && validName) {
 					let obj = {}
 					obj.criteria = 'exit'
 					obj.index = 0
@@ -574,12 +590,13 @@ export default {
 					this.$store.commit('getRiskValue', obj)
 					return checked
 				} else {
-					// this.$message({
-					// 	message:
-					// 		'Please select' + ' ' + this.criteria + ' ' + ' risk indicator',
-					// 	type: 'error',
-					// 	offset: 300
-					// })
+					if (!validName) {
+						this.$message({
+							message: 'Please select indicator from the drop-down box',
+							type: 'error',
+							offset: 300
+						})
+					}
 					checked = false
 					return checked
 				}
