@@ -358,7 +358,7 @@ export default {
 			}
 			CIQ.addIndicators()
 		},
-				handleTechnicalSelect(item) {
+		handleTechnicalSelect(item) {
 			// const obj = {}
 			// obj.criteria = this.criteria
 			// obj.index = this.tabIndex

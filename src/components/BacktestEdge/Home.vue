@@ -354,6 +354,8 @@ export default {
 									vm.loading = false
 									vm.goToHistoryForm()
 									vm.$refs.historyChild.refreshHistory(res.data.id)
+									// 刷新 favorite 表单
+									vm.$refs.favoriteChild.getBacktestList()
 									// 保存成功之后应该清除表单的所有数据
 									vm.clearForm()
 									// 并且清除 old_uuid
