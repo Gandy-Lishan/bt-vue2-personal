@@ -493,6 +493,7 @@ export default {
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
+			this.$store.commit('setTechSD', data.savedTechSD)
 			var frequency = ''
 			switch (freq) {
 				case 'Daily': {
@@ -512,7 +513,7 @@ export default {
 				}
 			}
 			this.$store.commit('setRestoreFreq', frequency)
-			CIQ.addIndicators()
+			CIQ.addIndicatorsFromBacktest()
 		},
 		showDes(row) {
 			const datades = {}

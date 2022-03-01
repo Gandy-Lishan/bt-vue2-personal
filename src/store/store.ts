@@ -4,6 +4,8 @@ import axios from "axios"
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
+		techSD: [],
+		savedTechSD: [],
 		currentSenti: {
 			url: '',
 			name: ''
@@ -148,6 +150,12 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+		setTechSD(state, val){
+			state.techSD = val
+		},	
+		setSavedTechSD(state, val){
+			state.savedTechSD = val
+		},
 	setCurrentSenti(state,val){
 		state.currentSenti = val
 	},

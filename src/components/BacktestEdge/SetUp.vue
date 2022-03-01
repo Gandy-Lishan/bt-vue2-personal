@@ -641,23 +641,6 @@ export default {
 			this.$emit('getTimeFrame', val)
 			this.loadSentimentList(val)
 			// same as setPeriodicity
-			var selectedFreq = ''
-			switch (val) {
-				case 'Monthly': {
-					selectedFreq = 'month'
-					break
-				}
-				case 'Weekly': {
-					selectedFreq = 'week'
-					break
-				}
-				case 'Daily': {
-					selectedFreq = 'day'
-					break
-				}
-				default:
-			}
-			CIQ.addIndicators(selectedFreq)
 			// var selectedFreq = ''
 			// switch (val) {
 			// 	case 'Monthly': {
@@ -674,8 +657,8 @@ export default {
 			// 	}
 			// 	default:
 			// }
-
 			// CIQ.addIndicators(selectedFreq)
+
 		},
 		async loadSentimentList(val) {
 			const vm = this

@@ -232,7 +232,7 @@ export default {
 				this.disabled = false
 				this.tech.value = newVal[this.criteria].signals[0].value
 				if (this.tech.value === 'MACDSL') {
-					this.conditionRadio = ' MACD Value '
+					this.conditionRadio = 'MACD Value '
 					this.disabled = true
 				}
 				this.editTechVal = newVal[this.criteria].signals[0].indicator
