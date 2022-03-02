@@ -100,7 +100,7 @@ export default {
 					period: 20
 				},
 				condition: 3,
-				value: -200
+				value: ''
 			},
 			conditions: [
 				{ value: 0, label: '>' },
