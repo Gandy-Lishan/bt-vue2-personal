@@ -306,7 +306,7 @@ export default {
 			this.loadTest = 'Loading...'
 			this.loading = true
 			let page = this.queryInfo.page
-			const res = await this.$http.get(
+			let res = await this.$http.get(
 				'/dev/backtest/?ordering=-create_date&page=' + page
 			)
 			if (res.status === 200) {
@@ -414,6 +414,7 @@ export default {
 		// 	}
 		// },
 		copyBacktest: throttle(function (row) {
+			console.log("复制");
 			let params = {}
 			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
@@ -427,7 +428,7 @@ export default {
 				this.$store.commit('getRunBacktestData', row)
 				// this.$emit('goTobacktestSetupForm', row.id)
 				// this.$emit('goBacktestResultForm', row)
-
+				console.log('复制的响应数据', res.data)
 				params = res.data
 				params.name = params.name + '(copy)'
 				params.favorites = false

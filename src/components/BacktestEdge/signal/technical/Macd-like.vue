@@ -1,6 +1,6 @@
 <template>
 	<div class="senti-container">
-		<el-form :model="tech">
+		<el-form :model="tech" :rules="rules" ref="form">
 			<!-- <div class="ids-container">
 				<el-form-item label="Slow moving average" prop="MACDSlow">
 					<el-input
@@ -114,6 +114,20 @@ export default {
 		direction: String
 	},
 	data() {
+		var validateValue = (rule, value, callback) => {
+ if (value === '') {
+ return callback(new Error('Please input value'))
+ }
+ if (isNaN(value) && value !== 'SL') {
+ return callback(new Error('Please enter the correct format'))
+ }
+ const pattern =
+ /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+ if (!pattern.test(value) && value != 0 && value !== 'SL') {
+ return callback(new Error('Enter up to two decimal places'))
+ }
+ callback()
+ }
 		return {
 			tech: {
 				ids: {
@@ -135,33 +149,19 @@ export default {
 			disabled: false,
 			description: '',
 			editTechVal: '',
-			histCondition: 0
+			histCondition: 0,
+			rules: {
+				value: [{validator: validateValue, trigger: 'blur'}]
+			}
 		}
-	},
-	watch: {
-		// editIndiData: {
-		// 	handler(newVal) {
-		// 		if (JSON.stringify(newVal) != '{}') {
-		// 			this.tech.ids = newVal[this.criteria].signals[0].ids
-		// 			this.tech.condition = Number(
-		// 				newVal[this.criteria].signals[0].condition
-		// 			)
-		// 			this.disabled = false
-		// 			this.tech.value = newVal[this.criteria].signals[0].value
-		// 			if (this.tech.value === 'MACDSL') {
-		// 				this.conditionRadio = ' MACD Value '
-		// 				this.disabled = true
-		// 			}
-		// 			this.setDesciption()
-		// 		}
-		// 	},
-		// 	immediate: true,
-		// 	deep: true
-		// }
 	},
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
+			this.clearFormValidate()
+		},
+		clearFormValidate() {
+			this.$refs.form.clearValidate()
 		},
 		setDesciption: throttle(function () {
 			let criteria = ''
@@ -197,7 +197,11 @@ export default {
 		},
 		saveCondition() {
 			let checked = true
-			if (this.tech.value !== '') {
+			let validForm
+			this.$refs.form.validate(valid => {
+				validForm = valid
+			})
+			if (validForm) {
 				let ids = {
 					MACDSlow: 26,
 					MACDFast: 12,
@@ -215,11 +219,6 @@ export default {
 				this.$store.commit('saveDescription', desObj)
 				return checked
 			} else {
-				this.$message({
-					message: 'Please Input Value',
-					type: 'error',
-					offset: 300
-				})
 				checked = false
 				return checked
 			}
