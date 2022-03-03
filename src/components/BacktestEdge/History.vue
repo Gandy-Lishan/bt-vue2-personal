@@ -330,10 +330,12 @@ export default {
 			let vm = this
 			vm.loadTest = 'Backtest is running, please wait'
 			vm.loading = true
-			vm.clearInterval = clearInterval()
-			vm.timer = setInterval(() => {
+			vm.clearInterval = clearInterval
+			let timer = setInterval(() => {
 				vm.$http.get('/dev/status/' + id + '/').then((res) => {
+					console.log('响应状态码',res.data.status);
 					if (res.data.status !== 1 && res.data.status !== 0) {
+						clearInterval(timer)
 						vm.$notify({
 							title: 'The run was successful',
 							message:
@@ -342,7 +344,7 @@ export default {
 							type: 'success',
 							duration: 1000
 						})
-						clearInterval(vm.timer)
+						vm.queryInfo.page = 1
 						vm.getBacktestList()
 						vm.loading = false
 					}
@@ -368,7 +370,7 @@ export default {
 				this.$emit('goBacktestResultForm', row)
 				vm.$emit('goTobacktestSetupForm', row.id)
 			})
-		}, 5000),
+		}, 1000),
 		deleteBacktest(id) {
 			this.$http
 				.delete('/dev/backtest/' + id + '/')
@@ -451,6 +453,7 @@ export default {
 								offset: 100
 							})
 							console.log('复制以后的运行', res.data)
+							this.queryInfo.page = 1
 							this.getBacktestList()
 							this.$emit('refFavoritesForm')
 						} else {
@@ -458,7 +461,7 @@ export default {
 						}
 					})
 			})
-		}, 50000),
+		}, 1000),
 		viewBacktestResults: throttle(function (row) {
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
@@ -484,7 +487,7 @@ export default {
 					type: 'warning'
 				})
 			}
-		}, 5000),
+		}, 1000),
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
@@ -594,7 +597,7 @@ export default {
 						})
 					}
 				})
-		}, 5000),
+		}, 1000),
 		moveToFavorites: throttle(function (row) {
 			let vm = this
 			row.favorites = false
@@ -616,7 +619,7 @@ export default {
 						})
 					}
 				})
-		}, 5000)
+		}, 1000)
 	}
 }
 </script>

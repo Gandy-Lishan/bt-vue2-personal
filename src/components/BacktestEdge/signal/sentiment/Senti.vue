@@ -456,6 +456,7 @@ export default {
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
+				this.clearFormValidate()
 				this.senti.extreme_optimism =
 					newVal[this.criteria].signals[0].extreme_optimism
 				this.senti.extreme_pessimism =

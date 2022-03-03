@@ -118,12 +118,12 @@ export default {
  if (value === '') {
  return callback(new Error('Please input value'))
  }
- if (isNaN(value) && value !== 'SL') {
+ if (isNaN(value) && value !== 'MACDSL') {
  return callback(new Error('Please enter the correct format'))
  }
  const pattern =
  /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
- if (!pattern.test(value) && value != 0 && value !== 'SL') {
+ if (!pattern.test(value) && value != 0 && value !== 'MACDSL') {
  return callback(new Error('Enter up to two decimal places'))
  }
  callback()
