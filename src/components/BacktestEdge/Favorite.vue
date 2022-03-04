@@ -296,11 +296,12 @@ export default {
 				this.loading = false
 				this.backtestList = res.data.results
 				if (this.backtestList.length != 0) {
-					res.data.results.forEach((element) => {
+					this.backtestList.forEach((element) => {
 						if (element.result !== '')
 							element.result = JSON.parse(element.result)
 					})
 				}
+				console.log("收藏夹中的表单",this.backtestList);
 				this.queryInfo.total = res.data.count
 			} else {
 				this.loading = false
@@ -310,10 +311,10 @@ export default {
 			let vm = this
 			vm.loading = true
 			vm.clearInterval = clearInterval()
-			vm.timer = setInterval(() => {
+			let timer = setInterval(() => {
 				vm.$http.get('/dev/status/' + id + '/').then((res) => {
-					if (res.data.status === 2) {
-						clearInterval(vm.timer)
+					if (res.data.status === 0 || res.data.status === 3) {
+						clearInterval(timer)
 						vm.getBacktestList()
 						vm.loading = false
 						vm.$notify({

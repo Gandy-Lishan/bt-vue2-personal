@@ -408,7 +408,7 @@ class SignalCode {
 // var ids = new SignalDecodeIDS()
 // console.log(ids.decode("EO20/EP80"));
 // console.log(sc.decode("SVMA20/3/20"));
-const a = new SignalCode()
+// const a = new SignalCode()
 
 // a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SVMA20/3/20")
 // a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SV/3/20")
@@ -420,6 +420,7 @@ const a = new SignalCode()
 // a.decode("TI:Commodity Channel Index;IDS:OBB20/OSB80/Period20;SC:CCIV/4/90.0")
 // a.decode("TI:RSI;IDS:OBB200/OSB-200/Period20.000;SC:RSIV/3/-200.00")
 // a.decode("TI:RSI;IDS:OBB200/OSB-200/Period20;SC:RSIV/4/200.00")
+// a.decode("SI:STEM.MR NASDAQ Model;IDS:EO0.75/EP0.25;SC:SVMA10/3/0.34")
 
 // console.log(a.decode("Exit:RC;IDS:;SC:PTE20/LSE/TIM180"))
 // take_profit: 20; stop_loss: 80

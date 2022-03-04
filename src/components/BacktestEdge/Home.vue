@@ -342,7 +342,6 @@ export default {
 							this.$store.state.indicators.technicalIndicators
 						indicatorLayout.activatedMA = this.$store.state.activatedMA
 						backtestData.indicator_layout = JSON.stringify(indicatorLayout)
-						console.log('传递的参数', backtestData)
 						this.$http
 							.post('/dev/runbt/', this.$qs.stringify(backtestData), {
 								withCredentials: true
@@ -354,6 +353,12 @@ export default {
 									vm.loading = false
 									vm.goToHistoryForm()
 									vm.$refs.historyChild.refreshHistory(res.data.id)
+									if(res.data.favorites) {
+										let obj = {}
+										obj.favorites = true
+										obj.id = res.data.id
+										vm.$ref.favoriteChild.addToFavorites(obj)
+									} 
 									// 保存成功之后应该清除表单的所有数据
 									vm.clearForm()
 									// 并且清除 old_uuid
@@ -361,7 +366,6 @@ export default {
 									if (backtestInfo.old_uuid) {
 										vm.$store.commit('clearBacktestUuid')
 									}
-									vm.$refs.favoriteChild.getBacktestList()
 
 								} else {
 									vm.$message.error('Save failed')

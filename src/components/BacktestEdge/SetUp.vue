@@ -765,7 +765,6 @@ export default {
 				validForm = valid
 			})
 			if (validForm) {
-				if (!this.bd.old_uuid) {
 					let nameList = this.$store.state.backtestNameList
 					for (let i = 0; i < nameList.length; i++) {
 						if (nameList[i] == this.bd.name) {
@@ -773,7 +772,6 @@ export default {
 							break
 						}
 					}
-				}
 				if (nameChecked) {
 					if (this.bd.end_date) {
 						// 保存 backtestform 的数据

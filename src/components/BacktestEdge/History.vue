@@ -346,6 +346,7 @@ export default {
 						})
 						vm.queryInfo.page = 1
 						vm.getBacktestList()
+						this.$emit('refFavoritesForm')
 						vm.loading = false
 					}
 				})
