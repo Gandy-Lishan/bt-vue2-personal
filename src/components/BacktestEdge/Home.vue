@@ -361,7 +361,7 @@ export default {
 									if (backtestInfo.old_uuid) {
 										vm.$store.commit('clearBacktestUuid')
 									}
-									vm.$refs.historyChild.refreshHistory(res.data.id)
+									vm.$refs.favoriteChild.getBacktestList()
 
 								} else {
 									vm.$message.error('Save failed')

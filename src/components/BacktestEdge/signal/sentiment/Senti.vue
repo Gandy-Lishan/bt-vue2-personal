@@ -98,7 +98,7 @@
 					<el-form-item prop="maValue">
 						<el-input
 							:disabled="!disabled"
-							v-model="senti.value"
+							v-model="maValue"
 							placeholder="Input Value"
 							@input="setDesciption"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
@@ -205,7 +205,8 @@ export default {
 				value: [{ validator: validateValue, trigger: 'blur' }],
 				maValue: [{ validator: validateMaValue, trigger: 'blur' }],
 				period: [{ validator: validatePeriod, trigger: 'blur' }]
-			}
+			},
+			maValue: ''
 		}
 	},
 	computed: {
@@ -330,6 +331,7 @@ export default {
 			let period = this.senti.period ? this.senti.period : ''
 			let condition = this.conditions[this.senti.condition].label
 			let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
+			let value = this.conditionRadio === 'Sentiment Value' ? this.senti.value : this.maValue
 			this.description = `${criteria} ${direction} ${sentiVal} ${ma} ${period} ${condition} ${this.senti.value}`
 		}, 500),
 		getConditionRadio(val) {
@@ -341,6 +343,7 @@ export default {
 				this.disabled = !this.disabled
 			} else if (val === 'Sentiment Moving Average') {
 				this.disabled = !this.disabled
+				this.senti.period = ''
 			}
 		},
 		setPeriod(val) {
@@ -424,6 +427,7 @@ export default {
 				if (validForm) {
 					// if (this.senti.period) {
 					let senti = this.senti
+					senti.value = maValue
 					senti.criteria = this.criteria
 					senti.index = 0
 					// 定义一个 vuex 新事件用于保存 description
@@ -474,6 +478,7 @@ export default {
 				if (period) {
 					this.conditionRadio = 'Sentiment Moving Average'
 					this.senti.period = period
+					this.maValue = this.senti.value
 					this.setPeriod(period)
 					this.disabled = true
 				}
