@@ -98,7 +98,7 @@
 					<el-form-item prop="maValue">
 						<el-input
 							:disabled="!disabled"
-							v-model="senti.value"
+							v-model="senti.maValue"
 							placeholder="Input Value"
 							@input="setDesciption"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
@@ -145,6 +145,7 @@ export default {
 		}
 		var validateMaValue = (rule, value, callback) => {
 			if (this.conditionRadio == 'Sentiment Moving Average') {
+				console.log('校验');
 				if (value === '') {
 					callback(new Error('Please input value'))
 				} else if (isNaN(value)) {
@@ -187,7 +188,8 @@ export default {
 				extreme_pessimism: '',
 				condition: 3,
 				value: '',
-				period: ''
+				period: '',
+				maValue: ''
 			},
 			conditions: [
 				{ value: 0, label: '>' },
@@ -205,7 +207,8 @@ export default {
 				value: [{ validator: validateValue, trigger: 'blur' }],
 				maValue: [{ validator: validateMaValue, trigger: 'blur' }],
 				period: [{ validator: validatePeriod, trigger: 'blur' }]
-			}
+			},
+			maValue: ''
 		}
 	},
 	computed: {
@@ -330,17 +333,21 @@ export default {
 			let period = this.senti.period ? this.senti.period : ''
 			let condition = this.conditions[this.senti.condition].label
 			let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
-			this.description = `${criteria} ${direction} ${sentiVal} ${ma} ${period} ${condition} ${this.senti.value}`
+			let value = this.conditionRadio === 'Sentiment Value' ? this.senti.value : this.senti.maValue
+			this.description = `${criteria} ${direction} ${sentiVal} ${ma} ${period} ${condition} ${value}`
 		}, 500),
 		getConditionRadio(val) {
 			this.clearFormValidate()
 			if (val === 'Sentiment Value') {
 				if ('period' in this.senti) {
 					delete this.senti.period
+					delete this.senti.maValue
 				}
 				this.disabled = !this.disabled
 			} else if (val === 'Sentiment Moving Average') {
 				this.disabled = !this.disabled
+				this.senti.period = ''
+				this.senti.maValue = ''
 			}
 		},
 		setPeriod(val) {
@@ -401,6 +408,7 @@ export default {
 				if (validForm) {
 					let senti = this.senti
 					delete senti.period
+					delete senti.maValue
 					senti.criteria = this.criteria
 					senti.index = 0
 					// 定义一个 vuex 新事件用于保存 description
@@ -424,6 +432,8 @@ export default {
 				if (validForm) {
 					// if (this.senti.period) {
 					let senti = this.senti
+					senti.value = senti.maValue
+					delete senti.maValue
 					senti.criteria = this.criteria
 					senti.index = 0
 					// 定义一个 vuex 新事件用于保存 description
@@ -456,6 +466,7 @@ export default {
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
+				this.clearFormValidate()
 				this.senti.extreme_optimism =
 					newVal[this.criteria].signals[0].extreme_optimism
 				this.senti.extreme_pessimism =
@@ -473,6 +484,7 @@ export default {
 				if (period) {
 					this.conditionRadio = 'Sentiment Moving Average'
 					this.senti.period = period
+					this.senti.maValue = this.senti.value
 					this.setPeriod(period)
 					this.disabled = true
 				}

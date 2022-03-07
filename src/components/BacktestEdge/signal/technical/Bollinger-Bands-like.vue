@@ -89,8 +89,7 @@ export default {
 			],
             valueConditions: [
 				{ value: 'LB', label: 'Low Band' },
-				{ value: 'HB', label: 'High Band' },
-				{ value: 'MB', label: 'Middle Band' }
+				{ value: 'HB', label: 'High Band' }
 			],
 			conditionRadio: 'Symbol Close',
 			disabled: false,
@@ -99,33 +98,6 @@ export default {
 			description: '',
 			editTechVal: ''
 		}
-	},
-	watch: {
-		// editIndiData: {
-		// 	handler(newVal) {
-		// 		if (JSON.stringify(newVal) != '{}') {
-		// 			this.tech.ids = newVal[this.criteria].signals[0].ids
-		// 			this.tech.condition = Number(
-		// 				newVal[this.criteria].signals[0].condition
-		// 			)
-		// 			this.tech.period = newVal[this.criteria].signals[0].period
-		// 			this.conditionRadio = 'Symbol Close'
-		// 			this.disabled = false
-		// 			this.getSCvalue(this.tech.period)
-		// 			let ma_period = newVal[this.criteria].signals[0].ma_period
-		// 			if (ma_period) {
-		// 				this.conditionRadio = 'Moving Average'
-		// 				this.disabled = true
-		// 				this.tech.ma_period = ma_period
-		// 				this.getMaPeriodValue(ma_period)
-		// 				this.getMaValue(newVal[this.criteria].signals[0].period)
-		// 			}
-		// 			this.setDesciption()
-		// 		}
-		// 	},
-		// 	immediate: true,
-		// 	deep: true
-		// }
 	},
 	methods: {
 		clearForm() {

@@ -310,7 +310,8 @@ export default {
 						trigger: 'blur'
 					}
 				]
-			}
+			},
+			oldBacktestName: ''
 		}
 	},
 	mounted() {
@@ -370,6 +371,8 @@ export default {
 					this.getSymbolName(newVal.symbol)
 					this.frequency = this.editFrequency
 					this.changeTimeframe(this.frequency)
+					// 保存编辑之前旧的名字
+					this.oldBacktestName = newVal.name
 					// console.log('频率', this.frequency)
 					this.temp.commission = Number(newVal.commission) * 100
 					this.temp.slippage = Number(newVal.slippage) * 100
@@ -658,7 +661,6 @@ export default {
 			// 	default:
 			// }
 			// CIQ.addIndicators(selectedFreq)
-
 		},
 		async loadSentimentList(val) {
 			const vm = this
@@ -765,13 +767,14 @@ export default {
 				validForm = valid
 			})
 			if (validForm) {
-				if (!this.bd.old_uuid) {
-					let nameList = this.$store.state.backtestNameList
-					for (let i = 0; i < nameList.length; i++) {
-						if (nameList[i] == this.bd.name) {
-							nameChecked = false
-							break
-						}
+				let nameList = this.$store.state.backtestNameList
+				for (let i = 0; i < nameList.length; i++) {
+					if (
+						this.bd.name === nameList[i] &&
+						this.bd.name !== this.oldBacktestName
+					) {
+						nameChecked = false
+						break
 					}
 				}
 				if (nameChecked) {
