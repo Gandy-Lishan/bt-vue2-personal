@@ -244,34 +244,6 @@ export default {
 			immediate: true,
 			deep: true
 		},
-		// editIndiData: {
-		// 	handler(newVal) {
-		// 		if (JSON.stringify(newVal) != '{}') {
-		// 			this.senti.extreme_optimism =
-		// 				newVal[this.criteria].signals[0].extreme_optimism
-		// 			this.senti.extreme_pessimism =
-		// 				newVal[this.criteria].signals[0].extreme_pessimism
-		// 			this.senti.condition = Number(
-		// 				newVal[this.criteria].signals[0].condition
-		// 			)
-		// 			this.senti.value = newVal[this.criteria].signals[0].value
-		// 			this.conditionRadio = 'Sentiment Value'
-		// 			this.disabled = false
-		// 			delete this.senti.period
-		// 			let period = newVal[this.criteria].signals[0].period
-		// 			if (period) {
-		// 				this.conditionRadio = 'Sentiment Moving Average'
-		// 				this.senti.period = period
-		// 				this.setPeriod(period)
-		// 				this.disabled = true
-		// 			}
-		// 			this.setDesciption()
-		// 		}
-		// 	},
-		// 	immediate: true,
-		// 	deep: true
-		// },
-		// 用于解决 entry 和 exit 选择相同 indicator 而无法展示极值的问题
 		sentiUrl: {
 			handler(newVal) {
 				if (newVal) {

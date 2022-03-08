@@ -183,8 +183,10 @@ export default {
 		}
 	},
 	watch: {
-		updateSenti(val) {
-			this.indicatorRadio = 'sentiment'
+		updateSenti(val) {	
+			if(this.indicatorRadio == 'technical' && this.techVal == ''){
+				this.indicatorRadio = 'sentiment'
+			}
 		},
 		updateTech(val) {
 			this.indicatorRadio = 'technical'
