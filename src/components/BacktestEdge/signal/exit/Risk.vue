@@ -151,6 +151,7 @@ export default {
 			}
 		}, 500),
 		saveCondition() {
+			console.log("risk的保存");
 			let checked = true
 			// 判断有无空值
 			if (

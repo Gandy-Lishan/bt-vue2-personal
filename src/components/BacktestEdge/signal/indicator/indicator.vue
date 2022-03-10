@@ -142,15 +142,18 @@ export default {
 	},
 	watch: {
 		updateSenti(val) {
-			this.si.sentimentIndicator = val.name
+			if (this.si.sentimentIndicator == '' && this.si.technicalIndicator == '') {
+				this.si.sentimentIndicator = val.name
 
-			for (var i in CIQ.indicatorList) {
-				if (CIQ.indicatorList[i].chart_name == val.name) {
-					this.indicatorRadio = 'Sentiment Indicators'
-					// extract this statement from handleSentimentSelect
-					this.$emit('getSentiVal', CIQ.indicatorList[i].chart_name)
+				for (var i in CIQ.indicatorList) {
+					if (CIQ.indicatorList[i].chart_name == val.name) {
+						this.indicatorRadio = 'Sentiment Indicators'
+						// extract this statement from handleSentimentSelect
+						this.$emit('getSentiVal', CIQ.indicatorList[i].chart_name)
 
-					//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
+						//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
+						this.$emit('getSentiUrl', CIQ.indicatorList[i].url)
+					}
 				}
 			}
 		},
@@ -273,8 +276,11 @@ export default {
 		},
 		createStateSentimentFilter(queryString) {
 			return (state) => {
+				if (state.value.indexOf("Seasonality") !==-1){
+                          return false
+                }
 				return (
-					state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+					state.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1
 				)
 			}
 		},
@@ -294,7 +300,7 @@ export default {
 				return (
 					technicaltIndicatorList.value
 						.toLowerCase()
-						.indexOf(queryString.toLowerCase()) === 0
+						.indexOf(queryString.toLowerCase()) !== -1
 				)
 			}
 		},
@@ -311,7 +317,7 @@ export default {
 				return (
 					riskIndicatorList.value
 						.toLowerCase()
-						.indexOf(queryString.toLowerCase()) === 0
+						.indexOf(queryString.toLowerCase()) !== -1
 				)
 			}
 		},

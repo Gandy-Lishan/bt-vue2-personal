@@ -244,34 +244,6 @@ export default {
 			immediate: true,
 			deep: true
 		},
-		// editIndiData: {
-		// 	handler(newVal) {
-		// 		if (JSON.stringify(newVal) != '{}') {
-		// 			this.senti.extreme_optimism =
-		// 				newVal[this.criteria].signals[0].extreme_optimism
-		// 			this.senti.extreme_pessimism =
-		// 				newVal[this.criteria].signals[0].extreme_pessimism
-		// 			this.senti.condition = Number(
-		// 				newVal[this.criteria].signals[0].condition
-		// 			)
-		// 			this.senti.value = newVal[this.criteria].signals[0].value
-		// 			this.conditionRadio = 'Sentiment Value'
-		// 			this.disabled = false
-		// 			delete this.senti.period
-		// 			let period = newVal[this.criteria].signals[0].period
-		// 			if (period) {
-		// 				this.conditionRadio = 'Sentiment Moving Average'
-		// 				this.senti.period = period
-		// 				this.setPeriod(period)
-		// 				this.disabled = true
-		// 			}
-		// 			this.setDesciption()
-		// 		}
-		// 	},
-		// 	immediate: true,
-		// 	deep: true
-		// },
-		// 用于解决 entry 和 exit 选择相同 indicator 而无法展示极值的问题
 		sentiUrl: {
 			handler(newVal) {
 				if (newVal) {
@@ -292,7 +264,8 @@ export default {
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
-			this.clearFormValidate()
+			// this.clearFormValidate()
+			this.$refs.sentiForm.resetFields();
 		},
 		// 清除表单认证
 		clearFormValidate() {
@@ -399,14 +372,20 @@ export default {
 			this.$store.commit('getMA', activatedMAList)
 		},
 		saveCondition() {
+			console.log("senti的保存");
 			let checked = true
 			let validForm
+			console.dir("表单验证", this.$refs.sentiForm);
 			this.$refs.sentiForm.validate((valid) => {
 				validForm = valid
+				console.dir("表单验证", this.$refs.sentiForm);
 			})
 			if (this.conditionRadio === 'Sentiment Value') {
 				if (validForm) {
 					let senti = this.senti
+					if(senti.value === '') {
+						senti.value = 0
+					}
 					delete senti.period
 					delete senti.maValue
 					senti.criteria = this.criteria

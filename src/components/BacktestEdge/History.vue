@@ -422,12 +422,12 @@ export default {
 			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)
-				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayout(
-						JSON.parse(res.data.indicator_layout),
-						JSON.parse(res.data.entry).frequency
-					)
-				}
+				// if (res.data.indicator_layout) {
+				// 	this.restoreIndicatorLayout(
+				// 		JSON.parse(res.data.indicator_layout),
+				// 		JSON.parse(res.data.entry).frequency
+				// 	)
+				// }
 				this.$store.commit('getRunBacktestData', row)
 				// this.$emit('goTobacktestSetupForm', row.id)
 				// this.$emit('goBacktestResultForm', row)
