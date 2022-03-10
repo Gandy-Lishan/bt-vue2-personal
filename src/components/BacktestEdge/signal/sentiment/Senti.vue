@@ -145,7 +145,6 @@ export default {
 		}
 		var validateMaValue = (rule, value, callback) => {
 			if (this.conditionRadio == 'Sentiment Moving Average') {
-				console.log('校验');
 				if (value === '') {
 					callback(new Error('Please input value'))
 				} else if (isNaN(value)) {
@@ -264,7 +263,9 @@ export default {
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
+			this.conditionRadio = 'Sentiment Value'
 			this.clearFormValidate()
+			// this.$refs.sentiForm.resetFields();
 		},
 		// 清除表单认证
 		clearFormValidate() {
@@ -372,14 +373,20 @@ export default {
 			this.$store.commit('getMA', activatedMAList)
 		},
 		saveCondition() {
+			let vm = this
 			let checked = true
 			let validForm
-			this.$refs.sentiForm.validate((valid) => {
+			console.dir("表单验证", vm.$refs.sentiForm);
+			vm.$refs['sentiForm'].validate((valid) => {
 				validForm = valid
+				console.dir("表单验证", vm.$refs.sentiForm);
 			})
 			if (this.conditionRadio === 'Sentiment Value') {
 				if (validForm) {
 					let senti = this.senti
+					// if(senti.value === '') {
+					// 	senti.value = 0
+					// }
 					delete senti.period
 					delete senti.maValue
 					senti.criteria = this.criteria
@@ -436,6 +443,7 @@ export default {
 					return checked
 				}
 			}
+			this.clearFormValidate()
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {

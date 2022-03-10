@@ -333,7 +333,6 @@ export default {
 			vm.clearInterval = clearInterval
 			let timer = setInterval(() => {
 				vm.$http.get('/dev/status/' + id + '/').then((res) => {
-					console.log('响应状态码',res.data.status);
 					if (res.data.status !== 1 && res.data.status !== 0) {
 						clearInterval(timer)
 						vm.$notify({
@@ -417,7 +416,6 @@ export default {
 		// 	}
 		// },
 		copyBacktest: throttle(function (row) {
-			console.log("复制");
 			let params = {}
 			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
@@ -431,7 +429,6 @@ export default {
 				this.$store.commit('getRunBacktestData', row)
 				// this.$emit('goTobacktestSetupForm', row.id)
 				// this.$emit('goBacktestResultForm', row)
-				console.log('复制的响应数据', res.data)
 				params = res.data
 				params.name = params.name + '(copy)'
 				params.favorites = false
@@ -453,7 +450,6 @@ export default {
 								type: 'success',
 								offset: 100
 							})
-							console.log('复制以后的运行', res.data)
 							this.queryInfo.page = 1
 							this.getBacktestList()
 							this.$emit('refFavoritesForm')

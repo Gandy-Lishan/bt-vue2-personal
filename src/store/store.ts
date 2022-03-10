@@ -463,7 +463,6 @@ export default new Vuex.Store({
 			state.isClearForm = !state.isClearForm
 		},
 		saveCondition(state, obj) {
-			console.log("保存 condition");
 			let criteria = obj.criteria
 			let index = obj.index
 			delete obj.criteria
@@ -471,7 +470,9 @@ export default new Vuex.Store({
 			let init = {sentimentIndicator: '', technicalIndicator: '',riskIndicator: ''}
 			init.sentimentIndicator = state.backtestInfo[criteria].signals[index].sentimentIndicator
 			init.technicalIndicator = state.backtestInfo[criteria].signals[index].technicalIndicator
-			init.riskIndicator = state.backtestInfo.exit.signals[index].riskIndicator
+			if(criteria === 'exit') {
+				init.riskIndicator = state.backtestInfo.exit.signals[index].riskIndicator
+				}
 			// 在保存之前确保只有 sentimentIndicator 以及 technicalIndicator 两个属性
 			if(criteria == 'exit') {
 			state.backtestInfo.exit.signals[index] = Object.assign({}, init)

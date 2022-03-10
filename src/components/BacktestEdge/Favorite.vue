@@ -301,7 +301,6 @@ export default {
 							element.result = JSON.parse(element.result)
 					})
 				}
-				console.log("收藏夹中的表单",this.backtestList);
 				this.queryInfo.total = res.data.count
 			} else {
 				this.loading = false

@@ -1,6 +1,6 @@
 <template>
 	<div class="senti-container">
-		<el-form :model="tech" :rules="rules" ref="form">
+		<el-form :model="tech" :rules="rules" ref="cciForm">
 			<!-- <div class="ids-container">
 				<el-form-item label="OverBought bound" prop="over_bought_bound">
 					<el-input
@@ -144,7 +144,7 @@ export default {
 		},
 		// 清除表单认证
 		clearFormValidate() {
-			this.$refs.form.clearValidate()
+			this.$refs.cciForm.clearValidate()
 		},
 		setDesciption: throttle(function () {
 			let criteria = ''
@@ -166,10 +166,9 @@ export default {
 			this.description = `${criteria} ${direction} ${techVal} ${period} ${condition} ${this.tech.value}`
 		}, 500),
 		saveCondition() {
-			console.log('CCI保存')
 			let checked = true
 			let validForm
-			this.$refs.form.validate((valid) => {
+			this.$refs.cciForm.validate((valid) => {
 				validForm = valid
 			})
 			if (validForm) {

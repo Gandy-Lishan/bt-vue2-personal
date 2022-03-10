@@ -370,8 +370,6 @@ export default {
 			// obj.index = this.tabIndex
 			// obj.value = item.value
 			// this.$store.commit('clearSignal', obj)
-			console.log('item', item)
-			console.log('technical 选择', CIQ.technicalCategory)
 			this.si.technicalIndicator = item.value
 			this.$emit('getTechVal', item.value)
 			const vm = this
@@ -422,8 +420,6 @@ export default {
 					techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
 					techIndicators.push(i[1])
 					this.$store.commit('getTechnicalIndicators', techIndicators)
-
-					console.log('TechnicalSelect MA LIST', CIQ.store.state.activatedMA)
 
 					// avoid add indicator redundantly
 					for (var studyInstanceName in CIQ.stxx.layout.studies) {

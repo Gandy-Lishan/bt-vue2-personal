@@ -1,6 +1,6 @@
 <template>
 	<div class="senti-container">
-		<el-form :model="tech" :rules="rules" ref="form">
+		<el-form :model="tech" :rules="rules" ref="rsiForm">
 			<!-- <div class="ids-container">
 				<el-form-item label="OverBought bound" prop="over_bought_bound">
 					<el-input
@@ -119,7 +119,7 @@ export default {
 		},
 		// 清除表单认证
 		clearFormValidate() {
-			this.$refs.form.clearValidate()
+			this.$refs.rsiForm.clearValidate()
 		},
 		setDesciption: throttle(function () {
 			let criteria = ''
@@ -139,12 +139,11 @@ export default {
 			let period = this.tech.period ? this.tech.period : ''
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${period} ${condition} ${this.tech.value}`
-			console.log('描述', this.description)
 		}, 500),
 		saveCondition() {
 			let checked = true
 			let validForm
-			this.$refs.form.validate((valid) => {
+			this.$refs.rsiForm.validate((valid) => {
 				validForm = valid
 			})
 			if (validForm) {

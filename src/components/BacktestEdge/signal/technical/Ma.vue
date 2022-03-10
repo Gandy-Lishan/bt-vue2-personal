@@ -1,6 +1,6 @@
 <template>
 	<div class="senti-container">
-		<el-form :model="tech" :rules="rules" ref="form">
+		<el-form :model="tech" :rules="rules" ref="maForm">
 			<!-- <div class="ids-container">
 				<el-radio-group v-model="tech.ids.ma_category" @change="getMaRadio">
 					<el-radio label="SMA" style="margin-bottom: 30px"
@@ -226,7 +226,7 @@ export default {
 		},
 		// 清除表单认证
 		clearFormValidate() {
-			this.$refs.form.clearValidate()
+			this.$refs.maForm.clearValidate()
 		},
 		getConditionRadio(val) {
 			this.conditionRadio = val
@@ -528,7 +528,7 @@ export default {
 		saveCondition() {
 			let checked = true
 			let validForm
-			this.$refs.form.validate((valid) => {
+			this.$refs.maForm.validate((valid) => {
 				validForm = valid
 			})
 			if (this.conditionRadio === 'Symbol Close') {

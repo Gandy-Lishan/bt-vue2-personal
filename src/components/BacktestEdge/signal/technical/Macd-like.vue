@@ -1,6 +1,6 @@
 <template>
 	<div class="senti-container">
-		<el-form :model="tech" :rules="rules" ref="form">
+		<el-form :model="tech" :rules="rules" ref="macdForm">
 			<!-- <div class="ids-container">
 				<el-form-item label="Slow moving average" prop="MACDSlow">
 					<el-input
@@ -161,7 +161,7 @@ export default {
 			this.clearFormValidate()
 		},
 		clearFormValidate() {
-			this.$refs.form.clearValidate()
+			this.$refs.macdForm.clearValidate()
 		},
 		setDesciption: throttle(function () {
 			let criteria = ''
@@ -181,7 +181,6 @@ export default {
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${condition} ${this.tech.value}`
-			console.log('描述', this.description)
 		}, 500),
 		getConditionRadio(val) {
 			CIQ.store.commit('setConditionRadio',val)
@@ -198,7 +197,7 @@ export default {
 		saveCondition() {
 			let checked = true
 			let validForm
-			this.$refs.form.validate(valid => {
+			this.$refs.macdForm.validate(valid => {
 				validForm = valid
 			})
 			if (validForm) {

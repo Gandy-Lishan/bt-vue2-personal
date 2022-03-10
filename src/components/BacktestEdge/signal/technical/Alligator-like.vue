@@ -530,7 +530,6 @@ export default {
 		// 设置编辑的数据
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
-				console.log('alliger的编辑',newVal);
 				this.tech.ids = newVal[this.criteria].signals[0].ids
 				this.tech.condition = Number(newVal[this.criteria].signals[0].condition)
 				this.tech.period = newVal[this.criteria].signals[0].period

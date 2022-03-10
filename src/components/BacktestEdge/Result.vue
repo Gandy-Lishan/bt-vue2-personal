@@ -146,7 +146,6 @@ export default {
 	watch: {
 		backtestEditData: {
 			handler(newVal) {
-				console.log('RESULT 数据', newVal)
 			},
 			immediate: true,
 			deep: true
