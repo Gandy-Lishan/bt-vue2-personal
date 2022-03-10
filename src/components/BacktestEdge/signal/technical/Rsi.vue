@@ -139,7 +139,6 @@ export default {
 			let period = this.tech.period ? this.tech.period : ''
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${period} ${condition} ${this.tech.value}`
-			console.log('描述', this.description)
 		}, 500),
 		saveCondition() {
 			let checked = true

@@ -166,7 +166,6 @@ export default {
 			this.description = `${criteria} ${direction} ${techVal} ${period} ${condition} ${this.tech.value}`
 		}, 500),
 		saveCondition() {
-			console.log('CCI保存')
 			let checked = true
 			let validForm
 			this.$refs.cciForm.validate((valid) => {

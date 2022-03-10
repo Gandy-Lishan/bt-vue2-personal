@@ -271,7 +271,6 @@ export default {
 						const b = new SignalCode()
 						var entry_signal_list = []
 						var exit_signal_list = []
-						console.log(backtestData.exit.signals[0])
 						const set = new Set([
 							['Commodity Channel Index', 'cci'],
 							['Relative Strength Index', 'rsi'],

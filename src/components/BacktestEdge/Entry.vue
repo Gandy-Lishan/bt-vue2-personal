@@ -287,7 +287,6 @@ export default {
 					data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
 				}
 				vm.fd.direction = data.entry.direction
-				console.log('entry的direction', vm.fd.direction)
 				vm.getExitDirection(data.entry.direction)
 				let edit = {}
 				edit.entry_description = data.entry_description
@@ -303,7 +302,6 @@ export default {
 				// 监听
 				// vm.editIndiData = edit
 				// 改成直接触发
-				console.log('编辑的进场数据', edit)
 				vm.$refs.indiChild.setEditData(edit)
 				// 判断使用那个组件
 				// vm.$refs.sentiChild.setEditData(edit)

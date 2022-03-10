@@ -285,7 +285,6 @@ export default {
 								element.result = JSON.parse(element.result)
 						})
 					}
-					console.log('sample', this.backtestList)
 					this.queryInfo.total = res.data.count
 					this.loading = false
 				} else {
