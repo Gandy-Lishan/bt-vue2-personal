@@ -318,8 +318,9 @@ export default {
 				this.disabled = !this.disabled
 			} else if (val === 'Sentiment Moving Average') {
 				this.disabled = !this.disabled
-				this.senti.period = ''
+				this.senti.period = 20
 				this.senti.maValue = ''
+				this.setPeriod(this.senti.period)
 			}
 		},
 		setPeriod(val) {
