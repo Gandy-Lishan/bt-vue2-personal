@@ -28,7 +28,7 @@
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							:disabled="disabled"
+							::disabled="!(conditionRadio === 'Sentiment Value')"
 							v-model="senti.condition"
 							filterable
 							placeholder="Please select condition"
@@ -46,7 +46,7 @@
 				<div class="conditionInput">
 					<el-form-item prop="value">
 						<el-input
-							:disabled="disabled"
+							:disabled="!(conditionRadio === 'Sentiment Value')"
 							@input="setDesciption"
 							v-model="senti.value"
 							placeholder="Input Value"
@@ -68,7 +68,7 @@
 					<el-form-item prop="period">
 						<el-input
 							@change="setPeriod"
-							:disabled="!disabled"
+							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
 							placeholder="Input Period"
 							oninput="value=value.replace(/[^\d]/g,'')"
 							v-model="senti.period"
@@ -81,7 +81,7 @@
 						<el-select
 							v-model="senti.condition"
 							filterable
-							:disabled="!disabled"
+							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
 							placeholder="Please select condition"
 						>
 							<el-option
@@ -97,7 +97,7 @@
 				<div class="conditionInput">
 					<el-form-item prop="maValue">
 						<el-input
-							:disabled="!disabled"
+							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
 							v-model="senti.maValue"
 							placeholder="Input Value"
 							@input="setDesciption"
@@ -125,7 +125,6 @@ export default {
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
-			if (this.conditionRadio == 'Sentiment Value') {
 				if (value === '') {
 					callback(new Error('Please input value'))
 				} else if (isNaN(value)) {
@@ -139,12 +138,8 @@ export default {
 						callback()
 					}
 				}
-			} else {
-				callback()
-			}
 		}
 		var validateMaValue = (rule, value, callback) => {
-			if (this.conditionRadio == 'Sentiment Moving Average') {
 				if (value === '') {
 					callback(new Error('Please input value'))
 				} else if (isNaN(value)) {
@@ -158,12 +153,8 @@ export default {
 						callback()
 					}
 				}
-			} else {
-				callback()
-			}
 		}
 		var validatePeriod = (rule, value, callback) => {
-			if (this.conditionRadio == 'Sentiment Moving Average') {
 				if (value === 0 || value === '') {
 					callback(new Error('Please input period'))
 				} else if (isNaN(value)) {
@@ -176,9 +167,6 @@ export default {
 						callback()
 					}
 				}
-			} else {
-				callback()
-			}
 		}
 		return {
 			preload: false,
@@ -262,10 +250,11 @@ export default {
 	},
 	methods: {
 		clearForm() {
-			Object.assign(this.$data, this.$options.data())
-			this.conditionRadio = 'Sentiment Value'
-			this.clearFormValidate()
-			// this.$refs.sentiForm.resetFields();
+			// Object.assign(this.$data, this.$options.data())
+			// this.conditionRadio = 'Sentiment Value'
+			// this.clearFormValidate()
+			this.$refs.sentiForm.resetFields();
+			this.getConditionRadio('Sentiment Value')
 		},
 		// 清除表单认证
 		clearFormValidate() {
@@ -375,12 +364,12 @@ export default {
 			let vm = this
 			let checked = true
 			let validForm
-			console.dir("表单验证", vm.$refs.sentiForm);
-			vm.$refs['sentiForm'].validate((valid) => {
-				validForm = valid
-				console.dir("表单验证", vm.$refs.sentiForm);
-			})
 			if (this.conditionRadio === 'Sentiment Value') {
+			this.$refs['sentiForm'].validateField(['value'], errorMsg => {
+				if(!errorMsg){
+					validForm = true
+				}
+            })
 				if (validForm) {
 					let senti = this.senti
 					// if(senti.value === '') {
@@ -408,6 +397,11 @@ export default {
 					return checked
 				}
 			} else if (this.conditionRadio === 'Sentiment Moving Average') {
+			this.$refs['sentiForm'].validateField(['maValue', 'period'], errorMsg => {
+				if(!errorMsg){
+					validForm = true
+				}
+            })
 				if (validForm) {
 					// if (this.senti.period) {
 					let senti = this.senti
