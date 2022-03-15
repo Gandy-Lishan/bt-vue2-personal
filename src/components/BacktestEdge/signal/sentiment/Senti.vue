@@ -253,8 +253,7 @@ export default {
 			// Object.assign(this.$data, this.$options.data())
 			// this.conditionRadio = 'Sentiment Value'
 			// this.clearFormValidate()
-			this.$refs.sentiForm.resetFields();
-			this.getConditionRadio('Sentiment Value')
+			this.$refs.sentiForm.resetFields()
 		},
 		// 清除表单认证
 		clearFormValidate() {
@@ -300,18 +299,17 @@ export default {
 		}, 500),
 		getConditionRadio(val) {
 			this.clearFormValidate()
-			if (val === 'Sentiment Value') {
-				if ('period' in this.senti) {
-					delete this.senti.period
-					delete this.senti.maValue
-				}
-				this.disabled = !this.disabled
-			} else if (val === 'Sentiment Moving Average') {
-				this.disabled = !this.disabled
-				this.senti.period = 20
-				this.senti.maValue = ''
-				this.setPeriod(this.senti.period)
-			}
+			// if (val === 'Sentiment Value') {
+			// 	if ('period' in this.senti) {
+			// 		delete this.senti.period
+			// 		delete this.senti.maValue
+			// 	}
+			// 	this.disabled = !this.disabled
+			// } else if (val === 'Sentiment Moving Average') {
+			// 	this.disabled = !this.disabled
+			// 	this.senti.period = ''
+			// 	this.senti.maValue = ''
+			// }
 		},
 		setPeriod(val) {
 			if (this.conditionRadio === 'Sentiment Moving Average') {
