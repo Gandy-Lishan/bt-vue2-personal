@@ -61,9 +61,7 @@
 			ref="maChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-show="
-				indicatorRadio === 'technical' && techIndiValue === 'ma'
-			"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'ma'"
 		></ma>
 		<risk
 			v-show="indicatorRadio === 'risk'"
@@ -200,7 +198,7 @@ export default {
 	},
 	watch: {
 		updateSenti(val) {
-			if(this.indicatorRadio == 'technical' && this.techVal == ''){
+			if (this.indicatorRadio == 'technical' && this.techVal == '') {
 				this.indicatorRadio = 'sentiment'
 			}
 		},
@@ -246,7 +244,8 @@ export default {
 		},
 		setDirection(data) {
 			this.fd.direction = data
-		},		saveBacktestData() {
+		},
+		saveBacktestData() {
 			let checked = true
 			// 将选择的 indicator 保存到 vuex 中
 			let indi = this.$refs.indiChild.saveIndicator()
@@ -403,6 +402,31 @@ export default {
 	margin-bottom: 10px;
 }
 .exit-container {
+	margin-right: 40px;
 	margin-bottom: 10px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	.exit-container {
+		// padding-left: 50px;
+		// padding-right: 10px;
+		margin: 0px 10px 10px 10px;
+		// border-right: 1px solid #797979;
+	}
+}
+@media (min-width: 820px) and (max-width: 1279px) {
+	.exit-container {
+		// padding-left: 50px;
+		// padding-right: 10px;
+		margin: 0px 40px 10px 40px;
+		// border-right: 1px solid #797979;
+	}
+}
+@media (min-width: 768px) and (max-width: 819px) {
+		.exit-container {
+		// padding-left: 50px;
+		// padding-right: 10px;
+		margin: 0px 40px 10px 40px;
+		// border-right: 1px solid #797979;
+	}
 }
 </style>

@@ -115,19 +115,19 @@ export default {
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
- if (value === '') {
- return callback(new Error('Please input value'))
- }
- if (isNaN(value) && value !== 'MACDSL') {
- return callback(new Error('Please enter the correct format'))
- }
- const pattern =
- /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
- if (!pattern.test(value) && value != 0 && value !== 'MACDSL') {
- return callback(new Error('Enter up to two decimal places'))
- }
- callback()
- }
+			if (value === '') {
+				return callback(new Error('Please input value'))
+			}
+			if (isNaN(value) && value !== 'MACDSL') {
+				return callback(new Error('Please enter the correct format'))
+			}
+			const pattern =
+				/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+			if (!pattern.test(value) && value != 0 && value !== 'MACDSL') {
+				return callback(new Error('Enter up to two decimal places'))
+			}
+			callback()
+		}
 		return {
 			tech: {
 				ids: {
@@ -151,7 +151,7 @@ export default {
 			editTechVal: '',
 			histCondition: 0,
 			rules: {
-				value: [{validator: validateValue, trigger: 'blur'}]
+				value: [{ validator: validateValue, trigger: 'blur' }]
 			}
 		}
 	},
@@ -163,7 +163,7 @@ export default {
 		clearFormValidate() {
 			this.$refs.macdForm.clearValidate()
 		},
-		setDesciption: throttle(function () {
+		setDesciption() {
 			let criteria = ''
 			let direction = ''
 			if (this.criteria == 'entry') {
@@ -181,9 +181,9 @@ export default {
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${condition} ${this.tech.value}`
-		}, 500),
+		},
 		getConditionRadio(val) {
-			CIQ.store.commit('setConditionRadio',val)
+			CIQ.store.commit('setConditionRadio', val)
 			if (val === ' MACD Value ') {
 				this.tech.value = 'MACDSL'
 				this.disabled = !this.disabled
@@ -197,7 +197,7 @@ export default {
 		saveCondition() {
 			let checked = true
 			let validForm
-			this.$refs.macdForm.validate(valid => {
+			this.$refs.macdForm.validate((valid) => {
 				validForm = valid
 			})
 			if (validForm) {
@@ -264,5 +264,10 @@ export default {
 }
 /deep/ .el-form-item__label {
 	margin-right: 36px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .el-form-item__label {
+		margin-right: 10px;
+	}
 }
 </style>

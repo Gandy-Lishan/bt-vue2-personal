@@ -119,7 +119,7 @@ export default {
 				}
 			}
 		},
-		setDesciption: throttle(function () {
+		setDesciption() {
 			let criteria = ''
 			let direction = ''
 			if (this.criteria == 'exit') {
@@ -149,7 +149,7 @@ export default {
 			if (value2 && riskVal == arr[3]) {
 				this.description = `${criteria} ${direction} Profit ${value1} / Loss ${value2}`
 			}
-		}, 500),
+		},
 		saveCondition() {
 			let checked = true
 			// 判断有无空值

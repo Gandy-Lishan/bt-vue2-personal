@@ -25,7 +25,7 @@
 				<el-tabs
 					v-model="activeName"
 					type="card"
-					:tab-position="tabPosition"
+					tab-position
 					@tab-click="handleTabClick"
 				>
 					<el-tab-pane label="Set up Backtest" name="first">
@@ -120,7 +120,7 @@ export default {
 	name: 'home',
 	data() {
 		return {
-			tabPosition: 'top',
+			// tabPosition: 'top',
 			activeName: 'first',
 			clientHeight: 0,
 			loading: false,
@@ -148,19 +148,19 @@ export default {
 		sample
 	},
 	mounted() {
-		// 在DOM渲染数据时，设置下区域高度为浏览器可视区域高度．
-		this.clientHeight = document.body.clientHeight
-		// 监听window的resize事件．在浏览器窗口变化时再设置下区域高度．
-		const _this = this
-		window.onresize = throttle(function temp() {
-			window.screenWidth = document.body.clientWidth
-			_this.clientHeight = window.screenWidth
-			if (_this.clientHeight < 768) {
-				_this.tabPosition = 'left'
-			} else {
-				_this.tabPosition = 'top'
-			}
-		}, 500)
+		// // 在DOM渲染数据时，设置下区域高度为浏览器可视区域高度．
+		// this.clientHeight = document.body.clientHeight
+		// // 监听window的resize事件．在浏览器窗口变化时再设置下区域高度．
+		// const _this = this
+		// window.onresize = throttle(function temp() {
+		// 	window.screenWidth = document.body.clientWidth
+		// 	_this.clientHeight = window.screenWidth
+		// 	if (_this.clientHeight < 768) {
+		// 		_this.tabPosition = 'left'
+		// 	} else {
+		// 		_this.tabPosition = 'top'
+		// 	}
+		// }, 500)
 	},
 	methods: {
 		// 清除set up  表单
@@ -276,24 +276,28 @@ export default {
 							['Relative Strength Index', 'rsi'],
 							['Moving Average', 'ma'],
 							['MACD', 'macd'],
-							['RC','']
+							['RC', '']
 						])
 
 						const newMap = new Map(set)
-			
-						var entrySignal = CIQ.indicatorList.find(item=> {return item.chart_name == backtestData.entry.signals[0].indicator})
-						var exitSignal = CIQ.indicatorList.find(item=> {return item.chart_name == backtestData.exit.signals[0].indicator})
-						if(!entrySignal){
+
+						var entrySignal = CIQ.indicatorList.find((item) => {
+							return item.chart_name == backtestData.entry.signals[0].indicator
+						})
+						var exitSignal = CIQ.indicatorList.find((item) => {
+							return item.chart_name == backtestData.exit.signals[0].indicator
+						})
+						if (!entrySignal) {
 							for (let i of newMap.entries()) {
 								if (backtestData.entry.signals[0].indicator === i[0]) {
-									entrySignal = {url:i[1]}
+									entrySignal = { url: i[1] }
 								}
 							}
 						}
-						if(!exitSignal){
+						if (!exitSignal) {
 							for (let i of newMap.entries()) {
 								if (backtestData.exit.signals[0].indicator === i[0]) {
-									exitSignal = {url:i[1]}
+									exitSignal = { url: i[1] }
 								}
 							}
 						}
@@ -360,7 +364,6 @@ export default {
 										vm.$store.commit('clearBacktestUuid')
 									}
 									vm.$refs.favoriteChild.getBacktestList()
-
 								} else {
 									vm.$message.error('Save failed')
 									vm.loading = false
@@ -499,8 +502,26 @@ header {
 }
 .criteria-box {
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
 	border-bottom: 1px solid #797979;
+}
+@media (min-width: 820px) and (max-width: 1279px) {
+	.criteria-box {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		border-bottom: 1px solid #797979;
+	}
+}
+@media (min-width: 768px) and (max-width: 819px) {
+	.criteria-box {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		border-bottom: 1px solid #797979;
+	}
 }
 .backtest-btns {
 	margin-top: 10px;

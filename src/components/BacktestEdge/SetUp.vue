@@ -828,13 +828,25 @@ export default {
 .comUnitNote {
 	position: absolute;
 
-	left: 329px;
+	left: 335px;
 	top: 56px;
 }
 .sliUnitNote {
 	position: absolute;
-	left: 329px;
+	left: 335px;
 	top: 105px;
+}
+@media (min-width: 1680px) {
+	.comUnitNote {
+		position: absolute;
+		left: 454px;
+		top: 56px;
+	}
+	.sliUnitNote {
+		position: absolute;
+		left: 454px;
+		top: 105px;
+	}
 }
 .border-set {
 	border-bottom: 1px solid #797979;

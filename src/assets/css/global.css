@@ -101,7 +101,7 @@
 	border: #000000 solid 1px;
 	padding: 0 5px 0 10px;
 	height: 25px;
-	width: 175px;
+	width: 180px;
 	border-radius: unset;
 }
 .entry-container input:not([type]),
@@ -208,4 +208,126 @@ input[type='time'] {
 	padding-top: 0px;
 	left: 4px;
 	width: 180px;
+}
+@media (min-width: 1024px) and (max-width: 1099px) {
+	body {
+		font-size: 18px;
+	}
+	.backtest_container
+		.el-form-item
+		.el-form-item__content
+		.selectBox
+		.el-select
+		.el-input
+		.el-input__inner {
+		width: 250px !important;
+	}
+	.backtest_container
+		.el-form-item
+		.el-form-item__content
+		.selectBox
+		.el-select
+		.el-input
+		.el-input__icon {
+		width: 115px;
+	}
+}
+@media (min-width: 768px) and (max-width: 819px) {
+	.el-tabs__item {
+		font-size: 12px;
+		padding: 0 2px;
+	}
+}
+@media (min-width: 820px) and (max-width: 1099px) {
+	body {
+		font-size: 20px;
+	}
+	.el-tabs__item {
+		font-size: 12px;
+		padding: 1px;
+	}
+}
+@media (min-width: 1100px) and (max-width: 1279px) {
+	body {
+		font-size: 20px;
+	}
+	.backtest_container .nameBox input[type='text']:last-child {
+		width: 91%;
+	}
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	body {
+		font-size: 22px;
+	}
+	.senti-container .ids-container input[type='text'],
+	input[type='number'],
+	input[type='date'],
+	input[type='time'] {
+		width: 70px;
+	}
+}
+@media (min-width: 1366px) and (max-width: 1439px) {
+	body {
+		font-size: 24px;
+	}
+}
+
+@media (min-width: 1440px) and (max-width: 1679px) {
+	body {
+		font-size: 25px !important;
+	}
+	.backtest_container .nameBox input[type='text']:last-child {
+		width: 866px;
+	}
+}
+
+@media (min-width: 1680px) {
+	body {
+		font-size: 28px;
+	}
+	.set-up-container input:not([type]),
+	.set-up-container input[type='text'],
+	.set-up-container input[type='number'],
+	.set-up-container input[type='date'],
+	.set-up-container input[type='time'] {
+		border: #000000 solid 1px;
+		padding: 0 5px 0 10px;
+		height: 25px;
+		width: 300px;
+		border-radius: unset;
+	}
+	.entry-container input:not([type]),
+	.entry-container input[type='text'],
+	.entry-container input[type='number'],
+	.entry-container input[type='date'],
+	.entry-container input[type='time'] {
+		border: #000000 solid 1px;
+		padding: 0 5px 0 10px;
+		height: 25px;
+		width: 115px;
+		border-radius: unset;
+	}
+	.exit-container input:not([type]),
+	.exit-container input[type='text'],
+	.exit-container input[type='number'],
+	.exit-container input[type='date'],
+	.exit-container input[type='time'] {
+		border: #000000 solid 1px;
+		padding: 0 5px 0 10px;
+		height: 25px;
+		width: 115px;
+		border-radius: unset;
+	}
+	.backtest_container
+		.el-form-item
+		.el-form-item__content
+		.selectBox
+		.el-select
+		.el-input
+		.el-input__inner {
+		width: 301px !important;
+	}
+	.backtest_container .nameBox input[type='text']:last-child {
+		width: 78%;
+	}
 }

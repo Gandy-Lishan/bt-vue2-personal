@@ -15,6 +15,7 @@
     "element-ui": "^2.15.6",
     "i": "^0.3.7",
     "lodash": "^4.17.21",
+    "postcss-pxtorem": "^5.1.1",
     "querystring": "^0.2.1",
     "screenfull": "^4.2.0",
     "standard": "^16.0.3",

@@ -142,7 +142,10 @@ export default {
 	},
 	watch: {
 		updateSenti(val) {
-			if (this.si.sentimentIndicator == '' && this.si.technicalIndicator == '') {
+			if (
+				this.si.sentimentIndicator == '' &&
+				this.si.technicalIndicator == ''
+			) {
 				this.si.sentimentIndicator = val.name
 
 				for (var i in CIQ.indicatorList) {
@@ -276,9 +279,9 @@ export default {
 		},
 		createStateSentimentFilter(queryString) {
 			return (state) => {
-				if (state.value.indexOf("Seasonality") !==-1){
-                          return false
-                }
+				if (state.value.indexOf('Seasonality') !== -1) {
+					return false
+				}
 				return (
 					state.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1
 				)
@@ -675,6 +678,47 @@ export default {
 /deep/ .techBox .el-input--prefix .el-input__inner:first-child {
 	width: 334px;
 	padding-left: 30px;
+}
+@media (min-width: 1680px) {
+	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
+		width: 500px;
+		padding-left: 30px;
+	}
+	/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+		width: 500px;
+		padding-left: 30px;
+	}
+}
+
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
+		width: 300px;
+		padding-left: 30px;
+	}
+	/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+		width: 300px;
+		padding-left: 30px;
+	}
+}
+@media (min-width: 820px) and (max-width: 1279px) {
+	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
+		width: 500px;
+		padding-left: 30px;
+	}
+	/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+		width: 500px;
+		padding-left: 30px;
+	}
+}
+@media (min-width: 768px) and (max-width: 819px) {
+	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
+		width: 400px;
+		padding-left: 30px;
+	}
+	/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+		width: 400px;
+		padding-left: 30px;
+	}
 }
 /deep/ .el-radio__label {
 	display: inline-block;

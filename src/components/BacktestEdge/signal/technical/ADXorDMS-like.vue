@@ -168,7 +168,7 @@ export default {
 				clearForm() {
 			Object.assign(this.$data, this.$options.data())
 		},
-		setDesciption: throttle(function () {
+		setDesciption() {
 			let criteria = ''
 			let direction = ''
 			if (this.criteria == 'entry') {
@@ -186,7 +186,7 @@ export default {
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${condition} ${this.tech.value}`
-		}, 500),
+		},
 		getConditionRadio(val) {
 			if (val === ' -DI ADX ') {
 				this.tech.value = 'MACDSL'
