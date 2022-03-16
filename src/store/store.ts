@@ -100,7 +100,6 @@ export default new Vuex.Store({
 		strategyId: '',
 		indicatorsList: [],
 		builtinList: [],
-		symbolName: '',
 		trades: [],
 		entryIndicatorRadio: 'sentiment',
 		exitIndicatorRadio: 'Sentiment_Indicators:',
@@ -158,6 +157,7 @@ export default new Vuex.Store({
 			state.techSD = val
 		},	
 		setSavedTechSD(state, val){
+			console.log('sd changed: ',val)
 			state.savedTechSD = val
 		},
 	setCurrentSenti(state,val){
@@ -283,13 +283,11 @@ export default new Vuex.Store({
 		getBuiltinList(state, data) {
 			state.builtinList = data
 		},
-		getSymbolName(state, val) {
-			state.symbolName = val
-		},
 		getTradesData(state, data) {
 			state.trades = data
 		},
 		getFrequency(state, val) {
+			//console.log('store',val)
 			state.exitFrequency = val
 			// 将频率保存到 backtestInfo 
 			if(typeof(state.backtestInfo.entry) == 'object' && typeof(state.backtestInfo.exit) == 'object') {

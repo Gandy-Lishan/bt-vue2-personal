@@ -428,7 +428,9 @@ export default {
 							return
 						}
 					}
-					CIQ.addIndicators()
+					if(arguments[1]!=true){
+						CIQ.addIndicators()
+					}
 				}
 			}
 			vm.si.technicalIndicator = item.value
@@ -654,7 +656,8 @@ export default {
 					let technicalIndicator = newVal[this.criteria].signals[0].indicator
 					let item = {}
 					item.value = technicalIndicator
-					vm.handleTechnicalSelect(item)
+					let isFromEdit = true
+					vm.handleTechnicalSelect(item,isFromEdit)
 					this.indicatorRadio = 'Technical Indicators'
 					this.isCheckedIndicators = true
 					// this.$emit('getTechVal', vm.si.technicalIndicator)

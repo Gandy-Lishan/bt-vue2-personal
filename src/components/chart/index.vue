@@ -77,7 +77,6 @@ export default class AdvancedWrapper extends Vue {
 		// refresh pag
 		
 		CIQ.store.commit('setCopy',JSON.stringify(CIQ.store.state))
-		
 		CIQ.addIndicators()
 		CIQ.technicalCategory = config.technicalClassCategory
 

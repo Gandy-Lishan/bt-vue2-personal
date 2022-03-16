@@ -368,9 +368,12 @@ export default {
 					delete newVal.results
 					delete newVal.uuid
 					this.bd = Object.assign(this.bd, newVal)
-					this.getSymbolName(newVal.symbol)
+					//this.getSymbolName(newVal.symbol)
+					CIQ.hideMarker()
 					this.frequency = this.editFrequency
-					this.changeTimeframe(this.frequency)
+					this.getFrequency(this.frequency)
+					//this.changeTimeframe(this.frequency)
+					
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
 					// console.log('频率', this.frequency)
@@ -475,19 +478,19 @@ export default {
 				this.bd.capital = ''
 			}
 		}, 500),
-		getSymbolName(val) {
-			this.$store.commit('getSymbolName', val)
-			// 清空 两个表单的方法
-			// this.$emit('resetResultData')
-			// this.$emit('resetPerformanceData')
-			// for (var studyInstanceName in CIQ.stxx.layout.studies) {
-			//     CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
-			// }
+		// getSymbolName(val) {
+		// 	this.$store.commit('getSymbolName', val)
+		// 	// 清空 两个表单的方法
+		// 	// this.$emit('resetResultData')
+		// 	// this.$emit('resetPerformanceData')
+		// 	// for (var studyInstanceName in CIQ.stxx.layout.studies) {
+		// 	//     CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
+		// 	// }
 
-			CIQ.addSymbol(val)
-			// remove markers when symbol changes
-			CIQ.hideMarker()
-		},
+		// 	CIQ.addSymbol(val)
+		// 	// remove markers when symbol changes
+		// 	CIQ.hideMarker()
+		// },
 		getBenchmark(val) {
 			this.bd.benchmark = val
 		},

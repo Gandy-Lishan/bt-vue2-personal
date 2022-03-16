@@ -324,6 +324,7 @@ export default {
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
+				this.$store.commit('getBacktestSymbol', res.data.symbol)
 				if (res.data.indicator_layout) {
 					this.restoreIndicatorLayout(
 						JSON.parse(res.data.indicator_layout),
@@ -360,6 +361,9 @@ export default {
 			let params = {}
 			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				if (res.status === 200) {
+					this.$store.commit('getBacktestSymbol', res.data.symbol)
+					this.$store.commit('getRunBacktestData', row)
+
 					params = res.data
 					params.name = params.name + '(copy)'
 					delete params.results
@@ -433,8 +437,10 @@ export default {
 		restoreIndicatorLayout(data, freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
+			this.$store.commit('getExtraIndicators',[])
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
+			this.$store.commit('setTechSD', data.savedTechSD)
 			var frequency = ''
 			switch (freq) {
 				case 'Daily': {

@@ -369,6 +369,7 @@ export default {
 				}
 				this.$store.commit('getRunBacktestData', row)
 				this.$emit('goBacktestResultForm', row)
+
 				vm.$emit('goTobacktestSetupForm', row.id)
 			})
 		}, 1000),
@@ -394,42 +395,14 @@ export default {
 					})
 				})
 		},
-		// async copyBacktest(row) {
-		// 	let vm = this
-		// 	try {
-		// 		const res = await this.$http.get('/dev/seeparams/' + row.id + '/')
-		// 		console.log('相应数据', res.data)
-		// 		let data = res.data
-		// 		data.name = data.name + '(copy)'
-		// 		delete data.backtest_id
-		// 		// console.log('copy', data)
-		// 		const seRes = await vm.$http.post(
-		// 			'/dev/runbt/',
-		// 			vm.$qs.stringify(data),
-		// 			{
-		// 				withCredentials: true
-		// 			}
-		// 		)
-		// 		console.log('wwwww', seRes)
-		// 		this.refreshHistory(seRes.data.id)
-		// 	} catch (error) {
-		// 		console.log(error)
-		// 	}
-		// },
+
 		copyBacktest: throttle(function (row) {
 			let params = {}
 			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)
-				// if (res.data.indicator_layout) {
-				// 	this.restoreIndicatorLayout(
-				// 		JSON.parse(res.data.indicator_layout),
-				// 		JSON.parse(res.data.entry).frequency
-				// 	)
-				// }
 				this.$store.commit('getRunBacktestData', row)
-				// this.$emit('goTobacktestSetupForm', row.id)
-				// this.$emit('goBacktestResultForm', row)
+
 				params = res.data
 				params.name = params.name + '(copy)'
 				params.favorites = false
@@ -493,6 +466,7 @@ export default {
 		restoreIndicatorLayout(data, freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
+			this.$store.commit('getExtraIndicators',[])
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)

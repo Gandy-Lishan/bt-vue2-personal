@@ -344,6 +344,7 @@ export default {
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
 				// 恢复indicator layout
+				this.$store.commit('getBacktestSymbol', res.data.symbol)
 				if (res.data.indicator_layout) {
 					this.restoreIndicatorLayout(
 						JSON.parse(res.data.indicator_layout),
@@ -380,6 +381,8 @@ export default {
 		copyBacktest: throttle(function (row) {
 			let params = {}
 			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+				this.$store.commit('getBacktestSymbol', res.data.symbol)
+
 				params = res.data
 				params.name = params.name + '(copy)'
 				delete params.uuid
@@ -434,6 +437,7 @@ export default {
 		restoreIndicatorLayout(data, freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
+			this.$store.commit('getExtraIndicators',[])
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
