@@ -343,6 +343,19 @@ export default {
 						}
 						indicatorLayout.technicalIndicators =
 							this.$store.state.indicators.technicalIndicators
+
+						var savedTechSD = []
+						for (var i in CIQ.stxx.layout.studies) {
+							savedTechSD.push({
+								type: CIQ.stxx.layout.studies[i].type,
+								inputs: CIQ.stxx.layout.studies[i].inputs,
+								outputs: CIQ.stxx.layout.studies[i].outputs,
+								parameters: CIQ.stxx.layout.studies[i].parameters,
+								panel: CIQ.stxx.layout.studies[i].panel
+							})
+						}
+
+						indicatorLayout.savedTechSD = savedTechSD
 						indicatorLayout.activatedMA = this.$store.state.activatedMA
 						backtestData.indicator_layout = JSON.stringify(indicatorLayout)
 						this.$http
@@ -389,6 +402,7 @@ export default {
 		},
 		goTobacktestSetupForm(id) {
 			// backtestEditData
+
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
 			this.$refs.exitChild.clearForm()
