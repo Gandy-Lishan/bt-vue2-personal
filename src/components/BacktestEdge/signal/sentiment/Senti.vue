@@ -28,7 +28,7 @@
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							::disabled="!(conditionRadio === 'Sentiment Value')"
+							:disabled="!(conditionRadio === 'Sentiment Value')"
 							v-model="senti.condition"
 							filterable
 							placeholder="Please select condition"
