@@ -431,7 +431,7 @@ export default {
 							return
 						}
 					}
-					if(arguments[1]!=true){
+					if (arguments[1] != true) {
 						CIQ.addIndicators()
 					}
 				}
@@ -660,7 +660,7 @@ export default {
 					let item = {}
 					item.value = technicalIndicator
 					let isFromEdit = true
-					vm.handleTechnicalSelect(item,isFromEdit)
+					vm.handleTechnicalSelect(item, isFromEdit)
 					this.indicatorRadio = 'Technical Indicators'
 					this.isCheckedIndicators = true
 					// this.$emit('getTechVal', vm.si.technicalIndicator)
@@ -681,6 +681,17 @@ export default {
 /deep/ .techBox .el-input--prefix .el-input__inner:first-child {
 	width: 334px;
 	padding-left: 30px;
+}
+
+/deep/ .el-radio__label {
+	display: inline-block;
+	width: 136px;
+}
+/deep/ .el-input__icon {
+	width: 60px;
+}
+/deep/ .el-form-item {
+	margin-bottom: 10px;
 }
 @media (min-width: 1680px) {
 	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
@@ -723,14 +734,20 @@ export default {
 		padding-left: 30px;
 	}
 }
-/deep/ .el-radio__label {
-	display: inline-block;
-	width: 136px;
-}
-/deep/ .el-input__icon {
-	width: 60px;
-}
-/deep/ .el-form-item {
-	margin-bottom: 10px;
+@media (min-width: 375px) and (max-width: 767px) {
+	// /deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
+	// 	width: 232px;
+	// 	padding-left: 22px;
+	// }
+	// /deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+	// 	width: 232px;
+	// 	padding-left: 22px;
+	// }
+	.indicator-container {
+		display: flex;
+		flex-direction: column;
+		// justify-content: center;
+		// align-items: center;
+	}
 }
 </style>

@@ -1,8 +1,11 @@
 const path = require('path')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 function resolve(dir) {
 	return path.join(__dirname, dir)
 }
+
+const TimeSimestamp = new Date().getTime()
 
 module.exports = {
 	publicPath: '/',
@@ -16,6 +19,16 @@ module.exports = {
 					loader: require.resolve('@open-wc/webpack-import-meta-loader')
 				}
 			]
+		},
+		plugins: [
+			new MiniCssExtractPlugin({
+				filename: `css/[name].${TimeSimestamp}.css`,
+				chunkFilename: `css/[name].${TimeSimestamp}.css`
+			})
+		],
+		output: {
+			filename: `js/[name].${TimeSimestamp}.js`,
+			chunkFilename: `js/[name].${TimeSimestamp}.js`
 		}
 	},
 	chainWebpack: (config) => {
@@ -59,7 +72,7 @@ module.exports = {
 		// https:false,
 		proxy: {
 			'/demo': {
-				target: 'http://3.140.194.24:80',
+				target: 'http://127.0.0.1:8000',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
@@ -67,7 +80,7 @@ module.exports = {
 				}
 			},
 			'/dev': {
-				target: 'http://3.140.194.24:80',
+				target: 'http://127.0.0.1:8000',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
@@ -75,7 +88,7 @@ module.exports = {
 				}
 			},
 			'/rundev': {
-				target: 'http://3.140.194.24:80',
+				target: 'http://127.0.0.1:8000',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {

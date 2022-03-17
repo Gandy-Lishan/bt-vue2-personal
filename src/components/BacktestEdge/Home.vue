@@ -8,7 +8,7 @@
 				></el-row>
 
 				<el-row type="flex" justify="center"
-					><el-col><p>BacktestEdge</p></el-col>
+					><el-col><p>BacktestEdge Beta</p></el-col>
 				</el-row>
 				<div class="chart_box" id="chart_box">
 					<chart width="100%" height="100%"></chart>
@@ -25,6 +25,7 @@
 				<el-tabs
 					v-model="activeName"
 					type="card"
+					stretch
 					tab-position
 					@tab-click="handleTabClick"
 				>
@@ -469,7 +470,7 @@ export default {
 	.restartBtn {
 		position: relative;
 		z-index: 1;
-		width: 10rem;
+		width: 98%;
 	}
 }
 @media screen and (min-width: 768px) {
@@ -548,6 +549,29 @@ header {
 	}
 	.el-button:last-child {
 		background: #03a113;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	.home-container {
+		width: 100%;
+		margin: 0 auto;
+		padding: 0px 5px;
+	}
+	.criteria-container {
+		padding: 0;
+	}
+	.criteria-box {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		border-bottom: 1px solid #797979;
+	}
+	.el-tabs__nav-scroll {
+		overflow: scroll;
+	}
+	/deep/.el-tabs__nav-scroll {
+		overflow: scroll;
 	}
 }
 </style>
