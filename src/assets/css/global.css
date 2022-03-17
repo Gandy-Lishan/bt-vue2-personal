@@ -1,3 +1,42 @@
+@media screen and (max-width: 768px) {
+	.el-tabs__content{
+		left:0px;
+		transition: all 0.5s;
+		flex: 0 0 100vw;
+	}
+	.el-tabs__header.is-left {
+		left:0px;
+		transition: all 0.5s;
+		flex: 0 0 0;
+	}
+	.el-tabs--left{
+		display: flex;
+	}
+	
+}
+@media screen and (min-width: 768px) {
+	.el-tabs__content{
+		left:0px !important;
+		transition: all 0.5s !important;
+	}
+	.el-tabs__header.is-top {
+		left:0px !important;
+		transition: all 0.5s !important;
+		float: none !important;
+	}
+}
+.el-tabs--left .el-tabs__item.is-left {
+    transition: all 0.2s;
+}
+
+.el-tabs__header.is-left {
+	transition: all 0.5s !important;
+}
+.el-tabs__content{
+	overflow-x: scroll !important;
+	transition: all 0.5s !important;
+}
+
 .green {
 	width: 105px;
 	position: absolute;

@@ -330,8 +330,7 @@ export default {
 	methods: {
 		handleClick(tab, event) {},
 		loadMarker(tradeData) {
-			CIQ.loadChart(tradeData.markerSet)
-			CIQ.addMarker()
+			CIQ.loadChart(tradeData.markerSet,CIQ.addMarker)
 		},
 		getResultData(row) {
 			let vm = this
@@ -416,7 +415,7 @@ export default {
 								this.$emit('setBacktestResult', initalData['basic'])
 								// ------------------------------ end -----------------------------------
 
-								//(initalData)
+								console.log(initalData)
 								this.loadMarker(initalData)
 								// vm.$store.commit('getTradesData',initalData[])
 								vm.loading = false

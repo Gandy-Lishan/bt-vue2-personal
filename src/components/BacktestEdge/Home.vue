@@ -15,13 +15,16 @@
 				</div>
 			</header>
 			<main class="main">
-				<el-button
-					@click="refreshPage"
-					class="restartBtn"
-					type="primary"
-					icon="el-icon-refresh-right"
-					>Create New Backtest</el-button
-				>
+				<div style="display:flex;align-items:center;">
+					<i @click="sidebar" class="fa fa-outdent navCheck" style="font-size:30px;"></i>
+					<el-button
+						@click="refreshPage"
+						class="restartBtn"
+						type="primary"
+						icon="el-icon-refresh-right"
+						>Create New Backtest</el-button
+					>
+				</div>
 				<el-tabs
 					v-model="activeName"
 					type="card"
@@ -120,9 +123,11 @@ export default {
 	name: 'home',
 	data() {
 		return {
+			btnClickBool: true,
+
 			tabPosition: 'top',
 			activeName: 'first',
-			clientHeight: 0,
+			clientHeight: document.body.clientWidth,
 			loading: false,
 			backtestEditData: {},
 			editFrequency: 'Daily',
@@ -149,7 +154,7 @@ export default {
 	},
 	mounted() {
 		// 在DOM渲染数据时，设置下区域高度为浏览器可视区域高度．
-		this.clientHeight = document.body.clientHeight
+		//this.clientHeight = document.body.clientHeight
 		// 监听window的resize事件．在浏览器窗口变化时再设置下区域高度．
 		const _this = this
 		window.onresize = throttle(function temp() {
@@ -160,12 +165,46 @@ export default {
 			} else {
 				_this.tabPosition = 'top'
 			}
-		}, 500)
+		})
+	},
+	watch: {
+		clientHeight: {
+			handler(val) {
+				this.clientHeight = val
+				if(this.clientHeight < 768){
+					this.tabPosition = 'left'
+				} else {
+					this.tabPosition = 'top'
+				}
+			},
+			immediate: true,
+    		deep: true
+		}
 	},
 	methods: {
 		// 清除set up  表单
+		sidebar() {
+			let sidebar = document.getElementsByClassName('el-tabs__header is-left')
+			let tabContent = document.getElementsByClassName('el-tabs__content')
+			let btn = document.getElementsByClassName('fa fa-outdent navCheck')
+
+			if(this.btnClickBool==true){
+				sidebar[0].style.left = "-200px"
+				tabContent[0].style.left = "-200px"
+				btn[0].style.transform = "rotate3d(0, 1, 0, -180deg)"
+				btn[0].style.transition = "all 0.5s"
+				this.btnClickBool = false
+			}else{
+				sidebar[0].style.left = "0px"
+				tabContent[0].style.left = "0px"
+				btn[0].style.transform = "rotate3d(0, 1, 0, 0deg)"
+				btn[0].style.transition = "all 0.5s"
+				this.btnClickBool = true
+			}
+			
+		},
 		clearForm() {
-			CIQ.reloadChart()
+			//CIQ.reloadChart()
 			this.$store.commit('initialBacktestInfo')
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
@@ -467,15 +506,23 @@ export default {
 		position: relative;
 		z-index: 1;
 		width: 10rem;
+		margin-left: 100px;
+    	flex: 1;
 	}
+
+	
 }
 @media screen and (min-width: 768px) {
+	.navCheck{
+		display: none;
+	}
 	.restartBtn {
-		margin-left: 10px;
+		margin-left: 0px !important;
 		position: relative;
 		z-index: 1;
 		float: right;
 		width: 12rem;
+		flex: 1;
 	}
 }
 

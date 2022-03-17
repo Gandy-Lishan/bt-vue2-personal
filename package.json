@@ -13,6 +13,7 @@
     "chartiq": "file:chartiq-8.3.0.tgz",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.6",
+    "font-awesome": "^4.7.0",
     "i": "^0.3.7",
     "lodash": "^4.17.21",
     "querystring": "^0.2.1",
