@@ -145,14 +145,12 @@ export default {
 	},
 	watch: {
 		backtestEditData: {
-			handler(newVal) {
-			},
+			handler(newVal) {},
 			immediate: true,
 			deep: true
 		},
 		editFrequency: {
-			handler(newVal) {
-			},
+			handler(newVal) {},
 			immediate: true,
 			deep: true
 		}
@@ -186,5 +184,17 @@ export default {
 }
 .result-container {
 	margin-bottom: 20px;
+}
+@media (min-width: 1680px) {
+	.comUnitNote {
+		position: absolute;
+		left: 454px;
+		top: 56px;
+	}
+	.sliUnitNote {
+		position: absolute;
+		left: 454px;
+		top: 105px;
+	}
 }
 </style>

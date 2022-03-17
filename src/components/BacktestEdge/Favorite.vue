@@ -78,6 +78,16 @@
 							</div>
 						</template>
 					</el-table-column>
+					<el-table-column
+						label="Timeframe"
+						show-overflow-tooltip
+						align="center"
+						width="90px"
+					>
+						<template slot-scope="scope">
+							<p>{{ scope.row.frequency }}</p>
+						</template>
+					</el-table-column>
 					<!-- <el-table-column label="Status" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.status == 0">Ready to run</span>
@@ -437,7 +447,7 @@ export default {
 		restoreIndicatorLayout(data, freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
-			this.$store.commit('getExtraIndicators',[])
+			this.$store.commit('getExtraIndicators', [])
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
