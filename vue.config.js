@@ -72,7 +72,7 @@ module.exports = {
 		// https:false,
 		proxy: {
 			'/demo': {
-				target: 'http://3.140.194.24:80',
+				target: 'http://127.0.0.1:8000',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
@@ -80,7 +80,7 @@ module.exports = {
 				}
 			},
 			'/dev': {
-				target: 'http://3.140.194.24:80',
+				target: 'http://127.0.0.1:8000',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
@@ -88,7 +88,7 @@ module.exports = {
 				}
 			},
 			'/rundev': {
-				target: 'http://3.140.194.24:80',
+				target: 'http://127.0.0.1:8000',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
