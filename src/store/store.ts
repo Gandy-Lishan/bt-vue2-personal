@@ -32,6 +32,7 @@ export default new Vuex.Store({
 		backtestInfo: {
 			entry_description: '',
 			exit_description: '',
+			frequency: 'Daily',
 			entry: {
 				direction: 'Long',
 				frequency: 'Daily',
@@ -289,6 +290,7 @@ export default new Vuex.Store({
 		getFrequency(state, val) {
 			//console.log('store',val)
 			state.exitFrequency = val
+			state.backtestInfo.frequency = val
 			// 将频率保存到 backtestInfo 
 			if(typeof(state.backtestInfo.entry) == 'object' && typeof(state.backtestInfo.exit) == 'object') {
 			state.backtestInfo.entry.frequency = val
@@ -434,6 +436,7 @@ export default new Vuex.Store({
 			state.backtestInfo = {
 				entry_description: '',
 				exit_description: '',
+				frequency: 'Daily',
 				entry: {
 					direction: '',
 					frequency: '',
@@ -489,6 +492,7 @@ export default new Vuex.Store({
 			state.backtestInfo = {
 				entry_description: '',
 				exit_description: '',
+				frequency: 'Daily',
 				entry: {
 					direction: 'Long',
 					frequency: 'Daily',

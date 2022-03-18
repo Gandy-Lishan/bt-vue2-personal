@@ -422,11 +422,16 @@ export default {
 	}
 }
 @media (min-width: 768px) and (max-width: 819px) {
-		.exit-container {
+	.exit-container {
 		// padding-left: 50px;
 		// padding-right: 10px;
 		margin: 0px 40px 10px 40px;
 		// border-right: 1px solid #797979;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	.exit-container {
+		margin: 0px 0px 10px 0px;
 	}
 }
 </style>

@@ -373,7 +373,7 @@ export default {
 					this.frequency = this.editFrequency
 					this.getFrequency(this.frequency)
 					//this.changeTimeframe(this.frequency)
-					
+
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
 					// console.log('频率', this.frequency)
@@ -638,6 +638,7 @@ export default {
 		},
 		changeTimeframe(val) {
 			this.getFrequency(val)
+			this.$store.commit('getFrequency', val)
 			CIQ.addIndicators()
 		},
 		getFrequency(val) {
@@ -784,6 +785,7 @@ export default {
 					if (this.bd.end_date) {
 						// 保存 backtestform 的数据
 						this.$store.commit('setBd', this.bd)
+						this.$store.commit('getFrequency', this.frequency)
 						return checked
 					} else {
 						this.$message({
@@ -849,6 +851,21 @@ export default {
 		position: absolute;
 		left: 454px;
 		top: 105px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	.comUnitNote {
+		position: absolute;
+		left: 272px;
+		top: 56px;
+	}
+	.sliUnitNote {
+		position: absolute;
+		left: 272px;
+		top: 105px;
+	}
+	.el-input__suffix {
+		right: 68px;
 	}
 }
 .border-set {

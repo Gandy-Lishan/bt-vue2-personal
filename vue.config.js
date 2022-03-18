@@ -1,8 +1,11 @@
 const path = require('path')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 function resolve(dir) {
 	return path.join(__dirname, dir)
 }
+
+const TimeSimestamp = new Date().getTime()
 
 module.exports = {
 	publicPath: '/',
@@ -16,6 +19,16 @@ module.exports = {
 					loader: require.resolve('@open-wc/webpack-import-meta-loader')
 				}
 			]
+		},
+		plugins: [
+			new MiniCssExtractPlugin({
+				filename: `css/[name].${TimeSimestamp}.css`,
+				chunkFilename: `css/[name].${TimeSimestamp}.css`
+			})
+		],
+		output: {
+			filename: `js/[name].${TimeSimestamp}.js`,
+			chunkFilename: `js/[name].${TimeSimestamp}.js`
 		}
 	},
 	chainWebpack: (config) => {

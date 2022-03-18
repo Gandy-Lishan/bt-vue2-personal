@@ -236,4 +236,13 @@ export default {
 		margin-right: 10px;
 	}
 }
+@media (min-width: 375px) and (max-width: 767px) {
+	/deep/ .el-form-item__label {
+		margin-right: 0px;
+	}
+	.condition-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
+}
 </style>

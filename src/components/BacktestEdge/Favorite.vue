@@ -78,6 +78,16 @@
 							</div>
 						</template>
 					</el-table-column>
+					<el-table-column
+						label="Timeframe"
+						show-overflow-tooltip
+						align="center"
+						width="90px"
+					>
+						<template slot-scope="scope">
+							<p>{{ scope.row.frequency }}</p>
+						</template>
+					</el-table-column>
 					<!-- <el-table-column label="Status" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.status == 0">Ready to run</span>
@@ -355,7 +365,7 @@ export default {
 				this.$emit('goBacktestResultForm', row)
 				vm.$emit('goTobacktestSetupForm', row.id)
 			})
-		}, 5000),
+		}, 500),
 		deleteBacktest(id) {
 			this.$http
 				.delete('/dev/backtest/' + id + '/')
@@ -402,7 +412,7 @@ export default {
 						}
 					})
 			})
-		}, 5000),
+		}, 500),
 		viewBacktestResults: throttle(function (row) {
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
@@ -429,7 +439,7 @@ export default {
 					type: 'warning'
 				})
 			}
-		}, 5000),
+		}, 500),
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
@@ -437,7 +447,7 @@ export default {
 		restoreIndicatorLayout(data, freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
-			this.$store.commit('getExtraIndicators',[])
+			this.$store.commit('getExtraIndicators', [])
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
@@ -537,7 +547,7 @@ export default {
 						})
 					}
 				})
-		}, 5000),
+		}, 500),
 		moveToFavorites: throttle(function (row) {
 			let vm = this
 			row.favorites = false
@@ -558,7 +568,7 @@ export default {
 						})
 					}
 				})
-		}, 5000)
+		}, 500)
 	}
 }
 </script>

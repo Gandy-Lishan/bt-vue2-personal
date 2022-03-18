@@ -390,11 +390,19 @@ export default {
 	}
 }
 @media (min-width: 768px) and (max-width: 819px) {
-		.entry-container {
+	.entry-container {
 		// padding-left: 50px;
 		// padding-right: 10px;
 		margin: 0px 40px 10px 40px;
 		border-bottom: 1px solid #797979;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	.entry-container {
+		border-bottom: 1px solid #797979;
+	}
+	.entry-container {
+		margin: 0px 0px 10px 0px;
 	}
 }
 </style>

@@ -6,9 +6,8 @@
 					><el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="2"
 						><img src="../../assets/logo.png" alt="logo" /></el-col
 				></el-row>
-
 				<el-row type="flex" justify="center"
-					><el-col><p>BacktestEdge</p></el-col>
+					><el-col><p class="betaNote">BacktestEdge Beta</p></el-col>
 				</el-row>
 				<div class="chart_box" id="chart_box">
 					<chart width="100%" height="100%"></chart>
@@ -25,6 +24,7 @@
 				<el-tabs
 					v-model="activeName"
 					type="card"
+					stretch
 					tab-position
 					@tab-click="handleTabClick"
 				>
@@ -396,7 +396,7 @@ export default {
 					}
 				}
 			}
-		}, 5000),
+		}, 500),
 		goToHistoryForm() {
 			this.activeName = 'second'
 		},
@@ -469,7 +469,7 @@ export default {
 	.restartBtn {
 		position: relative;
 		z-index: 1;
-		width: 10rem;
+		width: 98%;
 	}
 }
 @media screen and (min-width: 768px) {
@@ -502,7 +502,7 @@ header {
 	p:first-of-type {
 		text-align: left;
 		font-size: 2.5rem;
-		margin: 50px 0 50px 0;
+		margin: 0px;
 		font-weight: lighter;
 		color: #333333;
 	}
@@ -543,11 +543,35 @@ header {
 	justify-content: flex-end;
 	margin-right: 20px;
 	padding-bottom: 10px;
+	margin-bottom: 100px;
 	.el-button:first-child {
 		background: #d9001b;
 	}
 	.el-button:last-child {
 		background: #03a113;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	.home-container {
+		width: 100%;
+		margin: 0 auto;
+		padding: 0px 5px;
+	}
+	.criteria-container {
+		padding: 0;
+	}
+	.criteria-box {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		border-bottom: 1px solid #797979;
+	}
+	.el-tabs__nav-scroll {
+		overflow: scroll;
+	}
+	/deep/.el-tabs__nav-scroll {
+		overflow: scroll;
 	}
 }
 </style>

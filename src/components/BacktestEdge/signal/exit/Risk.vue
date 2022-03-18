@@ -27,7 +27,7 @@
 							@input="setDesciption"
 						></el-input>
 
-						<span class="tpNote">(%)</span>
+						<p class="tpNote">(%)</p>
 					</div>
 					<div class="check-box" v-if="riskIndiValue === 'pl'">
 						<el-checkbox label="Stop Loss" disabled></el-checkbox>
@@ -36,7 +36,7 @@
 							@input="setDesciption"
 							@change="validateStopLoss"
 						></el-input>
-						<span class="tpNote">(%)</span>
+						<p class="tpNote">(%)</p>
 					</div>
 					<div class="check-box" v-if="riskIndiValue === 'tim'">
 						<el-checkbox label="Time In Market" disabled></el-checkbox
@@ -45,7 +45,7 @@
 							@input="setDesciption"
 							oninput="value=value.replace(/[^\d]/g,'')"
 						></el-input>
-						<span class="tpNote">{{ timeFra }}</span>
+						<p class="tpNote">{{ timeFra }}</p>
 					</div>
 				</el-checkbox-group>
 			</div>
@@ -234,16 +234,16 @@ export default {
 		display: flex;
 		margin-bottom: 10px;
 		.tpNote {
-			width: 50px;
 			font-size: 16px;
+			margin: 0px 0px 0px 25px;
 		}
 	}
 }
-/deep/ .el-checkbox {
-	width: 180px;
+/deep/.el-input {
+	width: 15%;
 }
-/deep/ .el-input {
-	width: 22%;
+/deep/.el-checkbox {
+	width: 120px;
 }
 /deep/ .el-input__inner {
 	padding-left: 5px;
@@ -258,5 +258,11 @@ export default {
 /deep/ .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner {
 	color: #409eff;
 	background-color: #409eff;
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	.condition-container .check-box .tpNote {
+		font-size: 16px;
+		margin: 0px 0px 0px 42px;
+	}
 }
 </style>

@@ -60,6 +60,9 @@
 .el-tab-pane .el-tabs {
 	overflow: auto;
 }
+.el-table th.el-table__cell > .cell {
+	word-wrap: break-word;
+}
 .btnBox .el-button:nth-child(1),
 .signalBtnBox .el-button {
 	color: #910012;
@@ -157,6 +160,7 @@
 } */
 .el-input__inner {
 	margin-left: 20px;
+	line-height: 25px;
 }
 .backtest_container {
 	padding-left: 40px;
@@ -210,9 +214,6 @@ input[type='time'] {
 	width: 180px;
 }
 @media (min-width: 1024px) and (max-width: 1099px) {
-	body {
-		font-size: 18px;
-	}
 	.backtest_container
 		.el-form-item
 		.el-form-item__content
@@ -238,27 +239,94 @@ input[type='time'] {
 		padding: 0 2px;
 	}
 }
-@media (min-width: 820px) and (max-width: 1099px) {
-	body {
-		font-size: 20px;
+@media (min-width: 375px) and (max-width: 767px) {
+	.el-tabs__item {
+		font-size: 12px;
+		padding: 0 2px;
 	}
+	.body {
+		font-size: 12px;
+	}
+	.backtest_container {
+		padding: 0 5px;
+	}
+	.backtest_container
+		.el-form-item
+		.el-form-item__content
+		.selectBox
+		.el-select
+		.el-input
+		.el-input__inner {
+		width: 185px !important;
+	}
+	.backtest_container
+		.el-form-item
+		.el-form-item__content
+		.selectBox
+		.el-select
+		.el-input
+		.el-input__icon {
+		width: 115px;
+	}
+
+	.set-up-container input:not([type]),
+	.set-up-container input[type='text'],
+	.set-up-container input[type='number'],
+	.set-up-container input[type='date'],
+	.set-up-container input[type='time'] {
+		border: #000000 solid 1px;
+		padding: 0 5px 0 10px;
+		height: 25px;
+		width: 150px;
+		border-radius: unset;
+	}
+	.backtest_container
+		.el-form-item
+		.el-form-item__content
+		.selectBox
+		.el-select
+		.el-input
+		.el-input__icon {
+		width: 240px;
+	}
+	.backtest_container .el-form-item__content {
+		padding-left: 100px;
+	}
+	.entry-container input:not([type]),
+	.entry-container input[type='text'],
+	.entry-container input[type='number'],
+	.entry-container input[type='date'],
+	.entry-container input[type='time'] {
+		border: #000000 solid 1px;
+		padding: 0 5px 0 10px;
+		height: 25px;
+		width: 115px;
+		border-radius: unset;
+	}
+	.exit-container input:not([type]),
+	.exit-container input[type='text'],
+	.exit-container input[type='number'],
+	.exit-container input[type='date'],
+	.exit-container input[type='time'] {
+		border: #000000 solid 1px;
+		padding: 0 5px 0 10px;
+		height: 25px;
+		width: 115px;
+		border-radius: unset;
+	}
+}
+@media (min-width: 820px) and (max-width: 1099px) {
 	.el-tabs__item {
 		font-size: 12px;
 		padding: 1px;
 	}
 }
 @media (min-width: 1100px) and (max-width: 1279px) {
-	body {
-		font-size: 20px;
-	}
 	.backtest_container .nameBox input[type='text']:last-child {
 		width: 91%;
 	}
 }
 @media (min-width: 1280px) and (max-width: 1365px) {
-	body {
-		font-size: 22px;
-	}
 	.senti-container .ids-container input[type='text'],
 	input[type='number'],
 	input[type='date'],
@@ -267,24 +335,15 @@ input[type='time'] {
 	}
 }
 @media (min-width: 1366px) and (max-width: 1439px) {
-	body {
-		font-size: 24px;
-	}
 }
 
 @media (min-width: 1440px) and (max-width: 1679px) {
-	body {
-		font-size: 25px !important;
-	}
 	.backtest_container .nameBox input[type='text']:last-child {
 		width: 866px;
 	}
 }
 
 @media (min-width: 1680px) {
-	body {
-		font-size: 28px;
-	}
 	.set-up-container input:not([type]),
 	.set-up-container input[type='text'],
 	.set-up-container input[type='number'],
@@ -330,4 +389,13 @@ input[type='time'] {
 	.backtest_container .nameBox input[type='text']:last-child {
 		width: 78%;
 	}
+}
+.el-table .cell {
+	white-space: nowrap;
+	word-wrap: break-word;
+	overflow: hidden;
+	/* text-overflow: ellipsis; */
+}
+.el-table th.el-table__cell > .cell {
+	word-wrap: break-word;
 }
