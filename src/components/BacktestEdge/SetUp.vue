@@ -638,6 +638,7 @@ export default {
 		},
 		changeTimeframe(val) {
 			this.getFrequency(val)
+			this.$store.commit('getFrequency', val)
 			CIQ.addIndicators()
 		},
 		getFrequency(val) {
@@ -784,6 +785,7 @@ export default {
 					if (this.bd.end_date) {
 						// 保存 backtestform 的数据
 						this.$store.commit('setBd', this.bd)
+						this.$store.commit('getFrequency', this.frequency)
 						return checked
 					} else {
 						this.$message({

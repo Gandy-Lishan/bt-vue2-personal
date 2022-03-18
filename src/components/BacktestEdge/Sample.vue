@@ -345,7 +345,7 @@ export default {
 			this.$store.commit('getRunBacktestData', row)
 			this.$emit('goBacktestResultForm', row)
 			vm.$emit('goTobacktestSetupForm', row.id)
-		}, 5000),
+		}, 500),
 		deleteBacktest(id) {
 			this.$http
 				.delete('/dev/backtest/' + id + '/')
@@ -413,7 +413,7 @@ export default {
 						})
 				}
 			})
-		}, 5000),
+		}, 500),
 		viewBacktestResults: throttle(function (row) {
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
@@ -439,7 +439,7 @@ export default {
 					type: 'warning'
 				})
 			}
-		}, 5000),
+		}, 500),
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
 			this.getStrategyList()

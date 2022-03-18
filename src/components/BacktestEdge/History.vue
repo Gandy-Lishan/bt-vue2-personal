@@ -93,7 +93,7 @@
 						width="90px"
 					>
 						<template slot-scope="scope">
-							<p>{{scope.row.frequency}}</p>
+							<p>{{ scope.row.frequency }}</p>
 						</template>
 					</el-table-column>
 					<!-- <el-table-column label="Status" align="center">
@@ -331,6 +331,7 @@ export default {
 					})
 					this.$store.commit('getBacktestName', historyNameList)
 				}
+				console.log(this.backtestList)
 				this.queryInfo.total = res.data.count
 			} else {
 				this.loading = false
@@ -476,7 +477,7 @@ export default {
 		restoreIndicatorLayout(data, freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
-			this.$store.commit('getExtraIndicators',[])
+			this.$store.commit('getExtraIndicators', [])
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
@@ -502,7 +503,7 @@ export default {
 			CIQ.addIndicatorsFromBacktest()
 		},
 		showDes(row) {
-			console.log("当前row",row);
+			console.log('当前row', row)
 			const datades = {}
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {

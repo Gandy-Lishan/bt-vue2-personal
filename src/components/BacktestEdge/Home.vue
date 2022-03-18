@@ -6,9 +6,8 @@
 					><el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="2"
 						><img src="../../assets/logo.png" alt="logo" /></el-col
 				></el-row>
-
 				<el-row type="flex" justify="center"
-					><el-col><p>BacktestEdge Beta</p></el-col>
+					><el-col><p class="betaNote">BacktestEdge Beta</p></el-col>
 				</el-row>
 				<div class="chart_box" id="chart_box">
 					<chart width="100%" height="100%"></chart>
@@ -458,7 +457,7 @@ export default {
 					}
 				}
 			}
-		}, 5000),
+		}, 500),
 		goToHistoryForm() {
 			this.activeName = 'second'
 		},
@@ -571,7 +570,7 @@ header {
 	p:first-of-type {
 		text-align: left;
 		font-size: 2.5rem;
-		margin: 50px 0 50px 0;
+		margin: 0px;
 		font-weight: lighter;
 		color: #333333;
 	}
@@ -612,6 +611,7 @@ header {
 	justify-content: flex-end;
 	margin-right: 20px;
 	padding-bottom: 10px;
+	margin-bottom: 100px;
 	.el-button:first-child {
 		background: #d9001b;
 	}
