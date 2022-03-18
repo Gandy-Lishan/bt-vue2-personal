@@ -82,7 +82,7 @@ export default {
 			} else {
 				const pattern =
 					/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
-				if (!pattern.test(value)) {
+				if (!pattern.test(value) && value != 0) {
 					callback(new Error('Enter up to two decimal places'))
 				} else {
 					callback()
@@ -121,7 +121,7 @@ export default {
 		clearFormValidate() {
 			this.$refs.rsiForm.clearValidate()
 		},
-		setDesciption: throttle(function () {
+		setDesciption() {
 			let criteria = ''
 			let direction = ''
 			if (this.criteria == 'entry') {
@@ -139,7 +139,7 @@ export default {
 			let period = this.tech.period ? this.tech.period : ''
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${period} ${condition} ${this.tech.value}`
-		}, 500),
+		},
 		saveCondition() {
 			let checked = true
 			let validForm
@@ -205,5 +205,19 @@ export default {
 }
 /deep/.el-input--suffix .el-input__inner {
 	padding-right: 5px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .el-form-item__label {
+		margin-right: 10px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	/deep/ .el-form-item__label {
+		margin-right: 0px;
+	}
+	.condition-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
 </style>

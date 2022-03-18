@@ -102,7 +102,7 @@
 					</el-form-item>
 				</div>
 			</div>
-            
+
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio
@@ -200,10 +200,10 @@ export default {
 		// }
 	},
 	methods: {
-				clearForm() {
+		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 		},
-		setDesciption: throttle(function () {
+		setDesciption() {
 			let criteria = ''
 			let direction = ''
 			if (this.criteria == 'entry') {
@@ -221,8 +221,7 @@ export default {
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${condition} ${this.tech.value}`
-			
-		}, 500),
+		},
 		getConditionRadio(val) {
 			if (val === ' %D ') {
 				this.tech.value = 'MACDSL'
@@ -287,7 +286,7 @@ export default {
 .condition-container {
 	display: flex;
 	&:first-child {
-	border-top: 1px solid #797979;
+		border-top: 1px solid #797979;
 	}
 }
 /deep/ .el-input__inner {

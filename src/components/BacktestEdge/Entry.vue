@@ -59,9 +59,7 @@
 			ref="maChild"
 			:techUrl="techUrl"
 			:techVal="techVal"
-			v-show="
-				indicatorRadio === 'technical' && techIndiValue === 'ma'
-			"
+			v-show="indicatorRadio === 'technical' && techIndiValue === 'ma'"
 		></ma>
 		<!-- <bollinger-bands-like
 			:direction="fd.direction"
@@ -183,8 +181,8 @@ export default {
 		}
 	},
 	watch: {
-		updateSenti(val) {	
-			if(this.indicatorRadio == 'technical' && this.techVal == ''){
+		updateSenti(val) {
+			if (this.indicatorRadio == 'technical' && this.techVal == '') {
 				this.indicatorRadio = 'sentiment'
 			}
 		},
@@ -369,10 +367,42 @@ export default {
 	margin-bottom: 10px;
 }
 .entry-container {
-	padding-left: 50px;
-	padding-right: 10px;
-	margin-right: 50px;
-	border-right: 1px solid #797979;
+	// padding-left: 50px;
+	// padding-right: 10px;
+	margin-left: 40px;
+	// border-right: 1px solid #797979;
 	margin-bottom: 10px;
+}
+
+@media (min-width: 1280px) and (max-width: 1365px) {
+	.entry-container {
+		// padding-left: 50px;
+		// padding-right: 10px;
+		margin: 0px 10px 10px 10px;
+	}
+}
+@media (min-width: 820px) and (max-width: 1279px) {
+	.entry-container {
+		// padding-left: 50px;
+		// padding-right: 10px;
+		margin: 0px 40px 10px 40px;
+		border-bottom: 1px solid #797979;
+	}
+}
+@media (min-width: 768px) and (max-width: 819px) {
+	.entry-container {
+		// padding-left: 50px;
+		// padding-right: 10px;
+		margin: 0px 40px 10px 40px;
+		border-bottom: 1px solid #797979;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	.entry-container {
+		border-bottom: 1px solid #797979;
+	}
+	.entry-container {
+		margin: 0px 0px 10px 0px;
+	}
 }
 </style>

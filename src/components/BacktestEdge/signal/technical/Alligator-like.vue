@@ -248,7 +248,7 @@ export default {
 			}
 			this.setDesciption()
 		},
-		setDesciption: throttle(function () {
+		setDesciption() {
 			let criteria = ''
 			let direction = ''
 			if (this.criteria == 'entry') {
@@ -269,7 +269,7 @@ export default {
 			this.conditionRadio == 'Moving Average' ? this.tech.ma_period : ''
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${ma_period} ${condition} ${this.conditionRadio} ${this.tech.period}`
-		}, 500),
+		},
 		getMaPeriodValue(val) {
 			this.period = val
 			this.tech.ma_period = this.period

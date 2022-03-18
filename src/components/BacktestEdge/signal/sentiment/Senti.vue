@@ -125,48 +125,48 @@ export default {
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
-				if (value === '') {
-					callback(new Error('Please input value'))
-				} else if (isNaN(value)) {
-					callback(new Error('Please enter the correct format'))
+			if (value === '') {
+				callback(new Error('Please input value'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
+				const pattern =
+					/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+				if (!pattern.test(value) && value != 0) {
+					callback(new Error('Enter up to two decimal places'))
 				} else {
-					const pattern =
-						/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
-					if (!pattern.test(value)) {
-						callback(new Error('Enter up to two decimal places'))
-					} else {
-						callback()
-					}
+					callback()
 				}
+			}
 		}
 		var validateMaValue = (rule, value, callback) => {
-				if (value === '') {
-					callback(new Error('Please input value'))
-				} else if (isNaN(value)) {
-					callback(new Error('Please enter the correct format'))
-				} else if (value) {
-					const pattern =
-						/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
-					if (!pattern.test(value)) {
-						callback(new Error('Enter up to two decimal places'))
-					} else {
-						callback()
-					}
+			if (value === '') {
+				callback(new Error('Please input value'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else if (value) {
+				const pattern =
+					/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+				if (!pattern.test(value)) {
+					callback(new Error('Enter up to two decimal places'))
+				} else {
+					callback()
 				}
+			}
 		}
 		var validatePeriod = (rule, value, callback) => {
-				if (value === 0 || value === '') {
-					callback(new Error('Please input period'))
-				} else if (isNaN(value)) {
-					callback(new Error('Please enter the correct format'))
-				} else if (value) {
-					const pattern = /[1-9]\d*/
-					if (!pattern.test(value)) {
-						callback(new Error('Please enter a positive integer'))
-					} else {
-						callback()
-					}
+			if (value === 0 || value === '') {
+				callback(new Error('Please input period'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else if (value) {
+				const pattern = /[1-9]\d*/
+				if (!pattern.test(value)) {
+					callback(new Error('Please enter a positive integer'))
+				} else {
+					callback()
 				}
+			}
 		}
 		return {
 			preload: false,
@@ -276,7 +276,7 @@ export default {
 		// 	console.log('处理过后的值', value)
 		// 	this.senti.value = value
 		// },
-		setDesciption: throttle(function () {
+		setDesciption() {
 			let criteria = ''
 			let direction = ''
 			if (this.criteria == 'entry') {
@@ -294,9 +294,12 @@ export default {
 			let period = this.senti.period ? this.senti.period : ''
 			let condition = this.conditions[this.senti.condition].label
 			let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
-			let value = this.conditionRadio === 'Sentiment Value' ? this.senti.value : this.senti.maValue
+			let value =
+				this.conditionRadio === 'Sentiment Value'
+					? this.senti.value
+					: this.senti.maValue
 			this.description = `${criteria} ${direction} ${sentiVal} ${ma} ${period} ${condition} ${value}`
-		}, 500),
+		},
 		getConditionRadio(val) {
 			this.clearFormValidate()
 			// if (val === 'Sentiment Value') {
@@ -364,11 +367,11 @@ export default {
 			let checked = true
 			let validForm
 			if (this.conditionRadio === 'Sentiment Value') {
-			this.$refs['sentiForm'].validateField(['value'], errorMsg => {
-				if(!errorMsg){
-					validForm = true
-				}
-            })
+				this.$refs['sentiForm'].validateField(['value'], (errorMsg) => {
+					if (!errorMsg) {
+						validForm = true
+					}
+				})
 				if (validForm) {
 					let senti = this.senti
 					// if(senti.value === '') {
@@ -396,11 +399,14 @@ export default {
 					return checked
 				}
 			} else if (this.conditionRadio === 'Sentiment Moving Average') {
-			this.$refs['sentiForm'].validateField(['maValue', 'period'], errorMsg => {
-				if(!errorMsg){
-					validForm = true
-				}
-            })
+				this.$refs['sentiForm'].validateField(
+					['maValue', 'period'],
+					(errorMsg) => {
+						if (!errorMsg) {
+							validForm = true
+						}
+					}
+				)
 				if (validForm) {
 					// if (this.senti.period) {
 					let senti = this.senti
@@ -488,5 +494,19 @@ export default {
 
 /deep/ .el-form-item__label {
 	margin-right: 36px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .el-form-item__label {
+		margin-right: 10px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	/deep/ .el-form-item__label {
+		margin-right: 0px;
+	}
+	.condition-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
 </style>

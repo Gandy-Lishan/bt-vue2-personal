@@ -233,10 +233,6 @@ export default {
 			this.clearFormValidate()
 			CIQ.store.commit('setConditionRadio', val)
 			if (val === 'Symbol Close') {
-				if ('ma_period' in this.tech) {
-					delete this.tech.ma_period
-					delete this.tech.maPeriod
-				}
 				this.disabled = !this.disabled
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
@@ -255,8 +251,6 @@ export default {
 			} else if (val === 'Moving Average') {
 				// 添加附属ma
 				this.disabled = !this.disabled
-				this.tech.ma_period = 5
-				this.tech.maPeriod = this.tech.period
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
 					if (sd.type == 'ST MA' && sd.panel == 'chart') {
@@ -288,7 +282,7 @@ export default {
 			}
 			this.setDesciption()
 		},
-		setDesciption: throttle(function () {
+		setDesciption() {
 			let criteria = ''
 			let direction = ''
 			if (this.criteria == 'entry') {
@@ -315,8 +309,7 @@ export default {
 			// this.conditionRadio == 'Moving Average' ? this.tech.ma_period : ''
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${this.conditionRadio} ${ma_period} ${condition} Moving Average ${period}`
-			
-		}, 500),
+		},
 		getMaPeriodValue(val) {
 			// this.period = val
 			// this.tech.ma_period = this.period
@@ -528,10 +521,12 @@ export default {
 		saveCondition() {
 			let checked = true
 			let validForm
-			this.$refs.maForm.validate((valid) => {
-				validForm = valid
-			})
 			if (this.conditionRadio === 'Symbol Close') {
+				this.$refs['maForm'].validateField(['period'], (errorMsg) => {
+					if (!errorMsg) {
+						validForm = true
+					}
+				})
 				let ids = {}
 				if (validForm) {
 					if (this.tech.ids) {
@@ -542,6 +537,7 @@ export default {
 					let tech = this.tech
 					delete tech.ids
 					delete tech.ma_period
+					delete tech.maPeriod
 					tech = Object.assign(ids, tech)
 					tech.criteria = this.criteria
 					tech.index = 0
@@ -561,6 +557,14 @@ export default {
 					return checked
 				}
 			} else {
+				this.$refs['maForm'].validateField(
+					['ma_period', 'maPeriod'],
+					(errorMsg) => {
+						if (!errorMsg) {
+							validForm = true
+						}
+					}
+				)
 				if (validForm) {
 					let ids = {}
 					let tech = {}
@@ -569,6 +573,8 @@ export default {
 					delete tech.ids
 					tech = Object.assign(ids, tech)
 					tech.criteria = this.criteria
+					tech.period = tech.maPeriod
+					delete tech.maPeriod
 					tech.index = 0
 					this.$store.commit('saveCondition', tech)
 					let desObj = {}
@@ -594,7 +600,6 @@ export default {
 				this.tech.ids = newVal[this.criteria].signals[0].ids
 				this.tech.condition = Number(newVal[this.criteria].signals[0].condition)
 				this.tech.period = newVal[this.criteria].signals[0].period
-				this.tech.maPeriod = newVal[this.criteria].signals[0].period
 				this.conditionRadio = 'Symbol Close'
 				this.disabled = false
 				this.getSCvalue(this.tech.period)
@@ -603,6 +608,7 @@ export default {
 					this.conditionRadio = 'Moving Average'
 					this.disabled = true
 					this.tech.ma_period = ma_period
+					this.tech.maPeriod = this.tech.period
 					this.getMaPeriodValue(ma_period)
 					this.getMaValue(newVal[this.criteria].signals[0].period)
 				}
@@ -634,5 +640,19 @@ export default {
 }
 /deep/ .el-form-item__label {
 	margin-right: 36px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .el-form-item__label {
+		margin-right: 10px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	/deep/ .el-form-item__label {
+		margin-right: 0px;
+	}
+	.condition-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
 </style>

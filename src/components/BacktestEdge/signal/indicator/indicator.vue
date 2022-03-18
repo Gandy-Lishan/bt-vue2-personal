@@ -142,7 +142,11 @@ export default {
 	},
 	watch: {
 		updateSenti(val) {
-			if (this.si.sentimentIndicator == '' && this.si.technicalIndicator == '') {
+			console.log('updateSenti',val)
+			if (
+				this.si.sentimentIndicator == '' &&
+				this.si.technicalIndicator == ''
+			) {
 				this.si.sentimentIndicator = val.name
 
 				for (var i in CIQ.indicatorList) {
@@ -276,9 +280,9 @@ export default {
 		},
 		createStateSentimentFilter(queryString) {
 			return (state) => {
-				if (state.value.indexOf("Seasonality") !==-1){
-                          return false
-                }
+				if (state.value.indexOf('Seasonality') !== -1) {
+					return false
+				}
 				return (
 					state.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1
 				)
@@ -428,7 +432,7 @@ export default {
 							return
 						}
 					}
-					if(arguments[1]!=true){
+					if (arguments[1] != true) {
 						CIQ.addIndicators()
 					}
 				}
@@ -657,7 +661,7 @@ export default {
 					let item = {}
 					item.value = technicalIndicator
 					let isFromEdit = true
-					vm.handleTechnicalSelect(item,isFromEdit)
+					vm.handleTechnicalSelect(item, isFromEdit)
 					this.indicatorRadio = 'Technical Indicators'
 					this.isCheckedIndicators = true
 					// this.$emit('getTechVal', vm.si.technicalIndicator)
@@ -679,6 +683,7 @@ export default {
 	width: 334px;
 	padding-left: 30px;
 }
+
 /deep/ .el-radio__label {
 	display: inline-block;
 	width: 136px;
@@ -688,5 +693,62 @@ export default {
 }
 /deep/ .el-form-item {
 	margin-bottom: 10px;
+}
+@media (min-width: 1680px) {
+	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
+		width: 500px;
+		padding-left: 30px;
+	}
+	/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+		width: 500px;
+		padding-left: 30px;
+	}
+}
+
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
+		width: 300px;
+		padding-left: 30px;
+	}
+	/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+		width: 300px;
+		padding-left: 30px;
+	}
+}
+@media (min-width: 820px) and (max-width: 1279px) {
+	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
+		width: 500px;
+		padding-left: 30px;
+	}
+	/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+		width: 500px;
+		padding-left: 30px;
+	}
+}
+@media (min-width: 768px) and (max-width: 819px) {
+	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
+		width: 400px;
+		padding-left: 30px;
+	}
+	/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+		width: 400px;
+		padding-left: 30px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	// /deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
+	// 	width: 232px;
+	// 	padding-left: 22px;
+	// }
+	// /deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+	// 	width: 232px;
+	// 	padding-left: 22px;
+	// }
+	.indicator-container {
+		display: flex;
+		flex-direction: column;
+		// justify-content: center;
+		// align-items: center;
+	}
 }
 </style>

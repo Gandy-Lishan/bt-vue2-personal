@@ -66,6 +66,7 @@ if (document.baseURI.search(host) != -1) {
 			window.location.href = loginUrl
 		}
 	}
+	console.log('userId', userId)
 	// 3. 根据返回状态码判断后续操作
 	
 	axios
@@ -103,6 +104,8 @@ if (document.baseURI.search(host) != -1) {
 	//  alert("asdasd");
 	next()
 }
+// cookies.set('userid','test')
+// next()
   })
 //   }
 //  )

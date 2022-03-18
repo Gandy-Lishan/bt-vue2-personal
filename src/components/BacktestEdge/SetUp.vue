@@ -373,7 +373,7 @@ export default {
 					this.frequency = this.editFrequency
 					this.getFrequency(this.frequency)
 					//this.changeTimeframe(this.frequency)
-					
+
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
 					// console.log('频率', this.frequency)
@@ -831,13 +831,40 @@ export default {
 .comUnitNote {
 	position: absolute;
 
-	left: 329px;
+	left: 335px;
 	top: 56px;
 }
 .sliUnitNote {
 	position: absolute;
-	left: 329px;
+	left: 335px;
 	top: 105px;
+}
+@media (min-width: 1680px) {
+	.comUnitNote {
+		position: absolute;
+		left: 454px;
+		top: 56px;
+	}
+	.sliUnitNote {
+		position: absolute;
+		left: 454px;
+		top: 105px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	.comUnitNote {
+		position: absolute;
+		left: 272px;
+		top: 56px;
+	}
+	.sliUnitNote {
+		position: absolute;
+		left: 272px;
+		top: 105px;
+	}
+	.el-input__suffix {
+		right: 68px;
+	}
 }
 .border-set {
 	border-bottom: 1px solid #797979;

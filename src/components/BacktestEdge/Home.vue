@@ -8,7 +8,7 @@
 				></el-row>
 
 				<el-row type="flex" justify="center"
-					><el-col><p>BacktestEdge</p></el-col>
+					><el-col><p>BacktestEdge Beta</p></el-col>
 				</el-row>
 				<div class="chart_box" id="chart_box">
 					<chart width="100%" height="100%"></chart>
@@ -28,11 +28,12 @@
 				<el-tabs
 					v-model="activeName"
 					type="card"
-					:tab-position="tabPosition"
+					stretch
+					:tab-position = "tabPosition"
 					@tab-click="handleTabClick"
 				>
 					<el-tab-pane label="Set up Backtest" name="first">
-						<div class="set-up-container">
+						<div class="set-up-container" @click="tabContentClick">
 							<set-up
 								ref="setUpChild"
 								:backtestEditData="backtestEditData"
@@ -183,28 +184,48 @@ export default {
 	},
 	methods: {
 		// 清除set up  表单
-		sidebar() {
-			let sidebar = document.getElementsByClassName('el-tabs__header is-left')
-			let tabContent = document.getElementsByClassName('el-tabs__content')
-			let btn = document.getElementsByClassName('fa fa-outdent navCheck')
-
-			if(this.btnClickBool==true){
-				sidebar[0].style.left = "-200px"
-				tabContent[0].style.left = "-200px"
+		tabContentClick(){
+			try {
+				let sidebar = document.getElementsByClassName('el-tabs__header is-left')
+				let tabContent = document.getElementsByClassName('el-tabs__content')
+				let btn = document.getElementsByClassName('fa fa-outdent navCheck')
+				sidebar[0].style.left = "-124px"
+				tabContent[0].style.left = "-124px"
 				btn[0].style.transform = "rotate3d(0, 1, 0, -180deg)"
 				btn[0].style.transition = "all 0.5s"
 				this.btnClickBool = false
-			}else{
-				sidebar[0].style.left = "0px"
-				tabContent[0].style.left = "0px"
-				btn[0].style.transform = "rotate3d(0, 1, 0, 0deg)"
-				btn[0].style.transition = "all 0.5s"
-				this.btnClickBool = true
+			} catch (error) {
+				
 			}
 			
 		},
+		sidebar() {
+			try {
+				let sidebar = document.getElementsByClassName('el-tabs__header is-left')
+				let tabContent = document.getElementsByClassName('el-tabs__content')
+				let btn = document.getElementsByClassName('fa fa-outdent navCheck')
+				
+				if(this.btnClickBool==true){
+					sidebar[0].style.left = "-124px"
+					tabContent[0].style.left = "-124px"
+					btn[0].style.transform = "rotate3d(0, 1, 0, -180deg)"
+					btn[0].style.transition = "all 0.5s"
+					this.btnClickBool = false
+				}else{
+					sidebar[0].style.left = "0px"
+					tabContent[0].style.left = "0px"
+					btn[0].style.transform = "rotate3d(0, 1, 0, 0deg)"
+					btn[0].style.transition = "all 0.5s"
+					this.btnClickBool = true
+				}				
+			} catch (error) {
+				
+			}
+
+			
+		},
 		clearForm() {
-			//CIQ.reloadChart()
+			CIQ.reloadChart()
 			this.$store.commit('initialBacktestInfo')
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
@@ -315,24 +336,28 @@ export default {
 							['Relative Strength Index', 'rsi'],
 							['Moving Average', 'ma'],
 							['MACD', 'macd'],
-							['RC','']
+							['RC', '']
 						])
 
 						const newMap = new Map(set)
-			
-						var entrySignal = CIQ.indicatorList.find(item=> {return item.chart_name == backtestData.entry.signals[0].indicator})
-						var exitSignal = CIQ.indicatorList.find(item=> {return item.chart_name == backtestData.exit.signals[0].indicator})
-						if(!entrySignal){
+
+						var entrySignal = CIQ.indicatorList.find((item) => {
+							return item.chart_name == backtestData.entry.signals[0].indicator
+						})
+						var exitSignal = CIQ.indicatorList.find((item) => {
+							return item.chart_name == backtestData.exit.signals[0].indicator
+						})
+						if (!entrySignal) {
 							for (let i of newMap.entries()) {
 								if (backtestData.entry.signals[0].indicator === i[0]) {
-									entrySignal = {url:i[1]}
+									entrySignal = { url: i[1] }
 								}
 							}
 						}
-						if(!exitSignal){
+						if (!exitSignal) {
 							for (let i of newMap.entries()) {
 								if (backtestData.exit.signals[0].indicator === i[0]) {
-									exitSignal = {url:i[1]}
+									exitSignal = { url: i[1] }
 								}
 							}
 						}
@@ -371,7 +396,7 @@ export default {
 
 						//上传indicator layout
 						var indicatorLayout = {}
-						// console.log("entry/exit: ",this.$store.state.indicators.formIndicators)
+						console.log("entry/exit: ",this.$store.state.indicators.formIndicators)
 						indicatorLayout.formIndicators = {
 							entry: this.$store.state.indicators.formIndicators.entry,
 							exit: this.$store.state.indicators.formIndicators.exit
@@ -405,18 +430,19 @@ export default {
 									vm.goToHistoryForm()
 									vm.$refs.historyChild.refreshHistory(res.data.id)
 									// 保存成功之后应该清除表单的所有数据
-									vm.clearForm()
+									//vm.clearForm()
+									CIQ.hideMarker()
 									// 并且清除 old_uuid
 									let backtestInfo = vm.$store.state.backtestInfo
 									if (backtestInfo.old_uuid) {
 										vm.$store.commit('clearBacktestUuid')
 									}
 									vm.$refs.favoriteChild.getBacktestList()
-
 								} else {
 									vm.$message.error('Save failed')
 									vm.loading = false
-									vm.clearForm()
+									//vm.clearForm()
+									CIQ.hideMarker()
 								}
 							})
 							.catch((error) => {
@@ -508,9 +534,8 @@ export default {
 		width: 10rem;
 		margin-left: 100px;
     	flex: 1;
+		//width: 98%;
 	}
-
-	
 }
 @media screen and (min-width: 768px) {
 	.navCheck{
@@ -560,8 +585,26 @@ header {
 }
 .criteria-box {
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
 	border-bottom: 1px solid #797979;
+}
+@media (min-width: 820px) and (max-width: 1279px) {
+	.criteria-box {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		border-bottom: 1px solid #797979;
+	}
+}
+@media (min-width: 768px) and (max-width: 819px) {
+	.criteria-box {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		border-bottom: 1px solid #797979;
+	}
 }
 .backtest-btns {
 	margin-top: 10px;
@@ -574,6 +617,29 @@ header {
 	}
 	.el-button:last-child {
 		background: #03a113;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	.home-container {
+		width: 100%;
+		margin: 0 auto;
+		padding: 0px 5px;
+	}
+	.criteria-container {
+		padding: 0;
+	}
+	.criteria-box {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		border-bottom: 1px solid #797979;
+	}
+	.el-tabs__nav-scroll {
+		overflow: scroll;
+	}
+	/deep/.el-tabs__nav-scroll {
+		overflow: scroll;
 	}
 }
 </style>
