@@ -142,7 +142,7 @@ export default {
 	},
 	watch: {
 		updateSenti(val) {
-			console.log('updateSenti',val)
+			//console.log('updateSenti',val)
 			if (
 				this.si.sentimentIndicator == '' &&
 				this.si.technicalIndicator == ''
@@ -152,9 +152,13 @@ export default {
 				for (var i in CIQ.indicatorList) {
 					if (CIQ.indicatorList[i].chart_name == val.name) {
 						this.indicatorRadio = 'Sentiment Indicators'
+						if(this.criteria == 'entry'){
+							this.$store.commit('getEntryIndicators', CIQ.indicatorList[i].url)
+						}else{
+							this.$store.commit('getExitIndicators', CIQ.indicatorList[i].url)
+						}
 						// extract this statement from handleSentimentSelect
-						this.$emit('getSentiVal', CIQ.indicatorList[i].chart_name)
-
+						this.$emit('getSentiVal', CIQ.indicatorList[i].chart_name)						
 						//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
 						this.$emit('getSentiUrl', CIQ.indicatorList[i].url)
 					}
@@ -167,7 +171,8 @@ export default {
 				if (item.url == val.url) {
 					// this.si.technicalIndicator = item.value
 					// 暂时注释掉，因为大部分tech没有加到back test内
-					this.indicatorRadio = 'Technical Indicators'
+					//this.indicatorRadio = 'Technical Indicators'
+					
 					//this.handleTechnicalSelect({value:item.value})
 				}
 			})
