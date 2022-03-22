@@ -638,7 +638,6 @@ export default {
 		},
 		changeTimeframe(val) {
 			this.getFrequency(val)
-			this.$store.commit('getFrequency', val)
 			CIQ.addIndicators()
 		},
 		getFrequency(val) {
