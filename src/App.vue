@@ -4,29 +4,42 @@
 	</div>
 </template>
 <script>
-function isMobile() {
-	var ua = navigator.userAgent.toLowerCase()
-	var StringPhoneReg =
-		'\\b(ip(hone|od)|android|opera m(ob|in)i' +
-		'|windows (phone|ce)|blackberry' +
-		'|s(ymbian|eries60|amsung)|p(laybook|alm|rofile/midp' +
-		'|laystation portable)|nokia|fennec|htc[-_]' +
-		'|mobile|up.browser|[1-4][0-9]{2}x[1-4][0-9]{2})\\b'
-	var StringTableReg =
-		'\\b(ipad|tablet|(Nexus 7)|up.browser' + '|[1-4][0-9]{2}x[1-4][0-9]{2})\\b'
+function testBrowser() {
+	//取得浏览器的userAgent字符串
+	var userAgent = navigator.userAgent
+	var isOpera = userAgent.indexOf('Opera') > -1
 
-	console.log(ua)
-	var isIphone = ua.match(StringPhoneReg),
-		isTable = ua.match(StringTableReg),
-		isMobile = isIphone || isTable
-
-	if (isMobile) {
-		alert('yes')
-		return true
-	} else {
-		alert('no')
-		return false
+	//谷歌
+	if (userAgent.indexOf('Chrome') > -1) {
+		return 'Chrome'
 	}
+
+	//火狐
+	if (userAgent.indexOf('Firefox') > -1) {
+		return 'Firefox'
+	}
+
+	//ie
+	if (
+		userAgent.indexOf('compatible') > -1 &&
+		userAgent.indexOf('MSIE') > -1 &&
+		!isOpera
+	) {
+		return 'IE'
+	}
+	//Opera
+	if (isOpera) {
+		return 'Opera'
+	}
+	//Safari
+	if (userAgent.indexOf('Safari') > -1) {
+		return 'Safari'
+	}
+}
+//调用函数实现
+var broweser = testBrowser()
+if ('Chrome' !== broweser) {
+	alert('Google Chrome renders the screen better')
 }
 export default {
 	name: 'app',

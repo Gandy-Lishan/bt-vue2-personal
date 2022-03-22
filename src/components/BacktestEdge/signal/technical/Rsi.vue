@@ -114,8 +114,9 @@ export default {
 	},
 	methods: {
 		clearForm() {
-			Object.assign(this.$data, this.$options.data())
-			this.clearFormValidate()
+			// Object.assign(this.$data, this.$options.data())
+			// this.clearFormValidate()
+			this.$refs.rsiForm.resetFields()
 		},
 		// 清除表单认证
 		clearFormValidate() {

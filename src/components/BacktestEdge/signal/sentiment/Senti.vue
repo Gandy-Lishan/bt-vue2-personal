@@ -72,7 +72,6 @@
 							placeholder="Input Period"
 							oninput="value=value.replace(/[^\d]/g,'')"
 							v-model="senti.period"
-							@input="setDesciption"
 						></el-input>
 					</el-form-item>
 				</div>
@@ -100,7 +99,7 @@
 							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
 							v-model="senti.maValue"
 							placeholder="Input Value"
-							@input="setDesciption"
+							@input="change($event)"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 						></el-input>
 					</el-form-item>
@@ -147,7 +146,7 @@ export default {
 			} else if (value) {
 				const pattern =
 					/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
-				if (!pattern.test(value)) {
+				if (!pattern.test(value) && value != 0) {
 					callback(new Error('Enter up to two decimal places'))
 				} else {
 					callback()
@@ -249,10 +248,18 @@ export default {
 		}
 	},
 	methods: {
+		change(e) {
+			// const vm = this
+			this.$forceUpdate()
+			// console.log('强制刷新事件', e)
+			// vm.$refs['sentiForm'].validateField(['maValue'], (errorMsg) => {
+			// 	if (!errorMsg) {
+			// 		console.log('校验失败')
+			// 	}
+			// })
+		},
 		clearForm() {
 			// Object.assign(this.$data, this.$options.data())
-			// this.conditionRadio = 'Sentiment Value'
-			// this.clearFormValidate()
 			this.$refs.sentiForm.resetFields()
 		},
 		// 清除表单认证
@@ -276,7 +283,7 @@ export default {
 		// 	console.log('处理过后的值', value)
 		// 	this.senti.value = value
 		// },
-		setDesciption() {
+		setDesciption(val) {
 			let criteria = ''
 			let direction = ''
 			if (this.criteria == 'entry') {
@@ -301,17 +308,43 @@ export default {
 			this.description = `${criteria} ${direction} ${sentiVal} ${ma} ${period} ${condition} ${value}`
 		},
 		getConditionRadio(val) {
-			this.clearFormValidate()
+			this.$refs.sentiForm.clearValidate()
+			// this.$forceUpdate()
+			// this.clearFormValidate()
+			// this.$refs.sentiForm.resetFields()
+			// this.senti.maValue = ''
+			// this.senti.period = ''
+			// this.senti.value = ''
+			// this.$refs.sentiForm.clearValidate(['validatePeriod', 'validateMaValue'])
+			// this.$refs.sentiForm.clearValidate(['validateValue'])
+			console.log('消除校验')
 			// if (val === 'Sentiment Value') {
-			// 	if ('period' in this.senti) {
-			// 		delete this.senti.period
-			// 		delete this.senti.maValue
-			// 	}
-			// 	this.disabled = !this.disabled
-			// } else if (val === 'Sentiment Moving Average') {
-			// 	this.disabled = !this.disabled
-			// 	this.senti.period = ''
-			// 	this.senti.maValue = ''
+			// 	this.$nextTick(() => {
+			// 		this.$refs.sentiForm.clearValidate([
+			// 			'validatePeriod',
+			// 			'validateMaValue'
+			// 		])
+			// 		this.$refs.sentiForm.clearValidate(['validateValue'])
+			// 		console.log('消除校验')
+			// 	})
+			// 	// this.$refs.sentiForm.clearValidate('validateMaValue')
+			// 	// 	if ('period' in this.senti) {
+			// 	// 		delete this.senti.period
+			// 	// 		delete this.senti.maValue
+			// 	// 	}
+			// 	// 	this.disabled = !this.disabled
+			// 	// } else if (val === 'Sentiment Moving Average') {
+			// 	// 	this.disabled = !this.disabled
+			// 	// 	this.senti.period = ''
+			// 	// 	this.senti.maValue = ''
+			// } else {
+			// 	this.$nextTick(() => {
+			// 		this.$refs.sentiForm.clearValidate([
+			// 			'validatePeriod',
+			// 			'validateMaValue'
+			// 		])
+			// 		this.$refs.sentiForm.clearValidate(['validateValue'])
+			// 	})
 			// }
 		},
 		setPeriod(val) {
@@ -441,7 +474,7 @@ export default {
 					return checked
 				}
 			}
-			this.clearFormValidate()
+			this.clearForm()
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {

@@ -23,7 +23,6 @@
 						<el-checkbox label="Take Profit" disabled></el-checkbox>
 						<el-input
 							v-model="risk.take_profit"
-							oninput="value=value.replace(/[^\d]/g,'')"
 							@input="setDesciption"
 						></el-input>
 
@@ -34,7 +33,6 @@
 						<el-input
 							v-model="risk.stop_loss"
 							@input="setDesciption"
-							@change="validateStopLoss"
 						></el-input>
 						<p class="tpNote">(%)</p>
 					</div>
@@ -43,7 +41,6 @@
 						><el-input
 							v-model="risk.time_in_market"
 							@input="setDesciption"
-							oninput="value=value.replace(/[^\d]/g,'')"
 						></el-input>
 						<p class="tpNote">{{ timeFra }}</p>
 					</div>
@@ -53,6 +50,7 @@
 	</div>
 </template>
 <script>
+import { trix } from 'chartiq/js/advanced'
 import { Store, mapGetters } from 'vuex'
 const _ = require('lodash')
 const throttle = _.throttle
@@ -113,11 +111,67 @@ export default {
 			this.timeFra = '(days)'
 		},
 		validateStopLoss(num) {
-			if (isNaN(num) || num <= 0 || num >= 101 || !/^\d+$/.test(num)) {
+			if (num < 0 || num > 100) {
 				{
-					alert('提示', '请输入正确的数值,只允许输入小于等于100的正整数!')
+					this.$message({
+						message:
+							'Only positive integers less than or equal to 100 are allowed',
+						type: 'error',
+						offset: 300
+					})
 				}
+				return false
 			}
+			const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
+			if (!pattern.test(num) && num != 0) {
+				{
+					this.$message({
+						message: 'Only two decimal points are allowed',
+						type: 'error',
+						offset: 300
+					})
+				}
+				return false
+			}
+			return true
+		},
+
+		validateTakeProfit(num) {
+			if (num < 0) {
+				{
+					this.$message({
+						message: 'Only positive integers are allowed',
+						type: 'error',
+						offset: 300
+					})
+				}
+				return false
+			}
+			const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
+			if (!pattern.test(num) && num != 0) {
+				{
+					this.$message({
+						message: 'Only two decimal points are allowed',
+						type: 'error',
+						offset: 300
+					})
+				}
+				return false
+			}
+			return true
+		},
+		validateTimeInMarket(num) {
+			if (isNaN(num) || num < 0 || !/^\d+$/.test(num)) {
+				{
+					this.$message({
+						message: 'Only positive integers are allowed',
+						type: 'error',
+						offset: 300
+					})
+				}
+				return false
+			}
+			return true
 		},
 		setDesciption() {
 			let criteria = ''
@@ -153,11 +207,16 @@ export default {
 		saveCondition() {
 			let checked = true
 			// 判断有无空值
-			if (
-				this.risk.take_profit ||
-				this.risk.stop_loss ||
-				this.risk.time_in_market
-			) {
+			console.log(this.risk)
+			let valid = true
+			if (this.riskVal === 'Profit/Loss') {
+				valid =
+					this.validateStopLoss(this.risk.stop_loss) &&
+					this.validateTakeProfit(this.risk.take_profit)
+			} else {
+				valid = this.validateTimeInMarket(this.risk.time_in_market)
+			}
+			if (valid) {
 				let risk = this.risk
 				let riskVal = this.riskVal
 				let arr = ['Take Profit', 'Stop Loss', 'Time In Market', 'Profit/Loss']
@@ -182,7 +241,6 @@ export default {
 				this.$store.commit('saveDescription', desObj)
 				return checked
 			} else {
-				this.$message.error('Please Input Risk Value')
 				checked = false
 				return checked
 			}

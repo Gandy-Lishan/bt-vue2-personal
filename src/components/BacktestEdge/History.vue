@@ -308,9 +308,9 @@ export default {
 			loadTest: 'Loading...'
 		}
 	},
-	// created() {
-	// 	this.getBacktestList()
-	// },
+	created() {
+		this.getBacktestList()
+	},
 	methods: {
 		async getBacktestList(strategy) {
 			this.loadTest = 'Loading...'

@@ -320,6 +320,7 @@ export default {
 		// this.getIndexsList()
 		// this.getStocksList()
 		this.getEndDate()
+		// cookies.set('userid', 'test')
 	},
 	computed: {
 		// listSet() {

@@ -28,7 +28,7 @@
 					v-model="activeName"
 					type="card"
 					stretch
-					:tab-position = "tabPosition"
+					:tab-position="tabPosition"
 					@tab-click="handleTabClick"
 				>
 					<el-tab-pane label="Set up Backtest" name="first">
@@ -166,24 +166,39 @@ export default {
 				_this.tabPosition = 'top'
 			}
 		})
+		// this.myBrowser()
 	},
 	watch: {
 		clientHeight: {
 			handler(val) {
 				this.clientHeight = val
-				if(this.clientHeight < 768){
+				if (this.clientHeight < 768) {
 					this.tabPosition = 'left'
 				} else {
 					this.tabPosition = 'top'
 				}
 			},
 			immediate: true,
-    		deep: true
+			deep: true
 		}
 	},
 	methods: {
+		myBrowser: function () {
+			//取得浏览器的userAgent字符串
+			var userAgent = navigator.userAgent
+			var isOpera = userAgent.indexOf('Opera') > -1
+			//判断是否Opera浏览器
+			if (
+				userAgent.indexOf('Chrome') > -1 &&
+				userAgent.indexOf('Safari') > -1
+			) {
+				// alert('Chrome浏览器')
+			} else {
+				alert('The best display is accessed using the chrome browser')
+			}
+		},
 		// 清除set up  表单
-		tabContentClick(){
+		tabContentClick() {
 			try {
 				let sidebar = document.getElementsByClassName('el-tabs__header is-left')
 				let tabContent = document.getElementsByClassName('el-tabs__content')
@@ -193,35 +208,27 @@ export default {
 				btn[0].style.transform = "rotate3d(0, 1, 0, -180deg)"
 				btn[0].style.transition = "all 0.5s"
 				this.btnClickBool = false
-			} catch (error) {
-				
-			}
-			
+			} catch (error) {}
 		},
 		sidebar() {
 			try {
 				let sidebar = document.getElementsByClassName('el-tabs__header is-left')
 				let tabContent = document.getElementsByClassName('el-tabs__content')
-				let btn = document.getElementsByClassName('fa fa-outdent navCheck')
-				
+				let btn = document.getElementsByClassName('fa fa-outdent navCheck')	
 				if(this.btnClickBool==true){
 					sidebar[0].style.left = "-110px"
 					tabContent[0].style.left = "-110px"
 					btn[0].style.transform = "rotate3d(0, 1, 0, -180deg)"
 					btn[0].style.transition = "all 0.5s"
 					this.btnClickBool = false
-				}else{
-					sidebar[0].style.left = "0px"
-					tabContent[0].style.left = "0px"
-					btn[0].style.transform = "rotate3d(0, 1, 0, 0deg)"
-					btn[0].style.transition = "all 0.5s"
+				} else {
+					sidebar[0].style.left = '0px'
+					tabContent[0].style.left = '0px'
+					btn[0].style.transform = 'rotate3d(0, 1, 0, 0deg)'
+					btn[0].style.transition = 'all 0.5s'
 					this.btnClickBool = true
-				}				
-			} catch (error) {
-				
-			}
-
-			
+				}
+			} catch (error) {}
 		},
 		clearForm() {
 			CIQ.reloadChart()
@@ -230,15 +237,15 @@ export default {
 			this.$refs.entryChild.clearForm()
 			this.$refs.exitChild.clearForm()
 		},
+		clearAllDataForm() {
+			this.$store.commit('initialBacktestInfo')
+			this.$refs.setUpChild.clearForm()
+			this.$refs.entryChild.clearForm()
+			this.$refs.exitChild.clearForm()
+		},
 		handleTabClick(tab, event) {
 			let tabName = tab.name
 			switch (tabName) {
-				case 'second':
-					if (this.historyFlag) {
-						this.$refs.historyChild.getBacktestList()
-						this.historyFlag = false
-					}
-					break
 				case 'forth':
 					if (this.favoriteFlag) {
 						this.$refs.favoriteChild.getBacktestList()
@@ -395,7 +402,6 @@ export default {
 
 						//上传indicator layout
 						var indicatorLayout = {}
-						console.log("entry/exit: ",exitSignal)
 						indicatorLayout.formIndicators = {
 							entry: this.$store.state.indicators.formIndicators.entry,
 							exit: this.$store.state.indicators.formIndicators.exit
@@ -429,7 +435,7 @@ export default {
 									vm.goToHistoryForm()
 									vm.$refs.historyChild.refreshHistory(res.data.id)
 									// 保存成功之后应该清除表单的所有数据
-									//vm.clearForm()
+									vm.clearAllDataForm()
 									CIQ.hideMarker()
 									// 并且清除 old_uuid
 									let backtestInfo = vm.$store.state.backtestInfo
@@ -440,7 +446,7 @@ export default {
 								} else {
 									vm.$message.error('Save failed')
 									vm.loading = false
-									//vm.clearForm()
+									vm.clearAllDataForm()
 									CIQ.hideMarker()
 								}
 							})
@@ -541,7 +547,7 @@ export default {
 	}
 }
 @media screen and (min-width: 768px) {
-	.navCheck{
+	.navCheck {
 		display: none;
 	}
 	.restartBtn {
