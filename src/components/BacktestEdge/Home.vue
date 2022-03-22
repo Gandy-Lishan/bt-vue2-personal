@@ -14,12 +14,8 @@
 				</div>
 			</header>
 			<main class="main">
-				<div style="display: flex; align-items: center">
-					<i
-						@click="sidebar"
-						class="fa fa-outdent navCheck"
-						style="font-size: 30px"
-					></i>
+				<div class="alignRight" style="display:flex;align-items:center;">
+					<i @click="sidebar" class="fa fa-outdent navCheck" style="font-size:30px;"></i>
 					<el-button
 						@click="refreshPage"
 						class="restartBtn"
@@ -207,10 +203,10 @@ export default {
 				let sidebar = document.getElementsByClassName('el-tabs__header is-left')
 				let tabContent = document.getElementsByClassName('el-tabs__content')
 				let btn = document.getElementsByClassName('fa fa-outdent navCheck')
-				sidebar[0].style.left = '-124px'
-				tabContent[0].style.left = '-124px'
-				btn[0].style.transform = 'rotate3d(0, 1, 0, -180deg)'
-				btn[0].style.transition = 'all 0.5s'
+				sidebar[0].style.left = "-110px"
+				tabContent[0].style.left = "-110px"
+				btn[0].style.transform = "rotate3d(0, 1, 0, -180deg)"
+				btn[0].style.transition = "all 0.5s"
 				this.btnClickBool = false
 			} catch (error) {}
 		},
@@ -218,13 +214,12 @@ export default {
 			try {
 				let sidebar = document.getElementsByClassName('el-tabs__header is-left')
 				let tabContent = document.getElementsByClassName('el-tabs__content')
-				let btn = document.getElementsByClassName('fa fa-outdent navCheck')
-
-				if (this.btnClickBool == true) {
-					sidebar[0].style.left = '-124px'
-					tabContent[0].style.left = '-124px'
-					btn[0].style.transform = 'rotate3d(0, 1, 0, -180deg)'
-					btn[0].style.transition = 'all 0.5s'
+				let btn = document.getElementsByClassName('fa fa-outdent navCheck')	
+				if(this.btnClickBool==true){
+					sidebar[0].style.left = "-110px"
+					tabContent[0].style.left = "-110px"
+					btn[0].style.transform = "rotate3d(0, 1, 0, -180deg)"
+					btn[0].style.transition = "all 0.5s"
 					this.btnClickBool = false
 				} else {
 					sidebar[0].style.left = '0px'
@@ -407,10 +402,6 @@ export default {
 
 						//上传indicator layout
 						var indicatorLayout = {}
-						console.log(
-							'entry/exit: ',
-							this.$store.state.indicators.formIndicators
-						)
 						indicatorLayout.formIndicators = {
 							entry: this.$store.state.indicators.formIndicators.entry,
 							exit: this.$store.state.indicators.formIndicators.exit
@@ -547,8 +538,12 @@ export default {
 		z-index: 1;
 		width: 10rem;
 		margin-left: 100px;
-		flex: 1;
+		margin-right: 30px;
+    	flex: 1;
 		//width: 98%;
+	}
+	.alignRight{
+		float: none;
 	}
 }
 @media screen and (min-width: 768px) {
@@ -559,9 +554,12 @@ export default {
 		margin-left: 0px !important;
 		position: relative;
 		z-index: 1;
-		float: right;
 		width: 12rem;
 		flex: 1;
+	}
+	.alignRight{
+		float: right;
+		margin: 1px 0 0 10px;
 	}
 }
 
@@ -650,11 +648,11 @@ header {
 		align-items: center;
 		border-bottom: 1px solid #797979;
 	}
-	.el-tabs__nav-scroll {
-		overflow: scroll;
-	}
-	/deep/.el-tabs__nav-scroll {
-		overflow: scroll;
-	}
+	// .el-tabs__nav-scroll {
+	// 	overflow: scroll;
+	// }
+	// /deep/.el-tabs__nav-scroll {
+	// 	overflow: scroll;
+	// }
 }
 </style>
