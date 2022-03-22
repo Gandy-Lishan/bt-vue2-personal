@@ -67,6 +67,9 @@ if (document.baseURI.search(host) != -1) {
 		}
 	}
 	console.log('userId', userId)
+	if(!userId) {
+		alert('User does not exist, please log in again')
+	}
 	// 3. 根据返回状态码判断后续操作
 	
 	axios
@@ -82,12 +85,15 @@ if (document.baseURI.search(host) != -1) {
 				}
 			} else if (res.status === 401) {
 				//无权限
+				alert('No permission, please log in again')
 				window.location.href = loginUrl
 			} else if (res.status === 403) {
 				//认证时间超时
+				alert('Authentication expired, please log in again')
 				window.location.href = loginUrl
 			} else if (res.status === 404) {
 				// 用户不存在
+				alert('User does not exist, please log in again')
 				window.location.href = loginUrl
 			}
 		})
@@ -107,8 +113,6 @@ if (document.baseURI.search(host) != -1) {
 // cookies.set('userid','test')
 // next()
   })
-//   }
-//  )
 
 
 

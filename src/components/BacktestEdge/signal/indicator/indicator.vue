@@ -142,7 +142,7 @@ export default {
 	},
 	watch: {
 		updateSenti(val) {
-			console.log('updateSenti',val)
+			console.log('updateSenti', val)
 			if (
 				this.si.sentimentIndicator == '' &&
 				this.si.technicalIndicator == ''
@@ -250,6 +250,7 @@ export default {
 		},
 		//  load sentiment list
 		clearForm() {
+			this.clearFormValidate()
 			let data = {
 				indicatorRadio: 'Sentiment Indicators',
 				si: {
@@ -262,7 +263,6 @@ export default {
 			}
 			data.sentimentIndicatorList = this.$store.state.sentimentIndicatorList
 			Object.assign(this.$data, data)
-			this.clearFormValidate()
 		},
 		// sentiment search
 		indicatorSentimentSearch(queryString, cb) {
@@ -517,7 +517,7 @@ export default {
 		// 		this.isCheckedIndicators = true
 		// 	}
 		// },
-		saveIndicator() {
+		async saveIndicator() {
 			let checked = true
 			let validForm
 			let validName = false
@@ -526,6 +526,31 @@ export default {
 					validForm = valid
 				})
 				let sentimentList = this.$store.state.sentimentIndicatorList
+				// if (sentimentList.length == 0) {
+				// 	const res = await this.$http.get(
+				// 		'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+				// 		{
+				// 			auth: {
+				// 				username: 'sentimentrader_backtest_api',
+				// 				password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+				// 			}
+				// 		}
+				// 	)
+				// 	sentimentList = res.data.map((obj) => {
+				// 		if (
+				// 			frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1
+				// 		) {
+				// 			if (obj.chart_name && obj.url && obj.updated) {
+				// 				return {
+				// 					value: obj.chart_name,
+				// 					url: obj.url,
+				// 					updated: obj.updated
+				// 				}
+				// 			}
+				// 		}
+				// 	})
+				// 	console.log('sentiment列表为空')
+				// }
 				for (let i = 0; i < sentimentList.length; i++) {
 					if (this.si.sentimentIndicator === sentimentList[i].value) {
 						validName = true

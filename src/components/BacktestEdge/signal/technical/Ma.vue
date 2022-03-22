@@ -221,8 +221,9 @@ export default {
 	},
 	methods: {
 		clearForm() {
-			Object.assign(this.$data, this.$options.data())
-			this.clearFormValidate()
+			// Object.assign(this.$data, this.$options.data())
+			// this.clearFormValidate()
+			this.$refs.maForm.resetFields()
 		},
 		// 清除表单认证
 		clearFormValidate() {
@@ -495,6 +496,7 @@ export default {
 		},
 		getMaValue: throttle(function (val) {
 			this.tech.maPeriod = val
+
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (sd.type == 'ma') {

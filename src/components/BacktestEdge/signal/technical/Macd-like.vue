@@ -157,8 +157,9 @@ export default {
 	},
 	methods: {
 		clearForm() {
-			Object.assign(this.$data, this.$options.data())
-			this.clearFormValidate()
+			// Object.assign(this.$data, this.$options.data())
+			// this.clearFormValidate()
+			this.$refs.macdForm.resetFields()
 		},
 		clearFormValidate() {
 			this.$refs.macdForm.clearValidate()
