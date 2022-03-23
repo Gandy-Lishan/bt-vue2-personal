@@ -774,8 +774,7 @@ export default {
 				let nameList = this.$store.state.backtestNameList
 				for (let i = 0; i < nameList.length; i++) {
 					if (
-						this.bd.name === nameList[i] &&
-						this.bd.name !== this.oldBacktestName
+						this.bd.name === nameList[i]
 					) {
 						nameChecked = false
 						break

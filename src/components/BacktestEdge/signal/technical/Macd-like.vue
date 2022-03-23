@@ -179,21 +179,24 @@ export default {
 					direction = 'Close:'
 				}
 			}
+			if(this.conditionRadio === 'MACD Value ') {
+					this.tech.value = 'MACDSL'
+				}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${condition} ${this.tech.value}`
 		},
 		getConditionRadio(val) {
 			CIQ.store.commit('setConditionRadio', val)
-			if (val === ' MACD Value ') {
+			if (val === 'MACD Value ') {
 				this.tech.value = 'MACDSL'
 				this.disabled = !this.disabled
-			} else if (val === ' MACD Value') {
+			} else if (val === 'MACD Value') {
 				this.tech.value = 0
 				this.disabled = !this.disabled
 			}
 			this.setDesciption()
-			CIQ.exportEx()
+			// CIQ.exportEx()
 		},
 		saveCondition() {
 			let checked = true
@@ -208,6 +211,9 @@ export default {
 					MACDSL: 9
 				}
 				let tech = this.tech
+				if(this.conditionRadio === 'MACD Value ') {
+					tech.value = 'MACDSL'
+				}
 				delete tech.ids
 				tech = Object.assign(ids, tech)
 				tech.criteria = this.criteria

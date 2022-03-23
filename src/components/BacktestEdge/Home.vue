@@ -435,7 +435,7 @@ export default {
 									vm.goToHistoryForm()
 									vm.$refs.historyChild.refreshHistory(res.data.id)
 									// 保存成功之后应该清除表单的所有数据
-									vm.clearAllDataForm()
+									// vm.clearAllDataForm()
 									CIQ.hideMarker()
 									// 并且清除 old_uuid
 									let backtestInfo = vm.$store.state.backtestInfo
@@ -446,7 +446,7 @@ export default {
 								} else {
 									vm.$message.error('Save failed')
 									vm.loading = false
-									vm.clearAllDataForm()
+									// vm.clearAllDataForm()
 									CIQ.hideMarker()
 								}
 							})
@@ -463,7 +463,7 @@ export default {
 					}
 				}
 			}
-		}, 500),
+		}, 1000),
 		goToHistoryForm() {
 			this.activeName = 'second'
 		},
@@ -499,8 +499,8 @@ export default {
 				vm.$refs.entryChild.setEditData(id)
 				vm.$refs.exitChild.setEditData(id)
 				// 拿到 frequency 的值
-				vm.editFrequency = data.entry.frequency
-				vm.timeFrame = data.entry.frequency
+				vm.editFrequency = data.frequency
+				vm.timeFrame = data.frequency
 				vm.$store.commit('getFrequency', vm.editFrequency)
 				vm.backtestEditData = data
 			})
@@ -521,6 +521,7 @@ export default {
 		},
 		// 无法拿到 performance 的数据，服务端异常
 		errorCatchPerformance() {
+			this.$store.commit('clearBacktestUuid')
 			this.$notify({
 				title: 'Try Another',
 				message: 'The backtest cannot request data, please change parameter',

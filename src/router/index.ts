@@ -83,15 +83,18 @@ if (document.baseURI.search(host) != -1) {
 					cookies.set('userid', userId)
 					next()
 				}
-			} else if (res.status === 401) {
+			}
+			if (res.status === 401) {
 				//无权限
 				alert('No permission, please log in again')
 				window.location.href = loginUrl
-			} else if (res.status === 403) {
+			} 
+			if (res.status === 403) {
 				//认证时间超时
 				alert('Authentication expired, please log in again')
 				window.location.href = loginUrl
-			} else if (res.status === 404) {
+			}
+			if (res.status === 404) {
 				// 用户不存在
 				alert('User does not exist, please log in again')
 				window.location.href = loginUrl
@@ -100,6 +103,7 @@ if (document.baseURI.search(host) != -1) {
 		.catch((error) => {
 			console.log(error)
 			// next('https://users.sentdevsite.com/login')
+			alert('Login failed, please log in again')
 			window.location.href = loginUrl
 		})
 	// 3.1 200 成功设置 cookie userid=XXX endDate=XXX     cookie.set()
