@@ -499,8 +499,9 @@ export default {
 				vm.$refs.entryChild.setEditData(id)
 				vm.$refs.exitChild.setEditData(id)
 				// 拿到 frequency 的值
-				vm.editFrequency = data.entry.frequency
-				vm.timeFrame = data.entry.frequency
+				console.log(data.frequency)
+				vm.editFrequency = data.frequency
+				vm.timeFrame = data.frequency
 				vm.$store.commit('getFrequency', vm.editFrequency)
 				vm.backtestEditData = data
 			})
