@@ -350,7 +350,6 @@ export default {
 						// ])
 
 						// const newMap = new Map(set)
-
 						// var entrySignal = CIQ.indicatorList.find((item) => {
 						// 	return item.chart_name == backtestData.entry.signals[0].indicator
 						// })
@@ -407,9 +406,10 @@ export default {
 						//上传indicator layout
 						var indicatorLayout = {}
 						indicatorLayout.formIndicators = {
-							entry: this.$store.state.indicators.formIndicators.entry,
-							exit: this.$store.state.indicators.formIndicators.exit
+							entry: entrySignal.url,
+							exit: exitSignal.url
 						}
+						
 						indicatorLayout.technicalIndicators =
 							this.$store.state.indicators.technicalIndicators
 
@@ -505,6 +505,8 @@ export default {
 				vm.$refs.entryChild.setEditData(id)
 				vm.$refs.exitChild.setEditData(id)
 				// 拿到 frequency 的值
+
+				console.log(data.frequency)
 				vm.editFrequency = data.frequency
 				vm.timeFrame = data.frequency
 				vm.$store.commit('getFrequency', vm.editFrequency)

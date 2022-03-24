@@ -369,11 +369,9 @@ export default {
 					delete newVal.results
 					delete newVal.uuid
 					this.bd = Object.assign(this.bd, newVal)
-					//this.getSymbolName(newVal.symbol)
 					CIQ.hideMarker()
 					this.frequency = this.editFrequency
 					this.getFrequency(this.frequency)
-					//this.changeTimeframe(this.frequency)
 
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
@@ -643,6 +641,7 @@ export default {
 		},
 		getFrequency(val) {
 			// getFrequency will no longer call addIndicator and pass a parameter to it
+			console.log('getFreq: ',val)
 			this.frequency = val
 			this.$store.commit('getFrequency', val)
 			this.$emit('getTimeFrame', val)

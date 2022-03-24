@@ -330,11 +330,18 @@ export default {
 			}
 		},
 		handleSentimentSelect(item) {
-			// const obj = {}
-			// obj.criteria = this.criteria
-			// obj.index = this.tabIndex
-			// obj.value = item.value
-			// this.$store.commit('clearSignal', obj)
+                // old version only
+                var countExistIndicator = 0
+                for (var studyInstanceName in CIQ.stxx.layout.studies) {
+                    for (var i in CIQ.store.state.builtinList){
+                        if(CIQ.store.state.builtinList[i].url == CIQ.stxx.layout.studies[studyInstanceName].type){countExistIndicator--}
+                    }
+                    countExistIndicator++
+                } 
+                if(countExistIndicator>=5){
+                    CIQ.description("Indicators can be added only up to 5")
+                    return
+                }
 
 			this.si.sentimentIndicator = item.value
 			this.$emit('getSentiVal', item.value)
@@ -658,10 +665,6 @@ export default {
 							}
 						)
 						sentimentList = res.data.map((obj) => {
-							if (
-								frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !==
-								-1
-							) {
 								if (obj.chart_name && obj.url && obj.updated) {
 									return {
 										value: obj.chart_name,
@@ -669,7 +672,6 @@ export default {
 										updated: obj.updated
 									}
 								}
-							}
 						})
 					}
 					let indi = this.si.sentimentIndicator
