@@ -571,7 +571,7 @@ export default {
 					let ids = {}
 					let tech = {}
 					tech = this.tech
-					ids = this.tech.ids
+					ids = { ma_category: 'SMA' }
 					delete tech.ids
 					tech = Object.assign(ids, tech)
 					tech.criteria = this.criteria
