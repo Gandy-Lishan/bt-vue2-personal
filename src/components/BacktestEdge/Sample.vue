@@ -98,6 +98,16 @@
 							<span v-else-if="scope.row.status == 3">Invalid test</span>
 						</template>
 					</el-table-column> -->
+										<el-table-column
+						label="Timeframe"
+						show-overflow-tooltip
+						align="center"
+						width="90px"
+					>
+						<template slot-scope="scope">
+							<p>{{ scope.row.frequency }}</p>
+						</template>
+					</el-table-column>
 					<el-table-column
 						align="center"
 						show-overflow-tooltip
@@ -281,7 +291,6 @@ export default {
 			})
 		},
 		async getStrategyList() {
-			if (this.backtestList.length === 0) {
 				this.loading = true
 				let page = this.queryInfo.page
 				const res = await this.$http.get(
@@ -297,11 +306,11 @@ export default {
 					}
 					this.queryInfo.total = res.data.count
 					this.loading = false
+					console.log("sample列表", this.backtestList);
 				} else {
 					this.$message.error('List request failed')
 					this.loading = false
 				}
-			}
 		},
 		refreshHistory(id) {
 			let vm = this
@@ -441,6 +450,7 @@ export default {
 			}
 		}, 500),
 		handleCurrentChange(newpage) {
+			console.log('sample新页码',newpage);
 			this.queryInfo.page = newpage
 			this.getStrategyList()
 		},

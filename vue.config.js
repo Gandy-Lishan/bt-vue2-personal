@@ -57,6 +57,7 @@ module.exports = {
 		// port: 8080,
 		// host:"localhost",
 		// https:false,
+		// 测试的ip 18.216.210.200
 		proxy: {
 			'/demo': {
 				target: 'http://3.140.194.24:80',
@@ -67,7 +68,7 @@ module.exports = {
 				}
 			},
 			'/dev': {
-				target: 'http://18.216.210.200',
+				target: 'http://3.140.194.24:80',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {

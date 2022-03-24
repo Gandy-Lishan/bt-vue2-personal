@@ -229,34 +229,40 @@ export default {
 			// 将选择的 indicator 保存到 vuex 中
 			let checked = true
 			let indi = this.$refs.indiChild.saveIndicator()
+			return indi.then( val => {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
-			if (indi) {
+			console.log('entry indicator验证', val);
+			if (val) {
 				if (this.indicatorRadio === 'sentiment') {
 					this.$refs.sentiChild.setDesciption()
 					let senti = this.$refs.sentiChild.saveCondition()
-					return (checked = senti)
-				} else if (
+					return checked = senti
+				}
+				if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'cci'
 				) {
 					this.$refs.cciChild.setDesciption()
 					let cci = this.$refs.cciChild.saveCondition()
 					return (checked = cci)
-				} else if (
+				}
+				if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'rsi'
 				) {
 					this.$refs.rsiChild.setDesciption()
 					let rsi = this.$refs.rsiChild.saveCondition()
 					return (checked = rsi)
-				} else if (
+				}
+				if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'macd'
 				) {
 					this.$refs.macdChild.setDesciption()
 					let macd = this.$refs.macdChild.saveCondition()
 					return (checked = macd)
-				} else if (
+				}
+				if (
 					this.indicatorRadio === 'technical' &&
 					this.techIndiValue === 'ma'
 				) {
@@ -268,6 +274,7 @@ export default {
 				checked = false
 				return checked
 			}
+			})
 		},
 		setEditData(id) {
 			let vm = this

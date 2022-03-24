@@ -231,7 +231,7 @@ export default {
 			} catch (error) {}
 		},
 		clearForm() {
-			CIQ.reloadChart()
+			// CIQ.reloadChart()
 			this.$store.commit('initialBacktestInfo')
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
@@ -282,13 +282,17 @@ export default {
 		refreshPage() {
 			location.reload()
 		},
-		runBacktest: throttle(function () {
+		runBacktest: throttle(async function () {
 			let setUp = this.$refs.setUpChild.saveBacktestData()
 			if (setUp) {
 				let entry = this.$refs.entryChild.saveBacktestData()
-				if (entry) {
+				let entryChecked = await entry
+				console.log("entry的验证",entryChecked);
+				if (entryChecked) {
 					let exit = this.$refs.exitChild.saveBacktestData()
-					if (exit) {
+					let exitChecked = await exit
+					console.log("exit的验证", exitChecked);
+					if (exitChecked) {
 						this.loading = true
 						console.log('保存的backtest数据', this.$store.state.backtestInfo)
 						let vm = this
@@ -337,36 +341,36 @@ export default {
 						const b = new SignalCode()
 						var entry_signal_list = []
 						var exit_signal_list = []
-						const set = new Set([
-							['Commodity Channel Index', 'cci'],
-							['Relative Strength Index', 'rsi'],
-							['Moving Average', 'ma'],
-							['MACD', 'macd'],
-							['RC', '']
-						])
+						// const set = new Set([
+						// 	['Commodity Channel Index', 'cci'],
+						// 	['Relative Strength Index', 'rsi'],
+						// 	['Moving Average', 'ma'],
+						// 	['MACD', 'macd'],
+						// 	['RC', '']
+						// ])
 
-						const newMap = new Map(set)
+						// const newMap = new Map(set)
 
-						var entrySignal = CIQ.indicatorList.find((item) => {
-							return item.chart_name == backtestData.entry.signals[0].indicator
-						})
-						var exitSignal = CIQ.indicatorList.find((item) => {
-							return item.chart_name == backtestData.exit.signals[0].indicator
-						})
-						if (!entrySignal) {
-							for (let i of newMap.entries()) {
-								if (backtestData.entry.signals[0].indicator === i[0]) {
-									entrySignal = { url: i[1] }
-								}
-							}
-						}
-						if (!exitSignal) {
-							for (let i of newMap.entries()) {
-								if (backtestData.exit.signals[0].indicator === i[0]) {
-									exitSignal = { url: i[1] }
-								}
-							}
-						}
+						// var entrySignal = CIQ.indicatorList.find((item) => {
+						// 	return item.chart_name == backtestData.entry.signals[0].indicator
+						// })
+						// var exitSignal = CIQ.indicatorList.find((item) => {
+						// 	return item.chart_name == backtestData.exit.signals[0].indicator
+						// })
+						// if (!entrySignal) {
+						// 	for (let i of newMap.entries()) {
+						// 		if (backtestData.entry.signals[0].indicator === i[0]) {
+						// 			entrySignal = { url: i[1] }
+						// 		}
+						// 	}
+						// }
+						// if (!exitSignal) {
+						// 	for (let i of newMap.entries()) {
+						// 		if (backtestData.exit.signals[0].indicator === i[0]) {
+						// 			exitSignal = { url: i[1] }
+						// 		}
+						// 	}
+						// }
 						delete backtestData.entry.signals
 						for (var i in signalEntryList) {
 							let code = b.encode(signalEntryList[i])
@@ -442,6 +446,8 @@ export default {
 									if (backtestInfo.old_uuid) {
 										vm.$store.commit('clearBacktestUuid')
 									}
+									// 清除 oldBacktestName
+									vm.$refs.setUpChild.clearOldBacktestName()
 									vm.$refs.favoriteChild.getBacktestList()
 								} else {
 									vm.$message.error('Save failed')
@@ -521,7 +527,7 @@ export default {
 		},
 		// 无法拿到 performance 的数据，服务端异常
 		errorCatchPerformance() {
-			this.$store.commit('clearBacktestUuid')
+			// this.$store.commit('clearBacktestUuid')
 			this.$notify({
 				title: 'Try Another',
 				message: 'The backtest cannot request data, please change parameter',
