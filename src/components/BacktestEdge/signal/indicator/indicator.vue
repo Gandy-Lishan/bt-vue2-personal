@@ -129,10 +129,6 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['getIsClearForm']),
-		isClearForm() {
-			return this.getIsClearForm
-		},
 		updateSenti() {
 			return this.$store.state.currentSenti
 		},
@@ -175,12 +171,6 @@ export default {
 					//this.handleTechnicalSelect({value:item.value})
 				}
 			})
-		},
-		isClearForm: {
-			handler(newVal) {
-				let init = deepClone1(this.$options.data())
-				Object.assign(this.$data, init)
-			}
 		}
 		// editIndiData: {
 		// 	async handler(newVal) {

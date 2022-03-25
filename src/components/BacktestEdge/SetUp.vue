@@ -333,10 +333,6 @@ export default {
 		// 		return { value: `${item.symbol}`, label: `${item.symbol}` }
 		// 	})
 		// },
-		...mapGetters(['getIsClearForm']),
-		isClearForm() {
-			return this.getIsClearForm
-		},
 		updateFreq() {
 			return this.$store.state.pairDataFreq
 		}
@@ -398,13 +394,6 @@ export default {
 					}
 				}
 			}
-		},
-		isClearForm: {
-			handler(newVal) {
-				let init = deepClone1(this.$options.data())
-				Object.assign(this.$data, init)
-				this.getEndDate()
-			}
 		}
 	},
 	methods: {
@@ -412,6 +401,7 @@ export default {
 			this.clearFormValidate()
 			Object.assign(this.$data, this.$options.data())
 			this.getEndDate()
+			this.bd.symbol = this.$store.state.backtestSymbol
 		},
 		getDirection(val) {
 			// direction 设置到 vuex

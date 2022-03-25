@@ -145,9 +145,6 @@ export default new Vuex.Store({
 		},
 		getSentimentIndicator: (state) => {
 			return state.backtestInfo
-		},
-		getIsClearForm: (state) => {
-			return state.isClearForm
 		}
 	},
 	mutations: {
