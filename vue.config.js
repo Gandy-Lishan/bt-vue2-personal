@@ -57,6 +57,8 @@ module.exports = {
 		// port: 8080,
 		// host:"localhost",
 		// https:false,
+		// 测试的ip 18.216.210.200
+		// 10.131.3.74:8000
 		proxy: {
 			'/demo': {
 				target: 'http://3.140.194.24:80',

@@ -333,10 +333,6 @@ export default {
 		// 		return { value: `${item.symbol}`, label: `${item.symbol}` }
 		// 	})
 		// },
-		...mapGetters(['getIsClearForm']),
-		isClearForm() {
-			return this.getIsClearForm
-		},
 		updateFreq() {
 			return this.$store.state.pairDataFreq
 		}
@@ -398,13 +394,6 @@ export default {
 					}
 				}
 			}
-		},
-		isClearForm: {
-			handler(newVal) {
-				let init = deepClone1(this.$options.data())
-				Object.assign(this.$data, init)
-				this.getEndDate()
-			}
 		}
 	},
 	methods: {
@@ -412,6 +401,7 @@ export default {
 			this.clearFormValidate()
 			Object.assign(this.$data, this.$options.data())
 			this.getEndDate()
+			this.bd.symbol = this.$store.state.backtestSymbol
 		},
 		getDirection(val) {
 			// direction 设置到 vuex
@@ -763,6 +753,7 @@ export default {
 			CIQ.indicatorList = indicatorList
 		},
 		saveBacktestData() {
+			console.log("保存setup");
 			let checked = true
 			let nameChecked = true
 			let validForm
@@ -772,10 +763,33 @@ export default {
 			if (validForm) {
 				let nameList = this.$store.state.backtestNameList
 				for (let i = 0; i < nameList.length; i++) {
-					if (
-						this.bd.name === nameList[i]
-					) {
+					if(this.bd.name !== nameList[i]) {
+						// 说明不重名，直接创建新的，删除 old_uuid
+						// this.$store.commit('clearBacktestUuid')
+						delete this.bd.old_uuid
+						console.log('说明不重名，直接创建新的，删除 old_uuid')
+						break
+					}
+					if(this.bd.name === nameList[i] && this.oldBacktestName === '') {
+						// 说明这是刚开始创建的时候
+						// this.$store.commit('clearBacktestUuid')
+						delete this.bd.old_uuid
+						console.log('说明这是刚开始创建的时候')
 						nameChecked = false
+						break
+					}
+					if (
+						this.bd.name === nameList[i] && this.oldBacktestName === this.bd.name && this.oldBacktestName !== ''
+					) {
+						// 说明重名要进行替换，不删除 old_uuid
+						console.log('说明重名要进行替换，不删除 old_uuid')
+						break
+					}
+					if(this.bd.name === nameList[i] && this.oldBacktestName !== this.bd.name && this.oldBacktestName !== '') {
+						// 说明不重名，直接创建新的，删除 old_uuid
+						// this.$store.commit('clearBacktestUuid')
+						delete this.bd.old_uuid
+						console.log('说明不重名，直接创建新的，删除 old_uuid')
 						break
 					}
 				}
@@ -812,6 +826,9 @@ export default {
 				checked = false
 				return checked
 			}
+		},
+		clearOldBacktestName() {
+			this.oldBacktestName = ''
 		}
 	}
 }

@@ -145,9 +145,6 @@ export default new Vuex.Store({
 		},
 		getSentimentIndicator: (state) => {
 			return state.backtestInfo
-		},
-		getIsClearForm: (state) => {
-			return state.isClearForm
 		}
 	},
 	mutations: {
@@ -535,6 +532,7 @@ export default new Vuex.Store({
 		clearBacktestUuid(state) {
 			if(state.backtestInfo.old_uuid) {
 			delete state.backtestInfo.old_uuid}
+			console.log("此时的backtestInfo", state.backtestInfo);
 			
 		},
 		saveFormatTechnicalList(state,list) {

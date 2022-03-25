@@ -433,6 +433,7 @@ input[type='time'] {
 	white-space: nowrap;
 	word-wrap: break-word;
 	overflow: hidden;
+	text-overflow: unset;
 	/* text-overflow: ellipsis; */
 }
 .el-table th.el-table__cell > .cell {

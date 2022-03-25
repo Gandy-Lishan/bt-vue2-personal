@@ -249,8 +249,10 @@ export default {
 			let checked = true
 			// 将选择的 indicator 保存到 vuex 中
 			let indi = this.$refs.indiChild.saveIndicator()
+			return indi.then( val => {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
-			if (indi) {
+			console.log('exit indicator验证', val);
+			if (val) {
 				if (this.indicatorRadio === 'sentiment') {
 					this.$refs.sentiChild.setDesciption()
 					let senti = this.$refs.sentiChild.saveCondition()
@@ -292,6 +294,7 @@ export default {
 				checked = false
 				return checked
 			}
+			})
 		},
 		setEditData(id) {
 			let vm = this

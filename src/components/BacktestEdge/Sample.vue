@@ -98,6 +98,16 @@
 							<span v-else-if="scope.row.status == 3">Invalid test</span>
 						</template>
 					</el-table-column> -->
+										<el-table-column
+						label="Timeframe"
+						show-overflow-tooltip
+						align="center"
+						width="90px"
+					>
+						<template slot-scope="scope">
+							<p>{{ scope.row.frequency }}</p>
+						</template>
+					</el-table-column>
 					<el-table-column
 						align="center"
 						show-overflow-tooltip
@@ -281,7 +291,6 @@ export default {
 			})
 		},
 		async getStrategyList() {
-			if (this.backtestList.length === 0) {
 				this.loading = true
 				let page = this.queryInfo.page
 				const res = await this.$http.get(
@@ -297,11 +306,11 @@ export default {
 					}
 					this.queryInfo.total = res.data.count
 					this.loading = false
+					console.log("sample列表", this.backtestList);
 				} else {
 					this.$message.error('List request failed')
 					this.loading = false
 				}
-			}
 		},
 		refreshHistory(id) {
 			let vm = this
@@ -341,6 +350,12 @@ export default {
 						JSON.parse(res.data.entry).frequency
 					)
 				}
+			}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
 			})
 			this.$store.commit('getRunBacktestData', row)
 			this.$emit('goBacktestResultForm', row)
@@ -430,7 +445,13 @@ export default {
 					this.$store.commit('getRunBacktestData', row)
 					this.$emit('goTobacktestSetupForm', row.id)
 					this.$emit('goBacktestResultForm', row)
-				})
+				}).catch(error => {
+				this.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
+			})
 			} else {
 				this.$notify({
 					title: 'No trades',
@@ -441,6 +462,7 @@ export default {
 			}
 		}, 500),
 		handleCurrentChange(newpage) {
+			console.log('sample新页码',newpage);
 			this.queryInfo.page = newpage
 			this.getStrategyList()
 		},
@@ -494,6 +516,12 @@ export default {
 						})
 					}
 				})
+			}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
 			})
 		},
 		addToFavorites(row) {
@@ -538,7 +566,7 @@ export default {
 	}
 }
 /deep/ .el-table .cell {
-	padding: 0px;
+	padding: 0px 10px 0px 10px;
 	word-wrap: break-word;
 }
 </style>

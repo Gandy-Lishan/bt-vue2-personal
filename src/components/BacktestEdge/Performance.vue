@@ -11,6 +11,7 @@
 					<el-table :data="tableData" style="width: 100%">
 						<el-table-column
 							prop="totalReturn"
+							show-overflow-tooltip
 							label="TOTAL RETURN"
 							align="center"
 							algin="center"
@@ -27,6 +28,7 @@
 						</el-table-column>
 						<el-table-column
 							prop="CAGR"
+							show-overflow-tooltip
 							label="Annual Return % (CAGR)"
 							align="center"
 							algin="center"
@@ -42,6 +44,7 @@
 							</template>
 						</el-table-column>
 						<el-table-column
+						show-overflow-tooltip
 							prop="medianReturn"
 							label="MEDIAN RETURN"
 							align="center"
@@ -57,6 +60,7 @@
 							</template>
 						</el-table-column>
 						<el-table-column
+						show-overflow-tooltip
 							prop="averageReturn"
 							label="AVERAGE RETURN"
 							align="center"
@@ -71,7 +75,7 @@
 								}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column prop="tzScore" label="Z_SCORE" align="center">
+						<el-table-column prop="tzScore" label="Z_SCORE" align="center" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span v-if="scope.row.tzScore >= 0">{{
 									scope.row.tzScore
@@ -83,6 +87,7 @@
 						<el-table-column
 							prop="standardDeviation"
 							label="STD. DEV"
+							show-overflow-tooltip
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -96,6 +101,7 @@
 							</template>
 						</el-table-column>
 						<el-table-column
+						show-overflow-tooltip
 							prop="buyHoldGain"
 							label="BUY & HOLD"
 							align="center"
@@ -120,6 +126,7 @@
 						<el-table-column
 							prop="winRate"
 							label="WIN RATE"
+							show-overflow-tooltip
 							width="180"
 							align="center"
 						>
@@ -134,6 +141,7 @@
 							</template>
 						</el-table-column>
 						<el-table-column
+						show-overflow-tooltip
 							prop="averageWin"
 							label="AVERAGE WIN %"
 							align="center"
@@ -149,6 +157,7 @@
 							</template>
 						</el-table-column>
 						<el-table-column
+						show-overflow-tooltip
 							prop="averageLoss"
 							label="AVERAGE LOSS %"
 							align="center"
@@ -163,7 +172,7 @@
 								}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column prop="drawDown" label="MAX RISK" align="center">
+						<el-table-column prop="drawDown" label="MAX RISK" align="center" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span v-if="scope.row.drawDown >= 0">{{
 									scope.row.drawDown + '%'
@@ -184,6 +193,7 @@
 							prop="totalTrades"
 							label="TOTAL TRADES"
 							width="180"
+							show-overflow-tooltip
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -196,6 +206,7 @@
 							</template>
 						</el-table-column>
 						<el-table-column
+						show-overflow-tooltip
 							prop="totalPositive"
 							label="TOTAL POSITIVE"
 							align="center"
@@ -211,6 +222,7 @@
 						</el-table-column>
 						<el-table-column
 							prop="totalNegative"
+							show-overflow-tooltip
 							label="TOTAL NEGATIVE"
 							align="center"
 						>
@@ -225,6 +237,7 @@
 						</el-table-column>
 						<el-table-column
 							prop="timeInMarket"
+							show-overflow-tooltip
 							label="% TIME IN MARKET"
 							align="center"
 						>
@@ -265,6 +278,7 @@
 					>
 						<el-table-column
 							prop="trade_number"
+							show-overflow-tooltip
 							label="Trade Number"
 							align="center"
 						>
@@ -272,11 +286,11 @@
 								{{ Number(scope.row.trade_number) + 1 }}
 							</template>
 						</el-table-column>
-						<el-table-column prop="Date" label="Trade Date" align="center">
+						<el-table-column prop="Date" label="Trade Date" align="center" show-overflow-tooltip>
 						</el-table-column>
-						<el-table-column prop="TradeStatus" label="Action" align="center">
+						<el-table-column prop="TradeStatus" label="Action" align="center" show-overflow-tooltip>
 						</el-table-column>
-						<el-table-column prop="Indicator" label="Indicator" align="center">
+						<el-table-column prop="Indicator" label="Indicator" align="center" show-overflow-tooltip>
 						</el-table-column>
 						<el-table-column
 							prop="TradePrice"
@@ -289,7 +303,7 @@
         label="Indicator Level"
         align="center">
       </el-table-column> -->
-						<el-table-column prop="Return" label="Total Return" align="center">
+						<el-table-column prop="Return" label="Total Return" align="center" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span v-if="scope.row.Return == 'none'">{{ '' }}</span>
 								<span v-else-if="scope.row.Return >= 0"

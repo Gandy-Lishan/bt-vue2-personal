@@ -129,10 +129,6 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['getIsClearForm']),
-		isClearForm() {
-			return this.getIsClearForm
-		},
 		updateSenti() {
 			return this.$store.state.currentSenti
 		},
@@ -175,12 +171,6 @@ export default {
 					//this.handleTechnicalSelect({value:item.value})
 				}
 			})
-		},
-		isClearForm: {
-			handler(newVal) {
-				let init = deepClone1(this.$options.data())
-				Object.assign(this.$data, init)
-			}
 		}
 		// editIndiData: {
 		// 	async handler(newVal) {
@@ -537,31 +527,26 @@ export default {
 					validForm = valid
 				})
 				let sentimentList = this.$store.state.sentimentIndicatorList
-				// if (sentimentList.length == 0) {
-				// 	const res = await this.$http.get(
-				// 		'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
-				// 		{
-				// 			auth: {
-				// 				username: 'sentimentrader_backtest_api',
-				// 				password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-				// 			}
-				// 		}
-				// 	)
-				// 	sentimentList = res.data.map((obj) => {
-				// 		if (
-				// 			frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1
-				// 		) {
-				// 			if (obj.chart_name && obj.url && obj.updated) {
-				// 				return {
-				// 					value: obj.chart_name,
-				// 					url: obj.url,
-				// 					updated: obj.updated
-				// 				}
-				// 			}
-				// 		}
-				// 	})
-				// 	console.log('sentiment列表为空')
-				// }
+				if (sentimentList.length == 0) {
+					const res = await this.$http.get(
+						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+						{
+							auth: {
+								username: 'sentimentrader_backtest_api',
+								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+							}
+						}
+					)
+					sentimentList = res.data.map((obj) => {
+							if (obj.chart_name && obj.url && obj.updated) {
+								return {
+									value: obj.chart_name,
+									url: obj.url,
+									updated: obj.updated
+								}
+							}
+					})
+				}
 				for (let i = 0; i < sentimentList.length; i++) {
 					if (this.si.sentimentIndicator === sentimentList[i].value) {
 						validName = true
