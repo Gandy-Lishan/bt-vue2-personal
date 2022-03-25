@@ -635,4 +635,7 @@ export default {
 /deep/ .el-button--mini.is-circle {
 	margin-right: 5px;
 }
+/deep/ .el-button--mini, .el-button--mini.is-round{
+	padding: 7px 0px;
+}
 </style>

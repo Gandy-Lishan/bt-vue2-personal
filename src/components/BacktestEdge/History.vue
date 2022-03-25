@@ -123,7 +123,7 @@
 						align="center"
 						show-overflow-tooltip
 						label="Total Return"
-						width="100px"
+						width="97px"
 						><template slot-scope="scope">
 							<span v-if="scope.row.result['Total Return (%)']">{{
 								scope.row.result['Total Return (%)'] + '%'
@@ -131,7 +131,7 @@
 							<span v-else>{{ 0 + '%' }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column align="center" width="250px">
+					<el-table-column align="center" width="200px">
 						<template slot-scope="scope">
 							<el-row>
 								<el-tooltip
@@ -643,13 +643,31 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-/deep/.el-button + .el-button {
-	margin-left: 2px;
-}
-/deep/ .el-button--mini,
-.el-button--mini.is-round {
-	margin-bottom: 5px;
-}
+// /deep/.el-button + .el-button {
+// 	margin-left: 2px;
+// }
+// /deep/ .el-button--mini,
+// .el-button--mini.is-round {
+// 	margin-bottom: 5px;
+// }
+// .showDate {
+// 	display: flex;
+// 	flex-direction: column;
+// 	/deep/.el-button + .el-button {
+// 		margin-left: 0px;
+// 	}
+// 	/deep/ .el-button--mini,
+// 	.el-button--mini.is-round {
+// 		padding: 5px 0px;
+// 		margin-bottom: 5px;
+// 	}
+// }
+// /deep/ .el-table .cell {
+// 	padding: 0px 10px 0px 10px;
+// }
+// /deep/ .el-button--mini.is-circle {
+// 	margin-right: 5px;
+// }
 .showDate {
 	display: flex;
 	flex-direction: column;
@@ -658,12 +676,15 @@ export default {
 	}
 	/deep/ .el-button--mini,
 	.el-button--mini.is-round {
-		padding: 5px 0px;
 		margin-bottom: 5px;
 	}
 }
 /deep/ .el-table .cell {
 	padding: 0px 10px 0px 10px;
+	word-wrap: break-word;
+}
+/deep/.el-button + .el-button {
+	margin-left: 0px;
 }
 /deep/ .el-button--mini.is-circle {
 	margin-right: 5px;
