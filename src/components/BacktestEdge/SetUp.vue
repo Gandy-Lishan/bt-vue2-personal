@@ -663,7 +663,7 @@ export default {
 			// 	}
 			// 	default:
 			// }
-			// CIQ.addIndicators(selectedFreq)
+			// CIQ.addIndicators()
 		},
 		async loadSentimentList(val) {
 			const vm = this
