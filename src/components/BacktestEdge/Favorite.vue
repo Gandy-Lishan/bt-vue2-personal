@@ -364,6 +364,12 @@ export default {
 				this.$store.commit('getRunBacktestData', row)
 				this.$emit('goBacktestResultForm', row)
 				vm.$emit('goTobacktestSetupForm', row.id)
+			}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
 			})
 		}, 500),
 		deleteBacktest(id) {
@@ -379,14 +385,13 @@ export default {
 							duration: 1000
 						})
 					}
-				})
-				.catch((error) => {
-					//(error);
-					this.$message.error({
-						message: 'The deletion failed',
-						duration: 1000
-					})
-				})
+				}).catch(error => {
+				this.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
+			})
 		},
 		copyBacktest: throttle(function (row) {
 			let params = {}
@@ -410,7 +415,13 @@ export default {
 						} else {
 							this.$message.error('Copy failed')
 						}
-					})
+					}).catch(error => {
+			 this.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
+			})
 			})
 		}, 500),
 		viewBacktestResults: throttle(function (row) {
@@ -430,7 +441,13 @@ export default {
 					this.$store.commit('getRunBacktestData', row)
 					this.$emit('goTobacktestSetupForm', row.id)
 					this.$emit('goBacktestResultForm', row)
-				})
+				}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
+			})
 			} else {
 				this.$notify({
 					title: 'No trades',
@@ -493,6 +510,12 @@ export default {
 						})
 					}
 				})
+			}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
 			})
 		},
 		sendBack(row) {
@@ -525,6 +548,12 @@ export default {
 						})
 					}
 				})
+			}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
 			})
 		},
 		addToFavorites: throttle(function (row) {
@@ -546,7 +575,13 @@ export default {
 							duration: 1000
 						})
 					}
-				})
+				}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
+			})
 		}, 500),
 		moveToFavorites: throttle(function (row) {
 			let vm = this
@@ -567,7 +602,13 @@ export default {
 							duration: 1000
 						})
 					}
-				})
+				}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
+			})
 		}, 500)
 	}
 }

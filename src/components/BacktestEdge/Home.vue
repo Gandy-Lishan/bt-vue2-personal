@@ -575,6 +575,7 @@ export default {
 .home-container {
 	width: 85vw;
 	margin: 0 auto;
+	padding-bottom: 50px;
 }
 // 暂时的样式
 header {

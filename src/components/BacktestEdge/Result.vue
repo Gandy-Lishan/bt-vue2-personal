@@ -171,12 +171,12 @@ export default {
 .comUnitNote {
 	position: absolute;
 
-	left: 329px;
+	left: 335px;
 	top: 56px;
 }
 .sliUnitNote {
 	position: absolute;
-	left: 329px;
+	left: 335px;
 	top: 105px;
 }
 .border-set {

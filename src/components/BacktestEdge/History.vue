@@ -382,6 +382,12 @@ export default {
 				this.$emit('goBacktestResultForm', row)
 
 				vm.$emit('goTobacktestSetupForm', row.id)
+			}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
 			})
 		}, 1000),
 		deleteBacktest(id) {
@@ -397,14 +403,13 @@ export default {
 							duration: 1000
 						})
 					}
-				})
-				.catch((error) => {
-					//(error);
-					this.$message.error({
-						message: 'The deletion failed',
-						duration: 1000
-					})
-				})
+				}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
+			})
 		},
 
 		copyBacktest: throttle(function (row) {
@@ -441,7 +446,13 @@ export default {
 						} else {
 							this.$message.error('Copy failed')
 						}
-					})
+					}).catch(error => {
+				this.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
+			})
 			})
 		}, 1000),
 		viewBacktestResults: throttle(function (row) {
@@ -460,7 +471,13 @@ export default {
 					this.$store.commit('getRunBacktestData', row)
 					this.$emit('goTobacktestSetupForm', row.id)
 					this.$emit('goBacktestResultForm', row)
-				})
+				}).catch(error => {
+				this.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
+			})
 			} else {
 				this.$notify({
 					title: 'No trades',
@@ -524,6 +541,12 @@ export default {
 						})
 					}
 				})
+			}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
 			})
 		},
 		sendBack(row) {
@@ -551,6 +574,12 @@ export default {
 						})
 					}
 				})
+			}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
 			})
 		},
 		addToFavorites: throttle(function (row) {
@@ -580,7 +609,13 @@ export default {
 							duration: 1000
 						})
 					}
-				})
+				}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
+			})
 		}, 1000),
 		moveToFavorites: throttle(function (row) {
 			let vm = this
@@ -595,14 +630,14 @@ export default {
 						this.getBacktestList()
 
 						this.$emit('refFavoritesForm')
-					} else {
-						this.getBacktestList()
-						this.$message.error({
-							message: 'Add failed',
-							duration: 1000
-						})
 					}
-				})
+				}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
+			})
 		}, 1000)
 	}
 }
@@ -628,7 +663,7 @@ export default {
 	}
 }
 /deep/ .el-table .cell {
-	padding: 0px;
+	padding: 0px 10px 0px 10px;
 }
 /deep/ .el-button--mini.is-circle {
 	margin-right: 5px;

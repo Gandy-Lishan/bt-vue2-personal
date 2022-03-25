@@ -350,6 +350,12 @@ export default {
 						JSON.parse(res.data.entry).frequency
 					)
 				}
+			}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
 			})
 			this.$store.commit('getRunBacktestData', row)
 			this.$emit('goBacktestResultForm', row)
@@ -439,7 +445,13 @@ export default {
 					this.$store.commit('getRunBacktestData', row)
 					this.$emit('goTobacktestSetupForm', row.id)
 					this.$emit('goBacktestResultForm', row)
-				})
+				}).catch(error => {
+				this.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
+			})
 			} else {
 				this.$notify({
 					title: 'No trades',
@@ -504,6 +516,12 @@ export default {
 						})
 					}
 				})
+			}).catch(error => {
+				vm.$message({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
 			})
 		},
 		addToFavorites(row) {
@@ -548,7 +566,7 @@ export default {
 	}
 }
 /deep/ .el-table .cell {
-	padding: 0px;
+	padding: 0px 10px 0px 10px;
 	word-wrap: break-word;
 }
 </style>
