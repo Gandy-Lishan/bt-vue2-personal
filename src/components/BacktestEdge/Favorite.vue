@@ -585,7 +585,7 @@ export default {
 	}
 }
 /deep/ .el-table .cell {
-	padding: 0px;
+	padding: 0px 10px 0px 10px;
 	word-wrap: break-word;
 }
 /deep/.el-button + .el-button {
