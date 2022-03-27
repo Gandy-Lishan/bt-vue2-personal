@@ -47,13 +47,6 @@
 							<p>{{ scope.row.exit_description }}</p>
 						</template>
 					</el-table-column>
-					<!-- <el-table-column
-						label="Exit"
-						align="center"
-						show-overflow-tooltip
-						prop="exit_description"
-					>
-					</el-table-column> -->
 					<el-table-column
 						label="Period"
 						show-overflow-tooltip
@@ -131,7 +124,7 @@
 							<span v-else>{{ 0 + '%' }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column align="center" width="200px">
+					<el-table-column align="center">
 						<template slot-scope="scope">
 							<el-row>
 								<el-tooltip
@@ -331,7 +324,6 @@ export default {
 					})
 					this.$store.commit('getBacktestName', historyNameList)
 				}
-				console.log(this.backtestList)
 				this.queryInfo.total = res.data.count
 			} else {
 				this.loading = false
@@ -369,26 +361,29 @@ export default {
 		},
 		editBacktest: throttle(function (row) {
 			let vm = this
-			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
-				// 恢复indicator layout
-				this.$store.commit('getBacktestSymbol', res.data.symbol)
-				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayout(
-						JSON.parse(res.data.indicator_layout),
-						JSON.parse(res.data.entry).frequency
-					)
-				}
-				this.$store.commit('getRunBacktestData', row)
-				this.$emit('goBacktestResultForm', row)
+			vm.$http
+				.get('/dev/seeparams/' + row.id + '/')
+				.then((res) => {
+					// 恢复indicator layout
+					this.$store.commit('getBacktestSymbol', res.data.symbol)
+					if (res.data.indicator_layout) {
+						this.restoreIndicatorLayout(
+							JSON.parse(res.data.indicator_layout),
+							JSON.parse(res.data.entry).frequency
+						)
+					}
+					this.$store.commit('getRunBacktestData', row)
+					this.$emit('goBacktestResultForm', row)
 
-				vm.$emit('goTobacktestSetupForm', row.id)
-			}).catch(error => {
-				vm.$message({
-							message: 'The internal server is busy, please try again later ',
-							type: 'error',
-							offset: 300
-						})
-			})
+					vm.$emit('goTobacktestSetupForm', row.id)
+				})
+				.catch((error) => {
+					vm.$message({
+						message: 'The internal server is busy, please try again later ',
+						type: 'error',
+						offset: 300
+					})
+				})
 		}, 1000),
 		deleteBacktest(id) {
 			this.$http
@@ -403,13 +398,14 @@ export default {
 							duration: 1000
 						})
 					}
-				}).catch(error => {
-				vm.$message({
-							message: 'The internal server is busy, please try again later ',
-							type: 'error',
-							offset: 300
-						})
-			})
+				})
+				.catch((error) => {
+					vm.$message({
+						message: 'The internal server is busy, please try again later ',
+						type: 'error',
+						offset: 300
+					})
+				})
 		},
 
 		copyBacktest: throttle(function (row) {
@@ -446,38 +442,42 @@ export default {
 						} else {
 							this.$message.error('Copy failed')
 						}
-					}).catch(error => {
-				this.$message({
+					})
+					.catch((error) => {
+						this.$message({
 							message: 'The internal server is busy, please try again later ',
 							type: 'error',
 							offset: 300
 						})
-			})
+					})
 			})
 		}, 1000),
 		viewBacktestResults: throttle(function (row) {
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
-				this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
-					// 恢复indicator layout
-					this.$store.commit('getBacktestSymbol', res.data.symbol)
-					if (res.data.indicator_layout) {
-						this.restoreIndicatorLayout(
-							JSON.parse(res.data.indicator_layout),
-							JSON.parse(res.data.entry).frequency
-						)
-					}
+				this.$http
+					.get('/dev/seeparams/' + row.id + '/')
+					.then((res) => {
+						// 恢复indicator layout
+						this.$store.commit('getBacktestSymbol', res.data.symbol)
+						if (res.data.indicator_layout) {
+							this.restoreIndicatorLayout(
+								JSON.parse(res.data.indicator_layout),
+								JSON.parse(res.data.entry).frequency
+							)
+						}
 
-					this.$store.commit('getRunBacktestData', row)
-					this.$emit('goTobacktestSetupForm', row.id)
-					this.$emit('goBacktestResultForm', row)
-				}).catch(error => {
-				this.$message({
+						this.$store.commit('getRunBacktestData', row)
+						this.$emit('goTobacktestSetupForm', row.id)
+						this.$emit('goBacktestResultForm', row)
+					})
+					.catch((error) => {
+						this.$message({
 							message: 'The internal server is busy, please try again later ',
 							type: 'error',
 							offset: 300
 						})
-			})
+					})
 			} else {
 				this.$notify({
 					title: 'No trades',
@@ -520,67 +520,72 @@ export default {
 			CIQ.addIndicatorsFromBacktest()
 		},
 		showDes(row) {
-			console.log('当前row', row)
 			const datades = {}
 			let vm = this
-			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
-				const des = res.data
-				let str = ``
-				for (let key in des) {
-					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
-				}
-
-				vm.$alert(str, '标题名称', {
-					confirmButtonText: '确定',
-					dangerouslyUseHTMLString: true,
-					lockScroll: false,
-					callback: (action) => {
-						vm.$message({
-							type: 'info',
-							message: `action: ${action}`
-						})
+			vm.$http
+				.get('/dev/seeparams/' + row.id + '/')
+				.then((res) => {
+					const des = res.data
+					let str = ``
+					for (let key in des) {
+						str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
 					}
+
+					vm.$alert(str, '标题名称', {
+						confirmButtonText: '确定',
+						dangerouslyUseHTMLString: true,
+						lockScroll: false,
+						callback: (action) => {
+							vm.$message({
+								type: 'info',
+								message: `action: ${action}`
+							})
+						}
+					})
 				})
-			}).catch(error => {
-				vm.$message({
-							message: 'The internal server is busy, please try again later ',
-							type: 'error',
-							offset: 300
-						})
-			})
+				.catch((error) => {
+					vm.$message({
+						message: 'The internal server is busy, please try again later ',
+						type: 'error',
+						offset: 300
+					})
+				})
 		},
 		sendBack(row) {
 			let vm = this
-			this.$http.get('/dev/report/?uuid=' + row.id).then((res) => {
-				const des = res.data
-				let str = ``
-				for (let key in des) {
-					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
-				}
-				// for (let key in des.FinalResult.AnnualReturn) {
-				// 	str =
-				// 		str +
-				// 		'<p>' +
-				// 		`${key}:  ${des.FinalResult.AnnualReturn[key]}` +
-				// 		'</p>'
-				// }
-				vm.$alert(str, '标题名称', {
-					confirmButtonText: '确定',
-					dangerouslyUseHTMLString: true,
-					callback: (action) => {
-						vm.$message({
-							type: 'info',
-							message: `action: ${action}`
-						})
+			this.$http
+				.get('/dev/report/?uuid=' + row.id)
+				.then((res) => {
+					const des = res.data
+					let str = ``
+					for (let key in des) {
+						str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
 					}
+					// for (let key in des.FinalResult.AnnualReturn) {
+					// 	str =
+					// 		str +
+					// 		'<p>' +
+					// 		`${key}:  ${des.FinalResult.AnnualReturn[key]}` +
+					// 		'</p>'
+					// }
+					vm.$alert(str, '标题名称', {
+						confirmButtonText: '确定',
+						dangerouslyUseHTMLString: true,
+						callback: (action) => {
+							vm.$message({
+								type: 'info',
+								message: `action: ${action}`
+							})
+						}
+					})
 				})
-			}).catch(error => {
-				vm.$message({
-							message: 'The internal server is busy, please try again later ',
-							type: 'error',
-							offset: 300
-						})
-			})
+				.catch((error) => {
+					vm.$message({
+						message: 'The internal server is busy, please try again later ',
+						type: 'error',
+						offset: 300
+					})
+				})
 		},
 		addToFavorites: throttle(function (row) {
 			let vm = this
@@ -609,13 +614,14 @@ export default {
 							duration: 1000
 						})
 					}
-				}).catch(error => {
-				vm.$message({
-							message: 'The internal server is busy, please try again later ',
-							type: 'error',
-							offset: 300
-						})
-			})
+				})
+				.catch((error) => {
+					vm.$message({
+						message: 'The internal server is busy, please try again later ',
+						type: 'error',
+						offset: 300
+					})
+				})
 		}, 1000),
 		moveToFavorites: throttle(function (row) {
 			let vm = this
@@ -631,13 +637,14 @@ export default {
 
 						this.$emit('refFavoritesForm')
 					}
-				}).catch(error => {
-				vm.$message({
-							message: 'The internal server is busy, please try again later ',
-							type: 'error',
-							offset: 300
-						})
-			})
+				})
+				.catch((error) => {
+					vm.$message({
+						message: 'The internal server is busy, please try again later ',
+						type: 'error',
+						offset: 300
+					})
+				})
 		}, 1000)
 	}
 }
@@ -688,5 +695,13 @@ export default {
 }
 /deep/ .el-button--mini.is-circle {
 	margin-right: 5px;
+	margin-bottom: 5px;
+}
+/deep/ .el-button--mini,
+.el-button--mini.is-round {
+	padding: 7px 0px;
+}
+.el-table__body-wrapper {
+	overflow-x: scroll;
 }
 </style>

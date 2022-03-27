@@ -371,7 +371,6 @@ export default {
 
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
-					// console.log('频率', this.frequency)
 					this.temp.commission = Number(newVal.commission) * 100
 					this.temp.slippage = Number(newVal.slippage) * 100
 					let year
@@ -509,7 +508,6 @@ export default {
 			return (window.utils = new utils())
 		},
 		async getIndexsList() {
-			//console.log('vuex', this.$store.state.indexsList)
 			if (this.$store.state.indexsList.length != 0) {
 				this.indexList = this.$store.state.indexsList.map((item) => {
 					return { value: `${item.symbol}`, label: `${item.symbol}` }
@@ -631,7 +629,6 @@ export default {
 		},
 		getFrequency(val) {
 			// getFrequency will no longer call addIndicator and pass a parameter to it
-			console.log('getFreq: ',val)
 			this.frequency = val
 			this.$store.commit('getFrequency', val)
 			this.$emit('getTimeFrame', val)
@@ -753,7 +750,6 @@ export default {
 			CIQ.indicatorList = indicatorList
 		},
 		saveBacktestData() {
-			console.log("保存setup");
 			let checked = true
 			let nameChecked = true
 			let validForm
@@ -762,37 +758,78 @@ export default {
 			})
 			if (validForm) {
 				let nameList = this.$store.state.backtestNameList
-				for (let i = 0; i < nameList.length; i++) {
-					if(this.bd.name !== nameList[i]) {
-						// 说明不重名，直接创建新的，删除 old_uuid
-						// this.$store.commit('clearBacktestUuid')
-						delete this.bd.old_uuid
-						console.log('说明不重名，直接创建新的，删除 old_uuid')
-						break
-					}
-					if(this.bd.name === nameList[i] && this.oldBacktestName === '') {
-						// 说明这是刚开始创建的时候
-						// this.$store.commit('clearBacktestUuid')
-						delete this.bd.old_uuid
-						console.log('说明这是刚开始创建的时候')
-						nameChecked = false
-						break
-					}
-					if (
-						this.bd.name === nameList[i] && this.oldBacktestName === this.bd.name && this.oldBacktestName !== ''
-					) {
-						// 说明重名要进行替换，不删除 old_uuid
-						console.log('说明重名要进行替换，不删除 old_uuid')
-						break
-					}
-					if(this.bd.name === nameList[i] && this.oldBacktestName !== this.bd.name && this.oldBacktestName !== '') {
-						// 说明不重名，直接创建新的，删除 old_uuid
-						// this.$store.commit('clearBacktestUuid')
-						delete this.bd.old_uuid
-						console.log('说明不重名，直接创建新的，删除 old_uuid')
-						break
-					}
+				// let noDuplicateName = false
+				// let firstCreate = false
+				// let duplicateName = false
+				// let editNoDuplicateName = false
+				// for (let i = 0; i < nameList.length; i++) {
+				// 	if (this.bd.name !== nameList[i]) {
+				// 		// 说明不重名，直接创建新的，删除 old_uuid
+				// 		console.log('说明不重名 直接创建新的 删除 old_uuid 和 favorites')
+				// 		this.bd.favorites = false
+				// 		delete this.bd.old_uuid
+				// 	}
+				// 	if (this.bd.name === nameList[i] && this.oldBacktestName === '') {
+				// 		// 说明这是刚开始创建的时候
+				// 		// this.$store.commit('clearBacktestUuid')
+				// 		console.log('说明这是刚开始创建的时候 删除 old_uuid 和 favorites')
+				// 		this.bd.favorites = false
+				// 		delete this.bd.old_uuid
+				// 		nameChecked = false
+				// 	}
+				// 	if (
+				// 		this.bd.name === nameList[i] &&
+				// 		this.oldBacktestName === this.bd.name &&
+				// 		this.oldBacktestName !== ''
+				// 	) {
+				// 		// 说明重名要进行替换，不删除 old_uuid
+				// 		console.log('说明重名要进行替换 不删除 old_uuid 不删除favorites')
+				// 	}
+				// 	if (
+				// 		this.bd.name === nameList[i] &&
+				// 		this.oldBacktestName !== this.bd.name &&
+				// 		this.oldBacktestName !== ''
+				// 	) {
+				// 		// 说明不重名，直接创建新的，删除 old_uuid
+				// 		console.log('说明不重名 直接创建新的 删除 old_uuid和 favorites')
+				// 		// this.$store.commit('clearBacktestUuid')
+				// 		this.bd.favorites = false
+				// 		delete this.bd.old_uuid
+				// 	}
+				// }
+				if (nameList.indexOf(this.bd.name) === -1) {
+					console.log('说明不重名 直接创建新的 删除 old_uuid 和 favorites')
+					this.bd.favorites = false
+					delete this.bd.old_uuid
 				}
+				if (
+					nameList.indexOf(this.bd.name) > -1 &&
+					this.oldBacktestName === ''
+				) {
+					console.log('说明这是刚开始创建的时候 删除 old_uuid 和 favorites')
+					this.bd.favorites = false
+					delete this.bd.old_uuid
+					nameChecked = false
+				}
+				if (
+					nameList.indexOf(this.bd.name) > -1 &&
+					this.oldBacktestName === this.bd.name &&
+					this.oldBacktestName !== ''
+				) {
+					// 说明重名要进行替换，不删除 old_uuid
+					console.log('说明重名要进行替换 不删除 old_uuid 不删除favorites')
+				}
+				// if (
+				// 	nameList.indexOf(this.bd.name) > -1 &&
+				// 	this.oldBacktestName !== this.bd.name &&
+				// 	this.oldBacktestName !== ''
+				// ) {
+				// 	// 说明不重名，直接创建新的，删除 old_uuid
+				// 	console.log('说明不重名 直接创建新的 删除 old_uuid和 favorites')
+				// 	// this.$store.commit('clearBacktestUuid')
+				// 	this.bd.favorites = false
+				// 	delete this.bd.old_uuid
+				// }
 				if (nameChecked) {
 					if (this.bd.end_date) {
 						// 保存 backtestform 的数据

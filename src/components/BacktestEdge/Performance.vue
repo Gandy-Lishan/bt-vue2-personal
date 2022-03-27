@@ -12,7 +12,7 @@
 						<el-table-column
 							prop="totalReturn"
 							show-overflow-tooltip
-							label="TOTAL RETURN"
+							label="TOTAL RETURN %"
 							align="center"
 							algin="center"
 						>
@@ -44,9 +44,9 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-						show-overflow-tooltip
+							show-overflow-tooltip
 							prop="medianReturn"
-							label="MEDIAN RETURN"
+							label="MEDIAN RETURN %"
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -60,9 +60,9 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-						show-overflow-tooltip
+							show-overflow-tooltip
 							prop="averageReturn"
-							label="AVERAGE RETURN"
+							label="AVERAGE RETURN %"
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -75,7 +75,12 @@
 								}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column prop="tzScore" label="Z_SCORE" align="center" show-overflow-tooltip>
+						<el-table-column
+							prop="tzScore"
+							label="Z_SCORE"
+							align="center"
+							show-overflow-tooltip
+						>
 							<template slot-scope="scope">
 								<span v-if="scope.row.tzScore >= 0">{{
 									scope.row.tzScore
@@ -101,9 +106,9 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-						show-overflow-tooltip
+							show-overflow-tooltip
 							prop="buyHoldGain"
-							label="BUY & HOLD"
+							label="BUY & HOLD %"
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -125,7 +130,7 @@
 					>
 						<el-table-column
 							prop="winRate"
-							label="WIN RATE"
+							label="WIN RATE %"
 							show-overflow-tooltip
 							width="180"
 							align="center"
@@ -141,7 +146,7 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-						show-overflow-tooltip
+							show-overflow-tooltip
 							prop="averageWin"
 							label="AVERAGE WIN %"
 							align="center"
@@ -157,7 +162,7 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-						show-overflow-tooltip
+							show-overflow-tooltip
 							prop="averageLoss"
 							label="AVERAGE LOSS %"
 							align="center"
@@ -172,7 +177,12 @@
 								}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column prop="drawDown" label="MAX RISK" align="center" show-overflow-tooltip>
+						<el-table-column
+							prop="drawDown"
+							label="MAX RISK %"
+							align="center"
+							show-overflow-tooltip
+						>
 							<template slot-scope="scope">
 								<span v-if="scope.row.drawDown >= 0">{{
 									scope.row.drawDown + '%'
@@ -206,7 +216,7 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-						show-overflow-tooltip
+							show-overflow-tooltip
 							prop="totalPositive"
 							label="TOTAL POSITIVE"
 							align="center"
@@ -286,11 +296,26 @@
 								{{ Number(scope.row.trade_number) + 1 }}
 							</template>
 						</el-table-column>
-						<el-table-column prop="Date" label="Trade Date" align="center" show-overflow-tooltip>
+						<el-table-column
+							prop="Date"
+							label="Trade Date"
+							align="center"
+							show-overflow-tooltip
+						>
 						</el-table-column>
-						<el-table-column prop="TradeStatus" label="Action" align="center" show-overflow-tooltip>
+						<el-table-column
+							prop="TradeStatus"
+							label="Action"
+							align="center"
+							show-overflow-tooltip
+						>
 						</el-table-column>
-						<el-table-column prop="Indicator" label="Indicator" align="center" show-overflow-tooltip>
+						<el-table-column
+							prop="Indicator"
+							label="Indicator"
+							align="center"
+							show-overflow-tooltip
+						>
 						</el-table-column>
 						<el-table-column
 							prop="TradePrice"
@@ -303,7 +328,12 @@
         label="Indicator Level"
         align="center">
       </el-table-column> -->
-						<el-table-column prop="Return" label="Total Return" align="center" show-overflow-tooltip>
+						<el-table-column
+							prop="Return"
+							label="Total Return %"
+							align="center"
+							show-overflow-tooltip
+						>
 							<template slot-scope="scope">
 								<span v-if="scope.row.Return == 'none'">{{ '' }}</span>
 								<span v-else-if="scope.row.Return >= 0"
@@ -344,7 +374,7 @@ export default {
 	methods: {
 		handleClick(tab, event) {},
 		loadMarker(tradeData) {
-			CIQ.loadChart(tradeData.markerSet,CIQ.addMarker)
+			CIQ.loadChart(tradeData.markerSet, CIQ.addMarker)
 		},
 		getResultData(row) {
 			let vm = this
@@ -428,8 +458,6 @@ export default {
 
 								this.$emit('setBacktestResult', initalData['basic'])
 								// ------------------------------ end -----------------------------------
-
-								console.log(initalData)
 								this.loadMarker(initalData)
 								// vm.$store.commit('getTradesData',initalData[])
 								vm.loading = false

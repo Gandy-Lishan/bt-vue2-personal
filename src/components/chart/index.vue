@@ -58,7 +58,6 @@ export default class AdvancedWrapper extends Vue {
 	// 	// })
 
 	// 	if(res.data.length!=0){
-	// 		console.log(res)
 	// 	}
 	// }
 	chartInitialized({

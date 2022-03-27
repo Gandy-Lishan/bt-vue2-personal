@@ -123,7 +123,7 @@
 							<span v-else>{{ 0 + '%' }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column align="center" width="200px">
+					<el-table-column align="center">
 						<template slot-scope="scope">
 							<el-row>
 								<el-tooltip
@@ -634,8 +634,12 @@ export default {
 }
 /deep/ .el-button--mini.is-circle {
 	margin-right: 5px;
+	margin-bottom: 5px;
 }
 /deep/ .el-button--mini, .el-button--mini.is-round{
 	padding: 7px 0px;
+}
+.el-table__body-wrapper {
+	overflow-x: scroll;
 }
 </style>

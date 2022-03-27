@@ -207,7 +207,6 @@ export default {
 		saveCondition() {
 			let checked = true
 			// 判断有无空值
-			console.log(this.risk)
 			let valid = true
 			if (this.riskVal === 'Profit/Loss') {
 				valid =

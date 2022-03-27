@@ -14,8 +14,12 @@
 				</div>
 			</header>
 			<main class="main">
-				<div class="alignRight" style="display:flex;align-items:center;">
-					<i @click="sidebar" class="fa fa-outdent navCheck" style="font-size:30px;"></i>
+				<div class="alignRight" style="display: flex; align-items: center">
+					<i
+						@click="sidebar"
+						class="fa fa-outdent navCheck"
+						style="font-size: 30px"
+					></i>
 					<el-button
 						@click="refreshPage"
 						class="restartBtn"
@@ -203,10 +207,10 @@ export default {
 				let sidebar = document.getElementsByClassName('el-tabs__header is-left')
 				let tabContent = document.getElementsByClassName('el-tabs__content')
 				let btn = document.getElementsByClassName('fa fa-outdent navCheck')
-				sidebar[0].style.left = "-110px"
-				tabContent[0].style.left = "-110px"
-				btn[0].style.transform = "rotate3d(0, 1, 0, -180deg)"
-				btn[0].style.transition = "all 0.5s"
+				sidebar[0].style.left = '-110px'
+				tabContent[0].style.left = '-110px'
+				btn[0].style.transform = 'rotate3d(0, 1, 0, -180deg)'
+				btn[0].style.transition = 'all 0.5s'
 				this.btnClickBool = false
 			} catch (error) {}
 		},
@@ -214,12 +218,12 @@ export default {
 			try {
 				let sidebar = document.getElementsByClassName('el-tabs__header is-left')
 				let tabContent = document.getElementsByClassName('el-tabs__content')
-				let btn = document.getElementsByClassName('fa fa-outdent navCheck')	
-				if(this.btnClickBool==true){
-					sidebar[0].style.left = "-110px"
-					tabContent[0].style.left = "-110px"
-					btn[0].style.transform = "rotate3d(0, 1, 0, -180deg)"
-					btn[0].style.transition = "all 0.5s"
+				let btn = document.getElementsByClassName('fa fa-outdent navCheck')
+				if (this.btnClickBool == true) {
+					sidebar[0].style.left = '-110px'
+					tabContent[0].style.left = '-110px'
+					btn[0].style.transform = 'rotate3d(0, 1, 0, -180deg)'
+					btn[0].style.transition = 'all 0.5s'
 					this.btnClickBool = false
 				} else {
 					sidebar[0].style.left = '0px'
@@ -287,14 +291,11 @@ export default {
 			if (setUp) {
 				let entry = this.$refs.entryChild.saveBacktestData()
 				let entryChecked = await entry
-				console.log("entry的验证",entryChecked);
 				if (entryChecked) {
 					let exit = this.$refs.exitChild.saveBacktestData()
 					let exitChecked = await exit
-					console.log("exit的验证", exitChecked);
 					if (exitChecked) {
 						this.loading = true
-						console.log('保存的backtest数据', this.$store.state.backtestInfo)
 						let vm = this
 						let signalEntryList = []
 						let signalExitList = []
@@ -409,7 +410,7 @@ export default {
 							entry: entrySignal.url,
 							exit: exitSignal.url
 						}
-						
+
 						indicatorLayout.technicalIndicators =
 							this.$store.state.indicators.technicalIndicators
 
@@ -505,8 +506,6 @@ export default {
 				vm.$refs.entryChild.setEditData(id)
 				vm.$refs.exitChild.setEditData(id)
 				// 拿到 frequency 的值
-
-				console.log(data.frequency)
 				vm.editFrequency = data.frequency
 				vm.timeFrame = data.frequency
 				vm.$store.commit('getFrequency', vm.editFrequency)
@@ -548,10 +547,10 @@ export default {
 		width: 10rem;
 		margin-left: 100px;
 		margin-right: 30px;
-    	flex: 1;
+		flex: 1;
 		//width: 98%;
 	}
-	.alignRight{
+	.alignRight {
 		float: none;
 	}
 }
@@ -566,7 +565,7 @@ export default {
 		width: 12rem;
 		flex: 1;
 	}
-	.alignRight{
+	.alignRight {
 		float: right;
 		margin: 1px 0 0 10px;
 	}
