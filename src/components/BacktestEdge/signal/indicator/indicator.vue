@@ -142,6 +142,7 @@ export default {
 				this.si.sentimentIndicator == '' &&
 				this.si.technicalIndicator == ''
 			) {
+
 				this.si.sentimentIndicator = val.name
 
 				for (var i in CIQ.indicatorList) {
@@ -326,10 +327,15 @@ export default {
                     for (var i in CIQ.store.state.builtinList){
                         if(CIQ.store.state.builtinList[i].url == CIQ.stxx.layout.studies[studyInstanceName].type){countExistIndicator--}
                     }
-                    countExistIndicator++
+					if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'){
+						countExistIndicator--
+					}
+					countExistIndicator++
                 } 
-                if(countExistIndicator>=5){
-                    CIQ.description("Indicators can be added only up to 5")
+
+                if(countExistIndicator>=1){
+                    CIQ.description("Maximum 5 signals can be displayed on chart")
+					console.log(this.si)
                     return
                 }
 

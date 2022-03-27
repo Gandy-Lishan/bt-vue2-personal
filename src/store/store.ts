@@ -5,6 +5,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
 		favoriteIndicatorList: [],
+		favoriteSymbolList: [],
 		techSD: [],
 		savedTechSD: [],
 		currentSenti: {
@@ -150,6 +151,9 @@ export default new Vuex.Store({
 	mutations: {
 		setFavoriteIndicatorList(state, val){
 			state.favoriteIndicatorList = val
+		},
+		setFavoriteSymbolList(state, val){
+			state.favoriteSymbolList = val
 		},
 		setTechSD(state, val){
 			state.techSD = val
