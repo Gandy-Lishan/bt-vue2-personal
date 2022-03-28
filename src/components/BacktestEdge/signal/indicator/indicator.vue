@@ -142,6 +142,7 @@ export default {
 				this.si.sentimentIndicator == '' &&
 				this.si.technicalIndicator == ''
 			) {
+
 				this.si.sentimentIndicator = val.name
 
 				for (var i in CIQ.indicatorList) {
@@ -166,7 +167,7 @@ export default {
 				if (item.url == val.url) {
 					// this.si.technicalIndicator = item.value
 					// 暂时注释掉，因为大部分tech没有加到back test内
-					//this.indicatorRadio = 'Technical Indicators'
+					this.indicatorRadio = 'Technical Indicators'
 					
 					//this.handleTechnicalSelect({value:item.value})
 				}
@@ -326,10 +327,15 @@ export default {
                     for (var i in CIQ.store.state.builtinList){
                         if(CIQ.store.state.builtinList[i].url == CIQ.stxx.layout.studies[studyInstanceName].type){countExistIndicator--}
                     }
-                    countExistIndicator++
+					if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'){
+						countExistIndicator--
+					}
+					countExistIndicator++
                 } 
-                if(countExistIndicator>=5){
-                    CIQ.description("Indicators can be added only up to 5")
+
+                if(countExistIndicator>=1){
+                    CIQ.description("Maximum 5 signals can be displayed on chart")
+					console.log(this.si)
                     return
                 }
 
