@@ -333,7 +333,7 @@ export default {
 					countExistIndicator++
                 } 
 
-                if(countExistIndicator>=1){
+                if(countExistIndicator>=5){
                     CIQ.description("Maximum 5 signals can be displayed on chart")
 					console.log(this.si)
                     return

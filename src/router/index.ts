@@ -104,6 +104,7 @@ router.beforeEach((to, from, next) => {
 				// next('https://users.sentdevsite.com/login')
 				alert('Login failed, please log in again')
 				window.location.href = loginUrl
+
 			})
 		// 3.1 200 成功设置 cookie userid=XXX endDate=XXX     cookie.set()
 		// 3.2 403 代表认证时间超时，返回到登录页面
@@ -116,5 +117,6 @@ router.beforeEach((to, from, next) => {
 	// cookies.set('userid','test')
 	// next()
 })
+
 
 export default router
