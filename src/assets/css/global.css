@@ -196,7 +196,7 @@
   border: #000000 solid 1px;
   padding: 0 5px 0 10px;
   height: 25px;
-  width: 115px;
+  width: 124px;
   border-radius: unset;
 }
 .exit-container input:not([type]),
@@ -207,7 +207,7 @@
   border: #000000 solid 1px;
   padding: 0 5px 0 10px;
   height: 25px;
-  width: 115px;
+  width: 124px;
   border-radius: unset;
 }
 
@@ -263,13 +263,13 @@ input[type="time"] {
 input[type="number"],
 input[type="date"],
 input[type="time"] {
-  width: 90px;
+  width: 103px;
 }
 .senti-container .condition-container .check-box input[type="text"],
 input[type="number"],
 input[type="date"],
 input[type="time"] {
-  width: 90px;
+  width: 103px;
 }
 .el-radio__label {
   font-size: 15px !important;
@@ -311,7 +311,7 @@ input[type="time"] {
     .el-select
     .el-input
     .el-input__icon {
-    width: 115px;
+    width: 124px;
   }
 }
 @media (min-width: 768px) and (max-width: 819px) {
@@ -347,7 +347,7 @@ input[type="time"] {
     .el-select
     .el-input
     .el-input__icon {
-    width: 115px;
+    width: 124px;
   }
 
   .set-up-container input:not([type]),
@@ -381,7 +381,7 @@ input[type="time"] {
     border: #000000 solid 1px;
     padding: 0 5px 0 10px;
     height: 25px;
-    width: 115px;
+    width: 124px;
     border-radius: unset;
   }
   .exit-container input:not([type]),
@@ -392,7 +392,7 @@ input[type="time"] {
     border: #000000 solid 1px;
     padding: 0 5px 0 10px;
     height: 25px;
-    width: 115px;
+    width: 124px;
     border-radius: unset;
   }
 }
@@ -444,7 +444,7 @@ input[type="time"] {
     border: #000000 solid 1px;
     padding: 0 5px 0 10px;
     height: 25px;
-    width: 115px;
+    width: 124px;
     border-radius: unset;
   }
   .exit-container input:not([type]),
@@ -455,7 +455,7 @@ input[type="time"] {
     border: #000000 solid 1px;
     padding: 0 5px 0 10px;
     height: 25px;
-    width: 115px;
+    width: 124px;
     border-radius: unset;
   }
   .backtest_container
