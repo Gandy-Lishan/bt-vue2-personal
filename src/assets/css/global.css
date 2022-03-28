@@ -1,442 +1,440 @@
 @media screen and (max-width: 768px) {
-	.el-tabs__content{
-		left:0px;
-		transition: all 0.5s;
-		flex: 0 0 100vw;
-	}
-	.el-tabs__header.is-left {
-		left:0px;
-		transition: all 0.5s;
-		flex: 0 0 0;
-	}
-	.el-tabs--left{
-		display: flex;
-	}
-	
+  .el-tabs__content {
+    left: 0px;
+    transition: all 0.5s;
+    flex: 0 0 100vw;
+  }
+  .el-tabs__header.is-left {
+    left: 0px;
+    transition: all 0.5s;
+    flex: 0 0 0;
+  }
+  .el-tabs--left {
+    display: flex;
+  }
 }
 @media screen and (min-width: 768px) {
-	.el-tabs__content{
-		left:0px !important;
-		transition: all 0.5s !important;
-	}
-	.el-tabs__header.is-top {
-		left:0px !important;
-		transition: all 0.5s !important;
-		float: none !important;
-	}
+  .el-tabs__content {
+    left: 0px !important;
+    transition: all 0.5s !important;
+  }
+  .el-tabs__header.is-top {
+    left: 0px !important;
+    transition: all 0.5s !important;
+    float: none !important;
+  }
 }
 .el-tabs--left .el-tabs__item.is-left {
-    transition: all 0.2s;
+  transition: all 0.2s;
 }
 
 .el-tabs__header.is-left {
-	transition: all 0.5s !important;
+  transition: all 0.5s !important;
 }
-.el-tabs__content{
-	overflow-x: scroll !important;
-	transition: all 0.5s !important;
+.el-tabs__content {
+  transition: all 0.5s !important;
 }
 
 .green {
-	width: 105px;
-	position: absolute;
-	display: flex;
-	padding-left: 10px;
-	padding-right: 10px;
-	top: 48px;
-	left: 233px;
-	align-items: center;
-	color: #575757;
-	font-size: 1.2em;
-	font-weight: bold;
-	transition: color 0.2s 0s;
+  width: 105px;
+  position: absolute;
+  display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
+  top: 48px;
+  left: 233px;
+  align-items: center;
+  color: #575757;
+  font-size: 1.2em;
+  font-weight: bold;
+  transition: color 0.2s 0s;
 }
 .green:hover {
-	color: black;
-	background-color: rgba(145, 143, 143, 0.247);
+  color: black;
+  background-color: rgba(145, 143, 143, 0.247);
 }
 .red {
-	width: 105px;
-	position: absolute;
-	display: flex;
-	padding-left: 10px;
-	padding-right: 10px;
-	top: 5px;
-	left: 233px;
-	align-items: center;
-	color: #575757;
-	font-size: 1.2em;
-	font-weight: bold;
-	transition: color 0.2s 0s;
+  width: 105px;
+  position: absolute;
+  display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
+  top: 5px;
+  left: 233px;
+  align-items: center;
+  color: #575757;
+  font-size: 1.2em;
+  font-weight: bold;
+  transition: color 0.2s 0s;
 }
 .red:hover {
-	color: black;
-	background-color: rgba(145, 143, 143, 0.247);
+  color: black;
+  background-color: rgba(145, 143, 143, 0.247);
 }
 
 .el-message-box__wrapper {
-	overflow: auto !important;
+  overflow: auto !important;
 }
 .el-message-box {
-	width: 50%;
+  width: 50%;
 }
 .home-container {
-	padding: 0 50px;
-	overflow-x: visible;
-	height: 100%;
-	font-size: 16px;
+  padding: 0 50px;
+  overflow-x: visible;
+  height: 100%;
+  font-size: 16px;
 }
 #el-tab-pane {
-	overflow-y: scroll;
+  overflow-y: scroll;
 }
 .el-table td.el-table__cell,
 .el-table th.el-table__cell.is-leaf {
-	border-bottom: 2px solid #d6e5ec;
+  border-bottom: 2px solid #d6e5ec;
 }
 .el-form-item__label {
-	font-weight: 500;
+  font-weight: 500;
 }
 .el-tab-pane .el-tabs {
-	overflow: auto;
+  overflow: auto;
 }
-.el-table th.el-table__cell > .cell {
-	word-wrap: break-word;
-}
+/* .el-table th.el-table__cell > .cell {
+  word-wrap: break-word;
+} */
 .btnBox .el-button:nth-child(1),
 .signalBtnBox .el-button {
-	color: #910012;
+  color: #910012;
 }
 .btnBox .el-button:nth-child(2) {
-	color: #0000ff;
+  color: #0000ff;
 }
 .btnBox .el-button:nth-child(3) {
-	color: #d9001b;
+  color: #d9001b;
 }
 .el-tabs__item {
-	background-color: #797979;
-	font-weight: bold;
-	color: #333333;
+  background-color: #797979;
+  font-weight: bold;
+  color: #333333;
+  border-radius: 4px;
 }
 .el-tabs__item.is-active {
-	background-color: #f8f8f8;
-	font-weight: bold;
-	color: #333333;
+  background-color: #f8f8f8;
+  font-weight: bold;
+  color: #333333;
 }
 .el-tabs__item:hover {
-	color: #494848;
-	cursor: pointer;
+  color: #494848;
+  cursor: pointer;
 }
 .backtest_container .el-form-item__label {
-	position: absolute;
-	width: 135px;
-	font-size: 16px;
+  position: absolute;
+  width: 135px;
+  font-size: 16px;
 }
 .backtest_container .el-form-item__content {
-	padding-left: 132px;
-	height: 25px;
+  padding-left: 132px;
+  height: 25px;
 }
 .set-up-container input:not([type]),
-.set-up-container input[type='text'],
-.set-up-container input[type='number'],
-.set-up-container input[type='date'],
-.set-up-container input[type='time'] {
-	border: #000000 solid 1px;
-	padding: 0 5px 0 10px;
-	height: 25px;
-	width: 180px;
-	border-radius: unset;
+.set-up-container input[type="text"],
+.set-up-container input[type="number"],
+.set-up-container input[type="date"],
+.set-up-container input[type="time"] {
+  border: #000000 solid 1px;
+  padding: 0 5px 0 10px;
+  height: 25px;
+  width: 180px;
+  border-radius: unset;
 }
 .entry-container input:not([type]),
-.entry-container input[type='text'],
-.entry-container input[type='number'],
-.entry-container input[type='date'],
-.entry-container input[type='time'] {
-	border: #000000 solid 1px;
-	padding: 0 5px 0 10px;
-	height: 25px;
-	width: 115px;
-	border-radius: unset;
+.entry-container input[type="text"],
+.entry-container input[type="number"],
+.entry-container input[type="date"],
+.entry-container input[type="time"] {
+  border: #000000 solid 1px;
+  padding: 0 5px 0 10px;
+  height: 25px;
+  width: 115px;
+  border-radius: unset;
 }
 .exit-container input:not([type]),
-.exit-container input[type='text'],
-.exit-container input[type='number'],
-.exit-container input[type='date'],
-.exit-container input[type='time'] {
-	border: #000000 solid 1px;
-	padding: 0 5px 0 10px;
-	height: 25px;
-	width: 115px;
-	border-radius: unset;
+.exit-container input[type="text"],
+.exit-container input[type="number"],
+.exit-container input[type="date"],
+.exit-container input[type="time"] {
+  border: #000000 solid 1px;
+  padding: 0 5px 0 10px;
+  height: 25px;
+  width: 115px;
+  border-radius: unset;
 }
 
 .set-up-container .dateBox .el-date-editor input:not([type]),
-.set-up-container .dateBox .el-date-editor input[type='date'],
-.set-up-container .dateBox .el-date-editor input[type='text'] {
-	padding-left: 23px;
+.set-up-container .dateBox .el-date-editor input[type="date"],
+.set-up-container .dateBox .el-date-editor input[type="text"] {
+  padding-left: 23px;
 }
 .backtest_container .el-form-item .el-form-item__content .selectBox .el-select {
-	width: 320px;
+  width: 320px;
 }
 
 .backtest_container
-	.el-form-item
-	.el-form-item__content
-	.selectBox
-	.el-select
-	.el-input
-	.el-input__inner {
-	width: 293px !important;
+  .el-form-item
+  .el-form-item__content
+  .selectBox
+  .el-select
+  .el-input
+  .el-input__inner {
+  width: 293px !important;
 }
 .backtest_container .dateBox .el-form-item .el-form-item__label {
-	margin-left: 40px;
+  margin-left: 40px;
 }
-.backtest_container .nameBox input[type='text']:last-child {
-	width: 80%;
+.backtest_container .nameBox input[type="text"]:last-child {
+  width: 80%;
 }
 /* .backtest_container .nameBox .el-form-item .el-form-item__label {
 	width: 135px;
 	margin-left: 40px;
 } */
 .el-input__inner {
-	margin-left: 20px;
-	line-height: 25px;
+  margin-left: 20px;
+  line-height: 25px;
 }
 .backtest_container {
-	padding-left: 40px;
-	padding-right: 40px;
+  padding-left: 40px;
+  padding-right: 40px;
 }
-.senti-container .ids-container input[type='text'],
-input[type='number'],
-input[type='date'],
-input[type='time'] {
-	width: 80px;
+.senti-container .ids-container input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="time"] {
+  width: 80px;
 }
-.senti-container .ids-container input[type='text'],
-input[type='number'],
-input[type='date'],
-input[type='time'] {
-	width: 80px;
+.senti-container .ids-container input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="time"] {
+  width: 80px;
 }
-.senti-container .condition-container .conditionInput input[type='text'],
-input[type='number'],
-input[type='date'],
-input[type='time'] {
-	width: 90px;
+.senti-container .condition-container .conditionInput input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="time"] {
+  width: 90px;
 }
-.senti-container .condition-container .check-box input[type='text'],
-input[type='number'],
-input[type='date'],
-input[type='time'] {
-	width: 90px;
+.senti-container .condition-container .check-box input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="time"] {
+  width: 90px;
 }
 .el-radio__label {
-	font-size: 15px !important;
+  font-size: 15px !important;
 }
 .backtest_container .el-form-item {
-	margin-right: 0 !important;
+  margin-right: 0 !important;
 }
 .el-dialog__wrapper .el-dialog {
-	width: 60% !important;
+  width: 60% !important;
 }
 .backtest_container .el-form-item .el-form-item__content .el-form-item__error {
-	padding-top: 11px;
-	left: 155px;
+  padding-top: 11px;
+  left: 155px;
 }
 
 .indicator-box .el-form-item .el-form-item__content .el-form-item__error {
-	padding-top: 0px;
-	left: 80px;
+  padding-top: 0px;
+  left: 80px;
 }
 .senti-container .el-form-item .el-form-item__content .el-form-item__error {
-	padding-top: 0px;
-	left: 4px;
-	width: 180px;
+  padding-top: 0px;
+  left: 4px;
+  width: 180px;
 }
 @media (min-width: 1024px) and (max-width: 1099px) {
-	.backtest_container
-		.el-form-item
-		.el-form-item__content
-		.selectBox
-		.el-select
-		.el-input
-		.el-input__inner {
-		width: 250px !important;
-	}
-	.backtest_container
-		.el-form-item
-		.el-form-item__content
-		.selectBox
-		.el-select
-		.el-input
-		.el-input__icon {
-		width: 115px;
-	}
+  .backtest_container
+    .el-form-item
+    .el-form-item__content
+    .selectBox
+    .el-select
+    .el-input
+    .el-input__inner {
+    width: 250px !important;
+  }
+  .backtest_container
+    .el-form-item
+    .el-form-item__content
+    .selectBox
+    .el-select
+    .el-input
+    .el-input__icon {
+    width: 115px;
+  }
 }
 @media (min-width: 768px) and (max-width: 819px) {
-	.el-tabs__item {
-		font-size: 12px;
-		padding: 0 2px;
-	}
+  .el-tabs__item {
+    font-size: 12px;
+    padding: 0 2px;
+  }
 }
 @media (min-width: 375px) and (max-width: 767px) {
-	.el-tabs__item {
-		font-size: 12px;
-		padding: 0 2px;
-	}
-	.body {
-		font-size: 12px;
-	}
-	.backtest_container {
-		padding: 0 5px;
-	}
-	.backtest_container
-		.el-form-item
-		.el-form-item__content
-		.selectBox
-		.el-select
-		.el-input
-		.el-input__inner {
-		width: 185px !important;
-	}
-	.backtest_container
-		.el-form-item
-		.el-form-item__content
-		.selectBox
-		.el-select
-		.el-input
-		.el-input__icon {
-		width: 115px;
-	}
+  .el-tabs__item {
+    font-size: 12px;
+    padding: 0 2px;
+  }
+  .body {
+    font-size: 12px;
+  }
+  .backtest_container {
+    padding: 0 5px;
+  }
+  .backtest_container
+    .el-form-item
+    .el-form-item__content
+    .selectBox
+    .el-select
+    .el-input
+    .el-input__inner {
+    width: 185px !important;
+  }
+  .backtest_container
+    .el-form-item
+    .el-form-item__content
+    .selectBox
+    .el-select
+    .el-input
+    .el-input__icon {
+    width: 115px;
+  }
 
-	.set-up-container input:not([type]),
-	.set-up-container input[type='text'],
-	.set-up-container input[type='number'],
-	.set-up-container input[type='date'],
-	.set-up-container input[type='time'] {
-		border: #000000 solid 1px;
-		padding: 0 5px 0 10px;
-		height: 25px;
-		width: 150px;
-		border-radius: unset;
-	}
-	.backtest_container
-		.el-form-item
-		.el-form-item__content
-		.selectBox
-		.el-select
-		.el-input
-		.el-input__icon {
-		width: 240px;
-	}
-	.backtest_container .el-form-item__content {
-		padding-left: 100px;
-	}
-	.entry-container input:not([type]),
-	.entry-container input[type='text'],
-	.entry-container input[type='number'],
-	.entry-container input[type='date'],
-	.entry-container input[type='time'] {
-		border: #000000 solid 1px;
-		padding: 0 5px 0 10px;
-		height: 25px;
-		width: 115px;
-		border-radius: unset;
-	}
-	.exit-container input:not([type]),
-	.exit-container input[type='text'],
-	.exit-container input[type='number'],
-	.exit-container input[type='date'],
-	.exit-container input[type='time'] {
-		border: #000000 solid 1px;
-		padding: 0 5px 0 10px;
-		height: 25px;
-		width: 115px;
-		border-radius: unset;
-	}
+  .set-up-container input:not([type]),
+  .set-up-container input[type="text"],
+  .set-up-container input[type="number"],
+  .set-up-container input[type="date"],
+  .set-up-container input[type="time"] {
+    border: #000000 solid 1px;
+    padding: 0 5px 0 10px;
+    height: 25px;
+    width: 150px;
+    border-radius: unset;
+  }
+  .backtest_container
+    .el-form-item
+    .el-form-item__content
+    .selectBox
+    .el-select
+    .el-input
+    .el-input__icon {
+    width: 240px;
+  }
+  .backtest_container .el-form-item__content {
+    padding-left: 100px;
+  }
+  .entry-container input:not([type]),
+  .entry-container input[type="text"],
+  .entry-container input[type="number"],
+  .entry-container input[type="date"],
+  .entry-container input[type="time"] {
+    border: #000000 solid 1px;
+    padding: 0 5px 0 10px;
+    height: 25px;
+    width: 115px;
+    border-radius: unset;
+  }
+  .exit-container input:not([type]),
+  .exit-container input[type="text"],
+  .exit-container input[type="number"],
+  .exit-container input[type="date"],
+  .exit-container input[type="time"] {
+    border: #000000 solid 1px;
+    padding: 0 5px 0 10px;
+    height: 25px;
+    width: 115px;
+    border-radius: unset;
+  }
 }
 @media (min-width: 820px) and (max-width: 1099px) {
-	.el-tabs__item {
-		font-size: 12px;
-		padding: 1px;
-	}
+  .el-tabs__item {
+    font-size: 12px;
+    padding: 1px;
+  }
 }
 @media (min-width: 1100px) and (max-width: 1279px) {
-	.backtest_container .nameBox input[type='text']:last-child {
-		width: 91%;
-	}
+  .backtest_container .nameBox input[type="text"]:last-child {
+    width: 91%;
+  }
 }
 @media (min-width: 1280px) and (max-width: 1365px) {
-	.senti-container .ids-container input[type='text'],
-	input[type='number'],
-	input[type='date'],
-	input[type='time'] {
-		width: 70px;
-	}
+  .senti-container .ids-container input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  input[type="time"] {
+    width: 70px;
+  }
 }
 @media (min-width: 1366px) and (max-width: 1439px) {
 }
 
 @media (min-width: 1440px) and (max-width: 1679px) {
-	.backtest_container .nameBox input[type='text']:last-child {
-		width: 866px;
-	}
+  .backtest_container .nameBox input[type="text"]:last-child {
+    width: 866px;
+  }
 }
 
 @media (min-width: 1680px) {
-	.set-up-container input:not([type]),
-	.set-up-container input[type='text'],
-	.set-up-container input[type='number'],
-	.set-up-container input[type='date'],
-	.set-up-container input[type='time'] {
-		border: #000000 solid 1px;
-		padding: 0 5px 0 10px;
-		height: 25px;
-		width: 300px;
-		border-radius: unset;
-	}
-	.entry-container input:not([type]),
-	.entry-container input[type='text'],
-	.entry-container input[type='number'],
-	.entry-container input[type='date'],
-	.entry-container input[type='time'] {
-		border: #000000 solid 1px;
-		padding: 0 5px 0 10px;
-		height: 25px;
-		width: 115px;
-		border-radius: unset;
-	}
-	.exit-container input:not([type]),
-	.exit-container input[type='text'],
-	.exit-container input[type='number'],
-	.exit-container input[type='date'],
-	.exit-container input[type='time'] {
-		border: #000000 solid 1px;
-		padding: 0 5px 0 10px;
-		height: 25px;
-		width: 115px;
-		border-radius: unset;
-	}
-	.backtest_container
-		.el-form-item
-		.el-form-item__content
-		.selectBox
-		.el-select
-		.el-input
-		.el-input__inner {
-		width: 301px !important;
-	}
-	.backtest_container .nameBox input[type='text']:last-child {
-		width: 78%;
-	}
+  .set-up-container input:not([type]),
+  .set-up-container input[type="text"],
+  .set-up-container input[type="number"],
+  .set-up-container input[type="date"],
+  .set-up-container input[type="time"] {
+    border: #000000 solid 1px;
+    padding: 0 5px 0 10px;
+    height: 25px;
+    width: 300px;
+    border-radius: unset;
+  }
+  .entry-container input:not([type]),
+  .entry-container input[type="text"],
+  .entry-container input[type="number"],
+  .entry-container input[type="date"],
+  .entry-container input[type="time"] {
+    border: #000000 solid 1px;
+    padding: 0 5px 0 10px;
+    height: 25px;
+    width: 115px;
+    border-radius: unset;
+  }
+  .exit-container input:not([type]),
+  .exit-container input[type="text"],
+  .exit-container input[type="number"],
+  .exit-container input[type="date"],
+  .exit-container input[type="time"] {
+    border: #000000 solid 1px;
+    padding: 0 5px 0 10px;
+    height: 25px;
+    width: 115px;
+    border-radius: unset;
+  }
+  .backtest_container
+    .el-form-item
+    .el-form-item__content
+    .selectBox
+    .el-select
+    .el-input
+    .el-input__inner {
+    width: 301px !important;
+  }
+  .backtest_container .nameBox input[type="text"]:last-child {
+    width: 78%;
+  }
 }
 .el-table .cell {
-	white-space: wrap;
-	word-wrap: break-word;
-	overflow: hidden;
-	text-overflow: unset;
-	/* text-overflow: ellipsis; */
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: unset;
+  /* text-overflow: ellipsis; */
 }
 .el-table th.el-table__cell > .cell {
-	word-wrap: break-word;
+  word-break: break-word;
 }
-

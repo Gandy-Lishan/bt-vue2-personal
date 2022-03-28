@@ -819,17 +819,16 @@ export default {
 					// 说明重名要进行替换，不删除 old_uuid
 					console.log('说明重名要进行替换 不删除 old_uuid 不删除favorites')
 				}
-				// if (
-				// 	nameList.indexOf(this.bd.name) > -1 &&
-				// 	this.oldBacktestName !== this.bd.name &&
-				// 	this.oldBacktestName !== ''
-				// ) {
-				// 	// 说明不重名，直接创建新的，删除 old_uuid
-				// 	console.log('说明不重名 直接创建新的 删除 old_uuid和 favorites')
-				// 	// this.$store.commit('clearBacktestUuid')
-				// 	this.bd.favorites = false
-				// 	delete this.bd.old_uuid
-				// }
+				if (
+					nameList.indexOf(this.bd.name) > -1 &&
+					this.oldBacktestName !== this.bd.name &&
+					this.oldBacktestName !== ''
+				) {
+					// 说明不重名，直接创建新的，删除 old_uuid
+					console.log('说明是编辑后的重名')
+					// this.$store.commit('clearBacktestUuid')
+					nameChecked = false
+				}
 				if (nameChecked) {
 					if (this.bd.end_date) {
 						// 保存 backtestform 的数据
