@@ -251,10 +251,8 @@ export default {
 		change(e) {
 			// const vm = this
 			this.$forceUpdate()
-			// console.log('强制刷新事件', e)
 			// vm.$refs['sentiForm'].validateField(['maValue'], (errorMsg) => {
 			// 	if (!errorMsg) {
-			// 		console.log('校验失败')
 			// 	}
 			// })
 		},
@@ -267,7 +265,6 @@ export default {
 			this.$refs.sentiForm.clearValidate()
 		},
 		// clearNoNum(value) {
-		// 	console.log(value)
 		// 	//先把非数字的都替换掉，除了数字和.
 		// 	// value = value.replace(/[^\d.]/g, '')
 		// 	//保证只有出现一个.而没有多个.
@@ -280,7 +277,6 @@ export default {
 		// 	value = value.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3')
 		// 	value = value.replace(/^0+\./, '0.')
 		// 	value = value.replace(/^\-+/g, '-')
-		// 	console.log('处理过后的值', value)
 		// 	this.senti.value = value
 		// },
 		setDesciption(val) {
@@ -317,7 +313,6 @@ export default {
 			// this.senti.value = ''
 			// this.$refs.sentiForm.clearValidate(['validatePeriod', 'validateMaValue'])
 			// this.$refs.sentiForm.clearValidate(['validateValue'])
-			console.log('消除校验')
 			// if (val === 'Sentiment Value') {
 			// 	this.$nextTick(() => {
 			// 		this.$refs.sentiForm.clearValidate([
@@ -325,7 +320,6 @@ export default {
 			// 			'validateMaValue'
 			// 		])
 			// 		this.$refs.sentiForm.clearValidate(['validateValue'])
-			// 		console.log('消除校验')
 			// 	})
 			// 	// this.$refs.sentiForm.clearValidate('validateMaValue')
 			// 	// 	if ('period' in this.senti) {
@@ -432,14 +426,19 @@ export default {
 					return checked
 				}
 			} else if (this.conditionRadio === 'Sentiment Moving Average') {
-				this.$refs['sentiForm'].validateField(
-					['maValue', 'period'],
-					(errorMsg) => {
-						if (!errorMsg) {
-							validForm = true
-						}
+				let validMaValue = false
+				let validatePeriod = false
+				this.$refs['sentiForm'].validateField(['maValue'], (errorMsg) => {
+					if (!errorMsg) {
+						validMaValue = true
 					}
-				)
+				})
+				this.$refs['sentiForm'].validateField(['period'], (errorMsg) => {
+					if (!errorMsg) {
+						validatePeriod = true
+					}
+				})
+				validForm = validMaValue && validatePeriod
 				if (validForm) {
 					// if (this.senti.period) {
 					let senti = this.senti

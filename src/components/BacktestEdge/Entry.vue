@@ -61,69 +61,6 @@
 			:techVal="techVal"
 			v-show="indicatorRadio === 'technical' && techIndiValue === 'ma'"
 		></ma>
-		<!-- <bollinger-bands-like
-			:direction="fd.direction"
-			:criteria="'entry'"
-			ref="bollBandsLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"
-			v-show="
-				indicatorRadio === 'technical' &&
-				techIndiValue === 'BollingerBands_like'
-			"
-		></bollinger-bands-like>
-		<ehler-fisher-transform-like
-			:direction="fd.direction"
-			:criteria="'entry'"
-			ref="EFTLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"
-			v-show="indicatorRadio === 'technical' && techIndiValue === 'EFT_like'"
-		></ehler-fisher-transform-like>
-		<stochastic-momentum-index-like
-			:direction="fd.direction"
-			:criteria="'entry'"
-			ref="stochasticsLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"
-			v-show="
-				indicatorRadio === 'technical' && techIndiValue === 'Stochastics_like'
-			"
-		></stochastic-momentum-index-like>
-		<ADX-or-DMS-Like
-			:direction="fd.direction"
-			:criteria="'entry'"
-			ref="ADXLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"
-			v-show="indicatorRadio === 'technical' && techIndiValue === 'ADX_like'"
-		></ADX-or-DMS-Like>
-		<elder-ray-index-like
-			:direction="fd.direction"
-			:criteria="'entry'"
-			ref="ERILikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"
-			v-show="indicatorRadio === 'technical' && techIndiValue === 'ERI_like'"
-		></elder-ray-index-like>
-		<alligator-like
-			:direction="fd.direction"
-			:criteria="'entry'"
-			ref="aligatorLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"
-			v-show="
-				indicatorRadio === 'technical' && techIndiValue === 'Aligator_like'
-			"
-		></alligator-like>
-		<linear-regForecast-like
-			:direction="fd.direction"
-			:criteria="'entry'"
-			ref="LRFLikeChild"
-			:techUrl="techUrl"
-			:techVal="techVal"
-			v-show="indicatorRadio === 'technical' && techIndiValue === 'LRF_like'"
-		></linear-regForecast-like> -->
 	</div>
 </template>
 <script>
@@ -134,13 +71,6 @@ import macd from '@/components/BacktestEdge/signal/technical/Macd-like.vue'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
 import indicator from '@/components/BacktestEdge/signal/indicator/indicator'
 import SignalCode from '@/tools/codeTool.js'
-import bollingerBandsLike from '@/components/BacktestEdge/signal/technical/Bollinger-Bands-like.vue'
-import ehlerFisherTransformLike from '@/components/BacktestEdge/signal/technical/Ehler-Fisher-Transform-like.vue'
-import stochasticMomentumIndexLike from '@/components/BacktestEdge/signal/technical/Stochastic-Momentum-Index-like.vue'
-import ADXorDMSLike from '@/components/BacktestEdge/signal/technical/ADXorDMS-like.vue'
-import elderRayIndexLike from '@/components/BacktestEdge/signal/technical/Elder-Ray-Index-like.vue'
-import alligatorLike from '@/components/BacktestEdge/signal/technical/Alligator-like.vue'
-import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Linear-RegForecast-like.vue'
 export default {
 	name: 'entry',
 	data() {
@@ -163,14 +93,7 @@ export default {
 		cci,
 		rsi,
 		macd,
-		ma,
-		'bollinger-bands-like': bollingerBandsLike,
-		'ehler-fisher-transform-like': ehlerFisherTransformLike,
-		'stochastic-momentum-index-like': stochasticMomentumIndexLike,
-		'ADX-or-DMS-Like': ADXorDMSLike,
-		'elder-ray-index-like': elderRayIndexLike,
-		'alligator-like': alligatorLike,
-		'linear-regForecast-like': linearRegForecastLike
+		ma
 	},
 	computed: {
 		updateSenti() {
@@ -229,51 +152,50 @@ export default {
 			// 将选择的 indicator 保存到 vuex 中
 			let checked = true
 			let indi = this.$refs.indiChild.saveIndicator()
-			return indi.then( val => {
-			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
-			console.log('entry indicator验证', val);
-			if (val) {
-				if (this.indicatorRadio === 'sentiment') {
-					this.$refs.sentiChild.setDesciption()
-					let senti = this.$refs.sentiChild.saveCondition()
-					return checked = senti
+			return indi.then((val) => {
+				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
+				if (val) {
+					if (this.indicatorRadio === 'sentiment') {
+						this.$refs.sentiChild.setDesciption()
+						let senti = this.$refs.sentiChild.saveCondition()
+						return (checked = senti)
+					}
+					if (
+						this.indicatorRadio === 'technical' &&
+						this.techIndiValue === 'cci'
+					) {
+						this.$refs.cciChild.setDesciption()
+						let cci = this.$refs.cciChild.saveCondition()
+						return (checked = cci)
+					}
+					if (
+						this.indicatorRadio === 'technical' &&
+						this.techIndiValue === 'rsi'
+					) {
+						this.$refs.rsiChild.setDesciption()
+						let rsi = this.$refs.rsiChild.saveCondition()
+						return (checked = rsi)
+					}
+					if (
+						this.indicatorRadio === 'technical' &&
+						this.techIndiValue === 'macd'
+					) {
+						this.$refs.macdChild.setDesciption()
+						let macd = this.$refs.macdChild.saveCondition()
+						return (checked = macd)
+					}
+					if (
+						this.indicatorRadio === 'technical' &&
+						this.techIndiValue === 'ma'
+					) {
+						this.$refs.maChild.setDesciption()
+						let ma = this.$refs.maChild.saveCondition()
+						return (checked = ma)
+					}
+				} else {
+					checked = false
+					return checked
 				}
-				if (
-					this.indicatorRadio === 'technical' &&
-					this.techIndiValue === 'cci'
-				) {
-					this.$refs.cciChild.setDesciption()
-					let cci = this.$refs.cciChild.saveCondition()
-					return (checked = cci)
-				}
-				if (
-					this.indicatorRadio === 'technical' &&
-					this.techIndiValue === 'rsi'
-				) {
-					this.$refs.rsiChild.setDesciption()
-					let rsi = this.$refs.rsiChild.saveCondition()
-					return (checked = rsi)
-				}
-				if (
-					this.indicatorRadio === 'technical' &&
-					this.techIndiValue === 'macd'
-				) {
-					this.$refs.macdChild.setDesciption()
-					let macd = this.$refs.macdChild.saveCondition()
-					return (checked = macd)
-				}
-				if (
-					this.indicatorRadio === 'technical' &&
-					this.techIndiValue === 'ma'
-				) {
-					this.$refs.maChild.setDesciption()
-					let ma = this.$refs.maChild.saveCondition()
-					return (checked = ma)
-				}
-			} else {
-				checked = false
-				return checked
-			}
 			})
 		},
 		setEditData(id) {

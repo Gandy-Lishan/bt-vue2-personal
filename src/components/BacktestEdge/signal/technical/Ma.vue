@@ -353,7 +353,6 @@ export default {
 			this.$store.commit('getStMaPeriod', val)
 		},
 		getMaRadio(val) {
-			//console.log(val)
 			this.tech.ids.ma_category = val
 			CIQ.store.commit('setMaRadio', val)
 
@@ -559,14 +558,19 @@ export default {
 					return checked
 				}
 			} else {
-				this.$refs['maForm'].validateField(
-					['ma_period', 'maPeriod'],
-					(errorMsg) => {
-						if (!errorMsg) {
-							validForm = true
-						}
+				let validMa_Period = false
+				let validMaPeriod = false
+				this.$refs['maForm'].validateField(['ma_period'], (errorMsg) => {
+					if (!errorMsg) {
+						validMa_Period = true
 					}
-				)
+				})
+				this.$refs['maForm'].validateField(['maPeriod'], (errorMsg) => {
+					if (!errorMsg) {
+						validMaPeriod = true
+					}
+				})
+				validForm = validMa_Period && validMaPeriod
 				if (validForm) {
 					let ids = {}
 					let tech = {}

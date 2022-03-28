@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from "axios"
+import axios from 'axios'
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
@@ -47,7 +47,9 @@ export default new Vuex.Store({
 			exit: {
 				direction: 'Short',
 				frequency: 'Daily',
-				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: ''}]
+				signals: [
+					{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }
+				]
 			}
 		},
 		openedPorfolioBacktests: [],
@@ -149,7 +151,7 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
-		setFavoriteIndicatorList(state, val){
+		setFavoriteIndicatorList(state, val) {
 			state.favoriteIndicatorList = val
 		},
 		setFavoriteSymbolList(state, val){
@@ -157,48 +159,46 @@ export default new Vuex.Store({
 		},
 		setTechSD(state, val){
 			state.techSD = val
-		},	
-		setSavedTechSD(state, val){
-			console.log('sd changed: ',val)
+		},
+		setSavedTechSD(state, val) {
 			state.savedTechSD = val
 		},
-	setCurrentSenti(state,val){
-		state.currentSenti = val
-	},
-	setCurrentTech(state,val){
-		state.currentTech = val
-	},
-	setRestoreFreq(state,val){
-		state.restoreFreq = val
-	},
-	getBacktestSymbol(state,val){
-		state.backtestSymbol = val
-	},
-    resetState(state,val){
-      state = val
-    },
-    setCopy(state,val){
-      state.stateCopy = val
-    },
-	setFreqency(state,val){
-		state.pairDataFreq = val
-	},
-    setConditionRadio(state,val){
-      state.conditionRadio = val
-    },
-    setMaRadio(state,val){
-      state.maRadio = val
-    }
-    ,
-    getStMaPeriod(state,val){
-      state.stMaPeriod = val
-    },
-    getMaPeriod(state,val){
-      state.maPeriod = val
-    },
-    getImportedLayout(state,val){
-      state.importedLayout = val
-    },
+		setCurrentSenti(state, val) {
+			state.currentSenti = val
+		},
+		setCurrentTech(state, val) {
+			state.currentTech = val
+		},
+		setRestoreFreq(state, val) {
+			state.restoreFreq = val
+		},
+		getBacktestSymbol(state, val) {
+			state.backtestSymbol = val
+		},
+		resetState(state, val) {
+			state = val
+		},
+		setCopy(state, val) {
+			state.stateCopy = val
+		},
+		setFreqency(state, val) {
+			state.pairDataFreq = val
+		},
+		setConditionRadio(state, val) {
+			state.conditionRadio = val
+		},
+		setMaRadio(state, val) {
+			state.maRadio = val
+		},
+		getStMaPeriod(state, val) {
+			state.stMaPeriod = val
+		},
+		getMaPeriod(state, val) {
+			state.maPeriod = val
+		},
+		getImportedLayout(state, val) {
+			state.importedLayout = val
+		},
 		getExtremeValue: (state, list) => {
 			state.extremeValue = list
 		},
@@ -289,13 +289,16 @@ export default new Vuex.Store({
 			state.trades = data
 		},
 		getFrequency(state, val) {
-			//console.log('store',val)
 			state.exitFrequency = val
 			state.backtestInfo.frequency = val
-			// 将频率保存到 backtestInfo 
-			if(typeof(state.backtestInfo.entry) == 'object' && typeof(state.backtestInfo.exit) == 'object') {
-			state.backtestInfo.entry.frequency = val
-			state.backtestInfo.exit.frequency = val}
+			// 将频率保存到 backtestInfo
+			if (
+				typeof state.backtestInfo.entry == 'object' &&
+				typeof state.backtestInfo.exit == 'object'
+			) {
+				state.backtestInfo.entry.frequency = val
+				state.backtestInfo.exit.frequency = val
+			}
 		},
 		getMA(state, val) {
 			state.activatedMA = val
@@ -323,11 +326,11 @@ export default new Vuex.Store({
 		},
 		getExitDirection(state, val) {
 			let data = ''
-			if(val == 'Long') {
+			if (val == 'Long') {
 				data = 'Short'
-			}else if(val == 'Short') {
+			} else if (val == 'Short') {
 				data = 'Long'
-			}else if(val == ''){
+			} else if (val == '') {
 				data = ''
 			}
 			state.exitDirection = data
@@ -376,7 +379,6 @@ export default new Vuex.Store({
 				}
 				data = Object.assign(data, newData)
 				state.backtestInfo[criteria]['signals'][index] = data
-
 			}
 		},
 		setFd(state, obj) {
@@ -395,28 +397,22 @@ export default new Vuex.Store({
 					state.backtestInfo[key] = obj[key]
 				}
 			}
-			
 		},
 		deleteIndicator(state, val) {
 			state.backtestInfo[val.criteria].signals[val.index].sentimentIndicator =
 				''
 			state.backtestInfo[val.criteria].signals[val.index].technicalIndicator =
 				''
-			state.backtestInfo.exit.signals[val.index].riskIndicator =
-				''
+			state.backtestInfo.exit.signals[val.index].riskIndicator = ''
 		},
 		getTechValue(state, obj) {
 			state.backtestInfo[obj.criteria].signals[obj.index].technicalIndicator =
 				obj.value
 		},
 		getRiskValue(state, obj) {
-			
 			state.backtestInfo.exit.signals[obj.index].riskIndicator = obj.value
-				
-				
 		},
 		getSentiValue(state, obj) {
-			
 			state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator =
 				obj.value
 		},
@@ -430,8 +426,7 @@ export default new Vuex.Store({
 				''
 			state.backtestInfo[obj.criteria].signals[obj.index].technicalIndicator =
 				''
-				state.backtestInfo.exit.signals[obj.index].riskIndicator =
-				''
+			state.backtestInfo.exit.signals[obj.index].riskIndicator = ''
 		},
 		clearBacktest(state) {
 			state.backtestInfo = {
@@ -451,11 +446,17 @@ export default new Vuex.Store({
 				exit: {
 					direction: '',
 					frequency: '',
-					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
+					signals: [
+						{
+							sentimentIndicator: '',
+							technicalIndicator: '',
+							riskIndicator: ''
+						}
+					]
 				}
 			}
 		},
-		getSentimentList(state,list) {
+		getSentimentList(state, list) {
 			state.sentimentIndicatorList = list
 		},
 		setSignalDialogFd(state, fd) {
@@ -469,25 +470,32 @@ export default new Vuex.Store({
 			let index = obj.index
 			delete obj.criteria
 			delete obj.index
-			let init = {sentimentIndicator: '', technicalIndicator: '',riskIndicator: ''}
-			init.sentimentIndicator = state.backtestInfo[criteria].signals[index].sentimentIndicator
-			init.technicalIndicator = state.backtestInfo[criteria].signals[index].technicalIndicator
-			if(criteria === 'exit') {
-				init.riskIndicator = state.backtestInfo.exit.signals[index].riskIndicator
-				}
-			// 在保存之前确保只有 sentimentIndicator 以及 technicalIndicator 两个属性
-			if(criteria == 'exit') {
-			state.backtestInfo.exit.signals[index] = Object.assign({}, init)
-			}else if(criteria == 'entry') {
-			delete init.riskIndicator
-			state.backtestInfo.entry.signals[index] = Object.assign({}, init)
+			let init = {
+				sentimentIndicator: '',
+				technicalIndicator: '',
+				riskIndicator: ''
 			}
-			for(let key in obj) {
+			init.sentimentIndicator =
+				state.backtestInfo[criteria].signals[index].sentimentIndicator
+			init.technicalIndicator =
+				state.backtestInfo[criteria].signals[index].technicalIndicator
+			if (criteria === 'exit') {
+				init.riskIndicator =
+					state.backtestInfo.exit.signals[index].riskIndicator
+			}
+			// 在保存之前确保只有 sentimentIndicator 以及 technicalIndicator 两个属性
+			if (criteria == 'exit') {
+				state.backtestInfo.exit.signals[index] = Object.assign({}, init)
+			} else if (criteria == 'entry') {
+				delete init.riskIndicator
+				state.backtestInfo.entry.signals[index] = Object.assign({}, init)
+			}
+			for (let key in obj) {
 				state.backtestInfo[criteria].signals[index][key] = obj[key]
 			}
 		},
 		saveDescription(state, desObj) {
-			state.backtestInfo[desObj.criteria+'_description'] = desObj.description
+			state.backtestInfo[desObj.criteria + '_description'] = desObj.description
 		},
 		initialBacktestInfo(state) {
 			state.backtestInfo = {
@@ -507,10 +515,16 @@ export default new Vuex.Store({
 				exit: {
 					direction: 'Short',
 					frequency: 'Daily',
-					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
+					signals: [
+						{
+							sentimentIndicator: '',
+							technicalIndicator: '',
+							riskIndicator: ''
+						}
+					]
 				}
 			}
-			state.backtestInfo.entry =  {
+			state.backtestInfo.entry = {
 				direction: 'Long',
 				frequency: 'Daily',
 				signals: [
@@ -520,34 +534,32 @@ export default new Vuex.Store({
 					}
 				]
 			}
-			state.backtestInfo.exit =  {
+			state.backtestInfo.exit = {
 				direction: 'Short',
 				frequency: 'Daily',
-				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
+				signals: [
+					{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }
+				]
 			}
-			
 		},
 		getBacktestName(state, list) {
-          state.backtestNameList = list
+			state.backtestNameList = list
 		},
-		savaDescriptionAgain(state,flag) {
+		savaDescriptionAgain(state, flag) {
 			state.isSavaDescription = flag
 		},
 		clearBacktestUuid(state) {
-			if(state.backtestInfo.old_uuid) {
-			delete state.backtestInfo.old_uuid}
-			console.log("此时的backtestInfo", state.backtestInfo);
-			
+			if (state.backtestInfo.old_uuid) {
+				delete state.backtestInfo.old_uuid
+			}
 		},
-		saveFormatTechnicalList(state,list) {
+		saveFormatTechnicalList(state, list) {
 			state.formateTechnicalList = list
 		}
-
 	},
 	actions: {
 		Try(context, val) {
 			context.commit('setEntryData', val)
 		}
 	}
-
 })
