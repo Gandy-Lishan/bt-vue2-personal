@@ -1,3 +1,22 @@
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    --tw-border-opacity: 1;
+    border: 2px solid rgb(229 231 235/var(--tw-border-opacity));
+    background-color: rgb(156 163 175/.8);
+    -webkit-transition-property: all;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+}
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    --tw-bg-opacity: 1;
+    background-color: rgb(229 231 235/var(--tw-bg-opacity));
+}
 @media screen and (max-width: 768px) {
 	.el-tabs__content{
 		left:0px;
@@ -25,6 +44,18 @@
 		float: none !important;
 	}
 }
+.el-tabs{
+	background-color: #fff;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -1px rgb(0 0 0 / 6%);
+}
+.el-tabs__item {
+    background-color: #d7d8d8 !important;
+}
+.el-tabs__item.is-active {
+    background-color: #f8f8f8 !important;
+}
 .el-tabs--left .el-tabs__item.is-left {
     transition: all 0.2s;
 }
@@ -35,6 +66,7 @@
 .el-tabs__content{
 	overflow-x: scroll !important;
 	transition: all 0.5s !important;
+	
 }
 
 .green {
@@ -81,7 +113,7 @@
 	width: 50%;
 }
 .home-container {
-	padding: 0 50px;
+
 	overflow-x: visible;
 	height: 100%;
 	font-size: 16px;
@@ -135,6 +167,19 @@
 	padding-left: 132px;
 	height: 25px;
 }
+
+.set-up-container input{
+	font-size: 16px;
+    line-height: 24px;
+    box-sizing: border-box;
+    resize: none;
+    border: 1px solid #d1d5db !important;
+    border-radius: 6px !important;
+    outline: none;
+    background: #fff;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
+}
+
 .set-up-container input:not([type]),
 .set-up-container input[type='text'],
 .set-up-container input[type='number'],

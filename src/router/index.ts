@@ -43,79 +43,80 @@ router.beforeEach((to, from, next) => {
 //   next()
 // })
 router.beforeEach((to, from, next) => {
- // let host = "/[a-z]*\.sentimentrader\.com/"/
-let host = /.*/
-// console.log('to from next',to, from, next);
-let formateHost = location.origin
-let loginUrl = 'https://users.sentdevsite.com/login'
-if (document.baseURI.search(host) != -1) {
-	//  alert("asdasd")
-	// https://backtest.sentimentrader.com/user?userID=668696
-	// 1. 从访问过来的 url 获取到 userid
-	// 2. 访问后端 api '/dev/user/?userid=668696' get 参数
-	let userId
-	try {
-		userId = document.baseURI.split('?')[1]
-		userId = userId.split('=')[1]
-    cookies.set('userid',userId)
-    window.location.href = formateHost
-	} catch (error) {
-		console.log(error)
-		userId = cookies.get('userid')
-		if (!userId) {
-			window.location.href = loginUrl
-		}
-	}
-	console.log('userId', userId)
-	if(!userId) {
-		alert('User does not exist, please log in again')
-	}
-	// 3. 根据返回状态码判断后续操作
+//  // let host = "/[a-z]*\.sentimentrader\.com/"/
+// let host = /.*/
+// // console.log('to from next',to, from, next);
+// let formateHost = location.origin
+// let loginUrl = 'https://users.sentdevsite.com/login'
+// if (document.baseURI.search(host) != -1) {
+// 	//  alert("asdasd")
+// 	// https://backtest.sentimentrader.com/user?userID=668696
+// 	// 1. 从访问过来的 url 获取到 userid
+// 	// 2. 访问后端 api '/dev/user/?userid=668696' get 参数
+// 	let userId
+// 	try {
+// 		userId = document.baseURI.split('?')[1]
+// 		userId = userId.split('=')[1]
+//     cookies.set('userid',userId)
+//     window.location.href = formateHost
+// 	} catch (error) {
+// 		console.log(error)
+// 		userId = cookies.get('userid')
+// 		if (!userId) {
+// 			window.location.href = loginUrl
+// 		}
+// 	}
+// 	console.log('userId', userId)
+// 	if(!userId) {
+// 		alert('User does not exist, please log in again')
+// 	}
+// 	// 3. 根据返回状态码判断后续操作
 	
-	axios
-		.get('/dev/user/?userid=' + userId)
-		.then((res) => {
-			if (res.status === 200) {
-				let oldUserid = cookies.get('userid')
-				if (oldUserid == res.data.userid) {
-					next()
-				} else {
-					cookies.set('userid', userId)
-					next()
-				}
-			}
-			if (res.status === 401) {
-				//无权限
-				alert('No permission, please log in again')
-				window.location.href = loginUrl
-			} 
-			if (res.status === 403) {
-				//认证时间超时
-				alert('Authentication expired, please log in again')
-				window.location.href = loginUrl
-			}
-			if (res.status === 404) {
-				// 用户不存在
-				alert('User does not exist, please log in again')
-				window.location.href = loginUrl
-			}
-		})
-		.catch((error) => {
-			console.log(error)
-			// next('https://users.sentdevsite.com/login')
-			alert('Login failed, please log in again')
-			window.location.href = loginUrl
-		})
-	// 3.1 200 成功设置 cookie userid=XXX endDate=XXX     cookie.set()
-	// 3.2 403 代表认证时间超时，返回到登录页面
-	// 3.3 404 表示用户不存在，返回到登录页面
-	// next('')
-} else {
-	//  alert("asdasd");
-	next()
-}
-// cookies.set('userid','test')
-// next()
+// 	axios
+// 		.get('/dev/user/?userid=' + userId)
+// 		.then((res) => {
+// 			if (res.status === 200) {
+// 				let oldUserid = cookies.get('userid')
+// 				if (oldUserid == res.data.userid) {
+// 					next()
+// 				} else {
+// 					cookies.set('userid', userId)
+// 					next()
+// 				}
+// 			}
+// 			if (res.status === 401) {
+// 				//无权限
+// 				alert('No permission, please log in again')
+// 				window.location.href = loginUrl
+// 			} 
+// 			if (res.status === 403) {
+// 				//认证时间超时
+// 				alert('Authentication expired, please log in again')
+// 				window.location.href = loginUrl
+// 			}
+// 			if (res.status === 404) {
+// 				// 用户不存在
+// 				alert('User does not exist, please log in again')
+// 				window.location.href = loginUrl
+// 			}
+// 		})
+// 		.catch((error) => {
+// 			console.log(error)
+// 			// next('https://users.sentdevsite.com/login')
+// 			alert('Login failed, please log in again')
+// 			window.location.href = loginUrl
+// 		})
+// 	// 3.1 200 成功设置 cookie userid=XXX endDate=XXX     cookie.set()
+// 	// 3.2 403 代表认证时间超时，返回到登录页面
+// 	// 3.3 404 表示用户不存在，返回到登录页面
+// 	// next('')
+// } else {
+// 	//  alert("asdasd");
+// 	next()
+// }
+
+cookies.set('userid','test')
+next()
   })
 
 
