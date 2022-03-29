@@ -63,7 +63,7 @@ module.exports = {
 		disableHostCheck: true,
 		proxy: {
 			'/demo': {
-				target: 'http://3.140.194.24:80',
+				target: 'http://18.216.210.200',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
