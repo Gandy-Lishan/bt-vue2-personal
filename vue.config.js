@@ -60,6 +60,7 @@ module.exports = {
 		// 测试的ip 18.216.210.200
 		// 10.131.3.74:8000
 		// http://3.140.194.24:80
+		disableHostCheck: true,
 		proxy: {
 			'/demo': {
 				target: 'http://3.140.194.24:80',
@@ -70,7 +71,7 @@ module.exports = {
 				}
 			},
 			'/dev': {
-				target: 'http://18.216.210.200',
+				target: 'http://10.131.3.74:8000',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
@@ -78,7 +79,7 @@ module.exports = {
 				}
 			},
 			'/rundev': {
-				target: 'http://3.140.194.24:80',
+				target: 'http://18.216.210.200',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
