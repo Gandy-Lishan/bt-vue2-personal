@@ -458,6 +458,7 @@ export default {
 
 								this.$emit('setBacktestResult', initalData['basic'])
 								// ------------------------------ end -----------------------------------
+								console.log(res)
 								this.loadMarker(initalData)
 								// vm.$store.commit('getTradesData',initalData[])
 								vm.loading = false

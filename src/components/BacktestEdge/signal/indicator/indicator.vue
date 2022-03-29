@@ -140,7 +140,8 @@ export default {
 		updateSenti(val) {
 			if (
 				this.si.sentimentIndicator == '' &&
-				this.si.technicalIndicator == ''
+				this.si.technicalIndicator == '' && 
+				this.si.riskIndicator == ''
 			) {
 
 				this.si.sentimentIndicator = val.name
