@@ -269,7 +269,7 @@ input[type="time"] {
 input[type="number"],
 input[type="date"],
 input[type="time"] {
-  width: 103px;
+  width: 90px;
 }
 .el-radio__label {
   font-size: 15px !important;

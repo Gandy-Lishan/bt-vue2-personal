@@ -588,7 +588,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-
 main{
 	padding: 0 50px;
 	background: #f9fafb;
