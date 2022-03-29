@@ -67,11 +67,7 @@ router.beforeEach((to, from, next) => {
 				window.location.href = loginUrl
 			}
 		}
-		if (!userId) {
-			alert('User does not exist, please log in again')
-		}
 		// 3. 根据返回状态码判断后续操作
-
 		axios
 			.get('/dev/user/?userid=' + userId)
 			.then((res) => {

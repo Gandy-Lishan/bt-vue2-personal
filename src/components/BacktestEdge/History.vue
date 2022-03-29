@@ -37,14 +37,19 @@
 						prop="description"
 					>
 					</el-table-column> -->
-					<el-table-column
-						label="Entry & Exit"
-						align="center"
-						show-overflow-tooltip
-					>
+					<el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
-							<p>{{ scope.row.entry_description }}</p>
-							<p>{{ scope.row.exit_description }}</p>
+							<el-tooltip placement="top">
+								<div>
+									<p>{{ scope.row.entry_description }}</p>
+									<p>{{ scope.row.exit_description }}</p>
+								</div>
+								<div slot="content">
+									{{ scope.row.entry_description }}<br />{{
+										scope.row.exit_description
+									}}
+								</div>
+							</el-tooltip>
 						</template>
 					</el-table-column>
 					<el-table-column
@@ -697,9 +702,12 @@ export default {
 	margin-right: 5px;
 	margin-bottom: 5px;
 }
-/deep/ .el-button--mini,
+/deep/ .showDate .el-button--mini,
 .el-button--mini.is-round {
 	padding: 7px 0px;
+}
+.el-button--mini.is-circle {
+	padding: 7px;
 }
 .el-table__body-wrapper {
 	overflow-x: scroll;

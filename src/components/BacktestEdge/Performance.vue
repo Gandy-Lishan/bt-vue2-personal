@@ -248,7 +248,7 @@
 						<el-table-column
 							prop="timeInMarket"
 							show-overflow-tooltip
-							label="% TIME IN MARKET"
+							label="TIME IN MARKET %"
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -499,7 +499,7 @@ export default {
 			}
 		},
 		try1({ row, column, rowIndex, columnIndex }) {
-			if (columnIndex == 5 && column.label == 'Total Return') {
+			if (columnIndex === 5 && column.label == 'Total Return %') {
 				if (rowIndex % 2 === 0) {
 					row.Return = 'none'
 				}

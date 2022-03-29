@@ -36,7 +36,14 @@
 					:tab-position="tabPosition"
 					@tab-click="handleTabClick"
 				>
-					<el-tab-pane label="Set up Backtest" name="first">
+					<el-tab-pane
+						label="Set up Backtest"
+						name="first"
+						v-loading="loading"
+						element-loading-text="Loading..."
+						element-loading-spinner="el-icon-loading"
+						element-loading-background="rgba(0, 0, 0, 0.8)"
+					>
 						<div class="set-up-container" @click="tabContentClick">
 							<set-up
 								ref="setUpChild"
@@ -504,41 +511,54 @@ export default {
 		},
 		goTobacktestSetupForm(id) {
 			// backtestEditData
-
+			this.loading = true
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
 			this.$refs.exitChild.clearForm()
 			let vm = this
 			vm.activeName = 'first'
 			vm.backtestEditData = {}
-			vm.$http.get('/dev/seeparams/' + id + '/').then((res) => {
-				let data = res.data
-				data.old_uuid = id
-				data.entry = JSON.parse(data.entry)
-				data.exit = JSON.parse(data.exit)
-				delete data.results
-				delete data.status
-				delete data.backtest_id
-				delete data.user_id
-				delete data.uuid
-				let signalCode = new SignalCode()
-				if (data.entry.signals instanceof Array) {
-					data.entry.signals[0] = signalCode.decode(
-						data.entry.signals[0]['code']
-					)
-				}
-				if (data.exit.signals instanceof Array) {
-					data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
-				}
+			vm.$http
+				.get('/dev/seeparams/' + id + '/')
+				.then((res) => {
+					let data = res.data
+					data.old_uuid = id
+					data.entry = JSON.parse(data.entry)
+					data.exit = JSON.parse(data.exit)
+					delete data.results
+					delete data.status
+					delete data.backtest_id
+					delete data.user_id
+					delete data.uuid
+					let signalCode = new SignalCode()
+					if (data.entry.signals instanceof Array) {
+						data.entry.signals[0] = signalCode.decode(
+							data.entry.signals[0]['code']
+						)
+					}
+					if (data.exit.signals instanceof Array) {
+						data.exit.signals[0] = signalCode.decode(
+							data.exit.signals[0]['code']
+						)
+					}
 
-				vm.$refs.entryChild.setEditData(id)
-				vm.$refs.exitChild.setEditData(id)
-				// 拿到 frequency 的值
-				vm.editFrequency = data.frequency
-				vm.timeFrame = data.frequency
-				vm.$store.commit('getFrequency', vm.editFrequency)
-				vm.backtestEditData = data
-			})
+					vm.$refs.entryChild.setEditData(id)
+					vm.$refs.exitChild.setEditData(id)
+					// 拿到 frequency 的值
+					vm.editFrequency = data.frequency
+					vm.timeFrame = data.frequency
+					vm.$store.commit('getFrequency', vm.editFrequency)
+					vm.backtestEditData = data
+					this.loading = false
+				})
+				.catch((error) => {
+					vm.$message({
+						message: 'The internal server is busy, please try again later ',
+						type: 'error',
+						offset: 300
+					})
+					this.loading = false
+				})
 		},
 		goBacktestResultForm(row) {
 			this.activeName = 'third'
@@ -568,7 +588,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-
 main{
 	padding: 0 50px;
 	background: #f9fafb;

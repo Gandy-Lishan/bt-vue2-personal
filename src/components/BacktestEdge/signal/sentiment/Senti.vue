@@ -473,7 +473,6 @@ export default {
 					return checked
 				}
 			}
-			this.clearForm()
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
