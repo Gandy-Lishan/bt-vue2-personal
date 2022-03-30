@@ -210,7 +210,7 @@ export default {
 					MACDFast: 12,
 					MACDSL: 9
 				}
-				let tech = this.tech
+				let tech = JSON.parse(JSON.stringify(this.tech))
 				if(this.conditionRadio === 'MACD Value ') {
 					tech.value = 'MACDSL'
 				}

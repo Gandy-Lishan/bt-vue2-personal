@@ -177,7 +177,7 @@ export default {
 					over_sold_bound: -100,
 					period: 20
 				}
-				let tech = this.tech
+				let tech = JSON.parse(JSON.stringify(this.tech))
 				delete tech.ids
 				tech = Object.assign(ids, tech)
 				tech.criteria = this.criteria

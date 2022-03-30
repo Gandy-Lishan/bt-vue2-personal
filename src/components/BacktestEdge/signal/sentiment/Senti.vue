@@ -31,6 +31,7 @@
 							:disabled="!(conditionRadio === 'Sentiment Value')"
 							v-model="senti.condition"
 							filterable
+							size="mini"
 							placeholder="Please select condition"
 						>
 							<el-option
@@ -80,6 +81,7 @@
 						<el-select
 							v-model="senti.condition"
 							filterable
+							size="mini"
 							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
 							placeholder="Please select condition"
 						>
@@ -194,8 +196,7 @@ export default {
 				value: [{ validator: validateValue, trigger: 'blur' }],
 				maValue: [{ validator: validateMaValue, trigger: 'blur' }],
 				period: [{ validator: validatePeriod, trigger: 'blur' }]
-			},
-			maValue: ''
+			}
 		}
 	},
 	computed: {
@@ -442,7 +443,7 @@ export default {
 					}
 				})
 				if (validForm) {
-					let senti = this.senti
+					let senti = JSON.parse(JSON.stringify(this.senti))
 					// if(senti.value === '') {
 					// 	senti.value = 0
 					// }
@@ -483,7 +484,8 @@ export default {
 				validForm = validMaValue && validatePeriod
 				if (validForm) {
 					// if (this.senti.period) {
-					let senti = this.senti
+						console.log('11111');
+					let senti = JSON.parse(JSON.stringify(this.senti))
 					senti.value = senti.maValue
 					delete senti.maValue
 					senti.criteria = this.criteria
@@ -518,7 +520,6 @@ export default {
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
-				this.clearFormValidate()
 				this.senti.extreme_optimism =
 					newVal[this.criteria].signals[0].extreme_optimism
 				this.senti.extreme_pessimism =

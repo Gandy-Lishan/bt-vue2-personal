@@ -530,12 +530,8 @@ export default {
 				})
 				let ids = {}
 				if (validForm) {
-					if (this.tech.ids) {
-						ids = this.tech.ids
-					} else {
-						ids = { ma_category: 'SMA' }
-					}
-					let tech = this.tech
+					ids = { ma_category: 'SMA' }
+					let tech = JSON.parse(JSON.stringify(this.tech))
 					delete tech.ids
 					delete tech.ma_period
 					delete tech.maPeriod

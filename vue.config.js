@@ -60,6 +60,7 @@ module.exports = {
 		// 测试的ip 18.216.210.200
 		// 10.131.3.74:8000
 		// http://3.140.194.24:80
+		disableHostCheck: true,
 		proxy: {
 			'/demo': {
 				target: 'http://18.216.210.200',
