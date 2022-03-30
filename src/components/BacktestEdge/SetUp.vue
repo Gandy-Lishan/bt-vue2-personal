@@ -26,9 +26,7 @@
 					<span class="comUnitNote">(%)</span>
 					<el-form-item label="Slippage:" prop="slippage">
 						<el-input
-							v-model="temp.slippage"
-							@change="getSlippage"
-							@input="validateSlippage"
+							v-model="bd.slippage"
 							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input> </el-form-item
 					><span class="sliUnitNote">(per trade)</span>
@@ -282,7 +280,7 @@ export default {
 			indexList: [],
 			loading: false,
 			options: [],
-			temp: { commission: '0.1', slippage: '0.1' },
+			temp: { commission: '0.1'},
 			sentimentIndicatorList: [],
 			direction: 'Long',
 			rules: {
@@ -372,7 +370,6 @@ export default {
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
 					this.temp.commission = Number(newVal.commission) * 100
-					this.temp.slippage = Number(newVal.slippage) * 100
 					let year
 					let month
 					let day
@@ -431,27 +428,6 @@ export default {
 					this.bd.commission = list[0]
 				else {
 					this.temp.commission = list[0].substring(0, 2)
-				}
-			}
-		}, 500),
-		validateSlippage: throttle(function (val) {
-			let list = val.split('.')
-			if (list.length === 2) {
-				let temp = ''
-				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) temp = list[0]
-				else {
-					temp = list[0].substring(0, 2)
-				}
-
-				if (list[1].search(/^\d{0,3}?$/) !== -1) temp = temp + '.' + list[1]
-				else {
-					temp = temp + '.' + list[1].substring(0, 3)
-				}
-				this.temp.slippage = temp
-			} else if (list.length === 1) {
-				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) this.bd.slippage = list[0]
-				else {
-					this.temp.slippage = list[0].substring(0, 2)
 				}
 			}
 		}, 500),
@@ -603,9 +579,6 @@ export default {
 		getCommission: throttle(function (val) {
 			this.bd.commission = val / 100
 		}, 500),
-		getSlippage: throttle(function (val) {
-			this.bd.slippage = val / 100
-		}),
 		validateForm(newTag, oldTag) {
 			let data = true
 			this.$refs.backtestSetupForm.validate((valid) => {
