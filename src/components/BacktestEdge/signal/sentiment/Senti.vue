@@ -177,6 +177,7 @@ export default {
 				period: '',
 				maValue: ''
 			},
+			periodTemp: '',
 			conditions: [
 				{ value: 0, label: '>' },
 				{ value: 1, label: '=' },
@@ -304,7 +305,46 @@ export default {
 			this.description = `${criteria} ${direction} ${sentiVal} ${ma} ${period} ${condition} ${value}`
 		},
 		getConditionRadio(val) {
-			this.$refs.sentiForm.clearValidate()
+			if (this.conditionRadio !== 'Sentiment Moving Average') {
+				// 清空moving average在切回默认senti radio
+				this.periodTemp = this.senti.period
+				this.senti.period = ''
+				let result
+				this.$store.state.indicatorsList.forEach((value, index) => {
+					if (this.sentiVal) {
+						if (value.chart_name.indexOf(this.sentiVal) !== -1) {
+							result = value
+						}
+					} else {
+						if (value.chart_name.indexOf(this.sentiVal) !== -1) {
+							result = value
+						}
+					}
+				})
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					if (
+						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
+					) {
+						CIQ.Studies.removeStudy(
+							CIQ.stxx,
+							CIQ.stxx.layout.studies[studyInstanceName]
+						)
+					}
+				}
+
+				var activatedMAList = this.$store.state.activatedMA
+				// remove current MA attached to an indicator
+				var MAListIndex = activatedMAList.findIndex(
+					(item) => item.url == result.url
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+			}else{
+				// 默认radio切到moving average radio时 加载ma
+				this.setPeriod(this.periodTemp)
+			}
 			// this.$forceUpdate()
 			// this.clearFormValidate()
 			// this.$refs.sentiForm.resetFields()
@@ -344,6 +384,8 @@ export default {
 		setPeriod(val) {
 			if (this.conditionRadio === 'Sentiment Moving Average') {
 				this.senti.period = val
+			}else{
+				this.senti.period = ''
 			}
 			let result
 			this.$store.state.indicatorsList.forEach((value, index) => {
