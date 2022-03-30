@@ -463,6 +463,7 @@ export default {
 						indicatorLayout.savedTechSD = savedTechSD
 						indicatorLayout.activatedMA = this.$store.state.activatedMA
 						backtestData.indicator_layout = JSON.stringify(indicatorLayout)
+						console.log('即将创建传至后台的backtest数据',backtestData);
 						this.$http
 							.post('/dev/runbt/', this.$qs.stringify(backtestData), {
 								withCredentials: true
