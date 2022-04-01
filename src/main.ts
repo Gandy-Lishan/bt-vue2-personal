@@ -56,7 +56,6 @@ Vue.component('template-placeholder', {
 		return createElement('template', this.$slots.default)
 	}
 })
-
 new Vue({
 	store,
 	router,

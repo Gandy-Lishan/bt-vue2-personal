@@ -42,70 +42,7 @@
 // 	alert('Google Chrome renders the screen better')
 // }
 export default {
-	name: 'app',
-	created() {
-		// this.loadSentimentList()
-		// this.loadIndexsList()
-		// this.loadStocksList()
-	},
-	methods: {
-		loadSentimentList() {
-			const vm = this
-
-			vm.$http
-				.get(
-					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
-					{
-						auth: {
-							username: 'sentimentrader_backtest_api',
-							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-						}
-					}
-				)
-				.then((res) => {
-					this.$store.commit('getIndicatorsList', res.data)
-				})
-				.catch((error) => {
-					console.warn(error)
-				})
-		},
-		loadIndexsList() {
-			this.$http
-				.get(
-					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
-					{
-						auth: {
-							username: 'sentimentrader_backtest_api',
-							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-						}
-					}
-				)
-				.then((res) => {
-					this.$store.commit('getIndexsList', res.data)
-				})
-				.catch((error) => {
-					console.warn(error)
-				})
-		},
-		loadStocksList() {
-			this.$http
-				.get(
-					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks',
-					{
-						auth: {
-							username: 'sentimentrader_backtest_api',
-							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-						}
-					}
-				)
-				.then((res) => {
-					this.$store.commit('getStocksList', res.data)
-				})
-				.catch((error) => {
-					console.warn(error)
-				})
-		}
-	}
+	name: 'app'
 }
 </script>
 <style lang="scss">

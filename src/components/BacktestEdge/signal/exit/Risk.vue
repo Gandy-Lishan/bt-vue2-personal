@@ -52,8 +52,7 @@
 <script>
 import { trix } from 'chartiq/js/advanced'
 import { Store, mapGetters } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+const throttle = require('lodash/throttle')
 export default {
 	name: 'risk',
 	inheritAttrs: true,
@@ -135,7 +134,6 @@ export default {
 			}
 			return true
 		},
-
 		validateTakeProfit(num) {
 			if (num < 0) {
 				{
@@ -216,7 +214,7 @@ export default {
 				valid = this.validateTimeInMarket(this.risk.time_in_market)
 			}
 			if (valid) {
-				let risk = this.risk
+				let risk = JSON.parse(JSON.stringify(this.risk))
 				let riskVal = this.riskVal
 				let arr = ['Take Profit', 'Stop Loss', 'Time In Market', 'Profit/Loss']
 				if (riskVal == arr[0]) {

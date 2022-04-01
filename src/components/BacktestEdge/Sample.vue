@@ -216,8 +216,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+const throttle = require('lodash/throttle')
 export default {
 	data() {
 		return {

@@ -21,13 +21,14 @@
 						class="fa fa-outdent navCheck"
 						style="font-size: 30px"
 					></i>
+					<el-tooltip class="item" effect="light" content="Create a new backtest" placement="bottom">
 					<el-button
 						@click="refreshPage"
 						class="restartBtn"
 						type="primary"
 						icon="el-icon-refresh-right"
 						>Create New Backtest</el-button
-					>
+					></el-tooltip>
 				</div>
 				<el-tabs
 					v-model="activeName"
@@ -62,12 +63,15 @@
 								</div>
 							</div>
 							<div class="backtest-btns">
+								<el-tooltip class="item" effect="light" content="clearForm" placement="bottom">
 								<el-button type="danger" @click="clearForm">
 									Clear Form</el-button
 								>
+								</el-tooltip>
+								<el-tooltip class="item" effect="light" content="runBacktest" placement="bottom">
 								<el-button type="success" @click="runBacktest"
 									>Run Backtest</el-button
-								>
+								></el-tooltip>
 							</div>
 						</div>
 					</el-tab-pane>
@@ -113,7 +117,9 @@
 					></el-tab-pane>
 				</el-tabs>
 			</main>
+			<el-tooltip class="item" effect="light" content="Back to the top" placement="bottom">
 			<button class="toTop" @click="animationUp"><svg width="22" height="30" viewBox="0 0 22 30" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M-1.31134e-07 1.5C-5.87107e-08 0.671573 0.642374 5.61581e-08 1.43478 1.25433e-07L20.5652 1.79787e-06C21.3576 1.86714e-06 22 0.671574 22 1.5C22 2.32843 21.3576 3 20.5652 3L1.43478 3C0.642374 3 -2.03557e-07 2.32843 -1.31134e-07 1.5Z" fill="#F9FAFB"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M11.5 30C10.6716 30 10 29.2645 10 28.3571L10 8.64286C10 7.73553 10.6716 7 11.5 7C12.3284 7 13 7.73553 13 8.64286L13 28.3571C13 29.2645 12.3284 30 11.5 30Z" fill="#F9FAFB"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M21.5079 18.5152C20.8519 19.1616 19.7881 19.1616 19.1321 18.5152L11.5 10.9959L3.86794 18.5152C3.21186 19.1616 2.14814 19.1616 1.49206 18.5152C0.835983 17.8688 0.835983 16.8208 1.49206 16.1744L10.3121 7.48479C10.9681 6.8384 12.0319 6.8384 12.6879 7.48479L21.5079 16.1744C22.164 16.8208 22.164 17.8688 21.5079 18.5152Z" fill="#F9FAFB"></path></svg></button>
+			</el-tooltip>
 			<div class="footer">
 				<p>Copyright © 2001 - 2022 Sundial Capital Research, Inc. All rights reserved.</p>
 			</div>
@@ -121,8 +127,7 @@
 	</div>
 </template>
 <script>
-const _ = require('lodash')
-const throttle = _.throttle
+const throttle = require('lodash/throttle')
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import deepClone1 from '@/tools/deepClone.js'
 import SignalCode from '@/tools/codeTool.js'
@@ -470,6 +475,7 @@ export default {
 							})
 							.then((res) => {
 								if (res.status === 201) {
+									console.log("runBacktest成功后返回的数据", res);
 									// 保存成功之后，将 backtestInfo 清空回原始的状态
 									vm.$store.commit('initialBacktestInfo')
 									vm.loading = false
@@ -751,7 +757,6 @@ header {
 	.home-container {
 		width: 100%;
 		margin: 0 auto;
-		padding: 0px 5px;
 	}
 	.criteria-container {
 		padding: 0;
@@ -763,11 +768,22 @@ header {
 		align-items: center;
 		border-bottom: 1px solid #797979;
 	}
-	// .el-tabs__nav-scroll {
-	// 	overflow: scroll;
-	// }
-	// /deep/.el-tabs__nav-scroll {
-	// 	overflow: scroll;
-	// }
+	.restartBtn{
+		padding: 7px;
+		font-size: 12px;
+	}
+	main{
+	padding: 0px;
+}
+.backtest-btns {
+	.el-button{
+		padding: 7px;
+		font-size: 12px;
+	}
+}
+button.toTop{
+	width: 50px;
+	height: 50px;
+}
 }
 </style>

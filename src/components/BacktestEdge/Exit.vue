@@ -358,5 +358,8 @@ export default {
 	.exit-container {
 		margin: 0px 0px 10px 0px;
 	}
+		.criteria-title {
+		font-size: 15px;
+	}
 }
 </style>

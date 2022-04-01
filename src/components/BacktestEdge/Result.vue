@@ -200,16 +200,21 @@ export default {
 @media (min-width: 375px) and (max-width: 767px) {
 	.comUnitNote {
 		position: absolute;
-		left: 272px;
+		left: 208px;
 		top: 56px;
+		font-size: 12px;
 	}
 	.sliUnitNote {
 		position: absolute;
-		left: 272px;
-		top: 105px;
+		left: 208px;
+		top: 103px;
+		font-size: 12px;
 	}
 	.el-input__suffix {
 		right: 68px;
+	}
+	.nameBox input[type="text"]:last-child{
+		width: 30%;
 	}
 }
 </style>
