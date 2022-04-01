@@ -366,6 +366,7 @@ export default {
 					delete newVal.uuid
 					this.bd = Object.assign(this.bd, newVal)
 					CIQ.hideMarker()
+					CIQ.isMarkerShown = false
 					this.frequency = this.editFrequency
 					this.getFrequency(this.frequency)
 

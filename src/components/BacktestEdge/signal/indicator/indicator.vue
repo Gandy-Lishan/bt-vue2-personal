@@ -320,6 +320,7 @@ export default {
 						.indexOf(queryString.toLowerCase()) !== -1
 				)
 			}
+			
 		},
 		handleSentimentSelect(item) {
                 // old version only

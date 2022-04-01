@@ -4,6 +4,7 @@ import axios from 'axios'
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
+		markerSet: [],
 		favoriteIndicatorList: [],
 		favoriteSymbolList: [],
 		techSD: [],
@@ -151,6 +152,9 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+		SetmarkerSet(state,list){
+			state.markerSet = list
+		},
 		setFavoriteIndicatorList(state, val) {
 			state.favoriteIndicatorList = val
 		},

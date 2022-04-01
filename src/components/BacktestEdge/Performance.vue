@@ -354,6 +354,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import keepTwoDecimal from '@/tools/keepTwoDecimal.js'
+import jutils from 'jutils-src'
 
 export default {
 	data() {
@@ -373,9 +374,7 @@ export default {
 	},
 	methods: {
 		handleClick(tab, event) {},
-		loadMarker(tradeData) {
-			CIQ.loadChart(tradeData.markerSet, CIQ.addMarker)
-		},
+		
 		getResultData(row) {
 			let vm = this
 			let initalData = {}
@@ -457,10 +456,14 @@ export default {
 								// ----------------------- backtest result-------------------------------
 
 								this.$emit('setBacktestResult', initalData['basic'])
+								console.log('initialData:',initalData.markerSet)
 								// ------------------------------ end -----------------------------------
-								console.log(res)
-								this.loadMarker(initalData)
-								// vm.$store.commit('getTradesData',initalData[])
+
+								setTimeout(
+									this.loadMarker(initalData.markerSet)
+								,0)
+
+								//vm.$store.commit('getTradesData',initalData[])
 								vm.loading = false
 							}
 						})
@@ -474,6 +477,29 @@ export default {
 						})
 				}
 			}
+		},
+		loadMarker(markerSet){
+			//load markers for initial quotefeed
+			let list = this.filterMarkerDate(new Date(CIQ.initialDate.start),new Date(CIQ.initialDate.end),markerSet)
+			console.log("CIQ.initialDate: ",new Date(CIQ.initialDate.start))
+			CIQ.store.commit('SetmarkerSet',markerSet)
+			CIQ.isMarkerShown = true
+			CIQ.loadChart(list, CIQ.addMarker)
+		},
+		filterMarkerDate(start_date,end_date,markerSet){
+			let list = []
+			let _date = {
+				start: jutils.formatDate(start_date,"YYYYMMDD"),
+				end: jutils.formatDate(end_date,"YYYYMMDD")
+			}
+			for(var date in markerSet){
+				let markerSetDate = markerSet[date].DT.slice(0,4)+markerSet[date].DT.slice(5,7)+markerSet[date].DT.slice(8,10)
+				if(markerSetDate>_date.start && markerSetDate<=_date.end){
+					list.push(markerSet[date])
+				}
+			}
+			console.log(_date,list)
+			return list
 		},
 		clearPerformanceData() {
 			this.tableData = []

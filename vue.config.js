@@ -63,7 +63,7 @@ module.exports = {
 		disableHostCheck: true,
 		proxy: {
 			'/demo': {
-				target: 'http://18.216.210.200',
+				target: 'http://3.140.194.24:80',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
@@ -71,7 +71,7 @@ module.exports = {
 				}
 			},
 			'/dev': {
-				target: 'http://18.216.210.200',
+				target: 'http://3.140.194.24:80',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
@@ -79,7 +79,7 @@ module.exports = {
 				}
 			},
 			'/rundev': {
-				target: 'http://18.216.210.200',
+				target: 'http://3.140.194.24:80',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {

@@ -4,7 +4,7 @@
 			<header class="header">
 				<div class="header_logo"
 					><span
-						><img style="max-width: 190px" src="../../assets/logo.png" alt="logo" /></span
+						><img style="width: 190px;height: 50px" src="../../assets/logo.png" alt="logo" /></span
 				></div>
 				<el-row type="flex" justify="center"
 					><el-col><p class="betaNote">BacktestEdge Beta</p></el-col>
@@ -186,8 +186,11 @@ export default {
 			} else {
 				_this.tabPosition = 'top'
 			}
+			var chartBox = document.getElementsByClassName("chart_box")[0]
+			chartBox.style.width = ''
 		})
-		// this.myBrowser()
+		 
+		this.myBrowser()
 	},
 	watch: {
 		scroll: {
@@ -464,6 +467,7 @@ export default {
 						indicatorLayout.activatedMA = this.$store.state.activatedMA
 						backtestData.indicator_layout = JSON.stringify(indicatorLayout)
 						console.log('即将创建传至后台的backtest数据',backtestData);
+	    				
 						this.$http
 							.post('/dev/runbt/', this.$qs.stringify(backtestData), {
 								withCredentials: true
@@ -471,6 +475,7 @@ export default {
 							.then((res) => {
 								if (res.status === 201) {
 									// 保存成功之后，将 backtestInfo 清空回原始的状态
+									CIQ.isBacktestRun = true
 									vm.$store.commit('initialBacktestInfo')
 									vm.loading = false
 									vm.goToHistoryForm()
@@ -478,6 +483,7 @@ export default {
 									// 保存成功之后应该清除表单的所有数据
 									// vm.clearAllDataForm()
 									CIQ.hideMarker()
+									CIQ.isMarkerShown = false
 									// 并且清除 old_uuid
 									let backtestInfo = vm.$store.state.backtestInfo
 									if (backtestInfo.old_uuid) {
@@ -491,6 +497,7 @@ export default {
 									vm.loading = false
 									// vm.clearAllDataForm()
 									CIQ.hideMarker()
+									CIQ.isMarkerShown = false
 								}
 							})
 							.catch((error) => {
@@ -631,7 +638,7 @@ main{
 button.toTop {
 	border:unset;
     position: fixed;
-    right: 75px;
+    left: 75px;
     bottom: 63px;
     display: flex;
     align-items: center;
@@ -705,7 +712,10 @@ header {
 	padding: 10px;
 }
 .chart_box {
-    padding: 0 50px;
+    padding: 10px 10px;
+    resize: auto;
+    overflow: hidden;
+    margin: 25px;
 }
 .betaNote{
 	padding: 22px 50px;

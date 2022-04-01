@@ -54,7 +54,7 @@
 						</cq-menu>
 					</cq-info-toggle-dropdown> -->
 
-					<!-- <cq-info-toggle-dropdown>
+					<cq-info-toggle-dropdown>
 						<cq-toggle class="ciq-HU" id="ciq-HU" cq-member="headsUp">
 							<span></span>
 							<cq-tooltip>Info</cq-tooltip>
@@ -73,7 +73,7 @@
 								
 							</cq-menu-dropdown>
 						</cq-menu>
-					</cq-info-toggle-dropdown> -->
+					</cq-info-toggle-dropdown>
 					<!-- <cq-toggle class="ciq-DT tableview-ui" cq-member="tableView"
 						><span></span><cq-tooltip>Table View</cq-tooltip></cq-toggle
 					> -->
@@ -353,7 +353,7 @@
 
 						<cq-chart-legend></cq-chart-legend>
 
-						<cq-loader></cq-loader>
+						<cq-loader class="loaderMain"></cq-loader>
 					</div>
 				</div>
 			</div>

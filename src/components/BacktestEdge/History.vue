@@ -522,6 +522,11 @@ export default {
 				}
 			}
 			this.$store.commit('setRestoreFreq', frequency)
+			// 在跑完回测后和view result之间会加载一次chart去输出SignalOuput
+			if(CIQ.isBacktestRun == true){
+				CIQ.isBacktestRun = false
+				CIQ.outputSignalsResult()
+			}
 			CIQ.addIndicatorsFromBacktest()
 		},
 		showDes(row) {
