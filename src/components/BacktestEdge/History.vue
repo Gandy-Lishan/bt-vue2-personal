@@ -282,8 +282,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+const throttle = require('lodash/throttle')
 export default {
 	data() {
 		return {
@@ -310,7 +309,7 @@ export default {
 		this.getBacktestList()
 	},
 	methods: {
-		async getBacktestList(strategy) {
+		async getBacktestList() {
 			this.loadTest = 'Loading...'
 			this.loading = true
 			let page = this.queryInfo.page
@@ -342,6 +341,7 @@ export default {
 			let timer = setInterval(() => {
 				vm.$http.get('/dev/status/' + id + '/').then((res) => {
 					if (res.data.status !== 1 && res.data.status !== 0) {
+						console.log("运行结束后的返回值",res);
 						clearInterval(timer)
 						vm.$notify({
 							title: 'The run was successful',
@@ -355,6 +355,9 @@ export default {
 						vm.getBacktestList()
 						this.$emit('refFavoritesForm')
 						vm.loading = false
+						let row = res.data
+						row.result = JSON.parse(row.result)
+						vm.viewBacktestResults(row)
 					}
 				})
 			}, 3000)
@@ -459,6 +462,7 @@ export default {
 		}, 1000),
 		viewBacktestResults: throttle(function (row) {
 			if (row.result['Total Trades']) {
+				console.log("查看结果");
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				this.$http
 					.get('/dev/seeparams/' + row.id + '/')
@@ -523,10 +527,10 @@ export default {
 			}
 			this.$store.commit('setRestoreFreq', frequency)
 			// 在跑完回测后和view result之间会加载一次chart去输出SignalOuput
-			if(CIQ.isBacktestRun == true){
-				CIQ.isBacktestRun = false
-				CIQ.outputSignalsResult()
-			}
+			// if(CIQ.isBacktestRun == true){
+			// 	CIQ.isBacktestRun = false
+			// 	CIQ.outputSignalsResult()
+			// }
 			CIQ.addIndicatorsFromBacktest()
 		},
 		showDes(row) {

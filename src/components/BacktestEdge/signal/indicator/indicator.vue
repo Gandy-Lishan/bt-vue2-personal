@@ -760,14 +760,14 @@ export default {
 	}
 }
 @media (min-width: 375px) and (max-width: 767px) {
-	// /deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
-	// 	width: 232px;
-	// 	padding-left: 22px;
-	// }
-	// /deep/ .techBox .el-input--prefix .el-input__inner:first-child {
-	// 	width: 232px;
-	// 	padding-left: 22px;
-	// }
+	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
+		width: 232px;
+		padding-left: 22px;
+	}
+	/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+		width: 232px;
+		padding-left: 22px;
+	}
 	.indicator-container {
 		display: flex;
 		flex-direction: column;

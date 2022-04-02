@@ -113,8 +113,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+const throttle = require('lodash/throttle')
 export default {
 	name: 'senti',
 	props: {
@@ -577,6 +576,7 @@ export default {
 @media (min-width: 375px) and (max-width: 767px) {
 	/deep/ .el-form-item__label {
 		margin-right: 0px;
+		font-size: 12px;
 	}
 	.condition-container {
 		display: flex;

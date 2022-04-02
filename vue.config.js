@@ -58,7 +58,7 @@ module.exports = {
 		// host:"localhost",
 		// https:false,
 		// 测试的ip 18.216.210.200
-		// 10.131.3.74:8000
+		// http://10.131.3.74:8000
 		// http://3.140.194.24:80
 		disableHostCheck: true,
 		proxy: {
@@ -72,6 +72,7 @@ module.exports = {
 			},
 			'/dev': {
 				target: 'http://3.140.194.24:80',
+				//target: 'http://10.131.3.74:8000', 
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
