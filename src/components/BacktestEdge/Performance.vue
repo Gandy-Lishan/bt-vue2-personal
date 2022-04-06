@@ -459,9 +459,9 @@ export default {
 								console.log('initialData:',initalData.markerSet)
 								// ------------------------------ end -----------------------------------
 
-								setTimeout(
+								setTimeout(()=>{
 									this.loadMarker(initalData.markerSet)
-								,0)
+								},0)
 
 								//vm.$store.commit('getTradesData',initalData[])
 								vm.loading = false
