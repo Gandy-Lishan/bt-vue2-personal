@@ -164,9 +164,10 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
 import { timestampToTime } from '@/tools/formatDate.js'
-import deepClone1 from '@/tools/deepClone.js'
 import { getIndicatorsList, getIndexsList, getStocksList } from "@/service/service.js"
 const throttle = require('lodash/throttle')
+const uniqWith = require('lodash/uniqWith')
+const isEqual = require('lodash/isEqual')
 export default {
 	props: { backtestEditData: Object, editFrequency: String },
 	name: 'setUp',
@@ -313,10 +314,10 @@ export default {
 		}
 	},
 	mounted() {
-		getIndicatorsList()
+		this.getIndicatorsList()
 		this.loadSentimentList('Daily')
-		// this.getIndexsList()
-		// this.getStocksList()
+		this.getIndexsList()
+		this.getStocksList()
 		this.getEndDate()
 		// cookies.set('userid', 'test')
 	},
@@ -485,66 +486,60 @@ export default {
 			return (window.utils = new utils())
 		},
 		async getIndexsList() {
-			if (this.$store.state.indexsList.length != 0) {
-				this.indexList = this.$store.state.indexsList.map((item) => {
+			let vm = this
+			if (vm.$store.state.indexsList.length != 0) {
+				vm.indexList = vm.$store.state.indexsList.map((item) => {
 					return { value: `${item.symbol}`, label: `${item.symbol}` }
 				})
 			} else {
-				const res = await getIndexsList
-						this.indexList = res.data.map((item) => {
+				let res = await getIndexsList()
+						vm.indexList = res.data.map((item) => {
 							return { value: `${item.symbol}`, label: `${item.symbol}` }
 						})
 			}
 		},
 		async getStocksList() {
-			if (this.$store.state.stocksList.length != 0) {
-				this.symbolList = this.$store.state.stocksList.map((item) => {
+			let vm = this
+			if (vm.$store.state.stocksList.length != 0) {
+				vm.symbolList = vm.$store.state.stocksList.map((item) => {
 					return { value: `${item.stock}`, label: `${item.stock}` }
 				})
 			} else {
-				await this.$http
-					.get(
-						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks',
-						{
-							auth: {
-								username: 'sentimentrader_backtest_api',
-								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-							}
-						}
-					)
-					.then((res) => {
-						this.symbolList = res.data.map((item) => {
+				try {
+				let res = await getStocksList()
+				console.log("stocks响应数据",res);
+						vm.symbolList = res.data.map((item) => {
 							return { value: `${item.stock}`, label: `${item.stock}` }
 						})
-					})
-					.catch((error) => {
+				} catch (error) {
 						console.warn(error)
-					})
+				}
 			}
 		},
 		async remoteMethod(query) {
+			let vm = this
 			if (query !== '') {
 				this.loading = true
 				setTimeout(() => {
 					this.loading = false
-					if (this.symbolList.length == 0 || this.indexList.length == 0) {
-						this.getStocksList()
-						this.getIndexsList()
+					if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
+						vm.getStocksList()
+						vm.getIndexsList()
 					}
-					var symbolListTemp = this.symbolList.filter((item) => {
+					var symbolListTemp = vm.symbolList.filter((item) => {
 						return (
 							item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
 							item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
 						)
 					})
-					var IndexListTemp = this.indexList.filter((item) => {
+					var IndexListTemp = vm.indexList.filter((item) => {
 						return (
 							item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
 							item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
 						)
 					})
 					let options = symbolListTemp.concat(IndexListTemp)
-					this.options = _.uniqWith(options, _.isEqual)
+					vm.options = uniqWith(options, isEqual)
 				}, 200)
 			} else {
 				this.options = []

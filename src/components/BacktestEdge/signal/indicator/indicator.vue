@@ -84,7 +84,7 @@
 <script>
 import { Store, mapGetters } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import deepClone1 from '@/tools/deepClone.js'
+import {getIndicatorsList} from '@/service/service'
 export default {
 	props: {
 		// indicatorEditData: Object
@@ -174,70 +174,6 @@ export default {
 				}
 			})
 		}
-		// editIndiData: {
-		// 	async handler(newVal) {
-		// 		if (JSON.stringify(newVal) != '{}') {
-		// 			let vm = this
-		// 			if (newVal[this.criteria].signals[0].analysis === 'Sentiment') {
-		// 				this.$emit('getIndicatorRadio', 'sentiment')
-		// 				this.$emit('getSentiVal', this.si.sentimentIndicator)
-		// 				this.indicatorRadio = 'Sentiment Indicators'
-		// 				this.isCheckedIndicators = false
-		// 				this.si.sentimentIndicator =
-		// 					newVal[this.criteria].signals[0].indicator
-		// 				// 往父组件传值
-		// 				let sentimentList = this.$store.state.sentimentIndicatorList
-		// 				if (sentimentList.length == 0) {
-		// 					const res = await this.$http.get(
-		// 						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
-		// 						{
-		// 							auth: {
-		// 								username: 'sentimentrader_backtest_api',
-		// 								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-		// 							}
-		// 						}
-		// 					)
-		// 					sentimentList = res.data.map((obj) => {
-		// 						console.log(
-		// 							frequency.toUpperCase().indexOf(obj.updated.toUpperCase())
-		// 						)
-		// 						if (
-		// 							frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !==
-		// 							-1
-		// 						) {
-		// 							if (obj.chart_name && obj.url && obj.updated) {
-		// 								return {
-		// 									value: obj.chart_name,
-		// 									url: obj.url,
-		// 									updated: obj.updated
-		// 								}
-		// 							}
-		// 						}
-		// 					})
-		// 				}
-		// 				let indi = this.si.sentimentIndicator
-		// 				sentimentList.forEach((obj) => {
-		// 					if (indi.toUpperCase() == obj.value.toUpperCase()) {
-		// 						vm.$emit('getSentiUrl', obj.url)
-		// 					}
-		// 				})
-		// 				// if(this.$store.state.sentimentIndicatorList)
-		// 			} else if (
-		// 				newVal[this.criteria].signals[0].analysis === 'Technical'
-		// 			) {
-		// 				this.$emit('getIndicatorRadio', 'technical')
-		// 				let technicalIndicator = newVal[this.criteria].signals[0].indicator
-		// 				let item = {}
-		// 				item.value = technicalIndicator
-		// 				vm.handleTechnicalSelect(item)
-		// 				this.indicatorRadio = 'Technical Indicators'
-		// 				this.isCheckedIndicators = true
-		// 				this.$emit('getTechVal', vm.si.technicalIndicator)
-		// 			}
-		// 		}
-		// 	},
-		// 	deep: true
-		// }
 	},
 	methods: {
 		// 清除表单认证
@@ -536,15 +472,7 @@ export default {
 				})
 				let sentimentList = this.$store.state.sentimentIndicatorList
 				if (sentimentList.length == 0) {
-					const res = await this.$http.get(
-						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
-						{
-							auth: {
-								username: 'sentimentrader_backtest_api',
-								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-							}
-						}
-					)
+					const res = await getIndicatorsList()
 					sentimentList = res.data.map((obj) => {
 							if (obj.chart_name && obj.url && obj.updated) {
 								return {
@@ -653,15 +581,7 @@ export default {
 					// 往父组件传值
 					let sentimentList = this.$store.state.sentimentIndicatorList
 					if (sentimentList.length == 0) {
-						const res = await this.$http.get(
-							'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
-							{
-								auth: {
-									username: 'sentimentrader_backtest_api',
-									password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-								}
-							}
-						)
+						const res = await getIndicatorsList()
 						sentimentList = res.data.map((obj) => {
 								if (obj.chart_name && obj.url && obj.updated) {
 									return {
