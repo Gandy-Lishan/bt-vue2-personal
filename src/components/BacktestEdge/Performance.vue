@@ -289,7 +289,7 @@
 						<el-table-column
 							prop="trade_number"
 							show-overflow-tooltip
-							label="Trade Number"
+							label="Trade #"
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -323,12 +323,24 @@
 							align="center"
 						>
 						</el-table-column>
-						<!-- <el-table-column
-        prop="indicator_close"
-        label="Indicator Level"
-        align="center">
-      </el-table-column> -->
+						
 						<el-table-column
+							prop="EachReturn"
+							label="Each Return %"
+							align="center"
+							show-overflow-tooltip
+						>
+							<template slot-scope="scope">
+								<span v-if="scope.row.EachReturn == 'none'">{{ '' }}</span>
+								<span v-else-if="scope.row.EachReturn >= 0"
+									>{{ (scope.row.EachReturn * 100).toFixed(2) }}%</span
+								>
+								<span v-else style="color: red"
+									>{{ (scope.row.EachReturn * 100).toFixed(2) }}%</span
+								>
+							</template>
+						</el-table-column>
+					<el-table-column
 							prop="Return"
 							label="Total Return %"
 							align="center"
@@ -353,7 +365,6 @@
 </template>
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import keepTwoDecimal from '@/tools/keepTwoDecimal.js'
 import jutils from 'jutils-src'
 import { seeReport } from '@/service/service'
 
@@ -377,6 +388,7 @@ export default {
 		handleClick(tab, event) {},
 
 		async getResultData(row) {
+			console.log("获取结果值")
 			let vm = this
 			let initalData = {}
 			let data = {}
@@ -393,6 +405,7 @@ export default {
 							if (typeof res.data == String) {
 								JSON.parse(res.data)
 							}
+							console.log('eric返回的值', res.data);
 							initalData = res.data
 							// -------------------------------------  text ----------------
 							data.uuid = initalData['UUID']

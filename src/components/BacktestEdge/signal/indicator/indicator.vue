@@ -84,7 +84,6 @@
 <script>
 import { Store, mapGetters } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import deepClone1 from '@/tools/deepClone.js'
 import {getIndicatorsList} from '@/service/service'
 export default {
 	props: {

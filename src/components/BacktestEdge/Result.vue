@@ -73,8 +73,6 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
-import { timestampToTime } from '@/tools/formatDate.js'
-import deepClone1 from '@/tools/deepClone.js'
 export default {
 	props: { backtestEditData: Object, editFrequency: String },
 	name: 'setUp',

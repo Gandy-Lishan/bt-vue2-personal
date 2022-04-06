@@ -289,7 +289,8 @@ import {
 	getHistoryList,
 	getStatus,
 	seeParams,
-	seeReport
+	seeReport,
+	deleteBacktest
 } from '@/service/service.js'
 export default {
 	data() {
@@ -398,6 +399,7 @@ export default {
 		async deleteBacktest(id) {
 			try {
 				const res = await deleteBacktest(id)
+				console.log("删除返回值",res);
 				if (res.status == 204) {
 					this.getHistoryList()
 					this.$emit('refFavoritesForm')
@@ -408,6 +410,7 @@ export default {
 					})
 				}
 			} catch (error) {
+				console.log(error);
 				this.$message({
 					message: 'The internal server is busy, please try again later ',
 					type: 'error',

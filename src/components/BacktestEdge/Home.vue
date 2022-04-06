@@ -129,7 +129,6 @@
 <script>
 const throttle = require('lodash/throttle')
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import deepClone1 from '@/tools/deepClone.js'
 import SignalCode from '@/tools/codeTool.js'
 import chart from '@/components/chart/index.vue'
 import setUp from '@/components/BacktestEdge/SetUp.vue'
