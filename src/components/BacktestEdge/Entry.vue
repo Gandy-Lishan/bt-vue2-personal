@@ -71,6 +71,7 @@ import macd from '@/components/BacktestEdge/signal/technical/Macd-like.vue'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
 import indicator from '@/components/BacktestEdge/signal/indicator/indicator'
 import SignalCode from '@/tools/codeTool.js'
+import {seeParams} from "@/service/service.js"
 export default {
 	name: 'entry',
 	data() {
@@ -198,9 +199,9 @@ export default {
 				}
 			})
 		},
-		setEditData(id) {
+		async setEditData(id) {
 			let vm = this
-			this.$http.get('/dev/seeparams/' + id + '/').then((res) => {
+				const res = await seeParams(id)
 				let data = res.data
 				data.entry = JSON.parse(data.entry)
 				data.exit = JSON.parse(data.exit)
@@ -264,10 +265,6 @@ export default {
 					vm.techIndiValue = 'macd'
 					vm.$refs.macdChild.setEditData(edit)
 				}
-				// if (vm.editIndiData.entry.signals[0].analysis === 'Technical') {
-				// 	this.$refs.maChild.setEditData(vm.editIndiData)
-				// }
-			})
 		}
 	}
 }

@@ -83,6 +83,7 @@ import macd from '@/components/BacktestEdge/signal/technical/Macd-like.vue'
 import SignalCode from '@/tools/codeTool.js'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
 import risk from '@/components/BacktestEdge/signal/exit/Risk.vue'
+import { seeParams } from "@/service/service.js"
 export default {
 	name: 'exit',
 	inheritAttrs: true,
@@ -218,9 +219,9 @@ export default {
 			}
 			})
 		},
-		setEditData(id) {
+		async setEditData(id) {
 			let vm = this
-			this.$http.get('/dev/seeparams/' + id + '/').then((res) => {
+			const res = await seeParams(id)
 				let data = res.data
 				data.entry = JSON.parse(data.entry)
 				data.exit = JSON.parse(data.exit)
@@ -298,7 +299,6 @@ export default {
 				} else if (edit.exit.signals[0].analysis == 'Exit') {
 					this.$refs.riskChild.setEditData(edit)
 				}
-			})
 		}
 	}
 }

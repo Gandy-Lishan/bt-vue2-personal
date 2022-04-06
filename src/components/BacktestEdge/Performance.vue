@@ -355,6 +355,7 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import keepTwoDecimal from '@/tools/keepTwoDecimal.js'
 import jutils from 'jutils-src'
+import { seeReport } from '@/service/service'
 
 export default {
 	data() {
@@ -374,8 +375,8 @@ export default {
 	},
 	methods: {
 		handleClick(tab, event) {},
-		
-		getResultData(row) {
+
+		async getResultData(row) {
 			let vm = this
 			let initalData = {}
 			let data = {}
@@ -386,119 +387,119 @@ export default {
 				if (this.$store.state.favoriteBacktestRowData.id) {
 					vm.loading = true
 					let id = row.id
-					vm.$http
-						.get('/dev/report/?uuid=' + id)
-						.then((res) => {
-							if (res.status == 200) {
-								if (typeof res.data == String) {
-									JSON.parse(res.data)
-								}
-								initalData = res.data
-
-								// -------------------------------------  text ----------------
-								data.uuid = initalData['UUID']
-								data.symbol = initalData['Symbol']
-								data.frequency = initalData['Frequency']
-								data.totalTrades = initalData['Total Trades']
-								data.totalPositive = initalData['Total Positive']
-								data.totalNegative = initalData['Total Negative']
-								data.scratch = initalData['Scratch']
-								data.averageWin = initalData['Average Win %']
-								data.averageLoss = initalData['Average Loss %']
-								data.medianGain = initalData['Median Gain']
-								data.medianLoss = initalData['Median Loss']
-								data.averageReturn = initalData['Average Return']
-								data.medianReturn = initalData['Median Return']
-								data.buyHoldGain = initalData['BuyHoldGain']
-								data.winRate = initalData['Win Rate']
-								data.timeInMarket = initalData['Time in Market']
-								data.totalReturn = initalData['Total Return (%)']
-								data.tzScore = initalData['Z-score']
-								data.standardDeviation = initalData['Standard Deviation']
-								data.s3_status_response = initalData['s3_status_response']
-								data.cagr = initalData['CAGR']
-								data.annual_volatiltiy = initalData['annual_volatiltiy']
-								data.calmar_ratio = initalData['calmar_ratio']
-								data.sortino_ratio = initalData['sortino_ratio']
-								data.tail_ratio = initalData['tail_ratio']
-								data.var = initalData['VAR']
-								data.capture = initalData['capture']
-								data.alpha = initalData['alpha']
-								data.beta = initalData['beta']
-								data.information_ratio = initalData['information_ratio']
-								data.sharpeRatio = initalData['Sharpe Ratio']
-								data.drawDown = initalData['DrawDown']
-								data.drawDownPeriod = initalData['DrawDown Period']
-								data.drawDownImageUploaded =
-									initalData['DrawDown Image Uploaded']
-								data.ddFileURL = initalData['DD File URL']
-								data.returnsImageUploaded = initalData['Returns Image Uploaded']
-								data.returnsFileURL = initalData['Returns File URL']
-								data.annualReturnsImageUploaded =
-									initalData['Annual Returns Image Uploaded']
-								data.annualReturnsFileURL =
-									initalData['Annual Returns File URL']
-								data.returnsheatmapImageUploadedURL =
-									initalData['Returns Heatmap Image Uploaded']
-								data.returnsHeatmapFileURL =
-									initalData['Returns Heatmap File URL']
-								data.CAGR = initalData['CAGR']
-								vm.tableData = []
-								//('data',data)
-								vm.tableData.push(data)
-								vm.returnImgUrl = data.returnsFileURL
-								vm.drawDownImgUrl = data.ddFileURL
-								vm.monthReturnImgUrl = data.returnsHeatmapFileURL
-								vm.annualReturnImgUrl = data.annualReturnsFileURL
-								vm.tradesData = initalData['Trades']
-								// ---------------------------------------- end ----------------------------------
-
-								// ----------------------- backtest result-------------------------------
-
-								this.$emit('setBacktestResult', initalData['basic'])
-								console.log('initialData:',initalData.markerSet)
-								// ------------------------------ end -----------------------------------
-
-								setTimeout(
-									this.loadMarker(initalData.markerSet)
-								,0)
-
-								//vm.$store.commit('getTradesData',initalData[])
-								vm.loading = false
+					try {
+						const res = await seeReport(id)
+						if (res.status == 200) {
+							if (typeof res.data == String) {
+								JSON.parse(res.data)
 							}
-						})
-						.catch((error) => {
-							console.error('服务器报错', error)
-							// 清空数据并且进行提示
+							initalData = res.data
+							// -------------------------------------  text ----------------
+							data.uuid = initalData['UUID']
+							data.symbol = initalData['Symbol']
+							data.frequency = initalData['Frequency']
+							data.totalTrades = initalData['Total Trades']
+							data.totalPositive = initalData['Total Positive']
+							data.totalNegative = initalData['Total Negative']
+							data.scratch = initalData['Scratch']
+							data.averageWin = initalData['Average Win %']
+							data.averageLoss = initalData['Average Loss %']
+							data.medianGain = initalData['Median Gain']
+							data.medianLoss = initalData['Median Loss']
+							data.averageReturn = initalData['Average Return']
+							data.medianReturn = initalData['Median Return']
+							data.buyHoldGain = initalData['BuyHoldGain']
+							data.winRate = initalData['Win Rate']
+							data.timeInMarket = initalData['Time in Market']
+							data.totalReturn = initalData['Total Return (%)']
+							data.tzScore = initalData['Z-score']
+							data.standardDeviation = initalData['Standard Deviation']
+							data.s3_status_response = initalData['s3_status_response']
+							data.cagr = initalData['CAGR']
+							data.annual_volatiltiy = initalData['annual_volatiltiy']
+							data.calmar_ratio = initalData['calmar_ratio']
+							data.sortino_ratio = initalData['sortino_ratio']
+							data.tail_ratio = initalData['tail_ratio']
+							data.var = initalData['VAR']
+							data.capture = initalData['capture']
+							data.alpha = initalData['alpha']
+							data.beta = initalData['beta']
+							data.information_ratio = initalData['information_ratio']
+							data.sharpeRatio = initalData['Sharpe Ratio']
+							data.drawDown = initalData['DrawDown']
+							data.drawDownPeriod = initalData['DrawDown Period']
+							data.drawDownImageUploaded = initalData['DrawDown Image Uploaded']
+							data.ddFileURL = initalData['DD File URL']
+							data.returnsImageUploaded = initalData['Returns Image Uploaded']
+							data.returnsFileURL = initalData['Returns File URL']
+							data.annualReturnsImageUploaded =
+								initalData['Annual Returns Image Uploaded']
+							data.annualReturnsFileURL = initalData['Annual Returns File URL']
+							data.returnsheatmapImageUploadedURL =
+								initalData['Returns Heatmap Image Uploaded']
+							data.returnsHeatmapFileURL =
+								initalData['Returns Heatmap File URL']
+							data.CAGR = initalData['CAGR']
 							vm.tableData = []
-							vm.tradesData = []
-							vm.$emit('errorCatchPerformance')
+							//('data',data)
+							vm.tableData.push(data)
+							vm.returnImgUrl = data.returnsFileURL
+							vm.drawDownImgUrl = data.ddFileURL
+							vm.monthReturnImgUrl = data.returnsHeatmapFileURL
+							vm.annualReturnImgUrl = data.annualReturnsFileURL
+							vm.tradesData = initalData['Trades']
+							// ---------------------------------------- end ----------------------------------
+
+							// ----------------------- backtest result-------------------------------
+
+							this.$emit('setBacktestResult', initalData['basic'])
+							console.log('initialData:', initalData.markerSet)
+							// ------------------------------ end -----------------------------------
+
+							setTimeout(this.loadMarker(initalData.markerSet), 0)
+
+							//vm.$store.commit('getTradesData',initalData[])
 							vm.loading = false
-						})
+						}
+					} catch (error) {
+						console.error('服务器报错', error)
+						// 清空数据并且进行提示
+						vm.tableData = []
+						vm.tradesData = []
+						vm.$emit('errorCatchPerformance')
+						vm.loading = false
+					}
 				}
 			}
 		},
-		loadMarker(markerSet){
+		loadMarker(markerSet) {
 			//load markers for initial quotefeed
-			let list = this.filterMarkerDate(new Date(CIQ.initialDate.start),new Date(CIQ.initialDate.end),markerSet)
-			console.log("CIQ.initialDate: ",new Date(CIQ.initialDate.start))
-			CIQ.store.commit('SetmarkerSet',markerSet)
+			let list = this.filterMarkerDate(
+				new Date(CIQ.initialDate.start),
+				new Date(CIQ.initialDate.end),
+				markerSet
+			)
+			console.log('CIQ.initialDate: ', new Date(CIQ.initialDate.start))
+			CIQ.store.commit('SetmarkerSet', markerSet)
 			CIQ.isMarkerShown = true
 			CIQ.loadChart(list, CIQ.addMarker)
 		},
-		filterMarkerDate(start_date,end_date,markerSet){
+		filterMarkerDate(start_date, end_date, markerSet) {
 			let list = []
 			let _date = {
-				start: jutils.formatDate(start_date,"YYYYMMDD"),
-				end: jutils.formatDate(end_date,"YYYYMMDD")
+				start: jutils.formatDate(start_date, 'YYYYMMDD'),
+				end: jutils.formatDate(end_date, 'YYYYMMDD')
 			}
-			for(var date in markerSet){
-				let markerSetDate = markerSet[date].DT.slice(0,4)+markerSet[date].DT.slice(5,7)+markerSet[date].DT.slice(8,10)
-				if(markerSetDate>_date.start && markerSetDate<=_date.end){
+			for (var date in markerSet) {
+				let markerSetDate =
+					markerSet[date].DT.slice(0, 4) +
+					markerSet[date].DT.slice(5, 7) +
+					markerSet[date].DT.slice(8, 10)
+				if (markerSetDate > _date.start && markerSetDate <= _date.end) {
 					list.push(markerSet[date])
 				}
 			}
-			console.log(_date,list)
+			console.log(_date, list)
 			return list
 		},
 		clearPerformanceData() {

@@ -140,6 +140,7 @@ import performance from '@/components/BacktestEdge/Performance.vue'
 import history from '@/components/BacktestEdge/History.vue'
 import favorite from '@/components/BacktestEdge/Favorite.vue'
 import sample from '@/components/BacktestEdge/Sample.vue'
+import { runBacktest, seeParams } from '@/service/service'
 export default {
 	name: 'home',
 	data() {
@@ -295,12 +296,12 @@ export default {
 			switch (tabName) {
 				case 'forth':
 					if (this.favoriteFlag) {
-						this.$refs.favoriteChild.getBacktestList()
+						this.$refs.favoriteChild.getFavoriteList()
 						this.favoriteFlag = false
 					}
 					break
 				case 'fifth':
-					this.$refs.sampleChild.getStrategyList()
+					this.$refs.sampleChild.getSampleList()
 			}
 		},
 		getTimeFrame(val) {
@@ -472,12 +473,9 @@ export default {
 						indicatorLayout.activatedMA = this.$store.state.activatedMA
 						backtestData.indicator_layout = JSON.stringify(indicatorLayout)
 						console.log('即将创建传至后台的backtest数据',backtestData);
-	    				
-						this.$http
-							.post('/dev/runbt/', this.$qs.stringify(backtestData), {
-								withCredentials: true
-							})
-							.then((res) => {
+							let backtestDataStr = this.$qs.stringify(backtestData)
+							try {
+								let res = await runBacktest(backtestDataStr)
 								if (res.status === 201) {
 									console.log("runBacktest成功后返回的数据", res);
 									// 保存成功之后，将 backtestInfo 清空回原始的状态
@@ -497,7 +495,7 @@ export default {
 									}
 									// 清除 oldBacktestName
 									vm.$refs.setUpChild.clearOldBacktestName()
-									vm.$refs.favoriteChild.getBacktestList()
+									vm.$refs.favoriteChild.getFavoriteList()
 								} else {
 									vm.$message.error('Save failed')
 									vm.loading = false
@@ -505,8 +503,7 @@ export default {
 									CIQ.hideMarker()
 									CIQ.isMarkerShown = false
 								}
-							})
-							.catch((error) => {
+							} catch (error) {
 								this.$notify.error({
 									title: 'Create New Backtest',
 									message:
@@ -515,7 +512,7 @@ export default {
 								})
 								// 初始化backtestInfo的数据
 								vm.$store.commit('initialBacktestInfo')
-							})
+							}
 					}
 				}
 			}
@@ -523,7 +520,7 @@ export default {
 		goToHistoryForm() {
 			this.activeName = 'second'
 		},
-		goTobacktestSetupForm(id) {
+		async goTobacktestSetupForm(id) {
 			// backtestEditData
 			this.loading = true
 			this.$refs.setUpChild.clearForm()
@@ -532,9 +529,8 @@ export default {
 			let vm = this
 			vm.activeName = 'first'
 			vm.backtestEditData = {}
-			vm.$http
-				.get('/dev/seeparams/' + id + '/')
-				.then((res) => {
+			try{
+					const res = await seeParams(id)
 					let data = res.data
 					data.old_uuid = id
 					data.entry = JSON.parse(data.entry)
@@ -564,15 +560,15 @@ export default {
 					vm.$store.commit('getFrequency', vm.editFrequency)
 					vm.backtestEditData = data
 					this.loading = false
+			}
+			catch(error){
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
 				})
-				.catch((error) => {
-					vm.$message({
-						message: 'The internal server is busy, please try again later ',
-						type: 'error',
-						offset: 300
-					})
-					this.loading = false
-				})
+				this.loading = false
+			}
 		},
 		goBacktestResultForm(row) {
 			this.activeName = 'third'
@@ -580,13 +576,13 @@ export default {
 		},
 		goToFavoritesForm() {
 			this.activeName = 'forth'
-			this.$refs.favoriteChild.getBacktestList()
+			this.$refs.favoriteChild.getFavoriteList()
 		},
 		refFavoritesForm() {
-			this.$refs.favoriteChild.getBacktestList()
+			this.$refs.favoriteChild.getFavoriteList()
 		},
 		refHistoryForm() {
-			this.$refs.historyChild.getBacktestList()
+			this.$refs.historyChild.getHistoryList()
 		},
 		// 无法拿到 performance 的数据，服务端异常
 		errorCatchPerformance() {

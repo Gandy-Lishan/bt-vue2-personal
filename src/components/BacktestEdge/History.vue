@@ -283,6 +283,14 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store } from 'vuex'
 const throttle = require('lodash/throttle')
+import {
+	copyBacktest,
+	favoriteBacktest,
+	getHistoryList,
+	getStatus,
+	seeParams,
+	seeReport
+} from '@/service/service.js'
 export default {
 	data() {
 		return {
@@ -306,30 +314,32 @@ export default {
 		}
 	},
 	created() {
-		this.getBacktestList()
+		this.getHistoryList()
 	},
 	methods: {
-		async getBacktestList() {
+		async getHistoryList() {
 			this.loadTest = 'Loading...'
 			this.loading = true
 			let page = this.queryInfo.page
-			let res = await this.$http.get(
-				'/dev/backtest/?ordering=-create_date&page=' + page
-			)
-			if (res.status === 200) {
-				this.loading = false
-				let historyNameList = []
-				this.backtestList = res.data.results
-				if (this.backtestList.length != 0) {
-					this.backtestList.forEach((element) => {
-						historyNameList.push(element.name)
-						if (element.result !== '')
-							element.result = JSON.parse(element.result)
-					})
-					this.$store.commit('getBacktestName', historyNameList)
+			try {
+				let res = await getHistoryList(page)
+			console.log("history列表响应", res);
+				if (res.status === 200) {
+					this.loading = false
+					let historyNameList = []
+					this.backtestList = res.data.results
+					if (this.backtestList.length != 0) {
+						this.backtestList.forEach((element) => {
+							historyNameList.push(element.name)
+							if (element.result !== '')
+								element.result = JSON.parse(element.result)
+						})
+						this.$store.commit('getBacktestName', historyNameList)
+					}
+					this.queryInfo.total = res.data.count
 				}
-				this.queryInfo.total = res.data.count
-			} else {
+			} catch (error) {
+				console.log(error);
 				this.loading = false
 			}
 		},
@@ -338,40 +348,118 @@ export default {
 			vm.loadTest = 'Backtest is running, please wait'
 			vm.loading = true
 			vm.clearInterval = clearInterval
-			let timer = setInterval(() => {
-				vm.$http.get('/dev/status/' + id + '/').then((res) => {
-					if (res.data.status !== 1 && res.data.status !== 0) {
-						console.log("运行结束后的返回值",res);
-						clearInterval(timer)
-						vm.$notify({
-							title: 'The run was successful',
-							message:
-								'Run backtest is successful, click the view results button to see the results.',
-							offset: 100,
-							type: 'success',
-							duration: 1000
-						})
-						vm.queryInfo.page = 1
-						vm.getBacktestList()
-						this.$emit('refFavoritesForm')
-						vm.loading = false
-						let row = res.data
-						row.result = JSON.parse(row.result)
-						vm.viewBacktestResults(row)
-					}
-				})
+			let timer = setInterval(async () => {
+				const res = await getStatus(id)
+				if (res.data.status !== 1 && res.data.status !== 0) {
+					console.log('运行结束后的返回值', res)
+					clearInterval(timer)
+					vm.$notify({
+						title: 'The run was successful',
+						message:
+							'Run backtest is successful, click the view results button to see the results.',
+						offset: 100,
+						type: 'success',
+						duration: 1000
+					})
+					vm.queryInfo.page = 1
+					vm.getHistoryList()
+					this.$emit('refFavoritesForm')
+					vm.loading = false
+					let row = res.data
+					row.result = JSON.parse(row.result)
+					vm.viewBacktestResults(row)
+				}
 			}, 3000)
 		},
-
-		async getStrategyName() {
-			const id = this.backtestList
-			// const res = await this.$http.get('/demo/strategies' + id + '/')
-		},
-		editBacktest: throttle(function (row) {
+		editBacktest: throttle(async function (row) {
 			let vm = this
-			vm.$http
-				.get('/dev/seeparams/' + row.id + '/')
-				.then((res) => {
+			try {
+				const res = await seeParams(row.id)
+				// 恢复indicator layout
+				this.$store.commit('getBacktestSymbol', res.data.symbol)
+				if (res.data.indicator_layout) {
+					this.restoreIndicatorLayout(
+						JSON.parse(res.data.indicator_layout),
+						JSON.parse(res.data.entry).frequency
+					)
+				}
+				this.$store.commit('getRunBacktestData', row)
+				this.$emit('goBacktestResultForm', row)
+
+				vm.$emit('goTobacktestSetupForm', row.id)
+			} catch (error) {
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
+				})
+			}
+		}, 1000),
+		async deleteBacktest(id) {
+			try {
+				const res = await deleteBacktest(id)
+				if (res.status == 204) {
+					this.getHistoryList()
+					this.$emit('refFavoritesForm')
+				} else {
+					this.$message.error({
+						message: 'The deletion failed',
+						duration: 1000
+					})
+				}
+			} catch (error) {
+				this.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
+				})
+			}
+		},
+
+		copyBacktest: throttle(async function (row) {
+			let params = {}
+			const res = await seeParams(row.id)
+			// 恢复indicator layout
+			this.$store.commit('getBacktestSymbol', res.data.symbol)
+			this.$store.commit('getRunBacktestData', row)
+			params = res.data
+			params.name = params.name + '(copy)'
+			params.favorites = false
+			delete params.uuid
+			delete params.results
+			delete params.user_id
+			delete params.status
+			delete params.backtest_id
+			let paramsStr = this.$qs.stringify(params)
+			try {
+				const copyRes = await copyBacktest(paramsStr)
+				if (copyRes.status === 201) {
+					this.$notify({
+						title: 'Copy successfully',
+						message: 'After copying successfully, you can edit the backtest',
+						type: 'success',
+						offset: 100
+					})
+					this.queryInfo.page = 1
+					this.getHistoryList()
+					this.$emit('refFavoritesForm')
+				} else {
+					this.$message.error('Copy failed')
+				}
+			} catch (error) {
+				this.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
+				})
+			}
+		}, 1000),
+		viewBacktestResults: throttle(async function (row) {
+			if (row.result['Total Trades']) {
+				console.log('查看结果')
+				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
+				try {
+					const res = await seeParams(row.id)
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					if (res.data.indicator_layout) {
@@ -380,113 +468,17 @@ export default {
 							JSON.parse(res.data.entry).frequency
 						)
 					}
+
 					this.$store.commit('getRunBacktestData', row)
+					this.$emit('goTobacktestSetupForm', row.id)
 					this.$emit('goBacktestResultForm', row)
-
-					vm.$emit('goTobacktestSetupForm', row.id)
-				})
-				.catch((error) => {
-					vm.$message({
+				} catch (error) {
+					this.$message({
 						message: 'The internal server is busy, please try again later ',
 						type: 'error',
 						offset: 300
 					})
-				})
-		}, 1000),
-		deleteBacktest(id) {
-			this.$http
-				.delete('/dev/backtest/' + id + '/')
-				.then((res) => {
-					if (res.status == 204) {
-						this.getBacktestList()
-						this.$emit('refFavoritesForm')
-					} else {
-						this.$message.error({
-							message: 'The deletion failed',
-							duration: 1000
-						})
-					}
-				})
-				.catch((error) => {
-					vm.$message({
-						message: 'The internal server is busy, please try again later ',
-						type: 'error',
-						offset: 300
-					})
-				})
-		},
-
-		copyBacktest: throttle(function (row) {
-			let params = {}
-			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
-				// 恢复indicator layout
-				this.$store.commit('getBacktestSymbol', res.data.symbol)
-				this.$store.commit('getRunBacktestData', row)
-
-				params = res.data
-				params.name = params.name + '(copy)'
-				params.favorites = false
-				delete params.uuid
-				delete params.results
-				delete params.user_id
-				delete params.status
-				delete params.backtest_id
-				this.$http
-					.post('/dev/backtest/', this.$qs.stringify(params), {
-						withCredentials: true
-					})
-					.then((res) => {
-						if (res.status === 201) {
-							this.$notify({
-								title: 'Copy successfully',
-								message:
-									'After copying successfully, you can edit the backtest',
-								type: 'success',
-								offset: 100
-							})
-							this.queryInfo.page = 1
-							this.getBacktestList()
-							this.$emit('refFavoritesForm')
-						} else {
-							this.$message.error('Copy failed')
-						}
-					})
-					.catch((error) => {
-						this.$message({
-							message: 'The internal server is busy, please try again later ',
-							type: 'error',
-							offset: 300
-						})
-					})
-			})
-		}, 1000),
-		viewBacktestResults: throttle(function (row) {
-			if (row.result['Total Trades']) {
-				console.log("查看结果");
-				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
-				this.$http
-					.get('/dev/seeparams/' + row.id + '/')
-					.then((res) => {
-						// 恢复indicator layout
-						this.$store.commit('getBacktestSymbol', res.data.symbol)
-						if (res.data.indicator_layout) {
-							this.restoreIndicatorLayout(
-								JSON.parse(res.data.indicator_layout),
-								JSON.parse(res.data.entry).frequency
-							)
-						}
-
-						this.$store.commit('getRunBacktestData', row)
-						this.$emit('goTobacktestSetupForm', row.id)
-						this.$emit('goBacktestResultForm', row)
-					})
-					.catch((error) => {
-						this.$message({
-							message: 'The internal server is busy, please try again later ',
-							type: 'error',
-							offset: 300
-						})
-					})
+				}
 			} else {
 				this.$notify({
 					title: 'No trades',
@@ -498,7 +490,7 @@ export default {
 		}, 1000),
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
-			this.getBacktestList()
+			this.getHistoryList()
 		},
 		restoreIndicatorLayout(data, freq) {
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
@@ -533,132 +525,125 @@ export default {
 			// }
 			CIQ.addIndicatorsFromBacktest()
 		},
-		showDes(row) {
+		async showDes(row) {
 			const datades = {}
 			let vm = this
-			vm.$http
-				.get('/dev/seeparams/' + row.id + '/')
-				.then((res) => {
-					const des = res.data
-					let str = ``
-					for (let key in des) {
-						str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
-					}
+			try {
+				const res = await seeParams(row.id)
+				const des = res.data
+				let str = ``
+				for (let key in des) {
+					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
+				}
 
-					vm.$alert(str, '标题名称', {
-						confirmButtonText: '确定',
-						dangerouslyUseHTMLString: true,
-						lockScroll: false,
-						callback: (action) => {
-							vm.$message({
-								type: 'info',
-								message: `action: ${action}`
-							})
-						}
-					})
-				})
-				.catch((error) => {
-					vm.$message({
-						message: 'The internal server is busy, please try again later ',
-						type: 'error',
-						offset: 300
-					})
-				})
-		},
-		sendBack(row) {
-			let vm = this
-			this.$http
-				.get('/dev/report/?uuid=' + row.id)
-				.then((res) => {
-					const des = res.data
-					let str = ``
-					for (let key in des) {
-						str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
+				vm.$alert(str, '标题名称', {
+					confirmButtonText: '确定',
+					dangerouslyUseHTMLString: true,
+					lockScroll: false,
+					callback: (action) => {
+						vm.$message({
+							type: 'info',
+							message: `action: ${action}`
+						})
 					}
-					// for (let key in des.FinalResult.AnnualReturn) {
-					// 	str =
-					// 		str +
-					// 		'<p>' +
-					// 		`${key}:  ${des.FinalResult.AnnualReturn[key]}` +
-					// 		'</p>'
-					// }
-					vm.$alert(str, '标题名称', {
-						confirmButtonText: '确定',
-						dangerouslyUseHTMLString: true,
-						callback: (action) => {
-							vm.$message({
-								type: 'info',
-								message: `action: ${action}`
-							})
-						}
-					})
 				})
-				.catch((error) => {
-					vm.$message({
-						message: 'The internal server is busy, please try again later ',
-						type: 'error',
-						offset: 300
-					})
+			} catch (error) {
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
 				})
+			}
 		},
-		addToFavorites: throttle(function (row) {
+		async sendBack(row) {
+			let vm = this
+			try {
+				const res = await seeReport(row.id)
+				const des = res.data
+				let str = ``
+				for (let key in des) {
+					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
+				}
+				// for (let key in des.FinalResult.AnnualReturn) {
+				// 	str =
+				// 		str +
+				// 		'<p>' +
+				// 		`${key}:  ${des.FinalResult.AnnualReturn[key]}` +
+				// 		'</p>'
+				// }
+				vm.$alert(str, '标题名称', {
+					confirmButtonText: '确定',
+					dangerouslyUseHTMLString: true,
+					callback: (action) => {
+						vm.$message({
+							type: 'info',
+							message: `action: ${action}`
+						})
+					}
+				})
+			} catch (error) {
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
+				})
+			}
+		},
+		addToFavorites: throttle(async function (row) {
 			let vm = this
 			row.favorites = true
 			let params = {
 				favorites: true
 			}
-			this.$http
-				.put('/dev/backtest/' + row.id + '/', vm.$qs.stringify(params))
-				.then((res) => {
-					if (res.status === 200) {
-						this.getBacktestList()
-						this.$notify({
-							title: 'Added to favorites',
-							message:
-								'Favorites have been added and you can view them in My Favorites',
-							type: 'success',
-							offset: 100
-						})
-
-						this.$emit('refFavoritesForm')
-					} else {
-						this.getBacktestList()
-						this.$message.error({
-							message: 'Collection failed',
-							duration: 1000
-						})
-					}
-				})
-				.catch((error) => {
-					vm.$message({
-						message: 'The internal server is busy, please try again later ',
-						type: 'error',
-						offset: 300
+			let paramsStr = vm.$qs.stringify(params)
+			try {
+				const res = await favoriteBacktest(row.id, paramsStr)
+				if (res.status === 200) {
+					this.getHistoryList()
+					this.$notify({
+						title: 'Added to favorites',
+						message:
+							'Favorites have been added and you can view them in My Favorites',
+						type: 'success',
+						offset: 100
 					})
+
+					this.$emit('refFavoritesForm')
+				} else {
+					this.getHistoryList()
+					this.$message.error({
+						message: 'Collection failed',
+						duration: 1000
+					})
+				}
+			} catch (error) {
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
 				})
+			}
 		}, 1000),
-		moveToFavorites: throttle(function (row) {
+		moveToFavorites: throttle(async function (row) {
 			let vm = this
 			row.favorites = false
 			let params = {
 				favorites: false
 			}
-			this.$http
-				.put('/dev/backtest/' + row.id + '/', vm.$qs.stringify(params))
-				.then((res) => {
-					if (res.status === 200) {
-						this.getBacktestList()
-
-						this.$emit('refFavoritesForm')
-					}
+			let paramsStr = vm.$qs.stringify(params)
+			try {
+				const res = await favoriteBacktest(row.id, paramsStr)
+				if (res.status === 200) {
+					this.getHistoryList()
+					this.$emit('refFavoritesForm')
+				}
+			} catch (error) {
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
 				})
-				.catch((error) => {
-					vm.$message({
-						message: 'The internal server is busy, please try again later ',
-						type: 'error',
-						offset: 300
-					})
-				})
+			}
 		}, 1000)
 	}
 }

@@ -502,16 +502,7 @@ export default {
 					return { value: `${item.stock}`, label: `${item.stock}` }
 				})
 			} else {
-				await this.$http
-					.get(
-						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks',
-						{
-							auth: {
-								username: 'sentimentrader_backtest_api',
-								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-							}
-						}
-					)
+				await getStocksList()
 					.then((res) => {
 						this.symbolList = res.data.map((item) => {
 							return { value: `${item.stock}`, label: `${item.stock}` }
