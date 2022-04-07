@@ -354,14 +354,14 @@ export default {
 				if (res.data.status !== 1 && res.data.status !== 0) {
 					console.log('运行结束后的返回值', res)
 					clearInterval(timer)
-					vm.$notify({
-						title: 'The run was successful',
-						message:
-							'Run backtest is successful, click the view results button to see the results.',
-						offset: 100,
-						type: 'success',
-						duration: 1000
-					})
+					// vm.$notify({
+					// 	title: 'The run was successful',
+					// 	message:
+					// 		'Run backtest is successful, click the view results button to see the results.',
+					// 	offset: 100,
+					// 	type: 'success',
+					// 	duration: 1000
+					// })
 					vm.queryInfo.page = 1
 					vm.getHistoryList()
 					this.$emit('refFavoritesForm')

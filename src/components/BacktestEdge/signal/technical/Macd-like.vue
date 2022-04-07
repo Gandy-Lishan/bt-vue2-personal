@@ -186,6 +186,7 @@ export default {
 			this.description = `${criteria} ${direction} ${techVal} ${condition} ${this.tech.value}`
 		},
 		getConditionRadio(val) {
+			this.clearFormValidate()
 			CIQ.store.commit('setConditionRadio', val)
 			if (val === 'MACD Value ') {
 				this.tech.value = 'MACDSL'
