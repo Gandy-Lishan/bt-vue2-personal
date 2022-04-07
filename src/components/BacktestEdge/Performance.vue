@@ -468,8 +468,9 @@ export default {
 							this.$emit('setBacktestResult', initalData['basic'])
 							console.log('initialData:', initalData.markerSet)
 							// ------------------------------ end -----------------------------------
-
-							setTimeout(this.loadMarker(initalData.markerSet), 0)
+								setTimeout(()=>{
+									this.loadMarker(initalData.markerSet)
+								},0)
 
 							//vm.$store.commit('getTradesData',initalData[])
 							vm.loading = false

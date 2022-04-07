@@ -282,6 +282,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store } from 'vuex'
+import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
 const throttle = require('lodash/throttle')
 import {
 	copyBacktest,
@@ -378,16 +379,20 @@ export default {
 				const res = await seeParams(row.id)
 				// 恢复indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)
+				CIQ.hideMarker()
+				CIQ.isMarkerShown = false
 				if (res.data.indicator_layout) {
 					this.restoreIndicatorLayout(
 						JSON.parse(res.data.indicator_layout),
-						JSON.parse(res.data.entry).frequency
+						JSON.parse(res.data.entry).frequency,
+						row
 					)
 				}
-				this.$store.commit('getRunBacktestData', row)
-				this.$emit('goBacktestResultForm', row)
-
-				vm.$emit('goTobacktestSetupForm', row.id)
+				else{
+					this.$store.commit('getRunBacktestData', row)
+					this.$emit('goTobacktestSetupForm', row.id)
+					this.$emit('goBacktestResultForm', row)
+				}
 			} catch (error) {
 				vm.$message({
 					message: 'The internal server is busy, please try again later ',
@@ -464,19 +469,24 @@ export default {
 				try {
 					const res = await seeParams(row.id)
 					// 恢复indicator layout
+					console.log("编辑回测");
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
+					CIQ.hideMarker()
+					CIQ.isMarkerShown = false
 					if (res.data.indicator_layout) {
 						this.restoreIndicatorLayout(
 							JSON.parse(res.data.indicator_layout),
-							JSON.parse(res.data.entry).frequency
+							JSON.parse(res.data.entry).frequency,
+							row
 						)
 					}
-
-					this.$store.commit('getRunBacktestData', row)
-					this.$emit('goTobacktestSetupForm', row.id)
-					this.$emit('goBacktestResultForm', row)
-				} catch (error) {
-					this.$message({
+					else{
+						this.$store.commit('getRunBacktestData', row)
+						this.$emit('goTobacktestSetupForm', row.id)
+						this.$emit('goBacktestResultForm', row)
+					}
+				}catch(error){
+					vm.$message({
 						message: 'The internal server is busy, please try again later ',
 						type: 'error',
 						offset: 300
@@ -495,14 +505,15 @@ export default {
 			this.queryInfo.page = newpage
 			this.getHistoryList()
 		},
-		restoreIndicatorLayout(data, freq) {
+		reloadData(data, freq){
+			let frequency = ''
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getExtraIndicators', [])
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
-			var frequency = ''
+			
 			switch (freq) {
 				case 'Daily': {
 					frequency = 'daily'
@@ -521,12 +532,27 @@ export default {
 				}
 			}
 			this.$store.commit('setRestoreFreq', frequency)
-			// 在跑完回测后和view result之间会加载一次chart去输出SignalOuput
-			// if(CIQ.isBacktestRun == true){
-			// 	CIQ.isBacktestRun = false
-			// 	CIQ.outputSignalsResult()
-			// }
-			CIQ.addIndicatorsFromBacktest()
+		},
+		restoreIndicatorLayout(data, freq, row) {
+			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
+			if(CIQ.isBacktestRun == true){
+				CIQ.isBacktestRun = false
+				this.reloadData(data, freq)
+				var that = this
+				CIQ.outputSignalsResult(function(){
+					that.$store.commit('getRunBacktestData', row)
+					that.$emit('goTobacktestSetupForm', row.id)
+					that.$emit('goBacktestResultForm', row)
+				})
+			}else{
+				this.reloadData(data, freq)
+				var that = this
+				CIQ.addIndicatorsFromBacktest(function(){
+					that.$store.commit('getRunBacktestData', row)
+					that.$emit('goTobacktestSetupForm', row.id)
+					that.$emit('goBacktestResultForm', row)
+				})
+			}
 		},
 		async showDes(row) {
 			const datades = {}
