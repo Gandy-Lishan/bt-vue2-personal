@@ -363,7 +363,7 @@ export default {
 								duration: 1000
 							})
 							vm.queryInfo.page = 1
-							vm.getBacktestList()
+							vm.getHistoryList()
 							this.$emit('refFavoritesForm')
 							vm.loading = false
 							let row = res.data
@@ -378,16 +378,20 @@ export default {
 				const res = await seeParams(row.id)
 				// 恢复indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)
+				CIQ.hideMarker()
+				CIQ.isMarkerShown = false
 				if (res.data.indicator_layout) {
 					this.restoreIndicatorLayout(
 						JSON.parse(res.data.indicator_layout),
-						JSON.parse(res.data.entry).frequency
+						JSON.parse(res.data.entry).frequency,
+						row
 					)
 				}
-				this.$store.commit('getRunBacktestData', row)
-				this.$emit('goBacktestResultForm', row)
-
-				vm.$emit('goTobacktestSetupForm', row.id)
+				else{
+					this.$store.commit('getRunBacktestData', row)
+					this.$emit('goTobacktestSetupForm', row.id)
+					this.$emit('goBacktestResultForm', row)
+				}
 			} catch (error) {
 				vm.$message({
 					message: 'The internal server is busy, please try again later ',
@@ -487,107 +491,6 @@ export default {
 						offset: 300
 					})
 				}
-			}
-		}, 1000),
-		deleteBacktest(id) {
-			this.$http
-				.delete('/dev/backtest/' + id + '/')
-				.then((res) => {
-					if (res.status == 204) {
-						this.getBacktestList()
-						this.$emit('refFavoritesForm')
-					} else {
-						this.$message.error({
-							message: 'The deletion failed',
-							duration: 1000
-						})
-					}
-				})
-				.catch((error) => {
-					vm.$message({
-						message: 'The internal server is busy, please try again later ',
-						type: 'error',
-						offset: 300
-					})
-				})
-		},
-
-		copyBacktest: throttle(function (row) {
-			let params = {}
-			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
-				// 恢复indicator layout
-				this.$store.commit('getBacktestSymbol', res.data.symbol)
-				this.$store.commit('getRunBacktestData', row)
-
-				params = res.data
-				params.name = params.name + '(copy)'
-				params.favorites = false
-				delete params.uuid
-				delete params.results
-				delete params.user_id
-				delete params.status
-				delete params.backtest_id
-				this.$http
-					.post('/dev/backtest/', this.$qs.stringify(params), {
-						withCredentials: true
-					})
-					.then((res) => {
-						if (res.status === 201) {
-							this.$notify({
-								title: 'Copy successfully',
-								message:
-									'After copying successfully, you can edit the backtest',
-								type: 'success',
-								offset: 100
-							})
-							this.queryInfo.page = 1
-							this.getBacktestList()
-							this.$emit('refFavoritesForm')
-						} else {
-							this.$message.error('Copy failed')
-						}
-					})
-					.catch((error) => {
-						this.$message({
-							message: 'The internal server is busy, please try again later ',
-							type: 'error',
-							offset: 300
-						})
-					})
-			})
-		}, 1000),
-		viewBacktestResults: throttle(function (row) {
-			if (row.result['Total Trades']) {
-				console.log("查看结果",row);
-				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
-				this.$http
-					.get('/dev/seeparams/' + row.id + '/')
-					.then((res) => {
-						// 恢复indicator layout
-						this.$store.commit('getBacktestSymbol', res.data.symbol)
-						CIQ.hideMarker()
-						CIQ.isMarkerShown = false
-						if (res.data.indicator_layout) {
-							this.restoreIndicatorLayout(
-								JSON.parse(res.data.indicator_layout),
-								JSON.parse(res.data.entry).frequency,
-								row
-							)
-						}
-						else{
-							this.$store.commit('getRunBacktestData', row)
-							this.$emit('goTobacktestSetupForm', row.id)
-							this.$emit('goBacktestResultForm', row)
-						}
-					})
-					.catch((error) => {
-						console.error(error)
-						this.$message({
-							message: 'The internal server is busy, please try again later ',
-							type: 'error',
-							offset: 300
-						})
-					})
 			} else {
 				this.$notify({
 					title: 'No trades',

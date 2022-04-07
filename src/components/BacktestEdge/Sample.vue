@@ -373,15 +373,20 @@ export default {
 					const res = await seeParams(row.id)
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
+					CIQ.hideMarker()
+					CIQ.isMarkerShown = false
 					if (res.data.indicator_layout) {
 						this.restoreIndicatorLayout(
 							JSON.parse(res.data.indicator_layout),
-							JSON.parse(res.data.entry).frequency
+							JSON.parse(res.data.entry).frequency,
+							row
 						)
 					}
-					this.$store.commit('getRunBacktestData', row)
-					this.$emit('goTobacktestSetupForm', row.id)
-					this.$emit('goBacktestResultForm', row)
+					else{
+						this.$store.commit('getRunBacktestData', row)
+						this.$emit('goTobacktestSetupForm', row.id)
+						this.$emit('goBacktestResultForm', row)
+					}
 				} catch (error) {
 					this.$message({
 						message: 'The internal server is busy, please try again later ',
@@ -402,14 +407,15 @@ export default {
 			this.queryInfo.page = newpage
 			this.getSampleList()
 		},
-		restoreIndicatorLayout(data, freq) {
+		reloadData(data, freq){
+			let frequency = ''
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
 			this.$store.commit('getExtraIndicators', [])
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
-			var frequency = ''
+			
 			switch (freq) {
 				case 'Daily': {
 					frequency = 'daily'
@@ -428,7 +434,15 @@ export default {
 				}
 			}
 			this.$store.commit('setRestoreFreq', frequency)
-			CIQ.addIndicators()
+		},
+		restoreIndicatorLayout(data, freq, row) {
+				this.reloadData(data, freq)
+				var that = this
+				CIQ.addIndicatorsFromBacktest(function(){
+					that.$store.commit('getRunBacktestData', row)
+					that.$emit('goTobacktestSetupForm', row.id)
+					that.$emit('goBacktestResultForm', row)
+				})
 		},
 		async showDes(row) {
 			const datades = {}

@@ -637,6 +637,7 @@ main{
 }
 
 button.toTop {
+	z-index: 999;
 	border:unset;
     position: fixed;
     left: 75px;
@@ -785,10 +786,6 @@ header {
 		padding: 7px;
 		font-size: 12px;
 	}
-}
-button.toTop{
-	width: 50px;
-	height: 50px;
 }
 }
 </style>
