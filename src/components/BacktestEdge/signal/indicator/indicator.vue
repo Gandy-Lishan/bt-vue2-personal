@@ -472,7 +472,7 @@ export default {
 				})
 				let sentimentList = this.$store.state.sentimentIndicatorList
 				if (sentimentList.length == 0) {
-					const res = await getIndicatorsList()
+					let res = await getIndicatorsList()
 					sentimentList = res.data.map((obj) => {
 							if (obj.chart_name && obj.url && obj.updated) {
 								return {
@@ -581,7 +581,7 @@ export default {
 					// 往父组件传值
 					let sentimentList = this.$store.state.sentimentIndicatorList
 					if (sentimentList.length == 0) {
-						const res = await getIndicatorsList()
+						let res = await getIndicatorsList()
 						sentimentList = res.data.map((obj) => {
 								if (obj.chart_name && obj.url && obj.updated) {
 									return {
