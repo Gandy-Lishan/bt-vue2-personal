@@ -18,8 +18,7 @@
 					<el-form-item label="Commission:" prop="commission">
 						<el-input
 							v-model="temp.commission"
-							@change="getCommission"
-							@input="validateCommission"
+							@input="getCommission"
 							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input>
 					</el-form-item>
@@ -54,23 +53,6 @@
 							</el-select>
 						</div>
 					</el-form-item>
-					<!-- <el-form-item label="Money Management:" prop="moneyManagement">
-						<div class="selectBox">
-							<el-select
-								v-model="mmValue"
-								@change="getSizeAllocationValue(mmValue)"
-								placeholder="Pleace select"
-							>
-								<el-option
-									v-for="item in mmOptions"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value"
-								>
-								</el-option>
-							</el-select>
-						</div>
-					</el-form-item> -->
 				</el-col>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12" :span="2">
 					<el-form-item label="Backtest Period:" prop="backtestHistory">
@@ -183,28 +165,30 @@ export default {
 			}
 		}
 		var validateCommissionRule = (rule, value, callback) => {
-			const pattern = /^\d+(\.\d{1,3})?$/
-			if (value == 0 || value == '') {
+			let val = value * 100
+			const pattern = /^\d+(\.\d{1,2})?$/
+			if (val == 0 || val == '') {
 				callback(new Error('Please input commission'))
-			} else if (!pattern.test(value)) {
-				callback(new Error('You can enter only two  decimal places at most'))
-			}else if(value > 100){
-				callback(new Error('Commission cannot exceed 100'))
-			} else {
-				callback()
+			} 
+			if (!pattern.test(val) && val != 0) {
+				callback(new Error('Number should be below 100 with two decimal places'))}
+			if(val > 100){
+				callback(new Error('Number should be below 100 with two decimal places'))
 			}
+			callback()
 		}
 		var validateSlippageRule = (rule, value, callback) => {
-			const pattern = /^\d+(\.\d{1,3})?$/
+			const pattern = /^\d+(\.\d{1,2})?$/
 			if (value == 0 || value == '') {
 				callback(new Error('Please input slippage'))
-			} else if (!pattern.test(value)) {
-				callback(new Error('You can enter only two  decimal places at most'))
-			}else if(value > 1){
-				callback(new Error('Slippage cannot exceed 1'))
-			}  else {
-				callback()
 			}
+			if (!pattern.test(value) && value != 0) {
+				callback(new Error('Number should be below 1 with two decimal places'))
+			}
+			if(value > 1){
+				callback(new Error('Number should be below 1 with two decimal places'))
+			}
+				callback()
 		}
 		var validateNameRule = (rule, value, callback) => {
 			if (value == '') {
@@ -417,29 +401,6 @@ export default {
 		setEditDirection(val) {
 			this.direction = val
 		},
-		validateCommission: throttle(function (val) {
-			let list = val.split('.')
-			if (list.length === 2) {
-				let temp = ''
-				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) temp = list[0]
-				else {
-					temp = list[0].substring(0, 2)
-				}
-
-				if (list[1].search(/^\d{0,3}?$/) !== -1) temp = temp + '.' + list[1]
-				else {
-					temp = temp + '.' + list[1].substring(0, 3)
-				}
-
-				this.temp.commission = temp
-			} else if (list.length === 1) {
-				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1)
-					this.bd.commission = list[0]
-				else {
-					this.temp.commission = list[0].substring(0, 2)
-				}
-			}
-		}, 500),
 		validateStartingCapital: throttle(function (val) {
 			let re = /^\d+\.?\d{0,2}$/
 			if (val.search(re) !== -1) {
@@ -567,6 +528,7 @@ export default {
 		},
 		getCommission: throttle(function (val) {
 			this.bd.commission = val / 100
+			console.log(val);
 		}, 500),
 		validateForm(newTag, oldTag) {
 			let data = true

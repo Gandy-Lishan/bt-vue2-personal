@@ -299,7 +299,7 @@ input[type="time"] {
 }
 .backtest_container .el-form-item .el-form-item__content .el-form-item__error {
   padding-top: 11px;
-  left: 155px;
+  left: -1px;
 }
 
 .indicator-box .el-form-item .el-form-item__content .el-form-item__error {
