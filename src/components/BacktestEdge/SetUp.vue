@@ -173,29 +173,36 @@ export default {
 	name: 'setUp',
 	data() {
 		var validateCapital = (rule, value, callback) => {
+			const pattern = /^[1-9]*[1-9][0-9]*$/
 			if (value == 0 || value == '') {
 				callback(new Error('Please input starting capital'))
-			} else if (isNaN(value)) {
-				callback(new Error('Please enter the correct format'))
-			} else {
+			} else if (!pattern.test(value)) {
+				callback(new Error('Please enter a positive integer'))
+			} else{
 				callback()
 			}
 		}
 		var validateCommissionRule = (rule, value, callback) => {
+			const pattern = /^\d+(\.\d{1,3})?$/
 			if (value == 0 || value == '') {
 				callback(new Error('Please input commission'))
-			} else if (isNaN(value)) {
-				callback(new Error('Please enter the correct format'))
+			} else if (!pattern.test(value)) {
+				callback(new Error('You can enter only two  decimal places at most'))
+			}else if(value > 100){
+				callback(new Error('Commission cannot exceed 100'))
 			} else {
 				callback()
 			}
 		}
 		var validateSlippageRule = (rule, value, callback) => {
+			const pattern = /^\d+(\.\d{1,3})?$/
 			if (value == 0 || value == '') {
 				callback(new Error('Please input slippage'))
-			} else if (isNaN(value)) {
-				callback(new Error('Please enter the correct format'))
-			} else {
+			} else if (!pattern.test(value)) {
+				callback(new Error('You can enter only two  decimal places at most'))
+			}else if(value > 1){
+				callback(new Error('Slippage cannot exceed 1'))
+			}  else {
 				callback()
 			}
 		}
@@ -577,6 +584,7 @@ export default {
 		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.backtestSetupForm.clearValidate()
+			this.$emit('getTimeFrame', this.frequency)
 		},
 		changeTimeframe(val) {
 			this.getFrequency(val)

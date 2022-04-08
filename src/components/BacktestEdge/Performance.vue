@@ -325,18 +325,18 @@
 						</el-table-column>
 						
 						<el-table-column
-							prop="EachReturn"
-							label="Each Return %"
+							prop="TradeReturn"
+							label="Trade Return %"
 							align="center"
 							show-overflow-tooltip
 						>
 							<template slot-scope="scope">
-								<span v-if="scope.row.EachReturn == 'none'">{{ '' }}</span>
-								<span v-else-if="scope.row.EachReturn >= 0"
-									>{{ (scope.row.EachReturn * 100).toFixed(2) }}%</span
+								<span v-if="scope.row.TradeReturn == 'none'">{{ '' }}</span>
+								<span v-else-if="scope.row.TradeReturn >= 0"
+									>{{scope.row.TradeReturn}}%</span
 								>
 								<span v-else style="color: red"
-									>{{ (scope.row.EachReturn * 100).toFixed(2) }}%</span
+									>{{scope.row.TradeReturn}}%</span
 								>
 							</template>
 						</el-table-column>
@@ -408,6 +408,7 @@ export default {
 							console.log('eric返回的值', res.data);
 							initalData = res.data
 							// -------------------------------------  text ----------------
+							const tradeReturn = initalData["Each Return"]
 							data.uuid = initalData['UUID']
 							data.symbol = initalData['Symbol']
 							data.frequency = initalData['Frequency']
@@ -460,7 +461,15 @@ export default {
 							vm.drawDownImgUrl = data.ddFileURL
 							vm.monthReturnImgUrl = data.returnsHeatmapFileURL
 							vm.annualReturnImgUrl = data.annualReturnsFileURL
+							for(let i=0;i<initalData['Trades'].length;i++) {
+								if( i % 2 !== 0) {
+								initalData['Trades'][i].TradeReturn = tradeReturn[initalData['Trades'][i].trade_number]
+								}else{
+									initalData['Trades'][i].TradeReturn = 'none'
+								}
+							}
 							vm.tradesData = initalData['Trades']
+							console.log("trades的数据", vm.tradesData);
 							// ---------------------------------------- end ----------------------------------
 
 							// ----------------------- backtest result-------------------------------
@@ -540,7 +549,12 @@ export default {
 			}
 		},
 		try1({ row, column, rowIndex, columnIndex }) {
-			if (columnIndex === 5 && column.label == 'Total Return %') {
+			if (columnIndex === 6 && column.label == 'Total Return %') {
+				if (rowIndex % 2 === 0) {
+					row.Return = 'none'
+				}
+			}
+			if (columnIndex === 5 && column.label == 'Trade Return %') {
 				if (rowIndex % 2 === 0) {
 					row.Return = 'none'
 				}

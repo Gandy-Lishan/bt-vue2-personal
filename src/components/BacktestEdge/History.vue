@@ -390,8 +390,8 @@ export default {
 				}
 				else{
 					this.$store.commit('getRunBacktestData', row)
-					this.$emit('goTobacktestSetupForm', row.id)
 					this.$emit('goBacktestResultForm', row)
+					this.$emit('goTobacktestSetupForm', row.id)
 				}
 			} catch (error) {
 				vm.$message({

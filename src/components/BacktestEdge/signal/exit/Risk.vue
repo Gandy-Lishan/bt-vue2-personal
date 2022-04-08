@@ -101,13 +101,19 @@ export default {
 			description: '',
 			editRiskVal: '',
 			checkList: ['Take Profit', 'Stop Loss', 'Time In Market', 'Profit/Loss'],
-			timeFra: ''
+			timeFra: '',
+			
 		}
 	},
 	methods: {
 		clearForm() {
-			Object.assign(this.$data, this.$options.data())
-			this.timeFra = '(days)'
+			this.risk =  {
+				take_profit: 20,
+				stop_loss: 5,
+				time_in_market: 120}
+			this.description = ''
+			this.checkList = ['Take Profit', 'Stop Loss', 'Time In Market', 'Profit/Loss']
+			this.editRiskVal = ''
 		},
 		validateStopLoss(num) {
 			if (num < 0 || num > 100) {
@@ -243,6 +249,7 @@ export default {
 			}
 		},
 		setEditData(newVal) {
+			console.log('risk control', newVal);
 			if (JSON.stringify(newVal) != '{}') {
 				if (
 					newVal.exit.signals[0].sc.take_profit &&
