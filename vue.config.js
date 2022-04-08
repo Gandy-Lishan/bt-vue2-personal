@@ -71,7 +71,8 @@ module.exports = {
 				}
 			},
 			'/dev': {
-				target: 'http://3.140.194.24:80', 
+				target: 'http://3.140.194.24:80',
+				//target: 'http://10.131.3.74:8000', 
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {

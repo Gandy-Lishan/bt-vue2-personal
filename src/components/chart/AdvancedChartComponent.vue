@@ -469,6 +469,8 @@ export default class AdvancedChartComponent extends Vue {
 			
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
 			CIQ.stxx.layout.headsUp = "floating";
+			CIQ.stxx.chart.yAxis.displayGridLines = false;
+			CIQ.stxx.chart.xAxis.displayGridLines = false;
 			//CIQ.UI.Markers.prototype.showMarkers('mMarker')
 			
 			//let showMarkers = CIQ.UI.Markers.prototype.showMarkers
