@@ -48,8 +48,8 @@
 						<div class="set-up-container" @click="tabContentClick">
 							<set-up
 								ref="setUpChild"
-								:backtestEditData="backtestEditData"
 								:editFrequency="editFrequency"
+								:backtestEditData="backtestEditData"
 								@getTimeFrame="getTimeFrame"
 								@setDirection="setDirection"
 							></set-up>
@@ -493,6 +493,7 @@ export default {
 										vm.$store.commit('clearBacktestUuid')
 									}
 									// 清除 oldBacktestName
+									vm.backtestEditData = {}
 									vm.$refs.setUpChild.clearOldBacktestName()
 									vm.$refs.favoriteChild.getFavoriteList()
 								} else {
