@@ -351,26 +351,26 @@ export default {
 			vm.loading = true
 			vm.clearInterval = clearPromiseInterval
 			let timer = setPromiseInterval(async () => {
-				 var res = await vm.$http.get('/dev/status/' + id + '/')
-					if (res.data.status !== 1 && res.data.status !== 0) {
-						clearPromiseInterval(timer).then(() => console.log("运行结束后的返回值",res))		
-							vm.$notify({
-								title: 'The run was successful',
-								message:
-									'Run backtest is successful, click the view results button to see the results.',
-								offset: 100,
-								type: 'success',
-								duration: 1000
-							})
-							vm.queryInfo.page = 1
-							vm.getHistoryList()
-							this.$emit('refFavoritesForm')
-							vm.loading = false
-							let row = res.data
-							row.result = JSON.parse(row.result)
-							vm.viewBacktestResults(row)
-					}
-			}, 1000)
+				const res = await getStatus(id)
+				if (res.data.status !== 1 && res.data.status !== 0) {
+					clearPromiseInterval(timer).then(() => console.log("运行结束后的返回值",res))
+					// vm.$notify({
+					// 	title: 'The run was successful',
+					// 	message:
+					// 		'Run backtest is successful, click the view results button to see the results.',
+					// 	offset: 100,
+					// 	type: 'success',
+					// 	duration: 1000
+					// })
+					vm.queryInfo.page = 1
+					vm.getHistoryList()
+					this.$emit('refFavoritesForm')
+					vm.loading = false
+					let row = res.data
+					row.result = JSON.parse(row.result)
+					vm.viewBacktestResults(row)
+				}
+			}, 3000)
 		},
 		editBacktest: throttle(async function (row) {
 			let vm = this

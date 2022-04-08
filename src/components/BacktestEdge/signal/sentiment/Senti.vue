@@ -305,6 +305,7 @@ export default {
 			this.description = `${criteria} ${direction} ${sentiVal} ${ma} ${period} ${condition} ${value}`
 		},
 		getConditionRadio(val) {
+			this.clearFormValidate()
 			if (this.conditionRadio !== 'Sentiment Moving Average') {
 				// 清空moving average在切回默认senti radio
 				this.periodTemp = this.senti.period
