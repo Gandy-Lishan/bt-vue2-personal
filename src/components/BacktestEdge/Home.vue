@@ -717,10 +717,10 @@ header {
     padding: 10px 10px;
     resize: auto;
     overflow: hidden;
-    margin: 25px;
+    margin: 0 25px;
 }
 .betaNote{
-	padding: 22px 50px;
+	padding: 22px 50px 10px 50px;
 }
 .criteria-box {
 	display: flex;

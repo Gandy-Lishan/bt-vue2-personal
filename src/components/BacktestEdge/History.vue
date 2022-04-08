@@ -381,7 +381,7 @@ export default {
 				CIQ.hideMarker()
 				CIQ.isMarkerShown = false
 				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayout(
+					this.restoreIndicatorLayoutEdit(
 						JSON.parse(res.data.indicator_layout),
 						JSON.parse(res.data.entry).frequency,
 						row
@@ -389,8 +389,8 @@ export default {
 				}
 				else{
 					this.$store.commit('getRunBacktestData', row)
-					this.$emit('goTobacktestSetupForm', row.id)
 					this.$emit('goBacktestResultForm', row)
+					this.$emit('goTobacktestSetupForm', row.id)
 				}
 			} catch (error) {
 				vm.$message({
@@ -473,7 +473,7 @@ export default {
 					CIQ.hideMarker()
 					CIQ.isMarkerShown = false
 					if (res.data.indicator_layout) {
-						this.restoreIndicatorLayout(
+						this.restoreIndicatorLayoutView(
 							JSON.parse(res.data.indicator_layout),
 							JSON.parse(res.data.entry).frequency,
 							row
@@ -532,7 +532,7 @@ export default {
 			}
 			this.$store.commit('setRestoreFreq', frequency)
 		},
-		restoreIndicatorLayout(data, freq, row) {
+		restoreIndicatorLayoutView(data, freq, row) {
 			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
 			if(CIQ.isBacktestRun == true){
 				CIQ.isBacktestRun = false
@@ -550,6 +550,27 @@ export default {
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goTobacktestSetupForm', row.id)
 					that.$emit('goBacktestResultForm', row)
+				})
+			}
+		},
+		restoreIndicatorLayoutEdit(data, freq, row) {
+			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
+			if(CIQ.isBacktestRun == true){
+				CIQ.isBacktestRun = false
+				this.reloadData(data, freq)
+				var that = this
+				CIQ.outputSignalsResult(function(){
+					that.$store.commit('getRunBacktestData', row)
+					that.$emit('goBacktestResultForm', row)
+					that.$emit('goTobacktestSetupForm', row.id)	
+				})
+			}else{
+				this.reloadData(data, freq)
+				var that = this
+				CIQ.addIndicatorsFromBacktest(function(){
+					that.$store.commit('getRunBacktestData', row)
+					that.$emit('goBacktestResultForm', row)
+					that.$emit('goTobacktestSetupForm', row.id)
 				})
 			}
 		},
