@@ -481,7 +481,7 @@ export default {
 					}
 					else{
 						this.$store.commit('getRunBacktestData', row)
-						this.$emit('goTobacktestSetupForm', row.id)
+						this.$emit('goTobacktestSetupForm', row.id, 'fromView')
 						this.$emit('goBacktestResultForm', row)
 					}
 				}catch(error){
@@ -562,7 +562,7 @@ export default {
 				CIQ.outputSignalsResult(function(){
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goBacktestResultForm', row)
-					that.$emit('goTobacktestSetupForm', row.id)	
+					that.$emit('goTobacktestSetupForm', row.id)
 				})
 			}else{
 				this.reloadData(data, freq)
