@@ -59,7 +59,6 @@
 							<span></span>
 							<cq-tooltip>Info</cq-tooltip>
 						</cq-toggle>
-
 						<cq-menu class="ciq-menu toggle-options collapse tooltip-ui">
 							<span></span>
 							<cq-menu-dropdown>
@@ -69,10 +68,13 @@
 								<cq-item cq-member="headsUp-dynamic"
 									>Show Dynamic Callout<span class="ciq-radio"
 										><span></span></span
-								></cq-item>
-								
+								></cq-item>		
 							</cq-menu-dropdown>
 						</cq-menu>
+						<cq-toggle class="grid" id="grid" stxtap="Layout.xAixsGridLine()">
+							<span></span>
+							<cq-tooltip>hide grid</cq-tooltip>
+						</cq-toggle>
 					</cq-info-toggle-dropdown>
 					<!-- <cq-toggle class="ciq-DT tableview-ui" cq-member="tableView"
 						><span></span><cq-tooltip>Table View</cq-tooltip></cq-toggle
@@ -248,7 +250,7 @@
 								<cq-themes></cq-themes>
 								<cq-separator></cq-separator>
 							</cq-menu-dropdown-section>
-							<cq-menu-dropdown-section class="chart-locale">
+							<!-- <cq-menu-dropdown-section class="chart-locale">
 								<cq-heading>Locale</cq-heading>
 								<cq-item keyboard-selectable="false"
 									><cq-clickable
@@ -262,7 +264,7 @@
 									<cq-flag></cq-flag>
 									<cq-language-name>Change Language</cq-language-name>
 								</cq-item>
-							</cq-menu-dropdown-section>
+							</cq-menu-dropdown-section> -->
 						</cq-menu-dropdown>
 					</cq-menu>
 				</div>
@@ -469,8 +471,7 @@ export default class AdvancedChartComponent extends Vue {
 			
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
 			CIQ.stxx.layout.headsUp = "floating";
-			CIQ.stxx.chart.yAxis.displayGridLines = false;
-			CIQ.stxx.chart.xAxis.displayGridLines = false;
+			CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = false;
 			//CIQ.UI.Markers.prototype.showMarkers('mMarker')
 			
 			//let showMarkers = CIQ.UI.Markers.prototype.showMarkers
