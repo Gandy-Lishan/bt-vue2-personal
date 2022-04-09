@@ -155,38 +155,41 @@ export default {
 	name: 'setUp',
 	data() {
 		var validateCapital = (rule, value, callback) => {
-			const pattern = /^[1-9]*[1-9][0-9]*$/
-			if (value == 0 || value == '') {
+			const pattern = /^\d+(\.\d{1,2})?$/
+			if ( value == '') {
 				callback(new Error('Please input starting capital'))
-			} else if (!pattern.test(value)) {
-				callback(new Error('Please enter a positive integer'))
-			} else{
-				callback()
 			}
+			if (!pattern.test(value) && value != 0) {
+				callback(new Error('Values greater than 1000, up to two decimal places'))
+			}
+			if(value < 1000) {
+				callback(new Error('Values greater than 1000, up to two decimal places'))
+			}
+				callback()
 		}
 		var validateCommissionRule = (rule, value, callback) => {
 			let val = value * 100
 			const pattern = /^\d+(\.\d{1,2})?$/
-			if (val == 0 || val == '') {
+			if (value == '') {
 				callback(new Error('Please input commission'))
 			} 
-			if (!pattern.test(val) && val != 0) {
-				callback(new Error('Number should be below 100 with two decimal places'))}
-			if(val > 100){
-				callback(new Error('Number should be below 100 with two decimal places'))
+			if (!pattern.test(value) && value != 0) {
+				callback(new Error('Value less than 50, up to two decimal places'))}
+			if(value > 50){
+				callback(new Error('Value less than 50, up to two decimal places'))
 			}
 			callback()
 		}
 		var validateSlippageRule = (rule, value, callback) => {
 			const pattern = /^\d+(\.\d{1,2})?$/
-			if (value == 0 || value == '') {
+			if (value == '') {
 				callback(new Error('Please input slippage'))
 			}
 			if (!pattern.test(value) && value != 0) {
-				callback(new Error('Number should be below 1 with two decimal places'))
+				callback(new Error('Value greater than 0, up to two decimal places'))
 			}
-			if(value > 1){
-				callback(new Error('Number should be below 1 with two decimal places'))
+			if(value < 0) {
+				callback(new Error('Value greater than 0, up to two decimal places'))
 			}
 				callback()
 		}
@@ -363,6 +366,7 @@ export default {
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
 					this.temp.commission = Number(newVal.commission) * 100
+					this.bd.commission = newVal.commission * 100
 					let year
 					let month
 					let day
@@ -527,8 +531,8 @@ export default {
 			}
 		},
 		getCommission: throttle(function (val) {
-			this.bd.commission = val / 100
-			console.log(val);
+			this.bd.commission = val
+			console.log('this.bd.commission',this.bd.commission);
 		}, 500),
 		validateForm(newTag, oldTag) {
 			let data = true
@@ -741,6 +745,7 @@ export default {
 				if (nameChecked) {
 					if (this.bd.end_date) {
 						// 保存 backtestform 的数据
+						this.bd.commission = this.temp.commission / 100
 						this.$store.commit('setBd', this.bd)
 						this.$store.commit('getFrequency', this.frequency)
 						return checked
