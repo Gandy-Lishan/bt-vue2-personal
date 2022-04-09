@@ -73,7 +73,19 @@
 						</cq-menu>
 						<cq-toggle class="grid" id="grid" stxtap="Layout.xAixsGridLine()">
 							<span></span>
-							<cq-tooltip>hide grid</cq-tooltip>
+							<cq-tooltip>grid</cq-tooltip>
+						</cq-toggle>
+						<cq-toggle class="lastP" id="lastP" stxtap="Layout.lastPriceLabel()">
+						<span></span>
+						<cq-tooltip>last price</cq-tooltip>
+						</cq-toggle>
+						<cq-toggle class="buy" id="buy" style="visibility:hidden;margin-left:28px">
+							<span style='margin-right:10px'><svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'><path d='M512 124L64 900h896z' p-id='2093' fill='#1afa29'></path></svg></span>
+							<cq-tooltip>BUY</cq-tooltip>
+						</cq-toggle>
+						<cq-toggle class="sell" id="sell" style="visibility:hidden">
+							<span style='margin-right:10px'><svg t='1636008125523' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2169' width='30' height='30' ><path d='M525.873548 897.156129l-383.174193-761.723871 763.045161-1.981935-379.870968 763.705806z' p-id='2170' fill='#d81e06'></path></svg></span>
+							<cq-tooltip>SELL</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
 					<!-- <cq-toggle class="ciq-DT tableview-ui" cq-member="tableView"
@@ -458,31 +470,37 @@ export default class AdvancedChartComponent extends Vue {
 			//CIQ.stxx.setTimeZone("Asia/Hong_Kong", "America/New_York");
 
 			CIQ.ChartEngine.prototype.prepend("draw", function () {
-			// create persistence by forcing it  be called in every animation frame.
-				//CIQ.stxx.watermark("chart", { h: "bottom", v: "left", text: "sentimentrader.com" });
-				
+	
 			});
 			var node = document.getElementsByClassName("stx-subholder")[0]
 			var newdiv=document.createElement("div");
 			newdiv.className = 'stLogo'
 			node.appendChild(newdiv)
-
-			
 			
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
-			CIQ.stxx.layout.headsUp = "floating";
-			CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = false;
-			//CIQ.UI.Markers.prototype.showMarkers('mMarker')
-			
-			//let showMarkers = CIQ.UI.Markers.prototype.showMarkers
-			// var mas = CIQ.Studies.movingAverageHelper(CIQ.stxx, "options");
-			// //(mas);
-           
+			//CIQ.stxx.layout.headsUp = "floating";
+			//CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = false;
+			this.initializeToggle()
 		}, 0)
 				
 	}
 
-
+	initializeToggle() {
+		var mNode = document.getElementsByClassName("lastP")[0]
+		if (CIQ.stxx.layout.lastPriceLabel){
+			mNode.classList.remove("active");
+		}
+		else{
+			mNode.classList.add("active");
+		}
+		var mNode = document.getElementsByClassName("grid")[0]
+		if (CIQ.stxx.layout.xAixsGridLine){
+			mNode.classList.remove("active");
+		}
+		else{
+			mNode.classList.add("active");
+		}
+	}
 	beforeDestroy() {
 		// Destroy the ChartEngine instance when unloading the component.
 		// This will stop internal processes such as quotefeed polling.
