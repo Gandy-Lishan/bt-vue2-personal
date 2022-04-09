@@ -339,6 +339,7 @@ export default {
 				delete params.status
 				delete params.backtest_id
 				let paramsStr = this.$qs.stringify(params)
+				console.log('sample copy 后即将传过去的值',params)
 				try {
 					const copyRes = await copyBacktest(paramsStr)
 					if (copyRes.status === 201) {

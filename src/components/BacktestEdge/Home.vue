@@ -2,10 +2,14 @@
 	<div class="home">
 		<div class="home-container">
 			<header class="header">
-				<div class="header_logo"
-					><span
-						><img style="width: 190px;height: 50px" src="../../assets/logo.png" alt="logo" /></span
-				></div>
+				<div class="header_logo">
+					<span
+						><img
+							style="width: 190px; height: 50px"
+							src="../../assets/logo.png"
+							alt="logo"
+					/></span>
+				</div>
 				<el-row type="flex" justify="center"
 					><el-col><p class="betaNote">BacktestEdge Beta</p></el-col>
 				</el-row>
@@ -21,14 +25,20 @@
 						class="fa fa-outdent navCheck"
 						style="font-size: 30px"
 					></i>
-					<el-tooltip class="item" effect="light" content="Create a new backtest" placement="bottom">
-					<el-button
-						@click="refreshPage"
-						class="restartBtn"
-						type="primary"
-						icon="el-icon-refresh-right"
-						>Create New Backtest</el-button
-					></el-tooltip>
+					<el-tooltip
+						class="item"
+						effect="light"
+						content="Create a new backtest"
+						placement="bottom"
+					>
+						<el-button
+							@click="refreshPage"
+							class="restartBtn"
+							type="primary"
+							icon="el-icon-refresh-right"
+							>Create New Backtest</el-button
+						></el-tooltip
+					>
 				</div>
 				<el-tabs
 					v-model="activeName"
@@ -63,15 +73,26 @@
 								</div>
 							</div>
 							<div class="backtest-btns">
-								<el-tooltip class="item" effect="light" content="clearForm" placement="bottom">
-								<el-button type="danger" @click="clearForm">
-									Clear Form</el-button
+								<el-tooltip
+									class="item"
+									effect="light"
+									content="clearForm"
+									placement="bottom"
 								>
+									<el-button type="danger" @click="clearForm">
+										Clear Form</el-button
+									>
 								</el-tooltip>
-								<el-tooltip class="item" effect="light" content="runBacktest" placement="bottom">
-								<el-button type="success" @click="runBacktest"
-									>Run Backtest</el-button
-								></el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="light"
+									content="runBacktest"
+									placement="bottom"
+								>
+									<el-button type="success" @click="runBacktest"
+										>Run Backtest</el-button
+									></el-tooltip
+								>
 							</div>
 						</div>
 					</el-tab-pane>
@@ -117,11 +138,46 @@
 					></el-tab-pane>
 				</el-tabs>
 			</main>
-			<el-tooltip class="item" effect="light" content="Back to the top" placement="bottom">
-			<button class="toTop" @click="animationUp"><svg width="22" height="30" viewBox="0 0 22 30" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M-1.31134e-07 1.5C-5.87107e-08 0.671573 0.642374 5.61581e-08 1.43478 1.25433e-07L20.5652 1.79787e-06C21.3576 1.86714e-06 22 0.671574 22 1.5C22 2.32843 21.3576 3 20.5652 3L1.43478 3C0.642374 3 -2.03557e-07 2.32843 -1.31134e-07 1.5Z" fill="#F9FAFB"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M11.5 30C10.6716 30 10 29.2645 10 28.3571L10 8.64286C10 7.73553 10.6716 7 11.5 7C12.3284 7 13 7.73553 13 8.64286L13 28.3571C13 29.2645 12.3284 30 11.5 30Z" fill="#F9FAFB"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M21.5079 18.5152C20.8519 19.1616 19.7881 19.1616 19.1321 18.5152L11.5 10.9959L3.86794 18.5152C3.21186 19.1616 2.14814 19.1616 1.49206 18.5152C0.835983 17.8688 0.835983 16.8208 1.49206 16.1744L10.3121 7.48479C10.9681 6.8384 12.0319 6.8384 12.6879 7.48479L21.5079 16.1744C22.164 16.8208 22.164 17.8688 21.5079 18.5152Z" fill="#F9FAFB"></path></svg></button>
+			<el-tooltip
+				class="item"
+				effect="light"
+				content="Back to the top"
+				placement="bottom"
+			>
+				<button class="toTop" @click="animationUp">
+					<svg
+						width="22"
+						height="30"
+						viewBox="0 0 22 30"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M-1.31134e-07 1.5C-5.87107e-08 0.671573 0.642374 5.61581e-08 1.43478 1.25433e-07L20.5652 1.79787e-06C21.3576 1.86714e-06 22 0.671574 22 1.5C22 2.32843 21.3576 3 20.5652 3L1.43478 3C0.642374 3 -2.03557e-07 2.32843 -1.31134e-07 1.5Z"
+							fill="#F9FAFB"
+						></path>
+						<path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M11.5 30C10.6716 30 10 29.2645 10 28.3571L10 8.64286C10 7.73553 10.6716 7 11.5 7C12.3284 7 13 7.73553 13 8.64286L13 28.3571C13 29.2645 12.3284 30 11.5 30Z"
+							fill="#F9FAFB"
+						></path>
+						<path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M21.5079 18.5152C20.8519 19.1616 19.7881 19.1616 19.1321 18.5152L11.5 10.9959L3.86794 18.5152C3.21186 19.1616 2.14814 19.1616 1.49206 18.5152C0.835983 17.8688 0.835983 16.8208 1.49206 16.1744L10.3121 7.48479C10.9681 6.8384 12.0319 6.8384 12.6879 7.48479L21.5079 16.1744C22.164 16.8208 22.164 17.8688 21.5079 18.5152Z"
+							fill="#F9FAFB"
+						></path>
+					</svg>
+				</button>
 			</el-tooltip>
 			<div class="footer">
-				<p>Copyright © 2001 - 2022 Sundial Capital Research, Inc. All rights reserved.</p>
+				<p>
+					Copyright © 2001 - 2022 Sundial Capital Research, Inc. All rights
+					reserved.
+				</p>
 			</div>
 		</div>
 	</div>
@@ -174,14 +230,15 @@ export default {
 		sample
 	},
 	mounted() {
-		let toTop = document.getElementsByClassName("toTop")[0]
-		toTop.style.visibility = "hidden"
+		let toTop = document.getElementsByClassName('toTop')[0]
+		toTop.style.visibility = 'hidden'
 		// 在DOM渲染数据时，设置下区域高度为浏览器可视区域高度．
 		//this.clientHeight = document.body.clientHeight
 		// 监听window的resize事件．在浏览器窗口变化时再设置下区域高度．
 		const _this = this
-		window.onscroll = function scroll(){
-			_this.scroll = document.documentElement.scrollTop || document.body.scrollTop;
+		window.onscroll = function scroll() {
+			_this.scroll =
+				document.documentElement.scrollTop || document.body.scrollTop
 		}
 		window.onresize = throttle(function temp() {
 			window.screenWidth = document.body.clientWidth
@@ -191,20 +248,20 @@ export default {
 			} else {
 				_this.tabPosition = 'top'
 			}
-			var chartBox = document.getElementsByClassName("chart_box")[0]
+			var chartBox = document.getElementsByClassName('chart_box')[0]
 			chartBox.style.width = ''
 		})
-		 
+
 		this.myBrowser()
 	},
 	watch: {
 		scroll: {
 			handler(val) {
-				let toTop = document.getElementsByClassName("toTop")[0]
-				if(val<=600){
-					toTop.style.visibility = "hidden"
-				}else{
-					toTop.style.visibility = "visible"
+				let toTop = document.getElementsByClassName('toTop')[0]
+				if (val <= 600) {
+					toTop.style.visibility = 'hidden'
+				} else {
+					toTop.style.visibility = 'visible'
 				}
 			},
 			immediate: true,
@@ -224,7 +281,7 @@ export default {
 		}
 	},
 	methods: {
-		animationUp: function() {
+		animationUp: function () {
 			window.scrollTo({
 				top: 0,
 				behavior: 'smooth'
@@ -342,7 +399,9 @@ export default {
 						let vm = this
 						let signalEntryList = []
 						let signalExitList = []
-						let backtestData = this.$store.state.backtestInfo
+						let backtestData = JSON.parse(
+							JSON.stringify(this.$store.state.backtestInfo)
+						)
 						signalEntryList = backtestData.entry.signals
 						signalExitList = backtestData.exit.signals
 						signalEntryList.forEach((item) => {
@@ -471,48 +530,55 @@ export default {
 						indicatorLayout.savedTechSD = savedTechSD
 						indicatorLayout.activatedMA = this.$store.state.activatedMA
 						backtestData.indicator_layout = JSON.stringify(indicatorLayout)
-						console.log('即将创建传至后台的backtest数据',backtestData);
-							let backtestDataStr = this.$qs.stringify(backtestData)
-							try {
-								let res = await runBacktest(backtestDataStr)
-								if (res.status === 201) {
-									console.log("runBacktest成功后返回的数据", res);
-									// 保存成功之后，将 backtestInfo 清空回原始的状态
-									CIQ.isBacktestRun = true
-									vm.$store.commit('initialBacktestInfo')
-									vm.loading = false
-									vm.goToHistoryForm()
-									vm.$refs.historyChild.refreshHistory(res.data.id)
-									// 保存成功之后应该清除表单的所有数据
-									// vm.clearAllDataForm()
-									CIQ.hideMarker()
-									CIQ.isMarkerShown = false
-									// 并且清除 old_uuid
-									let backtestInfo = vm.$store.state.backtestInfo
-									if (backtestInfo.old_uuid) {
-										vm.$store.commit('clearBacktestUuid')
-									}
-									// 清除 oldBacktestName
-									vm.backtestEditData = {}
-									vm.$refs.setUpChild.clearOldBacktestName()
-									vm.$refs.favoriteChild.getFavoriteList()
-								} else {
-									vm.$message.error('Save failed')
-									vm.loading = false
-									// vm.clearAllDataForm()
-									CIQ.hideMarker()
-									CIQ.isMarkerShown = false
-								}
-							} catch (error) {
-								this.$notify.error({
-									title: 'Create New Backtest',
-									message:
-										'Please click the Create New Backtest button to a new Backtest',
-									offset: 100
-								})
-								// 初始化backtestInfo的数据
+						console.log('即将创建传至后台的backtest数据', backtestData)
+						let backtestDataStr = this.$qs.stringify(backtestData)
+						try {
+							let res = await runBacktest(backtestDataStr)
+							if (res.status === 201) {
+								console.log('runBacktest成功后返回的数据', res)
+								// 保存成功之后，将 backtestInfo 清空回原始的状态
+								CIQ.isBacktestRun = true
 								vm.$store.commit('initialBacktestInfo')
+								vm.loading = false
+								vm.goToHistoryForm()
+								vm.$refs.historyChild.refreshHistory(res.data.id)
+								// 保存成功之后应该清除表单的所有数据
+								// vm.clearAllDataForm()
+								CIQ.hideMarker()
+								CIQ.isMarkerShown = false
+								// 并且清除 old_uuid
+								let backtestInfo = JSON.parse(
+									JSON.stringify(vm.$store.state.backtestInfo)
+								)
+								if (backtestInfo.old_uuid) {
+									vm.$store.commit('clearBacktestUuid')
+								}
+								// 清除 oldBacktestName
+								vm.backtestEditData = {}
+								vm.$refs.setUpChild.clearOldBacktestName()
+								vm.$refs.favoriteChild.getFavoriteList()
+							} else {
+								vm.$message.error('Save failed')
+								vm.loading = false
+								// vm.clearAllDataForm()
+								CIQ.hideMarker()
+								CIQ.isMarkerShown = false
 							}
+						} catch (error) {
+							// this.$notify.error({
+							// 	title: 'Create New Backtest',
+							// 	message:
+							// 		'Please click the Create New Backtest button to a new Backtest',
+							// 	offset: 100
+							// })
+							vm.$message({
+								message: 'The internal server is busy, please try again later ',
+								type: 'error',
+								offset: 300
+							})
+							// 初始化backtestInfo的数据
+							vm.$store.commit('initialBacktestInfo')
+						}
 					}
 				}
 			}
@@ -529,39 +595,36 @@ export default {
 			let vm = this
 			vm.activeName = 'first'
 			vm.backtestEditData = {}
-			try{
-					const res = await seeParams(id)
-					let data = res.data
-					data.old_uuid = id
-					data.entry = JSON.parse(data.entry)
-					data.exit = JSON.parse(data.exit)
-					delete data.results
-					delete data.status
-					delete data.backtest_id
-					delete data.user_id
-					delete data.uuid
-					let signalCode = new SignalCode()
-					if (data.entry.signals instanceof Array) {
-						data.entry.signals[0] = signalCode.decode(
-							data.entry.signals[0]['code']
-						)
-					}
-					if (data.exit.signals instanceof Array) {
-						data.exit.signals[0] = signalCode.decode(
-							data.exit.signals[0]['code']
-						)
-					}
+			try {
+				const res = await seeParams(id)
+				let data = res.data
+				data.old_uuid = id
+				data.entry = JSON.parse(data.entry)
+				data.exit = JSON.parse(data.exit)
+				delete data.results
+				delete data.status
+				delete data.backtest_id
+				delete data.user_id
+				delete data.uuid
+				let signalCode = new SignalCode()
+				if (data.entry.signals instanceof Array) {
+					data.entry.signals[0] = signalCode.decode(
+						data.entry.signals[0]['code']
+					)
+				}
+				if (data.exit.signals instanceof Array) {
+					data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
+				}
 
-					vm.$refs.entryChild.setEditData(id)
-					vm.$refs.exitChild.setEditData(id)
-					// 拿到 frequency 的值
-					vm.editFrequency = data.frequency
-					vm.timeFrame = data.frequency
-					vm.$store.commit('getFrequency', vm.editFrequency)
-					vm.backtestEditData = data
-					this.loading = false
-			}
-			catch(error){
+				vm.$refs.entryChild.setEditData(id)
+				vm.$refs.exitChild.setEditData(id)
+				// 拿到 frequency 的值
+				vm.editFrequency = data.frequency
+				vm.timeFrame = data.frequency
+				vm.$store.commit('getFrequency', vm.editFrequency)
+				vm.backtestEditData = data
+				this.loading = false
+			} catch (error) {
 				vm.$message({
 					message: 'The internal server is busy, please try again later ',
 					type: 'error',
@@ -598,13 +661,13 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-main{
+main {
 	padding: 0 50px;
 	background: #f9fafb;
 }
-.gradient{
+.gradient {
 	padding-top: 88px;
-	background: linear-gradient(180deg,#dde0e4,rgba(249,250,251,0));
+	background: linear-gradient(180deg, #dde0e4, rgba(249, 250, 251, 0));
 }
 @media screen and (max-width: 768px) {
 	.restartBtn {
@@ -639,39 +702,40 @@ main{
 
 button.toTop {
 	z-index: 999;
-	border:unset;
-    position: fixed;
-    left: 75px;
-    bottom: 63px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 80px;
-    height: 80px;
-    border-radius: 100%;
-    background: #111827;
-    background-image: initial;
-    background-position-x: initial;
-    background-position-y: initial;
-    background-size: initial;
-    background-repeat-x: initial;
-    background-repeat-y: initial;
-    background-attachment: initial;
-    background-origin: initial;
-    background-clip: initial;
-    background-color: rgb(17, 24, 39);
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 10px 10px -5px rgb(0 0 0 / 4%);
+	border: unset;
+	position: fixed;
+	left: 75px;
+	bottom: 63px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 80px;
+	height: 80px;
+	border-radius: 100%;
+	background: #111827;
+	background-image: initial;
+	background-position-x: initial;
+	background-position-y: initial;
+	background-size: initial;
+	background-repeat-x: initial;
+	background-repeat-y: initial;
+	background-attachment: initial;
+	background-origin: initial;
+	background-clip: initial;
+	background-color: rgb(17, 24, 39);
+	box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%),
+		0 10px 10px -5px rgb(0 0 0 / 4%);
 }
 
-.footer{
+.footer {
 	background: #fff;
-    display: flex;
-    padding: 16px;
-    border-top: 1px solid #e5e7eb;
+	display: flex;
+	padding: 16px;
+	border-top: 1px solid #e5e7eb;
 	margin-top: 50px;
 }
-.footer p{
-    text-align: center;
+.footer p {
+	text-align: center;
 	color: #9ca3af;
 	line-height: 21px;
 }
@@ -701,26 +765,26 @@ header {
 	}
 	background: url(../../assets/dots-blue.png);
 }
-.header_logo{
+.header_logo {
 	padding: 12px 24px;
 	display: flex;
 	box-shadow: 0 1px 3px rgb(0 0 0 / 10%), 0 1px 2px rgb(0 0 0 / 6%);
 	position: sticky;
-    z-index: 999;
-    top: 0;
-    width: 100%;
-    background: #fff;
+	z-index: 999;
+	top: 0;
+	width: 100%;
+	background: #fff;
 }
 .criteria-container {
 	padding: 10px;
 }
 .chart_box {
-    padding: 10px 10px;
-    resize: auto;
-    overflow: hidden;
-    margin: 0 25px;
+	padding: 10px 10px;
+	resize: auto;
+	overflow: hidden;
+	margin: 0 25px;
 }
-.betaNote{
+.betaNote {
 	padding: 22px 50px 10px 50px;
 }
 .criteria-box {
@@ -775,18 +839,18 @@ header {
 		align-items: center;
 		border-bottom: 1px solid #797979;
 	}
-	.restartBtn{
+	.restartBtn {
 		padding: 7px;
 		font-size: 12px;
 	}
-	main{
-	padding: 0px;
-}
-.backtest-btns {
-	.el-button{
-		padding: 7px;
-		font-size: 12px;
+	main {
+		padding: 0px;
 	}
-}
+	.backtest-btns {
+		.el-button {
+			padding: 7px;
+			font-size: 12px;
+		}
+	}
 }
 </style>
