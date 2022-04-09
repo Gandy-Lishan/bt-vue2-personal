@@ -42,7 +42,8 @@
 							v-model="risk.time_in_market"
 							@input="setDesciption"
 						></el-input>
-						<p class="tpNote">{{ timeFra }}</p>
+						<!-- <p class="tpNote">{{ timeFra }}</p> -->
+						<p class="tpNote">(Bars)</p>
 					</div>
 				</el-checkbox-group>
 			</div>
@@ -198,7 +199,8 @@ export default {
 				} else if (riskVal == arr[1]) {
 					value1 = this.risk.stop_loss + '%'
 				} else if (riskVal == arr[2]) {
-					value1 = this.risk.time_in_market + this.timeFra
+					// value1 = this.risk.time_in_market + this.timeFra
+					value1 = this.risk.time_in_market + '(bars)'
 				} else if (riskVal == arr[3]) {
 					value1 = this.risk.take_profit + '%'
 					value2 = this.risk.stop_loss + '%'

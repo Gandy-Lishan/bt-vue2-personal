@@ -125,7 +125,7 @@
 						prop="name"
 						placeholder="Give the backtest a name"
 					>
-						<el-input v-model="bd.name"></el-input>
+						<el-input v-model="bd.name" oninput="value=value.replace(/[\+]/g,'')"></el-input>
 					</el-form-item>
 				</div>
 			</el-row>
@@ -208,7 +208,7 @@ export default {
 				strategy: 'Signal',
 				capital: 100000.0,
 				capital_alloc: 1.0,
-				commission: 0.001,
+				commission: 0.1,
 				win_rate: 0.0,
 				slippage: 0.1,
 				start_date: '',
@@ -310,8 +310,8 @@ export default {
 	mounted() {
 		this.getIndicatorsList()
 		this.loadSentimentList('Daily')
-		this.getIndexsList()
-		this.getStocksList()
+		// this.getIndexsList()
+		// this.getStocksList()
 		this.getEndDate()
 		// cookies.set('userid', 'test')
 	},
@@ -404,6 +404,7 @@ export default {
 		},
 		setEditDirection(val) {
 			this.direction = val
+			console.log("设置编辑的direction",val);
 		},
 		validateStartingCapital: throttle(function (val) {
 			let re = /^\d+\.?\d{0,2}$/
@@ -492,12 +493,13 @@ export default {
 			let vm = this
 			if (query !== '') {
 				this.loading = true
-				setTimeout(() => {
-					this.loading = false
+				setTimeout(async () => {
 					if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
-						vm.getStocksList()
-						vm.getIndexsList()
+						await vm.getStocksList()
+						await vm.getIndexsList()
+						this.loading = false
 					}
+					this.loading = false
 					var symbolListTemp = vm.symbolList.filter((item) => {
 						return (
 							item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
