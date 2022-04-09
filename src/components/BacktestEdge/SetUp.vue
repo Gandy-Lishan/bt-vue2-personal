@@ -749,6 +749,7 @@ export default {
 						// 保存 backtestform 的数据
 						this.bd.commission = this.temp.commission / 100
 						this.$store.commit('setBd', this.bd)
+						this.$store.commit('getExitDirection',this.direction)
 						this.$store.commit('getFrequency', this.frequency)
 						return checked
 					} else {

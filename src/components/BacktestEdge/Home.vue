@@ -621,6 +621,7 @@ export default {
 				// 拿到 frequency 的值
 				vm.editFrequency = data.frequency
 				vm.timeFrame = data.frequency
+				vm.setExitDirection(data.entry.direction)
 				vm.$store.commit('getFrequency', vm.editFrequency)
 				vm.backtestEditData = data
 				this.loading = false
