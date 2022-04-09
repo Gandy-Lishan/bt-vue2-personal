@@ -156,7 +156,7 @@ export default {
 	data() {
 		var validateCapital = (rule, value, callback) => {
 			const pattern = /^\d+(\.\d{1,2})?$/
-			if (value == 0 || value == '') {
+			if ( value == '') {
 				callback(new Error('Please input starting capital'))
 			}
 			if (!pattern.test(value) && value != 0) {
