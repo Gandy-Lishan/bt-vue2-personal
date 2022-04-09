@@ -310,8 +310,8 @@ export default {
 	mounted() {
 		this.getIndicatorsList()
 		this.loadSentimentList('Daily')
-		this.getIndexsList()
-		this.getStocksList()
+		// this.getIndexsList()
+		// this.getStocksList()
 		this.getEndDate()
 		// cookies.set('userid', 'test')
 	},
@@ -492,12 +492,13 @@ export default {
 			let vm = this
 			if (query !== '') {
 				this.loading = true
-				setTimeout(() => {
-					this.loading = false
+				setTimeout(async () => {
 					if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
-						vm.getStocksList()
-						vm.getIndexsList()
+						await vm.getStocksList()
+						await vm.getIndexsList()
+						this.loading = false
 					}
+					this.loading = false
 					var symbolListTemp = vm.symbolList.filter((item) => {
 						return (
 							item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
