@@ -406,7 +406,7 @@ export default {
 								JSON.parse(res.data)
 							}
 							console.log('eric返回的值', res.data);
-							initalData = res.data
+							initalData = JSON.parse(JSON.stringify(res.data))
 							// -------------------------------------  text ----------------
 							const tradeReturn = initalData["Each Return"]
 							data.uuid = initalData['UUID']
@@ -462,16 +462,14 @@ export default {
 							vm.monthReturnImgUrl = data.returnsHeatmapFileURL
 							vm.annualReturnImgUrl = data.annualReturnsFileURL
 							for(let i=0;i<initalData['Trades'].length;i++) {
-								if( i % 2 !== 0) {
 								initalData['Trades'][i].TradeReturn = tradeReturn[initalData['Trades'][i].trade_number]
-								}else{
-									initalData['Trades'][i].TradeReturn = 'none'
+								if(i % 2 !== 0) {
+								 initalData['Trades'][i-1].Return = initalData['Trades'][i].Return
 								}
 							}
 							vm.tradesData = initalData['Trades']
 							console.log("trades的数据", vm.tradesData);
 							// ---------------------------------------- end ----------------------------------
-
 							// ----------------------- backtest result-------------------------------
 
 							this.$emit('setBacktestResult', initalData['basic'])
@@ -547,18 +545,44 @@ export default {
 					}
 				}
 			}
+			if (columnIndex === 5) {
+				if (rowIndex % 2 === 0) {
+					return {
+						rowspan: 2,
+						colspan: 1
+					}
+				} else {
+					return {
+						rowspan: 0,
+						colspan: 0
+					}
+				}
+			}
+		   if (columnIndex === 6) {
+				if (rowIndex % 2 === 0) {
+					return {
+						rowspan: 2,
+						colspan: 1
+					}
+				} else {
+					return {
+						rowspan: 0,
+						colspan: 0
+					}
+				}
+			}
 		},
 		try1({ row, column, rowIndex, columnIndex }) {
-			if (columnIndex === 6 && column.label == 'Total Return %') {
-				if (rowIndex % 2 === 0) {
-					row.Return = 'none'
-				}
-			}
-			if (columnIndex === 5 && column.label == 'Trade Return %') {
-				if (rowIndex % 2 === 0) {
-					row.Return = 'none'
-				}
-			}
+			// if (columnIndex === 6 && column.label == 'Total Return %') {
+			// 	if (rowIndex % 2 === 0) {
+			// 		row.Return = 'none'
+			// 	}
+			// }
+			// if (columnIndex === 5 && column.label == 'Trade Return %') {
+			// 	if (rowIndex % 2 === 0) {
+			// 		row.Return = 'none'
+			// 	}
+			// }
 		}
 	}
 }

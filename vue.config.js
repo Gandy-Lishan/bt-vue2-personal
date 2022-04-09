@@ -1,10 +1,12 @@
 const path = require('path')
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
+
 
 function resolve(dir) {
 	return path.join(__dirname, dir)
 }
 
-module.exports = {
+const config = {
 	publicPath: '/',
 	configureWebpack: {
 		module: {
@@ -90,3 +92,20 @@ module.exports = {
 		}
 	}
 }
+
+if (process.env.ST_ENV !== "dev" && process.env.ST_ENV !== undefined){
+    config.configureWebpack = {
+        Plugins:[
+            new UglifyJsPlugin({
+                uglifyOptions: {
+                    compress:{
+                        drop_console:true,
+                    }
+                }
+            })
+        ]
+    }
+}
+
+
+module.exports = config

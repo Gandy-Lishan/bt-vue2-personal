@@ -125,7 +125,7 @@
 						prop="name"
 						placeholder="Give the backtest a name"
 					>
-						<el-input v-model="bd.name"></el-input>
+						<el-input v-model="bd.name" oninput="value=value.replace(/[\+]/g,'')"></el-input>
 					</el-form-item>
 				</div>
 			</el-row>
@@ -208,7 +208,7 @@ export default {
 				strategy: 'Signal',
 				capital: 100000.0,
 				capital_alloc: 1.0,
-				commission: 0.001,
+				commission: 0.1,
 				win_rate: 0.0,
 				slippage: 0.1,
 				start_date: '',
@@ -404,6 +404,7 @@ export default {
 		},
 		setEditDirection(val) {
 			this.direction = val
+			console.log("设置编辑的direction",val);
 		},
 		validateStartingCapital: throttle(function (val) {
 			let re = /^\d+\.?\d{0,2}$/
@@ -748,6 +749,7 @@ export default {
 						// 保存 backtestform 的数据
 						this.bd.commission = this.temp.commission / 100
 						this.$store.commit('setBd', this.bd)
+						this.$store.commit('getExitDirection',this.direction)
 						this.$store.commit('getFrequency', this.frequency)
 						return checked
 					} else {
