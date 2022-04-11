@@ -61,10 +61,9 @@ router.beforeEach((to, from, next) => {
 		try {
 			userId = document.baseURI.split('?')[1]
 			userId = userId.split('=')[1]
-			// cookies.set('userid', userId)
+			cookies.set('userid', userId)
 			window.location.href = formateHost
 		} catch (error) {
-			console.log(error)
 			userId = cookies.get('userid')
 			if (!userId) {
 				alert('Login failed, please log in again')
