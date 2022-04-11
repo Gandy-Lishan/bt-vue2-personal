@@ -164,7 +164,7 @@
 										size="mini"
 									></el-button>
 								</el-tooltip>
-								<el-button
+								<!-- <el-button
 									plain
 									icon="el-icon-s-comment"
 									circle
@@ -177,7 +177,7 @@
 									circle
 									@click="showDes(scope.row)"
 									size="mini"
-								></el-button>
+								></el-button> -->
 								<el-tooltip
 									class="item"
 									effect="light"
