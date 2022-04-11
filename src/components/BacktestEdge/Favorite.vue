@@ -198,6 +198,7 @@
 									placement="bottom-start"
 								>
 									<el-button
+										:disabled = "isEditDone"
 										type="primary"
 										icon="el-icon-edit"
 										circle
@@ -287,6 +288,7 @@ import { warn } from 'vue-class-component/lib/util'
 export default {
 	data() {
 		return {
+			isEditDone: false,
 			backtestList: [],
 			strategyName: '',
 			checkList: [],
@@ -355,7 +357,9 @@ export default {
 		editBacktest: throttle(async function (row) {
 			let vm = this
 			try {
+				this.isEditDone = true
 				const res = await seeParams(row.id)
+				this.isEditDone = false
 				// 恢复indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)
 				CIQ.hideMarker()
