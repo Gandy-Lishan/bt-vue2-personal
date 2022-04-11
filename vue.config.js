@@ -18,7 +18,16 @@ const config = {
 					loader: require.resolve('@open-wc/webpack-import-meta-loader')
 				}
 			]
-		}
+		},
+		plugins:[
+            new UglifyJsPlugin({
+                uglifyOptions: {
+                    compress:{
+                        drop_console:true,
+                    }
+                }
+            })
+        ]
 	},
 	chainWebpack: (config) => {
 		config.resolve.alias
@@ -94,19 +103,19 @@ const config = {
 	}
 }
 
-if (process.env.ST_ENV !== "dev" && process.env.ST_ENV !== undefined){
-    config.configureWebpack = {
-        Plugins:[
-            new UglifyJsPlugin({
-                uglifyOptions: {
-                    compress:{
-                        drop_console:true,
-                    }
-                }
-            })
-        ]
-    }
-}
+// if (process.env.ST_ENV !== "dev" && process.env.ST_ENV !== undefined){
+//     config.configureWebpack = {
+//         Plugins:[
+//             new UglifyJsPlugin({
+//                 uglifyOptions: {
+//                     compress:{
+//                         drop_console:true,
+//                     }
+//                 }
+//             })
+//         ]
+//     }
+// }
 
 
 module.exports = config
