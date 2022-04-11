@@ -168,7 +168,6 @@ export default {
 				callback()
 		}
 		var validateCommissionRule = (rule, value, callback) => {
-			let val = value * 100
 			const pattern = /^\d+(\.\d{1,2})?$/
 			if (value == '') {
 				callback(new Error('Please input commission'))
