@@ -61,20 +61,21 @@ router.beforeEach((to, from, next) => {
 		try {
 			userId = document.baseURI.split('?')[1]
 			userId = userId.split('=')[1]
-			cookies.set('userid', userId)
+			// cookies.set('userid', userId)
 			window.location.href = formateHost
 		} catch (error) {
 			console.log(error)
 			userId = cookies.get('userid')
 			if (!userId) {
+				alert('Login failed, please log in again')
 				window.location.href = loginUrl
+				return
 			}
 		}
 		// 3. 根据返回状态码判断后续操作
 		axios
 			.get('/dev/user/?userid=' + userId)
 			.then((res) => {
-				console.log(res)
 				if (res.status === 200) {
 					let oldUserid = cookies.get('userid')
 					if (oldUserid == res.data.userid) {

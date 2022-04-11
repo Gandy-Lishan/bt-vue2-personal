@@ -404,7 +404,6 @@ export default {
 		},
 		setEditDirection(val) {
 			this.direction = val
-			console.log("设置编辑的direction",val);
 		},
 		validateStartingCapital: throttle(function (val) {
 			let re = /^\d+\.?\d{0,2}$/
@@ -480,7 +479,6 @@ export default {
 			} else {
 				try {
 				let res = await getStocksList()
-				console.log("stocks响应数据",res);
 						vm.symbolList = res.data.map((item) => {
 							return { value: `${item.stock}`, label: `${item.stock}` }
 						})
@@ -534,7 +532,6 @@ export default {
 		},
 		getCommission: throttle(function (val) {
 			this.bd.commission = val
-			console.log('this.bd.commission',this.bd.commission);
 		}, 500),
 		validateForm(newTag, oldTag) {
 			let data = true
@@ -673,47 +670,7 @@ export default {
 			})
 			if (validForm) {
 				let nameList = this.$store.state.backtestNameList
-				// let noDuplicateName = false
-				// let firstCreate = false
-				// let duplicateName = false
-				// let editNoDuplicateName = false
-				// for (let i = 0; i < nameList.length; i++) {
-				// 	if (this.bd.name !== nameList[i]) {
-				// 		// 说明不重名，直接创建新的，删除 old_uuid
-				// 		console.log('说明不重名 直接创建新的 删除 old_uuid 和 favorites')
-				// 		this.bd.favorites = false
-				// 		delete this.bd.old_uuid
-				// 	}
-				// 	if (this.bd.name === nameList[i] && this.oldBacktestName === '') {
-				// 		// 说明这是刚开始创建的时候
-				// 		// this.$store.commit('clearBacktestUuid')
-				// 		console.log('说明这是刚开始创建的时候 删除 old_uuid 和 favorites')
-				// 		this.bd.favorites = false
-				// 		delete this.bd.old_uuid
-				// 		nameChecked = false
-				// 	}
-				// 	if (
-				// 		this.bd.name === nameList[i] &&
-				// 		this.oldBacktestName === this.bd.name &&
-				// 		this.oldBacktestName !== ''
-				// 	) {
-				// 		// 说明重名要进行替换，不删除 old_uuid
-				// 		console.log('说明重名要进行替换 不删除 old_uuid 不删除favorites')
-				// 	}
-				// 	if (
-				// 		this.bd.name === nameList[i] &&
-				// 		this.oldBacktestName !== this.bd.name &&
-				// 		this.oldBacktestName !== ''
-				// 	) {
-				// 		// 说明不重名，直接创建新的，删除 old_uuid
-				// 		console.log('说明不重名 直接创建新的 删除 old_uuid和 favorites')
-				// 		// this.$store.commit('clearBacktestUuid')
-				// 		this.bd.favorites = false
-				// 		delete this.bd.old_uuid
-				// 	}
-				// }
 				if (nameList.indexOf(this.bd.name) === -1) {
-					console.log('说明不重名 直接创建新的 删除 old_uuid 和 favorites')
 					this.bd.favorites = false
 					delete this.bd.old_uuid
 				}
@@ -721,7 +678,6 @@ export default {
 					nameList.indexOf(this.bd.name) > -1 &&
 					this.oldBacktestName === ''
 				) {
-					console.log('说明这是刚开始创建的时候 删除 old_uuid 和 favorites')
 					this.bd.favorites = false
 					delete this.bd.old_uuid
 					nameChecked = false
@@ -732,7 +688,6 @@ export default {
 					this.oldBacktestName !== ''
 				) {
 					// 说明重名要进行替换，不删除 old_uuid
-					console.log('说明重名要进行替换 不删除 old_uuid 不删除favorites')
 				}
 				if (
 					nameList.indexOf(this.bd.name) > -1 &&
@@ -740,7 +695,6 @@ export default {
 					this.oldBacktestName !== ''
 				) {
 					// 说明不重名，直接创建新的，删除 old_uuid
-					console.log('说明是编辑后的重名')
 					// this.$store.commit('clearBacktestUuid')
 					nameChecked = false
 				}

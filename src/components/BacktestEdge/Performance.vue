@@ -388,7 +388,6 @@ export default {
 		handleClick(tab, event) {},
 
 		async getResultData(row) {
-			console.log("获取结果值")
 			let vm = this
 			let initalData = {}
 			let data = {}
@@ -405,7 +404,6 @@ export default {
 							if (typeof res.data == String) {
 								JSON.parse(res.data)
 							}
-							console.log('eric返回的值', res.data);
 							initalData = JSON.parse(JSON.stringify(res.data))
 							// -------------------------------------  text ----------------
 							const tradeReturn = initalData["Each Return"]
@@ -468,12 +466,10 @@ export default {
 								}
 							}
 							vm.tradesData = initalData['Trades']
-							console.log("trades的数据", vm.tradesData);
 							// ---------------------------------------- end ----------------------------------
 							// ----------------------- backtest result-------------------------------
 
 							this.$emit('setBacktestResult', initalData['basic'])
-							console.log('initialData:', initalData.markerSet)
 							// ------------------------------ end -----------------------------------
 								setTimeout(()=>{
 									this.loadMarker(initalData.markerSet)
@@ -500,7 +496,6 @@ export default {
 				new Date(CIQ.initialDate.end),
 				markerSet
 			)
-			console.log('CIQ.initialDate: ', new Date(CIQ.initialDate.start))
 			CIQ.store.commit('SetmarkerSet', markerSet)
 			CIQ.isMarkerShown = true
 			CIQ.loadChart(list, CIQ.addMarker)
@@ -520,7 +515,6 @@ export default {
 					list.push(markerSet[date])
 				}
 			}
-			console.log(_date, list)
 			return list
 		},
 		clearPerformanceData() {
