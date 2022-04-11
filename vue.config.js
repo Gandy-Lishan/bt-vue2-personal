@@ -62,6 +62,7 @@ const config = {
 		// 测试的ip 18.216.210.200
 		// http://10.131.3.74:8000
 		// http://3.140.194.24:80
+		// http://3.144.31.178:8000
 		disableHostCheck: true,
 		proxy: {
 			'/demo': {
