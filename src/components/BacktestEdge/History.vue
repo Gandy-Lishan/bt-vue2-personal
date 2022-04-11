@@ -327,7 +327,6 @@ export default {
 			let page = this.queryInfo.page
 			try {
 				let res = await getHistoryList(page)
-			console.log("history列表响应", res);
 				if (res.status === 200) {
 					this.loading = false
 					let historyNameList = []
@@ -355,7 +354,7 @@ export default {
 			let timer = setPromiseInterval(async () => {
 				const res = await getStatus(id)
 				if (res.data.status !== 1 && res.data.status !== 0) {
-					clearPromiseInterval(timer).then(() => console.log("运行结束后的返回值",res))
+					clearPromiseInterval(timer).then(() => {})
 					// vm.$notify({
 					// 	title: 'The run was successful',
 					// 	message:
@@ -407,7 +406,6 @@ export default {
 		async deleteBacktest(id) {
 			try {
 				const res = await deleteBacktest(id)
-				console.log("删除返回值",res);
 				if (res.status == 204) {
 					this.getHistoryList()
 					this.$emit('refFavoritesForm')
@@ -467,12 +465,10 @@ export default {
 		}, 1000),
 		viewBacktestResults: throttle(async function (row) {
 			if (row.result['Total Trades']) {
-				console.log('查看结果')
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {
 					const res = await seeParams(row.id)
 					// 恢复indicator layout
-					console.log("编辑回测");
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					CIQ.hideMarker()
 					CIQ.isMarkerShown = false

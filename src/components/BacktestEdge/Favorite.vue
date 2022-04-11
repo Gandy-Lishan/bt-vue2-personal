@@ -316,7 +316,6 @@ export default {
 			let page = this.queryInfo.page
 			try {
 				const res = await getFavoriteList(page)
-				console.log('favorite列表响应',res);
 				if (res.status === 200) {
 					this.loading = false
 					this.backtestList = res.data.results

@@ -19,7 +19,6 @@ const router = new Router({
 
 router.beforeEach(async (to, from, next) => {
 	const res = await getIndicatorsList()
-	console.log("进入路由的getAllSymbol请求", res);
 			CIQ.store = store
 			CIQ.indicatorList = res.data
 			return next()
@@ -39,7 +38,6 @@ router.beforeEach(async (to, from, next) => {
 router.beforeEach((to, from, next) => {
 	// let host = "/[a-z]*\.sentimentrader\.com/"/
 	const data = getCookieData()
-	console.log("测试cookie",data);
 	// console.log('to from next',to, from, next);
 	let loginUrl = 'https://users.sentdevsite.com/login'
 		//  alert("asdasd")
@@ -64,7 +62,6 @@ router.beforeEach((to, from, next) => {
 			})
 			.catch((error) => {
 				// next('https://users.sentdevsite.com/login')
-                console.log(error)
                 let status = error.response.status
 				if (status === 401) {
 					//无权限

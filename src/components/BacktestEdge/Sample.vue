@@ -307,7 +307,6 @@ export default {
 			let page = this.queryInfo.page
 			try {
 				const res = await getSampleList(page)
-				console.log("sample列表响应",res);
 				if (res.status === 200) {
 					this.backtestList = res.data.results
 					if (this.backtestList.length != 0) {
@@ -339,7 +338,6 @@ export default {
 				delete params.status
 				delete params.backtest_id
 				let paramsStr = this.$qs.stringify(params)
-				console.log('sample copy 后即将传过去的值',params)
 				try {
 					const copyRes = await copyBacktest(paramsStr)
 					if (copyRes.status === 201) {

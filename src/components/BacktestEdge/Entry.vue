@@ -214,7 +214,6 @@ export default {
 				if (data.exit.signals instanceof Array) {
 					data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
 				}
-				console.log("entry编辑的数据",data);
 				vm.fd.direction = data.entry.direction
 				vm.getExitDirection(data.entry.direction)
 				let edit = {}

@@ -530,12 +530,10 @@ export default {
 						indicatorLayout.savedTechSD = savedTechSD
 						indicatorLayout.activatedMA = this.$store.state.activatedMA
 						backtestData.indicator_layout = JSON.stringify(indicatorLayout)
-						console.log('即将创建传至后台的backtest数据', backtestData)
 						let backtestDataStr = this.$qs.stringify(backtestData)
 						try {
 							let res = await runBacktest(backtestDataStr)
 							if (res.status === 201) {
-								console.log('runBacktest成功后返回的数据', res)
 								// 保存成功之后，将 backtestInfo 清空回原始的状态
 								CIQ.isBacktestRun = true
 								vm.$store.commit('initialBacktestInfo')

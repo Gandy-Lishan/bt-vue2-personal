@@ -487,8 +487,6 @@ export default {
 				})
 				validForm = validMaValue && validatePeriod
 				if (validForm) {
-					// if (this.senti.period) {
-						console.log('11111');
 					let senti = JSON.parse(JSON.stringify(this.senti))
 					senti.value = senti.maValue
 					delete senti.maValue

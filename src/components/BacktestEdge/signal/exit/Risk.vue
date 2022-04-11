@@ -251,7 +251,6 @@ export default {
 			}
 		},
 		setEditData(newVal) {
-			console.log('risk control', newVal);
 			if (JSON.stringify(newVal) != '{}') {
 				if (
 					newVal.exit.signals[0].sc.take_profit &&
