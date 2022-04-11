@@ -28,7 +28,7 @@
 					<el-tooltip
 						class="item"
 						effect="light"
-						content="Create a new backtest"
+						content="Clear chart and backtest set up form to create new backtests"
 						placement="bottom"
 					>
 						<el-button
@@ -76,7 +76,7 @@
 								<el-tooltip
 									class="item"
 									effect="light"
-									content="clearForm"
+									content="Clear the backtest set up form "
 									placement="bottom"
 								>
 									<el-button type="danger" @click="clearForm">
@@ -86,7 +86,7 @@
 								<el-tooltip
 									class="item"
 									effect="light"
-									content="runBacktest"
+									content="Complete the form filling, run the backtest, and view the results"
 									placement="bottom"
 								>
 									<el-button type="success" @click="runBacktest"
@@ -576,6 +576,7 @@ export default {
 								type: 'error',
 								offset: 300
 							})
+							vm.loading = false
 							// 初始化backtestInfo的数据
 							vm.$store.commit('initialBacktestInfo')
 						}

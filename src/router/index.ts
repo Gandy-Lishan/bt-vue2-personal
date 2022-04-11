@@ -6,7 +6,7 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { getIndicatorsList } from "@/service/service"
 import store from '../store/store'
 
-import { getCookieData, setCookieData } from '@/tools/cookie'
+// import { getCookieData, setCookieData } from '@/tools/cookie'
 import Home from '@/components/BacktestEdge/Home.vue'
 Vue.use(Router)
 const router = new Router({
@@ -37,8 +37,8 @@ router.beforeEach(async (to, from, next) => {
 router.beforeEach((to, from, next) => {
 	// let host = "/[a-z]*\.sentimentrader\.com/"/
 	let host = /.*/
-	const data = getCookieData()
-	console.log("测试cookie",data);
+	// const data = getCookieData()
+	// console.log("测试cookie",data);
 	// const detail = {
 	// 	security_response: 200,
 	// 	username: 'eric+test12345678@ericbrown.com',
