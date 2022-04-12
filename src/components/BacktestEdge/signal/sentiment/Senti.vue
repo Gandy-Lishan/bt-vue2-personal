@@ -393,18 +393,22 @@ export default {
 				this.senti.period = ''
 			}
 			let result
+			
 			this.$store.state.indicatorsList.forEach((value, index) => {
+				
 				if (this.sentiVal) {
-					if (value.chart_name.indexOf(this.sentiVal) !== -1) {
+					if (value.chart_name == this.sentiVal) {
 						result = value
 					}
 				} else {
-					if (value.chart_name.indexOf(this.sentiVal) !== -1) {
+					if (value.chart_name == this.sentiVal) {
 						result = value
 					}
 				}
 			})
+			
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				
 				if (
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
 				) {
@@ -520,7 +524,7 @@ export default {
 				}
 			}
 		},
-		setEditData(newVal) {
+		setEditData(newVal,sv) {
 			if (JSON.stringify(newVal) != '{}') {
 				this.senti.extreme_optimism =
 					newVal[this.criteria].signals[0].extreme_optimism
@@ -540,7 +544,7 @@ export default {
 					this.conditionRadio = 'Sentiment Moving Average'
 					this.senti.period = period
 					this.senti.maValue = this.senti.value
-					this.setPeriod(period)
+					//this.setPeriod(period)
 					this.disabled = true
 				}
 				this.editSentiVal = newVal[this.criteria].signals[0].indicator
