@@ -143,7 +143,7 @@
 							<el-row>
 								<!-- <el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="run backtest"
 									placement="bottom-start"
 								>
@@ -157,7 +157,7 @@
 								</el-tooltip> -->
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="copy backtest"
 									placement="bottom-start"
 								>
@@ -185,7 +185,7 @@
 								></el-button> -->
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="view backtest results"
 									placement="bottom-start"
 								>

@@ -133,7 +133,7 @@
 							<el-row>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="add to favorites"
 									v-if="scope.row.favorites == false"
 									placement="bottom-start"
@@ -149,7 +149,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="remove from favorites"
 									v-if="scope.row.favorites == true"
 									placement="bottom-start"
@@ -179,7 +179,7 @@
 								></el-button> -->
 								<!-- <el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="run backtest"
 									placement="bottom-start"
 								>
@@ -193,7 +193,7 @@
 								</el-tooltip> -->
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="edit backtest"
 									placement="bottom-start"
 								>
@@ -208,7 +208,7 @@
 								</el-tooltip>
 								<!-- <el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="copy backtest"
 									placement="bottom-start"
 								>
@@ -222,7 +222,7 @@
 								</el-tooltip> -->
 								<!-- <el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="delete backtest"
 									placement="bottom-start"
 								>
@@ -245,7 +245,7 @@
 								</el-tooltip> -->
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="view backtest results"
 									placement="bottom-start"
 								>

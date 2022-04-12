@@ -27,7 +27,7 @@
 					></i>
 					<el-tooltip
 						class="item"
-						effect="light"
+						effect="dark"
 						content="Clear chart and backtest set up form to create new backtests"
 						placement="bottom"
 					>
@@ -75,7 +75,7 @@
 							<div class="backtest-btns">
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="Clear the backtest set up form "
 									placement="bottom"
 								>
@@ -85,7 +85,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="Complete the form filling, run the backtest, and view the results"
 									placement="bottom"
 								>
@@ -140,7 +140,7 @@
 			</main>
 			<el-tooltip
 				class="item"
-				effect="light"
+				effect="dark"
 				content="Back to the top"
 				placement="bottom"
 			>
