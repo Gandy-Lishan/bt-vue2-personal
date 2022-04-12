@@ -19,15 +19,15 @@ const config = {
 				}
 			]
 		},
-		// plugins:[
-        //     new UglifyJsPlugin({
-        //         uglifyOptions: {
-        //             compress:{
-        //                 drop_console:true,
-        //             }
-        //         }
-        //     })
-        // ]
+		plugins:[
+            new UglifyJsPlugin({
+                uglifyOptions: {
+                    compress:{
+                        drop_console:true,
+                    }
+                }
+            })
+        ]
 	},
 	chainWebpack: (config) => {
 		config.resolve.alias
