@@ -359,7 +359,7 @@ export default {
 				} catch (error) {
 					this.$notify.error({
 						title: 'Has been Copied',
-						message: 'The strategy has been copied',
+						message: 'The backtest has been copied',
 						offset: 100
 					})
 				}
