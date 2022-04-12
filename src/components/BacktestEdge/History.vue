@@ -134,7 +134,7 @@
 							<el-row>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="add to favorites"
 									v-if="scope.row.favorites == false"
 									placement="bottom-start"
@@ -150,7 +150,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="remove from favorites"
 									v-if="scope.row.favorites == true"
 									placement="bottom-start"
@@ -170,8 +170,8 @@
 									circle
 									@click="sendBack(scope.row)"
 									size="mini"
-								></el-button>
-								<el-button
+								></el-button> -->
+								<!-- <el-button
 									plain
 									icon="el-icon-check"
 									circle
@@ -180,12 +180,12 @@
 								></el-button> -->
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="edit backtest"
 									placement="bottom-start"
 								>
 									<el-button
-										:disabled = "isEditDone"
+										:disabled="isEditDone"
 										type="primary"
 										icon="el-icon-edit"
 										circle
@@ -195,7 +195,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="copy backtest"
 									placement="bottom-start"
 								>
@@ -210,7 +210,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="delete backtest"
 									placement="bottom-start"
 								>
@@ -251,7 +251,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="view backtest results"
 									placement="bottom-start"
 								>
@@ -342,7 +342,7 @@ export default {
 					this.queryInfo.total = res.data.count
 				}
 			} catch (error) {
-				console.log(error);
+				console.log(error)
 				this.loading = false
 			}
 		},
@@ -390,8 +390,7 @@ export default {
 						JSON.parse(res.data.entry).frequency,
 						row
 					)
-				}
-				else{
+				} else {
 					this.$store.commit('getRunBacktestData', row)
 					this.$emit('goBacktestResultForm', row)
 					this.$emit('goTobacktestSetupForm', row.id)
@@ -417,7 +416,7 @@ export default {
 					})
 				}
 			} catch (error) {
-				console.log(error);
+				console.log(error)
 				this.$message({
 					message: 'The internal server is busy, please try again later ',
 					type: 'error',
@@ -457,11 +456,19 @@ export default {
 					this.$message.error('Copy failed')
 				}
 			} catch (error) {
-				this.$message({
-					message: 'The internal server is busy, please try again later ',
-					type: 'error',
-					offset: 300
-				})
+				if (error.response.status === 403) {
+					this.$notify.error({
+						title: 'Has been Copied',
+						message: 'The backtest has been copied',
+						offset: 100
+					})
+				} else {
+					this.$message({
+						message: 'The internal server is busy, please try again later ',
+						type: 'error',
+						offset: 300
+					})
+				}
 			}
 		}, 1000),
 		viewBacktestResults: throttle(async function (row) {
@@ -479,13 +486,12 @@ export default {
 							JSON.parse(res.data.entry).frequency,
 							row
 						)
-					}
-					else{
+					} else {
 						this.$store.commit('getRunBacktestData', row)
 						this.$emit('goTobacktestSetupForm', row.id, 'fromView')
 						this.$emit('goBacktestResultForm', row)
 					}
-				}catch(error){
+				} catch (error) {
 					vm.$message({
 						message: 'The internal server is busy, please try again later ',
 						type: 'error',
@@ -505,7 +511,7 @@ export default {
 			this.queryInfo.page = newpage
 			this.getHistoryList()
 		},
-		reloadData(data, freq){
+		reloadData(data, freq) {
 			let frequency = ''
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
@@ -513,7 +519,7 @@ export default {
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
-			
+
 			switch (freq) {
 				case 'Daily': {
 					frequency = 'daily'
@@ -535,19 +541,19 @@ export default {
 		},
 		restoreIndicatorLayoutView(data, freq, row) {
 			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
-			if(CIQ.isBacktestRun == true){
+			if (CIQ.isBacktestRun == true) {
 				CIQ.isBacktestRun = false
 				this.reloadData(data, freq)
 				var that = this
-				CIQ.outputSignalsResult(function(){
+				CIQ.outputSignalsResult(function () {
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goTobacktestSetupForm', row.id)
 					that.$emit('goBacktestResultForm', row)
 				})
-			}else{
+			} else {
 				this.reloadData(data, freq)
 				var that = this
-				CIQ.addIndicatorsFromBacktest(function(){
+				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goTobacktestSetupForm', row.id)
 					that.$emit('goBacktestResultForm', row)
@@ -556,19 +562,19 @@ export default {
 		},
 		restoreIndicatorLayoutEdit(data, freq, row) {
 			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
-			if(CIQ.isBacktestRun == true){
+			if (CIQ.isBacktestRun == true) {
 				CIQ.isBacktestRun = false
 				this.reloadData(data, freq)
 				var that = this
-				CIQ.outputSignalsResult(function(){
+				CIQ.outputSignalsResult(function () {
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goBacktestResultForm', row)
 					that.$emit('goTobacktestSetupForm', row.id)
 				})
-			}else{
+			} else {
 				this.reloadData(data, freq)
 				var that = this
-				CIQ.addIndicatorsFromBacktest(function(){
+				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goBacktestResultForm', row)
 					that.$emit('goTobacktestSetupForm', row.id)

@@ -168,7 +168,6 @@ export default {
 				callback()
 		}
 		var validateCommissionRule = (rule, value, callback) => {
-			let val = value * 100
 			const pattern = /^\d+(\.\d{1,2})?$/
 			if (value == '') {
 				callback(new Error('Please input commission'))
@@ -665,33 +664,34 @@ export default {
 			let checked = true
 			let nameChecked = true
 			let validForm
+			let bd = JSON.parse(JSON.stringify(this.bd))
 			this.$refs.backtestSetupForm.validate((valid) => {
 				validForm = valid
 			})
 			if (validForm) {
 				let nameList = this.$store.state.backtestNameList
-				if (nameList.indexOf(this.bd.name) === -1) {
-					this.bd.favorites = false
-					delete this.bd.old_uuid
+				if (nameList.indexOf(bd.name) === -1) {
+					bd.favorites = false
+					delete bd.old_uuid
 				}
 				if (
-					nameList.indexOf(this.bd.name) > -1 &&
+					nameList.indexOf(bd.name) > -1 &&
 					this.oldBacktestName === ''
 				) {
-					this.bd.favorites = false
-					delete this.bd.old_uuid
+					bd.favorites = false
+					delete bd.old_uuid
 					nameChecked = false
 				}
 				if (
-					nameList.indexOf(this.bd.name) > -1 &&
-					this.oldBacktestName === this.bd.name &&
+					nameList.indexOf(bd.name) > -1 &&
+					this.oldBacktestName === bd.name &&
 					this.oldBacktestName !== ''
 				) {
 					// 说明重名要进行替换，不删除 old_uuid
 				}
 				if (
-					nameList.indexOf(this.bd.name) > -1 &&
-					this.oldBacktestName !== this.bd.name &&
+					nameList.indexOf(bd.name) > -1 &&
+					this.oldBacktestName !== bd.name &&
 					this.oldBacktestName !== ''
 				) {
 					// 说明不重名，直接创建新的，删除 old_uuid
@@ -699,10 +699,10 @@ export default {
 					nameChecked = false
 				}
 				if (nameChecked) {
-					if (this.bd.end_date) {
+					if (bd.end_date) {
 						// 保存 backtestform 的数据
-						this.bd.commission = this.temp.commission / 100
-						this.$store.commit('setBd', this.bd)
+						bd.commission = this.temp.commission / 100
+						this.$store.commit('setBd', bd)
 						this.$store.commit('getExitDirection',this.direction)
 						this.$store.commit('getFrequency', this.frequency)
 						return checked
