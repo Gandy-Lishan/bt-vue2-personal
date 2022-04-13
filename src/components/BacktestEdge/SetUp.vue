@@ -59,6 +59,7 @@
 						<div class="selectBox">
 							<el-select
 								@change="getBacktestHistory(historyValue)"
+								@blur="setBacktestHistory(historyValue)"
 								v-model="historyValue"
 								placeholder="— Select Timeframe —"
 							>
@@ -517,6 +518,20 @@ export default {
 			}
 		},
 		getBacktestHistory(val) {
+			this.historyValue = val
+			this.bd.end_date = timestampToTime(new Date())
+			if (val <= 20) {
+				this.bd.end_date = timestampToTime(new Date())
+				const str = this.bd.end_date.split('-')
+				str[0] = Number(str[0]) - Number(this.historyValue) + ''
+				this.bd.start_date = str.join('-')
+			}
+			if (val === 21) {
+				this.bd.start_date = ''
+			}
+		},
+		setBacktestHistory(val) {
+			console.log("blur年限",val);
 			this.historyValue = val
 			this.bd.end_date = timestampToTime(new Date())
 			if (val <= 20) {

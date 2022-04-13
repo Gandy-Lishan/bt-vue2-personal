@@ -51,7 +51,9 @@ router.beforeEach((to, from, next) => {
 	// console.log('设置cookie', setData)
 	// console.log('to from next',to, from, next);
 	let formateHost = location.origin
-	let loginUrl = 'https://users.sentdevsite.com/login'
+	let loginUrl = 'https://users.sentimentrader.com/login'
+	//正式网站 https://users.sentimentrader.com/login
+	//测试网站 https://users.sentdevsite.com/login
 	if (document.baseURI.search(host) != -1) {
 		//  alert("asdasd")
 		// https://backtest.sentimentrader.com/user?userID=668696
@@ -102,6 +104,11 @@ router.beforeEach((to, from, next) => {
 					// 用户不存在
 					alert('User does not exist, please log in again')
 					window.location.href = loginUrl
+				}
+				if(status === 500) {
+				// 服务器错误
+				alert('Internal Server Error, please log in again')
+				window.location.href = loginUrl
 				}
 				// next('https://users.sentdevsite.com/login')
 			})
