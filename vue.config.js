@@ -83,12 +83,20 @@ const config = {
 				}
 			},
 			'/dev': {
-				target: 'http://3.140.194.24:8000',
+				target: 'http://18.216.210.200',
 				//target: 'http://10.131.3.74:8000', 
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
 					'^/dev': '/dev'
+				}
+			},
+			'/CHART_DATA_API': {
+				target: 'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev',
+				// ws:true,
+				changeOrigin: true,
+				pathRewrite: {
+				'^/CHART_DATA_API': '/'
 				}
 			},
 			'/rundev': {

@@ -78,41 +78,6 @@ export default class AdvancedWrapper extends Vue {
 		CIQ.store.commit('setCopy', JSON.stringify(CIQ.store.state))
 		CIQ.addIndicators()
 		CIQ.technicalCategory = config.technicalClassCategory
-
-		// console.log("length of indicatorList: ",CIQ.store.state.indexsList.length)
-		// for (var i = 0; i < CIQ.store.state.indexsList.length; i++) {
-		//                 var fields = CIQ.store.state.indexsList[i];
-		//                 var item = {
-		//                     symbol: fields.symbol,
-		//                     name: fields.name,
-		//                     exchDisp: " "
-		//                 };
-		// 				//console.log(item)
-		// 				this.testIndicators(
-		// 					"https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/pair_data?symbol=AAOI",
-		// 					[item.symbol]
-		// 				)
-		// }
-
-		// Methods for capturing state changes in chart engine and UI
-		// 	Channel subscribe example to listen to breakpoint changes
-		// 	const { channels } = config
-		// 	const channelSubscribe = CIQ.UI.BaseComponent.prototype.channelSubscribe
-		// 	channelSubscribe(
-		// 		channels.breakpoint,
-		// 		(value: any) => {
-		// 			//('channels.breakpoint', value)
-		// 		},
-		// 		chartEngine
-		// 	)
-		// Layout listener example, see parameters at https://documentation.chartiq.com/global.html#layoutEventListener
-		// uiContext.stx.addEventListener('layout', ({ layout }: any) => {
-		// 	//('layout changed', layout)
-		// })
-		// Simulate L2 data using https://documentation.chartiq.com/CIQ.ChartEngine.html#updateCurrentMarketData
-		// Requires import 'chartiq/examples/feeds/L2_simulator'
-		// CIQ.simulateL2({ stx: chartEngine, onInterval: 1000, onTrade: true })
-		// CIQ.stx.loadChart(	{ symbol: "AA",startDate:new Date(),endDate:new Date(), indicator:"AAPL"},)
 	}
 }
 </script>

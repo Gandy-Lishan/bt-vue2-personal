@@ -352,7 +352,8 @@ export default {
 			vm.loading = true
 			vm.clearInterval = clearPromiseInterval
 			let timer = setPromiseInterval(async () => {
-				const res = await getStatus(id)
+				try {
+					const res = await getStatus(id)
 				if (res.data.status !== 1 && res.data.status !== 0) {
 					clearPromiseInterval(timer).then(() => {})
 					// vm.$notify({
@@ -370,6 +371,13 @@ export default {
 					let row = res.data
 					row.result = JSON.parse(row.result)
 					vm.viewBacktestResults(row)
+				}
+				} catch (error) {
+					vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
+				})
 				}
 			}, 3000)
 		},
