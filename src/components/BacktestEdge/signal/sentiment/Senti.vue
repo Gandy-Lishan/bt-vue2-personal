@@ -211,18 +211,25 @@ export default {
 		updateSenti: {
 			handler() {
 				this.preload = true
+				
 			},
 			immediate: true,
 			deep: true
+			
 		},
 		extremeValue: {
 			handler(newVal) {
 				let vm = this
+				// 为了解决先选ma再选indicator后保存不了ma的问题
+				if(this.conditionRadio=='Sentiment Moving Average'){
+					this.setPeriod(this.senti.period)
+				}
 				newVal.forEach((item) => {
 					if (item.indicator) {
 						if (item.indicator === vm.sentiUrl || vm.preload == true) {
 							vm.senti.extreme_pessimism = item.extremePessimism
 							vm.senti.extreme_optimism = item.extremeOptimism
+							
 						}
 					}
 				})
@@ -400,15 +407,13 @@ export default {
 					if (value.chart_name == this.sentiVal) {
 						result = value
 					}
-				} else {
-					if (value.chart_name == this.sentiVal) {
-						result = value
-					}
 				}
 			})
-			
+			// 如果在换成ma radio时indicator没有加载，那么退出
+			if(!result){return}
+
+			//移除重复的ma，有时候也可以防止莫名其妙的多次调用导致的重复加载问题
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
-				
 				if (
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
 				) {
