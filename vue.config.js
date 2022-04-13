@@ -99,14 +99,6 @@ const config = {
 					'^/dev': '/dev'
 				}
 			},
-			'/CHART_DATA_API': {
-				target: 'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev',
-				// ws:true,
-				changeOrigin: true,
-				pathRewrite: {
-				'^/CHART_DATA_API': '/'
-				}
-			},
 			// '/BATE_LOGIN_API': {
 			// 	target: 'https://users.sentdevsite.com/login',
 			// 	// ws:true,
