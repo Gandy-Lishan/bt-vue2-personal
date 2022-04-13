@@ -12,15 +12,15 @@ const author = {
     password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
 }
 export function getIndicatorsList() {
-    const url = get_env("SERVICE_URL",'/CHART_DATA_API') + "/getAllSymbols"
+    const url = get_env("SERVICE_URL",'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev') + "/getAllSymbols"
     return axios.get(url, {auth: author})
 }
 export function getIndexsList() {
-    const url = get_env("SERVICE_URL",'/CHART_DATA_API') + '/getIndexes'
+    const url = get_env("SERVICE_URL",'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev') + '/getIndexes'
     return axios.get(url, {auth: author})
 }
 export function getStocksList() {
-    const url = get_env("SERVICE_URL",'/CHART_DATA_API') + '/getStocks'
+    const url = get_env("SERVICE_URL",'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev') + '/getStocks'
     return axios.get(url, {auth: author})
 }
 
