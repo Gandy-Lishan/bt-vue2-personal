@@ -99,6 +99,14 @@ const config = {
 				'^/CHART_DATA_API': '/'
 				}
 			},
+			// '/BATE_LOGIN_API': {
+			// 	target: 'https://users.sentdevsite.com/login',
+			// 	// ws:true,
+			// 	changeOrigin: true,
+			// 	pathRewrite: {
+			// 	'^/BATE_LOGIN_API': '/'
+			// 	}
+			// },
 			'/rundev': {
 				target: 'http://3.140.194.24:8000',
 				// ws:true,
