@@ -109,6 +109,9 @@ export default {
 			if (this.indicatorRadio == 'technical' && this.techVal == '') {
 				this.indicatorRadio = 'sentiment'
 			}
+			if (this.indicatorRadio == 'risk' && this.riskVal == '') {
+				this.indicatorRadio = 'sentiment'
+			}
 		},
 		updateTech(val) {
 			this.indicatorRadio = 'technical'

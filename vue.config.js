@@ -74,6 +74,14 @@ const config = {
 		// http://3.144.31.178:8000
 		disableHostCheck: true,
 		proxy: {
+			'/CHART_DATA_API': {
+				target: 'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev',
+				// ws:true,
+				changeOrigin: true,
+				pathRewrite: {
+					'^/CHART_DATA_API': '/'
+				}
+			},
 			'/demo': {
 				target: 'http://3.140.194.24:8000',
 				// ws:true,
