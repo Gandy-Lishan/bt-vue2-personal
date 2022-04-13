@@ -221,7 +221,7 @@ export default {
 				edit.exit_description = data.exit_description
 				edit.entry = data.entry
 				edit.exit = data.exit
-
+				
 				if (edit.entry.signals[0].analysis == 'Sentiment') {
 					this.sentiVal = edit.entry.signals[0].indicator
 				} else if (edit.entry.signals[0].analysis == 'Technical') {

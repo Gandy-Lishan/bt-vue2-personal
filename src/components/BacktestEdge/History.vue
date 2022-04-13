@@ -378,6 +378,7 @@ export default {
 			try {
 				this.isEditDone = true
 				const res = await seeParams(row.id)
+				document.getElementsByClassName('ciq-period')[0].style.display = ''
 				this.isEditDone = false
 				// 恢复indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)

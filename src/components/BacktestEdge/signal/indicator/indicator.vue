@@ -154,7 +154,7 @@ export default {
 						}else{
 							this.$store.commit('getExitIndicators', CIQ.indicatorList[i].url)
 						}
-						// extract this statement from handleSentimentSelect
+						// extract this statement from handleSentimentSelect.
 						this.$emit('getSentiVal', CIQ.indicatorList[i].chart_name)						
 						//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
 						this.$emit('getSentiUrl', CIQ.indicatorList[i].url)
