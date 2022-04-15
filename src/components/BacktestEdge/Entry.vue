@@ -414,7 +414,7 @@ export default {
 			// this.$nextTick(() => {
 			// 	this.$refs.indiChild[index].initData()
 			// })
-			console.log('entry的保存执行了' + index + '次')
+			//console.log('entry的保存执行了' + index + '次')
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			if (indi) {
