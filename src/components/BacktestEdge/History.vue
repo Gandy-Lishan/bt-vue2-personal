@@ -502,7 +502,7 @@ export default {
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
 			// CIQ.savedTechSD = data.savedTechSD
-			console.log(data.formIndicators)
+			//console.log(data.formIndicators)
 			var frequency = ''
 			switch (freq) {
 				case 'Daily': {
