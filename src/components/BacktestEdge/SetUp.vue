@@ -18,14 +18,17 @@
 					<el-form-item label="Commission:" prop="commission">
 						<el-input
 							v-model="temp.commission"
-							@input="getCommission"
+							@change="getCommission"
+							@input="validateCommission"
 							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input>
 					</el-form-item>
 					<span class="comUnitNote">(%)</span>
 					<el-form-item label="Slippage:" prop="slippage">
 						<el-input
-							v-model="bd.slippage"
+							v-model="temp.slippage"
+							@change="getSlippage"
+							@input="validateSlippage"
 							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input> </el-form-item
 					><span class="sliUnitNote">(per trade)</span>
@@ -53,13 +56,29 @@
 							</el-select>
 						</div>
 					</el-form-item>
+					<!-- <el-form-item label="Money Management:" prop="moneyManagement">
+						<div class="selectBox">
+							<el-select
+								v-model="mmValue"
+								@change="getSizeAllocationValue(mmValue)"
+								placeholder="Pleace select"
+							>
+								<el-option
+									v-for="item in mmOptions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value"
+								>
+								</el-option>
+							</el-select>
+						</div>
+					</el-form-item> -->
 				</el-col>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12" :span="2">
 					<el-form-item label="Backtest Period:" prop="backtestHistory">
 						<div class="selectBox">
 							<el-select
 								@change="getBacktestHistory(historyValue)"
-								@blur="setBacktestHistory(historyValue)"
 								v-model="historyValue"
 								placeholder="— Select Timeframe —"
 							>
@@ -103,7 +122,7 @@
 					<el-form-item label="Timeframe:" prop="frequency">
 						<div class="selectBox">
 							<el-select
-								v-model="frequency"
+								v-model="bd.frequency"
 								placeholder="— Select Timeframe —"
 								@change="changeTimeframe"
 							>
@@ -126,20 +145,18 @@
 						prop="name"
 						placeholder="Give the backtest a name"
 					>
-						<el-input v-model="bd.name" oninput="value=value.replace(/[\+]/g,'')"></el-input>
+						<el-input v-model="bd.name"></el-input>
 					</el-form-item>
 				</div>
 			</el-row>
-			<el-row>
-				<div class="border-set">
-					<el-form-item label="Direction:" prop="direction">
-						<el-radio-group v-model="direction" @change="getDirection">
-							<el-radio label="Long">Long</el-radio>
-							<el-radio label="Short">Short</el-radio>
-						</el-radio-group>
-					</el-form-item>
-				</div>
-			</el-row>
+			<div class="border-set">
+				<el-form-item label="Direction:" prop="direction">
+					<el-radio-group v-model="bd.direction" @change="getDirection">
+						<el-radio label="Long">Long</el-radio>
+						<el-radio label="Short">Short</el-radio>
+					</el-radio-group>
+				</el-form-item>
+			</div>
 		</el-form>
 	</div>
 </template>
@@ -147,51 +164,39 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
 import { timestampToTime } from '@/tools/formatDate.js'
-import { getIndicatorsList, getIndexsList, getStocksList } from "@/service/service.js"
-const throttle = require('lodash/throttle')
-const uniqWith = require('lodash/uniqWith')
-const isEqual = require('lodash/isEqual')
+import deepClone1 from '@/tools/deepClone.js'
+const _ = require('lodash')
+const throttle = _.throttle
 export default {
-	props: { backtestEditData: Object, editFrequency: String },
+	props: { backtestEditData: Object },
 	name: 'setUp',
 	data() {
 		var validateCapital = (rule, value, callback) => {
-			const pattern = /^\d+(\.\d{1,2})?$/
-			if ( value == '') {
+			if (value == 0 || value == '') {
 				callback(new Error('Please input starting capital'))
-			}
-			if (!pattern.test(value) && value != 0) {
-				callback(new Error('Values greater than 1000, up to two decimal places'))
-			}
-			if(value < 1000) {
-				callback(new Error('Values greater than 1000, up to two decimal places'))
-			}
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
 				callback()
+			}
 		}
 		var validateCommissionRule = (rule, value, callback) => {
-			const pattern = /^\d+(\.\d{1,2})?$/
-			if (value == '') {
+			if (value == 0 || value == '') {
 				callback(new Error('Please input commission'))
-			} 
-			if (!pattern.test(value) && value != 0) {
-				callback(new Error('Value less than 50, up to two decimal places'))}
-			if(value > 50){
-				callback(new Error('Value less than 50, up to two decimal places'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
+				callback()
 			}
-			callback()
 		}
 		var validateSlippageRule = (rule, value, callback) => {
-			const pattern = /^\d+(\.\d{1,2})?$/
-			if (value == '') {
+			if (value == 0 || value == '') {
 				callback(new Error('Please input slippage'))
-			}
-			if (!pattern.test(value) && value != 0) {
-				callback(new Error('Value greater than 0, up to two decimal places'))
-			}
-			if(value < 0) {
-				callback(new Error('Value greater than 0, up to two decimal places'))
-			}
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
 				callback()
+			}
 		}
 		var validateNameRule = (rule, value, callback) => {
 			if (value == '') {
@@ -208,14 +213,15 @@ export default {
 				strategy: 'Signal',
 				capital: 100000.0,
 				capital_alloc: 1.0,
-				commission: 0.1,
+				commission: 0.001,
 				win_rate: 0.0,
 				slippage: 0.1,
 				start_date: '',
 				end_date: '',
-				description: 'backtest'
+				description: 'backtest',
+				direction: 'Long',
+				frequency: 'Daily'
 			},
-			frequency: 'Daily',
 			historyOptions: [
 				{
 					value: 1,
@@ -275,9 +281,8 @@ export default {
 			indexList: [],
 			loading: false,
 			options: [],
-			temp: { commission: '0.1'},
+			temp: { commission: '0.1', slippage: '0.1' },
 			sentimentIndicatorList: [],
-			direction: 'Long',
 			rules: {
 				capital: [
 					{
@@ -313,7 +318,6 @@ export default {
 		// this.getIndexsList()
 		// this.getStocksList()
 		this.getEndDate()
-		// cookies.set('userid', 'test')
 	},
 	computed: {
 		// listSet() {
@@ -357,16 +361,20 @@ export default {
 					delete newVal.status
 					delete newVal.results
 					delete newVal.uuid
+					delete newVal.entry_description
+					delete newVal.exit_description
+					delete newVal.entry
+					delete newVal.exit
+					delete newVal.result
 					this.bd = Object.assign(this.bd, newVal)
-					// CIQ.hideMarker()
-					// CIQ.isMarkerShown = false
-					this.frequency = this.editFrequency
-					this.getFrequency(this.frequency)
+					CIQ.hideMarker()
+					this.getDirection(newVal.direction)
+					this.getFrequency(this.bd.frequency)
 
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
 					this.temp.commission = Number(newVal.commission) * 100
-					this.bd.commission = newVal.commission * 100
+					this.temp.slippage = Number(newVal.slippage) * 100
 					let year
 					let month
 					let day
@@ -393,18 +401,62 @@ export default {
 		clearForm() {
 			this.clearFormValidate()
 			Object.assign(this.$data, this.$options.data())
+			this.$emit('setDirection', 'Long')
 			this.getEndDate()
-			this.bd.symbol = this.$store.state.backtestSymbol
 		},
 		getDirection(val) {
 			// direction 设置到 vuex
-			this.$store.commit('getExitDirection', val)
-			// 设置 entry 和 exit 的 direction
+			this.$store.commit('getDirection', val)
+			// 传给 entry 和 exit 的 direction
 			this.$emit('setDirection', val)
 		},
-		setEditDirection(val) {
-			this.direction = val
-		},
+		// setEditDirection(val) {
+		// 	this.direction = val
+		// },
+		validateCommission: throttle(function (val) {
+			let list = val.split('.')
+			if (list.length === 2) {
+				let temp = ''
+				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) temp = list[0]
+				else {
+					temp = list[0].substring(0, 2)
+				}
+
+				if (list[1].search(/^\d{0,3}?$/) !== -1) temp = temp + '.' + list[1]
+				else {
+					temp = temp + '.' + list[1].substring(0, 3)
+				}
+
+				this.temp.commission = temp
+			} else if (list.length === 1) {
+				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1)
+					this.bd.commission = list[0]
+				else {
+					this.temp.commission = list[0].substring(0, 2)
+				}
+			}
+		}, 500),
+		validateSlippage: throttle(function (val) {
+			let list = val.split('.')
+			if (list.length === 2) {
+				let temp = ''
+				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) temp = list[0]
+				else {
+					temp = list[0].substring(0, 2)
+				}
+
+				if (list[1].search(/^\d{0,3}?$/) !== -1) temp = temp + '.' + list[1]
+				else {
+					temp = temp + '.' + list[1].substring(0, 3)
+				}
+				this.temp.slippage = temp
+			} else if (list.length === 1) {
+				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) this.bd.slippage = list[0]
+				else {
+					this.temp.slippage = list[0].substring(0, 2)
+				}
+			}
+		}, 500),
 		validateStartingCapital: throttle(function (val) {
 			let re = /^\d+\.?\d{0,2}$/
 			if (val.search(re) !== -1) {
@@ -416,19 +468,7 @@ export default {
 				this.bd.capital = ''
 			}
 		}, 500),
-		// getSymbolName(val) {
-		// 	this.$store.commit('getSymbolName', val)
-		// 	// 清空 两个表单的方法
-		// 	// this.$emit('resetResultData')
-		// 	// this.$emit('resetPerformanceData')
-		// 	// for (var studyInstanceName in CIQ.stxx.layout.studies) {
-		// 	//     CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
-		// 	// }
 
-		// 	CIQ.addSymbol(val)
-		// 	// remove markers when symbol changes
-		// 	CIQ.hideMarker()
-		// },
 		getBenchmark(val) {
 			this.bd.benchmark = val
 		},
@@ -458,60 +498,81 @@ export default {
 			return (window.utils = new utils())
 		},
 		async getIndexsList() {
-			let vm = this
-			if (vm.$store.state.indexsList.length != 0) {
-				vm.indexList = vm.$store.state.indexsList.map((item) => {
+			//console.log('vuex', this.$store.state.indexsList)
+			if (this.$store.state.indexsList.length != 0) {
+				this.indexList = this.$store.state.indexsList.map((item) => {
 					return { value: `${item.symbol}`, label: `${item.symbol}` }
 				})
 			} else {
-				let res = await getIndexsList()
-						vm.indexList = res.data.map((item) => {
+				await this.$http
+					.get(
+						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
+						{
+							auth: {
+								username: 'sentimentrader_backtest_api',
+								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+							}
+						}
+					)
+					.then((res) => {
+						this.indexList = res.data.map((item) => {
 							return { value: `${item.symbol}`, label: `${item.symbol}` }
 						})
+					})
+					.catch((error) => {
+						console.warn(error)
+					})
 			}
 		},
 		async getStocksList() {
-			let vm = this
-			if (vm.$store.state.stocksList.length != 0) {
-				vm.symbolList = vm.$store.state.stocksList.map((item) => {
+			if (this.$store.state.stocksList.length != 0) {
+				this.symbolList = this.$store.state.stocksList.map((item) => {
 					return { value: `${item.stock}`, label: `${item.stock}` }
 				})
 			} else {
-				try {
-				let res = await getStocksList()
-						vm.symbolList = res.data.map((item) => {
+				await this.$http
+					.get(
+						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks',
+						{
+							auth: {
+								username: 'sentimentrader_backtest_api',
+								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+							}
+						}
+					)
+					.then((res) => {
+						this.symbolList = res.data.map((item) => {
 							return { value: `${item.stock}`, label: `${item.stock}` }
 						})
-				} catch (error) {
+					})
+					.catch((error) => {
 						console.warn(error)
-				}
+					})
 			}
 		},
 		async remoteMethod(query) {
-			let vm = this
 			if (query !== '') {
 				this.loading = true
-				setTimeout(async () => {
-					if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
-						await vm.getStocksList()
-						await vm.getIndexsList()
-						this.loading = false
-					}
+				setTimeout(() => {
 					this.loading = false
-					var symbolListTemp = vm.symbolList.filter((item) => {
+					if (this.symbolList.length == 0 || this.indexList.length == 0) {
+						this.getStocksList()
+						this.getIndexsList()
+					}
+					var symbolListTemp = this.symbolList.filter((item) => {
 						return (
 							item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
 							item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
 						)
 					})
-					var IndexListTemp = vm.indexList.filter((item) => {
+					var IndexListTemp = this.indexList.filter((item) => {
 						return (
 							item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
 							item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
 						)
 					})
 					let options = symbolListTemp.concat(IndexListTemp)
-					vm.options = uniqWith(options, isEqual)
+					this.options = _.uniqWith(options, _.isEqual)
 				}, 200)
 			} else {
 				this.options = []
@@ -530,23 +591,12 @@ export default {
 				this.bd.start_date = ''
 			}
 		},
-		setBacktestHistory(val) {
-			console.log("blur年限",val);
-			this.historyValue = val
-			this.bd.end_date = timestampToTime(new Date())
-			if (val <= 20) {
-				this.bd.end_date = timestampToTime(new Date())
-				const str = this.bd.end_date.split('-')
-				str[0] = Number(str[0]) - Number(this.historyValue) + ''
-				this.bd.start_date = str.join('-')
-			}
-			if (val === 21) {
-				this.bd.start_date = ''
-			}
-		},
 		getCommission: throttle(function (val) {
-			this.bd.commission = val
+			this.bd.commission = val / 100
 		}, 500),
+		getSlippage: throttle(function (val) {
+			this.bd.slippage = val / 100
+		}),
 		validateForm(newTag, oldTag) {
 			let data = true
 			this.$refs.backtestSetupForm.validate((valid) => {
@@ -563,7 +613,6 @@ export default {
 		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.backtestSetupForm.clearValidate()
-			this.$emit('getTimeFrame', this.frequency)
 		},
 		changeTimeframe(val) {
 			this.getFrequency(val)
@@ -571,7 +620,7 @@ export default {
 		},
 		getFrequency(val) {
 			// getFrequency will no longer call addIndicator and pass a parameter to it
-			this.frequency = val
+			this.bd.frequency=val
 			this.$store.commit('getFrequency', val)
 			this.$emit('getTimeFrame', val)
 			this.loadSentimentList(val)
@@ -592,12 +641,12 @@ export default {
 			// 	}
 			// 	default:
 			// }
-			// CIQ.addIndicators()
+			// CIQ.addIndicators(selectedFreq)
 		},
 		async loadSentimentList(val) {
 			const vm = this
 			var frequency = val
-			var indicatorList = []
+			var indicatorList =                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               []
 
 			if (CIQ.indicatorList) {
 				if (CIQ.indicatorList.length != 0) {
@@ -605,7 +654,15 @@ export default {
 					indicatorList = CIQ.indicatorList
 				}
 			} else {
-				const res = await getIndicatorsList()
+				const res = await vm.$http.get(
+					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+					{
+						auth: {
+							username: 'sentimentrader_backtest_api',
+							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+						}
+					}
+				)
 				indicatorList = res.data
 			}
 			// vm.sentimentIndicatorList = res.data.map((obj) => {
@@ -669,7 +726,15 @@ export default {
 					indicatorList = CIQ.indicatorList
 				}
 			} else {
-				const res = await getIndicatorsList()
+				const res = await vm.$http.get(
+					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+					{
+						auth: {
+							username: 'sentimentrader_backtest_api',
+							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+						}
+					}
+				)
 				indicatorList = res.data
 			}
 			this.$store.commit('getIndicatorsList', indicatorList)
@@ -679,47 +744,24 @@ export default {
 			let checked = true
 			let nameChecked = true
 			let validForm
-			let bd = JSON.parse(JSON.stringify(this.bd))
 			this.$refs.backtestSetupForm.validate((valid) => {
 				validForm = valid
 			})
 			if (validForm) {
 				let nameList = this.$store.state.backtestNameList
-				if (nameList.indexOf(bd.name) === -1) {
-					bd.favorites = false
-					delete bd.old_uuid
-				}
-				if (
-					nameList.indexOf(bd.name) > -1 &&
-					this.oldBacktestName === ''
-				) {
-					bd.favorites = false
-					delete bd.old_uuid
-					nameChecked = false
-				}
-				if (
-					nameList.indexOf(bd.name) > -1 &&
-					this.oldBacktestName === bd.name &&
-					this.oldBacktestName !== ''
-				) {
-					// 说明重名要进行替换，不删除 old_uuid
-				}
-				if (
-					nameList.indexOf(bd.name) > -1 &&
-					this.oldBacktestName !== bd.name &&
-					this.oldBacktestName !== ''
-				) {
-					// 说明不重名，直接创建新的，删除 old_uuid
-					// this.$store.commit('clearBacktestUuid')
-					nameChecked = false
+				for (let i = 0; i < nameList.length; i++) {
+					if (
+						this.bd.name === nameList[i] &&
+						this.bd.name !== this.oldBacktestName
+					) {
+						nameChecked = false
+						break
+					}
 				}
 				if (nameChecked) {
-					if (bd.end_date) {
+					if (this.bd.end_date) {
 						// 保存 backtestform 的数据
-						bd.commission = this.temp.commission / 100
-						this.$store.commit('setBd', bd)
-						this.$store.commit('getExitDirection',this.direction)
-						this.$store.commit('getFrequency', this.frequency)
+						this.$store.commit('setBd', this.bd)
 						return checked
 					} else {
 						this.$message({
@@ -748,9 +790,6 @@ export default {
 				checked = false
 				return checked
 			}
-		},
-		clearOldBacktestName() {
-			this.oldBacktestName = ''
 		}
 	}
 }
@@ -770,50 +809,13 @@ export default {
 .comUnitNote {
 	position: absolute;
 
-	left: 335px;
+	left: 329px;
 	top: 56px;
 }
 .sliUnitNote {
 	position: absolute;
-	left: 335px;
+	left: 329px;
 	top: 105px;
-}
-@media (min-width: 1680px) {
-	.comUnitNote {
-		position: absolute;
-		left: 454px;
-		top: 56px;
-	}
-	.sliUnitNote {
-		position: absolute;
-		left: 454px;
-		top: 105px;
-	}
-}
-@media (min-width: 375px) and (max-width: 767px) {
-	.comUnitNote {
-		position: absolute;
-		left: 208px;
-		top: 56px;
-		font-size: 12px;
-	}
-	.sliUnitNote {
-		position: absolute;
-		left: 208px;
-		top: 103px;
-		font-size: 12px;
-	}
-	.el-input__suffix {
-		right: 68px;
-	}
-	/deep/.el-select-dropdown__item {
-		font-size: 12px;
-		padding: 0 5px;
-	}
-	/deep/.el-select-dropdown {
-		max-width: 206px;
-		left: 107px;
-	}
 }
 .border-set {
 	border-bottom: 1px solid #797979;

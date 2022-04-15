@@ -54,11 +54,12 @@
 						</cq-menu>
 					</cq-info-toggle-dropdown> -->
 
-					<cq-info-toggle-dropdown>
+					<!-- <cq-info-toggle-dropdown>
 						<cq-toggle class="ciq-HU" id="ciq-HU" cq-member="headsUp">
 							<span></span>
 							<cq-tooltip>Info</cq-tooltip>
 						</cq-toggle>
+
 						<cq-menu class="ciq-menu toggle-options collapse tooltip-ui">
 							<span></span>
 							<cq-menu-dropdown>
@@ -68,26 +69,11 @@
 								<cq-item cq-member="headsUp-dynamic"
 									>Show Dynamic Callout<span class="ciq-radio"
 										><span></span></span
-								></cq-item>		
+								></cq-item>
+								
 							</cq-menu-dropdown>
 						</cq-menu>
-						<cq-toggle class="grid" id="grid" stxtap="Layout.xAixsGridLine()">
-							<span></span>
-							<cq-tooltip>grid</cq-tooltip>
-						</cq-toggle>
-						<cq-toggle class="lastP" id="lastP" stxtap="Layout.lastPriceLabel()">
-						<span></span>
-						<cq-tooltip>last price</cq-tooltip>
-						</cq-toggle>
-						<cq-toggle class="buy" id="buy" style="visibility:hidden;margin-left:28px">
-							<span style='margin-right:10px'><svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'><path d='M512 124L64 900h896z' p-id='2093' fill='#1afa29'></path></svg></span>
-							<cq-tooltip>BUY</cq-tooltip>
-						</cq-toggle>
-						<cq-toggle class="sell" id="sell" style="visibility:hidden">
-							<span style='margin-right:10px'><svg t='1636008125523' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2169' width='30' height='30' ><path d='M525.873548 897.156129l-383.174193-761.723871 763.045161-1.981935-379.870968 763.705806z' p-id='2170' fill='#d81e06'></path></svg></span>
-							<cq-tooltip>SELL</cq-tooltip>
-						</cq-toggle>
-					</cq-info-toggle-dropdown>
+					</cq-info-toggle-dropdown> -->
 					<!-- <cq-toggle class="ciq-DT tableview-ui" cq-member="tableView"
 						><span></span><cq-tooltip>Table View</cq-tooltip></cq-toggle
 					> -->
@@ -262,7 +248,7 @@
 								<cq-themes></cq-themes>
 								<cq-separator></cq-separator>
 							</cq-menu-dropdown-section>
-							<!-- <cq-menu-dropdown-section class="chart-locale">
+							<cq-menu-dropdown-section class="chart-locale">
 								<cq-heading>Locale</cq-heading>
 								<cq-item keyboard-selectable="false"
 									><cq-clickable
@@ -276,7 +262,7 @@
 									<cq-flag></cq-flag>
 									<cq-language-name>Change Language</cq-language-name>
 								</cq-item>
-							</cq-menu-dropdown-section> -->
+							</cq-menu-dropdown-section>
 						</cq-menu-dropdown>
 					</cq-menu>
 				</div>
@@ -367,7 +353,7 @@
 
 						<cq-chart-legend></cq-chart-legend>
 
-						<cq-loader class="loaderMain"></cq-loader>
+						<cq-loader></cq-loader>
 					</div>
 				</div>
 			</div>
@@ -449,6 +435,7 @@ export default class AdvancedChartComponent extends Vue {
 			this.stx = uiContext.stx
 			CIQ.stxx = uiContext.stx
 			CIQ.periodicity = {period:1, interval:1, timeUnit:'day'}
+			
 			var iter = CIQ.stxx.chart.market.newIterator({
 			interval: CIQ.stxx.layout.interval,
 			periodicity: CIQ.stxx.layout.periodicity,
@@ -466,41 +453,35 @@ export default class AdvancedChartComponent extends Vue {
 				////(study)
 				CIQ.studys.push(study)
 			}
+			
+			//console.log(CIQ.stxx.panels['chart'].yAxis)
 
 			//CIQ.stxx.setTimeZone("Asia/Hong_Kong", "America/New_York");
 
 			CIQ.ChartEngine.prototype.prepend("draw", function () {
-	
+			// create persistence by forcing it  be called in every animation frame.
+				//CIQ.stxx.watermark("chart", { h: "bottom", v: "left", text: "sentimentrader.com" });
 			});
 			var node = document.getElementsByClassName("stx-subholder")[0]
 			var newdiv=document.createElement("div");
 			newdiv.className = 'stLogo'
 			node.appendChild(newdiv)
+
+			
 			
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
-			//CIQ.stxx.layout.headsUp = "floating";
-			//CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = false;
-			this.initializeToggle()
+			CIQ.stxx.layout.headsUp = "floating";
+			//CIQ.UI.Markers.prototype.showMarkers('mMarker')
+			
+			//let showMarkers = CIQ.UI.Markers.prototype.showMarkers
+			// var mas = CIQ.Studies.movingAverageHelper(CIQ.stxx, "options");
+			// //(mas);
+           
 		}, 0)
 				
 	}
 
-	initializeToggle() {
-		var mNode = document.getElementsByClassName("lastP")[0]
-		if (CIQ.stxx.layout.lastPriceLabel){
-			mNode.classList.remove("active");
-		}
-		else{
-			mNode.classList.add("active");
-		}
-		var mNode = document.getElementsByClassName("grid")[0]
-		if (CIQ.stxx.layout.xAixsGridLine){
-			mNode.classList.remove("active");
-		}
-		else{
-			mNode.classList.add("active");
-		}
-	}
+
 	beforeDestroy() {
 		// Destroy the ChartEngine instance when unloading the component.
 		// This will stop internal processes such as quotefeed polling.
@@ -514,7 +495,6 @@ export default class AdvancedChartComponent extends Vue {
 		const chart = new CIQ.UI.Chart()
 		const uiContext = chart.createChartAndUI({ container, config })
 
-		
 		return uiContext
 	}
 	

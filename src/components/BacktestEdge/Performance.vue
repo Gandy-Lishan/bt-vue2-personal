@@ -11,8 +11,7 @@
 					<el-table :data="tableData" style="width: 100%">
 						<el-table-column
 							prop="totalReturn"
-							show-overflow-tooltip
-							label="TOTAL RETURN %"
+							label="TOTAL RETURN"
 							align="center"
 							algin="center"
 						>
@@ -28,7 +27,6 @@
 						</el-table-column>
 						<el-table-column
 							prop="CAGR"
-							show-overflow-tooltip
 							label="Annual Return % (CAGR)"
 							align="center"
 							algin="center"
@@ -44,9 +42,8 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-							show-overflow-tooltip
 							prop="medianReturn"
-							label="MEDIAN RETURN %"
+							label="MEDIAN RETURN"
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -60,9 +57,8 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-							show-overflow-tooltip
 							prop="averageReturn"
-							label="AVERAGE RETURN %"
+							label="AVERAGE RETURN"
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -75,12 +71,7 @@
 								}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column
-							prop="tzScore"
-							label="Z_SCORE"
-							align="center"
-							show-overflow-tooltip
-						>
+						<el-table-column prop="tzScore" label="Z_SCORE" align="center">
 							<template slot-scope="scope">
 								<span v-if="scope.row.tzScore >= 0">{{
 									scope.row.tzScore
@@ -92,7 +83,6 @@
 						<el-table-column
 							prop="standardDeviation"
 							label="STD. DEV"
-							show-overflow-tooltip
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -106,9 +96,8 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-							show-overflow-tooltip
 							prop="buyHoldGain"
-							label="BUY & HOLD %"
+							label="BUY & HOLD"
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -130,8 +119,7 @@
 					>
 						<el-table-column
 							prop="winRate"
-							label="WIN RATE %"
-							show-overflow-tooltip
+							label="WIN RATE"
 							width="180"
 							align="center"
 						>
@@ -146,7 +134,6 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-							show-overflow-tooltip
 							prop="averageWin"
 							label="AVERAGE WIN %"
 							align="center"
@@ -162,7 +149,6 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-							show-overflow-tooltip
 							prop="averageLoss"
 							label="AVERAGE LOSS %"
 							align="center"
@@ -177,12 +163,7 @@
 								}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column
-							prop="drawDown"
-							label="MAX RISK %"
-							align="center"
-							show-overflow-tooltip
-						>
+						<el-table-column prop="drawDown" label="MAX RISK" align="center">
 							<template slot-scope="scope">
 								<span v-if="scope.row.drawDown >= 0">{{
 									scope.row.drawDown + '%'
@@ -203,7 +184,6 @@
 							prop="totalTrades"
 							label="TOTAL TRADES"
 							width="180"
-							show-overflow-tooltip
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -216,7 +196,6 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-							show-overflow-tooltip
 							prop="totalPositive"
 							label="TOTAL POSITIVE"
 							align="center"
@@ -232,7 +211,6 @@
 						</el-table-column>
 						<el-table-column
 							prop="totalNegative"
-							show-overflow-tooltip
 							label="TOTAL NEGATIVE"
 							align="center"
 						>
@@ -247,8 +225,7 @@
 						</el-table-column>
 						<el-table-column
 							prop="timeInMarket"
-							show-overflow-tooltip
-							label="TIME IN MARKET %"
+							label="% TIME IN MARKET"
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -288,34 +265,18 @@
 					>
 						<el-table-column
 							prop="trade_number"
-							show-overflow-tooltip
-							label="Trade #"
+							label="Trade Number"
 							align="center"
 						>
 							<template slot-scope="scope">
 								{{ Number(scope.row.trade_number) + 1 }}
 							</template>
 						</el-table-column>
-						<el-table-column
-							prop="Date"
-							label="Trade Date"
-							align="center"
-							show-overflow-tooltip
-						>
+						<el-table-column prop="Date" label="Trade Date" align="center">
 						</el-table-column>
-						<el-table-column
-							prop="TradeStatus"
-							label="Action"
-							align="center"
-							show-overflow-tooltip
-						>
+						<el-table-column prop="TradeStatus" label="Action" align="center">
 						</el-table-column>
-						<el-table-column
-							prop="Indicator"
-							label="Indicator"
-							align="center"
-							show-overflow-tooltip
-						>
+						<el-table-column prop="Indicator" label="Indicator" align="center">
 						</el-table-column>
 						<el-table-column
 							prop="TradePrice"
@@ -323,29 +284,12 @@
 							align="center"
 						>
 						</el-table-column>
-						
-						<el-table-column
-							prop="TradeReturn"
-							label="Trade Return %"
-							align="center"
-							show-overflow-tooltip
-						>
-							<template slot-scope="scope">
-								<span v-if="scope.row.TradeReturn == 'none'">{{ '' }}</span>
-								<span v-else-if="scope.row.TradeReturn >= 0"
-									>{{scope.row.TradeReturn}}%</span
-								>
-								<span v-else style="color: red"
-									>{{scope.row.TradeReturn}}%</span
-								>
-							</template>
-						</el-table-column>
-					<el-table-column
-							prop="Return"
-							label="Total Return %"
-							align="center"
-							show-overflow-tooltip
-						>
+						<!-- <el-table-column
+        prop="indicator_close"
+        label="Indicator Level"
+        align="center">
+      </el-table-column> -->
+						<el-table-column prop="Return" label="Total Return" align="center">
 							<template slot-scope="scope">
 								<span v-if="scope.row.Return == 'none'">{{ '' }}</span>
 								<span v-else-if="scope.row.Return >= 0"
@@ -365,8 +309,7 @@
 </template>
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import jutils from 'jutils-src'
-import { seeReport } from '@/service/service'
+import keepTwoDecimal from '@/tools/keepTwoDecimal.js'
 
 export default {
 	data() {
@@ -386,8 +329,10 @@ export default {
 	},
 	methods: {
 		handleClick(tab, event) {},
-
-		async getResultData(row) {
+		loadMarker(tradeData) {
+			CIQ.loadChart(tradeData.markerSet,CIQ.addMarker)
+		},
+		getResultData(row) {
 			let vm = this
 			let initalData = {}
 			let data = {}
@@ -398,124 +343,94 @@ export default {
 				if (this.$store.state.favoriteBacktestRowData.id) {
 					vm.loading = true
 					let id = row.id
-					try {
-						const res = await seeReport(id)
-						if (res.status == 200) {
-							if (typeof res.data == String) {
-								JSON.parse(res.data)
-							}
-							initalData = JSON.parse(JSON.stringify(res.data))
-							// -------------------------------------  text ----------------
-							const tradeReturn = initalData["Each Return"]
-							data.uuid = initalData['UUID']
-							data.symbol = initalData['Symbol']
-							data.frequency = initalData['Frequency']
-							data.totalTrades = initalData['Total Trades']
-							data.totalPositive = initalData['Total Positive']
-							data.totalNegative = initalData['Total Negative']
-							data.scratch = initalData['Scratch']
-							data.averageWin = initalData['Average Win %']
-							data.averageLoss = initalData['Average Loss %']
-							data.medianGain = initalData['Median Gain']
-							data.medianLoss = initalData['Median Loss']
-							data.averageReturn = initalData['Average Return']
-							data.medianReturn = initalData['Median Return']
-							data.buyHoldGain = initalData['BuyHoldGain']
-							data.winRate = initalData['Win Rate']
-							data.timeInMarket = initalData['Time in Market']
-							data.totalReturn = initalData['Total Return (%)']
-							data.tzScore = initalData['Z-score']
-							data.standardDeviation = initalData['Standard Deviation']
-							data.s3_status_response = initalData['s3_status_response']
-							data.cagr = initalData['CAGR']
-							data.annual_volatiltiy = initalData['annual_volatiltiy']
-							data.calmar_ratio = initalData['calmar_ratio']
-							data.sortino_ratio = initalData['sortino_ratio']
-							data.tail_ratio = initalData['tail_ratio']
-							data.var = initalData['VAR']
-							data.capture = initalData['capture']
-							data.alpha = initalData['alpha']
-							data.beta = initalData['beta']
-							data.information_ratio = initalData['information_ratio']
-							data.sharpeRatio = initalData['Sharpe Ratio']
-							data.drawDown = initalData['DrawDown']
-							data.drawDownPeriod = initalData['DrawDown Period']
-							data.drawDownImageUploaded = initalData['DrawDown Image Uploaded']
-							data.ddFileURL = initalData['DD File URL']
-							data.returnsImageUploaded = initalData['Returns Image Uploaded']
-							data.returnsFileURL = initalData['Returns File URL']
-							data.annualReturnsImageUploaded =
-								initalData['Annual Returns Image Uploaded']
-							data.annualReturnsFileURL = initalData['Annual Returns File URL']
-							data.returnsheatmapImageUploadedURL =
-								initalData['Returns Heatmap Image Uploaded']
-							data.returnsHeatmapFileURL =
-								initalData['Returns Heatmap File URL']
-							data.CAGR = initalData['CAGR']
-							vm.tableData = []
-							//('data',data)
-							vm.tableData.push(data)
-							vm.returnImgUrl = data.returnsFileURL
-							vm.drawDownImgUrl = data.ddFileURL
-							vm.monthReturnImgUrl = data.returnsHeatmapFileURL
-							vm.annualReturnImgUrl = data.annualReturnsFileURL
-							for(let i=0;i<initalData['Trades'].length;i++) {
-								initalData['Trades'][i].TradeReturn = tradeReturn[initalData['Trades'][i].trade_number]
-								if(i % 2 !== 0) {
-								 initalData['Trades'][i-1].Return = initalData['Trades'][i].Return
+					vm.$http
+						.get('/dev/report/?uuid=' + id)
+						.then((res) => {
+							if (res.status == 200) {
+								if (typeof res.data == String) {
+									JSON.parse(res.data)
 								}
+								initalData = res.data
+
+								// -------------------------------------  text ----------------
+								data.uuid = initalData['UUID']
+								data.symbol = initalData['Symbol']
+								data.frequency = initalData['Frequency']
+								data.totalTrades = initalData['Total Trades']
+								data.totalPositive = initalData['Total Positive']
+								data.totalNegative = initalData['Total Negative']
+								data.scratch = initalData['Scratch']
+								data.averageWin = initalData['Average Win %']
+								data.averageLoss = initalData['Average Loss %']
+								data.medianGain = initalData['Median Gain']
+								data.medianLoss = initalData['Median Loss']
+								data.averageReturn = initalData['Average Return']
+								data.medianReturn = initalData['Median Return']
+								data.buyHoldGain = initalData['BuyHoldGain']
+								data.winRate = initalData['Win Rate']
+								data.timeInMarket = initalData['Time in Market']
+								data.totalReturn = initalData['Total Return (%)']
+								data.tzScore = initalData['Z-score']
+								data.standardDeviation = initalData['Standard Deviation']
+								data.s3_status_response = initalData['s3_status_response']
+								data.cagr = initalData['CAGR']
+								data.annual_volatiltiy = initalData['annual_volatiltiy']
+								data.calmar_ratio = initalData['calmar_ratio']
+								data.sortino_ratio = initalData['sortino_ratio']
+								data.tail_ratio = initalData['tail_ratio']
+								data.var = initalData['VAR']
+								data.capture = initalData['capture']
+								data.alpha = initalData['alpha']
+								data.beta = initalData['beta']
+								data.information_ratio = initalData['information_ratio']
+								data.sharpeRatio = initalData['Sharpe Ratio']
+								data.drawDown = initalData['DrawDown']
+								data.drawDownPeriod = initalData['DrawDown Period']
+								data.drawDownImageUploaded =
+									initalData['DrawDown Image Uploaded']
+								data.ddFileURL = initalData['DD File URL']
+								data.returnsImageUploaded = initalData['Returns Image Uploaded']
+								data.returnsFileURL = initalData['Returns File URL']
+								data.annualReturnsImageUploaded =
+									initalData['Annual Returns Image Uploaded']
+								data.annualReturnsFileURL =
+									initalData['Annual Returns File URL']
+								data.returnsheatmapImageUploadedURL =
+									initalData['Returns Heatmap Image Uploaded']
+								data.returnsHeatmapFileURL =
+									initalData['Returns Heatmap File URL']
+								data.CAGR = initalData['CAGR']
+								vm.tableData = []
+								//('data',data)
+								vm.tableData.push(data)
+								vm.returnImgUrl = data.returnsFileURL
+								vm.drawDownImgUrl = data.ddFileURL
+								vm.monthReturnImgUrl = data.returnsHeatmapFileURL
+								vm.annualReturnImgUrl = data.annualReturnsFileURL
+								vm.tradesData = initalData['Trades']
+								// ---------------------------------------- end ----------------------------------
+
+								// ----------------------- backtest result-------------------------------
+
+								this.$emit('setBacktestResult', initalData['basic'])
+								// ------------------------------ end -----------------------------------
+
+								//(initalData)
+								this.loadMarker(initalData)
+								// vm.$store.commit('getTradesData',initalData[])
+								vm.loading = false
 							}
-							vm.tradesData = initalData['Trades']
-							// ---------------------------------------- end ----------------------------------
-							// ----------------------- backtest result-------------------------------
-
-							this.$emit('setBacktestResult', initalData['basic'])
-							// ------------------------------ end -----------------------------------
-								setTimeout(()=>{
-									this.loadMarker(initalData.markerSet)
-								},0)
-
-							//vm.$store.commit('getTradesData',initalData[])
+						})
+						.catch((error) => {
+							console.error('服务器报错', error)
+							// 清空数据并且进行提示
+							vm.tableData = []
+							vm.tradesData = []
+							vm.$emit('errorCatchPerformance')
 							vm.loading = false
-						}
-					} catch (error) {
-						console.error('服务器报错', error)
-						// 清空数据并且进行提示
-						vm.tableData = []
-						vm.tradesData = []
-						vm.$emit('errorCatchPerformance')
-						vm.loading = false
-					}
+						})
 				}
 			}
-		},
-		loadMarker(markerSet) {
-			//load markers for initial quotefeed
-			let list = this.filterMarkerDate(
-				new Date(CIQ.initialDate.start),
-				new Date(CIQ.initialDate.end),
-				markerSet
-			)
-			CIQ.store.commit('SetmarkerSet', markerSet)
-			CIQ.isMarkerShown = true
-			CIQ.loadChart(list, CIQ.addMarker)
-		},
-		filterMarkerDate(start_date, end_date, markerSet) {
-			let list = []
-			let _date = {
-				start: jutils.formatDate(start_date, 'YYYYMMDD'),
-				end: jutils.formatDate(end_date, 'YYYYMMDD')
-			}
-			for (var date in markerSet) {
-				let markerSetDate =
-					markerSet[date].DT.slice(0, 4) +
-					markerSet[date].DT.slice(5, 7) +
-					markerSet[date].DT.slice(8, 10)
-				if (markerSetDate > _date.start && markerSetDate <= _date.end) {
-					list.push(markerSet[date])
-				}
-			}
-			return list
 		},
 		clearPerformanceData() {
 			this.tableData = []
@@ -539,44 +454,13 @@ export default {
 					}
 				}
 			}
-			if (columnIndex === 5) {
-				if (rowIndex % 2 === 0) {
-					return {
-						rowspan: 2,
-						colspan: 1
-					}
-				} else {
-					return {
-						rowspan: 0,
-						colspan: 0
-					}
-				}
-			}
-		   if (columnIndex === 6) {
-				if (rowIndex % 2 === 0) {
-					return {
-						rowspan: 2,
-						colspan: 1
-					}
-				} else {
-					return {
-						rowspan: 0,
-						colspan: 0
-					}
-				}
-			}
 		},
 		try1({ row, column, rowIndex, columnIndex }) {
-			// if (columnIndex === 6 && column.label == 'Total Return %') {
-			// 	if (rowIndex % 2 === 0) {
-			// 		row.Return = 'none'
-			// 	}
-			// }
-			// if (columnIndex === 5 && column.label == 'Trade Return %') {
-			// 	if (rowIndex % 2 === 0) {
-			// 		row.Return = 'none'
-			// 	}
-			// }
+			if (columnIndex == 5 && column.label == 'Total Return') {
+				if (rowIndex % 2 === 0) {
+					row.Return = 'none'
+				}
+			}
 		}
 	}
 }

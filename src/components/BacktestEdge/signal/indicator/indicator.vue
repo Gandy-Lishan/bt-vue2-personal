@@ -17,9 +17,7 @@
 							class="inline-input"
 							clearable
 							v-model="si.sentimentIndicator"
-							:disabled="
-								indicatorRadio === 'Sentiment Indicators' ? false : true
-							"
+							:disabled="!(indicatorRadio === 'Sentiment Indicators')"
 							:fetch-suggestions="indicatorSentimentSearch"
 							placeholder="Input the sentiment indicator"
 							@select="handleSentimentSelect"
@@ -40,9 +38,7 @@
 				<el-form-item prop="technicalIndicator">
 					<div class="indicatorSearchBox">
 						<el-autocomplete
-							:disabled="
-								indicatorRadio === 'Technical Indicators' ? false : true
-							"
+							:disabled="!(indicatorRadio === 'Technical Indicators')"
 							class="inline-input"
 							clearable
 							prefix-icon="el-icon-search"
@@ -54,7 +50,10 @@
 					</div>
 				</el-form-item>
 			</div>
-			<div class="indicator-container techBox" v-if="criteria == 'exit'">
+			<div
+				class="indicator-container techBox"
+				v-if="criteria === 'exit' && isShowRisk === panelIndex"
+			>
 				<el-form-item>
 					<el-radio
 						v-model="indicatorRadio"
@@ -66,7 +65,7 @@
 				<el-form-item prop="riskIndicator">
 					<div class="indicatorSearchBox">
 						<el-autocomplete
-							:disabled="indicatorRadio === 'Risk Control' ? false : true"
+							:disabled="!(indicatorRadio === 'Risk Control')"
 							class="inline-input"
 							clearable
 							prefix-icon="el-icon-search"
@@ -84,11 +83,13 @@
 <script>
 import { Store, mapGetters } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import {getIndicatorsList} from '@/service/service'
+import deepClone1 from '@/tools/deepClone.js'
 export default {
 	props: {
 		// indicatorEditData: Object
-		criteria: String
+		criteria: String,
+		panelIndex: Number,
+		isShowRisk: Number
 	},
 	data() {
 		var validateSenti = (rule, value, callback) => {
@@ -119,7 +120,6 @@ export default {
 				technicalIndicator: '',
 				riskIndicator: ''
 			},
-			isCheckedIndicators: false,
 			sentimentIndicatorList: this.$store.state.sentimentIndicatorList,
 			rules: {
 				sentimentIndicator: [{ validator: validateSenti, trigger: 'change' }],
@@ -140,22 +140,22 @@ export default {
 		updateSenti(val) {
 			if (
 				this.si.sentimentIndicator == '' &&
-				this.si.technicalIndicator == '' && 
+				this.si.technicalIndicator == '' &&
 				this.si.riskIndicator == ''
 			) {
-
 				this.si.sentimentIndicator = val.name
-
 				for (var i in CIQ.indicatorList) {
 					if (CIQ.indicatorList[i].chart_name == val.name) {
 						this.indicatorRadio = 'Sentiment Indicators'
 						if(this.criteria == 'entry'){
-							this.$store.commit('getEntryIndicators', CIQ.indicatorList[i].url)
+							this.$store.commit('getEntryIndicators', {index: this.panelIndex, value: CIQ.indicatorList[i].url})
 						}else{
-							this.$store.commit('getExitIndicators', CIQ.indicatorList[i].url)
+							this.$store.commit('getExitIndicators', {index: this.panelIndex, value: CIQ.indicatorList[i].url})
 						}
-						// extract this statement from handleSentimentSelect.
-						this.$emit('getSentiVal', CIQ.indicatorList[i].chart_name)						
+
+						// extract this statement from handleSentimentSelect
+						this.$emit('getSentiVal', CIQ.indicatorList[i].chart_name)
+
 						//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
 						this.$emit('getSentiUrl', CIQ.indicatorList[i].url)
 					}
@@ -168,8 +168,7 @@ export default {
 				if (item.url == val.url) {
 					// this.si.technicalIndicator = item.value
 					// 暂时注释掉，因为大部分tech没有加到back test内
-					//this.indicatorRadio = 'Technical Indicators'
-					
+					this.indicatorRadio = 'Technical Indicators'
 					//this.handleTechnicalSelect({value:item.value})
 				}
 			})
@@ -182,7 +181,6 @@ export default {
 		},
 		//  load sentiment list
 		clearForm() {
-			this.clearFormValidate()
 			let data = {
 				indicatorRadio: 'Sentiment Indicators',
 				si: {
@@ -190,11 +188,11 @@ export default {
 					technicalIndicator: '',
 					riskIndicator: ''
 				},
-				isCheckedIndicators: false,
 				sentimentIndicatorList: []
 			}
 			data.sentimentIndicatorList = this.$store.state.sentimentIndicatorList
 			Object.assign(this.$data, data)
+			this.clearFormValidate()
 		},
 		// sentiment search
 		indicatorSentimentSearch(queryString, cb) {
@@ -256,53 +254,35 @@ export default {
 						.indexOf(queryString.toLowerCase()) !== -1
 				)
 			}
-			
 		},
 		handleSentimentSelect(item) {
-                // old version only
-                var countExistIndicator = 0
-                for (var studyInstanceName in CIQ.stxx.layout.studies) {
-                    for (var i in CIQ.store.state.builtinList){
-                        if(CIQ.store.state.builtinList[i].url == CIQ.stxx.layout.studies[studyInstanceName].type){countExistIndicator--}
-                    }
-					if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'){
-						countExistIndicator--
-					}
-					countExistIndicator++
-                } 
-
-                if(countExistIndicator>=5){
-                    CIQ.description("Maximum 5 signals can be displayed on chart")
-                    return
-                }
-
 			this.si.sentimentIndicator = item.value
 			this.$emit('getSentiVal', item.value)
 			// remove a MA tat already exists in current criteria before loading
 			var activatedMAList = this.$store.state.activatedMA
 			if (this.criteria == 'entry') {
 				var MAListIndex = activatedMAList.findIndex(
-					(item) =>
-						item.url == this.$store.state.indicators.formIndicators.entry
+					(item) => item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex]
 				)
 				if (MAListIndex != -1) {
 					activatedMAList.splice(MAListIndex, 1)
 				}
 				this.$store.commit('getMA', activatedMAList)
-				this.$store.commit('getEntryIndicators', item.url)
+				//console.log('panelIndex:',this.panelIndex)
+				this.$store.commit('getEntryIndicators', {index: this.panelIndex, value: item.url})
 				this.$emit('getSentiUrl', item.url)
 			} else {
 				var MAListIndex = activatedMAList.findIndex(
-					(item) => item.url == this.$store.state.indicators.formIndicators.exit
+					(item) => item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex]
 				)
 				if (MAListIndex != -1) {
 					activatedMAList.splice(MAListIndex, 1)
 				}
 				this.$store.commit('getMA', activatedMAList)
-				this.$store.commit('getExitIndicators', item.url)
+				this.$store.commit('getExitIndicators', {index: this.panelIndex, value: item.url})
 				this.$emit('getSentiUrl', item.url)
 			}
-
+			console.log('current formIndicator: ',this.$store.state.indicators.formIndicators)
 			// avoid add indicator redundantly
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
@@ -313,75 +293,85 @@ export default {
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
+			//console.log('handleTechnicalSelect')
 			// const obj = {}
 			// obj.criteria = this.criteria
 			// obj.index = this.tabIndex
 			// obj.value = item.value
 			// this.$store.commit('clearSignal', obj)
+
+			CIQ.technicalCategory.forEach((item) => {})
 			this.si.technicalIndicator = item.value
+			// technical 的名字， 用于 description 显示
 			this.$emit('getTechVal', item.value)
 			const vm = this
 			let val = item.value
-			const set = new Set([
-				['Commodity Channel Index', 'cci'],
-				['Relative Strength Index', 'rsi'],
-				['Moving Average', 'ma'],
-				['MACD', 'macd']
-			])
+			// const set = new Set([
+			// 	['Commodity Channel Index', 'cci'],
+			// 	['Relative Strength Index', 'rsi'],
+			// 	['Moving Average', 'ma'],
+			// 	['MACD', 'macd']
+			// ])
+			// const newMap = new Map(set)
+			let url = item.url
 
-			const newMap = new Map(set)
-			var url = ''
-			for (let i of newMap.entries()) {
-				if (val === i[0]) {
-					url = i[1]
-					this.$emit('getTechIndiValue', i[1])
-					// remove a MA tat already exists in current criteria before loadin
-					if (this.criteria == 'entry') {
-						// remove MA from Vuex after loading Tech
-						var activatedMAList = CIQ.store.state.activatedMA
+			// for (let i of newMap.entries()) {
+			// if (val === i[0]) {
+			// url = i[1]
+			this.$emit('getTechIndiValue', item.class)
+			let obj = {}
+			obj.index = this.panelIndex
+			obj.class = item.class
+			this.$emit('getTechIndiObj', obj)
+			// remove a MA tat already exists in current criteria before loadin
+			if (this.criteria == 'entry') {
+				// remove MA from Vuex after loading Tech
+				var activatedMAList = CIQ.store.state.activatedMA
 
-						var MAListIndex = activatedMAList.findIndex(
-							(ma) =>
-								ma.url == this.$store.state.indicators.formIndicators.entry
-						)
-						if (MAListIndex != -1) {
-							activatedMAList.splice(MAListIndex, 1)
-						}
-						CIQ.store.commit('getMA', activatedMAList)
-						this.$store.commit('getEntryIndicators', i[1])
-					} else {
-						// remove MA from Vuex after loading Tech
-						var activatedMAList = CIQ.store.state.activatedMA
+				var MAListIndex = activatedMAList.findIndex(
+					(ma) => ma.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				CIQ.store.commit('getMA', activatedMAList)
+				this.$store.commit('getEntryIndicators', {index: this.panelIndex, value: url})
+			} else {
+				// remove MA from Vuex after loading Tech
+				var activatedMAList = CIQ.store.state.activatedMA
 
-						var MAListIndex = activatedMAList.findIndex(
-							(ma) => ma.url == this.$store.state.indicators.formIndicators.exit
-						)
-						if (MAListIndex != -1) {
-							activatedMAList.splice(MAListIndex, 1)
-						}
+				var MAListIndex = activatedMAList.findIndex(
+					(ma) => ma.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
 
-						CIQ.store.commit('getMA', activatedMAList)
-						this.$store.commit('getExitIndicators', i[1])
-					}
-					// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
-					let techIndicators = []
-					techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
-					techIndicators.push(i[1])
-					this.$store.commit('getTechnicalIndicators', techIndicators)
+				CIQ.store.commit('getMA', activatedMAList)
+				this.$store.commit('getExitIndicators', {index: this.panelIndex, value: url})
+			}
+			// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
+			let techIndicators = []
+			techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
+			techIndicators.push(url)
+			this.$store.commit('getTechnicalIndicators', techIndicators)
 
-					// avoid add indicator redundantly
-					for (var studyInstanceName in CIQ.stxx.layout.studies) {
-						var sd = CIQ.stxx.layout.studies[studyInstanceName]
-						if (sd.type == url) {
-							return
-						}
-					}
-					if (arguments[1] != true) {
-						CIQ.addIndicators()
-					}
+			// avoid add indicator redundantly
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+				if (sd.type == url) {
+					return
 				}
 			}
+
+			// }
+			// }
 			vm.si.technicalIndicator = item.value
+
+			if(arguments[1]!=true){
+				CIQ.addIndicators()
+			}
+			
 		},
 		handleRiskSelect(item) {
 			this.si.riskIndicator = item.value
@@ -403,9 +393,9 @@ export default {
 			}
 		},
 		changeIndicatorChecked(val) {
+			console.log('改变组件里面的radio', val)
 			this.indicatorRadio = val
 			this.clearFormValidate()
-			this.isCheckedIndicators = !this.isCheckedIndicators
 			const arr = [
 				'Sentiment Indicators',
 				'Technical Indicators',
@@ -413,55 +403,52 @@ export default {
 			]
 			const obj = {}
 			obj.criteria = this.criteria
-			obj.index = 0
+			obj.index = this.panelIndex
 			this.$store.commit('deleteIndicator', obj)
+			let radioObj = {}
+			radioObj.index = this.panelIndex
 			if (this.indicatorRadio === arr[0]) {
-				this.$emit('getIndicatorRadio', 'sentiment')
+				radioObj.value = 'sentiment'
+				this.$emit('getIndicatorRadio', radioObj)
 				this.$store.commit('getEntryIndicatorRadio', 'sentiment')
 			} else if (this.indicatorRadio === arr[1]) {
-				this.$emit('getIndicatorRadio', 'technical')
+				radioObj.value = 'technical'
+				this.$emit('getIndicatorRadio', radioObj)
 				this.$store.commit('getEntryIndicatorRadio', 'technical')
 			} else if (this.indicatorRadio === arr[2]) {
-				this.$emit('getIndicatorRadio', 'risk')
+				radioObj.value = 'risk'
+				this.$emit('getIndicatorRadio', radioObj)
 				this.$store.commit('getEntryIndicatorRadio', 'risk')
 			}
 		},
 		// load short and long technical list
 		loadShortLong() {
-			const technicalObj = CIQ.technicalCategory
-			let formatObj = []
-			return [
-				{ value: 'Commodity Channel Index' },
-				{ value: 'Relative Strength Index' },
-				{ value: 'MACD' },
-				{ value: 'Moving Average' }
-			]
+			const technicalList = CIQ.technicalCategory
+			let formatList = []
+			for (let i = 0; i < technicalList.length; i++) {
+				if (
+					technicalList[i].class === 'No_display_technical_indicator' ||
+					technicalList[i].class ===
+						'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
+				)
+					continue
+				technicalList[i].studies.forEach((item) => {
+					let obj = {}
+					obj.class = technicalList[i].class
+					obj.value = item.name
+					obj.url = item.url
+					formatList.push(obj)
+				})
+			}
+			// 在 vuex 中存入 formatList
+			this.$store.commit('saveFormatTechnicalList', formatList)
+			return formatList
 		},
 		loadRiskList() {
 			return [{ value: 'Time In Market' }, { value: 'Profit/Loss' }]
 		},
-		// setIndicatorRadio(obj) {
-		// 	let vm = this
-		// 	this.indicatorRadio = obj.radio
-		// 	var data = Object.assign(obj)
-		// 	if (data.sentimentIndicator) {
-		// 		vm.si['sentimentIndicator'] = data['sentimentIndicator']
-		// 		vm.$set(vm.si, 'sentimentIndicator', data.sentimentIndicator)
-		// 		this.$emit('getSentiVal', data.sentimentIndicator)
-		// 		const sentiObj = data
-		// 		sentiObj.value = sentiObj.sentimentIndicator
-		// 		this.$store.commit('getSentiValue', sentiObj)
-		// 		this.isCheckedIndicators = false
-		// 	} else if (data.technicalIndicator) {
-		// 		vm.$set(this.si, 'technicalIndicator', obj.technicalIndicator)
-		// 		this.$emit('getTechVal', obj.technicalIndicator)
-		// 		const sentiObj = data
-		// 		sentiObj.value = sentiObj.technicalIndicator
-		// 		this.$store.commit('getTechValue', sentiObj)
-		// 		this.isCheckedIndicators = true
-		// 	}
-		// },
-		async saveIndicator() {
+		saveIndicator(index) {
+			console.log('保存indicator', index)
 			let checked = true
 			let validForm
 			let validName = false
@@ -470,18 +457,6 @@ export default {
 					validForm = valid
 				})
 				let sentimentList = this.$store.state.sentimentIndicatorList
-				if (sentimentList.length == 0) {
-					let res = await getIndicatorsList()
-					sentimentList = res.data.map((obj) => {
-							if (obj.chart_name && obj.url && obj.updated) {
-								return {
-									value: obj.chart_name,
-									url: obj.url,
-									updated: obj.updated
-								}
-							}
-					})
-				}
 				for (let i = 0; i < sentimentList.length; i++) {
 					if (this.si.sentimentIndicator === sentimentList[i].value) {
 						validName = true
@@ -491,7 +466,7 @@ export default {
 				if (validForm && validName) {
 					let obj = {}
 					obj.criteria = this.criteria
-					obj.index = 0
+					obj.index = index
 					obj.value = this.si.sentimentIndicator
 					this.$store.commit('getSentiValue', obj)
 					return checked
@@ -510,7 +485,11 @@ export default {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})
-				let formateList = this.loadShortLong()
+				let formateList = this.$store.state.formateTechnicalList
+				if (formateList.length === 0) {
+					vm.loadShortLong()
+				}
+				formateList = this.$store.state.formateTechnicalList
 				for (let i = 0; i < formateList.length; i++) {
 					if (this.si.technicalIndicator === formateList[i].value) {
 						validName = true
@@ -520,7 +499,7 @@ export default {
 				if (validForm && validName) {
 					let obj = {}
 					obj.criteria = this.criteria
-					obj.index = 0
+					obj.index = index
 					obj.value = this.si.technicalIndicator
 					this.$store.commit('getTechValue', obj)
 					return checked
@@ -549,8 +528,8 @@ export default {
 				if (validForm && validName) {
 					let obj = {}
 					obj.criteria = 'exit'
-					obj.index = 0
-					obj.value = 'RC'
+					obj.index = index
+					obj.value = 'Risk Control'
 					this.$store.commit('getRiskValue', obj)
 					return checked
 				} else {
@@ -567,30 +546,44 @@ export default {
 			}
 		},
 		async setEditData(newVal) {
+			console.log('indicator编辑', this.criteria, this.panelIndex)
 			if (JSON.stringify(newVal) != '{}') {
 				this.clearFormValidate()
+				let index = this.panelIndex
 				let vm = this
-				if (newVal[this.criteria].signals[0].analysis === 'Sentiment') {
-					this.$emit('getIndicatorRadio', 'sentiment')
+				if (newVal[this.criteria].signals[index].analysis === 'Sentiment') {
+					// let obj = {}
+					// obj.value = 'sentiment'
+					// obj.index = index
+					// this.$emit('getIndicatorRadio', 'sentiment')
 					// this.$emit('getSentiVal', this.si.sentimentIndicator)
 					this.indicatorRadio = 'Sentiment Indicators'
-					this.isCheckedIndicators = false
 					this.si.sentimentIndicator =
-						newVal[this.criteria].signals[0].indicator
+						newVal[this.criteria].signals[index].indicator
 					// 往父组件传值
 					let sentimentList = this.$store.state.sentimentIndicatorList
+					
 					if (sentimentList.length == 0) {
-						let res = await getIndicatorsList()
-						sentimentList = res.data.map((obj) => {
-								if (obj.chart_name && obj.url && obj.updated) {
-									return {
-										value: obj.chart_name,
-										url: obj.url,
-										updated: obj.updated
-									}
+						const res = await this.$http.get(
+							'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
+							{
+								auth: {
+									username: 'sentimentrader_backtest_api',
+									password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
 								}
-						})
-					}
+							}
+						)
+						sentimentList = res.data.map((obj) => {
+							if (obj.chart_name && obj.url && obj.updated) {
+								return {
+									value: obj.chart_name,
+									url: obj.url,
+									updated: obj.updated
+								}
+						}
+						
+					})
+
 					let indi = this.si.sentimentIndicator
 					sentimentList.forEach((obj) => {
 						if (indi.toUpperCase() == obj.value.toUpperCase()) {
@@ -598,20 +591,48 @@ export default {
 						}
 					})
 					// if(this.$store.state.sentimentIndicatorList)
-				} else if (newVal[this.criteria].signals[0].analysis === 'Technical') {
-					this.$emit('getIndicatorRadio', 'technical')
-					let technicalIndicator = newVal[this.criteria].signals[0].indicator
-					let item = {}
-					item.value = technicalIndicator
-					let isFromEdit = true
-					vm.handleTechnicalSelect(item, isFromEdit)
+				}
+				if (newVal[this.criteria].signals[index].analysis === 'Technical') {
+					// let obj = {}
+					// obj.value = 'technical'
+					// obj.index = index
+					// this.$emit('getIndicatorRadio', 'technical')
+					let technicalIndicator =
+						newVal[this.criteria].signals[index].indicator
+					let formateList = this.$store.state.formateTechnicalList
+					if (formateList.length === 0) {
+						this.loadShortLong()
+					}
+					formateList = this.$store.state.formateTechnicalList
+					for (let i = 0; i < formateList.length; i++) {
+						if (technicalIndicator === formateList[i].value) {
+							let obj = formateList[i]
+							let isFromEdit = true
+							vm.handleTechnicalSelect(obj,isFromEdit)
+							break
+						}
+					}
 					this.indicatorRadio = 'Technical Indicators'
-					this.isCheckedIndicators = true
 					// this.$emit('getTechVal', vm.si.technicalIndicator)
+				}
+				if (newVal[this.criteria].signals[index].analysis === 'Exit') {
+					this.indicatorRadio = 'Risk Control'
+					let obj = {}
+					if (newVal[this.criteria].signals[index].time_in_market) {
+						obj.value = 'Time In Market'
+					}
+					if (
+						newVal[this.criteria].signals[index].stop_loss &&
+						newVal[this.criteria].signals[index].take_profit
+					) {
+						obj.value = 'Profit/Loss'
+					}
+					this.handleRiskSelect(obj)
 				}
 			}
 		}
 	}
+}
 }
 </script>
 <style lang="less" scoped>
@@ -626,7 +647,6 @@ export default {
 	width: 334px;
 	padding-left: 30px;
 }
-
 /deep/ .el-radio__label {
 	display: inline-block;
 	width: 136px;
@@ -636,62 +656,5 @@ export default {
 }
 /deep/ .el-form-item {
 	margin-bottom: 10px;
-}
-@media (min-width: 1680px) {
-	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
-		width: 500px;
-		padding-left: 30px;
-	}
-	/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
-		width: 500px;
-		padding-left: 30px;
-	}
-}
-
-@media (min-width: 1280px) and (max-width: 1365px) {
-	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
-		width: 300px;
-		padding-left: 30px;
-	}
-	/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
-		width: 300px;
-		padding-left: 30px;
-	}
-}
-@media (min-width: 820px) and (max-width: 1279px) {
-	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
-		width: 500px;
-		padding-left: 30px;
-	}
-	/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
-		width: 500px;
-		padding-left: 30px;
-	}
-}
-@media (min-width: 768px) and (max-width: 819px) {
-	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
-		width: 400px;
-		padding-left: 30px;
-	}
-	/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
-		width: 400px;
-		padding-left: 30px;
-	}
-}
-@media (min-width: 375px) and (max-width: 767px) {
-	/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
-		width: 232px;
-		padding-left: 22px;
-	}
-	/deep/ .techBox .el-input--prefix .el-input__inner:first-child {
-		width: 232px;
-		padding-left: 22px;
-	}
-	.indicator-container {
-		display: flex;
-		flex-direction: column;
-		// justify-content: center;
-		// align-items: center;
-	}
 }
 </style>

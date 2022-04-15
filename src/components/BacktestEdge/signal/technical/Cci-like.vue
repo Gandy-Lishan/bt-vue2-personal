@@ -65,13 +65,15 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
-const throttle = require('lodash/throttle')
+const _ = require('lodash')
+const throttle = _.throttle
 export default {
 	name: 'cci',
 	props: {
 		criteria: String,
 		techUrl: String,
 		techVal: String,
+		panelIndex: Number,
 		// editIndiData: Object,
 		direction: String
 	},
@@ -93,11 +95,8 @@ export default {
 		}
 		return {
 			tech: {
-				ids: {
-					over_bought_bound: 100,
-					over_sold_bound: -100,
-					period: 20
-				},
+				ids: 'CCI',
+				comparison: 'CCI',
 				condition: 3,
 				value: ''
 			},
@@ -114,38 +113,16 @@ export default {
 			rules: { value: [{ validator: validateValue, trigger: 'blur' }] }
 		}
 	},
-	// computed: {
-	// 	...mapGetters(['getterIsSavaDescription']),
-	// 	isSavaDescriptionAgain() {
-	// 		return this.getterIsSavaDescription
-	// 	}
-	// },
-	watch: {
-		// editIndiData: {
-		// 	handler(newVal) {
-		// 		if (JSON.stringify(newVal) != '{}') {
-		// 			this.tech.ids = newVal[this.criteria].signals[0].ids
-		// 			this.tech.condition = Number(
-		// 				newVal[this.criteria].signals[0].condition
-		// 			)
-		// 			this.tech.value = newVal[this.criteria].signals[0].value
-		// 			this.setDesciption()
-		// 		}
-		// 	},
-		// 	immediate: true,
-		// 	deep: true
-		// }
-	},
 	methods: {
 		clearForm() {
-			// Object.assign(this.$data, this.$options.data())
-			this.$refs.cciForm.resetFields()
+			Object.assign(this.$data, this.$options.data())
+			this.clearFormValidate()
 		},
 		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.cciForm.clearValidate()
 		},
-		setDesciption() {
+		setDesciption(index) {
 			let criteria = ''
 			let direction = ''
 			if (this.criteria == 'entry') {
@@ -154,9 +131,9 @@ export default {
 			} else if (this.criteria == 'exit') {
 				criteria = 'X:'
 				if (this.direction == 'Long') {
-					direction = 'Cover:'
-				} else if (this.direction == 'Short') {
 					direction = 'Close:'
+				} else if (this.direction == 'Short') {
+					direction = 'Cover:'
 				}
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
@@ -164,26 +141,21 @@ export default {
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${period} ${condition} ${this.tech.value}`
 		},
-		saveCondition() {
+		saveCondition(index) {
+			console.log('CCIlike保存condition', index)
 			let checked = true
 			let validForm
 			this.$refs.cciForm.validate((valid) => {
 				validForm = valid
 			})
 			if (validForm) {
-				let ids = {
-					over_bought_bound: 100,
-					over_sold_bound: -100,
-					period: 20
-				}
-				let tech = JSON.parse(JSON.stringify(this.tech))
-				delete tech.ids
-				tech = Object.assign(ids, tech)
+				let tech = this.tech
 				tech.criteria = this.criteria
-				tech.index = 0
+				tech.index = index
 				this.$store.commit('saveCondition', tech)
 				let desObj = {}
 				desObj.criteria = this.criteria
+				desObj.index = index
 				desObj.description = this.description
 				this.$store.commit('saveDescription', desObj)
 				return checked
@@ -199,11 +171,12 @@ export default {
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
-				this.clearFormValidate()
-				this.tech.ids = newVal[this.criteria].signals[0].ids
-				this.tech.condition = Number(newVal[this.criteria].signals[0].condition)
-				this.tech.value = newVal[this.criteria].signals[0].value
-				this.editTechVal = newVal[this.criteria].signals[0].indicator
+				let obj = newVal[this.criteria].signals[this.panelIndex]
+				this.tech.ids = obj.ids
+				this.tech.condition = Number(obj.condition)
+				this.tech.value = obj.value
+				this.tech.comparison = obj.comparison
+				this.editTechVal = obj.indicator
 				this.setDesciption()
 			}
 		}
@@ -229,19 +202,5 @@ export default {
 }
 /deep/.el-input--suffix .el-input__inner {
 	padding-right: 5px;
-}
-@media (min-width: 1280px) and (max-width: 1365px) {
-	/deep/ .el-form-item__label {
-		margin-right: 10px;
-	}
-}
-@media (min-width: 375px) and (max-width: 767px) {
-	/deep/ .el-form-item__label {
-		margin-right: 0px;
-	}
-	.condition-container {
-		display: flex;
-		flex-wrap: wrap;
-	}
 }
 </style>

@@ -36,7 +36,7 @@
 					<el-form-item label="Timeframe:" prop="frequency">
 						<div class="selectBox">
 							<el-select
-								v-model="editFrequency"
+								v-model="backtestEditData.frequency"
 								placeholder="— Select Timeframe —"
 								disabled
 							>
@@ -73,8 +73,10 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
+import { timestampToTime } from '@/tools/formatDate.js'
+import deepClone1 from '@/tools/deepClone.js'
 export default {
-	props: { backtestEditData: Object, editFrequency: String },
+	props: { backtestEditData: Object },
 	name: 'setUp',
 	data() {
 		return {
@@ -143,12 +145,8 @@ export default {
 	},
 	watch: {
 		backtestEditData: {
-			handler(newVal) {},
-			immediate: true,
-			deep: true
-		},
-		editFrequency: {
-			handler(newVal) {},
+			handler(newVal) {
+			},
 			immediate: true,
 			deep: true
 		}
@@ -169,12 +167,12 @@ export default {
 .comUnitNote {
 	position: absolute;
 
-	left: 335px;
+	left: 329px;
 	top: 56px;
 }
 .sliUnitNote {
 	position: absolute;
-	left: 335px;
+	left: 329px;
 	top: 105px;
 }
 .border-set {
@@ -182,37 +180,5 @@ export default {
 }
 .result-container {
 	margin-bottom: 20px;
-}
-@media (min-width: 1680px) {
-	.comUnitNote {
-		position: absolute;
-		left: 454px;
-		top: 56px;
-	}
-	.sliUnitNote {
-		position: absolute;
-		left: 454px;
-		top: 105px;
-	}
-}
-@media (min-width: 375px) and (max-width: 767px) {
-	.comUnitNote {
-		position: absolute;
-		left: 208px;
-		top: 56px;
-		font-size: 12px;
-	}
-	.sliUnitNote {
-		position: absolute;
-		left: 208px;
-		top: 103px;
-		font-size: 12px;
-	}
-	.el-input__suffix {
-		right: 68px;
-	}
-	.nameBox input[type="text"]:last-child{
-		width: 30%;
-	}
 }
 </style>
