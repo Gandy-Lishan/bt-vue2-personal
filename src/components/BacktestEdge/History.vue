@@ -437,6 +437,7 @@ export default {
 		copyBacktest: throttle(async function (row) {
 			let params = {}
 			const res = await seeParams(row.id)
+			console.log("恢复indicator layout")
 			// 恢复indicator layout
 			this.$store.commit('getBacktestSymbol', res.data.symbol)
 			this.$store.commit('getRunBacktestData', row)
@@ -550,6 +551,7 @@ export default {
 			this.$store.commit('setRestoreFreq', frequency)
 		},
 		restoreIndicatorLayoutView(data, freq, row) {
+			console.log("在跑完回测后和view result之间会加载一次chart去输出SignalOuput")
 			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
 			if (CIQ.isBacktestRun == true) {
 				CIQ.isBacktestRun = false
