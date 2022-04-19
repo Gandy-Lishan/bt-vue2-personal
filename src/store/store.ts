@@ -32,8 +32,8 @@ export default new Vuex.Store({
 			inputOriginalAssetValue: ''
 		},
 		backtestInfo: {
-			entry_description: '',
-			exit_description: '',
+			entry_description: [],
+			exit_description: [],
 			frequency: 'Daily',
 			entry: {
 				direction: 'Long',
@@ -63,8 +63,8 @@ export default new Vuex.Store({
 		strategyExitData: {},
 		indicators: {
 			formIndicators: {
-				entry: '',
-				exit: ''
+				entry: [],
+				exit: []
 			},
 			extraIndicators: [],
 			technicalIndicators: []
@@ -231,11 +231,19 @@ export default new Vuex.Store({
 		getRunBacktestAllResult(state, list) {
 			state.favoriteBacktestData = list
 		},
-		getEntryIndicators(state, val) {
-			state.indicators.formIndicators.entry = val
+		getEntryIndicators(state, obj) {
+			let {index,value} = obj
+			state.indicators.formIndicators.entry[index] = value
 		},
-		getExitIndicators(state, val) {
-			state.indicators.formIndicators.exit = val
+		getEntryIndicatorsList(state, list) {
+			state.indicators.formIndicators.entry = list
+		},
+		getExitIndicators(state, obj) {
+			let {index,value} = obj
+			state.indicators.formIndicators.exit[index] = value
+		},
+		getExitIndicatorsList(state, list) {
+			state.indicators.formIndicators.exit = list
 		},
 		getExtraIndicators(state, val) {
 			state.indicators.extraIndicators = val

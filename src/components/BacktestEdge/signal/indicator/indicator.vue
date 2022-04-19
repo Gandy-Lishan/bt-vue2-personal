@@ -283,13 +283,14 @@ export default {
 			if (this.criteria == 'entry') {
 				var MAListIndex = activatedMAList.findIndex(
 					(item) =>
-						item.url == this.$store.state.indicators.formIndicators.entry
+						item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex]
 				)
 				if (MAListIndex != -1) {
 					activatedMAList.splice(MAListIndex, 1)
 				}
 				this.$store.commit('getMA', activatedMAList)
-				this.$store.commit('getEntryIndicators', item.url)
+				console.log('panelIndex:',this.panelIndex)
+				this.$store.commit('getEntryIndicators', {index: this.panelIndex, value: item.url})
 				this.$emit('getSentiUrl', item.url)
 			} else {
 				var MAListIndex = activatedMAList.findIndex(
@@ -330,7 +331,9 @@ export default {
 			])
 
 			const newMap = new Map(set)
-			var url = ''
+
+			let url = item.url
+
 			for (let i of newMap.entries()) {
 				if (val === i[0]) {
 					url = i[1]
@@ -342,31 +345,31 @@ export default {
 
 						var MAListIndex = activatedMAList.findIndex(
 							(ma) =>
-								ma.url == this.$store.state.indicators.formIndicators.entry
+								ma.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex]
 						)
 						if (MAListIndex != -1) {
 							activatedMAList.splice(MAListIndex, 1)
 						}
 						CIQ.store.commit('getMA', activatedMAList)
-						this.$store.commit('getEntryIndicators', i[1])
+						this.$store.commit('getEntryIndicators', {index: this.panelIndex, value: url})
 					} else {
 						// remove MA from Vuex after loading Tech
 						var activatedMAList = CIQ.store.state.activatedMA
 
 						var MAListIndex = activatedMAList.findIndex(
-							(ma) => ma.url == this.$store.state.indicators.formIndicators.exit
+							(ma) => ma.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex]
 						)
 						if (MAListIndex != -1) {
 							activatedMAList.splice(MAListIndex, 1)
 						}
 
 						CIQ.store.commit('getMA', activatedMAList)
-						this.$store.commit('getExitIndicators', i[1])
+						this.$store.commit('getExitIndicators', {index: this.panelIndex, value: url})
 					}
 					// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
 					let techIndicators = []
 					techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
-					techIndicators.push(i[1])
+					techIndicators.push(url)
 					this.$store.commit('getTechnicalIndicators', techIndicators)
 
 					// avoid add indicator redundantly

@@ -475,8 +475,8 @@ export default {
 		},
 		reloadData(data, freq){
 			let frequency = ''
-			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
-			this.$store.commit('getExitIndicators', data.formIndicators.exit)
+			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
+			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
 			this.$store.commit('getExtraIndicators', [])
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)

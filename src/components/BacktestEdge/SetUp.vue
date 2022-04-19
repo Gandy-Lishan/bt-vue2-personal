@@ -531,7 +531,7 @@ export default {
 			}
 		},
 		setBacktestHistory(val) {
-			console.log("blur年限",val);
+			//console.log("blur年限",val);
 			this.historyValue = val
 			this.bd.end_date = timestampToTime(new Date())
 			if (val <= 20) {
