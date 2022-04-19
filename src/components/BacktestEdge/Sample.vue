@@ -319,7 +319,7 @@ export default {
 					this.loading = false
 				}
 			} catch (error) {
-				console.log(error);
+				console.log(error)
 				this.$message.error('List request failed')
 				this.loading = false
 			}
@@ -357,11 +357,20 @@ export default {
 						})
 					}
 				} catch (error) {
-					this.$notify.error({
-						title: 'Has been Copied',
-						message: 'The backtest has been copied',
-						offset: 100
-					})
+					if (error.response.status === 403) {
+						this.$notify.error({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
+					}
+					if (error.response.status === 500) {
+						this.$notify.error({
+							title: 'Has been Copied',
+							message: 'The backtest has been copied',
+							offset: 100
+						})
+					}
 				}
 			}
 		}, 500),
@@ -380,8 +389,7 @@ export default {
 							JSON.parse(res.data.entry).frequency,
 							row
 						)
-					}
-					else{
+					} else {
 						this.$store.commit('getRunBacktestData', row)
 						this.$emit('goTobacktestSetupForm', row.id)
 						this.$emit('goBacktestResultForm', row)
@@ -406,7 +414,7 @@ export default {
 			this.queryInfo.page = newpage
 			this.getSampleList()
 		},
-		reloadData(data, freq){
+		reloadData(data, freq) {
 			let frequency = ''
 			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
 			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
@@ -414,7 +422,7 @@ export default {
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
-			
+
 			switch (freq) {
 				case 'Daily': {
 					frequency = 'daily'
@@ -435,13 +443,13 @@ export default {
 			this.$store.commit('setRestoreFreq', frequency)
 		},
 		restoreIndicatorLayout(data, freq, row) {
-				this.reloadData(data, freq)
-				var that = this
-				CIQ.addIndicatorsFromBacktest(function(){
-					that.$store.commit('getRunBacktestData', row)
-					that.$emit('goTobacktestSetupForm', row.id)
-					that.$emit('goBacktestResultForm', row)
-				})
+			this.reloadData(data, freq)
+			var that = this
+			CIQ.addIndicatorsFromBacktest(function () {
+				that.$store.commit('getRunBacktestData', row)
+				that.$emit('goTobacktestSetupForm', row.id)
+				that.$emit('goBacktestResultForm', row)
+			})
 		},
 		async showDes(row) {
 			const datades = {}

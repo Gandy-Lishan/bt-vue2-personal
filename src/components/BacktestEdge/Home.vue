@@ -9,6 +9,19 @@
 							src="../../assets/logo.png"
 							alt="logo"
 					/></span>
+					<div class="menu">
+<el-dropdown :hide-on-click="false" @command="handleCommand">
+  <span class="el-dropdown-link">
+    Help<i class="el-icon-arrow-down el-icon--right"></i>
+  </span>
+  <el-dropdown-menu slot="dropdown">
+    <el-dropdown-item command="doc">
+		文档教程
+	</el-dropdown-item>
+    <el-dropdown-item command="video">视频教程</el-dropdown-item>
+    <el-dropdown-item command="contact">联系我们</el-dropdown-item>
+  </el-dropdown-menu>
+</el-dropdown></div>
 				</div>
 				<el-row type="flex" justify="center"
 					><el-col><p class="betaNote">BacktestEdge Beta</p></el-col>
@@ -656,6 +669,10 @@ export default {
 				offset: 100,
 				type: 'warning'
 			})
+		},
+		handleCommand(command) {
+			console.log("文档教程",command);
+			this.$router.push('/doc')
 		}
 	}
 }
@@ -774,6 +791,12 @@ header {
 	top: 0;
 	width: 100%;
 	background: #fff;
+	justify-content: space-between;
+	.menu{
+		justify-self: center;
+		align-self: center;
+		margin-right: 50px;
+	}
 }
 .criteria-container {
 	padding: 10px;
@@ -853,4 +876,11 @@ header {
 		}
 	}
 }
+.el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
 </style>

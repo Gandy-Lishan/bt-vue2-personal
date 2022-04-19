@@ -378,6 +378,7 @@ export default {
 					type: 'error',
 					offset: 300
 				})
+				vm.loading = true
 				}
 			}, 3000)
 		},
@@ -471,7 +472,8 @@ export default {
 						message: 'The backtest has been copied',
 						offset: 100
 					})
-				} else {
+				}
+				if (error.response.status === 500) {
 					this.$message({
 						message: 'The internal server is busy, please try again later ',
 						type: 'error',

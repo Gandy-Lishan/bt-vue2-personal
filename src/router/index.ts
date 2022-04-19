@@ -8,12 +8,14 @@ import store from '../store/store'
 
 // import { getCookieData, setCookieData } from '@/tools/cookie'
 import Home from '@/components/BacktestEdge/Home.vue'
+import Doc from '@/components/Menu/Doc.vue'
 Vue.use(Router)
 const router = new Router({
 	mode: 'history',
 	routes: [
 		{ path: '/', redirect: '/home' },
-		{ path: '/home', component: Home }
+		{ path: '/home', component: Home },
+		{path: '/doc', component: Doc}
 	]
 })
 router.beforeEach(async (to, from, next) => {
