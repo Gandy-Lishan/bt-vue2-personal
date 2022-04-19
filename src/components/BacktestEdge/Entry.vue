@@ -38,13 +38,6 @@
 						:label="item.title"
 						:name="item.name"
 					>
-						编辑面板{{ editableTabsValue }} 总共面板{{ tabIndex }} 数组序号{{
-							index
-						}}
-						technical的值{{ techIndiObj[index] }} indicatorradio{{
-							indicatorRadioArr[index]
-						}}
-					 sentimentIndicator: {{sentiVal}}
 						<indicator
 							:criteria="'entry'"
 							:panelIndex="index"
@@ -327,7 +320,6 @@ export default {
 			this.techIndiObj.splice(obj.index, 1, obj.class)
 		},
 		handleTabsEdit(targetName, action) {
-			console.log(targetName, action)
 			if (action === 'add') {
 				if (this.editableTabs.length < 5) {
 					let newTabName = ++this.tabIndex + ''
@@ -409,15 +401,12 @@ export default {
 		},
 		saveBacktestData(index) {
 			let checked = true
-			// 将选择的 indicator 保存到 vuex 中
-			// let index = this.editableTabsValue - 1
-			// this.$nextTick(() => {
-			// 	this.$refs.indiChild[index].initData()
-			// })
-			//console.log('entry的保存执行了' + index + '次')
+			console.log('entry的保存执行了' + index + '次')
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
-			if (indi) {
+			return indi.then((val) => { 
+				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
+				if (indi) {
 				if (this.indicatorRadioArr[index] === 'sentiment') {
 					this.$refs.sentiChild[index].setDesciption(index)
 					let senti = this.$refs.sentiChild[index].saveCondition(index)
@@ -523,7 +512,7 @@ export default {
 			} else {
 				checked = false
 			}
-			return checked
+			})
 		},
 		setEditPanel(num, data) {
 			this.clearForm()
@@ -536,7 +525,7 @@ export default {
 				this.setEditData(this.refs)
 			})
 		},
-		setEditData(data) {
+		async setEditData(data) {
 			console.log('编辑的entrydata', data)
 			this.scoreValue = data.entry.score
 			let length = data.entry.signals.length
@@ -637,9 +626,63 @@ export default {
 .entry-container {
 	// padding-left: 50px;
 	// padding-right: 10px;
-	// margin-right: 50px;
+	margin-left: 40px;
 	// border-right: 1px solid #797979;
-	margin-bottom: 60px;
+	margin-bottom: 10px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	.entry-container {
+		// padding-left: 50px;
+		// padding-right: 10px;
+		margin: 0px 10px 10px 10px;
+	}
+}
+@media (min-width: 820px) and (max-width: 1279px) {
+	.entry-container {
+		// padding-left: 50px;
+		// padding-right: 10px;
+		margin: 0px 40px 10px 40px;
+		border-bottom: 1px solid #797979;
+	}
+}
+@media (min-width: 768px) and (max-width: 819px) {
+	.entry-container {
+		// padding-left: 50px;
+		// padding-right: 10px;
+		margin: 0px 40px 10px 40px;
+		border-bottom: 1px solid #797979;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	.entry-container {
+		border-bottom: 1px solid #797979;
+	}
+	.entry-container {
+		margin: 0px 0px 10px 0px;
+	}
+	.criteria-title {
+		font-size: 15px;
+	}
+}
+.signal-option-box {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.signal-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+/deep/ .multi .multi-box .el-tabs--card > .el-tabs__header {
+	display: none;
+}
+.scoreNote {
+	font-size: 16px;
+	font-weight: 500;
+}
+/deep/.el-tabs__nav .el-tabs__item:nth-child(1) span {
+	display: none;
 }
 .signal-option-box {
 	display: flex;

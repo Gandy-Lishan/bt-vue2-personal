@@ -89,4 +89,5 @@ import exit from '@/components/BacktestEdge/Exit.vue'
   bottom: 0px;
   border: 1px solid #c2c0c0;
 }
+
 </style>

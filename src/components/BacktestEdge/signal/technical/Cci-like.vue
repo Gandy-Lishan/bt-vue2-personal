@@ -65,8 +65,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+const throttle = require('lodash/throttle')
 export default {
 	name: 'cci',
 	props: {
@@ -74,7 +73,6 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		// editIndiData: Object,
 		direction: String
 	},
 	data() {
@@ -114,9 +112,8 @@ export default {
 		}
 	},
 	methods: {
-		clearForm() {
-			Object.assign(this.$data, this.$options.data())
-			this.clearFormValidate()
+		clearForm() {		
+			this.$refs.cciForm.resetFields()
 		},
 		// 清除表单认证
 		clearFormValidate() {
@@ -131,9 +128,9 @@ export default {
 			} else if (this.criteria == 'exit') {
 				criteria = 'X:'
 				if (this.direction == 'Long') {
-					direction = 'Close:'
-				} else if (this.direction == 'Short') {
 					direction = 'Cover:'
+				} else if (this.direction == 'Short') {
+					direction = 'Close:'
 				}
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
@@ -142,14 +139,13 @@ export default {
 			this.description = `${criteria} ${direction} ${techVal} ${period} ${condition} ${this.tech.value}`
 		},
 		saveCondition(index) {
-			console.log('CCIlike保存condition', index)
 			let checked = true
 			let validForm
 			this.$refs.cciForm.validate((valid) => {
 				validForm = valid
 			})
 			if (validForm) {
-				let tech = this.tech
+				let tech = JSON.parse(JSON.stringify(this.tech))
 				tech.criteria = this.criteria
 				tech.index = index
 				this.$store.commit('saveCondition', tech)
@@ -202,5 +198,19 @@ export default {
 }
 /deep/.el-input--suffix .el-input__inner {
 	padding-right: 5px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .el-form-item__label {
+		margin-right: 10px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	/deep/ .el-form-item__label {
+		margin-right: 0px;
+	}
+	.condition-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
 </style>

@@ -150,7 +150,6 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		// editIndiData: Object,
 		direction: String
 	},
 	data() {
@@ -158,12 +157,12 @@ export default {
 			if (value === '') {
 				return callback(new Error('Please input value'))
 			}
-			if (isNaN(value) && value !== 'SL') {
+			if (isNaN(value) && value !== 'MACDSL') {
 				return callback(new Error('Please enter the correct format'))
 			}
 			const pattern =
 				/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
-			if (!pattern.test(value) && value != 0 && value !== 'SL') {
+			if (!pattern.test(value) && value != 0 && value !== 'MACDSL') {
 				return callback(new Error('Enter up to two decimal places'))
 			}
 			callback()
@@ -208,7 +207,6 @@ export default {
 				var obj = CIQ.store.state.conditionRadio
 				obj.MACD_like = this.conditionRadio
 				CIQ.store.commit('setConditionRadio', obj)
-				//console.log('watch techVal!!!!!!!!!', obj)
 			},
 			immediate: true,
 			deep: true
@@ -216,8 +214,7 @@ export default {
 	},
 	methods: {
 		clearForm() {
-			Object.assign(this.$data, this.$options.data())
-			this.clearFormValidate()
+			this.$refs.macdForm.resetFields()
 		},
 		// 清除表单认证
 		clearFormValidate() {
@@ -233,9 +230,9 @@ export default {
 				criteria = 'X:'
 
 				if (this.direction == 'Long') {
-					direction = 'Close:'
-				} else if (this.direction == 'Short') {
 					direction = 'Cover:'
+				} else if (this.direction == 'Short') {
+					direction = 'Close:'
 				}
 			}
 			let condition = this.conditions[this.tech.condition].label
@@ -301,7 +298,8 @@ export default {
 				if (this.radioObj.histRadio) {
 					this.tech.condition = this.histCondition
 				}
-				let tech = this.tech
+				let tech = JSON.parse(JSON.stringify(this.tech))
+
 				tech.criteria = this.criteria
 				tech.index = index
 				this.$store.commit('saveCondition', tech)
@@ -318,6 +316,7 @@ export default {
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
+				this.clearFormValidate()
 				for (let key in this.radioObj) {
 					this.radioObj[key] = ''
 				}
@@ -367,5 +366,19 @@ export default {
 }
 /deep/ .el-form-item__label {
 	margin-right: 36px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .el-form-item__label {
+		margin-right: 10px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	/deep/ .el-form-item__label {
+		margin-right: 0px;
+	}
+	.condition-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
 </style>

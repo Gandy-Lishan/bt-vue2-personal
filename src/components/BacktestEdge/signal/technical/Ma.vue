@@ -141,7 +141,6 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		// editIndiData: Object,
 		direction: String
 	},
 	data() {
@@ -158,7 +157,7 @@ export default {
 			callback()
 		}
 		let validateMaPeriodRule = (rule, value, callback) => {
-			if (!/[1-9]\d*/.test(value)) {
+if (!/[1-9]\d*/.test(value)) {
 				return callback(new Error('Please enter a positive integer'))
 			}
 			if (value === 0 || value === '') {
@@ -170,7 +169,7 @@ export default {
 			callback()
 		}
 		let validateMaPeriod = (rule, value, callback) => {
-			if (!/[1-9]\d*/.test(value)) {
+if (!/[1-9]\d*/.test(value)) {
 				return callback(new Error('Please enter a positive integer'))
 			}
 			if (value === 0 || value === '') {
@@ -221,7 +220,6 @@ export default {
 	watch: {
 		techVal: {
 			handler(newVal) {
-				//console.log('watch techVal!!!!!!!!!',newVal)
 				var obj = CIQ.store.state.conditionRadio
 				obj.MovingAverage_like = this.conditionRadio
 				CIQ.store.commit('setConditionRadio', obj)
@@ -232,14 +230,14 @@ export default {
 	},
 	methods: {
 		clearForm() {
-			Object.assign(this.$data, this.$options.data())
-			this.clearFormValidate()
+			this.$refs.maForm.resetFields()
 		},
 		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.maForm.clearValidate()
 		},
 		getRadioValue(val) {
+			this.clearFormValidate()
 			if (val === 'Moving Average') {
 				// 添加附属ma
 				this.disabled = !this.disabled
@@ -358,9 +356,9 @@ export default {
 				criteria = 'X:'
 
 				if (this.direction == 'Long') {
-					direction = 'Close:'
-				} else if (this.direction == 'Short') {
 					direction = 'Cover:'
+				} else if (this.direction == 'Short') {
+					direction = 'Close:'
 				}
 			}
 			let techVal = this.techVal
@@ -377,16 +375,10 @@ export default {
 			this.description = `${criteria} ${direction} ${conditionRadio} ${ma_period} ${condition} Moving Average ${period}`
 		},
 		getMaPeriodValue(val) {
-			console.log('setperiod')
-			// this.period = val
-			// this.tech.ma_period = this.period
 			this.tech.ma_period = val
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (sd.type == 'ST MA' && sd.panel == 'chart') {
-					// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
-					// dialogHelper.updateStudy({ inputs: { Period: val } });
-
 					// 刷新附属ma
 					var replaceStudy = {
 						name: 'Moving Average ',
@@ -588,13 +580,15 @@ export default {
 		saveCondition(index) {
 			let checked = true
 			let validForm
-			this.$refs.maForm.validate((valid) => {
-				validForm = valid
-			})
 			if (this.conditionRadio === 'Symbol Close') {
+				this.$refs['maForm'].validateField(['period'], (errorMsg) => {
+					if (!errorMsg) {
+						validForm = true
+					}
+				})
 				let ids = {}
 				if (validForm) {
-					let tech = this.tech
+					let tech = JSON.parse(JSON.stringify(this.tech))
 					tech.criteria = this.criteria
 					tech.index = index
 					this.$store.commit('saveCondition', tech)
@@ -614,9 +608,21 @@ export default {
 					return checked
 				}
 			} else {
+				let validMa_Period = false
+				let validMaPeriod = false
+				this.$refs['maForm'].validateField(['ma_period'], (errorMsg) => {
+					if (!errorMsg) {
+						validMa_Period = true
+					}
+				})
+				this.$refs['maForm'].validateField(['maPeriod'], (errorMsg) => {
+					if (!errorMsg) {
+						validMaPeriod = true
+					}
+				})
+				validForm = validMa_Period && validMaPeriod
 				if (validForm) {
-					let tech = {}
-					tech = this.tech
+					let tech = JSON.parse(JSON.stringify(this.tech))
 					tech.criteria = this.criteria
 					tech.index = index
 					this.$store.commit('saveCondition', tech)
@@ -639,6 +645,7 @@ export default {
 		// 设置编辑的数据
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
+				this.clearFormValidate()
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)
@@ -701,5 +708,19 @@ export default {
 }
 /deep/ .el-radio {
 	margin-right: -3px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .el-form-item__label {
+		margin-right: 10px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	/deep/ .el-form-item__label {
+		margin-right: 0px;
+	}
+	.condition-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
 </style>

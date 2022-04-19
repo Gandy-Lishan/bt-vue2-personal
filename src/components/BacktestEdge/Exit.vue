@@ -38,8 +38,6 @@
 						:label="item.title"
 						:name="item.name"
 					>
-						{{ editableTabsValue - 1 }} {{ tabIndex }} {{ techIndiObj[index] }}
-						{{ indicatorRadioArr[index] }}
 						<indicator
 							:criteria="'exit'"
 							:panelIndex="index"
@@ -242,7 +240,7 @@ import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Li
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 export default {
 	name: 'exit',
-	inheritAttrs: false,
+	inheritAttrs: true,
 	data() {
 		return {
 			sentiUrl: '',
@@ -438,6 +436,7 @@ export default {
 			// 将选择的 indicator 保存到 vuex 中
 			console.log('exit的保存执行了' + index + '次')
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
+			return indi.then( val => {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			if (indi) {
 				if (this.indicatorRadioArr[index] === 'sentiment') {
@@ -551,6 +550,7 @@ export default {
 				checked = false
 				return checked
 			}
+			})
 		},
 		setEditPanel(num, data) {
 			this.clearForm()
@@ -674,7 +674,40 @@ export default {
 	margin-bottom: 10px;
 }
 .exit-container {
+	margin-right: 40px;
 	margin-bottom: 10px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	.exit-container {
+		// padding-left: 50px;
+		// padding-right: 10px;
+		margin: 0px 10px 10px 10px;
+		// border-right: 1px solid #797979;
+	}
+}
+@media (min-width: 820px) and (max-width: 1279px) {
+	.exit-container {
+		// padding-left: 50px;
+		// padding-right: 10px;
+		margin: 0px 40px 10px 40px;
+		// border-right: 1px solid #797979;
+	}
+}
+@media (min-width: 768px) and (max-width: 819px) {
+.exit-container {
+		// padding-left: 50px;
+		// padding-right: 10px;
+		margin: 0px 40px 10px 40px;
+		// border-right: 1px solid #797979;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+		.exit-container {
+		margin: 0px 0px 10px 0px;
+	}
+		.criteria-title {
+		font-size: 15px;
+	}
 }
 .signal-option-box {
 	display: flex;

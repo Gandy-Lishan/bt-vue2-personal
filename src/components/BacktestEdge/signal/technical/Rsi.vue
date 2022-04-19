@@ -62,8 +62,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+const throttle = require('lodash/throttle')
 export default {
 	name: 'cci',
 	props: {
@@ -71,7 +70,6 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		// editIndiData: Object,
 		direction: String
 	},
 	data() {
@@ -113,26 +111,9 @@ export default {
 			rules: { value: [{ validator: validateValue, trigger: 'blur' }] }
 		}
 	},
-	watch: {
-		// editIndiData: {
-		// 	handler(newVal) {
-		// 		if (JSON.stringify(newVal) != '{}') {
-		// 			this.tech.ids = newVal[this.criteria].signals[0].ids
-		// 			this.tech.condition = Number(
-		// 				newVal[this.criteria].signals[0].condition
-		// 			)
-		// 			this.tech.value = newVal[this.criteria].signals[0].value
-		// 			this.setDesciption()
-		// 		}
-		// 	},
-		// 	immediate: true,
-		// 	deep: true
-		// }
-	},
 	methods: {
 		clearForm() {
-			Object.assign(this.$data, this.$options.data())
-			this.clearFormValidate()
+			this.$refs.rsiForm.resetFields()
 		},
 		// 清除表单认证
 		clearFormValidate() {
@@ -147,9 +128,9 @@ export default {
 			} else if (this.criteria == 'exit') {
 				criteria = 'X:'
 				if (this.direction == 'Long') {
-					direction = 'Close:'
-				} else if (this.direction == 'Short') {
 					direction = 'Cover:'
+				} else if (this.direction == 'Short') {
+					direction = 'Close:'
 				}
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
@@ -169,7 +150,7 @@ export default {
 					over_sold_bound: 20,
 					period: 14
 				}
-				let tech = this.tech
+				let tech = JSON.parse(JSON.stringify(this.tech))
 				delete tech.ids
 				tech = Object.assign(ids, tech)
 				tech.criteria = this.criteria
@@ -182,11 +163,6 @@ export default {
 				this.$store.commit('saveDescription', desObj)
 				return checked
 			} else {
-				// this.$message({
-				// 	message: 'Please Input Value',
-				// 	type: 'error',
-				// 	offset: 300
-				// })
 				checked = false
 				return checked
 			}
@@ -223,5 +199,19 @@ export default {
 }
 /deep/.el-input--suffix .el-input__inner {
 	padding-right: 5px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .el-form-item__label {
+		margin-right: 10px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	/deep/ .el-form-item__label {
+		margin-right: 0px;
+	}
+	.condition-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
 </style>

@@ -1,6 +1,5 @@
 <template>
 	<div class="senti-container">
-		{{ direction }}
 		<el-form :model="senti" :rules="rules" ref="sentiForm">
 			<div class="ids-container">
 				<el-form-item label="Extreme Optimism" prop="extreme_optimism">
@@ -29,7 +28,7 @@
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							:disabled="disabled"
+							:disabled="!(conditionRadio === 'Sentiment Value')"
 							v-model="senti.condition"
 							filterable
 							placeholder="Please select condition"
@@ -47,7 +46,7 @@
 				<div class="conditionInput">
 					<el-form-item prop="value">
 						<el-input
-							:disabled="disabled"
+							:disabled="!(conditionRadio === 'Sentiment Value')"
 							@input="setDesciption"
 							v-model="senti.value"
 							placeholder="Input Value"
@@ -69,11 +68,10 @@
 					<el-form-item prop="period">
 						<el-input
 							@input="setPeriod"
-							:disabled="!disabled"
+							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
 							placeholder="Input Period"
 							oninput="value=value.replace(/[^\d]/g,'')"
 							v-model="senti.period"
-							@blur="setDesciption"
 						></el-input>
 					</el-form-item>
 				</div>
@@ -82,7 +80,7 @@
 						<el-select
 							v-model="senti.condition"
 							filterable
-							:disabled="!disabled"
+							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
 							placeholder="Please select condition"
 						>
 							<el-option
@@ -98,10 +96,10 @@
 				<div class="conditionInput">
 					<el-form-item prop="maValue">
 						<el-input
-							:disabled="!disabled"
+							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
 							v-model="senti.maValue"
 							placeholder="Input Value"
-							@input="setDesciption"
+							@input="change($event)"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 						></el-input>
 					</el-form-item>
@@ -113,8 +111,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+const throttle = require('lodash/throttle')
 export default {
 	name: 'senti',
 	props: {
@@ -122,64 +119,51 @@ export default {
 		sentiUrl: String,
 		sentiVal: String,
 		panelIndex: Number,
-		// editIndiData: Object,
 		direction: String
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
-			if (this.conditionRadio == 'Sentiment Value') {
-				if (value === '') {
-					callback(new Error('Please input value'))
-				} else if (isNaN(value)) {
-					callback(new Error('Please enter the correct format'))
-				} else {
-					const pattern =
-						/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
-					if (!pattern.test(value)) {
-						callback(new Error('Enter up to two decimal places'))
-					} else {
-						callback()
-					}
-				}
+	        if (value === '') {
+				callback(new Error('Please input value'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
 			} else {
-				callback()
+				const pattern =
+					/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+				if (!pattern.test(value) && value != 0) {
+					callback(new Error('Enter up to two decimal places'))
+				} else {
+					callback()
+				}
 			}
 		}
 		var validateMaValue = (rule, value, callback) => {
-			if (this.conditionRadio == 'Sentiment Moving Average') {
-				if (value === '') {
-					callback(new Error('Please input value'))
-				} else if (isNaN(value)) {
-					callback(new Error('Please enter the correct format'))
-				} else if (value) {
-					const pattern =
-						/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
-					if (!pattern.test(value) && value != 0) {
-						callback(new Error('Enter up to two decimal places'))
-					} else {
-						callback()
-					}
+			if (value === '') {
+				callback(new Error('Please input value'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else if (value) {
+				const pattern =
+					/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+				if (!pattern.test(value) && value != 0) {
+					callback(new Error('Enter up to two decimal places'))
+				} else {
+					callback()
 				}
-			} else {
-				callback()
 			}
 		}
 		var validatePeriod = (rule, value, callback) => {
-			if (this.conditionRadio == 'Sentiment Moving Average') {
 				if (value === 0 || value === '') {
-					callback(new Error('Please input period'))
-				} else if (isNaN(value)) {
-					callback(new Error('Please enter the correct format'))
-				} else if (value) {
-					const pattern = /[1-9]\d*/
-					if (!pattern.test(value)) {
-						callback(new Error('Please enter a positive integer'))
-					} else {
-						callback()
-					}
+				callback(new Error('Please input period'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else if (value) {
+				const pattern = /[1-9]\d*/
+				if (!pattern.test(value)) {
+					callback(new Error('Please enter a positive integer'))
+				} else {
+					callback()
 				}
-			} else {
-				callback()
 			}
 		}
 		return {
@@ -190,9 +174,10 @@ export default {
 				comparison: 'SV',
 				condition: 3,
 				value: '',
-				period: 1,
+				period: '',
 				maValue: ''
 			},
+			periodTemp: '',
 			conditions: [
 				{ value: 0, label: '>' },
 				{ value: 1, label: '=' },
@@ -200,8 +185,6 @@ export default {
 				{ value: 3, label: 'CrossAbove' },
 				{ value: 4, label: 'CrossBelow' }
 			],
-
-			disabled: false,
 			conditionRadio: 'Sentiment Value',
 			description: '',
 			editSentiVal: '',
@@ -232,6 +215,10 @@ export default {
 		extremeValue: {
 			handler(newVal) {
 				let vm = this
+				// 为了解决先选ma再选indicator后保存不了ma的问题
+				if(this.conditionRadio=='Sentiment Moving Average'){
+					this.setPeriod(this.senti.period)
+				}
 				newVal.forEach((item) => {
 					if (item.indicator) {
 						if (item.indicator === vm.sentiUrl || vm.preload == true) {
@@ -263,32 +250,16 @@ export default {
 		}
 	},
 	methods: {
+		change(e) {
+			this.$forceUpdate()
+		},
 		clearForm() {
-			Object.assign(this.$data, this.$options.data())
-			this.conditionRadio = 'Sentiment Value'
-			this.clearFormValidate()
+			this.$refs.sentiForm.resetFields()
 		},
 		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.sentiForm.clearValidate()
 		},
-		// clearNoNum(value) {
-		// 	console.log(value)
-		// 	//先把非数字的都替换掉，除了数字和.
-		// 	// value = value.replace(/[^\d.]/g, '')
-		// 	//保证只有出现一个.而没有多个.
-		// 	value = value.replace(/\.{2,}/g, '.')
-		// 	//必须保证第一个为数字而不是.
-		// 	value = value.replace(/^\./g, '')
-		// 	//保证.只出现一次，而不能出现两次以上
-		// 	value = value.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
-		// 	//只能输入两个小数
-		// 	value = value.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3')
-		// 	value = value.replace(/^0+\./, '0.')
-		// 	value = value.replace(/^\-+/g, '-')
-		// 	console.log('处理过后的值', value)
-		// 	this.senti.value = value
-		// },
 		setDesciption(index) {
 			let criteria = ''
 			let direction = ''
@@ -316,19 +287,59 @@ export default {
 		getConditionRadio(val) {
 			this.clearFormValidate()
 			if (val === 'Sentiment Value') {
-				this.senti.period = 1
+				// 清空moving average在切回默认senti radio
+				this.periodTemp = this.senti.period
+				this.senti.period = ''
 				this.senti.comparison = 'SV'
-				this.disabled = !this.disabled
-			} else if (val === 'Sentiment Moving Average') {
-				this.senti.period = 20
+				let result
+				this.$store.state.indicatorsList.forEach((value, index) => {
+					if (this.sentiVal) {
+						if (value.chart_name.indexOf(this.sentiVal) !== -1) {
+							result = value
+						}
+					} else {
+						if (value.chart_name.indexOf(this.sentiVal) !== -1) {
+							result = value
+						}
+					}
+				})
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					if (
+						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
+					) {
+						CIQ.Studies.removeStudy(
+							CIQ.stxx,
+							CIQ.stxx.layout.studies[studyInstanceName]
+						)
+					}
+				}
+
+				var activatedMAList = this.$store.state.activatedMA
+				// remove current MA attached to an indicator
+				var MAListIndex = activatedMAList.findIndex(
+					(item) => item.url == result.url
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				
+			} 
+			if (val === 'Sentiment Moving Average') {
 				this.senti.comparison = 'SVMA'
-				this.disabled = !this.disabled
-				this.setPeriod(this.senti.period)
+			// 默认radio切到moving average radio时 加载ma
+				this.setPeriod(this.periodTemp)
 			}
 		},
 		setPeriod(val) {
+						let _val = val
+			if(!_val){
+				_val = 5
+			}
 			if (this.conditionRadio === 'Sentiment Moving Average') {
 				this.senti.period = val
+			}else{
+				this.senti.period = ''
 			}
 			let result
 			this.$store.state.indicatorsList.forEach((value, index) => {
@@ -336,12 +347,10 @@ export default {
 					if (value.chart_name.indexOf(this.sentiVal) !== -1) {
 						result = value
 					}
-				} else {
-					if (value.chart_name.indexOf(this.sentiVal) !== -1) {
-						result = value
-					}
-				}
+				} 
 			})
+			// 如果在换成ma radio时indicator没有加载，那么退出
+			if(!result){return}
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				if (
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
@@ -374,63 +383,83 @@ export default {
 
 			this.$store.commit('getMA', activatedMAList)
 		},
+		
 		saveCondition(index) {
+			let vm = this
 			let checked = true
 			let validForm
-			this.$refs.sentiForm.validate((valid) => {
-				if (valid) {
-					validForm = true
+			if (this.conditionRadio === 'Sentiment Value') {
+				this.$refs['sentiForm'].validateField(['value'], (errorMsg) => {
+					if (!errorMsg) {
+						validForm = true
+					}
+				})
+				if (validForm) {
+					let senti = JSON.parse(JSON.stringify(this.senti))
+					delete senti.period
+					delete senti.maValue
+					senti.criteria = this.criteria
+					senti.index = index
+					// 定义一个 vuex 新事件用于保存 description
+					let desObj = {}
+					desObj.criteria = this.criteria
+					desObj.description = this.description
+					this.$store.commit('saveDescription', desObj)
+					// 定义一个 vuex 新事件用于保存 condition数据
+					this.$store.commit('saveCondition', senti)
+					return checked
 				} else {
-					validForm = false
+					checked = false
+					return checked
 				}
-				// validForm = valid
-			})
-			if (validForm) {
-				let senti = this.senti
-				if (this.conditionRadio === 'Sentiment Moving Average') {
+			} else if (this.conditionRadio === 'Sentiment Moving Average') {
+				let validMaValue = false
+				let validatePeriod = false
+				this.$refs['sentiForm'].validateField(['maValue'], (errorMsg) => {
+					if (!errorMsg) {
+						validMaValue = true
+					}
+				})
+				this.$refs['sentiForm'].validateField(['period'], (errorMsg) => {
+					if (!errorMsg) {
+						validatePeriod = true
+					}
+				})
+				validForm = validMaValue && validatePeriod
+				if (validForm) {
+					let senti = JSON.parse(JSON.stringify(this.senti))
 					senti.value = senti.maValue
 					delete senti.maValue
+					senti.criteria = this.criteria
+					senti.index = index
+					// 定义一个 vuex 新事件用于保存 description
+					let desObj = {}
+					desObj.criteria = this.criteria
+					desObj.description = this.description
+					this.$store.commit('saveDescription', desObj)
+					// 定义一个 vuex 新事件用于保存 condition数据
+					this.$store.commit('saveCondition', senti)
+					return checked
+				} else {
+					checked = false
+					return checked
 				}
-				delete senti.maValue
-				senti.criteria = this.criteria
-				senti.index = index
-				// 定义一个 vuex 新事件用于保存 description
-				let desObj = {}
-				desObj.criteria = this.criteria
-				desObj.index = index
-				desObj.description = this.description
-				this.$store.commit('saveDescription', desObj)
-				// 定义一个 vuex 新事件用于保存 condition数据
-				this.$store.commit('saveCondition', senti)
-				return checked
-			} else {
-				// this.$message({
-				// 	message: 'Please Input Value',
-				// 	type: 'error',
-				// 	offset: 300
-				// })
-				checked = false
-				return checked
 			}
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
-				console.log('编辑')
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.senti.extreme_optimism = obj.extreme_optimism
 				this.senti.extreme_pessimism = obj.extreme_pessimism
 				this.senti.condition = Number(obj.condition)
 				this.senti.value = obj.value
 				this.senti.comparison = obj.comparison
-				this.senti.period = obj.period
-				this.setPeriod(this.senti.period)
 				this.conditionRadio = 'Sentiment Value'
-				this.disabled = false
 				this.editSentiVal = obj.indicator
 				if (this.senti.comparison === 'SVMA') {
 					this.conditionRadio = 'Sentiment Moving Average'
 					this.senti.maValue = this.senti.value
-					this.disabled = true
+				    this.senti.period = obj.period
 				}
 				this.setDesciption()
 			}
@@ -458,5 +487,20 @@ export default {
 
 /deep/ .el-form-item__label {
 	margin-right: 36px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .el-form-item__label {
+		margin-right: 10px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	/deep/ .el-form-item__label {
+		margin-right: 0px;
+		font-size: 12px;
+	}
+	.condition-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
 </style>

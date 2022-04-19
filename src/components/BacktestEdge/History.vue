@@ -31,13 +31,6 @@
 					>
 					</el-table-column>
 					<!-- <el-table-column
-						label="Description"
-						align="center"
-						show-overflow-tooltip
-						prop="description"
-					>
-					</el-table-column> -->
-					<el-table-column
 						label="Entry & Exit"
 						align="center"
 						show-overflow-tooltip
@@ -56,17 +49,22 @@
 								<p>{{ item }}</p>
 							</div>
 						</template>
-					</el-table-column>
-					<!-- <el-table-column
-						label="Entry & Exit"
-						align="center"
-						show-overflow-tooltip
-					>
-						<template slot-scope="scope">
-							<p>{{ scope.row.entry_description }}</p>
-							<p>{{ scope.row.exit_description }}</p>
-						</template>
 					</el-table-column> -->
+					<el-table-column label="Entry & Exit" align="center">
+						<template slot-scope="scope">
+							<el-tooltip placement="top">
+								<div>
+									<p>{{ scope.row.entry_description }}</p>
+									<p>{{ scope.row.exit_description }}</p>
+								</div>
+								<div slot="content">
+									{{ scope.row.entry_description }}<br />{{
+										scope.row.exit_description
+									}}
+								</div>
+							</el-tooltip>
+						</template>
+					</el-table-column>
 					<el-table-column
 						label="Period"
 						show-overflow-tooltip
@@ -99,16 +97,17 @@
 							</div>
 						</template>
 					</el-table-column>
-					<!-- <el-table-column label="Status" align="center">
+					
+					<el-table-column
+						label="Timeframe"
+						show-overflow-tooltip
+						align="center"
+						width="90px"
+					>
 						<template slot-scope="scope">
-							<span v-if="scope.row.status == 0">Ready to run</span>
-							<span v-else-if="scope.row.status == 1"
-								><img src="'@/assets/loading.gif'" width="25px"
-							/></span>
-							<span v-else-if="scope.row.status == 2">Run completed</span>
-							<span v-else-if="scope.row.status == 3">Invalid test</span>
+							<p>{{ scope.row.frequency }}</p>
 						</template>
-					</el-table-column> -->
+					</el-table-column>
 					<el-table-column
 						align="center"
 						show-overflow-tooltip
@@ -139,7 +138,7 @@
 							<el-row>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="add to favorites"
 									v-if="scope.row.favorites == false"
 									placement="bottom-start"
@@ -155,7 +154,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="remove from favorites"
 									v-if="scope.row.favorites == true"
 									placement="bottom-start"
@@ -185,7 +184,7 @@
 								></el-button>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="edit backtest"
 									placement="bottom-start"
 								>
@@ -199,7 +198,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="copy backtest"
 									placement="bottom-start"
 								>
@@ -214,7 +213,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="delete backtest"
 									placement="bottom-start"
 								>
@@ -255,7 +254,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="view backtest results"
 									placement="bottom-start"
 								>
@@ -287,8 +286,17 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
+const throttle = require('lodash/throttle')
+import {
+	copyBacktest,
+	favoriteBacktest,
+	getHistoryList,
+	getStatus,
+	seeParams,
+	seeReport,
+	deleteBacktest
+} from '@/service/service.js'
 export default {
 	data() {
 		return {
@@ -311,49 +319,32 @@ export default {
 			loadTest: 'Loading...'
 		}
 	},
-	// created() {
-	// 	this.getBacktestList()
-	// },
+	created() {
+		this.getHistoryList()
+	},
 	methods: {
-		async getBacktestList(strategy) {
+		async getHistoryList() {
 			this.loadTest = 'Loading...'
 			this.loading = true
 			let page = this.queryInfo.page
-			const res = await this.$http.get(
-				'/dev/backtest/?ordering=-create_date&page=' + page
-			)
-			if (res.status === 200) {
-				this.loading = false
-				let historyNameList = []
-				this.backtestList = res.data.results
-				if (this.backtestList.length != 0) {
-					for (let i = 0; i < this.backtestList.length; i++) {
-						if (this.backtestList[i].result !== '') {
-							this.backtestList[i].result = JSON.parse(
-								this.backtestList[i].result
-							)
-							try {
-								this.backtestList[i].entry_description = JSON.parse(
-									this.backtestList[i].entry_description
-								)
-								this.backtestList[i].exit_description = JSON.parse(
-									this.backtestList[i].exit_description
-								)
-							} catch (error) {
-								let entryArr = []
-								entryArr.push(this.backtestList[i].entry_description)
-								this.backtestList[i].entry_description = entryArr
-								let exitArr = []
-								exitArr.push(this.backtestList[i].exit_description)
-								this.backtestList[i].exit_description = exitArr
-							}
-						}
+			try {
+				let res = await getHistoryList(page)
+				if (res.status === 200) {
+					this.loading = false
+					let historyNameList = []
+					this.backtestList = res.data.results
+					if (this.backtestList.length != 0) {
+						this.backtestList.forEach((element) => {
+							historyNameList.push(element.name)
+							if (element.result !== '')
+								element.result = JSON.parse(element.result)
+						})
+						this.$store.commit('getBacktestName', historyNameList)
 					}
-					this.$store.commit('getBacktestName', historyNameList)
+					this.queryInfo.total = res.data.count
 				}
-				this.queryInfo.total = res.data.count
-				console.log('history列表', this.backtestList)
-			} else {
+			} catch (error) {
+				console.log(error)
 				this.loading = false
 			}
 		},
@@ -361,76 +352,93 @@ export default {
 			let vm = this
 			vm.loadTest = 'Backtest is running, please wait'
 			vm.loading = true
-			
-			let timer = setInterval(() => {
-				vm.$http.get('/dev/status/' + id + '/').then((res) => {
-					console.log(res)
-					if (res.data.status !== 1 && res.data.status !== 0) {
-						clearInterval(timer)
-						vm.$notify({
-							title: 'The run was successful',
-							message:
-								'Run backtest is successful, click the view results button to see the results.',
-							offset: 100,
-							type: 'success',
-							duration: 1000
-						})
-						vm.queryInfo.page = 1
-						vm.getBacktestList()
-						vm.$emit('refFavoritesForm')
-						vm.loading = false
-					}
+			vm.clearInterval = clearPromiseInterval
+			let timer = setPromiseInterval(async () => {
+				try {
+					const res = await getStatus(id)
+				if (res.data.status !== 1 && res.data.status !== 0) {
+					clearPromiseInterval(timer).then(() => {})
+					// vm.$notify({
+					// 	title: 'The run was successful',
+					// 	message:
+					// 		'Run backtest is successful, click the view results button to see the results.',
+					// 	offset: 100,
+					// 	type: 'success',
+					// 	duration: 1000
+					// })
+					vm.queryInfo.page = 1
+					vm.getHistoryList()
+					this.$emit('refFavoritesForm')
+					vm.loading = false
+					let row = res.data
+					row.result = JSON.parse(row.result)
+					vm.viewBacktestResults(row)
+				}
+				} catch (error) {
+					vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
 				})
+				vm.loading = true
+				}
 			}, 3000)
 		},
-
-		async getStrategyName() {
-			const id = this.backtestList
-			// const res = await this.$http.get('/demo/strategies' + id + '/')
-		},
-		editBacktest: throttle(function (row) {
+		editBacktest: throttle(async function (row) {
 			let vm = this
-			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+			try {
+				this.isEditDone = true
+				const res = await seeParams(row.id)
+				document.getElementsByClassName('ciq-period')[0].style.display = ''
+				this.isEditDone = false
 				// 恢复indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)
+				CIQ.hideMarker()
+				CIQ.isMarkerShown = false
 				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayout(
+					this.restoreIndicatorLayoutEdit(
 						JSON.parse(res.data.indicator_layout),
-						res.data.frequency
+						JSON.parse(res.data.entry).frequency,
+						row
 					)
+				} else {
+					this.$store.commit('getRunBacktestData', row)
+					this.$emit('goBacktestResultForm', row)
+					this.$emit('goTobacktestSetupForm', row.id)
 				}
-				this.$store.commit('getRunBacktestData', row)
-				this.$emit('goBacktestResultForm', row)
-				
-				vm.$emit('goTobacktestSetupForm', row.id)
-			})
-		}, 1000),
-		deleteBacktest(id) {
-			this.$http
-				.delete('/dev/backtest/' + id + '/')
-				.then((res) => {
-					if (res.status == 204) {
-						this.getBacktestList()
-						this.$emit('refFavoritesForm')
-					} else {
-						this.$message.error({
-							message: 'The deletion failed',
-							duration: 1000
-						})
-					}
+			} catch (error) {
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
 				})
-				.catch((error) => {
-					//(error);
+			}
+		}, 1000),
+		async deleteBacktest(id) {
+			try {
+				const res = await deleteBacktest(id)
+				if (res.status == 204) {
+					this.getHistoryList()
+					this.$emit('refFavoritesForm')
+				} else {
 					this.$message.error({
 						message: 'The deletion failed',
 						duration: 1000
 					})
+				}
+			} catch (error) {
+				console.log(error)
+				this.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
 				})
+			}
 		},
-		copyBacktest: throttle(function (row) {
+		copyBacktest: throttle(async function (row) {
 			let params = {}
 			const res = await seeParams(row.id)
-			//console.log("恢复indicator layout")
+			console.log("恢复indicator layout")
 			// 恢复indicator layout
 			this.$store.commit('getBacktestSymbol', res.data.symbol)
 			this.$store.commit('getRunBacktestData', row)
@@ -472,26 +480,36 @@ export default {
 						type: 'error',
 						offset: 300
 					})
-			}
+				}
 			}
 		}, 1000),
-		viewBacktestResults: throttle(function (row) {
+		viewBacktestResults: throttle(async function (row) {
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
-				this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+				try {
+					const res = await seeParams(row.id)
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
+					CIQ.hideMarker()
+					CIQ.isMarkerShown = false
 					if (res.data.indicator_layout) {
-						this.restoreIndicatorLayout(
+						this.restoreIndicatorLayoutView(
 							JSON.parse(res.data.indicator_layout),
-							res.data.frequency
+							JSON.parse(res.data.entry).frequency,
+							row
 						)
+					} else {
+						this.$store.commit('getRunBacktestData', row)
+						this.$emit('goTobacktestSetupForm', row.id, 'fromView')
+						this.$emit('goBacktestResultForm', row)
 					}
-
-					this.$store.commit('getRunBacktestData', row)
-					this.$emit('goTobacktestSetupForm', row.id)
-					this.$emit('goBacktestResultForm', row)
-				})
+				} catch (error) {
+					vm.$message({
+						message: 'The internal server is busy, please try again later ',
+						type: 'error',
+						offset: 300
+					})
+				}
 			} else {
 				this.$notify({
 					title: 'No trades',
@@ -503,7 +521,7 @@ export default {
 		}, 1000),
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
-			this.getBacktestList()
+			this.getHistoryList()
 		},
 		reloadData(data, freq) {
 			let frequency = ''
@@ -515,7 +533,6 @@ export default {
 			this.$store.commit('setTechSD', data.savedTechSD)
 			// CIQ.savedTechSD = data.savedTechSD
 			//console.log(data.formIndicators)
-			var frequency = ''
 			switch (freq) {
 				case 'Daily': {
 					frequency = 'daily'
@@ -534,7 +551,7 @@ export default {
 				}
 			}
 			this.$store.commit('setRestoreFreq', frequency)
-			CIQ.addIndicatorsFromBacktest()
+			// CIQ.addIndicatorsFromBacktest()
 		},
 		restoreIndicatorLayoutView(data, freq, row) {
 			//console.log("在跑完回测后和view result之间会加载一次chart去输出SignalOuput")
@@ -582,9 +599,9 @@ export default {
 		async showDes(row) {
 			const datades = {}
 			let vm = this
-			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+			try {
+				const res = await seeParams(row.id)
 				const des = res.data
-				console.log('所要展示的数据', des)
 				let str = ``
 				for (let key in des) {
 					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
@@ -601,11 +618,18 @@ export default {
 						})
 					}
 				})
-			})
+			} catch (error) {
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
+				})
+			}
 		},
-		sendBack(row) {
+		async sendBack(row) {
 			let vm = this
-			this.$http.get('/dev/report/?uuid=' + row.id).then((res) => {
+			try {
+				const res = await seeReport(row.id)
 				const des = res.data
 				let str = ``
 				for (let key in des) {
@@ -628,70 +652,74 @@ export default {
 						})
 					}
 				})
-			})
+			} catch (error) {
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
+				})
+			}
 		},
-		addToFavorites: throttle(function (row) {
+		addToFavorites: throttle(async function (row) {
 			let vm = this
 			row.favorites = true
 			let params = {
 				favorites: true
 			}
-			this.$http
-				.put('/dev/backtest/' + row.id + '/', vm.$qs.stringify(params))
-				.then((res) => {
-					if (res.status === 200) {
-						this.getBacktestList()
-						this.$notify({
-							title: 'Added to favorites',
-							message:
-								'Favorites have been added and you can view them in My Favorites',
-							type: 'success',
-							offset: 100
-						})
+			let paramsStr = vm.$qs.stringify(params)
+			try {
+				const res = await favoriteBacktest(row.id, paramsStr)
+				if (res.status === 200) {
+					this.getHistoryList()
+					this.$notify({
+						title: 'Added to favorites',
+						message:
+							'Favorites have been added and you can view them in My Favorites',
+						type: 'success',
+						offset: 100
+					})
 
-						this.$emit('refFavoritesForm')
-					} else {
-						this.getBacktestList()
-						this.$message.error({
-							message: 'Collection failed',
-							duration: 1000
-						})
-					}
+					this.$emit('refFavoritesForm')
+				} else {
+					this.getHistoryList()
+					this.$message.error({
+						message: 'Collection failed',
+						duration: 1000
+					})
+				}
+			} catch (error) {
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
 				})
+			}
 		}, 1000),
-		moveToFavorites: throttle(function (row) {
+		moveToFavorites: throttle(async function (row) {
 			let vm = this
 			row.favorites = false
 			let params = {
 				favorites: false
 			}
-			this.$http
-				.put('/dev/backtest/' + row.id + '/', vm.$qs.stringify(params))
-				.then((res) => {
-					if (res.status === 200) {
-						this.getBacktestList()
-
-						this.$emit('refFavoritesForm')
-					} else {
-						this.getBacktestList()
-						this.$message.error({
-							message: 'Add failed',
-							duration: 1000
-						})
-					}
+			let paramsStr = vm.$qs.stringify(params)
+			try {
+				const res = await favoriteBacktest(row.id, paramsStr)
+				if (res.status === 200) {
+					this.getHistoryList()
+					this.$emit('refFavoritesForm')
+				}
+			} catch (error) {
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
 				})
+			}
 		}, 1000)
 	}
 }
 </script>
 <style lang="less" scoped>
-/deep/.el-button + .el-button {
-	margin-left: 2px;
-}
-/deep/ .el-button--mini,
-.el-button--mini.is-round {
-	margin-bottom: 5px;
-}
 .showDate {
 	display: flex;
 	flex-direction: column;
@@ -700,14 +728,28 @@ export default {
 	}
 	/deep/ .el-button--mini,
 	.el-button--mini.is-round {
-		padding: 5px 0px;
 		margin-bottom: 5px;
 	}
 }
 /deep/ .el-table .cell {
-	padding: 0px;
+	padding: 0px 10px 0px 10px;
+	word-wrap: break-word;
+}
+/deep/.el-button + .el-button {
+	margin-left: 0px;
 }
 /deep/ .el-button--mini.is-circle {
 	margin-right: 5px;
+	margin-bottom: 5px;
+}
+/deep/ .showDate .el-button--mini,
+.el-button--mini.is-round {
+	padding: 7px 0px;
+}
+.el-button--mini.is-circle {
+	padding: 7px;
+}
+.el-table__body-wrapper {
+	overflow-x: scroll;
 }
 </style>

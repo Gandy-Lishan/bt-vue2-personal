@@ -83,10 +83,9 @@
 <script>
 import { Store, mapGetters } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import deepClone1 from '@/tools/deepClone.js'
+import {getIndicatorsList} from '@/service/service'
 export default {
 	props: {
-		// indicatorEditData: Object
 		criteria: String,
 		panelIndex: Number,
 		isShowRisk: Number
@@ -192,7 +191,6 @@ export default {
 			}
 			data.sentimentIndicatorList = this.$store.state.sentimentIndicatorList
 			Object.assign(this.$data, data)
-			this.clearFormValidate()
 		},
 		// sentiment search
 		indicatorSentimentSearch(queryString, cb) {
@@ -256,6 +254,23 @@ export default {
 			}
 		},
 		handleSentimentSelect(item) {
+			     // old version only
+                var countExistIndicator = 0
+                for (var studyInstanceName in CIQ.stxx.layout.studies) {
+                    for (var i in CIQ.store.state.builtinList){
+                        if(CIQ.store.state.builtinList[i].url == CIQ.stxx.layout.studies[studyInstanceName].type){countExistIndicator--}
+                    }
+					if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'){
+						countExistIndicator--
+					}
+					countExistIndicator++
+                } 
+
+                if(countExistIndicator>=5){
+                    CIQ.description("Maximum 5 signals can be displayed on chart")
+                    return
+                }
+
 			this.si.sentimentIndicator = item.value
 			this.$emit('getSentiVal', item.value)
 			// remove a MA tat already exists in current criteria before loading
@@ -292,14 +307,6 @@ export default {
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
-			//console.log('handleTechnicalSelect')
-			// const obj = {}
-			// obj.criteria = this.criteria
-			// obj.index = this.tabIndex
-			// obj.value = item.value
-			// this.$store.commit('clearSignal', obj)
-
-			CIQ.technicalCategory.forEach((item) => {})
 			this.si.technicalIndicator = item.value
 			// technical 的名字， 用于 description 显示
 			this.$emit('getTechVal', item.value)
@@ -445,8 +452,7 @@ export default {
 		loadRiskList() {
 			return [{ value: 'Time In Market' }, { value: 'Profit/Loss' }]
 		},
-		saveIndicator(index) {
-			console.log('保存indicator', index)
+		async saveIndicator(index) {
 			let checked = true
 			let validForm
 			let validName = false
@@ -455,6 +461,18 @@ export default {
 					validForm = valid
 				})
 				let sentimentList = this.$store.state.sentimentIndicatorList
+				if (sentimentList.length == 0) {
+					let res = await getIndicatorsList()
+					sentimentList = res.data.map((obj) => {
+							if (obj.chart_name && obj.url && obj.updated) {
+								return {
+									value: obj.chart_name,
+									url: obj.url,
+									updated: obj.updated
+								}
+							}
+					})
+				}
 				for (let i = 0; i < sentimentList.length; i++) {
 					if (this.si.sentimentIndicator === sentimentList[i].value) {
 						validName = true
@@ -487,7 +505,6 @@ export default {
 				if (formateList.length === 0) {
 					vm.loadShortLong()
 				}
-				formateList = this.$store.state.formateTechnicalList
 				for (let i = 0; i < formateList.length; i++) {
 					if (this.si.technicalIndicator === formateList[i].value) {
 						validName = true
@@ -544,7 +561,6 @@ export default {
 			}
 		},
 		async setEditData(newVal) {
-			console.log('indicator编辑', this.criteria, this.panelIndex)
 			if (JSON.stringify(newVal) != '{}') {
 				this.clearFormValidate()
 				let index = this.panelIndex
@@ -562,15 +578,7 @@ export default {
 					let sentimentList = this.$store.state.sentimentIndicatorList
 					
 					if (sentimentList.length == 0) {
-						const res = await this.$http.get(
-							'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
-							{
-								auth: {
-									username: 'sentimentrader_backtest_api',
-									password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-								}
-							}
-						)
+						let res = await getIndicatorsList()
 						sentimentList = res.data.map((obj) => {
 							if (obj.chart_name && obj.url && obj.updated) {
 								return {
@@ -601,7 +609,6 @@ export default {
 					if (formateList.length === 0) {
 						this.loadShortLong()
 					}
-					formateList = this.$store.state.formateTechnicalList
 					for (let i = 0; i < formateList.length; i++) {
 						if (technicalIndicator === formateList[i].value) {
 							let obj = formateList[i]

@@ -122,7 +122,6 @@ export default new Vuex.Store({
 		state.techSD = val
 	},	
 	setSavedTechSD(state, val){
-		console.log('sd changed: ',val)
 		state.savedTechSD = val
 	},
 	setCurrentSenti(state,val){
@@ -304,18 +303,15 @@ export default new Vuex.Store({
 		getTechValue(state, obj) {
 			state.backtestInfo[obj.criteria].signals[obj.index].technicalIndicator =
 				obj.value
-			console.log("保存的indicator", state.backtestInfo[obj.criteria].signals);
 		},
 		getRiskValue(state, obj) {
 			state.backtestInfo.exit.signals[obj.index].riskIndicator = obj.value
-			console.log("保存的indicator", state.backtestInfo.exit.signals);
 			
 				
 		},
 		getSentiValue(state, obj) {
 			state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator =
 				obj.value
-				console.log("保存的indicator", state.backtestInfo[obj.criteria].signals);
 		},
 		// 用于单选框 切换时删除不必要字段
 		delete(state, obj) {
@@ -371,21 +367,17 @@ export default new Vuex.Store({
 			if(criteria == 'exit') {
 			state.backtestInfo.exit.signals[index] = Object.assign({}, init)
 			}else if(criteria == 'entry') {
-			  delete init.riskIndicator
+			  init.riskIndicator = ''
 			state.backtestInfo.entry.signals[index] = Object.assign({}, init)
 			}
 			for(let key in obj) {
 				state.backtestInfo[criteria].signals[index][key] = obj[key]
 			}
-			
-			console.log("保存 condition",state.backtestInfo[criteria]);
 		},
 		saveDescription(state, desObj) {
 			if(Array.isArray(state.backtestInfo[desObj.criteria+'_description'])) {
 				// state.backtestInfo[desObj.criteria+'_description'].splice(desObj.index, 0, desObj.description)
 				state.backtestInfo[desObj.criteria+'_description'][desObj.index] = desObj.description
-				console.log("成功保存的entry description",state.backtestInfo.entry_description);
-				console.log("成功保存的exit description",state.backtestInfo.exit_description);
 			
 			}
 		},
@@ -457,15 +449,12 @@ export default new Vuex.Store({
 			if(obj.criteria === 'exit') {
 					state.backtestInfo[obj.criteria].signals[obj.index] = newExitSignal
 			}
-			console.log('添加后'+obj.criteria+'当前的信号结构',state.backtestInfo[obj.criteria].signals)
 		},
 		reduceSignalLength(state, obj) {
 			state.backtestInfo[obj.criteria].signals.splice(obj.index, 1)
-			console.log('删除后'+obj.criteria+'当前的信号结构',state.backtestInfo[obj.criteria].signals)
 		},
 		saveScoreValue(state, obj) {
 			state.backtestInfo[obj.criteria].score = Number(obj.value)
-			console.log("保存分数", state.backtestInfo[obj.criteria]);
 			
 		}
 	},

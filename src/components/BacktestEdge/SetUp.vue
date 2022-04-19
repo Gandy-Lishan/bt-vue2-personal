@@ -17,18 +17,15 @@
 					</el-form-item>
 					<el-form-item label="Commission:" prop="commission">
 						<el-input
-							v-model="temp.commission"
+							v-model="bd.commission"
 							@change="getCommission"
-							@input="validateCommission"
 							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input>
 					</el-form-item>
 					<span class="comUnitNote">(%)</span>
 					<el-form-item label="Slippage:" prop="slippage">
 						<el-input
-							v-model="temp.slippage"
-							@change="getSlippage"
-							@input="validateSlippage"
+							v-model="bd.slippage"
 							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input> </el-form-item
 					><span class="sliUnitNote">(per trade)</span>
@@ -56,29 +53,13 @@
 							</el-select>
 						</div>
 					</el-form-item>
-					<!-- <el-form-item label="Money Management:" prop="moneyManagement">
-						<div class="selectBox">
-							<el-select
-								v-model="mmValue"
-								@change="getSizeAllocationValue(mmValue)"
-								placeholder="Pleace select"
-							>
-								<el-option
-									v-for="item in mmOptions"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value"
-								>
-								</el-option>
-							</el-select>
-						</div>
-					</el-form-item> -->
 				</el-col>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12" :span="2">
 					<el-form-item label="Backtest Period:" prop="backtestHistory">
 						<div class="selectBox">
 							<el-select
 								@change="getBacktestHistory(historyValue)"
+								@blur="setBacktestHistory(historyValue)"
 								v-model="historyValue"
 								placeholder="— Select Timeframe —"
 							>
@@ -145,7 +126,7 @@
 						prop="name"
 						placeholder="Give the backtest a name"
 					>
-						<el-input v-model="bd.name"></el-input>
+						<el-input v-model="bd.name" oninput="value=value.replace(/[\+]/g,'')"></el-input>
 					</el-form-item>
 				</div>
 			</el-row>
@@ -164,39 +145,51 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
 import { timestampToTime } from '@/tools/formatDate.js'
-import deepClone1 from '@/tools/deepClone.js'
-const _ = require('lodash')
-const throttle = _.throttle
+import { getIndicatorsList, getIndexsList, getStocksList } from "@/service/service.js"
+const throttle = require('lodash/throttle')
+const uniqWith = require('lodash/uniqWith')
+const isEqual = require('lodash/isEqual')
 export default {
 	props: { backtestEditData: Object },
 	name: 'setUp',
 	data() {
 		var validateCapital = (rule, value, callback) => {
-			if (value == 0 || value == '') {
+			const pattern = /^\d+(\.\d{1,2})?$/
+			if ( value == '') {
 				callback(new Error('Please input starting capital'))
-			} else if (isNaN(value)) {
-				callback(new Error('Please enter the correct format'))
-			} else {
-				callback()
 			}
+			if (!pattern.test(value) && value != 0) {
+				callback(new Error('Values greater than 1000, up to two decimal places'))
+			}
+			if(value < 1000) {
+				callback(new Error('Values greater than 1000, up to two decimal places'))
+			}
+				callback()
 		}
 		var validateCommissionRule = (rule, value, callback) => {
-			if (value == 0 || value == '') {
+			const pattern = /^\d+(\.\d{1,2})?$/
+			if (value == '') {
 				callback(new Error('Please input commission'))
-			} else if (isNaN(value)) {
-				callback(new Error('Please enter the correct format'))
-			} else {
-				callback()
+			} 
+			if (!pattern.test(value) && value != 0) {
+				callback(new Error('Value less than 50, up to two decimal places'))}
+			if(value > 50){
+				callback(new Error('Value less than 50, up to two decimal places'))
 			}
+			callback()
 		}
 		var validateSlippageRule = (rule, value, callback) => {
-			if (value == 0 || value == '') {
+			const pattern = /^\d+(\.\d{1,2})?$/
+			if (value == '') {
 				callback(new Error('Please input slippage'))
-			} else if (isNaN(value)) {
-				callback(new Error('Please enter the correct format'))
-			} else {
-				callback()
 			}
+			if (!pattern.test(value) && value != 0) {
+				callback(new Error('Value greater than 0, up to two decimal places'))
+			}
+			if(value < 0) {
+				callback(new Error('Value greater than 0, up to two decimal places'))
+			}
+				callback()
 		}
 		var validateNameRule = (rule, value, callback) => {
 			if (value == '') {
@@ -213,7 +206,7 @@ export default {
 				strategy: 'Signal',
 				capital: 100000.0,
 				capital_alloc: 1.0,
-				commission: 0.001,
+				commission: 0.1,
 				win_rate: 0.0,
 				slippage: 0.1,
 				start_date: '',
@@ -281,7 +274,6 @@ export default {
 			indexList: [],
 			loading: false,
 			options: [],
-			temp: { commission: '0.1', slippage: '0.1' },
 			sentimentIndicatorList: [],
 			rules: {
 				capital: [
@@ -320,16 +312,6 @@ export default {
 		this.getEndDate()
 	},
 	computed: {
-		// listSet() {
-		// 	return this.symbolList.map((item) => {
-		// 		return { value: `${item.stock}`, label: `${item.stock}` }
-		// 	})
-		// },
-		// indexSet() {
-		// 	return this.indexList.map((item) => {
-		// 		return { value: `${item.symbol}`, label: `${item.symbol}` }
-		// 	})
-		// },
 		updateFreq() {
 			return this.$store.state.pairDataFreq
 		}
@@ -366,15 +348,14 @@ export default {
 					delete newVal.entry
 					delete newVal.exit
 					delete newVal.result
-					this.bd = Object.assign(this.bd, newVal)
+				    this.bd = Object.assign(this.bd, newVal)
 					CIQ.hideMarker()
+					this.changeTimeframe(newVal.frequency)
+					this.getSymbolName(newVal.symbol)
 					this.getDirection(newVal.direction)
-					this.getFrequency(this.bd.frequency)
-
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
-					this.temp.commission = Number(newVal.commission) * 100
-					this.temp.slippage = Number(newVal.slippage) * 100
+					this.bd.commission = newVal.commission * 100
 					let year
 					let month
 					let day
@@ -401,8 +382,8 @@ export default {
 		clearForm() {
 			this.clearFormValidate()
 			Object.assign(this.$data, this.$options.data())
-			this.$emit('setDirection', 'Long')
 			this.getEndDate()
+			this.bd.symbol = this.$store.state.backtestSymbol
 		},
 		getDirection(val) {
 			// direction 设置到 vuex
@@ -410,53 +391,6 @@ export default {
 			// 传给 entry 和 exit 的 direction
 			this.$emit('setDirection', val)
 		},
-		// setEditDirection(val) {
-		// 	this.direction = val
-		// },
-		validateCommission: throttle(function (val) {
-			let list = val.split('.')
-			if (list.length === 2) {
-				let temp = ''
-				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) temp = list[0]
-				else {
-					temp = list[0].substring(0, 2)
-				}
-
-				if (list[1].search(/^\d{0,3}?$/) !== -1) temp = temp + '.' + list[1]
-				else {
-					temp = temp + '.' + list[1].substring(0, 3)
-				}
-
-				this.temp.commission = temp
-			} else if (list.length === 1) {
-				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1)
-					this.bd.commission = list[0]
-				else {
-					this.temp.commission = list[0].substring(0, 2)
-				}
-			}
-		}, 500),
-		validateSlippage: throttle(function (val) {
-			let list = val.split('.')
-			if (list.length === 2) {
-				let temp = ''
-				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) temp = list[0]
-				else {
-					temp = list[0].substring(0, 2)
-				}
-
-				if (list[1].search(/^\d{0,3}?$/) !== -1) temp = temp + '.' + list[1]
-				else {
-					temp = temp + '.' + list[1].substring(0, 3)
-				}
-				this.temp.slippage = temp
-			} else if (list.length === 1) {
-				if (list[0].search(/^[1-9]?\d{1}?$/) !== -1) this.bd.slippage = list[0]
-				else {
-					this.temp.slippage = list[0].substring(0, 2)
-				}
-			}
-		}, 500),
 		validateStartingCapital: throttle(function (val) {
 			let re = /^\d+\.?\d{0,2}$/
 			if (val.search(re) !== -1) {
@@ -498,56 +432,33 @@ export default {
 			return (window.utils = new utils())
 		},
 		async getIndexsList() {
-			//console.log('vuex', this.$store.state.indexsList)
-			if (this.$store.state.indexsList.length != 0) {
-				this.indexList = this.$store.state.indexsList.map((item) => {
+			let vm = this
+			if (vm.$store.state.indexsList.length != 0) {
+				vm.indexList = vm.$store.state.indexsList.map((item) => {
 					return { value: `${item.symbol}`, label: `${item.symbol}` }
 				})
 			} else {
-				await this.$http
-					.get(
-						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getIndexes',
-						{
-							auth: {
-								username: 'sentimentrader_backtest_api',
-								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-							}
-						}
-					)
-					.then((res) => {
-						this.indexList = res.data.map((item) => {
+				let res = await getIndexsList()
+						vm.indexList = res.data.map((item) => {
 							return { value: `${item.symbol}`, label: `${item.symbol}` }
 						})
-					})
-					.catch((error) => {
-						console.warn(error)
-					})
 			}
 		},
 		async getStocksList() {
-			if (this.$store.state.stocksList.length != 0) {
-				this.symbolList = this.$store.state.stocksList.map((item) => {
+			let vm = this
+			if (vm.$store.state.stocksList.length != 0) {
+				vm.symbolList = vm.$store.state.stocksList.map((item) => {
 					return { value: `${item.stock}`, label: `${item.stock}` }
 				})
 			} else {
-				await this.$http
-					.get(
-						'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getStocks',
-						{
-							auth: {
-								username: 'sentimentrader_backtest_api',
-								password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-							}
-						}
-					)
-					.then((res) => {
-						this.symbolList = res.data.map((item) => {
+				try {
+				let res = await getStocksList()
+						vm.symbolList = res.data.map((item) => {
 							return { value: `${item.stock}`, label: `${item.stock}` }
 						})
-					})
-					.catch((error) => {
+				} catch (error) {
 						console.warn(error)
-					})
+				}
 			}
 		},
 		async remoteMethod(query) {
@@ -572,7 +483,7 @@ export default {
 						)
 					})
 					let options = symbolListTemp.concat(IndexListTemp)
-					this.options = _.uniqWith(options, _.isEqual)
+					this.options = uniqWith(options, isEqual)
 				}, 200)
 			} else {
 				this.options = []
@@ -591,8 +502,6 @@ export default {
 				this.bd.start_date = ''
 			}
 		},
-<<<<<<< HEAD
-=======
 		setBacktestHistory(val) {
 			//console.log("blur年限",val);
 			this.historyValue = val
@@ -607,13 +516,9 @@ export default {
 				this.bd.start_date = ''
 			}
 		},
->>>>>>> f40866c4cad564f6fdc5830ee5e3b06512a37ace
 		getCommission: throttle(function (val) {
-			this.bd.commission = val / 100
+			this.bd.commission = val
 		}, 500),
-		getSlippage: throttle(function (val) {
-			this.bd.slippage = val / 100
-		}),
 		validateForm(newTag, oldTag) {
 			let data = true
 			this.$refs.backtestSetupForm.validate((valid) => {
@@ -630,6 +535,7 @@ export default {
 		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.backtestSetupForm.clearValidate()
+			this.$emit('getTimeFrame', this.frequency)
 		},
 		changeTimeframe(val) {
 			this.getFrequency(val)
@@ -637,7 +543,6 @@ export default {
 		},
 		getFrequency(val) {
 			// getFrequency will no longer call addIndicator and pass a parameter to it
-			this.bd.frequency=val
 			this.$store.commit('getFrequency', val)
 			this.$emit('getTimeFrame', val)
 			this.loadSentimentList(val)
@@ -671,15 +576,7 @@ export default {
 					indicatorList = CIQ.indicatorList
 				}
 			} else {
-				const res = await vm.$http.get(
-					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
-					{
-						auth: {
-							username: 'sentimentrader_backtest_api',
-							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-						}
-					}
-				)
+				const res = await getIndicatorsList()
 				indicatorList = res.data
 			}
 			// vm.sentimentIndicatorList = res.data.map((obj) => {
@@ -743,15 +640,7 @@ export default {
 					indicatorList = CIQ.indicatorList
 				}
 			} else {
-				const res = await vm.$http.get(
-					'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols',
-					{
-						auth: {
-							username: 'sentimentrader_backtest_api',
-							password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-						}
-					}
-				)
+				const res = await getIndicatorsList()
 				indicatorList = res.data
 			}
 			this.$store.commit('getIndicatorsList', indicatorList)
@@ -761,24 +650,45 @@ export default {
 			let checked = true
 			let nameChecked = true
 			let validForm
+			let bd = JSON.parse(JSON.stringify(this.bd))
 			this.$refs.backtestSetupForm.validate((valid) => {
 				validForm = valid
 			})
 			if (validForm) {
 				let nameList = this.$store.state.backtestNameList
-				for (let i = 0; i < nameList.length; i++) {
-					if (
-						this.bd.name === nameList[i] &&
-						this.bd.name !== this.oldBacktestName
-					) {
-						nameChecked = false
-						break
-					}
+				if (nameList.indexOf(bd.name) === -1) {
+					bd.favorites = false
+					delete bd.old_uuid
+				}
+				if (
+					nameList.indexOf(bd.name) > -1 &&
+					this.oldBacktestName === ''
+				) {
+					bd.favorites = false
+					delete bd.old_uuid
+					nameChecked = false
+				}
+				if (
+					nameList.indexOf(bd.name) > -1 &&
+					this.oldBacktestName === bd.name &&
+					this.oldBacktestName !== ''
+				) {
+					// 说明重名要进行替换，不删除 old_uuid
+				}
+				if (
+					nameList.indexOf(bd.name) > -1 &&
+					this.oldBacktestName !== bd.name &&
+					this.oldBacktestName !== ''
+				) {
+					// 说明不重名，直接创建新的，删除 old_uuid
+					// this.$store.commit('clearBacktestUuid')
+					nameChecked = false
 				}
 				if (nameChecked) {
-					if (this.bd.end_date) {
+					if (bd.end_date) {
 						// 保存 backtestform 的数据
-						this.$store.commit('setBd', this.bd)
+						bd.commission = bd.commission / 100
+						this.$store.commit('setBd', bd)
 						return checked
 					} else {
 						this.$message({
@@ -807,6 +717,9 @@ export default {
 				checked = false
 				return checked
 			}
+		},
+		clearOldBacktestName() {
+			this.oldBacktestName = ''
 		}
 	}
 }
@@ -826,13 +739,50 @@ export default {
 .comUnitNote {
 	position: absolute;
 
-	left: 329px;
+	left: 335px;
 	top: 56px;
 }
 .sliUnitNote {
 	position: absolute;
-	left: 329px;
+	left: 335px;
 	top: 105px;
+}
+@media (min-width: 1680px) {
+	.comUnitNote {
+		position: absolute;
+		left: 454px;
+		top: 56px;
+	}
+	.sliUnitNote {
+		position: absolute;
+		left: 454px;
+		top: 105px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	.comUnitNote {
+		position: absolute;
+		left: 208px;
+		top: 56px;
+		font-size: 12px;
+	}
+	.sliUnitNote {
+		position: absolute;
+		left: 208px;
+		top: 103px;
+		font-size: 12px;
+	}
+	.el-input__suffix {
+		right: 68px;
+	}
+	/deep/.el-select-dropdown__item {
+		font-size: 12px;
+		padding: 0 5px;
+	}
+	/deep/.el-select-dropdown {
+		max-width: 206px;
+		left: 107px;
+	}
 }
 .border-set {
 	border-bottom: 1px solid #797979;
