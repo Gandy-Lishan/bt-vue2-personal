@@ -134,7 +134,7 @@
 							<el-row>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="add to favorites"
 									v-if="scope.row.favorites == false"
 									placement="bottom-start"
@@ -150,7 +150,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="remove from favorites"
 									v-if="scope.row.favorites == true"
 									placement="bottom-start"
@@ -164,27 +164,28 @@
 										size="mini"
 									></el-button>
 								</el-tooltip>
-								<el-button
+								<!-- <el-button
 									plain
 									icon="el-icon-s-comment"
 									circle
 									@click="sendBack(scope.row)"
 									size="mini"
-								></el-button>
-								<el-button
+								></el-button> -->
+								<!-- <el-button
 									plain
 									icon="el-icon-check"
 									circle
 									@click="showDes(scope.row)"
 									size="mini"
-								></el-button>
+								></el-button> -->
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="edit backtest"
 									placement="bottom-start"
 								>
 									<el-button
+										:disabled="isEditDone"
 										type="primary"
 										icon="el-icon-edit"
 										circle
@@ -194,7 +195,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="copy backtest"
 									placement="bottom-start"
 								>
@@ -209,7 +210,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="delete backtest"
 									placement="bottom-start"
 								>
@@ -250,7 +251,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="view backtest results"
 									placement="bottom-start"
 								>
@@ -296,6 +297,7 @@ import {
 export default {
 	data() {
 		return {
+			isEditDone: false,
 			backtestList: [],
 			strategyName: '',
 			checkList: [],
@@ -325,7 +327,6 @@ export default {
 			let page = this.queryInfo.page
 			try {
 				let res = await getHistoryList(page)
-			console.log("history列表响应", res);
 				if (res.status === 200) {
 					this.loading = false
 					let historyNameList = []
@@ -341,7 +342,7 @@ export default {
 					this.queryInfo.total = res.data.count
 				}
 			} catch (error) {
-				console.log(error);
+				console.log(error)
 				this.loading = false
 			}
 		},
@@ -351,9 +352,10 @@ export default {
 			vm.loading = true
 			vm.clearInterval = clearPromiseInterval
 			let timer = setPromiseInterval(async () => {
-				const res = await getStatus(id)
+				try {
+					const res = await getStatus(id)
 				if (res.data.status !== 1 && res.data.status !== 0) {
-					clearPromiseInterval(timer).then(() => console.log("运行结束后的返回值",res))
+					clearPromiseInterval(timer).then(() => {})
 					// vm.$notify({
 					// 	title: 'The run was successful',
 					// 	message:
@@ -370,12 +372,23 @@ export default {
 					row.result = JSON.parse(row.result)
 					vm.viewBacktestResults(row)
 				}
+				} catch (error) {
+					vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
+				})
+				vm.loading = true
+				}
 			}, 3000)
 		},
 		editBacktest: throttle(async function (row) {
 			let vm = this
 			try {
+				this.isEditDone = true
 				const res = await seeParams(row.id)
+				document.getElementsByClassName('ciq-period')[0].style.display = ''
+				this.isEditDone = false
 				// 恢复indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)
 				CIQ.hideMarker()
@@ -386,8 +399,7 @@ export default {
 						JSON.parse(res.data.entry).frequency,
 						row
 					)
-				}
-				else{
+				} else {
 					this.$store.commit('getRunBacktestData', row)
 					this.$emit('goBacktestResultForm', row)
 					this.$emit('goTobacktestSetupForm', row.id)
@@ -403,7 +415,6 @@ export default {
 		async deleteBacktest(id) {
 			try {
 				const res = await deleteBacktest(id)
-				console.log("删除返回值",res);
 				if (res.status == 204) {
 					this.getHistoryList()
 					this.$emit('refFavoritesForm')
@@ -414,7 +425,7 @@ export default {
 					})
 				}
 			} catch (error) {
-				console.log(error);
+				console.log(error)
 				this.$message({
 					message: 'The internal server is busy, please try again later ',
 					type: 'error',
@@ -426,6 +437,7 @@ export default {
 		copyBacktest: throttle(async function (row) {
 			let params = {}
 			const res = await seeParams(row.id)
+			console.log("恢复indicator layout")
 			// 恢复indicator layout
 			this.$store.commit('getBacktestSymbol', res.data.symbol)
 			this.$store.commit('getRunBacktestData', row)
@@ -454,21 +466,28 @@ export default {
 					this.$message.error('Copy failed')
 				}
 			} catch (error) {
-				this.$message({
-					message: 'The internal server is busy, please try again later ',
-					type: 'error',
-					offset: 300
-				})
+				if (error.response.status === 403) {
+					this.$notify.error({
+						title: 'Has been Copied',
+						message: 'The backtest has been copied',
+						offset: 100
+					})
+				}
+				if (error.response.status === 500) {
+					this.$message({
+						message: 'The internal server is busy, please try again later ',
+						type: 'error',
+						offset: 300
+					})
+				}
 			}
 		}, 1000),
 		viewBacktestResults: throttle(async function (row) {
 			if (row.result['Total Trades']) {
-				console.log('查看结果')
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {
 					const res = await seeParams(row.id)
 					// 恢复indicator layout
-					console.log("编辑回测");
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					CIQ.hideMarker()
 					CIQ.isMarkerShown = false
@@ -478,13 +497,12 @@ export default {
 							JSON.parse(res.data.entry).frequency,
 							row
 						)
-					}
-					else{
+					} else {
 						this.$store.commit('getRunBacktestData', row)
 						this.$emit('goTobacktestSetupForm', row.id, 'fromView')
 						this.$emit('goBacktestResultForm', row)
 					}
-				}catch(error){
+				} catch (error) {
 					vm.$message({
 						message: 'The internal server is busy, please try again later ',
 						type: 'error',
@@ -504,7 +522,7 @@ export default {
 			this.queryInfo.page = newpage
 			this.getHistoryList()
 		},
-		reloadData(data, freq){
+		reloadData(data, freq) {
 			let frequency = ''
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
@@ -512,7 +530,7 @@ export default {
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
-			
+
 			switch (freq) {
 				case 'Daily': {
 					frequency = 'daily'
@@ -533,20 +551,21 @@ export default {
 			this.$store.commit('setRestoreFreq', frequency)
 		},
 		restoreIndicatorLayoutView(data, freq, row) {
+			console.log("在跑完回测后和view result之间会加载一次chart去输出SignalOuput")
 			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
-			if(CIQ.isBacktestRun == true){
+			if (CIQ.isBacktestRun == true) {
 				CIQ.isBacktestRun = false
 				this.reloadData(data, freq)
 				var that = this
-				CIQ.outputSignalsResult(function(){
+				CIQ.outputSignalsResult(function () {
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goTobacktestSetupForm', row.id)
 					that.$emit('goBacktestResultForm', row)
 				})
-			}else{
+			} else {
 				this.reloadData(data, freq)
 				var that = this
-				CIQ.addIndicatorsFromBacktest(function(){
+				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goTobacktestSetupForm', row.id)
 					that.$emit('goBacktestResultForm', row)
@@ -555,19 +574,19 @@ export default {
 		},
 		restoreIndicatorLayoutEdit(data, freq, row) {
 			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
-			if(CIQ.isBacktestRun == true){
+			if (CIQ.isBacktestRun == true) {
 				CIQ.isBacktestRun = false
 				this.reloadData(data, freq)
 				var that = this
-				CIQ.outputSignalsResult(function(){
+				CIQ.outputSignalsResult(function () {
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goBacktestResultForm', row)
 					that.$emit('goTobacktestSetupForm', row.id)
 				})
-			}else{
+			} else {
 				this.reloadData(data, freq)
 				var that = this
-				CIQ.addIndicatorsFromBacktest(function(){
+				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goBacktestResultForm', row)
 					that.$emit('goTobacktestSetupForm', row.id)

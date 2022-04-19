@@ -9,6 +9,19 @@
 							src="../../assets/logo.png"
 							alt="logo"
 					/></span>
+					<div class="menu">
+<el-dropdown :hide-on-click="false" @command="handleCommand">
+  <span class="el-dropdown-link">
+    Help<i class="el-icon-arrow-down el-icon--right"></i>
+  </span>
+  <el-dropdown-menu slot="dropdown">
+    <el-dropdown-item command="doc">
+		文档教程
+	</el-dropdown-item>
+    <el-dropdown-item command="video">视频教程</el-dropdown-item>
+    <el-dropdown-item command="contact">联系我们</el-dropdown-item>
+  </el-dropdown-menu>
+</el-dropdown></div>
 				</div>
 				<el-row type="flex" justify="center"
 					><el-col><p class="betaNote">BacktestEdge Beta</p></el-col>
@@ -27,8 +40,8 @@
 					></i>
 					<el-tooltip
 						class="item"
-						effect="light"
-						content="Create a new backtest"
+						effect="dark"
+						content="Clear chart and backtest set up form to create new backtests"
 						placement="bottom"
 					>
 						<el-button
@@ -75,8 +88,8 @@
 							<div class="backtest-btns">
 								<el-tooltip
 									class="item"
-									effect="light"
-									content="clearForm"
+									effect="dark"
+									content="Clear the backtest set up form "
 									placement="bottom"
 								>
 									<el-button type="danger" @click="clearForm">
@@ -85,8 +98,8 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
-									content="runBacktest"
+									effect="dark"
+									content="Complete the form filling, run the backtest, and view the results"
 									placement="bottom"
 								>
 									<el-button type="success" @click="runBacktest"
@@ -140,7 +153,7 @@
 			</main>
 			<el-tooltip
 				class="item"
-				effect="light"
+				effect="dark"
 				content="Back to the top"
 				placement="bottom"
 			>
@@ -213,11 +226,6 @@ export default {
 			favoriteFlag: true
 		}
 	},
-	// provide() {
-	// 	return {
-	// 		timeFrame: () => this.pubilcEditData
-	// 	}
-	// },
 	components: {
 		chart: chart,
 		'set-up': setUp,
@@ -530,12 +538,10 @@ export default {
 						indicatorLayout.savedTechSD = savedTechSD
 						indicatorLayout.activatedMA = this.$store.state.activatedMA
 						backtestData.indicator_layout = JSON.stringify(indicatorLayout)
-						console.log('即将创建传至后台的backtest数据', backtestData)
 						let backtestDataStr = this.$qs.stringify(backtestData)
 						try {
 							let res = await runBacktest(backtestDataStr)
 							if (res.status === 201) {
-								console.log('runBacktest成功后返回的数据', res)
 								// 保存成功之后，将 backtestInfo 清空回原始的状态
 								CIQ.isBacktestRun = true
 								vm.$store.commit('initialBacktestInfo')
@@ -543,7 +549,6 @@ export default {
 								vm.goToHistoryForm()
 								vm.$refs.historyChild.refreshHistory(res.data.id)
 								// 保存成功之后应该清除表单的所有数据
-								// vm.clearAllDataForm()
 								CIQ.hideMarker()
 								CIQ.isMarkerShown = false
 								// 并且清除 old_uuid
@@ -576,6 +581,7 @@ export default {
 								type: 'error',
 								offset: 300
 							})
+							vm.loading = false
 							// 初始化backtestInfo的数据
 							vm.$store.commit('initialBacktestInfo')
 						}
@@ -657,6 +663,10 @@ export default {
 				offset: 100,
 				type: 'warning'
 			})
+		},
+		handleCommand(command) {
+			console.log("文档教程",command);
+			this.$router.push('/doc')
 		}
 	}
 }
@@ -775,6 +785,12 @@ header {
 	top: 0;
 	width: 100%;
 	background: #fff;
+	justify-content: space-between;
+	.menu{
+		justify-self: center;
+		align-self: center;
+		margin-right: 50px;
+	}
 }
 .criteria-container {
 	padding: 10px;
@@ -854,4 +870,11 @@ header {
 		}
 	}
 }
+.el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
 </style>

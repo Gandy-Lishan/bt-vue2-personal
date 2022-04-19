@@ -133,7 +133,7 @@
 							<el-row>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="add to favorites"
 									v-if="scope.row.favorites == false"
 									placement="bottom-start"
@@ -149,7 +149,7 @@
 								</el-tooltip>
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="remove from favorites"
 									v-if="scope.row.favorites == true"
 									placement="bottom-start"
@@ -163,7 +163,7 @@
 										size="mini"
 									></el-button>
 								</el-tooltip>
-								<el-button
+								<!-- <el-button
 									type="warning"
 									icon="el-icon-star-off"
 									circle
@@ -176,10 +176,10 @@
 									circle
 									@click="showDes(scope.row)"
 									size="mini"
-								></el-button>
+								></el-button> -->
 								<!-- <el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="run backtest"
 									placement="bottom-start"
 								>
@@ -193,11 +193,12 @@
 								</el-tooltip> -->
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="edit backtest"
 									placement="bottom-start"
 								>
 									<el-button
+										:disabled = "isEditDone"
 										type="primary"
 										icon="el-icon-edit"
 										circle
@@ -207,7 +208,7 @@
 								</el-tooltip>
 								<!-- <el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="copy backtest"
 									placement="bottom-start"
 								>
@@ -221,7 +222,7 @@
 								</el-tooltip> -->
 								<!-- <el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="delete backtest"
 									placement="bottom-start"
 								>
@@ -244,7 +245,7 @@
 								</el-tooltip> -->
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="view backtest results"
 									placement="bottom-start"
 								>
@@ -287,6 +288,7 @@ import { warn } from 'vue-class-component/lib/util'
 export default {
 	data() {
 		return {
+			isEditDone: false,
 			backtestList: [],
 			strategyName: '',
 			checkList: [],
@@ -314,7 +316,6 @@ export default {
 			let page = this.queryInfo.page
 			try {
 				const res = await getFavoriteList(page)
-				console.log('favorite列表响应',res);
 				if (res.status === 200) {
 					this.loading = false
 					this.backtestList = res.data.results
@@ -355,7 +356,9 @@ export default {
 		editBacktest: throttle(async function (row) {
 			let vm = this
 			try {
+				this.isEditDone = true
 				const res = await seeParams(row.id)
+				this.isEditDone = false
 				// 恢复indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)
 				CIQ.hideMarker()

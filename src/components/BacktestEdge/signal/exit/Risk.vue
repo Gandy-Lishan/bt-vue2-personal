@@ -42,7 +42,6 @@
 							v-model="risk.time_in_market"
 							@input="setDesciption"
 						></el-input>
-						<!-- <p class="tpNote">{{ timeFra }}</p> -->
 						<p class="tpNote">(Bars)</p>
 					</div>
 				</el-checkbox-group>
@@ -51,42 +50,17 @@
 	</div>
 </template>
 <script>
-import { trix } from 'chartiq/js/advanced'
 import { Store, mapGetters } from 'vuex'
+import { trix } from 'chartiq/js/advanced'
 const throttle = require('lodash/throttle')
 export default {
 	name: 'risk',
 	inheritAttrs: true,
 	props: {
 		criteria: String,
-		// riskUrl: String,
-		timeFrame: String,
 		riskVal: String,
 		riskIndiValue: String,
 		direction: String
-	},
-	// inject: ['timeFrame'],
-	// computed: {
-	// 	getTimeFrame() {
-	// 		return this.timeFrame()
-	// 	}
-	// },
-	watch: {
-		timeFrame: {
-			handler(newVal) {
-				if (newVal == 'Daily') {
-					this.timeFra = '(days)'
-				} else if (newVal == 'Weekly') {
-					this.timeFra = '(weeks)'
-				} else if (newVal == 'Monthly') {
-					this.timeFra = '(months)'
-				} else {
-					this.timeFra = '(days)'
-				}
-			},
-			immediate: true,
-			deep: true
-		}
 	},
 	data() {
 		return {
@@ -102,7 +76,6 @@ export default {
 			description: '',
 			editRiskVal: '',
 			checkList: ['Take Profit', 'Stop Loss', 'Time In Market', 'Profit/Loss'],
-			timeFra: '',
 			
 		}
 	},
@@ -193,14 +166,12 @@ export default {
 			let value1 = ''
 			let value2 = ''
 			let arr = ['Take Profit', 'Stop Loss', 'Time In Market', 'Profit/Loss']
-			if (this.timeFrame)
 				if (riskVal == arr[0]) {
 					value1 = this.risk.take_profit + '%'
 				} else if (riskVal == arr[1]) {
 					value1 = this.risk.stop_loss + '%'
 				} else if (riskVal == arr[2]) {
-					// value1 = this.risk.time_in_market + this.timeFra
-					value1 = this.risk.time_in_market + '(bars)'
+					value1 = this.risk.time_in_market + '(Bars)'
 				} else if (riskVal == arr[3]) {
 					value1 = this.risk.take_profit + '%'
 					value2 = this.risk.stop_loss + '%'
@@ -251,7 +222,6 @@ export default {
 			}
 		},
 		setEditData(newVal) {
-			console.log('risk control', newVal);
 			if (JSON.stringify(newVal) != '{}') {
 				if (
 					newVal.exit.signals[0].sc.take_profit &&

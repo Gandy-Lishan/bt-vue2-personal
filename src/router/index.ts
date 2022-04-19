@@ -6,14 +6,16 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { getIndicatorsList } from "@/service/service"
 import store from '../store/store'
 
-import { getCookieData, setCookieData } from '@/tools/cookie'
+// import { getCookieData, setCookieData } from '@/tools/cookie'
 import Home from '@/components/BacktestEdge/Home.vue'
+import Doc from '@/components/Menu/Doc.vue'
 Vue.use(Router)
 const router = new Router({
 	mode: 'history',
 	routes: [
 		{ path: '/', redirect: '/home' },
-		{ path: '/home', component: Home }
+		{ path: '/home', component: Home },
+		{path: '/doc', component: Doc}
 	]
 })
 router.beforeEach(async (to, from, next) => {
@@ -37,8 +39,8 @@ router.beforeEach(async (to, from, next) => {
 router.beforeEach((to, from, next) => {
 	// let host = "/[a-z]*\.sentimentrader\.com/"/
 	let host = /.*/
-	const data = getCookieData()
-	console.log("测试cookie",data);
+	// const data = getCookieData()
+	// console.log("测试cookie",data);
 	// const detail = {
 	// 	security_response: 200,
 	// 	username: 'eric+test12345678@ericbrown.com',
@@ -51,7 +53,9 @@ router.beforeEach((to, from, next) => {
 	// console.log('设置cookie', setData)
 	// console.log('to from next',to, from, next);
 	let formateHost = location.origin
-	let loginUrl = 'https://users.sentdevsite.com/login'
+	let loginUrl = 'https://users.sentimentrader.com/login'
+	//正式网站 https://users.sentimentrader.com/login
+	//测试网站 https://users.sentdevsite.com/login
 	if (document.baseURI.search(host) != -1) {
 		//  alert("asdasd")
 		// https://backtest.sentimentrader.com/user?userID=668696
@@ -64,17 +68,17 @@ router.beforeEach((to, from, next) => {
 			cookies.set('userid', userId)
 			window.location.href = formateHost
 		} catch (error) {
-			console.log(error)
 			userId = cookies.get('userid')
 			if (!userId) {
+				alert('Login failed, please log in again')
 				window.location.href = loginUrl
+				return
 			}
 		}
 		// 3. 根据返回状态码判断后续操作
 		axios
 			.get('/dev/user/?userid=' + userId)
 			.then((res) => {
-				console.log(res)
 				if (res.status === 200) {
 					let oldUserid = cookies.get('userid')
 					if (oldUserid == res.data.userid) {
@@ -102,6 +106,11 @@ router.beforeEach((to, from, next) => {
 					// 用户不存在
 					alert('User does not exist, please log in again')
 					window.location.href = loginUrl
+				}
+				if(status === 500) {
+				// 服务器错误
+				alert('Internal Server Error, please log in again')
+				window.location.href = loginUrl
 				}
 				// next('https://users.sentdevsite.com/login')
 			})

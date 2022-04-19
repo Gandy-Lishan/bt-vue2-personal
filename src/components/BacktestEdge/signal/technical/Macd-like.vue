@@ -109,7 +109,6 @@ export default {
 		criteria: String,
 		techUrl: String,
 		techVal: String,
-		// editIndiData: Object,
 		direction: String
 	},
 	data() {
@@ -156,8 +155,6 @@ export default {
 	},
 	methods: {
 		clearForm() {
-			// Object.assign(this.$data, this.$options.data())
-			// this.clearFormValidate()
 			this.$refs.macdForm.resetFields()
 		},
 		clearFormValidate() {

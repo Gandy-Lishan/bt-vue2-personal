@@ -87,7 +87,6 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import {getIndicatorsList} from '@/service/service'
 export default {
 	props: {
-		// indicatorEditData: Object
 		criteria: String
 	},
 	data() {
@@ -119,7 +118,6 @@ export default {
 				technicalIndicator: '',
 				riskIndicator: ''
 			},
-			isCheckedIndicators: false,
 			sentimentIndicatorList: this.$store.state.sentimentIndicatorList,
 			rules: {
 				sentimentIndicator: [{ validator: validateSenti, trigger: 'change' }],
@@ -154,7 +152,7 @@ export default {
 						}else{
 							this.$store.commit('getExitIndicators', CIQ.indicatorList[i].url)
 						}
-						// extract this statement from handleSentimentSelect
+						// extract this statement from handleSentimentSelect.
 						this.$emit('getSentiVal', CIQ.indicatorList[i].chart_name)						
 						//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
 						this.$emit('getSentiUrl', CIQ.indicatorList[i].url)
@@ -190,7 +188,6 @@ export default {
 					technicalIndicator: '',
 					riskIndicator: ''
 				},
-				isCheckedIndicators: false,
 				sentimentIndicatorList: []
 			}
 			data.sentimentIndicatorList = this.$store.state.sentimentIndicatorList
@@ -273,7 +270,6 @@ export default {
 
                 if(countExistIndicator>=5){
                     CIQ.description("Maximum 5 signals can be displayed on chart")
-					console.log(this.si)
                     return
                 }
 
@@ -314,11 +310,6 @@ export default {
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
-			// const obj = {}
-			// obj.criteria = this.criteria
-			// obj.index = this.tabIndex
-			// obj.value = item.value
-			// this.$store.commit('clearSignal', obj)
 			this.si.technicalIndicator = item.value
 			this.$emit('getTechVal', item.value)
 			const vm = this
@@ -406,7 +397,6 @@ export default {
 		changeIndicatorChecked(val) {
 			this.indicatorRadio = val
 			this.clearFormValidate()
-			this.isCheckedIndicators = !this.isCheckedIndicators
 			const arr = [
 				'Sentiment Indicators',
 				'Technical Indicators',
@@ -441,27 +431,6 @@ export default {
 		loadRiskList() {
 			return [{ value: 'Time In Market' }, { value: 'Profit/Loss' }]
 		},
-		// setIndicatorRadio(obj) {
-		// 	let vm = this
-		// 	this.indicatorRadio = obj.radio
-		// 	var data = Object.assign(obj)
-		// 	if (data.sentimentIndicator) {
-		// 		vm.si['sentimentIndicator'] = data['sentimentIndicator']
-		// 		vm.$set(vm.si, 'sentimentIndicator', data.sentimentIndicator)
-		// 		this.$emit('getSentiVal', data.sentimentIndicator)
-		// 		const sentiObj = data
-		// 		sentiObj.value = sentiObj.sentimentIndicator
-		// 		this.$store.commit('getSentiValue', sentiObj)
-		// 		this.isCheckedIndicators = false
-		// 	} else if (data.technicalIndicator) {
-		// 		vm.$set(this.si, 'technicalIndicator', obj.technicalIndicator)
-		// 		this.$emit('getTechVal', obj.technicalIndicator)
-		// 		const sentiObj = data
-		// 		sentiObj.value = sentiObj.technicalIndicator
-		// 		this.$store.commit('getTechValue', sentiObj)
-		// 		this.isCheckedIndicators = true
-		// 	}
-		// },
 		async saveIndicator() {
 			let checked = true
 			let validForm
@@ -511,7 +480,10 @@ export default {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})
-				let formateList = this.loadShortLong()
+				let formateList = this.$store.state.formateTechnicalList
+					if (formateList.length === 0) {
+						this.loadShortLong()
+					}
 				for (let i = 0; i < formateList.length; i++) {
 					if (this.si.technicalIndicator === formateList[i].value) {
 						validName = true
@@ -575,7 +547,6 @@ export default {
 					this.$emit('getIndicatorRadio', 'sentiment')
 					// this.$emit('getSentiVal', this.si.sentimentIndicator)
 					this.indicatorRadio = 'Sentiment Indicators'
-					this.isCheckedIndicators = false
 					this.si.sentimentIndicator =
 						newVal[this.criteria].signals[0].indicator
 					// 往父组件传值
@@ -607,7 +578,6 @@ export default {
 					let isFromEdit = true
 					vm.handleTechnicalSelect(item, isFromEdit)
 					this.indicatorRadio = 'Technical Indicators'
-					this.isCheckedIndicators = true
 					// this.$emit('getTechVal', vm.si.technicalIndicator)
 				}
 			}

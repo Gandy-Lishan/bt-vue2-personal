@@ -30,7 +30,6 @@ export const getCookieData = () => {
 	// padding: CryptoJS.pad.Pkcs7
 	// })
 	const originalText = bytes.toString(CryptoJS.enc.Utf8)
-	console.log('utf8', CryptoJS.enc.Utf8)
 	return originalText && originalText.length && originalText !== 'undefined'
 		? JSON.parse(originalText)
 		: null

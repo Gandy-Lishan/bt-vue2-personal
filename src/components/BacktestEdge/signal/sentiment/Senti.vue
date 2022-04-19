@@ -120,7 +120,6 @@ export default {
 		criteria: String,
 		sentiUrl: String,
 		sentiVal: String,
-		// editIndiData: Object,
 		direction: String
 	},
 	data() {
@@ -211,18 +210,25 @@ export default {
 		updateSenti: {
 			handler() {
 				this.preload = true
+				
 			},
 			immediate: true,
 			deep: true
+			
 		},
 		extremeValue: {
 			handler(newVal) {
 				let vm = this
+				// 为了解决先选ma再选indicator后保存不了ma的问题
+				if(this.conditionRadio=='Sentiment Moving Average'){
+					this.setPeriod(this.senti.period)
+				}
 				newVal.forEach((item) => {
 					if (item.indicator) {
 						if (item.indicator === vm.sentiUrl || vm.preload == true) {
 							vm.senti.extreme_pessimism = item.extremePessimism
 							vm.senti.extreme_optimism = item.extremeOptimism
+							
 						}
 					}
 				})
@@ -250,36 +256,15 @@ export default {
 	},
 	methods: {
 		change(e) {
-			// const vm = this
 			this.$forceUpdate()
-			// vm.$refs['sentiForm'].validateField(['maValue'], (errorMsg) => {
-			// 	if (!errorMsg) {
-			// 	}
-			// })
 		},
 		clearForm() {
-			// Object.assign(this.$data, this.$options.data())
 			this.$refs.sentiForm.resetFields()
 		},
 		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.sentiForm.clearValidate()
 		},
-		// clearNoNum(value) {
-		// 	//先把非数字的都替换掉，除了数字和.
-		// 	// value = value.replace(/[^\d.]/g, '')
-		// 	//保证只有出现一个.而没有多个.
-		// 	value = value.replace(/\.{2,}/g, '.')
-		// 	//必须保证第一个为数字而不是.
-		// 	value = value.replace(/^\./g, '')
-		// 	//保证.只出现一次，而不能出现两次以上
-		// 	value = value.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
-		// 	//只能输入两个小数
-		// 	value = value.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3')
-		// 	value = value.replace(/^0+\./, '0.')
-		// 	value = value.replace(/^\-+/g, '-')
-		// 	this.senti.value = value
-		// },
 		setDesciption(val) {
 			let criteria = ''
 			let direction = ''
@@ -306,7 +291,7 @@ export default {
 		},
 		getConditionRadio(val) {
 			this.clearFormValidate()
-			if (this.conditionRadio !== 'Sentiment Moving Average') {
+			if (this.conditionRadio === 'Sentiment Value') {
 				// 清空moving average在切回默认senti radio
 				this.periodTemp = this.senti.period
 				this.senti.period = ''
@@ -346,41 +331,6 @@ export default {
 				// 默认radio切到moving average radio时 加载ma
 				this.setPeriod(this.periodTemp)
 			}
-			// this.$forceUpdate()
-			// this.clearFormValidate()
-			// this.$refs.sentiForm.resetFields()
-			// this.senti.maValue = ''
-			// this.senti.period = ''
-			// this.senti.value = ''
-			// this.$refs.sentiForm.clearValidate(['validatePeriod', 'validateMaValue'])
-			// this.$refs.sentiForm.clearValidate(['validateValue'])
-			// if (val === 'Sentiment Value') {
-			// 	this.$nextTick(() => {
-			// 		this.$refs.sentiForm.clearValidate([
-			// 			'validatePeriod',
-			// 			'validateMaValue'
-			// 		])
-			// 		this.$refs.sentiForm.clearValidate(['validateValue'])
-			// 	})
-			// 	// this.$refs.sentiForm.clearValidate('validateMaValue')
-			// 	// 	if ('period' in this.senti) {
-			// 	// 		delete this.senti.period
-			// 	// 		delete this.senti.maValue
-			// 	// 	}
-			// 	// 	this.disabled = !this.disabled
-			// 	// } else if (val === 'Sentiment Moving Average') {
-			// 	// 	this.disabled = !this.disabled
-			// 	// 	this.senti.period = ''
-			// 	// 	this.senti.maValue = ''
-			// } else {
-			// 	this.$nextTick(() => {
-			// 		this.$refs.sentiForm.clearValidate([
-			// 			'validatePeriod',
-			// 			'validateMaValue'
-			// 		])
-			// 		this.$refs.sentiForm.clearValidate(['validateValue'])
-			// 	})
-			// }
 		},
 		setPeriod(val) {
 			let _val = val
@@ -393,17 +343,19 @@ export default {
 				this.senti.period = ''
 			}
 			let result
+			
 			this.$store.state.indicatorsList.forEach((value, index) => {
+				
 				if (this.sentiVal) {
-					if (value.chart_name.indexOf(this.sentiVal) !== -1) {
-						result = value
-					}
-				} else {
-					if (value.chart_name.indexOf(this.sentiVal) !== -1) {
+					if (value.chart_name == this.sentiVal) {
 						result = value
 					}
 				}
 			})
+			// 如果在换成ma radio时indicator没有加载，那么退出
+			if(!result){return}
+
+			//移除重复的ma，有时候也可以防止莫名其妙的多次调用导致的重复加载问题
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				if (
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
@@ -448,9 +400,6 @@ export default {
 				})
 				if (validForm) {
 					let senti = JSON.parse(JSON.stringify(this.senti))
-					// if(senti.value === '') {
-					// 	senti.value = 0
-					// }
 					delete senti.period
 					delete senti.maValue
 					senti.criteria = this.criteria
@@ -464,11 +413,6 @@ export default {
 					this.$store.commit('saveCondition', senti)
 					return checked
 				} else {
-					// this.$message({
-					// 	message: 'Please Input Value',
-					// 	type: 'error',
-					// 	offset: 300
-					// })
 					checked = false
 					return checked
 				}
@@ -487,8 +431,6 @@ export default {
 				})
 				validForm = validMaValue && validatePeriod
 				if (validForm) {
-					// if (this.senti.period) {
-						console.log('11111');
 					let senti = JSON.parse(JSON.stringify(this.senti))
 					senti.value = senti.maValue
 					delete senti.maValue
@@ -502,21 +444,7 @@ export default {
 					// 定义一个 vuex 新事件用于保存 condition数据
 					this.$store.commit('saveCondition', senti)
 					return checked
-					// } else {
-					// 	this.$message({
-					// 		message: 'Please Input Period',
-					// 		type: 'error',
-					// 		offset: 300
-					// 	})
-					// 	checked = false
-					// 	return checked
-					// }
 				} else {
-					// this.$message({
-					// 	message: 'Please Input Value',
-					// 	type: 'error',
-					// 	offset: 300
-					// })
 					checked = false
 					return checked
 				}
@@ -542,7 +470,7 @@ export default {
 					this.conditionRadio = 'Sentiment Moving Average'
 					this.senti.period = period
 					this.senti.maValue = this.senti.value
-					this.setPeriod(period)
+					//this.setPeriod(period)
 					this.disabled = true
 				}
 				this.editSentiVal = newVal[this.criteria].signals[0].indicator

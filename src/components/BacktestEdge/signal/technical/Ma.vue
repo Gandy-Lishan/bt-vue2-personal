@@ -123,7 +123,6 @@ export default {
 		criteria: String,
 		techUrl: String,
 		techVal: String,
-		// editIndiData: Object,
 		direction: String
 	},
 	data() {
@@ -568,8 +567,7 @@ export default {
 				validForm = validMa_Period && validMaPeriod
 				if (validForm) {
 					let ids = {}
-					let tech = {}
-					tech = this.tech
+					let tech = JSON.parse(JSON.stringify(this.tech))
 					ids = { ma_category: 'SMA' }
 					delete tech.ids
 					tech = Object.assign(ids, tech)

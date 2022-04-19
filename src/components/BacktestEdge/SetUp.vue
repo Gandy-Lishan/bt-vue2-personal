@@ -59,6 +59,7 @@
 						<div class="selectBox">
 							<el-select
 								@change="getBacktestHistory(historyValue)"
+								@blur="setBacktestHistory(historyValue)"
 								v-model="historyValue"
 								placeholder="— Select Timeframe —"
 							>
@@ -168,7 +169,6 @@ export default {
 				callback()
 		}
 		var validateCommissionRule = (rule, value, callback) => {
-			let val = value * 100
 			const pattern = /^\d+(\.\d{1,2})?$/
 			if (value == '') {
 				callback(new Error('Please input commission'))
@@ -404,7 +404,6 @@ export default {
 		},
 		setEditDirection(val) {
 			this.direction = val
-			console.log("设置编辑的direction",val);
 		},
 		validateStartingCapital: throttle(function (val) {
 			let re = /^\d+\.?\d{0,2}$/
@@ -480,7 +479,6 @@ export default {
 			} else {
 				try {
 				let res = await getStocksList()
-				console.log("stocks响应数据",res);
 						vm.symbolList = res.data.map((item) => {
 							return { value: `${item.stock}`, label: `${item.stock}` }
 						})
@@ -532,9 +530,22 @@ export default {
 				this.bd.start_date = ''
 			}
 		},
+		setBacktestHistory(val) {
+			console.log("blur年限",val);
+			this.historyValue = val
+			this.bd.end_date = timestampToTime(new Date())
+			if (val <= 20) {
+				this.bd.end_date = timestampToTime(new Date())
+				const str = this.bd.end_date.split('-')
+				str[0] = Number(str[0]) - Number(this.historyValue) + ''
+				this.bd.start_date = str.join('-')
+			}
+			if (val === 21) {
+				this.bd.start_date = ''
+			}
+		},
 		getCommission: throttle(function (val) {
 			this.bd.commission = val
-			console.log('this.bd.commission',this.bd.commission);
 		}, 500),
 		validateForm(newTag, oldTag) {
 			let data = true
@@ -668,87 +679,45 @@ export default {
 			let checked = true
 			let nameChecked = true
 			let validForm
+			let bd = JSON.parse(JSON.stringify(this.bd))
 			this.$refs.backtestSetupForm.validate((valid) => {
 				validForm = valid
 			})
 			if (validForm) {
 				let nameList = this.$store.state.backtestNameList
-				// let noDuplicateName = false
-				// let firstCreate = false
-				// let duplicateName = false
-				// let editNoDuplicateName = false
-				// for (let i = 0; i < nameList.length; i++) {
-				// 	if (this.bd.name !== nameList[i]) {
-				// 		// 说明不重名，直接创建新的，删除 old_uuid
-				// 		console.log('说明不重名 直接创建新的 删除 old_uuid 和 favorites')
-				// 		this.bd.favorites = false
-				// 		delete this.bd.old_uuid
-				// 	}
-				// 	if (this.bd.name === nameList[i] && this.oldBacktestName === '') {
-				// 		// 说明这是刚开始创建的时候
-				// 		// this.$store.commit('clearBacktestUuid')
-				// 		console.log('说明这是刚开始创建的时候 删除 old_uuid 和 favorites')
-				// 		this.bd.favorites = false
-				// 		delete this.bd.old_uuid
-				// 		nameChecked = false
-				// 	}
-				// 	if (
-				// 		this.bd.name === nameList[i] &&
-				// 		this.oldBacktestName === this.bd.name &&
-				// 		this.oldBacktestName !== ''
-				// 	) {
-				// 		// 说明重名要进行替换，不删除 old_uuid
-				// 		console.log('说明重名要进行替换 不删除 old_uuid 不删除favorites')
-				// 	}
-				// 	if (
-				// 		this.bd.name === nameList[i] &&
-				// 		this.oldBacktestName !== this.bd.name &&
-				// 		this.oldBacktestName !== ''
-				// 	) {
-				// 		// 说明不重名，直接创建新的，删除 old_uuid
-				// 		console.log('说明不重名 直接创建新的 删除 old_uuid和 favorites')
-				// 		// this.$store.commit('clearBacktestUuid')
-				// 		this.bd.favorites = false
-				// 		delete this.bd.old_uuid
-				// 	}
-				// }
-				if (nameList.indexOf(this.bd.name) === -1) {
-					console.log('说明不重名 直接创建新的 删除 old_uuid 和 favorites')
-					this.bd.favorites = false
-					delete this.bd.old_uuid
+				if (nameList.indexOf(bd.name) === -1) {
+					bd.favorites = false
+					delete bd.old_uuid
 				}
 				if (
-					nameList.indexOf(this.bd.name) > -1 &&
+					nameList.indexOf(bd.name) > -1 &&
 					this.oldBacktestName === ''
 				) {
-					console.log('说明这是刚开始创建的时候 删除 old_uuid 和 favorites')
-					this.bd.favorites = false
-					delete this.bd.old_uuid
+					bd.favorites = false
+					delete bd.old_uuid
 					nameChecked = false
 				}
 				if (
-					nameList.indexOf(this.bd.name) > -1 &&
-					this.oldBacktestName === this.bd.name &&
+					nameList.indexOf(bd.name) > -1 &&
+					this.oldBacktestName === bd.name &&
 					this.oldBacktestName !== ''
 				) {
 					// 说明重名要进行替换，不删除 old_uuid
-					console.log('说明重名要进行替换 不删除 old_uuid 不删除favorites')
 				}
 				if (
-					nameList.indexOf(this.bd.name) > -1 &&
-					this.oldBacktestName !== this.bd.name &&
+					nameList.indexOf(bd.name) > -1 &&
+					this.oldBacktestName !== bd.name &&
 					this.oldBacktestName !== ''
 				) {
 					// 说明不重名，直接创建新的，删除 old_uuid
-					console.log('说明是编辑后的重名')
 					// this.$store.commit('clearBacktestUuid')
 					nameChecked = false
 				}
 				if (nameChecked) {
-					if (this.bd.end_date) {
+					if (bd.end_date) {
 						// 保存 backtestform 的数据
-						this.bd.commission = this.temp.commission / 100
-						this.$store.commit('setBd', this.bd)
+						bd.commission = this.temp.commission / 100
+						this.$store.commit('setBd', bd)
 						this.$store.commit('getExitDirection',this.direction)
 						this.$store.commit('getFrequency', this.frequency)
 						return checked

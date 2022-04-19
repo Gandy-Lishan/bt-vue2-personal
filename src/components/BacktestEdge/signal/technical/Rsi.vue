@@ -69,7 +69,6 @@ export default {
 		criteria: String,
 		techUrl: String,
 		techVal: String,
-		// editIndiData: Object,
 		direction: String
 	},
 	data() {
@@ -113,8 +112,6 @@ export default {
 	},
 	methods: {
 		clearForm() {
-			// Object.assign(this.$data, this.$options.data())
-			// this.clearFormValidate()
 			this.$refs.rsiForm.resetFields()
 		},
 		// 清除表单认证
@@ -164,11 +161,6 @@ export default {
 				this.$store.commit('saveDescription', desObj)
 				return checked
 			} else {
-				// this.$message({
-				// 	message: 'Please Input Value',
-				// 	type: 'error',
-				// 	offset: 300
-				// })
 				checked = false
 				return checked
 			}

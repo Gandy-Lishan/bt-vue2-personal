@@ -109,6 +109,9 @@ export default {
 			if (this.indicatorRadio == 'technical' && this.techVal == '') {
 				this.indicatorRadio = 'sentiment'
 			}
+			if (this.indicatorRadio == 'risk' && this.riskVal == '') {
+				this.indicatorRadio = 'sentiment'
+			}
 		},
 		updateTech(val) {
 			this.indicatorRadio = 'technical'
@@ -214,7 +217,6 @@ export default {
 				if (data.exit.signals instanceof Array) {
 					data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
 				}
-				console.log("entry编辑的数据",data);
 				vm.fd.direction = data.entry.direction
 				vm.getExitDirection(data.entry.direction)
 				let edit = {}
@@ -222,7 +224,7 @@ export default {
 				edit.exit_description = data.exit_description
 				edit.entry = data.entry
 				edit.exit = data.exit
-
+				
 				if (edit.entry.signals[0].analysis == 'Sentiment') {
 					this.sentiVal = edit.entry.signals[0].indicator
 				} else if (edit.entry.signals[0].analysis == 'Technical') {
@@ -294,10 +296,7 @@ export default {
 	margin-bottom: 10px;
 }
 .entry-container {
-	// padding-left: 50px;
-	// padding-right: 10px;
 	margin-left: 40px;
-	// border-right: 1px solid #797979;
 	margin-bottom: 10px;
 }
 

@@ -143,7 +143,7 @@
 							<el-row>
 								<!-- <el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="run backtest"
 									placement="bottom-start"
 								>
@@ -157,7 +157,7 @@
 								</el-tooltip> -->
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="copy backtest"
 									placement="bottom-start"
 								>
@@ -169,23 +169,23 @@
 										@click="copyBacktest(scope.row)"
 									></el-button>
 								</el-tooltip>
-								<el-button
+								<!-- <el-button
 									plain
 									icon="el-icon-s-comment"
 									circle
 									@click="sendBack(scope.row)"
 									size="mini"
-								></el-button>
-								<el-button
+								></el-button> -->
+								<!-- <el-button
 									plain
 									icon="el-icon-check"
 									circle
 									@click="showDes(scope.row)"
 									size="mini"
-								></el-button>
+								></el-button> -->
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="view backtest results"
 									placement="bottom-start"
 								>
@@ -307,7 +307,6 @@ export default {
 			let page = this.queryInfo.page
 			try {
 				const res = await getSampleList(page)
-				console.log("sample列表响应",res);
 				if (res.status === 200) {
 					this.backtestList = res.data.results
 					if (this.backtestList.length != 0) {
@@ -320,7 +319,7 @@ export default {
 					this.loading = false
 				}
 			} catch (error) {
-				console.log(error);
+				console.log(error)
 				this.$message.error('List request failed')
 				this.loading = false
 			}
@@ -339,7 +338,6 @@ export default {
 				delete params.status
 				delete params.backtest_id
 				let paramsStr = this.$qs.stringify(params)
-				console.log('sample copy 后即将传过去的值',params)
 				try {
 					const copyRes = await copyBacktest(paramsStr)
 					if (copyRes.status === 201) {
@@ -359,11 +357,20 @@ export default {
 						})
 					}
 				} catch (error) {
-					this.$notify.error({
-						title: 'Has been Copied',
-						message: 'The strategy has been copied',
-						offset: 100
-					})
+					if (error.response.status === 403) {
+						this.$notify.error({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
+						})
+					}
+					if (error.response.status === 500) {
+						this.$notify.error({
+							title: 'Has been Copied',
+							message: 'The backtest has been copied',
+							offset: 100
+						})
+					}
 				}
 			}
 		}, 500),
@@ -382,8 +389,7 @@ export default {
 							JSON.parse(res.data.entry).frequency,
 							row
 						)
-					}
-					else{
+					} else {
 						this.$store.commit('getRunBacktestData', row)
 						this.$emit('goTobacktestSetupForm', row.id)
 						this.$emit('goBacktestResultForm', row)
@@ -408,7 +414,7 @@ export default {
 			this.queryInfo.page = newpage
 			this.getSampleList()
 		},
-		reloadData(data, freq){
+		reloadData(data, freq) {
 			let frequency = ''
 			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
 			this.$store.commit('getExitIndicators', data.formIndicators.exit)
@@ -416,7 +422,7 @@ export default {
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
-			
+
 			switch (freq) {
 				case 'Daily': {
 					frequency = 'daily'
@@ -437,13 +443,13 @@ export default {
 			this.$store.commit('setRestoreFreq', frequency)
 		},
 		restoreIndicatorLayout(data, freq, row) {
-				this.reloadData(data, freq)
-				var that = this
-				CIQ.addIndicatorsFromBacktest(function(){
-					that.$store.commit('getRunBacktestData', row)
-					that.$emit('goTobacktestSetupForm', row.id)
-					that.$emit('goBacktestResultForm', row)
-				})
+			this.reloadData(data, freq)
+			var that = this
+			CIQ.addIndicatorsFromBacktest(function () {
+				that.$store.commit('getRunBacktestData', row)
+				that.$emit('goTobacktestSetupForm', row.id)
+				that.$emit('goBacktestResultForm', row)
+			})
 		},
 		async showDes(row) {
 			const datades = {}
