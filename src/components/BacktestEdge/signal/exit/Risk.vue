@@ -22,8 +22,7 @@
 					<div class="check-box" v-if="riskIndiValue === 'pl'">
 						<el-checkbox label="Take Profit" disabled></el-checkbox>
 						<el-input
-							v-model="risk.take_profit"
-							oninput="value=value.replace(/[^\d]/g,'')"
+							v-model="risk.take_profit"、
 							@input="setDesciption"
 						></el-input>
 
@@ -34,7 +33,6 @@
 						<el-input
 							v-model="risk.stop_loss"
 							@input="setDesciption"
-							@change="validateStopLoss"
 						></el-input>
 						<span class="tpNote">(%)</span>
 					</div>
@@ -43,7 +41,6 @@
 						><el-input
 							v-model="risk.time_in_market"
 							@input="setDesciption"
-							oninput="value=value.replace(/[^\d]/g,'')"
 						></el-input>
 						<span class="tpNote">{{ timeFra }}</span>
 					</div>
