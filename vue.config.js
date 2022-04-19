@@ -18,7 +18,16 @@ const config = {
 					loader: require.resolve('@open-wc/webpack-import-meta-loader')
 				}
 			]
-		}
+		},
+		// plugins:[
+        //     new UglifyJsPlugin({
+        //         uglifyOptions: {
+        //             compress:{
+        //                 drop_console:true,
+        //             }
+        //         }
+        //     })
+        // ]
 	},
 	chainWebpack: (config) => {
 		config.resolve.alias
@@ -62,10 +71,19 @@ const config = {
 		// 测试的ip 18.216.210.200
 		// http://10.131.3.74:8000
 		// http://3.140.194.24:80
+		// http://3.144.31.178:8000
 		disableHostCheck: true,
 		proxy: {
+			// '/CHART_DATA_API': {
+			// 	target: 'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev',
+			// 	// ws:true,
+			// 	changeOrigin: true,
+			// 	pathRewrite: {
+			// 		'^/CHART_DATA_API': '/'
+			// 	}
+			// },
 			'/demo': {
-				target: 'http://3.140.194.24:80',
+				target: 'http://3.140.194.24:8000',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
@@ -73,16 +91,24 @@ const config = {
 				}
 			},
 			'/dev': {
-				target: 'http://3.140.194.24:80',
-				//target: 'http://10.131.3.74:8000', 
+				//target: 'http://18.216.210.200',
+				target: 'http://10.131.3.74:8000', 
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
 					'^/dev': '/dev'
 				}
 			},
+			// '/BATE_LOGIN_API': {
+			// 	target: 'https://users.sentdevsite.com/login',
+			// 	// ws:true,
+			// 	changeOrigin: true,
+			// 	pathRewrite: {
+			// 	'^/BATE_LOGIN_API': '/'
+			// 	}
+			// },
 			'/rundev': {
-				target: 'http://3.140.194.24:80',
+				target: 'http://3.140.194.24:8000',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
@@ -93,19 +119,19 @@ const config = {
 	}
 }
 
-if (process.env.ST_ENV !== "dev" && process.env.ST_ENV !== undefined){
-    config.configureWebpack = {
-        Plugins:[
-            new UglifyJsPlugin({
-                uglifyOptions: {
-                    compress:{
-                        drop_console:true,
-                    }
-                }
-            })
-        ]
-    }
-}
+// if (process.env.ST_ENV !== "dev" && process.env.ST_ENV !== undefined){
+//     config.configureWebpack = {
+//         Plugins:[
+//             new UglifyJsPlugin({
+//                 uglifyOptions: {
+//                     compress:{
+//                         drop_console:true,
+//                     }
+//                 }
+//             })
+//         ]
+//     }
+// }
 
 
 module.exports = config
