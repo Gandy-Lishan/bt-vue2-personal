@@ -20,6 +20,8 @@ import locale from 'element-ui/lib/locale/lang/en'
 import '@/assets/iconfont/iconfont.css'
 import VueCookies from 'vue-cookies'
 
+import 'github-markdown-css'
+
 
 Vue.use(VueCookies)
 // 配置请求根路径

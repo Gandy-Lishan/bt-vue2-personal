@@ -429,40 +429,51 @@ export default {
 		},
 		copyBacktest: throttle(function (row) {
 			let params = {}
-			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
-				this.$store.commit('getBacktestSymbol', res.data.symbol)
-				this.$store.commit('getRunBacktestData', row)
-
-				params = res.data
-				params.name = params.name + '(copy)'
-				params.favorites = false
-				delete params.uuid
-				delete params.results
-				delete params.user_id
-				delete params.status
-				delete params.backtest_id
-				console.log('复制以后即将传递的数据', params)
-				this.$http
-					.post('/dev/backtest/', this.$qs.stringify(params), {
-						withCredentials: true
+			const res = await seeParams(row.id)
+			//console.log("恢复indicator layout")
+			// 恢复indicator layout
+			this.$store.commit('getBacktestSymbol', res.data.symbol)
+			this.$store.commit('getRunBacktestData', row)
+			params = res.data
+			params.name = params.name + '(copy)'
+			params.favorites = false
+			delete params.uuid
+			delete params.results
+			delete params.user_id
+			delete params.status
+			delete params.backtest_id
+			let paramsStr = this.$qs.stringify(params)
+			try {
+				const copyRes = await copyBacktest(paramsStr)
+				if (copyRes.status === 201) {
+					this.$notify({
+						title: 'Copy successfully',
+						message: 'After copying successfully, you can edit the backtest',
+						type: 'success',
+						offset: 100
 					})
-					.then((res) => {
-						if (res.status === 201) {
-							this.$notify({
-								title: 'Copy successfully',
-								message:
-									'After copying successfully, you can edit the backtest',
-								type: 'success',
-								offset: 100
-							})
-							this.queryInfo.page = 1
-							this.getBacktestList()
-							this.$emit('refFavoritesForm')
-						} else {
-							this.$message.error('Copy failed')
-						}
+					this.queryInfo.page = 1
+					this.getHistoryList()
+					this.$emit('refFavoritesForm')
+				} else {
+					this.$message.error('Copy failed')
+				}
+			} catch (error) {
+				if (error.response.status === 403) {
+					this.$notify.error({
+						title: 'Has been Copied',
+						message: 'The backtest has been copied',
+						offset: 100
 					})
-			})
+				}
+				if (error.response.status === 500) {
+					this.$message({
+						message: 'The internal server is busy, please try again later ',
+						type: 'error',
+						offset: 300
+					})
+			}
+			}
 		}, 1000),
 		viewBacktestResults: throttle(function (row) {
 			if (row.result['Total Trades']) {
@@ -494,10 +505,11 @@ export default {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
 		},
-		restoreIndicatorLayout(data, freq) {
+		reloadData(data, freq) {
+			let frequency = ''
 			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
 			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
-			this.$store.commit('getExtraIndicators',[])
+			this.$store.commit('getExtraIndicators', [])
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
@@ -524,7 +536,50 @@ export default {
 			this.$store.commit('setRestoreFreq', frequency)
 			CIQ.addIndicatorsFromBacktest()
 		},
-		showDes(row) {
+		restoreIndicatorLayoutView(data, freq, row) {
+			//console.log("在跑完回测后和view result之间会加载一次chart去输出SignalOuput")
+			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
+			if (CIQ.isBacktestRun == true) {
+				CIQ.isBacktestRun = false
+				this.reloadData(data, freq)
+				var that = this
+				CIQ.outputSignalsResult(function () {
+					that.$store.commit('getRunBacktestData', row)
+					that.$emit('goTobacktestSetupForm', row.id)
+					that.$emit('goBacktestResultForm', row)
+				})
+			} else {
+				this.reloadData(data, freq)
+				var that = this
+				CIQ.addIndicatorsFromBacktest(function () {
+					that.$store.commit('getRunBacktestData', row)
+					that.$emit('goTobacktestSetupForm', row.id)
+					that.$emit('goBacktestResultForm', row)
+				})
+			}
+		},
+		restoreIndicatorLayoutEdit(data, freq, row) {
+			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
+			if (CIQ.isBacktestRun == true) {
+				CIQ.isBacktestRun = false
+				this.reloadData(data, freq)
+				var that = this
+				CIQ.outputSignalsResult(function () {
+					that.$store.commit('getRunBacktestData', row)
+					that.$emit('goBacktestResultForm', row)
+					that.$emit('goTobacktestSetupForm', row.id)
+				})
+			} else {
+				this.reloadData(data, freq)
+				var that = this
+				CIQ.addIndicatorsFromBacktest(function () {
+					that.$store.commit('getRunBacktestData', row)
+					that.$emit('goBacktestResultForm', row)
+					that.$emit('goTobacktestSetupForm', row.id)
+				})
+			}
+		},
+		async showDes(row) {
 			const datades = {}
 			let vm = this
 			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {

@@ -29,15 +29,26 @@
 						width="70px"
 					>
 					</el-table-column>
-					<el-table-column
-						label="Entry & Exit"
+					<!-- <el-table-column
+						label="Description"
 						align="center"
 						show-overflow-tooltip
+						prop="description"
 					>
+					</el-table-column> -->
+					<el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
-							<!-- <div v-if="scope.row.entry_description.indexOf()"></div> -->
-							<p>{{ scope.row.entry_description }}</p>
-							<p>{{ scope.row.exit_description }}</p>
+							<el-tooltip placement="top">
+								<div>
+									<p>{{ scope.row.entry_description }}</p>
+									<p>{{ scope.row.exit_description }}</p>
+								</div>
+								<div slot="content">
+									{{ scope.row.entry_description }}<br />{{
+										scope.row.exit_description
+									}}
+								</div>
+							</el-tooltip>
 						</template>
 					</el-table-column>
 					<el-table-column
@@ -72,6 +83,16 @@
 							</div>
 						</template>
 					</el-table-column>
+					<!-- <el-table-column
+						label="Timeframe"
+						show-overflow-tooltip
+						align="center"
+						width="90px"
+					>
+						<template slot-scope="scope">
+							<p>{{ scope.row.frequency }}</p>
+						</template>
+					</el-table-column> -->
 					<!-- <el-table-column label="Status" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.status == 0">Ready to run</span>
@@ -82,6 +103,16 @@
 							<span v-else-if="scope.row.status == 3">Invalid test</span>
 						</template>
 					</el-table-column> -->
+					<el-table-column
+						label="Timeframe"
+						show-overflow-tooltip
+						align="center"
+						width="90px"
+					>
+						<template slot-scope="scope">
+							<p>{{ scope.row.frequency }}</p>
+						</template>
+					</el-table-column>
 					<el-table-column
 						align="center"
 						show-overflow-tooltip
@@ -107,12 +138,12 @@
 							<span v-else>{{ 0 + '%' }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column align="center" width="230px">
+					<el-table-column align="center">
 						<template slot-scope="scope">
 							<el-row>
 								<!-- <el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="run backtest"
 									placement="bottom-start"
 								>
@@ -126,7 +157,7 @@
 								</el-tooltip> -->
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="copy backtest"
 									placement="bottom-start"
 								>
@@ -138,23 +169,23 @@
 										@click="copyBacktest(scope.row)"
 									></el-button>
 								</el-tooltip>
-								<el-button
+								<!-- <el-button
 									plain
 									icon="el-icon-s-comment"
 									circle
 									@click="sendBack(scope.row)"
 									size="mini"
-								></el-button>
-								<el-button
+								></el-button> -->
+								<!-- <el-button
 									plain
 									icon="el-icon-check"
 									circle
 									@click="showDes(scope.row)"
 									size="mini"
-								></el-button>
+								></el-button> -->
 								<el-tooltip
 									class="item"
-									effect="light"
+									effect="dark"
 									content="view backtest results"
 									placement="bottom-start"
 								>
@@ -185,8 +216,13 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+const throttle = require('lodash/throttle')
+import {
+	copyBacktest,
+	getSampleList,
+	seeParams,
+	seeReport
+} from '@/service/service'
 export default {
 	data() {
 		return {
@@ -209,15 +245,12 @@ export default {
 			loadTest: 'Loading'
 		}
 	},
-	// created() {
-	// 	this.getStrategyList()
-	// 	this.getStrategyName()
-	// },
 	methods: {
-		showDes(row) {
+		async showDes(row) {
 			const datades = {}
 			let vm = this
-			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+			try {
+				const res = await seeParams(row.id)
 				const des = res.data
 				let str = ``
 				for (let key in des) {
@@ -235,11 +268,14 @@ export default {
 						})
 					}
 				})
-			})
+			} catch (error) {
+				console.log(error)
+			}
 		},
-		sendBack(row) {
+		async sendBack(row) {
 			let vm = this
-			this.$http.get('/dev/report/?uuid=' + row.id).then((res) => {
+			try {
+				const res = await seeReport(row.id)
 				const des = res.data
 				let str = ``
 				for (let key in des) {
@@ -262,15 +298,15 @@ export default {
 						})
 					}
 				})
-			})
+			} catch (error) {
+				console.log(error)
+			}
 		},
-		async getStrategyList() {
-			if (this.backtestList.length === 0) {
-				this.loading = true
-				let page = this.queryInfo.page
-				const res = await this.$http.get(
-					'/dev/strategy/?ordering=name,status,-create_date&page=' + page
-				)
+		async getSampleList() {
+			this.loading = true
+			let page = this.queryInfo.page
+			try {
+				const res = await getSampleList(page)
 				if (res.status === 200) {
 					this.backtestList = res.data.results
 					if (this.backtestList.length != 0) {
@@ -281,140 +317,90 @@ export default {
 					}
 					this.queryInfo.total = res.data.count
 					this.loading = false
-				} else {
-					this.$message.error('List request failed')
-					this.loading = false
 				}
+			} catch (error) {
+				console.log(error)
+				this.$message.error('List request failed')
+				this.loading = false
 			}
 		},
-		refreshHistory(id) {
-			let vm = this
-			vm.loadTest = 'Backtest is running, please wait'
-			vm.loading = true
-			vm.clearInterval = clearInterval()
-			vm.timer = setInterval(() => {
-				vm.$http.get('/dev/status/' + id + '/').then((res) => {
-					if (res.data.status !== 1 && res.data.status !== 0) {
-						vm.$notify({
-							title: 'The run was successful',
-							message:
-								'Run backtest is successful, click the view results button to see the results.',
-							offset: 100,
-							type: 'success',
-							duration: 1000
-						})
-						clearInterval(vm.timer)
-						vm.getStrategyList()
-						vm.loading = false
-					}
-				})
-			}, 3000)
-		},
-		async getStatus(id) {
-			const { res: data } = await this.$http.get('/dev/status/' + id + '/')
-			return res.data.status
-		},
-		editBacktest: throttle(function (row) {
-			let vm = this
-			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
-				// 恢复indicator layout
-				this.$store.commit('getBacktestSymbol', res.data.symbol)
-				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayout(
-						JSON.parse(res.data.indicator_layout),
-						JSON.parse(res.data.entry).frequency
-					)
-				}
-			})
-			this.$store.commit('getRunBacktestData', row)
-			this.$emit('goBacktestResultForm', row)
-			vm.$emit('goTobacktestSetupForm', row.id)
-		}, 5000),
-		deleteBacktest(id) {
-			this.$http
-				.delete('/dev/backtest/' + id + '/')
-				.then((res) => {
-					if (res.status == 204) {
-						this.getStrategyList()
-					} else {
-						this.$message.error({
-							message: 'The deletion failed',
-							duration: 1000
-						})
-					}
-				})
-				.catch((error) => {
-					//(error);
-					this.$message.error({
-						message: 'The deletion failed',
-						duration: 1000
-					})
-				})
-		},
-		copyBacktest: throttle(function (row) {
+		copyBacktest: throttle(async function (row) {
 			let params = {}
-			this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
-				if (res.status === 200) {
-					this.$store.commit('getBacktestSymbol', res.data.symbol)
-					this.$store.commit('getRunBacktestData', row)
-
-					params = res.data
-					params.name = params.name + '(copy)'
-					delete params.results
-					delete params.uuid
-					delete params.user_id
-					delete params.status
-					delete params.backtest_id
-					this.$http
-						.post('/dev/backtest/', this.$qs.stringify(params), {
-							withCredentials: true
+			const res = await seeParams(row.id)
+			if (res.status === 200) {
+				this.$store.commit('getBacktestSymbol', res.data.symbol)
+				this.$store.commit('getRunBacktestData', row)
+				params = res.data
+				params.name = params.name + '(copy)'
+				delete params.results
+				delete params.uuid
+				delete params.user_id
+				delete params.status
+				delete params.backtest_id
+				let paramsStr = this.$qs.stringify(params)
+				try {
+					const copyRes = await copyBacktest(paramsStr)
+					if (copyRes.status === 201) {
+						this.$notify({
+							title: 'Copy successfully',
+							message: 'After copying successfully, you can edit the backtest',
+							type: 'success',
+							offset: 100
 						})
-						.then((res) => {
-							if (res.status === 201) {
-								this.$notify({
-									title: 'Copy successfully',
-									message:
-										'After copying successfully, you can edit the backtest',
-									type: 'success',
-									offset: 100
-								})
-								this.$emit('goToHistoryForm')
-								this.$emit('refHistoryForm')
-							} else {
-								this.$notify.error({
-									title: 'Failed',
-									message: 'Copy failed',
-									offset: 100
-								})
-							}
+						this.$emit('goToHistoryForm')
+						this.$emit('refHistoryForm')
+					} else {
+						this.$notify.error({
+							title: 'Failed',
+							message: 'Copy failed',
+							offset: 100
 						})
-						.catch((error) => {
-							this.$notify.error({
-								title: 'Has been Copied',
-								message: 'The strategy has been copied',
-								offset: 100
-							})
+					}
+				} catch (error) {
+					if (error.response.status === 403) {
+						this.$notify.error({
+							message: 'The internal server is busy, please try again later ',
+							type: 'error',
+							offset: 300
 						})
+					}
+					if (error.response.status === 500) {
+						this.$notify.error({
+							title: 'Has been Copied',
+							message: 'The backtest has been copied',
+							offset: 100
+						})
+					}
 				}
-			})
-		}, 5000),
-		viewBacktestResults: throttle(function (row) {
+			}
+		}, 500),
+		viewBacktestResults: throttle(async function (row) {
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
-				this.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+				try {
+					const res = await seeParams(row.id)
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
+					CIQ.hideMarker()
+					CIQ.isMarkerShown = false
 					if (res.data.indicator_layout) {
 						this.restoreIndicatorLayout(
 							JSON.parse(res.data.indicator_layout),
-							JSON.parse(res.data.entry).frequency
+							JSON.parse(res.data.entry).frequency,
+							row
 						)
+					} else {
+						this.$store.commit('getRunBacktestData', row)
+						this.$emit('goTobacktestSetupForm', row.id)
+						this.$emit('goBacktestResultForm', row)
 					}
-
-					this.$store.commit('getRunBacktestData', row)
-					this.$emit('goTobacktestSetupForm', row.id)
-					this.$emit('goBacktestResultForm', row)
-				})
+				} catch (error) {
+					this.$message({
+						message: 'The internal server is busy, please try again later ',
+						type: 'error',
+						offset: 300
+					})
+				}
 			} else {
 				this.$notify({
 					title: 'No trades',
@@ -423,20 +409,20 @@ export default {
 					type: 'warning'
 				})
 			}
-		}, 5000),
+		}, 500),
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
-			this.getStrategyList()
+			this.getSampleList()
 		},
-		restoreIndicatorLayout(data, freq) {
-			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
-			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
-			this.$store.commit('getExtraIndicators',[])
+		reloadData(data, freq) {
+			let frequency = ''
+			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
+			this.$store.commit('getExitIndicators', data.formIndicators.exit)
+			this.$store.commit('getExtraIndicators', [])
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
-			var frequency = ''
-			console.log(CIQ.state.indicators.formIndicators)
+
 			switch (freq) {
 				case 'Daily': {
 					frequency = 'daily'
@@ -455,14 +441,22 @@ export default {
 				}
 			}
 			this.$store.commit('setRestoreFreq', frequency)
-			CIQ.addIndicators()
 		},
-		showDes(row) {
+		restoreIndicatorLayout(data, freq, row) {
+			this.reloadData(data, freq)
+			var that = this
+			CIQ.addIndicatorsFromBacktest(function () {
+				that.$store.commit('getRunBacktestData', row)
+				that.$emit('goTobacktestSetupForm', row.id)
+				that.$emit('goBacktestResultForm', row)
+			})
+		},
+		async showDes(row) {
 			const datades = {}
 			let vm = this
-			vm.$http.get('/dev/seeparams/' + row.id + '/').then((res) => {
+			try {
+				const res = await seeParams(row.id)
 				const des = res.data
-
 				let str = ``
 				for (let key in des) {
 					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
@@ -479,32 +473,13 @@ export default {
 						})
 					}
 				})
-			})
-		},
-		addToFavorites(row) {
-			let vm = this
-			let params = {
-				favorites: true
-			}
-			this.$http
-				.put('/dev/backtest/' + row.id + '/', vm.$qs.stringify(params))
-				.then((res) => {
-					if (res.status === 200) {
-						this.getStrategyList()
-						this.$message.success({
-							message: '已添加收藏',
-							duration: 1000
-						})
-
-						this.$emit('goToFavoritesForm')
-					} else {
-						this.getStrategyList()
-						this.$message.error({
-							message: '收藏失败',
-							duration: 1000
-						})
-					}
+			} catch (error) {
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
 				})
+			}
 		}
 	}
 }
@@ -518,12 +493,28 @@ export default {
 	}
 	/deep/ .el-button--mini,
 	.el-button--mini.is-round {
-		padding: 5px 0px;
 		margin-bottom: 5px;
 	}
 }
 /deep/ .el-table .cell {
-	padding: 0px;
+	padding: 0px 10px 0px 10px;
 	word-wrap: break-word;
+}
+/deep/.el-button + .el-button {
+	margin-left: 0px;
+}
+/deep/ .el-button--mini.is-circle {
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+/deep/ .showDate .el-button--mini,
+.el-button--mini.is-round {
+	padding: 7px 0px;
+}
+.el-button--mini.is-circle {
+	padding: 7px;
+}
+.el-table__body-wrapper {
+	overflow-x: scroll;
 }
 </style>

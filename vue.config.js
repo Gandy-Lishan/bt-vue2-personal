@@ -30,6 +30,15 @@ module.exports = {
 			filename: `js/[name].${TimeSimestamp}.js`,
 			chunkFilename: `js/[name].${TimeSimestamp}.js`
 		}
+		// plugins:[
+        //     new UglifyJsPlugin({
+        //         uglifyOptions: {
+        //             compress:{
+        //                 drop_console:true,
+        //             }
+        //         }
+        //     })
+        // ]
 	},
 	chainWebpack: (config) => {
 		config.resolve.alias
@@ -81,6 +90,7 @@ module.exports = {
 			},
 			'/dev': {
 				//target: 'http://3.140.194.24:80',
+				//target: 'http://18.216.210.200',
 				target: 'http://10.131.3.74:8000', 
 				// ws:true,
 				changeOrigin: true,

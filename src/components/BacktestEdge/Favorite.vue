@@ -444,10 +444,11 @@ export default {
 			this.queryInfo.page = newpage
 			this.getBacktestList()
 		},
-		restoreIndicatorLayout(data, freq) {
+		reloadData(data, freq){
+			let frequency = ''
 			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
 			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
-			this.$store.commit('getExtraIndicators',[])
+			this.$store.commit('getExtraIndicators', [])
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)

@@ -6,13 +6,15 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import store from '../store/store'
 import Home from '@/components/BacktestEdge/Home.vue'
 Vue.config.devtools = true
+import Doc from '@/components/Menu/Doc.vue'
 Vue.use(Router)
 const router = new Router({
-  mode: 'history',
-  routes: [
-    { path: '/', redirect: '/home' },
-    { path: '/home', component: Home },
-  ]
+	mode: 'history',
+	routes: [
+		{ path: '/', redirect: '/home' },
+		{ path: '/home', component: Home },
+		{path: '/doc', component: Doc}
+	]
 })
 
 router.beforeEach((to, from, next) => {

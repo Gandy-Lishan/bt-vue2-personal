@@ -268,7 +268,6 @@ export default {
 					activatedMAList.splice(MAListIndex, 1)
 				}
 				this.$store.commit('getMA', activatedMAList)
-				//console.log('panelIndex:',this.panelIndex)
 				this.$store.commit('getEntryIndicators', {index: this.panelIndex, value: item.url})
 				this.$emit('getSentiUrl', item.url)
 			} else {
@@ -314,7 +313,6 @@ export default {
 			// ])
 			// const newMap = new Map(set)
 			let url = item.url
-
 			// for (let i of newMap.entries()) {
 			// if (val === i[0]) {
 			// url = i[1]

@@ -591,6 +591,23 @@ export default {
 				this.bd.start_date = ''
 			}
 		},
+<<<<<<< HEAD
+=======
+		setBacktestHistory(val) {
+			//console.log("blur年限",val);
+			this.historyValue = val
+			this.bd.end_date = timestampToTime(new Date())
+			if (val <= 20) {
+				this.bd.end_date = timestampToTime(new Date())
+				const str = this.bd.end_date.split('-')
+				str[0] = Number(str[0]) - Number(this.historyValue) + ''
+				this.bd.start_date = str.join('-')
+			}
+			if (val === 21) {
+				this.bd.start_date = ''
+			}
+		},
+>>>>>>> f40866c4cad564f6fdc5830ee5e3b06512a37ace
 		getCommission: throttle(function (val) {
 			this.bd.commission = val / 100
 		}, 500),
