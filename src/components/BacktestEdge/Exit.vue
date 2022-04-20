@@ -58,8 +58,8 @@
 							:panelIndex="index"
 							v-bind="$attrs"
 							ref="sentiChild"
-							:sentiUrl="sentiUrl"
-							:sentiVal="sentiVal"
+							:sentiUrl="sentiUrlArr[index]"
+							:sentiVal="sentiValArr[index]"
 							v-show="indicatorRadioArr[index] === 'sentiment'"
 						></senti>
 						<cci
@@ -67,8 +67,8 @@
 							:panelIndex="index"
 							:criteria="'exit'"
 							ref="cciChild"
-							:techUrl="techUrl"
-							:techVal="techVal"
+							:techUrl="techUrlArr[index]"
+							:techVal="techValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'CCI_like'
@@ -79,8 +79,8 @@
 							:panelIndex="index"
 							:criteria="'exit'"
 							ref="rsiChild"
-							:techUrl="techUrl"
-							:techVal="techVal"
+							:techUrl="techUrlArr[index]"
+							:techVal="techValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'rsi'
@@ -91,8 +91,8 @@
 							:panelIndex="index"
 							:criteria="'exit'"
 							ref="macdChild"
-							:techUrl="techUrl"
-							:techVal="techVal"
+							:techUrl="techUrlArr[index]"
+							:techVal="techValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MACD_like'
@@ -103,8 +103,8 @@
 							:panelIndex="index"
 							:criteria="'exit'"
 							ref="maChild"
-							:techUrl="techUrl"
-							:techVal="techVal"
+							:techUrl="techUrlArr[index]"
+							:techVal="techValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MovingAverage_like'
@@ -117,15 +117,15 @@
 							:panelIndex="index"
 							:criteria="'exit'"
 							:riskIndiValue="riskIndiValue"
-							:riskVal="riskVal"
+							:riskVal="riskValArr[index]"
 						></risk>
 						<bollinger-bands-like
 							v-bind="$attrs"
 							:panelIndex="index"
 							:criteria="'exit'"
 							ref="bollBandsLikeChild"
-							:techUrl="techUrl"
-							:techVal="techVal"
+							:techUrl="techUrlArr[index]"
+							:techVal="techValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'BollingerBands_like'
@@ -136,8 +136,8 @@
 							:panelIndex="index"
 							:criteria="'exit'"
 							ref="EFTLikeChild"
-							:techUrl="techUrl"
-							:techVal="techVal"
+							:techUrl="techUrlArr[index]"
+							:techVal="techValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'EFT_like'
@@ -148,8 +148,8 @@
 							:panelIndex="index"
 							:criteria="'exit'"
 							ref="stochasticsLikeChild"
-							:techUrl="techUrl"
-							:techVal="techVal"
+							:techUrl="techUrlArr[index]"
+							:techVal="techValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Stochastics_like'
@@ -160,8 +160,8 @@
 							:panelIndex="index"
 							:criteria="'exit'"
 							ref="ADXLikeChild"
-							:techUrl="techUrl"
-							:techVal="techVal"
+							:techUrl="techUrlArr[index]"
+							:techVal="techValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ADX_like'
@@ -172,8 +172,8 @@
 							:panelIndex="index"
 							:criteria="'exit'"
 							ref="ERILikeChild"
-							:techUrl="techUrl"
-							:techVal="techVal"
+							:techUrl="techUrlArr[index]"
+							:techVal="techValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ERI_like'
@@ -184,8 +184,8 @@
 							:panelIndex="index"
 							:criteria="'exit'"
 							ref="aligatorLikeChild"
-							:techUrl="techUrl"
-							:techVal="techVal"
+							:techUrl="techUrlArr[index]"
+							:techVal="techValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Aligator_like'
@@ -196,8 +196,8 @@
 							:panelIndex="index"
 							:criteria="'exit'"
 							ref="LRFLikeChild"
-							:techUrl="techUrl"
-							:techVal="techVal"
+							:techUrl="techUrlArr[index]"
+							:techVal="techValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'LRF_like'
@@ -208,8 +208,8 @@
 							:panelIndex="index"
 							:criteria="'exit'"
 							ref="trailingStopLikeChild"
-							:techUrl="techUrl"
-							:techVal="techVal"
+							:techUrl="techUrlArr[index]"
+							:techVal="techValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Trailingstop_like'
@@ -243,12 +243,7 @@ export default {
 	inheritAttrs: true,
 	data() {
 		return {
-			sentiUrl: '',
-			techUrl: '',
-			sentiVal: '',
-			techVal: '',
 			techIndiValue: '',
-			riskVal: '',
 			riskIndiValue: '',
 			indicatorRadio: 'sentiment',
 			signalOptions: [
@@ -274,7 +269,13 @@ export default {
 			scoreValue: 1,
 			techIndiObj: [''],
 			indicatorRadioArr: ['sentiment'],
-			refs: {}
+			refs: {},
+			sentiUrlArr: [],
+			techUrlArr: [],
+			sentiValArr: [],
+			techValArr: [],
+			riskValArr: [],
+			techVal: ''
 		}
 	},
 	components: {
@@ -397,20 +398,21 @@ export default {
 				// this.$store.commit('reduceSignalLength', obj)
 			}
 		},
-		getSentiUrl(val) {
-			this.sentiUrl = val
+		getSentiUrl(obj) {
+			this.sentiUrlArr.splice(obj.index, 1, obj.url)
 		},
-		getTechUrl(val) {
-			this.techUrl = val
+		getTechUrl(obj) {
+			this.techUrlArr.splice(obj.index, 1, obj.url)
 		},
-		getSentiVal(val) {
-			this.sentiVal = val
+		getSentiVal(obj) {
+			this.sentiValArr.splice(obj.index, 1, obj.value)
 		},
-		getTechVal(val) {
-			this.techVal = val
+		getTechVal(obj) {
+			this.techVal = obj.value
+			this.techValArr.splice(obj.index, 1, obj.value)
 		},
-		getRiskVal(val) {
-			this.riskVal = val
+		getRiskVal(obj) {
+			tthis.riskValArr.splice(obj.index, 1, obj.value)
 		},
 		getTechIndiValue(val) {
 			this.techIndiValue = val
@@ -582,7 +584,7 @@ export default {
 					this.techIndiObj[j] = ''
 				}
 				if (data.exit.signals[j].analysis === 'Technical') {
-					this.techVal = data.exit.signals[j].indicator
+					this.techValArr[j] = data.exit.signals[j].indicator
 					this.indicatorRadio = 'technical'
 					this.indicatorRadioArr.splice(j, 1, 'technical')
 					let formateTechnicalList
@@ -639,9 +641,9 @@ export default {
 						data.exit.signals[j].take_profit &&
 						data.exit.signals[j].stop_loss
 					) {
-						this.riskVal = 'Profit/Loss'
+						this.riskValArr[j] = 'Profit/Loss'
 					} else if (data.exit.signals[j].time_in_market) {
-						this.riskVal = 'Time In Market'
+						this.riskValArr[j] = 'Time In Market'
 					}
 					this.$refs.riskChild[j].setEditData(data)
 				}

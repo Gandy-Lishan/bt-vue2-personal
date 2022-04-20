@@ -153,10 +153,16 @@ export default {
 						}
 
 						// extract this statement from handleSentimentSelect
-						this.$emit('getSentiVal', CIQ.indicatorList[i].chart_name)
+							let valObj = {}
+							valObj.value = CIQ.indicatorList[i].chart_name
+							valObj.index = this.panelIndex
+							this.$emit('getSentiVal', valObj)
 
 						//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
-						this.$emit('getSentiUrl', CIQ.indicatorList[i].url)
+						let obj = {}
+						obj.index = this.panelIndex
+						obj.url = CIQ.indicatorList[i].url
+						this.$emit('getSentiUrl', obj)
 					}
 				}
 			}
@@ -272,7 +278,10 @@ export default {
                 }
 
 			this.si.sentimentIndicator = item.value
-			this.$emit('getSentiVal', item.value)
+			let obj = {}
+			obj.value = item.value
+			obj.index = this.panelIndex
+			this.$emit('getSentiVal', obj)
 			// remove a MA tat already exists in current criteria before loading
 			var activatedMAList = this.$store.state.activatedMA
 			if (this.criteria == 'entry') {
@@ -284,18 +293,24 @@ export default {
 				}
 				this.$store.commit('getMA', activatedMAList)
 				this.$store.commit('getEntryIndicators', {index: this.panelIndex, value: item.url})
-				this.$emit('getSentiUrl', item.url)
-			} else {
-				var MAListIndex = activatedMAList.findIndex(
-					(item) => item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex]
-				)
-				if (MAListIndex != -1) {
-					activatedMAList.splice(MAListIndex, 1)
-				}
-				this.$store.commit('getMA', activatedMAList)
-				this.$store.commit('getExitIndicators', {index: this.panelIndex, value: item.url})
-				this.$emit('getSentiUrl', item.url)
-			}
+						let obj = {}
+						obj.index = this.panelIndex
+						obj.url = item.url
+						this.$emit('getSentiUrl', obj)
+					} else {
+						var MAListIndex = activatedMAList.findIndex(
+							(item) => item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+						)
+						if (MAListIndex != -1) {
+							activatedMAList.splice(MAListIndex, 1)
+						}
+						this.$store.commit('getMA', activatedMAList)
+						this.$store.commit('getExitIndicators', {index: this.panelIndex, value: item.url})
+												let obj = {}
+								obj.index = this.panelIndex
+								obj.url = item.url
+								this.$emit('getSentiUrl', obj)
+					}
 			console.log('current formIndicator: ',this.$store.state.indicators.formIndicators)
 			// avoid add indicator redundantly
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -309,7 +324,10 @@ export default {
 		handleTechnicalSelect(item) {
 			this.si.technicalIndicator = item.value
 			// technical 的名字， 用于 description 显示
-			this.$emit('getTechVal', item.value)
+			let valObj = {}
+			valObj.index = this.panelIndex
+			valObj.value = item.value
+			this.$emit('getTechVal', valObj)
 			const vm = this
 			let val = item.value
 			// const set = new Set([
@@ -380,7 +398,10 @@ export default {
 		},
 		handleRiskSelect(item) {
 			this.si.riskIndicator = item.value
-			this.$emit('getRiskVal', item.value)
+			let obj = {}
+			obj.value = item.value
+			obj.index = this.panelIndex
+			this.$emit('getRiskVal', obj)
 			let val = item.value
 			const set = new Set([
 				['Time In Market', 'tim'],
@@ -593,7 +614,10 @@ export default {
 					let indi = this.si.sentimentIndicator
 					sentimentList.forEach((obj) => {
 						if (indi.toUpperCase() == obj.value.toUpperCase()) {
-							vm.$emit('getSentiUrl', obj.url)
+						let obj = {}
+						obj.index = vm.panelIndex
+						obj.url = item.url
+						vm.$emit('getSentiUrl', obj)
 						}
 					})
 					// if(this.$store.state.sentimentIndicatorList)
