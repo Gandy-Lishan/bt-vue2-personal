@@ -396,7 +396,7 @@ export default {
 				})
 				if (validForm) {
 					let senti = JSON.parse(JSON.stringify(this.senti))
-					delete senti.period
+					senti.period = 1
 					delete senti.maValue
 					senti.criteria = this.criteria
 					senti.index = index
