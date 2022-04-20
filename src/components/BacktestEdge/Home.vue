@@ -441,7 +441,7 @@ export default {
 							JSON.stringify(vm.$store.state.backtestInfo)
 						)
 						let entry_description =
-							vm.$store.state.backtestInfo.entry_description
+							JSON.parse(JSON.stringify(vm.$store.state.backtestInfo.entry_description))
 
 						let sameEntryIndexArr = searchKeys(entry_description)
 						if (sameEntryIndexArr.length >= 1) {
@@ -461,7 +461,7 @@ export default {
 								return
 							}
 						}
-						let exit_description = vm.$store.state.backtestInfo.exit_description
+						let exit_description = JSON.parse(JSON.stringify(vm.$store.state.backtestInfo.exit_description))
 
 						let sameExitIndexArr = searchKeys(exit_description)
 						if (sameExitIndexArr.length > 1) {
@@ -495,6 +495,7 @@ export default {
 								item.analysis = 'Technical'
 								delete item.technicalIndicator
 								delete item.sentimentIndicator
+								delete item.riskIndicator
 							}
 						})
 						signalExitList.forEach((item) => {
