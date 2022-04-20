@@ -10,6 +10,8 @@ import en from './tools/en.js'
 import './assets/css/global.css'
 // 导入字体图标
 import './assets/fonts/iconfont.css'
+import 'font-awesome/css/font-awesome.css';
+
 // 导入全局样式表
 import './assets/style/global.css'
 import axios from 'axios'
@@ -56,10 +58,9 @@ Vue.component('template-placeholder', {
 		return createElement('template', this.$slots.default)
 	}
 })
-
 new Vue({
 	store,
 	router,
 	render: (h) => h(App)
 }).$mount('#app')
-
+console.log(process.env)

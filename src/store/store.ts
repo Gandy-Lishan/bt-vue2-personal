@@ -4,7 +4,9 @@ import axios from "axios"
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
+		markerSet: [],
 		favoriteIndicatorList: [],
+		favoriteSymbolList: [],
 		techSD: [],
 		savedTechSD: [],
 		currentSenti: {
@@ -59,6 +61,7 @@ export default new Vuex.Store({
 				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: ''}]
 			}
 		},
+		openedPorfolioBacktests: [],
 		favoriteBacktestRowData: { id: 0 },
 		favoriteBacktestData: [],
 		indicators: {
@@ -99,6 +102,7 @@ export default new Vuex.Store({
 		entryIndicatorRadio: 'sentiment',
 		exitIndicatorRadio: 'Sentiment_Indicators:',
 		saveConditionFormdata: {},
+		exitFrequency: '',
 		activatedMA: [{ period: 21, url: '' }],
 		// indicators look up
 		allSymbolsList: [],
@@ -115,8 +119,14 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+		SetmarkerSet(state,list){
+			state.markerSet = list
+		},
 	setFavoriteIndicatorList(state, val){
 		state.favoriteIndicatorList = val
+	},
+	setFavoriteSymbolList(state, val){
+		state.favoriteSymbolList = val
 	},
 	setTechSD(state, val){
 		state.techSD = val
@@ -174,6 +184,12 @@ export default new Vuex.Store({
 		getIndexsList(state, list) {
 			state.indexsList = list
 		},
+		getNewPorfolioInputsValues(state, row) {
+			state.newPorfolioInputsValues.inputNameValue = row.name
+			state.newPorfolioInputsValues.inputDescriptionValue = row.description
+			state.newPorfolioInputsValues.inputOriginalAssetValue = row.original_asset
+			state.openedPorfolioBacktests = row.backtests
+		},
 		getRunBacktestData(state, row) {
 			state.favoriteBacktestRowData = row
 		},
@@ -211,6 +227,7 @@ export default new Vuex.Store({
 			state.trades = data
 		},
 		getFrequency(state, val) {
+			state.exitFrequency = val
 			state.backtestInfo.frequency = val
 		},
 		getMA(state, val) {
@@ -373,6 +390,8 @@ export default new Vuex.Store({
 			for(let key in obj) {
 				state.backtestInfo[criteria].signals[index][key] = obj[key]
 			}
+			console.log("保存sentiment的condition", state.backtestInfo);
+			
 		},
 		saveDescription(state, desObj) {
 			if(Array.isArray(state.backtestInfo[desObj.criteria+'_description'])) {

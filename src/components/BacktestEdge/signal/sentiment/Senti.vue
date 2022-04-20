@@ -332,12 +332,12 @@ export default {
 			}
 		},
 		setPeriod(val) {
-						let _val = val
+			let _val = val
 			if(!_val){
 				_val = 5
 			}
 			if (this.conditionRadio === 'Sentiment Moving Average') {
-				this.senti.period = val
+				this.senti.period = _val
 			}else{
 				this.senti.period = ''
 			}
@@ -363,13 +363,13 @@ export default {
 			}
 
 			var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
-				Period: val,
+				Period: _val,
 				display: 'ST MA',
 				Field: result.url
 			})
 			//CIQ.exportEx()
 			// keep current MA
-			var objMA = { period: val, url: result.url }
+			var objMA = { period: _val, url: result.url }
 			var activatedMAList = this.$store.state.activatedMA
 
 			// remove current MA attached to an indicator
@@ -385,7 +385,6 @@ export default {
 		},
 		
 		saveCondition(index) {
-			let vm = this
 			let checked = true
 			let validForm
 			if (this.conditionRadio === 'Sentiment Value') {
@@ -404,6 +403,7 @@ export default {
 					let desObj = {}
 					desObj.criteria = this.criteria
 					desObj.description = this.description
+					desObj.index = index
 					this.$store.commit('saveDescription', desObj)
 					// 定义一个 vuex 新事件用于保存 condition数据
 					this.$store.commit('saveCondition', senti)
@@ -436,6 +436,7 @@ export default {
 					let desObj = {}
 					desObj.criteria = this.criteria
 					desObj.description = this.description
+					desObj.index = index
 					this.$store.commit('saveDescription', desObj)
 					// 定义一个 vuex 新事件用于保存 condition数据
 					this.$store.commit('saveCondition', senti)

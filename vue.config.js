@@ -1,13 +1,12 @@
 const path = require('path')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
+
 
 function resolve(dir) {
 	return path.join(__dirname, dir)
 }
 
-const TimeSimestamp = new Date().getTime()
-
-module.exports = {
+const config = {
 	publicPath: '/',
 	configureWebpack: {
 		module: {
@@ -20,16 +19,6 @@ module.exports = {
 				}
 			]
 		},
-		plugins: [
-			new MiniCssExtractPlugin({
-				filename: `css/[name].${TimeSimestamp}.css`,
-				chunkFilename: `css/[name].${TimeSimestamp}.css`
-			})
-		],
-		output: {
-			filename: `js/[name].${TimeSimestamp}.js`,
-			chunkFilename: `js/[name].${TimeSimestamp}.js`
-		}
 		// plugins:[
         //     new UglifyJsPlugin({
         //         uglifyOptions: {
@@ -79,9 +68,22 @@ module.exports = {
 		// port: 8080,
 		// host:"localhost",
 		// https:false,
+		// 测试的ip 18.216.210.200
+		// http://10.131.3.74:8000
+		// http://3.140.194.24:80
+		// http://3.144.31.178:8000
+		disableHostCheck: true,
 		proxy: {
+			// '/CHART_DATA_API': {
+			// 	target: 'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev',
+			// 	// ws:true,
+			// 	changeOrigin: true,
+			// 	pathRewrite: {
+			// 		'^/CHART_DATA_API': '/'
+			// 	}
+			// },
 			'/demo': {
-				target: 'http://3.140.194.24:80',
+				target: 'http://3.140.194.24:8000',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
@@ -89,7 +91,6 @@ module.exports = {
 				}
 			},
 			'/dev': {
-				//target: 'http://3.140.194.24:80',
 				//target: 'http://18.216.210.200',
 				target: 'http://10.131.3.74:8000', 
 				// ws:true,
@@ -98,8 +99,16 @@ module.exports = {
 					'^/dev': '/dev'
 				}
 			},
+			// '/BATE_LOGIN_API': {
+			// 	target: 'https://users.sentdevsite.com/login',
+			// 	// ws:true,
+			// 	changeOrigin: true,
+			// 	pathRewrite: {
+			// 	'^/BATE_LOGIN_API': '/'
+			// 	}
+			// },
 			'/rundev': {
-				target: 'http://3.140.194.24:80',
+				target: 'http://3.140.194.24:8000',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
@@ -109,3 +118,20 @@ module.exports = {
 		}
 	}
 }
+
+// if (process.env.ST_ENV !== "dev" && process.env.ST_ENV !== undefined){
+//     config.configureWebpack = {
+//         Plugins:[
+//             new UglifyJsPlugin({
+//                 uglifyOptions: {
+//                     compress:{
+//                         drop_console:true,
+//                     }
+//                 }
+//             })
+//         ]
+//     }
+// }
+
+
+module.exports = config

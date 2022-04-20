@@ -350,7 +350,7 @@ export default {
 					delete newVal.result
 				    this.bd = Object.assign(this.bd, newVal)
 					CIQ.hideMarker()
-					this.changeTimeframe(newVal.frequency)
+					this.getFrequency(newVal.frequency)
 					this.getSymbolName(newVal.symbol)
 					this.getDirection(newVal.direction)
 					// 保存编辑之前旧的名字
@@ -535,7 +535,7 @@ export default {
 		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.backtestSetupForm.clearValidate()
-			this.$emit('getTimeFrame', this.frequency)
+			this.$emit('getTimeFrame', this.bd.frequency)
 		},
 		changeTimeframe(val) {
 			this.getFrequency(val)
@@ -543,6 +543,7 @@ export default {
 		},
 		getFrequency(val) {
 			// getFrequency will no longer call addIndicator and pass a parameter to it
+			this.bd.frequency = val
 			this.$store.commit('getFrequency', val)
 			this.$emit('getTimeFrame', val)
 			this.loadSentimentList(val)

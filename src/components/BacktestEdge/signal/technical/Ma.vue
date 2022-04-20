@@ -629,6 +629,7 @@ if (!/[1-9]\d*/.test(value)) {
 					let desObj = {}
 					desObj.criteria = this.criteria
 					desObj.description = this.description
+					desObj.index = index
 					this.$store.commit('saveDescription', desObj)
 					return checked
 				} else {

@@ -52,11 +52,11 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item>
+					<el-form-item prop="valuePositive">
 						<el-input
 							:disabled="!(conditionRadio === '+DI ADX')"
 							@input="setDesciption"
-							v-model="tech.value"
+							v-model="tech.valuePositive"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 							placeholder="Input Value"
 						></el-input>
@@ -91,11 +91,11 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item>
+					<el-form-item prop="valueNegative">
 						<el-input
 							:disabled="!(conditionRadio === '-DI ADX')"
 							@input="setDesciption"
-							v-model="tech.value"
+							v-model="tech.valueNegative"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 							placeholder="Input Value"
 						></el-input>
@@ -121,25 +121,42 @@ export default {
 		direction: String
 	},
 	data() {
-		var validateValue = (rule, value, callback) => {
-			if (value === '') {
-				return callback(new Error('Please input value'))
+		var validateValueNegative = (rule, value, callback) => {
+			 if (value === '') {
+				callback(new Error('Please input value'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
+				const pattern =
+					/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+				if (!pattern.test(value) && value != 0) {
+					callback(new Error('Enter up to two decimal places'))
+				} else {
+					callback()
+				}
 			}
-			if (isNaN(value)) {
-				return callback(new Error('Please enter the correct format'))
+		}
+		var validateValuePositive = (rule, value, callback) => {
+			 if (value === '') {
+				callback(new Error('Please input value'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
+				const pattern =
+					/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+				if (!pattern.test(value) && value != 0) {
+					callback(new Error('Enter up to two decimal places'))
+				} else {
+					callback()
+				}
 			}
-			const pattern =
-				/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
-			if (!pattern.test(value) && value != 0) {
-				return callback(new Error('Enter up to two decimal places'))
-			}
-			callback()
 		}
 		return {
 			tech: {
 				ids: 'ADX',
 				condition: 3,
-				value: '',
+				valuePositive: '',
+				valueNegative: '',
 				comparison: 'PADX'
 			},
 			conditions: [
@@ -153,7 +170,8 @@ export default {
 			description: '',
 			editTechVal: '',
 			rules: {
-				value: [{ validator: validateValue, trigger: 'blur' }]
+				valueNegative: [{ validator: validateValueNegative, trigger: 'blur' }],
+				valuePositive: [{ validator: validateValuePositive, trigger: 'blur' }]
 			}
 		}
 	},
@@ -216,11 +234,28 @@ export default {
 		saveCondition(index) {
 			let checked = true
 			let validForm
-			this.$refs.adxForm.validate((valid) => {
-				validForm = valid
-			})
+			let tech = JSON.parse(JSON.stringify(this.tech))
+			if(this.conditionRadio === '+DI ADX') {
+				this.$refs['adxForm'].validateField(['valuePositive'], (errorMsg) => {
+					if (!errorMsg) {
+						validForm = true
+					}
+				})
+				tech.value = tech.valuePositive
+				delete tech.valuePositive
+				delete tech.valueNegative
+			}
+			if(this.conditionRadio === '-DI ADX') {
+				this.$refs['adxForm'].validateField(['valueNegative'], (errorMsg) => {
+					if (!errorMsg) {
+						validForm = true
+					}
+				})
+				tech.value = tech.valueNegative
+				delete tech.valuePositive
+				delete tech.valueNegative
+			}
 			if (validForm) {
-				let tech = this.tech
 				tech.criteria = this.criteria
 				tech.index = index
 				this.$store.commit('saveCondition', tech)
@@ -279,5 +314,20 @@ export default {
 }
 /deep/ .el-form-item__label {
 	margin-right: 36px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .el-form-item__label {
+		margin-right: 10px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	/deep/ .el-form-item__label {
+		margin-right: 0px;
+		font-size: 12px;
+	}
+	.condition-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
 </style>
