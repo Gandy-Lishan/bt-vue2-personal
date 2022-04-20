@@ -141,8 +141,8 @@ export default {
 			if (
 				this.si.sentimentIndicator == '' &&
 				this.si.technicalIndicator == '' &&
-				this.si.riskIndicator == '' &&
-				this.editableTabsValue == this.panelIndex+1
+				this.si.riskIndicator == ''
+				//this.editableTabsValue == this.panelIndex+1
 			) {
 				this.si.sentimentIndicator = val.name
 				for (var i in CIQ.indicatorList) {

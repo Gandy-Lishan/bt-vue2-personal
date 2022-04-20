@@ -207,6 +207,7 @@ export default {
 	watch: {
 		updateSenti: {
 			handler() {
+				console.log(this.sentiUrl)
 				this.preload = true
 			},
 			immediate: true,
@@ -221,8 +222,9 @@ export default {
 				}
 				newVal.forEach((item) => {
 					if (item.indicator) {
-						//console.log(item.indicator,vm.sentiUrl)
+						
 						if (item.indicator === vm.sentiUrl || vm.preload == true) {
+							//console.log(item.indicator,vm.sentiUrl,vm.preload)
 							vm.senti.extreme_pessimism = item.extremePessimism
 							vm.senti.extreme_optimism = item.extremeOptimism
 						}
