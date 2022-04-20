@@ -320,6 +320,7 @@ export default {
 			this.techIndiObj.splice(obj.index, 1, obj.class)
 		},
 		handleTabsEdit(targetName, action) {
+			console.log(targetName, action)
 			if (action === 'add') {
 				if (this.editableTabs.length < 5) {
 					let newTabName = ++this.tabIndex + ''
@@ -372,6 +373,7 @@ export default {
 			}
 		},
 		getSentiUrl(val) {
+			//console.log('getSentiUrl',val)
 			this.sentiUrl = val
 		},
 		getTechUrl(val) {

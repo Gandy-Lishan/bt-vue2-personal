@@ -221,7 +221,9 @@ export default {
 				}
 				newVal.forEach((item) => {
 					if (item.indicator) {
+						//console.log(item.indicator,vm.sentiUrl)
 						if (item.indicator === vm.sentiUrl || vm.preload == true) {
+							console.log('invoke extremeValue listener',this.sentiUrl)
 							vm.senti.extreme_pessimism = item.extremePessimism
 							vm.senti.extreme_optimism = item.extremeOptimism
 						}
@@ -236,6 +238,8 @@ export default {
 			handler(newVal) {
 				if (newVal) {
 					let vm = this
+					//console.log('invoke sentiUrl listener',newVal)
+
 					let extremeValue = this.$store.state.extremeValue
 					extremeValue.forEach((item) => {
 						if (item.indicator) {
