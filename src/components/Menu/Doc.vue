@@ -18,6 +18,10 @@
 			<p>文档会以图文结合的方式教你如何使用回测系统，现在让我们开始吧！</p>
 			<h3>1. 介绍回测系统</h3>
             <h4>1.1 图表部分</h4>
+             <blockquote class="video_link">
+               <i class="el-icon-video-play"></i>
+               <a href="#">图表操作介绍</a>
+            </blockquote>
             <img src="../../assets/demo-chart.png" alt="Chart">
             <blockquote>
                 <p>
@@ -40,6 +44,10 @@
                 </p>
             </blockquote>
 			<h3>2. 如何创建回测</h3>
+            <blockquote class="video_link">
+              <i class="el-icon-video-play"></i>
+              <a href="#">回测创建流程演示</a>
+            </blockquote>
             <h4>2.1 填写回测的基本信息</h4>
             <img src="../../assets/fill-set-up.png" alt="Backtest Information">
             <blockquote>
@@ -107,6 +115,10 @@
                 </p>
             </blockquote>
             <h3>4. 如何使用 Sample Backtests</h3>
+            <blockquote class="video_link">
+              <i class="el-icon-video-play"></i>
+              <a href="#">Sample Backtest的演示视频</a>
+            </blockquote>
             <h4>4.1 打开 Sample Backtests 标签页</h4>
              <img src="../../assets/sample-backtests.png" alt="Sample Backtests">
              <blockquote>
@@ -242,6 +254,24 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.video_link{
+  border-radius: 2px;
+  padding: 20px;
+  background-color: #e7ecf3;
+  width: 40rem;
+  margin: 24px 0;
+  display: flex;
+  align-items: center;
+}
+.video_link i{
+  font-size:35px;
+}
+.video_link a{
+  padding-left: 16px;
+  color:#486491;
+  font-weight: 600;
+  text-decoration: none;
+}
 .content {
 	margin: 0 auto 0 310px;
 	max-width: 1280px;
