@@ -348,6 +348,7 @@ export default {
 					delete newVal.entry
 					delete newVal.exit
 					delete newVal.result
+					newVal.commission = newVal.commission * 100
 				    this.bd = Object.assign(this.bd, newVal)
 					CIQ.hideMarker()
 					this.getFrequency(newVal.frequency)
@@ -355,7 +356,7 @@ export default {
 					this.getDirection(newVal.direction)
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
-					this.bd.commission = newVal.commission * 100
+					// this.getCommission(this.bd.commission)
 					let year
 					let month
 					let day

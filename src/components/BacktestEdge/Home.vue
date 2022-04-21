@@ -607,7 +607,7 @@ export default {
 							savedTechSD.push({
 								type: CIQ.stxx.layout.studies[i].type,
 								inputs: CIQ.stxx.layout.studies[i].inputs,
-								outputs: CIQ.stxx.layout.studies[i].outputs,
+								//outputs: CIQ.stxx.layout.studies[i].outputs,
 								parameters: CIQ.stxx.layout.studies[i].parameters,
 								panel: CIQ.stxx.layout.studies[i].panel
 							})
@@ -696,7 +696,7 @@ export default {
 				delete data.backtest_id
 				delete data.user_id
 				delete data.uuid
-				console.log(data)
+				//console.log(data)
 				let signalCode = new SignalCode()
 				if (data.entry.signals instanceof Array) {
 					// data.entry.signals = signalCode.decode(data.entry.signals[0]['code'])

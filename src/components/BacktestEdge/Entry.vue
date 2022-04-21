@@ -56,6 +56,7 @@
 							:criteria="'entry'"
 							:panelIndex="index"
 							ref="sentiChild"
+							:sentiUrlArr = "sentiUrlArr"
 							:sentiUrl="sentiUrlArr[index]"
 							:sentiVal="sentiValArr[index]"
 							v-show="indicatorRadioArr[index] === 'sentiment'"
@@ -257,10 +258,10 @@ export default {
 			techIndiObj: [''],
 			indicatorRadioArr: ['sentiment'],
 			refs: {}, 
-			sentiUrlArr: [],
-			techUrlArr: [],
-			sentiValArr: [],
-			techValArr: [],
+			sentiUrlArr: new Array(5).fill(''),
+			techUrlArr: new Array(5).fill(''),
+			sentiValArr: new Array(5).fill(''),
+			techValArr: new Array(5).fill(''),
 			techVal: ''
 		}
 	},
