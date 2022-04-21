@@ -108,7 +108,17 @@ export default {
 			conditionRadio: ' Indicator Value',
 			description: '',
 			editTechVal: '',
-			rules: { value: [{ validator: validateValue, trigger: 'blur' }] }
+			rules: { value: [{ validator: validateValue, trigger: 'blur' }] },
+			// technicalName: ''
+		}
+	},
+	watch: {
+		techVal: {
+			handler(val) {
+				this.technicalName = val
+				console.log("新增加的indicator", val);
+				console.log("当前的面板为", this.panelIndex+1);
+			}
 		}
 	},
 	methods: {
@@ -119,7 +129,7 @@ export default {
 		clearFormValidate() {
 			this.$refs.cciForm.clearValidate()
 		},
-		setDesciption(index) {
+		setDesciption: throttle(function(index) {
 			let criteria = ''
 			let direction = ''
 			if (this.criteria == 'entry') {
@@ -137,7 +147,8 @@ export default {
 			let period = this.tech.period ? this.tech.period : ''
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${period} ${condition} ${this.tech.value}`
-		},
+			console.log("CCI描述",this.description);
+		}, 500),
 		saveCondition(index) {
 			let checked = true
 			let validForm

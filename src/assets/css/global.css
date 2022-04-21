@@ -550,3 +550,25 @@ input[type="time"] {
 .el-tabs__new-tab{
   margin: 12px 5px 9px 10px;
 }
+.multi-box .el-tabs__item {
+	background-color: #797979;
+	font-weight: bold;
+	font-size: 10px;
+	height: 26px;
+	line-height: 26px;
+	color: #333333;
+}
+.multi-box .el-tabs__item.is-active {
+	background-color: #d6d5d5;
+	font-weight: bold;
+	color: #333333;
+}
+.multi-box .el-tabs__item:hover {
+	color: #c2c0c0;
+	cursor: pointer;
+}
+.multi-box .el-tabs__new-tab {
+	margin-top: 6px;
+	border: 1px solid #797979;
+	color: #797979;
+}

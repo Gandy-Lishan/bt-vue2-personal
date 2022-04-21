@@ -400,20 +400,20 @@ export default {
 			}
 		},
 		getSentiUrl(obj) {
-			this.sentiUrlArr.splice(obj.index, 1, obj.url)
+			this.sentiUrlArr[obj.index] = obj.url
 		},
 		getTechUrl(obj) {
-			this.techUrlArr.splice(obj.index, 1, obj.url)
+			this.sentiUrlArr[obj.index] = obj.url
 		},
 		getSentiVal(obj) {
-			this.sentiValArr.splice(obj.index, 1, obj.value)
+			this.sentiValArr[obj.index] = obj.value
 		},
 		getTechVal(obj) {
 			this.techVal = obj.value
-			this.techValArr.splice(obj.index, 1, obj.value)
+			this.techValArr[obj.index] = obj.value
 		},
 		getRiskVal(obj) {
-			tthis.riskValArr.splice(obj.index, 1, obj.value)
+			this.riskValArr[obj.index] = obj.value
 		},
 		getTechIndiValue(val) {
 			this.techIndiValue = val

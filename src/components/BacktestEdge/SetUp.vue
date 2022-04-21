@@ -352,11 +352,9 @@ export default {
 				    this.bd = Object.assign(this.bd, newVal)
 					CIQ.hideMarker()
 					this.getFrequency(newVal.frequency)
-					this.getSymbolName(newVal.symbol)
 					this.getDirection(newVal.direction)
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
-					// this.getCommission(this.bd.commission)
 					let year
 					let month
 					let day
