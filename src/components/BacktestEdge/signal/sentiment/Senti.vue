@@ -283,6 +283,7 @@ export default {
 					? this.senti.value
 					: this.senti.maValue
 			this.description = `${criteria} ${direction} ${sentiVal} ${ma} ${period} ${condition} ${value}`
+			console.log("Senti描述",this.description);
 		},
 		getConditionRadio(val) {
 			this.clearFormValidate()

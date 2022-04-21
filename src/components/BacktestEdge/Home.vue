@@ -658,12 +658,12 @@ export default {
 								}
 							})
 							.catch((error) => {
-								this.$notify.error({
-									title: 'Create New Backtest',
-									message:
-										'Please click the Create New Backtest button to a new Backtest',
-									offset: 100
-								})
+							vm.$message({
+								message: 'The internal server is busy, please try again later ',
+								type: 'error',
+								offset: 300
+							})
+							vm.loading = false
 								// 初始化backtestInfo的数据
 								vm.$store.commit('clearStoreDesciption')
 								vm.$store.commit('initialBacktestInfo')

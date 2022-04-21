@@ -93,6 +93,7 @@ const config = {
 			'/dev': {
 				//target: 'http://18.216.210.200',
 				target: 'http://10.131.3.74:8000', 
+				// target: 'http://3.140.194.24:8000',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
