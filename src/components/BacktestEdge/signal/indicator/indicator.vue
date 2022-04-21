@@ -88,7 +88,8 @@ export default {
 	props: {
 		criteria: String,
 		panelIndex: Number,
-		isShowRisk: Number
+		isShowRisk: Number,
+		editableTabsValue: String,
 	},
 	data() {
 		var validateSenti = (rule, value, callback) => {
@@ -140,7 +141,8 @@ export default {
 			if (
 				this.si.sentimentIndicator == '' &&
 				this.si.technicalIndicator == '' &&
-				this.si.riskIndicator == ''
+				this.si.riskIndicator == '' &&
+				this.editableTabsValue == this.panelIndex+1
 			) {
 				this.si.sentimentIndicator = val.name
 				for (var i in CIQ.indicatorList) {

@@ -607,7 +607,7 @@ export default {
 							savedTechSD.push({
 								type: CIQ.stxx.layout.studies[i].type,
 								inputs: CIQ.stxx.layout.studies[i].inputs,
-								outputs: CIQ.stxx.layout.studies[i].outputs,
+								//outputs: CIQ.stxx.layout.studies[i].outputs,
 								parameters: CIQ.stxx.layout.studies[i].parameters,
 								panel: CIQ.stxx.layout.studies[i].panel
 							})
@@ -687,6 +687,7 @@ export default {
 			try {
 				const res = await seeParams(id)
 				let data = res.data
+				
 				data.old_uuid = id
 				data.entry = JSON.parse(data.entry)
 				data.exit = JSON.parse(data.exit)
@@ -695,6 +696,7 @@ export default {
 				delete data.backtest_id
 				delete data.user_id
 				delete data.uuid
+				//console.log(data)
 				let signalCode = new SignalCode()
 				if (data.entry.signals instanceof Array) {
 					// data.entry.signals = signalCode.decode(data.entry.signals[0]['code'])
@@ -716,6 +718,7 @@ export default {
 				let exitData = {}
 				exitData.exit = data.exit
 				// exitData.exit_description = data.exit_description
+				
 				vm.$refs.entryChild.setEditPanel(entryPanel, entryData)
 				vm.$refs.exitChild.setEditPanel(exitPanel, exitData)
 				// 拿到 frequency 的值
@@ -725,6 +728,7 @@ export default {
 				vm.backtestEditData = data
 				this.loading = false
 			} catch (error) {
+				console.error(error)
 				vm.$message({
 					message: 'The internal server is busy, please try again later ',
 					type: 'error',

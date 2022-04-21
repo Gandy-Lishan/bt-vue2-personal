@@ -41,6 +41,7 @@
 						<indicator
 							:criteria="'entry'"
 							:panelIndex="index"
+							:editableTabsValue = "editableTabsValue"
 							ref="indiChild"
 							@getSentiUrl="getSentiUrl"
 							@getTechUrl="getTechUrl"
@@ -55,6 +56,7 @@
 							:criteria="'entry'"
 							:panelIndex="index"
 							ref="sentiChild"
+							:sentiUrlArr = "sentiUrlArr"
 							:sentiUrl="sentiUrlArr[index]"
 							:sentiVal="sentiValArr[index]"
 							v-show="indicatorRadioArr[index] === 'sentiment'"
@@ -256,10 +258,10 @@ export default {
 			techIndiObj: [''],
 			indicatorRadioArr: ['sentiment'],
 			refs: {}, 
-			sentiUrlArr: [],
-			techUrlArr: [],
-			sentiValArr: [],
-			techValArr: [],
+			sentiUrlArr: new Array(5).fill(''),
+			techUrlArr: new Array(5).fill(''),
+			sentiValArr: new Array(5).fill(''),
+			techValArr: new Array(5).fill(''),
 			techVal: ''
 		}
 	},
@@ -321,6 +323,7 @@ export default {
 			this.techIndiObj.splice(obj.index, 1, obj.class)
 		},
 		handleTabsEdit(targetName, action) {
+			console.log(targetName, action)
 			if (action === 'add') {
 				if (this.editableTabs.length < 5) {
 					let newTabName = ++this.tabIndex + ''
@@ -372,6 +375,11 @@ export default {
 				// this.$store.commit('reduceSignalLength', obj)
 			}
 		},
+
+		// getSentiUrl(val) {
+		// 	//console.log('getSentiUrl',val)
+		// 	this.sentiUrl = val
+		// },
 		getSentiUrl(obj) {
 			this.sentiUrlArr[obj.index] = obj.url
 		},

@@ -41,6 +41,7 @@
 						<indicator
 							:criteria="'exit'"
 							:panelIndex="index"
+							:editableTabsValue = "editableTabsValue"
 							ref="indiChild"
 							:isShowRisk="tabIndex - 1"
 							@getSentiUrl="getSentiUrl"
