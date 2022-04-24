@@ -315,12 +315,14 @@ export default {
 	watch: {
 		scroll: {
 			handler(val) {
-				let toTop = document.getElementsByClassName('toTop')[0]
-				if (val <= 600) {
-					toTop.style.visibility = 'hidden'
-				} else {
-					toTop.style.visibility = 'visible'
-				}
+				try{
+					let toTop = document.getElementsByClassName('toTop')[0]
+					if (val <= 600) {
+						toTop.style.visibility = 'hidden'
+					} else {
+						toTop.style.visibility = 'visible'
+					}
+				}catch(err){}
 			},
 			immediate: true,
 			deep: true

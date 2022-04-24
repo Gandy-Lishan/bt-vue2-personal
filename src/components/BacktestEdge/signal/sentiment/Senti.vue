@@ -168,7 +168,7 @@ export default {
 			}
 		}
 		return {
-			preload: false,
+			//preload: false,
 			senti: {
 				extreme_optimism: '',
 				extreme_pessimism: '',
@@ -201,19 +201,19 @@ export default {
 		extremeValue() {
 			return this.getExtremeValue
 		},
-		updateSenti() {
-			return this.$store.state.currentSenti
-		}
+		// updateSenti() {
+		// 	return this.$store.state.currentSenti
+		// }
 	},
 	watch: {
-		updateSenti: {
-			handler() {
-				//console.log(this.sentiUrl)
-				this.preload = true
-			},
-			immediate: true,
-			deep: true
-		},
+		// updateSenti: {
+		// 	handler() {
+		// 		//console.log(this.sentiUrl)
+		// 		this.preload = true
+		// 	},
+		// 	immediate: true,
+		// 	deep: true
+		// },
 		extremeValue: {
 			handler(newVal) {
 				let vm = this
@@ -232,29 +232,29 @@ export default {
 						}
 					}
 				})
-				vm.preload = false
+				//vm.preload = false
 			},
 			immediate: true,
 			deep: true
 		},
-		sentiUrl: {
-			handler(newVal) {
-				// if (newVal) {
-				// 	let vm = this
-				// 	let extremeValue = this.$store.state.extremeValue
-				// 	extremeValue.forEach((item) => {
-				// 		console.log(item.indicator,newVal)
-				// 		if (item.indicator) {
-				// 			if (item.indicator === newVal) {
+		// sentiUrl: {
+		// 	handler(newVal) {
+		// 		if (newVal) {
+		// 			let vm = this
+		// 			let extremeValue = this.$store.state.extremeValue
+		// 			extremeValue.forEach((item) => {
+		// 				console.log(item.indicator,newVal)
+		// 				if (item.indicator) {
+		// 					if (item.indicator === newVal) {
 								
-				// 				vm.senti.extreme_pessimism = item.extremePessimism
-				// 				vm.senti.extreme_optimism = item.extremeOptimism
-				// 			}
-				// 		}
-				// 	})
-				// }
-			}
-		}
+		// 						vm.senti.extreme_pessimism = item.extremePessimism
+		// 						vm.senti.extreme_optimism = item.extremeOptimism
+		// 					}
+		// 				}
+		// 			})
+		// 		}
+		// 	}
+		// }
 	},
 	methods: {
 		change(e) {
