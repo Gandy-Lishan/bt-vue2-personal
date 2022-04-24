@@ -207,8 +207,8 @@ export default {
 			rules: {
 				value: [{ validator: validateValue, trigger: 'blur' }],
 				histValue: [{ validator: validateHistValue, trigger: 'blur' }]
-			},
-		};
+			}
+		}
 	},
 	watch: {
 		techVal: {

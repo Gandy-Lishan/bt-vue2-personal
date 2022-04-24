@@ -93,11 +93,11 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item>
+					<el-form-item prop="valueD">
 						<el-input
 							:disabled="!(radio === '%D')"
 							@input="setDesciption"
-							v-model="tech.value"
+							v-model="tech.valueD"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 							placeholder="Input Value"
 						></el-input>
@@ -170,12 +170,28 @@ export default {
 			}
 			callback()
 		}
+		var validateValueD = (rule, value, callback) => {
+			console.log(value);
+			if (value === '') {
+				return callback(new Error('Please input value'))
+			}
+			if (isNaN(value) && value !== 'D') {
+				return callback(new Error('Please enter the correct format'))
+			}
+			const pattern =
+				/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+			if (!pattern.test(value) && value != 0 && value !== 'D') {
+				return callback(new Error('Enter up to two decimal places'))
+			}
+			callback()
+		}
 		return {
 			tech: {
 				ids: 'SMI',
 				condition: 3,
 				comparison: 'K',
-				value: 0
+				value: 0,
+				valueD: 0
 			},
 			conditions: [
 				{ value: 0, label: '>' },
@@ -188,7 +204,8 @@ export default {
 			editTechVal: '',
 			radio: '%K',
 			rules: {
-				value: [{ validator: validateValue, trigger: 'blur' }]
+				value: [{ validator: validateValue, trigger: 'blur' }],
+				valueD:[{ validator: validateValueD, trigger: 'blur' }]
 			}
 		}
 	},
@@ -228,6 +245,7 @@ export default {
 				}
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
+			let value = this.radio !== '%D'?this.tech.value:this.tech.valueD
 			let suffix = ''
 			switch (this.radio) {
 				case '%K':
@@ -240,10 +258,11 @@ export default {
 					suffix = ' D'
 					break
 			}
-			this.description = `${criteria} ${direction} ${techVal}${suffix} ${this.conditions[this.tech.condition].label} ${this.tech.value}`
+			this.description = `${criteria} ${direction} ${techVal}${suffix} ${this.conditions[this.tech.condition].label} ${value}`
 			console.log(this.description);
 		},
 		getConditionRadio(val) {
+			this.clearFormValidate()
 			var obj = CIQ.store.state.conditionRadio
 			obj.Stochastics_like = val
 			CIQ.store.commit('setConditionRadio', obj)
@@ -257,7 +276,7 @@ export default {
 					this.tech.comparison = 'K'
 					break
 				case '%D':
-					this.tech.value = 0
+					this.tech.valueD = 0
 					this.tech.comparison = 'D'
 					break
 			}
@@ -277,6 +296,10 @@ export default {
 				let tech = JSON.parse(JSON.stringify(this.tech))
 				tech.criteria = this.criteria
 				tech.index = index
+				if(this.radio === "%D") {
+					tech.value = tech.valueD
+				}
+				delete tech.valueD
 				this.$store.commit('saveCondition', tech)
 				let desObj = {}
 				desObj.criteria = this.criteria
@@ -304,6 +327,7 @@ export default {
 				}
 				if (this.tech.comparison === 'D') {
 					this.radio = '%D'
+					this.tech.valueD = obj.value
 				}
 				this.editTechVal = obj.indicator
 				this.setDesciption()

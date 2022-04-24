@@ -2,6 +2,7 @@
 	<div class="entry-container">
 		<div class="signal-option-box">
 			<p class="criteria-title">Entry Criteria</p>
+			sentiValArr: {{sentiValArr}}
 			<div class="signal-container">
 				<span class="scoreNote" v-if="signalValue === 1">score:</span>
 				<el-input
@@ -303,7 +304,7 @@ export default {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 			// 重置所有子组件的数据
-			for (let i = 0; i < this.tabIndex; i++) {
+			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
 				this.$refs.indiChild[i].clearForm()
 				this.$refs.sentiChild[i].clearForm()
 				this.$refs.cciChild[i].clearForm()
@@ -361,18 +362,12 @@ export default {
 					})
 				}
 				this.editableTabsValue = activeName
-				this.indicatorRadioArr.splice(activeName - 1, 1)
+				this.sentiValArr.splice(targetName-1,1)
+				this.sentiValArr.push('')
+				this.techValArr.splice(targetName-1,1)
+				this.techValArr.push('')
+				this.indicatorRadioArr.splice(targetName - 1, 1)
 				this.editableTabs = tabs.filter((tab) => tab.name !== targetName)
-				this.editableTabs.map((tab, index) => {
-					tab.title = 'Signal' + (index + 1)
-					tab.name = index + 1 + ''
-				})
-				this.editableTabsValue = this.editableTabs.length + ''
-				this.tabIndex = this.editableTabs.length
-				// let obj = {}
-				// obj.criteria = 'entry'
-				// obj.index = this.editableTabs.length - 1
-				// this.$store.commit('reduceSignalLength', obj)
 			}
 		},
 
@@ -401,7 +396,7 @@ export default {
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
 		},
 		addEntrySignalLength() {
-			this.$emit('sendEntrySignalIndex', this.tabIndex)
+			this.$emit('sendEntrySignalIndex', this.indicatorRadioArr.length)
 		},
 		saveScoreValue() {
 			let obj = {}

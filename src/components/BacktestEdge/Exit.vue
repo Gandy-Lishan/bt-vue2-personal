@@ -318,7 +318,7 @@ export default {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 			// 重置所有子组件的数据
-			for (let i = 0; i < this.tabIndex; i++) {
+			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
 				this.$refs.indiChild[i].clearForm()
 				this.$refs.sentiChild[i].clearForm()
 				this.$refs.cciChild[i].clearForm()
@@ -352,8 +352,6 @@ export default {
 					// this.$store.commit('addSignalLength', obj)
 					// this.saveBacktestData()
 					let activeIndex = Number(this.editableTabsValue - 1)
-					console.log('上一个的index', activeIndex)
-					console.log('上一个的indicator', this.indicatorRadioArr[activeIndex])
 					if (this.indicatorRadioArr[activeIndex] === 'risk') {
 						// 把上一个变成默认的'sentiment'
 						this.$refs.indiChild[activeIndex].changeIndicatorChecked(
@@ -385,18 +383,14 @@ export default {
 					})
 				}
 				this.editableTabsValue = activeName
-				this.indicatorRadioArr.splice(activeName - 1, 1)
+						this.sentiValArr.splice(targetName-1,1)
+						this.sentiValArr.push('')
+						this.techValArr.splice(targetName-1,1)
+				        this.techValArr.push('')
+				this.indicatorRadioArr.splice(targetName - 1, 1)
 				this.editableTabs = tabs.filter((tab) => tab.name !== targetName)
-				this.editableTabs.map((tab, index) => {
-					tab.title = 'Signal' + (index + 1)
-					tab.name = index + 1 + ''
-				})
-				this.editableTabsValue = this.editableTabs.length + ''
-				this.tabIndex = this.editableTabs.length
-				// let obj = {}
-				// obj.criteria = 'exit'
-				// obj.index = this.editableTabs.length - 1
-				// this.$store.commit('reduceSignalLength', obj)
+				// this.riskValArr.splice(targetName-1,1)
+				// this.riskValArr.push('')
 			}
 		},
 		getSentiUrl(obj) {
@@ -426,7 +420,7 @@ export default {
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
 		},
 		addExitSignalLength() {
-			this.$emit('sendExitSignalIndex', this.tabIndex)
+			this.$emit('sendExitSignalIndex', this.indicatorRadioArr.length)
 		},
 		saveScoreValue() {
 			let obj = {}

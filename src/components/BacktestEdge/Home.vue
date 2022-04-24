@@ -16,14 +16,15 @@
 							</span>
 							<el-dropdown-menu slot="dropdown">
 								<el-dropdown-item command="doc"> Tutorial </el-dropdown-item>
-								<el-dropdown-item command="contact"> Contant Us </el-dropdown-item>
+								<el-dropdown-item command="contact">
+									Contant Us
+								</el-dropdown-item>
 							</el-dropdown-menu>
 						</el-dropdown>
 					</div>
 				</div>
 			</div>
 			<header class="header">
-
 				<el-row type="flex" justify="center"
 					><el-col><p class="betaNote">BacktestEdge Beta</p></el-col>
 				</el-row>
@@ -200,7 +201,40 @@
 					Copyright © 2001 - 2022 Sundial Capital Research, Inc. All rights
 					reserved.
 				</p>
-				<ul class="Footer_social___a7sK"><li><a href="https://facebook.com/sentimentrader" target="_blank" rel="noopener noreferrer"><i class="fa fa-facebook"></i></a></li><li><a href="https://www.linkedin.com/company/sentimentrader" target="_blank" rel="noopener noreferrer"><i class="fa fa-linkedin"></i></a></li><li><a href="https://youtube.com/sentimentrader" target="_blank" rel="noopener noreferrer"><i class="fa fa-youtube"></i></a></li><li><a href="https://twitter.com/sentimentrader" target="_blank" rel="noopener noreferrer"><i class="fa fa-twitter"></i></a></li></ul>
+				<ul class="Footer_social___a7sK">
+					<li>
+						<a
+							href="https://facebook.com/sentimentrader"
+							target="_blank"
+							rel="noopener noreferrer"
+							><i class="fa fa-facebook"></i
+						></a>
+					</li>
+					<li>
+						<a
+							href="https://www.linkedin.com/company/sentimentrader"
+							target="_blank"
+							rel="noopener noreferrer"
+							><i class="fa fa-linkedin"></i
+						></a>
+					</li>
+					<li>
+						<a
+							href="https://youtube.com/sentimentrader"
+							target="_blank"
+							rel="noopener noreferrer"
+							><i class="fa fa-youtube"></i
+						></a>
+					</li>
+					<li>
+						<a
+							href="https://twitter.com/sentimentrader"
+							target="_blank"
+							rel="noopener noreferrer"
+							><i class="fa fa-twitter"></i
+						></a>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -443,8 +477,9 @@ export default {
 						let backtestData = JSON.parse(
 							JSON.stringify(vm.$store.state.backtestInfo)
 						)
-						let entry_description =
-							JSON.parse(JSON.stringify(vm.$store.state.backtestInfo.entry_description))
+						let entry_description = JSON.parse(
+							JSON.stringify(vm.$store.state.backtestInfo.entry_description)
+						)
 
 						let sameEntryIndexArr = searchKeys(entry_description)
 						if (sameEntryIndexArr.length >= 1) {
@@ -464,7 +499,9 @@ export default {
 								return
 							}
 						}
-						let exit_description = JSON.parse(JSON.stringify(vm.$store.state.backtestInfo.exit_description))
+						let exit_description = JSON.parse(
+							JSON.stringify(vm.$store.state.backtestInfo.exit_description)
+						)
 
 						let sameExitIndexArr = searchKeys(exit_description)
 						if (sameExitIndexArr.length > 1) {
@@ -626,55 +663,51 @@ export default {
 						backtestData.pk = str
 						console.log('编辑后传出去的数据', backtestData)
 						// console.log('编辑后传出去的ID', UUID(JSON.stringify(backtestData)))
-
-						this.$http
-							.post('/dev/runbt/', this.$qs.stringify(backtestData), {
-								withCredentials: true
-							})
-							.then((res) => {
-								if (res.status === 201) {
-									// 保存成功之后，将 backtestInfo 清空回原始的状态
-									CIQ.isBacktestRun = true
-									vm.$store.commit('initialBacktestInfo')
-									vm.loading = false
-									vm.goToHistoryForm()
-									vm.$refs.historyChild.refreshHistory(res.data.id)
-									// 保存成功之后应该清除表单的所有数据
-									CIQ.hideMarker()
-									CIQ.isMarkerShown = false
-									// 并且清除 old_uuid
-									let backtestInfo = JSON.parse(
-										JSON.stringify(vm.$store.state.backtestInfo)
-									)
-									if (backtestInfo.old_uuid) {
-										vm.$store.commit('clearBacktestUuid')
-									}
-									// 清除 oldBacktestName
-									vm.backtestEditData = {}
-									vm.$refs.setUpChild.clearOldBacktestName()
-									vm.$refs.favoriteChild.getFavoriteList()
-								} else {
-									vm.$message.error('Save failed')
-									vm.loading = false
-									CIQ.hideMarker()
-									CIQ.isMarkerShown = false
+						let backtestDataStr = this.$qs.stringify(backtestData)
+						try {
+							let res = await runBacktest(backtestDataStr)
+							if (res.status === 201) {
+								// 保存成功之后，将 backtestInfo 清空回原始的状态
+								CIQ.isBacktestRun = true
+								vm.$store.commit('initialBacktestInfo')
+								vm.loading = false
+								vm.goToHistoryForm()
+								vm.$refs.historyChild.refreshHistory(res.data.id)
+								// 保存成功之后应该清除表单的所有数据
+								CIQ.hideMarker()
+								CIQ.isMarkerShown = false
+								// 并且清除 old_uuid
+								let backtestInfo = JSON.parse(
+									JSON.stringify(vm.$store.state.backtestInfo)
+								)
+								if (backtestInfo.old_uuid) {
+									vm.$store.commit('clearBacktestUuid')
 								}
-							})
-							.catch((error) => {
+								// 清除 oldBacktestName
+								vm.backtestEditData = {}
+								vm.$refs.setUpChild.clearOldBacktestName()
+								vm.$refs.favoriteChild.getFavoriteList()
+							} else {
+								vm.$message.error('Save failed')
+								vm.loading = false
+								CIQ.hideMarker()
+								CIQ.isMarkerShown = false
+							}
+						} catch (error) {
 							vm.$message({
 								message: 'The internal server is busy, please try again later ',
 								type: 'error',
 								offset: 300
 							})
 							vm.loading = false
-								// 初始化backtestInfo的数据
-								vm.$store.commit('clearStoreDesciption')
-								vm.$store.commit('initialBacktestInfo')
-							})
+							// 初始化backtestInfo的数据
+							vm.$store.commit('clearStoreDesciption')
+							vm.$store.commit('initialBacktestInfo')
+						}
 					}
 				}
 			}
-		}, 5000),
+		}, 1000),
 		goToHistoryForm() {
 			this.activeName = 'second'
 		},
@@ -690,7 +723,7 @@ export default {
 			try {
 				const res = await seeParams(id)
 				let data = res.data
-				
+
 				data.old_uuid = id
 				data.entry = JSON.parse(data.entry)
 				data.exit = JSON.parse(data.exit)
@@ -721,7 +754,7 @@ export default {
 				let exitData = {}
 				exitData.exit = data.exit
 				// exitData.exit_description = data.exit_description
-				
+
 				vm.$refs.entryChild.setEditPanel(entryPanel, entryData)
 				vm.$refs.exitChild.setEditPanel(exitPanel, exitData)
 				// 拿到 frequency 的值
@@ -850,28 +883,29 @@ button.toTop {
 	color: #9ca3af;
 	line-height: 21px;
 }
-ol, ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+ol,
+ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
 .Footer_social___a7sK {
-    display: flex;
+	display: flex;
 }
 .Footer_social___a7sK li {
-    margin-right: 24px;
+	margin-right: 24px;
 }
 .Footer_social___a7sK a {
-    font-size: 20px;
-    color: #9ca3af;
+	font-size: 20px;
+	color: #9ca3af;
 }
 .Footer_social___a7sK a:hover {
-    font-size: 20px;
-    color: #0284c7;
+	font-size: 20px;
+	color: #0284c7;
 }
 a {
-    transition: color .3s ease-in-out;
-    text-decoration: none;
+	transition: color 0.3s ease-in-out;
+	text-decoration: none;
 }
 .home-container {
 	margin: 0 auto;
@@ -999,18 +1033,18 @@ header {
 	cursor: pointer;
 	//color: #409eff;
 	font-weight: 500;
-    line-height: 24px;
-    display: inline-flex;
-    align-items: center;
-    padding: 0;
-    transition: color .3s ease-in-out;
-    color: #6b7280;
-    border: none;
-    outline: none;
-    background: transparent;
+	line-height: 24px;
+	display: inline-flex;
+	align-items: center;
+	padding: 0;
+	transition: color 0.3s ease-in-out;
+	color: #6b7280;
+	border: none;
+	outline: none;
+	background: transparent;
 }
 .el-dropdown-link:hover {
-    color: #111827;
+	color: #111827;
 }
 .el-icon-arrow-down {
 	font-size: 12px;
