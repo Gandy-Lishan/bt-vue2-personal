@@ -381,18 +381,17 @@ export default {
 		// 	this.sentiUrl = val
 		// },
 		getSentiUrl(obj) {
-			this.sentiUrlArr[obj.index] = obj.url
+			this.sentiUrlArr.splice(obj.index, 1, obj.url)
 		},
 		getTechUrl(obj) {
-			this.sentiUrlArr[obj.index] = obj.url
+			this.techUrlArr.splice(obj.index, 1, obj.url)
 		},
 		getSentiVal(obj) {
-			this.sentiValArr[obj.index] = obj.value
-			console.log()
+			this.sentiValArr.splice(obj.index, 1, obj.value)
 		},
 		getTechVal(obj) {
 			this.techVal = obj.value
-			this.techValArr[obj.index] = obj.value
+			this.techValArr.splice(obj.index, 1, obj.value)
 		},
 		getTechIndiValue(val) {
 			this.techIndiValue = val

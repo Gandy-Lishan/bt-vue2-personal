@@ -13,10 +13,10 @@
 				<el-form-item>
 					<el-radio v-model="radio" label=" "></el-radio>
 					<el-select
-						v-model="conditionRadio"
+						v-model="tech.comparison"
 						size="mini"
 						filterable
-						@change="getConditionRadio"
+						@change="setDesciption"
 						placeholder="Please select condition"
 					>
 						<el-option
@@ -85,12 +85,11 @@ export default {
 				{ value: 3, label: 'CrossAbove' },
 				{ value: 4, label: 'CrossBelow' }
 			],
-			conditionRadio: 'Symbol Close',
 			radioConditions: [
-				{ value: 'Symbol Close', label: 'Symbol Close' },
-				{ value: 'Symbol High', label: 'Symbol High' },
-				{ value: 'Symbol Open', label: 'Symbol Open' },
-				{ value: 'Symbol Low', label: 'Symbol Low' }
+				{ value: 'SC', label: 'Symbol Close' },
+				{ value: 'SH', label: 'Symbol High' },
+				{ value: 'SO', label: 'Symbol Open' },
+				{ value: 'SL', label: 'Symbol Low' }
 			],
 			description: '',
 			editTechVal: '',
@@ -100,22 +99,6 @@ export default {
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
-		},
-		getConditionRadio(val) {
-			switch (val) {
-				case 'Symbol Close':
-					this.tech.comparison = 'SC'
-					break
-				case 'Symbol High':
-					this.tech.comparison = 'SH'
-					break
-				case 'Symbol Open':
-					this.tech.comparison = 'SO'
-					break
-				case 'Symbol Low':
-					this.tech.comparison = 'SL'
-					break
-			}
 		},
 		setDesciption(index) {
 			let criteria = ''
@@ -134,8 +117,24 @@ export default {
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
-			let radio = this.conditionRadio
-			this.description = `${criteria} ${direction} ${techVal} ${radio} ${condition} ${this.tech.value}`
+			let comparison
+			switch (this.tech.comparison) {
+				case 'SC':
+					comparison = "Symbol Close"
+					break;
+				case 'SH':
+					comparison = "Symbol High"
+					break;
+				case 'SL':
+					comparison = "Symbol Low"
+					break;
+				case 'SO':
+					comparison = "Symbol Open"
+					break;
+				default:
+					break;
+			}
+			this.description = `${criteria} ${direction} ${techVal} ${comparison} ${condition} ${this.tech.value}`
 			console.log(this.description)
 		},
 		saveCondition(index) {
@@ -143,7 +142,7 @@ export default {
 			if (this.description) {
 				this.setDesciption()
 			}
-			let tech = this.tech
+			let tech = JSON.parse(JSON.stringify(this.tech))
 			tech.criteria = this.criteria
 			tech.index = index
 			this.$store.commit('saveCondition', tech)
@@ -163,20 +162,6 @@ export default {
 				this.tech.comparison = obj.comparison
 				this.tech.value = obj.value
 				this.radio = ' '
-				switch (this.tech.comparison) {
-					case 'SC':
-						this.conditionRadio = 'Symbol Close'
-						break
-					case 'SH':
-						this.conditionRadio = 'Symbol High'
-						break
-					case 'SO':
-						this.conditionRadio = 'Symbol Open'
-						break
-					case 'SL':
-						this.conditionRadio = 'Symbol Low'
-						break
-				}
 				this.editTechVal = obj.indicator
 				this.setDesciption()
 			}
@@ -208,5 +193,19 @@ export default {
 }
 /deep/ .el-radio {
 	margin-right: -3px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .el-form-item__label {
+		margin-right: 10px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	/deep/ .el-form-item__label {
+		margin-right: 0px;
+	}
+	.condition-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
 </style>

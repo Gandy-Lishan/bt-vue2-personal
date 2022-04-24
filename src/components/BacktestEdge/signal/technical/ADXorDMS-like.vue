@@ -121,7 +121,7 @@ export default {
 	},
 	data() {
 		var validateValueNegative = (rule, value, callback) => {
-			 if (value === '') {
+			if (value === '') {
 				callback(new Error('Please input value'))
 			} else if (isNaN(value)) {
 				callback(new Error('Please enter the correct format'))
@@ -136,7 +136,7 @@ export default {
 			}
 		}
 		var validateValuePositive = (rule, value, callback) => {
-			 if (value === '') {
+			if (value === '') {
 				callback(new Error('Please input value'))
 			} else if (isNaN(value)) {
 				callback(new Error('Please enter the correct format'))
@@ -188,14 +188,13 @@ export default {
 	},
 	methods: {
 		clearForm() {
-			Object.assign(this.$data, this.$options.data())
-			this.clearFormValidate()
+			this.$refs.adxForm.resetFields()
 		},
 		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.adxForm.clearValidate()
 		},
-		setDesciption(index) {
+		setDesciption: throttle(function(index) {
 			let criteria = ''
 			let direction = ''
 			if (this.criteria == 'entry') {
@@ -212,13 +211,16 @@ export default {
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
+			let value = this.tech.valuePositive
 			let isPositive = '+'
 			if (this.conditionRadio === '-DI ADX') {
 				isPositive = '-'
+				value = this.tech.valueNegative
 			}
-			this.description = `${criteria} ${direction} ${isPositive}${techVal} ${condition} ${this.tech.value}`
-		},
+			this.description = `${criteria} ${direction} ${isPositive}${techVal} ${condition} ${value}`
+		}, 500),
 		getConditionRadio(val) {
+			this.clearFormValidate()
 			var obj = CIQ.store.state.conditionRadio
 			obj.ADX_like = val
 			CIQ.store.commit('setConditionRadio', obj)
@@ -227,14 +229,13 @@ export default {
 			} else if (val === '-DI ADX') {
 				this.tech.comparison = 'NADX'
 			}
-			this.setDesciption()
 			//CIQ.exportEx()
 		},
 		saveCondition(index) {
 			let checked = true
 			let validForm
 			let tech = JSON.parse(JSON.stringify(this.tech))
-			if(this.conditionRadio === '+DI ADX') {
+			if (this.conditionRadio === '+DI ADX') {
 				this.$refs['adxForm'].validateField(['valuePositive'], (errorMsg) => {
 					if (!errorMsg) {
 						validForm = true
@@ -244,7 +245,7 @@ export default {
 				delete tech.valuePositive
 				delete tech.valueNegative
 			}
-			if(this.conditionRadio === '-DI ADX') {
+			if (this.conditionRadio === '-DI ADX') {
 				this.$refs['adxForm'].validateField(['valueNegative'], (errorMsg) => {
 					if (!errorMsg) {
 						validForm = true
@@ -271,6 +272,7 @@ export default {
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
+				console.log('ADX编辑',newVal);
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)
@@ -278,9 +280,11 @@ export default {
 				this.tech.comparison = obj.comparison
 				if (this.tech.comparison === 'PADX') {
 					this.conditionRadio = '+DI ADX'
+					this.tech.valuePositive = obj.value
 				}
 				if (this.tech.comparison === 'NADX') {
 					this.conditionRadio = '-DI ADX'
+					this.tech.valueNegative = obj.value
 				}
 				this.editTechVal = obj.indicator
 				this.setDesciption()

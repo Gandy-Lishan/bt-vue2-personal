@@ -14,14 +14,14 @@
 					<el-radio
 						v-model="radio"
 						label=" "
-						@change="getRadioValue"
+						@change="setRadio"
 					></el-radio>
 					<el-select
-						v-model="conditionRadio"
+						v-model="tech.comparison"
 						size="mini"
 						filterable
-						:disabled="disabled"
-						@change="getConditionRadio"
+						:disabled="!(radio === ' ')"
+						@change="getRadioSelect"
 						placeholder="Please select condition"
 					>
 						<el-option
@@ -37,7 +37,7 @@
 					<el-form-item>
 						<el-select
 							v-model="tech.condition"
-							:disabled="disabled"
+							:disabled="!(radio === ' ')"
 							size="mini"
 							filterable
 							placeholder="Please select condition"
@@ -61,7 +61,7 @@
 					<el-form-item prop="period">
 						<el-input
 							v-model="tech.period"
-							:disabled="disabled"
+							:disabled="!(radio === ' ')"
 							@input="getSCvalue"
 							@blur="setDesciption"
 							oninput="value=value.replace(/[^\d]/g,'')"
@@ -75,13 +75,13 @@
 					<el-radio
 						v-model="radio"
 						label="Moving Average"
-						@change="getRadioValue"
+						@change="setRadio"
 					></el-radio>
 				</el-form-item>
 				<div class="conditionInput">
 					<el-form-item prop="ma_period">
 						<el-input
-							:disabled="!disabled"
+							:disabled="!(radio === 'Moving Average')"
 							v-model="tech.ma_period"
 							placeholder="Input Period"
 							@input="getMaPeriodValue"
@@ -95,7 +95,7 @@
 							v-model="tech.condition"
 							filterable
 							size="mini"
-							:disabled="!disabled"
+							:disabled="!(radio === 'Moving Average')"
 							placeholder="Please select condition"
 						>
 							<el-option
@@ -117,7 +117,7 @@
 					<el-form-item prop="maPeriod">
 						<el-input
 							v-model="tech.maPeriod"
-							:disabled="!disabled"
+							:disabled="!(radio === 'Moving Average')"
 							placeholder="Input Period"
 							@input="getMaValue"
 							@blur="setDesciption"
@@ -132,8 +132,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+const throttle = require('lodash/throttle')
 export default {
 	name: 'ma',
 	props: {
@@ -157,7 +156,7 @@ export default {
 			callback()
 		}
 		let validateMaPeriodRule = (rule, value, callback) => {
-if (!/[1-9]\d*/.test(value)) {
+			if (!/[1-9]\d*/.test(value)) {
 				return callback(new Error('Please enter a positive integer'))
 			}
 			if (value === 0 || value === '') {
@@ -169,7 +168,7 @@ if (!/[1-9]\d*/.test(value)) {
 			callback()
 		}
 		let validateMaPeriod = (rule, value, callback) => {
-if (!/[1-9]\d*/.test(value)) {
+			if (!/[1-9]\d*/.test(value)) {
 				return callback(new Error('Please enter a positive integer'))
 			}
 			if (value === 0 || value === '') {
@@ -196,19 +195,15 @@ if (!/[1-9]\d*/.test(value)) {
 				{ value: 3, label: 'CrossAbove' },
 				{ value: 4, label: 'CrossBelow' }
 			],
-			conditionRadio: 'Symbol Close',
 			radio: ' ',
-			disabled: false,
 			maRadio: 'SMA',
-			maPeriod: 20,
 			description: '',
 			editTechVal: '',
-			emptyRadio: ' ',
 			radioConditions: [
-				{ value: 'Symbol Close', label: 'Symbol Close' },
-				{ value: 'Symbol High', label: 'Symbol High' },
-				{ value: 'Symbol Open', label: 'Symbol Open' },
-				{ value: 'Symbol Low', label: 'Symbol Low' }
+				{ value: 'SC', label: 'Symbol Close' },
+				{ value: 'SH', label: 'Symbol High' },
+				{ value: 'SO', label: 'Symbol Open' },
+				{ value: 'SL', label: 'Symbol Low' }
 			],
 			rules: {
 				period: [{ validator: validatePeriod, trigger: 'blur' }],
@@ -221,7 +216,7 @@ if (!/[1-9]\d*/.test(value)) {
 		techVal: {
 			handler(newVal) {
 				var obj = CIQ.store.state.conditionRadio
-				obj.MovingAverage_like = this.conditionRadio
+				obj.MovingAverage_like = this.tech.comparison
 				CIQ.store.commit('setConditionRadio', obj)
 			},
 			immediate: true,
@@ -236,14 +231,12 @@ if (!/[1-9]\d*/.test(value)) {
 		clearFormValidate() {
 			this.$refs.maForm.clearValidate()
 		},
-		getRadioValue(val) {
+		setRadio(val) {
 			this.clearFormValidate()
 			if (val === 'Moving Average') {
 				// 添加附属ma
-				this.disabled = !this.disabled
 				this.tech.ma_period = 5
 				this.tech.comparison = 'MA'
-				this.tech.maPeriod = this.tech.period
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
 					if (sd.type == 'ST MA' && sd.panel == 'chart') {
@@ -273,20 +266,13 @@ if (!/[1-9]\d*/.test(value)) {
 				this.$store.commit('getMA', activatedMAList)
 			}
 			if (val === ' ') {
-				this.conditionRadio = 'Symbol Close'
-				if ('ma_period' in this.tech) {
-					delete this.tech.ma_period
-					delete this.tech.maPeriod
-				}
 				this.tech.comparison = 'SC'
-				this.disabled = !this.disabled
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
 					if (sd.type == 'ST MA' && sd.panel == 'chart') {
 						CIQ.Studies.removeStudy(CIQ.stxx, sd)
 					}
 				}
-
 				// remove current MA attached to an indicator
 				var activatedMAList = this.$store.state.activatedMA
 				var MAListIndex = activatedMAList.findIndex((item) => item.url == 'ma')
@@ -297,19 +283,10 @@ if (!/[1-9]\d*/.test(value)) {
 			}
 			this.setDesciption()
 		},
-		getConditionRadio(val) {
-			this.conditionRadio = val
-			this.clearFormValidate()
+		getRadioSelect(val) {
 			var obj = CIQ.store.state.conditionRadio
 			obj.MovingAverage_like = val
 			CIQ.store.commit('setConditionRadio', obj)
-			if (val === 'Symbol Close') {
-				if ('ma_period' in this.tech) {
-					delete this.tech.ma_period
-					delete this.tech.maPeriod
-				}
-				this.tech.comparison = 'SC'
-				this.disabled = !this.disabled
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
 					if (sd.type == 'ST MA' && sd.panel == 'chart') {
@@ -337,13 +314,6 @@ if (!/[1-9]\d*/.test(value)) {
 					activatedMAList.splice(MAListIndex, 1)
 				}
 				this.$store.commit('getMA', activatedMAList)
-			}
-			if (val === 'Symbol High') {
-			}
-			if (val === 'Symbol Open') {
-			}
-			if (val === 'Symbol Low') {
-			}
 			this.setDesciption()
 		},
 		setDesciption(index) {
@@ -356,23 +326,42 @@ if (!/[1-9]\d*/.test(value)) {
 				criteria = 'X:'
 
 				if (this.direction == 'Long') {
-					direction = 'Cover:'
-				} else if (this.direction == 'Short') {
 					direction = 'Close:'
+				} else if (this.direction == 'Short') {
+					direction = 'Cover:'
 				}
 			}
-			let techVal = this.techVal
-			// let period = this.tech.period ? this.tech.period : ''
+			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let period =
-				this.conditionRadio === 'Symbol Close'
+				this.radio !== 'Moving Average'
 					? this.tech.period
 					: this.tech.maPeriod
-			// let ma_period = this.techVal ? this.techVal : this.editTechVal
 			let ma_period =
-				this.conditionRadio == 'Moving Average' ? this.tech.ma_period : ''
-			let conditionRadio = this.radio == ' ' ? this.conditionRadio : this.radio
+				this.radio == 'Moving Average' ? this.tech.ma_period : ''
+			let conditionRadio = this.radio == ' ' ? this.tech.comparison : this.radio
+			let comparison
+			switch (this.tech.comparison) {
+				case 'SC':
+					comparison = "Symbol Close"
+					break;
+				case 'SH':
+					comparison = "Symbol High"
+					break;
+				case 'SL':
+					comparison = "Symbol Low"
+					break;
+				case 'SO':
+					comparison = "Symbol Open"
+					break;
+				case 'MA':
+					comparison = "Moving Average"
+					break;
+				default:
+					break;
+			}
 			let condition = this.conditions[this.tech.condition].label
-			this.description = `${criteria} ${direction} ${conditionRadio} ${ma_period} ${condition} Moving Average ${period}`
+			this.description = `${criteria} ${direction} ${comparison} ${ma_period} ${condition} Moving Average ${period}`
+			console.log(this.description);
 		},
 		getMaPeriodValue(val) {
 			this.tech.ma_period = val
@@ -473,7 +462,7 @@ if (!/[1-9]\d*/.test(value)) {
 					}
 				}
 			}
-			if (this.conditionRadio == 'Moving Average') {
+			if (this.radio == 'Moving Average') {
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
 					if (sd.type == 'ST MA' && sd.panel == 'chart') {
@@ -519,7 +508,7 @@ if (!/[1-9]\d*/.test(value)) {
 			}
 		},
 		getSCvalue(val) {
-			if (this.conditionRadio === 'Symbol Close') {
+			if (this.tech.comparison === 'Symbol Close') {
 				//   delete this.sc.ma_period
 				// const obj = {}
 				// obj.criteria = this.criteria
@@ -580,15 +569,16 @@ if (!/[1-9]\d*/.test(value)) {
 		saveCondition(index) {
 			let checked = true
 			let validForm
-			if (this.conditionRadio === 'Symbol Close') {
+			if (this.radio !== 'Moving Average') {
 				this.$refs['maForm'].validateField(['period'], (errorMsg) => {
 					if (!errorMsg) {
 						validForm = true
 					}
 				})
-				let ids = {}
 				if (validForm) {
 					let tech = JSON.parse(JSON.stringify(this.tech))
+					delete tech.ma_period
+					delete tech.maPeriod
 					tech.criteria = this.criteria
 					tech.index = index
 					this.$store.commit('saveCondition', tech)
@@ -599,11 +589,6 @@ if (!/[1-9]\d*/.test(value)) {
 					this.$store.commit('saveDescription', desObj)
 					return checked
 				} else {
-					// this.$message({
-					// 	message: 'Please Input Period',
-					// 	type: 'error',
-					// 	offset: 300
-					// })
 					checked = false
 					return checked
 				}
@@ -623,6 +608,8 @@ if (!/[1-9]\d*/.test(value)) {
 				validForm = validMa_Period && validMaPeriod
 				if (validForm) {
 					let tech = JSON.parse(JSON.stringify(this.tech))
+					tech.period = tech.maPeriod
+					delete tech.maPeriod
 					tech.criteria = this.criteria
 					tech.index = index
 					this.$store.commit('saveCondition', tech)
@@ -650,32 +637,16 @@ if (!/[1-9]\d*/.test(value)) {
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)
-				this.tech.period = obj.period
-				this.tech.maPeriod = obj.period
 				this.tech.comparison = obj.comparison
 				if (this.tech.comparison === 'MA') {
 					this.radio = 'Moving Average'
-					this.disabled = true
 					this.tech.ma_period = obj.ma_period
+					this.tech.maPeriod = obj.period
 					this.getMaPeriodValue(obj.ma_period)
 					this.getMaValue(obj.period)
 				} else {
 					this.radio = ' '
-					switch (this.tech.comparison) {
-						case 'SC':
-							this.conditionRadio = 'Symbol Close'
-							break
-						case 'SH':
-							this.conditionRadio = 'Symbol High'
-							break
-						case 'SO':
-							this.conditionRadio = 'Symbol Open'
-							break
-						case 'SL':
-							this.conditionRadio = 'Symbol Low'
-							break
-					}
-					this.disabled = false
+					this.tech.period = obj.period
 					this.getSCvalue(this.tech.period)
 				}
 				this.editTechVal = obj.indicator

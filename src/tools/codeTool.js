@@ -1130,7 +1130,7 @@ class Code {
 	// 		'ids': 'SMA',
 	// 		'comparison': 'MA',
 	// 		'ma_period': '5',
-	// 		'period': '20',
+	// 		'  ': '20',
 	// 		'condition': '3'
 	// 	}, {
 	// 		'analysis': 'Technical',

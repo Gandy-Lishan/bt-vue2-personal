@@ -27,7 +27,7 @@
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio
-						v-model="radioObj.kRadio1"
+						v-model="radio"
 						label="%K"
 						@change="getConditionRadio"
 					></el-radio>
@@ -35,8 +35,9 @@
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							:disabled="!(radioObj.kRadio1 === '%K')"
-							v-model="kCondition1"
+							:disabled="!(radio === '%K')"
+							v-model="tech.condition"
+							@change="setDesciption"
 							size="mini"
 							filterable
 							placeholder="Please select condition"
@@ -54,7 +55,7 @@
 				<div class="conditionInput">
 					<el-form-item prop="value">
 						<el-input
-							:disabled="!(radioObj.kRadio1 === '%K')"
+							:disabled="!(radio === '%K')"
 							@input="setDesciption"
 							v-model="tech.value"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
@@ -66,7 +67,7 @@
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio
-						v-model="radioObj.dRadio"
+						v-model="radio"
 						label="%D"
 						@change="getConditionRadio"
 					></el-radio>
@@ -74,8 +75,9 @@
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							:disabled="!(radioObj.dRadio === '%D')"
-							v-model="dCondition"
+							:disabled="!(radio === '%D')"
+							v-model="tech.condition"
+							@change="setDesciption"
 							size="mini"
 							filterable
 							placeholder="Please select condition"
@@ -93,7 +95,7 @@
 				<div class="conditionInput">
 					<el-form-item>
 						<el-input
-							:disabled="!(radioObj.dRadio === '%D')"
+							:disabled="!(radio === '%D')"
 							@input="setDesciption"
 							v-model="tech.value"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
@@ -105,7 +107,7 @@
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio
-						v-model="radioObj.kRadio2"
+						v-model="radio"
 						label="%K "
 						@change="getConditionRadio"
 					></el-radio>
@@ -113,8 +115,9 @@
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							:disabled="!(radioObj.kRadio2 === '%K ')"
-							v-model="kCondition2"
+							:disabled="!(radio === '%K ')"
+							v-model="tech.condition"
+							@change="setDesciption"
 							size="mini"
 							filterable
 							placeholder="Please select condition"
@@ -141,10 +144,9 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+const throttle = require('lodash/throttle')
 export default {
-	name: 'macd',
+	name: 'stochastic',
 	props: {
 		criteria: String,
 		techUrl: String,
@@ -184,15 +186,7 @@ export default {
 			],
 			description: '',
 			editTechVal: '',
-			kCondition1: 0,
-			dCondition: 0,
-			kCondition2: 3,
-			conditionRadio: '%K',
-			radioObj: {
-				kRadio1: '%K',
-				kRadio2: '',
-				dRadio: ''
-			},
+			radio: '%K',
 			rules: {
 				value: [{ validator: validateValue, trigger: 'blur' }]
 			}
@@ -203,7 +197,7 @@ export default {
 			handler(newVal) {
 				//console.log('watch techVal!!!!!!!!!',newVal)
 				var obj = CIQ.store.state.conditionRadio
-				obj.Stochastics_like = this.conditionRadio
+				obj.Stochastics_like = this.radio
 				CIQ.store.commit('setConditionRadio', obj)
 			},
 			immediate: true,
@@ -212,8 +206,7 @@ export default {
 	},
 	methods: {
 		clearForm() {
-			Object.assign(this.$data, this.$options.data())
-			this.clearFormValidate()
+			this.$refs.smiForm.resetFields()
 		},
 		// 清除表单认证
 		clearFormValidate() {
@@ -236,51 +229,36 @@ export default {
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let suffix = ''
-			if (this.radioObj.kRadio1 || this.radioObj.kRadio2) {
-				suffix = ' K'
+			switch (this.radio) {
+				case '%K':
+					suffix = ' K'
+					break
+				case '%K ':
+					suffix = ' K'
+					break
+				case '%D':
+					suffix = ' D'
+					break
 			}
-			if (this.radioObj.dRadio) {
-				suffix = ' D'
-			}
-			let condition = this.conditions[this.tech.condition].label
-			if (this.radioObj.kRadio1 === '%K') {
-				condition = this.conditions[this.kCondition1].label
-			}
-			if (this.radioObj.kRadio2 === '%K ') {
-				condition = this.conditions[this.kCondition2].label
-			}
-			if (this.radioObj.dRadio === '%D') {
-				condition = this.conditions[this.dCondition].label
-			}
-			this.description = `${criteria} ${direction} ${techVal}${suffix} ${condition} ${this.tech.value}`
+			this.description = `${criteria} ${direction} ${techVal}${suffix} ${this.conditions[this.tech.condition].label} ${this.tech.value}`
+			console.log(this.description);
 		},
 		getConditionRadio(val) {
-			// 排他思想
-			this.conditionRadio = val
 			var obj = CIQ.store.state.conditionRadio
 			obj.Stochastics_like = val
 			CIQ.store.commit('setConditionRadio', obj)
-			for (let key in this.radioObj) {
-				this.radioObj[key] = ''
-			}
 			switch (val) {
 				case '%K':
-					this.radioObj.kRadio1 = val
 					this.tech.value = 0
 					this.tech.comparison = 'K'
-					this.tech.condition = this.kCondition1
 					break
 				case '%K ':
-					this.radioObj.kRadio2 = val
 					this.tech.value = 'D'
 					this.tech.comparison = 'K'
-					this.tech.condition = this.kCondition2
 					break
 				case '%D':
-					this.radioObj.dRadio = val
 					this.tech.value = 0
 					this.tech.comparison = 'D'
-					this.tech.condition = this.dCondition
 					break
 			}
 			this.setDesciption()
@@ -296,16 +274,7 @@ export default {
 				if (this.description) {
 					this.setDesciption()
 				}
-				if (this.radioObj.dRadio === '%D') {
-					this.tech.condition = this.dCondition
-				}
-				if (this.radioObj.kRadio1 === '%K') {
-					this.tech.condition = this.kCondition1
-				}
-				if (this.radioObj.kRadio2 === '%K ') {
-					this.tech.condition = this.kCondition2
-				}
-				let tech = this.tech
+				let tech = JSON.parse(JSON.stringify(this.tech))
 				tech.criteria = this.criteria
 				tech.index = index
 				this.$store.commit('saveCondition', tech)
@@ -322,26 +291,19 @@ export default {
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
-				console.log('编辑')
-				for (let key in this.radioObj) {
-					this.radioObj[key] = ''
-				}
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)
 				this.tech.value = obj.value
 				this.tech.comparison = obj.comparison
 				if (this.tech.value !== 'D' && this.tech.comparison === 'K') {
-					this.radioObj.kRadio1 = '%K'
-					this.kCondition1 = this.tech.condition
+					this.radio = '%K'
 				}
 				if (this.tech.value === 'D' && this.tech.comparison === 'K') {
-					this.radioObj.kRadio2 = '%K '
-					this.kCondition2 = this.tech.condition
+					this.radio = '%K '
 				}
 				if (this.tech.comparison === 'D') {
-					this.radioObj.dRadio = '%D'
-					this.dCondition = this.tech.condition
+					this.radio = '%D'
 				}
 				this.editTechVal = obj.indicator
 				this.setDesciption()

@@ -13,10 +13,10 @@
 				<el-form-item>
 					<el-radio v-model="radio" label=" "></el-radio>
 					<el-select
-						v-model="conditionRadio"
+						v-model="tech.comparison"
 						size="mini"
 						filterable
-						@change="getConditionRadio"
+						@change="setDesciption"
 						placeholder="Please select condition"
 					>
 						<el-option
@@ -53,7 +53,7 @@
 							size="mini"
 							filterable
 							placeholder="Please select condition"
-							@change="changeValueCondition"
+							@change="getValueSelect"
 						>
 							<el-option
 								v-for="item in valueConditions"
@@ -72,8 +72,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+const throttle = require('lodash/throttle')
 export default {
 	name: 'cci',
 	props: {
@@ -104,13 +103,12 @@ export default {
 				{ value: 'HB', label: 'High Band' },
 				{ value: 'MB', label: 'Middle Band' }
 			],
-			conditionRadio: 'Symbol Close',
 			radio: ' ',
 			radioConditions: [
-				{ value: 'Symbol Close', label: 'Symbol Close' },
-				{ value: 'Symbol High', label: 'Symbol High' },
-				{ value: 'Symbol Open', label: 'Symbol Open' },
-				{ value: 'Symbol Low', label: 'Symbol Low' }
+				{ value: 'SC', label: 'Symbol Close' },
+				{ value: 'SH', label: 'Symbol High' },
+				{ value: 'SO', label: 'Symbol Open' },
+				{ value: 'SL', label: 'Symbol Low' }
 			],
 			description: '',
 			editTechVal: ''
@@ -132,14 +130,14 @@ export default {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 		},
-		changeValueCondition(val) {
+		getValueSelect(val) {
 			var obj = CIQ.store.state.conditionRadio
 			obj.BollingerBands_like = val
 			CIQ.store.commit('setConditionRadio', obj)
 			//CIQ.exportEx()
+			this.setDesciption()
 		},
 		setDesciption(index) {
-
 			let criteria = ''
 			let direction = ''
 			if (this.criteria == 'entry') {
@@ -154,33 +152,47 @@ export default {
 				}
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
-			let condition = this.conditions[this.tech.condition].label
-			let radio = this.conditionRadio
-			this.description = `${criteria} ${direction} ${techVal} ${radio} ${condition} ${this.tech.value}`
-			console.log(this.description)
-		},
-		getConditionRadio(val) {
-			switch (val) {
-				case 'Symbol Close':
-					this.tech.comparison = 'SC'
-					break
-				case 'Symbol High':
-					this.tech.comparison = 'SH'
-					break
-				case 'Symbol Open':
-					this.tech.comparison = 'SO'
-					break
-				case 'Symbol Low':
-					this.tech.comparison = 'SL'
-					break
+			let comparison
+			switch (this.tech.comparison) {
+				case 'SC':
+					comparison = "Symbol Close"
+					break;
+				case 'SH':
+					comparison = "Symbol High"
+					break;
+				case 'SL':
+					comparison = "Symbol Low"
+					break;
+				case 'SO':
+					comparison = "Symbol Open"
+					break;
+				default:
+					break;
 			}
+			let value
+			switch(this.tech.value) {
+				case 'LB':
+					value = "Low Band"
+					break;
+				case 'HB':
+					value = "High Band"
+					break;
+				case 'MB':
+					value = "Middle Band"
+					break;
+				default:
+					break;
+			}
+			let condition = this.conditions[this.tech.condition].label
+			this.description = `${criteria} ${direction} ${techVal} ${comparison} ${condition} ${value}`
+			console.log(this.description)
 		},
 		saveCondition(index) {
 			let checked = true
 			if (this.description) {
 				this.setDesciption()
 			}
-			let tech = this.tech
+			let tech = JSON.parse(JSON.stringify(this.tech))
 			tech.criteria = this.criteria
 			tech.index = index
 			this.$store.commit('saveCondition', tech)
@@ -201,20 +213,6 @@ export default {
 				this.tech.comparison = obj.comparison
 				this.tech.value = obj.value
 				this.radio = ' '
-				switch (this.tech.comparison) {
-					case 'SC':
-						this.conditionRadio = 'Symbol Close'
-						break
-					case 'SH':
-						this.conditionRadio = 'Symbol High'
-						break
-					case 'SO':
-						this.conditionRadio = 'Symbol Open'
-						break
-					case 'SL':
-						this.conditionRadio = 'Symbol Low'
-						break
-				}
 				this.editTechVal = obj.indicator
 				this.setDesciption()
 			}

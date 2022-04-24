@@ -112,15 +112,6 @@ export default {
 			// technicalName: ''
 		}
 	},
-	watch: {
-		techVal: {
-			handler(val) {
-				this.technicalName = val
-				console.log("新增加的indicator", val);
-				console.log("当前的面板为", this.panelIndex+1);
-			}
-		}
-	},
 	methods: {
 		clearForm() {		
 			this.$refs.cciForm.resetFields()
@@ -138,9 +129,9 @@ export default {
 			} else if (this.criteria == 'exit') {
 				criteria = 'X:'
 				if (this.direction == 'Long') {
-					direction = 'Cover:'
-				} else if (this.direction == 'Short') {
 					direction = 'Close:'
+				} else if (this.direction == 'Short') {
+					direction = 'Cover:'
 				}
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal

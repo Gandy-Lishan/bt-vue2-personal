@@ -170,8 +170,7 @@ export default {
 	},
 	methods: {
 		clearForm() {
-			Object.assign(this.$data, this.$options.data())
-			this.clearFormValidate()
+			this.$refs.eriForm.resetFields()
 		},
 		// 清除表单认证
 		clearFormValidate() {
@@ -220,7 +219,7 @@ export default {
 				validForm = valid
 			})
 			if (validForm) {
-				let tech = this.tech
+				let tech = JSON.parse(JSON.stringify(this.tech))
 				tech.criteria = this.criteria
 				tech.index = index
 				this.$store.commit('saveCondition', tech)
