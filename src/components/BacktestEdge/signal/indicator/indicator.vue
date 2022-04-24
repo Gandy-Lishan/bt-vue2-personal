@@ -584,6 +584,8 @@ export default {
 			}
 		},
 		async setEditData(newVal) {
+			console.log("indicator编辑的数据",newVal);
+			console.log("判断数据",newVal[this.criteria].signals[this.panelIndex]);
 			if (JSON.stringify(newVal) != '{}') {
 				this.clearFormValidate()
 				let index = this.panelIndex
@@ -611,11 +613,11 @@ export default {
 								}
 						}
 						
-					})
+					})}
 
 					let indi = this.si.sentimentIndicator
-					sentimentList.forEach((obj) => {
-						if (indi.toUpperCase() == obj.value.toUpperCase()) {
+					sentimentList.forEach((item) => {
+						if (indi.toUpperCase() == item.value.toUpperCase()) {
 						let obj = {}
 						obj.index = vm.panelIndex
 						obj.url = item.url
@@ -629,8 +631,11 @@ export default {
 					// obj.value = 'technical'
 					// obj.index = index
 					// this.$emit('getIndicatorRadio', 'technical')
+			console.log("进入technical");
+					vm.indicatorRadio = 'Technical Indicators'
 					let technicalIndicator =
 						newVal[this.criteria].signals[index].indicator
+					vm.si.technicalIndicators = technicalIndicator
 					let formateList = this.$store.state.formateTechnicalList
 					if (formateList.length === 0) {
 						this.loadShortLong()
@@ -643,7 +648,6 @@ export default {
 							break
 						}
 					}
-					this.indicatorRadio = 'Technical Indicators'
 					// this.$emit('getTechVal', vm.si.technicalIndicator)
 				}
 				if (newVal[this.criteria].signals[index].analysis === 'Exit') {
@@ -660,7 +664,6 @@ export default {
 					}
 					this.handleRiskSelect(obj)
 				}
-			}
 		}
 	}
 }

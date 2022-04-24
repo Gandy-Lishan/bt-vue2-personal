@@ -14,14 +14,14 @@
 					<el-radio
 						v-model="radio"
 						label=" "
-						@change="getRadioSelect"
+						@change="setRadio"
 					></el-radio>
 					<el-select
-						v-model="conditionRadio"
+						v-model="tech.comparison"
+						@change="setDesciption"
 						size="mini"
 						:disabled="!(this.radio === ' ')"
 						filterable
-						@change="getConditionRadio"
 						placeholder="Please select condition"
 					>
 						<el-option
@@ -55,12 +55,12 @@
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							v-model="scValue"
+							v-model="tech.value"
 							:disabled="!(this.radio === ' ')"
 							size="mini"
 							filterable
 							placeholder="Please select condition"
-							@change="getConditionRadioSymbolClose"
+							@change="getValue1Select"
 						>
 							<el-option
 								v-for="item in valueConditions"
@@ -78,15 +78,15 @@
 					<el-form-item>
 						<el-radio
 							v-model="radio"
-							@change="getRadioSelect"
+							@change="setRadio"
 							label="  "
 						></el-radio>
 						<el-select
-							v-model="radioValue"
+							v-model="comparison2"
 							:disabled="!(this.radio === '  ')"
 							size="mini"
 							filterable
-							@change="getRadioValue"
+							@change="getRadio2Select"
 							placeholder="Please select condition"
 						>
 							<el-option
@@ -122,12 +122,12 @@
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							v-model="tech.value"
+							v-model="value2"
 							:disabled="!(this.radio === '  ')"
 							size="mini"
 							filterable
 							placeholder="Please select condition"
-							@change="getTechValue"
+							@change="getValue2Select"
 						>
 							<el-option
 								v-for="item in valueConditions"
@@ -147,8 +147,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+const throttle = require('lodash/throttle')
 export default {
 	name: 'cci',
 	props: {
@@ -185,15 +184,14 @@ export default {
 				{ value: 'LIPS', label: 'Lips', disabled: false }
 			],
 			scRadioConditions: [
-				{ value: 'Symbol Close', label: 'Symbol Close' },
-				{ value: 'Symbol High', label: 'Symbol High' },
-				{ value: 'Symbol Open', label: 'Symbol Open' },
-				{ value: 'Symbol Low', label: 'Symbol Low' }
+				{ value: 'SC', label: 'Symbol Close' },
+				{ value: 'SH', label: 'Symbol High' },
+				{ value: 'SO', label: 'Symbol Open' },
+				{ value: 'SL', label: 'Symbol Low' }
 			],
-			conditionRadio: 'Symbol Close',
 			description: '',
-			scValue: 'JAW',
-			radioValue: 'JAW',
+			value2: 'TEETH',
+			comparison2: 'JAW',
 			editTechVal: '',
 			radio: ' '
 		}
@@ -202,9 +200,9 @@ export default {
 		techVal: {
 			handler(newVal) {
 				var _obj = {
-					radio: this.conditionRadio,
-					radioValue: this.radioValue,
-					techValue: this.tech.value
+					radio: this.tech.comparison,
+					radioValue: this.comparison2,
+					techValue: this.value2
 				}
 				var obj = CIQ.store.state.conditionRadio
 				obj.Aligator_like = JSON.stringify(_obj)
@@ -219,43 +217,31 @@ export default {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 		},
-		getConditionRadioSymbolClose(val) {
-			this.scValue = val
+		getValue1Select(val) {
+			this.tech.value = val
 			var _obj = {
-				radio: this.conditionRadio,
-				radioValue: this.radioValue,
-				techValue: this.scValue
+				radio: this.tech.comparison,
+				radioValue: this.comparison2,
+				techValue: this.value2
 			}
 			var obj = CIQ.store.state.conditionRadio
 			obj.Aligator_like = JSON.stringify(_obj)
 			CIQ.store.commit('setConditionRadio', obj)
-			//CIQ.exportEx()
-		},
-		getRadioSelect(val) {
-			this.radio = val
-			if (val === ' ') {
-				this.tech.comparison = 'SC'
-				this.conditionRadio = 'Symbol Close'
-				this.tech.value = this.scValue
-			}
-			if (val === '  ') {
-				this.tech.comparison = this.radioValue
-				this.radioValue = 'JAW'
-				this.tech.value = 'TEETH'
-			}
-			var _obj = {
-				radio: val,
-				radioValue: this.radioValue,
-				techValue: this.tech.value
-			}
-			var obj = CIQ.store.state.conditionRadio
-			obj.Aligator_like = JSON.stringify(_obj)
-			CIQ.store.commit('setConditionRadio', obj)
-
 			this.setDesciption()
 			//CIQ.exportEx()
 		},
-		getRadioValue(val) {
+		setRadio(val) {
+			var _obj = {
+				radio: val,
+				radioValue: this.comparison2,
+				techValue: this.value2
+			}
+			var obj = CIQ.store.state.conditionRadio
+			obj.Aligator_like = JSON.stringify(_obj)
+			CIQ.store.commit('setConditionRadio', obj)
+			//CIQ.exportEx()
+		},
+		getRadio2Select(val) {
 			for (let i = 0; i < this.valueConditions.length; i++) {
 				this.valueConditions[i].disabled = false
 				if (this.valueConditions[i].value === val) {
@@ -263,16 +249,17 @@ export default {
 				}
 			}
 			var _obj = {
-				radio: this.conditionRadio,
-				radioValue: this.radioValue,
-				techValue: this.tech.value
+				radio: this.tech.comparison,
+				radioValue: this.comparison2,
+				techValue: this.value2
 			}
 			var obj = CIQ.store.state.conditionRadio
 			obj.Aligator_like = JSON.stringify(_obj)
 			CIQ.store.commit('setConditionRadio', obj)
+			this.setDesciption()
 			//CIQ.exportEx()
 		},
-		getTechValue(val) {
+		getValue2Select(val) {
 			for (let i = 0; i < this.radioConditions.length; i++) {
 				this.radioConditions[i].disabled = false
 				if (this.radioConditions[i].value === val) {
@@ -280,14 +267,15 @@ export default {
 				}
 			}
 			var _obj = {
-				radio: this.conditionRadio,
-				radioValue: this.radioValue,
-				techValue: this.tech.value
+				radio: this.tech.comparison,
+				radioValue: this.comparison2,
+				techValue: this.value2
 			}
 			var obj = CIQ.store.state.conditionRadio
 			obj.Aligator_like = JSON.stringify(_obj)
 			CIQ.store.commit('setConditionRadio', obj)
 			//CIQ.exportEx()
+			this.setDesciption()
 		},
 		setDesciption(index) {
 			let criteria = ''
@@ -305,18 +293,35 @@ export default {
 				}
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
-			let radio = this.radio === ' ' ? this.conditionRadio : this.radioValue
-			let value = this.radio === ' ' ? this.scValue : this.tech.value
+			let comparison
+			switch (this.tech.comparison) {
+				case 'SC':
+					comparison = "Symbol Close"
+					break;
+				case 'SH':
+					comparison = "Symbol High"
+					break;
+				case 'SL':
+					comparison = "Symbol Low"
+					break;
+				case 'SO':
+					comparison = "Symbol Open"
+					break;
+				default:
+					break;
+			}
+			let radio = this.radio === ' ' ? comparison : this.comparison2
+			let value = this.radio === ' ' ? this.tech.value : this.value2
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${radio} ${condition} ${value}`
 			console.log(this.description)
 		},
 		saveCondition(index) {
 			let checked = true
-			if (this.conditionRadio === '  ') {
-				this.tech.comparison = this.radioValue
+			if (this.radio === '  ') {
+				this.tech.comparison = this.comparison2
 			}
-			let tech = this.tech
+			let tech = JSON.parse(JSON.stringify(this.tech))
 			tech.criteria = this.criteria
 			tech.index = index
 			this.$store.commit('saveCondition', tech)
@@ -333,8 +338,6 @@ export default {
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)
-				this.tech.comparison = obj.comparison
-				this.tech.value = obj.value
 				if (
 					this.tech.comparison === 'SC' ||
 					this.tech.comparison === 'SO' ||
@@ -342,21 +345,8 @@ export default {
 					this.tech.comparison === 'SH'
 				) {
 					this.radio = ' '
-					switch (this.tech.comparison) {
-						case 'SC':
-							this.conditionRadio = 'Symbol Close'
-							break
-						case 'SH':
-							this.conditionRadio = 'Symbol High'
-							break
-						case 'SO':
-							this.conditionRadio = 'Symbol Open'
-							break
-						case 'SL':
-							this.conditionRadio = 'Symbol Low'
-							break
-					}
-					this.scValue = this.tech.value
+					this.tech.comparison = obj.comparison
+				    this.tech.value = obj.value
 				}
 				if (
 					this.tech.comparison === 'TEETH' ||
@@ -364,28 +354,12 @@ export default {
 					this.tech.comparison === 'LIPS'
 				) {
 					this.radio = '  '
-					this.tech.scValue = this.tech.value
-					this.radioValue = this.tech.comparison
-					this.getRadioValue(this.radioValue)
+					this.value2 = obj.value
+					this.comparison2 = obj.comparison
+					this.getRadio2Select(this.comparison2)
 				}
 				this.editTechVal = obj.indicator
 				this.setDesciption()
-			}
-		},
-		getConditionRadio(val) {
-			switch (val) {
-				case 'Symbol Close':
-					this.tech.comparison = 'SC'
-					break
-				case 'Symbol High':
-					this.tech.comparison = 'SH'
-					break
-				case 'Symbol Open':
-					this.tech.comparison = 'SO'
-					break
-				case 'Symbol Low':
-					this.tech.comparison = 'SL'
-					break
 			}
 		}
 	}
@@ -415,5 +389,19 @@ export default {
 }
 /deep/ .el-radio {
 	margin-right: -3px;
+}
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .el-form-item__label {
+		margin-right: 10px;
+	}
+}
+@media (min-width: 375px) and (max-width: 767px) {
+	/deep/ .el-form-item__label {
+		margin-right: 0px;
+	}
+	.condition-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
 </style>

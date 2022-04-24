@@ -1,6 +1,6 @@
 <template>
 	<div class="senti-container">
-		<el-form :model="tech" :rules="rules" ref="macdForm">
+		<el-form :model="tech" ref="macdForm" :rules="rules">
 			<!-- <div class="ids-container">
 				<el-form-item label="Slow moving average" prop="MACDSlow">
 					<el-input
@@ -27,7 +27,7 @@
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio
-						v-model="radioObj.valueRadio1"
+						v-model="radio"
 						label="Indicator Value"
 						@change="getConditionRadio"
 					></el-radio>
@@ -35,7 +35,7 @@
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							:disabled="!(radioObj.valueRadio1 === 'Indicator Value')"
+							:disabled="!(radio === 'Indicator Value')"
 							v-model="tech.condition"
 							size="mini"
 							filterable
@@ -54,7 +54,7 @@
 				<div class="conditionInput">
 					<el-form-item prop="value">
 						<el-input
-							:disabled="!(radioObj.valueRadio1 === 'Indicator Value')"
+							:disabled="!(radio === 'Indicator Value')"
 							@input="setDesciption"
 							v-model="tech.value"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
@@ -66,7 +66,7 @@
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio
-						v-model="radioObj.valueRadio2"
+						v-model="radio"
 						label="Indicator Value "
 						@change="getConditionRadio"
 					></el-radio>
@@ -74,7 +74,7 @@
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							:disabled="!(radioObj.valueRadio2 === 'Indicator Value ')"
+							:disabled="!(radio === 'Indicator Value ')"
 							v-model="tech.condition"
 							size="mini"
 							filterable
@@ -99,7 +99,7 @@
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio
-						v-model="radioObj.histRadio"
+						v-model="radio"
 						label="Indicator Hist"
 						@change="getConditionRadio"
 					></el-radio>
@@ -107,7 +107,7 @@
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							:disabled="!(radioObj.histRadio === 'Indicator Hist')"
+							:disabled="!(radio === 'Indicator Hist')"
 							v-model="histCondition"
 							size="mini"
 							filterable
@@ -124,11 +124,11 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item>
+					<el-form-item prop="histValue">
 						<el-input
-							:disabled="!(radioObj.histRadio === 'Indicator Hist')"
+							:disabled="!(radio === 'Indicator Hist')"
 							@input="setDesciption"
-							v-model="tech.value"
+							v-model="tech.histValue"
 							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 							placeholder="Input Value"
 						></el-input>
@@ -141,8 +141,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+const throttle = require('lodash/throttle')
 export default {
 	name: 'macd',
 	props: {
@@ -153,7 +152,21 @@ export default {
 		direction: String
 	},
 	data() {
-		var validateValue = (rule, value, callback) => {
+		let validateValue = (rule, value, callback) => {
+			if (value === '') {
+				return callback(new Error('Please input value'))
+			}
+			if (isNaN(value) && value !== 'MACDSL') {
+				return callback(new Error('Please enter the correct format'))
+			}
+			const pattern =
+				/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+			if (!pattern.test(value) && value != 0 && value !== 'MACDSL') {
+				return callback(new Error('Enter up to two decimal places'))
+			}
+			callback()
+		}
+		let validateHistValue = (rule, value, callback) => {
 			if (value === '') {
 				return callback(new Error('Please input value'))
 			}
@@ -172,9 +185,9 @@ export default {
 				ids: 'MACD',
 				condition: 3,
 				comparison: 'MACD',
-				value: 0
+				value: 0,
+				histValue: 0
 			},
-			conditionRadio: 'Indicator Value',
 			conditions: [
 				{ value: 0, label: '>' },
 				{ value: 1, label: '=' },
@@ -190,22 +203,18 @@ export default {
 			description: '',
 			editTechVal: '',
 			histCondition: 0,
-			radioObj: {
-				valueRadio1: 'Indicator Value',
-				valueRadio2: '',
-				histRadio: ''
-			},
-
+			radio: 'Indicator Value',
 			rules: {
-				value: [{ validator: validateValue, trigger: 'blur' }]
-			}
-		}
+				value: [{ validator: validateValue, trigger: 'blur' }],
+				histValue: [{ validator: validateHistValue, trigger: 'blur' }]
+			},
+		};
 	},
 	watch: {
 		techVal: {
 			handler(newVal) {
 				var obj = CIQ.store.state.conditionRadio
-				obj.MACD_like = this.conditionRadio
+				obj.MACD_like = this.radio
 				CIQ.store.commit('setConditionRadio', obj)
 			},
 			immediate: true,
@@ -230,54 +239,37 @@ export default {
 				criteria = 'X:'
 
 				if (this.direction == 'Long') {
-					direction = 'Cover:'
-				} else if (this.direction == 'Short') {
 					direction = 'Close:'
+				} else if (this.direction == 'Short') {
+					direction = 'Cover:'
 				}
 			}
+			let value = this.tech.value
 			let condition = this.conditions[this.tech.condition].label
 			let techVal = this.techVal ? this.techVal : this.editTechVal
-			if (this.radioObj.histRadio) {
+			if (this.radio === 'Indicator Hist') {
 				techVal += ' Hist'
+				value = this.tech.histValue
 				condition = this.conditions[this.histCondition].label
 			}
-			this.description = `${criteria} ${direction} ${techVal} ${condition} ${this.tech.value}`
+			this.description = `${criteria} ${direction} ${techVal} ${condition} ${value}`
+			console.log(this.description);
 		},
-
-		// getConditionRadio(val) {
-		// 	CIQ.store.commit('setConditionRadio', val)
-		// 	if (val === ' Indicator Value ') {
-		// 		this.tech.value = 'MACDSL'
-		// 	} else if (val === ' Indicator Value') {
-		// 		this.tech.value = 0
-		// 	}
-		// 	this.setDesciption()
-		// 	CIQ.exportEx()
-		// },
 		getConditionRadio(val) {
-			// 排他思想
-			this.conditionRadio = val
-
+			this.clearFormValidate()
 			var obj = CIQ.store.state.conditionRadio
 			obj.MACD_like = val
 			CIQ.store.commit('setConditionRadio', obj)
-
-			for (let key in this.radioObj) {
-				this.radioObj[key] = ''
-			}
 			switch (val) {
 				case 'Indicator Value':
-					this.radioObj.valueRadio1 = val
 					this.tech.value = 0
 					this.tech.comparison = 'MACD'
 					break
 				case 'Indicator Value ':
-					this.radioObj.valueRadio2 = val
 					this.tech.value = 'SL'
 					this.tech.comparison = 'MACD'
 					break
 				case 'Indicator Hist':
-					this.radioObj.histRadio = val
 					this.tech.value = 0
 					this.tech.comparison = 'MACDH'
 					break
@@ -287,19 +279,35 @@ export default {
 		},
 		saveCondition(index) {
 			let checked = true
-			let validForm
-			this.$refs.macdForm.validate((valid) => {
-				validForm = valid
-			})
+			let validForm = true
+			if(this.radio === 'Indicator Value') {
+				this.$refs['macdForm'].validateField(['value'], (errorMsg) => {
+					if (errorMsg) {
+						validForm = false
+					}
+				})
+			}
+			if(this.radio === 'Indicator Value ') {
+				this.$refs['macdForm'].validateField(['histValue'], (errorMsg) => {
+					if (errorMsg) {
+						validForm = false
+					}
+				})
+			}
 			if (validForm) {
+				
+				let tech = JSON.parse(JSON.stringify(this.tech))
+
 				if (this.description) {
 					this.setDesciption()
 				}
-				if (this.radioObj.histRadio) {
-					this.tech.condition = this.histCondition
+				if (this.radio === 'Indicator Hist') {
+					tech.condition = this.histCondition
+					tech.value = tech.histValue
+					delete tech.histValue
+				}else{
+					delete tech.histValue
 				}
-				let tech = JSON.parse(JSON.stringify(this.tech))
-
 				tech.criteria = this.criteria
 				tech.index = index
 				this.$store.commit('saveCondition', tech)
@@ -317,23 +325,21 @@ export default {
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
 				this.clearFormValidate()
-				for (let key in this.radioObj) {
-					this.radioObj[key] = ''
-				}
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
-				this.tech.condition = Number(obj.condition)
 				this.tech.value = obj.value
 				this.tech.comparison = obj.comparison
 				if (this.tech.value === 'SL' && this.tech.comparison === 'MACD') {
-					this.radioObj.valueRadio2 = 'Indicator Value '
+					this.radio = 'Indicator Value '	
+				    this.tech.condition = Number(obj.condition)
 				}
 				if (this.tech.comparison === 'MACDH') {
-					this.radioObj.histRadio = 'Indicator Hist'
-					this.histCondition = this.tech.condition
+					this.radio = 'Indicator Hist'
+					this.histCondition = Number(obj.condition)
 				}
 				if (this.tech.value !== 'SL' && this.tech.comparison === 'MACD') {
-					this.radioObj.valueRadio1 = 'Indicator Value'
+					this.radio = 'Indicator Value'
+				    this.tech.condition = Number(obj.condition)
 				}
 				this.editTechVal = obj.indicator
 				this.setDesciption()

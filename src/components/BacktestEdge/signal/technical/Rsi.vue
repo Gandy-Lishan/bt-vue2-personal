@@ -128,9 +128,9 @@ export default {
 			} else if (this.criteria == 'exit') {
 				criteria = 'X:'
 				if (this.direction == 'Long') {
-					direction = 'Cover:'
-				} else if (this.direction == 'Short') {
 					direction = 'Close:'
+				} else if (this.direction == 'Short') {
+					direction = 'Cover:'
 				}
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
