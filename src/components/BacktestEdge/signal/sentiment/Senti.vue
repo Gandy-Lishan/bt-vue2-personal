@@ -119,8 +119,7 @@ export default {
 		sentiUrl: String,
 		sentiVal: String,
 		panelIndex: Number,
-		direction: String,
-		sentiUrlArr: Array
+		direction: String
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -223,7 +222,6 @@ export default {
 				}
 				newVal.forEach((item) => {
 					if (item.indicator) {
-						//console.log(vm.sentiUrl,item.indicator,vm.panelIndex,vm.sentiUrlArr)
 						if (item.indicator === vm.sentiUrl) {
 							// 当从chartiq填充，极值发生了改变时
 							//console.log(vm.sentiUrl)
