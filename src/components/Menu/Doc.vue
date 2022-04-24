@@ -18,6 +18,10 @@
 			<p>文档会以图文结合的方式教你如何使用回测系统，现在让我们开始吧！</p>
 			<h3>1. 介绍回测系统</h3>
             <h4>1.1 图表部分</h4>
+             <blockquote class="video_link">
+               <i class="el-icon-video-play"></i>
+               <a href="#">图表操作介绍</a>
+            </blockquote>
             <img src="../../assets/demo-chart.png" alt="Chart">
             <blockquote>
                 <p>
@@ -40,6 +44,10 @@
                 </p>
             </blockquote>
 			<h3>2. 如何创建回测</h3>
+            <blockquote class="video_link">
+              <i class="el-icon-video-play"></i>
+              <a href="#">回测创建流程演示</a>
+            </blockquote>
             <h4>2.1 填写回测的基本信息</h4>
             <img src="../../assets/fill-set-up.png" alt="Backtest Information">
             <blockquote>
@@ -54,9 +62,8 @@
             <blockquote>
                 <p>
                     <br />
-                    如上图所示，在下拉框中选择一个 Sentiment Indicator，填写指标值。
-                    为了确保你的指标有收益，我们推荐你填写 Extreme Optimism 和 Extreme Pessimism 之间的值。如果你选的是 Technical Indicators 我们推荐你结合图表，填写
-                    极值附近或者两个极值之间的值。
+                    如上图所示，在下拉框中选择一个 Sentiment Indicator或者 Technical Indicator，填写指标值。
+                    为了确保你的指标有收益，Sentiment Indicator方面我们推荐你填写 Extreme Optimism 和 Extreme Pessimism 之间的值。
                     <br />
                 </p>
             </blockquote>
@@ -66,7 +73,15 @@
             <blockquote>
                 <p>
                     <br />
-                    如上图所示，你可以在退场条件中使用 Technical Indicator，切换单选框，在 Technical Indicators 的下拉框中选择一个 indicator，填写指标值。
+                    如上图所示，你可以在退场条件中设定一个 Sentiment Indicator或者 Technical Indicator，填写指标值。
+                    <br />
+                </p>
+            </blockquote>
+            <img src="../../assets/risk-control.png" alt="Exit Criteria">
+            <blockquote>
+                <p>
+                    <br />
+                    如上图所示，你可以在退场条件中设定 stop/loss 或者 time-in-market 
                     <br />
                 </p>
             </blockquote>
@@ -100,6 +115,10 @@
                 </p>
             </blockquote>
             <h3>4. 如何使用 Sample Backtests</h3>
+            <blockquote class="video_link">
+              <i class="el-icon-video-play"></i>
+              <a href="#">Sample Backtest的演示视频</a>
+            </blockquote>
             <h4>4.1 打开 Sample Backtests 标签页</h4>
              <img src="../../assets/sample-backtests.png" alt="Sample Backtests">
              <blockquote>
@@ -124,8 +143,8 @@
         <el-aside>
           <div style="margin:0px 0 0 180px;font-size:18px;font-weight:bold;">目录</div>
             <el-tabs @tab-click="handleClick" v-model="activeName" :tab-position="tabPosition" style="height: auto;">
-              <el-tab-pane :name="'tab'+index"
-              :class="item.lev"
+              <el-tab-pane :name="'tab'+index" 
+              :class="item.lev" 
               v-for="(item, index) in navList" 
               :key="index" 
               :label="item.name"></el-tab-pane>
@@ -235,6 +254,24 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.video_link{
+  border-radius: 2px;
+  padding: 20px;
+  background-color: #e7ecf3;
+  width: 40rem;
+  margin: 24px 0;
+  display: flex;
+  align-items: center;
+}
+.video_link i{
+  font-size:35px;
+}
+.video_link a{
+  padding-left: 16px;
+  color:#486491;
+  font-weight: 600;
+  text-decoration: none;
+}
 .content {
 	margin: 0 auto 0 310px;
 	max-width: 1280px;

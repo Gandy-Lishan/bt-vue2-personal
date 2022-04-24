@@ -1,7 +1,7 @@
 <template>
 	<div class="home">
 		<div class="home-container">
-			<header class="header">
+			<div class="navbar">
 				<div class="header_logo">
 					<span
 						><img
@@ -10,19 +10,20 @@
 							alt="logo"
 					/></span>
 					<div class="menu">
-<el-dropdown :hide-on-click="false" @command="handleCommand">
-  <span class="el-dropdown-link">
-    Help<i class="el-icon-arrow-down el-icon--right"></i>
-  </span>
-  <el-dropdown-menu slot="dropdown">
-    <el-dropdown-item command="doc">
-		文档教程
-	</el-dropdown-item>
-    <el-dropdown-item command="video">视频教程</el-dropdown-item>
-    <el-dropdown-item command="contact">联系我们</el-dropdown-item>
-  </el-dropdown-menu>
-</el-dropdown></div>
+						<el-dropdown :hide-on-click="false" @command="handleCommand">
+							<span class="el-dropdown-link">
+								Help<i class="el-icon-arrow-down el-icon--right"></i>
+							</span>
+							<el-dropdown-menu slot="dropdown">
+								<el-dropdown-item command="doc"> Tutorial </el-dropdown-item>
+								<el-dropdown-item command="contact"> Contant Us </el-dropdown-item>
+							</el-dropdown-menu>
+						</el-dropdown>
+					</div>
 				</div>
+			</div>
+			<header class="header">
+
 				<el-row type="flex" justify="center"
 					><el-col><p class="betaNote">BacktestEdge Beta</p></el-col>
 				</el-row>
@@ -191,6 +192,7 @@
 					Copyright © 2001 - 2022 Sundial Capital Research, Inc. All rights
 					reserved.
 				</p>
+				<ul class="Footer_social___a7sK"><li><a href="https://facebook.com/sentimentrader" target="_blank" rel="noopener noreferrer"><i class="fa fa-facebook"></i></a></li><li><a href="https://www.linkedin.com/company/sentimentrader" target="_blank" rel="noopener noreferrer"><i class="fa fa-linkedin"></i></a></li><li><a href="https://youtube.com/sentimentrader" target="_blank" rel="noopener noreferrer"><i class="fa fa-youtube"></i></a></li><li><a href="https://twitter.com/sentimentrader" target="_blank" rel="noopener noreferrer"><i class="fa fa-twitter"></i></a></li></ul>
 			</div>
 		</div>
 	</div>
@@ -529,7 +531,7 @@ export default {
 							savedTechSD.push({
 								type: CIQ.stxx.layout.studies[i].type,
 								inputs: CIQ.stxx.layout.studies[i].inputs,
-								outputs: CIQ.stxx.layout.studies[i].outputs,
+								//outputs: CIQ.stxx.layout.studies[i].outputs,
 								parameters: CIQ.stxx.layout.studies[i].parameters,
 								panel: CIQ.stxx.layout.studies[i].panel
 							})
@@ -537,6 +539,7 @@ export default {
 
 						indicatorLayout.savedTechSD = savedTechSD
 						indicatorLayout.activatedMA = this.$store.state.activatedMA
+
 						backtestData.indicator_layout = JSON.stringify(indicatorLayout)
 						let backtestDataStr = this.$qs.stringify(backtestData)
 						try {
@@ -741,14 +744,40 @@ button.toTop {
 .footer {
 	background: #fff;
 	display: flex;
-	padding: 16px;
+	padding: 16px 16px 48px 16px;
 	border-top: 1px solid #e5e7eb;
 	margin-top: 50px;
+	justify-content: space-between;
+	align-items: center;
 }
 .footer p {
 	text-align: center;
 	color: #9ca3af;
 	line-height: 21px;
+}
+
+ol, ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.Footer_social___a7sK {
+    display: flex;
+}
+.Footer_social___a7sK li {
+    margin-right: 24px;
+}
+.Footer_social___a7sK a {
+    font-size: 20px;
+    color: #9ca3af;
+}
+.Footer_social___a7sK a:hover {
+    font-size: 20px;
+    color: #0284c7;
+}
+a {
+    transition: color .3s ease-in-out;
+    text-decoration: none;
 }
 
 .home-container {
@@ -871,10 +900,23 @@ header {
 	}
 }
 .el-dropdown-link {
-    cursor: pointer;
-    color: #409EFF;
-  }
-  .el-icon-arrow-down {
-    font-size: 12px;
-  }
+	cursor: pointer;
+	//color: #409eff;
+	font-weight: 500;
+    line-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    transition: color .3s ease-in-out;
+    color: #6b7280;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+.el-dropdown-link:hover {
+    color: #111827;
+}
+.el-icon-arrow-down {
+font-size: 12px;
+}
 </style>
