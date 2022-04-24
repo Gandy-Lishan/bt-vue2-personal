@@ -394,6 +394,7 @@ export default {
 			}
 		},
 		getSentiUrl(obj) {
+			//console.log('getSentiUrl Exit',obj)
 			this.sentiUrlArr.splice(obj.index, 1, obj.url)
 		},
 		getTechUrl(obj) {

@@ -42,6 +42,7 @@
 						<indicator
 							:criteria="'entry'"
 							:panelIndex="index"
+							:indicatorRadioArr="indicatorRadioArr"
 							:editableTabsValue = "editableTabsValue"
 							ref="indiChild"
 							@getSentiUrl="getSentiUrl"
@@ -57,7 +58,6 @@
 							:criteria="'entry'"
 							:panelIndex="index"
 							ref="sentiChild"
-							:sentiUrlArr = "sentiUrlArr"
 							:sentiUrl="sentiUrlArr[index]"
 							:sentiVal="sentiValArr[index]"
 							v-show="indicatorRadioArr[index] === 'sentiment'"
@@ -376,6 +376,7 @@ export default {
 		// 	this.sentiUrl = val
 		// },
 		getSentiUrl(obj) {
+			//console.log('getSentiUrl Exit',obj)
 			this.sentiUrlArr.splice(obj.index, 1, obj.url)
 		},
 		getTechUrl(obj) {

@@ -119,8 +119,7 @@ export default {
 		sentiUrl: String,
 		sentiVal: String,
 		panelIndex: Number,
-		direction: String,
-		sentiUrlArr: Array
+		direction: String
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -223,7 +222,6 @@ export default {
 				}
 				newVal.forEach((item) => {
 					if (item.indicator) {
-						//console.log(vm.sentiUrl,item.indicator,vm.panelIndex,vm.sentiUrlArr)
 						if (item.indicator === vm.sentiUrl) {
 							// 当从chartiq填充，极值发生了改变时
 							//console.log(vm.sentiUrl)
@@ -237,24 +235,25 @@ export default {
 			immediate: true,
 			deep: true
 		},
-		// sentiUrl: {
-		// 	handler(newVal) {
-		// 		if (newVal) {
-		// 			let vm = this
-		// 			let extremeValue = this.$store.state.extremeValue
-		// 			extremeValue.forEach((item) => {
-		// 				console.log(item.indicator,newVal)
-		// 				if (item.indicator) {
-		// 					if (item.indicator === newVal) {
-								
-		// 						vm.senti.extreme_pessimism = item.extremePessimism
-		// 						vm.senti.extreme_optimism = item.extremeOptimism
-		// 					}
-		// 				}
-		// 			})
-		// 		}
-		// 	}
-		// }
+		sentiUrl: {
+			handler(newVal) {
+				if (newVal) {
+					//console.log(newVal)
+					let vm = this
+					let extremeValue = this.$store.state.extremeValue
+					extremeValue.forEach((item) => {
+						
+						if (item.indicator) {
+							if (item.indicator === newVal) {
+								//console.log(item.indicator,newVal)
+								vm.senti.extreme_pessimism = item.extremePessimism
+								vm.senti.extreme_optimism = item.extremeOptimism
+							}
+						}
+					})
+				}
+			}
+		}
 	},
 	methods: {
 		change(e) {
@@ -456,7 +455,7 @@ export default {
 			}
 		},
 		setEditData(newVal) {
-			if (JSON.stringify(newVal) != '{}') {
+			if (JSON.stringify(newVal) != '{}') {	
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.senti.extreme_optimism = obj.extreme_optimism
 				this.senti.extreme_pessimism = obj.extreme_pessimism

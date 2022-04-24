@@ -90,6 +90,7 @@ export default {
 		panelIndex: Number,
 		isShowRisk: Number,
 		editableTabsValue: String,
+		indicatorRadioArr: Array,
 	},
 	data() {
 		var validateSenti = (rule, value, callback) => {
@@ -138,6 +139,7 @@ export default {
 	},
 	watch: {
 		updateSenti(val) {
+			console.log(this.editableTabsValue,this.panelIndex,this.indicatorRadioArr)
 			if (
 				this.si.sentimentIndicator == '' &&
 				this.si.technicalIndicator == '' &&
@@ -295,6 +297,7 @@ export default {
 				}
 				this.$store.commit('getMA', activatedMAList)
 				this.$store.commit('getEntryIndicators', {index: this.panelIndex, value: item.url})
+				console.log(this.$store.state.indicators.formIndicators.entry)
 						let obj = {}
 						obj.index = this.panelIndex
 						obj.url = item.url
