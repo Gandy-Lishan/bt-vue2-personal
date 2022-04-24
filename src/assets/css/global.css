@@ -277,6 +277,9 @@ input[type="date"],
 input[type="time"] {
   width: 80px;
 }
+.condition-container {
+  margin-top: 16px;
+}
 .senti-container .condition-container .conditionInput input[type="text"],
 input[type="number"],
 input[type="date"],

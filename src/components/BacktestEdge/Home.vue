@@ -1,7 +1,7 @@
 <template>
 	<div class="home">
 		<div class="home-container">
-			<header class="header">
+			<div class="navbar">
 				<div class="header_logo">
 					<span
 						><img
@@ -15,13 +15,15 @@
 								Help<i class="el-icon-arrow-down el-icon--right"></i>
 							</span>
 							<el-dropdown-menu slot="dropdown">
-								<el-dropdown-item command="doc"> 文档教程 </el-dropdown-item>
-								<el-dropdown-item command="video">视频教程</el-dropdown-item>
-								<el-dropdown-item command="contact">联系我们</el-dropdown-item>
+								<el-dropdown-item command="doc"> Tutorial </el-dropdown-item>
+								<el-dropdown-item command="contact"> Contant Us </el-dropdown-item>
 							</el-dropdown-menu>
 						</el-dropdown>
 					</div>
 				</div>
+			</div>
+			<header class="header">
+
 				<el-row type="flex" justify="center"
 					><el-col><p class="betaNote">BacktestEdge Beta</p></el-col>
 				</el-row>
@@ -198,6 +200,7 @@
 					Copyright © 2001 - 2022 Sundial Capital Research, Inc. All rights
 					reserved.
 				</p>
+				<ul class="Footer_social___a7sK"><li><a href="https://facebook.com/sentimentrader" target="_blank" rel="noopener noreferrer"><i class="fa fa-facebook"></i></a></li><li><a href="https://www.linkedin.com/company/sentimentrader" target="_blank" rel="noopener noreferrer"><i class="fa fa-linkedin"></i></a></li><li><a href="https://youtube.com/sentimentrader" target="_blank" rel="noopener noreferrer"><i class="fa fa-youtube"></i></a></li><li><a href="https://twitter.com/sentimentrader" target="_blank" rel="noopener noreferrer"><i class="fa fa-twitter"></i></a></li></ul>
 			</div>
 		</div>
 	</div>
@@ -761,7 +764,6 @@ export default {
 			})
 		},
 		handleCommand(command) {
-			console.log('文档教程', command)
 			this.$router.push('/doc')
 		}
 	}
@@ -837,16 +839,40 @@ button.toTop {
 .footer {
 	background: #fff;
 	display: flex;
-	padding: 16px;
+	padding: 16px 16px 48px 16px;
 	border-top: 1px solid #e5e7eb;
 	margin-top: 50px;
+	justify-content: space-between;
+	align-items: center;
 }
 .footer p {
 	text-align: center;
 	color: #9ca3af;
 	line-height: 21px;
 }
-
+ol, ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.Footer_social___a7sK {
+    display: flex;
+}
+.Footer_social___a7sK li {
+    margin-right: 24px;
+}
+.Footer_social___a7sK a {
+    font-size: 20px;
+    color: #9ca3af;
+}
+.Footer_social___a7sK a:hover {
+    font-size: 20px;
+    color: #0284c7;
+}
+a {
+    transition: color .3s ease-in-out;
+    text-decoration: none;
+}
 .home-container {
 	margin: 0 auto;
 }
@@ -872,11 +898,14 @@ header {
 	}
 	background: url(../../assets/dots-blue.png);
 }
+.navbar {
+	height: 78px;
+}
 .header_logo {
 	padding: 12px 24px;
 	display: flex;
 	box-shadow: 0 1px 3px rgb(0 0 0 / 10%), 0 1px 2px rgb(0 0 0 / 6%);
-	position: sticky;
+	position: fixed;
 	z-index: 999;
 	top: 0;
 	width: 100%;
@@ -968,7 +997,20 @@ header {
 }
 .el-dropdown-link {
 	cursor: pointer;
-	color: #409eff;
+	//color: #409eff;
+	font-weight: 500;
+    line-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    transition: color .3s ease-in-out;
+    color: #6b7280;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+.el-dropdown-link:hover {
+    color: #111827;
 }
 .el-icon-arrow-down {
 	font-size: 12px;
