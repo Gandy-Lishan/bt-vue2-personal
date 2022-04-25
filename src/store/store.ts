@@ -48,6 +48,7 @@ export default new Vuex.Store({
 			entry: {
 				relation: 0,
 				score: 1,
+				signals_in_market: 1,
 				signals: [
 					{
 						sentimentIndicator: '',
@@ -58,6 +59,7 @@ export default new Vuex.Store({
 			exit: {
 				relation: 0,
 				score: 1,
+				signals_in_market: 1,
 				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: ''}]
 			}
 		},
@@ -352,6 +354,7 @@ export default new Vuex.Store({
 				entry: {
 					relation: 0,
 					score: 1,
+					signals_in_market: 1,
 					signals: [
 						{
 							sentimentIndicator: '',
@@ -362,6 +365,7 @@ export default new Vuex.Store({
 				exit: {
 					relation: 0,
 					score: 1,
+					signals_in_market: 1,
 					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
 				}
 			}
@@ -409,6 +413,7 @@ export default new Vuex.Store({
 				entry: {
 					relation: 0,
 					score: 1,
+					signals_in_market: 1,
 					signals: [
 						{
 							sentimentIndicator: '',
@@ -419,12 +424,14 @@ export default new Vuex.Store({
 				exit: {
 					relation: 0,
 					score: 1,
+					signals_in_market: 1,
 					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
 				}
 			}
 			state.backtestInfo.entry =  {
 				score: 1,
 				relation: 0,
+				signals_in_market: 1,
 				signals: [
 					{
 						sentimentIndicator: '',
@@ -435,6 +442,7 @@ export default new Vuex.Store({
 			state.backtestInfo.exit =  {
 				relation: 0,
 				score: 1,
+				signals_in_market: 1,
 				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
 			}
 			state.backtestInfo.entry_description = []
@@ -474,7 +482,9 @@ export default new Vuex.Store({
 		},
 		saveScoreValue(state, obj) {
 			state.backtestInfo[obj.criteria].score = Number(obj.value)
-			
+		},
+		saveSignalsInMarket(state, obj) {
+			state.backtestInfo[obj.criteria].signals_in_market = Number(obj.value)
 		}
 	},
 	actions: {

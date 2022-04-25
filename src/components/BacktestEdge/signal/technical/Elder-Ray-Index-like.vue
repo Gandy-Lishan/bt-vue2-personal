@@ -6,21 +6,18 @@
 					<el-input
 						v-model="tech.ids.MACDSlow"
 						disabled
-						oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="Fast moving average" prop="MACDFast">
 					<el-input
 						disabled
 						v-model="tech.ids.MACDFast"
-						oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="Signal line" prop="MACDSL">
 					<el-input
 						disabled
 						v-model="tech.ids.MACDSL"
-						oninput="this.value=this.value.replace(/[\d]/g,'')"
 					></el-input>
 				</el-form-item>
 			</div> -->
@@ -57,7 +54,6 @@
 							:disabled="!(conditionRadio === 'Indicator hist1')"
 							@input="setDesciption"
 							v-model="tech.value"
-							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 							placeholder="Input Value"
 						></el-input>
 					</el-form-item>
@@ -96,7 +92,6 @@
 							:disabled="!(conditionRadio === 'Indicator hist2')"
 							@input="setDesciption"
 							v-model="tech.value"
-							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 							placeholder="Input Value"
 						></el-input>
 					</el-form-item>

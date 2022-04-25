@@ -183,6 +183,13 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   padding-left: 132px;
   height: 25px;
 }
+.backtest_container .risk-control-container .el-form-item__content{
+  padding-left: 0px;
+}
+.el-checkbox__label {
+  font-size: 16px;
+  margin-right: 5px;
+}
 
 .set-up-container input{
     line-height: 24px;
@@ -204,6 +211,17 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   padding: 0 5px 0 10px;
   height: 25px;
   width: 180px;
+  border-radius: unset;
+}
+.set-up-container .risk-control-container input:not([type]),
+.set-up-container .risk-control-container input[type="text"],
+.set-up-container .risk-control-container input[type="number"],
+.set-up-container .risk-control-container input[type="date"],
+.set-up-container .risk-control-container input[type="time"] {
+  border: #000000 solid 1px;
+  padding: 0 5px 0 10px;
+  height: 25px;
+  width: 103px;
   border-radius: unset;
 }
 .entry-container input:not([type]),
@@ -521,14 +539,14 @@ input[type="time"] {
 .entry-container .signal-option-box .signal-container input[type='number']:first-child, 
 .entry-container .signal-option-box .signal-container input[type='date']:first-child,
 .entry-container .signal-option-box .signal-container input[type='time']:first-child {
-	width: 120px;
+	width: 178px;
 }
 .exit-container .signal-option-box .signal-container input:not([type]):first-child, 
 .exit-container .signal-option-box .signal-container input[type='text']:first-child, 
 .exit-container .signal-option-box .signal-container input[type='number']:first-child, 
 .exit-container .signal-option-box .signal-container input[type='date']:first-child,
 .exit-container .signal-option-box .signal-container input[type='time']:first-child {
-	width: 120px;
+	width: 178px;
 }
 .exit-container .signal-option-box .signal-container .el-input__inner {
 	margin-left: 5px;
