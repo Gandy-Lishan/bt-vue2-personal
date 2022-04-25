@@ -480,10 +480,7 @@ export default {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})
-				let formateList = this.$store.state.formateTechnicalList
-					if (formateList.length === 0) {
-						formateList = this.loadShortLong()
-					}
+				let formateList = this.loadShortLong()
 				console.log(formateList)
 				for (let i = 0; i < formateList.length; i++) {
 					if (this.si.technicalIndicator === formateList[i].value) {

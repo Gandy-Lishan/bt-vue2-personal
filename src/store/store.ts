@@ -126,7 +126,6 @@ export default new Vuex.Store({
 		sentimentIndicatorList: [],
 		backtestNameList: [],
 		isSavaDescription: false,
-		formateTechnicalList: []
 	},
 	getters: {
 		getterIsSavaDescription: (state) => {
@@ -556,9 +555,6 @@ export default new Vuex.Store({
 			if (state.backtestInfo.old_uuid) {
 				delete state.backtestInfo.old_uuid
 			}
-		},
-		saveFormatTechnicalList(state, list) {
-			state.formateTechnicalList = list
 		}
 	},
 	actions: {
