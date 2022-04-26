@@ -419,8 +419,6 @@ export default {
 		},
 		// load short and long technical list
 		loadShortLong() {
-			const technicalObj = CIQ.technicalCategory
-			let formatObj = []
 			return [
 				{ value: 'Commodity Channel Index' },
 				{ value: 'Relative Strength Index' },

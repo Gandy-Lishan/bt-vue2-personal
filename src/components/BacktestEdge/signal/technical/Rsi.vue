@@ -6,21 +6,18 @@
 					<el-input
 						v-model="tech.ids.over_bought_bound"
 						disabled
-						oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="OverSold bound" prop="over_sold_bound">
 					<el-input
 						disabled
 						v-model="tech.ids.over_sold_bound"
-						oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="Period" prop="period">
 					<el-input
 						disabled
 						v-model="tech.ids.period"
-						oninput="value=value.replace(/[^-?\d]/g,'')"
 					></el-input>
 				</el-form-item>
 			</div> -->
@@ -50,7 +47,6 @@
 						<el-input
 							@input="setDesciption"
 							v-model="tech.value"
-							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 							placeholder="Input Value"
 						></el-input>
 					</el-form-item>

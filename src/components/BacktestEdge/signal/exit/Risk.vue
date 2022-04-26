@@ -6,14 +6,12 @@
 					<el-input
 						v-model="risk.ids.atr_period"
 						disabled
-						oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="Atr Multiplier" prop="atr_multiplier">
 					<el-input
 						disabled
 						v-model="risk.ids.atr_multiplier"
-						oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 					></el-input>
 				</el-form-item>
 			</div> -->

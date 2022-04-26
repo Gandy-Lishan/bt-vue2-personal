@@ -6,14 +6,12 @@
 					<el-input
 						disabled
 						v-model="senti.extreme_optimism"
-						oninput="value=value.replace(/[^\-?\d.]/g,'')"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="Extreme Pessimism" prop="extreme_pessimism">
 					<el-input
 						disabled
 						v-model="senti.extreme_pessimism"
-						oninput="value=value.replace(/^\-?\d.]/g,'')"
 					></el-input>
 				</el-form-item>
 			</div>
@@ -51,7 +49,6 @@
 							@input="setDesciption"
 							v-model="senti.value"
 							placeholder="Input Value"
-							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 						></el-input>
 					</el-form-item>
 				</div>
@@ -71,7 +68,6 @@
 							@change="setPeriod"
 							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
 							placeholder="Input Period"
-							oninput="value=value.replace(/[^\d]/g,'')"
 							v-model="senti.period"
 						></el-input>
 					</el-form-item>
@@ -102,7 +98,6 @@
 							v-model="senti.maValue"
 							placeholder="Input Value"
 							@input="change($event)"
-							oninput="this.value=this.value.replace(/[^\-?\d.]/g,'')"
 						></el-input>
 					</el-form-item>
 				</div>
