@@ -416,10 +416,21 @@ export default {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			return indi.then((val) => { 
 				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
+				if(!indi) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
+					type: 'error'
+				})}
 				if (indi) {
 				if (this.indicatorRadioArr[index] === 'sentiment') {
 					this.$refs.sentiChild[index].setDesciption(index)
 					let senti = this.$refs.sentiChild[index].saveCondition(index)
+					if(!senti) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = senti)
 				}
 				if (

@@ -592,7 +592,7 @@ export default {
 					this.indicatorRadioArr.splice(j, 1, 'technical')
 					let formateTechnicalList
 					if (this.$store.state.formateTechnicalList.length === 0) {
-						this.$refs.indiChild[j].loadShortLong()
+					  this.$refs.indiChild[j].loadShortLong()
 					}
 					formateTechnicalList = this.$store.state.formateTechnicalList
 					let indicatorName = data.exit.signals[j].indicator

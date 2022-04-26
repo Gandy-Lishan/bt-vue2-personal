@@ -513,8 +513,7 @@ export default {
 					if (!validName) {
 						this.$message({
 							message: 'Please select indicator from the drop-down box',
-							type: 'error',
-							offset: 300
+							type: 'error'
 						})
 					}
 					checked = false
@@ -639,6 +638,7 @@ export default {
 					let formateList = this.$store.state.formateTechnicalList
 					if (formateList.length === 0) {
 						this.loadShortLong()
+						formateList = this.$store.state.formateTechnicalList
 					}
 					for (let i = 0; i < formateList.length; i++) {
 						if (technicalIndicator === formateList[i].value) {
