@@ -144,7 +144,8 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		direction: String
+		direction: String,
+		isRiskControl: Boolean
 	},
 	data() {
 		let validateValue = (rule, value, callback) => {
@@ -274,6 +275,9 @@ export default {
 		},
 		saveCondition(index) {
 			let checked = true
+						if(this.isRiskControl) {
+				return checked = true
+			}
 			let validForm = true
 			if(this.radio === 'Indicator Value') {
 				this.$refs['macdForm'].validateField(['value'], (errorMsg) => {

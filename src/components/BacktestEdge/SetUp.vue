@@ -138,18 +138,18 @@
 			<div class="risk-control-container border-set">
 						 <div class="riskItem">
 							 
-    <el-checkbox v-model="isRiskControl">Risk Control:</el-checkbox>
+    <el-checkbox v-model="isRiskControl" border>Risk Control:</el-checkbox>
 						 </div>
 	<div class="tpContainer riskItem" v-if="isRiskControl">
-    <el-checkbox v-model="isTakeProfit">Take Profit</el-checkbox>
+    <el-checkbox v-model="isTakeProfit" @change="selectRiskControl">Take Profit</el-checkbox>
 	<el-input v-model="tp"></el-input><p style="margin:0px">(%)</p>
 	</div>
 		<div class="slContainer riskItem"  v-if="isRiskControl">
-    <el-checkbox v-model="isStopLoss">Stop Loss</el-checkbox>
+    <el-checkbox v-model="isStopLoss" @change="selectRiskControl">Stop Loss</el-checkbox>
 	<el-input v-model="sl"></el-input><p>(%)</p>
 		</div>
 		<div class="timContainer riskItem"  v-if="isRiskControl">
-	    <el-checkbox v-model="isTimeInMarket">Time In Market</el-checkbox>
+	    <el-checkbox v-model="isTimeInMarket" @change="selectRiskControl">Time In Market</el-checkbox>
 		<el-input v-model="tim"></el-input><p>(Bars)</p>
 		</div>
 			</div>
@@ -382,16 +382,20 @@ export default {
 						this.isTakeProfit = true
 						this.tp = riskValArr[0]
 						this.isRiskControl = true
+						this.selectRiskControl(true)
+						
 					}
 					if(riskValArr[1]) {
 						this.isStopLoss = true
 						this.sl = riskValArr[1]
 						this.isRiskControl = true
+						this.selectRiskControl(true)
 					}
 					if(riskValArr[2]) {
 						this.isTimeInMarket = true
 						this.tim = riskValArr[2]
 						this.isRiskControl = true
+						this.selectRiskControl(true)
 					}
 					}
 					// 保存编辑之前旧的名字
@@ -575,17 +579,22 @@ export default {
 		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.backtestSetupForm.clearValidate()
-			this.$emit('getTimeFrame', this.bd.frequency)
+			this.$emit('IsRiskControl', this.isRiskControl)
 		},
 		changeTimeframe(val) {
 			this.getFrequency(val)
 			CIQ.addIndicators()
 		},
+		selectRiskControl(val) {
+			console.log(val);
+			if(this.isRiskControl && (this.isTakeProfit || this.isRiskControl || this.isStopLoss)) {
+			this.$emit('IsRiskControl', true)
+			}
+		},
 		getFrequency(val) {
 			// getFrequency will no longer call addIndicator and pass a parameter to it
 			this.bd.frequency = val
 			this.$store.commit('getFrequency', val)
-			this.$emit('getTimeFrame', val)
 			this.loadSentimentList(val)
 			// same as setPeriodicity
 			// var selectedFreq = ''

@@ -114,7 +114,8 @@ export default {
 		sentiUrl: String,
 		sentiVal: String,
 		panelIndex: Number,
-		direction: String
+		direction: String,
+		isRiskControl: Boolean
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -388,7 +389,7 @@ export default {
 		saveCondition(index) {
 			let checked = true
 			let validForm
-			if (this.conditionRadio === 'Sentiment Value') {
+			if (this.conditionRadio === 'Sentiment Value' && !this.isRiskControl) {
 				this.$refs['sentiForm'].validateField(['value'], (errorMsg) => {
 					if (!errorMsg) {
 						validForm = true
@@ -413,7 +414,8 @@ export default {
 					checked = false
 					return checked
 				}
-			} else if (this.conditionRadio === 'Sentiment Moving Average') {
+			}
+			if (this.conditionRadio === 'Sentiment Moving Average' && !this.isRiskControl) {
 				let validMaValue = false
 				let validatePeriod = false
 				this.$refs['sentiForm'].validateField(['maValue'], (errorMsg) => {
@@ -446,6 +448,9 @@ export default {
 					checked = false
 					return checked
 				}
+			}
+			if(this.isRiskControl) {
+				return checked = true
 			}
 		},
 		setEditData(newVal) {

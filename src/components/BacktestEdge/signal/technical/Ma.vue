@@ -137,7 +137,8 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		direction: String
+		direction: String,
+		isRiskControl: Boolean
 	},
 	data() {
 		let validatePeriod = (rule, value, callback) => {
@@ -565,6 +566,9 @@ export default {
 		}, 500),
 		saveCondition(index) {
 			let checked = true
+						if(this.isRiskControl) {
+				return checked = true
+			}
 			let validForm
 			if (this.radio !== 'Moving Average') {
 				this.$refs['maForm'].validateField(['period'], (errorMsg) => {

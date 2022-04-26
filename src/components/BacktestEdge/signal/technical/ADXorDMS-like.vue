@@ -112,7 +112,8 @@ export default {
 		techVal: String,
 		panelIndex: Number,
 		// editIndiData: Object,
-		direction: String
+		direction: String,
+		isRiskControl: Boolean
 	},
 	data() {
 		var validateValueNegative = (rule, value, callback) => {
@@ -228,6 +229,9 @@ export default {
 		},
 		saveCondition(index) {
 			let checked = true
+			if(this.isRiskControl) {
+				return checked = true
+			}
 			let validForm
 			let tech = JSON.parse(JSON.stringify(this.tech))
 			if (this.conditionRadio === '+DI ADX') {

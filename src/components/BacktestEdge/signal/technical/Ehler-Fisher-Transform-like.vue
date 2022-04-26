@@ -108,7 +108,8 @@ export default {
 		techVal: String,
 		panelIndex: Number,
 		// editIndiData: Object,
-		direction: String
+		direction: String,
+		isRiskControl: Boolean
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -201,6 +202,9 @@ export default {
 		},
 		saveCondition(index) {
 			let checked = true
+						if(this.isRiskControl) {
+				return checked = true
+			}
 			let validForm
 			this.$refs.eftForm.validate((valid) => {
 				validForm = valid

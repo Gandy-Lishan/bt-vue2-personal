@@ -53,6 +53,7 @@
 							:panelIndex="index"
 							:editableTabsValue = "editableTabsValue"
 							ref="indiChild"
+							v-bind="$attrs"
 							@getIndicatorUrl="getIndicatorUrl"
 							@getIndicatorVal="getIndicatorVal"
 							:isShowRisk="tabIndex - 1"
@@ -248,6 +249,10 @@ import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Li
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 export default {
 	name: 'exit',
+	props: {
+		exitSaveCheck: Boolean
+	},
+	inheritAttrs: true,
 	data() {
 		return {
 			techIndiValue: '',
@@ -443,6 +448,9 @@ export default {
 			return indi.then( val => {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			if (indi) {
+				if(this.exitSaveCheck) {
+					return checked = true
+				}
 				if (this.indicatorRadioArr[index] === 'sentiment') {
 					this.$refs.sentiChild[index].setDesciption(index)
 					let senti = this.$refs.sentiChild[index].saveCondition(index)

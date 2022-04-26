@@ -90,6 +90,7 @@ export default {
 		panelIndex: Number,
 		isShowRisk: Number,
 		editableTabsValue: String,
+		isRiskControl: Boolean
 	},
 	data() {
 		var validateSenti = (rule, value, callback) => {
@@ -479,7 +480,7 @@ export default {
 			let checked = true
 			let validForm
 			let validName = false
-			if (this.indicatorRadio === 'Sentiment Indicators') {
+			if (this.indicatorRadio === 'Sentiment Indicators' && !this.isRiskControl) {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})
@@ -519,7 +520,8 @@ export default {
 					checked = false
 					return checked
 				}
-			} else if (this.indicatorRadio === 'Technical Indicators') {
+			}
+			if (this.indicatorRadio === 'Technical Indicators' && this.isRiskControl) {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})
@@ -551,36 +553,41 @@ export default {
 					checked = false
 					return checked
 				}
-			} else if (this.indicatorRadio === 'Risk Control') {
-				this.$refs.siForm.validate((valid) => {
-					validForm = valid
-				})
-				let formateList = this.loadRiskList()
-				for (let i = 0; i < formateList.length; i++) {
-					if (this.si.riskIndicator === formateList[i].value) {
-						validName = true
-						break
-					}
-				}
-				if (validForm && validName) {
-					let obj = {}
-					obj.criteria = 'exit'
-					obj.index = index
-					obj.value = 'Risk Control'
-					this.$store.commit('getRiskValue', obj)
-					return checked
-				} else {
-					if (!validName) {
-						this.$message({
-							message: 'Please select indicator from the drop-down box',
-							type: 'error',
-							offset: 300
-						})
-					}
-					checked = false
-					return checked
-				}
 			}
+			if(this.isRiskControl) {
+				checked = true
+				return checked
+			}
+			// if (this.indicatorRadio === 'Risk Control') {
+			// 	this.$refs.siForm.validate((valid) => {
+			// 		validForm = valid
+			// 	})
+			// 	let formateList = this.loadRiskList()
+			// 	for (let i = 0; i < formateList.length; i++) {
+			// 		if (this.si.riskIndicator === formateList[i].value) {
+			// 			validName = true
+			// 			break
+			// 		}
+			// 	}
+			// 	if (validForm && validName) {
+			// 		let obj = {}
+			// 		obj.criteria = 'exit'
+			// 		obj.index = index
+			// 		obj.value = 'Risk Control'
+			// 		this.$store.commit('getRiskValue', obj)
+			// 		return checked
+			// 	} else {
+			// 		if (!validName) {
+			// 			this.$message({
+			// 				message: 'Please select indicator from the drop-down box',
+			// 				type: 'error',
+			// 				offset: 300
+			// 			})
+			// 		}
+			// 		checked = false
+			// 		return checked
+			// 	}
+			// }
 		},
 		async setEditData(newVal) {
 			console.log("indicator编辑的数据",newVal);

@@ -114,7 +114,8 @@ export default {
 
 		panelIndex: Number,
 		// editIndiData: Object,
-		direction: String
+		direction: String,
+		isRiskControl: Boolean
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -209,6 +210,9 @@ export default {
 		},
 		saveCondition(index) {
 			let checked = true
+						if(this.isRiskControl) {
+				return checked = true
+			}
 			let validForm
 			this.$refs.eriForm.validate((valid) => {
 				validForm = valid

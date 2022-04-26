@@ -74,7 +74,7 @@
 							<set-up
 								ref="setUpChild"
 								:backtestEditData="backtestEditData"
-								@getTimeFrame="getTimeFrame"
+								@IsRiskControl="IsRiskControl"
 								@setDirection="setDirection"
 							></set-up>
 							<div class="criteria-container">
@@ -88,6 +88,8 @@
 									<exit
 										ref="exitChild"
 										:direction="direction"
+										:exitSaveCheck="exitSaveCheck"
+										:isRiskControl="isRiskControl"
 										@sendExitSignalIndex="sendExitSignalIndex"
 									></exit>
 									<!-- <multi-exit></multi-exit> -->
@@ -267,7 +269,8 @@ export default {
 			loading: false,
 			backtestEditData: {},
 			editFrequency: 'Daily',
-			timeFrame: 'Daily',
+			isRiskControl: false,
+			exitSaveCheck: false,
 			historyFlag: true,
 			favoriteFlag: true,
 			entryLength: 1,
@@ -427,8 +430,9 @@ export default {
 					this.$refs.sampleChild.getSampleList()
 			}
 		},
-		getTimeFrame(val) {
-			this.timeFrame = val
+		IsRiskControl(val) {
+			this.isRiskControl = val
+			this.exitSaveCheck = val
 		},
 		setDirection(val) {
 			this.direction = val
@@ -541,6 +545,7 @@ export default {
 								delete item.riskIndicator
 							}
 						})
+						if(!this.isRiskControl) {
 						signalExitList.forEach((item) => {
 							if (item.sentimentIndicator) {
 								item.indicator = item.sentimentIndicator
@@ -564,6 +569,7 @@ export default {
 								delete item.riskIndicator
 							}
 						})
+						}
 						const b = new SignalCode()
 						var entry_signal_list = []
 						var exit_signal_list = []
@@ -584,7 +590,9 @@ export default {
 							}
 							return signal.url
 						})
-						let exitSignal = backtestData.exit.signals.map((item) => {
+						let exitSignal
+						if(!this.isRiskControl) {
+						exitSignal = backtestData.exit.signals.map((item) => {
 							let signal = CIQ.indicatorList.find((i) => {
 								return i.chart_name == item.indicator
 							})
@@ -597,6 +605,9 @@ export default {
 							}
 							return signal.url
 						})
+						}else {
+							exitSignal = ""
+						}
 						delete backtestData.entry.signals
 						for (let i = 0; i < signalEntryList.length; i++) {
 							let code = b.encode(signalEntryList[i])
@@ -606,12 +617,17 @@ export default {
 							entry_signal_list.push(singal)
 						}
 						delete backtestData.exit.signals
+						if(!this.isRiskControl) {
 						for (var i in signalExitList) {
 							let code = b.encode(signalExitList[i])
 							var singal = {
 								code: code
 							}
 							exit_signal_list.push(singal)
+						}
+						}
+						if(this.isRiskControl) {
+							exit_signal_list = [{code: ''}]
 						}
 						let entry = {
 							description: backtestData.entry.description,
@@ -761,7 +777,9 @@ export default {
 				// exitData.exit_description = data.exit_description
 
 				vm.$refs.entryChild.setEditPanel(entryPanel, entryData)
+				if(!this.isRiskControl) {
 				vm.$refs.exitChild.setEditPanel(exitPanel, exitData)
+				}
 				// 拿到 frequency 的值
 				vm.editFrequency = data.frequency
 				vm.timeFrame = data.frequency
