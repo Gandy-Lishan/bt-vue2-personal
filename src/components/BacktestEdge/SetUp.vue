@@ -12,21 +12,18 @@
 						<el-input
 							v-model="bd.capital"
 							@input="validateStartingCapital"
-							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="Commission:" prop="commission">
 						<el-input
 							v-model="bd.commission"
 							@change="getCommission"
-							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input>
 					</el-form-item>
 					<span class="comUnitNote">(%)</span>
 					<el-form-item label="Slippage:" prop="slippage">
 						<el-input
 							v-model="bd.slippage"
-							oninput="value=value.replace(/[^\d.]/g,'')"
 						></el-input> </el-form-item
 					><span class="sliUnitNote">(per trade)</span>
 					<el-form-item label="Benchmark:" prop="benchmark">
@@ -130,13 +127,31 @@
 					</el-form-item>
 				</div>
 			</el-row>
-			<div class="border-set">
+			<div>
 				<el-form-item label="Direction:" prop="direction">
 					<el-radio-group v-model="bd.direction" @change="getDirection">
 						<el-radio label="Long">Long</el-radio>
 						<el-radio label="Short">Short</el-radio>
 					</el-radio-group>
 				</el-form-item>
+			</div>
+			<div class="risk-control-container border-set">
+						 <div class="riskItem">
+							 
+    <el-checkbox v-model="isRiskControl">Risk Control:</el-checkbox>
+						 </div>
+	<div class="tpContainer riskItem" v-if="isRiskControl">
+    <el-checkbox v-model="isTakeProfit">Take Profit</el-checkbox>
+	<el-input v-model="tp"></el-input><p style="margin:0px">(%)</p>
+	</div>
+		<div class="slContainer riskItem"  v-if="isRiskControl">
+    <el-checkbox v-model="isStopLoss">Stop Loss</el-checkbox>
+	<el-input v-model="sl"></el-input><p>(%)</p>
+		</div>
+		<div class="timContainer riskItem"  v-if="isRiskControl">
+	    <el-checkbox v-model="isTimeInMarket">Time In Market</el-checkbox>
+		<el-input v-model="tim"></el-input><p>(Bars)</p>
+		</div>
 			</div>
 		</el-form>
 	</div>
@@ -213,7 +228,8 @@ export default {
 				end_date: '',
 				description: 'backtest',
 				direction: 'Long',
-				frequency: 'Daily'
+				frequency: 'Daily',
+				risk_control: '//'
 			},
 			historyOptions: [
 				{
@@ -274,6 +290,13 @@ export default {
 			indexList: [],
 			loading: false,
 			options: [],
+			tp: 20,
+			sl: 10,
+			tim: 120,
+			isRiskControl: false,
+			isTakeProfit: false,
+			isStopLoss: false,
+			isTimeInMarket: false,
 			sentimentIndicatorList: [],
 			rules: {
 				capital: [
@@ -353,6 +376,24 @@ export default {
 					CIQ.hideMarker()
 					this.getFrequency(newVal.frequency)
 					this.getDirection(newVal.direction)
+					if(newVal.risk_control){
+					let riskValArr = newVal.risk_control.split('/')
+					if(riskValArr[0]) {
+						this.isTakeProfit = true
+						this.tp = riskValArr[0]
+						this.isRiskControl = true
+					}
+					if(riskValArr[1]) {
+						this.isStopLoss = true
+						this.sl = riskValArr[1]
+						this.isRiskControl = true
+					}
+					if(riskValArr[2]) {
+						this.isTimeInMarket = true
+						this.tim = riskValArr[2]
+						this.isRiskControl = true
+					}
+					}
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
 					let year
@@ -688,6 +729,11 @@ export default {
 					if (bd.end_date) {
 						// 保存 backtestform 的数据
 						bd.commission = bd.commission / 100
+		if(this.isRiskControl) {
+		let bd = JSON.parse(JSON.stringify(this.bd))
+		bd.risk_control = `${this.isTakeProfit?this.tp:''}/${this.isStopLoss?this.sl:''}/${this.isTimeInMarket?this.tim:''}`
+		console.log(bd.risk_control);
+		}
 						this.$store.commit('setBd', bd)
 						return checked
 					} else {
@@ -786,5 +832,19 @@ export default {
 }
 .border-set {
 	border-bottom: 1px solid #797979;
+}
+.riskItem{
+	display: flex;
+	margin: 5px;
+	justify-content: center;
+	align-items: center;
+}
+.risk-control-container{
+	display: flex;
+}
+
+.el-checkbox-group{
+	display: flex;
+	margin-bottom: 10px;
 }
 </style>

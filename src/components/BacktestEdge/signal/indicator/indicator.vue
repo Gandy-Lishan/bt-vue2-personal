@@ -50,7 +50,7 @@
 					</div>
 				</el-form-item>
 			</div>
-			<div
+			<!-- <div
 				class="indicator-container techBox"
 				v-if="criteria === 'exit' && isShowRisk === panelIndex"
 			>
@@ -76,7 +76,7 @@
 						></el-autocomplete>
 					</div>
 				</el-form-item>
-			</div>
+			</div> -->
 		</el-form>
 	</div>
 </template>
@@ -408,28 +408,28 @@ export default {
 			}
 			
 		},
-		handleRiskSelect(item) {
-			this.si.riskIndicator = item.value
-			let obj = {}
-			obj.value = item.value
-			obj.index = this.panelIndex
-			this.$emit('getRiskVal', obj)
-			let val = item.value
-			const set = new Set([
-				['Time In Market', 'tim'],
-				['Profit/Loss', 'pl']
-			])
-			const newMap = new Map(set)
-			var url = ''
-			for (let i of newMap.entries()) {
-				if (val === i[0]) {
-					url = i[1]
-					this.$emit('getRiskIndiValue', i[1])
-				}
-				// this.$store.commit('getExitIndicators', 'Exit')
-				// this.$store.commit('getRiskIndicators', 'RC')
-			}
-		},
+		// handleRiskSelect(item) {
+		// 	this.si.riskIndicator = item.value
+		// 	let obj = {}
+		// 	obj.value = item.value
+		// 	obj.index = this.panelIndex
+		// 	this.$emit('getRiskVal', obj)
+		// 	let val = item.value
+		// 	const set = new Set([
+		// 		['Time In Market', 'tim'],
+		// 		['Profit/Loss', 'pl']
+		// 	])
+		// 	const newMap = new Map(set)
+		// 	var url = ''
+		// 	for (let i of newMap.entries()) {
+		// 		if (val === i[0]) {
+		// 			url = i[1]
+		// 			this.$emit('getRiskIndiValue', i[1])
+		// 		}
+		// 		// this.$store.commit('getExitIndicators', 'Exit')
+		// 		// this.$store.commit('getRiskIndicators', 'RC')
+		// 	}
+		// },
 		changeIndicatorChecked(val) {
 			console.log('改变组件里面的radio', val)
 			this.indicatorRadio = val
@@ -523,8 +523,7 @@ export default {
 					if (!validName) {
 						this.$message({
 							message: 'Please select indicator from the drop-down box',
-							type: 'error',
-							offset: 300
+							type: 'error'
 						})
 					}
 					checked = false
@@ -649,6 +648,7 @@ export default {
 					let formateList = this.$store.state.formateTechnicalList
 					if (formateList.length === 0) {
 						this.loadShortLong()
+						formateList = this.$store.state.formateTechnicalList
 					}
 					for (let i = 0; i < formateList.length; i++) {
 						if (technicalIndicator === formateList[i].value) {
@@ -659,20 +659,20 @@ export default {
 						}
 					}
 				}
-				if (newVal[this.criteria].signals[index].analysis === 'Exit') {
-					this.indicatorRadio = 'Risk Control'
-					let obj = {}
-					if (newVal[this.criteria].signals[index].time_in_market) {
-						obj.value = 'Time In Market'
-					}
-					if (
-						newVal[this.criteria].signals[index].stop_loss &&
-						newVal[this.criteria].signals[index].take_profit
-					) {
-						obj.value = 'Profit/Loss'
-					}
-					this.handleRiskSelect(obj)
-				}
+				// if (newVal[this.criteria].signals[index].analysis === 'Exit') {
+				// 	this.indicatorRadio = 'Risk Control'
+				// 	let obj = {}
+				// 	if (newVal[this.criteria].signals[index].time_in_market) {
+				// 		obj.value = 'Time In Market'
+				// 	}
+				// 	if (
+				// 		newVal[this.criteria].signals[index].stop_loss &&
+				// 		newVal[this.criteria].signals[index].take_profit
+				// 	) {
+				// 		obj.value = 'Profit/Loss'
+				// 	}
+				// 	this.handleRiskSelect(obj)
+				// }
 		}
 	}
 }

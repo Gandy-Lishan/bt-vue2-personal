@@ -4,15 +4,24 @@
 			<p class="criteria-title">Entry Criteria</p>
 			indicatorValArr: {{indicatorValArr}}
 			<div class="signal-container">
-				<span class="scoreNote" v-if="signalValue === 1">score:</span>
+				<span class="scoreNote" v-if="signalValue === 1">Score:</span>
 				<el-input
 					size="mini"
 					v-if="signalValue === 1"
-					v-model="scoreValue"
+					v-model="score"
 					type="number"
 					step="1"
 					min="1"
 					:max="editableTabsValue"
+				></el-input>
+			<span class="scoreNote" v-if="signalValue === 2">Period:</span>
+				<el-input
+					size="mini"
+					v-if="signalValue === 2"
+					v-model="signals_in_market"
+					type="number"
+					step="1"
+					min="1"
 				></el-input>
 				<el-select v-model="signalValue" placeholder="Please select signal">
 					<el-option
@@ -237,14 +246,19 @@ export default {
 			signalOptions: [
 				{
 					value: 0,
-					label: 'single-signal'
+					label: 'Single-Signal'
 				},
 				{
 					value: 1,
-					label: 'multi-signal'
-				}
+					label: 'SameBar Multi-Signal'
+				},
+				{
+					value: 2,
+					label: 'TimeOrder Multi-Signal'
+				},
 			],
 			signalValue: 0,
+			periodValue: 1,
 			editableTabsValue: '1',
 			editableTabs: [
 				{
@@ -254,7 +268,8 @@ export default {
 				}
 			],
 			tabIndex: 1,
-			scoreValue: 1,
+			score: 1,
+			signals_in_market: 1,
 			techIndiObj: [''],
 			indicatorRadioArr: ['sentiment'],
 			refs: {}, 
@@ -407,8 +422,14 @@ export default {
 		saveScoreValue() {
 			let obj = {}
 			obj.criteria = 'entry'
-			obj.value = this.scoreValue
+			obj.value = this.score
 			this.$store.commit('saveScoreValue', obj)
+		},
+		saveSignalsInMarket() {
+			let obj = {}
+			obj.criteria = "entry"
+			obj.value = this.signals_in_market
+			this.$store.commit('saveSignalsInMarket',obj)
 		},
 		saveBacktestData(index) {
 			let checked = true
@@ -417,10 +438,21 @@ export default {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			return indi.then((val) => { 
 				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
+				if(!indi) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
+					type: 'error'
+				})}
 				if (indi) {
 				if (this.indicatorRadioArr[index] === 'sentiment') {
 					this.$refs.sentiChild[index].setDesciption(index)
 					let senti = this.$refs.sentiChild[index].saveCondition(index)
+					if(!senti) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = senti)
 				}
 				if (
@@ -538,7 +570,8 @@ export default {
 		},
 		async setEditData(data) {
 			console.log('编辑的entrydata', data)
-			this.scoreValue = data.entry.score
+			this.score = data.entry.score
+			this.signals_in_market = data.entry.signals_in_market ? data.entry.signals_in_market : 1
 			let length = data.entry.signals.length
 			this.tabIndex = length
 			if (length > 1) {
@@ -707,10 +740,6 @@ export default {
 }
 /deep/ .multi .multi-box .el-tabs--card > .el-tabs__header {
 	display: none;
-}
-.scoreNote {
-	font-size: 16px;
-	font-weight: 500;
 }
 /deep/.el-tabs__nav .el-tabs__item:nth-child(1) span {
 	display: none;

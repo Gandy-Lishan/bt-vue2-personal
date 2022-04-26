@@ -4,15 +4,24 @@
 			<p class="criteria-title">Exit Criteria</p>
 			indicatorValArr: {{indicatorValArr}}
 			<div class="signal-container">
-				<span class="scoreNote" v-if="signalValue === 1">score:</span>
+				<span class="scoreNote" v-if="signalValue === 1">Score:</span>
 				<el-input
 					size="mini"
 					v-if="signalValue === 1"
-					v-model="scoreValue"
+					v-model="score"
 					type="number"
 					step="1"
 					min="1"
 					:max="editableTabsValue"
+				></el-input>
+				<span class="scoreNote" v-if="signalValue === 2">Period:</span>
+				<el-input
+					size="mini"
+					v-if="signalValue === 2"
+					v-model="signals_in_market"
+					type="number"
+					step="1"
+					min="1"
 				></el-input>
 				<el-select v-model="signalValue" placeholder="Please select signal">
 					<el-option
@@ -50,7 +59,6 @@
 							:isShowRisk="tabIndex - 1"
 							@getRiskVal="getRiskVal"
 							@getTechIndiValue="getTechIndiValue"
-							@getRiskIndiValue="getRiskIndiValue"
 							@getIndicatorRadio="getIndicatorRadio"
 							@getTechIndiObj="getTechIndiObj"
 						></indicator>
@@ -112,7 +120,7 @@
 								techIndiObj[index] === 'MovingAverage_like'
 							"
 						></ma>
-						<risk
+						<!-- <risk
 							v-show="indicatorRadioArr[index] === 'risk'"
 							ref="riskChild"
 							v-bind="$attrs"
@@ -120,7 +128,7 @@
 							:criteria="'exit'"
 							:riskIndiValue="riskIndiValue"
 							:riskVal="riskValArr[index]"
-						></risk>
+						></risk> -->
 						<bollinger-bands-like
 							v-bind="$attrs"
 							:panelIndex="index"
@@ -242,21 +250,24 @@ import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Li
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 export default {
 	name: 'exit',
-	inheritAttrs: true,
 	data() {
 		return {
 			techIndiValue: '',
-			riskIndiValue: '',
+			// riskIndiValue: '',
 			indicatorRadio: 'sentiment',
 			signalOptions: [
 				{
 					value: 0,
-					label: 'single-signal'
+					label: 'Single-Signal'
 				},
 				{
 					value: 1,
-					label: 'multi-signal'
-				}
+					label: 'SameBar Multi-Signal'
+				},
+				{
+					value: 2,
+					label: 'TimeOrder Multi-Signal'
+				},
 			],
 			signalValue: 0,
 			editableTabsValue: '1',
@@ -268,7 +279,8 @@ export default {
 				}
 			],
 			tabIndex: 1,
-			scoreValue: 1,
+			score: 1,
+			signals_in_market: 1,
 			techIndiObj: [''],
 			indicatorRadioArr: ['sentiment'],
 			refs: {},
@@ -285,7 +297,6 @@ export default {
 		rsi,
 		macd,
 		ma,
-		risk,
 		'bollinger-bands-like': bollingerBandsLike,
 		'ehler-fisher-transform-like': ehlerFisherTransformLike,
 		'stochastic-momentum-index-like': stochasticMomentumIndexLike,
@@ -323,7 +334,6 @@ export default {
 				this.$refs.cciChild[i].clearForm()
 				this.$refs.maChild[i].clearForm()
 				this.$refs.macdChild[i].clearForm()
-				this.$refs.riskChild[i].clearForm()
 				this.$refs.bollBandsLikeChild[i].clearForm()
 				this.$refs.EFTLikeChild[i].clearForm()
 				this.$refs.stochasticsLikeChild[i].clearForm()
@@ -422,9 +432,9 @@ export default {
 		getTechIndiValue(val) {
 			this.techIndiValue = val
 		},
-		getRiskIndiValue(val) {
-			this.riskIndiValue = val
-		},
+		// getRiskIndiValue(val) {
+		// 	this.riskIndiValue = val
+		// },
 		getIndicatorRadio(obj) {
 			this.indicatorRadio = obj.value
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
@@ -435,8 +445,14 @@ export default {
 		saveScoreValue() {
 			let obj = {}
 			obj.criteria = 'exit'
-			obj.value = this.scoreValue
+			obj.value = this.score
 			this.$store.commit('saveScoreValue', obj)
+		},
+		saveSignalsInMarket() {
+			let obj = {}
+			obj.criteria = "exit"
+			obj.value = this.signals_in_market
+			this.$store.commit('saveSignalsInMarket',obj)
 		},
 		saveBacktestData(index) {
 			let checked = true
@@ -548,11 +564,11 @@ export default {
 					let ts = this.$refs.trailingStopLikeChild[index].saveCondition(index)
 					return (checked = ts)
 				}
-				if (this.indicatorRadioArr[index] === 'risk') {
-					this.$refs.riskChild[index].setDesciption(index)
-					let risk = this.$refs.riskChild[index].saveCondition(index)
-					return (checked = risk)
-				}
+				// if (this.indicatorRadioArr[index] === 'risk') {
+				// 	this.$refs.riskChild[index].setDesciption(index)
+				// 	let risk = this.$refs.riskChild[index].saveCondition(index)
+				// 	return (checked = risk)
+				// }
 			} else {
 				checked = false
 				return checked
@@ -572,7 +588,8 @@ export default {
 		},
 		setEditData(data) {
 			console.log('编辑的exitdata', data)
-			this.scoreValue = data.exit.score
+			this.score = data.exit.score
+			this.signals_in_market = data.exit.signals_in_market ? data.exit.signals_in_market : 1
 			let length = data.exit.signals.length
 			this.tabIndex = length
 			if (length > 1) {
@@ -594,7 +611,7 @@ export default {
 					this.indicatorRadioArr.splice(j, 1, 'technical')
 					let formateTechnicalList
 					if (this.$store.state.formateTechnicalList.length === 0) {
-						this.$refs.indiChild[j].loadShortLong()
+					  this.$refs.indiChild[j].loadShortLong()
 					}
 					formateTechnicalList = this.$store.state.formateTechnicalList
 					let indicatorName = data.exit.signals[j].indicator
@@ -640,18 +657,18 @@ export default {
 						this.$refs.trailingStopLikeChild[j].setEditData(data)
 					}
 				}
-				if (data.exit.signals[j].analysis === 'Exit') {
-					this.indicatorRadioArr.splice(j, 1, 'risk')
-					if (
-						data.exit.signals[j].take_profit &&
-						data.exit.signals[j].stop_loss
-					) {
-						this.riskValArr[j] = 'Profit/Loss'
-					} else if (data.exit.signals[j].time_in_market) {
-						this.riskValArr[j] = 'Time In Market'
-					}
-					this.$refs.riskChild[j].setEditData(data)
-				}
+				// if (data.exit.signals[j].analysis === 'Exit') {
+				// 	this.indicatorRadioArr.splice(j, 1, 'risk')
+				// 	if (
+				// 		data.exit.signals[j].take_profit &&
+				// 		data.exit.signals[j].stop_loss
+				// 	) {
+				// 		this.riskValArr[j] = 'Profit/Loss'
+				// 	} else if (data.exit.signals[j].time_in_market) {
+				// 		this.riskValArr[j] = 'Time In Market'
+				// 	}
+				// 	this.$refs.riskChild[j].setEditData(data)
+				// }
 			}
 		}
 	}

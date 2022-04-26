@@ -101,7 +101,6 @@
 									<!-- <multi-entry></multi-entry> -->
 									<exit
 										ref="exitChild"
-										:timeFrame="timeFrame"
 										:direction="direction"
 										@sendExitSignalIndex="sendExitSignalIndex"
 									></exit>
@@ -477,6 +476,7 @@ export default {
 					this.addEntrySignalLength(index)
 					entry = this.$refs.entryChild.saveBacktestData(index)
 					this.$refs.entryChild.saveScoreValue()
+					this.$refs.entryChild.saveSignalsInMarket()
 				}
 				let entryChecked = await entry
 				if (entryChecked) {
@@ -487,6 +487,7 @@ export default {
 						exit = this.$refs.exitChild.saveBacktestData(index)
 						exitChecked = await exit
 						this.$refs.exitChild.saveScoreValue()
+						this.$refs.exitChild.saveSignalsInMarket()
 					}
 					if (exitChecked) {
 						this.loading = true
@@ -632,12 +633,14 @@ export default {
 						let entry = {
 							description: backtestData.entry.description,
 							score: backtestData.entry.score,
+							signals_in_market: backtestData.entry.signals_in_market,
 							relation: 0,
 							signals: entry_signal_list
 						}
 						let exit = {
 							description: backtestData.exit.description,
 							score: backtestData.exit.score,
+							signals_in_market: backtestData.exit.signals_in_market,
 							relation: 0,
 							signals: exit_signal_list
 						}

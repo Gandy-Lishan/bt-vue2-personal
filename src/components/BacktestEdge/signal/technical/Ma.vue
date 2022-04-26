@@ -64,7 +64,6 @@
 							:disabled="!(radio === ' ')"
 							@input="getSCvalue"
 							@blur="setDesciption"
-							oninput="value=value.replace(/[^\d]/g,'')"
 							placeholder="Input Period"
 						></el-input>
 					</el-form-item>
@@ -85,7 +84,6 @@
 							v-model="tech.ma_period"
 							placeholder="Input Period"
 							@input="getMaPeriodValue"
-							oninput="value=value.replace(/[^\d]/g,'')"
 						></el-input>
 					</el-form-item>
 				</div>
@@ -121,7 +119,6 @@
 							placeholder="Input Period"
 							@input="getMaValue"
 							@blur="setDesciption"
-							oninput="value=value.replace(/[^\d]/g,'')"
 						></el-input>
 					</el-form-item>
 				</div>
