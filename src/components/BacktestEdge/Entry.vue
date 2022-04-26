@@ -2,7 +2,7 @@
 	<div class="entry-container">
 		<div class="signal-option-box">
 			<p class="criteria-title">Entry Criteria</p>
-			sentiValArr: {{sentiValArr}}
+			indicatorValArr: {{indicatorValArr}}
 			<div class="signal-container">
 				<span class="scoreNote" v-if="signalValue === 1">score:</span>
 				<el-input
@@ -42,13 +42,11 @@
 						<indicator
 							:criteria="'entry'"
 							:panelIndex="index"
-							:indicatorRadioArr="indicatorRadioArr"
+							:editableTabs = "editableTabs"
 							:editableTabsValue = "editableTabsValue"
 							ref="indiChild"
-							@getSentiUrl="getSentiUrl"
-							@getTechUrl="getTechUrl"
-							@getSentiVal="getSentiVal"
-							@getTechVal="getTechVal"
+							@getIndicatorUrl="getIndicatorUrl"
+							@getIndicatorVal="getIndicatorVal"
 							@getTechIndiValue="getTechIndiValue"
 							@getIndicatorRadio="getIndicatorRadio"
 							@getTechIndiObj="getTechIndiObj"
@@ -58,8 +56,9 @@
 							:criteria="'entry'"
 							:panelIndex="index"
 							ref="sentiChild"
-							:sentiUrl="sentiUrlArr[index]"
-							:sentiVal="sentiValArr[index]"
+
+							:sentiUrl="indicatorUrlArr[index]"
+							:sentiVal="indicatorValArr[index]"
 							v-show="indicatorRadioArr[index] === 'sentiment'"
 						></senti>
 						<cci
@@ -67,8 +66,8 @@
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="cciChild"
-							:techUrl="techUrlArr[index]"
-							:techVal="techValArr[index]"
+							:techUrl="indicatorUrlArr[index]"
+							:techVal="indicatorValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'CCI_like'
@@ -79,8 +78,8 @@
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="rsiChild"
-							:techUrl="techUrlArr[index]"
-							:techVal="techValArr[index]"
+							:techUrl="indicatorUrlArr[index]"
+							:techVal="indicatorValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'rsi'
@@ -91,8 +90,8 @@
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="macdChild"
-							:techUrl="techUrlArr[index]"
-							:techVal="techValArr[index]"
+							:techUrl="indicatorUrlArr[index]"
+							:techVal="indicatorValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MACD_like'
@@ -103,8 +102,8 @@
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="maChild"
-							:techUrl="techUrlArr[index]"
-							:techVal="techValArr[index]"
+							:techUrl="indicatorUrlArr[index]"
+							:techVal="indicatorValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MovingAverage_like'
@@ -115,8 +114,8 @@
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="bollBandsLikeChild"
-							:techUrl="techUrlArr[index]"
-							:techVal="techValArr[index]"
+							:techUrl="indicatorUrlArr[index]"
+							:techVal="indicatorValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'BollingerBands_like'
@@ -127,8 +126,8 @@
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="EFTLikeChild"
-							:techUrl="techUrlArr[index]"
-							:techVal="techValArr[index]"
+							:techUrl="indicatorUrlArr[index]"
+							:techVal="indicatorValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'EFT_like'
@@ -139,8 +138,8 @@
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="stochasticsLikeChild"
-							:techUrl="techUrlArr[index]"
-							:techVal="techValArr[index]"
+							:techUrl="indicatorUrlArr[index]"
+							:techVal="indicatorValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Stochastics_like'
@@ -151,8 +150,8 @@
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="ADXLikeChild"
-							:techUrl="techUrlArr[index]"
-							:techVal="techValArr[index]"
+							:techUrl="indicatorUrlArr[index]"
+							:techVal="indicatorValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ADX_like'
@@ -163,8 +162,8 @@
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="ERILikeChild"
-							:techUrl="techUrlArr[index]"
-							:techVal="techValArr[index]"
+							:techUrl="indicatorUrlArr[index]"
+							:techVal="indicatorValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ERI_like'
@@ -175,8 +174,8 @@
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="aligatorLikeChild"
-							:techUrl="techUrlArr[index]"
-							:techVal="techValArr[index]"
+							:techUrl="indicatorUrlArr[index]"
+							:techVal="indicatorValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Aligator_like'
@@ -187,8 +186,8 @@
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="LRFLikeChild"
-							:techUrl="techUrlArr[index]"
-							:techVal="techValArr[index]"
+							:techUrl="indicatorUrlArr[index]"
+							:techVal="indicatorValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'LRF_like'
@@ -199,8 +198,8 @@
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="trailingStopLikeChild"
-							:techUrl="techUrlArr[index]"
-							:techVal="techValArr[index]"
+							:techUrl="indicatorUrlArr[index]"
+							:techVal="indicatorValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiValue[index] === 'Trailingstop_like'
@@ -259,10 +258,8 @@ export default {
 			techIndiObj: [''],
 			indicatorRadioArr: ['sentiment'],
 			refs: {}, 
-			sentiUrlArr: new Array(5).fill(''),
-			techUrlArr: new Array(5).fill(''),
-			sentiValArr: new Array(5).fill(''),
-			techValArr: new Array(5).fill(''),
+			indicatorUrlArr: new Array(5).fill(''),
+			indicatorValArr: new Array(5).fill(''),
 			techVal: ''
 		}
 	},
@@ -350,7 +347,7 @@ export default {
 			if (action === 'remove') {
 				let tabs = this.editableTabs
 				let activeName = this.editableTabsValue
-				console.log('activeName', targetName)
+				
 				if (activeName === targetName) {
 					tabs.forEach((tab, index) => {
 						if (tab.name === targetName) {
@@ -361,33 +358,41 @@ export default {
 						}
 					})
 				}
+				
+				var absoluteIndex = ''
+				tabs.forEach((tab, index) => {
+					if(tab.name==targetName){
+						absoluteIndex = index
+					}
+				})
+				// console.log('absoluteIndex', absoluteIndex)
+				// console.log('targetName', targetName)
+				// console.log('activeName', activeName)
 				this.editableTabsValue = activeName
-				this.sentiValArr.splice(targetName-1,1)
-				this.sentiValArr.push('')
-				this.techValArr.splice(targetName-1,1)
-				this.techValArr.push('')
-				this.indicatorRadioArr.splice(targetName - 1, 1)
+				this.indicatorUrlArr.splice(absoluteIndex,1)
+				this.indicatorUrlArr.push('')
+				this.indicatorValArr.splice(absoluteIndex,1)
+				this.indicatorValArr.push('')
+				this.indicatorRadioArr.splice(absoluteIndex,1)
 				this.editableTabs = tabs.filter((tab) => tab.name !== targetName)
+
+				// 移除某选项卡时，把indicatorUrlArr内的indicator依次载入vuex以刷新状态
+				tabs.forEach((tab, index) => {
+					this.$store.commit('getEntryIndicators', {index: index, value: this.indicatorUrlArr[index]})
+				})
 			}
 		},
 
-		// getSentiUrl(val) {
-		// 	//console.log('getSentiUrl',val)
-		// 	this.sentiUrl = val
+		// getSentiUrl(obj) {
+		// 	//console.log('getSentiUrl Exit',obj)
+		// 	this.sentiUrlArr.splice(obj.index, 1, obj.url)
 		// },
-		getSentiUrl(obj) {
-			//console.log('getSentiUrl Exit',obj)
-			this.sentiUrlArr.splice(obj.index, 1, obj.url)
+		getIndicatorUrl(obj) {
+			this.indicatorUrlArr.splice(obj.index, 1, obj.url)
 		},
-		getTechUrl(obj) {
-			this.techUrlArr.splice(obj.index, 1, obj.url)
-		},
-		getSentiVal(obj) {
-			this.sentiValArr.splice(obj.index, 1, obj.value)
-		},
-		getTechVal(obj) {
+		getIndicatorVal(obj) {
 			this.techVal = obj.value
-			this.techValArr.splice(obj.index, 1, obj.value)
+			this.indicatorValArr.splice(obj.index, 1, obj.value)
 		},
 		getTechIndiValue(val) {
 			this.techIndiValue = val
@@ -543,14 +548,14 @@ export default {
 				console.log('函数执行了' + j + '次，共' + length + '次')
 				this.$refs.indiChild[j].setEditData(data)
 				if (data.entry.signals[j].analysis === 'Sentiment') {
-					this.sentiValArr[j] = data.entry.signals[j].indicator
+					this.indicatorValArr[j] = data.entry.signals[j].indicator
 					this.indicatorRadioArr.splice(j, 1, 'sentiment')
 					this.indicatorRadio = 'sentiment'
 					this.$refs.sentiChild[j].setEditData(data)
 					this.techIndiObj[j] = ''
 				}
 				if (data.entry.signals[j].analysis === 'Technical') {
-					this.techValArr[j] = data.entry.signals[j].indicator
+					this.indicatorValArr[j] = data.entry.signals[j].indicator
 					this.indicatorRadio = 'technical'
 					this.indicatorRadioArr.splice(j, 1, 'technical')
 					let formateTechnicalList

@@ -90,7 +90,7 @@ export default {
 		panelIndex: Number,
 		isShowRisk: Number,
 		editableTabsValue: String,
-		indicatorRadioArr: Array,
+		editableTabs: Array,
 	},
 	data() {
 		var validateSenti = (rule, value, callback) => {
@@ -139,12 +139,19 @@ export default {
 	},
 	watch: {
 		updateSenti(val) {
-			console.log(this.editableTabsValue,this.panelIndex,this.indicatorRadioArr)
+			let tabs = this.editableTabs
+			var absoluteIndex = ''
+			tabs.forEach((tab, index) => {
+				if(tab.name==this.editableTabsValue){
+					absoluteIndex = index
+				}
+			})
+
 			if (
 				this.si.sentimentIndicator == '' &&
 				this.si.technicalIndicator == '' &&
 				this.si.riskIndicator == '' &&
-				this.editableTabsValue == this.panelIndex+1
+				absoluteIndex == this.panelIndex
 			) {
 				this.si.sentimentIndicator = val.name
 				for (var i in CIQ.indicatorList) {
@@ -160,13 +167,13 @@ export default {
 							let valObj = {}
 							valObj.value = CIQ.indicatorList[i].chart_name
 							valObj.index = this.panelIndex
-							this.$emit('getSentiVal', valObj)
+							this.$emit('getIndicatorVal', valObj)
 
 						//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
 						let obj = {}
 						obj.index = this.panelIndex
 						obj.url = CIQ.indicatorList[i].url
-						this.$emit('getSentiUrl', obj)
+						this.$emit('getIndicatorUrl', obj)
 					}
 				}
 			}
@@ -285,7 +292,7 @@ export default {
 			let obj = {}
 			obj.value = item.value
 			obj.index = this.panelIndex
-			this.$emit('getSentiVal', obj)
+			this.$emit('getIndicatorVal', obj)
 			// remove a MA tat already exists in current criteria before loading
 			var activatedMAList = this.$store.state.activatedMA
 			if (this.criteria == 'entry') {
@@ -301,7 +308,7 @@ export default {
 						let obj = {}
 						obj.index = this.panelIndex
 						obj.url = item.url
-						this.$emit('getSentiUrl', obj)
+						this.$emit('getIndicatorUrl', obj)
 					} else {
 						var MAListIndex = activatedMAList.findIndex(
 							(item) => item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex]
@@ -314,7 +321,7 @@ export default {
 												let obj = {}
 								obj.index = this.panelIndex
 								obj.url = item.url
-								this.$emit('getSentiUrl', obj)
+								this.$emit('getIndicatorUrl', obj)
 					}
 			console.log('current formIndicator: ',this.$store.state.indicators.formIndicators)
 			// avoid add indicator redundantly
@@ -332,7 +339,7 @@ export default {
 			let valObj = {}
 			valObj.index = this.panelIndex
 			valObj.value = item.value
-			this.$emit('getTechVal', valObj)
+			this.$emit('getIndicatorVal', valObj)
 			const vm = this
 			let val = item.value
 			// const set = new Set([
@@ -624,7 +631,7 @@ export default {
 						let obj = {}
 						obj.index = vm.panelIndex
 						obj.url = item.url
-						vm.$emit('getSentiUrl', obj)
+						vm.$emit('getIndicatorUrl', obj)
 						}
 					})
 					// if(this.$store.state.sentimentIndicatorList)
@@ -651,7 +658,6 @@ export default {
 							break
 						}
 					}
-					// this.$emit('getTechVal', vm.si.technicalIndicator)
 				}
 				if (newVal[this.criteria].signals[index].analysis === 'Exit') {
 					this.indicatorRadio = 'Risk Control'

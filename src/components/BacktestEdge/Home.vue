@@ -54,6 +54,20 @@
 							>Create New Backtest</el-button
 						></el-tooltip
 					>
+					<el-tooltip
+						class="item"
+						effect="light"
+						content="Clear chart and backtest set up form to create new backtests"
+						placement="bottom"
+					>
+						<el-button
+							@click="test"
+							class="restartBtn"
+							type="primary"
+							icon="el-icon-refresh-right"
+							>Test</el-button
+						></el-tooltip
+					>
 				</div>
 				<el-tabs
 					v-model="activeName"
@@ -341,6 +355,9 @@ export default {
 		}
 	},
 	methods: {
+		test: function(){
+			CIQ.outputTest()
+		},
 		animationUp: function () {
 			window.scrollTo({
 				top: 0,
