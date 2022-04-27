@@ -431,6 +431,7 @@ export default {
 			}
 		},
 		IsRiskControl(val) {
+			console.log("传到home的zhi",val);
 			this.isRiskControl = val
 			this.exitSaveCheck = val
 		},
@@ -464,6 +465,8 @@ export default {
 					entry = this.$refs.entryChild.saveBacktestData(index)
 					this.$refs.entryChild.saveScoreValue()
 					this.$refs.entryChild.saveSignalsInMarket()
+					this.$refs.entryChild.saveDelayBar()
+					this.$refs.entryChild.saveRelation()
 				}
 				let entryChecked = await entry
 				if (entryChecked) {
@@ -475,6 +478,8 @@ export default {
 						exitChecked = await exit
 						this.$refs.exitChild.saveScoreValue()
 						this.$refs.exitChild.saveSignalsInMarket()
+						this.$refs.exitChild.saveDelayBar()
+						this.$refs.exitChild.saveRelation()
 					}
 					if (exitChecked) {
 						this.loading = true
@@ -633,14 +638,16 @@ export default {
 							description: backtestData.entry.description,
 							score: backtestData.entry.score,
 							signals_in_market: backtestData.entry.signals_in_market,
-							relation: 0,
+							relation: backtestData.entry.relation,
+							delay_bars: backtestData.entry.delay_bars,
 							signals: entry_signal_list
 						}
 						let exit = {
 							description: backtestData.exit.description,
 							score: backtestData.exit.score,
 							signals_in_market: backtestData.exit.signals_in_market,
-							relation: 0,
+							relation: acktestData.exit.relation,
+							delay_bars: backtestData.exit.delay_bars,
 							signals: exit_signal_list
 						}
 						delete backtestData.entry

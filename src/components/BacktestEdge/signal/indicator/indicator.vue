@@ -90,7 +90,8 @@ export default {
 		panelIndex: Number,
 		isShowRisk: Number,
 		editableTabsValue: String,
-		isRiskControl: Boolean
+		isRiskControl: Boolean,
+		exitItemCheck: Boolean
 	},
 	data() {
 		var validateSenti = (rule, value, callback) => {
@@ -480,7 +481,7 @@ export default {
 			let checked = true
 			let validForm
 			let validName = false
-			if (this.indicatorRadio === 'Sentiment Indicators' && !this.isRiskControl) {
+			if (this.indicatorRadio === 'Sentiment Indicators' && !this.exitItemCheck) {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})
@@ -521,7 +522,7 @@ export default {
 					return checked
 				}
 			}
-			if (this.indicatorRadio === 'Technical Indicators' && this.isRiskControl) {
+			if (this.indicatorRadio === 'Technical Indicators' && this.exitItemCheck) {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})
@@ -554,7 +555,7 @@ export default {
 					return checked
 				}
 			}
-			if(this.isRiskControl) {
+			if(this.exitItemCheck) {
 				checked = true
 				return checked
 			}

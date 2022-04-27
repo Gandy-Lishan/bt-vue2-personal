@@ -212,6 +212,16 @@
 								techIndiValue[index] === 'Trailingstop_like'
 							"
 						></trailing-stop-like>
+						<div class="delay-bar-box">
+							 <el-checkbox v-model="isDelayBar">Delay Bars</el-checkbox>
+							<el-input
+								size="mini"
+								v-model="delay_bars"
+								type="number"
+								step="1"
+								min="0"
+							></el-input>
+						</div>
 					</el-tab-pane>
 				</el-tabs>
 			</div>
@@ -273,7 +283,9 @@ export default {
 			refs: {}, 
 			indicatorUrlArr: new Array(5).fill(''),
 			indicatorValArr: new Array(5).fill(''),
-			techVal: ''
+			techVal: '',
+			delay_bars: 0,
+			isDelayBar: false
 		}
 	},
 	components: {
@@ -409,6 +421,19 @@ export default {
 			obj.value = this.signals_in_market
 			this.$store.commit('saveSignalsInMarket',obj)
 		},
+		saveDelayBar() {
+			let obj = {}
+			obj.criteria = "entry"
+			obj.value = this.delay_bars
+			this.$store.commit("saveDelayBar",obj)
+		},
+		saveRelation() {
+		if(this.editableTabs.length>1) {
+			let obj = {}
+			obj.criteria = "entry"
+			obj.value = 1
+			this.$store.commit("saveRelation",obj)}
+		},
 		saveBacktestData(index) {
 			let checked = true
 			console.log('entry的保存执行了' + index + '次')
@@ -416,12 +441,12 @@ export default {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			return indi.then((val) => { 
 				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
-				if(!indi) {
+				if(!val) {
 					this.$message({
 					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
 					type: 'error'
 				})}
-				if (indi) {
+				if (val) {
 				if (this.indicatorRadioArr[index] === 'sentiment') {
 					this.$refs.sentiChild[index].setDesciption(index)
 					let senti = this.$refs.sentiChild[index].saveCondition(index)
@@ -549,6 +574,7 @@ export default {
 		async setEditData(data) {
 			console.log('编辑的entrydata', data)
 			this.score = data.entry.score
+			this.delay_bars =  data.entry.delay_bars ? data.entry.delay_bars : 0
 			this.signals_in_market = data.entry.signals_in_market ? data.entry.signals_in_market : 1
 			let length = data.entry.signals.length
 			this.tabIndex = length
@@ -721,5 +747,10 @@ export default {
 }
 /deep/.el-tabs__nav .el-tabs__item:nth-child(1) span {
 	display: none;
+}
+.delay-bar-box{
+	display: flex;
+	border-top: 1px solid #797979;
+	padding-top: 10px;
 }
 </style>

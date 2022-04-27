@@ -82,7 +82,8 @@ export default {
 		panelIndex: Number,
 		// editIndiData: Object,
 		direction: String,
-		isRiskControl: Boolean
+		isRiskControl: Boolean,
+		exitItemCheck: Boolean
 	},
 	data() {
 		return {
@@ -190,7 +191,7 @@ export default {
 		},
 		saveCondition(index) {
 			let checked = true
-			if(this.isRiskControl) {
+			if(this.exitItemCheck) {
 				return checked = true
 			}
 			if (this.description) {

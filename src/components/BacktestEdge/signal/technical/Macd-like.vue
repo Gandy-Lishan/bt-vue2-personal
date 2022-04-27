@@ -145,7 +145,8 @@ export default {
 		techVal: String,
 		panelIndex: Number,
 		direction: String,
-		isRiskControl: Boolean
+		isRiskControl: Boolean,
+		exitItemCheck: Boolean
 	},
 	data() {
 		let validateValue = (rule, value, callback) => {
@@ -275,7 +276,7 @@ export default {
 		},
 		saveCondition(index) {
 			let checked = true
-						if(this.isRiskControl) {
+						if(this.exitItemCheck) {
 				return checked = true
 			}
 			let validForm = true

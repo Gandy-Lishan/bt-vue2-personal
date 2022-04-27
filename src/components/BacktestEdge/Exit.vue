@@ -23,7 +23,7 @@
 					step="1"
 					min="1"
 				></el-input>
-				<el-select v-model="signalValue" placeholder="Please select signal">
+				<el-select v-model="signalValue" placeholder="Please select signal" @change="getSignslType">
 					<el-option
 						v-for="item in signalOptions"
 						:key="item.value"
@@ -53,6 +53,7 @@
 							:panelIndex="index"
 							:editableTabsValue = "editableTabsValue"
 							ref="indiChild"
+							:exitItemCheck="exitItemCheck"
 							v-bind="$attrs"
 							@getIndicatorUrl="getIndicatorUrl"
 							@getIndicatorVal="getIndicatorVal"
@@ -66,6 +67,7 @@
 							:criteria="'exit'"
 							:panelIndex="index"
 							v-bind="$attrs"
+							:exitItemCheck="exitItemCheck"
 							ref="sentiChild"
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
@@ -74,6 +76,7 @@
 						<cci
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="cciChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -86,6 +89,7 @@
 						<rsi
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="rsiChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -98,6 +102,7 @@
 						<macd
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="macdChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -110,6 +115,7 @@
 						<ma
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="maChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -131,6 +137,7 @@
 						<bollinger-bands-like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="bollBandsLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -143,6 +150,7 @@
 						<ehler-fisher-transform-like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="EFTLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -155,6 +163,7 @@
 						<stochastic-momentum-index-like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="stochasticsLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -167,6 +176,7 @@
 						<ADX-or-DMS-Like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="ADXLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -179,6 +189,7 @@
 						<elder-ray-index-like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="ERILikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -191,6 +202,7 @@
 						<alligator-like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="aligatorLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -203,6 +215,7 @@
 						<linear-regForecast-like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="LRFLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -215,6 +228,7 @@
 						<trailing-stop-like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="trailingStopLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -224,6 +238,16 @@
 								techIndiObj[index] === 'Trailingstop_like'
 							"
 						></trailing-stop-like>
+												<div class="delay-bar-box">
+							 <el-checkbox v-model="isDelayBar">Delay Bars</el-checkbox>
+							<el-input
+								size="mini"
+								v-model="delay_bars"
+								type="number"
+								step="1"
+								min="0"
+							></el-input>
+						</div>
 					</el-tab-pane>
 				</el-tabs>
 			</div>
@@ -290,7 +314,10 @@ export default {
             indicatorUrlArr: new Array(5).fill(''),
 			indicatorValArr: new Array(5).fill(''),
 			riskValArr: new Array(5).fill(''),
-			techVal: ''
+			techVal: '',
+			exitItemCheck: false,
+			delay_bars: 0,
+			isDelayBar: false
 		}
 	},
 	components: {
@@ -325,7 +352,33 @@ export default {
 		},
 		updateTech(val) {
 			this.indicatorRadio = 'technical'
-		}
+		},
+		
+		exitSaveCheck: {
+			handler(newVal) {
+				console.log("传到exit的值");
+				if(newVal) {
+					this.signalOptions = [
+				{
+					value: 0,
+					label: 'Single-Signal'
+				},
+				{
+					value: 1,
+					label: 'SameBar Multi-Signal'
+				},
+				{
+					value: 2,
+					label: 'TimeOrder Multi-Signal'
+				},
+								{
+					value: 3,
+					label: 'Only Use Risk Control'
+				},
+			]
+			}
+ 		}
+	}
 	},
 	methods: {
 		clearForm() {
@@ -440,19 +493,34 @@ export default {
 			obj.value = this.signals_in_market
 			this.$store.commit('saveSignalsInMarket',obj)
 		},
+	    saveDelayBar() {
+			let obj = {}
+			obj.criteria = "exit"
+			obj.value = this.delay_bars
+			this.$store.commit("saveDelayBar",obj)
+		},
+		saveRelation() {
+			if(this.editableTabs.length>1) {
+			let obj = {}
+			obj.criteria = "exit"
+			obj.value = 1
+			this.$store.commit("saveRelation",obj)
+			}
+		},
 		saveBacktestData(index) {
 			let checked = true
 			// 将选择的 indicator 保存到 vuex 中
 			console.log('exit的保存执行了' + index + '次')
+			let vm = this
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			return indi.then( val => {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
-			if (indi) {
-				if(this.exitSaveCheck) {
+			if (val) {
+				if(vm.exitSaveCheck) {
 					return checked = true
 				}
-				if (this.indicatorRadioArr[index] === 'sentiment') {
-					this.$refs.sentiChild[index].setDesciption(index)
+				if (vm.indicatorRadioArr[index] === 'sentiment') {
+					vm.$refs.sentiChild[index].setDesciption(index)
 					let senti = this.$refs.sentiChild[index].saveCondition(index)
 					return (checked = senti)
 				}
@@ -578,6 +646,7 @@ export default {
 		setEditData(data) {
 			console.log('编辑的exitdata', data)
 			this.score = data.exit.score
+			this.delay_bars =  data.exit.delay_bars ? data.exit.delay_bars : 0
 			this.signals_in_market = data.exit.signals_in_market ? data.exit.signals_in_market : 1
 			let length = data.exit.signals.length
 			this.tabIndex = length
@@ -658,6 +727,12 @@ export default {
 				// 	}
 				// 	this.$refs.riskChild[j].setEditData(data)
 				// }
+			}
+		},
+		getSignslType(val) {
+			console.log("选择",val);
+			if(val == 3) {
+				this.exitItemCheck = true
 			}
 		}
 	}
@@ -741,5 +816,10 @@ export default {
 }
 /deep/.el-tabs__nav .el-tabs__item:nth-child(1) span {
 	display: none;
+}
+.delay-bar-box{
+	display: flex;
+	border-top: 1px solid #797979;
+	padding-top: 10px;
 }
 </style>

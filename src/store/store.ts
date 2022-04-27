@@ -49,6 +49,7 @@ export default new Vuex.Store({
 				relation: 0,
 				score: 1,
 				signals_in_market: 1,
+				delay_bars: 0,
 				signals: [
 					{
 						sentimentIndicator: '',
@@ -60,6 +61,7 @@ export default new Vuex.Store({
 				relation: 0,
 				score: 1,
 				signals_in_market: 1,
+				delay_bars: 0,
 				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: ''}]
 			}
 		},
@@ -304,6 +306,8 @@ export default new Vuex.Store({
 					state.backtestInfo[key] = obj[key]
 				}
 			}
+			console.log("setBd",state.backtestInfo);
+			
 			
 		},
 		deleteIndicator(state, val) {
@@ -355,6 +359,7 @@ export default new Vuex.Store({
 					relation: 0,
 					score: 1,
 					signals_in_market: 1,
+					delay_bars: 0,
 					signals: [
 						{
 							sentimentIndicator: '',
@@ -366,6 +371,7 @@ export default new Vuex.Store({
 					relation: 0,
 					score: 1,
 					signals_in_market: 1,
+					delay_bars: 0,
 					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
 				}
 			}
@@ -414,6 +420,7 @@ export default new Vuex.Store({
 					relation: 0,
 					score: 1,
 					signals_in_market: 1,
+					delay_bars: 0,
 					signals: [
 						{
 							sentimentIndicator: '',
@@ -425,6 +432,7 @@ export default new Vuex.Store({
 					relation: 0,
 					score: 1,
 					signals_in_market: 1,
+					delay_bars: 0,
 					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
 				}
 			}
@@ -432,6 +440,7 @@ export default new Vuex.Store({
 				score: 1,
 				relation: 0,
 				signals_in_market: 1,
+				delay_bars: 0,
 				signals: [
 					{
 						sentimentIndicator: '',
@@ -443,6 +452,7 @@ export default new Vuex.Store({
 				relation: 0,
 				score: 1,
 				signals_in_market: 1,
+				delay_bars: 0,
 				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
 			}
 			state.backtestInfo.entry_description = []
@@ -485,7 +495,13 @@ export default new Vuex.Store({
 		},
 		saveSignalsInMarket(state, obj) {
 			state.backtestInfo[obj.criteria].signals_in_market = Number(obj.value)
-		}
+		},
+		saveDelayBar(state,obj) {
+			state.backtestInfo[obj.criteria].delay_bars = Number(obj.value)
+		},
+		saveRelation(state,obj) {
+			state.backtestInfo[obj.criteria].relation = Number(obj.value)
+		},
 	},
 	actions: {
 		Try(context, val) {

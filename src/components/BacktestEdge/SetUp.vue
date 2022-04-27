@@ -138,7 +138,7 @@
 			<div class="risk-control-container border-set">
 						 <div class="riskItem">
 							 
-    <el-checkbox v-model="isRiskControl" border>Risk Control:</el-checkbox>
+    <el-checkbox v-model="isRiskControl" border>Risk Control at Exit:</el-checkbox>
 						 </div>
 	<div class="tpContainer riskItem" v-if="isRiskControl">
     <el-checkbox v-model="isTakeProfit" @change="selectRiskControl">Take Profit</el-checkbox>
@@ -587,7 +587,7 @@ export default {
 		},
 		selectRiskControl(val) {
 			console.log(val);
-			if(this.isRiskControl && (this.isTakeProfit || this.isRiskControl || this.isStopLoss)) {
+			if(this.isRiskControl && (this.isTakeProfit || this.isTimeInMarket || this.isStopLoss)) {
 			this.$emit('IsRiskControl', true)
 			}
 		},
@@ -739,9 +739,9 @@ export default {
 						// 保存 backtestform 的数据
 						bd.commission = bd.commission / 100
 		if(this.isRiskControl) {
-		let bd = JSON.parse(JSON.stringify(this.bd))
-		bd.risk_control = `${this.isTakeProfit?this.tp:''}/${this.isStopLoss?this.sl:''}/${this.isTimeInMarket?this.tim:''}`
-		console.log(bd.risk_control);
+	    let riskStr = `${this.isTakeProfit?this.tp:''}/${this.isStopLoss?this.sl:''}/${this.isTimeInMarket?this.tim:''}`
+	    bd.risk_control = riskStr
+		console.log("risk control",bd.risk_control);
 		}
 						this.$store.commit('setBd', bd)
 						return checked
