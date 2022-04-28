@@ -541,6 +541,7 @@ export default {
 						indicatorLayout.activatedMA = this.$store.state.activatedMA
 
 						backtestData.indicator_layout = JSON.stringify(indicatorLayout)
+						console.log("backtest数据",backtestData)
 						let backtestDataStr = this.$qs.stringify(backtestData)
 						try {
 							let res = await runBacktest(backtestDataStr)

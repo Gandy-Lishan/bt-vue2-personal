@@ -100,7 +100,7 @@ export default {
 				return false
 			}
 			const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
-			if (!pattern.test(num) && num != 0) {
+			if (!pattern.test(num) && num !== 0) {
 				{
 					this.$message({
 						message: 'Only two decimal points are allowed',
@@ -124,7 +124,7 @@ export default {
 				return false
 			}
 			const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
-			if (!pattern.test(num) && num != 0) {
+			if (!pattern.test(num) && num !== 0) {
 				{
 					this.$message({
 						message: 'Only two decimal points are allowed',
@@ -180,6 +180,7 @@ export default {
 			}
 		},
 		saveCondition() {
+			console.log("保存risk");
 			let checked = true
 			// 判断有无空值
 			let valid = true
