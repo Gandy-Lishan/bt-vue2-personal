@@ -233,7 +233,11 @@ export default {
 		sentiUrl: {
 			handler(newVal) {
 				if (newVal) {
-					//console.log(newVal)
+					var obj = CIQ.store.state.conditionRadio
+					obj[this.criteria][this.panelIndex] = this.conditionRadio
+					console.log('handle Senti,',obj)
+					CIQ.store.commit('setConditionRadio', obj)
+
 					let vm = this
 					let extremeValue = this.$store.state.extremeValue
 					extremeValue.forEach((item) => {
@@ -288,6 +292,10 @@ export default {
 		},
 		getConditionRadio(val) {
 			this.clearFormValidate()
+			var obj = CIQ.store.state.conditionRadio
+			obj[this.criteria][this.panelIndex] = val
+			CIQ.store.commit('setConditionRadio', obj)
+
 			if (val === 'Sentiment Value') {
 				// 清空moving average在切回默认senti radio
 				this.periodTemp = this.senti.period

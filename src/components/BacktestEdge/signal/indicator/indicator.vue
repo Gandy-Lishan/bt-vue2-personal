@@ -146,7 +146,6 @@ export default {
 					absoluteIndex = index
 				}
 			})
-
 			if (
 				this.si.sentimentIndicator == '' &&
 				this.si.technicalIndicator == '' &&
@@ -283,8 +282,8 @@ export default {
 					countExistIndicator++
                 } 
 
-                if(countExistIndicator>=5){
-                    CIQ.description("Maximum 5 signals can be displayed on chart")
+                if(countExistIndicator>=10){
+                    CIQ.description("Maximum 10 signals can be displayed on chart")
                     return
                 }
 

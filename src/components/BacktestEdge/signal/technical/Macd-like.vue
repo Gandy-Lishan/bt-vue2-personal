@@ -144,7 +144,8 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		direction: String
+		direction: String,
+		isActived: Boolean
 	},
 	data() {
 		let validateValue = (rule, value, callback) => {
@@ -206,11 +207,14 @@ export default {
 		}
 	},
 	watch: {
-		techVal: {
+		isActived: {
 			handler(newVal) {
-				var obj = CIQ.store.state.conditionRadio
-				obj.MACD_like = this.radio
-				CIQ.store.commit('setConditionRadio', obj)
+				if(newVal){
+					var obj = CIQ.store.state.conditionRadio
+					obj[this.criteria][this.panelIndex] = this.radio
+					CIQ.store.commit('setConditionRadio', obj)
+					console.log('handle macd,',obj)
+				}
 			},
 			immediate: true,
 			deep: true
@@ -253,7 +257,7 @@ export default {
 		getConditionRadio(val) {
 			this.clearFormValidate()
 			var obj = CIQ.store.state.conditionRadio
-			obj.MACD_like = val
+			obj[this.criteria][this.panelIndex] = val
 			CIQ.store.commit('setConditionRadio', obj)
 			switch (val) {
 				case 'Indicator Value':

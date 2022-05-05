@@ -137,7 +137,8 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		direction: String
+		direction: String,
+		isActived: Boolean
 	},
 	data() {
 		let validatePeriod = (rule, value, callback) => {
@@ -210,11 +211,14 @@ export default {
 		}
 	},
 	watch: {
-		techVal: {
+		isActived: {
 			handler(newVal) {
-				var obj = CIQ.store.state.conditionRadio
-				obj.MovingAverage_like = this.tech.comparison
-				CIQ.store.commit('setConditionRadio', obj)
+				if(newVal){
+					var obj = CIQ.store.state.conditionRadio
+					obj[this.criteria][this.panelIndex] = this.radio
+					console.log('handle MA,',obj)
+					CIQ.store.commit('setConditionRadio', obj)
+				}
 			},
 			immediate: true,
 			deep: true
@@ -230,6 +234,10 @@ export default {
 		},
 		setRadio(val) {
 			this.clearFormValidate()
+			var obj = CIQ.store.state.conditionRadio
+			obj[this.criteria][this.panelIndex] = val
+			console.log('MA radio change,',obj)
+			CIQ.store.commit('setConditionRadio', obj)
 			if (val === 'Moving Average') {
 				// 添加附属ma
 				this.tech.ma_period = 5
@@ -281,9 +289,10 @@ export default {
 			this.setDesciption()
 		},
 		getRadioSelect(val) {
-			var obj = CIQ.store.state.conditionRadio
-			obj.MovingAverage_like = val
-			CIQ.store.commit('setConditionRadio', obj)
+			// var obj = CIQ.store.state.conditionRadio
+			// obj[this.criteria][this.panelIndex] = val
+			// //console.log('MA radio change,',obj)
+			// CIQ.store.commit('setConditionRadio', obj)
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
 					if (sd.type == 'ST MA' && sd.panel == 'chart') {

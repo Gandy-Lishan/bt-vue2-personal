@@ -114,7 +114,8 @@ export default {
 
 		panelIndex: Number,
 		// editIndiData: Object,
-		direction: String
+		direction: String,
+		isActived: Boolean
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -152,12 +153,15 @@ export default {
 		}
 	},
 	watch: {
-		techVal: {
+		isActived: {
 			handler(newVal) {
-				//console.log('watch techVal!!!!!!!!!',newVal)
-				var obj = CIQ.store.state.conditionRadio
-				obj.ERI_like = this.conditionRadio
-				CIQ.store.commit('setConditionRadio', obj)
+				if(newVal) {
+					
+					var obj = CIQ.store.state.conditionRadio
+					obj[this.criteria][this.panelIndex] = this.conditionRadio
+					CIQ.store.commit('setConditionRadio', obj)
+					console.log('handle ERI,',obj)
+				}
 			},
 			immediate: true,
 			deep: true
@@ -197,7 +201,7 @@ export default {
 		getConditionRadio(val) {
 			this.conditionRadio = val
 			var obj = CIQ.store.state.conditionRadio
-			obj.ERI_like = val
+			obj[this.criteria][this.panelIndex] = val
 			CIQ.store.commit('setConditionRadio', obj)
 			if (val === ' Indicator hist1 ') {
 				this.tech.comparison = 'ERIH1'

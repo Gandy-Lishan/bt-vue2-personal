@@ -13,14 +13,14 @@
 				<el-form-item>
 					<el-radio
 						v-model="radio"
-						label=" "
+						label="first"
 						@change="setRadio"
-					></el-radio>
+					>&nbsp;</el-radio>
 					<el-select
 						v-model="tech.comparison"
 						@change="setDesciption"
 						size="mini"
-						:disabled="!(this.radio === ' ')"
+						:disabled="!(this.radio === 'first')"
 						filterable
 						placeholder="Please select condition"
 					>
@@ -37,7 +37,7 @@
 					<el-form-item>
 						<el-select
 							v-model="tech.condition"
-							:disabled="!(this.radio === ' ')"
+							:disabled="!(this.radio === 'first')"
 							size="mini"
 							filterable
 							placeholder="Please select condition"
@@ -56,7 +56,7 @@
 					<el-form-item>
 						<el-select
 							v-model="tech.value"
-							:disabled="!(this.radio === ' ')"
+							:disabled="!(this.radio === 'first')"
 							size="mini"
 							filterable
 							placeholder="Please select condition"
@@ -79,11 +79,11 @@
 						<el-radio
 							v-model="radio"
 							@change="setRadio"
-							label="  "
-						></el-radio>
+							label="second"
+						>&nbsp;</el-radio>
 						<el-select
 							v-model="comparison2"
-							:disabled="!(this.radio === '  ')"
+							:disabled="!(this.radio === 'second')"
 							size="mini"
 							filterable
 							@change="getRadio2Select"
@@ -106,7 +106,7 @@
 							v-model="tech.condition"
 							filterable
 							size="mini"
-							:disabled="!(this.radio === '  ')"
+							:disabled="!(this.radio === 'second')"
 							placeholder="Please select condition"
 						>
 							<el-option
@@ -123,7 +123,7 @@
 					<el-form-item>
 						<el-select
 							v-model="value2"
-							:disabled="!(this.radio === '  ')"
+							:disabled="!(this.radio === 'second')"
 							size="mini"
 							filterable
 							placeholder="Please select condition"
@@ -156,7 +156,8 @@ export default {
 		techVal: String,
 		panelIndex: Number,
 		// editIndiData: Object,
-		direction: String
+		direction: String,
+		isActived: Boolean
 	},
 	data() {
 		return {
@@ -193,21 +194,24 @@ export default {
 			value2: 'TEETH',
 			comparison2: 'JAW',
 			editTechVal: '',
-			radio: ' '
+			radio: 'first'
 		}
 	},
 	watch: {
-		techVal: {
+		isActived: {
 			handler(newVal) {
-				var _obj = {
-					radio: this.tech.comparison,
-					radioValue: this.comparison2,
-					techValue: this.value2
-				}
-				var obj = CIQ.store.state.conditionRadio
-				obj.Aligator_like = JSON.stringify(_obj)
-				CIQ.store.commit('setConditionRadio', obj)
-				//console.log('watch alligator techVal!!!!!!!!!',obj)
+				if(newVal){
+					var _obj = {
+						radio: this.radio,
+						radioValue: this.comparison2,
+						techValue: this.radio === 'first' ? this.tech.value : this.value2
+					}
+					var obj = CIQ.store.state.conditionRadio
+					//obj.Aligator_like = JSON.stringify(_obj)
+					obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
+					CIQ.store.commit('setConditionRadio', obj)
+					console.log('handle alligator,',obj)
+				}	
 			},
 			immediate: true,
 			deep: true
@@ -220,12 +224,14 @@ export default {
 		getValue1Select(val) {
 			this.tech.value = val
 			var _obj = {
-				radio: this.tech.comparison,
+				radio: this.radio,
 				radioValue: this.comparison2,
-				techValue: this.value2
+				techValue: this.radio === 'first' ? this.tech.value : this.value2
 			}
 			var obj = CIQ.store.state.conditionRadio
-			obj.Aligator_like = JSON.stringify(_obj)
+			//obj.Aligator_like = JSON.stringify(_obj)
+			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
+			//console.log(obj)
 			CIQ.store.commit('setConditionRadio', obj)
 			this.setDesciption()
 			//CIQ.exportEx()
@@ -234,10 +240,12 @@ export default {
 			var _obj = {
 				radio: val,
 				radioValue: this.comparison2,
-				techValue: this.value2
+				techValue: this.radio === 'first' ? this.tech.value : this.value2
 			}
 			var obj = CIQ.store.state.conditionRadio
-			obj.Aligator_like = JSON.stringify(_obj)
+			//obj.Aligator_like = JSON.stringify(_obj)
+			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
+			//console.log(obj)
 			CIQ.store.commit('setConditionRadio', obj)
 			//CIQ.exportEx()
 		},
@@ -249,12 +257,14 @@ export default {
 				}
 			}
 			var _obj = {
-				radio: this.tech.comparison,
+				radio: this.radio,
 				radioValue: this.comparison2,
 				techValue: this.value2
 			}
 			var obj = CIQ.store.state.conditionRadio
-			obj.Aligator_like = JSON.stringify(_obj)
+			//obj.Aligator_like = JSON.stringify(_obj)
+			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
+			//console.log(obj)
 			CIQ.store.commit('setConditionRadio', obj)
 			this.setDesciption()
 			//CIQ.exportEx()
@@ -267,12 +277,14 @@ export default {
 				}
 			}
 			var _obj = {
-				radio: this.tech.comparison,
+				radio: this.radio,
 				radioValue: this.comparison2,
 				techValue: this.value2
 			}
+			//console.log(_obj)
 			var obj = CIQ.store.state.conditionRadio
-			obj.Aligator_like = JSON.stringify(_obj)
+			//obj.Aligator_like = JSON.stringify(_obj)
+			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
 			CIQ.store.commit('setConditionRadio', obj)
 			//CIQ.exportEx()
 			this.setDesciption()
@@ -310,15 +322,15 @@ export default {
 				default:
 					break;
 			}
-			let radio = this.radio === ' ' ? comparison : this.comparison2
-			let value = this.radio === ' ' ? this.tech.value : this.value2
+			let radio = this.radio === 'first' ? comparison : this.comparison2
+			let value = this.radio === 'first' ? this.tech.value : this.value2
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${techVal} ${radio} ${condition} ${value}`
 			console.log(this.description)
 		},
 		saveCondition(index) {
 			let checked = true
-			if (this.radio === '  ') {
+			if (this.radio === 'second') {
 				this.tech.comparison = this.comparison2
 			}
 			let tech = JSON.parse(JSON.stringify(this.tech))
@@ -344,7 +356,7 @@ export default {
 					this.tech.comparison === 'SL' ||
 					this.tech.comparison === 'SH'
 				) {
-					this.radio = ' '
+					this.radio = 'first'
 					this.tech.comparison = obj.comparison
 				    this.tech.value = obj.value
 				}
@@ -353,7 +365,7 @@ export default {
 					this.tech.comparison === 'JAW' ||
 					this.tech.comparison === 'LIPS'
 				) {
-					this.radio = '  '
+					this.radio = 'second'
 					this.value2 = obj.value
 					this.comparison2 = obj.comparison
 					this.getRadio2Select(this.comparison2)

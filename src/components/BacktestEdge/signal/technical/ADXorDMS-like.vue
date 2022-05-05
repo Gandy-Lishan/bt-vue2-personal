@@ -112,7 +112,8 @@ export default {
 		techVal: String,
 		panelIndex: Number,
 		// editIndiData: Object,
-		direction: String
+		direction: String,
+		isActived: Boolean
 	},
 	data() {
 		var validateValueNegative = (rule, value, callback) => {
@@ -170,12 +171,16 @@ export default {
 		}
 	},
 	watch: {
-		techVal: {
+		isActived: {
 			handler(newVal) {
-				//console.log('watch techVal!!!!!!!!!',newVal)
-				var obj = CIQ.store.state.conditionRadio
-				obj.ADX_like = this.conditionRadio
-				CIQ.store.commit('setConditionRadio', obj)
+				if(newVal){
+					//console.log('watch techVal!!!!!!!!!',newVal)
+					var obj = CIQ.store.state.conditionRadio
+					obj[this.criteria][this.panelIndex] = this.conditionRadio
+					CIQ.store.commit('setConditionRadio', obj)
+					console.log('handle ADX,',obj)
+				}
+
 			},
 			immediate: true,
 			deep: true
@@ -217,7 +222,7 @@ export default {
 		getConditionRadio(val) {
 			this.clearFormValidate()
 			var obj = CIQ.store.state.conditionRadio
-			obj.ADX_like = val
+			obj[this.criteria][this.panelIndex] = val
 			CIQ.store.commit('setConditionRadio', obj)
 			if (val === ' +DI ADX ') {
 				this.tech.comparison = 'PADX'

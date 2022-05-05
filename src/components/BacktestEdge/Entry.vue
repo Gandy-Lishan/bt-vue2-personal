@@ -72,6 +72,10 @@
 						></senti>
 						<cci
 							v-bind="$attrs"
+							:isActived ="
+								indicatorRadioArr[index] === 'technical' &&
+								techIndiObj[index] === 'CCI_like'
+							"
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="cciChild"
@@ -84,6 +88,10 @@
 						></cci>
 						<rsi
 							v-bind="$attrs"
+							:isActived ="
+								indicatorRadioArr[index] === 'technical' &&
+								techIndiObj[index] === 'rsi'
+							"
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="rsiChild"
@@ -96,6 +104,10 @@
 						></rsi>
 						<macd
 							v-bind="$attrs"
+							:isActived ="
+								indicatorRadioArr[index] === 'technical' &&
+								techIndiObj[index] === 'MACD_like'
+							"
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="macdChild"
@@ -108,6 +120,10 @@
 						></macd>
 						<ma
 							v-bind="$attrs"
+							:isActived ="
+								indicatorRadioArr[index] === 'technical' &&
+								techIndiObj[index] === 'MovingAverage_like'
+							"
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="maChild"
@@ -120,6 +136,10 @@
 						></ma>
 						<bollinger-bands-like
 							v-bind="$attrs"
+							:isActived ="
+								indicatorRadioArr[index] === 'technical' &&
+								techIndiObj[index] === 'BollingerBands_like'
+							"
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="bollBandsLikeChild"
@@ -132,6 +152,10 @@
 						></bollinger-bands-like>
 						<ehler-fisher-transform-like
 							v-bind="$attrs"
+							:isActived ="
+								indicatorRadioArr[index] === 'technical' &&
+								techIndiObj[index] === 'EFT_like'
+							"
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="EFTLikeChild"
@@ -144,6 +168,10 @@
 						></ehler-fisher-transform-like>
 						<stochastic-momentum-index-like
 							v-bind="$attrs"
+							:isActived ="
+								indicatorRadioArr[index] === 'technical' &&
+								techIndiObj[index] === 'Stochastics_like'
+							"
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="stochasticsLikeChild"
@@ -156,6 +184,10 @@
 						></stochastic-momentum-index-like>
 						<ADX-or-DMS-Like
 							v-bind="$attrs"
+							:isActived ="
+								indicatorRadioArr[index] === 'technical' &&
+								techIndiObj[index] === 'ADX_like'
+							"
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="ADXLikeChild"
@@ -168,6 +200,10 @@
 						></ADX-or-DMS-Like>
 						<elder-ray-index-like
 							v-bind="$attrs"
+							:isActived ="
+								indicatorRadioArr[index] === 'technical' &&
+								techIndiObj[index] === 'ERI_like'
+							"
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="ERILikeChild"
@@ -180,6 +216,10 @@
 						></elder-ray-index-like>
 						<alligator-like
 							v-bind="$attrs"
+							:isActived ="
+								indicatorRadioArr[index] === 'technical' &&
+								techIndiObj[index] === 'Aligator_like'
+							"
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="aligatorLikeChild"
@@ -192,6 +232,10 @@
 						></alligator-like>
 						<linear-regForecast-like
 							v-bind="$attrs"
+							:isActived ="
+								indicatorRadioArr[index] === 'technical' &&
+								techIndiObj[index] === 'LRF_like'
+							"
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="LRFLikeChild"
@@ -204,6 +248,10 @@
 						></linear-regForecast-like>
 						<trailing-stop-like
 							v-bind="$attrs"
+							:isActived ="
+								indicatorRadioArr[index] === 'technical' &&
+								techIndiValue[index] === 'Trailingstop_like'
+							"
 							:panelIndex="index"
 							:criteria="'entry'"
 							ref="trailingStopLikeChild"

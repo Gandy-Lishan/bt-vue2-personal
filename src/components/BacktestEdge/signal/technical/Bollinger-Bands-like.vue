@@ -81,7 +81,8 @@ export default {
 		techVal: String,
 		panelIndex: Number,
 		// editIndiData: Object,
-		direction: String
+		direction: String,
+		isActived: Boolean
 	},
 	data() {
 		return {
@@ -115,12 +116,14 @@ export default {
 		}
 	},
 	watch: {
-		techVal: {
+		isActived: {
 			handler(newVal) {
-				//console.log('watch techVal!!!!!!!!!',newVal)
-				var obj = CIQ.store.state.conditionRadio
-				obj.BollingerBands_like = this.tech.value
-				CIQ.store.commit('setConditionRadio', obj)
+				if(newVal){
+					var obj = CIQ.store.state.conditionRadio
+					obj[this.criteria][this.panelIndex] = this.tech.value
+					CIQ.store.commit('setConditionRadio', obj)
+					console.log('handle BollingerBands_like,',obj)
+				}
 			},
 			immediate: true,
 			deep: true
@@ -132,7 +135,7 @@ export default {
 		},
 		getValueSelect(val) {
 			var obj = CIQ.store.state.conditionRadio
-			obj.BollingerBands_like = val
+			obj[this.criteria][this.panelIndex] = val
 			CIQ.store.commit('setConditionRadio', obj)
 			//CIQ.exportEx()
 			this.setDesciption()

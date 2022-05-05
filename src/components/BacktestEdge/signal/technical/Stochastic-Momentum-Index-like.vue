@@ -148,7 +148,8 @@ export default {
 		techVal: String,
 		panelIndex: Number,
 		// editIndiData: Object,
-		direction: String
+		direction: String,
+		isActived: Boolean
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -205,12 +206,15 @@ export default {
 		}
 	},
 	watch: {
-		techVal: {
+		isActived: {
 			handler(newVal) {
-				//console.log('watch techVal!!!!!!!!!',newVal)
-				var obj = CIQ.store.state.conditionRadio
-				obj.Stochastics_like = this.radio
-				CIQ.store.commit('setConditionRadio', obj)
+				if(newVal){
+					//console.log('watch techVal!!!!!!!!!',newVal)
+					var obj = CIQ.store.state.conditionRadio
+					obj[this.criteria][this.panelIndex] = this.radio
+					CIQ.store.commit('setConditionRadio', obj)
+					console.log('handle stocastic,',obj)
+				}
 			},
 			immediate: true,
 			deep: true
@@ -259,7 +263,7 @@ export default {
 		getConditionRadio(val) {
 			this.clearFormValidate()
 			var obj = CIQ.store.state.conditionRadio
-			obj.Stochastics_like = val
+			obj[this.criteria][this.panelIndex] = val
 			CIQ.store.commit('setConditionRadio', obj)
 			switch (val) {
 				case '%K':
