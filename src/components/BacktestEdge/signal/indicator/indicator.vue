@@ -50,33 +50,6 @@
 					</div>
 				</el-form-item>
 			</div>
-			<!-- <div
-				class="indicator-container techBox"
-				v-if="criteria === 'exit' && isShowRisk === panelIndex"
-			>
-				<el-form-item>
-					<el-radio
-						v-model="indicatorRadio"
-						label="Risk Control"
-						@change="changeIndicatorChecked"
-					>
-					</el-radio>
-				</el-form-item>
-				<el-form-item prop="riskIndicator">
-					<div class="indicatorSearchBox">
-						<el-autocomplete
-							:disabled="!(indicatorRadio === 'Risk Control')"
-							class="inline-input"
-							clearable
-							prefix-icon="el-icon-search"
-							v-model="si.riskIndicator"
-							:fetch-suggestions="indicatorRiskSearch"
-							placeholder="Input the Risk Control Indicator"
-							@select="handleRiskSelect"
-						></el-autocomplete>
-					</div>
-				</el-form-item>
-			</div> -->
 		</el-form>
 	</div>
 </template>
@@ -88,9 +61,9 @@ export default {
 	props: {
 		criteria: String,
 		panelIndex: Number,
-		isShowRisk: Number,
 		editableTabsValue: String,
 		editableTabs: Array,
+		exitItemCheck: Boolean
 	},
 	data() {
 		var validateSenti = (rule, value, callback) => {
@@ -167,6 +140,11 @@ export default {
 							valObj.value = CIQ.indicatorList[i].chart_name
 							valObj.index = this.panelIndex
 							this.$emit('getIndicatorVal', valObj)
+							let radioObj = {}
+							radioObj.value = 'sentiment'
+							radioObj.index = this.panelIndex
+							this.$emit('getIndicatorRadio', radioObj)
+							
 
 						//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
 						let obj = {}
@@ -184,6 +162,10 @@ export default {
 					// this.si.technicalIndicator = item.value
 					// 暂时注释掉，因为大部分tech没有加到back test内
 					this.indicatorRadio = 'Technical Indicators'
+						// 					let radioObj = {}
+						// radioObj.value = 'technical'
+						// radioObj.index = this.panelIndex
+						// this.$emit('getIndicatorRadio', radioObj)
 					//this.handleTechnicalSelect({value:item.value})
 				}
 			})
@@ -488,7 +470,7 @@ export default {
 			let checked = true
 			let validForm
 			let validName = false
-			if (this.indicatorRadio === 'Sentiment Indicators') {
+			if (this.indicatorRadio === 'Sentiment Indicators' && !this.exitItemCheck) {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})
@@ -528,7 +510,8 @@ export default {
 					checked = false
 					return checked
 				}
-			} else if (this.indicatorRadio === 'Technical Indicators') {
+			}
+			if (this.indicatorRadio === 'Technical Indicators' && !this.exitItemCheck) {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})
@@ -560,36 +543,41 @@ export default {
 					checked = false
 					return checked
 				}
-			} else if (this.indicatorRadio === 'Risk Control') {
-				this.$refs.siForm.validate((valid) => {
-					validForm = valid
-				})
-				let formateList = this.loadRiskList()
-				for (let i = 0; i < formateList.length; i++) {
-					if (this.si.riskIndicator === formateList[i].value) {
-						validName = true
-						break
-					}
-				}
-				if (validForm && validName) {
-					let obj = {}
-					obj.criteria = 'exit'
-					obj.index = index
-					obj.value = 'Risk Control'
-					this.$store.commit('getRiskValue', obj)
-					return checked
-				} else {
-					if (!validName) {
-						this.$message({
-							message: 'Please select indicator from the drop-down box',
-							type: 'error',
-							offset: 300
-						})
-					}
-					checked = false
-					return checked
-				}
 			}
+			if(this.exitItemCheck) {
+				checked = true
+				return checked
+			}
+			// if (this.indicatorRadio === 'Risk Control') {
+			// 	this.$refs.siForm.validate((valid) => {
+			// 		validForm = valid
+			// 	})
+			// 	let formateList = this.loadRiskList()
+			// 	for (let i = 0; i < formateList.length; i++) {
+			// 		if (this.si.riskIndicator === formateList[i].value) {
+			// 			validName = true
+			// 			break
+			// 		}
+			// 	}
+			// 	if (validForm && validName) {
+			// 		let obj = {}
+			// 		obj.criteria = 'exit'
+			// 		obj.index = index
+			// 		obj.value = 'Risk Control'
+			// 		this.$store.commit('getRiskValue', obj)
+			// 		return checked
+			// 	} else {
+			// 		if (!validName) {
+			// 			this.$message({
+			// 				message: 'Please select indicator from the drop-down box',
+			// 				type: 'error',
+			// 				offset: 300
+			// 			})
+			// 		}
+			// 		checked = false
+			// 		return checked
+			// 	}
+			// }
 		},
 		async setEditData(newVal) {
 			console.log("indicator编辑的数据",newVal);

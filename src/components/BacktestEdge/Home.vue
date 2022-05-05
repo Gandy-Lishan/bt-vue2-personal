@@ -88,7 +88,7 @@
 							<set-up
 								ref="setUpChild"
 								:backtestEditData="backtestEditData"
-								@getTimeFrame="getTimeFrame"
+								@IsRiskControl="IsRiskControl"
 								@setDirection="setDirection"
 							></set-up>
 							<div class="criteria-container">
@@ -102,6 +102,8 @@
 									<exit
 										ref="exitChild"
 										:direction="direction"
+										:exitSaveCheck="exitSaveCheck"
+										@isOnlyRiskControl="isOnlyRiskControl"
 										@sendExitSignalIndex="sendExitSignalIndex"
 									></exit>
 									<!-- <multi-exit></multi-exit> -->
@@ -281,12 +283,13 @@ export default {
 			loading: false,
 			backtestEditData: {},
 			editFrequency: 'Daily',
-			timeFrame: 'Daily',
+			exitSaveCheck: false,
 			historyFlag: true,
 			favoriteFlag: true,
 			entryLength: 1,
 			exitLength: 1,
-			direction: 'Long'
+			direction: 'Long',
+			isOnlyRisk: false
 		}
 	},
 	components: {
@@ -413,12 +416,14 @@ export default {
 		// 清除set up  表单
 		clearForm() {
 			//CIQ.reloadChart()
+			Object.assign(this.$data, this.$options.data())
 			this.$store.commit('initialBacktestInfo')
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
 			this.$refs.exitChild.clearForm()
 		},
 		clearAllDataForm() {
+			Object.assign(this.$data, this.$options.data())
 			this.$store.commit('initialBacktestInfo')
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
@@ -444,8 +449,8 @@ export default {
 					this.$refs.sampleChild.getSampleList()
 			}
 		},
-		getTimeFrame(val) {
-			this.timeFrame = val
+		IsRiskControl(val) {
+			this.exitSaveCheck = val
 		},
 		setDirection(val) {
 			this.direction = val
@@ -477,6 +482,8 @@ export default {
 					entry = this.$refs.entryChild.saveBacktestData(index)
 					this.$refs.entryChild.saveScoreValue()
 					this.$refs.entryChild.saveSignalsInMarket()
+					this.$refs.entryChild.saveDelayBar()
+					this.$refs.entryChild.saveRelation()
 				}
 				let entryChecked = await entry
 				if (entryChecked) {
@@ -488,6 +495,8 @@ export default {
 						exitChecked = await exit
 						this.$refs.exitChild.saveScoreValue()
 						this.$refs.exitChild.saveSignalsInMarket()
+						this.$refs.exitChild.saveDelayBar()
+						this.$refs.exitChild.saveRelation()
 					}
 					if (exitChecked) {
 						this.loading = true
@@ -516,6 +525,7 @@ export default {
 									type: 'error',
 									offset: 300
 								})
+								vm.loading = false
 								return
 							}
 						}
@@ -538,6 +548,7 @@ export default {
 									type: 'error',
 									offset: 300
 								})
+								vm.loading = false
 								return
 							}
 						}
@@ -558,6 +569,7 @@ export default {
 								delete item.riskIndicator
 							}
 						})
+						if(!this.isOnlyRisk) {
 						signalExitList.forEach((item) => {
 							if (item.sentimentIndicator) {
 								item.indicator = item.sentimentIndicator
@@ -581,12 +593,16 @@ export default {
 								delete item.riskIndicator
 							}
 						})
+						}
 						const b = new SignalCode()
 						var entry_signal_list = []
 						var exit_signal_list = []
 
 						let formateTechnicalList
 						formateTechnicalList = vm.$store.state.formateTechnicalList
+						if(formateTechnicalList.length === 0) {
+							formateTechnicalList = vm.loadShortLong()
+						}
 
 						let entrySignal = backtestData.entry.signals.map((item) => {
 							let signal = CIQ.indicatorList.find((i) => {
@@ -601,7 +617,9 @@ export default {
 							}
 							return signal.url
 						})
-						let exitSignal = backtestData.exit.signals.map((item) => {
+						let exitSignal
+						if(!this.isOnlyRisk) {
+						exitSignal = backtestData.exit.signals.map((item) => {
 							let signal = CIQ.indicatorList.find((i) => {
 								return i.chart_name == item.indicator
 							})
@@ -614,6 +632,9 @@ export default {
 							}
 							return signal.url
 						})
+						}else {
+							exitSignal = [""]
+						}
 						delete backtestData.entry.signals
 						for (let i = 0; i < signalEntryList.length; i++) {
 							let code = b.encode(signalEntryList[i])
@@ -623,6 +644,7 @@ export default {
 							entry_signal_list.push(singal)
 						}
 						delete backtestData.exit.signals
+						if(!this.isOnlyRisk) {
 						for (var i in signalExitList) {
 							let code = b.encode(signalExitList[i])
 							var singal = {
@@ -630,18 +652,24 @@ export default {
 							}
 							exit_signal_list.push(singal)
 						}
+						}
+						if(this.isOnlyRisk) {
+							exit_signal_list = [{code: ''}]
+						}
 						let entry = {
 							description: backtestData.entry.description,
 							score: backtestData.entry.score,
 							signals_in_market: backtestData.entry.signals_in_market,
-							relation: 0,
+							relation: backtestData.entry.relation,
+							delay_bars: backtestData.entry.delay_bars,
 							signals: entry_signal_list
 						}
 						let exit = {
 							description: backtestData.exit.description,
 							score: backtestData.exit.score,
 							signals_in_market: backtestData.exit.signals_in_market,
-							relation: 0,
+							relation: backtestData.exit.relation,
+							delay_bars: backtestData.exit.delay_bars,
 							signals: exit_signal_list
 						}
 						delete backtestData.entry
@@ -764,21 +792,28 @@ export default {
 				}
 				if (data.exit.signals instanceof Array) {
 					// data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
-					data.exit.signals = data.exit.signals.map((value) => {
-						return signalCode.decode(value.code)
-					})
+
+						data.exit.signals = data.exit.signals.map((value) => {
+						return signalCode.decode(value.code)	
+					    })
+						if(data.exit.signals.includes(undefined)) {
+							data.exit.signals = [{code: ''}]
+							vm.$refs.exitChild.setRiskEditData(data)
+						}else {
+							
+				        let exitPanel = data.exit.signals.length
+						let exitData = {}
+						exitData.exit = data.exit
+						vm.$refs.exitChild.setEditPanel(exitPanel, exitData)
+						}
 				}
 				let entryPanel = data.entry.signals.length
-				let exitPanel = data.exit.signals.length
 				let entryData = {}
 				entryData.entry = data.entry
 				// entryData.entry_description = data.entry_description
-				let exitData = {}
-				exitData.exit = data.exit
 				// exitData.exit_description = data.exit_description
 
 				vm.$refs.entryChild.setEditPanel(entryPanel, entryData)
-				vm.$refs.exitChild.setEditPanel(exitPanel, exitData)
 				// 拿到 frequency 的值
 				vm.editFrequency = data.frequency
 				vm.timeFrame = data.frequency
@@ -820,7 +855,30 @@ export default {
 		},
 		handleCommand(command) {
 			this.$router.push('/doc')
-		}
+		},
+		isOnlyRiskControl(val) {
+			this.isOnlyRisk = val
+		},
+		loadShortLong() {
+			const technicalList = CIQ.technicalCategory
+			let formatList = []
+			for (let i = 0; i < technicalList.length; i++) {
+				if (
+					technicalList[i].class === 'No_display_technical_indicator' ||
+					technicalList[i].class ===
+						'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
+				)
+					continue
+				technicalList[i].studies.forEach((item) => {
+					let obj = {}
+					obj.class = technicalList[i].class
+					obj.value = item.name
+					obj.url = item.url
+					formatList.push(obj)
+				})
+			}
+			return formatList
+		},
 	}
 }
 </script>

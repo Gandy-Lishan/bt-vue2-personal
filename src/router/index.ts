@@ -132,7 +132,8 @@ router.beforeEach((to, from, next) => {
 	} else {
 		//  alert("asdasd");
 		next()
+		// window.location.href = loginUrl
 	}
-	next()
+	// next()
 })
 export default router

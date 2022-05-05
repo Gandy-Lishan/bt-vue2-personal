@@ -66,7 +66,8 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		direction: String
+		direction: String,
+		exitItemCheck: Boolean
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -136,6 +137,9 @@ export default {
 		},
 		saveCondition(index) {
 			let checked = true
+						if(this.exitItemCheck) {
+				return checked = true
+			}
 			let validForm
 			this.$refs.rsiForm.validate((valid) => {
 				validForm = valid

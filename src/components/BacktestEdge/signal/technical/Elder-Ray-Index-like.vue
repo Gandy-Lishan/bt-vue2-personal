@@ -115,7 +115,8 @@ export default {
 		panelIndex: Number,
 		// editIndiData: Object,
 		direction: String,
-		isActived: Boolean
+		isActived: Boolean,
+		exitItemCheck: Boolean
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -213,6 +214,9 @@ export default {
 		},
 		saveCondition(index) {
 			let checked = true
+						if(this.exitItemCheck) {
+				return checked = true
+			}
 			let validForm
 			this.$refs.eriForm.validate((valid) => {
 				validForm = valid

@@ -157,7 +157,8 @@ export default {
 		panelIndex: Number,
 		// editIndiData: Object,
 		direction: String,
-		isActived: Boolean
+		isActived: Boolean,
+		exitItemCheck: Boolean
 	},
 	data() {
 		return {
@@ -330,6 +331,10 @@ export default {
 		},
 		saveCondition(index) {
 			let checked = true
+
+			if(this.exitItemCheck) {
+				return checked = true
+			}
 			if (this.radio === 'second') {
 				this.tech.comparison = this.comparison2
 			}

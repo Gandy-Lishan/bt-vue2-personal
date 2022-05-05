@@ -2,7 +2,6 @@
 	<div class="exit-container">
 		<div class="signal-option-box">
 			<p class="criteria-title">Exit Criteria</p>
-			indicatorValArr: {{indicatorValArr}}
 			<div class="signal-container">
 				<span class="scoreNote" v-if="signalValue === 1">Score:</span>
 				<el-input
@@ -23,7 +22,7 @@
 					step="1"
 					min="1"
 				></el-input>
-				<el-select v-model="signalValue" placeholder="Please select signal">
+				<el-select v-model="signalValue" placeholder="Please select signal" @change="getSignalType">
 					<el-option
 						v-for="item in signalOptions"
 						:key="item.value"
@@ -34,7 +33,7 @@
 				</el-select>
 			</div>
 		</div>
-		<div :class="signalValue === 0 ? 'multi' : ''">
+		<div :class="signalValue === 0 ? 'multi' : ''" v-if="exitItemCheck === false">
 			<div class="multi-box">
 				<el-tabs
 					v-model="editableTabsValue"
@@ -54,18 +53,18 @@
 							:editableTabs = "editableTabs"
 							:editableTabsValue = "editableTabsValue"
 							ref="indiChild"
+							:exitItemCheck="exitItemCheck"
 							@getIndicatorUrl="getIndicatorUrl"
 							@getIndicatorVal="getIndicatorVal"
-							:isShowRisk="tabIndex - 1"
-							@getRiskVal="getRiskVal"
 							@getTechIndiValue="getTechIndiValue"
 							@getIndicatorRadio="getIndicatorRadio"
 							@getTechIndiObj="getTechIndiObj"
 						></indicator>
 						<senti
+							v-bind="$attrs"
 							:criteria="'exit'"
 							:panelIndex="index"
-							v-bind="$attrs"
+							:exitItemCheck="exitItemCheck"
 							ref="sentiChild"
 							
 							:sentiUrl="indicatorUrlArr[index]"
@@ -79,6 +78,7 @@
 								techIndiObj[index] === 'CCI_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="cciChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -95,6 +95,7 @@
 								techIndiObj[index] === 'rsi'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="rsiChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -111,6 +112,7 @@
 								techIndiObj[index] === 'MACD_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="macdChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -127,6 +129,7 @@
 								techIndiObj[index] === 'MovingAverage_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="maChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -152,6 +155,7 @@
 								techIndiObj[index] === 'BollingerBands_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="bollBandsLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -168,6 +172,7 @@
 								techIndiObj[index] === 'EFT_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="EFTLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -184,6 +189,7 @@
 								techIndiObj[index] === 'Stochastics_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="stochasticsLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -200,6 +206,7 @@
 								techIndiObj[index] === 'ADX_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="ADXLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -216,6 +223,7 @@
 								techIndiObj[index] === 'ERI_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="ERILikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -232,6 +240,7 @@
 								techIndiObj[index] === 'Aligator_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="aligatorLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -248,6 +257,7 @@
 								techIndiObj[index] === 'LRF_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="LRFLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -264,6 +274,7 @@
 								techIndiValue[index] === 'Trailingstop_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="trailingStopLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -273,6 +284,16 @@
 								techIndiObj[index] === 'Trailingstop_like'
 							"
 						></trailing-stop-like>
+						<div class="delay-bar-box">
+							 <el-checkbox v-model="isDelayBar">Delay Bars</el-checkbox>
+							<el-input
+								size="mini"
+								v-model="delay_bars"
+								type="number"
+								step="1"
+								min="0"
+							></el-input>
+						</div>
 					</el-tab-pane>
 				</el-tabs>
 			</div>
@@ -298,6 +319,10 @@ import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Li
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 export default {
 	name: 'exit',
+	props: {
+		exitSaveCheck: Boolean
+	},
+	inheritAttrs: false,
 	data() {
 		return {
 			techIndiValue: '',
@@ -334,8 +359,11 @@ export default {
 			refs: {},
             indicatorUrlArr: new Array(5).fill(''),
 			indicatorValArr: new Array(5).fill(''),
-			riskValArr: new Array(5).fill(''),
-			techVal: ''
+			// riskValArr: new Array(5).fill(''),
+			techVal: '',
+			exitItemCheck: false,
+			delay_bars: 0,
+			isDelayBar: false
 		}
 	},
 	components: {
@@ -370,12 +398,55 @@ export default {
 		},
 		updateTech(val) {
 			this.indicatorRadio = 'technical'
-		}
+		},
+		exitSaveCheck: {
+			handler(newVal) {
+				console.log("传到exit的值", newVal);
+				if(newVal) {
+					this.signalOptions = [
+				{
+					value: 0,
+					label: 'Single-Signal'
+				},
+				{
+					value: 1,
+					label: 'SameBar Multi-Signal'
+				},
+				{
+					value: 2,
+					label: 'TimeOrder Multi-Signal'
+				},
+								{
+					value: 3,
+					label: 'Only Use Risk Control'
+				},
+			]
+			}else{
+			this.signalOptions = [
+				{
+					value: 0,
+					label: 'Single-Signal'
+				},
+				{
+					value: 1,
+					label: 'SameBar Multi-Signal'
+				},
+				{
+					value: 2,
+					label: 'TimeOrder Multi-Signal'
+				}
+			]
+			this.signalValue = 0
+			this.exitItemCheck = false
+			}
+ 		}
+	}
 	},
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 			// 重置所有子组件的数据
+			try {
 			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
 				this.$refs.indiChild[i].clearForm()
 				this.$refs.sentiChild[i].clearForm()
@@ -390,6 +461,9 @@ export default {
 				this.$refs.aligatorLikeChild[i].clearForm()
 				this.$refs.LRFLikeChild[i].clearForm()
 				this.$refs.trailingStopLikeChild[i].clearForm()
+			}
+			} catch (error) {
+				console.log(error);
 			}
 		},
 		getTechIndiObj(obj) {
@@ -474,9 +548,6 @@ export default {
 			this.techVal = obj.value
 			this.indicatorValArr.splice(obj.index, 1, obj.value)
 		},
-		getRiskVal(obj) {
-			this.riskValArr.splice(obj.index, 1, obj.value)
-		},
 		getTechIndiValue(val) {
 			this.techIndiValue = val
 		},
@@ -502,16 +573,34 @@ export default {
 			obj.value = this.signals_in_market
 			this.$store.commit('saveSignalsInMarket',obj)
 		},
+	    saveDelayBar() {
+			let obj = {}
+			obj.criteria = "exit"
+			obj.value = this.delay_bars
+			this.$store.commit("saveDelayBar",obj)
+		},
+		saveRelation() {
+			if(this.editableTabs.length>1) {
+			let obj = {}
+			obj.criteria = "exit"
+			obj.value = 1
+			this.$store.commit("saveRelation",obj)
+			}
+		},
 		saveBacktestData(index) {
 			let checked = true
 			// 将选择的 indicator 保存到 vuex 中
 			console.log('exit的保存执行了' + index + '次')
+			let vm = this
+			if(vm.exitItemCheck) {
+				return checked = true
+			}
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			return indi.then( val => {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			if (indi) {
-				if (this.indicatorRadioArr[index] === 'sentiment') {
-					this.$refs.sentiChild[index].setDesciption(index)
+				if (vm.indicatorRadioArr[index] === 'sentiment') {
+					vm.$refs.sentiChild[index].setDesciption(index)
 					let senti = this.$refs.sentiChild[index].saveCondition(index)
 					return (checked = senti)
 				}
@@ -637,6 +726,7 @@ export default {
 		setEditData(data) {
 			console.log('编辑的exitdata', data)
 			this.score = data.exit.score
+			this.delay_bars =  data.exit.delay_bars ? data.exit.delay_bars : 0
 			this.signals_in_market = data.exit.signals_in_market ? data.exit.signals_in_market : 1
 			let length = data.exit.signals.length
 			this.tabIndex = length
@@ -718,6 +808,23 @@ export default {
 				// 	this.$refs.riskChild[j].setEditData(data)
 				// }
 			}
+		},
+		setRiskEditData(data) {
+			console.log('编辑的risk exitdata', data)
+			this.score = data.exit.score
+			this.delay_bars =  data.exit.delay_bars ? data.exit.delay_bars : 0
+			this.signals_in_market = data.exit.signals_in_market ? data.exit.signals_in_market : 1
+			this.getSignalType(3)
+			this.signalValue = 3
+		},
+		getSignalType(val) {
+			console.log("选择",val);
+			if(val == 3) {
+				this.exitItemCheck = true
+			}else{
+				this.exitItemCheck = false
+			}
+			this.$emit('isOnlyRiskControl',this.exitItemCheck)
 		}
 	}
 }
@@ -800,5 +907,10 @@ export default {
 }
 /deep/.el-tabs__nav .el-tabs__item:nth-child(1) span {
 	display: none;
+}
+.delay-bar-box{
+	display: flex;
+	border-top: 1px solid #797979;
+	padding-top: 10px;
 }
 </style>

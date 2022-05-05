@@ -113,7 +113,8 @@ export default {
 		panelIndex: Number,
 		// editIndiData: Object,
 		direction: String,
-		isActived: Boolean
+		isActived: Boolean,
+		exitItemCheck: Boolean
 	},
 	data() {
 		var validateValueNegative = (rule, value, callback) => {
@@ -233,6 +234,9 @@ export default {
 		},
 		saveCondition(index) {
 			let checked = true
+			if(this.exitItemCheck) {
+				return checked = true
+			}
 			let validForm
 			let tech = JSON.parse(JSON.stringify(this.tech))
 			if (this.conditionRadio === '+DI ADX') {

@@ -235,6 +235,17 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   width: 124px;
   border-radius: unset;
 }
+.entry-container .delay-bar-box input:not([type]),
+.entry-container .delay-bar-box input[type="text"],
+.entry-container .delay-bar-box input[type="number"],
+.entry-container .delay-bar-box input[type="date"],
+.entry-container .delay-bar-box input[type="time"] {
+  border: #000000 solid 1px;
+  padding: 0 5px 0 10px;
+  height: 25px;
+  width: 60px;
+  border-radius: unset;
+}
 .exit-container input:not([type]),
 .exit-container input[type="text"],
 .exit-container input[type="number"],
@@ -244,6 +255,17 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   padding: 0 5px 0 10px;
   height: 25px;
   width: 124px;
+  border-radius: unset;
+}
+.exit-container .delay-bar-box input:not([type]),
+.exit-container .delay-bar-box input[type="text"],
+.exit-container .delay-bar-box input[type="number"],
+.exit-container .delay-bar-box input[type="date"],
+.exit-container .delay-bar-box input[type="time"] {
+  border: #000000 solid 1px;
+  padding: 0 5px 0 10px;
+  height: 25px;
+  width: 60px;
   border-radius: unset;
 }
 

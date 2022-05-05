@@ -145,7 +145,8 @@ export default {
 		techVal: String,
 		panelIndex: Number,
 		direction: String,
-		isActived: Boolean
+		isActived: Boolean,
+		exitItemCheck: Boolean
 	},
 	data() {
 		let validateValue = (rule, value, callback) => {
@@ -278,6 +279,9 @@ export default {
 		},
 		saveCondition(index) {
 			let checked = true
+						if(this.exitItemCheck) {
+				return checked = true
+			}
 			let validForm = true
 			if(this.radio === 'Indicator Value') {
 				this.$refs['macdForm'].validateField(['value'], (errorMsg) => {

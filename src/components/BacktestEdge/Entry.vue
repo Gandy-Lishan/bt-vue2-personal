@@ -2,7 +2,6 @@
 	<div class="entry-container">
 		<div class="signal-option-box">
 			<p class="criteria-title">Entry Criteria</p>
-			indicatorValArr: {{indicatorValArr}}
 			<div class="signal-container">
 				<span class="scoreNote" v-if="signalValue === 1">Score:</span>
 				<el-input
@@ -34,7 +33,7 @@
 				</el-select>
 			</div>
 		</div>
-		<div :class="signalValue === 0 ? 'multi' : ''">
+		<div :class="signalValue === 0 ? 'multi' : ''" v-if="exitItemCheck === false">
 			<div class="multi-box">
 				<el-tabs
 					v-model="editableTabsValue"
@@ -54,6 +53,7 @@
 							:editableTabs = "editableTabs"
 							:editableTabsValue = "editableTabsValue"
 							ref="indiChild"
+							:exitItemCheck="exitItemCheck"
 							@getIndicatorUrl="getIndicatorUrl"
 							@getIndicatorVal="getIndicatorVal"
 							@getTechIndiValue="getTechIndiValue"
@@ -64,6 +64,7 @@
 							v-bind="$attrs"
 							:criteria="'entry'"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							ref="sentiChild"
 
 							:sentiUrl="indicatorUrlArr[index]"
@@ -77,6 +78,7 @@
 								techIndiObj[index] === 'CCI_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="cciChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -93,6 +95,7 @@
 								techIndiObj[index] === 'rsi'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="rsiChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -109,6 +112,7 @@
 								techIndiObj[index] === 'MACD_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="macdChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -125,6 +129,7 @@
 								techIndiObj[index] === 'MovingAverage_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="maChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -141,6 +146,7 @@
 								techIndiObj[index] === 'BollingerBands_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="bollBandsLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -157,6 +163,7 @@
 								techIndiObj[index] === 'EFT_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="EFTLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -173,6 +180,7 @@
 								techIndiObj[index] === 'Stochastics_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="stochasticsLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -189,6 +197,7 @@
 								techIndiObj[index] === 'ADX_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="ADXLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -205,6 +214,7 @@
 								techIndiObj[index] === 'ERI_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="ERILikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -221,6 +231,7 @@
 								techIndiObj[index] === 'Aligator_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="aligatorLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -237,6 +248,7 @@
 								techIndiObj[index] === 'LRF_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="LRFLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -253,6 +265,7 @@
 								techIndiValue[index] === 'Trailingstop_like'
 							"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="trailingStopLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -262,6 +275,16 @@
 								techIndiValue[index] === 'Trailingstop_like'
 							"
 						></trailing-stop-like>
+						<div class="delay-bar-box">
+							 <el-checkbox v-model="isDelayBar">Delay Bars</el-checkbox>
+							<el-input
+								size="mini"
+								v-model="delay_bars"
+								type="number"
+								step="1"
+								min="0"
+							></el-input>
+						</div>
 					</el-tab-pane>
 				</el-tabs>
 			</div>
@@ -323,7 +346,10 @@ export default {
 			refs: {}, 
 			indicatorUrlArr: new Array(5).fill(''),
 			indicatorValArr: new Array(5).fill(''),
-			techVal: ''
+			techVal: '',
+			exitItemCheck: false,
+			delay_bars: 0,
+			isDelayBar: false
 		}
 	},
 	components: {
@@ -479,6 +505,19 @@ export default {
 			obj.value = this.signals_in_market
 			this.$store.commit('saveSignalsInMarket',obj)
 		},
+		saveDelayBar() {
+			let obj = {}
+			obj.criteria = "entry"
+			obj.value = this.delay_bars
+			this.$store.commit("saveDelayBar",obj)
+		},
+		saveRelation() {
+		if(this.editableTabs.length>1) {
+			let obj = {}
+			obj.criteria = "entry"
+			obj.value = 1
+			this.$store.commit("saveRelation",obj)}
+		},
 		saveBacktestData(index) {
 			let checked = true
 			console.log('entry的保存执行了' + index + '次')
@@ -486,21 +525,21 @@ export default {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			return indi.then((val) => { 
 				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
-				if(!indi) {
-					this.$message({
-					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
-					type: 'error'
-				})}
+				// if(!val) {
+				// 	this.$message({
+				// 	message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
+				// 	type: 'error'
+				// })}
 				if (indi) {
 				if (this.indicatorRadioArr[index] === 'sentiment') {
 					this.$refs.sentiChild[index].setDesciption(index)
 					let senti = this.$refs.sentiChild[index].saveCondition(index)
-					if(!senti) {
-					this.$message({
-					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
+					// if(!senti) {
+					// this.$message({
+					// message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
+					// type: 'error'
+				    // })
+					// } 
 					return (checked = senti)
 				}
 				if (
@@ -619,6 +658,7 @@ export default {
 		async setEditData(data) {
 			console.log('编辑的entrydata', data)
 			this.score = data.entry.score
+			this.delay_bars =  data.entry.delay_bars ? data.entry.delay_bars : 0
 			this.signals_in_market = data.entry.signals_in_market ? data.entry.signals_in_market : 1
 			let length = data.entry.signals.length
 			this.tabIndex = length
@@ -791,5 +831,10 @@ export default {
 }
 /deep/.el-tabs__nav .el-tabs__item:nth-child(1) span {
 	display: none;
+}
+.delay-bar-box{
+	display: flex;
+	border-top: 1px solid #797979;
+	padding-top: 10px;
 }
 </style>

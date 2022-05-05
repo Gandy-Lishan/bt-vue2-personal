@@ -67,7 +67,8 @@ export default {
 		techVal: String,
 		panelIndex: Number,
 		// editIndiData: Object,
-		direction: String
+		direction: String,
+		exitItemCheck: Boolean
 	},
 	data() {
 		return {
@@ -123,6 +124,9 @@ export default {
 		},
 		saveCondition() {
 			let checked = true
+			if(this.exitItemCheck) {
+				return checked = true
+			}
 			if (this.description) {
 				this.setDesciption()
 			}

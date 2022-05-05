@@ -138,18 +138,18 @@
 			<div class="risk-control-container border-set">
 						 <div class="riskItem">
 							 
-    <el-checkbox v-model="isRiskControl">Risk Control:</el-checkbox>
+    <el-checkbox v-model="isRiskControl" border @change="selectRiskControl">Risk Control at Exit:</el-checkbox>
 						 </div>
 	<div class="tpContainer riskItem" v-if="isRiskControl">
-    <el-checkbox v-model="isTakeProfit">Take Profit</el-checkbox>
+    <el-checkbox v-model="isTakeProfit" @change="selectRiskControl">Take Profit</el-checkbox>
 	<el-input v-model="tp"></el-input><p style="margin:0px">(%)</p>
 	</div>
 		<div class="slContainer riskItem"  v-if="isRiskControl">
-    <el-checkbox v-model="isStopLoss">Stop Loss</el-checkbox>
+    <el-checkbox v-model="isStopLoss" @change="selectRiskControl">Stop Loss</el-checkbox>
 	<el-input v-model="sl"></el-input><p>(%)</p>
 		</div>
 		<div class="timContainer riskItem"  v-if="isRiskControl">
-	    <el-checkbox v-model="isTimeInMarket">Time In Market</el-checkbox>
+	    <el-checkbox v-model="isTimeInMarket" @change="selectRiskControl">Time In Market</el-checkbox>
 		<el-input v-model="tim"></el-input><p>(Bars)</p>
 		</div>
 			</div>
@@ -294,8 +294,8 @@ export default {
 			sl: 10,
 			tim: 120,
 			isRiskControl: false,
-			isTakeProfit: false,
-			isStopLoss: false,
+			isTakeProfit: true,
+			isStopLoss: true,
 			isTimeInMarket: false,
 			sentimentIndicatorList: [],
 			rules: {
@@ -359,6 +359,7 @@ export default {
 		backtestEditData: {
 			handler(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
+					console.log("编辑展示的数据",newVal);
 					this.clearFormValidate()
 					delete newVal.entry
 					delete newVal.exit
@@ -370,8 +371,9 @@ export default {
 					delete newVal.exit_description
 					delete newVal.entry
 					delete newVal.exit
-					delete newVal.result
-					newVal.commission = newVal.commission * 100
+					delete newVal.results
+					newVal.commission = (newVal.commission * 100).toFixed(2)
+					newVal.slippage = (Number(newVal.slippage)).toFixed(2)
 				    this.bd = Object.assign(this.bd, newVal)
 					CIQ.hideMarker()
 					this.getFrequency(newVal.frequency)
@@ -382,16 +384,20 @@ export default {
 						this.isTakeProfit = true
 						this.tp = riskValArr[0]
 						this.isRiskControl = true
+						this.selectRiskControl(true)
+						
 					}
 					if(riskValArr[1]) {
 						this.isStopLoss = true
 						this.sl = riskValArr[1]
 						this.isRiskControl = true
+						this.selectRiskControl(true)
 					}
 					if(riskValArr[2]) {
 						this.isTimeInMarket = true
 						this.tim = riskValArr[2]
 						this.isRiskControl = true
+						this.selectRiskControl(true)
 					}
 					}
 					// 保存编辑之前旧的名字
@@ -428,7 +434,9 @@ export default {
 		getDirection(val) {
 			// direction 设置到 vuex
 			this.$store.commit('getDirection', val)
-			// 传给 entry 和 exit 的 direction
+			// 传给 entry 和 exit 的 direction\
+			console.log("direction",val);
+			this.bd.direction = val
 			this.$emit('setDirection', val)
 		},
 		validateStartingCapital: throttle(function (val) {
@@ -575,17 +583,24 @@ export default {
 		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.backtestSetupForm.clearValidate()
-			this.$emit('getTimeFrame', this.bd.frequency)
+			this.$emit('IsRiskControl', this.isRiskControl)
 		},
 		changeTimeframe(val) {
 			this.getFrequency(val)
 			CIQ.addIndicators()
 		},
+		selectRiskControl(val) {
+			console.log(val);
+			if(this.isRiskControl && (this.isTakeProfit || this.isTimeInMarket || this.isStopLoss)) {
+			this.$emit('IsRiskControl', true)
+			}else{
+				this.$emit('IsRiskControl', false)
+			}
+		},
 		getFrequency(val) {
 			// getFrequency will no longer call addIndicator and pass a parameter to it
 			this.bd.frequency = val
 			this.$store.commit('getFrequency', val)
-			this.$emit('getTimeFrame', val)
 			this.loadSentimentList(val)
 			// same as setPeriodicity
 			// var selectedFreq = ''
@@ -730,9 +745,9 @@ export default {
 						// 保存 backtestform 的数据
 						bd.commission = bd.commission / 100
 		if(this.isRiskControl) {
-		let bd = JSON.parse(JSON.stringify(this.bd))
-		bd.risk_control = `${this.isTakeProfit?this.tp:''}/${this.isStopLoss?this.sl:''}/${this.isTimeInMarket?this.tim:''}`
-		console.log(bd.risk_control);
+	    let riskStr = `${this.isTakeProfit?this.tp:''}/${this.isStopLoss?this.sl:''}/${this.isTimeInMarket?this.tim:''}`
+	    bd.risk_control = riskStr
+		console.log("risk control",bd.risk_control);
 		}
 						this.$store.commit('setBd', bd)
 						return checked
