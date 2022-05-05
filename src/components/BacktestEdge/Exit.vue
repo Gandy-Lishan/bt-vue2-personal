@@ -23,7 +23,7 @@
 					step="1"
 					min="1"
 				></el-input>
-				<el-select v-model="signalValue" placeholder="Please select signal" @change="getSignslType">
+				<el-select v-model="signalValue" placeholder="Please select signal" @change="getSignalType">
 					<el-option
 						v-for="item in signalOptions"
 						:key="item.value"
@@ -34,7 +34,7 @@
 				</el-select>
 			</div>
 		</div>
-		<div :class="signalValue === 0 ? 'multi' : ''">
+		<div :class="signalValue === 0 ? 'multi' : ''" v-if="exitItemCheck === false">
 			<div class="multi-box">
 				<el-tabs
 					v-model="editableTabsValue"
@@ -54,19 +54,16 @@
 							:editableTabsValue = "editableTabsValue"
 							ref="indiChild"
 							:exitItemCheck="exitItemCheck"
-							v-bind="$attrs"
 							@getIndicatorUrl="getIndicatorUrl"
 							@getIndicatorVal="getIndicatorVal"
-							:isShowRisk="tabIndex - 1"
-							@getRiskVal="getRiskVal"
 							@getTechIndiValue="getTechIndiValue"
 							@getIndicatorRadio="getIndicatorRadio"
 							@getTechIndiObj="getTechIndiObj"
 						></indicator>
 						<senti
+							v-bind="$attrs"
 							:criteria="'exit'"
 							:panelIndex="index"
-							v-bind="$attrs"
 							:exitItemCheck="exitItemCheck"
 							ref="sentiChild"
 							:sentiUrl="indicatorUrlArr[index]"
@@ -238,7 +235,7 @@
 								techIndiObj[index] === 'Trailingstop_like'
 							"
 						></trailing-stop-like>
-												<div class="delay-bar-box">
+						<div class="delay-bar-box">
 							 <el-checkbox v-model="isDelayBar">Delay Bars</el-checkbox>
 							<el-input
 								size="mini"
@@ -313,7 +310,7 @@ export default {
 			refs: {},
             indicatorUrlArr: new Array(5).fill(''),
 			indicatorValArr: new Array(5).fill(''),
-			riskValArr: new Array(5).fill(''),
+			// riskValArr: new Array(5).fill(''),
 			techVal: '',
 			exitItemCheck: false,
 			delay_bars: 0,
@@ -353,10 +350,9 @@ export default {
 		updateTech(val) {
 			this.indicatorRadio = 'technical'
 		},
-		
 		exitSaveCheck: {
 			handler(newVal) {
-				console.log("传到exit的值");
+				console.log("传到exit的值", newVal);
 				if(newVal) {
 					this.signalOptions = [
 				{
@@ -376,6 +372,23 @@ export default {
 					label: 'Only Use Risk Control'
 				},
 			]
+			}else{
+			this.signalOptions = [
+				{
+					value: 0,
+					label: 'Single-Signal'
+				},
+				{
+					value: 1,
+					label: 'SameBar Multi-Signal'
+				},
+				{
+					value: 2,
+					label: 'TimeOrder Multi-Signal'
+				}
+			]
+			this.signalValue = 0
+			this.exitItemCheck = false
 			}
  		}
 	}
@@ -465,9 +478,6 @@ export default {
 			this.techVal = obj.value
 			this.indicatorValArr.splice(obj.index, 1, obj.value)
 		},
-		getRiskVal(obj) {
-			this.riskValArr.splice(obj.index, 1, obj.value)
-		},
 		getTechIndiValue(val) {
 			this.techIndiValue = val
 		},
@@ -512,13 +522,13 @@ export default {
 			// 将选择的 indicator 保存到 vuex 中
 			console.log('exit的保存执行了' + index + '次')
 			let vm = this
-			let indi = this.$refs.indiChild[index].saveIndicator(index)
-			return indi.then( val => {
-			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
-			if (val) {
 				if(vm.exitSaveCheck) {
 					return checked = true
 				}
+			let indi = this.$refs.indiChild[index].saveIndicator(index)
+			return indi.then( val => {
+			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
+			if (indi) {
 				if (vm.indicatorRadioArr[index] === 'sentiment') {
 					vm.$refs.sentiChild[index].setDesciption(index)
 					let senti = this.$refs.sentiChild[index].saveCondition(index)
@@ -729,10 +739,12 @@ export default {
 				// }
 			}
 		},
-		getSignslType(val) {
+		getSignalType(val) {
 			console.log("选择",val);
 			if(val == 3) {
 				this.exitItemCheck = true
+			}else{
+				this.exitItemCheck = false
 			}
 		}
 	}

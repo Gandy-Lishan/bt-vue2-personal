@@ -50,33 +50,6 @@
 					</div>
 				</el-form-item>
 			</div>
-			<!-- <div
-				class="indicator-container techBox"
-				v-if="criteria === 'exit' && isShowRisk === panelIndex"
-			>
-				<el-form-item>
-					<el-radio
-						v-model="indicatorRadio"
-						label="Risk Control"
-						@change="changeIndicatorChecked"
-					>
-					</el-radio>
-				</el-form-item>
-				<el-form-item prop="riskIndicator">
-					<div class="indicatorSearchBox">
-						<el-autocomplete
-							:disabled="!(indicatorRadio === 'Risk Control')"
-							class="inline-input"
-							clearable
-							prefix-icon="el-icon-search"
-							v-model="si.riskIndicator"
-							:fetch-suggestions="indicatorRiskSearch"
-							placeholder="Input the Risk Control Indicator"
-							@select="handleRiskSelect"
-						></el-autocomplete>
-					</div>
-				</el-form-item>
-			</div> -->
 		</el-form>
 	</div>
 </template>
@@ -88,9 +61,7 @@ export default {
 	props: {
 		criteria: String,
 		panelIndex: Number,
-		isShowRisk: Number,
 		editableTabsValue: String,
-		isRiskControl: Boolean,
 		exitItemCheck: Boolean
 	},
 	data() {
@@ -522,7 +493,7 @@ export default {
 					return checked
 				}
 			}
-			if (this.indicatorRadio === 'Technical Indicators' && this.exitItemCheck) {
+			if (this.indicatorRadio === 'Technical Indicators' && !this.exitItemCheck) {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})

@@ -115,7 +115,6 @@ export default {
 		sentiVal: String,
 		panelIndex: Number,
 		direction: String,
-		isRiskControl: Boolean,
 		exitItemCheck: Boolean
 	},
 	data() {

@@ -34,7 +34,7 @@
 				</el-select>
 			</div>
 		</div>
-		<div :class="signalValue === 0 ? 'multi' : ''">
+		<div :class="signalValue === 0 ? 'multi' : ''" v-if="exitItemCheck === false">
 			<div class="multi-box">
 				<el-tabs
 					v-model="editableTabsValue"
@@ -53,6 +53,7 @@
 							:panelIndex="index"
 							:editableTabsValue = "editableTabsValue"
 							ref="indiChild"
+							:exitItemCheck="exitItemCheck"
 							@getIndicatorUrl="getIndicatorUrl"
 							@getIndicatorVal="getIndicatorVal"
 							@getTechIndiValue="getTechIndiValue"
@@ -63,6 +64,7 @@
 							v-bind="$attrs"
 							:criteria="'entry'"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							ref="sentiChild"
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
@@ -71,6 +73,7 @@
 						<cci
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="cciChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -83,6 +86,7 @@
 						<rsi
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="rsiChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -95,6 +99,7 @@
 						<macd
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="macdChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -107,6 +112,7 @@
 						<ma
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="maChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -119,6 +125,7 @@
 						<bollinger-bands-like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="bollBandsLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -131,6 +138,7 @@
 						<ehler-fisher-transform-like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="EFTLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -143,6 +151,7 @@
 						<stochastic-momentum-index-like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="stochasticsLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -155,6 +164,7 @@
 						<ADX-or-DMS-Like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="ADXLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -167,6 +177,7 @@
 						<elder-ray-index-like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="ERILikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -179,6 +190,7 @@
 						<alligator-like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="aligatorLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -191,6 +203,7 @@
 						<linear-regForecast-like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="LRFLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -203,6 +216,7 @@
 						<trailing-stop-like
 							v-bind="$attrs"
 							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="trailingStopLikeChild"
 							:techUrl="indicatorUrlArr[index]"
@@ -246,7 +260,7 @@ import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Li
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 export default {
 	name: 'entry',
-	inheritAttrs: false,
+	inheritAttrs: true,
 	data() {
 		return {
 			techIndiValue: '',
@@ -284,6 +298,7 @@ export default {
 			indicatorUrlArr: new Array(5).fill(''),
 			indicatorValArr: new Array(5).fill(''),
 			techVal: '',
+			exitItemCheck: false,
 			delay_bars: 0,
 			isDelayBar: false
 		}
@@ -441,21 +456,21 @@ export default {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			return indi.then((val) => { 
 				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
-				if(!val) {
-					this.$message({
-					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
-					type: 'error'
-				})}
-				if (val) {
+				// if(!val) {
+				// 	this.$message({
+				// 	message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
+				// 	type: 'error'
+				// })}
+				if (indi) {
 				if (this.indicatorRadioArr[index] === 'sentiment') {
 					this.$refs.sentiChild[index].setDesciption(index)
 					let senti = this.$refs.sentiChild[index].saveCondition(index)
-					if(!senti) {
-					this.$message({
-					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
+					// if(!senti) {
+					// this.$message({
+					// message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
+					// type: 'error'
+				    // })
+					// } 
 					return (checked = senti)
 				}
 				if (

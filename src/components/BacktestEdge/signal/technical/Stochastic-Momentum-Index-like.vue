@@ -149,7 +149,6 @@ export default {
 		panelIndex: Number,
 		// editIndiData: Object,
 		direction: String,
-		isRiskControl: Boolean,
 		exitItemCheck: Boolean
 	},
 	data() {

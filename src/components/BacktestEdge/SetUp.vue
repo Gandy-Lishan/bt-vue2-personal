@@ -138,7 +138,7 @@
 			<div class="risk-control-container border-set">
 						 <div class="riskItem">
 							 
-    <el-checkbox v-model="isRiskControl" border>Risk Control at Exit:</el-checkbox>
+    <el-checkbox v-model="isRiskControl" border @change="selectRiskControl">Risk Control at Exit:</el-checkbox>
 						 </div>
 	<div class="tpContainer riskItem" v-if="isRiskControl">
     <el-checkbox v-model="isTakeProfit" @change="selectRiskControl">Take Profit</el-checkbox>
@@ -294,8 +294,8 @@ export default {
 			sl: 10,
 			tim: 120,
 			isRiskControl: false,
-			isTakeProfit: false,
-			isStopLoss: false,
+			isTakeProfit: true,
+			isStopLoss: true,
 			isTimeInMarket: false,
 			sentimentIndicatorList: [],
 			rules: {
@@ -589,6 +589,8 @@ export default {
 			console.log(val);
 			if(this.isRiskControl && (this.isTakeProfit || this.isTimeInMarket || this.isStopLoss)) {
 			this.$emit('IsRiskControl', true)
+			}else{
+				this.$emit('IsRiskControl', false)
 			}
 		},
 		getFrequency(val) {

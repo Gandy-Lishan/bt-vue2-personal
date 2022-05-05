@@ -89,7 +89,6 @@
 										ref="exitChild"
 										:direction="direction"
 										:exitSaveCheck="exitSaveCheck"
-										:isRiskControl="isRiskControl"
 										@sendExitSignalIndex="sendExitSignalIndex"
 									></exit>
 									<!-- <multi-exit></multi-exit> -->
@@ -508,6 +507,7 @@ export default {
 									type: 'error',
 									offset: 300
 								})
+								vm.loading = false
 								return
 							}
 						}
@@ -530,6 +530,7 @@ export default {
 									type: 'error',
 									offset: 300
 								})
+								vm.loading = false
 								return
 							}
 						}
@@ -646,7 +647,7 @@ export default {
 							description: backtestData.exit.description,
 							score: backtestData.exit.score,
 							signals_in_market: backtestData.exit.signals_in_market,
-							relation: acktestData.exit.relation,
+							relation: backtestData.exit.relation,
 							delay_bars: backtestData.exit.delay_bars,
 							signals: exit_signal_list
 						}
