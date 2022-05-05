@@ -72,6 +72,7 @@ const config = {
 		// http://10.131.3.74:8000
 		// http://3.140.194.24:80
 		// http://3.144.31.178:8000
+		// 10.131.3.17:8000
 		disableHostCheck: true,
 		proxy: {
 			// '/CHART_DATA_API': {
@@ -92,7 +93,7 @@ const config = {
 			},
 			'/dev': {
 				//target: 'http://18.216.210.200',
-				target: 'http://10.131.3.74:8000', 
+				target: 'http://10.131.3.17:8000', 
 				//target: 'http://3.140.194.24:8000',
 				// ws:true,
 				changeOrigin: true,

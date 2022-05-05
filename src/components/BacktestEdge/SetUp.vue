@@ -359,6 +359,7 @@ export default {
 		backtestEditData: {
 			handler(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
+					console.log("编辑展示的数据",newVal);
 					this.clearFormValidate()
 					delete newVal.entry
 					delete newVal.exit
@@ -370,8 +371,9 @@ export default {
 					delete newVal.exit_description
 					delete newVal.entry
 					delete newVal.exit
-					delete newVal.result
-					newVal.commission = newVal.commission * 100
+					delete newVal.results
+					newVal.commission = (newVal.commission * 100).toFixed(2)
+					newVal.slippage = (Number(newVal.slippage)).toFixed(2)
 				    this.bd = Object.assign(this.bd, newVal)
 					CIQ.hideMarker()
 					this.getFrequency(newVal.frequency)
@@ -432,7 +434,9 @@ export default {
 		getDirection(val) {
 			// direction 设置到 vuex
 			this.$store.commit('getDirection', val)
-			// 传给 entry 和 exit 的 direction
+			// 传给 entry 和 exit 的 direction\
+			console.log("direction",val);
+			this.bd.direction = val
 			this.$emit('setDirection', val)
 		},
 		validateStartingCapital: throttle(function (val) {

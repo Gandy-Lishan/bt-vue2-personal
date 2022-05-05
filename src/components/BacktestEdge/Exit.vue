@@ -2,7 +2,6 @@
 	<div class="exit-container">
 		<div class="signal-option-box">
 			<p class="criteria-title">Exit Criteria</p>
-			indicatorValArr: {{indicatorValArr}}
 			<div class="signal-container">
 				<span class="scoreNote" v-if="signalValue === 1">Score:</span>
 				<el-input
@@ -273,7 +272,7 @@ export default {
 	props: {
 		exitSaveCheck: Boolean
 	},
-	inheritAttrs: true,
+	inheritAttrs: false,
 	data() {
 		return {
 			techIndiValue: '',
@@ -397,6 +396,7 @@ export default {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 			// 重置所有子组件的数据
+			try {
 			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
 				this.$refs.indiChild[i].clearForm()
 				this.$refs.sentiChild[i].clearForm()
@@ -411,6 +411,9 @@ export default {
 				this.$refs.aligatorLikeChild[i].clearForm()
 				this.$refs.LRFLikeChild[i].clearForm()
 				this.$refs.trailingStopLikeChild[i].clearForm()
+			}
+			} catch (error) {
+				console.log(error);
 			}
 		},
 		getTechIndiObj(obj) {
@@ -522,9 +525,9 @@ export default {
 			// 将选择的 indicator 保存到 vuex 中
 			console.log('exit的保存执行了' + index + '次')
 			let vm = this
-				if(vm.exitSaveCheck) {
-					return checked = true
-				}
+			if(vm.exitItemCheck) {
+				return checked = true
+			}
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			return indi.then( val => {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
@@ -739,6 +742,14 @@ export default {
 				// }
 			}
 		},
+		setRiskEditData(data) {
+			console.log('编辑的risk exitdata', data)
+			this.score = data.exit.score
+			this.delay_bars =  data.exit.delay_bars ? data.exit.delay_bars : 0
+			this.signals_in_market = data.exit.signals_in_market ? data.exit.signals_in_market : 1
+			this.getSignalType(3)
+			this.signalValue = 3
+		},
 		getSignalType(val) {
 			console.log("选择",val);
 			if(val == 3) {
@@ -746,6 +757,7 @@ export default {
 			}else{
 				this.exitItemCheck = false
 			}
+			this.$emit('isOnlyRiskControl',this.exitItemCheck)
 		}
 	}
 }

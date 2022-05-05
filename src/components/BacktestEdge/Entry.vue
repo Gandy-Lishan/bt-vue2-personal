@@ -2,7 +2,6 @@
 	<div class="entry-container">
 		<div class="signal-option-box">
 			<p class="criteria-title">Entry Criteria</p>
-			indicatorValArr: {{indicatorValArr}}
 			<div class="signal-container">
 				<span class="scoreNote" v-if="signalValue === 1">Score:</span>
 				<el-input
@@ -260,7 +259,7 @@ import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Li
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 export default {
 	name: 'entry',
-	inheritAttrs: true,
+	inheritAttrs: false,
 	data() {
 		return {
 			techIndiValue: '',
