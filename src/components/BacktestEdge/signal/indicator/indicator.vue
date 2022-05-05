@@ -132,6 +132,11 @@ export default {
 							valObj.value = CIQ.indicatorList[i].chart_name
 							valObj.index = this.panelIndex
 							this.$emit('getIndicatorVal', valObj)
+							let radioObj = {}
+							radioObj.value = 'sentiment'
+							radioObj.index = this.panelIndex
+							this.$emit('getIndicatorRadio', radioObj)
+							
 
 						//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
 						let obj = {}
@@ -149,6 +154,10 @@ export default {
 					// this.si.technicalIndicator = item.value
 					// 暂时注释掉，因为大部分tech没有加到back test内
 					this.indicatorRadio = 'Technical Indicators'
+						// 					let radioObj = {}
+						// radioObj.value = 'technical'
+						// radioObj.index = this.panelIndex
+						// this.$emit('getIndicatorRadio', radioObj)
 					//this.handleTechnicalSelect({value:item.value})
 				}
 			})
