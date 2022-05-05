@@ -814,6 +814,24 @@ export default {
 			this.score = data.exit.score
 			this.delay_bars =  data.exit.delay_bars ? data.exit.delay_bars : 0
 			this.signals_in_market = data.exit.signals_in_market ? data.exit.signals_in_market : 1
+			this.signalOptions = [
+				{
+					value: 0,
+					label: 'Single-Signal'
+				},
+				{
+					value: 1,
+					label: 'SameBar Multi-Signal'
+				},
+				{
+					value: 2,
+					label: 'TimeOrder Multi-Signal'
+				},
+								{
+					value: 3,
+					label: 'Only Use Risk Control'
+				},
+			]
 			this.getSignalType(3)
 			this.signalValue = 3
 		},
