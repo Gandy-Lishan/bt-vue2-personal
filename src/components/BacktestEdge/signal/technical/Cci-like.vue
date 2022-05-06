@@ -141,10 +141,10 @@ export default {
 					relation = "Only Risk:"
 					break;
 				case 1:
-					relation = "Single:"
+					relation = ""
 					break;
 				case 2:
-					relation = "SamBar:"
+					relation = "SameBar:"
 					break;
 				case 2:
 					relation = "TimeOrder:"
