@@ -142,15 +142,15 @@
 						 </div>
 	<div class="tpContainer riskItem" v-if="isRiskControl">
     <el-checkbox v-model="isTakeProfit" @change="selectRiskControl">Take Profit</el-checkbox>
-	<el-input v-model="tp"></el-input><p style="margin:0px">(%)</p>
+	<el-input v-model="tp" @input="setDesciption"></el-input><p style="margin:0px">(%)</p>
 	</div>
 		<div class="slContainer riskItem"  v-if="isRiskControl">
     <el-checkbox v-model="isStopLoss" @change="selectRiskControl">Stop Loss</el-checkbox>
-	<el-input v-model="sl"></el-input><p>(%)</p>
+	<el-input v-model="sl" @input="setDesciption"></el-input><p>(%)</p>
 		</div>
 		<div class="timContainer riskItem"  v-if="isRiskControl">
 	    <el-checkbox v-model="isTimeInMarket" @change="selectRiskControl">Time In Market</el-checkbox>
-		<el-input v-model="tim"></el-input><p>(Bars)</p>
+		<el-input v-model="tim" @input="setDesciption"></el-input><p>(Bars)</p>
 		</div>
 			</div>
 		</el-form>
@@ -747,6 +747,7 @@ export default {
 		if(this.isRiskControl) {
 	    let riskStr = `${this.isTakeProfit?this.tp:''}/${this.isStopLoss?this.sl:''}/${this.isTimeInMarket?this.tim:''}`
 	    bd.risk_control = riskStr
+		this.setDesciption()
 		console.log("risk control",bd.risk_control);
 		}
 						this.$store.commit('setBd', bd)
@@ -781,7 +782,39 @@ export default {
 		},
 		clearOldBacktestName() {
 			this.oldBacktestName = ''
-		}
+		},
+		setDesciption() {
+			let criteria = 'X:'
+			let direction = ''
+			let description
+				if (this.bd.direction == 'Long') {
+					direction = 'Close:'
+				}
+				if (this.bd.direction == 'Short') {
+					direction = 'Cover:'
+				}
+				let tpStr = ''
+				let slStr = ''
+				let timStr = ''
+			if(this.isRiskControl) {
+				if(this.isTakeProfit) {
+					tpStr = 'Take Profit ' + this.tp + '%'
+				}
+				if(this.isStopLoss) {
+					slStr = 'Stop Loss ' + this.sl + '%'
+				}
+				if(this.isTimeInMarket) {
+					timStr = 'Time In Market ' + this.tim + '(Bars)'
+				}
+			}
+           description = `${criteria} ${direction} ${tpStr} ${slStr} ${timStr}`
+		   console.log('risk description',description)
+		   let desObj = {}
+				// desObj.criteria = 'exit'
+				// desObj.index = 0
+				desObj.description = description
+				this.$store.commit('saveRiskDescription', desObj)
+		},
 	}
 }
 </script>

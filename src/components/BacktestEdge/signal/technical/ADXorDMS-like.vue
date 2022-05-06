@@ -114,7 +114,8 @@ export default {
 		// editIndiData: Object,
 		direction: String,
 		isActived: Boolean,
-		exitItemCheck: Boolean
+		exitItemCheck: Boolean,
+		relation: Number
 	},
 	data() {
 		var validateValueNegative = (rule, value, callback) => {
@@ -218,7 +219,24 @@ export default {
 				isPositive = '-'
 				value = this.tech.valueNegative
 			}
-			this.description = `${criteria} ${direction} ${isPositive}${techVal} ${condition} ${value}`
+			let relation = ''
+			switch (this.relation) {
+				case 0:
+					relation = "Only Risk:"
+					break;
+				case 1:
+					relation = "Single:"
+					break;
+				case 2:
+					relation = "SamBar:"
+					break;
+				case 2:
+					relation = "TimeOrder:"
+					break;
+				default:
+					break;
+			}
+			this.description = `${criteria} ${direction} ${relation} ${isPositive}${techVal} ${condition} ${value}`
 		}, 500),
 		getConditionRadio(val) {
 			this.clearFormValidate()

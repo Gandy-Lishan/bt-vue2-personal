@@ -115,7 +115,9 @@ export default {
 		sentiVal: String,
 		panelIndex: Number,
 		direction: String,
-		exitItemCheck: Boolean
+		exitItemCheck: Boolean,
+		relation: Number,
+		relation: Number
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -288,7 +290,24 @@ export default {
 				this.conditionRadio === 'Sentiment Value'
 					? this.senti.value
 					: this.senti.maValue
-			this.description = `${criteria} ${direction} ${sentiVal} ${ma} ${period} ${condition} ${value}`
+			let relation = ''
+			switch (this.relation) {
+				case 0:
+					relation = "Only Risk:"
+					break;
+				case 1:
+					relation = "Single:"
+					break;
+				case 2:
+					relation = "SamBar:"
+					break;
+				case 2:
+					relation = "TimeOrder:"
+					break;
+				default:
+					break;
+			}
+			this.description = `${criteria} ${direction} ${relation} ${sentiVal} ${ma} ${period} ${condition} ${value}`
 			console.log("Senti描述",this.description);
 		},
 		getConditionRadio(val) {

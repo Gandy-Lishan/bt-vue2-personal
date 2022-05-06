@@ -140,6 +140,8 @@ export default {
 							valObj.value = CIQ.indicatorList[i].chart_name
 							valObj.index = this.panelIndex
 							this.$emit('getIndicatorVal', valObj)
+							// 去掉表单校验
+							this.clearFormValidate()
 							let radioObj = {}
 							radioObj.value = 'sentiment'
 							radioObj.index = this.panelIndex

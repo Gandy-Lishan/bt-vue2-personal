@@ -139,7 +139,8 @@ export default {
 		panelIndex: Number,
 		direction: String,
 		isActived: Boolean,
-		exitItemCheck: Boolean
+		exitItemCheck: Boolean,
+		relation: Number
 	},
 	data() {
 		let validatePeriod = (rule, value, callback) => {
@@ -367,7 +368,24 @@ export default {
 					break;
 			}
 			let condition = this.conditions[this.tech.condition].label
-			this.description = `${criteria} ${direction} ${comparison} ${ma_period} ${condition} Moving Average ${period}`
+			let relation = ''
+			switch (this.relation) {
+				case 0:
+					relation = "Only Risk:"
+					break;
+				case 1:
+					relation = "Single:"
+					break;
+				case 2:
+					relation = "SamBar:"
+					break;
+				case 2:
+					relation = "TimeOrder:"
+					break;
+				default:
+					break;
+			}
+			this.description = `${criteria} ${direction} ${relation} ${comparison} ${ma_period} ${condition} Moving Average ${period}`
 			console.log(this.description);
 		},
 		getMaPeriodValue(val) {

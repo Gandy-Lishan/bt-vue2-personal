@@ -68,7 +68,8 @@ export default {
 		panelIndex: Number,
 		// editIndiData: Object,
 		direction: String,
-		exitItemCheck: Boolean
+		exitItemCheck: Boolean,
+		relation: Number
 	},
 	data() {
 		return {
@@ -119,7 +120,24 @@ export default {
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
 			let radio = 'Symbol Close'
-			this.description = `${criteria} ${direction} ${techVal} ${radio} ${condition} ${this.tech.value}`
+						let relation = ''
+			switch (this.relation) {
+				case 0:
+					relation = "Only Risk:"
+					break;
+				case 1:
+					relation = "Single:"
+					break;
+				case 2:
+					relation = "SamBar:"
+					break;
+				case 2:
+					relation = "TimeOrder:"
+					break;
+				default:
+					break;
+			}
+			this.description = `${criteria} ${direction} ${relation} ${techVal} ${radio} ${condition} ${this.tech.value}`
 			console.log(this.description)
 		},
 		saveCondition() {

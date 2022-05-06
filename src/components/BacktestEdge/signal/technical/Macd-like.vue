@@ -146,7 +146,8 @@ export default {
 		panelIndex: Number,
 		direction: String,
 		isActived: Boolean,
-		exitItemCheck: Boolean
+		exitItemCheck: Boolean,
+		relation: Number
 	},
 	data() {
 		let validateValue = (rule, value, callback) => {
@@ -252,7 +253,24 @@ export default {
 				value = this.tech.histValue
 				condition = this.conditions[this.histCondition].label
 			}
-			this.description = `${criteria} ${direction} ${techVal} ${condition} ${value}`
+						let relation = ''
+			switch (this.relation) {
+				case 0:
+					relation = "Only Risk:"
+					break;
+				case 1:
+					relation = "Single:"
+					break;
+				case 2:
+					relation = "SamBar:"
+					break;
+				case 2:
+					relation = "TimeOrder:"
+					break;
+				default:
+					break;
+			}
+			this.description = `${criteria} ${direction} ${relation} ${techVal} ${condition} ${value}`
 			console.log(this.description);
 		},
 		getConditionRadio(val) {

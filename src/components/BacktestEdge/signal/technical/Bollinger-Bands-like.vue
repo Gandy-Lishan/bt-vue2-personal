@@ -83,7 +83,8 @@ export default {
 		// editIndiData: Object,
 		direction: String,
 		isActived: Boolean,
-		exitItemCheck: Boolean
+		exitItemCheck: Boolean,
+		relation: Number
 	},
 	data() {
 		return {
@@ -188,7 +189,24 @@ export default {
 					break;
 			}
 			let condition = this.conditions[this.tech.condition].label
-			this.description = `${criteria} ${direction} ${techVal} ${comparison} ${condition} ${value}`
+			let relation = ''
+			switch (this.relation) {
+				case 0:
+					relation = "Only Risk:"
+					break;
+				case 1:
+					relation = "Single:"
+					break;
+				case 2:
+					relation = "SamBar:"
+					break;
+				case 2:
+					relation = "TimeOrder:"
+					break;
+				default:
+					break;
+			}
+			this.description = `${criteria} ${direction} ${relation} ${techVal} ${comparison} ${condition} ${value}`
 			console.log(this.description)
 		},
 		saveCondition(index) {

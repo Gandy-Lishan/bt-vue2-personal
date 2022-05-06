@@ -150,7 +150,8 @@ export default {
 		// editIndiData: Object,
 		direction: String,
 		isActived: Boolean,
-		exitItemCheck: Boolean
+		exitItemCheck: Boolean,
+		relation: Number
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -258,7 +259,24 @@ export default {
 					suffix = ' D'
 					break
 			}
-			this.description = `${criteria} ${direction} ${techVal}${suffix} ${this.conditions[this.tech.condition].label} ${value}`
+						let relation = ''
+			switch (this.relation) {
+				case 0:
+					relation = "Only Risk:"
+					break;
+				case 1:
+					relation = "Single:"
+					break;
+				case 2:
+					relation = "SamBar:"
+					break;
+				case 2:
+					relation = "TimeOrder:"
+					break;
+				default:
+					break;
+			}
+			this.description = `${criteria} ${direction} ${relation} ${techVal}${suffix} ${this.conditions[this.tech.condition].label} ${value}`
 			console.log(this.description);
 		},
 		getConditionRadio(val) {
