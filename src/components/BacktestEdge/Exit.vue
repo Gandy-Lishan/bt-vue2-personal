@@ -416,7 +416,7 @@ export default {
 					value: 2,
 					label: 'TimeOrder Multi-Signal'
 				},
-								{
+				{
 					value: 3,
 					label: 'Only Use Risk Control'
 				},

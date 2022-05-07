@@ -697,17 +697,24 @@ export default {
 							savedTechSD.push({
 								type: CIQ.stxx.layout.studies[i].type,
 								inputs: CIQ.stxx.layout.studies[i].inputs,
-								//outputs: CIQ.stxx.layout.studies[i].outputs,
+								outputs: CIQ.stxx.layout.studies[i].outputs,
 								parameters: CIQ.stxx.layout.studies[i].parameters,
 								panel: CIQ.stxx.layout.studies[i].panel
 							})
+							// var sd = CIQ.stxx.layout.studies[i]
+							// savedTechSD.push([
+							// 	sd.type,
+							// 	sd.inputs,
+							// 	sd.outputs,
+							// 	sd.parameters,
+							// ])
 						}
 
 						indicatorLayout.savedTechSD = savedTechSD
 						indicatorLayout.activatedMA = this.$store.state.activatedMA
 
 						backtestData.indicator_layout = JSON.stringify(indicatorLayout)
-						console.log('indicatorLayout: ', indicatorLayout)
+						console.log('indicatorLayout: ', savedTechSD)
 						let str = UUID(JSON.stringify(backtestData))
 
 						backtestData.pk = str
