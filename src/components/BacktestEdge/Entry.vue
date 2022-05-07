@@ -21,6 +21,7 @@
 					type="number"
 					step="1"
 					min="1"
+					max="3"
 				></el-input>
 				<el-select v-model="relation" placeholder="Please select signal">
 					<el-option
@@ -288,7 +289,7 @@
 							"
 						></trailing-stop-like>
 						<div class="delay-bar-box">
-							 <el-checkbox v-model="isDelayBar">Delay Bars</el-checkbox>
+							 <el-checkbox v-model="isDelayBar">Delay of Bars</el-checkbox>
 							<el-input
 								size="mini"
 								v-model="delay_bars"
@@ -434,14 +435,14 @@ export default {
 			this.techIndiObj.splice(obj.index, 1, obj.class)
 		},
 		handleTabsEdit(targetName, action) {
-			console.log(targetName, action)
 			if (action === 'add') {
+				console.log('add的tabindex',this.tabIndex);
 				if ((this.editableTabs.length < 5 && this.relation == 2) || (this.relation == 3 && this.editableTabs.length < 3)) {
 					let newTabName = ++this.tabIndex + ''
 					this.editableTabs.push({
 						title: 'Signal' + newTabName,
 						name: newTabName,
-						content: 'Signal 1 content'
+						content: 'Signal' + newTabName + 'content'
 					})
 					this.editableTabsValue = newTabName
 					this.indicatorRadioArr.push('sentiment')
@@ -463,7 +464,7 @@ export default {
 			if (action === 'remove') {
 				let tabs = this.editableTabs
 				let activeName = this.editableTabsValue
-				
+				console.log("活跃面板",activeName)
 				if (activeName === targetName) {
 					tabs.forEach((tab, index) => {
 						if (tab.name === targetName) {
@@ -473,24 +474,28 @@ export default {
 							}
 						}
 					})
+				this.editableTabs = tabs.filter((tab) => tab.name !== targetName)
 				}
-				
 				var absoluteIndex = ''
 				tabs.forEach((tab, index) => {
 					if(tab.name==targetName){
 						absoluteIndex = index
 					}
 				})
-				// console.log('absoluteIndex', absoluteIndex)
-				// console.log('targetName', targetName)
-				// console.log('activeName', activeName)
+				if(activeName != targetName) {
+					tabs[Number(absoluteIndex+1)].name = tabs[Number(absoluteIndex)].name
+					tabs[Number(absoluteIndex+1)].title = tabs[Number(absoluteIndex)].title
+					tabs.splice(absoluteIndex,1)
+					activeName = tabs[absoluteIndex].name
+					this.editableTabs = tabs
+				}
+				this.tabIndex = this.editableTabs.length + ''
 				this.editableTabsValue = activeName
 				this.indicatorUrlArr.splice(absoluteIndex,1)
 				this.indicatorUrlArr.push('')
 				this.indicatorValArr.splice(absoluteIndex,1)
 				this.indicatorValArr.push('')
 				this.indicatorRadioArr.splice(absoluteIndex,1)
-				this.editableTabs = tabs.filter((tab) => tab.name !== targetName)
 
 				// 移除某选项卡时，把indicatorUrlArr内的indicator依次载入vuex以刷新状态
 				tabs.forEach((tab, index) => {
@@ -673,7 +678,11 @@ export default {
 		},
 		setEditPanel(num, data) {
 			this.clearForm()
-			for (let i = 0; i < num - 1; i++) {
+		    if(num == 1) {
+				this.relation = 1
+			}
+			this.relation = data.entry.relation ? data.entry.relation : 1
+			for (let i = 0; i < num-1; i++) {
 				this.handleTabsEdit(null, 'add')
 			}
 			this.refs = data
@@ -682,7 +691,8 @@ export default {
 				this.setEditData(this.refs)
 			})
 		},
-		async setEditData(data) {
+		setEditData(data) {
+			let vm = this
 			console.log('编辑的entrydata', data)
 			this.score = data.entry.score
 			this.delay_bars =  data.entry.delay_bars ? data.entry.delay_bars : 0
@@ -692,7 +702,7 @@ export default {
             this.relation = data.entry.relation ? data.entry.relation : 1
 			for (let j = 0; j < length; j++) {
 				console.log('函数执行了' + j + '次，共' + length + '次')
-				this.$refs.indiChild[j].setEditData(data)
+				vm.$refs.indiChild[j].setEditData(data)
 				if (data.entry.signals[j].analysis === 'Sentiment') {
 					this.indicatorValArr[j] = data.entry.signals[j].indicator
 					this.indicatorRadioArr.splice(j, 1, 'sentiment')

@@ -145,7 +145,7 @@ export default {
 				case 2:
 					relation = "SameBar:"
 					break;
-				case 2:
+				case 3:
 					relation = "TimeOrder:"
 					break;
 				default:

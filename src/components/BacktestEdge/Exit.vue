@@ -21,6 +21,7 @@
 					type="number"
 					step="1"
 					min="1"
+					max="3"
 				></el-input>
 				<el-select v-model="relation" placeholder="Please select signal">
 					<el-option
@@ -297,7 +298,7 @@
 							"
 						></trailing-stop-like>
 						<div class="delay-bar-box">
-							 <el-checkbox v-model="isDelayBar">Delay Bars</el-checkbox>
+							 <el-checkbox v-model="isDelayBar">Delay of Bars</el-checkbox>
 							<el-input
 								size="mini"
 								v-model="delay_bars"
@@ -538,6 +539,7 @@ export default {
 							}
 						}
 					})
+					this.editableTabs = tabs.filter((tab) => tab.name !== targetName)
 				}
 
 				var absoluteIndex = ''
@@ -546,13 +548,19 @@ export default {
 						absoluteIndex = index
 					}
 				})
+				if(activeName != targetName) {
+					tabs[Number(absoluteIndex+1)] = tabs[Number(absoluteIndex)] 
+					tabs.splice(absoluteIndex,1)
+					activeName = tabs[absoluteIndex].name
+					this.editableTabs = tabs
+				}
+				this.tabIndex = this.editableTabs.length + ''
 				this.editableTabsValue = activeName
 				this.indicatorValArr.splice(absoluteIndex,1)
 				this.indicatorValArr.push('')
 				this.indicatorUrlArr.splice(absoluteIndex,1)
 				this.indicatorUrlArr.push('')
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
-				this.editableTabs = tabs.filter((tab) => tab.name !== targetName)
 				// this.riskValArr.splice(targetName-1,1)
 				// this.riskValArr.push('')
 				
@@ -746,7 +754,11 @@ export default {
 		},
 		setEditPanel(num, data) {
 			this.clearForm()
-			for (let i = 0; i < num - 1; i++) {
+					    if(num == 1) {
+				this.relation = 1
+			}
+			this.relation = data.exit.relation ? data.exit.relation : 1
+			for (let i = 0; i < num-1; i++) {
 				this.handleTabsEdit(null, 'add')
 			}
 			this.refs = data
