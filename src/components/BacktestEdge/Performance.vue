@@ -404,6 +404,7 @@ export default {
 							if (typeof res.data == String) {
 								JSON.parse(res.data)
 							}
+							console.log("Eric 返回的数据", res.data);
 							initalData = JSON.parse(JSON.stringify(res.data))
 							// -------------------------------------  text ----------------
 							const tradeReturn = initalData["Each Return"]
@@ -460,12 +461,21 @@ export default {
 							vm.monthReturnImgUrl = data.returnsHeatmapFileURL
 							vm.annualReturnImgUrl = data.annualReturnsFileURL
 							for(let i=0;i<initalData['Trades'].length;i++) {
+									if(i % 2 == 0) {
+									  initalData['Trades'][i].trade_number = i / 2
+									  initalData['Trades'][i + 1].trade_number = i / 2
+									}
+							}
+							
+							console.log("tradesData", vm.tradesData);
+							for(let i=0;i<initalData['Trades'].length;i++) {
 								initalData['Trades'][i].TradeReturn = tradeReturn[initalData['Trades'][i].trade_number]
 								if(i % 2 !== 0) {
 								 initalData['Trades'][i-1].Return = initalData['Trades'][i].Return
 								}
 							}
 							vm.tradesData = initalData['Trades']
+							console.log("tradesData", vm.tradesData);
 							// ---------------------------------------- end ----------------------------------
 							// ----------------------- backtest result-------------------------------
 

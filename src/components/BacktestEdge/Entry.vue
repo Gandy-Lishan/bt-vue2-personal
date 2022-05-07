@@ -21,7 +21,6 @@
 					type="number"
 					step="1"
 					min="1"
-					max="3"
 				></el-input>
 				<el-select v-model="relation" placeholder="Please select signal">
 					<el-option
