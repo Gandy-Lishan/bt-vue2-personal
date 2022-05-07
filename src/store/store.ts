@@ -67,6 +67,7 @@ export default new Vuex.Store({
 				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: ''}]
 			}
 		},
+		riskDescription: '',
 		openedPorfolioBacktests: [],
 		favoriteBacktestRowData: { id: 0 },
 		favoriteBacktestData: [],
@@ -411,6 +412,9 @@ export default new Vuex.Store({
 				state.backtestInfo[desObj.criteria+'_description'][desObj.index] = desObj.description
 			
 			}
+		},
+		saveRiskDescription(state, desObj) {
+			state.riskDescription = desObj.description
 		},
 		initialBacktestInfo(state) {
 			state.backtestInfo = {

@@ -116,7 +116,8 @@ export default {
 		// editIndiData: Object,
 		direction: String,
 		isActived: Boolean,
-		exitItemCheck: Boolean
+		exitItemCheck: Boolean,
+		relation: Number
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -197,7 +198,24 @@ export default {
 			if (this.conditionRadio === 'Indicator hist2') {
 				isPositive = 'Hist 2'
 			}
-			this.description = `${criteria} ${direction} ${techVal} ${isPositive} ${condition} ${this.tech.value}`
+						let relation = ''
+			switch (this.relation) {
+				case 0:
+					relation = "Only Risk:"
+					break;
+				case 1:
+					relation = ""
+					break;
+				case 2:
+					relation = "SameBar:"
+					break;
+				case 3:
+					relation = "TimeOrder:"
+					break;
+				default:
+					break;
+			}
+			this.description = `${criteria} ${direction} ${relation} ${techVal} ${isPositive} ${condition} ${this.tech.value}`
 		},
 		getConditionRadio(val) {
 			this.conditionRadio = val

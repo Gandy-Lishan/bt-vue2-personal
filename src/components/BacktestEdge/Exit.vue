@@ -3,26 +3,26 @@
 		<div class="signal-option-box">
 			<p class="criteria-title">Exit Criteria</p>
 			<div class="signal-container">
-				<span class="scoreNote" v-if="signalValue === 1">Score:</span>
+				<span class="scoreNote" v-if="relation === 2">Score:</span>
 				<el-input
 					size="mini"
-					v-if="signalValue === 1"
+					v-if="relation === 2"
 					v-model="score"
 					type="number"
 					step="1"
 					min="1"
 					:max="editableTabsValue"
 				></el-input>
-				<span class="scoreNote" v-if="signalValue === 2">Period:</span>
+				<span class="scoreNote" v-if="relation === 3">Period:</span>
 				<el-input
 					size="mini"
-					v-if="signalValue === 2"
+					v-if="relation === 3"
 					v-model="signals_in_market"
 					type="number"
 					step="1"
 					min="1"
 				></el-input>
-				<el-select v-model="signalValue" placeholder="Please select signal" @change="getSignalType">
+				<el-select v-model="relation" placeholder="Please select signal">
 					<el-option
 						v-for="item in signalOptions"
 						:key="item.value"
@@ -33,7 +33,7 @@
 				</el-select>
 			</div>
 		</div>
-		<div :class="signalValue === 0 ? 'multi' : ''" v-if="exitItemCheck === false">
+		<div :class="relation === 1 ? 'multi' : ''" v-if="exitItemCheck === false">
 			<div class="multi-box">
 				<el-tabs
 					v-model="editableTabsValue"
@@ -66,7 +66,7 @@
 							:panelIndex="index"
 							:exitItemCheck="exitItemCheck"
 							ref="sentiChild"
-							
+							:relation="relation"
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
 							v-show="indicatorRadioArr[index] === 'sentiment'"
@@ -81,6 +81,7 @@
 							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="cciChild"
+							:relation="relation"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -98,6 +99,7 @@
 							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="rsiChild"
+							:relation="relation"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -115,6 +117,7 @@
 							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="macdChild"
+							:relation="relation"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -132,6 +135,7 @@
 							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="maChild"
+							:relation="relation"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -158,6 +162,7 @@
 							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="bollBandsLikeChild"
+							:relation="relation"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -175,6 +180,7 @@
 							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="EFTLikeChild"
+							:relation="relation"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -192,6 +198,7 @@
 							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="stochasticsLikeChild"
+							:relation="relation"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -209,6 +216,7 @@
 							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="ADXLikeChild"
+							:relation="relation"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -226,6 +234,7 @@
 							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="ERILikeChild"
+							:relation="relation"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -243,6 +252,7 @@
 							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="aligatorLikeChild"
+							:relation="relation"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -260,6 +270,7 @@
 							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="LRFLikeChild"
+							:relation="relation"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -277,6 +288,7 @@
 							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="trailingStopLikeChild"
+							:relation="relation"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -285,7 +297,7 @@
 							"
 						></trailing-stop-like>
 						<div class="delay-bar-box">
-							 <el-checkbox v-model="isDelayBar">Delay Bars</el-checkbox>
+							 <el-checkbox v-model="isDelayBar">Delay of Bars</el-checkbox>
 							<el-input
 								size="mini"
 								v-model="delay_bars"
@@ -330,19 +342,19 @@ export default {
 			indicatorRadio: 'sentiment',
 			signalOptions: [
 				{
-					value: 0,
+					value: 1,
 					label: 'Single-Signal'
 				},
 				{
-					value: 1,
+					value: 2,
 					label: 'SameBar Multi-Signal'
 				},
 				{
-					value: 2,
+					value: 3,
 					label: 'TimeOrder Multi-Signal'
-				},
+				}
 			],
-			signalValue: 0,
+			relation: 1,
 			editableTabsValue: '1',
 			editableTabs: [
 				{
@@ -405,41 +417,59 @@ export default {
 				if(newVal) {
 					this.signalOptions = [
 				{
-					value: 0,
+					value: 1,
 					label: 'Single-Signal'
 				},
 				{
-					value: 1,
+					value: 2,
 					label: 'SameBar Multi-Signal'
 				},
 				{
-					value: 2,
+					value: 3,
 					label: 'TimeOrder Multi-Signal'
 				},
 				{
-					value: 3,
+					value: 0,
 					label: 'Only Use Risk Control'
 				},
 			]
 			}else{
 			this.signalOptions = [
 				{
-					value: 0,
+					value: 1,
 					label: 'Single-Signal'
 				},
 				{
-					value: 1,
+					value: 2,
 					label: 'SameBar Multi-Signal'
 				},
 				{
-					value: 2,
+					value: 3,
 					label: 'TimeOrder Multi-Signal'
 				}
 			]
-			this.signalValue = 0
+			this.relation = 1
 			this.exitItemCheck = false
 			}
  		}
+	},
+	relation: {
+		handler(newVal, oldVal) {
+			if(newVal == 0) {
+				this.exitItemCheck = true
+			}else{
+				this.exitItemCheck = false
+			}
+			this.$emit('isOnlyRiskControl',this.exitItemCheck)
+			if(newVal == 3 && this.editableTabs.length > 3) {
+				this.$message({
+						message: 'TimeOrder Multi-Signal supports up to three signals, please delete the panel',
+						type: 'error',
+						offset: 300
+					})
+					this.relation = oldVal
+			}
+		}
 	}
 	},
 	methods: {
@@ -471,34 +501,30 @@ export default {
 		},
 		handleTabsEdit(targetName, action) {
 			if (action === 'add') {
-				if (this.editableTabs.length < 5) {
+				if ((this.editableTabs.length < 5 && this.relation == 2) || (this.relation == 3 && this.editableTabs.length < 3)) {
 					let newTabName = ++this.tabIndex + ''
 					this.editableTabs.push({
 						title: 'Signal' + newTabName,
 						name: newTabName,
 						content: 'Signal 1 content'
 					})
-					// let obj = {}
-					// obj.criteria = 'exit'
-					// this.$store.commit('addSignalLength', obj)
-					// this.saveBacktestData()
-					let activeIndex = Number(this.editableTabsValue - 1)
-					if (this.indicatorRadioArr[activeIndex] === 'risk') {
-						// 把上一个变成默认的'sentiment'
-						this.$refs.indiChild[activeIndex].changeIndicatorChecked(
-							'Sentiment Indicators'
-						)
-						this.indicatorRadioArr[activeIndex] = 'sentiment'
-					}
 					this.editableTabsValue = newTabName
 					this.indicatorRadioArr.push('sentiment')
-				} else {
+				}
+				if(this.editableTabs.length >= 5 && this.relation == 2){
+						this.$message({
+							message: 'Add up to five signals',
+							type: 'error',
+							offset: 300
+						})
+				}
+				if(this.relation == 3 && this.editableTabs.length >= 3) {
 					this.$message({
-						message: 'Add up to five signals',
+						message: 'Add up to three signals',
 						type: 'error',
 						offset: 300
 					})
-				}
+					}
 			}
 			if (action === 'remove') {
 				let tabs = this.editableTabs
@@ -512,6 +538,7 @@ export default {
 							}
 						}
 					})
+					this.editableTabs = tabs.filter((tab) => tab.name !== targetName)
 				}
 
 				var absoluteIndex = ''
@@ -520,13 +547,19 @@ export default {
 						absoluteIndex = index
 					}
 				})
+				if(activeName != targetName) {
+					tabs[Number(absoluteIndex+1)] = tabs[Number(absoluteIndex)] 
+					tabs.splice(absoluteIndex,1)
+					activeName = tabs[absoluteIndex].name
+					this.editableTabs = tabs
+				}
+				this.tabIndex = this.editableTabs.length + ''
 				this.editableTabsValue = activeName
 				this.indicatorValArr.splice(absoluteIndex,1)
 				this.indicatorValArr.push('')
 				this.indicatorUrlArr.splice(absoluteIndex,1)
 				this.indicatorUrlArr.push('')
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
-				this.editableTabs = tabs.filter((tab) => tab.name !== targetName)
 				// this.riskValArr.splice(targetName-1,1)
 				// this.riskValArr.push('')
 				
@@ -583,7 +616,7 @@ export default {
 			if(this.editableTabs.length>1) {
 			let obj = {}
 			obj.criteria = "exit"
-			obj.value = 1
+			obj.value = this.relation
 			this.$store.commit("saveRelation",obj)
 			}
 		},
@@ -593,6 +626,12 @@ export default {
 			console.log('exit的保存执行了' + index + '次')
 			let vm = this
 			if(vm.exitItemCheck) {
+				// 保存 risk description
+				let desObj = {}
+				desObj.criteria = 'exit'
+				desObj.index = 0
+				desObj.description = vm.$store.state.riskDescription
+				this.$store.commit('saveDescription', desObj)
 				return checked = true
 			}
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
@@ -714,7 +753,11 @@ export default {
 		},
 		setEditPanel(num, data) {
 			this.clearForm()
-			for (let i = 0; i < num - 1; i++) {
+					    if(num == 1) {
+				this.relation = 1
+			}
+			this.relation = data.exit.relation ? data.exit.relation : 1
+			for (let i = 0; i < num-1; i++) {
 				this.handleTabsEdit(null, 'add')
 			}
 			this.refs = data
@@ -728,11 +771,9 @@ export default {
 			this.score = data.exit.score
 			this.delay_bars =  data.exit.delay_bars ? data.exit.delay_bars : 0
 			this.signals_in_market = data.exit.signals_in_market ? data.exit.signals_in_market : 1
+			this.relation = data.exit.relation ? data.exit.relation : 1
 			let length = data.exit.signals.length
 			this.tabIndex = length
-			if (length > 1) {
-				this.signalValue = 1
-			}
 			for (let j = 0; j < length; j++) {
 				console.log('函数执行了' + j + '次，共' + length + '次')
 				this.$refs.indiChild[j].setEditData(data)
@@ -814,18 +855,28 @@ export default {
 			this.score = data.exit.score
 			this.delay_bars =  data.exit.delay_bars ? data.exit.delay_bars : 0
 			this.signals_in_market = data.exit.signals_in_market ? data.exit.signals_in_market : 1
-			this.getSignalType(3)
-			this.signalValue = 3
-		},
-		getSignalType(val) {
-			console.log("选择",val);
-			if(val == 3) {
-				this.exitItemCheck = true
-			}else{
-				this.exitItemCheck = false
-			}
+			this.signalOptions = [
+				{
+					value: 1,
+					label: 'Single-Signal'
+				},
+				{
+					value: 2,
+					label: 'SameBar Multi-Signal'
+				},
+				{
+					value: 3,
+					label: 'TimeOrder Multi-Signal'
+				},
+				{
+					value: 0,
+					label: 'Only Use Risk Control'
+				},
+			]
+			this.exitItemCheck = true
 			this.$emit('isOnlyRiskControl',this.exitItemCheck)
-		}
+			this.relation = 0
+		},
 	}
 }
 </script>

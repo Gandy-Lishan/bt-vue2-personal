@@ -110,7 +110,8 @@ export default {
 		// editIndiData: Object,
 		direction: String,
 		isActived: Boolean,
-		exitItemCheck: Boolean
+		exitItemCheck: Boolean,
+		relation: Number
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -190,7 +191,24 @@ export default {
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
-			this.description = `${criteria} ${direction} ${techVal} ${condition} ${this.tech.value}`
+			let relation = ''
+			switch (this.relation) {
+				case 0:
+					relation = "Only Risk:"
+					break;
+				case 1:
+					relation = ""
+					break;
+				case 2:
+					relation = "SameBar:"
+					break;
+				case 3:
+					relation = "TimeOrder:"
+					break;
+				default:
+					break;
+			}
+			this.description = `${criteria} ${direction} ${relation} ${techVal} ${condition} ${this.tech.value}`
 		},
 		getConditionRadio(val) {
 			this.conditionRadio = val

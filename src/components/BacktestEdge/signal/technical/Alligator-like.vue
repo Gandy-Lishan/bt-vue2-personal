@@ -158,7 +158,8 @@ export default {
 		// editIndiData: Object,
 		direction: String,
 		isActived: Boolean,
-		exitItemCheck: Boolean
+		exitItemCheck: Boolean,
+		relation: Number
 	},
 	data() {
 		return {
@@ -326,7 +327,24 @@ export default {
 			let radio = this.radio === 'first' ? comparison : this.comparison2
 			let value = this.radio === 'first' ? this.tech.value : this.value2
 			let condition = this.conditions[this.tech.condition].label
-			this.description = `${criteria} ${direction} ${techVal} ${radio} ${condition} ${value}`
+			let relation = ''
+			switch (this.relation) {
+				case 0:
+					relation = "Only Risk:"
+					break;
+				case 1:
+					relation = ""
+					break;
+				case 2:
+					relation = "SameBar:"
+					break;
+				case 3:
+					relation = "TimeOrder:"
+					break;
+				default:
+					break;
+			}
+			this.description = `${criteria} ${direction} ${relation} ${techVal} ${radio} ${condition} ${value}`
 			console.log(this.description)
 		},
 		saveCondition(index) {
