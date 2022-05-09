@@ -435,35 +435,55 @@ export default {
 		},
 		handleTabsEdit(targetName, action) {
 			if (action === 'add') {
-				console.log('add的tabindex',this.tabIndex);
-				if ((this.editableTabs.length < 5 && this.relation == 2) || (this.relation == 3 && this.editableTabs.length < 3)) {
-					let newTabName = ++this.tabIndex + ''
+				if ((this.relation == 2) || (this.relation == 3)) {
+					let num_key
+					try{
+						 num_key = Number(this.editableTabs[this.editableTabs.length-1].name) + 1
+		
+					}catch(err){
+						num_key = 1
+					}
+					let num = this.editableTabs.length
+					let newTabName = (num +1)  + ''
+					// let newTabName = ++(this.editableTabs.length) + ''
 					this.editableTabs.push({
 						title: 'Signal' + newTabName,
-						name: newTabName,
+						name: num_key + "",
 						content: 'Signal' + newTabName + 'content'
 					})
-					this.editableTabsValue = newTabName
+					this.editableTabsValue = Number(this.editableTabsValue) + 1 + ''
 					this.indicatorRadioArr.push('sentiment')
 				}
-				if(this.editableTabs.length >= 5 && this.relation == 2){
+				if(this.editableTabs.length > 5 && this.relation == 2){
 						this.$message({
 							message: 'Add up to five signals',
 							type: 'error',
 							offset: 300
-						})}
-					if(this.relation == 3 && this.editableTabs.length >= 3) {
+						})
+						this.editableTabs.pop()
+						this.editableTabsValue = this.editableTabs.length + ''
+				        this.tabIndex =this.editableTabs.length
+				}
+					if(this.relation == 3 && this.editableTabs.length > 3) {
 					this.$message({
 						message: 'Add up to three signals',
 						type: 'error',
 						offset: 300
 					})
+						this.editableTabs.pop()
+						this.editableTabsValue = this.editableTabs.length + ''
+				        this.tabIndex =this.editableTabs.length
 					}
 				}
 			if (action === 'remove') {
 				let tabs = this.editableTabs
 				let activeName = this.editableTabsValue
-				console.log("活跃面板",activeName)
+				var absoluteIndex = ''
+				tabs.forEach((tab, index) => {
+					if(tab.name==targetName){
+						absoluteIndex = index
+					}
+				})
 				if (activeName === targetName) {
 					tabs.forEach((tab, index) => {
 						if (tab.name === targetName) {
@@ -473,22 +493,22 @@ export default {
 							}
 						}
 					})
-				this.editableTabs = tabs.filter((tab) => tab.name !== targetName)
 				}
-				var absoluteIndex = ''
-				tabs.forEach((tab, index) => {
-					if(tab.name==targetName){
-						absoluteIndex = index
-					}
-				})
-				if(activeName != targetName) {
-					tabs[Number(absoluteIndex+1)].name = tabs[Number(absoluteIndex)].name
-					tabs[Number(absoluteIndex+1)].title = tabs[Number(absoluteIndex)].title
-					tabs.splice(absoluteIndex,1)
-					activeName = tabs[absoluteIndex].name
-					this.editableTabs = tabs
-				}
-				this.tabIndex = this.editableTabs.length + ''
+				let panelArr = tabs.filter((tab) => tab.name !== targetName) 
+				this.editableTabs = panelArr
+				panelArr.forEach((item,index) => {
+						// item.name = index + 1 + ''
+						item.title = 'Signal' + (index + 1)
+						// item.content = 'Signal' + (index + 1) + 'content'
+					})
+
+				// this.editableTabs = panelArr
+				// try{
+				// 	activeName = (panelArr.length)-1
+
+				// }catch(error){
+				// 	activeName = 1
+				// }
 				this.editableTabsValue = activeName
 				this.indicatorUrlArr.splice(absoluteIndex,1)
 				this.indicatorUrlArr.push('')
@@ -501,12 +521,9 @@ export default {
 					this.$store.commit('getEntryIndicators', {index: index, value: this.indicatorUrlArr[index]})
 				})
 			}
+			
+					console.log('refs',this.$refs)
 		},
-
-		// getSentiUrl(obj) {
-		// 	//console.log('getSentiUrl Exit',obj)
-		// 	this.sentiUrlArr.splice(obj.index, 1, obj.url)
-		// },
 		getIndicatorUrl(obj) {
 			this.indicatorUrlArr.splice(obj.index, 1, obj.url)
 		},

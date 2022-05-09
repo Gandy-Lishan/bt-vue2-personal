@@ -323,7 +323,7 @@
 							align="center"
 						>
 						</el-table-column>
-						
+
 						<el-table-column
 							prop="TradeReturn"
 							label="Trade Return %"
@@ -333,14 +333,14 @@
 							<template slot-scope="scope">
 								<span v-if="scope.row.TradeReturn == 'none'">{{ '' }}</span>
 								<span v-else-if="scope.row.TradeReturn >= 0"
-									>{{scope.row.TradeReturn}}%</span
+									>{{ scope.row.TradeReturn }}%</span
 								>
 								<span v-else style="color: red"
-									>{{scope.row.TradeReturn}}%</span
+									>{{ scope.row.TradeReturn }}%</span
 								>
 							</template>
 						</el-table-column>
-					<el-table-column
+						<el-table-column
 							prop="Return"
 							label="Total Return %"
 							align="center"
@@ -400,14 +400,29 @@ export default {
 					let id = row.id
 					try {
 						const res = await seeReport(id)
+						
+							console.log('Eric 返回的数据', res.data)
 						if (res.status == 200) {
-							if (typeof res.data == String) {
-								JSON.parse(res.data)
+							if (typeof res.data == "string") {
+								initalData = JSON.parse(res.data)
+							}else{
+								initalData = res.data
 							}
-							console.log("Eric 返回的数据", res.data);
-							initalData = JSON.parse(JSON.stringify(res.data))
+							console.log('Eric 返回的数据', res.data)
+							// 使用try-catch去捕捉错误
+							// 直接使用JSON.parse去转译，并把转译结果判断一下是不是object类型，如果是的话就返回true,否则就返回false,这样就排除了转化后非object的类型，比如"123456789"
+							// function isJSON(str) {
+							// 	try {
+							// 		if (typeof JSON.parse(str) == 'object') {
+							// 			return true
+							// 		}
+							// 	} catch (e) {}
+							// 	return false
+							// }
+							// console.log("判断返回值是不是json", isJSON(res.data))
+							
 							// -------------------------------------  text ----------------
-							const tradeReturn = initalData["Each Return"]
+							const tradeReturn = initalData['Each Return']
 							data.uuid = initalData['UUID']
 							data.symbol = initalData['Symbol']
 							data.frequency = initalData['Frequency']
@@ -460,30 +475,31 @@ export default {
 							vm.drawDownImgUrl = data.ddFileURL
 							vm.monthReturnImgUrl = data.returnsHeatmapFileURL
 							vm.annualReturnImgUrl = data.annualReturnsFileURL
-							for(let i=0;i<initalData['Trades'].length;i++) {
-									if(i % 2 == 0) {
-									  initalData['Trades'][i].trade_number = i / 2
-									  initalData['Trades'][i + 1].trade_number = i / 2
-									}
+							for (let i = 0; i < initalData['Trades'].length; i++) {
+								if (i % 2 == 0) {
+									initalData['Trades'][i].trade_number = i / 2
+									initalData['Trades'][i + 1].trade_number = i / 2
+								}
 							}
-							
-							console.log("tradesData", vm.tradesData);
-							for(let i=0;i<initalData['Trades'].length;i++) {
-								initalData['Trades'][i].TradeReturn = tradeReturn[initalData['Trades'][i].trade_number]
-								if(i % 2 !== 0) {
-								 initalData['Trades'][i-1].Return = initalData['Trades'][i].Return
+
+							for (let i = 0; i < initalData['Trades'].length; i++) {
+								initalData['Trades'][i].TradeReturn =
+									tradeReturn[initalData['Trades'][i].trade_number]
+								if (i % 2 !== 0) {
+									initalData['Trades'][i - 1].Return =
+										initalData['Trades'][i].Return
 								}
 							}
 							vm.tradesData = initalData['Trades']
-							console.log("tradesData", vm.tradesData);
+							console.log('tradesData', vm.tradesData)
 							// ---------------------------------------- end ----------------------------------
 							// ----------------------- backtest result-------------------------------
 
 							this.$emit('setBacktestResult', initalData['basic'])
 							// ------------------------------ end -----------------------------------
-								setTimeout(()=>{
-									this.loadMarker(initalData.markerSet)
-								},0)
+							setTimeout(() => {
+								this.loadMarker(initalData.markerSet)
+							}, 0)
 
 							//vm.$store.commit('getTradesData',initalData[])
 							vm.loading = false
@@ -562,7 +578,7 @@ export default {
 					}
 				}
 			}
-		   if (columnIndex === 6) {
+			if (columnIndex === 6) {
 				if (rowIndex % 2 === 0) {
 					return {
 						rowspan: 2,

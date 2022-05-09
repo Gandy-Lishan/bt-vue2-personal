@@ -356,6 +356,7 @@ export default {
 			let timer = setPromiseInterval(async () => {
 				try {
 					const res = await getStatus(id)
+					console.log("状态码",res.data.status)
 				if (res.data.status !== 1 && res.data.status !== 0) {
 					clearPromiseInterval(timer).then(() => {})
 					// vm.$notify({
