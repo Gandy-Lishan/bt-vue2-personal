@@ -52,15 +52,21 @@
 					</el-table-column> -->
 					<el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
-							<el-tooltip placement="top">
-								<div>
-									<p>{{ scope.row.entry_description }}</p>
-									<p>{{ scope.row.exit_description }}</p>
+							<el-tooltip placement="top" effect="dark" transition>
+								<div slot="content" v-for="(item,index) in scope.row.entry_description" :key="index">
+									{{ item }}<br/>
 								</div>
-								<div slot="content">
-									{{ scope.row.entry_description }}<br />{{
-										scope.row.exit_description
-									}}
+								<div v-for="(item,index) in scope.row.entry_description" :key="index">
+								{{ item }}<br/>
+								</div>
+							</el-tooltip>
+							<br/>
+							<el-tooltip placement="bottom" effect="light" transition>
+								<div slot="content" v-for="(item,index) in scope.row.exit_description" :key="index">
+									{{ item }}<br/>
+								</div>
+								<div  v-for="(item,index) in scope.row.exit_description" :key="index">
+									{{ item }}<br/>
 								</div>
 							</el-tooltip>
 						</template>
@@ -333,12 +339,26 @@ export default {
 					this.loading = false
 					let historyNameList = []
 					this.backtestList = res.data.results
+					
+				console.log('history列表',res.data.results);
 					if (this.backtestList.length != 0) {
 						this.backtestList.forEach((element) => {
 							historyNameList.push(element.name)
 							if (element.result !== '')
 								element.result = JSON.parse(element.result)
+								if(element.entry_description.indexOf("[") != -1) {
+									element.entry_description = JSON.parse(element.entry_description)
+								}else{
+									element.entry_description = [entry_description]
+								}
+								if(element.exit_description.indexOf("[") != -1) {
+									element.exit_description = JSON.parse(element.exit_description)
+								}else{
+									element.exit_description = [exit_description]
+								}
 						})
+						
+				console.log('处理过后history列表',this.backtestList);
 						this.$store.commit('getBacktestName', historyNameList)
 					}
 					this.queryInfo.total = res.data.count
