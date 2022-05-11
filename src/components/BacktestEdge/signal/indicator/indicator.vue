@@ -219,6 +219,10 @@ export default {
 		// technical search
 		indicatorTechnicalSearch(queryString, cb) {
 			var technicaltIndicatorList = this.loadShortLong()
+				if(this.criteria === 'entry') {
+				let valueArr = ["ATR Trailing Stops","Parabolic SAR"]
+				technicaltIndicatorList = technicaltIndicatorList.filter((item) => valueArr.indexOf(item.value) === -1)
+			}
 			var results = queryString
 				? technicaltIndicatorList.filter(
 						this.createTechnicalFilter(queryString)
