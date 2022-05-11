@@ -31,15 +31,20 @@
 					</el-table-column>
 					<el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
-							<el-tooltip placement="top">
-								<div>
-									<p>{{ scope.row.entry_description }}</p>
-									<p>{{ scope.row.exit_description }}</p>
+							<el-tooltip placement="top" effect="dark" transition>
+								<div slot="content" v-for="(item,index) in scope.row.entry_description" :key="index">
+									{{ item }}<br/>
 								</div>
-								<div slot="content">
-									{{ scope.row.entry_description }}<br />{{
-										scope.row.exit_description
-									}}
+								<div v-for="(item,index) in scope.row.entry_description" :key="index">
+								{{ item }}<br/>
+								</div>
+							</el-tooltip>
+							<el-tooltip placement="bottom" effect="light" transition>
+								<div slot="content" v-for="(item,index) in scope.row.exit_description" :key="index">
+									{{ item }}<br/>
+								</div>
+								<div  v-for="(item,index) in scope.row.exit_description" :key="index">
+									{{ item }}<br/>
 								</div>
 							</el-tooltip>
 						</template>
@@ -302,6 +307,16 @@ async getFavoriteList(strategy) {
 						this.backtestList.forEach((element) => {
 							if (element.result !== '')
 								element.result = JSON.parse(element.result)
+								if(element.entry_description.indexOf("[") != -1) {
+									element.entry_description = JSON.parse(element.entry_description)
+								}else{
+									element.entry_description = [entry_description]
+								}
+								if(element.exit_description.indexOf("[") != -1) {
+									element.exit_description = JSON.parse(element.exit_description)
+								}else{
+									element.exit_description = [exit_description]
+								}
 						})
 					}
 					this.queryInfo.total = res.data.count
