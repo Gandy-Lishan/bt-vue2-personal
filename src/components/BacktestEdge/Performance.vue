@@ -402,10 +402,12 @@ export default {
 						const res = await seeReport(id)
 						if (res.status == 200) {
 							if (typeof res.data == String) {
-								JSON.parse(res.data)
+								initalData = JSON.parse(res.data)
+							}else{
+								initalData = JSON.parse(JSON.stringify(res.data))
 							}
-							console.log("Eric 返回的数据", res.data);
-							initalData = JSON.parse(JSON.stringify(res.data))
+							console.log("Eric 返回的数据", initalData);
+							
 							// -------------------------------------  text ----------------
 							const tradeReturn = initalData["Each Return"]
 							data.uuid = initalData['UUID']
@@ -460,6 +462,7 @@ export default {
 							vm.drawDownImgUrl = data.ddFileURL
 							vm.monthReturnImgUrl = data.returnsHeatmapFileURL
 							vm.annualReturnImgUrl = data.annualReturnsFileURL
+							//console.log("initalData",typeof initalData);
 							for(let i=0;i<initalData['Trades'].length;i++) {
 									if(i % 2 == 0) {
 									  initalData['Trades'][i].trade_number = i / 2
@@ -467,7 +470,7 @@ export default {
 									}
 							}
 							
-							console.log("tradesData", vm.tradesData);
+							//console.log("tradesData", vm.tradesData);
 							for(let i=0;i<initalData['Trades'].length;i++) {
 								initalData['Trades'][i].TradeReturn = tradeReturn[initalData['Trades'][i].trade_number]
 								if(i % 2 !== 0) {

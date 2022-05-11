@@ -218,7 +218,7 @@ export default {
 				if(newVal){
 					var obj = CIQ.store.state.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.radio
-					console.log('handle MA,',obj)
+					//console.log('handle MA,',obj)
 					CIQ.store.commit('setConditionRadio', obj)
 				}
 			},

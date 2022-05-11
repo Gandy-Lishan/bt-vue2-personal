@@ -372,6 +372,8 @@ export default {
 			let techIndicators = []
 			techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
 			techIndicators.push(url)
+			techIndicators = [...new Set(techIndicators)]
+			console.log("handle tech select,techIndicators: ",techIndicators)
 			this.$store.commit('getTechnicalIndicators', techIndicators)
 
 			// avoid add indicator redundantly

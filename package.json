@@ -12,6 +12,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.72.0",
     "@open-wc/webpack-import-meta-loader": "^0.4.7",
+    "aws-sdk": "^2.1131.0",
     "axios": "^0.21.1",
     "chartiq": "file:chartiq-8.3.0.tgz",
     "core-js": "^3.6.5",

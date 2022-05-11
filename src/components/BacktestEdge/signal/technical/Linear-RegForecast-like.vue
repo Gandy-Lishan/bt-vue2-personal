@@ -154,7 +154,7 @@ export default {
 					break;
 			}
 			this.description = `${criteria} ${direction} ${relation} ${techVal} ${comparison} ${condition} ${this.tech.value}`
-			console.log(this.description)
+			//console.log(this.description)
 		},
 		saveCondition(index) {
 			let checked = true

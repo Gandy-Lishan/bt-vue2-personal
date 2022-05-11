@@ -153,7 +153,7 @@ export default {
 					break;
 			}
 			this.description = `${criteria} ${direction} ${relation} ${techVal} ${period} ${condition} ${this.tech.value}`
-			console.log("CCI描述",this.description);
+			//console.log("CCI描述",this.description);
 		}, 500),
 		saveCondition(index) {
 			let checked = true

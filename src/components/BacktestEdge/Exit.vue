@@ -413,7 +413,7 @@ export default {
 		},
 		exitSaveCheck: {
 			handler(newVal) {
-				console.log("传到exit的值", newVal);
+				//console.log("传到exit的值", newVal);
 				if(newVal) {
 					this.signalOptions = [
 				{
@@ -623,7 +623,7 @@ export default {
 		saveBacktestData(index) {
 			let checked = true
 			// 将选择的 indicator 保存到 vuex 中
-			console.log('exit的保存执行了' + index + '次')
+			//console.log('exit的保存执行了' + index + '次')
 			let vm = this
 			if(vm.exitItemCheck) {
 				// 保存 risk description
@@ -762,12 +762,12 @@ export default {
 			}
 			this.refs = data
 			this.$nextTick(() => {
-				console.log('当前的refs', this.$refs.indiChild)
+				//console.log('当前的refs', this.$refs.indiChild)
 				this.setEditData(this.refs)
 			})
 		},
 		setEditData(data) {
-			console.log('编辑的exitdata', data)
+			//console.log('编辑的exitdata', data)
 			this.score = data.exit.score
 			this.delay_bars =  data.exit.delay_bars ? data.exit.delay_bars : 0
 			this.signals_in_market = data.exit.signals_in_market ? data.exit.signals_in_market : 1
@@ -775,7 +775,7 @@ export default {
 			let length = data.exit.signals.length
 			this.tabIndex = length
 			for (let j = 0; j < length; j++) {
-				console.log('函数执行了' + j + '次，共' + length + '次')
+				//console.log('函数执行了' + j + '次，共' + length + '次')
 				this.$refs.indiChild[j].setEditData(data)
 				if (data.exit.signals[j].analysis === 'Sentiment') {
 					this.indicatorValArr[j] = data.exit.signals[j].indicator
@@ -851,7 +851,7 @@ export default {
 			}
 		},
 		setRiskEditData(data) {
-			console.log('编辑的risk exitdata', data)
+			//console.log('编辑的risk exitdata', data)
 			this.score = data.exit.score
 			this.delay_bars =  data.exit.delay_bars ? data.exit.delay_bars : 0
 			this.signals_in_market = data.exit.signals_in_market ? data.exit.signals_in_market : 1

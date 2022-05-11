@@ -212,7 +212,7 @@ export default {
 					//obj.Aligator_like = JSON.stringify(_obj)
 					obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
 					CIQ.store.commit('setConditionRadio', obj)
-					console.log('handle alligator,',obj)
+					//console.log('handle alligator,',obj)
 				}	
 			},
 			immediate: true,

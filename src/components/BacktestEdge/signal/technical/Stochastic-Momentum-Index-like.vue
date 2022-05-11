@@ -215,7 +215,7 @@ export default {
 					var obj = CIQ.store.state.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.radio
 					CIQ.store.commit('setConditionRadio', obj)
-					console.log('handle stocastic,',obj)
+					//console.log('handle stocastic,',obj)
 				}
 			},
 			immediate: true,

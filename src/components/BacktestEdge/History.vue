@@ -489,6 +489,7 @@ export default {
 				try {
 					const res = await seeParams(row.id)
 					// 恢复indicator layout
+					// console.log(res,row)
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					CIQ.hideMarker()
 					CIQ.isMarkerShown = false
@@ -558,16 +559,19 @@ export default {
 			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
 			if (CIQ.isBacktestRun == true) {
 				CIQ.isBacktestRun = false
-				this.reloadData(data, freq)
+				//this.reloadData(data, freq)
 				var that = this
-				CIQ.outputSignalsResult(function () {
+				//不再使用outputSignalsResult，exportcsv放置在回测前，callback置于原地
+				//CIQ.outputSignalsResult(function () {
+					console.log("after output uploaded to S3")
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goTobacktestSetupForm', row.id)
 					that.$emit('goBacktestResultForm', row)
-				})
+				//})
 			} else {
 				this.reloadData(data, freq)
 				var that = this
+				console.log("after clicking view")
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goTobacktestSetupForm', row.id)
@@ -577,16 +581,17 @@ export default {
 		},
 		restoreIndicatorLayoutEdit(data, freq, row) {
 			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
-			if (CIQ.isBacktestRun == true) {
-				CIQ.isBacktestRun = false
-				this.reloadData(data, freq)
-				var that = this
-				CIQ.outputSignalsResult(function () {
-					that.$store.commit('getRunBacktestData', row)
-					that.$emit('goBacktestResultForm', row)
-					that.$emit('goTobacktestSetupForm', row.id)
-				})
-			} else {
+			// if (CIQ.isBacktestRun == true) {
+			// 	CIQ.isBacktestRun = false
+			// 	this.reloadData(data, freq)
+			// 	var that = this
+			// 	CIQ.outputSignalsResult(function () {
+			// 		that.$store.commit('getRunBacktestData', row)
+			// 		that.$emit('goBacktestResultForm', row)
+			// 		that.$emit('goTobacktestSetupForm', row.id)
+			// 	})
+			// } else {
+				console.log("restoreIndicatorLayoutEdit")
 				this.reloadData(data, freq)
 				var that = this
 				CIQ.addIndicatorsFromBacktest(function () {
@@ -594,7 +599,7 @@ export default {
 					that.$emit('goBacktestResultForm', row)
 					that.$emit('goTobacktestSetupForm', row.id)
 				})
-			}
+			//}
 		},
 		async showDes(row) {
 			const datades = {}
