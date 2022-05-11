@@ -54,7 +54,7 @@
 							>Create New Backtest</el-button
 						></el-tooltip
 					>
-					<el-tooltip
+					<!-- <el-tooltip
 						class="item"
 						effect="light"
 						content="Clear chart and backtest set up form to create new backtests"
@@ -67,7 +67,7 @@
 							icon="el-icon-refresh-right"
 							>Test</el-button
 						></el-tooltip
-					>
+					> -->
 				</div>
 				<el-tabs
 					v-model="activeName"
@@ -470,6 +470,37 @@ export default {
 			obj.index = index
 			this.$store.commit('addSignalLength', obj)
 		},
+		reloadData(data,freq) {
+			let frequency = ''
+
+			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
+			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
+			this.$store.commit('getExtraIndicators', [])
+			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
+			this.$store.commit('getMA', data.activatedMA)
+			this.$store.commit('setTechSD', data.savedTechSD)
+			//CIQ.savedTechSD = data.savedTechSD
+
+			switch (freq) {
+				case 'Daily': {
+					frequency = 'daily'
+					break
+				}
+				case 'Weekly': {
+					frequency = 'weekly'
+					break
+				}
+				case 'Monthly': {
+					frequency = 'monthly'
+					break
+				}
+				default: {
+					break
+				}
+			}
+			this.$store.commit('setRestoreFreq', frequency)
+			// CIQ.addIndicatorsFromBacktest()
+		},
 		runBacktest: throttle(async function () {
 			let setUp = this.$refs.setUpChild.saveBacktestData()
 			this.$refs.entryChild.addEntrySignalLength()
@@ -694,10 +725,15 @@ export default {
 							this.$store.state.indicators.technicalIndicators
 						var savedTechSD = []
 						for (var i in CIQ.stxx.layout.studies) {
+							var output = {}
+							if(CIQ.indicatorList.find((j) => { return j.url == CIQ.stxx.layout.studies[i].type }) == undefined){
+								console.log('isTech',CIQ.stxx.layout.studies[i].type)
+								output = CIQ.stxx.layout.studies[i].outputs
+							}
 							savedTechSD.push({
 								type: CIQ.stxx.layout.studies[i].type,
 								inputs: CIQ.stxx.layout.studies[i].inputs,
-								outputs: CIQ.stxx.layout.studies[i].outputs,
+								outputs: output,
 								parameters: CIQ.stxx.layout.studies[i].parameters,
 								panel: CIQ.stxx.layout.studies[i].panel
 							})
@@ -718,49 +754,91 @@ export default {
 						let str = UUID(JSON.stringify(backtestData))
 
 						backtestData.pk = str
-						console.log('编辑后传出去的数据', backtestData)
-						// console.log('编辑后传出去的ID', UUID(JSON.stringify(backtestData)))
+						//console.log('编辑后传出去的数据', backtestData)
+
+						// 传给S3的backtestData copy
+						var backtestParams = backtestData
+						delete backtestParams.create_date
+						delete backtestParams.description
+						delete backtestParams.entry_description
+						delete backtestParams.exit_description
+						delete backtestParams.favorites
+						delete backtestParams.indicator_layout
+						delete backtestParams.old_uuid
+						delete backtestParams.pk
+						delete backtestParams.result
+						delete backtestParams.seconds
+						delete backtestParams.url_data
+						delete backtestParams.user
+						backtestParams = JSON.stringify(backtestParams).replace(/id/g, 'uuid')
+						/* ********** */
+
 						let backtestDataStr = this.$qs.stringify(backtestData)
-						try {
-							let res = await runBacktest(backtestDataStr)
-							if (res.status === 201) {
-								// 保存成功之后，将 backtestInfo 清空回原始的状态
-								CIQ.isBacktestRun = true
-								vm.$store.commit('initialBacktestInfo')
-								vm.loading = false
-								vm.goToHistoryForm()
-								vm.$refs.historyChild.refreshHistory(res.data.id)
-								// 保存成功之后应该清除表单的所有数据
-								CIQ.hideMarker()
-								CIQ.isMarkerShown = false
-								// 并且清除 old_uuid
-								let backtestInfo = JSON.parse(
-									JSON.stringify(vm.$store.state.backtestInfo)
-								)
-								if (backtestInfo.old_uuid) {
-									vm.$store.commit('clearBacktestUuid')
-								}
-								// 清除 oldBacktestName
-								vm.backtestEditData = {}
-								vm.$refs.setUpChild.clearOldBacktestName()
-								vm.$refs.favoriteChild.getFavoriteList()
-							} else {
-								vm.$message.error('Save failed')
-								vm.loading = false
-								CIQ.hideMarker()
-								CIQ.isMarkerShown = false
-							}
-						} catch (error) {
-							vm.$message({
-								message: 'The internal server is busy, please try again later ',
-								type: 'error',
-								offset: 300
-							})
-							vm.loading = false
-							// 初始化backtestInfo的数据
-							vm.$store.commit('clearStoreDesciption')
-							vm.$store.commit('initialBacktestInfo')
+						
+						// 在回测前加载全时段的数据并生成csv上传s3,结果出来再更新表单
+						this.reloadData(indicatorLayout,backtestData.frequency)
+						// 1.上传数据文件
+						// 2.上传参数文件
+						// 3.判断文件上传状态，如果报错则不执行跑回测操作
+						
+						// TODO 
+						// long
+						CIQ.outputSignalsResult(str)
+
+						var promise = 200
+						// 何上传的json
+						try{
+							await s3_tool.upload({key:str + '/' + str + '_backtest_params.json',val:backtestParams})
+							promise = 200	
+						}catch(error){
+							promise = 500
 						}
+						if (promise == 500){
+							// 弹出报错
+						}
+						
+
+						try {
+									let res = await runBacktest(backtestDataStr)
+									if (res.status === 201) {
+										// 保存成功之后，将 backtestInfo 清空回原始的状态
+										CIQ.isBacktestRun = true
+										vm.$store.commit('initialBacktestInfo')
+										vm.loading = false
+										vm.goToHistoryForm()
+										vm.$refs.historyChild.refreshHistory(res.data.id)
+										// 保存成功之后应该清除表单的所有数据
+										CIQ.hideMarker()
+										CIQ.isMarkerShown = false 
+										// 并且清除 old_uuid
+										let backtestInfo = JSON.parse(
+											JSON.stringify(vm.$store.state.backtestInfo)
+										)
+										if (backtestInfo.old_uuid) {
+											vm.$store.commit('clearBacktestUuid')
+										}
+										// 清除 oldBacktestName
+										vm.backtestEditData = {}
+										vm.$refs.setUpChild.clearOldBacktestName()
+										vm.$refs.favoriteChild.getFavoriteList()
+									} else {
+										vm.$message.error('Save failed')
+										vm.loading = false
+										CIQ.hideMarker()
+										CIQ.isMarkerShown = false
+									}
+								} catch (error) {
+									vm.$message({
+										message: 'The internal server is busy, please try again later ',
+										type: 'error',
+										offset: 300
+									})
+									vm.loading = false
+									// 初始化backtestInfo的数据
+									vm.$store.commit('clearStoreDesciption')
+									vm.$store.commit('initialBacktestInfo')
+								}
+				
 					}
 				}
 			}

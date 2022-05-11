@@ -475,6 +475,7 @@ export default {
 							vm.drawDownImgUrl = data.ddFileURL
 							vm.monthReturnImgUrl = data.returnsHeatmapFileURL
 							vm.annualReturnImgUrl = data.annualReturnsFileURL
+
 							for (let i = 0; i < initalData['Trades'].length; i++) {
 								if (i % 2 == 0) {
 									initalData['Trades'][i].trade_number = i / 2
@@ -488,6 +489,7 @@ export default {
 								if (i % 2 !== 0) {
 									initalData['Trades'][i - 1].Return =
 										initalData['Trades'][i].Return
+
 								}
 							}
 							vm.tradesData = initalData['Trades']

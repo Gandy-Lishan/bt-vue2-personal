@@ -446,6 +446,7 @@ export default {
 					let num = this.editableTabs.length
 					let newTabName = (num +1)  + ''
 					// let newTabName = ++(this.editableTabs.length) + ''
+
 					this.editableTabs.push({
 						title: 'Signal' + newTabName,
 						name: num_key + "",
@@ -478,12 +479,14 @@ export default {
 			if (action === 'remove') {
 				let tabs = this.editableTabs
 				let activeName = this.editableTabsValue
+
 				var absoluteIndex = ''
 				tabs.forEach((tab, index) => {
 					if(tab.name==targetName){
 						absoluteIndex = index
 					}
 				})
+
 				if (activeName === targetName) {
 					tabs.forEach((tab, index) => {
 						if (tab.name === targetName) {
@@ -568,7 +571,7 @@ export default {
 		},
 		saveBacktestData(index) {
 			let checked = true
-			console.log('entry的保存执行了' + index + '次')
+			//console.log('entry的保存执行了' + index + '次')
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			return indi.then((val) => { 

@@ -124,7 +124,7 @@ export default {
 					var obj = CIQ.store.state.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.tech.value
 					CIQ.store.commit('setConditionRadio', obj)
-					console.log('handle BollingerBands_like,',obj)
+					//console.log('handle BollingerBands_like,',obj)
 				}
 			},
 			immediate: true,

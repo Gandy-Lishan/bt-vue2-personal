@@ -180,7 +180,7 @@ export default {
 					var obj = CIQ.store.state.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.conditionRadio
 					CIQ.store.commit('setConditionRadio', obj)
-					console.log('handle ADX,',obj)
+					//console.log('handle ADX,',obj)
 				}
 
 			},
@@ -294,7 +294,7 @@ export default {
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
-				console.log('ADX编辑',newVal);
+				//console.log('ADX编辑',newVal);
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)
