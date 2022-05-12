@@ -710,7 +710,24 @@ export default {
 			this.$refs.backtestSetupForm.validate((valid) => {
 				validForm = valid
 			})
-			if (validForm) {
+			let riskCheck = true
+			let slCheck
+			let tpCheck
+			let timCheck
+			if(this.isRiskControl) {
+				if (this.isStopLoss) {
+					slCheck = this.validateStopLoss(this.sl)
+				}
+				if(this.isTakeProfit) {
+					tpCheck = this.validateTakeProfit(this.tp)
+				}
+				if(this.isTimeInMarket){
+					timCheck = this.validateTimeInMarket(this.tim)
+				}
+				riskCheck = (this.isStopLoss?slCheck:true) && (this.isTakeProfit?tpCheck:true) && (this.isTimeInMarket?timCheck:true)
+			}
+			
+			if (validForm && riskCheck) {
 				let nameList = this.$store.state.backtestNameList
 				if (nameList.indexOf(bd.name) === -1) {
 					bd.favorites = false
@@ -814,6 +831,59 @@ export default {
 				// desObj.index = 0
 				desObj.description = description
 				this.$store.commit('saveRiskDescription', desObj)
+		},
+		
+		validateStopLoss(num) {
+			if (num < 0 || num > 100) {
+					this.$message({
+						message:
+							'Only positive numbers less than or equal to 100 are allowed',
+						type: 'error',
+						offset: 300
+					})
+				return false
+			}
+			const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
+			if (!pattern.test(num) && num !== 0) {
+					this.$message({
+						message: 'Please enter a two-decimal number',
+						type: 'error',
+						offset: 300
+					})
+				return false
+			}
+			return true
+		},
+		validateTakeProfit(num) {
+			if (num < 0) {
+					this.$message({
+						message: 'Only positive numbers are allowed',
+						type: 'error',
+						offset: 300
+					})
+				return false
+			}
+			const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
+			if (!pattern.test(num) && num !== 0) {
+					this.$message({
+						message: 'Please enter a two-decimal number',
+						type: 'error',
+						offset: 300
+					})
+				return false
+			}
+			return true
+		},
+		validateTimeInMarket(num) {
+			if (isNaN(num) || num < 0 || !/^\d+$/.test(num)) {
+					this.$message({
+						message: 'Only positive integers are allowed',
+						type: 'error',
+						offset: 300
+					})
+				return false
+			}
+			return true
 		},
 	}
 }
