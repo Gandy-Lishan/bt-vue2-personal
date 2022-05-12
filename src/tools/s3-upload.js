@@ -1,7 +1,6 @@
 // import axios from "axios"
 // import qs from 'querystring'
 import AWS from "aws-sdk"
-import { S3Client } from "@aws-sdk/client-s3"
 //var AWS = require('aws-sdk');
 
 var bucketName = "sentimentrader-backtestv2-dailyreturnresults";
@@ -36,31 +35,31 @@ var s3 = new AWS.S3({
   });
 
 const s3_tool = {};
+s3_tool.upload = async (params) => {
+    //console.log(params)
+    var uploadParams = {Bucket: bucketName, Key: params.key, Body: params.val};
+
+    var upload = new AWS.S3.ManagedUpload({
+        params: uploadParams
+    });
+    
+    var promise = upload.promise();
+    return promise
+
+};
 // s3_tool.upload = async (params) => {
 //     console.log(params)
 //     var uploadParams = {Bucket: bucketName, Key: params.key, Body: params.val};
-
-//     var upload = new AWS.S3.ManagedUpload({
-//         params: uploadParams
+//     s3.upload (uploadParams, function (err, data) {
+//         if (err) {
+//             //console.log("Error", err);
+//             return {state:-1,payload:err}
+//         } if (data) {
+//             console.log("Upload Success", data);
+//             return {state:1,payload:data}
+//         }
 //     });
-    
-//     var promise = upload.promise();
-//     return promise
-
 // };
-s3_tool.upload = async (params) => {
-    console.log(params)
-    var uploadParams = {Bucket: bucketName, Key: params.key, Body: params.val};
-    s3.upload (uploadParams, function (err, data) {
-        if (err) {
-            //console.log("Error", err);
-            return {state:-1,payload:err}
-        } if (data) {
-            console.log("Upload Success", data);
-            return {state:1,payload:data}
-        }
-    });
-};
 
 
 

@@ -727,7 +727,7 @@ export default {
 						for (var i in CIQ.stxx.layout.studies) {
 							var output = {}
 							if(CIQ.indicatorList.find((j) => { return j.url == CIQ.stxx.layout.studies[i].type }) == undefined){
-								console.log('isTech',CIQ.stxx.layout.studies[i].type)
+								//console.log('isTech',CIQ.stxx.layout.studies[i].type)
 								output = CIQ.stxx.layout.studies[i].outputs
 							}
 							savedTechSD.push({
@@ -750,31 +750,51 @@ export default {
 						indicatorLayout.activatedMA = this.$store.state.activatedMA
 
 						backtestData.indicator_layout = JSON.stringify(indicatorLayout)
-						console.log('indicatorLayout: ', savedTechSD)
+
+						
+						//console.log('indicatorLayout: ', savedTechSD)
 						let str = UUID(JSON.stringify(backtestData))
 
 						backtestData.pk = str
-						//console.log('编辑后传出去的数据', backtestData)
+					
+						// 把对象里的数字字符串还原成数字
+						backtestData.capital_alloc = parseFloat(backtestData.capital_alloc)
+						backtestData.slippage = parseFloat(backtestData.slippage)
+						backtestData.win_rate = parseFloat(backtestData.win_rate)
 
+
+						CIQ.spanPeriod = {
+							start_date: backtestData.start_date.replace(/-/g,'') * 1000000000,
+							end_date: backtestData.end_date.replace(/-/g,'') * 1000000000
+						}
+						console.log(CIQ.spanPeriod)
 						// 传给S3的backtestData copy
-						var backtestParams = backtestData
-						delete backtestParams.create_date
-						delete backtestParams.description
-						delete backtestParams.entry_description
-						delete backtestParams.exit_description
-						delete backtestParams.favorites
-						delete backtestParams.indicator_layout
-						delete backtestParams.old_uuid
-						delete backtestParams.pk
-						delete backtestParams.result
-						delete backtestParams.seconds
-						delete backtestParams.url_data
-						delete backtestParams.user
-						backtestParams = JSON.stringify(backtestParams).replace(/id/g, 'uuid')
+						var backtestParams = {}
+						backtestParams.uuid = backtestData.pk
+						backtestParams.benchmark = backtestData.benchmark
+						backtestParams.capital = backtestData.capital
+						backtestParams.capital_alloc = backtestData.capital_alloc
+						backtestParams.commission = backtestData.commission
+						backtestParams.create_date = backtestData.create_date
+						backtestParams.direction = backtestData.direction
+						backtestParams.create_date = backtestData.create_date
+						backtestParams.end_date = backtestData.end_date
+						backtestParams.entry = backtestData.entry
+						backtestParams.exit = backtestData.exit
+						backtestParams.frequency = backtestData.frequency
+						backtestParams.name = backtestData.name
+						backtestParams.risk_control = backtestData.risk_control
+						backtestParams.slippage = backtestData.slippage
+						backtestParams.start_date = backtestData.start_date
+						backtestParams.strategy = backtestData.strategy
+						backtestParams.symbol = backtestData.symbol
+						backtestParams.win_rate = backtestData.win_rate
+						console.log('编辑后传出去的数据', backtestParams)
+						backtestParams = JSON.stringify(backtestParams)
 						/* ********** */
+						
 
 						let backtestDataStr = this.$qs.stringify(backtestData)
-						
 						// 在回测前加载全时段的数据并生成csv上传s3,结果出来再更新表单
 						this.reloadData(indicatorLayout,backtestData.frequency)
 						// 1.上传数据文件
@@ -783,61 +803,63 @@ export default {
 						
 						// TODO 
 						// long
-						CIQ.outputSignalsResult(str)
-
-						var promise = 200
-						// 何上传的json
-						try{
-							await s3_tool.upload({key:str + '/' + str + '_backtest_params.json',val:backtestParams})
-							promise = 200	
-						}catch(error){
-							promise = 500
-						}
-						if (promise == 500){
-							// 弹出报错
-						}
-						
-
-						try {
-									let res = await runBacktest(backtestDataStr)
-									if (res.status === 201) {
-										// 保存成功之后，将 backtestInfo 清空回原始的状态
-										CIQ.isBacktestRun = true
-										vm.$store.commit('initialBacktestInfo')
-										vm.loading = false
-										vm.goToHistoryForm()
-										vm.$refs.historyChild.refreshHistory(res.data.id)
-										// 保存成功之后应该清除表单的所有数据
-										CIQ.hideMarker()
-										CIQ.isMarkerShown = false 
-										// 并且清除 old_uuid
-										let backtestInfo = JSON.parse(
-											JSON.stringify(vm.$store.state.backtestInfo)
-										)
-										if (backtestInfo.old_uuid) {
-											vm.$store.commit('clearBacktestUuid')
+						CIQ.outputSignalsResult(str, async function () {
+							if(arguments[0]==200){
+								// 何上传的json
+								try{
+									var data = await s3_tool.upload({key:str + '/' + str + '_backtest_params.json',val:backtestParams})
+									console.log("Upload json Success", data.key);
+									try {
+										console.log("start runBacktest");
+										let res = await runBacktest(backtestDataStr)
+										if (res.status === 201) {
+											// 保存成功之后，将 backtestInfo 清空回原始的状态
+											CIQ.isBacktestRun = true
+											vm.$store.commit('initialBacktestInfo')
+											vm.loading = false
+											vm.goToHistoryForm()
+											vm.$refs.historyChild.refreshHistory(res.data.id)
+											// 保存成功之后应该清除表单的所有数据
+											CIQ.hideMarker()
+											CIQ.isMarkerShown = false 
+											// 并且清除 old_uuid
+											let backtestInfo = JSON.parse(
+												JSON.stringify(vm.$store.state.backtestInfo)
+											)
+											if (backtestInfo.old_uuid) {
+												vm.$store.commit('clearBacktestUuid')
+											}
+											// 清除 oldBacktestName
+											vm.backtestEditData = {}
+											vm.$refs.setUpChild.clearOldBacktestName()
+											vm.$refs.favoriteChild.getFavoriteList()
+										} else {
+											vm.$message.error('Save failed')
+											vm.loading = false
+											CIQ.hideMarker()
+											CIQ.isMarkerShown = false
 										}
-										// 清除 oldBacktestName
-										vm.backtestEditData = {}
-										vm.$refs.setUpChild.clearOldBacktestName()
-										vm.$refs.favoriteChild.getFavoriteList()
-									} else {
-										vm.$message.error('Save failed')
+									} catch (error) {
+										vm.$message({
+											message: 'The internal server is busy, please try again later ',
+											type: 'error',
+											offset: 300
+										})
 										vm.loading = false
-										CIQ.hideMarker()
-										CIQ.isMarkerShown = false
-									}
-								} catch (error) {
-									vm.$message({
-										message: 'The internal server is busy, please try again later ',
-										type: 'error',
-										offset: 300
-									})
-									vm.loading = false
-									// 初始化backtestInfo的数据
-									vm.$store.commit('clearStoreDesciption')
-									vm.$store.commit('initialBacktestInfo')
-								}
+										// 初始化backtestInfo的数据
+										vm.$store.commit('clearStoreDesciption')
+										vm.$store.commit('initialBacktestInfo')
+									}	
+								}catch(error){
+									console.log("Error", error);
+									alert('Upload JSON failed')
+								}	
+							}else{
+								alert('Upload CSV failed')
+							}						
+						})
+
+
 				
 					}
 				}
