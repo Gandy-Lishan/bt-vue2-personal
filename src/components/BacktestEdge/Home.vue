@@ -84,6 +84,9 @@
 						element-loading-spinner="el-icon-loading"
 						element-loading-background="rgba(0, 0, 0, 0.8)"
 					>
+					<el-tooltip slot="label" effect="light" content="Fill in the backtest parameters and run the backtest" placement="bottom-start">
+          <span  class="tmp">Set up Backtest</span>
+        </el-tooltip>
 						<div class="set-up-container" @click="tabContentClick">
 							<set-up
 								ref="setUpChild"
@@ -134,7 +137,11 @@
 						</div>
 					</el-tab-pane>
 					<el-tab-pane label="Backtest History" name="second"
-						><history
+						>
+		<el-tooltip slot="label" effect="light" content="After running the backtesting list, you can delete, add favorites, edit, and view the results of the backtesting" placement="bottom-start">
+          <span  class="tmp">Backtest History</span>
+        </el-tooltip>
+						<history
 							ref="historyChild"
 							@goTobacktestSetupForm="goTobacktestSetupForm"
 							@goBacktestResultForm="goBacktestResultForm"
@@ -143,7 +150,11 @@
 						></history
 					></el-tab-pane>
 					<el-tab-pane label="Backtest Results" name="third"
-						><div class="set-up-container">
+						>
+								<el-tooltip slot="label" effect="light" content="View the backtest results at the end of the run" placement="bottom-start">
+          <span  class="tmp">Backtest Results</span>
+        </el-tooltip>
+						<div class="set-up-container">
 							<result
 								:backtestEditData="backtestEditData"
 								:editFrequency="editFrequency"
@@ -156,7 +167,11 @@
 						></performance>
 					</el-tab-pane>
 					<el-tab-pane label="My Favorites" name="forth"
-						><favorite
+						>
+								<el-tooltip slot="label" effect="light" content="Backtests that have been added to favorites" placement="bottom-start">
+          <span  class="tmp">My Favorites</span>
+        </el-tooltip>
+						<favorite
 							ref="favoriteChild"
 							@refHistoryForm="refHistoryForm"
 							@goTobacktestSetupForm="goTobacktestSetupForm"
@@ -165,7 +180,11 @@
 						></favorite
 					></el-tab-pane>
 					<el-tab-pane label="Sample Backtests" name="fifth"
-						><sample
+						>
+		<el-tooltip slot="label" effect="light" content="A list of backtest samples, you can use it by copying" placement="bottom-start">
+          <span  class="tmp">Sample Backtests</span>
+        </el-tooltip>
+						<sample
 							ref="sampleChild"
 							@goToHistoryForm="goToHistoryForm"
 							@refHistoryForm="refHistoryForm"

@@ -30,6 +30,7 @@
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
+						<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
 							v-model="tech.condition"
 							filterable
@@ -43,15 +44,18 @@
 							>
 							</el-option>
 						</el-select>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="value">
+						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							@input="setDesciption"
 							v-model="tech.value"
 							placeholder="Input Value"
 						></el-input>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 			</div>

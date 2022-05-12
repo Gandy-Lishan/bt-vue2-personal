@@ -16,6 +16,7 @@
 						label=" "
 						@change="setRadio"
 					></el-radio>
+					<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 					<el-select
 						v-model="tech.comparison"
 						size="mini"
@@ -32,9 +33,11 @@
 						>
 						</el-option>
 					</el-select>
+					</el-tooltip>
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
+												<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
 							v-model="tech.condition"
 							:disabled="!(radio === ' ')"
@@ -50,6 +53,7 @@
 							>
 							</el-option>
 						</el-select>
+					</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
@@ -59,6 +63,7 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="period">
+												<el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
 						<el-input
 							v-model="tech.period"
 							:disabled="!(radio === ' ')"
@@ -66,6 +71,7 @@
 							@blur="setDesciption"
 							placeholder="Input Period"
 						></el-input>
+												</el-tooltip>
 					</el-form-item>
 				</div>
 			</div>
@@ -79,16 +85,19 @@
 				</el-form-item>
 				<div class="conditionInput">
 					<el-form-item prop="ma_period">
+												<el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
 						<el-input
 							:disabled="!(radio === 'Moving Average')"
 							v-model="tech.ma_period"
 							placeholder="Input Period"
 							@input="getMaPeriodValue"
 						></el-input>
+												</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionSelect">
 					<el-form-item>
+												<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
 							v-model="tech.condition"
 							filterable
@@ -104,6 +113,7 @@
 							>
 							</el-option>
 						</el-select>
+												</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
@@ -113,6 +123,7 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="maPeriod">
+												<el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
 						<el-input
 							v-model="tech.maPeriod"
 							:disabled="!(radio === 'Moving Average')"
@@ -120,6 +131,7 @@
 							@input="getMaValue"
 							@blur="setDesciption"
 						></el-input>
+												</el-tooltip>
 					</el-form-item>
 				</div>
 			</div>

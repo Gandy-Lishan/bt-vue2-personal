@@ -31,7 +31,7 @@
 					</el-table-column>
 					<el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
-							<el-tooltip placement="top" effect="dark" transition>
+							<el-tooltip placement="bottom" effect="dark" transition>
 								<div slot="content" v-for="(item,index) in scope.row.entry_description" :key="index">
 									{{ item }}<br/>
 								</div>

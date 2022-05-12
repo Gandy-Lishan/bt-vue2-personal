@@ -12,6 +12,7 @@
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio v-model="radio" label=" "></el-radio>
+					<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 					<el-select
 						v-model="tech.comparison"
 						size="mini"
@@ -27,9 +28,11 @@
 						>
 						</el-option>
 					</el-select>
+					</el-tooltip>
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
+						<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
 							v-model="tech.condition"
 							size="mini"
@@ -44,10 +47,12 @@
 							>
 							</el-option>
 						</el-select>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionSelect">
 					<el-form-item>
+						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-select
 							v-model="tech.value"
 							size="mini"
@@ -63,6 +68,7 @@
 							>
 							</el-option>
 						</el-select>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 			</div>

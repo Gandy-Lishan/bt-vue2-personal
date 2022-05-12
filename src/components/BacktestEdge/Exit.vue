@@ -1,9 +1,12 @@
 <template>
 	<div class="exit-container">
 		<div class="signal-option-box">
-			<p class="criteria-title">Exit Criteria</p>
+						<el-tooltip style="diaplay:inline" effect="light" content="All params of exit criteria" placement="bottom">
+			<p class="criteria-title">Exit Criteria</p></el-tooltip>
 			<div class="signal-container">
-				<span class="scoreNote" v-if="relation === 2">Score:</span>
+				<span class="scoreNote" v-if="relation === 2"><el-tooltip style="diaplay:inline" effect="light" content="Only use in multi signals and the value <= the len of signals" placement="bottom">
+                       <span>Score:</span>
+                        </el-tooltip></span>
 				<el-input
 					size="mini"
 					v-if="relation === 2"
@@ -13,7 +16,9 @@
 					min="1"
 					:max="editableTabsValue"
 				></el-input>
-				<span class="scoreNote" v-if="relation === 3">Period:</span>
+				<span class="scoreNote" v-if="relation === 3"><el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
+                       <span>Period:</span>
+                        </el-tooltip></span>
 				<el-input
 					size="mini"
 					v-if="relation === 3"
@@ -297,7 +302,9 @@
 							"
 						></trailing-stop-like>
 						<div class="delay-bar-box">
-							 <el-checkbox v-model="isDelayBar">Delay of Bars</el-checkbox>
+							 <el-checkbox v-model="isDelayBar"><el-tooltip style="diaplay:inline" effect="light" content="The number of bars delayed" placement="bottom">
+                       <span>Delay of Bars</span>
+                        </el-tooltip></el-checkbox>
 							<el-input
 								size="mini"
 								v-model="delay_bars"
