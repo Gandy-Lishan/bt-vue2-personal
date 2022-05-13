@@ -83,16 +83,8 @@ const config = {
 			// 		'^/CHART_DATA_API': '/'
 			// 	}
 			// },
-			'/demo': {
-				target: 'http://3.140.194.24:8000',
-				// ws:true,
-				changeOrigin: true,
-				pathRewrite: {
-					'^/demo': '/demo'
-				}
-			},
 			'/dev': {
-				//target: 'http://18.216.210.200',
+				//target: 'http://10.131.3.17:8000',
 				target: 'http://10.131.3.17:8000', 
 				//target: 'http://3.140.194.24:8000',
 				// ws:true,
@@ -109,14 +101,6 @@ const config = {
 			// 	'^/BATE_LOGIN_API': '/'
 			// 	}
 			// },
-			'/rundev': {
-				target: 'http://3.140.194.24:8000',
-				// ws:true,
-				changeOrigin: true,
-				pathRewrite: {
-					'^/rundev': '/rundev'
-				}
-			}
 		}
 	}
 }

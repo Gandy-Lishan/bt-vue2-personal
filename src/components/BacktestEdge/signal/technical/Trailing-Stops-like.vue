@@ -140,7 +140,7 @@ export default {
 			this.description = `${criteria} ${direction} ${relation} ${techVal} ${radio} ${condition} ${this.tech.value}`
 			console.log(this.description)
 		},
-		saveCondition() {
+		saveCondition(index) {
 			let checked = true
 			if(this.exitItemCheck) {
 				return checked = true

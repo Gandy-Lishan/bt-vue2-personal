@@ -374,6 +374,7 @@ export default {
 					delete newVal.results
 					newVal.commission = (newVal.commission * 100).toFixed(2)
 					newVal.slippage = (Number(newVal.slippage)).toFixed(2)
+					//console.log("bd",bd);
 				    this.bd = Object.assign(this.bd, newVal)
 					CIQ.hideMarker()
 					this.getFrequency(newVal.frequency)
@@ -765,8 +766,9 @@ export default {
 	    let riskStr = `${this.isTakeProfit?this.tp:''}/${this.isStopLoss?this.sl:''}/${this.isTimeInMarket?this.tim:''}`
 	    bd.risk_control = riskStr
 		this.setDesciption()
-		console.log("risk control",bd.risk_control);
+		
 		}
+		console.log("bd",bd);
 						this.$store.commit('setBd', bd)
 						return checked
 					} else {
