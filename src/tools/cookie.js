@@ -2,14 +2,14 @@ import Cookies from 'vue-cookie'
 import CryptoJS from 'crypto-js'
 const COOKIE_DOMAIN = '.sentdevsite.com'
 const COOKIE_HASH = '49Xsc8027bdNU3174b2cbb92dwWWExa9'
-const MY_DOMAIN = 'host.sentdevsite.com'
+const MY_DOMAIN = '.sentimentrader.com'
 // const cookies = new Cookies(COOKIE_HASH);
 export const setCookieData = (data, isLocal) => {
 	const ciphertext =
 		data === null
 			? ''
 			: CryptoJS.AES.encrypt(JSON.stringify(data), COOKIE_HASH).toString()
-	return Cookies.set('my-test-id', ciphertext, {
+	return Cookies.set('sentimen_session', ciphertext, {
 		path: '/',
 		domain: isLocal ? 'localhost' : MY_DOMAIN
 	})

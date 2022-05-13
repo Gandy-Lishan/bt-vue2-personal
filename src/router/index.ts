@@ -33,6 +33,8 @@ router.beforeEach((to, from, next) => {
 		try {
 			userId = document.baseURI.split('?')[1]
 			userId = userId.split('=')[1]
+			userId = decodeURIComponent(userId)
+			cookies.set('userid',encodeURIComponent(userId))
 			axios
 			.get('/dev/user/?userid=' + userId)
 			.then((res) => {
@@ -68,6 +70,8 @@ router.beforeEach((to, from, next) => {
 		} catch (error) {
 			const data = getCookieData()
 			userId = data.account_code
+			// cookies.set('userid',userId)
+
 			axios
 			.post('/dev/user/')
 			.then((res) => {

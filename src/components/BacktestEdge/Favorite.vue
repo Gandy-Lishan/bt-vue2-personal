@@ -31,20 +31,37 @@
 					</el-table-column>
 					<el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
-							<el-tooltip placement="bottom" effect="dark" transition>
+								<el-tooltip placement="top" effect="dark" transition  v-if="(scope.row.entry_description) instanceof Array">
 								<div slot="content" v-for="(item,index) in scope.row.entry_description" :key="index">
 									{{ item }}<br/>
 								</div>
 								<div v-for="(item,index) in scope.row.entry_description" :key="index">
-								{{ item }}<br/>
+								{{ scope.row.entry_description[1] }}<br/>
 								</div>
 							</el-tooltip>
-							<el-tooltip placement="bottom" effect="light" transition>
+							   <el-tooltip placement="top" effect="dark" transition v-if="!((scope.row.entry_description) instanceof Array)">
+								<div slot="content">
+									{{ scope.row.entry_description }}<br/>
+								</div>
+								<div>
+								{{ scope.row.entry_description }}<br/>
+								</div>
+							</el-tooltip>
+							<br/>
+							<el-tooltip placement="bottom" effect="light" transition v-if="(scope.row.exit_description) instanceof Array">
 								<div slot="content" v-for="(item,index) in scope.row.exit_description" :key="index">
 									{{ item }}<br/>
 								</div>
 								<div  v-for="(item,index) in scope.row.exit_description" :key="index">
-									{{ item }}<br/>
+									{{ scope.row.exit_description[1] || scope.row.exit_description[0] }}<br/>
+								</div>
+							</el-tooltip>
+								<el-tooltip placement="top" effect="light" transition v-if="!((scope.row.exit_description) instanceof Array)">
+								<div slot="content">
+									{{ scope.row.exit_description }}<br/>
+								</div>
+								<div>
+								{{ scope.row.exit_description }}<br/>
 								</div>
 							</el-tooltip>
 						</template>
@@ -305,17 +322,13 @@ async getFavoriteList(strategy) {
 					this.backtestList = res.data.results
 					if (this.backtestList.length != 0) {
 						this.backtestList.forEach((element) => {
-							if (element.result !== '')
+														if (element.result !== '')
 								element.result = JSON.parse(element.result)
 								if(element.entry_description.indexOf("[") != -1) {
 									element.entry_description = JSON.parse(element.entry_description)
-								}else{
-									element.entry_description = [entry_description]
 								}
 								if(element.exit_description.indexOf("[") != -1) {
 									element.exit_description = JSON.parse(element.exit_description)
-								}else{
-									element.exit_description = [exit_description]
 								}
 						})
 					}
