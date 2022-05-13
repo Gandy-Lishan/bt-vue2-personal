@@ -16,6 +16,7 @@
 						label=" "
 						@change="setRadio"
 					></el-radio>
+					<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 					<el-select
 						v-model="tech.comparison"
 						size="mini"
@@ -32,9 +33,11 @@
 						>
 						</el-option>
 					</el-select>
+					</el-tooltip>
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
+												<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
 							v-model="tech.condition"
 							:disabled="!(radio === ' ')"
@@ -50,6 +53,7 @@
 							>
 							</el-option>
 						</el-select>
+					</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
@@ -59,6 +63,7 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="period">
+												<el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
 						<el-input
 							v-model="tech.period"
 							:disabled="!(radio === ' ')"
@@ -66,6 +71,7 @@
 							@blur="setDesciption"
 							placeholder="Input Period"
 						></el-input>
+												</el-tooltip>
 					</el-form-item>
 				</div>
 			</div>
@@ -79,16 +85,19 @@
 				</el-form-item>
 				<div class="conditionInput">
 					<el-form-item prop="ma_period">
+												<el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
 						<el-input
 							:disabled="!(radio === 'Moving Average')"
 							v-model="tech.ma_period"
 							placeholder="Input Period"
 							@input="getMaPeriodValue"
 						></el-input>
+												</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionSelect">
 					<el-form-item>
+												<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
 							v-model="tech.condition"
 							filterable
@@ -104,6 +113,7 @@
 							>
 							</el-option>
 						</el-select>
+												</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
@@ -113,6 +123,7 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="maPeriod">
+												<el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
 						<el-input
 							v-model="tech.maPeriod"
 							:disabled="!(radio === 'Moving Average')"
@@ -120,6 +131,7 @@
 							@input="getMaValue"
 							@blur="setDesciption"
 						></el-input>
+												</el-tooltip>
 					</el-form-item>
 				</div>
 			</div>
@@ -140,7 +152,10 @@ export default {
 		direction: String,
 		isActived: Boolean,
 		exitItemCheck: Boolean,
-		relation: Number
+		relation: [String, Number],
+score: [String, Number],
+period: [String, Number],
+delay_bars: [String, Number]
 	},
 	data() {
 		let validatePeriod = (rule, value, callback) => {
@@ -327,10 +342,13 @@ export default {
 		setDesciption(index) {
 			let criteria = ''
 			let direction = ''
+			if(index === 0) {
+				
 			if (this.criteria == 'entry') {
 				criteria = 'E:'
 				direction = this.direction + ':'
-			} else if (this.criteria == 'exit') {
+			}
+			if (this.criteria == 'exit') {
 				criteria = 'X:'
 
 				if (this.direction == 'Long') {
@@ -338,6 +356,35 @@ export default {
 				} else if (this.direction == 'Short') {
 					direction = 'Cover:'
 				}
+			}
+			let relation = ''
+				let score = ''
+				let period = ''
+				switch (this.relation) {
+					case 0:
+						relation = "Only Risk;"
+						break;
+					case 1:
+						relation = "Single Signal;"
+						break;
+					case 2:
+						relation = "SameBar Multi Signal;"
+						score = 'Score: ' + this.score
+						break;
+					case 3:
+						relation = "TimeOrder Multi Signal;"
+						period = 'Period: ' + this.period
+						break;
+					default:
+						break;
+				}
+				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars:''
+				let commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
+				   let desObj = {}
+					desObj.criteria = this.criteria
+					desObj.description = commentDes
+					desObj.index = index
+					this.$store.commit('saveDescription', desObj)
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let period =
@@ -368,24 +415,7 @@ export default {
 					break;
 			}
 			let condition = this.conditions[this.tech.condition].label
-			let relation = ''
-			switch (this.relation) {
-				case 0:
-					relation = "Only Risk:"
-					break;
-				case 1:
-					relation = ""
-					break;
-				case 2:
-					relation = "SameBar:"
-					break;
-				case 3:
-					relation = "TimeOrder:"
-					break;
-				default:
-					break;
-			}
-			this.description = `${criteria} ${direction} ${relation} ${comparison} ${ma_period} ${condition} Moving Average ${period}`
+			this.description = `${comparison} ${ma_period} ${condition} Moving Average ${period}`
 			console.log(this.description);
 		},
 		getMaPeriodValue(val) {
@@ -612,7 +642,7 @@ export default {
 					this.$store.commit('saveCondition', tech)
 					let desObj = {}
 					desObj.criteria = this.criteria
-					desObj.index = index
+					desObj.index = index + 1
 					desObj.description = this.description
 					this.$store.commit('saveDescription', desObj)
 					return checked
@@ -644,7 +674,7 @@ export default {
 					let desObj = {}
 					desObj.criteria = this.criteria
 					desObj.description = this.description
-					desObj.index = index
+					desObj.index = index + 1
 					this.$store.commit('saveDescription', desObj)
 					return checked
 				} else {

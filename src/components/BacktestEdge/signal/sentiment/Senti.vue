@@ -3,12 +3,26 @@
 		<el-form :model="senti" :rules="rules" ref="sentiForm">
 			<div class="ids-container">
 				<el-form-item label="Extreme Optimism" prop="extreme_optimism">
+				<span slot="label">
+                     <span class="span-box">
+                        <el-tooltip style="diaplay:inline" effect="light" content="The extreme optimism value of the current indicator" placement="bottom">
+                       <span>Extreme Optimism:</span>
+                        </el-tooltip>
+                     </span>
+                   </span>
 					<el-input
 						disabled
 						v-model="senti.extreme_optimism"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="Extreme Pessimism" prop="extreme_pessimism">
+									<span slot="label">
+                     <span class="span-box">
+                        <el-tooltip style="diaplay:inline" effect="light" content="The extreme pessimism value of the current indicator" placement="bottom">
+                       <span>Extreme Pessimism:</span>
+                        </el-tooltip>
+                     </span>
+                   </span>
 					<el-input
 						disabled
 						v-model="senti.extreme_pessimism"
@@ -25,6 +39,7 @@
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
+						<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
 							:disabled="!(conditionRadio === 'Sentiment Value')"
 							v-model="senti.condition"
@@ -39,16 +54,19 @@
 							>
 							</el-option>
 						</el-select>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="value">
+						 <el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							:disabled="!(conditionRadio === 'Sentiment Value')"
 							@input="setDesciption"
 							v-model="senti.value"
 							placeholder="Input Value"
 						></el-input>
+						 </el-tooltip>
 					</el-form-item>
 				</div>
 			</div>
@@ -63,16 +81,19 @@
 				</el-form-item>
 				<div class="conditionInput">
 					<el-form-item prop="period">
+						<el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
 						<el-input
 							@input="setPeriod"
 							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
 							placeholder="Input Period"
 							v-model="senti.period"
 						></el-input>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionSelect">
 					<el-form-item>
+						<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
 							v-model="senti.condition"
 							filterable
@@ -87,16 +108,19 @@
 							>
 							</el-option>
 						</el-select>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="maValue">
+						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
 							v-model="senti.maValue"
 							placeholder="Input Value"
 							@input="change($event)"
 						></el-input>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 			</div>
@@ -116,7 +140,10 @@ export default {
 		panelIndex: Number,
 		direction: String,
 		exitItemCheck: Boolean,
-		relation: Number
+		relation: [String, Number],
+		score: [String, Number],
+		period: [String, Number],
+		delay_bars: [String, Number],
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -270,16 +297,48 @@ export default {
 		setDesciption(index) {
 			let criteria = ''
 			let direction = ''
-			if (this.criteria == 'entry') {
-				criteria = 'E:'
-				direction = this.direction + ':'
-			} else if (this.criteria == 'exit') {
-				criteria = 'X:'
-				if (this.direction == 'Long') {
-					direction = 'Close:'
-				} else if (this.direction == 'Short') {
-					direction = 'Cover:'
+			if(index === 0) {
+				if (this.criteria == 'entry') {
+					criteria = 'E:'
+					direction = this.direction + ';'
 				}
+				if (this.criteria == 'exit') {
+					criteria = 'X:'
+					if (this.direction == 'Long') {
+						direction = 'Close;'
+					} else if (this.direction == 'Short') {
+						direction = 'Cover;'
+					}
+				}
+				let relation = ''
+				let score = ''
+				let period = ''
+				switch (this.relation) {
+					case 0:
+						relation = "Only Risk;"
+						break;
+					case 1:
+						relation = "Single Signal;"
+						break;
+					case 2:
+						relation = "SameBar Multi Signal;"
+						score = 'Score: ' + this.score
+						break;
+					case 3:
+						relation = "TimeOrder Multi Signal;"
+						period = 'Period: ' + this.period
+						break;
+					default:
+						break;
+				}
+				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars:''
+				let commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
+				   let desObj = {}
+					desObj.criteria = this.criteria
+					desObj.description = commentDes
+					desObj.index = index
+					this.$store.commit('saveDescription', desObj)
+
 			}
 			let ma = this.senti.period ? 'moving average' : ''
 			let period = this.senti.period ? this.senti.period : ''
@@ -289,24 +348,7 @@ export default {
 				this.conditionRadio === 'Sentiment Value'
 					? this.senti.value
 					: this.senti.maValue
-			let relation = ''
-			switch (this.relation) {
-				case 0:
-					relation = "Only Risk:"
-					break;
-				case 1:
-					relation = ""
-					break;
-				case 2:
-					relation = "SameBar:"
-					break;
-				case 3:
-					relation = "TimeOrder:"
-					break;
-				default:
-					break;
-			}
-			this.description = `${criteria} ${direction} ${relation} ${sentiVal} ${ma} ${period} ${condition} ${value}`
+			this.description = `${sentiVal} ${ma} ${period} ${condition} ${value}`
 			console.log("Senti描述",this.description);
 		},
 		getConditionRadio(val) {
@@ -432,7 +474,7 @@ export default {
 					let desObj = {}
 					desObj.criteria = this.criteria
 					desObj.description = this.description
-					desObj.index = index
+					desObj.index = index + 1
 					this.$store.commit('saveDescription', desObj)
 					// 定义一个 vuex 新事件用于保存 condition数据
 					this.$store.commit('saveCondition', senti)

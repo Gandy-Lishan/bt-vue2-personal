@@ -1,9 +1,12 @@
 <template>
 	<div class="exit-container">
 		<div class="signal-option-box">
-			<p class="criteria-title">Exit Criteria</p>
+						<el-tooltip style="diaplay:inline" effect="light" content="All params of exit criteria" placement="bottom">
+			<p class="criteria-title">Exit Criteria</p></el-tooltip>
 			<div class="signal-container">
-				<span class="scoreNote" v-if="relation === 2">Score:</span>
+				<span class="scoreNote" v-if="relation === 2"><el-tooltip style="diaplay:inline" effect="light" content="Only use in multi signals and the value <= the len of signals" placement="bottom">
+                       <span>Score:</span>
+                        </el-tooltip></span>
 				<el-input
 					size="mini"
 					v-if="relation === 2"
@@ -13,7 +16,9 @@
 					min="1"
 					:max="editableTabsValue"
 				></el-input>
-				<span class="scoreNote" v-if="relation === 3">Period:</span>
+				<span class="scoreNote" v-if="relation === 3"><el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
+                       <span>Period:</span>
+                        </el-tooltip></span>
 				<el-input
 					size="mini"
 					v-if="relation === 3"
@@ -67,12 +72,16 @@
 							:exitItemCheck="exitItemCheck"
 							ref="sentiChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
 							v-show="indicatorRadioArr[index] === 'sentiment'"
 						></senti>
 						<cci
 							v-bind="$attrs"
+							
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'CCI_like'
@@ -82,6 +91,9 @@
 							:criteria="'exit'"
 							ref="cciChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -100,6 +112,9 @@
 							:criteria="'exit'"
 							ref="rsiChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -118,6 +133,9 @@
 							:criteria="'exit'"
 							ref="macdChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -136,6 +154,9 @@
 							:criteria="'exit'"
 							ref="maChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -163,6 +184,9 @@
 							:criteria="'exit'"
 							ref="bollBandsLikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -181,6 +205,9 @@
 							:criteria="'exit'"
 							ref="EFTLikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -199,6 +226,9 @@
 							:criteria="'exit'"
 							ref="stochasticsLikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -217,6 +247,9 @@
 							:criteria="'exit'"
 							ref="ADXLikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -235,6 +268,9 @@
 							:criteria="'exit'"
 							ref="ERILikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -253,6 +289,9 @@
 							:criteria="'exit'"
 							ref="aligatorLikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -271,6 +310,9 @@
 							:criteria="'exit'"
 							ref="LRFLikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -282,13 +324,16 @@
 							v-bind="$attrs"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
-								techIndiValue[index] === 'Trailingstop_like'
+								techIndiObj[index] === 'Trailingstop_like'
 							"
 							:panelIndex="index"
 							:exitItemCheck="exitItemCheck"
 							:criteria="'exit'"
 							ref="trailingStopLikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -297,7 +342,9 @@
 							"
 						></trailing-stop-like>
 						<div class="delay-bar-box">
-							 <el-checkbox v-model="isDelayBar">Delay of Bars</el-checkbox>
+							 <el-checkbox v-model="isDelayBar"><el-tooltip style="diaplay:inline" effect="light" content="The number of bars delayed" placement="bottom">
+                       <span>Delay of Bars</span>
+                        </el-tooltip></el-checkbox>
 							<el-input
 								size="mini"
 								v-model="delay_bars"
@@ -366,7 +413,7 @@ export default {
 			tabIndex: 1,
 			score: 1,
 			signals_in_market: 1,
-			techIndiObj: [''],
+			techIndiObj: new Array(5).fill(''),
 			indicatorRadioArr: ['sentiment'],
 			refs: {},
             indicatorUrlArr: new Array(5).fill(''),

@@ -280,7 +280,7 @@
 			<el-tab-pane label="Trades" name="second">
 				<div class="trades-container">
 					<el-table
-						:data="tradesData"
+						:data="tradesData.slice(18*(queryInfo.page-1),queryInfo.page*18)"
 						style="width: 100%"
 						border
 						:span-method="objectSpanMethod"
@@ -290,6 +290,7 @@
 							prop="trade_number"
 							show-overflow-tooltip
 							label="Trade #"
+							width="150px"
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -300,6 +301,7 @@
 							prop="Date"
 							label="Trade Date"
 							align="center"
+							width="150px"
 							show-overflow-tooltip
 						>
 						</el-table-column>
@@ -307,6 +309,7 @@
 							prop="TradeStatus"
 							label="Action"
 							align="center"
+							width="150px"
 							show-overflow-tooltip
 						>
 						</el-table-column>
@@ -316,10 +319,16 @@
 							align="center"
 							show-overflow-tooltip
 						>
+						<template slot-scope="scope">
+							<div v-for="(item, index) in scope.row.Indicator" :key="index">
+								<p>{{item}}</p>
+							</div>
+						</template>
 						</el-table-column>
 						<el-table-column
 							prop="TradePrice"
 							label="Trade Price"
+							width="150px"
 							align="center"
 						>
 						</el-table-column>
@@ -327,6 +336,7 @@
 						<el-table-column
 							prop="TradeReturn"
 							label="Trade Return %"
+							width="150px"
 							align="center"
 							show-overflow-tooltip
 						>
@@ -343,6 +353,7 @@
 						<el-table-column
 							prop="Return"
 							label="Total Return %"
+							width="150px"
 							align="center"
 							show-overflow-tooltip
 						>
@@ -357,6 +368,15 @@
 							</template>
 						</el-table-column>
 					</el-table>
+						
+				   <el-pagination
+					@current-change="handleCurrentChange"
+					:current-page="queryInfo.page"
+					:page-size="18"
+					layout="total, prev, pager, next"
+					:total="queryInfo.total"
+				    >
+				</el-pagination>
 				</div>
 			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
@@ -378,7 +398,11 @@ export default {
 			monthReturnImgUrl: '',
 			annualReturnImgUrl: '',
 			loading: false,
-			tradesData: []
+			tradesData: [],
+			queryInfo: {
+				total: 0,
+				page: 1
+			}
 		}
 	},
 	created() {
@@ -492,6 +516,7 @@ export default {
 
 								}
 							}
+							vm.queryInfo.total = initalData['Trades'].length
 							vm.tradesData = initalData['Trades']
 							console.log('tradesData', vm.tradesData)
 							// ---------------------------------------- end ----------------------------------
@@ -606,6 +631,10 @@ export default {
 			// 		row.Return = 'none'
 			// 	}
 			// }
+		},
+		handleCurrentChange(page) {
+			this.queryInfo.page = page
+			console.log('tradesdata的页数',page)
 		}
 	}
 }

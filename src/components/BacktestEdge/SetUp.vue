@@ -8,25 +8,53 @@
 		>
 			<el-row>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12">
-					<el-form-item label="Starting Capital:" prop="capital">
+					<el-form-item prop="capital">
+						<span slot="label">
+                     <span class="span-box">
+                        <el-tooltip style="diaplay:inline" effect="light" content="Start cash" placement="bottom">
+                       <span>Starting Capital:</span>
+                        </el-tooltip>
+                     </span>
+                   </span>
 						<el-input
 							v-model="bd.capital"
 							@input="validateStartingCapital"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="Commission:" prop="commission">
+					<el-form-item prop="commission">
+					<span slot="label">
+                     <span class="span-box">
+                        <el-tooltip style="diaplay:inline" effect="light" content="Fees for a single transaction" placement="bottom">
+                       <span>Commission:</span>
+                        </el-tooltip>
+                     </span>
+                   </span>
 						<el-input
 							v-model="bd.commission"
 							@change="getCommission"
 						></el-input>
 					</el-form-item>
 					<span class="comUnitNote">(%)</span>
-					<el-form-item label="Slippage:" prop="slippage">
+					<el-form-item prop="slippage">
+						<span slot="label">
+                     <span class="span-box">
+                        <el-tooltip style="diaplay:inline" effect="light" content="The range of the target trading price" placement="bottom">
+                       <span>Slippage:</span>
+                        </el-tooltip>
+                     </span>
+                   </span>
 						<el-input
 							v-model="bd.slippage"
 						></el-input> </el-form-item
 					><span class="sliUnitNote">(per trade)</span>
-					<el-form-item label="Benchmark:" prop="benchmark">
+					<el-form-item prop="benchmark">
+					<span slot="label">
+                     <span class="span-box">
+                        <el-tooltip style="diaplay:inline" effect="light" content="The stock name used in backtest benchmark without strategy" placement="bottom">
+                       <span>Benchmark:</span>
+                        </el-tooltip>
+                     </span>
+                   </span>
 						<div class="enterSymbolBox">
 							<el-select
 								v-model="bd.benchmark"
@@ -52,7 +80,14 @@
 					</el-form-item>
 				</el-col>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12" :span="2">
-					<el-form-item label="Backtest Period:" prop="backtestHistory">
+					<el-form-item prop="backtestHistory">
+					<span slot="label">
+                     <span class="span-box">
+                        <el-tooltip style="diaplay:inline" effect="light" content="Backtest run time" placement="bottom">
+                       <span>Backtest Period:</span>
+                        </el-tooltip>
+                     </span>
+                   </span>
 						<div class="selectBox">
 							<el-select
 								@change="getBacktestHistory(historyValue)"
@@ -71,7 +106,14 @@
 						</div>
 					</el-form-item>
 					<div class="dateBox">
-						<el-form-item label="Start date:">
+						<el-form-item>
+					<span slot="label">
+                     <span class="span-box">
+                        <el-tooltip style="diaplay:inline" effect="light" content="The first day of backtest" placement="bottom">
+                       <span>Start date:</span>
+                        </el-tooltip>
+                     </span>
+                   </span>
 							<el-date-picker
 								v-if="historyValue === 22"
 								v-model="bd.start_date"
@@ -85,7 +127,14 @@
 						</el-form-item>
 					</div>
 					<div class="dateBox">
-						<el-form-item label="End date:" prop="endDate">
+						<el-form-item prop="endDate">
+						<span slot="label">
+                     <span class="span-box">
+                        <el-tooltip style="diaplay:inline" effect="light" content="The last day of backtest" placement="bottom">
+                       <span>End date:</span>
+                        </el-tooltip>
+                     </span>
+                   </span>
 							<el-date-picker
 								v-if="historyValue === 22"
 								v-model="bd.end_date"
@@ -98,6 +147,13 @@
 						</el-form-item>
 					</div>
 					<el-form-item label="Timeframe:" prop="frequency">
+					<span slot="label">
+                     <span class="span-box">
+                        <el-tooltip style="diaplay:inline" effect="light" content="Time period of backtest" placement="bottom">
+                       <span>Timeframe:</span>
+                        </el-tooltip>
+                     </span>
+                   </span>
 						<div class="selectBox">
 							<el-select
 								v-model="bd.frequency"
@@ -123,12 +179,26 @@
 						prop="name"
 						placeholder="Give the backtest a name"
 					>
+					<span slot="label">
+                     <span class="span-box">
+                        <el-tooltip style="diaplay:inline" effect="light" content="Backtest name" placement="bottom">
+                       <span>Backtest Name:</span>
+                        </el-tooltip>
+                     </span>
+                   </span>
 						<el-input v-model="bd.name" oninput="value=value.replace(/[\+]/g,'')"></el-input>
 					</el-form-item>
 				</div>
 			</el-row>
 			<div>
-				<el-form-item label="Direction:" prop="direction">
+				<el-form-item prop="direction">
+					<span slot="label">
+                     <span class="span-box">
+                        <el-tooltip style="diaplay:inline" effect="light" content="Direction of approach market" placement="bottom">
+                       <span>Direction:</span>
+                        </el-tooltip>
+                     </span>
+                   </span>
 					<el-radio-group v-model="bd.direction" @change="getDirection">
 						<el-radio label="Long">Long</el-radio>
 						<el-radio label="Short">Short</el-radio>
@@ -137,19 +207,24 @@
 			</div>
 			<div class="risk-control-container border-set">
 						 <div class="riskItem">
-							 
     <el-checkbox v-model="isRiskControl" border @change="selectRiskControl">Risk Control at Exit:</el-checkbox>
 						 </div>
 	<div class="tpContainer riskItem" v-if="isRiskControl">
-    <el-checkbox v-model="isTakeProfit" @change="selectRiskControl">Take Profit</el-checkbox>
+    <el-checkbox v-model="isTakeProfit" @change="selectRiskControl"><el-tooltip style="diaplay:inline" effect="light" content="Take profit in risk_control" placement="bottom">
+                       <span>Take Profit</span>
+                        </el-tooltip></el-checkbox>
 	<el-input v-model="tp" @input="setDesciption"></el-input><p style="margin:0px">(%)</p>
 	</div>
 		<div class="slContainer riskItem"  v-if="isRiskControl">
-    <el-checkbox v-model="isStopLoss" @change="selectRiskControl">Stop Loss</el-checkbox>
+    <el-checkbox v-model="isStopLoss" @change="selectRiskControl"><el-tooltip style="diaplay:inline" effect="light" content="Stop loss in risk_control" placement="bottom">
+                       <span>Stop Loss</span>
+                        </el-tooltip></el-checkbox>
 	<el-input v-model="sl" @input="setDesciption"></el-input><p>(%)</p>
 		</div>
 		<div class="timContainer riskItem"  v-if="isRiskControl">
-	    <el-checkbox v-model="isTimeInMarket" @change="selectRiskControl">Time In Market</el-checkbox>
+	    <el-checkbox v-model="isTimeInMarket" @change="selectRiskControl"><el-tooltip style="diaplay:inline" effect="light" content="Stay time in the market in risk_control" placement="bottom">
+                       <span>Time In Market</span>
+                        </el-tooltip></el-checkbox>
 		<el-input v-model="tim" @input="setDesciption"></el-input><p>(Bars)</p>
 		</div>
 			</div>

@@ -57,7 +57,7 @@
 									{{ item }}<br/>
 								</div>
 								<div v-for="(item,index) in scope.row.entry_description" :key="index">
-								{{ item }}<br/>
+								{{ scope.row.entry_description[1] }}<br/>
 								</div>
 							</el-tooltip>
 							   <el-tooltip placement="top" effect="dark" transition v-if="!((scope.row.entry_description) instanceof Array)">
@@ -74,7 +74,7 @@
 									{{ item }}<br/>
 								</div>
 								<div  v-for="(item,index) in scope.row.exit_description" :key="index">
-									{{ item }}<br/>
+									{{ scope.row.exit_description[1] || scope.row.exit_description[0] }}<br/>
 								</div>
 							</el-tooltip>
 								<el-tooltip placement="top" effect="light" transition v-if="!((scope.row.exit_description) instanceof Array)">

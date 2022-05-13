@@ -1,9 +1,14 @@
 <template>
 	<div class="entry-container">
 		<div class="signal-option-box">
-			<p class="criteria-title">Entry Criteria</p>
+			<el-tooltip style="diaplay:inline" effect="light" content="All params of entry criteria" placement="bottom">
+			<p class="criteria-title">Entry Criteria</p></el-tooltip>
 			<div class="signal-container">
-				<span class="scoreNote" v-if="relation === 2">Score:</span>
+				<span class="scoreNote" v-if="relation === 2">
+					<el-tooltip style="diaplay:inline" effect="light" content="Only use in multi signals and the value <= the len of signals" placement="bottom">
+                       <span>Score:</span>
+                        </el-tooltip>
+				</span>
 				<el-input
 					size="mini"
 					v-if="relation === 2"
@@ -13,7 +18,9 @@
 					min="1"
 					:max="editableTabsValue"
 				></el-input>
-			<span class="scoreNote" v-if="relation === 3">Period:</span>
+			<span class="scoreNote" v-if="relation === 3"><el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
+                       <span>Period:</span>
+                        </el-tooltip></span>
 				<el-input
 					size="mini"
 					v-if="relation === 3"
@@ -67,6 +74,9 @@
 							:exitItemCheck="exitItemCheck"
 							ref="sentiChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
 							v-show="indicatorRadioArr[index] === 'sentiment'"
@@ -82,6 +92,9 @@
 							:criteria="'entry'"
 							ref="cciChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -100,6 +113,9 @@
 							:criteria="'entry'"
 							ref="rsiChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -118,6 +134,9 @@
 							:criteria="'entry'"
 							ref="macdChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -136,6 +155,9 @@
 							:criteria="'entry'"
 							ref="maChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -154,6 +176,9 @@
 							:criteria="'entry'"
 							ref="bollBandsLikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -172,6 +197,9 @@
 							:criteria="'entry'"
 							ref="EFTLikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -190,6 +218,9 @@
 							:criteria="'entry'"
 							ref="stochasticsLikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -208,6 +239,9 @@
 							:criteria="'entry'"
 							ref="ADXLikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -226,6 +260,9 @@
 							:criteria="'entry'"
 							ref="ERILikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -244,6 +281,9 @@
 							:criteria="'entry'"
 							ref="aligatorLikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -262,6 +302,9 @@
 							:criteria="'entry'"
 							ref="LRFLikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -273,22 +316,27 @@
 							v-bind="$attrs"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
-								techIndiValue[index] === 'Trailingstop_like'
+								techIndiObj[index] === 'Trailingstop_like'
 							"
 							:panelIndex="index"
 							:exitItemCheck="exitItemCheck"
 							:criteria="'entry'"
 							ref="trailingStopLikeChild"
 							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
-								techIndiValue[index] === 'Trailingstop_like'
+								techIndiObj[index] === 'Trailingstop_like'
 							"
 						></trailing-stop-like>
 						<div class="delay-bar-box">
-							 <el-checkbox v-model="isDelayBar">Delay of Bars</el-checkbox>
+							 <el-checkbox v-model="isDelayBar"><el-tooltip style="diaplay:inline" effect="light" content="The number of bars delayed" placement="bottom">
+                       <span>Delay of Bars</span>
+                        </el-tooltip></el-checkbox>
 							<el-input
 								size="mini"
 								v-model="delay_bars"
@@ -353,7 +401,7 @@ export default {
 			tabIndex: 1,
 			score: 1,
 			signals_in_market: 1,
-			techIndiObj: [''],
+			techIndiObj: new Array(5).fill(''),
 			indicatorRadioArr: ['sentiment'],
 			refs: {}, 
 			indicatorUrlArr: new Array(5).fill(''),
@@ -432,6 +480,7 @@ export default {
 		},
 		getTechIndiObj(obj) {
 			this.techIndiObj.splice(obj.index, 1, obj.class)
+			console.log("techinicalindicator的数组", this.techIndiObj)
 		},
 		handleTabsEdit(targetName, action) {
 			if (action === 'add') {
@@ -576,21 +625,21 @@ export default {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			return indi.then((val) => { 
 				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
-				// if(!val) {
-				// 	this.$message({
-				// 	message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
-				// 	type: 'error'
-				// })}
+				if(!val) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
+					type: 'error'
+				})}
 				if (indi) {
 				if (this.indicatorRadioArr[index] === 'sentiment') {
 					this.$refs.sentiChild[index].setDesciption(index)
 					let senti = this.$refs.sentiChild[index].saveCondition(index)
-					// if(!senti) {
-					// this.$message({
-					// message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
-					// type: 'error'
-				    // })
-					// } 
+					if(!senti) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = senti)
 				}
 				if (

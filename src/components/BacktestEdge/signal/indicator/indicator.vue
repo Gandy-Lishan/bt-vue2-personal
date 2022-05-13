@@ -3,12 +3,14 @@
 		<el-form :model="si" ref="siForm" :rules="rules">
 			<div class="indicator-container sentiBox">
 				<el-form-item>
+					<el-tooltip style="diaplay:inline" effect="light" content="The sentiment indicator used by the signal" placement="bottom">
 					<el-radio
 						v-model="indicatorRadio"
 						label="Sentiment Indicators"
 						@change="changeIndicatorChecked"
 					>
 					</el-radio>
+					</el-tooltip>
 				</el-form-item>
 				<el-form-item prop="sentimentIndicator">
 					<div class="indicatorSearchBox">
@@ -28,12 +30,14 @@
 			</div>
 			<div class="indicator-container techBox">
 				<el-form-item>
+					<el-tooltip style="diaplay:inline" effect="light" content="The technical indicator used by the signal" placement="bottom">
 					<el-radio
 						v-model="indicatorRadio"
 						label="Technical Indicators"
 						@change="changeIndicatorChecked"
 					>
 					</el-radio>
+					</el-tooltip>
 				</el-form-item>
 				<el-form-item prop="technicalIndicator">
 					<div class="indicatorSearchBox">
@@ -525,7 +529,7 @@ export default {
 				})
 				let formateList = this.$store.state.formateTechnicalList
 				if (formateList.length === 0) {
-					vm.loadShortLong()
+					formateList = vm.loadShortLong()
 				}
 				for (let i = 0; i < formateList.length; i++) {
 					if (this.si.technicalIndicator === formateList[i].value) {
@@ -642,8 +646,7 @@ export default {
 					vm.si.technicalIndicators = technicalIndicator
 					let formateList = this.$store.state.formateTechnicalList
 					if (formateList.length === 0) {
-						this.loadShortLong()
-						formateList = this.$store.state.formateTechnicalList
+						formateList = vm.loadShortLong()
 					}
 					for (let i = 0; i < formateList.length; i++) {
 						if (technicalIndicator === formateList[i].value) {

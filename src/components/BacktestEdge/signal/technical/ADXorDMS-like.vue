@@ -31,6 +31,7 @@
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
+						<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
 							:disabled="!(conditionRadio === '+DI ADX')"
 							v-model="tech.condition"
@@ -46,16 +47,19 @@
 							>
 							</el-option>
 						</el-select>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="valuePositive">
+						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							:disabled="!(conditionRadio === '+DI ADX')"
 							@input="setDesciption"
 							v-model="tech.valuePositive"
 							placeholder="Input Value"
 						></el-input>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 			</div>
@@ -69,6 +73,7 @@
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
+						<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
 							:disabled="!(conditionRadio === '-DI ADX')"
 							v-model="tech.condition"
@@ -84,16 +89,19 @@
 							>
 							</el-option>
 						</el-select>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="valueNegative">
+						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							:disabled="!(conditionRadio === '-DI ADX')"
 							@input="setDesciption"
 							v-model="tech.valueNegative"
 							placeholder="Input Value"
 						></el-input>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 			</div>
@@ -115,7 +123,10 @@ export default {
 		direction: String,
 		isActived: Boolean,
 		exitItemCheck: Boolean,
-		relation: Number
+		relation: [String, Number],
+		score: [String, Number],
+		period: [String, Number],
+		delay_bars: [String, Number],
 	},
 	data() {
 		var validateValueNegative = (rule, value, callback) => {
@@ -199,10 +210,12 @@ export default {
 		setDesciption: throttle(function(index) {
 			let criteria = ''
 			let direction = ''
+			if(index === 0) {
 			if (this.criteria == 'entry') {
 				criteria = 'E:'
 				direction = this.direction + ':'
-			} else if (this.criteria == 'exit') {
+			}
+			if (this.criteria == 'exit') {
 				criteria = 'X:'
 
 				if (this.direction == 'Long') {
@@ -210,6 +223,35 @@ export default {
 				} else if (this.direction == 'Short') {
 					direction = 'Cover:'
 				}
+			}
+				let relation = ''
+				let score = ''
+				let period = ''
+				switch (this.relation) {
+					case 0:
+						relation = "Only Risk;"
+						break;
+					case 1:
+						relation = "Single Signal;"
+						break;
+					case 2:
+						relation = "SameBar Multi Signal;"
+						score = 'Score: ' + this.score
+						break;
+					case 3:
+						relation = "TimeOrder Multi Signal;"
+						period = 'Period: ' + this.period
+						break;
+					default:
+						break;
+				}
+				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars:''
+				let commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
+				   let desObj = {}
+					desObj.criteria = this.criteria
+					desObj.description = commentDes
+					desObj.index = index
+					this.$store.commit('saveDescription', desObj)
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
@@ -219,24 +261,7 @@ export default {
 				isPositive = '-'
 				value = this.tech.valueNegative
 			}
-			let relation = ''
-			switch (this.relation) {
-				case 0:
-					relation = "Only Risk:"
-					break;
-				case 1:
-					relation = ""
-					break;
-				case 2:
-					relation = "SameBar:"
-					break;
-				case 3:
-					relation = "TimeOrder:"
-					break;
-				default:
-					break;
-			}
-			this.description = `${criteria} ${direction} ${relation} ${isPositive}${techVal} ${condition} ${value}`
+			this.description = `${isPositive}${techVal} ${condition} ${value}`
 		}, 500),
 		getConditionRadio(val) {
 			this.clearFormValidate()
@@ -283,7 +308,7 @@ export default {
 				this.$store.commit('saveCondition', tech)
 				let desObj = {}
 				desObj.criteria = this.criteria
-				desObj.index = index
+				desObj.index = index + 1
 				desObj.description = this.description
 				this.$store.commit('saveDescription', desObj)
 				return checked
