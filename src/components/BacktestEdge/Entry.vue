@@ -316,7 +316,7 @@
 							v-bind="$attrs"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
-								techIndiValue[index] === 'Trailingstop_like'
+								techIndiObj[index] === 'Trailingstop_like'
 							"
 							:panelIndex="index"
 							:exitItemCheck="exitItemCheck"
@@ -330,7 +330,7 @@
 							:techVal="indicatorValArr[index]"
 							v-show="
 								indicatorRadioArr[index] === 'technical' &&
-								techIndiValue[index] === 'Trailingstop_like'
+								techIndiObj[index] === 'Trailingstop_like'
 							"
 						></trailing-stop-like>
 						<div class="delay-bar-box">
@@ -401,7 +401,7 @@ export default {
 			tabIndex: 1,
 			score: 1,
 			signals_in_market: 1,
-			techIndiObj: [''],
+			techIndiObj: new Array(5).fill(''),
 			indicatorRadioArr: ['sentiment'],
 			refs: {}, 
 			indicatorUrlArr: new Array(5).fill(''),
@@ -480,6 +480,7 @@ export default {
 		},
 		getTechIndiObj(obj) {
 			this.techIndiObj.splice(obj.index, 1, obj.class)
+			console.log("techinicalindicator的数组", this.techIndiObj)
 		},
 		handleTabsEdit(targetName, action) {
 			if (action === 'add') {

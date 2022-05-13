@@ -529,7 +529,7 @@ export default {
 				})
 				let formateList = this.$store.state.formateTechnicalList
 				if (formateList.length === 0) {
-					vm.loadShortLong()
+					formateList = vm.loadShortLong()
 				}
 				for (let i = 0; i < formateList.length; i++) {
 					if (this.si.technicalIndicator === formateList[i].value) {
@@ -646,8 +646,7 @@ export default {
 					vm.si.technicalIndicators = technicalIndicator
 					let formateList = this.$store.state.formateTechnicalList
 					if (formateList.length === 0) {
-						this.loadShortLong()
-						formateList = this.$store.state.formateTechnicalList
+						formateList = vm.loadShortLong()
 					}
 					for (let i = 0; i < formateList.length; i++) {
 						if (technicalIndicator === formateList[i].value) {

@@ -81,6 +81,7 @@
 						></senti>
 						<cci
 							v-bind="$attrs"
+							
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'CCI_like'
@@ -323,7 +324,7 @@
 							v-bind="$attrs"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
-								techIndiValue[index] === 'Trailingstop_like'
+								techIndiObj[index] === 'Trailingstop_like'
 							"
 							:panelIndex="index"
 							:exitItemCheck="exitItemCheck"
@@ -412,7 +413,7 @@ export default {
 			tabIndex: 1,
 			score: 1,
 			signals_in_market: 1,
-			techIndiObj: [''],
+			techIndiObj: new Array(5).fill(''),
 			indicatorRadioArr: ['sentiment'],
 			refs: {},
             indicatorUrlArr: new Array(5).fill(''),

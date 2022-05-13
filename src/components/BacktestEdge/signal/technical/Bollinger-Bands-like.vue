@@ -279,6 +279,7 @@ delay_bars: [String, Number]
 	}
 }
 .condition-container {
+	border-top: 1px solid #797979;
 	display: flex;
 }
 /deep/ .el-input__inner {
@@ -288,10 +289,18 @@ delay_bars: [String, Number]
 /deep/.el-input--suffix .el-input__inner {
 	padding-right: 5px;
 }
-/deep/ .el-form-item__label {
-	margin-right: 36px;
+@media (min-width: 1280px) and (max-width: 1365px) {
+	/deep/ .el-form-item__label {
+		margin-right: 10px;
+	}
 }
-/deep/ .el-radio {
-	margin-right: -3px;
+@media (min-width: 375px) and (max-width: 767px) {
+	/deep/ .el-form-item__label {
+		margin-right: 0px;
+	}
+	.condition-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
 </style>
