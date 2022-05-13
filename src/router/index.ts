@@ -7,7 +7,7 @@ import { getIndicatorsList } from "@/service/service"
 import store from '../store/store'
 import https from 'https'
 
-// import { getCookieData, setCookieData } from '@/tools/cookie'
+import { getCookieData, setCookieData } from '@/tools/cookie'
 
 // import Home from '@/components/BacktestEdge/Home.vue'
 // import Doc from '@/components/Menu/Doc.vue'
@@ -52,16 +52,23 @@ router.beforeEach((to, from, next) => {
 	let host = /.*/
 	// const data = getCookieData()
 	// console.log("测试cookie",data);
-	// const detail = {
+	// let testid = data.account_code
+	// const detail = 
+	// {
 	// 	security_response: 200,
-	// 	username: 'eric+test12345678@ericbrown.com',
-	// 	access_level: ['backtestedge', 'indicatoredge', 'sentimentedge'],
+	// 	username: "he+PB@sentimentrader.com",
+	// 	access_level: [
+	// 		"portfolioedge",
+	// 		"articles",
+	// 		"backtestedge"
+	// 	],
 	// 	authorized: true,
-	// 	session_expiration: '2022-04-01 02:51:48',
-	// 	account_code: '22b610a4-de02-4d41-be1c-080b64dcb900'
+	// 	session_expiration: "2022-05-14 02:20:56",
+	// 	account_code: "he+PB@sentimentrader.com",
+	// 	articles: []
 	// }
 	// const setData = setCookieData(detail, false)
-	// console.log('设置cookie', setData)
+	// console.log('设置cookie', cookies.get('my-test-id'))
 	// console.log('to from next',to, from, next);
 	let formateHost = location.origin
 	let loginUrl = 'https://users.sentimentrader.com/login'

@@ -153,7 +153,10 @@ export default {
 		direction: String,
 		isActived: Boolean,
 		exitItemCheck: Boolean,
-		relation: Number
+		relation: [String, Number],
+score: [String, Number],
+period: [String, Number],
+delay_bars: [String, Number]
 	},
 	data() {
 		let validateValue = (rule, value, callback) => {
@@ -239,10 +242,13 @@ export default {
 		setDesciption(index) {
 			let criteria = ''
 			let direction = ''
+			if(index === 0) {
+				
 			if (this.criteria == 'entry') {
 				criteria = 'E:'
 				direction = this.direction + ':'
-			} else if (this.criteria == 'exit') {
+			} 
+			if (this.criteria == 'exit') {
 				criteria = 'X:'
 
 				if (this.direction == 'Long') {
@@ -250,6 +256,35 @@ export default {
 				} else if (this.direction == 'Short') {
 					direction = 'Cover:'
 				}
+			}
+			let relation = ''
+				let score = ''
+				let period = ''
+				switch (this.relation) {
+					case 0:
+						relation = "Only Risk;"
+						break;
+					case 1:
+						relation = "Single Signal;"
+						break;
+					case 2:
+						relation = "SameBar Multi Signal;"
+						score = 'Score: ' + this.score
+						break;
+					case 3:
+						relation = "TimeOrder Multi Signal;"
+						period = 'Period: ' + this.period
+						break;
+					default:
+						break;
+				}
+				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars:''
+				let commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
+				   let desObj = {}
+					desObj.criteria = this.criteria
+					desObj.description = commentDes
+					desObj.index = index
+					this.$store.commit('saveDescription', desObj)
 			}
 			let value = this.tech.value
 			let condition = this.conditions[this.tech.condition].label
@@ -259,24 +294,7 @@ export default {
 				value = this.tech.histValue
 				condition = this.conditions[this.histCondition].label
 			}
-						let relation = ''
-			switch (this.relation) {
-				case 0:
-					relation = "Only Risk:"
-					break;
-				case 1:
-					relation = ""
-					break;
-				case 2:
-					relation = "SameBar:"
-					break;
-				case 3:
-					relation = "TimeOrder:"
-					break;
-				default:
-					break;
-			}
-			this.description = `${criteria} ${direction} ${relation} ${techVal} ${condition} ${value}`
+			this.description = `${techVal} ${condition} ${value}`
 			console.log(this.description);
 		},
 		getConditionRadio(val) {
@@ -340,7 +358,7 @@ export default {
 				this.$store.commit('saveCondition', tech)
 				let desObj = {}
 				desObj.criteria = this.criteria
-				desObj.index = index
+				desObj.index = index + 1
 				desObj.description = this.description
 				this.$store.commit('saveDescription', desObj)
 				return checked

@@ -140,8 +140,10 @@ export default {
 		panelIndex: Number,
 		direction: String,
 		exitItemCheck: Boolean,
-		relation: Number,
-		score: Number
+		relation: [String, Number],
+		score: [String, Number],
+		period: [String, Number],
+		delay_bars: [String, Number],
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -298,34 +300,39 @@ export default {
 			if(index === 0) {
 				if (this.criteria == 'entry') {
 					criteria = 'E:'
-					direction = this.direction + ':'
+					direction = this.direction + ';'
 				}
 				if (this.criteria == 'exit') {
 					criteria = 'X:'
 					if (this.direction == 'Long') {
-						direction = 'Close:'
+						direction = 'Close;'
 					} else if (this.direction == 'Short') {
-						direction = 'Cover:'
+						direction = 'Cover;'
 					}
 				}
 				let relation = ''
+				let score = ''
+				let period = ''
 				switch (this.relation) {
 					case 0:
-						relation = "Only Risk:"
+						relation = "Only Risk;"
 						break;
 					case 1:
-						relation = ""
+						relation = "Single Signal;"
 						break;
 					case 2:
-						relation = "SameBar:"
+						relation = "SameBar Multi Signal;"
+						score = 'Score: ' + this.score
 						break;
 					case 3:
-						relation = "TimeOrder:"
+						relation = "TimeOrder Multi Signal;"
+						period = 'Period: ' + this.period
 						break;
 					default:
 						break;
 				}
-				let commentDes = `${criteria} ${direction} ${relation}`
+				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars:''
+				let commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
 				   let desObj = {}
 					desObj.criteria = this.criteria
 					desObj.description = commentDes

@@ -69,7 +69,10 @@ export default {
 		// editIndiData: Object,
 		direction: String,
 		exitItemCheck: Boolean,
-		relation: Number
+		relation: [String, Number],
+score: [String, Number],
+period: [String, Number],
+delay_bars: [String, Number]
 	},
 	data() {
 		return {
@@ -105,6 +108,8 @@ export default {
 		setDesciption(index) {
 			let criteria = ''
 			let direction = ''
+			if(index === 0) {
+				
 			if (this.criteria == 'entry') {
 				criteria = 'E:'
 				direction = this.direction + ':'
@@ -117,30 +122,42 @@ export default {
 					direction = 'Cover:'
 				}
 			}
+			let relation = ''
+				let score = ''
+				let period = ''
+				switch (this.relation) {
+					case 0:
+						relation = "Only Risk;"
+						break;
+					case 1:
+						relation = "Single Signal;"
+						break;
+					case 2:
+						relation = "SameBar Multi Signal;"
+						score = 'Score: ' + this.score
+						break;
+					case 3:
+						relation = "TimeOrder Multi Signal;"
+						period = 'Period: ' + this.period
+						break;
+					default:
+						break;
+				}
+				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars:''
+				let commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
+				   let desObj = {}
+					desObj.criteria = this.criteria
+					desObj.description = commentDes
+					desObj.index = index
+					this.$store.commit('saveDescription', desObj)
+			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
 			let radio = 'Symbol Close'
-						let relation = ''
-			switch (this.relation) {
-				case 0:
-					relation = "Only Risk:"
-					break;
-				case 1:
-					relation = ""
-					break;
-				case 2:
-					relation = "SameBar:"
-					break;
-				case 3:
-					relation = "TimeOrder:"
-					break;
-				default:
-					break;
-			}
-			this.description = `${criteria} ${direction} ${relation} ${techVal} ${radio} ${condition} ${this.tech.value}`
+			this.description = `${techVal} ${radio} ${condition} ${this.tech.value}`
 			console.log(this.description)
 		},
-		saveCondition() {
+		saveCondition(index) {
 			let checked = true
 			if(this.exitItemCheck) {
 				return checked = true
@@ -150,11 +167,11 @@ export default {
 			}
 			let tech = this.tech
 			tech.criteria = this.criteria
-			tech.index = index
+			tech.index = index + 1
 			this.$store.commit('saveCondition', tech)
 			let desObj = {}
 			desObj.criteria = this.criteria
-			desObj.index = index
+			desObj.index = index + 1
 			desObj.description = this.description
 			this.$store.commit('saveDescription', desObj)
 			return checked

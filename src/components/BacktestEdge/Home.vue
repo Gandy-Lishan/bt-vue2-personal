@@ -557,7 +557,7 @@ export default {
 							JSON.stringify(vm.$store.state.backtestInfo)
 						)
 						let entry_description = JSON.parse(
-							JSON.stringify(vm.$store.state.backtestInfo.entry_description)
+							JSON.stringify(backtestData.entry_description)
 						)
 
 						let sameEntryIndexArr = searchKeys(entry_description)
@@ -580,7 +580,7 @@ export default {
 							}
 						}
 						let exit_description = JSON.parse(
-							JSON.stringify(vm.$store.state.backtestInfo.exit_description)
+							JSON.stringify(backtestData.exit_description)
 						)
 
 						let sameExitIndexArr = searchKeys(exit_description)
@@ -811,8 +811,7 @@ export default {
 						console.log('编辑后传出去的数据', backtestParams)
 						backtestParams = JSON.stringify(backtestParams)
 						/* ********** */
-						
-
+						console.log("创建backtest传出去的数据",backtestData)
 						let backtestDataStr = this.$qs.stringify(backtestData)
 						// 在回测前加载全时段的数据并生成csv上传s3,结果出来再更新表单
 						this.reloadData(indicatorLayout,backtestData.frequency)
