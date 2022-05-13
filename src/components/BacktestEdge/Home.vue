@@ -377,6 +377,12 @@ export default {
 	},
 	methods: {
 		test: function(){
+			let backtestData = this.backtestEditData
+			console.log(backtestData)
+			CIQ.spanPeriod = {
+							start_date: backtestData.start_date.replace(/-/g,'') * 1000000000,
+							end_date: backtestData.end_date.replace(/-/g,'') * 1000000000
+						}
 			CIQ.outputTest()
 		},
 		animationUp: function () {
