@@ -449,9 +449,11 @@ export default {
 					delete newVal.results
 					newVal.commission = (newVal.commission * 100).toFixed(2)
 					newVal.slippage = (Number(newVal.slippage)).toFixed(2)
-					//console.log("bd",bd);
 				    this.bd = Object.assign(this.bd, newVal)
-					CIQ.hideMarker()
+
+					// 调试中。。。暂时注释
+					//CIQ.hideMarker()
+					//console.log("CIQ.hideMarker in setup.vue");
 					this.getFrequency(newVal.frequency)
 					this.getDirection(newVal.direction)
 					if(newVal.risk_control){
@@ -511,7 +513,7 @@ export default {
 			// direction 设置到 vuex
 			this.$store.commit('getDirection', val)
 			// 传给 entry 和 exit 的 direction\
-			console.log("direction",val);
+			//console.log("direction",val);
 			this.bd.direction = val
 			this.$emit('setDirection', val)
 		},
@@ -666,7 +668,7 @@ export default {
 			CIQ.addIndicators()
 		},
 		selectRiskControl(val) {
-			console.log(val);
+			//console.log(val);
 			if(this.isRiskControl && (this.isTakeProfit || this.isTimeInMarket || this.isStopLoss)) {
 			this.$emit('IsRiskControl', true)
 			}else{
@@ -843,7 +845,7 @@ export default {
 		this.setDesciption()
 		
 		}
-		console.log("bd",bd);
+		//console.log("bd",bd);
 						this.$store.commit('setBd', bd)
 						return checked
 					} else {
@@ -902,7 +904,7 @@ export default {
 				}
 			}
            description = `${criteria} ${direction} ${tpStr} ${slStr} ${timStr}`
-		   console.log('risk description',description)
+		   //console.log('risk description',description)
 		   let desObj = {}
 				// desObj.criteria = 'exit'
 				// desObj.index = 0

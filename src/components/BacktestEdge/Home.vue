@@ -54,21 +54,6 @@
 							>Create New Backtest</el-button
 						></el-tooltip
 					>
-					<el-tooltip
-						style="margin-left:10px !important"
-						class="item"
-						effect="light"
-						content="Clear chart and backtest set up form to create new backtests"
-						placement="bottom"
-					>
-						<el-button
-							@click="test"
-							class="restartBtn"
-							type="success"
-							icon="el-icon-s-claim"
-							>Test</el-button
-						></el-tooltip
-					>
 				</div>
 				<el-tabs
 					v-model="activeName"
@@ -131,6 +116,7 @@
 										>Run Backtest</el-button
 									></el-tooltip
 								>
+								<el-checkbox style="margin-left:10px" v-model="test" label="download test csv" border></el-checkbox>
 							</div>
 						</div>
 					</el-tab-pane>
@@ -276,6 +262,7 @@ export default {
 	name: 'home',
 	data() {
 		return {
+			test: false,
 			btnClickBool: true,
 			scroll: '',
 			tabPosition: 'top',
@@ -355,12 +342,16 @@ export default {
 			},
 			immediate: true,
 			deep: true
+		},
+		test: {
+			handler(val) {
+				CIQ.downloadCSV = val 
+			},
+			immediate: true,
+			deep: true
 		}
 	},
 	methods: {
-		test: function(){
-			CIQ.downloadTest()
-		},
 		animationUp: function () {
 			window.scrollTo({
 				top: 0,
@@ -926,6 +917,7 @@ export default {
 				vm.editFrequency = data.frequency
 				vm.timeFrame = data.frequency
 				vm.$store.commit('getFrequency', vm.editFrequency)
+				console.log("before listen to backtestEditData")
 				vm.backtestEditData = data
 				this.loading = false
 			} catch (error) {

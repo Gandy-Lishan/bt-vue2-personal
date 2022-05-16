@@ -322,6 +322,7 @@ import {
 export default {
 	data() {
 		return {
+			isEditDone: true,
 			backtestList: [],
 			strategyName: '',
 			checkList: [],
@@ -630,6 +631,8 @@ export default {
 				var that = this
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
+
+					// 执行顺序不是同步，存在问题
 					that.$emit('goBacktestResultForm', row)
 					that.$emit('goTobacktestSetupForm', row.id)
 				})

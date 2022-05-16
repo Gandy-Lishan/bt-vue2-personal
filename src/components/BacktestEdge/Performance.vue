@@ -544,7 +544,7 @@ export default {
 		},
 		loadMarker(markerSet) {
 			//load markers for initial quotefeed
-			console.log("loadMarker timeperiod",CIQ.initialDate )
+			
 			let list = this.filterMarkerDate(
 				new Date(CIQ.initialDate.start),
 				new Date(CIQ.initialDate.end),
@@ -552,6 +552,7 @@ export default {
 			)
 			CIQ.store.commit('SetmarkerSet', markerSet)
 			CIQ.isMarkerShown = true
+			console.log("CIQ.loadChart from loadMarder()")
 			CIQ.loadChart(list, CIQ.addMarker)
 		},
 		filterMarkerDate(start_date, end_date, markerSet) {
