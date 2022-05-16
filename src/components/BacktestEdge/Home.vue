@@ -54,7 +54,7 @@
 							>Create New Backtest</el-button
 						></el-tooltip
 					>
-					<!-- <el-tooltip
+					<el-tooltip
 						class="item"
 						effect="light"
 						content="Clear chart and backtest set up form to create new backtests"
@@ -63,11 +63,11 @@
 						<el-button
 							@click="test"
 							class="restartBtn"
-							type="primary"
-							icon="el-icon-refresh-right"
+							type="success"
+							icon="el-icon-s-claim"
 							>Test</el-button
 						></el-tooltip
-					> -->
+					>
 				</div>
 				<el-tabs
 					v-model="activeName"
@@ -84,9 +84,6 @@
 						element-loading-spinner="el-icon-loading"
 						element-loading-background="rgba(0, 0, 0, 0.8)"
 					>
-					<el-tooltip slot="label" effect="light" content="Fill in the backtest parameters and run the backtest" placement="bottom-start">
-          <span  class="tmp">Set up Backtest</span>
-        </el-tooltip>
 						<div class="set-up-container" @click="tabContentClick">
 							<set-up
 								ref="setUpChild"
@@ -137,11 +134,7 @@
 						</div>
 					</el-tab-pane>
 					<el-tab-pane label="Backtest History" name="second"
-						>
-		<el-tooltip slot="label" effect="light" content="After running the backtesting list, you can delete, add favorites, edit, and view the results of the backtesting" placement="bottom-start">
-          <span  class="tmp">Backtest History</span>
-        </el-tooltip>
-						<history
+						><history
 							ref="historyChild"
 							@goTobacktestSetupForm="goTobacktestSetupForm"
 							@goBacktestResultForm="goBacktestResultForm"
@@ -150,11 +143,7 @@
 						></history
 					></el-tab-pane>
 					<el-tab-pane label="Backtest Results" name="third"
-						>
-								<el-tooltip slot="label" effect="light" content="View the backtest results at the end of the run" placement="bottom-start">
-          <span  class="tmp">Backtest Results</span>
-        </el-tooltip>
-						<div class="set-up-container">
+						><div class="set-up-container">
 							<result
 								:backtestEditData="backtestEditData"
 								:editFrequency="editFrequency"
@@ -167,11 +156,7 @@
 						></performance>
 					</el-tab-pane>
 					<el-tab-pane label="My Favorites" name="forth"
-						>
-								<el-tooltip slot="label" effect="light" content="Backtests that have been added to favorites" placement="bottom-start">
-          <span  class="tmp">My Favorites</span>
-        </el-tooltip>
-						<favorite
+						><favorite
 							ref="favoriteChild"
 							@refHistoryForm="refHistoryForm"
 							@goTobacktestSetupForm="goTobacktestSetupForm"
@@ -180,11 +165,7 @@
 						></favorite
 					></el-tab-pane>
 					<el-tab-pane label="Sample Backtests" name="fifth"
-						>
-		<el-tooltip slot="label" effect="light" content="A list of backtest samples, you can use it by copying" placement="bottom-start">
-          <span  class="tmp">Sample Backtests</span>
-        </el-tooltip>
-						<sample
+						><sample
 							ref="sampleChild"
 							@goToHistoryForm="goToHistoryForm"
 							@refHistoryForm="refHistoryForm"
@@ -377,13 +358,7 @@ export default {
 	},
 	methods: {
 		test: function(){
-			let backtestData = this.backtestEditData
-			console.log(backtestData)
-			CIQ.spanPeriod = {
-							start_date: backtestData.start_date.replace(/-/g,'') * 1000000000,
-							end_date: backtestData.end_date.replace(/-/g,'') * 1000000000
-						}
-			CIQ.outputTest()
+			CIQ.downloadTest()
 		},
 		animationUp: function () {
 			window.scrollTo({
@@ -563,7 +538,7 @@ export default {
 							JSON.stringify(vm.$store.state.backtestInfo)
 						)
 						let entry_description = JSON.parse(
-							JSON.stringify(backtestData.entry_description)
+							JSON.stringify(vm.$store.state.backtestInfo.entry_description)
 						)
 
 						let sameEntryIndexArr = searchKeys(entry_description)
@@ -586,7 +561,7 @@ export default {
 							}
 						}
 						let exit_description = JSON.parse(
-							JSON.stringify(backtestData.exit_description)
+							JSON.stringify(vm.$store.state.backtestInfo.exit_description)
 						)
 
 						let sameExitIndexArr = searchKeys(exit_description)
@@ -817,7 +792,8 @@ export default {
 						console.log('编辑后传出去的数据', backtestParams)
 						backtestParams = JSON.stringify(backtestParams)
 						/* ********** */
-						console.log("创建backtest传出去的数据",backtestData)
+						
+
 						let backtestDataStr = this.$qs.stringify(backtestData)
 						// 在回测前加载全时段的数据并生成csv上传s3,结果出来再更新表单
 						this.reloadData(indicatorLayout,backtestData.frequency)

@@ -309,9 +309,7 @@ export default new Vuex.Store({
 					state.backtestInfo[key] = obj[key]
 				}
 			}
-			console.log("setBd",state.backtestInfo);
-			
-			
+			console.log("setBd",state.backtestInfo);	
 		},
 		deleteIndicator(state, val) {
 			try {
