@@ -456,26 +456,30 @@ export default {
 					//console.log("CIQ.hideMarker in setup.vue");
 					this.getFrequency(newVal.frequency)
 					this.getDirection(newVal.direction)
+					this.isRiskControl = false
+					this.isTakeProfit = false
+					this.isStopLoss = false
+					this.isTimeInMarket = false
 					if(newVal.risk_control){
 					let riskValArr = newVal.risk_control.split('/')
 					if(riskValArr[0]) {
 						this.isTakeProfit = true
 						this.tp = riskValArr[0]
 						this.isRiskControl = true
-						this.selectRiskControl(true)
+						this.$emit('IsRiskControl', true)
 						
 					}
 					if(riskValArr[1]) {
 						this.isStopLoss = true
 						this.sl = riskValArr[1]
 						this.isRiskControl = true
-						this.selectRiskControl(true)
+						this.$emit('IsRiskControl', true)
 					}
 					if(riskValArr[2]) {
 						this.isTimeInMarket = true
 						this.tim = riskValArr[2]
 						this.isRiskControl = true
-						this.selectRiskControl(true)
+						this.$emit('IsRiskControl', true)
 					}
 					}
 					// 保存编辑之前旧的名字
@@ -668,7 +672,6 @@ export default {
 			CIQ.addIndicators()
 		},
 		selectRiskControl(val) {
-			//console.log(val);
 			if(this.isRiskControl && (this.isTakeProfit || this.isTimeInMarket || this.isStopLoss)) {
 			this.$emit('IsRiskControl', true)
 			}else{
@@ -913,7 +916,7 @@ export default {
 		},
 		
 		validateStopLoss(num) {
-			if (num < 0 || num > 100) {
+			if (num < 0 ) {
 					this.$message({
 						message:
 							'Only positive numbers less than or equal to 100 are allowed',

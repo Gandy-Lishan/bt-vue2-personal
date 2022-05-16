@@ -243,7 +243,7 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   border: #000000 solid 1px;
   padding: 0 5px 0 10px;
   height: 25px;
-  width: 60px;
+  width: 72px;
   border-radius: unset;
 }
 .exit-container input:not([type]),
@@ -265,7 +265,7 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   border: #000000 solid 1px;
   padding: 0 5px 0 10px;
   height: 25px;
-  width: 60px;
+  width: 72px;
   border-radius: unset;
 }
 
@@ -563,6 +563,13 @@ input[type="time"] {
 .entry-container .signal-option-box .signal-container input[type='time']:first-child {
 	width: 178px;
 }
+.entry-container .signal-option-box .signal-container .score-container input:not([type]), 
+.entry-container .signal-option-box .signal-container .score-container input[type='text'], 
+.entry-container .signal-option-box .signal-container .score-container input[type='number'], 
+.entry-container .signal-option-box .signal-container .score-container input[type='date'],
+.entry-container .signal-option-box .signal-container .score-container input[type='time'] {
+	width: 50px;
+}
 .exit-container .signal-option-box .signal-container input:not([type]):first-child, 
 .exit-container .signal-option-box .signal-container input[type='text']:first-child, 
 .exit-container .signal-option-box .signal-container input[type='number']:first-child, 
@@ -581,14 +588,14 @@ input[type="time"] {
 .entry-container .signal-option-box .signal-container input[type='number']:last-child, 
 .entry-container .signal-option-box .signal-container input[type='date']:last-child,
 .entry-container .signal-option-box .signal-container input[type='time']:last-child {
-	width: 60px;
+	width: 100px;
 }
 .exit-container .signal-option-box .signal-container input:not([type]):last-child, 
 .exit-container .signal-option-box .signal-container input[type='text']:last-child, 
 .exit-container .signal-option-box .signal-container input[type='number']:last-child, 
 .exit-container .signal-option-box .signal-container input[type='date']:last-child,
 .exit-container .signal-option-box .signal-container input[type='time']:last-child {
-	width: 60px;
+	width: 100px;
 }
 .el-tabs__new-tab{
   margin: 12px 5px 9px 10px;
