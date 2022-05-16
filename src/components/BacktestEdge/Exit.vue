@@ -1,32 +1,52 @@
 <template>
 	<div class="exit-container">
 		<div class="signal-option-box">
-						<el-tooltip style="diaplay:inline" effect="light" content="All params of exit criteria" placement="bottom">
-			<p class="criteria-title">Exit Criteria</p></el-tooltip>
+			<el-tooltip
+				style="diaplay: inline"
+				effect="light"
+				content="All params of exit criteria"
+				placement="bottom"
+			>
+				<p class="criteria-title">Exit Criteria</p></el-tooltip
+			>
 			<div class="signal-container">
-				<span class="scoreNote" v-if="relation === 2"><el-tooltip style="diaplay:inline" effect="light" content="Only use in multi signals and the value <= the len of signals" placement="bottom">
-                       <span>Score:</span>
-                        </el-tooltip></span>
-				<el-input
-					size="mini"
-					v-if="relation === 2"
+				<span class="scoreNote" v-if="relation === 2"
+					><el-tooltip
+						style="diaplay: inline"
+						effect="light"
+						content="Only use in multi signals and the value <= the len of signals"
+						placement="bottom"
+					>
+						<span>Score:</span>
+					</el-tooltip></span
+				>
+				<el-input-number
 					v-model="score"
-					type="number"
-					step="1"
-					min="1"
-					:max="editableTabsValue"
-				></el-input>
-				<span class="scoreNote" v-if="relation === 3"><el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
-                       <span>Period:</span>
-                        </el-tooltip></span>
-				<el-input
+					:step="1"
+					step-strictly
+					v-if="relation === 2"
+					:min="1"
+					:max="Number(editableTabsValue)"
 					size="mini"
-					v-if="relation === 3"
+				></el-input-number>
+				<span class="scoreNote" v-if="relation === 3"
+					><el-tooltip
+						style="diaplay: inline"
+						effect="light"
+						content="Using in indicator formula"
+						placement="bottom"
+					>
+						<span>Period:</span>
+					</el-tooltip></span
+				>
+				<el-input-number
 					v-model="signals_in_market"
-					type="number"
-					step="1"
-					min="1"
-				></el-input>
+					:step="1"
+					step-strictly
+					v-if="relation === 3"
+					:min="1"
+					size="mini"
+				></el-input-number>
 				<el-select v-model="relation" placeholder="Please select signal">
 					<el-option
 						v-for="item in signalOptions"
@@ -55,8 +75,8 @@
 						<indicator
 							:criteria="'exit'"
 							:panelIndex="index"
-							:editableTabs = "editableTabs"
-							:editableTabsValue = "editableTabsValue"
+							:editableTabs="editableTabs"
+							:editableTabsValue="editableTabsValue"
 							ref="indiChild"
 							:exitItemCheck="exitItemCheck"
 							@getIndicatorUrl="getIndicatorUrl"
@@ -81,8 +101,7 @@
 						></senti>
 						<cci
 							v-bind="$attrs"
-							
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'CCI_like'
 							"
@@ -103,7 +122,7 @@
 						></cci>
 						<rsi
 							v-bind="$attrs"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'rsi'
 							"
@@ -124,7 +143,7 @@
 						></rsi>
 						<macd
 							v-bind="$attrs"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MACD_like'
 							"
@@ -145,7 +164,7 @@
 						></macd>
 						<ma
 							v-bind="$attrs"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MovingAverage_like'
 							"
@@ -175,7 +194,7 @@
 						></risk> -->
 						<bollinger-bands-like
 							v-bind="$attrs"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'BollingerBands_like'
 							"
@@ -196,7 +215,7 @@
 						></bollinger-bands-like>
 						<ehler-fisher-transform-like
 							v-bind="$attrs"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'EFT_like'
 							"
@@ -217,7 +236,7 @@
 						></ehler-fisher-transform-like>
 						<stochastic-momentum-index-like
 							v-bind="$attrs"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Stochastics_like'
 							"
@@ -238,7 +257,7 @@
 						></stochastic-momentum-index-like>
 						<ADX-or-DMS-Like
 							v-bind="$attrs"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ADX_like'
 							"
@@ -259,7 +278,7 @@
 						></ADX-or-DMS-Like>
 						<elder-ray-index-like
 							v-bind="$attrs"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ERI_like'
 							"
@@ -280,7 +299,7 @@
 						></elder-ray-index-like>
 						<alligator-like
 							v-bind="$attrs"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Aligator_like'
 							"
@@ -301,7 +320,7 @@
 						></alligator-like>
 						<linear-regForecast-like
 							v-bind="$attrs"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'LRF_like'
 							"
@@ -322,7 +341,7 @@
 						></linear-regForecast-like>
 						<trailing-stop-like
 							v-bind="$attrs"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Trailingstop_like'
 							"
@@ -342,16 +361,23 @@
 							"
 						></trailing-stop-like>
 						<div class="delay-bar-box">
-							 <el-checkbox v-model="isDelayBar"><el-tooltip style="diaplay:inline" effect="light" content="The number of bars delayed" placement="bottom">
-                       <span>Delay of Bars</span>
-                        </el-tooltip></el-checkbox>
-							<el-input
-								size="mini"
-								v-model="delay_bars"
-								type="number"
-								step="1"
-								min="0"
-							></el-input>
+							<el-checkbox v-model="isDelayBar"
+								><el-tooltip
+									style="diaplay: inline"
+									effect="light"
+									content="The number of bars delayed"
+									placement="bottom"
+								>
+									<span>Delay of Bars</span>
+								</el-tooltip></el-checkbox
+							>
+											<el-input-number
+					v-model="delay_bars"
+					:step="1"
+					step-strictly
+					:min="0"
+					size="mini"
+				></el-input-number>
 						</div>
 					</el-tab-pane>
 				</el-tabs>
@@ -416,7 +442,7 @@ export default {
 			techIndiObj: new Array(5).fill(''),
 			indicatorRadioArr: ['sentiment'],
 			refs: {},
-            indicatorUrlArr: new Array(5).fill(''),
+			indicatorUrlArr: new Array(5).fill(''),
 			indicatorValArr: new Array(5).fill(''),
 			// riskValArr: new Array(5).fill(''),
 			techVal: '',
@@ -461,86 +487,87 @@ export default {
 		exitSaveCheck: {
 			handler(newVal) {
 				//console.log("传到exit的值", newVal);
-				if(newVal) {
+				if (newVal) {
 					this.signalOptions = [
-				{
-					value: 1,
-					label: 'Single-Signal'
-				},
-				{
-					value: 2,
-					label: 'SameBar Multi-Signal'
-				},
-				{
-					value: 3,
-					label: 'TimeOrder Multi-Signal'
-				},
-				{
-					value: 0,
-					label: 'Only Use Risk Control'
-				},
-			]
-			}else{
-			this.signalOptions = [
-				{
-					value: 1,
-					label: 'Single-Signal'
-				},
-				{
-					value: 2,
-					label: 'SameBar Multi-Signal'
-				},
-				{
-					value: 3,
-					label: 'TimeOrder Multi-Signal'
+						{
+							value: 1,
+							label: 'Single-Signal'
+						},
+						{
+							value: 2,
+							label: 'SameBar Multi-Signal'
+						},
+						{
+							value: 3,
+							label: 'TimeOrder Multi-Signal'
+						},
+						{
+							value: 0,
+							label: 'Only Use Risk Control'
+						}
+					]
+				} else {
+					this.signalOptions = [
+						{
+							value: 1,
+							label: 'Single-Signal'
+						},
+						{
+							value: 2,
+							label: 'SameBar Multi-Signal'
+						},
+						{
+							value: 3,
+							label: 'TimeOrder Multi-Signal'
+						}
+					]
+					this.relation = 1
+					this.exitItemCheck = false
 				}
-			]
-			this.relation = 1
-			this.exitItemCheck = false
 			}
- 		}
-	},
-	relation: {
-		handler(newVal, oldVal) {
-			if(newVal == 0) {
-				this.exitItemCheck = true
-			}else{
-				this.exitItemCheck = false
-			}
-			this.$emit('isOnlyRiskControl',this.exitItemCheck)
-			if(newVal == 3 && this.editableTabs.length > 3) {
-				this.$message({
-						message: 'TimeOrder Multi-Signal supports up to three signals, please delete the panel',
+		},
+		relation: {
+			handler(newVal, oldVal) {
+				if (newVal == 0) {
+					this.exitItemCheck = true
+				} else {
+					this.exitItemCheck = false
+				}
+				this.$emit('isOnlyRiskControl', this.exitItemCheck)
+				if (newVal == 3 && this.editableTabs.length > 3) {
+					this.$message({
+						message:
+							'TimeOrder Multi-Signal supports up to three signals, please delete the panel',
 						type: 'error',
 						offset: 300
 					})
 					this.relation = oldVal
+				}
 			}
 		}
-	}
 	},
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 			// 重置所有子组件的数据
 			try {
-			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
-				this.$refs.indiChild[i].clearForm()
-				this.$refs.sentiChild[i].clearForm()
-				this.$refs.cciChild[i].clearForm()
-				this.$refs.maChild[i].clearForm()
-				this.$refs.macdChild[i].clearForm()
-				this.$refs.bollBandsLikeChild[i].clearForm()
-				this.$refs.EFTLikeChild[i].clearForm()
-				this.$refs.stochasticsLikeChild[i].clearForm()
-				this.$refs.ADXLikeChild[i].clearForm()
-				this.$refs.ERILikeChild[i].clearForm()
-				this.$refs.aligatorLikeChild[i].clearForm()
-				this.$refs.LRFLikeChild[i].clearForm()
-				this.$refs.trailingStopLikeChild[i].clearForm()
-			}
+				for (let i = 0; i < this.indicatorRadioArr.length; i++) {
+					this.$refs.indiChild[i].clearForm()
+					this.$refs.sentiChild[i].clearForm()
+					this.$refs.cciChild[i].clearForm()
+					this.$refs.maChild[i].clearForm()
+					this.$refs.macdChild[i].clearForm()
+					this.$refs.bollBandsLikeChild[i].clearForm()
+					this.$refs.EFTLikeChild[i].clearForm()
+					this.$refs.stochasticsLikeChild[i].clearForm()
+					this.$refs.ADXLikeChild[i].clearForm()
+					this.$refs.ERILikeChild[i].clearForm()
+					this.$refs.aligatorLikeChild[i].clearForm()
+					this.$refs.LRFLikeChild[i].clearForm()
+					this.$refs.trailingStopLikeChild[i].clearForm()
+				}
 			} catch (error) {
-				console.log(error);
+				console.log(error)
 			}
 		},
 		getTechIndiObj(obj) {
@@ -548,44 +575,44 @@ export default {
 		},
 		handleTabsEdit(targetName, action) {
 			if (action === 'add') {
-				if ((this.relation == 2) || (this.relation == 3)) {
+				if (this.relation == 2 || this.relation == 3) {
 					let num_key
-					try{
-						 num_key = Number(this.editableTabs[this.editableTabs.length-1].name) + 1
-		
-					}catch(err){
+					try {
+						num_key =
+							Number(this.editableTabs[this.editableTabs.length - 1].name) + 1
+					} catch (err) {
 						num_key = 1
 					}
 					let num = this.editableTabs.length
-					let newTabName = (num +1)  + ''
+					let newTabName = num + 1 + ''
 					// let newTabName = ++(this.editableTabs.length) + ''
 					this.editableTabs.push({
 						title: 'Signal' + newTabName,
-						name: num_key + "",
+						name: num_key + '',
 						content: 'Signal' + newTabName + 'content'
 					})
 					this.editableTabsValue = Number(this.editableTabsValue) + 1 + ''
 					this.indicatorRadioArr.push('sentiment')
 				}
-				if(this.editableTabs.length > 5 && this.relation == 2){
-						this.$message({
-							message: 'Add up to five signals',
-							type: 'error',
-							offset: 300
-						})
-						this.editableTabs.pop()
-						this.editableTabsValue = this.editableTabs.length + ''
-				        this.tabIndex =this.editableTabs.length
+				if (this.editableTabs.length > 5 && this.relation == 2) {
+					this.$message({
+						message: 'Add up to five signals',
+						type: 'error',
+						offset: 300
+					})
+					this.editableTabs.pop()
+					this.editableTabsValue = this.editableTabs.length + ''
+					this.tabIndex = this.editableTabs.length
 				}
-				if(this.relation == 3 && this.editableTabs.length > 3) {
+				if (this.relation == 3 && this.editableTabs.length > 3) {
 					this.$message({
 						message: 'Add up to three signals',
 						type: 'error',
 						offset: 300
 					})
-						this.editableTabs.pop()
-						this.editableTabsValue = this.editableTabs.length + ''
-				        this.tabIndex =this.editableTabs.length
+					this.editableTabs.pop()
+					this.editableTabsValue = this.editableTabs.length + ''
+					this.tabIndex = this.editableTabs.length
 				}
 			}
 			if (action === 'remove') {
@@ -593,7 +620,7 @@ export default {
 				let activeName = this.editableTabsValue
 				var absoluteIndex = ''
 				tabs.forEach((tab, index) => {
-					if(tab.name==targetName){
+					if (tab.name == targetName) {
 						absoluteIndex = index
 					}
 				})
@@ -607,25 +634,28 @@ export default {
 						}
 					})
 				}
-				let panelArr = tabs.filter((tab) => tab.name !== targetName) 
+				let panelArr = tabs.filter((tab) => tab.name !== targetName)
 				this.editableTabs = panelArr
-				panelArr.forEach((item,index) => {
-						// item.name = index + 1 + ''
-						item.title = 'Signal' + (index + 1)
-						// item.content = 'Signal' + (index + 1) + 'content'
-					})
+				panelArr.forEach((item, index) => {
+					// item.name = index + 1 + ''
+					item.title = 'Signal' + (index + 1)
+					// item.content = 'Signal' + (index + 1) + 'content'
+				})
 				this.editableTabsValue = activeName
-				this.indicatorValArr.splice(absoluteIndex,1)
+				this.indicatorValArr.splice(absoluteIndex, 1)
 				this.indicatorValArr.push('')
-				this.indicatorUrlArr.splice(absoluteIndex,1)
+				this.indicatorUrlArr.splice(absoluteIndex, 1)
 				this.indicatorUrlArr.push('')
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				// this.riskValArr.splice(targetName-1,1)
 				// this.riskValArr.push('')
-				
+
 				// 移除某选项卡时，把indicatorUrlArr内的indicator依次载入vuex以刷新状态
 				tabs.forEach((tab, index) => {
-					this.$store.commit('getExitIndicators', {index: index, value: this.indicatorUrlArr[index]})
+					this.$store.commit('getExitIndicators', {
+						index: index,
+						value: this.indicatorUrlArr[index]
+					})
 				})
 			}
 		},
@@ -662,22 +692,26 @@ export default {
 		},
 		saveSignalsInMarket() {
 			let obj = {}
-			obj.criteria = "exit"
+			obj.criteria = 'exit'
 			obj.value = this.signals_in_market
-			this.$store.commit('saveSignalsInMarket',obj)
+			this.$store.commit('saveSignalsInMarket', obj)
 		},
-	    saveDelayBar() {
+		saveDelayBar() {
 			let obj = {}
-			obj.criteria = "exit"
+			obj.criteria = 'exit'
+			if(this.isDelayBar) {
 			obj.value = this.delay_bars
-			this.$store.commit("saveDelayBar",obj)
+			}else{
+			obj.value =0
+			}
+			this.$store.commit('saveDelayBar', obj)
 		},
 		saveRelation() {
-			if(this.editableTabs.length>1) {
-			let obj = {}
-			obj.criteria = "exit"
-			obj.value = this.relation
-			this.$store.commit("saveRelation",obj)
+			if (this.editableTabs.length > 1) {
+				let obj = {}
+				obj.criteria = 'exit'
+				obj.value = this.relation
+				this.$store.commit('saveRelation', obj)
 			}
 		},
 		saveBacktestData(index) {
@@ -685,139 +719,141 @@ export default {
 			// 将选择的 indicator 保存到 vuex 中
 			//console.log('exit的保存执行了' + index + '次')
 			let vm = this
-			if(vm.exitItemCheck) {
+			if (vm.exitItemCheck) {
 				// 保存 risk description
 				let desObj = {}
 				desObj.criteria = 'exit'
 				desObj.index = 0
 				desObj.description = vm.$store.state.riskDescription
 				this.$store.commit('saveDescription', desObj)
-				return checked = true
+				return (checked = true)
 			}
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
-			return indi.then( val => {
-			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
-			if (indi) {
-				if (vm.indicatorRadioArr[index] === 'sentiment') {
-					vm.$refs.sentiChild[index].setDesciption(index)
-					let senti = this.$refs.sentiChild[index].saveCondition(index)
-					return (checked = senti)
+			return indi.then((val) => {
+				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
+				if (indi) {
+					if (vm.indicatorRadioArr[index] === 'sentiment') {
+						vm.$refs.sentiChild[index].setDesciption(index)
+						let senti = this.$refs.sentiChild[index].saveCondition(index)
+						return (checked = senti)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'CCI_like'
+					) {
+						this.$refs.cciChild[index].setDesciption(index)
+						let cci = this.$refs.cciChild[index].saveCondition(index)
+						return (checked = cci)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'rsi'
+					) {
+						this.$refs.rsiChild[index].setDesciption(index)
+						let rsi = this.$refs.rsiChild[index].saveCondition(index)
+						return (checked = rsi)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'MACD_like'
+					) {
+						this.$refs.macdChild[index].setDesciption(index)
+						let macd = this.$refs.macdChild[index].saveCondition(index)
+						return (checked = macd)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'MovingAverage_like'
+					) {
+						this.$refs.maChild[index].setDesciption(index)
+						let ma = this.$refs.maChild[index].saveCondition(index)
+						return (checked = ma)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'EFT_like'
+					) {
+						this.$refs.EFTLikeChild[index].setDesciption(index)
+						let eft = this.$refs.EFTLikeChild[index].saveCondition(index)
+						return (checked = eft)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'ADX_like'
+					) {
+						this.$refs.ADXLikeChild[index].setDesciption(index)
+						let adx = this.$refs.ADXLikeChild[index].saveCondition(index)
+						return (checked = adx)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'Aligator_like'
+					) {
+						this.$refs.aligatorLikeChild[index].setDesciption(index)
+						let aligator =
+							this.$refs.aligatorLikeChild[index].saveCondition(index)
+						return (checked = aligator)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'LRF_like'
+					) {
+						this.$refs.LRFLikeChild[index].setDesciption(index)
+						let lrf = this.$refs.LRFLikeChild[index].saveCondition(index)
+						return (checked = lrf)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'BollingerBands_like'
+					) {
+						this.$refs.bollBandsLikeChild[index].setDesciption(index)
+						let blb = this.$refs.bollBandsLikeChild[index].saveCondition(index)
+						return (checked = blb)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'Stochastics_like'
+					) {
+						this.$refs.stochasticsLikeChild[index].setDesciption(index)
+						let smi =
+							this.$refs.stochasticsLikeChild[index].saveCondition(index)
+						return (checked = smi)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'ERI_like'
+					) {
+						this.$refs.ERILikeChild[index].setDesciption(index)
+						let eri = this.$refs.ERILikeChild[index].saveCondition(index)
+						return (checked = eri)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'Trailingstop_like'
+					) {
+						this.$refs.trailingStopLikeChild[index].setDesciption(index)
+						let ts =
+							this.$refs.trailingStopLikeChild[index].saveCondition(index)
+						return (checked = ts)
+					}
+					// if (this.indicatorRadioArr[index] === 'risk') {
+					// 	this.$refs.riskChild[index].setDesciption(index)
+					// 	let risk = this.$refs.riskChild[index].saveCondition(index)
+					// 	return (checked = risk)
+					// }
+				} else {
+					checked = false
+					return checked
 				}
-				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'CCI_like'
-				) {
-					this.$refs.cciChild[index].setDesciption(index)
-					let cci = this.$refs.cciChild[index].saveCondition(index)
-					return (checked = cci)
-				}
-				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'rsi'
-				) {
-					this.$refs.rsiChild[index].setDesciption(index)
-					let rsi = this.$refs.rsiChild[index].saveCondition(index)
-					return (checked = rsi)
-				}
-				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'MACD_like'
-				) {
-					this.$refs.macdChild[index].setDesciption(index)
-					let macd = this.$refs.macdChild[index].saveCondition(index)
-					return (checked = macd)
-				}
-				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'MovingAverage_like'
-				) {
-					this.$refs.maChild[index].setDesciption(index)
-					let ma = this.$refs.maChild[index].saveCondition(index)
-					return (checked = ma)
-				}
-				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'EFT_like'
-				) {
-					this.$refs.EFTLikeChild[index].setDesciption(index)
-					let eft = this.$refs.EFTLikeChild[index].saveCondition(index)
-					return (checked = eft)
-				}
-				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'ADX_like'
-				) {
-					this.$refs.ADXLikeChild[index].setDesciption(index)
-					let adx = this.$refs.ADXLikeChild[index].saveCondition(index)
-					return (checked = adx)
-				}
-				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'Aligator_like'
-				) {
-					this.$refs.aligatorLikeChild[index].setDesciption(index)
-					let aligator =
-						this.$refs.aligatorLikeChild[index].saveCondition(index)
-					return (checked = aligator)
-				}
-				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'LRF_like'
-				) {
-					this.$refs.LRFLikeChild[index].setDesciption(index)
-					let lrf = this.$refs.LRFLikeChild[index].saveCondition(index)
-					return (checked = lrf)
-				}
-				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'BollingerBands_like'
-				) {
-					this.$refs.bollBandsLikeChild[index].setDesciption(index)
-					let blb = this.$refs.bollBandsLikeChild[index].saveCondition(index)
-					return (checked = blb)
-				}
-				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'Stochastics_like'
-				) {
-					this.$refs.stochasticsLikeChild[index].setDesciption(index)
-					let smi = this.$refs.stochasticsLikeChild[index].saveCondition(index)
-					return (checked = smi)
-				}
-				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'ERI_like'
-				) {
-					this.$refs.ERILikeChild[index].setDesciption(index)
-					let eri = this.$refs.ERILikeChild[index].saveCondition(index)
-					return (checked = eri)
-				}
-				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'Trailingstop_like'
-				) {
-					this.$refs.trailingStopLikeChild[index].setDesciption(index)
-					let ts = this.$refs.trailingStopLikeChild[index].saveCondition(index)
-					return (checked = ts)
-				}
-				// if (this.indicatorRadioArr[index] === 'risk') {
-				// 	this.$refs.riskChild[index].setDesciption(index)
-				// 	let risk = this.$refs.riskChild[index].saveCondition(index)
-				// 	return (checked = risk)
-				// }
-			} else {
-				checked = false
-				return checked
-			}
 			})
 		},
 		setEditPanel(num, data) {
 			this.clearForm()
-					    if(num == 1) {
+			if (num == 1) {
 				this.relation = 1
 			}
 			this.relation = data.exit.relation ? data.exit.relation : 1
-			for (let i = 0; i < num-1; i++) {
+			for (let i = 0; i < num - 1; i++) {
 				this.handleTabsEdit(null, 'add')
 			}
 			this.refs = data
@@ -829,8 +865,15 @@ export default {
 		setEditData(data) {
 			//console.log('编辑的exitdata', data)
 			this.score = data.exit.score
-			this.delay_bars =  data.exit.delay_bars ? data.exit.delay_bars : 0
-			this.signals_in_market = data.exit.signals_in_market ? data.exit.signals_in_market : 1
+			this.delay_bars = data.exit.delay_bars ? data.exit.delay_bars : 0
+			if(this.delay_bars != 0) {
+				this.isDelayBar = true
+			}else{
+				this.isDelayBar = false
+			}
+			this.signals_in_market = data.exit.signals_in_market
+				? data.exit.signals_in_market
+				: 1
 			this.relation = data.exit.relation ? data.exit.relation : 1
 			let length = data.exit.signals.length
 			this.tabIndex = length
@@ -850,7 +893,7 @@ export default {
 					this.indicatorRadioArr.splice(j, 1, 'technical')
 					let formateTechnicalList
 					if (this.$store.state.formateTechnicalList.length === 0) {
-					  this.$refs.indiChild[j].loadShortLong()
+						this.$refs.indiChild[j].loadShortLong()
 					}
 					formateTechnicalList = this.$store.state.formateTechnicalList
 					let indicatorName = data.exit.signals[j].indicator
@@ -913,8 +956,15 @@ export default {
 		setRiskEditData(data) {
 			//console.log('编辑的risk exitdata', data)
 			this.score = data.exit.score
-			this.delay_bars =  data.exit.delay_bars ? data.exit.delay_bars : 0
-			this.signals_in_market = data.exit.signals_in_market ? data.exit.signals_in_market : 1
+			this.delay_bars = data.exit.delay_bars ? data.exit.delay_bars : 0
+			if(this.delay_bars != 0) {
+				this.isDelayBar = true
+			}else{
+				this.isDelayBar = false
+			}
+			this.signals_in_market = data.exit.signals_in_market
+				? data.exit.signals_in_market
+				: 1
 			this.signalOptions = [
 				{
 					value: 1,
@@ -931,12 +981,12 @@ export default {
 				{
 					value: 0,
 					label: 'Only Use Risk Control'
-				},
+				}
 			]
 			this.exitItemCheck = true
-			this.$emit('isOnlyRiskControl',this.exitItemCheck)
+			this.$emit('isOnlyRiskControl', this.exitItemCheck)
 			this.relation = 0
-		},
+		}
 	}
 }
 </script>
@@ -984,7 +1034,7 @@ export default {
 	}
 }
 @media (min-width: 768px) and (max-width: 819px) {
-.exit-container {
+	.exit-container {
 		// padding-left: 50px;
 		// padding-right: 10px;
 		margin: 0px 40px 10px 40px;
@@ -992,10 +1042,10 @@ export default {
 	}
 }
 @media (min-width: 375px) and (max-width: 767px) {
-		.exit-container {
+	.exit-container {
 		margin: 0px 0px 10px 0px;
 	}
-		.criteria-title {
+	.criteria-title {
 		font-size: 15px;
 	}
 }
@@ -1019,9 +1069,12 @@ export default {
 /deep/.el-tabs__nav .el-tabs__item:nth-child(1) span {
 	display: none;
 }
-.delay-bar-box{
+.delay-bar-box {
 	display: flex;
 	border-top: 1px solid #797979;
 	padding-top: 10px;
+}
+/deep/ .el-input-number--mini{
+	width: 118px;
 }
 </style>

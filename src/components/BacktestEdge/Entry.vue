@@ -9,26 +9,27 @@
                        <span>Score:</span>
                         </el-tooltip>
 				</span>
-				<el-input
-					size="mini"
-					v-if="relation === 2"
+				
+                  <el-input-number
 					v-model="score"
-					type="number"
-					step="1"
-					min="1"
-					:max="editableTabsValue"
-				></el-input>
+					:step="1"
+					step-strictly
+					v-if="relation === 2"
+					:min="1"
+					:max="Number(editableTabsValue)"
+					size="mini"
+				></el-input-number>
 			<span class="scoreNote" v-if="relation === 3"><el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
                        <span>Period:</span>
                         </el-tooltip></span>
-				<el-input
-					size="mini"
-					v-if="relation === 3"
+				<el-input-number
 					v-model="signals_in_market"
-					type="number"
-					step="1"
-					min="1"
-				></el-input>
+					:step="1"
+					step-strictly
+					v-if="relation === 3"
+					:min="1"
+					size="mini"
+				></el-input-number>
 				<el-select v-model="relation" placeholder="Please select signal">
 					<el-option
 						v-for="item in signalOptions"
@@ -337,13 +338,13 @@
 							 <el-checkbox v-model="isDelayBar"><el-tooltip style="diaplay:inline" effect="light" content="The number of bars delayed" placement="bottom">
                        <span>Delay of Bars</span>
                         </el-tooltip></el-checkbox>
-							<el-input
-								size="mini"
-								v-model="delay_bars"
-								type="number"
-								step="1"
-								min="0"
-							></el-input>
+											<el-input-number
+					v-model="delay_bars"
+					:step="1"
+					step-strictly
+					:min="0"
+					size="mini"
+				></el-input-number>
 						</div>
 					</el-tab-pane>
 				</el-tabs>
@@ -388,6 +389,12 @@ export default {
 					label: 'TimeOrder Multi-Signal'
 				},
 			],
+			scoreOptions: [
+				{
+					value: 1,
+					label: '1'
+				},
+			],
 			relation: 1,
 			periodValue: 1,
 			editableTabsValue: '1',
@@ -409,7 +416,7 @@ export default {
 			techVal: '',
 			exitItemCheck: false,
 			delay_bars: 0,
-			isDelayBar: false
+			isDelayBar: false,
 		}
 	},
 	components: {
@@ -608,7 +615,11 @@ export default {
 		saveDelayBar() {
 			let obj = {}
 			obj.criteria = "entry"
+			if(this.isDelayBar) {
 			obj.value = this.delay_bars
+			}else{
+			obj.value =0
+			}
 			this.$store.commit("saveDelayBar",obj)
 		},
 		saveRelation() {
@@ -764,6 +775,11 @@ export default {
 			console.log('编辑的entrydata', data)
 			this.score = data.entry.score
 			this.delay_bars =  data.entry.delay_bars ? data.entry.delay_bars : 0
+			if(this.delay_bars != 0) {
+				this.isDelayBar = true
+			}else{
+				this.isDelayBar = false
+			}
 			this.signals_in_market = data.entry.signals_in_market ? data.entry.signals_in_market : 1
 			let length = data.entry.signals.length
 			this.tabIndex = length
@@ -831,7 +847,7 @@ export default {
 					}
 				}
 			}
-		}
+		},
 	}
 }
 </script>
@@ -939,5 +955,8 @@ export default {
 	display: flex;
 	border-top: 1px solid #797979;
 	padding-top: 10px;
+}
+/deep/ .el-input-number--mini{
+	width: 118px;
 }
 </style>

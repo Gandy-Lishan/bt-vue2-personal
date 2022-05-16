@@ -36,7 +36,9 @@
 						prop="description"
 					>
 					</el-table-column> -->
-					<el-table-column label="Entry & Exit" align="center">
+					<el-table-column label="Entry & Exit" align="center" 
+					
+						show-overflow-tooltip>
 						<template slot-scope="scope">
 							<el-tooltip placement="top">
 								<div>
@@ -191,6 +193,7 @@
 								>
 									<el-button
 										type="warning"
+										:disabled="scope.row.status == 0 || scope.row.status == 3"
 										icon="el-icon-view"
 										circle
 										size="mini"

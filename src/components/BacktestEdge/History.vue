@@ -50,14 +50,14 @@
 							</div>
 						</template>
 					</el-table-column> -->
-					<el-table-column label="Entry & Exit" align="center">
+					<el-table-column label="Entry & Exit" align="center" show-overflow-tooltip >
 						<template slot-scope="scope">
 								<el-tooltip placement="top" effect="dark" transition  v-if="(scope.row.entry_description) instanceof Array">
 								<div slot="content" v-for="(item,index) in scope.row.entry_description" :key="index">
 									{{ item }}<br/>
 								</div>
 								<div v-for="(item,index) in scope.row.entry_description" :key="index">
-								{{ scope.row.entry_description[1] }}<br/>
+								{{ scope.row.entry_description[0] }}<br/>
 								</div>
 							</el-tooltip>
 							   <el-tooltip placement="top" effect="dark" transition v-if="!((scope.row.entry_description) instanceof Array)">
@@ -74,7 +74,7 @@
 									{{ item }}<br/>
 								</div>
 								<div  v-for="(item,index) in scope.row.exit_description" :key="index">
-									{{ scope.row.exit_description[1] || scope.row.exit_description[0] }}<br/>
+									{{ scope.row.exit_description[0] }}<br/>
 								</div>
 							</el-tooltip>
 								<el-tooltip placement="top" effect="light" transition v-if="!((scope.row.exit_description) instanceof Array)">
@@ -281,7 +281,7 @@
 									placement="bottom-start"
 								>
 									<el-button
-										:disabled="scope.row.status == 0"
+										:disabled="scope.row.status == 0 || scope.row.status == 3"
 										type="warning"
 										icon="el-icon-view"
 										circle
@@ -390,23 +390,32 @@ export default {
 				try {
 					const res = await getStatus(id)
 					console.log("状态码",res.data.status)
-				if (res.data.status !== 1 && res.data.status !== 0) {
+				if (res.data.status == 2) {
 					clearPromiseInterval(timer).then(() => {})
-					// vm.$notify({
-					// 	title: 'The run was successful',
-					// 	message:
-					// 		'Run backtest is successful, click the view results button to see the results.',
-					// 	offset: 100,
-					// 	type: 'success',
-					// 	duration: 1000
-					// })
 					vm.queryInfo.page = 1
 					vm.getHistoryList()
 					this.$emit('refFavoritesForm')
 					vm.loading = false
+					console.log('成功之后的返回值', res.data)
 					let row = res.data
 					row.result = JSON.parse(row.result)
 					vm.viewBacktestResults(row)
+				}
+				if(res.data.status == 3) {
+					clearPromiseInterval(timer).then(() => {})
+					vm.queryInfo.page = 1
+					vm.getHistoryList()
+					this.$emit('refFavoritesForm')
+					vm.loading = false
+					console.log('成功之后的返回值', res.data)
+					let row = res.data
+					row.result = JSON.parse(row.result)
+					vm.$notify({
+					title: 'No trades',
+					message: 'No trades, please change parameter.',
+					offset: 100,
+					type: 'warning'
+				})
 				}
 				} catch (error) {
 					vm.$message({

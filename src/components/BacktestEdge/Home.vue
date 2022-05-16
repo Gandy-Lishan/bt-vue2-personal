@@ -686,7 +686,7 @@ export default {
 						}
 						}
 						if(this.isOnlyRisk) {
-							exit_signal_list = [{code: ''}]
+							exit_signal_list = [{code: "SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999"}]
 						}
 						let entry = {
 							description: backtestData.entry.description,
@@ -841,15 +841,17 @@ export default {
 											CIQ.isMarkerShown = false
 										}
 									} catch (error) {
+										vm.$store.commit('initialBacktestInfo')
+										vm.$refs.setUpChild.clearOldBacktestName()
+										vm.$refs.favoriteChild.getFavoriteList()
+										vm.loading = false
 										vm.$message({
 											message: 'The internal server is busy, please try again later ',
 											type: 'error',
 											offset: 300
 										})
-										vm.loading = false
 										// 初始化backtestInfo的数据
 										vm.$store.commit('clearStoreDesciption')
-										vm.$store.commit('initialBacktestInfo')
 									}	
 								}catch(error){
 									console.log("Error", error);
@@ -900,15 +902,18 @@ export default {
 				}
 				if (data.exit.signals instanceof Array) {
 					// data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
-
 						data.exit.signals = data.exit.signals.map((value) => {
-						return signalCode.decode(value.code)	
+							if(value.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999') {
+						return signalCode.decode(value.code)	}else{
+							vm.$refs.exitChild.setRiskEditData(data)
+							data.exit.signals = [{code: ''}]
+							return
+						}
 					    })
 						if(data.exit.signals.includes(undefined)) {
 							data.exit.signals = [{code: ''}]
 							vm.$refs.exitChild.setRiskEditData(data)
 						}else {
-							
 				        let exitPanel = data.exit.signals.length
 						let exitData = {}
 						exitData.exit = data.exit
