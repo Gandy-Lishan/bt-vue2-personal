@@ -55,6 +55,7 @@
 						></el-tooltip
 					>
 					<el-tooltip
+						style="margin-left:10px !important"
 						class="item"
 						effect="light"
 						content="Clear chart and backtest set up form to create new backtests"
