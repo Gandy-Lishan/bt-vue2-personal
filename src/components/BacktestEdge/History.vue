@@ -365,18 +365,9 @@ export default {
 								if(element.entry_description.indexOf("[") != -1) {
 									element.entry_description = JSON.parse(element.entry_description)
 								}
-								// else{
-								// 	element.entry_description = [].push(entry_description)
-								// }
 								if(element.exit_description.indexOf("[") != -1) {
 									element.exit_description = JSON.parse(element.exit_description)
 								}
-								// if(!(element.entry_description instanceof Array)) {
-								// 	element.entry_description = [element.entry_description]
-								// }
-								// else{
-								// 	element.exit_description = [].push(exit_description)
-								// }
 						})
 						
 						this.backtestList = res.data.results

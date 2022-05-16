@@ -75,32 +75,17 @@ const config = {
 		// 10.131.3.17:8000
 		disableHostCheck: true,
 		proxy: {
-			// '/CHART_DATA_API': {
-			// 	target: 'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev',
-			// 	// ws:true,
-			// 	changeOrigin: true,
-			// 	pathRewrite: {
-			// 		'^/CHART_DATA_API': '/'
-			// 	}
-			// },
 			'/dev': {
-				//target: 'http://10.131.3.17:8000',
-				target: 'http://10.131.3.17:8000', 
+				//target: 'http://18.216.210.200',
+				// target: 'http://10.131.3.17:8000', 
 				//target: 'http://3.140.194.24:8000',
+				target: "https://h7r34cgfvh.execute-api.us-east-1.amazonaws.com",
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
 					'^/dev': '/dev'
 				}
 			},
-			// '/BATE_LOGIN_API': {
-			// 	target: 'https://users.sentdevsite.com/login',
-			// 	// ws:true,
-			// 	changeOrigin: true,
-			// 	pathRewrite: {
-			// 	'^/BATE_LOGIN_API': '/'
-			// 	}
-			// },
 		}
 	}
 }

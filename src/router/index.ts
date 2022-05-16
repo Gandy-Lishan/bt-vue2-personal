@@ -25,14 +25,32 @@ router.beforeEach(async (to, from, next) => {
 })
 router.beforeEach((to, from, next) => {
 	let loginUrl = 'https://users.sentimentrader.com/login'
+	let formateHost = location.origin
 	//测试网站 https://users.sentdevsite.com/login
 		// https://backtest.sentimentrader.com/user?userID=668696
 		// 1. 从访问过来的 url 获取到 userid
 		// 2. 访问后端 api '/dev/user/?userid=668696' get 参数
 		let userId
 		try {
-			userId = document.baseURI.split('?')[1]
-			userId = userId.split('=')[1]
+			// userId = document.baseURI.split('?')[1]
+			// userId = userId.split('=')[1]
+			// userId = encodeURIComponent(userId)
+			// cookies.set('userid',decodeURIComponent(userId))
+			let url = location.search;
+			if(url.indexOf("?")!== -1) {
+				let paramsStr = url.substr(1)
+				let paramsArr = paramsStr.split('=')
+				userId = paramsArr[1]
+				cookies.set('userid',userId)
+				window.location.href = formateHost
+			}else{
+				userId = cookies.get('userid')
+				if (!userId) {
+					alert('Login failed, please log in again')
+					window.location.href = loginUrl
+					return
+				}
+			}
 			axios
 			.get('/dev/user/?userid=' + userId)
 			.then((res) => {
@@ -68,6 +86,8 @@ router.beforeEach((to, from, next) => {
 		} catch (error) {
 			const data = getCookieData()
 			userId = data.account_code
+			// cookies.set('userid',userId)
+
 			axios
 			.post('/dev/user/')
 			.then((res) => {
