@@ -86,7 +86,6 @@ router.beforeEach((to, from, next) => {
 		} catch (error) {
 			const data = getCookieData()
 			userId = data.account_code
-			// cookies.set('userid',userId)
 
 			axios
 			.post('/dev/user/')
