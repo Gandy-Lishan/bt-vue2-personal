@@ -745,7 +745,8 @@ export default {
 
 						
 						//console.log('indicatorLayout: ', savedTechSD)
-						let str = UUID(JSON.stringify(backtestData))
+						let copyBacktestData = JSON.parse(JSON.stringify(backtestData))
+						let str = UUID(JSON.stringify(copyBacktestData))
 
 						backtestData.pk = str
 					
@@ -782,6 +783,7 @@ export default {
 						backtestParams.symbol = backtestData.symbol
 						backtestParams.win_rate = backtestData.win_rate
 						console.log('编辑后传出去的数据', backtestParams)
+						console.log("back test数据", backtestData);
 						backtestParams = JSON.stringify(backtestParams)
 						/* ********** */
 						

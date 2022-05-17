@@ -1,5 +1,9 @@
 <template>
 	<div class="exit-container">
+		
+			<!-- <p>{{indicatorRadioArr}}</p>
+			<p>{{indicatorUrlArr}}</p>
+			<p>{{indicatorValArr}}</p> -->
 		<div class="signal-option-box">
 			<el-tooltip
 				style="diaplay: inline"
@@ -26,7 +30,7 @@
 					step-strictly
 					v-if="relation === 2"
 					:min="1"
-					:max="Number(editableTabsValue)"
+					:max="editableTabs.length"
 					size="mini"
 				></el-input-number>
 				<span class="scoreNote" v-if="relation === 3"
@@ -550,8 +554,8 @@ export default {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 			// 重置所有子组件的数据
-			try {
 				for (let i = 0; i < this.indicatorRadioArr.length; i++) {
+					if(this.indicatorRadioArr[i]){
 					this.$refs.indiChild[i].clearForm()
 					this.$refs.sentiChild[i].clearForm()
 					this.$refs.cciChild[i].clearForm()
@@ -565,10 +569,8 @@ export default {
 					this.$refs.aligatorLikeChild[i].clearForm()
 					this.$refs.LRFLikeChild[i].clearForm()
 					this.$refs.trailingStopLikeChild[i].clearForm()
+					}
 				}
-			} catch (error) {
-				console.log(error)
-			}
 		},
 		getTechIndiObj(obj) {
 			this.techIndiObj.splice(obj.index, 1, obj.class)
@@ -601,6 +603,7 @@ export default {
 						offset: 300
 					})
 					this.editableTabs.pop()
+					this.indicatorRadioArr.pop()
 					this.editableTabsValue = this.editableTabs.length + ''
 					this.tabIndex = this.editableTabs.length
 				}
@@ -611,6 +614,7 @@ export default {
 						offset: 300
 					})
 					this.editableTabs.pop()
+					this.indicatorRadioArr.pop()
 					this.editableTabsValue = this.editableTabs.length + ''
 					this.tabIndex = this.editableTabs.length
 				}
@@ -647,8 +651,8 @@ export default {
 				this.indicatorUrlArr.splice(absoluteIndex, 1)
 				this.indicatorUrlArr.push('')
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
-				// this.riskValArr.splice(targetName-1,1)
-				// this.riskValArr.push('')
+				this.techIndiObj.splice(absoluteIndex,1)
+				this.techIndiObj.push('')
 
 				// 移除某选项卡时，把indicatorUrlArr内的indicator依次载入vuex以刷新状态
 				tabs.forEach((tab, index) => {
@@ -707,17 +711,18 @@ export default {
 			this.$store.commit('saveDelayBar', obj)
 		},
 		saveRelation() {
-			if (this.editableTabs.length > 1) {
 				let obj = {}
 				obj.criteria = 'exit'
-				obj.value = this.relation
-				this.$store.commit('saveRelation', obj)
+						if(this.editableTabs.length>1) {
+			obj.value = this.relation}else{
+				obj.value = 1
 			}
+				this.$store.commit('saveRelation', obj)
 		},
 		saveBacktestData(index) {
 			let checked = true
 			// 将选择的 indicator 保存到 vuex 中
-			//console.log('exit的保存执行了' + index + '次')
+			console.log('exit的保存执行了' + index + '次')
 			let vm = this
 			if (vm.exitItemCheck) {
 				// 保存 risk description
@@ -731,6 +736,11 @@ export default {
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			return indi.then((val) => {
 				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
+				if(!val) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
+					type: 'error'
+				})}
 				if (indi) {
 					if (vm.indicatorRadioArr[index] === 'sentiment') {
 						vm.$refs.sentiChild[index].setDesciption(index)

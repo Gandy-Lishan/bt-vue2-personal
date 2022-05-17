@@ -45,7 +45,6 @@
 				<div class="conditionInput">
 					<el-form-item prop="value">
 						<el-input
-							@input="setDesciption"
 							v-model="tech.value"
 							placeholder="Input Value"
 						></el-input>
@@ -169,6 +168,11 @@ delay_bars: [String, Number]
 			let period = this.tech.period ? this.tech.period : ''
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${criteria} ${direction} ${relation} ${techVal} ${period} ${condition} ${this.tech.value}`
+				let desObj = {}
+				desObj.criteria = this.criteria
+				desObj.index = index + 1
+				desObj.description = this.description
+				this.$store.commit('saveDescription', desObj)
 		},
 		saveCondition(index) {
 			let checked = true
@@ -191,11 +195,6 @@ delay_bars: [String, Number]
 				tech.criteria = this.criteria
 				tech.index = index
 				this.$store.commit('saveCondition', tech)
-				let desObj = {}
-				desObj.criteria = this.criteria
-				desObj.index = index + 1
-				desObj.description = this.description
-				this.$store.commit('saveDescription', desObj)
 				return checked
 			} else {
 				checked = false
@@ -209,7 +208,6 @@ delay_bars: [String, Number]
 				this.tech.condition = Number(obj.condition)
 				this.tech.value = obj.value
 				this.editTechVal = obj.indicator
-				this.setDesciption()
 			}
 		}
 	}

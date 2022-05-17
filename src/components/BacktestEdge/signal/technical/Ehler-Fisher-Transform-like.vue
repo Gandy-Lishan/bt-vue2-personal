@@ -55,7 +55,6 @@
 						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							:disabled="!(conditionRadio === 'Indicator Value')"
-							@input="setDesciption"
 							v-model="tech.value"
 							placeholder="Input Value"
 						></el-input>
@@ -233,6 +232,12 @@ delay_bars: [String, Number]
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${techVal} ${condition} ${this.tech.value}`
+				let desObj = {}
+				desObj.criteria = this.criteria
+				desObj.index = index + 1
+				desObj.description = this.description
+				this.$store.commit('saveDescription', desObj)
+
 		},
 		getConditionRadio(val) {
 			this.conditionRadio = val
@@ -256,18 +261,13 @@ delay_bars: [String, Number]
 				validForm = valid
 			})
 			if (this.description) {
-				this.setDesciption()
+				this.setDesciption(index)
 			}
 			if (validForm) {
 				let tech = JSON.parse(JSON.stringify(this.tech))
 				tech.criteria = this.criteria
 				tech.index = index
 				this.$store.commit('saveCondition', tech)
-				let desObj = {}
-				desObj.criteria = this.criteria
-				desObj.index = index + 1
-				desObj.description = this.description
-				this.$store.commit('saveDescription', desObj)
 				return checked
 			} else {
 				checked = false
@@ -285,7 +285,6 @@ delay_bars: [String, Number]
 					this.conditionRadio = 'Indicator Value '
 				}
 				this.editTechVal = obj.indicator
-				this.setDesciption()
 			}
 		}
 	}

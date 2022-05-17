@@ -55,7 +55,6 @@
 						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							:disabled="!(conditionRadio === 'Indicator hist1')"
-							@input="setDesciption"
 							v-model="tech.value"
 							placeholder="Input Value"
 						></el-input>
@@ -97,7 +96,6 @@
 						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							:disabled="!(conditionRadio === 'Indicator hist2')"
-							@input="setDesciption"
 							v-model="tech.value"
 							placeholder="Input Value"
 						></el-input>
@@ -241,6 +239,11 @@ delay_bars: [String, Number]
 				isPositive = 'Hist 2'
 			}
 			this.description = `${techVal} ${isPositive} ${condition} ${this.tech.value}`
+				let desObj = {}
+				desObj.criteria = this.criteria
+				desObj.index = index + 1
+				desObj.description = this.description
+				this.$store.commit('saveDescription', desObj)
 		},
 		getConditionRadio(val) {
 			this.conditionRadio = val
@@ -252,7 +255,6 @@ delay_bars: [String, Number]
 			} else if (val === 'Indicator hist2') {
 				this.tech.comparison = 'ERIH2'
 			}
-			this.setDesciption()
 			//CIQ.exportEx()
 		},
 		saveCondition(index) {
@@ -269,11 +271,6 @@ delay_bars: [String, Number]
 				tech.criteria = this.criteria
 				tech.index = index
 				this.$store.commit('saveCondition', tech)
-				let desObj = {}
-				desObj.criteria = this.criteria
-				desObj.index = index + 1
-				desObj.description = this.description
-				this.$store.commit('saveDescription', desObj)
 				return checked
 			} else {
 				checked = false
@@ -295,7 +292,6 @@ delay_bars: [String, Number]
 					this.conditionRadio = 'Indicator hist2'
 				}
 				this.editTechVal = obj.indicator
-				this.setDesciption()
 			}
 		}
 	}

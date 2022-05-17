@@ -55,7 +55,6 @@
 						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							:disabled="!(conditionRadio === '+DI ADX')"
-							@input="setDesciption"
 							v-model="tech.valuePositive"
 							placeholder="Input Value"
 						></el-input>
@@ -97,7 +96,6 @@
 						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							:disabled="!(conditionRadio === '-DI ADX')"
-							@input="setDesciption"
 							v-model="tech.valueNegative"
 							placeholder="Input Value"
 						></el-input>
@@ -262,6 +260,12 @@ export default {
 				value = this.tech.valueNegative
 			}
 			this.description = `${isPositive}${techVal} ${condition} ${value}`
+				this.$store.commit('saveCondition', tech)
+				let desObj = {}
+				desObj.criteria = this.criteria
+				desObj.index = index + 1
+				desObj.description = this.description
+				this.$store.commit('saveDescription', desObj)
 		}, 500),
 		getConditionRadio(val) {
 			this.clearFormValidate()
@@ -305,12 +309,6 @@ export default {
 			if (validForm) {
 				tech.criteria = this.criteria
 				tech.index = index
-				this.$store.commit('saveCondition', tech)
-				let desObj = {}
-				desObj.criteria = this.criteria
-				desObj.index = index + 1
-				desObj.description = this.description
-				this.$store.commit('saveDescription', desObj)
 				return checked
 			} else {
 				checked = false
@@ -334,7 +332,6 @@ export default {
 					this.tech.valueNegative = obj.value
 				}
 				this.editTechVal = obj.indicator
-				this.setDesciption()
 			}
 		}
 	}

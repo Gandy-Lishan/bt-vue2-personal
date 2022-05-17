@@ -50,7 +50,7 @@
 							</div>
 						</template>
 					</el-table-column> -->
-					<el-table-column label="Entry & Exit" align="center" show-overflow-tooltip >
+					<el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
 								<el-tooltip placement="top" effect="dark" transition  v-if="(scope.row.entry_description) instanceof Array">
 								<div slot="content" v-for="(item,index) in scope.row.entry_description" :key="index">

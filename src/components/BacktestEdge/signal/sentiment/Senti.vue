@@ -62,7 +62,6 @@
 						 <el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							:disabled="!(conditionRadio === 'Sentiment Value')"
-							@input="setDesciption"
 							v-model="senti.value"
 							placeholder="Input Value"
 						></el-input>
@@ -349,7 +348,13 @@ export default {
 					? this.senti.value
 					: this.senti.maValue
 			this.description = `${sentiVal} ${ma} ${period} ${condition} ${value}`
-			console.log("Senti描述",this.description);
+				
+					let desObj = {}
+					desObj.criteria = this.criteria
+					desObj.description = this.description
+					desObj.index = index + 1
+					this.$store.commit('saveDescription', desObj)
+					console.log('senti保存description',desObj)
 		},
 		getConditionRadio(val) {
 			this.clearFormValidate()
@@ -470,12 +475,6 @@ export default {
 					delete senti.maValue
 					senti.criteria = this.criteria
 					senti.index = index
-					// 定义一个 vuex 新事件用于保存 description
-					let desObj = {}
-					desObj.criteria = this.criteria
-					desObj.description = this.description
-					desObj.index = index + 1
-					this.$store.commit('saveDescription', desObj)
 					// 定义一个 vuex 新事件用于保存 condition数据
 					this.$store.commit('saveCondition', senti)
 					return checked
@@ -504,13 +503,6 @@ export default {
 					delete senti.maValue
 					senti.criteria = this.criteria
 					senti.index = index
-					// 定义一个 vuex 新事件用于保存 description
-					let desObj = {}
-					desObj.criteria = this.criteria
-					desObj.description = this.description
-					desObj.index = index
-					this.$store.commit('saveDescription', desObj)
-					// 定义一个 vuex 新事件用于保存 condition数据
 					this.$store.commit('saveCondition', senti)
 					return checked
 				} else {
@@ -537,7 +529,6 @@ export default {
 					this.senti.maValue = this.senti.value
 				    this.senti.period = obj.period
 				}
-				this.setDesciption()
 			}
 		}
 	}

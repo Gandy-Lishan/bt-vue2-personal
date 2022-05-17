@@ -17,7 +17,6 @@
 						v-model="tech.comparison"
 						size="mini"
 						filterable
-						@change="setDesciption"
 						placeholder="Please select condition"
 					>
 						<el-option
@@ -149,7 +148,6 @@ delay_bars: [String, Number]
 			obj[this.criteria][this.panelIndex] = val
 			CIQ.store.commit('setConditionRadio', obj)
 			//CIQ.exportEx()
-			this.setDesciption()
 		},
 		setDesciption(index) {
 			let criteria = ''
@@ -231,7 +229,12 @@ delay_bars: [String, Number]
 			}
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${techVal} ${comparison} ${condition} ${value}`
-			console.log(this.description)
+			let desObj = {}
+			desObj.criteria = this.criteria
+			desObj.index = index + 1
+			desObj.description = this.description
+			this.$store.commit('saveDescription', desObj)
+
 		},
 		saveCondition(index) {
 			let checked = true
@@ -239,17 +242,12 @@ delay_bars: [String, Number]
 				return checked = true
 			}
 			if (this.description) {
-				this.setDesciption()
+				this.setDesciption(index)
 			}
 			let tech = JSON.parse(JSON.stringify(this.tech))
 			tech.criteria = this.criteria
 			tech.index = index
 			this.$store.commit('saveCondition', tech)
-			let desObj = {}
-			desObj.criteria = this.criteria
-			desObj.index = index + 1
-			desObj.description = this.description
-			this.$store.commit('saveDescription', desObj)
 			return checked
 		},
 		// 设置编辑的数据
@@ -263,7 +261,6 @@ delay_bars: [String, Number]
 				this.tech.value = obj.value
 				this.radio = ' '
 				this.editTechVal = obj.indicator
-				this.setDesciption()
 			}
 		}
 	}
