@@ -364,7 +364,7 @@ async getFavoriteList(strategy) {
 		editBacktest: throttle(async function (row) {
 			let vm = this
 			try {
-				this.isEditDone = true
+				vm.loading = true
 				const res = await seeParams(row.id)
 				this.isEditDone = false
 				// 恢复indicator layout
@@ -382,6 +382,7 @@ async getFavoriteList(strategy) {
 					this.$store.commit('getRunBacktestData', row)
 					this.$emit('goBacktestResultForm', row)
 					this.$emit('goTobacktestSetupForm', row.id)
+					this.loading = false
 				}
 			} catch (error) {
 				vm.$message({
@@ -444,6 +445,7 @@ copyBacktest: throttle(async function (row) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				let vm = this
 				try {
+					vm.loading = true
 					const res = await seeParams(row.id)
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
@@ -460,6 +462,7 @@ copyBacktest: throttle(async function (row) {
 						this.$store.commit('getRunBacktestData', row)
 						this.$emit('goTobacktestSetupForm', row.id)
 						this.$emit('goBacktestResultForm', row)
+						this.loading = false
 					}
 				} catch (error) {
 					vm.$message({
@@ -522,6 +525,7 @@ copyBacktest: throttle(async function (row) {
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goTobacktestSetupForm', row.id)
 					that.$emit('goBacktestResultForm', row)
+					that.loading = false
 				})
 		},
 		restoreIndicatorLayoutEdit(data, freq, row) {
@@ -531,6 +535,7 @@ copyBacktest: throttle(async function (row) {
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goBacktestResultForm', row)
 					that.$emit('goTobacktestSetupForm', row.id)
+					that.loading = false
 				})
 		},
 		async showDes(row) {

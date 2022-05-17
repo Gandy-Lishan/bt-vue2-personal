@@ -167,7 +167,8 @@ export default {
 				if (item.url == val.url) {
 					// this.si.technicalIndicator = item.value
 					// 暂时注释掉，因为大部分tech没有加到back test内
-					this.indicatorRadio = 'Technical Indicators'
+					//this.indicatorRadio = 'Technical Indicators'
+					
 						// 					let radioObj = {}
 						// radioObj.value = 'technical'
 						// radioObj.index = this.panelIndex
@@ -199,6 +200,9 @@ export default {
 		// sentiment search
 		indicatorSentimentSearch(queryString, cb) {
 			var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
+			sentimentIndicatorList.sort(function(a,b){
+				return a.value.localeCompare(b.value)
+			})
 			var results = queryString
 				? sentimentIndicatorList.filter(
 						this.createStateSentimentFilter(queryString)
@@ -223,7 +227,7 @@ export default {
 		// technical search
 		indicatorTechnicalSearch(queryString, cb) {
 			var technicaltIndicatorList = this.loadShortLong()
-				if(this.criteria === 'entry') {
+			if(this.criteria === 'entry') {
 				let valueArr = ["ATR Trailing Stops","Parabolic SAR"]
 				technicaltIndicatorList = technicaltIndicatorList.filter((item) => valueArr.indexOf(item.value) === -1)
 			}
@@ -232,6 +236,7 @@ export default {
 						this.createTechnicalFilter(queryString)
 				  )
 				: technicaltIndicatorList
+			
 			// 调用 callback 返回建议列表的数据
 			cb(results)
 		},
@@ -472,6 +477,9 @@ export default {
 				})
 			}
 			// 在 vuex 中存入 formatList
+			formatList.sort(function(a,b){
+				return a.value.localeCompare(b.value)
+			})
 			this.$store.commit('saveFormatTechnicalList', formatList)
 			return formatList
 		},
