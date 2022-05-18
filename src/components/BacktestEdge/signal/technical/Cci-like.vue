@@ -51,7 +51,6 @@
 					<el-form-item prop="value">
 						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
-							@input="setDesciption"
 							v-model="tech.value"
 							placeholder="Input Value"
 						></el-input>
@@ -174,7 +173,11 @@ delay_bars: [String, Number]
 			let period = this.tech.period ? this.tech.period : ''
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${techVal} ${period} ${condition} ${this.tech.value}`
-			//console.log("CCI描述",this.description);
+				let desObj = {}
+				desObj.criteria = this.criteria
+				desObj.index = index + 1
+				desObj.description = this.description
+				this.$store.commit('saveDescription', desObj)
 		}, 500),
 		saveCondition(index) {
 			let checked = true
@@ -190,11 +193,6 @@ delay_bars: [String, Number]
 				tech.criteria = this.criteria
 				tech.index = index
 				this.$store.commit('saveCondition', tech)
-				let desObj = {}
-				desObj.criteria = this.criteria
-				desObj.index = index + 1
-				desObj.description = this.description
-				this.$store.commit('saveDescription', desObj)
 				return checked
 			} else {
 				// this.$message({
@@ -214,7 +212,6 @@ delay_bars: [String, Number]
 				this.tech.value = obj.value
 				this.tech.comparison = obj.comparison
 				this.editTechVal = obj.indicator
-				this.setDesciption()
 			}
 		}
 	}

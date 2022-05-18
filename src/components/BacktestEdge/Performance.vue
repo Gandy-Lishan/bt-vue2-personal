@@ -280,7 +280,7 @@
 			<el-tab-pane label="Trades" name="second">
 				<div class="trades-container">
 					<el-table
-						:data="tradesData.slice(18*(queryInfo.page-1),queryInfo.page*18)"
+						:data="tradesData.slice(20*(queryInfo.page-1),queryInfo.page*20)"
 						style="width: 100%"
 						border
 						:span-method="objectSpanMethod"
@@ -372,7 +372,7 @@
 				   <el-pagination
 					@current-change="handleCurrentChange"
 					:current-page="queryInfo.page"
-					:page-size="18"
+					:page-size="20"
 					layout="total, prev, pager, next"
 					:total="queryInfo.total"
 				    >
@@ -517,6 +517,7 @@ export default {
 								}
 							}
 							vm.queryInfo.total = initalData['Trades'].length
+							console.log("总的交易次数", vm.queryInfo.total);
 							vm.tradesData = initalData['Trades']
 							console.log('tradesData', vm.tradesData)
 							// ---------------------------------------- end ----------------------------------

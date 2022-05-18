@@ -45,6 +45,7 @@ router.beforeEach((to, from, next) => {
 				window.location.href = formateHost
 			}else{
 				userId = cookies.get('userid')
+				console.log('进入querySring判断')
 				if (!userId) {
 					alert('Login failed, please log in again')
 					window.location.href = loginUrl
@@ -87,6 +88,7 @@ router.beforeEach((to, from, next) => {
 			const data = getCookieData()
 			userId = data.account_code
 
+			console.log('进入域名校验')
 			axios
 			.post('/dev/user/')
 			.then((res) => {

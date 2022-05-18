@@ -11,42 +11,23 @@
 			</div> -->
 			<div class="condition-container">
 				<el-form-item>
-					<el-radio
-						v-model="radio"
-						label=" "
-						@change="setRadio"
-					></el-radio>
-					<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
-					<el-select
-						v-model="tech.comparison"
-						size="mini"
-						filterable
-						:disabled="!(radio === ' ')"
-						@change="getRadioSelect"
-						placeholder="Please select condition"
+					<el-radio v-model="radio" label=" " @change="setRadio"></el-radio>
+					<el-tooltip
+						style="diaplay: inline"
+						effect="light"
+						content="Compare with indicator value"
+						placement="bottom"
 					>
-						<el-option
-							v-for="item in radioConditions"
-							:key="item.value"
-							:label="item.label"
-							:value="item.value"
-						>
-						</el-option>
-					</el-select>
-					</el-tooltip>
-				</el-form-item>
-				<div class="conditionSelect">
-					<el-form-item>
-												<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
-							v-model="tech.condition"
-							:disabled="!(radio === ' ')"
+							v-model="tech.comparison"
 							size="mini"
 							filterable
+							:disabled="!(radio === ' ')"
+							@change="getRadioSelect"
 							placeholder="Please select condition"
 						>
 							<el-option
-								v-for="item in conditions"
+								v-for="item in radioConditions"
 								:key="item.value"
 								:label="item.label"
 								:value="item.value"
@@ -54,6 +35,31 @@
 							</el-option>
 						</el-select>
 					</el-tooltip>
+				</el-form-item>
+				<div class="conditionSelect">
+					<el-form-item>
+						<el-tooltip
+							style="diaplay: inline"
+							effect="light"
+							content="The way of comparing between comparison and value"
+							placement="bottom"
+						>
+							<el-select
+								v-model="tech.condition"
+								:disabled="!(radio === ' ')"
+								size="mini"
+								filterable
+								placeholder="Please select condition"
+							>
+								<el-option
+									v-for="item in conditions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value"
+								>
+								</el-option>
+							</el-select>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
@@ -63,15 +69,19 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="period">
-												<el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
-						<el-input
-							v-model="tech.period"
-							:disabled="!(radio === ' ')"
-							@input="getSCvalue"
-							@blur="setDesciption"
-							placeholder="Input Period"
-						></el-input>
-												</el-tooltip>
+						<el-tooltip
+							style="diaplay: inline"
+							effect="light"
+							content="Using in indicator formula"
+							placement="bottom"
+						>
+							<el-input
+								v-model="tech.period"
+								:disabled="!(radio === ' ')"
+								@input="getSCvalue"
+								placeholder="Input Period"
+							></el-input>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 			</div>
@@ -85,35 +95,45 @@
 				</el-form-item>
 				<div class="conditionInput">
 					<el-form-item prop="ma_period">
-												<el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
-						<el-input
-							:disabled="!(radio === 'Moving Average')"
-							v-model="tech.ma_period"
-							placeholder="Input Period"
-							@input="getMaPeriodValue"
-						></el-input>
-												</el-tooltip>
+						<el-tooltip
+							style="diaplay: inline"
+							effect="light"
+							content="Using in indicator formula"
+							placement="bottom"
+						>
+							<el-input
+								:disabled="!(radio === 'Moving Average')"
+								v-model="tech.ma_period"
+								placeholder="Input Period"
+								@input="getMaPeriodValue"
+							></el-input>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionSelect">
 					<el-form-item>
-												<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
-						<el-select
-							v-model="tech.condition"
-							filterable
-							size="mini"
-							:disabled="!(radio === 'Moving Average')"
-							placeholder="Please select condition"
+						<el-tooltip
+							style="diaplay: inline"
+							effect="light"
+							content="The way of comparing between comparison and value"
+							placement="bottom"
 						>
-							<el-option
-								v-for="item in conditions"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value"
+							<el-select
+								v-model="tech.condition"
+								filterable
+								size="mini"
+								:disabled="!(radio === 'Moving Average')"
+								placeholder="Please select condition"
 							>
-							</el-option>
-						</el-select>
-												</el-tooltip>
+								<el-option
+									v-for="item in conditions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value"
+								>
+								</el-option>
+							</el-select>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
@@ -123,15 +143,19 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="maPeriod">
-												<el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
-						<el-input
-							v-model="tech.maPeriod"
-							:disabled="!(radio === 'Moving Average')"
-							placeholder="Input Period"
-							@input="getMaValue"
-							@blur="setDesciption"
-						></el-input>
-												</el-tooltip>
+						<el-tooltip
+							style="diaplay: inline"
+							effect="light"
+							content="Using in indicator formula"
+							placement="bottom"
+						>
+							<el-input
+								v-model="tech.maPeriod"
+								:disabled="!(radio === 'Moving Average')"
+								placeholder="Input Period"
+								@input="getMaValue"
+							></el-input>
+						</el-tooltip>
 					</el-form-item>
 				</div>
 			</div>
@@ -153,9 +177,9 @@ export default {
 		isActived: Boolean,
 		exitItemCheck: Boolean,
 		relation: [String, Number],
-score: [String, Number],
-period: [String, Number],
-delay_bars: [String, Number]
+		score: [String, Number],
+		period: [String, Number],
+		delay_bars: [String, Number]
 	},
 	data() {
 		let validatePeriod = (rule, value, callback) => {
@@ -230,7 +254,7 @@ delay_bars: [String, Number]
 	watch: {
 		isActived: {
 			handler(newVal) {
-				if(newVal){
+				if (newVal) {
 					var obj = CIQ.store.state.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.radio
 					//console.log('handle MA,',obj)
@@ -253,7 +277,7 @@ delay_bars: [String, Number]
 			this.clearFormValidate()
 			var obj = CIQ.store.state.conditionRadio
 			obj[this.criteria][this.panelIndex] = val
-			console.log('MA radio change,',obj)
+			console.log('MA radio change,', obj)
 			CIQ.store.commit('setConditionRadio', obj)
 			if (val === 'Moving Average') {
 				// 添加附属ma
@@ -303,120 +327,125 @@ delay_bars: [String, Number]
 				}
 				this.$store.commit('getMA', activatedMAList)
 			}
-			this.setDesciption()
 		},
 		getRadioSelect(val) {
 			// var obj = CIQ.store.state.conditionRadio
 			// obj[this.criteria][this.panelIndex] = val
 			// //console.log('MA radio change,',obj)
 			// CIQ.store.commit('setConditionRadio', obj)
-				for (var studyInstanceName in CIQ.stxx.layout.studies) {
-					var sd = CIQ.stxx.layout.studies[studyInstanceName]
-					if (sd.type == 'ST MA' && sd.panel == 'chart') {
-						CIQ.Studies.removeStudy(CIQ.stxx, sd)
-					}
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+				if (sd.type == 'ST MA' && sd.panel == 'chart') {
+					CIQ.Studies.removeStudy(CIQ.stxx, sd)
 				}
-				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
-					Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
-					Period: this.tech.ma_period,
-					display: 'ST MA'
-				})
-				//CIQ.exportEx()
-				// keep current MA
-				var objMA = {
-					period: this.tech.ma_period,
-					url: 'ma',
-					type: this.maRadio
-				}
-				var activatedMAList = this.$store.state.activatedMA
+			}
+			var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
+				Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
+				Period: this.tech.ma_period,
+				display: 'ST MA'
+			})
+			//CIQ.exportEx()
+			// keep current MA
+			var objMA = {
+				period: this.tech.ma_period,
+				url: 'ma',
+				type: this.maRadio
+			}
+			var activatedMAList = this.$store.state.activatedMA
 
-				// remove current MA attached to an indicator
-				var activatedMAList = this.$store.state.activatedMA
-				var MAListIndex = activatedMAList.findIndex((item) => item.url == 'ma')
-				if (MAListIndex != -1) {
-					activatedMAList.splice(MAListIndex, 1)
-				}
-				this.$store.commit('getMA', activatedMAList)
-			this.setDesciption()
+			// remove current MA attached to an indicator
+			var activatedMAList = this.$store.state.activatedMA
+			var MAListIndex = activatedMAList.findIndex((item) => item.url == 'ma')
+			if (MAListIndex != -1) {
+				activatedMAList.splice(MAListIndex, 1)
+			}
+			this.$store.commit('getMA', activatedMAList)
 		},
 		setDesciption(index) {
 			let criteria = ''
 			let direction = ''
-			if(index === 0) {
-				
-			if (this.criteria == 'entry') {
-				criteria = 'E:'
-				direction = this.direction + ':'
-			}
-			if (this.criteria == 'exit') {
-				criteria = 'X:'
-
-				if (this.direction == 'Long') {
-					direction = 'Close:'
-				} else if (this.direction == 'Short') {
-					direction = 'Cover:'
+			if (index === 0) {
+				if (this.criteria == 'entry') {
+					criteria = 'E:'
+					direction = this.direction + ':'
 				}
-			}
-			let relation = ''
+				if (this.criteria == 'exit') {
+					criteria = 'X:'
+
+					if (this.direction == 'Long') {
+						direction = 'Close:'
+					} else if (this.direction == 'Short') {
+						direction = 'Cover:'
+					}
+				}
+				let relation = ''
 				let score = ''
 				let period = ''
 				switch (this.relation) {
 					case 0:
-						relation = "Only Risk;"
-						break;
+						relation = 'Only Risk;'
+						break
 					case 1:
-						relation = "Single Signal;"
-						break;
+						relation = 'Single Signal;'
+						break
 					case 2:
-						relation = "SameBar Multi Signal;"
+						relation = 'SameBar Multi Signal;'
 						score = 'Score: ' + this.score
-						break;
+						break
 					case 3:
-						relation = "TimeOrder Multi Signal;"
+						relation = 'TimeOrder Multi Signal;'
 						period = 'Period: ' + this.period
-						break;
+						break
 					default:
-						break;
+						break
 				}
-				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars:''
-				let commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
-				   let desObj = {}
-					desObj.criteria = this.criteria
-					desObj.description = commentDes
-					desObj.index = index
-					this.$store.commit('saveDescription', desObj)
+				let delay_bars = this.delay_bars ? 'Delay Bars: ' + this.delay_bars : ''
+				let commentDes = `${criteria} ${direction} ${relation} ${
+					score ? score : ''
+				} ${period ? period : ''} ${delay_bars}`
+				let desObj = {}
+				desObj.criteria = this.criteria
+				desObj.description = commentDes
+				desObj.index = index
+				this.$store.commit('saveDescription', desObj)
 			}
-			let techVal = this.techVal ? this.techVal : this.editTechVal
-			let period =
-				this.radio !== 'Moving Average'
-					? this.tech.period
-					: this.tech.maPeriod
-			let ma_period =
-				this.radio == 'Moving Average' ? this.tech.ma_period : ''
-			let conditionRadio = this.radio == ' ' ? this.tech.comparison : this.radio
-			let comparison
-			switch (this.tech.comparison) {
-				case 'SC':
-					comparison = "Symbol Close"
-					break;
-				case 'SH':
-					comparison = "Symbol High"
-					break;
-				case 'SL':
-					comparison = "Symbol Low"
-					break;
-				case 'SO':
-					comparison = "Symbol Open"
-					break;
-				case 'MA':
-					comparison = "Moving Average"
-					break;
-				default:
-					break;
-			}
-			let condition = this.conditions[this.tech.condition].label
-			this.description = `${comparison} ${ma_period} ${condition} Moving Average ${period}`
-			console.log(this.description);
+				let techVal = this.techVal ? this.techVal : this.editTechVal
+				let period =
+					this.radio !== 'Moving Average'
+						? this.tech.period
+						: this.tech.maPeriod
+				let ma_period =
+					this.radio == 'Moving Average' ? this.tech.ma_period : ''
+				let conditionRadio =
+					this.radio == ' ' ? this.tech.comparison : this.radio
+				let comparison
+				switch (this.tech.comparison) {
+					case 'SC':
+						comparison = 'Symbol Close'
+						break
+					case 'SH':
+						comparison = 'Symbol High'
+						break
+					case 'SL':
+						comparison = 'Symbol Low'
+						break
+					case 'SO':
+						comparison = 'Symbol Open'
+						break
+					case 'MA':
+						comparison = 'Moving Average'
+						break
+					default:
+						break
+				}
+				let condition = this.conditions[this.tech.condition].label
+				this.description = `${comparison} ${ma_period} ${condition} Moving Average ${period}`
+
+				let desObj = {}
+				desObj.criteria = this.criteria
+				desObj.description = this.description
+				desObj.index = index + 1
+				this.$store.commit('saveDescription', desObj)
 		},
 		getMaPeriodValue(val) {
 			this.tech.ma_period = val
@@ -623,8 +652,8 @@ delay_bars: [String, Number]
 		}, 500),
 		saveCondition(index) {
 			let checked = true
-						if(this.exitItemCheck) {
-				return checked = true
+			if (this.exitItemCheck) {
+				return (checked = true)
 			}
 			let validForm
 			if (this.radio !== 'Moving Average') {
@@ -640,11 +669,6 @@ delay_bars: [String, Number]
 					tech.criteria = this.criteria
 					tech.index = index
 					this.$store.commit('saveCondition', tech)
-					let desObj = {}
-					desObj.criteria = this.criteria
-					desObj.index = index + 1
-					desObj.description = this.description
-					this.$store.commit('saveDescription', desObj)
 					return checked
 				} else {
 					checked = false
@@ -671,11 +695,6 @@ delay_bars: [String, Number]
 					tech.criteria = this.criteria
 					tech.index = index
 					this.$store.commit('saveCondition', tech)
-					let desObj = {}
-					desObj.criteria = this.criteria
-					desObj.description = this.description
-					desObj.index = index + 1
-					this.$store.commit('saveDescription', desObj)
 					return checked
 				} else {
 					// this.$message({
@@ -708,7 +727,6 @@ delay_bars: [String, Number]
 					this.getSCvalue(this.tech.period)
 				}
 				this.editTechVal = obj.indicator
-				this.setDesciption()
 			}
 		}
 	}

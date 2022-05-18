@@ -2,13 +2,14 @@ function searchKeys(arr) {
 	let sameArr = []
 	let list = []
 	for (let i = 0; i < arr.length; i++) {
-		let hasRead = false
+		if(arr[i]) {
+			let hasRead = false
 		for (let k = 0; k < list.length; k++) {
 			if (list[k] == arr[i]) {
 				hasRead = true
 			}
 		}
-		if (!hasRead) {
+			if (!hasRead) {
 			let _index = i,
 				haveSame = false
 			for (let j = i + 1; j < arr.length; j++) {
@@ -22,6 +23,7 @@ function searchKeys(arr) {
 				// str += '数组下标为' + _index + '，相同值为' + arr[i] + '\n'
 				sameArr.push(_index)
 			}
+		}
 		}
 	}
 	return sameArr

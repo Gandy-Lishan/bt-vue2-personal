@@ -55,7 +55,6 @@
 												<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							:disabled="!(radio === 'Indicator Value')"
-							@input="setDesciption"
 							v-model="tech.value"
 							placeholder="Input Value"
 						></el-input>
@@ -129,7 +128,6 @@
 					<el-form-item prop="histValue">
 						<el-input
 							:disabled="!(radio === 'Indicator Hist')"
-							@input="setDesciption"
 							v-model="tech.histValue"
 							placeholder="Input Value"
 						></el-input>
@@ -295,7 +293,11 @@ delay_bars: [String, Number]
 				condition = this.conditions[this.histCondition].label
 			}
 			this.description = `${techVal} ${condition} ${value}`
-			console.log(this.description);
+				let desObj = {}
+				desObj.criteria = this.criteria
+				desObj.index = index + 1
+				desObj.description = this.description
+				this.$store.commit('saveDescription', desObj)
 		},
 		getConditionRadio(val) {
 			this.clearFormValidate()
@@ -316,7 +318,6 @@ delay_bars: [String, Number]
 					this.tech.comparison = 'MACDH'
 					break
 			}
-			this.setDesciption()
 			//CIQ.exportEx()
 		},
 		saveCondition(index) {
@@ -344,7 +345,7 @@ delay_bars: [String, Number]
 				let tech = JSON.parse(JSON.stringify(this.tech))
 
 				if (this.description) {
-					this.setDesciption()
+					this.setDesciption(index)
 				}
 				if (this.radio === 'Indicator Hist') {
 					tech.condition = this.histCondition
@@ -356,11 +357,6 @@ delay_bars: [String, Number]
 				tech.criteria = this.criteria
 				tech.index = index
 				this.$store.commit('saveCondition', tech)
-				let desObj = {}
-				desObj.criteria = this.criteria
-				desObj.index = index + 1
-				desObj.description = this.description
-				this.$store.commit('saveDescription', desObj)
 				return checked
 			} else {
 				checked = false
@@ -387,7 +383,6 @@ delay_bars: [String, Number]
 				    this.tech.condition = Number(obj.condition)
 				}
 				this.editTechVal = obj.indicator
-				this.setDesciption()
 			}
 		}
 	}

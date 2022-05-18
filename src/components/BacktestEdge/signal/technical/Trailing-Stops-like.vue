@@ -155,7 +155,11 @@ delay_bars: [String, Number]
 			let condition = this.conditions[this.tech.condition].label
 			let radio = 'Symbol Close'
 			this.description = `${techVal} ${radio} ${condition} ${this.tech.value}`
-			console.log(this.description)
+			let desObj = {}
+			desObj.criteria = this.criteria
+			desObj.index = index + 1
+			desObj.description = this.description
+			this.$store.commit('saveDescription', desObj)
 		},
 		saveCondition(index) {
 			let checked = true
@@ -163,17 +167,12 @@ delay_bars: [String, Number]
 				return checked = true
 			}
 			if (this.description) {
-				this.setDesciption()
+				this.setDesciption(index)
 			}
 			let tech = this.tech
 			tech.criteria = this.criteria
 			tech.index = index + 1
 			this.$store.commit('saveCondition', tech)
-			let desObj = {}
-			desObj.criteria = this.criteria
-			desObj.index = index + 1
-			desObj.description = this.description
-			this.$store.commit('saveDescription', desObj)
 			return checked
 		},
 		// 设置编辑的数据
@@ -186,7 +185,6 @@ delay_bars: [String, Number]
 				this.tech.value = obj.value
 				this.conditionRadio = 'Symbol Close'
 				this.editTechVal = obj.indicator
-				this.setDesciption()
 			}
 		}
 	}

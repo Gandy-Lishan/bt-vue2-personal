@@ -35,7 +35,6 @@
 						<el-select
 							:disabled="!(radio === '%K')"
 							v-model="tech.condition"
-							@change="setDesciption"
 							size="mini"
 							filterable
 							placeholder="Please select condition"
@@ -56,7 +55,6 @@
 						 <el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							:disabled="!(radio === '%K')"
-							@input="setDesciption"
 							v-model="tech.value"
 							placeholder="Input Value"
 						></el-input>
@@ -79,7 +77,6 @@
 						<el-select
 							:disabled="!(radio === '%D')"
 							v-model="tech.condition"
-							@change="setDesciption"
 							size="mini"
 							filterable
 							placeholder="Please select condition"
@@ -101,7 +98,6 @@
 
 						<el-input
 							:disabled="!(radio === '%D')"
-							@input="setDesciption"
 							v-model="tech.valueD"
 							placeholder="Input Value"
 						></el-input>
@@ -124,7 +120,6 @@
 						<el-select
 							:disabled="!(radio === '%K ')"
 							v-model="tech.condition"
-							@change="setDesciption"
 							size="mini"
 							filterable
 							placeholder="Please select condition"
@@ -308,6 +303,11 @@ delay_bars: [String, Number]
 			}
 			this.description = `${techVal}${suffix} ${this.conditions[this.tech.condition].label} ${value}`
 			console.log(this.description);
+				let desObj = {}
+				desObj.criteria = this.criteria
+				desObj.index = index + 1
+				desObj.description = this.description
+				this.$store.commit('saveDescription', desObj)
 		},
 		getConditionRadio(val) {
 			this.clearFormValidate()
@@ -328,7 +328,6 @@ delay_bars: [String, Number]
 					this.tech.comparison = 'D'
 					break
 			}
-			this.setDesciption()
 			//CIQ.exportEx()
 		},
 		saveCondition(index) {
@@ -342,7 +341,7 @@ delay_bars: [String, Number]
 			})
 			if (validForm) {
 				if (this.description) {
-					this.setDesciption()
+					this.setDesciption(index)
 				}
 				let tech = JSON.parse(JSON.stringify(this.tech))
 				tech.criteria = this.criteria
@@ -352,11 +351,6 @@ delay_bars: [String, Number]
 				}
 				delete tech.valueD
 				this.$store.commit('saveCondition', tech)
-				let desObj = {}
-				desObj.criteria = this.criteria
-				desObj.index = index + 1
-				desObj.description = this.description
-				this.$store.commit('saveDescription', desObj)
 				return checked
 			} else {
 				checked = false
@@ -381,7 +375,6 @@ delay_bars: [String, Number]
 					this.tech.valueD = obj.value
 				}
 				this.editTechVal = obj.indicator
-				this.setDesciption()
 			}
 		}
 	}

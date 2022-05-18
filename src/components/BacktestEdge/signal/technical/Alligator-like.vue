@@ -19,7 +19,6 @@
 					<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 					<el-select
 						v-model="tech.comparison"
-						@change="setDesciption"
 						size="mini"
 						:disabled="!(this.radio === 'first')"
 						filterable
@@ -251,7 +250,6 @@ delay_bars: [String, Number]
 			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
 			//console.log(obj)
 			CIQ.store.commit('setConditionRadio', obj)
-			this.setDesciption()
 			//CIQ.exportEx()
 		},
 		setRadio(val) {
@@ -284,7 +282,6 @@ delay_bars: [String, Number]
 			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
 			//console.log(obj)
 			CIQ.store.commit('setConditionRadio', obj)
-			this.setDesciption()
 			//CIQ.exportEx()
 		},
 		getValue2Select(val) {
@@ -305,7 +302,6 @@ delay_bars: [String, Number]
 			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
 			CIQ.store.commit('setConditionRadio', obj)
 			//CIQ.exportEx()
-			this.setDesciption()
 		},
 		setDesciption(index) {
 			let criteria = ''
@@ -375,7 +371,11 @@ delay_bars: [String, Number]
 			let value = this.radio === 'first' ? this.tech.value : this.value2
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${techVal} ${radio} ${condition} ${value}`
-			console.log(this.description)
+			let desObj = {}
+			desObj.criteria = this.criteria
+			desObj.index = index + 1
+			desObj.description = this.description
+			this.$store.commit('saveDescription', desObj)
 		},
 		saveCondition(index) {
 			let checked = true
@@ -390,11 +390,6 @@ delay_bars: [String, Number]
 			tech.criteria = this.criteria
 			tech.index = index
 			this.$store.commit('saveCondition', tech)
-			let desObj = {}
-			desObj.criteria = this.criteria
-			desObj.index = index + 1
-			desObj.description = this.description
-			this.$store.commit('saveDescription', desObj)
 			return checked
 		},
 		// 设置编辑的数据
@@ -424,7 +419,6 @@ delay_bars: [String, Number]
 					this.getRadio2Select(this.comparison2)
 				}
 				this.editTechVal = obj.indicator
-				this.setDesciption()
 			}
 		}
 	}
