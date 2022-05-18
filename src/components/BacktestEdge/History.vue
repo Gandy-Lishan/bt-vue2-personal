@@ -383,7 +383,7 @@ export default {
 		},
 		refreshHistory(id) {
 			let vm = this
-			vm.loadTest = 'Backtest is running, please wait'
+			vm.loadTest = 'Generating Backtest report, please wait'
 			vm.loading = true
 			vm.clearInterval = clearPromiseInterval
 			let timer = setPromiseInterval(async () => {
@@ -445,8 +445,10 @@ export default {
 					)
 				} else {
 					this.$store.commit('getRunBacktestData', row)
-					this.$emit('goBacktestResultForm', row)
-					this.$emit('goTobacktestSetupForm', row.id)
+					// emit同步调用
+					this.$emit('goBacktestResultForm', row, ()=>{
+						this.$emit('goTobacktestSetupForm', row.id)
+					})
 					this.loading = false
 				}
 			} catch (error) {
@@ -545,8 +547,10 @@ export default {
 						)
 					} else {
 						this.$store.commit('getRunBacktestData', row)
-						this.$emit('goTobacktestSetupForm', row.id, 'fromView')
-						this.$emit('goBacktestResultForm', row)
+						// emit同步调用
+						this.$emit('goTobacktestSetupForm', row.id, ()=>{
+							this.$emit('goBacktestResultForm', row)
+						})
 						this.loading = false
 					}
 				} catch (error) {
@@ -609,8 +613,10 @@ export default {
 				//不再使用outputSignalsResult，exportcsv放置在回测前，callback置于原地
 				//CIQ.outputSignalsResult(function () {
 					that.$store.commit('getRunBacktestData', row)
-					that.$emit('goTobacktestSetupForm', row.id)
-					that.$emit('goBacktestResultForm', row)
+					// emit同步调用
+					that.$emit('goTobacktestSetupForm', row.id, ()=>{
+						that.$emit('goBacktestResultForm', row)
+					})
 					that.loading = false
 				//})
 			} else {
@@ -619,8 +625,13 @@ export default {
 				console.log("after clicking view")
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
-					that.$emit('goTobacktestSetupForm', row.id)
-					that.$emit('goBacktestResultForm', row)
+					//that.$emit('goTobacktestSetupForm', row.id)
+					//that.$emit('goBacktestResultForm', row)
+
+					// emit同步调用
+					that.$emit('goTobacktestSetupForm', row.id, ()=>{
+						that.$emit('goBacktestResultForm', row)
+					})
 					that.loading = false
 				})
 			}
@@ -642,9 +653,11 @@ export default {
 				var that = this
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
-					// 执行顺序不是同步，存在问题
-					that.$emit('goBacktestResultForm', row)
-					that.$emit('goTobacktestSetupForm', row.id)
+					// emit同步调用
+					that.$emit('goBacktestResultForm', row, ()=>{
+						that.$emit('goTobacktestSetupForm', row.id)
+					})
+					
 					that.loading = false
 				})
 			//}
