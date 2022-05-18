@@ -162,7 +162,9 @@ export default {
 		relation: [String, Number],
 score: [String, Number],
 period: [String, Number],
-delay_bars: [String, Number]
+delay_bars: [String, Number],
+		tabLength: Number,
+
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -244,6 +246,7 @@ delay_bars: [String, Number]
 		setDesciption(index) {
 			let criteria = ''
 			let direction = ''
+			let commentDes
 			if(index === 0) {
 			if (this.criteria == 'entry') {
 				criteria = 'E:'
@@ -270,22 +273,24 @@ delay_bars: [String, Number]
 						break;
 					case 2:
 						relation = "SameBar Multi Signal;"
-						score = 'Score: ' + this.score
+						score = 'Score: ' + this.score + ';'
 						break;
 					case 3:
 						relation = "TimeOrder Multi Signal;"
-						period = 'Period: ' + this.period
+						period = 'Period: ' + this.period + ';'
 						break;
 					default:
 						break;
 				}
-				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars:''
-				let commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
+				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars + ';':''
+				commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
+				if(this.relation != 1) {
 				   let desObj = {}
 					desObj.criteria = this.criteria
 					desObj.description = commentDes
 					desObj.index = index
 					this.$store.commit('saveDescription', desObj)
+				}  
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let value = this.radio !== '%D'?this.tech.value:this.tech.valueD
@@ -305,8 +310,14 @@ delay_bars: [String, Number]
 			console.log(this.description);
 				let desObj = {}
 				desObj.criteria = this.criteria
-				desObj.index = index + 1
-				desObj.description = this.description
+					if(this.relation != 1) {
+					desObj.description = this.description
+					desObj.index = index + 1
+					}
+					if(this.relation == 1 && this.tabLength == 1) {
+						desObj.description = commentDes + this.description
+						desObj.index = 0
+					}
 				this.$store.commit('saveDescription', desObj)
 		},
 		getConditionRadio(val) {

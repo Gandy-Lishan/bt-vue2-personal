@@ -842,13 +842,12 @@ export default {
 					if (bd.end_date) {
 						// 保存 backtestform 的数据
 						bd.commission = bd.commission / 100
-		if(this.isRiskControl) {
-	    let riskStr = `${this.isTakeProfit?this.tp:''}/${this.isStopLoss?this.sl:''}/${this.isTimeInMarket?this.tim:''}`
-	    bd.risk_control = riskStr
-		this.setDesciption()
-		
-		}
-		//console.log("bd",bd);
+						if(this.isRiskControl) {
+							let riskStr = `${this.isTakeProfit?this.tp:''}/${this.isStopLoss?this.sl:''}/${this.isTimeInMarket?this.tim:''}`
+							bd.risk_control = riskStr
+							this.setDesciption()
+				
+				        }
 						this.$store.commit('setBd', bd)
 						return checked
 					} else {
