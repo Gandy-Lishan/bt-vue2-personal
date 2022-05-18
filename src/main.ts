@@ -38,6 +38,11 @@ axios.interceptors.request.use((config) => {
 	return config
 })
 // const encode = require("../node_modules/element-ui/lib/locale/lang/en")
+
+// 定义外部接口可配置
+// axios.get('/dist/config.json').then((res) => {
+// 	Vue.prototype.$SERVICE_URL = res;
+// })
 Vue.prototype.$qs = qs
 Vue.use(ElementUI, { locale })
 Vue.prototype.$http = axios

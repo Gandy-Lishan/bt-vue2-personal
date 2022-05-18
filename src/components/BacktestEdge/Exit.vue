@@ -554,23 +554,26 @@ export default {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 			// 重置所有子组件的数据
-				for (let i = 0; i < this.indicatorRadioArr.length; i++) {
-					if(this.indicatorRadioArr[i]){
-					this.$refs.indiChild[i].clearForm()
-					this.$refs.sentiChild[i].clearForm()
-					this.$refs.cciChild[i].clearForm()
-					this.$refs.maChild[i].clearForm()
-					this.$refs.macdChild[i].clearForm()
-					this.$refs.bollBandsLikeChild[i].clearForm()
-					this.$refs.EFTLikeChild[i].clearForm()
-					this.$refs.stochasticsLikeChild[i].clearForm()
-					this.$refs.ADXLikeChild[i].clearForm()
-					this.$refs.ERILikeChild[i].clearForm()
-					this.$refs.aligatorLikeChild[i].clearForm()
-					this.$refs.LRFLikeChild[i].clearForm()
-					this.$refs.trailingStopLikeChild[i].clearForm()
+				try{
+					for (let i = 0; i < this.indicatorRadioArr.length; i++) {
+						if(this.indicatorRadioArr[i]){
+							this.$refs.indiChild[i].clearForm()
+							this.$refs.sentiChild[i].clearForm()
+							this.$refs.cciChild[i].clearForm()
+							this.$refs.maChild[i].clearForm()
+							this.$refs.macdChild[i].clearForm()
+							this.$refs.bollBandsLikeChild[i].clearForm()
+							this.$refs.EFTLikeChild[i].clearForm()
+							this.$refs.stochasticsLikeChild[i].clearForm()
+							this.$refs.ADXLikeChild[i].clearForm()
+							this.$refs.ERILikeChild[i].clearForm()
+							this.$refs.aligatorLikeChild[i].clearForm()
+							this.$refs.LRFLikeChild[i].clearForm()
+							this.$refs.trailingStopLikeChild[i].clearForm()
+						}
 					}
-				}
+				}catch(err){console.error(err)}
+
 		},
 		getTechIndiObj(obj) {
 			this.techIndiObj.splice(obj.index, 1, obj.class)

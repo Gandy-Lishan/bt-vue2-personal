@@ -380,8 +380,10 @@ async getFavoriteList(strategy) {
 				}
 				else{
 					this.$store.commit('getRunBacktestData', row)
-					this.$emit('goBacktestResultForm', row)
-					this.$emit('goTobacktestSetupForm', row.id)
+					// emit同步调用
+					this.$emit('goBacktestResultForm', row, ()=>{
+						this.$emit('goTobacktestSetupForm', row.id)
+					})
 					this.loading = false
 				}
 			} catch (error) {
@@ -460,8 +462,10 @@ copyBacktest: throttle(async function (row) {
 					}
 					else{
 						this.$store.commit('getRunBacktestData', row)
-						this.$emit('goTobacktestSetupForm', row.id)
-						this.$emit('goBacktestResultForm', row)
+						// emit同步调用
+						this.$emit('goTobacktestSetupForm', row.id, ()=>{
+							this.$emit('goBacktestResultForm', row)
+						})
 						this.loading = false
 					}
 				} catch (error) {
@@ -523,8 +527,10 @@ copyBacktest: throttle(async function (row) {
 				var that = this
 				CIQ.addIndicatorsFromBacktest(function(){
 					that.$store.commit('getRunBacktestData', row)
-					that.$emit('goTobacktestSetupForm', row.id)
-					that.$emit('goBacktestResultForm', row)
+					// emit同步调用
+					that.$emit('goTobacktestSetupForm', row.id, ()=>{
+						that.$emit('goBacktestResultForm', row)
+					})
 					that.loading = false
 				})
 		},
@@ -533,8 +539,10 @@ copyBacktest: throttle(async function (row) {
 				var that = this
 				CIQ.addIndicatorsFromBacktest(function(){
 					that.$store.commit('getRunBacktestData', row)
-					that.$emit('goBacktestResultForm', row)
-					that.$emit('goTobacktestSetupForm', row.id)
+					// emit同步调用
+					that.$emit('goBacktestResultForm', row, ()=>{
+						that.$emit('goTobacktestSetupForm', row.id)
+					})
 					that.loading = false
 				})
 		},

@@ -864,7 +864,7 @@ export default {
 		goToHistoryForm() {
 			this.activeName = 'second'
 		},
-		async goTobacktestSetupForm(id) {
+		async goTobacktestSetupForm(id, callback) {
 			// backtestEditData
 			this.loading = true
 			this.$refs.setUpChild.clearForm()
@@ -936,10 +936,18 @@ export default {
 				})
 				this.loading = false
 			}
+			setTimeout(()=>{
+				console.log("异步请求结束，执行回调函数")
+				if(callback){callback()}
+			},1000)
 		},
-		goBacktestResultForm(row) {
+		goBacktestResultForm(row, callback) {
 			this.activeName = 'third'
 			this.$refs.performanceChild.getResultData(row)
+			setTimeout(() => {
+				console.log("异步请求结束，执行回调函数");
+				if(callback){callback()}
+			}, 1000)
 		},
 		goToFavoritesForm() {
 			this.activeName = 'forth'
