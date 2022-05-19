@@ -1,9 +1,9 @@
 <template>
 	<div class="exit-container">
 		
-			<!-- <p>{{indicatorRadioArr}}</p>
+			<p>{{indicatorRadioArr}}</p>
 			<p>{{indicatorUrlArr}}</p>
-			<p>{{indicatorValArr}}</p> -->
+			<p>{{indicatorValArr}}</p>
 		<div class="signal-option-box">
 			<el-tooltip
 				style="diaplay: inline"
@@ -637,6 +637,15 @@ export default {
 				}
 			}
 			if (action === 'remove') {
+				if((this.relation == 2 || this.relation == 3) && this.editableTabs.length == 2) {
+					// 最少两个信号
+					this.$message({
+						message: 'Multiple signals are currently selected, at least two signals',
+						type: 'error',
+						offset: 300
+					})
+					return
+				}
 				let tabs = this.editableTabs
 				let activeName = this.editableTabsValue
 				var absoluteIndex = ''
@@ -705,7 +714,7 @@ export default {
 		addExitSignalLength() {
 		if(this.relation == 2 || this.relation == 3 || this.relation == 0) {
 			    this.$emit('sendExitSignalIndex', this.indicatorRadioArr.length)
-			}
+		}
 			if(this.relation == 1){
 				this.$emit('sendExitSignalIndex', 1)
 			}
@@ -737,10 +746,16 @@ export default {
 		saveDelayBar() {
 			let obj = {}
 			obj.criteria = 'exit'
+			// 不选 isDelayBar
+			if(!this.isDelayBar) {
+				obj.value = 0
+			}
+			// 选了 delayBar 不选 only risk
 			if(this.isDelayBar && !this.exitItemCheck) {
 			    obj.value = this.delay_bars
 			}
-			if(this.exitItemCheck){
+			// 选了 delayBar 选择 only risk
+			if(this.isDelayBar && this.exitItemCheck){
 			   obj.value = 0
 			}
 			this.$store.commit('saveDelayBar', obj)
@@ -764,6 +779,11 @@ export default {
 		changeRelation(val) {
 			if(val == 1) {
 				this.editableTabsValue = '1'
+			}
+			if(val == 2 || val == 3) {
+				if(this.editableTabs.length === 1) {
+				this.handleTabsEdit(null,'add')
+				}
 			}
 			this.$emit('getExitRelation',val)
 		},
