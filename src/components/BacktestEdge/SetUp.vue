@@ -847,7 +847,9 @@ export default {
 							bd.risk_control = riskStr
 							this.setDesciption()
 				
-				        }
+				        }else{
+							bd.risk_control = '//'
+						}
 						this.$store.commit('setBd', bd)
 						return checked
 					} else {

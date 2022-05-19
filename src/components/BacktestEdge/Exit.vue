@@ -542,7 +542,6 @@ export default {
 							label: 'TimeOrder Multi-Signal'
 						}
 					]
-					this.relation = 1
 					this.exitItemCheck = false
 				}
 			}
