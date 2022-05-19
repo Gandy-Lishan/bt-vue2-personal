@@ -1,9 +1,10 @@
 <template>
 	<div class="entry-container">
-					<!-- <p>{{indicatorRadioArr}}</p>
+					<p>{{indicatorRadioArr}}</p>
 						<p>{{indicatorUrlArr}}</p>
 			<p>{{indicatorValArr}}</p>
-			<p>{{techIndiObj}}</p> -->
+			<p>{{techIndiObj}}</p>
+			<p>{{editableTabs}}</p>
 		<div class="signal-option-box">
 			<el-tooltip style="diaplay:inline" effect="light" content="All params of entry criteria" placement="bottom">
 			<p class="criteria-title">Entry Criteria</p></el-tooltip>
@@ -34,7 +35,7 @@
 					:min="1"
 					size="mini"
 				></el-input-number>
-				<el-select v-model="relation" placeholder="Please select signal">
+				<el-select v-model="relation" placeholder="Please select signal" @change="changeRelation">
 					<el-option
 						v-for="item in signalOptions"
 						:key="item.value"
@@ -74,6 +75,7 @@
 						></indicator>
 						<senti
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:criteria="'entry'"
 							:panelIndex="index"
 							:exitItemCheck="exitItemCheck"
@@ -88,6 +90,7 @@
 						></senti>
 						<cci
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'CCI_like'
@@ -109,6 +112,7 @@
 						></cci>
 						<rsi
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'rsi'
@@ -130,6 +134,7 @@
 						></rsi>
 						<macd
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MACD_like'
@@ -151,6 +156,7 @@
 						></macd>
 						<ma
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MovingAverage_like'
@@ -172,6 +178,7 @@
 						></ma>
 						<bollinger-bands-like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'BollingerBands_like'
@@ -193,6 +200,7 @@
 						></bollinger-bands-like>
 						<ehler-fisher-transform-like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'EFT_like'
@@ -214,6 +222,7 @@
 						></ehler-fisher-transform-like>
 						<stochastic-momentum-index-like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Stochastics_like'
@@ -235,6 +244,7 @@
 						></stochastic-momentum-index-like>
 						<ADX-or-DMS-Like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ADX_like'
@@ -256,6 +266,7 @@
 						></ADX-or-DMS-Like>
 						<elder-ray-index-like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ERI_like'
@@ -277,6 +288,7 @@
 						></elder-ray-index-like>
 						<alligator-like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Aligator_like'
@@ -298,6 +310,7 @@
 						></alligator-like>
 						<linear-regForecast-like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'LRF_like'
@@ -319,6 +332,7 @@
 						></linear-regForecast-like>
 						<trailing-stop-like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived ="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Trailingstop_like'
@@ -342,12 +356,13 @@
 							 <el-checkbox v-model="isDelayBar"><el-tooltip style="diaplay:inline" effect="light" content="The number of bars delayed" placement="bottom">
                        <span>Delay of Bars</span>
                         </el-tooltip></el-checkbox>
-											<el-input-number
+					<el-input-number
 					v-model="delay_bars"
 					:step="1"
 					step-strictly
 					:min="0"
 					size="mini"
+					:disabled="!isDelayBar"
 				></el-input-number>
 						</div>
 					</el-tab-pane>
@@ -616,18 +631,35 @@ export default {
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
 		},
 		addEntrySignalLength() {
-			this.$emit('sendEntrySignalIndex', this.indicatorRadioArr.length)
+			if(this.relation == 2 || this.relation == 3) {
+			    this.$emit('sendEntrySignalIndex', this.indicatorRadioArr.length)
+			}
+			if(this.relation == 1){
+				this.$emit('sendEntrySignalIndex', 1)
+			}
 		},
 		saveScoreValue() {
 			let obj = {}
 			obj.criteria = 'entry'
-			obj.value = this.score
+			// 当选择 timeorder 和 signal 时，score 默认为 1
+			if(this.relation == 1 || this.relation == 3) {
+				obj.value = 1
+			}
+			if(this.relation == 2) {
+			    obj.value = this.score
+			}
 			this.$store.commit('saveScoreValue', obj)
 		},
 		saveSignalsInMarket() {
 			let obj = {}
 			obj.criteria = "entry"
-			obj.value = this.signals_in_market
+			// 当选择 sameBar 和 signal 时，signals_in_market 默认为 1
+			if(this.relation == 1 || this.relation == 2) {
+				obj.value = 1
+			}
+			if(this.relation == 3) {
+			   obj.value = this.signals_in_market
+			}
 			this.$store.commit('saveSignalsInMarket',obj)
 		},
 		saveDelayBar() {
@@ -643,11 +675,19 @@ export default {
 		saveRelation() {
 			let obj = {}
 			obj.criteria = "entry"
-		if(this.editableTabs.length>1) {
-			obj.value = this.relation}else{
+			if(this.indicatorRadioArr.length > 1) {
+			   obj.value = this.relation
+			}
+			if(this.indicatorRadioArr.length == 1){
 				obj.value = 1
 			}
 			this.$store.commit("saveRelation",obj)
+		},
+		changeRelation(val) {
+			if(val == 1) {
+				this.editableTabsValue = '1'
+			}
+			this.$emit('getEntryRelation',val)
 		},
 		saveBacktestData(index) {
 			let checked = true
@@ -804,6 +844,7 @@ export default {
 			let length = data.entry.signals.length
 			this.tabIndex = length
             this.relation = data.entry.relation ? data.entry.relation : 1
+			vm.$emit('getEntryRelation',this.relation)
 			for (let j = 0; j < length; j++) {
 				console.log('函数执行了' + j + '次，共' + length + '次')
 				vm.$refs.indiChild[j].setEditData(data)

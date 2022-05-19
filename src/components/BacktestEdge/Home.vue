@@ -82,6 +82,7 @@
 									<entry
 										ref="entryChild"
 										:direction="direction"
+										@getEntryRelation="getEntryRelation"
 										@sendEntrySignalIndex="sendEntrySignalIndex"
 									></entry>
 									<!-- <multi-entry></multi-entry> -->
@@ -90,6 +91,7 @@
 										:direction="direction"
 										:exitSaveCheck="exitSaveCheck"
 										@isOnlyRiskControl="isOnlyRiskControl"
+										@getExitRelation="getExitRelation"
 										@sendExitSignalIndex="sendExitSignalIndex"
 									></exit>
 									<!-- <multi-exit></multi-exit> -->
@@ -277,7 +279,9 @@ export default {
 			entryLength: 1,
 			exitLength: 1,
 			direction: 'Long',
-			isOnlyRisk: false
+			isOnlyRisk: false,
+			exitRelation: 1,
+			entryRelation: 1
 		}
 	},
 	components: {
@@ -464,7 +468,6 @@ export default {
 		},
 		reloadData(data,freq) {
 			let frequency = ''
-
 			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
 			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
 			this.$store.commit('getExtraIndicators', [])
@@ -532,15 +535,17 @@ export default {
 						let entry_description = JSON.parse(
 							JSON.stringify(vm.$store.state.backtestInfo.entry_description)
 						)
-
 						let sameEntryIndexArr = searchKeys(entry_description)
+						if(vm.entryRelation == 3){
+							sameEntryIndexArr = []
+						}
 						if (sameEntryIndexArr.length >= 1) {
 							for (let j = 0; j < sameEntryIndexArr.length; j++) {
 								let sameItem = []
 								let str = ''
 								sameItem = sameEntryIndexArr[j].split(',')
 								for (let n = 0; n < sameItem.length; n++) {
-									str += 'Signal' + (Number(sameItem[n]) + 1) + ' '
+									str += 'Signal' + Number(sameItem[n]) + ' '
 								}
 								vm.$message({
 									message:
@@ -557,13 +562,16 @@ export default {
 						)
 
 						let sameExitIndexArr = searchKeys(exit_description)
-						if (sameExitIndexArr.length > 1) {
+						if(vm.exitRelation == 3){
+							sameExitIndexArr = []
+						}
+						if (sameExitIndexArr.length >= 1) {
 							for (let j = 0; j < sameExitIndexArr.length; j++) {
 								let sameItem = []
 								let str = ''
 								sameItem = sameExitIndexArr[j].split(',')
 								for (let n = 0; n < sameItem.length; n++) {
-									str += 'Signal' + (Number(sameItem[n]) + 1) + ' '
+									str += 'Signal' + Number(sameItem[n]) + ' '
 								}
 								vm.$message({
 									message:
@@ -994,6 +1002,12 @@ export default {
 			}
 			return formatList
 		},
+		getExitRelation(val) {
+			this.exitRelation = val
+		},
+		getEntryRelation(val) {
+			this.entryRelation = val
+		}
 	}
 }
 </script>

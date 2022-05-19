@@ -51,7 +51,7 @@
 					:min="1"
 					size="mini"
 				></el-input-number>
-				<el-select v-model="relation" placeholder="Please select signal">
+				<el-select v-model="relation" placeholder="Please select signal" @change="changeRelation">
 					<el-option
 						v-for="item in signalOptions"
 						:key="item.value"
@@ -91,6 +91,7 @@
 						></indicator>
 						<senti
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:criteria="'exit'"
 							:panelIndex="index"
 							:exitItemCheck="exitItemCheck"
@@ -105,6 +106,7 @@
 						></senti>
 						<cci
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'CCI_like'
@@ -126,6 +128,7 @@
 						></cci>
 						<rsi
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'rsi'
@@ -147,6 +150,7 @@
 						></rsi>
 						<macd
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MACD_like'
@@ -168,6 +172,7 @@
 						></macd>
 						<ma
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MovingAverage_like'
@@ -198,6 +203,7 @@
 						></risk> -->
 						<bollinger-bands-like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'BollingerBands_like'
@@ -219,6 +225,7 @@
 						></bollinger-bands-like>
 						<ehler-fisher-transform-like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'EFT_like'
@@ -240,6 +247,7 @@
 						></ehler-fisher-transform-like>
 						<stochastic-momentum-index-like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Stochastics_like'
@@ -261,6 +269,7 @@
 						></stochastic-momentum-index-like>
 						<ADX-or-DMS-Like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ADX_like'
@@ -282,6 +291,7 @@
 						></ADX-or-DMS-Like>
 						<elder-ray-index-like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ERI_like'
@@ -303,6 +313,7 @@
 						></elder-ray-index-like>
 						<alligator-like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Aligator_like'
@@ -324,6 +335,7 @@
 						></alligator-like>
 						<linear-regForecast-like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'LRF_like'
@@ -345,6 +357,7 @@
 						></linear-regForecast-like>
 						<trailing-stop-like
 							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
 							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Trailingstop_like'
@@ -381,6 +394,7 @@
 					step-strictly
 					:min="0"
 					size="mini"
+					:disabled="!isDelayBar"
 				></el-input-number>
 						</div>
 					</el-tab-pane>
@@ -689,38 +703,69 @@ export default {
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
 		},
 		addExitSignalLength() {
-			this.$emit('sendExitSignalIndex', this.indicatorRadioArr.length)
+		if(this.relation == 2 || this.relation == 3 || this.relation == 0) {
+			    this.$emit('sendExitSignalIndex', this.indicatorRadioArr.length)
+			}
+			if(this.relation == 1){
+				this.$emit('sendExitSignalIndex', 1)
+			}
 		},
 		saveScoreValue() {
 			let obj = {}
 			obj.criteria = 'exit'
-			obj.value = this.score
+		 // 当选择 timeorder 和 signal 和 only risk 时，score 默认为 1
+			if(this.relation == 1 || this.relation == 3 || this.relation == 0) {
+				obj.value = 1
+			}
+			if(this.relation == 2) {
+			    obj.value = this.score
+			}
 			this.$store.commit('saveScoreValue', obj)
 		},
 		saveSignalsInMarket() {
 			let obj = {}
-			obj.criteria = 'exit'
-			obj.value = this.signals_in_market
+			obj.criteria = "exit"
+			// 当选择 sameBar 和 signal 和 only risk时，signals_in_market 默认为 1
+			if(this.relation == 1 || this.relation == 2 || this.relation == 0) {
+				obj.value = 1
+			}
+			if(this.relation == 3) {
+			   obj.value = this.signals_in_market
+			}
 			this.$store.commit('saveSignalsInMarket', obj)
 		},
 		saveDelayBar() {
 			let obj = {}
 			obj.criteria = 'exit'
-			if(this.isDelayBar) {
-			obj.value = this.delay_bars
-			}else{
-			obj.value =0
+			if(this.isDelayBar && !this.exitItemCheck) {
+			    obj.value = this.delay_bars
+			}
+			if(this.exitItemCheck){
+			   obj.value = 0
 			}
 			this.$store.commit('saveDelayBar', obj)
 		},
 		saveRelation() {
 				let obj = {}
 				obj.criteria = 'exit'
-						if(this.editableTabs.length>1) {
-			obj.value = this.relation}else{
+
+			if(this.indicatorRadioArr.length > 1 && !this.exitItemCheck) {
+			   obj.value = this.relation
+			}
+			if(this.indicatorRadioArr.length == 1 && !this.exitItemCheck){
 				obj.value = 1
 			}
+			if(this.exitItemCheck) {
+				obj.value = 0
+			}
+
 				this.$store.commit('saveRelation', obj)
+		},
+		changeRelation(val) {
+			if(val == 1) {
+				this.editableTabsValue = '1'
+			}
+			this.$emit('getExitRelation',val)
 		},
 		saveBacktestData(index) {
 			let checked = true
@@ -888,6 +933,7 @@ export default {
 				? data.exit.signals_in_market
 				: 1
 			this.relation = data.exit.relation ? data.exit.relation : 1
+			this.$emit('getExitRelation',this.relation)
 			let length = data.exit.signals.length
 			this.tabIndex = length
 			for (let j = 0; j < length; j++) {
@@ -999,6 +1045,7 @@ export default {
 			this.exitItemCheck = true
 			this.$emit('isOnlyRiskControl', this.exitItemCheck)
 			this.relation = 0
+			this.$emit('getExitRelation',this.relation)
 		}
 	}
 }

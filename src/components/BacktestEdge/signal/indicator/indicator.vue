@@ -208,12 +208,7 @@ export default {
 						this.createStateSentimentFilter(queryString)
 				  )
 				: sentimentIndicatorList
-
-			//clearTimeout(this.sentimentTimeout)
 			cb(results)
-			// this.sentimentTimeout = setTimeout(() => {
-			// 	cb(results)
-			// }, 3000 * Math.random())
 		},
 		createStateSentimentFilter(queryString) {
 			return (state) => {

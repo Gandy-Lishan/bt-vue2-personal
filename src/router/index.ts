@@ -41,10 +41,14 @@ router.beforeEach((to, from, next) => {
 				let paramsStr = url.substr(1)
 				let paramsArr = paramsStr.split('=')
 				userId = paramsArr[1]
-				cookies.set('userid',userId)
+				// 正式版旧版
+				// cookies.set('userid',userId)
+				cookies.set('devbt2Userid',userId)
 				window.location.href = formateHost
 			}else{
-				userId = cookies.get('userid')
+				// 正式版旧版
+				// userId = cookies.get('userid')
+				userId = cookies.get('devbt2Userid')
 				console.log('进入querySring判断')
 				if (!userId) {
 					alert('Login failed, please log in again')

@@ -368,15 +368,24 @@
 							</template>
 						</el-table-column>
 					</el-table>
+					<div class="pagination-container">
 						
+					<span style="font-size: 13px;font-weight:400;margin-right: 10px">Total  {{totalTradesNumber}}</span>
 				   <el-pagination
 					@current-change="handleCurrentChange"
 					:current-page="queryInfo.page"
 					:page-size="20"
-					layout="total, prev, pager, next"
+					layout="prev, pager, next,slot"
 					:total="queryInfo.total"
 				    >
 				</el-pagination>
+					</div>
+				<!-- <el-pagination
+  background
+  layout="prev, pager, next"
+  :total="queryInfo.total"
+  >
+</el-pagination> -->
 				</div>
 			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
@@ -402,7 +411,8 @@ export default {
 			queryInfo: {
 				total: 0,
 				page: 1
-			}
+			},
+			totalTradesNumber: 0
 		}
 	},
 	created() {
@@ -517,6 +527,7 @@ export default {
 								}
 							}
 							vm.queryInfo.total = initalData['Trades'].length
+							vm.totalTradesNumber = (initalData['Trades'].length)/2
 							console.log("总的交易次数", vm.queryInfo.total);
 							vm.tradesData = initalData['Trades']
 							console.log('tradesData', vm.tradesData)
@@ -653,5 +664,10 @@ export default {
 }
 .perfprmance-container {
 	padding-bottom: 20px;
+}
+.pagination-container{
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
 }
 </style>

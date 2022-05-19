@@ -143,6 +143,7 @@ export default {
 		score: [String, Number],
 		period: [String, Number],
 		delay_bars: [String, Number],
+		tabLength: Number,
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -296,6 +297,7 @@ export default {
 		setDesciption(index) {
 			let criteria = ''
 			let direction = ''
+			let commentDes
 			if(index === 0) {
 				if (this.criteria == 'entry') {
 					criteria = 'E:'
@@ -317,26 +319,28 @@ export default {
 						relation = "Only Risk;"
 						break;
 					case 1:
-						relation = "Single Signal;"
+						relation = "Single Signal"
 						break;
 					case 2:
 						relation = "SameBar Multi Signal;"
-						score = 'Score: ' + this.score
+						score = 'Score: ' + this.score + ';'
 						break;
 					case 3:
 						relation = "TimeOrder Multi Signal;"
-						period = 'Period: ' + this.period
+						period = 'Period: ' + this.period+ ';'
 						break;
 					default:
 						break;
 				}
-				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars:''
-				let commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
+				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars + ';':''
+				commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
+				if(this.relation != 1) {
 				   let desObj = {}
 					desObj.criteria = this.criteria
 					desObj.description = commentDes
 					desObj.index = index
 					this.$store.commit('saveDescription', desObj)
+				}
 
 			}
 			let ma = this.senti.period ? 'moving average' : ''
@@ -348,13 +352,19 @@ export default {
 					? this.senti.value
 					: this.senti.maValue
 			this.description = `${sentiVal} ${ma} ${period} ${condition} ${value}`
-				
+
 					let desObj = {}
 					desObj.criteria = this.criteria
+					if(this.relation != 1) {
 					desObj.description = this.description
 					desObj.index = index + 1
+					}
+					if(this.relation == 1) {
+						desObj.description = commentDes+ this.description
+						desObj.index = 0
+					}
 					this.$store.commit('saveDescription', desObj)
-					console.log('senti保存description',desObj)
+
 		},
 		getConditionRadio(val) {
 			this.clearFormValidate()
