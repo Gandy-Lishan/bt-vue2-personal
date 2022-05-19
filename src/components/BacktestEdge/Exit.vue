@@ -772,6 +772,12 @@ export default {
 			}
 			this.$store.commit('saveDelayBar', obj)
 		},
+		isCheckDelayBar(val) {
+			if(!val) {
+				this.delay_bars = 0
+			}
+
+		},
 		saveRelation() {
 				let obj = {}
 				obj.criteria = 'exit'

@@ -353,7 +353,7 @@
 							"
 						></trailing-stop-like>
 						<div class="delay-bar-box">
-							 <el-checkbox v-model="isDelayBar"><el-tooltip style="diaplay:inline" effect="light" content="The number of bars delayed" placement="bottom">
+							 <el-checkbox v-model="isDelayBar" @change="isCheckDelayBar"><el-tooltip style="diaplay:inline" effect="light" content="The number of bars delayed" placement="bottom">
                        <span>Delay of Bars</span>
                         </el-tooltip></el-checkbox>
 					<el-input-number
@@ -679,6 +679,12 @@ export default {
 			obj.value =0
 			}
 			this.$store.commit("saveDelayBar",obj)
+		},
+		isCheckDelayBar(val) {
+			if(!val) {
+				this.delay_bars = 0
+			}
+
 		},
 		saveRelation() {
 			let obj = {}
