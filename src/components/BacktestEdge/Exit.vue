@@ -1,9 +1,9 @@
 <template>
 	<div class="exit-container">
 		
-			<p>{{indicatorRadioArr}}</p>
+			<!-- <p>{{indicatorRadioArr}}</p>
 			<p>{{indicatorUrlArr}}</p>
-			<p>{{indicatorValArr}}</p>
+			<p>{{indicatorValArr}}</p> -->
 		<div class="signal-option-box">
 			<el-tooltip
 				style="diaplay: inline"

@@ -248,7 +248,6 @@ export default {
 					if (item.indicator) {
 						if (item.indicator === vm.sentiUrl) {
 							// 当从chartiq填充，极值发生了改变时
-							//console.log(vm.sentiUrl)
 							vm.senti.extreme_pessimism = item.extremePessimism
 							vm.senti.extreme_optimism = item.extremeOptimism
 						}
