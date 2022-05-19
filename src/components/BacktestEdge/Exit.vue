@@ -738,9 +738,9 @@ export default {
 			let obj = {}
 			obj.criteria = 'exit'
 			if(this.isDelayBar && !this.exitItemCheck) {
-			obj.value = this.delay_bars
+			    obj.value = this.delay_bars
 			}
-			if(this.isDelayBar && this.exitItemCheck){
+			if(this.exitItemCheck){
 			   obj.value = 0
 			}
 			this.$store.commit('saveDelayBar', obj)
