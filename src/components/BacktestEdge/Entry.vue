@@ -1,10 +1,10 @@
 <template>
 	<div class="entry-container">
-					<p>{{indicatorRadioArr}}</p>
+					<!-- <p>{{indicatorRadioArr}}</p>
 						<p>{{indicatorUrlArr}}</p>
 			<p>{{indicatorValArr}}</p>
 			<p>{{techIndiObj}}</p>
-			<p>{{editableTabs}}</p>
+			<p>{{editableTabs}}</p> -->
 		<div class="signal-option-box">
 			<el-tooltip style="diaplay:inline" effect="light" content="All params of entry criteria" placement="bottom">
 			<p class="criteria-title">Entry Criteria</p></el-tooltip>
@@ -557,13 +557,21 @@ export default {
 						offset: 300
 					})
 						this.editableTabs.pop()
-					this.indicatorRadioArr.pop()
-
+					    this.indicatorRadioArr.pop()
 						this.editableTabsValue = this.editableTabs.length + ''
 				        this.tabIndex =this.editableTabs.length
 					}
 				}
 			if (action === 'remove') {
+				if((this.relation == 2 || this.relation == 3) && this.editableTabs.length == 2) {
+					// 最少两个信号
+					this.$message({
+						message: 'Multiple signals are currently selected, at least two signals',
+						type: 'error',
+						offset: 300
+					})
+					return
+				}
 				let tabs = this.editableTabs
 				let activeName = this.editableTabsValue
 
@@ -686,6 +694,11 @@ export default {
 		changeRelation(val) {
 			if(val == 1) {
 				this.editableTabsValue = '1'
+			}
+			if(val == 2 || val == 3) {
+				if(this.editableTabs.length === 1) {
+				this.handleTabsEdit(null,'add')
+				}
 			}
 			this.$emit('getEntryRelation',val)
 		},
