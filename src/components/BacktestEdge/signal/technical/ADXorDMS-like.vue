@@ -319,7 +319,7 @@ export default {
 			if (validForm) {
 				tech.criteria = this.criteria
 				tech.index = index
-				// this.$store.commit('saveCondition', tech)
+				this.$store.commit('saveCondition', tech)
 				return checked
 			} else {
 				checked = false

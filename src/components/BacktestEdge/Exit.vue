@@ -469,6 +469,9 @@ export default {
 			isDelayBar: false
 		}
 	},
+	mounted() {
+		console.log('初次加载的this.$refs',this.$refs)
+	},
 	components: {
 		indicator,
 		senti,
@@ -688,6 +691,8 @@ export default {
 					})
 				})
 			}
+			
+				console.log('refs',this.$refs)
 		},
 
 		// getSentiUrl(obj) {
@@ -714,6 +719,14 @@ export default {
 		addExitSignalLength() {
 		if(this.relation == 2 || this.relation == 3 || this.relation == 0) {
 			    this.$emit('sendExitSignalIndex', this.indicatorRadioArr.length)
+				for(let i=0;i<this.indicatorRadioArr.length;i++) {
+					// 申请空间
+					let obj = {}
+					obj.criteria = 'exit'
+					obj.index = i
+					console.log('exit申请空间'+ i + '次')
+					this.$store.commit('addSignalLength', obj)
+			}
 		}
 			if(this.relation == 1){
 				this.$emit('sendExitSignalIndex', 1)
@@ -927,10 +940,10 @@ export default {
 		},
 		setEditPanel(num, data) {
 			this.clearForm()
+			this.relation = data.exit.relation ? data.exit.relation : 1
 			if (num == 1) {
 				this.relation = 1
 			}
-			this.relation = data.exit.relation ? data.exit.relation : 1
 			for (let i = 0; i < num - 1; i++) {
 				this.handleTabsEdit(null, 'add')
 			}
