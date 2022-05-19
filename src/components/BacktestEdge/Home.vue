@@ -855,10 +855,13 @@ export default {
 										vm.$store.commit('clearStoreDesciption')
 									}	
 								}catch(error){
-									console.log("Error", error);
+									console.log("Upload JSON failed", error);
+									vm.loading = false
 									alert('Upload JSON failed')
 								}	
 							}else{
+								console.log("Upload CSV failed", error);
+								vm.loading = false
 								alert('Upload CSV failed')
 							}						
 						})
