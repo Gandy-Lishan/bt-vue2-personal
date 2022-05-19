@@ -163,11 +163,11 @@ delay_bars: [String, Number],
 			this.description = `${techVal} ${radio} ${condition} ${this.tech.value}`
 			let desObj = {}
 			desObj.criteria = this.criteria
-if(this.relation != 1) {
+            if(this.relation != 1) {
 					desObj.description = this.description
 					desObj.index = index + 1
 					}
-					if(this.relation == 1 && this.tabLength == 1) {
+					if(this.relation == 1) {
 						desObj.description = commentDes+ this.description
 						desObj.index = 0
 					}

@@ -179,7 +179,7 @@ if(this.relation != 1) {
 					desObj.description = this.description
 					desObj.index = index + 1
 					}
-					if(this.relation == 1 && this.tabLength == 1) {
+					if(this.relation == 1) {
 						desObj.description = commentDes + this.description
 						desObj.index = 0
 					}

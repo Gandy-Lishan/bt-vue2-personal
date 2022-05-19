@@ -1,10 +1,10 @@
 <template>
 	<div class="entry-container">
-					<!-- <p>{{indicatorRadioArr}}</p>
+					<p>{{indicatorRadioArr}}</p>
 						<p>{{indicatorUrlArr}}</p>
 			<p>{{indicatorValArr}}</p>
 			<p>{{techIndiObj}}</p>
-			<p>{{editableTabs}}</p> -->
+			<p>{{editableTabs}}</p>
 		<div class="signal-option-box">
 			<el-tooltip style="diaplay:inline" effect="light" content="All params of entry criteria" placement="bottom">
 			<p class="criteria-title">Entry Criteria</p></el-tooltip>
