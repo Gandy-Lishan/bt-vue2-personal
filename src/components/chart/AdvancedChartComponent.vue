@@ -449,6 +449,7 @@ export default class AdvancedChartComponent extends Vue {
 			this.stx = uiContext.stx
 			CIQ.stxx = uiContext.stx
 			CIQ.periodicity = {period:1, interval:1, timeUnit:'day'}
+
 			var iter = CIQ.stxx.chart.market.newIterator({
 			interval: CIQ.stxx.layout.interval,
 			periodicity: CIQ.stxx.layout.periodicity,

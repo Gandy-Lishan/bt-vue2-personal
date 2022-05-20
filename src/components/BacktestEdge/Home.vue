@@ -296,6 +296,7 @@ export default {
 		sample
 	},
 	mounted() {
+
 		let toTop = document.getElementsByClassName('toTop')[0]
 		toTop.style.visibility = 'hidden'
 		// 在DOM渲染数据时，设置下区域高度为浏览器可视区域高度．
@@ -452,7 +453,36 @@ export default {
 			this.direction = val
 		},
 		refreshPage() {
-			location.reload()
+			if (!CIQ.Studies) return;
+			var stx = CIQ.stxx
+			for (var id in stx.layout.studies) {
+				var sd = stx.layout.studies[id];
+				if (!sd.customLegend && !sd.permanent) CIQ.Studies.removeStudy(stx, sd);
+			}
+			stx.draw();
+			var chartBox = document.getElementsByClassName("chart_box")[0]
+			var height = 520
+			chartBox.style.height = height+ 'px'
+
+			// remove all Studies from Vuex
+			CIQ.store.commit('getEntryIndicatorsList',[])
+			CIQ.store.commit('getExitIndicatorsList',[])
+			CIQ.store.commit('getMA',[])
+			CIQ.store.commit('getExtraIndicators',[])
+			CIQ.store.commit('getTechnicalIndicators',[])
+
+			CIQ.store.commit('getBacktestSymbol','SPY')
+			CIQ.store.commit('getFrequency', 'Daily')
+
+			// remove markers, prompt, recover timeframe dropdown
+			CIQ.removePrompt()
+			CIQ.hideMarker()
+			CIQ.isMarkerShown = false
+			document.getElementsByClassName("ciq-period")[0].style.display = "block"
+
+			this.clearForm()
+			CIQ.addIndicators()
+			//location.reload()
 		},
 		addEntrySignalLength(index) {
 			let obj = {}
@@ -525,7 +555,8 @@ export default {
 						this.$refs.exitChild.saveRelation()
 					}
 					if (exitChecked) {
-						this.loading = true
+						//this.loading = true
+						CIQ.addCover("Start runing Backtest...")
 						let vm = this
 						let signalEntryList = []
 						let signalExitList = []
@@ -553,7 +584,8 @@ export default {
 									type: 'error',
 									offset: 300
 								})
-								vm.loading = false
+								CIQ.hideCover()
+								//vm.loading = false
 								return
 							}
 						}
@@ -579,7 +611,8 @@ export default {
 									type: 'error',
 									offset: 300
 								})
-								vm.loading = false
+								CIQ.hideCover()
+								//vm.loading = false
 								return
 							}
 						}
@@ -818,7 +851,11 @@ export default {
 											// 保存成功之后，将 backtestInfo 清空回原始的状态
 											CIQ.isBacktestRun = true
 											vm.$store.commit('initialBacktestInfo')
-											vm.loading = false
+
+											//和创回测绑在一起，没有加所以不用删
+											//CIQ.hideCover()
+
+											//vm.loading = false
 											vm.goToHistoryForm()
 											vm.$refs.historyChild.refreshHistory(res.data.id)
 											// 保存成功之后应该清除表单的所有数据
@@ -837,7 +874,8 @@ export default {
 											vm.$refs.favoriteChild.getFavoriteList()
 										} else {
 											vm.$message.error('Save failed')
-											vm.loading = false
+											CIQ.hideCover()
+											//vm.loading = false
 											CIQ.hideMarker()
 											CIQ.isMarkerShown = false
 										}
@@ -845,7 +883,8 @@ export default {
 										vm.$store.commit('initialBacktestInfo')
 										vm.$refs.setUpChild.clearOldBacktestName()
 										vm.$refs.favoriteChild.getFavoriteList()
-										vm.loading = false
+										CIQ.hideCover()
+										//vm.loading = false
 										vm.$message({
 											message: 'The internal server is busy, please try again later ',
 											type: 'error',
@@ -856,12 +895,14 @@ export default {
 									}	
 								}catch(error){
 									console.log("Upload JSON failed", error);
-									vm.loading = false
+									CIQ.hideCover()
+									//vm.loading = false
 									alert('Upload JSON failed')
 								}	
 							}else{
 								console.log("Upload CSV failed", error);
-								vm.loading = false
+								CIQ.hideCover()
+								//vm.loading = false
 								alert('Upload CSV failed')
 							}						
 						})
@@ -875,9 +916,11 @@ export default {
 		goToHistoryForm() {
 			this.activeName = 'second'
 		},
-		async goTobacktestSetupForm(id, callback) {
+		async goTobacktestSetupForm(id, resData, callback) {
 			// backtestEditData
-			this.loading = true
+			CIQ.setCoverText('Restoring Backtest form...')
+			console.log(resData)
+			//this.loading = true
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
 			this.$refs.exitChild.clearForm()
@@ -885,8 +928,8 @@ export default {
 			vm.activeName = 'first'
 			vm.backtestEditData = {}
 			try {
-				const res = await seeParams(id)
-				let data = res.data
+				//const res = await seeParams(id)
+				let data = resData
 
 				data.old_uuid = id
 				data.entry = JSON.parse(data.entry)
@@ -937,7 +980,8 @@ export default {
 				vm.$store.commit('getFrequency', vm.editFrequency)
 				console.log("before listen to backtestEditData")
 				vm.backtestEditData = data
-				this.loading = false
+				
+				//this.loading = false
 			} catch (error) {
 				console.error(error)
 				vm.$message({
@@ -945,7 +989,8 @@ export default {
 					type: 'error',
 					offset: 300
 				})
-				this.loading = false
+				CIQ.hideCover()
+				//this.loading = false
 			}
 			setTimeout(()=>{
 				console.log("异步请求结束，执行回调函数")
@@ -954,11 +999,15 @@ export default {
 		},
 		goBacktestResultForm(row, callback) {
 			this.activeName = 'third'
-			this.$refs.performanceChild.getResultData(row)
-			setTimeout(() => {
-				console.log("异步请求结束，执行回调函数");
+			CIQ.setCoverText('Generating Backtest report, please wait...')
+			this.$refs.performanceChild.getResultData(row,() => {
+				console.log("异步请求结束，执行回调函数(别看了，回调地狱好吧)");
 				if(callback){callback()}
-			}, 1000)
+			})
+			// setTimeout(() => {
+			// 	console.log("异步请求结束，执行回调函数");
+			// 	if(callback){callback()}
+			// }, 1000)
 		},
 		goToFavoritesForm() {
 			this.activeName = 'forth'

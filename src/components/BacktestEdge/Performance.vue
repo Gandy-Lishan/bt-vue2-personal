@@ -421,7 +421,7 @@ export default {
 	methods: {
 		handleClick(tab, event) {},
 
-		async getResultData(row) {
+		async getResultData(row,callback) {
 			let vm = this
 			let initalData = {}
 			let data = {}
@@ -430,7 +430,7 @@ export default {
 			}
 			if (row.status != 0) {
 				if (this.$store.state.favoriteBacktestRowData.id) {
-					vm.loading = true
+					//vm.loading = true
 					let id = row.id
 					try {
 						const res = await seeReport(id)
@@ -538,10 +538,11 @@ export default {
 							// ------------------------------ end -----------------------------------
 							setTimeout(() => {
 								this.loadMarker(initalData.markerSet)
+								if(callback){callback()}
 							}, 0)
 
 							//vm.$store.commit('getTradesData',initalData[])
-							vm.loading = false
+							//vm.loading = false
 						}
 					} catch (error) {
 						console.error('服务器报错', error)
@@ -549,7 +550,8 @@ export default {
 						vm.tableData = []
 						vm.tradesData = []
 						vm.$emit('errorCatchPerformance')
-						vm.loading = false
+						CIQ.hideCover()
+						//vm.loading = false
 					}
 				}
 			}
