@@ -675,6 +675,12 @@ export default {
 					this.editableTabsValue = this.editableTabs.length + ''
 					this.tabIndex = this.editableTabs.length
 				}
+				if(this.relation == 2) {
+					this.score = this.indicatorRadioArr.length
+				}
+				if(this.relation == 3) {
+					this.signals_in_market = this.indicatorRadioArr.length
+				}
 			}
 			if (action === 'remove') {
 				if((this.relation == 2 || this.relation == 3) && this.editableTabs.length == 2) {
@@ -719,6 +725,12 @@ export default {
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex,1)
 				this.techIndiObj.push('')
+				if(this.relation == 2) {
+					this.score = this.indicatorRadioArr.length
+				}
+				if(this.relation == 3) {
+					this.signals_in_market = this.indicatorRadioArr.length
+				}
 
 				// 移除某选项卡时，把indicatorUrlArr内的indicator依次载入vuex以刷新状态
 				tabs.forEach((tab, index) => {
@@ -830,10 +842,18 @@ export default {
 		changeRelation(val) {
 			if(val == 1) {
 				this.editableTabsValue = '1'
+				this.score = 1
+				this.signals_in_market = 1
 			}
 			if(val == 2 || val == 3) {
 				if(this.editableTabs.length === 1) {
 				this.handleTabsEdit(null,'add')
+				}
+				if(val == 2) {
+					this.score = 2
+				}
+				if(val == 3) {
+					this.signals_in_market = 2
 				}
 			}
 			this.$emit('getExitRelation',val)
