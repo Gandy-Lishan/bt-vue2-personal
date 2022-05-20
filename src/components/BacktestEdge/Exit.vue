@@ -422,9 +422,9 @@ import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Li
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 export default {
 	name: 'exit',
-	props: {
-		exitSaveCheck: Boolean
-	},
+	// props: {
+	// 	exitSaveCheck: Boolean
+	// },
 	inheritAttrs: false,
 	data() {
 		return {
@@ -505,47 +505,47 @@ export default {
 		updateTech(val) {
 			this.indicatorRadio = 'technical'
 		},
-		exitSaveCheck: {
-			handler(newVal) {
-				//console.log("传到exit的值", newVal);
-				if (newVal) {
-					this.signalOptions = [
-						{
-							value: 1,
-							label: 'Single-Signal'
-						},
-						{
-							value: 2,
-							label: 'SameBar Multi-Signal'
-						},
-						{
-							value: 3,
-							label: 'TimeOrder Multi-Signal'
-						},
-						{
-							value: 0,
-							label: 'Only Use Risk Control'
-						}
-					]
-				} else {
-					this.signalOptions = [
-						{
-							value: 1,
-							label: 'Single-Signal'
-						},
-						{
-							value: 2,
-							label: 'SameBar Multi-Signal'
-						},
-						{
-							value: 3,
-							label: 'TimeOrder Multi-Signal'
-						}
-					]
-					this.exitItemCheck = false
-				}
-			}
-		},
+		// exitSaveCheck: {
+		// 	handler(newVal) {
+		// 		console.log("传到exit的值", newVal);
+		// 		if (newVal) {
+		// 			this.signalOptions = [
+		// 				{
+		// 					value: 1,
+		// 					label: 'Single-Signal'
+		// 				},
+		// 				{
+		// 					value: 2,
+		// 					label: 'SameBar Multi-Signal'
+		// 				},
+		// 				{
+		// 					value: 3,
+		// 					label: 'TimeOrder Multi-Signal'
+		// 				},
+		// 				{
+		// 					value: 0,
+		// 					label: 'Only Use Risk Control'
+		// 				}
+		// 			]
+		// 		} else {
+		// 			this.signalOptions = [
+		// 				{
+		// 					value: 1,
+		// 					label: 'Single-Signal'
+		// 				},
+		// 				{
+		// 					value: 2,
+		// 					label: 'SameBar Multi-Signal'
+		// 				},
+		// 				{
+		// 					value: 3,
+		// 					label: 'TimeOrder Multi-Signal'
+		// 				}
+		// 			]
+		// 			this.exitItemCheck = false
+		// 		}
+		// 	}
+		// },
 		relation: {
 			handler(newVal, oldVal) {
 				if (newVal == 0) {
@@ -590,6 +590,44 @@ export default {
 					}
 				}catch(err){console.error(err)}
 
+		},
+		addRiskControlOption(newVal) {
+			if (newVal) {
+					this.signalOptions = [
+						{
+							value: 1,
+							label: 'Single-Signal'
+						},
+						{
+							value: 2,
+							label: 'SameBar Multi-Signal'
+						},
+						{
+							value: 3,
+							label: 'TimeOrder Multi-Signal'
+						},
+						{
+							value: 0,
+							label: 'Only Use Risk Control'
+						}
+					]
+				} else {
+					this.signalOptions = [
+						{
+							value: 1,
+							label: 'Single-Signal'
+						},
+						{
+							value: 2,
+							label: 'SameBar Multi-Signal'
+						},
+						{
+							value: 3,
+							label: 'TimeOrder Multi-Signal'
+						}
+					]
+					this.exitItemCheck = false
+				}
 		},
 		getTechIndiObj(obj) {
 			this.techIndiObj.splice(obj.index, 1, obj.class)
@@ -693,11 +731,6 @@ export default {
 			
 				console.log('refs',this.$refs)
 		},
-
-		// getSentiUrl(obj) {
-		// 	//console.log('getSentiUrl Exit',obj)
-		// 	this.sentiUrlArr.splice(obj.index, 1, obj.url)
-		// },
 		getIndicatorUrl(obj) {
 			this.indicatorUrlArr.splice(obj.index, 1, obj.url)
 		},

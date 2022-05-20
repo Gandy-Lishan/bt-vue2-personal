@@ -30,33 +30,6 @@
 						width="70px"
 					>
 					</el-table-column>
-					<el-table-column
-						label="Entry & Exit"
-						align="center"
-						show-overflow-tooltip
-					>
-						<template slot-scope="scope">
-							<el-popover
-    placement="top-start"
-    title="标题"
-    width="200"
-    trigger="hover"
-    content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
-							<div
-								v-for="item in scope.row.entry_description"
-								:key="item"
-							>
-							
-								<p>{{ item }}</p>
-							</div></el-popover>
-							<div
-								v-for="item in scope.row.exit_description"
-								:key="item"
-							>
-								<p>{{ item }}</p>
-							</div>
-						</template>
-					</el-table-column>
 					<el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
 								<el-tooltip placement="top" effect="dark" transition  v-if="(scope.row.entry_description) instanceof Array">

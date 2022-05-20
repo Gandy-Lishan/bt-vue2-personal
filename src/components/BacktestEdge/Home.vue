@@ -89,7 +89,6 @@
 									<exit
 										ref="exitChild"
 										:direction="direction"
-										:exitSaveCheck="exitSaveCheck"
 										@isOnlyRiskControl="isOnlyRiskControl"
 										@getExitRelation="getExitRelation"
 										@sendExitSignalIndex="sendExitSignalIndex"
@@ -273,7 +272,6 @@ export default {
 			loading: false,
 			backtestEditData: {},
 			editFrequency: 'Daily',
-			exitSaveCheck: false,
 			historyFlag: true,
 			favoriteFlag: true,
 			entryLength: 1,
@@ -449,7 +447,8 @@ export default {
 			}
 		},
 		IsRiskControl(val) {
-			this.exitSaveCheck = val
+			// this.exitSaveCheck = val
+			this.$refs.exitChild.addRiskControlOption(val)
 		},
 		setDirection(val) {
 			this.direction = val
