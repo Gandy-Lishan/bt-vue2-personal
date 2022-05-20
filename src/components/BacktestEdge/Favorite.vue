@@ -29,7 +29,35 @@
 						width="70px"
 					>
 					</el-table-column>
+					
+					<el-table-column type="expand">
+						<template slot-scope="scope">
+							<div class="descriptionBox">
+								<div class="entryBox">
+									<p>Entry Description</p>
+									<template
+										v-for="(item, index) in scope.row.entry_description"
+									>
+										<p :key="index">{{ item }}</p>
+									</template>
+								</div>
+								<div class="exitBox">
+									<p>Exit Description</p>
+									<template v-for="(item, index) in scope.row.exit_description">
+										<p :key="index">{{ item }}</p>
+									</template>
+								</div>
+							</div>
+						</template>
+					</el-table-column>
 					<el-table-column label="Entry & Exit" align="center">
+						<template slot-scope="scope">
+							{{ scope.row.entry_description[0] }}<br />
+							<br />
+							{{ scope.row.exit_description[0] }}<br />
+						</template>
+					</el-table-column>
+					<!-- <el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
 								<el-tooltip placement="top" effect="dark" transition  v-if="(scope.row.entry_description) instanceof Array">
 								<div slot="content" v-for="(item,index) in scope.row.entry_description" :key="index">
@@ -65,7 +93,7 @@
 								</div>
 							</el-tooltip>
 						</template>
-					</el-table-column>
+					</el-table-column> -->
 					<el-table-column
 						label="Period"
 						show-overflow-tooltip
@@ -704,5 +732,17 @@ moveToFavorites: throttle(async function (row) {
 }
 .el-table__body-wrapper {
 	overflow-x: scroll;
+}
+.descriptionBox{
+	display: flex;
+	justify-content: space-around;
+	.entryBox p:first-child {
+		font-weight: 500;
+		color: #99a9bf;
+	}
+	.exitBox p:first-child {
+		font-weight: 500;
+		color: #99a9bf;
+	}
 }
 </style>
