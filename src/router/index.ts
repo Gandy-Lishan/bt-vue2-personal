@@ -8,128 +8,158 @@ import store from '../store/store'
 import https from 'https'
 
 import { getCookieData, setCookieData } from '@/tools/cookie'
+import { stringMap } from 'aws-sdk/clients/backup'
 Vue.use(Router)
 const router = new Router({
 	mode: 'history',
 	routes: [
 		{ path: '/', redirect: '/home' },
 		{ path: '/home', component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve) },
-		{path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve)}
+		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
 	]
 })
 router.beforeEach(async (to, from, next) => {
 	const res = await getIndicatorsList()
-			CIQ.store = store
-			CIQ.indicatorList = res.data
-			return next()
+	CIQ.store = store
+	CIQ.indicatorList = res.data
+	return next()
 })
+
+
 router.beforeEach((to, from, next) => {
 	let loginUrl = 'https://users.sentimentrader.com/login'
 	let formateHost = location.origin
 	//测试网站 https://users.sentdevsite.com/login
-		// https://backtest.sentimentrader.com/user?userID=668696
-		// 1. 从访问过来的 url 获取到 userid
-		// 2. 访问后端 api '/dev/user/?userid=668696' get 参数
-		let userId
-		try {
-			// userId = document.baseURI.split('?')[1]
-			// userId = userId.split('=')[1]
-			// userId = encodeURIComponent(userId)
-			// cookies.set('userid',decodeURIComponent(userId))
-			let url = location.search;
-			if(url.indexOf("?")!== -1) {
-				let paramsStr = url.substr(1)
-				let paramsArr = paramsStr.split('=')
-				userId = paramsArr[1]
-				// 正式版旧版
-				// cookies.set('userid',userId)
-				cookies.set('devbt2Userid',userId)
-				window.location.href = formateHost
-			}else{
-				// 正式版旧版
-				// userId = cookies.get('userid')
-				userId = cookies.get('devbt2Userid')
-				console.log('进入querySring判断')
-				if (!userId) {
-					alert('Login failed, please log in again')
-					window.location.href = loginUrl
-					return
-				}
+	// https://backtest.sentimentrader.com/user?userID=668696
+	// 1. 从访问过来的 url 获取到 userid
+	// 2. 访问后端 api '/dev/user/?userid=668696' get 参数
+	let userId
+		let url = location.search
+		userId = subURLstrToUserid(url, loginUrl, formateHost)
+
+		
+		let tmpStatus = postAxiosRequest(loginUrl, next)
+		if (!tmpStatus){
+			// 请求失败会进入这个分支
+			tmpStatus = getAxiosRequest(userId, loginUrl, next)
+			if (!tmpStatus){
+				alert("request failed")
+				window.location.href = loginUrl
 			}
-			axios
-			.get('/dev/user/?userid=' + userId)
-			.then((res) => {
-				if (res.status === 200) {
-						next()
-				}
-			})
-			.catch((error) => {
-				console.log(error)
-				let status = error.response.status
-				if (status === 401) {
-					//无权限
-					alert('No permission, please log in again')
-					window.location.href = loginUrl
-				}
-				if (status === 403) {
-					//认证时间超时
-					alert('Authentication expired, please log in again')
-					window.location.href = loginUrl
-				}
-				if (status === 404) {
-					// 用户不存在
-					alert('User does not exist, please log in again')
-					window.location.href = loginUrl
-				}
-				if(status === 500) {
-				// 服务器错误
-				alert('Internal Server Error, please log in again')
-				window.location.href = loginUrl
-				}
-				// next('https://users.sentdevsite.com/login')
-			})
-		} catch (error) {
-			const data = getCookieData()
-			userId = data.account_code
-
-			console.log('进入域名校验')
-			axios
-			.post('/dev/user/')
-			.then((res) => {
-				if (res.status === 200) {
-						next()
-				}
-			})
-			.catch((error) => {
-				console.log(error)
-				let status = error.response.status
-				if (status === 401) {
-					//无权限
-					alert('No permission, please log in again')
-					window.location.href = loginUrl
-				}
-				if (status === 403) {
-					//认证时间超时
-					alert('Authentication expired, please log in again')
-					window.location.href = loginUrl
-				}
-				if (status === 404) {
-					// 用户不存在
-					alert('User does not exist, please log in again')
-					window.location.href = loginUrl
-				}
-				if(status === 500) {
-				// 服务器错误
-				alert('Internal Server Error, please log in again')
-				window.location.href = loginUrl
-				}
-				// next('https://users.sentdevsite.com/login')
-			})
 		}
-		// 3. 根据返回状态码判断后续操作
-		// 3.1 200 成功设置 cookie userid=XXX endDate=XXX     cookie.set()
-		// 3.2 403 代表认证时间超时，返回到登录页面
-		// 3.3 404 表示用户不存在，返回到登录页面
+	})
 
-})
+
+async function postAxiosRequest(loginUrl: string, next: any) {
+	// 状态码,用于判断工作是否完成,成功为true,失败为false
+	let status = true
+
+	try{
+		const data = getCookieData()
+		let userId = data.account_code
+	}catch(err){
+		status = false
+	}
+
+	let res = await axios.post('/dev/user/')
+	if (res.status === 200) {
+		next()
+		status = true
+	}
+	else if (res.status === 401) {
+		//无权限
+		status = false
+		alert('No permission, please log in again')
+		window.location.href = loginUrl
+
+	}
+	else if (res.status === 403) {
+		//认证时间超时
+		status = false
+		alert('Authentication expired, please log in again')
+		window.location.href = loginUrl
+	}
+	else if (res.status === 404) {
+		// 用户不存在
+		status = false
+		alert('User does not exist, please log in again')
+		window.location.href = loginUrl
+	}
+	else if (res.status === 500) {
+		// 服务器错误
+		status = false
+		alert('Internal Server Error, please log in again')
+		window.location.href = loginUrl
+	}
+	else {
+		status = false
+		console.log(res);
+	}
+	return status
+}
+
+async function getAxiosRequest(userId: string, loginUrl: string, next: any) {
+	// 状态码,用于判断工作是否完成,成功为true,失败为false
+	let status = true
+	let res = await axios.get('/dev/user/?userid=' + userId)
+	if (res.status === 200) {
+		status = true
+		next()
+	}
+	else if (res.status === 401) {
+		//无权限
+		status = false
+		alert('No permission, please log in again')
+		window.location.href = loginUrl
+	}
+	else if (res.status === 403) {
+		//认证时间超时
+		status = false
+		alert('Authentication expired, please log in again')
+		window.location.href = loginUrl
+	}
+	else if (res.status === 404) {
+		// 用户不存在
+		status = false
+		alert('User does not exist, please log in again')
+		window.location.href = loginUrl
+	}
+	else if (res.status === 500) {
+		// 服务器错误
+		status = false
+		alert('Internal Server Error, please log in again')
+		window.location.href = loginUrl
+	}
+	else {
+		status = false
+		console.log(res);
+
+	}
+	return status
+
+}
+
+function subURLstrToUserid(url: string, loginUrl: string, formateHost: string) {
+	let userId;
+	if (url.indexOf("?") !== -1) {
+		let paramsStr = url.substr(1)
+		let paramsArr = paramsStr.split('=')
+		userId = paramsArr[1]
+		// 正式版旧版
+		// cookies.set('userid',userId)
+		cookies.set('devbt2Userid', userId)
+		window.location.href = formateHost
+	} else {
+		// 正式版旧版
+		// userId = cookies.get('userid')
+		userId = cookies.get('devbt2Userid')
+		console.log('进入querySring判断')
+		if (!userId) {
+			alert('Login failed, please log in again')
+			window.location.href = loginUrl
+			return
+		}
+	}
+	return userId
+}
 export default router
