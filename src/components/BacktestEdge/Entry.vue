@@ -353,7 +353,7 @@
 							"
 						></trailing-stop-like>
 						<div class="delay-bar-box">
-							 <el-checkbox v-model="isDelayBar"><el-tooltip style="diaplay:inline" effect="light" content="The number of bars delayed" placement="bottom">
+							 <el-checkbox v-model="isDelayBar" @change="isCheckDelayBar"><el-tooltip style="diaplay:inline" effect="light" content="The number of bars delayed" placement="bottom">
                        <span>Delay of Bars</span>
                         </el-tooltip></el-checkbox>
 					<el-input-number
@@ -561,6 +561,12 @@ export default {
 						this.editableTabsValue = this.editableTabs.length + ''
 				        this.tabIndex =this.editableTabs.length
 					}
+				if(this.relation == 2) {
+					this.score = this.indicatorRadioArr.length
+				}
+				if(this.relation == 3) {
+					this.signals_in_market = this.indicatorRadioArr.length
+				}
 				}
 			if (action === 'remove') {
 				if((this.relation == 2 || this.relation == 3) && this.editableTabs.length == 2) {
@@ -615,14 +621,17 @@ export default {
 				this.indicatorRadioArr.splice(absoluteIndex,1)
 				this.techIndiObj.splice(absoluteIndex,1)
 				this.techIndiObj.push('')
-
+				if(this.relation == 2) {
+					this.score = this.indicatorRadioArr.length
+				}
+				if(this.relation == 3) {
+					this.signals_in_market = this.indicatorRadioArr.length
+				}
 				// 移除某选项卡时，把indicatorUrlArr内的indicator依次载入vuex以刷新状态
 				tabs.forEach((tab, index) => {
 					this.$store.commit('getEntryIndicators', {index: index, value: this.indicatorUrlArr[index]})
 				})
 			}
-			
-					console.log('refs',this.$refs)
 		},
 		getIndicatorUrl(obj) {
 			this.indicatorUrlArr.splice(obj.index, 1, obj.url)
@@ -680,6 +689,12 @@ export default {
 			}
 			this.$store.commit("saveDelayBar",obj)
 		},
+		isCheckDelayBar(val) {
+			if(!val) {
+				this.delay_bars = 0
+			}
+
+		},
 		saveRelation() {
 			let obj = {}
 			obj.criteria = "entry"
@@ -694,10 +709,18 @@ export default {
 		changeRelation(val) {
 			if(val == 1) {
 				this.editableTabsValue = '1'
+				this.score = 1
+				this.signals_in_market = 1
 			}
 			if(val == 2 || val == 3) {
 				if(this.editableTabs.length === 1) {
 				this.handleTabsEdit(null,'add')
+				if(val == 2) {
+					this.score = 2
+				}
+				if(val == 3) {
+					this.signals_in_market = 2
+				}
 				}
 			}
 			this.$emit('getEntryRelation',val)

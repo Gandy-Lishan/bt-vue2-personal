@@ -89,7 +89,6 @@
 									<exit
 										ref="exitChild"
 										:direction="direction"
-										:exitSaveCheck="exitSaveCheck"
 										@isOnlyRiskControl="isOnlyRiskControl"
 										@getExitRelation="getExitRelation"
 										@sendExitSignalIndex="sendExitSignalIndex"
@@ -273,7 +272,6 @@ export default {
 			loading: false,
 			backtestEditData: {},
 			editFrequency: 'Daily',
-			exitSaveCheck: false,
 			historyFlag: true,
 			favoriteFlag: true,
 			entryLength: 1,
@@ -432,6 +430,9 @@ export default {
 
 		sendExitSignalIndex(length) {
 			this.exitLength = length
+			// for(let i=0;i<length;i++) {
+			// 	this.addExitSignalLength(i)
+			// }
 		},
 		handleTabClick(tab, event) {
 			let tabName = tab.name
@@ -447,7 +448,8 @@ export default {
 			}
 		},
 		IsRiskControl(val) {
-			this.exitSaveCheck = val
+			// this.exitSaveCheck = val
+			this.$refs.exitChild.addRiskControlOption(val)
 		},
 		setDirection(val) {
 			this.direction = val
@@ -546,7 +548,8 @@ export default {
 					let exit
 					let exitChecked
 					for (let index = 0; index < this.exitLength; index++) {
-						this.addExitSignalLength(index)
+					// this.addEntrySignalLength(index)
+					console.log('runbacktest exit' + index)
 						exit = this.$refs.exitChild.saveBacktestData(index)
 						exitChecked = await exit
 						this.$refs.exitChild.saveScoreValue()
@@ -624,6 +627,7 @@ export default {
 								item.analysis = 'Sentiment'
 								delete item.technicalIndicator
 								delete item.sentimentIndicator
+								delete item.riskIndicator
 							}
 							if (item.technicalIndicator) {
 								item.indicator = item.technicalIndicator

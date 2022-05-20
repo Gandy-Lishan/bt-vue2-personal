@@ -193,6 +193,7 @@ delay_bars: [String, Number],
 			this.$store.commit('saveDescription', desObj)
 		},
 		saveCondition(index) {
+			console.log('传入LRF的index',index)
 			let checked = true
 						if(this.exitItemCheck) {
 				return checked = true

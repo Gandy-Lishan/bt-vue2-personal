@@ -183,7 +183,7 @@ delay_bars: [String, Number],
 			}
 			let tech = this.tech
 			tech.criteria = this.criteria
-			tech.index = index + 1
+			tech.index = index
 			this.$store.commit('saveCondition', tech)
 			return checked
 		},

@@ -1,9 +1,9 @@
 <template>
 	<div class="exit-container">
 		
-			<p>{{indicatorRadioArr}}</p>
+			<!-- <p>{{indicatorRadioArr}}</p>
 			<p>{{indicatorUrlArr}}</p>
-			<p>{{indicatorValArr}}</p>
+			<p>{{indicatorValArr}}</p> -->
 		<div class="signal-option-box">
 			<el-tooltip
 				style="diaplay: inline"
@@ -422,9 +422,9 @@ import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Li
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 export default {
 	name: 'exit',
-	props: {
-		exitSaveCheck: Boolean
-	},
+	// props: {
+	// 	exitSaveCheck: Boolean
+	// },
 	inheritAttrs: false,
 	data() {
 		return {
@@ -469,6 +469,9 @@ export default {
 			isDelayBar: false
 		}
 	},
+	mounted() {
+		console.log('初次加载的this.$refs',this.$refs)
+	},
 	components: {
 		indicator,
 		senti,
@@ -502,48 +505,47 @@ export default {
 		updateTech(val) {
 			this.indicatorRadio = 'technical'
 		},
-		exitSaveCheck: {
-			handler(newVal) {
-				//console.log("传到exit的值", newVal);
-				if (newVal) {
-					this.signalOptions = [
-						{
-							value: 1,
-							label: 'Single-Signal'
-						},
-						{
-							value: 2,
-							label: 'SameBar Multi-Signal'
-						},
-						{
-							value: 3,
-							label: 'TimeOrder Multi-Signal'
-						},
-						{
-							value: 0,
-							label: 'Only Use Risk Control'
-						}
-					]
-				} else {
-					this.signalOptions = [
-						{
-							value: 1,
-							label: 'Single-Signal'
-						},
-						{
-							value: 2,
-							label: 'SameBar Multi-Signal'
-						},
-						{
-							value: 3,
-							label: 'TimeOrder Multi-Signal'
-						}
-					]
-					this.relation = 1
-					this.exitItemCheck = false
-				}
-			}
-		},
+		// exitSaveCheck: {
+		// 	handler(newVal) {
+		// 		console.log("传到exit的值", newVal);
+		// 		if (newVal) {
+		// 			this.signalOptions = [
+		// 				{
+		// 					value: 1,
+		// 					label: 'Single-Signal'
+		// 				},
+		// 				{
+		// 					value: 2,
+		// 					label: 'SameBar Multi-Signal'
+		// 				},
+		// 				{
+		// 					value: 3,
+		// 					label: 'TimeOrder Multi-Signal'
+		// 				},
+		// 				{
+		// 					value: 0,
+		// 					label: 'Only Use Risk Control'
+		// 				}
+		// 			]
+		// 		} else {
+		// 			this.signalOptions = [
+		// 				{
+		// 					value: 1,
+		// 					label: 'Single-Signal'
+		// 				},
+		// 				{
+		// 					value: 2,
+		// 					label: 'SameBar Multi-Signal'
+		// 				},
+		// 				{
+		// 					value: 3,
+		// 					label: 'TimeOrder Multi-Signal'
+		// 				}
+		// 			]
+		// 			this.exitItemCheck = false
+		// 		}
+		// 	}
+		// },
 		relation: {
 			handler(newVal, oldVal) {
 				if (newVal == 0) {
@@ -588,6 +590,44 @@ export default {
 					}
 				}catch(err){console.error(err)}
 
+		},
+		addRiskControlOption(newVal) {
+			if (newVal) {
+					this.signalOptions = [
+						{
+							value: 1,
+							label: 'Single-Signal'
+						},
+						{
+							value: 2,
+							label: 'SameBar Multi-Signal'
+						},
+						{
+							value: 3,
+							label: 'TimeOrder Multi-Signal'
+						},
+						{
+							value: 0,
+							label: 'Only Use Risk Control'
+						}
+					]
+				} else {
+					this.signalOptions = [
+						{
+							value: 1,
+							label: 'Single-Signal'
+						},
+						{
+							value: 2,
+							label: 'SameBar Multi-Signal'
+						},
+						{
+							value: 3,
+							label: 'TimeOrder Multi-Signal'
+						}
+					]
+					this.exitItemCheck = false
+				}
 		},
 		getTechIndiObj(obj) {
 			this.techIndiObj.splice(obj.index, 1, obj.class)
@@ -635,6 +675,12 @@ export default {
 					this.editableTabsValue = this.editableTabs.length + ''
 					this.tabIndex = this.editableTabs.length
 				}
+				if(this.relation == 2) {
+					this.score = this.indicatorRadioArr.length
+				}
+				if(this.relation == 3) {
+					this.signals_in_market = this.indicatorRadioArr.length
+				}
 			}
 			if (action === 'remove') {
 				if((this.relation == 2 || this.relation == 3) && this.editableTabs.length == 2) {
@@ -679,6 +725,12 @@ export default {
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex,1)
 				this.techIndiObj.push('')
+				if(this.relation == 2) {
+					this.score = this.indicatorRadioArr.length
+				}
+				if(this.relation == 3) {
+					this.signals_in_market = this.indicatorRadioArr.length
+				}
 
 				// 移除某选项卡时，把indicatorUrlArr内的indicator依次载入vuex以刷新状态
 				tabs.forEach((tab, index) => {
@@ -688,12 +740,9 @@ export default {
 					})
 				})
 			}
+			
+				console.log('refs',this.$refs)
 		},
-
-		// getSentiUrl(obj) {
-		// 	//console.log('getSentiUrl Exit',obj)
-		// 	this.sentiUrlArr.splice(obj.index, 1, obj.url)
-		// },
 		getIndicatorUrl(obj) {
 			this.indicatorUrlArr.splice(obj.index, 1, obj.url)
 		},
@@ -714,6 +763,14 @@ export default {
 		addExitSignalLength() {
 		if(this.relation == 2 || this.relation == 3 || this.relation == 0) {
 			    this.$emit('sendExitSignalIndex', this.indicatorRadioArr.length)
+				for(let i=0;i<this.indicatorRadioArr.length;i++) {
+					// 申请空间
+					let obj = {}
+					obj.criteria = 'exit'
+					obj.index = i
+					console.log('exit申请空间'+ i + '次')
+					this.$store.commit('addSignalLength', obj)
+			}
 		}
 			if(this.relation == 1){
 				this.$emit('sendExitSignalIndex', 1)
@@ -760,6 +817,12 @@ export default {
 			}
 			this.$store.commit('saveDelayBar', obj)
 		},
+		isCheckDelayBar(val) {
+			if(!val) {
+				this.delay_bars = 0
+			}
+
+		},
 		saveRelation() {
 				let obj = {}
 				obj.criteria = 'exit'
@@ -779,10 +842,18 @@ export default {
 		changeRelation(val) {
 			if(val == 1) {
 				this.editableTabsValue = '1'
+				this.score = 1
+				this.signals_in_market = 1
 			}
 			if(val == 2 || val == 3) {
 				if(this.editableTabs.length === 1) {
 				this.handleTabsEdit(null,'add')
+				}
+				if(val == 2) {
+					this.score = 2
+				}
+				if(val == 3) {
+					this.signals_in_market = 2
 				}
 			}
 			this.$emit('getExitRelation',val)
@@ -927,10 +998,10 @@ export default {
 		},
 		setEditPanel(num, data) {
 			this.clearForm()
+			this.relation = data.exit.relation ? data.exit.relation : 1
 			if (num == 1) {
 				this.relation = 1
 			}
-			this.relation = data.exit.relation ? data.exit.relation : 1
 			for (let i = 0; i < num - 1; i++) {
 				this.handleTabsEdit(null, 'add')
 			}

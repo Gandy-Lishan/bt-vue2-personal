@@ -30,26 +30,6 @@
 						width="70px"
 					>
 					</el-table-column>
-					<!-- <el-table-column
-						label="Entry & Exit"
-						align="center"
-						show-overflow-tooltip
-					>
-						<template slot-scope="scope">
-							<div
-								v-for="item in scope.row.entry_description"
-								:key="item"
-							>
-								<p>{{ item }}</p>
-							</div>
-							<div
-								v-for="item in scope.row.exit_description"
-								:key="item"
-							>
-								<p>{{ item }}</p>
-							</div>
-						</template>
-					</el-table-column> -->
 					<el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
 								<el-tooltip placement="top" effect="dark" transition  v-if="(scope.row.entry_description) instanceof Array">
@@ -440,6 +420,7 @@ export default {
 				//vm.loading = true
 				}
 			}, 3000)
+			vm.getHistoryList()
 		},
 		editBacktest: throttle(async function (row) {
 			let vm = this
