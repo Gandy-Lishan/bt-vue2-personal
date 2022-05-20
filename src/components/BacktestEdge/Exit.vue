@@ -542,7 +542,6 @@ export default {
 							label: 'TimeOrder Multi-Signal'
 						}
 					]
-					this.relation = 1
 					this.exitItemCheck = false
 				}
 			}
@@ -772,6 +771,12 @@ export default {
 			   obj.value = 0
 			}
 			this.$store.commit('saveDelayBar', obj)
+		},
+		isCheckDelayBar(val) {
+			if(!val) {
+				this.delay_bars = 0
+			}
+
 		},
 		saveRelation() {
 				let obj = {}
