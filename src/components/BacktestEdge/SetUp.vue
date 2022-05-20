@@ -412,6 +412,9 @@ export default {
 	computed: {
 		updateFreq() {
 			return this.$store.state.pairDataFreq
+		},
+		allRiskOption() {
+			return this.isTakeProfit || this.isStopLoss || this.isTimeInMarket
 		}
 	},
 	watch: {
@@ -428,6 +431,14 @@ export default {
 				case 'monthly': {
 					this.getFrequency('Monthly')
 					break
+				}
+			}
+		},
+		allRiskOption: {
+			handler(newVal) {
+				if(this.isRiskControl && !(this.isTakeProfit || this.isStopLoss || this.isTimeInMarket)) {
+					this.isTakeProfit = true
+					this.isStopLoss = true
 				}
 			}
 		},

@@ -406,6 +406,7 @@ export default {
 				vm.loading = true
 				}
 			}, 3000)
+			vm.getHistoryList()
 		},
 		editBacktest: throttle(async function (row) {
 			let vm = this
