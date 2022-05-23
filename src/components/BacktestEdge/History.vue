@@ -354,12 +354,16 @@ export default {
 	methods: {
 		async getHistoryList() {
 			this.loadTest = 'Loading...'
-			this.loading = true
+			//貌似不用
+			//CIQ.addCover("Loading HistoryList...")
+			//this.loading = true
 			let page = this.queryInfo.page
 			try {
 				let res = await getHistoryList(page)
 				if (res.status === 200) {
-					this.loading = false
+					//貌似不用
+					//CIQ.hideCover()
+					//this.loading = false
 					let historyNameList = []
 					this.backtestList = res.data.results
 
@@ -387,59 +391,70 @@ export default {
 				}
 			} catch (error) {
 				console.log(error)
-				this.loading = false
+				//CIQ.hideCover()
+				//this.loading = false
 			}
 		},
 		refreshHistory(id) {
 			let vm = this
 			vm.loadTest = 'Generating Backtest report, please wait'
-			vm.loading = true
+			//和创回测绑在一起，没有加
+			//CIQ.addCover('Generating Backtest report, please wait')
+			
+			//vm.loading = true
 			vm.clearInterval = clearPromiseInterval
 			let timer = setPromiseInterval(async () => {
 				try {
 					const res = await getStatus(id)
-					//console.log("状态码",res.data.status)
-					if (res.data.status == 2) {
-						clearPromiseInterval(timer).then(() => {})
-						vm.queryInfo.page = 1
-						vm.getHistoryList()
-						this.$emit('refFavoritesForm')
-						vm.loading = false
-						//console.log('成功之后的返回值', res.data)
-						let row = res.data
-						row.result = JSON.parse(row.result)
-						vm.viewBacktestResults(row)
-					}
-					if (res.data.status == 3) {
-						clearPromiseInterval(timer).then(() => {})
-						vm.queryInfo.page = 1
-						vm.getHistoryList()
-						this.$emit('refFavoritesForm')
-						vm.loading = false
-						//console.log('成功之后的返回值', res.data)
-						let row = res.data
-						row.result = JSON.parse(row.result)
-						vm.$notify({
-							title: 'No trades',
-							message: 'No trades, please change parameter.',
-							offset: 100,
-							type: 'warning'
-						})
-					}
+					console.log("状态码",res.data.status)
+				if (res.data.status == 2) {
+					clearPromiseInterval(timer).then(() => {})
+					vm.queryInfo.page = 1
+					vm.getHistoryList()
+					this.$emit('refFavoritesForm')
+					
+					// 直接衔接view result
+					//CIQ.hideCover()
+
+					//vm.loading = false
+					//console.log('成功之后的返回值', res.data)
+					let row = res.data
+					row.result = JSON.parse(row.result)
+					vm.viewBacktestResults(row)
+				}
+				if(res.data.status == 3) {
+					clearPromiseInterval(timer).then(() => {})
+					vm.queryInfo.page = 1
+					vm.getHistoryList()
+					this.$emit('refFavoritesForm')
+					CIQ.hideCover()
+					//vm.loading = false
+					//console.log('成功之后的返回值', res.data)
+					let row = res.data
+					row.result = JSON.parse(row.result)
+					vm.$notify({
+					title: 'No trades',
+					message: 'No trades, please change parameter.',
+					offset: 100,
+					type: 'warning'
+				})
+				}
 				} catch (error) {
 					vm.$message({
-						message: 'The internal server is busy, please try again later ',
-						type: 'error',
-						offset: 300
-					})
-					vm.loading = true
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
+				})
+				CIQ.addCover()
+				//vm.loading = true
 				}
 			}, 3000)
 		},
 		editBacktest: throttle(async function (row) {
 			let vm = this
 			try {
-				vm.loading = true
+				CIQ.addCover('Fetching backtest information...')
+				//vm.loading = true
 				const res = await seeParams(row.id)
 				document.getElementsByClassName('ciq-period')[0].style.display = ''
 				// 恢复indicator layout
@@ -450,15 +465,17 @@ export default {
 					this.restoreIndicatorLayoutEdit(
 						JSON.parse(res.data.indicator_layout),
 						res.data.frequency,
-						row
+						row, res.data
 					)
 				} else {
 					this.$store.commit('getRunBacktestData', row)
 					// emit同步调用
-					this.$emit('goBacktestResultForm', row, () => {
-						this.$emit('goTobacktestSetupForm', row.id)
+					this.$emit('goBacktestResultForm', row, ()=>{
+						this.$emit('goTobacktestSetupForm', row.id, res.data,()=>{
+							CIQ.hideCover()
+						})
 					})
-					this.loading = false
+					//this.loading = false
 				}
 			} catch (error) {
 				vm.$message({
@@ -542,7 +559,8 @@ export default {
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {
-					this.loading = true
+					CIQ.addCover('Fetching backtest information...')
+					//this.loading = true
 					const res = await seeParams(row.id)
 					// 恢复indicator layout
 					// console.log(res,row)
@@ -553,15 +571,17 @@ export default {
 						this.restoreIndicatorLayoutView(
 							JSON.parse(res.data.indicator_layout),
 							JSON.parse(res.data.entry).frequency,
-							row
+							row,res.data
 						)
 					} else {
 						this.$store.commit('getRunBacktestData', row)
 						// emit同步调用
-						this.$emit('goTobacktestSetupForm', row.id, () => {
-							this.$emit('goBacktestResultForm', row)
+						this.$emit('goTobacktestSetupForm', row.id, res.data, ()=>{
+							this.$emit('goBacktestResultForm', row, ()=>{
+								CIQ.hideCover()
+							})
 						})
-						this.loading = false
+						//this.loading = false
 					}
 				} catch (error) {
 					vm.$message({
@@ -613,7 +633,7 @@ export default {
 			this.$store.commit('setRestoreFreq', frequency)
 			// CIQ.addIndicatorsFromBacktest()
 		},
-		restoreIndicatorLayoutView(data, freq, row) {
+		restoreIndicatorLayoutView(data, freq, row, resData) {
 			//console.log("在跑完回测后和view result之间会加载一次chart去输出SignalOuput")
 			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
 			if (CIQ.isBacktestRun == true) {
@@ -622,12 +642,14 @@ export default {
 				var that = this
 				//不再使用outputSignalsResult，exportcsv放置在回测前，callback置于原地
 				//CIQ.outputSignalsResult(function () {
-				that.$store.commit('getRunBacktestData', row)
-				// emit同步调用
-				that.$emit('goTobacktestSetupForm', row.id, () => {
-					that.$emit('goBacktestResultForm', row)
-				})
-				that.loading = false
+					that.$store.commit('getRunBacktestData', row)
+					// emit同步调用
+					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
+						that.$emit('goBacktestResultForm', row, ()=>{
+							CIQ.hideCover()
+						})
+					})
+					//that.loading = false
 				//})
 			} else {
 				this.reloadData(data, freq)
@@ -639,14 +661,17 @@ export default {
 					//that.$emit('goBacktestResultForm', row)
 
 					// emit同步调用
-					that.$emit('goTobacktestSetupForm', row.id, () => {
-						that.$emit('goBacktestResultForm', row)
+					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
+						that.$emit('goBacktestResultForm', row, ()=>{
+							CIQ.hideCover()
+						})
 					})
-					that.loading = false
+					
+					//that.loading = false
 				})
 			}
 		},
-		restoreIndicatorLayoutEdit(data, freq, row) {
+		restoreIndicatorLayoutEdit(data, freq, row, resData) {
 			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
 			// if (CIQ.isBacktestRun == true) {
 			// 	CIQ.isBacktestRun = false
@@ -658,19 +683,20 @@ export default {
 			// 		that.$emit('goTobacktestSetupForm', row.id)
 			// 	})
 			// } else {
-			console.log('restoreIndicatorLayoutEdit')
-			this.reloadData(data, freq)
-			var that = this
-			CIQ.addIndicatorsFromBacktest(function () {
-				that.$store.commit('getRunBacktestData', row)
-				// emit同步调用
-				that.$emit('goBacktestResultForm', row, () => {
-					that.$emit('goTobacktestSetupForm', row.id)
+				console.log("restoreIndicatorLayoutEdit")
+				this.reloadData(data, freq)
+				var that = this
+				CIQ.addIndicatorsFromBacktest(function () {
+					that.$store.commit('getRunBacktestData', row)
+					// emit同步调用
+					
+					that.$emit('goBacktestResultForm', row, ()=>{
+						that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
+							CIQ.hideCover()
+						})
+					})
+					//that.loading = false
 				})
-
-				that.loading = false
-			})
-			//}
 		},
 		async showDes(row) {
 			const datades = {}

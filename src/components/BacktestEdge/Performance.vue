@@ -421,18 +421,21 @@ export default {
 	methods: {
 		handleClick(tab, event) {},
 
-		async getResultData(row) {
+		async getResultData(row,callback) {
+			
 			let vm = this
 			let initalData = {}
 			let data = {}
 			if (!row.id) {
 				return
 			}
+			
 			if (row.status != 0) {
 				if (this.$store.state.favoriteBacktestRowData.id) {
-					vm.loading = true
+					//vm.loading = true
 					let id = row.id
 					try {
+						
 						const res = await seeReport(id)
 						
 							console.log('Eric 返回的数据', res.data)
@@ -536,12 +539,8 @@ export default {
 
 							this.$emit('setBacktestResult', initalData['basic'])
 							// ------------------------------ end -----------------------------------
-							setTimeout(() => {
-								this.loadMarker(initalData.markerSet)
-							}, 0)
 
 							//vm.$store.commit('getTradesData',initalData[])
-							vm.loading = false
 						}
 					} catch (error) {
 						console.error('服务器报错', error)
@@ -549,10 +548,17 @@ export default {
 						vm.tableData = []
 						vm.tradesData = []
 						vm.$emit('errorCatchPerformance')
-						vm.loading = false
 					}
 				}
+			}else{
+				//console.error('row status is ',row.status)
 			}
+			setTimeout(() => {
+				if(initalData.markerSet){
+					this.loadMarker(initalData.markerSet)
+				}
+				if(callback){callback()}
+			}, 0)
 		},
 		loadMarker(markerSet) {
 			//load markers for initial quotefeed

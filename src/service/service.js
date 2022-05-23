@@ -40,6 +40,20 @@ export function seeParams(id) {
     const url = '/dev/seeparams/'
     return axios.get(url + id + '/')
 }
+
+// axios({
+//     //用axios发送get请求
+//   method: "get",
+//   url: url + id + '/',
+//   responseType: "blob", // 表明返回服务器返回的数据类型
+//   //关键点，在axios发送网络请求，并且接收到后端返回的文件流时，换算成百分比，并赋值给data中声明的变量
+//   onDownloadProgress (progress) { 
+//     //progress可以改成其他的参数，不需要提前声明
+//     console.log(Math.round(progress.loaded / progress.total * 100))
+//   }
+// })
+
+
 export function runBacktest(backtestDataStr) {
     const url = '/dev/runbt/'
     return axios.post(url,backtestDataStr,{withCredentials: true})
