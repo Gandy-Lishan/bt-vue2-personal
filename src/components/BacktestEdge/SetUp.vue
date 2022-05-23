@@ -492,6 +492,7 @@ export default {
 						this.isRiskControl = true
 						this.$emit('IsRiskControl', true)
 					}
+					this.selectRiskControl(this.isRiskControl)
 					}
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
@@ -667,7 +668,7 @@ export default {
 		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.backtestSetupForm.clearValidate()
-			this.$emit('IsRiskControl', this.isRiskControl)
+			// this.$emit('IsRiskControl', this.isRiskControl)
 		},
 		changeTimeframe(val) {
 			this.getFrequency(val)

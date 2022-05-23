@@ -538,7 +538,11 @@ export default {
 	},
 	methods: {
 		clearForm() {
+			let oldRelation = this.relation
+			let exitItemCheck = this.exitItemCheck
 			Object.assign(this.$data, this.$options.data())
+			this.relation = oldRelation
+			this.exitItemCheck = exitItemCheck
 			// 重置所有子组件的数据
 				try{
 					for (let i = 0; i < this.indicatorRadioArr.length; i++) {
@@ -1088,9 +1092,8 @@ export default {
 			// this.signals_in_market = data.exit.signals_in_market
 			// 	? data.exit.signals_in_market
 			// 	: 1
-			let riskValArr = data.risk_control.split('/')
-			for(let i=0;i < riskValArr.length;i++) {
-				if(riskValArr[i]) {
+			this.relation = 0
+				this.exitItemCheck = true
 				this.signalOptions = [
 					{
 						value: 1,
@@ -1109,13 +1112,8 @@ export default {
 						label: 'Only Use Risk Control'
 					}
 				]
-				this.exitItemCheck = true
 				this.$emit('isOnlyRiskControl', this.exitItemCheck)
-				this.relation = 0
 				this.$emit('getExitRelation',this.relation)
-				return
-				}
-			}
 		}
 	}
 }
