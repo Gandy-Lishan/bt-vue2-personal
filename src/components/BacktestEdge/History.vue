@@ -538,6 +538,7 @@ export default {
 			}
 		}, 1000),
 		viewBacktestResults: throttle(async function (row) {
+			console.log('row',row)
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {

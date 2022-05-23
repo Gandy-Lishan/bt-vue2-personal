@@ -434,7 +434,7 @@ export default {
 			indicatorValArr: new Array(5).fill(''),
 			techVal: '',
 			exitItemCheck: false,
-			delay_bars: 0,
+			delay_bars: 1,
 			isDelayBar: false,
 		}
 	},

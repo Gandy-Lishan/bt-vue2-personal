@@ -465,7 +465,7 @@ export default {
 			// riskValArr: new Array(5).fill(''),
 			techVal: '',
 			exitItemCheck: false,
-			delay_bars: 0,
+			delay_bars: 1,
 			isDelayBar: false
 		}
 	},
@@ -627,6 +627,7 @@ export default {
 						}
 					]
 					this.exitItemCheck = false
+					this.relation = 1
 				}
 		},
 		getTechIndiObj(obj) {
@@ -1104,17 +1105,17 @@ export default {
 			}
 		},
 		setRiskEditData(data) {
-			//console.log('编辑的risk exitdata', data)
-			this.score = data.exit.score
-			this.delay_bars = data.exit.delay_bars ? data.exit.delay_bars : 0
-			if(this.delay_bars != 0) {
-				this.isDelayBar = true
-			}else{
-				this.isDelayBar = false
-			}
-			this.signals_in_market = data.exit.signals_in_market
-				? data.exit.signals_in_market
-				: 1
+			console.log('编辑的risk exitdata', data)
+			// this.score = data.exit.score
+			// this.delay_bars = data.exit.delay_bars ? data.exit.delay_bars : 0
+			// if(this.delay_bars != 0) {
+			// 	this.isDelayBar = true
+			// }else{
+			// 	this.isDelayBar = false
+			// }
+			// this.signals_in_market = data.exit.signals_in_market
+			// 	? data.exit.signals_in_market
+			// 	: 1
 			this.signalOptions = [
 				{
 					value: 1,

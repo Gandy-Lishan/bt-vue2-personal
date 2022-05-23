@@ -477,21 +477,19 @@ export default {
 						this.isTakeProfit = true
 						this.tp = riskValArr[0]
 						this.isRiskControl = true
-						this.$emit('IsRiskControl', true)
 						
 					}
 					if(riskValArr[1]) {
 						this.isStopLoss = true
 						this.sl = riskValArr[1]
 						this.isRiskControl = true
-						this.$emit('IsRiskControl', true)
 					}
 					if(riskValArr[2]) {
 						this.isTimeInMarket = true
 						this.tim = riskValArr[2]
 						this.isRiskControl = true
-						this.$emit('IsRiskControl', true)
 					}
+					this.selectRiskControl()
 					}
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
