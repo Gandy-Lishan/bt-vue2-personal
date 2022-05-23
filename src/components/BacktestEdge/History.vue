@@ -377,7 +377,7 @@ export default {
 			let timer = setPromiseInterval(async () => {
 				try {
 					const res = await getStatus(id)
-					//console.log("状态码",res.data.status)
+					console.log("状态码",res.data.status)
 				if (res.data.status == 2) {
 					clearPromiseInterval(timer).then(() => {})
 					vm.queryInfo.page = 1
@@ -660,6 +660,7 @@ export default {
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
 					// emit同步调用
+					
 					that.$emit('goBacktestResultForm', row, ()=>{
 						that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
 							CIQ.hideCover()

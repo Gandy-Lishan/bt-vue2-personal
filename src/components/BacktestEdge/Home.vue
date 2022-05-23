@@ -800,7 +800,6 @@ export default {
 						backtestData.slippage = parseFloat(backtestData.slippage)
 						backtestData.win_rate = parseFloat(backtestData.win_rate)
 
-
 						CIQ.spanPeriod = {
 							start_date: backtestData.start_date.replace(/-/g,'') * 1000000000,
 							end_date: backtestData.end_date.replace(/-/g,'') * 1000000000
@@ -923,7 +922,7 @@ export default {
 		async goTobacktestSetupForm(id, resData, callback) {
 			// backtestEditData
 			CIQ.setCoverText('Restoring Backtest form...')
-			console.log(resData)
+			
 			//this.loading = true
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
@@ -1004,8 +1003,9 @@ export default {
 		goBacktestResultForm(row, callback) {
 			this.activeName = 'third'
 			CIQ.setCoverText('Generating Backtest report, please wait...')
+			
 			this.$refs.performanceChild.getResultData(row,() => {
-				console.log("异步请求结束，执行回调函数(别看了，回调地狱好吧)");
+				console.log("异步请求结束，执行回调函数(别看了，回调地狱好吧)",callback);
 				if(callback){callback()}
 			})
 			// setTimeout(() => {
