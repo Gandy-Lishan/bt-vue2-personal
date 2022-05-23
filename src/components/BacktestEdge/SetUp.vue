@@ -210,19 +210,19 @@
     <el-checkbox v-model="isRiskControl" border @change="selectRiskControl">Risk Control at Exit:</el-checkbox>
 						 </div>
 	<div class="tpContainer riskItem" v-if="isRiskControl">
-    <el-checkbox v-model="isTakeProfit" @change="selectRiskControl"><el-tooltip style="diaplay:inline" effect="light" content="Take profit in risk_control" placement="bottom">
+    <el-checkbox v-model="isTakeProfit" ><el-tooltip style="diaplay:inline" effect="light" content="Take profit in risk_control" placement="bottom">
                        <span>Take Profit</span>
                         </el-tooltip></el-checkbox>
 	<el-input v-model="tp" @input="setDesciption"></el-input><p style="margin:0px">(%)</p>
 	</div>
 		<div class="slContainer riskItem"  v-if="isRiskControl">
-    <el-checkbox v-model="isStopLoss" @change="selectRiskControl"><el-tooltip style="diaplay:inline" effect="light" content="Stop loss in risk_control" placement="bottom">
+    <el-checkbox v-model="isStopLoss" ><el-tooltip style="diaplay:inline" effect="light" content="Stop loss in risk_control" placement="bottom">
                        <span>Stop Loss</span>
                         </el-tooltip></el-checkbox>
 	<el-input v-model="sl" @input="setDesciption"></el-input><p>(%)</p>
 		</div>
 		<div class="timContainer riskItem"  v-if="isRiskControl">
-	    <el-checkbox v-model="isTimeInMarket" @change="selectRiskControl"><el-tooltip style="diaplay:inline" effect="light" content="Stay time in the market in risk_control" placement="bottom">
+	    <el-checkbox v-model="isTimeInMarket"><el-tooltip style="diaplay:inline" effect="light" content="Stay time in the market in risk_control" placement="bottom">
                        <span>Time In Market</span>
                         </el-tooltip></el-checkbox>
 		<el-input v-model="tim" @input="setDesciption"></el-input><p>(Bars)</p>
@@ -413,9 +413,6 @@ export default {
 		updateFreq() {
 			return this.$store.state.pairDataFreq
 		},
-		allRiskOption() {
-			return this.isTakeProfit || this.isStopLoss || this.isTimeInMarket
-		}
 	},
 	watch: {
 		updateFreq(val) {
@@ -434,16 +431,19 @@ export default {
 				}
 			}
 		},
-		allRiskOption: {
-			handler(newVal) {
-				if(this.isRiskControl && !(this.isTakeProfit || this.isStopLoss || this.isTimeInMarket)) {
-					this.isTakeProfit = true
-					this.isStopLoss = true
-				}
-			}
-		},
 		backtestEditData: {
 			handler(newVal) {
+			}
+		}
+	},
+	methods: {
+		clearForm() {
+			this.clearFormValidate()
+			Object.assign(this.$data, this.$options.data())
+			this.getEndDate()
+			this.bd.symbol = this.$store.state.backtestSymbol
+		},
+		setEditData(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
 					console.log("编辑展示的数据",newVal);
 					this.clearFormValidate()
@@ -477,19 +477,21 @@ export default {
 						this.isTakeProfit = true
 						this.tp = riskValArr[0]
 						this.isRiskControl = true
+						this.$emit('IsRiskControl', true)
 						
 					}
 					if(riskValArr[1]) {
 						this.isStopLoss = true
 						this.sl = riskValArr[1]
 						this.isRiskControl = true
+						this.$emit('IsRiskControl', true)
 					}
 					if(riskValArr[2]) {
 						this.isTimeInMarket = true
 						this.tim = riskValArr[2]
 						this.isRiskControl = true
+						this.$emit('IsRiskControl', true)
 					}
-					this.selectRiskControl()
 					}
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
@@ -512,15 +514,6 @@ export default {
 						this.bd.start_date = ''
 					}
 				}
-			}
-		}
-	},
-	methods: {
-		clearForm() {
-			this.clearFormValidate()
-			Object.assign(this.$data, this.$options.data())
-			this.getEndDate()
-			this.bd.symbol = this.$store.state.backtestSymbol
 		},
 		getDirection(val) {
 			// direction 设置到 vuex
@@ -681,11 +674,18 @@ export default {
 			CIQ.addIndicators()
 		},
 		selectRiskControl(val) {
+			if(!this.isRiskControl) {
+			this.$emit('IsRiskControl', false)
+			}
 			if(this.isRiskControl && (this.isTakeProfit || this.isTimeInMarket || this.isStopLoss)) {
 			this.$emit('IsRiskControl', true)
-			}else{
-				this.$emit('IsRiskControl', false)
 			}
+			if(this.isRiskControl && !(this.isTakeProfit || this.isTimeInMarket || this.isStopLoss)){
+				this.isTakeProfit = true
+				this.isStopLoss = true
+				this.$emit('IsRiskControl', true)
+			}
+			this.$store.commit('isRiskControl',val)
 		},
 		getFrequency(val) {
 			// getFrequency will no longer call addIndicator and pass a parameter to it

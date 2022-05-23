@@ -690,7 +690,9 @@ export default {
 			this.$store.commit("saveDelayBar",obj)
 		},
 		isCheckDelayBar(val) {
-			if(!val) {
+			if(val) {
+				this.delay_bars = 1
+			}else{
 				this.delay_bars = 0
 			}
 

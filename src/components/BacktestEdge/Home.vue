@@ -448,7 +448,7 @@ export default {
 			}
 		},
 		IsRiskControl(val) {
-			// this.exitSaveCheck = val
+			console.log('home risk control', val)
 			this.$refs.exitChild.addRiskControlOption(val)
 		},
 		setDirection(val) {
@@ -983,6 +983,7 @@ export default {
 				vm.$store.commit('getFrequency', vm.editFrequency)
 				console.log("before listen to backtestEditData")
 				vm.backtestEditData = data
+				vm.$refs.setUpChild.setEditData(data)
 				
 				//this.loading = false
 			} catch (error) {

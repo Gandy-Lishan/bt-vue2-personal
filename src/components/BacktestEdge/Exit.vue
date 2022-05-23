@@ -494,6 +494,9 @@ export default {
 		},
 		updateTech() {
 			return this.$store.state.currentTech
+		},
+		riskControl() {
+			return this.$store.state.riskControl
 		}
 	},
 	watch: {
@@ -505,47 +508,6 @@ export default {
 		updateTech(val) {
 			this.indicatorRadio = 'technical'
 		},
-		// exitSaveCheck: {
-		// 	handler(newVal) {
-		// 		console.log("传到exit的值", newVal);
-		// 		if (newVal) {
-		// 			this.signalOptions = [
-		// 				{
-		// 					value: 1,
-		// 					label: 'Single-Signal'
-		// 				},
-		// 				{
-		// 					value: 2,
-		// 					label: 'SameBar Multi-Signal'
-		// 				},
-		// 				{
-		// 					value: 3,
-		// 					label: 'TimeOrder Multi-Signal'
-		// 				},
-		// 				{
-		// 					value: 0,
-		// 					label: 'Only Use Risk Control'
-		// 				}
-		// 			]
-		// 		} else {
-		// 			this.signalOptions = [
-		// 				{
-		// 					value: 1,
-		// 					label: 'Single-Signal'
-		// 				},
-		// 				{
-		// 					value: 2,
-		// 					label: 'SameBar Multi-Signal'
-		// 				},
-		// 				{
-		// 					value: 3,
-		// 					label: 'TimeOrder Multi-Signal'
-		// 				}
-		// 			]
-		// 			this.exitItemCheck = false
-		// 		}
-		// 	}
-		// },
 		relation: {
 			handler(newVal, oldVal) {
 				if (newVal == 0) {
@@ -564,6 +526,14 @@ export default {
 					this.relation = oldVal
 				}
 			}
+		},
+		riskControl: {
+			handler(newVal) {
+				if(!newVal && this.relation == 0) {
+					this.relation = 1
+				}
+			},
+			immediate: true
 		}
 	},
 	methods: {
@@ -592,6 +562,7 @@ export default {
 
 		},
 		addRiskControlOption(newVal) {
+			console.log('exit risk control', newVal)
 			if (newVal) {
 					this.signalOptions = [
 						{
@@ -627,7 +598,6 @@ export default {
 						}
 					]
 					this.exitItemCheck = false
-					this.relation = 1
 				}
 		},
 		getTechIndiObj(obj) {
@@ -819,7 +789,9 @@ export default {
 			this.$store.commit('saveDelayBar', obj)
 		},
 		isCheckDelayBar(val) {
-			if(!val) {
+			if(val) {
+				this.delay_bars = 1
+			}else{
 				this.delay_bars = 0
 			}
 
@@ -1000,9 +972,9 @@ export default {
 		setEditPanel(num, data) {
 			this.clearForm()
 			this.relation = data.exit.relation ? data.exit.relation : 1
-			if (num == 1) {
-				this.relation = 1
-			}
+			// if (num == 1) {
+			// 	this.relation = 1
+			// }
 			for (let i = 0; i < num - 1; i++) {
 				this.handleTabsEdit(null, 'add')
 			}
@@ -1116,28 +1088,34 @@ export default {
 			// this.signals_in_market = data.exit.signals_in_market
 			// 	? data.exit.signals_in_market
 			// 	: 1
-			this.signalOptions = [
-				{
-					value: 1,
-					label: 'Single-Signal'
-				},
-				{
-					value: 2,
-					label: 'SameBar Multi-Signal'
-				},
-				{
-					value: 3,
-					label: 'TimeOrder Multi-Signal'
-				},
-				{
-					value: 0,
-					label: 'Only Use Risk Control'
+			let riskValArr = data.risk_control.split('/')
+			for(let i=0;i < riskValArr.length;i++) {
+				if(riskValArr[i]) {
+				this.signalOptions = [
+					{
+						value: 1,
+						label: 'Single-Signal'
+					},
+					{
+						value: 2,
+						label: 'SameBar Multi-Signal'
+					},
+					{
+						value: 3,
+						label: 'TimeOrder Multi-Signal'
+					},
+					{
+						value: 0,
+						label: 'Only Use Risk Control'
+					}
+				]
+				this.exitItemCheck = true
+				this.$emit('isOnlyRiskControl', this.exitItemCheck)
+				this.relation = 0
+				this.$emit('getExitRelation',this.relation)
+				return
 				}
-			]
-			this.exitItemCheck = true
-			this.$emit('isOnlyRiskControl', this.exitItemCheck)
-			this.relation = 0
-			this.$emit('getExitRelation',this.relation)
+			}
 		}
 	}
 }
