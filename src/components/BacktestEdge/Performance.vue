@@ -548,8 +548,6 @@ export default {
 						vm.tableData = []
 						vm.tradesData = []
 						vm.$emit('errorCatchPerformance')
-						CIQ.hideCover()
-						//vm.loading = false
 					}
 				}
 			}else{

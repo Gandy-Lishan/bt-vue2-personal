@@ -30,7 +30,34 @@
 						width="70px"
 					>
 					</el-table-column>
+					<el-table-column type="expand">
+						<template slot-scope="scope">
+							<div class="descriptionBox">
+								<div class="entryBox">
+									<p>Entry Description</p>
+									<template
+										v-for="(item, index) in scope.row.entry_description"
+									>
+										<p :key="index">{{ item }}</p>
+									</template>
+								</div>
+								<div class="exitBox">
+									<p>Exit Description</p>
+									<template v-for="(item, index) in scope.row.exit_description">
+										<p :key="index">{{ item }}</p>
+									</template>
+								</div>
+							</div>
+						</template>
+					</el-table-column>
 					<el-table-column label="Entry & Exit" align="center">
+						<template slot-scope="scope">
+							{{ scope.row.entry_description[0] }}<br />
+							<br />
+							{{ scope.row.exit_description[0] }}<br />
+						</template>
+					</el-table-column>
+					<!-- <el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
 								<el-tooltip placement="top" effect="dark" transition  v-if="(scope.row.entry_description) instanceof Array">
 								<div slot="content" v-for="(item,index) in scope.row.entry_description" :key="index">
@@ -66,7 +93,7 @@
 								</div>
 							</el-tooltip>
 						</template>
-					</el-table-column>
+					</el-table-column> -->
 					<el-table-column
 						label="Period"
 						show-overflow-tooltip
@@ -99,7 +126,7 @@
 							</div>
 						</template>
 					</el-table-column>
-					
+
 					<el-table-column
 						label="Timeframe"
 						show-overflow-tooltip
@@ -339,23 +366,25 @@ export default {
 					//this.loading = false
 					let historyNameList = []
 					this.backtestList = res.data.results
-					
-				    //console.log('history列表',res.data.results);
+
+					//console.log('history列表',res.data.results);
 					if (res.data.results.length != 0) {
 						res.data.results.forEach((element) => {
 							historyNameList.push(element.name)
 							if (element.result !== '')
 								element.result = JSON.parse(element.result)
-								if(element.entry_description.indexOf("[") != -1) {
-									element.entry_description = JSON.parse(element.entry_description)
-								}
-								if(element.exit_description.indexOf("[") != -1) {
-									element.exit_description = JSON.parse(element.exit_description)
-								}
+							if (element.entry_description.indexOf('[') != -1) {
+								element.entry_description = JSON.parse(
+									element.entry_description
+								)
+							}
+							if (element.exit_description.indexOf('[') != -1) {
+								element.exit_description = JSON.parse(element.exit_description)
+							}
 						})
-						
+
 						this.backtestList = res.data.results
-				        //console.log('处理过后history列表',this.backtestList);
+						//console.log('处理过后history列表',this.backtestList);
 						this.$store.commit('getBacktestName', historyNameList)
 					}
 					this.queryInfo.total = res.data.count
@@ -420,7 +449,6 @@ export default {
 				//vm.loading = true
 				}
 			}, 3000)
-			vm.getHistoryList()
 		},
 		editBacktest: throttle(async function (row) {
 			let vm = this
@@ -625,7 +653,7 @@ export default {
 			} else {
 				this.reloadData(data, freq)
 				var that = this
-				console.log("after clicking view")
+				console.log('after clicking view')
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
 					//that.$emit('goTobacktestSetupForm', row.id)
@@ -668,7 +696,6 @@ export default {
 					})
 					//that.loading = false
 				})
-			//}
 		},
 		async showDes(row) {
 			const datades = {}
@@ -825,5 +852,17 @@ export default {
 }
 .el-table__body-wrapper {
 	overflow-x: scroll;
+}
+.descriptionBox{
+	display: flex;
+	justify-content: space-around;
+	.entryBox p:first-child {
+		font-weight: 500;
+		color: #99a9bf;
+	}
+	.exitBox p:first-child {
+		font-weight: 500;
+		color: #99a9bf;
+	}
 }
 </style>
