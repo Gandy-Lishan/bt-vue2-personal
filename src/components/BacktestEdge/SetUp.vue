@@ -283,7 +283,7 @@ export default {
 		}
 		var validateNameRule = (rule, value, callback) => {
 			if (value == '') {
-				callback(new Error('Please give a backtest name'))
+				callback(new Error('Please input backtest name'))
 			} else {
 				callback()
 			}
@@ -413,6 +413,9 @@ export default {
 		updateFreq() {
 			return this.$store.state.pairDataFreq
 		},
+		allRiskControlOptions() {
+			return this.isTakeProfit || this.isStopLoss || this.isTimeInMarket
+		}
 	},
 	watch: {
 		updateFreq(val) {
@@ -433,6 +436,20 @@ export default {
 		},
 		backtestEditData: {
 			handler(newVal) {
+			}
+		},
+		allRiskControlOptions: {
+			handler(newVal) {
+			if(!newVal && this.isRiskControl) {
+			    this.$message({
+				message:
+					'至少选择一个 Risk Control 指标',
+				type: 'error',
+				offset: 300
+			    })
+			   this.isTakeProfit = true
+			   this.selectRiskControl(this.isRiskControl)
+			}
 			}
 		}
 	},

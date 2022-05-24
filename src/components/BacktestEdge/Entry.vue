@@ -434,7 +434,7 @@ export default {
 			indicatorValArr: new Array(5).fill(''),
 			techVal: '',
 			exitItemCheck: false,
-			delay_bars: 1,
+			delay_bars: 0,
 			isDelayBar: false,
 		}
 	},
@@ -717,6 +717,7 @@ export default {
 			if(val == 2 || val == 3) {
 				if(this.editableTabs.length === 1) {
 				this.handleTabsEdit(null,'add')
+				this.editableTabsValue = '1'
 				if(val == 2) {
 					this.score = 2
 				}

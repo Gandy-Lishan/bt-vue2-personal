@@ -407,24 +407,25 @@ delay_bars: [String, Number],
 		},
 		// 设置编辑的数据
 		setEditData(newVal) {
+			console.log('Alligator编辑的数据',newVal)
 			if (JSON.stringify(newVal) != '{}') {
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)
 				if (
-					this.tech.comparison === 'SC' ||
-					this.tech.comparison === 'SO' ||
-					this.tech.comparison === 'SL' ||
-					this.tech.comparison === 'SH'
+					obj.comparison === 'SC' ||
+					obj.comparison === 'SO' ||
+					obj.comparison === 'SL' ||
+					obj.comparison === 'SH'
 				) {
 					this.radio = 'first'
 					this.tech.comparison = obj.comparison
 				    this.tech.value = obj.value
 				}
 				if (
-					this.tech.comparison === 'TEETH' ||
-					this.tech.comparison === 'JAW' ||
-					this.tech.comparison === 'LIPS'
+					obj.comparison === 'TEETH' ||
+					obj.comparison === 'JAW' ||
+					obj.comparison === 'LIPS'
 				) {
 					this.radio = 'second'
 					this.value2 = obj.value
