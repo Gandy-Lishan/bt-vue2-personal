@@ -43,7 +43,7 @@
 					<el-tooltip
 						class="item"
 						effect="dark"
-						content="Clear chart and backtest set up form to create new backtests"
+						content="Clear current chart & Backtest Setup Form and create a new backtest."
 						placement="bottom"
 					>
 						<el-button

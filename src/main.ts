@@ -10,6 +10,8 @@ import en from './tools/en.js'
 import './assets/css/global.css'
 // 导入字体图标
 import './assets/fonts/iconfont.css'
+// 导入帮助图标
+import './assets/helpIconFont/iconfont.css'
 import 'font-awesome/css/font-awesome.css';
 
 // 导入全局样式表

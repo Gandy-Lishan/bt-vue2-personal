@@ -4,25 +4,35 @@
 			<!-- <p>{{indicatorRadioArr}}</p>
 			<p>{{indicatorUrlArr}}</p>
 			<p>{{indicatorValArr}}</p> -->
-		<div class="signal-option-box">
-			<el-tooltip
-				style="diaplay: inline"
-				effect="light"
-				content="All params of exit criteria"
-				placement="bottom"
-			>
-				<p class="criteria-title">Exit Criteria</p></el-tooltip
-			>
+		<div class="signal-option-box">			<div class="entry-title-box">
+			<p class="criteria-title">Exit Criteria</p> 
+		<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+        <span slot="content">Set the signal/signals which trigger the backtest exit criteria.<br/>
+		Choose one of the three options for exit criteria:<br/>
+		1. Single Signal: One signal will trigger the backtest criteria.<br/>
+		2. SameBar Multi-Signal: More than one signals (limit to 5) occurring at the same bar,will trigger the backtest criteria.<br/>
+		3. TimeOrder Multi-Signal: More than one signals (limit to 3) occurring within a number of bars,will trigger the backtest criteria.<br/>
+		4. Only Use Risk Control: If the 'Risk Control at Exit' is set, this option can be chosen to trigger the backtest criteria.<br/>
+		</span>
+		<i class="iconfont icon-wenhao"></i>
+        </el-tooltip>
+			</div>
 			<div class="signal-container">
 				<span class="scoreNote" v-if="relation === 2"
-					><el-tooltip
-						style="diaplay: inline"
-						effect="light"
-						content="Only use in multi signals and the value <= the len of signals"
-						placement="bottom"
 					>
-						<span>Score:</span>
-					</el-tooltip></span
+			<span>Score: </span>
+		<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+        <span slot="content">Choose a value to specify how many following signals will occur at the same bar to trigger the backtest criteria.<br/>
+		if choose score 1, meanning if any one signal of the following signals occur the backtest criteria is met.<br/>
+		if choose score 2, meanning if any two of the signals of the following signals occur the backtest criteria is met.<br/>
+		etc.<br/>
+		For example:<br/>
+		If the backtest criteria needs to have a "AND" condition of 2 signals, set two signals below and choose score 2.<br/>
+		If the backtest criteria needs to have a "OR" condition of 2 signals, set two signals below and choose score 1.<br/>
+		etc.<br/>
+		</span>
+		<i class="iconfont icon-wenhao"></i>
+        </el-tooltip></span
 				>
 				<el-input-number
 					v-model="score"
@@ -34,14 +44,20 @@
 					size="mini"
 				></el-input-number>
 				<span class="scoreNote" v-if="relation === 3"
-					><el-tooltip
-						style="diaplay: inline"
-						effect="light"
-						content="Using in indicator formula"
-						placement="bottom"
 					>
 						<span>Period:</span>
-					</el-tooltip></span
+											<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+        <span slot="content">Choose a value to specify how many bars within which the following signals will occur in time order to trigger the backtest criteria.<br/>
+		if choose score 1, meanning if the following signals occur at the same bar the backtest criteria is met.<br/>
+		if choose score 2, meanning if the following signals occur within two bars the backtest criteria is met.<br/>
+		etc.<br/>
+		For example:<br/>
+		If the backtest criteria needs to have two consecutive signals, set two signals below and choose period 2.<br/>
+		If the backtest criteria needs to have two signals occur within 3 bars, set two signals below and period 3.<br/>
+		etc.<br/>
+		</span>
+		<i class="iconfont icon-wenhao"></i>
+        </el-tooltip></span
 				>
 				<el-input-number
 					v-model="signals_in_market"
@@ -379,14 +395,13 @@
 						></trailing-stop-like>
 						<div class="delay-bar-box">
 							<el-checkbox v-model="isDelayBar"
-								><el-tooltip
-									style="diaplay: inline"
-									effect="light"
-									content="The number of bars delayed"
-									placement="bottom"
 								>
-									<span>Delay of Bars</span>
-								</el-tooltip></el-checkbox
+									<span>Delay of Bars </span>
+													   <el-tooltip effect="dark" placement="top" style="diaplay:inline">
+        <span slot="content">Check this option to delay the specified number of bars to exit when the exit criteria is met.<br/>
+		</span>
+		<i class="iconfont icon-wenhao"></i>
+        </el-tooltip></el-checkbox
 							>
 											<el-input-number
 					v-model="delay_bars"
@@ -1123,6 +1138,8 @@ export default {
 .criteria-title {
 	font-size: 18px;
 	font-weight: bold;
+	margin-right: 5px;
+	display: inline-block;
 }
 .radioBox .el-form-item {
 	display: flex;
