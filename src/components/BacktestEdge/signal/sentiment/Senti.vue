@@ -5,9 +5,7 @@
 				<el-form-item label="Extreme Optimism" prop="extreme_optimism">
 				<span slot="label">
                      <span class="span-box">
-                        <el-tooltip style="diaplay:inline" effect="light" content="The extreme optimism value of the current indicator" placement="bottom">
                        <span>Extreme Optimism:</span>
-                        </el-tooltip>
                      </span>
                    </span>
 					<el-input
@@ -18,9 +16,7 @@
 				<el-form-item label="Extreme Pessimism" prop="extreme_pessimism">
 									<span slot="label">
                      <span class="span-box">
-                        <el-tooltip style="diaplay:inline" effect="light" content="The extreme pessimism value of the current indicator" placement="bottom">
                        <span>Extreme Pessimism:</span>
-                        </el-tooltip>
                      </span>
                    </span>
 					<el-input
@@ -39,7 +35,6 @@
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
-						<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
 							:disabled="!(conditionRadio === 'Sentiment Value')"
 							v-model="senti.condition"
@@ -54,18 +49,16 @@
 							>
 							</el-option>
 						</el-select>
-						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="value">
-						 <el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
+						 
 						<el-input
 							:disabled="!(conditionRadio === 'Sentiment Value')"
 							v-model="senti.value"
 							placeholder="Input Value"
 						></el-input>
-						 </el-tooltip>
 					</el-form-item>
 				</div>
 			</div>
@@ -80,19 +73,18 @@
 				</el-form-item>
 				<div class="conditionInput">
 					<el-form-item prop="period">
-						<el-tooltip style="diaplay:inline" effect="light" content="Using in indicator formula" placement="bottom">
+						
 						<el-input
 							@input="setPeriod"
 							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
 							placeholder="Input Period"
 							v-model="senti.period"
 						></el-input>
-						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionSelect">
 					<el-form-item>
-						<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
+						
 						<el-select
 							v-model="senti.condition"
 							filterable
@@ -107,19 +99,16 @@
 							>
 							</el-option>
 						</el-select>
-						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="maValue">
-						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
 							v-model="senti.maValue"
 							placeholder="Input Value"
 							@input="change($event)"
 						></el-input>
-						</el-tooltip>
 					</el-form-item>
 				</div>
 			</div>

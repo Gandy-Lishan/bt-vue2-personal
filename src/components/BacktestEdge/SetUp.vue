@@ -10,9 +10,9 @@
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12">
 					<el-form-item prop="capital" label="
 							Starting Capital">
-                        <el-tooltip effect="dark" placement="top" style="diaplay:inline">
+                        <el-tooltip effect="dark" placement="top" style="diaplay:inline" >
                              <span slot="content">Input the value of starting capital of the backtest. (default: 100000)<br/></span>
-							<i class="iconfont icon-wenhao"></i>
+							<i class="iconfont icon-wenhao" ></i>
                         </el-tooltip>
 						<el-input
 							v-model="bd.capital"
@@ -380,7 +380,7 @@ export default {
 					}
 				]
 			},
-			oldBacktestName: ''
+			oldBacktestName: '',
 		}
 	},
 	mounted() {

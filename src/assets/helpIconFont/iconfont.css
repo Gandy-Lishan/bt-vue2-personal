@@ -17,5 +17,6 @@
 .icon-wenhao:before {
   content: "\e61a";
   display: inline;
+  cursor: pointer;
 }
 
