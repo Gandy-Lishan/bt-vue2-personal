@@ -10,13 +10,13 @@
 				</el-radio-group>
 			</div> -->
 			<div class="condition-container">
-				<el-form-item>
-					<el-radio v-model="radio" label=" " @change="setRadio"></el-radio>
+				<el-form-item
 						style="diaplay: inline"
 						effect="light"
 						content="Compare with indicator value"
 						placement="bottom"
 					>
+					<el-radio v-model="radio" label=" " @change="setRadio"></el-radio>
 						<el-select
 							v-model="tech.comparison"
 							size="mini"
@@ -35,7 +35,7 @@
 						</el-select>
 				</el-form-item>
 				<div class="conditionSelect">
-					<el-form-item>
+					<el-form-item
 							style="diaplay: inline"
 							effect="light"
 							content="The way of comparing between comparison and value"

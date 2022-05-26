@@ -48,12 +48,12 @@
 			<span>Period: </span>
 					<el-tooltip effect="dark" placement="top" style="diaplay:inline">
         <span slot="content">Choose a value to specify how many bars within which the following signals will occur in time order to trigger the backtest criteria.<br/>
-		if choose score 1, meanning if the following signals occur at the same bar the backtest criteria is met.<br/>
-		if choose score 2, meanning if the following signals occur within two bars the backtest criteria is met.<br/>
+		if choose period 1, meanning if the following signals occur at the same bar the backtest criteria is met.<br/>
+		if choose period 2, meanning if the following signals occur within two bars the backtest criteria is met.<br/>
 		etc.<br/>
 		For example:<br/>
 		If the backtest criteria needs to have two consecutive signals, set two signals below and choose period 2.<br/>
-		If the backtest criteria needs to have two signals occur within 3 bars, set two signals below and period 3.<br/>
+		If the backtest criteria needs to have two signals occur within 3 bars, set two signals below and choose period 3.<br/>
 		etc.<br/>
 		</span>
 		<i class="iconfont icon-wenhao"></i>
