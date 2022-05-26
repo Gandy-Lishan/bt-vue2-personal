@@ -518,7 +518,7 @@ export default {
 				} else {
 					if (!validName) {
 						this.$message({
-							message: 'Please select indicator from the drop-down box',
+							message: 'Please select '+(index+1)+'th '+this.criteria+ ' indicator from the drop-down box',
 							type: 'error'
 						})
 					}
@@ -550,7 +550,7 @@ export default {
 				} else {
 					if (!validName) {
 						this.$message({
-							message: 'Please select indicator from the drop-down box',
+							message: 'Please select '+(index+1)+'th '+this.criteria+ ' indicator from the drop-down box',
 							type: 'error',
 							offset: 300
 						})

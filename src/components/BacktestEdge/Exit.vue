@@ -1,39 +1,48 @@
 <template>
 	<div class="exit-container">
-		
-			<!-- <p>{{indicatorRadioArr}}</p>
+		<!-- <p>{{indicatorRadioArr}}</p>
 			<p>{{indicatorUrlArr}}</p>
 			<p>{{indicatorValArr}}</p> -->
-		<div class="signal-option-box">			<div class="entry-title-box">
-			<p class="criteria-title">Exit Criteria</p> 
-		<el-tooltip effect="dark" placement="top" style="diaplay:inline">
-        <span slot="content">Set the signal/signals which trigger the backtest exit criteria.<br/>
-		Choose one of the three options for exit criteria:<br/>
-		1. Single Signal: One signal will trigger the backtest criteria.<br/>
-		2. SameBar Multi-Signal: More than one signals (limit to 5) occurring at the same bar,will trigger the backtest criteria.<br/>
-		3. TimeOrder Multi-Signal: More than one signals (limit to 3) occurring within a number of bars,will trigger the backtest criteria.<br/>
-		4. Only Use Risk Control: If the 'Risk Control at Exit' is set, this option can be chosen to trigger the backtest criteria.<br/>
-		</span>
-		<i class="iconfont icon-wenhao"></i>
-        </el-tooltip>
+		<div class="signal-option-box">
+			<div class="entry-title-box">
+				<p class="criteria-title">Exit Criteria</p>
+				<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+					<span slot="content"
+						>Set the signal/signals which trigger the backtest exit criteria.<br />
+						Choose one of the three options for exit criteria:<br />
+						1. Single Signal: One signal will trigger the backtest criteria.<br />
+						2. SameBar Multi-Signal: More than one signals (limit to 5)
+						occurring at the same bar,will trigger the backtest criteria.<br />
+						3. TimeOrder Multi-Signal: More than one signals (limit to 3)
+						occurring within a number of bars,will trigger the backtest
+						criteria.<br />
+						4. Only Use Risk Control: If the 'Risk Control at Exit' is set, this
+						option can be chosen to trigger the backtest criteria.<br />
+					</span>
+					<i class="iconfont icon-wenhao"></i>
+				</el-tooltip>
 			</div>
 			<div class="signal-container">
-				<span class="scoreNote" v-if="relation === 2"
-					>
-			<span>Score: </span>
-		<el-tooltip effect="dark" placement="top" style="diaplay:inline">
-        <span slot="content">Choose a value to specify how many following signals will occur at the same bar to trigger the backtest criteria.<br/>
-		if choose score 1, meanning if any one signal of the following signals occur the backtest criteria is met.<br/>
-		if choose score 2, meanning if any two of the signals of the following signals occur the backtest criteria is met.<br/>
-		etc.<br/>
-		For example:<br/>
-		If the backtest criteria needs to have a "AND" condition of 2 signals, set two signals below and choose score 2.<br/>
-		If the backtest criteria needs to have a "OR" condition of 2 signals, set two signals below and choose score 1.<br/>
-		etc.<br/>
-		</span>
-		<i class="iconfont icon-wenhao"></i>
-        </el-tooltip></span
-				>
+				<span class="scoreNote" v-if="relation === 2">
+					<span>Score: </span>
+					<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+						<span slot="content"
+							>Choose a value to specify how many following signals will occur
+							at the same bar to trigger the backtest criteria.<br />
+							if choose score 1, meanning if any one signal of the following
+							signals occur the backtest criteria is met.<br />
+							if choose score 2, meanning if any two of the signals of the
+							following signals occur the backtest criteria is met.<br />
+							etc.<br />
+							For example:<br />
+							If the backtest criteria needs to have a "AND" condition of 2
+							signals, set two signals below and choose score 2.<br />
+							If the backtest criteria needs to have a "OR" condition of 2
+							signals, set two signals below and choose score 1.<br />
+							etc.<br />
+						</span>
+						<i class="iconfont icon-wenhao"></i> </el-tooltip
+				></span>
 				<el-input-number
 					v-model="score"
 					:step="1"
@@ -43,22 +52,27 @@
 					:max="editableTabs.length"
 					size="mini"
 				></el-input-number>
-				<span class="scoreNote" v-if="relation === 3"
-					>
-						<span>Period:</span>
-											<el-tooltip effect="dark" placement="top" style="diaplay:inline">
-        <span slot="content">Choose a value to specify how many bars within which the following signals will occur in time order to trigger the backtest criteria.<br/>
-		if choose period 1, meanning if the following signals occur at the same bar the backtest criteria is met.<br/>
-		if choose period 2, meanning if the following signals occur within two bars the backtest criteria is met.<br/>
-		etc.<br/>
-		For example:<br/>
-		If the backtest criteria needs to have two consecutive signals, set two signals below and choose period 2.<br/>
-		If the backtest criteria needs to have two signals occur within 3 bars, set two signals below and choose period 3.<br/>
-		etc.<br/>
-		</span>
-		<i class="iconfont icon-wenhao"></i>
-        </el-tooltip></span
-				>
+				<span class="scoreNote" v-if="relation === 3">
+					<span>Period:</span>
+					<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+						<span slot="content"
+							>Choose a value to specify how many bars within which the
+							following signals will occur in time order to trigger the backtest
+							criteria.<br />
+							if choose period 1, meanning if the following signals occur at the
+							same bar the backtest criteria is met.<br />
+							if choose period 2, meanning if the following signals occur within
+							two bars the backtest criteria is met.<br />
+							etc.<br />
+							For example:<br />
+							If the backtest criteria needs to have two consecutive signals,
+							set two signals below and choose period 2.<br />
+							If the backtest criteria needs to have two signals occur within 3
+							bars, set two signals below and choose period 3.<br />
+							etc.<br />
+						</span>
+						<i class="iconfont icon-wenhao"></i> </el-tooltip
+				></span>
 				<el-input-number
 					v-model="signals_in_market"
 					:step="1"
@@ -67,7 +81,11 @@
 					:min="1"
 					size="mini"
 				></el-input-number>
-				<el-select v-model="relation" placeholder="Please select signal" @change="changeRelation">
+				<el-select
+					v-model="relation"
+					placeholder="Please select signal"
+					@change="changeRelation"
+				>
 					<el-option
 						v-for="item in signalOptions"
 						:key="item.value"
@@ -394,23 +412,27 @@
 							"
 						></trailing-stop-like>
 						<div class="delay-bar-box">
-							<el-checkbox v-model="isDelayBar"
+							<el-checkbox v-model="isDelayBar" @change="isCheckDelayBar">
+								<span>Delay of Bars </span>
+								<el-tooltip
+									effect="dark"
+									placement="top"
+									style="diaplay: inline"
 								>
-									<span>Delay of Bars </span>
-													   <el-tooltip effect="dark" placement="top" style="diaplay:inline">
-        <span slot="content">Check this option to delay the specified number of bars to exit when the exit criteria is met.<br/>
-		</span>
-		<i class="iconfont icon-wenhao"></i>
-        </el-tooltip></el-checkbox
-							>
-											<el-input-number
-					v-model="delay_bars"
-					:step="1"
-					step-strictly
-					:min="0"
-					size="mini"
-					:disabled="!isDelayBar"
-				></el-input-number>
+									<span slot="content"
+										>Check this option to delay the specified number of bars to
+										exit when the exit criteria is met.<br />
+									</span>
+									<i class="iconfont icon-wenhao"></i> </el-tooltip
+							></el-checkbox>
+							<el-input-number
+								v-model="delay_bars"
+								:step="1"
+								step-strictly
+								:min="0"
+								size="mini"
+								:disabled="!isDelayBar"
+							></el-input-number>
 						</div>
 					</el-tab-pane>
 				</el-tabs>
@@ -485,7 +507,7 @@ export default {
 		}
 	},
 	mounted() {
-		console.log('初次加载的this.$refs',this.$refs)
+		console.log('初次加载的this.$refs', this.$refs)
 	},
 	components: {
 		indicator,
@@ -544,7 +566,7 @@ export default {
 		},
 		riskControl: {
 			handler(newVal) {
-				if(!newVal && this.relation == 0) {
+				if (!newVal && this.relation == 0) {
 					this.relation = 1
 				}
 			},
@@ -555,65 +577,66 @@ export default {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 			// 重置所有子组件的数据
-				try{
-					for (let i = 0; i < this.indicatorRadioArr.length; i++) {
-						if(this.indicatorRadioArr[i]){
-							this.$refs.indiChild[i].clearForm()
-							this.$refs.sentiChild[i].clearForm()
-							this.$refs.cciChild[i].clearForm()
-							this.$refs.maChild[i].clearForm()
-							this.$refs.macdChild[i].clearForm()
-							this.$refs.bollBandsLikeChild[i].clearForm()
-							this.$refs.EFTLikeChild[i].clearForm()
-							this.$refs.stochasticsLikeChild[i].clearForm()
-							this.$refs.ADXLikeChild[i].clearForm()
-							this.$refs.ERILikeChild[i].clearForm()
-							this.$refs.aligatorLikeChild[i].clearForm()
-							this.$refs.LRFLikeChild[i].clearForm()
-							this.$refs.trailingStopLikeChild[i].clearForm()
-						}
+			try {
+				for (let i = 0; i < this.indicatorRadioArr.length; i++) {
+					if (this.indicatorRadioArr[i]) {
+						this.$refs.indiChild[i].clearForm()
+						this.$refs.sentiChild[i].clearForm()
+						this.$refs.cciChild[i].clearForm()
+						this.$refs.maChild[i].clearForm()
+						this.$refs.macdChild[i].clearForm()
+						this.$refs.bollBandsLikeChild[i].clearForm()
+						this.$refs.EFTLikeChild[i].clearForm()
+						this.$refs.stochasticsLikeChild[i].clearForm()
+						this.$refs.ADXLikeChild[i].clearForm()
+						this.$refs.ERILikeChild[i].clearForm()
+						this.$refs.aligatorLikeChild[i].clearForm()
+						this.$refs.LRFLikeChild[i].clearForm()
+						this.$refs.trailingStopLikeChild[i].clearForm()
 					}
-				}catch(err){console.error(err)}
-
+				}
+			} catch (err) {
+				console.error(err)
+			}
 		},
 		addRiskControlOption(newVal) {
 			console.log('exit risk control', newVal)
 			if (newVal) {
-					this.signalOptions = [
-						{
-							value: 1,
-							label: 'Single-Signal'
-						},
-						{
-							value: 2,
-							label: 'SameBar Multi-Signal'
-						},
-						{
-							value: 3,
-							label: 'TimeOrder Multi-Signal'
-						},
-						{
-							value: 0,
-							label: 'Only Use Risk Control'
-						}
-					]
-				} else {
-					this.signalOptions = [
-						{
-							value: 1,
-							label: 'Single-Signal'
-						},
-						{
-							value: 2,
-							label: 'SameBar Multi-Signal'
-						},
-						{
-							value: 3,
-							label: 'TimeOrder Multi-Signal'
-						}
-					]
-					this.exitItemCheck = false
-				}
+				this.signalOptions = [
+					{
+						value: 1,
+						label: 'Single-Signal'
+					},
+					{
+						value: 2,
+						label: 'SameBar Multi-Signal'
+					},
+					{
+						value: 3,
+						label: 'TimeOrder Multi-Signal'
+					},
+					{
+						value: 0,
+						label: 'Only Use Risk Control'
+					}
+				]
+			} else {
+				this.signalOptions = [
+					{
+						value: 1,
+						label: 'Single-Signal'
+					},
+					{
+						value: 2,
+						label: 'SameBar Multi-Signal'
+					},
+					{
+						value: 3,
+						label: 'TimeOrder Multi-Signal'
+					}
+				]
+				this.exitItemCheck = false
+			}
 		},
 		getTechIndiObj(obj) {
 			this.techIndiObj.splice(obj.index, 1, obj.class)
@@ -661,18 +684,22 @@ export default {
 					this.editableTabsValue = this.editableTabs.length + ''
 					this.tabIndex = this.editableTabs.length
 				}
-				if(this.relation == 2) {
+				if (this.relation == 2) {
 					this.score = this.indicatorRadioArr.length
 				}
-				if(this.relation == 3) {
+				if (this.relation == 3) {
 					this.signals_in_market = this.indicatorRadioArr.length
 				}
 			}
 			if (action === 'remove') {
-				if((this.relation == 2 || this.relation == 3) && this.editableTabs.length == 2) {
+				if (
+					(this.relation == 2 || this.relation == 3) &&
+					this.editableTabs.length == 2
+				) {
 					// 最少两个信号
 					this.$message({
-						message: 'Multiple signals are currently selected, at least two signals',
+						message:
+							'Multiple signals are currently selected, at least two signals',
 						type: 'error',
 						offset: 300
 					})
@@ -709,12 +736,12 @@ export default {
 				this.indicatorUrlArr.splice(absoluteIndex, 1)
 				this.indicatorUrlArr.push('')
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
-				this.techIndiObj.splice(absoluteIndex,1)
+				this.techIndiObj.splice(absoluteIndex, 1)
 				this.techIndiObj.push('')
-				if(this.relation == 2) {
+				if (this.relation == 2) {
 					this.score = this.indicatorRadioArr.length
 				}
-				if(this.relation == 3) {
+				if (this.relation == 3) {
 					this.signals_in_market = this.indicatorRadioArr.length
 				}
 
@@ -726,8 +753,8 @@ export default {
 					})
 				})
 			}
-			
-				console.log('refs',this.$refs)
+
+			console.log('refs', this.$refs)
 		},
 		getIndicatorUrl(obj) {
 			this.indicatorUrlArr.splice(obj.index, 1, obj.url)
@@ -747,42 +774,42 @@ export default {
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
 		},
 		addExitSignalLength() {
-		if(this.relation == 2 || this.relation == 3 || this.relation == 0) {
-			    this.$emit('sendExitSignalIndex', this.indicatorRadioArr.length)
-				for(let i=0;i<this.indicatorRadioArr.length;i++) {
+			if (this.relation == 2 || this.relation == 3 || this.relation == 0) {
+				this.$emit('sendExitSignalIndex', this.indicatorRadioArr.length)
+				for (let i = 0; i < this.indicatorRadioArr.length; i++) {
 					// 申请空间
 					let obj = {}
 					obj.criteria = 'exit'
 					obj.index = i
-					console.log('exit申请空间'+ i + '次')
+					console.log('exit申请空间' + i + '次')
 					this.$store.commit('addSignalLength', obj)
+				}
 			}
-		}
-			if(this.relation == 1){
+			if (this.relation == 1) {
 				this.$emit('sendExitSignalIndex', 1)
 			}
 		},
 		saveScoreValue() {
 			let obj = {}
 			obj.criteria = 'exit'
-		 // 当选择 timeorder 和 signal 和 only risk 时，score 默认为 1
-			if(this.relation == 1 || this.relation == 3 || this.relation == 0) {
+			// 当选择 timeorder 和 signal 和 only risk 时，score 默认为 1
+			if (this.relation == 1 || this.relation == 3 || this.relation == 0) {
 				obj.value = 1
 			}
-			if(this.relation == 2) {
-			    obj.value = this.score
+			if (this.relation == 2) {
+				obj.value = this.score
 			}
 			this.$store.commit('saveScoreValue', obj)
 		},
 		saveSignalsInMarket() {
 			let obj = {}
-			obj.criteria = "exit"
+			obj.criteria = 'exit'
 			// 当选择 sameBar 和 signal 和 only risk时，signals_in_market 默认为 1
-			if(this.relation == 1 || this.relation == 2 || this.relation == 0) {
+			if (this.relation == 1 || this.relation == 2 || this.relation == 0) {
 				obj.value = 1
 			}
-			if(this.relation == 3) {
-			   obj.value = this.signals_in_market
+			if (this.relation == 3) {
+				obj.value = this.signals_in_market
 			}
 			this.$store.commit('saveSignalsInMarket', obj)
 		},
@@ -790,62 +817,61 @@ export default {
 			let obj = {}
 			obj.criteria = 'exit'
 			// 不选 isDelayBar
-			if(!this.isDelayBar) {
+			if (!this.isDelayBar) {
 				obj.value = 0
 			}
 			// 选了 delayBar 不选 only risk
-			if(this.isDelayBar && !this.exitItemCheck) {
-			    obj.value = this.delay_bars
+			if (this.isDelayBar && !this.exitItemCheck) {
+				obj.value = this.delay_bars
 			}
 			// 选了 delayBar 选择 only risk
-			if(this.isDelayBar && this.exitItemCheck){
-			   obj.value = 0
+			if (this.isDelayBar && this.exitItemCheck) {
+				obj.value = 0
 			}
 			this.$store.commit('saveDelayBar', obj)
 		},
 		isCheckDelayBar(val) {
-			if(val) {
+			if (val) {
 				this.delay_bars = 1
-			}else{
+			} else {
 				this.delay_bars = 0
 			}
-
 		},
 		saveRelation() {
-				let obj = {}
-				obj.criteria = 'exit'
+			let obj = {}
+			obj.criteria = 'exit'
 
-			if(this.indicatorRadioArr.length > 1 && !this.exitItemCheck) {
-			   obj.value = this.relation
+			if (this.indicatorRadioArr.length > 1 && !this.exitItemCheck) {
+				obj.value = this.relation
 			}
-			if(this.indicatorRadioArr.length == 1 && !this.exitItemCheck){
+			if (this.indicatorRadioArr.length == 1 && !this.exitItemCheck) {
 				obj.value = 1
 			}
-			if(this.exitItemCheck) {
+			if (this.exitItemCheck) {
 				obj.value = 0
 			}
 
-				this.$store.commit('saveRelation', obj)
+			this.$store.commit('saveRelation', obj)
 		},
 		changeRelation(val) {
-			if(val == 1) {
+			if (val == 1) {
 				this.editableTabsValue = '1'
 				this.score = 1
 				this.signals_in_market = 1
 			}
-			if(val == 2 || val == 3) {
-				if(this.editableTabs.length === 1) {
-				this.handleTabsEdit(null,'add')
-				this.editableTabsValue = '1'
+			if (val == 2 || val == 3) {
+				if (this.editableTabs.length === 1) {
+					this.handleTabsEdit(null, 'add')
+					this.editableTabsValue = '1'
 				}
-				if(val == 2) {
+				if (val == 2) {
 					this.score = 2
 				}
-				if(val == 3) {
+				if (val == 3) {
 					this.signals_in_market = 2
 				}
 			}
-			this.$emit('getExitRelation',val)
+			this.$emit('getExitRelation', val)
 		},
 		saveBacktestData(index) {
 			let checked = true
@@ -864,15 +890,19 @@ export default {
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			return indi.then((val) => {
 				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
-				if(!val) {
-					this.$message({
-					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
-					type: 'error'
-				})}
-				if (indi) {
+				if (val) {
 					if (vm.indicatorRadioArr[index] === 'sentiment') {
 						vm.$refs.sentiChild[index].setDesciption(index)
 						let senti = this.$refs.sentiChild[index].saveCondition(index)
+						if (!senti) {
+							this.$message({
+								message:
+									'Please check that the ' +
+									(index + 1) +
+									'th exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
 						return (checked = senti)
 					}
 					if (
@@ -881,6 +911,15 @@ export default {
 					) {
 						this.$refs.cciChild[index].setDesciption(index)
 						let cci = this.$refs.cciChild[index].saveCondition(index)
+						if (!cci) {
+							this.$message({
+								message:
+									'Please check that the ' +
+									(index + 1) +
+									'th exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
 						return (checked = cci)
 					}
 					if (
@@ -889,6 +928,15 @@ export default {
 					) {
 						this.$refs.rsiChild[index].setDesciption(index)
 						let rsi = this.$refs.rsiChild[index].saveCondition(index)
+						if (!rsi) {
+							this.$message({
+								message:
+									'Please check that the ' +
+									(index + 1) +
+									'th exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
 						return (checked = rsi)
 					}
 					if (
@@ -897,6 +945,15 @@ export default {
 					) {
 						this.$refs.macdChild[index].setDesciption(index)
 						let macd = this.$refs.macdChild[index].saveCondition(index)
+						if (!macd) {
+							this.$message({
+								message:
+									'Please check that the ' +
+									(index + 1) +
+									'th exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
 						return (checked = macd)
 					}
 					if (
@@ -905,6 +962,15 @@ export default {
 					) {
 						this.$refs.maChild[index].setDesciption(index)
 						let ma = this.$refs.maChild[index].saveCondition(index)
+						if (!ma) {
+							this.$message({
+								message:
+									'Please check that the ' +
+									(index + 1) +
+									'th exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
 						return (checked = ma)
 					}
 					if (
@@ -913,6 +979,15 @@ export default {
 					) {
 						this.$refs.EFTLikeChild[index].setDesciption(index)
 						let eft = this.$refs.EFTLikeChild[index].saveCondition(index)
+						if (!eft) {
+							this.$message({
+								message:
+									'Please check that the ' +
+									(index + 1) +
+									'th exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
 						return (checked = eft)
 					}
 					if (
@@ -921,6 +996,15 @@ export default {
 					) {
 						this.$refs.ADXLikeChild[index].setDesciption(index)
 						let adx = this.$refs.ADXLikeChild[index].saveCondition(index)
+						if (!adx) {
+							this.$message({
+								message:
+									'Please check that the ' +
+									(index + 1) +
+									'th exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
 						return (checked = adx)
 					}
 					if (
@@ -930,6 +1014,15 @@ export default {
 						this.$refs.aligatorLikeChild[index].setDesciption(index)
 						let aligator =
 							this.$refs.aligatorLikeChild[index].saveCondition(index)
+						if (!aligator) {
+							this.$message({
+								message:
+									'Please check that the ' +
+									(index + 1) +
+									'th exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
 						return (checked = aligator)
 					}
 					if (
@@ -938,6 +1031,15 @@ export default {
 					) {
 						this.$refs.LRFLikeChild[index].setDesciption(index)
 						let lrf = this.$refs.LRFLikeChild[index].saveCondition(index)
+						if (!lrf) {
+							this.$message({
+								message:
+									'Please check that the ' +
+									(index + 1) +
+									'th exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
 						return (checked = lrf)
 					}
 					if (
@@ -946,6 +1048,15 @@ export default {
 					) {
 						this.$refs.bollBandsLikeChild[index].setDesciption(index)
 						let blb = this.$refs.bollBandsLikeChild[index].saveCondition(index)
+						if (!blb) {
+							this.$message({
+								message:
+									'Please check that the ' +
+									(index + 1) +
+									'th exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
 						return (checked = blb)
 					}
 					if (
@@ -955,6 +1066,15 @@ export default {
 						this.$refs.stochasticsLikeChild[index].setDesciption(index)
 						let smi =
 							this.$refs.stochasticsLikeChild[index].saveCondition(index)
+						if (!smi) {
+							this.$message({
+								message:
+									'Please check that the ' +
+									(index + 1) +
+									'th exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
 						return (checked = smi)
 					}
 					if (
@@ -963,6 +1083,15 @@ export default {
 					) {
 						this.$refs.ERILikeChild[index].setDesciption(index)
 						let eri = this.$refs.ERILikeChild[index].saveCondition(index)
+						if (!eri) {
+							this.$message({
+								message:
+									'Please check that the ' +
+									(index + 1) +
+									'th exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
 						return (checked = eri)
 					}
 					if (
@@ -972,6 +1101,15 @@ export default {
 						this.$refs.trailingStopLikeChild[index].setDesciption(index)
 						let ts =
 							this.$refs.trailingStopLikeChild[index].saveCondition(index)
+						if (!ts) {
+							this.$message({
+								message:
+									'Please check that the ' +
+									(index + 1) +
+									'th exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
 						return (checked = ts)
 					}
 					// if (this.indicatorRadioArr[index] === 'risk') {
@@ -1004,16 +1142,16 @@ export default {
 			//console.log('编辑的exitdata', data)
 			this.score = data.exit.score
 			this.delay_bars = data.exit.delay_bars ? data.exit.delay_bars : 0
-			if(this.delay_bars != 0) {
+			if (this.delay_bars != 0) {
 				this.isDelayBar = true
-			}else{
+			} else {
 				this.isDelayBar = false
 			}
 			this.signals_in_market = data.exit.signals_in_market
 				? data.exit.signals_in_market
 				: 1
 			this.relation = data.exit.relation ? data.exit.relation : 1
-			this.$emit('getExitRelation',this.relation)
+			this.$emit('getExitRelation', this.relation)
 			let length = data.exit.signals.length
 			this.tabIndex = length
 			for (let j = 0; j < length; j++) {
@@ -1105,27 +1243,27 @@ export default {
 			// 	? data.exit.signals_in_market
 			// 	: 1
 			this.relation = 0
-				this.exitItemCheck = true
-				this.signalOptions = [
-					{
-						value: 1,
-						label: 'Single-Signal'
-					},
-					{
-						value: 2,
-						label: 'SameBar Multi-Signal'
-					},
-					{
-						value: 3,
-						label: 'TimeOrder Multi-Signal'
-					},
-					{
-						value: 0,
-						label: 'Only Use Risk Control'
-					}
-				]
-				this.$emit('isOnlyRiskControl', this.exitItemCheck)
-				this.$emit('getExitRelation',this.relation)
+			this.exitItemCheck = true
+			this.signalOptions = [
+				{
+					value: 1,
+					label: 'Single-Signal'
+				},
+				{
+					value: 2,
+					label: 'SameBar Multi-Signal'
+				},
+				{
+					value: 3,
+					label: 'TimeOrder Multi-Signal'
+				},
+				{
+					value: 0,
+					label: 'Only Use Risk Control'
+				}
+			]
+			this.$emit('isOnlyRiskControl', this.exitItemCheck)
+			this.$emit('getExitRelation', this.relation)
 		}
 	}
 }
@@ -1216,7 +1354,7 @@ export default {
 	border-top: 1px solid #797979;
 	padding-top: 10px;
 }
-/deep/ .el-input-number--mini{
+/deep/ .el-input-number--mini {
 	width: 118px;
 }
 </style>

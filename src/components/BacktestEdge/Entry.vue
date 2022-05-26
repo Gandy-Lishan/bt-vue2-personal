@@ -771,18 +771,14 @@ export default {
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			return indi.then((val) => { 
 				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
-				if(!val) {
-					this.$message({
-					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
-					type: 'error'
-				})}
-				if (indi) {
+				if (val) {
 				if (this.indicatorRadioArr[index] === 'sentiment') {
 					this.$refs.sentiChild[index].setDesciption(index)
 					let senti = this.$refs.sentiChild[index].saveCondition(index)
+					console.log('SENTI错误捕捉',senti)
 					if(!senti) {
 					this.$message({
-					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
+					message: 'Please check that the ' + (index+1) + 'th entry panel field is filled in correctly',
 					type: 'error'
 				    })
 					} 
@@ -794,6 +790,12 @@ export default {
 				) {
 					this.$refs.cciChild[index].setDesciption(index)
 					let cci = this.$refs.cciChild[index].saveCondition(index)
+					if(!cci) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = cci)
 				}
 				if (
@@ -802,6 +804,12 @@ export default {
 				) {
 					this.$refs.rsiChild[index].setDesciption(index)
 					let rsi = this.$refs.rsiChild[index].saveCondition(index)
+					if(!rsi) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = rsi)
 				}
 				if (
@@ -810,6 +818,12 @@ export default {
 				) {
 					this.$refs.macdChild[index].setDesciption(index)
 					let macd = this.$refs.macdChild[index].saveCondition(index)
+					if(!macd) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = macd)
 				}
 				if (
@@ -818,6 +832,12 @@ export default {
 				) {
 					this.$refs.maChild[index].setDesciption(index)
 					let ma = this.$refs.maChild[index].saveCondition(index)
+					if(!ma) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = ma)
 				}
 				if (
@@ -826,6 +846,12 @@ export default {
 				) {
 					this.$refs.EFTLikeChild[index].setDesciption(index)
 					let eft = this.$refs.EFTLikeChild[index].saveCondition(index)
+					if(!eft) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = eft)
 				}
 				if (
@@ -834,6 +860,12 @@ export default {
 				) {
 					this.$refs.ADXLikeChild[index].setDesciption(index)
 					let adx = this.$refs.ADXLikeChild[index].saveCondition(index)
+					if(!adx) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = adx)
 				}
 				if (
@@ -843,6 +875,12 @@ export default {
 					this.$refs.aligatorLikeChild[index].setDesciption(index)
 					let aligator =
 						this.$refs.aligatorLikeChild[index].saveCondition(index)
+					if(!aligator) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = aligator)
 				}
 				if (
@@ -851,6 +889,12 @@ export default {
 				) {
 					this.$refs.LRFLikeChild[index].setDesciption(index)
 					let lrf = this.$refs.LRFLikeChild[index].saveCondition(index)
+					if(!lrf) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = lrf)
 				}
 				if (
@@ -859,6 +903,12 @@ export default {
 				) {
 					this.$refs.bollBandsLikeChild[index].setDesciption(index)
 					let blb = this.$refs.bollBandsLikeChild[index].saveCondition(index)
+					if(!blb) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = blb)
 				}
 				if (
@@ -867,6 +917,12 @@ export default {
 				) {
 					this.$refs.stochasticsLikeChild[index].setDesciption(index)
 					let smi = this.$refs.stochasticsLikeChild[index].saveCondition(index)
+					if(!smi) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = smi)
 				}
 				if (
@@ -875,6 +931,12 @@ export default {
 				) {
 					this.$refs.ERILikeChild[index].setDesciption(index)
 					let eri = this.$refs.ERILikeChild[index].saveCondition(index)
+					if(!eri) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = eri)
 				}
 				if (
@@ -883,6 +945,12 @@ export default {
 				) {
 					this.$refs.trailingStopLikeChild[index].setDesciption(index)
 					let ts = this.$refs.trailingStopLikeChild[index].saveCondition(index)
+					if(!ts) {
+					this.$message({
+					message: 'Please check that the ' + (index+1) + 'th entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = ts)
 				}
 			} else {

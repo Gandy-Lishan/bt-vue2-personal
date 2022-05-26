@@ -594,21 +594,22 @@ export default {
 			}
 		},
 		async remoteMethod(query) {
+			let vm = this
 			if (query !== '') {
-				this.loading = true
+				vm.loading = true
 				setTimeout(() => {
-					this.loading = false
-					if (this.symbolList.length == 0 || this.indexList.length == 0) {
-						this.getStocksList()
-						this.getIndexsList()
+					vm.loading = false
+					if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
+						vm.getStocksList()
+						vm.getIndexsList()
 					}
-					var symbolListTemp = this.symbolList.filter((item) => {
+					var symbolListTemp = vm.symbolList.filter((item) => {
 						return (
 							item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
 							item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
 						)
 					})
-					var IndexListTemp = this.indexList.filter((item) => {
+					var IndexListTemp = vm.indexList.filter((item) => {
 						return (
 							item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
 							item.label.toLowerCase().indexOf(query.toLowerCase()) > -1

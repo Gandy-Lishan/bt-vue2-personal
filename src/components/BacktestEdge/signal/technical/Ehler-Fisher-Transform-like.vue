@@ -181,6 +181,7 @@ delay_bars: [String, Number],
 		setDesciption(index) {
 			let criteria = ''
 			let direction = ''
+				let commentDes
 			if(index === 0) {
 				
 			if (this.criteria == 'entry') {
@@ -199,7 +200,6 @@ delay_bars: [String, Number],
 			let relation = ''
 				let score = ''
 				let period = ''
-				let commentDes
 				switch (this.relation) {
 					case 0:
 						relation = "Only Risk;"

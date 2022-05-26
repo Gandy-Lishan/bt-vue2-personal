@@ -957,12 +957,24 @@ export default {
 				//console.log(data)
 				let signalCode = new SignalCode()
 				if (data.entry.signals instanceof Array) {
+					// 删除掉 code 为 false 的项
+				data.entry.signals.forEach((item,index) => {
+					if(!item.code) {
+						data.entry.signals.splice(index,1)
+					}
+				})
 					// data.entry.signals = signalCode.decode(data.entry.signals[0]['code'])
 					data.entry.signals = data.entry.signals.map((value) => {
 						return signalCode.decode(value.code)
 					})
 				}
 				if (data.exit.signals instanceof Array) {
+					// 删除掉 code 为 false 的项
+						data.exit.signals.forEach((item,index) => {
+							if(!item.code) {
+								data.exit.signals.splice(index,1)
+							}
+						})
 					// data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
 						data.exit.signals = data.exit.signals.map((value) => {
 							if(value.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999') {
