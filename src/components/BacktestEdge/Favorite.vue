@@ -342,7 +342,7 @@ export default {
 	},
 	methods: {
 async getFavoriteList(strategy) {
-			this.loading = true
+			//this.loading = true
 			let page = this.queryInfo.page
 			try {
 				const res = await getFavoriteList(page)
@@ -365,36 +365,18 @@ async getFavoriteList(strategy) {
 				}
 			} catch (error) {
 				console.log(error);
-				this.loading = false
+				//this.loading = false
 			}
-		},
-		refreshHistory(id) {
-			let vm = this
-			vm.loading = true
-			vm.clearInterval = clearInterval()
-			let timer = setInterval(async () => {
-				const res = await getStatus(id)
-				if (res.data.status === 0 || res.data.status === 3) {
-					clearInterval(timer)
-					vm.getFavoriteList()
-					vm.loading = false
-					vm.$notify({
-						title: 'The run was successful',
-						message:
-							'Run backtest is successful, click the view results button to see the results.',
-						offset: 100,
-						type: 'success',
-						duration: 1000
-					})
-				}
-			}, 3000)
 		},
 		editBacktest: throttle(async function (row) {
 			let vm = this
 			try {
-				vm.loading = true
+				CIQ.addCover('Fetching backtest information...')
+				CIQ.nprogress.start()
+
+				//vm.loading = true
 				const res = await seeParams(row.id)
-				this.isEditDone = false
+				document.getElementsByClassName('ciq-period')[0].style.display = ''
 				// 恢复indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)
 				CIQ.hideMarker()
@@ -402,17 +384,20 @@ async getFavoriteList(strategy) {
 				if (res.data.indicator_layout) {
 					this.restoreIndicatorLayoutEdit(
 						JSON.parse(res.data.indicator_layout),
-						JSON.parse(res.data.entry).frequency,
-						row
+						res.data.frequency,
+						row, res.data
 					)
 				}
 				else{
 					this.$store.commit('getRunBacktestData', row)
 					// emit同步调用
 					this.$emit('goBacktestResultForm', row, ()=>{
-						this.$emit('goTobacktestSetupForm', row.id)
+						this.$emit('goTobacktestSetupForm', row.id, res.data,()=>{
+							CIQ.hideCover()
+							CIQ.nprogress.done()
+						})
 					})
-					this.loading = false
+					//this.loading = false
 				}
 			} catch (error) {
 				vm.$message({
@@ -422,7 +407,7 @@ async getFavoriteList(strategy) {
 				})
 			}
 		}, 500),
-				async deleteBacktest(id) {
+		async deleteBacktest(id) {
 			try {
 				const res = await deleteBacktest(id)
 				if (res.status == 204) {
@@ -475,7 +460,10 @@ copyBacktest: throttle(async function (row) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				let vm = this
 				try {
-					vm.loading = true
+					CIQ.addCover('Fetching backtest information...')
+					CIQ.nprogress.start()
+					
+					//vm.loading = true
 					const res = await seeParams(row.id)
 					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
@@ -485,16 +473,19 @@ copyBacktest: throttle(async function (row) {
 						this.restoreIndicatorLayoutView(
 							JSON.parse(res.data.indicator_layout),
 							JSON.parse(res.data.entry).frequency,
-							row
+							row,res.data
 						)
 					}
 					else{
 						this.$store.commit('getRunBacktestData', row)
 						// emit同步调用
-						this.$emit('goTobacktestSetupForm', row.id, ()=>{
-							this.$emit('goBacktestResultForm', row)
+						this.$emit('goTobacktestSetupForm', row.id, res.data, ()=>{
+							this.$emit('goBacktestResultForm', row, ()=>{
+								CIQ.hideCover()
+								CIQ.nprogress.done()
+							})
 						})
-						this.loading = false
+						//this.loading = false
 					}
 				} catch (error) {
 					vm.$message({
@@ -525,11 +516,6 @@ copyBacktest: throttle(async function (row) {
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
 
-			// var savedTechSD = data.savedTechSD
-			// console.log(savedTechSD)
-			// for(var item in savedTechSD){
-			// 	CIQ.Studies.addStudy(CIQ.stxx, savedTechSD[item].type, savedTechSD[item].inputs, savedTechSD[item].outputs, savedTechSD[item].parameters, savedTechSD[item].panel)
-			// }
 			switch (freq) {
 				case 'Daily': {
 					frequency = 'daily'
@@ -550,16 +536,20 @@ copyBacktest: throttle(async function (row) {
 			this.$store.commit('setRestoreFreq', frequency)
 			// CIQ.addIndicatorsFromBacktest()
 		},
-		restoreIndicatorLayoutView(data, freq, row) {
+		restoreIndicatorLayoutView(data, freq, row, resData) {
 				this.reloadData(data, freq)
 				var that = this
 				CIQ.addIndicatorsFromBacktest(function(){
 					that.$store.commit('getRunBacktestData', row)
 					// emit同步调用
-					that.$emit('goTobacktestSetupForm', row.id, ()=>{
-						that.$emit('goBacktestResultForm', row)
+					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
+						that.$emit('goBacktestResultForm', row, ()=>{
+							CIQ.hideCover()
+							CIQ.nprogress.done()
+						})
 					})
-					that.loading = false
+					
+					//that.loading = false
 				})
 		},
 		restoreIndicatorLayoutEdit(data, freq, row) {
@@ -568,10 +558,14 @@ copyBacktest: throttle(async function (row) {
 				CIQ.addIndicatorsFromBacktest(function(){
 					that.$store.commit('getRunBacktestData', row)
 					// emit同步调用
+					
 					that.$emit('goBacktestResultForm', row, ()=>{
-						that.$emit('goTobacktestSetupForm', row.id)
+						that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
+							CIQ.hideCover()
+							CIQ.nprogress.done()
+						})
 					})
-					that.loading = false
+					//that.loading = false
 				})
 		},
 		async showDes(row) {

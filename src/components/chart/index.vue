@@ -75,10 +75,16 @@ export default class AdvancedWrapper extends Vue {
 		CIQ.vue = Vue
 		// refresh pag
 
-		CIQ.store.commit('setCopy', JSON.stringify(CIQ.store.state))
-		CIQ.addIndicators()
+		//CIQ.store.commit('setCopy', JSON.stringify(CIQ.store.state))
+
+		// console.log('first CIQ.addIndicators')
+		// CIQ.addIndicators()
+		var chartBox = document.getElementsByClassName("chart_box")[0]
+		var height = 75/100*window.innerHeight
+		chartBox.style.height = height.toString()+ 'px'
 		CIQ.technicalCategory = config.technicalClassCategory
 	}
+
 }
 </script>
 <style lang="scss" scoped>

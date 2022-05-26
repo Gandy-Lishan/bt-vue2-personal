@@ -355,7 +355,6 @@ export default {
 		async getHistoryList() {
 			this.loadTest = 'Loading...'
 			//貌似不用
-			//CIQ.addCover("Loading HistoryList...")
 			//this.loading = true
 			let page = this.queryInfo.page
 			try {
@@ -399,13 +398,13 @@ export default {
 			let vm = this
 			vm.loadTest = 'Generating Backtest report, please wait'
 			//和创回测绑在一起，没有加
-			//CIQ.addCover('Generating Backtest report, please wait')
 			
 			//vm.loading = true
 			vm.clearInterval = clearPromiseInterval
 			let timer = setPromiseInterval(async () => {
 				try {
 					const res = await getStatus(id)
+					CIQ.nprogress.inc()
 					console.log("状态码",res.data.status)
 				if (res.data.status == 2) {
 					clearPromiseInterval(timer).then(() => {})
@@ -428,6 +427,7 @@ export default {
 					vm.getHistoryList()
 					this.$emit('refFavoritesForm')
 					CIQ.hideCover()
+					CIQ.nprogress.done()
 					//vm.loading = false
 					//console.log('成功之后的返回值', res.data)
 					let row = res.data
@@ -444,9 +444,10 @@ export default {
 					message: 'The internal server is busy, please try again later ',
 					type: 'error',
 					offset: 300
-				})
-				CIQ.addCover()
-				//vm.loading = true
+					})
+					CIQ.addCover()
+					CIQ.nprogress.start()
+					//vm.loading = true
 				}
 			}, 3000)
 		},
@@ -454,6 +455,7 @@ export default {
 			let vm = this
 			try {
 				CIQ.addCover('Fetching backtest information...')
+				CIQ.nprogress.start()
 				//vm.loading = true
 				const res = await seeParams(row.id)
 				document.getElementsByClassName('ciq-period')[0].style.display = ''
@@ -473,6 +475,7 @@ export default {
 					this.$emit('goBacktestResultForm', row, ()=>{
 						this.$emit('goTobacktestSetupForm', row.id, res.data,()=>{
 							CIQ.hideCover()
+							CIQ.nprogress.done()
 						})
 					})
 					//this.loading = false
@@ -484,7 +487,7 @@ export default {
 					offset: 300
 				})
 			}
-		}, 1000),
+		}, 500),
 		async deleteBacktest(id) {
 			try {
 				const res = await deleteBacktest(id)
@@ -558,7 +561,9 @@ export default {
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {
+					
 					CIQ.addCover('Fetching backtest information...')
+					CIQ.nprogress.start()
 					//this.loading = true
 					const res = await seeParams(row.id)
 					// 恢复indicator layout
@@ -578,6 +583,7 @@ export default {
 						this.$emit('goTobacktestSetupForm', row.id, res.data, ()=>{
 							this.$emit('goBacktestResultForm', row, ()=>{
 								CIQ.hideCover()
+								CIQ.nprogress.done()
 							})
 						})
 						//this.loading = false
@@ -597,7 +603,7 @@ export default {
 					type: 'warning'
 				})
 			}
-		}, 1000),
+		}, 500),
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
 			this.getHistoryList()
@@ -610,8 +616,7 @@ export default {
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
-			// CIQ.savedTechSD = data.savedTechSD
-			//console.log(data.formIndicators)
+
 			switch (freq) {
 				case 'Daily': {
 					frequency = 'daily'
@@ -646,6 +651,7 @@ export default {
 					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
 						that.$emit('goBacktestResultForm', row, ()=>{
 							CIQ.hideCover()
+							CIQ.nprogress.done()
 						})
 					})
 					//that.loading = false
@@ -663,6 +669,7 @@ export default {
 					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
 						that.$emit('goBacktestResultForm', row, ()=>{
 							CIQ.hideCover()
+							CIQ.nprogress.done()
 						})
 					})
 					
@@ -671,18 +678,6 @@ export default {
 			}
 		},
 		restoreIndicatorLayoutEdit(data, freq, row, resData) {
-			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
-			// if (CIQ.isBacktestRun == true) {
-			// 	CIQ.isBacktestRun = false
-			// 	this.reloadData(data, freq)
-			// 	var that = this
-			// 	CIQ.outputSignalsResult(function () {
-			// 		that.$store.commit('getRunBacktestData', row)
-			// 		that.$emit('goBacktestResultForm', row)
-			// 		that.$emit('goTobacktestSetupForm', row.id)
-			// 	})
-			// } else {
-				console.log("restoreIndicatorLayoutEdit")
 				this.reloadData(data, freq)
 				var that = this
 				CIQ.addIndicatorsFromBacktest(function () {
@@ -692,6 +687,7 @@ export default {
 					that.$emit('goBacktestResultForm', row, ()=>{
 						that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
 							CIQ.hideCover()
+							CIQ.nprogress.done()
 						})
 					})
 					//that.loading = false
