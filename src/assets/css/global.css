@@ -47,7 +47,7 @@
 cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 	border-radius: 0 0 24px 24px;
 }
-.el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
+.el-select-dropdown__item:focus, .el-select-dropdown__item:focus {
 	background: rgb(233, 233, 233);
 	border-radius: 12px;
 }

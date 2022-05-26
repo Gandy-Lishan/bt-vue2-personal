@@ -74,6 +74,8 @@ export function favoriteBacktest(id, paramsStr) {
     const url = '/dev/backtest/'
     return axios.put(url + id + '/', paramsStr)
 }
+
+
 export function seeReport(id) {
     const url = '/dev/report/?uuid='
     return axios.get(url + id)

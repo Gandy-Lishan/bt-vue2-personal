@@ -15,6 +15,9 @@ import './assets/helpIconFont/iconfont.css'
 import 'font-awesome/css/font-awesome.css';
 
 // 导入全局样式表
+import Nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 import './assets/style/global.css'
 import axios from 'axios'
 import store from './store/store'
@@ -25,6 +28,7 @@ import '@/assets/iconfont/iconfont.css'
 import VueCookies from 'vue-cookies'
 
 import 'github-markdown-css'
+import { CIQ } from 'chartiq'
 
 
 Vue.use(VueCookies)
@@ -37,8 +41,10 @@ axios.interceptors.request.use((config) => {
 		username: 'sentimentrader_backtest_api',
 		password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
 	}
+	
 	return config
 })
+
 // const encode = require("../node_modules/element-ui/lib/locale/lang/en")
 
 // 定义外部接口可配置
@@ -48,6 +54,8 @@ axios.interceptors.request.use((config) => {
 Vue.prototype.$qs = qs
 Vue.use(ElementUI, { locale })
 Vue.prototype.$http = axios
+CIQ.axios = axios
+CIQ.nprogress = Nprogress
 Vue.prototype.$message = Message
 Vue.config.productionTip = false
 // Vue.use(VueDirectiveImagePreviewer,{

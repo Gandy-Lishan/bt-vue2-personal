@@ -463,8 +463,9 @@ export default {
 			}
 			stx.draw();
 			var chartBox = document.getElementsByClassName("chart_box")[0]
-			var height = 520
+			var height = 75/100*window.innerHeight
 			chartBox.style.height = height+ 'px'
+			const freq = CIQ.store.state.exitFrequency
 
 			// remove all Studies from Vuex
 			CIQ.store.commit('getEntryIndicatorsList',[])
@@ -482,9 +483,12 @@ export default {
 			CIQ.isMarkerShown = false
 			document.getElementsByClassName("ciq-period")[0].style.display = "block"
 
+			if(freq != 'Daily'){
+				CIQ.addIndicators()
+			}
+
 			this.clearForm()
-			CIQ.addIndicators()
-			//location.reload()
+
 		},
 		addEntrySignalLength(index) {
 			let obj = {}
@@ -560,6 +564,7 @@ export default {
 					if (exitChecked) {
 						//this.loading = true
 						CIQ.addCover("Start runing Backtest...")
+						CIQ.nprogress.start()
 						let vm = this
 						let signalEntryList = []
 						let signalExitList = []
@@ -588,6 +593,7 @@ export default {
 									offset: 300
 								})
 								CIQ.hideCover()
+								CIQ.nprogress.done()
 								//vm.loading = false
 								return
 							}
@@ -615,6 +621,7 @@ export default {
 									offset: 300
 								})
 								CIQ.hideCover()
+								CIQ.nprogress.done()
 								//vm.loading = false
 								return
 							}
@@ -878,6 +885,7 @@ export default {
 										} else {
 											vm.$message.error('Save failed')
 											CIQ.hideCover()
+											CIQ.nprogress.done()
 											//vm.loading = false
 											CIQ.hideMarker()
 											CIQ.isMarkerShown = false
@@ -887,6 +895,7 @@ export default {
 										vm.$refs.setUpChild.clearOldBacktestName()
 										vm.$refs.favoriteChild.getFavoriteList()
 										CIQ.hideCover()
+										CIQ.nprogress.done()
 										//vm.loading = false
 										vm.$message({
 											message: 'The internal server is busy, please try again later ',
@@ -899,12 +908,14 @@ export default {
 								}catch(error){
 									console.log("Upload JSON failed", error);
 									CIQ.hideCover()
+									CIQ.nprogress.done()
 									//vm.loading = false
 									alert('Upload JSON failed')
 								}	
 							}else{
 								console.log("Upload CSV failed", error);
 								CIQ.hideCover()
+								CIQ.nprogress.done()
 								//vm.loading = false
 								alert('Upload CSV failed')
 							}						
@@ -921,6 +932,7 @@ export default {
 		},
 		async goTobacktestSetupForm(id, resData, callback) {
 			// backtestEditData
+			CIQ.nprogress.inc()
 			CIQ.setCoverText('Restoring Backtest form...')
 			
 			//this.loading = true
@@ -994,6 +1006,7 @@ export default {
 					offset: 300
 				})
 				CIQ.hideCover()
+				CIQ.nprogress.done()
 				//this.loading = false
 			}
 			setTimeout(()=>{
@@ -1003,6 +1016,7 @@ export default {
 		},
 		goBacktestResultForm(row, callback) {
 			this.activeName = 'third'
+			CIQ.nprogress.inc()
 			CIQ.setCoverText('Generating Backtest report, please wait...')
 			
 			this.$refs.performanceChild.getResultData(row,() => {

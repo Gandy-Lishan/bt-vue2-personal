@@ -440,10 +440,25 @@ export default class AdvancedChartComponent extends Vue {
 		
 		const container = this.container
 		
+		var tooltip = document.getElementsByClassName("ciq-HU")[0]
+		tooltip.onclick = function(){
+			tooltip.classList.remove("active");	
+			if (CIQ.stxx.layout.headsUp.floating == true){	
+				tooltip.classList.remove("activated");	
+				CIQ.stxx.layout.headsUp.floating = false	
+			}
+			else{
+				tooltip.classList.add("activated");
+				CIQ.stxx.layout.headsUp.floating = true
+			}
+		}
+
 		
 		portalizeContextDialogs(container)
 		// Delay the call to createChartAndUI so any other AdvancedChart components on the page
 		// have a chance to call portalizeContextDialogs
+		CIQ.nprogress.start()
+		CIQ.addCover()
 		window.setTimeout(() => {
 			const uiContext = this.createChartAndUI(config)
 			this.stx = uiContext.stx
@@ -479,7 +494,12 @@ export default class AdvancedChartComponent extends Vue {
 			node.appendChild(newdiv)
 			
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
-			//CIQ.stxx.layout.headsUp = "floating";
+			
+			CIQ.stxx.layout.headsUp = "floating";
+			//console.log(CIQ.stxx.layout.headsUp.floating)
+			var mNode = document.getElementsByClassName("ciq-HU")[0]
+			mNode.classList.add("activated");		
+
 			//CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = false;
 			this.initializeToggle()
 		}, 0)
@@ -487,6 +507,14 @@ export default class AdvancedChartComponent extends Vue {
 	}
 
 	initializeToggle() {
+		
+		// var mNode = document.getElementsByClassName("ciq-HU")[0]
+		// if (CIQ.stxx.layout.headsUp == "activated"){	
+		// 	mNode.classList.add("activated");		
+		// }
+		// else{
+		// 	mNode.classList.remove("activated");
+		// }
 		var mNode = document.getElementsByClassName("lastP")[0]
 		if (CIQ.stxx.layout.lastPriceLabel){
 			mNode.classList.remove("active");
