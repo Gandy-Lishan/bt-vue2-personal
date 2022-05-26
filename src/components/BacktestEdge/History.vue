@@ -38,13 +38,13 @@
 									<template
 										v-for="(item, index) in scope.row.entry_description"
 									>
-										<p :key="index">{{ item }}</p>
+										<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
 									</template>
 								</div>
 								<div class="exitBox">
 									<p>Exit Description</p>
 									<template v-for="(item, index) in scope.row.exit_description">
-										<p :key="index">{{ item }}</p>
+										<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
 									</template>
 								</div>
 							</div>
@@ -558,6 +558,7 @@ export default {
 			}
 		}, 1000),
 		viewBacktestResults: throttle(async function (row) {
+			console.log('row',row)
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {
@@ -852,9 +853,11 @@ export default {
 .descriptionBox{
 	display: flex;
 	justify-content: space-around;
-	.entryBox p:first-child {
+	.entryBox {
+		p:first-child {
 		font-weight: 500;
 		color: #99a9bf;
+	    }
 	}
 	.exitBox p:first-child {
 		font-weight: 500;

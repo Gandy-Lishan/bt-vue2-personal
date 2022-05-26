@@ -4,25 +4,35 @@
 			<!-- <p>{{indicatorRadioArr}}</p>
 			<p>{{indicatorUrlArr}}</p>
 			<p>{{indicatorValArr}}</p> -->
-		<div class="signal-option-box">
-			<el-tooltip
-				style="diaplay: inline"
-				effect="light"
-				content="All params of exit criteria"
-				placement="bottom"
-			>
-				<p class="criteria-title">Exit Criteria</p></el-tooltip
-			>
+		<div class="signal-option-box">			<div class="entry-title-box">
+			<p class="criteria-title">Exit Criteria</p> 
+		<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+        <span slot="content">Set the signal/signals which trigger the backtest exit criteria.<br/>
+		Choose one of the three options for exit criteria:<br/>
+		1. Single Signal: One signal will trigger the backtest criteria.<br/>
+		2. SameBar Multi-Signal: More than one signals (limit to 5) occurring at the same bar,will trigger the backtest criteria.<br/>
+		3. TimeOrder Multi-Signal: More than one signals (limit to 3) occurring within a number of bars,will trigger the backtest criteria.<br/>
+		4. Only Use Risk Control: If the 'Risk Control at Exit' is set, this option can be chosen to trigger the backtest criteria.<br/>
+		</span>
+		<i class="iconfont icon-wenhao"></i>
+        </el-tooltip>
+			</div>
 			<div class="signal-container">
 				<span class="scoreNote" v-if="relation === 2"
-					><el-tooltip
-						style="diaplay: inline"
-						effect="light"
-						content="Only use in multi signals and the value <= the len of signals"
-						placement="bottom"
 					>
-						<span>Score:</span>
-					</el-tooltip></span
+			<span>Score: </span>
+		<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+        <span slot="content">Choose a value to specify how many following signals will occur at the same bar to trigger the backtest criteria.<br/>
+		if choose score 1, meanning if any one signal of the following signals occur the backtest criteria is met.<br/>
+		if choose score 2, meanning if any two of the signals of the following signals occur the backtest criteria is met.<br/>
+		etc.<br/>
+		For example:<br/>
+		If the backtest criteria needs to have a "AND" condition of 2 signals, set two signals below and choose score 2.<br/>
+		If the backtest criteria needs to have a "OR" condition of 2 signals, set two signals below and choose score 1.<br/>
+		etc.<br/>
+		</span>
+		<i class="iconfont icon-wenhao"></i>
+        </el-tooltip></span
 				>
 				<el-input-number
 					v-model="score"
@@ -34,14 +44,20 @@
 					size="mini"
 				></el-input-number>
 				<span class="scoreNote" v-if="relation === 3"
-					><el-tooltip
-						style="diaplay: inline"
-						effect="light"
-						content="Using in indicator formula"
-						placement="bottom"
 					>
 						<span>Period:</span>
-					</el-tooltip></span
+											<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+        <span slot="content">Choose a value to specify how many bars within which the following signals will occur in time order to trigger the backtest criteria.<br/>
+		if choose score 1, meanning if the following signals occur at the same bar the backtest criteria is met.<br/>
+		if choose score 2, meanning if the following signals occur within two bars the backtest criteria is met.<br/>
+		etc.<br/>
+		For example:<br/>
+		If the backtest criteria needs to have two consecutive signals, set two signals below and choose period 2.<br/>
+		If the backtest criteria needs to have two signals occur within 3 bars, set two signals below and period 3.<br/>
+		etc.<br/>
+		</span>
+		<i class="iconfont icon-wenhao"></i>
+        </el-tooltip></span
 				>
 				<el-input-number
 					v-model="signals_in_market"
@@ -379,14 +395,13 @@
 						></trailing-stop-like>
 						<div class="delay-bar-box">
 							<el-checkbox v-model="isDelayBar"
-								><el-tooltip
-									style="diaplay: inline"
-									effect="light"
-									content="The number of bars delayed"
-									placement="bottom"
 								>
-									<span>Delay of Bars</span>
-								</el-tooltip></el-checkbox
+									<span>Delay of Bars </span>
+													   <el-tooltip effect="dark" placement="top" style="diaplay:inline">
+        <span slot="content">Check this option to delay the specified number of bars to exit when the exit criteria is met.<br/>
+		</span>
+		<i class="iconfont icon-wenhao"></i>
+        </el-tooltip></el-checkbox
 							>
 											<el-input-number
 					v-model="delay_bars"
@@ -494,6 +509,9 @@ export default {
 		},
 		updateTech() {
 			return this.$store.state.currentTech
+		},
+		riskControl() {
+			return this.$store.state.riskControl
 		}
 	},
 	watch: {
@@ -505,47 +523,6 @@ export default {
 		updateTech(val) {
 			this.indicatorRadio = 'technical'
 		},
-		// exitSaveCheck: {
-		// 	handler(newVal) {
-		// 		console.log("传到exit的值", newVal);
-		// 		if (newVal) {
-		// 			this.signalOptions = [
-		// 				{
-		// 					value: 1,
-		// 					label: 'Single-Signal'
-		// 				},
-		// 				{
-		// 					value: 2,
-		// 					label: 'SameBar Multi-Signal'
-		// 				},
-		// 				{
-		// 					value: 3,
-		// 					label: 'TimeOrder Multi-Signal'
-		// 				},
-		// 				{
-		// 					value: 0,
-		// 					label: 'Only Use Risk Control'
-		// 				}
-		// 			]
-		// 		} else {
-		// 			this.signalOptions = [
-		// 				{
-		// 					value: 1,
-		// 					label: 'Single-Signal'
-		// 				},
-		// 				{
-		// 					value: 2,
-		// 					label: 'SameBar Multi-Signal'
-		// 				},
-		// 				{
-		// 					value: 3,
-		// 					label: 'TimeOrder Multi-Signal'
-		// 				}
-		// 			]
-		// 			this.exitItemCheck = false
-		// 		}
-		// 	}
-		// },
 		relation: {
 			handler(newVal, oldVal) {
 				if (newVal == 0) {
@@ -564,11 +541,23 @@ export default {
 					this.relation = oldVal
 				}
 			}
+		},
+		riskControl: {
+			handler(newVal) {
+				if(!newVal && this.relation == 0) {
+					this.relation = 1
+				}
+			},
+			immediate: true
 		}
 	},
 	methods: {
 		clearForm() {
+			let oldRelation = this.relation
+			let exitItemCheck = this.exitItemCheck
 			Object.assign(this.$data, this.$options.data())
+			this.relation = oldRelation
+			this.exitItemCheck = exitItemCheck
 			// 重置所有子组件的数据
 				try{
 					for (let i = 0; i < this.indicatorRadioArr.length; i++) {
@@ -592,6 +581,7 @@ export default {
 
 		},
 		addRiskControlOption(newVal) {
+			console.log('exit risk control', newVal)
 			if (newVal) {
 					this.signalOptions = [
 						{
@@ -818,7 +808,9 @@ export default {
 			this.$store.commit('saveDelayBar', obj)
 		},
 		isCheckDelayBar(val) {
-			if(!val) {
+			if(val) {
+				this.delay_bars = 1
+			}else{
 				this.delay_bars = 0
 			}
 
@@ -848,6 +840,7 @@ export default {
 			if(val == 2 || val == 3) {
 				if(this.editableTabs.length === 1) {
 				this.handleTabsEdit(null,'add')
+				this.editableTabsValue = '1'
 				}
 				if(val == 2) {
 					this.score = 2
@@ -999,9 +992,9 @@ export default {
 		setEditPanel(num, data) {
 			this.clearForm()
 			this.relation = data.exit.relation ? data.exit.relation : 1
-			if (num == 1) {
-				this.relation = 1
-			}
+			// if (num == 1) {
+			// 	this.relation = 1
+			// }
 			for (let i = 0; i < num - 1; i++) {
 				this.handleTabsEdit(null, 'add')
 			}
@@ -1104,39 +1097,39 @@ export default {
 			}
 		},
 		setRiskEditData(data) {
-			//console.log('编辑的risk exitdata', data)
-			this.score = data.exit.score
-			this.delay_bars = data.exit.delay_bars ? data.exit.delay_bars : 0
-			if(this.delay_bars != 0) {
-				this.isDelayBar = true
-			}else{
-				this.isDelayBar = false
-			}
-			this.signals_in_market = data.exit.signals_in_market
-				? data.exit.signals_in_market
-				: 1
-			this.signalOptions = [
-				{
-					value: 1,
-					label: 'Single-Signal'
-				},
-				{
-					value: 2,
-					label: 'SameBar Multi-Signal'
-				},
-				{
-					value: 3,
-					label: 'TimeOrder Multi-Signal'
-				},
-				{
-					value: 0,
-					label: 'Only Use Risk Control'
-				}
-			]
-			this.exitItemCheck = true
-			this.$emit('isOnlyRiskControl', this.exitItemCheck)
+			console.log('编辑的risk exitdata', data)
+			// this.score = data.exit.score
+			// this.delay_bars = data.exit.delay_bars ? data.exit.delay_bars : 0
+			// if(this.delay_bars != 0) {
+			// 	this.isDelayBar = true
+			// }else{
+			// 	this.isDelayBar = false
+			// }
+			// this.signals_in_market = data.exit.signals_in_market
+			// 	? data.exit.signals_in_market
+			// 	: 1
 			this.relation = 0
-			this.$emit('getExitRelation',this.relation)
+				this.exitItemCheck = true
+				this.signalOptions = [
+					{
+						value: 1,
+						label: 'Single-Signal'
+					},
+					{
+						value: 2,
+						label: 'SameBar Multi-Signal'
+					},
+					{
+						value: 3,
+						label: 'TimeOrder Multi-Signal'
+					},
+					{
+						value: 0,
+						label: 'Only Use Risk Control'
+					}
+				]
+				this.$emit('isOnlyRiskControl', this.exitItemCheck)
+				this.$emit('getExitRelation',this.relation)
 		}
 	}
 }
@@ -1145,6 +1138,8 @@ export default {
 .criteria-title {
 	font-size: 18px;
 	font-weight: bold;
+	margin-right: 5px;
+	display: inline-block;
 }
 .radioBox .el-form-item {
 	display: flex;

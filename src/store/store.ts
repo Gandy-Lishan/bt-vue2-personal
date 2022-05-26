@@ -118,7 +118,8 @@ export default new Vuex.Store({
 		tabIndex: 0,
 		sentimentIndicatorList: [],
 		backtestNameList: [],
-		formateTechnicalList: []
+		formateTechnicalList: [],
+		riskControl: '1111'
 	},
 	getters: {
 		getExtremeValue: (state) => {
@@ -506,6 +507,9 @@ export default new Vuex.Store({
 		saveRelation(state,obj) {
 			state.backtestInfo[obj.criteria].relation = Number(obj.value)
 		},
+		isRiskControl(state, val) {
+			state.riskControl = val
+		}
 	},
 	actions: {
 		Try(context, val) {

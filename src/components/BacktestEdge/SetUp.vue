@@ -8,53 +8,42 @@
 		>
 			<el-row>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12">
-					<el-form-item prop="capital">
-						<span slot="label">
-                     <span class="span-box">
-                        <el-tooltip style="diaplay:inline" effect="light" content="Start cash" placement="bottom">
-                       <span>Starting Capital:</span>
+					<el-form-item prop="capital" label="
+							Starting Capital">
+                        <el-tooltip effect="dark" placement="top" style="diaplay:inline">
+                             <span slot="content">Input the value of starting capital of the backtest. (default: 100000)<br/></span>
+							<i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
-                     </span>
-                   </span>
 						<el-input
 							v-model="bd.capital"
 							@input="validateStartingCapital"
 						></el-input>
 					</el-form-item>
-					<el-form-item prop="commission">
-					<span slot="label">
-                     <span class="span-box">
-                        <el-tooltip style="diaplay:inline" effect="light" content="Fees for a single transaction" placement="bottom">
-                       <span>Commission:</span>
+					<el-form-item prop="commission" label="Commission">
+                     <el-tooltip effect="dark" placement="top" style="diaplay:inline">
+                             <span slot="content">Input the percentage value of trading commission. (default: 0.1%)<br/></span>
+							<i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
-                     </span>
-                   </span>
 						<el-input
 							v-model="bd.commission"
 							@change="getCommission"
 						></el-input>
 					</el-form-item>
 					<span class="comUnitNote">(%)</span>
-					<el-form-item prop="slippage">
-						<span slot="label">
-                     <span class="span-box">
-                        <el-tooltip style="diaplay:inline" effect="light" content="The range of the target trading price" placement="bottom">
-                       <span>Slippage:</span>
+					<el-form-item prop="slippage" label="Slippage">
+						<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+                             <span slot="content">Input the value of slippage of trading price. (default: 0.1)<br/></span>
+							<i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
-                     </span>
-                   </span>
 						<el-input
 							v-model="bd.slippage"
 						></el-input> </el-form-item
 					><span class="sliUnitNote">(per trade)</span>
-					<el-form-item prop="benchmark">
-					<span slot="label">
-                     <span class="span-box">
-                        <el-tooltip style="diaplay:inline" effect="light" content="The stock name used in backtest benchmark without strategy" placement="bottom">
-                       <span>Benchmark:</span>
+					<el-form-item prop="benchmark" label="Benchmark">
+						<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+                             <span slot="content">Choose a stock/index with simple entry on the Start date & exit on the End date as benchmark compared with this backtest. (default: SPY)<br/></span>
+							<i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
-                     </span>
-                   </span>
 						<div class="enterSymbolBox">
 							<el-select
 								v-model="bd.benchmark"
@@ -80,20 +69,16 @@
 					</el-form-item>
 				</el-col>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12" :span="2">
-					<el-form-item prop="backtestHistory">
-					<span slot="label">
-                     <span class="span-box">
-                        <el-tooltip style="diaplay:inline" effect="light" content="Backtest run time" placement="bottom">
-                       <span>Backtest Period:</span>
+					<el-form-item prop="backtestHistory" label="Backtest Period">
+							<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+                             <span slot="content">Specify the start and end date of the backtest.<br/>Choose 'All History' to include all data since the inception of the backtesting stock/index.<br/></span>
+							<i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
-                     </span>
-                   </span>
-						<div class="selectBox">
+						<div class="selectBox historySelectBox">
 							<el-select
 								@change="getBacktestHistory(historyValue)"
 								@blur="setBacktestHistory(historyValue)"
 								v-model="historyValue"
-								placeholder="— Select Timeframe —"
 							>
 								<el-option
 									v-for="item in historyOptions"
@@ -106,14 +91,7 @@
 						</div>
 					</el-form-item>
 					<div class="dateBox">
-						<el-form-item>
-					<span slot="label">
-                     <span class="span-box">
-                        <el-tooltip style="diaplay:inline" effect="light" content="The first day of backtest" placement="bottom">
-                       <span>Start date:</span>
-                        </el-tooltip>
-                     </span>
-                   </span>
+						<el-form-item label="Start Date">
 							<el-date-picker
 								v-if="historyValue === 22"
 								v-model="bd.start_date"
@@ -127,14 +105,7 @@
 						</el-form-item>
 					</div>
 					<div class="dateBox">
-						<el-form-item prop="endDate">
-						<span slot="label">
-                     <span class="span-box">
-                        <el-tooltip style="diaplay:inline" effect="light" content="The last day of backtest" placement="bottom">
-                       <span>End date:</span>
-                        </el-tooltip>
-                     </span>
-                   </span>
+						<el-form-item prop="endDate" label="End Date">
 							<el-date-picker
 								v-if="historyValue === 22"
 								v-model="bd.end_date"
@@ -146,14 +117,13 @@
 							<el-input v-else disabled v-model="bd.end_date"> </el-input>
 						</el-form-item>
 					</div>
-					<el-form-item label="Timeframe:" prop="frequency">
-					<span slot="label">
-                     <span class="span-box">
-                        <el-tooltip style="diaplay:inline" effect="light" content="Time period of backtest" placement="bottom">
-                       <span>Timeframe:</span>
+					<el-form-item label="Timeframe" prop="frequency">
+					<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+                             <span slot="content">Choose the timeframe of the backtest. The chart above will change accordingly to the selection of the timeframe.<br/>if Daily is chosen, only daily sentiment indicators will be included in the below criteria sentiment indicators selection;<br/>
+							 if Weekly is chosen, both weekly and daily sentiment indicators will be included in the below criteria sentiment indicators selection;<br/>
+							 if Monthly is chosen, all monthly/weekly/daily sentiment indicators will be included in the below criteria sentiment indicators selection.<br/></span>
+							<i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
-                     </span>
-                   </span>
 						<div class="selectBox">
 							<el-select
 								v-model="bd.frequency"
@@ -175,30 +145,25 @@
 			<el-row>
 				<div class="nameBox">
 					<el-form-item
-						label="Backtest Name:"
+						label="Backtest Name"
 						prop="name"
 						placeholder="Give the backtest a name"
 					>
-					<span slot="label">
-                     <span class="span-box">
-                        <el-tooltip style="diaplay:inline" effect="light" content="Backtest name" placement="bottom">
-                       <span>Backtest Name:</span>
+					<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+                             <span slot="content">Input a unique name for each backtest.<br/></span>
+							<i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
-                     </span>
-                   </span>
 						<el-input v-model="bd.name" oninput="value=value.replace(/[\+]/g,'')"></el-input>
 					</el-form-item>
 				</div>
 			</el-row>
 			<div>
-				<el-form-item prop="direction">
-					<span slot="label">
-                     <span class="span-box">
-                        <el-tooltip style="diaplay:inline" effect="light" content="Direction of approach market" placement="bottom">
-                       <span>Direction:</span>
+				<el-form-item prop="direction" label="Direction">
+
+					<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+                             <span slot="content">Select Long or Short to specify the starting position of the backtest.<br/></span>
+							<i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
-                     </span>
-                   </span>
 					<el-radio-group v-model="bd.direction" @change="getDirection">
 						<el-radio label="Long">Long</el-radio>
 						<el-radio label="Short">Short</el-radio>
@@ -207,23 +172,39 @@
 			</div>
 			<div class="risk-control-container border-set">
 						 <div class="riskItem">
-    <el-checkbox v-model="isRiskControl" border @change="selectRiskControl">Risk Control at Exit:</el-checkbox>
+    <el-checkbox v-model="isRiskControl" border @change="selectRiskControl">Risk Control at Exit
+	
+					<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+                             <span slot="content">Check this option to include three methods of risk control to exit position.<br/>
+							 The specified methods will serve as first-come, first-execute.<br/>
+							 This option can be used combinedly as an OR condition with the Exit Criteria selection or be solely used in the Exit Criteria "Only Use Risk Control".<br/></span>
+							<i class="iconfont icon-wenhao"></i>
+                        </el-tooltip></el-checkbox>
 						 </div>
 	<div class="tpContainer riskItem" v-if="isRiskControl">
-    <el-checkbox v-model="isTakeProfit" @change="selectRiskControl"><el-tooltip style="diaplay:inline" effect="light" content="Take profit in risk_control" placement="bottom">
-                       <span>Take Profit</span>
-                        </el-tooltip></el-checkbox>
+    <el-checkbox v-model="isTakeProfit" >
+                       Take Profit
+					<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+                             <span slot="content">Input a value of percentage to exit position when the specified profit is reached. (default: 20%)<br/></span>
+							<i class="iconfont icon-wenhao"></i>
+                        </el-tooltip>
+						</el-checkbox>
 	<el-input v-model="tp" @input="setDesciption"></el-input><p style="margin:0px">(%)</p>
 	</div>
 		<div class="slContainer riskItem"  v-if="isRiskControl">
-    <el-checkbox v-model="isStopLoss" @change="selectRiskControl"><el-tooltip style="diaplay:inline" effect="light" content="Stop loss in risk_control" placement="bottom">
-                       <span>Stop Loss</span>
+    <el-checkbox v-model="isStopLoss" >Stop Loss
+	
+					<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+                             <span slot="content">Input a value of percentage to exit position when the specified loss is reached. (default: 10%)<br/></span>
+							<i class="iconfont icon-wenhao"></i>
                         </el-tooltip></el-checkbox>
 	<el-input v-model="sl" @input="setDesciption"></el-input><p>(%)</p>
 		</div>
 		<div class="timContainer riskItem"  v-if="isRiskControl">
-	    <el-checkbox v-model="isTimeInMarket" @change="selectRiskControl"><el-tooltip style="diaplay:inline" effect="light" content="Stay time in the market in risk_control" placement="bottom">
-                       <span>Time In Market</span>
+	    <el-checkbox v-model="isTimeInMarket">Time In Market
+							<el-tooltip effect="dark" placement="top" style="diaplay:inline">
+                             <span slot="content">Input a value of bars to stay in market after entry.<br/>Exit position when the specified Time In Market is reached. (default: 30)<br/></span>
+							<i class="iconfont icon-wenhao"></i>
                         </el-tooltip></el-checkbox>
 		<el-input v-model="tim" @input="setDesciption"></el-input><p>(Bars)</p>
 		</div>
@@ -283,7 +264,7 @@ export default {
 		}
 		var validateNameRule = (rule, value, callback) => {
 			if (value == '') {
-				callback(new Error('Please give a backtest name'))
+				callback(new Error('Please input backtest name'))
 			} else {
 				callback()
 			}
@@ -413,7 +394,7 @@ export default {
 		updateFreq() {
 			return this.$store.state.pairDataFreq
 		},
-		allRiskOption() {
+		allRiskControlOptions() {
 			return this.isTakeProfit || this.isStopLoss || this.isTimeInMarket
 		}
 	},
@@ -434,16 +415,33 @@ export default {
 				}
 			}
 		},
-		allRiskOption: {
-			handler(newVal) {
-				if(this.isRiskControl && !(this.isTakeProfit || this.isStopLoss || this.isTimeInMarket)) {
-					this.isTakeProfit = true
-					this.isStopLoss = true
-				}
-			}
-		},
 		backtestEditData: {
 			handler(newVal) {
+			}
+		},
+		allRiskControlOptions: {
+			handler(newVal) {
+			if(!newVal && this.isRiskControl) {
+			    this.$message({
+				message:
+					'Select at least one Risk Control indicator',
+				type: 'error',
+				offset: 300
+			    })
+			   this.isTakeProfit = true
+			   this.selectRiskControl(this.isRiskControl)
+			}
+			}
+		}
+	},
+	methods: {
+		clearForm() {
+			Object.assign(this.$data, this.$options.data())
+			this.getEndDate()
+			this.bd.symbol = this.$store.state.backtestSymbol
+			this.clearFormValidate()
+		},
+		setEditData(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
 					console.log("编辑展示的数据",newVal);
 					this.clearFormValidate()
@@ -492,6 +490,7 @@ export default {
 						this.isRiskControl = true
 						this.$emit('IsRiskControl', true)
 					}
+					this.selectRiskControl(this.isRiskControl)
 					}
 					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
@@ -514,15 +513,6 @@ export default {
 						this.bd.start_date = ''
 					}
 				}
-			}
-		}
-	},
-	methods: {
-		clearForm() {
-			this.clearFormValidate()
-			Object.assign(this.$data, this.$options.data())
-			this.getEndDate()
-			this.bd.symbol = this.$store.state.backtestSymbol
 		},
 		getDirection(val) {
 			// direction 设置到 vuex
@@ -676,18 +666,25 @@ export default {
 		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.backtestSetupForm.clearValidate()
-			this.$emit('IsRiskControl', this.isRiskControl)
+			// this.$emit('IsRiskControl', this.isRiskControl)
 		},
 		changeTimeframe(val) {
 			this.getFrequency(val)
 			CIQ.addIndicators()
 		},
 		selectRiskControl(val) {
+			if(!this.isRiskControl) {
+			this.$emit('IsRiskControl', false)
+			}
 			if(this.isRiskControl && (this.isTakeProfit || this.isTimeInMarket || this.isStopLoss)) {
 			this.$emit('IsRiskControl', true)
-			}else{
-				this.$emit('IsRiskControl', false)
 			}
+			if(this.isRiskControl && !(this.isTakeProfit || this.isTimeInMarket || this.isStopLoss)){
+				this.isTakeProfit = true
+				this.isStopLoss = true
+				this.$emit('IsRiskControl', true)
+			}
+			this.$store.commit('isRiskControl',val)
 		},
 		getFrequency(val) {
 			// getFrequency will no longer call addIndicator and pass a parameter to it
@@ -931,7 +928,7 @@ export default {
 			if (num < 0 ) {
 					this.$message({
 						message:
-							'Only positive numbers less than or equal to 100 are allowed',
+							'Please enter Stop Loss,only positive numbers less than or equal to 100 are allowed',
 						type: 'error',
 						offset: 300
 					})
@@ -940,7 +937,7 @@ export default {
 			const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
 			if (!pattern.test(num) && num !== 0) {
 					this.$message({
-						message: 'Please enter a two-decimal number',
+						message: 'Please enter Stop Loss, only two decimal places are allowed',
 						type: 'error',
 						offset: 300
 					})
@@ -951,7 +948,7 @@ export default {
 		validateTakeProfit(num) {
 			if (num < 0) {
 					this.$message({
-						message: 'Only positive numbers are allowed',
+						message: 'Please enter Take Profit, only positive numbers are allowed',
 						type: 'error',
 						offset: 300
 					})
@@ -960,7 +957,7 @@ export default {
 			const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
 			if (!pattern.test(num) && num !== 0) {
 					this.$message({
-						message: 'Please enter a two-decimal number',
+						message: 'Please enter Take Profit, only two decimal places are allowed',
 						type: 'error',
 						offset: 300
 					})
@@ -971,7 +968,7 @@ export default {
 		validateTimeInMarket(num) {
 			if (isNaN(num) || num < 0 || !/^\d+$/.test(num)) {
 					this.$message({
-						message: 'Only positive integers are allowed',
+						message: 'Please enter Time in Market, only positive integers are allowed',
 						type: 'error',
 						offset: 300
 					})
@@ -1058,5 +1055,15 @@ export default {
 .el-checkbox-group{
 	display: flex;
 	margin-bottom: 10px;
+}
+.el-input {
+	display: inline;
+}
+.el-select{
+	top: -41px;
+	left: 16px;
+}
+/deep/.el-radio__input{
+	margin-left: 10px;
 }
 </style>

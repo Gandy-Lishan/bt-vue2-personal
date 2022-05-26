@@ -43,7 +43,7 @@
 					<el-tooltip
 						class="item"
 						effect="dark"
-						content="Clear chart and backtest set up form to create new backtests"
+						content="Clear current chart & Backtest Setup Form and create a new backtest."
 						placement="bottom"
 					>
 						<el-button
@@ -448,7 +448,7 @@ export default {
 			}
 		},
 		IsRiskControl(val) {
-			// this.exitSaveCheck = val
+			console.log('home risk control', val)
 			this.$refs.exitChild.addRiskControlOption(val)
 		},
 		setDirection(val) {
@@ -995,6 +995,7 @@ export default {
 				vm.$store.commit('getFrequency', vm.editFrequency)
 				console.log("before listen to backtestEditData")
 				vm.backtestEditData = data
+				vm.$refs.setUpChild.setEditData(data)
 				
 				//this.loading = false
 			} catch (error) {

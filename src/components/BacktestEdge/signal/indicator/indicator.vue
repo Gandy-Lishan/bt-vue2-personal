@@ -196,6 +196,8 @@ export default {
 			}
 			data.sentimentIndicatorList = this.$store.state.sentimentIndicatorList
 			Object.assign(this.$data, data)
+			
+			this.$refs.siForm.clearValidate()
 		},
 		// sentiment search
 		indicatorSentimentSearch(queryString, cb) {
