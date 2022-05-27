@@ -49,7 +49,7 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item>
+					<el-form-item prop="value">
 						<el-input
 							:disabled="!(conditionRadio === 'Indicator hist1')"
 							v-model="tech.value"

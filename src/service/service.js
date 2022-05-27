@@ -6,7 +6,6 @@ function get_env(name,value){
     }
     return process.env[name]
 }
-
 const author = {
     username: 'sentimentrader_backtest_api',
     password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'

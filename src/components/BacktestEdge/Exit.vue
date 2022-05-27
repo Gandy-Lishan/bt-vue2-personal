@@ -897,9 +897,9 @@ export default {
 						if (!senti) {
 							this.$message({
 								message:
-									'Please check that the ' +
+									'Please check that the #' +
 									(index + 1) +
-									'th exit panel field is filled in correctly',
+									' exit panel field is filled in correctly',
 								type: 'error'
 							})
 						}
@@ -914,9 +914,9 @@ export default {
 						if (!cci) {
 							this.$message({
 								message:
-									'Please check that the ' +
+									'Please check that the #' +
 									(index + 1) +
-									'th exit panel field is filled in correctly',
+									' exit panel field is filled in correctly',
 								type: 'error'
 							})
 						}
@@ -931,9 +931,9 @@ export default {
 						if (!rsi) {
 							this.$message({
 								message:
-									'Please check that the ' +
+								'Please check that the #' +
 									(index + 1) +
-									'th exit panel field is filled in correctly',
+									' exit panel field is filled in correctly',
 								type: 'error'
 							})
 						}
@@ -948,9 +948,9 @@ export default {
 						if (!macd) {
 							this.$message({
 								message:
-									'Please check that the ' +
+								'Please check that the #' +
 									(index + 1) +
-									'th exit panel field is filled in correctly',
+									' exit panel field is filled in correctly',
 								type: 'error'
 							})
 						}
@@ -965,9 +965,9 @@ export default {
 						if (!ma) {
 							this.$message({
 								message:
-									'Please check that the ' +
+								'Please check that the #' +
 									(index + 1) +
-									'th exit panel field is filled in correctly',
+									' exit panel field is filled in correctly',
 								type: 'error'
 							})
 						}
@@ -982,9 +982,9 @@ export default {
 						if (!eft) {
 							this.$message({
 								message:
-									'Please check that the ' +
+									'Please check that the #' +
 									(index + 1) +
-									'th exit panel field is filled in correctly',
+									' exit panel field is filled in correctly',
 								type: 'error'
 							})
 						}
@@ -999,9 +999,9 @@ export default {
 						if (!adx) {
 							this.$message({
 								message:
-									'Please check that the ' +
+									'Please check that the #' +
 									(index + 1) +
-									'th exit panel field is filled in correctly',
+									' exit panel field is filled in correctly',
 								type: 'error'
 							})
 						}
@@ -1017,9 +1017,9 @@ export default {
 						if (!aligator) {
 							this.$message({
 								message:
-									'Please check that the ' +
+									'Please check that the #' +
 									(index + 1) +
-									'th exit panel field is filled in correctly',
+									' exit panel field is filled in correctly',
 								type: 'error'
 							})
 						}
@@ -1034,9 +1034,9 @@ export default {
 						if (!lrf) {
 							this.$message({
 								message:
-									'Please check that the ' +
+									'Please check that the #' +
 									(index + 1) +
-									'th exit panel field is filled in correctly',
+									' exit panel field is filled in correctly',
 								type: 'error'
 							})
 						}
@@ -1051,9 +1051,9 @@ export default {
 						if (!blb) {
 							this.$message({
 								message:
-									'Please check that the ' +
+									'Please check that the #' +
 									(index + 1) +
-									'th exit panel field is filled in correctly',
+									' exit panel field is filled in correctly',
 								type: 'error'
 							})
 						}
@@ -1069,9 +1069,9 @@ export default {
 						if (!smi) {
 							this.$message({
 								message:
-									'Please check that the ' +
+								'Please check that the #' +
 									(index + 1) +
-									'th exit panel field is filled in correctly',
+									' exit panel field is filled in correctly',
 								type: 'error'
 							})
 						}
@@ -1086,9 +1086,9 @@ export default {
 						if (!eri) {
 							this.$message({
 								message:
-									'Please check that the ' +
+									'Please check that the #' +
 									(index + 1) +
-									'th exit panel field is filled in correctly',
+									' exit panel field is filled in correctly',
 								type: 'error'
 							})
 						}
@@ -1104,9 +1104,9 @@ export default {
 						if (!ts) {
 							this.$message({
 								message:
-									'Please check that the ' +
+									'Please check that the #' +
 									(index + 1) +
-									'th exit panel field is filled in correctly',
+									' exit panel field is filled in correctly',
 								type: 'error'
 							})
 						}

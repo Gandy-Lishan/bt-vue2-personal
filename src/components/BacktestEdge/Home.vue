@@ -539,15 +539,19 @@ export default {
 			if (setUp) {
 				let entry
 				// 申请空间
+				let entryChecked
 				for (let index = 0; index < this.entryLength; index++) {
 					this.addEntrySignalLength(index)
 					entry = this.$refs.entryChild.saveBacktestData(index)
+				    entryChecked = await entry
+					if(!entryChecked){
+						return
+					}
 					this.$refs.entryChild.saveScoreValue()
 					this.$refs.entryChild.saveSignalsInMarket()
 					this.$refs.entryChild.saveDelayBar()
 					this.$refs.entryChild.saveRelation()
 				}
-				let entryChecked = await entry
 				if (entryChecked) {
 					let exit
 					let exitChecked
@@ -556,6 +560,9 @@ export default {
 					console.log('runbacktest exit' + index)
 						exit = this.$refs.exitChild.saveBacktestData(index)
 						exitChecked = await exit
+											if(!exitChecked){
+						return
+					}
 						this.$refs.exitChild.saveScoreValue()
 						this.$refs.exitChild.saveSignalsInMarket()
 						this.$refs.exitChild.saveDelayBar()
