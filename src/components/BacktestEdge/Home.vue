@@ -138,12 +138,12 @@
 							></result>
 						</div>
 						<performance
-							ref="performanceChild"
+						ref="performanceChild"
 							:backtestEditData="backtestEditData"
 							@errorCatchPerformance="errorCatchPerformance"
 						></performance>
 					</el-tab-pane>
-					<el-tab-pane label="My Favorites" name="forth"
+					<el-tab-pane label="My Favorites" name="forth" 
 						><favorite
 							ref="favoriteChild"
 							@refHistoryForm="refHistoryForm"
