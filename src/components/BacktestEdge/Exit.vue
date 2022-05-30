@@ -136,7 +136,7 @@
 							:period="signals_in_market"
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
-							v-if="indicatorRadioArr[index] === 'sentiment'"
+							v-show="indicatorRadioArr[index] === 'sentiment'"
 						></senti>
 						<cci
 							v-bind="$attrs"
@@ -155,7 +155,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-if="
+							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'CCI_like'
 							"
@@ -177,7 +177,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-if="
+							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'rsi'
 							"
@@ -199,7 +199,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-if="
+							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MACD_like'
 							"
@@ -221,13 +221,13 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-if="
+							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MovingAverage_like'
 							"
 						></ma>
 						<!-- <risk
-							v-if="indicatorRadioArr[index] === 'risk'"
+							v-show="indicatorRadioArr[index] === 'risk'"
 							ref="riskChild"
 							v-bind="$attrs"
 							:panelIndex="index"
@@ -252,7 +252,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-if="
+							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'BollingerBands_like'
 							"
@@ -274,7 +274,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-if="
+							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'EFT_like'
 							"
@@ -296,7 +296,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-if="
+							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Stochastics_like'
 							"
@@ -318,7 +318,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-if="
+							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ADX_like'
 							"
@@ -340,7 +340,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-if="
+							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ERI_like'
 							"
@@ -362,7 +362,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-if="
+							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Aligator_like'
 							"
@@ -384,7 +384,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-if="
+							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'LRF_like'
 							"
@@ -406,7 +406,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-if="
+							v-show="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Trailingstop_like'
 							"
