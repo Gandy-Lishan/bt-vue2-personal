@@ -1124,7 +1124,6 @@ export default {
 			})
 		},
 		setEditPanel(num, data) {
-			Object.assign(this.$data, this.$options.data())
 			this.relation = data.exit.relation ? data.exit.relation : 1
 			// if (num == 1) {
 			// 	this.relation = 1
@@ -1183,10 +1182,10 @@ export default {
 				console.log('函数执行了' + j + '次，共' + length + '次')
 				this.$refs.indiChild[j].setEditData(data)
 				this.$refs.indiChild[j].setEditData(data)
-				if (this.indicatorRadioArr[j] === 'Sentiment') {
+				if (this.indicatorRadioArr[j] === 'sentiment') {
 					this.$refs.sentiChild[j].setEditData(data)
 				}
-				if (this.indicatorRadioArr[j] === 'Technical') {
+				if (this.indicatorRadioArr[j] === 'technical') {
 					if (this.techIndiObj[j] === 'CCI_like') {
 						this.$refs.cciChild[j].setEditData(data)
 					}

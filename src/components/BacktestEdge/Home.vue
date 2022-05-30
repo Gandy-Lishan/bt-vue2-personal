@@ -560,7 +560,7 @@ export default {
 					console.log('runbacktest exit' + index)
 						exit = this.$refs.exitChild.saveBacktestData(index)
 						exitChecked = await exit
-											if(!exitChecked){
+						if(!exitChecked){
 						return
 					}
 						this.$refs.exitChild.saveScoreValue()
@@ -943,9 +943,9 @@ export default {
 			CIQ.setCoverText('Restoring Backtest form...')
 			
 			//this.loading = true
-			// this.$refs.setUpChild.clearForm()
-			// this.$refs.entryChild.clearForm()
-			// this.$refs.exitChild.clearForm()
+			this.$refs.setUpChild.clearForm()
+			this.$refs.entryChild.clearForm()
+			this.$refs.exitChild.clearForm()
 			let vm = this
 			vm.activeName = 'first'
 			vm.backtestEditData = {}

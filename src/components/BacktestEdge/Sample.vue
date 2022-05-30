@@ -91,21 +91,21 @@
 								<el-button
 									size="mini"
 									type="info"
-									v-if="scope.row.start_date === '1800-01-01'"
+									v-if="scope.row.start_date === '1800-10-01'"
 									plain
 									>All History</el-button
 								>
 								<el-button
 									size="mini"
 									type="info"
-									v-if="scope.row.start_date !== '1800-01-01'"
+									v-if="scope.row.start_date !== '1800-10-01'"
 									plain
 									>{{ scope.row.start_date }}</el-button
 								>
 								<el-button
 									size="mini"
 									type="info"
-									v-if="scope.row.start_date !== '1800-01-01'"
+									v-if="scope.row.start_date !== '1800-10-01'"
 									plain
 									>{{ scope.row.end_date }}</el-button
 								>

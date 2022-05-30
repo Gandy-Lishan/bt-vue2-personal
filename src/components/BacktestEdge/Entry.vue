@@ -958,7 +958,6 @@ export default {
 		    // if(num == 1) {
 			// 	this.relation = 1
 			// }
-			Object.assign(this.$data, this.$options.data())
 			this.relation = data.entry.relation ? data.entry.relation : 1
 			
 			for (let i = 0; i < num-1; i++) {
@@ -1014,10 +1013,10 @@ export default {
 			for (let j = 0; j < length; j++) {
 				console.log('函数执行了' + j + '次，共' + length + '次')
 				this.$refs.indiChild[j].setEditData(data)
-				if (this.indicatorRadioArr[j] === 'Sentiment') {
+				if (this.indicatorRadioArr[j] === 'sentiment') {
 					this.$refs.sentiChild[j].setEditData(data)
 				}
-				if (this.indicatorRadioArr[j] === 'Technical') {
+				if (this.indicatorRadioArr[j] === 'technical') {
 					if (this.techIndiObj[j] === 'CCI_like') {
 						this.$refs.cciChild[j].setEditData(data)
 					}

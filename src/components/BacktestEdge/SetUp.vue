@@ -498,7 +498,7 @@ export default {
 					let year
 					let month
 					let day
-					if (newVal.start_date && newVal.start_date !== '1800-01-01') {
+					if (newVal.start_date && newVal.start_date !== '1800-10-01') {
 						const starArr = newVal.start_date.toString().split('-')
 						const endArr = newVal.end_date.toString().split('-')
 						year = Number(endArr[0]) - Number(starArr[0])
@@ -861,7 +861,7 @@ export default {
 							bd.risk_control = '//'
 						}
 						if(this.historyValue == 21) {
-							bd.start_date = '1800-01-01'
+							bd.start_date = '1800-10-01'
 						}
 						this.$store.commit('setBd', bd)
 						return checked
@@ -1071,4 +1071,5 @@ export default {
 /deep/.el-radio__input{
 	margin-left: 10px;
 }
+
 </style>

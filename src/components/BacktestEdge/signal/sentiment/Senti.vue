@@ -513,8 +513,7 @@ export default {
 			}
 		},
 		setEditData(newVal) {
-			if (JSON.stringify(newVal) != '{}') {
-				this.clearForm()
+			if (JSON.stringify(newVal) != '{}') {	
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.senti.extreme_optimism = obj.extreme_optimism
 				this.senti.extreme_pessimism = obj.extreme_pessimism
