@@ -397,6 +397,8 @@ delay_bars: [String, Number],
 		setEditData(newVal) {
 			console.log('Alligator编辑的数据',newVal)
 			if (JSON.stringify(newVal) != '{}') {
+				this.clearForm()
+
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)

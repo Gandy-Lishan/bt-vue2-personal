@@ -943,9 +943,9 @@ export default {
 			CIQ.setCoverText('Restoring Backtest form...')
 			
 			//this.loading = true
-			this.$refs.setUpChild.clearForm()
-			this.$refs.entryChild.clearForm()
-			this.$refs.exitChild.clearForm()
+			// this.$refs.setUpChild.clearForm()
+			// this.$refs.entryChild.clearForm()
+			// this.$refs.exitChild.clearForm()
 			let vm = this
 			vm.activeName = 'first'
 			vm.backtestEditData = {}

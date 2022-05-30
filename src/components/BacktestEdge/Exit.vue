@@ -136,7 +136,7 @@
 							:period="signals_in_market"
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
-							v-show="indicatorRadioArr[index] === 'sentiment'"
+							v-if="indicatorRadioArr[index] === 'sentiment'"
 						></senti>
 						<cci
 							v-bind="$attrs"
@@ -155,7 +155,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'CCI_like'
 							"
@@ -177,7 +177,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'rsi'
 							"
@@ -199,7 +199,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MACD_like'
 							"
@@ -221,13 +221,13 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MovingAverage_like'
 							"
 						></ma>
 						<!-- <risk
-							v-show="indicatorRadioArr[index] === 'risk'"
+							v-if="indicatorRadioArr[index] === 'risk'"
 							ref="riskChild"
 							v-bind="$attrs"
 							:panelIndex="index"
@@ -252,7 +252,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'BollingerBands_like'
 							"
@@ -274,7 +274,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'EFT_like'
 							"
@@ -296,7 +296,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Stochastics_like'
 							"
@@ -318,7 +318,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ADX_like'
 							"
@@ -340,7 +340,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ERI_like'
 							"
@@ -362,7 +362,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Aligator_like'
 							"
@@ -384,7 +384,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'LRF_like'
 							"
@@ -406,7 +406,7 @@
 							:period="signals_in_market"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Trailingstop_like'
 							"
@@ -1124,7 +1124,7 @@ export default {
 			})
 		},
 		setEditPanel(num, data) {
-			this.clearForm()
+			Object.assign(this.$data, this.$options.data())
 			this.relation = data.exit.relation ? data.exit.relation : 1
 			// if (num == 1) {
 			// 	this.relation = 1
@@ -1133,13 +1133,6 @@ export default {
 				this.handleTabsEdit(null, 'add')
 			}
 			this.refs = data
-			this.$nextTick(() => {
-				//console.log('当前的refs', this.$refs.indiChild)
-				this.setEditData(this.refs)
-			})
-		},
-		setEditData(data) {
-			//console.log('编辑的exitdata', data)
 			this.score = data.exit.score
 			this.delay_bars = data.exit.delay_bars ? data.exit.delay_bars : 0
 			if (this.delay_bars != 0) {
@@ -1154,14 +1147,11 @@ export default {
 			this.$emit('getExitRelation', this.relation)
 			let length = data.exit.signals.length
 			this.tabIndex = length
-			for (let j = 0; j < length; j++) {
-				//console.log('函数执行了' + j + '次，共' + length + '次')
-				this.$refs.indiChild[j].setEditData(data)
+				for (let j = 0; j < length; j++) {
 				if (data.exit.signals[j].analysis === 'Sentiment') {
 					this.indicatorValArr[j] = data.exit.signals[j].indicator
 					this.indicatorRadioArr.splice(j, 1, 'sentiment')
 					this.indicatorRadio = 'sentiment'
-					this.$refs.sentiChild[j].setEditData(data)
 					this.techIndiObj[j] = ''
 				}
 				if (data.exit.signals[j].analysis === 'Technical') {
@@ -1181,7 +1171,22 @@ export default {
 							this.techIndiObj[j] = formateTechnicalList[i].class
 							break
 						}
-					}
+					}}}
+			this.$nextTick(() => {
+				//console.log('当前的refs', this.$refs.indiChild)
+				this.setEditData(this.refs)
+			})
+		},
+		setEditData(data) {
+			let length = data.exit.signals.length
+			for (let j = 0; j < length; j++) {
+				console.log('函数执行了' + j + '次，共' + length + '次')
+				this.$refs.indiChild[j].setEditData(data)
+				this.$refs.indiChild[j].setEditData(data)
+				if (this.indicatorRadioArr[j] === 'Sentiment') {
+					this.$refs.sentiChild[j].setEditData(data)
+				}
+				if (this.indicatorRadioArr[j] === 'Technical') {
 					if (this.techIndiObj[j] === 'CCI_like') {
 						this.$refs.cciChild[j].setEditData(data)
 					}
@@ -1216,32 +1221,10 @@ export default {
 						this.$refs.trailingStopLikeChild[j].setEditData(data)
 					}
 				}
-				// if (data.exit.signals[j].analysis === 'Exit') {
-				// 	this.indicatorRadioArr.splice(j, 1, 'risk')
-				// 	if (
-				// 		data.exit.signals[j].take_profit &&
-				// 		data.exit.signals[j].stop_loss
-				// 	) {
-				// 		this.riskValArr[j] = 'Profit/Loss'
-				// 	} else if (data.exit.signals[j].time_in_market) {
-				// 		this.riskValArr[j] = 'Time In Market'
-				// 	}
-				// 	this.$refs.riskChild[j].setEditData(data)
-				// }
 			}
 		},
 		setRiskEditData(data) {
 			console.log('编辑的risk exitdata', data)
-			// this.score = data.exit.score
-			// this.delay_bars = data.exit.delay_bars ? data.exit.delay_bars : 0
-			// if(this.delay_bars != 0) {
-			// 	this.isDelayBar = true
-			// }else{
-			// 	this.isDelayBar = false
-			// }
-			// this.signals_in_market = data.exit.signals_in_market
-			// 	? data.exit.signals_in_market
-			// 	: 1
 			this.relation = 0
 			this.exitItemCheck = true
 			this.signalOptions = [

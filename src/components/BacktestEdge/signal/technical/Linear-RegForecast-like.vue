@@ -206,6 +206,8 @@ delay_bars: [String, Number],
 		// 设置编辑的数据
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
+				this.clearForm()
+
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)

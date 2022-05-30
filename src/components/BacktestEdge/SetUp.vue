@@ -445,7 +445,7 @@ export default {
 		setEditData(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
 					console.log("编辑展示的数据",newVal);
-					this.clearFormValidate()
+					this.clearForm()
 					delete newVal.entry
 					delete newVal.exit
 					delete newVal.user_id
@@ -859,6 +859,9 @@ export default {
 				
 				        }else{
 							bd.risk_control = '//'
+						}
+						if(this.historyValue == 21) {
+							bd.start_date = '1800-01-01'
 						}
 						this.$store.commit('setBd', bd)
 						return checked
