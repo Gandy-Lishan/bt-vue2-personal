@@ -197,7 +197,7 @@
 										size="mini"
 									></el-button>
 								</el-tooltip>
-								<el-button
+								<!-- <el-button
 									type="warning"
 									icon="el-icon-star-off"
 									circle
@@ -210,7 +210,7 @@
 									circle
 									@click="showDes(scope.row)"
 									size="mini"
-								></el-button>
+								></el-button> -->
 								<!-- <el-tooltip
 									class="item"
 									effect="dark"
@@ -452,11 +452,20 @@ copyBacktest: throttle(async function (row) {
 					this.$message.error('Copy failed')
 				}
 			} catch (error) {
-				this.$message({
-					message: 'The internal server is busy, please try again later ',
-					type: 'error',
-					offset: 300
-				})
+					if (error.response.status === 403) {
+					this.$notify.error({
+						title: 'Has been Copied',
+						message: 'The backtest has been copied',
+						offset: 100
+					})
+					}
+					if (error.response.status === 500) {
+						this.$notify.error({
+							title: 'Service is busy',
+							message: 'The internal server is busy, please try again later ',
+							offset: 100
+						})
+					}
 			}
 		}, 500),
 		viewBacktestResults: throttle(async function (row) {

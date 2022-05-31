@@ -197,20 +197,20 @@
 										size="mini"
 									></el-button>
 								</el-tooltip>
-								<el-button
+								<!-- <el-button
 									plain
 									icon="el-icon-s-comment"
 									circle
 									@click="sendBack(scope.row)"
 									size="mini"
-								></el-button>
-								<el-button
+								></el-button> -->
+								<!-- <el-button
 									plain
 									icon="el-icon-check"
 									circle
 									@click="showDes(scope.row)"
 									size="mini"
-								></el-button>
+								></el-button> -->
 								<el-tooltip
 									class="item"
 									effect="dark"
@@ -545,20 +545,20 @@ export default {
 					this.$message.error('Copy failed')
 				}
 			} catch (error) {
-				if (error.response.status === 403) {
+					if (error.response.status === 403) {
 					this.$notify.error({
 						title: 'Has been Copied',
 						message: 'The backtest has been copied',
 						offset: 100
 					})
-				}
-				if (error.response.status === 500) {
-					this.$message({
-						message: 'The internal server is busy, please try again later ',
-						type: 'error',
-						offset: 300
-					})
-				}
+					}
+					if (error.response.status === 500) {
+						this.$notify.error({
+							title: 'Service is busy',
+							message: 'The internal server is busy, please try again later ',
+							offset: 100
+						})
+					}
 			}
 		}, 1000),
 		viewBacktestResults: throttle(async function (row) {

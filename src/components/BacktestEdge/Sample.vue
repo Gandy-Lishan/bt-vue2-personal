@@ -8,6 +8,7 @@
 					:element-loading-text="loadTest"
 					element-loading-spinner="el-icon-loading"
 					element-loading-background="rgba(0, 0, 0, 0.8)"
+					default-expand-all
 				>
 					<el-table-column type="index" align="center">
 						<template scope="scope">
@@ -402,16 +403,16 @@ export default {
 					}
 				} catch (error) {
 					if (error.response.status === 403) {
-						this.$notify.error({
-							message: 'The internal server is busy, please try again later ',
-							type: 'error',
-							offset: 300
-						})
+					this.$notify.error({
+						title: 'Has been Copied',
+						message: 'The backtest has been copied',
+						offset: 100
+					})
 					}
 					if (error.response.status === 500) {
 						this.$notify.error({
-							title: 'Has been Copied',
-							message: 'The backtest has been copied',
+							title: 'Service is busy',
+							message: 'The internal server is busy, please try again later ',
 							offset: 100
 						})
 					}
