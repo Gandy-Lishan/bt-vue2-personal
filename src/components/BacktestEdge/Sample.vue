@@ -36,7 +36,7 @@
 						prop="description"
 					>
 					</el-table-column> -->
-					<el-table-column label="Entry & Exit" align="center" 
+					<!-- <el-table-column label="Entry & Exit" align="center" 
 					
 						show-overflow-tooltip>
 						<template slot-scope="scope">
@@ -51,6 +51,33 @@
 									}}
 								</div>
 							</el-tooltip>
+						</template>
+					</el-table-column> -->
+					<el-table-column type="expand">
+						<template slot-scope="scope">
+							<div class="descriptionBox">
+								<div class="entryBox">
+									<p>Entry Description</p>
+									<template
+										v-for="(item, index) in scope.row.entry_description"
+									>
+										<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
+									</template>
+								</div>
+								<div class="exitBox">
+									<p>Exit Description</p>
+									<template v-for="(item, index) in scope.row.exit_description">
+										<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
+									</template>
+								</div>
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column label="Entry & Exit" align="center">
+						<template slot-scope="scope">
+							{{ scope.row.entry_description[0] }}<br />
+							<br />
+							{{ scope.row.exit_description[0] }}<br />
 						</template>
 					</el-table-column>
 					<el-table-column
@@ -312,10 +339,24 @@ export default {
 				const res = await getSampleList(page)
 				if (res.status === 200) {
 					this.backtestList = res.data.results
+					console.log(this.backtestList)
 					if (this.backtestList.length != 0) {
 						this.backtestList.forEach((element) => {
 							if (element.result !== '')
 								element.result = JSON.parse(element.result)
+								
+						if (element.entry_description.indexOf('[') != -1) {
+								element.entry_description = JSON.parse(
+									element.entry_description
+								)
+							}else{
+								element.entry_description = [element.entry_description]
+							}
+							if (element.exit_description.indexOf('[') != -1) {
+								element.exit_description = JSON.parse(element.exit_description)
+							}else{
+								element.exit_description = [element.exit_description]
+							}
 						})
 					}
 					this.queryInfo.total = res.data.count
@@ -519,5 +560,19 @@ export default {
 }
 .el-table__body-wrapper {
 	overflow-x: scroll;
+}
+.descriptionBox{
+	display: flex;
+	justify-content: space-around;
+	.entryBox {
+		p:first-child {
+		font-weight: 500;
+		color: #99a9bf;
+	    }
+	}
+	.exitBox p:first-child {
+		font-weight: 500;
+		color: #99a9bf;
+	}
 }
 </style>

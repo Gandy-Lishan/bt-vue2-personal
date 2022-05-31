@@ -16,7 +16,6 @@
 						label="first"
 						@change="setRadio"
 					>&nbsp;</el-radio>
-					<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 					<el-select
 						v-model="tech.comparison"
 						size="mini"
@@ -33,11 +32,9 @@
 						</el-option>
 						
 					</el-select>
-					</el-tooltip>
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
-						<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
 							v-model="tech.condition"
 							:disabled="!(this.radio === 'first')"
@@ -53,12 +50,10 @@
 							>
 							</el-option>
 						</el-select>
-						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionSelect">
 					<el-form-item>
-						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-select
 							v-model="tech.value"
 							:disabled="!(this.radio === 'first')"
@@ -75,7 +70,6 @@
 							>
 							</el-option>
 						</el-select>
-						</el-tooltip>
 					</el-form-item>
 				</div>
 			</div>
@@ -87,7 +81,6 @@
 							@change="setRadio"
 							label="second"
 						>&nbsp;</el-radio>
-						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-select
 							v-model="comparison2"
 							:disabled="!(this.radio === 'second')"
@@ -105,12 +98,10 @@
 							>
 							</el-option>
 						</el-select>
-						</el-tooltip>
 					</el-form-item>
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
-						<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
 							v-model="tech.condition"
 							filterable
@@ -126,12 +117,10 @@
 							>
 							</el-option>
 						</el-select>
-						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionSelect">
 					<el-form-item>
-						<el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-select
 							v-model="value2"
 							:disabled="!(this.radio === 'second')"
@@ -149,7 +138,6 @@
 							>
 							</el-option>
 						</el-select>
-						</el-tooltip>
 					</el-form-item>
 				</div>
 			</div>

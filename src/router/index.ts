@@ -10,6 +10,9 @@ import https from 'https'
 import { getCookieData, setCookieData } from '@/tools/cookie'
 import { stringMap } from 'aws-sdk/clients/backup'
 Vue.use(Router)
+// 路由懒加载
+// 懒加载即组件的延迟加载，通常vue的页面在运行后进入都会有一个默认的页面，而其他页面只有在点击后才需要加载出来。
+// 使用懒加载可以将页面中的资源划分为多份，从而减少第一次加载的时候耗时
 const router = new Router({
 	mode: 'history',
 	routes: [
@@ -18,15 +21,23 @@ const router = new Router({
 		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
 	]
 })
+// router.beforeEach(async (to, from, next) => {
+// 	console.log("router.beforeEach1.1")
+// 	const res = await getIndicatorsList()
+// 	console.log("router.beforeEach1.2")
+// 	CIQ.store = store
+// 	// 虽然用缓存了，但是还是用CIQ.indicatorList管理
+// 	CIQ.indicatorList = res.data
+// 	return next()
+// })
+
+
 router.beforeEach(async (to, from, next) => {
 	const res = await getIndicatorsList()
 	CIQ.store = store
+	// 虽然用缓存了，但是还是用CIQ.indicatorList管理
 	CIQ.indicatorList = res.data
-	return next()
-})
 
-
-router.beforeEach((to, from, next) => {
 	let loginUrl = 'https://users.sentimentrader.com/login'
 	let formateHost = location.origin
 	//测试网站 https://users.sentdevsite.com/login
@@ -37,7 +48,6 @@ router.beforeEach((to, from, next) => {
 		let url = location.search
 		userId = subURLstrToUserid(url, loginUrl, formateHost)
 
-		
 		let tmpStatus = postAxiosRequest(loginUrl, next)
 		if (!tmpStatus){
 			// 请求失败会进入这个分支
@@ -62,6 +72,7 @@ async function postAxiosRequest(loginUrl: string, next: any) {
 	}
 
 	let res = await axios.post('/dev/user/')
+	
 	if (res.status === 200) {
 		next()
 		status = true

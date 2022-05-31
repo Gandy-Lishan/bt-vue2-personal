@@ -138,12 +138,12 @@
 							></result>
 						</div>
 						<performance
-							ref="performanceChild"
+						ref="performanceChild"
 							:backtestEditData="backtestEditData"
 							@errorCatchPerformance="errorCatchPerformance"
 						></performance>
 					</el-tab-pane>
-					<el-tab-pane label="My Favorites" name="forth"
+					<el-tab-pane label="My Favorites" name="forth" 
 						><favorite
 							ref="favoriteChild"
 							@refHistoryForm="refHistoryForm"
@@ -539,15 +539,19 @@ export default {
 			if (setUp) {
 				let entry
 				// 申请空间
+				let entryChecked
 				for (let index = 0; index < this.entryLength; index++) {
 					this.addEntrySignalLength(index)
 					entry = this.$refs.entryChild.saveBacktestData(index)
+				    entryChecked = await entry
+					if(!entryChecked){
+						return
+					}
 					this.$refs.entryChild.saveScoreValue()
 					this.$refs.entryChild.saveSignalsInMarket()
 					this.$refs.entryChild.saveDelayBar()
 					this.$refs.entryChild.saveRelation()
 				}
-				let entryChecked = await entry
 				if (entryChecked) {
 					let exit
 					let exitChecked
@@ -556,6 +560,9 @@ export default {
 					console.log('runbacktest exit' + index)
 						exit = this.$refs.exitChild.saveBacktestData(index)
 						exitChecked = await exit
+						if(!exitChecked){
+						return
+					}
 						this.$refs.exitChild.saveScoreValue()
 						this.$refs.exitChild.saveSignalsInMarket()
 						this.$refs.exitChild.saveDelayBar()
@@ -957,12 +964,24 @@ export default {
 				//console.log(data)
 				let signalCode = new SignalCode()
 				if (data.entry.signals instanceof Array) {
+					// 删除掉 code 为 false 的项
+				data.entry.signals.forEach((item,index) => {
+					if(!item.code) {
+						data.entry.signals.splice(index,1)
+					}
+				})
 					// data.entry.signals = signalCode.decode(data.entry.signals[0]['code'])
 					data.entry.signals = data.entry.signals.map((value) => {
 						return signalCode.decode(value.code)
 					})
 				}
 				if (data.exit.signals instanceof Array) {
+					// 删除掉 code 为 false 的项
+						data.exit.signals.forEach((item,index) => {
+							if(!item.code) {
+								data.exit.signals.splice(index,1)
+							}
+						})
 					// data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
 						data.exit.signals = data.exit.signals.map((value) => {
 							if(value.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999') {

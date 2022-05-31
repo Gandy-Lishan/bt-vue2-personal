@@ -31,7 +31,6 @@
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
-						<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 						<el-select
 							:disabled="!(radio === '%K')"
 							v-model="tech.condition"
@@ -47,18 +46,15 @@
 							>
 							</el-option>
 						</el-select>
-						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="value">
-						 <el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 						<el-input
 							:disabled="!(radio === '%K')"
 							v-model="tech.value"
 							placeholder="Input Value"
 						></el-input>
-						 </el-tooltip>
 					</el-form-item>
 				</div>
 			</div>
@@ -72,7 +68,6 @@
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
-						<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 
 						<el-select
 							:disabled="!(radio === '%D')"
@@ -89,19 +84,16 @@
 							>
 							</el-option>
 						</el-select>
-						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="valueD">
-						 <el-tooltip style="diaplay:inline" effect="light" content="Compare with indicator value" placement="bottom">
 
 						<el-input
 							:disabled="!(radio === '%D')"
 							v-model="tech.valueD"
 							placeholder="Input Value"
 						></el-input>
-						 </el-tooltip>
 					</el-form-item>
 				</div>
 			</div>
@@ -115,7 +107,6 @@
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
-						<el-tooltip style="diaplay:inline" effect="light" content="The way of comparing between comparison and value" placement="bottom">
 
 						<el-select
 							:disabled="!(radio === '%K ')"
@@ -132,7 +123,6 @@
 							>
 							</el-option>
 						</el-select>
-						</el-tooltip>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">

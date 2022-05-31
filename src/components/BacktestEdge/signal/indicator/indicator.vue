@@ -3,14 +3,12 @@
 		<el-form :model="si" ref="siForm" :rules="rules">
 			<div class="indicator-container sentiBox">
 				<el-form-item>
-					<el-tooltip style="diaplay:inline" effect="light" content="The sentiment indicator used by the signal" placement="bottom">
 					<el-radio
 						v-model="indicatorRadio"
 						label="Sentiment Indicators"
 						@change="changeIndicatorChecked"
 					>
 					</el-radio>
-					</el-tooltip>
 				</el-form-item>
 				<el-form-item prop="sentimentIndicator">
 					<div class="indicatorSearchBox">
@@ -30,14 +28,13 @@
 			</div>
 			<div class="indicator-container techBox">
 				<el-form-item>
-					<el-tooltip style="diaplay:inline" effect="light" content="The technical indicator used by the signal" placement="bottom">
+					
 					<el-radio
 						v-model="indicatorRadio"
 						label="Technical Indicators"
 						@change="changeIndicatorChecked"
 					>
 					</el-radio>
-					</el-tooltip>
 				</el-form-item>
 				<el-form-item prop="technicalIndicator">
 					<div class="indicatorSearchBox">
@@ -521,7 +518,7 @@ export default {
 				} else {
 					if (!validName) {
 						this.$message({
-							message: 'Please select indicator from the drop-down box',
+							message: 'Please select #'+(index+1)+' '+this.criteria+ ' indicator from the drop-down box',
 							type: 'error'
 						})
 					}
@@ -553,7 +550,7 @@ export default {
 				} else {
 					if (!validName) {
 						this.$message({
-							message: 'Please select indicator from the drop-down box',
+							message: 'Please select #'+(index+1)+' '+this.criteria+ ' indicator from the drop-down box',
 							type: 'error',
 							offset: 300
 						})

@@ -376,9 +376,13 @@ export default {
 								element.entry_description = JSON.parse(
 									element.entry_description
 								)
+							}else{
+								element.entry_description = [element.entry_description]
 							}
 							if (element.exit_description.indexOf('[') != -1) {
 								element.exit_description = JSON.parse(element.exit_description)
+							}else{
+								element.exit_description = [element.exit_description]
 							}
 						})
 

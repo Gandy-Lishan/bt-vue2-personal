@@ -1,10 +1,5 @@
 <template>
 	<div class="entry-container">
-					<!-- <p>{{indicatorRadioArr}}</p>
-						<p>{{indicatorUrlArr}}</p>
-			<p>{{indicatorValArr}}</p>
-			<p>{{techIndiObj}}</p>
-			<p>{{editableTabs}}</p> -->
 		<div class="signal-option-box">
 			<div class="entry-title-box">
 			<p class="criteria-title">Entry Criteria</p> 
@@ -48,12 +43,12 @@
 			<span>Period: </span>
 					<el-tooltip effect="dark" placement="top" style="diaplay:inline">
         <span slot="content">Choose a value to specify how many bars within which the following signals will occur in time order to trigger the backtest criteria.<br/>
-		if choose score 1, meanning if the following signals occur at the same bar the backtest criteria is met.<br/>
-		if choose score 2, meanning if the following signals occur within two bars the backtest criteria is met.<br/>
+		if choose period 1, meanning if the following signals occur at the same bar the backtest criteria is met.<br/>
+		if choose period 2, meanning if the following signals occur within two bars the backtest criteria is met.<br/>
 		etc.<br/>
 		For example:<br/>
 		If the backtest criteria needs to have two consecutive signals, set two signals below and choose period 2.<br/>
-		If the backtest criteria needs to have two signals occur within 3 bars, set two signals below and period 3.<br/>
+		If the backtest criteria needs to have two signals occur within 3 bars, set two signals below and choose period 3.<br/>
 		etc.<br/>
 		</span>
 		<i class="iconfont icon-wenhao"></i>
@@ -496,7 +491,7 @@ export default {
 		},
 		updateTech() {
 			return this.$store.state.currentTech
-		}
+		},
 	},
 	watch: {
 		updateSenti(val) {
@@ -518,7 +513,7 @@ export default {
 					this.relation = oldVal
 			}
 		}
-	}
+	},
 	},
 	methods: {
 		clearForm() {
@@ -668,6 +663,7 @@ export default {
 					this.$store.commit('getEntryIndicators', {index: index, value: this.indicatorUrlArr[index]})
 				})
 			}
+			console.log('this.$refs',this.$refs)
 		},
 		getIndicatorUrl(obj) {
 			this.indicatorUrlArr.splice(obj.index, 1, obj.url)
@@ -765,124 +761,192 @@ export default {
 			this.$emit('getEntryRelation',val)
 		},
 		saveBacktestData(index) {
+			let vm = this
 			let checked = true
 			console.log('entry的保存执行了' + index + '次')
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 			return indi.then((val) => { 
 				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
-				if(!val) {
-					this.$message({
-					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
-					type: 'error'
-				})}
-				if (indi) {
-				if (this.indicatorRadioArr[index] === 'sentiment') {
-					this.$refs.sentiChild[index].setDesciption(index)
-					let senti = this.$refs.sentiChild[index].saveCondition(index)
+				if (val) {
+				if (vm.indicatorRadioArr[index] === 'sentiment') {
+					vm.$refs.sentiChild[index].setDesciption(index)
+					let senti = vm.$refs.sentiChild[index].saveCondition(index)
 					if(!senti) {
-					this.$message({
-					message: 'Please check that the ' + (index+1) + 'th panel field is filled in correctly',
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
 					type: 'error'
 				    })
 					} 
 					return (checked = senti)
 				}
 				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'CCI_like'
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'CCI_like'
 				) {
-					this.$refs.cciChild[index].setDesciption(index)
-					let cci = this.$refs.cciChild[index].saveCondition(index)
+					vm.$refs.cciChild[index].setDesciption(index)
+					let cci = vm.$refs.cciChild[index].saveCondition(index)
+					if(!cci) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = cci)
 				}
 				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'rsi'
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'rsi'
 				) {
-					this.$refs.rsiChild[index].setDesciption(index)
-					let rsi = this.$refs.rsiChild[index].saveCondition(index)
+					vm.$refs.rsiChild[index].setDesciption(index)
+					let rsi = vm.$refs.rsiChild[index].saveCondition(index)
+					if(!rsi) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = rsi)
 				}
 				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'MACD_like'
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'MACD_like'
 				) {
-					this.$refs.macdChild[index].setDesciption(index)
-					let macd = this.$refs.macdChild[index].saveCondition(index)
+					vm.$refs.macdChild[index].setDesciption(index)
+					let macd = vm.$refs.macdChild[index].saveCondition(index)
+					if(!macd) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = macd)
 				}
 				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'MovingAverage_like'
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'MovingAverage_like'
 				) {
-					this.$refs.maChild[index].setDesciption(index)
-					let ma = this.$refs.maChild[index].saveCondition(index)
+					vm.$refs.maChild[index].setDesciption(index)
+					let ma = vm.$refs.maChild[index].saveCondition(index)
+					if(!ma) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = ma)
 				}
 				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'EFT_like'
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'EFT_like'
 				) {
-					this.$refs.EFTLikeChild[index].setDesciption(index)
-					let eft = this.$refs.EFTLikeChild[index].saveCondition(index)
+					vm.$refs.EFTLikeChild[index].setDesciption(index)
+					let eft = vm.$refs.EFTLikeChild[index].saveCondition(index)
+					if(!eft) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = eft)
 				}
 				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'ADX_like'
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'ADX_like'
 				) {
-					this.$refs.ADXLikeChild[index].setDesciption(index)
-					let adx = this.$refs.ADXLikeChild[index].saveCondition(index)
+					vm.$refs.ADXLikeChild[index].setDesciption(index)
+					let adx = vm.$refs.ADXLikeChild[index].saveCondition(index)
+					if(!adx) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = adx)
 				}
 				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'Aligator_like'
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'Aligator_like'
 				) {
-					this.$refs.aligatorLikeChild[index].setDesciption(index)
+					vm.$refs.aligatorLikeChild[index].setDesciption(index)
 					let aligator =
-						this.$refs.aligatorLikeChild[index].saveCondition(index)
+						vm.$refs.aligatorLikeChild[index].saveCondition(index)
+					if(!aligator) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = aligator)
 				}
 				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'LRF_like'
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'LRF_like'
 				) {
-					this.$refs.LRFLikeChild[index].setDesciption(index)
-					let lrf = this.$refs.LRFLikeChild[index].saveCondition(index)
+					vm.$refs.LRFLikeChild[index].setDesciption(index)
+					let lrf = vm.$refs.LRFLikeChild[index].saveCondition(index)
+					if(!lrf) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = lrf)
 				}
 				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'BollingerBands_like'
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'BollingerBands_like'
 				) {
-					this.$refs.bollBandsLikeChild[index].setDesciption(index)
-					let blb = this.$refs.bollBandsLikeChild[index].saveCondition(index)
+					vm.$refs.bollBandsLikeChild[index].setDesciption(index)
+					let blb = vm.$refs.bollBandsLikeChild[index].saveCondition(index)
+					if(!blb) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = blb)
 				}
 				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'Stochastics_like'
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'Stochastics_like'
 				) {
-					this.$refs.stochasticsLikeChild[index].setDesciption(index)
-					let smi = this.$refs.stochasticsLikeChild[index].saveCondition(index)
+					vm.$refs.stochasticsLikeChild[index].setDesciption(index)
+					let smi = vm.$refs.stochasticsLikeChild[index].saveCondition(index)
+					if(!smi) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = smi)
 				}
 				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'ERI_like'
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'ERI_like'
 				) {
-					this.$refs.ERILikeChild[index].setDesciption(index)
-					let eri = this.$refs.ERILikeChild[index].saveCondition(index)
+					vm.$refs.ERILikeChild[index].setDesciption(index)
+					let eri = vm.$refs.ERILikeChild[index].saveCondition(index)
+					if(!eri) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = eri)
 				}
 				if (
-					this.indicatorRadioArr[index] === 'technical' &&
-					this.techIndiObj[index] === 'Trailingstop_like'
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'Trailingstop_like'
 				) {
-					this.$refs.trailingStopLikeChild[index].setDesciption(index)
-					let ts = this.$refs.trailingStopLikeChild[index].saveCondition(index)
+					vm.$refs.trailingStopLikeChild[index].setDesciption(index)
+					let ts = vm.$refs.trailingStopLikeChild[index].saveCondition(index)
+					if(!ts) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
 					return (checked = ts)
 				}
 			} else {
@@ -891,23 +955,16 @@ export default {
 			})
 		},
 		setEditPanel(num, data) {
-			this.clearForm()
-		    if(num == 1) {
-				this.relation = 1
-			}
+		    // if(num == 1) {
+			// 	this.relation = 1
+			// }
 			this.relation = data.entry.relation ? data.entry.relation : 1
+			
 			for (let i = 0; i < num-1; i++) {
 				this.handleTabsEdit(null, 'add')
 			}
 			this.refs = data
-			this.$nextTick(() => {
-				console.log('当前的refs', this.$refs.indiChild)
-				this.setEditData(this.refs)
-			})
-		},
-		setEditData(data) {
 			let vm = this
-			console.log('编辑的entrydata', data)
 			this.score = data.entry.score
 			this.delay_bars =  data.entry.delay_bars ? data.entry.delay_bars : 0
 			if(this.delay_bars != 0) {
@@ -919,15 +976,12 @@ export default {
 			let length = data.entry.signals.length
 			this.tabIndex = length
             this.relation = data.entry.relation ? data.entry.relation : 1
-			vm.$emit('getEntryRelation',this.relation)
+			this.$emit('getEntryRelation',this.relation)
 			for (let j = 0; j < length; j++) {
-				console.log('函数执行了' + j + '次，共' + length + '次')
-				vm.$refs.indiChild[j].setEditData(data)
 				if (data.entry.signals[j].analysis === 'Sentiment') {
 					this.indicatorValArr[j] = data.entry.signals[j].indicator
 					this.indicatorRadioArr.splice(j, 1, 'sentiment')
 					this.indicatorRadio = 'sentiment'
-					this.$refs.sentiChild[j].setEditData(data)
 					this.techIndiObj[j] = ''
 				}
 				if (data.entry.signals[j].analysis === 'Technical') {
@@ -948,6 +1002,21 @@ export default {
 							break
 						}
 					}
+				}
+			}
+			this.$nextTick(() => {
+				this.setEditData(this.refs)
+			})
+		},
+		setEditData(data) {
+			let length = data.entry.signals.length
+			for (let j = 0; j < length; j++) {
+				console.log('函数执行了' + j + '次，共' + length + '次')
+				this.$refs.indiChild[j].setEditData(data)
+				if (this.indicatorRadioArr[j] === 'sentiment') {
+					this.$refs.sentiChild[j].setEditData(data)
+				}
+				if (this.indicatorRadioArr[j] === 'technical') {
 					if (this.techIndiObj[j] === 'CCI_like') {
 						this.$refs.cciChild[j].setEditData(data)
 					}
