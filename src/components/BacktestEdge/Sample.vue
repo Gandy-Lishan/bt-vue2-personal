@@ -419,28 +419,81 @@ export default {
 				}
 			}
 		}, 500),
+				restoreIndicatorLayoutView(data, freq, row, resData) {
+			//console.log("在跑完回测后和view result之间会加载一次chart去输出SignalOuput")
+			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
+			if (CIQ.isBacktestRun == true) {
+				CIQ.isBacktestRun = false
+				//this.reloadData(data, freq)
+				var that = this
+				//不再使用outputSignalsResult，exportcsv放置在回测前，callback置于原地
+				//CIQ.outputSignalsResult(function () {
+					that.$store.commit('getRunBacktestData', row)
+					// emit同步调用
+					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
+						that.$emit('goBacktestResultForm', row, ()=>{
+							CIQ.hideCover()
+							CIQ.nprogress.done()
+						})
+					})
+					//that.loading = false
+				//})
+			} else {
+				this.reloadData(data, freq)
+				var that = this
+				console.log('after clicking view')
+				CIQ.addIndicatorsFromBacktest(function () {
+					that.$store.commit('getRunBacktestData', row)
+					//that.$emit('goTobacktestSetupForm', row.id)
+					//that.$emit('goBacktestResultForm', row)
+
+					// emit同步调用
+					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
+						that.$emit('goBacktestResultForm', row, ()=>{
+							CIQ.hideCover()
+							CIQ.nprogress.done()
+						})
+					})
+					
+					//that.loading = false
+				})
+			}
+		},
 		viewBacktestResults: throttle(async function (row) {
+			let vm = this
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {
+					
+					CIQ.addCover('Fetching backtest information...')
+					CIQ.nprogress.start()
+					//this.loading = true
 					const res = await seeParams(row.id)
 					// 恢复indicator layout
+					// console.log(res,row)
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					CIQ.hideMarker()
 					CIQ.isMarkerShown = false
 					if (res.data.indicator_layout) {
-						this.restoreIndicatorLayout(
+						this.restoreIndicatorLayoutView(
 							JSON.parse(res.data.indicator_layout),
 							JSON.parse(res.data.entry).frequency,
-							row
+							row,res.data
 						)
 					} else {
 						this.$store.commit('getRunBacktestData', row)
-						this.$emit('goTobacktestSetupForm', row.id)
-						this.$emit('goBacktestResultForm', row)
+						// emit同步调用
+						this.$emit('goTobacktestSetupForm', row.id, res.data, ()=>{
+							this.$emit('goBacktestResultForm', row, ()=>{
+								CIQ.hideCover()
+								CIQ.nprogress.done()
+							})
+						})
+						//this.loading = false
 					}
 				} catch (error) {
-					this.$message({
+					console.log(error)
+					vm.$message({
 						message: 'The internal server is busy, please try again later ',
 						type: 'error',
 						offset: 300
