@@ -19,7 +19,7 @@ import Nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 import './assets/style/global.css'
-import axios from 'axios'
+import axios from './axios'
 import store from './store/store'
 //import VueDirectiveImagePreviewer from "vue-directive-image-previewer"
 import 'vue-directive-image-previewer/dist/assets/style.css'

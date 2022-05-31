@@ -439,7 +439,6 @@ export default class AdvancedChartComponent extends Vue {
 		const config = this.config || getCustomConfig()
 		
 		const container = this.container
-		
 		var tooltip = document.getElementsByClassName("ciq-HU")[0]
 		tooltip.onclick = function(){
 			tooltip.classList.remove("active");	
@@ -543,7 +542,6 @@ export default class AdvancedChartComponent extends Vue {
 		const chart = new CIQ.UI.Chart()
 		const uiContext = chart.createChartAndUI({ container, config })
 
-		
 		return uiContext
 	}
 	

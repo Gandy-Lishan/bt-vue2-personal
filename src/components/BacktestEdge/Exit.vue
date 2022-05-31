@@ -753,7 +753,6 @@ export default {
 					})
 				})
 			}
-
 			console.log('exit refs', this.$refs)
 		},
 		getIndicatorUrl(obj) {
