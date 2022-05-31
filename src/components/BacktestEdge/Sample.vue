@@ -206,13 +206,13 @@
 									@click="sendBack(scope.row)"
 									size="mini"
 								></el-button> -->
-								<el-button
+								<!-- <el-button
 									plain
 									icon="el-icon-check"
 									circle
 									@click="showDes(scope.row)"
 									size="mini"
-								></el-button>
+								></el-button> -->
 								<el-tooltip
 									class="item"
 									effect="dark"

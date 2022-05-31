@@ -247,9 +247,8 @@
 
 
         <h1>3. add backtest to my favorites</h1>
-				<h3>3.1 打开 Backtest History 标签页</h3>
-				<!-- <img src="../../assets/history-add-favorite.png" alt="Add To Favorites"> -->
-				<blockquote>
+				<h3>3.1 打开 Backtest History 标签页</h3>				
+        <blockquote>
 					<p>
 						<br />
 						找出你想添加收藏的回测，点击 add to favorites
@@ -257,8 +256,9 @@
 						<br />
 					</p>
 				</blockquote>
+				<img src="../../assets/helpImg/add-fa.png" alt="Add To Favorites">
+
 				<h3>3.2 查看收藏夹中的回测</h3>
-				<!-- <img src="../../assets/see-favorites.png" alt="View favorites"> -->
 				<blockquote>
 					<p>
 						<br />
@@ -267,6 +267,8 @@
 						<br />
 					</p>
 				</blockquote>
+        
+				<img src="../../assets/helpImg/fa-list.png" alt="View favorites">
 				<h1>4. copy a sample backtest</h1>
 				<blockquote class="video_link">
 					<i class="el-icon-video-play"></i>
