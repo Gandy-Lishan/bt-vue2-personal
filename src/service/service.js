@@ -53,7 +53,7 @@ export function getSampleList(page) {
     const url = '/dev/strategy/?ordering=name,status,-create_date&page='
 
     return new Promise((resolve,reject)=>{
-		axios.get(url+page,{cache:true})
+		axios.get(url+page)
 		.then(res=>{
 			resolve(res)
 		}).catch(err=>{

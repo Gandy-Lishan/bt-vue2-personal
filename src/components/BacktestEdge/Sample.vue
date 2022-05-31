@@ -420,24 +420,36 @@ export default {
 			}
 		}, 500),
 		viewBacktestResults: throttle(async function (row) {
+			console.log('row',row)
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {
+					
+					CIQ.addCover('Fetching backtest information...')
+					CIQ.nprogress.start()
+					//this.loading = true
 					const res = await seeParams(row.id)
 					// 恢复indicator layout
+					// console.log(res,row)
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					CIQ.hideMarker()
 					CIQ.isMarkerShown = false
 					if (res.data.indicator_layout) {
-						this.restoreIndicatorLayout(
+						this.restoreIndicatorLayoutView(
 							JSON.parse(res.data.indicator_layout),
 							JSON.parse(res.data.entry).frequency,
-							row
+							row,res.data
 						)
 					} else {
 						this.$store.commit('getRunBacktestData', row)
-						this.$emit('goTobacktestSetupForm', row.id)
-						this.$emit('goBacktestResultForm', row)
+						// emit同步调用
+						this.$emit('goTobacktestSetupForm', row.id, res.data, ()=>{
+							this.$emit('goBacktestResultForm', row, ()=>{
+								CIQ.hideCover()
+								CIQ.nprogress.done()
+							})
+						})
+						//this.loading = false
 					}
 				} catch (error) {
 					this.$message({
