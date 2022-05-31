@@ -419,7 +419,7 @@ export default {
 				}
 			}
 		}, 500),
-				restoreIndicatorLayoutView(data, freq, row, resData) {
+			restoreIndicatorLayoutView(data, freq, row, resData) {
 			//console.log("在跑完回测后和view result之间会加载一次chart去输出SignalOuput")
 			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
 			if (CIQ.isBacktestRun == true) {
