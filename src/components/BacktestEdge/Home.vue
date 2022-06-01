@@ -855,7 +855,9 @@ export default {
 						
 						// TODO 
 						// long
-						CIQ.outputSignalsResult(str, async function () {
+						let attemptTime = 0
+
+						let callback = async function () {
 							if(arguments[0]==200){
 								// 何上传的json
 								try{
@@ -913,23 +915,35 @@ export default {
 										vm.$store.commit('clearStoreDesciption')
 									}	
 								}catch(error){
+									// 如果上传JSON失败, 重试，因为它不是axios请求，所以重试逻辑要自己写
 									console.log("Upload JSON failed", error);
+									if(attemptTime<4){
+										CIQ.outputSignalsResult(str,callback)
+										attemptTime++
+									}
+									
 									CIQ.hideCover()
 									CIQ.nprogress.done()
 									//vm.loading = false
-									alert('Upload JSON failed')
+									alert('Upload JSON failed')	
 								}	
 							}else{
-								// console.log("Upload CSV failed", error);
+								// 如果上传csv失败，自定义返回500， 重试，因为它不是axios请求，所以重试逻辑要自己写
+								console.log("Upload CSV failed", error);
+								// 重试
+								if(attemptTime<4){
+									CIQ.outputSignalsResult(str,callback)
+									attemptTime++
+								}
+
 								CIQ.hideCover()
 								CIQ.nprogress.done()
 								//vm.loading = false
-								alert('Upload CSV failed')
+								alert('Upload CSV failed')							
 							}						
-						})
+						}
 
-
-				
+						CIQ.outputSignalsResult(str,callback)
 					}
 				}
 			}
