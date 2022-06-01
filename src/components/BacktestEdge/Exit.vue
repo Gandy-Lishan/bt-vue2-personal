@@ -886,6 +886,7 @@ export default {
 				this.$store.commit('saveDescription', desObj)
 				return (checked = true)
 			}
+			
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			return indi.then((val) => {
 				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
@@ -942,6 +943,7 @@ export default {
 						this.indicatorRadioArr[index] === 'technical' &&
 						this.techIndiObj[index] === 'MACD_like'
 					) {
+						
 						this.$refs.macdChild[index].setDesciption(index)
 						let macd = this.$refs.macdChild[index].saveCondition(index)
 						if (!macd) {

@@ -59,10 +59,8 @@ export default class Cache {
     let options = this.options
     options.instance.interceptors.request.use(async config => {
       // 判断用户是否返回 config 的 promise
-      
       let newConfig = cb && (await cb(config))
       config = newConfig || config
-      
       // req只处理get，post不被拦截，照常发请求
       if (config.method === 'get' && config.cache) {
         let source = this.cancelToken.source()

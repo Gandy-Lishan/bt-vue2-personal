@@ -572,7 +572,7 @@ export default {
 			}
 		},
 		getSCvalue(val) {
-			if (this.tech.comparison === 'Symbol Close') {
+			if (this.tech.comparison === 'SC') {
 				//   delete this.sc.ma_period
 				// const obj = {}
 				// obj.criteria = this.criteria
@@ -584,6 +584,7 @@ export default {
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
 					if (sd.type == 'ma') {
+						
 						// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
 						// dialogHelper.updateStudy({ inputs: { Period: val } });
 						var replaceStudy = {

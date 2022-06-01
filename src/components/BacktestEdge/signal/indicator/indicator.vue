@@ -104,6 +104,9 @@ export default {
 		}
 	},
 	computed: {
+		updateFreq() {
+			return this.$store.state.pairDataFreq
+		},
 		updateSenti() {
 			return this.$store.state.currentSenti
 		},
@@ -112,6 +115,14 @@ export default {
 		}
 	},
 	watch: {
+		// 监听freq在indicator.vue是为了让表单加载的指标在timeframe范围内
+		updateFreq() {
+			this.indicatorSentimentSearch(this.si.sentimentIndicator, res=>{
+				if(res.length==0){
+					this.si.sentimentIndicator = ''
+				}
+			})
+		},
 		updateSenti(val) {
 			let tabs = this.editableTabs
 			var absoluteIndex = ''
