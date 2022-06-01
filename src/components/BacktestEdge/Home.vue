@@ -920,7 +920,7 @@ export default {
 									alert('Upload JSON failed')
 								}	
 							}else{
-								console.log("Upload CSV failed", error);
+								// console.log("Upload CSV failed", error);
 								CIQ.hideCover()
 								CIQ.nprogress.done()
 								//vm.loading = false

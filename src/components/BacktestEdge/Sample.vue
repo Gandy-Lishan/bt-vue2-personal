@@ -248,6 +248,7 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store } from 'vuex'
 const throttle = require('lodash/throttle')
+import isJson from '@/tools/isJson.js'
 import {
 	copyBacktest,
 	getSampleList,
@@ -343,7 +344,7 @@ export default {
 					console.log(this.backtestList)
 					if (this.backtestList.length != 0) {
 						this.backtestList.forEach((element) => {
-							if (element.result !== '')
+							if(isJson(element.result) && element.result !== '')
 								element.result = JSON.parse(element.result)
 								
 						if (element.entry_description.indexOf('[') != -1) {
@@ -364,9 +365,14 @@ export default {
 					this.loading = false
 				}
 			} catch (error) {
-				console.log(error)
-				this.$message.error('List request failed')
-				this.loading = false
+				if(error.response.status === 500){
+			     this.$notify({
+							title: 'Failed',
+							message: 'List request failed',
+							type: 'success',
+							offset: 100
+						})
+				this.loading = false}
 			}
 		},
 		copyBacktest: throttle(async function (row) {

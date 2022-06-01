@@ -244,7 +244,36 @@
 						<br />
 					</p>
 				</blockquote>
-
+      <h3>2.5 create a sameday multi-signal entry/exit criteria new backtest</h3>
+				<h4>2.5.1 填写回测的基本信息</h4>
+				<blockquote>
+					<p>
+						<br />
+            根据自己的需要，填写回测的相关参数
+						<br />
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" />
+				<h4>2.5.2 填写进场和退场条件</h4>
+				<blockquote>
+					<p>
+						<br />
+						按照你的需求填写进场条件和退场条件
+						<br />
+					</p>
+				</blockquote>
+				<img
+					src="../../assets/helpImg/timeframe-criteria.png"
+					alt="Set Up Form"
+				/>
+				<h4>2.5.3 运行回测并查看结果</h4>
+				<blockquote>
+					<p>
+						<br />
+						点击Run Backtest 按钮运行退场使用Time In Market的策略，查看结果。
+						<br />
+					</p>
+				</blockquote>
 
         <h1>3. add backtest to my favorites</h1>
 				<h3>3.1 打开 Backtest History 标签页</h3>				
