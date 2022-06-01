@@ -175,7 +175,11 @@ delay_bars: [String, Number],
 				default:
 					break;
 			}
-			this.description = `${techVal} ${comparison} ${condition} ${this.tech.value}`
+			let value = this.tech.value
+			if(value == 'SL'){
+				value = 'Single Line'
+			}
+			this.description = `${techVal} ${comparison} ${condition} ${value}`
 			let desObj = {}
 			desObj.criteria = this.criteria
            if(this.relation != 1) {

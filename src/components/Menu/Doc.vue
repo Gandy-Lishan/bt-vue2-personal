@@ -493,28 +493,27 @@
 				</blockquote>
 
 				<!-- <img src="../../assets/helpImg/fa-list.png" alt="View favorites" /> -->
-				<h1>4. copy a sample backtest</h1>
+				<h1>4. edit a sample backtest</h1>
 				<blockquote class="video_link">
 					<i class="el-icon-video-play"></i>
 					<a href="#">Sample Backtest的演示视频</a>
 				</blockquote>
-				<h3>4.1 打开 Sample Backtests 标签页</h3>
+				<h3>4.1 打开 History Backtests 标签页</h3>
 				<!-- <img src="../../assets/sample-backtests.png" alt="Sample Backtests"> -->
 				<blockquote>
 					<p>
 						<br />
-						打开 Sample Backtests 标签页, 点击 copy backtest 按钮。
+						打开 History Backtests 标签页, 这里存放着所有创建，复制，以及编辑后的回测，在列表中找出你想编辑的回测，点击 edit backtest 按钮。
 						<br />
 					</p>
 				</blockquote>
-				<h3>4.2 在 Backtest History 中编辑后运行</h3>
+				<h3>4.2 在 Set Up Backtest 中编辑</h3>
 				<!-- <img src="../../assets/copy-backtests.png" alt="Copy Backtests"> -->
 				<blockquote>
 					<p>
 						<br />
-						打开 Backtest History 标签页, 点击 edit backtest 按钮，对复制的
-						Sample Backtest 进行编辑。你可以看到部分按钮是不可用的，那是因为所有
-						复制的回测都要编辑以后才能进行查看结果等操作。
+						当点击 edit backtest 按钮后，当前回测的信息就会展示在Set Up Backtest标签页的表单中，你可以在这里修改回测的数据。完成修改后，点击Run Backtest
+						运行修改后的回测，并查看结果。
 						<br />
 					</p>
 				</blockquote>
