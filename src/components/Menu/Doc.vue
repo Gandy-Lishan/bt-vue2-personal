@@ -9,65 +9,64 @@
 				/>
 			</div>
 			<section data-v-15d0b2f8="">
-				<h1>轻松上手 backtest</h1>
+				<h1>Easy to get started backtest</h1>
 				<p>
-					在这里，你可以设定回测系统的参数，如初始金额、滑点、开始时间以及结束时间等，然后选择
-					不同的股票组合。系统会根据填写的参数模拟真实金融市场
-					交易规则进行模型买入、模型卖出，得出交易次数、盈利率等数据。
+Here you can set the parameters of the backtesting system, such as the initial amount, slippage, start time and end time, etc., and then select
+					Different stock portfolios. The system simulates the real financial market based on the filled parameters
+					The trading rules carry out model buy and model sell, and data such as the number of trades and profitability are obtained.
 				</p>
-				<p>文档会以视频以及图文结合的方式教你如何使用回测系统，现在让我们开始吧！</p>
+				<p>The documentation will teach you how to use the backtesting system in a video and graphic combination, now let's get started!</p>
 
-				<h1>1. 介绍回测系统</h1>
+				<h1>1. Describes the backtesting system</h1>
 
-				<h3>1.1 图表部分</h3>
+				<h3>1.1 Chart section</h3>
 				<blockquote class="video_link">
 					<i class="el-icon-video-play"></i>
-					<a href="#">图表操作介绍</a>
+					<a href="#">Introduction to chart operations</a>
 				</blockquote>
 
 				<blockquote>
 					<p>
 						<br />
-						图表不仅可以反映股票的走势情况，而且还支持图表界面互动。在图表中，你可以在图表中修改回测的symbol
-						；你可以在图表中将喜欢的indicator到图表中的收藏夹；你可以在图表中自定义 indicator
-						的属性，例如极值以及极值曲线的颜色；可以选定 indicator
-						周期（Daily、Weekly、Monthly）;
-						你可以在图表的设置中更换图标的主题（目前有Dark和light两种主题）;图表下方的 clear chart 可以实现
-						一键清除图表； 图表还支持添加以及去除背景网格线、去除last
-						price标签，同时还具备其他的视觉辅助工具;
+						Charts can not only reflect the movement of stocks, but also support chart interface interaction. In the chart, you can modify the backtested symbol in the chart
+						You can add your favorite indicators to favorites in the chart; you can customize the indicator in the chart
+						properties, such as the extremum and the color of the extremum curve; you can select indicator
+						Period (Daily, Weekly, Monthly);
+						You can change the theme of the icon in the chart settings (there are currently two themes of Dark and light); The clear chart below the chart is achievable
+						One-click clear chart; charts also support adding and removing background gridlines and removing last
+						price tag, but also with other visual aids.
 						<br />
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/chart.png" alt="Chart" />
 
-				<h3>1.2 表单部分</h3>
+				<h3>1.2 Form section</h3>
 				<blockquote>
 					<p>
 						<br />
-						表单部分有四个标签页，Set up Backtest 标签页用于 Backtest
-						的创建，Backtest History 标签页展示所有创建的回测；Backtest Results
-						用于展示 某个回测的结果；My Favorites
-						标签页展示添加收收藏夹的回测；Sample Backtest 标签页中提供了一些Sample Backtests，你可以复制Sample Backtest，然后在Backtest History中使用。
+						The form section has four tabs, and the Set up Backtest tab is used for Backtest
+						Of the Creation, the Backtest History tab displays all created backtests; Backtest Results
+						Used to show the results of a backtest; My Favorites
+						The Sample Backtest tab shows backtests for adding favorites; the Sample Backtest tab provides some Sample Backtests that you can copy and use in Backtest History.
 						<br />
 					</p>
 				</blockquote>
 
 				<img src="../../assets/helpImg/form.png" alt="Form" />
 
-				<h1>2. 如何创建回测</h1>
+				<h1>2. How to create a backtest</h1>
 				<blockquote class="video_link">
 					<i class="el-icon-video-play"></i>
-					<a href="#">回测创建流程演示</a>
+					<a href="#">Demonstration of the backtest creation process</a>
 				</blockquote>
 				<h3>2.1 create a single-signal entry/exit criteria new backtest</h3>
-				<h4>2.1.1 填写回测基本参数</h4>
+				<h4>2.1.1 Fill in the basic parameters of the backtest</h4>
 				<blockquote>
 					<p>
-						<br />
-						打开 Set up Backtest 标签页，填写回测的基本信息，包括 Starting
+						<br />Open the Set up Backtest tab and fill in the basic information for the backtest, including Starting
 						Capital、Commission、Benchmark、Backtest
-						History....如果你不清楚每个字段的意思，
-						可以将鼠标移到问号上，提示框会解释每个字段的意思。
+						History.... If you don't know what each field means,
+						You can move the mouse over the question mark and the prompt box explains the meaning of each field.
 						<br />
 					</p>
 				</blockquote>
@@ -76,62 +75,61 @@
 					alt="Set Up Form"
 				/> -->
 
-				<h4>2.1.2 填写进场条件</h4>
+				<h4>2.1.2 Fill in the entry criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						在下拉框中选择一个 Sentiment Indicator或者 Technical
-						Indicator，填写指标值。 为了确保你的指标有收益，对于Sentiment
-						Indicator我们推荐你填写 Extreme Optimism 和 Extreme Pessimism
-						之间的值。
+						Select a Sentiment Indicator or Technical in the drop-down box
+						Indicator, fill in the indicator value. To make sure your indicators have a payoff, for Sentiment
+						Indicator We recommend that you fill out Extreme Optimism and Extreme Pessimism
+						The value between.
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-entry.png" alt="Entry Criteria" /> -->
 
-				<h4>2.1.3 填写退场条件</h4>
+				<h4>2.1.3 Fill in the exit criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						你可以在退场条件中选择一个Sentiment Indicator或者 Technical
-						Indicator，填写指标值。对于Technical
-						Indicator我们推荐你结合图表填写指标值。
+You can select a Sential Indicator or Technical in the exit criteria
+						Indicator, fill in the indicator value. For Technical
+						Indicator We recommend that you fill in the indicator values in conjunction with the chart.
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-exit.png" alt="Exit Criteria" /> -->
-				<h4>2.1.4 运行策略并查看结果</h4>
+				<h4>2.1.4 Run the policy and view the results</h4>
 
 				<blockquote>
 					<p>
 						<br />
-						填写完表单后，点击 Run Backtest
-						按钮运行并查看结果，运行回测会花费一定的时间，请你耐心等待。回测运行结束之后，会自动跳转
-						到 Backtest Results
-						标签页展示回测运行成功后的数据，包括交易次数，买点卖点等信息。如果你创建的回测没有交易，你可以在
+When you're done filling out the form, click Run Backtest
+						button to run and view the results, running a backtest will take a certain amount of time, please be patient. After the backtesting run ends, it jumps automatically
+						to Backtest Results
+						The tab displays the data after the successful backtesting operation, including the number of transactions, buy points and sell points. If you create a backtest without trading, you can be in
 						Backtest History
-						标签页，点击编辑按钮，修改回测的数据，保存后重新运行。
+						tab, click the Edit button, modify the backtest data, save and rerun.
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-result.png" alt="Summary" /> -->
 				<h3>2.2 set stop/loss in exit criteria</h3>
-				<h4>2.2.1 在回测基本信息中勾选 Stop Loss</h4>
+				<h4>2.2.1 Check Stop Loss in the Backtesting Basics</h4>
 				<blockquote>
 					<p>
-						<br />
-						打开 Set up Backtest 标签页，填写回测的基本信息，勾选Risk Control at
-						Exit,在弹出的Take Profit、Stop Loss、Time In Market中，只勾选Stop
-						Loss,你可以根据自己的需求填入相应的值，也可以使用默认值10%。
+						<br />Open the Set up Backtest tab, fill in the basic information of the backtest, and check Rise Control at
+						Exit, in the pop-up Take Profit, Stop Loss, Time In Market, only check Stop
+						Loss, you can fill in the corresponding value according to your needs, you can also use the default value of 10%.
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/stoploss-setup.png" alt="Set Up Form" /> -->
-				<h4>2.2.2 填写进场条件</h4>
+				<h4>2.2.2 Fill in the entry conditions</h4>
 				<blockquote>
 					<p>
 						<br />
-						在进场条件右上角的下拉框中选择Single Signal(你也可以选择Samebar Multi-Signal或者Timeorder Multi-Signal,多信号也支持Stop Loss)，然后填写信号指标。
+						Select Single Signal in the drop-down box in the upper right corner of the entry condition (you can also choose Summerbar Multi-Signal or Timeorder Multi-Signal, multi-signal also supports Stop Loss) and fill in the signal indicator.
 						<br />
 					</p>
 				</blockquote>
@@ -139,16 +137,15 @@
 					src="../../assets/helpImg/single-change-criteria.png"
 					alt="Set Up Form"
 				/> -->
-				<h4>2.2.3 在退场条件中选择Only Use Risk Control</h4>
+				<h4>2.2.3 Select Early Use Risk Control in the exit criteria</h4>
 				<blockquote>
 					<p>
-						<br />
-						当你填写回测的基本信息时，勾选了Risk Control at
-						Exit的同时,还至少勾选了一个Take Profit/Stop Loss/Time In Market,那么下拉框中就会多出Only Use Risk
-						Control这个选项。。你可以在退场条件右上角的下拉选项中选择Only
-						Use Risk Control,这意味着将会选用Stop Loss值作为你的退场条件。你也可以选择
-						除Only Use Risk Control的其他接下来选项，如Single-Signal，选择Single-Signal就意味着Single-Signal里的信号和
-						Stop Loss都会作为你的退场条件
+						<br />When you fill in the basic information for the backtest, tick Risk Control at
+						At the same time as Exit, at least check a Take Profit/Stop Loss/Time In Market, then there will be more Than use Risk in the drop-down box
+						Control this option. You can select Only in the drop-down option in the upper right corner of the exit condition
+						Use Risk Control, which means that the Stop Loss value will be used as your exit condition. You can also choose
+						In addition to the other next options of The Use Risk Control, such as Single-Signal, choosing Single-Signal means the sum of signals in Single-Signal
+						Stop Loss will be your exit condition.
 						<br />
 					</p>
 				</blockquote>
@@ -156,23 +153,23 @@
 					src="../../assets/helpImg/single-only-stoploss.png"
 					alt="Set Up Form"
 				/> -->
-				<h4>2.2.4 运行回测并查看结果</h4>
+				<h4>2.2.4 Run a backtest and view the results</h4>
 				<blockquote>
 					<p>
 						<br />
-						点击Run Backtest 按钮运行退场使用Stop Loss的策略，查看结果。
+						Click the Run Backtest button to run the exit using Stop Loss's strategy to see the results.
 						<br />
 					</p>
 				</blockquote>
 
 				<h3>2.3 set time-in-market in exit criteria</h3>
-				<h4>2.3.1 在回测基本信息中勾选Time In Market</h4>
+				<h4>2.3.1 Check Time In Market in Backtesting Basics</h4>
 				<blockquote>
 					<p>
 						<br />
-						打开 Set up Backtest 标签页，填写回测的基本信息，勾选Risk Control at
-						Exit,在弹出的Take Profit、Stop Loss、Time In Market中，只勾选Time In
-						Market,你可以根据自己的需求填入相应的值，也可以使用，默认值120
+						Open the Set up Backtest tab, fill in the basic information of the backtest, and check Rise Control at
+						Exit, in the pop-up Take Profit, Stop Loss, Time In Market, only tick Time In
+						Market, you can fill in the corresponding value according to your needs, you can also use, the default value of 120
 						Bars。
 						<br />
 					</p>
@@ -181,11 +178,11 @@
 					src="../../assets/helpImg/single-tim-setup.png"
 					alt="Set Up Form"
 				/> -->
-				<h4>2.3.2 填写进场条件</h4>
+				<h4>2.3.2 Fill in the entry exit criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						在进场条件右上角的下拉框中选择Single Signal(你也可以选择Samebar Multi-Signal或者Timeorder Multi-Signal,多信号也支持Time In Market)，然后填写信号指标。
+						Select Single Signal in the drop-down box in the upper right corner of the entry condition (you can also choose Summerbar Multi-Signal or Timeorder Multi-Signal, Multi Signal also supports Time In Market) and fill in the Signal Indicator.
 						<br />
 					</p>
 				</blockquote>
@@ -193,45 +190,45 @@
 					src="../../assets/helpImg/single-change-criteria.png"
 					alt="Set Up Form"
 				/> -->
-				<h4>2.3.3 在退场条件中选择Only Use Risk Control</h4>
+				<h4>2.3.3 Select Early Use Risk Control in the exit criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						当你填写回测的基本信息时，勾选了Risk Control at
-						Exit的同时,还至少勾选了一个Take Profit/Stop Loss/Time In Market,那么下拉框中就会多出Only Use Risk
-						Control这个选项。。你可以在退场条件右上角的下拉选项中选择Only
-						Use Risk Control,这意味着将会选用Time In Market值作为你的退场条件。你也可以选择
-						除Only Use Risk Control的其他接下来选项，如Single-Signal，选择Single-Signal就意味着Single-Signal里的信号和Time In
-						Market都会作为你的退场条件
+						When you fill in the basic information for the backtest, tick Risk Control at
+						At the same time as Exit, at least check a Take Profit/Stop Loss/Time In Market, then there will be more Than use Risk in the drop-down box
+						Control this option. You can select Only in the drop-down option in the upper right corner of the exit condition
+						Use Risk Control, which means that the Time In Market value will be used as your exit condition. You can also choose
+						In addition to the other next options of The Use Risk Control, such as Single-Signal, choosing Single-Signal means signaling and Time In in Single-Signal
+						The Market will be your exit condition
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-tim-exit.png" alt="Set Up Form" /> -->
-				<h4>2.3.4 运行回测并查看结果</h4>
+				<h4>2.3.4 Run a backtest and view the results</h4>
 				<blockquote>
 					<p>
 						<br />
-						点击Run Backtest 按钮运行退场使用Time In Market的策略，查看结果。
+						Click the Run Backtest button to run exit using Time In Market's strategy to view the results.
 						<br />
 					</p>
 				</blockquote>
 
 				<h3>2.4 set different backtest timeframe</h3>
-				<h4>2.4.1  在回测基本信息中修改 timeframe</h4>
+				<h4>2.4.1 Modify the timeframe in the backtesting basics</h4>
 				<blockquote>
 					<p>
 						<br />
-						打开 Set up Backtest 标签页，填写回测的基本信息,修改 Timeframe
-						的值为Weekly,你也可以修改成Monthly，总共有Daily、Weekly、Monthly三种选择。
+						Open the Set up Backtest tab, fill in the basic information of the backtest, and modify the Timeframe
+						The value of Weekly, you can also modify it to Montthly, there are three options in total: Daily, Weekly, and Monthly.
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
-				<h4>2.4.2 填写进场和退场条件</h4>
+				<h4>2.4.2 Fill in the entry and exit conditions</h4>
 				<blockquote>
 					<p>
 						<br />
-						根据你的需求填写进场条件和退场条件。
+						Fill in the entry and exit conditions according to your needs.
 						<br />
 					</p>
 				</blockquote>
@@ -239,34 +236,34 @@
 					src="../../assets/helpImg/timeframe-criteria.png"
 					alt="Set Up Form"
 				/> -->
-				<h4>2.4.3 运行回测并查看结果</h4>
+				<h4>2.4.3 Run a backtest and view the results</h4>
 				<blockquote>
 					<p>
 						<br />
-						点击Run Backtest 按钮运行修改Timeframe的策略并查看结果。
+						Click the Run Backtest button to run the policy that modifies the Timeframe and view the results.
 						<br />
 					</p>
 				</blockquote>
 				<h3>
 					2.5 create a sameday multi-signal entry/exit criteria new backtest
 				</h3>
-				<h4>2.5.1 填写回测的基本信息</h4>
+				<h4>2.5.1 Fill in the basic information for the backtest</h4>
 				<blockquote>
 					<p>
 						<br />
-						根据自己的需要，填写回测的相关参数,包括 Starting
+						According to your own needs, fill in the relevant parameters of the backtest, including Starting
 						Capital、Commission、Benchmark、Backtest History....
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
-				<h4>2.5.2 填写进场条件</h4>
+				<h4>2.5.2 Fill in the entry conditions</h4>
 				<blockquote>
 					<p>
 						<br />
-						在进场信号的右上角下拉框中选择SameBar Multi-Signal,
-						然后默认会弹出Signal1和Signal2两个信号面板，默认的Score值为2。点击SameBar Multi-Signal下方的+号，可以增加进场信号，Score的值也会增加。
-						当选择SameBarMulti-Signal时，进场最多只能增加到5个信号。接下来你需要像填写单信号一样，将进场条件对应的每个信号面板都填写完。
+						Select SameBar Multi-Signal in the drop-down box in the upper right corner of the entry signal,
+						Then the signal1 and Signal2 signal panels will pop up by default, and the default Score value is 2. Clicking on the + sign below the SameBar Multi-Signal increases the entry signal and the score value.
+						When SameBar Multi-Signal is selected, the entry can only be increased to a maximum of 5 signals. Next, you need to fill in each signal panel corresponding to the entry condition as if filling out a single signal.
 						<br />
 					</p>
 				</blockquote>
@@ -274,45 +271,45 @@
 					src="../../assets/helpImg/timeframe-criteria.png"
 					alt="Set Up Form"
 				/> -->
-				<h4>2.5.3 填写退场条件</h4>
+				<h4>2.5.3 Fill in the exit criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						在退场信号的右上角下拉框中选择SameBar Multi-Signal,
-						然后默认会弹出Signal1和Signal2两个信号面板，默认的Score值为2。点击SameBar Multi-Signal下方的+号，可以增加退场信号，Score的值也会增加。
-						当选择SameBarMulti-Signal时，退场最多只能增加到5个信号。接下来你需要像填写单信号一样，将退场条件对应的每个信号面板都填写完。
+						Select SameBar Multi-Signal in the drop-down box in the upper right corner of the exit signal,
+						Then the signal1 and Signal2 signal panels will pop up by default, and the default Score value is 2. Clicking the + sign below the SaveBar Multi-Signal increases the exit signal and the score value.
+						When SamBar Multi-Signal is selected, the exit can only be increased to a maximum of 5 signals. Next, you need to fill in each signal panel corresponding to the exit condition as if you were filling out a single signal.
 						<br />
 					</p>
 				</blockquote>
-				<h4>2.5.4 运行回测并查看结果</h4>
+				<h4>2.5.4 Run a backtest and view the results</h4>
 				<blockquote>
 					<p>
 						<br />
-						点击Run Backtest 按钮运行使用SameBar
-						Multi-Signal的回测，并且查看结果。
+						Click the Run Backtest button to run using The SaveBar
+						Multi-Signal backtests, and view the results.
 						<br />
 					</p>
 				</blockquote>
 				<h3>
 					2.6 create a timeorder multi-signal entry/exit criteria new backtest
 				</h3>
-				<h4>2.6.1 填写回测的基本信息</h4>
+				<h4>2.6.1 Fill in the basic information for the backtest</h4>
 				<blockquote>
 					<p>
 						<br />
-						根据自己的需要，填写回测的相关参数,包括 Starting
+According to your own needs, fill in the relevant parameters of the backtest, including Starting
 						Capital、Commission、Benchmark、Backtest History....
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
-				<h4>2.6.2 进场条件选择TimeOrder Multi-Signal</h4>
+				<h4>2.6.2 The entry condition is TimeOrder Multi-Signal</h4>
 				<blockquote>
 					<p>
 						<br />
-						在进场信号的右上角下拉框中选择TimeOrder Multi-Signal,
-						然后默认会弹出Signal1和Signal2两个信号面板，默认的Period值为2。点击TimeOrder Multi-Signal下方的+号，可以增加进场信号，Period的值也会增加。
-						当选择TimeOrder Multi-Signal时，进场最多只能增加到3个信号。接下来你需要像填写单信号一样，将进场条件对应的每个信号面板都填写完。
+						Select TimeOrder Multi-Signal in the drop-down box in the upper right corner of the entry signal,
+						Then the signal1 and Signal2 signal panels will pop up by default, and the default Period value is 2. Clicking on the + sign below the TimeOrder Multi-Signal increases the entry signal and the value of period increases.
+						When TimeOrder Multi-Signal is selected, the entry can only be increased to a maximum of 3 signals. Next, you need to fill in each signal panel corresponding to the entry condition as if filling out a single signal.
 						<br />
 					</p>
 				</blockquote>
@@ -320,39 +317,39 @@
 					src="../../assets/helpImg/timeframe-criteria.png"
 					alt="Set Up Form"
 				/> -->
-				<h4>2.6.3 退场条件选择TimeOrder Multi-Signal</h4>
+				<h4>2.6.3 The exit condition is TimeOrder Multi-Signal</h4>
 				<blockquote>
 					<p>
 						<br />
-						在退场信号的右上角下拉框中选择TimeOrder Multi-Signal,
-						然后默认会弹出Signal1和Signal2两个信号面板，默认的Period值为2。点击TimeOrder Multi-Signal下方的+号，可以增加退场信号，Period的值也会增加。
-						当选择TimeOrder Multi-Signal时，退场最多只能增加到3个信号。接下来你需要像填写单信号一样，将退场条件对应的每个信号面板都填写完。
+					Select TimeOrder Multi-Signal in the drop-down box in the upper-right corner of the exit signal,
+						Then the signal1 and Signal2 signal panels will pop up by default, and the default Period value is 2. Clicking the + sign below the TimeOrder Multi-Signal increases the exit signal and the value of Period.
+						When TimeOrder Multi-Signal is selected, the exit can only be increased to a maximum of 3 signals. Next, you need to fill in each signal panel corresponding to the exit condition as if you were filling out a single signal.
 						<br />
 					</p>
 				</blockquote>
-				<h4>2.6.4 运行回测并查看结果</h4>
+				<h4>2.6.4 Run a backtest and view the results</h4>
 				<blockquote>
 					<p>
 						<br />
-						点击Run Backtest 按钮运行使用TimeOrder
-						Multi-Signal的回测，并且查看结果。
+						Click the Run Backtest button to run using TimeOrder
+						Multi-Signal backtests, and view the results.
 						<br />
 					</p>
 				</blockquote>
 				<h3>
 					2.7 set score value in sameday multi-signal entry/exit criteria
 				</h3>
-				<h4>2.7.1 填写回测的基本信息</h4>
+				<h4>2.7.1 Fill in the basic information for the backtest</h4>
 				<blockquote>
 					<p>
 						<br />
-						根据自己的需要，填写回测的相关参数,包括 Starting
+							According to your own needs, fill in the relevant parameters of the backtest, including Starting
 						Capital、Commission、Benchmark、Backtest History....
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
-				<h4>2.7.2 在进场条件中修改Score的值</h4>
+				<h4>2.7.2 Modify the value of the Score in the entry condition</h4>
 				<blockquote>
 					<p>
 						<br />
