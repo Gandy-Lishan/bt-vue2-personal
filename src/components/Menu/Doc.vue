@@ -353,9 +353,9 @@ According to your own needs, fill in the relevant parameters of the backtest, in
 				<blockquote>
 					<p>
 						<br />
-						在进场信号的右上角下拉框中选择Sambar Multi-Signal,
-						然后默认会弹出Signal1和Signal2两个信号面板，当前Score的值为2（Score数值默认与进场信号数量相等），如果你不想使用当前的Score值，可以填入大于1小于进场信号数量的整数。接下来你需要
-						将进场条件对应的每个信号面板都填写完。
+						Select Sambar Multi-Signal in the drop-down box in the upper right corner of the entry signal,
+						Then the signal panels of Signal1 and Signal2 will pop up by default, the current Score value is 2 (the Score value is equal to the number of incoming signals by default), if you don't want to use the current Score value, you can fill in an integer greater than 1 less than the number of entry signals. Next you need
+						Fill in each signal panel corresponding to the entry condition.
 						<br />
 					</p>
 				</blockquote>
@@ -367,40 +367,38 @@ According to your own needs, fill in the relevant parameters of the backtest, in
 				<blockquote>
 					<p>
 						<br />
-							在退场信号的右上角下拉框中选择Sambar Multi-Signal,
-						然后默认会弹出Signal1和Signal2两个信号面板，当前Score的值为2（Score数值默认与退场信号数量相等），如果你不想使用当前的Score值，可以填入大于1小于退场信号数量的整数。接下来你需要
-						将退场条件对应的每个信号面板都填写完。
+						Modify the value of the Score in the exit condition
 						<br />
 					</p>
 				</blockquote>
-				<h4>2.7.4 运行回测并查看结果</h4>
+				<h4>2.7.4 Run a backtest and view the results</h4>
 				<blockquote>
 					<p>
 						<br />
-						点击Run Backtest 按钮运行自定义Score的多信号回测，并且查看结果。
+						Click the Run Backtest button to run a custom Score multi-signal backtest and view the results.
 						<br />
 					</p>
 				</blockquote>
 				<h3>
 					2.8 set period value in timeorder multi-signal entry/exit criteria
 				</h3>
-				<h4>2.8.1 填写回测的基本信息</h4>
+				<h4>2.8.1 Fill in the basic information for the backtest</h4>
 				<blockquote>
 					<p>
 						<br />
-						根据自己的需要，填写回测的相关参数,包括 Starting
+						According to your own needs, fill in the relevant parameters of the backtest, including Starting
 						Capital、Commission、Benchmark、Backtest History....
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
-				<h4>2.8.2 在进场条件中修改Period的值</h4>
+				<h4>2.8.2 Modify the value of Period in the entry condition</h4>
 				<blockquote>
 					<p>
-						<br />。
-						在进场信号的右上角下拉框中选择TimeOrder Multi-Signal,
-						然后默认会弹出Signal1和Signal2两个信号面板，当前Period的值为2（Period数值默认与进场信号数量相等），如果你不想使用当前的Period值，可以填入大于1的任意整数。接下来你需要
-						将进场条件对应的每个信号面板都填写完。
+						<br />
+						Select TimeOrder Multi-Signal in the drop-down box in the upper right corner of the entry signal,
+						Then by default, the signal panels of Signal1 and Signal2 will pop up, the current Period value is 2 (the Period value is equal to the number of entry signals by default), if you do not want to use the current Period value, you can fill in any integer greater than 1. Next you need
+						Fill in each signal panel corresponding to the entry condition.
 						<br />
 					</p>
 				</blockquote>
@@ -408,21 +406,21 @@ According to your own needs, fill in the relevant parameters of the backtest, in
 					src="../../assets/helpImg/timeframe-criteria.png"
 					alt="Set Up Form"
 				/> -->
-				<h4>2.8.3 在退场条件中修改Period的值</h4>
+				<h4>2.8.3 Modify the value of Period in the exit condition</h4>
 				<blockquote>
 					<p>
 						<br />
-						在退场信号的右上角下拉框中选择TimeOrder Multi-Signal,
-						然后默认会弹出Signal1和Signal2两个信号面板，当前Period的值为2（Period数值默认与退场信号数量相等），如果你不想使用当前的Period值，可以填入大于1的任意整数。接下来你需要
-						将退场条件对应的每个信号面板都填写完。
+						Select TimeOrder Multi-Signal in the drop-down box in the upper-right corner of the exit signal,
+						Then the signal panels of Signal1 and Signal2 will pop up by default, the current Period value is 2 (the Period value defaults to equal to the number of exit signals), if you do not want to use the current Periodic value, you can fill in any integer greater than 1. Next you need
+						Fill in each signal panel corresponding to the exit condition.
 						<br />
 					</p>
 				</blockquote>
-				<h4>2.8.4 运行回测并查看结果</h4>
+				<h4>2.8.4 Run a backtest and view the results</h4>
 				<blockquote>
 					<p>
 						<br />
-						点击Run Backtest 按钮运行自定义Period的多信号回测，并且查看结果。
+						Click the Run Backtest button to run a custom Period multi-signal backtest and view the results.
 						<br />
 					</p>
 				</blockquote>
@@ -430,21 +428,21 @@ According to your own needs, fill in the relevant parameters of the backtest, in
 				<h3>
 					2.9 set a delay of entry/exit criteria
 				</h3>
-				<h4>2.9.1 填写回测的基本信息</h4>
+				<h4>2.9.1 Fill in the basic information for the backtest</h4>
 				<blockquote>
 					<p>
 						<br />
-						根据自己的需要，填写回测的相关参数,包括 Starting
+						According to your own needs, fill in the relevant parameters of the backtest, including Starting
 						Capital、Commission、Benchmark、Backtest History....
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
-				<h4>2.9.2 在进场条件中修改Delay of Bars</h4>
+				<h4>2.9.2 Modify the Layer of Bars in the entry conditions</h4>
 				<blockquote>
 					<p>
 						<br />
-						在进场信号的右上角下拉框中选择任意选项，如Samebar Multi-Signal,然后勾选进场条件中的Delay of Bars。Delay of Bars默认值为1,你可以输入大于0的数来修改Delay of Bars的值。
+						Select any option in the drop-down box in the upper right corner of the entry signal, such as The Flamebar Multi-Signal, and tick TheLay of Bars in the entry conditions. The Delay of Bars defaults to 1, and you can enter a number greater than 0 to modify the value of The Delay of Bars.
 						<br />
 					</p>
 				</blockquote>
@@ -452,39 +450,38 @@ According to your own needs, fill in the relevant parameters of the backtest, in
 					src="../../assets/helpImg/timeframe-criteria.png"
 					alt="Set Up Form"
 				/> -->
-				<h4>2.9.3 在退场条件中修改Delay of Bars</h4>
+				<h4>2.9.3 Modify the Layer of Bars in the exit conditions</h4>
 				<blockquote>
 					<p>
-						<br />在退场信号的右上角下拉框中选择任意选项，如TimeOrder Multi-Signal,然后勾选退场条件中的Delay of Bars。Delay of Bars默认值为1,你可以输入大于0的数来修改Delay of Bars的值。
+						<br />Select any option in the drop-down box in the upper-right corner of the exit signal, such as TimeOrder Multi-Signal, and then tick TheLay of Bars in the exit conditions. The Delay of Bars defaults to 1, and you can enter a number greater than 0 to modify the value of The Delay of Bars.
 						<br />
 					</p>
 				</blockquote>
-				<h4>2.9.4 运行回测并查看结果</h4>
+				<h4>2.9.4 Run a backtest and view the results</h4>
 				<blockquote>
 					<p>
 						<br />
-						点击Run Backtest 按钮运行带有Delay of Bars的回测，并且查看结果。
+						Click the Run Backtest button to run a backtest with The Layer of Bars and see the results.
 						<br />
 					</p>
 				</blockquote>
 				<h1>3. add backtest to my favorites</h1>
-				<h3>3.1 打开 Backtest History 标签页</h3>
+				<h3>3.1 Open the Backtest History tab</h3>
 				<blockquote>
 					<p>
-						<br />
-						找出你想添加收藏的回测，点击 add to favorites 按钮,
-						即可将回测添加至收藏夹。
+						<br />Find out which backtest you want to add to the favorites, click the add to favorites button,
+						to add backtesting to your favorites.
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/add-fa.png" alt="Add To Favorites" /> -->
 
-				<h3>3.2 查看收藏夹中的回测</h3>
+				<h3>3.2 View backtesting in favorites</h3>
 				<blockquote>
 					<p>
 						<br />
-						打开 My Favorites
-						标签页即可查看收藏的回测，你可以在这里移除回测收藏、编辑回测以及查看回测结果。
+						Open My Favorites
+						tab to view your favorite backtests, where you can remove backtesting collections, edit backtests, and view backtest results.
 						<br />
 					</p>
 				</blockquote>
@@ -493,78 +490,76 @@ According to your own needs, fill in the relevant parameters of the backtest, in
 				<h1>4. edit a sample backtest</h1>
 				<blockquote class="video_link">
 					<i class="el-icon-video-play"></i>
-					<a href="#">Sample Backtest的演示视频</a>
+					<a href="#">Sample Backtest demo video</a>
 				</blockquote>
-				<h3>4.1 打开 History Backtests 标签页</h3>
+				<h3>4.1 Open the History Backtests tab</h3>
 				<!-- <img src="../../assets/sample-backtests.png" alt="Sample Backtests"> -->
 				<blockquote>
 					<p>
 						<br />
-						打开 History Backtests 标签页, 这里存放着所有创建，复制，以及编辑后的回测，在列表中找出你想编辑的回测，点击 edit backtest 按钮。
+						Open the History Backtests tab, which houses all the created, copied, and edited backtests, find the backtest you want to edit in the list, and click the edit backtest button.
 						<br />
 					</p>
 				</blockquote>
-				<h3>4.2 在 Set Up Backtest 中编辑</h3>
+				<h3>4.2 Edit in Set Up Backtest</h3>
 				<!-- <img src="../../assets/copy-backtests.png" alt="Copy Backtests"> -->
 				<blockquote>
 					<p>
-						<br />
-						当点击 edit backtest 按钮后，当前回测的信息就会展示在Set Up Backtest标签页的表单中，你可以在这里修改回测的数据。完成修改后，点击Run Backtest
-						运行修改后的回测，并查看结果。
+						<br />When you click the edit backtest button, the information of the current backtest will be displayed in the form of the Set Up Backtest tab, where you can modify the backtest data. When you're done editing, click Run Backtest
+						Run the modified backtest and view the results.
 						<br />
 					</p>
 				</blockquote>
 				<h1>5. view result of a created backtest</h1>
-				<h3>5.1 打开 Backtest History 标签页</h3>
+				<h3>5.1 Open the Backtest History tab</h3>
 				<!-- <img src="../../assets/history-add-favorite.png" alt="Add To Favorites"> -->
 				<blockquote>
 					<p>
 						<br />
-						找出你想查看结果的回测，点击 view backtest results 按钮,
-						就可以查看当前回测的结果。
+Find out the backtest you want to see the results of, click the view backtest results button,
+						It is possible to view the results of the current backtesting.
 						<br />
 					</p>
 				</blockquote>
-				<h3>5.2 修改当前的回测参数</h3>
+				<h3>5.2 Modify the current backtesting parameters</h3>
 				<!-- <img src="../../assets/see-favorites.png" alt="View favorites"> -->
 				<blockquote>
 					<p>
 						<br />
-						当点击按钮查看结果时，Set Up
-						Backtest会展示当前查看结果的回测的具体参数，如果你对这个回测的结果不满意，可以返回Set
-						Up Backtest标签页进行修改，修改后点击Run Backtest运行修改后的回测。
+						When you click the button to view the results, Set Up
+						Backtest will show the specific parameters of the backtest of the current viewing result, and if you are not satisfied with the results of this backtest, you can return to Set
+						Edit the Up Backtest tab, click Run Backtest to run the modified backtest.
 						<br />
 					</p>
 				</blockquote>
 								<h1>6. copy a sample backtest</h1>
 				<blockquote class="video_link">
 					<i class="el-icon-video-play"></i>
-					<a href="#">Sample Backtest的演示视频</a>
+					<a href="#">Sample Backtest demo video</a>
 				</blockquote>
-				<h3>6.1 打开 Sample Backtests 标签页</h3>
+				<h3>6.1 Open the Sample Backtests tab</h3>
 				<!-- <img src="../../assets/sample-backtests.png" alt="Sample Backtests"> -->
 				<blockquote>
 					<p>
 						<br />
-						打开 Sample Backtests 标签页, 点击 copy backtest 按钮。
+						Open the Sample Backtests tab and click the copy backtest button.
 						<br />
 					</p>
 				</blockquote>
-				<h3>6.2 在 Backtest History 中编辑后运行</h3>
+				<h3>6.2 Edit and run in Backtest History</h3>
 				<!-- <img src="../../assets/copy-backtests.png" alt="Copy Backtests"> -->
 				<blockquote>
 					<p>
-						<br />
-						打开 Backtest History 标签页, 点击 edit backtest 按钮，对复制的
-						Sample Backtest 进行编辑。你可以看到部分按钮是不可用的，那是因为所有
-						复制的回测都要编辑以后才能进行查看结果等操作。
+						<br />Open the Backtest History tab and click the edit backtest button to copy
+						Sample Backtest for editing. You can see that part of the button is not available, that's because of all
+						The copied backtest must be edited before you can view the results.
 						<br />
 					</p>
 				</blockquote>
 			</section>
 			<el-aside>
 				<div style="margin: 0px 0 0 77px; font-size: 18px; font-weight: bold">
-					目录
+					directory
 				</div>
 				<el-tabs
 					@tab-click="handleClick"
