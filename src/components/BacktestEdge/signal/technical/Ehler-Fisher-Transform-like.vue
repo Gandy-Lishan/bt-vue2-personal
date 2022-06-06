@@ -228,9 +228,13 @@ delay_bars: [String, Number],
 					this.$store.commit('saveDescription', desObj)
 				 }  
 			}
+			let value = this.tech.value
+			if(value == 'SL') {
+				value = 'Single Line'
+			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let condition = this.conditions[this.tech.condition].label
-			this.description = `${techVal} ${condition} ${this.tech.value}`
+			this.description = `${techVal} ${condition} ${value}`
 				let desObj = {}
 				desObj.criteria = this.criteria
 					if(this.relation != 1) {

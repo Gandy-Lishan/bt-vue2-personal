@@ -28,7 +28,6 @@
 			</div>
 			<div class="indicator-container techBox">
 				<el-form-item>
-					
 					<el-radio
 						v-model="indicatorRadio"
 						label="Technical Indicators"
@@ -57,7 +56,7 @@
 <script>
 import { Store, mapGetters } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import {getIndicatorsList} from '@/service/service'
+import { getIndicatorsList } from '@/service/service'
 export default {
 	props: {
 		criteria: String,
@@ -100,7 +99,8 @@ export default {
 				sentimentIndicator: [{ validator: validateSenti, trigger: 'change' }],
 				technicalIndicator: [{ validator: validateTech, trigger: 'change' }],
 				riskIndicator: [{ validater: validateRisk, trigger: 'change' }]
-			}
+			},
+			currentSentiUpdated: ''
 		}
 	},
 	computed: {
@@ -112,13 +112,16 @@ export default {
 		},
 		updateTech() {
 			return this.$store.state.currentTech
+		},
+		frequency() {
+			return this.$store.state.exitFrequency
 		}
 	},
 	watch: {
 		// 监听freq在indicator.vue是为了让表单加载的指标在timeframe范围内
 		updateFreq() {
-			this.indicatorSentimentSearch(this.si.sentimentIndicator, res=>{
-				if(res.length==0){
+			this.indicatorSentimentSearch(this.si.sentimentIndicator, (res) => {
+				if (res.length == 0) {
 					this.si.sentimentIndicator = ''
 				}
 			})
@@ -127,7 +130,7 @@ export default {
 			let tabs = this.editableTabs
 			var absoluteIndex = ''
 			tabs.forEach((tab, index) => {
-				if(tab.name==this.editableTabsValue){
+				if (tab.name == this.editableTabsValue) {
 					absoluteIndex = index
 				}
 			})
@@ -141,24 +144,29 @@ export default {
 				for (var i in CIQ.indicatorList) {
 					if (CIQ.indicatorList[i].chart_name == val.name) {
 						this.indicatorRadio = 'Sentiment Indicators'
-						if(this.criteria == 'entry'){
-							this.$store.commit('getEntryIndicators', {index: this.panelIndex, value: CIQ.indicatorList[i].url})
-						}else{
-							this.$store.commit('getExitIndicators', {index: this.panelIndex, value: CIQ.indicatorList[i].url})
+						if (this.criteria == 'entry') {
+							this.$store.commit('getEntryIndicators', {
+								index: this.panelIndex,
+								value: CIQ.indicatorList[i].url
+							})
+						} else {
+							this.$store.commit('getExitIndicators', {
+								index: this.panelIndex,
+								value: CIQ.indicatorList[i].url
+							})
 						}
 
 						// extract this statement from handleSentimentSelect
-							let valObj = {}
-							valObj.value = CIQ.indicatorList[i].chart_name
-							valObj.index = this.panelIndex
-							this.$emit('getIndicatorVal', valObj)
-							// 去掉表单校验
-							this.clearFormValidate()
-							let radioObj = {}
-							radioObj.value = 'sentiment'
-							radioObj.index = this.panelIndex
-							this.$emit('getIndicatorRadio', radioObj)
-							
+						let valObj = {}
+						valObj.value = CIQ.indicatorList[i].chart_name
+						valObj.index = this.panelIndex
+						this.$emit('getIndicatorVal', valObj)
+						// 去掉表单校验
+						this.clearFormValidate()
+						let radioObj = {}
+						radioObj.value = 'sentiment'
+						radioObj.index = this.panelIndex
+						this.$emit('getIndicatorRadio', radioObj)
 
 						//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
 						let obj = {}
@@ -176,14 +184,34 @@ export default {
 					// this.si.technicalIndicator = item.value
 					// 暂时注释掉，因为大部分tech没有加到back test内
 					//this.indicatorRadio = 'Technical Indicators'
-					
-						// 					let radioObj = {}
-						// radioObj.value = 'technical'
-						// radioObj.index = this.panelIndex
-						// this.$emit('getIndicatorRadio', radioObj)
+					// 					let radioObj = {}
+					// radioObj.value = 'technical'
+					// radioObj.index = this.panelIndex
+					// this.$emit('getIndicatorRadio', radioObj)
 					//this.handleTechnicalSelect({value:item.value})
 				}
 			})
+		},
+		frequency: {
+			handler(newVal) {
+				if (newVal != this.currentSentiUpdated) {
+					// 变化后的 timeframe 和现在 sentiment indicator 的 timeframe 不相等
+					switch (newVal) {
+						case 'Daily':
+							if(this.si.sentimentIndicator){
+								this.si.sentimentIndicator = ''
+							}
+							break
+						case 'Weekly':
+							if(this.currentSentiUpdated == 'Monthly' && this.si.sentimentIndicator) {
+								this.si.sentimentIndicator = ''
+							}
+							break
+						default:
+							break
+					}
+				}
+			}
 		}
 	},
 	methods: {
@@ -204,13 +232,13 @@ export default {
 			}
 			data.sentimentIndicatorList = this.$store.state.sentimentIndicatorList
 			Object.assign(this.$data, data)
-			
+
 			this.$refs.siForm.clearValidate()
 		},
 		// sentiment search
 		indicatorSentimentSearch(queryString, cb) {
 			var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
-			sentimentIndicatorList.sort(function(a,b){
+			sentimentIndicatorList.sort(function (a, b) {
 				return a.value.localeCompare(b.value)
 			})
 			var results = queryString
@@ -233,16 +261,18 @@ export default {
 		// technical search
 		indicatorTechnicalSearch(queryString, cb) {
 			var technicaltIndicatorList = this.loadShortLong()
-			if(this.criteria === 'entry') {
-				let valueArr = ["ATR Trailing Stops","Parabolic SAR"]
-				technicaltIndicatorList = technicaltIndicatorList.filter((item) => valueArr.indexOf(item.value) === -1)
+			if (this.criteria === 'entry') {
+				let valueArr = ['ATR Trailing Stops', 'Parabolic SAR']
+				technicaltIndicatorList = technicaltIndicatorList.filter(
+					(item) => valueArr.indexOf(item.value) === -1
+				)
 			}
 			var results = queryString
 				? technicaltIndicatorList.filter(
 						this.createTechnicalFilter(queryString)
 				  )
 				: technicaltIndicatorList
-			
+
 			// 调用 callback 返回建议列表的数据
 			cb(results)
 		},
@@ -273,22 +303,29 @@ export default {
 			}
 		},
 		handleSentimentSelect(item) {
-			     // old version only
-                var countExistIndicator = 0
-                for (var studyInstanceName in CIQ.stxx.layout.studies) {
-                    for (var i in CIQ.store.state.builtinList){
-                        if(CIQ.store.state.builtinList[i].url == CIQ.stxx.layout.studies[studyInstanceName].type){countExistIndicator--}
-                    }
-					if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'){
+			console.log('当前indicator的对象', item)
+			this.currentSentiUpdated = item.updated
+			// old version only
+			var countExistIndicator = 0
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				for (var i in CIQ.store.state.builtinList) {
+					if (
+						CIQ.store.state.builtinList[i].url ==
+						CIQ.stxx.layout.studies[studyInstanceName].type
+					) {
 						countExistIndicator--
 					}
-					countExistIndicator++
-                } 
+				}
+				if (CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
+					countExistIndicator--
+				}
+				countExistIndicator++
+			}
 
-                if(countExistIndicator>=10){
-                    CIQ.description("Maximum 10 signals can be displayed on chart")
-                    return
-                }
+			if (countExistIndicator >= 10) {
+				CIQ.description('Maximum 10 signals can be displayed on chart')
+				return
+			}
 
 			this.si.sentimentIndicator = item.value
 			let obj = {}
@@ -299,33 +336,46 @@ export default {
 			var activatedMAList = this.$store.state.activatedMA
 			if (this.criteria == 'entry') {
 				var MAListIndex = activatedMAList.findIndex(
-					(item) => item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+					(item) =>
+						item.url ==
+						this.$store.state.indicators.formIndicators.entry[this.panelIndex]
 				)
 				if (MAListIndex != -1) {
 					activatedMAList.splice(MAListIndex, 1)
 				}
 				this.$store.commit('getMA', activatedMAList)
-				this.$store.commit('getEntryIndicators', {index: this.panelIndex, value: item.url})
+				this.$store.commit('getEntryIndicators', {
+					index: this.panelIndex,
+					value: item.url
+				})
 				console.log(this.$store.state.indicators.formIndicators.entry)
-						let obj = {}
-						obj.index = this.panelIndex
-						obj.url = item.url
-						this.$emit('getIndicatorUrl', obj)
-					} else {
-						var MAListIndex = activatedMAList.findIndex(
-							(item) => item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex]
-						)
-						if (MAListIndex != -1) {
-							activatedMAList.splice(MAListIndex, 1)
-						}
-						this.$store.commit('getMA', activatedMAList)
-						this.$store.commit('getExitIndicators', {index: this.panelIndex, value: item.url})
-												let obj = {}
-								obj.index = this.panelIndex
-								obj.url = item.url
-								this.$emit('getIndicatorUrl', obj)
-					}
-			console.log('current formIndicator: ',this.$store.state.indicators.formIndicators)
+				let obj = {}
+				obj.index = this.panelIndex
+				obj.url = item.url
+				this.$emit('getIndicatorUrl', obj)
+			} else {
+				var MAListIndex = activatedMAList.findIndex(
+					(item) =>
+						item.url ==
+						this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				this.$store.commit('getExitIndicators', {
+					index: this.panelIndex,
+					value: item.url
+				})
+				let obj = {}
+				obj.index = this.panelIndex
+				obj.url = item.url
+				this.$emit('getIndicatorUrl', obj)
+			}
+			console.log(
+				'current formIndicator: ',
+				this.$store.state.indicators.formIndicators
+			)
 			// avoid add indicator redundantly
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
@@ -366,33 +416,43 @@ export default {
 				var activatedMAList = CIQ.store.state.activatedMA
 
 				var MAListIndex = activatedMAList.findIndex(
-					(ma) => ma.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+					(ma) =>
+						ma.url ==
+						this.$store.state.indicators.formIndicators.entry[this.panelIndex]
 				)
 				if (MAListIndex != -1) {
 					activatedMAList.splice(MAListIndex, 1)
 				}
 				CIQ.store.commit('getMA', activatedMAList)
-				this.$store.commit('getEntryIndicators', {index: this.panelIndex, value: url})
+				this.$store.commit('getEntryIndicators', {
+					index: this.panelIndex,
+					value: url
+				})
 			} else {
 				// remove MA from Vuex after loading Tech
 				var activatedMAList = CIQ.store.state.activatedMA
 
 				var MAListIndex = activatedMAList.findIndex(
-					(ma) => ma.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+					(ma) =>
+						ma.url ==
+						this.$store.state.indicators.formIndicators.exit[this.panelIndex]
 				)
 				if (MAListIndex != -1) {
 					activatedMAList.splice(MAListIndex, 1)
 				}
 
 				CIQ.store.commit('getMA', activatedMAList)
-				this.$store.commit('getExitIndicators', {index: this.panelIndex, value: url})
+				this.$store.commit('getExitIndicators', {
+					index: this.panelIndex,
+					value: url
+				})
 			}
 			// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
 			let techIndicators = []
 			techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
 			techIndicators.push(url)
 			techIndicators = [...new Set(techIndicators)]
-			console.log("handle tech select,techIndicators: ",techIndicators)
+			console.log('handle tech select,techIndicators: ', techIndicators)
 			this.$store.commit('getTechnicalIndicators', techIndicators)
 
 			// avoid add indicator redundantly
@@ -407,10 +467,9 @@ export default {
 			// }
 			vm.si.technicalIndicator = item.value
 
-			if(arguments[1]!=true){
+			if (arguments[1] != true) {
 				CIQ.addIndicators()
 			}
-			
 		},
 		// handleRiskSelect(item) {
 		// 	this.si.riskIndicator = item.value
@@ -483,7 +542,7 @@ export default {
 				})
 			}
 			// 在 vuex 中存入 formatList
-			formatList.sort(function(a,b){
+			formatList.sort(function (a, b) {
 				return a.value.localeCompare(b.value)
 			})
 			this.$store.commit('saveFormatTechnicalList', formatList)
@@ -496,7 +555,10 @@ export default {
 			let checked = true
 			let validForm
 			let validName = false
-			if (this.indicatorRadio === 'Sentiment Indicators' && !this.exitItemCheck) {
+			if (
+				this.indicatorRadio === 'Sentiment Indicators' &&
+				!this.exitItemCheck
+			) {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})
@@ -504,13 +566,13 @@ export default {
 				if (sentimentList.length == 0) {
 					let res = await getIndicatorsList()
 					sentimentList = res.data.map((obj) => {
-							if (obj.chart_name && obj.url && obj.updated) {
-								return {
-									value: obj.chart_name,
-									url: obj.url,
-									updated: obj.updated
-								}
+						if (obj.chart_name && obj.url && obj.updated) {
+							return {
+								value: obj.chart_name,
+								url: obj.url,
+								updated: obj.updated
 							}
+						}
 					})
 				}
 				for (let i = 0; i < sentimentList.length; i++) {
@@ -529,7 +591,12 @@ export default {
 				} else {
 					if (!validName) {
 						this.$message({
-							message: 'Please select #'+(index+1)+' '+this.criteria+ ' indicator from the drop-down box',
+							message:
+								'Please select #' +
+								(index + 1) +
+								' ' +
+								this.criteria +
+								' indicator from the drop-down box',
 							type: 'error'
 						})
 					}
@@ -537,7 +604,10 @@ export default {
 					return checked
 				}
 			}
-			if (this.indicatorRadio === 'Technical Indicators' && !this.exitItemCheck) {
+			if (
+				this.indicatorRadio === 'Technical Indicators' &&
+				!this.exitItemCheck
+			) {
 				this.$refs.siForm.validate((valid) => {
 					validForm = valid
 				})
@@ -561,7 +631,12 @@ export default {
 				} else {
 					if (!validName) {
 						this.$message({
-							message: 'Please select #'+(index+1)+' '+this.criteria+ ' indicator from the drop-down box',
+							message:
+								'Please select #' +
+								(index + 1) +
+								' ' +
+								this.criteria +
+								' indicator from the drop-down box',
 							type: 'error',
 							offset: 300
 						})
@@ -570,7 +645,7 @@ export default {
 					return checked
 				}
 			}
-			if(this.exitItemCheck) {
+			if (this.exitItemCheck) {
 				checked = true
 				return checked
 			}
@@ -606,8 +681,8 @@ export default {
 			// }
 		},
 		async setEditData(newVal) {
-			console.log("indicator编辑的数据",newVal);
-			console.log("判断数据",newVal[this.criteria].signals[this.panelIndex]);
+			console.log('indicator编辑的数据', newVal)
+			console.log('判断数据', newVal[this.criteria].signals[this.panelIndex])
 			if (JSON.stringify(newVal) != '{}') {
 				this.clearFormValidate()
 				let index = this.panelIndex
@@ -623,7 +698,7 @@ export default {
 						newVal[this.criteria].signals[index].indicator
 					// 往父组件传值
 					let sentimentList = this.$store.state.sentimentIndicatorList
-					
+
 					if (sentimentList.length == 0) {
 						let res = await getIndicatorsList()
 						sentimentList = res.data.map((obj) => {
@@ -633,17 +708,17 @@ export default {
 									url: obj.url,
 									updated: obj.updated
 								}
-						}
-						
-					})}
+							}
+						})
+					}
 
 					let indi = this.si.sentimentIndicator
 					sentimentList.forEach((item) => {
 						if (indi.toUpperCase() == item.value.toUpperCase()) {
-						let obj = {}
-						obj.index = vm.panelIndex
-						obj.url = item.url
-						vm.$emit('getIndicatorUrl', obj)
+							let obj = {}
+							obj.index = vm.panelIndex
+							obj.url = item.url
+							vm.$emit('getIndicatorUrl', obj)
 						}
 					})
 					// if(this.$store.state.sentimentIndicatorList)
@@ -653,7 +728,7 @@ export default {
 					// obj.value = 'technical'
 					// obj.index = index
 					// this.$emit('getIndicatorRadio', 'technical')
-			console.log("进入technical");
+					console.log('进入technical')
 					vm.indicatorRadio = 'Technical Indicators'
 					let technicalIndicator =
 						newVal[this.criteria].signals[index].indicator
@@ -666,7 +741,7 @@ export default {
 						if (technicalIndicator === formateList[i].value) {
 							let obj = formateList[i]
 							let isFromEdit = true
-							vm.handleTechnicalSelect(obj,isFromEdit)
+							vm.handleTechnicalSelect(obj, isFromEdit)
 							break
 						}
 					}
@@ -685,9 +760,9 @@ export default {
 				// 	}
 				// 	this.handleRiskSelect(obj)
 				// }
+			}
 		}
 	}
-}
 }
 </script>
 <style lang="less" scoped>

@@ -9,350 +9,397 @@
 				/>
 			</div>
 			<section data-v-15d0b2f8="">
-				<h1>轻松上手 backtest</h1>
+				<h1>Easy to use of BacktestEdge</h1>
 				<p>
-					在这里，你可以设定回测系统的参数，如初始金额、滑点、开始时间以及结束时间等，然后选择
-					不同的股票组合（目前系统只支持单信号）。系统会根据填写的参数模拟真实金融市场
-					交易规则进行模型买入、模型卖出，得出交易次数、盈利率等数据。
+BacktestEdge utilizes the real data of financial&stock market and provides users a trading edge by backtesting trading strategies that are related to sentiment and technical indicators. Before you actually apply your trading strategy into live trading, BacktestEdge will help you backtest this strategy with actual result of return, number of trades and many other useful data within seconds! 
+
+
 				</p>
-				<p>文档会以图文结合的方式教你如何使用回测系统，现在让我们开始吧！</p>
+				<p>This tutorial will teach you how to quickly start using BacktestEdge and thanks for reading!</p>
 
-<h1>1. 介绍回测系统</h1>
+				<h1>1.Brief introduction of BacktestEdge</h1>
 
-				<h3>1.1 图表部分</h3>
+				<h3>1.1 Chart section</h3>
 				<blockquote class="video_link">
 					<i class="el-icon-video-play"></i>
-					<a href="#">图表操作介绍</a>
+					<a href="#">Introduction to chart operations</a>
 				</blockquote>
 
 				<blockquote>
 					<p>
 						<br />
-						图表不仅可以反映股票的走势情况，而且还支持图表界面互动。例如，你可以在图表中添加symbol以及
-						indicator到收藏夹；可以自定义 indicator
-						的属性，例如极值以及极值曲线的颜色；可以选定 indicator
-						周期（Daily、Weekly、Monthly）; 支持添加以及去除背景网格线、last
-						price标签以及其他视觉辅助工具;
-						你可以更换图标的主题（Dark、light）;图表下方的 clear chart 可以实现
-						一键清除图表。
+						In the chart section of BacktestEdge, users can select stock/index symbol to be backtested and add to favorites; select sentiment indicators and add to favorites; select technical indicators and modify settings; select timeframe among Daily/Weekly/Monthly; select the Day/Night theme of chart.
 						<br />
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/chart.png" alt="Chart" />
 
-				<h3>1.2 表单部分</h3>
+				<h3>1.2 Form section</h3>
 				<blockquote>
 					<p>
 						<br />
-						表单部分有四个标签页，Set up Backtest 标签页用于 Backtest
-						的创建，Backtest History 标签页展示所有创建的回测；Backtest Results
-						用于展示 某个回测的结果；My Favorites
-						标签页展示添加收收藏夹的回测；Sample Backtest 标签页中我们提供了 30
-						个实例，你可以通过复制使用。
+						In the chart section of BacktestEdge, users can select stock/index symbol to be backtested and add to favorites; select sentiment indicators and add to favorites; select technical indicators and modify settings; select timeframe among Daily/Weekly/Monthly; select the Day/Night theme of chart.
 						<br />
 					</p>
 				</blockquote>
 
 				<img src="../../assets/helpImg/form.png" alt="Form" />
 
-				<h1>2. 如何创建回测</h1>
+				<h1>2. How to create a new backtest</h1>
 				<blockquote class="video_link">
 					<i class="el-icon-video-play"></i>
-					<a href="#">回测创建流程演示</a>
+					<a href="#">Demonstration of the backtest creation process</a>
 				</blockquote>
 				<h3>2.1 create a single-signal entry/exit criteria new backtest</h3>
-				<h4>2.1.1 填写回测基本参数</h4>
+				<h4>2.1.1 Fill in the basic parameters of the backtest</h4>
 				<blockquote>
 					<p>
-						<br />
-						打开 Set up Backtest 标签页，填写回测的基本信息，包括 Starting
-						Capital、Commission、Benchmark、Backtest
-						History....如果你不清楚每个字段的意思，
-						可以将鼠标移到问号上，提示框会解释每个字段的意思。
+						<br />According to your own needs, fill in the relevant parameters of the backtest, including Starting
+						Capital、Commission、Benchmark、Backtest History....
 						<br />
 					</p>
 				</blockquote>
-				<img
+				<!-- <img
 					src="../../assets/helpImg/single-setup-demo.png"
 					alt="Set Up Form"
-				/>
+				/> -->
 
-				<h4>2.1.2 填写进场条件</h4>
+				<h4>2.1.2 Fill in the entry criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						在下拉框中选择一个 Sentiment Indicator或者 Technical
-						Indicator，填写指标值。 为了确保你的指标有收益，对于Sentiment
-						Indicator我们推荐你填写 Extreme Optimism 和 Extreme Pessimism
-						之间的值。
+						Select Single Signal in the drop-down list in the
+upper right corner of the Entry Criteria section;
+Select a sentiment or indicator from the drop-down box indicator field, fill in required value and choose condition in the signal section. 
+For sentiment indicator, the Extreme Optimism and Extreme Pessimism values are recommended. 
 						<br />
 					</p>
 				</blockquote>
-				<img src="../../assets/helpImg/single-entry.png" alt="Entry Criteria" />
+				<!-- <img src="../../assets/helpImg/single-entry.png" alt="Entry Criteria" /> -->
 
-				<h4>2.1.3 填写退场条件</h4>
+				<h4>2.1.3 Fill in the exit criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						你可以在退场条件中选择一个Sentiment Indicator或者 Technical
-						Indicator，填写指标值。对于Technical
-						Indicator我们推荐你结合图表填写指标值。
+Select Single Signal in the drop-down list in the
+upper right corner of the Entry Criteria section;
+Select a sentiment or indicator from the drop-down box indicator field, fill in required value and choose condition in the signal section. 
+For sentiment indicator, the Extreme Optimism and Extreme Pessimism values are recommended. 
 						<br />
 					</p>
 				</blockquote>
-				<img src="../../assets/helpImg/single-exit.png" alt="Exit Criteria" />
-				<h4>2.1.4 运行策略并查看结果</h4>
+				<!-- <img src="../../assets/helpImg/single-exit.png" alt="Exit Criteria" /> -->
+				<h4>2.1.4 Run the policy and view the results</h4>
 
 				<blockquote>
 					<p>
 						<br />
-						填写完表单后，点击 Run Backtest
-						按钮运行并查看结果，运行回测会花费一定的时间，请你耐心等待。回测运行结束之后，会自动跳转
-						到 Backtest Results
-						标签页展示回测运行成功后的数据。如果你创建的回测没有交易，你可以在
-						Backtest History
-						标签页，点击编辑按钮，修改回测的数据，保存后重新运行。
+After filling out the backtest form, click "Run Backtest" button to run the backtest and view the backtest results. The runtime of backtest will take more than 30 seconds to finish. After the backtest is completed, it will jump to Backtest Results tab to display the backtest results, including the number of trades, entry & exit points etc. If the backtest has no trades, you can go to Backtest History tab and click 'Edit" icon to modify backtest data. 
 						<br />
 					</p>
 				</blockquote>
-				<img src="../../assets/helpImg/single-result.png" alt="Summary" />
-				<h3>2.2 set stop/loss in exit criteria</h3>
-				<h4>2.2.1 在Set Up Backtest 表单中勾选 Stop Loss</h4>
+				<!-- <img src="../../assets/helpImg/single-result.png" alt="Summary" /> -->
+				<h3>2.2 Use Risk Control at Exit</h3>
+				<h4>2.2.1 Set stop/loss </h4>
+				<blockquote>
+					<p>
+						<br />To use stop/loss as an OR condition with exit criteria, check "Risk Control at Exit" and then fill in value in the "Take Profit" and "Stop Loss"
+fieldboxes. 
+
+						<br />
+					</p>
+				</blockquote>
+				<!-- <img src="../../assets/helpImg/stoploss-setup.png" alt="Set Up Form" /> -->
+				<h4>2.2.2 Set time-in-market</h4>
 				<blockquote>
 					<p>
 						<br />
-						打开 Set up Backtest 标签页，填写回测的基本信息，勾选Risk Control at
-						Exit,在弹出的Take Profit、Stop Loss、Time In Market中，只勾选Stop
-						Loss,你可以根据自己的需求填入相应的值，也可以使用，默认值10%。
+						To use time-in-market as an OR condition with exit criteria, check "Risk Control at Exit" and then fill in value in the "Time in Market" fieldbox. 
 						<br />
 					</p>
 				</blockquote>
-				<img src="../../assets/helpImg/stoploss-setup.png" alt="Set Up Form" />
-				<h4>2.2.2 在原有进场条件上修改</h4>
-				<blockquote>
-					<p>
-						<br />
-						如果你对刚才回测的结果不满意，可以在原有的进场和退场数据的基础上进行修改。
-						<br />
-					</p>
-				</blockquote>
-				<img
+				<!-- <img
 					src="../../assets/helpImg/single-change-criteria.png"
 					alt="Set Up Form"
-				/>
-				<h4>2.2.3 在退场条件中选择Only Use Risk Control</h4>
+				/> -->
+				<h4>2.2.3 Select Only Use Risk Control in the exit criteria</h4>
 				<blockquote>
 					<p>
-						<br />
-						在退场条件右上角的下拉选项中选择Only Use Risk
-						Control,这意味着将会选用Stop Loss的值作为你的退场条件。
+						<br />When Risk Control at Exit is checked and filled in with settings, the exit criteria will combine with the Risk Control settings as an OR condition.
+If you only want to use Risk Control at Exit settings as the exit criteria, select "Only Use Risk Control" in the drop down list in the upper right corner of the Exit Criteria section.
 						<br />
 					</p>
 				</blockquote>
-				<img
+				<!-- <img
 					src="../../assets/helpImg/single-only-stoploss.png"
 					alt="Set Up Form"
-				/>
-				<h4>2.2.4 运行回测并查看结果</h4>
-				<blockquote>
-					<p>
-						<br />
-						点击Run Backtest 按钮运行退场使用Stop Loss的策略，查看结果。
-						<br />
-					</p>
-				</blockquote>
-
-				<h3>2.3 set time-in-market in exit criteria</h3>
-				<h4>2.3.1 在Set Up Backtest 表单中勾选 Time In Market</h4>
-				<blockquote>
-					<p>
-						<br />
-						打开 Set up Backtest 标签页，填写回测的基本信息，勾选Risk Control at
-						Exit,在弹出的Take Profit、Stop Loss、Time In Market中，只勾选Time In
-						Market,你可以根据自己的需求填入相应的值，也可以使用，默认值120
-						Bars。
-						<br />
-					</p>
-				</blockquote>
-				<img
-					src="../../assets/helpImg/single-tim-setup.png"
-					alt="Set Up Form"
-				/>
-				<h4>2.3.2 填写进场条件</h4>
-				<blockquote>
-					<p>
-						<br />
-						填写进场条件
-						<br />
-					</p>
-				</blockquote>
-				<img
+				/> -->
+				<!-- <img
 					src="../../assets/helpImg/single-change-criteria.png"
 					alt="Set Up Form"
-				/>
-				<h4>2.3.3 在退场条件中选择Only Use Risk Control</h4>
+				/> -->
+				<h3>2.3 set different backtest timeframe</h3>
+				<h4>2.3.1 Set timeframe to Daily</h4>
 				<blockquote>
 					<p>
 						<br />
-						你可以在退场条件右上角的下拉选项中选择Only Use Risk
-						Control,这意味着将会选用Time In
-						Market的值作为你的退场条件。也可以选择
-						Single-Signal，这意味着Single-Signal里的 信号和Time In
-						Market都会作为你的退场条件。
+						When the timeframe in Set up Backtest tab is set to Daily, the sentiment indicators in the entry and exit criteria sections will only have sentiment indicators with daily updates.
 						<br />
 					</p>
 				</blockquote>
-				<img src="../../assets/helpImg/single-tim-exit.png" alt="Set Up Form" />
-				<h4>2.3.4 运行回测并查看结果</h4>
+				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
+				<h4>2.3.2 Set timeframe to Weekly</h4>
 				<blockquote>
 					<p>
 						<br />
-						点击Run Backtest 按钮运行退场使用Time In Market的策略，查看结果。
+						When the timeframe in Set up Backtest tab is set to Weekly, the sentiment indicators in the entry and exit criteria sections will have sentiment indicators with daily and weekly updates.
 						<br />
 					</p>
 				</blockquote>
-
-				<h3>2.4 set different backtest timeframe</h3>
-				<h4>2.4.1 在Set Up Backtest 表单中修改 timeframe</h4>
-				<blockquote>
-					<p>
-						<br />
-						打开 Set up Backtest 标签页，填写回测的基本信息,修改 Timeframe
-						的值为
-						Weekly,你也可以修改成Monthly，总共有Daily、Weekly、Monthly三种选择。
-						<br />
-					</p>
-				</blockquote>
-				<img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" />
-				<h4>2.4.2 填写进场和退场条件</h4>
-				<blockquote>
-					<p>
-						<br />
-						按照你的需求填写进场条件和退场条件
-						<br />
-					</p>
-				</blockquote>
-				<img
+				<!-- <img
 					src="../../assets/helpImg/timeframe-criteria.png"
 					alt="Set Up Form"
-				/>
-				<h4>2.4.3 运行回测并查看结果</h4>
+				/> -->
+				<h4>2.3.3 Set timeframe to Monthly</h4>
 				<blockquote>
 					<p>
 						<br />
-						点击Run Backtest 按钮运行退场使用Time In Market的策略，查看结果。
+						When the timeframe in Set up Backtest tab is set to Monthly, the sentiment indicators in the entry and exit criteria sections will have sentiment indicators with daily/weekly/monthly updates.
 						<br />
 					</p>
 				</blockquote>
-      <h3>2.5 create a sameday multi-signal entry/exit criteria new backtest</h3>
-				<h4>2.5.1 填写回测的基本信息</h4>
+				<h3>
+					2.4 create a sameday multi-signal entry/exit criteria new backtest
+				</h3>
+				<h4>2.4.1 Fill in the basic information for the backtest</h4>
 				<blockquote>
 					<p>
 						<br />
-            根据自己的需要，填写回测的相关参数
+						According to your own needs, fill in the relevant parameters of the backtest, including Starting
+						Capital、Commission、Benchmark、Backtest History....
 						<br />
 					</p>
 				</blockquote>
-				<img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" />
-				<h4>2.5.2 填写进场和退场条件</h4>
+				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
+				<h4>2.4.2 Fill in the entry criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						按照你的需求填写进场条件和退场条件
+						SameBar Multi-Signal means that when multiple signals occur at the same bar the backtest criteria is met. Select SameBar Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  score value is 2. Clicking on the + sign will increase the number of entry signals and also the score value. The maximum number of signals  in SameBar Multi-Signal selection is 5. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
+
 						<br />
 					</p>
 				</blockquote>
-				<img
+				<!-- <img
 					src="../../assets/helpImg/timeframe-criteria.png"
 					alt="Set Up Form"
-				/>
-				<h4>2.5.3 运行回测并查看结果</h4>
+				/> -->
+				<h4>2.4.3 Fill in the exit criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						点击Run Backtest 按钮运行退场使用Time In Market的策略，查看结果。
+						SameBar Multi-Signal means that when multiple signals occur at the same bar the backtest criteria is met. Select SameBar Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  score value is 2. Clicking on the + sign will increase the number of entry signals and also the score value. The maximum number of signals  in SameBar Multi-Signal selection is 5. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
+
+						<br />
+					</p>
+				</blockquote>
+				<h4>2.4.4 Set score value in SameBar Multi-Signal entry/exit criteria</h4>
+				<blockquote>
+					<p>
+						<br />
+						Set a value of score to specify how many signals will occur at the same bar to trigger the backtest criteria.
+if choose score 1, meanning if any one signal of the selected signals occur the backtest criteria is met.
+if choose score 2, meanning if any two of the signals of the selected signals occur the backtest criteria is met. etc.
+For example:
+If the backtest criteria needs to have a "AND" condition of 2 signals, set two signals below and choose score 2.
+If the backtest criteria needs to have a "OR" condition of 2 signals, set two signals below and choose score 1. etc.
+						<br />
+					</p>
+				</blockquote>
+				]<h4>2.4.5 Run Backtest and view results</h4>
+				<blockquote>
+					<p>
+						<br />
+					Click Run Backtest button to run the backtest and view results.
+						<br />
+					</p>
+				</blockquote>
+				<h3>
+					2.5 create a timeorder multi-signal entry/exit criteria new backtest
+				</h3>
+				<h4>2.5.1 Fill in the basic information for the backtest</h4>
+				<blockquote>
+					<p>
+						<br />
+According to your own needs, fill in the relevant parameters of the backtest, including Starting
+						Capital、Commission、Benchmark、Backtest History....
+						<br />
+					</p>
+				</blockquote>
+				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
+				<h4>2.5.2 Fill in the entry criteria</h4>
+				<blockquote>
+					<p>
+						<br />
+						TimeOrder Multi-Signal means that when multiple signals occur in time order the backtest criteria is met. Select TimeOrder Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  period value is 2. Clicking on the + sign will increase the number of entry signals and also the period value. The maximum number of signals  in SameBar Multi-Signal selection is 3. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
+						<br />
+					</p>
+				</blockquote>
+				<!-- <img
+					src="../../assets/helpImg/timeframe-criteria.png"
+					alt="Set Up Form"
+				/> -->
+				<h4>2.5.3 Fill in the exit criteria</h4>
+				<blockquote>
+					<p>
+						<br />
+					TimeOrder Multi-Signal means that when multiple signals occur in time order the backtest criteria is met. Select TimeOrder Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  period value is 2. Clicking on the + sign will increase the number of entry signals and also the period value. The maximum number of signals  in SameBar Multi-Signal selection is 3. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
+						<br />
+					</p>
+				</blockquote>
+				<h4>2.5.4 Set period value in timeorder Multi-Signal entry/exit criteria</h4>
+				<blockquote>
+					<p>
+						<br />
+						Set a value to specify how many bars within which the selected signals will occur in time order to trigger the backtest criteria.
+if choose score 1, meaning if the selected signals occuring at the samebar the backtest criteria is met.
+if choose score 2, meaning if the selected signals occuring within two bars the backtest criteria is met. etc.
+For example:
+If the backtest criteria needs to have two consecutive signals, set two signals below and choose period 2.
+If the backtest criteria needs to have two signals occuring within 3 bars, set two signals below and period 3. etc.
+						<br />
+					</p>
+				</blockquote>
+				
+				<h4>2.5.5 Run Backtest and view results</h4>
+				<blockquote>
+					<p>
+						<br />Click Run Backtest button to run the backtest and view results.
 						<br />
 					</p>
 				</blockquote>
 
-        <h1>3. add backtest to my favorites</h1>
-				<h3>3.1 打开 Backtest History 标签页</h3>				
-        <blockquote>
-					<p>
-						<br />
-						找出你想添加收藏的回测，点击 add to favorites
-						按钮, 即可将回测添加至收藏夹。
-						<br />
-					</p>
-				</blockquote>
-				<img src="../../assets/helpImg/add-fa.png" alt="Add To Favorites">
-
-				<h3>3.2 查看收藏夹中的回测</h3>
+				<h3>
+					2.6 set the value of delay of bars
+				</h3>
+				<h4>2.6.1 set the value of delay of bars in entry criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						打开 My Favorites
-						标签页即可查看收藏的回测，你可以在这里移除回测收藏、编辑回测以及查看回测结果。
+						Check this option to delay the specified number of bars to enter when the entry criteria is met. Set the value preferred.
 						<br />
 					</p>
 				</blockquote>
-        
-				<img src="../../assets/helpImg/fa-list.png" alt="View favorites">
-				<h1>4. copy a sample backtest</h1>
+				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
+				<h4>2.6.2 set the value of delay of bars in entry criteria</h4>
+				<blockquote>
+					<p>
+						<br />
+						Check this option to delay the specified number of bars to exit when the exit criteria is met. Set the value preferred.
+						<br />
+					</p>
+				</blockquote>
+				<!-- <img
+					src="../../assets/helpImg/timeframe-criteria.png"
+					alt="Set Up Form"
+				/> -->
+				<h1>3. Add created backtest to My Favorites</h1>
+				<h3>3.1 Open the Backtest History tab</h3>
+				<blockquote>
+					<p>
+						<br />Open the Backtest History tab, choose which backtest you want to add to the favorites, and click the add to favorites button.
+						<br />
+					</p>
+				</blockquote>
+				<!-- <img src="../../assets/helpImg/add-fa.png" alt="Add To Favorites" /> -->
+
+				<h3>3.2 View backtest in My Favorites</h3>
+				<blockquote>
+					<p>
+						<br />
+						Open My Favorites
+						tab to view your favorite backtests, where you can remove backtesting collections, edit backtests, and view backtest results.
+						<br />
+					</p>
+				</blockquote>
+
+				<!-- <img src="../../assets/helpImg/fa-list.png" alt="View favorites" /> -->
+				<h1>4. edit a created backtest</h1>
 				<blockquote class="video_link">
 					<i class="el-icon-video-play"></i>
-					<a href="#">Sample Backtest的演示视频</a>
+					<a href="#">Sample Backtest demo video</a>
 				</blockquote>
-				<h3>4.1 打开 Sample Backtests 标签页</h3>
+				<h3>4.1 Open the Backtest History tab</h3>
 				<!-- <img src="../../assets/sample-backtests.png" alt="Sample Backtests"> -->
 				<blockquote>
 					<p>
 						<br />
-						打开 Sample Backtests 标签页, 点击 copy backtest 按钮。
+						Open the Backtest History tab, choose which backtest you want to edit, and click the edit backtest button.
 						<br />
 					</p>
 				</blockquote>
-				<h3>4.2 在 Backtest History 中编辑后运行</h3>
+				<h3>4.2 Edit in Set Up Backtest</h3>
 				<!-- <img src="../../assets/copy-backtests.png" alt="Copy Backtests"> -->
 				<blockquote>
 					<p>
-						<br />
-						打开 Backtest History 标签页, 点击 edit backtest 按钮，对复制的
-						Sample Backtest 进行编辑。你可以看到部分按钮是不可用的，那是因为所有
-						复制的回测都要编辑以后才能进行查看结果等操作。
+						<br />When you click the edit backtest button, the information of the current backtest will be displayed in the form of the Set Up Backtest tab, where you can modify the backtest data. When you're done editing, click Run Backtest
+						Run the modified backtest and view the results.
 						<br />
 					</p>
 				</blockquote>
-      <h1>5. view result of a created backtest</h1>
-				<h3>5.1 打开 Backtest History 标签页</h3>
+				<h1>5. view result of a created backtest</h1>
+				<h3>5.1 Open the Backtest History tab</h3>
 				<!-- <img src="../../assets/history-add-favorite.png" alt="Add To Favorites"> -->
 				<blockquote>
 					<p>
 						<br />
-						找出你想查看结果的回测，点击 view backtest results
-						按钮, 就可以查看当前回测的结果。
+Open the Backtest History tab, choose which backtest you want to edit, and click the view backtest results button.
 						<br />
 					</p>
 				</blockquote>
-				<h3>5.2 修改当前的回测参数</h3>
+				<h3>5.2 Modify the current backtesting parameters</h3>
 				<!-- <img src="../../assets/see-favorites.png" alt="View favorites"> -->
 				<blockquote>
 					<p>
 						<br />
-            当点击按钮查看结果时，Set Up Backtest会展示当前查看结果的回测的具体参数，如果你对这个回测的结果不满意，可以返回Set Up Backtest标签页进行修改，修改后点击Run Backtest运行修改后的回测。
+						When you click the button to view the results, Set Up
+						Backtest will show the specific parameters of the backtest of the current viewing result, and if you are not satisfied with the results of this backtest, you can return to Set
+						Edit the Up Backtest tab, click Run Backtest to run the modified backtest.
+						<br />
+					</p>
+				</blockquote>
+								<h1>6. copy a sample backtest</h1>
+				<blockquote class="video_link">
+					<i class="el-icon-video-play"></i>
+					<a href="#">Sample Backtest demo video</a>
+				</blockquote>
+				<h3>6.1 Open the Sample Backtests tab</h3>
+				<!-- <img src="../../assets/sample-backtests.png" alt="Sample Backtests"> -->
+				<blockquote>
+					<p>
+						<br />
+						Open the Sample Backtests tab and click the copy backtest button.
+						<br />
+					</p>
+				</blockquote>
+				<h3>6.2 Edit and run a copied backtest</h3>
+				<!-- <img src="../../assets/copy-backtests.png" alt="Copy Backtests"> -->
+				<blockquote>
+					<p>
+						<br />Open the Backtest History tab, choose the copied backtest to edit. Some of the action buttons to the copied backtest are not available because for all copied backtests results can only be viewed after edit and run is completed.
 						<br />
 					</p>
 				</blockquote>
 			</section>
 			<el-aside>
 				<div style="margin: 0px 0 0 77px; font-size: 18px; font-weight: bold">
-					目录
+					directory
 				</div>
 				<el-tabs
 					@tab-click="handleClick"
 					v-model="activeName"
 					:tab-position="tabPosition"
-					style="height: 2000px"
+					style="height: auto"
 				>
 					<el-tab-pane
 						:name="'tab' + index"
@@ -449,14 +496,14 @@ export default {
 					if (this.navList[i].lev == 'lev1') {
 						document.querySelector('#' + navs[i].id).style.paddingLeft = '20px'
 					} else if (this.navList[i].lev == 'lev2') {
-						document.querySelector('#' + navs[i].id).style.paddingLeft = '35px'
+						document.querySelector('#' + navs[i].id).style.paddingLeft = '30px'
 					} else if (this.navList[i].lev == 'lev3') {
-						document.querySelector('#' + navs[i].id).style.paddingLeft = '50px'
+						document.querySelector('#' + navs[i].id).style.paddingLeft = '40px'
 					} else if (this.navList[i].lev == 'lev4') {
-						document.querySelector('#' + navs[i].id).style.paddingLeft = '65px'
+						document.querySelector('#' + navs[i].id).style.paddingLeft = '50px'
 						document.querySelector('#' + navs[i].id).style.fontWeight = '400'
 					} else if (this.navList[i].lev == 'lev5') {
-						document.querySelector('#' + navs[i].id).style.paddingLeft = '80px'
+						document.querySelector('#' + navs[i].id).style.paddingLeft = '60px'
 						document.querySelector('#' + navs[i].id).style.fontWeight = '400'
 					}
 				}
@@ -485,7 +532,7 @@ export default {
 	text-decoration: none;
 }
 .content {
-	margin: 0 auto 0 500px;
+	margin: 0 auto 0 510px;
 	max-width: 1280px;
 	padding: 10px;
 	position: relative;
@@ -518,11 +565,15 @@ export default {
 .el-aside {
 	position: fixed;
 	top: 0px;
-	left: 0px;
-	width: 435px !important;
-	height: auto;
+	left: 10px;
+	width: 500px !important;
+	height: 99%;
+	overflow-y: scroll;
 }
 .content-container {
 	position: relative;
+}
+scrollbar-track {
+	background-color: none;
 }
 </style>

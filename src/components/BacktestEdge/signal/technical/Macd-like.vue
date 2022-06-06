@@ -283,6 +283,9 @@ delay_bars: [String, Number],
 				  
 			}
 			let value = this.tech.value
+			if(value == 'SL') {
+				value = 'Single Line'
+			}
 			let condition = this.conditions[this.tech.condition].label
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			if (this.radio === 'Indicator Hist') {

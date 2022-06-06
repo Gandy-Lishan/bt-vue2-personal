@@ -389,6 +389,7 @@ export default {
 		// this.getIndexsList()
 		// this.getStocksList()
 		this.getEndDate()
+		console.log('setup重新渲染了')
 	},
 	computed: {
 		updateFreq() {
