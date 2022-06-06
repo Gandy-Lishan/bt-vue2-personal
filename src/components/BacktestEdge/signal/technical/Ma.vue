@@ -282,6 +282,31 @@ export default {
 				activatedMAList.push(objMA)
 
 				this.$store.commit('getMA', activatedMAList)
+
+				// update MA period
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					var sd = CIQ.stxx.layout.studies[studyInstanceName]
+					if (sd.type == 'ma') {
+						
+						// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
+						// dialogHelper.updateStudy({ inputs: { Period: val } });
+						var replaceStudy = {
+							name: 'Moving Average',
+							overlay: true,
+							calculateFN: CIQ.Studies.calculateMovingAverage,
+							inputs: {
+								Period: this.tech.maPeriod = 20,
+								Field: 'field',
+								Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
+								Offset: 0
+							},
+							outputs: { MA: '#FF0000' }
+						}
+						CIQ.Studies.studyLibrary[sd.type] = replaceStudy
+						var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
+						CIQ.store.commit('getMaPeriod', val)
+					}
+				}
 			}
 			if (val === ' ') {
 				this.tech.comparison = 'SC'
@@ -298,6 +323,31 @@ export default {
 					activatedMAList.splice(MAListIndex, 1)
 				}
 				this.$store.commit('getMA', activatedMAList)
+
+				// update MA period
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					var sd = CIQ.stxx.layout.studies[studyInstanceName]
+					if (sd.type == 'ma') {
+						
+						// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
+						// dialogHelper.updateStudy({ inputs: { Period: val } });
+						var replaceStudy = {
+							name: 'Moving Average',
+							overlay: true,
+							calculateFN: CIQ.Studies.calculateMovingAverage,
+							inputs: {
+								Period: this.tech.period,
+								Field: 'field',
+								Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
+								Offset: 0
+							},
+							outputs: { MA: '#FF0000' }
+						}
+						CIQ.Studies.studyLibrary[sd.type] = replaceStudy
+						var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
+						CIQ.store.commit('getMaPeriod', val)
+					}
+				}
 			}
 		},
 		getRadioSelect(val) {
