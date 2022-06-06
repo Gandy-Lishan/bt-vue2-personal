@@ -9,15 +9,15 @@
 				/>
 			</div>
 			<section data-v-15d0b2f8="">
-				<h1>Easy to get started backtest</h1>
+				<h1>Easy to use of BacktestEdge</h1>
 				<p>
-Here you can set the parameters of the backtesting system, such as the initial amount, slippage, start time and end time, etc., and then select
-					Different stock portfolios. The system simulates the real financial market based on the filled parameters
-					The trading rules carry out model buy and model sell, and data such as the number of trades and profitability are obtained.
-				</p>
-				<p>The documentation will teach you how to use the backtesting system in a video and graphic combination, now let's get started!</p>
+BacktestEdge utilizes the real data of financial&stock market and provides users a trading edge by backtesting trading strategies that are related to sentiment and technical indicators. Before you actually apply your trading strategy into live trading, BacktestEdge will help you backtest this strategy with actual result of return, number of trades and many other useful data within seconds! 
 
-				<h1>1. Describes the backtesting system</h1>
+
+				</p>
+				<p>This tutorial will teach you how to quickly start using BacktestEdge and thanks for reading!</p>
+
+				<h1>1.Brief introduction of BacktestEdge</h1>
 
 				<h3>1.1 Chart section</h3>
 				<blockquote class="video_link">
@@ -28,13 +28,7 @@ Here you can set the parameters of the backtesting system, such as the initial a
 				<blockquote>
 					<p>
 						<br />
-						Charts can not only reflect the movement of stocks, but also support chart interface interaction. In the chart, you can modify the backtested symbol in the chart
-						You can add your favorite indicators to favorites in the chart; you can customize the indicator in the chart
-						properties, such as the extremum and the color of the extremum curve; you can select indicator
-						Period (Daily, Weekly, Monthly);
-						You can change the theme of the icon in the chart settings (there are currently two themes of Dark and light); The clear chart below the chart is achievable
-						One-click clear chart; charts also support adding and removing background gridlines and removing last
-						price tag, but also with other visual aids.
+						In the chart section of BacktestEdge, users can select stock/index symbol to be backtested and add to favorites; select sentiment indicators and add to favorites; select technical indicators and modify settings; select timeframe among Daily/Weekly/Monthly; select the Day/Night theme of chart.
 						<br />
 					</p>
 				</blockquote>
@@ -44,17 +38,14 @@ Here you can set the parameters of the backtesting system, such as the initial a
 				<blockquote>
 					<p>
 						<br />
-						The form section has four tabs, and the Set up Backtest tab is used for Backtest
-						Of the Creation, the Backtest History tab displays all created backtests; Backtest Results
-						Used to show the results of a backtest; My Favorites
-						The Sample Backtest tab shows backtests for adding favorites; the Sample Backtest tab provides some Sample Backtests that you can copy and use in Backtest History.
+						In the chart section of BacktestEdge, users can select stock/index symbol to be backtested and add to favorites; select sentiment indicators and add to favorites; select technical indicators and modify settings; select timeframe among Daily/Weekly/Monthly; select the Day/Night theme of chart.
 						<br />
 					</p>
 				</blockquote>
 
 				<img src="../../assets/helpImg/form.png" alt="Form" />
 
-				<h1>2. How to create a backtest</h1>
+				<h1>2. How to create a new backtest</h1>
 				<blockquote class="video_link">
 					<i class="el-icon-video-play"></i>
 					<a href="#">Demonstration of the backtest creation process</a>
@@ -63,10 +54,8 @@ Here you can set the parameters of the backtesting system, such as the initial a
 				<h4>2.1.1 Fill in the basic parameters of the backtest</h4>
 				<blockquote>
 					<p>
-						<br />Open the Set up Backtest tab and fill in the basic information for the backtest, including Starting
-						Capital、Commission、Benchmark、Backtest
-						History.... If you don't know what each field means,
-						You can move the mouse over the question mark and the prompt box explains the meaning of each field.
+						<br />According to your own needs, fill in the relevant parameters of the backtest, including Starting
+						Capital、Commission、Benchmark、Backtest History....
 						<br />
 					</p>
 				</blockquote>
@@ -79,10 +68,10 @@ Here you can set the parameters of the backtesting system, such as the initial a
 				<blockquote>
 					<p>
 						<br />
-						Select a Sentiment Indicator or Technical in the drop-down box
-						Indicator, fill in the indicator value. To make sure your indicators have a payoff, for Sentiment
-						Indicator We recommend that you fill out Extreme Optimism and Extreme Pessimism
-						The value between.
+						Select Single Signal in the drop-down list in the
+upper right corner of the Entry Criteria section;
+Select a sentiment or indicator from the drop-down box indicator field, fill in required value and choose condition in the signal section. 
+For sentiment indicator, the Extreme Optimism and Extreme Pessimism values are recommended. 
 						<br />
 					</p>
 				</blockquote>
@@ -92,9 +81,10 @@ Here you can set the parameters of the backtesting system, such as the initial a
 				<blockquote>
 					<p>
 						<br />
-You can select a Sential Indicator or Technical in the exit criteria
-						Indicator, fill in the indicator value. For Technical
-						Indicator We recommend that you fill in the indicator values in conjunction with the chart.
+Select Single Signal in the drop-down list in the
+upper right corner of the Entry Criteria section;
+Select a sentiment or indicator from the drop-down box indicator field, fill in required value and choose condition in the signal section. 
+For sentiment indicator, the Extreme Optimism and Extreme Pessimism values are recommended. 
 						<br />
 					</p>
 				</blockquote>
@@ -104,32 +94,27 @@ You can select a Sential Indicator or Technical in the exit criteria
 				<blockquote>
 					<p>
 						<br />
-When you're done filling out the form, click Run Backtest
-						button to run and view the results, running a backtest will take a certain amount of time, please be patient. After the backtesting run ends, it jumps automatically
-						to Backtest Results
-						The tab displays the data after the successful backtesting operation, including the number of transactions, buy points and sell points. If you create a backtest without trading, you can be in
-						Backtest History
-						tab, click the Edit button, modify the backtest data, save and rerun.
+After filling out the backtest form, click "Run Backtest" button to run the backtest and view the backtest results. The runtime of backtest will take more than 30 seconds to finish. After the backtest is completed, it will jump to Backtest Results tab to display the backtest results, including the number of trades, entry & exit points etc. If the backtest has no trades, you can go to Backtest History tab and click 'Edit" icon to modify backtest data. 
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-result.png" alt="Summary" /> -->
-				<h3>2.2 set stop/loss in exit criteria</h3>
-				<h4>2.2.1 Check Stop Loss in the Backtesting Basics</h4>
+				<h3>2.2 Use Risk Control at Exit</h3>
+				<h4>2.2.1 Set stop/loss </h4>
 				<blockquote>
 					<p>
-						<br />Open the Set up Backtest tab, fill in the basic information of the backtest, and check Rise Control at
-						Exit, in the pop-up Take Profit, Stop Loss, Time In Market, only check Stop
-						Loss, you can fill in the corresponding value according to your needs, you can also use the default value of 10%.
+						<br />To use stop/loss as an OR condition with exit criteria, check "Risk Control at Exit" and then fill in value in the "Take Profit" and "Stop Loss"
+fieldboxes. 
+
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/stoploss-setup.png" alt="Set Up Form" /> -->
-				<h4>2.2.2 Fill in the entry conditions</h4>
+				<h4>2.2.2 Set time-in-market</h4>
 				<blockquote>
 					<p>
 						<br />
-						Select Single Signal in the drop-down box in the upper right corner of the entry condition (you can also choose Summerbar Multi-Signal or Timeorder Multi-Signal, multi-signal also supports Stop Loss) and fill in the signal indicator.
+						To use time-in-market as an OR condition with exit criteria, check "Risk Control at Exit" and then fill in value in the "Time in Market" fieldbox. 
 						<br />
 					</p>
 				</blockquote>
@@ -137,15 +122,11 @@ When you're done filling out the form, click Run Backtest
 					src="../../assets/helpImg/single-change-criteria.png"
 					alt="Set Up Form"
 				/> -->
-				<h4>2.2.3 Select Early Use Risk Control in the exit criteria</h4>
+				<h4>2.2.3 Select Only Use Risk Control in the exit criteria</h4>
 				<blockquote>
 					<p>
-						<br />When you fill in the basic information for the backtest, tick Risk Control at
-						At the same time as Exit, at least check a Take Profit/Stop Loss/Time In Market, then there will be more Than use Risk in the drop-down box
-						Control this option. You can select Only in the drop-down option in the upper right corner of the exit condition
-						Use Risk Control, which means that the Stop Loss value will be used as your exit condition. You can also choose
-						In addition to the other next options of The Use Risk Control, such as Single-Signal, choosing Single-Signal means the sum of signals in Single-Signal
-						Stop Loss will be your exit condition.
+						<br />When Risk Control at Exit is checked and filled in with settings, the exit criteria will combine with the Risk Control settings as an OR condition.
+If you only want to use Risk Control at Exit settings as the exit criteria, select "Only Use Risk Control" in the drop down list in the upper right corner of the Exit Criteria section.
 						<br />
 					</p>
 				</blockquote>
@@ -153,82 +134,25 @@ When you're done filling out the form, click Run Backtest
 					src="../../assets/helpImg/single-only-stoploss.png"
 					alt="Set Up Form"
 				/> -->
-				<h4>2.2.4 Run a backtest and view the results</h4>
-				<blockquote>
-					<p>
-						<br />
-						Click the Run Backtest button to run the exit using Stop Loss's strategy to see the results.
-						<br />
-					</p>
-				</blockquote>
-
-				<h3>2.3 set time-in-market in exit criteria</h3>
-				<h4>2.3.1 Check Time In Market in Backtesting Basics</h4>
-				<blockquote>
-					<p>
-						<br />
-						Open the Set up Backtest tab, fill in the basic information of the backtest, and check Rise Control at
-						Exit, in the pop-up Take Profit, Stop Loss, Time In Market, only tick Time In
-						Market, you can fill in the corresponding value according to your needs, you can also use, the default value of 120
-						Bars。
-						<br />
-					</p>
-				</blockquote>
-				<!-- <img
-					src="../../assets/helpImg/single-tim-setup.png"
-					alt="Set Up Form"
-				/> -->
-				<h4>2.3.2 Fill in the entry exit criteria</h4>
-				<blockquote>
-					<p>
-						<br />
-						Select Single Signal in the drop-down box in the upper right corner of the entry condition (you can also choose Summerbar Multi-Signal or Timeorder Multi-Signal, Multi Signal also supports Time In Market) and fill in the Signal Indicator.
-						<br />
-					</p>
-				</blockquote>
 				<!-- <img
 					src="../../assets/helpImg/single-change-criteria.png"
 					alt="Set Up Form"
 				/> -->
-				<h4>2.3.3 Select Early Use Risk Control in the exit criteria</h4>
+				<h3>2.3 set different backtest timeframe</h3>
+				<h4>2.3.1 Set timeframe to Daily</h4>
 				<blockquote>
 					<p>
 						<br />
-						When you fill in the basic information for the backtest, tick Risk Control at
-						At the same time as Exit, at least check a Take Profit/Stop Loss/Time In Market, then there will be more Than use Risk in the drop-down box
-						Control this option. You can select Only in the drop-down option in the upper right corner of the exit condition
-						Use Risk Control, which means that the Time In Market value will be used as your exit condition. You can also choose
-						In addition to the other next options of The Use Risk Control, such as Single-Signal, choosing Single-Signal means signaling and Time In in Single-Signal
-						The Market will be your exit condition
-						<br />
-					</p>
-				</blockquote>
-				<!-- <img src="../../assets/helpImg/single-tim-exit.png" alt="Set Up Form" /> -->
-				<h4>2.3.4 Run a backtest and view the results</h4>
-				<blockquote>
-					<p>
-						<br />
-						Click the Run Backtest button to run exit using Time In Market's strategy to view the results.
-						<br />
-					</p>
-				</blockquote>
-
-				<h3>2.4 set different backtest timeframe</h3>
-				<h4>2.4.1 Modify the timeframe in the backtesting basics</h4>
-				<blockquote>
-					<p>
-						<br />
-						Open the Set up Backtest tab, fill in the basic information of the backtest, and modify the Timeframe
-						The value of Weekly, you can also modify it to Montthly, there are three options in total: Daily, Weekly, and Monthly.
+						When the timeframe in Set up Backtest tab is set to Daily, the sentiment indicators in the entry and exit criteria sections will only have sentiment indicators with daily updates.
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
-				<h4>2.4.2 Fill in the entry and exit conditions</h4>
+				<h4>2.3.2 Set timeframe to Weekly</h4>
 				<blockquote>
 					<p>
 						<br />
-						Fill in the entry and exit conditions according to your needs.
+						When the timeframe in Set up Backtest tab is set to Weekly, the sentiment indicators in the entry and exit criteria sections will have sentiment indicators with daily and weekly updates.
 						<br />
 					</p>
 				</blockquote>
@@ -236,18 +160,18 @@ When you're done filling out the form, click Run Backtest
 					src="../../assets/helpImg/timeframe-criteria.png"
 					alt="Set Up Form"
 				/> -->
-				<h4>2.4.3 Run a backtest and view the results</h4>
+				<h4>2.3.3 Set timeframe to Monthly</h4>
 				<blockquote>
 					<p>
 						<br />
-						Click the Run Backtest button to run the policy that modifies the Timeframe and view the results.
+						When the timeframe in Set up Backtest tab is set to Monthly, the sentiment indicators in the entry and exit criteria sections will have sentiment indicators with daily/weekly/monthly updates.
 						<br />
 					</p>
 				</blockquote>
 				<h3>
-					2.5 create a sameday multi-signal entry/exit criteria new backtest
+					2.4 create a sameday multi-signal entry/exit criteria new backtest
 				</h3>
-				<h4>2.5.1 Fill in the basic information for the backtest</h4>
+				<h4>2.4.1 Fill in the basic information for the backtest</h4>
 				<blockquote>
 					<p>
 						<br />
@@ -257,13 +181,67 @@ When you're done filling out the form, click Run Backtest
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
-				<h4>2.5.2 Fill in the entry conditions</h4>
+				<h4>2.4.2 Fill in the entry criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						Select SameBar Multi-Signal in the drop-down box in the upper right corner of the entry signal,
-						Then the signal1 and Signal2 signal panels will pop up by default, and the default Score value is 2. Clicking on the + sign below the SameBar Multi-Signal increases the entry signal and the score value.
-						When SameBar Multi-Signal is selected, the entry can only be increased to a maximum of 5 signals. Next, you need to fill in each signal panel corresponding to the entry condition as if filling out a single signal.
+						SameBar Multi-Signal means that when multiple signals occur at the same bar the backtest criteria is met. Select SameBar Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  score value is 2. Clicking on the + sign will increase the number of entry signals and also the score value. The maximum number of signals  in SameBar Multi-Signal selection is 5. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
+
+						<br />
+					</p>
+				</blockquote>
+				<!-- <img
+					src="../../assets/helpImg/timeframe-criteria.png"
+					alt="Set Up Form"
+				/> -->
+				<h4>2.4.3 Fill in the exit criteria</h4>
+				<blockquote>
+					<p>
+						<br />
+						SameBar Multi-Signal means that when multiple signals occur at the same bar the backtest criteria is met. Select SameBar Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  score value is 2. Clicking on the + sign will increase the number of entry signals and also the score value. The maximum number of signals  in SameBar Multi-Signal selection is 5. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
+
+						<br />
+					</p>
+				</blockquote>
+				<h4>2.4.4 Set score value in SameBar Multi-Signal entry/exit criteria</h4>
+				<blockquote>
+					<p>
+						<br />
+						Set a value of score to specify how many signals will occur at the same bar to trigger the backtest criteria.
+if choose score 1, meanning if any one signal of the selected signals occur the backtest criteria is met.
+if choose score 2, meanning if any two of the signals of the selected signals occur the backtest criteria is met. etc.
+For example:
+If the backtest criteria needs to have a "AND" condition of 2 signals, set two signals below and choose score 2.
+If the backtest criteria needs to have a "OR" condition of 2 signals, set two signals below and choose score 1. etc.
+						<br />
+					</p>
+				</blockquote>
+				]<h4>2.4.5 Run Backtest and view results</h4>
+				<blockquote>
+					<p>
+						<br />
+					Click Run Backtest button to run the backtest and view results.
+						<br />
+					</p>
+				</blockquote>
+				<h3>
+					2.5 create a timeorder multi-signal entry/exit criteria new backtest
+				</h3>
+				<h4>2.5.1 Fill in the basic information for the backtest</h4>
+				<blockquote>
+					<p>
+						<br />
+According to your own needs, fill in the relevant parameters of the backtest, including Starting
+						Capital、Commission、Benchmark、Backtest History....
+						<br />
+					</p>
+				</blockquote>
+				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
+				<h4>2.5.2 Fill in the entry criteria</h4>
+				<blockquote>
+					<p>
+						<br />
+						TimeOrder Multi-Signal means that when multiple signals occur in time order the backtest criteria is met. Select TimeOrder Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  period value is 2. Clicking on the + sign will increase the number of entry signals and also the period value. The maximum number of signals  in SameBar Multi-Signal selection is 3. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
 						<br />
 					</p>
 				</blockquote>
@@ -275,174 +253,49 @@ When you're done filling out the form, click Run Backtest
 				<blockquote>
 					<p>
 						<br />
-						Select SameBar Multi-Signal in the drop-down box in the upper right corner of the exit signal,
-						Then the signal1 and Signal2 signal panels will pop up by default, and the default Score value is 2. Clicking the + sign below the SaveBar Multi-Signal increases the exit signal and the score value.
-						When SamBar Multi-Signal is selected, the exit can only be increased to a maximum of 5 signals. Next, you need to fill in each signal panel corresponding to the exit condition as if you were filling out a single signal.
+					TimeOrder Multi-Signal means that when multiple signals occur in time order the backtest criteria is met. Select TimeOrder Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  period value is 2. Clicking on the + sign will increase the number of entry signals and also the period value. The maximum number of signals  in SameBar Multi-Signal selection is 3. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
 						<br />
 					</p>
 				</blockquote>
-				<h4>2.5.4 Run a backtest and view the results</h4>
+				<h4>2.5.4 Set period value in timeorder Multi-Signal entry/exit criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						Click the Run Backtest button to run using The SaveBar
-						Multi-Signal backtests, and view the results.
+						Set a value to specify how many bars within which the selected signals will occur in time order to trigger the backtest criteria.
+if choose score 1, meaning if the selected signals occuring at the samebar the backtest criteria is met.
+if choose score 2, meaning if the selected signals occuring within two bars the backtest criteria is met. etc.
+For example:
+If the backtest criteria needs to have two consecutive signals, set two signals below and choose period 2.
+If the backtest criteria needs to have two signals occuring within 3 bars, set two signals below and period 3. etc.
 						<br />
 					</p>
 				</blockquote>
-				<h3>
-					2.6 create a timeorder multi-signal entry/exit criteria new backtest
-				</h3>
-				<h4>2.6.1 Fill in the basic information for the backtest</h4>
+				
+				<h4>2.5.5 Run Backtest and view results</h4>
 				<blockquote>
 					<p>
-						<br />
-According to your own needs, fill in the relevant parameters of the backtest, including Starting
-						Capital、Commission、Benchmark、Backtest History....
-						<br />
-					</p>
-				</blockquote>
-				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
-				<h4>2.6.2 The entry condition is TimeOrder Multi-Signal</h4>
-				<blockquote>
-					<p>
-						<br />
-						Select TimeOrder Multi-Signal in the drop-down box in the upper right corner of the entry signal,
-						Then the signal1 and Signal2 signal panels will pop up by default, and the default Period value is 2. Clicking on the + sign below the TimeOrder Multi-Signal increases the entry signal and the value of period increases.
-						When TimeOrder Multi-Signal is selected, the entry can only be increased to a maximum of 3 signals. Next, you need to fill in each signal panel corresponding to the entry condition as if filling out a single signal.
-						<br />
-					</p>
-				</blockquote>
-				<!-- <img
-					src="../../assets/helpImg/timeframe-criteria.png"
-					alt="Set Up Form"
-				/> -->
-				<h4>2.6.3 The exit condition is TimeOrder Multi-Signal</h4>
-				<blockquote>
-					<p>
-						<br />
-					Select TimeOrder Multi-Signal in the drop-down box in the upper-right corner of the exit signal,
-						Then the signal1 and Signal2 signal panels will pop up by default, and the default Period value is 2. Clicking the + sign below the TimeOrder Multi-Signal increases the exit signal and the value of Period.
-						When TimeOrder Multi-Signal is selected, the exit can only be increased to a maximum of 3 signals. Next, you need to fill in each signal panel corresponding to the exit condition as if you were filling out a single signal.
-						<br />
-					</p>
-				</blockquote>
-				<h4>2.6.4 Run a backtest and view the results</h4>
-				<blockquote>
-					<p>
-						<br />
-						Click the Run Backtest button to run using TimeOrder
-						Multi-Signal backtests, and view the results.
-						<br />
-					</p>
-				</blockquote>
-				<h3>
-					2.7 set score value in sameday multi-signal entry/exit criteria
-				</h3>
-				<h4>2.7.1 Fill in the basic information for the backtest</h4>
-				<blockquote>
-					<p>
-						<br />
-							According to your own needs, fill in the relevant parameters of the backtest, including Starting
-						Capital、Commission、Benchmark、Backtest History....
-						<br />
-					</p>
-				</blockquote>
-				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
-				<h4>2.7.2 Modify the value of the Score in the entry condition</h4>
-				<blockquote>
-					<p>
-						<br />
-						Select Sambar Multi-Signal in the drop-down box in the upper right corner of the entry signal,
-						Then the signal panels of Signal1 and Signal2 will pop up by default, the current Score value is 2 (the Score value is equal to the number of incoming signals by default), if you don't want to use the current Score value, you can fill in an integer greater than 1 less than the number of entry signals. Next you need
-						Fill in each signal panel corresponding to the entry condition.
-						<br />
-					</p>
-				</blockquote>
-				<!-- <img
-					src="../../assets/helpImg/timeframe-criteria.png"
-					alt="Set Up Form"
-				/> -->
-				<h4>2.7.3 在退场条件中修改Score的值</h4>
-				<blockquote>
-					<p>
-						<br />
-						Modify the value of the Score in the exit condition
-						<br />
-					</p>
-				</blockquote>
-				<h4>2.7.4 Run a backtest and view the results</h4>
-				<blockquote>
-					<p>
-						<br />
-						Click the Run Backtest button to run a custom Score multi-signal backtest and view the results.
-						<br />
-					</p>
-				</blockquote>
-				<h3>
-					2.8 set period value in timeorder multi-signal entry/exit criteria
-				</h3>
-				<h4>2.8.1 Fill in the basic information for the backtest</h4>
-				<blockquote>
-					<p>
-						<br />
-						According to your own needs, fill in the relevant parameters of the backtest, including Starting
-						Capital、Commission、Benchmark、Backtest History....
-						<br />
-					</p>
-				</blockquote>
-				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
-				<h4>2.8.2 Modify the value of Period in the entry condition</h4>
-				<blockquote>
-					<p>
-						<br />
-						Select TimeOrder Multi-Signal in the drop-down box in the upper right corner of the entry signal,
-						Then by default, the signal panels of Signal1 and Signal2 will pop up, the current Period value is 2 (the Period value is equal to the number of entry signals by default), if you do not want to use the current Period value, you can fill in any integer greater than 1. Next you need
-						Fill in each signal panel corresponding to the entry condition.
-						<br />
-					</p>
-				</blockquote>
-				<!-- <img
-					src="../../assets/helpImg/timeframe-criteria.png"
-					alt="Set Up Form"
-				/> -->
-				<h4>2.8.3 Modify the value of Period in the exit condition</h4>
-				<blockquote>
-					<p>
-						<br />
-						Select TimeOrder Multi-Signal in the drop-down box in the upper-right corner of the exit signal,
-						Then the signal panels of Signal1 and Signal2 will pop up by default, the current Period value is 2 (the Period value defaults to equal to the number of exit signals), if you do not want to use the current Periodic value, you can fill in any integer greater than 1. Next you need
-						Fill in each signal panel corresponding to the exit condition.
-						<br />
-					</p>
-				</blockquote>
-				<h4>2.8.4 Run a backtest and view the results</h4>
-				<blockquote>
-					<p>
-						<br />
-						Click the Run Backtest button to run a custom Period multi-signal backtest and view the results.
+						<br />Click Run Backtest button to run the backtest and view results.
 						<br />
 					</p>
 				</blockquote>
 
 				<h3>
-					2.9 set a delay of entry/exit criteria
+					2.6 set the value of delay of bars
 				</h3>
-				<h4>2.9.1 Fill in the basic information for the backtest</h4>
+				<h4>2.6.1 set the value of delay of bars in entry criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						According to your own needs, fill in the relevant parameters of the backtest, including Starting
-						Capital、Commission、Benchmark、Backtest History....
+						Check this option to delay the specified number of bars to enter when the entry criteria is met. Set the value preferred.
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
-				<h4>2.9.2 Modify the Layer of Bars in the entry conditions</h4>
+				<h4>2.6.2 set the value of delay of bars in entry criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						Select any option in the drop-down box in the upper right corner of the entry signal, such as The Flamebar Multi-Signal, and tick TheLay of Bars in the entry conditions. The Delay of Bars defaults to 1, and you can enter a number greater than 0 to modify the value of The Delay of Bars.
+						Check this option to delay the specified number of bars to exit when the exit criteria is met. Set the value preferred.
 						<br />
 					</p>
 				</blockquote>
@@ -450,33 +303,17 @@ According to your own needs, fill in the relevant parameters of the backtest, in
 					src="../../assets/helpImg/timeframe-criteria.png"
 					alt="Set Up Form"
 				/> -->
-				<h4>2.9.3 Modify the Layer of Bars in the exit conditions</h4>
-				<blockquote>
-					<p>
-						<br />Select any option in the drop-down box in the upper-right corner of the exit signal, such as TimeOrder Multi-Signal, and then tick TheLay of Bars in the exit conditions. The Delay of Bars defaults to 1, and you can enter a number greater than 0 to modify the value of The Delay of Bars.
-						<br />
-					</p>
-				</blockquote>
-				<h4>2.9.4 Run a backtest and view the results</h4>
-				<blockquote>
-					<p>
-						<br />
-						Click the Run Backtest button to run a backtest with The Layer of Bars and see the results.
-						<br />
-					</p>
-				</blockquote>
-				<h1>3. add backtest to my favorites</h1>
+				<h1>3. Add created backtest to My Favorites</h1>
 				<h3>3.1 Open the Backtest History tab</h3>
 				<blockquote>
 					<p>
-						<br />Find out which backtest you want to add to the favorites, click the add to favorites button,
-						to add backtesting to your favorites.
+						<br />Open the Backtest History tab, choose which backtest you want to add to the favorites, and click the add to favorites button.
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/add-fa.png" alt="Add To Favorites" /> -->
 
-				<h3>3.2 View backtesting in favorites</h3>
+				<h3>3.2 View backtest in My Favorites</h3>
 				<blockquote>
 					<p>
 						<br />
@@ -487,17 +324,17 @@ According to your own needs, fill in the relevant parameters of the backtest, in
 				</blockquote>
 
 				<!-- <img src="../../assets/helpImg/fa-list.png" alt="View favorites" /> -->
-				<h1>4. edit a sample backtest</h1>
+				<h1>4. edit a created backtest</h1>
 				<blockquote class="video_link">
 					<i class="el-icon-video-play"></i>
 					<a href="#">Sample Backtest demo video</a>
 				</blockquote>
-				<h3>4.1 Open the History Backtests tab</h3>
+				<h3>4.1 Open the Backtest History tab</h3>
 				<!-- <img src="../../assets/sample-backtests.png" alt="Sample Backtests"> -->
 				<blockquote>
 					<p>
 						<br />
-						Open the History Backtests tab, which houses all the created, copied, and edited backtests, find the backtest you want to edit in the list, and click the edit backtest button.
+						Open the Backtest History tab, choose which backtest you want to edit, and click the edit backtest button.
 						<br />
 					</p>
 				</blockquote>
@@ -516,8 +353,7 @@ According to your own needs, fill in the relevant parameters of the backtest, in
 				<blockquote>
 					<p>
 						<br />
-Find out the backtest you want to see the results of, click the view backtest results button,
-						It is possible to view the results of the current backtesting.
+Open the Backtest History tab, choose which backtest you want to edit, and click the view backtest results button.
 						<br />
 					</p>
 				</blockquote>
@@ -546,13 +382,11 @@ Find out the backtest you want to see the results of, click the view backtest re
 						<br />
 					</p>
 				</blockquote>
-				<h3>6.2 Edit and run in Backtest History</h3>
+				<h3>6.2 Edit and run a copied backtest</h3>
 				<!-- <img src="../../assets/copy-backtests.png" alt="Copy Backtests"> -->
 				<blockquote>
 					<p>
-						<br />Open the Backtest History tab and click the edit backtest button to copy
-						Sample Backtest for editing. You can see that part of the button is not available, that's because of all
-						The copied backtest must be edited before you can view the results.
+						<br />Open the Backtest History tab, choose the copied backtest to edit. Some of the action buttons to the copied backtest are not available because for all copied backtests results can only be viewed after edit and run is completed.
 						<br />
 					</p>
 				</blockquote>

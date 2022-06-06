@@ -69,14 +69,15 @@
 						element-loading-text="Loading..."
 						element-loading-spinner="el-icon-loading"
 						element-loading-background="rgba(0, 0, 0, 0.8)"
-					>
+					>                           
 						<div class="set-up-container" @click="tabContentClick">
+						<keep-alive>
 							<set-up
 								ref="setUpChild"
 								:backtestEditData="backtestEditData"
 								@IsRiskControl="IsRiskControl"
 								@setDirection="setDirection"
-							></set-up>
+							></set-up></keep-alive>
 							<div class="criteria-container">
 								<div class="criteria-box">
 									<entry
