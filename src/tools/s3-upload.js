@@ -15,6 +15,15 @@ AWS.config.region = bucketRegion; // 区域
 AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: IdentityPoolId,
 });
+let temp = AWS.config.credentials.params.IdentityId
+for (;;){
+    if (temp.indexOf("\"") ===-1 && temp.indexOf("\\") ===-1 && temp.indexOf("\'") ===-1){
+        break;
+    }
+    temp = temp.replace('\\','').replace("\'","").replace("\"","")
+}
+AWS.config.credentials.params.IdentityId = temp
+console.log(AWS.config.credentials.params.IdentityId)
 
 //方案2，代码内配置accessKeyId和secretAccessKey，可行
 // AWS.config.update({
@@ -42,7 +51,7 @@ s3_tool.upload = async (params) => {
     var upload = new AWS.S3.ManagedUpload({
         params: uploadParams
     });
-    
+    console.log(upload)
     var promise = upload.promise();
     return promise
 

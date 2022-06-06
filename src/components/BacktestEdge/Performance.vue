@@ -562,7 +562,6 @@ export default {
 		},
 		loadMarker(markerSet) {
 			//load markers for initial quotefeed
-			
 			let list = this.filterMarkerDate(
 				new Date(CIQ.initialDate.start),
 				new Date(CIQ.initialDate.end),
@@ -571,7 +570,30 @@ export default {
 			CIQ.store.commit('SetmarkerSet', markerSet)
 			CIQ.isMarkerShown = true
 			console.log("CIQ.loadChart from loadMarder()")
-			CIQ.loadChart(list, CIQ.addMarker)
+
+			let groups = this.group(list)
+			
+
+			for (let i = 0; i < groups.length; i++) {
+				setTimeout(() => {
+					CIQ.loadChart(groups[i], CIQ.addMarker)
+					console.log(groups[i])
+				}, 1000 * i);
+			}
+			//CIQ.loadChart(list, CIQ.addMarker)
+		},
+		group(data) {
+			var result = [];
+			var groupItem;
+			for (var i = 0; i < data.length; i++) {
+				if (i % 500 == 0) {
+					groupItem != null && result.push(groupItem);
+					groupItem = [];
+				}
+				groupItem.push(data[i]);
+			}
+			result.push(groupItem);
+			return result;
 		},
 		filterMarkerDate(start_date, end_date, markerSet) {
 			let list = []

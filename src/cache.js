@@ -29,11 +29,12 @@ export default class Cache {
         if(!localStorage.hasOwnProperty(_x)){continue;} 
         _xLen= ((localStorage[_x].length + _x.length)* 2);
         _lsTotal+=_xLen; 
-        console.log(_x+" = "+ (_xLen/1024).toFixed(2)+" KB")};
-        console.log("Total = " + (_lsTotal / 1024).toFixed(2) + " KB");
-        // if(_x == '/dev/favorites/'){
-        //   console.log(JSON.parse(localStorage[_x]).data.data)};
-        // }
+        // if(_x.indexOf('cognito') != -1){
+        //   console.log(_x+" = "+ localStorage[_x])
+        // };
+        console.log(_x+" = "+ (_xLen/1024).toFixed(2)+" KB");
+      }
+        console.log("Total = " + (_lsTotal / 1024).toFixed(2) + " KB");      
   }
 
   init() {
