@@ -565,7 +565,7 @@ copyBacktest: throttle(async function (row) {
 					//that.loading = false
 				})
 		},
-		restoreIndicatorLayoutEdit(data, freq, row) {
+		restoreIndicatorLayoutEdit(data, freq, row, resData) {
 				this.reloadData(data, freq)
 				var that = this
 				CIQ.addIndicatorsFromBacktest(function(){

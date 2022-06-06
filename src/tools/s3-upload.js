@@ -16,14 +16,17 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: IdentityPoolId,
 });
 let temp = AWS.config.credentials.params.IdentityId
-for (;;){
-    if (temp.indexOf("\"") ===-1 && temp.indexOf("\\") ===-1 && temp.indexOf("\'") ===-1){
-        break;
+if(temp){
+    for (;;){
+        if (temp.indexOf("\"") ===-1 && temp.indexOf("\\") ===-1 && temp.indexOf("\'") ===-1){
+            break;
+        }
+        temp = temp.replace('\\','').replace("\'","").replace("\"","")
     }
-    temp = temp.replace('\\','').replace("\'","").replace("\"","")
 }
+
 AWS.config.credentials.params.IdentityId = temp
-console.log(AWS.config.credentials.params.IdentityId)
+// console.log(AWS.config.credentials.params.IdentityId)
 
 //方案2，代码内配置accessKeyId和secretAccessKey，可行
 // AWS.config.update({
@@ -45,13 +48,11 @@ var s3 = new AWS.S3({
 
 const s3_tool = {};
 s3_tool.upload = async (params) => {
-    //console.log(params)
     var uploadParams = {Bucket: bucketName, Key: params.key, Body: params.val};
 
     var upload = new AWS.S3.ManagedUpload({
         params: uploadParams
     });
-    console.log(upload)
     var promise = upload.promise();
     return promise
 

@@ -921,26 +921,28 @@ export default {
 									if(attemptTime<4){
 										CIQ.outputSignalsResult(str,callback)
 										attemptTime++
+										console.log("retry the upload request...");
+									}else{
+										CIQ.hideCover()
+										CIQ.nprogress.done()
+										//vm.loading = false
+										alert('Upload JSON failed')	
 									}
-									
-									CIQ.hideCover()
-									CIQ.nprogress.done()
-									//vm.loading = false
-									alert('Upload JSON failed')	
 								}	
 							}else{
 								// 如果上传csv失败，自定义返回500， 重试，因为它不是axios请求，所以重试逻辑要自己写
-								console.log("Upload CSV failed", error);
+								console.log("Upload CSV failed");
 								// 重试
 								if(attemptTime<4){
 									CIQ.outputSignalsResult(str,callback)
 									attemptTime++
-								}
-
-								CIQ.hideCover()
-								CIQ.nprogress.done()
-								//vm.loading = false
-								alert('Upload CSV failed')							
+									console.log("retry the upload request...");
+								}else{
+									CIQ.hideCover()
+									CIQ.nprogress.done()
+									//vm.loading = false
+									alert('Upload CSV failed')		
+								}					
 							}						
 						}
 
