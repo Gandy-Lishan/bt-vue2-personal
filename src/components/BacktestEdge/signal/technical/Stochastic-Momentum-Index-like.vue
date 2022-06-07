@@ -360,6 +360,7 @@ delay_bars: [String, Number],
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
+				console.log("setEditData",newVal)
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)
@@ -376,6 +377,10 @@ delay_bars: [String, Number],
 					this.tech.valueD = obj.value
 				}
 				this.editTechVal = obj.indicator
+				//console.log("stocha this.radio",this.radio)
+					var cr = CIQ.store.state.conditionRadio
+					cr[this.criteria][this.panelIndex] = this.radio
+					CIQ.store.commit('setConditionRadio', cr)
 			}
 		}
 	}

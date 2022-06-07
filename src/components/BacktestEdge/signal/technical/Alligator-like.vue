@@ -421,6 +421,15 @@ delay_bars: [String, Number],
 					this.getRadio2Select(this.comparison2)
 				}
 				this.editTechVal = obj.indicator
+
+					var _obj = {
+						radio: this.radio,
+						radioValue: this.comparison2,
+						techValue: this.radio === 'first' ? this.tech.value : this.value2
+					}
+					var cr = CIQ.store.state.conditionRadio
+					cr[this.criteria][this.panelIndex] = JSON.stringify(_obj)
+					CIQ.store.commit('setConditionRadio', cr)
 			}
 		}
 	}
