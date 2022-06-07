@@ -390,6 +390,10 @@ delay_bars: [String, Number],
 				    this.tech.condition = Number(obj.condition)
 				}
 				this.editTechVal = obj.indicator
+
+					var cr = CIQ.store.state.conditionRadio
+					cr[this.criteria][this.panelIndex] = this.radio
+					CIQ.store.commit('setConditionRadio', cr)
 			}
 		}
 	}

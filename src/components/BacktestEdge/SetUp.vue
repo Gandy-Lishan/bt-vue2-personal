@@ -385,9 +385,11 @@ export default {
 	},
 	mounted() {
 		this.getIndicatorsList()
-		this.loadSentimentList('Daily')
+
 		// this.getIndexsList()
 		// this.getStocksList()
+		this.loadSentimentList('Daily')
+
 		this.getEndDate()
 		console.log('setup重新渲染了')
 	},
@@ -709,18 +711,38 @@ export default {
 				const res = await getIndicatorsList()
 				indicatorList = res.data
 			}
+
 			// vm.sentimentIndicatorList = res.data.map((obj) => {
 			// 	if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1) {
 			// 		return { value: obj.chart_name, url: obj.url, updated: obj.updated }
 			// 	}
 			// })
 			vm.sentimentIndicatorList = []
+
+				// if (vm.symbolList.length == 0) {
+				// 	await vm.getStocksList()
+				// }
+
 			if (frequency) {
 				indicatorList.forEach((element) => {
 					if (
 						frequency.toUpperCase().indexOf(element.updated.toUpperCase()) !==
 						-1
 					) {
+						// if(this.symbolList.find(i=>i.value==element.url)){
+                        //     let newName = element.url + ' Optix'
+						// 	vm.sentimentIndicatorList.push({
+						// 		value: newName,
+						// 		url: element.url,
+						// 		updated: element.updated
+						// 	})
+                        // }else{
+						// 	vm.sentimentIndicatorList.push({
+						// 		value: element.chart_name,
+						// 		url: element.url,
+						// 		updated: element.updated
+						// 	})
+                        // }
 						vm.sentimentIndicatorList.push({
 							value: element.chart_name,
 							url: element.url,
@@ -751,6 +773,20 @@ export default {
 			arr.forEach((fre) => {
 				data.forEach((element) => {
 					if (fre.toUpperCase().indexOf(element.updated.toUpperCase()) !== -1) {
+						// if(this.symbolList.find(i=>i.value==element.url)){
+                        //     let newName = element.url + ' Optix'
+						// 	vm.sentimentIndicatorList.push({
+						// 		value: newName,
+						// 		url: element.url,
+						// 		updated: element.updated
+						// 	})
+                        // }else{
+						// 	vm.sentimentIndicatorList.push({
+						// 		value: element.chart_name,
+						// 		url: element.url,
+						// 		updated: element.updated
+						// 	})
+                        // }
 						vm.sentimentIndicatorList.push({
 							value: element.chart_name,
 							url: element.url,

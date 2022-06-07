@@ -238,6 +238,7 @@ export default {
 		// sentiment search
 		indicatorSentimentSearch(queryString, cb) {
 			var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
+
 			sentimentIndicatorList.sort(function (a, b) {
 				return a.value.localeCompare(b.value)
 			})

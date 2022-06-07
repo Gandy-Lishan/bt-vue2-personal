@@ -245,6 +245,32 @@ export default {
 		clearFormValidate() {
 			this.$refs.maForm.clearValidate()
 		},
+		updateMAPeriod(val) {
+			// update MA period
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+				if (sd.type == 'ma') {
+					
+					// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
+					// dialogHelper.updateStudy({ inputs: { Period: val } });
+					var replaceStudy = {
+						name: 'Moving Average',
+						overlay: true,
+						calculateFN: CIQ.Studies.calculateMovingAverage,
+						inputs: {
+							Period: val,
+							Field: 'field',
+							Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
+							Offset: 0
+						},
+						outputs: { MA: '#FF0000' }
+					}
+					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
+					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
+					CIQ.store.commit('getMaPeriod', val)
+				}
+			}			
+		},
 		setRadio(val) {
 			this.clearFormValidate()
 			var obj = CIQ.store.state.conditionRadio
@@ -283,30 +309,7 @@ export default {
 
 				this.$store.commit('getMA', activatedMAList)
 
-				// update MA period
-				for (var studyInstanceName in CIQ.stxx.layout.studies) {
-					var sd = CIQ.stxx.layout.studies[studyInstanceName]
-					if (sd.type == 'ma') {
-						
-						// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
-						// dialogHelper.updateStudy({ inputs: { Period: val } });
-						var replaceStudy = {
-							name: 'Moving Average',
-							overlay: true,
-							calculateFN: CIQ.Studies.calculateMovingAverage,
-							inputs: {
-								Period: this.tech.maPeriod = 20,
-								Field: 'field',
-								Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
-								Offset: 0
-							},
-							outputs: { MA: '#FF0000' }
-						}
-						CIQ.Studies.studyLibrary[sd.type] = replaceStudy
-						var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
-						CIQ.store.commit('getMaPeriod', val)
-					}
-				}
+				this.updateMAPeriod(this.tech.maPeriod)
 			}
 			if (val === ' ') {
 				this.tech.comparison = 'SC'
@@ -324,30 +327,7 @@ export default {
 				}
 				this.$store.commit('getMA', activatedMAList)
 
-				// update MA period
-				for (var studyInstanceName in CIQ.stxx.layout.studies) {
-					var sd = CIQ.stxx.layout.studies[studyInstanceName]
-					if (sd.type == 'ma') {
-						
-						// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
-						// dialogHelper.updateStudy({ inputs: { Period: val } });
-						var replaceStudy = {
-							name: 'Moving Average',
-							overlay: true,
-							calculateFN: CIQ.Studies.calculateMovingAverage,
-							inputs: {
-								Period: this.tech.period,
-								Field: 'field',
-								Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
-								Offset: 0
-							},
-							outputs: { MA: '#FF0000' }
-						}
-						CIQ.Studies.studyLibrary[sd.type] = replaceStudy
-						var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
-						CIQ.store.commit('getMaPeriod', val)
-					}
-				}
+				this.updateMAPeriod(this.tech.period)
 			}
 		},
 		getRadioSelect(val) {
@@ -631,29 +611,7 @@ export default {
 				// this.$store.commit('delete', obj)
 				this.tech.period = val
 
-				for (var studyInstanceName in CIQ.stxx.layout.studies) {
-					var sd = CIQ.stxx.layout.studies[studyInstanceName]
-					if (sd.type == 'ma') {
-						
-						// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
-						// dialogHelper.updateStudy({ inputs: { Period: val } });
-						var replaceStudy = {
-							name: 'Moving Average',
-							overlay: true,
-							calculateFN: CIQ.Studies.calculateMovingAverage,
-							inputs: {
-								Period: val,
-								Field: 'field',
-								Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
-								Offset: 0
-							},
-							outputs: { MA: '#FF0000' }
-						}
-						CIQ.Studies.studyLibrary[sd.type] = replaceStudy
-						var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
-						CIQ.store.commit('getMaPeriod', val)
-					}
-				}
+				this.updateMAPeriod(val)
 			}
 		},
 		getMaValue: throttle(function (val) {
@@ -758,6 +716,10 @@ export default {
 					this.getSCvalue(this.tech.period)
 				}
 				this.editTechVal = obj.indicator
+
+					var cr = CIQ.store.state.conditionRadio
+					cr[this.criteria][this.panelIndex] = this.radio
+					CIQ.store.commit('setConditionRadio', cr)
 			}
 		}
 	}

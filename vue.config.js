@@ -8,6 +8,7 @@ function resolve(dir) {
 
 const config = {
 	publicPath: '/',
+	productionSourceMap: false,
 	configureWebpack: {
 		module: {
 			rules: [
