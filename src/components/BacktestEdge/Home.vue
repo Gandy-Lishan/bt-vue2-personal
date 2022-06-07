@@ -1084,7 +1084,10 @@ export default {
 			})
 		},
 		handleCommand(command) {
-			this.$router.push('/doc')
+			let routeUrl = this.$router.resolve({
+                path: '/doc',
+            });
+          window.open(routeUrl.href, '_blank');
 		},
 		isOnlyRiskControl(val) {
 			this.isOnlyRisk = val

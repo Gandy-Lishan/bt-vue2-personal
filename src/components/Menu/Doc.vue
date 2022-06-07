@@ -70,7 +70,7 @@ BacktestEdge utilizes the real data of financial&stock market and provides users
 						<br />
 						Select Single Signal in the drop-down list in the
 upper right corner of the Entry Criteria section;
-Select a sentiment or indicator from the drop-down box indicator field, fill in required value and choose condition in the signal section. 
+Select a sentiment or technical indicator from the drop-down box indicator field, fill in required value and choose condition in the signal section. 
 For sentiment indicator, the Extreme Optimism and Extreme Pessimism values are recommended. 
 						<br />
 					</p>
@@ -83,13 +83,13 @@ For sentiment indicator, the Extreme Optimism and Extreme Pessimism values are r
 						<br />
 Select Single Signal in the drop-down list in the
 upper right corner of the Entry Criteria section;
-Select a sentiment or indicator from the drop-down box indicator field, fill in required value and choose condition in the signal section. 
+Select a sentiment or technical indicator from the drop-down box indicator field, fill in required value and choose condition in the signal section. 
 For sentiment indicator, the Extreme Optimism and Extreme Pessimism values are recommended. 
 						<br />
 					</p>
 				</blockquote>
 				<!-- <img src="../../assets/helpImg/single-exit.png" alt="Exit Criteria" /> -->
-				<h4>2.1.4 Run the policy and view the results</h4>
+				<h4>2.1.4 Run the backtest and view the results</h4>
 
 				<blockquote>
 					<p>
@@ -180,29 +180,41 @@ If you only want to use Risk Control at Exit settings as the exit criteria, sele
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
+				<img src="../../assets/helpImg/scoreSetup.png" alt="Set Up Form" title="Set Up Form"/>
 				<h4>2.4.2 Fill in the entry criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						SameBar Multi-Signal means that when multiple signals occur at the same bar the backtest criteria is met. Select SameBar Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  score value is 2. Clicking on the + sign will increase the number of entry signals and also the score value. The maximum number of signals  in SameBar Multi-Signal selection is 5. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
+						SameBar Multi-Signal means that when multiple signals occur at the same bar the backtest criteria is met. Select SameBar Multi-Signal in the drop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  score value is 2. Clicking on the + sign will increase the number of entry signals and also the score value. The maximum number of signals  in SameBar Multi-Signal selection is 5. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
 
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img
-					src="../../assets/helpImg/timeframe-criteria.png"
-					alt="Set Up Form"
-				/> -->
+				<img
+					src="../../assets/helpImg/scoreEntry1.png"
+					alt="entry signal 1" title="entry signal 1"
+				/>
+								<img
+					src="../../assets/helpImg/scoreEntry2.png"
+					alt="entry signal 2" title="entry signal 2"
+				/>
 				<h4>2.4.3 Fill in the exit criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						SameBar Multi-Signal means that when multiple signals occur at the same bar the backtest criteria is met. Select SameBar Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  score value is 2. Clicking on the + sign will increase the number of entry signals and also the score value. The maximum number of signals  in SameBar Multi-Signal selection is 5. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
+						SameBar Multi-Signal means that when multiple signals occur at the same bar the backtest criteria is met. Select SameBar Multi-Signal in the drop-down box in the upper right corner of the exit criteria section; then signal1 and signal2 panels will show by default and the default  score value is 2. Clicking on the + sign will increase the number of exit signals and also the score value. The maximum number of signals  in SameBar Multi-Signal selection is 5. Then you can fill in each signal panel corresponding to the exit condition same as single-signal selection.
 
 						<br />
 					</p>
 				</blockquote>
+								<img
+					src="../../assets/helpImg/scoreExit1.png"
+					alt="exit signal 1" title="exit signal 1"
+				/>
+								<img
+					src="../../assets/helpImg/scoreExit2.png"
+					alt="exit signal 2" title="exit signal 2"
+				/>
 				<h4>2.4.4 Set score value in SameBar Multi-Signal entry/exit criteria</h4>
 				<blockquote>
 					<p>
@@ -216,7 +228,11 @@ If the backtest criteria needs to have a "OR" condition of 2 signals, set two si
 						<br />
 					</p>
 				</blockquote>
-				]<h4>2.4.5 Run Backtest and view results</h4>
+							<img
+					src="../../assets/helpImg/scoreChange.png"
+					alt="change exit score" title="change score"
+				/>
+				<h4>2.4.5 Run Backtest and view results</h4>
 				<blockquote>
 					<p>
 						<br />
@@ -236,27 +252,27 @@ According to your own needs, fill in the relevant parameters of the backtest, in
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
+				<img src="../../assets/helpImg/periodSetup.png" alt="Set Up Form" title="Set Up Form"/>
 				<h4>2.5.2 Fill in the entry criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						TimeOrder Multi-Signal means that when multiple signals occur in time order the backtest criteria is met. Select TimeOrder Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  period value is 2. Clicking on the + sign will increase the number of entry signals and also the period value. The maximum number of signals  in SameBar Multi-Signal selection is 3. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
+						TimeOrder Multi-Signal means that when multiple signals occur in time order the backtest criteria is met. Select TimeOrder Multi-Signal in the drop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  period value is 2. Clicking on the + sign will increase the number of entry signals and also the period value. The maximum number of signals  in SameBar Multi-Signal selection is 3. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img
-					src="../../assets/helpImg/timeframe-criteria.png"
-					alt="Set Up Form"
-				/> -->
+<img src="../../assets/helpImg/periodEntry1.png" alt="entry signal 1" title="entry signal 1"/>
+<img src="../../assets/helpImg/periodEntry2.png" alt="entry signal 2" title="entry signal 2"/>
 				<h4>2.5.3 Fill in the exit criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-					TimeOrder Multi-Signal means that when multiple signals occur in time order the backtest criteria is met. Select TimeOrder Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  period value is 2. Clicking on the + sign will increase the number of entry signals and also the period value. The maximum number of signals  in SameBar Multi-Signal selection is 3. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
+					TimeOrder Multi-Signal means that when multiple signals occur in time order the backtest criteria is met. Select TimeOrder Multi-Signal in the drop-down box in the upper right corner of the exit criteria section; then signal1 and signal2 panels will show by default and the default  period value is 2. Clicking on the + sign will increase the number of exit signals and also the period value. The maximum number of signals  in SameBar Multi-Signal selection is 3. Then you can fill in each signal panel corresponding to the exit condition same as single-signal selection.
 						<br />
 					</p>
 				</blockquote>
+				<img src="../../assets/helpImg/periodExit1.png" alt="exit signal 1" title="exit signal 1"/>
+<img src="../../assets/helpImg/periodExit2.png" alt="exit signal 2" title="exit signal 2"/>
 				<h4>2.5.4 Set period value in timeorder Multi-Signal entry/exit criteria</h4>
 				<blockquote>
 					<p>
@@ -270,6 +286,8 @@ If the backtest criteria needs to have two signals occuring within 3 bars, set t
 						<br />
 					</p>
 				</blockquote>
+								<img src="../../assets/helpImg/changePeriodEntry.png" alt="change entry period" title="change entry period"/>
+<img src="../../assets/helpImg/changePeriodExit.png" alt="change exit period" title="change exit period"/>
 				
 				<h4>2.5.5 Run Backtest and view results</h4>
 				<blockquote>
@@ -290,8 +308,9 @@ If the backtest criteria needs to have two signals occuring within 3 bars, set t
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
-				<h4>2.6.2 set the value of delay of bars in entry criteria</h4>
+				<img src="../../assets/helpImg/delayEntry1.png" alt="entry signal 1" title="entry signal 1"/>
+				<img src="../../assets/helpImg/delayEntry2.png" alt="entry signal 2" title="entry signal 2"/>
+				<h4>2.6.2 set the value of delay of bars in exit criteria</h4>
 				<blockquote>
 					<p>
 						<br />
@@ -299,10 +318,8 @@ If the backtest criteria needs to have two signals occuring within 3 bars, set t
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img
-					src="../../assets/helpImg/timeframe-criteria.png"
-					alt="Set Up Form"
-				/> -->
+                   <img src="../../assets/helpImg/delayExit1.png" alt="exit signal 1" title="exit signal 1"/>
+                   <img src="../../assets/helpImg/delayExit2.png" alt="exit signal 2" title="exit signal 2"/>
 				<h1>3. Add created backtest to My Favorites</h1>
 				<h3>3.1 Open the Backtest History tab</h3>
 				<blockquote>
@@ -363,8 +380,7 @@ Open the Backtest History tab, choose which backtest you want to edit, and click
 					<p>
 						<br />
 						When you click the button to view the results, Set Up
-						Backtest will show the specific parameters of the backtest of the current viewing result, and if you are not satisfied with the results of this backtest, you can return to Set
-						Edit the Up Backtest tab, click Run Backtest to run the modified backtest.
+						Backtest will show the specific parameters of the backtest of the current viewing result, and if you are not satisfied with the results of this backtest, you can return to edit the Set Up Backtest tab, click Run Backtest to run the modified backtest.
 						<br />
 					</p>
 				</blockquote>
