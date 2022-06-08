@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import cookies from 'vue-cookies'
-import axios from 'axios'
+import axios from '../axios'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import { getIndicatorsList } from "@/service/service"
+import { getIndicatorsList, getStocksList } from "@/service/service"
 import store from '../store/store'
 import https from 'https'
 
@@ -22,21 +22,57 @@ const router = new Router({
 	]
 })
 // router.beforeEach(async (to, from, next) => {
-// 	console.log("router.beforeEach1.1")
+// 	// 从根源替换allSymbolList
 // 	const res = await getIndicatorsList()
-// 	console.log("router.beforeEach1.2")
+// 	let allSymbolsList = res.data
+// 	const resStocks = await getStocksList()
+// 	let stocksList = resStocks.data
+// 	let newAllSymbolsList = []
+// 	for(var i=0;i<allSymbolsList.length;i++){
+// 		let item = allSymbolsList[i]
+// 		if(stocksList.find(j=>j.stock==item.url)){
+// 			let newName = item.url + ' Optix'
+// 			newAllSymbolsList.push({
+// 				chart_name: newName,
+// 				url: item.url,
+// 				updated: item.updated
+// 			})
+// 		}else{
+// 			newAllSymbolsList.push(allSymbolsList[i])
+// 		}
+// 	}
+	
 // 	CIQ.store = store
 // 	// 虽然用缓存了，但是还是用CIQ.indicatorList管理
-// 	CIQ.indicatorList = res.data
+// 	CIQ.indicatorList = newAllSymbolsList
 // 	return next()
 // })
 
 
 router.beforeEach(async (to, from, next) => {
+	// 从根源替换allSymbolList
 	const res = await getIndicatorsList()
+	let allSymbolsList = res.data
+	const resStocks = await getStocksList()
+	let stocksList = resStocks.data
+	let newAllSymbolsList = []
+	for(var i=0;i<allSymbolsList.length;i++){
+		let item = allSymbolsList[i]
+		if(stocksList.find(j=>j.stock==item.url)){
+			let newName = item.url + ' Optix'
+			newAllSymbolsList.push({
+				chart_name: newName,
+				url: item.url,
+				updated: item.updated
+			})
+		}else{
+			newAllSymbolsList.push(allSymbolsList[i])
+		}
+	}
+	
 	CIQ.store = store
 	// 虽然用缓存了，但是还是用CIQ.indicatorList管理
-	CIQ.indicatorList = res.data
+	CIQ.indicatorList = newAllSymbolsList
 
 	let loginUrl = 'https://users.sentimentrader.com/login'
 	let formateHost = location.origin
@@ -81,8 +117,8 @@ async function postAxiosRequest(loginUrl: string, next: any) {
 	}catch(err){
 		status = false
 	}
-
-	let res = await axios.post('/dev/user/')
+	//默认15秒超时，不过会针对一些可能耗时请求单独处理(对于容易堵塞的请求在等待3秒后就重发)
+	let res = await axios.post('/dev/user/',null,{timeout:3000})
 	
 	if (res.status === 200) {
 		next()

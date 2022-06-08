@@ -1,5 +1,6 @@
 <template>
 	<div class="perfprmance-container">
+		<p class="hint">Hint: Markers on the chart point to the buy/sell trader dates on the open <b>ONE</b> bar after entry/exit criteria met.</p>
 		<el-tabs
 			v-model="activePerTag"
 			type="card"
@@ -389,6 +390,7 @@
 				</div>
 			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
+			
 		</el-tabs>
 	</div>
 </template>
@@ -681,6 +683,14 @@ export default {
 }
 </script>
 <style scoped>
+.hint{
+	position: absolute;
+	font-size: 0.8rem;
+	color: black !important;
+	right:8px;
+	font-weight: 300;
+}
+
 .imgBox {
 	display: flex;
 	justify-content: center;

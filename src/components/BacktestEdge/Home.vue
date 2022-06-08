@@ -26,7 +26,10 @@
 			</div>
 			<header class="header">
 				<el-row type="flex" justify="center"
-					><el-col><p class="betaNote">BacktestEdge Beta</p></el-col>
+					><el-col>
+						<p class="betaNote">BacktestEdge Beta</p>
+						<p class="hint">Hint: Moving cursor out of chart area to scroll down the page below</p>
+					</el-col>
 				</el-row>
 				<div class="chart_box" id="chart_box">
 					<chart width="100%" height="100%"></chart>
@@ -1159,6 +1162,15 @@ main {
 		float: right;
 		margin: 1px 0 0 10px;
 	}
+}
+
+.hint{
+	position: absolute;
+	font-size: 0.8rem;
+	color: black !important;
+	bottom:-20px;
+	right:30px;
+	font-weight: 300;
 }
 
 button.toTop {

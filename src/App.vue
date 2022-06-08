@@ -60,7 +60,7 @@ export default {
 #nprogress .bar {
 	background: #2299ddcf !important;
 	z-index: 99999 !important; 
-	height: 8px !important; 
+	height: 10px !important; 
 }
 #nprogress .peg {
 	background: rgb(34 153 221 / 34%) !important;

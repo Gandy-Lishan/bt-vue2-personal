@@ -1,6 +1,6 @@
 const path = require('path')
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
-
+const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin')
 
 function resolve(dir) {
 	return path.join(__dirname, dir)
@@ -20,17 +20,42 @@ const config = {
 				}
 			]
 		},
-		// plugins:[
-        //     new UglifyJsPlugin({
-        //         uglifyOptions: {
-        //             compress:{
-        //                 drop_console:true,
-        //             }
-        //         }
-        //     })
-        // ]
+		plugins:[
+            // new UglifyJsPlugin({
+            //     uglifyOptions: {
+            //         compress:{
+            //             drop_console:true,
+            //         }
+            //     }
+            // }),
+			// 骨架屏
+			new SkeletonWebpackPlugin({
+				webpackConfig: {
+					entry: {
+						app: path.join(__dirname, './src/Skeleton.js')
+					}
+				},
+				minimize: true,
+				quiet: true,
+				router: {
+					mode: 'history',
+					routes: [
+						{ path: '/home', skeletonId: 'homeSkeleton' },
+						{ path: '/', skeletonId: 'homeSkeleton' }
+					]
+				}
+			})
+        ]
 	},
-	chainWebpack: (config) => {
+	// css: {
+    //     // 是否使用css分离插件 ExtractTextPlugin
+    //     extract: true,
+    //     // 开启 CSS source maps?
+    //     sourceMap: false,
+    //     // 启用 CSS modules for all css / pre-processor files.
+    //     modules: false
+    // },
+	chainWebpack: (config) => {  
 		config.resolve.alias
 			.set('assets', resolve('src/assets'))
 			.set('styles', resolve('src/assets/styles'))
