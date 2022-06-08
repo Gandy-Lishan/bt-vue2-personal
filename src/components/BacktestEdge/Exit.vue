@@ -1129,6 +1129,10 @@ export default {
 			// if (num == 1) {
 			// 	this.relation = 1
 			// }
+								let formateTechnicalList
+					if (this.$store.state.formateTechnicalList.length === 0) {
+						this.$refs.indiChild[0].loadShortLong()
+					}
 			for (let i = 0; i < num - 1; i++) {
 				this.handleTabsEdit(null, 'add')
 			}
@@ -1158,10 +1162,6 @@ export default {
 					this.indicatorValArr[j] = data.exit.signals[j].indicator
 					this.indicatorRadio = 'technical'
 					this.indicatorRadioArr.splice(j, 1, 'technical')
-					let formateTechnicalList
-					if (this.$store.state.formateTechnicalList.length === 0) {
-						this.$refs.indiChild[j].loadShortLong()
-					}
 					formateTechnicalList = this.$store.state.formateTechnicalList
 					let indicatorName = data.exit.signals[j].indicator
 					for (let i = 0; i < formateTechnicalList.length; i++) {

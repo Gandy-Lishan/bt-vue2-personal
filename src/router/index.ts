@@ -84,7 +84,18 @@ router.beforeEach(async (to, from, next) => {
 		let url = location.search
 		userId = subURLstrToUserid(url, loginUrl, formateHost)
 
-		let tmpStatus = postAxiosRequest(loginUrl, next)
+		let tmpStatus = postAxiosRequest(loginUrl, next
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			)
 		if (!tmpStatus){
 			// 请求失败会进入这个分支
 			tmpStatus = getAxiosRequest(userId, loginUrl, next)

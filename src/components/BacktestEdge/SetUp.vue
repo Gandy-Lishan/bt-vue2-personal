@@ -8,6 +8,35 @@
 		>
 			<el-row>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12">
+				
+					<el-form-item prop="symbol" label="Symbol">
+						<el-tooltip effect="dark" placement="top">
+                             <span slot="content">Choose a stock/index as backtest symbol. (default: SPY)<br/></span>
+							<i class="iconfont icon-wenhao"></i>
+                        </el-tooltip>
+						<div class="enterSymbolBox">
+							<el-select
+								v-model="bd.symbol"
+								id="symbolName"
+								filterable
+								remote
+								reserve-keyword
+								automatic-dropdown
+								@change="getSymbol(bd.symbol)"
+								placeholder="enter keywords"
+								:remote-method="remoteMethod"
+								:loading="loading"
+							>
+								<el-option
+									v-for="item in options"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value"
+								>
+								</el-option>
+							</el-select>
+						</div>
+					</el-form-item>
 					<el-form-item prop="capital" label="
 							Starting Capital">
                         <el-tooltip effect="dark" placement="top">
@@ -540,6 +569,9 @@ export default {
 
 		getBenchmark(val) {
 			this.bd.benchmark = val
+		},
+		getSymbol(val) {
+			this.$store.commit('getBacktestSymbol',val)
 		},
 		formateStartDate(val) {
 			this.bd.start_date = timestampToTime(val)

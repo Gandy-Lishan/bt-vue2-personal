@@ -59,10 +59,10 @@ BacktestEdge utilizes the real data of financial&stock market and provides users
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img
-					src="../../assets/helpImg/single-setup-demo.png"
-					alt="Set Up Form"
-				/> -->
+				<img
+					src="../../assets/helpImg/singleSetup.png"
+					alt="Set Up Form" title="Set Up Form"
+				/>
 
 				<h4>2.1.2 Fill in the entry criteria</h4>
 				<blockquote>
@@ -70,12 +70,12 @@ BacktestEdge utilizes the real data of financial&stock market and provides users
 						<br />
 						Select Single Signal in the drop-down list in the
 upper right corner of the Entry Criteria section;
-Select a sentiment or indicator from the drop-down box indicator field, fill in required value and choose condition in the signal section. 
+Select a sentiment or technical indicator from the drop-down box indicator field, fill in required value and choose condition in the signal section. 
 For sentiment indicator, the Extreme Optimism and Extreme Pessimism values are recommended. 
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img src="../../assets/helpImg/single-entry.png" alt="Entry Criteria" /> -->
+				<img src="../../assets/helpImg/singleEntry.png" alt="Entry Criteria" title="Entry Criteria" />
 
 				<h4>2.1.3 Fill in the exit criteria</h4>
 				<blockquote>
@@ -83,13 +83,14 @@ For sentiment indicator, the Extreme Optimism and Extreme Pessimism values are r
 						<br />
 Select Single Signal in the drop-down list in the
 upper right corner of the Entry Criteria section;
-Select a sentiment or indicator from the drop-down box indicator field, fill in required value and choose condition in the signal section. 
+Select a sentiment or technical indicator from the drop-down box indicator field, fill in required value and choose condition in the signal section. 
 For sentiment indicator, the Extreme Optimism and Extreme Pessimism values are recommended. 
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img src="../../assets/helpImg/single-exit.png" alt="Exit Criteria" /> -->
-				<h4>2.1.4 Run the policy and view the results</h4>
+								<img src="../../assets/helpImg/singleExit.png" alt="Exit Criteria" title="Exit Criteria" />
+
+				<h4>2.1.4 Run the backtest and view the results</h4>
 
 				<blockquote>
 					<p>
@@ -98,7 +99,7 @@ After filling out the backtest form, click "Run Backtest" button to run the back
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img src="../../assets/helpImg/single-result.png" alt="Summary" /> -->
+				<img src="../../assets/helpImg/runBacktest.png" alt="Summary" />
 				<h3>2.2 Use Risk Control at Exit</h3>
 				<h4>2.2.1 Set stop/loss </h4>
 				<blockquote>
@@ -109,7 +110,7 @@ fieldboxes.
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img src="../../assets/helpImg/stoploss-setup.png" alt="Set Up Form" /> -->
+				<img src="../../assets/helpImg/sl.png" alt="Set Up Form" />
 				<h4>2.2.2 Set time-in-market</h4>
 				<blockquote>
 					<p>
@@ -118,10 +119,10 @@ fieldboxes.
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img
-					src="../../assets/helpImg/single-change-criteria.png"
+				<img
+					src="../../assets/helpImg/tim.png"
 					alt="Set Up Form"
-				/> -->
+				/>
 				<h4>2.2.3 Select Only Use Risk Control in the exit criteria</h4>
 				<blockquote>
 					<p>
@@ -130,10 +131,16 @@ If you only want to use Risk Control at Exit settings as the exit criteria, sele
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img
-					src="../../assets/helpImg/single-only-stoploss.png"
+				
+				
+				<img
+					src="../../assets/helpImg/timEntry.png"
 					alt="Set Up Form"
-				/> -->
+				/>
+				<img
+					src="../../assets/helpImg/timExit.png"
+					alt="Set Up Form"
+				/>
 				<!-- <img
 					src="../../assets/helpImg/single-change-criteria.png"
 					alt="Set Up Form"
@@ -147,7 +154,7 @@ If you only want to use Risk Control at Exit settings as the exit criteria, sele
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
+				<img src="../../assets/helpImg/daily.png" alt="Set Up Form" />
 				<h4>2.3.2 Set timeframe to Weekly</h4>
 				<blockquote>
 					<p>
@@ -156,10 +163,10 @@ If you only want to use Risk Control at Exit settings as the exit criteria, sele
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img
-					src="../../assets/helpImg/timeframe-criteria.png"
+				<img
+					src="../../assets/helpImg/Weekly.png"
 					alt="Set Up Form"
-				/> -->
+				/>
 				<h4>2.3.3 Set timeframe to Monthly</h4>
 				<blockquote>
 					<p>
@@ -168,6 +175,10 @@ If you only want to use Risk Control at Exit settings as the exit criteria, sele
 						<br />
 					</p>
 				</blockquote>
+								<img
+					src="../../assets/helpImg/Monthly.png"
+					alt="Set Up Form"
+				/>
 				<h3>
 					2.4 create a sameday multi-signal entry/exit criteria new backtest
 				</h3>
@@ -180,29 +191,41 @@ If you only want to use Risk Control at Exit settings as the exit criteria, sele
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
+				<img src="../../assets/helpImg/scoreSetup.png" alt="Set Up Form" title="Set Up Form"/>
 				<h4>2.4.2 Fill in the entry criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						SameBar Multi-Signal means that when multiple signals occur at the same bar the backtest criteria is met. Select SameBar Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  score value is 2. Clicking on the + sign will increase the number of entry signals and also the score value. The maximum number of signals  in SameBar Multi-Signal selection is 5. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
+						SameBar Multi-Signal means that when multiple signals occur at the same bar the backtest criteria is met. Select SameBar Multi-Signal in the drop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  score value is 2. Clicking on the + sign will increase the number of entry signals and also the score value. The maximum number of signals  in SameBar Multi-Signal selection is 5. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
 
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img
-					src="../../assets/helpImg/timeframe-criteria.png"
-					alt="Set Up Form"
-				/> -->
+				<img
+					src="../../assets/helpImg/scoreEntry1.png"
+					alt="entry signal 1" title="entry signal 1"
+				/>
+								<img
+					src="../../assets/helpImg/scoreEntry2.png"
+					alt="entry signal 2" title="entry signal 2"
+				/>
 				<h4>2.4.3 Fill in the exit criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						SameBar Multi-Signal means that when multiple signals occur at the same bar the backtest criteria is met. Select SameBar Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  score value is 2. Clicking on the + sign will increase the number of entry signals and also the score value. The maximum number of signals  in SameBar Multi-Signal selection is 5. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
+						SameBar Multi-Signal means that when multiple signals occur at the same bar the backtest criteria is met. Select SameBar Multi-Signal in the drop-down box in the upper right corner of the exit criteria section; then signal1 and signal2 panels will show by default and the default  score value is 2. Clicking on the + sign will increase the number of exit signals and also the score value. The maximum number of signals  in SameBar Multi-Signal selection is 5. Then you can fill in each signal panel corresponding to the exit condition same as single-signal selection.
 
 						<br />
 					</p>
 				</blockquote>
+								<img
+					src="../../assets/helpImg/scoreExit1.png"
+					alt="exit signal 1" title="exit signal 1"
+				/>
+								<img
+					src="../../assets/helpImg/scoreExit2.png"
+					alt="exit signal 2" title="exit signal 2"
+				/>
 				<h4>2.4.4 Set score value in SameBar Multi-Signal entry/exit criteria</h4>
 				<blockquote>
 					<p>
@@ -216,7 +239,11 @@ If the backtest criteria needs to have a "OR" condition of 2 signals, set two si
 						<br />
 					</p>
 				</blockquote>
-				]<h4>2.4.5 Run Backtest and view results</h4>
+							<img
+					src="../../assets/helpImg/scoreChange.png"
+					alt="change exit score" title="change score"
+				/>
+				<h4>2.4.5 Run Backtest and view results</h4>
 				<blockquote>
 					<p>
 						<br />
@@ -236,27 +263,27 @@ According to your own needs, fill in the relevant parameters of the backtest, in
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
+				<img src="../../assets/helpImg/periodSetup.png" alt="Set Up Form" title="Set Up Form"/>
 				<h4>2.5.2 Fill in the entry criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-						TimeOrder Multi-Signal means that when multiple signals occur in time order the backtest criteria is met. Select TimeOrder Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  period value is 2. Clicking on the + sign will increase the number of entry signals and also the period value. The maximum number of signals  in SameBar Multi-Signal selection is 3. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
+						TimeOrder Multi-Signal means that when multiple signals occur in time order the backtest criteria is met. Select TimeOrder Multi-Signal in the drop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  period value is 2. Clicking on the + sign will increase the number of entry signals and also the period value. The maximum number of signals  in SameBar Multi-Signal selection is 3. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img
-					src="../../assets/helpImg/timeframe-criteria.png"
-					alt="Set Up Form"
-				/> -->
+<img src="../../assets/helpImg/periodEntry1.png" alt="entry signal 1" title="entry signal 1"/>
+<img src="../../assets/helpImg/periodEntry2.png" alt="entry signal 2" title="entry signal 2"/>
 				<h4>2.5.3 Fill in the exit criteria</h4>
 				<blockquote>
 					<p>
 						<br />
-					TimeOrder Multi-Signal means that when multiple signals occur in time order the backtest criteria is met. Select TimeOrder Multi-Signal in thedrop-down box in the upper right corner of the entry criteria section; then signal1 and signal2 panels will show by default and the default  period value is 2. Clicking on the + sign will increase the number of entry signals and also the period value. The maximum number of signals  in SameBar Multi-Signal selection is 3. Then you can fill in each signal panel corresponding to the entry condition same as single-signal selection.
+					TimeOrder Multi-Signal means that when multiple signals occur in time order the backtest criteria is met. Select TimeOrder Multi-Signal in the drop-down box in the upper right corner of the exit criteria section; then signal1 and signal2 panels will show by default and the default  period value is 2. Clicking on the + sign will increase the number of exit signals and also the period value. The maximum number of signals  in SameBar Multi-Signal selection is 3. Then you can fill in each signal panel corresponding to the exit condition same as single-signal selection.
 						<br />
 					</p>
 				</blockquote>
+				<img src="../../assets/helpImg/periodExit1.png" alt="exit signal 1" title="exit signal 1"/>
+<img src="../../assets/helpImg/periodExit2.png" alt="exit signal 2" title="exit signal 2"/>
 				<h4>2.5.4 Set period value in timeorder Multi-Signal entry/exit criteria</h4>
 				<blockquote>
 					<p>
@@ -270,6 +297,8 @@ If the backtest criteria needs to have two signals occuring within 3 bars, set t
 						<br />
 					</p>
 				</blockquote>
+								<img src="../../assets/helpImg/changePeriodEntry.png" alt="change entry period" title="change entry period"/>
+<img src="../../assets/helpImg/changePeriodExit.png" alt="change exit period" title="change exit period"/>
 				
 				<h4>2.5.5 Run Backtest and view results</h4>
 				<blockquote>
@@ -290,8 +319,9 @@ If the backtest criteria needs to have two signals occuring within 3 bars, set t
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img src="../../assets/helpImg/single-timframe.png" alt="Set Up Form" /> -->
-				<h4>2.6.2 set the value of delay of bars in entry criteria</h4>
+				<img src="../../assets/helpImg/delayEntry1.png" alt="entry signal 1" title="entry signal 1"/>
+				<img src="../../assets/helpImg/delayEntry2.png" alt="entry signal 2" title="entry signal 2"/>
+				<h4>2.6.2 set the value of delay of bars in exit criteria</h4>
 				<blockquote>
 					<p>
 						<br />
@@ -299,10 +329,8 @@ If the backtest criteria needs to have two signals occuring within 3 bars, set t
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img
-					src="../../assets/helpImg/timeframe-criteria.png"
-					alt="Set Up Form"
-				/> -->
+                   <img src="../../assets/helpImg/delayExit1.png" alt="exit signal 1" title="exit signal 1"/>
+                   <img src="../../assets/helpImg/delayExit2.png" alt="exit signal 2" title="exit signal 2"/>
 				<h1>3. Add created backtest to My Favorites</h1>
 				<h3>3.1 Open the Backtest History tab</h3>
 				<blockquote>
@@ -311,7 +339,7 @@ If the backtest criteria needs to have two signals occuring within 3 bars, set t
 						<br />
 					</p>
 				</blockquote>
-				<!-- <img src="../../assets/helpImg/add-fa.png" alt="Add To Favorites" /> -->
+				<img src="../../assets/helpImg/addFav.png" alt="Add To Favorites" title="Add To Favorites"/>
 
 				<h3>3.2 View backtest in My Favorites</h3>
 				<blockquote>
@@ -323,7 +351,7 @@ If the backtest criteria needs to have two signals occuring within 3 bars, set t
 					</p>
 				</blockquote>
 
-				<!-- <img src="../../assets/helpImg/fa-list.png" alt="View favorites" /> -->
+				<img src="../../assets/helpImg/seeFav.png" alt="View Favorite Backtests" title="View Favorite Backtests"/>
 				<h1>4. edit a created backtest</h1>
 				<blockquote class="video_link">
 					<i class="el-icon-video-play"></i>
@@ -338,8 +366,12 @@ If the backtest criteria needs to have two signals occuring within 3 bars, set t
 						<br />
 					</p>
 				</blockquote>
+				
+				<img src="../../assets/helpImg/editHis.png" alt="Edit Backtest" title="Edit Backtest">
 				<h3>4.2 Edit in Set Up Backtest</h3>
-				<!-- <img src="../../assets/copy-backtests.png" alt="Copy Backtests"> -->
+
+				<img src="../../assets/helpImg/editEntry.png" alt="Edit Entry Criteria" title="Edit Entry Criteria">
+				<img src="../../assets/helpImg/editExit.png" alt="Edit Exit Criteria" title="Edit Exit Criteria">
 				<blockquote>
 					<p>
 						<br />When you click the edit backtest button, the information of the current backtest will be displayed in the form of the Set Up Backtest tab, where you can modify the backtest data. When you're done editing, click Run Backtest
@@ -349,7 +381,6 @@ If the backtest criteria needs to have two signals occuring within 3 bars, set t
 				</blockquote>
 				<h1>5. view result of a created backtest</h1>
 				<h3>5.1 Open the Backtest History tab</h3>
-				<!-- <img src="../../assets/history-add-favorite.png" alt="Add To Favorites"> -->
 				<blockquote>
 					<p>
 						<br />
@@ -357,14 +388,15 @@ Open the Backtest History tab, choose which backtest you want to edit, and click
 						<br />
 					</p>
 				</blockquote>
+				
+				<img src="../../assets/helpImg/toViewResult.png" alt="View Result" title="View Result">
 				<h3>5.2 Modify the current backtesting parameters</h3>
 				<!-- <img src="../../assets/see-favorites.png" alt="View favorites"> -->
 				<blockquote>
 					<p>
 						<br />
 						When you click the button to view the results, Set Up
-						Backtest will show the specific parameters of the backtest of the current viewing result, and if you are not satisfied with the results of this backtest, you can return to Set
-						Edit the Up Backtest tab, click Run Backtest to run the modified backtest.
+						Backtest will show the specific parameters of the backtest of the current viewing result, and if you are not satisfied with the results of this backtest, you can return to edit the Set Up Backtest tab, click Run Backtest to run the modified backtest.
 						<br />
 					</p>
 				</blockquote>
@@ -374,7 +406,6 @@ Open the Backtest History tab, choose which backtest you want to edit, and click
 					<a href="#">Sample Backtest demo video</a>
 				</blockquote>
 				<h3>6.1 Open the Sample Backtests tab</h3>
-				<!-- <img src="../../assets/sample-backtests.png" alt="Sample Backtests"> -->
 				<blockquote>
 					<p>
 						<br />
@@ -382,14 +413,16 @@ Open the Backtest History tab, choose which backtest you want to edit, and click
 						<br />
 					</p>
 				</blockquote>
+				<img src="../../assets/helpImg/copyBacktest.png" alt="Copy Sample Backtest" title="Copy Sample Backtest">
 				<h3>6.2 Edit and run a copied backtest</h3>
-				<!-- <img src="../../assets/copy-backtests.png" alt="Copy Backtests"> -->
 				<blockquote>
 					<p>
 						<br />Open the Backtest History tab, choose the copied backtest to edit. Some of the action buttons to the copied backtest are not available because for all copied backtests results can only be viewed after edit and run is completed.
 						<br />
 					</p>
 				</blockquote>
+				<img src="../../assets/helpImg/editSample.png" alt="Edit Sample Backtest" title="Edit Sample Backtest">
+
 			</section>
 			<el-aside>
 				<div style="margin: 0px 0 0 77px; font-size: 18px; font-weight: bold">
@@ -567,7 +600,7 @@ export default {
 	top: 0px;
 	left: 10px;
 	width: 500px !important;
-	height: 99%;
+	height: 98%;
 	overflow-y: scroll;
 }
 .content-container {
