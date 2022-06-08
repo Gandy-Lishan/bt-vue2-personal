@@ -34,6 +34,115 @@ BacktestEdge utilizes the real data of financial&stock market and provides users
 				</blockquote>
 				<img src="../../assets/helpImg/chart.png" alt="Chart" />
 
+				<h4>1.1.1 如何在图表上改变Symbol</h4>
+				<blockquote>
+					<p>
+						<br/>
+						在图表中找到名为symbol的搜索框，在搜索框内选择你想更换的股票，如AAPL。当股票更换后，
+						下方表单中的symbol会同步更换。你可以在运行回测时使用它作为回测的股票参数。
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/symbolChart.png" alt="Change Symbol" title="Change Symbol"/>
+				<h4>1.1.2 如何在图表上改变Sentiment Indicator</h4>
+				<blockquote>
+					<p>
+						<br/>
+						在图表中找到名为Sentiment Indicator的搜索框，列表项的右侧会有每个indicator的周期，选择你想更换的indicator，如Smart Money Confidence。当indicator更换后，会在图表下方显示相应的曲线图，
+						下方表单中的Entry Criteria 和 Exit Criteria会自动填充到表单中，但是不会覆盖表单中已经选择的indicator。你可以在运行回测时使用它作为回测的indicator。
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/changeSenti.png" alt="Change Sentiment Indicator" title="Change Sentiment Indicator"/>
+				<h4>1.1.3 如何在图表上改变Technical Indicator</h4>
+				<blockquote>
+					<p>
+						<br/>
+						在图表中找到名为Studies的下拉选项，在搜索框内选择你想更换的indicator，如Commodity Channel Index 。当indicator更换后，会在图表下方显示相应的曲线图，
+						。在图表上选择的Technical Indicators并不会像选择Sentiment Indicators一样，填充到Entry Criteria 和 Exit Criteria，如果你想在回测中使用Technical Indicators，
+						可以直接在表单中选择。
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/changeTech.png" alt="Change Technical Indicator" title="Change Technical Indicator"/>
+				<h4>1.1.4 如何在图表上改变图表类型</h4>
+				<blockquote>
+					<p>
+						<br/>
+						在图表中找到名为Display的下拉选项，在下拉框内选择你想更换的Style，如Bar 。当Chart Style更换后，会在图表下方显示对应类型的曲线样式，
+						。需要注意的是，图表的类型是根据indicator来决定的，例如有些indicator只支持Candle Style.
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/changeStyle.png" alt="Change Chart Style" title="Change Chart Style"/>
+				<h4>1.1.5 如何在图表上改变图表周期</h4>
+				<blockquote>
+					<p>
+						<br/>
+						在图表中找到名为1D的下拉选项，其中1D表示Daily，1W表示Weekly，1M表示Monthly，在下拉框内选择你想更换的周期，如1W 。图表中的股票周期有以及Set Up Backtest标签页下的表单会随着周期的更改而更改
+						，你可以在创建回测时使用它作为回测的timeframe参数。
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/chartTime.png" alt="Change Frequecy" title="Change Frequecy"/>
+				<h4>1.1.6 如何改变图表主题</h4>
+				<blockquote>
+					<p>
+						<br/>
+						在图表中打开设置，在设置中找到Themes,目前图表有两种主题，Dark 和 Light，你可以根据个人喜好进行更换。
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/changeTheme.png" alt="Change Chart Themes" title="Change Chart Themes"/>
+				<h4>1.1.7 如何一键清除图表内容</h4>
+				<blockquote>
+					<p>
+						<br/>
+						当你在图表中选择了多个indicator,你可以点击图表下方的Clear Chart按钮一键清除图表。
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/clearChart.png" alt="Clear Chart" title="Clear Chart"/>
+
+								<h4>1.1.8 如何隐藏股票信息提示框</h4>
+				<blockquote>
+					<p>
+						<br/>
+						当你的鼠标移入股票曲线框时，会出现蓝色的信息提示框，如果你不需要它，可以点击信息按钮关闭它。
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/hideInfo.png" alt="Hide Information" title="Hide Information"/>
+				
+				<h4>1.1.9 如何隐藏图表网格线</h4>
+				<blockquote>
+					<p>
+						<br/>
+						图表会默认显示x轴和y轴的网格线，如果你不需要它，可以点击Grid按钮隐藏它。
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/hideGrid.png" alt="Hide Grid" title="Hide Grid"/>
+				<h4>1.1.10 如何隐藏Last Price</h4>
+				<blockquote>
+					<p>
+						<br/>
+						图表会默认显示最后一个Bar的Price，如果你不需要它，可以点击Last Price按钮隐藏它。
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/hidePrice.png" alt="Hide Last Price" title="Hide Last Price"/>
+
+				<h4>1.1.11 添加股票到收藏夹</h4>
+				<blockquote>
+					<p>
+						<br/>
+						点击股票名称右侧的Add to Favorites按钮，将股票添加到收藏夹。这个时候可以点击Symbol搜索框查看收藏夹中的股票。
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/hidePrice.png" alt="Hide Last Price" title="Hide Last Price"/>
+
 				<h3>1.2 Form section</h3>
 				<blockquote>
 					<p>
@@ -44,7 +153,6 @@ BacktestEdge utilizes the real data of financial&stock market and provides users
 				</blockquote>
 
 				<img src="../../assets/helpImg/form.png" alt="Form" />
-
 				<h1>2. How to create a new backtest</h1>
 				<blockquote class="video_link">
 					<i class="el-icon-video-play"></i>
