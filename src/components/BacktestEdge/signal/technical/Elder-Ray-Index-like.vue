@@ -1,5 +1,6 @@
 <template>
 	<div class="senti-container">
+		<p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p>
 		<el-form :model="tech" :rules="rules" ref="eriForm">
 			<!-- <div class="ids-container">
 				<el-form-item label="Slow moving average" prop="MACDSlow">
@@ -317,6 +318,14 @@ delay_bars: [String, Number],
 	&:first-child {
 		border-top: 1px solid #797979;
 	}
+}
+.hint{
+    position: absolute;
+    font-size: 0.7rem;
+    color: black !important;
+    top: 74px;
+    left: 231px;
+    font-weight: 300;
 }
 /deep/ .el-input__inner {
 	padding-left: 5px;

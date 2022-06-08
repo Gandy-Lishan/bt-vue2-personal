@@ -1,5 +1,6 @@
 <template>
 	<div class="senti-container">
+		<p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p>
 		<el-form :model="tech" :rules="rules" ref="rsiForm">
 			<!-- <div class="ids-container">
 				<el-form-item label="OverBought bound" prop="over_bought_bound">
@@ -257,5 +258,13 @@ if(this.relation != 1) {
 		display: flex;
 		flex-wrap: wrap;
 	}
+}
+.hint{
+	position: absolute;
+	font-size: 0.7rem;
+	color: black !important;
+	top: 74px;
+	left: 231px;
+	font-weight: 300;
 }
 </style>

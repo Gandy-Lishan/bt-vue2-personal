@@ -565,8 +565,14 @@ export default {
 				})
 				let sentimentList = this.$store.state.sentimentIndicatorList
 				if (sentimentList.length == 0) {
-					let res = await getIndicatorsList()
-					sentimentList = res.data.map((obj) => {
+					var indicatorList = []
+					if (CIQ.indicatorList) {
+						if (CIQ.indicatorList.length != 0) {
+							indicatorList = this.$store.state.indicatorsList
+							indicatorList = CIQ.indicatorList
+						}
+					} 
+					sentimentList = indicatorList.map((obj) => {
 						if (obj.chart_name && obj.url && obj.updated) {
 							return {
 								value: obj.chart_name,
@@ -694,10 +700,12 @@ export default {
 					// obj.index = index
 					// this.$emit('getIndicatorRadio', 'sentiment')
 					// this.$emit('getSentiVal', this.si.sentimentIndicator)
+
 					this.indicatorRadio = 'Sentiment Indicators'
 					this.si.sentimentIndicator =
 						newVal[this.criteria].signals[index].indicator
 					// 往父组件传值
+					
 					let sentimentList = this.$store.state.sentimentIndicatorList
 
 					if (sentimentList.length == 0) {
@@ -714,11 +722,15 @@ export default {
 					}
 
 					let indi = this.si.sentimentIndicator
+
 					sentimentList.forEach((item) => {
 						if (indi.toUpperCase() == item.value.toUpperCase()) {
 							let obj = {}
 							obj.index = vm.panelIndex
 							obj.url = item.url
+
+							// 设定当前填充indicator的tiemframe, 如果切换timeframe后indicator不匹配则移除
+							this.currentSentiUpdated = item.updated
 							vm.$emit('getIndicatorUrl', obj)
 						}
 					})

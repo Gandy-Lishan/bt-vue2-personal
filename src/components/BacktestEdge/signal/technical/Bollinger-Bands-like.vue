@@ -1,5 +1,6 @@
 <template>
 	<div class="senti-container">
+		<p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p>
 		<el-form :model="tech">
 			<!-- <div class="ids-container">
 				<el-radio-group v-model="tech.ids.ma_category" @change="getMaRadio">
@@ -309,5 +310,13 @@ delay_bars: [String, Number],
 		display: flex;
 		flex-wrap: wrap;
 	}
+}
+.hint{
+    position: absolute;
+    font-size: 0.7rem;
+    color: black !important;
+    top: 74px;
+    left: 231px;
+    font-weight: 300;
 }
 </style>

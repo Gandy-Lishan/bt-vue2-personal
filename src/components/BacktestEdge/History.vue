@@ -579,7 +579,7 @@ export default {
 					if (res.data.indicator_layout) {
 						this.restoreIndicatorLayoutView(
 							JSON.parse(res.data.indicator_layout),
-							JSON.parse(res.data.entry).frequency,
+							res.data.frequency,
 							row,res.data
 						)
 					} else {
