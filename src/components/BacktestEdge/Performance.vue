@@ -1,6 +1,6 @@
 <template>
 	<div class="perfprmance-container">
-		<p class="hint">Hint: Markers on the chart point to the buy/sell trader dates on the open <b>ONE</b> bar after entry/exit criteria met.</p>
+		<p class="hint">Hint: Markers on the chart point to the buy/sell trade dates on the open <b>ONE</b> bar after entry/exit criteria met.</p>
 		<el-tabs
 			v-model="activePerTag"
 			type="card"
@@ -564,6 +564,7 @@ export default {
 		},
 		loadMarker(markerSet) {
 			//load markers for initial quotefeed
+				
 			let list = this.filterMarkerDate(
 				new Date(CIQ.initialDate.start),
 				new Date(CIQ.initialDate.end),
@@ -579,7 +580,7 @@ export default {
 			for (let i = 0; i < groups.length; i++) {
 				setTimeout(() => {
 					CIQ.loadChart(groups[i], CIQ.addMarker)
-					console.log(groups[i])
+					
 				}, 1000 * i);
 			}
 			//CIQ.loadChart(list, CIQ.addMarker)

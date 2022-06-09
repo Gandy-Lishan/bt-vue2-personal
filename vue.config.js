@@ -21,13 +21,15 @@ const config = {
 			]
 		},
 		plugins:[
-            // new UglifyJsPlugin({
-            //     uglifyOptions: {
-            //         compress:{
-            //             drop_console:true,
-            //         }
-            //     }
-            // }),
+            new UglifyJsPlugin({
+                uglifyOptions: {
+                    compress:{
+                        drop_console:true,
+						dead_code:true,
+						drop_debugger:true,
+                    }
+                }
+            }),
 			// 骨架屏
 			new SkeletonWebpackPlugin({
 				webpackConfig: {
@@ -41,20 +43,20 @@ const config = {
 					mode: 'history',
 					routes: [
 						{ path: '/home', skeletonId: 'homeSkeleton' },
-						{ path: '/', skeletonId: 'homeSkeleton' }
+						{ path: '/', skeletonId: 'homeSkeleton' },
 					]
 				}
 			})
         ]
 	},
-	// css: {
-    //     // 是否使用css分离插件 ExtractTextPlugin
-    //     extract: true,
-    //     // 开启 CSS source maps?
-    //     sourceMap: false,
-    //     // 启用 CSS modules for all css / pre-processor files.
-    //     modules: false
-    // },
+	css: {
+        // 是否使用css分离插件 ExtractTextPlugin
+        extract: true,
+        // 开启 CSS source maps?
+        sourceMap: false,
+        // 启用 CSS modules for all css / pre-processor files.
+        modules: false
+    },
 	chainWebpack: (config) => {  
 		config.resolve.alias
 			.set('assets', resolve('src/assets'))
