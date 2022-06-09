@@ -34,115 +34,170 @@ BacktestEdge utilizes the real data of financial&stock market and provides users
 				</blockquote>
 				<img src="../../assets/helpImg/chart.png" alt="Chart" />
 
-				<h4>1.1.1 如何在图表上改变Symbol</h4>
+				<h4>1.1.1 How to change Symbol on a chart</h4>
 				<blockquote>
 					<p>
 						<br/>
-						在图表中找到名为symbol的搜索框，在搜索框内选择你想更换的股票，如AAPL。当股票更换后，
-						下方表单中的symbol会同步更换。你可以在运行回测时使用它作为回测的股票参数。
+Find the search box named symbol in the chart and select the stock you want to replace, such as AAPL, within the search box. When the stock is replaced,
+						The symbol in the form below will be replaced synchronously. You can use it as a stock parameter for backtesting when running a backtest.
 						<br/>
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/symbolChart.png" alt="Change Symbol" title="Change Symbol"/>
-				<h4>1.1.2 如何在图表上改变Sentiment Indicator</h4>
+				<h4>1.1.2 How to change the Sentiment Indicator on a chart</h4>
 				<blockquote>
 					<p>
 						<br/>
-						在图表中找到名为Sentiment Indicator的搜索框，列表项的右侧会有每个indicator的周期，选择你想更换的indicator，如Smart Money Confidence。当indicator更换后，会在图表下方显示相应的曲线图，
-						下方表单中的Entry Criteria 和 Exit Criteria会自动填充到表单中，但是不会覆盖表单中已经选择的indicator。你可以在运行回测时使用它作为回测的indicator。
+					Find the search box named Sentiment Indicator in the chart, and to the right of the list item there will be a cycle for each indexer, select the indexer you want to replace, such as Smart Money Confidence. When the indexer is replaced, the corresponding graph will be displayed below the chart,
+						The Entity Criteria and Exit Criteria in the form below are automatically populated into the form, but do not overwrite the indexer already selected in the form. You can use it as an indexator for backtesting when running backtesting.
 						<br/>
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/changeSenti.png" alt="Change Sentiment Indicator" title="Change Sentiment Indicator"/>
-				<h4>1.1.3 如何在图表上改变Technical Indicator</h4>
+				<h4>1.1.3 How to change the Technical Indicator on a chart</h4>
 				<blockquote>
 					<p>
-						<br/>
-						在图表中找到名为Studies的下拉选项，在搜索框内选择你想更换的indicator，如Commodity Channel Index 。当indicator更换后，会在图表下方显示相应的曲线图，
-						。在图表上选择的Technical Indicators并不会像选择Sentiment Indicators一样，填充到Entry Criteria 和 Exit Criteria，如果你想在回测中使用Technical Indicators，
-						可以直接在表单中选择。
+						<br/>Find a drop-down option called Studios in the chart and select the indexer you want to replace in the search box, such as the Connectivity Channel Index. When the indexer is replaced, the corresponding graph will be displayed below the chart,
+						。 The Technical Indicators selected on the chart are not populated with The Entry Criteria and Exit Criteria as the Selection Indicators are selected, and if you want to use Technical Indicators in backtesting,
+						You can select directly from the form.
 						<br/>
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/changeTech.png" alt="Change Technical Indicator" title="Change Technical Indicator"/>
-				<h4>1.1.4 如何在图表上改变图表类型</h4>
+				<h4>1.1.4 How to change the chart type on a chart</h4>
 				<blockquote>
 					<p>
 						<br/>
-						在图表中找到名为Display的下拉选项，在下拉框内选择你想更换的Style，如Bar 。当Chart Style更换后，会在图表下方显示对应类型的曲线样式，
-						。需要注意的是，图表的类型是根据indicator来决定的，例如有些indicator只支持Candle Style.
+						Find a drop-down option called Display in the chart and select the Style you want to replace, such as Bar, in the drop-down box. When the Chart Style is replaced, the corresponding type of curve style will be displayed below the chart.
+						。 It should be noted that the type of chart is determined by the indexer, for example some indexers only support the Candle Style.
 						<br/>
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/changeStyle.png" alt="Change Chart Style" title="Change Chart Style"/>
-				<h4>1.1.5 如何在图表上改变图表周期</h4>
+				<h4>1.1.5 How to change the chart period on a chart</h4>
 				<blockquote>
 					<p>
 						<br/>
-						在图表中找到名为1D的下拉选项，其中1D表示Daily，1W表示Weekly，1M表示Monthly，在下拉框内选择你想更换的周期，如1W 。图表中的股票周期有以及Set Up Backtest标签页下的表单会随着周期的更改而更改
-						，你可以在创建回测时使用它作为回测的timeframe参数。
+						Find the drop-down option named 1D in the chart, where 1D represents Daily, 1W means Weekly, 1M represents Montthly, and inside the drop-down box select the period you want to replace, such as 1W. The stock cycle in the chart has and the form under the Set Up Backtest tab changes as the period changes
+						, you can use it as a timeframe parameter for backtesting when creating a backtest.
 						<br/>
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/chartTime.png" alt="Change Frequecy" title="Change Frequecy"/>
-				<h4>1.1.6 如何改变图表主题</h4>
+				<h4>1.1.6 How to change the chart theme</h4>
 				<blockquote>
 					<p>
 						<br/>
-						在图表中打开设置，在设置中找到Themes,目前图表有两种主题，Dark 和 Light，你可以根据个人喜好进行更换。
+						Open Settings in the chart, find Themes in the settings, there are currently two themes for the chart, Dark and Light, which you can change according to your personal preferences.
 						<br/>
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/changeTheme.png" alt="Change Chart Themes" title="Change Chart Themes"/>
-				<h4>1.1.7 如何一键清除图表内容</h4>
+				<h4>1.1.7 How to clear chart contents with one click</h4>
 				<blockquote>
 					<p>
 						<br/>
-						当你在图表中选择了多个indicator,你可以点击图表下方的Clear Chart按钮一键清除图表。
+						When you have selected multiple indexers in the chart, you can clear the chart by clicking the Clear Chart button below the chart.
 						<br/>
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/clearChart.png" alt="Clear Chart" title="Clear Chart"/>
 
-								<h4>1.1.8 如何隐藏股票信息提示框</h4>
+				<h4>1.1.8 How to hide the stock information prompt box</h4>
 				<blockquote>
 					<p>
 						<br/>
-						当你的鼠标移入股票曲线框时，会出现蓝色的信息提示框，如果你不需要它，可以点击信息按钮关闭它。
+						When you move your mouse into the stock curve box, a blue message box will appear, and if you don't need it, you can click the information button to close it.
 						<br/>
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/hideInfo.png" alt="Hide Information" title="Hide Information"/>
 				
-				<h4>1.1.9 如何隐藏图表网格线</h4>
+				<h4>1.1.9 How to hide chart gridlines</h4>
 				<blockquote>
 					<p>
 						<br/>
-						图表会默认显示x轴和y轴的网格线，如果你不需要它，可以点击Grid按钮隐藏它。
+						The chart will display the gridlines of the x-axis and y-axes by default, if you don't need it, you can click the Grid button to hide it.
 						<br/>
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/hideGrid.png" alt="Hide Grid" title="Hide Grid"/>
-				<h4>1.1.10 如何隐藏Last Price</h4>
+				<h4>1.1.10 How to hide Last Price</h4>
 				<blockquote>
 					<p>
 						<br/>
-						图表会默认显示最后一个Bar的Price，如果你不需要它，可以点击Last Price按钮隐藏它。
+						The chart will show the Price of the last Bar by default, if you don't need it, you can click the Last Price button to hide it.
 						<br/>
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/hidePrice.png" alt="Hide Last Price" title="Hide Last Price"/>
+				
 
-				<h4>1.1.11 添加股票到收藏夹</h4>
+				<h4>1.1.11 Add stocks to favorites</h4>
 				<blockquote>
 					<p>
 						<br/>
-						点击股票名称右侧的Add to Favorites按钮，将股票添加到收藏夹。这个时候可以点击Symbol搜索框查看收藏夹中的股票。
+						Click the Add to Favorites button to the right of the stock name to add the stock to your favorites. At this time, you can click on the Symbol search box to view the stocks in the favorites.
 						<br/>
 					</p>
 				</blockquote>
-				<img src="../../assets/helpImg/hidePrice.png" alt="Hide Last Price" title="Hide Last Price"/>
+				<img src="../../assets/helpImg/symbolFav.png" alt="Add Symbol To Favorites" title="Add Symbol To Favorites"/>
+				<img src="../../assets/helpImg/viewSymbolFav.png" alt="View Symbol's Favorites" title="View Symbol's Favorites"/>
+				<h4>1.1.12 Add The Sentiment Indicator to Favorites</h4>
+				<blockquote>
+					<p>
+						<br/>
+Feel free to choose an Indexer in the Sentiment Indicator search box, such as Smart Money Confidence. Place the mouse over the selected graph and right-click on the one that appears
+						Click add to Favorites Indicators in the menu item to add the current stock to the indicator favorites. If you want to see the Sentiment Indicator in your favorites, you can click here
+						Sentiment Indicator search box view.
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/indiFav.png" alt="Add Sentiment Indicator To Favorites" title="Add Sentiment Indicator To Favorites"/>
+				<img src="../../assets/helpImg/viewIndiFav.png" alt="View Sentiment Indicator's Favorites" title="View Sentiment Indicator's Favorites"/>
+				
 
+				<h4>1.1.13 How to modify the extremum of the Sentiment Indicator</h4>
+				<blockquote>
+					<p>
+						<br/>
+						Feel free to choose an Indexer in the Sentiment Indicator search box, such as Smart Money Confidence. Place the mouse over the selected graph and right-click on the one that appears
+						Click edit settings in the menu item, in which you can change the extremum of the indicator and you can also change the color of the extremum curve. If your Entry Indicator is the same as the indexer for editing extremums on the chart,
+						Then when the extremum on the form changes, the corresponding extremum on the form will also change.
+						<br/>
+					</p>
+				</blockquote>
+				<h4>1.1.14 How to remove Range Selector</h4>
+				<blockquote>
+					<p>
+						<br/>
+						There is a Range Select below the chart, and you can drag the selector to see the chart curves within a specified range. If you want to hide it, you can uncheck Range Selector in the settings
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/deleteRange.png" alt="Hide Range Selector" title="Hide Range Selector"/>
+				<h4>1.1.15 Set Y-Axis Preferences</h4>
+				<blockquote>
+					<p>
+						<br/>
+						In the chart you can set Y-Axis Preferences, just open the settings, find the Y-Axis Preferences section, the chart provides two kinds of Preferences. Tick Log Scale to think
+						Your stock graph will grow according to the curve, give invert and your stock graph will flip.
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/setY.png" alt="Set Y-Axis Preferences" title="Set Y-Axis Preferences"/>
+					<h4>1.1.16 How to delete a specified Indexer in a chart</h4>
+				<blockquote>
+					<p>
+						<br/>
+						
+To delete a specified Indexor in the chart, you can click on the X sign in the upper left corner of the indicator to delete, or you can move the mouse over the indicator you want to delete, right-click, and drop down the menu
+						Select Delete Indicator to delete the current indicator.
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/deSenti1.png" alt="Delete Indicator" title="Delete Indicator"/>
+				<img src="../../assets/helpImg/deSenti2.png" alt="Delete Indicator" title="Delete Indicator"/>
 				<h3>1.2 Form section</h3>
 				<blockquote>
 					<p>
