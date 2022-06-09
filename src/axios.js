@@ -8,7 +8,7 @@ let instance = axios.create({
  
 let cache = new Cache(axios) // 将当前 axios 对象传入 Cache 中
 cache.use({
-  expire: 3600000*24*7,
+  expire: 3600000*24*7, // 过期时间 7天
   storage: true,
   instance, // 如果有自定义axios实例 比如上面的instance 需要将其传入instance 没有则不传
   requestConfigFn: config => {
