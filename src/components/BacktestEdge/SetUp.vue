@@ -428,7 +428,7 @@ export default {
 		},
 		allRiskControlOptions() {
 			return this.isTakeProfit || this.isStopLoss || this.isTimeInMarket
-		}
+		},
 	},
 	watch: {
 		updateFreq(val) {
@@ -572,6 +572,7 @@ export default {
 		},
 		getSymbol(val) {
 			this.$store.commit('getBacktestSymbol',val)
+			CIQ.addSymbol(val)
 		},
 		formateStartDate(val) {
 			this.bd.start_date = timestampToTime(val)

@@ -28,7 +28,7 @@
 				<el-row type="flex" justify="center"
 					><el-col>
 						<p class="betaNote">BacktestEdge Beta</p>
-						<p class="hint">Hint: Moving cursor out of chart area to scroll down the page below</p>
+						<p class="hint">Hint: Move cursor out of chart area to scroll down the page below</p>
 					</el-col>
 				</el-row>
 				<div class="chart_box" id="chart_box">
