@@ -574,7 +574,7 @@ export default {
 					}
 					if (exitChecked) {
 						//this.loading = true
-						CIQ.addCover("Start runing Backtest...")
+						CIQ.addCover("Start running Backtest...")
 						CIQ.nprogress.start()
 						let vm = this
 						let signalEntryList = []
