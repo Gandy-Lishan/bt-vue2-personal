@@ -351,6 +351,23 @@ export default new Vuex.Store({
 				state.backtestInfo.exit.signals[obj.index].riskIndicator =
 				''
 		},
+		clearEntrySignalArr(state) {
+			state.backtestInfo.entry.signals = [
+				{
+					sentimentIndicator: '',
+					technicalIndicator: ''
+				}
+			]
+		},
+		clearExitSignalArr(state) {
+			
+			state.backtestInfo.exit.signals = [
+				{
+					sentimentIndicator: '',
+					technicalIndicator: ''
+				}
+			]
+		},
 		clearBacktest(state) {
 			state.backtestInfo = {
 				entry_description: [],

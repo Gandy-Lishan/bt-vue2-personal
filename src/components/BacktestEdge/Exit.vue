@@ -857,6 +857,7 @@ export default {
 				this.editableTabsValue = '1'
 				this.score = 1
 				this.signals_in_market = 1
+				this.editableTabs.splice(0,1)
 			}
 			if (val == 2 || val == 3) {
 				if (this.editableTabs.length === 1) {
@@ -871,6 +872,9 @@ export default {
 				}
 			}
 			this.$emit('getExitRelation', val)
+			this.$store.commit('clearExitSignalArr')
+			console.log(this.editableTabs)
+
 		},
 		saveBacktestData(index) {
 			let checked = true
