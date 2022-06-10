@@ -117,8 +117,8 @@ async function postAxiosRequest(loginUrl: string, next: any) {
 	}catch(err){
 		status = false
 	}
-	//默认15秒超时，不过会针对一些可能耗时请求单独处理(对于容易堵塞的请求在等待3秒后就重发)
-	let res = await axios.post('/dev/user/',null,{timeout:3000})
+	//默认10秒超时，不过会针对一些可能耗时请求单独处理(对于容易堵塞的请求在等待3秒后就重发)
+	let res = await axios.post('/dev/user/',null,{timeout:5000})
 	
 	if (res.status === 200) {
 		next()

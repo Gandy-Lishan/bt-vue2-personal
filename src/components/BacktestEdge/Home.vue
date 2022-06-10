@@ -9,7 +9,19 @@
 							src="../../assets/logo.png"
 							alt="logo"
 					/></span>
-					<div class="menu">
+					<el-menu :default-active="activeIndex" class="el-menu-demo menu" mode="horizontal" @select="handleSelect">
+						<el-submenu index="1">
+							<template slot="title">Help</template>
+							<el-menu-item index="1-1">Tutorial</el-menu-item>
+							<el-menu-item index="1-2">Contant Us</el-menu-item>
+						</el-submenu>
+						<el-submenu index="2">
+							<template slot="title"><i class="el-icon-s-tools"></i></template>
+							<el-menu-item index="2-1">Theme</el-menu-item>
+							<el-menu-item index="2-2">Language</el-menu-item>
+						</el-submenu>
+					</el-menu>
+					<!-- <div class="menu">
 						<el-dropdown :hide-on-click="false" @command="handleCommand">
 							<span class="el-dropdown-link">
 								Help<i class="el-icon-arrow-down el-icon--right"></i>
@@ -21,7 +33,7 @@
 								</el-dropdown-item>
 							</el-dropdown-menu>
 						</el-dropdown>
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<header class="header">
@@ -267,6 +279,8 @@ export default {
 	name: 'home',
 	data() {
 		return {
+			activeIndex: '1',
+        	activeIndex2: '1',
 			test: false,
 			btnClickBool: true,
 			scroll: '',
@@ -359,6 +373,13 @@ export default {
 		}
 	},
 	methods: {
+		handleSelect(key, keyPath) {
+			console.log(key, keyPath);
+			let routeUrl = this.$router.resolve({
+                path: '/doc',
+            });
+          	window.open(routeUrl.href, '_blank');
+		},
 		animationUp: function () {
 			window.scrollTo({
 				top: 0,
@@ -948,7 +969,7 @@ export default {
 								}					
 							}						
 						}
-
+						console.log('开始调用CIQ.outputSignalsResult')
 						CIQ.outputSignalsResult(str,callback)
 					}
 				}
@@ -1086,12 +1107,12 @@ export default {
 				type: 'warning'
 			})
 		},
-		handleCommand(command) {
-			let routeUrl = this.$router.resolve({
-                path: '/doc',
-            });
-          window.open(routeUrl.href, '_blank');
-		},
+		// handleCommand(command) {
+		// 	let routeUrl = this.$router.resolve({
+        //         path: '/doc',
+        //     });
+        //   window.open(routeUrl.href, '_blank');
+		// },
 		isOnlyRiskControl(val) {
 			this.isOnlyRisk = val
 		},
@@ -1267,7 +1288,6 @@ header {
 	height: 78px;
 }
 .header_logo {
-	padding: 12px 24px;
 	display: flex;
 	box-shadow: 0 1px 3px rgb(0 0 0 / 10%), 0 1px 2px rgb(0 0 0 / 6%);
 	position: fixed;
@@ -1275,6 +1295,7 @@ header {
 	top: 0;
 	width: 100%;
 	background: #fff;
+	align-items: center;
 	justify-content: space-between;
 	.menu {
 		justify-self: center;
@@ -1282,6 +1303,10 @@ header {
 		margin-right: 50px;
 	}
 }
+.header_logo>span{
+	padding: 12px 24px;
+}
+
 .criteria-container {
 	padding: 10px;
 }

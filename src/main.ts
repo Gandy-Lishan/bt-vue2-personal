@@ -33,8 +33,8 @@ import { CIQ } from 'chartiq'
 Vue.use(VueCookies)
 // 配置请求根路径
 axios.defaults.baseURL = ''
-//默认15秒超时，不过会针对一些可能耗时请求单独处理(对于容易堵塞的请求在等待3秒后就重发)
-axios.defaults.timeout = 15000;
+//默认10秒超时，不过会针对一些可能耗时请求单独处理(对于容易堵塞的请求在等待5秒后就重发)
+axios.defaults.timeout = 10000;
 //在main.js设置全局的请求次数，请求的间隙
 axios.defaults.retry = 4;
 axios.defaults.retryDelay = 1000;

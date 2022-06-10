@@ -21,15 +21,15 @@ const config = {
 			]
 		},
 		plugins:[
-            new UglifyJsPlugin({
-                uglifyOptions: {
-                    compress:{
-                        drop_console:true,
-						dead_code:true,
-						drop_debugger:true,
-                    }
-                }
-            }),
+            // new UglifyJsPlugin({
+            //     uglifyOptions: {
+            //         compress:{
+            //             drop_console:true,
+			// 			dead_code:true,
+			// 			drop_debugger:true,
+            //         }
+            //     }
+            // }),
 			// 骨架屏
 			new SkeletonWebpackPlugin({
 				webpackConfig: {
