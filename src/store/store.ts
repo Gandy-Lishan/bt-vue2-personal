@@ -303,6 +303,7 @@ export default new Vuex.Store({
 					state.backtestInfo[criteria][key] = obj[key]
 				}
 			}
+			console.log('Setupform的值',state.backtestInfo)
 		},
 		setBd(state, obj) {
 			for (let key in obj) {

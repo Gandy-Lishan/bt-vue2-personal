@@ -73,6 +73,18 @@ export function getHistoryList(page) {
 		})
 	})
 }
+export function getBacktestName(name) {
+    const url = '/dev/backtest/?name='
+
+    return new Promise((resolve,reject)=>{
+		axios.get(url+name)
+		.then(res=>{
+			resolve(res)
+		}).catch(err=>{
+			reject(err)
+		})
+	})
+}
 export function getFavoriteList(page) {
     const url = '/dev/backtest/?ordering=-create_date&favorites=true&page='
 

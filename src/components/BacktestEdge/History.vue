@@ -324,7 +324,8 @@ import {
 	getStatus,
 	seeParams,
 	seeReport,
-	deleteBacktest
+	deleteBacktest,
+	getBacktestName
 } from '@/service/service.js'
 export default {
 	data() {
@@ -515,7 +516,18 @@ export default {
 		},
 		copyBacktest: throttle(async function (row) {
 			let params = {}
-			const res = await seeParams(row.id)
+			const nameRes = await getBacktestName(row.name + '(copy)')
+			
+			console.log('copy名字校验')
+			if(nameRes.data.count != 0) {
+				this.$notify.error({
+						title: 'Has been Copied',
+						message: 'The backtest has been copied',
+						offset: 100
+			    })
+				return
+			}
+				const res = await seeParams(row.id)
 			//console.log("恢复indicator layout")
 			// 恢复indicator layout
 			this.$store.commit('getBacktestSymbol', res.data.symbol)
@@ -545,13 +557,13 @@ export default {
 					this.$message.error('Copy failed')
 				}
 			} catch (error) {
-					if (error.response.status === 403) {
-					this.$notify.error({
-						title: 'Has been Copied',
-						message: 'The backtest has been copied',
-						offset: 100
-					})
-					}
+					// if (error.response.status === 403) {
+					// this.$notify.error({
+					// 	title: 'Has been Copied',
+					// 	message: 'The backtest has been copied',
+					// 	offset: 100
+					// })
+					// }
 					if (error.response.status === 500) {
 						this.$notify.error({
 							title: 'Service is busy',
@@ -560,6 +572,7 @@ export default {
 						})
 					}
 			}
+			
 		}, 1000),
 		viewBacktestResults: throttle(async function (row) {
 			console.log('row',row)

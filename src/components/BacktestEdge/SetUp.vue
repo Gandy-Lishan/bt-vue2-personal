@@ -245,7 +245,7 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
 import { timestampToTime } from '@/tools/formatDate.js'
-import { getIndicatorsList, getIndexsList, getStocksList } from "@/service/service.js"
+import { getIndicatorsList, getIndexsList, getStocksList, getBacktestName } from "@/service/service.js"
 const throttle = require('lodash/throttle')
 const uniqWith = require('lodash/uniqWith')
 const isEqual = require('lodash/isEqual')
@@ -846,6 +846,18 @@ export default {
 			this.$store.commit('getIndicatorsList', indicatorList)
 			CIQ.indicatorList = indicatorList
 		},
+		backtestNameCheck() {
+			return getBacktestName(this.bd.name).then((res) => {
+				if(res.data.count == 0) {
+					resolve(true)
+				}else{
+					reject(false)
+				}
+			}).then(res => {
+				console.log('测试',res)
+				return res
+			})
+		},
 		saveBacktestData() {
 			let checked = true
 			let nameChecked = true
@@ -1053,36 +1065,36 @@ export default {
 	position: absolute;
 
 	left: 335px;
-	top: 56px;
+	top: 105px;
 }
 .sliUnitNote {
 	position: absolute;
 	left: 335px;
-	top: 105px;
+	top: 152px;
 }
 @media (min-width: 1680px) {
 	.comUnitNote {
 		position: absolute;
 		left: 454px;
-		top: 56px;
+		top: 105px;
 	}
 	.sliUnitNote {
 		position: absolute;
 		left: 454px;
-		top: 105px;
+		top: 152px;
 	}
 }
 @media (min-width: 375px) and (max-width: 767px) {
 	.comUnitNote {
 		position: absolute;
 		left: 208px;
-		top: 56px;
+		top: 105px;
 		font-size: 12px;
 	}
 	.sliUnitNote {
 		position: absolute;
 		left: 208px;
-		top: 103px;
+		top: 152px;
 		font-size: 12px;
 	}
 	.el-input__suffix {

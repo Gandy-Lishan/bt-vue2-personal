@@ -537,7 +537,7 @@ export default {
 			// CIQ.addIndicatorsFromBacktest()
 		},
 		runBacktest: throttle(async function () {
-			let setUp = this.$refs.setUpChild.saveBacktestData()
+	let setUp = this.$refs.setUpChild.saveBacktestData()
 			this.$refs.entryChild.addEntrySignalLength()
 			this.$refs.exitChild.addExitSignalLength()
 			if (setUp) {

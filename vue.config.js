@@ -21,15 +21,15 @@ const config = {
 			]
 		},
 		plugins:[
-            new UglifyJsPlugin({
-                uglifyOptions: {
-                    compress:{
-                        drop_console:true,
-						dead_code:true,
-						drop_debugger:true,
-                    }
-                }
-            }),
+            // new UglifyJsPlugin({
+            //     uglifyOptions: {
+            //         compress:{
+            //             drop_console:true,
+			// 			dead_code:true,
+			// 			drop_debugger:true,
+            //         }
+            //     }
+            // }),
 			// 骨架屏
 			new SkeletonWebpackPlugin({
 				webpackConfig: {
@@ -101,6 +101,7 @@ const config = {
 		// http://3.140.194.24:80
 		// http://3.144.31.178:8000
 		// 10.131.3.17:8000
+		hot: true,
 		disableHostCheck: true,
 		proxy: {
 			'/dev': {
