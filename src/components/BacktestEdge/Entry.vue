@@ -505,15 +505,32 @@ export default {
 	   relation: {
 		handler(newVal, oldVal) {
 			if(newVal == 3 && this.editableTabs.length > 3) {
-				this.$message({
-						message: 'TimeOrder Multi-Signal supports up to three signals, please delete the panel',
-						type: 'error',
-						offset: 300
-					})
-					this.relation = oldVal
+  this.$confirm('TimeOrder Multi-Signal supports up to three signals,Currently your multi-signal count is '+ this.editableTabs.length + ', are you sure you want to delete the last '+(this.editableTabs.length - 3) + 'th panels', 'Tips', {
+          confirmButtonText: 'Confirm',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        }).then(() => {
+			const currentTabs = this.editableTabs.length
+			for(let i=0;i<( currentTabs - 3);i++) {
+				this.handleTabsEdit(this.editableTabs.length + '','remove')
+			}
+          this.$message({
+            type: 'success',
+            offset: 300,
+			message: 'The deletion is successful and has been automatically switched to TimeOrder Multi-Signal'
+          });
+		  this.relation = newVal
+        }).catch(() => {
+		this.relation = oldVal
+          this.$message({
+            type: 'info',
+			offset: 300,
+            message: 'With the deletion undeleted, you can switch to The SaveBar Multi-Signal to delete the signal panel to less than 3'
+          });          
+        });
+      }
 			}
 		}
-	},
 	},
 	methods: {
 		clearForm() {

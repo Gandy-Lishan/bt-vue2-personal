@@ -271,7 +271,7 @@ import performance from '@/components/BacktestEdge/Performance.vue'
 import history from '@/components/BacktestEdge/History.vue'
 import favorite from '@/components/BacktestEdge/Favorite.vue'
 import sample from '@/components/BacktestEdge/Sample.vue'
-import { runBacktest, seeParams } from '@/service/service'
+import { runBacktest, seeParams, getBacktestName } from '@/service/service'
 import searchKeys from '@/tools/searchKeys.js'
 import UUID from '@/tools/uuid.js'
 import s3_tool from '@/tools/s3-upload.js'
@@ -558,10 +558,23 @@ export default {
 			// CIQ.addIndicatorsFromBacktest()
 		},
 		runBacktest: throttle(async function () {
-	let setUp = this.$refs.setUpChild.saveBacktestData()
+	      let setUp = this.$refs.setUpChild.saveBacktestData()
+	       console.log('runbacktest的setup',setUp)
 			this.$refs.entryChild.addEntrySignalLength()
 			this.$refs.exitChild.addExitSignalLength()
-			if (setUp) {
+			let setUpChecked = await getBacktestName()
+			console.log('setUpChecked',setUpChecked)
+			if(setUpChecked.data.count != 0) {
+				
+				CIQ.hideCover()
+				this.$message({
+						message: 'The backtest name already exists',
+						type: 'error',
+						offset: 300
+					})
+				this.$store.commit('clearBacktest')
+				return
+			}
 				let entry
 				// 申请空间
 				let entryChecked
@@ -973,7 +986,7 @@ export default {
 						CIQ.outputSignalsResult(str,callback)
 					}
 				}
-			}
+
 		}, 1000),
 		goToHistoryForm() {
 			this.activeName = 'second'

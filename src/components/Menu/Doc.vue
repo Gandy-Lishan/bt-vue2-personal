@@ -167,7 +167,24 @@ Feel free to choose an Indexer in the Sentiment Indicator search box, such as Sm
 						<br/>
 					</p>
 				</blockquote>
-				<h4>1.1.14 How to remove Range Selector</h4>
+				<img src="../../assets/helpImg/editSenti.png" alt="Modify the extremum of the Sentiment Indicator" title="Modify the extremum of the Sentiment Indicator"/>
+				<img src="../../assets/helpImg/sentiSettings.png" alt="Modify the extremum of the Sentiment Indicator" title="Modify the extremum of the Sentiment Indicator"/>
+					<h4>1.1.14 怎么修改Technical Indicator的属性设置</h4>
+				<blockquote>
+					<p>
+						<br/>
+						Feel free to choose an Indexer in the Sentiment Indicator search box, such as Smart Money Confidence. Place the mouse over the selected graph and right-click on the one that appears
+						Click edit settings in the menu item, in which you can change the extremum of the indicator and you can also change the color of the extremum curve. If your Entry Indicator is the same as the indexer for editing extremums on the chart,
+						Then when the extremum on the form changes, the corresponding extremum on the form will also change.
+						在点击Studies选项，在下拉搜索框中选择任意一个Technical Indicator,如Commodity Channel Index。将鼠标移到刚才选择的Technical Indicator曲线上，点击鼠标右键，在出现
+						的菜单项中选择Edit Settings.你可以在这里修改当前指标的属性，比如Period（用于修改曲线的周期），Result（用于修改曲线的颜色），Excessive Optimism（可以修改Excessive Optimism的颜色），Excessive Pessimism（可以修改Excessive Pessimism的颜色）
+						<br/>
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/editTech.png" alt="Select a Technical Indicator" title="Select a Technical Indicator"/>
+				<img src="../../assets/helpImg/findSettings.png" alt="Select Edit Settings" title="Select Edit Settings"/>
+				<img src="../../assets/helpImg/techSettings.png" alt="Modify the Indicator settings" title="Modify the Indicator settings"/>
+				<h4>1.1.15 How to remove Range Selector</h4>
 				<blockquote>
 					<p>
 						<br/>
@@ -176,7 +193,7 @@ Feel free to choose an Indexer in the Sentiment Indicator search box, such as Sm
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/deleteRange.png" alt="Hide Range Selector" title="Hide Range Selector"/>
-				<h4>1.1.15 Set Y-Axis Preferences</h4>
+				<h4>1.1.16 Set Y-Axis Preferences</h4>
 				<blockquote>
 					<p>
 						<br/>
@@ -186,7 +203,7 @@ Feel free to choose an Indexer in the Sentiment Indicator search box, such as Sm
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/setY.png" alt="Set Y-Axis Preferences" title="Set Y-Axis Preferences"/>
-					<h4>1.1.16 How to delete a specified Indexer in a chart</h4>
+					<h4>1.1.17 How to delete a specified Indexer in a chart</h4>
 				<blockquote>
 					<p>
 						<br/>

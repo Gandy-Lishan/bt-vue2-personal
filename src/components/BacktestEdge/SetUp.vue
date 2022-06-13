@@ -848,13 +848,14 @@ export default {
 		},
 		backtestNameCheck() {
 			return getBacktestName(this.bd.name).then((res) => {
+				console.log('名字校验接口返回值',res)
 				if(res.data.count == 0) {
-					resolve(true)
+					this.saveBacktestData()
 				}else{
-					reject(false)
+					console.log('名字校验不通过',res)
 				}
 			}).then(res => {
-				console.log('测试',res)
+				console.log('名字校验不通过错误捕捉',res)
 				return res
 			})
 		},
