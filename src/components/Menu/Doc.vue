@@ -169,15 +169,12 @@ Feel free to choose an Indexer in the Sentiment Indicator search box, such as Sm
 				</blockquote>
 				<img src="../../assets/helpImg/editSenti.png" alt="Modify the extremum of the Sentiment Indicator" title="Modify the extremum of the Sentiment Indicator"/>
 				<img src="../../assets/helpImg/sentiSettings.png" alt="Modify the extremum of the Sentiment Indicator" title="Modify the extremum of the Sentiment Indicator"/>
-					<h4>1.1.14 怎么修改Technical Indicator的属性设置</h4>
+					<h4>1.1.14 How to modify the property settings of the Technical Indicator</h4>
 				<blockquote>
 					<p>
 						<br/>
-						Feel free to choose an Indexer in the Sentiment Indicator search box, such as Smart Money Confidence. Place the mouse over the selected graph and right-click on the one that appears
-						Click edit settings in the menu item, in which you can change the extremum of the indicator and you can also change the color of the extremum curve. If your Entry Indicator is the same as the indexer for editing extremums on the chart,
-						Then when the extremum on the form changes, the corresponding extremum on the form will also change.
-						在点击Studies选项，在下拉搜索框中选择任意一个Technical Indicator,如Commodity Channel Index。将鼠标移到刚才选择的Technical Indicator曲线上，点击鼠标右键，在出现
-						的菜单项中选择Edit Settings.你可以在这里修改当前指标的属性，比如Period（用于修改曲线的周期），Result（用于修改曲线的颜色），Excessive Optimism（可以修改Excessive Optimism的颜色），Excessive Pessimism（可以修改Excessive Pessimism的颜色）
+						In clicking on the Studios option, select any Technical Indicator in the drop-down search box, such as the Connectivity Channel Index. Move your mouse over the Technical Indicator curve you just selected and right-click on the occurrence
+						You can modify the properties of the current indicator here, such as Period (for modifying the period of the curve), Result (for modifying the color of the curve), Excessive Optimism (you can modify the color of The Excelssive Optimism), Excessive Pessimism (you can modify the color of the Expossage Pessimism)
 						<br/>
 					</p>
 				</blockquote>
@@ -580,7 +577,7 @@ Open the Backtest History tab, choose which backtest you want to edit, and click
 						<br />
 					</p>
 				</blockquote>
-								<h1>6. copy a sample backtest</h1>
+				<h1>6. copy a sample backtest</h1>
 				<blockquote class="video_link">
 					<i class="el-icon-video-play"></i>
 					<a href="#">Sample Backtest demo video</a>
@@ -602,6 +599,33 @@ Open the Backtest History tab, choose which backtest you want to edit, and click
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/editSample.png" alt="Edit Sample Backtest" title="Edit Sample Backtest">
+
+				<h1>7. How to view the description of the backtest in the list</h1>
+				<blockquote class="video_link">
+					<i class="el-icon-video-play"></i>
+					<a href="#">Sample Backtest demo video</a>
+				</blockquote>
+				<h3>7.1 Open any list page</h3>
+				<blockquote>
+					<p>
+						<br />
+						The backtesting system has three list pages: Backtest History, My Favorites, and Sample Backtests. The Backtest History contains all the backtests you create; My Favorites
+						Contains all backtests added to the collection; There are many Sample Backtests stored in Sample Backtests, which you can use through copy. Now let's open one of the list pages, such as Backtest History,
+						Then click on the triangle button to see the signal indicators used for the current backtesting. If you open the Sample Backtests tab, you'll find that Sample Backtests displays the basic information indicator by default, and if you don't need it, you can click the triangle button to hide.
+						<br />
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/viewDes.png" alt="View Backtest's Description" title="View Backtest's Description">
+				<h3>7.2 How to know the indicator parameters used by the backup through scription</h3>
+				<blockquote>
+					<p>
+						<br />
+						How do you know from the scription on display what entry and exit conditions are used in backtest? The description is divided into two parts, the Entry description on the left and the Entry description on the right
+						Exit description. The following figure is the meaning of the Entry description and the Exit description.
+						<br />
+					</p>
+				</blockquote>
+				<img src="../../assets/helpImg/des.png" alt="Entry Description & Exit Description" title="Entry Description & Exit Description">
 
 			</section>
 			<el-aside>
