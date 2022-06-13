@@ -861,7 +861,7 @@ export default {
 		},
 		saveBacktestData() {
 			let checked = true
-			let nameChecked = true
+			// let nameChecked = true
 			let validForm
 			let bd = JSON.parse(JSON.stringify(this.bd))
 			this.$refs.backtestSetupForm.validate((valid) => {
@@ -885,36 +885,36 @@ export default {
 			}
 			
 			if (validForm && riskCheck) {
-				let nameList = this.$store.state.backtestNameList
-				if (nameList.indexOf(bd.name) === -1) {
-					bd.favorites = false
-					delete bd.old_uuid
-				}
-				if (
-					nameList.indexOf(bd.name) > -1 &&
-					this.oldBacktestName === ''
-				) {
-					bd.favorites = false
-					delete bd.old_uuid
-					nameChecked = false
-				}
-				if (
-					nameList.indexOf(bd.name) > -1 &&
-					this.oldBacktestName === bd.name &&
-					this.oldBacktestName !== ''
-				) {
+				// let nameList = this.$store.state.backtestNameList
+				// if (nameList.indexOf(bd.name) === -1) {
+				// 	bd.favorites = false
+				// 	delete bd.old_uuid
+				// }
+				// if (
+				// 	nameList.indexOf(bd.name) > -1 &&
+				// 	this.oldBacktestName === ''
+				// ) {
+				// 	bd.favorites = false
+				// 	delete bd.old_uuid
+					// nameChecked = false
+				// }
+				// if (
+				// 	nameList.indexOf(bd.name) > -1 &&
+				// 	this.oldBacktestName === bd.name &&
+				// 	this.oldBacktestName !== ''
+				// ) {
 					// 说明重名要进行替换，不删除 old_uuid
-				}
-				if (
-					nameList.indexOf(bd.name) > -1 &&
-					this.oldBacktestName !== bd.name &&
-					this.oldBacktestName !== ''
-				) {
+				// }
+				// if (
+				// 	nameList.indexOf(bd.name) > -1 &&
+				// 	this.oldBacktestName !== bd.name &&
+				// 	this.oldBacktestName !== ''
+				// ) {
 					// 说明不重名，直接创建新的，删除 old_uuid
 					// this.$store.commit('clearBacktestUuid')
-					nameChecked = false
-				}
-				if (nameChecked) {
+					// nameChecked = false
+				// }
+				// if (nameChecked) {
 					if (bd.end_date) {
 						// 保存 backtestform 的数据
 						bd.commission = bd.commission / 100
@@ -940,15 +940,15 @@ export default {
 						checked = false
 						return checked
 					}
-				} else {
-					this.$message({
-						message: 'The backtest name already exists',
-						type: 'error',
-						offset: 300
-					})
-					checked = false
-					return checked
-				}
+				// } else {
+				// 	this.$message({
+				// 		message: 'The backtest name already exists',
+				// 		type: 'error',
+				// 		offset: 300
+				// 	})
+				// 	checked = false
+				// 	return checked
+				// }
 			} else {
 				// this.$message({
 				// 	message: 'Please give the backtest name',
@@ -1047,6 +1047,12 @@ export default {
 			}
 			return true
 		},
+		isEdit() {
+			if(this.oldBacktestName == this.bd.name) {
+				// 说明是编辑的
+				return true
+			}
+		}
 	}
 }
 </script>

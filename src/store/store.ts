@@ -119,7 +119,7 @@ export default new Vuex.Store({
 		sentimentIndicatorList: [],
 		backtestNameList: [],
 		formateTechnicalList: [],
-		riskControl: '1111'
+		riskControl: '1111',
 	},
 	getters: {
 		getExtremeValue: (state) => {
