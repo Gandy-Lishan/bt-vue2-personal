@@ -554,7 +554,7 @@ export default {
 				}
 				this.$emit('isOnlyRiskControl', this.exitItemCheck)
 			if(newVal == 3 && this.editableTabs.length > 3) {
-  this.$confirm('TimeOrder Multi-Signal supports up to three signals,Currently your multi-signal count is '+ this.editableTabs.length + ', are you sure you want to delete the last '+(this.editableTabs.length - 3) + 'th panels', 'Tips', {
+  this.$confirm('TimeOrder Multi-Signal supports up to three signals,Currently your multi-signal count is '+ this.editableTabs.length + ', are you sure you want to delete the last '+(this.editableTabs.length - 3) + 'th panels ?', 'Tips', {
           confirmButtonText: 'Confirm',
           cancelButtonText: 'Cancel',
           type: 'warning'

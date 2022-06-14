@@ -173,7 +173,7 @@ Feel free to choose an Indexer in the Sentiment Indicator search box, such as Sm
 				<blockquote>
 					<p>
 						<br/>
-						In clicking on the Studios option, select any Technical Indicator in the drop-down search box, such as the Connectivity Channel Index. Move your mouse over the Technical Indicator curve you just selected and right-click on the occurrence
+						In clicking on the Studios option, select any Technical Indicator in the drop-down search box, such as the Commodity Channel Index. Move your mouse over the Technical Indicator curve you just selected and right-click on the occurrence
 						You can modify the properties of the current indicator here, such as Period (for modifying the period of the curve), Result (for modifying the color of the curve), Excessive Optimism (you can modify the color of The Excelssive Optimism), Excessive Pessimism (you can modify the color of the Expossage Pessimism)
 						<br/>
 					</p>
