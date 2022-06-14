@@ -586,13 +586,16 @@ export default {
 
 			// if the last groups has no enough number of items, merge it with the last one
 			let c_date = jutils.formatDate(CIQ.stxx.chart.xaxis[0].DT, 'YYYYMMDD');
-			let m_date =
-					CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
-					CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
-					CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
-			if(c_date<m_date){
-				markers.unshift(...CIQ.groups.pop()) 
+			if(CIQ.groups.slice(-1)[0]){
+				let m_date =
+						CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
+						CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
+						CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
+				if(c_date<m_date){
+					markers.unshift(...CIQ.groups.pop()) 
+				}
 			}
+
 
 			console.log('initiating Markers...',markers)
 			CIQ.loadChart(markers, CIQ.addMarker)	
