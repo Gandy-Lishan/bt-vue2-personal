@@ -245,7 +245,7 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store, mapGetters } from 'vuex'
 import { timestampToTime } from '@/tools/formatDate.js'
-import { getIndicatorsList, getIndexsList, getStocksList } from "@/service/service.js"
+import { getIndicatorsList, getIndexsList, getStocksList, getBacktestName } from "@/service/service.js"
 const throttle = require('lodash/throttle')
 const uniqWith = require('lodash/uniqWith')
 const isEqual = require('lodash/isEqual')
@@ -846,9 +846,22 @@ export default {
 			this.$store.commit('getIndicatorsList', indicatorList)
 			CIQ.indicatorList = indicatorList
 		},
+		backtestNameCheck() {
+			return getBacktestName(this.bd.name).then((res) => {
+				console.log('名字校验接口返回值',res)
+				if(res.data.count == 0) {
+					this.saveBacktestData()
+				}else{
+					console.log('名字校验不通过',res)
+				}
+			}).then(res => {
+				console.log('名字校验不通过错误捕捉',res)
+				return res
+			})
+		},
 		saveBacktestData() {
 			let checked = true
-			let nameChecked = true
+			// let nameChecked = true
 			let validForm
 			let bd = JSON.parse(JSON.stringify(this.bd))
 			this.$refs.backtestSetupForm.validate((valid) => {
@@ -872,36 +885,36 @@ export default {
 			}
 			
 			if (validForm && riskCheck) {
-				let nameList = this.$store.state.backtestNameList
-				if (nameList.indexOf(bd.name) === -1) {
-					bd.favorites = false
-					delete bd.old_uuid
-				}
-				if (
-					nameList.indexOf(bd.name) > -1 &&
-					this.oldBacktestName === ''
-				) {
-					bd.favorites = false
-					delete bd.old_uuid
-					nameChecked = false
-				}
-				if (
-					nameList.indexOf(bd.name) > -1 &&
-					this.oldBacktestName === bd.name &&
-					this.oldBacktestName !== ''
-				) {
+				// let nameList = this.$store.state.backtestNameList
+				// if (nameList.indexOf(bd.name) === -1) {
+				// 	bd.favorites = false
+				// 	delete bd.old_uuid
+				// }
+				// if (
+				// 	nameList.indexOf(bd.name) > -1 &&
+				// 	this.oldBacktestName === ''
+				// ) {
+				// 	bd.favorites = false
+				// 	delete bd.old_uuid
+					// nameChecked = false
+				// }
+				// if (
+				// 	nameList.indexOf(bd.name) > -1 &&
+				// 	this.oldBacktestName === bd.name &&
+				// 	this.oldBacktestName !== ''
+				// ) {
 					// 说明重名要进行替换，不删除 old_uuid
-				}
-				if (
-					nameList.indexOf(bd.name) > -1 &&
-					this.oldBacktestName !== bd.name &&
-					this.oldBacktestName !== ''
-				) {
+				// }
+				// if (
+				// 	nameList.indexOf(bd.name) > -1 &&
+				// 	this.oldBacktestName !== bd.name &&
+				// 	this.oldBacktestName !== ''
+				// ) {
 					// 说明不重名，直接创建新的，删除 old_uuid
 					// this.$store.commit('clearBacktestUuid')
-					nameChecked = false
-				}
-				if (nameChecked) {
+					// nameChecked = false
+				// }
+				// if (nameChecked) {
 					if (bd.end_date) {
 						// 保存 backtestform 的数据
 						bd.commission = bd.commission / 100
@@ -927,15 +940,15 @@ export default {
 						checked = false
 						return checked
 					}
-				} else {
-					this.$message({
-						message: 'The backtest name already exists',
-						type: 'error',
-						offset: 300
-					})
-					checked = false
-					return checked
-				}
+				// } else {
+				// 	this.$message({
+				// 		message: 'The backtest name already exists',
+				// 		type: 'error',
+				// 		offset: 300
+				// 	})
+				// 	checked = false
+				// 	return checked
+				// }
 			} else {
 				// this.$message({
 				// 	message: 'Please give the backtest name',
@@ -1034,6 +1047,12 @@ export default {
 			}
 			return true
 		},
+		isEdit() {
+			if(this.oldBacktestName == this.bd.name) {
+				// 说明是编辑的
+				return true
+			}
+		}
 	}
 }
 </script>
@@ -1053,36 +1072,36 @@ export default {
 	position: absolute;
 
 	left: 335px;
-	top: 56px;
+	top: 105px;
 }
 .sliUnitNote {
 	position: absolute;
 	left: 335px;
-	top: 105px;
+	top: 152px;
 }
 @media (min-width: 1680px) {
 	.comUnitNote {
 		position: absolute;
 		left: 454px;
-		top: 56px;
+		top: 105px;
 	}
 	.sliUnitNote {
 		position: absolute;
 		left: 454px;
-		top: 105px;
+		top: 152px;
 	}
 }
 @media (min-width: 375px) and (max-width: 767px) {
 	.comUnitNote {
 		position: absolute;
 		left: 208px;
-		top: 56px;
+		top: 105px;
 		font-size: 12px;
 	}
 	.sliUnitNote {
 		position: absolute;
 		left: 208px;
-		top: 103px;
+		top: 152px;
 		font-size: 12px;
 	}
 	.el-input__suffix {

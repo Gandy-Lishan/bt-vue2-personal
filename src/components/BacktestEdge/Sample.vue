@@ -253,7 +253,8 @@ import {
 	copyBacktest,
 	getSampleList,
 	seeParams,
-	seeReport
+	seeReport,
+	getBacktestName
 } from '@/service/service'
 export default {
 	data() {
@@ -377,6 +378,15 @@ export default {
 		},
 		copyBacktest: throttle(async function (row) {
 			let params = {}
+			const nameRes = await getBacktestName(row.name + '(copy)')
+			if(nameRes.data.count != 0) {
+				this.$notify.error({
+						title: 'Has been Copied',
+						message: 'The backtest has been copied',
+						offset: 100
+			    })
+				return
+			}
 			const res = await seeParams(row.id)
 			if (res.status === 200) {
 				this.$store.commit('getBacktestSymbol', res.data.symbol)

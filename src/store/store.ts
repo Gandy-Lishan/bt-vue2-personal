@@ -120,7 +120,6 @@ export default new Vuex.Store({
 		backtestNameList: [],
 		formateTechnicalList: [],
 		riskControl: '1111',
-		groupedMarkerArray: [],
 	},
 	getters: {
 		getExtremeValue: (state) => {
@@ -301,6 +300,7 @@ export default new Vuex.Store({
 					state.backtestInfo[criteria][key] = obj[key]
 				}
 			}
+			console.log('Setupform的值',state.backtestInfo)
 		},
 		setBd(state, obj) {
 			for (let key in obj) {

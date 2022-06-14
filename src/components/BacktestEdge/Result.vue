@@ -143,7 +143,11 @@ export default {
 	},
 	watch: {
 		backtestEditData: {
-			handler(newVal) {},
+			handler(newVal) {
+				if (JSON.stringify(newVal) != '{}') {
+					this.temp.commission = (newVal.commission * 100).toFixed(2)
+				}
+			},
 			immediate: true,
 			deep: true
 		},

@@ -281,7 +281,7 @@
 			<el-tab-pane label="Trades" name="second">
 				<div class="trades-container">
 					<el-table
-						:data="tradesData.slice(20*(queryInfo.page-1),queryInfo.page*20)"
+						:data="splitTradeData"
 						style="width: 100%"
 						border
 						:span-method="objectSpanMethod"
@@ -414,7 +414,13 @@ export default {
 				total: 0,
 				page: 1
 			},
-			totalTradesNumber: 0
+			totalTradesNumber: 0,
+		}
+	},
+	computed: {
+		splitTradeData()
+		{
+			return this.tradesData.slice(20*(this.queryInfo.page-1),this.queryInfo.page*20)
 		}
 	},
 	created() {

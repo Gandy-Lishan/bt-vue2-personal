@@ -13,7 +13,7 @@
 						<el-submenu index="1">
 							<template slot="title">Help</template>
 							<el-menu-item index="1-1">Tutorial</el-menu-item>
-							<el-menu-item index="1-2">Contant Us</el-menu-item>
+							<!-- <el-menu-item index="1-2">Contant Us</el-menu-item> -->
 						</el-submenu>
 						<el-submenu index="2">
 							<template slot="title"><i class="el-icon-s-tools"></i></template>
@@ -271,7 +271,7 @@ import performance from '@/components/BacktestEdge/Performance.vue'
 import history from '@/components/BacktestEdge/History.vue'
 import favorite from '@/components/BacktestEdge/Favorite.vue'
 import sample from '@/components/BacktestEdge/Sample.vue'
-import { runBacktest, seeParams } from '@/service/service'
+import { runBacktest, seeParams, getBacktestName } from '@/service/service'
 import searchKeys from '@/tools/searchKeys.js'
 import UUID from '@/tools/uuid.js'
 import s3_tool from '@/tools/s3-upload.js'
@@ -558,13 +558,30 @@ export default {
 			// CIQ.addIndicatorsFromBacktest()
 		},
 		runBacktest: throttle(async function () {
-			let setUp = this.$refs.setUpChild.saveBacktestData()
+	      let setUp = this.$refs.setUpChild.saveBacktestData()
+		  let setUpChecked = true
+		  let entryChecked = true
+		  let isEdit = this.$refs.setUpChild.isEdit()
+	       console.log('runbacktest的setup',setUp)
 			this.$refs.entryChild.addEntrySignalLength()
 			this.$refs.exitChild.addExitSignalLength()
-			if (setUp) {
+			let setUpRes = await getBacktestName(this.$store.state.backtestInfo.name)
+			console.log('setUpRes',setUpRes)
+			if(setUpRes.data.count != 0 && !isEdit) {
+				console.log('名字校验失败')
+				this.$message({
+						message: 'The backtest name already exists',
+						type: 'error',
+						offset: 300
+					})
+				setUpChecked = false
+				this.$store.commit('clearBacktest')
+				return
+				}
+			if(setUpRes.data.count == 0 || isEdit) {
+				
 				let entry
 				// 申请空间
-				let entryChecked
 				for (let index = 0; index < this.entryLength; index++) {
 					this.addEntrySignalLength(index)
 					entry = this.$refs.entryChild.saveBacktestData(index)
@@ -577,7 +594,7 @@ export default {
 					this.$refs.entryChild.saveDelayBar()
 					this.$refs.entryChild.saveRelation()
 				}
-				if (entryChecked) {
+				if (entryChecked && setUpChecked) {
 					let exit
 					let exitChecked
 					for (let index = 0; index < this.exitLength; index++) {
@@ -974,6 +991,7 @@ export default {
 					}
 				}
 			}
+
 		}, 1000),
 		goToHistoryForm() {
 			this.activeName = 'second'

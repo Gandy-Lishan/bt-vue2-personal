@@ -553,15 +553,31 @@ export default {
 					this.exitItemCheck = false
 				}
 				this.$emit('isOnlyRiskControl', this.exitItemCheck)
-				if (newVal == 3 && this.editableTabs.length > 3) {
-					this.$message({
-						message:
-							'TimeOrder Multi-Signal supports up to three signals, please delete the panel',
-						type: 'error',
-						offset: 300
-					})
-					this.relation = oldVal
-				}
+			if(newVal == 3 && this.editableTabs.length > 3) {
+  this.$confirm('TimeOrder Multi-Signal supports up to three signals,Currently your multi-signal count is '+ this.editableTabs.length + ', are you sure you want to delete the last '+(this.editableTabs.length - 3) + 'th panels', 'Tips', {
+          confirmButtonText: 'Confirm',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        }).then(() => {
+			const currentTabs = this.editableTabs.length
+			for(let i=0;i<( currentTabs - 3);i++) {
+				this.handleTabsEdit(this.editableTabs.length + '','remove')
+			}
+          this.$message({
+            type: 'success',
+            offset: 300,
+			message: 'The deletion is successful and has been automatically switched to TimeOrder Multi-Signal'
+          });
+		  this.relation = newVal
+        }).catch(() => {
+		this.relation = oldVal
+          this.$message({
+            type: 'info',
+			offset: 300,
+            message: 'With the deletion undeleted, you can switch to The SaveBar Multi-Signal to delete the signal panel to less than 3'
+          });          
+        });
+      }
 			}
 		},
 		riskControl: {
@@ -642,6 +658,7 @@ export default {
 			this.techIndiObj.splice(obj.index, 1, obj.class)
 		},
 		handleTabsEdit(targetName, action) {
+			console.log(targetName, action)
 			if (action === 'add') {
 				if (this.relation == 2 || this.relation == 3) {
 					let num_key
@@ -857,7 +874,6 @@ export default {
 				this.editableTabsValue = '1'
 				this.score = 1
 				this.signals_in_market = 1
-				this.editableTabs.splice(0,1)
 			}
 			if (val == 2 || val == 3) {
 				if (this.editableTabs.length === 1) {
