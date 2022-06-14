@@ -1045,14 +1045,20 @@ export default {
 						data.exit.signals = data.exit.signals.map((value) => {
 							if(value.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999') {
 						return signalCode.decode(value.code)	}else{
+							vm.$nextTick(() => {
+								
 							vm.$refs.exitChild.setRiskEditData(data)
+							})
 							data.exit.signals = [{code: ''}]
 							return
 						}
 					    })
 						if(data.exit.signals.includes(undefined)) {
 							data.exit.signals = [{code: ''}]
+														vm.$nextTick(() => {
+								
 							vm.$refs.exitChild.setRiskEditData(data)
+							})
 						}else {
 				        let exitPanel = data.exit.signals.length
 						let exitData = {}
