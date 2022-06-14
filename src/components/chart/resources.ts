@@ -102,7 +102,6 @@ function getCustomConfig({
 	onChartReady?: Function
 } = {}) {
 	const config = getConfig()
-
 	// Update chart configuration by modifying default configuration
 	config.chartId = chartId || '_advanced-chart'
 	config.initialSymbol = symbol || {

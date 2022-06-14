@@ -596,7 +596,6 @@ export default {
 				}
 			}
 
-
 			console.log('initiating Markers...',markers)
 			CIQ.loadChart(markers, CIQ.addMarker)	
 			// for (let i = groups.length-1,j=0; i >= 0 ; i--,j++) {

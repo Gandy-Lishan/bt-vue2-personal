@@ -460,7 +460,6 @@ export default class AdvancedChartComponent extends Vue {
 		CIQ.addCover()
 		window.setTimeout(() => {
 			const uiContext = this.createChartAndUI(config)
-			this.stx = uiContext.stx
 			CIQ.stxx = uiContext.stx
 			CIQ.periodicity = {period:1, interval:1, timeUnit:'day'}
 
