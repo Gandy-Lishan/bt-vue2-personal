@@ -1107,6 +1107,7 @@ export default {
 	// border-right: 1px solid #797979;
 	margin-bottom: 10px;
 }
+
 @media (min-width: 1280px) and (max-width: 1365px) {
 	.entry-container {
 		// padding-left: 50px;
