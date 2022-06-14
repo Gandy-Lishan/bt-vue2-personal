@@ -75,8 +75,6 @@ export default class AdvancedWrapper extends Vue {
 		CIQ.vue = Vue
 		// refresh pag
 
-		//CIQ.store.commit('setCopy', JSON.stringify(CIQ.store.state))
-
 		// console.log('first CIQ.addIndicators')
 		// CIQ.addIndicators()
 		var chartBox = document.getElementsByClassName("chart_box")[0]

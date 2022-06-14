@@ -33,13 +33,13 @@ import { CIQ } from 'chartiq'
 Vue.use(VueCookies)
 // 配置请求根路径
 axios.defaults.baseURL = ''
-//默认10秒超时，不过会针对一些可能耗时请求单独处理(对于容易堵塞的请求在等待5秒后就重发)
+//set 10 sec as default,However, some time-consuming requests are processed separately
 axios.defaults.timeout = 10000;
-//在main.js设置全局的请求次数，请求的间隙
+//define the global retry count in main.js
 axios.defaults.retry = 4;
 axios.defaults.retryDelay = 1000;
 
-// 请求拦截器，挂载请求头
+// request interceptor
 axios.interceptors.request.use((config) => {
 	config.headers.Authorization = window.sessionStorage.getItem('token')
 	config.auth = {
@@ -50,7 +50,7 @@ axios.interceptors.request.use((config) => {
 	return config
 })
 
-// 重试请求(处理可能出现的请求报错或者超时)
+// retry the request(for handling request error or timeout)
 axios.interceptors.response.use(undefined, function axiosRetryInterceptor(err) {
     var config = err.config;
     // If config does not exist or the retry option is not set, reject
@@ -62,6 +62,9 @@ axios.interceptors.response.use(undefined, function axiosRetryInterceptor(err) {
     // Check if we've maxed out the total number of retries
     if(config.__retryCount >= config.retry) {
         // Reject with the error
+        console.error('timeout! ',config.url)
+        alert('request timeout, please refresh the page')
+        location.reload();
         return Promise.reject(err);
     }
     

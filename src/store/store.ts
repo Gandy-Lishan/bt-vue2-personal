@@ -36,7 +36,7 @@ export default new Vuex.Store({
 		maRadio: '',
 		stMaPeriod: '',
 		maPeriod: '',
-		importedLayout: '',
+		//importedLayout: '',
 		newPorfolioInputsValues: {
 			inputNameValue: '',
 			inputDescriptionValue: '',
@@ -127,9 +127,6 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
-		SetmarkerSet(state,list){
-			state.markerSet = list
-		},
 	setFavoriteIndicatorList(state, val){
 		state.favoriteIndicatorList = val
 	},
@@ -176,9 +173,9 @@ export default new Vuex.Store({
     getMaPeriod(state,val){
       state.maPeriod = val
     },
-    getImportedLayout(state,val){
-      state.importedLayout = val
-    },
+    // getImportedLayout(state,val){
+    //   state.importedLayout = val
+    // },
 		getExtremeValue: (state, list) => {
 			state.extremeValue = list
 		},
