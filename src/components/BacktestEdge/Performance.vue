@@ -4,7 +4,6 @@
 		<el-tabs
 			v-model="activePerTag"
 			type="card"
-			@tab-click="handleClick"
 			v-loading="loading"
 		>
 			<el-tab-pane label="Summary" name="first">
@@ -415,19 +414,19 @@ export default {
 				page: 1
 			},
 			totalTradesNumber: 0,
+			splitTradeData: []
 		}
 	},
 	computed: {
-		splitTradeData()
-		{
-			return this.tradesData.slice(20*(this.queryInfo.page-1),this.queryInfo.page*20)
-		}
+		// splitTradeData()
+		// {
+		// 	return this.tradesData.slice(20*(this.queryInfo.page-1),this.queryInfo.page*20)
+		// }
 	},
 	created() {
 		this.getResultData({ id: 0 })
 	},
 	methods: {
-		handleClick(tab, event) {},
 
 		async getResultData(row,callback) {
 			
@@ -540,6 +539,8 @@ export default {
 							vm.queryInfo.total = initalData['Trades'].length
 							vm.totalTradesNumber = (initalData['Trades'].length)/2
 							console.log("总的交易次数", vm.queryInfo.total);
+							// vm.queryInfo.page = 1
+							vm.handleCurrentChange(1)
 							vm.tradesData = initalData['Trades']
 							console.log('tradesData', vm.tradesData)
 							// ---------------------------------------- end ----------------------------------
@@ -698,6 +699,9 @@ export default {
 		handleCurrentChange(page) {
 			this.queryInfo.page = page
 			console.log('tradesdata的页数',page)
+			this.$nextTick(() => {
+				this.splitTradeData = this.tradesData.slice(20*(this.queryInfo.page-1),this.queryInfo.page*20)
+			})
 		}
 	}
 }

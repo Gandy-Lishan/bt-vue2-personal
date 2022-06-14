@@ -458,6 +458,7 @@ export default {
 			}, 3000)
 		},
 		editBacktest: throttle(async function (row) {
+			console.log(row);
 			let vm = this
 			try {
 				CIQ.addCover('Fetching backtest information...')

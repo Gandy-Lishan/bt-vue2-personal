@@ -769,7 +769,7 @@ export default {
 	text-decoration: none;
 }
 .content {
-	margin: 0 auto 0 510px;
+	margin: 0 auto 0 582px;
 	max-width: 1280px;
 	padding: 10px;
 	position: relative;
@@ -797,13 +797,13 @@ export default {
 	width: 900px;
 }
 .el-tabs__header.is-right {
-	height: 500px !important;
+	height: 600px !important;
 }
 .el-aside {
 	position: fixed;
 	top: 0px;
 	left: 10px;
-	width: 600px !important;
+	width: 570px !important;
 	height: 98%;
 	overflow-y: scroll;
 }
