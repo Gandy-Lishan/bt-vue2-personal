@@ -803,7 +803,7 @@ export default {
 	position: fixed;
 	top: 0px;
 	left: 10px;
-	width: 500px !important;
+	width: 600px !important;
 	height: 98%;
 	overflow-y: scroll;
 }
