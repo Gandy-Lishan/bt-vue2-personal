@@ -420,7 +420,7 @@
 import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
 // @ts-ignore
 import { CIQ } from 'chartiq/js/components'
-
+import jutils from 'jutils-src'
 //import { CIQ as ciqq} from 'chartiq/js/components'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
 
@@ -501,10 +501,28 @@ export default class AdvancedChartComponent extends Vue {
 
 			//CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = false;
 			this.initializeToggle()
-		}, 0)
-				
+			
+			CIQ.stxx.addEventListener("scroll", function(object) {
+				// same as "object.stx.markers.circle"
+				if(CIQ.isMarkerShown){
+					let c_date = jutils.formatDate(object.stx.chart.xaxis[0].DT, 'YYYYMMDD');
+					let m_date =
+							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
+							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
+							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
+					if(c_date<m_date){
+						let markers = CIQ.groups.pop()
+						console.log("new pagnigation start from ",
+							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
+							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
+							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10))
+						//console.log("an new group of marker is ready to load at: " + object.stx.chart.xaxis[0].DT,"\n marker : " + object.stx.markers.circle[0].params.x);
+						CIQ.loadChart(markers, CIQ.addMarker)
+					}
+				}
+			});
+		}, 0)			
 	}
-
 	initializeToggle() {
 		
 		// var mNode = document.getElementsByClassName("ciq-HU")[0]

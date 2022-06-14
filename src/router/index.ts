@@ -50,7 +50,7 @@ const router = new Router({
 
 
 router.beforeEach(async (to, from, next) => {
-	// 从根源替换allSymbolList
+	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	const res = await getIndicatorsList()
 	let allSymbolsList = res.data
 	const resStocks = await getStocksList()
@@ -117,7 +117,7 @@ async function postAxiosRequest(loginUrl: string, next: any) {
 	}catch(err){
 		status = false
 	}
-	//默认10秒超时，不过会针对一些可能耗时请求单独处理(对于容易堵塞的请求在等待3秒后就重发)
+	//set 10 sec as default,However, some time-consuming requests are processed separately
 	let res = await axios.post('/dev/user/',null,{timeout:5000})
 	
 	if (res.status === 200) {
