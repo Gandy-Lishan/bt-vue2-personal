@@ -505,7 +505,7 @@ export default {
 	   relation: {
 		handler(newVal, oldVal) {
 			if(newVal == 3 && this.editableTabs.length > 3) {
-  this.$confirm('TimeOrder Multi-Signal supports up to three signals,Currently your multi-signal count is '+ this.editableTabs.length + ', are you sure you want to delete the last '+(this.editableTabs.length - 3) + 'th panels', 'Tips', {
+  this.$confirm('TimeOrder Multi-Signal supports up to three signals,Currently your multi-signal count is '+ this.editableTabs.length + ', are you sure you want to delete the last '+(this.editableTabs.length - 3) + 'th panels ?', 'Tips', {
           confirmButtonText: 'Confirm',
           cancelButtonText: 'Cancel',
           type: 'warning'
@@ -595,7 +595,8 @@ export default {
 						this.editableTabs.pop()
 					this.indicatorRadioArr.pop()
 
-						this.editableTabsValue = this.editableTabs.length + ''
+						// this.editableTabsValue = this.editableTabs.length + ''
+						this.editableTabsValue = '1'
 				        this.tabIndex =this.editableTabs.length
 				}
 					if(this.relation == 3 && this.editableTabs.length > 3) {
@@ -606,7 +607,8 @@ export default {
 					})
 						this.editableTabs.pop()
 					    this.indicatorRadioArr.pop()
-						this.editableTabsValue = this.editableTabs.length + ''
+						// this.editableTabsValue = this.editableTabs.length + ''
+						this.editableTabsValue = '1'
 				        this.tabIndex =this.editableTabs.length
 					}
 				if(this.relation == 2) {
