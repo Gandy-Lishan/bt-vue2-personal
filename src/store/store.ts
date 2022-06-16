@@ -201,10 +201,12 @@ export default new Vuex.Store({
 		getRunBacktestAllResult(state, list) {
 			state.favoriteBacktestData = list
 		},
+		// set a single indicator to the indicator list
 		getEntryIndicators(state, obj) {
 			let {index,value} = obj
 			state.indicators.formIndicators.entry[index] = value
 		},
+		// store a list of entry indicators
 		getEntryIndicatorsList(state, list) {
 			state.indicators.formIndicators.entry = list
 		},

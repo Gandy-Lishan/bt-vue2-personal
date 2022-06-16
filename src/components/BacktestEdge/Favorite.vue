@@ -525,7 +525,11 @@ copyBacktest: throttle(async function (row) {
 			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
 			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
 			this.$store.commit('getExtraIndicators', [])
-			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
+			// filter garbage in TechnicalIndicators
+			const technicalIndicators = data.technicalIndicators.filter(item=>{
+				data.formIndicators.entry.indexOf(item) != -1 || data.formIndicators.exit.indexOf(item) != -1
+			})
+			this.$store.commit('getTechnicalIndicators', technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
 

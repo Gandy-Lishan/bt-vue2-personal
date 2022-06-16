@@ -17,8 +17,8 @@
 						</el-submenu>
 						<el-submenu index="2">
 							<template slot="title"><i class="el-icon-s-tools"></i></template>
-							<el-menu-item index="2-1">Theme</el-menu-item>
-							<el-menu-item index="2-2">Language</el-menu-item>
+							<!-- <el-menu-item index="2-1">Theme</el-menu-item>
+							<el-menu-item index="2-2">Language</el-menu-item> -->
 						</el-submenu>
 					</el-menu>
 					<!-- <div class="menu">
