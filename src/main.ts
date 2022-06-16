@@ -70,7 +70,7 @@ axios.interceptors.response.use(undefined, function axiosRetryInterceptor(err) {
     
     // Increase the retry count
     config.__retryCount += 1;
-    
+     
     
     // Create new promise to handle exponential backoff
     var backoff = new Promise(function(resolve) {
