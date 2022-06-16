@@ -456,11 +456,15 @@ export default class AdvancedChartComponent extends Vue {
 		portalizeContextDialogs(container)
 		// Delay the call to createChartAndUI so any other AdvancedChart components on the page
 		// have a chance to call portalizeContextDialogs
-		CIQ.nprogress.start()
-		CIQ.addCover()
+
+		// don't add mask when initiating a chart
+		// CIQ.nprogress.start()
+		// CIQ.addCover()
+		
 		window.setTimeout(() => {
 			const uiContext = this.createChartAndUI(config)
 			CIQ.stxx = uiContext.stx
+			
 			CIQ.periodicity = {period:1, interval:1, timeUnit:'day'}
 
 			var iter = CIQ.stxx.chart.market.newIterator({
@@ -505,18 +509,20 @@ export default class AdvancedChartComponent extends Vue {
 				// same as "object.stx.markers.circle"
 				if(CIQ.isMarkerShown){
 					let c_date = jutils.formatDate(object.stx.chart.xaxis[0].DT, 'YYYYMMDD');
-					let m_date =
-							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
-							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
-							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
-					if(c_date<m_date){
-						let markers = CIQ.groups.pop()
-						console.log("new pagnigation start from ",
-							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
-							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
-							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10))
-						//console.log("an new group of marker is ready to load at: " + object.stx.chart.xaxis[0].DT,"\n marker : " + object.stx.markers.circle[0].params.x);
-						CIQ.loadChart(markers, CIQ.addMarker)
+					if(CIQ.groups.slice(-1)[0]){
+						let m_date =
+								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
+								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
+								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
+						if(c_date<m_date){
+							let markers = CIQ.groups.pop()
+							console.log("new pagnigation start from ",
+								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
+								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
+								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10))
+							//console.log("an new group of marker is ready to load at: " + object.stx.chart.xaxis[0].DT,"\n marker : " + object.stx.markers.circle[0].params.x);
+							CIQ.loadChart(markers, CIQ.addMarker)
+						}
 					}
 				}
 			});

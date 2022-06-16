@@ -357,14 +357,14 @@ export default {
 		async getHistoryList() {
 			this.loadTest = 'Loading...'
 			//貌似不用
-			//this.loading = true
+			this.loading = true
 			let page = this.queryInfo.page
 			try {
 				let res = await getHistoryList(page)
 				if (res.status === 200) {
 					//貌似不用
 					//CIQ.hideCover()
-					//this.loading = false
+					this.loading = false
 					let historyNameList = []
 					this.backtestList = res.data.results
 
@@ -397,7 +397,7 @@ export default {
 			} catch (error) {
 				console.log(error)
 				//CIQ.hideCover()
-				//this.loading = false
+				this.loading = false
 			}
 		},
 		refreshHistory(id) {
@@ -633,7 +633,11 @@ export default {
 			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
 			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
 			this.$store.commit('getExtraIndicators', [])
-			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
+			// filter garbage in TechnicalIndicators
+			const technicalIndicators = data.technicalIndicators.filter(item=>{
+				data.formIndicators.entry.indexOf(item) != -1 || data.formIndicators.exit.indexOf(item) != -1
+			})
+			this.$store.commit('getTechnicalIndicators', technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
 

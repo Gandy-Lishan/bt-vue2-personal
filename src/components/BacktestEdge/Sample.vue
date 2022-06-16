@@ -529,11 +529,16 @@ export default {
 			this.getSampleList()
 		},
 		reloadData(data, freq) {
+			console.log(data)
 			let frequency = ''
-			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
-			this.$store.commit('getExitIndicators', data.formIndicators.exit)
+			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
+			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
 			this.$store.commit('getExtraIndicators', [])
-			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
+			// filter garbage in TechnicalIndicators
+			const technicalIndicators = data.technicalIndicators.filter(item=>{
+				data.formIndicators.entry.indexOf(item) != -1 || data.formIndicators.exit.indexOf(item) != -1
+			})
+			this.$store.commit('getTechnicalIndicators', technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
 
@@ -555,15 +560,6 @@ export default {
 				}
 			}
 			this.$store.commit('setRestoreFreq', frequency)
-		},
-		restoreIndicatorLayout(data, freq, row) {
-			this.reloadData(data, freq)
-			var that = this
-			CIQ.addIndicatorsFromBacktest(function () {
-				that.$store.commit('getRunBacktestData', row)
-				that.$emit('goTobacktestSetupForm', row.id)
-				that.$emit('goBacktestResultForm', row)
-			})
 		},
 		async showDes(row) {
 			const datades = {}
