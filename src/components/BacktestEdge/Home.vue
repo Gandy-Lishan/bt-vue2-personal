@@ -1046,7 +1046,6 @@ export default {
 							if(value.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999') {
 						return signalCode.decode(value.code)	}else{
 							vm.$nextTick(() => {
-								
 							vm.$refs.exitChild.setRiskEditData(data)
 							})
 							data.exit.signals = [{code: ''}]
@@ -1055,8 +1054,7 @@ export default {
 					    })
 						if(data.exit.signals.includes(undefined)) {
 							data.exit.signals = [{code: ''}]
-														vm.$nextTick(() => {
-								
+							vm.$nextTick(() => {
 							vm.$refs.exitChild.setRiskEditData(data)
 							})
 						}else {
