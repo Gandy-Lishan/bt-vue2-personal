@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from "axios"
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
+		studySettingMA: '',
 		markerSet: [],
 		favoriteIndicatorList: [],
 		favoriteSymbolList: [],
@@ -22,14 +22,6 @@ export default new Vuex.Store({
 		pairDataFreq: '',
 		stateCopy: {},
 		conditionRadio: {
-			// MACD_like: '',
-			// EFT_like: '',
-			// BollingerBands_like: '',
-			// Stochastics_like: '',
-			// ERI_like: '',
-			// ADX_like: '',
-			// MovingAverage_like: '',
-			// Aligator_like: '',
 			entry:new Array(5).fill(''),
 			exit:new Array(5).fill(''),
 		},
@@ -81,27 +73,6 @@ export default new Vuex.Store({
 		},
 
 		extremeValue: [],
-
-		// extremeValue: [{
-		// 	indicator: '',
-		// 	extremeOptimism: '',
-		// 	extremePessimism: ''
-		// }],
-		// cciDefault: {
-		//   over_bought_bound: undefined,
-		// 	over_sold_bound: undefined,
-		//   period: undefined
-		// },
-		// macdDefault: {
-		//   MACDSlow: undefined,
-		//   MACDFast: undefined,
-		//   MACDSL: undefined
-		// },
-		// rsiDefault: {
-		//   over_bought_bound: undefined,
-		// 	over_sold_bound: undefined,
-		//   period: undefined
-		// },
 		strategyId: '',
 		indicatorsList: [],
 		builtinList: [],
@@ -127,65 +98,122 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
-	setFavoriteIndicatorList(state, val){
-		state.favoriteIndicatorList = val
-	},
-	setFavoriteSymbolList(state, val){
-		state.favoriteSymbolList = val
-	},
-	setTechSD(state, val){
-		state.techSD = val
-	},	
-	setSavedTechSD(state, val){
-		state.savedTechSD = val
-	},
-	setCurrentSenti(state,val){
-		state.currentSenti = val
-	},
-	setCurrentTech(state,val){
-		state.currentTech = val
-	},
-	setRestoreFreq(state,val){
-		state.restoreFreq = val
-	},
-	getBacktestSymbol(state,val){
-		state.backtestSymbol = val
-	},
-    resetState(state,val){
-      state = val
-    },
-    setCopy(state,val){
-      state.stateCopy = val
-    },
-	setFreqency(state,val){
-		state.pairDataFreq = val
-	},
-    setConditionRadio(state,val){
-      state.conditionRadio = val
-    },
-    setMaRadio(state,val){
-      state.maRadio = val
-    }
-    ,
-    getStMaPeriod(state,val){
-      state.stMaPeriod = val
-    },
-    getMaPeriod(state,val){
-      state.maPeriod = val
-    },
-    // getImportedLayout(state,val){
-    //   state.importedLayout = val
-    // },
+		/**
+		 * Sets up a mutations to store MA period when editting MA study to make sure the MA period is the same in chart and form 
+		 */
+		studySettingMAChange(state,val){
+			state.studySettingMA = val
+		},
+		/**
+		 * Sets up a mutations to store favoriteIndicatorList that is originally read from API
+		 */
+		setFavoriteIndicatorList(state, val){
+			state.favoriteIndicatorList = val
+		},
+		/**
+		 * Sets up a mutations to store favoriteSymbolList that is originally read from API
+		 */
+		setFavoriteSymbolList(state, val){
+			state.favoriteSymbolList = val
+		},
+		/**
+		 * Sets up a mutations to store the study objects that are read from API
+		 */	
+		setTechSD(state, val){
+			state.techSD = val
+		},
+		/**
+		 * Sets up a mutations to store the current study objects on chart
+		 */
+		setSavedTechSD(state, val){
+			state.savedTechSD = val
+		},
+		/**
+		 * Sets up a mutations to store the current selected sentiment indicator, it's used to trigger the listener for updating indicator in form
+		 */
+		setCurrentSenti(state,val){
+			state.currentSenti = val
+		},
+		/**
+		 * Sets up a mutations to store the current selected technical indicator, it's used to trigger the listener for updating indicator in form
+		 */
+		setCurrentTech(state,val){
+			state.currentTech = val
+		},
+		/**
+		 * Sets up a mutations to restore the timeframe of selected backtest
+		 */	
+		setRestoreFreq(state,val){
+			state.restoreFreq = val
+		},
+		/**
+		 * Sets up a mutations to restore the symbol of selected backtest
+		 */	
+		getBacktestSymbol(state,val){
+			state.backtestSymbol = val
+		},
+		/**
+		 * not in use
+		 */	
+		resetState(state,val){
+		state = val
+		},
+		/**
+		 * not in use
+		 */	
+		setCopy(state,val){
+		state.stateCopy = val
+		},
+		/**
+		 * no bug occurs, however, the logic inside is confusing
+		 */	
+		setFreqency(state,val){
+			state.pairDataFreq = val
+		},
+		getFrequency(state, val) {
+			state.exitFrequency = val
+			state.backtestInfo.frequency = val
+		},
+		/**
+		 * Sets up a mutations to store the condition of selected technical indicator in form, it's used for gennerating output csv
+		 */
+		setConditionRadio(state,val){
+		state.conditionRadio = val
+		},
+		/**
+		 * these 3 mutations below are used to update status of Moving average in MA.vue
+		 */
+		setMaRadio(state,val){
+		state.maRadio = val
+		}
+		,
+		getStMaPeriod(state,val){
+		state.stMaPeriod = val
+		},
+		getMaPeriod(state,val){
+		state.maPeriod = val
+		},
+		/**
+		 * Sets up a mutations to store the extremeValue of an indicator
+		 */	
 		getExtremeValue: (state, list) => {
 			state.extremeValue = list
 		},
-
+		/**
+		 * Sets up a mutations to store the list of all indicators which is loaded from getAllSymbolsList API in project initiation
+		 */	
 		getAllSymbolsList(state, list) {
 			state.allSymbolsList = list
 		},
+		/**
+		 * Sets up a mutations to store the StocksList, it's usually called when the project is initiated
+		 */	
 		getStocksList(state, list) {
 			state.stocksList = list
 		},
+		/**
+		 * Sets up a mutations to store the IndexsList, it's usually called when the project is initiated
+		 */	
 		getIndexsList(state, list) {
 			state.indexsList = list
 		},
@@ -201,12 +229,16 @@ export default new Vuex.Store({
 		getRunBacktestAllResult(state, list) {
 			state.favoriteBacktestData = list
 		},
-		// set a single indicator to the indicator list
+		/**
+		 * set a single indicator to the indicator list
+		 */	
 		getEntryIndicators(state, obj) {
 			let {index,value} = obj
 			state.indicators.formIndicators.entry[index] = value
 		},
-		// store a list of entry indicators
+		/**
+		 * store a list of entry indicators
+		 */	
 		getEntryIndicatorsList(state, list) {
 			state.indicators.formIndicators.entry = list
 		},
@@ -217,15 +249,24 @@ export default new Vuex.Store({
 		getExitIndicatorsList(state, list) {
 			state.indicators.formIndicators.exit = list
 		},
+		/**
+		 * no bug occurs, however, the logic inside is confusing
+		 */	
 		getExtraIndicators(state, val) {
 			state.indicators.extraIndicators = val
 		},
 		getStrategyId(state, id) {
 			state.strategyId = id
 		},
+		/**
+		 * no bug occurs, however, the logic inside is confusing
+		 */	
 		getIndicatorsList(state, data) {
 			state.indicatorsList = data
 		},
+		/**
+		 * Sets up a mutations to store the technical indicators
+		 */	
 		getBuiltinList(state, data) {
 			state.builtinList = data
 		},
@@ -233,10 +274,9 @@ export default new Vuex.Store({
 		getTradesData(state, data) {
 			state.trades = data
 		},
-		getFrequency(state, val) {
-			state.exitFrequency = val
-			state.backtestInfo.frequency = val
-		},
+		/**
+		 * Sets up a mutations to store a list of the name of all rendered moving average line 
+		 */	
 		getMA(state, val) {
 			state.activatedMA = val
 		},
@@ -413,7 +453,7 @@ export default new Vuex.Store({
 			if(criteria == 'exit') {
 			state.backtestInfo.exit.signals[index] = Object.assign({}, init)
 			}else if(criteria == 'entry') {
-			  init.riskIndicator = ''
+				init.riskIndicator = ''
 			state.backtestInfo.entry.signals[index] = Object.assign({}, init)
 			}
 			for(let key in obj) {
@@ -486,7 +526,7 @@ export default new Vuex.Store({
 			state.backtestInfo.exit_description = []	
 		},
 		getBacktestName(state, list) {
-          state.backtestNameList = list
+			state.backtestNameList = list
 		},
 		clearBacktestUuid(state) {
 			if(state.backtestInfo.old_uuid) {
