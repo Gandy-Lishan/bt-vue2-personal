@@ -51,29 +51,6 @@
 					</div>
 				</el-form-item>
 			</div>
-			<div class="indicator-container techBox">
-				<el-form-item>
-					<el-radio
-						v-model="indicatorRadio"
-						label="Customized Indicator"
-						@change="changeIndicatorChecked"
-					>
-					</el-radio>
-				</el-form-item>
-				<el-upload
-  class="upload-demo"
-  action="https://jsonplaceholder.typicode.com/posts/"
-  :on-preview="handlePreview"
-  :on-remove="handleRemove"
-  :before-remove="beforeRemove"
-  multiple
-  :limit="3"
-  :on-exceed="handleExceed"
-  :file-list="fileList">
-  <el-button size="small" type="primary">点击上传</el-button>
-  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-</el-upload>
-			</div>
 		</el-form>
 	</div>
 </template>
@@ -805,10 +782,6 @@ export default {
 <style lang="less" scoped>
 .indicator-container {
 	display: flex;
-}
-.file-uploade-container {
-	display: flex;
-	justify-content: space-around;
 }
 /deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
 	width: 334px;
