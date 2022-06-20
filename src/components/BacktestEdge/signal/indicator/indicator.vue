@@ -1,3 +1,4 @@
+
 <template>
 	<div class="indicator-box">
 		<el-form :model="si" ref="siForm" :rules="rules">

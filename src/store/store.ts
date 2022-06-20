@@ -1,3 +1,8 @@
+/**
+ *	2.2.0
+ *	Vuex store
+ */
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)

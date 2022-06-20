@@ -14,8 +14,8 @@ import { getCustomConfig } from './resources' // ChartIQ library resources
 import store from '../../store/store'
 
 // @ts-ignore
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-//import { CIQ } from 'chartiq/js/components' // Required for types in chartInitialized
+//import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { CIQ } from 'chartiq/js/components' // Required for types in chartInitialized
 
 @Component({
 	components: {
