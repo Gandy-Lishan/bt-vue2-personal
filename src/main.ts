@@ -24,7 +24,8 @@ import '@/assets/iconfont/iconfont.css'
 import VueCookies from 'vue-cookies'
 
 import 'github-markdown-css'
-import { CIQ } from 'chartiq'
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+//import { CIQ } from 'chartiq'
 
 Vue.use(VueCookies)
 axios.defaults.baseURL = ''

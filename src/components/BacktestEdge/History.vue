@@ -510,7 +510,7 @@ export default {
 					if (res.data.indicator_layout) {
 						this.restoreIndicatorLayoutView(
 							JSON.parse(res.data.indicator_layout),
-							JSON.parse(res.data.entry).frequency,
+							res.data.frequency,
 							row,res.data
 						)
 					} else {
@@ -548,10 +548,10 @@ export default {
 			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
 			this.$store.commit('getExtraIndicators', [])
 			// filter garbage in TechnicalIndicators
-			const technicalIndicators = data.technicalIndicators.filter(item=>{
-				data.formIndicators.entry.indexOf(item) != -1 || data.formIndicators.exit.indexOf(item) != -1
-			})
-			this.$store.commit('getTechnicalIndicators', technicalIndicators)
+			// const technicalIndicators = data.technicalIndicators.filter(item=>{
+			// 	data.formIndicators.entry.indexOf(item) != -1 || data.formIndicators.exit.indexOf(item) != -1
+			// })
+			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
 

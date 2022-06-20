@@ -217,7 +217,17 @@ export default {
 			}
 		}
 	},
+	computed: {
+		updateSettingMA() {
+			return this.$store.state.studySettingMA
+		},
+	},
 	watch: {
+		updateSettingMA(val) {
+			//console.log('updateSettingMA: ',val)
+			this.getMaValue(val)
+			this.getSCvalue(val)
+		},
 		isActived: {
 			handler(newVal) {
 				if (newVal) {
@@ -441,6 +451,7 @@ export default {
 				this.$store.commit('saveDescription', desObj)
 		},
 		getMaPeriodValue(val) {
+			
 			this.tech.ma_period = val
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
@@ -573,9 +584,10 @@ export default {
 				this.tech.period = val
 
 				this.updateMAPeriod(val)
-			}
+		}
 		},
 		getMaValue: throttle(function (val) {
+			
 			this.tech.maPeriod = val
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]

@@ -298,9 +298,9 @@
 <script lang="ts">
 import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
 // @ts-ignore
+//import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { CIQ } from 'chartiq/js/components'
 import jutils from 'jutils-src'
-//import { CIQ as ciqq} from 'chartiq/js/components'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
 
 @Component({})
