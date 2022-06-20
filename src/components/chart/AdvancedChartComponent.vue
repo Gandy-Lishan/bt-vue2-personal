@@ -3,7 +3,6 @@
 		<cq-color-picker></cq-color-picker>
 		
 		<div class="ciq-nav full-screen-hide">
-			<!-- enables the more button when in break-sm mode -->
 			<div class="sidenav-toggle ciq-toggles">
 				<cq-toggle
 					class="ciq-sidenav"
@@ -16,43 +15,14 @@
 				</cq-toggle>
 			</div>
 
-			<!-- <cq-menu class="ciq-search">
-				<cq-lookup cq-keystroke-claim cq-uppercase></cq-lookup>
-			</cq-menu> -->
-
-			<!-- any entry in this div will be shown in the side navigation bar in break-sm mode -->
 			<cq-side-nav cq-on="sidenavOn">
 				<div class="icon-toggles ciq-toggles">
 					<cq-menu class="ciq-search">
 						<cq-lookup cq-keystroke-claim cq-uppercase></cq-lookup>
 					</cq-menu>
-					<!-- <cq-toggle class="ciq-draw" cq-member="drawing">
-						<cq-help help-id="drawing_tools_toggle"></cq-help>
-						<span></span><cq-tooltip>Draw</cq-tooltip>
-					</cq-toggle> -->
 					<cq-menu class="ciq-indicators-search">
 						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
 					</cq-menu>
-					<!-- <cq-info-toggle-dropdown>
-						<cq-toggle id="mStudies" class="ciq-CH" cq-member="crosshair">
-							<span></span>
-							<cq-tooltip>Crosshair (Alt + \)</cq-tooltip>
-						</cq-toggle>
-
-						<cq-menu class="ciq-menu toggle-options collapse">
-							<span></span>
-							<cq-menu-dropdown>
-								<cq-item cq-member="crosshair"
-									>Hide Heads-Up Display<span class="ciq-radio"
-										><span></span></span
-								></cq-item>
-								<cq-item cq-member="headsUp-static"
-									>Show Heads-Up Display<span class="ciq-radio"
-										><span></span></span
-								></cq-item>
-							</cq-menu-dropdown>
-						</cq-menu>
-					</cq-info-toggle-dropdown> -->
 
 					<cq-info-toggle-dropdown>
 						<cq-toggle class="ciq-HU" id="ciq-HU" cq-member="headsUp">
@@ -106,17 +76,6 @@
 							<cq-menu-container cq-name="menuPeriodicity"></cq-menu-container>
 						</cq-menu-dropdown>
 					</cq-menu>
-					<!-- customized features -->
-					<!-- <cq-menu class="ciq-indicators-search">
-						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
-					</cq-menu> -->
-
-					<!-- <cq-menu class="ciq-menu ciq-views collapse">
-						<span>Views</span>
-						<cq-menu-dropdown>
-							<cq-views></cq-views>
-						</cq-menu-dropdown>
-					</cq-menu> -->
 
 					<cq-menu class="ciq-menu ciq-display collapse">
 						<span>Display</span>
@@ -125,11 +84,6 @@
 								<cq-heading>Chart Style</cq-heading>
 								<cq-menu-container cq-name="menuChartStyle"></cq-menu-container>
 							</cq-menu-dropdown-section>
-							<!-- <cq-menu-dropdown-section class="chart-aggregations">
-								<cq-menu-container
-									cq-name="menuChartAggregates"
-								></cq-menu-container>
-							</cq-menu-dropdown-section> -->
 						</cq-menu-dropdown>
 					</cq-menu>
 
@@ -177,64 +131,6 @@
 						</cq-menu-dropdown>
 					</cq-menu>
 
-					<!-- <cq-menu class="ciq-menu stx-markers collapse">
-						<span>Events</span>
-						<cq-menu-dropdown>
-							<cq-heading>Chart Events</cq-heading>
-							<cq-item stxtap="Markers.showMarkers('square')"
-								>Simple Square<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<cq-item stxtap="Markers.showMarkers('circle')"
-								>Simple Circle<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<cq-item stxtap="Markers.showMarkers('callout')"
-								>Callouts<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<cq-item
-								class="ta_markers-ui"
-								stxtap="Markers.showMarkers('trade')"
-								>Trade<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<cq-item class="ta_markers-ui" stxtap="Markers.showMarkers('mMarker')">mMarker<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<cq-item
-								class="video_markers-ui"
-								stxtap="Markers.showMarkers('video')"
-								>Video<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<cq-item stxtap="Markers.showMarkers('abstract')"
-								>Abstract<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<cq-separator></cq-separator>
-							<cq-item stxtap="Markers.showMarkers()" class="ciq-active"
-								>None<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<div class="timespanevent-ui">
-								<cq-separator></cq-separator>
-								<cq-heading>Panel Events</cq-heading>
-								<cq-item
-									class="span-event"
-									stxtap="TimeSpanEvent.showMarkers('Order')"
-									cq-no-close
-									>Order<span class="ciq-checkbox ciq-active"
-										><span></span></span
-								></cq-item>
-								<cq-item
-									class="span-event"
-									stxtap="TimeSpanEvent.showMarkers('CEO')"
-									cq-no-close
-									>CEO<span class="ciq-checkbox ciq-active"><span></span></span
-								></cq-item>
-								<cq-item
-									class="span-event"
-									stxtap="TimeSpanEvent.showMarkers('News')"
-									cq-no-close
-									>News<span class="ciq-checkbox ciq-active"><span></span></span
-								></cq-item>
-							</div>
-						</cq-menu-dropdown>
-					</cq-menu> -->
-
 					<cq-menu class="ciq-menu ciq-preferences collapse">
 						<span></span>
 						<cq-menu-dropdown>
@@ -262,21 +158,6 @@
 								<cq-themes></cq-themes>
 								<cq-separator></cq-separator>
 							</cq-menu-dropdown-section>
-							<!-- <cq-menu-dropdown-section class="chart-locale">
-								<cq-heading>Locale</cq-heading>
-								<cq-item keyboard-selectable="false"
-									><cq-clickable
-										cq-selector="cq-timezone-dialog"
-										cq-method="open"
-										keyboard-selectable="true"
-										>Change Timezone</cq-clickable
-									></cq-item
-								>
-								<cq-item stxsetget="Layout.Language()">
-									<cq-flag></cq-flag>
-									<cq-language-name>Change Language</cq-language-name>
-								</cq-item>
-							</cq-menu-dropdown-section> -->
 						</cq-menu-dropdown>
 					</cq-menu>
 				</div>
@@ -300,10 +181,8 @@
 		</div>
 		<!-- End Navbar -->
 
-		<!-- custom tag for scriptiq only works when plugin is loaded -->
 		<cq-scriptiq class="scriptiq-ui"></cq-scriptiq>
 
-		<!-- custom tag for analystviews only works when plugin is loaded -->
 		<cq-analystviews
 			class="analystviews-ui"
 			token="eZOrIVNU3KR1f0cf6PTUYg=="
@@ -458,8 +337,6 @@ export default class AdvancedChartComponent extends Vue {
 		// have a chance to call portalizeContextDialogs
 
 		// don't add mask when initiating a chart
-		// CIQ.nprogress.start()
-		// CIQ.addCover()
 		
 		window.setTimeout(() => {
 			const uiContext = this.createChartAndUI(config)
@@ -498,11 +375,9 @@ export default class AdvancedChartComponent extends Vue {
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
 			
 			CIQ.stxx.layout.headsUp = "floating";
-			//console.log(CIQ.stxx.layout.headsUp.floating)
 			var mNode = document.getElementsByClassName("ciq-HU")[0]
 			mNode.classList.add("activated");		
 
-			//CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = false;
 			this.initializeToggle()
 			
 			CIQ.stxx.addEventListener("scroll", function(object) {
@@ -520,7 +395,6 @@ export default class AdvancedChartComponent extends Vue {
 								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
 								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
 								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10))
-							//console.log("an new group of marker is ready to load at: " + object.stx.chart.xaxis[0].DT,"\n marker : " + object.stx.markers.circle[0].params.x);
 							CIQ.loadChart(markers, CIQ.addMarker)
 						}
 					}
@@ -529,14 +403,7 @@ export default class AdvancedChartComponent extends Vue {
 		}, 0)			
 	}
 	initializeToggle() {
-		
-		// var mNode = document.getElementsByClassName("ciq-HU")[0]
-		// if (CIQ.stxx.layout.headsUp == "activated"){	
-		// 	mNode.classList.add("activated");		
-		// }
-		// else{
-		// 	mNode.classList.remove("activated");
-		// }
+
 		var mNode = document.getElementsByClassName("lastP")[0]
 		if (CIQ.stxx.layout.lastPriceLabel){
 			mNode.classList.remove("active");
@@ -551,11 +418,6 @@ export default class AdvancedChartComponent extends Vue {
 		else{
 			mNode.classList.add("active");
 		}
-	}
-	beforeDestroy() {
-		// Destroy the ChartEngine instance when unloading the component.
-		// This will stop internal processes such as quotefeed polling.
-		//this.stx?.destroy()
 	}
 
 	

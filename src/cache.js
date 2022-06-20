@@ -1,4 +1,4 @@
-// 缓存池
+// Cache pool
 let CACHES = {}
  
 export default class Cache {
@@ -10,12 +10,12 @@ export default class Cache {
  
   use(options) {
     let defaults = {
-      expire: 3600000*24, // 过期时间 默认一天
-      storage: false, // 是否开启缓存
-      storage_expire: 3600000*24*7, // 本地缓存过期时间 默认一周
-      instance: this.axios, // axios的实例对象 默认指向当前axios
-      requestConfigFn: null, // 请求拦截的操作函数 参数为请求的config对象 返回一个Promise
-      responseConfigFn: null, // 响应拦截的操作函数 参数为响应数据的response对象 返回一个Promise
+      expire: 3600000*24, // The default expiration time is one day
+      storage: false, // Whether cache is enabled
+      storage_expire: 3600000*24*7, // Local cache expiration time defaults to one week
+      instance: this.axios, // The instance object of Axios points to the current Axios by default
+      requestConfigFn: null, // The operation function parameter requesting interception returns a promise for the requested config object
+      responseConfigFn: null, // The operation function parameter of response interception returns a promise for the response object of response data
       ...options
     }
     this.options = defaults
@@ -38,14 +38,13 @@ export default class Cache {
   }
 
   init() {
-    // 初始化
+    // initialization
     let options = this.options
     this.testUsage()
     if (options.storage) {
-      // 如果开启本地缓存 则设置一个过期时间 避免时间过久 缓存一直存在
+      // If the local cache is enabled, set an expiration time to avoid the cache remaining for too longg
       this._storageExpire('expire').then(() => {
         if (localStorage.length === 0){
-            console.log("storage_expire过期了")
             CACHES = {}
         }
         else mapStorage(localStorage, 'get')
@@ -56,30 +55,27 @@ export default class Cache {
   }
  
   request(cb) {
-    // 请求拦截器
+    // request interceptor 
     let options = this.options
     options.instance.interceptors.request.use(async config => {
-      // 判断用户是否返回 config 的 promise
+      // Judge whether the user returns the promise of config
       let newConfig = cb && (await cb(config))
       config = newConfig || config
-      // req只处理get，post不被拦截，照常发请求
+      // Req only processes get, post is not intercepted, and requests are sent as usual
       if (config.method === 'get' && config.cache) {
         let source = this.cancelToken.source()
         config.cancelToken = source.token
         let data = CACHES[config.url]
         let expire = getExpireTime()
-        // 判断缓存数据是否存在 存在的话 是否过期 没过期就返回
+        // Judge whether the cached data exists. If so, whether it is expired. If not, return
         
-        // 现在时间减去设定缓存时时间是否小于过期时长
+        // Whether the current time minus the set cache time is less than the expiration time
         if (data && expire - data.expire < this.options.expire) {
-            console.log('没过期',config.url)
+            console.log('Not expired',config.url)
             source.cancel(data)
         }else{
-            console.log('过期',config.url,data)
-           // console.log('cache date info',expire,data.expire,this.options.expire)
+            console.log('be overdue',config.url,data)
         }
-        
-        //console.log("req save cache for ",CACHES[config.url]+ '\nurl ',config.url + '\n expire time ',new Date(expire))
       }
 
       config.headers.Authorization = window.sessionStorage.getItem('token')
@@ -93,10 +89,10 @@ export default class Cache {
   }
  
   response(cb) {
-    // 响应拦截器
+    // Response interceptor
     this.options.instance.interceptors.response.use(
       async response => {
-        // 判断用户是否返回了 response 的 Promise
+        // Determine whether the user has returned the promise of the response
         let newResponse = cb && (await cb(response))
         response = newResponse || response
 
@@ -106,18 +102,16 @@ export default class Cache {
             expire: getExpireTime(),
             data: response
           }
-          //console.log("response",data)
           CACHES[`${response.config.url}`] = data
           if (this.options.storage) mapStorage(CACHES)
           
         }
-        //res让post把请求返回值缓存
+        // Res lets post cache the request return value
         if (response.config.method === 'put' && response.config.cache) {   
           let data = {
             expire: getExpireTime(),
             data: response
           }
-          //console.log("put response",data)
           CACHES[`${response.config.url}`] = data
           if (this.options.storage) mapStorage(CACHES)
         }
@@ -125,8 +119,7 @@ export default class Cache {
         return response
       },
       error => {
-        // 返回缓存数据
-        //console.log('缓存数据',error.message.data)
+        // Return cached data
         if (this.axios.isCancel(error)) {
           return Promise.resolve(error.message.data)
         }
@@ -135,7 +128,7 @@ export default class Cache {
     )
   }
  
-  // 本地缓存过期判断
+  // Local cache expiration judgment
   _storageExpire(cacheKey) {
     return new Promise(resolve => {
         
@@ -143,9 +136,9 @@ export default class Cache {
       
       let date = getExpireTime()
       if (key) {
-        // 缓存存在 判断是否过期
+        // Whether the cache is expired
         let isExpire = date - key < this.options.storage_expire
-        // 如果过期 则重新设定过期时间 并清空缓存
+        // If expired, reset the expiration time and empty the cache
         if (!isExpire) {
           removeStorage()
         }
@@ -158,8 +151,8 @@ export default class Cache {
 }
  
 /**
- * caches: 缓存列表
- * type: set->存 get->取
+ * caches: Cache list
+ * type: set->Save get->take
  */
 function mapStorage(caches, type = 'set') {
   Object.entries(caches).map(([key, cache]) => {
@@ -171,7 +164,7 @@ function mapStorage(caches, type = 'set') {
       }
       setStorage(key, val)
     } else {  
-      // 正则太弱 只能简单判断是否是json字符串
+      // The regular is too weak. You can only simply judge whether it is a JSON string
       let reg = /\{/g
       if (reg.test(cache)) CACHES[key] = JSON.parse(cache)
       else CACHES[key] = cache
@@ -179,23 +172,23 @@ function mapStorage(caches, type = 'set') {
   })
 }
  
-// 清除本地缓存
+// Clear local cache
 function removeStorage() {
   localStorage.clear()
 }
  
-// 设置缓存
+// Set cache
 function setStorage(key, cache) {
   localStorage.setItem(key, JSON.stringify(cache))
 }
  
-// 获取缓存
+// Get cache
 function getStorage(key) {
   let data = localStorage.getItem(key)
   return JSON.parse(data)
 }
  
-// 设置过期时间
+// Set expiration time
 function getExpireTime() {
   return new Date().getTime()
 }

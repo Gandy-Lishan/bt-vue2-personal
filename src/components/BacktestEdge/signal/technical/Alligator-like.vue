@@ -1,15 +1,8 @@
+// Alligator-Like input box
 <template>
 	<div class="senti-container">
 		<p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p>
 		<el-form :model="tech">
-			<!-- <div class="ids-container">
-				<el-radio-group v-model="tech.ids.ma_category" @change="getMaRadio">
-					<el-radio label="SMA" style="margin-bottom: 30px"
-						>Simple moving average</el-radio
-					>
-					<el-radio label="EMA">Exponential moving average</el-radio>
-				</el-radio-group>
-			</div> -->
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio
@@ -156,7 +149,6 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		// editIndiData: Object,
 		direction: String,
 		isActived: Boolean,
 		exitItemCheck: Boolean,
@@ -215,10 +207,8 @@ delay_bars: [String, Number],
 						techValue: this.radio === 'first' ? this.tech.value : this.value2
 					}
 					var obj = CIQ.store.state.conditionRadio
-					//obj.Aligator_like = JSON.stringify(_obj)
 					obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
 					CIQ.store.commit('setConditionRadio', obj)
-					//console.log('handle alligator,',obj)
 				}	
 			},
 			immediate: true,
@@ -237,11 +227,8 @@ delay_bars: [String, Number],
 				techValue: this.radio === 'first' ? this.tech.value : this.value2
 			}
 			var obj = CIQ.store.state.conditionRadio
-			//obj.Aligator_like = JSON.stringify(_obj)
 			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
-			//console.log(obj)
 			CIQ.store.commit('setConditionRadio', obj)
-			//CIQ.exportEx()
 		},
 		setRadio(val) {
 			var _obj = {
@@ -250,11 +237,8 @@ delay_bars: [String, Number],
 				techValue: this.radio === 'first' ? this.tech.value : this.value2
 			}
 			var obj = CIQ.store.state.conditionRadio
-			//obj.Aligator_like = JSON.stringify(_obj)
 			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
-			//console.log(obj)
 			CIQ.store.commit('setConditionRadio', obj)
-			//CIQ.exportEx()
 		},
 		getRadio2Select(val) {
 			for (let i = 0; i < this.valueConditions.length; i++) {
@@ -269,11 +253,8 @@ delay_bars: [String, Number],
 				techValue: this.value2
 			}
 			var obj = CIQ.store.state.conditionRadio
-			//obj.Aligator_like = JSON.stringify(_obj)
 			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
-			//console.log(obj)
 			CIQ.store.commit('setConditionRadio', obj)
-			//CIQ.exportEx()
 		},
 		getValue2Select(val) {
 			for (let i = 0; i < this.radioConditions.length; i++) {
@@ -287,12 +268,9 @@ delay_bars: [String, Number],
 				radioValue: this.comparison2,
 				techValue: this.value2
 			}
-			//console.log(_obj)
 			var obj = CIQ.store.state.conditionRadio
-			//obj.Aligator_like = JSON.stringify(_obj)
 			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
 			CIQ.store.commit('setConditionRadio', obj)
-			//CIQ.exportEx()
 		},
 		setDesciption(index) {
 			let criteria = ''
@@ -394,9 +372,8 @@ delay_bars: [String, Number],
 			this.$store.commit('saveCondition', tech)
 			return checked
 		},
-		// 设置编辑的数据
+		// Set edited data
 		setEditData(newVal) {
-			console.log('Alligator编辑的数据',newVal)
 			if (JSON.stringify(newVal) != '{}') {
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids

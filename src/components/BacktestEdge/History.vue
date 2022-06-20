@@ -1,3 +1,4 @@
+// History List
 <template>
 	<el-row>
 		<el-col :span="24">
@@ -57,43 +58,6 @@
 							{{ scope.row.exit_description[0] }}<br />
 						</template>
 					</el-table-column>
-					<!-- <el-table-column label="Entry & Exit" align="center">
-						<template slot-scope="scope">
-								<el-tooltip placement="top" effect="dark" transition  v-if="(scope.row.entry_description) instanceof Array">
-								<div slot="content" v-for="(item,index) in scope.row.entry_description" :key="index">
-									{{ item }}<br/>
-								</div>
-								<div v-for="(item,index) in scope.row.entry_description" :key="index">
-								{{ scope.row.entry_description[0] }}<br/>
-								</div>
-							</el-tooltip>
-							   <el-tooltip placement="top" effect="dark" transition v-if="!((scope.row.entry_description) instanceof Array)">
-								<div slot="content">
-									{{ scope.row.entry_description }}<br/>
-								</div>
-								<div>
-								{{ scope.row.entry_description }}<br/>
-								</div>
-							</el-tooltip>
-							<br/>
-							<el-tooltip placement="bottom" effect="light" transition v-if="(scope.row.exit_description) instanceof Array">
-								<div slot="content" v-for="(item,index) in scope.row.exit_description" :key="index">
-									{{ item }}<br/>
-								</div>
-								<div  v-for="(item,index) in scope.row.exit_description" :key="index">
-									{{ scope.row.exit_description[0] }}<br/>
-								</div>
-							</el-tooltip>
-								<el-tooltip placement="top" effect="light" transition v-if="!((scope.row.exit_description) instanceof Array)">
-								<div slot="content">
-									{{ scope.row.exit_description }}<br/>
-								</div>
-								<div>
-								{{ scope.row.exit_description }}<br/>
-								</div>
-							</el-tooltip>
-						</template>
-					</el-table-column> -->
 					<el-table-column
 						label="Period"
 						show-overflow-tooltip
@@ -197,20 +161,6 @@
 										size="mini"
 									></el-button>
 								</el-tooltip>
-								<!-- <el-button
-									plain
-									icon="el-icon-s-comment"
-									circle
-									@click="sendBack(scope.row)"
-									size="mini"
-								></el-button> -->
-								<!-- <el-button
-									plain
-									icon="el-icon-check"
-									circle
-									@click="showDes(scope.row)"
-									size="mini"
-								></el-button> -->
 								<el-tooltip
 									class="item"
 									effect="dark"
@@ -313,7 +263,6 @@
 	</el-row>
 </template>
 <script>
-// document.querySelector('.el-table__expand-icon').
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store } from 'vuex'
 import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
@@ -356,19 +305,15 @@ export default {
 	methods: {
 		async getHistoryList() {
 			this.loadTest = 'Loading...'
-			//貌似不用
 			this.loading = true
 			let page = this.queryInfo.page
 			try {
 				let res = await getHistoryList(page)
 				if (res.status === 200) {
-					//貌似不用
-					//CIQ.hideCover()
 					this.loading = false
 					let historyNameList = []
 					this.backtestList = res.data.results
 
-					//console.log('history列表',res.data.results);
 					if (res.data.results.length != 0) {
 						res.data.results.forEach((element) => {
 							historyNameList.push(element.name)
@@ -389,40 +334,31 @@ export default {
 						})
 
 						this.backtestList = res.data.results
-						//console.log('处理过后history列表',this.backtestList);
 						this.$store.commit('getBacktestName', historyNameList)
 					}
 					this.queryInfo.total = res.data.count
 				}
 			} catch (error) {
 				console.log(error)
-				//CIQ.hideCover()
 				this.loading = false
 			}
 		},
 		refreshHistory(id) {
 			let vm = this
 			vm.loadTest = 'Generating Backtest report, please wait'
-			//和创回测绑在一起，没有加
 			
-			//vm.loading = true
 			vm.clearInterval = clearPromiseInterval
 			let timer = setPromiseInterval(async () => {
 				try {
 					const res = await getStatus(id)
 					CIQ.nprogress.inc()
-					console.log("状态码",res.data.status)
 				if (res.data.status == 2) {
 					clearPromiseInterval(timer).then(() => {})
 					vm.queryInfo.page = 1
 					vm.getHistoryList()
 					this.$emit('refFavoritesForm')
 					
-					// 直接衔接view result
-					//CIQ.hideCover()
 
-					//vm.loading = false
-					//console.log('成功之后的返回值', res.data)
 					let row = res.data
 					row.result = JSON.parse(row.result)
 					vm.viewBacktestResults(row)
@@ -434,8 +370,6 @@ export default {
 					this.$emit('refFavoritesForm')
 					CIQ.hideCover()
 					CIQ.nprogress.done()
-					//vm.loading = false
-					//console.log('成功之后的返回值', res.data)
 					let row = res.data
 					row.result = JSON.parse(row.result)
 					vm.$notify({
@@ -453,20 +387,17 @@ export default {
 					})
 					CIQ.addCover()
 					CIQ.nprogress.start()
-					//vm.loading = true
 				}
 			}, 3000)
 		},
 		editBacktest: throttle(async function (row) {
-			console.log(row);
 			let vm = this
 			try {
 				CIQ.addCover('Fetching backtest information...')
 				CIQ.nprogress.start()
-				//vm.loading = true
 				const res = await seeParams(row.id)
 				document.getElementsByClassName('ciq-period')[0].style.display = ''
-				// 恢复indicator layout
+				//  Restore indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)
 				CIQ.hideMarker()
 				CIQ.isMarkerShown = false
@@ -478,14 +409,13 @@ export default {
 					)
 				} else {
 					this.$store.commit('getRunBacktestData', row)
-					// emit同步调用
+					// emit Synchronous call
 					this.$emit('goBacktestResultForm', row, ()=>{
 						this.$emit('goTobacktestSetupForm', row.id, res.data,()=>{
 							CIQ.hideCover()
 							CIQ.nprogress.done()
 						})
 					})
-					//this.loading = false
 				}
 			} catch (error) {
 				vm.$message({
@@ -520,7 +450,6 @@ export default {
 			let params = {}
 			const nameRes = await getBacktestName(row.name + '(copy)')
 			
-			console.log('copy名字校验')
 			if(nameRes.data.count != 0) {
 				this.$notify.error({
 						title: 'Has been Copied',
@@ -530,8 +459,6 @@ export default {
 				return
 			}
 				const res = await seeParams(row.id)
-			//console.log("恢复indicator layout")
-			// 恢复indicator layout
 			this.$store.commit('getBacktestSymbol', res.data.symbol)
 			this.$store.commit('getRunBacktestData', row)
 			params = res.data
@@ -559,13 +486,6 @@ export default {
 					this.$message.error('Copy failed')
 				}
 			} catch (error) {
-					// if (error.response.status === 403) {
-					// this.$notify.error({
-					// 	title: 'Has been Copied',
-					// 	message: 'The backtest has been copied',
-					// 	offset: 100
-					// })
-					// }
 					if (error.response.status === 500) {
 						this.$notify.error({
 							title: 'Service is busy',
@@ -577,17 +497,13 @@ export default {
 			
 		}, 1000),
 		viewBacktestResults: throttle(async function (row) {
-			console.log('row',row)
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {
 					
 					CIQ.addCover('Fetching backtest information...')
 					CIQ.nprogress.start()
-					//this.loading = true
 					const res = await seeParams(row.id)
-					// 恢复indicator layout
-					// console.log(res,row)
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					CIQ.hideMarker()
 					CIQ.isMarkerShown = false
@@ -599,14 +515,12 @@ export default {
 						)
 					} else {
 						this.$store.commit('getRunBacktestData', row)
-						// emit同步调用
 						this.$emit('goTobacktestSetupForm', row.id, res.data, ()=>{
 							this.$emit('goBacktestResultForm', row, ()=>{
 								CIQ.hideCover()
 								CIQ.nprogress.done()
 							})
 						})
-						//this.loading = false
 					}
 				} catch (error) {
 					vm.$message({
@@ -659,37 +573,26 @@ export default {
 				}
 			}
 			this.$store.commit('setRestoreFreq', frequency)
-			// CIQ.addIndicatorsFromBacktest()
 		},
 		restoreIndicatorLayoutView(data, freq, row, resData) {
-			//console.log("在跑完回测后和view result之间会加载一次chart去输出SignalOuput")
-			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
+			// After the run back test and between the view result, a chart will be loaded to output signalouput
 			if (CIQ.isBacktestRun == true) {
 				CIQ.isBacktestRun = false
-				//this.reloadData(data, freq)
 				var that = this
-				//不再使用outputSignalsResult，exportcsv放置在回测前，callback置于原地
-				//CIQ.outputSignalsResult(function () {
+				//The outputsignalsresult is no longer used. The exportcsv is placed before the backtest and the callback is placed in place
 					that.$store.commit('getRunBacktestData', row)
-					// emit同步调用
 					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
 						that.$emit('goBacktestResultForm', row, ()=>{
 							CIQ.hideCover()
 							CIQ.nprogress.done()
 						})
 					})
-					//that.loading = false
-				//})
 			} else {
 				this.reloadData(data, freq)
 				var that = this
-				console.log('after clicking view')
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
-					//that.$emit('goTobacktestSetupForm', row.id)
-					//that.$emit('goBacktestResultForm', row)
 
-					// emit同步调用
 					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
 						that.$emit('goBacktestResultForm', row, ()=>{
 							CIQ.hideCover()
@@ -697,7 +600,6 @@ export default {
 						})
 					})
 					
-					//that.loading = false
 				})
 			}
 		},
@@ -706,7 +608,6 @@ export default {
 				var that = this
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
-					// emit同步调用
 					
 					that.$emit('goBacktestResultForm', row, ()=>{
 						that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
@@ -714,72 +615,7 @@ export default {
 							CIQ.nprogress.done()
 						})
 					})
-					//that.loading = false
 				})
-		},
-		async showDes(row) {
-			const datades = {}
-			let vm = this
-			try {
-				const res = await seeParams(row.id)
-				const des = res.data
-				let str = ``
-				for (let key in des) {
-					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
-				}
-
-				vm.$alert(str, '标题名称', {
-					confirmButtonText: '确定',
-					dangerouslyUseHTMLString: true,
-					lockScroll: false,
-					callback: (action) => {
-						vm.$message({
-							type: 'info',
-							message: `action: ${action}`
-						})
-					}
-				})
-			} catch (error) {
-				vm.$message({
-					message: 'The internal server is busy, please try again later ',
-					type: 'error',
-					offset: 300
-				})
-			}
-		},
-		async sendBack(row) {
-			let vm = this
-			try {
-				const res = await seeReport(row.id)
-				const des = res.data
-				let str = ``
-				for (let key in des) {
-					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
-				}
-				// for (let key in des.FinalResult.AnnualReturn) {
-				// 	str =
-				// 		str +
-				// 		'<p>' +
-				// 		`${key}:  ${des.FinalResult.AnnualReturn[key]}` +
-				// 		'</p>'
-				// }
-				vm.$alert(str, '标题名称', {
-					confirmButtonText: '确定',
-					dangerouslyUseHTMLString: true,
-					callback: (action) => {
-						vm.$message({
-							type: 'info',
-							message: `action: ${action}`
-						})
-					}
-				})
-			} catch (error) {
-				vm.$message({
-					message: 'The internal server is busy, please try again later ',
-					type: 'error',
-					offset: 300
-				})
-			}
 		},
 		addToFavorites: throttle(async function (row) {
 			let vm = this

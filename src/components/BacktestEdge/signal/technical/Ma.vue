@@ -1,15 +1,8 @@
+// Moving-Average-Like input box
 <template>
 	<div class="senti-container">
 		<p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p>
 		<el-form :model="tech" :rules="rules" ref="maForm">
-			<!-- <div class="ids-container">
-				<el-radio-group v-model="tech.ids.ma_category" @change="getMaRadio">
-					<el-radio label="SMA" style="margin-bottom: 30px"
-						>Simple moving average</el-radio
-					>
-					<el-radio label="EMA">Exponential moving average</el-radio>
-				</el-radio-group>
-			</div> -->
 			<div class="condition-container">
 				<el-form-item
 						style="diaplay: inline"
@@ -230,7 +223,6 @@ export default {
 				if (newVal) {
 					var obj = CIQ.store.state.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.radio
-					//console.log('handle MA,',obj)
 					CIQ.store.commit('setConditionRadio', obj)
 				}
 			},
@@ -242,7 +234,6 @@ export default {
 		clearForm() {
 			this.$refs.maForm.resetFields()
 		},
-		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.maForm.clearValidate()
 		},
@@ -251,9 +242,6 @@ export default {
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (sd.type == 'ma') {
-					
-					// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
-					// dialogHelper.updateStudy({ inputs: { Period: val } });
 					var replaceStudy = {
 						name: 'Moving Average',
 						overlay: true,
@@ -276,7 +264,6 @@ export default {
 			this.clearFormValidate()
 			var obj = CIQ.store.state.conditionRadio
 			obj[this.criteria][this.panelIndex] = val
-			console.log('MA radio change,', obj)
 			CIQ.store.commit('setConditionRadio', obj)
 			if (val === 'Moving Average') {
 				// 添加附属ma
@@ -332,10 +319,6 @@ export default {
 			}
 		},
 		getRadioSelect(val) {
-			// var obj = CIQ.store.state.conditionRadio
-			// obj[this.criteria][this.panelIndex] = val
-			// //console.log('MA radio change,',obj)
-			// CIQ.store.commit('setConditionRadio', obj)
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (sd.type == 'ST MA' && sd.panel == 'chart') {
@@ -347,7 +330,6 @@ export default {
 				Period: this.tech.ma_period,
 				display: 'ST MA'
 			})
-			//CIQ.exportEx()
 			// keep current MA
 			var objMA = {
 				period: this.tech.ma_period,
@@ -495,7 +477,6 @@ export default {
 			this.$store.commit('getStMaPeriod', val)
 		},
 		getMaRadio(val) {
-			//console.log(val)
 			this.tech.ids.ma_category = val
 			CIQ.store.commit('setMaRadio', val)
 
@@ -503,8 +484,6 @@ export default {
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
 					if (sd.type == 'ma') {
-						// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
-						// dialogHelper.updateStudy({ inputs: { Period: val } });
 
 						var replaceStudy = {
 							name: 'Moving Average',
@@ -528,15 +507,6 @@ export default {
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
 					if (sd.type == 'ma') {
-						// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
-						// dialogHelper.updateStudy({ inputs: { Period: val } });
-
-						// var st = CIQ.Studies.replaceStudy(
-						// 	CIQ.stxx,
-						// 	sd.inputs.id,
-						// 	sd.type,
-						// 	{Type: "exponential"}
-						// );
 
 						var replaceStudy = {
 							name: 'Moving Average',
@@ -561,10 +531,6 @@ export default {
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
 					if (sd.type == 'ST MA' && sd.panel == 'chart') {
-						// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
-						// dialogHelper.updateStudy({ inputs: { Period: val } });
-
-						// 刷新附属ma
 						var replaceStudy = {
 							name: 'Moving Average ',
 							overlay: true,
@@ -604,12 +570,6 @@ export default {
 		},
 		getSCvalue(val) {
 			if (this.tech.comparison === 'SC') {
-				//   delete this.sc.ma_period
-				// const obj = {}
-				// obj.criteria = this.criteria
-				// obj.index = this.tabIndex
-				// obj.delete = 'ma_period'
-				// this.$store.commit('delete', obj)
 				this.tech.period = val
 
 				this.updateMAPeriod(val)
@@ -620,8 +580,6 @@ export default {
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (sd.type == 'ma') {
-					// let dialogHelper = new CIQ.Studies.DialogHelper({ stx: CIQ.stxx, sd: sd });
-					// dialogHelper.updateStudy({ inputs: { Period: val } });
 					var replaceStudy = {
 						name: 'Moving Average',
 						overlay: true,
@@ -687,17 +645,11 @@ export default {
 					this.$store.commit('saveCondition', tech)
 					return checked
 				} else {
-					// this.$message({
-					// 	message: 'Please Input Period',
-					// 	type: 'error',
-					// 	offset: 300
-					// })
 					checked = false
 					return checked
 				}
 			}
 		},
-		// 设置编辑的数据
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
 				this.clearFormValidate()

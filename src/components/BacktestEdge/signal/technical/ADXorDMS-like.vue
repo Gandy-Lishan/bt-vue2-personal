@@ -1,26 +1,7 @@
+// ADX-Like input box
 <template>
 	<div class="senti-container">
 		<el-form :model="tech" :rules="rules" ref="adxForm">
-			<!-- <div class="ids-container">
-				<el-form-item label="Slow moving average" prop="MACDSlow">
-					<el-input
-						v-model="tech.ids.MACDSlow"
-						disabled
-					></el-input>
-				</el-form-item>
-				<el-form-item label="Fast moving average" prop="MACDFast">
-					<el-input
-						disabled
-						v-model="tech.ids.MACDFast"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="Signal line" prop="MACDSL">
-					<el-input
-						disabled
-						v-model="tech.ids.MACDSL"
-					></el-input>
-				</el-form-item>
-			</div> -->
 			<div class="condition-container">
 				<p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p>
 				<el-form-item>
@@ -110,7 +91,6 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		// editIndiData: Object,
 		direction: String,
 		isActived: Boolean,
 		exitItemCheck: Boolean,
@@ -180,11 +160,9 @@ export default {
 		isActived: {
 			handler(newVal) {
 				if(newVal){
-					//console.log('watch techVal!!!!!!!!!',newVal)
 					var obj = CIQ.store.state.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.conditionRadio
 					CIQ.store.commit('setConditionRadio', obj)
-					//console.log('handle ADX,',obj)
 				}
 
 			},
@@ -196,7 +174,7 @@ export default {
 		clearForm() {
 			this.$refs.adxForm.resetFields()
 		},
-		// 清除表单认证
+		// Clear form authentication
 		clearFormValidate() {
 			this.$refs.adxForm.clearValidate()
 		},
@@ -280,7 +258,6 @@ export default {
 			} else if (val === '-DI ADX') {
 				this.tech.comparison = 'NADX'
 			}
-			//CIQ.exportEx()
 		},
 		saveCondition(index) {
 			let checked = true
@@ -321,7 +298,6 @@ export default {
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
-				//console.log('ADX编辑',newVal);
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)

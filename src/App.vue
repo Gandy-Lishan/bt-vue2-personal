@@ -4,43 +4,6 @@
 	</div>
 </template>
 <script>
-// function testBrowser() {
-// 	//取得浏览器的userAgent字符串
-// 	var userAgent = navigator.userAgent
-// 	var isOpera = userAgent.indexOf('Opera') > -1
-
-// 	//谷歌
-// 	if (userAgent.indexOf('Chrome') > -1) {
-// 		return 'Chrome'
-// 	}
-
-// 	//火狐
-// 	if (userAgent.indexOf('Firefox') > -1) {
-// 		return 'Firefox'
-// 	}
-
-// 	//ie
-// 	if (
-// 		userAgent.indexOf('compatible') > -1 &&
-// 		userAgent.indexOf('MSIE') > -1 &&
-// 		!isOpera
-// 	) {
-// 		return 'IE'
-// 	}
-// 	//Opera
-// 	if (isOpera) {
-// 		return 'Opera'
-// 	}
-// 	//Safari
-// 	if (userAgent.indexOf('Safari') > -1) {
-// 		return 'Safari'
-// 	}
-// }
-// //调用函数实现
-// var broweser = testBrowser()
-// if ('Chrome' !== broweser) {
-// 	alert('Google Chrome renders the screen better')
-// }
 export default {
 	name: 'app'
 }
@@ -52,7 +15,6 @@ export default {
 @import '../node_modules/chartiq/css/chartiq.css'; // Chart UI
 @import '../node_modules/chartiq/st-development/css/ST-chartiq.css';
 #app {
-	//height: 100vh;
 	overflow-y: auto;
 	overflow-x: hidden;
 }

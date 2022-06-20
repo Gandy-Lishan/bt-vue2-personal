@@ -1,30 +1,25 @@
 import axios from 'axios'
 import Cache from './cache'
  
-// axios的自定义实例
+// Custom instances of Axios
 let instance = axios.create({
   baseURL: ''
 })
  
-let cache = new Cache(axios) // 将当前 axios 对象传入 Cache 中
+let cache = new Cache(axios) // Pass the current Axios object into the cache
 cache.use({
-  expire: 3600000*24*7, // 过期时间 7天
+  expire: 3600000*24*7, // Expiration time: 7 days
   storage: true,
-  instance, // 如果有自定义axios实例 比如上面的instance 需要将其传入instance 没有则不传
+  instance, // If there is a custom Axios instance, such as the above instance, it needs to be passed into the instance. If there is no instance, it will not be transferred
   requestConfigFn: config => {
-    // 请求拦截自定义操作
-    // if (config.header) {
-    //   config.header.token = 'i am token'
-    // } else {
-    //   config.header = { token: 'i am token' }
-    // }
-    // 需要将config对象通过 Promise 返回 cache 中 也可以使用new Promise的写法
+    // Request to intercept custom actions
+    // The config object needs to be returned to the cache through promise. You can also use the writing method of new promise
     return Promise.resolve(config)
   },
   responseConfigFn: res => {
-    // 响应拦截的自定义操作
+    // Response to intercepted custom actions
     if (!res.data.code) {
-      // 需要将 res 通过 Promise 返回
+      // Res needs to be returned through promise
       return Promise.resolve(res)
     }
   }

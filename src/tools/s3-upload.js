@@ -1,7 +1,5 @@
-// import axios from "axios"
-// import qs from 'querystring'
+
 import AWS from "aws-sdk"
-//var AWS = require('aws-sdk');
 
 var bucketName = "sentimentrader-backtestv2-dailyreturnresults";
 var bucketRegion = "us-east-1";
@@ -9,9 +7,9 @@ var IdentityPoolId = 'us-east-1:a276f16b-4c8c-4252-895f-b8c738be0438';
 
 // set the default config object
 
-//方案1，配置IdentityPoolId，不可行
-// 初始化 Amazon Cognito 凭证提供程序
-AWS.config.region = bucketRegion; // 区域
+//Scheme 1: configuring identitypoolid is not feasible
+// Initialize Amazon cognito credential provider
+AWS.config.region = bucketRegion; // region
 AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: IdentityPoolId,
 });
@@ -28,7 +26,7 @@ if(temp){
 AWS.config.credentials.params.IdentityId = temp
 // console.log(AWS.config.credentials.params.IdentityId)
 
-//方案2，代码内配置accessKeyId和secretAccessKey，可行
+// Scheme 2: configure accesskeyid and secretaccesskey in the code, which is feasible
 // AWS.config.update({
 // //   region: bucketRegion,
 // //   credentials: new AWS.CognitoIdentityCredentials({
@@ -37,7 +35,7 @@ AWS.config.credentials.params.IdentityId = temp
 // });
 
 
-//方案3，本地文件配置accessKeyId和secretAccessKey，可行
+// Scheme 3: configure accesskeyid and secretaccesskey in local file, which is feasible
 //AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
 
 

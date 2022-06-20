@@ -22,21 +22,12 @@ export default new Vuex.Store({
 		pairDataFreq: '',
 		stateCopy: {},
 		conditionRadio: {
-			// MACD_like: '',
-			// EFT_like: '',
-			// BollingerBands_like: '',
-			// Stochastics_like: '',
-			// ERI_like: '',
-			// ADX_like: '',
-			// MovingAverage_like: '',
-			// Aligator_like: '',
 			entry:new Array(5).fill(''),
 			exit:new Array(5).fill(''),
 		},
 		maRadio: '',
 		stMaPeriod: '',
 		maPeriod: '',
-		//importedLayout: '',
 		newPorfolioInputsValues: {
 			inputNameValue: '',
 			inputDescriptionValue: '',
@@ -81,27 +72,6 @@ export default new Vuex.Store({
 		},
 
 		extremeValue: [],
-
-		// extremeValue: [{
-		// 	indicator: '',
-		// 	extremeOptimism: '',
-		// 	extremePessimism: ''
-		// }],
-		// cciDefault: {
-		//   over_bought_bound: undefined,
-		// 	over_sold_bound: undefined,
-		//   period: undefined
-		// },
-		// macdDefault: {
-		//   MACDSlow: undefined,
-		//   MACDFast: undefined,
-		//   MACDSL: undefined
-		// },
-		// rsiDefault: {
-		//   over_bought_bound: undefined,
-		// 	over_sold_bound: undefined,
-		//   period: undefined
-		// },
 		strategyId: '',
 		indicatorsList: [],
 		builtinList: [],
@@ -173,9 +143,6 @@ export default new Vuex.Store({
     getMaPeriod(state,val){
       state.maPeriod = val
     },
-    // getImportedLayout(state,val){
-    //   state.importedLayout = val
-    // },
 		getExtremeValue: (state, list) => {
 			state.extremeValue = list
 		},
@@ -256,7 +223,6 @@ export default new Vuex.Store({
 			state.saveConditionFormdata = val
 		},
 		getDirection(state, val) {
-			// 设置 backtestInfo 的 direction
 			state.backtestInfo.direction = val
 		},
 		getTechnicalIndicators(state, val) {
@@ -302,7 +268,6 @@ export default new Vuex.Store({
 					state.backtestInfo[criteria][key] = obj[key]
 				}
 			}
-			console.log('Setupform的值',state.backtestInfo)
 		},
 		setBd(state, obj) {
 			for (let key in obj) {
@@ -338,7 +303,6 @@ export default new Vuex.Store({
 			state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator =
 				obj.value
 		},
-		// 用于单选框 切换时删除不必要字段
 		delete(state, obj) {
 			delete state.backtestInfo[obj.criteria].signals[obj.index][obj.delete]
 		},
@@ -409,7 +373,6 @@ export default new Vuex.Store({
 			if(criteria === 'exit') {
 			init.riskIndicator = state.backtestInfo.exit.signals[index].riskIndicator
 			}
-			// 在保存之前确保只有 sentimentIndicator 以及 technicalIndicator 两个属性
 			if(criteria == 'exit') {
 			state.backtestInfo.exit.signals[index] = Object.assign({}, init)
 			}else if(criteria == 'entry') {
@@ -419,12 +382,10 @@ export default new Vuex.Store({
 			for(let key in obj) {
 				state.backtestInfo[criteria].signals[index][key] = obj[key]
 			}
-			console.log("保存sentiment的condition", state.backtestInfo);
 			
 		},
 		saveDescription(state, desObj) {
 			if(Array.isArray(state.backtestInfo[desObj.criteria+'_description'])) {
-				// state.backtestInfo[desObj.criteria+'_description'].splice(desObj.index, 0, desObj.description)
 				state.backtestInfo[desObj.criteria+'_description'][desObj.index] = desObj.description
 			
 			}

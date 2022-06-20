@@ -21,16 +21,7 @@ const config = {
 			]
 		},
 		plugins:[
-            // new UglifyJsPlugin({
-            //     uglifyOptions: {
-            //         compress:{
-            //             drop_console:true,
-			// 			dead_code:true,
-			// 			drop_debugger:true,
-            //         }
-            //     }
-            // }),
-			// 骨架屏
+			// Skeleton screen
 			new SkeletonWebpackPlugin({
 				webpackConfig: {
 					entry: {
@@ -50,11 +41,11 @@ const config = {
         ]
 	},
 	css: {
-        // 是否使用css分离插件 ExtractTextPlugin
+        // Whether to use CSS separation plug-in extracttextplugin
         extract: true,
-        // 开启 CSS source maps?
+        // Open CSS source maps?
         sourceMap: false,
-        // 启用 CSS modules for all css / pre-processor files.
+        // Enable CSS modules for all CSS / pre processor files
         modules: false
     },
 	chainWebpack: (config) => {  
@@ -77,37 +68,12 @@ const config = {
 			.tap((options) => {
 				return options
 			})
-		// config.module
-		//     .rule('file-loader')
-		//     .test(/\.(jpg|gif|png|svg|cur)$/)
-		//     .use('file-loader')
-		//     .loader('file-loader')
-		//     .end()
-
-		// config.module
-		//     .rule('sass-loader')
-		//     .test(/\.(s)?css$/)
-		//     .use('sass-loader')
-		//     .loader('sass-loader')
-		//     .end()
 	},
 	devServer: {
-		// open:true,
-		// port: 8080,
-		// host:"localhost",
-		// https:false,
-		// 测试的ip 18.216.210.200
-		// http://10.131.3.74:8000
-		// http://3.140.194.24:80
-		// http://3.144.31.178:8000
-		// 10.131.3.17:8000
 		hot: true,
 		disableHostCheck: true,
 		proxy: {
 			'/dev': {
-				//target: 'http://18.216.210.200',
-				 //target: 'http://10.131.3.232:8000', 
-				//target: 'http://3.140.194.24:8000',
 				target: "https://h7r34cgfvh.execute-api.us-east-1.amazonaws.com",
 				// ws:true,
 				changeOrigin: true,
@@ -118,20 +84,5 @@ const config = {
 		}
 	}
 }
-
-// if (process.env.ST_ENV !== "dev" && process.env.ST_ENV !== undefined){
-//     config.configureWebpack = {
-//         Plugins:[
-//             new UglifyJsPlugin({
-//                 uglifyOptions: {
-//                     compress:{
-//                         drop_console:true,
-//                     }
-//                 }
-//             })
-//         ]
-//     }
-// }
-
 
 module.exports = config
