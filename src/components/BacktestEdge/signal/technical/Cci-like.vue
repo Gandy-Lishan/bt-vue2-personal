@@ -1,27 +1,8 @@
+// CCI-Like input box
 <template>
 	<div class="senti-container">
 		<p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p>
 		<el-form :model="tech" :rules="rules" ref="cciForm">
-			<!-- <div class="ids-container">
-				<el-form-item label="OverBought bound" prop="over_bought_bound">
-					<el-input
-						v-model="tech.ids.over_bought_bound"
-						disabled
-					></el-input>
-				</el-form-item>
-				<el-form-item label="OverSold bound" prop="over_sold_bound">
-					<el-input
-						disabled
-						v-model="tech.ids.over_sold_bound"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="Period" prop="period">
-					<el-input
-						disabled
-						v-model="tech.ids.period"
-					></el-input>
-				</el-form-item>
-			</div> -->
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio
@@ -112,14 +93,13 @@ delay_bars: [String, Number],
 			description: '',
 			editTechVal: '',
 			rules: { value: [{ validator: validateValue, trigger: 'blur' }] },
-			// technicalName: ''
 		}
 	},
 	methods: {
 		clearForm() {		
 			this.$refs.cciForm.resetFields()
 		},
-		// 清除表单认证
+		// Clear form authentication
 		clearFormValidate() {
 			this.$refs.cciForm.clearValidate()
 		},
@@ -204,11 +184,6 @@ delay_bars: [String, Number],
 				this.$store.commit('saveCondition', tech)
 				return checked
 			} else {
-				// this.$message({
-				// 	message: 'Please Input Value',
-				// 	type: 'error',
-				// 	offset: 300
-				// })
 				checked = false
 				return checked
 			}

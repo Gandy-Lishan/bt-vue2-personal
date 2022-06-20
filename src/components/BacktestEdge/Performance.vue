@@ -1,3 +1,4 @@
+// Summary & Trades
 <template>
 	<div class="perfprmance-container">
 		<p class="hint">Hint: Markers on the chart point to the buy/sell trade dates on the open <b>ONE</b> bar after entry/exit criteria met.</p>
@@ -284,7 +285,6 @@
 						style="width: 100%"
 						border
 						:span-method="objectSpanMethod"
-						:cell-style="try1"
 					>
 						<el-table-column
 							prop="trade_number"
@@ -417,12 +417,6 @@ export default {
 			splitTradeData: []
 		}
 	},
-	computed: {
-		// splitTradeData()
-		// {
-		// 	return this.tradesData.slice(20*(this.queryInfo.page-1),this.queryInfo.page*20)
-		// }
-	},
 	created() {
 		this.getResultData({ id: 0 })
 	},
@@ -439,33 +433,19 @@ export default {
 			
 			if (row.status != 0) {
 				if (this.$store.state.favoriteBacktestRowData.id) {
-					//vm.loading = true
 					let id = row.id
 					try {
 						
 						const res = await seeReport(id)
 						
-							console.log('Eric 返回的数据', res.data)
 						if (res.status == 200) {
 							if (typeof res.data == "string") {
 								initalData = JSON.parse(res.data)
 							}else{
 								initalData = res.data
 							}
-							console.log('Eric 返回的数据', res.data)
-							// 使用try-catch去捕捉错误
-							// 直接使用JSON.parse去转译，并把转译结果判断一下是不是object类型，如果是的话就返回true,否则就返回false,这样就排除了转化后非object的类型，比如"123456789"
-							// function isJSON(str) {
-							// 	try {
-							// 		if (typeof JSON.parse(str) == 'object') {
-							// 			return true
-							// 		}
-							// 	} catch (e) {}
-							// 	return false
-							// }
-							// console.log("判断返回值是不是json", isJSON(res.data))
 							
-							// -------------------------------------  text ----------------
+							// -------------------------------------  start ----------------
 							const tradeReturn = initalData['Each Return']
 							data.uuid = initalData['UUID']
 							data.symbol = initalData['Symbol']
@@ -513,7 +493,6 @@ export default {
 								initalData['Returns Heatmap File URL']
 							data.CAGR = initalData['CAGR']
 							vm.tableData = []
-							//('data',data)
 							vm.tableData.push(data)
 							vm.returnImgUrl = data.returnsFileURL
 							vm.drawDownImgUrl = data.ddFileURL
@@ -538,35 +517,29 @@ export default {
 							}
 							vm.queryInfo.total = initalData['Trades'].length
 							vm.totalTradesNumber = (initalData['Trades'].length)/2
-							console.log("总的交易次数", vm.queryInfo.total);
-							// vm.queryInfo.page = 1
 							vm.handleCurrentChange(1)
 							vm.tradesData = initalData['Trades']
-							console.log('tradesData', vm.tradesData)
 							// ---------------------------------------- end ----------------------------------
 							// ----------------------- backtest result-------------------------------
 
 							this.$emit('setBacktestResult', initalData['basic'])
 							// ------------------------------ end -----------------------------------
 
-							//vm.$store.commit('getTradesData',initalData[])
 						}
 					} catch (error) {
 						console.error('服务器报错', error)
-						// 清空数据并且进行提示
 						vm.tableData = []
 						vm.tradesData = []
 						vm.$emit('errorCatchPerformance')
 					}
 				}
 			}else{
-				//console.error('row status is ',row.status)
+				console.error('row status is ',row.status)
 			}
 			setTimeout(() => {
 				if(initalData.markerSet){
 					this.loadMarker(initalData.markerSet)
 				}
-				console.log(CIQ.stxx)
 				if(callback){callback()}
 			}, 0)
 		},
@@ -579,7 +552,6 @@ export default {
 				markerSet
 			)
 			CIQ.isMarkerShown = true
-			console.log("CIQ.loadChart from loadMarder()")
 
 			// split the markers into several groups
 			CIQ.groups = this.group(list)
@@ -596,14 +568,8 @@ export default {
 					markers.unshift(...CIQ.groups.pop()) 
 				}
 			}
-
 			console.log('initiating Markers...',markers)
-			CIQ.loadChart(markers, CIQ.addMarker)	
-			// for (let i = groups.length-1,j=0; i >= 0 ; i--,j++) {
-			// 	setTimeout(() => {
-			// 		CIQ.loadChart(groups[i], CIQ.addMarker)	
-			// 	}, j*8000);
-			// }
+			CIQ.loadChart(markers, CIQ.addMarker)
 		},
 		group(data) {
 			var result = [];
@@ -684,21 +650,8 @@ export default {
 				}
 			}
 		},
-		try1({ row, column, rowIndex, columnIndex }) {
-			// if (columnIndex === 6 && column.label == 'Total Return %') {
-			// 	if (rowIndex % 2 === 0) {
-			// 		row.Return = 'none'
-			// 	}
-			// }
-			// if (columnIndex === 5 && column.label == 'Trade Return %') {
-			// 	if (rowIndex % 2 === 0) {
-			// 		row.Return = 'none'
-			// 	}
-			// }
-		},
 		handleCurrentChange(page) {
 			this.queryInfo.page = page
-			console.log('tradesdata的页数',page)
 			this.$nextTick(() => {
 				this.splitTradeData = this.tradesData.slice(20*(this.queryInfo.page-1),this.queryInfo.page*20)
 			})

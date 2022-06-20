@@ -52,11 +52,11 @@ const config = {
         ]
 	},
 	css: {
-        //  ExtractTextPlugin
+        // Whether to use CSS separation plug-in extracttextplugin
         extract: true,
-        //enable CSS source maps?
+        // Open CSS source maps?
         sourceMap: false,
-        // enable CSS modules for all css / pre-processor files.
+        // Enable CSS modules for all CSS / pre processor files
         modules: false
     },
 	chainWebpack: (config) => {  
@@ -79,19 +79,6 @@ const config = {
 			.tap((options) => {
 				return options
 			})
-		// config.module
-		//     .rule('file-loader')
-		//     .test(/\.(jpg|gif|png|svg|cur)$/)
-		//     .use('file-loader')
-		//     .loader('file-loader')
-		//     .end()
-
-		// config.module
-		//     .rule('sass-loader')
-		//     .test(/\.(s)?css$/)
-		//     .use('sass-loader')
-		//     .loader('sass-loader')
-		//     .end()
 	},
 	devServer: {
 		// open:true,

@@ -2,14 +2,15 @@
  *	2.2.0
  *	import css files, setup axios entity
  */
+
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import ElementUI, { Message } from 'element-ui'
 import qs from 'querystring'
 import 'element-ui/lib/theme-chalk/index.css'
-// import locale from '../node_modules/element-ui/lib/locale/lang/en.js'
 import en from './tools/en.js'
+
 // import global css rule
 import './assets/css/global.css'
 // icon & front
@@ -25,7 +26,6 @@ import 'nprogress/nprogress.css'
 import './assets/style/global.css'
 import axios from './axios'
 import store from './store/store'
-//import VueDirectiveImagePreviewer from "vue-directive-image-previewer"
 import 'vue-directive-image-previewer/dist/assets/style.css'
 import locale from 'element-ui/lib/locale/lang/en'
 import '@/assets/iconfont/iconfont.css'
@@ -37,6 +37,7 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 
 Vue.use(VueCookies)
 // setup default url
+
 axios.defaults.baseURL = ''
 //set 10 sec as default,However, some time-consuming requests are processed separately
 axios.defaults.timeout = 10000;
@@ -91,8 +92,6 @@ axios.interceptors.response.use(undefined, function axiosRetryInterceptor(err) {
     });
 });
 
-// const encode = require("../node_modules/element-ui/lib/locale/lang/en")
-
 Vue.prototype.$qs = qs
 Vue.use(ElementUI, { locale })
 Vue.prototype.$http = axios
@@ -100,16 +99,9 @@ CIQ.axios = axios
 CIQ.nprogress = Nprogress
 Vue.prototype.$message = Message
 Vue.config.productionTip = false
-// Vue.use(VueDirectiveImagePreviewer,{
-//   zIndex:9999,
-//   previewSize:3
-// })
-
 Vue.config.productionTip = false
 
 Vue.config.ignoredElements = [/^cq-.*$/, /^stx-.*$/]
-
-// Workaround to be able to use the HTML template element in Vue template
 Vue.component('template-placeholder', {
 	render: function (createElement) {
 		return createElement('template', this.$slots.default)

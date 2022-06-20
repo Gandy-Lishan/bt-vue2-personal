@@ -1,3 +1,4 @@
+
 /**
  *	2.2.0
  *	customized cache pool
@@ -109,7 +110,6 @@ export default class Cache {
             expire: getExpireTime(),
             data: response
           }
-          //console.log("put response",data)
           CACHES[`${response.config.url}`] = data
           if (this.options.storage) mapStorage(CACHES)
         }
@@ -125,7 +125,6 @@ export default class Cache {
       }
     )
   }
-
   _storageExpire(cacheKey) {
     return new Promise(resolve => {
         
@@ -133,7 +132,9 @@ export default class Cache {
       
       let date = getExpireTime()
       if (key) {
+        // Whether the cache is expired
         let isExpire = date - key < this.options.storage_expire
+        // If expired, reset the expiration time and empty the cache
         if (!isExpire) {
           removeStorage()
         }
@@ -166,19 +167,23 @@ function mapStorage(caches, type = 'set') {
   })
 }
  
+// Clear local cache
 function removeStorage() {
   localStorage.clear()
 }
  
+// Set cache
 function setStorage(key, cache) {
   localStorage.setItem(key, JSON.stringify(cache))
 }
  
+// Get cache
 function getStorage(key) {
   let data = localStorage.getItem(key)
   return JSON.parse(data)
 }
  
+// Set expiration time
 function getExpireTime() {
   return new Date().getTime()
 }

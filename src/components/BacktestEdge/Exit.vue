@@ -1,8 +1,6 @@
+// Exit Criteria
 <template>
 	<div class="exit-container">
-		<!-- <p>{{indicatorRadioArr}}</p>
-			<p>{{indicatorUrlArr}}</p>
-			<p>{{indicatorValArr}}</p> -->
 		<div class="signal-option-box">
 			<div class="entry-title-box">
 				<p class="criteria-title">Exit Criteria</p>
@@ -160,28 +158,6 @@
 								techIndiObj[index] === 'CCI_like'
 							"
 						></cci>
-						<rsi
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:isActived="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'rsi'
-							"
-							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
-							:criteria="'exit'"
-							ref="rsiChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:techUrl="indicatorUrlArr[index]"
-							:techVal="indicatorValArr[index]"
-							v-show="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'rsi'
-							"
-						></rsi>
 						<macd
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
@@ -226,15 +202,6 @@
 								techIndiObj[index] === 'MovingAverage_like'
 							"
 						></ma>
-						<!-- <risk
-							v-show="indicatorRadioArr[index] === 'risk'"
-							ref="riskChild"
-							v-bind="$attrs"
-							:panelIndex="index"
-							:criteria="'exit'"
-							:riskIndiValue="riskIndiValue"
-							:riskVal="riskValArr[index]"
-						></risk> -->
 						<bollinger-bands-like
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
@@ -444,11 +411,9 @@
 import indicator from '@/components/BacktestEdge/signal/indicator/indicator'
 import senti from '@/components/BacktestEdge/signal/sentiment/Senti'
 import cci from '@/components/BacktestEdge/signal/technical/Cci-like'
-import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
 import macd from '@/components/BacktestEdge/signal/technical/Macd-like.vue'
 import SignalCode from '@/tools/codeTool.js'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
-import risk from '@/components/BacktestEdge/signal/exit/Risk.vue'
 import bollingerBandsLike from '@/components/BacktestEdge/signal/technical/Bollinger-Bands-like.vue'
 import ehlerFisherTransformLike from '@/components/BacktestEdge/signal/technical/Ehler-Fisher-Transform-like.vue'
 import stochasticMomentumIndexLike from '@/components/BacktestEdge/signal/technical/Stochastic-Momentum-Index-like.vue'
@@ -459,14 +424,10 @@ import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Li
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 export default {
 	name: 'exit',
-	// props: {
-	// 	exitSaveCheck: Boolean
-	// },
 	inheritAttrs: false,
 	data() {
 		return {
 			techIndiValue: '',
-			// riskIndiValue: '',
 			indicatorRadio: 'sentiment',
 			signalOptions: [
 				{
@@ -506,14 +467,10 @@ export default {
 			isDelayBar: false
 		}
 	},
-	mounted() {
-		console.log('初次加载的this.$refs', this.$refs)
-	},
 	components: {
 		indicator,
 		senti,
 		cci,
-		rsi,
 		macd,
 		ma,
 		'bollinger-bands-like': bollingerBandsLike,
@@ -592,7 +549,7 @@ export default {
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
-			// 重置所有子组件的数据
+			// Reset data for all subcomponents
 			try {
 				for (let i = 0; i < this.indicatorRadioArr.length; i++) {
 					if (this.indicatorRadioArr[i]) {
@@ -616,7 +573,6 @@ export default {
 			}
 		},
 		addRiskControlOption(newVal) {
-			console.log('exit risk control', newVal)
 			if (newVal) {
 				this.signalOptions = [
 					{
@@ -658,7 +614,6 @@ export default {
 			this.techIndiObj.splice(obj.index, 1, obj.class)
 		},
 		handleTabsEdit(targetName, action) {
-			console.log(targetName, action)
 			if (action === 'add') {
 				if (this.relation == 2 || this.relation == 3) {
 					let num_key
@@ -670,7 +625,6 @@ export default {
 					}
 					let num = this.editableTabs.length
 					let newTabName = num + 1 + ''
-					// let newTabName = ++(this.editableTabs.length) + ''
 					this.editableTabs.push({
 						title: 'Signal' + newTabName,
 						name: num_key + '',
@@ -713,7 +667,7 @@ export default {
 					(this.relation == 2 || this.relation == 3) &&
 					this.editableTabs.length == 2
 				) {
-					// 最少两个信号
+					// At least two signals
 					this.$message({
 						message:
 							'Multiple signals are currently selected, at least two signals',
@@ -743,9 +697,7 @@ export default {
 				let panelArr = tabs.filter((tab) => tab.name !== targetName)
 				this.editableTabs = panelArr
 				panelArr.forEach((item, index) => {
-					// item.name = index + 1 + ''
 					item.title = 'Signal' + (index + 1)
-					// item.content = 'Signal' + (index + 1) + 'content'
 				})
 				this.editableTabsValue = activeName
 				this.indicatorValArr.splice(absoluteIndex, 1)
@@ -761,8 +713,7 @@ export default {
 				if (this.relation == 3) {
 					this.signals_in_market = this.indicatorRadioArr.length
 				}
-
-				// 移除某选项卡时，把indicatorUrlArr内的indicator依次载入vuex以刷新状态
+//When removing a tab, load the indicators in the indicatorurlarr into vuex to refresh the status
 				tabs.forEach((tab, index) => {
 					this.$store.commit('getExitIndicators', {
 						index: index,
@@ -770,7 +721,6 @@ export default {
 					})
 				})
 			}
-			console.log('exit refs', this.$refs)
 		},
 		getIndicatorUrl(obj) {
 			this.indicatorUrlArr.splice(obj.index, 1, obj.url)
@@ -782,9 +732,6 @@ export default {
 		getTechIndiValue(val) {
 			this.techIndiValue = val
 		},
-		// getRiskIndiValue(val) {
-		// 	this.riskIndiValue = val
-		// },
 		getIndicatorRadio(obj) {
 			this.indicatorRadio = obj.value
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
@@ -793,11 +740,10 @@ export default {
 			if (this.relation == 2 || this.relation == 3 || this.relation == 0) {
 				this.$emit('sendExitSignalIndex', this.indicatorRadioArr.length)
 				for (let i = 0; i < this.indicatorRadioArr.length; i++) {
-					// 申请空间
+					// Apply for space
 					let obj = {}
 					obj.criteria = 'exit'
 					obj.index = i
-					console.log('exit申请空间' + i + '次')
 					this.$store.commit('addSignalLength', obj)
 				}
 			}
@@ -808,7 +754,6 @@ export default {
 		saveScoreValue() {
 			let obj = {}
 			obj.criteria = 'exit'
-			// 当选择 timeorder 和 signal 和 only risk 时，score 默认为 1
 			if (this.relation == 1 || this.relation == 3 || this.relation == 0) {
 				obj.value = 1
 			}
@@ -820,7 +765,6 @@ export default {
 		saveSignalsInMarket() {
 			let obj = {}
 			obj.criteria = 'exit'
-			// 当选择 sameBar 和 signal 和 only risk时，signals_in_market 默认为 1
 			if (this.relation == 1 || this.relation == 2 || this.relation == 0) {
 				obj.value = 1
 			}
@@ -832,15 +776,15 @@ export default {
 		saveDelayBar() {
 			let obj = {}
 			obj.criteria = 'exit'
-			// 不选 isDelayBar
+			// Do not select isdelaybar
 			if (!this.isDelayBar) {
 				obj.value = 0
 			}
-			// 选了 delayBar 不选 only risk
+			// Choose delaybar instead of only risk
 			if (this.isDelayBar && !this.exitItemCheck) {
 				obj.value = this.delay_bars
 			}
-			// 选了 delayBar 选择 only risk
+			// Select delaybar and only risk
 			if (this.isDelayBar && this.exitItemCheck) {
 				obj.value = 0
 			}
@@ -889,16 +833,14 @@ export default {
 			}
 			this.$emit('getExitRelation', val)
 			this.$store.commit('clearExitSignalArr')
-			console.log(this.editableTabs)
 
 		},
 		saveBacktestData(index) {
 			let checked = true
-			// 将选择的 indicator 保存到 vuex 中
-			console.log('exit的保存执行了' + index + '次')
+			// Save the selected indicator to vuex
 			let vm = this
 			if (vm.exitItemCheck) {
-				// 保存 risk description
+				// Save risk description
 				let desObj = {}
 				desObj.criteria = 'exit'
 				desObj.index = 0
@@ -909,7 +851,6 @@ export default {
 			
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			return indi.then((val) => {
-				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
 				if (val) {
 					if (vm.indicatorRadioArr[index] === 'sentiment') {
 						vm.$refs.sentiChild[index].setDesciption(index)
@@ -941,23 +882,6 @@ export default {
 							})
 						}
 						return (checked = cci)
-					}
-					if (
-						this.indicatorRadioArr[index] === 'technical' &&
-						this.techIndiObj[index] === 'rsi'
-					) {
-						this.$refs.rsiChild[index].setDesciption(index)
-						let rsi = this.$refs.rsiChild[index].saveCondition(index)
-						if (!rsi) {
-							this.$message({
-								message:
-								'Please check that the #' +
-									(index + 1) +
-									' exit panel field is filled in correctly',
-								type: 'error'
-							})
-						}
-						return (checked = rsi)
 					}
 					if (
 						this.indicatorRadioArr[index] === 'technical' &&
@@ -1133,11 +1057,6 @@ export default {
 						}
 						return (checked = ts)
 					}
-					// if (this.indicatorRadioArr[index] === 'risk') {
-					// 	this.$refs.riskChild[index].setDesciption(index)
-					// 	let risk = this.$refs.riskChild[index].saveCondition(index)
-					// 	return (checked = risk)
-					// }
 				} else {
 					checked = false
 					return checked
@@ -1146,10 +1065,8 @@ export default {
 		},
 		setEditPanel(num, data) {
 			this.relation = data.exit.relation ? data.exit.relation : 1
-			// if (num == 1) {
-			// 	this.relation = 1
-			// }
-								let formateTechnicalList
+			
+							let formateTechnicalList
 					if (this.$store.state.formateTechnicalList.length === 0) {
 						this.$refs.indiChild[0].loadShortLong()
 					}
@@ -1187,20 +1104,17 @@ export default {
 					for (let i = 0; i < formateTechnicalList.length; i++) {
 						if (indicatorName === formateTechnicalList[i].value) {
 							this.techIndiValue = formateTechnicalList[i].class
-							// this.techIndiObj.splice(i, 1, formateTechnicalList[j].class)
 							this.techIndiObj[j] = formateTechnicalList[i].class
 							break
 						}
 					}}}
 			this.$nextTick(() => {
-				//console.log('当前的refs', this.$refs.indiChild)
 				this.setEditData(this.refs)
 			})
 		},
 		setEditData(data) {
 			let length = data.exit.signals.length
 			for (let j = 0; j < length; j++) {
-				console.log('函数执行了' + j + '次，共' + length + '次')
 				this.$refs.indiChild[j].setEditData(data)
 				this.$refs.indiChild[j].setEditData(data)
 				if (this.indicatorRadioArr[j] === 'sentiment') {
@@ -1244,7 +1158,6 @@ export default {
 			}
 		},
 		setRiskEditData(data) {
-			console.log('编辑的risk exitdata', data)
 			this.relation = 0
 			this.exitItemCheck = true
 			this.signalOptions = [

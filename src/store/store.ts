@@ -33,7 +33,6 @@ export default new Vuex.Store({
 		maRadio: '',
 		stMaPeriod: '',
 		maPeriod: '',
-		//importedLayout: '',
 		newPorfolioInputsValues: {
 			inputNameValue: '',
 			inputDescriptionValue: '',
@@ -103,6 +102,54 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+<<<<<<< HEAD
+	setFavoriteIndicatorList(state, val){
+		state.favoriteIndicatorList = val
+	},
+	setFavoriteSymbolList(state, val){
+		state.favoriteSymbolList = val
+	},
+	setTechSD(state, val){
+		state.techSD = val
+	},	
+	setSavedTechSD(state, val){
+		state.savedTechSD = val
+	},
+	setCurrentSenti(state,val){
+		state.currentSenti = val
+	},
+	setCurrentTech(state,val){
+		state.currentTech = val
+	},
+	setRestoreFreq(state,val){
+		state.restoreFreq = val
+	},
+	getBacktestSymbol(state,val){
+		state.backtestSymbol = val
+	},
+    resetState(state,val){
+      state = val
+    },
+    setCopy(state,val){
+      state.stateCopy = val
+    },
+	setFreqency(state,val){
+		state.pairDataFreq = val
+	},
+    setConditionRadio(state,val){
+      state.conditionRadio = val
+    },
+    setMaRadio(state,val){
+      state.maRadio = val
+    }
+    ,
+    getStMaPeriod(state,val){
+      state.stMaPeriod = val
+    },
+    getMaPeriod(state,val){
+      state.maPeriod = val
+    },
+=======
 		/**
 		 * Sets up a mutations to store MA period when editting MA study to make sure the MA period is the same in chart and form 
 		 */
@@ -201,6 +248,7 @@ export default new Vuex.Store({
 		/**
 		 * Sets up a mutations to store the extremeValue of an indicator
 		 */	
+>>>>>>> 6f4e83616aeacfffaacd3a12c1db1f708248e73e
 		getExtremeValue: (state, list) => {
 			state.extremeValue = list
 		},
@@ -301,7 +349,6 @@ export default new Vuex.Store({
 			state.saveConditionFormdata = val
 		},
 		getDirection(state, val) {
-			// 设置 backtestInfo 的 direction
 			state.backtestInfo.direction = val
 		},
 		getTechnicalIndicators(state, val) {
@@ -347,7 +394,6 @@ export default new Vuex.Store({
 					state.backtestInfo[criteria][key] = obj[key]
 				}
 			}
-			console.log('Setupform的值',state.backtestInfo)
 		},
 		setBd(state, obj) {
 			for (let key in obj) {
@@ -383,7 +429,6 @@ export default new Vuex.Store({
 			state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator =
 				obj.value
 		},
-		// 用于单选框 切换时删除不必要字段
 		delete(state, obj) {
 			delete state.backtestInfo[obj.criteria].signals[obj.index][obj.delete]
 		},
@@ -454,7 +499,6 @@ export default new Vuex.Store({
 			if(criteria === 'exit') {
 			init.riskIndicator = state.backtestInfo.exit.signals[index].riskIndicator
 			}
-			// 在保存之前确保只有 sentimentIndicator 以及 technicalIndicator 两个属性
 			if(criteria == 'exit') {
 			state.backtestInfo.exit.signals[index] = Object.assign({}, init)
 			}else if(criteria == 'entry') {
@@ -464,12 +508,10 @@ export default new Vuex.Store({
 			for(let key in obj) {
 				state.backtestInfo[criteria].signals[index][key] = obj[key]
 			}
-			console.log("保存sentiment的condition", state.backtestInfo);
 			
 		},
 		saveDescription(state, desObj) {
 			if(Array.isArray(state.backtestInfo[desObj.criteria+'_description'])) {
-				// state.backtestInfo[desObj.criteria+'_description'].splice(desObj.index, 0, desObj.description)
 				state.backtestInfo[desObj.criteria+'_description'][desObj.index] = desObj.description
 			
 			}

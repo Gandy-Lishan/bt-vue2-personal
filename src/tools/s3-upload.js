@@ -2,6 +2,7 @@
  *	2.2.0
  *	aws s3 upload tool initiation, data will store in S3 bucket before a backtest start running
  */
+
 import AWS from "aws-sdk"
 
 var bucketName = "sentimentrader-backtestv2-dailyreturnresults";
@@ -12,7 +13,8 @@ var IdentityPoolId = 'us-east-1:a276f16b-4c8c-4252-895f-b8c738be0438';
 
 //plan A，setup IdentityPoolId
 // initiate Amazon Cognito
-AWS.config.region = bucketRegion; // 区域
+AWS.config.region = bucketRegion; // region
+
 AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: IdentityPoolId,
 });

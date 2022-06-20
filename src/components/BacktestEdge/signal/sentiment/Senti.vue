@@ -1,3 +1,4 @@
+// sentiment indicator input box
 <template>
 	<div class="senti-container">
 		<el-form :model="senti" :rules="rules" ref="sentiForm">
@@ -213,30 +214,19 @@ export default {
 		extremeValue() {
 			return this.getExtremeValue
 		},
-		// updateSenti() {
-		// 	return this.$store.state.currentSenti
-		// }
 	},
 	watch: {
-		// updateSenti: {
-		// 	handler() {
-		// 		//console.log(this.sentiUrl)
-		// 		this.preload = true
-		// 	},
-		// 	immediate: true,
-		// 	deep: true
-		// },
 		extremeValue: {
 			handler(newVal) {
 				let vm = this
-				// 为了解决先选ma再选indicator后保存不了ma的问题
+				// To solve the problem that Ma cannot be saved after selecting Ma and then indicator
 				if(this.conditionRadio=='Sentiment Moving Average'){
 					this.setPeriod(this.senti.period)
 				}
 				newVal.forEach((item) => {
 					if (item.indicator) {
 						if (item.indicator === vm.sentiUrl) {
-							// 当从chartiq填充，极值发生了改变时
+							// When filling from chartiq, the extreme value changes
 							vm.senti.extreme_pessimism = item.extremePessimism
 							vm.senti.extreme_optimism = item.extremeOptimism
 						}
@@ -252,7 +242,6 @@ export default {
 				if (newVal) {
 					var obj = CIQ.store.state.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.conditionRadio
-					console.log('handle Senti,',obj)
 					CIQ.store.commit('setConditionRadio', obj)
 
 					let vm = this
@@ -261,7 +250,6 @@ export default {
 						
 						if (item.indicator) {
 							if (item.indicator === newVal) {
-								//console.log(item.indicator,newVal)
 								vm.senti.extreme_pessimism = item.extremePessimism
 								vm.senti.extreme_optimism = item.extremeOptimism
 							}
@@ -278,7 +266,7 @@ export default {
 		clearForm() {
 			this.$refs.sentiForm.resetFields()
 		},
-		// 清除表单认证
+		// Clear form authentication
 		clearFormValidate() {
 			this.$refs.sentiForm.clearValidate()
 		},
@@ -361,7 +349,7 @@ export default {
 			CIQ.store.commit('setConditionRadio', obj)
 
 			if (val === 'Sentiment Value') {
-				// 清空moving average在切回默认senti radio
+				// Clear moving average before switching back to the default senti radio
 				this.periodTemp = this.senti.period
 				this.senti.period = ''
 				this.senti.comparison = 'SV'
@@ -401,7 +389,7 @@ export default {
 			} 
 			if (val === 'Sentiment Moving Average') {
 				this.senti.comparison = 'SVMA'
-			// 默认radio切到moving average radio时 加载ma
+			// Ma is loaded when the default radio is switched to moving average radio
 				this.setPeriod(this.periodTemp)
 			}
 		},
@@ -423,7 +411,7 @@ export default {
 					}
 				} 
 			})
-			// 如果在换成ma radio时indicator没有加载，那么退出
+			// If the indicator is not loaded when changing to Ma radio, exit
 			if(!result){return}
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				if (
@@ -441,7 +429,6 @@ export default {
 				display: 'ST MA',
 				Field: result.url
 			})
-			//CIQ.exportEx()
 			// keep current MA
 			var objMA = { period: _val, url: result.url }
 			var activatedMAList = this.$store.state.activatedMA

@@ -1,3 +1,4 @@
+// Set Up Backtest
 <template>
 	<div class="backtest_container">
 		<el-form
@@ -413,14 +414,10 @@ export default {
 		}
 	},
 	mounted() {
-		//this.getIndicatorsList()
 
-		// this.getIndexsList()
-		// this.getStocksList()
 		this.loadSentimentList('Daily')
 
 		this.getEndDate()
-		console.log('setup重新渲染了')
 	},
 	computed: {
 		updateFreq() {
@@ -476,7 +473,6 @@ export default {
 		},
 		setEditData(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
-					console.log("编辑展示的数据",newVal);
 					this.clearForm()
 					delete newVal.entry
 					delete newVal.exit
@@ -492,10 +488,6 @@ export default {
 					newVal.commission = (newVal.commission * 100).toFixed(2)
 					newVal.slippage = (Number(newVal.slippage)).toFixed(2)
 				    this.bd = Object.assign(this.bd, newVal)
-
-					// 调试中。。。暂时注释
-					//CIQ.hideMarker()
-					//console.log("CIQ.hideMarker in setup.vue");
 					this.getFrequency(newVal.frequency)
 					this.getDirection(newVal.direction)
 					this.isRiskControl = false
@@ -525,7 +517,6 @@ export default {
 					}
 					this.selectRiskControl(this.isRiskControl)
 					}
-					// 保存编辑之前旧的名字
 					this.oldBacktestName = newVal.name
 					let year
 					let month
@@ -548,10 +539,9 @@ export default {
 				}
 		},
 		getDirection(val) {
-			// direction 设置到 vuex
+			// Set direction to vuex
 			this.$store.commit('getDirection', val)
-			// 传给 entry 和 exit 的 direction\
-			//console.log("direction",val);
+			// Direction passed to entry and exit
 			this.bd.direction = val
 			this.$emit('setDirection', val)
 		},
@@ -591,7 +581,6 @@ export default {
 				let vm = this
 				vm.setSymbol = function (symbol) {
 					that.bd.symbol = symbol
-					// that.bd.benchmark = symbol
 				}
 				vm.b = function () {
 					alert('b')
@@ -672,7 +661,6 @@ export default {
 			}
 		},
 		setBacktestHistory(val) {
-			//console.log("blur年限",val);
 			this.historyValue = val
 			this.bd.end_date = timestampToTime(new Date())
 			if (val <= 20) {
@@ -701,10 +689,8 @@ export default {
 			})
 			return data
 		},
-		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.backtestSetupForm.clearValidate()
-			// this.$emit('IsRiskControl', this.isRiskControl)
 		},
 		changeTimeframe(val) {
 			this.getFrequency(val)
@@ -741,42 +727,13 @@ export default {
 					indicatorList = CIQ.indicatorList
 				}
 			} 
-			// else {
-			// 	const res = await getIndicatorsList()
-			// 	indicatorList = res.data
-			// }
-
-			// vm.sentimentIndicatorList = res.data.map((obj) => {
-			// 	if (frequency.toUpperCase().indexOf(obj.updated.toUpperCase()) !== -1) {
-			// 		return { value: obj.chart_name, url: obj.url, updated: obj.updated }
-			// 	}
-			// })
 			vm.sentimentIndicatorList = []
-
-				// if (vm.symbolList.length == 0) {
-				// 	await vm.getStocksList()
-				// }
-
 			if (frequency) {
 				indicatorList.forEach((element) => {
 					if (
 						frequency.toUpperCase().indexOf(element.updated.toUpperCase()) !==
 						-1
 					) {
-						// if(this.symbolList.find(i=>i.value==element.url)){
-                        //     let newName = element.url + ' Optix'
-						// 	vm.sentimentIndicatorList.push({
-						// 		value: newName,
-						// 		url: element.url,
-						// 		updated: element.updated
-						// 	})
-                        // }else{
-						// 	vm.sentimentIndicatorList.push({
-						// 		value: element.chart_name,
-						// 		url: element.url,
-						// 		updated: element.updated
-						// 	})
-                        // }
 						vm.sentimentIndicatorList.push({
 							value: element.chart_name,
 							url: element.url,
@@ -807,20 +764,6 @@ export default {
 			arr.forEach((fre) => {
 				data.forEach((element) => {
 					if (fre.toUpperCase().indexOf(element.updated.toUpperCase()) !== -1) {
-						// if(this.symbolList.find(i=>i.value==element.url)){
-                        //     let newName = element.url + ' Optix'
-						// 	vm.sentimentIndicatorList.push({
-						// 		value: newName,
-						// 		url: element.url,
-						// 		updated: element.updated
-						// 	})
-                        // }else{
-						// 	vm.sentimentIndicatorList.push({
-						// 		value: element.chart_name,
-						// 		url: element.url,
-						// 		updated: element.updated
-						// 	})
-                        // }
 						vm.sentimentIndicatorList.push({
 							value: element.chart_name,
 							url: element.url,
@@ -848,14 +791,11 @@ export default {
 		},
 		backtestNameCheck() {
 			return getBacktestName(this.bd.name).then((res) => {
-				console.log('名字校验接口返回值',res)
 				if(res.data.count == 0) {
 					this.saveBacktestData()
 				}else{
-					console.log('名字校验不通过',res)
 				}
 			}).then(res => {
-				console.log('名字校验不通过错误捕捉',res)
 				return res
 			})
 		},
@@ -885,38 +825,7 @@ export default {
 			}
 			
 			if (validForm && riskCheck) {
-				// let nameList = this.$store.state.backtestNameList
-				// if (nameList.indexOf(bd.name) === -1) {
-				// 	bd.favorites = false
-				// 	delete bd.old_uuid
-				// }
-				// if (
-				// 	nameList.indexOf(bd.name) > -1 &&
-				// 	this.oldBacktestName === ''
-				// ) {
-				// 	bd.favorites = false
-				// 	delete bd.old_uuid
-					// nameChecked = false
-				// }
-				// if (
-				// 	nameList.indexOf(bd.name) > -1 &&
-				// 	this.oldBacktestName === bd.name &&
-				// 	this.oldBacktestName !== ''
-				// ) {
-					// 说明重名要进行替换，不删除 old_uuid
-				// }
-				// if (
-				// 	nameList.indexOf(bd.name) > -1 &&
-				// 	this.oldBacktestName !== bd.name &&
-				// 	this.oldBacktestName !== ''
-				// ) {
-					// 说明不重名，直接创建新的，删除 old_uuid
-					// this.$store.commit('clearBacktestUuid')
-					// nameChecked = false
-				// }
-				// if (nameChecked) {
 					if (bd.end_date) {
-						// 保存 backtestform 的数据
 						bd.commission = bd.commission / 100
 						if(this.isRiskControl) {
 							let riskStr = `${this.isTakeProfit?this.tp:''}/${this.isStopLoss?this.sl:''}/${this.isTimeInMarket?this.tim:''}`
@@ -940,21 +849,7 @@ export default {
 						checked = false
 						return checked
 					}
-				// } else {
-				// 	this.$message({
-				// 		message: 'The backtest name already exists',
-				// 		type: 'error',
-				// 		offset: 300
-				// 	})
-				// 	checked = false
-				// 	return checked
-				// }
 			} else {
-				// this.$message({
-				// 	message: 'Please give the backtest name',
-				// 	type: 'error',
-				// 	offset: 300
-				// })
 				checked = false
 				return checked
 			}
@@ -987,10 +882,7 @@ export default {
 				}
 			}
            description = `${criteria} ${direction} ${tpStr} ${slStr} ${timStr}`
-		   //console.log('risk description',description)
 		   let desObj = {}
-				// desObj.criteria = 'exit'
-				// desObj.index = 0
 				desObj.description = description
 				this.$store.commit('saveRiskDescription', desObj)
 		},
@@ -1049,7 +941,6 @@ export default {
 		},
 		isEdit() {
 			if(this.oldBacktestName == this.bd.name) {
-				// 说明是编辑的
 				return true
 			}
 		}

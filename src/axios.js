@@ -5,7 +5,7 @@
 import axios from 'axios'
 import Cache from './cache'
  
-// customized axios entity
+// Custom instances of Axios
 let instance = axios.create({
   baseURL: ''
 })

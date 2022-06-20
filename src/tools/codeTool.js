@@ -1,4 +1,6 @@
-// import { noConflict } from "lodash"
+/*
+	Signal decoding and encoding file
+*/
 
 class SignalDecodeIDS {
 	constructor() {

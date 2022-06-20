@@ -1,3 +1,4 @@
+// Home
 <template>
 	<div class="home">
 		<div class="home-container">
@@ -17,8 +18,8 @@
 						</el-submenu>
 						<el-submenu index="2">
 							<template slot="title"><i class="el-icon-s-tools"></i></template>
-							<!-- <el-menu-item index="2-1">Theme</el-menu-item>
-							<el-menu-item index="2-2">Language</el-menu-item> -->
+							<!-- <el-menu-item index="2-1">Theme</el-menu-item> -->
+							<el-menu-item index="2-2">Language</el-menu-item>
 						</el-submenu>
 					</el-menu>
 					<!-- <div class="menu">
@@ -101,7 +102,6 @@
 										@getEntryRelation="getEntryRelation"
 										@sendEntrySignalIndex="sendEntrySignalIndex"
 									></entry>
-									<!-- <multi-entry></multi-entry> -->
 									<exit
 										ref="exitChild"
 										:direction="direction"
@@ -109,7 +109,6 @@
 										@getExitRelation="getExitRelation"
 										@sendExitSignalIndex="sendExitSignalIndex"
 									></exit>
-									<!-- <multi-exit></multi-exit> -->
 								</div>
 							</div>
 							<div class="backtest-btns">
@@ -315,9 +314,8 @@ export default {
 
 		let toTop = document.getElementsByClassName('toTop')[0]
 		toTop.style.visibility = 'hidden'
-		// 在DOM渲染数据时，设置下区域高度为浏览器可视区域高度．
-		//this.clientHeight = document.body.clientHeight
-		// 监听window的resize事件．在浏览器窗口变化时再设置下区域高度．
+		// When DOM renders data, set the height of the lower area to the height of the browser's visible area
+		// Listen for the resize event of the window. Set the height of the lower area when the browser window changes
 		const _this = this
 		window.onscroll = function scroll() {
 			_this.scroll =
@@ -374,7 +372,6 @@ export default {
 	},
 	methods: {
 		handleSelect(key, keyPath) {
-			console.log(key, keyPath);
 			let routeUrl = this.$router.resolve({
                 path: '/doc',
             });
@@ -387,20 +384,18 @@ export default {
 			})
 		},
 		myBrowser: function () {
-			//取得浏览器的userAgent字符串
+			//Get the useragent string of the browser
 			var userAgent = navigator.userAgent
 			var isOpera = userAgent.indexOf('Opera') > -1
-			//判断是否Opera浏览器
+			//Determine whether opera browser
 			if (
 				userAgent.indexOf('Chrome') > -1 &&
 				userAgent.indexOf('Safari') > -1
 			) {
-				// alert('Chrome浏览器')
 			} else {
 				alert('The best display is accessed using the chrome browser')
 			}
 		},
-		// 清除set up  表单
 		tabContentClick() {
 			try {
 				let sidebar = document.getElementsByClassName('el-tabs__header is-left')
@@ -433,9 +428,7 @@ export default {
 				}
 			} catch (error) {}
 		},
-		// 清除set up  表单
 		clearForm() {
-			//CIQ.reloadChart()
 			Object.assign(this.$data, this.$options.data())
 			this.$store.commit('initialBacktestInfo')
 			this.$refs.setUpChild.clearForm()
@@ -455,9 +448,6 @@ export default {
 
 		sendExitSignalIndex(length) {
 			this.exitLength = length
-			// for(let i=0;i<length;i++) {
-			// 	this.addExitSignalLength(i)
-			// }
 		},
 		handleTabClick(tab, event) {
 			let tabName = tab.name
@@ -473,7 +463,6 @@ export default {
 			}
 		},
 		IsRiskControl(val) {
-			console.log('home risk control', val)
 			this.$refs.exitChild.addRiskControlOption(val)
 		},
 		setDirection(val) {
@@ -535,7 +524,6 @@ export default {
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
-			//CIQ.savedTechSD = data.savedTechSD
 
 			switch (freq) {
 				case 'Daily': {
@@ -555,20 +543,16 @@ export default {
 				}
 			}
 			this.$store.commit('setRestoreFreq', frequency)
-			// CIQ.addIndicatorsFromBacktest()
 		},
 		runBacktest: throttle(async function () {
 	      let setUp = this.$refs.setUpChild.saveBacktestData()
 		  let setUpChecked = true
 		  let entryChecked = true
 		  let isEdit = this.$refs.setUpChild.isEdit()
-	       console.log('runbacktest的setup',setUp)
 			this.$refs.entryChild.addEntrySignalLength()
 			this.$refs.exitChild.addExitSignalLength()
 			let setUpRes = await getBacktestName(this.$store.state.backtestInfo.name)
-			console.log('setUpRes',setUpRes)
 			if(setUpRes.data.count != 0 && !isEdit) {
-				console.log('名字校验失败')
 				this.$message({
 						message: 'The backtest name already exists',
 						type: 'error',
@@ -581,7 +565,6 @@ export default {
 			if(setUpRes.data.count == 0 || isEdit) {
 				
 				let entry
-				// 申请空间
 				for (let index = 0; index < this.entryLength; index++) {
 					this.addEntrySignalLength(index)
 					entry = this.$refs.entryChild.saveBacktestData(index)
@@ -598,8 +581,6 @@ export default {
 					let exit
 					let exitChecked
 					for (let index = 0; index < this.exitLength; index++) {
-					// this.addEntrySignalLength(index)
-					console.log('runbacktest exit' + index)
 						exit = this.$refs.exitChild.saveBacktestData(index)
 						exitChecked = await exit
 						if(!exitChecked){
@@ -611,7 +592,6 @@ export default {
 						this.$refs.exitChild.saveRelation()
 					}
 					if (exitChecked) {
-						//this.loading = true
 						CIQ.addCover("Start running Backtest...")
 						CIQ.nprogress.start()
 						let vm = this
@@ -643,7 +623,6 @@ export default {
 								})
 								CIQ.hideCover()
 								CIQ.nprogress.done()
-								//vm.loading = false
 								return
 							}
 						}
@@ -671,7 +650,6 @@ export default {
 								})
 								CIQ.hideCover()
 								CIQ.nprogress.done()
-								//vm.loading = false
 								return
 							}
 						}
@@ -806,10 +784,9 @@ export default {
 						if (Array.isArray(exit_description)) {
 							backtestData.exit_description = JSON.stringify(exit_description)
 						}
-						//上传indicator layout
+						//uploade indicator layout
 
 						var indicatorLayout = {}
-						// console.log("entry/exit: ",this.$store.state.indicators.formIndicators)
 						indicatorLayout.formIndicators = {
 							entry: entrySignal,
 							exit: exitSignal
@@ -820,7 +797,6 @@ export default {
 						for (var i in CIQ.stxx.layout.studies) {
 							var output = {}
 							if(CIQ.indicatorList.find((j) => { return j.url == CIQ.stxx.layout.studies[i].type }) == undefined){
-								//console.log('isTech',CIQ.stxx.layout.studies[i].type)
 								output = CIQ.stxx.layout.studies[i].outputs
 							}
 							savedTechSD.push({
@@ -830,13 +806,6 @@ export default {
 								parameters: CIQ.stxx.layout.studies[i].parameters,
 								panel: CIQ.stxx.layout.studies[i].panel
 							})
-							// var sd = CIQ.stxx.layout.studies[i]
-							// savedTechSD.push([
-							// 	sd.type,
-							// 	sd.inputs,
-							// 	sd.outputs,
-							// 	sd.parameters,
-							// ])
 						}
 
 						indicatorLayout.savedTechSD = savedTechSD
@@ -845,13 +814,12 @@ export default {
 						backtestData.indicator_layout = JSON.stringify(indicatorLayout)
 
 						
-						//console.log('indicatorLayout: ', savedTechSD)
 						let copyBacktestData = JSON.parse(JSON.stringify(backtestData))
 						let str = UUID(JSON.stringify(copyBacktestData))
 
 						backtestData.pk = str
 					
-						// 把对象里的数字字符串还原成数字
+						// Restore a numeric string in an object to a number
 						backtestData.capital_alloc = parseFloat(backtestData.capital_alloc)
 						backtestData.slippage = parseFloat(backtestData.slippage)
 						backtestData.win_rate = parseFloat(backtestData.win_rate)
@@ -860,8 +828,6 @@ export default {
 							start_date: backtestData.start_date.replace(/-/g,'') * 1000000000,
 							end_date: backtestData.end_date.replace(/-/g,'') * 1000000000
 						}
-						console.log(CIQ.spanPeriod)
-						// 传给S3的backtestData copy
 						var backtestParams = {}
 						backtestParams.uuid = backtestData.pk
 						backtestParams.benchmark = backtestData.benchmark
@@ -882,18 +848,16 @@ export default {
 						backtestParams.strategy = backtestData.strategy
 						backtestParams.symbol = backtestData.symbol
 						backtestParams.win_rate = backtestData.win_rate
-						console.log('编辑后传出去的数据', backtestParams)
-						console.log("back test数据", backtestData);
 						backtestParams = JSON.stringify(backtestParams)
 						/* ********** */
 						
 
 						let backtestDataStr = this.$qs.stringify(backtestData)
-						// 在回测前加载全时段的数据并生成csv上传s3,结果出来再更新表单
+						// Before the back test, load the data of the whole period and generate CSV to upload S3, and then update the form when the results come out
 						this.reloadData(indicatorLayout,backtestData.frequency)
-						// 1.上传数据文件
-						// 2.上传参数文件
-						// 3.判断文件上传状态，如果报错则不执行跑回测操作
+						// 1. Upload data file
+						// 2. Upload parameter file
+						// 3. Judge the file upload status. If an error is reported, run back test will not be performed
 						
 						// TODO 
 						// long
@@ -901,35 +865,31 @@ export default {
 
 						let callback = async function () {
 							if(arguments[0]==200){
-								// 何上传的json
+								// He upload JSON
 								try{
 									var data = await s3_tool.upload({key:str + '/' + str + '_backtest_params.json',val:backtestParams})
 									console.log("Upload json Success", data.key);
 									try {
-										console.log("start runBacktest");
 										let res = await runBacktest(backtestDataStr)
 										if (res.status === 201) {
-											// 保存成功之后，将 backtestInfo 清空回原始的状态
 											CIQ.isBacktestRun = true
+											//After saving successfully, clear the backtestinfo back to the original state
 											vm.$store.commit('initialBacktestInfo')
 
-											//和创回测绑在一起，没有加所以不用删
-											//CIQ.hideCover()
+										
 
-											//vm.loading = false
 											vm.goToHistoryForm()
 											vm.$refs.historyChild.refreshHistory(res.data.id)
-											// 保存成功之后应该清除表单的所有数据
 											CIQ.hideMarker()
 											CIQ.isMarkerShown = false 
-											// 并且清除 old_uuid
 											let backtestInfo = JSON.parse(
 												JSON.stringify(vm.$store.state.backtestInfo)
 											)
+											//clear old_ uuid
 											if (backtestInfo.old_uuid) {
 												vm.$store.commit('clearBacktestUuid')
 											}
-											// 清除 oldBacktestName
+											// clear oldBacktestName
 											vm.backtestEditData = {}
 											vm.$refs.setUpChild.clearOldBacktestName()
 											vm.$refs.favoriteChild.getFavoriteList()
@@ -937,7 +897,6 @@ export default {
 											vm.$message.error('Save failed')
 											CIQ.hideCover()
 											CIQ.nprogress.done()
-											//vm.loading = false
 											CIQ.hideMarker()
 											CIQ.isMarkerShown = false
 										}
@@ -947,17 +906,16 @@ export default {
 										vm.$refs.favoriteChild.getFavoriteList()
 										CIQ.hideCover()
 										CIQ.nprogress.done()
-										//vm.loading = false
 										vm.$message({
 											message: 'The internal server is busy, please try again later ',
 											type: 'error',
 											offset: 300
 										})
-										// 初始化backtestInfo的数据
+										// Initialize the data of backtestinfo
 										vm.$store.commit('clearStoreDesciption')
 									}	
 								}catch(error){
-									// 如果上传JSON失败, 重试，因为它不是axios请求，所以重试逻辑要自己写
+									// If uploading JSON fails, try again. Because it is not an Axios request, the retry logic should be written by yourself
 									console.log("Upload JSON failed", error);
 									if(attemptTime<4){
 										CIQ.outputSignalsResult(str,callback)
@@ -971,22 +929,18 @@ export default {
 									}
 								}	
 							}else{
-								// 如果上传csv失败，自定义返回500， 重试，因为它不是axios请求，所以重试逻辑要自己写
 								console.log("Upload CSV failed");
-								// 重试
+								// If the upload of CSV fails, the customization returns 500. Try again. Because it is not an Axios request, the retry logic should be written by yourself
 								if(attemptTime<5){
 									CIQ.outputSignalsResult(str,callback)
 									attemptTime++
 									console.log("retry the upload request...");
 								}else{
 									CIQ.hideCover()
-									CIQ.nprogress.done()
-									//vm.loading = false
 									alert('Upload CSV failed')		
 								}					
 							}						
 						}
-						console.log('开始调用CIQ.outputSignalsResult')
 						CIQ.outputSignalsResult(str,callback)
 					}
 				}
@@ -997,11 +951,9 @@ export default {
 			this.activeName = 'second'
 		},
 		async goTobacktestSetupForm(id, resData, callback) {
-			// backtestEditData
 			CIQ.nprogress.inc()
 			CIQ.setCoverText('Restoring Backtest form...')
 			
-			//this.loading = true
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
 			this.$refs.exitChild.clearForm()
@@ -1009,7 +961,6 @@ export default {
 			vm.activeName = 'first'
 			vm.backtestEditData = {}
 			try {
-				//const res = await seeParams(id)
 				let data = resData
 
 				data.old_uuid = id
@@ -1020,28 +971,24 @@ export default {
 				delete data.backtest_id
 				delete data.user_id
 				delete data.uuid
-				//console.log(data)
 				let signalCode = new SignalCode()
 				if (data.entry.signals instanceof Array) {
-					// 删除掉 code 为 false 的项
 				data.entry.signals.forEach((item,index) => {
 					if(!item.code) {
 						data.entry.signals.splice(index,1)
 					}
 				})
-					// data.entry.signals = signalCode.decode(data.entry.signals[0]['code'])
 					data.entry.signals = data.entry.signals.map((value) => {
 						return signalCode.decode(value.code)
 					})
 				}
 				if (data.exit.signals instanceof Array) {
-					// 删除掉 code 为 false 的项
+					// Delete items with code false
 						data.exit.signals.forEach((item,index) => {
 							if(!item.code) {
 								data.exit.signals.splice(index,1)
 							}
 						})
-					// data.exit.signals[0] = signalCode.decode(data.exit.signals[0]['code'])
 						data.exit.signals = data.exit.signals.map((value) => {
 							if(value.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999') {
 						return signalCode.decode(value.code)	}else{
@@ -1067,19 +1014,14 @@ export default {
 				let entryPanel = data.entry.signals.length
 				let entryData = {}
 				entryData.entry = data.entry
-				// entryData.entry_description = data.entry_description
-				// exitData.exit_description = data.exit_description
 
 				vm.$refs.entryChild.setEditPanel(entryPanel, entryData)
-				// 拿到 frequency 的值
+				// Get the value of frequency
 				vm.editFrequency = data.frequency
 				vm.timeFrame = data.frequency
 				vm.$store.commit('getFrequency', vm.editFrequency)
-				console.log("before listen to backtestEditData")
 				vm.backtestEditData = data
 				vm.$refs.setUpChild.setEditData(data)
-				
-				//this.loading = false
 			} catch (error) {
 				console.error(error)
 				vm.$message({
@@ -1089,10 +1031,8 @@ export default {
 				})
 				CIQ.hideCover()
 				CIQ.nprogress.done()
-				//this.loading = false
 			}
 			setTimeout(()=>{
-				console.log("异步请求结束，执行回调函数")
 				if(callback){callback()}
 			},1000)
 		},
@@ -1102,13 +1042,8 @@ export default {
 			CIQ.setCoverText('Generating Backtest report, please wait...')
 			
 			this.$refs.performanceChild.getResultData(row,() => {
-				console.log("异步请求结束，执行回调函数(别看了，回调地狱好吧)",callback);
 				if(callback){callback()}
 			})
-			// setTimeout(() => {
-			// 	console.log("异步请求结束，执行回调函数");
-			// 	if(callback){callback()}
-			// }, 1000)
 		},
 		goToFavoritesForm() {
 			this.activeName = 'forth'
@@ -1120,7 +1055,7 @@ export default {
 		refHistoryForm() {
 			this.$refs.historyChild.getHistoryList()
 		},
-		// 无法拿到 performance 的数据，服务端异常
+		// Unable to get performance data, server exception
 		errorCatchPerformance() {
 			this.$notify({
 				title: 'Try Another',
@@ -1129,12 +1064,6 @@ export default {
 				type: 'warning'
 			})
 		},
-		// handleCommand(command) {
-		// 	let routeUrl = this.$router.resolve({
-        //         path: '/doc',
-        //     });
-        //   window.open(routeUrl.href, '_blank');
-		// },
 		isOnlyRiskControl(val) {
 			this.isOnlyRisk = val
 		},
