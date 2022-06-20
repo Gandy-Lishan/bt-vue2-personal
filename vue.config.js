@@ -21,6 +21,7 @@ const config = {
 			]
 		},
 		plugins:[
+			// filter console.log message
             // new UglifyJsPlugin({
             //     uglifyOptions: {
             //         compress:{
@@ -30,7 +31,8 @@ const config = {
             //         }
             //     }
             // }),
-			// 骨架屏
+
+			// Skeleton screen
 			new SkeletonWebpackPlugin({
 				webpackConfig: {
 					entry: {
@@ -50,11 +52,11 @@ const config = {
         ]
 	},
 	css: {
-        // 是否使用css分离插件 ExtractTextPlugin
+        //  ExtractTextPlugin
         extract: true,
-        // 开启 CSS source maps?
+        //enable CSS source maps?
         sourceMap: false,
-        // 启用 CSS modules for all css / pre-processor files.
+        // enable CSS modules for all css / pre-processor files.
         modules: false
     },
 	chainWebpack: (config) => {  
@@ -96,7 +98,7 @@ const config = {
 		// port: 8080,
 		// host:"localhost",
 		// https:false,
-		// 测试的ip 18.216.210.200
+		// test ip 18.216.210.200
 		// http://10.131.3.74:8000
 		// http://3.140.194.24:80
 		// http://3.144.31.178:8000
@@ -105,9 +107,6 @@ const config = {
 		disableHostCheck: true,
 		proxy: {
 			'/dev': {
-				//target: 'http://18.216.210.200',
-				 //target: 'http://10.131.3.232:8000', 
-				//target: 'http://3.140.194.24:8000',
 				target: "https://h7r34cgfvh.execute-api.us-east-1.amazonaws.com",
 				// ws:true,
 				changeOrigin: true,
@@ -118,20 +117,5 @@ const config = {
 		}
 	}
 }
-
-// if (process.env.ST_ENV !== "dev" && process.env.ST_ENV !== undefined){
-//     config.configureWebpack = {
-//         Plugins:[
-//             new UglifyJsPlugin({
-//                 uglifyOptions: {
-//                     compress:{
-//                         drop_console:true,
-//                     }
-//                 }
-//             })
-//         ]
-//     }
-// }
-
 
 module.exports = config

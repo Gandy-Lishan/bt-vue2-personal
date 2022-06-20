@@ -1,3 +1,7 @@
+/**
+ *	2.2.0
+ *	import css files, setup axios entity
+ */
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -6,15 +10,15 @@ import qs from 'querystring'
 import 'element-ui/lib/theme-chalk/index.css'
 // import locale from '../node_modules/element-ui/lib/locale/lang/en.js'
 import en from './tools/en.js'
-// 导入全局样式表
+// import global css rule
 import './assets/css/global.css'
-// 导入字体图标
+// icon & front
 import './assets/fonts/iconfont.css'
-// 导入帮助图标
+// help icon
 import './assets/helpIconFont/iconfont.css'
 import 'font-awesome/css/font-awesome.css';
 
-// 导入全局样式表
+// progress bar
 import Nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 
@@ -32,7 +36,7 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 //import { CIQ } from 'chartiq'
 
 Vue.use(VueCookies)
-// 配置请求根路径
+// setup default url
 axios.defaults.baseURL = ''
 //set 10 sec as default,However, some time-consuming requests are processed separately
 axios.defaults.timeout = 10000;
@@ -89,10 +93,6 @@ axios.interceptors.response.use(undefined, function axiosRetryInterceptor(err) {
 
 // const encode = require("../node_modules/element-ui/lib/locale/lang/en")
 
-// 定义外部接口可配置
-// axios.get('/dist/config.json').then((res) => {
-// 	Vue.prototype.$SERVICE_URL = res;
-// })
 Vue.prototype.$qs = qs
 Vue.use(ElementUI, { locale })
 Vue.prototype.$http = axios

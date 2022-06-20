@@ -1,3 +1,7 @@
+/**
+ *	2.2.0
+ *	Vue router
+ */
 import Vue from 'vue'
 import Router from 'vue-router'
 import cookies from 'vue-cookies'
@@ -10,9 +14,9 @@ import https from 'https'
 import { getCookieData, setCookieData } from '@/tools/cookie'
 import { stringMap } from 'aws-sdk/clients/backup'
 Vue.use(Router)
-// 路由懒加载
-// 懒加载即组件的延迟加载，通常vue的页面在运行后进入都会有一个默认的页面，而其他页面只有在点击后才需要加载出来。
-// 使用懒加载可以将页面中的资源划分为多份，从而减少第一次加载的时候耗时
+// Route lazy loading
+// Lazy loading is lazy loading of components. Usually vue pages will have a default page when entered after running, while other pages need to be loaded only after clicking.
+// Lazy loading can be used to divide the resources on the page into multiple portions, thus reducing the first load time
 const router = new Router({
 	mode: 'history',
 	routes: [
@@ -21,33 +25,6 @@ const router = new Router({
 		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
 	]
 })
-// router.beforeEach(async (to, from, next) => {
-// 	// 从根源替换allSymbolList
-// 	const res = await getIndicatorsList()
-// 	let allSymbolsList = res.data
-// 	const resStocks = await getStocksList()
-// 	let stocksList = resStocks.data
-// 	let newAllSymbolsList = []
-// 	for(var i=0;i<allSymbolsList.length;i++){
-// 		let item = allSymbolsList[i]
-// 		if(stocksList.find(j=>j.stock==item.url)){
-// 			let newName = item.url + ' Optix'
-// 			newAllSymbolsList.push({
-// 				chart_name: newName,
-// 				url: item.url,
-// 				updated: item.updated
-// 			})
-// 		}else{
-// 			newAllSymbolsList.push(allSymbolsList[i])
-// 		}
-// 	}
-	
-// 	CIQ.store = store
-// 	// 虽然用缓存了，但是还是用CIQ.indicatorList管理
-// 	CIQ.indicatorList = newAllSymbolsList
-// 	return next()
-// })
-
 
 router.beforeEach(async (to, from, next) => {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
@@ -71,33 +48,22 @@ router.beforeEach(async (to, from, next) => {
 	}
 	
 	CIQ.store = store
-	// 虽然用缓存了，但是还是用CIQ.indicatorList管理
+	// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
 	CIQ.indicatorList = newAllSymbolsList
 
 	let loginUrl = 'https://users.sentimentrader.com/login'
 	let formateHost = location.origin
-	//测试网站 https://users.sentdevsite.com/login
+	//website for testing https://users.sentdevsite.com/login
 	// https://backtest.sentimentrader.com/user?userID=668696
-	// 1. 从访问过来的 url 获取到 userid
-	// 2. 访问后端 api '/dev/user/?userid=668696' get 参数
+	// 1. get the userid from url
+	// 2. call axios get method to '/dev/user/?userid=668696'
 	let userId
 		let url = location.search
 		userId = subURLstrToUserid(url, loginUrl, formateHost)
 
-		let tmpStatus = postAxiosRequest(loginUrl, next
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			)
+		let tmpStatus = postAxiosRequest(loginUrl, next)
 		if (!tmpStatus){
-			// 请求失败会进入这个分支
+			// handle error response
 			tmpStatus = getAxiosRequest(userId, loginUrl, next)
 			if (!tmpStatus){
 				alert("request failed")
@@ -108,7 +74,7 @@ router.beforeEach(async (to, from, next) => {
 
 
 async function postAxiosRequest(loginUrl: string, next: any) {
-	// 状态码,用于判断工作是否完成,成功为true,失败为false
+	// Status code, used to determine whether the work is complete. The value is true for success and false for failure
 	let status = true
 
 	try{
@@ -118,33 +84,33 @@ async function postAxiosRequest(loginUrl: string, next: any) {
 		status = false
 	}
 	//set 10 sec as default,However, some time-consuming requests are processed separately
-	let res = await axios.post('/dev/user/',null,{timeout:5000})
+	let res = await axios.post('/dev/user/',null,{timeout:10000})
 	
 	if (res.status === 200) {
 		next()
 		status = true
 	}
 	else if (res.status === 401) {
-		//无权限
+		//not authorized 
 		status = false
 		alert('No permission, please log in again')
 		window.location.href = loginUrl
 
 	}
 	else if (res.status === 403) {
-		//认证时间超时
+		//timeout
 		status = false
 		alert('Authentication expired, please log in again')
 		window.location.href = loginUrl
 	}
 	else if (res.status === 404) {
-		// 用户不存在
+		// user does not exist
 		status = false
 		alert('User does not exist, please log in again')
 		window.location.href = loginUrl
 	}
 	else if (res.status === 500) {
-		// 服务器错误
+		// server error
 		status = false
 		alert('Internal Server Error, please log in again')
 		window.location.href = loginUrl
@@ -157,7 +123,7 @@ async function postAxiosRequest(loginUrl: string, next: any) {
 }
 
 async function getAxiosRequest(userId: string, loginUrl: string, next: any) {
-	// 状态码,用于判断工作是否完成,成功为true,失败为false
+	// Status code, used to determine whether the work is complete. The value is true for success and false for failure
 	let status = true
 	let res = await axios.get('/dev/user/?userid=' + userId)
 	if (res.status === 200) {
@@ -165,25 +131,25 @@ async function getAxiosRequest(userId: string, loginUrl: string, next: any) {
 		next()
 	}
 	else if (res.status === 401) {
-		//无权限
+		//not authorized 
 		status = false
 		alert('No permission, please log in again')
 		window.location.href = loginUrl
 	}
 	else if (res.status === 403) {
-		//认证时间超时
+		//timeout
 		status = false
 		alert('Authentication expired, please log in again')
 		window.location.href = loginUrl
 	}
 	else if (res.status === 404) {
-		// 用户不存在
+		// user does not exist
 		status = false
 		alert('User does not exist, please log in again')
 		window.location.href = loginUrl
 	}
 	else if (res.status === 500) {
-		// 服务器错误
+		// server error
 		status = false
 		alert('Internal Server Error, please log in again')
 		window.location.href = loginUrl
@@ -203,15 +169,12 @@ function subURLstrToUserid(url: string, loginUrl: string, formateHost: string) {
 		let paramsStr = url.substr(1)
 		let paramsArr = paramsStr.split('=')
 		userId = paramsArr[1]
-		// 正式版旧版
 		// cookies.set('userid',userId)
 		cookies.set('devbt2Userid', userId)
 		window.location.href = formateHost
 	} else {
-		// 正式版旧版
 		// userId = cookies.get('userid')
 		userId = cookies.get('devbt2Userid')
-		console.log('进入querySring判断')
 		if (!userId) {
 			alert('Login failed, please log in again')
 			window.location.href = loginUrl
