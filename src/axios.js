@@ -1,3 +1,7 @@
+/**
+ *	2.2.0
+ *	customized axios.js for local cache setup
+ */
 import axios from 'axios'
 import Cache from './cache'
  
@@ -6,20 +10,25 @@ let instance = axios.create({
   baseURL: ''
 })
  
-let cache = new Cache(axios) // Pass the current Axios object into the cache
+let cache = new Cache(axios) // pass current axios to Cache
 cache.use({
-  expire: 3600000*24*7, // Expiration time: 7 days
+  expire: 3600000*24*7, // default timeout period, 7 days
   storage: true,
-  instance, // If there is a custom Axios instance, such as the above instance, it needs to be passed into the instance. If there is no instance, it will not be transferred
+  instance,
   requestConfigFn: config => {
-    // Request to intercept custom actions
-    // The config object needs to be returned to the cache through promise. You can also use the writing method of new promise
+    // customized request interceptor
+    // if (config.header) {
+    //   config.header.token = 'i am token'
+    // } else {
+    //   config.header = { token: 'i am token' }
+    // }
+    // need to return the Config object through the Promise cache. You can also use the new Promise notation
     return Promise.resolve(config)
   },
   responseConfigFn: res => {
-    // Response to intercepted custom actions
-    if (!res.data.code) {
-      // Res needs to be returned through promise
+    // customized response interceptor
+    if (!res.data || !res.data.code) {
+      // need to return the Config object through the Promise cache. You can also use the new Promise notation
       return Promise.resolve(res)
     }
   }

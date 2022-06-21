@@ -1,3 +1,7 @@
+/**
+ *	2.2.0
+ *	aws s3 upload tool initiation, data will store in S3 bucket before a backtest start running
+ */
 
 import AWS from "aws-sdk"
 
@@ -7,9 +11,10 @@ var IdentityPoolId = 'us-east-1:a276f16b-4c8c-4252-895f-b8c738be0438';
 
 // set the default config object
 
-//Scheme 1: configuring identitypoolid is not feasible
-// Initialize Amazon cognito credential provider
+//plan A，setup IdentityPoolId
+// initiate Amazon Cognito
 AWS.config.region = bucketRegion; // region
+
 AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: IdentityPoolId,
 });
@@ -26,7 +31,7 @@ if(temp){
 AWS.config.credentials.params.IdentityId = temp
 // console.log(AWS.config.credentials.params.IdentityId)
 
-// Scheme 2: configure accesskeyid and secretaccesskey in the code, which is feasible
+//plan b，setup accessKeyId & secretAccessKey，it works
 // AWS.config.update({
 // //   region: bucketRegion,
 // //   credentials: new AWS.CognitoIdentityCredentials({
@@ -35,7 +40,7 @@ AWS.config.credentials.params.IdentityId = temp
 // });
 
 
-// Scheme 3: configure accesskeyid and secretaccesskey in local file, which is feasible
+//plan c，setup accessKeyId & secretAccessKey in local config file，it works
 //AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
 
 
@@ -55,21 +60,6 @@ s3_tool.upload = async (params) => {
     return promise
 
 };
-// s3_tool.upload = async (params) => {
-//     console.log(params)
-//     var uploadParams = {Bucket: bucketName, Key: params.key, Body: params.val};
-//     s3.upload (uploadParams, function (err, data) {
-//         if (err) {
-//             //console.log("Error", err);
-//             return {state:-1,payload:err}
-//         } if (data) {
-//             console.log("Upload Success", data);
-//             return {state:1,payload:data}
-//         }
-//     });
-// };
-
-
 
 s3_tool.getList = async () => {
     var bucketParams = {
@@ -83,17 +73,5 @@ s3_tool.getList = async () => {
         }
     });
 }
-// is abandund
-// s3_tool.send_obj_server = async (params) => {
-//     try {
-//         console.log(params)
-//         const results = await axios.post("/dev/setdata/",qs.stringify(params))
-//         return results; // For unit tests.
-//     } catch (err) {
-//         return false
-//     }
-// };
 
-//s3_tool.upload({key:'00020cd4-c288-3645-b8fa-01a4bd53cc7f/00020cd4-c288-3645-b8fa-01a4bd53cc7f_data.csv',val:'hello world'});
-//s3_tool.getList();
 export default s3_tool;

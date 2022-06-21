@@ -14,12 +14,27 @@
 						<el-submenu index="1">
 							<template slot="title">Help</template>
 							<el-menu-item index="1-1">Tutorial</el-menu-item>
+							<!-- <el-menu-item index="1-2">Contant Us</el-menu-item> -->
 						</el-submenu>
 						<el-submenu index="2">
 							<template slot="title"><i class="el-icon-s-tools"></i></template>
-							<el-menu-item index="2-2">Language</el-menu-item> -->
+							<!-- <el-menu-item index="2-1">Theme</el-menu-item> -->
+							<!-- <el-menu-item index="2-2">Language</el-menu-item> -->
 						</el-submenu>
 					</el-menu>
+					<!-- <div class="menu">
+						<el-dropdown :hide-on-click="false" @command="handleCommand">
+							<span class="el-dropdown-link">
+								Help<i class="el-icon-arrow-down el-icon--right"></i>
+							</span>
+							<el-dropdown-menu slot="dropdown">
+								<el-dropdown-item command="doc"> Tutorial </el-dropdown-item>
+								<el-dropdown-item command="contact">
+									Contant Us
+								</el-dropdown-item>
+							</el-dropdown-menu>
+						</el-dropdown>
+					</div> -->
 				</div>
 			</div>
 			<header class="header">
@@ -853,6 +868,7 @@ export default {
 								// He upload JSON
 								try{
 									var data = await s3_tool.upload({key:str + '/' + str + '_backtest_params.json',val:backtestParams})
+									console.log("Upload json Success", data.key);
 									try {
 										let res = await runBacktest(backtestDataStr)
 										if (res.status === 201) {
@@ -900,9 +916,11 @@ export default {
 									}	
 								}catch(error){
 									// If uploading JSON fails, try again. Because it is not an Axios request, the retry logic should be written by yourself
+									console.log("Upload JSON failed", error);
 									if(attemptTime<4){
 										CIQ.outputSignalsResult(str,callback)
 										attemptTime++
+										console.log("retry the upload request...");
 									}else{
 										CIQ.hideCover()
 										CIQ.nprogress.done()
@@ -911,11 +929,12 @@ export default {
 									}
 								}	
 							}else{
-								// 
+								console.log("Upload CSV failed");
 								// If the upload of CSV fails, the customization returns 500. Try again. Because it is not an Axios request, the retry logic should be written by yourself
 								if(attemptTime<5){
 									CIQ.outputSignalsResult(str,callback)
 									attemptTime++
+									console.log("retry the upload request...");
 								}else{
 									CIQ.hideCover()
 									alert('Upload CSV failed')		

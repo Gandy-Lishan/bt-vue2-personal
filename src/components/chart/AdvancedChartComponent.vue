@@ -1,3 +1,7 @@
+/**
+ *	2.2.0
+ *	chartiq component for VUE
+ */
 <template>
 	<cq-context ref="container">
 		<cq-color-picker></cq-color-picker>
@@ -318,6 +322,8 @@ export default class AdvancedChartComponent extends Vue {
 		const config = this.config || getCustomConfig()
 		
 		const container = this.container
+
+		// a listener for observing tooltip button's action
 		var tooltip = document.getElementsByClassName("ciq-HU")[0]
 		tooltip.onclick = function(){
 			tooltip.classList.remove("active");	
@@ -352,21 +358,17 @@ export default class AdvancedChartComponent extends Vue {
 			outZone: CIQ.stxx.displayZone,
 			});
 			
-			// for (var studyInstanceName in CIQ.stxx.layout.studies) {
-			// 	CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
-			// }
-			
 			CIQ.studys = []
 			for (var study in CIQ.Studies.studyLibrary) {
 				////(study)
 				CIQ.studys.push(study)
 			}
 
-			//CIQ.stxx.setTimeZone("Asia/Hong_Kong", "America/New_York");
-
 			CIQ.ChartEngine.prototype.prepend("draw", function () {
 	
 			});
+
+			// append Logo image
 			var node = document.getElementsByClassName("stx-subholder")[0]
 			var newdiv=document.createElement("div");
 			newdiv.className = 'stLogo'
@@ -381,7 +383,8 @@ export default class AdvancedChartComponent extends Vue {
 			this.initializeToggle()
 			
 			CIQ.stxx.addEventListener("scroll", function(object) {
-				// same as "object.stx.markers.circle"
+				
+				// an event handle for updating trade marker when dragging the chart
 				if(CIQ.isMarkerShown){
 					let c_date = jutils.formatDate(object.stx.chart.xaxis[0].DT, 'YYYYMMDD');
 					if(CIQ.groups.slice(-1)[0]){
@@ -402,6 +405,7 @@ export default class AdvancedChartComponent extends Vue {
 			});
 		}, 0)			
 	}
+	// initiate lastPrice and grid button
 	initializeToggle() {
 
 		var mNode = document.getElementsByClassName("lastP")[0]

@@ -1,3 +1,4 @@
+
 <template>
 	<div class="chart-wrapper">
 		<AdvancedChartComponent
@@ -53,8 +54,6 @@ export default class AdvancedWrapper extends Vue {
 		CIQ.vue = Vue
 		// refresh pag
 
-		// console.log('first CIQ.addIndicators')
-		// CIQ.addIndicators()
 		var chartBox = document.getElementsByClassName("chart_box")[0]
 		var height = 75/100*window.innerHeight
 		chartBox.style.height = height.toString()+ 'px'

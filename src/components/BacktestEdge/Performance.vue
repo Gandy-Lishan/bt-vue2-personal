@@ -568,7 +568,7 @@ export default {
 					markers.unshift(...CIQ.groups.pop()) 
 				}
 			}
-
+			console.log('initiating Markers...',markers)
 			CIQ.loadChart(markers, CIQ.addMarker)
 		},
 		group(data) {

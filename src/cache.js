@@ -1,4 +1,8 @@
-// Cache pool
+
+/**
+ *	2.2.0
+ *	customized cache pool
+ */
 let CACHES = {}
  
 export default class Cache {
@@ -10,12 +14,12 @@ export default class Cache {
  
   use(options) {
     let defaults = {
-      expire: 3600000*24, // The default expiration time is one day
-      storage: false, // Whether cache is enabled
-      storage_expire: 3600000*24*7, // Local cache expiration time defaults to one week
-      instance: this.axios, // The instance object of Axios points to the current Axios by default
-      requestConfigFn: null, // The operation function parameter requesting interception returns a promise for the requested config object
-      responseConfigFn: null, // The operation function parameter of response interception returns a promise for the response object of response data
+      expire: 3600000*24, // timeout period, 1 days as default
+      storage: false, // use storage or not
+      storage_expire: 3600000*24*7, // local storage timeout period, 7 days as default
+      instance: this.axios, // an instance of axios
+      requestConfigFn: null, // event function in request interceptor, take a config object as parameter, return a Promise
+      responseConfigFn: null, // event function in response interceptor, take a config object as parameter, return a Promise
       ...options
     }
     this.options = defaults
@@ -29,22 +33,20 @@ export default class Cache {
         if(!localStorage.hasOwnProperty(_x)){continue;} 
         _xLen= ((localStorage[_x].length + _x.length)* 2);
         _lsTotal+=_xLen; 
-        // if(_x.indexOf('cognito') != -1){
-        //   console.log(_x+" = "+ localStorage[_x])
-        // };
         console.log(_x+" = "+ (_xLen/1024).toFixed(2)+" KB");
       }
         console.log("Total = " + (_lsTotal / 1024).toFixed(2) + " KB");      
   }
 
   init() {
-    // initialization
+    // initiate cache
     let options = this.options
     this.testUsage()
     if (options.storage) {
-      // If the local cache is enabled, set an expiration time to avoid the cache remaining for too longg
+      // if use local storage cache, setup a timeout period
       this._storageExpire('expire').then(() => {
         if (localStorage.length === 0){
+            console.log("storage_expire expired")
             CACHES = {}
         }
         else mapStorage(localStorage, 'get')
@@ -55,26 +57,23 @@ export default class Cache {
   }
  
   request(cb) {
-    // request interceptor 
+    // request interceptor
     let options = this.options
     options.instance.interceptors.request.use(async config => {
-      // Judge whether the user returns the promise of config
       let newConfig = cb && (await cb(config))
       config = newConfig || config
-      // Req only processes get, post is not intercepted, and requests are sent as usual
+      // req only handle get method
       if (config.method === 'get' && config.cache) {
         let source = this.cancelToken.source()
         config.cancelToken = source.token
         let data = CACHES[config.url]
         let expire = getExpireTime()
-        // Judge whether the cached data exists. If so, whether it is expired. If not, return
-        
-        // Whether the current time minus the set cache time is less than the expiration time
+        // Check whether cached data exists, if not expired, return it
         if (data && expire - data.expire < this.options.expire) {
-            console.log('Not expired',config.url)
+            console.log('valid',config.url)
             source.cancel(data)
         }else{
-            console.log('be overdue',config.url,data)
+            console.log('expired',config.url,data)
         }
       }
 
@@ -89,10 +88,9 @@ export default class Cache {
   }
  
   response(cb) {
-    // Response interceptor
+    // response interceptor
     this.options.instance.interceptors.response.use(
       async response => {
-        // Determine whether the user has returned the promise of the response
         let newResponse = cb && (await cb(response))
         response = newResponse || response
 
@@ -106,7 +104,7 @@ export default class Cache {
           if (this.options.storage) mapStorage(CACHES)
           
         }
-        // Res lets post cache the request return value
+        //if a request opened cache reading&writing , store response data from post method
         if (response.config.method === 'put' && response.config.cache) {   
           let data = {
             expire: getExpireTime(),
@@ -119,7 +117,7 @@ export default class Cache {
         return response
       },
       error => {
-        // Return cached data
+        // return cached data
         if (this.axios.isCancel(error)) {
           return Promise.resolve(error.message.data)
         }
@@ -127,8 +125,6 @@ export default class Cache {
       }
     )
   }
- 
-  // Local cache expiration judgment
   _storageExpire(cacheKey) {
     return new Promise(resolve => {
         
@@ -151,8 +147,8 @@ export default class Cache {
 }
  
 /**
- * caches: Cache list
- * type: set->Save get->take
+ * caches: cache list
+ * type: set->store data get->get data
  */
 function mapStorage(caches, type = 'set') {
   Object.entries(caches).map(([key, cache]) => {
@@ -164,7 +160,6 @@ function mapStorage(caches, type = 'set') {
       }
       setStorage(key, val)
     } else {  
-      // The regular is too weak. You can only simply judge whether it is a JSON string
       let reg = /\{/g
       if (reg.test(cache)) CACHES[key] = JSON.parse(cache)
       else CACHES[key] = cache

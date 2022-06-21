@@ -1,6 +1,8 @@
-/*
-    Entry file for the project
-*/
+/**
+ *	2.2.0
+ *	import css files, setup axios entity
+ */
+
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -8,10 +10,16 @@ import ElementUI, { Message } from 'element-ui'
 import qs from 'querystring'
 import 'element-ui/lib/theme-chalk/index.css'
 import en from './tools/en.js'
+
+// import global css rule
 import './assets/css/global.css'
+// icon & front
 import './assets/fonts/iconfont.css'
+// help icon
 import './assets/helpIconFont/iconfont.css'
 import 'font-awesome/css/font-awesome.css';
+
+// progress bar
 import Nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 
@@ -28,6 +36,8 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 //import { CIQ } from 'chartiq'
 
 Vue.use(VueCookies)
+// setup default url
+
 axios.defaults.baseURL = ''
 //set 10 sec as default,However, some time-consuming requests are processed separately
 axios.defaults.timeout = 10000;
@@ -81,6 +91,7 @@ axios.interceptors.response.use(undefined, function axiosRetryInterceptor(err) {
         return axios(config);
     });
 });
+
 Vue.prototype.$qs = qs
 Vue.use(ElementUI, { locale })
 Vue.prototype.$http = axios

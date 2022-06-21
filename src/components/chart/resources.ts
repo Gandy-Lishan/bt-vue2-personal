@@ -1,4 +1,7 @@
-// Required imports from chartiq for advanced chart
+/**
+ *	2.2.0
+ *	Required imports from chartiq for advanced chart
+ */
 
 // @ts-ignore
 //import { CIQ } from 'chartiq/st-development/js/entryIndicator'
