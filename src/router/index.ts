@@ -10,9 +10,6 @@ import https from 'https'
 import { getCookieData, setCookieData } from '@/tools/cookie'
 import { stringMap } from 'aws-sdk/clients/backup'
 Vue.use(Router)
-// 路由懒加载
-// 懒加载即组件的延迟加载，通常vue的页面在运行后进入都会有一个默认的页面，而其他页面只有在点击后才需要加载出来。
-// 使用懒加载可以将页面中的资源划分为多份，从而减少第一次加载的时候耗时
 const router = new Router({
 	mode: 'history',
 	routes: [
