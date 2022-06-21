@@ -1,15 +1,8 @@
+// Bollinger-Bands-Like input box
 <template>
 	<div class="senti-container">
 		<p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p>
 		<el-form :model="tech">
-			<!-- <div class="ids-container">
-				<el-radio-group v-model="tech.ids.ma_category" @change="getMaRadio">
-					<el-radio label="SMA" style="margin-bottom: 30px"
-						>Simple moving average</el-radio
-					>
-					<el-radio label="EMA">Exponential moving average</el-radio>
-				</el-radio-group>
-			</div> -->
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio v-model="radio" label=" "></el-radio>
@@ -80,7 +73,6 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		// editIndiData: Object,
 		direction: String,
 		isActived: Boolean,
 		exitItemCheck: Boolean,
@@ -129,7 +121,6 @@ delay_bars: [String, Number],
 					var obj = CIQ.store.state.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.tech.value
 					CIQ.store.commit('setConditionRadio', obj)
-					//console.log('handle BollingerBands_like,',obj)
 				}
 			},
 			immediate: true,
@@ -144,7 +135,6 @@ delay_bars: [String, Number],
 			var obj = CIQ.store.state.conditionRadio
 			obj[this.criteria][this.panelIndex] = val
 			CIQ.store.commit('setConditionRadio', obj)
-			//CIQ.exportEx()
 		},
 		setDesciption(index) {
 			let criteria = ''
@@ -257,10 +247,9 @@ delay_bars: [String, Number],
 			this.$store.commit('saveCondition', tech)
 			return checked
 		},
-		// 设置编辑的数据
+		// Set edited data
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
-				console.log('设置bolliger bands的数据')
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)

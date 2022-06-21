@@ -1,3 +1,4 @@
+// Favorite List
 <template>
 	<el-row>
 		<el-col :span="24">
@@ -57,43 +58,6 @@
 							{{ scope.row.exit_description[0] }}<br />
 						</template>
 					</el-table-column>
-					<!-- <el-table-column label="Entry & Exit" align="center">
-						<template slot-scope="scope">
-								<el-tooltip placement="top" effect="dark" transition  v-if="(scope.row.entry_description) instanceof Array">
-								<div slot="content" v-for="(item,index) in scope.row.entry_description" :key="index">
-									{{ item }}<br/>
-								</div>
-								<div v-for="(item,index) in scope.row.entry_description" :key="index">
-								{{ scope.row.entry_description[0] }}<br/>
-								</div>
-							</el-tooltip>
-							   <el-tooltip placement="top" effect="dark" transition v-if="!((scope.row.entry_description) instanceof Array)">
-								<div slot="content">
-									{{ scope.row.entry_description }}<br/>
-								</div>
-								<div>
-								{{ scope.row.entry_description }}<br/>
-								</div>
-							</el-tooltip>
-							<br/>
-							<el-tooltip placement="bottom" effect="light" transition v-if="(scope.row.exit_description) instanceof Array">
-								<div slot="content" v-for="(item,index) in scope.row.exit_description" :key="index">
-									{{ item }}<br/>
-								</div>
-								<div  v-for="(item,index) in scope.row.exit_description" :key="index">
-									{{ scope.row.exit_description[0] }}<br/>
-								</div>
-							</el-tooltip>
-								<el-tooltip placement="top" effect="light" transition v-if="!((scope.row.exit_description) instanceof Array)">
-								<div slot="content">
-									{{ scope.row.exit_description }}<br/>
-								</div>
-								<div>
-								{{ scope.row.exit_description }}<br/>
-								</div>
-							</el-tooltip>
-						</template>
-					</el-table-column> -->
 					<el-table-column
 						label="Period"
 						show-overflow-tooltip
@@ -197,34 +161,6 @@
 										size="mini"
 									></el-button>
 								</el-tooltip>
-								<!-- <el-button
-									type="warning"
-									icon="el-icon-star-off"
-									circle
-									@click="sendBack(scope.row)"
-									size="mini"
-								></el-button>
-								<el-button
-									type="success"
-									icon="el-icon-check"
-									circle
-									@click="showDes(scope.row)"
-									size="mini"
-								></el-button> -->
-								<!-- <el-tooltip
-									class="item"
-									effect="dark"
-									content="run backtest"
-									placement="bottom-start"
-								>
-									<el-button
-										type="success"
-										icon="el-icon-caret-right"
-										circle
-										size="mini"
-										@click="runbacktest(scope.row)"
-									></el-button>
-								</el-tooltip> -->
 								<el-tooltip
 									class="item"
 									effect="dark"
@@ -239,43 +175,6 @@
 										@click="editBacktest(scope.row)"
 									></el-button>
 								</el-tooltip>
-								<!-- <el-tooltip
-									class="item"
-									effect="dark"
-									content="copy backtest"
-									placement="bottom-start"
-								>
-									<el-button
-										type="info"
-										icon="el-icon-copy-document"
-										circle
-										size="mini"
-										@click="copyBacktest(scope.row)"
-									></el-button>
-								</el-tooltip> -->
-								<!-- <el-tooltip
-									class="item"
-									effect="dark"
-									content="delete backtest"
-									placement="bottom-start"
-								>
-									<el-popconfirm
-										confirm-button-text="yes"
-										cancel-button-text="no"
-										icon="el-icon-info"
-										icon-color="red"
-										title="remove from favorites"
-										@confirm="deleteBacktest(scope.row.id)"
-									>
-										<el-button
-											type="danger"
-											icon="el-icon-delete"
-											circle
-											size="mini"
-											slot="reference"
-										></el-button>
-									</el-popconfirm>
-								</el-tooltip> -->
 								<el-tooltip
 									class="item"
 									effect="dark"
@@ -342,7 +241,6 @@ export default {
 	},
 	methods: {
 async getFavoriteList(strategy) {
-			//this.loading = true
 			let page = this.queryInfo.page
 			try {
 				const res = await getFavoriteList(page)
@@ -369,7 +267,6 @@ async getFavoriteList(strategy) {
 				}
 			} catch (error) {
 				console.log(error);
-				//this.loading = false
 			}
 		},
 		editBacktest: throttle(async function (row) {
@@ -378,10 +275,9 @@ async getFavoriteList(strategy) {
 				CIQ.addCover('Fetching backtest information...')
 				CIQ.nprogress.start()
 
-				//vm.loading = true
 				const res = await seeParams(row.id)
 				document.getElementsByClassName('ciq-period')[0].style.display = ''
-				// 恢复indicator layout
+				// Restore indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)
 				CIQ.hideMarker()
 				CIQ.isMarkerShown = false
@@ -394,14 +290,13 @@ async getFavoriteList(strategy) {
 				}
 				else{
 					this.$store.commit('getRunBacktestData', row)
-					// emit同步调用
+					// Emit synchronous call
 					this.$emit('goBacktestResultForm', row, ()=>{
 						this.$emit('goTobacktestSetupForm', row.id, res.data,()=>{
 							CIQ.hideCover()
 							CIQ.nprogress.done()
 						})
 					})
-					//this.loading = false
 				}
 			} catch (error) {
 				vm.$message({
@@ -476,9 +371,7 @@ copyBacktest: throttle(async function (row) {
 					CIQ.addCover('Fetching backtest information...')
 					CIQ.nprogress.start()
 					
-					//vm.loading = true
 					const res = await seeParams(row.id)
-					// 恢复indicator layout
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					CIQ.hideMarker()
 					CIQ.isMarkerShown = false
@@ -491,14 +384,12 @@ copyBacktest: throttle(async function (row) {
 					}
 					else{
 						this.$store.commit('getRunBacktestData', row)
-						// emit同步调用
 						this.$emit('goTobacktestSetupForm', row.id, res.data, ()=>{
 							this.$emit('goBacktestResultForm', row, ()=>{
 								CIQ.hideCover()
 								CIQ.nprogress.done()
 							})
 						})
-						//this.loading = false
 					}
 				} catch (error) {
 					vm.$message({
@@ -525,6 +416,10 @@ copyBacktest: throttle(async function (row) {
 			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
 			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
 			this.$store.commit('getExtraIndicators', [])
+			// filter garbage in TechnicalIndicators
+			// const technicalIndicators = data.technicalIndicators.filter(item=>{
+			// 	data.formIndicators.entry.indexOf(item) != -1 || data.formIndicators.exit.indexOf(item) != -1
+			// })
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
@@ -547,7 +442,6 @@ copyBacktest: throttle(async function (row) {
 				}
 			}
 			this.$store.commit('setRestoreFreq', frequency)
-			// CIQ.addIndicatorsFromBacktest()
 		},
 		restoreIndicatorLayoutView(data, freq, row, resData) {
 				this.reloadData(data, freq)
@@ -562,7 +456,6 @@ copyBacktest: throttle(async function (row) {
 						})
 					})
 					
-					//that.loading = false
 				})
 		},
 		restoreIndicatorLayoutEdit(data, freq, row, resData) {
@@ -570,7 +463,6 @@ copyBacktest: throttle(async function (row) {
 				var that = this
 				CIQ.addIndicatorsFromBacktest(function(){
 					that.$store.commit('getRunBacktestData', row)
-					// emit同步调用
 					
 					that.$emit('goBacktestResultForm', row, ()=>{
 						that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
@@ -578,77 +470,7 @@ copyBacktest: throttle(async function (row) {
 							CIQ.nprogress.done()
 						})
 					})
-					//that.loading = false
 				})
-		},
-		async showDes(row) {
-			const datades = {}
-			let vm = this
-			try {
-				const res = await seeParams(row.id)
-				const des = res.data
-				let str = ``
-				for (let key in des) {
-					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
-				}
-
-				vm.$alert(str, '标题名称', {
-					confirmButtonText: '确定',
-					dangerouslyUseHTMLString: true,
-					lockScroll: false,
-					callback: (action) => {
-						vm.$message({
-							type: 'info',
-							message: `action: ${action}`
-						})
-					}
-				})
-			} catch (error) {
-				vm.$message({
-					message: 'The internal server is busy, please try again later ',
-					type: 'error',
-					offset: 300
-				})
-			}
-		},
-		async sendBack(row) {
-			let vm = this
-			try {
-				const res = await seeParams(row.id)
-				const des = res.data
-				let str = ``
-				for (let key in des) {
-					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
-				}
-				str = str + '<h3>FinalResult:</h3>'
-				for (let key in des.FinalResult) {
-					str = str + '<p>' + `${key}:  ${des.FinalResult[key]}` + '</p>'
-				}
-				str = str + '<h3>FinalResult.AnnualReturn:</h3>'
-				for (let key in des.FinalResult.AnnualReturn) {
-					str =
-						str +
-						'<p>' +
-						`${key}:  ${des.FinalResult.AnnualReturn[key]}` +
-						'</p>'
-				}
-				vm.$alert(str, '标题名称', {
-					confirmButtonText: '确定',
-					dangerouslyUseHTMLString: true,
-					callback: (action) => {
-						vm.$message({
-							type: 'info',
-							message: `action: ${action}`
-						})
-					}
-				})
-			} catch (error) {
-				vm.$message({
-					message: 'The internal server is busy, please try again later ',
-					type: 'error',
-					offset: 300
-				})
-			}
 		},
 		addToFavorites: throttle(async function (row) {
 			let vm = this

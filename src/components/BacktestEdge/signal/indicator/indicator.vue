@@ -1,3 +1,4 @@
+// indicator search box
 <template>
 	<div class="indicator-box">
 		<el-form :model="si" ref="siForm" :rules="rules">
@@ -100,7 +101,7 @@ export default {
 				technicalIndicator: [{ validator: validateTech, trigger: 'change' }],
 				riskIndicator: [{ validater: validateRisk, trigger: 'change' }]
 			},
-			currentSentiUpdated: ''
+			 fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
 		}
 	},
 	computed: {
@@ -118,7 +119,7 @@ export default {
 		}
 	},
 	watch: {
-		// 监听freq在indicator.vue是为了让表单加载的指标在timeframe范围内
+		// Listen to freq on the indicator Vue is to make the indicators loaded by the form within the timeframe range
 		updateFreq() {
 			this.indicatorSentimentSearch(this.si.sentimentIndicator, (res) => {
 				if (res.length == 0) {
@@ -161,14 +162,12 @@ export default {
 						valObj.value = CIQ.indicatorList[i].chart_name
 						valObj.index = this.panelIndex
 						this.$emit('getIndicatorVal', valObj)
-						// 去掉表单校验
+						// Remove form verification
 						this.clearFormValidate()
 						let radioObj = {}
 						radioObj.value = 'sentiment'
 						radioObj.index = this.panelIndex
 						this.$emit('getIndicatorRadio', radioObj)
-
-						//this.handleSentimentSelect({value:CIQ.indicatorList[i].chart_name,url:CIQ.indicatorList[i].url})
 						let obj = {}
 						obj.index = this.panelIndex
 						obj.url = CIQ.indicatorList[i].url
@@ -182,7 +181,9 @@ export default {
 			builtinList.find((item) => {
 				if (item.url == val.url) {
 					// this.si.technicalIndicator = item.value
-					// 暂时注释掉，因为大部分tech没有加到back test内
+					/*
+					Note it out for the time being, because most of the technologies are not added to the back test
+					*/
 					//this.indicatorRadio = 'Technical Indicators'
 					// 					let radioObj = {}
 					// radioObj.value = 'technical'
@@ -195,7 +196,7 @@ export default {
 		frequency: {
 			handler(newVal) {
 				if (newVal != this.currentSentiUpdated) {
-					// 变化后的 timeframe 和现在 sentiment indicator 的 timeframe 不相等
+					// The changed timeframe is not equal to the current timeframe of the sentiment indicator
 					switch (newVal) {
 						case 'Daily':
 							if(this.si.sentimentIndicator){
@@ -215,7 +216,7 @@ export default {
 		}
 	},
 	methods: {
-		// 清除表单认证
+		// Clear form authentication
 		clearFormValidate() {
 			this.$refs.siForm.clearValidate()
 		},
@@ -291,7 +292,7 @@ export default {
 			var results = queryString
 				? riskIndicatorList.filter(this.createRiskFilter(queryString))
 				: riskIndicatorList
-			// 调用 callback 返回建议列表的数据
+			// Call callback to return the data of the suggestion list
 			cb(results)
 		},
 		createRiskFilter(queryString) {
@@ -304,7 +305,6 @@ export default {
 			}
 		},
 		handleSentimentSelect(item) {
-			console.log('当前indicator的对象', item)
 			this.currentSentiUpdated = item.updated
 			// old version only
 			var countExistIndicator = 0
@@ -349,7 +349,6 @@ export default {
 					index: this.panelIndex,
 					value: item.url
 				})
-				console.log(this.$store.state.indicators.formIndicators.entry)
 				let obj = {}
 				obj.index = this.panelIndex
 				obj.url = item.url
@@ -373,10 +372,6 @@ export default {
 				obj.url = item.url
 				this.$emit('getIndicatorUrl', obj)
 			}
-			console.log(
-				'current formIndicator: ',
-				this.$store.state.indicators.formIndicators
-			)
 			// avoid add indicator redundantly
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
@@ -388,24 +383,13 @@ export default {
 		},
 		handleTechnicalSelect(item) {
 			this.si.technicalIndicator = item.value
-			// technical 的名字， 用于 description 显示
 			let valObj = {}
 			valObj.index = this.panelIndex
 			valObj.value = item.value
 			this.$emit('getIndicatorVal', valObj)
 			const vm = this
 			let val = item.value
-			// const set = new Set([
-			// 	['Commodity Channel Index', 'cci'],
-			// 	['Relative Strength Index', 'rsi'],
-			// 	['Moving Average', 'ma'],
-			// 	['MACD', 'macd']
-			// ])
-			// const newMap = new Map(set)
 			let url = item.url
-			// for (let i of newMap.entries()) {
-			// if (val === i[0]) {
-			// url = i[1]
 			this.$emit('getTechIndiValue', item.class)
 			let obj = {}
 			obj.index = this.panelIndex
@@ -453,7 +437,6 @@ export default {
 			techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
 			techIndicators.push(url)
 			techIndicators = [...new Set(techIndicators)]
-			console.log('handle tech select,techIndicators: ', techIndicators)
 			this.$store.commit('getTechnicalIndicators', techIndicators)
 
 			// avoid add indicator redundantly
@@ -463,39 +446,13 @@ export default {
 					return
 				}
 			}
-
-			// }
-			// }
 			vm.si.technicalIndicator = item.value
 
 			if (arguments[1] != true) {
 				CIQ.addIndicators()
 			}
 		},
-		// handleRiskSelect(item) {
-		// 	this.si.riskIndicator = item.value
-		// 	let obj = {}
-		// 	obj.value = item.value
-		// 	obj.index = this.panelIndex
-		// 	this.$emit('getRiskVal', obj)
-		// 	let val = item.value
-		// 	const set = new Set([
-		// 		['Time In Market', 'tim'],
-		// 		['Profit/Loss', 'pl']
-		// 	])
-		// 	const newMap = new Map(set)
-		// 	var url = ''
-		// 	for (let i of newMap.entries()) {
-		// 		if (val === i[0]) {
-		// 			url = i[1]
-		// 			this.$emit('getRiskIndiValue', i[1])
-		// 		}
-		// 		// this.$store.commit('getExitIndicators', 'Exit')
-		// 		// this.$store.commit('getRiskIndicators', 'RC')
-		// 	}
-		// },
 		changeIndicatorChecked(val) {
-			console.log('改变组件里面的radio', val)
 			this.indicatorRadio = val
 			this.clearFormValidate()
 			const arr = [
@@ -542,7 +499,6 @@ export default {
 					formatList.push(obj)
 				})
 			}
-			// 在 vuex 中存入 formatList
 			formatList.sort(function (a, b) {
 				return a.value.localeCompare(b.value)
 			})
@@ -656,56 +612,17 @@ export default {
 				checked = true
 				return checked
 			}
-			// if (this.indicatorRadio === 'Risk Control') {
-			// 	this.$refs.siForm.validate((valid) => {
-			// 		validForm = valid
-			// 	})
-			// 	let formateList = this.loadRiskList()
-			// 	for (let i = 0; i < formateList.length; i++) {
-			// 		if (this.si.riskIndicator === formateList[i].value) {
-			// 			validName = true
-			// 			break
-			// 		}
-			// 	}
-			// 	if (validForm && validName) {
-			// 		let obj = {}
-			// 		obj.criteria = 'exit'
-			// 		obj.index = index
-			// 		obj.value = 'Risk Control'
-			// 		this.$store.commit('getRiskValue', obj)
-			// 		return checked
-			// 	} else {
-			// 		if (!validName) {
-			// 			this.$message({
-			// 				message: 'Please select indicator from the drop-down box',
-			// 				type: 'error',
-			// 				offset: 300
-			// 			})
-			// 		}
-			// 		checked = false
-			// 		return checked
-			// 	}
-			// }
 		},
 		async setEditData(newVal) {
-			console.log('indicator编辑的数据', newVal)
-			console.log('判断数据', newVal[this.criteria].signals[this.panelIndex])
 			if (JSON.stringify(newVal) != '{}') {
 				this.clearFormValidate()
 				let index = this.panelIndex
 				let vm = this
 				if (newVal[this.criteria].signals[index].analysis === 'Sentiment') {
-					// let obj = {}
-					// obj.value = 'sentiment'
-					// obj.index = index
-					// this.$emit('getIndicatorRadio', 'sentiment')
-					// this.$emit('getSentiVal', this.si.sentimentIndicator)
 
 					this.indicatorRadio = 'Sentiment Indicators'
 					this.si.sentimentIndicator =
 						newVal[this.criteria].signals[index].indicator
-					// 往父组件传值
-					
 					let sentimentList = this.$store.state.sentimentIndicatorList
 
 					if (sentimentList.length == 0) {
@@ -728,20 +645,13 @@ export default {
 							let obj = {}
 							obj.index = vm.panelIndex
 							obj.url = item.url
-
-							// 设定当前填充indicator的tiemframe, 如果切换timeframe后indicator不匹配则移除
+							// Set the tiemframe that currently fills the indicator. If the indicator does not match after switching the timeframe, it will be removed
 							this.currentSentiUpdated = item.updated
 							vm.$emit('getIndicatorUrl', obj)
 						}
 					})
-					// if(this.$store.state.sentimentIndicatorList)
 				}
 				if (newVal[this.criteria].signals[index].analysis === 'Technical') {
-					// let obj = {}
-					// obj.value = 'technical'
-					// obj.index = index
-					// this.$emit('getIndicatorRadio', 'technical')
-					console.log('进入technical')
 					vm.indicatorRadio = 'Technical Indicators'
 					let technicalIndicator =
 						newVal[this.criteria].signals[index].indicator
@@ -759,22 +669,8 @@ export default {
 						}
 					}
 				}
-				// if (newVal[this.criteria].signals[index].analysis === 'Exit') {
-				// 	this.indicatorRadio = 'Risk Control'
-				// 	let obj = {}
-				// 	if (newVal[this.criteria].signals[index].time_in_market) {
-				// 		obj.value = 'Time In Market'
-				// 	}
-				// 	if (
-				// 		newVal[this.criteria].signals[index].stop_loss &&
-				// 		newVal[this.criteria].signals[index].take_profit
-				// 	) {
-				// 		obj.value = 'Profit/Loss'
-				// 	}
-				// 	this.handleRiskSelect(obj)
-				// }
 			}
-		}
+		},
 	}
 }
 </script>
@@ -799,5 +695,10 @@ export default {
 }
 /deep/ .el-form-item {
 	margin-bottom: 10px;
+}
+.upload-demo{
+	display: flex;
+
+	flex-direction: row-reverse;
 }
 </style>

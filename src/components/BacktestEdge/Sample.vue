@@ -1,3 +1,4 @@
+// Sample Backtests List
 <template>
 	<el-row>
 		<el-col :span="24">
@@ -171,20 +172,6 @@
 					<el-table-column align="center">
 						<template slot-scope="scope">
 							<el-row>
-								<!-- <el-tooltip
-									class="item"
-									effect="dark"
-									content="run backtest"
-									placement="bottom-start"
-								>
-									<el-button
-										type="success"
-										icon="el-icon-caret-right"
-										circle
-										size="mini"
-										@click="runbacktest(scope.row)"
-									></el-button>
-								</el-tooltip> -->
 								<el-tooltip
 									class="item"
 									effect="dark"
@@ -199,20 +186,6 @@
 										@click="copyBacktest(scope.row)"
 									></el-button>
 								</el-tooltip>
-								<!-- <el-button
-									plain
-									icon="el-icon-s-comment"
-									circle
-									@click="sendBack(scope.row)"
-									size="mini"
-								></el-button> -->
-								<!-- <el-button
-									plain
-									icon="el-icon-check"
-									circle
-									@click="showDes(scope.row)"
-									size="mini"
-								></el-button> -->
 								<el-tooltip
 									class="item"
 									effect="dark"
@@ -279,62 +252,6 @@ export default {
 		}
 	},
 	methods: {
-		async showDes(row) {
-			const datades = {}
-			let vm = this
-			try {
-				const res = await seeParams(row.id)
-				const des = res.data
-				let str = ``
-				for (let key in des) {
-					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
-				}
-
-				vm.$alert(str, '标题名称', {
-					confirmButtonText: '确定',
-					dangerouslyUseHTMLString: true,
-					lockScroll: false,
-					callback: (action) => {
-						vm.$message({
-							type: 'info',
-							message: `action: ${action}`
-						})
-					}
-				})
-			} catch (error) {
-				console.log(error)
-			}
-		},
-		async sendBack(row) {
-			let vm = this
-			try {
-				const res = await seeReport(row.id)
-				const des = res.data
-				let str = ``
-				for (let key in des) {
-					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
-				}
-				// for (let key in des.FinalResult.AnnualReturn) {
-				// 	str =
-				// 		str +
-				// 		'<p>' +
-				// 		`${key}:  ${des.FinalResult.AnnualReturn[key]}` +
-				// 		'</p>'
-				// }
-				vm.$alert(str, '标题名称', {
-					confirmButtonText: '确定',
-					dangerouslyUseHTMLString: true,
-					callback: (action) => {
-						vm.$message({
-							type: 'info',
-							message: `action: ${action}`
-						})
-					}
-				})
-			} catch (error) {
-				console.log(error)
-			}
-		},
 		async getSampleList() {
 			this.loading = true
 			let page = this.queryInfo.page
@@ -342,7 +259,6 @@ export default {
 				const res = await getSampleList(page)
 				if (res.status === 200) {
 					this.backtestList = res.data.results
-					console.log(this.backtestList)
 					if (this.backtestList.length != 0) {
 						this.backtestList.forEach((element) => {
 							if(isJson(element.result) && element.result !== '')
@@ -436,34 +352,22 @@ export default {
 			}
 		}, 500),
 		restoreIndicatorLayoutView(data, freq, row, resData) {
-			//console.log("在跑完回测后和view result之间会加载一次chart去输出SignalOuput")
-			//在跑完回测后和view result之间会加载一次chart去输出SignalOuput
 			if (CIQ.isBacktestRun == true) {
 				CIQ.isBacktestRun = false
-				//this.reloadData(data, freq)
 				var that = this
-				//不再使用outputSignalsResult，exportcsv放置在回测前，callback置于原地
-				//CIQ.outputSignalsResult(function () {
 					that.$store.commit('getRunBacktestData', row)
-					// emit同步调用
 					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
 						that.$emit('goBacktestResultForm', row, ()=>{
 							CIQ.hideCover()
 							CIQ.nprogress.done()
 						})
 					})
-					//that.loading = false
-				//})
 			} else {
 				this.reloadData(data, freq)
 				var that = this
-				console.log('after clicking view')
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
-					//that.$emit('goTobacktestSetupForm', row.id)
-					//that.$emit('goBacktestResultForm', row)
 
-					// emit同步调用
 					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
 						that.$emit('goBacktestResultForm', row, ()=>{
 							CIQ.hideCover()
@@ -471,7 +375,6 @@ export default {
 						})
 					})
 					
-					//that.loading = false
 				})
 			}
 		},
@@ -483,10 +386,7 @@ export default {
 					
 					CIQ.addCover('Fetching backtest information...')
 					CIQ.nprogress.start()
-					//this.loading = true
 					const res = await seeParams(row.id)
-					// 恢复indicator layout
-					// console.log(res,row)
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					CIQ.hideMarker()
 					CIQ.isMarkerShown = false
@@ -498,17 +398,14 @@ export default {
 						)
 					} else {
 						this.$store.commit('getRunBacktestData', row)
-						// emit同步调用
 						this.$emit('goTobacktestSetupForm', row.id, res.data, ()=>{
 							this.$emit('goBacktestResultForm', row, ()=>{
 								CIQ.hideCover()
 								CIQ.nprogress.done()
 							})
 						})
-						//this.loading = false
 					}
 				} catch (error) {
-					console.log(error)
 					vm.$message({
 						message: 'The internal server is busy, please try again later ',
 						type: 'error',
@@ -530,9 +427,13 @@ export default {
 		},
 		reloadData(data, freq) {
 			let frequency = ''
-			this.$store.commit('getEntryIndicators', data.formIndicators.entry)
-			this.$store.commit('getExitIndicators', data.formIndicators.exit)
+			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
+			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
 			this.$store.commit('getExtraIndicators', [])
+			// filter garbage in TechnicalIndicators
+			// const technicalIndicators = data.technicalIndicators.filter(item=>{
+			// 	data.formIndicators.entry.indexOf(item) != -1 || data.formIndicators.exit.indexOf(item) != -1
+			// })
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
 			this.$store.commit('setTechSD', data.savedTechSD)
@@ -556,45 +457,6 @@ export default {
 			}
 			this.$store.commit('setRestoreFreq', frequency)
 		},
-		restoreIndicatorLayout(data, freq, row) {
-			this.reloadData(data, freq)
-			var that = this
-			CIQ.addIndicatorsFromBacktest(function () {
-				that.$store.commit('getRunBacktestData', row)
-				that.$emit('goTobacktestSetupForm', row.id)
-				that.$emit('goBacktestResultForm', row)
-			})
-		},
-		async showDes(row) {
-			const datades = {}
-			let vm = this
-			try {
-				const res = await seeParams(row.id)
-				const des = res.data
-				let str = ``
-				for (let key in des) {
-					str = str + '<p>' + `${key}:  ${des[key]}` + '</p>'
-				}
-
-				vm.$alert(str, '标题名称', {
-					confirmButtonText: '确定',
-					dangerouslyUseHTMLString: true,
-					lockScroll: false,
-					callback: (action) => {
-						vm.$message({
-							type: 'info',
-							message: `action: ${action}`
-						})
-					}
-				})
-			} catch (error) {
-				vm.$message({
-					message: 'The internal server is busy, please try again later ',
-					type: 'error',
-					offset: 300
-				})
-			}
-		}
 	}
 }
 </script>

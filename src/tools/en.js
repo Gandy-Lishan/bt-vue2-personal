@@ -1,5 +1,5 @@
 'use strict';
-
+/* Element uiuse English */
 exports.__esModule = true;
 exports.default = {
   el: {

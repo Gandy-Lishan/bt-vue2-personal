@@ -1,27 +1,8 @@
+// Stochastic-Momentum-Index-Like input box
 <template>
 	<div class="senti-container">
 		<p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p>
 		<el-form :model="tech" :rules="rules" ref="smiForm">
-			<!-- <div class="ids-container">
-				<el-form-item label="Slow moving average" prop="MACDSlow">
-					<el-input
-						v-model="tech.ids.MACDSlow"
-						disabled
-					></el-input>
-				</el-form-item>
-				<el-form-item label="Fast moving average" prop="MACDFast">
-					<el-input
-						disabled
-						v-model="tech.ids.MACDFast"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="Signal line" prop="MACDSL">
-					<el-input
-						disabled
-						v-model="tech.ids.MACDSL"
-					></el-input>
-				</el-form-item>
-			</div> -->
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio
@@ -146,7 +127,6 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		// editIndiData: Object,
 		direction: String,
 		isActived: Boolean,
 		exitItemCheck: Boolean,
@@ -173,7 +153,6 @@ delay_bars: [String, Number],
 			callback()
 		}
 		var validateValueD = (rule, value, callback) => {
-			console.log(value);
 			if (value === '') {
 				return callback(new Error('Please input value'))
 			}
@@ -215,11 +194,9 @@ delay_bars: [String, Number],
 		isActived: {
 			handler(newVal) {
 				if(newVal){
-					//console.log('watch techVal!!!!!!!!!',newVal)
 					var obj = CIQ.store.state.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.radio
 					CIQ.store.commit('setConditionRadio', obj)
-					//console.log('handle stocastic,',obj)
 				}
 			},
 			immediate: true,
@@ -230,7 +207,6 @@ delay_bars: [String, Number],
 		clearForm() {
 			this.$refs.smiForm.resetFields()
 		},
-		// 清除表单认证
 		clearFormValidate() {
 			this.$refs.smiForm.clearValidate()
 		},
@@ -298,7 +274,6 @@ delay_bars: [String, Number],
 					break
 			}
 			this.description = `${techVal}${suffix} ${this.conditions[this.tech.condition].label} ${value}`
-			console.log(this.description);
 				let desObj = {}
 				desObj.criteria = this.criteria
 					if(this.relation != 1) {
@@ -330,7 +305,6 @@ delay_bars: [String, Number],
 					this.tech.comparison = 'D'
 					break
 			}
-			//CIQ.exportEx()
 		},
 		saveCondition(index) {
 			let checked = true
@@ -361,7 +335,6 @@ delay_bars: [String, Number],
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
-				console.log("setEditData",newVal)
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)
@@ -378,7 +351,6 @@ delay_bars: [String, Number],
 					this.tech.valueD = obj.value
 				}
 				this.editTechVal = obj.indicator
-				//console.log("stocha this.radio",this.radio)
 					var cr = CIQ.store.state.conditionRadio
 					cr[this.criteria][this.panelIndex] = this.radio
 					CIQ.store.commit('setConditionRadio', cr)

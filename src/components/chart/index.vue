@@ -1,3 +1,4 @@
+
 <template>
 	<div class="chart-wrapper">
 		<AdvancedChartComponent
@@ -12,9 +13,9 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import AdvancedChartComponent from './AdvancedChartComponent.vue'
 import { getCustomConfig } from './resources' // ChartIQ library resources
 import store from '../../store/store'
-import axios from 'axios'
 
 // @ts-ignore
+//import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { CIQ } from 'chartiq/js/components' // Required for types in chartInitialized
 
 @Component({
@@ -38,28 +39,6 @@ export default class AdvancedWrapper extends Vue {
 		this.config = getCustomConfig({ symbol, chartId, onChartReady, restore })
 	}
 
-	// async testIndicators(url,indicators) {
-
-	// for ( var  i = 0; i < indicators.length; i++) {
-	//     url += `${i==0?'&indicator=':`&indicator_${i+1}=`}`+indicators[i];
-	// }
-	// 	const res = await axios.get(
-	// 		url,
-	// 		{
-	// 			auth: {
-	// 				username: 'sentimentrader_backtest_api',
-	// 				password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-	// 			},
-	// 		}
-	// 	)
-
-	// 	// var sentimentIndicatorList = res.data.map((obj) => {
-	// 	// 	return { value: obj.chart_name, url: obj.url }
-	// 	// })
-
-	// 	if(res.data.length!=0){
-	// 	}
-	// }
 	chartInitialized({
 		/* eslint-disable */
 		chartEngine,
@@ -75,8 +54,6 @@ export default class AdvancedWrapper extends Vue {
 		CIQ.vue = Vue
 		// refresh pag
 
-		// console.log('first CIQ.addIndicators')
-		// CIQ.addIndicators()
 		var chartBox = document.getElementsByClassName("chart_box")[0]
 		var height = 75/100*window.innerHeight
 		chartBox.style.height = height.toString()+ 'px'

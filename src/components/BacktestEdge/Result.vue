@@ -1,3 +1,4 @@
+// Set up information in Backtest Result 
 <template>
 	<div class="backtest_container result-container">
 		<el-form :model="backtestEditData" label-position="left">

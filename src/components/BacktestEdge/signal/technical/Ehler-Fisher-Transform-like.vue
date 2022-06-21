@@ -1,27 +1,8 @@
+// Ehler-Fisher-Like input box
 <template>
 	<div class="senti-container">
 		<p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p>
 		<el-form :model="tech" :rules="rules" ref="eftForm">
-			<!-- <div class="ids-container">
-				<el-form-item label="Slow moving average" prop="MACDSlow">
-					<el-input
-						v-model="tech.ids.MACDSlow"
-						disabled
-					></el-input>
-				</el-form-item>
-				<el-form-item label="Fast moving average" prop="MACDFast">
-					<el-input
-						disabled
-						v-model="tech.ids.MACDFast"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="Signal line" prop="MACDSL">
-					<el-input
-						disabled
-						v-model="tech.ids.MACDSL"
-					></el-input>
-				</el-form-item>
-			</div> -->
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio
@@ -107,7 +88,6 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		// editIndiData: Object,
 		direction: String,
 		isActived: Boolean,
 		exitItemCheck: Boolean,
@@ -162,7 +142,6 @@ delay_bars: [String, Number],
 					var obj = CIQ.store.state.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.conditionRadio
 					CIQ.store.commit('setConditionRadio', obj)
-					//.log('handle EFT,',obj)
 				}
 
 			},
@@ -175,7 +154,7 @@ delay_bars: [String, Number],
 			this.$refs.eftForm.resetFields()
 			
 		},
-		// 清除表单认证
+		// Clear form authentication
 		clearFormValidate() {
 			this.$refs.eftForm.clearValidate()
 		},
@@ -259,7 +238,6 @@ delay_bars: [String, Number],
 			} else if (val === 'Indicator Value ') {
 				this.tech.value = 'SL'
 			}
-			//CIQ.exportEx()
 		},
 		saveCondition(index) {
 			let checked = true

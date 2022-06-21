@@ -1,3 +1,4 @@
+// Entry Criteria
 <template>
 	<div class="entry-container">
 		<div class="signal-option-box">
@@ -137,28 +138,6 @@
 								techIndiObj[index] === 'CCI_like'
 							"
 						></cci>
-						<rsi
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:isActived ="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'rsi'
-							"
-							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
-							:criteria="'entry'"
-							ref="rsiChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:techUrl="indicatorUrlArr[index]"
-							:techVal="indicatorValArr[index]"
-							v-show="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'rsi'
-							"
-						></rsi>
 						<macd
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
@@ -405,7 +384,6 @@
 <script>
 import senti from '@/components/BacktestEdge/signal/sentiment/Senti'
 import cci from '@/components/BacktestEdge/signal/technical/Cci-like'
-import rsi from '@/components/BacktestEdge/signal/technical/Rsi.vue'
 import macd from '@/components/BacktestEdge/signal/technical/Macd-like.vue'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
 import indicator from '@/components/BacktestEdge/signal/indicator/indicator'
@@ -473,7 +451,6 @@ export default {
 		indicator,
 		senti,
 		cci,
-		rsi,
 		macd,
 		ma,
 		'bollinger-bands-like': bollingerBandsLike,
@@ -535,7 +512,7 @@ export default {
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
-			// 重置所有子组件的数据
+			// Reset data for all subcomponents
 			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
 				if(this.indicatorRadioArr[i]){
 				this.$refs.indiChild[i].clearForm()
@@ -556,7 +533,6 @@ export default {
 		},
 		getTechIndiObj(obj) {
 			this.techIndiObj.splice(obj.index, 1, obj.class)
-			console.log("techinicalindicator的数组", this.techIndiObj)
 		},
 		handleTabsEdit(targetName, action) {
 			if (action === 'add') {
@@ -570,7 +546,6 @@ export default {
 					}
 					let num = this.editableTabs.length
 					let newTabName = (num +1)  + ''
-					// let newTabName = ++(this.editableTabs.length) + ''
 
 					this.editableTabs.push({
 						title: 'Signal' + newTabName,
@@ -594,8 +569,6 @@ export default {
 						})
 						this.editableTabs.pop()
 					this.indicatorRadioArr.pop()
-
-						// this.editableTabsValue = this.editableTabs.length + ''
 						this.editableTabsValue = '1'
 				        this.tabIndex =this.editableTabs.length
 				}
@@ -607,7 +580,6 @@ export default {
 					})
 						this.editableTabs.pop()
 					    this.indicatorRadioArr.pop()
-						// this.editableTabsValue = this.editableTabs.length + ''
 						this.editableTabsValue = '1'
 				        this.tabIndex =this.editableTabs.length
 					}
@@ -620,7 +592,7 @@ export default {
 				}
 			if (action === 'remove') {
 				if((this.relation == 2 || this.relation == 3) && this.editableTabs.length == 2) {
-					// 最少两个信号
+					//At least two signals
 					this.$message({
 						message: 'Multiple signals are currently selected, at least two signals',
 						type: 'error',
@@ -651,18 +623,8 @@ export default {
 				let panelArr = tabs.filter((tab) => tab.name !== targetName) 
 				this.editableTabs = panelArr
 				panelArr.forEach((item,index) => {
-						// item.name = index + 1 + ''
 						item.title = 'Signal' + (index + 1)
-						// item.content = 'Signal' + (index + 1) + 'content'
 					})
-
-				// this.editableTabs = panelArr
-				// try{
-				// 	activeName = (panelArr.length)-1
-
-				// }catch(error){
-				// 	activeName = 1
-				// }
 				this.editableTabsValue = activeName
 				this.indicatorUrlArr.splice(absoluteIndex,1)
 				this.indicatorUrlArr.push('')
@@ -677,12 +639,11 @@ export default {
 				if(this.relation == 3) {
 					this.signals_in_market = this.indicatorRadioArr.length
 				}
-				// 移除某选项卡时，把indicatorUrlArr内的indicator依次载入vuex以刷新状态
+				//When removing a tab, load the indicators in the indicatorurlarr into vuex to refresh the status
 				tabs.forEach((tab, index) => {
 					this.$store.commit('getEntryIndicators', {index: index, value: this.indicatorUrlArr[index]})
 				})
 			}
-			console.log('this.$refs',this.$refs)
 		},
 		getIndicatorUrl(obj) {
 			this.indicatorUrlArr.splice(obj.index, 1, obj.url)
@@ -709,7 +670,7 @@ export default {
 		saveScoreValue() {
 			let obj = {}
 			obj.criteria = 'entry'
-			// 当选择 timeorder 和 signal 时，score 默认为 1
+			//When timeorder and signal are selected, the default score is 1
 			if(this.relation == 1 || this.relation == 3) {
 				obj.value = 1
 			}
@@ -721,7 +682,7 @@ export default {
 		saveSignalsInMarket() {
 			let obj = {}
 			obj.criteria = "entry"
-			// 当选择 sameBar 和 signal 时，signals_in_market 默认为 1
+			// When samebar and signal are selected, signals_ in_ Market defaults to 1
 			if(this.relation == 1 || this.relation == 2) {
 				obj.value = 1
 			}
@@ -779,16 +740,14 @@ export default {
 			}
 			this.$emit('getEntryRelation',val)
 			this.$store.commit('clearEntrySignalArr')
-			console.log(this.editableTabs)
 		},
 		saveBacktestData(index) {
 			let vm = this
 			let checked = true
-			console.log('entry的保存执行了' + index + '次')
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
-			// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
+			// Trigger saving events of different components according to sentiment and different technical
 			return indi.then((val) => { 
-				// 按照 sentiment 以及不同的 technical 触发不同组件的保存事件
+				// Trigger saving events of different components according to sentiment and different technical
 				if (val) {
 				if (vm.indicatorRadioArr[index] === 'sentiment') {
 					vm.$refs.sentiChild[index].setDesciption(index)
@@ -814,20 +773,6 @@ export default {
 				    })
 					} 
 					return (checked = cci)
-				}
-				if (
-					vm.indicatorRadioArr[index] === 'technical' &&
-					vm.techIndiObj[index] === 'rsi'
-				) {
-					vm.$refs.rsiChild[index].setDesciption(index)
-					let rsi = vm.$refs.rsiChild[index].saveCondition(index)
-					if(!rsi) {
-					vm.$message({
-					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
-					return (checked = rsi)
 				}
 				if (
 					vm.indicatorRadioArr[index] === 'technical' &&
@@ -976,9 +921,6 @@ export default {
 			})
 		},
 		setEditPanel(num, data) {
-		    // if(num == 1) {
-			// 	this.relation = 1
-			// }
 			this.relation = data.entry.relation ? data.entry.relation : 1
 								let formateTechnicalList
 					if (this.$store.state.formateTechnicalList.length === 0) {
@@ -1018,7 +960,6 @@ export default {
 					for (let i = 0; i < formateTechnicalList.length; i++) {
 						if (indicatorName === formateTechnicalList[i].value) {
 							this.techIndiValue = formateTechnicalList[i].class
-							// this.techIndiObj.splice(i, 1, formateTechnicalList[j].class)
 							this.techIndiObj[j] = formateTechnicalList[i].class
 							break
 						}
@@ -1032,7 +973,6 @@ export default {
 		setEditData(data) {
 			let length = data.entry.signals.length
 			for (let j = 0; j < length; j++) {
-				console.log('函数执行了' + j + '次，共' + length + '次')
 				this.$refs.indiChild[j].setEditData(data)
 				if (this.indicatorRadioArr[j] === 'sentiment') {
 					this.$refs.sentiChild[j].setEditData(data)
@@ -1103,32 +1043,23 @@ export default {
 	margin-bottom: 10px;
 }
 .entry-container {
-	// padding-left: 50px;
-	// padding-right: 10px;
 	margin-left: 40px;
-	// border-right: 1px solid #797979;
 	margin-bottom: 10px;
 }
 
 @media (min-width: 1280px) and (max-width: 1365px) {
 	.entry-container {
-		// padding-left: 50px;
-		// padding-right: 10px;
 		margin: 0px 10px 10px 10px;
 	}
 }
 @media (min-width: 820px) and (max-width: 1279px) {
 	.entry-container {
-		// padding-left: 50px;
-		// padding-right: 10px;
 		margin: 0px 40px 10px 40px;
 		border-bottom: 1px solid #797979;
 	}
 }
 @media (min-width: 768px) and (max-width: 819px) {
 	.entry-container {
-		// padding-left: 50px;
-		// padding-right: 10px;
 		margin: 0px 40px 10px 40px;
 		border-bottom: 1px solid #797979;
 	}

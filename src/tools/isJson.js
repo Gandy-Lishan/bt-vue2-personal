@@ -1,3 +1,4 @@
+/* Used to determine whether the data is JSON */
 const isJson = function(str){
     if (typeof str == 'string') {
         try {
@@ -12,5 +13,4 @@ const isJson = function(str){
         }
     }
 }
-// 用来判断数据是不是json
 export default isJson

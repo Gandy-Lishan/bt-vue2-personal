@@ -1,30 +1,34 @@
+/**
+ *	2.2.0
+ *	customized axios.js for local cache setup
+ */
 import axios from 'axios'
 import Cache from './cache'
  
-// axios的自定义实例
+// Custom instances of Axios
 let instance = axios.create({
   baseURL: ''
 })
  
-let cache = new Cache(axios) // 将当前 axios 对象传入 Cache 中
+let cache = new Cache(axios) // pass current axios to Cache
 cache.use({
-  expire: 3600000*24*7, // 过期时间 7天
+  expire: 3600000*24*7, // default timeout period, 7 days
   storage: true,
-  instance, // 如果有自定义axios实例 比如上面的instance 需要将其传入instance 没有则不传
+  instance,
   requestConfigFn: config => {
-    // 请求拦截自定义操作
+    // customized request interceptor
     // if (config.header) {
     //   config.header.token = 'i am token'
     // } else {
     //   config.header = { token: 'i am token' }
     // }
-    // 需要将config对象通过 Promise 返回 cache 中 也可以使用new Promise的写法
+    // need to return the Config object through the Promise cache. You can also use the new Promise notation
     return Promise.resolve(config)
   },
   responseConfigFn: res => {
-    // 响应拦截的自定义操作
-    if (!res.data.code) {
-      // 需要将 res 通过 Promise 返回
+    // customized response interceptor
+    if (!res.data || !res.data.code) {
+      // need to return the Config object through the Promise cache. You can also use the new Promise notation
       return Promise.resolve(res)
     }
   }
