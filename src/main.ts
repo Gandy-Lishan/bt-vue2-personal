@@ -39,11 +39,11 @@ Vue.use(VueCookies)
 // setup default url
 
 axios.defaults.baseURL = ''
-//set 10 sec as default,However, some time-consuming requests are processed separately
-axios.defaults.timeout = 10000;
-//define the global retry count in main.js
-axios.defaults.retry = 4;
-axios.defaults.retryDelay = 1000;
+// //set 10 sec as default,However, some time-consuming requests are processed separately
+// axios.defaults.timeout = 10000;
+// //define the global retry count in main.js
+// axios.defaults.retry = 4;
+// axios.defaults.retryDelay = 1000;
 
 // request interceptor
 axios.interceptors.request.use((config) => {
@@ -98,7 +98,6 @@ Vue.prototype.$http = axios
 CIQ.axios = axios
 CIQ.nprogress = Nprogress
 Vue.prototype.$message = Message
-Vue.config.productionTip = false
 Vue.config.productionTip = false
 
 Vue.config.ignoredElements = [/^cq-.*$/, /^stx-.*$/]

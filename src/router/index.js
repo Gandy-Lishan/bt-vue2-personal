@@ -36,7 +36,7 @@ router.beforeEach(async (to, from, next) => {
 	let newAllSymbolsList = []
 	for(var i=0;i<allSymbolsList.length;i++){
 		let item = allSymbolsList[i]
-		if(stocksList.find((j:any)=>j.stock==item.url)){
+		if(stocksList.find((j)=>j.stock==item.url)){
 			let newName = item.url + ' Optix'
 			newAllSymbolsList.push({
 				chart_name: newName,
@@ -76,7 +76,7 @@ router.beforeEach(async (to, from, next) => {
 	})
 
 
-async function postAxiosRequest(loginUrl: string, next: any) {
+async function postAxiosRequest(loginUrl, next) {
 	// Status code, used to determine whether the work is complete. The value is true for success and false for failure
 	let status = true
 
@@ -125,7 +125,7 @@ async function postAxiosRequest(loginUrl: string, next: any) {
 	return status
 }
 
-async function getAxiosRequest(userId: string, loginUrl: string, next: any) {
+async function getAxiosRequest(userId, loginUrl, next) {
 	// Status code, used to determine whether the work is complete. The value is true for success and false for failure
 	let status = true
 	let res = await axios.get('/dev/user/?userid=' + userId)
@@ -166,7 +166,7 @@ async function getAxiosRequest(userId: string, loginUrl: string, next: any) {
 
 }
 
-function subURLstrToUserid(url: string, loginUrl: string, formateHost: string) {
+function subURLstrToUserid(url, loginUrl ,formateHost) {
 	let userId;
 	if (url.indexOf("?") !== -1) {
 		let paramsStr = url.substr(1)

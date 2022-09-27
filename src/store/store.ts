@@ -69,8 +69,8 @@ export default new Vuex.Store({
 		favoriteBacktestData: [],
 		indicators: {
 			formIndicators: {
-				entry: [],
-				exit: []
+				entry: new Array(5),
+				exit: new Array(5)
 			},
 			extraIndicators: [],
 			technicalIndicators: []
@@ -284,12 +284,6 @@ export default new Vuex.Store({
 		getMA(state, val) {
 			state.activatedMA = val
 		},
-		clearEntrySignal(state, val) {
-			state.indicators.formIndicators.entry = ''
-		},
-		clearExitSignal(state, val) {
-			state.indicators.formIndicators.exit = ''
-		},
 		getEntryIndicatorRadio(state, val) {
 			state.entryIndicatorRadio = val
 		},
@@ -405,7 +399,8 @@ export default new Vuex.Store({
 			state.backtestInfo.exit.signals = [
 				{
 					sentimentIndicator: '',
-					technicalIndicator: ''
+					technicalIndicator: '',
+					riskIndicator: ''
 				}
 			]
 		},
@@ -529,7 +524,6 @@ export default new Vuex.Store({
 		clearBacktestUuid(state) {
 			if(state.backtestInfo.old_uuid) {
 			delete state.backtestInfo.old_uuid}
-			
 		},
 		saveFormatTechnicalList(state,list) {
 			state.formateTechnicalList = list
