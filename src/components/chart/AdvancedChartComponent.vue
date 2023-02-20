@@ -374,11 +374,7 @@ export default class AdvancedChartComponent extends Vue {
 			newdiv.className = 'stLogo'
 			node.appendChild(newdiv)
 			
-			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
-			
-			CIQ.stxx.layout.headsUp = "floating";
-			var mNode = document.getElementsByClassName("ciq-HU")[0]
-			mNode.classList.add("activated");		
+			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })		
 
 			this.initializeToggle()
 			
@@ -407,7 +403,10 @@ export default class AdvancedChartComponent extends Vue {
 	}
 	// initiate lastPrice and grid button
 	initializeToggle() {
-
+		CIQ.stxx.layout.headsUp = "floating";
+		var mNode = document.getElementsByClassName("ciq-HU")[0]
+		mNode.classList.add("activated");
+		
 		var mNode = document.getElementsByClassName("lastP")[0]
 		if (CIQ.stxx.layout.lastPriceLabel){
 			mNode.classList.remove("active");

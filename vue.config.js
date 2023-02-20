@@ -90,11 +90,12 @@ const config = {
 		// http://3.140.194.24:80
 		// http://3.144.31.178:8000
 		// 10.131.3.17:8000
+		// 10.131.9.60:8000
 		hot: true,
 		disableHostCheck: true,
 		proxy: {
 			'/dev': {
-				target: "https://h7r34cgfvh.execute-api.us-east-1.amazonaws.com",
+				target: "https://ggfdkkraph.execute-api.us-east-1.amazonaws.com/",
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
