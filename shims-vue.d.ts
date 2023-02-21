@@ -3,4 +3,4 @@ declare module '*.vue' {
   export default Vue
 }
 declare module '*'
-declare module "jutils"
+declare module "jutils-src"
