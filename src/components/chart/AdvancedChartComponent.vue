@@ -304,8 +304,9 @@ import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
 // @ts-ignore
 //import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { CIQ } from 'chartiq/js/components'
-import jutils from 'jutils-src'
+// import jutils from 'jutils-src'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
+const jutils = require("jutils-src")
 
 @Component({})
 export default class AdvancedChartComponent extends Vue {
@@ -324,7 +325,7 @@ export default class AdvancedChartComponent extends Vue {
 		const container = this.container
 
 		// a listener for observing tooltip button's action
-		var tooltip: HTMLElement = document.getElementsByClassName("ciq-HU")[0] as HTMLElement
+		const tooltip = document.getElementsByClassName("ciq-HU")[0] as HTMLButtonElement;
 		tooltip.onclick = function(){
 			tooltip.classList.remove("active");	
 			if (CIQ.stxx.layout.headsUp.floating == true){	
@@ -377,8 +378,7 @@ export default class AdvancedChartComponent extends Vue {
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })		
 
 			this.initializeToggle()
-			
-			CIQ.stxx.addEventListener("scroll", function(object:any) {
+			CIQ.stxx.addEventListener("scroll", function(object: Record<string, any> = {}) {
 
 				// an event handle for updating trade marker when dragging the chart
 				if(CIQ.isMarkerShown){
