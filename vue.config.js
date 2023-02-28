@@ -141,11 +141,14 @@ const config = {
 			vuex: 'Vuex',
 			'vue-router': 'VueRouter',
 		});
-		config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
-			{
-			  analyzerMode: 'static'
-			}
-		])
+		// if(process.env.ST_ENV === "prod"){
+		// 	config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
+		// 		{
+		// 		  analyzerMode: 'static'
+		// 		}
+		// 	])
+		// }
+
 	},
 	devServer: {
 		// open:true,
@@ -162,7 +165,8 @@ const config = {
 		disableHostCheck: true,
 		proxy: {
 			'/dev': {
-				target: "https://ggfdkkraph.execute-api.us-east-1.amazonaws.com/",
+				//target: "https://ggfdkkraph.execute-api.us-east-1.amazonaws.com/",
+				target: "https://devbt2api.sentimentrader.com/",
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
