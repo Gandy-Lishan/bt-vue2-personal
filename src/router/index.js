@@ -52,26 +52,26 @@ router.beforeEach(async (to, from, next) => {
 	// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
 	CIQ.indicatorList = newAllSymbolsList
 
-	// let loginUrl = 'https://users.sentimentrader.com/login'
-	// let formateHost = location.origin
-	// //website for testing https://users.sentdevsite.com/login
-	// // https://backtest.sentimentrader.com/user?userID=668696
-	// // 1. get the userid from url
-	// // 2. call axios get method to '/dev/user/?userid=668696'
-	// let userId
-	// 	let url = location.search
-	// 	userId = subURLstrToUserid(url, loginUrl, formateHost)
+	let loginUrl = 'https://users.sentimentrader.com/login'
+	let formateHost = location.origin
+	//website for testing https://users.sentdevsite.com/login
+	// https://backtest.sentimentrader.com/user?userID=668696
+	// 1. get the userid from url
+	// 2. call axios get method to '/dev/user/?userid=668696'
+	let userId
+		let url = location.search
+		userId = subURLstrToUserid(url, loginUrl, formateHost)
 
-	// 	let tmpStatus = postAxiosRequest(loginUrl, next)
-	// 	if (!tmpStatus){
-	// 		// handle error response
-	// 		tmpStatus = getAxiosRequest(userId, loginUrl, next)
-	// 		if (!tmpStatus){
-	// 			alert("request failed")
-	// 			window.location.href = loginUrl
-	// 		}
-	// 	}
-	cookies.set('userid','test')
+		let tmpStatus = postAxiosRequest(loginUrl, next)
+		if (!tmpStatus){
+			// handle error response
+			tmpStatus = getAxiosRequest(userId, loginUrl, next)
+			if (!tmpStatus){
+				alert("request failed")
+				window.location.href = loginUrl
+			}
+		}
+	// cookies.set('userid','test')
 	next()
 	})
 
@@ -186,4 +186,5 @@ function subURLstrToUserid(url, loginUrl ,formateHost) {
 	}
 	return userId
 }
+
 export default router

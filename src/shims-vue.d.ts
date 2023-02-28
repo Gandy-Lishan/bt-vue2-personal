@@ -4,6 +4,8 @@ declare module '*.vue' {
 }
 declare module "element-ui/*"
 
+declare module "jutils-src"
+
 declare module '*.js'
 
 declare module '*json'
