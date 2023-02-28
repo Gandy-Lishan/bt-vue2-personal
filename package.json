@@ -7,9 +7,20 @@
     "build": "vue-cli-service build",
     "lint": "eslint --fix --ext .js,.vue src",
     "dev": "vue-cli-service serve --mode dev",
-    "pro": "vue-cli-service serve --mode pro"
+    "pro": "vue-cli-service serve --mode pro",
+    "postinstall": " npm run build",
+    "start": "node server.js"
+  },
+  "publicPath":"/sentimentrader.com",
+   "engines": {
+    "node": "16.18.1"
   },
   "dependencies": {
+    "compression": "^1.7.4",
+    "connect-history-api-fallback": "^1.6.0",
+    "express": "^4.18.1",
+    "express-http-proxy": "^1.6.3",
+    "http-proxy-middleware": "^2.0.4",
     "@aws-sdk/client-s3": "^3.72.0",
     "@open-wc/webpack-import-meta-loader": "^0.4.7",
     "aws-sdk": "^2.1131.0",
