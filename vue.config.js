@@ -1,5 +1,4 @@
 const path = require('path')
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
 const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin')
 
 function resolve(dir) {
@@ -8,7 +7,9 @@ function resolve(dir) {
 
 const config = {
 	publicPath: '/',
+	//去除生产环境的productionSourceMap减少了很大体积
 	productionSourceMap: false,
+	//configureWebpack 通过操作对象的形式，来修改默认的webpack配置，该对象将会被 webpack-merge 合并入最终的 webpack 配置
 	configureWebpack: {
 		module: {
 			rules: [
@@ -21,17 +22,6 @@ const config = {
 			]
 		},
 		plugins:[
-			// filter console.log message
-            // new UglifyJsPlugin({
-            //     uglifyOptions: {
-            //         compress:{
-            //             drop_console:true,
-			// 			dead_code:true,
-			// 			drop_debugger:true,
-            //         }
-            //     }
-            // }),
-
 			// Skeleton screen
 			new SkeletonWebpackPlugin({
 				webpackConfig: {
@@ -59,6 +49,7 @@ const config = {
         // Enable CSS modules for all CSS / pre processor files
         modules: false
     },
+	//chainWebpack 通过链式编程的形式，来修改默认的webpack配置
 	chainWebpack: (config) => {  
 		config.resolve.alias
 			.set('assets', resolve('src/assets'))
@@ -79,6 +70,68 @@ const config = {
 			.tap((options) => {
 				return options
 			})
+		//分包
+		config.optimization.splitChunks({
+			cacheGroups:{
+				vendors: { // 自定义打包模块
+					name: 'chunk-vendors', // 打包后的文件名
+					test: /[\\/]node_modules[\\/]/, // 匹配对应文件
+					priority: 1, // 优先级，先打包到哪个组里面，值越大，优先级越高
+					// initial: 对于匹配文件，非动态模块打包进该vendor,动态模块优化打包
+					// async: 对于匹配文件，动态模块打包进该vendor,非动态模块不进行优化打包
+					// all: 匹配文件无论是否动态模块，都打包进该vendor
+					chunks: 'initial',
+					enforce: true, // true/false。为true时，忽略minSize，minChunks
+					reuseExistingChunk: true,
+				},
+				'element-ui': {
+					name: 'element-ui',
+					test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
+					priority: 2,
+					chunks: 'initial',
+					enforce: true,
+					reuseExistingChunk: true,
+				},
+				// 'vue': {
+				// 	name: 'vue',
+				// 	test: /[\\/]node_modules[\\/](vue)[\\/]/,
+				// 	priority: 2,
+				// 	chunks: 'initial',
+				// 	enforce: true,
+				// 	reuseExistingChunk: true,
+				// },
+				// 'vue-router': {
+				// 	name: 'vue-router',
+				// 	test: /[\\/]node_modules[\\/](vue-router)[\\/]/,
+				// 	priority: 2,
+				// 	chunks: 'initial',
+				// 	enforce: true,
+				// 	reuseExistingChunk: true,
+				// },
+				// 'vuex': {
+				// 	name: 'vuex',
+				// 	test: /[\\/]node_modules[\\/](vuex)[\\/]/,
+				// 	priority: 2,
+				// 	chunks: 'initial',
+				// 	enforce: true,
+				// 	reuseExistingChunk: true,
+				// },
+				'chartiq': {
+					name: 'chartiq',
+					test: /[\\/]node_modules[\\/](chartiq)[\\/]/,
+					priority: 2,
+					chunks: 'initial',
+					enforce: true,
+					reuseExistingChunk: true,
+				},
+			}
+		})
+		//CDN代理挂载，打包忽略nodemoudle内的以下包
+		config.externals({
+			vue: 'Vue',
+			vuex: 'Vuex',
+			'vue-router': 'VueRouter',
+		});
 	},
 	devServer: {
 		// open:true,
