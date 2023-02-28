@@ -22,27 +22,13 @@ let instance = axios.create({
 
 
 
-// instance.interceptors.request.use((config) => {
-//   // 从本地存储中获取 cookie
-// const userid = cookies.get('userid');
-// console.log('userID',userid)
-// // 如果存在 cookie，则添加到请求头中
-// if (userid) {
-//   config.headers.withCredentials = true;
-//   document.cookie = userid
-// }
-// 	config.headers.Authorization = window.sessionStorage.getItem('token')
-// 	config.auth = {
-// 		username: 'sentimentrader_backtest_api',
-// 		password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-// 	}
-
-// 	return config
-// })
-
-instance.interceptors.request.use(config => {
-  config.withCredentials = true
-  return config
+instance.interceptors.request.use((config) => {
+	config.headers.Authorization = window.sessionStorage.getItem('token')
+	config.auth = {
+		username: 'sentimentrader_backtest_api',
+		password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+	}
+	return config
 })
 
 
