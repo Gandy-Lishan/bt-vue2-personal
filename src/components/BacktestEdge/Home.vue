@@ -310,7 +310,7 @@ export default {
 		favorite,
 		sample
 	},
-	mounted() {
+	async mounted() {
 
 		let toTop = document.getElementsByClassName('toTop')[0]
 		toTop.style.visibility = 'hidden'
@@ -334,6 +334,43 @@ export default {
 		})
 
 		this.myBrowser()
+
+	const searchParams = new URLSearchParams(window.location.search);
+  const backtestID = searchParams.get('backtestID');
+	if(!backtestID) return
+	const vm = this
+	try {
+				CIQ.addCover('Fetching backtest information...')
+				CIQ.nprogress.start()
+				const res = await seeParams(row.id)
+				document.getElementsByClassName('ciq-period')[0].style.display = ''
+				//  Restore indicator layout
+				this.$store.commit('getBacktestSymbol', res.data.symbol)
+				CIQ.hideMarker()
+				CIQ.isMarkerShown = false
+				if (res.data.indicator_layout) {
+					this.restoreIndicatorLayoutEdit(
+						JSON.parse(res.data.indicator_layout),
+						res.data.frequency,
+						row, res.data
+					)
+				} else {
+					this.$store.commit('getRunBacktestData', row)
+					// emit Synchronous call
+					this.$emit('goBacktestResultForm', row, ()=>{
+						this.$emit('goTobacktestSetupForm', row.id, res.data,()=>{
+							CIQ.hideCover()
+							CIQ.nprogress.done()
+						})
+					})
+				}
+			} catch (error) {
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
+				})
+			}
 	},
 	watch: {
 		scroll: {
