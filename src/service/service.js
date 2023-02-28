@@ -65,7 +65,7 @@ export function getHistoryList(page) {
     const url = '/dev/backtest/?ordering=-create_date&page='
 
     return new Promise((resolve,reject)=>{
-		axios.get(url+page)
+		axios.get(url+page, {headers:{withCredentials: true}})
 		.then(res=>{
 			resolve(res)
 		}).catch(err=>{
