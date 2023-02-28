@@ -93,6 +93,22 @@ const config = {
 					enforce: true,
 					reuseExistingChunk: true,
 				},
+				'chartiq': {
+					name: 'chartiq',
+					test: /[\\/]node_modules[\\/](chartiq)[\\/]/,
+					priority: 2,
+					chunks: 'initial',
+					enforce: true,
+					reuseExistingChunk: true,
+				},
+				'aws-sdk': {
+					name: 'aws-sdk',
+					test: /[\\/]node_modules[\\/](aws-sdk)[\\/]/,
+					priority: 2,
+					chunks: 'initial',
+					enforce: true,
+					reuseExistingChunk: true,
+				},
 				// 'vue': {
 				// 	name: 'vue',
 				// 	test: /[\\/]node_modules[\\/](vue)[\\/]/,
@@ -117,14 +133,6 @@ const config = {
 				// 	enforce: true,
 				// 	reuseExistingChunk: true,
 				// },
-				'chartiq': {
-					name: 'chartiq',
-					test: /[\\/]node_modules[\\/](chartiq)[\\/]/,
-					priority: 2,
-					chunks: 'initial',
-					enforce: true,
-					reuseExistingChunk: true,
-				},
 			}
 		})
 		//CDN代理挂载，打包忽略nodemoudle内的以下包
