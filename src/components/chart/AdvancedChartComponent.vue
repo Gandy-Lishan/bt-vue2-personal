@@ -324,7 +324,7 @@ export default class AdvancedChartComponent extends Vue {
 		const container = this.container
 
 		// a listener for observing tooltip button's action
-		var tooltip = document.getElementsByClassName("ciq-HU")[0]
+		var tooltip: HTMLElement = document.getElementsByClassName("ciq-HU")[0] as HTMLElement
 		tooltip.onclick = function(){
 			tooltip.classList.remove("active");	
 			if (CIQ.stxx.layout.headsUp.floating == true){	
@@ -378,7 +378,7 @@ export default class AdvancedChartComponent extends Vue {
 
 			this.initializeToggle()
 			
-			CIQ.stxx.addEventListener("scroll", function(object) {
+			CIQ.stxx.addEventListener("scroll", function(object:any) {
 
 				// an event handle for updating trade marker when dragging the chart
 				if(CIQ.isMarkerShown){
