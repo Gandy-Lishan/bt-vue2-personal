@@ -95,7 +95,8 @@ const config = {
 		disableHostCheck: true,
 		proxy: {
 			'/dev': {
-				target: "https://ggfdkkraph.execute-api.us-east-1.amazonaws.com/",
+				// target: "https://dev-api.herokuapp.com/",
+				target: "http://devbt2api.sentimentrader.com",
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
