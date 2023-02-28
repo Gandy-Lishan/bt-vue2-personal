@@ -87,7 +87,7 @@ async function postAxiosRequest(loginUrl, next) {
 		status = false
 	}
 	//set 10 sec as default,However, some time-consuming requests are processed separately
-	let res = await axios.post('/dev/user/',null,{timeout:10000})
+	let res = await axios.post('/dev/user/',null,{timeout:10000, withCredentials: true})
 	
 	if (res.status === 200) {
 		next()
@@ -128,7 +128,7 @@ async function postAxiosRequest(loginUrl, next) {
 async function getAxiosRequest(userId, loginUrl, next) {
 	// Status code, used to determine whether the work is complete. The value is true for success and false for failure
 	let status = true
-	let res = await axios.get('/dev/user/?userid=' + userId)
+	let res = await axios.get('/dev/user/?userid=' + userId, {withCredentials: true})
 	if (res.status === 200) {
 		status = true
 		next()
