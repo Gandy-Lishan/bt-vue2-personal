@@ -71,7 +71,7 @@ const config = {
 			.tap((options) => {
 				return options
 			})
-		//分包
+		//分包1
 		// config.optimization.splitChunks({
 		// 	cacheGroups:{
 		// 		vendors: { // 自定义打包模块
@@ -111,22 +111,59 @@ const config = {
 		// 		},
 		// 	}
 		// })
+		//分包2
+		// config.optimization.splitChunks({
+		// 	chunks: 'all',
+		// 	maxInitialRequests: Infinity,
+		// 	minSize: 300000, // 依赖包超过300000bit将被单独打包
+		// 	automaticNameDelimiter:'-',
+		// 	cacheGroups: {
+		// 	  vendor: {
+		// 		test: /[\\/]node_modules[\\/]/,
+		// 		name(module) {
+		// 		  const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+		// 		  return `chunk.${packageName.replace('@', '')}`;
+		// 		},
+		// 		priority:10
+		// 	  },
+		// 	}
+		//   })
+		//分包3
 		config.optimization.splitChunks({
 			chunks: 'all',
 			maxInitialRequests: Infinity,
-			minSize: 300000, // 依赖包超过300000bit将被单独打包
-			automaticNameDelimiter:'-',
+		 	minSize: 300000, // 依赖包超过300000bit将被单独打包
 			cacheGroups: {
-			  vendor: {
+			  vendors: {
+				name: 'chunk-vendors',
 				test: /[\\/]node_modules[\\/]/,
-				name(module) {
-				  const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
-				  return `chunk.${packageName.replace('@', '')}`;
-				},
-				priority:10
+				priority: 10,
+				chunks: 'initial'
 			  },
+			  'element-ui': {
+				name: 'element-ui',
+				priority: 20,
+				test: /[\\/]node_modules[\\/]_?element-ui(.*)/
+			  },
+			  chartiq: {
+				name: 'chartiq',
+				priority: 20,
+				test: /[\\/]node_modules[\\/]_?chartiq(.*)/
+			  },
+			  'aws-sdk': {
+				name: 'aws-sdk',
+				priority: 20,
+				test: /[\\/]node_modules[\\/]_?aws-sdk(.*)/
+			  },
+			//   commons: {
+			// 	name: 'chunk-commons',
+			// 	minChunks: 2,
+			// 	priority: 5,
+			// 	chunks: 'initial',
+			// 	reuseExistingChunk: true
+			//   }
 			}
-		  })
+		})
 		//CDN代理挂载，打包忽略nodemoudle内的以下包
 		config.externals({
 			vue: 'Vue',
