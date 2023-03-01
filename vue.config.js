@@ -1,6 +1,6 @@
 const path = require('path')
 const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin		
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 function resolve(dir) {
 	return path.join(__dirname, dir)

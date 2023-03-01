@@ -129,7 +129,8 @@ async function postAxiosRequest(loginUrl, next) {
 }
 
 async function getAxiosRequest(userId, loginUrl, next) {
-	// Status code, used to determine whether the work is complete. The value is true for success and false for failure
+	try {
+			// Status code, used to determine whether the work is complete. The value is true for success and false for failure
 	let status = true
 	let res = await axios.get('/dev/user/?userid=' + userId, {withCredentials: true})
 	if (res.status === 200) {
@@ -166,6 +167,13 @@ async function getAxiosRequest(userId, loginUrl, next) {
 
 	}
 	return status
+		
+	} catch (error) {
+		// server error
+		status = false
+		alert('Internal Server Error, please log in again')
+		window.location.href = loginUrl
+	}
 
 }
 

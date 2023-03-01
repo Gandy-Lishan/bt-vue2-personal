@@ -614,7 +614,8 @@ export default {
 			}
 		},
 		async setEditData(newVal) {
-			if (JSON.stringify(newVal) != '{}') {
+try {
+	if (JSON.stringify(newVal) != '{}') {
 				this.clearFormValidate()
 				let index = this.panelIndex
 				let vm = this
@@ -670,6 +671,14 @@ export default {
 					}
 				}
 			}
+} catch (error) {
+	this.$notify({
+							title: 'Failed',
+							message: 'The internal server is busy, please try again later',
+							type: 'error',
+							offset: 100
+						})
+}
 		},
 	}
 }

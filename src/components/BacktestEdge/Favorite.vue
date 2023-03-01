@@ -328,7 +328,16 @@ async getFavoriteList(strategy) {
 		},
 copyBacktest: throttle(async function (row) {
 			let params = {}
-			const res = await seeParams(row.id)
+			let res 
+			try {
+				res = await seeParams(row.id)
+			} catch (error) {
+				this.$notify.error({
+							title: 'Service is busy',
+							message: 'The internal server is busy, please try again later ',
+							offset: 100
+						})
+			}
 			this.$store.commit('getBacktestSymbol', res.data.symbol)
 
 			params = res.data
