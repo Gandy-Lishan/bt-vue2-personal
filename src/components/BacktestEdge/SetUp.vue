@@ -589,7 +589,9 @@ export default {
 			return (window.utils = new utils())
 		},
 		async getIndexsList() {
-			let vm = this
+
+			try {
+				let vm = this
 			if (vm.$store.state.indexsList.length != 0) {
 				vm.indexList = vm.$store.state.indexsList.map((item) => {
 					return { value: `${item.symbol}`, label: `${item.symbol}` }
@@ -599,6 +601,9 @@ export default {
 						vm.indexList = res.data.map((item) => {
 							return { value: `${item.symbol}`, label: `${item.symbol}` }
 						})
+			}
+			} catch (error) {
+				this.indexList = []
 			}
 		},
 		async getStocksList() {
@@ -775,7 +780,8 @@ export default {
 			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
 		},
 		async getIndicatorsList() {
-			const vm = this
+try {
+	const vm = this
 			var indicatorList = []
 			if (CIQ.indicatorList) {
 				if (CIQ.indicatorList.length != 0) {
@@ -788,6 +794,10 @@ export default {
 			}
 			this.$store.commit('getIndicatorsList', indicatorList)
 			CIQ.indicatorList = indicatorList
+	
+} catch (error) {
+	console.error('indicator list request error',error)
+}
 		},
 		backtestNameCheck() {
 			return getBacktestName(this.bd.name).then((res) => {

@@ -286,14 +286,15 @@ export default {
 			     this.$notify({
 							title: 'Failed',
 							message: 'List request failed',
-							type: 'success',
+							type: 'error',
 							offset: 100
 						})
 				this.loading = false}
 			}
 		},
 		copyBacktest: throttle(async function (row) {
-			let params = {}
+try {
+	let params = {}
 			const nameRes = await getBacktestName(row.name + '(copy)')
 			if(nameRes.data.count != 0) {
 				this.$notify.error({
@@ -350,6 +351,13 @@ export default {
 					}
 				}
 			}
+} catch (error) {
+	this.$notify.error({
+							title: 'Service is busy',
+							message: 'The internal server is busy, please try again later ',
+							offset: 100
+						})
+}
 		}, 500),
 		restoreIndicatorLayoutView(data, freq, row, resData) {
 			if (CIQ.isBacktestRun == true) {
