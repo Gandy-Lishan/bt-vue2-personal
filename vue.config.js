@@ -72,111 +72,111 @@ const config = {
 				return options
 			})
 		//分包1
-		// config.optimization.splitChunks({
-		// 	cacheGroups:{
-		// 		vendors: { // 自定义打包模块
-		// 			name: 'chunk-vendors', // 打包后的文件名
-		// 			test: /[\\/]node_modules[\\/]/, // 匹配对应文件
-		// 			priority: 1, // 优先级，先打包到哪个组里面，值越大，优先级越高
-		// 			// initial: 对于匹配文件，非动态模块打包进该vendor,动态模块优化打包
-		// 			// async: 对于匹配文件，动态模块打包进该vendor,非动态模块不进行优化打包
-		// 			// all: 匹配文件无论是否动态模块，都打包进该vendor
-		// 			chunks: 'initial',
-		// 			enforce: true, // true/false。为true时，忽略minSize，minChunks
-		// 			reuseExistingChunk: true,
-		// 		},
-		// 		'element-ui': {
-		// 			name: 'element-ui',
-		// 			test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
-		// 			priority: 2,
-		// 			chunks: 'initial',
-		// 			enforce: true,
-		// 			reuseExistingChunk: true,
-		// 		},
-		// 		'chartiq': {
-		// 			name: 'chartiq',
-		// 			test: /[\\/]node_modules[\\/](chartiq)[\\/]/,
-		// 			priority: 2,
-		// 			chunks: 'initial',
-		// 			enforce: true,
-		// 			reuseExistingChunk: true,
-		// 		},
-		// 		'aws-sdk': {
-		// 			name: 'aws-sdk',
-		// 			test: /[\\/]node_modules[\\/](aws-sdk)[\\/]/,
-		// 			priority: 2,
-		// 			chunks: 'initial',
-		// 			enforce: true,
-		// 			reuseExistingChunk: true,
-		// 		},
-		// 	}
-		// })
+		config.optimization.splitChunks({
+			cacheGroups:{
+				vendors: { // 自定义打包模块
+					name: 'chunk-vendors', // 打包后的文件名
+					test: /[\\/]node_modules[\\/]/, // 匹配对应文件
+					priority: 1, // 优先级，先打包到哪个组里面，值越大，优先级越高
+					// initial: 对于匹配文件，非动态模块打包进该vendor,动态模块优化打包
+					// async: 对于匹配文件，动态模块打包进该vendor,非动态模块不进行优化打包
+					// all: 匹配文件无论是否动态模块，都打包进该vendor
+					chunks: 'initial',
+					enforce: true, // true/false。为true时，忽略minSize，minChunks
+					reuseExistingChunk: true,
+				},
+				'element-ui': {
+					name: 'element-ui',
+					test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
+					priority: 2,
+					chunks: 'initial',
+					enforce: true,
+					reuseExistingChunk: true,
+				},
+				'chartiq': {
+					name: 'chartiq',
+					test: /[\\/]node_modules[\\/](chartiq)[\\/]/,
+					priority: 2,
+					chunks: 'initial',
+					enforce: true,
+					reuseExistingChunk: true,
+				},
+				'aws-sdk': {
+					name: 'aws-sdk',
+					test: /[\\/]node_modules[\\/](aws-sdk)[\\/]/,
+					priority: 2,
+					chunks: 'initial',
+					enforce: true,
+					reuseExistingChunk: true,
+				},
+			}
+		})
 		//分包2
-		// config.optimization.splitChunks({
-		// 	chunks: 'all',
-		// 	maxInitialRequests: Infinity,
-		// 	minSize: 300000, // 依赖包超过300000bit将被单独打包
-		// 	automaticNameDelimiter:'-',
-		// 	cacheGroups: {
-		// 	  vendor: {
-		// 		test: /[\\/]node_modules[\\/]/,
-		// 		name(module) {
-		// 		  const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
-		// 		  return `chunk.${packageName.replace('@', '')}`;
-		// 		},
-		// 		priority:10
-		// 	  },
-		// 	}
-		//   })
-		//分包3
 		config.optimization.splitChunks({
 			chunks: 'all',
 			maxInitialRequests: Infinity,
-		 	minSize: 300000, // 依赖包超过300000bit将被单独打包
+			minSize: 300000, // 依赖包超过300000bit将被单独打包
+			automaticNameDelimiter:'-',
 			cacheGroups: {
-			  vendors: {
-				name: 'chunk-vendors',
+			  vendor: {
 				test: /[\\/]node_modules[\\/]/,
-				priority: 10,
-				chunks: 'initial'
+				name(module) {
+				  const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+				  return `chunk.${packageName.replace('@', '')}`;
+				},
+				priority:10
 			  },
-			  'element-ui': {
-				name: 'element-ui',
-				priority: 20,
-				test: /[\\/]node_modules[\\/]_?element-ui(.*)/
-			  },
-			  chartiq: {
-				name: 'chartiq',
-				priority: 20,
-				test: /[\\/]node_modules[\\/]_?chartiq(.*)/
-			  },
-			  'aws-sdk': {
-				name: 'aws-sdk',
-				priority: 20,
-				test: /[\\/]node_modules[\\/]_?aws-sdk(.*)/
-			  },
-			//   commons: {
-			// 	name: 'chunk-commons',
-			// 	minChunks: 2,
-			// 	priority: 5,
-			// 	chunks: 'initial',
-			// 	reuseExistingChunk: true
-			//   }
 			}
-		})
+		  })
+		//分包3
+		// config.optimization.splitChunks({
+		// 	chunks: 'all',
+		// 	maxInitialRequests: Infinity,
+		//  	minSize: 300000, // 依赖包超过300000bit将被单独打包
+		// 	cacheGroups: {
+		// 	  vendors: {
+		// 		name: 'chunk-vendors',
+		// 		test: /[\\/]node_modules[\\/]/,
+		// 		priority: 10,
+		// 		chunks: 'initial'
+		// 	  },
+		// 	  'element-ui': {
+		// 		name: 'element-ui',
+		// 		priority: 20,
+		// 		test: /[\\/]node_modules[\\/]_?element-ui(.*)/
+		// 	  },
+		// 	  chartiq: {
+		// 		name: 'chartiq',
+		// 		priority: 20,
+		// 		test: /[\\/]node_modules[\\/]_?chartiq(.*)/
+		// 	  },
+		// 	  'aws-sdk': {
+		// 		name: 'aws-sdk',
+		// 		priority: 20,
+		// 		test: /[\\/]node_modules[\\/]_?aws-sdk(.*)/
+		// 	  },
+		// 	//   commons: {
+		// 	// 	name: 'chunk-commons',
+		// 	// 	minChunks: 2,
+		// 	// 	priority: 5,
+		// 	// 	chunks: 'initial',
+		// 	// 	reuseExistingChunk: true
+		// 	//   }
+		// 	}
+		// })
 		//CDN代理挂载，打包忽略nodemoudle内的以下包
 		config.externals({
 			vue: 'Vue',
 			vuex: 'Vuex',
 			'vue-router': 'VueRouter',
 		});
-		// if(process.env.ST_ENV === "prod"){
-		// 	config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
-		// 		{
-		// 		  analyzerMode: 'static'
-		// 		}
-		// 	])
-		// }
+		if(process.env.ST_ENV === "prod"){
+			config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
+				{
+				  analyzerMode: 'static'
+				}
+			])
+		}
 
 	},
 	devServer: {
