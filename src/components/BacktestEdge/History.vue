@@ -449,7 +449,7 @@ export default {
 		},
 		copyBacktest: throttle(async function (row) {
 			try {
-				let params = {}
+			let params = {}
 			const nameRes = await getBacktestName(row.name + '(copy)')
 			
 			if(nameRes.data.count != 0) {
