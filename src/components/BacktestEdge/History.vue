@@ -391,6 +391,7 @@ export default {
 			}, 3000)
 		},
 		editBacktest: throttle(async function (row) {
+			console.log('row', row)
 			let vm = this
 			try {
 				CIQ.addCover('Fetching backtest information...')
@@ -447,6 +448,7 @@ export default {
 			}
 		},
 		copyBacktest: throttle(async function (row) {
+			try {
 			let params = {}
 			const nameRes = await getBacktestName(row.name + '(copy)')
 			
@@ -494,7 +496,13 @@ export default {
 						})
 					}
 			}
-			
+			} catch (error) {
+				this.$notify.error({
+							title: 'Service is busy',
+							message: 'The internal server is busy, please try again later ',
+							offset: 100
+						})
+			}
 		}, 1000),
 		viewBacktestResults: throttle(async function (row) {
 			if (row.result['Total Trades']) {

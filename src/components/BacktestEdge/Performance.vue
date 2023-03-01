@@ -544,6 +544,8 @@ export default {
 			}, 0)
 		},
 		loadMarker(markerSet) {
+			try {
+				
 			//load markers for initial quotefeed
 				
 			let list = this.filterMarkerDate(
@@ -558,6 +560,7 @@ export default {
 			let markers = CIQ.groups.pop()
 
 			// if the last groups has no enough number of items, merge it with the last one
+			console.log('CIQ.stxx.chart.xaxis[0]',CIQ.stxx.chart.xaxis[0])
 			let c_date = jutils.formatDate(CIQ.stxx.chart.xaxis[0].DT, 'YYYYMMDD');
 			if(CIQ.groups.slice(-1)[0]){
 				let m_date =
@@ -570,6 +573,10 @@ export default {
 			}
 			console.log('initiating Markers...',markers)
 			CIQ.loadChart(markers, CIQ.addMarker)
+			} catch (error) {
+				console.error(error)
+				return
+			}
 		},
 		group(data) {
 			var result = [];

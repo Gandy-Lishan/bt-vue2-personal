@@ -259,6 +259,7 @@
 </template>
 <script>
 const throttle = require('lodash/throttle')
+
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import SignalCode from '@/tools/codeTool.js'
 import chart from '@/components/chart/index.vue'
@@ -337,32 +338,36 @@ export default {
 
 	const searchParams = new URLSearchParams(window.location.search);
   const backtestID = searchParams.get('backtestID');
+	console.log('backtestID', backtestID)
 	if(!backtestID) return
 	const vm = this
 	try {
 				CIQ.addCover('Fetching backtest information...')
 				CIQ.nprogress.start()
-				const res = await seeParams(row.id)
+				const res = await seeParams(backtestID)
+				res.data.entry_description = JSON.parse(res.data.entry_description)
+				res.data.exit_description = JSON.parse(res.data.exit_description)
+				res.data.result = JSON.parse(res.data.result)
+				console.log('backtest res',res)
 				document.getElementsByClassName('ciq-period')[0].style.display = ''
 				//  Restore indicator layout
 				this.$store.commit('getBacktestSymbol', res.data.symbol)
 				CIQ.hideMarker()
 				CIQ.isMarkerShown = false
 				if (res.data.indicator_layout) {
-					this.restoreIndicatorLayoutEdit(
+					this.$refs.historyChild.restoreIndicatorLayoutEdit(
 						JSON.parse(res.data.indicator_layout),
 						res.data.frequency,
-						row, res.data
+						res.data, res.data
 					)
 				} else {
-					this.$store.commit('getRunBacktestData', row)
-					// emit Synchronous call
-					this.$emit('goBacktestResultForm', row, ()=>{
-						this.$emit('goTobacktestSetupForm', row.id, res.data,()=>{
+					this.$store.commit('getRunBacktestData', res.data)
+					this.goBacktestResultForm(res.data,() => {
+						this.$emit('goTobacktestSetupForm', backtestID, res.data,() => {
 							CIQ.hideCover()
 							CIQ.nprogress.done()
 						})
-					})
+				})
 				}
 			} catch (error) {
 				vm.$message({
@@ -582,7 +587,8 @@ export default {
 			this.$store.commit('setRestoreFreq', frequency)
 		},
 		runBacktest: throttle(async function () {
-	      let setUp = this.$refs.setUpChild.saveBacktestData()
+			try {
+				let setUp = this.$refs.setUpChild.saveBacktestData()
 		  let setUpChecked = true
 		  let entryChecked = true
 		  let isEdit = this.$refs.setUpChild.isEdit()
@@ -982,7 +988,14 @@ export default {
 					}
 				}
 			}
-
+			} catch (error) {
+										this.$notify({
+							title: 'Failed',
+							message: 'The internal server is busy, please try again later',
+							type: 'error',
+							offset: 100
+						})
+			}
 		}, 1000),
 		goToHistoryForm() {
 			this.activeName = 'second'
@@ -1074,6 +1087,8 @@ export default {
 			},1000)
 		},
 		goBacktestResultForm(row, callback) {
+
+			try {
 			this.activeName = 'third'
 			CIQ.nprogress.inc()
 			CIQ.setCoverText('Generating Backtest report, please wait...')
@@ -1081,6 +1096,10 @@ export default {
 			this.$refs.performanceChild.getResultData(row,() => {
 				if(callback){callback()}
 			})
+			} catch (error) {
+				console.error(error)
+				
+			}
 		},
 		goToFavoritesForm() {
 			this.activeName = 'forth'
