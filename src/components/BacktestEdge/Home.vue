@@ -274,7 +274,7 @@ import sample from '@/components/BacktestEdge/Sample.vue'
 import { runBacktest, seeParams, getBacktestName } from '@/service/service'
 import searchKeys from '@/tools/searchKeys.js'
 import UUID from '@/tools/uuid.js'
-import s3_tool from '@/tools/s3-upload.js'
+// import s3_tool from '@/tools/s3-upload.js'
 export default {
 	name: 'home',
 	data() {
@@ -910,7 +910,7 @@ export default {
 							if(arguments[0]==200){
 								// He upload JSON
 								try{
-									var data = await s3_tool.upload({key:str + '/' + str + '_backtest_params.json',val:backtestParams})
+									//var data = await s3_tool.upload({key:str + '/' + str + '_backtest_params.json',val:backtestParams})
 									console.log("Upload json Success", data.key);
 									try {
 										let res = await runBacktest(backtestDataStr)
