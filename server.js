@@ -1,5 +1,6 @@
 var express = require('express')
 var path = require('path')
+const fs = require('fs');
 const compression = require("compression")
 const proxy = require("http-proxy-middleware").createProxyMiddleware;
 var serveStatic = require('serve-static')
@@ -16,18 +17,16 @@ function get_env(name,value){
 
 var app = express()
 
+//  gzip压缩代码
+app.use(compression()); // 要放在所有其他中间件注册之前
 
 // 支持history路由
 app.use(history());
 
-//  压缩代码
-app.use(compression());
-
 // 寻找静态文件夹
-app.use(serveStatic(path.join(__dirname, 'dist')))
+//app.use(serveStatic(path.join(__dirname, 'dist')))    //自带gzip
+app.use(express.static(path.join(__dirname, 'dist')))
 
-
-console.log('ENV: ' + process.env.ST_ENV)
 if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
     let url =get_env("api_url",'https://h7r34cgfvh.execute-api.us-east-1.amazonaws.com/')
     app.use('/dev',proxy({target:url,changeOrigin:true}))
