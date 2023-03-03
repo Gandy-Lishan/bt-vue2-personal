@@ -129,14 +129,14 @@ const config = {
 					enforce: true,
 					reuseExistingChunk: true,
 				},
-				'aws-sdk': {
-					name: 'aws-sdk',
-					test: /[\\/]node_modules[\\/](aws-sdk)[\\/]/,
-					priority: 2,
-					chunks: 'initial',
-					enforce: true,
-					reuseExistingChunk: true,
-				},
+				// 'aws-sdk': {
+				// 	name: 'aws-sdk',
+				// 	test: /[\\/]node_modules[\\/](aws-sdk)[\\/]/,
+				// 	priority: 2,
+				// 	chunks: 'initial',
+				// 	enforce: true,
+				// 	reuseExistingChunk: true,
+				// },
 			}
 		})
 
@@ -252,13 +252,13 @@ const config = {
 			vuex: 'Vuex',
 			'vue-router': 'VueRouter',
 		});
-		// if(process.env.ST_ENV === "prod"){
-		// 	config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
-		// 		{
-		// 			analyzerMode: 'static'
-		// 		}
-		// 	])
-		// }
+		if(process.env.ST_ENV === "prod"){
+			config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
+				{
+					analyzerMode: 'static'
+				}
+			])
+		}
 
 	},
 	devServer: {
