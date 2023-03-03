@@ -1,6 +1,8 @@
 const path = require('path')
 const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
 
 function resolve(dir) {
 	return path.join(__dirname, dir)
@@ -22,7 +24,7 @@ const config = {
 				}
 			]
 		},
-		plugins:[
+		plugins: [
 			// Skeleton screen
 			new SkeletonWebpackPlugin({
 				webpackConfig: {
@@ -40,18 +42,41 @@ const config = {
 					]
 				}
 			})
-        ]
+			,
+			// new UglifyJsPlugin({
+            //     uglifyOptions: {
+            //         compress:{
+            //             drop_console:true,
+			// 			dead_code:true,
+			// 			drop_debugger:true,
+            //         },
+			// 		warnings: false
+            //     },
+			// 	sourceMap: false,
+			// 	parallel: true	//多进程提高构建速度
+            // }),
+			// new CompressionPlugin({
+			// 	// 压缩成gzip
+			// 	algorithm: 'gzip',
+			// 	// 使用正则给匹配到的文件做压缩，这里是给html、css、js以及字体做压缩
+			// 	test: /\.js$|\.css$|\.html$|\.ttf$|\.eot$|\.woff$/, 
+			// 	// 只有大小大于该值的资源会被处理。单位是 bytes。默认值是 0。
+			// 	threshold: 10240,
+			// 	// 只有压缩率小于这个值的资源才会被处理。默认值是 0.8。
+			// 	minRatio: 0.8
+			// })
+		]
 	},
 	css: {
-        // Whether to use CSS separation plug-in extracttextplugin
-        extract: true,
-        // Open CSS source maps?
-        sourceMap: false,
-        // Enable CSS modules for all CSS / pre processor files
-        modules: false
-    },
+		// Whether to use CSS separation plug-in extracttextplugin
+		extract: true,
+		// Open CSS source maps?
+		sourceMap: false,
+		// Enable CSS modules for all CSS / pre processor files
+		modules: false
+	},
 	//chainWebpack 通过链式编程的形式，来修改默认的webpack配置
-	chainWebpack: (config) => {  
+	chainWebpack: (config) => {
 		config.resolve.alias
 			.set('assets', resolve('src/assets'))
 			.set('styles', resolve('src/assets/styles'))
@@ -71,6 +96,9 @@ const config = {
 			.tap((options) => {
 				return options
 			})
+		// 「尽量将第三方库拆为独立分包」
+		// 「保持按路由分包，减少首屏资源负载」
+		// 「尽量保持」 chunks = 'all'
 		//分包1
 		config.optimization.splitChunks({
 			cacheGroups:{
@@ -111,6 +139,7 @@ const config = {
 				},
 			}
 		})
+
 		//分包2
 		// config.optimization.splitChunks({
 		// 	chunks: 'all',
@@ -127,7 +156,8 @@ const config = {
 		// 		priority:10
 		// 	  },
 		// 	}
-		//   })
+		// })
+
 		//分包3
 		// config.optimization.splitChunks({
 		// 	chunks: 'all',
@@ -164,19 +194,71 @@ const config = {
 		// 	//   }
 		// 	}
 		// })
+
+		//分包4
+		// 先把大体积包拆分出来* 先大体积包 echarts 拆分出来；* 再把 node_modules 中体积大于 160000B 的依赖包拆出来（这里参考 next.js，将阈值设置为 160000B）；
+		// 再考虑将 node_modules 中的剩余项打成一个 chunk；
+		// 将被引用次数大于等于 3 次的公共模块拆分出来；
+		// config.optimization.splitChunks({
+		// 	chunks: 'all', 
+		// 	cacheGroups: {
+		// 		vendor: { 
+		// 			name: 'chunk-vendors', 
+		// 			test: /[\\/]node_modules[\\/]/, 
+		// 			priority: 10, chunks: 'initial' 
+		// 		}, 
+		// 		chartiq: { 
+		// 			name: 'chunk-chartiq', 
+		// 			priority: 20, 
+		// 			test: /[\\/]node_modules[\\/]_?chartiq|zrender(.*)/ 
+		// 		}, 
+		// 		'aws-sdk': { 
+		// 			name: 'chunk-aws-sdk', 
+		// 			priority: 20, 
+		// 			test: /[\\/]node_modules[\\/]_?aws-sdk|zrender(.*)/ 
+		// 		}, 
+		// 		'element-ui': { 
+		// 			name: 'chunk-element-ui', 
+		// 			priority: 20, 
+		// 			test: /[\\/]node_modules[\\/]_?element-ui|zrender(.*)/ 
+		// 		},
+		// 		commons: {
+		// 			name: 'chunk-commons', 
+		// 			minChunks: 3, 
+		// 			// minimum common number
+		// 			priority: 5,
+		// 			reuseExistingChunk: true
+		// 		},
+		// 		lib: {
+		// 			test(module) {
+		// 				return (module.size() > 160000 &&/node_modules[/\\]/.test(module.nameForCondition() || ''))
+		// 			},
+		// 			name(module) {
+		// 				const packageNameArr = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/);
+		// 				const packageName = packageNameArr ? packageNameArr[1] : '';
+		// 				// npm package names are URL-safe, but some servers don't like @ symbols
+		// 				return `chunk-lib.${packageName.replace("@", "")}`;
+		// 			},
+		// 			priority: 15,
+		// 			minChunks: 1,
+		// 			reuseExistingChunk: true,
+		// 		},
+		// 	}
+		// })	
+
 		//CDN代理挂载，打包忽略nodemoudle内的以下包
 		config.externals({
 			vue: 'Vue',
 			vuex: 'Vuex',
 			'vue-router': 'VueRouter',
 		});
-		if(process.env.ST_ENV === "prod"){
-			config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
-				{
-				  analyzerMode: 'static'
-				}
-			])
-		}
+		// if(process.env.ST_ENV === "prod"){
+		// 	config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
+		// 		{
+		// 			analyzerMode: 'static'
+		// 		}
+		// 	])
+		// }
 
 	},
 	devServer: {
