@@ -214,3 +214,16 @@ export function seeReport(id) {
 		})
 	})
 }
+
+export function uploadS3(S3DataStr) {
+    const url = '/dev/upload/'
+
+    return new Promise((resolve,reject)=>{
+		axios.post(url,S3DataStr,{withCredentials: true})
+		.then(res=>{
+			resolve(res)
+		}).catch(err=>{
+			reject(err)
+		})
+	})
+}
