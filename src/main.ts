@@ -6,9 +6,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import ElementUI, { Message } from 'element-ui'
+import ElementUI from 'element-ui'
 import qs from 'querystring'
-import 'element-ui/lib/theme-chalk/index.css'
+// import 'element-ui/lib/theme-chalk/index.css'
 import en from './tools/en.js'
 
 // import global css rule
@@ -22,6 +22,8 @@ import 'font-awesome/css/font-awesome.css';
 // progress bar
 import Nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
+import '@/plugins/element'
+
 
 import './assets/style/global.css'
 import axios from './axios'
@@ -42,7 +44,7 @@ Vue.use(ElementUI, { locale })
 Vue.prototype.$http = axios
 CIQ.axios = axios
 CIQ.nprogress = Nprogress
-Vue.prototype.$message = Message
+// Vue.prototype.$message = Message
 Vue.config.productionTip = false
 
 Vue.config.ignoredElements = [/^cq-.*$/, /^stx-.*$/]
