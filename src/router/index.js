@@ -12,7 +12,7 @@ import store from '../store/store'
 import https from 'https'
 
 import { getCookieData, setCookieData } from '@/tools/cookie'
-import { stringMap } from 'aws-sdk/clients/backup'
+// import { stringMap } from 'aws-sdk/clients/backup'
 Vue.use(Router)
 // Route lazy loading
 // Lazy loading is lazy loading of components. Usually vue pages will have a default page when entered after running, while other pages need to be loaded only after clicking.
@@ -22,10 +22,10 @@ const router = new Router({
 	mode: 'history',
 	routes: [
 		{ path: '/', redirect: '/home' },
-		// { path: '/home', component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve) },
-		// { path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
-		{ path: '/home', component: () => import(/* webpackChunkName: "Home" */ "@/components/BacktestEdge/Home.vue") },
-		{ path: '/doc', component: () => import(/* webpackChunkName: "Doc" */ "@/components/Menu/Doc.vue") }
+		{ path: '/home', component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve) },
+		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
+		// { path: '/home', component: () => import(/* webpackChunkName: "Home" */ "@/components/BacktestEdge/Home.vue") },
+		// { path: '/doc', component: () => import(/* webpackChunkName: "Doc" */ "@/components/Menu/Doc.vue") }
 	]
 })
 
