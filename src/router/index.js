@@ -12,7 +12,6 @@ import store from '../store/store'
 import https from 'https'
 
 import { getCookieData, setCookieData } from '@/tools/cookie'
-// import { stringMap } from 'aws-sdk/clients/backup'
 Vue.use(Router)
 // Route lazy loading
 // Lazy loading is lazy loading of components. Usually vue pages will have a default page when entered after running, while other pages need to be loaded only after clicking.
