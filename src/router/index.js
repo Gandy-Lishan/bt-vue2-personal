@@ -30,29 +30,9 @@ const router = new Router({
 })
 
 router.beforeEach(async (to, from, next) => {
-	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
-	const res = await getIndicatorsList()
-	let allSymbolsList = res.data
-	const resStocks = await getStocksList()
-	let stocksList = resStocks.data
-	let newAllSymbolsList = []
-	for(var i=0;i<allSymbolsList.length;i++){
-		let item = allSymbolsList[i]
-		if(stocksList.find((j)=>j.stock==item.url)){
-			let newName = item.url + ' Optix'
-			newAllSymbolsList.push({
-				chart_name: newName,
-				url: item.url,
-				updated: item.updated
-			})
-		}else{
-			newAllSymbolsList.push(allSymbolsList[i])
-		}
-	}
-	
+	await initiateIndicatorList()
+
 	CIQ.store = store
-	// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
-	CIQ.indicatorList = newAllSymbolsList
 
 	let loginUrl = 'https://users.sentimentrader.com/login'
 	let formateHost = location.origin
@@ -78,6 +58,30 @@ router.beforeEach(async (to, from, next) => {
 	next()
 })
 
+async function initiateIndicatorList(){
+	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
+	const res = await getIndicatorsList()
+	let allSymbolsList = res.data
+	const resStocks = await getStocksList()
+	let stocksList = resStocks.data
+
+	let newAllSymbolsList = []
+	for(var i=0;i<allSymbolsList.length;i++){
+		let item = allSymbolsList[i]
+		if(stocksList.find((j)=>j.stock==item.url)){
+			let newName = item.url + ' Optix'
+			newAllSymbolsList.push({
+				chart_name: newName,
+				url: item.url,
+				updated: item.updated
+			})
+		}else{
+			newAllSymbolsList.push(allSymbolsList[i])
+		}
+	}
+	// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
+	CIQ.indicatorList = newAllSymbolsList
+}
 
 async function postAxiosRequest(loginUrl, next) {
 	// Status code, used to determine whether the work is complete. The value is true for success and false for failure

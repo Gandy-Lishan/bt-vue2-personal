@@ -6,6 +6,7 @@ const proxy = require("http-proxy-middleware").createProxyMiddleware;
 var serveStatic = require('serve-static')
 var history = require('connect-history-api-fallback');
 
+var dataPath = './src/assets/'
 // const proxy = require("express-http-proxy")
 
 function get_env(name,value){
@@ -22,6 +23,20 @@ app.use(compression()); // 要放在所有其他中间件注册之前
 
 // 支持history路由
 app.use(history());
+
+
+app.get('/api/indicatorsList', (req, res) => {
+    fs.readFile( dataPath+'indicatorsList.json', 'utf8', function (err, data) {
+        res.send(data);
+        res.end( data );
+    });
+ });
+app.get('/api/stocksList', (req, res) => {
+    fs.readFile( dataPath+'stocksList.json', 'utf8', function (err, data) {
+        res.send(data);
+        res.end( data );
+    });
+});
 
 // 寻找静态文件夹
 //app.use(serveStatic(path.join(__dirname, 'dist')))    //自带gzip

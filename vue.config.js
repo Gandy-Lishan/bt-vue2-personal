@@ -252,13 +252,13 @@ const config = {
 			vuex: 'Vuex',
 			'vue-router': 'VueRouter',
 		});
-		if(process.env.ST_ENV === "prod"){
-			config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
-				{
-					analyzerMode: 'static'
-				}
-			])
-		}
+		// if(process.env.ST_ENV === "prod"){
+		// 	config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
+		// 		{
+		// 			analyzerMode: 'static'
+		// 		}
+		// 	])
+		// }
 
 	},
 	devServer: {
