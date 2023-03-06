@@ -16,9 +16,7 @@
     "node": "16.18.1"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.72.0",
     "@open-wc/webpack-import-meta-loader": "^0.4.7",
-    "aws-sdk": "^2.1131.0",
     "axios": "^0.21.1",
     "chartiq": "file:chartiq-8.3.0.tgz",
     "compression": "^1.7.4",
@@ -42,6 +40,7 @@
     "screenfull": "^4.2.0",
     "set-promise-interval": "^1.0.8",
     "standard": "^16.0.3",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "vue": "^2.6.14",
     "vue-class-component": "^7.2.6",
     "vue-cookie": "^1.1.4",
@@ -64,6 +63,7 @@
     "babel-loader": "^7.1.5",
     "babel-plugin-component": "^1.1.1",
     "babel-plugin-transform-remove-console": "^6.9.4",
+    "compression-webpack-plugin": "^5.0.0",
     "html-webpack-plugin": "^4.5.2",
     "less": "^4.1.1",
     "less-loader": "^7.3.0",
