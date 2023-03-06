@@ -913,7 +913,7 @@ export default {
 									//var data = await s3_tool.upload({key:str + '/' + str + '_backtest_params.json',val:backtestParams})
 									var S3DataStr = vm.$qs.stringify({file_name:str + '/' + str + '_backtest_params.json',file_data:backtestParams})
                 					var data = await uploadS3(S3DataStr)
-									console.log("Upload json Success",data);
+
 									try {
 										let res = await runBacktest(backtestDataStr)
 										if (res.status === 201) {
