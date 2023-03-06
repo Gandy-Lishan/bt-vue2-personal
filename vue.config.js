@@ -285,6 +285,16 @@ const config = {
 					'^/dev': '/dev'
 				}
 			},
+			'/api': {
+				//target: "https://ggfdkkraph.execute-api.us-east-1.amazonaws.com/",
+				//target: "http://10.131.9.169:8000",
+				target: "http://localhost:5001",
+				// ws:true,
+				changeOrigin: true,
+				pathRewrite: {
+					'^/api': '/api'
+				}
+			},
 		}
 	}
 }

@@ -780,24 +780,24 @@ export default {
 			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
 		},
 		async getIndicatorsList() {
-try {
-	const vm = this
-			var indicatorList = []
-			if (CIQ.indicatorList) {
-				if (CIQ.indicatorList.length != 0) {
-					indicatorList = this.$store.state.indicatorsList
-					indicatorList = CIQ.indicatorList
-				}
-			} else {
-				const res = await getIndicatorsList()
-				indicatorList = res.data
+			try {
+				const vm = this
+						var indicatorList = []
+						if (CIQ.indicatorList) {
+							if (CIQ.indicatorList.length != 0) {
+								indicatorList = this.$store.state.indicatorsList
+								indicatorList = CIQ.indicatorList
+							}
+						} else {
+							const res = await getIndicatorsList()
+							indicatorList = res.data
+						}
+						this.$store.commit('getIndicatorsList', indicatorList)
+						CIQ.indicatorList = indicatorList
+				
+			} catch (error) {
+				console.error('indicator list request error',error)
 			}
-			this.$store.commit('getIndicatorsList', indicatorList)
-			CIQ.indicatorList = indicatorList
-	
-} catch (error) {
-	console.error('indicator list request error',error)
-}
 		},
 		backtestNameCheck() {
 			return getBacktestName(this.bd.name).then((res) => {

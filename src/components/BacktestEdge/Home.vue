@@ -271,7 +271,7 @@ import performance from '@/components/BacktestEdge/Performance.vue'
 import history from '@/components/BacktestEdge/History.vue'
 import favorite from '@/components/BacktestEdge/Favorite.vue'
 import sample from '@/components/BacktestEdge/Sample.vue'
-import { runBacktest, seeParams, getBacktestName } from '@/service/service'
+import { runBacktest, seeParams, getBacktestName,uploadS3 } from '@/service/service'
 import searchKeys from '@/tools/searchKeys.js'
 import UUID from '@/tools/uuid.js'
 // import s3_tool from '@/tools/s3-upload.js'
@@ -911,7 +911,9 @@ export default {
 								// He upload JSON
 								try{
 									//var data = await s3_tool.upload({key:str + '/' + str + '_backtest_params.json',val:backtestParams})
-									console.log("Upload json Success", data.key);
+									var S3DataStr = vm.$qs.stringify({file_name:str + '/' + str + '_backtest_params.json',file_data:backtestParams})
+                					var data = await uploadS3(S3DataStr)
+
 									try {
 										let res = await runBacktest(backtestDataStr)
 										if (res.status === 201) {
