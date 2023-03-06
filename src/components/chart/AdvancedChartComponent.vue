@@ -91,7 +91,7 @@
 						</cq-menu-dropdown>
 					</cq-menu>
 
-					<cq-menu class="ciq-menu ciq-studies collapse" cq-focus="input">
+					<cq-menu class="ciq-menu ciq-studies collapse" cq-focus="input" @click="collapseStudies">
 						<span>Studies</span>
 						<cq-menu-dropdown>
 							<cq-study-legend cq-no-close>
@@ -130,7 +130,7 @@
 							</div>
 							<cq-heading cq-filter cq-filter-min="15">Studies</cq-heading>
 							<cq-scroll cq-no-maximize>
-								<cq-studies></cq-studies>
+								<cq-studies v-if="isCollapse==true"></cq-studies>
 							</cq-scroll>
 						</cq-menu-dropdown>
 					</cq-menu>
@@ -317,8 +317,12 @@ export default class AdvancedChartComponent extends Vue {
 	@Ref('container') container!: HTMLElement
 
 	stx: CIQ.ChartEngine | undefined
+	isCollapse: boolean | undefined
 	
-	
+	constructor() {
+		super()
+		this.isCollapse = false 
+	}
 	mounted() {
 		const config = this.config || getCustomConfig()
 		
@@ -423,7 +427,9 @@ export default class AdvancedChartComponent extends Vue {
 		}
 	}
 
-	
+	collapseStudies() {
+		this.isCollapse = true
+	}
 
 	createChartAndUI(config: any) {
 		const container = this.container
