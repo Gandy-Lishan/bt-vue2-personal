@@ -129,14 +129,6 @@ const config = {
 					enforce: true,
 					reuseExistingChunk: true,
 				},
-				// 'aws-sdk': {
-				// 	name: 'aws-sdk',
-				// 	test: /[\\/]node_modules[\\/](aws-sdk)[\\/]/,
-				// 	priority: 2,
-				// 	chunks: 'initial',
-				// 	enforce: true,
-				// 	reuseExistingChunk: true,
-				// },
 			}
 		})
 
