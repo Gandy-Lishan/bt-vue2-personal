@@ -4,14 +4,13 @@
  */
 import Vue from 'vue'
 import Router from 'vue-router'
-import cookies from 'vue-cookies'
+import Cookies from 'vue-cookies'
 import axios from '../axios'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { getIndicatorsList, getStocksList } from "@/service/service"
+import getQueryVariable from '@/tools/getQueryVariable'
 import store from '../store/store'
-import https from 'https'
 
-import { getCookieData, setCookieData } from '@/tools/cookie'
 Vue.use(Router)
 // Route lazy loading
 // Lazy loading is lazy loading of components. Usually vue pages will have a default page when entered after running, while other pages need to be loaded only after clicking.
@@ -30,30 +29,53 @@ const router = new Router({
 
 router.beforeEach(async (to, from, next) => {
 	await initiateIndicatorList()
-
 	CIQ.store = store
 
-	let loginUrl = 'https://users.sentimentrader.com/login'
-	let formateHost = location.origin
-	//website for testing https://users.sentdevsite.com/login
-	// https://backtest.sentimentrader.com/user?userID=668696
-	// 1. get the userid from url
-	// 2. call axios get method to '/dev/user/?userid=668696'
-	let userId
-	let url = location.search
-	userId = subURLstrToUserid(url, loginUrl, formateHost)
-	
-	let tmpStatus = postAxiosRequest(loginUrl, next)
-	if (!tmpStatus){
-		// handle error response
-		tmpStatus = getAxiosRequest(userId, loginUrl, next)
-		if (!tmpStatus){
-			alert("request failed")
-			window.location.href = loginUrl
-		}
+	let loginUrl = 'https://sentimentrader.com/login'
+	//  开发环境无法判断环境变量
+	// if(process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined) loginUrl = 'https://sentdevsite.com/login'
+	// 先判断有无 sentimen_session
+	if(Cookies.isKey('sentimen_session')) {
+		// 删除 devbt2Userid
+		Cookies.remove('devbt2Userid')
+	}else{
+		// 判断 url 有无 userid
+		if(getQueryVariable('userid')) Cookies.set('devbt2Userid', getQueryVariable('userid'))
 	}
-	// cookies.set('userid','test')
-	next()
+	// 当有 sentimen_session 或 devbt2Userid 时才能发请求
+	if(Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
+			//set 10 sec as default,However, some time-consuming requests are processed separately
+			axios.post('/dev/user/',null,{timeout:10000, withCredentials: true})
+			.then((res) => {
+				if(res.status == 200) {
+					if(getQueryVariable('userid')) window.location.href = location.origin // 去掉？后面的部分
+					next()
+				}else {throw Error('Status code error')}
+			})
+			.catch((error) => {
+				console.error(error)
+				switch(error?.response?.status){
+					case 401:
+						alert('No permission, please log in again3')
+					break;
+					case 403:
+						alert('Authentication expired, please log in again')
+					break;
+					case 404:
+						alert('User does not exist, please log in again')
+					break;
+					case 500:
+						alert('Internal Server Error, please log in again')
+					break;
+					default:
+						alert('Unknown error')
+				}
+				window.location.href = loginUrl
+			})
+	}else{
+		alert('No permission, please log in again')
+		window.location.href = loginUrl
+	}
 })
 
 async function initiateIndicatorList(){
@@ -81,123 +103,5 @@ async function initiateIndicatorList(){
 	CIQ.indicatorList = newAllSymbolsList
 }
 
-async function postAxiosRequest(loginUrl, next) {
-	// Status code, used to determine whether the work is complete. The value is true for success and false for failure
-	let status = true
-
-	try{
-		const data = getCookieData()
-		let userId = data.account_code
-	}catch(err){
-		status = false
-	}
-	//set 10 sec as default,However, some time-consuming requests are processed separately
-	let res = await axios.post('/dev/user/',null,{timeout:10000, withCredentials: true})
-	
-	if (res.status === 200) {
-		next()
-		status = true
-	}
-	else if (res.status === 401) {
-		//not authorized 
-		status = false
-		alert('No permission, please log in again')
-		window.location.href = loginUrl
-
-	}
-	else if (res.status === 403) {
-		//timeout
-		status = false
-		alert('Authentication expired, please log in again')
-		window.location.href = loginUrl
-	}
-	else if (res.status === 404) {
-		// user does not exist
-		status = false
-		alert('User does not exist, please log in again')
-		window.location.href = loginUrl
-	}
-	else if (res.status === 500) {
-		// server error
-		status = false
-		alert('Internal Server Error, please log in again')
-		window.location.href = loginUrl
-	}
-	else {
-		status = false
-		console.log(res);
-	}
-	return status
-}
-
-async function getAxiosRequest(userId, loginUrl, next) {
-	try {
-			// Status code, used to determine whether the work is complete. The value is true for success and false for failure
-	let status = true
-	let res = await axios.get('/dev/user/?userid=' + userId, {withCredentials: true})
-	if (res.status === 200) {
-		status = true
-		next()
-	}
-	else if (res.status === 401) {
-		//not authorized 
-		status = false
-		alert('No permission, please log in again')
-		window.location.href = loginUrl
-	}
-	else if (res.status === 403) {
-		//timeout
-		status = false
-		alert('Authentication expired, please log in again')
-		window.location.href = loginUrl
-	}
-	else if (res.status === 404) {
-		// user does not exist
-		status = false
-		alert('User does not exist, please log in again')
-		window.location.href = loginUrl
-	}
-	else if (res.status === 500) {
-		// server error
-		status = false
-		alert('Internal Server Error, please log in again')
-		window.location.href = loginUrl
-	}
-	else {
-		status = false
-		console.log(res);
-
-	}
-	return status
-		
-	} catch (error) {
-		// server error
-		status = false
-		alert('Internal Server Error, please log in again')
-		window.location.href = loginUrl
-	}
-
-}
-
-function subURLstrToUserid(url, loginUrl ,formateHost) {
-	let userId;
-	if (url.indexOf("?") !== -1) {
-		let paramsStr = url.substr(1)
-		let paramsArr = paramsStr.split('=')
-		userId = paramsArr[1]
-		// cookies.set('userid',userId)
-		cookies.set('devbt2Userid', userId)
-		window.location.href = formateHost
-	} else {
-		// userId = cookies.get('userid')
-		userId = cookies.get('devbt2Userid')
-		if (!userId) {
-			alert('Login failed, please log in again')
-			window.location.href = loginUrl
-			return
-		}
-	}
-	return userId
-}
 
 export default router
