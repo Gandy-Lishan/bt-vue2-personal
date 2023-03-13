@@ -6,12 +6,12 @@
 				<p class="criteria-title">Exit Criteria</p>
 				<el-tooltip effect="dark" placement="top" style="diaplay: inline">
 					<span slot="content"
-						>Set the signal/signals which trigger the backtest exit criteria.<br />
+						>Set the criteria/criterias which trigger the backtest exit criteria.<br />
 						Choose one of the three options for exit criteria:<br />
-						1. Single Signal: One signal will trigger the backtest criteria.<br />
-						2. SameBar Multi-Signal: More than one signals (limit to 5)
+						1. Single Criteria: One criteria will trigger the backtest criteria.<br />
+						2. SameBar Multi-Criteria: More than one criterias (limit to 5)
 						occurring at the same bar,will trigger the backtest criteria.<br />
-						3. TimeOrder Multi-Signal: More than one signals (limit to 3)
+						3. TimeOrder Multi-Criteria: More than one criterias (limit to 3)
 						occurring within a number of bars,will trigger the backtest
 						criteria.<br />
 						4. Only Use Risk Control: If the 'Risk Control at Exit' is set, this
@@ -25,18 +25,18 @@
 					<span>Score: </span>
 					<el-tooltip effect="dark" placement="top" style="diaplay: inline">
 						<span slot="content"
-							>Choose a value to specify how many following signals will occur
+							>Choose a value to specify how many following criterias will occur
 							at the same bar to trigger the backtest criteria.<br />
-							if choose score 1, meanning if any one signal of the following
-							signals occur the backtest criteria is met.<br />
-							if choose score 2, meanning if any two of the signals of the
-							following signals occur the backtest criteria is met.<br />
+							if choose score 1, meanning if any one criteria of the following
+							criterias occur the backtest criteria is met.<br />
+							if choose score 2, meanning if any two of the criterias of the
+							following criterias occur the backtest criteria is met.<br />
 							etc.<br />
 							For example:<br />
 							If the backtest criteria needs to have a "AND" condition of 2
-							signals, set two signals below and choose score 2.<br />
+							criterias, set two criterias below and choose score 2.<br />
 							If the backtest criteria needs to have a "OR" condition of 2
-							signals, set two signals below and choose score 1.<br />
+							criterias, set two criterias below and choose score 1.<br />
 							etc.<br />
 						</span>
 						<i class="iconfont icon-wenhao"></i> </el-tooltip
@@ -55,18 +55,18 @@
 					<el-tooltip effect="dark" placement="top" style="diaplay: inline">
 						<span slot="content"
 							>Choose a value to specify how many bars within which the
-							following signals will occur in time order to trigger the backtest
+							following criterias will occur in time order to trigger the backtest
 							criteria.<br />
-							if choose period 1, meanning if the following signals occur at the
+							if choose period 1, meanning if the following criterias occur at the
 							same bar the backtest criteria is met.<br />
-							if choose period 2, meanning if the following signals occur within
+							if choose period 2, meanning if the following criterias occur within
 							two bars the backtest criteria is met.<br />
 							etc.<br />
 							For example:<br />
-							If the backtest criteria needs to have two consecutive signals,
-							set two signals below and choose period 2.<br />
-							If the backtest criteria needs to have two signals occur within 3
-							bars, set two signals below and choose period 3.<br />
+							If the backtest criteria needs to have two consecutive criterias,
+							set two criterias below and choose period 2.<br />
+							If the backtest criteria needs to have two criterias occur within 3
+							bars, set two criterias below and choose period 3.<br />
 							etc.<br />
 						</span>
 						<i class="iconfont icon-wenhao"></i> </el-tooltip
@@ -81,7 +81,7 @@
 				></el-input-number>
 				<el-select
 					v-model="relation"
-					placeholder="Please select signal"
+					placeholder="Please select criteria"
 					@change="changeRelation"
 				>
 					<el-option
@@ -432,24 +432,24 @@ export default {
 			signalOptions: [
 				{
 					value: 1,
-					label: 'Single-Signal'
+					label: 'Single-Criteria'
 				},
 				{
 					value: 2,
-					label: 'SameBar Multi-Signal'
+					label: 'SameBar Multi-Criteria'
 				},
 				{
 					value: 3,
-					label: 'TimeOrder Multi-Signal'
+					label: 'TimeOrder Multi-Criteria'
 				}
 			],
 			relation: 1,
 			editableTabsValue: '1',
 			editableTabs: [
 				{
-					title: 'Signal 1',
+					title: 'Criteria 1',
 					name: '1',
-					content: 'Signal 1 content'
+					content: 'Criteria 1 content'
 				}
 			],
 			tabIndex: 1,
@@ -511,7 +511,7 @@ export default {
 				}
 				this.$emit('isOnlyRiskControl', this.exitItemCheck)
 			if(newVal == 3 && this.editableTabs.length > 3) {
-  this.$confirm('TimeOrder Multi-Signal supports up to three signals,Currently your multi-signal count is '+ this.editableTabs.length + ', are you sure you want to delete the last '+(this.editableTabs.length - 3) + 'th panels ?', 'Tips', {
+  this.$confirm('TimeOrder Multi-Criteria supports up to three criterias,Currently your multi-criteria count is '+ this.editableTabs.length + ', are you sure you want to delete the last '+(this.editableTabs.length - 3) + 'th panels ?', 'Tips', {
           confirmButtonText: 'Confirm',
           cancelButtonText: 'Cancel',
           type: 'warning'
@@ -523,7 +523,7 @@ export default {
           this.$message({
             type: 'success',
             offset: 300,
-			message: 'The deletion is successful and has been automatically switched to TimeOrder Multi-Signal'
+			message: 'The deletion is successful and has been automatically switched to TimeOrder Multi-Criteria'
           });
 		  this.relation = newVal
         }).catch(() => {
@@ -531,7 +531,7 @@ export default {
           this.$message({
             type: 'info',
 			offset: 300,
-            message: 'With the deletion undeleted, you can switch to The SaveBar Multi-Signal to delete the signal panel to less than 3'
+            message: 'With the deletion undeleted, you can switch to The SaveBar Multi-Criteria to delete the criteria panel to less than 3'
           });          
         });
       }
@@ -577,15 +577,15 @@ export default {
 				this.signalOptions = [
 					{
 						value: 1,
-						label: 'Single-Signal'
+						label: 'Single-Criteria'
 					},
 					{
 						value: 2,
-						label: 'SameBar Multi-Signal'
+						label: 'SameBar Multi-Criteria'
 					},
 					{
 						value: 3,
-						label: 'TimeOrder Multi-Signal'
+						label: 'TimeOrder Multi-Criteria'
 					},
 					{
 						value: 0,
@@ -596,15 +596,15 @@ export default {
 				this.signalOptions = [
 					{
 						value: 1,
-						label: 'Single-Signal'
+						label: 'Single-Criteria'
 					},
 					{
 						value: 2,
-						label: 'SameBar Multi-Signal'
+						label: 'SameBar Multi-Criteria'
 					},
 					{
 						value: 3,
-						label: 'TimeOrder Multi-Signal'
+						label: 'TimeOrder Multi-Criteria'
 					}
 				]
 				this.exitItemCheck = false
@@ -626,16 +626,16 @@ export default {
 					let num = this.editableTabs.length
 					let newTabName = num + 1 + ''
 					this.editableTabs.push({
-						title: 'Signal' + newTabName,
+						title: 'Criteria' + newTabName,
 						name: num_key + '',
-						content: 'Signal' + newTabName + 'content'
+						content: 'Criteria' + newTabName + 'content'
 					})
 					this.editableTabsValue = Number(this.editableTabsValue) + 1 + ''
 					this.indicatorRadioArr.push('sentiment')
 				}
 				if (this.editableTabs.length > 5 && this.relation == 2) {
 					this.$message({
-						message: 'Add up to five signals',
+						message: 'Add up to five criterias',
 						type: 'error',
 						offset: 300
 					})
@@ -646,7 +646,7 @@ export default {
 				}
 				if (this.relation == 3 && this.editableTabs.length > 3) {
 					this.$message({
-						message: 'Add up to three signals',
+						message: 'Add up to three criterias',
 						type: 'error',
 						offset: 300
 					})
@@ -667,10 +667,10 @@ export default {
 					(this.relation == 2 || this.relation == 3) &&
 					this.editableTabs.length == 2
 				) {
-					// At least two signals
+					// At least two criterias
 					this.$message({
 						message:
-							'Multiple signals are currently selected, at least two signals',
+							'Multiple criterias are currently selected, at least two criterias',
 						type: 'error',
 						offset: 300
 					})
@@ -697,7 +697,7 @@ export default {
 				let panelArr = tabs.filter((tab) => tab.name !== targetName)
 				this.editableTabs = panelArr
 				panelArr.forEach((item, index) => {
-					item.title = 'Signal' + (index + 1)
+					item.title = 'Criteria' + (index + 1)
 				})
 				this.editableTabsValue = activeName
 				this.indicatorValArr.splice(absoluteIndex, 1)
@@ -1163,15 +1163,15 @@ export default {
 			this.signalOptions = [
 				{
 					value: 1,
-					label: 'Single-Signal'
+					label: 'Single-Criteria'
 				},
 				{
 					value: 2,
-					label: 'SameBar Multi-Signal'
+					label: 'SameBar Multi-Criteria'
 				},
 				{
 					value: 3,
-					label: 'TimeOrder Multi-Signal'
+					label: 'TimeOrder Multi-Criteria'
 				},
 				{
 					value: 0,
