@@ -649,7 +649,7 @@ Open the Backtest History tab, choose which backtest you want to edit, and click
 			</el-aside>
 			<div class="footer">
 				<p>
-					Copyright © 2001 - 2022 Sundial Capital Research, Inc. All rights
+					Copyright © 2001 - 2023 Sundial Capital Research, Inc. All rights
 					reserved.
 				</p>
 			</div>
