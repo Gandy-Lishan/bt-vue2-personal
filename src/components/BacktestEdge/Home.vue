@@ -216,7 +216,7 @@
 			</el-tooltip>
 			<div class="footer">
 				<p>
-					Copyright © 2001 - 2022 Sundial Capital Research, Inc. All rights
+					Copyright © 2001 - 2023 Sundial Capital Research, Inc. All rights
 					reserved.
 				</p>
 				<ul class="Footer_social___a7sK">
