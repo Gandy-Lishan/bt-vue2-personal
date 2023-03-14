@@ -56,16 +56,17 @@ router.beforeEach(async (to, from, next) => {
 				console.error(error)
 				switch(error?.response?.status){
 					case 401:
-						alert('No permission, please log in again3')
+						alert('No permission')
 					break;
 					case 403:
-						alert('Authentication expired, please log in again')
+						alert('Authentication expired')
 					break;
 					case 404:
-						alert('User does not exist, please log in again')
+						alert('User does not exist')
 					break;
 					case 500:
-						alert('Internal Server Error, please log in again')
+						alert('Internal Server Error')
+
 					break;
 					default:
 						alert('Unknown error')
@@ -73,7 +74,8 @@ router.beforeEach(async (to, from, next) => {
 				window.location.href = loginUrl
 			})
 	}else{
-		alert('No permission, please log in again')
+		alert('No permission')
+
 		window.location.href = loginUrl
 	}
 })
