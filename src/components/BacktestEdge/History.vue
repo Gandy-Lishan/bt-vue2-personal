@@ -132,6 +132,21 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
+									content="copy backtestID"
+									placement="bottom-start"
+								>
+									<el-button
+										plain
+										icon="el-icon-link"
+										circle
+										size="mini"
+										type="success"
+										v-copy="scope.row.id"
+									></el-button>
+								</el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="dark"
 									content="add to favorites"
 									v-if="scope.row.favorites == false"
 									placement="bottom-start"
@@ -266,6 +281,8 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { Store } from 'vuex'
 import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
+import {copy,permission} from "@/tools/copyBacktestID";
+import Cookies from 'vue-cookies'
 const throttle = require('lodash/throttle')
 import {
 	copyBacktest,
@@ -296,9 +313,14 @@ export default {
 				page: 1,
 				total: 0
 			},
-			loadTest: 'Loading...'
+			loadTest: 'Loading...',
+			permission: Cookies.get('devbt2Userid')
 		}
 	},
+	directives: {
+    copy,
+		permission
+  },
 	created() {
 		this.getHistoryList()
 	},
