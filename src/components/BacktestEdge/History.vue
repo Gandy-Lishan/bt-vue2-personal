@@ -132,7 +132,7 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
-									content="copy backtestID"
+									content="copy backtest link"
 									placement="bottom-start"
 								>
 									<el-button
