@@ -381,13 +381,46 @@
 				</el-pagination>
 					</div>
 				<!-- <el-pagination
-  background
-  layout="prev, pager, next"
-  :total="queryInfo.total"
-  >
-</el-pagination> -->
+				background
+				layout="prev, pager, next"
+				:total="queryInfo.total"
+				>
+				</el-pagination> -->
 				</div>
 			</el-tab-pane>
+			<el-tab-pane label="History" name="third">
+				<div class="trades-container">
+					<div class="history-container">
+						<el-skeleton :rows="6" :loading="loading" animated>
+							<template>
+								<el-table
+									:data="backtestHistoryList"
+									stripe
+									show-summary
+									:summary-method="getSummaries"
+									style="width: 100%; height: 100%"
+								>
+									<div v-if="defaultTableLabels.length > 0">
+										<template v-for="(l, index) in defaultTableLabels">
+											<el-table-column
+												:label="l"
+												:prop="l"
+												:key="index"
+											>
+												<template slot-scope="scope">
+													<p class="tableText">
+														{{ scope.row[l] }}
+													</p>
+												</template>
+											</el-table-column>
+										</template>
+									</div>
+								</el-table>
+							</template>
+						</el-skeleton>
+					</div>
+				</div>
+			</el-tab-pane>			
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
 			
 		</el-tabs>
@@ -414,7 +447,18 @@ export default {
 				page: 1
 			},
 			totalTradesNumber: 0,
-			splitTradeData: []
+			splitTradeData: [],
+			defaultTableLabels: [
+				'12 Months [%]',
+				'Entry Date',
+				'1 Week [%]',
+				'2 Weeks [%]',
+				'1 Month [%]',
+				'2 Months [%]',
+				'3 Months [%]',
+				'8 Months [%]',	
+			],
+			backtestHistoryList: []
 		}
 	},
 	created() {
@@ -519,6 +563,9 @@ export default {
 							vm.totalTradesNumber = (initalData['Trades'].length)/2
 							vm.handleCurrentChange(1)
 							vm.tradesData = initalData['Trades']
+							
+							// 根据entrydate计算未来收益
+							this.backtestHistoryList = this.calculateBacktestHistory(vm.tradesData)	
 							// ---------------------------------------- end ----------------------------------
 							// ----------------------- backtest result-------------------------------
 
@@ -543,36 +590,117 @@ export default {
 				if(callback){callback()}
 			}, 0)
 		},
+		calculateBacktestHistory(dataSet){
+			let chartDataset = CIQ.stxx.chart.dataSet
+			const direction = dataSet[0].TradeStatus=='BUY'?'Short':'Long'
+			dataSet = dataSet.filter(item=>item.TradeStatus=='BUY')
+			console.log('ohlcv: ',chartDataset)	
+			let backtestResult = []
+			for (var data in dataSet) {
+				var datatime = new Date(dataSet[data].Date)
+				
+				var offset = datatime.getTimezoneOffset() * 60 * 1000
+				var entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
+				
+				let res = chartDataset.findIndex(x=>{
+					return entryDate.getTime()==x.DT.getTime()
+				})
+				
+				if(res!=-1){
+					//拿进场价格和前一天作比较
+					let entryPrice = chartDataset[res].Open
+					let exitIn5Bar = chartDataset[res+5]?((direction=='Short'?entryPrice-chartDataset[res+5].Open:chartDataset[res+5].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
+					let exitIn10Bar = chartDataset[res+10]?((direction=='Short'?entryPrice-chartDataset[res+10].Open:chartDataset[res+10].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
+					let exitIn21Bar = chartDataset[res+21]?((direction=='Short'?entryPrice-chartDataset[res+21].Open:chartDataset[res+21].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
+					let exitIn42Bar = chartDataset[res+42]?((direction=='Short'?entryPrice-chartDataset[res+42].Open:chartDataset[res+42].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
+					let exitIn64Bar = chartDataset[res+64]?((direction=='Short'?entryPrice-chartDataset[res+64].Open:chartDataset[res+64].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
+					let exitIn170Bar = chartDataset[res+170]?((direction=='Short'?entryPrice-chartDataset[res+170].Open:chartDataset[res+170].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
+					let exitIn260Bar = chartDataset[res+260]?((direction=='Short'?entryPrice-chartDataset[res+260].Open:chartDataset[res+260].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
+					backtestResult.push({
+						'12 Months [%]': exitIn260Bar,
+						'Entry Date': dataSet[data].Date,
+						'1 Week [%]': exitIn5Bar,
+						'2 Weeks [%]': exitIn10Bar,
+						'1 Month [%]': exitIn21Bar,
+						'2 Months [%]': exitIn42Bar,
+						'3 Months [%]': exitIn64Bar,
+						'8 Months [%]': exitIn170Bar,
+					})
+				}
+			}
+			return backtestResult
+		},
+		getSummaries(param) {
+			const { columns, data } = param
+
+			const sums = [] //声明变量
+			columns.forEach((column, index) => {
+				if (index === 0) {
+					sums[index] = 'Average'
+					return
+				}
+				// if (index === 1) {
+				// 	return
+				// }
+				const values = data.map((item) => {
+					return Number(
+						item[column.property].slice(0, item[column.property].length - 1)
+					)
+				})
+				let totalCount = 0 // 求平均数使用
+				sums[index] = values.reduce((prev, curr) => {
+					const value = Number(curr)
+					if (!isNaN(value) && value != 0) {
+						totalCount++
+						return prev + curr
+					} else {
+						return prev
+					}
+				}, 0)
+
+				sums[index] = sums[index] / totalCount
+
+				// ***********演示完要删**************************************
+				// if(this.rowData && this.rowData.Symbol=='WWW' && sums[index]<0){
+				//   sums[index] = -sums[index]
+				// }
+				// *****************************************************
+
+				sums[index] = sums[index].toFixed(2)
+				sums[index] = sums[index] + ' %'
+			})
+			return sums
+		},
 		loadMarker(markerSet) {
 			try {
 				
-			//load markers for initial quotefeed
-				
-			let list = this.filterMarkerDate(
-				new Date(CIQ.initialDate.start),
-				new Date(CIQ.initialDate.end),
-				markerSet
-			)
-			CIQ.isMarkerShown = true
+				//load markers for initial quotefeed
+					
+				let list = this.filterMarkerDate(
+					new Date(CIQ.initialDate.start),
+					new Date(CIQ.initialDate.end),
+					markerSet
+				)
+				CIQ.isMarkerShown = true
 
-			// split the markers into several groups
-			CIQ.groups = this.group(list)
-			let markers = CIQ.groups.pop()
+				// split the markers into several groups
+				CIQ.groups = this.group(list)
+				let markers = CIQ.groups.pop()
 
-			// if the last groups has no enough number of items, merge it with the last one
-			console.log('CIQ.stxx.chart.xaxis[0]',CIQ.stxx.chart.xaxis[0])
-			let c_date = jutils.formatDate(CIQ.stxx.chart.xaxis[0].DT, 'YYYYMMDD');
-			if(CIQ.groups.slice(-1)[0]){
-				let m_date =
-						CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
-						CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
-						CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
-				if(c_date<m_date){
-					markers.unshift(...CIQ.groups.pop()) 
+				// if the last groups has no enough number of items, merge it with the last one
+				//console.log('CIQ.stxx.chart.xaxis[0]',CIQ.stxx.chart.xaxis[0])
+				let c_date = jutils.formatDate(CIQ.stxx.chart.xaxis[0].DT, 'YYYYMMDD');
+				if(CIQ.groups.slice(-1)[0]){
+					let m_date =
+							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
+							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
+							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
+					if(c_date<m_date){
+						markers.unshift(...CIQ.groups.pop()) 
+					}
 				}
-			}
-			console.log('initiating Markers...',markers)
-			CIQ.loadChart(markers, CIQ.addMarker)
+				console.log('initiating Markers...',markers)
+				CIQ.loadChart(markers, CIQ.addMarker)
 			} catch (error) {
 				console.error(error)
 				return
