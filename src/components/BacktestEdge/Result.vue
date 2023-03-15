@@ -146,7 +146,8 @@ export default {
 		backtestEditData: {
 			handler(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
-					this.temp.commission = (newVal.commission * 100).toFixed(2)
+					const commission = Number(newVal.commission)
+					this.temp.commission = commission.toFixed(2)
 				}
 			},
 			immediate: true,
