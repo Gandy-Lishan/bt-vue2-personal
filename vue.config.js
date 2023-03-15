@@ -4,6 +4,15 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 
+const Timestamp = new Date()
+const utcTimestamp = Date.UTC(
+	Timestamp.getUTCFullYear(),
+	Timestamp.getUTCMonth(),
+	Timestamp.getUTCDate(),
+	Timestamp.getUTCHours(),
+	Timestamp.getUTCMinutes(),
+	Timestamp.getUTCSeconds()
+  );
 function resolve(dir) {
 	return path.join(__dirname, dir)
 }
@@ -65,11 +74,18 @@ const config = {
 			// 	// 只有压缩率小于这个值的资源才会被处理。默认值是 0.8。
 			// 	minRatio: 0.8
 			// })
-		]
+		],
+		output: {
+			filename: `js/[name].${utcTimestamp}.js`,
+			chunkFilename: `js/[name].${utcTimestamp}.js`
+		}
 	},
 	css: {
 		// Whether to use CSS separation plug-in extracttextplugin
-		extract: true,
+		extract: {
+			filename: `css/[name].${utcTimestamp}.css`,
+			chunkFilename: `css/[name].${utcTimestamp}.css`
+		},
 		// Open CSS source maps?
 		sourceMap: false,
 		// Enable CSS modules for all CSS / pre processor files
@@ -244,13 +260,14 @@ const config = {
 			vuex: 'Vuex',
 			'vue-router': 'VueRouter',
 		});
-		if(process.env.ST_ENV === "prod"){
-			config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
-				{
-					analyzerMode: 'static'
-				}
-			])
-		}
+		
+		// if(process.env.ST_ENV === "prod"){
+		// 	config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
+		// 		{
+		// 			analyzerMode: 'static'
+		// 		}
+		// 	])
+		// }
 
 	},
 	devServer: {
