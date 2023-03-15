@@ -601,9 +601,11 @@ export default {
 						vm.indexList = res.data.map((item) => {
 							return { value: `${item.symbol}`, label: `${item.symbol}` }
 						})
+					vm.loading = false
 			}
 			} catch (error) {
 				this.indexList = []
+				vm.loading = false
 			}
 		},
 		async getStocksList() {
@@ -619,7 +621,8 @@ export default {
 							return { value: `${item.stock}`, label: `${item.stock}` }
 						})
 				} catch (error) {
-						console.warn(error)
+					console.warn(error)
+					vm.loading = false
 				}
 			}
 		},
@@ -627,11 +630,9 @@ export default {
 			let vm = this
 			if (query !== '') {
 				vm.loading = true
-				setTimeout(() => {
-					vm.loading = false
 					if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
-						vm.getStocksList()
-						vm.getIndexsList()
+						await vm.getStocksList()
+						await vm.getIndexsList()
 					}
 					var symbolListTemp = vm.symbolList.filter((item) => {
 						return (
@@ -647,7 +648,7 @@ export default {
 					})
 					let options = symbolListTemp.concat(IndexListTemp)
 					this.options = uniqWith(options, isEqual)
-				}, 200)
+				
 			} else {
 				this.options = []
 			}
