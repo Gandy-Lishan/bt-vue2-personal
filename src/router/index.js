@@ -20,7 +20,10 @@ const router = new Router({
 	mode: 'history',
 	routes: [
 		{ path: '/', redirect: '/home' },
-		{ path: '/home', component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve) },
+		{ path: '/home', component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
+	children: [
+		{path: '/home/backtests', component: resolve => require(['@/components/BacktestEdge/Backtests'], resolve)}
+	] },
 		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
 		// { path: '/home', component: () => import(/* webpackChunkName: "Home" */ "@/components/BacktestEdge/Home.vue") },
 		// { path: '/doc', component: () => import(/* webpackChunkName: "Doc" */ "@/components/Menu/Doc.vue") }

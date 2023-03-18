@@ -167,6 +167,9 @@
 							@goToFavoritesForm="goToFavoritesForm"
 						></favorite
 					></el-tab-pane>
+					<el-tab-pane label="Backtests" name="sixth">
+						<router-view></router-view>
+					</el-tab-pane>
 					<el-tab-pane label="Sample Backtests" name="fifth"
 						><sample
 							ref="sampleChild"
@@ -335,6 +338,9 @@ export default {
 
 		this.myBrowser()
 
+		const pathname = window.location.pathname
+			if(pathname.includes('backtests')) this.activeName = 'sixth'
+
 	const searchParams = new URLSearchParams(window.location.search);
   const backtestID = searchParams.get('backtestID');
 	console.log('backtestID', backtestID)
@@ -375,6 +381,8 @@ export default {
 					offset: 300
 				})
 			}
+
+
 	},
 	watch: {
 		scroll: {
@@ -498,9 +506,18 @@ export default {
 						this.$refs.favoriteChild.getFavoriteList()
 						this.favoriteFlag = false
 					}
+					if(window.location.pathname.includes('backtests')) this.$router.push('/home')
 					break
 				case 'fifth':
 					this.$refs.sampleChild.getSampleList()
+					if(window.location.pathname.includes('backtests')) this.$router.push('/home')
+					break
+				case 'sixth':
+					this.$router.push('/home/backtests')
+					break
+				default:
+					if(window.location.pathname.includes('backtests')) this.$router.push('/home')
+				
 			}
 		},
 		IsRiskControl(val) {

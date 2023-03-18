@@ -170,6 +170,15 @@
 							</el-select>
 						</div>
 					</el-form-item>
+					<el-form-item label="Backtest URL" prop="backtestUrl">
+						<el-tooltip effect="dark" placement="top" >
+              <span slot="content">Fill in the analyst's report url here.</span>
+							<i class="iconfont icon-wenhao"></i>
+                        </el-tooltip>
+						<el-input
+							v-model="bd.backtestUrl"
+						></el-input>
+					</el-form-item>
 				</el-col>
 			</el-row>
 			<el-row>
@@ -299,6 +308,16 @@ export default {
 				callback()
 			}
 		}
+		var validateURLRule = (rule, value, callback) => {
+			const pattern = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
+			if (value == '') {
+				callback(new Error('Please enter the url of the analyst report'))
+			}
+			if (!pattern.test(value)) {
+				callback(new Error('Url address format error'))
+			}
+				callback()
+		}
 		return {
 			bd: {
 				name: '',
@@ -315,7 +334,8 @@ export default {
 				description: 'backtest',
 				direction: 'Long',
 				frequency: 'Daily',
-				risk_control: '//'
+				risk_control: '//',
+				backtestUrl: ''
 			},
 			historyOptions: [
 				{
@@ -408,7 +428,13 @@ export default {
 						validator: validateNameRule,
 						trigger: 'blur'
 					}
-				]
+				],
+			backtestUrl: [
+				{
+					validator: validateURLRule,
+						trigger: 'blur'
+				}
+			]
 			},
 			oldBacktestName: '',
 		}
