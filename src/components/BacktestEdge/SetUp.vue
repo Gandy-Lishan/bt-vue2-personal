@@ -121,7 +121,7 @@
 							</el-tooltip>
 							<div class="selectBox">
 								<el-select
-									v-model="bd.userTag"
+									v-model="bd.user_tag"
 									placeholder="— Select User Tag —"
 								>
 									<el-option
@@ -223,17 +223,17 @@
 						</div>
 					</el-form-item>
 
-					<div class="backtestURLBox">
-						<el-form-item label="Backtest Report URL" prop="backtestUrl" v-if="bd.userTag === 'analyst'">
+					<!-- <div class="backtestURLBox">
+						<el-form-item label="Backtest Report URL" prop="backtestUrl" v-if="bd.user_tag === 'analyst'" v-permission="permission">
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
 									>Fill in the analyst's report url here.</span
 								>
 								<i class="iconfont icon-wenhao"></i>
 							</el-tooltip>
-							<el-input v-model="bd.backtestUrl"></el-input>
+							<el-input v-model="bd.backtest_url"></el-input>
 						</el-form-item>
-					</div>
+					</div> -->
 				</el-col>
 			</el-row>
 			<el-row>
@@ -434,8 +434,8 @@ export default {
 				direction: 'Long',
 				frequency: 'Daily',
 				risk_control: '//',
-				backtestUrl: '',
-				userTag: 'client'
+				backtest_url: '',
+				user_tag: 'client'
 			},
 			permission: Cookies.get('devbt2Userid'),
 			historyOptions: [
