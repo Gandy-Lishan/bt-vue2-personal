@@ -63,13 +63,19 @@
 									<template
 										v-for="(item, index) in scope.row.entry_description"
 									>
-										<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
+										<p :key="index">
+											<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
+											>{{ item }}
+										</p>
 									</template>
 								</div>
 								<div class="exitBox">
 									<p>Exit Description</p>
 									<template v-for="(item, index) in scope.row.exit_description">
-										<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
+										<p :key="index">
+											<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
+											>{{ item }}
+										</p>
 									</template>
 								</div>
 							</div>
@@ -235,7 +241,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 const throttle = require('lodash/throttle')
-import {copy,permission} from "@/tools/copyBacktestID";
+import { copy, permission } from '@/tools/copyBacktestID'
 
 import isJson from '@/tools/isJson.js'
 import {
@@ -267,9 +273,9 @@ export default {
 		}
 	},
 	directives: {
-    copy,
+		copy,
 		permission
-  },
+	},
 	methods: {
 		async getSampleList() {
 			this.loading = true
@@ -280,19 +286,19 @@ export default {
 					this.backtestList = res.data.results
 					if (this.backtestList.length != 0) {
 						this.backtestList.forEach((element) => {
-							if(isJson(element.result) && element.result !== '')
+							if (isJson(element.result) && element.result !== '')
 								element.result = JSON.parse(element.result)
-								
-						if (element.entry_description.indexOf('[') != -1) {
+
+							if (element.entry_description.indexOf('[') != -1) {
 								element.entry_description = JSON.parse(
 									element.entry_description
 								)
-							}else{
+							} else {
 								element.entry_description = [element.entry_description]
 							}
 							if (element.exit_description.indexOf('[') != -1) {
 								element.exit_description = JSON.parse(element.exit_description)
-							}else{
+							} else {
 								element.exit_description = [element.exit_description]
 							}
 						})
@@ -301,107 +307,108 @@ export default {
 					this.loading = false
 				}
 			} catch (error) {
-				if(error.response.status === 500){
-			     this.$notify({
-							title: 'Failed',
-							message: 'List request failed',
-							type: 'error',
-							offset: 100
-						})
-				this.loading = false}
+				if (error.response.status === 500) {
+					this.$notify({
+						title: 'Failed',
+						message: 'List request failed',
+						type: 'error',
+						offset: 100
+					})
+					this.loading = false
+				}
 			}
 		},
 		copyBacktest: throttle(async function (row) {
-try {
-	let params = {}
-			const nameRes = await getBacktestName(row.name + '(copy)')
-			if(nameRes.data.count != 0) {
-				this.$notify.error({
-						title: 'Has been Copied',
-						message: 'The backtest has been copied',
-						offset: 100
-			    })
-				return
-			}
-			const res = await seeParams(row.id)
-			if (res.status === 200) {
-				this.$store.commit('getBacktestSymbol', res.data.symbol)
-				this.$store.commit('getRunBacktestData', row)
-				params = res.data
-				params.name = params.name + '(copy)'
-				delete params.results
-				delete params.uuid
-				delete params.user_id
-				delete params.status
-				delete params.backtest_id
-				let paramsStr = this.$qs.stringify(params)
-				try {
-					const copyRes = await copyBacktest(paramsStr)
-					if (copyRes.status === 201) {
-						this.$notify({
-							title: 'Copy successfully',
-							message: 'After copying successfully, you can edit the backtest',
-							type: 'success',
-							offset: 100
-						})
-						this.$emit('goToHistoryForm')
-						this.$emit('refHistoryForm')
-					} else {
-						this.$notify.error({
-							title: 'Failed',
-							message: 'Copy failed',
-							offset: 100
-						})
-					}
-				} catch (error) {
-					if (error.response.status === 403) {
+			try {
+				let params = {}
+				const nameRes = await getBacktestName(row.name + '(copy)')
+				if (nameRes.data.count != 0) {
 					this.$notify.error({
 						title: 'Has been Copied',
 						message: 'The backtest has been copied',
 						offset: 100
 					})
-					}
-					if (error.response.status === 500) {
-						this.$notify.error({
-							title: 'Service is busy',
-							message: 'The internal server is busy, please try again later ',
-							offset: 100
-						})
+					return
+				}
+				const res = await seeParams(row.id)
+				if (res.status === 200) {
+					this.$store.commit('getBacktestSymbol', res.data.symbol)
+					this.$store.commit('getRunBacktestData', row)
+					params = res.data
+					params.name = params.name + '(copy)'
+					delete params.results
+					delete params.uuid
+					delete params.user_id
+					delete params.status
+					delete params.backtest_id
+					let paramsStr = this.$qs.stringify(params)
+					try {
+						const copyRes = await copyBacktest(paramsStr)
+						if (copyRes.status === 201) {
+							this.$notify({
+								title: 'Copy successfully',
+								message:
+									'After copying successfully, you can edit the backtest',
+								type: 'success',
+								offset: 100
+							})
+							this.$emit('goToHistoryForm')
+							this.$emit('refHistoryForm')
+						} else {
+							this.$notify.error({
+								title: 'Failed',
+								message: 'Copy failed',
+								offset: 100
+							})
+						}
+					} catch (error) {
+						if (error.response.status === 403) {
+							this.$notify.error({
+								title: 'Has been Copied',
+								message: 'The backtest has been copied',
+								offset: 100
+							})
+						}
+						if (error.response.status === 500) {
+							this.$notify.error({
+								title: 'Service is busy',
+								message: 'The internal server is busy, please try again later ',
+								offset: 100
+							})
+						}
 					}
 				}
+			} catch (error) {
+				this.$notify.error({
+					title: 'Service is busy',
+					message: 'The internal server is busy, please try again later ',
+					offset: 100
+				})
 			}
-} catch (error) {
-	this.$notify.error({
-							title: 'Service is busy',
-							message: 'The internal server is busy, please try again later ',
-							offset: 100
-						})
-}
 		}, 500),
 		restoreIndicatorLayoutView(data, freq, row, resData) {
 			if (CIQ.isBacktestRun == true) {
 				CIQ.isBacktestRun = false
 				var that = this
-					that.$store.commit('getRunBacktestData', row)
-					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
-						that.$emit('goBacktestResultForm', row, ()=>{
-							CIQ.hideCover()
-							CIQ.nprogress.done()
-						})
+				that.$store.commit('getRunBacktestData', row)
+				that.$emit('goTobacktestSetupForm', row.id, resData, () => {
+					that.$emit('goBacktestResultForm', row, () => {
+						CIQ.hideCover()
+						CIQ.nprogress.done()
 					})
+				})
 			} else {
 				this.reloadData(data, freq)
 				var that = this
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
 
-					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
-						that.$emit('goBacktestResultForm', row, ()=>{
+					that.$emit('goTobacktestSetupForm', row.id, resData, () => {
+						that.$emit('goBacktestResultForm', row, () => {
 							CIQ.hideCover()
 							CIQ.nprogress.done()
 						})
 					})
-					
 				})
 			}
 		},
@@ -410,7 +417,6 @@ try {
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {
-					
 					CIQ.addCover('Fetching backtest information...')
 					CIQ.nprogress.start()
 					const res = await seeParams(row.id)
@@ -421,12 +427,13 @@ try {
 						this.restoreIndicatorLayoutView(
 							JSON.parse(res.data.indicator_layout),
 							res.data.frequency,
-							row,res.data
+							row,
+							res.data
 						)
 					} else {
 						this.$store.commit('getRunBacktestData', row)
-						this.$emit('goTobacktestSetupForm', row.id, res.data, ()=>{
-							this.$emit('goBacktestResultForm', row, ()=>{
+						this.$emit('goTobacktestSetupForm', row.id, res.data, () => {
+							this.$emit('goBacktestResultForm', row, () => {
 								CIQ.hideCover()
 								CIQ.nprogress.done()
 							})
@@ -483,7 +490,7 @@ try {
 				}
 			}
 			this.$store.commit('setRestoreFreq', frequency)
-		},
+		}
 	}
 }
 </script>
@@ -520,14 +527,14 @@ try {
 .el-table__body-wrapper {
 	overflow-x: scroll;
 }
-.descriptionBox{
+.descriptionBox {
 	display: flex;
 	justify-content: space-around;
 	.entryBox {
 		p:first-child {
-		font-weight: 500;
-		color: #99a9bf;
-	    }
+			font-weight: 500;
+			color: #99a9bf;
+		}
 	}
 	.exitBox p:first-child {
 		font-weight: 500;

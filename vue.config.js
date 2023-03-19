@@ -286,8 +286,8 @@ const config = {
 		proxy: {
 			'/dev': {
 				//target: "https://ggfdkkraph.execute-api.us-east-1.amazonaws.com/",
-				//target: "http://10.131.9.169:8000",
-				target: "https://devbt2api.sentimentrader.com/",
+				target: "http://10.131.9.139:8000",
+				//target: "https://devbt2api.sentimentrader.com/",
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
