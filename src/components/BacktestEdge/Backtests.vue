@@ -72,6 +72,10 @@
 										<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
 									</template>
 								</div>
+								<div class="urlBox">
+									<p>Analyst Report URL</p>
+									<el-link>www.www.com</el-link>
+								</div>
 							</div>
 						</template>
 					</el-table-column>
@@ -175,6 +179,21 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
+									content="copy backtest link"
+									placement="bottom-start"
+								>
+									<el-button
+										plain
+										icon="el-icon-link"
+										circle
+										size="mini"
+										type="success"
+										v-copy="scope.row.id"
+									></el-button>
+								</el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="dark"
 									content="copy backtest"
 									placement="bottom-start"
 								>
@@ -218,8 +237,8 @@
 	</el-row>
 </template>
 <script>
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import isJson from '@/tools/isJson.js'
+import {copy,permission} from "@/tools/copyBacktestID";
 import {
 	getSampleList,
 } from '@/service/service'
@@ -234,6 +253,13 @@ export default {
 			},
 			loadTest: 'Loading'
 		}
+	},
+	directives: {
+    copy,
+		permission
+  },
+	mounted() {
+		this.getSampleList()
 	},
 	methods: {
 		async getSampleList() {
@@ -326,6 +352,10 @@ export default {
 	    }
 	}
 	.exitBox p:first-child {
+		font-weight: 500;
+		color: #99a9bf;
+	}
+	.urlBox p:first-child {
 		font-weight: 500;
 		color: #99a9bf;
 	}

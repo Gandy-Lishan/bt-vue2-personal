@@ -167,9 +167,6 @@
 							@goToFavoritesForm="goToFavoritesForm"
 						></favorite
 					></el-tab-pane>
-					<el-tab-pane label="Backtests" name="sixth">
-						<router-view></router-view>
-					</el-tab-pane>
 					<el-tab-pane label="Sample Backtests" name="fifth"
 						><sample
 							ref="sampleChild"
@@ -179,6 +176,9 @@
 							@goBacktestResultForm="goBacktestResultForm"
 						></sample
 					></el-tab-pane>
+					<el-tab-pane label="Analysts' Backtest" name="sixth">
+						<router-view></router-view>
+					</el-tab-pane>
 				</el-tabs>
 			</main>
 

@@ -175,6 +175,21 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
+									content="copy backtest link"
+									placement="bottom-start"
+								>
+									<el-button
+										plain
+										icon="el-icon-link"
+										circle
+										size="mini"
+										type="success"
+										v-copy="scope.row.id"
+									></el-button>
+								</el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="dark"
 									content="copy backtest"
 									placement="bottom-start"
 								>
@@ -219,14 +234,14 @@
 </template>
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import { Store } from 'vuex'
 const throttle = require('lodash/throttle')
+import {copy,permission} from "@/tools/copyBacktestID";
+
 import isJson from '@/tools/isJson.js'
 import {
 	copyBacktest,
 	getSampleList,
 	seeParams,
-	seeReport,
 	getBacktestName
 } from '@/service/service'
 export default {
@@ -251,6 +266,10 @@ export default {
 			loadTest: 'Loading'
 		}
 	},
+	directives: {
+    copy,
+		permission
+  },
 	methods: {
 		async getSampleList() {
 			this.loading = true
