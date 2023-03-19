@@ -51,6 +51,7 @@ router.beforeEach(async (to, from, next) => {
 			axios.post('/dev/user/',null,{timeout:10000, withCredentials: true})
 			.then((res) => {
 				if(res.status == 200) {
+					store.commit('setUserRole', res.data.is_admin)
 					if(getQueryVariable('userid')) window.location.href = location.origin // 去掉？后面的部分
 					next()
 				}else {throw Error('Status code error')}

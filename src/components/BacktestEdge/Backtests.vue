@@ -74,7 +74,7 @@
 								</div>
 								<div class="urlBox">
 									<p>Analyst Report URL</p>
-									<el-link>www.www.com</el-link>
+									<el-link :href="scope.row.report_url" target="_blank" type="primary">{{scope.row.report_url}}</el-link>
 								</div>
 							</div>
 						</template>
@@ -240,7 +240,10 @@
 import isJson from '@/tools/isJson.js'
 import {copy,permission} from "@/tools/copyBacktestID";
 import {
-	getSampleList,
+	copyBacktest,
+	seeParams,
+	getAnalystList,
+	getBacktestName
 } from '@/service/service'
 export default {
 	data() {
@@ -259,16 +262,17 @@ export default {
 		permission
   },
 	mounted() {
-		this.getSampleList()
+		this.getAnalystList()
 	},
 	methods: {
-		async getSampleList() {
+		async getAnalystList() {
 			this.loading = true
 			let page = this.queryInfo.page
 			try {
-				const res = await getSampleList(page)
+				const res = await getAnalystList(page)
 				if (res.status === 200) {
 					this.backtestList = res.data.results
+					console.log(this.backtestList)
 					if (this.backtestList.length != 0) {
 						this.backtestList.forEach((element) => {
 							if(isJson(element.result) && element.result !== '')
@@ -302,9 +306,77 @@ export default {
 				this.loading = false}
 			}
 		},
+		copyBacktest: throttle(async function (row) {
+			try {
+				let params = {}
+				const nameRes = await getBacktestName(row.name + '(copy)')
+				if (nameRes.data.count != 0) {
+					this.$notify.error({
+						title: 'Has been Copied',
+						message: 'The backtest has been copied',
+						offset: 100
+					})
+					return
+				}
+				const res = await seeParams(row.id)
+				if (res.status === 200) {
+					this.$store.commit('getBacktestSymbol', res.data.symbol)
+					this.$store.commit('getRunBacktestData', row)
+					params = res.data
+					params.name = params.name + '(copy)'
+					delete params.results
+					delete params.uuid
+					delete params.user_id
+					delete params.status
+					delete params.backtest_id
+					let paramsStr = this.$qs.stringify(params)
+					try {
+						const copyRes = await copyBacktest(paramsStr)
+						if (copyRes.status === 201) {
+							this.$notify({
+								title: 'Copy successfully',
+								message:
+									'After copying successfully, you can edit the backtest',
+								type: 'success',
+								offset: 100
+							})
+							this.$emit('goToHistoryForm')
+							this.$emit('refHistoryForm')
+						} else {
+							this.$notify.error({
+								title: 'Failed',
+								message: 'Copy failed',
+								offset: 100
+							})
+						}
+					} catch (error) {
+						if (error.response.status === 403) {
+							this.$notify.error({
+								title: 'Has been Copied',
+								message: 'The backtest has been copied',
+								offset: 100
+							})
+						}
+						if (error.response.status === 500) {
+							this.$notify.error({
+								title: 'Service is busy',
+								message: 'The internal server is busy, please try again later ',
+								offset: 100
+							})
+						}
+					}
+				}
+			} catch (error) {
+				this.$notify.error({
+					title: 'Service is busy',
+					message: 'The internal server is busy, please try again later ',
+					offset: 100
+				})
+			}
+		}, 500),
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
-			this.getSampleList()
+			this.getAnalystList()
 		},
 	}
 }

@@ -112,7 +112,7 @@
 						</div>
 					</el-form-item>
 					<div class="userTagBoc">
-						<el-form-item label="User Tag" prop="userTag">
+						<el-form-item label="User Tag" prop="use_tag" v-if="is_admin==true">
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
 									>Choose the type of backtest you want to create.<br
@@ -222,18 +222,17 @@
 							</el-select>
 						</div>
 					</el-form-item>
-
-					<!-- <div class="backtestURLBox">
-						<el-form-item label="Backtest Report URL" prop="backtestUrl" v-if="bd.user_tag === 'analyst'" v-permission="permission">
+					<div class="backtestURLBox">
+						<el-form-item label="Report URL" prop="report_url" v-if="bd.user_tag === 'analyst'">
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
 									>Fill in the analyst's report url here.</span
 								>
 								<i class="iconfont icon-wenhao"></i>
 							</el-tooltip>
-							<el-input v-model="bd.backtest_url"></el-input>
+							<el-input v-model="bd.report_url"></el-input>
 						</el-form-item>
-					</div> -->
+					</div>
 				</el-col>
 			</el-row>
 			<el-row>
@@ -434,7 +433,7 @@ export default {
 				direction: 'Long',
 				frequency: 'Daily',
 				risk_control: '//',
-				backtest_url: '',
+				report_url: '',
 				user_tag: 'client'
 			},
 			permission: Cookies.get('devbt2Userid'),
@@ -535,18 +534,22 @@ export default {
 						trigger: 'blur'
 					}
 				],
-				backtestUrl: [
+				report_url: [
 					{
 						validator: validateURLRule,
 						trigger: 'blur'
 					}
 				]
 			},
-			oldBacktestName: ''
+			oldBacktestName: '',
+			is_admin: false
 		}
 	},
 	directives: {
 		permission
+	},
+	created() {
+		this.is_admin = this.$store.state.is_admin
 	},
 	mounted() {
 		this.loadSentimentList('Daily')
