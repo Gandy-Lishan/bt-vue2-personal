@@ -279,7 +279,6 @@
 </template>
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import { Store } from 'vuex'
 import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
 import {copy,permission} from "@/tools/copyBacktestID";
 import Cookies from 'vue-cookies'
@@ -290,7 +289,6 @@ import {
 	getHistoryList,
 	getStatus,
 	seeParams,
-	seeReport,
 	deleteBacktest,
 	getBacktestName
 } from '@/service/service.js'

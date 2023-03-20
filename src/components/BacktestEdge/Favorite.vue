@@ -132,6 +132,21 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
+									content="copy backtest link"
+									placement="bottom-start"
+								>
+									<el-button
+										plain
+										icon="el-icon-link"
+										circle
+										size="mini"
+										type="success"
+										v-copy="scope.row.id"
+									></el-button>
+								</el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="dark"
 									content="add to favorites"
 									v-if="scope.row.favorites == false"
 									placement="bottom-start"
@@ -209,15 +224,14 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 const throttle = require('lodash/throttle')
+import {copy,permission} from "@/tools/copyBacktestID";
 import {
 	getFavoriteList,
-	getStatus,
 	seeParams,
 	deleteBacktest,
 	copyBacktest,
 	favoriteBacktest
 } from '@/service/service'
-import { warn } from 'vue-class-component/lib/util'
 export default {
 	data() {
 		return {
@@ -239,6 +253,10 @@ export default {
 			}
 		}
 	},
+	directives: {
+    copy,
+		permission
+  },
 	methods: {
 async getFavoriteList(strategy) {
 			let page = this.queryInfo.page
