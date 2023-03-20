@@ -50,6 +50,7 @@ router.beforeEach(async (to, from, next) => {
 			//set 10 sec as default,However, some time-consuming requests are processed separately
 			axios.post('/dev/user/',null,{timeout:10000, withCredentials: true})
 			.then((res) => {
+				console.log('lishan res', res)
 				if(res.status == 200) {
 					store.commit('setUserRole', res.data.is_admin)
 					if(getQueryVariable('userid')) window.location.href = location.origin // 去掉？后面的部分

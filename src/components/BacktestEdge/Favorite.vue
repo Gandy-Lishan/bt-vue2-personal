@@ -132,21 +132,6 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
-									content="copy backtest link"
-									placement="bottom-start"
-								>
-									<el-button
-										plain
-										icon="el-icon-link"
-										circle
-										size="mini"
-										type="success"
-										v-copy="scope.row.id"
-									></el-button>
-								</el-tooltip>
-								<el-tooltip
-									class="item"
-									effect="dark"
 									content="add to favorites"
 									v-if="scope.row.favorites == false"
 									placement="bottom-start"
@@ -203,6 +188,21 @@
 										circle
 										size="mini"
 										@click="viewBacktestResults(scope.row)"
+									></el-button>
+								</el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="dark"
+									content="copy backtest link"
+									placement="bottom-start"
+								>
+									<el-button
+										plain
+										icon="el-icon-link"
+										circle
+										size="mini"
+										type="success"
+										v-copy="scope.row.id"
 									></el-button>
 								</el-tooltip>
 							</el-row>
@@ -360,6 +360,8 @@ copyBacktest: throttle(async function (row) {
 
 			params = res.data
 			params.name = params.name + '(copy)'
+			params.user_tag = 'client'
+			params.report_url = ''
 			delete params.uuid
 			delete params.results
 			delete params.user_id
