@@ -83,7 +83,7 @@ export function getSampleList(page) {
 }
 
 export function getAnalystList(page) {
-    const url = '/dev/analyst/?ordering=name,status,-create_date&page='
+    const url = '/dev/analyst/?ordering=-create_date,name,status&page='
 
     return new Promise((resolve,reject)=>{
 		axios.get(url+page)
