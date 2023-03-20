@@ -188,6 +188,7 @@
 										circle
 										size="mini"
 										@click="copyBacktest(scope.row)"
+
 									></el-button>
 								</el-tooltip>
 								<el-tooltip
@@ -219,6 +220,7 @@
 										size="mini"
 										type="success"
 										v-copy="scope.row.id"
+
 									></el-button>
 								</el-tooltip>
 							</el-row>
@@ -343,6 +345,7 @@ export default {
 									'After copying successfully, you can edit the backtest',
 									type: 'success',
 									offset: 100
+
 							})
 							this.$emit('goToHistoryForm')
 							this.$emit('refHistoryForm')
