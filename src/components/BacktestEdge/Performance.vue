@@ -388,7 +388,7 @@
 				</el-pagination> -->
 				</div>
 			</el-tab-pane>
-			<el-tab-pane label="History" name="third">
+			<el-tab-pane label="Exit with different Time-In-Market frame" name="third">
 				<div class="trades-container">
 					<div class="history-container">
 						<el-skeleton :rows="6" :loading="loading" animated>
@@ -543,29 +543,32 @@ export default {
 							vm.monthReturnImgUrl = data.returnsHeatmapFileURL
 							vm.annualReturnImgUrl = data.annualReturnsFileURL
 
-							for (let i = 0; i < initalData['Trades'].length; i++) {
-								if (i % 2 == 0) {
-									initalData['Trades'][i].trade_number = i / 2
-									initalData['Trades'][i + 1].trade_number = i / 2
+							if(initalData['Trades']){
+								for (let i = 0; i < initalData['Trades'].length; i++) {
+									if (i % 2 == 0) {
+										initalData['Trades'][i].trade_number = i / 2
+										initalData['Trades'][i + 1].trade_number = i / 2
+									}
 								}
+
+								for (let i = 0; i < initalData['Trades'].length; i++) {
+									initalData['Trades'][i].TradeReturn =
+										tradeReturn[initalData['Trades'][i].trade_number]
+									if (i % 2 !== 0) {
+										initalData['Trades'][i - 1].Return =
+											initalData['Trades'][i].Return
+
+									}
+								}
+								vm.queryInfo.total = initalData['Trades'].length
+								vm.totalTradesNumber = (initalData['Trades'].length)/2
+								vm.handleCurrentChange(1)
+								vm.tradesData = initalData['Trades']
+								
+								// 根据entrydate计算未来收益
+								this.backtestHistoryList = this.calculateBacktestHistory(vm.tradesData)	
 							}
 
-							for (let i = 0; i < initalData['Trades'].length; i++) {
-								initalData['Trades'][i].TradeReturn =
-									tradeReturn[initalData['Trades'][i].trade_number]
-								if (i % 2 !== 0) {
-									initalData['Trades'][i - 1].Return =
-										initalData['Trades'][i].Return
-
-								}
-							}
-							vm.queryInfo.total = initalData['Trades'].length
-							vm.totalTradesNumber = (initalData['Trades'].length)/2
-							vm.handleCurrentChange(1)
-							vm.tradesData = initalData['Trades']
-							
-							// 根据entrydate计算未来收益
-							this.backtestHistoryList = this.calculateBacktestHistory(vm.tradesData)	
 							// ---------------------------------------- end ----------------------------------
 							// ----------------------- backtest result-------------------------------
 
