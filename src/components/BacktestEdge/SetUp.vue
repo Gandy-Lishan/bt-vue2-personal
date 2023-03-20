@@ -222,8 +222,8 @@
 							</el-select>
 						</div>
 					</el-form-item>
-					<div class="backtestURLBox">				
-						<el-form-item label="Report URL" prop="report_url" v-if="bd.user_tag === 'analyst'">
+					<div class="backtestURLBox">
+						<el-form-item label="Report URL" prop="report_url" v-if="bd.user_tag === 'analyst' && is_admin==true">
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
 									>Fill in the analyst's report url here.</span
@@ -621,6 +621,7 @@ export default {
 				delete newVal.results
 				newVal.commission = (newVal.commission * 100).toFixed(2)
 				newVal.slippage = Number(newVal.slippage).toFixed(2)
+				this.is_admin = this.$store.state.is_admin
 				this.bd = Object.assign(this.bd, newVal)
 				this.getFrequency(newVal.frequency)
 				this.getDirection(newVal.direction)
