@@ -337,6 +337,8 @@ export default {
 					this.$store.commit('getRunBacktestData', row)
 					params = res.data
 					params.name = params.name + '(copy)'
+					params.user_tag = 'client'
+					params.report_url = ''
 					delete params.results
 					delete params.uuid
 					delete params.user_id
