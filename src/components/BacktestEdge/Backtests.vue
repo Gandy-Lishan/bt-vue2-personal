@@ -239,6 +239,7 @@
 <script>
 import isJson from '@/tools/isJson.js'
 import {copy,permission} from "@/tools/copyBacktestID";
+const throttle = require('lodash/throttle')
 import {
 	copyBacktest,
 	seeParams,

@@ -592,7 +592,7 @@ export default {
 		},
 		calculateBacktestHistory(dataSet){
 			let chartDataset = CIQ.stxx.chart.dataSet
-			const direction = dataSet[0].TradeStatus=='BUY'?'Short':'Long'
+			const direction = dataSet[0].TradeStatus=='BUY'?'Long':'Short'
 			dataSet = dataSet.filter(item=>item.TradeStatus=='BUY')
 			console.log('ohlcv: ',chartDataset)	
 			let backtestResult = []
