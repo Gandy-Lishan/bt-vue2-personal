@@ -222,8 +222,7 @@
 							</el-select>
 						</div>
 					</el-form-item>
-
-					<div class="backtestURLBox">
+					<div class="backtestURLBox">				
 						<el-form-item label="Report URL" prop="report_url" v-if="bd.user_tag === 'analyst'">
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
