@@ -326,6 +326,8 @@ export default {
 					this.$store.commit('getRunBacktestData', row)
 					params = res.data
 					params.name = params.name + '(copy)'
+					params.user_tag = 'client'
+					params.report_url = ''
 					delete params.results
 					delete params.uuid
 					delete params.user_id
@@ -339,8 +341,8 @@ export default {
 								title: 'Copy successfully',
 								message:
 									'After copying successfully, you can edit the backtest',
-								type: 'success',
-								offset: 100
+									type: 'success',
+									offset: 100
 							})
 							this.$emit('goToHistoryForm')
 							this.$emit('refHistoryForm')
