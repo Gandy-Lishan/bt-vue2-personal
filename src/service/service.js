@@ -81,6 +81,19 @@ export function getSampleList(page) {
 		})
 	})
 }
+
+export function getAnalystList(page) {
+    const url = '/dev/analyst/?ordering=name,status,-create_date&page='
+
+    return new Promise((resolve,reject)=>{
+		axios.get(url+page)
+		.then(res=>{
+			resolve(res)
+		}).catch(err=>{
+			reject(err)
+		})
+	})
+}
 export function getHistoryList(page) {
     const url = '/dev/backtest/?ordering=-create_date&page='
 

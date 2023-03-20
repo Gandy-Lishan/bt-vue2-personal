@@ -95,6 +95,8 @@ export default new Vuex.Store({
 		backtestNameList: [],
 		formateTechnicalList: [],
 		riskControl: '1111',
+
+		is_admin: false,
 	},
 	getters: {
 		getExtremeValue: (state) => {
@@ -558,7 +560,10 @@ export default new Vuex.Store({
 		},
 		isRiskControl(state, val) {
 			state.riskControl = val
-		}
+		},
+		setUserRole(state, val){
+			state.is_admin = val
+		},
 	},
 	actions: {
 		Try(context, val) {

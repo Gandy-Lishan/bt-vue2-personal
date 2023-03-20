@@ -79,7 +79,7 @@
 					@tab-click="handleTabClick"
 				>
 					<el-tab-pane
-						label="Set up Backtest"
+						label="Set up"
 						name="first"
 						v-loading="loading"
 						element-loading-text="Loading..."
@@ -136,7 +136,7 @@
 							</div>
 						</div>
 					</el-tab-pane>
-					<el-tab-pane label="Backtest History" name="second"
+					<el-tab-pane label="History" name="second"
 						><history
 							ref="historyChild"
 							@goTobacktestSetupForm="goTobacktestSetupForm"
@@ -145,7 +145,7 @@
 							@refFavoritesForm="refFavoritesForm"
 						></history
 					></el-tab-pane>
-					<el-tab-pane label="Backtest Results" name="third"
+					<el-tab-pane label="Results" name="third"
 						><div class="set-up-container">
 							<result
 								:backtestEditData="backtestEditData"
@@ -176,6 +176,9 @@
 							@goBacktestResultForm="goBacktestResultForm"
 						></sample
 					></el-tab-pane>
+					<el-tab-pane label="Analysts' Backtest" name="sixth">
+						<router-view @goToHistoryForm="goToHistoryForm"  @refHistoryForm="refHistoryForm"></router-view>
+					</el-tab-pane>
 				</el-tabs>
 			</main>
 
@@ -335,6 +338,9 @@ export default {
 
 		this.myBrowser()
 
+		const pathname = window.location.pathname
+			if(pathname.includes('backtests')) this.activeName = 'sixth'
+
 	const searchParams = new URLSearchParams(window.location.search);
   const backtestID = searchParams.get('backtestID');
 	console.log('backtestID', backtestID)
@@ -375,6 +381,8 @@ export default {
 					offset: 300
 				})
 			}
+
+
 	},
 	watch: {
 		scroll: {
@@ -498,9 +506,18 @@ export default {
 						this.$refs.favoriteChild.getFavoriteList()
 						this.favoriteFlag = false
 					}
+					if(window.location.pathname.includes('backtests')) this.$router.push('/home')
 					break
 				case 'fifth':
 					this.$refs.sampleChild.getSampleList()
+					if(window.location.pathname.includes('backtests')) this.$router.push('/home')
+					break
+				case 'sixth':
+					this.$router.push('/home/backtests')
+					break
+				default:
+					if(window.location.pathname.includes('backtests')) this.$router.push('/home')
+				
 			}
 		},
 		IsRiskControl(val) {
@@ -1188,7 +1205,7 @@ main {
 	}
 	.alignRight {
 		float: right;
-		margin: 1px 0 0 10px;
+		margin: 5px 0 0 10px;
 	}
 }
 

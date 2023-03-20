@@ -20,7 +20,10 @@ const router = new Router({
 	mode: 'history',
 	routes: [
 		{ path: '/', redirect: '/home' },
-		{ path: '/home', component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve) },
+		{ path: '/home', component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
+	children: [
+		{path: '/home/backtests', component: resolve => require(['@/components/BacktestEdge/Backtests'], resolve)}
+	] },
 		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
 		// { path: '/home', component: () => import(/* webpackChunkName: "Home" */ "@/components/BacktestEdge/Home.vue") },
 		// { path: '/doc', component: () => import(/* webpackChunkName: "Doc" */ "@/components/Menu/Doc.vue") }
@@ -48,6 +51,7 @@ router.beforeEach(async (to, from, next) => {
 			axios.post('/dev/user/',null,{timeout:10000, withCredentials: true})
 			.then((res) => {
 				if(res.status == 200) {
+					store.commit('setUserRole', res.data.is_admin)
 					if(getQueryVariable('userid')) window.location.href = location.origin // 去掉？后面的部分
 					next()
 				}else {throw Error('Status code error')}
