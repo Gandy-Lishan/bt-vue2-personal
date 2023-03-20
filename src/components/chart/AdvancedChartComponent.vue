@@ -382,6 +382,7 @@ export default class AdvancedChartComponent extends Vue {
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })		
 
 			this.initializeToggle()
+			
 			CIQ.stxx.addEventListener("scroll", function(object: Record<string, any> = {}) {
 
 				// an event handle for updating trade marker when dragging the chart
@@ -394,10 +395,11 @@ export default class AdvancedChartComponent extends Vue {
 								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
 						if(c_date<m_date){
 							let markers = CIQ.groups.pop()
-							console.log("new pagnigation start from ",
-								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
-								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
-								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10))
+							
+							// console.log("new pagnigation start from ",
+							// 	CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
+							// 	CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
+							// 	CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10))
 							CIQ.loadChart(markers, CIQ.addMarker)
 						}
 					}

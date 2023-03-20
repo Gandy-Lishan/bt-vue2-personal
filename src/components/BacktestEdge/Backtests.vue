@@ -179,21 +179,6 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
-									content="copy backtest link"
-									placement="bottom-start"
-								>
-									<el-button
-										plain
-										icon="el-icon-link"
-										circle
-										size="mini"
-										type="success"
-										v-copy="scope.row.id"
-									></el-button>
-								</el-tooltip>
-								<el-tooltip
-									class="item"
-									effect="dark"
 									content="copy backtest"
 									placement="bottom-start"
 								>
@@ -203,6 +188,7 @@
 										circle
 										size="mini"
 										@click="copyBacktest(scope.row)"
+
 									></el-button>
 								</el-tooltip>
 								<el-tooltip
@@ -218,6 +204,23 @@
 										circle
 										size="mini"
 										@click="viewBacktestResults(scope.row)"
+									></el-button>
+								</el-tooltip>
+								
+								<el-tooltip
+									class="item"
+									effect="dark"
+									content="copy backtest link"
+									placement="bottom-start"
+								>
+									<el-button
+										plain
+										icon="el-icon-link"
+										circle
+										size="mini"
+										type="success"
+										v-copy="scope.row.id"
+
 									></el-button>
 								</el-tooltip>
 							</el-row>
@@ -325,6 +328,8 @@ export default {
 					this.$store.commit('getRunBacktestData', row)
 					params = res.data
 					params.name = params.name + '(copy)'
+					params.user_tag = 'client'
+					params.report_url = ''
 					delete params.results
 					delete params.uuid
 					delete params.user_id
@@ -338,8 +343,9 @@ export default {
 								title: 'Copy successfully',
 								message:
 									'After copying successfully, you can edit the backtest',
-								type: 'success',
-								offset: 100
+									type: 'success',
+									offset: 100
+
 							})
 							this.$emit('goToHistoryForm')
 							this.$emit('refHistoryForm')

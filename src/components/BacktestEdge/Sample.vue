@@ -222,6 +222,22 @@
 										@click="viewBacktestResults(scope.row)"
 									></el-button>
 								</el-tooltip>
+								
+								<el-tooltip
+									class="item"
+									effect="dark"
+									content="copy backtest link"
+									placement="bottom-start"
+								>
+									<el-button
+										plain
+										icon="el-icon-link"
+										circle
+										size="mini"
+										type="success"
+										v-copy="scope.row.id"
+									></el-button>
+								</el-tooltip>
 							</el-row>
 						</template>
 					</el-table-column>
@@ -336,6 +352,8 @@ export default {
 					this.$store.commit('getRunBacktestData', row)
 					params = res.data
 					params.name = params.name + '(copy)'
+					params.user_tag = 'client'
+					params.report_url = ''
 					delete params.results
 					delete params.uuid
 					delete params.user_id
