@@ -621,6 +621,7 @@ export default {
 				delete newVal.results
 				newVal.commission = (newVal.commission * 100).toFixed(2)
 				newVal.slippage = Number(newVal.slippage).toFixed(2)
+				this.is_admin = this.$store.state.is_admin
 				this.bd = Object.assign(this.bd, newVal)
 				this.getFrequency(newVal.frequency)
 				this.getDirection(newVal.direction)
