@@ -600,6 +600,7 @@ export default {
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
+			this.is_admin = this.$store.state.is_admin
 			this.getEndDate()
 			this.bd.symbol = this.$store.state.backtestSymbol
 			this.$emit('IsRiskControl', false)
