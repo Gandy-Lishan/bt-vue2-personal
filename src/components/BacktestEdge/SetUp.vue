@@ -223,7 +223,7 @@
 						</div>
 					</el-form-item>
 					<div class="backtestURLBox">
-						<el-form-item label="Report URL" prop="report_url" v-if="bd.user_tag === 'analyst'">
+						<el-form-item label="Report URL" prop="report_url" v-if="bd.user_tag === 'analyst' && is_admin==true">
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
 									>Fill in the analyst's report url here.</span
