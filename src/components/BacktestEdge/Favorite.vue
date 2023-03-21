@@ -132,21 +132,6 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
-									content="copy backtest link"
-									placement="bottom-start"
-								>
-									<el-button
-										plain
-										icon="el-icon-link"
-										circle
-										size="mini"
-										type="success"
-										v-copy="scope.row.id"
-									></el-button>
-								</el-tooltip>
-								<el-tooltip
-									class="item"
-									effect="dark"
 									content="add to favorites"
 									v-if="scope.row.favorites == false"
 									placement="bottom-start"
