@@ -171,6 +171,7 @@
 								type="date"
 								placeholder="- Select Start Date -"
 								prop="startDate"
+								value-format="yyyy-MM-dd"
 							>
 							</el-date-picker>
 							<el-input v-else disabled v-model="bd.start_date"> </el-input>
@@ -184,6 +185,7 @@
 								@change="formateEndDate"
 								type="date"
 								placeholder="- Select End Date -"
+								value-format="yyyy-MM-dd"
 							>
 							</el-date-picker>
 							<el-input v-else disabled v-model="bd.end_date"> </el-input>
@@ -606,7 +608,7 @@ export default {
 			this.$emit('IsRiskControl', false)
 			this.clearFormValidate()
 		},
-		setEditData(newVal) {
+		setEditData(newVal) {			
 			if (JSON.stringify(newVal) != '{}') {
 				this.clearForm()
 				delete newVal.entry
@@ -623,7 +625,7 @@ export default {
 				newVal.commission = (newVal.commission * 100).toFixed(2)
 				newVal.slippage = Number(newVal.slippage).toFixed(2)
 				this.is_admin = this.$store.state.is_admin
-				this.bd = Object.assign(this.bd, newVal)
+				this.bd = Object.assign(this.bd, newVal)	
 				this.getFrequency(newVal.frequency)
 				this.getDirection(newVal.direction)
 				this.isRiskControl = false
@@ -655,7 +657,7 @@ export default {
 				this.oldBacktestName = newVal.name
 				let year
 				let month
-				let day
+				let day	
 				if (newVal.start_date && newVal.start_date !== '1800-10-01') {
 					const starArr = newVal.start_date.toString().split('-')
 					const endArr = newVal.end_date.toString().split('-')
@@ -700,17 +702,17 @@ export default {
 			CIQ.addSymbol(val)
 		},
 		formateStartDate(val) {
-			this.bd.start_date = timestampToTime(val)
+			this.bd.start_date = val
 		},
 		formateEndDate(val) {
-			this.bd.end_date = timestampToTime(val)
+			this.bd.end_date = val
 		},
 		getEndDate() {
 			this.bd.end_date = timestampToTime(new Date())
 			const str = this.bd.end_date.split('-')
 			str[0] = Number(str[0]) - Number(this.historyValue) + ''
 			this.bd.start_date = str.join('-')
-
+			
 			var that = this
 			var utils = function () {
 				let vm = this
