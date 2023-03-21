@@ -74,7 +74,7 @@
 								</div>
 								<div class="urlBox">
 									<p>Analyst Report URL</p>
-									<el-link :underline="false" :href="scope.row.report_url" target="_blank" type="primary">{{scope.row.name}}</el-link>
+									<el-link :underline="false" :href="scope.row.report_url" target="_blank" type="primary">{{scope.row.report_url}}</el-link>
 								</div>
 							</div>
 						</template>
@@ -214,6 +214,7 @@
 									placement="bottom-start"
 								>
 									<el-button
+									:disabled="scope.row.status == 0 || scope.row.status == 3"
 										plain
 										icon="el-icon-link"
 										circle

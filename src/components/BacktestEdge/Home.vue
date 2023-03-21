@@ -18,23 +18,11 @@
 						</el-submenu>
 						<el-submenu index="2">
 							<template slot="title"><i class="el-icon-s-tools"></i></template>
+							<el-menu-item index="2-1">User: {{$store.state.role}}</el-menu-item>
 							<!-- <el-menu-item index="2-1">Theme</el-menu-item> -->
 							<!-- <el-menu-item index="2-2">Language</el-menu-item> -->
 						</el-submenu>
 					</el-menu>
-					<!-- <div class="menu">
-						<el-dropdown :hide-on-click="false" @command="handleCommand">
-							<span class="el-dropdown-link">
-								Help<i class="el-icon-arrow-down el-icon--right"></i>
-							</span>
-							<el-dropdown-menu slot="dropdown">
-								<el-dropdown-item command="doc"> Tutorial </el-dropdown-item>
-								<el-dropdown-item command="contact">
-									Contant Us
-								</el-dropdown-item>
-							</el-dropdown-menu>
-						</el-dropdown>
-					</div> -->
 				</div>
 			</div>
 			<header class="header">

@@ -97,6 +97,7 @@ export default new Vuex.Store({
 		riskControl: '1111',
 
 		is_admin: false,
+		role: ''
 	},
 	getters: {
 		getExtremeValue: (state) => {
@@ -562,7 +563,8 @@ export default new Vuex.Store({
 			state.riskControl = val
 		},
 		setUserRole(state, val){
-			state.is_admin = val
+			state.is_admin = val.is_admin
+			state.role = val.role
 		},
 	},
 	actions: {

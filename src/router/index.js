@@ -52,7 +52,7 @@ router.beforeEach(async (to, from, next) => {
 			.then((res) => {
 				console.log('lishan res', res)
 				if(res.status == 200) {
-					store.commit('setUserRole', res.data.is_admin)
+					store.commit('setUserRole', {'is_admin':res.data.is_admin,'role':res.data.userid})
 					if(getQueryVariable('userid')) window.location.href = location.origin // 去掉？后面的部分
 					next()
 				}else {throw Error('Status code error')}

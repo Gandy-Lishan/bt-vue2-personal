@@ -253,6 +253,7 @@
 									placement="bottom-start"
 								>
 									<el-button
+									:disabled="scope.row.status == 0 || scope.row.status == 3"
 										plain
 										icon="el-icon-link"
 										circle
