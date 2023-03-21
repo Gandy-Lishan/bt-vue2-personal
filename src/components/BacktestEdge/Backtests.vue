@@ -243,6 +243,8 @@
 import isJson from '@/tools/isJson.js'
 import {copy,permission} from "@/tools/copyBacktestID";
 const throttle = require('lodash/throttle')
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+
 import {
 	copyBacktest,
 	seeParams,
@@ -381,6 +383,111 @@ export default {
 				})
 			}
 		}, 500),
+		viewBacktestResults: throttle(async function (row) {
+			const vm = this
+			if (row.result['Total Trades']) {
+				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
+				try {
+					
+					CIQ.addCover('Fetching backtest information...')
+					CIQ.nprogress.start()
+					const res = await seeParams(row.id)
+					this.$store.commit('getBacktestSymbol', res.data.symbol)
+					CIQ.hideMarker()
+					CIQ.isMarkerShown = false
+					if (res.data.indicator_layout) {
+						this.restoreIndicatorLayoutView(
+							JSON.parse(res.data.indicator_layout),
+							res.data.frequency,
+							row,res.data
+						)
+					} else {
+						this.$store.commit('getRunBacktestData', row)
+						this.$emit('goTobacktestSetupForm', row.id, res.data, ()=>{
+							this.$emit('goBacktestResultForm', row, ()=>{
+								CIQ.hideCover()
+								CIQ.nprogress.done()
+							})
+						})
+					}
+				} catch (error) {
+					console.error(error)
+					vm.$message({
+						message: 'The internal server is busy, please try again later ',
+						type: 'error',
+						offset: 300
+					})
+				}
+			} else {
+				this.$notify({
+					title: 'No trades',
+					message: 'No trades, please change parameter.',
+					offset: 100,
+					type: 'warning'
+				})
+			}
+		}, 500),
+		restoreIndicatorLayoutView(data, freq, row, resData) {
+			// After the run back test and between the view result, a chart will be loaded to output signalouput
+			if (CIQ.isBacktestRun == true) {
+				CIQ.isBacktestRun = false
+				var that = this
+				//The outputsignalsresult is no longer used. The exportcsv is placed before the backtest and the callback is placed in place
+					that.$store.commit('getRunBacktestData', row)
+					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
+						that.$emit('goBacktestResultForm', row, ()=>{
+							CIQ.hideCover()
+							CIQ.nprogress.done()
+						})
+					})
+			} else {
+				this.reloadData(data, freq)
+				var that = this
+				CIQ.addIndicatorsFromBacktest(function () {
+					that.$store.commit('getRunBacktestData', row)
+
+					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
+						that.$emit('goBacktestResultForm', row, ()=>{
+							CIQ.hideCover()
+							CIQ.nprogress.done()
+						})
+					})
+					
+				})
+			}
+		},
+		reloadData(data, freq) {
+			let frequency = ''
+			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
+			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
+			this.$store.commit('getExtraIndicators', [])
+			// filter garbage in TechnicalIndicators
+			// const technicalIndicators = data.technicalIndicators.filter(item=>{
+			// 	data.formIndicators.entry.indexOf(item) != -1 || data.formIndicators.exit.indexOf(item) != -1
+			// })
+			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
+			this.$store.commit('getMA', data.activatedMA)
+			this.$store.commit('setTechSD', data.savedTechSD)
+
+			switch (freq) {
+				case 'Daily': {
+					frequency = 'daily'
+					break
+				}
+				case 'Weekly': {
+					frequency = 'weekly'
+					break
+				}
+				case 'Monthly': {
+					frequency = 'monthly'
+					break
+				}
+				default: {
+					break
+				}
+			}
+			this.$store.commit('setRestoreFreq', frequency)
+		},
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
 			this.getAnalystList()
