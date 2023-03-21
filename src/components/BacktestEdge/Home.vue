@@ -177,7 +177,7 @@
 						></sample
 					></el-tab-pane>
 					<el-tab-pane label="Analysts' Backtest" name="sixth">
-						<router-view @goToHistoryForm="goToHistoryForm"  @refHistoryForm="refHistoryForm"></router-view>
+						<router-view @goToHistoryForm="goToHistoryForm"  @refHistoryForm="refHistoryForm" @goTobacktestSetupForm="goTobacktestSetupForm" @goBacktestResultForm="goBacktestResultForm"></router-view>
 					</el-tab-pane>
 				</el-tabs>
 			</main>
