@@ -941,6 +941,7 @@ export default {
 		backtestNameCheck() {
 			return getBacktestName(this.bd.name)
 				.then((res) => {
+					console.log('res count', res)
 					if (res.data.count == 0) {
 						this.saveBacktestData()
 					} else {
