@@ -74,7 +74,7 @@
 								</div>
 								<div class="urlBox">
 									<p>Analyst Report URL</p>
-									<el-link :href="scope.row.report_url" target="_blank" type="primary">{{scope.row.report_url}}</el-link>
+									<el-link :underline="false" :href="scope.row.report_url" target="_blank" type="primary">{{scope.row.name}}</el-link>
 								</div>
 							</div>
 						</template>
@@ -530,7 +530,8 @@ export default {
 }
 .descriptionBox{
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-between;
+	flex-wrap: wrap;
 	.entryBox {
 		p:first-child {
 		font-weight: 500;
