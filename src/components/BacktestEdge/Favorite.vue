@@ -593,7 +593,8 @@ moveToFavorites: throttle(async function (row) {
 }
 .descriptionBox{
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-between;
+	flex-wrap: wrap;
 	.entryBox p:first-child {
 		font-weight: 500;
 		color: #99a9bf;
