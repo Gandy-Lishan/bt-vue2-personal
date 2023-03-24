@@ -3,6 +3,8 @@
 	<el-row>
 		<el-col :span="24">
 			<div class="favoriteForm_container">
+				<el-input class="search" style="width:12vw;" size="mini" v-model="searchItem" placeholder="" @keyup.enter.native="handleQuery" clearable @clear="handleQuery"></el-input>
+				<el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">Search</el-button>
 				<el-table
 					header-align="center"
 					:data="backtestList"
@@ -291,7 +293,8 @@ import {
 	getStatus,
 	seeParams,
 	deleteBacktest,
-	getBacktestName
+	getBacktestName,
+	searchHistoryList
 } from '@/service/service.js'
 export default {
 	data() {
@@ -313,7 +316,8 @@ export default {
 				total: 0
 			},
 			loadTest: 'Loading...',
-			permission: Cookies.get('devbt2Userid')
+			permission: Cookies.get('devbt2Userid'),
+			searchItem: '',
 		}
 	},
 	directives: {
@@ -329,7 +333,12 @@ export default {
 			this.loading = true
 			let page = this.queryInfo.page
 			try {
-				let res = await getHistoryList(page)
+				let res
+				if(this.searchItem){
+					res = await searchHistoryList(this.searchItem)
+				}else{
+					res = await getHistoryList(page)
+				}
 				if (res.status === 200) {
 					this.loading = false
 					let historyNameList = []
@@ -703,11 +712,16 @@ export default {
 					offset: 300
 				})
 			}
-		}, 1000)
+		}, 1000),
+
+		handleQuery:throttle(function(){this.getHistoryList()},500)
 	}
 }
 </script>
 <style lang="less" scoped>
+.search {
+	margin-right: 28px
+}
 .showDate {
 	display: flex;
 	flex-direction: column;

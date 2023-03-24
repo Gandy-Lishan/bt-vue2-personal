@@ -106,6 +106,18 @@ export function getHistoryList(page) {
 		})
 	})
 }
+export function searchHistoryList(keyword) {
+    const url = '/dev/backtest/?name='
+
+    return new Promise((resolve,reject)=>{
+		axios.get(url+keyword, {withCredentials: true})
+		.then(res=>{
+			resolve(res)
+		}).catch(err=>{
+			reject(err)
+		})
+	})
+}
 export function getBacktestName(name) {
     const url = '/dev/backtest/?name='
 
