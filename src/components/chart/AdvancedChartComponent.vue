@@ -352,7 +352,9 @@ export default class AdvancedChartComponent extends Vue {
 		window.setTimeout(() => {
 			const uiContext = this.createChartAndUI(config)
 			CIQ.stxx = uiContext.stx
-			
+			// If your feed returns data already rolled up in monthly or weekly ticks, 
+			// you can override this behavior by setting stxx.dontRoll to true
+			CIQ.stxx.dontRoll = true	
 			CIQ.periodicity = {period:1, interval:1, timeUnit:'day'}
 
 			var iter = CIQ.stxx.chart.market.newIterator({
