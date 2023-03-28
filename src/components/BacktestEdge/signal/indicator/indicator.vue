@@ -24,7 +24,7 @@
 							@select="handleSentimentSelect"
 							highlight-first-item
 						></el-autocomplete>
-						<div class="dropdown">
+						<!-- <div class="dropdown">
 							<div @click="myFunction" class="dropbtn" id="dropbtn">{{category}}</div>
 							<div ref="myDropdown" id="myDropdown" class="dropdown-content">
 								<div @click="selectCategory">all</div>
@@ -32,7 +32,7 @@
 								<div @click="selectCategory">model2</div>
 								<div @click="selectCategory">model3</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</el-form-item>
 			</div>

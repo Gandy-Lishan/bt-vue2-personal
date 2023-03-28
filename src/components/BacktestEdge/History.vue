@@ -3,8 +3,8 @@
 	<el-row>
 		<el-col :span="24">
 			<div class="favoriteForm_container">
-				<el-input class="search" style="width:12vw;" size="mini" v-model="searchItem" placeholder="" @keyup.enter.native="handleQuery" clearable @clear="handleQuery"></el-input>
-				<el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">Search</el-button>
+				<!-- <el-input class="search" style="width:12vw;" size="mini" v-model="searchItem" placeholder="" @keyup.enter.native="handleQuery" clearable @clear="handleQuery"></el-input>
+				<el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">Search</el-button> -->
 				<el-table
 					header-align="center"
 					:data="backtestList"
