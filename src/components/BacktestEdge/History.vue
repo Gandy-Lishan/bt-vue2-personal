@@ -267,6 +267,9 @@
 							</el-row>
 						</template>
 					</el-table-column>
+					<div slot="empty" style="text-align: left;">
+						<el-empty image-size="80" description="No Data"></el-empty>
+					</div>
 				</el-table>
 				<el-pagination
 					@current-change="handleCurrentChange"

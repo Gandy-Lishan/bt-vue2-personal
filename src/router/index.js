@@ -33,7 +33,6 @@ const router = new Router({
 router.beforeEach(async (to, from, next) => {
 	await initiateIndicatorList()
 	CIQ.store = store
-
 	let loginUrl = 'https://sentimentrader.com/login'
 	//  开发环境无法判断环境变量
 	// if(process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined) loginUrl = 'https://sentdevsite.com/login'

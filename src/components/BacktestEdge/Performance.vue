@@ -264,6 +264,9 @@
 					</el-table>
 				</div>
 				<div class="imgBox">
+					<div v-if="!returnImgUrl && !drawDownImgUrl && !monthReturnImgUrl && !annualReturnImgUrl" style="text-align: left;">
+						<el-empty image-size="80" description="No Data"></el-empty>
+					</div>
 					<div class="benchmarkReturnImg">
 						<img :src="returnImgUrl" alt="" width="100%" />
 					</div>
@@ -367,6 +370,9 @@
 								>
 							</template>
 						</el-table-column>
+						<div slot="empty" style="text-align: left;">
+							<el-empty image-size="80" description="No Data"></el-empty>
+						</div>
 					</el-table>
 					<div class="pagination-container">
 						
@@ -414,6 +420,9 @@
 												</template>
 											</el-table-column>
 										</template>
+									</div>
+									<div slot="empty" style="text-align: left;">
+										<el-empty image-size="80" description="No Data"></el-empty>
 									</div>
 								</el-table>
 							</template>
