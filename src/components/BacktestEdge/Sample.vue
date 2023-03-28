@@ -538,6 +538,9 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	flex-wrap: wrap;
+	> *{
+		flex: 1;
+	}
 	.entryBox {
 		p:first-child {
 			font-weight: 500;
