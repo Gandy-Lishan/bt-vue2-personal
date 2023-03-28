@@ -746,6 +746,7 @@ export default {
 		},
 		async getStocksList() {
 			let vm = this
+			
 			if (vm.$store.state.stocksList.length != 0) {
 				vm.symbolList = vm.$store.state.stocksList.map((item) => {
 					return { value: `${item.stock}`, label: `${item.stock}` }
@@ -770,6 +771,7 @@ export default {
 					await vm.getStocksList()
 					await vm.getIndexsList()
 				}
+				
 				var symbolListTemp = vm.symbolList.filter((item) => {
 					return (
 						item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
@@ -782,8 +784,22 @@ export default {
 						item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
 					)
 				})
+
 				let options = symbolListTemp.concat(IndexListTemp)
+				// keyword全匹配
+				for(var item of options){
+					if(
+						item.value.toLowerCase()===query.toLowerCase() || 
+						item.label.toLowerCase()===query.toLowerCase()
+					){	
+						options.unshift(item)
+						break
+					}
+				} 
+				// 去重
 				this.options = uniqWith(options, isEqual)
+				// 解除遮罩
+				vm.loading = false
 			} else {
 				this.options = []
 			}

@@ -24,6 +24,15 @@
 							@select="handleSentimentSelect"
 							highlight-first-item
 						></el-autocomplete>
+						<div class="dropdown">
+							<div @click="myFunction" class="dropbtn" id="dropbtn">{{category}}</div>
+							<div ref="myDropdown" id="myDropdown" class="dropdown-content">
+								<div @click="selectCategory">all</div>
+								<div @click="selectCategory">model</div>
+								<div @click="selectCategory">model2</div>
+								<div @click="selectCategory">model3</div>
+							</div>
+						</div>
 					</div>
 				</el-form-item>
 			</div>
@@ -101,7 +110,17 @@ export default {
 				technicalIndicator: [{ validator: validateTech, trigger: 'change' }],
 				riskIndicator: [{ validater: validateRisk, trigger: 'change' }]
 			},
-			 fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+			fileList: [
+				{
+					name: 'food.jpeg',
+					url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+				},
+				{
+					name: 'food2.jpeg',
+					url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+				}
+			],
+			category: 'all'
 		}
 	},
 	computed: {
@@ -199,12 +218,15 @@ export default {
 					// The changed timeframe is not equal to the current timeframe of the sentiment indicator
 					switch (newVal) {
 						case 'Daily':
-							if(this.si.sentimentIndicator){
+							if (this.si.sentimentIndicator) {
 								this.si.sentimentIndicator = ''
 							}
 							break
 						case 'Weekly':
-							if(this.currentSentiUpdated == 'Monthly' && this.si.sentimentIndicator) {
+							if (
+								this.currentSentiUpdated == 'Monthly' &&
+								this.si.sentimentIndicator
+							) {
 								this.si.sentimentIndicator = ''
 							}
 							break
@@ -216,6 +238,13 @@ export default {
 		}
 	},
 	methods: {
+		myFunction() {
+			this.$refs.myDropdown.classList.toggle('show')
+		},
+		/* 当用户选择indicator类别，进行搜索筛选*/
+		selectCategory(e){
+			this.category = e.target.innerHTML
+		},
 		// Clear form authentication
 		clearFormValidate() {
 			this.$refs.siForm.clearValidate()
@@ -527,7 +556,7 @@ export default {
 							indicatorList = this.$store.state.indicatorsList
 							indicatorList = CIQ.indicatorList
 						}
-					} 
+					}
 					sentimentList = indicatorList.map((obj) => {
 						if (obj.chart_name && obj.url && obj.updated) {
 							return {
@@ -614,76 +643,85 @@ export default {
 			}
 		},
 		async setEditData(newVal) {
-try {
-	if (JSON.stringify(newVal) != '{}') {
-				this.clearFormValidate()
-				let index = this.panelIndex
-				let vm = this
-				if (newVal[this.criteria].signals[index].analysis === 'Sentiment') {
+			try {
+				if (JSON.stringify(newVal) != '{}') {
+					this.clearFormValidate()
+					let index = this.panelIndex
+					let vm = this
+					if (newVal[this.criteria].signals[index].analysis === 'Sentiment') {
+						this.indicatorRadio = 'Sentiment Indicators'
+						this.si.sentimentIndicator =
+							newVal[this.criteria].signals[index].indicator
+						let sentimentList = this.$store.state.sentimentIndicatorList
 
-					this.indicatorRadio = 'Sentiment Indicators'
-					this.si.sentimentIndicator =
-						newVal[this.criteria].signals[index].indicator
-					let sentimentList = this.$store.state.sentimentIndicatorList
-
-					if (sentimentList.length == 0) {
-						let res = await getIndicatorsList()
-						sentimentList = res.data.map((obj) => {
-							if (obj.chart_name && obj.url && obj.updated) {
-								return {
-									value: obj.chart_name,
-									url: obj.url,
-									updated: obj.updated
+						if (sentimentList.length == 0) {
+							let res = await getIndicatorsList()
+							sentimentList = res.data.map((obj) => {
+								if (obj.chart_name && obj.url && obj.updated) {
+									return {
+										value: obj.chart_name,
+										url: obj.url,
+										updated: obj.updated
+									}
 								}
+							})
+						}
+
+						let indi = this.si.sentimentIndicator
+
+						sentimentList.forEach((item) => {
+							if (indi.toUpperCase() == item.value.toUpperCase()) {
+								let obj = {}
+								obj.index = vm.panelIndex
+								obj.url = item.url
+								// Set the tiemframe that currently fills the indicator. If the indicator does not match after switching the timeframe, it will be removed
+								this.currentSentiUpdated = item.updated
+								vm.$emit('getIndicatorUrl', obj)
 							}
 						})
 					}
-
-					let indi = this.si.sentimentIndicator
-
-					sentimentList.forEach((item) => {
-						if (indi.toUpperCase() == item.value.toUpperCase()) {
-							let obj = {}
-							obj.index = vm.panelIndex
-							obj.url = item.url
-							// Set the tiemframe that currently fills the indicator. If the indicator does not match after switching the timeframe, it will be removed
-							this.currentSentiUpdated = item.updated
-							vm.$emit('getIndicatorUrl', obj)
+					if (newVal[this.criteria].signals[index].analysis === 'Technical') {
+						vm.indicatorRadio = 'Technical Indicators'
+						let technicalIndicator =
+							newVal[this.criteria].signals[index].indicator
+						vm.si.technicalIndicators = technicalIndicator
+						let formateList = this.$store.state.formateTechnicalList
+						if (formateList.length === 0) {
+							formateList = vm.loadShortLong()
 						}
-					})
-				}
-				if (newVal[this.criteria].signals[index].analysis === 'Technical') {
-					vm.indicatorRadio = 'Technical Indicators'
-					let technicalIndicator =
-						newVal[this.criteria].signals[index].indicator
-					vm.si.technicalIndicators = technicalIndicator
-					let formateList = this.$store.state.formateTechnicalList
-					if (formateList.length === 0) {
-						formateList = vm.loadShortLong()
-					}
-					for (let i = 0; i < formateList.length; i++) {
-						if (technicalIndicator === formateList[i].value) {
-							let obj = formateList[i]
-							let isFromEdit = true
-							vm.handleTechnicalSelect(obj, isFromEdit)
-							break
+						for (let i = 0; i < formateList.length; i++) {
+							if (technicalIndicator === formateList[i].value) {
+								let obj = formateList[i]
+								let isFromEdit = true
+								vm.handleTechnicalSelect(obj, isFromEdit)
+								break
+							}
 						}
 					}
 				}
+			} catch (error) {
+				this.$notify({
+					title: 'Failed',
+					message: 'The internal server is busy, please try again later',
+					type: 'error',
+					offset: 100
+				})
 			}
-} catch (error) {
-	this.$notify({
-							title: 'Failed',
-							message: 'The internal server is busy, please try again later',
-							type: 'error',
-							offset: 100
-						})
-}
-		},
+		}
 	}
 }
 </script>
 <style lang="less" scoped>
+.dropdown {
+	display: block;
+	left: unset;
+	right: 0;
+}
+.dropbtn:after {
+	right: 14px;
+	top: 15px;
+}
+
 .indicator-container {
 	display: flex;
 }
@@ -705,7 +743,7 @@ try {
 /deep/ .el-form-item {
 	margin-bottom: 10px;
 }
-.upload-demo{
+.upload-demo {
 	display: flex;
 
 	flex-direction: row-reverse;

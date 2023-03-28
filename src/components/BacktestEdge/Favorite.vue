@@ -30,7 +30,7 @@
 						width="70px"
 					>
 					</el-table-column>
-					
+
 					<el-table-column type="expand">
 						<template slot-scope="scope">
 							<div class="descriptionBox">
@@ -39,13 +39,19 @@
 									<template
 										v-for="(item, index) in scope.row.entry_description"
 									>
-										<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
+										<p :key="index">
+											<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
+											>{{ item }}
+										</p>
 									</template>
 								</div>
 								<div class="exitBox">
 									<p>Exit Description</p>
 									<template v-for="(item, index) in scope.row.exit_description">
-										<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
+										<p :key="index">
+											<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
+											>{{ item }}
+										</p>
 									</template>
 								</div>
 							</div>
@@ -90,7 +96,7 @@
 							</div>
 						</template>
 					</el-table-column>
-					
+
 					<el-table-column
 						label="Timeframe"
 						show-overflow-tooltip
@@ -182,7 +188,7 @@
 									placement="bottom-start"
 								>
 									<el-button
-									    :disabled="scope.row.status == 0 || scope.row.status == 3"
+										:disabled="scope.row.status == 0 || scope.row.status == 3"
 										type="warning"
 										icon="el-icon-view"
 										circle
@@ -197,7 +203,7 @@
 									placement="bottom-start"
 								>
 									<el-button
-									:disabled="scope.row.status == 0 || scope.row.status == 3"
+										:disabled="scope.row.status == 0 || scope.row.status == 3"
 										plain
 										icon="el-icon-link"
 										circle
@@ -209,6 +215,9 @@
 							</el-row>
 						</template>
 					</el-table-column>
+					<div slot="empty" style="text-align: left">
+						<el-empty image-size="80" description="No Data"></el-empty>
+					</div>
 				</el-table>
 				<el-pagination
 					@current-change="handleCurrentChange"
@@ -225,7 +234,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 const throttle = require('lodash/throttle')
-import {copy,permission} from "@/tools/copyBacktestID";
+import { copy, permission } from '@/tools/copyBacktestID'
 import {
 	getFavoriteList,
 	seeParams,
@@ -255,11 +264,12 @@ export default {
 		}
 	},
 	directives: {
-    copy,
+		copy,
 		permission
-  },
+	},
 	methods: {
-async getFavoriteList(strategy) {
+		async getFavoriteList(strategy) {
+			this.loading = true
 			let page = this.queryInfo.page
 			try {
 				const res = await getFavoriteList(page)
@@ -268,16 +278,18 @@ async getFavoriteList(strategy) {
 					this.backtestList = res.data.results
 					if (this.backtestList.length != 0) {
 						this.backtestList.forEach((element) => {
-														if (element.result !== '')
+							if (element.result !== '')
 								element.result = JSON.parse(element.result)
-								if(element.entry_description.indexOf("[") != -1) {
-									element.entry_description = JSON.parse(element.entry_description)
-								}else{
+							if (element.entry_description.indexOf('[') != -1) {
+								element.entry_description = JSON.parse(
+									element.entry_description
+								)
+							} else {
 								element.entry_description = [element.entry_description]
 							}
-								if(element.exit_description.indexOf("[") != -1) {
-									element.exit_description = JSON.parse(element.exit_description)
-								}else{
+							if (element.exit_description.indexOf('[') != -1) {
+								element.exit_description = JSON.parse(element.exit_description)
+							} else {
 								element.exit_description = [element.exit_description]
 							}
 						})
@@ -285,7 +297,7 @@ async getFavoriteList(strategy) {
 					this.queryInfo.total = res.data.count
 				}
 			} catch (error) {
-				console.log(error);
+				console.log(error)
 			}
 		},
 		editBacktest: throttle(async function (row) {
@@ -304,14 +316,14 @@ async getFavoriteList(strategy) {
 					this.restoreIndicatorLayoutEdit(
 						JSON.parse(res.data.indicator_layout),
 						res.data.frequency,
-						row, res.data
+						row,
+						res.data
 					)
-				}
-				else{
+				} else {
 					this.$store.commit('getRunBacktestData', row)
 					// Emit synchronous call
-					this.$emit('goBacktestResultForm', row, ()=>{
-						this.$emit('goTobacktestSetupForm', row.id, res.data,()=>{
+					this.$emit('goBacktestResultForm', row, () => {
+						this.$emit('goTobacktestSetupForm', row.id, res.data, () => {
 							CIQ.hideCover()
 							CIQ.nprogress.done()
 						})
@@ -345,17 +357,17 @@ async getFavoriteList(strategy) {
 				})
 			}
 		},
-copyBacktest: throttle(async function (row) {
+		copyBacktest: throttle(async function (row) {
 			let params = {}
-			let res 
+			let res
 			try {
 				res = await seeParams(row.id)
 			} catch (error) {
 				this.$notify.error({
-							title: 'Service is busy',
-							message: 'The internal server is busy, please try again later ',
-							offset: 100
-						})
+					title: 'Service is busy',
+					message: 'The internal server is busy, please try again later ',
+					offset: 100
+				})
 			}
 			this.$store.commit('getBacktestSymbol', res.data.symbol)
 
@@ -377,20 +389,20 @@ copyBacktest: throttle(async function (row) {
 					this.$message.error('Copy failed')
 				}
 			} catch (error) {
-					if (error.response.status === 403) {
+				if (error.response.status === 403) {
 					this.$notify.error({
 						title: 'Has been Copied',
 						message: 'The backtest has been copied',
 						offset: 100
 					})
-					}
-					if (error.response.status === 500) {
-						this.$notify.error({
-							title: 'Service is busy',
-							message: 'The internal server is busy, please try again later ',
-							offset: 100
-						})
-					}
+				}
+				if (error.response.status === 500) {
+					this.$notify.error({
+						title: 'Service is busy',
+						message: 'The internal server is busy, please try again later ',
+						offset: 100
+					})
+				}
 			}
 		}, 500),
 		viewBacktestResults: throttle(async function (row) {
@@ -400,7 +412,7 @@ copyBacktest: throttle(async function (row) {
 				try {
 					CIQ.addCover('Fetching backtest information...')
 					CIQ.nprogress.start()
-					
+
 					const res = await seeParams(row.id)
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					CIQ.hideMarker()
@@ -409,13 +421,13 @@ copyBacktest: throttle(async function (row) {
 						this.restoreIndicatorLayoutView(
 							JSON.parse(res.data.indicator_layout),
 							res.data.frequency,
-							row,res.data
+							row,
+							res.data
 						)
-					}
-					else{
+					} else {
 						this.$store.commit('getRunBacktestData', row)
-						this.$emit('goTobacktestSetupForm', row.id, res.data, ()=>{
-							this.$emit('goBacktestResultForm', row, ()=>{
+						this.$emit('goTobacktestSetupForm', row.id, res.data, () => {
+							this.$emit('goBacktestResultForm', row, () => {
 								CIQ.hideCover()
 								CIQ.nprogress.done()
 							})
@@ -441,7 +453,7 @@ copyBacktest: throttle(async function (row) {
 			this.queryInfo.page = newpage
 			this.getFavoriteList()
 		},
-		reloadData(data, freq){
+		reloadData(data, freq) {
 			let frequency = ''
 			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
 			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
@@ -474,33 +486,32 @@ copyBacktest: throttle(async function (row) {
 			this.$store.commit('setRestoreFreq', frequency)
 		},
 		restoreIndicatorLayoutView(data, freq, row, resData) {
-				this.reloadData(data, freq)
-				var that = this
-				CIQ.addIndicatorsFromBacktest(function(){
-					that.$store.commit('getRunBacktestData', row)
-					// emit同步调用
-					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
-						that.$emit('goBacktestResultForm', row, ()=>{
-							CIQ.hideCover()
-							CIQ.nprogress.done()
-						})
+			this.reloadData(data, freq)
+			var that = this
+			CIQ.addIndicatorsFromBacktest(function () {
+				that.$store.commit('getRunBacktestData', row)
+				// emit同步调用
+				that.$emit('goTobacktestSetupForm', row.id, resData, () => {
+					that.$emit('goBacktestResultForm', row, () => {
+						CIQ.hideCover()
+						CIQ.nprogress.done()
 					})
-					
 				})
+			})
 		},
 		restoreIndicatorLayoutEdit(data, freq, row, resData) {
-				this.reloadData(data, freq)
-				var that = this
-				CIQ.addIndicatorsFromBacktest(function(){
-					that.$store.commit('getRunBacktestData', row)
-					
-					that.$emit('goBacktestResultForm', row, ()=>{
-						that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
-							CIQ.hideCover()
-							CIQ.nprogress.done()
-						})
+			this.reloadData(data, freq)
+			var that = this
+			CIQ.addIndicatorsFromBacktest(function () {
+				that.$store.commit('getRunBacktestData', row)
+
+				that.$emit('goBacktestResultForm', row, () => {
+					that.$emit('goTobacktestSetupForm', row.id, resData, () => {
+						CIQ.hideCover()
+						CIQ.nprogress.done()
 					})
 				})
+			})
 		},
 		addToFavorites: throttle(async function (row) {
 			let vm = this
@@ -529,7 +540,7 @@ copyBacktest: throttle(async function (row) {
 				})
 			}
 		}, 500),
-moveToFavorites: throttle(async function (row) {
+		moveToFavorites: throttle(async function (row) {
 			let vm = this
 			row.favorites = false
 			let params = {
@@ -592,7 +603,7 @@ moveToFavorites: throttle(async function (row) {
 .el-table__body-wrapper {
 	overflow-x: scroll;
 }
-.descriptionBox{
+.descriptionBox {
 	display: flex;
 	justify-content: space-between;
 	flex-wrap: wrap;

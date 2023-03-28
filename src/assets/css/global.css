@@ -600,6 +600,18 @@ input[type="time"] {
 .el-tabs__new-tab{
   margin: 12px 5px 9px 10px;
 }
+.el-autocomplete-suggestion li{
+  margin: 0 10px;
+}
+.el-empty{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 40px 0;
+}
 .multi-box .el-tabs__item {
 	background-color: #797979;
 	font-weight: bold;
