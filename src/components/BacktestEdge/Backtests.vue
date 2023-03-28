@@ -57,20 +57,22 @@
 					</el-table-column> -->
 					<el-table-column type="expand">
 						<template slot-scope="scope">
-							<div class="descriptionBox">
-								<div class="entryBox">
-									<p>Entry Description</p>
-									<template
-										v-for="(item, index) in scope.row.entry_description"
-									>
-										<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
-									</template>
-								</div>
-								<div class="exitBox">
-									<p>Exit Description</p>
-									<template v-for="(item, index) in scope.row.exit_description">
-										<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
-									</template>
+							<div class="expandArea">
+								<div class="descriptionBox">
+									<div class="entryBox">
+										<p>Entry Description</p>
+										<template
+											v-for="(item, index) in scope.row.entry_description"
+										>
+											<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
+										</template>
+									</div>
+									<div class="exitBox">
+										<p>Exit Description</p>
+										<template v-for="(item, index) in scope.row.exit_description">
+											<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
+										</template>
+									</div>
 								</div>
 								<div class="urlBox">
 									<p>Analyst Report URL</p>
@@ -536,6 +538,10 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	flex-wrap: wrap;
+	gap: 20px;
+	> *{
+		flex: 1;
+	}
 	.entryBox {
 		p:first-child {
 		font-weight: 500;
