@@ -379,7 +379,7 @@ export default {
 		refreshHistory(id) {
 			let vm = this
 			vm.loadTest = 'Generating Backtest report, please wait'
-			
+			console.log('refreshHistory')
 			vm.clearInterval = clearPromiseInterval
 			let timer = setPromiseInterval(async () => {
 				try {
@@ -391,7 +391,6 @@ export default {
 					vm.getHistoryList()
 					this.$emit('refFavoritesForm')
 					
-
 					let row = res.data
 					row.result = JSON.parse(row.result)
 					vm.viewBacktestResults(row)
@@ -401,16 +400,18 @@ export default {
 					vm.queryInfo.page = 1
 					vm.getHistoryList()
 					this.$emit('refFavoritesForm')
+
 					CIQ.hideCover()
 					CIQ.nprogress.done()
 					let row = res.data
 					row.result = JSON.parse(row.result)
-					vm.$notify({
-					title: 'No trades',
-					message: 'No trades, please change parameter.',
-					offset: 100,
-					type: 'warning'
-				})
+					vm.viewBacktestResults(row)
+					// vm.$notify({
+					// 	title: 'No trades',
+					// 	message: 'No trades, please change parameter.',
+					// 	offset: 100,
+					// 	type: 'warning'
+					// })
 				}
 				} catch (error) {
 					vm.$message({
@@ -424,7 +425,7 @@ export default {
 			}, 3000)
 		},
 		editBacktest: throttle(async function (row) {
-			console.log('row', row)
+			console.log('editBacktest', row)
 			let vm = this
 			try {
 				CIQ.addCover('Fetching backtest information...')
@@ -540,10 +541,9 @@ export default {
 			}
 		}, 1000),
 		viewBacktestResults: throttle(async function (row) {
-			if (row.result['Total Trades']) {
+			console.log('viewBacktestResults',row)
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {
-					
 					CIQ.addCover('Fetching backtest information...')
 					CIQ.nprogress.start()
 					const res = await seeParams(row.id)
@@ -572,7 +572,7 @@ export default {
 						offset: 300
 					})
 				}
-			} else {
+			if (!row.result['Total Trades']){
 				this.$notify({
 					title: 'No trades',
 					message: 'No trades, please change parameter.',
