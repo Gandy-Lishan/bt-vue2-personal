@@ -10,6 +10,7 @@
 							src="../../assets/logo.png"
 							alt="logo"
 					/></span>
+					<div class="betaNote">BacktestEdge Beta</div>
 					<el-menu :default-active="activeIndex" class="el-menu-demo menu" mode="horizontal" @select="handleSelect">
 						<el-submenu index="1">
 							<template slot="title">Help</template>
@@ -26,12 +27,13 @@
 				</div>
 			</div>
 			<header class="header">
-				<el-row type="flex" justify="center"
+				<p class="hint">Hint: Move cursor out of chart area to scroll down the page below</p>
+				<!-- <el-row type="flex" justify="center"
 					><el-col>
 						<p class="betaNote">BacktestEdge Beta</p>
 						<p class="hint">Hint: Move cursor out of chart area to scroll down the page below</p>
 					</el-col>
-				</el-row>
+				</el-row> -->
 				<div class="chart_box" id="chart_box">
 					<chart width="100%" height="100%"></chart>
 				</div>
@@ -120,7 +122,7 @@
 										>Run Backtest</el-button
 									></el-tooltip
 								>
-								<el-checkbox style="margin-left:10px" v-model="test" label="download test csv" border></el-checkbox>
+								<!-- <el-checkbox style="margin-left:10px" v-model="test" label="download test csv" border></el-checkbox> -->
 							</div>
 						</div>
 					</el-tab-pane>
@@ -164,9 +166,9 @@
 							@goBacktestResultForm="goBacktestResultForm"
 						></sample
 					></el-tab-pane>
-					<el-tab-pane label="Analysts' Backtest" name="sixth">
+					<!-- <el-tab-pane label="Analysts' Backtest" name="sixth">
 						<router-view @goToHistoryForm="goToHistoryForm"  @refHistoryForm="refHistoryForm" @goTobacktestSetupForm="goTobacktestSetupForm" @goBacktestResultForm="goBacktestResultForm"></router-view>
-					</el-tab-pane>
+					</el-tab-pane> -->
 				</el-tabs>
 			</main>
 
@@ -1198,7 +1200,8 @@ main {
 }
 
 .hint{
-	position: absolute;
+	// position: absolute;
+	text-align: right;
 	font-size: 0.8rem;
 	color: black !important;
 	bottom:-20px;
@@ -1283,17 +1286,17 @@ header {
 		width: 100%;
 	}
 	p {
-		margin: 1.14rem 0 1.14rem 0px;
+		margin: 1rem 2rem 0rem 0rem;
 		font-style: italic;
 		color: #6c6c6c;
 	}
-	p:first-of-type {
-		text-align: left;
-		font-size: 2.5rem;
-		margin: 0px;
-		font-weight: lighter;
-		color: #333333;
-	}
+	// p:first-of-type {
+	// 	text-align: left;
+	// 	font-size: 2.5rem;
+	// 	margin: 0px;
+	// 	font-weight: lighter;
+	// 	color: #333333;
+	// }
 	background: url(../../assets/dots-blue.png);
 }
 .navbar {
@@ -1314,6 +1317,16 @@ header {
 		align-self: center;
 		margin-right: 7px;
 	}
+	.betaNote {
+		margin: 1.14rem 0 1.14rem 0px;
+		font-style: italic;
+		color: #6c6c6c;
+		text-align: left;
+		font-size: 2.5rem;
+		margin: 0px;
+		font-weight: lighter;
+		color: #333333;
+	}
 }
 .header_logo>span{
 	padding: 12px 24px;
@@ -1328,9 +1341,9 @@ header {
 	overflow: hidden;
 	margin: 0 25px;
 }
-.betaNote {
-	padding: 22px 50px 10px 50px;
-}
+// .betaNote {
+// 	padding: 22px 50px 10px 50px;
+// }
 .criteria-box {
 	display: flex;
 	justify-content: space-between;
@@ -1353,6 +1366,7 @@ header {
 		align-items: center;
 		border-bottom: 1px solid #797979;
 	}
+	.betaNote {visibility: hidden;}
 }
 .backtest-btns {
 	margin-top: 10px;
@@ -1396,7 +1410,9 @@ header {
 			font-size: 12px;
 		}
 	}
+	.betaNote {visibility: hidden;}
 }
+@media (max-width: 374px) {.betaNote {visibility: hidden;}}
 .el-dropdown-link {
 	cursor: pointer;
 	//color: #409eff;
