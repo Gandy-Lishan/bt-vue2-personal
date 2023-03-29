@@ -924,9 +924,7 @@ export default {
 										if (res.status === 201) {
 											CIQ.isBacktestRun = true
 											//After saving successfully, clear the backtestinfo back to the original state
-											vm.$store.commit('initialBacktestInfo')
-
-										
+											vm.$store.commit('initialBacktestInfo')			
 
 											vm.goToHistoryForm()
 											vm.$refs.historyChild.refreshHistory(res.data.id)

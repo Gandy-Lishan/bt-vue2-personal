@@ -480,6 +480,8 @@ export default {
 			let vm = this
 			let initalData = {}
 			let data = {}
+			// 清空performance表单
+			vm.clearPerformanceData()
 			if (!row.id) {
 				return
 			}
@@ -546,13 +548,13 @@ export default {
 								initalData['Returns Heatmap File URL']
 							data.CAGR = initalData['CAGR']
 							vm.tableData = []
-							vm.tableData.push(data)
-							vm.returnImgUrl = data.returnsFileURL
-							vm.drawDownImgUrl = data.ddFileURL
-							vm.monthReturnImgUrl = data.returnsHeatmapFileURL
-							vm.annualReturnImgUrl = data.annualReturnsFileURL
-
 							if(initalData['Trades']){
+								// 有交易才填表单
+								vm.tableData.push(data)
+								vm.returnImgUrl = data.returnsFileURL
+								vm.drawDownImgUrl = data.ddFileURL
+								vm.monthReturnImgUrl = data.returnsHeatmapFileURL
+								vm.annualReturnImgUrl = data.annualReturnsFileURL
 								for (let i = 0; i < initalData['Trades'].length; i++) {
 									if (i % 2 == 0) {
 										initalData['Trades'][i].trade_number = i / 2
@@ -625,18 +627,18 @@ export default {
 					let exitIn10Bar = chartDataset[res+10]?((direction=='Short'?entryPrice-chartDataset[res+10].Open:chartDataset[res+10].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
 					let exitIn21Bar = chartDataset[res+21]?((direction=='Short'?entryPrice-chartDataset[res+21].Open:chartDataset[res+21].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
 					let exitIn42Bar = chartDataset[res+42]?((direction=='Short'?entryPrice-chartDataset[res+42].Open:chartDataset[res+42].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn64Bar = chartDataset[res+64]?((direction=='Short'?entryPrice-chartDataset[res+64].Open:chartDataset[res+64].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn170Bar = chartDataset[res+170]?((direction=='Short'?entryPrice-chartDataset[res+170].Open:chartDataset[res+170].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn260Bar = chartDataset[res+260]?((direction=='Short'?entryPrice-chartDataset[res+260].Open:chartDataset[res+260].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
+					let exitIn63Bar = chartDataset[res+63]?((direction=='Short'?entryPrice-chartDataset[res+63].Open:chartDataset[res+63].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
+					let exitIn168Bar = chartDataset[res+168]?((direction=='Short'?entryPrice-chartDataset[res+168].Open:chartDataset[res+168].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
+					let exitIn252Bar = chartDataset[res+252]?((direction=='Short'?entryPrice-chartDataset[res+252].Open:chartDataset[res+252].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
 					backtestResult.push({
-						'12 Months [%]': exitIn260Bar,
+						'12 Months [%]': exitIn252Bar,
 						'Entry Date': dataSet[data].Date,
 						'1 Week [%]': exitIn5Bar,
 						'2 Weeks [%]': exitIn10Bar,
 						'1 Month [%]': exitIn21Bar,
 						'2 Months [%]': exitIn42Bar,
-						'3 Months [%]': exitIn64Bar,
-						'8 Months [%]': exitIn170Bar,
+						'3 Months [%]': exitIn63Bar,
+						'8 Months [%]': exitIn168Bar,
 					})
 				}
 			}
@@ -751,6 +753,9 @@ export default {
 		clearPerformanceData() {
 			this.tableData = []
 			this.tradesData = []
+			//splitTradeData和backtestHistoryList也要清空
+			this.splitTradeData = []
+			this.backtestHistoryList = []
 			this.returnImgUrl = ''
 			this.drawDownImgUrl = ''
 			this.monthReturnImgUrl = ''
