@@ -196,7 +196,7 @@
 										@click="viewBacktestResults(scope.row)"
 									></el-button>
 								</el-tooltip>
-								<el-tooltip
+								<!-- <el-tooltip
 									class="item"
 									effect="dark"
 									content="copy backtest link"
@@ -211,7 +211,7 @@
 										type="success"
 										v-copy="scope.row.id"
 									></el-button>
-								</el-tooltip>
+								</el-tooltip> -->
 							</el-row>
 						</template>
 					</el-table-column>
