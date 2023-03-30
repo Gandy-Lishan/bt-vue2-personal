@@ -1208,6 +1208,7 @@ main {
 }
 
 button.toTop {
+	opacity: .8;
 	z-index: 999;
 	border: unset;
 	position: fixed;
