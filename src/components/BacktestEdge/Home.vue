@@ -15,11 +15,11 @@
 						<el-submenu index="1">
 							<template slot="title">Help</template>
 							<el-menu-item index="1-1">Tutorial</el-menu-item>
-							<!-- <el-menu-item index="1-2">Contant Us</el-menu-item> -->
+							<el-menu-item index="1-2">Contant Us</el-menu-item>
 						</el-submenu>
 						<el-submenu index="2">
 							<template slot="title"><i class="el-icon-s-tools"></i></template>
-							<el-menu-item index="2-1">User: {{$store.state.role}}</el-menu-item>
+							<!-- <el-menu-item index="2-1">User: {{$store.state.role}}</el-menu-item> -->
 							<!-- <el-menu-item index="2-1">Theme</el-menu-item> -->
 							<!-- <el-menu-item index="2-2">Language</el-menu-item> -->
 						</el-submenu>
@@ -411,10 +411,15 @@ export default {
 	},
 	methods: {
 		handleSelect(key, keyPath) {
-			let routeUrl = this.$router.resolve({
-                path: '/doc',
-            });
-          	window.open(routeUrl.href, '_blank');
+			let path = ''
+			if(key=='1-1'){
+				path = this.$router.resolve({
+					path: '/doc',
+				}).href
+			}else if(key=='1-2'){
+				path = 'https://users.sentimentrader.com/users/account/support/'
+			}
+          	window.open(path, '_blank');
 		},
 		animationUp: function () {
 			window.scrollTo({
