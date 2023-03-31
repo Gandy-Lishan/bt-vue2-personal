@@ -860,7 +860,8 @@ export default {
 						indicatorLayout.savedTechSD = savedTechSD
 						indicatorLayout.activatedMA = this.$store.state.activatedMA
 
-						backtestData.indicator_layout = JSON.stringify(indicatorLayout)
+						backtestData.indicator_layout = JSON.stringify(indicatorLayout).replaceAll('\u200c','$r001$')
+						console.log('any \u200c ?',backtestData.indicator_layout.search('\u200c'))
 
 						
 						let copyBacktestData = JSON.parse(JSON.stringify(backtestData))
@@ -920,6 +921,7 @@ export default {
                 					var data = await uploadS3(S3DataStr)
 
 									try {
+										
 										let res = await runBacktest(backtestDataStr)
 										if (res.status === 201) {
 											CIQ.isBacktestRun = true
