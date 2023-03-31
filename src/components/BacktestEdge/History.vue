@@ -436,8 +436,9 @@ export default {
 				CIQ.hideMarker()
 				CIQ.isMarkerShown = false
 				if (res.data.indicator_layout) {
-					let parsedData = JSON.parse(res.data.indicator_layout)
-					// let parsedData = JSON.parse('{"formIndicators":{"entry":["Ehler Fisher"],"exit":[""]},"technicalIndicators":["Ehler Fisher"],"savedTechSD":[{"type":"Ehler Fisher","inputs":{"Period":10,"display":"Ehler Fisher","id":"\u200cEhler Fisher\u200c (10)"},"outputs":{"EF":"auto","EF Trigger":"#FF0000"},"parameters":{"chartName":"chart","editMode":true},"panel":"\u200cEhler Fisher\u200c (10)"}],"activatedMA":[{"period":21,"url":""}]}')
+					let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$','\u200c'))
+					console.log('after edit,indicator_layout',parsedData)
+					//let parsedData = JSON.parse('{"formIndicators":{"entry":["Ehler Fisher"],"exit":[""]},"technicalIndicators":["Ehler Fisher"],"savedTechSD":[{"type":"Ehler Fisher","inputs":{"Period":10,"display":"Ehler Fisher","id":"\u200cEhler Fisher\u200c (10)"},"outputs":{"EF":"auto","EF Trigger":"#FF0000"},"parameters":{"chartName":"chart","editMode":true},"panel":"\u200cEhler Fisher\u200c (10)"}],"activatedMA":[{"period":21,"url":""}]}')
 					this.restoreIndicatorLayoutEdit(
 						parsedData,
 						res.data.frequency,
