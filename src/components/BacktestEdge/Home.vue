@@ -631,7 +631,7 @@ export default {
 					this.$refs.entryChild.saveDelayBar()
 					this.$refs.entryChild.saveRelation()
 				}
-				if (entryChecked && setUpChecked) {
+				if (entryChecked && setUpChecked && setUp) {
 					let exit
 					let exitChecked
 					for (let index = 0; index < this.exitLength; index++) {
