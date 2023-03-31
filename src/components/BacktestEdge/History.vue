@@ -379,7 +379,6 @@ export default {
 		refreshHistory(id) {
 			let vm = this
 			vm.loadTest = 'Generating Backtest report, please wait'
-			console.log('refreshHistory')
 			vm.clearInterval = clearPromiseInterval
 			let timer = setPromiseInterval(async () => {
 				try {
@@ -437,8 +436,10 @@ export default {
 				CIQ.hideMarker()
 				CIQ.isMarkerShown = false
 				if (res.data.indicator_layout) {
+					let parsedData = JSON.parse(res.data.indicator_layout)
+					// let parsedData = JSON.parse('{"formIndicators":{"entry":["Ehler Fisher"],"exit":[""]},"technicalIndicators":["Ehler Fisher"],"savedTechSD":[{"type":"Ehler Fisher","inputs":{"Period":10,"display":"Ehler Fisher","id":"\u200cEhler Fisher\u200c (10)"},"outputs":{"EF":"auto","EF Trigger":"#FF0000"},"parameters":{"chartName":"chart","editMode":true},"panel":"\u200cEhler Fisher\u200c (10)"}],"activatedMA":[{"period":21,"url":""}]}')
 					this.restoreIndicatorLayoutEdit(
-						JSON.parse(res.data.indicator_layout),
+						parsedData,
 						res.data.frequency,
 						row, res.data
 					)
