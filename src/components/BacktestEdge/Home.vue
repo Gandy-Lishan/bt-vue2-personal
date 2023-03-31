@@ -549,8 +549,7 @@ export default {
 			CIQ.hideMarker()
 			CIQ.isMarkerShown = false
 			document.getElementsByClassName("ciq-period")[0].style.display = "block"
-
-			if(freq != 'Daily'){
+			if(stx.chart.symbol!=CIQ.store.state.backtestSymbol || freq != 'Daily'){
 				CIQ.addIndicators()
 			}
 
@@ -631,7 +630,7 @@ export default {
 					this.$refs.entryChild.saveDelayBar()
 					this.$refs.entryChild.saveRelation()
 				}
-				if (entryChecked && setUpChecked) {
+				if (entryChecked && setUpChecked && setUp) {
 					let exit
 					let exitChecked
 					for (let index = 0; index < this.exitLength; index++) {

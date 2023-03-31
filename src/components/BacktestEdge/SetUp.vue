@@ -996,7 +996,7 @@ export default {
 					(this.isTakeProfit ? tpCheck : true) &&
 					(this.isTimeInMarket ? timCheck : true)
 			}
-
+			
 			if (validForm && riskCheck) {
 				if (bd.end_date) {
 					bd.commission = bd.commission / 100
@@ -1024,6 +1024,12 @@ export default {
 					return checked
 				}
 			} else {
+				this.$message({
+					message:
+						'Please check the setup form',
+					type: 'error',
+					offset: 300
+				})
 				checked = false
 				return checked
 			}
