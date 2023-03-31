@@ -549,8 +549,7 @@ export default {
 			CIQ.hideMarker()
 			CIQ.isMarkerShown = false
 			document.getElementsByClassName("ciq-period")[0].style.display = "block"
-
-			if(freq != 'Daily'){
+			if(stx.chart.symbol!=CIQ.store.state.backtestSymbol || freq != 'Daily'){
 				CIQ.addIndicators()
 			}
 

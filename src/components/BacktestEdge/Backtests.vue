@@ -394,7 +394,6 @@ export default {
 			if (row.result['Total Trades']) {
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {
-					
 					CIQ.addCover('Fetching backtest information...')
 					CIQ.nprogress.start()
 					const res = await seeParams(row.id)
