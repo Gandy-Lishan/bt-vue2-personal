@@ -7,7 +7,7 @@ import Router from 'vue-router'
 import Cookies from 'vue-cookies'
 import axios from '../axios'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import { getIndicatorsList, getStocksList } from "@/service/service"
+import { getIndicatorsList, getStocksList, getIndexsList } from "@/service/service"
 import getQueryVariable from '@/tools/getQueryVariable'
 import store from '../store/store'
 
@@ -90,6 +90,10 @@ async function initiateIndicatorList(){
 	let allSymbolsList = res.data
 	const resStocks = await getStocksList()
 	let stocksList = resStocks.data
+	store.commit('getStocksList',stocksList)
+	const resIndexs = await getIndexsList()
+	let indexsList = resIndexs.data
+	store.commit('getIndexsList',indexsList)
 
 	let newAllSymbolsList = []
 	for(var i=0;i<allSymbolsList.length;i++){
