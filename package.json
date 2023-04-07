@@ -33,6 +33,7 @@
     "i": "^0.3.7",
     "jutils-src": "^1.0.0-beta2",
     "lodash": "^4.17.21",
+    "lru-cache": "^8.0.5",
     "nprogress": "^0.2.0",
     "postcss-pxtorem": "^5.1.1",
     "process": "^0.11.10",
