@@ -396,6 +396,7 @@
 			</el-tab-pane>
 			<el-tab-pane label="Exit with different Time-In-Market frame" name="third">
 				<div class="trades-container">
+					<p>The results below provide a multiple timeframe view of the backtest of the indicator and index that you have chosen. The 'Exit Criteria' selected for the backtest is not used for the results below. Instead, we provide a look at various time-frames from 1-Week to 1-Year of returns.</p>
 					<div class="history-container">
 						<el-skeleton :rows="6" :loading="loading" animated>
 							<template>
@@ -836,5 +837,10 @@ export default {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
+}
+
+.trades-container p{
+	width: 90%;
+	font-size: 0.8rem;
 }
 </style>
