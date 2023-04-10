@@ -37,12 +37,6 @@ app.get('/api/stocksList', (req, res) => {
         res.end( data );
     });
 });
-app.get('/api/indexsList', (req, res) => {
-    fs.readFile( dataPath+'indexsList.json', 'utf8', function (err, data) {
-        res.send(data);
-        res.end( data );
-    });
-});
 
 // 寻找静态文件夹
 //app.use(serveStatic(path.join(__dirname, 'dist')))    //自带gzip

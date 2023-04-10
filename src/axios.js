@@ -10,7 +10,6 @@ import cookies from 'vue-cookies'
 let instance = axios.create({
   baseURL: ''
 })
-
  
 //set 10 sec as default,However, some time-consuming requests are processed separately
 //instance.defaults.timeout = 30000;
@@ -19,6 +18,10 @@ let instance = axios.create({
 // instance.defaults.retryDelay = 1000;
 
 // request interceptor
+
+
+
+
 instance.interceptors.request.use((config) => {
 	config.headers.Authorization = window.sessionStorage.getItem('token')
 	config.auth = {

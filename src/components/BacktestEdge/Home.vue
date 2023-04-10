@@ -529,7 +529,9 @@ export default {
 				if (!sd.customLegend && !sd.permanent) CIQ.Studies.removeStudy(stx, sd);
 			}
 			stx.draw();
-			CIQ.setPanelHeight([])
+			var chartBox = document.getElementsByClassName("chart_box")[0]
+			var height = 75/100*window.innerHeight
+			chartBox.style.height = height+ 'px'
 			const freq = CIQ.store.state.exitFrequency
 
 			// remove all Studies from Vuex
