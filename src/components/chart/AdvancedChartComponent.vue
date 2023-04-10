@@ -354,7 +354,7 @@ export default class AdvancedChartComponent extends Vue {
 			CIQ.stxx = uiContext.stx
 			// If your feed returns data already rolled up in monthly or weekly ticks, 
 			// you can override this behavior by setting stxx.dontRoll to true
-			CIQ.stxx.dontRoll = true
+			CIQ.stxx.dontRoll = true	
 			CIQ.periodicity = {period:1, interval:1, timeUnit:'day'}
 
 			var iter = CIQ.stxx.chart.market.newIterator({
@@ -376,7 +376,7 @@ export default class AdvancedChartComponent extends Vue {
 			});
 
 			// append Logo image
-			var node = document.getElementsByClassName("chartContainer")[0]
+			var node = document.getElementsByClassName("stx-subholder")[0]
 			var newdiv=document.createElement("div");
 			newdiv.className = 'stLogo'
 			node.appendChild(newdiv)

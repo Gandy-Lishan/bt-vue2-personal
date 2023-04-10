@@ -29,20 +29,8 @@ const config = {
 				{
 					test: /\.js$/,
 					include: path.resolve(__dirname, 'node_modules/cesium/Source'),
-					loader: require.resolve('@open-wc/webpack-import-meta-loader'),
-				},
-				// 在这里添加 lru-cache 的配置
-				{
-					test: /node_modules[\\/]lru-cache[\\/]/,
-					use: [
-					  {
-						loader: 'babel-loader',
-						options: {
-						  presets: ['@babel/preset-env'],
-						},
-					  },
-					],
-				  },
+					loader: require.resolve('@open-wc/webpack-import-meta-loader')
+				}
 			]
 		},
 		plugins: [

@@ -35,20 +35,10 @@ export function getIndicatorsList() {
 	})
 }
 export function getIndexsList() {
-    // const url = get_env("SERVICE_URL",'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev') + '/getIndexes'
+    const url = get_env("SERVICE_URL",'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev') + '/getIndexes'
     
-    // return new Promise((resolve,reject)=>{
-	// 	axios.get(url, {cache:true, auth: author})
-	// 	.then(res=>{
-	// 		resolve(res)
-	// 	}).catch(err=>{
-	// 		reject(err)
-	// 	})
-	// })
-	
-	const url = '/api/indexsList'
-	return new Promise((resolve,reject)=>{
-		axios.get(url, {withCredentials: true})
+    return new Promise((resolve,reject)=>{
+		axios.get(url, {cache:true, auth: author})
 		.then(res=>{
 			resolve(res)
 		}).catch(err=>{
