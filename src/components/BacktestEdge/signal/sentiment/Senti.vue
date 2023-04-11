@@ -28,13 +28,58 @@
 			</div>
 			<div class="condition-container">
 				<el-form-item>
-					<el-radio
+					<el-radio 
 						v-model="conditionRadio"
 						label="Sentiment Value"
 						@change="getConditionRadio"
-					></el-radio>
+					>
+						<el-select 
+							:disabled="!(conditionRadio === 'Sentiment Value')"
+							v-model="senti.rocCondition"
+							placeholder="Please select condition"
+						>
+							<el-option
+								v-for="item in ROCConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+					</el-radio>
 				</el-form-item>
-				<div class="conditionSelect">
+				<!-- <el-form-item  v-show="isROCLike">
+
+				</el-form-item> -->
+				<div class="conditionSelect new">
+					<el-form-item>
+						<el-select
+							:disabled="!(conditionRadio === 'Sentiment Value')"
+							v-model="senti.newCondition"
+							filterable
+							placeholder="Please select condition"
+							@change="ROCLikeChange"
+						>
+							<el-option
+								v-for="item in newConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</div>
+				<div class="conditionInput period" v-show="isROCLike">
+					<el-form-item prop="value">
+						<el-input
+							:disabled="!(conditionRadio === 'Sentiment Value')"
+							v-model="senti.conditionPeriod"
+							placeholder="Condition Period"
+						></el-input>
+					</el-form-item>
+				</div>
+				<div class="conditionSelect" v-show="isROCLike">
 					<el-form-item>
 						<el-select
 							:disabled="!(conditionRadio === 'Sentiment Value')"
@@ -84,8 +129,7 @@
 					</el-form-item>
 				</div>
 				<div class="conditionSelect">
-					<el-form-item>
-						
+					<el-form-item>				
 						<el-select
 							v-model="senti.condition"
 							filterable
@@ -181,17 +225,39 @@ export default {
 			}
 		}
 		return {
+			isROCLike: false,
+			ROCConditions : [
+				{ value: 'sv', label: 'Sentiment Value' },
+				{ value: 'o', label: 'Symbol Open' },
+				{ value: 'h', label: 'Symbol High' },
+				{ value: 'l', label: 'Symbol Low' },
+				{ value: 'c', label: 'Symbol Close' },
+				{ value: 'v', label: 'Symbol Volume' },
+			],
 			//preload: false,
 			senti: {
 				extreme_optimism: '',
 				extreme_pessimism: '',
 				comparison: 'SV',
 				condition: 3,
+				newCondition: 3,
 				value: '',
+				conditionPeriod: '',
 				period: '',
-				maValue: ''
+				maValue: '',
+				rocCondition: 'sv',
 			},
 			periodTemp: '',
+			newConditions: [
+				{ value: 0, label: '>' },
+				{ value: 1, label: '=' },
+				{ value: 2, label: '<' },
+				{ value: 3, label: 'CrossAbove' },
+				{ value: 4, label: 'CrossBelow' },
+				{ value: 5, label: 'ROC' },
+				{ value: 6, label: 'ROR' },
+				{ value: 7, label: 'MAR' }
+			],
 			conditions: [
 				{ value: 0, label: '>' },
 				{ value: 1, label: '=' },
@@ -260,6 +326,9 @@ export default {
 		}
 	},
 	methods: {
+		ROCLikeChange(val){
+			this.isROCLike = 5<=val && val<=7
+		},
 		change(e) {
 			this.$forceUpdate()
 		},
@@ -321,7 +390,8 @@ export default {
 			}
 			let ma = this.senti.period ? 'moving average' : ''
 			let period = this.senti.period ? this.senti.period : ''
-			let condition = this.conditions[this.senti.condition].label
+			// 选了roc等就用conditions，反则用newConditions
+			let condition = this.isROCLike?this.conditions[this.senti.condition].label:this.newConditions[this.senti.newCondition].label
 			let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
 			let value =
 				this.conditionRadio === 'Sentiment Value'
@@ -339,6 +409,7 @@ export default {
 						desObj.description = commentDes+ this.description
 						desObj.index = 0
 					}
+					console.log('saveDescription',desObj)
 					this.$store.commit('saveDescription', desObj)
 
 		},
@@ -461,6 +532,7 @@ export default {
 					senti.criteria = this.criteria
 					senti.index = index
 					// 定义一个 vuex 新事件用于保存 condition数据
+					console.log('saveCondition',senti)
 					this.$store.commit('saveCondition', senti)
 					return checked
 				} else {
