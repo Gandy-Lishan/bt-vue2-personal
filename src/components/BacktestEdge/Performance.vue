@@ -609,7 +609,6 @@ export default {
 			let chartDataset = CIQ.stxx.chart.dataSet
 			const direction = dataSet[0].TradeStatus=='BUY'?'Long':'Short'
 			dataSet = dataSet.filter(item=>item.TradeStatus=='BUY')
-			console.log('ohlcv: ',chartDataset)	
 			let backtestResult = []
 			for (var data in dataSet) {
 				var datatime = new Date(dataSet[data].Date)
