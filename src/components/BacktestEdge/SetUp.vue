@@ -509,7 +509,7 @@ export default {
 			isRiskControl: false,
 			isTakeProfit: true,
 			isStopLoss: true,
-			isTimeInMarket: false,
+			isTimeInMarket: true,
 			sentimentIndicatorList: [],
 			rules: {
 				capital: [
@@ -1196,12 +1196,13 @@ export default {
 }
 .riskItem {
 	display: flex;
-	margin: 5px;
+	margin: 0px 10px 15px 0px;
 	justify-content: center;
 	align-items: center;
 }
 .risk-control-container {
 	display: flex;
+	justify-content: flex-end;
 }
 
 .el-checkbox-group {
