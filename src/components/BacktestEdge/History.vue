@@ -447,7 +447,7 @@ export default {
 					this.$store.commit('getRunBacktestData', row)
 					// emit Synchronous call
 					this.$emit('goBacktestResultForm', row, ()=>{
-						this.$emit('goTobacktestSetupForm', row.id, res.data,()=>{
+						this.$emit('goTobacktestSetupForm', row.id, res.data,'edit',()=>{
 							CIQ.hideCover()
 							CIQ.nprogress.done()
 						})
@@ -542,7 +542,7 @@ export default {
 			}
 		}, 1000),
 		viewBacktestResults: throttle(async function (row) {
-			console.log('viewBacktestResults',row)
+			console.log('lishan viewBacktestResults',row)
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {
 					CIQ.addCover('Fetching backtest information...')
@@ -560,7 +560,7 @@ export default {
 						)
 					} else {
 						this.$store.commit('getRunBacktestData', row)
-						this.$emit('goTobacktestSetupForm', row.id, res.data, ()=>{
+						this.$emit('goTobacktestSetupForm', row.id, res.data, 'canDelView',()=>{
 							this.$emit('goBacktestResultForm', row, ()=>{
 								CIQ.hideCover()
 								CIQ.nprogress.done()
@@ -626,7 +626,7 @@ export default {
 				var that = this
 				//The outputsignalsresult is no longer used. The exportcsv is placed before the backtest and the callback is placed in place
 					that.$store.commit('getRunBacktestData', row)
-					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
+					that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
 						that.$emit('goBacktestResultForm', row, ()=>{
 							CIQ.hideCover()
 							CIQ.nprogress.done()
@@ -638,7 +638,7 @@ export default {
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
 
-					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
+					that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
 						that.$emit('goBacktestResultForm', row, ()=>{
 							CIQ.hideCover()
 							CIQ.nprogress.done()
@@ -655,7 +655,7 @@ export default {
 					that.$store.commit('getRunBacktestData', row)
 					
 					that.$emit('goBacktestResultForm', row, ()=>{
-						that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
+						that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
 							CIQ.hideCover()
 							CIQ.nprogress.done()
 						})

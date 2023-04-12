@@ -1053,7 +1053,7 @@ export default {
 		goToHistoryForm() {
 			this.activeName = 'second'
 		},
-		async goTobacktestSetupForm(id, resData, callback) {
+		async goTobacktestSetupForm(id, resData, action, callback) {
 			CIQ.nprogress.inc()
 			CIQ.setCoverText('Restoring Backtest form...')
 
@@ -1065,8 +1065,13 @@ export default {
 			vm.backtestEditData = {}
 			try {
 				let data = resData
-
-				data.old_uuid = id
+				if(action === 'edit' || action === 'canDelView'){
+					data.old_uuid = id
+				}else if(action === 'cannotDelView'){
+					if(data.hasOwnProperty('old_uuid')) {
+						delete data.old_uuid
+					}
+				}
 				data.entry = JSON.parse(data.entry)
 				data.exit = JSON.parse(data.exit)
 				delete data.results
