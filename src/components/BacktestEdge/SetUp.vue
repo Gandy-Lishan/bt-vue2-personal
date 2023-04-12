@@ -712,15 +712,11 @@ export default {
 			const str = this.bd.end_date.split('-')
 			str[0] = Number(str[0]) - Number(this.historyValue) + ''
 			this.bd.start_date = str.join('-')
-			
 			var that = this
 			var utils = function () {
 				let vm = this
 				vm.setSymbol = function (symbol) {
 					that.bd.symbol = symbol
-				}
-				vm.b = function () {
-					alert('b')
 				}
 			}
 			return (window.utils = new utils())
