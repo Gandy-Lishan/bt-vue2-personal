@@ -549,6 +549,7 @@ export default {
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
+			this.addRiskControlOption(true)
 			// Reset data for all subcomponents
 			try {
 				for (let i = 0; i < this.indicatorRadioArr.length; i++) {
