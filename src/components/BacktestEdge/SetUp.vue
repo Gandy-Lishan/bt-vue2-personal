@@ -506,7 +506,7 @@ export default {
 			tp: 20,
 			sl: 10,
 			tim: 120,
-			isRiskControl: false,
+			isRiskControl: true,
 			isTakeProfit: true,
 			isStopLoss: true,
 			isTimeInMarket: true,
@@ -555,6 +555,7 @@ export default {
 	},
 	mounted() {
 		this.loadSentimentList('Daily')
+		this.$emit('IsRiskControl', true)
 		this.getEndDate()
 	},
 	computed: {
@@ -605,7 +606,7 @@ export default {
 			this.is_admin = this.$store.state.is_admin
 			this.getEndDate()
 			this.bd.symbol = this.$store.state.backtestSymbol
-			this.$emit('IsRiskControl', false)
+			this.$emit('IsRiskControl', true)
 			this.clearFormValidate()
 		},
 		setEditData(newVal) {			
