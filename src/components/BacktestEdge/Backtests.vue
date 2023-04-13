@@ -409,7 +409,7 @@ export default {
 						)
 					} else {
 						this.$store.commit('getRunBacktestData', row)
-						this.$emit('goTobacktestSetupForm', row.id, res.data, ()=>{
+						this.$emit('goTobacktestSetupForm', row.id, res.data, 'cannotDelView', ()=>{
 							this.$emit('goBacktestResultForm', row, ()=>{
 								CIQ.hideCover()
 								CIQ.nprogress.done()
@@ -440,7 +440,7 @@ export default {
 				var that = this
 				//The outputsignalsresult is no longer used. The exportcsv is placed before the backtest and the callback is placed in place
 					that.$store.commit('getRunBacktestData', row)
-					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
+					that.$emit('goTobacktestSetupForm', row.id, resData, 'cannotDelView', ()=>{
 						that.$emit('goBacktestResultForm', row, ()=>{
 							CIQ.hideCover()
 							CIQ.nprogress.done()
@@ -452,7 +452,7 @@ export default {
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
 
-					that.$emit('goTobacktestSetupForm', row.id, resData, ()=>{
+					that.$emit('goTobacktestSetupForm', row.id, resData, 'cannotDelView',()=>{
 						that.$emit('goBacktestResultForm', row, ()=>{
 							CIQ.hideCover()
 							CIQ.nprogress.done()
