@@ -996,17 +996,27 @@ export default {
 												CIQ.isMarkerShown = false
 											}
 										} catch (error) {
+											console.log('lishan error', error)
 											vm.$store.commit('initialBacktestInfo')
 											vm.$refs.setUpChild.clearOldBacktestName()
 											vm.$refs.favoriteChild.getFavoriteList()
 											CIQ.hideCover()
 											CIQ.nprogress.done()
-											vm.$message({
+											if(error?.response?.status === 403) {
+												vm.$message({
+												message:
+													'This backtest is already in your history list',
+												type: 'error',
+												offset: 300
+											})
+											}else{
+												vm.$message({
 												message:
 													'The internal server is busy, please try again later ',
 												type: 'error',
 												offset: 300
 											})
+											}
 											// Initialize the data of backtestinfo
 											vm.$store.commit('clearStoreDesciption')
 										}
