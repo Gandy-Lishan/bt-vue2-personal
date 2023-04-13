@@ -324,7 +324,7 @@ export default {
 					this.$store.commit('getRunBacktestData', row)
 					// Emit synchronous call
 					this.$emit('goBacktestResultForm', row, () => {
-						this.$emit('goTobacktestSetupForm', row.id, res.data, () => {
+						this.$emit('goTobacktestSetupForm', row.id, res.data, 'edit',() => {
 							CIQ.hideCover()
 							CIQ.nprogress.done()
 						})
@@ -428,7 +428,7 @@ export default {
 						)
 					} else {
 						this.$store.commit('getRunBacktestData', row)
-						this.$emit('goTobacktestSetupForm', row.id, res.data, () => {
+						this.$emit('goTobacktestSetupForm', row.id, res.data, 'canDelView',() => {
 							this.$emit('goBacktestResultForm', row, () => {
 								CIQ.hideCover()
 								CIQ.nprogress.done()
@@ -493,7 +493,7 @@ export default {
 			CIQ.addIndicatorsFromBacktest(function () {
 				that.$store.commit('getRunBacktestData', row)
 				// emit同步调用
-				that.$emit('goTobacktestSetupForm', row.id, resData, () => {
+				that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',() => {
 					that.$emit('goBacktestResultForm', row, () => {
 						CIQ.hideCover()
 						CIQ.nprogress.done()
@@ -508,7 +508,7 @@ export default {
 				that.$store.commit('getRunBacktestData', row)
 
 				that.$emit('goBacktestResultForm', row, () => {
-					that.$emit('goTobacktestSetupForm', row.id, resData, () => {
+					that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',() => {
 						CIQ.hideCover()
 						CIQ.nprogress.done()
 					})

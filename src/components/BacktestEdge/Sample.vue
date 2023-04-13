@@ -398,7 +398,7 @@ export default {
 				CIQ.isBacktestRun = false
 				var that = this
 				that.$store.commit('getRunBacktestData', row)
-				that.$emit('goTobacktestSetupForm', row.id, resData, () => {
+				that.$emit('goTobacktestSetupForm', row.id, resData, 'cannotDelView',() => {
 					that.$emit('goBacktestResultForm', row, () => {
 						CIQ.hideCover()
 						CIQ.nprogress.done()
@@ -410,7 +410,7 @@ export default {
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
 
-					that.$emit('goTobacktestSetupForm', row.id, resData, () => {
+					that.$emit('goTobacktestSetupForm', row.id, resData,'cannotDelView',() => {
 						that.$emit('goBacktestResultForm', row, () => {
 							CIQ.hideCover()
 							CIQ.nprogress.done()
@@ -420,8 +420,10 @@ export default {
 			}
 		},
 		viewBacktestResults: throttle(async function (row) {
+			console.log('lishan row',row)
 			let vm = this
 			if (row.result['Total Trades']) {
+				vm.$store.commit('clearBacktestUuid')
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {
 					CIQ.addCover('Fetching backtest information...')
@@ -440,7 +442,7 @@ export default {
 						)
 					} else {
 						this.$store.commit('getRunBacktestData', row)
-						this.$emit('goTobacktestSetupForm', row.id, res.data, () => {
+						this.$emit('goTobacktestSetupForm', row.id, res.data,'cannotDelView', () => {
 							this.$emit('goBacktestResultForm', row, () => {
 								CIQ.hideCover()
 								CIQ.nprogress.done()
