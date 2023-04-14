@@ -60,6 +60,31 @@
 					</div>
 				</el-form-item>
 			</div>
+			<div class="indicator-container symbolBox">
+				<el-form-item>
+					<el-radio
+						v-model="indicatorRadio"
+						label="Symbol Indicators"
+						@change="changeIndicatorChecked"
+					>
+					</el-radio>
+				</el-form-item>
+				<!-- <el-form-item prop="sentimentIndicator">
+					<div class="indicatorSearchBox">
+						<el-autocomplete
+							prefix-icon="el-icon-search"
+							class="inline-input"
+							clearable
+							v-model="si.sentimentIndicator"
+							:disabled="!(indicatorRadio === 'Sentiment Indicators')"
+							:fetch-suggestions="indicatorSentimentSearch"
+							placeholder="Input the sentiment indicator"
+							@select="handleSentimentSelect"
+							highlight-first-item
+						></el-autocomplete>
+					</div>
+				</el-form-item> -->
+			</div>
 		</el-form>
 	</div>
 </template>
@@ -487,7 +512,8 @@ export default {
 			const arr = [
 				'Sentiment Indicators',
 				'Technical Indicators',
-				'Risk Control'
+				'Risk Control',
+				'Symbol Indicators'
 			]
 			const obj = {}
 			obj.criteria = this.criteria
@@ -507,6 +533,10 @@ export default {
 				radioObj.value = 'risk'
 				this.$emit('getIndicatorRadio', radioObj)
 				this.$store.commit('getEntryIndicatorRadio', 'risk')
+			} else if (this.indicatorRadio === arr[3]) {
+				radioObj.value = 'symbol'
+				this.$emit('getIndicatorRadio', radioObj)
+				this.$store.commit('getEntryIndicatorRadio', 'symbol')
 			}
 		},
 		// load short and long technical list
@@ -730,6 +760,10 @@ export default {
 	padding-left: 30px;
 }
 /deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+	width: 334px;
+	padding-left: 30px;
+}
+/deep/ .symbolBox .el-input--prefix .el-input__inner:first-child {
 	width: 334px;
 	padding-left: 30px;
 }

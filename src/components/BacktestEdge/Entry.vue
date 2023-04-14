@@ -116,6 +116,21 @@
 							:sentiVal="indicatorValArr[index]"
 							v-show="indicatorRadioArr[index] === 'sentiment'"
 						></senti>
+						<symbol-indi
+							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
+							:criteria="'entry'"
+							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
+							ref="symbolChild"
+							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
+							:sentiUrl="indicatorUrlArr[index]"
+							:sentiVal="indicatorValArr[index]"
+							v-show="indicatorRadioArr[index] === 'symbol'"
+						></symbol-indi>
 						<cci
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
@@ -383,6 +398,7 @@
 </template>
 <script>
 import senti from '@/components/BacktestEdge/signal/sentiment/Senti'
+import symbol from '@/components/BacktestEdge/signal/sentiment/Symbol'
 import cci from '@/components/BacktestEdge/signal/technical/Cci-like'
 import macd from '@/components/BacktestEdge/signal/technical/Macd-like.vue'
 import ma from '@/components/BacktestEdge/signal/technical/Ma.vue'
@@ -450,6 +466,7 @@ export default {
 	components: {
 		indicator,
 		senti,
+		'symbol-indi' :symbol,
 		cci,
 		macd,
 		ma,
@@ -517,6 +534,7 @@ export default {
 				if(this.indicatorRadioArr[i]){
 				this.$refs.indiChild[i].clearForm()
 				this.$refs.sentiChild[i].clearForm()
+				this.$refs.symbolChild[i].clearForm()
 				this.$refs.cciChild[i].clearForm()
 				this.$refs.maChild[i].clearForm()
 				this.$refs.macdChild[i].clearForm()
@@ -760,6 +778,17 @@ export default {
 					} 
 					return (checked = senti)
 				}
+				if (vm.indicatorRadioArr[index] === 'symbol') {
+					vm.$refs.symbolChild[index].setDesciption(index)
+					let symbol = vm.$refs.symbolChild[index].saveCondition(index)
+					if(!symbol) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
+					return (checked = symbol)
+				}
 				if (
 					vm.indicatorRadioArr[index] === 'technical' &&
 					vm.techIndiObj[index] === 'CCI_like'
@@ -976,6 +1005,9 @@ export default {
 				this.$refs.indiChild[j].setEditData(data)
 				if (this.indicatorRadioArr[j] === 'sentiment') {
 					this.$refs.sentiChild[j].setEditData(data)
+				}
+				if (this.indicatorRadioArr[j] === 'symbol') {
+					this.$refs.symbolChild[j].setEditData(data)
 				}
 				if (this.indicatorRadioArr[j] === 'technical') {
 					if (this.techIndiObj[j] === 'CCI_like') {
