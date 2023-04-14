@@ -844,7 +844,11 @@ export default {
 				let desObj = {}
 				desObj.criteria = 'exit'
 				desObj.index = 0
-				desObj.description = vm.$store.state.riskDescription
+				//desObj.description = vm.$store.state.riskDescription
+				desObj.description = {
+					'commentDes':vm.$store.state.riskDescription,
+					'rocCond':null
+				}
 				this.$store.commit('saveDescription', desObj)
 				return (checked = true)
 			}

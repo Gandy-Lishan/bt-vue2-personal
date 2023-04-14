@@ -651,6 +651,7 @@ export default {
 						let backtestData = JSON.parse(
 							JSON.stringify(vm.$store.state.backtestInfo)
 						)
+
 						let entry_description = JSON.parse(
 							JSON.stringify(vm.$store.state.backtestInfo.entry_description)
 						)
@@ -809,13 +810,15 @@ export default {
 						if(this.isOnlyRisk) {
 							exit_signal_list = [{code: "SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999"}]
 						}
+
 						let entry = {
 							description: backtestData.entry.description,
 							score: backtestData.entry.score,
 							signals_in_market: backtestData.entry.signals_in_market,
 							relation: backtestData.entry.relation,
 							delay_bars: backtestData.entry.delay_bars,
-							signals: entry_signal_list
+							signals: entry_signal_list,
+							desc: entry_description
 						}
 						let exit = {
 							description: backtestData.exit.description,
@@ -823,7 +826,8 @@ export default {
 							signals_in_market: backtestData.exit.signals_in_market,
 							relation: backtestData.exit.relation,
 							delay_bars: backtestData.exit.delay_bars,
-							signals: exit_signal_list
+							signals: exit_signal_list,
+							desc: exit_description
 						}
 						delete backtestData.entry
 						delete backtestData.exit
@@ -1012,7 +1016,6 @@ export default {
 		async goTobacktestSetupForm(id, resData, callback) {
 			CIQ.nprogress.inc()
 			CIQ.setCoverText('Restoring Backtest form...')
-			
 			this.$refs.setUpChild.clearForm()
 			this.$refs.entryChild.clearForm()
 			this.$refs.exitChild.clearForm()
