@@ -621,12 +621,13 @@ export default {
 				let setUpChecked = true
 				let entryChecked = true
 				let isEdit = this.$refs.setUpChild.isEdit()
+				let backtestInfo = JSON.parse(JSON.stringify(this.$store.state.backtestInfo))
 				this.$refs.entryChild.addEntrySignalLength()
 				this.$refs.exitChild.addExitSignalLength()
 				let setUpRes = await getBacktestName(
 					this.$store.state.backtestInfo.name
 				)
-				if (setUpRes.data.count != 0 && !isEdit) {
+				if (setUpRes.data.count != 0 && !isEdit || (setUpRes.data.count != 0 && !backtestInfo.hasOwnProperty('old_uuid'))) {
 					this.$message({
 						message: 'The backtest name already exists',
 						type: 'error',
