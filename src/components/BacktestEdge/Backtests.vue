@@ -64,13 +64,15 @@
 										<template
 											v-for="(item, index) in scope.row.entry_description"
 										>
-											<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
+											<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item.commentDes
+ }}</p>
 										</template>
 									</div>
 									<div class="exitBox">
 										<p>Exit Description</p>
 										<template v-for="(item, index) in scope.row.exit_description">
-											<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item }}</p>
+											<p :key="index"><span v-if="index != 0">&emsp;&emsp;{{index}}.</span>{{ item.commentDes
+ }}</p>
 										</template>
 									</div>
 								</div>
@@ -83,9 +85,11 @@
 					</el-table-column>
 					<el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
-							{{ scope.row.entry_description[0] }}<br />
+							{{ scope.row.entry_description[0].commentDes
+ }}<br />
 							<br />
-							{{ scope.row.exit_description[0] }}<br />
+							{{ scope.row.exit_description[0].commentDes
+ }}<br />
 						</template>
 					</el-table-column>
 					<el-table-column

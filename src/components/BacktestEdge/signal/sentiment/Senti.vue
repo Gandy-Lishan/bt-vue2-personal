@@ -29,6 +29,7 @@
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio 
+						class='condition-radio'
 						v-model="conditionRadio"
 						label="Sentiment Value"
 						@change="getConditionRadio"
@@ -56,6 +57,7 @@
 						<el-select
 							:disabled="!(conditionRadio === 'Sentiment Value')"
 							v-model="senti.newCondition"
+							class='newCond'
 							filterable
 							placeholder="Please select condition"
 							@change="ROCLikeChange"
@@ -227,12 +229,12 @@ export default {
 		return {
 			isROCLike: false,
 			ROCConditions : [
-				{ value: 'sv', label: 'Sentiment Value' },
-				{ value: 'o', label: 'Symbol Open' },
-				{ value: 'h', label: 'Symbol High' },
-				{ value: 'l', label: 'Symbol Low' },
-				{ value: 'c', label: 'Symbol Close' },
-				{ value: 'v', label: 'Symbol Volume' },
+				{ value: 0, label: 'Sentiment Value' },
+				{ value: 1, label: 'Symbol Open' },
+				{ value: 2, label: 'Symbol High' },
+				{ value: 3, label: 'Symbol Low' },
+				{ value: 4, label: 'Symbol Close' },
+				{ value: 5, label: 'Symbol Volume' },
 			],
 			//preload: false,
 			senti: {
@@ -245,7 +247,7 @@ export default {
 				conditionPeriod: '',
 				period: '',
 				maValue: '',
-				rocCondition: 'sv',
+				rocCondition: 0,
 			},
 			periodTemp: '',
 			newConditions: [
@@ -254,9 +256,9 @@ export default {
 				{ value: 2, label: '<' },
 				{ value: 3, label: 'CrossAbove' },
 				{ value: 4, label: 'CrossBelow' },
-				{ value: 5, label: 'ROC' },
-				{ value: 6, label: 'ROR' },
-				{ value: 7, label: 'MAR' }
+				{ value: 5, label: 'Rate Of Change' },
+				{ value: 6, label: 'Range Of Rank' },
+				{ value: 7, label: 'MA Ratio' }
 			],
 			conditions: [
 				{ value: 0, label: '>' },
@@ -328,6 +330,10 @@ export default {
 	methods: {
 		ROCLikeChange(val){
 			this.isROCLike = 5<=val && val<=7
+			// 如果不是ROC类型，则这两个condition值一致
+			if(!this.isROCLike){
+				this.senti.condition = this.senti.newCondition
+			}
 		},
 		change(e) {
 			this.$forceUpdate()
@@ -340,6 +346,11 @@ export default {
 			this.$refs.sentiForm.clearValidate()
 		},
 		setDesciption(index) {
+			let rocCond = {
+				'newCondition':this.senti.newCondition,
+				'conditionPeriod':this.senti.conditionPeriod,
+				'rocCondition':this.senti.rocCondition
+			}
 			let criteria = ''
 			let direction = ''
 			let commentDes
@@ -379,19 +390,24 @@ export default {
 				}
 				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars + ';':''
 				commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
+				
 				if(this.relation != 1) {
 				   let desObj = {}
 					desObj.criteria = this.criteria
-					desObj.description = commentDes
+					desObj.description = {
+						'commentDes':commentDes,
+						'rocCond':rocCond
+					}
 					desObj.index = index
+
+					console.log('this.relation != 1',this.criteria,desObj)
 					this.$store.commit('saveDescription', desObj)
 				}
 
 			}
 			let ma = this.senti.period ? 'moving average' : ''
 			let period = this.senti.period ? this.senti.period : ''
-			// 选了roc等就用conditions，反则用newConditions
-			let condition = this.isROCLike?this.conditions[this.senti.condition].label:this.newConditions[this.senti.newCondition].label
+			let condition = this.conditions[this.senti.condition].label
 			let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
 			let value =
 				this.conditionRadio === 'Sentiment Value'
@@ -402,14 +418,20 @@ export default {
 					let desObj = {}
 					desObj.criteria = this.criteria
 					if(this.relation != 1) {
-					desObj.description = this.description
-					desObj.index = index + 1
+						desObj.description = {
+							'commentDes':this.description,
+							'rocCond':rocCond
+						}
+						desObj.index = index + 1
 					}
 					if(this.relation == 1) {
-						desObj.description = commentDes+ this.description
+						desObj.description = {
+							'commentDes':commentDes+ this.description,
+							'rocCond':rocCond
+						}
 						desObj.index = 0
 					}
-					console.log('saveDescription',desObj)
+					console.log('saveDescription',desObj,this.criteria)
 					this.$store.commit('saveDescription', desObj)
 
 		},
@@ -532,7 +554,6 @@ export default {
 					senti.criteria = this.criteria
 					senti.index = index
 					// 定义一个 vuex 新事件用于保存 condition数据
-					console.log('saveCondition',senti)
 					this.$store.commit('saveCondition', senti)
 					return checked
 				} else {
@@ -574,11 +595,17 @@ export default {
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
 				let obj = newVal[this.criteria].signals[this.panelIndex]
+				// test在samebar(relation 2/3)的情况下
+				let cond = newVal[this.criteria].desc[(this.relation==2||this.relation==3)?this.panelIndex+1:this.panelIndex]['rocCond']
 				this.senti.extreme_optimism = obj.extreme_optimism
 				this.senti.extreme_pessimism = obj.extreme_pessimism
 				this.senti.condition = Number(obj.condition)
 				this.senti.value = obj.value
 				this.senti.comparison = obj.comparison
+
+				this.senti.newCondition = Number(cond.newCondition)?Number(cond.newCondition):this.senti.condition
+				this.senti.conditionPeriod = cond.conditionPeriod?cond.conditionPeriod:''
+				this.senti.rocCondition = Number(cond.rocCondition)?Number(cond.rocCondition):0
 				this.conditionRadio = 'Sentiment Value'
 				this.editSentiVal = obj.indicator
 				if (this.senti.comparison === 'SVMA') {
@@ -586,6 +613,7 @@ export default {
 					this.senti.maValue = this.senti.value
 				    this.senti.period = obj.period
 				}
+				this.ROCLikeChange(this.senti.newCondition)
 			}
 		}
 	}
