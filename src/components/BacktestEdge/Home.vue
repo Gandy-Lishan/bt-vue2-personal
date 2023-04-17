@@ -818,7 +818,7 @@ export default {
 							relation: backtestData.entry.relation,
 							delay_bars: backtestData.entry.delay_bars,
 							signals: entry_signal_list,
-							desc: entry_description
+							cond: entry_description.map(i=>i.rocCond)
 						}
 						let exit = {
 							description: backtestData.exit.description,
@@ -827,7 +827,7 @@ export default {
 							relation: backtestData.exit.relation,
 							delay_bars: backtestData.exit.delay_bars,
 							signals: exit_signal_list,
-							desc: exit_description
+							cond: exit_description.map(i=>i.rocCond)
 						}
 						delete backtestData.entry
 						delete backtestData.exit

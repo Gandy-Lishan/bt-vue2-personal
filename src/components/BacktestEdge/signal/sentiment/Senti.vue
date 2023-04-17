@@ -34,19 +34,6 @@
 						label="Sentiment Value"
 						@change="getConditionRadio"
 					>
-						<el-select 
-							:disabled="!(conditionRadio === 'Sentiment Value')"
-							v-model="senti.rocCondition"
-							placeholder="Please select condition"
-						>
-							<el-option
-								v-for="item in ROCConditions"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value"
-							>
-							</el-option>
-						</el-select>
 					</el-radio>
 				</el-form-item>
 				<!-- <el-form-item  v-show="isROCLike">
@@ -100,8 +87,7 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item prop="value">
-						 
+					<el-form-item prop="value"> 
 						<el-input
 							:disabled="!(conditionRadio === 'Sentiment Value')"
 							v-model="senti.value"
@@ -130,7 +116,36 @@
 						></el-input>
 					</el-form-item>
 				</div>
-				<div class="conditionSelect">
+				<div class="conditionSelect new">
+					<el-form-item>
+						<el-select
+							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
+							v-model="senti.newCondition"
+							class='newCond'
+							filterable
+							placeholder="Please select condition"
+							@change="ROCLikeChange"
+						>
+							<el-option
+								v-for="item in newConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</div>
+				<div class="conditionInput period" v-show="isROCLike">
+					<el-form-item prop="value">
+						<el-input
+							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
+							v-model="senti.conditionPeriodMA"
+							placeholder="Condition Period"
+						></el-input>
+					</el-form-item>
+				</div>
+				<div class="conditionSelect" v-show="isROCLike">
 					<el-form-item>				
 						<el-select
 							v-model="senti.condition"
@@ -228,14 +243,6 @@ export default {
 		}
 		return {
 			isROCLike: false,
-			ROCConditions : [
-				{ value: 0, label: 'Sentiment Value' },
-				{ value: 1, label: 'Symbol Open' },
-				{ value: 2, label: 'Symbol High' },
-				{ value: 3, label: 'Symbol Low' },
-				{ value: 4, label: 'Symbol Close' },
-				{ value: 5, label: 'Symbol Volume' },
-			],
 			//preload: false,
 			senti: {
 				extreme_optimism: '',
@@ -245,9 +252,9 @@ export default {
 				newCondition: 3,
 				value: '',
 				conditionPeriod: '',
+				conditionPeriodMA: '',
 				period: '',
 				maValue: '',
-				rocCondition: 0,
 			},
 			periodTemp: '',
 			newConditions: [
@@ -349,7 +356,7 @@ export default {
 			let rocCond = {
 				'newCondition':this.senti.newCondition,
 				'conditionPeriod':this.senti.conditionPeriod,
-				'rocCondition':this.senti.rocCondition
+				'conditionPeriodMA':this.senti.conditionPeriodMA
 			}
 			let criteria = ''
 			let direction = ''
@@ -596,7 +603,7 @@ export default {
 			if (JSON.stringify(newVal) != '{}') {
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				// test在samebar(relation 2/3)的情况下
-				let cond = newVal[this.criteria].desc[(this.relation==2||this.relation==3)?this.panelIndex+1:this.panelIndex]['rocCond']
+				let cond = newVal[this.criteria].cond[(this.relation==2||this.relation==3)?this.panelIndex+1:this.panelIndex]
 				this.senti.extreme_optimism = obj.extreme_optimism
 				this.senti.extreme_pessimism = obj.extreme_pessimism
 				this.senti.condition = Number(obj.condition)
@@ -605,7 +612,7 @@ export default {
 
 				this.senti.newCondition = Number(cond.newCondition)?Number(cond.newCondition):this.senti.condition
 				this.senti.conditionPeriod = cond.conditionPeriod?cond.conditionPeriod:''
-				this.senti.rocCondition = Number(cond.rocCondition)?Number(cond.rocCondition):0
+				this.senti.conditionPeriodMA = cond.conditionPeriodMA?cond.conditionPeriodMA:''
 				this.conditionRadio = 'Sentiment Value'
 				this.editSentiVal = obj.indicator
 				if (this.senti.comparison === 'SVMA') {

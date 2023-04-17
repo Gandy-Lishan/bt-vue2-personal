@@ -4,24 +4,18 @@
 		<el-form :model="senti" ref="symbolForm">
 			<div class="condition-container">
 				<el-form-item>
-					<el-radio 
-						class='condition-radio'
-						v-model="conditionRadio"
-						label="Sentiment Value"
+					<el-select 
+						v-model="senti.rocCondition"
+						placeholder="Please select condition"
 					>
-						<el-select 
-							v-model="senti.rocCondition"
-							placeholder="Please select condition"
+						<el-option
+							v-for="item in ROCConditions"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value"
 						>
-							<el-option
-								v-for="item in ROCConditions"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value"
-							>
-							</el-option>
-						</el-select>
-					</el-radio>
+						</el-option>
+					</el-select>
 				</el-form-item>
 				<div class="conditionSelect new">
 					<el-form-item>
@@ -81,9 +75,6 @@
 	</div>
 </template>
 <script>
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import { Store, mapGetters } from 'vuex'
-const throttle = require('lodash/throttle')
 export default {
 	name: 'symbol',
 	props: {
@@ -137,7 +128,6 @@ export default {
 				{ value: 3, label: 'CrossAbove' },
 				{ value: 4, label: 'CrossBelow' }
 			],
-			conditionRadio: 'Sentiment Value',
 			description: '',
 			editSentiVal: '',
 		}
@@ -224,10 +214,7 @@ export default {
 			let period = this.senti.period ? this.senti.period : ''
 			let condition = this.conditions[this.senti.condition].label
 			let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
-			let value =
-				this.conditionRadio === 'Sentiment Value'
-					? this.senti.value
-					: this.senti.maValue
+			let value = this.senti.value
 			this.description = `${sentiVal} ${ma} ${period} ${condition} ${value}`
 
 					let desObj = {}
@@ -281,7 +268,7 @@ export default {
 			if (JSON.stringify(newVal) != '{}') {
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				// test在samebar(relation 2/3)的情况下
-				let cond = newVal[this.criteria].desc[(this.relation==2||this.relation==3)?this.panelIndex+1:this.panelIndex]['rocCond']
+				let cond = newVal[this.criteria].cond[(this.relation==2||this.relation==3)?this.panelIndex+1:this.panelIndex]
 				this.senti.condition = Number(obj.condition)
 				this.senti.value = obj.value
 				this.senti.comparison = obj.comparison
