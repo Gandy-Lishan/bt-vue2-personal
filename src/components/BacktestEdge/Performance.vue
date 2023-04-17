@@ -466,7 +466,7 @@ export default {
 				'1 Month [%]',
 				'2 Months [%]',
 				'3 Months [%]',
-				'8 Months [%]',	
+				'6 Months [%]',	
 			],
 			backtestHistoryList: []
 		}
@@ -628,7 +628,7 @@ export default {
 					let exitIn21Bar = chartDataset[res+21]?((direction=='Short'?entryPrice-chartDataset[res+21].Open:chartDataset[res+21].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
 					let exitIn42Bar = chartDataset[res+42]?((direction=='Short'?entryPrice-chartDataset[res+42].Open:chartDataset[res+42].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
 					let exitIn63Bar = chartDataset[res+63]?((direction=='Short'?entryPrice-chartDataset[res+63].Open:chartDataset[res+63].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn168Bar = chartDataset[res+168]?((direction=='Short'?entryPrice-chartDataset[res+168].Open:chartDataset[res+168].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
+					let exitIn126Bar = chartDataset[res+126]?((direction=='Short'?entryPrice-chartDataset[res+126].Open:chartDataset[res+126].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
 					let exitIn252Bar = chartDataset[res+252]?((direction=='Short'?entryPrice-chartDataset[res+252].Open:chartDataset[res+252].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
 					backtestResult.push({
 						'12 Months [%]': exitIn252Bar,
@@ -638,7 +638,7 @@ export default {
 						'1 Month [%]': exitIn21Bar,
 						'2 Months [%]': exitIn42Bar,
 						'3 Months [%]': exitIn63Bar,
-						'8 Months [%]': exitIn168Bar,
+						'6 Months [%]': exitIn126Bar,
 					})
 				}
 			}
@@ -842,4 +842,5 @@ export default {
 	width: 90%;
 	font-size: 0.8rem;
 }
+
 </style>
