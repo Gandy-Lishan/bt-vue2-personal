@@ -866,6 +866,7 @@ export default {
 			) {
 				this.isTakeProfit = true
 				this.isStopLoss = true
+				this.isTimeInMarket = true
 				this.$emit('IsRiskControl', true)
 			}
 			this.$store.commit('isRiskControl', val)
