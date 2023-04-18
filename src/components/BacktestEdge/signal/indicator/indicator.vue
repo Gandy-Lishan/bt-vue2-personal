@@ -60,6 +60,48 @@
 					</div>
 				</el-form-item>
 			</div>
+			<div class="indicator-container customBox">
+				<el-form-item>
+					<el-radio
+						v-model="indicatorRadio"
+						label="Custom Indicators"
+						@change="changeIndicatorChecked"
+					>
+					</el-radio>
+				</el-form-item>
+				<el-form-item prop="customIndicator">
+					<div class="indicatorSearchBox">
+						<el-upload
+							class="upload-demo"
+							action="https://jsonplaceholder.typicode.com/posts/"
+							:on-preview="handlePreview"
+							:on-remove="handleRemove"
+							:before-upload="beforeUpload"
+							:multiple="false"
+							:limit="1"
+							:on-exceed="handleExceed"
+							:file-list="fileList"
+							:disabled="!(indicatorRadio === 'Custom Indicators')"
+						>
+							<el-button
+								size="small"
+								type="primary"
+								class="upload-indicator-btn"
+								>点击上传</el-button
+							>
+							<div slot="tip" class="el-upload__tip">
+								只能上传csv/xlsx文件，且不超过1MB
+							</div>
+						</el-upload>
+						<el-dialog :title="previewFileName" :visible.sync="previewVisible">
+						<el-table :data="previewData" style="margin-top: 20px; max-height: 400px; overflow-y: auto;">
+      <el-table-column label="Date" prop="Date"></el-table-column>
+      <el-table-column label="Close" prop="Close"></el-table-column>
+    </el-table>
+	</el-dialog>
+					</div>
+				</el-form-item>
+			</div>
 		</el-form>
 	</div>
 </template>
@@ -67,6 +109,7 @@
 import { Store, mapGetters } from 'vuex'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { getIndicatorsList } from '@/service/service'
+import Papa from 'papaparse'
 export default {
 	props: {
 		criteria: String,
@@ -102,7 +145,8 @@ export default {
 			si: {
 				sentimentIndicator: '',
 				technicalIndicator: '',
-				riskIndicator: ''
+				riskIndicator: '',
+				customIndicator: ''
 			},
 			sentimentIndicatorList: this.$store.state.sentimentIndicatorList,
 			rules: {
@@ -110,17 +154,14 @@ export default {
 				technicalIndicator: [{ validator: validateTech, trigger: 'change' }],
 				riskIndicator: [{ validater: validateRisk, trigger: 'change' }]
 			},
-			fileList: [
-				{
-					name: 'food.jpeg',
-					url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-				},
-				{
-					name: 'food2.jpeg',
-					url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-				}
-			],
-			category: 'all'
+			category: 'all',
+			fileList: [],
+			actionUrl: '', // 文件上传的接口地址
+      headers: {}, // 请求头部
+      previewVisible: false, // 是否显示预览表格
+      previewData: [], // 预览表格的数据
+			previewFileName: '',
+			fieldErrors: []
 		}
 	},
 	computed: {
@@ -242,7 +283,7 @@ export default {
 			this.$refs.myDropdown.classList.toggle('show')
 		},
 		/* 当用户选择indicator类别，进行搜索筛选*/
-		selectCategory(e){
+		selectCategory(e) {
 			this.category = e.target.innerHTML
 		},
 		// Clear form authentication
@@ -482,12 +523,14 @@ export default {
 			}
 		},
 		changeIndicatorChecked(val) {
+			console.log('indicatorRadio', val)
 			this.indicatorRadio = val
 			this.clearFormValidate()
 			const arr = [
 				'Sentiment Indicators',
 				'Technical Indicators',
-				'Risk Control'
+				'Risk Control',
+				'Custom Indicators'
 			]
 			const obj = {}
 			obj.criteria = this.criteria
@@ -507,6 +550,8 @@ export default {
 				radioObj.value = 'risk'
 				this.$emit('getIndicatorRadio', radioObj)
 				this.$store.commit('getEntryIndicatorRadio', 'risk')
+			} else if (this.indicatorRadio === arr[3]) {
+				radioObj.value = 'custom'
 			}
 		},
 		// load short and long technical list
@@ -707,7 +752,85 @@ export default {
 					offset: 100
 				})
 			}
-		}
+		},
+		handleRemove(file, fileList) {
+			console.log(file, fileList)
+		},
+		handlePreview(file) {
+			console.log('handlePreview', file)
+			Papa.parse(file.raw, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (result) => {
+          // 获取解析后的数据
+          const data = result.data;
+          // 更新预览表格的数据
+          this.previewData = data;
+					this.previewFileName = file.name
+					console.log('previewData',data)
+          // 显示预览表格
+          this.previewVisible = true;
+        },
+        error: (error) => {
+          // 解析错误时的处理逻辑
+          console.error('解析错误:', error);
+        }
+      });
+		},
+		handleExceed(files, fileList) {
+			this.$message.warning('只能上传单个 indicator 文件')
+		},
+		beforeUpload(file) {
+			console.log('beforeUpload', file)
+			if (!/(CSV)/i.test(file.type)) {
+				this.$message.warning('上传的图片只能是 CSV 格式')
+				return false
+			}
+			// 限制文件上传大小 1M
+			if (file.size > 1 * 1024 * 1024) {
+				this.$message.warning('上传的文件不能超过 1MB')
+				return false
+			}
+			// 限制字段
+			const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target.result;
+				console.log('content',content)
+			// 使用 PapaParse 解析 CSV 文件内容
+			const result = Papa.parse(content, {
+          header: true, // 指定是否将第一行作为字段名
+					skipEmptyLines: true
+        });
+        // 获取解析结果
+        const data = result.data;
+				console.log('data', data)
+        // 进行字段校验
+        this.fieldErrors = this.validateFields(data);
+      }
+      reader.readAsText(file);
+			console.log('错误的地方', this.fieldErrors)
+			if (this.fieldErrors.length > 0) {
+          // 如果有错误，显示错误信息
+					this.$message.warning('字段校验未通过')
+					return false
+        } else {
+          // 校验通过，可以继续处理解析后的数据
+        }
+      },
+			validateFields(data) {
+      // 在这里进行字段校验
+      // 可以遍历解析后的数据对象数组，对每一行的字段进行校验
+      // 如果有错误，将错误信息存储到一个数组中，并返回
+      // 示例：校验字段是否存在且不为空
+      const errors = [];
+      data.forEach((row, index) => {
+				console.log('row',row)
+        if (!row.Date || !row.Close) {
+          errors.push(`第 ${index + 1} 行字段校验未通过`);
+        }
+      });
+      return errors;
+    },
 	}
 }
 </script>
@@ -747,5 +870,16 @@ export default {
 	display: flex;
 
 	flex-direction: row-reverse;
+}
+.upload-demo {
+	flex-direction: column;
+	min-width: 300px;
+	border-radius: 5px;
+	border: 1px solid #dcdfe6;
+	padding: 10px;
+	margin-left: 20px;
+}
+.upload-indicator-btn {
+	width: 100%;
 }
 </style>
