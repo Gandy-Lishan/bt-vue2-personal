@@ -6,9 +6,11 @@
 				<p class="criteria-title">Exit Criteria</p>
 				<el-tooltip effect="dark" placement="top" style="diaplay: inline">
 					<span slot="content"
-						>Set the criteria/criterias which trigger the backtest exit criteria.<br />
+						>Set the criteria/criterias which trigger the backtest exit
+						criteria.<br />
 						Choose one of the three options for exit criteria:<br />
-						1. Single Criteria: One criteria will trigger the backtest criteria.<br />
+						1. Single Criteria: One criteria will trigger the backtest
+						criteria.<br />
 						2. SameBar Multi-Criteria: More than one criterias (limit to 5)
 						occurring at the same bar,will trigger the backtest criteria.<br />
 						3. TimeOrder Multi-Criteria: More than one criterias (limit to 3)
@@ -55,18 +57,18 @@
 					<el-tooltip effect="dark" placement="top" style="diaplay: inline">
 						<span slot="content"
 							>Choose a value to specify how many bars within which the
-							following criterias will occur in time order to trigger the backtest
-							criteria.<br />
-							if choose period 1, meanning if the following criterias occur at the
-							same bar the backtest criteria is met.<br />
-							if choose period 2, meanning if the following criterias occur within
-							two bars the backtest criteria is met.<br />
+							following criterias will occur in time order to trigger the
+							backtest criteria.<br />
+							if choose period 1, meanning if the following criterias occur at
+							the same bar the backtest criteria is met.<br />
+							if choose period 2, meanning if the following criterias occur
+							within two bars the backtest criteria is met.<br />
 							etc.<br />
 							For example:<br />
 							If the backtest criteria needs to have two consecutive criterias,
 							set two criterias below and choose period 2.<br />
-							If the backtest criteria needs to have two criterias occur within 3
-							bars, set two criterias below and choose period 3.<br />
+							If the backtest criteria needs to have two criterias occur within
+							3 bars, set two criterias below and choose period 3.<br />
 							etc.<br />
 						</span>
 						<i class="iconfont icon-wenhao"></i> </el-tooltip
@@ -510,31 +512,43 @@ export default {
 					this.exitItemCheck = false
 				}
 				this.$emit('isOnlyRiskControl', this.exitItemCheck)
-			if(newVal == 3 && this.editableTabs.length > 3) {
-  this.$confirm('TimeOrder Multi-Criteria supports up to three criterias,Currently your multi-criteria count is '+ this.editableTabs.length + ', are you sure you want to delete the last '+(this.editableTabs.length - 3) + 'th panels ?', 'Tips', {
-          confirmButtonText: 'Confirm',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }).then(() => {
-			const currentTabs = this.editableTabs.length
-			for(let i=0;i<( currentTabs - 3);i++) {
-				this.handleTabsEdit(this.editableTabs.length + '','remove')
-			}
-      this.$message({
-            type: 'success',
-            offset: 300,
-			message: 'The deletion is successful and has been automatically switched to TimeOrder Multi-Criteria'
-          });
-		  this.relation = newVal
-        }).catch(() => {
-		this.relation = oldVal
-          this.$message({
-            type: 'info',
-			offset: 300,
-            message: 'With the deletion undeleted, you can switch to The SaveBar Multi-Criteria to delete the criteria panel to less than 3'
-          });          
-        });
-      }
+				if (newVal == 3 && this.editableTabs.length > 3) {
+					this.$confirm(
+						'TimeOrder Multi-Criteria supports up to three criterias,Currently your multi-criteria count is ' +
+							this.editableTabs.length +
+							', are you sure you want to delete the last ' +
+							(this.editableTabs.length - 3) +
+							'th panels ?',
+						'Tips',
+						{
+							confirmButtonText: 'Confirm',
+							cancelButtonText: 'Cancel',
+							type: 'warning'
+						}
+					)
+						.then(() => {
+							const currentTabs = this.editableTabs.length
+							for (let i = 0; i < currentTabs - 3; i++) {
+								this.handleTabsEdit(this.editableTabs.length + '', 'remove')
+							}
+							this.$message({
+								type: 'success',
+								offset: 300,
+								message:
+									'The deletion is successful and has been automatically switched to TimeOrder Multi-Criteria'
+							})
+							this.relation = newVal
+						})
+						.catch(() => {
+							this.relation = oldVal
+							this.$message({
+								type: 'info',
+								offset: 300,
+								message:
+									'With the deletion undeleted, you can switch to The SaveBar Multi-Criteria to delete the criteria panel to less than 3'
+							})
+						})
+				}
 			}
 		},
 		riskControl: {
@@ -642,8 +656,10 @@ export default {
 					})
 					this.editableTabs.pop()
 					this.indicatorRadioArr.pop()
-					this.editableTabsValue = this.editableTabs.length + ''
-					this.tabIndex = this.editableTabs.length
+					// this.editableTabsValue = this.editableTabs.length + ''
+					this.editableTabsValue = '5'
+					// this.tabIndex = this.editableTabs.length
+					this.tabIndex = 5
 				}
 				if (this.relation == 3 && this.editableTabs.length > 3) {
 					this.$message({
@@ -653,8 +669,10 @@ export default {
 					})
 					this.editableTabs.pop()
 					this.indicatorRadioArr.pop()
-					this.editableTabsValue = this.editableTabs.length + ''
-					this.tabIndex = this.editableTabs.length
+					// this.editableTabsValue = this.editableTabs.length + ''
+					this.editableTabsValue = '3'
+					// this.tabIndex = this.editableTabs.length
+					this.tabIndex = 3
 				}
 				if (this.relation == 2) {
 					this.score = this.indicatorRadioArr.length
@@ -708,13 +726,16 @@ export default {
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex, 1)
 				this.techIndiObj.push('')
-				if (this.relation == 2 && this.score >= (this.indicatorRadioArr.length + 1)) {
+				if (
+					this.relation == 2 &&
+					this.score >= this.indicatorRadioArr.length + 1
+				) {
 					this.score = this.indicatorRadioArr.length
 				}
 				// if (this.relation == 3 && this.signals_in_market >= (this.indicatorRadioArr.length + 1)) {
 				// 	this.signals_in_market = this.indicatorRadioArr.length
 				// }
-//When removing a tab, load the indicators in the indicatorurlarr into vuex to refresh the status
+				//When removing a tab, load the indicators in the indicatorurlarr into vuex to refresh the status
 				tabs.forEach((tab, index) => {
 					this.$store.commit('getExitIndicators', {
 						index: index,
@@ -834,7 +855,6 @@ export default {
 			}
 			this.$emit('getExitRelation', val)
 			this.$store.commit('clearExitSignalArr')
-
 		},
 		saveBacktestData(index) {
 			let checked = true
@@ -849,7 +869,7 @@ export default {
 				this.$store.commit('saveDescription', desObj)
 				return (checked = true)
 			}
-			
+
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			return indi.then((val) => {
 				if (val) {
@@ -888,13 +908,12 @@ export default {
 						this.indicatorRadioArr[index] === 'technical' &&
 						this.techIndiObj[index] === 'MACD_like'
 					) {
-						
 						this.$refs.macdChild[index].setDesciption(index)
 						let macd = this.$refs.macdChild[index].saveCondition(index)
 						if (!macd) {
 							this.$message({
 								message:
-								'Please check that the #' +
+									'Please check that the #' +
 									(index + 1) +
 									' exit panel field is filled in correctly',
 								type: 'error'
@@ -911,7 +930,7 @@ export default {
 						if (!ma) {
 							this.$message({
 								message:
-								'Please check that the #' +
+									'Please check that the #' +
 									(index + 1) +
 									' exit panel field is filled in correctly',
 								type: 'error'
@@ -1015,7 +1034,7 @@ export default {
 						if (!smi) {
 							this.$message({
 								message:
-								'Please check that the #' +
+									'Please check that the #' +
 									(index + 1) +
 									' exit panel field is filled in correctly',
 								type: 'error'
@@ -1066,11 +1085,11 @@ export default {
 		},
 		setEditPanel(num, data) {
 			this.relation = data.exit.relation ? data.exit.relation : 1
-			
-							let formateTechnicalList
-					if (this.$store.state.formateTechnicalList.length === 0) {
-						this.$refs.indiChild[0].loadShortLong()
-					}
+
+			let formateTechnicalList
+			if (this.$store.state.formateTechnicalList.length === 0) {
+				this.$refs.indiChild[0].loadShortLong()
+			}
 			for (let i = 0; i < num - 1; i++) {
 				this.handleTabsEdit(null, 'add')
 			}
@@ -1089,7 +1108,7 @@ export default {
 			this.$emit('getExitRelation', this.relation)
 			let length = data.exit.signals.length
 			this.tabIndex = length
-				for (let j = 0; j < length; j++) {
+			for (let j = 0; j < length; j++) {
 				if (data.exit.signals[j].analysis === 'Sentiment') {
 					this.indicatorValArr[j] = data.exit.signals[j].indicator
 					this.indicatorRadioArr.splice(j, 1, 'sentiment')
@@ -1108,7 +1127,9 @@ export default {
 							this.techIndiObj[j] = formateTechnicalList[i].class
 							break
 						}
-					}}}
+					}
+				}
+			}
 			this.$nextTick(() => {
 				this.setEditData(this.refs)
 			})

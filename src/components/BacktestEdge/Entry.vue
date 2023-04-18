@@ -3,35 +3,47 @@
 	<div class="entry-container">
 		<div class="signal-option-box">
 			<div class="entry-title-box">
-			<p class="criteria-title">Entry Criteria</p> 
-		<el-tooltip effect="dark" placement="top" style="diaplay:inline">
-        <span slot="content">Set the criteria/criterias which trigger the backtest entry criteria.<br/>
-		Choose one of the three options for entry criteria:<br/>
-		1. Single Criteria: One criteria will trigger the backtest criteria.<br/>
-		2. SameBar Multi-Criteria: More than one criterias (limit to 5) occurring at the same bar,will trigger the backtest criteria.<br/>
-		3. TimeOrder Multi-Criteria: More than one criterias (limit to 3) occurring within a number of bars,will trigger the backtest criteria.<br/>
-		</span>
-		<i class="iconfont icon-wenhao"></i>
-        </el-tooltip>
+				<p class="criteria-title">Entry Criteria</p>
+				<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+					<span slot="content"
+						>Set the criteria/criterias which trigger the backtest entry
+						criteria.<br />
+						Choose one of the three options for entry criteria:<br />
+						1. Single Criteria: One criteria will trigger the backtest
+						criteria.<br />
+						2. SameBar Multi-Criteria: More than one criterias (limit to 5)
+						occurring at the same bar,will trigger the backtest criteria.<br />
+						3. TimeOrder Multi-Criteria: More than one criterias (limit to 3)
+						occurring within a number of bars,will trigger the backtest
+						criteria.<br />
+					</span>
+					<i class="iconfont icon-wenhao"></i>
+				</el-tooltip>
 			</div>
 			<div class="signal-container">
 				<span class="scoreNote" v-if="relation === 2">
-				                       <span>Score: </span>
-		<el-tooltip effect="dark" placement="top" style="diaplay:inline">
-        <span slot="content">Choose a value to specify how many following criterias will occur at the same bar to trigger the backtest criteria.<br/>
-		if choose score 1, meanning if any one criteria of the following criterias occur the backtest criteria is met.<br/>
-		if choose score 2, meanning if any two of the criterias of the following criterias occur the backtest criteria is met.<br/>
-		etc.<br/>
-		For example:<br/>
-		If the backtest criteria needs to have a "AND" condition of 2 criterias, set two criterias below and choose score 2.<br/>
-		If the backtest criteria needs to have a "OR" condition of 2 criterias, set two criterias below and choose score 1.<br/>
-		etc.<br/>
-		</span>
-		<i class="iconfont icon-wenhao"></i>
-        </el-tooltip>
+					<span>Score: </span>
+					<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+						<span slot="content"
+							>Choose a value to specify how many following criterias will occur
+							at the same bar to trigger the backtest criteria.<br />
+							if choose score 1, meanning if any one criteria of the following
+							criterias occur the backtest criteria is met.<br />
+							if choose score 2, meanning if any two of the criterias of the
+							following criterias occur the backtest criteria is met.<br />
+							etc.<br />
+							For example:<br />
+							If the backtest criteria needs to have a "AND" condition of 2
+							criterias, set two criterias below and choose score 2.<br />
+							If the backtest criteria needs to have a "OR" condition of 2
+							criterias, set two criterias below and choose score 1.<br />
+							etc.<br />
+						</span>
+						<i class="iconfont icon-wenhao"></i>
+					</el-tooltip>
 				</span>
-				
-                  <el-input-number
+
+				<el-input-number
 					v-model="score"
 					:step="1"
 					step-strictly
@@ -40,21 +52,28 @@
 					:max="editableTabs.length"
 					size="mini"
 				></el-input-number>
-			<span class="scoreNote" v-if="relation === 3">
-			<span>Period: </span>
-					<el-tooltip effect="dark" placement="top" style="diaplay:inline">
-        <span slot="content">Choose a value to specify how many bars within which the following criterias will occur in time order to trigger the backtest criteria.<br/>
-		if choose period 1, meanning if the following criterias occur at the same bar the backtest criteria is met.<br/>
-		if choose period 2, meanning if the following criterias occur within two bars the backtest criteria is met.<br/>
-		etc.<br/>
-		For example:<br/>
-		If the backtest criteria needs to have two consecutive criterias, set two criterias below and choose period 2.<br/>
-		If the backtest criteria needs to have two criterias occur within 3 bars, set two criterias below and choose period 3.<br/>
-		etc.<br/>
-		</span>
-		<i class="iconfont icon-wenhao"></i>
-        </el-tooltip>
-			</span>
+				<span class="scoreNote" v-if="relation === 3">
+					<span>Period: </span>
+					<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+						<span slot="content"
+							>Choose a value to specify how many bars within which the
+							following criterias will occur in time order to trigger the
+							backtest criteria.<br />
+							if choose period 1, meanning if the following criterias occur at
+							the same bar the backtest criteria is met.<br />
+							if choose period 2, meanning if the following criterias occur
+							within two bars the backtest criteria is met.<br />
+							etc.<br />
+							For example:<br />
+							If the backtest criteria needs to have two consecutive criterias,
+							set two criterias below and choose period 2.<br />
+							If the backtest criteria needs to have two criterias occur within
+							3 bars, set two criterias below and choose period 3.<br />
+							etc.<br />
+						</span>
+						<i class="iconfont icon-wenhao"></i>
+					</el-tooltip>
+				</span>
 				<el-input-number
 					v-model="signals_in_market"
 					:step="1"
@@ -63,7 +82,11 @@
 					:min="1"
 					size="mini"
 				></el-input-number>
-				<el-select v-model="relation" placeholder="Please select signal" @change="changeRelation">
+				<el-select
+					v-model="relation"
+					placeholder="Please select signal"
+					@change="changeRelation"
+				>
 					<el-option
 						v-for="item in signalOptions"
 						:key="item.value"
@@ -91,8 +114,8 @@
 						<indicator
 							:criteria="'entry'"
 							:panelIndex="index"
-							:editableTabs = "editableTabs"
-							:editableTabsValue = "editableTabsValue"
+							:editableTabs="editableTabs"
+							:editableTabsValue="editableTabsValue"
 							ref="indiChild"
 							:exitItemCheck="exitItemCheck"
 							@getIndicatorUrl="getIndicatorUrl"
@@ -119,7 +142,7 @@
 						<cci
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'CCI_like'
 							"
@@ -141,7 +164,7 @@
 						<macd
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MACD_like'
 							"
@@ -163,7 +186,7 @@
 						<ma
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MovingAverage_like'
 							"
@@ -185,7 +208,7 @@
 						<bollinger-bands-like
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'BollingerBands_like'
 							"
@@ -207,7 +230,7 @@
 						<ehler-fisher-transform-like
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'EFT_like'
 							"
@@ -229,7 +252,7 @@
 						<stochastic-momentum-index-like
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Stochastics_like'
 							"
@@ -251,7 +274,7 @@
 						<ADX-or-DMS-Like
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ADX_like'
 							"
@@ -273,7 +296,7 @@
 						<elder-ray-index-like
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ERI_like'
 							"
@@ -295,7 +318,7 @@
 						<alligator-like
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Aligator_like'
 							"
@@ -317,7 +340,7 @@
 						<linear-regForecast-like
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'LRF_like'
 							"
@@ -339,7 +362,7 @@
 						<trailing-stop-like
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
-							:isActived ="
+							:isActived="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Trailingstop_like'
 							"
@@ -359,21 +382,27 @@
 							"
 						></trailing-stop-like>
 						<div class="delay-bar-box">
-							 <el-checkbox v-model="isDelayBar" @change="isCheckDelayBar">
-                       <span>Delay of Bars </span>
-					   <el-tooltip effect="dark" placement="top" style="diaplay:inline">
-        <span slot="content">Check this option to delay the specified number of bars to enter when the entry criteria is met.<br/>
-		</span>
-		<i class="iconfont icon-wenhao"></i>
-        </el-tooltip></el-checkbox>
-					<el-input-number
-					v-model="delay_bars"
-					:step="1"
-					step-strictly
-					:min="0"
-					size="mini"
-					:disabled="!isDelayBar"
-				></el-input-number>
+							<el-checkbox v-model="isDelayBar" @change="isCheckDelayBar">
+								<span>Delay of Bars </span>
+								<el-tooltip
+									effect="dark"
+									placement="top"
+									style="diaplay: inline"
+								>
+									<span slot="content"
+										>Check this option to delay the specified number of bars to
+										enter when the entry criteria is met.<br />
+									</span>
+									<i class="iconfont icon-wenhao"></i> </el-tooltip
+							></el-checkbox>
+							<el-input-number
+								v-model="delay_bars"
+								:step="1"
+								step-strictly
+								:min="0"
+								size="mini"
+								:disabled="!isDelayBar"
+							></el-input-number>
 						</div>
 					</el-tab-pane>
 				</el-tabs>
@@ -415,13 +444,13 @@ export default {
 				{
 					value: 3,
 					label: 'TimeOrder Multi-Criteria'
-				},
+				}
 			],
 			scoreOptions: [
 				{
 					value: 1,
 					label: '1'
-				},
+				}
 			],
 			relation: 1,
 			periodValue: 1,
@@ -438,13 +467,13 @@ export default {
 			signals_in_market: 1,
 			techIndiObj: new Array(5).fill(''),
 			indicatorRadioArr: ['sentiment'],
-			refs: {}, 
+			refs: {},
 			indicatorUrlArr: new Array(5).fill(''),
 			indicatorValArr: new Array(5).fill(''),
 			techVal: '',
 			exitItemCheck: false,
 			delay_bars: 0,
-			isDelayBar: false,
+			isDelayBar: false
 		}
 	},
 	components: {
@@ -468,7 +497,7 @@ export default {
 		},
 		updateTech() {
 			return this.$store.state.currentTech
-		},
+		}
 	},
 	watch: {
 		updateSenti(val) {
@@ -479,33 +508,45 @@ export default {
 		updateTech(val) {
 			this.indicatorRadio = 'technical'
 		},
-	   relation: {
-		handler(newVal, oldVal) {
-			if(newVal == 3 && this.editableTabs.length > 3) {
-  this.$confirm('TimeOrder Multi-Criteria supports up to three criterias,Currently your multi-criteria count is '+ this.editableTabs.length + ', are you sure you want to delete the last '+(this.editableTabs.length - 3) + 'th panels ?', 'Tips', {
-          confirmButtonText: 'Confirm',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }).then(() => {
-			const currentTabs = this.editableTabs.length
-			for(let i=0;i<( currentTabs - 3);i++) {
-				this.handleTabsEdit(this.editableTabs.length + '','remove')
-			}
-          this.$message({
-            type: 'success',
-            offset: 300,
-			message: 'The deletion is successful and has been automatically switched to TimeOrder Multi-Criteria'
-          });
-		  this.relation = newVal
-        }).catch(() => {
-		this.relation = oldVal
-          this.$message({
-            type: 'info',
-			offset: 300,
-            message: 'With the deletion undeleted, you can switch to The SaveBar Multi-Criteria to delete the criteria panel to less than 3'
-          });          
-        });
-      }
+		relation: {
+			handler(newVal, oldVal) {
+				if (newVal == 3 && this.editableTabs.length > 3) {
+					this.$confirm(
+						'TimeOrder Multi-Criteria supports up to three criterias,Currently your multi-criteria count is ' +
+							this.editableTabs.length +
+							', are you sure you want to delete the last ' +
+							(this.editableTabs.length - 3) +
+							'th panels ?',
+						'Tips',
+						{
+							confirmButtonText: 'Confirm',
+							cancelButtonText: 'Cancel',
+							type: 'warning'
+						}
+					)
+						.then(() => {
+							const currentTabs = this.editableTabs.length
+							for (let i = 0; i < currentTabs - 3; i++) {
+								this.handleTabsEdit(this.editableTabs.length + '', 'remove')
+							}
+							this.$message({
+								type: 'success',
+								offset: 300,
+								message:
+									'The deletion is successful and has been automatically switched to TimeOrder Multi-Criteria'
+							})
+							this.relation = newVal
+						})
+						.catch(() => {
+							this.relation = oldVal
+							this.$message({
+								type: 'info',
+								offset: 300,
+								message:
+									'With the deletion undeleted, you can switch to The SaveBar Multi-Criteria to delete the criteria panel to less than 3'
+							})
+						})
+				}
 			}
 		}
 	},
@@ -514,20 +555,20 @@ export default {
 			Object.assign(this.$data, this.$options.data())
 			// Reset data for all subcomponents
 			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
-				if(this.indicatorRadioArr[i]){
-				this.$refs.indiChild[i].clearForm()
-				this.$refs.sentiChild[i].clearForm()
-				this.$refs.cciChild[i].clearForm()
-				this.$refs.maChild[i].clearForm()
-				this.$refs.macdChild[i].clearForm()
-				this.$refs.bollBandsLikeChild[i].clearForm()
-				this.$refs.EFTLikeChild[i].clearForm()
-				this.$refs.stochasticsLikeChild[i].clearForm()
-				this.$refs.ADXLikeChild[i].clearForm()
-				this.$refs.ERILikeChild[i].clearForm()
-				this.$refs.aligatorLikeChild[i].clearForm()
-				this.$refs.LRFLikeChild[i].clearForm()
-				this.$refs.trailingStopLikeChild[i].clearForm()
+				if (this.indicatorRadioArr[i]) {
+					this.$refs.indiChild[i].clearForm()
+					this.$refs.sentiChild[i].clearForm()
+					this.$refs.cciChild[i].clearForm()
+					this.$refs.maChild[i].clearForm()
+					this.$refs.macdChild[i].clearForm()
+					this.$refs.bollBandsLikeChild[i].clearForm()
+					this.$refs.EFTLikeChild[i].clearForm()
+					this.$refs.stochasticsLikeChild[i].clearForm()
+					this.$refs.ADXLikeChild[i].clearForm()
+					this.$refs.ERILikeChild[i].clearForm()
+					this.$refs.aligatorLikeChild[i].clearForm()
+					this.$refs.LRFLikeChild[i].clearForm()
+					this.$refs.trailingStopLikeChild[i].clearForm()
 				}
 			}
 		},
@@ -536,65 +577,67 @@ export default {
 		},
 		handleTabsEdit(targetName, action) {
 			if (action === 'add') {
-				if ((this.relation == 2) || (this.relation == 3)) {
+				if (this.relation == 2 || this.relation == 3) {
 					let num_key
-					try{
-						 num_key = Number(this.editableTabs[this.editableTabs.length-1].name) + 1
-		
-					}catch(err){
+					try {
+						num_key =
+							Number(this.editableTabs[this.editableTabs.length - 1].name) + 1
+					} catch (err) {
 						num_key = 1
 					}
 					let num = this.editableTabs.length
-					let newTabName = (num +1)  + ''
+					let newTabName = num + 1 + ''
 
 					this.editableTabs.push({
 						title: 'Criteria' + newTabName,
-						name: num_key + "",
+						name: num_key + '',
 						content: 'Criteria' + newTabName + 'content'
 					})
 					this.editableTabsValue = Number(this.editableTabsValue) + 1 + ''
-					var absoluteIndex = ''
-					this.editableTabs.forEach((tab, index) => {
-						if(tab.name==targetName){
-							absoluteIndex = index
-						}
-					})
 					this.indicatorRadioArr.push('sentiment')
 				}
-				if(this.editableTabs.length > 5 && this.relation == 2){
-						this.$message({
-							message: 'Add up to five criterias',
-							type: 'error',
-							offset: 300
-						})
-						this.editableTabs.pop()
+				if (this.editableTabs.length > 5 && this.relation == 2) {
+					this.$message({
+						message: 'Add up to five criterias',
+						type: 'error',
+						offset: 300
+					})
+					this.editableTabs.pop()
 					this.indicatorRadioArr.pop()
-						this.editableTabsValue = '1'
-				        this.tabIndex =this.editableTabs.length
+					// this.editableTabsValue = this.editableTabs.length + ''
+					this.editableTabsValue = '5'
+					// this.tabIndex = this.editableTabs.length
+					this.tabIndex = 5
 				}
-					if(this.relation == 3 && this.editableTabs.length > 3) {
+				if (this.relation == 3 && this.editableTabs.length > 3) {
 					this.$message({
 						message: 'Add up to three criterias',
 						type: 'error',
 						offset: 300
 					})
-						this.editableTabs.pop()
-					    this.indicatorRadioArr.pop()
-						this.editableTabsValue = '1'
-				        this.tabIndex =this.editableTabs.length
-					}
-				if(this.relation == 2) {
+					this.editableTabs.pop()
+					this.indicatorRadioArr.pop()
+					// this.editableTabsValue = this.editableTabs.length + ''
+					this.editableTabsValue = '3'
+					// this.tabIndex = this.editableTabs.length
+					this.tabIndex = 3
+				}
+				if (this.relation == 2) {
 					this.score = this.indicatorRadioArr.length
 				}
-				if(this.relation == 3) {
+				if (this.relation == 3) {
 					this.signals_in_market = this.indicatorRadioArr.length
 				}
-				}
+			}
 			if (action === 'remove') {
-				if((this.relation == 2 || this.relation == 3) && this.editableTabs.length == 2) {
+				if (
+					(this.relation == 2 || this.relation == 3) &&
+					this.editableTabs.length == 2
+				) {
 					//At least two criterias
 					this.$message({
-						message: 'Multiple criterias are currently selected, at least two criterias',
+						message:
+							'Multiple criterias are currently selected, at least two criterias',
 						type: 'error',
 						offset: 300
 					})
@@ -605,7 +648,7 @@ export default {
 
 				var absoluteIndex = ''
 				tabs.forEach((tab, index) => {
-					if(tab.name==targetName){
+					if (tab.name == targetName) {
 						absoluteIndex = index
 					}
 				})
@@ -620,20 +663,23 @@ export default {
 						}
 					})
 				}
-				let panelArr = tabs.filter((tab) => tab.name !== targetName) 
+				let panelArr = tabs.filter((tab) => tab.name !== targetName)
 				this.editableTabs = panelArr
-				panelArr.forEach((item,index) => {
-						item.title = 'Criteria' + (index + 1)
-					})
+				panelArr.forEach((item, index) => {
+					item.title = 'Criteria' + (index + 1)
+				})
 				this.editableTabsValue = activeName
-				this.indicatorUrlArr.splice(absoluteIndex,1)
+				this.indicatorUrlArr.splice(absoluteIndex, 1)
 				this.indicatorUrlArr.push('')
-				this.indicatorValArr.splice(absoluteIndex,1)
+				this.indicatorValArr.splice(absoluteIndex, 1)
 				this.indicatorValArr.push('')
-				this.indicatorRadioArr.splice(absoluteIndex,1)
-				this.techIndiObj.splice(absoluteIndex,1)
+				this.indicatorRadioArr.splice(absoluteIndex, 1)
+				this.techIndiObj.splice(absoluteIndex, 1)
 				this.techIndiObj.push('')
-				if (this.relation == 2 && this.score >= (this.indicatorRadioArr.length + 1)) {
+				if (
+					this.relation == 2 &&
+					this.score >= this.indicatorRadioArr.length + 1
+				) {
 					this.score = this.indicatorRadioArr.length
 				}
 				// if (this.relation == 3 && this.signals_in_market >= (this.indicatorRadioArr.length + 1)) {
@@ -641,7 +687,10 @@ export default {
 				// }
 				//When removing a tab, load the indicators in the indicatorurlarr into vuex to refresh the status
 				tabs.forEach((tab, index) => {
-					this.$store.commit('getEntryIndicators', {index: index, value: this.indicatorUrlArr[index]})
+					this.$store.commit('getEntryIndicators', {
+						index: index,
+						value: this.indicatorUrlArr[index]
+					})
 				})
 			}
 		},
@@ -660,10 +709,10 @@ export default {
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
 		},
 		addEntrySignalLength() {
-			if(this.relation == 2 || this.relation == 3) {
-			    this.$emit('sendEntrySignalIndex', this.indicatorRadioArr.length)
+			if (this.relation == 2 || this.relation == 3) {
+				this.$emit('sendEntrySignalIndex', this.indicatorRadioArr.length)
 			}
-			if(this.relation == 1){
+			if (this.relation == 1) {
 				this.$emit('sendEntrySignalIndex', 1)
 			}
 		},
@@ -671,74 +720,73 @@ export default {
 			let obj = {}
 			obj.criteria = 'entry'
 			//When timeorder and criteria are selected, the default score is 1
-			if(this.relation == 1 || this.relation == 3) {
+			if (this.relation == 1 || this.relation == 3) {
 				obj.value = 1
 			}
-			if(this.relation == 2) {
-			    obj.value = this.score
+			if (this.relation == 2) {
+				obj.value = this.score
 			}
 			this.$store.commit('saveScoreValue', obj)
 		},
 		saveSignalsInMarket() {
 			let obj = {}
-			obj.criteria = "entry"
+			obj.criteria = 'entry'
 			// When samebar and criteria are selected, criterias_ in_ Market defaults to 1
-			if(this.relation == 1 || this.relation == 2) {
+			if (this.relation == 1 || this.relation == 2) {
 				obj.value = 1
 			}
-			if(this.relation == 3) {
-			   obj.value = this.signals_in_market
+			if (this.relation == 3) {
+				obj.value = this.signals_in_market
 			}
-			this.$store.commit('saveSignalsInMarket',obj)
+			this.$store.commit('saveSignalsInMarket', obj)
 		},
 		saveDelayBar() {
 			let obj = {}
-			obj.criteria = "entry"
-			if(this.isDelayBar) {
-			obj.value = this.delay_bars
-			}else{
-			obj.value =0
+			obj.criteria = 'entry'
+			if (this.isDelayBar) {
+				obj.value = this.delay_bars
+			} else {
+				obj.value = 0
 			}
-			this.$store.commit("saveDelayBar",obj)
+			this.$store.commit('saveDelayBar', obj)
 		},
 		isCheckDelayBar(val) {
-			if(val) {
+			if (val) {
 				this.delay_bars = 1
-			}else{
+			} else {
 				this.delay_bars = 0
 			}
-
 		},
 		saveRelation() {
 			let obj = {}
-			obj.criteria = "entry"
-			if(this.indicatorRadioArr.length > 1) {
-			   obj.value = this.relation
+			obj.criteria = 'entry'
+			if (this.indicatorRadioArr.length > 1) {
+				obj.value = this.relation
 			}
-			if(this.indicatorRadioArr.length == 1){
+			if (this.indicatorRadioArr.length == 1) {
 				obj.value = 1
 			}
-			this.$store.commit("saveRelation",obj)
+			this.$store.commit('saveRelation', obj)
 		},
 		changeRelation(val) {
-			if(val == 1) {
+			if (val == 1) {
 				this.editableTabsValue = '1'
 				this.score = 1
 				this.signals_in_market = 1
 			}
-			if(val == 2 || val == 3) {
-				if(this.editableTabs.length === 1) {
-				this.handleTabsEdit(null,'add')
-				this.editableTabsValue = '1'
-				if(val == 2) {
-					this.score = 2
-				}
-				if(val == 3) {
-					this.signals_in_market = 2
-				}
+			if (val == 2 || val == 3) {
+				if (this.editableTabs.length === 1) {
+					this.handleTabsEdit(null, 'add')
+					this.editableTabsValue = '1'
+					if (val == 2) {
+						this.score = 2
+					}
+					if (val == 3) {
+						this.signals_in_market = 2
+					}
 				}
 			}
-			this.$emit('getEntryRelation',val)
+			this.$emit('getEntryRelation', val)
 			this.$store.commit('clearEntrySignalArr')
 		},
 		saveBacktestData(index) {
@@ -746,203 +794,241 @@ export default {
 			let checked = true
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			// Trigger saving events of different components according to sentiment and different technical
-			return indi.then((val) => { 
+			return indi.then((val) => {
 				// Trigger saving events of different components according to sentiment and different technical
 				if (val) {
-				if (vm.indicatorRadioArr[index] === 'sentiment') {
-					vm.$refs.sentiChild[index].setDesciption(index)
-					let senti = vm.$refs.sentiChild[index].saveCondition(index)
-					if(!senti) {
-					vm.$message({
-					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
-					return (checked = senti)
+					if (vm.indicatorRadioArr[index] === 'sentiment') {
+						vm.$refs.sentiChild[index].setDesciption(index)
+						let senti = vm.$refs.sentiChild[index].saveCondition(index)
+						if (!senti) {
+							vm.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' entry panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = senti)
+					}
+					if (
+						vm.indicatorRadioArr[index] === 'technical' &&
+						vm.techIndiObj[index] === 'CCI_like'
+					) {
+						vm.$refs.cciChild[index].setDesciption(index)
+						let cci = vm.$refs.cciChild[index].saveCondition(index)
+						if (!cci) {
+							vm.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' entry panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = cci)
+					}
+					if (
+						vm.indicatorRadioArr[index] === 'technical' &&
+						vm.techIndiObj[index] === 'MACD_like'
+					) {
+						vm.$refs.macdChild[index].setDesciption(index)
+						let macd = vm.$refs.macdChild[index].saveCondition(index)
+						if (!macd) {
+							vm.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' entry panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = macd)
+					}
+					if (
+						vm.indicatorRadioArr[index] === 'technical' &&
+						vm.techIndiObj[index] === 'MovingAverage_like'
+					) {
+						vm.$refs.maChild[index].setDesciption(index)
+						let ma = vm.$refs.maChild[index].saveCondition(index)
+						if (!ma) {
+							vm.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' entry panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = ma)
+					}
+					if (
+						vm.indicatorRadioArr[index] === 'technical' &&
+						vm.techIndiObj[index] === 'EFT_like'
+					) {
+						vm.$refs.EFTLikeChild[index].setDesciption(index)
+						let eft = vm.$refs.EFTLikeChild[index].saveCondition(index)
+						if (!eft) {
+							vm.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' entry panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = eft)
+					}
+					if (
+						vm.indicatorRadioArr[index] === 'technical' &&
+						vm.techIndiObj[index] === 'ADX_like'
+					) {
+						vm.$refs.ADXLikeChild[index].setDesciption(index)
+						let adx = vm.$refs.ADXLikeChild[index].saveCondition(index)
+						if (!adx) {
+							vm.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' entry panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = adx)
+					}
+					if (
+						vm.indicatorRadioArr[index] === 'technical' &&
+						vm.techIndiObj[index] === 'Aligator_like'
+					) {
+						vm.$refs.aligatorLikeChild[index].setDesciption(index)
+						let aligator =
+							vm.$refs.aligatorLikeChild[index].saveCondition(index)
+						if (!aligator) {
+							vm.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' entry panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = aligator)
+					}
+					if (
+						vm.indicatorRadioArr[index] === 'technical' &&
+						vm.techIndiObj[index] === 'LRF_like'
+					) {
+						vm.$refs.LRFLikeChild[index].setDesciption(index)
+						let lrf = vm.$refs.LRFLikeChild[index].saveCondition(index)
+						if (!lrf) {
+							vm.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' entry panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = lrf)
+					}
+					if (
+						vm.indicatorRadioArr[index] === 'technical' &&
+						vm.techIndiObj[index] === 'BollingerBands_like'
+					) {
+						vm.$refs.bollBandsLikeChild[index].setDesciption(index)
+						let blb = vm.$refs.bollBandsLikeChild[index].saveCondition(index)
+						if (!blb) {
+							vm.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' entry panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = blb)
+					}
+					if (
+						vm.indicatorRadioArr[index] === 'technical' &&
+						vm.techIndiObj[index] === 'Stochastics_like'
+					) {
+						vm.$refs.stochasticsLikeChild[index].setDesciption(index)
+						let smi = vm.$refs.stochasticsLikeChild[index].saveCondition(index)
+						if (!smi) {
+							vm.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' entry panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = smi)
+					}
+					if (
+						vm.indicatorRadioArr[index] === 'technical' &&
+						vm.techIndiObj[index] === 'ERI_like'
+					) {
+						vm.$refs.ERILikeChild[index].setDesciption(index)
+						let eri = vm.$refs.ERILikeChild[index].saveCondition(index)
+						if (!eri) {
+							vm.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' entry panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = eri)
+					}
+					if (
+						vm.indicatorRadioArr[index] === 'technical' &&
+						vm.techIndiObj[index] === 'Trailingstop_like'
+					) {
+						vm.$refs.trailingStopLikeChild[index].setDesciption(index)
+						let ts = vm.$refs.trailingStopLikeChild[index].saveCondition(index)
+						if (!ts) {
+							vm.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' entry panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = ts)
+					}
+				} else {
+					checked = false
 				}
-				if (
-					vm.indicatorRadioArr[index] === 'technical' &&
-					vm.techIndiObj[index] === 'CCI_like'
-				) {
-					vm.$refs.cciChild[index].setDesciption(index)
-					let cci = vm.$refs.cciChild[index].saveCondition(index)
-					if(!cci) {
-					vm.$message({
-					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
-					return (checked = cci)
-				}
-				if (
-					vm.indicatorRadioArr[index] === 'technical' &&
-					vm.techIndiObj[index] === 'MACD_like'
-				) {
-					vm.$refs.macdChild[index].setDesciption(index)
-					let macd = vm.$refs.macdChild[index].saveCondition(index)
-					if(!macd) {
-					vm.$message({
-					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
-					return (checked = macd)
-				}
-				if (
-					vm.indicatorRadioArr[index] === 'technical' &&
-					vm.techIndiObj[index] === 'MovingAverage_like'
-				) {
-					vm.$refs.maChild[index].setDesciption(index)
-					let ma = vm.$refs.maChild[index].saveCondition(index)
-					if(!ma) {
-					vm.$message({
-					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
-					return (checked = ma)
-				}
-				if (
-					vm.indicatorRadioArr[index] === 'technical' &&
-					vm.techIndiObj[index] === 'EFT_like'
-				) {
-					vm.$refs.EFTLikeChild[index].setDesciption(index)
-					let eft = vm.$refs.EFTLikeChild[index].saveCondition(index)
-					if(!eft) {
-					vm.$message({
-					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
-					return (checked = eft)
-				}
-				if (
-					vm.indicatorRadioArr[index] === 'technical' &&
-					vm.techIndiObj[index] === 'ADX_like'
-				) {
-					vm.$refs.ADXLikeChild[index].setDesciption(index)
-					let adx = vm.$refs.ADXLikeChild[index].saveCondition(index)
-					if(!adx) {
-					vm.$message({
-					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
-					return (checked = adx)
-				}
-				if (
-					vm.indicatorRadioArr[index] === 'technical' &&
-					vm.techIndiObj[index] === 'Aligator_like'
-				) {
-					vm.$refs.aligatorLikeChild[index].setDesciption(index)
-					let aligator =
-						vm.$refs.aligatorLikeChild[index].saveCondition(index)
-					if(!aligator) {
-					vm.$message({
-					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
-					return (checked = aligator)
-				}
-				if (
-					vm.indicatorRadioArr[index] === 'technical' &&
-					vm.techIndiObj[index] === 'LRF_like'
-				) {
-					vm.$refs.LRFLikeChild[index].setDesciption(index)
-					let lrf = vm.$refs.LRFLikeChild[index].saveCondition(index)
-					if(!lrf) {
-					vm.$message({
-					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
-					return (checked = lrf)
-				}
-				if (
-					vm.indicatorRadioArr[index] === 'technical' &&
-					vm.techIndiObj[index] === 'BollingerBands_like'
-				) {
-					vm.$refs.bollBandsLikeChild[index].setDesciption(index)
-					let blb = vm.$refs.bollBandsLikeChild[index].saveCondition(index)
-					if(!blb) {
-					vm.$message({
-					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
-					return (checked = blb)
-				}
-				if (
-					vm.indicatorRadioArr[index] === 'technical' &&
-					vm.techIndiObj[index] === 'Stochastics_like'
-				) {
-					vm.$refs.stochasticsLikeChild[index].setDesciption(index)
-					let smi = vm.$refs.stochasticsLikeChild[index].saveCondition(index)
-					if(!smi) {
-					vm.$message({
-					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
-					return (checked = smi)
-				}
-				if (
-					vm.indicatorRadioArr[index] === 'technical' &&
-					vm.techIndiObj[index] === 'ERI_like'
-				) {
-					vm.$refs.ERILikeChild[index].setDesciption(index)
-					let eri = vm.$refs.ERILikeChild[index].saveCondition(index)
-					if(!eri) {
-					vm.$message({
-					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
-					return (checked = eri)
-				}
-				if (
-					vm.indicatorRadioArr[index] === 'technical' &&
-					vm.techIndiObj[index] === 'Trailingstop_like'
-				) {
-					vm.$refs.trailingStopLikeChild[index].setDesciption(index)
-					let ts = vm.$refs.trailingStopLikeChild[index].saveCondition(index)
-					if(!ts) {
-					vm.$message({
-					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
-					type: 'error'
-				    })
-					} 
-					return (checked = ts)
-				}
-			} else {
-				checked = false
-			}
 			})
 		},
 		setEditPanel(num, data) {
 			this.relation = data.entry.relation ? data.entry.relation : 1
-								let formateTechnicalList
-					if (this.$store.state.formateTechnicalList.length === 0) {
-						this.$refs.indiChild[0].loadShortLong()
-					}
-			for (let i = 0; i < num-1; i++) {
+			let formateTechnicalList
+			if (this.$store.state.formateTechnicalList.length === 0) {
+				this.$refs.indiChild[0].loadShortLong()
+			}
+			for (let i = 0; i < num - 1; i++) {
 				this.handleTabsEdit(null, 'add')
 			}
 			this.refs = data
 			let vm = this
 			this.score = data.entry.score
-			this.delay_bars =  data.entry.delay_bars ? data.entry.delay_bars : 0
-			if(this.delay_bars != 0) {
+			this.delay_bars = data.entry.delay_bars ? data.entry.delay_bars : 0
+			if (this.delay_bars != 0) {
 				this.isDelayBar = true
-			}else{
+			} else {
 				this.isDelayBar = false
 			}
-			this.signals_in_market = data.entry.signals_in_market ? data.entry.signals_in_market : 1
+			this.signals_in_market = data.entry.signals_in_market
+				? data.entry.signals_in_market
+				: 1
 			let length = data.entry.signals.length
 			this.tabIndex = length
-            this.relation = data.entry.relation ? data.entry.relation : 1
-			this.$emit('getEntryRelation',this.relation)
+			this.relation = data.entry.relation ? data.entry.relation : 1
+			this.$emit('getEntryRelation', this.relation)
 			for (let j = 0; j < length; j++) {
 				if (data.entry.signals[j].analysis === 'Sentiment') {
 					this.indicatorValArr[j] = data.entry.signals[j].indicator
@@ -1013,7 +1099,7 @@ export default {
 					}
 				}
 			}
-		},
+		}
 	}
 }
 </script>
@@ -1111,12 +1197,12 @@ export default {
 /deep/.el-tabs__nav .el-tabs__item:nth-child(1) span {
 	display: none;
 }
-.delay-bar-box{
+.delay-bar-box {
 	display: flex;
 	border-top: 1px solid #797979;
 	padding-top: 10px;
 }
-/deep/ .el-input-number--mini{
+/deep/ .el-input-number--mini {
 	width: 118px;
 }
 </style>
