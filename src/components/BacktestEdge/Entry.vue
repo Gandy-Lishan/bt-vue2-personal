@@ -636,9 +636,9 @@ export default {
 				if (this.relation == 2 && this.score >= (this.indicatorRadioArr.length + 1)) {
 					this.score = this.indicatorRadioArr.length
 				}
-				if (this.relation == 3 && this.signals_in_market >= (this.indicatorRadioArr.length + 1)) {
-					this.signals_in_market = this.indicatorRadioArr.length
-				}
+				// if (this.relation == 3 && this.signals_in_market >= (this.indicatorRadioArr.length + 1)) {
+				// 	this.signals_in_market = this.indicatorRadioArr.length
+				// }
 				//When removing a tab, load the indicators in the indicatorurlarr into vuex to refresh the status
 				tabs.forEach((tab, index) => {
 					this.$store.commit('getEntryIndicators', {index: index, value: this.indicatorUrlArr[index]})
