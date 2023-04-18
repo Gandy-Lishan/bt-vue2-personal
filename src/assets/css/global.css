@@ -648,3 +648,6 @@ input[type="time"] {
 .history-container td{
 	padding:0 !important;
 }
+.trades-container td{
+	padding:0 !important;
+}
