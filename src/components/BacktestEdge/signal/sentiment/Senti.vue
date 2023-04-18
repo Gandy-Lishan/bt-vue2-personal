@@ -251,8 +251,8 @@ export default {
 				condition: 3,
 				newCondition: 3,
 				value: '',
-				conditionPeriod: '',
-				conditionPeriodMA: '',
+				conditionPeriod: '5',
+				conditionPeriodMA: '5',
 				period: '',
 				maValue: '',
 			},
@@ -298,6 +298,8 @@ export default {
 				if(this.conditionRadio=='Sentiment Moving Average'){
 					this.setPeriod(this.senti.period)
 				}
+				//this.calculateNewConditions()
+
 				newVal.forEach((item) => {
 					if (item.indicator) {
 						if (item.indicator === vm.sentiUrl) {
@@ -344,14 +346,6 @@ export default {
 				// 开始计算数据并加载新的附属indicator
 				this.calculateNewConditions()
 			}
-		},
-		calculateNewConditions(){
-			var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-				// Period: 5,
-				display: 'ST ROCLike',
-				Field: 'Close'
-			})
-			console.log('ST ROCLike',sd)
 		},
 		change(e) {
 			this.$forceUpdate()
@@ -502,6 +496,17 @@ export default {
 				this.senti.comparison = 'SVMA'
 			// Ma is loaded when the default radio is switched to moving average radio
 				this.setPeriod(this.periodTemp)
+			}
+		},
+		calculateNewConditions(){
+			let indicator_url = this.$store.state.indicators.formIndicators[this.criteria][this.panelIndex]
+			if(indicator_url){
+				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+					display: 'ST ROCLike',
+					Field: indicator_url,
+					condition:this.senti.newCondition,
+					period:this.senti.newCondition==7?this.senti.conditionPeriodMA:this.senti.conditionPeriod
+				})
 			}
 		},
 		setPeriod(val) {

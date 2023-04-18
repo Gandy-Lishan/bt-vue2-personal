@@ -462,6 +462,7 @@ export default {
 				if (MAListIndex != -1) {
 					activatedMAList.splice(MAListIndex, 1)
 				}
+				
 				CIQ.store.commit('getMA', activatedMAList)
 				this.$store.commit('getEntryIndicators', {
 					index: this.panelIndex,
