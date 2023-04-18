@@ -35,6 +35,7 @@
     "lodash": "^4.17.21",
     "lru-cache": "^8.0.5",
     "nprogress": "^0.2.0",
+    "papaparse": "^5.4.1",
     "postcss-pxtorem": "^5.1.1",
     "process": "^0.11.10",
     "querystring": "^0.2.1",
