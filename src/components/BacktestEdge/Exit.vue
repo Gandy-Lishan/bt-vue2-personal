@@ -520,7 +520,7 @@ export default {
 			for(let i=0;i<( currentTabs - 3);i++) {
 				this.handleTabsEdit(this.editableTabs.length + '','remove')
 			}
-          this.$message({
+      this.$message({
             type: 'success',
             offset: 300,
 			message: 'The deletion is successful and has been automatically switched to TimeOrder Multi-Criteria'
@@ -708,10 +708,10 @@ export default {
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex, 1)
 				this.techIndiObj.push('')
-				if (this.relation == 2) {
+				if (this.relation == 2 && this.score >= (this.indicatorRadioArr.length + 1)) {
 					this.score = this.indicatorRadioArr.length
 				}
-				if (this.relation == 3) {
+				if (this.relation == 3 && this.signals_in_market >= (this.indicatorRadioArr.length + 1)) {
 					this.signals_in_market = this.indicatorRadioArr.length
 				}
 //When removing a tab, load the indicators in the indicatorurlarr into vuex to refresh the status
