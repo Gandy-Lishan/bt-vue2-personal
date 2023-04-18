@@ -340,7 +340,18 @@ export default {
 			// 如果不是ROC类型，则这两个condition值一致
 			if(!this.isROCLike){
 				this.senti.condition = this.senti.newCondition
+			}else{
+				// 开始计算数据并加载新的附属indicator
+				this.calculateNewConditions()
 			}
+		},
+		calculateNewConditions(){
+			var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+				// Period: 5,
+				display: 'ST ROCLike',
+				Field: 'Close'
+			})
+			console.log('ST ROCLike',sd)
 		},
 		change(e) {
 			this.$forceUpdate()
