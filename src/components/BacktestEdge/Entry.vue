@@ -569,7 +569,7 @@ export default {
 						})
 						this.editableTabs.pop()
 					this.indicatorRadioArr.pop()
-						this.editableTabsValue = '1'
+						this.editableTabsValue = this.editableTabs.length + ''
 				        this.tabIndex =this.editableTabs.length
 				}
 					if(this.relation == 3 && this.editableTabs.length > 3) {
@@ -580,7 +580,7 @@ export default {
 					})
 						this.editableTabs.pop()
 					    this.indicatorRadioArr.pop()
-						this.editableTabsValue = '1'
+						this.editableTabsValue = this.editableTabs.length + ''
 				        this.tabIndex =this.editableTabs.length
 					}
 				if(this.relation == 2) {
