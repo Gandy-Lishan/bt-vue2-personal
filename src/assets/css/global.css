@@ -644,3 +644,10 @@ input[type="time"] {
   top: -10px;
   right: -15px;
 }
+
+.history-container td{
+	padding:0 !important;
+}
+.trades-container td{
+	padding:0 !important;
+}

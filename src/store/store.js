@@ -94,7 +94,7 @@ export default new Vuex.Store({
 		sentimentIndicatorList: [],
 		backtestNameList: [],
 		formateTechnicalList: [],
-		riskControl: '1111',
+		riskControl: true,
 
 		is_admin: false,
 		role: ''

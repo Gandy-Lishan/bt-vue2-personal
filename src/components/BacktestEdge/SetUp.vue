@@ -506,10 +506,10 @@ export default {
 			tp: 20,
 			sl: 10,
 			tim: 120,
-			isRiskControl: false,
+			isRiskControl: true,
 			isTakeProfit: true,
 			isStopLoss: true,
-			isTimeInMarket: false,
+			isTimeInMarket: true,
 			sentimentIndicatorList: [],
 			rules: {
 				capital: [
@@ -555,6 +555,7 @@ export default {
 	},
 	mounted() {
 		this.loadSentimentList('Daily')
+		this.$emit('IsRiskControl', true)
 		this.getEndDate()
 	},
 	computed: {
@@ -605,7 +606,7 @@ export default {
 			this.is_admin = this.$store.state.is_admin
 			this.getEndDate()
 			this.bd.symbol = this.$store.state.backtestSymbol
-			this.$emit('IsRiskControl', false)
+			this.$emit('IsRiskControl', true)
 			this.clearFormValidate()
 		},
 		setEditData(newVal) {			
@@ -867,6 +868,7 @@ export default {
 			) {
 				this.isTakeProfit = true
 				this.isStopLoss = true
+				this.isTimeInMarket = true
 				this.$emit('IsRiskControl', true)
 			}
 			this.$store.commit('isRiskControl', val)
@@ -1194,12 +1196,13 @@ export default {
 }
 .riskItem {
 	display: flex;
-	margin: 5px;
+	margin: 0px 10px 15px 0px;
 	justify-content: center;
 	align-items: center;
 }
 .risk-control-container {
 	display: flex;
+	justify-content: flex-end;
 }
 
 .el-checkbox-group {
