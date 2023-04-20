@@ -525,6 +525,7 @@ input[type="time"] {
     width: 124px;
     border-radius: unset;
   }
+
   .exit-container input:not([type]),
   .exit-container input[type="text"],
   .exit-container input[type="number"],
@@ -599,6 +600,17 @@ input[type="time"] {
 .exit-container .signal-option-box .signal-container input[type='date']:last-child,
 .exit-container .signal-option-box .signal-container input[type='time']:last-child {
 	width: 100px;
+}
+.entry-container .custom-indicator-form input:not([type]),
+.entry-container .custom-indicator-form input[type="text"],
+.entry-container .custom-indicator-form input[type="number"],
+.entry-container .custom-indicator-form input[type="date"],
+.entry-container .custom-indicator-form input[type="time"] {
+  border: #000000 solid 1px;
+  padding: 0 5px 0 10px;
+  height: 40px;
+  width: 280px;
+  border-radius: unset;
 }
 .el-tabs__new-tab{
   margin: 12px 5px 9px 10px;
