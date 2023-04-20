@@ -73,14 +73,19 @@
 					<div class="indicatorSearchBox">
 						<el-upload
 							class="upload-demo"
-							action="https://jsonplaceholder.typicode.com/posts/"
+							:action="uploadUrl"
 							:on-preview="handlePreview"
+							:on-progress="handleUploadProgress"
 							:on-remove="handleRemove"
+							:on-success="handleUploadSuccess"
+							:on-error="handleUploadError"
+							:http-request="uploadFile"
 							:before-upload="beforeUpload"
 							:multiple="false"
 							:limit="1"
 							:on-exceed="handleExceed"
 							:file-list="fileList"
+							ref="upload"
 							:disabled="!(indicatorRadio === 'Custom Indicators')"
 						>
 							<el-button
@@ -90,15 +95,51 @@
 								>点击上传</el-button
 							>
 							<div slot="tip" class="el-upload__tip">
-								只能上传csv/xlsx文件，且不超过1MB
+								只能上传 csv 文件，且不超过 1MB
 							</div>
 						</el-upload>
 						<el-dialog :title="previewFileName" :visible.sync="previewVisible">
-						<el-table :data="previewData" style="margin-top: 20px; max-height: 400px; overflow-y: auto;">
-      <el-table-column label="Date" prop="Date"></el-table-column>
-      <el-table-column label="Close" prop="Close"></el-table-column>
-    </el-table>
-	</el-dialog>
+							<el-table
+								:data="previewData"
+								style="margin-top: 20px; max-height: 400px; overflow-y: auto"
+							>
+								<el-table-column label="Date" prop="Date"></el-table-column>
+								<el-table-column label="Close" prop="Close"></el-table-column>
+							</el-table>
+						</el-dialog>
+						<el-dialog
+							:title="previewFileName"
+							:visible.sync="dialogFormVisible"
+							:close-on-click-modal="false"
+							:close-on-press-escape="false"
+							:show-close="false"
+						>
+							<el-form
+								:model="form"
+								class="custom-indicator-form"
+								:rules="customIndicatorRules"
+								ref="customForm"
+							>
+								<el-form-item
+									label="indicator 名称"
+									:label-width="formLabelWidth"
+									prop="indicatorName"
+								>
+									<el-input
+										v-model="form.indicatorName"
+										autocomplete="off"
+									></el-input>
+								</el-form-item>
+							</el-form>
+							<div slot="footer" class="dialog-footer">
+								<el-button @click="handleDialogClose">直接使用文件名</el-button>
+								<el-button
+									type="primary"
+									@click="handleDialogConfirm('customForm')"
+									>确 定</el-button
+								>
+							</div>
+						</el-dialog>
 					</div>
 				</el-form-item>
 			</div>
@@ -106,10 +147,11 @@
 	</div>
 </template>
 <script>
-import { Store, mapGetters } from 'vuex'
+import SparkMD5 from 'spark-md5';
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { getIndicatorsList } from '@/service/service'
 import Papa from 'papaparse'
+import axios from 'axios'
 export default {
 	props: {
 		criteria: String,
@@ -140,6 +182,16 @@ export default {
 				callback()
 			}
 		}
+		var validateIndicatorName = (rule, value, callback) => {
+			const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
+			if (!value) {
+				callback(new Error('名称不能为空'))
+			} else if (!reg.test(value)) {
+				callback(new Error('必须以字母开头，并且只能够包含字母、数字和下划线'))
+			} else {
+				callback()
+			}
+		}
 		return {
 			indicatorRadio: 'Sentiment Indicators',
 			si: {
@@ -157,11 +209,24 @@ export default {
 			category: 'all',
 			fileList: [],
 			actionUrl: '', // 文件上传的接口地址
-      headers: {}, // 请求头部
-      previewVisible: false, // 是否显示预览表格
-      previewData: [], // 预览表格的数据
+			headers: {}, // 请求头部
+			previewVisible: false, // 是否显示预览表格
+			previewData: [], // 预览表格的数据
 			previewFileName: '',
-			fieldErrors: []
+			cancelToken: null, // 用于保存取消上传请求的取消令牌
+			uploadUrl: 'https://jsonplaceholder.typicode.com/posts/',
+			uploadHeaders: {},
+			// progress: 0, // 上传进度
+			dialogFormVisible: false,
+			form: {
+				indicatorName: ''
+			},
+			formLabelWidth: '120px',
+			customIndicatorRules: {
+				indicatorName: [{ validator: validateIndicatorName, trigger: 'blur' }],
+				dialogValid: false
+			},
+			rawMap: {} // 文件对象的 raw 属性备份
 		}
 	},
 	computed: {
@@ -753,37 +818,138 @@ export default {
 				})
 			}
 		},
+		uploadFile(file) {
+			console.log('文件上传', file)
+			const self = this
+			// 创建 FormData 对象，将文件添加到 FormData 中
+
+			const formData = new FormData()
+			formData.append('file', file)
+
+			// 创建 CancelToken 实例
+			const cancelToken = axios.CancelToken.source()
+
+			// 保存取消令牌，以便在需要终止上传时使用
+			self.cancelToken = cancelToken
+			// 发送上传请求
+			axios
+				.post(self.uploadUrl, formData, {
+					headers: {
+						...self.uploadHeaders,
+						...{
+							cancelToken: cancelToken.token
+						}
+					},
+					onUploadProgress: (event) => {
+						// 文件上传进度的处理逻辑
+						// self.handleUploadProgress(event, file.uid, self.fileList);
+						// const progress = Math.round((event.loaded * 100) / event.total)
+						// const curLi =
+						// 	self.$refs.upload.$el.querySelector('.el-progress-bar__inner') ||
+						// 	null
+						// console.log(
+						// 	'lishan curli',
+						// 	curLi,
+						// 	self.$refs.upload.$el.querySelector('.el-progress__text')
+						// )
+						// self.$refs.upload.$el.querySelector(
+						// 	'.el-progress-bar__inner'
+						// ).style.width = progress + '%'
+						// this.$refs.upload.$el.querySelector('.el-progress__text').innerHTML = this.progress + '%';
+						// ...
+					}
+				})
+				.then((response) => {
+					// 文件上传完成后的处理逻辑
+					console.log('文件上传成功', response)
+					// 还原文件对象的 raw 属性
+					self.$message.success('文件上传成功，可点击文件进行预览')
+					// ...
+				})
+				.catch((error) => {
+					// 文件上传出错的处理逻辑
+					console.log('文件上传失败', error)
+					self.$message.success('文件上传失败')
+
+					// ...
+				})
+		},
+		handleUploadSuccess(response, file, fileList) {
+			// 上传成功回调
+			console.log('上传成功回调：', response)
+			// 更新文件列表中对应文件的状态为成功
+			// this.fileList.forEach((item) => {
+			// 	if (item.uid === file.uid) {
+			// 		item.progress = 100 // 进度设置为 100
+			// 		item.status = 'success' // 状态设置为成功
+			// 	}
+			// })
+		},
+		handleUploadError(error, file, fileList) {
+			// 上传失败回调
+			console.log('上传失败：', error)
+			// 更新文件列表中对应文件的状态为
+		},
 		handleRemove(file, fileList) {
-			console.log(file, fileList)
+			console.log('处理删除', file)
+			// 备份文件对象的 raw 属性
+			this.rawMap[file.uid] = this.rawMap[file.uid] || file.raw
+			const index = this.fileList.indexOf(file)
+			if (index !== -1) {
+				this.fileList.splice(index, 1)
+			}
+			// 在需要终止上传的地方调用 cancelToken.cancel() 方法
+			if (this.cancelToken) {
+				this.cancelToken.cancel()
+				console.log('取消上传')
+			}
+			// 发送请求删除服务器上的文件
+			// axios.post('/your-delete-api', { filename: file.name })
+			//   .then(response => {
+			//     console.log('文件已从服务器删除')
+			//   })
+			//   .catch(error => {
+			//     console.log('文件删除失败：', error)
+			//   })
 		},
 		handlePreview(file) {
-			console.log('handlePreview', file)
+			console.log('处理预览', file)
+			file.raw = this.rawMap[file.uid] || file.raw
 			Papa.parse(file.raw, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (result) => {
-          // 获取解析后的数据
-          const data = result.data;
-          // 更新预览表格的数据
-          this.previewData = data;
+				header: true,
+				skipEmptyLines: true,
+				complete: (result) => {
+					// 获取解析后的数据
+					const data = result.data
+					// 更新预览表格的数据
+					this.previewData = data
 					this.previewFileName = file.name
-					console.log('previewData',data)
-          // 显示预览表格
-          this.previewVisible = true;
-        },
-        error: (error) => {
-          // 解析错误时的处理逻辑
-          console.error('解析错误:', error);
-        }
-      });
+					// 显示预览表格
+					this.previewVisible = true
+				},
+				error: (error) => {
+					// 解析错误时的处理逻辑
+					console.error('解析错误:', error)
+				}
+			})
 		},
 		handleExceed(files, fileList) {
+			console.log('处理超出', file)
 			this.$message.warning('只能上传单个 indicator 文件')
 		},
 		beforeUpload(file) {
-			console.log('beforeUpload', file)
+			console.log('上传前', file)
+			// 备份文件对象的 raw 属性
+			this.rawMap[file.uid] = this.rawMap[file.uid] || file.raw
 			if (!/(CSV)/i.test(file.type)) {
-				this.$message.warning('上传的图片只能是 CSV 格式')
+				this.$message.warning('上传的文件只能是 CSV 格式')
+				return false
+			}
+			const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
+			if (!reg.test(file.name.replace('.csv', ''))) {
+				this.$message.warning(
+					'文件名以字母开头，并且只能够包含字母、数字和下划线'
+				)
 				return false
 			}
 			// 限制文件上传大小 1M
@@ -791,46 +957,201 @@ export default {
 				this.$message.warning('上传的文件不能超过 1MB')
 				return false
 			}
-			// 限制字段
-			const reader = new FileReader();
-      reader.onload = (e) => {
-        const content = e.target.result;
-				console.log('content',content)
-			// 使用 PapaParse 解析 CSV 文件内容
-			const result = Papa.parse(content, {
-          header: true, // 指定是否将第一行作为字段名
-					skipEmptyLines: true
-        });
-        // 获取解析结果
-        const data = result.data;
-				console.log('data', data)
-        // 进行字段校验
-        this.fieldErrors = this.validateFields(data);
-      }
-      reader.readAsText(file);
-			console.log('错误的地方', this.fieldErrors)
-			if (this.fieldErrors.length > 0) {
-          // 如果有错误，显示错误信息
-					this.$message.warning('字段校验未通过')
+			this.validateCSV(file)
+			return false
+		},
+		handleUploadProgress(event, uid, fileList) {
+			// 上传进度回调
+			let { loaded, total } = event
+			const progress = (loaded / total) * 100
+			this.fileList = fileList.map((item) => {
+				console.log('lishan item', item.uid, uid)
+				console.log(item.uid)
+				if (item.uid === uid) {
+					item.progress = progress
+				}
+			})
+			// const progress = Math.round(event.percent);
+			// 自定义方式展示进度条
+			// this.$refs.upload.$el.querySelector('.el-progress-bar__inner').style.width = progress + '%';
+		},
+		handleDialogClose() {
+			console.log('弹窗关闭')
+			this.$refs['customForm'].resetFields()
+			this.dialogFormVisible = false
+			const file = this.fileList[this.fileList.length - 1]
+			this.uploadFile(file)
+		},
+		handleDialogConfirm(formName) {
+			this.$refs[formName].validate((valid) => {
+				if (valid) {
+					this.fileList.map((item) => {
+						const oldFileName = item.name
+						const newFileName = oldFileName.replace(
+							oldFileName.replace('.csv', ''),
+							this.form.indicatorName
+						)
+						const file = this.fileList[this.fileList.length - 1]
+						console.log('弹窗确认')
+						const blob = file.slice(0, file.size, file.type)
+						const newFile = new File([blob], newFileName, { type: file.type })
+						newFile.uid = file.uid
+						this.fileList.splice(-1, 1, newFile)
+						this.dialogValid = true
+						this.dialogFormVisible = false
+						this.uploadFile(newFile)
+					})
+					// this.$refs.upload.submit()
+					return
+				}
+			})
+		},
+		cancelIndicatorName(formName) {
+			this.$refs[formName].resetFields()
+			this.dialogFormVisible = false
+		},
+		validateCSV(file) {
+			return new Promise((resolve, reject) => {
+				// 限制字段
+				let isDateFormat = true
+				let isNumFormat = true
+				const reader = new FileReader()
+				reader.onload = (e) => {
+					const content = e.target.result
+					const hash = SparkMD5.hashBinary(reader.result);
+					file.hash = hash
+					// 使用 PapaParse 解析 CSV 文件内容
+					const result = Papa.parse(content, {
+						header: true, // 指定是否将第一行作为字段名
+						skipEmptyLines: true,
+						trimHeaders: true, // 去除表头中每个字段的空格
+						trimRows: true, // 去除数据行中每个字段的空格
+						step: function (row) {
+							const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/
+							const dateColumnIndex = 'Date'
+							for (const key in row.data) {
+								if (Object.hasOwnProperty.call(row.data, key)) {
+									row.data[key] = row.data[key].trim()
+								}
+							}
+							// const trimmedRow = row.data.map((value) => value.trim())
+							const dateCell = row.data[dateColumnIndex]
+							const numFormatRegex = /^\d+(\.\d{1,2})?$/
+							const numColumnIndex = 'Close' // Change this to the index of the column you want to check
+							const numCell = row.data[numColumnIndex]
+							if (!dateFormatRegex.test(dateCell)) {
+								console.log('日期格式校验失败')
+								isDateFormat = false
+								// parser.pause()
+								return
+							}
+							if (!numFormatRegex.test(numCell)) {
+								console.log('数字格式校验失败')
+								isNumFormat = false
+								// parser.pause()
+								return
+							}
+							return
+							// parser.resume()
+						},
+						complete: (results) => {
+							console.log(results.data)
+							// 在这里执行上传操作，仅上传符合要求的数据
+						},
+						error: (error) => {
+							reject(error)
+						}
+					})
+					// 获取解析结果
+					const data = result.data
+					// 进行字段校验
+					const isVerified = this.validateFields(data)
+					const lines = content.split('\n')
+					// 获取 CSV 文件的字段顺序
+					const fieldOrder = lines[0].trim().split(',')
+					const isOrdered = this.validateCSVFieldOrder(fieldOrder)
+					if (isVerified && isOrdered && isDateFormat && isNumFormat) {
+						// this.progress = 0 // 每次上传前重置进度为0
+						// this.fileList.push({
+						// 	uid: file.uid,
+						// 	name: file.name,
+						// 	progress: 0, // 进度初始化为 0
+						// 	status: 'uploading' // 状态设置为上传中
+						// })
+						this.form.indicatorName = file.name.replace('.csv', '')
+						this.dialogFormVisible = true
+						this.fileList.push(file)
+						resolve(file)
+					} // 校验通过，允许上传
+					if (!isVerified) {
+						reject(new Error('CSV字段校验失败'))
+						return
+					}
+					if (!isOrdered) {
+						reject(new Error('CSV字段顺序错误'))
+						return
+					}
+					if (!isDateFormat) {
+						this.$message.warning(
+							`文件 Date 列数据格式错误，应为 yyyy-MM-dd, 如 2023-04-20`
+						)
+						reject(
+							new Error(
+								`文件 Date 列数据格式错误，应为 yyyy-MM-dd, 如 2023-04-20`
+							)
+						)
+						return
+					}
+					if (!isNumFormat) {
+						this.$message.warning(
+							`文件 Close 列数据格式错误，应为数字，最多保存小数点后两位, 如 45.55`
+						)
+						reject(
+							new Error(
+								`文件 Close 列数据格式错误，应为数字，最多保存小数点后两位, 如 45.55`
+							)
+						)
+						return
+					}
+				}
+				reader.readAsText(file)
+			})
+		},
+		validateFields(data) {
+			// 在这里进行字段校验
+			// 可以遍历解析后的数据对象数组，对每一行的字段进行校验
+			// 如果有错误，将错误信息存储到一个数组中，并返回
+			const errors = []
+			data.forEach((row, index) => {
+				if (!row.Date || !row.Close) {
+					errors.push(`第 ${index + 1} 行字段校验未通过`)
+				}
+			})
+			if (errors.length > 0) {
+				// 如果有错误，显示错误信息
+				this.$message.warning('字段名称校验未通过')
+				return false
+			}
+			return true
+		},
+		validateCSVFieldOrder(fieldOrder) {
+			// 在这里进行 CSV 字段顺序校验的逻辑
+			const orderedValues = ['Date', 'Close'] // 规定顺序
+			for (let i = 0; i < fieldOrder.length - 1; i++) {
+				const currentIndex = orderedValues.indexOf(fieldOrder[i])
+				const nextIndex = orderedValues.indexOf(fieldOrder[i + 1])
+				// 首先名称存在，再判断顺序
+				if (
+					currentIndex !== -1 &&
+					nextIndex !== -1 &&
+					currentIndex > nextIndex
+				) {
+					this.$message.warning('字段顺序校验未通过')
 					return false
-        } else {
-          // 校验通过，可以继续处理解析后的数据
-        }
-      },
-			validateFields(data) {
-      // 在这里进行字段校验
-      // 可以遍历解析后的数据对象数组，对每一行的字段进行校验
-      // 如果有错误，将错误信息存储到一个数组中，并返回
-      // 示例：校验字段是否存在且不为空
-      const errors = [];
-      data.forEach((row, index) => {
-				console.log('row',row)
-        if (!row.Date || !row.Close) {
-          errors.push(`第 ${index + 1} 行字段校验未通过`);
-        }
-      });
-      return errors;
-    },
+				}
+			}
+			return true
+		}
 	}
 }
 </script>
