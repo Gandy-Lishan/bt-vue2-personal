@@ -11,7 +11,12 @@
 							alt="logo"
 					/></span>
 					<div class="betaNote">BacktestEdge Beta</div>
-					<el-menu :default-active="activeIndex" class="el-menu-demo menu" mode="horizontal" @select="handleSelect">
+					<el-menu
+						:default-active="activeIndex"
+						class="el-menu-demo menu"
+						mode="horizontal"
+						@select="handleSelect"
+					>
 						<el-submenu index="1">
 							<template slot="title">Help</template>
 							<el-menu-item index="1-1">Tutorial</el-menu-item>
@@ -27,7 +32,9 @@
 				</div>
 			</div>
 			<header class="header">
-				<p class="hint">Hint: Move cursor out of chart area to scroll down the page below</p>
+				<p class="hint">
+					Hint: Move cursor out of chart area to scroll down the page below
+				</p>
 				<!-- <el-row type="flex" justify="center"
 					><el-col>
 						<p class="betaNote">BacktestEdge Beta</p>
@@ -75,15 +82,16 @@
 						element-loading-text="Loading..."
 						element-loading-spinner="el-icon-loading"
 						element-loading-background="rgba(0, 0, 0, 0.8)"
-					>                           
+					>
 						<div class="set-up-container" @click="tabContentClick">
-						<keep-alive>
-							<set-up
-								ref="setUpChild"
-								:backtestEditData="backtestEditData"
-								@IsRiskControl="IsRiskControl"
-								@setDirection="setDirection"
-							></set-up></keep-alive>
+							<keep-alive>
+								<set-up
+									ref="setUpChild"
+									:backtestEditData="backtestEditData"
+									@IsRiskControl="IsRiskControl"
+									@setDirection="setDirection"
+								></set-up
+							></keep-alive>
 							<div class="criteria-container">
 								<div class="criteria-box">
 									<entry
@@ -143,12 +151,12 @@
 							></result>
 						</div>
 						<performance
-						ref="performanceChild"
+							ref="performanceChild"
 							:backtestEditData="backtestEditData"
 							@errorCatchPerformance="errorCatchPerformance"
 						></performance>
 					</el-tab-pane>
-					<el-tab-pane label="My Favorites" name="forth" 
+					<el-tab-pane label="My Favorites" name="forth"
 						><favorite
 							ref="favoriteChild"
 							@refHistoryForm="refHistoryForm"
@@ -264,7 +272,12 @@ import performance from '@/components/BacktestEdge/Performance.vue'
 import history from '@/components/BacktestEdge/History.vue'
 import favorite from '@/components/BacktestEdge/Favorite.vue'
 import sample from '@/components/BacktestEdge/Sample.vue'
-import { runBacktest, seeParams, getBacktestName,uploadS3 } from '@/service/service'
+import {
+	runBacktest,
+	seeParams,
+	getBacktestName,
+	uploadS3
+} from '@/service/service'
 import searchKeys from '@/tools/searchKeys.js'
 import UUID from '@/tools/uuid.js'
 export default {
@@ -272,7 +285,7 @@ export default {
 	data() {
 		return {
 			activeIndex: '1',
-        	activeIndex2: '1',
+			activeIndex2: '1',
 			test: false,
 			btnClickBool: true,
 			scroll: '',
@@ -304,7 +317,6 @@ export default {
 		sample
 	},
 	async mounted() {
-
 		let toTop = document.getElementsByClassName('toTop')[0]
 		toTop.style.visibility = 'hidden'
 		// When DOM renders data, set the height of the lower area to the height of the browser's visible area
@@ -329,62 +341,61 @@ export default {
 		this.myBrowser()
 
 		const pathname = window.location.pathname
-			if(pathname.includes('backtests')) this.activeName = 'sixth'
+		if (pathname.includes('backtests')) this.activeName = 'sixth'
 
-	const searchParams = new URLSearchParams(window.location.search);
-  const backtestID = searchParams.get('backtestID');
-	console.log('backtestID', backtestID)
-	if(!backtestID) return
-	const vm = this
-	try {
-				CIQ.addCover('Fetching backtest information...')
-				CIQ.nprogress.start()
-				const res = await seeParams(backtestID)
-				res.data.entry_description = JSON.parse(res.data.entry_description)
-				res.data.exit_description = JSON.parse(res.data.exit_description)
-				res.data.result = JSON.parse(res.data.result)
-				console.log('backtest res',res)
-				document.getElementsByClassName('ciq-period')[0].style.display = ''
-				//  Restore indicator layout
-				this.$store.commit('getBacktestSymbol', res.data.symbol)
-				CIQ.hideMarker()
-				CIQ.isMarkerShown = false
-				if (res.data.indicator_layout) {
-					this.$refs.historyChild.restoreIndicatorLayoutEdit(
-						JSON.parse(res.data.indicator_layout),
-						res.data.frequency,
-						res.data, res.data
-					)
-				} else {
-					this.$store.commit('getRunBacktestData', res.data)
-					this.goBacktestResultForm(res.data,() => {
-						this.$emit('goTobacktestSetupForm', backtestID, res.data,() => {
-							CIQ.hideCover()
-							CIQ.nprogress.done()
-						})
-				})
-				}
-			} catch (error) {
-				vm.$message({
-					message: 'The internal server is busy, please try again later ',
-					type: 'error',
-					offset: 300
+		const searchParams = new URLSearchParams(window.location.search)
+		const backtestID = searchParams.get('backtestID')
+		console.log('backtestID', backtestID)
+		if (!backtestID) return
+		const vm = this
+		try {
+			CIQ.addCover('Fetching backtest information...')
+			CIQ.nprogress.start()
+			const res = await seeParams(backtestID)
+			res.data.entry_description = JSON.parse(res.data.entry_description)
+			res.data.exit_description = JSON.parse(res.data.exit_description)
+			res.data.result = JSON.parse(res.data.result)
+			console.log('backtest res', res)
+			document.getElementsByClassName('ciq-period')[0].style.display = ''
+			//  Restore indicator layout
+			this.$store.commit('getBacktestSymbol', res.data.symbol)
+			CIQ.hideMarker()
+			CIQ.isMarkerShown = false
+			if (res.data.indicator_layout) {
+				this.$refs.historyChild.restoreIndicatorLayoutEdit(
+					JSON.parse(res.data.indicator_layout),
+					res.data.frequency,
+					res.data,
+					res.data
+				)
+			} else {
+				this.$store.commit('getRunBacktestData', res.data)
+				this.goBacktestResultForm(res.data, () => {
+					this.$emit('goTobacktestSetupForm', backtestID, res.data, () => {
+						CIQ.hideCover()
+						CIQ.nprogress.done()
+					})
 				})
 			}
-
-
+		} catch (error) {
+			vm.$message({
+				message: 'The internal server is busy, please try again later ',
+				type: 'error',
+				offset: 300
+			})
+		}
 	},
 	watch: {
 		scroll: {
 			handler(val) {
-				try{
+				try {
 					let toTop = document.getElementsByClassName('toTop')[0]
 					if (val <= 600) {
 						toTop.style.visibility = 'hidden'
 					} else {
 						toTop.style.visibility = 'visible'
 					}
-				}catch(err){}
+				} catch (err) {}
 			},
 			immediate: true,
 			deep: true
@@ -403,7 +414,7 @@ export default {
 		},
 		test: {
 			handler(val) {
-				CIQ.downloadCSV = val 
+				CIQ.downloadCSV = val
 			},
 			immediate: true,
 			deep: true
@@ -412,14 +423,14 @@ export default {
 	methods: {
 		handleSelect(key, keyPath) {
 			let path = ''
-			if(key=='1-1'){
+			if (key == '1-1') {
 				path = this.$router.resolve({
-					path: '/doc',
+					path: '/doc'
 				}).href
-			}else if(key=='1-2'){
+			} else if (key == '1-2') {
 				path = 'https://users.sentimentrader.com/users/account/support/'
 			}
-          	window.open(path, '_blank');
+			window.open(path, '_blank')
 		},
 		animationUp: function () {
 			window.scrollTo({
@@ -501,18 +512,20 @@ export default {
 						this.$refs.favoriteChild.getFavoriteList()
 						this.favoriteFlag = false
 					}
-					if(window.location.pathname.includes('backtests')) this.$router.push('/home')
+					if (window.location.pathname.includes('backtests'))
+						this.$router.push('/home')
 					break
 				case 'fifth':
 					this.$refs.sampleChild.getSampleList()
-					if(window.location.pathname.includes('backtests')) this.$router.push('/home')
+					if (window.location.pathname.includes('backtests'))
+						this.$router.push('/home')
 					break
 				case 'sixth':
 					this.$router.push('/home/backtests')
 					break
 				default:
-					if(window.location.pathname.includes('backtests')) this.$router.push('/home')
-				
+					if (window.location.pathname.includes('backtests'))
+						this.$router.push('/home')
 			}
 		},
 		IsRiskControl(val) {
@@ -522,37 +535,39 @@ export default {
 			this.direction = val
 		},
 		refreshPage() {
-			if (!CIQ.Studies) return;
+			if (!CIQ.Studies) return
 			var stx = CIQ.stxx
 			for (var id in stx.layout.studies) {
-				var sd = stx.layout.studies[id];
-				if (!sd.customLegend && !sd.permanent) CIQ.Studies.removeStudy(stx, sd);
+				var sd = stx.layout.studies[id]
+				if (!sd.customLegend && !sd.permanent) CIQ.Studies.removeStudy(stx, sd)
 			}
-			stx.draw();
+			stx.draw()
 			CIQ.setPanelHeight([])
 			const freq = CIQ.store.state.exitFrequency
 
 			// remove all Studies from Vuex
-			CIQ.store.commit('getEntryIndicatorsList',[])
-			CIQ.store.commit('getExitIndicatorsList',[])
-			CIQ.store.commit('getMA',[])
-			CIQ.store.commit('getExtraIndicators',[])
-			CIQ.store.commit('getTechnicalIndicators',[])
+			CIQ.store.commit('getEntryIndicatorsList', [])
+			CIQ.store.commit('getExitIndicatorsList', [])
+			CIQ.store.commit('getMA', [])
+			CIQ.store.commit('getExtraIndicators', [])
+			CIQ.store.commit('getTechnicalIndicators', [])
 
-			CIQ.store.commit('getBacktestSymbol','SPY')
+			CIQ.store.commit('getBacktestSymbol', 'SPY')
 			CIQ.store.commit('getFrequency', 'Daily')
 
 			// remove markers, prompt, recover timeframe dropdown
 			CIQ.removePrompt()
 			CIQ.hideMarker()
 			CIQ.isMarkerShown = false
-			document.getElementsByClassName("ciq-period")[0].style.display = "block"
-			if(stx.chart.symbol!=CIQ.store.state.backtestSymbol || freq != 'Daily'){
+			document.getElementsByClassName('ciq-period')[0].style.display = 'block'
+			if (
+				stx.chart.symbol != CIQ.store.state.backtestSymbol ||
+				freq != 'Daily'
+			) {
 				CIQ.addIndicators()
 			}
 
 			this.clearForm()
-
 		},
 		addEntrySignalLength(index) {
 			let obj = {}
@@ -566,7 +581,7 @@ export default {
 			obj.index = index
 			this.$store.commit('addSignalLength', obj)
 		},
-		reloadData(data,freq) {
+		reloadData(data, freq) {
 			let frequency = ''
 			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
 			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
@@ -597,417 +612,441 @@ export default {
 		runBacktest: throttle(async function () {
 			try {
 				let setUp = this.$refs.setUpChild.saveBacktestData()
-		  let setUpChecked = true
-		  let entryChecked = true
-		  let isEdit = this.$refs.setUpChild.isEdit()
-			this.$refs.entryChild.addEntrySignalLength()
-			this.$refs.exitChild.addExitSignalLength()
-			let setUpRes = await getBacktestName(this.$store.state.backtestInfo.name)
-			if(setUpRes.data.count != 0 && !isEdit) {
-				this.$message({
+				let setUpChecked = true
+				let entryChecked = true
+				let isEdit = this.$refs.setUpChild.isEdit()
+				this.$refs.entryChild.addEntrySignalLength()
+				this.$refs.exitChild.addExitSignalLength()
+				let setUpRes = await getBacktestName(
+					this.$store.state.backtestInfo.name
+				)
+				if (setUpRes.data.count != 0 && !isEdit) {
+					this.$message({
 						message: 'The backtest name already exists',
 						type: 'error',
 						offset: 300
 					})
-				setUpChecked = false
-				this.$store.commit('clearBacktest')
-				return
+					setUpChecked = false
+					this.$store.commit('clearBacktest')
+					return
 				}
-			if(setUpRes.data.count == 0 || isEdit) {
-				
-				let entry
-				for (let index = 0; index < this.entryLength; index++) {
-					this.addEntrySignalLength(index)
-					entry = this.$refs.entryChild.saveBacktestData(index)
-				    entryChecked = await entry
-					if(!entryChecked){
-						return
-					}
-					this.$refs.entryChild.saveScoreValue()
-					this.$refs.entryChild.saveSignalsInMarket()
-					this.$refs.entryChild.saveDelayBar()
-					this.$refs.entryChild.saveRelation()
-				}
-				if (entryChecked && setUpChecked && setUp) {
-					let exit
-					let exitChecked
-					for (let index = 0; index < this.exitLength; index++) {
-						exit = this.$refs.exitChild.saveBacktestData(index)
-						exitChecked = await exit
-						if(!exitChecked){
-						return
-					}
-						this.$refs.exitChild.saveScoreValue()
-						this.$refs.exitChild.saveSignalsInMarket()
-						this.$refs.exitChild.saveDelayBar()
-						this.$refs.exitChild.saveRelation()
-					}
-					if (exitChecked) {
-						CIQ.addCover("Start running Backtest...")
-						CIQ.nprogress.start()
-						let vm = this
-						let signalEntryList = []
-						let signalExitList = []
-						let backtestData = JSON.parse(
-							JSON.stringify(vm.$store.state.backtestInfo)
-						)
-
-						let entry_description = JSON.parse(
-							JSON.stringify(vm.$store.state.backtestInfo.entry_description)
-						)
-						let sameEntryIndexArr = searchKeys(entry_description)
-						if(vm.entryRelation == 3){
-							sameEntryIndexArr = []
+				if (setUpRes.data.count == 0 || isEdit) {
+					let entry
+					for (let index = 0; index < this.entryLength; index++) {
+						this.addEntrySignalLength(index)
+						entry = this.$refs.entryChild.saveBacktestData(index)
+						entryChecked = await entry
+						
+						if (!entryChecked) {
+							return
 						}
-						if (sameEntryIndexArr.length >= 1) {
-							for (let j = 0; j < sameEntryIndexArr.length; j++) {
-								let sameItem = []
-								let str = ''
-								sameItem = sameEntryIndexArr[j].split(',')
-								for (let n = 0; n < sameItem.length; n++) {
-									str += 'Signal' + Number(sameItem[n]) + ' '
-								}
-								vm.$message({
-									message:
-										'The current entry ' + str + ' are the same, please change',
-									type: 'error',
-									offset: 300
-								})
-								CIQ.hideCover()
-								CIQ.nprogress.done()
+						this.$refs.entryChild.saveScoreValue()
+						this.$refs.entryChild.saveSignalsInMarket()
+						this.$refs.entryChild.saveDelayBar()
+						this.$refs.entryChild.saveRelation()
+					}
+					if (entryChecked && setUpChecked && setUp) {
+						let exit
+						let exitChecked
+						for (let index = 0; index < this.exitLength; index++) {
+							exit = this.$refs.exitChild.saveBacktestData(index)
+							exitChecked = await exit
+							if (!exitChecked) {
 								return
 							}
+							this.$refs.exitChild.saveScoreValue()
+							this.$refs.exitChild.saveSignalsInMarket()
+							this.$refs.exitChild.saveDelayBar()
+							this.$refs.exitChild.saveRelation()
 						}
-						let exit_description = JSON.parse(
-							JSON.stringify(vm.$store.state.backtestInfo.exit_description)
-						)
-
-						let sameExitIndexArr = searchKeys(exit_description)
-						if(vm.exitRelation == 3){
-							sameExitIndexArr = []
-						}
-						if (sameExitIndexArr.length >= 1) {
-							for (let j = 0; j < sameExitIndexArr.length; j++) {
-								let sameItem = []
-								let str = ''
-								sameItem = sameExitIndexArr[j].split(',')
-								for (let n = 0; n < sameItem.length; n++) {
-									str += 'Signal' + Number(sameItem[n]) + ' '
+						if (exitChecked) {
+							CIQ.addCover('Start running Backtest...')
+							CIQ.nprogress.start()
+							let vm = this
+							let signalEntryList = []
+							let signalExitList = []
+							let backtestData = JSON.parse(
+								JSON.stringify(vm.$store.state.backtestInfo)
+							)
+							console.log(backtestData)
+							let entry_description = JSON.parse(
+								JSON.stringify(vm.$store.state.backtestInfo.entry_description)
+							)
+							let sameEntryIndexArr = searchKeys(entry_description)
+							if (vm.entryRelation == 3) {
+								sameEntryIndexArr = []
+							}
+							if (sameEntryIndexArr.length >= 1) {
+								for (let j = 0; j < sameEntryIndexArr.length; j++) {
+									let sameItem = []
+									let str = ''
+									sameItem = sameEntryIndexArr[j].split(',')
+									for (let n = 0; n < sameItem.length; n++) {
+										str += 'Signal' + Number(sameItem[n]) + ' '
+									}
+									vm.$message({
+										message:
+											'The current entry ' +
+											str +
+											' are the same, please change',
+										type: 'error',
+										offset: 300
+									})
+									CIQ.hideCover()
+									CIQ.nprogress.done()
+									return
 								}
-								vm.$message({
-									message:
-										'The current exit ' + str + ' are the same, please change',
-									type: 'error',
-									offset: 300
+							}
+							let exit_description = JSON.parse(
+								JSON.stringify(vm.$store.state.backtestInfo.exit_description)
+							)
+
+							let sameExitIndexArr = searchKeys(exit_description)
+							if (vm.exitRelation == 3) {
+								sameExitIndexArr = []
+							}
+							if (sameExitIndexArr.length >= 1) {
+								for (let j = 0; j < sameExitIndexArr.length; j++) {
+									let sameItem = []
+									let str = ''
+									sameItem = sameExitIndexArr[j].split(',')
+									for (let n = 0; n < sameItem.length; n++) {
+										str += 'Signal' + Number(sameItem[n]) + ' '
+									}
+									vm.$message({
+										message:
+											'The current exit ' +
+											str +
+											' are the same, please change',
+										type: 'error',
+										offset: 300
+									})
+									CIQ.hideCover()
+									CIQ.nprogress.done()
+									return
+								}
+							}
+							signalEntryList = backtestData.entry.signals
+							signalExitList = backtestData.exit.signals
+							signalEntryList.forEach((item) => {
+								if (item.sentimentIndicator) {
+									item.indicator = item.sentimentIndicator
+									item.analysis = 'Sentiment'
+									delete item.technicalIndicator
+									delete item.sentimentIndicator
+									delete item.riskIndicator
+								}
+								if (item.technicalIndicator) {
+									item.indicator = item.technicalIndicator
+									item.analysis = 'Technical'
+									delete item.technicalIndicator
+									delete item.sentimentIndicator
+									delete item.riskIndicator
+								}
+							})
+							if (!this.isOnlyRisk) {
+								signalExitList.forEach((item) => {
+									if (item.sentimentIndicator) {
+										item.indicator = item.sentimentIndicator
+										item.analysis = 'Sentiment'
+										delete item.technicalIndicator
+										delete item.sentimentIndicator
+										delete item.riskIndicator
+									}
+									if (item.technicalIndicator) {
+										item.indicator = item.technicalIndicator
+										item.analysis = 'Technical'
+										delete item.technicalIndicator
+										delete item.sentimentIndicator
+										delete item.riskIndicator
+									}
+									if (item.riskIndicator) {
+										item.indicator = 'RC'
+										item.analysis = 'Exit'
+										delete item.technicalIndicator
+										delete item.sentimentIndicator
+										delete item.riskIndicator
+									}
 								})
-								CIQ.hideCover()
-								CIQ.nprogress.done()
-								return
 							}
-						}
-						signalEntryList = backtestData.entry.signals
-						signalExitList = backtestData.exit.signals
-						signalEntryList.forEach((item) => {
-							if (item.sentimentIndicator) {
-								item.indicator = item.sentimentIndicator
-								item.analysis = 'Sentiment'
-								delete item.technicalIndicator
-								delete item.sentimentIndicator
-								delete item.riskIndicator
-							}
-							if (item.technicalIndicator) {
-								item.indicator = item.technicalIndicator
-								item.analysis = 'Technical'
-								delete item.technicalIndicator
-								delete item.sentimentIndicator
-								delete item.riskIndicator
-							}
-						})
-						if(!this.isOnlyRisk) {
-						signalExitList.forEach((item) => {
-							if (item.sentimentIndicator) {
-								item.indicator = item.sentimentIndicator
-								item.analysis = 'Sentiment'
-								delete item.technicalIndicator
-								delete item.sentimentIndicator
-								delete item.riskIndicator
-							}
-							if (item.technicalIndicator) {
-								item.indicator = item.technicalIndicator
-								item.analysis = 'Technical'
-								delete item.technicalIndicator
-								delete item.sentimentIndicator
-								delete item.riskIndicator
-							}
-							if (item.riskIndicator) {
-								item.indicator = 'RC'
-								item.analysis = 'Exit'
-								delete item.technicalIndicator
-								delete item.sentimentIndicator
-								delete item.riskIndicator
-							}
-						})
-						}
-						const b = new SignalCode()
-						var entry_signal_list = []
-						var exit_signal_list = []
+							const b = new SignalCode()
+							var entry_signal_list = []
+							var exit_signal_list = []
 
-						let formateTechnicalList
-						formateTechnicalList = vm.$store.state.formateTechnicalList
-						if(formateTechnicalList.length === 0) {
-							formateTechnicalList = vm.loadShortLong()
-						}
+							let formateTechnicalList
+							formateTechnicalList = vm.$store.state.formateTechnicalList
+							if (formateTechnicalList.length === 0) {
+								formateTechnicalList = vm.loadShortLong()
+							}
 
-						let entrySignal = backtestData.entry.signals.map((item) => {
-							let signal = CIQ.indicatorList.find((i) => {
-								return i.chart_name == item.indicator
-							})
-							if (!signal) {
-								for (let i = 0; i < formateTechnicalList.length; i++) {
-									if (formateTechnicalList[i].value == item.indicator) {
-										return formateTechnicalList[i].url
+							let entrySignal = backtestData.entry.signals.map((item) => {
+								let signal = CIQ.indicatorList.find((i) => {
+									return i.chart_name == item.indicator
+								})
+								if (!signal) {
+									for (let i = 0; i < formateTechnicalList.length; i++) {
+										if (formateTechnicalList[i].value == item.indicator) {
+											return formateTechnicalList[i].url
+										}
 									}
 								}
-							}
-							return signal.url
-						})
-						let exitSignal
-						if(!this.isOnlyRisk) {
-						exitSignal = backtestData.exit.signals.map((item) => {
-							let signal = CIQ.indicatorList.find((i) => {
-								return i.chart_name == item.indicator
+								return signal.url
 							})
-							if (!signal) {
-								for (let i = 0; i < formateTechnicalList.length; i++) {
-									if (formateTechnicalList[i].value == item.indicator) {
-										return formateTechnicalList[i].url
-									}
-								}
-							}
-							return signal.url
-						})
-						}else {
-							exitSignal = [""]
-						}
-						delete backtestData.entry.signals
-						for (let i = 0; i < signalEntryList.length; i++) {
-							let code = b.encode(signalEntryList[i])
-							var singal = {
-								code: code
-							}
-							entry_signal_list.push(singal)
-						}
-						delete backtestData.exit.signals
-						if(!this.isOnlyRisk) {
-						for (var i in signalExitList) {
-							let code = b.encode(signalExitList[i])
-							var singal = {
-								code: code
-							}
-							exit_signal_list.push(singal)
-						}
-						}
-						if(this.isOnlyRisk) {
-							exit_signal_list = [{code: "SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999"}]
-						}
-
-						let entry = {
-							description: backtestData.entry.description,
-							score: backtestData.entry.score,
-							signals_in_market: backtestData.entry.signals_in_market,
-							relation: backtestData.entry.relation,
-							delay_bars: backtestData.entry.delay_bars,
-							signals: entry_signal_list,
-							cond: entry_description.map(i=>i.rocCond)
-						}
-						let exit = {
-							description: backtestData.exit.description,
-							score: backtestData.exit.score,
-							signals_in_market: backtestData.exit.signals_in_market,
-							relation: backtestData.exit.relation,
-							delay_bars: backtestData.exit.delay_bars,
-							signals: exit_signal_list,
-							cond: exit_description.map(i=>i.rocCond)
-						}
-						delete backtestData.entry
-						delete backtestData.exit
-						backtestData.entry = JSON.stringify(entry)
-						backtestData.exit = JSON.stringify(exit)
-						if (Array.isArray(entry_description)) {
-							backtestData.entry_description = JSON.stringify(entry_description)
-						}
-						if (Array.isArray(exit_description)) {
-							backtestData.exit_description = JSON.stringify(exit_description)
-						}
-						//uploade indicator layout
-
-						var indicatorLayout = {}
-						indicatorLayout.formIndicators = {
-							entry: entrySignal,
-							exit: exitSignal
-						}
-						indicatorLayout.technicalIndicators =
-							this.$store.state.indicators.technicalIndicators
-						var savedTechSD = []
-						for (var i in CIQ.stxx.layout.studies) {
-							var output = {}
-							if(CIQ.indicatorList.find((j) => { return j.url == CIQ.stxx.layout.studies[i].type }) == undefined){
-								output = CIQ.stxx.layout.studies[i].outputs
-							}
-							savedTechSD.push({
-								type: CIQ.stxx.layout.studies[i].type,
-								inputs: CIQ.stxx.layout.studies[i].inputs,
-								outputs: output,
-								parameters: CIQ.stxx.layout.studies[i].parameters,
-								panel: CIQ.stxx.layout.studies[i].panel
-							})
-						}
-
-						indicatorLayout.savedTechSD = savedTechSD
-						indicatorLayout.activatedMA = this.$store.state.activatedMA
-
-						backtestData.indicator_layout = JSON.stringify(indicatorLayout).replaceAll('\u200c','$r001$')
-						console.log('any \u200c ?',backtestData.indicator_layout.search('\u200c'))
-
-						
-						let copyBacktestData = JSON.parse(JSON.stringify(backtestData))
-						let str = UUID(JSON.stringify(copyBacktestData))
-
-						backtestData.pk = str
-					
-						// Restore a numeric string in an object to a number
-						backtestData.capital_alloc = parseFloat(backtestData.capital_alloc)
-						backtestData.slippage = parseFloat(backtestData.slippage)
-						backtestData.win_rate = parseFloat(backtestData.win_rate)
-
-						CIQ.spanPeriod = {
-							start_date: backtestData.start_date.replace(/-/g,'') * 1000000000,
-							end_date: backtestData.end_date.replace(/-/g,'') * 1000000000
-						}
-						var backtestParams = {}
-						backtestParams.uuid = backtestData.pk
-						backtestParams.benchmark = backtestData.benchmark
-						backtestParams.capital = backtestData.capital
-						backtestParams.capital_alloc = backtestData.capital_alloc
-						backtestParams.commission = backtestData.commission
-						backtestParams.create_date = backtestData.create_date
-						backtestParams.direction = backtestData.direction
-						backtestParams.create_date = backtestData.create_date
-						backtestParams.end_date = backtestData.end_date
-						backtestParams.entry = backtestData.entry
-						backtestParams.exit = backtestData.exit
-						backtestParams.frequency = backtestData.frequency
-						backtestParams.name = backtestData.name
-						backtestParams.risk_control = backtestData.risk_control
-						backtestParams.slippage = backtestData.slippage
-						backtestParams.start_date = backtestData.start_date
-						backtestParams.strategy = backtestData.strategy
-						backtestParams.symbol = backtestData.symbol
-						backtestParams.win_rate = backtestData.win_rate
-						backtestParams = JSON.stringify(backtestParams)
-						/* ********** */
-						
-
-						let backtestDataStr = this.$qs.stringify(backtestData)
-						// Before the back test, load the data of the whole period and generate CSV to upload S3, and then update the form when the results come out
-						this.reloadData(indicatorLayout,backtestData.frequency)
-						// 1. Upload data file
-						// 2. Upload parameter file
-						// 3. Judge the file upload status. If an error is reported, run back test will not be performed
-						
-						// TODO 
-						// long
-						let attemptTime = 0
-
-						let callback = async function () {
-							if(arguments[0]==200){
-								// He upload JSON
-								try{
-									var S3DataStr = vm.$qs.stringify({file_name:str + '/' + str + '_backtest_params.json',file_data:backtestParams})
-                					var data = await uploadS3(S3DataStr)
-
-									try {
-										
-										let res = await runBacktest(backtestDataStr)
-										if (res.status === 201) {
-											CIQ.isBacktestRun = true
-											//After saving successfully, clear the backtestinfo back to the original state
-											vm.$store.commit('initialBacktestInfo')			
-
-											vm.goToHistoryForm()
-											vm.$refs.historyChild.refreshHistory(res.data.id)
-											CIQ.hideMarker()
-											CIQ.isMarkerShown = false 
-											let backtestInfo = JSON.parse(
-												JSON.stringify(vm.$store.state.backtestInfo)
-											)
-											//clear old_ uuid
-											if (backtestInfo.old_uuid) {
-												vm.$store.commit('clearBacktestUuid')
+							let exitSignal
+							if (!this.isOnlyRisk) {
+								exitSignal = backtestData.exit.signals.map((item) => {
+									let signal = CIQ.indicatorList.find((i) => {
+										return i.chart_name == item.indicator
+									})
+									if (!signal) {
+										for (let i = 0; i < formateTechnicalList.length; i++) {
+											if (formateTechnicalList[i].value == item.indicator) {
+												return formateTechnicalList[i].url
 											}
-											// clear oldBacktestName
-											vm.backtestEditData = {}
+										}
+									}
+									return signal.url
+								})
+							} else {
+								exitSignal = ['']
+							}
+							delete backtestData.entry.signals
+							for (let i = 0; i < signalEntryList.length; i++) {
+								let code = b.encode(signalEntryList[i])
+								var singal = {
+									code: code
+								}
+								entry_signal_list.push(singal)
+							}
+							delete backtestData.exit.signals
+							if (!this.isOnlyRisk) {
+								for (var i in signalExitList) {
+									let code = b.encode(signalExitList[i])
+									var singal = {
+										code: code
+									}
+									exit_signal_list.push(singal)
+								}
+							}
+							if (this.isOnlyRisk) {
+								exit_signal_list = [
+									{
+										code: 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'
+									}
+								]
+							}
+
+							let entry = {
+								description: backtestData.entry.description,
+								score: backtestData.entry.score,
+								signals_in_market: backtestData.entry.signals_in_market,
+								relation: backtestData.entry.relation,
+								delay_bars: backtestData.entry.delay_bars,
+								signals: entry_signal_list,
+								cond: entry_description.map((i) => i.rocCond)
+							}
+							let exit = {
+								description: backtestData.exit.description,
+								score: backtestData.exit.score,
+								signals_in_market: backtestData.exit.signals_in_market,
+								relation: backtestData.exit.relation,
+								delay_bars: backtestData.exit.delay_bars,
+								signals: exit_signal_list,
+								cond: exit_description.map((i) => i.rocCond)
+							}
+							delete backtestData.entry
+							delete backtestData.exit
+							backtestData.entry = JSON.stringify(entry)
+							backtestData.exit = JSON.stringify(exit)
+							if (Array.isArray(entry_description)) {
+								backtestData.entry_description =
+									JSON.stringify(entry_description)
+							}
+							if (Array.isArray(exit_description)) {
+								backtestData.exit_description = JSON.stringify(exit_description)
+							}
+							//uploade indicator layout
+
+							var indicatorLayout = {}
+							indicatorLayout.formIndicators = {
+								entry: entrySignal,
+								exit: exitSignal
+							}
+							indicatorLayout.technicalIndicators =
+								this.$store.state.indicators.technicalIndicators
+							var savedTechSD = []
+							for (var i in CIQ.stxx.layout.studies) {
+								var output = {}
+								if (
+									CIQ.indicatorList.find((j) => {
+										return j.url == CIQ.stxx.layout.studies[i].type
+									}) == undefined
+								) {
+									output = CIQ.stxx.layout.studies[i].outputs
+								}
+								savedTechSD.push({
+									type: CIQ.stxx.layout.studies[i].type,
+									inputs: CIQ.stxx.layout.studies[i].inputs,
+									outputs: output,
+									parameters: CIQ.stxx.layout.studies[i].parameters,
+									panel: CIQ.stxx.layout.studies[i].panel
+								})
+							}
+
+							indicatorLayout.savedTechSD = savedTechSD
+							indicatorLayout.activatedMA = this.$store.state.activatedMA
+
+							backtestData.indicator_layout = JSON.stringify(
+								indicatorLayout
+							).replaceAll('\u200c', '$r001$')
+							// console.log(
+							// 	'any \u200c ?',
+							// 	backtestData.indicator_layout.search('\u200c')
+							// )
+
+							let copyBacktestData = JSON.parse(JSON.stringify(backtestData))
+							let str = UUID(JSON.stringify(copyBacktestData))
+
+							backtestData.pk = str
+
+							// Restore a numeric string in an object to a number
+							backtestData.capital_alloc = parseFloat(
+								backtestData.capital_alloc
+							)
+							backtestData.slippage = parseFloat(backtestData.slippage)
+							backtestData.win_rate = parseFloat(backtestData.win_rate)
+
+							CIQ.spanPeriod = {
+								start_date:
+									backtestData.start_date.replace(/-/g, '') * 1000000000,
+								end_date: backtestData.end_date.replace(/-/g, '') * 1000000000
+							}
+							var backtestParams = {}
+							backtestParams.uuid = backtestData.pk
+							backtestParams.benchmark = backtestData.benchmark
+							backtestParams.capital = backtestData.capital
+							backtestParams.capital_alloc = backtestData.capital_alloc
+							backtestParams.commission = backtestData.commission
+							backtestParams.create_date = backtestData.create_date
+							backtestParams.direction = backtestData.direction
+							backtestParams.create_date = backtestData.create_date
+							backtestParams.end_date = backtestData.end_date
+							backtestParams.entry = backtestData.entry
+							backtestParams.exit = backtestData.exit
+							backtestParams.frequency = backtestData.frequency
+							backtestParams.name = backtestData.name
+							backtestParams.risk_control = backtestData.risk_control
+							backtestParams.slippage = backtestData.slippage
+							backtestParams.start_date = backtestData.start_date
+							backtestParams.strategy = backtestData.strategy
+							backtestParams.symbol = backtestData.symbol
+							backtestParams.win_rate = backtestData.win_rate
+							backtestParams = JSON.stringify(backtestParams)
+							/* ********** */
+
+							let backtestDataStr = this.$qs.stringify(backtestData)
+							// Before the back test, load the data of the whole period and generate CSV to upload S3, and then update the form when the results come out
+							this.reloadData(indicatorLayout, backtestData.frequency)
+							// 1. Upload data file
+							// 2. Upload parameter file
+							// 3. Judge the file upload status. If an error is reported, run back test will not be performed
+
+							// TODO
+							// long
+							let attemptTime = 0
+
+							let callback = async function () {
+								if (arguments[0] == 200) {
+									// He upload JSON
+									try {
+										var S3DataStr = vm.$qs.stringify({
+											file_name: str + '/' + str + '_backtest_params.json',
+											file_data: backtestParams
+										})
+										var data = await uploadS3(S3DataStr)
+
+										try {
+											let res = await runBacktest(backtestDataStr)
+											if (res.status === 201) {
+												CIQ.isBacktestRun = true
+												//After saving successfully, clear the backtestinfo back to the original state
+												vm.$store.commit('initialBacktestInfo')
+
+												vm.goToHistoryForm()
+												vm.$refs.historyChild.refreshHistory(res.data.id)
+												CIQ.hideMarker()
+												CIQ.isMarkerShown = false
+												let backtestInfo = JSON.parse(
+													JSON.stringify(vm.$store.state.backtestInfo)
+												)
+												//clear old_ uuid
+												if (backtestInfo.old_uuid) {
+													vm.$store.commit('clearBacktestUuid')
+												}
+												// clear oldBacktestName
+												vm.backtestEditData = {}
+												vm.$refs.setUpChild.clearOldBacktestName()
+												vm.$refs.favoriteChild.getFavoriteList()
+											} else {
+												vm.$message.error('Save failed')
+												CIQ.hideCover()
+												CIQ.nprogress.done()
+												CIQ.hideMarker()
+												CIQ.isMarkerShown = false
+											}
+										} catch (error) {
+											vm.$store.commit('initialBacktestInfo')
 											vm.$refs.setUpChild.clearOldBacktestName()
 											vm.$refs.favoriteChild.getFavoriteList()
-										} else {
-											vm.$message.error('Save failed')
 											CIQ.hideCover()
 											CIQ.nprogress.done()
-											CIQ.hideMarker()
-											CIQ.isMarkerShown = false
+											vm.$message({
+												message:
+													'The internal server is busy, please try again later ',
+												type: 'error',
+												offset: 300
+											})
+											// Initialize the data of backtestinfo
+											vm.$store.commit('clearStoreDesciption')
 										}
 									} catch (error) {
-										vm.$store.commit('initialBacktestInfo')
-										vm.$refs.setUpChild.clearOldBacktestName()
-										vm.$refs.favoriteChild.getFavoriteList()
-										CIQ.hideCover()
-										CIQ.nprogress.done()
-										vm.$message({
-											message: 'The internal server is busy, please try again later ',
-											type: 'error',
-											offset: 300
-										})
-										// Initialize the data of backtestinfo
-										vm.$store.commit('clearStoreDesciption')
-									}	
-								}catch(error){
-									// If uploading JSON fails, try again. Because it is not an Axios request, the retry logic should be written by yourself
-									console.log("Upload JSON failed", error);
-									if(attemptTime<4){
-										CIQ.outputSignalsResult(str,callback)
-										attemptTime++
-										console.log("retry the upload request...");
-									}else{
-										CIQ.hideCover()
-										CIQ.nprogress.done()
-										//vm.loading = false
-										alert('Upload JSON failed')	
+										// If uploading JSON fails, try again. Because it is not an Axios request, the retry logic should be written by yourself
+										console.log('Upload JSON failed', error)
+										if (attemptTime < 4) {
+											CIQ.outputSignalsResult(str, callback)
+											attemptTime++
+											console.log('retry the upload request...')
+										} else {
+											CIQ.hideCover()
+											CIQ.nprogress.done()
+											//vm.loading = false
+											alert('Upload JSON failed')
+										}
 									}
-								}	
-							}else{
-								console.log("Upload CSV failed");
-								// If the upload of CSV fails, the customization returns 500. Try again. Because it is not an Axios request, the retry logic should be written by yourself
-								if(attemptTime<5){
-									CIQ.outputSignalsResult(str,callback)
-									attemptTime++
-									console.log("retry the upload request...");
-								}else{
-									CIQ.hideCover()
-									alert('Upload CSV failed')		
-								}					
-							}						
+								} else {
+									console.log('Upload CSV failed')
+									// If the upload of CSV fails, the customization returns 500. Try again. Because it is not an Axios request, the retry logic should be written by yourself
+									if (attemptTime < 5) {
+										CIQ.outputSignalsResult(str, callback)
+										attemptTime++
+										console.log('retry the upload request...')
+									} else {
+										CIQ.hideCover()
+										alert('Upload CSV failed')
+									}
+								}
+							}
+							CIQ.outputSignalsResult(str, callback)
 						}
-						CIQ.outputSignalsResult(str,callback)
 					}
 				}
-			}
 			} catch (error) {
-										this.$notify({
-							title: 'Failed',
-							message: 'The internal server is busy, please try again later',
-							type: 'error',
-							offset: 100
-						})
+				this.$notify({
+					title: 'Failed',
+					message: 'The internal server is busy, please try again later',
+					type: 'error',
+					offset: 100
+				})
 			}
 		}, 1000),
 		goToHistoryForm() {
@@ -1035,48 +1074,53 @@ export default {
 				delete data.uuid
 				let signalCode = new SignalCode()
 				if (data.entry.signals instanceof Array) {
-				data.entry.signals.forEach((item,index) => {
-					if(!item.code) {
-						data.entry.signals.splice(index,1)
-					}
-				})
+					data.entry.signals.forEach((item, index) => {
+						if (!item.code) {
+							data.entry.signals.splice(index, 1)
+						}
+					})
 					data.entry.signals = data.entry.signals.map((value) => {
 						return signalCode.decode(value.code)
 					})
 				}
 				if (data.exit.signals instanceof Array) {
 					// Delete items with code false
-						data.exit.signals.forEach((item,index) => {
-							if(!item.code) {
-								data.exit.signals.splice(index,1)
-							}
-						})
-						data.exit.signals = data.exit.signals.map((value) => {
-							if(value.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999') {
-						return signalCode.decode(value.code)	}else{
+					data.exit.signals.forEach((item, index) => {
+						if (!item.code) {
+							data.exit.signals.splice(index, 1)
+						}
+					})
+					data.exit.signals = data.exit.signals.map((value) => {
+						// todo 加入symbol indicator解码
+						if (
+							value.code !==
+							'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'
+						) {
+							return signalCode.decode(value.code)
+						} else {
 							vm.$nextTick(() => {
-							vm.$refs.exitChild.setRiskEditData(data)
+								vm.$refs.exitChild.setRiskEditData(data)
 							})
-							data.exit.signals = [{code: ''}]
+							data.exit.signals = [{ code: '' }]
 							return
 						}
-					    })
-						if(data.exit.signals.includes(undefined)) {
-							data.exit.signals = [{code: ''}]
-							vm.$nextTick(() => {
+					})
+					if (data.exit.signals.includes(undefined)) {
+						data.exit.signals = [{ code: '' }]
+						vm.$nextTick(() => {
 							vm.$refs.exitChild.setRiskEditData(data)
-							})
-						}else {
-				        let exitPanel = data.exit.signals.length
+						})
+					} else {
+						let exitPanel = data.exit.signals.length
 						let exitData = {}
 						exitData.exit = data.exit
 						vm.$refs.exitChild.setEditPanel(exitPanel, exitData)
-						}
+					}
 				}
 				let entryPanel = data.entry.signals.length
 				let entryData = {}
 				entryData.entry = data.entry
-
+				console.log(entryPanel,entryData)
 				vm.$refs.entryChild.setEditPanel(entryPanel, entryData)
 				// Get the value of frequency
 				vm.editFrequency = data.frequency
@@ -1094,23 +1138,25 @@ export default {
 				CIQ.hideCover()
 				CIQ.nprogress.done()
 			}
-			setTimeout(()=>{
-				if(callback){callback()}
-			},1000)
+			setTimeout(() => {
+				if (callback) {
+					callback()
+				}
+			}, 1000)
 		},
 		goBacktestResultForm(row, callback) {
-
 			try {
-			this.activeName = 'third'
-			CIQ.nprogress.inc()
-			CIQ.setCoverText('Generating Backtest report, please wait...')
-			
-			this.$refs.performanceChild.getResultData(row,() => {
-				if(callback){callback()}
-			})
+				this.activeName = 'third'
+				CIQ.nprogress.inc()
+				CIQ.setCoverText('Generating Backtest report, please wait...')
+
+				this.$refs.performanceChild.getResultData(row, () => {
+					if (callback) {
+						callback()
+					}
+				})
 			} catch (error) {
 				console.error(error)
-				
 			}
 		},
 		goToFavoritesForm() {
@@ -1204,18 +1250,18 @@ main {
 	}
 }
 
-.hint{
+.hint {
 	// position: absolute;
 	text-align: right;
 	font-size: 0.8rem;
 	color: black !important;
-	bottom:-20px;
-	right:30px;
+	bottom: -20px;
+	right: 30px;
 	font-weight: 300;
 }
 
 button.toTop {
-	opacity: .8;
+	opacity: 0.8;
 	z-index: 999;
 	border: unset;
 	position: fixed;
@@ -1334,7 +1380,7 @@ header {
 		color: #333333;
 	}
 }
-.header_logo>span{
+.header_logo > span {
 	padding: 12px 24px;
 }
 
@@ -1372,7 +1418,9 @@ header {
 		align-items: center;
 		border-bottom: 1px solid #797979;
 	}
-	.betaNote {visibility: hidden;}
+	.betaNote {
+		visibility: hidden;
+	}
 }
 .backtest-btns {
 	margin-top: 10px;
@@ -1416,9 +1464,15 @@ header {
 			font-size: 12px;
 		}
 	}
-	.betaNote {visibility: hidden;}
+	.betaNote {
+		visibility: hidden;
+	}
 }
-@media (max-width: 374px) {.betaNote {visibility: hidden;}}
+@media (max-width: 374px) {
+	.betaNote {
+		visibility: hidden;
+	}
+}
 .el-dropdown-link {
 	cursor: pointer;
 	//color: #409eff;

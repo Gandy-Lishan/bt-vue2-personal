@@ -62,6 +62,7 @@
 				<div class="conditionInput period" v-show="isROCLike">
 					<el-form-item prop="value">
 						<el-input
+							@input="calculateNewConditions"
 							:disabled="!(conditionRadio === 'Sentiment Value')"
 							v-model="senti.conditionPeriod"
 							placeholder="Condition Period"
@@ -139,8 +140,9 @@
 				<div class="conditionInput period" v-show="isROCLike">
 					<el-form-item prop="value">
 						<el-input
+							@input="calculateNewConditions"
 							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
-							v-model="senti.conditionPeriodMA"
+							v-model="senti.conditionPeriod"
 							placeholder="Condition Period"
 						></el-input>
 					</el-form-item>
@@ -154,7 +156,7 @@
 							placeholder="Please select condition"
 						>
 							<el-option
-								v-for="item in conditions"
+								v-for="item in conditions"Q
 								:key="item.value"
 								:label="item.label"
 								:value="item.value"
@@ -252,7 +254,6 @@ export default {
 				newCondition: 3,
 				value: '',
 				conditionPeriod: '5',
-				conditionPeriodMA: '5',
 				period: '',
 				maValue: '',
 			},
@@ -298,7 +299,7 @@ export default {
 				if(this.conditionRadio=='Sentiment Moving Average'){
 					this.setPeriod(this.senti.period)
 				}
-				//this.calculateNewConditions()
+				this.calculateNewConditions()
 
 				newVal.forEach((item) => {
 					if (item.indicator) {
@@ -342,10 +343,25 @@ export default {
 			// 如果不是ROC类型，则这两个condition值一致
 			if(!this.isROCLike){
 				this.senti.condition = this.senti.newCondition
-			}else{
-				// 开始计算数据并加载新的附属indicator
-				this.calculateNewConditions()
+
+				let indicator_url = this.$store.state.indicators.formIndicators[this.criteria][this.panelIndex]
+				if(indicator_url){
+					for (var studyInstanceName in CIQ.stxx.layout.studies) {
+						if (
+							CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url
+						) {
+							// 在切换回非ROClike后清除ROCLike indicator
+							if(studyInstanceName.indexOf('‌ST MA‌')!=-1) continue
+							CIQ.Studies.removeStudy(
+								CIQ.stxx,
+								CIQ.stxx.layout.studies[studyInstanceName]
+							)
+						}
+					}
+				}
 			}
+			// 开始计算数据并加载新的附属indicator
+			this.calculateNewConditions()
 		},
 		change(e) {
 			this.$forceUpdate()
@@ -361,7 +377,6 @@ export default {
 			let rocCond = {
 				'newCondition':this.senti.newCondition,
 				'conditionPeriod':this.senti.conditionPeriod,
-				'conditionPeriodMA':this.senti.conditionPeriodMA
 			}
 			let criteria = ''
 			let direction = ''
@@ -474,6 +489,8 @@ export default {
 					if (
 						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
 					) {
+						// sentiment indicator自带的ROCLike除外
+						if(studyInstanceName.indexOf('‌ST ROCLike‌')!=-1) continue					
 						CIQ.Studies.removeStudy(
 							CIQ.stxx,
 							CIQ.stxx.layout.studies[studyInstanceName]
@@ -499,14 +516,34 @@ export default {
 			}
 		},
 		calculateNewConditions(){
+			if(!this.isROCLike) return
+
 			let indicator_url = this.$store.state.indicators.formIndicators[this.criteria][this.panelIndex]
 			if(indicator_url){
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					if (
+						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url
+					) {
+						// 添加ROCLike（包括修改study）前先清除已有的，sentiment indicator自带MA除外
+						if(studyInstanceName.indexOf('‌ST MA‌')!=-1) continue
+						CIQ.Studies.removeStudy(
+							CIQ.stxx,
+							CIQ.stxx.layout.studies[studyInstanceName]
+						)
+					}
+				}
+				const conditionMap = new Map([
+					[5, {name:'Rate Of Change',abbr:'ROC'}],
+					[6, {name:'Range Of Rank',abbr:'ROR'}],
+					[7, {name:'MA Ratio',abbr:'MA'}]
+				])
 				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-					display: 'ST ROCLike',
+					display: conditionMap.get(this.senti.newCondition).name,
 					Field: indicator_url,
-					condition:this.senti.newCondition,
-					period:this.senti.newCondition==7?this.senti.conditionPeriodMA:this.senti.conditionPeriod
+					condition:conditionMap.get(this.senti.newCondition).abbr,
+					period:this.senti.conditionPeriod
 				})
+				console.log(sd)
 			}
 		},
 		setPeriod(val) {
@@ -533,6 +570,8 @@ export default {
 				if (
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
 				) {
+					// sentiment indicator自带的ROCLike除外
+					if(studyInstanceName.indexOf('‌ST ROCLike‌')!=-1) continue	
 					CIQ.Studies.removeStudy(
 						CIQ.stxx,
 						CIQ.stxx.layout.studies[studyInstanceName]
@@ -545,6 +584,7 @@ export default {
 				display: 'ST MA',
 				Field: result.url
 			})
+
 			// keep current MA
 			var objMA = { period: _val, url: result.url }
 			var activatedMAList = this.$store.state.activatedMA
@@ -628,7 +668,6 @@ export default {
 
 				this.senti.newCondition = Number(cond.newCondition)?Number(cond.newCondition):this.senti.condition
 				this.senti.conditionPeriod = cond.conditionPeriod?cond.conditionPeriod:''
-				this.senti.conditionPeriodMA = cond.conditionPeriodMA?cond.conditionPeriodMA:''
 				this.conditionRadio = 'Sentiment Value'
 				this.editSentiVal = obj.indicator
 				if (this.senti.comparison === 'SVMA') {

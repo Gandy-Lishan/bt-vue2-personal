@@ -628,7 +628,8 @@ export default {
 				}
 			}
 			if (
-				this.indicatorRadio === 'Technical Indicators' &&
+				(this.indicatorRadio === 'Technical Indicators' || 
+				this.indicatorRadio === 'Symbol Indicators') &&
 				!this.exitItemCheck
 			) {
 				this.$refs.siForm.validate((valid) => {
@@ -638,6 +639,7 @@ export default {
 				if (formateList.length === 0) {
 					formateList = vm.loadShortLong()
 				}
+				console.log('formateList',formateList)
 				for (let i = 0; i < formateList.length; i++) {
 					if (this.si.technicalIndicator === formateList[i].value) {
 						validName = true
