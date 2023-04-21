@@ -1,17 +1,18 @@
 // symbol indicator input box
 <template>
 	<div class="senti-container">
-		<el-form :model="senti" ref="symbolForm">
+		<el-form :model="tech" ref="symbolForm">
 			<div class="condition-container">
 				<el-form-item>
 					<el-select 
-						v-model="senti.rocCondition"
+						v-model="tech.rocCondition"
 						placeholder="Please select condition"
+						@change="SymbolConditionChange"
 					>
 						<el-option
 							v-for="item in ROCConditions"
 							:key="item.value"
-							:label="item.label"
+							:label="item.obj.label"
 							:value="item.value"
 						>
 						</el-option>
@@ -20,7 +21,7 @@
 				<div class="conditionSelect new">
 					<el-form-item>
 						<el-select
-							v-model="senti.newCondition"
+							v-model="tech.newCondition"
 							class='newCond'
 							filterable
 							placeholder="Please select condition"
@@ -39,7 +40,8 @@
 				<div class="conditionInput period" v-show="isROCLike">
 					<el-form-item prop="value">
 						<el-input
-							v-model="senti.conditionPeriod"
+							@input="calculateNewConditions"
+							v-model="tech.conditionPeriod"
 							placeholder="Condition Period"
 						></el-input>
 					</el-form-item>
@@ -47,7 +49,7 @@
 				<div class="conditionSelect" v-show="isROCLike">
 					<el-form-item>
 						<el-select
-							v-model="senti.condition"
+							v-model="tech.condition"
 							filterable
 							placeholder="Please select condition"
 						>
@@ -65,7 +67,7 @@
 					<el-form-item prop="value">
 						 
 						<el-input
-							v-model="senti.value"
+							v-model="tech.value"
 							placeholder="Input Value"
 						></el-input>
 					</el-form-item>
@@ -75,12 +77,15 @@
 	</div>
 </template>
 <script>
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { Store, mapGetters } from 'vuex'
+const throttle = require('lodash/throttle')
 export default {
 	name: 'symbol',
 	props: {
 		criteria: String,
-		sentiUrl: String,
-		sentiVal: String,
+		techUrl: String,
+		techVal: String,
 		panelIndex: Number,
 		direction: String,
 		exitItemCheck: Boolean,
@@ -94,21 +99,20 @@ export default {
 		return {
 			isROCLike: false,
 			ROCConditions : [
-				{ value: 0, label: 'Symbol Open' },
-				{ value: 1, label: 'Symbol High' },
-				{ value: 2, label: 'Symbol Low' },
-				{ value: 3, label: 'Symbol Close' },
-				{ value: 4, label: 'Symbol Volume' },
+				{ value: 0, obj: {label:'Symbol Open',field:'Open'} },
+				{ value: 1, obj: {label:'Symbol High',field:'High'} },
+				{ value: 2, obj: {label:'Symbol Low',field:'Low'} },
+				{ value: 3, obj: {label:'Symbol Close',field:'Close'} },
+				{ value: 4, obj: {label:'Symbol Volume',field:'Volume'} },
 			],
 			//preload: false,
-			senti: {
-				comparison: 'SV',
+			tech: {
+				ids: 'CCI',
+				comparison: 'CCI',
 				condition: 3,
 				newCondition: 3,
 				value: '',
-				conditionPeriod: '',
-				period: '',
-				maValue: '',
+				conditionPeriod: '5',
 				rocCondition: 0,
 			},
 			newConditions: [
@@ -129,7 +133,7 @@ export default {
 				{ value: 4, label: 'CrossBelow' }
 			],
 			description: '',
-			editSentiVal: '',
+			editTechVal: '',
 		}
 	},
 	methods: {
@@ -137,8 +141,17 @@ export default {
 			this.isROCLike = 5<=val && val<=7
 			// 如果不是ROC类型，则这两个condition值一致
 			if(!this.isROCLike){
-				this.senti.condition = this.senti.newCondition
+				this.tech.condition = this.tech.newCondition
 			}
+			// 开始计算数据并加载新的附属indicator
+			this.calculateNewConditions()
+		},
+		SymbolConditionChange(){
+			// 如果不是ROC类型，则这两个condition值一致
+			if(this.isROCLike){
+				// 开始计算数据并加载新的附属indicator
+				this.calculateNewConditions()
+			}	
 		},
 		change(e) {
 			this.$forceUpdate()
@@ -152,9 +165,9 @@ export default {
 		},
 		setDesciption(index) {
 			let rocCond = {
-				'newCondition':this.senti.newCondition,
-				'conditionPeriod':this.senti.conditionPeriod,
-				'rocCondition':this.senti.rocCondition
+				'newCondition':this.tech.newCondition,
+				'conditionPeriod':this.tech.conditionPeriod,
+				'rocCondition':this.tech.rocCondition
 			}
 			let criteria = ''
 			let direction = ''
@@ -210,12 +223,10 @@ export default {
 				}
 
 			}
-			let ma = this.senti.period ? 'moving average' : ''
-			let period = this.senti.period ? this.senti.period : ''
-			let condition = this.conditions[this.senti.condition].label
-			let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
-			let value = this.senti.value
-			this.description = `${sentiVal} ${ma} ${period} ${condition} ${value}`
+			let period = this.tech.period ? this.tech.period : ''
+			let condition = this.conditions[this.tech.condition].label
+			let techVal = this.techVal ? this.techVal : this.editTechVal
+			this.description = `${techVal} ${period} ${condition} ${this.tech.value}`
 
 					let desObj = {}
 					desObj.criteria = this.criteria
@@ -237,6 +248,37 @@ export default {
 					this.$store.commit('saveDescription', desObj)
 
 		},
+		calculateNewConditions(){
+			if(!this.isROCLike) return
+
+			// let indicator_url = this.$store.state.indicators.formIndicators[this.criteria][this.panelIndex]
+			// if(indicator_url){
+				// for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				// 	if (
+				// 		CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url
+				// 	) {
+				// 		// 添加ROCLike（包括修改study）前先清除已有的
+				// 		CIQ.Studies.removeStudy(
+				// 			CIQ.stxx,
+				// 			CIQ.stxx.layout.studies[studyInstanceName]
+				// 		)
+				// 	}
+				// }
+				const conditionMap = new Map([
+					[5, {name:'Rate Of Change',abbr:'ROC'}],
+					[6, {name:'Range Of Rank',abbr:'ROR'}],
+					[7, {name:'MA Ratio',abbr:'MA'}]
+				])
+				const fieldName = this.ROCConditions.find(item=>item.value==this.tech.rocCondition).obj.field
+				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+					display: conditionMap.get(this.tech.newCondition).name,
+					Field: fieldName,
+					condition:conditionMap.get(this.tech.newCondition).abbr,
+					period:this.tech.conditionPeriod
+				})
+				console.log(sd)
+			//}
+		},
 		saveCondition(index) {
 			let checked = true
 			let validForm
@@ -247,13 +289,11 @@ export default {
 					}
 				})
 				if (validForm) {
-					let senti = JSON.parse(JSON.stringify(this.senti))
-					senti.period = 1
-					delete senti.maValue
-					senti.criteria = this.criteria
-					senti.index = index
+					let tech = JSON.parse(JSON.stringify(this.tech))
+					tech.criteria = this.criteria
+					tech.index = index
 					// 定义一个 vuex 新事件用于保存 condition数据
-					this.$store.commit('saveCondition', senti)
+					this.$store.commit('saveCondition', tech)
 					return checked
 				} else {
 					checked = false
@@ -269,19 +309,15 @@ export default {
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				// test在samebar(relation 2/3)的情况下
 				let cond = newVal[this.criteria].cond[(this.relation==2||this.relation==3)?this.panelIndex+1:this.panelIndex]
-				this.senti.condition = Number(obj.condition)
-				this.senti.value = obj.value
-				this.senti.comparison = obj.comparison
+				this.tech.condition = Number(obj.condition)
+				this.tech.value = obj.value
+				this.tech.comparison = obj.comparison
 
-				this.senti.newCondition = Number(cond.newCondition)?Number(cond.newCondition):this.senti.condition
-				this.senti.conditionPeriod = cond.conditionPeriod?cond.conditionPeriod:''
-				this.senti.rocCondition = Number(cond.rocCondition)?Number(cond.rocCondition):0
-				this.editSentiVal = obj.indicator
-				if (this.senti.comparison === 'SVMA') {
-					this.senti.maValue = this.senti.value
-				    this.senti.period = obj.period
-				}
-				this.ROCLikeChange(this.senti.newCondition)
+				this.tech.newCondition = Number(cond.newCondition)?Number(cond.newCondition):this.tech.condition
+				this.tech.conditionPeriod = cond.conditionPeriod?cond.conditionPeriod:''
+				this.tech.rocCondition = Number(cond.rocCondition)?Number(cond.rocCondition):0
+				this.editTechVal = obj.indicator
+				this.ROCLikeChange(this.tech.newCondition)
 			}
 		}
 	}

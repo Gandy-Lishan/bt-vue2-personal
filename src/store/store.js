@@ -445,13 +445,13 @@ export default new Vuex.Store({
 			init.sentimentIndicator = state.backtestInfo[criteria].signals[index].sentimentIndicator
 			init.technicalIndicator = state.backtestInfo[criteria].signals[index].technicalIndicator
 			if(criteria === 'exit') {
-			init.riskIndicator = state.backtestInfo.exit.signals[index].riskIndicator
+				init.riskIndicator = state.backtestInfo.exit.signals[index].riskIndicator
 			}
 			if(criteria == 'exit') {
-			state.backtestInfo.exit.signals[index] = Object.assign({}, init)
+				state.backtestInfo.exit.signals[index] = Object.assign({}, init)
 			}else if(criteria == 'entry') {
 				init.riskIndicator = ''
-			state.backtestInfo.entry.signals[index] = Object.assign({}, init)
+				state.backtestInfo.entry.signals[index] = Object.assign({}, init)
 			}
 			for(let key in obj) {
 				state.backtestInfo[criteria].signals[index][key] = obj[key]
