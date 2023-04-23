@@ -149,7 +149,7 @@
 <script>
 import SparkMD5 from 'spark-md5';
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import { getIndicatorsList } from '@/service/service'
+import { getIndicatorsList, csvFileDelete } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
 export default {
@@ -209,12 +209,14 @@ export default {
 			category: 'all',
 			fileList: [],
 			actionUrl: '', // 文件上传的接口地址
-			headers: {}, // 请求头部
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}, // 请求头部
 			previewVisible: false, // 是否显示预览表格
 			previewData: [], // 预览表格的数据
 			previewFileName: '',
 			cancelToken: null, // 用于保存取消上传请求的取消令牌
-			uploadUrl: 'https://jsonplaceholder.typicode.com/posts/',
+			uploadUrl: '/dev/uploadcsvfile/',
 			uploadHeaders: {},
 			// progress: 0, // 上传进度
 			dialogFormVisible: false,
@@ -226,7 +228,7 @@ export default {
 				indicatorName: [{ validator: validateIndicatorName, trigger: 'blur' }],
 				dialogValid: false
 			},
-			rawMap: {} // 文件对象的 raw 属性备份
+			rawMap: {}, // 文件对象的 raw 属性备份
 		}
 	},
 	computed: {
@@ -824,6 +826,11 @@ export default {
 			// 创建 FormData 对象，将文件添加到 FormData 中
 
 			const formData = new FormData()
+			const suffix = /\.([a-zA-Z0-9]+)$/.exec(file.name)[1]
+			const name = file.name.replace(`.${suffix}`, '')
+			formData.append('name', name)
+			formData.append('hash', file.hash)
+			formData.append('suffix', suffix)
 			formData.append('file', file)
 
 			// 创建 CancelToken 实例
@@ -862,6 +869,7 @@ export default {
 				.then((response) => {
 					// 文件上传完成后的处理逻辑
 					console.log('文件上传成功', response)
+					self.$store.commit('saveUserCustomIndicator', response.data.fileID)
 					// 还原文件对象的 raw 属性
 					self.$message.success('文件上传成功，可点击文件进行预览')
 					// ...
@@ -869,6 +877,8 @@ export default {
 				.catch((error) => {
 					// 文件上传出错的处理逻辑
 					console.log('文件上传失败', error)
+					 // 清空文件列表
+					 self.$refs.upload.clearFiles()
 					self.$message.success('文件上传失败')
 
 					// ...
@@ -890,27 +900,27 @@ export default {
 			console.log('上传失败：', error)
 			// 更新文件列表中对应文件的状态为
 		},
-		handleRemove(file, fileList) {
+		async handleRemove(file, fileList) {
 			console.log('处理删除', file)
 			// 备份文件对象的 raw 属性
 			this.rawMap[file.uid] = this.rawMap[file.uid] || file.raw
-			const index = this.fileList.indexOf(file)
-			if (index !== -1) {
-				this.fileList.splice(index, 1)
-			}
-			// 在需要终止上传的地方调用 cancelToken.cancel() 方法
-			if (this.cancelToken) {
-				this.cancelToken.cancel()
-				console.log('取消上传')
-			}
 			// 发送请求删除服务器上的文件
-			// axios.post('/your-delete-api', { filename: file.name })
-			//   .then(response => {
-			//     console.log('文件已从服务器删除')
-			//   })
-			//   .catch(error => {
-			//     console.log('文件删除失败：', error)
-			//   })
+			const fileID = file.name.replace('.csv', '') + '_' + file.hash
+			try {
+				await csvFileDelete(fileID)
+				const index = this.fileList.indexOf(file)
+				if (index !== -1) {
+					this.fileList.splice(index, 1)
+				}
+				// 在需要终止上传的地方调用 cancelToken.cancel() 方法
+				if (this.cancelToken) {
+					this.cancelToken.cancel()
+					console.log('取消上传')
+				}
+				console.log('删除成功')
+			} catch (error) {
+				console.log('删除失败', error)
+			}
 		},
 		handlePreview(file) {
 			console.log('处理预览', file)
@@ -936,6 +946,7 @@ export default {
 		handleExceed(files, fileList) {
 			console.log('处理超出', file)
 			this.$message.warning('只能上传单个 indicator 文件')
+			return false
 		},
 		beforeUpload(file) {
 			console.log('上传前', file)
