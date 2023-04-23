@@ -619,9 +619,7 @@ input[type="time"] {
   box-sizing: border-box;
   padding: 40px 0;
 }
-.el-table__footer-wrapper{
-  font-weight: bold;
-}
+
 .multi-box .el-tabs__item {
 	background-color: #797979;
 	font-weight: bold;
