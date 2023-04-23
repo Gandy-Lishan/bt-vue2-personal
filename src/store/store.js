@@ -97,7 +97,8 @@ export default new Vuex.Store({
 		riskControl: true,
 
 		is_admin: false,
-		role: ''
+		role: '',
+		userCustomIndicator: ''
 	},
 	getters: {
 		getExtremeValue: (state) => {
@@ -566,6 +567,9 @@ export default new Vuex.Store({
 			state.is_admin = val.is_admin
 			state.role = val.role
 		},
+		saveUserCustomIndicator(state, val) {
+			state.userCustomIndicator = val
+		}
 	},
 	actions: {
 		Try(context, val) {

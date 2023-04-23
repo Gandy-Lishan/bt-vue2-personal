@@ -262,3 +262,31 @@ export function uploadS3(S3DataStr) {
 		})
 	})
 }
+
+export function csvFileRead(fileID) {
+	const url = `/dev/csvfileread/?fileID=${fileID}`
+
+	return new Promise((resolve, reject) => {
+		axios.get(url, {withCredentials: true})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+export function csvFileDelete(fileID) {
+	const url = `/dev/csvfiledelete/${fileID}/`
+
+	return new Promise((resolve, reject) => {
+		axios.delete(url, {withCredentials: true})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
