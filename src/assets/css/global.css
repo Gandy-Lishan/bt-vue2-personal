@@ -606,6 +606,9 @@ input[type="time"] {
 .el-autocomplete-suggestion li{
   margin: 0 10px;
 }
+.el-table__footer-wrapper{
+  font-weight: bold;
+}
 .el-empty{
   display: flex;
   justify-content: center;
