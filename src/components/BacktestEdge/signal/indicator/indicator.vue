@@ -147,7 +147,7 @@
 	</div>
 </template>
 <script>
-import SparkMD5 from 'spark-md5';
+import SparkMD5 from 'spark-md5'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { getIndicatorsList, csvFileDelete } from '@/service/service'
 import Papa from 'papaparse'
@@ -228,7 +228,7 @@ export default {
 				indicatorName: [{ validator: validateIndicatorName, trigger: 'blur' }],
 				dialogValid: false
 			},
-			rawMap: {}, // 文件对象的 raw 属性备份
+			rawMap: {} // 文件对象的 raw 属性备份
 		}
 	},
 	computed: {
@@ -877,8 +877,8 @@ export default {
 				.catch((error) => {
 					// 文件上传出错的处理逻辑
 					console.log('文件上传失败', error)
-					 // 清空文件列表
-					 self.$refs.upload.clearFiles()
+					// 清空文件列表
+					self.$refs.upload.clearFiles()
 					self.$message.success('文件上传失败')
 
 					// ...
@@ -963,6 +963,10 @@ export default {
 				)
 				return false
 			}
+			if (file.size === 0) {
+				this.$message.error('不能上传空文件')
+				return false
+			}
 			// 限制文件上传大小 1M
 			if (file.size > 1 * 1024 * 1024) {
 				this.$message.warning('上传的文件不能超过 1MB')
@@ -1026,11 +1030,22 @@ export default {
 				// 限制字段
 				let isDateFormat = true
 				let isNumFormat = true
+				let isNotEmpty = true
 				const reader = new FileReader()
 				reader.onload = (e) => {
 					const content = e.target.result
-					const hash = SparkMD5.hashBinary(reader.result);
+					const hash = SparkMD5.hashBinary(reader.result)
 					file.hash = hash
+					const rows = content.trim().split('\n')
+					const headers = rows[0].trim().split(',')
+
+					// 判断表头和表内容是否都存在
+					if (
+						headers.length === 0 ||
+						(headers.length !== 0 && rows.length === 1)
+					) {
+						isNotEmpty = false
+					}
 					// 使用 PapaParse 解析 CSV 文件内容
 					const result = Papa.parse(content, {
 						header: true, // 指定是否将第一行作为字段名
@@ -1081,7 +1096,7 @@ export default {
 					// 获取 CSV 文件的字段顺序
 					const fieldOrder = lines[0].trim().split(',')
 					const isOrdered = this.validateCSVFieldOrder(fieldOrder)
-					if (isVerified && isOrdered && isDateFormat && isNumFormat) {
+					if (isVerified && isOrdered && isDateFormat && isNumFormat && isNotEmpty) {
 						// this.progress = 0 // 每次上传前重置进度为0
 						// this.fileList.push({
 						// 	uid: file.uid,
@@ -1094,6 +1109,13 @@ export default {
 						this.fileList.push(file)
 						resolve(file)
 					} // 校验通过，允许上传
+					if(!isNotEmpty) {
+						this.$message.warning(
+							`上传的csv文件为空, 请检查表头和表内容是否存在`
+						)
+						reject(new Error('上传的CSV文件为空, 请检查表头和表内容是否存在'))
+						return
+					}
 					if (!isVerified) {
 						reject(new Error('CSV字段校验失败'))
 						return
