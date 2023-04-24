@@ -6,7 +6,7 @@
 				<el-form-item>
 					<el-radio
 						v-model="indicatorRadio"
-						label="Sentiment Indicators"
+						label="Sentiment Indicator"
 						@change="changeIndicatorChecked"
 					>
 					</el-radio>
@@ -18,7 +18,7 @@
 							class="inline-input"
 							clearable
 							v-model="si.sentimentIndicator"
-							:disabled="!(indicatorRadio === 'Sentiment Indicators')"
+							:disabled="!(indicatorRadio === 'Sentiment Indicator')"
 							:fetch-suggestions="indicatorSentimentSearch"
 							placeholder="Input the sentiment indicator"
 							@select="handleSentimentSelect"
@@ -40,7 +40,7 @@
 				<el-form-item>
 					<el-radio
 						v-model="indicatorRadio"
-						label="Technical Indicators"
+						label="Technical Indicator"
 						@change="changeIndicatorChecked"
 					>
 					</el-radio>
@@ -48,7 +48,7 @@
 				<el-form-item prop="technicalIndicator">
 					<div class="indicatorSearchBox">
 						<el-autocomplete
-							:disabled="!(indicatorRadio === 'Technical Indicators')"
+							:disabled="!(indicatorRadio === 'Technical Indicator')"
 							class="inline-input"
 							clearable
 							prefix-icon="el-icon-search"
@@ -77,14 +77,14 @@ export default {
 	},
 	data() {
 		var validateSenti = (rule, value, callback) => {
-			if (!value && this.indicatorRadio == 'Sentiment Indicators') {
+			if (!value && this.indicatorRadio == 'Sentiment Indicator') {
 				callback(new Error('Please choose sentiment indicator'))
 			} else {
 				callback()
 			}
 		}
 		var validateTech = (rule, value, callback) => {
-			if (!value && this.indicatorRadio == 'Technical Indicators') {
+			if (!value && this.indicatorRadio == 'Technical Indicator') {
 				callback(new Error('Please choose technical indicator'))
 			} else {
 				callback()
@@ -98,7 +98,7 @@ export default {
 			}
 		}
 		return {
-			indicatorRadio: 'Sentiment Indicators',
+			indicatorRadio: 'Sentiment Indicator',
 			si: {
 				sentimentIndicator: '',
 				technicalIndicator: '',
@@ -163,7 +163,7 @@ export default {
 				this.si.sentimentIndicator = val.name
 				for (var i in CIQ.indicatorList) {
 					if (CIQ.indicatorList[i].chart_name == val.name) {
-						this.indicatorRadio = 'Sentiment Indicators'
+						this.indicatorRadio = 'Sentiment Indicator'
 						if (this.criteria == 'entry') {
 							this.$store.commit('getEntryIndicators', {
 								index: this.panelIndex,
@@ -203,7 +203,7 @@ export default {
 					/*
 					Note it out for the time being, because most of the technologies are not added to the back test
 					*/
-					//this.indicatorRadio = 'Technical Indicators'
+					//this.indicatorRadio = 'Technical Indicator'
 					// 					let radioObj = {}
 					// radioObj.value = 'technical'
 					// radioObj.index = this.panelIndex
@@ -252,7 +252,7 @@ export default {
 		//  load sentiment list
 		clearForm() {
 			let data = {
-				indicatorRadio: 'Sentiment Indicators',
+				indicatorRadio: 'Sentiment Indicator',
 				si: {
 					sentimentIndicator: '',
 					technicalIndicator: '',
@@ -485,8 +485,8 @@ export default {
 			this.indicatorRadio = val
 			this.clearFormValidate()
 			const arr = [
-				'Sentiment Indicators',
-				'Technical Indicators',
+				'Sentiment Indicator',
+				'Technical Indicator',
 				'Risk Control'
 			]
 			const obj = {}
@@ -542,7 +542,7 @@ export default {
 			let validForm
 			let validName = false
 			if (
-				this.indicatorRadio === 'Sentiment Indicators' &&
+				this.indicatorRadio === 'Sentiment Indicator' &&
 				!this.exitItemCheck
 			) {
 				this.$refs.siForm.validate((valid) => {
@@ -597,7 +597,7 @@ export default {
 				}
 			}
 			if (
-				this.indicatorRadio === 'Technical Indicators' &&
+				this.indicatorRadio === 'Technical Indicator' &&
 				!this.exitItemCheck
 			) {
 				this.$refs.siForm.validate((valid) => {
@@ -649,7 +649,7 @@ export default {
 					let index = this.panelIndex
 					let vm = this
 					if (newVal[this.criteria].signals[index].analysis === 'Sentiment') {
-						this.indicatorRadio = 'Sentiment Indicators'
+						this.indicatorRadio = 'Sentiment Indicator'
 						this.si.sentimentIndicator =
 							newVal[this.criteria].signals[index].indicator
 						let sentimentList = this.$store.state.sentimentIndicatorList
@@ -681,7 +681,7 @@ export default {
 						})
 					}
 					if (newVal[this.criteria].signals[index].analysis === 'Technical') {
-						vm.indicatorRadio = 'Technical Indicators'
+						vm.indicatorRadio = 'Technical Indicator'
 						let technicalIndicator =
 							newVal[this.criteria].signals[index].indicator
 						vm.si.technicalIndicators = technicalIndicator
