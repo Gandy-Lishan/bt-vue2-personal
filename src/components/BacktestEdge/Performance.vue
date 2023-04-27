@@ -577,6 +577,8 @@ export default {
 								vm.handleCurrentChange(1)
 								vm.tradesData = initalData['Trades']
 								
+								// 保存tradesdata到store
+								this.$store.commit('getTradesData',vm.tradesData)
 								// 根据entrydate计算未来收益
 								this.backtestHistoryList = this.calculateBacktestHistory(vm.tradesData)	
 							}
