@@ -142,6 +142,23 @@ export default {
 			// 如果不是ROC类型，则这两个condition值一致
 			if(!this.isROCLike){
 				this.tech.condition = this.tech.newCondition
+
+				let indicator_url = this.$store.state.indicators.formIndicators[this.criteria][this.panelIndex]
+				if(indicator_url){
+					for (var studyInstanceName in CIQ.stxx.layout.studies) {
+						console.log(indicator_url,CIQ.stxx.layout.studies[studyInstanceName])
+						if (
+							CIQ.stxx.layout.studies[studyInstanceName].type == indicator_url
+						) {
+							// 在切换回非ROClike后清除ROCLike indicator
+							if(studyInstanceName.indexOf('‌ST MA‌')!=-1) continue
+							CIQ.Studies.removeStudy(
+								CIQ.stxx,
+								CIQ.stxx.layout.studies[studyInstanceName]
+							)
+						}
+					}
+				}
 			}
 			// 开始计算数据并加载新的附属indicator
 			this.calculateNewConditions()
@@ -270,7 +287,7 @@ export default {
 					[7, {name:'MA Ratio',abbr:'MA'}]
 				])
 				const fieldName = this.ROCConditions.find(item=>item.value==this.tech.rocCondition).obj.field
-				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'Symbol Close', {
 					display: conditionMap.get(this.tech.newCondition).name,
 					Field: fieldName,
 					condition:conditionMap.get(this.tech.newCondition).abbr,

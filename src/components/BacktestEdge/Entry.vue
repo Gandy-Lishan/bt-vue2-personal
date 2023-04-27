@@ -1070,8 +1070,13 @@ export default {
 				}
 				if (data.entry.signals[j].analysis === 'Technical') {
 					this.indicatorValArr[j] = data.entry.signals[j].indicator
+
 					this.indicatorRadio = 'technical'
-					this.indicatorRadioArr.splice(j, 1, 'technical')
+					if(data.entry.signals[j].indicator=="Symbol Close"){
+						this.indicatorRadioArr.splice(j, 1, 'symbol')
+					}else{
+						this.indicatorRadioArr.splice(j, 1, 'technical')
+					}
 
 					formateTechnicalList = this.$store.state.formateTechnicalList
 					let indicatorName = data.entry.signals[j].indicator
@@ -1092,6 +1097,7 @@ export default {
 			let length = data.entry.signals.length
 			for (let j = 0; j < length; j++) {
 				this.$refs.indiChild[j].setEditData(data)
+				console.log(this.indicatorRadioArr[j])
 				if (this.indicatorRadioArr[j] === 'sentiment') {
 					this.$refs.sentiChild[j].setEditData(data)
 				}
