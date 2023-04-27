@@ -538,6 +538,8 @@ export default {
 				radioObj.value = 'symbol'
 				this.$emit('getIndicatorRadio', radioObj)
 				this.$store.commit('getEntryIndicatorRadio', 'symbol')
+
+				this.si.technicalIndicator = 'Symbol Close'
 			}
 		},
 		// load short and long technical list
@@ -572,6 +574,7 @@ export default {
 			let checked = true
 			let validForm
 			let validName = false
+			console.log('saveIndicator')
 			if (
 				this.indicatorRadio === 'Sentiment Indicators' &&
 				!this.exitItemCheck
@@ -637,9 +640,9 @@ export default {
 				})
 				let formateList = this.$store.state.formateTechnicalList
 				if (formateList.length === 0) {
-					formateList = vm.loadShortLong()
+					formateList = this.loadShortLong()
 				}
-				console.log('formateList',formateList)
+				
 				for (let i = 0; i < formateList.length; i++) {
 					if (this.si.technicalIndicator === formateList[i].value) {
 						validName = true
@@ -714,7 +717,12 @@ export default {
 						})
 					}
 					if (newVal[this.criteria].signals[index].analysis === 'Technical') {
-						vm.indicatorRadio = 'Technical Indicators'
+						if(newVal[this.criteria].signals[index].indicator=="Symbol Close"){
+							vm.indicatorRadio = 'Symbol Indicators'
+						}else{
+							vm.indicatorRadio = 'Technical Indicators'
+						}
+						
 						let technicalIndicator =
 							newVal[this.criteria].signals[index].indicator
 						vm.si.technicalIndicators = technicalIndicator
