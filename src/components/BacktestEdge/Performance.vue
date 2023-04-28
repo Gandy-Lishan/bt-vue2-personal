@@ -403,8 +403,6 @@
 								<el-table
 									:data="backtestHistoryList"
 									stripe
-									show-summary
-									:summary-method="getSummaries"
 									style="width: 100%; height: 100%"
 								>
 									<div v-if="defaultTableLabels.length > 0">
@@ -468,7 +466,12 @@ export default {
 				'3 Months [%]',
 				'6 Months [%]',	
 			],
-			backtestHistoryList: []
+			backtestHistoryList: [],
+			period_dict: {
+				5: "1WeekReturn", 10: "2WeeksReturn", 21: "1MonthReturn", 42: "2MonthsReturn",
+				63: "3MonthsReturn", 126: "6MonthsReturn", 252: "12MonthsReturn"
+			},
+			start_date: null
 		}
 	},
 	created() {
@@ -581,6 +584,12 @@ export default {
 								this.$store.commit('getTradesData',vm.tradesData)
 								// 根据entrydate计算未来收益
 								this.backtestHistoryList = this.calculateBacktestHistory(vm.tradesData)	
+
+								// 2.1中引入分析师的ZScore模块
+								var datatime = new Date(initalData['basic']['start_date'])
+								var offset = datatime.getTimezoneOffset() * 60 * 1000
+								this.start_date = new Date(datatime.setTime(datatime.getTime() + offset))
+								this.calculateZScore(vm.tradesData)
 							}
 
 							// ---------------------------------------- end ----------------------------------
@@ -608,7 +617,7 @@ export default {
 			}, 0)
 		},
 		calculateBacktestHistory(dataSet){
-			let chartDataset = CIQ.stxx.chart.dataSet
+			let chartDataset = CIQ.stxx.chart.masterData
 			const direction = dataSet[0].TradeStatus=='BUY'?'Long':'Short'
 			dataSet = dataSet.filter(item=>item.TradeStatus=='BUY')
 			let backtestResult = []
@@ -646,46 +655,97 @@ export default {
 			}
 			return backtestResult
 		},
-		getSummaries(param) {
-			const { columns, data } = param
-
-			const sums = [] //声明变量
-			columns.forEach((column, index) => {
-				if (index === 0) {
-					sums[index] = 'Average'
-					return
-				}
-				// if (index === 1) {
-				// 	return
-				// }
-				const values = data.map((item) => {
-					return Number(
-						item[column.property].slice(0, item[column.property].length - 1)
-					)
-				})
-				let totalCount = 0 // 求平均数使用
-				sums[index] = values.reduce((prev, curr) => {
-					const value = Number(curr)
-					if (!isNaN(value) && value != 0) {
-						totalCount++
-						return prev + curr
-					} else {
-						return prev
-					}
-				}, 0)
-
-				sums[index] = sums[index] / totalCount
-
-				// ***********演示完要删**************************************
-				// if(this.rowData && this.rowData.Symbol=='WWW' && sums[index]<0){
-				//   sums[index] = -sums[index]
-				// }
-				// *****************************************************
-
-				sums[index] = sums[index].toFixed(2)
-				sums[index] = sums[index] + ' %'
+		calculateZScore(dataSet){
+			let quotes = CIQ.stxx.chart.masterData
+			const period_list = Object.keys(this.period_dict).map(Number)
+			for(var i in period_list){
+				quotes = this.generate_period_data(quotes,period_list[i])
+			}
+			console.log('trades',dataSet)
+			console.log('原计算后的数据',quotes)
+			quotes = quotes.filter(x=>{
+				return this.start_date.getTime()<=x.DT.getTime()
 			})
-			return sums
+			let dataTimeList = []
+			for (var data in dataSet) {
+				if(dataSet[data].TradeStatus != 'BUY') continue
+				var datatime = new Date(dataSet[data].Date)
+				var offset = datatime.getTimezoneOffset() * 60 * 1000
+				var entryDate = new Date(datatime.setTime(datatime.getTime() + offset)).getTime()
+				dataTimeList.push(entryDate)
+			}
+			quotes = quotes.filter(x=>dataTimeList.indexOf(x.DT.getTime())!=-1)
+			console.log('切片并过滤后的数据',quotes)
+		},
+		generate_period_data(quotes,period){
+			const field = 'Close'
+			quotes = quotes.map((row, i) => {
+					if(i<quotes.length-period){
+						const change = parseFloat((100 * (quotes[i + period][field] / row[field] - 1)).toFixed(2))
+						return {
+							...row,
+							[this.period_dict[period]]: change == Infinity ? 0 : change
+						}
+					}else{
+						return {
+							...row,
+							[this.period_dict[period]]: -100
+						};
+					}
+				});
+			const minCloseArr = this.get_period_parm(quotes.map(row => row[field]), "min", period);
+			const maxCloseArr = this.get_period_parm(quotes.map(row => row[field]), "max", period);
+			quotes = quotes.map((row, i) => {
+					if(i>=period){
+						const change = parseFloat((100 * (minCloseArr[i] / row[field] - 1)).toFixed(2))
+						return {
+							...row,
+							["MaxLoss" + period]: change == Infinity ? 0 : change
+						}
+					}else{
+						return {
+							...row,
+							["MaxLoss" + period]: -100
+						};
+					}
+				});
+			quotes = quotes.map((row, i) => {
+					if(i>=period){
+						const change = parseFloat((100 * (maxCloseArr[i] / row[field] - 1)).toFixed(2))
+						return {
+							...row,
+							["MaxGain" + period]: change == Infinity ? 0 : change
+						}
+					}else{
+						return {
+							...row,
+							["MaxGain" + period]: -100
+						};
+					}
+				});
+			
+			return quotes
+		},
+		get_period_parm(dataSeries, paramType, period){
+			const typeDict = {
+			  max: Math.max,
+			  min: Math.min,
+			  mean: arr => arr.reduce((a, b) => a + b) / arr.length,
+			  sum: arr => arr.reduce((a, b) => a + b),
+			};
+		  
+			const dataArr = [];
+		  
+			for (let i = 0; i < dataSeries.length; i++) {
+			  if (i >= period) {
+				const tmpData = typeDict[paramType](...dataSeries.slice(i - period, i + 1));
+				dataArr.push(Number(tmpData.toFixed(3)));
+			  } else {
+				dataArr.push(NaN);
+			  }
+			}
+		  
+			return dataArr;
 		},
 		loadMarker(markerSet) {
 			try {
