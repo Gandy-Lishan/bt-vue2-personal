@@ -427,6 +427,38 @@
 							</template>
 						</el-skeleton>
 					</div>
+					<div class="zscore-container">
+						<el-skeleton :rows="2" :loading="loading" animated>
+							<template>
+								<el-table
+									:data="result_quotes"
+									:show-header="false"
+									stripe
+									style="width: 100%; height: 100%"
+								>
+									<el-table-column
+										prop="property"
+										label="Property"
+									>
+									</el-table-column>
+									
+									<template v-for="column in periods">
+										<el-table-column
+										:key="column.period"
+										:label="column.period"
+										:prop="column.period"
+										>
+											<template slot-scope="scope">
+												<p class="tableText">
+													{{ scope.row[column.period] }}
+												</p>
+											</template>
+										</el-table-column>
+									</template>
+								</el-table>
+							</template>
+						</el-skeleton>
+					</div>
 				</div>
 			</el-tab-pane>			
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
@@ -471,14 +503,54 @@ export default {
 				5: "1WeekReturn", 10: "2WeeksReturn", 21: "1MonthReturn", 42: "2MonthsReturn",
 				63: "3MonthsReturn", 126: "6MonthsReturn", 252: "12MonthsReturn"
 			},
-			start_date: null
+			start_date: null,
+			result_quotes: [],
+			periods:[],
 		}
 	},
 	created() {
 		this.getResultData({ id: 0 })
 	},
 	methods: {
-
+		generate_table_data() {
+			this.generatePeriods()
+			// 提取属性信息
+			let keys = Object.keys(this.result_quotes[0])
+			keys.splice(keys.indexOf('Period'), 1)
+			let result = []
+			for (let i = 0; i < keys.length; i++) {
+				result.push({
+					property: keys[i]
+				})
+			}
+			// 将 Periods 信息插入到 data 中，将 data 绑定到 table 中
+			
+			for (let i = 0; i < this.periods.length; i++) {
+				for (let j = 0; j < result.length; j++) {
+					this.result_quotes.forEach((obj) => {
+					if (obj.Period === this.periods[i].period) {
+						result[j][this.periods[i].period] = obj[result[j].property]
+					}
+					})
+				}
+			}
+			console.log('table_data',result)
+			this.result_quotes = result
+		},
+		generatePeriods() {
+			let set = new Set()
+			for (let i = 0; i < this.result_quotes.length; i++) {
+				set.add(this.result_quotes[i].Period)
+			}
+			let values = Array.from(set)
+			let columns = []
+			for (let i = 0; i < values.length; i++) {
+				columns.push({
+				period: values[i]
+				})
+			}
+			this.periods = columns
+		},
 		async getResultData(row,callback) {
 			
 			let vm = this
@@ -656,6 +728,7 @@ export default {
 			return backtestResult
 		},
 		calculateZScore(dataSet){
+			// masterData不包含indicator value,防止无ohlcv的情况
 			let quotes = CIQ.stxx.chart.masterData
 			const period_list = Object.keys(this.period_dict).map(Number)
 			for(var i in period_list){
@@ -663,9 +736,11 @@ export default {
 			}
 			console.log('trades',dataSet)
 			console.log('原计算后的数据',quotes)
+			// 数据切片
 			quotes = quotes.filter(x=>{
 				return this.start_date.getTime()<=x.DT.getTime()
 			})
+			//把交易列表转换成时间戳
 			let dataTimeList = []
 			for (var data in dataSet) {
 				if(dataSet[data].TradeStatus != 'BUY') continue
@@ -674,14 +749,68 @@ export default {
 				var entryDate = new Date(datatime.setTime(datatime.getTime() + offset)).getTime()
 				dataTimeList.push(entryDate)
 			}
-			quotes = quotes.filter(x=>dataTimeList.indexOf(x.DT.getTime())!=-1)
-			console.log('切片并过滤后的数据',quotes)
+			let used_quotes = quotes.filter(x=>dataTimeList.indexOf(x.DT.getTime())!=-1)
+			console.log('切片并过滤非交易日期的数据',used_quotes)
+			//替换NaN
+			quotes = quotes.map((quote) => {
+				const updatedQuote = {};
+				for (const [key, value] of Object.entries(quote)) {
+					updatedQuote[key] = isNaN(value) ? -100 : value;
+				}
+				return updatedQuote;
+			});
+
+			let median_list= [], positive_list= [], max_loss_list= [], max_gain_list= [], z_score_list = []
+			for(var i in period_list){
+				let temp_median = this.calculate_median(used_quotes.map(obj=>obj[this.period_dict[period_list[i]]]))
+				median_list.push(temp_median)
+				positive_list.push(this.calculate_win_rate(used_quotes.map(obj=>obj[this.period_dict[period_list[i]]])))
+				max_loss_list.push(this.calculate_median(used_quotes.map(obj=>obj["MaxLoss" + period_list[i]])))
+				max_gain_list.push(this.calculate_median(used_quotes.map(obj=>obj["MaxGain" + period_list[i]])))
+				let temp_std = this.calculate_std(used_quotes.map(obj=>obj[this.period_dict[period_list[i]]]))
+        		let temp_mean = this.calculate_mean(quotes.map(obj=>obj[this.period_dict[period_list[i]]]))
+				z_score_list.push(parseFloat(((temp_median - temp_mean) / (temp_std / Math.sqrt(used_quotes.length))).toFixed(1)))
+
+				// console.log(this.period_dict[period_list[i]] + ': ',used_quotes.map(obj=>obj[this.period_dict[period_list[i]]]))
+				// console.log('median_list',median_list)
+				// console.log('positive_list',positive_list)
+				// console.log("MaxLoss" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxLoss" + period_list[i]]))
+				// console.log("MaxGain" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxGain" + period_list[i]]))
+				// console.log('max_loss_list',max_loss_list)
+				// console.log('max_gain_list',max_gain_list)
+				// console.log('z_score_list',z_score_list)
+			}
+			this.result_quotes = Object.values(this.period_dict).map((val,i)=>({ 
+				'Period': val, 'Median': median_list[i], "% Positive": positive_list[i]*100 + ' %',
+        		"Avg Max Loss": max_loss_list[i], "Avg Max Gain": max_gain_list[i], "Z-Score": z_score_list[i]
+			}))
+			this.generate_table_data()
+		},
+		calculate_std(arr){
+			const n = arr.length;
+			const mean = arr.reduce((acc, val) => acc + val, 0) / n;
+			const squareDiff = arr.map(x => Math.pow(x - mean, 2));
+			const variance = squareDiff.reduce((acc, val) => acc + val, 0) / n;
+			const std = Math.sqrt(variance);
+			return std;
+		},
+		calculate_win_rate(arr){
+			let return_series = arr.map(x=>x>0?1:0)
+			return parseFloat(this.calculate_mean(return_series).toFixed(1))
+		},
+		calculate_mean(arr){
+			return arr.reduce((a, b) => a + b) / arr.length;
+		},
+		calculate_median(arr){
+			const mid = Math.floor(arr.length / 2);
+			const nums = [...arr].sort((a, b) => a - b);
+			return parseFloat((arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2).toFixed(1));
 		},
 		generate_period_data(quotes,period){
 			const field = 'Close'
 			quotes = quotes.map((row, i) => {
 					if(i<quotes.length-period){
-						const change = parseFloat((100 * (quotes[i + period][field] / row[field] - 1)).toFixed(2))
+						const change = parseFloat((100 * (quotes[i + period][field] / row[field] - 1)).toFixed(1))
 						return {
 							...row,
 							[this.period_dict[period]]: change == Infinity ? 0 : change
@@ -689,7 +818,7 @@ export default {
 					}else{
 						return {
 							...row,
-							[this.period_dict[period]]: -100
+							[this.period_dict[period]]: NaN
 						};
 					}
 				});
@@ -697,7 +826,7 @@ export default {
 			const maxCloseArr = this.get_period_parm(quotes.map(row => row[field]), "max", period);
 			quotes = quotes.map((row, i) => {
 					if(i>=period){
-						const change = parseFloat((100 * (minCloseArr[i] / row[field] - 1)).toFixed(2))
+						const change = parseFloat((100 * (minCloseArr[i] / row[field] - 1)).toFixed(1))
 						return {
 							...row,
 							["MaxLoss" + period]: change == Infinity ? 0 : change
@@ -705,13 +834,13 @@ export default {
 					}else{
 						return {
 							...row,
-							["MaxLoss" + period]: -100
+							["MaxLoss" + period]: NaN
 						};
 					}
 				});
 			quotes = quotes.map((row, i) => {
 					if(i>=period){
-						const change = parseFloat((100 * (maxCloseArr[i] / row[field] - 1)).toFixed(2))
+						const change = parseFloat((100 * (maxCloseArr[i] / row[field] - 1)).toFixed(1))
 						return {
 							...row,
 							["MaxGain" + period]: change == Infinity ? 0 : change
@@ -719,7 +848,7 @@ export default {
 					}else{
 						return {
 							...row,
-							["MaxGain" + period]: -100
+							["MaxGain" + period]: NaN
 						};
 					}
 				});
@@ -874,6 +1003,10 @@ export default {
 }
 </script>
 <style scoped>
+
+.zscore-container{
+	border-top: solid 3px #00000042 !important;
+}
 .hint{
 	position: absolute;
 	font-size: 0.8rem;
