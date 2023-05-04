@@ -534,7 +534,6 @@ export default {
 					})
 				}
 			}
-			console.log('table_data',result)
 			this.result_quotes = result
 		},
 		generatePeriods() {
@@ -749,7 +748,7 @@ export default {
 				var entryDate = new Date(datatime.setTime(datatime.getTime() + offset)).getTime()
 				dataTimeList.push(entryDate)
 			}
-			let used_quotes = quotes.filter(x=>dataTimeList.indexOf(x.DT.getTime())!=-1)
+			let used_quotes = quotes.filter(x=>dataTimeList.indexOf(x.DT.getTime())!=-1)			
 			console.log('切片并过滤非交易日期的数据',used_quotes)
 			//替换NaN
 			quotes = quotes.map((quote) => {
@@ -771,14 +770,14 @@ export default {
         		let temp_mean = this.calculate_mean(quotes.map(obj=>obj[this.period_dict[period_list[i]]]))
 				z_score_list.push(parseFloat(((temp_median - temp_mean) / (temp_std / Math.sqrt(used_quotes.length))).toFixed(1)))
 
-				// console.log(this.period_dict[period_list[i]] + ': ',used_quotes.map(obj=>obj[this.period_dict[period_list[i]]]))
-				// console.log('median_list',median_list)
-				// console.log('positive_list',positive_list)
-				// console.log("MaxLoss" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxLoss" + period_list[i]]))
-				// console.log("MaxGain" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxGain" + period_list[i]]))
-				// console.log('max_loss_list',max_loss_list)
-				// console.log('max_gain_list',max_gain_list)
-				// console.log('z_score_list',z_score_list)
+				//  console.log(this.period_dict[period_list[i]] + ': ',used_quotes.map(obj=>obj[this.period_dict[period_list[i]]]))
+				//  console.log('median_list',median_list)
+				//  console.log('positive_list',positive_list)
+				//  console.log("MaxLoss" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxLoss" + period_list[i]]))
+				//  console.log("MaxGain" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxGain" + period_list[i]]))
+				//  console.log('max_loss_list',max_loss_list)
+				//  console.log('max_gain_list',max_gain_list)
+				//  console.log('z_score_list',z_score_list)
 			}
 			this.result_quotes = Object.values(this.period_dict).map((val,i)=>({ 
 				'Period': val, 'Median': median_list[i], "% Positive": positive_list[i]*100 + ' %',
@@ -787,12 +786,24 @@ export default {
 			this.generate_table_data()
 		},
 		calculate_std(arr){
-			const n = arr.length;
-			const mean = arr.reduce((acc, val) => acc + val, 0) / n;
-			const squareDiff = arr.map(x => Math.pow(x - mean, 2));
-			const variance = squareDiff.reduce((acc, val) => acc + val, 0) / n;
-			const std = Math.sqrt(variance);
-			return std;
+			arr = arr.filter(function (x) {
+				return !isNaN(x); // 剔除NaN值
+			});
+
+			const mean = arr.reduce(function (a, b) {
+			return a + b;
+			}) / arr.length; // 计算平均数
+
+			const deviationArr = arr.map(function (x) {
+			return Math.pow(x - mean, 2);
+			});
+
+			const variance = deviationArr.reduce(function (a, b) {
+				return a + b;
+			}) / (deviationArr.length - 1); // 计算方差，使用自由度=1
+
+			const std = Math.sqrt(variance); // 计算标准差
+			return std
 		},
 		calculate_win_rate(arr){
 			let return_series = arr.map(x=>x>0?1:0)
@@ -802,6 +813,7 @@ export default {
 			return arr.reduce((a, b) => a + b) / arr.length;
 		},
 		calculate_median(arr){
+			arr = arr.filter(n => !isNaN(n))
 			const mid = Math.floor(arr.length / 2);
 			const nums = [...arr].sort((a, b) => a - b);
 			return parseFloat((arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2).toFixed(1));
@@ -813,17 +825,19 @@ export default {
 						const change = parseFloat((100 * (quotes[i + period][field] / row[field] - 1)).toFixed(1))
 						return {
 							...row,
+							["Close" + period]: quotes[i + period][field],
 							[this.period_dict[period]]: change == Infinity ? 0 : change
 						}
 					}else{
 						return {
 							...row,
+							["Close" + period]: NaN,
 							[this.period_dict[period]]: NaN
 						};
 					}
 				});
-			const minCloseArr = this.get_period_parm(quotes.map(row => row[field]), "min", period);
-			const maxCloseArr = this.get_period_parm(quotes.map(row => row[field]), "max", period);
+			const minCloseArr = this.get_period_parm(quotes.map(row => row["Close" + period]), "min", period);
+			const maxCloseArr = this.get_period_parm(quotes.map(row => row["Close" + period]), "max", period);
 			quotes = quotes.map((row, i) => {
 					if(i>=period){
 						const change = parseFloat((100 * (minCloseArr[i] / row[field] - 1)).toFixed(1))
@@ -864,16 +878,15 @@ export default {
 			};
 		  
 			const dataArr = [];
-		  
+
 			for (let i = 0; i < dataSeries.length; i++) {
 			  if (i >= period) {
-				const tmpData = typeDict[paramType](...dataSeries.slice(i - period, i + 1));
+				const tmpData = typeDict[paramType](...(dataSeries.slice(i - period, i + 1).filter(n => !isNaN(n))));
 				dataArr.push(Number(tmpData.toFixed(3)));
 			  } else {
 				dataArr.push(NaN);
 			  }
 			}
-		  
 			return dataArr;
 		},
 		loadMarker(markerSet) {
