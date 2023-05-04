@@ -143,6 +143,10 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 .el-table__cell.el-table__expanded-cell{
   padding: 12px;
 }
+.zscore-container .el-table tr:nth-child(1),
+.zscore-container .el-table tr:nth-child(2) {
+  font-weight: bold;
+}
 .el-form-item__label {
   font-weight: 500;
 }
@@ -649,6 +653,9 @@ input[type="time"] {
 }
 
 .history-container td{
+	padding:0 !important;
+}
+.zscore-container td{
 	padding:0 !important;
 }
 .trades-container td{
