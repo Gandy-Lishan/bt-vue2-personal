@@ -435,15 +435,15 @@ export default {
 			signalOptions: [
 				{
 					value: 1,
-					label: 'Single-Criteria'
+					label: 'Single-Condition'
 				},
 				{
 					value: 2,
-					label: 'SameBar Multi-Criteria'
+					label: 'SameBar Multi-Condition'
 				},
 				{
 					value: 3,
-					label: 'TimeOrder Multi-Criteria'
+					label: 'TimeOrder Multi-Condition'
 				}
 			],
 			scoreOptions: [
@@ -457,9 +457,9 @@ export default {
 			editableTabsValue: '1',
 			editableTabs: [
 				{
-					title: 'Criteria 1',
+					title: 'Condition 1',
 					name: '1',
-					content: 'Criteria 1 content'
+					content: 'Condition 1 content'
 				}
 			],
 			tabIndex: 1,
@@ -512,7 +512,7 @@ export default {
 			handler(newVal, oldVal) {
 				if (newVal == 3 && this.editableTabs.length > 3) {
 					this.$confirm(
-						'TimeOrder Multi-Criteria supports up to three criterias,Currently your multi-criteria count is ' +
+						'TimeOrder Multi-Condition supports up to three conditions,Currently your multi-condition count is ' +
 							this.editableTabs.length +
 							', are you sure you want to delete the last ' +
 							(this.editableTabs.length - 3) +
@@ -533,7 +533,7 @@ export default {
 								type: 'success',
 								offset: 300,
 								message:
-									'The deletion is successful and has been automatically switched to TimeOrder Multi-Criteria'
+									'The deletion is successful and has been automatically switched to TimeOrder Multi-Condition'
 							})
 							this.relation = newVal
 						})
@@ -543,7 +543,7 @@ export default {
 								type: 'info',
 								offset: 300,
 								message:
-									'With the deletion undeleted, you can switch to The SaveBar Multi-Criteria to delete the criteria panel to less than 3'
+									'With the deletion undeleted, you can switch to The SaveBar Multi-Condition to delete the condition panel to less than 3'
 							})
 						})
 				}
@@ -589,16 +589,16 @@ export default {
 					let newTabName = num + 1 + ''
 
 					this.editableTabs.push({
-						title: 'Criteria' + newTabName,
+						title: 'Condition' + newTabName,
 						name: num_key + '',
-						content: 'Criteria' + newTabName + 'content'
+						content: 'Condition' + newTabName + 'content'
 					})
 					this.editableTabsValue = Number(this.editableTabsValue) + 1 + ''
 					this.indicatorRadioArr.push('sentiment')
 				}
 				if (this.editableTabs.length > 5 && this.relation == 2) {
 					this.$message({
-						message: 'Add up to five criterias',
+						message: 'Add up to five conditions',
 						type: 'error',
 						offset: 300
 					})
@@ -611,7 +611,7 @@ export default {
 				}
 				if (this.relation == 3 && this.editableTabs.length > 3) {
 					this.$message({
-						message: 'Add up to three criterias',
+						message: 'Add up to three conditions',
 						type: 'error',
 						offset: 300
 					})
@@ -634,10 +634,10 @@ export default {
 					(this.relation == 2 || this.relation == 3) &&
 					this.editableTabs.length == 2
 				) {
-					//At least two criterias
+					//At least two conditions
 					this.$message({
 						message:
-							'Multiple criterias are currently selected, at least two criterias',
+							'Multiple conditions are currently selected, at least two conditions',
 						type: 'error',
 						offset: 300
 					})
@@ -666,7 +666,7 @@ export default {
 				let panelArr = tabs.filter((tab) => tab.name !== targetName)
 				this.editableTabs = panelArr
 				panelArr.forEach((item, index) => {
-					item.title = 'Criteria' + (index + 1)
+					item.title = 'Condition' + (index + 1)
 				})
 				this.editableTabsValue = activeName
 				this.indicatorUrlArr.splice(absoluteIndex, 1)
