@@ -730,8 +730,9 @@ export default {
 			// masterData不包含indicator value,防止无ohlcv的情况
 			let quotes = CIQ.stxx.chart.masterData
 			const period_list = Object.keys(this.period_dict).map(Number)
+			const direction = dataSet[0].TradeStatus=='BUY'?'Long':'Short'
 			for(var i in period_list){
-				quotes = this.generate_period_data(quotes,period_list[i])
+				quotes = this.generate_period_data(quotes,period_list[i],direction)
 			}
 			console.log('trades',dataSet)
 			console.log('原计算后的数据',quotes)
@@ -764,8 +765,14 @@ export default {
 				let temp_median = this.calculate_median(used_quotes.map(obj=>obj[this.period_dict[period_list[i]]]))
 				median_list.push(temp_median)
 				positive_list.push(this.calculate_win_rate(used_quotes.map(obj=>obj[this.period_dict[period_list[i]]])))
-				max_loss_list.push(this.calculate_median(used_quotes.map(obj=>obj["MaxLoss" + period_list[i]])))
-				max_gain_list.push(this.calculate_median(used_quotes.map(obj=>obj["MaxGain" + period_list[i]])))
+				if(direction=='Short'){
+					max_loss_list.push(this.calculate_median(used_quotes.map(obj=>obj["MaxGain" + period_list[i]])))
+					max_gain_list.push(this.calculate_median(used_quotes.map(obj=>obj["MaxLoss" + period_list[i]])))
+				}else{
+					max_loss_list.push(this.calculate_median(used_quotes.map(obj=>obj["MaxLoss" + period_list[i]])))
+					max_gain_list.push(this.calculate_median(used_quotes.map(obj=>obj["MaxGain" + period_list[i]])))
+				}
+
 				let temp_std = this.calculate_std(used_quotes.map(obj=>obj[this.period_dict[period_list[i]]]))
         		let temp_mean = this.calculate_mean(quotes.map(obj=>obj[this.period_dict[period_list[i]]]))
 				z_score_list.push(parseFloat(((temp_median - temp_mean) / (temp_std / Math.sqrt(used_quotes.length))).toFixed(1)))
@@ -818,26 +825,27 @@ export default {
 			const nums = [...arr].sort((a, b) => a - b);
 			return parseFloat((arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2).toFixed(1));
 		},
-		generate_period_data(quotes,period){
-			const field = 'Close'
+		generate_period_data(quotes,period,direction){
+			const field = 'Open'
 			quotes = quotes.map((row, i) => {
 					if(i<quotes.length-period){
-						const change = parseFloat((100 * (quotes[i + period][field] / row[field] - 1)).toFixed(1))
+						//const change = parseFloat((100 * (quotes[i + period][field] / row[field] - 1)).toFixed(1))
+						const change = parseFloat(((direction=='Short'?row[field]-quotes[i + period][field]:quotes[i + period][field]-row[field])/row[field]*100).toFixed(1))
 						return {
 							...row,
-							["Close" + period]: quotes[i + period][field],
+							[field + period]: quotes[i + period][field],
 							[this.period_dict[period]]: change == Infinity ? 0 : change
 						}
 					}else{
 						return {
 							...row,
-							["Close" + period]: NaN,
+							[field + period]: NaN,
 							[this.period_dict[period]]: NaN
 						};
 					}
 				});
-			const minCloseArr = this.get_period_parm(quotes.map(row => row["Close" + period]), "min", period);
-			const maxCloseArr = this.get_period_parm(quotes.map(row => row["Close" + period]), "max", period);
+			const minCloseArr = this.get_period_parm(quotes.map(row => row[field + period]), "min", period);
+			const maxCloseArr = this.get_period_parm(quotes.map(row => row[field + period]), "max", period);
 			quotes = quotes.map((row, i) => {
 					if(i>=period){
 						const change = parseFloat((100 * (minCloseArr[i] / row[field] - 1)).toFixed(1))
