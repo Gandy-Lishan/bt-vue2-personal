@@ -51,7 +51,8 @@ export default new Vuex.Store({
 				signals: [
 					{
 						sentimentIndicator: '',
-						technicalIndicator: ''
+						technicalIndicator: '',
+						usersOwnIndicator: '',
 					}
 				]
 			},
@@ -60,7 +61,7 @@ export default new Vuex.Store({
 				score: 1,
 				signals_in_market: 1,
 				delay_bars: 0,
-				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: ''}]
+				signals: [{ sentimentIndicator: '', technicalIndicator: '', usersOwnIndicator: '', riskIndicator: ''}]
 			}
 		},
 		riskDescription: '',
@@ -75,7 +76,6 @@ export default new Vuex.Store({
 			extraIndicators: [],
 			technicalIndicators: []
 		},
-
 		extremeValue: [],
 		strategyId: '',
 		indicatorsList: [],
@@ -95,10 +95,10 @@ export default new Vuex.Store({
 		backtestNameList: [],
 		formateTechnicalList: [],
 		riskControl: true,
-
 		is_admin: false,
 		role: '',
-		userCustomIndicator: ''
+		usersOwnEntryFileHash: Array(5).fill(''),
+		usersOwnExitFileHash: Array(5).fill(''),
 	},
 	getters: {
 		getExtremeValue: (state) => {
@@ -358,6 +358,8 @@ export default new Vuex.Store({
 			''
 			state.backtestInfo[val.criteria].signals[val.index].technicalIndicator =
 				''
+			state.backtestInfo[val.criteria].signals[val.index].usersOwnIndicator =
+			''
 			state.backtestInfo.exit.signals[val.index].riskIndicator =
 				''
 			} catch (error) {
@@ -370,13 +372,15 @@ export default new Vuex.Store({
 				obj.value
 		},
 		getRiskValue(state, obj) {
-			state.backtestInfo.exit.signals[obj.index].riskIndicator = obj.value
-			
-				
+			state.backtestInfo.exit.signals[obj.index].riskIndicator = obj.value		
 		},
 		getSentiValue(state, obj) {
 			state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator =
 				obj.value
+		},
+		getUserValue(state, obj) {
+			state.backtestInfo[obj.criteria].signals[obj.index].usersOwnIndicator =
+			obj.value
 		},
 		delete(state, obj) {
 			delete state.backtestInfo[obj.criteria].signals[obj.index][obj.delete]
@@ -387,6 +391,7 @@ export default new Vuex.Store({
 				''
 			state.backtestInfo[obj.criteria].signals[obj.index].technicalIndicator =
 				''
+			state.backtestInfo[obj.criteria].signals[obj.index].usersOwnIndicator = ''
 				state.backtestInfo.exit.signals[obj.index].riskIndicator =
 				''
 		},
@@ -394,7 +399,8 @@ export default new Vuex.Store({
 			state.backtestInfo.entry.signals = [
 				{
 					sentimentIndicator: '',
-					technicalIndicator: ''
+					technicalIndicator: '',
+					usersOwnIndicator: ''
 				}
 			]
 		},
@@ -404,7 +410,8 @@ export default new Vuex.Store({
 				{
 					sentimentIndicator: '',
 					technicalIndicator: '',
-					riskIndicator: ''
+					riskIndicator: '',
+					usersOwnIndicator: ''
 				}
 			]
 		},
@@ -422,7 +429,8 @@ export default new Vuex.Store({
 					signals: [
 						{
 							sentimentIndicator: '',
-							technicalIndicator: ''
+							technicalIndicator: '',
+							usersOwnIndicator: ''
 						}
 					]
 				},
@@ -431,7 +439,7 @@ export default new Vuex.Store({
 					score: 1,
 					signals_in_market: 1,
 					delay_bars: 0,
-					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
+					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', usersOwnIndicator: '' }]
 				}
 			}
 		},
@@ -443,9 +451,10 @@ export default new Vuex.Store({
 			let index = obj.index
 			delete obj.criteria
 			delete obj.index
-			let init = {sentimentIndicator: '', technicalIndicator: '',riskIndicator: ''}
+			let init = {sentimentIndicator: '', technicalIndicator: '',riskIndicator: '', usersOwnIndicator: ''}
 			init.sentimentIndicator = state.backtestInfo[criteria].signals[index].sentimentIndicator
 			init.technicalIndicator = state.backtestInfo[criteria].signals[index].technicalIndicator
+			init.usersOwnIndicator = state.backtestInfo[criteria].signals[index].usersOwnIndicator
 			if(criteria === 'exit') {
 			init.riskIndicator = state.backtestInfo.exit.signals[index].riskIndicator
 			}
@@ -483,7 +492,8 @@ export default new Vuex.Store({
 					signals: [
 						{
 							sentimentIndicator: '',
-							technicalIndicator: ''
+							technicalIndicator: '',
+							usersOwnIndicator: ''
 						}
 					]
 				},
@@ -492,7 +502,7 @@ export default new Vuex.Store({
 					score: 1,
 					signals_in_market: 1,
 					delay_bars: 0,
-					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
+					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', usersOwnIndicator: '' }]
 				}
 			}
 			state.backtestInfo.entry =  {
@@ -503,7 +513,8 @@ export default new Vuex.Store({
 				signals: [
 					{
 						sentimentIndicator: '',
-						technicalIndicator: ''
+						technicalIndicator: '',
+						usersOwnIndicator: ''
 					}
 				]
 			}
@@ -512,7 +523,7 @@ export default new Vuex.Store({
 				score: 1,
 				signals_in_market: 1,
 				delay_bars: 0,
-				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }]
+				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', usersOwnIndicator: '' }]
 			}
 			state.backtestInfo.entry_description = []
 			state.backtestInfo.exit_description = []
@@ -535,9 +546,10 @@ export default new Vuex.Store({
 		addSignalLength(state,obj) {
 			let newEntrySignal = {
 				sentimentIndicator: '',
-				technicalIndicator: ''
+				technicalIndicator: '',
+				usersOwnIndicator: ''
 			}
-			let newExitSignal = { sentimentIndicator: '', technicalIndicator: '', riskIndicator: '' }
+			let newExitSignal = { sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', usersOwnIndicator: '' }
 			if(obj.criteria === 'entry') {
 				state.backtestInfo[obj.criteria].signals[obj.index] = newEntrySignal
 			}
@@ -567,9 +579,12 @@ export default new Vuex.Store({
 			state.is_admin = val.is_admin
 			state.role = val.role
 		},
-		saveUserCustomIndicator(state, val) {
-			state.userCustomIndicator = val
-		}
+		saveUsersOwnEntryFileHash(state, obj) {
+			state.usersOwnEntryFileHash[obj.index] = obj.val
+		},
+		saveUsersOwnExitFileHash(state, obj) {
+			state.usersOwnExitFileHash[obj.index] = obj.val
+		},
 	},
 	actions: {
 		Try(context, val) {

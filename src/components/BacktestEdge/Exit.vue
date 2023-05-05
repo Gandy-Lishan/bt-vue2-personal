@@ -134,7 +134,7 @@
 							:period="signals_in_market"
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
-							v-show="indicatorRadioArr[index] === 'sentiment'"
+							v-show="indicatorRadioArr[index] === 'sentiment' || indicatorRadioArr[index] === 'user'"
 						></senti>
 						<cci
 							v-bind="$attrs"
@@ -853,7 +853,7 @@ export default {
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			return indi.then((val) => {
 				if (val) {
-					if (vm.indicatorRadioArr[index] === 'sentiment') {
+					if (vm.indicatorRadioArr[index] === 'sentiment' || vm.indicatorRadioArr[index] === 'user') {
 						vm.$refs.sentiChild[index].setDesciption(index)
 						let senti = this.$refs.sentiChild[index].saveCondition(index)
 						if (!senti) {
