@@ -64,12 +64,12 @@
 				<el-form-item>
 					<el-radio
 						v-model="indicatorRadio"
-						label="Custom Indicators"
+						label="Users' Own Indicator"
 						@change="changeIndicatorChecked"
 					>
 					</el-radio>
 				</el-form-item>
-				<el-form-item prop="customIndicator">
+				<el-form-item prop="userIndicator">
 					<div class="indicatorSearchBox">
 						<el-upload
 							class="upload-demo"
@@ -86,7 +86,7 @@
 							:on-exceed="handleExceed"
 							:file-list="fileList"
 							ref="upload"
-							:disabled="!(indicatorRadio === 'Custom Indicators')"
+							:disabled="!(indicatorRadio === 'Users\' Own Indicator')"
 						>
 							<el-button
 								size="small"
@@ -117,8 +117,8 @@
 							<el-form
 								:model="form"
 								class="custom-indicator-form"
-								:rules="customIndicatorRules"
-								ref="customForm"
+								:rules="userIndicatorRules"
+								ref="userForm"
 							>
 								<el-form-item
 									label="indicator 名称"
@@ -135,10 +135,24 @@
 								<el-button @click="handleDialogClose">直接使用文件名</el-button>
 								<el-button
 									type="primary"
-									@click="handleDialogConfirm('customForm')"
+									@click="handleDialogConfirm('userForm')"
 									>确 定</el-button
 								>
 							</div>
+						</el-dialog>
+						<el-dialog
+							:title="nonBusinessTitle"
+							:visible.sync="nonBusinessDialogVisible"
+						>
+							<el-card class="box-card">
+								<div
+									v-for="item in nonBusinessDay"
+									:key="item"
+									class="text item"
+								>
+									{{ item }}
+								</div>
+							</el-card>
 						</el-dialog>
 					</div>
 				</el-form-item>
@@ -149,9 +163,17 @@
 <script>
 import SparkMD5 from 'spark-md5'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import { getIndicatorsList, csvFileDelete } from '@/service/service'
+import {
+	getIndicatorsList,
+	csvFileDelete,
+	csvFileRead,
+	getPairData
+} from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
+import { compareArrays } from '@/tools/compareArrays'
+import moment from 'moment'
+import { reject } from 'q'
 export default {
 	props: {
 		criteria: String,
@@ -184,7 +206,7 @@ export default {
 		}
 		var validateIndicatorName = (rule, value, callback) => {
 			const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
-			if (!value) {
+			if (!value && this.indicatorRadio == "Users' Own Indicator") {
 				callback(new Error('名称不能为空'))
 			} else if (!reg.test(value)) {
 				callback(new Error('必须以字母开头，并且只能够包含字母、数字和下划线'))
@@ -198,7 +220,7 @@ export default {
 				sentimentIndicator: '',
 				technicalIndicator: '',
 				riskIndicator: '',
-				customIndicator: ''
+				userIndicator: ''
 			},
 			sentimentIndicatorList: this.$store.state.sentimentIndicatorList,
 			rules: {
@@ -224,11 +246,15 @@ export default {
 				indicatorName: ''
 			},
 			formLabelWidth: '120px',
-			customIndicatorRules: {
+			userIndicatorRules: {
 				indicatorName: [{ validator: validateIndicatorName, trigger: 'blur' }],
 				dialogValid: false
 			},
-			rawMap: {} // 文件对象的 raw 属性备份
+			rawMap: {}, // 文件对象的 raw 属性备份
+			file_hash: '',
+			nonBusinessTitle: 'CSV 中非交易日的时间表',
+			nonBusinessDay: [],
+			nonBusinessDialogVisible: false
 		}
 	},
 	computed: {
@@ -519,6 +545,7 @@ export default {
 			CIQ.addIndicators()
 		},
 		handleTechnicalSelect(item) {
+			console.log('lishan handleTechnicalSelect', item)
 			this.si.technicalIndicator = item.value
 			let valObj = {}
 			valObj.index = this.panelIndex
@@ -589,6 +616,86 @@ export default {
 				CIQ.addIndicators()
 			}
 		},
+		handleUsersOwnIndicatorSelect(data) {
+			const frequency = 'Daily'
+			const indicatorName = data.file_name
+			const indicatorUrl = data.file_id
+			this.currentSentiUpdated = frequency
+			// old version only
+			var countExistIndicator = 0
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				for (var i in CIQ.store.state.builtinList) {
+					if (
+						CIQ.store.state.builtinList[i].url ==
+						CIQ.stxx.layout.studies[studyInstanceName].type
+					) {
+						countExistIndicator--
+					}
+				}
+				if (CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
+					countExistIndicator--
+				}
+				countExistIndicator++
+			}
+
+			if (countExistIndicator >= 10) {
+				CIQ.description('Maximum 10 signals can be displayed on chart')
+				return
+			}
+
+			this.si.userIndicator = indicatorName
+			let valObj = {}
+			valObj.index = this.panelIndex
+			valObj.value = indicatorName
+			this.$emit('getIndicatorVal', valObj)
+			// remove a MA tat already exists in current criteria before loading
+			var activatedMAList = this.$store.state.activatedMA
+			if (this.criteria == 'entry') {
+				// var MAListIndex = activatedMAList.findIndex(
+				// 	(item) =>
+				// 		item.url ==
+				// 		this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+				// )
+				// if (MAListIndex != -1) {
+				// 	activatedMAList.splice(MAListIndex, 1)
+				// }
+				// this.$store.commit('getMA', activatedMAList)
+				// this.$store.commit('getEntryIndicators', {
+				// 	index: this.panelIndex,
+				// 	value: indicatorUrl
+				// })
+				let obj = {}
+				obj.index = this.panelIndex
+				obj.url = indicatorUrl
+				this.$emit('getIndicatorUrl', obj)
+			} else {
+				// var MAListIndex = activatedMAList.findIndex(
+				// 	(item) =>
+				// 		item.url ==
+				// 		this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+				// )
+				// if (MAListIndex != -1) {
+				// 	activatedMAList.splice(MAListIndex, 1)
+				// }
+				// this.$store.commit('getMA', activatedMAList)
+				// this.$store.commit('getExitIndicators', {
+				// 	index: this.panelIndex,
+				// 	value: indicatorUrl
+				// })
+				let obj = {}
+				obj.index = this.panelIndex
+				obj.url = indicatorUrl
+				this.$emit('getIndicatorUrl', obj)
+			}
+			// avoid add indicator redundantly
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+				if (sd.type == indicatorUrl) {
+					return
+				}
+			}
+			CIQ.addIndicators()
+		},
 		changeIndicatorChecked(val) {
 			console.log('indicatorRadio', val)
 			this.indicatorRadio = val
@@ -597,7 +704,7 @@ export default {
 				'Sentiment Indicators',
 				'Technical Indicators',
 				'Risk Control',
-				'Custom Indicators'
+				"Users' Own Indicator"
 			]
 			const obj = {}
 			obj.criteria = this.criteria
@@ -618,7 +725,8 @@ export default {
 				this.$emit('getIndicatorRadio', radioObj)
 				this.$store.commit('getEntryIndicatorRadio', 'risk')
 			} else if (this.indicatorRadio === arr[3]) {
-				radioObj.value = 'custom'
+				radioObj.value = 'user'
+				this.$emit('getIndicatorRadio', radioObj)
 			}
 		},
 		// load short and long technical list
@@ -691,6 +799,37 @@ export default {
 					obj.index = index
 					obj.value = this.si.sentimentIndicator
 					this.$store.commit('getSentiValue', obj)
+					return checked
+				} else {
+					if (!validName) {
+						this.$message({
+							message:
+								'Please select #' +
+								(index + 1) +
+								' ' +
+								this.criteria +
+								' indicator from the drop-down box',
+							type: 'error'
+						})
+					}
+					checked = false
+					return checked
+				}
+			}
+			if (
+				this.indicatorRadio === 'Users\' Own Indicator' &&
+				!this.exitItemCheck
+			) {
+				// this.$refs.siForm.validate((valid) => {
+				// 	validForm = valid
+				// })
+				validForm = true
+				if (validForm) {
+					let obj = {}
+					obj.criteria = this.criteria
+					obj.index = index
+					obj.value = this.si.userIndicator
+					this.$store.commit('getUserValue', obj)
 					return checked
 				} else {
 					if (!validName) {
@@ -823,10 +962,15 @@ export default {
 		uploadFile(file) {
 			console.log('文件上传', file)
 			const self = this
+			let suffix = ''
 			// 创建 FormData 对象，将文件添加到 FormData 中
 
 			const formData = new FormData()
-			const suffix = /\.([a-zA-Z0-9]+)$/.exec(file.name)[1]
+			try {
+				suffix = /\.([a-zA-Z0-9]+)$/.exec(file.name)[1]
+			} catch (error) {
+				return
+			}
 			const name = file.name.replace(`.${suffix}`, '')
 			formData.append('name', name)
 			formData.append('hash', file.hash)
@@ -869,9 +1013,19 @@ export default {
 				.then((response) => {
 					// 文件上传完成后的处理逻辑
 					console.log('文件上传成功', response)
-					self.$store.commit('saveUserCustomIndicator', response.data.fileID)
+					// self.$store.commit('saveUserCustomIndicator', response.data.fileID)
 					// 还原文件对象的 raw 属性
 					self.$message.success('文件上传成功，可点击文件进行预览')
+					const obj = {}
+					obj.index = this.panelIndex
+					obj.val = response.data.file_id
+					if(self.criteria === 'entry') {
+						self.$store.commit(`saveUsersOwnEntryFileHash`, obj)
+					}
+					if(self.criteria === 'exit') {
+					self.$store.commit(`saveUsersOwnExitFileHash`, obj)
+					}
+					self.handleUsersOwnIndicatorSelect(response.data)
 					// ...
 				})
 				.catch((error) => {
@@ -905,19 +1059,20 @@ export default {
 			// 备份文件对象的 raw 属性
 			this.rawMap[file.uid] = this.rawMap[file.uid] || file.raw
 			// 发送请求删除服务器上的文件
-			const fileID = file.name.replace('.csv', '') + '_' + file.hash
+			const hash = this.file_hash || file.hash
+			const fileID = file.name.replace('.csv', '') + 'HASH' + hash
 			try {
 				await csvFileDelete(fileID)
-				const index = this.fileList.indexOf(file)
-				if (index !== -1) {
-					this.fileList.splice(index, 1)
-				}
 				// 在需要终止上传的地方调用 cancelToken.cancel() 方法
 				if (this.cancelToken) {
 					this.cancelToken.cancel()
 					console.log('取消上传')
 				}
 				console.log('删除成功')
+				const index = this.fileList.indexOf(file)
+				if (index !== -1) {
+					this.fileList.splice(index, 1)
+				}
 			} catch (error) {
 				console.log('删除失败', error)
 			}
@@ -948,31 +1103,40 @@ export default {
 			this.$message.warning('只能上传单个 indicator 文件')
 			return false
 		},
-		beforeUpload(file) {
+		async beforeUpload(file) {
 			console.log('上传前', file)
 			// 备份文件对象的 raw 属性
 			this.rawMap[file.uid] = this.rawMap[file.uid] || file.raw
 			if (!/(CSV)/i.test(file.type)) {
 				this.$message.warning('上传的文件只能是 CSV 格式')
-				return false
+				return reject('上传的文件只能是 CSV 格式')
 			}
 			const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
 			if (!reg.test(file.name.replace('.csv', ''))) {
 				this.$message.warning(
 					'文件名以字母开头，并且只能够包含字母、数字和下划线'
 				)
-				return false
+				return reject('文件名以字母开头，并且只能够包含字母、数字和下划线')
 			}
 			if (file.size === 0) {
 				this.$message.error('不能上传空文件')
-				return false
+				return reject('不能上传空文件')
 			}
 			// 限制文件上传大小 1M
 			if (file.size > 1 * 1024 * 1024) {
 				this.$message.warning('上传的文件不能超过 1MB')
-				return false
+				return reject('上传的文件不能超过 1MB')
 			}
-			this.validateCSV(file)
+			try {
+				await this.validateCSV(file)
+				await this.handleParseResult(this.csvContent)
+				this.form.indicatorName = file.name.replace('.csv', '')
+				this.fileList.push(file)
+				this.dialogFormVisible = true
+			} catch (error) {
+				console.log('error', error)
+				return reject(error)
+			}
 			return false
 		},
 		handleUploadProgress(event, uid, fileList) {
@@ -992,7 +1156,7 @@ export default {
 		},
 		handleDialogClose() {
 			console.log('弹窗关闭')
-			this.$refs['customForm'].resetFields()
+			this.$refs['userForm'].resetFields()
 			this.dialogFormVisible = false
 			const file = this.fileList[this.fileList.length - 1]
 			this.uploadFile(file)
@@ -1000,6 +1164,7 @@ export default {
 		handleDialogConfirm(formName) {
 			this.$refs[formName].validate((valid) => {
 				if (valid) {
+					console.log('this.fileList', this.fileList)
 					this.fileList.map((item) => {
 						const oldFileName = item.name
 						const newFileName = oldFileName.replace(
@@ -1011,6 +1176,7 @@ export default {
 						const blob = file.slice(0, file.size, file.type)
 						const newFile = new File([blob], newFileName, { type: file.type })
 						newFile.uid = file.uid
+						newFile.hash = this.file_hash
 						this.fileList.splice(-1, 1, newFile)
 						this.dialogValid = true
 						this.dialogFormVisible = false
@@ -1025,17 +1191,20 @@ export default {
 			this.$refs[formName].resetFields()
 			this.dialogFormVisible = false
 		},
-		validateCSV(file) {
-			return new Promise((resolve, reject) => {
+		async validateCSV(file) {
+			const self = this
+			return await new Promise((resolve, reject) => {
 				// 限制字段
 				let isDateFormat = true
 				let isNumFormat = true
 				let isNotEmpty = true
+				self.csvContent = []
 				const reader = new FileReader()
 				reader.onload = (e) => {
 					const content = e.target.result
 					const hash = SparkMD5.hashBinary(reader.result)
 					file.hash = hash
+					self.file_hash = hash
 					const rows = content.trim().split('\n')
 					const headers = rows[0].trim().split(',')
 
@@ -1077,12 +1246,11 @@ export default {
 								// parser.pause()
 								return
 							}
-							return
+							self.csvContent.push(row)
 							// parser.resume()
 						},
-						complete: (results) => {
-							console.log(results.data)
-							// 在这里执行上传操作，仅上传符合要求的数据
+						complete: function () {
+							// resolve(csvContent)
 						},
 						error: (error) => {
 							reject(error)
@@ -1096,7 +1264,13 @@ export default {
 					// 获取 CSV 文件的字段顺序
 					const fieldOrder = lines[0].trim().split(',')
 					const isOrdered = this.validateCSVFieldOrder(fieldOrder)
-					if (isVerified && isOrdered && isDateFormat && isNumFormat && isNotEmpty) {
+					if (
+						isVerified &&
+						isOrdered &&
+						isDateFormat &&
+						isNumFormat &&
+						isNotEmpty
+					) {
 						// this.progress = 0 // 每次上传前重置进度为0
 						// this.fileList.push({
 						// 	uid: file.uid,
@@ -1104,47 +1278,44 @@ export default {
 						// 	progress: 0, // 进度初始化为 0
 						// 	status: 'uploading' // 状态设置为上传中
 						// })
-						this.form.indicatorName = file.name.replace('.csv', '')
-						this.dialogFormVisible = true
-						this.fileList.push(file)
+						// this.form.indicatorName = file.name.replace('.csv', '')
+						// this.fileList.push(file)
+						// this.dialogFormVisible = true
 						resolve(file)
 					} // 校验通过，允许上传
-					if(!isNotEmpty) {
+					if (!isNotEmpty) {
 						this.$message.warning(
 							`上传的csv文件为空, 请检查表头和表内容是否存在`
 						)
-						reject(new Error('上传的CSV文件为空, 请检查表头和表内容是否存在'))
-						return
+						return reject(
+							new Error('上传的CSV文件为空, 请检查表头和表内容是否存在')
+						)
 					}
 					if (!isVerified) {
-						reject(new Error('CSV字段校验失败'))
-						return
+						return reject(new Error('CSV字段校验失败'))
 					}
 					if (!isOrdered) {
-						reject(new Error('CSV字段顺序错误'))
-						return
+						return reject(new Error('CSV字段顺序错误'))
 					}
 					if (!isDateFormat) {
 						this.$message.warning(
 							`文件 Date 列数据格式错误，应为 yyyy-MM-dd, 如 2023-04-20`
 						)
-						reject(
+						return reject(
 							new Error(
 								`文件 Date 列数据格式错误，应为 yyyy-MM-dd, 如 2023-04-20`
 							)
 						)
-						return
 					}
 					if (!isNumFormat) {
 						this.$message.warning(
 							`文件 Close 列数据格式错误，应为数字，最多保存小数点后两位, 如 45.55`
 						)
-						reject(
+						return reject(
 							new Error(
 								`文件 Close 列数据格式错误，应为数字，最多保存小数点后两位, 如 45.55`
 							)
 						)
-						return
 					}
 				}
 				reader.readAsText(file)
@@ -1184,6 +1355,56 @@ export default {
 				}
 			}
 			return true
+		},
+		async handleParseResult(data) {
+			console.log('处理过的结果', data)
+			// 按照时间排序
+			const sortedRows = data.sort(
+				(a, b) => moment(a.data.Date) - moment(b.data.Date)
+			)
+			// 获取 Date 列的数据
+			const dateData = sortedRows.map((row) => row.data.Date)
+			// 计算时间间隔
+			const startDate = dateData[0]
+			const endDate = dateData[dateData.length - 1]
+			const frequency = this.frequency.toLowerCase()
+			if (frequency !== 'daily') {
+				this.$message.warning(
+					`只能上传 daily 的 CSV, 请把 Timeframe 设置成 Daily 再上传`
+				)
+				return Promise.reject(
+					`只能上传 daily 的 CSV, 请把 Timeframe 设置成 Daily 再上传`
+				)
+			}
+			const res = await getPairData(startDate, endDate, frequency)
+			const pairDataDate = res.data.map((item) => {
+				const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+				if (dateRegex.test(item.DT)) {
+					const dateObj = new Date(item.DT)
+					const formattedDate = dateObj.toISOString().slice(0, 10)
+					return formattedDate
+				} else {
+					console.log('Invalid date format')
+					this.$message.warning(`不合法的日期格式`)
+					return Promise.reject(`不合法的日期格式`)
+				}
+			})
+			const isDiffDateArr = compareArrays(dateData, pairDataDate)
+			if (isDiffDateArr === true) {
+				// 用户上传的 Date 和 pairData 的 Date 一致
+				return Promise.resolve(true)
+			} else {
+				const diffDateArr = Array.from(isDiffDateArr)
+				this.$message.warning(
+					`只能上传 daily 的 CSV, 请确认 CSV 中未包含非交易日，如周末、法定节假日`
+				)
+				console.log('上传的 CSV 中, 以下时间是非交易日', diffDateArr)
+				this.nonBusinessDay = diffDateArr
+				this.nonBusinessDialogVisible = true
+				return Promise.reject(
+					`只能上传 daily 的 CSV, 请确认 CSV 中未包含非交易日，如周末、法定节假日`
+				)
+			}
 		}
 	}
 }
@@ -1234,6 +1455,22 @@ export default {
 	margin-left: 20px;
 }
 .upload-indicator-btn {
+	width: 100%;
+}
+.text {
+	font-size: 14px;
+}
+
+.clearfix:before,
+.clearfix:after {
+	display: table;
+	content: '';
+}
+.clearfix:after {
+	clear: both;
+}
+
+.box-card {
 	width: 100%;
 }
 </style>
