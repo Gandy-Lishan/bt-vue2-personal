@@ -1,11 +1,11 @@
 // symbol indicator input box
 <template>
 	<div class="senti-container">
-		<el-form :model="tech" ref="symbolForm">
+		<el-form :model="sym" ref="symbolForm">
 			<div class="condition-container">
-				<el-form-item>
+				<!-- <el-form-item>
 					<el-select 
-						v-model="tech.rocCondition"
+						v-model="sym.rocCondition"
 						placeholder="Please select condition"
 						@change="SymbolConditionChange"
 					>
@@ -17,11 +17,20 @@
 						>
 						</el-option>
 					</el-select>
+				</el-form-item> -->
+				<el-form-item>
+					<el-radio 
+						class='condition-radio'
+						v-model="symVal"
+						:label="symVal"
+						@change="getConditionRadio"
+					>
+					</el-radio>
 				</el-form-item>
 				<div class="conditionSelect new">
 					<el-form-item>
 						<el-select
-							v-model="tech.newCondition"
+							v-model="sym.newCondition"
 							class='newCond'
 							filterable
 							placeholder="Please select condition"
@@ -41,7 +50,7 @@
 					<el-form-item prop="value">
 						<el-input
 							@input="calculateNewConditions"
-							v-model="tech.conditionPeriod"
+							v-model="sym.conditionPeriod"
 							placeholder="Condition Period"
 						></el-input>
 					</el-form-item>
@@ -49,7 +58,7 @@
 				<div class="conditionSelect" v-show="isROCLike">
 					<el-form-item>
 						<el-select
-							v-model="tech.condition"
+							v-model="sym.condition"
 							filterable
 							placeholder="Please select condition"
 						>
@@ -67,7 +76,7 @@
 					<el-form-item prop="value">
 						 
 						<el-input
-							v-model="tech.value"
+							v-model="sym.value"
 							placeholder="Input Value"
 						></el-input>
 					</el-form-item>
@@ -84,8 +93,8 @@ export default {
 	name: 'symbol',
 	props: {
 		criteria: String,
-		techUrl: String,
-		techVal: String,
+		symUrl: String,
+		symVal: String,
 		panelIndex: Number,
 		direction: String,
 		exitItemCheck: Boolean,
@@ -106,7 +115,7 @@ export default {
 				{ value: 4, obj: {label:'Symbol Volume',field:'Volume'} },
 			],
 			//preload: false,
-			tech: {
+			sym: {
 				ids: 'CCI',
 				comparison: 'CCI',
 				condition: 3,
@@ -141,7 +150,7 @@ export default {
 			this.isROCLike = 5<=val && val<=7
 			// 如果不是ROC类型，则这两个condition值一致
 			if(!this.isROCLike){
-				this.tech.condition = this.tech.newCondition
+				this.sym.condition = this.sym.newCondition
 
 				let indicator_url = this.$store.state.indicators.formIndicators[this.criteria][this.panelIndex]
 				if(indicator_url){
@@ -182,9 +191,9 @@ export default {
 		},
 		setDesciption(index) {
 			let rocCond = {
-				'newCondition':this.tech.newCondition,
-				'conditionPeriod':this.tech.conditionPeriod,
-				'rocCondition':this.tech.rocCondition
+				'newCondition':this.sym.newCondition,
+				'conditionPeriod':this.sym.conditionPeriod,
+				'rocCondition':this.sym.rocCondition
 			}
 			let criteria = ''
 			let direction = ''
@@ -240,10 +249,10 @@ export default {
 				}
 
 			}
-			let period = this.tech.period ? this.tech.period : ''
-			let condition = this.conditions[this.tech.condition].label
-			let techVal = this.techVal ? this.techVal : this.editTechVal
-			this.description = `${techVal} ${period} ${condition} ${this.tech.value}`
+			let period = this.sym.period ? this.sym.period : ''
+			let condition = this.conditions[this.sym.condition].label
+			let symVal = this.symVal ? this.symVal : this.editTechVal
+			this.description = `${symVal} ${period} ${condition} ${this.sym.value}`
 
 					let desObj = {}
 					desObj.criteria = this.criteria
@@ -268,33 +277,38 @@ export default {
 		calculateNewConditions(){
 			if(!this.isROCLike) return
 
-			// let indicator_url = this.$store.state.indicators.formIndicators[this.criteria][this.panelIndex]
-			// if(indicator_url){
-				// for (var studyInstanceName in CIQ.stxx.layout.studies) {
-				// 	if (
-				// 		CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url
-				// 	) {
-				// 		// 添加ROCLike（包括修改study）前先清除已有的
-				// 		CIQ.Studies.removeStudy(
-				// 			CIQ.stxx,
-				// 			CIQ.stxx.layout.studies[studyInstanceName]
-				// 		)
-				// 	}
-				// }
+			if(this.symUrl){
+				const fieldName = this.ROCConditions.find(item=>item.obj.label==this.symUrl).obj.field
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					console.log(CIQ.stxx.layout.studies[studyInstanceName])
+					if (
+						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName
+					) {
+						// 添加ROCLike（包括修改study）前先清除已有的
+						if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST ROCLike'){
+							CIQ.Studies.removeStudy(
+								CIQ.stxx,
+								CIQ.stxx.layout.studies[studyInstanceName]
+							)
+						}
+
+					}
+				}
 				const conditionMap = new Map([
 					[5, {name:'Rate Of Change',abbr:'ROC'}],
 					[6, {name:'Range Of Rank',abbr:'ROR'}],
 					[7, {name:'MA Ratio',abbr:'MA'}]
 				])
-				const fieldName = this.ROCConditions.find(item=>item.value==this.tech.rocCondition).obj.field
-				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'Symbol Close', {
-					display: conditionMap.get(this.tech.newCondition).name,
+
+				
+				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+					display: conditionMap.get(this.sym.newCondition).name,
 					Field: fieldName,
-					condition:conditionMap.get(this.tech.newCondition).abbr,
-					period:this.tech.conditionPeriod
+					condition:conditionMap.get(this.sym.newCondition).abbr,
+					period:this.sym.conditionPeriod
 				})
 				console.log(sd)
-			//}
+			}
 		},
 		saveCondition(index) {
 			let checked = true
@@ -306,11 +320,11 @@ export default {
 					}
 				})
 				if (validForm) {
-					let tech = JSON.parse(JSON.stringify(this.tech))
-					tech.criteria = this.criteria
-					tech.index = index
+					let sym = JSON.parse(JSON.stringify(this.sym))
+					sym.criteria = this.criteria
+					sym.index = index
 					// 定义一个 vuex 新事件用于保存 condition数据
-					this.$store.commit('saveCondition', tech)
+					this.$store.commit('saveCondition', sym)
 					return checked
 				} else {
 					checked = false
@@ -326,15 +340,15 @@ export default {
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				// test在samebar(relation 2/3)的情况下
 				let cond = newVal[this.criteria].cond[(this.relation==2||this.relation==3)?this.panelIndex+1:this.panelIndex]
-				this.tech.condition = Number(obj.condition)
-				this.tech.value = obj.value
-				this.tech.comparison = obj.comparison
+				this.sym.condition = Number(obj.condition)
+				this.sym.value = obj.value
+				this.sym.comparison = obj.comparison
 
-				this.tech.newCondition = Number(cond.newCondition)?Number(cond.newCondition):this.tech.condition
-				this.tech.conditionPeriod = cond.conditionPeriod?cond.conditionPeriod:''
-				this.tech.rocCondition = Number(cond.rocCondition)?Number(cond.rocCondition):0
+				this.sym.newCondition = Number(cond.newCondition)?Number(cond.newCondition):this.sym.condition
+				this.sym.conditionPeriod = cond.conditionPeriod?cond.conditionPeriod:''
+				this.sym.rocCondition = Number(cond.rocCondition)?Number(cond.rocCondition):0
 				this.editTechVal = obj.indicator
-				this.ROCLikeChange(this.tech.newCondition)
+				this.ROCLikeChange(this.sym.newCondition)
 			}
 		}
 	}
