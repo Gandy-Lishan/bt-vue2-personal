@@ -150,8 +150,8 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
-							:techUrl="indicatorUrlArr[index]"
-							:techVal="indicatorValArr[index]"
+							:symUrl="indicatorUrlArr[index]"
+							:symVal="indicatorValArr[index]"
 							v-show="indicatorRadioArr[index] === 'symbol'"
 						></symbol-indi>
 						<cci
@@ -715,7 +715,7 @@ export default {
 			this.indicatorUrlArr.splice(obj.index, 1, obj.url)
 		},
 		getIndicatorVal(obj) {
-			this.techVal = obj.value
+			this.techVal = obj.value	// 可能没用到
 			this.indicatorValArr.splice(obj.index, 1, obj.value)
 		},
 		getTechIndiValue(val) {
@@ -1070,13 +1070,8 @@ export default {
 				}
 				if (data.entry.signals[j].analysis === 'Technical') {
 					this.indicatorValArr[j] = data.entry.signals[j].indicator
-
 					this.indicatorRadio = 'technical'
-					if(data.entry.signals[j].indicator=="Symbol Close"){
-						this.indicatorRadioArr.splice(j, 1, 'symbol')
-					}else{
-						this.indicatorRadioArr.splice(j, 1, 'technical')
-					}
+					this.indicatorRadioArr.splice(j, 1, 'technical')
 
 					formateTechnicalList = this.$store.state.formateTechnicalList
 					let indicatorName = data.entry.signals[j].indicator

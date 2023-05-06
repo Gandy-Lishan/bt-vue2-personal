@@ -728,6 +728,7 @@ export default {
 							}
 							signalEntryList = backtestData.entry.signals
 							signalExitList = backtestData.exit.signals
+							// todo symbol analysis
 							signalEntryList.forEach((item) => {
 								if (item.sentimentIndicator) {
 									item.indicator = item.sentimentIndicator
