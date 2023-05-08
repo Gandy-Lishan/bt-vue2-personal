@@ -156,7 +156,7 @@
 							placeholder="Please select condition"
 						>
 							<el-option
-								v-for="item in conditions"Q
+								v-for="item in conditions"
 								:key="item.value"
 								:label="item.label"
 								:value="item.value"
