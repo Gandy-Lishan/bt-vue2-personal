@@ -705,13 +705,13 @@ export default {
 				if(res!=-1){
 					//拿进场价格和前一天作比较
 					let entryPrice = chartDataset[res].Open
-					let exitIn5Bar = chartDataset[res+5]?((direction=='Short'?entryPrice-chartDataset[res+5].Open:chartDataset[res+5].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn10Bar = chartDataset[res+10]?((direction=='Short'?entryPrice-chartDataset[res+10].Open:chartDataset[res+10].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn21Bar = chartDataset[res+21]?((direction=='Short'?entryPrice-chartDataset[res+21].Open:chartDataset[res+21].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn42Bar = chartDataset[res+42]?((direction=='Short'?entryPrice-chartDataset[res+42].Open:chartDataset[res+42].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn63Bar = chartDataset[res+63]?((direction=='Short'?entryPrice-chartDataset[res+63].Open:chartDataset[res+63].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn126Bar = chartDataset[res+126]?((direction=='Short'?entryPrice-chartDataset[res+126].Open:chartDataset[res+126].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn252Bar = chartDataset[res+252]?((direction=='Short'?entryPrice-chartDataset[res+252].Open:chartDataset[res+252].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
+					let exitIn5Bar = chartDataset[res+5]?((direction=='Short'?entryPrice-chartDataset[res+5].Open:chartDataset[res+5].Open-entryPrice)/entryPrice*100).toFixed(2):''
+					let exitIn10Bar = chartDataset[res+10]?((direction=='Short'?entryPrice-chartDataset[res+10].Open:chartDataset[res+10].Open-entryPrice)/entryPrice*100).toFixed(2):''
+					let exitIn21Bar = chartDataset[res+21]?((direction=='Short'?entryPrice-chartDataset[res+21].Open:chartDataset[res+21].Open-entryPrice)/entryPrice*100).toFixed(2):''
+					let exitIn42Bar = chartDataset[res+42]?((direction=='Short'?entryPrice-chartDataset[res+42].Open:chartDataset[res+42].Open-entryPrice)/entryPrice*100).toFixed(2):''
+					let exitIn63Bar = chartDataset[res+63]?((direction=='Short'?entryPrice-chartDataset[res+63].Open:chartDataset[res+63].Open-entryPrice)/entryPrice*100).toFixed(2):''
+					let exitIn126Bar = chartDataset[res+126]?((direction=='Short'?entryPrice-chartDataset[res+126].Open:chartDataset[res+126].Open-entryPrice)/entryPrice*100).toFixed(2):''
+					let exitIn252Bar = chartDataset[res+252]?((direction=='Short'?entryPrice-chartDataset[res+252].Open:chartDataset[res+252].Open-entryPrice)/entryPrice*100).toFixed(2):''
 					backtestResult.push({
 						'12 Months [%]': exitIn252Bar,
 						'Entry Date': dataSet[data].Date,
@@ -814,7 +814,7 @@ export default {
 		},
 		calculate_win_rate(arr){
 			let return_series = arr.map(x=>x>0?1:0)
-			return parseFloat(this.calculate_mean(return_series).toFixed(1))
+			return parseFloat(this.calculate_mean(return_series)).toFixed(1)
 		},
 		calculate_mean(arr){
 			return arr.reduce((a, b) => a + b) / arr.length;
@@ -823,27 +823,27 @@ export default {
 			arr = arr.filter(n => !isNaN(n))
 			const mid = Math.floor(arr.length / 2);
 			const nums = [...arr].sort((a, b) => a - b);
-			return parseFloat((arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2).toFixed(1));
+			return parseFloat(arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2).toFixed(1);
 		},
 		generate_period_data(quotes,period,direction){
 			const field = 'Open'
 			quotes = quotes.map((row, i) => {
-					if(i<quotes.length-period){
-						//const change = parseFloat((100 * (quotes[i + period][field] / row[field] - 1)).toFixed(1))
-						const change = parseFloat(((direction=='Short'?row[field]-quotes[i + period][field]:quotes[i + period][field]-row[field])/row[field]*100).toFixed(1))
-						return {
-							...row,
-							[field + period]: quotes[i + period][field],
-							[this.period_dict[period]]: change == Infinity ? 0 : change
-						}
-					}else{
-						return {
-							...row,
-							[field + period]: NaN,
-							[this.period_dict[period]]: NaN
-						};
+				if(i<quotes.length-period){
+					//const change = parseFloat((100 * (quotes[i + period][field] / row[field] - 1)).toFixed(1))
+					const change = parseFloat(((direction=='Short'?row[field]-quotes[i + period][field]:quotes[i + period][field]-row[field])/row[field]*100).toFixed(1))
+					return {
+						...row,
+						[field + period]: quotes[i + period][field],
+						[this.period_dict[period]]: change == Infinity ? 0 : change
 					}
-				});
+				}else{
+					return {
+						...row,
+						[field + period]: NaN,
+						[this.period_dict[period]]: NaN
+					};
+				}
+			});
 			const minCloseArr = this.get_period_parm(quotes.map(row => row[field + period]), "min", period);
 			const maxCloseArr = this.get_period_parm(quotes.map(row => row[field + period]), "max", period);
 			quotes = quotes.map((row, i) => {
@@ -889,7 +889,7 @@ export default {
 
 			for (let i = 0; i < dataSeries.length; i++) {
 			  if (i >= period) {
-				const tmpData = typeDict[paramType](...(dataSeries.slice(i - period, i + 1).filter(n => !isNaN(n))));
+				const tmpData = typeDict[paramType](...(dataSeries.slice(i - period, i).filter(n => !isNaN(n))));
 				dataArr.push(Number(tmpData.toFixed(3)));
 			  } else {
 				dataArr.push(NaN);
