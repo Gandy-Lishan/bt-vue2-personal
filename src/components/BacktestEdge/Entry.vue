@@ -812,7 +812,6 @@ export default {
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			// Trigger saving events of different components according to sentiment and different technical
 			return indi.then((val) => {
-				console.log('senti',val)
 				// Trigger saving events of different components according to sentiment and different technical
 				if (val) {
 					if (vm.indicatorRadioArr[index] === 'sentiment') {
@@ -1092,7 +1091,7 @@ export default {
 			let length = data.entry.signals.length
 			for (let j = 0; j < length; j++) {
 				this.$refs.indiChild[j].setEditData(data)
-				console.log(this.indicatorRadioArr[j])
+				this.indicatorRadioArr[j] = 'symbol'
 				if (this.indicatorRadioArr[j] === 'sentiment') {
 					this.$refs.sentiChild[j].setEditData(data)
 				}

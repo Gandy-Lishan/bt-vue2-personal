@@ -726,6 +726,36 @@ class EncodeSI {
 	}
 }
 
+// symbol ohlcv encode
+class EncodeSO {
+	encode(obj) {
+		var keys = Object.keys(obj)
+		if (!this.check(obj)) return false
+		return (
+			'SO:' +
+			obj['indicator'] +
+			';IDS:EO' +
+			obj['extreme_optimism'] +
+			'/EP' +
+			obj['extreme_pessimism'] +
+			';SC:' +
+			obj['comparison'] +
+			'/' +
+			obj['condition'] +
+			'/' +
+			obj['value']
+		)
+	}
+	check(obj) {
+		var keys = Object.keys(obj)
+		if (keys.indexOf('analysis') === -1) return false
+
+		if (obj['analysis'] !== 'Symbol') return false
+
+		return true
+	}
+}
+
 class EncodeTI {
 	encode(obj) {
 		if (!this.check(obj)) return false

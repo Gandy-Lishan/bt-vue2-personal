@@ -735,6 +735,7 @@ export default {
 									item.analysis = 'Sentiment'
 									delete item.technicalIndicator
 									delete item.sentimentIndicator
+									delete item.symbolIndicator
 									delete item.riskIndicator
 								}
 								if (item.technicalIndicator) {
@@ -742,6 +743,15 @@ export default {
 									item.analysis = 'Technical'
 									delete item.technicalIndicator
 									delete item.sentimentIndicator
+									delete item.symbolIndicator
+									delete item.riskIndicator
+								}
+								if (item.symbolIndicator) {
+									item.indicator = item.symbolIndicator
+									item.analysis = 'Symbol'
+									delete item.technicalIndicator
+									delete item.sentimentIndicator
+									delete item.symbolIndicator
 									delete item.riskIndicator
 								}
 							})
@@ -752,6 +762,7 @@ export default {
 										item.analysis = 'Sentiment'
 										delete item.technicalIndicator
 										delete item.sentimentIndicator
+										delete item.symbolIndicator
 										delete item.riskIndicator
 									}
 									if (item.technicalIndicator) {
@@ -759,6 +770,15 @@ export default {
 										item.analysis = 'Technical'
 										delete item.technicalIndicator
 										delete item.sentimentIndicator
+										delete item.symbolIndicator
+										delete item.riskIndicator
+									}
+									if (item.symbolIndicator) {
+										item.indicator = item.symbolIndicator
+										item.analysis = 'Symbol'
+										delete item.technicalIndicator
+										delete item.sentimentIndicator
+										delete item.symbolIndicator
 										delete item.riskIndicator
 									}
 									if (item.riskIndicator) {
@@ -781,9 +801,11 @@ export default {
 							}
 
 							let entrySignal = backtestData.entry.signals.map((item) => {
+								// 在 sentiment indicator list内检索url
 								let signal = CIQ.indicatorList.find((i) => {
 									return i.chart_name == item.indicator
 								})
+								// 在 technical indicator list内检索url
 								if (!signal) {
 									for (let i = 0; i < formateTechnicalList.length; i++) {
 										if (formateTechnicalList[i].value == item.indicator) {
@@ -791,8 +813,15 @@ export default {
 										}
 									}
 								}
+								// 在 technical indicator list内检索url
+								if (!signal) {
+									if(this.$store.state.symbolConditions.findIndex(i=>i.label==item.indicator) !== -1){
+										return item.indicator
+									}
+								}
 								return signal.url
 							})
+							
 							let exitSignal
 							if (!this.isOnlyRisk) {
 								exitSignal = backtestData.exit.signals.map((item) => {
@@ -811,14 +840,16 @@ export default {
 							} else {
 								exitSignal = ['']
 							}
-							delete backtestData.entry.signals
+							delete backtestData.entry.signals	
 							for (let i = 0; i < signalEntryList.length; i++) {
 								let code = b.encode(signalEntryList[i])
 								var singal = {
 									code: code
 								}
 								entry_signal_list.push(singal)
+								
 							}
+							console.log(signalEntryList,entry_signal_list)
 							delete backtestData.exit.signals
 							if (!this.isOnlyRisk) {
 								for (var i in signalExitList) {
@@ -1042,6 +1073,7 @@ export default {
 					}
 				}
 			} catch (error) {
+				console.log('抓取error:',error)
 				this.$notify({
 					title: 'Failed',
 					message: 'The internal server is busy, please try again later',

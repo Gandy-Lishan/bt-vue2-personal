@@ -1,32 +1,9 @@
 // symbol indicator input box
 <template>
 	<div class="senti-container">
-		<el-form :model="sym" ref="symbolForm">
+		<el-form :model="sym" :rules="rules" ref="symbolForm">
 			<div class="condition-container">
-				<!-- <el-form-item>
-					<el-select 
-						v-model="sym.rocCondition"
-						placeholder="Please select condition"
-						@change="SymbolConditionChange"
-					>
-						<el-option
-							v-for="item in ROCConditions"
-							:key="item.value"
-							:label="item.obj.label"
-							:value="item.value"
-						>
-						</el-option>
-					</el-select>
-				</el-form-item> -->
-				<el-form-item>
-					<el-radio 
-						class='condition-radio'
-						v-model="symVal"
-						:label="symVal"
-						@change="getConditionRadio"
-					>
-					</el-radio>
-				</el-form-item>
+				<el-form-item :label="symVal"></el-form-item>
 				<div class="conditionSelect new">
 					<el-form-item>
 						<el-select
@@ -105,24 +82,30 @@ export default {
 		tabLength: Number,
 	},
 	data() {
+		var validateValue = (rule, value, callback) => {
+	        if (value === '') {
+				callback(new Error('Please input value'))
+			} else if (isNaN(value)) {
+				callback(new Error('Please enter the correct format'))
+			} else {
+				const pattern =
+					/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+				if (!pattern.test(value) && value != 0) {
+					callback(new Error('Enter up to two decimal places'))
+				} else {
+					callback()
+				}
+			}
+		}
 		return {
 			isROCLike: false,
-			ROCConditions : [
-				{ value: 0, obj: {label:'Symbol Open',field:'Open'} },
-				{ value: 1, obj: {label:'Symbol High',field:'High'} },
-				{ value: 2, obj: {label:'Symbol Low',field:'Low'} },
-				{ value: 3, obj: {label:'Symbol Close',field:'Close'} },
-				{ value: 4, obj: {label:'Symbol Volume',field:'Volume'} },
-			],
 			//preload: false,
 			sym: {
-				ids: 'CCI',
-				comparison: 'CCI',
+				comparison: 'SO',
 				condition: 3,
 				newCondition: 3,
 				value: '',
 				conditionPeriod: '5',
-				rocCondition: 0,
 			},
 			newConditions: [
 				{ value: 0, label: '>' },
@@ -143,29 +126,32 @@ export default {
 			],
 			description: '',
 			editTechVal: '',
+			rules: {
+				value: [{ validator: validateValue, trigger: 'blur' }],
+			}
 		}
 	},
 	methods: {
 		ROCLikeChange(val){
 			this.isROCLike = 5<=val && val<=7
+			console.log(this.isROCLike,val)
 			// 如果不是ROC类型，则这两个condition值一致
 			if(!this.isROCLike){
 				this.sym.condition = this.sym.newCondition
 
-				let indicator_url = this.$store.state.indicators.formIndicators[this.criteria][this.panelIndex]
-				if(indicator_url){
-					for (var studyInstanceName in CIQ.stxx.layout.studies) {
-						console.log(indicator_url,CIQ.stxx.layout.studies[studyInstanceName])
-						if (
-							CIQ.stxx.layout.studies[studyInstanceName].type == indicator_url
-						) {
-							// 在切换回非ROClike后清除ROCLike indicator
-							if(studyInstanceName.indexOf('‌ST MA‌')!=-1) continue
+				const fieldName = this.$store.state.symbolConditions.find(item=>item.label==this.symUrl).field
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					if (
+						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName
+					) {
+						// 添加ROCLike（包括修改study）前先清除已有的
+						if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST ROCLike'){
 							CIQ.Studies.removeStudy(
 								CIQ.stxx,
 								CIQ.stxx.layout.studies[studyInstanceName]
 							)
 						}
+
 					}
 				}
 			}
@@ -193,7 +179,6 @@ export default {
 			let rocCond = {
 				'newCondition':this.sym.newCondition,
 				'conditionPeriod':this.sym.conditionPeriod,
-				'rocCondition':this.sym.rocCondition
 			}
 			let criteria = ''
 			let direction = ''
@@ -278,9 +263,8 @@ export default {
 			if(!this.isROCLike) return
 
 			if(this.symUrl){
-				const fieldName = this.ROCConditions.find(item=>item.obj.label==this.symUrl).obj.field
+				const fieldName = this.$store.state.symbolConditions.find(item=>item.label==this.symUrl).field
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
-					console.log(CIQ.stxx.layout.studies[studyInstanceName])
 					if (
 						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName
 					) {
@@ -346,7 +330,6 @@ export default {
 
 				this.sym.newCondition = Number(cond.newCondition)?Number(cond.newCondition):this.sym.condition
 				this.sym.conditionPeriod = cond.conditionPeriod?cond.conditionPeriod:''
-				this.sym.rocCondition = Number(cond.rocCondition)?Number(cond.rocCondition):0
 				this.editTechVal = obj.indicator
 				this.ROCLikeChange(this.sym.newCondition)
 			}

@@ -129,6 +129,13 @@ export default {
 				callback()
 			}
 		}
+		var validateSym = (rule, value, callback) => {
+			if (!value && this.indicatorRadio == 'Symbol Indicators') {
+				callback(new Error('Please choose symbol ohlcv'))
+			} else {
+				callback()
+			}
+		}
 		var validateRisk = (rule, value, callback) => {
 			if (!value && this.indicatorRadio == 'Risk Indicators') {
 				callback(new Error('Please choose risk indicator'))
@@ -155,6 +162,7 @@ export default {
 			rules: {
 				sentimentIndicator: [{ validator: validateSenti, trigger: 'change' }],
 				technicalIndicator: [{ validator: validateTech, trigger: 'change' }],
+				symbolIndicator: [{ validator: validateSym, trigger: 'change' }],
 				riskIndicator: [{ validater: validateRisk, trigger: 'change' }]
 			},
 			fileList: [
@@ -707,8 +715,7 @@ export default {
 				}
 			}
 			if (
-				(this.indicatorRadio === 'Technical Indicators' || 
-				this.indicatorRadio === 'Symbol Indicators') &&
+				this.indicatorRadio === 'Technical Indicators' &&
 				!this.exitItemCheck
 			) {
 				this.$refs.siForm.validate((valid) => {
@@ -731,6 +738,50 @@ export default {
 					obj.index = index
 					obj.value = this.si.technicalIndicator
 					this.$store.commit('getTechValue', obj)
+					return checked
+				} else {
+					if (!validName) {
+						this.$message({
+							message:
+								'Please select #' +
+								(index + 1) +
+								' ' +
+								this.criteria +
+								' indicator from the drop-down box',
+							type: 'error',
+							offset: 300
+						})
+					}
+					checked = false
+					return checked
+				}
+			}
+			if (
+				this.indicatorRadio === 'Symbol Indicators' &&
+				!this.exitItemCheck
+			) {
+				this.$refs.siForm.validate((valid) => {
+					validForm = valid
+				})
+				console.log('validForm',validForm)
+				// let formateList = this.$store.state.formateTechnicalList
+				// if (formateList.length === 0) {
+				// 	formateList = this.loadShortLong()
+				// }
+				
+				// for (let i = 0; i < formateList.length; i++) {
+				// 	if (this.si.technicalIndicator === formateList[i].value) {
+				// 		validName = true
+				// 		break
+				// 	}
+				// }
+				validName = true
+				if (validForm && validName) {
+					let obj = {}
+					obj.criteria = this.criteria
+					obj.index = index
+					obj.value = this.si.symbolIndicator
+					this.$store.commit('getSymValue', obj)
 					return checked
 				} else {
 					if (!validName) {
