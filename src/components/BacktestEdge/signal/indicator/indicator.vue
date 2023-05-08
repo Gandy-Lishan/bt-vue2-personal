@@ -173,7 +173,6 @@ import Papa from 'papaparse'
 import axios from 'axios'
 import { compareArrays } from '@/tools/compareArrays'
 import moment from 'moment'
-import { reject } from 'q'
 export default {
 	props: {
 		criteria: String,
@@ -949,6 +948,24 @@ export default {
 							}
 						}
 					}
+					if (newVal[this.criteria].signals[index].analysis === 'User') {
+						vm.indicatorRadio = 'Users\' Own Indicator'
+						let userIndicator =
+							newVal[this.criteria].signals[index].indicator
+						vm.si.userIndicator = userIndicator
+						let formateList = this.$store.state.formateTechnicalList
+						// if (formateList.length === 0) {
+						// 	formateList = vm.loadShortLong()
+						// }
+						// for (let i = 0; i < formateList.length; i++) {
+						// 	if (technicalIndicator === formateList[i].value) {
+						// 		let obj = formateList[i]
+						// 		let isFromEdit = true
+						// 		vm.handleTechnicalSelect(obj, isFromEdit)
+						// 		break
+						// 	}
+						// }
+					}
 				}
 			} catch (error) {
 				this.$notify({
@@ -1015,7 +1032,7 @@ export default {
 					console.log('文件上传成功', response)
 					// self.$store.commit('saveUserCustomIndicator', response.data.fileID)
 					// 还原文件对象的 raw 属性
-					self.$message.success('文件上传成功，可点击文件进行预览')
+					self.$message.success('File uploaded successfully. You can click on the file to preview it.')
 					const obj = {}
 					obj.index = this.panelIndex
 					obj.val = response.data.file_id
@@ -1033,7 +1050,7 @@ export default {
 					console.log('文件上传失败', error)
 					// 清空文件列表
 					self.$refs.upload.clearFiles()
-					self.$message.success('文件上传失败')
+					self.$message.success('File upload failed.')
 
 					// ...
 				})
@@ -1100,7 +1117,7 @@ export default {
 		},
 		handleExceed(files, fileList) {
 			console.log('处理超出', file)
-			this.$message.warning('只能上传单个 indicator 文件')
+			this.$message.warning('Only single indicator files can be uploaded.')
 			return false
 		},
 		async beforeUpload(file) {
@@ -1108,24 +1125,24 @@ export default {
 			// 备份文件对象的 raw 属性
 			this.rawMap[file.uid] = this.rawMap[file.uid] || file.raw
 			if (!/(CSV)/i.test(file.type)) {
-				this.$message.warning('上传的文件只能是 CSV 格式')
-				return reject('上传的文件只能是 CSV 格式')
+				this.$message.warning('The uploaded file must be in CSV format.')
+				return reject('The uploaded file must be in CSV format.')
 			}
 			const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
 			if (!reg.test(file.name.replace('.csv', ''))) {
 				this.$message.warning(
-					'文件名以字母开头，并且只能够包含字母、数字和下划线'
+					'The file name must start with a letter and can only contain letters, numbers, and underscores.'
 				)
-				return reject('文件名以字母开头，并且只能够包含字母、数字和下划线')
+				return reject('The file name must start with a letter and can only contain letters, numbers, and underscores.')
 			}
 			if (file.size === 0) {
-				this.$message.error('不能上传空文件')
-				return reject('不能上传空文件')
+				this.$message.error('Empty files cannot be uploaded.')
+				return reject('Empty files cannot be uploaded.')
 			}
 			// 限制文件上传大小 1M
 			if (file.size > 1 * 1024 * 1024) {
-				this.$message.warning('上传的文件不能超过 1MB')
-				return reject('上传的文件不能超过 1MB')
+				this.$message.warning('The uploaded file cannot exceed 1MB.')
+				return reject('The uploaded file cannot exceed 1MB.')
 			}
 			try {
 				await this.validateCSV(file)
@@ -1285,35 +1302,35 @@ export default {
 					} // 校验通过，允许上传
 					if (!isNotEmpty) {
 						this.$message.warning(
-							`上传的csv文件为空, 请检查表头和表内容是否存在`
+							`The uploaded CSV file is empty. Please check if the table header and table content are present.`
 						)
 						return reject(
-							new Error('上传的CSV文件为空, 请检查表头和表内容是否存在')
+							new Error('The uploaded CSV file is empty. Please check if the table header and table content are present.')
 						)
 					}
 					if (!isVerified) {
-						return reject(new Error('CSV字段校验失败'))
+						return reject(new Error('CSV field validation failed.'))
 					}
 					if (!isOrdered) {
-						return reject(new Error('CSV字段顺序错误'))
+						return reject(new Error('CSV field order is incorrect.'))
 					}
 					if (!isDateFormat) {
 						this.$message.warning(
-							`文件 Date 列数据格式错误，应为 yyyy-MM-dd, 如 2023-04-20`
+							`The Date column data format in the file is incorrect. It should be in yyyy-MM-dd format, for example: 2023-04-20.`
 						)
 						return reject(
 							new Error(
-								`文件 Date 列数据格式错误，应为 yyyy-MM-dd, 如 2023-04-20`
+								`The Date column data format in the file is incorrect. It should be in yyyy-MM-dd format, for example: 2023-04-20.`
 							)
 						)
 					}
 					if (!isNumFormat) {
 						this.$message.warning(
-							`文件 Close 列数据格式错误，应为数字，最多保存小数点后两位, 如 45.55`
+							`The Close column data format in the file is incorrect. It should be a number with up to two decimal places, for example: 45.55.`
 						)
 						return reject(
 							new Error(
-								`文件 Close 列数据格式错误，应为数字，最多保存小数点后两位, 如 45.55`
+								`The Close column data format in the file is incorrect. It should be a number with up to two decimal places, for example: 45.55.`
 							)
 						)
 					}
@@ -1328,12 +1345,12 @@ export default {
 			const errors = []
 			data.forEach((row, index) => {
 				if (!row.Date || !row.Close) {
-					errors.push(`第 ${index + 1} 行字段校验未通过`)
+					errors.push(`Field validation failed for row ${index + 1}.`)
 				}
 			})
 			if (errors.length > 0) {
 				// 如果有错误，显示错误信息
-				this.$message.warning('字段名称校验未通过')
+				this.$message.warning('Field name validation failed.')
 				return false
 			}
 			return true
@@ -1350,7 +1367,7 @@ export default {
 					nextIndex !== -1 &&
 					currentIndex > nextIndex
 				) {
-					this.$message.warning('字段顺序校验未通过')
+					this.$message.warning('Field order validation failed.')
 					return false
 				}
 			}
@@ -1370,10 +1387,10 @@ export default {
 			const frequency = this.frequency.toLowerCase()
 			if (frequency !== 'daily') {
 				this.$message.warning(
-					`只能上传 daily 的 CSV, 请把 Timeframe 设置成 Daily 再上传`
+					`Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
 				)
 				return Promise.reject(
-					`只能上传 daily 的 CSV, 请把 Timeframe 设置成 Daily 再上传`
+					`Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
 				)
 			}
 			const res = await getPairData(startDate, endDate, frequency)
@@ -1385,8 +1402,8 @@ export default {
 					return formattedDate
 				} else {
 					console.log('Invalid date format')
-					this.$message.warning(`不合法的日期格式`)
-					return Promise.reject(`不合法的日期格式`)
+					this.$message.warning(`Invalid date format.`)
+					return Promise.reject(`Invalid date format.`)
 				}
 			})
 			const isDiffDateArr = compareArrays(dateData, pairDataDate)
@@ -1396,13 +1413,13 @@ export default {
 			} else {
 				const diffDateArr = Array.from(isDiffDateArr)
 				this.$message.warning(
-					`只能上传 daily 的 CSV, 请确认 CSV 中未包含非交易日，如周末、法定节假日`
+					`Only daily CSV files can be uploaded. Please ensure that the CSV file does not contain non-trading days such as weekends and public holidays.`
 				)
 				console.log('上传的 CSV 中, 以下时间是非交易日', diffDateArr)
 				this.nonBusinessDay = diffDateArr
 				this.nonBusinessDialogVisible = true
 				return Promise.reject(
-					`只能上传 daily 的 CSV, 请确认 CSV 中未包含非交易日，如周末、法定节假日`
+					`Only daily CSV files can be uploaded. Please ensure that the CSV file does not contain non-trading days such as weekends and public holidays.`
 				)
 			}
 		}

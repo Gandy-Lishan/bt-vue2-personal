@@ -1118,7 +1118,7 @@ export default {
 			for (let j = 0; j < length; j++) {
 				this.$refs.indiChild[j].setEditData(data)
 				this.$refs.indiChild[j].setEditData(data)
-				if (this.indicatorRadioArr[j] === 'sentiment') {
+				if (this.indicatorRadioArr[j] === 'sentiment' || this.indicatorRadioArr[j] === 'user') {
 					this.$refs.sentiChild[j].setEditData(data)
 				}
 				if (this.indicatorRadioArr[j] === 'technical') {
