@@ -1,12 +1,11 @@
 // Summary & Trades
 <template>
 	<div class="perfprmance-container">
-		<p class="hint">Hint: Markers on the chart point to the buy/sell trade dates on the open <b>ONE</b> bar after entry/exit criteria met.</p>
-		<el-tabs
-			v-model="activePerTag"
-			type="card"
-			v-loading="loading"
-		>
+		<p class="hint">
+			Hint: Markers on the chart point to the buy/sell trade dates on the open
+			<b>ONE</b> bar after entry/exit criteria met.
+		</p>
+		<el-tabs v-model="activePerTag" type="card" v-loading="loading">
 			<el-tab-pane label="Summary" name="first">
 				<div class="summaryContainer">
 					<el-table :data="tableData" style="width: 100%">
@@ -264,7 +263,15 @@
 					</el-table>
 				</div>
 				<div class="imgBox">
-					<div v-if="!returnImgUrl && !drawDownImgUrl && !monthReturnImgUrl && !annualReturnImgUrl" style="text-align: left;">
+					<div
+						v-if="
+							!returnImgUrl &&
+							!drawDownImgUrl &&
+							!monthReturnImgUrl &&
+							!annualReturnImgUrl
+						"
+						style="text-align: left"
+					>
 						<el-empty image-size="80" description="No Data"></el-empty>
 					</div>
 					<div class="benchmarkReturnImg">
@@ -322,11 +329,11 @@
 							align="center"
 							show-overflow-tooltip
 						>
-						<template slot-scope="scope">
-							<div v-for="(item, index) in scope.row.Indicator" :key="index">
-								<p>{{item}}</p>
-							</div>
-						</template>
+							<template slot-scope="scope">
+								<div v-for="(item, index) in scope.row.Indicator" :key="index">
+									<p>{{ item }}</p>
+								</div>
+							</template>
 						</el-table-column>
 						<el-table-column
 							prop="TradePrice"
@@ -370,23 +377,24 @@
 								>
 							</template>
 						</el-table-column>
-						<div slot="empty" style="text-align: left;">
+						<div slot="empty" style="text-align: left">
 							<el-empty image-size="80" description="No Data"></el-empty>
 						</div>
 					</el-table>
 					<div class="pagination-container">
-						
-					<span style="font-size: 13px;font-weight:400;margin-right: 10px">Total  {{totalTradesNumber}}</span>
-				   <el-pagination
-					@current-change="handleCurrentChange"
-					:current-page="queryInfo.page"
-					:page-size="20"
-					layout="prev, pager, next,slot"
-					:total="queryInfo.total"
-				    >
-				</el-pagination>
+						<span style="font-size: 13px; font-weight: 400; margin-right: 10px"
+							>Total {{ totalTradesNumber }}</span
+						>
+						<el-pagination
+							@current-change="handleCurrentChange"
+							:current-page="queryInfo.page"
+							:page-size="20"
+							layout="prev, pager, next,slot"
+							:total="queryInfo.total"
+						>
+						</el-pagination>
 					</div>
-				<!-- <el-pagination
+					<!-- <el-pagination
 				background
 				layout="prev, pager, next"
 				:total="queryInfo.total"
@@ -394,9 +402,19 @@
 				</el-pagination> -->
 				</div>
 			</el-tab-pane>
-			<el-tab-pane label="Exit with different Time-In-Market frame" name="third">
+			<el-tab-pane
+				label="Exit with different Time-In-Market frame"
+				name="third"
+			>
 				<div class="trades-container">
-					<p>The results below provide a multiple timeframe view of the backtest of the indicator and index that you have chosen. The 'Exit Criteria' selected for the backtest is not used for the results below. Instead, we provide a look at various time-frames from 1-Week to 1-Year of returns.</p>
+					<p>
+						The results below provide a multiple timeframe view of the backtest
+						of the indicator and index that you have chosen. The 'Exit Criteria'
+						selected for the backtest is not used for the results below.
+						Instead, we provide a look at various time-frames from 1-Week to
+						1-Year of returns.
+					</p>
+
 					<div class="history-container">
 						<el-skeleton :rows="6" :loading="loading" animated>
 							<template>
@@ -409,11 +427,7 @@
 								>
 									<div v-if="defaultTableLabels.length > 0">
 										<template v-for="(l, index) in defaultTableLabels">
-											<el-table-column
-												:label="l"
-												:prop="l"
-												:key="index"
-											>
+											<el-table-column :label="l" :prop="l" :key="index">
 												<template slot-scope="scope">
 													<p class="tableText">
 														{{ scope.row[l] }}
@@ -422,7 +436,7 @@
 											</el-table-column>
 										</template>
 									</div>
-									<div slot="empty" style="text-align: left;">
+									<div slot="empty" style="text-align: left">
 										<el-empty image-size="80" description="No Data"></el-empty>
 									</div>
 								</el-table>
@@ -430,10 +444,14 @@
 						</el-skeleton>
 					</div>
 				</div>
-			</el-tab-pane>			
+			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
 			
 		</el-tabs>
+					
+		<div class="downLoadCsvBtn">
+				<el-button @click="handleDownloadCsv" style="display: inline-block;" type="info" icon="el-icon-download">Download CSV</el-button>
+			</div>
 	</div>
 </template>
 <script>
@@ -442,383 +460,460 @@ import jutils from 'jutils-src'
 import { seeReport } from '@/service/service'
 
 export default {
-	data() {
-		return {
-			activePerTag: 'first',
-			tableData: [],
-			returnImgUrl: '',
-			drawDownImgUrl: '',
-			monthReturnImgUrl: '',
-			annualReturnImgUrl: '',
-			loading: false,
-			tradesData: [],
-			queryInfo: {
-				total: 0,
-				page: 1
-			},
-			totalTradesNumber: 0,
-			splitTradeData: [],
-			defaultTableLabels: [
-				'12 Months [%]',
-				'Entry Date',
-				'1 Week [%]',
-				'2 Weeks [%]',
-				'1 Month [%]',
-				'2 Months [%]',
-				'3 Months [%]',
-				'6 Months [%]',	
-			],
-			backtestHistoryList: []
-		}
-	},
-	created() {
-		this.getResultData({ id: 0 })
-	},
-	methods: {
+  data() {
+    return {
+      activePerTag: 'first',
+      tableData: [],
+      returnImgUrl: '',
+      drawDownImgUrl: '',
+      monthReturnImgUrl: '',
+      annualReturnImgUrl: '',
+      loading: false,
+      tradesData: [],
+      queryInfo: {
+        total: 0,
+        page: 1
+      },
+      totalTradesNumber: 0,
+      splitTradeData: [],
+      defaultTableLabels: [
+        '12 Months [%]',
+        'Entry Date',
+        '1 Week [%]',
+        '2 Weeks [%]',
+        '1 Month [%]',
+        '2 Months [%]',
+        '3 Months [%]',
+        '6 Months [%]',
+      ],
+      backtestHistoryList: []
+    }
+  },
+  created() {
+    this.getResultData({ id: 0 })
+  },
+  methods: {
 
-		async getResultData(row,callback) {
-			
-			let vm = this
-			let initalData = {}
-			let data = {}
-			// 清空performance表单
-			vm.clearPerformanceData()
-			if (!row.id) {
+    async getResultData(row, callback) {
+
+      let vm = this
+      let initalData = {}
+      let data = {}
+      // 清空performance表单
+      vm.clearPerformanceData()
+      if (!row.id) {
+        return
+      }
+
+      if (row.status != 0) {
+        if (this.$store.state.favoriteBacktestRowData.id) {
+          let id = row.id
+          try {
+
+            const res = await seeReport(id)
+
+            if (res.status == 200) {
+              if (typeof res.data == "string") {
+                initalData = JSON.parse(res.data)
+              } else {
+                initalData = res.data
+              }
+
+              // -------------------------------------  start ----------------
+              const tradeReturn = initalData['Each Return']
+              data.uuid = initalData['UUID']
+              data.symbol = initalData['Symbol']
+              data.frequency = initalData['Frequency']
+              data.totalTrades = initalData['Total Trades']
+              data.totalPositive = initalData['Total Positive']
+              data.totalNegative = initalData['Total Negative']
+              data.scratch = initalData['Scratch']
+              data.averageWin = initalData['Average Win %']
+              data.averageLoss = initalData['Average Loss %']
+              data.medianGain = initalData['Median Gain']
+              data.medianLoss = initalData['Median Loss']
+              data.averageReturn = initalData['Average Return']
+              data.medianReturn = initalData['Median Return']
+              data.buyHoldGain = initalData['BuyHoldGain']
+              data.winRate = initalData['Win Rate']
+              data.timeInMarket = initalData['Time in Market']
+              data.totalReturn = initalData['Total Return (%)']
+              data.tzScore = initalData['Z-score']
+              data.standardDeviation = initalData['Standard Deviation']
+              data.s3_status_response = initalData['s3_status_response']
+              data.cagr = initalData['CAGR']
+              data.annual_volatiltiy = initalData['annual_volatiltiy']
+              data.calmar_ratio = initalData['calmar_ratio']
+              data.sortino_ratio = initalData['sortino_ratio']
+              data.tail_ratio = initalData['tail_ratio']
+              data.var = initalData['VAR']
+              data.capture = initalData['capture']
+              data.alpha = initalData['alpha']
+              data.beta = initalData['beta']
+              data.information_ratio = initalData['information_ratio']
+              data.sharpeRatio = initalData['Sharpe Ratio']
+              data.drawDown = initalData['DrawDown']
+              data.drawDownPeriod = initalData['DrawDown Period']
+              data.drawDownImageUploaded = initalData['DrawDown Image Uploaded']
+              data.ddFileURL = initalData['DD File URL']
+              data.returnsImageUploaded = initalData['Returns Image Uploaded']
+              data.returnsFileURL = initalData['Returns File URL']
+              data.annualReturnsImageUploaded =
+                initalData['Annual Returns Image Uploaded']
+              data.annualReturnsFileURL = initalData['Annual Returns File URL']
+              data.returnsheatmapImageUploadedURL =
+                initalData['Returns Heatmap Image Uploaded']
+              data.returnsHeatmapFileURL =
+                initalData['Returns Heatmap File URL']
+              data.CAGR = initalData['CAGR']
+              vm.tableData = []
+              if (initalData['Trades']) {
+                // 有交易才填表单
+                vm.tableData.push(data)
+                vm.returnImgUrl = data.returnsFileURL
+                vm.drawDownImgUrl = data.ddFileURL
+                vm.monthReturnImgUrl = data.returnsHeatmapFileURL
+                vm.annualReturnImgUrl = data.annualReturnsFileURL
+                for (let i = 0; i < initalData['Trades'].length; i++) {
+                  if (i % 2 == 0) {
+                    initalData['Trades'][i].trade_number = i / 2
+                    initalData['Trades'][i + 1].trade_number = i / 2
+                  }
+                }
+
+                for (let i = 0; i < initalData['Trades'].length; i++) {
+                  initalData['Trades'][i].TradeReturn =
+                    tradeReturn[initalData['Trades'][i].trade_number]
+                  if (i % 2 !== 0) {
+                    initalData['Trades'][i - 1].Return =
+                      initalData['Trades'][i].Return
+
+                  }
+                }
+                vm.queryInfo.total = initalData['Trades'].length
+                vm.totalTradesNumber = (initalData['Trades'].length) / 2
+                vm.handleCurrentChange(1)
+                vm.tradesData = initalData['Trades']
+
+                // 保存tradesdata到store
+                this.$store.commit('getTradesData', vm.tradesData)
+                // 根据entrydate计算未来收益
+                this.backtestHistoryList = this.calculateBacktestHistory(vm.tradesData)
+              }
+
+              // ---------------------------------------- end ----------------------------------
+              // ----------------------- backtest result-------------------------------
+
+              this.$emit('setBacktestResult', initalData['basic'])
+              // ------------------------------ end -----------------------------------
+
+            }
+          } catch (error) {
+            console.error('服务器报错', error)
+            vm.tableData = []
+            vm.tradesData = []
+            vm.$emit('errorCatchPerformance')
+          }
+        }
+      } else {
+        console.error('row status is ', row.status)
+      }
+      setTimeout(() => {
+        if (initalData.markerSet) {
+          this.loadMarker(initalData.markerSet)
+        }
+        if (callback) { callback() }
+      }, 0)
+    },
+    calculateBacktestHistory(dataSet) {
+      let chartDataset = CIQ.stxx.chart.dataSet
+      const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
+      dataSet = dataSet.filter(item => item.TradeStatus == 'BUY')
+      let backtestResult = []
+      for (var data in dataSet) {
+        var datatime = new Date(dataSet[data].Date)
+
+        var offset = datatime.getTimezoneOffset() * 60 * 1000
+        var entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
+
+        let res = chartDataset.findIndex(x => {
+          return entryDate.getTime() == x.DT.getTime()
+        })
+
+        if (res != -1) {
+          //拿进场价格和前一天作比较
+          let entryPrice = chartDataset[res].Open
+          let exitIn5Bar = chartDataset[res + 5] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 5].Open : chartDataset[res + 5].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
+          let exitIn10Bar = chartDataset[res + 10] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 10].Open : chartDataset[res + 10].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
+          let exitIn21Bar = chartDataset[res + 21] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 21].Open : chartDataset[res + 21].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
+          let exitIn42Bar = chartDataset[res + 42] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 42].Open : chartDataset[res + 42].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
+          let exitIn63Bar = chartDataset[res + 63] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 63].Open : chartDataset[res + 63].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
+          let exitIn126Bar = chartDataset[res + 126] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 126].Open : chartDataset[res + 126].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
+          let exitIn252Bar = chartDataset[res + 252] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 252].Open : chartDataset[res + 252].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
+          backtestResult.push({
+            '12 Months [%]': exitIn252Bar,
+            'Entry Date': dataSet[data].Date,
+            '1 Week [%]': exitIn5Bar,
+            '2 Weeks [%]': exitIn10Bar,
+            '1 Month [%]': exitIn21Bar,
+            '2 Months [%]': exitIn42Bar,
+            '3 Months [%]': exitIn63Bar,
+            '6 Months [%]': exitIn126Bar,
+          })
+        }
+      }
+      return backtestResult
+    },
+    getSummaries(param) {
+      const { columns, data } = param
+
+      const sums = [] //声明变量
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = 'Average'
+          return
+        }
+        // if (index === 1) {
+        // 	return
+        // }
+        const values = data.map((item) => {
+          return Number(
+            item[column.property].slice(0, item[column.property].length - 1)
+          )
+        })
+        let totalCount = 0 // 求平均数使用
+        sums[index] = values.reduce((prev, curr) => {
+          const value = Number(curr)
+          if (!isNaN(value) && value != 0) {
+            totalCount++
+            return prev + curr
+          } else {
+            return prev
+          }
+        }, 0)
+
+        sums[index] = sums[index] / totalCount
+
+        // ***********演示完要删**************************************
+        // if(this.rowData && this.rowData.Symbol=='WWW' && sums[index]<0){
+        //   sums[index] = -sums[index]
+        // }
+        // *****************************************************
+
+        sums[index] = sums[index].toFixed(2)
+        sums[index] = sums[index] + ' %'
+      })
+      return sums
+    },
+    loadMarker(markerSet) {
+      try {
+
+        //load markers for initial quotefeed
+
+        let list = this.filterMarkerDate(
+          new Date(CIQ.initialDate.start),
+          new Date(CIQ.initialDate.end),
+          markerSet
+        )
+        CIQ.isMarkerShown = true
+
+        // split the markers into several groups
+        CIQ.groups = this.group(list)
+        let markers = CIQ.groups.pop()
+
+        // if the last groups has no enough number of items, merge it with the last one
+        //console.log('CIQ.stxx.chart.xaxis[0]',CIQ.stxx.chart.xaxis[0])
+        let c_date = jutils.formatDate(CIQ.stxx.chart.xaxis[0].DT, 'YYYYMMDD');
+        if (CIQ.groups.slice(-1)[0]) {
+          let m_date =
+            CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
+            CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
+            CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
+          if (c_date < m_date) {
+            markers.unshift(...CIQ.groups.pop())
+          }
+        }
+        console.log('initiating Markers...', markers)
+        CIQ.loadChart(markers, CIQ.addMarker)
+      } catch (error) {
+        console.error(error)
+        return
+      }
+    },
+    group(data) {
+      var result = [];
+      var groupItem;
+      for (var i = 0; i < data.length; i++) {
+        if (i % 500 == 0) {
+          groupItem != null && result.push(groupItem);
+          groupItem = [];
+        }
+        groupItem.push(data[i]);
+      }
+      result.push(groupItem);
+      return result;
+    },
+    filterMarkerDate(start_date, end_date, markerSet) {
+      let list = []
+      let _date = {
+        start: jutils.formatDate(start_date, 'YYYYMMDD'),
+        end: jutils.formatDate(end_date, 'YYYYMMDD')
+      }
+      for (var date in markerSet) {
+        let markerSetDate =
+          markerSet[date].DT.slice(0, 4) +
+          markerSet[date].DT.slice(5, 7) +
+          markerSet[date].DT.slice(8, 10)
+        if (markerSetDate > _date.start && markerSetDate <= _date.end) {
+          list.push(markerSet[date])
+        }
+      }
+      return list
+    },
+    clearPerformanceData() {
+      this.tableData = []
+      this.tradesData = []
+      //splitTradeData和backtestHistoryList也要清空
+      this.splitTradeData = []
+      this.backtestHistoryList = []
+      this.returnImgUrl = ''
+      this.drawDownImgUrl = ''
+      this.monthReturnImgUrl = ''
+      this.annualReturnImgUrl = ''
+    },
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex === 0) {
+        if (rowIndex % 2 === 0) {
+          return {
+            rowspan: 2,
+            colspan: 1
+          }
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+      }
+      if (columnIndex === 5) {
+        if (rowIndex % 2 === 0) {
+          return {
+            rowspan: 2,
+            colspan: 1
+          }
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+      }
+      if (columnIndex === 6) {
+        if (rowIndex % 2 === 0) {
+          return {
+            rowspan: 2,
+            colspan: 1
+          }
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+      }
+    },
+    handleCurrentChange(page) {
+      this.queryInfo.page = page
+      this.$nextTick(() => {
+        this.splitTradeData = this.tradesData.slice(20 * (this.queryInfo.page - 1), this.queryInfo.page * 20)
+      })
+    },
+    handleDownloadCsv() {
+			if(!(this.tableData.length && this.splitTradeData.length && this.backtestHistoryList.length)) {
+				this.$message.warning('No data available for download.')
 				return
 			}
-			
-			if (row.status != 0) {
-				if (this.$store.state.favoriteBacktestRowData.id) {
-					let id = row.id
-					try {
-						
-						const res = await seeReport(id)
-						
-						if (res.status == 200) {
-							if (typeof res.data == "string") {
-								initalData = JSON.parse(res.data)
-							}else{
-								initalData = res.data
-							}
-							
-							// -------------------------------------  start ----------------
-							const tradeReturn = initalData['Each Return']
-							data.uuid = initalData['UUID']
-							data.symbol = initalData['Symbol']
-							data.frequency = initalData['Frequency']
-							data.totalTrades = initalData['Total Trades']
-							data.totalPositive = initalData['Total Positive']
-							data.totalNegative = initalData['Total Negative']
-							data.scratch = initalData['Scratch']
-							data.averageWin = initalData['Average Win %']
-							data.averageLoss = initalData['Average Loss %']
-							data.medianGain = initalData['Median Gain']
-							data.medianLoss = initalData['Median Loss']
-							data.averageReturn = initalData['Average Return']
-							data.medianReturn = initalData['Median Return']
-							data.buyHoldGain = initalData['BuyHoldGain']
-							data.winRate = initalData['Win Rate']
-							data.timeInMarket = initalData['Time in Market']
-							data.totalReturn = initalData['Total Return (%)']
-							data.tzScore = initalData['Z-score']
-							data.standardDeviation = initalData['Standard Deviation']
-							data.s3_status_response = initalData['s3_status_response']
-							data.cagr = initalData['CAGR']
-							data.annual_volatiltiy = initalData['annual_volatiltiy']
-							data.calmar_ratio = initalData['calmar_ratio']
-							data.sortino_ratio = initalData['sortino_ratio']
-							data.tail_ratio = initalData['tail_ratio']
-							data.var = initalData['VAR']
-							data.capture = initalData['capture']
-							data.alpha = initalData['alpha']
-							data.beta = initalData['beta']
-							data.information_ratio = initalData['information_ratio']
-							data.sharpeRatio = initalData['Sharpe Ratio']
-							data.drawDown = initalData['DrawDown']
-							data.drawDownPeriod = initalData['DrawDown Period']
-							data.drawDownImageUploaded = initalData['DrawDown Image Uploaded']
-							data.ddFileURL = initalData['DD File URL']
-							data.returnsImageUploaded = initalData['Returns Image Uploaded']
-							data.returnsFileURL = initalData['Returns File URL']
-							data.annualReturnsImageUploaded =
-								initalData['Annual Returns Image Uploaded']
-							data.annualReturnsFileURL = initalData['Annual Returns File URL']
-							data.returnsheatmapImageUploadedURL =
-								initalData['Returns Heatmap Image Uploaded']
-							data.returnsHeatmapFileURL =
-								initalData['Returns Heatmap File URL']
-							data.CAGR = initalData['CAGR']
-							vm.tableData = []
-							if(initalData['Trades']){
-								// 有交易才填表单
-								vm.tableData.push(data)
-								vm.returnImgUrl = data.returnsFileURL
-								vm.drawDownImgUrl = data.ddFileURL
-								vm.monthReturnImgUrl = data.returnsHeatmapFileURL
-								vm.annualReturnImgUrl = data.annualReturnsFileURL
-								for (let i = 0; i < initalData['Trades'].length; i++) {
-									if (i % 2 == 0) {
-										initalData['Trades'][i].trade_number = i / 2
-										initalData['Trades'][i + 1].trade_number = i / 2
-									}
-								}
-
-								for (let i = 0; i < initalData['Trades'].length; i++) {
-									initalData['Trades'][i].TradeReturn =
-										tradeReturn[initalData['Trades'][i].trade_number]
-									if (i % 2 !== 0) {
-										initalData['Trades'][i - 1].Return =
-											initalData['Trades'][i].Return
-
-									}
-								}
-								vm.queryInfo.total = initalData['Trades'].length
-								vm.totalTradesNumber = (initalData['Trades'].length)/2
-								vm.handleCurrentChange(1)
-								vm.tradesData = initalData['Trades']
-								
-								// 保存tradesdata到store
-								this.$store.commit('getTradesData',vm.tradesData)
-								// 根据entrydate计算未来收益
-								this.backtestHistoryList = this.calculateBacktestHistory(vm.tradesData)	
-							}
-
-							// ---------------------------------------- end ----------------------------------
-							// ----------------------- backtest result-------------------------------
-
-							this.$emit('setBacktestResult', initalData['basic'])
-							// ------------------------------ end -----------------------------------
-
-						}
-					} catch (error) {
-						console.error('服务器报错', error)
-						vm.tableData = []
-						vm.tradesData = []
-						vm.$emit('errorCatchPerformance')
-					}
-				}
-			}else{
-				console.error('row status is ',row.status)
-			}
-			setTimeout(() => {
-				if(initalData.markerSet){
-					this.loadMarker(initalData.markerSet)
-				}
-				if(callback){callback()}
-			}, 0)
-		},
-		calculateBacktestHistory(dataSet){
-			let chartDataset = CIQ.stxx.chart.dataSet
-			const direction = dataSet[0].TradeStatus=='BUY'?'Long':'Short'
-			dataSet = dataSet.filter(item=>item.TradeStatus=='BUY')
-			let backtestResult = []
-			for (var data in dataSet) {
-				var datatime = new Date(dataSet[data].Date)
-				
-				var offset = datatime.getTimezoneOffset() * 60 * 1000
-				var entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
-				
-				let res = chartDataset.findIndex(x=>{
-					return entryDate.getTime()==x.DT.getTime()
-				})
-				
-				if(res!=-1){
-					//拿进场价格和前一天作比较
-					let entryPrice = chartDataset[res].Open
-					let exitIn5Bar = chartDataset[res+5]?((direction=='Short'?entryPrice-chartDataset[res+5].Open:chartDataset[res+5].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn10Bar = chartDataset[res+10]?((direction=='Short'?entryPrice-chartDataset[res+10].Open:chartDataset[res+10].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn21Bar = chartDataset[res+21]?((direction=='Short'?entryPrice-chartDataset[res+21].Open:chartDataset[res+21].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn42Bar = chartDataset[res+42]?((direction=='Short'?entryPrice-chartDataset[res+42].Open:chartDataset[res+42].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn63Bar = chartDataset[res+63]?((direction=='Short'?entryPrice-chartDataset[res+63].Open:chartDataset[res+63].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn126Bar = chartDataset[res+126]?((direction=='Short'?entryPrice-chartDataset[res+126].Open:chartDataset[res+126].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					let exitIn252Bar = chartDataset[res+252]?((direction=='Short'?entryPrice-chartDataset[res+252].Open:chartDataset[res+252].Open-entryPrice)/entryPrice*100).toFixed(2)+' %':''
-					backtestResult.push({
-						'12 Months [%]': exitIn252Bar,
-						'Entry Date': dataSet[data].Date,
-						'1 Week [%]': exitIn5Bar,
-						'2 Weeks [%]': exitIn10Bar,
-						'1 Month [%]': exitIn21Bar,
-						'2 Months [%]': exitIn42Bar,
-						'3 Months [%]': exitIn63Bar,
-						'6 Months [%]': exitIn126Bar,
-					})
-				}
-			}
-			return backtestResult
-		},
-		getSummaries(param) {
-			const { columns, data } = param
-
-			const sums = [] //声明变量
-			columns.forEach((column, index) => {
-				if (index === 0) {
-					sums[index] = 'Average'
-					return
-				}
-				// if (index === 1) {
-				// 	return
-				// }
-				const values = data.map((item) => {
-					return Number(
-						item[column.property].slice(0, item[column.property].length - 1)
-					)
-				})
-				let totalCount = 0 // 求平均数使用
-				sums[index] = values.reduce((prev, curr) => {
-					const value = Number(curr)
-					if (!isNaN(value) && value != 0) {
-						totalCount++
-						return prev + curr
-					} else {
-						return prev
-					}
-				}, 0)
-
-				sums[index] = sums[index] / totalCount
-
-				// ***********演示完要删**************************************
-				// if(this.rowData && this.rowData.Symbol=='WWW' && sums[index]<0){
-				//   sums[index] = -sums[index]
-				// }
-				// *****************************************************
-
-				sums[index] = sums[index].toFixed(2)
-				sums[index] = sums[index] + ' %'
+      const summary = []
+      this.tableData.forEach((item, index) => {
+        const obj = {}
+        obj['TOTAL RETURN %'] = isNaN(item.totalReturn) ? 0 : `${item.totalReturn}%`
+        obj['Annual Return % (CAGR)'] = isNaN(item.CAGR) ? 0 : `${item.CAGR}%`
+        obj['MEDIAN RETURN %'] = isNaN(item.medianReturn) ? 0 : `${item.medianReturn}%`
+        obj['AVERAGE RETURN %'] = isNaN(item.averageReturn) ? 0 : `${item.averageReturn}%`
+        obj['Z_SCORE'] = isNaN(item.tzScore) ? 0 : `${item.tzScore}`
+        obj['STD. DEV'] = isNaN(item.standardDeviation) ? 0 : `${item.standardDeviation}`
+        obj['BUY & HOLD %'] = isNaN(item.buyHoldGain) ? 0 : `${item.buyHoldGain}%`
+        obj['WIN RATE %'] = isNaN(item.winRate) ? 0 : `${item.winRate}%`
+        obj['AVERAGE WIN %'] = isNaN(item.averageWin) ? 0 : `${item.averageWin}%`
+        obj['AVERAGE LOSS %'] = isNaN(item.averageLoss) ? 0 : `${item.averageLoss}%`
+        obj['MAX RISK %'] = isNaN(item.drawDown) ? 0 : `${item.drawDown}%`
+        obj['TOTAL TRADES'] = isNaN(item.totalTrades) ? 0 : `${item.totalTrades}`
+        obj['TOTAL POSITIVE'] = isNaN(item.totalPositive) ? 0 : `${item.totalPositive}`
+        obj['TOTAL NEGATIVE'] = isNaN(item.totalNegative) ? 0 : `${item.totalNegative}`
+        obj['TIME IN MARKET %'] = isNaN(item.timeInMarket) ? 0 : `${item.timeInMarket}%`
+        summary.push(obj)
+      })
+      const tradeData = []
+      this.splitTradeData.forEach((item, index) => {
+        const obj = {}
+        obj['Trade #'] = index + 1
+        obj['Trade Date'] = item.Date
+        obj['Action'] = item.TradeStatus
+        obj['Indicator'] = item.Indicator.join(',')
+        obj['Trade Price'] = item.TradePrice
+        obj['Trade Return %'] = `${item.TradeReturn}%`
+        obj['Total Return %'] = `${item.Return}%`
+        tradeData.push(obj)
+      })
+			const backtestHistoryList = []
+      this.backtestHistoryList.forEach(item => {
+				const obj = {}
+				obj['Entry Date'] = item['Entry Date']
+				obj['1 Week [%]'] = item['1 Week [%]']
+				obj['2 Weeks [%]'] = item['2 Weeks [%]']
+				obj['1 Month [%]'] = item['1 Month [%]']
+				obj['2 Months [%]'] = item['2 Months [%]']
+				obj['3 Months [%]'] = item['3 Months [%]']
+				obj['6 Months [%]'] = item['6 Months [%]']
+				obj['12 Months [%]'] = item['12 Months [%]']
+				backtestHistoryList.push(obj)
 			})
-			return sums
-		},
-		loadMarker(markerSet) {
-			try {
-				
-				//load markers for initial quotefeed
-					
-				let list = this.filterMarkerDate(
-					new Date(CIQ.initialDate.start),
-					new Date(CIQ.initialDate.end),
-					markerSet
-				)
-				CIQ.isMarkerShown = true
+      const data = [{ content: summary, label: 'Summary' }, { content: tradeData, label: 'Trades' }, { content: backtestHistoryList, label: 'Exit with different Time-In-Market frame' }]
+      data.forEach((item) => {
+        const fileName = `${item.label}.csv`
+        this.exportCsv(item.content, fileName);
+      })
+    },
+    exportCsv(data, fileName) {
+      const header = Object.keys(data[0]).join(",") + "\n";
+      const csv = header + data.map(row => Object.values(row).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
 
-				// split the markers into several groups
-				CIQ.groups = this.group(list)
-				let markers = CIQ.groups.pop()
-
-				// if the last groups has no enough number of items, merge it with the last one
-				//console.log('CIQ.stxx.chart.xaxis[0]',CIQ.stxx.chart.xaxis[0])
-				let c_date = jutils.formatDate(CIQ.stxx.chart.xaxis[0].DT, 'YYYYMMDD');
-				if(CIQ.groups.slice(-1)[0]){
-					let m_date =
-							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
-							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
-							CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
-					if(c_date<m_date){
-						markers.unshift(...CIQ.groups.pop()) 
-					}
-				}
-				console.log('initiating Markers...',markers)
-				CIQ.loadChart(markers, CIQ.addMarker)
-			} catch (error) {
-				console.error(error)
-				return
-			}
-		},
-		group(data) {
-			var result = [];
-			var groupItem;
-			for (var i = 0; i < data.length; i++) {
-				if (i % 500 == 0) {
-					groupItem != null && result.push(groupItem);
-					groupItem = [];
-				}
-				groupItem.push(data[i]);
-			}
-			result.push(groupItem);
-			return result;
-		},
-		filterMarkerDate(start_date, end_date, markerSet) {
-			let list = []
-			let _date = {
-				start: jutils.formatDate(start_date, 'YYYYMMDD'),
-				end: jutils.formatDate(end_date, 'YYYYMMDD')
-			}
-			for (var date in markerSet) {
-				let markerSetDate =
-					markerSet[date].DT.slice(0, 4) +
-					markerSet[date].DT.slice(5, 7) +
-					markerSet[date].DT.slice(8, 10)
-				if (markerSetDate > _date.start && markerSetDate <= _date.end) {
-					list.push(markerSet[date])
-				}
-			}
-			return list
-		},
-		clearPerformanceData() {
-			this.tableData = []
-			this.tradesData = []
-			//splitTradeData和backtestHistoryList也要清空
-			this.splitTradeData = []
-			this.backtestHistoryList = []
-			this.returnImgUrl = ''
-			this.drawDownImgUrl = ''
-			this.monthReturnImgUrl = ''
-			this.annualReturnImgUrl = ''
-		},
-		objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-			if (columnIndex === 0) {
-				if (rowIndex % 2 === 0) {
-					return {
-						rowspan: 2,
-						colspan: 1
-					}
-				} else {
-					return {
-						rowspan: 0,
-						colspan: 0
-					}
-				}
-			}
-			if (columnIndex === 5) {
-				if (rowIndex % 2 === 0) {
-					return {
-						rowspan: 2,
-						colspan: 1
-					}
-				} else {
-					return {
-						rowspan: 0,
-						colspan: 0
-					}
-				}
-			}
-			if (columnIndex === 6) {
-				if (rowIndex % 2 === 0) {
-					return {
-						rowspan: 2,
-						colspan: 1
-					}
-				} else {
-					return {
-						rowspan: 0,
-						colspan: 0
-					}
-				}
-			}
-		},
-		handleCurrentChange(page) {
-			this.queryInfo.page = page
-			this.$nextTick(() => {
-				this.splitTradeData = this.tradesData.slice(20*(this.queryInfo.page-1),this.queryInfo.page*20)
-			})
-		}
-	}
+      if (navigator.msSaveBlob) { // for IE
+        navigator.msSaveBlob(blob, fileName);
+      } else {
+        const link = document.createElement("a");
+        if (link.download !== undefined) { // for modern browsers
+          const url = URL.createObjectURL(blob);
+          link.setAttribute("href", url);
+          link.setAttribute("download", fileName);
+          link.style.visibility = "hidden";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }
+      }
+    }
+  }
 }
 </script>
 <style scoped>
-.hint{
+.hint {
 	position: absolute;
 	font-size: 0.8rem;
 	color: black !important;
-	right:8px;
+	right: 8px;
 	font-weight: 300;
 }
 
@@ -834,15 +929,20 @@ export default {
 .perfprmance-container {
 	padding-bottom: 20px;
 }
-.pagination-container{
+.pagination-container {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
 }
 
-.trades-container p{
+.trades-container p {
 	width: 90%;
 	font-size: 0.8rem;
 }
-
+.downLoadCsvBtn {
+    position: absolute;
+    left: 487px;
+    top: 262px;
+		color: #333333;
+}
 </style>
