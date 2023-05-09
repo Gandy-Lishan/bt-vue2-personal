@@ -829,7 +829,10 @@ export default {
       })
     },
     handleDownloadCsv() {
-			if(!(this.tableData.length && this.splitTradeData.length && this.backtestHistoryList.length)) return
+			if(!(this.tableData.length && this.splitTradeData.length && this.backtestHistoryList.length)) {
+				this.$message.warning('No data available for download.')
+				return
+			}
       const summary = []
       this.tableData.forEach((item, index) => {
         const obj = {}
