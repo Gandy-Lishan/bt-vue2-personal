@@ -312,6 +312,7 @@ export default {
 				si: {
 					sentimentIndicator: '',
 					technicalIndicator: '',
+					symbolIndicator: '',
 					riskIndicator: ''
 				},
 				sentimentIndicatorList: []
@@ -816,7 +817,6 @@ export default {
 						this.si.sentimentIndicator =
 							newVal[this.criteria].signals[index].indicator
 						let sentimentList = this.$store.state.sentimentIndicatorList
-
 						if (sentimentList.length == 0) {
 							let res = await getIndicatorsList()
 							sentimentList = res.data.map((obj) => {
@@ -844,6 +844,16 @@ export default {
 						})
 					}
 					// todo 加入symbol analysis
+					if (newVal[this.criteria].signals[index].analysis === 'Symbol') {
+						this.indicatorRadio = 'Symbol Indicators'
+						this.si.symbolIndicator =
+							newVal[this.criteria].signals[index].indicator
+						let obj = {}
+						obj.index = vm.panelIndex
+						obj.url = this.si.symbolIndicator
+						vm.$emit('getIndicatorUrl', obj)
+
+					}
 					if (newVal[this.criteria].signals[index].analysis === 'Technical') {
 						vm.indicatorRadio = 'Technical Indicators'
 						

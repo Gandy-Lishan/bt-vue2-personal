@@ -517,6 +517,7 @@ export default {
 		}
 	},
 	watch: {
+		// todo symbol update senti
 		updateSenti(val) {
 			if (this.indicatorRadio == 'technical' && this.techVal == '') {
 				this.indicatorRadio = 'sentiment'
@@ -1067,6 +1068,12 @@ export default {
 					this.indicatorRadio = 'sentiment'
 					this.techIndiObj[j] = ''
 				}
+				if (data.entry.signals[j].analysis === 'Symbol') {
+					this.indicatorValArr[j] = data.entry.signals[j].indicator
+					this.indicatorRadioArr.splice(j, 1, 'symbol')
+					this.indicatorRadio = 'symbol'
+					this.techIndiObj[j] = ''
+				}
 				if (data.entry.signals[j].analysis === 'Technical') {
 					this.indicatorValArr[j] = data.entry.signals[j].indicator
 					this.indicatorRadio = 'technical'
@@ -1091,7 +1098,6 @@ export default {
 			let length = data.entry.signals.length
 			for (let j = 0; j < length; j++) {
 				this.$refs.indiChild[j].setEditData(data)
-				this.indicatorRadioArr[j] = 'symbol'
 				if (this.indicatorRadioArr[j] === 'sentiment') {
 					this.$refs.sentiChild[j].setEditData(data)
 				}

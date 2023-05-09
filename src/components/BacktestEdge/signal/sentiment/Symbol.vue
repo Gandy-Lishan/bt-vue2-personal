@@ -101,7 +101,7 @@ export default {
 			isROCLike: false,
 			//preload: false,
 			sym: {
-				comparison: 'SO',
+				comparison: 'SY',
 				condition: 3,
 				newCondition: 3,
 				value: '',
@@ -134,12 +134,11 @@ export default {
 	methods: {
 		ROCLikeChange(val){
 			this.isROCLike = 5<=val && val<=7
-			console.log(this.isROCLike,val)
 			// 如果不是ROC类型，则这两个condition值一致
 			if(!this.isROCLike){
 				this.sym.condition = this.sym.newCondition
 
-				const fieldName = this.$store.state.symbolConditions.find(item=>item.label==this.symUrl).field
+				const fieldName = this.$store.state.symbolConditions.find(item=>item.label==this.symVal).field
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					if (
 						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName
@@ -157,13 +156,6 @@ export default {
 			}
 			// 开始计算数据并加载新的附属indicator
 			this.calculateNewConditions()
-		},
-		SymbolConditionChange(){
-			// 如果不是ROC类型，则这两个condition值一致
-			if(this.isROCLike){
-				// 开始计算数据并加载新的附属indicator
-				this.calculateNewConditions()
-			}	
 		},
 		change(e) {
 			this.$forceUpdate()
@@ -261,9 +253,9 @@ export default {
 		},
 		calculateNewConditions(){
 			if(!this.isROCLike) return
-
-			if(this.symUrl){
-				const fieldName = this.$store.state.symbolConditions.find(item=>item.label==this.symUrl).field
+			// 用symVal因为symUrl当前生命周期不存在
+			if(this.symVal){
+				const fieldName = this.$store.state.symbolConditions.find(item=>item.label==this.symVal).field
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					if (
 						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName
