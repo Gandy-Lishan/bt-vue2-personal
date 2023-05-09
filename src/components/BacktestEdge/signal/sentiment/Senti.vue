@@ -295,14 +295,14 @@ export default {
 						relation = "Only Risk;"
 						break;
 					case 1:
-						relation = "Single Signal"
+						relation = "Single Condition"
 						break;
 					case 2:
-						relation = "SameBar Multi Signal;"
+						relation = "SameBar Multi Condition;"
 						score = 'Score: ' + this.score + ';'
 						break;
 					case 3:
-						relation = "TimeOrder Multi Signal;"
+						relation = "TimeOrder Multi Condition;"
 						period = 'Period: ' + this.period+ ';'
 						break;
 					default:
