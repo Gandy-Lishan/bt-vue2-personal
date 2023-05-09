@@ -300,7 +300,7 @@ export default {
 					this.setPeriod(this.senti.period)
 				}
 				console.log('handle extremeValue update')
-				this.calculateNewConditions()
+				//this.calculateNewConditions()
 
 				newVal.forEach((item) => {
 					if (item.indicator) {
@@ -362,6 +362,7 @@ export default {
 				}
 			}
 			// 开始计算数据并加载新的附属indicator
+			console.log('ROCLikeChange')
 			this.calculateNewConditions()
 		},
 		change(e) {
@@ -544,7 +545,7 @@ export default {
 					condition:conditionMap.get(this.senti.newCondition).abbr,
 					period:this.senti.conditionPeriod
 				})
-				console.log(sd)
+				console.log('calculateNewConditions',sd)
 			}
 		},
 		setPeriod(val) {
@@ -676,6 +677,7 @@ export default {
 					this.senti.maValue = this.senti.value
 				    this.senti.period = obj.period
 				}
+				console.log('setEditData')
 				this.ROCLikeChange(this.senti.newCondition)
 			}
 		}
