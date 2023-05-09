@@ -849,7 +849,7 @@ export default {
 								entry_signal_list.push(singal)
 								
 							}
-							console.log(signalEntryList,entry_signal_list)
+							console.log('encode: ',signalEntryList,entry_signal_list)
 							delete backtestData.exit.signals
 							if (!this.isOnlyRisk) {
 								for (var i in signalExitList) {
@@ -1153,7 +1153,6 @@ export default {
 				let entryPanel = data.entry.signals.length
 				let entryData = {}
 				entryData.entry = data.entry
-				console.log(entryPanel,entryData)
 				vm.$refs.entryChild.setEditPanel(entryPanel, entryData)
 				// Get the value of frequency
 				vm.editFrequency = data.frequency
