@@ -495,7 +495,8 @@ export default {
         '3 Months [%]',
         '6 Months [%]',
       ],
-      backtestHistoryList: []
+      backtestHistoryList: [],
+			unSplitTadeData: []
     }
   },
   created() {
@@ -603,6 +604,7 @@ export default {
                 vm.totalTradesNumber = (initalData['Trades'].length) / 2
                 vm.handleCurrentChange(1)
                 vm.tradesData = initalData['Trades']
+								vm.unSplitTadeData =  vm.tradesData 
 
                 // 保存tradesdata到store
                 this.$store.commit('getTradesData', vm.tradesData)
@@ -863,7 +865,7 @@ export default {
         summary.push(obj)
       })
       const tradeData = []
-      this.splitTradeData.forEach((item, index) => {
+      this.unSplitTadeData.forEach((item, index) => {
         const obj = {}
         obj['Trade #'] = index + 1
         obj['Trade Date'] = item.Date
@@ -889,6 +891,7 @@ export default {
       })
       const dataList = [summary, tradeData, backtestHistoryList];
       const sheetNames = ["Summary", "Trades", "Exit with different Time Frame"];
+			// console.log('准备下载的数据 dataList', dataList)
       this.exportDataToCSV(dataList, sheetNames);
     },
 		exportDataToCSV(dataList, sheetNames) {
@@ -919,10 +922,10 @@ export default {
 
   // Create a link element for downloading the CSV file
   const link = document.createElement("a");
+	link.style.display = "none";
   link.setAttribute("href", url);
   link.setAttribute("download", "Results.xlsx");
   link.innerHTML = "Download XLSX";
-
   // Append the link element to the document body
   document.body.appendChild(link);
 
