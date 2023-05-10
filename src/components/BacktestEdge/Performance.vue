@@ -446,18 +446,25 @@
 				</div>
 			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
-			
 		</el-tabs>
-					
-		<div class="downLoadCsvBtn">
-				<el-button @click="handleDownloadCsv" style="display: inline-block;" type="info" icon="el-icon-download">Download CSV</el-button>
-			</div>
+
+		<!-- <div class="downLoadCsvBtn">
+			<el-button
+				@click="handleDownloadCsv"
+				style="display: inline-block"
+				type="info"
+				icon="el-icon-download"
+				>Export Data</el-button
+			>
+		</div> -->
 	</div>
 </template>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import jutils from 'jutils-src'
 import { seeReport } from '@/service/service'
+const XLSX = require('xlsx');
 
 export default {
   data() {
@@ -829,10 +836,10 @@ export default {
       })
     },
     handleDownloadCsv() {
-			if(!(this.tableData.length && this.splitTradeData.length && this.backtestHistoryList.length)) {
-				this.$message.warning('No data available for download.')
-				return
-			}
+      if (!(this.tableData.length && this.splitTradeData.length && this.backtestHistoryList.length)) {
+        this.$message.warning('No data available for download.')
+        return
+      }
       const summary = []
       this.tableData.forEach((item, index) => {
         const obj = {}
@@ -865,46 +872,72 @@ export default {
         obj['Total Return %'] = `${item.Return}%`
         tradeData.push(obj)
       })
-			const backtestHistoryList = []
+      const backtestHistoryList = []
       this.backtestHistoryList.forEach(item => {
-				const obj = {}
-				obj['Entry Date'] = item['Entry Date']
-				obj['1 Week [%]'] = item['1 Week [%]']
-				obj['2 Weeks [%]'] = item['2 Weeks [%]']
-				obj['1 Month [%]'] = item['1 Month [%]']
-				obj['2 Months [%]'] = item['2 Months [%]']
-				obj['3 Months [%]'] = item['3 Months [%]']
-				obj['6 Months [%]'] = item['6 Months [%]']
-				obj['12 Months [%]'] = item['12 Months [%]']
-				backtestHistoryList.push(obj)
-			})
-      const data = [{ content: summary, label: 'Summary' }, { content: tradeData, label: 'Trades' }, { content: backtestHistoryList, label: 'Exit with different Time-In-Market frame' }]
-      data.forEach((item) => {
-        const fileName = `${item.label}.csv`
-        this.exportCsv(item.content, fileName);
+        const obj = {}
+        obj['Entry Date'] = item['Entry Date']
+        obj['1 Week [%]'] = item['1 Week [%]']
+        obj['2 Weeks [%]'] = item['2 Weeks [%]']
+        obj['1 Month [%]'] = item['1 Month [%]']
+        obj['2 Months [%]'] = item['2 Months [%]']
+        obj['3 Months [%]'] = item['3 Months [%]']
+        obj['6 Months [%]'] = item['6 Months [%]']
+        obj['12 Months [%]'] = item['12 Months [%]']
+        backtestHistoryList.push(obj)
       })
+      const dataList = [summary, tradeData, backtestHistoryList];
+      const sheetNames = ["Summary", "Trades", "Exit with different Time Frame"];
+      this.exportDataToCSV(dataList, sheetNames);
     },
-    exportCsv(data, fileName) {
-      const header = Object.keys(data[0]).join(",") + "\n";
-      const csv = header + data.map(row => Object.values(row).join(",")).join("\n");
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+		exportDataToCSV(dataList, sheetNames) {
+  // Create a new workbook
+  const workbook = XLSX.utils.book_new();
 
-      if (navigator.msSaveBlob) { // for IE
-        navigator.msSaveBlob(blob, fileName);
-      } else {
-        const link = document.createElement("a");
-        if (link.download !== undefined) { // for modern browsers
-          const url = URL.createObjectURL(blob);
-          link.setAttribute("href", url);
-          link.setAttribute("download", fileName);
-          link.style.visibility = "hidden";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(url);
-        }
-      }
-    }
+  for (let i = 0; i < dataList.length; i++) {
+    // Convert the data to a worksheet
+    const worksheet = XLSX.utils.json_to_sheet(dataList[i]);
+
+    // Add the worksheet to the workbook with the given name
+    XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i]);
+  }
+
+  // Convert the workbook to a binary string
+  const workbookBinaryString = XLSX.write(workbook, {
+    type: "binary",
+    bookType: "xlsx",
+  });
+
+  // Create a Blob from the binary string
+  const blob = new Blob([this.s2ab(workbookBinaryString)], {
+    type: "application/octet-stream",
+  });
+
+  // Create a download URL for the Blob
+  const url = URL.createObjectURL(blob);
+
+  // Create a link element for downloading the CSV file
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", "Results.xlsx");
+  link.innerHTML = "Download XLSX";
+
+  // Append the link element to the document body
+  document.body.appendChild(link);
+
+  // Trigger the download
+  link.click();
+},
+// Utility function to convert a string to an ArrayBuffer
+s2ab(s) {
+  const buf = new ArrayBuffer(s.length);
+  const view = new Uint8Array(buf);
+  for (let i = 0; i < s.length; i++) {
+    view[i] = s.charCodeAt(i) & 0xff;
+  }
+  return buf;
+}
+
+
   }
 }
 </script>
@@ -940,9 +973,9 @@ export default {
 	font-size: 0.8rem;
 }
 .downLoadCsvBtn {
-    position: absolute;
-    left: 487px;
-    top: 262px;
-		color: #333333;
+	position: absolute;
+	left: 487px;
+	top: 262px;
+	color: #333333;
 }
 </style>
