@@ -659,10 +659,10 @@ export default {
 				// 	activatedMAList.splice(MAListIndex, 1)
 				// }
 				// this.$store.commit('getMA', activatedMAList)
-				// this.$store.commit('getEntryIndicators', {
-				// 	index: this.panelIndex,
-				// 	value: indicatorUrl
-				// })
+				this.$store.commit('getEntryIndicators', {
+					index: this.panelIndex,
+					value: indicatorUrl
+				})
 				let obj = {}
 				obj.index = this.panelIndex
 				obj.url = indicatorUrl
@@ -677,10 +677,10 @@ export default {
 				// 	activatedMAList.splice(MAListIndex, 1)
 				// }
 				// this.$store.commit('getMA', activatedMAList)
-				// this.$store.commit('getExitIndicators', {
-				// 	index: this.panelIndex,
-				// 	value: indicatorUrl
-				// })
+				this.$store.commit('getExitIndicators', {
+					index: this.panelIndex,
+					value: indicatorUrl
+				})
 				let obj = {}
 				obj.index = this.panelIndex
 				obj.url = indicatorUrl
