@@ -448,7 +448,7 @@
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
 		</el-tabs>
 
-		<!-- <div class="downLoadCsvBtn">
+		<div class="downLoadCsvBtn">
 			<el-button
 				@click="handleDownloadCsv"
 				style="display: inline-block"
@@ -456,7 +456,7 @@
 				icon="el-icon-download"
 				>Export Data</el-button
 			>
-		</div> -->
+		</div>
 	</div>
 </template>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
