@@ -452,7 +452,9 @@
 			<el-button
 				@click="handleDownloadCsv"
 				style="display: inline-block"
-				type="info"
+				type="primary"
+				plain
+				size="mini"
 				icon="el-icon-download"
 				>Export Data</el-button
 			>
@@ -948,6 +950,7 @@ s2ab(s) {
 	color: black !important;
 	right: 8px;
 	font-weight: 300;
+	margin: 0;
 }
 
 .imgBox {
@@ -974,8 +977,8 @@ s2ab(s) {
 }
 .downLoadCsvBtn {
 	position: absolute;
-	left: 487px;
-	top: 262px;
+right: 10px;
+	top: 273px;
 	color: #333333;
 }
 </style>
