@@ -578,7 +578,6 @@ export default {
           index: this.panelIndex,
           value: url
         })
-        console.log('getEntryIndicators tech', CIQ.store.state.indicators.formIndicators.entry)
       } else {
         // remove MA from Vuex after loading Tech
         var activatedMAList = CIQ.store.state.activatedMA
@@ -653,34 +652,33 @@ export default {
       // remove a MA tat already exists in current criteria before loading
       var activatedMAList = this.$store.state.activatedMA
       if (this.criteria == 'entry') {
-        // var MAListIndex = activatedMAList.findIndex(
-        // 	(item) =>
-        // 		item.url ==
-        // 		this.$store.state.indicators.formIndicators.entry[this.panelIndex]
-        // )
-        // if (MAListIndex != -1) {
-        // 	activatedMAList.splice(MAListIndex, 1)
-        // }
-        // this.$store.commit('getMA', activatedMAList)
+        var MAListIndex = activatedMAList.findIndex(
+        	(item) =>
+        		item.url ==
+        		this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+        )
+        if (MAListIndex != -1) {
+        	activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
         this.$store.commit('getEntryIndicators', {
           index: this.panelIndex,
           value: indicatorUrl
         })
-        console.log('getEntryIndicators users', CIQ.store.state.indicators.formIndicators.entry)
         let obj = {}
         obj.index = this.panelIndex
         obj.url = indicatorUrl
         this.$emit('getIndicatorUrl', obj)
       } else {
-        // var MAListIndex = activatedMAList.findIndex(
-        // 	(item) =>
-        // 		item.url ==
-        // 		this.$store.state.indicators.formIndicators.exit[this.panelIndex]
-        // )
-        // if (MAListIndex != -1) {
-        // 	activatedMAList.splice(MAListIndex, 1)
-        // }
-        // this.$store.commit('getMA', activatedMAList)
+        var MAListIndex = activatedMAList.findIndex(
+        	(item) =>
+        		item.url ==
+        		this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+        )
+        if (MAListIndex != -1) {
+        	activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
         this.$store.commit('getExitIndicators', {
           index: this.panelIndex,
           value: indicatorUrl
@@ -984,6 +982,19 @@ export default {
               const afterHash = str.substring(endIndex);
               const response = await csvFileRead(beforeHash, afterHash);
               console.log('文件响应', response)
+
+              // 还原文件对象的 raw 属性
+              const obj = {}
+              obj.index = index
+              obj.val = response.data.data.file_id
+              console.log('还原文件对象的 raw 属性',obj)
+              if (self.criteria === 'entry') {
+                self.$store.commit(`saveUsersOwnEntryFileHash`, obj)
+              }
+              if (self.criteria === 'exit') {
+                self.$store.commit(`saveUsersOwnExitFileHash`, obj)
+              }
+
               const res = response.data.data.csv_content
               try {
                 const data = res.map(item => ({
@@ -1078,6 +1089,7 @@ export default {
           const obj = {}
           obj.index = this.panelIndex
           obj.val = response.data.file_id
+
           if (self.criteria === 'entry') {
             self.$store.commit(`saveUsersOwnEntryFileHash`, obj)
           }

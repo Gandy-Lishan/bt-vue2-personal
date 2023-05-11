@@ -580,6 +580,7 @@ export default new Vuex.Store({
 			state.role = val.role
 		},
 		saveUsersOwnEntryFileHash(state, obj) {
+			//console.log('saveUsersOwnEntryFileHash',obj)
 			state.usersOwnEntryFileHash[obj.index] = obj.val
 		},
 		saveUsersOwnExitFileHash(state, obj) {
