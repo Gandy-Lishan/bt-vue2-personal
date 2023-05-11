@@ -1118,7 +1118,7 @@ class Code {
 // for (var i in tmp) {
 // 	console.log(a.encode(tmp[i]))
 // }
-// lishan
+
 // var temp =  {
 // 			'analysis': 'User',
 // 			'indicator': 'aapl_custom_testHASH9808',
@@ -1129,6 +1129,7 @@ class Code {
 // 			'condition': '3',
 // 			'value': '20',
 // }
+
 // console.log(a.encode(temp))
 
 // var a = new Code()

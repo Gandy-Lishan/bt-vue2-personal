@@ -2,7 +2,7 @@
 <template>
 	<div class="senti-container">
 		<el-form :model="senti" :rules="rules" ref="sentiForm">
-			<div class="ids-container">
+			<div class="ids-container" v-if="indicatorRadio === 'sentiment'">
 				<el-form-item label="Extreme Optimism" prop="extreme_optimism">
 				<span slot="label">
                      <span class="span-box">
@@ -134,6 +134,7 @@ export default {
 		period: [String, Number],
 		delay_bars: [String, Number],
 		tabLength: Number,
+		indicatorRadio: String
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
