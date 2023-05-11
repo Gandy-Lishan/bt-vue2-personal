@@ -986,11 +986,11 @@ export default {
               obj.index = index
               obj.val = response.data.data.file_id
               console.log('还原文件对象的 raw 属性',obj)
-              if (self.criteria === 'entry') {
-                self.$store.commit(`saveUsersOwnEntryFileHash`, obj)
+              if (this.criteria === 'entry') {
+                this.$store.commit(`saveUsersOwnEntryFileHash`, obj)
               }
-              if (self.criteria === 'exit') {
-                self.$store.commit(`saveUsersOwnExitFileHash`, obj)
+              if (this.criteria === 'exit') {
+                this.$store.commit(`saveUsersOwnExitFileHash`, obj)
               }
 
               const res = response.data.data.csv_content
