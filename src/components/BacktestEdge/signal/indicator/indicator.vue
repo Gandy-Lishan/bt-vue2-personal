@@ -92,10 +92,10 @@
 								size="small"
 								type="primary"
 								class="upload-indicator-btn"
-								>点击上传</el-button
+								>Click to upload custom indicator file</el-button
 							>
 							<div slot="tip" class="el-upload__tip">
-								只能上传 csv 文件，且不超过 1MB
+								You can only upload a csv file and don't exceed 1MB
 							</div>
 						</el-upload>
 						<el-dialog :title="previewFileName" :visible.sync="previewVisible">
@@ -121,7 +121,7 @@
 								ref="userForm"
 							>
 								<el-form-item
-									label="indicator 名称"
+									label="Indicator Name"
 									:label-width="formLabelWidth"
 									prop="indicatorName"
 								>
@@ -132,11 +132,13 @@
 								</el-form-item>
 							</el-form>
 							<div slot="footer" class="dialog-footer">
-								<el-button @click="handleDialogClose">直接使用文件名</el-button>
+								<el-button @click="handleDialogClose"
+									>Use the file name directly</el-button
+								>
 								<el-button
 									type="primary"
 									@click="handleDialogConfirm('userForm')"
-									>确 定</el-button
+									>Confirm</el-button
 								>
 							</div>
 						</el-dialog>
@@ -206,9 +208,9 @@ export default {
     var validateIndicatorName = (rule, value, callback) => {
       const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
       if (!value && this.indicatorRadio == "Users' Own Indicator") {
-        callback(new Error('名称不能为空'))
+        callback(new Error('Name cannot be empty.'))
       } else if (!reg.test(value)) {
-        callback(new Error('必须以字母开头，并且只能够包含字母、数字和下划线'))
+        callback(new Error('It must start with a letter and can only contain letters, numbers, and underscores.'))
       } else {
         callback()
       }
@@ -251,7 +253,7 @@ export default {
       },
       rawMap: {}, // 文件对象的 raw 属性备份
       file_hash: '',
-      nonBusinessTitle: 'CSV 中非交易日的时间表',
+      nonBusinessTitle: '"Non-trading day schedule in CSV',
       nonBusinessDay: [],
       nonBusinessDialogVisible: false
     }
@@ -901,9 +903,7 @@ export default {
           this.clearFormValidate()
           let index = this.panelIndex
           let vm = this
-          const f1 = newVal[this.criteria].signals[index].extreme_optimism
-          const f2 = newVal[this.criteria].signals[index].extreme_pessimism
-          if (newVal[this.criteria].signals[index].analysis === 'Sentiment' && (f1 !== "999" && f2 !== '999')) {
+          if (newVal[this.criteria].signals[index].analysis === 'Sentiment') {
             this.indicatorRadio = 'Sentiment Indicators'
             this.si.sentimentIndicator =
               newVal[this.criteria].signals[index].indicator
@@ -953,8 +953,7 @@ export default {
               }
             }
           }
-          // if (newVal[this.criteria].signals[index].analysis === 'User') {
-          if (newVal[this.criteria].signals[index].analysis === 'Sentiment' && (f1 === "999" && f2 === '999')) {
+          if (newVal[this.criteria].signals[index].analysis === 'User') {
             vm.indicatorRadio = 'Users\' Own Indicator'
             let userIndicator =
               newVal[this.criteria].signals[index].indicator
@@ -978,7 +977,6 @@ export default {
 
             if (startIndex !== -1) {
               const beforeHash = str.substring(0, startIndex);
-              const hash = str.substring(startIndex, endIndex);
               const afterHash = str.substring(endIndex);
               const response = await csvFileRead(beforeHash, afterHash);
               console.log('文件响应', response)
@@ -996,19 +994,28 @@ export default {
               }
 
               const res = response.data.data.csv_content
+              let data =[]
               try {
-                const data = res.map(item => ({
+                data = res.map(item => ({
                   Date: new Date(item.DT).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: '2-digit',
                     day: '2-digit'
                   }),
-                  Close: item.Indicator_close
+                  Close: item.indicator_Close
                 }));
                 // 创建 CSV 文件
-                const csvData = 'Date,Close\n' + data.map(item => `${item.Date},${item.Close}`).join('\n');
-                const file = new File([csvData], `${userIndicator}.csv`, { type: 'text/csv' });
-                this.fileList.splice(-1, 1, file)
+                // const csvData = 'Date,Close\n' + data.map(item => `${item.Date},${item.Close}`).join('\n');
+                // const file = new File([csvData], `${userIndicator}.csv`, { type: 'text/csv' });
+                // this.fileList.splice(-1, 1, file)
+
+const csvData = 'Date,Close\n' + data.map(item => `${item.Date},${item.Close}`).join('\n');
+const base64Data = btoa(csvData); // 编码为 Base64
+const rawValue = `data:text/csv;base64,${base64Data}`;
+const file = new File([csvData], `${userIndicator}.csv`, { type: 'text/csv' });
+file.raw = rawValue;
+this.fileList.splice(-1, 1, file);
+
               } catch (error) {
                 console.log('error', error)
               }
@@ -1149,25 +1156,24 @@ export default {
       }
     },
     handlePreview(file) {
-      console.log('处理预览', file)
-      file.raw = this.rawMap[file.uid] || file.raw
-      Papa.parse(file.raw, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (result) => {
-          // 获取解析后的数据
-          const data = result.data
-          // 更新预览表格的数据
-          this.previewData = data
-          this.previewFileName = file.name
-          // 显示预览表格
-          this.previewVisible = true
-        },
-        error: (error) => {
-          // 解析错误时的处理逻辑
-          console.error('解析错误:', error)
-        }
-      })
+      const fileContent = atob(file.raw.split(',')[1]) // 解码 Base64 数据
+  Papa.parse(fileContent, {
+    header: true,
+    skipEmptyLines: true,
+    complete: (result) => {
+      // 获取解析后的数据
+      const data = result.data
+      // 更新预览表格的数据
+      this.previewData = data
+      this.previewFileName = file.name
+      // 显示预览表格
+      this.previewVisible = true
+    },
+    error: (error) => {
+      // 解析错误时的处理逻辑
+      console.error('解析错误:', error)
+    }
+  })
     },
     handleExceed(files, fileList) {
       console.log('处理超出', file)
@@ -1175,28 +1181,35 @@ export default {
       return false
     },
     async beforeUpload(file) {
+      if (!file.raw) {
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          file.raw = event.target.result
+        }
+        reader.readAsDataURL(file)
+      }
       console.log('上传前', file)
       // 备份文件对象的 raw 属性
       this.rawMap[file.uid] = this.rawMap[file.uid] || file.raw
       if (!/(CSV)/i.test(file.type)) {
         this.$message.warning('The uploaded file must be in CSV format.')
-        return reject('The uploaded file must be in CSV format.')
+        return Promise.reject('The uploaded file must be in CSV format.')
       }
       const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
       if (!reg.test(file.name.replace('.csv', ''))) {
         this.$message.warning(
           'The file name must start with a letter and can only contain letters, numbers, and underscores.'
         )
-        return reject('The file name must start with a letter and can only contain letters, numbers, and underscores.')
+        return Promise.eject('The file name must start with a letter and can only contain letters, numbers, and underscores.')
       }
       if (file.size === 0) {
         this.$message.error('Empty files cannot be uploaded.')
-        return reject('Empty files cannot be uploaded.')
+        return Promise.reject('Empty files cannot be uploaded.')
       }
       // 限制文件上传大小 1M
       if (file.size > 1 * 1024 * 1024) {
         this.$message.warning('The uploaded file cannot exceed 1MB.')
-        return reject('The uploaded file cannot exceed 1MB.')
+        return Promise.reject('The uploaded file cannot exceed 1MB.')
       }
       try {
         await this.validateCSV(file)
@@ -1206,7 +1219,7 @@ export default {
         this.dialogFormVisible = true
       } catch (error) {
         console.log('error', error)
-        return reject(error)
+        return Promise.reject(error)
       }
       return false
     },

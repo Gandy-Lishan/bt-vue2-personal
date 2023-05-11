@@ -1091,17 +1091,13 @@ export default {
 			let length = data.exit.signals.length
 			this.tabIndex = length
 				for (let j = 0; j < length; j++) {
-					const f1 = data.exit.signals[j].extreme_optimism 
-				const f2 = data.exit.signals[j].extreme_pessimism 
-				const f = (f1 !== '999') && (f2 !== '999')
-				const _f = (f1 === '999') && (f2 === '999')
-				if (data.exit.signals[j].analysis === 'Sentiment'&& f) {
+				if (data.exit.signals[j].analysis === 'Sentiment') {
 					this.indicatorValArr[j] = data.exit.signals[j].indicator
 					this.indicatorRadioArr.splice(j, 1, 'sentiment')
 					this.indicatorRadio = 'sentiment'
 					this.techIndiObj[j] = ''
 				}
-				if (data.exit.signals[j].analysis === 'Sentiment' && _f) {
+				if (data.exit.signals[j].analysis === 'User') {
 					this.indicatorValArr[j] = data.exit.signals[j].indicator
 					this.indicatorRadioArr.splice(j, 1, 'user')
 					this.indicatorRadio = 'user'
