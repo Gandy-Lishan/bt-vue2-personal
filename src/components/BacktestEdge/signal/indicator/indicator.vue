@@ -979,24 +979,32 @@ export default {
 
             if (startIndex !== -1) {
               const beforeHash = str.substring(0, startIndex);
-              const hash = str.substring(startIndex, endIndex);
               const afterHash = str.substring(endIndex);
               const response = await csvFileRead(beforeHash, afterHash);
               console.log('文件响应', response)
               const res = response.data.data.csv_content
+              let data =[]
               try {
-                const data = res.map(item => ({
+                data = res.map(item => ({
                   Date: new Date(item.DT).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: '2-digit',
                     day: '2-digit'
                   }),
-                  Close: item.Indicator_close
+                  Close: item.indicator_Close
                 }));
                 // 创建 CSV 文件
-                const csvData = 'Date,Close\n' + data.map(item => `${item.Date},${item.Close}`).join('\n');
-                const file = new File([csvData], `${userIndicator}.csv`, { type: 'text/csv' });
-                this.fileList.splice(-1, 1, file)
+                // const csvData = 'Date,Close\n' + data.map(item => `${item.Date},${item.Close}`).join('\n');
+                // const file = new File([csvData], `${userIndicator}.csv`, { type: 'text/csv' });
+                // this.fileList.splice(-1, 1, file)
+
+const csvData = 'Date,Close\n' + data.map(item => `${item.Date},${item.Close}`).join('\n');
+const base64Data = btoa(csvData); // 编码为 Base64
+const rawValue = `data:text/csv;base64,${base64Data}`;
+const file = new File([csvData], `${userIndicator}.csv`, { type: 'text/csv' });
+file.raw = rawValue;
+this.fileList.splice(-1, 1, file);
+
               } catch (error) {
                 console.log('error', error)
               }
