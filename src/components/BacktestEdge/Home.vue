@@ -842,9 +842,9 @@ export default {
 											}
 										}
 									}
-									let usersOwnEntryList = vm.$store.state.usersOwnEntryFileHash
-									if(usersOwnEntryList[index]!=''){
-										return usersOwnEntryList[index]
+									let usersOwnExitList = vm.$store.state.usersOwnExitFileHash
+									if(usersOwnExitList[index]!=''){
+										return usersOwnExitList[index]
 									}
 									return signal?.url || ''
 								})
