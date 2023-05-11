@@ -807,10 +807,12 @@ export default {
 								formateTechnicalList = vm.loadShortLong()
 							}
 
-							let entrySignal = backtestData.entry.signals.map((item) => {
+							let entrySignal = backtestData.entry.signals.map((item,index) => {
+								// if it is senti
 								let signal = CIQ.indicatorList.find((i) => {
 									return i.chart_name == item.indicator
 								})
+								// if it is not senti?
 								if (!signal) {
 									for (let i = 0; i < formateTechnicalList.length; i++) {
 										if (formateTechnicalList[i].value == item.indicator) {
@@ -818,9 +820,15 @@ export default {
 										}
 									}
 								}
+								console.log('runbacktest',vm.$store.state.usersOwnEntryFileHash)
+								let usersOwnEntryList = vm.$store.state.usersOwnEntryFileHash
+								if(usersOwnEntryList[index]!=''){
+									return usersOwnEntryList[index]
+								}
 								return signal?.url || ''
 							})
-							entrySignal = entrySignal.concat(this.$store.state.usersOwnEntryFileHash).filter(item => item !== '')
+							
+							//entrySignal = entrySignal.concat(this.$store.state.usersOwnEntryFileHash).filter(item => item !== '')
 							let exitSignal
 							if (!this.isOnlyRisk) {
 								exitSignal = backtestData.exit.signals.map((item) => {
@@ -834,9 +842,13 @@ export default {
 											}
 										}
 									}
+									let usersOwnEntryList = vm.$store.state.usersOwnEntryFileHash
+									if(usersOwnEntryList[index]!=''){
+										return usersOwnEntryList[index]
+									}
 									return signal?.url || ''
 								})
-							exitSignal = exitSignal.concat(this.$store.state.usersOwnExitFileHash).filter(item => item !== '')
+							//exitSignal = exitSignal.concat(this.$store.state.usersOwnExitFileHash).filter(item => item !== '')
 							} else {
 								exitSignal = ['']
 							}

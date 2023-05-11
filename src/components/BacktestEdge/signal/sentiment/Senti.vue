@@ -405,6 +405,7 @@ export default {
 				this.senti.period = ''
 			}
 			let result
+			console.log('setPeriod',this.sentiVal)
 			this.$store.state.indicatorsList.forEach((value, index) => {
 				if (this.sentiVal) {
 					if (value.chart_name.indexOf(this.sentiVal) !== -1) {
