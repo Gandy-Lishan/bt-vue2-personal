@@ -114,6 +114,7 @@
 							:period="signals_in_market"
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
+							:indicatorRadio="indicatorRadioArr[index]"
 							v-show="indicatorRadioArr[index] === 'sentiment' || indicatorRadioArr[index] === 'user'"
 						></senti>
 						<cci
@@ -944,10 +945,20 @@ export default {
             this.relation = data.entry.relation ? data.entry.relation : 1
 			this.$emit('getEntryRelation',this.relation)
 			for (let j = 0; j < length; j++) {
-				if (data.entry.signals[j].analysis === 'Sentiment') {
+				const f1 = data.entry.signals[j].extreme_optimism 
+				const f2 = data.entry.signals[j].extreme_pessimism 
+				const f = (f1 !== '999') && (f2 !== '999')
+				const _f = (f1 === '999') && (f2 === '999')
+				if (data.entry.signals[j].analysis === 'Sentiment' && f) {
 					this.indicatorValArr[j] = data.entry.signals[j].indicator
 					this.indicatorRadioArr.splice(j, 1, 'sentiment')
 					this.indicatorRadio = 'sentiment'
+					this.techIndiObj[j] = ''
+				}
+				if (data.entry.signals[j].analysis === 'Sentiment' && _f) {
+					this.indicatorValArr[j] = data.entry.signals[j].indicator
+					this.indicatorRadioArr.splice(j, 1, 'user')
+					this.indicatorRadio = 'user'
 					this.techIndiObj[j] = ''
 				}
 				if (data.entry.signals[j].analysis === 'Technical') {
