@@ -752,8 +752,8 @@ export default {
 								}
 								if (item.usersOwnIndicator) {
 									item.indicator = item.usersOwnIndicator
-									// item.analysis = 'User'
-									item.analysis = 'Sentiment'
+									item.analysis = 'User'
+									// item.analysis = 'Sentiment'
 									delete item.technicalIndicator
 									delete item.sentimentIndicator
 									delete item.usersOwnIndicator
@@ -788,8 +788,8 @@ export default {
 									}
 									if (item.usersOwnIndicator) {
 									item.indicator = item.usersOwnIndicator
-									// item.analysis = 'User'
-									item.analysis = 'Sentiment'
+									item.analysis = 'User'
+									// item.analysis = 'Sentiment'
 									delete item.technicalIndicator
 									delete item.sentimentIndicator
 									delete item.usersOwnIndicator
