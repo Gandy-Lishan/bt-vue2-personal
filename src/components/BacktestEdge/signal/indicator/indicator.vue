@@ -1096,7 +1096,6 @@ this.fileList.splice(-1, 1, file);
           const obj = {}
           obj.index = this.panelIndex
           obj.val = response.data.file_id
-
           if (self.criteria === 'entry') {
             self.$store.commit(`saveUsersOwnEntryFileHash`, obj)
           }
