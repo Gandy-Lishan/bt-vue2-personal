@@ -908,7 +908,6 @@ export default {
             this.si.sentimentIndicator =
               newVal[this.criteria].signals[index].indicator
             let sentimentList = this.$store.state.sentimentIndicatorList
-
             if (sentimentList.length == 0) {
               let res = await getIndicatorsList()
               sentimentList = res.data.map((obj) => {
@@ -921,9 +920,7 @@ export default {
                 }
               })
             }
-
             let indi = this.si.sentimentIndicator
-
             sentimentList.forEach((item) => {
               if (indi.toUpperCase() == item.value.toUpperCase()) {
                 let obj = {}
@@ -985,12 +982,13 @@ export default {
               const obj = {}
               obj.index = index
               obj.val = response.data.data.file_id
+              vm.$emit('getIndicatorUrl', {index:index,url:response.data.data.file_id})
               console.log('还原文件对象的 raw 属性',obj)
-              if (self.criteria === 'entry') {
-                self.$store.commit(`saveUsersOwnEntryFileHash`, obj)
+              if (this.criteria === 'entry') {
+                this.$store.commit(`saveUsersOwnEntryFileHash`, obj)
               }
-              if (self.criteria === 'exit') {
-                self.$store.commit(`saveUsersOwnExitFileHash`, obj)
+              if (this.criteria === 'exit') {
+                this.$store.commit(`saveUsersOwnExitFileHash`, obj)
               }
 
               const res = response.data.data.csv_content

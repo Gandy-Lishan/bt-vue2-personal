@@ -831,7 +831,7 @@ export default {
 							//entrySignal = entrySignal.concat(this.$store.state.usersOwnEntryFileHash).filter(item => item !== '')
 							let exitSignal
 							if (!this.isOnlyRisk) {
-								exitSignal = backtestData.exit.signals.map((item) => {
+								exitSignal = backtestData.exit.signals.map((item,index) => {
 									let signal = CIQ.indicatorList.find((i) => {
 										return i.chart_name == item.indicator
 									})
@@ -842,9 +842,9 @@ export default {
 											}
 										}
 									}
-									let usersOwnEntryList = vm.$store.state.usersOwnEntryFileHash
-									if(usersOwnEntryList[index]!=''){
-										return usersOwnEntryList[index]
+									let usersOwnExitList = vm.$store.state.usersOwnExitFileHash
+									if(usersOwnExitList[index]!=''){
+										return usersOwnExitList[index]
 									}
 									return signal?.url || ''
 								})
