@@ -405,7 +405,7 @@ export default {
 				this.senti.period = ''
 			}
 			let result
-			console.log('setPeriod',this.sentiVal)
+
 			this.$store.state.indicatorsList.forEach((value, index) => {
 				if (this.sentiVal) {
 					if (value.chart_name.indexOf(this.sentiVal) !== -1) {
@@ -413,6 +413,16 @@ export default {
 					}
 				} 
 			})
+			if(!result){
+				let obj = {}
+				if(this.criteria=='entry'){
+					obj.url = this.$store.state.usersOwnEntryFileHash[this.panelIndex]
+				}else{
+					obj.url = this.$store.state.usersOwnExitFileHash[this.panelIndex]
+				}
+				result = obj
+			}
+			console.log('setPeriod',result)
 			// If the indicator is not loaded when changing to Ma radio, exit
 			if(!result){return}
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
