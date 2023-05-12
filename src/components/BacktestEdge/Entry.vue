@@ -9,13 +9,13 @@
 						>Set the criteria/criterias which trigger the backtest entry
 						criteria.<br />
 						Choose one of the three options for entry criteria:<br />
-						1. Single Criteria: One criteria will trigger the backtest
-						criteria.<br />
-						2. SameBar Multi-Criteria: More than one criterias (limit to 5)
-						occurring at the same bar,will trigger the backtest criteria.<br />
-						3. TimeOrder Multi-Criteria: More than one criterias (limit to 3)
+						1. Single Condition: One condition will trigger the backtest
+						condition.<br />
+						2. SameBar Multi-Condition: More than one conditions (limit to 5)
+						occurring at the same bar,will trigger the backtest condition.<br />
+						3. TimeOrder Multi-Condition: More than one conditions (limit to 3)
 						occurring within a number of bars,will trigger the backtest
-						criteria.<br />
+						condition.<br />
 					</span>
 					<i class="iconfont icon-wenhao"></i>
 				</el-tooltip>
@@ -25,18 +25,18 @@
 					<span>Score: </span>
 					<el-tooltip effect="dark" placement="top" style="diaplay: inline">
 						<span slot="content"
-							>Choose a value to specify how many following criterias will occur
-							at the same bar to trigger the backtest criteria.<br />
-							if choose score 1, meanning if any one criteria of the following
-							criterias occur the backtest criteria is met.<br />
-							if choose score 2, meanning if any two of the criterias of the
-							following criterias occur the backtest criteria is met.<br />
+							>Choose a value to specify how many following conditions will occur
+							at the same bar to trigger the backtest condition.<br />
+							if choose score 1, meanning if any one condition of the following
+							conditions occur the backtest condition is met.<br />
+							if choose score 2, meanning if any two of the conditions of the
+							following conditions occur the backtest condition is met.<br />
 							etc.<br />
 							For example:<br />
-							If the backtest criteria needs to have a "AND" condition of 2
-							criterias, set two criterias below and choose score 2.<br />
-							If the backtest criteria needs to have a "OR" condition of 2
-							criterias, set two criterias below and choose score 1.<br />
+							If the backtest condition needs to have a "AND" relation of 2
+							conditions, set two conditions below and choose score 2.<br />
+							If the backtest condition needs to have a "OR" relation of 2
+							conditions, set two conditions below and choose score 1.<br />
 							etc.<br />
 						</span>
 						<i class="iconfont icon-wenhao"></i>
@@ -57,18 +57,18 @@
 					<el-tooltip effect="dark" placement="top" style="diaplay: inline">
 						<span slot="content"
 							>Choose a value to specify how many bars within which the
-							following criterias will occur in time order to trigger the
-							backtest criteria.<br />
-							if choose period 1, meanning if the following criterias occur at
-							the same bar the backtest criteria is met.<br />
-							if choose period 2, meanning if the following criterias occur
-							within two bars the backtest criteria is met.<br />
+							following conditions will occur in time order to trigger the
+							backtest condition.<br />
+							if choose period 1, meanning if the following conditions occur at
+							the same bar the backtest condition is met.<br />
+							if choose period 2, meanning if the following conditions occur
+							within two bars the backtest condition is met.<br />
 							etc.<br />
 							For example:<br />
-							If the backtest criteria needs to have two consecutive criterias,
-							set two criterias below and choose period 2.<br />
-							If the backtest criteria needs to have two criterias occur within
-							3 bars, set two criterias below and choose period 3.<br />
+							If the backtest condition needs to have two consecutive conditions,
+							set two conditions below and choose period 2.<br />
+							If the backtest condition needs to have two conditions occur within
+							3 bars, set two conditions below and choose period 3.<br />
 							etc.<br />
 						</span>
 						<i class="iconfont icon-wenhao"></i>
