@@ -655,12 +655,12 @@ export default {
       var activatedMAList = this.$store.state.activatedMA
       if (this.criteria == 'entry') {
         var MAListIndex = activatedMAList.findIndex(
-        	(item) =>
-        		item.url ==
-        		this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+          (item) =>
+            item.url ==
+            this.$store.state.indicators.formIndicators.entry[this.panelIndex]
         )
         if (MAListIndex != -1) {
-        	activatedMAList.splice(MAListIndex, 1)
+          activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('getMA', activatedMAList)
         this.$store.commit('getEntryIndicators', {
@@ -673,12 +673,12 @@ export default {
         this.$emit('getIndicatorUrl', obj)
       } else {
         var MAListIndex = activatedMAList.findIndex(
-        	(item) =>
-        		item.url ==
-        		this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+          (item) =>
+            item.url ==
+            this.$store.state.indicators.formIndicators.exit[this.panelIndex]
         )
         if (MAListIndex != -1) {
-        	activatedMAList.splice(MAListIndex, 1)
+          activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('getMA', activatedMAList)
         this.$store.commit('getExitIndicators', {
@@ -982,8 +982,8 @@ export default {
               const obj = {}
               obj.index = index
               obj.val = response.data.data.file_id
-              vm.$emit('getIndicatorUrl', {index:index,url:response.data.data.file_id})
-              console.log('还原文件对象的 raw 属性',obj)
+              vm.$emit('getIndicatorUrl', { index: index, url: response.data.data.file_id })
+              console.log('还原文件对象的 raw 属性', obj)
               if (this.criteria === 'entry') {
                 this.$store.commit(`saveUsersOwnEntryFileHash`, obj)
               }
@@ -992,7 +992,7 @@ export default {
               }
 
               const res = response.data.data.csv_content
-              let data =[]
+              let data = []
               try {
                 data = res.map(item => ({
                   Date: new Date(item.DT).toLocaleDateString('en-US', {
@@ -1007,12 +1007,12 @@ export default {
                 // const file = new File([csvData], `${userIndicator}.csv`, { type: 'text/csv' });
                 // this.fileList.splice(-1, 1, file)
 
-const csvData = 'Date,Close\n' + data.map(item => `${item.Date},${item.Close}`).join('\n');
-const base64Data = btoa(csvData); // 编码为 Base64
-const rawValue = `data:text/csv;base64,${base64Data}`;
-const file = new File([csvData], `${userIndicator}.csv`, { type: 'text/csv' });
-file.raw = rawValue;
-this.fileList.splice(-1, 1, file);
+                const csvData = 'Date,Close\n' + data.map(item => `${item.Date},${item.Close}`).join('\n');
+                const base64Data = btoa(csvData); // 编码为 Base64
+                const rawValue = `data:text/csv;base64,${base64Data}`;
+                const file = new File([csvData], `${userIndicator}.csv`, { type: 'text/csv' });
+                file.raw = rawValue;
+                this.fileList.splice(-1, 1, file);
 
               } catch (error) {
                 console.log('error', error)
@@ -1086,6 +1086,9 @@ this.fileList.splice(-1, 1, file);
           }
         })
         .then((response) => {
+          CIQ.hideCover()
+				CIQ.nprogress.done()
+        
           // 文件上传完成后的处理逻辑
           console.log('文件上传成功', response)
           // self.$store.commit('saveUserCustomIndicator', response.data.fileID)
@@ -1104,11 +1107,13 @@ this.fileList.splice(-1, 1, file);
           // ...
         })
         .catch((error) => {
+          CIQ.hideCover()
+				CIQ.nprogress.done()
           // 文件上传出错的处理逻辑
           console.log('文件上传失败', error)
           // 清空文件列表
           self.$refs.upload.clearFiles()
-          self.$message.success('File upload failed.')
+          self.$message.warning('File upload failed.')
 
           // ...
         })
@@ -1127,6 +1132,8 @@ this.fileList.splice(-1, 1, file);
     handleUploadError(error, file, fileList) {
       // 上传失败回调
       console.log('上传失败：', error)
+      this.dialogFormVisible = false
+      this.$refs.upload.clearFiles()
       // 更新文件列表中对应文件的状态为
     },
     async handleRemove(file, fileList) {
@@ -1154,23 +1161,23 @@ this.fileList.splice(-1, 1, file);
     },
     handlePreview(file) {
       const fileContent = atob(file.raw.split(',')[1]) // 解码 Base64 数据
-  Papa.parse(fileContent, {
-    header: true,
-    skipEmptyLines: true,
-    complete: (result) => {
-      // 获取解析后的数据
-      const data = result.data
-      // 更新预览表格的数据
-      this.previewData = data
-      this.previewFileName = file.name
-      // 显示预览表格
-      this.previewVisible = true
-    },
-    error: (error) => {
-      // 解析错误时的处理逻辑
-      console.error('解析错误:', error)
-    }
-  })
+      Papa.parse(fileContent, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (result) => {
+          // 获取解析后的数据
+          const data = result.data
+          // 更新预览表格的数据
+          this.previewData = data
+          this.previewFileName = file.name
+          // 显示预览表格
+          this.previewVisible = true
+        },
+        error: (error) => {
+          // 解析错误时的处理逻辑
+          console.error('解析错误:', error)
+        }
+      })
     },
     handleExceed(files, fileList) {
       console.log('处理超出', file)
@@ -1178,6 +1185,8 @@ this.fileList.splice(-1, 1, file);
       return false
     },
     async beforeUpload(file) {
+      CIQ.addCover('File verification in progress...')
+			CIQ.nprogress.start()
       if (!file.raw) {
         const reader = new FileReader()
         reader.onload = (event) => {
@@ -1189,22 +1198,30 @@ this.fileList.splice(-1, 1, file);
       // 备份文件对象的 raw 属性
       this.rawMap[file.uid] = this.rawMap[file.uid] || file.raw
       if (!/(CSV)/i.test(file.type)) {
+        CIQ.hideCover()
+				CIQ.nprogress.done()
         this.$message.warning('The uploaded file must be in CSV format.')
         return Promise.reject('The uploaded file must be in CSV format.')
       }
       const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
       if (!reg.test(file.name.replace('.csv', ''))) {
+        CIQ.hideCover()
+				CIQ.nprogress.done()
         this.$message.warning(
           'The file name must start with a letter and can only contain letters, numbers, and underscores.'
         )
         return Promise.eject('The file name must start with a letter and can only contain letters, numbers, and underscores.')
       }
       if (file.size === 0) {
+        CIQ.hideCover()
+				CIQ.nprogress.done()
         this.$message.error('Empty files cannot be uploaded.')
         return Promise.reject('Empty files cannot be uploaded.')
       }
       // 限制文件上传大小 1M
       if (file.size > 1 * 1024 * 1024) {
+        CIQ.hideCover()
+				CIQ.nprogress.done()
         this.$message.warning('The uploaded file cannot exceed 1MB.')
         return Promise.reject('The uploaded file cannot exceed 1MB.')
       }
@@ -1213,6 +1230,8 @@ this.fileList.splice(-1, 1, file);
         await this.handleParseResult(this.csvContent)
         this.form.indicatorName = file.name.replace('.csv', '')
         this.fileList.push(file)
+        CIQ.hideCover()
+				CIQ.nprogress.done()
         this.dialogFormVisible = true
       } catch (error) {
         console.log('error', error)
@@ -1236,6 +1255,9 @@ this.fileList.splice(-1, 1, file);
       // this.$refs.upload.$el.querySelector('.el-progress-bar__inner').style.width = progress + '%';
     },
     handleDialogClose() {
+      
+      CIQ.addCover('File upload in progress...')
+				CIQ.nprogress.start()
       console.log('弹窗关闭')
       this.$refs['userForm'].resetFields()
       this.dialogFormVisible = false
@@ -1243,6 +1265,9 @@ this.fileList.splice(-1, 1, file);
       this.uploadFile(file)
     },
     handleDialogConfirm(formName) {
+      
+      CIQ.addCover('文件上传中...')
+				CIQ.nprogress.start()
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('this.fileList', this.fileList)
@@ -1365,6 +1390,8 @@ this.fileList.splice(-1, 1, file);
             resolve(file)
           } // 校验通过，允许上传
           if (!isNotEmpty) {
+            CIQ.hideCover()
+				CIQ.nprogress.done()
             this.$message.warning(
               `The uploaded CSV file is empty. Please check if the table header and table content are present.`
             )
@@ -1373,12 +1400,18 @@ this.fileList.splice(-1, 1, file);
             )
           }
           if (!isVerified) {
+            CIQ.hideCover()
+				CIQ.nprogress.done()
             return reject(new Error('CSV field validation failed.'))
           }
           if (!isOrdered) {
+            CIQ.hideCover()
+				CIQ.nprogress.done()
             return reject(new Error('CSV field order is incorrect.'))
           }
           if (!isDateFormat) {
+            CIQ.hideCover()
+				CIQ.nprogress.done()
             this.$message.warning(
               `The Date column data format in the file is incorrect. It should be in yyyy-MM-dd format, for example: 2023-04-20.`
             )
@@ -1389,6 +1422,8 @@ this.fileList.splice(-1, 1, file);
             )
           }
           if (!isNumFormat) {
+            CIQ.hideCover()
+				CIQ.nprogress.done()
             this.$message.warning(
               `The Close column data format in the file is incorrect. It should be a number with up to two decimal places, for example: 45.55.`
             )
@@ -1466,6 +1501,8 @@ this.fileList.splice(-1, 1, file);
           return formattedDate
         } else {
           console.log('Invalid date format')
+          CIQ.hideCover()
+				CIQ.nprogress.done()
           this.$message.warning(`Invalid date format.`)
           return Promise.reject(`Invalid date format.`)
         }
@@ -1476,6 +1513,8 @@ this.fileList.splice(-1, 1, file);
         return Promise.resolve(true)
       } else {
         const diffDateArr = Array.from(isDiffDateArr)
+        CIQ.hideCover()
+				CIQ.nprogress.done()
         this.$message.warning(
           `Only daily CSV files can be uploaded. Please ensure that the CSV file does not contain non-trading days such as weekends and public holidays.`
         )
