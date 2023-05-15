@@ -437,7 +437,6 @@ export default {
 				CIQ.isMarkerShown = false
 				if (res.data.indicator_layout) {
 					let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$','\u200c'))
-					
 					this.restoreIndicatorLayoutEdit(
 						parsedData,
 						res.data.frequency,
