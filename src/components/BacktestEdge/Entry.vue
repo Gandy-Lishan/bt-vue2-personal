@@ -137,7 +137,8 @@
 							:period="signals_in_market"
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
-							v-show="indicatorRadioArr[index] === 'sentiment'"
+							:indicatorRadio="indicatorRadioArr[index]"
+							v-show="indicatorRadioArr[index] === 'sentiment' || indicatorRadioArr[index] === 'user'"
 						></senti>
 						<cci
 							v-bind="$attrs"
@@ -797,20 +798,16 @@ export default {
 			return indi.then((val) => {
 				// Trigger saving events of different components according to sentiment and different technical
 				if (val) {
-					if (vm.indicatorRadioArr[index] === 'sentiment') {
-						vm.$refs.sentiChild[index].setDesciption(index)
-						let senti = vm.$refs.sentiChild[index].saveCondition(index)
-						if (!senti) {
-							vm.$message({
-								message:
-									'Please check that the #' +
-									(index + 1) +
-									' entry panel field is filled in correctly',
-								type: 'error'
-							})
-						}
-						return (checked = senti)
-					}
+				if (vm.indicatorRadioArr[index] === 'sentiment' || vm.indicatorRadioArr[index] === 'user') {
+					vm.$refs.sentiChild[index].setDesciption(index)
+					let senti = vm.$refs.sentiChild[index].saveCondition(index)
+					if(!senti) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
+					return (checked = senti)
 					if (
 						vm.indicatorRadioArr[index] === 'technical' &&
 						vm.techIndiObj[index] === 'CCI_like'
@@ -1002,7 +999,8 @@ export default {
 				} else {
 					checked = false
 				}
-			})
+			}}
+			)
 		},
 		setEditPanel(num, data) {
 			this.relation = data.entry.relation ? data.entry.relation : 1
@@ -1036,6 +1034,12 @@ export default {
 					this.indicatorRadio = 'sentiment'
 					this.techIndiObj[j] = ''
 				}
+				if (data.entry.signals[j].analysis === 'User') {
+					this.indicatorValArr[j] = data.entry.signals[j].indicator
+					this.indicatorRadioArr.splice(j, 1, 'user')
+					this.indicatorRadio = 'user'
+					this.techIndiObj[j] = ''
+				}
 				if (data.entry.signals[j].analysis === 'Technical') {
 					this.indicatorValArr[j] = data.entry.signals[j].indicator
 					this.indicatorRadio = 'technical'
@@ -1060,7 +1064,7 @@ export default {
 			let length = data.entry.signals.length
 			for (let j = 0; j < length; j++) {
 				this.$refs.indiChild[j].setEditData(data)
-				if (this.indicatorRadioArr[j] === 'sentiment') {
+				if (this.indicatorRadioArr[j] === 'sentiment' || this.indicatorRadioArr[j] === 'user') {
 					this.$refs.sentiChild[j].setEditData(data)
 				}
 				if (this.indicatorRadioArr[j] === 'technical') {

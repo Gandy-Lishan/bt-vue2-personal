@@ -2,7 +2,7 @@
 <template>
 	<div class="senti-container">
 		<el-form :model="senti" :rules="rules" ref="sentiForm">
-			<div class="ids-container">
+			<div class="ids-container" v-if="indicatorRadio === 'sentiment'">
 				<el-form-item label="Extreme Optimism" prop="extreme_optimism">
 				<span slot="label">
                      <span class="span-box">
@@ -134,6 +134,7 @@ export default {
 		period: [String, Number],
 		delay_bars: [String, Number],
 		tabLength: Number,
+		indicatorRadio: String
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -404,6 +405,7 @@ export default {
 				this.senti.period = ''
 			}
 			let result
+
 			this.$store.state.indicatorsList.forEach((value, index) => {
 				if (this.sentiVal) {
 					if (value.chart_name.indexOf(this.sentiVal) !== -1) {
@@ -411,6 +413,16 @@ export default {
 					}
 				} 
 			})
+			if(!result){
+				let obj = {}
+				if(this.criteria=='entry'){
+					obj.url = this.$store.state.usersOwnEntryFileHash[this.panelIndex]
+				}else{
+					obj.url = this.$store.state.usersOwnExitFileHash[this.panelIndex]
+				}
+				result = obj
+			}
+			console.log('setPeriod',result)
 			// If the indicator is not loaded when changing to Ma radio, exit
 			if(!result){return}
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
