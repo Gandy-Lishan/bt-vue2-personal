@@ -1113,6 +1113,7 @@ export default {
           console.log('文件上传失败', error)
           // 清空文件列表
           self.$refs.upload.clearFiles()
+          self.fileList = []
           self.$message.warning('File upload failed.')
 
           // ...
@@ -1134,6 +1135,7 @@ export default {
       console.log('上传失败：', error)
       this.dialogFormVisible = false
       this.$refs.upload.clearFiles()
+      this.fileList = []
       // 更新文件列表中对应文件的状态为
     },
     async handleRemove(file, fileList) {
@@ -1266,7 +1268,7 @@ export default {
     },
     handleDialogConfirm(formName) {
       
-      CIQ.addCover('文件上传中...')
+      CIQ.addCover('Uploading file...')
 				CIQ.nprogress.start()
       this.$refs[formName].validate((valid) => {
         if (valid) {
