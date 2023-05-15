@@ -6,16 +6,18 @@
 				<p class="criteria-title">Exit Criteria</p>
 				<el-tooltip effect="dark" placement="top" style="diaplay: inline">
 					<span slot="content"
-						>Set the criteria/criterias which trigger the backtest exit criteria.<br />
-						Choose one of the three options for exit criteria:<br />
-						1. Single Criteria: One criteria will trigger the backtest criteria.<br />
-						2. SameBar Multi-Criteria: More than one criterias (limit to 5)
-						occurring at the same bar,will trigger the backtest criteria.<br />
-						3. TimeOrder Multi-Criteria: More than one criterias (limit to 3)
-						occurring within a number of bars,will trigger the backtest
+						>Set the criteria/criterias which trigger the backtest exit
 						criteria.<br />
+						Choose one of the three options for exit criteria:<br />
+						1. Single Condition: One condition will trigger the backtest
+						condition.<br />
+						2. SameBar Multi-Condition: More than one conditions (limit to 5)
+						occurring at the same bar,will trigger the backtest condition.<br />
+						3. TimeOrder Multi-Condition: More than one conditions (limit to 3)
+						occurring within a number of bars,will trigger the backtest
+						condition.<br />
 						4. Only Use Risk Control: If the 'Risk Control at Exit' is set, this
-						option can be chosen to trigger the backtest criteria.<br />
+						option can be chosen to trigger the backtest condition.<br />
 					</span>
 					<i class="iconfont icon-wenhao"></i>
 				</el-tooltip>
@@ -25,18 +27,18 @@
 					<span>Score: </span>
 					<el-tooltip effect="dark" placement="top" style="diaplay: inline">
 						<span slot="content"
-							>Choose a value to specify how many following criterias will occur
-							at the same bar to trigger the backtest criteria.<br />
-							if choose score 1, meanning if any one criteria of the following
-							criterias occur the backtest criteria is met.<br />
-							if choose score 2, meanning if any two of the criterias of the
-							following criterias occur the backtest criteria is met.<br />
+							>Choose a value to specify how many following conditions will occur
+							at the same bar to trigger the backtest condition.<br />
+							if choose score 1, meanning if any one condition of the following
+							conditions occur the backtest condition is met.<br />
+							if choose score 2, meanning if any two of the conditions of the
+							following conditions occur the backtest condition is met.<br />
 							etc.<br />
 							For example:<br />
-							If the backtest criteria needs to have a "AND" condition of 2
-							criterias, set two criterias below and choose score 2.<br />
-							If the backtest criteria needs to have a "OR" condition of 2
-							criterias, set two criterias below and choose score 1.<br />
+							If the backtest condition needs to have a "AND" relation of 2
+							conditions, set two conditions below and choose score 2.<br />
+							If the backtest condition needs to have a "OR" relation of 2
+							conditions, set two conditions below and choose score 1.<br />
 							etc.<br />
 						</span>
 						<i class="iconfont icon-wenhao"></i> </el-tooltip
@@ -55,18 +57,18 @@
 					<el-tooltip effect="dark" placement="top" style="diaplay: inline">
 						<span slot="content"
 							>Choose a value to specify how many bars within which the
-							following criterias will occur in time order to trigger the backtest
-							criteria.<br />
-							if choose period 1, meanning if the following criterias occur at the
-							same bar the backtest criteria is met.<br />
-							if choose period 2, meanning if the following criterias occur within
-							two bars the backtest criteria is met.<br />
+							following conditions will occur in time order to trigger the
+							backtest condition.<br />
+							if choose period 1, meanning if the following conditions occur at
+							the same bar the backtest condition is met.<br />
+							if choose period 2, meanning if the following conditions occur
+							within two bars the backtest condition is met.<br />
 							etc.<br />
 							For example:<br />
-							If the backtest criteria needs to have two consecutive criterias,
-							set two criterias below and choose period 2.<br />
-							If the backtest criteria needs to have two criterias occur within 3
-							bars, set two criterias below and choose period 3.<br />
+							If the backtest condition needs to have two consecutive conditions,
+							set two conditions below and choose period 2.<br />
+							If the backtest condition needs to have two conditions occur within
+							3 bars, set two conditions below and choose period 3.<br />
 							etc.<br />
 						</span>
 						<i class="iconfont icon-wenhao"></i> </el-tooltip
@@ -433,24 +435,24 @@ export default {
 			signalOptions: [
 				{
 					value: 1,
-					label: 'Single-Criteria'
+					label: 'Single-Condition'
 				},
 				{
 					value: 2,
-					label: 'SameBar Multi-Criteria'
+					label: 'SameBar Multi-Condition'
 				},
 				{
 					value: 3,
-					label: 'TimeOrder Multi-Criteria'
+					label: 'TimeOrder Multi-Condition'
 				}
 			],
 			relation: 1,
 			editableTabsValue: '1',
 			editableTabs: [
 				{
-					title: 'Criteria 1',
+					title: 'Condition 1',
 					name: '1',
-					content: 'Criteria 1 content'
+					content: 'Condition 1 content'
 				}
 			],
 			tabIndex: 1,
@@ -511,31 +513,43 @@ export default {
 					this.exitItemCheck = false
 				}
 				this.$emit('isOnlyRiskControl', this.exitItemCheck)
-			if(newVal == 3 && this.editableTabs.length > 3) {
-  this.$confirm('TimeOrder Multi-Criteria supports up to three criterias,Currently your multi-criteria count is '+ this.editableTabs.length + ', are you sure you want to delete the last '+(this.editableTabs.length - 3) + 'th panels ?', 'Tips', {
-          confirmButtonText: 'Confirm',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }).then(() => {
-			const currentTabs = this.editableTabs.length
-			for(let i=0;i<( currentTabs - 3);i++) {
-				this.handleTabsEdit(this.editableTabs.length + '','remove')
-			}
-          this.$message({
-            type: 'success',
-            offset: 300,
-			message: 'The deletion is successful and has been automatically switched to TimeOrder Multi-Criteria'
-          });
-		  this.relation = newVal
-        }).catch(() => {
-		this.relation = oldVal
-          this.$message({
-            type: 'info',
-			offset: 300,
-            message: 'With the deletion undeleted, you can switch to The SaveBar Multi-Criteria to delete the criteria panel to less than 3'
-          });          
-        });
-      }
+				if (newVal == 3 && this.editableTabs.length > 3) {
+					this.$confirm(
+						'TimeOrder Multi-Condition supports up to three conditions,Currently your multi-condition count is ' +
+							this.editableTabs.length +
+							', are you sure you want to delete the last ' +
+							(this.editableTabs.length - 3) +
+							'th panels ?',
+						'Tips',
+						{
+							confirmButtonText: 'Confirm',
+							cancelButtonText: 'Cancel',
+							type: 'warning'
+						}
+					)
+						.then(() => {
+							const currentTabs = this.editableTabs.length
+							for (let i = 0; i < currentTabs - 3; i++) {
+								this.handleTabsEdit(this.editableTabs.length + '', 'remove')
+							}
+							this.$message({
+								type: 'success',
+								offset: 300,
+								message:
+									'The deletion is successful and has been automatically switched to TimeOrder Multi-Condition'
+							})
+							this.relation = newVal
+						})
+						.catch(() => {
+							this.relation = oldVal
+							this.$message({
+								type: 'info',
+								offset: 300,
+								message:
+									'With the deletion undeleted, you can switch to The SaveBar Multi-Condition to delete the condition panel to less than 3'
+							})
+						})
+				}
 			}
 		},
 		riskControl: {
@@ -579,15 +593,15 @@ export default {
 				this.signalOptions = [
 					{
 						value: 1,
-						label: 'Single-Criteria'
+						label: 'Single-Condition'
 					},
 					{
 						value: 2,
-						label: 'SameBar Multi-Criteria'
+						label: 'SameBar Multi-Condition'
 					},
 					{
 						value: 3,
-						label: 'TimeOrder Multi-Criteria'
+						label: 'TimeOrder Multi-Condition'
 					},
 					{
 						value: 0,
@@ -598,15 +612,15 @@ export default {
 				this.signalOptions = [
 					{
 						value: 1,
-						label: 'Single-Criteria'
+						label: 'Single-Condition'
 					},
 					{
 						value: 2,
-						label: 'SameBar Multi-Criteria'
+						label: 'SameBar Multi-Condition'
 					},
 					{
 						value: 3,
-						label: 'TimeOrder Multi-Criteria'
+						label: 'TimeOrder Multi-Condition'
 					}
 				]
 				this.exitItemCheck = false
@@ -628,34 +642,38 @@ export default {
 					let num = this.editableTabs.length
 					let newTabName = num + 1 + ''
 					this.editableTabs.push({
-						title: 'Criteria' + newTabName,
+						title: 'Condition' + newTabName,
 						name: num_key + '',
-						content: 'Criteria' + newTabName + 'content'
+						content: 'Condition' + newTabName + 'content'
 					})
 					this.editableTabsValue = Number(this.editableTabsValue) + 1 + ''
 					this.indicatorRadioArr.push('sentiment')
 				}
 				if (this.editableTabs.length > 5 && this.relation == 2) {
 					this.$message({
-						message: 'Add up to five criterias',
+						message: 'Add up to five conditions',
 						type: 'error',
 						offset: 300
 					})
 					this.editableTabs.pop()
 					this.indicatorRadioArr.pop()
-					this.editableTabsValue = this.editableTabs.length + ''
-					this.tabIndex = this.editableTabs.length
+					// this.editableTabsValue = this.editableTabs.length + ''
+					this.editableTabsValue = '5'
+					// this.tabIndex = this.editableTabs.length
+					this.tabIndex = 5
 				}
 				if (this.relation == 3 && this.editableTabs.length > 3) {
 					this.$message({
-						message: 'Add up to three criterias',
+						message: 'Add up to three conditions',
 						type: 'error',
 						offset: 300
 					})
 					this.editableTabs.pop()
 					this.indicatorRadioArr.pop()
-					this.editableTabsValue = this.editableTabs.length + ''
-					this.tabIndex = this.editableTabs.length
+					// this.editableTabsValue = this.editableTabs.length + ''
+					this.editableTabsValue = '3'
+					// this.tabIndex = this.editableTabs.length
+					this.tabIndex = 3
 				}
 				if (this.relation == 2) {
 					this.score = this.indicatorRadioArr.length
@@ -669,10 +687,10 @@ export default {
 					(this.relation == 2 || this.relation == 3) &&
 					this.editableTabs.length == 2
 				) {
-					// At least two criterias
+					// At least two conditions
 					this.$message({
 						message:
-							'Multiple criterias are currently selected, at least two criterias',
+							'Multiple conditions are currently selected, at least two conditions',
 						type: 'error',
 						offset: 300
 					})
@@ -699,7 +717,7 @@ export default {
 				let panelArr = tabs.filter((tab) => tab.name !== targetName)
 				this.editableTabs = panelArr
 				panelArr.forEach((item, index) => {
-					item.title = 'Criteria' + (index + 1)
+					item.title = 'Condition' + (index + 1)
 				})
 				this.editableTabsValue = activeName
 				this.indicatorValArr.splice(absoluteIndex, 1)
@@ -709,13 +727,16 @@ export default {
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex, 1)
 				this.techIndiObj.push('')
-				if (this.relation == 2) {
+				if (
+					this.relation == 2 &&
+					this.score >= this.indicatorRadioArr.length + 1
+				) {
 					this.score = this.indicatorRadioArr.length
 				}
-				if (this.relation == 3) {
-					this.signals_in_market = this.indicatorRadioArr.length
-				}
-//When removing a tab, load the indicators in the indicatorurlarr into vuex to refresh the status
+				// if (this.relation == 3 && this.signals_in_market >= (this.indicatorRadioArr.length + 1)) {
+				// 	this.signals_in_market = this.indicatorRadioArr.length
+				// }
+				//When removing a tab, load the indicators in the indicatorurlarr into vuex to refresh the status
 				tabs.forEach((tab, index) => {
 					this.$store.commit('getExitIndicators', {
 						index: index,
@@ -835,7 +856,6 @@ export default {
 			}
 			this.$emit('getExitRelation', val)
 			this.$store.commit('clearExitSignalArr')
-
 		},
 		saveBacktestData(index) {
 			let checked = true
@@ -850,7 +870,7 @@ export default {
 				this.$store.commit('saveDescription', desObj)
 				return (checked = true)
 			}
-			
+
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			return indi.then((val) => {
 				if (val) {
@@ -889,13 +909,12 @@ export default {
 						this.indicatorRadioArr[index] === 'technical' &&
 						this.techIndiObj[index] === 'MACD_like'
 					) {
-						
 						this.$refs.macdChild[index].setDesciption(index)
 						let macd = this.$refs.macdChild[index].saveCondition(index)
 						if (!macd) {
 							this.$message({
 								message:
-								'Please check that the #' +
+									'Please check that the #' +
 									(index + 1) +
 									' exit panel field is filled in correctly',
 								type: 'error'
@@ -912,7 +931,7 @@ export default {
 						if (!ma) {
 							this.$message({
 								message:
-								'Please check that the #' +
+									'Please check that the #' +
 									(index + 1) +
 									' exit panel field is filled in correctly',
 								type: 'error'
@@ -1016,7 +1035,7 @@ export default {
 						if (!smi) {
 							this.$message({
 								message:
-								'Please check that the #' +
+									'Please check that the #' +
 									(index + 1) +
 									' exit panel field is filled in correctly',
 								type: 'error'
@@ -1067,11 +1086,11 @@ export default {
 		},
 		setEditPanel(num, data) {
 			this.relation = data.exit.relation ? data.exit.relation : 1
-			
-							let formateTechnicalList
-					if (this.$store.state.formateTechnicalList.length === 0) {
-						this.$refs.indiChild[0].loadShortLong()
-					}
+
+			let formateTechnicalList
+			if (this.$store.state.formateTechnicalList.length === 0) {
+				this.$refs.indiChild[0].loadShortLong()
+			}
 			for (let i = 0; i < num - 1; i++) {
 				this.handleTabsEdit(null, 'add')
 			}
@@ -1090,7 +1109,7 @@ export default {
 			this.$emit('getExitRelation', this.relation)
 			let length = data.exit.signals.length
 			this.tabIndex = length
-				for (let j = 0; j < length; j++) {
+			for (let j = 0; j < length; j++) {
 				if (data.exit.signals[j].analysis === 'Sentiment') {
 					this.indicatorValArr[j] = data.exit.signals[j].indicator
 					this.indicatorRadioArr.splice(j, 1, 'sentiment')
@@ -1115,7 +1134,9 @@ export default {
 							this.techIndiObj[j] = formateTechnicalList[i].class
 							break
 						}
-					}}}
+					}
+				}
+			}
 			this.$nextTick(() => {
 				this.setEditData(this.refs)
 			})
@@ -1171,15 +1192,15 @@ export default {
 			this.signalOptions = [
 				{
 					value: 1,
-					label: 'Single-Criteria'
+					label: 'Single-Condition'
 				},
 				{
 					value: 2,
-					label: 'SameBar Multi-Criteria'
+					label: 'SameBar Multi-Condition'
 				},
 				{
 					value: 3,
-					label: 'TimeOrder Multi-Criteria'
+					label: 'TimeOrder Multi-Condition'
 				},
 				{
 					value: 0,

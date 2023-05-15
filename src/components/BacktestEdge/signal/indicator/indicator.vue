@@ -6,7 +6,7 @@
 				<el-form-item>
 					<el-radio
 						v-model="indicatorRadio"
-						label="Sentiment Indicators"
+						label="Sentiment Indicator"
 						@change="changeIndicatorChecked"
 					>
 					</el-radio>
@@ -18,7 +18,7 @@
 							class="inline-input"
 							clearable
 							v-model="si.sentimentIndicator"
-							:disabled="!(indicatorRadio === 'Sentiment Indicators')"
+							:disabled="!(indicatorRadio === 'Sentiment Indicator')"
 							:fetch-suggestions="indicatorSentimentSearch"
 							placeholder="Input the sentiment indicator"
 							@select="handleSentimentSelect"
@@ -40,7 +40,7 @@
 				<el-form-item>
 					<el-radio
 						v-model="indicatorRadio"
-						label="Technical Indicators"
+						label="Technical Indicator"
 						@change="changeIndicatorChecked"
 					>
 					</el-radio>
@@ -48,7 +48,7 @@
 				<el-form-item prop="technicalIndicator">
 					<div class="indicatorSearchBox">
 						<el-autocomplete
-							:disabled="!(indicatorRadio === 'Technical Indicators')"
+							:disabled="!(indicatorRadio === 'Technical Indicator')"
 							class="inline-input"
 							clearable
 							prefix-icon="el-icon-search"
