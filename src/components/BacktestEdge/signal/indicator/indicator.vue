@@ -397,7 +397,6 @@ export default {
       }
       data.sentimentIndicatorList = this.$store.state.sentimentIndicatorList
       Object.assign(this.$data, data)
-
       this.$refs.siForm.clearValidate()
       this.$refs.upload.clearFiles()
     },
@@ -605,7 +604,6 @@ export default {
       techIndicators.push(url)
       techIndicators = [...new Set(techIndicators)]
       this.$store.commit('getTechnicalIndicators', techIndicators)
-
       // avoid add indicator redundantly
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
         var sd = CIQ.stxx.layout.studies[studyInstanceName]
@@ -645,7 +643,6 @@ export default {
         CIQ.description('Maximum 10 signals can be displayed on chart')
         return
       }
-
       this.si.userIndicator = indicatorName
       let valObj = {}
       valObj.index = this.panelIndex
