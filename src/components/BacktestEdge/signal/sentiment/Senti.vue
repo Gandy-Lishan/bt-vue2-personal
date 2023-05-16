@@ -266,6 +266,8 @@ export default {
 		},
 		clearForm() {
 			this.$refs.sentiForm.resetFields()
+			this.senti.extreme_optimism = ''
+			this.senti.extreme_pessimism = ''
 		},
 		// Clear form authentication
 		clearFormValidate() {
