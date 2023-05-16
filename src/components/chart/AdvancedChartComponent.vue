@@ -423,19 +423,30 @@ export default class AdvancedChartComponent extends Vue {
 		mNode.classList.add("activated");
 		
 		var mNode = document.getElementsByClassName("lastP")[0]
-		if (CIQ.stxx.layout.lastPriceLabel){
-			mNode.classList.remove("active");
-		}
-		else{
-			mNode.classList.add("active");
-		}
+		CIQ.stxx.layout.lastPriceLabel = false;
+		CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = false;
+		CIQ.stxx.draw();
+
+		// if (CIQ.stxx.layout.lastPriceLabel){
+		// 	mNode.classList.remove("active");
+		// 	CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = false;
+		// 	CIQ.stxx.draw();
+		// }
+		// else{
+		// 	mNode.classList.add("active");
+		// 	CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = true;
+		// 	CIQ.stxx.draw();
+		// }
 		var mNode = document.getElementsByClassName("grid")[0]
-		if (CIQ.stxx.layout.xAixsGridLine){
-			mNode.classList.remove("active");
-		}
-		else{
-			mNode.classList.add("active");
-		}
+		CIQ.stxx.layout.xAixsGridLine = false
+		CIQ.stxx.chart.yAxis.displayGridLines = false;
+		CIQ.stxx.chart.xAxis.displayGridLines = false;
+		// if (CIQ.stxx.layout.xAixsGridLine){
+		// 	mNode.classList.remove("active");
+		// }
+		// else{
+		// 	mNode.classList.add("active");
+		// }
 	}
 
 	collapseStudies() {

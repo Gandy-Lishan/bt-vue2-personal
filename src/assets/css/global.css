@@ -350,8 +350,8 @@ input[type="time"] {
 }
 
 .indicator-box .el-form-item .el-form-item__content .el-form-item__error {
-  padding-top: 0px;
-  left: 80px;
+  padding-top: -1px;
+  left: -20px;
 }
 .senti-container .el-form-item .el-form-item__content .el-form-item__error {
   padding-top: 0px;
@@ -565,7 +565,7 @@ input[type="time"] {
 .entry-container .signal-option-box .signal-container input[type='number']:first-child, 
 .entry-container .signal-option-box .signal-container input[type='date']:first-child,
 .entry-container .signal-option-box .signal-container input[type='time']:first-child {
-	width: 178px;
+	width: 200px;
 }
 .entry-container .signal-option-box .signal-container .score-container input:not([type]), 
 .entry-container .signal-option-box .signal-container .score-container input[type='text'], 
@@ -579,7 +579,7 @@ input[type="time"] {
 .exit-container .signal-option-box .signal-container input[type='number']:first-child, 
 .exit-container .signal-option-box .signal-container input[type='date']:first-child,
 .exit-container .signal-option-box .signal-container input[type='time']:first-child {
-	width: 178px;
+	width: 200px;
 }
 .exit-container .signal-option-box .signal-container .el-input__inner {
 	margin-left: 5px;
@@ -629,6 +629,9 @@ input[type="time"] {
 .el-autocomplete-suggestion li{
   margin: 0 10px;
 }
+.el-table__footer-wrapper{
+  font-weight: bold;
+}
 .el-empty{
   display: flex;
   justify-content: center;
@@ -666,4 +669,11 @@ input[type="time"] {
 .dateBox .el-input__suffix{
   top: -10px;
   right: -15px;
+}
+
+.history-container td{
+	padding:0 !important;
+}
+.trades-container td{
+	padding:0 !important;
 }

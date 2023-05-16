@@ -637,6 +637,9 @@ export default {
 					this.$store.commit('clearBacktest')
 					return
 				}
+				// 首次创建
+				if(setUpRes.data.count == 0 && !isEdit) this.$store.commit('clearBacktestUuid')
+				
 				if (setUpRes.data.count == 0 || isEdit) {
 					let entry
 					for (let index = 0; index < this.entryLength; index++) {
@@ -1033,6 +1036,7 @@ export default {
 												CIQ.nprogress.done()
 												CIQ.hideMarker()
 												CIQ.isMarkerShown = false
+												vm.$refs.setUpChild.clearOldBacktestName()
 											}
 										} catch (error) {
 											console.log('lishan error', error)
@@ -1099,6 +1103,7 @@ export default {
 					offset: 100
 				})
 			}
+			this.$refs.setUpChild.clearOldBacktestName()
 		}, 1000),
 		goToHistoryForm() {
 			this.activeName = 'second'
