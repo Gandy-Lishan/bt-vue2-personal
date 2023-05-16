@@ -185,21 +185,21 @@ export default {
   },
   data() {
     var validateSenti = (rule, value, callback) => {
-      if (!value && this.indicatorRadio == 'Sentiment Indicators') {
+      if (!value && this.indicatorRadio == 'Sentiment Indicator') {
         callback(new Error('Please choose sentiment indicator'))
       } else {
         callback()
       }
     }
     var validateTech = (rule, value, callback) => {
-      if (!value && this.indicatorRadio == 'Technical Indicators') {
+      if (!value && this.indicatorRadio == 'Technical Indicator') {
         callback(new Error('Please choose technical indicator'))
       } else {
         callback()
       }
     }
     var validateRisk = (rule, value, callback) => {
-      if (!value && this.indicatorRadio == 'Risk Indicators') {
+      if (!value && this.indicatorRadio == 'Risk Indicator') {
         callback(new Error('Please choose risk indicator'))
       } else {
         callback()
@@ -216,7 +216,7 @@ export default {
       }
     }
     return {
-      indicatorRadio: 'Sentiment Indicators',
+      indicatorRadio: 'Sentiment Indicator',
       si: {
         sentimentIndicator: '',
         technicalIndicator: '',
@@ -298,7 +298,7 @@ export default {
         this.si.sentimentIndicator = val.name
         for (var i in CIQ.indicatorList) {
           if (CIQ.indicatorList[i].chart_name == val.name) {
-            this.indicatorRadio = 'Sentiment Indicators'
+            this.indicatorRadio = 'Sentiment Indicator'
             if (this.criteria == 'entry') {
               this.$store.commit('getEntryIndicators', {
                 index: this.panelIndex,
@@ -702,8 +702,8 @@ export default {
       this.indicatorRadio = val
       this.clearFormValidate()
       const arr = [
-        'Sentiment Indicators',
-        'Technical Indicators',
+        'Sentiment Indicator',
+        'Technical Indicator',
         'Risk Control',
         "Users' Own Indicator"
       ]
@@ -763,7 +763,7 @@ export default {
       let validForm
       let validName = false
       if (
-        this.indicatorRadio === 'Sentiment Indicators' &&
+        this.indicatorRadio === 'Sentiment Indicator' &&
         !this.exitItemCheck
       ) {
         this.$refs.siForm.validate((valid) => {
@@ -849,7 +849,7 @@ export default {
         }
       }
       if (
-        this.indicatorRadio === 'Technical Indicators' &&
+        this.indicatorRadio === 'Technical Indicator' &&
         !this.exitItemCheck
       ) {
         this.$refs.siForm.validate((valid) => {
@@ -902,7 +902,7 @@ export default {
           let index = this.panelIndex
           let vm = this
           if (newVal[this.criteria].signals[index].analysis === 'Sentiment') {
-            this.indicatorRadio = 'Sentiment Indicators'
+            this.indicatorRadio = 'Sentiment Indicator'
             this.si.sentimentIndicator =
               newVal[this.criteria].signals[index].indicator
             let sentimentList = this.$store.state.sentimentIndicatorList
@@ -931,7 +931,7 @@ export default {
             })
           }
           if (newVal[this.criteria].signals[index].analysis === 'Technical') {
-            vm.indicatorRadio = 'Technical Indicators'
+            vm.indicatorRadio = 'Technical Indicator'
             let technicalIndicator =
               newVal[this.criteria].signals[index].indicator
             vm.si.technicalIndicators = technicalIndicator
