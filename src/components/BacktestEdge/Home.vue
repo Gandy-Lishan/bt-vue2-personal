@@ -728,12 +728,14 @@ export default {
 							}
 							signalEntryList = backtestData.entry.signals
 							signalExitList = backtestData.exit.signals
+							// todo symbol analysis
 							signalEntryList.forEach((item) => {
 								if (item.sentimentIndicator) {
 									item.indicator = item.sentimentIndicator
 									item.analysis = 'Sentiment'
 									delete item.technicalIndicator
 									delete item.sentimentIndicator
+									delete item.symbolIndicator
 									delete item.riskIndicator
 								}
 								if (item.technicalIndicator) {
@@ -741,6 +743,15 @@ export default {
 									item.analysis = 'Technical'
 									delete item.technicalIndicator
 									delete item.sentimentIndicator
+									delete item.symbolIndicator
+									delete item.riskIndicator
+								}
+								if (item.symbolIndicator) {
+									item.indicator = item.symbolIndicator
+									item.analysis = 'Symbol'
+									delete item.technicalIndicator
+									delete item.sentimentIndicator
+									delete item.symbolIndicator
 									delete item.riskIndicator
 								}
 							})
@@ -751,6 +762,7 @@ export default {
 										item.analysis = 'Sentiment'
 										delete item.technicalIndicator
 										delete item.sentimentIndicator
+										delete item.symbolIndicator
 										delete item.riskIndicator
 									}
 									if (item.technicalIndicator) {
@@ -758,6 +770,15 @@ export default {
 										item.analysis = 'Technical'
 										delete item.technicalIndicator
 										delete item.sentimentIndicator
+										delete item.symbolIndicator
+										delete item.riskIndicator
+									}
+									if (item.symbolIndicator) {
+										item.indicator = item.symbolIndicator
+										item.analysis = 'Symbol'
+										delete item.technicalIndicator
+										delete item.sentimentIndicator
+										delete item.symbolIndicator
 										delete item.riskIndicator
 									}
 									if (item.riskIndicator) {
@@ -780,9 +801,11 @@ export default {
 							}
 
 							let entrySignal = backtestData.entry.signals.map((item) => {
+								// 在 sentiment indicator list内检索url
 								let signal = CIQ.indicatorList.find((i) => {
 									return i.chart_name == item.indicator
 								})
+								// 在 technical indicator list内检索url
 								if (!signal) {
 									for (let i = 0; i < formateTechnicalList.length; i++) {
 										if (formateTechnicalList[i].value == item.indicator) {
@@ -790,8 +813,15 @@ export default {
 										}
 									}
 								}
+								// 在 technical indicator list内检索url
+								if (!signal) {
+									if(this.$store.state.symbolConditions.findIndex(i=>i.label==item.indicator) !== -1){
+										return item.indicator
+									}
+								}
 								return signal.url
 							})
+							
 							let exitSignal
 							if (!this.isOnlyRisk) {
 								exitSignal = backtestData.exit.signals.map((item) => {
@@ -810,14 +840,16 @@ export default {
 							} else {
 								exitSignal = ['']
 							}
-							delete backtestData.entry.signals
+							delete backtestData.entry.signals	
 							for (let i = 0; i < signalEntryList.length; i++) {
 								let code = b.encode(signalEntryList[i])
 								var singal = {
 									code: code
 								}
 								entry_signal_list.push(singal)
+								
 							}
+							console.log('encode: ',signalEntryList,entry_signal_list)
 							delete backtestData.exit.signals
 							if (!this.isOnlyRisk) {
 								for (var i in signalExitList) {
@@ -1041,6 +1073,7 @@ export default {
 					}
 				}
 			} catch (error) {
+				console.log('抓取error:',error)
 				this.$notify({
 					title: 'Failed',
 					message: 'The internal server is busy, please try again later',
@@ -1120,7 +1153,6 @@ export default {
 				let entryPanel = data.entry.signals.length
 				let entryData = {}
 				entryData.entry = data.entry
-				console.log(entryPanel,entryData)
 				vm.$refs.entryChild.setEditPanel(entryPanel, entryData)
 				// Get the value of frequency
 				vm.editFrequency = data.frequency

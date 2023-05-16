@@ -462,7 +462,8 @@ class DecodeSC {
 			this.risk_control,
 			this.smi,
 			this.alli,
-			this.ma_condition_period
+			this.ma_condition_period,
+			this.sy_condition_value
 		]
 	}
 	si_condition_value(val) {
@@ -475,6 +476,18 @@ class DecodeSC {
 			condition: RegExp.$1,
 			value: RegExp.$2,
 			period: 1
+		}
+		return data
+	}
+	sy_condition_value(val) {
+		var re = /^SY\/(-?0?\d*?\.?\d*?)\/(-?0?\d*?\.?\d*?)$/
+		if (val.search(re) == -1)
+			return 'The input parameters of the Signal Condition maybe error!'
+		// var array = val.match(re)
+		var data = {
+			comparison: 'SY',
+			condition: RegExp.$1,
+			value: RegExp.$2,
 		}
 		return data
 	}
@@ -619,6 +632,7 @@ class Decode {
 		this.backtest_dict = {
 			Exit: this.ex,
 			SI: this.si,
+			SY: this.sy,
 			TI: this.ti
 			// "IDS": ids.decode,
 			// "SC": sc.decode
@@ -628,6 +642,12 @@ class Decode {
 	si(val) {
 		return {
 			analysis: 'Sentiment',
+			indicator: val
+		}
+	}
+	sy(val) {
+		return {
+			analysis: 'Symbol',
 			indicator: val
 		}
 	}
@@ -645,7 +665,7 @@ class Decode {
 	}
 
 	decode(val) {
-		var re = /(TI|SI|Exit){1}:(.*);IDS:(\S*);SC:(\S*)/
+		var re = /(TI|SY|SI|Exit){1}:(.*);IDS:(\S*);SC:(\S*)/
 		if (val.search(re) !== -1) {
 			var d1, d2, d3
 			d1 = RegExp.$2
@@ -670,7 +690,7 @@ class Decode {
 				tmp = Object.assign(tmp, sc)
 			}
 		}
-		//console.log(tmp);
+		console.log('decode: ',tmp);
 		return tmp
 	}
 }
@@ -722,6 +742,32 @@ class EncodeSI {
 			keys.indexOf('extreme_pessimism') === -1
 		)
 			return false
+		return true
+	}
+}
+
+// symbol ohlcv encode
+class EncodeSY {
+	encode(obj) {
+		var keys = Object.keys(obj)
+		if (!this.check(obj)) return false
+		return (
+			'SY:' +
+			obj['indicator'] +
+			';IDS:;SC:' +
+			obj['comparison'] +
+			'/' +
+			obj['condition'] +
+			'/' +
+			obj['value']
+		)
+	}
+	check(obj) {
+		var keys = Object.keys(obj)
+		if (keys.indexOf('analysis') === -1) return false
+
+		if (obj['analysis'] !== 'Symbol') return false
+
 		return true
 	}
 }
@@ -936,7 +982,7 @@ class EncodeExit {
 
 class Code {
 	constructor() {
-		this.encode_list = [new EncodeSI(), new EncodeTI(), new EncodeExit()]
+		this.encode_list = [new EncodeSI(), new EncodeSY(), new EncodeTI(), new EncodeExit()]
 
 		this.de = new Decode()
 	}
