@@ -300,7 +300,7 @@ export default {
 					this.setPeriod(this.senti.period)
 				}
 				console.log('handle extremeValue update')
-				//this.calculateNewConditions()
+				this.calculateNewConditions()
 
 				newVal.forEach((item) => {
 					if (item.indicator) {
