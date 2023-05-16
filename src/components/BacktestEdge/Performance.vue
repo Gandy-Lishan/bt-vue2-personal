@@ -794,9 +794,10 @@ export default {
 		},
 		calculate_std(arr){
 			arr = arr.filter(function (x) {
-				return !isNaN(x); // 剔除NaN值
+				return !isNaN(x); // 剔除NaN值s
 			});
-
+			if(arr.length==0) return NaN
+			
 			const mean = arr.reduce(function (a, b) {
 			return a + b;
 			}) / arr.length; // 计算平均数
@@ -817,10 +818,12 @@ export default {
 			return parseFloat(this.calculate_mean(return_series)).toFixed(1)
 		},
 		calculate_mean(arr){
+			if(arr.length==0) return NaN
 			return arr.reduce((a, b) => a + b) / arr.length;
 		},
 		calculate_median(arr){
 			arr = arr.filter(n => !isNaN(n))
+			if(arr.length==0) return NaN
 			const mid = Math.floor(arr.length / 2);
 			const nums = [...arr].sort((a, b) => a - b);
 			return parseFloat(arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2).toFixed(1);
