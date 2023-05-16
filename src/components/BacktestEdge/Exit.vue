@@ -1149,7 +1149,6 @@ export default {
 			let length = data.exit.signals.length
 			for (let j = 0; j < length; j++) {
 				this.$refs.indiChild[j].setEditData(data)
-				this.$refs.indiChild[j].setEditData(data)
 				if (this.indicatorRadioArr[j] === 'sentiment') {
 					this.$refs.sentiChild[j].setEditData(data)
 				}

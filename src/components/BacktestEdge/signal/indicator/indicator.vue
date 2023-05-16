@@ -69,8 +69,22 @@
 					>
 					</el-radio>
 				</el-form-item>
-				<!-- <el-form-item prop="sentimentIndicator">
-					<div class="indicatorSearchBox">
+				<el-form-item prop="symbolIndicator">
+					<el-select 
+						v-model="si.symbolIndicator"
+						placeholder="Please select condition"
+						:disabled="!(indicatorRadio === 'Symbol Indicators')"
+						@change="handleSymbolSelect"
+					>
+						<el-option
+							v-for="item in symbolConditions"
+							:key="item.value"
+							:label="item.obj.label"
+							:value="item.obj"
+						>
+						</el-option>
+					</el-select>
+					<!-- <div class="indicatorSearchBox">
 						<el-autocomplete
 							prefix-icon="el-icon-search"
 							class="inline-input"
@@ -82,8 +96,8 @@
 							@select="handleSentimentSelect"
 							highlight-first-item
 						></el-autocomplete>
-					</div>
-				</el-form-item> -->
+					</div> -->
+				</el-form-item>
 			</div>
 		</el-form>
 	</div>
@@ -115,6 +129,13 @@ export default {
 				callback()
 			}
 		}
+		var validateSym = (rule, value, callback) => {
+			if (!value && this.indicatorRadio == 'Symbol Indicators') {
+				callback(new Error('Please choose symbol ohlcv'))
+			} else {
+				callback()
+			}
+		}
 		var validateRisk = (rule, value, callback) => {
 			if (!value && this.indicatorRadio == 'Risk Indicators') {
 				callback(new Error('Please choose risk indicator'))
@@ -127,12 +148,21 @@ export default {
 			si: {
 				sentimentIndicator: '',
 				technicalIndicator: '',
+				symbolIndicator: '',
 				riskIndicator: ''
 			},
 			sentimentIndicatorList: this.$store.state.sentimentIndicatorList,
+			symbolConditions : [
+				{ value: 0, obj: {label:'Symbol Open',field:'Open'} },
+				{ value: 1, obj: {label:'Symbol High',field:'High'} },
+				{ value: 2, obj: {label:'Symbol Low',field:'Low'} },
+				{ value: 3, obj: {label:'Symbol Close',field:'Close'} },
+				{ value: 4, obj: {label:'Symbol Volume',field:'Volume'} },
+			],
 			rules: {
 				sentimentIndicator: [{ validator: validateSenti, trigger: 'change' }],
 				technicalIndicator: [{ validator: validateTech, trigger: 'change' }],
+				symbolIndicator: [{ validator: validateSym, trigger: 'change' }],
 				riskIndicator: [{ validater: validateRisk, trigger: 'change' }]
 			},
 			fileList: [
@@ -149,6 +179,7 @@ export default {
 		}
 	},
 	computed: {
+		// todo symbol computed 属性
 		updateFreq() {
 			return this.$store.state.pairDataFreq
 		},
@@ -281,6 +312,7 @@ export default {
 				si: {
 					sentimentIndicator: '',
 					technicalIndicator: '',
+					symbolIndicator: '',
 					riskIndicator: ''
 				},
 				sentimentIndicatorList: []
@@ -361,6 +393,7 @@ export default {
 		handleSentimentSelect(item) {
 			this.currentSentiUpdated = item.updated
 			// old version only
+			// 控制同屏显示senti indicator数量
 			var countExistIndicator = 0
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				for (var i in CIQ.store.state.builtinList) {
@@ -430,6 +463,61 @@ export default {
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (sd.type == item.url) {
+					return
+				}
+			}
+			CIQ.addIndicators()
+		},
+		// todo handle symobl select
+		handleSymbolSelect(item){
+			this.si.symbolIndicator = item.label
+			let obj = {}
+			obj.value = item.label
+			obj.index = this.panelIndex
+			this.$emit('getIndicatorVal', obj)
+			// remove a MA tat already exists in current criteria before loading
+			var activatedMAList = this.$store.state.activatedMA
+			if (this.criteria == 'entry') {
+				var MAListIndex = activatedMAList.findIndex(
+					(item) =>
+						item.url ==
+						this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				this.$store.commit('getEntryIndicators', {
+					index: this.panelIndex,
+					value: item.label
+				})
+				let obj = {}
+				obj.index = this.panelIndex
+				obj.url = item.label
+				this.$emit('getIndicatorUrl', obj)
+			} else {
+				var MAListIndex = activatedMAList.findIndex(
+					(item) =>
+						item.url ==
+						this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				this.$store.commit('getExitIndicators', {
+					index: this.panelIndex,
+					value: item.label
+				})
+				let obj = {}
+				obj.index = this.panelIndex
+				obj.url = item.label
+				this.$emit('getIndicatorUrl', obj)
+			}
+			// avoid add indicator redundantly
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+				if (sd.type == item.label) {
 					return
 				}
 			}
@@ -538,8 +626,6 @@ export default {
 				radioObj.value = 'symbol'
 				this.$emit('getIndicatorRadio', radioObj)
 				this.$store.commit('getEntryIndicatorRadio', 'symbol')
-
-				this.si.technicalIndicator = 'Symbol Close'
 			}
 		},
 		// load short and long technical list
@@ -574,7 +660,6 @@ export default {
 			let checked = true
 			let validForm
 			let validName = false
-			console.log('saveIndicator')
 			if (
 				this.indicatorRadio === 'Sentiment Indicators' &&
 				!this.exitItemCheck
@@ -631,8 +716,7 @@ export default {
 				}
 			}
 			if (
-				(this.indicatorRadio === 'Technical Indicators' || 
-				this.indicatorRadio === 'Symbol Indicators') &&
+				this.indicatorRadio === 'Technical Indicators' &&
 				!this.exitItemCheck
 			) {
 				this.$refs.siForm.validate((valid) => {
@@ -673,6 +757,50 @@ export default {
 					return checked
 				}
 			}
+			if (
+				this.indicatorRadio === 'Symbol Indicators' &&
+				!this.exitItemCheck
+			) {
+				this.$refs.siForm.validate((valid) => {
+					validForm = valid
+				})
+				console.log('validForm',validForm)
+				// let formateList = this.$store.state.formateTechnicalList
+				// if (formateList.length === 0) {
+				// 	formateList = this.loadShortLong()
+				// }
+				
+				// for (let i = 0; i < formateList.length; i++) {
+				// 	if (this.si.technicalIndicator === formateList[i].value) {
+				// 		validName = true
+				// 		break
+				// 	}
+				// }
+				validName = true
+				if (validForm && validName) {
+					let obj = {}
+					obj.criteria = this.criteria
+					obj.index = index
+					obj.value = this.si.symbolIndicator
+					this.$store.commit('getSymValue', obj)
+					return checked
+				} else {
+					if (!validName) {
+						this.$message({
+							message:
+								'Please select #' +
+								(index + 1) +
+								' ' +
+								this.criteria +
+								' indicator from the drop-down box',
+							type: 'error',
+							offset: 300
+						})
+					}
+					checked = false
+					return checked
+				}
+			}
 			if (this.exitItemCheck) {
 				checked = true
 				return checked
@@ -689,7 +817,6 @@ export default {
 						this.si.sentimentIndicator =
 							newVal[this.criteria].signals[index].indicator
 						let sentimentList = this.$store.state.sentimentIndicatorList
-
 						if (sentimentList.length == 0) {
 							let res = await getIndicatorsList()
 							sentimentList = res.data.map((obj) => {
@@ -716,12 +843,19 @@ export default {
 							}
 						})
 					}
+					// todo 加入symbol analysis
+					if (newVal[this.criteria].signals[index].analysis === 'Symbol') {
+						this.indicatorRadio = 'Symbol Indicators'
+						this.si.symbolIndicator =
+							newVal[this.criteria].signals[index].indicator
+						let obj = {}
+						obj.index = vm.panelIndex
+						obj.url = this.si.symbolIndicator
+						vm.$emit('getIndicatorUrl', obj)
+
+					}
 					if (newVal[this.criteria].signals[index].analysis === 'Technical') {
-						if(newVal[this.criteria].signals[index].indicator=="Symbol Close"){
-							vm.indicatorRadio = 'Symbol Indicators'
-						}else{
-							vm.indicatorRadio = 'Technical Indicators'
-						}
+						vm.indicatorRadio = 'Technical Indicators'
 						
 						let technicalIndicator =
 							newVal[this.criteria].signals[index].indicator
