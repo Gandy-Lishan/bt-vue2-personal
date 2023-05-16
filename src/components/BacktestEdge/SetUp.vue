@@ -623,6 +623,7 @@ export default {
 				delete newVal.entry
 				delete newVal.exit
 				delete newVal.results
+				newVal.user_tag = 'client'
 				newVal.commission = (newVal.commission * 100).toFixed(2)
 				newVal.slippage = Number(newVal.slippage).toFixed(2)
 				this.is_admin = this.$store.state.is_admin
@@ -674,6 +675,7 @@ export default {
 					this.historyValue = 21
 					this.bd.start_date = ''
 				}
+				console.log('处理完成之后的编辑数据', this.bd)
 			}
 		},
 		getDirection(val) {
@@ -866,6 +868,7 @@ export default {
 			) {
 				this.isTakeProfit = true
 				this.isStopLoss = true
+				this.isTimeInMarket = true
 				this.$emit('IsRiskControl', true)
 			}
 			this.$store.commit('isRiskControl', val)

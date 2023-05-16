@@ -30,14 +30,14 @@
 				<el-form-item>
 					<el-radio
 						v-model="conditionRadio"
-						label="Sentiment Value"
+						label="Indicator Value"
 						@change="getConditionRadio"
 					></el-radio>
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item>
 						<el-select
-							:disabled="!(conditionRadio === 'Sentiment Value')"
+							:disabled="!(conditionRadio === 'Indicator Value')"
 							v-model="senti.condition"
 							filterable
 							placeholder="Please select condition"
@@ -56,7 +56,7 @@
 					<el-form-item prop="value">
 						 
 						<el-input
-							:disabled="!(conditionRadio === 'Sentiment Value')"
+							:disabled="!(conditionRadio === 'Indicator Value')"
 							v-model="senti.value"
 							placeholder="Input Value"
 						></el-input>
@@ -67,7 +67,7 @@
 				<el-form-item>
 					<el-radio
 						v-model="conditionRadio"
-						label="Sentiment Moving Average"
+						label="Indicator Moving Average"
 						@change="getConditionRadio"
 					>
 					</el-radio>
@@ -77,7 +77,7 @@
 						
 						<el-input
 							@input="setPeriod"
-							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
+							:disabled="!(conditionRadio === 'Indicator Moving Average')"
 							placeholder="Input Period"
 							v-model="senti.period"
 						></el-input>
@@ -89,7 +89,7 @@
 						<el-select
 							v-model="senti.condition"
 							filterable
-							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
+							:disabled="!(conditionRadio === 'Indicator Moving Average')"
 							placeholder="Please select condition"
 						>
 							<el-option
@@ -105,7 +105,7 @@
 				<div class="conditionInput">
 					<el-form-item prop="maValue">
 						<el-input
-							:disabled="!(conditionRadio === 'Sentiment Moving Average')"
+							:disabled="!(conditionRadio === 'Indicator Moving Average')"
 							v-model="senti.maValue"
 							placeholder="Input Value"
 							@input="change($event)"
@@ -200,7 +200,7 @@ export default {
 				{ value: 3, label: 'CrossAbove' },
 				{ value: 4, label: 'CrossBelow' }
 			],
-			conditionRadio: 'Sentiment Value',
+			conditionRadio: 'Indicator Value',
 			description: '',
 			editSentiVal: '',
 			rules: {
@@ -221,7 +221,7 @@ export default {
 			handler(newVal) {
 				let vm = this
 				// To solve the problem that Ma cannot be saved after selecting Ma and then indicator
-				if(this.conditionRadio=='Sentiment Moving Average'){
+				if(this.conditionRadio=='Indicator Moving Average'){
 					this.setPeriod(this.senti.period)
 				}
 				newVal.forEach((item) => {
@@ -266,6 +266,8 @@ export default {
 		},
 		clearForm() {
 			this.$refs.sentiForm.resetFields()
+			this.senti.extreme_optimism = ''
+			this.senti.extreme_pessimism = ''
 		},
 		// Clear form authentication
 		clearFormValidate() {
@@ -296,14 +298,14 @@ export default {
 						relation = "Only Risk;"
 						break;
 					case 1:
-						relation = "Single Signal"
+						relation = "Single Condition"
 						break;
 					case 2:
-						relation = "SameBar Multi Signal;"
+						relation = "SameBar Multi Condition;"
 						score = 'Score: ' + this.score + ';'
 						break;
 					case 3:
-						relation = "TimeOrder Multi Signal;"
+						relation = "TimeOrder Multi Condition;"
 						period = 'Period: ' + this.period+ ';'
 						break;
 					default:
@@ -325,7 +327,7 @@ export default {
 			let condition = this.conditions[this.senti.condition].label
 			let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
 			let value =
-				this.conditionRadio === 'Sentiment Value'
+				this.conditionRadio === 'Indicator Value'
 					? this.senti.value
 					: this.senti.maValue
 			this.description = `${sentiVal} ${ma} ${period} ${condition} ${value}`
@@ -349,7 +351,7 @@ export default {
 			obj[this.criteria][this.panelIndex] = val
 			CIQ.store.commit('setConditionRadio', obj)
 
-			if (val === 'Sentiment Value') {
+			if (val === 'Indicator Value') {
 				// Clear moving average before switching back to the default senti radio
 				this.periodTemp = this.senti.period
 				this.senti.period = ''
@@ -388,7 +390,7 @@ export default {
 				this.$store.commit('getMA', activatedMAList)
 				
 			} 
-			if (val === 'Sentiment Moving Average') {
+			if (val === 'Indicator Moving Average') {
 				this.senti.comparison = 'SVMA'
 			// Ma is loaded when the default radio is switched to moving average radio
 				this.setPeriod(this.periodTemp)
@@ -399,7 +401,7 @@ export default {
 			if(!_val){
 				_val = 5
 			}
-			if (this.conditionRadio === 'Sentiment Moving Average') {
+			if (this.conditionRadio === 'Indicator Moving Average') {
 				this.senti.period = _val
 			}else{
 				this.senti.period = ''
@@ -460,7 +462,7 @@ export default {
 		saveCondition(index) {
 			let checked = true
 			let validForm
-			if (this.conditionRadio === 'Sentiment Value' && !this.exitItemCheck) {
+			if (this.conditionRadio === 'Indicator Value' && !this.exitItemCheck) {
 				this.$refs['sentiForm'].validateField(['value'], (errorMsg) => {
 					if (!errorMsg) {
 						validForm = true
@@ -480,7 +482,7 @@ export default {
 					return checked
 				}
 			}
-			if (this.conditionRadio === 'Sentiment Moving Average' && !this.exitItemCheck) {
+			if (this.conditionRadio === 'Indicator Moving Average' && !this.exitItemCheck) {
 				let validMaValue = false
 				let validatePeriod = false
 				this.$refs['sentiForm'].validateField(['maValue'], (errorMsg) => {
@@ -519,10 +521,10 @@ export default {
 				this.senti.condition = Number(obj.condition)
 				this.senti.value = obj.value
 				this.senti.comparison = obj.comparison
-				this.conditionRadio = 'Sentiment Value'
+				this.conditionRadio = 'Indicator Value'
 				this.editSentiVal = obj.indicator
 				if (this.senti.comparison === 'SVMA') {
-					this.conditionRadio = 'Sentiment Moving Average'
+					this.conditionRadio = 'Indicator Moving Average'
 					this.senti.maValue = this.senti.value
 				    this.senti.period = obj.period
 				}
