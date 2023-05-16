@@ -387,7 +387,7 @@ export default {
     //  load sentiment list
     clearForm() {
       let data = {
-        indicatorRadio: 'Sentiment Indicators',
+        indicatorRadio: 'Sentiment Indicator',
         si: {
           sentimentIndicator: '',
           technicalIndicator: '',
@@ -399,6 +399,7 @@ export default {
       Object.assign(this.$data, data)
       this.$refs.siForm.clearValidate()
       this.$refs.upload.clearFiles()
+      this.fileList = []
     },
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
