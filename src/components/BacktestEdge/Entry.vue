@@ -808,199 +808,164 @@ export default {
 				    })
 					} 
 					return (checked = senti)
-					if (
-						vm.indicatorRadioArr[index] === 'technical' &&
-						vm.techIndiObj[index] === 'CCI_like'
-					) {
-						vm.$refs.cciChild[index].setDesciption(index)
-						let cci = vm.$refs.cciChild[index].saveCondition(index)
-						if (!cci) {
-							vm.$message({
-								message:
-									'Please check that the #' +
-									(index + 1) +
-									' entry panel field is filled in correctly',
-								type: 'error'
-							})
-						}
-						return (checked = cci)
-					}
-					if (
-						vm.indicatorRadioArr[index] === 'technical' &&
-						vm.techIndiObj[index] === 'MACD_like'
-					) {
-						vm.$refs.macdChild[index].setDesciption(index)
-						let macd = vm.$refs.macdChild[index].saveCondition(index)
-						if (!macd) {
-							vm.$message({
-								message:
-									'Please check that the #' +
-									(index + 1) +
-									' entry panel field is filled in correctly',
-								type: 'error'
-							})
-						}
-						return (checked = macd)
-					}
-					if (
-						vm.indicatorRadioArr[index] === 'technical' &&
-						vm.techIndiObj[index] === 'MovingAverage_like'
-					) {
-						vm.$refs.maChild[index].setDesciption(index)
-						let ma = vm.$refs.maChild[index].saveCondition(index)
-						if (!ma) {
-							vm.$message({
-								message:
-									'Please check that the #' +
-									(index + 1) +
-									' entry panel field is filled in correctly',
-								type: 'error'
-							})
-						}
-						return (checked = ma)
-					}
-					if (
-						vm.indicatorRadioArr[index] === 'technical' &&
-						vm.techIndiObj[index] === 'EFT_like'
-					) {
-						vm.$refs.EFTLikeChild[index].setDesciption(index)
-						let eft = vm.$refs.EFTLikeChild[index].saveCondition(index)
-						if (!eft) {
-							vm.$message({
-								message:
-									'Please check that the #' +
-									(index + 1) +
-									' entry panel field is filled in correctly',
-								type: 'error'
-							})
-						}
-						return (checked = eft)
-					}
-					if (
-						vm.indicatorRadioArr[index] === 'technical' &&
-						vm.techIndiObj[index] === 'ADX_like'
-					) {
-						vm.$refs.ADXLikeChild[index].setDesciption(index)
-						let adx = vm.$refs.ADXLikeChild[index].saveCondition(index)
-						if (!adx) {
-							vm.$message({
-								message:
-									'Please check that the #' +
-									(index + 1) +
-									' entry panel field is filled in correctly',
-								type: 'error'
-							})
-						}
-						return (checked = adx)
-					}
-					if (
-						vm.indicatorRadioArr[index] === 'technical' &&
-						vm.techIndiObj[index] === 'Aligator_like'
-					) {
-						vm.$refs.aligatorLikeChild[index].setDesciption(index)
-						let aligator =
-							vm.$refs.aligatorLikeChild[index].saveCondition(index)
-						if (!aligator) {
-							vm.$message({
-								message:
-									'Please check that the #' +
-									(index + 1) +
-									' entry panel field is filled in correctly',
-								type: 'error'
-							})
-						}
-						return (checked = aligator)
-					}
-					if (
-						vm.indicatorRadioArr[index] === 'technical' &&
-						vm.techIndiObj[index] === 'LRF_like'
-					) {
-						vm.$refs.LRFLikeChild[index].setDesciption(index)
-						let lrf = vm.$refs.LRFLikeChild[index].saveCondition(index)
-						if (!lrf) {
-							vm.$message({
-								message:
-									'Please check that the #' +
-									(index + 1) +
-									' entry panel field is filled in correctly',
-								type: 'error'
-							})
-						}
-						return (checked = lrf)
-					}
-					if (
-						vm.indicatorRadioArr[index] === 'technical' &&
-						vm.techIndiObj[index] === 'BollingerBands_like'
-					) {
-						vm.$refs.bollBandsLikeChild[index].setDesciption(index)
-						let blb = vm.$refs.bollBandsLikeChild[index].saveCondition(index)
-						if (!blb) {
-							vm.$message({
-								message:
-									'Please check that the #' +
-									(index + 1) +
-									' entry panel field is filled in correctly',
-								type: 'error'
-							})
-						}
-						return (checked = blb)
-					}
-					if (
-						vm.indicatorRadioArr[index] === 'technical' &&
-						vm.techIndiObj[index] === 'Stochastics_like'
-					) {
-						vm.$refs.stochasticsLikeChild[index].setDesciption(index)
-						let smi = vm.$refs.stochasticsLikeChild[index].saveCondition(index)
-						if (!smi) {
-							vm.$message({
-								message:
-									'Please check that the #' +
-									(index + 1) +
-									' entry panel field is filled in correctly',
-								type: 'error'
-							})
-						}
-						return (checked = smi)
-					}
-					if (
-						vm.indicatorRadioArr[index] === 'technical' &&
-						vm.techIndiObj[index] === 'ERI_like'
-					) {
-						vm.$refs.ERILikeChild[index].setDesciption(index)
-						let eri = vm.$refs.ERILikeChild[index].saveCondition(index)
-						if (!eri) {
-							vm.$message({
-								message:
-									'Please check that the #' +
-									(index + 1) +
-									' entry panel field is filled in correctly',
-								type: 'error'
-							})
-						}
-						return (checked = eri)
-					}
-					if (
-						vm.indicatorRadioArr[index] === 'technical' &&
-						vm.techIndiObj[index] === 'Trailingstop_like'
-					) {
-						vm.$refs.trailingStopLikeChild[index].setDesciption(index)
-						let ts = vm.$refs.trailingStopLikeChild[index].saveCondition(index)
-						if (!ts) {
-							vm.$message({
-								message:
-									'Please check that the #' +
-									(index + 1) +
-									' entry panel field is filled in correctly',
-								type: 'error'
-							})
-						}
-						return (checked = ts)
-					}
-				} else {
-					checked = false
 				}
-			}}
-			)
+				if (
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'CCI_like'
+				) {
+					vm.$refs.cciChild[index].setDesciption(index)
+					let cci = vm.$refs.cciChild[index].saveCondition(index)
+					if(!cci) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
+					return (checked = cci)
+				}
+				if (
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'MACD_like'
+				) {
+					vm.$refs.macdChild[index].setDesciption(index)
+					let macd = vm.$refs.macdChild[index].saveCondition(index)
+					if(!macd) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
+					return (checked = macd)
+				}
+				if (
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'MovingAverage_like'
+				) {
+					vm.$refs.maChild[index].setDesciption(index)
+					let ma = vm.$refs.maChild[index].saveCondition(index)
+					if(!ma) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
+					return (checked = ma)
+				}
+				if (
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'EFT_like'
+				) {
+					vm.$refs.EFTLikeChild[index].setDesciption(index)
+					let eft = vm.$refs.EFTLikeChild[index].saveCondition(index)
+					if(!eft) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
+					return (checked = eft)
+				}
+				if (
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'ADX_like'
+				) {
+					vm.$refs.ADXLikeChild[index].setDesciption(index)
+					let adx = vm.$refs.ADXLikeChild[index].saveCondition(index)
+					if(!adx) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
+					return (checked = adx)
+				}
+				if (
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'Aligator_like'
+				) {
+					vm.$refs.aligatorLikeChild[index].setDesciption(index)
+					let aligator =
+						vm.$refs.aligatorLikeChild[index].saveCondition(index)
+					if(!aligator) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
+					return (checked = aligator)
+				}
+				if (
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'LRF_like'
+				) {
+					vm.$refs.LRFLikeChild[index].setDesciption(index)
+					let lrf = vm.$refs.LRFLikeChild[index].saveCondition(index)
+					if(!lrf) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
+					return (checked = lrf)
+				}
+				if (
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'BollingerBands_like'
+				) {
+					vm.$refs.bollBandsLikeChild[index].setDesciption(index)
+					let blb = vm.$refs.bollBandsLikeChild[index].saveCondition(index)
+					if(!blb) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
+					return (checked = blb)
+				}
+				if (
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'Stochastics_like'
+				) {
+					vm.$refs.stochasticsLikeChild[index].setDesciption(index)
+					let smi = vm.$refs.stochasticsLikeChild[index].saveCondition(index)
+					if(!smi) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
+					return (checked = smi)
+				}
+				if (
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'ERI_like'
+				) {
+					vm.$refs.ERILikeChild[index].setDesciption(index)
+					let eri = vm.$refs.ERILikeChild[index].saveCondition(index)
+					if(!eri) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
+					return (checked = eri)
+				}
+				if (
+					vm.indicatorRadioArr[index] === 'technical' &&
+					vm.techIndiObj[index] === 'Trailingstop_like'
+				) {
+					vm.$refs.trailingStopLikeChild[index].setDesciption(index)
+					let ts = vm.$refs.trailingStopLikeChild[index].saveCondition(index)
+					if(!ts) {
+					vm.$message({
+					message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+					type: 'error'
+				    })
+					} 
+					return (checked = ts)
+				}
+			}
+		})
 		},
 		setEditPanel(num, data) {
 			this.relation = data.entry.relation ? data.entry.relation : 1
