@@ -136,7 +136,8 @@
 							:period="signals_in_market"
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
-							v-show="indicatorRadioArr[index] === 'sentiment'"
+							:indicatorRadio="indicatorRadioArr[index]"
+							v-show="indicatorRadioArr[index] === 'sentiment' || indicatorRadioArr[index] === 'user'"
 						></senti>
 						<cci
 							v-bind="$attrs"
@@ -873,7 +874,7 @@ export default {
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
 			return indi.then((val) => {
 				if (val) {
-					if (vm.indicatorRadioArr[index] === 'sentiment') {
+					if (vm.indicatorRadioArr[index] === 'sentiment' || vm.indicatorRadioArr[index] === 'user') {
 						vm.$refs.sentiChild[index].setDesciption(index)
 						let senti = this.$refs.sentiChild[index].saveCondition(index)
 						if (!senti) {
@@ -1115,6 +1116,12 @@ export default {
 					this.indicatorRadio = 'sentiment'
 					this.techIndiObj[j] = ''
 				}
+				if (data.exit.signals[j].analysis === 'User') {
+					this.indicatorValArr[j] = data.exit.signals[j].indicator
+					this.indicatorRadioArr.splice(j, 1, 'user')
+					this.indicatorRadio = 'user'
+					this.techIndiObj[j] = ''
+				}
 				if (data.exit.signals[j].analysis === 'Technical') {
 					this.indicatorValArr[j] = data.exit.signals[j].indicator
 					this.indicatorRadio = 'technical'
@@ -1139,7 +1146,7 @@ export default {
 			for (let j = 0; j < length; j++) {
 				this.$refs.indiChild[j].setEditData(data)
 				this.$refs.indiChild[j].setEditData(data)
-				if (this.indicatorRadioArr[j] === 'sentiment') {
+				if (this.indicatorRadioArr[j] === 'sentiment' || this.indicatorRadioArr[j] === 'user') {
 					this.$refs.sentiChild[j].setEditData(data)
 				}
 				if (this.indicatorRadioArr[j] === 'technical') {
