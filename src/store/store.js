@@ -104,6 +104,8 @@ export default new Vuex.Store({
 			{label:'Symbol Close',field:'Close'},
 			{label:'Symbol Volume',field:'Volume'},
 		],
+		// a status before symbol is loaded as a study
+		beforeCalculateNewConditions: false, 
 
 		is_admin: false,
 		role: ''
@@ -112,8 +114,14 @@ export default new Vuex.Store({
 		getExtremeValue: (state) => {
 			return state.extremeValue
 		},
+		getBeforeCalculateNewConditions: (state) => {
+			return state.beforeCalculateNewConditions
+		},
 	},
 	mutations: {
+		envokeBeforeCalculateNewConditions(state,val){
+			state.beforeCalculateNewConditions = val
+		},
 		/**
 		 * Sets up a mutations to store MA period when editting MA study to make sure the MA period is the same in chart and form 
 		 */
