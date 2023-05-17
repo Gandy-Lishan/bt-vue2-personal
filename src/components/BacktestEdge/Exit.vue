@@ -39,7 +39,8 @@
 							criterias, set two criterias below and choose score 1.<br />
 							etc.<br />
 						</span>
-						<i class="iconfont icon-wenhao"></i> </el-tooltip
+						<i class="iconfont icon-wenhao"></i> 
+					</el-tooltip
 				></span>
 				<el-input-number
 					v-model="score"
@@ -69,7 +70,8 @@
 							bars, set two criterias below and choose period 3.<br />
 							etc.<br />
 						</span>
-						<i class="iconfont icon-wenhao"></i> </el-tooltip
+						<i class="iconfont icon-wenhao"></i> 
+					</el-tooltip
 				></span>
 				<el-input-number
 					v-model="signals_in_market"
@@ -147,8 +149,8 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
-							:sentiUrl="indicatorUrlArr[index]"
-							:sentiVal="indicatorValArr[index]"
+							:symUrl="indicatorUrlArr[index]"
+							:symVal="indicatorValArr[index]"
 							v-show="indicatorRadioArr[index] === 'symbol'"
 						></symbol-indi>
 						<cci
@@ -1126,6 +1128,12 @@ export default {
 					this.indicatorValArr[j] = data.exit.signals[j].indicator
 					this.indicatorRadioArr.splice(j, 1, 'sentiment')
 					this.indicatorRadio = 'sentiment'
+					this.techIndiObj[j] = ''
+				}
+				if (data.entry.signals[j].analysis === 'Symbol') {
+					this.indicatorValArr[j] = data.entry.signals[j].indicator
+					this.indicatorRadioArr.splice(j, 1, 'symbol')
+					this.indicatorRadio = 'symbol'
 					this.techIndiObj[j] = ''
 				}
 				if (data.exit.signals[j].analysis === 'Technical') {
