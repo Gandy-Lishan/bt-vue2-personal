@@ -873,7 +873,7 @@ export default {
         obj['Indicator'] = item.Indicator.join(',')
         obj['Trade Price'] = item.TradePrice
         obj['Trade Return %'] = `${item.TradeReturn}%`
-        obj['Total Return %'] = `${item.Return}%`
+        obj['Total Return %'] = `${(item.Return * 100).toFixed(2)}%`
         tradeData.push(obj)
       })
       const backtestHistoryList = []
