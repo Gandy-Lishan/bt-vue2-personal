@@ -1180,7 +1180,7 @@ export default {
       })
     },
     handleExceed(files, fileList) {
-      console.log('处理超出', file)
+      console.log('处理超出', files)
       this.$message.warning('Only single indicator files can be uploaded.')
       return false
     },
@@ -1337,6 +1337,7 @@ export default {
               }
               // const trimmedRow = row.data.map((value) => value.trim())
               const dateCell = row.data[dateColumnIndex]
+              console.log('日期格式', dateCell)
               const numFormatRegex = /^\d+(\.\d{1,2})?$/
               const numColumnIndex = 'Close' // Change this to the index of the column you want to check
               const numCell = row.data[numColumnIndex]
