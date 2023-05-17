@@ -224,7 +224,8 @@ class SignalCode {
 		this.backtest_dict = {
 			Exit: this.ex,
 			SI: this.si,
-			TI: this.ti
+			TI: this.ti,
+			UI: this.ui
 			// "IDS": ids.decode,
 			// "SC": sc.decode
 		}
@@ -233,6 +234,12 @@ class SignalCode {
 	si(val) {
 		return {
 			analysis: 'Sentiment',
+			indicator: val
+		}
+	}
+	ui(val) {
+		return {
+			analysis: 'User',
 			indicator: val
 		}
 	}
@@ -261,6 +268,8 @@ class SignalCode {
 				re_str += 'TI:' + val['indicator'] + ';'
 			} else if (val['analysis'] == 'Exit') {
 				re_str += 'Exit:' + val['indicator'] + ';'
+			} else if(val['analysis'] == 'User') {
+				re_str += 'UI:' + val['indicator'] + ';'
 			}
 		}
 		return re_str
@@ -307,7 +316,7 @@ class SignalCode {
 	re_sc(val) {
 		var re_str = 'SC:'
 		var val_keys = Object.keys(val)
-		if (val['analysis'] === 'Sentiment') {
+		if (val['analysis'] === 'Sentiment' || val['analysis'] === 'User') {
 			if (val_keys.indexOf('period') !== -1) {
 				re_str +=
 					'SVMA' + val['period'] + '/' + val['condition'] + '/' + val['value']
@@ -379,7 +388,7 @@ class SignalCode {
 		return s
 	}
 	decode(val) {
-		var re = /(TI|SI|Exit){1}:(.*);IDS:(\S*);SC:(\S*)/
+		var re = /(TI|SI|Exit|UI){1}:(.*);IDS:(\S*);SC:(\S*)/
 		if (val.search(re) !== -1) {
 			var d1, d2, d3
 			d1 = RegExp.$2
@@ -619,7 +628,8 @@ class Decode {
 		this.backtest_dict = {
 			Exit: this.ex,
 			SI: this.si,
-			TI: this.ti
+			TI: this.ti,
+			UI: this.ui
 			// "IDS": ids.decode,
 			// "SC": sc.decode
 		}
@@ -628,6 +638,12 @@ class Decode {
 	si(val) {
 		return {
 			analysis: 'Sentiment',
+			indicator: val
+		}
+	}
+	ui(val) {
+		return {
+			analysis: 'User',
 			indicator: val
 		}
 	}
@@ -645,7 +661,7 @@ class Decode {
 	}
 
 	decode(val) {
-		var re = /(TI|SI|Exit){1}:(.*);IDS:(\S*);SC:(\S*)/
+		var re = /(TI|SI|Exit|UI){1}:(.*);IDS:(\S*);SC:(\S*)/
 		if (val.search(re) !== -1) {
 			var d1, d2, d3
 			d1 = RegExp.$2
@@ -716,6 +732,57 @@ class EncodeSI {
 		if (keys.indexOf('analysis') === -1) return false
 
 		if (obj['analysis'] !== 'Sentiment') return false
+
+		if (
+			keys.indexOf('extreme_optimism') === -1 &&
+			keys.indexOf('extreme_pessimism') === -1
+		)
+			return false
+		return true
+	}
+}
+
+class EncodeUI {
+	encode(obj) {
+		var keys = Object.keys(obj)
+		if (!this.check(obj)) return false
+		if (obj['period'] == 1)
+			return (
+				'UI:' +
+				obj['indicator'] +
+				';IDS:EO' +
+				obj['extreme_optimism'] +
+				'/EP' +
+				obj['extreme_pessimism'] +
+				';SC:' +
+				obj['comparison'] +
+				'/' +
+				obj['condition'] +
+				'/' +
+				obj['value']
+			)
+		else if (keys.indexOf('period') !== -1)
+			return (
+				'UI:' +
+				obj['indicator'] +
+				';IDS:EO' +
+				obj['extreme_optimism'] +
+				'/EP' +
+				obj['extreme_pessimism'] +
+				';SC:' +
+				obj['comparison'] +
+				obj['period'] +
+				'/' +
+				obj['condition'] +
+				'/' +
+				obj['value']
+			)
+	}
+	check(obj) {
+		var keys = Object.keys(obj)
+		if (keys.indexOf('analysis') === -1) return false
+
+		if (obj['analysis'] !== 'User') return false
 
 		if (
 			keys.indexOf('extreme_optimism') === -1 &&
@@ -936,7 +1003,7 @@ class EncodeExit {
 
 class Code {
 	constructor() {
-		this.encode_list = [new EncodeSI(), new EncodeTI(), new EncodeExit()]
+		this.encode_list = [new EncodeSI(), new EncodeUI(), new EncodeTI(), new EncodeExit()]
 
 		this.de = new Decode()
 	}
@@ -952,8 +1019,8 @@ class Code {
 		return tmp
 	}
 }
-
-// a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SVMA20/3/20")
+// var a = new Code()
+// console.log(a.decode("UI:aybkn_hs6njn;IDS:EO20/EP80;SC:SVMA20/3/20"))
 // a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SV/3/20")
 // a.decode("TI:MA;IDS:EMA;SC:SC/3/MA20")
 // a.decode("TI:Moving Average;IDS:SMA;SC:MA5/3/MA20")
@@ -1051,16 +1118,19 @@ class Code {
 // for (var i in tmp) {
 // 	console.log(a.encode(tmp[i]))
 // }
-// var tmp = {
-//     "over_bought_bound": 80,
-//     "over_sold_bound": 20,
-//     "period": 14,
-//     "condition": 4,
-//     "value": "80",
-//     "indicator": "Relative Strength Index",
-//     "analysis": "Technical"
+
+// var temp =  {
+// 			'analysis': 'User',
+// 			'indicator': 'aapl_custom_testHASH9808',
+// 			'extreme_optimism': '20',
+// 			'extreme_pessimism': '80',
+// 			"comparison": 'SV',
+// 			'period': '1',
+// 			'condition': '3',
+// 			'value': '20',
 // }
-// console.log(a.encode(tmp))
+
+// console.log(a.encode(temp))
 
 // var a = new Code()
 // console.log(a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SVMA20/3/20"))

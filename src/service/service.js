@@ -262,3 +262,55 @@ export function uploadS3(S3DataStr) {
 		})
 	})
 }
+
+export function csvFileRead(fileName, HASH) {
+	const url = `/dev/csvfileread/?fileName=${fileName}&HASH=${HASH}`
+
+	return new Promise((resolve, reject) => {
+		axios.get(url, {withCredentials: true})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+export function csvFileDelete(fileID) {
+	const url = `/dev/csvfiledelete/${fileID}/`
+
+	return new Promise((resolve, reject) => {
+		axios.delete(url, {withCredentials: true})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+export function getPairData(startDate, endDate, frequency) {
+	const symbol = 'SPY'
+	const url = `https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/pair_data?symbol=${symbol}&start=${startDate}&end=${endDate}&freq=${frequency}`
+
+	return new Promise((resolve, reject) => {
+		axios.get(url, {auth: author})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+// instance.interceptors.request.use((config) => {
+// 	config.headers.Authorization = window.sessionStorage.getItem('token')
+// 	config.auth = {
+// 		username: 'sentimentrader_backtest_api',
+// 		password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
+// 	}
+// 	return config
+// })
