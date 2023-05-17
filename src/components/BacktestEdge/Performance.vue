@@ -446,6 +446,50 @@
 				</div>
 			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
+			<el-tab-pane label="Exit with different TIM" name="fifth">
+				<el-button type="primary" @click="showTableDialog" v-if="!showTable"
+					>Edit exit with different TIM</el-button
+				>
+
+				<el-dialog
+					title="Edit exit with different TIM Table"
+					:visible.sync="showTable"
+					width="80%"
+					@closed="resetTable"
+				>
+				
+				<div>
+		<el-table
+        :data="editTIMData"
+        style="width: 100%"
+        border
+        ref="table"
+      >
+        <el-table-column type="index" label="Index" width="80"></el-table-column>
+        <el-table-column label="Name">
+					<template slot-scope="scope">
+            <span>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="Period">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.period" :disabled="scope.row.readonly">
+              <el-option label="Day(s)" value="Day"></el-option>
+              <el-option label="Week(s)" value="Week"></el-option>
+              <el-option label="Month(s)" value="Month"></el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+      </el-table>
+    <el-button type="primary" icon="el-icon-plus" @click="addRow" style="margin-top: 10px">Add Row</el-button>
+    <el-button type="success" @click="getValues" style="margin-top: 10px">获取值</el-button>
+  </div>
+					<div slot="footer" class="dialog-footer">
+						<el-button @click="cancelTable">Cancel</el-button>
+						<el-button type="primary" @click="saveTable">Save</el-button>
+					</div>
+				</el-dialog>
+			</el-tab-pane>
 		</el-tabs>
 
 		<div class="downLoadCsvBtn">
@@ -496,7 +540,12 @@ export default {
         '6 Months [%]',
       ],
       backtestHistoryList: [],
-			unSplitTadeData: []
+      unSplitTadeData: [],
+      showTable: false,
+      editTIMData: [
+        { name: 'input period1', period: 'Day', readonly: false },
+        { name: 'input period2', period: 'Week', readonly: false }
+      ]
     }
   },
   created() {
@@ -604,7 +653,7 @@ export default {
                 vm.totalTradesNumber = (initalData['Trades'].length) / 2
                 vm.handleCurrentChange(1)
                 vm.tradesData = initalData['Trades']
-								vm.unSplitTadeData =  vm.tradesData 
+                vm.unSplitTadeData = vm.tradesData
 
                 // 保存tradesdata到store
                 this.$store.commit('getTradesData', vm.tradesData)
@@ -891,60 +940,90 @@ export default {
       })
       const dataList = [summary, tradeData, backtestHistoryList];
       const sheetNames = ["Summary", "Trades", "Exit with different Time Frame"];
-			// console.log('准备下载的数据 dataList', dataList)
+      // console.log('准备下载的数据 dataList', dataList)
       this.exportDataToCSV(dataList, sheetNames);
     },
-		exportDataToCSV(dataList, sheetNames) {
-  // Create a new workbook
-  const workbook = XLSX.utils.book_new();
+    exportDataToCSV(dataList, sheetNames) {
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new();
 
-  for (let i = 0; i < dataList.length; i++) {
-    // Convert the data to a worksheet
-    const worksheet = XLSX.utils.json_to_sheet(dataList[i]);
+      for (let i = 0; i < dataList.length; i++) {
+        // Convert the data to a worksheet
+        const worksheet = XLSX.utils.json_to_sheet(dataList[i]);
 
-    // Add the worksheet to the workbook with the given name
-    XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i]);
+        // Add the worksheet to the workbook with the given name
+        XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i]);
+      }
+
+      // Convert the workbook to a binary string
+      const workbookBinaryString = XLSX.write(workbook, {
+        type: "binary",
+        bookType: "xlsx",
+      });
+
+      // Create a Blob from the binary string
+      const blob = new Blob([this.s2ab(workbookBinaryString)], {
+        type: "application/octet-stream",
+      });
+
+      // Create a download URL for the Blob
+      const url = URL.createObjectURL(blob);
+
+      // Create a link element for downloading the CSV file
+      const link = document.createElement("a");
+      link.style.display = "none";
+      link.setAttribute("href", url);
+      link.setAttribute("download", "Results.xlsx");
+      link.innerHTML = "Download XLSX";
+      // Append the link element to the document body
+      document.body.appendChild(link);
+
+      // Trigger the download
+      link.click();
+    },
+    // Utility function to convert a string to an ArrayBuffer
+    s2ab(s) {
+      const buf = new ArrayBuffer(s.length);
+      const view = new Uint8Array(buf);
+      for (let i = 0; i < s.length; i++) {
+        view[i] = s.charCodeAt(i) & 0xff;
+      }
+      return buf;
+    },
+		addRow() {
+      const newRow = {
+        name: `input period${this.editTIMData.length + 1}`,
+        period: 'Day',
+        readonly: false
+      };
+      this.editTIMData.push(newRow);
+    },
+    getValues() {
+      const tableValues = this.editTIMData.map(row => {
+        return { name: row.name, period: row.period };
+      });
+      console.log(tableValues);
+    },
+		showTableDialog() {
+      this.showTable = true;
+    },
+    saveTable() {
+      this.showTable = false;
+			this.getValues()
+			this.resetTable()
+    },
+    cancelTable() {
+      this.showTable = false;
+      this.resetTable();
+    },
+    resetTable() {
+			this.editTIMData =  [
+        { name: 'input period1', period: 'Day', readonly: false },
+        { name: 'input period2', period: 'Week', readonly: false }
+      ]
+    }
   }
-
-  // Convert the workbook to a binary string
-  const workbookBinaryString = XLSX.write(workbook, {
-    type: "binary",
-    bookType: "xlsx",
-  });
-
-  // Create a Blob from the binary string
-  const blob = new Blob([this.s2ab(workbookBinaryString)], {
-    type: "application/octet-stream",
-  });
-
-  // Create a download URL for the Blob
-  const url = URL.createObjectURL(blob);
-
-  // Create a link element for downloading the CSV file
-  const link = document.createElement("a");
-	link.style.display = "none";
-  link.setAttribute("href", url);
-  link.setAttribute("download", "Results.xlsx");
-  link.innerHTML = "Download XLSX";
-  // Append the link element to the document body
-  document.body.appendChild(link);
-
-  // Trigger the download
-  link.click();
-},
-// Utility function to convert a string to an ArrayBuffer
-s2ab(s) {
-  const buf = new ArrayBuffer(s.length);
-  const view = new Uint8Array(buf);
-  for (let i = 0; i < s.length; i++) {
-    view[i] = s.charCodeAt(i) & 0xff;
   }
-  return buf;
-}
-
-
-  }
-}
 </script>
 <style scoped>
 .hint {
@@ -980,7 +1059,7 @@ s2ab(s) {
 }
 .downLoadCsvBtn {
 	position: absolute;
-right: 10px;
+	right: 10px;
 	top: 273px;
 	color: #333333;
 }
