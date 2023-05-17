@@ -64,7 +64,7 @@
 				<el-form-item>
 					<el-radio
 						v-model="indicatorRadio"
-						label="Symbol Indicators"
+						label="Symbol OHLCV"
 						@change="changeIndicatorChecked"
 					>
 					</el-radio>
@@ -73,7 +73,7 @@
 					<el-select 
 						v-model="si.symbolIndicator"
 						placeholder="Please select condition"
-						:disabled="!(indicatorRadio === 'Symbol Indicators')"
+						:disabled="!(indicatorRadio === 'Symbol OHLCV')"
 						@change="handleSymbolSelect"
 					>
 						<el-option
@@ -130,7 +130,7 @@ export default {
 			}
 		}
 		var validateSym = (rule, value, callback) => {
-			if (!value && this.indicatorRadio == 'Symbol Indicators') {
+			if (!value && this.indicatorRadio == 'Symbol OHLCV') {
 				callback(new Error('Please choose symbol ohlcv'))
 			} else {
 				callback()
@@ -602,7 +602,7 @@ export default {
 				'Sentiment Indicators',
 				'Technical Indicators',
 				'Risk Control',
-				'Symbol Indicators'
+				'Symbol OHLCV'
 			]
 			const obj = {}
 			obj.criteria = this.criteria
@@ -758,7 +758,7 @@ export default {
 				}
 			}
 			if (
-				this.indicatorRadio === 'Symbol Indicators' &&
+				this.indicatorRadio === 'Symbol OHLCV' &&
 				!this.exitItemCheck
 			) {
 				this.$refs.siForm.validate((valid) => {
@@ -845,7 +845,7 @@ export default {
 					}
 					// todo 加入symbol analysis
 					if (newVal[this.criteria].signals[index].analysis === 'Symbol') {
-						this.indicatorRadio = 'Symbol Indicators'
+						this.indicatorRadio = 'Symbol OHLCV'
 						this.si.symbolIndicator =
 							newVal[this.criteria].signals[index].indicator
 						let obj = {}
