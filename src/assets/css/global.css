@@ -354,8 +354,8 @@ input[type="time"] {
 }
 
 .indicator-box .el-form-item .el-form-item__content .el-form-item__error {
-  padding-top: 0px;
-  left: 80px;
+  padding-top: -1px;
+  left: -20px;
 }
 .senti-container .el-form-item .el-form-item__content .el-form-item__error {
   padding-top: 0px;
@@ -529,6 +529,7 @@ input[type="time"] {
     width: 124px;
     border-radius: unset;
   }
+
   .exit-container input:not([type]),
   .exit-container input[type="text"],
   .exit-container input[type="number"],
@@ -568,7 +569,7 @@ input[type="time"] {
 .entry-container .signal-option-box .signal-container input[type='number']:first-child, 
 .entry-container .signal-option-box .signal-container input[type='date']:first-child,
 .entry-container .signal-option-box .signal-container input[type='time']:first-child {
-	width: 178px;
+	width: 200px;
 }
 .entry-container .signal-option-box .signal-container .score-container input:not([type]), 
 .entry-container .signal-option-box .signal-container .score-container input[type='text'], 
@@ -582,7 +583,7 @@ input[type="time"] {
 .exit-container .signal-option-box .signal-container input[type='number']:first-child, 
 .exit-container .signal-option-box .signal-container input[type='date']:first-child,
 .exit-container .signal-option-box .signal-container input[type='time']:first-child {
-	width: 178px;
+	width: 200px;
 }
 .exit-container .signal-option-box .signal-container .el-input__inner {
 	margin-left: 5px;
@@ -603,6 +604,28 @@ input[type="time"] {
 .exit-container .signal-option-box .signal-container input[type='date']:last-child,
 .exit-container .signal-option-box .signal-container input[type='time']:last-child {
 	width: 100px;
+}
+.entry-container .custom-indicator-form input:not([type]),
+.entry-container .custom-indicator-form input[type="text"],
+.entry-container .custom-indicator-form input[type="number"],
+.entry-container .custom-indicator-form input[type="date"],
+.entry-container .custom-indicator-form input[type="time"] {
+  border: #000000 solid 1px;
+  padding: 0 5px 0 10px;
+  height: 40px;
+  width: 280px;
+  border-radius: unset;
+}
+.exit-container .custom-indicator-form input:not([type]),
+.exit-container .custom-indicator-form input[type="text"],
+.exit-container .custom-indicator-form input[type="number"],
+.exit-container .custom-indicator-form input[type="date"],
+.exit-container .custom-indicator-form input[type="time"] {
+  border: #000000 solid 1px;
+  padding: 0 5px 0 10px;
+  height: 40px;
+  width: 280px;
+  border-radius: unset;
 }
 .el-tabs__new-tab{
   margin: 12px 5px 9px 10px;
