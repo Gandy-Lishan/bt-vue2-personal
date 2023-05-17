@@ -3,7 +3,7 @@
 	<div class="senti-container">
 		<el-form :model="sym" :rules="rules" ref="symbolForm">
 			<div class="condition-container">
-				<el-form-item :label="symVal"></el-form-item>
+				<el-form-item :label="symbolLabel"></el-form-item>
 				<div class="conditionSelect new">
 					<el-form-item>
 						<el-select
@@ -128,8 +128,31 @@ export default {
 			editTechVal: '',
 			rules: {
 				value: [{ validator: validateValue, trigger: 'blur' }],
-			}
+			},
+			symbolLabel: 'Symbol Open'
 		}
+	},
+	computed: {
+		...mapGetters(['getBeforeCalculateNewConditions']),
+		beforeCalculateNewConditions() {
+			return this.getBeforeCalculateNewConditions
+		},
+	},
+	watch: {
+		beforeCalculateNewConditions: {
+			handler(newVal) {
+				this.calculateNewConditions()
+			},
+			immediate: true,
+			deep: true
+		},
+		symVal: {
+			handler(newVal) {
+				if(this.$store.state.symbolConditions.findIndex(item=>item.label==this.symVal)!=-1) this.symbolLabel = newVal
+			},
+			immediate: true,
+			deep: true
+		},
 	},
 	methods: {
 		ROCLikeChange(val){
