@@ -468,14 +468,27 @@
 				</div>
 			</el-tab-pane>			
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
-			
 		</el-tabs>
+
+		<div class="downLoadCsvBtn">
+			<el-button
+				@click="handleDownloadCsv"
+				style="display: inline-block"
+				type="primary"
+				plain
+				size="mini"
+				icon="el-icon-download"
+				>Export Data</el-button
+			>
+		</div>
 	</div>
 </template>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import jutils from 'jutils-src'
 import { seeReport } from '@/service/service'
+const XLSX = require('xlsx');
 
 export default {
 	data() {
@@ -505,6 +518,7 @@ export default {
 				'6 Months [%]',	
 			],
 			backtestHistoryList: [],
+			unSplitTadeData: [],
 			period_dict: {
 				5: "1WeekReturn", 10: "2WeeksReturn", 21: "1MonthReturn", 42: "2MonthsReturn",
 				63: "3MonthsReturn", 126: "6MonthsReturn", 252: "12MonthsReturn"
@@ -656,6 +670,7 @@ export default {
 								vm.totalTradesNumber = (initalData['Trades'].length)/2
 								vm.handleCurrentChange(1)
 								vm.tradesData = initalData['Trades']
+								vm.unSplitTadeData =  vm.tradesData
 								
 								// 保存tradesdata到store
 								this.$store.commit('getTradesData',vm.tradesData)
@@ -1030,7 +1045,109 @@ export default {
 			this.$nextTick(() => {
 				this.splitTradeData = this.tradesData.slice(20*(this.queryInfo.page-1),this.queryInfo.page*20)
 			})
+		},
+		handleDownloadCsv() {
+		if (!(this.tableData.length && this.splitTradeData.length && this.backtestHistoryList.length)) {
+			this.$message.warning('No data available for download.')
+			return
 		}
+		const summary = []
+		this.tableData.forEach((item, index) => {
+			const obj = {}
+			obj['TOTAL RETURN %'] = isNaN(item.totalReturn) ? 0 : `${item.totalReturn}%`
+			obj['Annual Return % (CAGR)'] = isNaN(item.CAGR) ? 0 : `${item.CAGR}%`
+			obj['MEDIAN RETURN %'] = isNaN(item.medianReturn) ? 0 : `${item.medianReturn}%`
+			obj['AVERAGE RETURN %'] = isNaN(item.averageReturn) ? 0 : `${item.averageReturn}%`
+			obj['Z_SCORE'] = isNaN(item.tzScore) ? 0 : `${item.tzScore}`
+			obj['STD. DEV'] = isNaN(item.standardDeviation) ? 0 : `${item.standardDeviation}`
+			obj['BUY & HOLD %'] = isNaN(item.buyHoldGain) ? 0 : `${item.buyHoldGain}%`
+			obj['WIN RATE %'] = isNaN(item.winRate) ? 0 : `${item.winRate}%`
+			obj['AVERAGE WIN %'] = isNaN(item.averageWin) ? 0 : `${item.averageWin}%`
+			obj['AVERAGE LOSS %'] = isNaN(item.averageLoss) ? 0 : `${item.averageLoss}%`
+			obj['MAX RISK %'] = isNaN(item.drawDown) ? 0 : `${item.drawDown}%`
+			obj['TOTAL TRADES'] = isNaN(item.totalTrades) ? 0 : `${item.totalTrades}`
+			obj['TOTAL POSITIVE'] = isNaN(item.totalPositive) ? 0 : `${item.totalPositive}`
+			obj['TOTAL NEGATIVE'] = isNaN(item.totalNegative) ? 0 : `${item.totalNegative}`
+			obj['TIME IN MARKET %'] = isNaN(item.timeInMarket) ? 0 : `${item.timeInMarket}%`
+			summary.push(obj)
+		})
+		const tradeData = []
+		this.unSplitTadeData.forEach((item, index) => {
+			const obj = {}
+			obj['Trade #'] = index + 1
+			obj['Trade Date'] = item.Date
+			obj['Action'] = item.TradeStatus
+			obj['Indicator'] = item.Indicator.join(',')
+			obj['Trade Price'] = item.TradePrice
+			obj['Trade Return %'] = `${item.TradeReturn}%`
+			obj['Total Return %'] = `${item.Return}%`
+			tradeData.push(obj)
+		})
+		const backtestHistoryList = []
+		this.backtestHistoryList.forEach(item => {
+			const obj = {}
+			obj['Entry Date'] = item['Entry Date']
+			obj['1 Week [%]'] = item['1 Week [%]']
+			obj['2 Weeks [%]'] = item['2 Weeks [%]']
+			obj['1 Month [%]'] = item['1 Month [%]']
+			obj['2 Months [%]'] = item['2 Months [%]']
+			obj['3 Months [%]'] = item['3 Months [%]']
+			obj['6 Months [%]'] = item['6 Months [%]']
+			obj['12 Months [%]'] = item['12 Months [%]']
+			backtestHistoryList.push(obj)
+		})
+		const dataList = [summary, tradeData, backtestHistoryList];
+		const sheetNames = ["Summary", "Trades", "Exit with different Time Frame"];
+				// console.log('准备下载的数据 dataList', dataList)
+		this.exportDataToCSV(dataList, sheetNames);
+		},
+			exportDataToCSV(dataList, sheetNames) {
+	// Create a new workbook
+	const workbook = XLSX.utils.book_new();
+
+	for (let i = 0; i < dataList.length; i++) {
+		// Convert the data to a worksheet
+		const worksheet = XLSX.utils.json_to_sheet(dataList[i]);
+
+		// Add the worksheet to the workbook with the given name
+		XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i]);
+	}
+
+	// Convert the workbook to a binary string
+	const workbookBinaryString = XLSX.write(workbook, {
+		type: "binary",
+		bookType: "xlsx",
+	});
+
+	// Create a Blob from the binary string
+	const blob = new Blob([this.s2ab(workbookBinaryString)], {
+		type: "application/octet-stream",
+	});
+
+	// Create a download URL for the Blob
+	const url = URL.createObjectURL(blob);
+
+	// Create a link element for downloading the CSV file
+	const link = document.createElement("a");
+		link.style.display = "none";
+	link.setAttribute("href", url);
+	link.setAttribute("download", "Results.xlsx");
+	link.innerHTML = "Download XLSX";
+	// Append the link element to the document body
+	document.body.appendChild(link);
+
+	// Trigger the download
+	link.click();
+	},
+	// Utility function to convert a string to an ArrayBuffer
+	s2ab(s) {
+	const buf = new ArrayBuffer(s.length);
+	const view = new Uint8Array(buf);
+	for (let i = 0; i < s.length; i++) {
+		view[i] = s.charCodeAt(i) & 0xff;
+	}
+	return buf;
+	}
 	}
 }
 </script>
@@ -1045,6 +1162,7 @@ export default {
 	color: black !important;
 	right:8px;
 	font-weight: 300;
+	margin: 0;
 }
 
 .imgBox {
@@ -1069,5 +1187,10 @@ export default {
 	width: 90%;
 	font-size: 0.8rem;
 }
-
+.downLoadCsvBtn {
+	position: absolute;
+	right: 10px;
+	top: 273px;
+	color: #333333;
+}
 </style>
