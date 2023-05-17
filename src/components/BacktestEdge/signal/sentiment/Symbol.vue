@@ -101,7 +101,7 @@ export default {
 			isROCLike: false,
 			//preload: false,
 			sym: {
-				comparison: 'SY',
+				comparison: 'SV',
 				condition: 3,
 				newCondition: 3,
 				value: '',

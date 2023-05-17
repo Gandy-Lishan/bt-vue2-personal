@@ -480,12 +480,12 @@ class DecodeSC {
 		return data
 	}
 	sy_condition_value(val) {
-		var re = /^SY\/(-?0?\d*?\.?\d*?)\/(-?0?\d*?\.?\d*?)$/
+		var re = /^SV\/(-?0?\d*?\.?\d*?)\/(-?0?\d*?\.?\d*?)$/
 		if (val.search(re) == -1)
 			return 'The input parameters of the Signal Condition maybe error!'
 		// var array = val.match(re)
 		var data = {
-			comparison: 'SY',
+			comparison: 'SV',
 			condition: RegExp.$1,
 			value: RegExp.$2,
 		}
@@ -754,7 +754,11 @@ class EncodeSY {
 		return (
 			'SY:' +
 			obj['indicator'] +
-			';IDS:;SC:' +
+			';IDS:EO' +
+			null +
+			'/EP' +
+			null +
+			';SC:' +
 			obj['comparison'] +
 			'/' +
 			obj['condition'] +

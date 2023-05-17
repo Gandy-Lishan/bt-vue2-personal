@@ -813,7 +813,7 @@ export default {
 										}
 									}
 								}
-								// 在 technical indicator list内检索url
+								// 在 symbol indicator list内检索url
 								if (!signal) {
 									if(this.$store.state.symbolConditions.findIndex(i=>i.label==item.indicator) !== -1){
 										return item.indicator
@@ -828,11 +828,18 @@ export default {
 									let signal = CIQ.indicatorList.find((i) => {
 										return i.chart_name == item.indicator
 									})
+									// 在 technical indicator list内检索url
 									if (!signal) {
 										for (let i = 0; i < formateTechnicalList.length; i++) {
 											if (formateTechnicalList[i].value == item.indicator) {
 												return formateTechnicalList[i].url
 											}
+										}
+									}
+									// 在 symbol indicator list内检索url
+									if (!signal) {
+										if(this.$store.state.symbolConditions.findIndex(i=>i.label==item.indicator) !== -1){
+											return item.indicator
 										}
 									}
 									return signal.url
@@ -843,6 +850,8 @@ export default {
 							delete backtestData.entry.signals	
 							for (let i = 0; i < signalEntryList.length; i++) {
 								let code = b.encode(signalEntryList[i])
+
+								//code = "SI:Symbol Low;IDS:EO0/EP0;SC:SV/2/400"
 								var singal = {
 									code: code
 								}
