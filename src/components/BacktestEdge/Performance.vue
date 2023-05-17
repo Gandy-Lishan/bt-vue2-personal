@@ -450,7 +450,13 @@
 										>
 											<template slot-scope="scope">
 												<p class="tableText">
-													{{ scope.row[column.period] }}
+													{{ 
+														!Number.isNaN(scope.row[column.period])?
+															typeof scope.row[column.period] == 'string'?
+																scope.row[column.period]:
+																parseFloat(scope.row[column.period]).toFixed(1)	 
+														:null
+													}}
 												</p>
 											</template>
 										</el-table-column>
@@ -775,10 +781,12 @@ export default {
 
 				let temp_std = this.calculate_std(used_quotes.map(obj=>obj[this.period_dict[period_list[i]]]))
         		let temp_mean = this.calculate_mean(quotes.map(obj=>obj[this.period_dict[period_list[i]]]))
-				z_score_list.push(parseFloat(((temp_median - temp_mean) / (temp_std / Math.sqrt(used_quotes.length))).toFixed(1)))
+				z_score_list.push(
+					parseFloat(((temp_median - temp_mean) / (temp_std / Math.sqrt(used_quotes.length))).toFixed(1))
+				)
 
 				//  console.log(this.period_dict[period_list[i]] + ': ',used_quotes.map(obj=>obj[this.period_dict[period_list[i]]]))
-				//  console.log('median_list',median_list)
+				  
 				//  console.log('positive_list',positive_list)
 				//  console.log("MaxLoss" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxLoss" + period_list[i]]))
 				//  console.log("MaxGain" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxGain" + period_list[i]]))
@@ -815,7 +823,7 @@ export default {
 		},
 		calculate_win_rate(arr){
 			let return_series = arr.map(x=>x>0?1:0)
-			return parseFloat(this.calculate_mean(return_series)).toFixed(1)
+			return parseFloat(this.calculate_mean(return_series).toFixed(1))
 		},
 		calculate_mean(arr){
 			if(arr.length==0) return NaN
@@ -826,7 +834,7 @@ export default {
 			if(arr.length==0) return NaN
 			const mid = Math.floor(arr.length / 2);
 			const nums = [...arr].sort((a, b) => a - b);
-			return parseFloat(arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2).toFixed(1);
+			return parseFloat((arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2).toFixed(1));
 		},
 		generate_period_data(quotes,period,direction){
 			const field = 'Open'
