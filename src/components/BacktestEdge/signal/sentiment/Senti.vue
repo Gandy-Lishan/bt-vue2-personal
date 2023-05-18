@@ -477,14 +477,8 @@ export default {
 				this.senti.comparison = 'SV'
 				let result
 				this.$store.state.indicatorsList.forEach((value, index) => {
-					if (this.sentiVal) {
-						if (value.chart_name.indexOf(this.sentiVal) !== -1) {
-							result = value
-						}
-					} else {
-						if (value.chart_name.indexOf(this.sentiVal) !== -1) {
-							result = value
-						}
+					if (value.url == this.sentiUrl) {
+						result = value
 					}
 				})
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -560,8 +554,8 @@ export default {
 			}
 			let result
 			this.$store.state.indicatorsList.forEach((value, index) => {
-				if (this.sentiVal) {
-					if (value.chart_name.indexOf(this.sentiVal) !== -1) {
+				if (this.sentiUrl) {
+					if (value.url == this.sentiUrl) {
 						result = value
 					}
 				} 
@@ -586,7 +580,7 @@ export default {
 				display: 'ST MA',
 				Field: result.url
 			})
-
+console.log(sd,CIQ.stxx.layout.studies)
 			// keep current MA
 			var objMA = { period: _val, url: result.url }
 			var activatedMAList = this.$store.state.activatedMA
