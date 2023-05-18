@@ -559,6 +559,7 @@ export default {
 			CIQ.removePrompt()
 			CIQ.hideMarker()
 			CIQ.isMarkerShown = false
+			CIQ.store.commit('getTradesData',[])
 			document.getElementsByClassName('ciq-period')[0].style.display = 'block'
 			if (
 				stx.chart.symbol != CIQ.store.state.backtestSymbol ||
