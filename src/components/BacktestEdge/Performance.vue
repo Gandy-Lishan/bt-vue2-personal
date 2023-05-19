@@ -531,12 +531,6 @@
 										style="margin-top: 10px"
 										>Add Row</el-button
 									>
-									<el-button
-										type="success"
-										@click="getValues"
-										style="margin-top: 10px"
-										>获取值</el-button
-									>
 								</div>
 								<div slot="footer" class="dialog-footer">
 									<el-button @click="cancelTable">Cancel</el-button>
@@ -1096,7 +1090,7 @@ export default {
     saveTable() {
       this.showTable = false;
       if (this.tradesData.length === 0) {
-        this.$message.warning('没有可计算的交易')
+        this.$message.warning('No computable trades.')
         return
       }
       const periodArray = this.getValues()
