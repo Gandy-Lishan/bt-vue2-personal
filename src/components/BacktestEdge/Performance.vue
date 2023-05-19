@@ -402,10 +402,7 @@
 				</el-pagination> -->
 				</div>
 			</el-tab-pane>
-			<el-tab-pane
-				label="Exit with different Time-In-Market frame"
-				name="third"
-			>
+			<el-tab-pane label="Exit with different Time-In-Market" name="third">
 				<div class="trades-container">
 					<p>
 						The results below provide a multiple timeframe view of the backtest
@@ -414,38 +411,146 @@
 						Instead, we provide a look at various time-frames from 1-Week to
 						1-Year of returns.
 					</p>
+					<el-tabs v-model="activeTIM" type="card" v-loading="loading">
+						<el-tab-pane label="Exit With Default Time-In-Market" name="first">
+							<div class="history-container">
+								<el-skeleton :rows="6" :loading="loading" animated>
+									<template>
+										<el-table
+											:data="backtestHistoryList"
+											stripe
+											show-summary
+											:summary-method="getSummaries"
+											style="width: 100%; height: 100%"
+										>
+											<template v-for="(l, index) in defaultTableLabels">
+												<el-table-column :label="l" :prop="l" :key="index">
+													<template slot-scope="scope">
+														<p class="tableText">
+															{{ scope.row[l] }}
+														</p>
+													</template>
+												</el-table-column>
+											</template>
+											<div slot="empty" style="text-align: left">
+												<el-empty
+													image-size="80"
+													description="No Data"
+												></el-empty>
+											</div>
+										</el-table>
+									</template>
+								</el-skeleton>
+							</div>
+						</el-tab-pane>
+						<el-tab-pane
+							label="Exit with Customized Time-In-Market"
+							name="second"
+						>
+							<el-button
+								type="primary"
+								@click="showTableDialog"
+								v-if="!showTable"
+								>Edit exit with different TIM</el-button
+							>
+							<div class="history-container">
+								<el-skeleton :rows="6" :loading="loading" animated>
+									<template>
+										<el-table
+											:data="TIMHistoryList"
+											stripe
+											show-summary
+											:summary-method="getSummaries"
+											style="width: 100%; height: 100%"
+										>
+											<template v-for="(l, index) in defaultTIMTableLabels">
+												<el-table-column :label="l" :prop="l" :key="index">
+													<template slot-scope="scope">
+														<p class="tableText">
+															{{ scope.row[l] }}
+														</p>
+													</template>
+												</el-table-column>
+											</template>
+											<div slot="empty" style="text-align: left">
+												<el-empty
+													image-size="80"
+													description="No Data"
+												></el-empty>
+											</div>
+										</el-table>
+									</template>
+								</el-skeleton>
+							</div>
 
-					<div class="history-container">
-						<el-skeleton :rows="6" :loading="loading" animated>
-							<template>
-								<el-table
-									:data="backtestHistoryList"
-									stripe
-									show-summary
-									:summary-method="getSummaries"
-									style="width: 100%; height: 100%"
-								>
-									<div v-if="defaultTableLabels.length > 0">
-										<template v-for="(l, index) in defaultTableLabels">
-											<el-table-column :label="l" :prop="l" :key="index">
-												<template slot-scope="scope">
-													<p class="tableText">
-														{{ scope.row[l] }}
-													</p>
-												</template>
-											</el-table-column>
-										</template>
-									</div>
-									<div slot="empty" style="text-align: left">
-										<el-empty image-size="80" description="No Data"></el-empty>
-									</div>
-								</el-table>
-							</template>
-						</el-skeleton>
-					</div>
+							<el-dialog
+								title="Edit exit with different TIM Table"
+								:visible.sync="showTable"
+								width="80%"
+								@closed="resetTable"
+							>
+								<div>
+									<el-table
+										:data="editTIMData"
+										style="width: 100%"
+										border
+										ref="table"
+									>
+										<el-table-column
+											type="index"
+											label="Index"
+											width="80"
+										></el-table-column>
+										<el-table-column label="Period">
+											<template slot-scope="scope">
+												<el-input
+													style="width: 50%"
+													:readonly="scope.row.readonly"
+													:placeholder="scope.row.placeholder"
+													v-model="scope.row.period"
+												></el-input>
+											</template>
+										</el-table-column>
+										<el-table-column label="Timeframe">
+											<template slot-scope="scope">
+												<el-select
+													v-model="scope.row.timeframe"
+													:disabled="scope.row.readonly"
+												>
+													<el-option label="Day(s)" value="Day"></el-option>
+													<el-option label="Week(s)" value="Week"></el-option>
+													<el-option label="Month(s)" value="Month"></el-option>
+												</el-select>
+											</template>
+										</el-table-column>
+									</el-table>
+									<el-button
+										type="primary"
+										icon="el-icon-plus"
+										@click="addRow"
+										style="margin-top: 10px"
+										>Add Row</el-button
+									>
+									<el-button
+										type="success"
+										@click="getValues"
+										style="margin-top: 10px"
+										>获取值</el-button
+									>
+								</div>
+								<div slot="footer" class="dialog-footer">
+									<el-button @click="cancelTable">Cancel</el-button>
+									<el-button type="primary" @click="saveTable">Save</el-button>
+								</div>
+							</el-dialog>
+						</el-tab-pane>
+					</el-tabs>
 				</div>
 			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
+			<!-- <el-tab-pane label="Exit with different TIM" name="fifth">
+
+			</el-tab-pane> -->
 		</el-tabs>
 
 		<div class="downLoadCsvBtn">
@@ -486,7 +591,6 @@ export default {
       totalTradesNumber: 0,
       splitTradeData: [],
       defaultTableLabels: [
-        '12 Months [%]',
         'Entry Date',
         '1 Week [%]',
         '2 Weeks [%]',
@@ -494,9 +598,18 @@ export default {
         '2 Months [%]',
         '3 Months [%]',
         '6 Months [%]',
+        '12 Months [%]'
       ],
       backtestHistoryList: [],
-			unSplitTadeData: []
+      unSplitTadeData: [],
+      showTable: false,
+      editTIMData: [
+        { period: '1', placeholder: 'input period1', timeframe: 'Day', readonly: false },
+        { period: '1', placeholder: 'input period2', timeframe: 'Week', readonly: false }
+      ],
+      activeTIM: 'first',
+      defaultTIMTableLabels: ['Entry Date', '1 Day [%]', '1 Week [%]'],
+      TIMHistoryList: []
     }
   },
   created() {
@@ -604,12 +717,17 @@ export default {
                 vm.totalTradesNumber = (initalData['Trades'].length) / 2
                 vm.handleCurrentChange(1)
                 vm.tradesData = initalData['Trades']
-								vm.unSplitTadeData =  vm.tradesData 
+                vm.unSplitTadeData = vm.tradesData
 
                 // 保存tradesdata到store
                 this.$store.commit('getTradesData', vm.tradesData)
                 // 根据entrydate计算未来收益
-                this.backtestHistoryList = this.calculateBacktestHistory(vm.tradesData)
+                const periodArray = [
+                  { period: 1, timeframe: 'Week' }, { period: 2, timeframe: 'Week' }, { period: 1, timeframe: 'Month' },
+                  { period: 2, timeframe: 'Month' }, { period: 3, timeframe: 'Month' }, { period: 6, timeframe: 'Month' },
+                  { period: 12, timeframe: 'Month' }
+                ]
+                this.backtestHistoryList = this.calculateBacktestHistory(vm.tradesData, periodArray)
               }
 
               // ---------------------------------------- end ----------------------------------
@@ -636,11 +754,35 @@ export default {
         if (callback) { callback() }
       }, 0)
     },
-    calculateBacktestHistory(dataSet) {
+    transformData(data) {
+      return data.map(item => {
+        let timeframe = item.period > 1 ? `${item.period} ${item.timeframe}s [%]` : `${item.period} ${item.timeframe} [%]`;
+        let value
+        switch (item.timeframe) {
+          case 'Day':
+            value = Number(item.period)
+            break;
+          case 'Week':
+            value = Number(item.period) * 5
+            break;
+          case 'Month':
+            value = Number(item.period) * 21
+            break;
+          default:
+            break;
+        }
+        return { timeframe, period: item.period, value };
+      });
+    },
+    calculateBacktestHistory(dataSet, periodArray) {
+      /*
+      periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
+      */
       let chartDataset = CIQ.stxx.chart.dataSet
       const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
       dataSet = dataSet.filter(item => item.TradeStatus == 'BUY')
       let backtestResult = []
+
       for (var data in dataSet) {
         var datatime = new Date(dataSet[data].Date)
 
@@ -654,23 +796,13 @@ export default {
         if (res != -1) {
           //拿进场价格和前一天作比较
           let entryPrice = chartDataset[res].Open
-          let exitIn5Bar = chartDataset[res + 5] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 5].Open : chartDataset[res + 5].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
-          let exitIn10Bar = chartDataset[res + 10] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 10].Open : chartDataset[res + 10].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
-          let exitIn21Bar = chartDataset[res + 21] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 21].Open : chartDataset[res + 21].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
-          let exitIn42Bar = chartDataset[res + 42] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 42].Open : chartDataset[res + 42].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
-          let exitIn63Bar = chartDataset[res + 63] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 63].Open : chartDataset[res + 63].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
-          let exitIn126Bar = chartDataset[res + 126] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 126].Open : chartDataset[res + 126].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
-          let exitIn252Bar = chartDataset[res + 252] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 252].Open : chartDataset[res + 252].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
-          backtestResult.push({
-            '12 Months [%]': exitIn252Bar,
-            'Entry Date': dataSet[data].Date,
-            '1 Week [%]': exitIn5Bar,
-            '2 Weeks [%]': exitIn10Bar,
-            '1 Month [%]': exitIn21Bar,
-            '2 Months [%]': exitIn42Bar,
-            '3 Months [%]': exitIn63Bar,
-            '6 Months [%]': exitIn126Bar,
+          const transformData = this.transformData(periodArray)
+          let obj = {}
+          transformData.map(item => {
+            let exitBar = chartDataset[res + item.value] ? ((direction == 'Short' ? entryPrice - chartDataset[res + item.value].Open : chartDataset[res + item.value].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
+            obj[item.timeframe] = exitBar
           })
+          backtestResult.push({ 'Entry Date': dataSet[data].Date, ...obj })
         }
       }
       return backtestResult
@@ -889,60 +1021,111 @@ export default {
         obj['12 Months [%]'] = item['12 Months [%]']
         backtestHistoryList.push(obj)
       })
-      const dataList = [summary, tradeData, backtestHistoryList];
-      const sheetNames = ["Summary", "Trades", "Exit with different Time Frame"];
-			// console.log('准备下载的数据 dataList', dataList)
+      const dataList = [summary, tradeData, backtestHistoryList, this.TIMHistoryList];
+      const sheetNames = ["Summary", "Trades", "Exit with default Time Frame", "Exit with Customized TIM"];
+      // console.log('准备下载的数据 dataList', dataList)
       this.exportDataToCSV(dataList, sheetNames);
     },
-		exportDataToCSV(dataList, sheetNames) {
-  // Create a new workbook
-  const workbook = XLSX.utils.book_new();
+    exportDataToCSV(dataList, sheetNames) {
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new();
 
-  for (let i = 0; i < dataList.length; i++) {
-    // Convert the data to a worksheet
-    const worksheet = XLSX.utils.json_to_sheet(dataList[i]);
+      for (let i = 0; i < dataList.length; i++) {
+        // Convert the data to a worksheet
+        const worksheet = XLSX.utils.json_to_sheet(dataList[i]);
 
-    // Add the worksheet to the workbook with the given name
-    XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i]);
-  }
+        // Add the worksheet to the workbook with the given name
+        XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i]);
+      }
+      // Convert the workbook to a binary string
+      const workbookBinaryString = XLSX.write(workbook, {
+        type: "binary",
+        bookType: "xlsx",
+      });
 
-  // Convert the workbook to a binary string
-  const workbookBinaryString = XLSX.write(workbook, {
-    type: "binary",
-    bookType: "xlsx",
-  });
+      // Create a Blob from the binary string
+      const blob = new Blob([this.s2ab(workbookBinaryString)], {
+        type: "application/octet-stream",
+      });
 
-  // Create a Blob from the binary string
-  const blob = new Blob([this.s2ab(workbookBinaryString)], {
-    type: "application/octet-stream",
-  });
+      // Create a download URL for the Blob
+      const url = URL.createObjectURL(blob);
 
-  // Create a download URL for the Blob
-  const url = URL.createObjectURL(blob);
+      // Create a link element for downloading the CSV file
+      const link = document.createElement("a");
+      link.style.display = "none";
+      link.setAttribute("href", url);
+      link.setAttribute("download", "Results.xlsx");
+      link.innerHTML = "Download XLSX";
+      // Append the link element to the document body
+      document.body.appendChild(link);
 
-  // Create a link element for downloading the CSV file
-  const link = document.createElement("a");
-	link.style.display = "none";
-  link.setAttribute("href", url);
-  link.setAttribute("download", "Results.xlsx");
-  link.innerHTML = "Download XLSX";
-  // Append the link element to the document body
-  document.body.appendChild(link);
-
-  // Trigger the download
-  link.click();
-		},
-// Utility function to convert a string to an ArrayBuffer
-		s2ab(s) {
-			const buf = new ArrayBuffer(s.length);
-			const view = new Uint8Array(buf);
-			for (let i = 0; i < s.length; i++) {
-				view[i] = s.charCodeAt(i) & 0xff;
-			}
-			return buf;
-		}
-
-
+      // Trigger the download
+      link.click();
+    },
+    // Utility function to convert a string to an ArrayBuffer
+    s2ab(s) {
+      const buf = new ArrayBuffer(s.length);
+      const view = new Uint8Array(buf);
+      for (let i = 0; i < s.length; i++) {
+        view[i] = s.charCodeAt(i) & 0xff;
+      }
+      return buf;
+    },
+    addRow() {
+      if (this.editTIMData.length >= 10) {
+        this.$message.warning('Cannot add more than 10 rows.')
+        return
+      }
+      const newRow = {
+        period: '1',
+        timeframe: 'Day',
+        placeholder: `input period${this.editTIMData.length + 1}`,
+        readonly: false
+      };
+      this.editTIMData.push(newRow);
+    },
+    getValues() {
+      return this.editTIMData.map(row => {
+        return { period: row.period, timeframe: row.timeframe };
+      });
+    },
+    showTableDialog() {
+      this.showTable = true;
+    },
+    saveTable() {
+      this.showTable = false;
+      if (this.tradesData.length === 0) {
+        this.$message.warning('没有可计算的交易')
+        return
+      }
+      const periodArray = this.getValues()
+      const uniqueData = periodArray.filter((item, index, arr) => {
+        return arr.findIndex((elem) => elem.timeframe === item.timeframe) === index;
+      });
+      const transformData = this.transformData(uniqueData)
+      console.log(transformData)
+      const table = ['Entry Date']
+      transformData.map((item) => {
+        table.push(item.timeframe)
+      })
+      this.defaultTIMTableLabels = table
+      console.log(this.defaultTIMTableLabels)
+      const data = this.calculateBacktestHistory(this.tradesData, periodArray)
+      console.log('data', data)
+      this.TIMHistoryList = data
+      this.resetTable()
+    },
+    cancelTable() {
+      this.showTable = false;
+      this.resetTable();
+    },
+    resetTable() {
+      this.editTIMData = [
+        { period: '1', placeholder: 'input period1', timeframe: 'Day', readonly: false },
+        { period: '1', placeholder: 'input period2', timeframe: 'Week', readonly: false }
+      ]
+    },
   }
 }
 </script>
@@ -980,7 +1163,7 @@ export default {
 }
 .downLoadCsvBtn {
 	position: absolute;
-right: 10px;
+	right: 10px;
 	top: 273px;
 	color: #333333;
 }
