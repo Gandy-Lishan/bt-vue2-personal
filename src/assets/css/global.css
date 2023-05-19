@@ -241,6 +241,7 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   height: 25px;
   width: 124px;
   border-radius: unset;
+  font-size: 0.7rem;
 }
 .entry-container .delay-bar-box input:not([type]),
 .entry-container .delay-bar-box input[type="text"],
@@ -252,6 +253,7 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   height: 25px;
   width: 72px;
   border-radius: unset;
+  font-size: 0.7rem;
 }
 .exit-container input:not([type]),
 .exit-container input[type="text"],
@@ -263,6 +265,7 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   height: 25px;
   width: 124px;
   border-radius: unset;
+  font-size: 0.7rem;
 }
 .exit-container .delay-bar-box input:not([type]),
 .exit-container .delay-bar-box input[type="text"],
@@ -274,6 +277,7 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   height: 25px;
   width: 72px;
   border-radius: unset;
+  font-size: 0.7rem;
 }
 
 .set-up-container .dateBox .el-date-editor input:not([type]),
@@ -645,6 +649,7 @@ input[type="time"] {
   box-sizing: border-box;
   padding: 40px 0;
 }
+
 .multi-box .el-tabs__item {
 	background-color: #797979;
 	font-weight: bold;
@@ -683,4 +688,14 @@ input[type="time"] {
 }
 .trades-container td{
 	padding:0 !important;
+}
+.condition-radio input{
+	  color: #606266 !important;
+    font-weight: 500 !important;
+    font-size: 15px !important;
+    width: 150px !important;
+}
+
+.conditionSelect input {
+  height: unset !important;
 }
