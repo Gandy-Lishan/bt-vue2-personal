@@ -727,7 +727,7 @@ export default {
                   { period: 2, timeframe: 'Month' }, { period: 3, timeframe: 'Month' }, { period: 6, timeframe: 'Month' },
                   { period: 12, timeframe: 'Month' }
                 ]
-                this.backtestHistoryList = this._calculateBacktestHistory(vm.tradesData, periodArray)
+                this.backtestHistoryList = this.calculateBacktestHistory(vm.tradesData, periodArray)
               }
 
               // ---------------------------------------- end ----------------------------------
@@ -754,45 +754,6 @@ export default {
         if (callback) { callback() }
       }, 0)
     },
-    calculateBacktestHistory(dataSet) {
-      let chartDataset = CIQ.stxx.chart.dataSet
-      const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
-      dataSet = dataSet.filter(item => item.TradeStatus == 'BUY')
-      let backtestResult = []
-      for (var data in dataSet) {
-        var datatime = new Date(dataSet[data].Date)
-
-        var offset = datatime.getTimezoneOffset() * 60 * 1000
-        var entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
-
-        let res = chartDataset.findIndex(x => {
-          return entryDate.getTime() == x.DT.getTime()
-        })
-
-        if (res != -1) {
-          //拿进场价格和前一天作比较
-          let entryPrice = chartDataset[res].Open
-          let exitIn5Bar = chartDataset[res + 5] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 5].Open : chartDataset[res + 5].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
-          let exitIn10Bar = chartDataset[res + 10] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 10].Open : chartDataset[res + 10].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
-          let exitIn21Bar = chartDataset[res + 21] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 21].Open : chartDataset[res + 21].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
-          let exitIn42Bar = chartDataset[res + 42] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 42].Open : chartDataset[res + 42].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
-          let exitIn63Bar = chartDataset[res + 63] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 63].Open : chartDataset[res + 63].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
-          let exitIn126Bar = chartDataset[res + 126] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 126].Open : chartDataset[res + 126].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
-          let exitIn252Bar = chartDataset[res + 252] ? ((direction == 'Short' ? entryPrice - chartDataset[res + 252].Open : chartDataset[res + 252].Open - entryPrice) / entryPrice * 100).toFixed(2) + ' %' : ''
-          backtestResult.push({
-            '12 Months [%]': exitIn252Bar,
-            'Entry Date': dataSet[data].Date,
-            '1 Week [%]': exitIn5Bar,
-            '2 Weeks [%]': exitIn10Bar,
-            '1 Month [%]': exitIn21Bar,
-            '2 Months [%]': exitIn42Bar,
-            '3 Months [%]': exitIn63Bar,
-            '6 Months [%]': exitIn126Bar,
-          })
-        }
-      }
-      return backtestResult
-    },
     transformData(data) {
       return data.map(item => {
         let timeframe = item.period > 1 ? `${item.period} ${item.timeframe}s [%]` : `${item.period} ${item.timeframe} [%]`;
@@ -813,7 +774,7 @@ export default {
         return { timeframe, period: item.period, value };
       });
     },
-    _calculateBacktestHistory(dataSet, periodArray) {
+    calculateBacktestHistory(dataSet, periodArray) {
       /*
       periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
       */
@@ -1060,15 +1021,6 @@ export default {
         obj['12 Months [%]'] = item['12 Months [%]']
         backtestHistoryList.push(obj)
       })
-      console.log('TIMHistoryList', this.TIMHistoryList)
-      const TIMHistoryList = []
-      // this.TIMHistoryList.forEach(item => {
-      //   const obj = {}
-      //   Object.getOwnPropertyNames(item).forEach(function (key) {
-      //     obj[key] = item[key]
-      //   });
-      //   TIMHistoryList.push(obj)
-      // })
       const dataList = [summary, tradeData, backtestHistoryList, this.TIMHistoryList];
       const sheetNames = ["Summary", "Trades", "Exit with default Time Frame", "Exit with Customized TIM"];
       // console.log('准备下载的数据 dataList', dataList)
@@ -1085,7 +1037,6 @@ export default {
         // Add the worksheet to the workbook with the given name
         XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i]);
       }
-
       // Convert the workbook to a binary string
       const workbookBinaryString = XLSX.write(workbook, {
         type: "binary",
@@ -1160,7 +1111,7 @@ export default {
       })
       this.defaultTIMTableLabels = table
       console.log(this.defaultTIMTableLabels)
-      const data = this._calculateBacktestHistory(this.tradesData, periodArray)
+      const data = this.calculateBacktestHistory(this.tradesData, periodArray)
       console.log('data', data)
       this.TIMHistoryList = data
       this.resetTable()
