@@ -742,6 +742,7 @@ export default {
 									item.analysis = 'Sentiment'
 									delete item.technicalIndicator
 									delete item.sentimentIndicator
+									delete item.usersOwnIndicator
 									delete item.riskIndicator
 								}
 								if (item.technicalIndicator) {
@@ -749,6 +750,16 @@ export default {
 									item.analysis = 'Technical'
 									delete item.technicalIndicator
 									delete item.sentimentIndicator
+									delete item.usersOwnIndicator
+									delete item.riskIndicator
+								}
+								if (item.usersOwnIndicator) {
+									item.indicator = item.usersOwnIndicator
+									item.analysis = 'User'
+									// item.analysis = 'Sentiment'
+									delete item.technicalIndicator
+									delete item.sentimentIndicator
+									delete item.usersOwnIndicator
 									delete item.riskIndicator
 								}
 							})
@@ -759,6 +770,7 @@ export default {
 										item.analysis = 'Sentiment'
 										delete item.technicalIndicator
 										delete item.sentimentIndicator
+										delete item.usersOwnIndicator
 										delete item.riskIndicator
 									}
 									if (item.technicalIndicator) {
@@ -766,6 +778,7 @@ export default {
 										item.analysis = 'Technical'
 										delete item.technicalIndicator
 										delete item.sentimentIndicator
+										delete item.usersOwnIndicator
 										delete item.riskIndicator
 									}
 									if (item.riskIndicator) {
@@ -773,8 +786,18 @@ export default {
 										item.analysis = 'Exit'
 										delete item.technicalIndicator
 										delete item.sentimentIndicator
+										delete item.usersOwnIndicator
 										delete item.riskIndicator
 									}
+									if (item.usersOwnIndicator) {
+									item.indicator = item.usersOwnIndicator
+									item.analysis = 'User'
+									// item.analysis = 'Sentiment'
+									delete item.technicalIndicator
+									delete item.sentimentIndicator
+									delete item.usersOwnIndicator
+									delete item.riskIndicator
+								}
 								})
 							}
 							const b = new SignalCode()
@@ -787,10 +810,12 @@ export default {
 								formateTechnicalList = vm.loadShortLong()
 							}
 
-							let entrySignal = backtestData.entry.signals.map((item) => {
+							let entrySignal = backtestData.entry.signals.map((item,index) => {
+								// if it is senti
 								let signal = CIQ.indicatorList.find((i) => {
 									return i.chart_name == item.indicator
 								})
+								// if it is not senti?
 								if (!signal) {
 									for (let i = 0; i < formateTechnicalList.length; i++) {
 										if (formateTechnicalList[i].value == item.indicator) {
@@ -798,11 +823,18 @@ export default {
 										}
 									}
 								}
-								return signal.url
+								console.log('runbacktest',vm.$store.state.usersOwnEntryFileHash)
+								let usersOwnEntryList = vm.$store.state.usersOwnEntryFileHash
+								if(usersOwnEntryList[index]!=''){
+									return usersOwnEntryList[index]
+								}
+								return signal?.url || ''
 							})
+							
+							//entrySignal = entrySignal.concat(this.$store.state.usersOwnEntryFileHash).filter(item => item !== '')
 							let exitSignal
 							if (!this.isOnlyRisk) {
-								exitSignal = backtestData.exit.signals.map((item) => {
+								exitSignal = backtestData.exit.signals.map((item,index) => {
 									let signal = CIQ.indicatorList.find((i) => {
 										return i.chart_name == item.indicator
 									})
@@ -813,8 +845,13 @@ export default {
 											}
 										}
 									}
-									return signal.url
+									let usersOwnExitList = vm.$store.state.usersOwnExitFileHash
+									if(usersOwnExitList[index]!=''){
+										return usersOwnExitList[index]
+									}
+									return signal?.url || ''
 								})
+							//exitSignal = exitSignal.concat(this.$store.state.usersOwnExitFileHash).filter(item => item !== '')
 							} else {
 								exitSignal = ['']
 							}
@@ -946,10 +983,11 @@ export default {
 							backtestParams.strategy = backtestData.strategy
 							backtestParams.symbol = backtestData.symbol
 							backtestParams.win_rate = backtestData.win_rate
+							console.log('处理过后的 backtestData', backtestParams)
 							backtestParams = JSON.stringify(backtestParams)
 							/* ********** */
-
 							let backtestDataStr = this.$qs.stringify(backtestData)
+							console.log('backtestDataStr', backtestData)
 							// Before the back test, load the data of the whole period and generate CSV to upload S3, and then update the form when the results come out
 							this.reloadData(indicatorLayout, backtestData.frequency)
 							// 1. Upload data file
@@ -1057,6 +1095,7 @@ export default {
 					}
 				}
 			} catch (error) {
+				console.log(error)
 				this.$notify({
 					title: 'Failed',
 					message: 'The internal server is busy, please try again later',
