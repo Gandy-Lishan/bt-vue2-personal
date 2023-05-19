@@ -755,9 +755,9 @@ class EncodeSY {
 			'SY:' +
 			obj['indicator'] +
 			';IDS:EO' +
-			null +
+			0 +
 			'/EP' +
-			null +
+			0 +
 			';SC:' +
 			obj['comparison'] +
 			'/' +
