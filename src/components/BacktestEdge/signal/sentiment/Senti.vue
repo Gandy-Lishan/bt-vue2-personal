@@ -2,6 +2,8 @@
 <template>
 	<div class="senti-container">
 		<el-form :model="senti" :rules="rules" ref="sentiForm">
+			sentiVal:{{sentiVal}}
+			sentiUrl:{{sentiUrl}}
 			<div class="ids-container" v-if="indicatorRadio === 'sentiment'">
 				<el-form-item label="Extreme Optimism" prop="extreme_optimism">
 				<span slot="label">
@@ -312,6 +314,7 @@ export default {
 						break;
 				}
 				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars + ';':''
+				console.log(score,period,delay_bars)
 				commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
 				if(this.relation != 1) {
 				   let desObj = {}

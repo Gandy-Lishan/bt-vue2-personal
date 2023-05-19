@@ -714,18 +714,51 @@ export default {
       let radioObj = {}
       radioObj.index = this.panelIndex
       if (this.indicatorRadio === arr[0]) {
+        // 切换radio后移除usersOwnEntryFileHash
+        if (this.criteria === 'entry') {
+          this.$store.commit(`saveUsersOwnEntryFileHash`, {index:this.panelIndex,val:''})
+        }
+        if (this.criteria === 'exit') {
+          this.$store.commit(`saveUsersOwnExitFileHash`, {index:this.panelIndex,val:''})
+        }
+
         radioObj.value = 'sentiment'
         this.$emit('getIndicatorRadio', radioObj)
         this.$store.commit('getEntryIndicatorRadio', 'sentiment')
       } else if (this.indicatorRadio === arr[1]) {
+        // 切换radio后移除usersOwnEntryFileHash
+        if (this.criteria === 'entry') {
+          this.$store.commit(`saveUsersOwnEntryFileHash`, {index:this.panelIndex,val:''})
+        }
+        if (this.criteria === 'exit') {
+          this.$store.commit(`saveUsersOwnExitFileHash`, {index:this.panelIndex,val:''})
+        }
+
         radioObj.value = 'technical'
         this.$emit('getIndicatorRadio', radioObj)
         this.$store.commit('getEntryIndicatorRadio', 'technical')
       } else if (this.indicatorRadio === arr[2]) {
+        // 切换radio后移除usersOwnEntryFileHash
+        if (this.criteria === 'entry') {
+          this.$store.commit(`saveUsersOwnEntryFileHash`, {index:this.panelIndex,val:''})
+        }
+        if (this.criteria === 'exit') {
+          this.$store.commit(`saveUsersOwnExitFileHash`, {index:this.panelIndex,val:''})
+        }
+
         radioObj.value = 'risk'
         this.$emit('getIndicatorRadio', radioObj)
         this.$store.commit('getEntryIndicatorRadio', 'risk')
       } else if (this.indicatorRadio === arr[3]) {
+        // 切换radio后还原usersOwnEntryFileHash
+        const userUrl = this.si.userIndicator + 'HASH' + this.file_hash
+        if (this.criteria === 'entry') {
+          this.$store.commit(`saveUsersOwnEntryFileHash`, {index:this.panelIndex,val:userUrl})
+        }
+        if (this.criteria === 'exit') {
+          this.$store.commit(`saveUsersOwnExitFileHash`, {index:this.panelIndex,val:userUrl})
+        }
+
         radioObj.value = 'user'
         this.$emit('getIndicatorRadio', radioObj)
       }
