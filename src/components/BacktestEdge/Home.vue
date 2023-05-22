@@ -345,50 +345,45 @@ export default {
 
 		const searchParams = new URLSearchParams(window.location.search)
 		const backtestID = searchParams.get('backtestID')
-		if (backtestID) {
-			const vm = this
-			try {
-				CIQ.addCover('Fetching backtest information...')
-				CIQ.nprogress.start()
-				const res = await seeParams(backtestID)
-				res.data.entry_description = JSON.parse(res.data.entry_description)
-				res.data.exit_description = JSON.parse(res.data.exit_description)
-				res.data.result = JSON.parse(res.data.result)
-				console.log('backtest res', res)
-				document.getElementsByClassName('ciq-period')[0].style.display = ''
-				//  Restore indicator layout
-				this.$store.commit('getBacktestSymbol', res.data.symbol)
-				CIQ.hideMarker()
-				CIQ.isMarkerShown = false
-				if (res.data.indicator_layout) {
-					this.$refs.historyChild.restoreIndicatorLayoutEdit(
-						JSON.parse(res.data.indicator_layout),
-						res.data.frequency,
-						res.data,
-						res.data
-					)
-				} else {
-					this.$store.commit('getRunBacktestData', res.data)
-					this.goBacktestResultForm(res.data, () => {
-						this.$emit('goTobacktestSetupForm', backtestID, res.data, () => {
-							CIQ.hideCover()
-							CIQ.nprogress.done()
-						})
+
+		console.log('backtestID', backtestID)
+		if (!backtestID) return
+		const vm = this
+		try {
+			CIQ.addCover('Fetching backtest information...')
+			CIQ.nprogress.start()
+			const res = await seeParams(backtestID)
+			res.data.entry_description = JSON.parse(res.data.entry_description)
+			res.data.exit_description = JSON.parse(res.data.exit_description)
+			res.data.result = JSON.parse(res.data.result)
+			console.log('backtest res', res)
+			document.getElementsByClassName('ciq-period')[0].style.display = ''
+			//  Restore indicator layout
+			this.$store.commit('getBacktestSymbol', res.data.symbol)
+			CIQ.hideMarker()
+			CIQ.isMarkerShown = false
+			if (res.data.indicator_layout) {
+				this.$refs.historyChild.restoreIndicatorLayoutEdit(
+					JSON.parse(res.data.indicator_layout),
+					res.data.frequency,
+					res.data,
+					res.data
+				)
+			} else {
+				this.$store.commit('getRunBacktestData', res.data)
+				this.goBacktestResultForm(res.data, () => {
+					this.$emit('goTobacktestSetupForm', backtestID, res.data, () => {
+						CIQ.hideCover()
+						CIQ.nprogress.done()
 					})
-				}
-			} catch (error) {
-				vm.$message({
-					message: 'The internal server is busy, please try again later ',
-					type: 'error',
-					offset: 300
 				})
 			}
-		}
-		const symbol = searchParams.get('index')
-		const indicator = searchParams.get('indicator')
-		if(symbol && indicator) {
-			console.log('lishan symbol', symbol)
-			console.log('lishan indicator', indicator)
+		} catch (error) {
+			vm.$message({
+				message: 'The internal server is busy, please try again later ',
+				type: 'error',
+				offset: 300
+			})
 		}
 	},
 	watch: {
@@ -565,6 +560,7 @@ export default {
 			CIQ.removePrompt()
 			CIQ.hideMarker()
 			CIQ.isMarkerShown = false
+			CIQ.store.commit('getTradesData',[])
 			document.getElementsByClassName('ciq-period')[0].style.display = 'block'
 			if (
 				stx.chart.symbol != CIQ.store.state.backtestSymbol ||
@@ -639,7 +635,7 @@ export default {
 				}
 				// 首次创建
 				if(setUpRes.data.count == 0 && !isEdit) this.$store.commit('clearBacktestUuid')
-				
+
 				if (setUpRes.data.count == 0 || isEdit) {
 					let entry
 					for (let index = 0; index < this.entryLength; index++) {
@@ -753,6 +749,14 @@ export default {
 									delete item.usersOwnIndicator
 									delete item.riskIndicator
 								}
+								if (item.symbolIndicator) {
+									item.indicator = item.symbolIndicator
+									item.analysis = 'Symbol'
+									delete item.technicalIndicator
+									delete item.sentimentIndicator
+									delete item.symbolIndicator
+									delete item.riskIndicator
+								}
 								if (item.usersOwnIndicator) {
 									item.indicator = item.usersOwnIndicator
 									item.analysis = 'User'
@@ -789,6 +793,14 @@ export default {
 										delete item.usersOwnIndicator
 										delete item.riskIndicator
 									}
+									if (item.symbolIndicator) {
+										item.indicator = item.symbolIndicator
+										item.analysis = 'Symbol'
+										delete item.technicalIndicator
+										delete item.sentimentIndicator
+										delete item.symbolIndicator
+										delete item.riskIndicator
+									}
 									if (item.usersOwnIndicator) {
 									item.indicator = item.usersOwnIndicator
 									item.analysis = 'User'
@@ -823,6 +835,12 @@ export default {
 										}
 									}
 								}
+								// 在 symbol indicator list内检索url
+								if (!signal) {
+									if(this.$store.state.symbolConditions.findIndex(i=>i.label==item.indicator) !== -1){
+										return item.indicator
+									}
+								}
 								console.log('runbacktest',vm.$store.state.usersOwnEntryFileHash)
 								let usersOwnEntryList = vm.$store.state.usersOwnEntryFileHash
 								if(usersOwnEntryList[index]!=''){
@@ -838,11 +856,18 @@ export default {
 									let signal = CIQ.indicatorList.find((i) => {
 										return i.chart_name == item.indicator
 									})
+
 									if (!signal) {
 										for (let i = 0; i < formateTechnicalList.length; i++) {
 											if (formateTechnicalList[i].value == item.indicator) {
 												return formateTechnicalList[i].url
 											}
+										}
+									}
+									// 在 symbol indicator list内检索url
+									if (!signal) {
+										if(this.$store.state.symbolConditions.findIndex(i=>i.label==item.indicator) !== -1){
+											return item.indicator
 										}
 									}
 									let usersOwnExitList = vm.$store.state.usersOwnExitFileHash
@@ -861,8 +886,10 @@ export default {
 								var singal = {
 									code: code
 								}
-								entry_signal_list.push(singal)
+								entry_signal_list.push(singal)				
 							}
+							console.log('encode: ',signalEntryList,entry_signal_list)
+
 							delete backtestData.exit.signals
 							if (!this.isOnlyRisk) {
 								for (var i in signalExitList) {
@@ -880,13 +907,16 @@ export default {
 									}
 								]
 							}
+
 							let entry = {
 								description: backtestData.entry.description,
 								score: backtestData.entry.score,
 								signals_in_market: backtestData.entry.signals_in_market,
 								relation: backtestData.entry.relation,
 								delay_bars: backtestData.entry.delay_bars,
-								signals: entry_signal_list
+								signals: entry_signal_list,
+								cond: entry_description.map((i) => i.rocCond)
+
 							}
 							let exit = {
 								description: backtestData.exit.description,
@@ -894,7 +924,8 @@ export default {
 								signals_in_market: backtestData.exit.signals_in_market,
 								relation: backtestData.exit.relation,
 								delay_bars: backtestData.exit.delay_bars,
-								signals: exit_signal_list
+								signals: exit_signal_list,
+								cond: exit_description.map((i) => i.rocCond)
 							}
 							delete backtestData.entry
 							delete backtestData.exit
@@ -941,10 +972,6 @@ export default {
 							backtestData.indicator_layout = JSON.stringify(
 								indicatorLayout
 							).replaceAll('\u200c', '$r001$')
-							console.log(
-								'any \u200c ?',
-								backtestData.indicator_layout.search('\u200c')
-							)
 
 							let copyBacktestData = JSON.parse(JSON.stringify(backtestData))
 							let str = UUID(JSON.stringify(copyBacktestData))
@@ -983,11 +1010,13 @@ export default {
 							backtestParams.strategy = backtestData.strategy
 							backtestParams.symbol = backtestData.symbol
 							backtestParams.win_rate = backtestData.win_rate
+
 							console.log('处理过后的 backtestData', backtestParams)
 							backtestParams = JSON.stringify(backtestParams)
 							/* ********** */
 							let backtestDataStr = this.$qs.stringify(backtestData)
 							console.log('backtestDataStr', backtestData)
+
 							// Before the back test, load the data of the whole period and generate CSV to upload S3, and then update the form when the results come out
 							this.reloadData(indicatorLayout, backtestData.frequency)
 							// 1. Upload data file
@@ -1040,26 +1069,29 @@ export default {
 											}
 										} catch (error) {
 											console.log('lishan error', error)
+
 											vm.$store.commit('initialBacktestInfo')
 											vm.$refs.setUpChild.clearOldBacktestName()
 											vm.$refs.favoriteChild.getFavoriteList()
 											CIQ.hideCover()
 											CIQ.nprogress.done()
+
 											if(error?.response?.status === 403) {
 												vm.$message({
-												message:
-													'This backtest is already in your history list',
-												type: 'error',
-												offset: 300
-											})
+													message:
+														'This backtest is already in your history list',
+													type: 'error',
+													offset: 300
+												})
 											}else{
 												vm.$message({
-												message:
-													'The internal server is busy, please try again later ',
-												type: 'error',
-												offset: 300
-											})
+													message:
+														'The internal server is busy, please try again later ',
+													type: 'error',
+													offset: 300
+												})
 											}
+
 											// Initialize the data of backtestinfo
 											vm.$store.commit('clearStoreDesciption')
 										}
@@ -1095,7 +1127,8 @@ export default {
 					}
 				}
 			} catch (error) {
-				console.log(error)
+				console.log('抓取error:',error)
+
 				this.$notify({
 					title: 'Failed',
 					message: 'The internal server is busy, please try again later',
@@ -1181,7 +1214,6 @@ export default {
 				let entryPanel = data.entry.signals.length
 				let entryData = {}
 				entryData.entry = data.entry
-
 				vm.$refs.entryChild.setEditPanel(entryPanel, entryData)
 				// Get the value of frequency
 				vm.editFrequency = data.frequency

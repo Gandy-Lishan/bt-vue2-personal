@@ -60,6 +60,32 @@
 					</div>
 				</el-form-item>
 			</div>
+			<div class="indicator-container symbolBox">
+				<el-form-item>
+					<el-radio
+						v-model="indicatorRadio"
+						label="Symbol OHLCV"
+						@change="changeIndicatorChecked"
+					>
+					</el-radio>
+				</el-form-item>
+				<el-form-item prop="symbolIndicator">
+					<el-select 
+						v-model="si.symbolIndicator"
+						placeholder="Please select condition"
+						:disabled="!(indicatorRadio === 'Symbol OHLCV')"
+						@change="handleSymbolSelect"
+					>
+						<el-option
+							v-for="item in symbolConditions"
+							:key="item.value"
+							:label="item.obj.label"
+							:value="item.obj"
+						>
+						</el-option>
+					</el-select>
+				</el-form-item>
+			</div>
 			<div class="indicator-container customBox">
 				<el-form-item>
 					<el-radio
@@ -157,8 +183,9 @@
 							</el-card>
 						</el-dialog>
 					</div>
-				</el-form-item>
-			</div>
+        </el-form-item>
+      </div>
+
 		</el-form>
 	</div>
 </template>
@@ -198,6 +225,13 @@ export default {
         callback()
       }
     }
+    var validateSym = (rule, value, callback) => {
+			if (!value && this.indicatorRadio == 'Symbol OHLCV') {
+				callback(new Error('Please choose symbol ohlcv'))
+			} else {
+				callback()
+			}
+		}
     var validateRisk = (rule, value, callback) => {
       if (!value && this.indicatorRadio == 'Risk Indicator') {
         callback(new Error('Please choose risk indicator'))
@@ -221,12 +255,21 @@ export default {
         sentimentIndicator: '',
         technicalIndicator: '',
         riskIndicator: '',
+        symbolIndicator: '',
         userIndicator: ''
       },
       sentimentIndicatorList: this.$store.state.sentimentIndicatorList,
+			symbolConditions : [
+				{ value: 0, obj: {label:'Symbol Open',field:'Open'} },
+				{ value: 1, obj: {label:'Symbol High',field:'High'} },
+				{ value: 2, obj: {label:'Symbol Low',field:'Low'} },
+				{ value: 3, obj: {label:'Symbol Close',field:'Close'} },
+				{ value: 4, obj: {label:'Symbol Volume',field:'Volume'} },
+			],
       rules: {
         sentimentIndicator: [{ validator: validateSenti, trigger: 'change' }],
         technicalIndicator: [{ validator: validateTech, trigger: 'change' }],
+				symbolIndicator: [{ validator: validateSym, trigger: 'change' }],
         riskIndicator: [{ validater: validateRisk, trigger: 'change' }]
       },
       category: 'all',
@@ -391,6 +434,7 @@ export default {
         si: {
           sentimentIndicator: '',
           technicalIndicator: '',
+          symbolIndicator: '',
           riskIndicator: ''
         },
         sentimentIndicatorList: []
@@ -404,7 +448,6 @@ export default {
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
       var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
-
       sentimentIndicatorList.sort(function (a, b) {
         return a.value.localeCompare(b.value)
       })
@@ -493,96 +536,150 @@ export default {
         return
       }
 
-      this.si.sentimentIndicator = item.value
-      let obj = {}
-      obj.value = item.value
-      obj.index = this.panelIndex
-      this.$emit('getIndicatorVal', obj)
-      // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.activatedMA
-      if (this.criteria == 'entry') {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url ==
-            this.$store.state.indicators.formIndicators.entry[this.panelIndex]
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('getMA', activatedMAList)
-        this.$store.commit('getEntryIndicators', {
-          index: this.panelIndex,
-          value: item.url
-        })
+			this.si.sentimentIndicator = item.value
+			let obj = {}
+			obj.value = item.value
+			obj.index = this.panelIndex
+			this.$emit('getIndicatorVal', obj)
+			// remove a MA tat already exists in current criteria before loading
+			var activatedMAList = this.$store.state.activatedMA
+			if (this.criteria == 'entry') {
+				var MAListIndex = activatedMAList.findIndex(
+					(item) =>
+						item.url ==
+						this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				this.$store.commit('getEntryIndicators', {
+					index: this.panelIndex,
+					value: item.url
+				})
+				let obj = {}
+				obj.index = this.panelIndex
+				obj.url = item.url
+				this.$emit('getIndicatorUrl', obj)
+			} else {
+				var MAListIndex = activatedMAList.findIndex(
+					(item) =>
+						item.url ==
+						this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				this.$store.commit('getExitIndicators', {
+					index: this.panelIndex,
+					value: item.url
+				})
+				let obj = {}
+				obj.index = this.panelIndex
+				obj.url = item.url
+				this.$emit('getIndicatorUrl', obj)
+			}
+			// avoid add indicator redundantly
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+				if (sd.type == item.url) {
+					return
+				}
+			}
+			CIQ.addIndicators()
+		},
+		// todo handle symobl select
+		handleSymbolSelect(item){
+			this.si.symbolIndicator = item.label
+			let obj = {}
+			obj.value = item.label
+			obj.index = this.panelIndex
+			this.$emit('getIndicatorVal', obj)
+			// remove a MA tat already exists in current criteria before loading
+			var activatedMAList = this.$store.state.activatedMA
+			if (this.criteria == 'entry') {
+				var MAListIndex = activatedMAList.findIndex(
+					(item) =>
+						item.url ==
+						this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				this.$store.commit('getEntryIndicators', {
+					index: this.panelIndex,
+					value: item.label
+				})
+				let obj = {}
+				obj.index = this.panelIndex
+				obj.url = item.label
+				this.$emit('getIndicatorUrl', obj)
+			} else {
+				var MAListIndex = activatedMAList.findIndex(
+					(item) =>
+						item.url ==
+						this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				this.$store.commit('getExitIndicators', {
+					index: this.panelIndex,
+					value: item.label
+				})
+				let obj = {}
+				obj.index = this.panelIndex
+				obj.url = item.label
+				this.$emit('getIndicatorUrl', obj)
+			}
+			// avoid add indicator redundantly
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+				if (sd.type == item.label) {
+					return
+				}
+			}
+			CIQ.addIndicators()
+		},
+		handleTechnicalSelect(item) {
+			this.si.technicalIndicator = item.value
+			let valObj = {}
+			valObj.index = this.panelIndex
+			valObj.value = item.value
+			this.$emit('getIndicatorVal', valObj)
+			const vm = this
+			let val = item.value
+			let url = item.url
+			this.$emit('getTechIndiValue', item.class)
+			let obj = {}
+			obj.index = this.panelIndex
+			obj.class = item.class
+			this.$emit('getTechIndiObj', obj)
+			// remove a MA tat already exists in current criteria before loadin
+			if (this.criteria == 'entry') {
+				// remove MA from Vuex after loading Tech
+				var activatedMAList = CIQ.store.state.activatedMA
 
-        let obj = {}
-        obj.index = this.panelIndex
-        obj.url = item.url
-        this.$emit('getIndicatorUrl', obj)
-      } else {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url ==
-            this.$store.state.indicators.formIndicators.exit[this.panelIndex]
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('getMA', activatedMAList)
-        this.$store.commit('getExitIndicators', {
-          index: this.panelIndex,
-          value: item.url
-        })
-        let obj = {}
-        obj.index = this.panelIndex
-        obj.url = item.url
-        this.$emit('getIndicatorUrl', obj)
-      }
-      // avoid add indicator redundantly
-      for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        var sd = CIQ.stxx.layout.studies[studyInstanceName]
-        if (sd.type == item.url) {
-          return
-        }
-      }
-      CIQ.addIndicators()
-    },
-    handleTechnicalSelect(item) {
-      console.log('lishan handleTechnicalSelect', item)
-      this.si.technicalIndicator = item.value
-      let valObj = {}
-      valObj.index = this.panelIndex
-      valObj.value = item.value
-      this.$emit('getIndicatorVal', valObj)
-      const vm = this
-      let val = item.value
-      let url = item.url
-      this.$emit('getTechIndiValue', item.class)
-      let obj = {}
-      obj.index = this.panelIndex
-      obj.class = item.class
-      this.$emit('getTechIndiObj', obj)
-      // remove a MA tat already exists in current criteria before loadin
-      if (this.criteria == 'entry') {
-        // remove MA from Vuex after loading Tech
-        var activatedMAList = CIQ.store.state.activatedMA
-
-        var MAListIndex = activatedMAList.findIndex(
-          (ma) =>
-            ma.url ==
-            this.$store.state.indicators.formIndicators.entry[this.panelIndex]
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        CIQ.store.commit('getMA', activatedMAList)
-        this.$store.commit('getEntryIndicators', {
-          index: this.panelIndex,
-          value: url
-        })
-      } else {
-        // remove MA from Vuex after loading Tech
-        var activatedMAList = CIQ.store.state.activatedMA
+				var MAListIndex = activatedMAList.findIndex(
+					(ma) =>
+						ma.url ==
+						this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				
+				CIQ.store.commit('getMA', activatedMAList)
+				this.$store.commit('getEntryIndicators', {
+					index: this.panelIndex,
+					value: url
+				})
+			} else {
+				// remove MA from Vuex after loading Tech
+				var activatedMAList = CIQ.store.state.activatedMA
 
         var MAListIndex = activatedMAList.findIndex(
           (ma) =>
@@ -705,7 +802,8 @@ export default {
         'Sentiment Indicator',
         'Technical Indicator',
         'Risk Control',
-        "Users' Own Indicator"
+        'Symbol OHLCV',
+        "Users' Own Indicator",
       ]
       const obj = {}
       obj.criteria = this.criteria
@@ -714,22 +812,65 @@ export default {
       let radioObj = {}
       radioObj.index = this.panelIndex
       if (this.indicatorRadio === arr[0]) {
+        // 切换radio后移除usersOwnEntryFileHash
+        if (this.criteria === 'entry') {
+          this.$store.commit(`saveUsersOwnEntryFileHash`, {index:this.panelIndex,val:''})
+        }
+        if (this.criteria === 'exit') {
+          this.$store.commit(`saveUsersOwnExitFileHash`, {index:this.panelIndex,val:''})
+        }
+
         radioObj.value = 'sentiment'
         this.$emit('getIndicatorRadio', radioObj)
         this.$store.commit('getEntryIndicatorRadio', 'sentiment')
       } else if (this.indicatorRadio === arr[1]) {
+        // 切换radio后移除usersOwnEntryFileHash
+        if (this.criteria === 'entry') {
+          this.$store.commit(`saveUsersOwnEntryFileHash`, {index:this.panelIndex,val:''})
+        }
+        if (this.criteria === 'exit') {
+          this.$store.commit(`saveUsersOwnExitFileHash`, {index:this.panelIndex,val:''})
+        }
         radioObj.value = 'technical'
         this.$emit('getIndicatorRadio', radioObj)
         this.$store.commit('getEntryIndicatorRadio', 'technical')
       } else if (this.indicatorRadio === arr[2]) {
+        // 切换radio后移除usersOwnEntryFileHash
+        if (this.criteria === 'entry') {
+          this.$store.commit(`saveUsersOwnEntryFileHash`, {index:this.panelIndex,val:''})
+        }
+        if (this.criteria === 'exit') {
+          this.$store.commit(`saveUsersOwnExitFileHash`, {index:this.panelIndex,val:''})
+        }
         radioObj.value = 'risk'
         this.$emit('getIndicatorRadio', radioObj)
         this.$store.commit('getEntryIndicatorRadio', 'risk')
       } else if (this.indicatorRadio === arr[3]) {
+        // 切换radio后移除usersOwnEntryFileHash
+        if (this.criteria === 'entry') {
+          this.$store.commit(`saveUsersOwnEntryFileHash`, {index:this.panelIndex,val:''})
+        }
+        if (this.criteria === 'exit') {
+          this.$store.commit(`saveUsersOwnExitFileHash`, {index:this.panelIndex,val:''})
+        }
+        radioObj.value = 'symbol'
+        this.$emit('getIndicatorRadio', radioObj)
+        this.$store.commit('getEntryIndicatorRadio', 'symbol')
+      } else if (this.indicatorRadio === arr[4]) {
+        // 切换radio后还原usersOwnEntryFileHash
+        const userUrl = this.si.userIndicator + 'HASH' + this.file_hash
+        if (this.criteria === 'entry') {
+          this.$store.commit(`saveUsersOwnEntryFileHash`, {index:this.panelIndex,val:userUrl})
+        }
+        if (this.criteria === 'exit') {
+          this.$store.commit(`saveUsersOwnExitFileHash`, {index:this.panelIndex,val:userUrl})
+        }
         radioObj.value = 'user'
         this.$emit('getIndicatorRadio', radioObj)
+        this.$store.commit('getEntryIndicatorRadio', 'user')
       }
-    },
+		},
+
     // load short and long technical list
     loadShortLong() {
       const technicalList = CIQ.technicalCategory
@@ -889,6 +1030,50 @@ export default {
           return checked
         }
       }
+			if (
+				this.indicatorRadio === 'Symbol OHLCV' &&
+				!this.exitItemCheck
+			) {
+				this.$refs.siForm.validate((valid) => {
+					validForm = valid
+				})
+				console.log('validForm',validForm)
+				// let formateList = this.$store.state.formateTechnicalList
+				// if (formateList.length === 0) {
+				// 	formateList = this.loadShortLong()
+				// }
+				
+				// for (let i = 0; i < formateList.length; i++) {
+				// 	if (this.si.technicalIndicator === formateList[i].value) {
+				// 		validName = true
+				// 		break
+				// 	}
+				// }
+				validName = true
+				if (validForm && validName) {
+					let obj = {}
+					obj.criteria = this.criteria
+					obj.index = index
+					obj.value = this.si.symbolIndicator
+					this.$store.commit('getSymValue', obj)
+					return checked
+				} else {
+					if (!validName) {
+						this.$message({
+							message:
+								'Please select #' +
+								(index + 1) +
+								' ' +
+								this.criteria +
+								' indicator from the drop-down box',
+							type: 'error',
+							offset: 300
+						})
+					}
+					checked = false
+					return checked
+				}
+			}
       if (this.exitItemCheck) {
         checked = true
         return checked
@@ -930,6 +1115,17 @@ export default {
               }
             })
           }
+					// todo 加入symbol analysis
+					if (newVal[this.criteria].signals[index].analysis === 'Symbol') {
+						this.indicatorRadio = 'Symbol OHLCV'
+						this.si.symbolIndicator =
+							newVal[this.criteria].signals[index].indicator
+						let obj = {}
+						obj.index = vm.panelIndex
+						obj.url = this.si.symbolIndicator
+						vm.$emit('getIndicatorUrl', obj)
+
+					}
           if (newVal[this.criteria].signals[index].analysis === 'Technical') {
             vm.indicatorRadio = 'Technical Indicator'
             let technicalIndicator =
@@ -1528,6 +1724,8 @@ export default {
       }
     }
   }
+
+
 }
 </script>
 <style lang="less" scoped>
@@ -1549,6 +1747,10 @@ export default {
 	padding-left: 30px;
 }
 /deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+	width: 334px;
+	padding-left: 30px;
+}
+/deep/ .symbolBox .el-input--prefix .el-input__inner:first-child {
 	width: 334px;
 	padding-left: 30px;
 }
