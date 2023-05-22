@@ -508,6 +508,7 @@
 													:readonly="scope.row.readonly"
 													:placeholder="scope.row.placeholder"
 													v-model="scope.row.period"
+													@keydown="handleKeyDown(scope.row)"
 												></el-input>
 											</template>
 										</el-table-column>
@@ -565,6 +566,7 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import jutils from 'jutils-src'
 import { seeReport } from '@/service/service'
+import sortByRule from "@/tools/sortTIM";
 const XLSX = require('xlsx');
 
 export default {
@@ -1093,22 +1095,48 @@ export default {
         this.$message.warning('No computable trades.')
         return
       }
-      const periodArray = this.getValues()
-      const uniqueData = periodArray.filter((item, index, arr) => {
-        return arr.findIndex((elem) => elem.timeframe === item.timeframe) === index;
+      CIQ.addCover('Calculating...')
+      CIQ.nprogress.start()
+			try {
+				const periodArray = this.getValues()
+			const isValid = this.validateData(periodArray)
+			if(!isValid) {
+				
+				CIQ.hideCover()
+      CIQ.nprogress.done()
+				return}
+      console.log(periodArray)
+      const uniqueData = [];
+      periodArray.forEach(item => {
+        const isDuplicate = uniqueData.some(
+          uniqueItem =>
+            uniqueItem.period === item.period && uniqueItem.timeframe === item.timeframe
+        );
+
+        if (!isDuplicate) {
+          uniqueData.push(item);
+        }
       });
+      console.log(uniqueData)
       const transformData = this.transformData(uniqueData)
       console.log(transformData)
       const table = ['Entry Date']
       transformData.map((item) => {
         table.push(item.timeframe)
       })
-      this.defaultTIMTableLabels = table
+      // 进行排序
+      const sortedData = table.sort(sortByRule);
+      this.defaultTIMTableLabels = sortedData
       console.log(this.defaultTIMTableLabels)
       const data = this.calculateBacktestHistory(this.tradesData, periodArray)
       console.log('data', data)
       this.TIMHistoryList = data
       this.resetTable()
+			} catch (error) {
+				console.log(error)
+			}
+      CIQ.hideCover()
+      CIQ.nprogress.done()
     },
     cancelTable() {
       this.showTable = false;
@@ -1120,6 +1148,56 @@ export default {
         { period: '1', placeholder: 'input period2', timeframe: 'Week', readonly: false }
       ]
     },
+    handleKeyDown(row) {
+      if (row.timeframe === 'Day') {
+        return event => {
+          const value = Number(event.target.value);
+          if (!Number.isInteger(value) || value < 1 || value > 252) {
+            event.preventDefault();
+          }
+        };
+      } else if (row.timeframe === 'Week') {
+        return event => {
+          const value = Number(event.target.value);
+          if (!Number.isInteger(value) || value < 1 || value > 52) {
+            event.preventDefault();
+          }
+        };
+      } else if (row.timeframe === 'Month') {
+        return event => {
+          const value = Number(event.target.value);
+          if (!Number.isInteger(value) || value < 1 || value > 120) {
+            event.preventDefault();
+          }
+        };
+      }
+    },
+    validateData(data) {
+      for (const item of data) {
+        if (item.timeframe === 'Day' || item.timeframe === 'Days') {
+          const period = parseInt(item.period);
+          if (isNaN(period) || period < 1 || period > 252 || !Number.isInteger(Number(item.period))) {
+						this.$message.warning('当 Timeframe 选择 Day(s) 时，只能输入 1-252 之间的正整数');
+            return false;
+          }
+        }
+				if (item.timeframe === 'Week' || item.timeframe === 'Weeks') {
+          const period = parseInt(item.period);
+          if (isNaN(period) || period < 1 || period > 52 || !Number.isInteger(Number(item.period))) {
+						this.$message.warning('当 Timeframe 选择 Week(s) 时，只能输入 1-52 之间的正整数');
+            return false;
+          }
+        }
+				if (item.timeframe === 'Month' || item.timeframe === 'Months') {
+          const period = parseInt(item.period);
+          if (isNaN(period) || period < 1 || period > 120 || !Number.isInteger(Number(item.period))) {
+						this.$message.warning('当 Timeframe 选择 Month(s) 时，只能输入 1-120 之间的正整数');
+            return false;
+          }
+        }
+      }
+      return true;
+    }
   }
 }
 </script>
