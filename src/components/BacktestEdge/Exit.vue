@@ -41,7 +41,8 @@
 							conditions, set two conditions below and choose score 1.<br />
 							etc.<br />
 						</span>
-						<i class="iconfont icon-wenhao"></i> </el-tooltip
+						<i class="iconfont icon-wenhao"></i> 
+					</el-tooltip
 				></span>
 				<el-input-number
 					v-model="score"
@@ -71,7 +72,8 @@
 							3 bars, set two conditions below and choose period 3.<br />
 							etc.<br />
 						</span>
-						<i class="iconfont icon-wenhao"></i> </el-tooltip
+						<i class="iconfont icon-wenhao"></i> 
+					</el-tooltip
 				></span>
 				<el-input-number
 					v-model="signals_in_market"
@@ -139,6 +141,21 @@
 							:indicatorRadio="indicatorRadioArr[index]"
 							v-show="indicatorRadioArr[index] === 'sentiment' || indicatorRadioArr[index] === 'user'"
 						></senti>
+						<symbol-indi
+							v-bind="$attrs"
+							:tabLength="indicatorRadioArr.length"
+							:criteria="'exit'"
+							:panelIndex="index"
+							:exitItemCheck="exitItemCheck"
+							ref="symbolChild"
+							:relation="relation"
+							:score="score"
+							:delay_bars="delay_bars"
+							:period="signals_in_market"
+							:symUrl="indicatorUrlArr[index]"
+							:symVal="indicatorValArr[index]"
+							v-show="indicatorRadioArr[index] === 'symbol'"
+						></symbol-indi>
 						<cci
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
@@ -413,6 +430,7 @@
 <script>
 import indicator from '@/components/BacktestEdge/signal/indicator/indicator'
 import senti from '@/components/BacktestEdge/signal/sentiment/Senti'
+import symbol from '@/components/BacktestEdge/signal/sentiment/Symbol'
 import cci from '@/components/BacktestEdge/signal/technical/Cci-like'
 import macd from '@/components/BacktestEdge/signal/technical/Macd-like.vue'
 import SignalCode from '@/tools/codeTool.js'
@@ -473,6 +491,7 @@ export default {
 	components: {
 		indicator,
 		senti,
+		'symbol-indi' :symbol,
 		cci,
 		macd,
 		ma,
@@ -571,6 +590,7 @@ export default {
 					if (this.indicatorRadioArr[i]) {
 						this.$refs.indiChild[i].clearForm()
 						this.$refs.sentiChild[i].clearForm()
+						this.$refs.symbolChild[i].clearForm()
 						this.$refs.cciChild[i].clearForm()
 						this.$refs.maChild[i].clearForm()
 						this.$refs.macdChild[i].clearForm()
@@ -866,7 +886,11 @@ export default {
 				let desObj = {}
 				desObj.criteria = 'exit'
 				desObj.index = 0
-				desObj.description = vm.$store.state.riskDescription
+				//desObj.description = vm.$store.state.riskDescription
+				desObj.description = {
+					'commentDes':vm.$store.state.riskDescription,
+					'rocCond':null
+				}
 				this.$store.commit('saveDescription', desObj)
 				return (checked = true)
 			}
@@ -887,6 +911,17 @@ export default {
 							})
 						}
 						return (checked = senti)
+					}
+					if (vm.indicatorRadioArr[index] === 'symbol') {
+						vm.$refs.symbolChild[index].setDesciption(index)
+						let symbol = vm.$refs.symbolChild[index].saveCondition(index)
+						if(!symbol) {
+						vm.$message({
+						message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+						type: 'error'
+						})
+						} 
+						return (checked = symbol)
 					}
 					if (
 						this.indicatorRadioArr[index] === 'technical' &&
@@ -1122,6 +1157,12 @@ export default {
 					this.indicatorRadio = 'user'
 					this.techIndiObj[j] = ''
 				}
+				if (data.entry.signals[j].analysis === 'Symbol') {
+					this.indicatorValArr[j] = data.entry.signals[j].indicator
+					this.indicatorRadioArr.splice(j, 1, 'symbol')
+					this.indicatorRadio = 'symbol'
+					this.techIndiObj[j] = ''
+				}
 				if (data.exit.signals[j].analysis === 'Technical') {
 					this.indicatorValArr[j] = data.exit.signals[j].indicator
 					this.indicatorRadio = 'technical'
@@ -1148,6 +1189,9 @@ export default {
 				this.$refs.indiChild[j].setEditData(data)
 				if (this.indicatorRadioArr[j] === 'sentiment' || this.indicatorRadioArr[j] === 'user') {
 					this.$refs.sentiChild[j].setEditData(data)
+				}
+				if (this.indicatorRadioArr[j] === 'symbol') {
+					this.$refs.symbolChild[j].setEditData(data)
 				}
 				if (this.indicatorRadioArr[j] === 'technical') {
 					if (this.techIndiObj[j] === 'CCI_like') {

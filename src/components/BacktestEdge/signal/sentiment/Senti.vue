@@ -2,6 +2,8 @@
 <template>
 	<div class="senti-container">
 		<el-form :model="senti" :rules="rules" ref="sentiForm">
+			sentiVal:{{sentiVal}}
+			sentiUrl:{{sentiUrl}}
 			<div class="ids-container" v-if="indicatorRadio === 'sentiment'">
 				<el-form-item label="Extreme Optimism" prop="extreme_optimism">
 				<span slot="label">
@@ -28,13 +30,48 @@
 			</div>
 			<div class="condition-container">
 				<el-form-item>
-					<el-radio
+					<el-radio 
+						class='condition-radio'
 						v-model="conditionRadio"
 						label="Indicator Value"
 						@change="getConditionRadio"
-					></el-radio>
+					>
+					</el-radio>
 				</el-form-item>
-				<div class="conditionSelect">
+				<!-- <el-form-item  v-show="isROCLike">
+
+				</el-form-item> -->
+				<div class="conditionSelect new">
+					<el-form-item>
+						<el-select
+							:disabled="!(conditionRadio === 'Indicator Value')"
+							v-model="senti.newCondition"
+							class='newCond'
+							filterable
+							placeholder="Please select condition"
+							@change="ROCLikeChange"
+						>
+							<el-option
+								v-for="item in newConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</div>
+				<div class="conditionInput period" v-show="isROCLike">
+					<el-form-item prop="value">
+						<el-input
+							@input="calculateNewConditions"
+							:disabled="!(conditionRadio === 'Indicator Value')"
+							v-model="senti.conditionPeriod"
+							placeholder="Condition Period"
+						></el-input>
+					</el-form-item>
+				</div>
+				<div class="conditionSelect" v-show="isROCLike">
 					<el-form-item>
 						<el-select
 							:disabled="!(conditionRadio === 'Indicator Value')"
@@ -53,8 +90,7 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item prop="value">
-						 
+					<el-form-item prop="value"> 
 						<el-input
 							:disabled="!(conditionRadio === 'Indicator Value')"
 							v-model="senti.value"
@@ -83,9 +119,38 @@
 						></el-input>
 					</el-form-item>
 				</div>
-				<div class="conditionSelect">
+				<div class="conditionSelect new">
 					<el-form-item>
-						
+						<el-select
+							:disabled="!(conditionRadio === 'Indicator Moving Average')"
+							v-model="senti.newCondition"
+							class='newCond'
+							filterable
+							placeholder="Please select condition"
+							@change="ROCLikeChange"
+						>
+							<el-option
+								v-for="item in newConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</div>
+				<div class="conditionInput period" v-show="isROCLike">
+					<el-form-item prop="value">
+						<el-input
+							@input="calculateNewConditions"
+							:disabled="!(conditionRadio === 'Indicator Moving Average')"
+							v-model="senti.conditionPeriod"
+							placeholder="Condition Period"
+						></el-input>
+					</el-form-item>
+				</div>
+				<div class="conditionSelect" v-show="isROCLike">
+					<el-form-item>				
 						<el-select
 							v-model="senti.condition"
 							filterable
@@ -182,17 +247,30 @@ export default {
 			}
 		}
 		return {
+			isROCLike: false,
 			//preload: false,
 			senti: {
 				extreme_optimism: '',
 				extreme_pessimism: '',
 				comparison: 'SV',
 				condition: 3,
+				newCondition: 3,
 				value: '',
+				conditionPeriod: '5',
 				period: '',
-				maValue: ''
+				maValue: '',
 			},
 			periodTemp: '',
+			newConditions: [
+				{ value: 0, label: '>' },
+				{ value: 1, label: '=' },
+				{ value: 2, label: '<' },
+				{ value: 3, label: 'CrossAbove' },
+				{ value: 4, label: 'CrossBelow' },
+				{ value: 5, label: 'Rate Of Change' },
+				{ value: 6, label: 'Range Of Rank' },
+				{ value: 7, label: 'MA Ratio' }
+			],
 			conditions: [
 				{ value: 0, label: '>' },
 				{ value: 1, label: '=' },
@@ -224,6 +302,9 @@ export default {
 				if(this.conditionRadio=='Indicator Moving Average'){
 					this.setPeriod(this.senti.period)
 				}
+				console.log('handle extremeValue update')
+				this.calculateNewConditions()
+
 				newVal.forEach((item) => {
 					if (item.indicator) {
 						if (item.indicator === vm.sentiUrl) {
@@ -261,6 +342,32 @@ export default {
 		}
 	},
 	methods: {
+		ROCLikeChange(val){
+			this.isROCLike = 5<=val && val<=7
+			// 如果不是ROC类型，则这两个condition值一致
+			if(!this.isROCLike){
+				this.senti.condition = this.senti.newCondition
+
+				let indicator_url = this.$store.state.indicators.formIndicators[this.criteria][this.panelIndex]
+				if(indicator_url){
+					for (var studyInstanceName in CIQ.stxx.layout.studies) {
+						if (
+							CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url
+						) {
+							// 在切换回非ROClike后清除ROCLike indicator
+							if(studyInstanceName.indexOf('‌ST MA‌')!=-1) continue
+							CIQ.Studies.removeStudy(
+								CIQ.stxx,
+								CIQ.stxx.layout.studies[studyInstanceName]
+							)
+						}
+					}
+				}
+			}
+			// 开始计算数据并加载新的附属indicator
+			console.log('ROCLikeChange')
+			this.calculateNewConditions()
+		},
 		change(e) {
 			this.$forceUpdate()
 		},
@@ -274,6 +381,10 @@ export default {
 			this.$refs.sentiForm.clearValidate()
 		},
 		setDesciption(index) {
+			let rocCond = {
+				'newCondition':this.senti.newCondition,
+				'conditionPeriod':this.senti.conditionPeriod,
+			}
 			let criteria = ''
 			let direction = ''
 			let commentDes
@@ -312,12 +423,19 @@ export default {
 						break;
 				}
 				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars + ';':''
+				console.log(score,period,delay_bars)
 				commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
+				
 				if(this.relation != 1) {
 				   let desObj = {}
 					desObj.criteria = this.criteria
-					desObj.description = commentDes
+					desObj.description = {
+						'commentDes':commentDes,
+						'rocCond':rocCond
+					}
 					desObj.index = index
+
+					console.log('this.relation != 1',this.criteria,desObj)
 					this.$store.commit('saveDescription', desObj)
 				}
 
@@ -335,13 +453,20 @@ export default {
 					let desObj = {}
 					desObj.criteria = this.criteria
 					if(this.relation != 1) {
-					desObj.description = this.description
-					desObj.index = index + 1
+						desObj.description = {
+							'commentDes':this.description,
+							'rocCond':rocCond
+						}
+						desObj.index = index + 1
 					}
 					if(this.relation == 1) {
-						desObj.description = commentDes+ this.description
+						desObj.description = {
+							'commentDes':commentDes+ this.description,
+							'rocCond':rocCond
+						}
 						desObj.index = 0
 					}
+					console.log('saveDescription',desObj,this.criteria)
 					this.$store.commit('saveDescription', desObj)
 
 		},
@@ -358,20 +483,26 @@ export default {
 				this.senti.comparison = 'SV'
 				let result
 				this.$store.state.indicatorsList.forEach((value, index) => {
-					if (this.sentiVal) {
-						if (value.chart_name.indexOf(this.sentiVal) !== -1) {
-							result = value
-						}
-					} else {
-						if (value.chart_name.indexOf(this.sentiVal) !== -1) {
-							result = value
-						}
+					if (value.url == this.sentiUrl) {
+						result = value
 					}
 				})
+				if(!result){
+					let obj = {}
+					if(this.criteria=='entry'){
+						obj.url = this.$store.state.usersOwnEntryFileHash[this.panelIndex]
+					}else{
+						obj.url = this.$store.state.usersOwnExitFileHash[this.panelIndex]
+					}
+					result = obj
+				}
+				console.log('remove ma',result)
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					if (
 						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
 					) {
+						// sentiment indicator自带的ROCLike除外
+						if(studyInstanceName.indexOf('‌ST ROCLike‌')!=-1) continue					
 						CIQ.Studies.removeStudy(
 							CIQ.stxx,
 							CIQ.stxx.layout.studies[studyInstanceName]
@@ -396,6 +527,37 @@ export default {
 				this.setPeriod(this.periodTemp)
 			}
 		},
+		calculateNewConditions(){
+			if(!this.isROCLike) return
+
+			let indicator_url = this.$store.state.indicators.formIndicators[this.criteria][this.panelIndex]
+			if(indicator_url){
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					if (
+						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url
+					) {
+						// 添加ROCLike（包括修改study）前先清除已有的，sentiment indicator自带MA除外
+						if(studyInstanceName.indexOf('‌ST MA‌')!=-1) continue
+						CIQ.Studies.removeStudy(
+							CIQ.stxx,
+							CIQ.stxx.layout.studies[studyInstanceName]
+						)
+					}
+				}
+				const conditionMap = new Map([
+					[5, {name:'Rate Of Change',abbr:'ROC'}],
+					[6, {name:'Range Of Rank',abbr:'ROR'}],
+					[7, {name:'MA Ratio',abbr:'MA'}]
+				])
+				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+					display: conditionMap.get(this.senti.newCondition).name,
+					Field: indicator_url,
+					condition:conditionMap.get(this.senti.newCondition).abbr,
+					period:this.senti.conditionPeriod
+				})
+				console.log('calculateNewConditions',sd)
+			}
+		},
 		setPeriod(val) {
 			let _val = val
 			if(!_val){
@@ -409,8 +571,8 @@ export default {
 			let result
 
 			this.$store.state.indicatorsList.forEach((value, index) => {
-				if (this.sentiVal) {
-					if (value.chart_name.indexOf(this.sentiVal) !== -1) {
+				if (this.sentiUrl) {
+					if (value.url == this.sentiUrl) {
 						result = value
 					}
 				} 
@@ -431,6 +593,8 @@ export default {
 				if (
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
 				) {
+					// sentiment indicator自带的ROCLike除外
+					if(studyInstanceName.indexOf('‌ST ROCLike‌')!=-1) continue	
 					CIQ.Studies.removeStudy(
 						CIQ.stxx,
 						CIQ.stxx.layout.studies[studyInstanceName]
@@ -443,6 +607,7 @@ export default {
 				display: 'ST MA',
 				Field: result.url
 			})
+console.log(sd,CIQ.stxx.layout.studies)
 			// keep current MA
 			var objMA = { period: _val, url: result.url }
 			var activatedMAList = this.$store.state.activatedMA
@@ -516,18 +681,26 @@ export default {
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
 				let obj = newVal[this.criteria].signals[this.panelIndex]
+				// test在samebar(relation 2/3)的情况下
+				let cond = newVal[this.criteria].cond[(this.relation==2||this.relation==3)?this.panelIndex+1:this.panelIndex]
 				this.senti.extreme_optimism = obj.extreme_optimism
 				this.senti.extreme_pessimism = obj.extreme_pessimism
 				this.senti.condition = Number(obj.condition)
 				this.senti.value = obj.value
 				this.senti.comparison = obj.comparison
+
+				this.senti.newCondition = Number(cond.newCondition)?Number(cond.newCondition):this.senti.condition
+				this.senti.conditionPeriod = cond.conditionPeriod?cond.conditionPeriod:''
 				this.conditionRadio = 'Indicator Value'
+
 				this.editSentiVal = obj.indicator
 				if (this.senti.comparison === 'SVMA') {
 					this.conditionRadio = 'Indicator Moving Average'
 					this.senti.maValue = this.senti.value
 				    this.senti.period = obj.period
 				}
+				console.log('setEditData')
+				this.ROCLikeChange(this.senti.newCondition)
 			}
 		}
 	}
