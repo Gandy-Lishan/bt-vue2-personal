@@ -414,11 +414,7 @@
 						Instead, we provide a look at various time-frames from 1-Week to
 						1-Year of returns.
 					</p>
-					<el-tabs
-						v-model="activeTIM"
-						type="card"
-						v-loading="loading"
-					>
+					<el-tabs v-model="activeTIM" type="card" v-loading="loading">
 						<el-tab-pane label="Exit With Default Time-In-Market" name="first">
 							<div class="history-container">
 								<el-skeleton :rows="6" :loading="loading" animated>
@@ -638,981 +634,1014 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import jutils from 'jutils-src'
 import { seeReport } from '@/service/service'
-const XLSX = require('xlsx')
+import sortByRule from "@/tools/sortTIM";
+const XLSX = require('xlsx');
 
 export default {
-	data() {
-		return {
-			activePerTag: 'first',
-			tableData: [],
-			returnImgUrl: '',
-			drawDownImgUrl: '',
-			monthReturnImgUrl: '',
-			annualReturnImgUrl: '',
-			loading: false,
-			tradesData: [],
-			queryInfo: {
-				total: 0,
-				page: 1
-			},
-			totalTradesNumber: 0,
-			splitTradeData: [],
-			defaultTableLabels: [
-				'Entry Date',
-				'1 Week [%]',
-				'2 Weeks [%]',
-				'1 Month [%]',
-				'2 Months [%]',
-				'3 Months [%]',
-				'6 Months [%]',
-				'12 Months [%]'
-			],
-			backtestHistoryList: [],
-			unSplitTadeData: [],
-			// period_dict: {
-			// 	5: "1WeekReturn", 10: "2WeeksReturn", 21: "1MonthReturn", 42: "2MonthsReturn",
-			// 	63: "3MonthsReturn", 126: "6MonthsReturn", 252: "12MonthsReturn"
-			// },
-			start_date: null,
-			result_quotes: [],
-			periods: [],
-			showTable: false,
-			editTIMData: [
-				{
-					period: '1',
-					placeholder: 'input period1',
-					timeframe: 'Day',
-					readonly: false
-				},
-				{
-					period: '1',
-					placeholder: 'input period2',
-					timeframe: 'Week',
-					readonly: false
-				}
-			],
-			activeTIM: 'first',
-			defaultTIMTableLabels: ['Entry Date', '1 Day [%]', '1 Week [%]'],
-			TIMHistoryList: [],
-			TIMResult_quotes: [],
-		}
-	},
-	created() {
-		this.getResultData({ id: 0 })
-	},
-	methods: {
-		generate_table_data() {
-			this.generatePeriods()
+  data() {
+    return {
+      activePerTag: 'first',
+      tableData: [],
+      returnImgUrl: '',
+      drawDownImgUrl: '',
+      monthReturnImgUrl: '',
+      annualReturnImgUrl: '',
+      loading: false,
+      tradesData: [],
+      queryInfo: {
+        total: 0,
+        page: 1
+      },
+      totalTradesNumber: 0,
+      splitTradeData: [],
+      defaultTableLabels: [
+        'Entry Date',
+        '1 Week [%]',
+        '2 Weeks [%]',
+        '1 Month [%]',
+        '2 Months [%]',
+        '3 Months [%]',
+        '6 Months [%]',
+        '12 Months [%]'
+      ],
+      backtestHistoryList: [],
+      unSplitTadeData: [],
+      // period_dict: {
+      // 	5: "1WeekReturn", 10: "2WeeksReturn", 21: "1MonthReturn", 42: "2MonthsReturn",
+      // 	63: "3MonthsReturn", 126: "6MonthsReturn", 252: "12MonthsReturn"
+      // },
+      start_date: null,
+      result_quotes: [],
+      periods: [],
+      showTable: false,
+      editTIMData: [
+        {
+          period: '1',
+          placeholder: 'input period1',
+          timeframe: 'Day',
+          readonly: false
+        },
+        {
+          period: '1',
+          placeholder: 'input period2',
+          timeframe: 'Week',
+          readonly: false
+        }
+      ],
+      activeTIM: 'first',
+      defaultTIMTableLabels: ['Entry Date', '1 Day [%]', '1 Week [%]'],
+      TIMHistoryList: [],
+      TIMResult_quotes: [],
+    }
+  },
+  created() {
+    this.getResultData({ id: 0 })
+  },
+  methods: {
+    generate_table_data() {
+      this.generatePeriods()
 
-			if(this.activeTIM == 'first'){
-				// 鎻愬彇灞炴€т俊鎭
-				let keys = Object.keys(this.result_quotes[0])
-				keys.splice(keys.indexOf('Period'), 1)
-				let result = []
-				for (let i = 0; i < keys.length; i++) {
-					result.push({
-						property: keys[i]
-					})
-				}
-				// 灏Periods 淇℃伅鎻掑叆鍒data 涓紝灏data 缁戝畾鍒table 涓
-				for (let i = 0; i < this.periods.length; i++) {
-					for (let j = 0; j < result.length; j++) {
-						this.result_quotes.forEach((obj) => {
-							if (obj.Period === this.periods[i].period) {
-								result[j][this.periods[i].period] = obj[result[j].property]
-							}
-						})
-					}
-				}
-				this.result_quotes = result
-			}else{
-				// 鎻愬彇灞炴€т俊鎭
-				let keys = Object.keys(this.TIMResult_quotes[0])
-				keys.splice(keys.indexOf('Period'), 1)
-				let result = []
-				for (let i = 0; i < keys.length; i++) {
-					result.push({
-						property: keys[i]
-					})
-				}
-				// 灏Periods 淇℃伅鎻掑叆鍒data 涓紝灏data 缁戝畾鍒table 涓
-				for (let i = 0; i < this.periods.length; i++) {
-					for (let j = 0; j < result.length; j++) {
-						this.TIMResult_quotes.forEach((obj) => {
-							if (obj.Period === this.periods[i].period) {
-								result[j][this.periods[i].period] = obj[result[j].property]
-							}
-						})
-					}
-				}
-				this.TIMResult_quotes = result
-			}
+      if (this.activeTIM == 'first') {
+        // 鎻愬彇灞炴€т俊鎭
+        let keys = Object.keys(this.result_quotes[0])
+        keys.splice(keys.indexOf('Period'), 1)
+        let result = []
+        for (let i = 0; i < keys.length; i++) {
+          result.push({
+            property: keys[i]
+          })
+        }
+        // 灏Periods 淇℃伅鎻掑叆鍒data 涓紝灏data 缁戝畾鍒table 涓
+        for (let i = 0; i < this.periods.length; i++) {
+          for (let j = 0; j < result.length; j++) {
+            this.result_quotes.forEach((obj) => {
+              if (obj.Period === this.periods[i].period) {
+                result[j][this.periods[i].period] = obj[result[j].property]
+              }
+            })
+          }
+        }
+        this.result_quotes = result
+      } else {
+        // 鎻愬彇灞炴€т俊鎭
+        let keys = Object.keys(this.TIMResult_quotes[0])
+        keys.splice(keys.indexOf('Period'), 1)
+        let result = []
+        for (let i = 0; i < keys.length; i++) {
+          result.push({
+            property: keys[i]
+          })
+        }
+        // 灏Periods 淇℃伅鎻掑叆鍒data 涓紝灏data 缁戝畾鍒table 涓
+        for (let i = 0; i < this.periods.length; i++) {
+          for (let j = 0; j < result.length; j++) {
+            this.TIMResult_quotes.forEach((obj) => {
+              if (obj.Period === this.periods[i].period) {
+                result[j][this.periods[i].period] = obj[result[j].property]
+              }
+            })
+          }
+        }
+        this.TIMResult_quotes = result
+      }
 
-		},
-		generatePeriods() {
-			let quotes = []
-			if(this.activeTIM == 'first'){
-				quotes = this.result_quotes
-			}else{
-				quotes = this.TIMResult_quotes
-			}
-			let set = new Set()
-			for (let i = 0; i < quotes.length; i++) {
-				set.add(quotes[i].Period)
-			}
-			let values = Array.from(set)
-			let columns = []
-			for (let i = 0; i < values.length; i++) {
-				columns.push({
-					period: values[i]
-				})
-			}
-			this.periods = columns
-		},
-		async getResultData(row, callback) {
-			let vm = this
-			let initalData = {}
-			let data = {}
-			// 娓呯┖performance琛ㄥ崟
-			vm.clearPerformanceData()
-			if (!row.id) {
-				return
-			}
+    },
+    generatePeriods() {
+      let quotes = []
+      if (this.activeTIM == 'first') {
+        quotes = this.result_quotes
+      } else {
+        quotes = this.TIMResult_quotes
+      }
+      let set = new Set()
+      for (let i = 0; i < quotes.length; i++) {
+        set.add(quotes[i].Period)
+      }
+      let values = Array.from(set)
+      let columns = []
+      for (let i = 0; i < values.length; i++) {
+        columns.push({
+          period: values[i]
+        })
+      }
+      this.periods = columns
+    },
+    async getResultData(row, callback) {
+      let vm = this
+      let initalData = {}
+      let data = {}
+      // 娓呯┖performance琛ㄥ崟
+      vm.clearPerformanceData()
+      if (!row.id) {
+        return
+      }
 
-			if (row.status != 0) {
-				if (this.$store.state.favoriteBacktestRowData.id) {
-					let id = row.id
-					try {
-						const res = await seeReport(id)
+      if (row.status != 0) {
+        if (this.$store.state.favoriteBacktestRowData.id) {
+          let id = row.id
+          try {
+            const res = await seeReport(id)
 
-						if (res.status == 200) {
-							if (typeof res.data == 'string') {
-								initalData = JSON.parse(res.data)
-							} else {
-								initalData = res.data
-							}
+            if (res.status == 200) {
+              if (typeof res.data == 'string') {
+                initalData = JSON.parse(res.data)
+              } else {
+                initalData = res.data
+              }
 
-							// -------------------------------------  start ----------------
-							const tradeReturn = initalData['Each Return']
-							data.uuid = initalData['UUID']
-							data.symbol = initalData['Symbol']
-							data.frequency = initalData['Frequency']
-							data.totalTrades = initalData['Total Trades']
-							data.totalPositive = initalData['Total Positive']
-							data.totalNegative = initalData['Total Negative']
-							data.scratch = initalData['Scratch']
-							data.averageWin = initalData['Average Win %']
-							data.averageLoss = initalData['Average Loss %']
-							data.medianGain = initalData['Median Gain']
-							data.medianLoss = initalData['Median Loss']
-							data.averageReturn = initalData['Average Return']
-							data.medianReturn = initalData['Median Return']
-							data.buyHoldGain = initalData['BuyHoldGain']
-							data.winRate = initalData['Win Rate']
-							data.timeInMarket = initalData['Time in Market']
-							data.totalReturn = initalData['Total Return (%)']
-							data.tzScore = initalData['Z-score']
-							data.standardDeviation = initalData['Standard Deviation']
-							data.s3_status_response = initalData['s3_status_response']
-							data.cagr = initalData['CAGR']
-							data.annual_volatiltiy = initalData['annual_volatiltiy']
-							data.calmar_ratio = initalData['calmar_ratio']
-							data.sortino_ratio = initalData['sortino_ratio']
-							data.tail_ratio = initalData['tail_ratio']
-							data.var = initalData['VAR']
-							data.capture = initalData['capture']
-							data.alpha = initalData['alpha']
-							data.beta = initalData['beta']
-							data.information_ratio = initalData['information_ratio']
-							data.sharpeRatio = initalData['Sharpe Ratio']
-							data.drawDown = initalData['DrawDown']
-							data.drawDownPeriod = initalData['DrawDown Period']
-							data.drawDownImageUploaded = initalData['DrawDown Image Uploaded']
-							data.ddFileURL = initalData['DD File URL']
-							data.returnsImageUploaded = initalData['Returns Image Uploaded']
-							data.returnsFileURL = initalData['Returns File URL']
-							data.annualReturnsImageUploaded =
-								initalData['Annual Returns Image Uploaded']
-							data.annualReturnsFileURL = initalData['Annual Returns File URL']
-							data.returnsheatmapImageUploadedURL =
-								initalData['Returns Heatmap Image Uploaded']
-							data.returnsHeatmapFileURL =
-								initalData['Returns Heatmap File URL']
-							data.CAGR = initalData['CAGR']
-							vm.tableData = []
-							if (initalData['Trades']) {
-								// 鏈変氦鏄撴墠濉〃鍗
-								vm.tableData.push(data)
-								vm.returnImgUrl = data.returnsFileURL
-								vm.drawDownImgUrl = data.ddFileURL
-								vm.monthReturnImgUrl = data.returnsHeatmapFileURL
-								vm.annualReturnImgUrl = data.annualReturnsFileURL
-								for (let i = 0; i < initalData['Trades'].length; i++) {
-									if (i % 2 == 0) {
-										initalData['Trades'][i].trade_number = i / 2
-										initalData['Trades'][i + 1].trade_number = i / 2
-									}
-								}
+              // -------------------------------------  start ----------------
+              const tradeReturn = initalData['Each Return']
+              data.uuid = initalData['UUID']
+              data.symbol = initalData['Symbol']
+              data.frequency = initalData['Frequency']
+              data.totalTrades = initalData['Total Trades']
+              data.totalPositive = initalData['Total Positive']
+              data.totalNegative = initalData['Total Negative']
+              data.scratch = initalData['Scratch']
+              data.averageWin = initalData['Average Win %']
+              data.averageLoss = initalData['Average Loss %']
+              data.medianGain = initalData['Median Gain']
+              data.medianLoss = initalData['Median Loss']
+              data.averageReturn = initalData['Average Return']
+              data.medianReturn = initalData['Median Return']
+              data.buyHoldGain = initalData['BuyHoldGain']
+              data.winRate = initalData['Win Rate']
+              data.timeInMarket = initalData['Time in Market']
+              data.totalReturn = initalData['Total Return (%)']
+              data.tzScore = initalData['Z-score']
+              data.standardDeviation = initalData['Standard Deviation']
+              data.s3_status_response = initalData['s3_status_response']
+              data.cagr = initalData['CAGR']
+              data.annual_volatiltiy = initalData['annual_volatiltiy']
+              data.calmar_ratio = initalData['calmar_ratio']
+              data.sortino_ratio = initalData['sortino_ratio']
+              data.tail_ratio = initalData['tail_ratio']
+              data.var = initalData['VAR']
+              data.capture = initalData['capture']
+              data.alpha = initalData['alpha']
+              data.beta = initalData['beta']
+              data.information_ratio = initalData['information_ratio']
+              data.sharpeRatio = initalData['Sharpe Ratio']
+              data.drawDown = initalData['DrawDown']
+              data.drawDownPeriod = initalData['DrawDown Period']
+              data.drawDownImageUploaded = initalData['DrawDown Image Uploaded']
+              data.ddFileURL = initalData['DD File URL']
+              data.returnsImageUploaded = initalData['Returns Image Uploaded']
+              data.returnsFileURL = initalData['Returns File URL']
+              data.annualReturnsImageUploaded =
+                initalData['Annual Returns Image Uploaded']
+              data.annualReturnsFileURL = initalData['Annual Returns File URL']
+              data.returnsheatmapImageUploadedURL =
+                initalData['Returns Heatmap Image Uploaded']
+              data.returnsHeatmapFileURL =
+                initalData['Returns Heatmap File URL']
+              data.CAGR = initalData['CAGR']
+              vm.tableData = []
+              if (initalData['Trades']) {
+                // 鏈変氦鏄撴墠濉〃鍗
+                vm.tableData.push(data)
+                vm.returnImgUrl = data.returnsFileURL
+                vm.drawDownImgUrl = data.ddFileURL
+                vm.monthReturnImgUrl = data.returnsHeatmapFileURL
+                vm.annualReturnImgUrl = data.annualReturnsFileURL
+                for (let i = 0; i < initalData['Trades'].length; i++) {
+                  if (i % 2 == 0) {
+                    initalData['Trades'][i].trade_number = i / 2
+                    initalData['Trades'][i + 1].trade_number = i / 2
+                  }
+                }
 
-								for (let i = 0; i < initalData['Trades'].length; i++) {
-									initalData['Trades'][i].TradeReturn =
-										tradeReturn[initalData['Trades'][i].trade_number]
-									if (i % 2 !== 0) {
-										initalData['Trades'][i - 1].Return =
-											initalData['Trades'][i].Return
-									}
-								}
-								vm.queryInfo.total = initalData['Trades'].length
-								vm.totalTradesNumber = initalData['Trades'].length / 2
-								vm.handleCurrentChange(1)
-								vm.tradesData = initalData['Trades']
-								vm.unSplitTadeData = vm.tradesData
+                for (let i = 0; i < initalData['Trades'].length; i++) {
+                  initalData['Trades'][i].TradeReturn =
+                    tradeReturn[initalData['Trades'][i].trade_number]
+                  if (i % 2 !== 0) {
+                    initalData['Trades'][i - 1].Return =
+                      initalData['Trades'][i].Return
+                  }
+                }
+                vm.queryInfo.total = initalData['Trades'].length
+                vm.totalTradesNumber = initalData['Trades'].length / 2
+                vm.handleCurrentChange(1)
+                vm.tradesData = initalData['Trades']
+                vm.unSplitTadeData = vm.tradesData
 
-								// 淇濆瓨tradesdata鍒皊tore
-								this.$store.commit('getTradesData', vm.tradesData)
-								// 鏍规嵁entrydate璁＄畻鏈潵鏀剁泭
-								const periodArray = [
-									{ period: 1, timeframe: 'Week' },
-									{ period: 2, timeframe: 'Week' },
-									{ period: 1, timeframe: 'Month' },
-									{ period: 2, timeframe: 'Month' },
-									{ period: 3, timeframe: 'Month' },
-									{ period: 6, timeframe: 'Month' },
-									{ period: 12, timeframe: 'Month' }
-								]
-								this.backtestHistoryList = this.calculateBacktestHistory(
-									vm.tradesData,
-									periodArray
-								)
+                // 淇濆瓨tradesdata鍒皊tore
+                this.$store.commit('getTradesData', vm.tradesData)
+                // 鏍规嵁entrydate璁＄畻鏈潵鏀剁泭
+                const periodArray = [
+                  { period: 1, timeframe: 'Week' },
+                  { period: 2, timeframe: 'Week' },
+                  { period: 1, timeframe: 'Month' },
+                  { period: 2, timeframe: 'Month' },
+                  { period: 3, timeframe: 'Month' },
+                  { period: 6, timeframe: 'Month' },
+                  { period: 12, timeframe: 'Month' }
+                ]
+                this.backtestHistoryList = this.calculateBacktestHistory(
+                  vm.tradesData,
+                  periodArray
+                )
 
-								// 2.1涓紩鍏ュ垎鏋愬笀鐨刏Score妯″潡
-								var datatime = new Date(initalData['basic']['start_date'])
-								var offset = datatime.getTimezoneOffset() * 60 * 1000
-								this.start_date = new Date(
-									datatime.setTime(datatime.getTime() + offset)
-								)
-								this.calculateZScore(vm.tradesData, periodArray)
-							}
+                // 2.1涓紩鍏ュ垎鏋愬笀鐨刏Score妯″潡
+                var datatime = new Date(initalData['basic']['start_date'])
+                var offset = datatime.getTimezoneOffset() * 60 * 1000
+                this.start_date = new Date(
+                  datatime.setTime(datatime.getTime() + offset)
+                )
+                this.calculateZScore(vm.tradesData, periodArray)
+              }
 
-							// ---------------------------------------- end ----------------------------------
-							// ----------------------- backtest result-------------------------------
+              // ---------------------------------------- end ----------------------------------
+              // ----------------------- backtest result-------------------------------
 
-							this.$emit('setBacktestResult', initalData['basic'])
-							// ------------------------------ end -----------------------------------
-						}
-					} catch (error) {
-						console.error('鏈嶅姟鍣ㄦ姤閿', error)
-						vm.tableData = []
-						vm.tradesData = []
-						vm.$emit('errorCatchPerformance')
-					}
-				}
-			} else {
-				console.error('row status is ', row.status)
-			}
-			setTimeout(() => {
-				if (initalData.markerSet) {
-					this.loadMarker(initalData.markerSet)
-				}
-				if (callback) {
-					callback()
-				}
-			}, 0)
-		},
-		transformData(data) {
-			return data.map((item) => {
-				let timeframe =
-					item.period > 1
-						? `${item.period} ${item.timeframe}s [%]`
-						: `${item.period} ${item.timeframe} [%]`
-				let value
-				switch (item.timeframe) {
-					case 'Day':
-						value = Number(item.period)
-						break
-					case 'Week':
-						value = Number(item.period) * 5
-						break
-					case 'Month':
-						value = Number(item.period) * 21
-						break
-					default:
-						break
-				}
-				return { timeframe, period: item.period, value }
-			})
-		},
-		calculateBacktestHistory(dataSet, periodArray) {
-			/*
-		periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
-		*/
-			let chartDataset = CIQ.stxx.chart.dataSet
-			const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
-			dataSet = dataSet.filter((item) => item.TradeStatus == 'BUY')
-			let backtestResult = []
+              this.$emit('setBacktestResult', initalData['basic'])
+              // ------------------------------ end -----------------------------------
+            }
+          } catch (error) {
+            console.error('鏈嶅姟鍣ㄦ姤閿', error)
+            vm.tableData = []
+            vm.tradesData = []
+            vm.$emit('errorCatchPerformance')
+          }
+        }
+      } else {
+        console.error('row status is ', row.status)
+      }
+      setTimeout(() => {
+        if (initalData.markerSet) {
+          this.loadMarker(initalData.markerSet)
+        }
+        if (callback) {
+          callback()
+        }
+      }, 0)
+    },
+    transformData(data) {
+      return data.map((item) => {
+        let timeframe =
+          item.period > 1
+            ? `${item.period} ${item.timeframe}s [%]`
+            : `${item.period} ${item.timeframe} [%]`
+        let value
+        switch (item.timeframe) {
+          case 'Day':
+            value = Number(item.period)
+            break
+          case 'Week':
+            value = Number(item.period) * 5
+            break
+          case 'Month':
+            value = Number(item.period) * 21
+            break
+          default:
+            break
+        }
+        return { timeframe, period: item.period, value }
+      })
+    },
+    calculateBacktestHistory(dataSet, periodArray) {
+      /*
+    periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
+    */
+      let chartDataset = CIQ.stxx.chart.dataSet
+      const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
+      dataSet = dataSet.filter((item) => item.TradeStatus == 'BUY')
+      let backtestResult = []
 
-			for (var data in dataSet) {
-				var datatime = new Date(dataSet[data].Date)
+      for (var data in dataSet) {
+        var datatime = new Date(dataSet[data].Date)
 
-				var offset = datatime.getTimezoneOffset() * 60 * 1000
-				var entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
+        var offset = datatime.getTimezoneOffset() * 60 * 1000
+        var entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
 
-				let res = chartDataset.findIndex((x) => {
-					return entryDate.getTime() == x.DT.getTime()
-				})
+        let res = chartDataset.findIndex((x) => {
+          return entryDate.getTime() == x.DT.getTime()
+        })
 
-				if (res != -1) {
-					//鎷胯繘鍦轰环鏍煎拰鍓嶄竴澶╀綔姣旇緝
-					let entryPrice = chartDataset[res].Open
-					const transformData = this.transformData(periodArray)
-					let obj = {}
-					transformData.map((item) => {
-						let exitBar = chartDataset[res + item.value]
-							? (
-									((direction == 'Short'
-										? entryPrice - chartDataset[res + item.value].Open
-										: chartDataset[res + item.value].Open - entryPrice) /
-										entryPrice) *
-									100
-							  ).toFixed(2) + ' %'
-							: ''
-						obj[item.timeframe] = exitBar
-					})
-					backtestResult.push({ 'Entry Date': dataSet[data].Date, ...obj })
-				}
-			}
-			return backtestResult
-		},
-		transformZScoreData(data) {
-			let obj = {}
-			data.map((item) => {
-				let timeframe =
-					item.period > 1
-						? `${item.period} ${item.timeframe}s`
-						: `${item.period} ${item.timeframe}`
-				let value
-				switch (item.timeframe) {
-					case 'Day':
-						value = Number(item.period)
-						break
-					case 'Week':
-						value = Number(item.period) * 5
-						break
-					case 'Month':
-						value = Number(item.period) * 21
-						break
-					default:
-						break
-				}
-				obj[value] = timeframe
-			})
-			return obj
-		},
-		calculateZScore(dataSet, periodArray) {
-			/*
-			periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
-			*/
-			// masterData涓嶅寘鍚玦ndicator value,闃叉鏃爋hlcv鐨勬儏鍐
-			let period_dict = this.transformZScoreData(periodArray)
-			console.log(period_dict)
-			let quotes = CIQ.stxx.chart.masterData
-			const period_list = Object.keys(period_dict).map(Number)
-			const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
-			for (var i in period_list) {
-				quotes = this.generate_period_data(
-					period_dict,
-					quotes,
-					period_list[i],
-					direction
-				)
-			}
-			console.log('trades', dataSet)
-			console.log('鍘熻绠楀悗鐨勬暟鎹', quotes)
-			// 鏁版嵁鍒囩墖
-			quotes = quotes.filter((x) => {
-				return this.start_date.getTime() <= x.DT.getTime()
-			})
-			//鎶婁氦鏄撳垪琛ㄨ浆鎹㈡垚鏃堕棿鎴
-			let dataTimeList = []
-			for (var data in dataSet) {
-				if (dataSet[data].TradeStatus != 'BUY') continue
-				var datatime = new Date(dataSet[data].Date)
-				var offset = datatime.getTimezoneOffset() * 60 * 1000
-				var entryDate = new Date(
-					datatime.setTime(datatime.getTime() + offset)
-				).getTime()
-				dataTimeList.push(entryDate)
-			}
-			let used_quotes = quotes.filter(
-				(x) => dataTimeList.indexOf(x.DT.getTime()) != -1
-			)
-			console.log('鍒囩墖骞惰繃婊ら潪浜ゆ槗鏃ユ湡鐨勬暟鎹', used_quotes)
-			//鏇挎崲NaN
-			quotes = quotes.map((quote) => {
-				const updatedQuote = {}
-				for (const [key, value] of Object.entries(quote)) {
-					updatedQuote[key] = isNaN(value) ? -100 : value
-				}
-				return updatedQuote
-			})
+        if (res != -1) {
+          //鎷胯繘鍦轰环鏍煎拰鍓嶄竴澶╀綔姣旇緝
+          let entryPrice = chartDataset[res].Open
+          const transformData = this.transformData(periodArray)
+          let obj = {}
+          transformData.map((item) => {
+            let exitBar = chartDataset[res + item.value]
+              ? (
+                ((direction == 'Short'
+                  ? entryPrice - chartDataset[res + item.value].Open
+                  : chartDataset[res + item.value].Open - entryPrice) /
+                  entryPrice) *
+                100
+              ).toFixed(2) + ' %'
+              : ''
+            obj[item.timeframe] = exitBar
+          })
+          backtestResult.push({ 'Entry Date': dataSet[data].Date, ...obj })
+        }
+      }
+      return backtestResult
+    },
+    transformZScoreData(data) {
+      let obj = {}
+      data.map((item) => {
+        let timeframe =
+          item.period > 1
+            ? `${item.period} ${item.timeframe}s`
+            : `${item.period} ${item.timeframe}`
+        let value
+        switch (item.timeframe) {
+          case 'Day':
+            value = Number(item.period)
+            break
+          case 'Week':
+            value = Number(item.period) * 5
+            break
+          case 'Month':
+            value = Number(item.period) * 21
+            break
+          default:
+            break
+        }
+        obj[value] = timeframe
+      })
+      return obj
+    },
+    calculateZScore(dataSet, periodArray) {
+      /*
+      periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
+      */
+      // masterData涓嶅寘鍚玦ndicator value,闃叉鏃爋hlcv鐨勬儏鍐
+      let period_dict = this.transformZScoreData(periodArray)
+      console.log(period_dict)
+      let quotes = CIQ.stxx.chart.masterData
+      const period_list = Object.keys(period_dict).map(Number)
+      const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
+      for (var i in period_list) {
+        quotes = this.generate_period_data(
+          period_dict,
+          quotes,
+          period_list[i],
+          direction
+        )
+      }
+      console.log('trades', dataSet)
+      console.log('鍘熻绠楀悗鐨勬暟鎹', quotes)
+      // 鏁版嵁鍒囩墖
+      quotes = quotes.filter((x) => {
+        return this.start_date.getTime() <= x.DT.getTime()
+      })
+      //鎶婁氦鏄撳垪琛ㄨ浆鎹㈡垚鏃堕棿鎴
+      let dataTimeList = []
+      for (var data in dataSet) {
+        if (dataSet[data].TradeStatus != 'BUY') continue
+        var datatime = new Date(dataSet[data].Date)
+        var offset = datatime.getTimezoneOffset() * 60 * 1000
+        var entryDate = new Date(
+          datatime.setTime(datatime.getTime() + offset)
+        ).getTime()
+        dataTimeList.push(entryDate)
+      }
+      let used_quotes = quotes.filter(
+        (x) => dataTimeList.indexOf(x.DT.getTime()) != -1
+      )
+      console.log('鍒囩墖骞惰繃婊ら潪浜ゆ槗鏃ユ湡鐨勬暟鎹', used_quotes)
+      //鏇挎崲NaN
+      quotes = quotes.map((quote) => {
+        const updatedQuote = {}
+        for (const [key, value] of Object.entries(quote)) {
+          updatedQuote[key] = isNaN(value) ? -100 : value
+        }
+        return updatedQuote
+      })
 
-			let median_list = [],
-				positive_list = [],
-				max_loss_list = [],
-				max_gain_list = [],
-				z_score_list = []
-			for (var i in period_list) {
-				let temp_median = this.calculate_median(
-					used_quotes.map((obj) => obj[period_dict[period_list[i]]])
-				)
-				median_list.push(temp_median)
-				positive_list.push(
-					this.calculate_win_rate(
-						used_quotes.map((obj) => obj[period_dict[period_list[i]]])
-					)
-				)
-				if (direction == 'Short') {
-					max_loss_list.push(
-						this.calculate_median(
-							used_quotes.map((obj) => obj['MaxGain' + period_list[i]])
-						)
-					)
-					max_gain_list.push(
-						this.calculate_median(
-							used_quotes.map((obj) => obj['MaxLoss' + period_list[i]])
-						)
-					)
-				} else {
-					max_loss_list.push(
-						this.calculate_median(
-							used_quotes.map((obj) => obj['MaxLoss' + period_list[i]])
-						)
-					)
-					max_gain_list.push(
-						this.calculate_median(
-							used_quotes.map((obj) => obj['MaxGain' + period_list[i]])
-						)
-					)
-				}
+      let median_list = [],
+        positive_list = [],
+        max_loss_list = [],
+        max_gain_list = [],
+        z_score_list = []
+      for (var i in period_list) {
+        let temp_median = this.calculate_median(
+          used_quotes.map((obj) => obj[period_dict[period_list[i]]])
+        )
+        median_list.push(temp_median)
+        positive_list.push(
+          this.calculate_win_rate(
+            used_quotes.map((obj) => obj[period_dict[period_list[i]]])
+          )
+        )
+        if (direction == 'Short') {
+          max_loss_list.push(
+            this.calculate_median(
+              used_quotes.map((obj) => obj['MaxGain' + period_list[i]])
+            )
+          )
+          max_gain_list.push(
+            this.calculate_median(
+              used_quotes.map((obj) => obj['MaxLoss' + period_list[i]])
+            )
+          )
+        } else {
+          max_loss_list.push(
+            this.calculate_median(
+              used_quotes.map((obj) => obj['MaxLoss' + period_list[i]])
+            )
+          )
+          max_gain_list.push(
+            this.calculate_median(
+              used_quotes.map((obj) => obj['MaxGain' + period_list[i]])
+            )
+          )
+        }
 
-				let temp_std = this.calculate_std(
-					used_quotes.map((obj) => obj[period_dict[period_list[i]]])
-				)
-				let temp_mean = this.calculate_mean(
-					quotes.map((obj) => obj[period_dict[period_list[i]]])
-				)
-				z_score_list.push(
-					parseFloat(
-						(
-							(temp_median - temp_mean) /
-							(temp_std / Math.sqrt(used_quotes.length))
-						).toFixed(1)
-					)
-				)
+        let temp_std = this.calculate_std(
+          used_quotes.map((obj) => obj[period_dict[period_list[i]]])
+        )
+        let temp_mean = this.calculate_mean(
+          quotes.map((obj) => obj[period_dict[period_list[i]]])
+        )
+        z_score_list.push(
+          parseFloat(
+            (
+              (temp_median - temp_mean) /
+              (temp_std / Math.sqrt(used_quotes.length))
+            ).toFixed(1)
+          )
+        )
 
-				//  console.log(period_dict[period_list[i]] + ': ',used_quotes.map(obj=>obj[period_dict[period_list[i]]]))
+        //  console.log(period_dict[period_list[i]] + ': ',used_quotes.map(obj=>obj[period_dict[period_list[i]]]))
 
-				//  console.log('positive_list',positive_list)
-				//  console.log("MaxLoss" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxLoss" + period_list[i]]))
-				//  console.log("MaxGain" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxGain" + period_list[i]]))
-				//  console.log('max_loss_list',max_loss_list)
-				//  console.log('max_gain_list',max_gain_list)
-				//  console.log('z_score_list',z_score_list)
-			}
-			console.log('activeTIM',this.activeTIM)
-			const res = Object.values(period_dict).map((val, i) => ({
-				Period: val,
-				Median: median_list[i],
-				'% Positive': positive_list[i] * 100 + ' %',
-				'Avg Max Loss': max_loss_list[i],
-				'Avg Max Gain': max_gain_list[i],
-				'Z-Score': z_score_list[i]
-			}))
-			if(this.activeTIM == 'first'){
-				this.result_quotes = res
-			}else{
-				this.TIMResult_quotes = res
-			}
+        //  console.log('positive_list',positive_list)
+        //  console.log("MaxLoss" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxLoss" + period_list[i]]))
+        //  console.log("MaxGain" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxGain" + period_list[i]]))
+        //  console.log('max_loss_list',max_loss_list)
+        //  console.log('max_gain_list',max_gain_list)
+        //  console.log('z_score_list',z_score_list)
+      }
+      console.log('activeTIM', this.activeTIM)
+      const res = Object.values(period_dict).map((val, i) => ({
+        Period: val,
+        Median: median_list[i],
+        '% Positive': positive_list[i] * 100 + ' %',
+        'Avg Max Loss': max_loss_list[i],
+        'Avg Max Gain': max_gain_list[i],
+        'Z-Score': z_score_list[i]
+      }))
+      if (this.activeTIM == 'first') {
+        this.result_quotes = res
+      } else {
+        this.TIMResult_quotes = res
+      }
 
-			this.generate_table_data()
-		},
-		calculate_std(arr) {
-			arr = arr.filter(function (x) {
-				return !isNaN(x) // 鍓旈櫎NaN鍊約
-			})
-			if (arr.length == 0) return NaN
+      this.generate_table_data()
+    },
+    calculate_std(arr) {
+      arr = arr.filter(function (x) {
+        return !isNaN(x) // 鍓旈櫎NaN鍊約
+      })
+      if (arr.length == 0) return NaN
 
-			const mean =
-				arr.reduce(function (a, b) {
-					return a + b
-				}) / arr.length // 璁＄畻骞冲潎鏁
-			const deviationArr = arr.map(function (x) {
-				return Math.pow(x - mean, 2)
-			})
+      const mean =
+        arr.reduce(function (a, b) {
+          return a + b
+        }) / arr.length // 璁＄畻骞冲潎鏁
+      const deviationArr = arr.map(function (x) {
+        return Math.pow(x - mean, 2)
+      })
 
-			const variance =
-				deviationArr.reduce(function (a, b) {
-					return a + b
-				}) /
-				(deviationArr.length - 1) // 璁＄畻鏂瑰樊锛屼娇鐢ㄨ嚜鐢卞害=1
+      const variance =
+        deviationArr.reduce(function (a, b) {
+          return a + b
+        }) /
+        (deviationArr.length - 1) // 璁＄畻鏂瑰樊锛屼娇鐢ㄨ嚜鐢卞害=1
 
-			const std = Math.sqrt(variance) // 璁＄畻鏍囧噯宸
-			return std
-		},
-		calculate_win_rate(arr) {
-			let return_series = arr.map((x) => (x > 0 ? 1 : 0))
-			return parseFloat(this.calculate_mean(return_series).toFixed(1))
-		},
-		calculate_mean(arr) {
-			if (arr.length == 0) return NaN
-			return arr.reduce((a, b) => a + b) / arr.length
-		},
-		calculate_median(arr) {
-			arr = arr.filter((n) => !isNaN(n))
-			if (arr.length == 0) return NaN
-			const mid = Math.floor(arr.length / 2)
-			const nums = [...arr].sort((a, b) => a - b)
-			return parseFloat(
-				(arr.length % 2 !== 0
-					? nums[mid]
-					: (nums[mid - 1] + nums[mid]) / 2
-				).toFixed(1)
-			)
-		},
-		generate_period_data(period_dict, quotes, period, direction) {
-			const field = 'Open'
-			quotes = quotes.map((row, i) => {
-				if (i < quotes.length - period) {
-					//const change = parseFloat((100 * (quotes[i + period][field] / row[field] - 1)).toFixed(1))
-					const change = parseFloat(
-						(
-							((direction == 'Short'
-								? row[field] - quotes[i + period][field]
-								: quotes[i + period][field] - row[field]) /
-								row[field]) *
-							100
-						).toFixed(1)
-					)
-					return {
-						...row,
-						[field + period]: quotes[i + period][field],
-						[period_dict[period]]: change == Infinity ? 0 : change
-					}
-				} else {
-					return {
-						...row,
-						[field + period]: NaN,
-						[period_dict[period]]: NaN
-					}
-				}
-			})
-			const minCloseArr = this.get_period_parm(
-				quotes.map((row) => row[field + period]),
-				'min',
-				period
-			)
-			const maxCloseArr = this.get_period_parm(
-				quotes.map((row) => row[field + period]),
-				'max',
-				period
-			)
-			quotes = quotes.map((row, i) => {
-				if (i >= period) {
-					const change = parseFloat(
-						(100 * (minCloseArr[i] / row[field] - 1)).toFixed(1)
-					)
-					return {
-						...row,
-						['MaxLoss' + period]: change == Infinity ? 0 : change
-					}
-				} else {
-					return {
-						...row,
-						['MaxLoss' + period]: NaN
-					}
-				}
-			})
-			quotes = quotes.map((row, i) => {
-				if (i >= period) {
-					const change = parseFloat(
-						(100 * (maxCloseArr[i] / row[field] - 1)).toFixed(1)
-					)
-					return {
-						...row,
-						['MaxGain' + period]: change == Infinity ? 0 : change
-					}
-				} else {
-					return {
-						...row,
-						['MaxGain' + period]: NaN
-					}
-				}
-			})
+      const std = Math.sqrt(variance) // 璁＄畻鏍囧噯宸
+      return std
+    },
+    calculate_win_rate(arr) {
+      let return_series = arr.map((x) => (x > 0 ? 1 : 0))
+      return parseFloat(this.calculate_mean(return_series).toFixed(1))
+    },
+    calculate_mean(arr) {
+      if (arr.length == 0) return NaN
+      return arr.reduce((a, b) => a + b) / arr.length
+    },
+    calculate_median(arr) {
+      arr = arr.filter((n) => !isNaN(n))
+      if (arr.length == 0) return NaN
+      const mid = Math.floor(arr.length / 2)
+      const nums = [...arr].sort((a, b) => a - b)
+      return parseFloat(
+        (arr.length % 2 !== 0
+          ? nums[mid]
+          : (nums[mid - 1] + nums[mid]) / 2
+        ).toFixed(1)
+      )
+    },
+    generate_period_data(period_dict, quotes, period, direction) {
+      const field = 'Open'
+      quotes = quotes.map((row, i) => {
+        if (i < quotes.length - period) {
+          //const change = parseFloat((100 * (quotes[i + period][field] / row[field] - 1)).toFixed(1))
+          const change = parseFloat(
+            (
+              ((direction == 'Short'
+                ? row[field] - quotes[i + period][field]
+                : quotes[i + period][field] - row[field]) /
+                row[field]) *
+              100
+            ).toFixed(1)
+          )
+          return {
+            ...row,
+            [field + period]: quotes[i + period][field],
+            [period_dict[period]]: change == Infinity ? 0 : change
+          }
+        } else {
+          return {
+            ...row,
+            [field + period]: NaN,
+            [period_dict[period]]: NaN
+          }
+        }
+      })
+      const minCloseArr = this.get_period_parm(
+        quotes.map((row) => row[field + period]),
+        'min',
+        period
+      )
+      const maxCloseArr = this.get_period_parm(
+        quotes.map((row) => row[field + period]),
+        'max',
+        period
+      )
+      quotes = quotes.map((row, i) => {
+        if (i >= period) {
+          const change = parseFloat(
+            (100 * (minCloseArr[i] / row[field] - 1)).toFixed(1)
+          )
+          return {
+            ...row,
+            ['MaxLoss' + period]: change == Infinity ? 0 : change
+          }
+        } else {
+          return {
+            ...row,
+            ['MaxLoss' + period]: NaN
+          }
+        }
+      })
+      quotes = quotes.map((row, i) => {
+        if (i >= period) {
+          const change = parseFloat(
+            (100 * (maxCloseArr[i] / row[field] - 1)).toFixed(1)
+          )
+          return {
+            ...row,
+            ['MaxGain' + period]: change == Infinity ? 0 : change
+          }
+        } else {
+          return {
+            ...row,
+            ['MaxGain' + period]: NaN
+          }
+        }
+      })
 
-			return quotes
-		},
-		get_period_parm(dataSeries, paramType, period) {
-			const typeDict = {
-				max: Math.max,
-				min: Math.min,
-				mean: (arr) => arr.reduce((a, b) => a + b) / arr.length,
-				sum: (arr) => arr.reduce((a, b) => a + b)
-			}
+      return quotes
+    },
+    get_period_parm(dataSeries, paramType, period) {
+      const typeDict = {
+        max: Math.max,
+        min: Math.min,
+        mean: (arr) => arr.reduce((a, b) => a + b) / arr.length,
+        sum: (arr) => arr.reduce((a, b) => a + b)
+      }
 
-			const dataArr = []
+      const dataArr = []
 
-			for (let i = 0; i < dataSeries.length; i++) {
-				if (i >= period) {
-					const tmpData = typeDict[paramType](
-						...dataSeries.slice(i - period, i).filter((n) => !isNaN(n))
-					)
-					dataArr.push(Number(tmpData.toFixed(3)))
-				} else {
-					dataArr.push(NaN)
-				}
-			}
-			return dataArr
-		},
-		loadMarker(markerSet) {
-			try {
-				//load markers for initial quotefeed
+      for (let i = 0; i < dataSeries.length; i++) {
+        if (i >= period) {
+          const tmpData = typeDict[paramType](
+            ...dataSeries.slice(i - period, i).filter((n) => !isNaN(n))
+          )
+          dataArr.push(Number(tmpData.toFixed(3)))
+        } else {
+          dataArr.push(NaN)
+        }
+      }
+      return dataArr
+    },
+    loadMarker(markerSet) {
+      try {
+        //load markers for initial quotefeed
 
-				let list = this.filterMarkerDate(
-					new Date(CIQ.initialDate.start),
-					new Date(CIQ.initialDate.end),
-					markerSet
-				)
-				CIQ.isMarkerShown = true
+        let list = this.filterMarkerDate(
+          new Date(CIQ.initialDate.start),
+          new Date(CIQ.initialDate.end),
+          markerSet
+        )
+        CIQ.isMarkerShown = true
 
-				// split the markers into several groups
-				CIQ.groups = this.group(list)
-				let markers = CIQ.groups.pop()
+        // split the markers into several groups
+        CIQ.groups = this.group(list)
+        let markers = CIQ.groups.pop()
 
-				// if the last groups has no enough number of items, merge it with the last one
-				//console.log('CIQ.stxx.chart.xaxis[0]',CIQ.stxx.chart.xaxis[0])
-				let c_date = jutils.formatDate(CIQ.stxx.chart.xaxis[0].DT, 'YYYYMMDD')
-				if (CIQ.groups.slice(-1)[0]) {
-					let m_date =
-						CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
-						CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
-						CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
-					if (c_date < m_date) {
-						markers.unshift(...CIQ.groups.pop())
-					}
-				}
-				console.log('initiating Markers...', markers)
-				CIQ.loadChart(markers, CIQ.addMarker)
-			} catch (error) {
-				console.error(error)
-				return
-			}
-		},
-		group(data) {
-			var result = []
-			var groupItem
-			for (var i = 0; i < data.length; i++) {
-				if (i % 500 == 0) {
-					groupItem != null && result.push(groupItem)
-					groupItem = []
-				}
-				groupItem.push(data[i])
-			}
-			result.push(groupItem)
-			return result
-		},
-		filterMarkerDate(start_date, end_date, markerSet) {
-			let list = []
-			let _date = {
-				start: jutils.formatDate(start_date, 'YYYYMMDD'),
-				end: jutils.formatDate(end_date, 'YYYYMMDD')
-			}
-			for (var date in markerSet) {
-				let markerSetDate =
-					markerSet[date].DT.slice(0, 4) +
-					markerSet[date].DT.slice(5, 7) +
-					markerSet[date].DT.slice(8, 10)
-				if (markerSetDate > _date.start && markerSetDate <= _date.end) {
-					list.push(markerSet[date])
-				}
-			}
-			return list
-		},
-		clearPerformanceData() {
-			this.tableData = []
-			this.tradesData = []
-			//splitTradeData鍜宐acktestHistoryList涔熻娓呯┖
-			this.splitTradeData = []
-			this.backtestHistoryList = []
-			this.returnImgUrl = ''
-			this.drawDownImgUrl = ''
-			this.monthReturnImgUrl = ''
-			this.annualReturnImgUrl = ''
-		},
-		objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-			if (columnIndex === 0) {
-				if (rowIndex % 2 === 0) {
-					return {
-						rowspan: 2,
-						colspan: 1
-					}
-				} else {
-					return {
-						rowspan: 0,
-						colspan: 0
-					}
-				}
-			}
-			if (columnIndex === 5) {
-				if (rowIndex % 2 === 0) {
-					return {
-						rowspan: 2,
-						colspan: 1
-					}
-				} else {
-					return {
-						rowspan: 0,
-						colspan: 0
-					}
-				}
-			}
-			if (columnIndex === 6) {
-				if (rowIndex % 2 === 0) {
-					return {
-						rowspan: 2,
-						colspan: 1
-					}
-				} else {
-					return {
-						rowspan: 0,
-						colspan: 0
-					}
-				}
-			}
-		},
-		handleCurrentChange(page) {
-			this.queryInfo.page = page
-			this.$nextTick(() => {
-				this.splitTradeData = this.tradesData.slice(
-					20 * (this.queryInfo.page - 1),
-					this.queryInfo.page * 20
-				)
-			})
-		},
-		handleDownloadCsv() {
-			if (
-				!(
-					this.tableData.length &&
-					this.splitTradeData.length &&
-					this.backtestHistoryList.length
-				)
-			) {
-				this.$message.warning('No data available for download.')
-				return
-			}
-			const summary = []
-			this.tableData.forEach((item, index) => {
-				const obj = {}
-				obj['TOTAL RETURN %'] = isNaN(item.totalReturn)
-					? 0
-					: `${item.totalReturn}%`
-				obj['Annual Return % (CAGR)'] = isNaN(item.CAGR) ? 0 : `${item.CAGR}%`
-				obj['MEDIAN RETURN %'] = isNaN(item.medianReturn)
-					? 0
-					: `${item.medianReturn}%`
-				obj['AVERAGE RETURN %'] = isNaN(item.averageReturn)
-					? 0
-					: `${item.averageReturn}%`
-				obj['Z_SCORE'] = isNaN(item.tzScore) ? 0 : `${item.tzScore}`
-				obj['STD. DEV'] = isNaN(item.standardDeviation)
-					? 0
-					: `${item.standardDeviation}`
-				obj['BUY & HOLD %'] = isNaN(item.buyHoldGain)
-					? 0
-					: `${item.buyHoldGain}%`
-				obj['WIN RATE %'] = isNaN(item.winRate) ? 0 : `${item.winRate}%`
-				obj['AVERAGE WIN %'] = isNaN(item.averageWin)
-					? 0
-					: `${item.averageWin}%`
-				obj['AVERAGE LOSS %'] = isNaN(item.averageLoss)
-					? 0
-					: `${item.averageLoss}%`
-				obj['MAX RISK %'] = isNaN(item.drawDown) ? 0 : `${item.drawDown}%`
-				obj['TOTAL TRADES'] = isNaN(item.totalTrades)
-					? 0
-					: `${item.totalTrades}`
-				obj['TOTAL POSITIVE'] = isNaN(item.totalPositive)
-					? 0
-					: `${item.totalPositive}`
-				obj['TOTAL NEGATIVE'] = isNaN(item.totalNegative)
-					? 0
-					: `${item.totalNegative}`
-				obj['TIME IN MARKET %'] = isNaN(item.timeInMarket)
-					? 0
-					: `${item.timeInMarket}%`
-				summary.push(obj)
-			})
-			const tradeData = []
-			this.unSplitTadeData.forEach((item, index) => {
-				const obj = {}
-				obj['Trade #'] = index + 1
-				obj['Trade Date'] = item.Date
-				obj['Action'] = item.TradeStatus
-				obj['Indicator'] = item.Indicator.join(',')
-				obj['Trade Price'] = item.TradePrice
-				obj['Trade Return %'] = `${item.TradeReturn}%`
-				obj['Total Return %'] = `${(item.Return * 100).toFixed(2)}%`
-				tradeData.push(obj)
-			})
-			const backtestHistoryList = []
-			this.backtestHistoryList.forEach((item) => {
-				const obj = {}
-				obj['Entry Date'] = item['Entry Date']
-				obj['1 Week [%]'] = item['1 Week [%]']
-				obj['2 Weeks [%]'] = item['2 Weeks [%]']
-				obj['1 Month [%]'] = item['1 Month [%]']
-				obj['2 Months [%]'] = item['2 Months [%]']
-				obj['3 Months [%]'] = item['3 Months [%]']
-				obj['6 Months [%]'] = item['6 Months [%]']
-				obj['12 Months [%]'] = item['12 Months [%]']
-				backtestHistoryList.push(obj)
-			})
-			const dataList = [
-				summary,
-				tradeData,
-				backtestHistoryList,
-				this.TIMHistoryList
-			]
-			const sheetNames = [
-				'Summary',
-				'Trades',
-				'Exit with default Time Frame',
-				'Exit with Customized TIM'
-			]
-			// console.log('鍑嗗涓嬭浇鐨勬暟鎹dataList', dataList)
-			this.exportDataToCSV(dataList, sheetNames)
-		},
-		exportDataToCSV(dataList, sheetNames) {
-			// Create a new workbook
-			const workbook = XLSX.utils.book_new()
+        // if the last groups has no enough number of items, merge it with the last one
+        //console.log('CIQ.stxx.chart.xaxis[0]',CIQ.stxx.chart.xaxis[0])
+        let c_date = jutils.formatDate(CIQ.stxx.chart.xaxis[0].DT, 'YYYYMMDD')
+        if (CIQ.groups.slice(-1)[0]) {
+          let m_date =
+            CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
+            CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
+            CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
+          if (c_date < m_date) {
+            markers.unshift(...CIQ.groups.pop())
+          }
+        }
+        console.log('initiating Markers...', markers)
+        CIQ.loadChart(markers, CIQ.addMarker)
+      } catch (error) {
+        console.error(error)
+        return
+      }
+    },
+    group(data) {
+      var result = []
+      var groupItem
+      for (var i = 0; i < data.length; i++) {
+        if (i % 500 == 0) {
+          groupItem != null && result.push(groupItem)
+          groupItem = []
+        }
+        groupItem.push(data[i])
+      }
+      result.push(groupItem)
+      return result
+    },
+    filterMarkerDate(start_date, end_date, markerSet) {
+      let list = []
+      let _date = {
+        start: jutils.formatDate(start_date, 'YYYYMMDD'),
+        end: jutils.formatDate(end_date, 'YYYYMMDD')
+      }
+      for (var date in markerSet) {
+        let markerSetDate =
+          markerSet[date].DT.slice(0, 4) +
+          markerSet[date].DT.slice(5, 7) +
+          markerSet[date].DT.slice(8, 10)
+        if (markerSetDate > _date.start && markerSetDate <= _date.end) {
+          list.push(markerSet[date])
+        }
+      }
+      return list
+    },
+    clearPerformanceData() {
+      this.tableData = []
+      this.tradesData = []
+      //splitTradeData鍜宐acktestHistoryList涔熻娓呯┖
+      this.splitTradeData = []
+      this.backtestHistoryList = []
+      this.returnImgUrl = ''
+      this.drawDownImgUrl = ''
+      this.monthReturnImgUrl = ''
+      this.annualReturnImgUrl = ''
+    },
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex === 0) {
+        if (rowIndex % 2 === 0) {
+          return {
+            rowspan: 2,
+            colspan: 1
+          }
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+      }
+      if (columnIndex === 5) {
+        if (rowIndex % 2 === 0) {
+          return {
+            rowspan: 2,
+            colspan: 1
+          }
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+      }
+      if (columnIndex === 6) {
+        if (rowIndex % 2 === 0) {
+          return {
+            rowspan: 2,
+            colspan: 1
+          }
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+      }
+    },
+    handleCurrentChange(page) {
+      this.queryInfo.page = page
+      this.$nextTick(() => {
+        this.splitTradeData = this.tradesData.slice(
+          20 * (this.queryInfo.page - 1),
+          this.queryInfo.page * 20
+        )
+      })
+    },
+    handleDownloadCsv() {
+      if (
+        !(
+          this.tableData.length &&
+          this.splitTradeData.length &&
+          this.backtestHistoryList.length
+        )
+      ) {
+        this.$message.warning('No data available for download.')
+        return
+      }
+      const summary = []
+      this.tableData.forEach((item, index) => {
+        const obj = {}
+        obj['TOTAL RETURN %'] = isNaN(item.totalReturn)
+          ? 0
+          : `${item.totalReturn}%`
+        obj['Annual Return % (CAGR)'] = isNaN(item.CAGR) ? 0 : `${item.CAGR}%`
+        obj['MEDIAN RETURN %'] = isNaN(item.medianReturn)
+          ? 0
+          : `${item.medianReturn}%`
+        obj['AVERAGE RETURN %'] = isNaN(item.averageReturn)
+          ? 0
+          : `${item.averageReturn}%`
+        obj['Z_SCORE'] = isNaN(item.tzScore) ? 0 : `${item.tzScore}`
+        obj['STD. DEV'] = isNaN(item.standardDeviation)
+          ? 0
+          : `${item.standardDeviation}`
+        obj['BUY & HOLD %'] = isNaN(item.buyHoldGain)
+          ? 0
+          : `${item.buyHoldGain}%`
+        obj['WIN RATE %'] = isNaN(item.winRate) ? 0 : `${item.winRate}%`
+        obj['AVERAGE WIN %'] = isNaN(item.averageWin)
+          ? 0
+          : `${item.averageWin}%`
+        obj['AVERAGE LOSS %'] = isNaN(item.averageLoss)
+          ? 0
+          : `${item.averageLoss}%`
+        obj['MAX RISK %'] = isNaN(item.drawDown) ? 0 : `${item.drawDown}%`
+        obj['TOTAL TRADES'] = isNaN(item.totalTrades)
+          ? 0
+          : `${item.totalTrades}`
+        obj['TOTAL POSITIVE'] = isNaN(item.totalPositive)
+          ? 0
+          : `${item.totalPositive}`
+        obj['TOTAL NEGATIVE'] = isNaN(item.totalNegative)
+          ? 0
+          : `${item.totalNegative}`
+        obj['TIME IN MARKET %'] = isNaN(item.timeInMarket)
+          ? 0
+          : `${item.timeInMarket}%`
+        summary.push(obj)
+      })
+      const tradeData = []
+      this.unSplitTadeData.forEach((item, index) => {
+        const obj = {}
+        obj['Trade #'] = index + 1
+        obj['Trade Date'] = item.Date
+        obj['Action'] = item.TradeStatus
+        obj['Indicator'] = item.Indicator.join(',')
+        obj['Trade Price'] = item.TradePrice
+        obj['Trade Return %'] = `${item.TradeReturn}%`
+        obj['Total Return %'] = `${(item.Return * 100).toFixed(2)}%`
+        tradeData.push(obj)
+      })
+      const backtestHistoryList = []
+      this.backtestHistoryList.forEach((item) => {
+        const obj = {}
+        obj['Entry Date'] = item['Entry Date']
+        obj['1 Week [%]'] = item['1 Week [%]']
+        obj['2 Weeks [%]'] = item['2 Weeks [%]']
+        obj['1 Month [%]'] = item['1 Month [%]']
+        obj['2 Months [%]'] = item['2 Months [%]']
+        obj['3 Months [%]'] = item['3 Months [%]']
+        obj['6 Months [%]'] = item['6 Months [%]']
+        obj['12 Months [%]'] = item['12 Months [%]']
+        backtestHistoryList.push(obj)
+      })
+      const dataList = [
+        summary,
+        tradeData,
+        backtestHistoryList,
+        this.TIMHistoryList
+      ]
+      const sheetNames = [
+        'Summary',
+        'Trades',
+        'Exit with default Time Frame',
+        'Exit with Customized TIM'
+      ]
+      // console.log('鍑嗗涓嬭浇鐨勬暟鎹dataList', dataList)
+      this.exportDataToCSV(dataList, sheetNames)
+    },
+    exportDataToCSV(dataList, sheetNames) {
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new()
 
-			for (let i = 0; i < dataList.length; i++) {
-				// Convert the data to a worksheet
-				const worksheet = XLSX.utils.json_to_sheet(dataList[i])
+      for (let i = 0; i < dataList.length; i++) {
+        // Convert the data to a worksheet
+        const worksheet = XLSX.utils.json_to_sheet(dataList[i])
 
-				// Add the worksheet to the workbook with the given name
-				XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i])
-			}
+        // Add the worksheet to the workbook with the given name
+        XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i])
+      }
 
-			// Convert the workbook to a binary string
-			const workbookBinaryString = XLSX.write(workbook, {
-				type: 'binary',
-				bookType: 'xlsx'
-			})
+      // Convert the workbook to a binary string
+      const workbookBinaryString = XLSX.write(workbook, {
+        type: 'binary',
+        bookType: 'xlsx'
+      })
+      // Create a Blob from the binary string
+      const blob = new Blob([this.s2ab(workbookBinaryString)], {
+        type: 'application/octet-stream'
+      })
 
-			// Create a Blob from the binary string
-			const blob = new Blob([this.s2ab(workbookBinaryString)], {
-				type: 'application/octet-stream'
-			})
+      // Create a download URL for the Blob
+      const url = URL.createObjectURL(blob)
 
-			// Create a download URL for the Blob
-			const url = URL.createObjectURL(blob)
+      // Create a link element for downloading the CSV file
+      const link = document.createElement('a')
+      link.style.display = 'none'
+      link.setAttribute('href', url)
+      link.setAttribute('download', 'Results.xlsx')
+      link.innerHTML = 'Download XLSX'
+      // Append the link element to the document body
+      document.body.appendChild(link)
 
-			// Create a link element for downloading the CSV file
-			const link = document.createElement('a')
-			link.style.display = 'none'
-			link.setAttribute('href', url)
-			link.setAttribute('download', 'Results.xlsx')
-			link.innerHTML = 'Download XLSX'
-			// Append the link element to the document body
-			document.body.appendChild(link)
+      // Trigger the download
+      link.click()
+    },
+    // Utility function to convert a string to an ArrayBuffer
+    s2ab(s) {
+      const buf = new ArrayBuffer(s.length);
+      const view = new Uint8Array(buf);
+      for (let i = 0; i < s.length; i++) {
+        view[i] = s.charCodeAt(i) & 0xff;
+      }
+      return buf;
+    },
+    addRow() {
+      if (this.editTIMData.length >= 10) {
+        this.$message.warning('Cannot add more than 10 rows.')
+        return
+      }
+      const newRow = {
+        period: '1',
+        timeframe: 'Day',
+        placeholder: `input period${this.editTIMData.length + 1}`,
+        readonly: false
+      };
+      this.editTIMData.push(newRow);
+    },
+    getValues() {
+      return this.editTIMData.map(row => {
+        return { period: row.period, timeframe: row.timeframe };
+      });
+    },
+    showTableDialog() {
+      this.showTable = true;
+    },
+    saveTable() {
+      this.showTable = false;
+      if (this.tradesData.length === 0) {
+        this.$message.warning('No computable trades.')
+        return
+      }
+      CIQ.addCover('Calculating...')
+      CIQ.nprogress.start()
+      try {
+        const periodArray = this.getValues()
+        const isValid = this.validateData(periodArray)
+        if (!isValid) {
 
-			// Trigger the download
-			link.click()
-		},
-		// Utility function to convert a string to an ArrayBuffer
-		s2ab(s) {
-			const buf = new ArrayBuffer(s.length)
-			const view = new Uint8Array(buf)
-			for (let i = 0; i < s.length; i++) {
-				view[i] = s.charCodeAt(i) & 0xff
-			}
-			return buf
-		},
-		addRow() {
-			if (this.editTIMData.length >= 10) {
-				this.$message.warning('Cannot add more than 10 rows.')
-				return
-			}
-			const newRow = {
-				period: '1',
-				timeframe: 'Day',
-				placeholder: `input period${this.editTIMData.length + 1}`,
-				readonly: false
-			}
-			this.editTIMData.push(newRow)
-		},
-		getValues() {
-			return this.editTIMData.map((row) => {
-				return { period: row.period, timeframe: row.timeframe }
-			})
-		},
-		showTableDialog() {
-			this.showTable = true
-		},
-		saveTable() {
-			this.showTable = false
-			if (this.tradesData.length === 0) {
-				this.$message.warning('No computable trades.')
-				return
-			}
-			const periodArray = this.getValues()
-			const uniqueData = periodArray.filter((item, index, arr) => {
-				return (
-					arr.findIndex((elem) => elem.timeframe === item.timeframe) === index
-				)
-			})
-			const transformData = this.transformData(uniqueData)
-			console.log(transformData)
-			const table = ['Entry Date']
-			transformData.map((item) => {
-				table.push(item.timeframe)
-			})
-			this.defaultTIMTableLabels = table
-			console.log(this.defaultTIMTableLabels)
-			const data = this.calculateBacktestHistory(this.tradesData, periodArray)
-			console.log('data', data)
-			this.TIMHistoryList = data
-			this.resetTable()
+          CIQ.hideCover()
+          CIQ.nprogress.done()
+          return
+        }
+        console.log(periodArray)
+        const uniqueData = [];
+        periodArray.forEach(item => {
+          const isDuplicate = uniqueData.some(
+            uniqueItem =>
+              uniqueItem.period === item.period && uniqueItem.timeframe === item.timeframe
+          );
 
-			this.calculateZScore(this.tradesData, periodArray)
-		},
-		cancelTable() {
-			this.showTable = false
-			this.resetTable()
-		},
-		resetTable() {
-			this.editTIMData = [
-				{
-					period: '1',
-					placeholder: 'input period1',
-					timeframe: 'Day',
-					readonly: false
-				},
-				{
-					period: '1',
-					placeholder: 'input period2',
-					timeframe: 'Week',
-					readonly: false
-				}
-			]
-		},
-		// handleTabClick(tab, event) {
-		// 	let tabName = tab.name
-		// 	if (tabName == 'second') {
-		// 		//this.result_quotes = []
-		// 	}
-		// }
-	}
+          if (!isDuplicate) {
+            uniqueData.push(item);
+          }
+        });
+        console.log(uniqueData)
+        const transformData = this.transformData(uniqueData)
+        console.log(transformData)
+        const table = ['Entry Date']
+        transformData.map((item) => {
+          table.push(item.timeframe)
+        })
+        // 进行排序
+        const sortedData = table.sort(sortByRule);
+        this.defaultTIMTableLabels = sortedData
+        console.log(this.defaultTIMTableLabels)
+        const data = this.calculateBacktestHistory(this.tradesData, periodArray)
+        console.log('data', data)
+        this.TIMHistoryList = data
+        this.resetTable()
+      } catch (error) {
+        console.log(error)
+      }
+      CIQ.hideCover()
+      CIQ.nprogress.done()
+    },
+    cancelTable() {
+      this.showTable = false;
+      this.resetTable();
+    },
+    resetTable() {
+      this.editTIMData = [
+        { period: '1', placeholder: 'input period1', timeframe: 'Day', readonly: false },
+        { period: '1', placeholder: 'input period2', timeframe: 'Week', readonly: false }
+      ]
+    },
+    validateData(data) {
+      for (const item of data) {
+        if (item.timeframe === 'Day' || item.timeframe === 'Days') {
+          const period = parseInt(item.period);
+          if (isNaN(period) || period < 1 || period > 252 || !Number.isInteger(Number(item.period))) {
+            this.$message.warning('When the Timeframe is selected as Day(s), only positive integers between 1 and 252 are allowed to be entered.');
+            return false;
+          }
+        }
+        if (item.timeframe === 'Week' || item.timeframe === 'Weeks') {
+          const period = parseInt(item.period);
+          if (isNaN(period) || period < 1 || period > 52 || !Number.isInteger(Number(item.period))) {
+            this.$message.warning('When the Timeframe is selected as Week(s), only positive integers between 1 and 52 are allowed to be entered.');
+            return false;
+          }
+        }
+        if (item.timeframe === 'Month' || item.timeframe === 'Months') {
+          const period = parseInt(item.period);
+          if (isNaN(period) || period < 1 || period > 120 || !Number.isInteger(Number(item.period))) {
+            this.$message.warning('When the Timeframe is selected as Month(s), only positive integers between 1 and 120 are allowed to be entered.');
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+  }
 }
 </script>
 <style scoped>
