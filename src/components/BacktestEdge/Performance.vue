@@ -559,7 +559,6 @@
 								title="Edit exit with different TIM Table"
 								:visible.sync="showTable"
 								width="80%"
-								@closed="resetTable"
 							>
 								<div>
 									<el-table
@@ -971,7 +970,7 @@ export default {
                   : chartDataset[res + item.value].Open - entryPrice) /
                   entryPrice) *
                 100
-              ).toFixed(2) + ' %'
+              ).toFixed(2)
               : ''
             obj[item.timeframe] = exitBar
           })
@@ -1585,6 +1584,8 @@ export default {
           }
         });
         console.log(uniqueData)
+				// 去重
+				this.editTIMData = uniqueData
         const transformData = this.transformData(uniqueData)
         console.log(transformData)
         const table = ['Entry Date']
@@ -1598,7 +1599,7 @@ export default {
         const data = this.calculateBacktestHistory(this.tradesData, periodArray)
         console.log('data', data)
         this.TIMHistoryList = data
-        this.resetTable()
+        // this.resetTable()
       } catch (error) {
         console.log(error)
       }
@@ -1607,7 +1608,7 @@ export default {
     },
     cancelTable() {
       this.showTable = false;
-      this.resetTable();
+      // this.resetTable();
     },
     resetTable() {
       this.editTIMData = [
