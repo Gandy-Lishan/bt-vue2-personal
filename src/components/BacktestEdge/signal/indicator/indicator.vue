@@ -122,6 +122,7 @@
 							>
 							<div slot="tip" class="el-upload__tip">
 								You can only upload a csv file and don't exceed 1MB
+                <el-button type="text" @click="exampleDataVisible=true">View Example Data</el-button>
 							</div>
 						</el-upload>
 						<el-dialog :title="previewFileName" :visible.sync="previewVisible">
@@ -181,6 +182,15 @@
 									{{ item }}
 								</div>
 							</el-card>
+						</el-dialog>
+            <el-dialog :title="exampleDataTitle" :visible.sync="exampleDataVisible">
+							<el-table
+								:data="exampleData"
+								style="margin-top: 20px; max-height: 400px; overflow-y: auto"
+							>
+								<el-table-column label="Date" prop="Date"></el-table-column>
+								<el-table-column label="Close" prop="Close"></el-table-column>
+							</el-table>
 						</el-dialog>
 					</div>
         </el-form-item>
@@ -298,7 +308,21 @@ export default {
       file_hash: '',
       nonBusinessTitle: '"Non-trading day schedule in CSV',
       nonBusinessDay: [],
-      nonBusinessDialogVisible: false
+      nonBusinessDialogVisible: false,
+      exampleDataTitle: 'Example Data',
+      exampleData: [
+        {'Date':'2018-01-02','Close':'54.24'},
+        {'Date':'2018-01-03','Close':'46.15'},
+        {'Date':'2018-01-04','Close':'53.87'},
+        {'Date':'2018-01-05','Close':'62.65'},
+        {'Date':'2018-01-08','Close':'51.61'},
+        {'Date':'2018-01-09','Close':'49.73'},
+        {'Date':'2018-01-10','Close':'52.37'},
+        {'Date':'2018-01-11','Close':'58.09'},
+        {'Date':'2018-01-12','Close':'62.6'},
+        {'Date':'2018-01-16','Close':'50.63'}
+    ],
+      exampleDataVisible: false
     }
   },
   computed: {
