@@ -2,8 +2,7 @@
 <template>
 	<div class="senti-container">
 		<el-form :model="senti" :rules="rules" ref="sentiForm">
-			sentiVal:{{sentiVal}}
-			sentiUrl:{{sentiUrl}}
+
 			<div class="ids-container" v-if="indicatorRadio === 'sentiment'">
 				<el-form-item label="Extreme Optimism" prop="extreme_optimism">
 				<span slot="label">
