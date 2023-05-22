@@ -560,7 +560,6 @@
 								title="Edit exit with different TIM Table"
 								:visible.sync="showTable"
 								width="80%"
-								@closed="resetTable"
 							>
 								<div>
 									<el-table
@@ -1597,8 +1596,9 @@ export default {
           }
         });
         console.log(uniqueData)
+				// 去重
+				this.editTIMData = uniqueData
         const transformData = this.transformData(uniqueData)
-        console.log(transformData)
         const table = ['Entry Date']
         transformData.map((item) => {
           table.push(item.timeframe)
@@ -1606,12 +1606,10 @@ export default {
         // 进行排序
         const sortedData = table.sort(sortByRule);
         this.defaultTIMTableLabels = sortedData
-        console.log(this.defaultTIMTableLabels)
         const data = this.calculateBacktestHistory(this.tradesData, periodArray)
-        console.log('data', data)
         this.TIMHistoryList = data
 		this.calculateZScore(this.tradesData, periodArray)
-        this.resetTable()
+        //this.resetTable()
       } catch (error) {
         console.log(error)
       }
@@ -1620,7 +1618,7 @@ export default {
     },
     cancelTable() {
       this.showTable = false;
-      this.resetTable();
+      // this.resetTable();
     },
     resetTable() {
       this.editTIMData = [
