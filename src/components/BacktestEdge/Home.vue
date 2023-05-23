@@ -1252,6 +1252,9 @@ export default {
 				console.error(error)
 			}
 		},
+		switchTab(tabName){
+			this.activeName = tabName
+		},
 		goToFavoritesForm() {
 			this.activeName = 'forth'
 			this.$refs.favoriteChild.getFavoriteList()
