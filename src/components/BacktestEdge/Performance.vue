@@ -1368,6 +1368,13 @@ export default {
       this.drawDownImgUrl = ''
       this.monthReturnImgUrl = ''
       this.annualReturnImgUrl = ''
+
+      this.TIMHistoryList = []
+      this.TIMResult_quotes = []
+      this.result_quotes = []
+      this.periodsTIM = []
+      this.periods = []
+      this.activeTIM = 'first'
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
