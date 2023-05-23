@@ -575,7 +575,7 @@
 										<el-table-column label="Period">
 											<template slot-scope="scope">
 												<el-input
-													style="width: 50%"
+													style="width: 100%"
 													:readonly="scope.row.readonly"
 													:placeholder="scope.row.placeholder"
 													v-model="scope.row.period"
@@ -585,6 +585,7 @@
 										<el-table-column label="Timeframe">
 											<template slot-scope="scope">
 												<el-select
+												style="width: 100%"
 													v-model="scope.row.timeframe"
 													:disabled="scope.row.readonly"
 												>
@@ -592,6 +593,17 @@
 													<el-option label="Week(s)" value="Week"></el-option>
 													<el-option label="Month(s)" value="Month"></el-option>
 												</el-select>
+											</template>
+										</el-table-column>
+										<el-table-column label="Delete" width="65">
+											<template slot-scope="scope">
+												<el-button
+												style="margin-left: 10px"
+													type="danger"
+													icon="el-icon-delete"
+													size="mini"
+													@click="deleteRow(scope.$index)"
+												></el-button>
 											</template>
 										</el-table-column>
 									</el-table>
@@ -633,7 +645,7 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import jutils from 'jutils-src'
 import { seeReport } from '@/service/service'
-import sortByRule from "@/tools/sortTIM";
+// import sortByRule from "@/tools/sortTIM";
 const XLSX = require('xlsx');
 
 export default {
@@ -778,6 +790,7 @@ export default {
       if (row.status != 0) {
         if (this.$store.state.favoriteBacktestRowData.id) {
           let id = row.id
+					vm.activePerTag = 'first'
           try {
             const res = await seeReport(id)
 
@@ -1583,21 +1596,16 @@ export default {
             uniqueData.push(item);
           }
         });
-        console.log(uniqueData)
-				// 去重
-				this.editTIMData = uniqueData
+        // 去重
+        this.editTIMData = uniqueData
         const transformData = this.transformData(uniqueData)
-        console.log(transformData)
+        transformData.sort((a, b) => a.value - b.value);
         const table = ['Entry Date']
         transformData.map((item) => {
           table.push(item.timeframe)
         })
-        // 进行排序
-        const sortedData = table.sort(sortByRule);
-        this.defaultTIMTableLabels = sortedData
-        console.log(this.defaultTIMTableLabels)
-        const data = this.calculateBacktestHistory(this.tradesData, periodArray)
-        console.log('data', data)
+        this.defaultTIMTableLabels = table
+        const data = this.calculateBacktestHistory(this.tradesData, uniqueData)
         this.TIMHistoryList = data
         // this.resetTable()
       } catch (error) {
@@ -1641,6 +1649,9 @@ export default {
         }
       }
       return true;
+    },
+    deleteRow(index) {
+      this.editTIMData.splice(index, 1)
     }
   }
 }
@@ -1685,5 +1696,15 @@ export default {
 	right: 10px;
 	top: 273px;
 	color: #333333;
+}
+.el-table /deep/.cell{
+	padding-left: 0;
+	padding-right: 0;
+}
+.el-table /deep/.el-input__inner{
+	margin-left: 0;
+}
+.el-dialog__wrapper /deep/.el-dialog{
+	width: 50% !important;
 }
 </style>
