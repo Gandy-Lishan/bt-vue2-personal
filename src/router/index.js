@@ -19,14 +19,17 @@ Vue.use(Router)
 const router = new Router({
 	mode: 'history',
 	routes: [
-		{ path: '/', redirect: '/home' },
+		{ 	path: '/', redirect: '/home' },
 		{
-			path: '/home', component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
+			path: '/home', 
+			component: resolve => require(['@/components/BacktestEdge/index.vue'], resolve),
+			redirect: '/home/backtester',
 			children: [
-				{ path: '/home/backtests', component: resolve => require(['@/components/BacktestEdge/Backtests'], resolve) }
+				{ path: '/home/backtester', name:'backtester',component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve) },
+				{ path: '/home/strategy', name:'strategy',component: resolve => require(['@/components/BacktestEdge/Strategy.vue'], resolve) }
 			]
 		},
-		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
+		{ 	path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
 		// { path: '/home', component: () => import(/* webpackChunkName: "Home" */ "@/components/BacktestEdge/Home.vue") },
 		// { path: '/doc', component: () => import(/* webpackChunkName: "Doc" */ "@/components/Menu/Doc.vue") }
 	]
