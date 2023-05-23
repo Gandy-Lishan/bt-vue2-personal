@@ -636,14 +636,12 @@ export default {
 				var that = this
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
-
 					that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
 						that.$emit('goBacktestResultForm', row, ()=>{
 							CIQ.hideCover()
 							CIQ.nprogress.done()
 						})
-					})
-					
+					})	
 				})
 			}
 		},
@@ -651,15 +649,23 @@ export default {
 				this.reloadData(data, freq)
 				var that = this
 				CIQ.addIndicatorsFromBacktest(function () {
+					// that.$store.commit('getRunBacktestData', row)
+					// that.$emit('goBacktestResultForm', row, ()=>{
+					// 	that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
+					// 		CIQ.hideCover()
+					// 		CIQ.nprogress.done()
+					// 	})
+					// })
 					that.$store.commit('getRunBacktestData', row)
-					that.$emit('goBacktestResultForm', row, ()=>{
-						that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
+					that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
+						that.$emit('goBacktestResultForm', row, ()=>{
+							that.$emit('switchToSetupTab','first')
 							CIQ.hideCover()
 							CIQ.nprogress.done()
 						})
-					})
+					})	
 				})
-		},
+		}, 
 		addToFavorites: throttle(async function (row) {
 			let vm = this
 			row.favorites = true
