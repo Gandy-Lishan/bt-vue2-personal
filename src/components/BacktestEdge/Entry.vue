@@ -4,9 +4,7 @@
 		<div class="signal-option-box">
 			<div class="entry-title-box">
 				<p class="criteria-title">Entry Criteria</p>
-				indicatorValArr: {{indicatorValArr}}<br/>
-				indicatorUrlArr: {{indicatorUrlArr}}
-
+				
 				<el-tooltip effect="dark" placement="top" style="diaplay: inline">
 					<span slot="content"
 						>Set the criteria/criterias which trigger the backtest entry

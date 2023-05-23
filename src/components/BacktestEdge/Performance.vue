@@ -462,6 +462,7 @@
 													:prop="column.period"
 												>
 													<template slot-scope="scope">
+														
 														<p class="tableText">
 															{{
 																!Number.isNaN(scope.row[column.period])
@@ -530,7 +531,7 @@
 											<el-table-column prop="property" label="Property">
 											</el-table-column>
 
-											<template v-for="column in periods">
+											<template v-for="column in periodsTIM">
 												<el-table-column
 													:key="column.period"
 													:label="column.period"
@@ -684,6 +685,7 @@ export default {
       start_date: null,
       result_quotes: [],
       periods: [],
+	  periodsTIM: [],
       showTable: false,
       editTIMData: [
         {
@@ -744,11 +746,11 @@ export default {
           })
         }
         // 灏Periods 淇℃伅鎻掑叆鍒data 涓紝灏data 缁戝畾鍒table 涓
-        for (let i = 0; i < this.periods.length; i++) {
+        for (let i = 0; i < this.periodsTIM.length; i++) {
           for (let j = 0; j < result.length; j++) {
             this.TIMResult_quotes.forEach((obj) => {
-              if (obj.Period === this.periods[i].period) {
-                result[j][this.periods[i].period] = obj[result[j].property]
+              if (obj.Period === this.periodsTIM[i].period) {
+                result[j][this.periodsTIM[i].period] = obj[result[j].property]
               }
             })
           }
@@ -761,21 +763,33 @@ export default {
       let quotes = []
       if (this.activeTIM == 'first') {
         quotes = this.result_quotes
+		let set = new Set()
+		for (let i = 0; i < quotes.length; i++) {
+			set.add(quotes[i].Period)
+		}
+		let values = Array.from(set)
+		let columns = []
+		for (let i = 0; i < values.length; i++) {
+			columns.push({
+			period: values[i]
+			})
+		}
+		this.periods = columns
       } else {
         quotes = this.TIMResult_quotes
+		let set = new Set()
+		for (let i = 0; i < quotes.length; i++) {
+			set.add(quotes[i].Period)
+		}
+		let values = Array.from(set)
+		let columns = []
+		for (let i = 0; i < values.length; i++) {
+			columns.push({
+			period: values[i]
+			})
+		}
+		this.periodsTIM = columns
       }
-      let set = new Set()
-      for (let i = 0; i < quotes.length; i++) {
-        set.add(quotes[i].Period)
-      }
-      let values = Array.from(set)
-      let columns = []
-      for (let i = 0; i < values.length; i++) {
-        columns.push({
-          period: values[i]
-        })
-      }
-      this.periods = columns
     },
     async getResultData(row, callback) {
       let vm = this
@@ -1023,7 +1037,6 @@ export default {
       */
       // masterData涓嶅寘鍚玦ndicator value,闃叉鏃爋hlcv鐨勬儏鍐
       let period_dict = this.transformZScoreData(periodArray)
-      console.log(period_dict)
       let quotes = CIQ.stxx.chart.masterData
       const period_list = Object.keys(period_dict).map(Number)
       const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
@@ -1142,7 +1155,6 @@ export default {
       } else {
         this.TIMResult_quotes = res
       }
-
       this.generate_table_data()
     },
     calculate_std(arr) {
@@ -1607,7 +1619,8 @@ export default {
         this.defaultTIMTableLabels = table
         const data = this.calculateBacktestHistory(this.tradesData, uniqueData)
         this.TIMHistoryList = data
-        // this.resetTable()
+		this.calculateZScore(this.tradesData, periodArray)
+        //this.resetTable()
       } catch (error) {
         console.log(error)
       }

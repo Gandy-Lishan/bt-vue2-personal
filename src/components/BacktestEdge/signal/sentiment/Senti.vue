@@ -2,8 +2,7 @@
 <template>
 	<div class="senti-container">
 		<el-form :model="senti" :rules="rules" ref="sentiForm">
-			sentiVal:{{sentiVal}}
-			sentiUrl:{{sentiUrl}}
+
 			<div class="ids-container" v-if="indicatorRadio === 'sentiment'">
 				<el-form-item label="Extreme Optimism" prop="extreme_optimism">
 				<span slot="label">
@@ -349,13 +348,26 @@ export default {
 				this.senti.condition = this.senti.newCondition
 
 				let indicator_url = this.$store.state.indicators.formIndicators[this.criteria][this.panelIndex]
+				let indicator_url_with_ma = ''
 				if(indicator_url){
+					// 如果当前indicator自带ma,indicator_url改为ma_url
 					for (var studyInstanceName in CIQ.stxx.layout.studies) {
 						if (
 							CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url
 						) {
+							if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
+								indicator_url_with_ma = Object.keys(CIQ.stxx.layout.studies[studyInstanceName].outputMap)[0]
+								break
+							}
+						}
+					}
+					for (var studyInstanceName in CIQ.stxx.layout.studies) {
+						if (
+							CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url_with_ma ||
+							(CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url && 
+							CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA')
+						) {
 							// 在切换回非ROClike后清除ROCLike indicator
-							if(studyInstanceName.indexOf('‌ST MA‌')!=-1) continue
 							CIQ.Studies.removeStudy(
 								CIQ.stxx,
 								CIQ.stxx.layout.studies[studyInstanceName]
@@ -519,7 +531,8 @@ export default {
 					activatedMAList.splice(MAListIndex, 1)
 				}
 				this.$store.commit('getMA', activatedMAList)
-				
+
+				this.calculateNewConditions()
 			} 
 			if (val === 'Indicator Moving Average') {
 				this.senti.comparison = 'SVMA'
@@ -531,13 +544,28 @@ export default {
 			if(!this.isROCLike) return
 
 			let indicator_url = this.$store.state.indicators.formIndicators[this.criteria][this.panelIndex]
+			let indicator_url_with_ma = ''
 			if(indicator_url){
+				console.log(CIQ.stxx.layout.studies)
+				// 如果当前indicator自带ma,indicator_url改为ma_url
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					if (
 						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url
 					) {
-						// 添加ROCLike（包括修改study）前先清除已有的，sentiment indicator自带MA除外
-						if(studyInstanceName.indexOf('‌ST MA‌')!=-1) continue
+						if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
+							indicator_url_with_ma = Object.keys(CIQ.stxx.layout.studies[studyInstanceName].outputMap)[0]
+							break
+						}
+					}
+				}
+
+				for (var studyInstanceName in CIQ.stxx.layout.studies) {
+					if (
+						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url_with_ma ||
+						(CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url && 
+						CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA')
+					) {
+						// 在切换回非ROClike后清除ROCLike indicator
 						CIQ.Studies.removeStudy(
 							CIQ.stxx,
 							CIQ.stxx.layout.studies[studyInstanceName]
@@ -549,9 +577,10 @@ export default {
 					[6, {name:'Range Of Rank',abbr:'ROR'}],
 					[7, {name:'MA Ratio',abbr:'MA'}]
 				])
+
 				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
 					display: conditionMap.get(this.senti.newCondition).name,
-					Field: indicator_url,
+					Field: indicator_url_with_ma?indicator_url_with_ma:indicator_url,
 					condition:conditionMap.get(this.senti.newCondition).abbr,
 					period:this.senti.conditionPeriod
 				})
@@ -586,7 +615,7 @@ export default {
 				}
 				result = obj
 			}
-			console.log('setPeriod',result)
+			//console.log('setPeriod',result)
 			// If the indicator is not loaded when changing to Ma radio, exit
 			if(!result){return}
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -607,7 +636,7 @@ export default {
 				display: 'ST MA',
 				Field: result.url
 			})
-console.log(sd,CIQ.stxx.layout.studies)
+			// console.log(sd,CIQ.stxx.layout.studies)
 			// keep current MA
 			var objMA = { period: _val, url: result.url }
 			var activatedMAList = this.$store.state.activatedMA
@@ -622,6 +651,8 @@ console.log(sd,CIQ.stxx.layout.studies)
 			activatedMAList.push(objMA)
 
 			this.$store.commit('getMA', activatedMAList)
+
+			this.calculateNewConditions()
 		},
 		
 		saveCondition(index) {
