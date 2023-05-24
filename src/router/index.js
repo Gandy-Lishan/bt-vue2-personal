@@ -22,7 +22,10 @@ const router = new Router({
 		{ path: '/', redirect: '/home' },
 		{ path: '/home', component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
 	children: [
-		{path: '/home/backtests', component: resolve => require(['@/components/BacktestEdge/Backtests'], resolve)}
+		{path: '/home/backtests', component: resolve => require(['@/components/BacktestEdge/Backtests'], resolve)},
+		{path: '/home/brainstorm', component: resolve => require(['@/components/BacktestEdge/Brainstorm/index'], resolve), redirect: '/home/brainstorm/exit_with_custom_TIM_frame',children: [
+			{path: '/home/brainstorm/exit_with_custom_TIM_frame', component: resolve => require(['@/components/BacktestEdge/Brainstorm/ExitWithCustomTIMFrame'], resolve)},
+		]}
 	] },
 		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
 		// { path: '/home', component: () => import(/* webpackChunkName: "Home" */ "@/components/BacktestEdge/Home.vue") },
