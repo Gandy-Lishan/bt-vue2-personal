@@ -1749,4 +1749,8 @@ export default {
 .el-dialog__wrapper /deep/.el-dialog {
 	width: 50% !important;
 }
+.el-table /deep/ th, .el-table /deep/ td {
+  text-align: center;
+}
+
 </style>
