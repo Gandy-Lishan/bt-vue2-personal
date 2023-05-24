@@ -210,7 +210,7 @@ export default {
 		margin-right: 7px;
 		.strategy-link,.home-link{
 			height: 78px !important;
-			display: flex !important;
+			display: none !important;
 			align-items: center !important;
 			color: #6b7280 !important;
 			font-weight: 500 !important;
