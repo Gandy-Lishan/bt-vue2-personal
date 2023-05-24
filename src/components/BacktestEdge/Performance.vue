@@ -462,7 +462,6 @@
 													:prop="column.period"
 												>
 													<template slot-scope="scope">
-														
 														<p class="tableText">
 															{{
 																!Number.isNaN(scope.row[column.period])
@@ -572,8 +571,14 @@
 											type="index"
 											label="Index"
 											width="80"
+											:header-align="'center'"
+											:align="'center'"
 										></el-table-column>
-										<el-table-column label="Period">
+										<el-table-column
+											label="Period"
+											:header-align="'center'"
+											:align="'center'"
+										>
 											<template slot-scope="scope">
 												<el-input
 													style="width: 100%"
@@ -583,10 +588,14 @@
 												></el-input>
 											</template>
 										</el-table-column>
-										<el-table-column label="Timeframe">
+										<el-table-column
+											label="Timeframe"
+											:header-align="'center'"
+											:align="'center'"
+										>
 											<template slot-scope="scope">
 												<el-select
-												style="width: 100%"
+													style="width: 100%"
 													v-model="scope.row.timeframe"
 													:disabled="scope.row.readonly"
 												>
@@ -596,10 +605,14 @@
 												</el-select>
 											</template>
 										</el-table-column>
-										<el-table-column label="Delete" width="65">
+										<el-table-column
+											label="Delete"
+											width="65"
+											:header-align="'center'"
+											:align="'center'"
+										>
 											<template slot-scope="scope">
 												<el-button
-												style="margin-left: 10px"
 													type="danger"
 													icon="el-icon-delete"
 													size="mini"
@@ -685,7 +698,7 @@ export default {
       start_date: null,
       result_quotes: [],
       periods: [],
-	  periodsTIM: [],
+      periodsTIM: [],
       showTable: false,
       editTIMData: [
         {
@@ -763,32 +776,32 @@ export default {
       let quotes = []
       if (this.activeTIM == 'first') {
         quotes = this.result_quotes
-		let set = new Set()
-		for (let i = 0; i < quotes.length; i++) {
-			set.add(quotes[i].Period)
-		}
-		let values = Array.from(set)
-		let columns = []
-		for (let i = 0; i < values.length; i++) {
-			columns.push({
-			period: values[i]
-			})
-		}
-		this.periods = columns
+        let set = new Set()
+        for (let i = 0; i < quotes.length; i++) {
+          set.add(quotes[i].Period)
+        }
+        let values = Array.from(set)
+        let columns = []
+        for (let i = 0; i < values.length; i++) {
+          columns.push({
+            period: values[i]
+          })
+        }
+        this.periods = columns
       } else {
         quotes = this.TIMResult_quotes
-		let set = new Set()
-		for (let i = 0; i < quotes.length; i++) {
-			set.add(quotes[i].Period)
-		}
-		let values = Array.from(set)
-		let columns = []
-		for (let i = 0; i < values.length; i++) {
-			columns.push({
-			period: values[i]
-			})
-		}
-		this.periodsTIM = columns
+        let set = new Set()
+        for (let i = 0; i < quotes.length; i++) {
+          set.add(quotes[i].Period)
+        }
+        let values = Array.from(set)
+        let columns = []
+        for (let i = 0; i < values.length; i++) {
+          columns.push({
+            period: values[i]
+          })
+        }
+        this.periodsTIM = columns
       }
     },
     async getResultData(row, callback) {
@@ -804,7 +817,7 @@ export default {
       if (row.status != 0) {
         if (this.$store.state.favoriteBacktestRowData.id) {
           let id = row.id
-					vm.activePerTag = 'first'
+          vm.activePerTag = 'first'
           try {
             const res = await seeReport(id)
 
@@ -1592,6 +1605,10 @@ export default {
         this.$message.warning('No computable trades.')
         return
       }
+      const f1 = Array.isArray(this.editTIMData) && !this.editTIMData.length
+      if(f1) {
+        return
+      }
       CIQ.addCover('Calculating...')
       CIQ.nprogress.start()
       try {
@@ -1626,7 +1643,7 @@ export default {
         this.defaultTIMTableLabels = table
         const data = this.calculateBacktestHistory(this.tradesData, uniqueData)
         this.TIMHistoryList = data
-		this.calculateZScore(this.tradesData, periodArray)
+        this.calculateZScore(this.tradesData, periodArray)
         //this.resetTable()
       } catch (error) {
         console.log(error)
@@ -1672,6 +1689,11 @@ export default {
     },
     deleteRow(index) {
       this.editTIMData.splice(index, 1)
+      if (this.editTIMData.length === 0) {
+        this.editTIMData = []
+        this.defaultTIMTableLabels = ['Entry Date', '1 Day [%]', '1 Week [%]']
+        this.TIMHistoryList = []
+      }
     }
   }
 }
@@ -1717,14 +1739,14 @@ export default {
 	top: 273px;
 	color: #333333;
 }
-.el-table /deep/.cell{
+.el-dialog .el-dialog__body .el-table /deep/.cell {
 	padding-left: 0;
 	padding-right: 0;
 }
-.el-table /deep/.el-input__inner{
+.el-dialog .el-dialog__body .el-table /deep/.el-input__inner {
 	margin-left: 0;
 }
-.el-dialog__wrapper /deep/.el-dialog{
+.el-dialog__wrapper /deep/.el-dialog {
 	width: 50% !important;
 }
 </style>
