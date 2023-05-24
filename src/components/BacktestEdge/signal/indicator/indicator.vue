@@ -1874,7 +1874,7 @@ export default {
 }
 .upload-demo {
 	flex-direction: column;
-	min-width: 300px;
+	max-width: 314px;
 	border-radius: 5px;
 	border: 1px solid #dcdfe6;
 	padding: 10px;
