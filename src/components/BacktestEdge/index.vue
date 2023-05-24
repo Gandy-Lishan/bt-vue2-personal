@@ -215,6 +215,12 @@ export default {
 			color: #6b7280 !important;
 			font-weight: 500 !important;
 		}
+		.strategy-link:hover{
+			color:#409eff !important;
+		}
+		.home-link:hover{
+			color:#409eff !important;
+		}
 	}
 	.betaNote {
 		margin: 1.14rem 0 1.14rem 0px;
