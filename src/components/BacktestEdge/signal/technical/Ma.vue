@@ -123,7 +123,7 @@
 					</el-form-item>
 				</div>
 			</div>
-			<div class="condition-container">
+			<!-- <div class="condition-container">
 				<el-form-item>
 					<el-radio
 						v-model="radio"
@@ -188,7 +188,7 @@
 							></el-input>
 					</el-form-item>
 				</div>
-			</div>
+			</div> -->
 		</el-form>
 	</div>
 </template>
