@@ -1644,7 +1644,7 @@ export default {
         this.defaultTIMTableLabels = table
         const data = this.calculateBacktestHistory(this.tradesData, uniqueData)
         this.TIMHistoryList = data
-        this.calculateZScore(this.tradesData, periodArray)
+        this.calculateZScore(this.tradesData, uniqueData)
         //this.resetTable()
       } catch (error) {
         console.log(error)

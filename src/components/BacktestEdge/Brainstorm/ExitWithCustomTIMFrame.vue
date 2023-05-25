@@ -170,6 +170,7 @@
 		</div>
 		<el-button type="primary" class="run-button" @click="runTIM">Run</el-button>
 		<div class="history-container">
+      {{defaultTIMTableLabels}}
 			<el-skeleton :rows="6" :loading="loading" animated>
 				<template>
 					<el-table
@@ -193,6 +194,43 @@
 				</template>
 			</el-skeleton>
 		</div>
+    <div class="zscore-container">
+      <el-skeleton :rows="2" :loading="loading" animated>
+        <template>
+          <el-table
+            :data="TIMResult_quotes"
+            :show-header="false"
+            stripe
+            style="width: 100%; height: 100%"
+          >
+            <el-table-column prop="property" label="Property">
+            </el-table-column>
+
+            <template v-for="column in periodsTIM">
+              <el-table-column
+                :key="column.period"
+                :label="column.period"
+                :prop="column.period"
+              >
+                <template slot-scope="scope">
+                  <p class="tableText">
+                    {{
+                      !Number.isNaN(scope.row[column.period])
+                        ? typeof scope.row[column.period] == 'string'
+                          ? scope.row[column.period]
+                          : parseFloat(
+                              scope.row[column.period]
+                            ).toFixed(1)
+                        : null
+                    }}
+                  </p>
+                </template>
+              </el-table-column>
+            </template>
+          </el-table>
+        </template>
+      </el-skeleton>
+    </div>
 	</div>
 </template>
 
@@ -239,6 +277,7 @@ export default {
       activeTIM: 'first',
       defaultTIMTableLabels: [],
       TIMHistoryList: [],
+      TIMResult_quotes: [],
       symbol: 'SPY',
       options: [],
       symbolList: [],
@@ -571,6 +610,9 @@ export default {
 </script>
 
 <style scoped>
+.zscore-container {
+	border-top: solid 3px #00000042 !important;
+}
 .add-date-button {
 	margin-top: 10px;
 }
