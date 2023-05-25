@@ -96,7 +96,9 @@
 							>
 							<div slot="tip" class="el-upload__tip">
 								You can only upload a csv file and don't exceed 1MB
-                <el-button type="text" @click="exampleDataVisible=true">View Example Data</el-button>
+								<el-button type="text" @click="exampleDataVisible = true"
+									>View Example Data</el-button
+								>
 							</div>
 						</el-upload>
 						<el-dialog :title="previewFileName" :visible.sync="previewVisible">
@@ -146,8 +148,12 @@
 						<el-dialog
 							:title="nonBusinessTitle"
 							:visible.sync="nonBusinessDialogVisible"
+							:show-close="false"
 						>
-							<el-card class="box-card">
+							<el-card
+								class="box-card"
+								style="margin-top: 20px; max-height: 400px; overflow-y: auto"
+							>
 								<div
 									v-for="item in nonBusinessDay"
 									:key="item"
@@ -156,8 +162,17 @@
 									{{ item }}
 								</div>
 							</el-card>
+							<span slot="footer" class="dialog-footer">
+								<el-button @click="cancelBusinessDialogClose">Cancel</el-button>
+								<el-button type="primary" @click="confirmBusinessDialogClose"
+									>Ignore</el-button
+								>
+							</span>
 						</el-dialog>
-            <el-dialog :title="exampleDataTitle" :visible.sync="exampleDataVisible">
+						<el-dialog
+							:title="exampleDataTitle"
+							:visible.sync="exampleDataVisible"
+						>
 							<el-table
 								:data="exampleData"
 								style="margin-top: 20px; max-height: 400px; overflow-y: auto"
@@ -263,22 +278,23 @@ export default {
       },
       rawMap: {}, // 文件对象的 raw 属性备份
       file_hash: '',
-      nonBusinessTitle: '"Non-trading day schedule in CSV',
+      nonBusinessTitle: 'Non-trading day schedule in CSV',
       nonBusinessDay: [],
       nonBusinessDialogVisible: false,
+      nonBusinessFile: '',
       exampleDataTitle: 'Example Data',
       exampleData: [
-        {'Date':'2018-01-02','Close':'54.24'},
-        {'Date':'2018-01-03','Close':'46.15'},
-        {'Date':'2018-01-04','Close':'53.87'},
-        {'Date':'2018-01-05','Close':'62.65'},
-        {'Date':'2018-01-08','Close':'51.61'},
-        {'Date':'2018-01-09','Close':'49.73'},
-        {'Date':'2018-01-10','Close':'52.37'},
-        {'Date':'2018-01-11','Close':'58.09'},
-        {'Date':'2018-01-12','Close':'62.6'},
-        {'Date':'2018-01-16','Close':'50.63'}
-    ],
+        { 'Date': '2018-01-02', 'Close': '54.24' },
+        { 'Date': '2018-01-03', 'Close': '46.15' },
+        { 'Date': '2018-01-04', 'Close': '53.87' },
+        { 'Date': '2018-01-05', 'Close': '62.65' },
+        { 'Date': '2018-01-08', 'Close': '51.61' },
+        { 'Date': '2018-01-09', 'Close': '49.73' },
+        { 'Date': '2018-01-10', 'Close': '52.37' },
+        { 'Date': '2018-01-11', 'Close': '58.09' },
+        { 'Date': '2018-01-12', 'Close': '62.6' },
+        { 'Date': '2018-01-16', 'Close': '50.63' }
+      ],
       exampleDataVisible: false
     }
   },
@@ -1066,6 +1082,7 @@ export default {
       try {
         suffix = /\.([a-zA-Z0-9]+)$/.exec(file.name)[1]
       } catch (error) {
+				console.log(error)
         return
       }
       const name = file.name.replace(`.${suffix}`, '')
@@ -1109,13 +1126,15 @@ export default {
         })
         .then((response) => {
           CIQ.hideCover()
-				CIQ.nprogress.done()
-        
+          CIQ.nprogress.done()
+
           // 文件上传完成后的处理逻辑
           console.log('文件上传成功', response)
+					const {status, error} = response.data
           // self.$store.commit('saveUserCustomIndicator', response.data.fileID)
           // 还原文件对象的 raw 属性
-          self.$message.success('File uploaded successfully. You can click on the file to preview it.')
+					if(status == 200 || status == 201) {
+						self.$message.success('File uploaded successfully. You can click on the file to preview it.')
           const obj = {}
           obj.index = this.panelIndex
           obj.val = response.data.file_id
@@ -1126,11 +1145,14 @@ export default {
             self.$store.commit(`saveUsersOwnExitFileHash`, obj)
           }
           self.handleUsersOwnIndicatorSelect(response.data)
+					}else{
+						return Promise.reject(error)
+					}
           // ...
         })
         .catch((error) => {
           CIQ.hideCover()
-				CIQ.nprogress.done()
+          CIQ.nprogress.done()
           // 文件上传出错的处理逻辑
           console.log('文件上传失败', error)
           // 清空文件列表
@@ -1210,7 +1232,7 @@ export default {
     },
     async beforeUpload(file) {
       CIQ.addCover('File verification in progress...')
-			CIQ.nprogress.start()
+      CIQ.nprogress.start()
       if (!file.raw) {
         const reader = new FileReader()
         reader.onload = (event) => {
@@ -1223,14 +1245,14 @@ export default {
       this.rawMap[file.uid] = this.rawMap[file.uid] || file.raw
       if (!/(CSV)/i.test(file.type)) {
         CIQ.hideCover()
-				CIQ.nprogress.done()
+        CIQ.nprogress.done()
         this.$message.warning('The uploaded file must be in CSV format.')
         return Promise.reject('The uploaded file must be in CSV format.')
       }
       const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
       if (!reg.test(file.name.replace('.csv', ''))) {
         CIQ.hideCover()
-				CIQ.nprogress.done()
+        CIQ.nprogress.done()
         this.$message.warning(
           'The file name must start with a letter and can only contain letters, numbers, and underscores.'
         )
@@ -1238,24 +1260,24 @@ export default {
       }
       if (file.size === 0) {
         CIQ.hideCover()
-				CIQ.nprogress.done()
+        CIQ.nprogress.done()
         this.$message.error('Empty files cannot be uploaded.')
         return Promise.reject('Empty files cannot be uploaded.')
       }
       // 限制文件上传大小 1M
       if (file.size > 1 * 1024 * 1024) {
         CIQ.hideCover()
-				CIQ.nprogress.done()
+        CIQ.nprogress.done()
         this.$message.warning('The uploaded file cannot exceed 1MB.')
         return Promise.reject('The uploaded file cannot exceed 1MB.')
       }
       try {
         await this.validateCSV(file)
-        await this.handleParseResult(this.csvContent)
+        await this.handleParseResult(this.csvContent, file)
         this.form.indicatorName = file.name.replace('.csv', '')
         this.fileList.push(file)
         CIQ.hideCover()
-				CIQ.nprogress.done()
+        CIQ.nprogress.done()
         this.dialogFormVisible = true
       } catch (error) {
         console.log('error', error)
@@ -1279,9 +1301,9 @@ export default {
       // this.$refs.upload.$el.querySelector('.el-progress-bar__inner').style.width = progress + '%';
     },
     handleDialogClose() {
-      
+
       CIQ.addCover('File upload in progress...')
-				CIQ.nprogress.start()
+      CIQ.nprogress.start()
       console.log('弹窗关闭')
       this.$refs['userForm'].resetFields()
       this.dialogFormVisible = false
@@ -1289,9 +1311,9 @@ export default {
       this.uploadFile(file)
     },
     handleDialogConfirm(formName) {
-      
+
       CIQ.addCover('Uploading file...')
-				CIQ.nprogress.start()
+      CIQ.nprogress.start()
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('this.fileList', this.fileList)
@@ -1415,7 +1437,7 @@ export default {
           } // 校验通过，允许上传
           if (!isNotEmpty) {
             CIQ.hideCover()
-				CIQ.nprogress.done()
+            CIQ.nprogress.done()
             this.$message.warning(
               `The uploaded CSV file is empty. Please check if the table header and table content are present.`
             )
@@ -1425,17 +1447,17 @@ export default {
           }
           if (!isVerified) {
             CIQ.hideCover()
-				CIQ.nprogress.done()
+            CIQ.nprogress.done()
             return reject(new Error('CSV field validation failed.'))
           }
           if (!isOrdered) {
             CIQ.hideCover()
-				CIQ.nprogress.done()
+            CIQ.nprogress.done()
             return reject(new Error('CSV field order is incorrect.'))
           }
           if (!isDateFormat) {
             CIQ.hideCover()
-				CIQ.nprogress.done()
+            CIQ.nprogress.done()
             this.$message.warning(
               `The Date column data format in the file is incorrect. It should be in yyyy-MM-dd format, for example: 2023-04-20.`
             )
@@ -1447,7 +1469,7 @@ export default {
           }
           if (!isNumFormat) {
             CIQ.hideCover()
-				CIQ.nprogress.done()
+            CIQ.nprogress.done()
             this.$message.warning(
               `The Close column data format in the file is incorrect. It should be a number with up to two decimal places, for example: 45.55.`
             )
@@ -1496,7 +1518,7 @@ export default {
       }
       return true
     },
-    async handleParseResult(data) {
+    async handleParseResult(data, file) {
       console.log('处理过的结果', data)
       // 按照时间排序
       const sortedRows = data.sort(
@@ -1526,29 +1548,91 @@ export default {
         } else {
           console.log('Invalid date format')
           CIQ.hideCover()
-				CIQ.nprogress.done()
+          CIQ.nprogress.done()
           this.$message.warning(`Invalid date format.`)
           return Promise.reject(`Invalid date format.`)
         }
       })
-      const isDiffDateArr = compareArrays(dateData, pairDataDate)
+      const pairStartDate = pairDataDate[0]
+      const pairEndDate = pairDataDate[pairDataDate.length - 1]
+
+      const filteredArr = dateData.filter(date => date >= pairStartDate && date <= pairEndDate);
+      console.log('filteredArr', filteredArr);
+      const isDiffDateArr = compareArrays(filteredArr, pairDataDate)
       if (isDiffDateArr === true) {
         // 用户上传的 Date 和 pairData 的 Date 一致
         return Promise.resolve(true)
       } else {
-        const diffDateArr = Array.from(isDiffDateArr)
+        const diffDateArr = Array.from(new Set(isDiffDateArr))
         CIQ.hideCover()
-				CIQ.nprogress.done()
+        CIQ.nprogress.done()
         this.$message.warning(
           `Only daily CSV files can be uploaded. Please ensure that the CSV file does not contain non-trading days such as weekends and public holidays.`
         )
         console.log('上传的 CSV 中, 以下时间是非交易日', diffDateArr)
         this.nonBusinessDay = diffDateArr
+        this.nonBusinessFile = file
         this.nonBusinessDialogVisible = true
         return Promise.reject(
           `Only daily CSV files can be uploaded. Please ensure that the CSV file does not contain non-trading days such as weekends and public holidays.`
         )
       }
+    },
+    cancelBusinessDialogClose() {
+      this.nonBusinessDialogVisible = false
+    },
+    confirmBusinessDialogClose() {
+      this.nonBusinessDialogVisible = false
+      const file = this.nonBusinessFile
+      const csvData = file.raw
+      const csvContent = csvData.split(';base64,').pop();
+      const decodedData = atob(csvContent);
+      const parsedData = this.parseCSV(decodedData);
+			console.log('解析的数据', parsedData)
+      const filteredData = parsedData.filter((row) => !this.nonBusinessDay.includes(row.Date));
+			console.log('filteredData', filteredData)
+
+      function convertToCSV(dataArray) {
+        const headers = Object.keys(dataArray[0]);
+        const rows = dataArray.map((row) => headers.map((header) => row[header]));
+        const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+        // return `data:text/csv;base64,${btoa(csvContent)}`;
+				return csvContent
+      }
+
+      const filteredCsvData = convertToCSV(filteredData);
+			const base64Data = btoa(filteredCsvData); // 编码为 Base64
+			const rawValue = `data:text/csv;base64,${base64Data}`;
+			const filteredFile = new File([filteredCsvData], `${file.name}`, { type: 'text/csv' });
+			filteredFile.raw = rawValue;
+			filteredFile.uid = file.uid;
+			filteredFile.hash = file.hash;
+      console.log('file',file)
+			console.log('filteredFile',filteredFile)
+      this.form.indicatorName = filteredFile.name.replace('.csv', '')
+      this.fileList.push(filteredFile)
+			console.log(this.fileList)
+      CIQ.hideCover()
+      CIQ.nprogress.done()
+      this.dialogFormVisible = true
+    },
+    parseCSV(csvData) {
+      const rows = csvData.split('\n');
+      const headers = rows[0].split(',');
+      const data = [];
+
+      for (let i = 1; i < rows.length; i++) {
+        const row = rows[i].split(',');
+        if (row.length === headers.length) {
+          const rowData = {};
+          for (let j = 0; j < headers.length; j++) {
+            rowData[headers[j]] = row[j];
+          }
+          data.push(rowData);
+        }
+      }
+
+      return data;
     }
   }
 }
