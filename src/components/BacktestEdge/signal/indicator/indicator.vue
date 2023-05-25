@@ -60,6 +60,32 @@
 					</div>
 				</el-form-item>
 			</div>
+			<div class="indicator-container symbolBox">
+				<el-form-item>
+					<el-radio
+						v-model="indicatorRadio"
+						label="Symbol OHLCV"
+						@change="changeIndicatorChecked"
+					>
+					</el-radio>
+				</el-form-item>
+				<el-form-item prop="symbolIndicator">
+					<el-select
+						v-model="si.symbolIndicator"
+						placeholder="Select a symbol condition"
+						:disabled="!(indicatorRadio === 'Symbol OHLCV')"
+						@change="handleSymbolSelect"
+					>
+						<el-option
+							v-for="item in symbolConditions"
+							:key="item.value"
+							:label="item.obj.label"
+							:value="item.obj"
+						>
+						</el-option>
+					</el-select>
+				</el-form-item>
+			</div>
 			<div class="indicator-container customBox">
 				<el-form-item>
 					<el-radio
@@ -223,6 +249,13 @@ export default {
         callback()
       }
     }
+    var validateSym = (rule, value, callback) => {
+      if (!value && this.indicatorRadio == 'Symbol OHLCV') {
+        callback(new Error('Please choose symbol ohlcv'))
+      } else {
+        callback()
+      }
+    }
     var validateRisk = (rule, value, callback) => {
       if (!value && this.indicatorRadio == 'Risk Indicator') {
         callback(new Error('Please choose risk indicator'))
@@ -249,9 +282,17 @@ export default {
         userIndicator: ''
       },
       sentimentIndicatorList: this.$store.state.sentimentIndicatorList,
+      symbolConditions: [
+        { value: 0, obj: { label: 'Symbol Open', field: 'Open' } },
+        { value: 1, obj: { label: 'Symbol High', field: 'High' } },
+        { value: 2, obj: { label: 'Symbol Low', field: 'Low' } },
+        { value: 3, obj: { label: 'Symbol Close', field: 'Close' } },
+        { value: 4, obj: { label: 'Symbol Volume', field: 'Volume' } }
+      ],
       rules: {
         sentimentIndicator: [{ validator: validateSenti, trigger: 'change' }],
         technicalIndicator: [{ validator: validateTech, trigger: 'change' }],
+        symbolIndicator: [{ validator: validateSym, trigger: 'change' }],
         riskIndicator: [{ validater: validateRisk, trigger: 'change' }]
       },
       category: 'all',
@@ -431,6 +472,7 @@ export default {
         si: {
           sentimentIndicator: '',
           technicalIndicator: '',
+          symbolIndicator: '',
           riskIndicator: ''
         },
         sentimentIndicatorList: []
@@ -444,7 +486,6 @@ export default {
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
       var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
-
       sentimentIndicatorList.sort(function (a, b) {
         return a.value.localeCompare(b.value)
       })
@@ -554,7 +595,6 @@ export default {
           index: this.panelIndex,
           value: item.url
         })
-
         let obj = {}
         obj.index = this.panelIndex
         obj.url = item.url
@@ -587,8 +627,62 @@ export default {
       }
       CIQ.addIndicators()
     },
+    // todo handle symobl select
+    handleSymbolSelect(item) {
+      this.si.symbolIndicator = item.label
+      let obj = {}
+      obj.value = item.label
+      obj.index = this.panelIndex
+      this.$emit('getIndicatorVal', obj)
+      // remove a MA tat already exists in current criteria before loading
+      var activatedMAList = this.$store.state.activatedMA
+      if (this.criteria == 'entry') {
+        var MAListIndex = activatedMAList.findIndex(
+          (item) =>
+            item.url ==
+            this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+        )
+        if (MAListIndex != -1) {
+          activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
+        this.$store.commit('getEntryIndicators', {
+          index: this.panelIndex,
+          value: item.label
+        })
+        let obj = {}
+        obj.index = this.panelIndex
+        obj.url = item.label
+        this.$emit('getIndicatorUrl', obj)
+      } else {
+        var MAListIndex = activatedMAList.findIndex(
+          (item) =>
+            item.url ==
+            this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+        )
+        if (MAListIndex != -1) {
+          activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
+        this.$store.commit('getExitIndicators', {
+          index: this.panelIndex,
+          value: item.label
+        })
+        let obj = {}
+        obj.index = this.panelIndex
+        obj.url = item.label
+        this.$emit('getIndicatorUrl', obj)
+      }
+      // avoid add indicator redundantly
+      for (var studyInstanceName in CIQ.stxx.layout.studies) {
+        var sd = CIQ.stxx.layout.studies[studyInstanceName]
+        if (sd.type == item.label) {
+          return
+        }
+      }
+      CIQ.addIndicators()
+    },
     handleTechnicalSelect(item) {
-      console.log('lishan handleTechnicalSelect', item)
       this.si.technicalIndicator = item.value
       let valObj = {}
       valObj.index = this.panelIndex
@@ -615,6 +709,7 @@ export default {
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
+
         CIQ.store.commit('getMA', activatedMAList)
         this.$store.commit('getEntryIndicators', {
           index: this.panelIndex,
@@ -745,6 +840,7 @@ export default {
         'Sentiment Indicator',
         'Technical Indicator',
         'Risk Control',
+        'Symbol OHLCV',
         "Users' Own Indicator"
       ]
       const obj = {}
@@ -754,22 +850,133 @@ export default {
       let radioObj = {}
       radioObj.index = this.panelIndex
       if (this.indicatorRadio === arr[0]) {
+        // 切换radio后移除usersOwnEntryFileHash
+        if (this.criteria === 'entry') {
+          this.$store.commit(`saveUsersOwnEntryFileHash`, {
+            index: this.panelIndex,
+            val: ''
+          })
+        }
+        if (this.criteria === 'exit') {
+          this.$store.commit(`saveUsersOwnExitFileHash`, {
+            index: this.panelIndex,
+            val: ''
+          })
+        }
+
         radioObj.value = 'sentiment'
         this.$emit('getIndicatorRadio', radioObj)
         this.$store.commit('getEntryIndicatorRadio', 'sentiment')
+
+        // console.log('store',this.$store.indicators.formIndicators.entry)
+        let valObj = {}
+        valObj.value = this.si.sentimentIndicator
+        valObj.index = this.panelIndex
+        this.$emit('getIndicatorVal', valObj)
+        let urlObj = {}
+        let res = CIQ.indicatorList.find((i) => { return i.chart_name == this.si.sentimentIndicator })
+        urlObj.url = res ? res.url : ''
+        urlObj.index = this.panelIndex
+        this.$emit('getIndicatorUrl', urlObj)
       } else if (this.indicatorRadio === arr[1]) {
+        // 切换radio后移除usersOwnEntryFileHash
+        if (this.criteria === 'entry') {
+          this.$store.commit(`saveUsersOwnEntryFileHash`, {
+            index: this.panelIndex,
+            val: ''
+          })
+        }
+        if (this.criteria === 'exit') {
+          this.$store.commit(`saveUsersOwnExitFileHash`, {
+            index: this.panelIndex,
+            val: ''
+          })
+        }
         radioObj.value = 'technical'
         this.$emit('getIndicatorRadio', radioObj)
         this.$store.commit('getEntryIndicatorRadio', 'technical')
+
+        let valObj = {}
+        valObj.value = this.si.technicalIndicator
+        valObj.index = this.panelIndex
+        this.$emit('getIndicatorVal', valObj)
+        let urlObj = {}
+        urlObj.url = ''
+        urlObj.index = this.panelIndex
+        this.$emit('getIndicatorUrl', urlObj)
       } else if (this.indicatorRadio === arr[2]) {
+        // 切换radio后移除usersOwnEntryFileHash
+        if (this.criteria === 'entry') {
+          this.$store.commit(`saveUsersOwnEntryFileHash`, {
+            index: this.panelIndex,
+            val: ''
+          })
+        }
+        if (this.criteria === 'exit') {
+          this.$store.commit(`saveUsersOwnExitFileHash`, {
+            index: this.panelIndex,
+            val: ''
+          })
+        }
         radioObj.value = 'risk'
         this.$emit('getIndicatorRadio', radioObj)
         this.$store.commit('getEntryIndicatorRadio', 'risk')
       } else if (this.indicatorRadio === arr[3]) {
+        // 切换radio后移除usersOwnEntryFileHash
+        if (this.criteria === 'entry') {
+          this.$store.commit(`saveUsersOwnEntryFileHash`, {
+            index: this.panelIndex,
+            val: ''
+          })
+        }
+        if (this.criteria === 'exit') {
+          this.$store.commit(`saveUsersOwnExitFileHash`, {
+            index: this.panelIndex,
+            val: ''
+          })
+        }
+        radioObj.value = 'symbol'
+        this.$emit('getIndicatorRadio', radioObj)
+        this.$store.commit('getEntryIndicatorRadio', 'symbol')
+
+        let valObj = {}
+        valObj.value = this.si.symbolIndicator
+        valObj.index = this.panelIndex
+        this.$emit('getIndicatorVal', valObj)
+        let valUrl = {}
+        valUrl.url = this.si.symbolIndicator
+        valUrl.index = this.panelIndex
+        this.$emit('getIndicatorUrl', valUrl)
+      } else if (this.indicatorRadio === arr[4]) {
+        // 切换radio后还原usersOwnEntryFileHash
+        const userUrl = this.si.userIndicator + 'HASH' + this.file_hash
+        if (this.criteria === 'entry') {
+          this.$store.commit(`saveUsersOwnEntryFileHash`, {
+            index: this.panelIndex,
+            val: userUrl
+          })
+        }
+        if (this.criteria === 'exit') {
+          this.$store.commit(`saveUsersOwnExitFileHash`, {
+            index: this.panelIndex,
+            val: userUrl
+          })
+        }
         radioObj.value = 'user'
         this.$emit('getIndicatorRadio', radioObj)
+        this.$store.commit('getEntryIndicatorRadio', 'user')
+
+        let valObj = {}
+        valObj.value = this.si.userIndicator
+        valObj.index = this.panelIndex
+        this.$emit('getIndicatorVal', valObj)
+        let urlObj = {}
+        urlObj.url = userUrl == 'HASH' ? '' : userUrl
+        urlObj.index = this.panelIndex
+        this.$emit('getIndicatorUrl', urlObj)
       }
     },
+
     // load short and long technical list
     loadShortLong() {
       const technicalList = CIQ.technicalCategory
@@ -858,7 +1065,7 @@ export default {
         }
       }
       if (
-        this.indicatorRadio === 'Users\' Own Indicator' &&
+        this.indicatorRadio === "Users' Own Indicator" &&
         !this.exitItemCheck
       ) {
         // this.$refs.siForm.validate((valid) => {
@@ -929,6 +1136,47 @@ export default {
           return checked
         }
       }
+      if (this.indicatorRadio === 'Symbol OHLCV' && !this.exitItemCheck) {
+        this.$refs.siForm.validate((valid) => {
+          validForm = valid
+        })
+        console.log('validForm', validForm)
+        // let formateList = this.$store.state.formateTechnicalList
+        // if (formateList.length === 0) {
+        // 	formateList = this.loadShortLong()
+        // }
+
+        // for (let i = 0; i < formateList.length; i++) {
+        // 	if (this.si.technicalIndicator === formateList[i].value) {
+        // 		validName = true
+        // 		break
+        // 	}
+        // }
+        validName = true
+        if (validForm && validName) {
+          let obj = {}
+          obj.criteria = this.criteria
+          obj.index = index
+          obj.value = this.si.symbolIndicator
+          this.$store.commit('getSymValue', obj)
+          return checked
+        } else {
+          if (!validName) {
+            this.$message({
+              message:
+                'Please select #' +
+                (index + 1) +
+                ' ' +
+                this.criteria +
+                ' indicator from the drop-down box',
+              type: 'error',
+              offset: 300
+            })
+          }
+          checked = false
+          return checked
+        }
+      }
       if (this.exitItemCheck) {
         checked = true
         return checked
@@ -970,6 +1218,16 @@ export default {
               }
             })
           }
+          // todo 加入symbol analysis
+          if (newVal[this.criteria].signals[index].analysis === 'Symbol') {
+            this.indicatorRadio = 'Symbol OHLCV'
+            this.si.symbolIndicator =
+              newVal[this.criteria].signals[index].indicator
+            let obj = {}
+            obj.index = vm.panelIndex
+            obj.url = this.si.symbolIndicator
+            vm.$emit('getIndicatorUrl', obj)
+          }
           if (newVal[this.criteria].signals[index].analysis === 'Technical') {
             vm.indicatorRadio = 'Technical Indicator'
             let technicalIndicator =
@@ -989,9 +1247,8 @@ export default {
             }
           }
           if (newVal[this.criteria].signals[index].analysis === 'User') {
-            vm.indicatorRadio = 'Users\' Own Indicator'
-            let userIndicator =
-              newVal[this.criteria].signals[index].indicator
+            vm.indicatorRadio = "Users' Own Indicator"
+            let userIndicator = newVal[this.criteria].signals[index].indicator
             vm.si.userIndicator = userIndicator
 
             // let formateList = this.$store.state.formateTechnicalList
@@ -1006,21 +1263,27 @@ export default {
             // 		break
             // 	}
             // }
-            const str = this.$store.state.indicators.formIndicators[this.criteria][this.panelIndex]
-            const startIndex = str.indexOf('HASH');
-            const endIndex = startIndex + 4; // 假设 "HASH" 的长度为 4
+            const str =
+              this.$store.state.indicators.formIndicators[this.criteria][
+              this.panelIndex
+              ]
+            const startIndex = str.indexOf('HASH')
+            const endIndex = startIndex + 4 // 假设 "HASH" 的长度为 4
 
             if (startIndex !== -1) {
-              const beforeHash = str.substring(0, startIndex);
-              const afterHash = str.substring(endIndex);
-              const response = await csvFileRead(beforeHash, afterHash);
+              const beforeHash = str.substring(0, startIndex)
+              const afterHash = str.substring(endIndex)
+              const response = await csvFileRead(beforeHash, afterHash)
               console.log('文件响应', response)
 
               // 还原文件对象的 raw 属性
               const obj = {}
               obj.index = index
               obj.val = response.data.data.file_id
-              vm.$emit('getIndicatorUrl', { index: index, url: response.data.data.file_id })
+              vm.$emit('getIndicatorUrl', {
+                index: index,
+                url: response.data.data.file_id
+              })
               console.log('还原文件对象的 raw 属性', obj)
               if (this.criteria === 'entry') {
                 this.$store.commit(`saveUsersOwnEntryFileHash`, obj)
@@ -1028,39 +1291,38 @@ export default {
               if (this.criteria === 'exit') {
                 this.$store.commit(`saveUsersOwnExitFileHash`, obj)
               }
-
               const res = response.data.data.csv_content
               let data = []
               try {
-                data = res.map(item => ({
+                data = res.map((item) => ({
                   Date: new Date(item.DT).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: '2-digit',
                     day: '2-digit'
                   }),
                   Close: item.indicator_Close
-                }));
+                }))
                 // 创建 CSV 文件
                 // const csvData = 'Date,Close\n' + data.map(item => `${item.Date},${item.Close}`).join('\n');
                 // const file = new File([csvData], `${userIndicator}.csv`, { type: 'text/csv' });
                 // this.fileList.splice(-1, 1, file)
 
-                const csvData = 'Date,Close\n' + data.map(item => `${item.Date},${item.Close}`).join('\n');
-                const base64Data = btoa(csvData); // 编码为 Base64
-                const rawValue = `data:text/csv;base64,${base64Data}`;
-                const file = new File([csvData], `${userIndicator}.csv`, { type: 'text/csv' });
-                file.raw = rawValue;
-                this.fileList.splice(-1, 1, file);
-
+                const csvData =
+                  'Date,Close\n' +
+                  data.map((item) => `${item.Date},${item.Close}`).join('\n')
+                const base64Data = btoa(csvData) // 编码为 Base64
+                const rawValue = `data:text/csv;base64,${base64Data}`
+                const file = new File([csvData], `${userIndicator}.csv`, {
+                  type: 'text/csv'
+                })
+                file.raw = rawValue
+                this.fileList.splice(-1, 1, file)
               } catch (error) {
                 console.log('error', error)
               }
             } else {
-              console.log('HASH not found in the string.');
+              console.log('HASH not found in the string.')
             }
-
-
-
           }
         }
       } catch (error) {
@@ -1082,7 +1344,6 @@ export default {
       try {
         suffix = /\.([a-zA-Z0-9]+)$/.exec(file.name)[1]
       } catch (error) {
-				console.log(error)
         return
       }
       const name = file.name.replace(`.${suffix}`, '')
@@ -1094,6 +1355,7 @@ export default {
       // 创建 CancelToken 实例
       const cancelToken = axios.CancelToken.source()
 
+      // 保存取消令牌，以便在需要终止上传时使用      
       // 保存取消令牌，以便在需要终止上传时使用
       self.cancelToken = cancelToken
       // 发送上传请求
@@ -1130,24 +1392,24 @@ export default {
 
           // 文件上传完成后的处理逻辑
           console.log('文件上传成功', response)
-					const {status, error} = response.data
+          const { status, error } = response.data
           // self.$store.commit('saveUserCustomIndicator', response.data.fileID)
           // 还原文件对象的 raw 属性
-					if(status == 200 || status == 201) {
-						self.$message.success('File uploaded successfully. You can click on the file to preview it.')
-          const obj = {}
-          obj.index = this.panelIndex
-          obj.val = response.data.file_id
-          if (self.criteria === 'entry') {
-            self.$store.commit(`saveUsersOwnEntryFileHash`, obj)
+          if (status == 200 || status == 201) {
+            self.$message.success('File uploaded successfully. You can click on the file to preview it.')
+            const obj = {}
+            obj.index = this.panelIndex
+            obj.val = response.data.file_id
+            if (self.criteria === 'entry') {
+              self.$store.commit(`saveUsersOwnEntryFileHash`, obj)
+            }
+            if (self.criteria === 'exit') {
+              self.$store.commit(`saveUsersOwnExitFileHash`, obj)
+            }
+            self.handleUsersOwnIndicatorSelect(response.data)
+          } else {
+            return Promise.reject(error)
           }
-          if (self.criteria === 'exit') {
-            self.$store.commit(`saveUsersOwnExitFileHash`, obj)
-          }
-          self.handleUsersOwnIndicatorSelect(response.data)
-					}else{
-						return Promise.reject(error)
-					}
           // ...
         })
         .catch((error) => {
@@ -1588,30 +1850,30 @@ export default {
       const csvContent = csvData.split(';base64,').pop();
       const decodedData = atob(csvContent);
       const parsedData = this.parseCSV(decodedData);
-			console.log('解析的数据', parsedData)
+      console.log('解析的数据', parsedData)
       const filteredData = parsedData.filter((row) => !this.nonBusinessDay.includes(row.Date));
-			console.log('filteredData', filteredData)
+      console.log('filteredData', filteredData)
 
       function convertToCSV(dataArray) {
         const headers = Object.keys(dataArray[0]);
         const rows = dataArray.map((row) => headers.map((header) => row[header]));
         const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
         // return `data:text/csv;base64,${btoa(csvContent)}`;
-				return csvContent
+        return csvContent
       }
 
       const filteredCsvData = convertToCSV(filteredData);
-			const base64Data = btoa(filteredCsvData); // 编码为 Base64
-			const rawValue = `data:text/csv;base64,${base64Data}`;
-			const filteredFile = new File([filteredCsvData], `${file.name}`, { type: 'text/csv' });
-			filteredFile.raw = rawValue;
-			filteredFile.uid = file.uid;
-			filteredFile.hash = file.hash;
-      console.log('file',file)
-			console.log('filteredFile',filteredFile)
+      const base64Data = btoa(filteredCsvData); // 编码为 Base64
+      const rawValue = `data:text/csv;base64,${base64Data}`;
+      const filteredFile = new File([filteredCsvData], `${file.name}`, { type: 'text/csv' });
+      filteredFile.raw = rawValue;
+      filteredFile.uid = file.uid;
+      filteredFile.hash = file.hash;
+      console.log('file', file)
+      console.log('filteredFile', filteredFile)
       this.form.indicatorName = filteredFile.name.replace('.csv', '')
       this.fileList.push(filteredFile)
-			console.log(this.fileList)
+      console.log(this.fileList)
       CIQ.hideCover()
       CIQ.nprogress.done()
       this.dialogFormVisible = true
@@ -1656,6 +1918,10 @@ export default {
 	padding-left: 30px;
 }
 /deep/ .techBox .el-input--prefix .el-input__inner:first-child {
+	width: 334px;
+	padding-left: 30px;
+}
+/deep/ .symbolBox .el-input--suffix .el-input__inner:first-child {
 	width: 334px;
 	padding-left: 30px;
 }
