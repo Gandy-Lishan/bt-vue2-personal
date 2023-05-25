@@ -46,5 +46,18 @@
 .el-menu--inline .el-menu-item {
   padding-left: 10px !important;
 }
-
-
+.brainstorm-select {
+  background-color: #d7d7d7;
+}
+.brainstorm-select .el-input__inner, .el-select-dropdown__item.is-disabled:hover{
+  background-color: #d7d7d7;
+  margin-left: 0;
+  font-weight: bold;
+  color: #333333;
+}
+#tab-seventh{
+  padding: 0;
+}
+.exit-with-custom-tim-frame-container /deep/.el-input__prefix{
+  left: 24px !important;
+}
