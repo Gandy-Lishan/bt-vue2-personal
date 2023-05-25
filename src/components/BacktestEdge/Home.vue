@@ -308,9 +308,7 @@ export default {
       entryRelation: 1,
 			activeTab: '', // 用于存储当前选中的选项卡
       options: [
-        { label: 'Exit with custom TIM frame', value: 'exit_with_custom_TIM_frame' },
-        { label: '选项2', value: 'option2' },
-        { label: '选项3', value: 'option3' }
+        { label: 'Exit with custom TIM frame', value: 'exit_with_custom_TIM_frame' }
       ]
     }
   },
