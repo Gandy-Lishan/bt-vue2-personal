@@ -1,37 +1,40 @@
 <template>
 	<div class="exit-with-custom-tim-frame-container">
 		<div class="title symbol-title">
-			<p>Custom entry date and different time-in-market: &nbsp; &nbsp;</p>
-			<strong>Symbol</strong>
-			<el-select
-				v-model="symbol"
-				id="symbolName"
-				filterable
-				remote
-				reserve-keyword
-				automatic-dropdown
-				@change="getSymbol(symbol)"
-				placeholder="enter keywords"
-				:remote-method="remoteMethod"
-				:loading="loading"
-			>
-				<el-option
-					v-for="item in options"
-					:key="item.value"
-					:label="item.label"
-					:value="item.value"
-				>
-				</el-option>
-			</el-select>
+			<p>Custom entry date and different time-in-market:</p>
+			<div class="options-container">
+				<div class="select-container">
+					<span>Symbol</span>
+					<el-select
+						v-model="symbol"
+						id="symbolName"
+						filterable
+						remote
+						reserve-keyword
+						automatic-dropdown
+						@change="getSymbol(symbol)"
+						placeholder="enter keywords"
+						:remote-method="remoteMethod"
+						:loading="loading"
+					>
+						<el-option
+							v-for="item in options"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value"
+						>
+						</el-option>
+					</el-select>
+				</div>
+				<div class="direction-box">
+					<span>Direction &nbsp; &nbsp;</span>
+					<el-radio-group v-model="direction" @change="getDirection">
+						<el-radio label="Long">Long</el-radio>
+						<el-radio label="Short">Short</el-radio>
+					</el-radio-group>
+				</div>
+			</div>
 		</div>
-		<!-- <div class="button-container">
-			<el-button type="primary" plain @click="openDateDialog"
-				>Define Entry Date</el-button
-			>
-			<el-button type="primary" plain @click="showTableDialog" v-if="!showTable"
-				>Define Different Time In Market</el-button
-			>
-    </div> -->
 		<div class="content-container">
 			<div class="entry-data-container">
 				<div class="title">
@@ -57,9 +60,9 @@
 								:placeholder="scope.row.placeholder"
 								v-model="scope.row.value"
 								@change="handleDateChange(scope.$index, $event)"
+								:picker-options="pickerOptions"
 							></el-date-picker>
 						</template>
-						<!-- <el-date-picker v-for="(date, index) in entryDates" :key="index" v-model="date[index]" type="date" placeholder="选择日期"></el-date-picker> -->
 					</el-table-column>
 					<el-table-column
 						label="Delete"
@@ -78,8 +81,6 @@
 					</el-table-column>
 				</el-table>
 				<div class="table-footer">
-					<!-- <el-button @click="cancelDateTable">Cancel</el-button> -->
-
 					<el-button
 						type="primary"
 						icon="el-icon-plus"
@@ -88,9 +89,9 @@
 						plain
 						>Add Row</el-button
 					>
-					<el-button type="primary" @click="saveDateTable" size="mini"
+					<!-- <el-button type="primary" @click="saveDateTable" size="mini"
 						>Save</el-button
-					>
+					> -->
 				</div>
 			</div>
 			<div class="TIM-container">
@@ -153,8 +154,6 @@
 					</el-table-column>
 				</el-table>
 				<div class="table-footer">
-					<!-- <el-button @click="cancelTable">Cancel</el-button> -->
-
 					<el-button
 						type="primary"
 						icon="el-icon-plus"
@@ -163,24 +162,37 @@
 						plain
 						>Add Row</el-button
 					>
-					<el-button type="primary" @click="saveTable" size="mini"
+					<!-- <el-button type="primary" @click="saveTable" size="mini"
 						>Save</el-button
-					>
+					> -->
 				</div>
 			</div>
 		</div>
-
-		<el-button type="primary" class="run-button">Run</el-button>
-
-		<!-- <el-dialog title="Define Entry Date" :visible.sync="dialogDateVisible"> -->
-		<!-- </el-dialog> -->
-
-		<!-- <el-dialog
-			title="Edit exit with different TIM Table"
-			:visible.sync="showTable"
-			width="80%"
-		> -->
-		<!-- </el-dialog> -->
+		<el-button type="primary" class="run-button" @click="runTIM">Run</el-button>
+		<div class="history-container">
+			<el-skeleton :rows="6" :loading="loading" animated>
+				<template>
+					<el-table
+						:data="TIMHistoryList"
+						stripe
+						style="width: 100%; height: 100%"
+					>
+						<template v-for="(l, index) in defaultTIMTableLabels">
+							<el-table-column :label="l" :prop="l" :key="index">
+								<template slot-scope="scope">
+									<p class="tableText">
+										{{ scope.row[l] }}
+									</p>
+								</template>
+							</el-table-column>
+						</template>
+						<div slot="empty" style="text-align: left">
+							<el-empty image-size="80" description="No Data"></el-empty>
+						</div>
+					</el-table>
+				</template>
+			</el-skeleton>
+		</div>
 	</div>
 </template>
 
@@ -198,12 +210,12 @@ export default {
     return {
       dialogDateVisible: false, // 弹框可见性
       entryDates: [{
-        value: '2023-5-22',
+        value: '2023-5-9',
         placeholder: 'select entry date1',
         readonly: false
       },
       {
-        value: '2023-5-23',
+        value: '2023-5-10',
         placeholder: 'select entry date2',
         readonly: false
       }], // 存储选择的日期数组
@@ -224,15 +236,28 @@ export default {
         }
       ],
       activeTIM: 'first',
-      defaultTIMTableLabels: ['Entry Date', '1 Day [%]', '1 Week [%]'],
+      defaultTIMTableLabels: [],
       TIMHistoryList: [],
-      TIMResult_quotes: [],
       symbol: 'SPY',
       options: [],
       symbolList: [],
       indexList: [],
-      loading: false
-    };
+      loading: false,
+      direction: 'Long',
+      pickerOptions: {
+        disabledDate(time) {
+          // 获取当前日期
+          const currentDate = new Date();
+          currentDate.setHours(0, 0, 0, 0);
+          // 获取限制日期
+          // const restrictionDate = new Date('2023-05-01');
+          // restrictionDate.setHours(0, 0, 0, 0);
+          // 比较时间戳
+          // return time.getTime() > currentDate.getTime() || time.getTime() < restrictionDate.getTime();
+          return time.getTime() > currentDate.getTime()
+        }
+      }
+    }
   },
   methods: {
     openDateDialog() {
@@ -281,10 +306,6 @@ export default {
     },
     saveTable() {
       this.showTable = false;
-      if (this.tradesData.length === 0) {
-        this.$message.warning('No computable trades.')
-        return
-      }
       CIQ.addCover('Calculating...')
       CIQ.nprogress.start()
       try {
@@ -296,7 +317,6 @@ export default {
           CIQ.nprogress.done()
           return
         }
-        console.log(periodArray)
         const uniqueData = [];
         periodArray.forEach(item => {
           const isDuplicate = uniqueData.some(
@@ -317,9 +337,11 @@ export default {
           table.push(item.timeframe)
         })
         this.defaultTIMTableLabels = table
-        const data = this.calculateBacktestHistory(this.tradesData, uniqueData)
+        this.saveDateTable()
+        const data = this.calculateBacktestHistory(this.entryDates, uniqueData)
         this.TIMHistoryList = data
-        this.calculateZScore(this.tradesData, periodArray)
+        console.log('data', data)
+        // this.calculateZScore(this.tradesData, periodArray)
         //this.resetTable()
       } catch (error) {
         console.log(error)
@@ -414,6 +436,12 @@ export default {
       this.$store.commit('getBacktestSymbol', val)
       CIQ.addSymbol(val)
     },
+    getDirection(val) {
+      // Set direction to vuex
+      this.$store.commit('getDirection', val)
+      // Direction passed to entry and exit
+      this.direction = val
+    },
     async remoteMethod(query) {
       let vm = this
       if (query !== '') {
@@ -493,6 +521,50 @@ export default {
         }
       }
     },
+    calculateBacktestHistory(dataSet, periodArray) {
+      /*
+        periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
+    */
+      let chartDataset = CIQ.stxx.chart.dataSet
+      const direction = this.direction
+      let backtestResult = []
+
+      for (var data in dataSet) {
+        var datatime = new Date(dataSet[data].value)
+
+        var offset = datatime.getTimezoneOffset() * 60 * 1000
+        var entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
+
+        let res = chartDataset.findIndex((x) => {
+          return entryDate.getTime() == x.DT.getTime()
+        })
+
+        if (res != -1) {
+          //鎷胯繘鍦轰环鏍煎拰鍓嶄竴澶╀綔姣旇緝
+          let entryPrice = chartDataset[res].Open
+          const transformData = this.transformData(periodArray)
+          console.log('transformData', transformData)
+          let obj = {}
+          transformData.map((item) => {
+            let exitBar = chartDataset[res + item.value]
+              ? (
+                ((direction == 'Short'
+                  ? entryPrice - chartDataset[res + item.value].Open
+                  : chartDataset[res + item.value].Open - entryPrice) /
+                  entryPrice) *
+                100
+              ).toFixed(2)
+              : ''
+            obj[item.timeframe] = exitBar
+          })
+          backtestResult.push({ 'Entry Date': dataSet[data].value, ...obj })
+        }
+      }
+      return backtestResult
+    },
+    runTIM() {
+      this.saveTable()
+    }
   }
 };
 </script>
@@ -526,9 +598,9 @@ export default {
 	font-weight: bold;
 }
 .symbol-title {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	/* display: flex;
+	justify-content: space-around;
+	align-items: center; */
 	margin: 1rem 0;
 }
 .button-container {
@@ -565,5 +637,19 @@ export default {
 .entry-data-container,
 .TIM-container {
 	width: 45%;
+}
+.options-container {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+.history-container {
+	margin-top: 10px;
+	border: 1px solid #dcdfe6;
+}
+.el-table /deep/ th,
+.el-table /deep/ td {
+	text-align: center;
 }
 </style>
