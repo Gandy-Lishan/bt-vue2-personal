@@ -1381,6 +1381,13 @@ export default {
       this.drawDownImgUrl = ''
       this.monthReturnImgUrl = ''
       this.annualReturnImgUrl = ''
+
+      this.TIMHistoryList = []
+      this.TIMResult_quotes = []
+      this.result_quotes = []
+      this.periodsTIM = []
+      this.periods = []
+      this.activeTIM = 'first'
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
@@ -1742,4 +1749,8 @@ export default {
 .el-dialog__wrapper /deep/.el-dialog {
 	width: 50% !important;
 }
+.el-table /deep/ th, .el-table /deep/ td {
+  text-align: center;
+}
+
 </style>

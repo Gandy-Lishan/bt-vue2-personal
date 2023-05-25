@@ -1,264 +1,157 @@
 // Home
 <template>
-	<div class="home">
-		<div class="home-container">
-			<div class="navbar">
-				<div class="header_logo">
-					<span
-						><img
-							style="width: 190px; height: 50px"
-							src="../../assets/logo.png"
-							alt="logo"
-					/></span>
-					<div class="betaNote">BacktestEdge Beta</div>
-					<el-menu
-						:default-active="activeIndex"
-						class="el-menu-demo menu"
-						mode="horizontal"
-						@select="handleSelect"
-					>
-						<el-submenu index="1">
-							<template slot="title">Help</template>
-							<el-menu-item index="1-1">Tutorial</el-menu-item>
-							<el-menu-item index="1-2">Contant Us</el-menu-item>
-						</el-submenu>
-						<el-submenu index="2">
-							<template slot="title"><i class="el-icon-s-tools"></i></template>
-							<!-- <el-menu-item index="2-1">User: {{$store.state.role}}</el-menu-item> -->
-							<!-- <el-menu-item index="2-1">Theme</el-menu-item> -->
-							<!-- <el-menu-item index="2-2">Language</el-menu-item> -->
-						</el-submenu>
-					</el-menu>
-				</div>
-			</div>
-			<header class="header">
-				<p class="hint">
-					Hint: Move cursor out of chart area to scroll down the page below
-				</p>
-				<!-- <el-row type="flex" justify="center"
+	<div>
+		<header class="header">
+			<p class="hint">
+				Hint: Move cursor out of chart area to scroll down the page below
+			</p>
+			<!-- <el-row type="flex" justify="center"
 					><el-col>
 						<p class="betaNote">BacktestEdge Beta</p>
 						<p class="hint">Hint: Move cursor out of chart area to scroll down the page below</p>
 					</el-col>
 				</el-row> -->
-				<div class="chart_box" id="chart_box">
-					<chart width="100%" height="100%"></chart>
-				</div>
-			</header>
-			<div class="gradient"></div>
-			<main class="main">
-				<div class="alignRight" style="display: flex; align-items: center">
-					<i
-						@click="sidebar"
-						class="fa fa-outdent navCheck"
-						style="font-size: 30px"
-					></i>
-					<el-tooltip
-						class="item"
-						effect="dark"
-						content="Clear current chart & Backtest Setup Form and create a new backtest."
-						placement="bottom"
-					>
-						<el-button
-							@click="refreshPage"
-							class="restartBtn"
-							type="primary"
-							icon="el-icon-refresh-right"
-							>Create New Backtest</el-button
-						></el-tooltip
-					>
-				</div>
-				<el-tabs
-					v-model="activeName"
-					type="card"
-					stretch
-					:tab-position="tabPosition"
-					@tab-click="handleTabClick"
+			<div class="chart_box" id="chart_box">
+				<chart width="100%" height="100%"></chart>
+			</div>
+		</header>
+		<div class="gradient"></div>
+		<main class="main">
+			<div class="alignRight" style="display: flex; align-items: center">
+				<i
+					@click="sidebar"
+					class="fa fa-outdent navCheck"
+					style="font-size: 30px"
+				></i>
+				<el-tooltip
+					class="item"
+					effect="dark"
+					content="Clear current chart & Backtest Setup Form and create a new backtest."
+					placement="bottom"
 				>
-					<el-tab-pane
-						label="Set up"
-						name="first"
-						v-loading="loading"
-						element-loading-text="Loading..."
-						element-loading-spinner="el-icon-loading"
-						element-loading-background="rgba(0, 0, 0, 0.8)"
-					>
-						<div class="set-up-container" @click="tabContentClick">
-							<keep-alive>
-								<set-up
-									ref="setUpChild"
-									:backtestEditData="backtestEditData"
-									@IsRiskControl="IsRiskControl"
-									@setDirection="setDirection"
-								></set-up
-							></keep-alive>
-							<div class="criteria-container">
-								<div class="criteria-box">
-									<entry
-										ref="entryChild"
-										:direction="direction"
-										@getEntryRelation="getEntryRelation"
-										@sendEntrySignalIndex="sendEntrySignalIndex"
-									></entry>
-									<exit
-										ref="exitChild"
-										:direction="direction"
-										@isOnlyRiskControl="isOnlyRiskControl"
-										@getExitRelation="getExitRelation"
-										@sendExitSignalIndex="sendExitSignalIndex"
-									></exit>
-								</div>
-							</div>
-							<div class="backtest-btns">
-								<el-tooltip
-									class="item"
-									effect="dark"
-									content="Clear the backtest set up form "
-									placement="bottom"
-								>
-									<el-button type="danger" @click="clearForm">
-										Clear Form</el-button
-									>
-								</el-tooltip>
-								<el-tooltip
-									class="item"
-									effect="dark"
-									content="Complete the form filling, run the backtest, and view the results"
-									placement="bottom"
-								>
-									<el-button type="success" @click="runBacktest"
-										>Run Backtest</el-button
-									></el-tooltip
-								>
-								<!-- <el-checkbox style="margin-left:10px" v-model="test" label="download test csv" border></el-checkbox> -->
-							</div>
-						</div>
-					</el-tab-pane>
-					<el-tab-pane label="History" name="second"
-						><history
-							ref="historyChild"
-							@goTobacktestSetupForm="goTobacktestSetupForm"
-							@goBacktestResultForm="goBacktestResultForm"
-							@goToFavoritesForm="goToFavoritesForm"
-							@refFavoritesForm="refFavoritesForm"
-						></history
-					></el-tab-pane>
-					<el-tab-pane label="Results" name="third"
-						><div class="set-up-container">
-							<result
+					<el-button
+						@click="refreshPage"
+						class="restartBtn"
+						type="primary"
+						icon="el-icon-refresh-right"
+						>Create New Backtest</el-button
+					></el-tooltip
+				>
+			</div>
+			<el-tabs
+				v-model="activeName"
+				type="card"
+				stretch
+				:tab-position="tabPosition"
+				@tab-click="handleTabClick"
+			>
+				<el-tab-pane
+					label="Set up"
+					name="first"
+					v-loading="loading"
+					element-loading-text="Loading..."
+					element-loading-spinner="el-icon-loading"
+					element-loading-background="rgba(0, 0, 0, 0.8)"
+				>
+					<div class="set-up-container" @click="tabContentClick">
+						<keep-alive>
+							<set-up
+								ref="setUpChild"
 								:backtestEditData="backtestEditData"
-								:editFrequency="editFrequency"
-							></result>
+								@IsRiskControl="IsRiskControl"
+								@setDirection="setDirection"
+							></set-up
+						></keep-alive>
+						<div class="criteria-container">
+							<div class="criteria-box">
+								<entry
+									ref="entryChild"
+									:direction="direction"
+									@getEntryRelation="getEntryRelation"
+									@sendEntrySignalIndex="sendEntrySignalIndex"
+								></entry>
+								<exit
+									ref="exitChild"
+									:direction="direction"
+									@isOnlyRiskControl="isOnlyRiskControl"
+									@getExitRelation="getExitRelation"
+									@sendExitSignalIndex="sendExitSignalIndex"
+								></exit>
+							</div>
 						</div>
-						<performance
-							ref="performanceChild"
+						<div class="backtest-btns">
+							<el-tooltip
+								class="item"
+								effect="dark"
+								content="Clear the backtest set up form "
+								placement="bottom"
+							>
+								<el-button type="danger" @click="clearForm">
+									Clear Form</el-button
+								>
+							</el-tooltip>
+							<el-tooltip
+								class="item"
+								effect="dark"
+								content="Complete the form filling, run the backtest, and view the results"
+								placement="bottom"
+							>
+								<el-button type="success" @click="runBacktest"
+									>Run Backtest</el-button
+								></el-tooltip
+							>
+							<!-- <el-checkbox style="margin-left:10px" v-model="test" label="download test csv" border></el-checkbox> -->
+						</div>
+					</div>
+				</el-tab-pane>
+				<el-tab-pane label="History" name="second"
+					><history
+						ref="historyChild"
+						@goTobacktestSetupForm="goTobacktestSetupForm"
+						@goBacktestResultForm="goBacktestResultForm"
+						@goToFavoritesForm="goToFavoritesForm"
+						@refFavoritesForm="refFavoritesForm"
+					></history
+				></el-tab-pane>
+				<el-tab-pane label="Results" name="third"
+					><div class="set-up-container">
+						<result
 							:backtestEditData="backtestEditData"
-							@errorCatchPerformance="errorCatchPerformance"
-						></performance>
-					</el-tab-pane>
-					<el-tab-pane label="My Favorites" name="forth"
-						><favorite
-							ref="favoriteChild"
-							@refHistoryForm="refHistoryForm"
-							@goTobacktestSetupForm="goTobacktestSetupForm"
-							@goBacktestResultForm="goBacktestResultForm"
-							@goToFavoritesForm="goToFavoritesForm"
-						></favorite
-					></el-tab-pane>
-					<el-tab-pane label="Sample Backtests" name="fifth"
-						><sample
-							ref="sampleChild"
-							@goToHistoryForm="goToHistoryForm"
-							@refHistoryForm="refHistoryForm"
-							@goTobacktestSetupForm="goTobacktestSetupForm"
-							@goBacktestResultForm="goBacktestResultForm"
-						></sample
-					></el-tab-pane>
-					<!-- <el-tab-pane label="Analysts' Backtest" name="sixth">
+							:editFrequency="editFrequency"
+						></result>
+					</div>
+					<performance
+						ref="performanceChild"
+						:backtestEditData="backtestEditData"
+						@errorCatchPerformance="errorCatchPerformance"
+					></performance>
+				</el-tab-pane>
+				<el-tab-pane label="My Favorites" name="forth"
+					><favorite
+						ref="favoriteChild"
+						@refHistoryForm="refHistoryForm"
+						@goTobacktestSetupForm="goTobacktestSetupForm"
+						@goBacktestResultForm="goBacktestResultForm"
+						@goToFavoritesForm="goToFavoritesForm"
+					></favorite
+				></el-tab-pane>
+				<el-tab-pane label="Sample Backtests" name="fifth"
+					><sample
+						ref="sampleChild"
+						@goToHistoryForm="goToHistoryForm"
+						@refHistoryForm="refHistoryForm"
+						@goTobacktestSetupForm="goTobacktestSetupForm"
+						@goBacktestResultForm="goBacktestResultForm"
+					></sample
+				></el-tab-pane>
+				<!-- <el-tab-pane label="Analysts' Backtest" name="sixth">
 						<router-view @goToHistoryForm="goToHistoryForm"  @refHistoryForm="refHistoryForm" @goTobacktestSetupForm="goTobacktestSetupForm" @goBacktestResultForm="goBacktestResultForm"></router-view>
 					</el-tab-pane> -->
-					<el-tab-pane :label="renderLabel()" name="seventh">
-							<router-view></router-view>
-					</el-tab-pane>
-				</el-tabs>
-			</main>
-
-			<el-tooltip
-				class="item"
-				effect="dark"
-				content="Back to the top"
-				placement="bottom"
-			>
-				<button class="toTop" @click="animationUp">
-					<svg
-						width="22"
-						height="30"
-						viewBox="0 0 22 30"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							fill-rule="evenodd"
-							clip-rule="evenodd"
-							d="M-1.31134e-07 1.5C-5.87107e-08 0.671573 0.642374 5.61581e-08 1.43478 1.25433e-07L20.5652 1.79787e-06C21.3576 1.86714e-06 22 0.671574 22 1.5C22 2.32843 21.3576 3 20.5652 3L1.43478 3C0.642374 3 -2.03557e-07 2.32843 -1.31134e-07 1.5Z"
-							fill="#F9FAFB"
-						></path>
-						<path
-							fill-rule="evenodd"
-							clip-rule="evenodd"
-							d="M11.5 30C10.6716 30 10 29.2645 10 28.3571L10 8.64286C10 7.73553 10.6716 7 11.5 7C12.3284 7 13 7.73553 13 8.64286L13 28.3571C13 29.2645 12.3284 30 11.5 30Z"
-							fill="#F9FAFB"
-						></path>
-						<path
-							fill-rule="evenodd"
-							clip-rule="evenodd"
-							d="M21.5079 18.5152C20.8519 19.1616 19.7881 19.1616 19.1321 18.5152L11.5 10.9959L3.86794 18.5152C3.21186 19.1616 2.14814 19.1616 1.49206 18.5152C0.835983 17.8688 0.835983 16.8208 1.49206 16.1744L10.3121 7.48479C10.9681 6.8384 12.0319 6.8384 12.6879 7.48479L21.5079 16.1744C22.164 16.8208 22.164 17.8688 21.5079 18.5152Z"
-							fill="#F9FAFB"
-						></path>
-					</svg>
-				</button>
-			</el-tooltip>
-			<div class="footer">
-				<p>
-					Copyright © 2001 - 2023 Sundial Capital Research, Inc. All rights
-					reserved.
-				</p>
-				<ul class="Footer_social___a7sK">
-					<li>
-						<a
-							href="https://facebook.com/sentimentrader"
-							target="_blank"
-							rel="noopener noreferrer"
-							><i class="fa fa-facebook"></i
-						></a>
-					</li>
-					<li>
-						<a
-							href="https://www.linkedin.com/company/sentimentrader"
-							target="_blank"
-							rel="noopener noreferrer"
-							><i class="fa fa-linkedin"></i
-						></a>
-					</li>
-					<li>
-						<a
-							href="https://youtube.com/sentimentrader"
-							target="_blank"
-							rel="noopener noreferrer"
-							><i class="fa fa-youtube"></i
-						></a>
-					</li>
-					<li>
-						<a
-							href="https://twitter.com/sentimentrader"
-							target="_blank"
-							rel="noopener noreferrer"
-							><i class="fa fa-twitter"></i
-						></a>
-					</li>
-				</ul>
-			</div>
-		</div>
+				<el-tab-pane :label="renderLabel()" name="seventh">
+					<router-view></router-view>
+				</el-tab-pane>
+			</el-tabs>
+		</main>
 	</div>
 </template>
 <script>
@@ -287,8 +180,6 @@ export default {
   name: 'home',
   data() {
     return {
-      activeIndex: '1',
-      activeIndex2: '1',
       test: false,
       btnClickBool: true,
       scroll: '',
@@ -306,7 +197,7 @@ export default {
       isOnlyRisk: false,
       exitRelation: 1,
       entryRelation: 1,
-			activeTab: '', // 用于存储当前选中的选项卡
+      activeTab: '', // 用于存储当前选中的选项卡
       options: [
         { label: 'Exit with custom TIM frame', value: 'exit_with_custom_TIM_frame' }
       ]
@@ -431,23 +322,6 @@ export default {
     }
   },
   methods: {
-    handleSelect(key, keyPath) {
-      let path = ''
-      if (key == '1-1') {
-        path = this.$router.resolve({
-          path: '/doc'
-        }).href
-      } else if (key == '1-2') {
-        path = 'https://users.sentimentrader.com/users/account/support/'
-      }
-      window.open(path, '_blank')
-    },
-    animationUp: function () {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      })
-    },
     myBrowser: function () {
       //Get the useragent string of the browser
       var userAgent = navigator.userAgent
@@ -510,7 +384,6 @@ export default {
     sendEntrySignalIndex(length) {
       this.entryLength = length
     },
-
     sendExitSignalIndex(length) {
       this.exitLength = length
     },
@@ -1253,7 +1126,6 @@ export default {
         this.activeName = 'third'
         CIQ.nprogress.inc()
         CIQ.setCoverText('Generating Backtest report, please wait...')
-
         this.$refs.performanceChild.getResultData(row, () => {
           if (callback) {
             callback()
@@ -1311,9 +1183,9 @@ export default {
     getEntryRelation(val) {
       this.entryRelation = val
     },
-		renderLabel() {
+    renderLabel() {
       return this.$createElement('el-select', {
-				class: 'brainstorm-select',
+        class: 'brainstorm-select',
         props: {
           value: 'Brainstorm',
           placeholder: 'Please select'
@@ -1329,11 +1201,14 @@ export default {
       })));
     },
     handleTabChange(value) {
-			this.activeName = 'seventh'
-			const targetPath = `/home/brainstorm/${value}`;
-			if (this.$route.path !== targetPath) {
-				this.$router.push(targetPath);
-			}
+      this.activeName = 'seventh'
+      const targetPath = `/home/brainstorm/${value}`;
+      if (this.$route.path !== targetPath) {
+        this.$router.push(targetPath);
+      }
+    },
+    switchTab(tabName) {
+      this.activeName = tabName
     }
   }
 }
@@ -1388,75 +1263,6 @@ main {
 	font-weight: 300;
 }
 
-button.toTop {
-	opacity: 0.8;
-	z-index: 999;
-	border: unset;
-	position: fixed;
-	left: 75px;
-	bottom: 63px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 80px;
-	height: 80px;
-	border-radius: 100%;
-	background: #111827;
-	background-image: initial;
-	background-position-x: initial;
-	background-position-y: initial;
-	background-size: initial;
-	background-repeat-x: initial;
-	background-repeat-y: initial;
-	background-attachment: initial;
-	background-origin: initial;
-	background-clip: initial;
-	background-color: rgb(17, 24, 39);
-	box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%),
-		0 10px 10px -5px rgb(0 0 0 / 4%);
-}
-
-.footer {
-	background: #fff;
-	display: flex;
-	padding: 16px 16px 48px 16px;
-	border-top: 1px solid #e5e7eb;
-	margin-top: 50px;
-	justify-content: space-between;
-	align-items: center;
-}
-.footer p {
-	text-align: center;
-	color: #9ca3af;
-	line-height: 21px;
-}
-ol,
-ul {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-.Footer_social___a7sK {
-	display: flex;
-}
-.Footer_social___a7sK li {
-	margin-right: 24px;
-}
-.Footer_social___a7sK a {
-	font-size: 20px;
-	color: #9ca3af;
-}
-.Footer_social___a7sK a:hover {
-	font-size: 20px;
-	color: #0284c7;
-}
-a {
-	transition: color 0.3s ease-in-out;
-	text-decoration: none;
-}
-.home-container {
-	margin: 0 auto;
-}
 // 暂时的样式
 header {
 	margin-bottom: 28px;
@@ -1479,38 +1285,6 @@ header {
 	// }
 	background: url(../../assets/dots-blue.png);
 }
-.navbar {
-	height: 78px;
-}
-.header_logo {
-	display: flex;
-	box-shadow: 0 1px 3px rgb(0 0 0 / 10%), 0 1px 2px rgb(0 0 0 / 6%);
-	position: fixed;
-	z-index: 999;
-	top: 0;
-	width: 100%;
-	background: #fff;
-	align-items: center;
-	justify-content: space-between;
-	.menu {
-		justify-self: center;
-		align-self: center;
-		margin-right: 7px;
-	}
-	.betaNote {
-		margin: 1.14rem 0 1.14rem 0px;
-		font-style: italic;
-		color: #6c6c6c;
-		text-align: left;
-		font-size: 2.5rem;
-		margin: 0px;
-		font-weight: lighter;
-		color: #333333;
-	}
-}
-.header_logo > span {
-	padding: 12px 24px;
-}
 
 .criteria-container {
 	padding: 10px;
@@ -1521,9 +1295,7 @@ header {
 	overflow: hidden;
 	margin: 0 25px;
 }
-// .betaNote {
-// 	padding: 22px 50px 10px 50px;
-// }
+
 .criteria-box {
 	display: flex;
 	justify-content: space-between;
@@ -1546,9 +1318,6 @@ header {
 		align-items: center;
 		border-bottom: 1px solid #797979;
 	}
-	.betaNote {
-		visibility: hidden;
-	}
 }
 .backtest-btns {
 	margin-top: 10px;
@@ -1565,10 +1334,6 @@ header {
 	}
 }
 @media (min-width: 375px) and (max-width: 767px) {
-	.home-container {
-		width: 100%;
-		margin: 0 auto;
-	}
 	.criteria-container {
 		padding: 0;
 	}
@@ -1592,15 +1357,8 @@ header {
 			font-size: 12px;
 		}
 	}
-	.betaNote {
-		visibility: hidden;
-	}
 }
-@media (max-width: 374px) {
-	.betaNote {
-		visibility: hidden;
-	}
-}
+
 .el-dropdown-link {
 	cursor: pointer;
 	//color: #409eff;

@@ -1157,7 +1157,7 @@ export default {
 					this.indicatorRadio = 'user'
 					this.techIndiObj[j] = ''
 				}
-				if (data.entry.signals[j].analysis === 'Symbol') {
+				if (data.exit.signals[j].analysis === 'Symbol') {
 					this.indicatorValArr[j] = data.entry.signals[j].indicator
 					this.indicatorRadioArr.splice(j, 1, 'symbol')
 					this.indicatorRadio = 'symbol'
