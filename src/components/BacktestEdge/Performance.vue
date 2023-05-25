@@ -1050,6 +1050,7 @@ export default {
       */
       // masterData涓嶅寘鍚玦ndicator value,闃叉鏃爋hlcv鐨勬儏鍐
       let period_dict = this.transformZScoreData(periodArray)
+      console.log(period_dict,periodArray)
       let quotes = CIQ.stxx.chart.masterData
       const period_list = Object.keys(period_dict).map(Number)
       const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
@@ -1643,7 +1644,7 @@ export default {
         this.defaultTIMTableLabels = table
         const data = this.calculateBacktestHistory(this.tradesData, uniqueData)
         this.TIMHistoryList = data
-        this.calculateZScore(this.tradesData, periodArray)
+        this.calculateZScore(this.tradesData, uniqueData)
         //this.resetTable()
       } catch (error) {
         console.log(error)
