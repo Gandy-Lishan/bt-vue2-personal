@@ -206,16 +206,17 @@ import {
 const uniqWith = require('lodash/uniqWith')
 const isEqual = require('lodash/isEqual')
 export default {
+  name: 'ExitWithCustomTIMFrame',
   data() {
     return {
       dialogDateVisible: false, // 弹框可见性
       entryDates: [{
-        value: '2023-5-9',
+        value: '2023-05-09',
         placeholder: 'select entry date1',
         readonly: false
       },
       {
-        value: '2023-5-10',
+        value: '2023-05-10',
         placeholder: 'select entry date2',
         readonly: false
       }], // 存储选择的日期数组
