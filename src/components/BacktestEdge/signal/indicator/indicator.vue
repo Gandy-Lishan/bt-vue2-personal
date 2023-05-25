@@ -1636,7 +1636,6 @@ export default {
 							}
 							// const trimmedRow = row.data.map((value) => value.trim())
 							const dateCell = row.data[dateColumnIndex]
-							console.log('日期格式', dateCell)
 							const numFormatRegex = /^\d+(\.\d{1,2})?$/
 							const numColumnIndex = 'Close' // Change this to the index of the column you want to check
 							const numCell = row.data[numColumnIndex]
