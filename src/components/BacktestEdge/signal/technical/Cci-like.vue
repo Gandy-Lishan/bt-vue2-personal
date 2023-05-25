@@ -1,7 +1,10 @@
 // CCI-Like input box
 <template>
 	<div class="senti-container">
-		<p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p>
+		<p class="hint">
+			Hint: To change the indicator settings, right click the indicator in the
+			above chart and select "Edit Setting"
+		</p>
 		<el-form :model="tech" :rules="rules" ref="cciForm">
 			<div class="condition-container">
 				<el-form-item>
@@ -29,10 +32,7 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="value">
-						<el-input
-							v-model="tech.value"
-							placeholder="Input Value"
-						></el-input>
+						<el-input v-model="tech.value" placeholder="Input Value"></el-input>
 					</el-form-item>
 				</div>
 			</div>
@@ -53,11 +53,10 @@ export default {
 		direction: String,
 		exitItemCheck: Boolean,
 		relation: [String, Number],
-score: [String, Number],
-period: [String, Number],
-delay_bars: [String, Number],
-		tabLength: Number,
-
+		score: [String, Number],
+		period: [String, Number],
+		delay_bars: [String, Number],
+		tabLength: Number
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
@@ -92,11 +91,11 @@ delay_bars: [String, Number],
 			conditionRadio: ' Indicator Value',
 			description: '',
 			editTechVal: '',
-			rules: { value: [{ validator: validateValue, trigger: 'blur' }] },
+			rules: { value: [{ validator: validateValue, trigger: 'blur' }] }
 		}
 	},
 	methods: {
-		clearForm() {		
+		clearForm() {
 			this.$refs.cciForm.resetFields()
 		},
 		// Clear form authentication
@@ -107,71 +106,74 @@ delay_bars: [String, Number],
 			let criteria = ''
 			let direction = ''
 			let commentDes
-			if(index === 0) {
-			if (this.criteria == 'entry') {
-				criteria = 'E:'
-				direction = this.direction + ':'
-			}
-			if (this.criteria == 'exit') {
-				criteria = 'X:'
-				if (this.direction == 'Long') {
-					direction = 'Close:'
-				} else if (this.direction == 'Short') {
-					direction = 'Cover:'
+			if (index === 0) {
+				if (this.criteria == 'entry') {
+					criteria = 'E:'
+					direction = this.direction + ':'
 				}
-			}
-			let relation = ''
+				if (this.criteria == 'exit') {
+					criteria = 'X:'
+					if (this.direction == 'Long') {
+						direction = 'Close:'
+					} else if (this.direction == 'Short') {
+						direction = 'Cover:'
+					}
+				}
+				let relation = ''
 				let score = ''
 				let period = ''
 				switch (this.relation) {
 					case 0:
-						relation = "Only Risk;"
-						break;
+						relation = 'Only Risk;'
+						break
 					case 1:
 						relation = "Single Condition;"
 						break;
 					case 2:
 						relation = "SameBar Multi Condition;"
 						score = 'Score: ' + this.score + ';'
-						break;
+						break
 					case 3:
 						relation = "TimeOrder Multi Condition;"
 						period = 'Period: ' + this.period + ';'
-						break;
+						break
 					default:
-						break;
+						break
 				}
-				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars + ';':''
-				commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
-				 if(this.relation != 1) {
-					 let desObj = {}
+				let delay_bars = this.delay_bars
+					? 'Delay Bars: ' + this.delay_bars + ';'
+					: ''
+				commentDes = `${criteria} ${direction} ${relation} ${
+					score ? score : ''
+				} ${period ? period : ''} ${delay_bars}`
+				if (this.relation != 1) {
+					let desObj = {}
 					desObj.criteria = this.criteria
 					desObj.description = commentDes
 					desObj.index = index
 					this.$store.commit('saveDescription', desObj)
-				 }  
-				   
+				}
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
 			let period = this.tech.period ? this.tech.period : ''
 			let condition = this.conditions[this.tech.condition].label
 			this.description = `${techVal} ${period} ${condition} ${this.tech.value}`
-				let desObj = {}
-				desObj.criteria = this.criteria
-					if(this.relation != 1) {
-					desObj.description = this.description
-					desObj.index = index + 1
-					}
-					if(this.relation == 1) {
-						desObj.description = commentDes+ this.description
-						desObj.index = 0
-					}
-				this.$store.commit('saveDescription', desObj)
+			let desObj = {}
+			desObj.criteria = this.criteria
+			if (this.relation != 1) {
+				desObj.description = this.description
+				desObj.index = index + 1
+			}
+			if (this.relation == 1) {
+				desObj.description = commentDes + this.description
+				desObj.index = 0
+			}
+			this.$store.commit('saveDescription', desObj)
 		},
 		saveCondition(index) {
 			let checked = true
-						if(this.exitItemCheck) {
-				return checked = true
+			if (this.exitItemCheck) {
+				return (checked = true)
 			}
 			let validForm
 			this.$refs.cciForm.validate((valid) => {
@@ -235,12 +237,12 @@ delay_bars: [String, Number],
 		flex-wrap: wrap;
 	}
 }
-	.hint{
-    position: absolute;
-    font-size: 0.7rem;
-    color: black !important;
-    top: 74px;
-    left: 231px;
-    font-weight: 300;
+.hint {
+	position: absolute;
+	font-size: 0.7rem;
+	color: black !important;
+	top: 74px;
+	left: 231px;
+	font-weight: 300;
 }
 </style>

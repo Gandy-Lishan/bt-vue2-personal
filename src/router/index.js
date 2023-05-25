@@ -20,9 +20,16 @@ const router = new Router({
 	mode: 'history',
 	routes: [
 		{ path: '/', redirect: '/home' },
-		{ path: '/home', component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
+		{ path: '/home', component: resolve => require(['@/components/BacktestEdge/index.vue'], resolve),
+		redirect: '/home/backtester',
 	children: [
-		{path: '/home/backtests', component: resolve => require(['@/components/BacktestEdge/Backtests'], resolve)}
+		{path: '/home/backtester', name:'backtester',component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
+	children: [
+		{path: '/home/brainstorm', name:'brainstorm',component: resolve => require(['@/components/BacktestEdge/Brainstorm/index.vue'], resolve), redirect: '/home/brainstorm/exit_with_custom_TIM_frame',children: [
+			{path: '/home/brainstorm/exit_with_custom_TIM_frame', name: 'ExitWithCustomTIMFrame',component: resolve => require(['@/components/BacktestEdge/Brainstorm/ExitWithCustomTIMFrame.vue'], resolve)},
+		]}
+	]},
+		{ path: '/home/strategy', name:'strategy',component: resolve => require(['@/components/BacktestEdge/Strategy.vue'], resolve) },
 	] },
 		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
 		// { path: '/home', component: () => import(/* webpackChunkName: "Home" */ "@/components/BacktestEdge/Home.vue") },
@@ -37,75 +44,75 @@ router.beforeEach(async (to, from, next) => {
 	//  开发环境无法判断环境变量
 	// if(process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined) loginUrl = 'https://sentdevsite.com/login'
 	// 先判断有无 sentimen_session
-	if(Cookies.isKey('sentimen_session')) {
+	if (Cookies.isKey('sentimen_session')) {
 		// 删除 devbt2Userid
 		Cookies.remove('devbt2Userid')
-	}else{
+	} else {
 		// 判断 url 有无 userid
-		if(getQueryVariable('userid')) Cookies.set('devbt2Userid', getQueryVariable('userid'))
+		if (getQueryVariable('userid')) Cookies.set('devbt2Userid', getQueryVariable('userid'))
 	}
 	// 当有 sentimen_session 或 devbt2Userid 时才能发请求
-	if(Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
-			//set 10 sec as default,However, some time-consuming requests are processed separately
-			axios.post('/dev/user/',null,{timeout:10000, withCredentials: true})
+	if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
+		//set 10 sec as default,However, some time-consuming requests are processed separately
+		axios.post('/dev/user/', null, { timeout: 10000, withCredentials: true })
 			.then((res) => {
 				console.log('lishan res', res)
-				if(res.status == 200) {
-					store.commit('setUserRole', {'is_admin':res.data.is_admin,'role':res.data.userid})
-					if(getQueryVariable('userid')) window.location.href = location.origin // 去掉？后面的部分
+				if (res.status == 200) {
+					store.commit('setUserRole', { 'is_admin': res.data.is_admin, 'role': res.data.userid })
+					if (getQueryVariable('userid')) window.location.href = location.origin // 去掉？后面的部分
 					next()
-				}else {throw Error('Status code error')}
+				} else { throw Error('Status code error') }
 			})
 			.catch((error) => {
 				console.error(error)
-				switch(error?.response?.status){
+				switch (error?.response?.status) {
 					case 401:
 						alert('No permission')
-					break;
+						break;
 					case 403:
 						alert('Authentication expired')
-					break;
+						break;
 					case 404:
 						alert('User does not exist')
-					break;
+						break;
 					case 500:
 						alert('Internal Server Error')
 
-					break;
+						break;
 					default:
 						alert('Unknown error')
 				}
 				window.location.href = loginUrl
 			})
-	}else{
+	} else {
 		alert('No permission')
 
 		window.location.href = loginUrl
 	}
 })
 
-async function initiateIndicatorList(){
+async function initiateIndicatorList() {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	const res = await getIndicatorsList()
 	let allSymbolsList = res.data
 	const resStocks = await getStocksList()
 	let stocksList = resStocks.data
-	store.commit('getStocksList',stocksList)
+	store.commit('getStocksList', stocksList)
 	const resIndexs = await getIndexsList()
 	let indexsList = resIndexs.data
-	store.commit('getIndexsList',indexsList)
+	store.commit('getIndexsList', indexsList)
 
 	let newAllSymbolsList = []
-	for(var i=0;i<allSymbolsList.length;i++){
+	for (var i = 0; i < allSymbolsList.length; i++) {
 		let item = allSymbolsList[i]
-		if(stocksList.find((j)=>j.stock==item.url)){
+		if (stocksList.find((j) => j.stock == item.url)) {
 			let newName = item.url + ' Optix'
 			newAllSymbolsList.push({
 				chart_name: newName,
 				url: item.url,
 				updated: item.updated
 			})
-		}else{
+		} else {
 			newAllSymbolsList.push(allSymbolsList[i])
 		}
 	}

@@ -52,6 +52,7 @@ export default new Vuex.Store({
 						sentimentIndicator: '',
 						technicalIndicator: '',
 						usersOwnIndicator: '',
+						symbolIndicator: ''
 					}
 				]
 			},
@@ -60,7 +61,7 @@ export default new Vuex.Store({
 				score: 1,
 				signals_in_market: 1,
 				delay_bars: 0,
-				signals: [{ sentimentIndicator: '', technicalIndicator: '', usersOwnIndicator: '', riskIndicator: ''}]
+				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', symbolIndicator: '', usersOwnIndicator: ''}]
 			}
 		},
 		riskDescription: '',
@@ -93,7 +94,17 @@ export default new Vuex.Store({
 		sentimentIndicatorList: [],
 		backtestNameList: [],
 		formateTechnicalList: [],
-		riskControl: true,
+		riskControl: 'true',
+		// read only
+		symbolConditions : [
+			{label:'Symbol Open',field:'Open'},
+			{label:'Symbol High',field:'High'},
+			{label:'Symbol Low',field:'Low'},
+			{label:'Symbol Close',field:'Close'},
+			{label:'Symbol Volume',field:'Volume'},
+		],
+		// a status before symbol is loaded as a study
+		beforeCalculateNewConditions: false, 
 		is_admin: false,
 		role: '',
 		usersOwnEntryFileHash: Array(5).fill(''),
@@ -102,9 +113,15 @@ export default new Vuex.Store({
 	getters: {
 		getExtremeValue: (state) => {
 			return state.extremeValue
-		}
+		},
+		getBeforeCalculateNewConditions: (state) => {
+			return state.beforeCalculateNewConditions
+		},
 	},
 	mutations: {
+		envokeBeforeCalculateNewConditions(state,val){
+			state.beforeCalculateNewConditions = val
+		},
 		/**
 		 * Sets up a mutations to store MA period when editting MA study to make sure the MA period is the same in chart and form 
 		 */
@@ -349,7 +366,6 @@ export default new Vuex.Store({
 					state.backtestInfo[key] = obj[key]
 				}
 			}
-			console.log("setBd",state.backtestInfo);	
 		},
 		deleteIndicator(state, val) {
 			try {
@@ -358,6 +374,7 @@ export default new Vuex.Store({
 			state.backtestInfo[val.criteria].signals[val.index].technicalIndicator =
 				''
 			state.backtestInfo[val.criteria].signals[val.index].usersOwnIndicator =
+			state.backtestInfo[val.criteria].signals[val.index].symbolIndicator =
 			''
 			state.backtestInfo.exit.signals[val.index].riskIndicator =
 				''
@@ -368,6 +385,10 @@ export default new Vuex.Store({
 		},
 		getTechValue(state, obj) {
 			state.backtestInfo[obj.criteria].signals[obj.index].technicalIndicator =
+				obj.value
+		},
+		getSymValue(state, obj) {
+			state.backtestInfo[obj.criteria].signals[obj.index].symbolIndicator =
 				obj.value
 		},
 		getRiskValue(state, obj) {
@@ -388,6 +409,8 @@ export default new Vuex.Store({
 			state.backtestInfo[obj.criteria].signals[obj.index] = {}
 			state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator =
 				''
+			state.backtestInfo[obj.criteria].signals[obj.index].symbolIndicator =
+				''
 			state.backtestInfo[obj.criteria].signals[obj.index].technicalIndicator =
 				''
 			state.backtestInfo[obj.criteria].signals[obj.index].usersOwnIndicator = ''
@@ -399,7 +422,8 @@ export default new Vuex.Store({
 				{
 					sentimentIndicator: '',
 					technicalIndicator: '',
-					usersOwnIndicator: ''
+					usersOwnIndicator: '',
+					symbolIndicator: '',
 				}
 			]
 		},
@@ -410,7 +434,8 @@ export default new Vuex.Store({
 					sentimentIndicator: '',
 					technicalIndicator: '',
 					riskIndicator: '',
-					usersOwnIndicator: ''
+					usersOwnIndicator: '',
+					symbolIndicator: '',
 				}
 			]
 		},
@@ -429,7 +454,8 @@ export default new Vuex.Store({
 						{
 							sentimentIndicator: '',
 							technicalIndicator: '',
-							usersOwnIndicator: ''
+							usersOwnIndicator: '',
+							symbolIndicator: '',
 						}
 					]
 				},
@@ -438,7 +464,7 @@ export default new Vuex.Store({
 					score: 1,
 					signals_in_market: 1,
 					delay_bars: 0,
-					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', usersOwnIndicator: '' }]
+					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', symbolIndicator: '', usersOwnIndicator: '' }]
 				}
 			}
 		},
@@ -450,18 +476,20 @@ export default new Vuex.Store({
 			let index = obj.index
 			delete obj.criteria
 			delete obj.index
-			let init = {sentimentIndicator: '', technicalIndicator: '',riskIndicator: '', usersOwnIndicator: ''}
+			let init = {sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', symbolIndicator: '', usersOwnIndicator: ''}
 			init.sentimentIndicator = state.backtestInfo[criteria].signals[index].sentimentIndicator
 			init.technicalIndicator = state.backtestInfo[criteria].signals[index].technicalIndicator
 			init.usersOwnIndicator = state.backtestInfo[criteria].signals[index].usersOwnIndicator
+			init.symbolIndicator = state.backtestInfo[criteria].signals[index].symbolIndicator
+
 			if(criteria === 'exit') {
-			init.riskIndicator = state.backtestInfo.exit.signals[index].riskIndicator
+				init.riskIndicator = state.backtestInfo.exit.signals[index].riskIndicator
 			}
 			if(criteria == 'exit') {
-			state.backtestInfo.exit.signals[index] = Object.assign({}, init)
+				state.backtestInfo.exit.signals[index] = Object.assign({}, init)
 			}else if(criteria == 'entry') {
 				init.riskIndicator = ''
-			state.backtestInfo.entry.signals[index] = Object.assign({}, init)
+				state.backtestInfo.entry.signals[index] = Object.assign({}, init)
 			}
 			for(let key in obj) {
 				state.backtestInfo[criteria].signals[index][key] = obj[key]
@@ -492,7 +520,8 @@ export default new Vuex.Store({
 						{
 							sentimentIndicator: '',
 							technicalIndicator: '',
-							usersOwnIndicator: ''
+							usersOwnIndicator: '',
+							symbolIndicator: ''
 						}
 					]
 				},
@@ -501,7 +530,7 @@ export default new Vuex.Store({
 					score: 1,
 					signals_in_market: 1,
 					delay_bars: 0,
-					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', usersOwnIndicator: '' }]
+					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', symbolIndicator: '', usersOwnIndicator: '' }]
 				}
 			}
 			state.backtestInfo.entry =  {
@@ -513,7 +542,8 @@ export default new Vuex.Store({
 					{
 						sentimentIndicator: '',
 						technicalIndicator: '',
-						usersOwnIndicator: ''
+						usersOwnIndicator: '',
+						symbolIndicator: ''
 					}
 				]
 			}
@@ -522,7 +552,7 @@ export default new Vuex.Store({
 				score: 1,
 				signals_in_market: 1,
 				delay_bars: 0,
-				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', usersOwnIndicator: '' }]
+				signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', symbolIndicator: '', usersOwnIndicator: '' }]
 			}
 			state.backtestInfo.entry_description = []
 			state.backtestInfo.exit_description = []
@@ -546,9 +576,11 @@ export default new Vuex.Store({
 			let newEntrySignal = {
 				sentimentIndicator: '',
 				technicalIndicator: '',
+				symbolIndicator: '',
 				usersOwnIndicator: ''
 			}
-			let newExitSignal = { sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', usersOwnIndicator: '' }
+			let newExitSignal = { sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', symbolIndicator: '', usersOwnIndicator: '' }
+
 			if(obj.criteria === 'entry') {
 				state.backtestInfo[obj.criteria].signals[obj.index] = newEntrySignal
 			}
