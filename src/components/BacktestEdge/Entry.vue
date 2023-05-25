@@ -4,7 +4,6 @@
 		<div class="signal-option-box">
 			<div class="entry-title-box">
 				<p class="criteria-title">Entry Criteria</p>
-				
 				<el-tooltip effect="dark" placement="top" style="diaplay: inline">
 					<span slot="content"
 						>Set the criteria/criterias which trigger the backtest entry
@@ -746,7 +745,6 @@ export default {
 		getIndicatorRadio(obj) {
 			this.indicatorRadio = obj.value
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
-			console.log('getIndicatorRadio',this.indicatorValArr)
 		},
 		addEntrySignalLength() {
 			if (this.relation == 2 || this.relation == 3) {
