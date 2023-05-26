@@ -301,6 +301,9 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 .backtest_container .dateBox .el-form-item .el-form-item__label {
   margin-left: 40px;
 }
+.result-container .dateBox .el-form-item .el-form-item__label{
+  margin-left: 0px;
+}
 .backtest_container .nameBox input[type="text"]:last-child {
   width: 80%;
 }
