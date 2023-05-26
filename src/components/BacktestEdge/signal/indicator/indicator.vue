@@ -279,6 +279,7 @@ export default {
       si: {
         sentimentIndicator: '',
         technicalIndicator: '',
+        symbolIndicator: '',
         riskIndicator: '',
         userIndicator: ''
       },
@@ -374,6 +375,7 @@ export default {
       if (
         this.si.sentimentIndicator == '' &&
         this.si.technicalIndicator == '' &&
+        this.si.symbolIndicator == '' &&
         this.si.riskIndicator == '' &&
         absoluteIndex == this.panelIndex
       ) {
@@ -392,7 +394,6 @@ export default {
                 value: CIQ.indicatorList[i].url
               })
             }
-
             // extract this statement from handleSentimentSelect
             let valObj = {}
             valObj.value = CIQ.indicatorList[i].chart_name
