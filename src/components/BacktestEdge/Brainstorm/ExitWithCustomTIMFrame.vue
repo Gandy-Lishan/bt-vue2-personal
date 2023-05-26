@@ -170,7 +170,6 @@
 		</div>
 		<el-button type="primary" class="run-button" @click="runTIM">Run</el-button>
 		<div class="history-container">
-      {{defaultTIMTableLabels}}
 			<el-skeleton :rows="6" :loading="loading" animated>
 				<template>
 					<el-table
@@ -622,7 +621,6 @@ export default {
           //鎷胯繘鍦轰环鏍煎拰鍓嶄竴澶╀綔姣旇緝
           let entryPrice = chartDataset[res].Open
           const transformData = this.transformData(periodArray)
-          console.log('transformData', transformData)
           let obj = {}
           transformData.map((item) => {
             let exitBar = chartDataset[res + item.value]
@@ -641,7 +639,7 @@ export default {
       }
       return backtestResult
     },
-      transformZScoreData(data) {
+    transformZScoreData(data) {
       return data.map((item) => {
         let timeframe =
           item.period > 1
