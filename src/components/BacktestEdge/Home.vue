@@ -111,6 +111,7 @@
 						@goBacktestResultForm="goBacktestResultForm"
 						@goToFavoritesForm="goToFavoritesForm"
 						@refFavoritesForm="refFavoritesForm"
+            @switchTab="switchTab"
 					></history
 				></el-tab-pane>
 				<el-tab-pane label="Results" name="third"
@@ -133,6 +134,7 @@
 						@goTobacktestSetupForm="goTobacktestSetupForm"
 						@goBacktestResultForm="goBacktestResultForm"
 						@goToFavoritesForm="goToFavoritesForm"
+            @switchTab="switchTab"
 					></favorite
 				></el-tab-pane>
 				<el-tab-pane label="Sample Backtests" name="fifth"
