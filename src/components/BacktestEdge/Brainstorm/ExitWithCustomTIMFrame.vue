@@ -422,7 +422,7 @@ export default {
         periodArray.forEach(item => {
           const isDuplicate = uniqueData.some(
             uniqueItem =>
-              uniqueItem.period === item.period && uniqueItem.timeframe === item.timeframe
+              uniqueItem.period == item.period && uniqueItem.timeframe == item.timeframe
           );
 
           if (!isDuplicate) {

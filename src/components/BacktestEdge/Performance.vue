@@ -703,13 +703,13 @@ export default {
       editTIMData: [
         {
           period: '1',
-          placeholder: 'input period1',
+          placeholder: 'input period',
           timeframe: 'Day',
           readonly: false
         },
         {
           period: '1',
-          placeholder: 'input period2',
+          placeholder: 'input period',
           timeframe: 'Week',
           readonly: false
         }
@@ -965,7 +965,19 @@ export default {
         }
         return item
       })
-      return data.map((item) => {
+      const uniqueData = [];
+      data.forEach(item => {
+          const isDuplicate = uniqueData.some(
+            uniqueItem =>
+              uniqueItem.period == item.period && uniqueItem.timeframe == item.timeframe
+          );
+
+          if (!isDuplicate) {
+            uniqueData.push(item);
+          }
+        });
+        console.log('数据去重', uniqueData)
+      return uniqueData.map((item) => {
         let timeframe =
           item.period > 1
             ? `${item.period} ${item.timeframe}s [%]`
@@ -1598,7 +1610,7 @@ export default {
       const newRow = {
         period: '1',
         timeframe: 'Day',
-        placeholder: `input period${this.editTIMData.length + 1}`,
+        placeholder: `input period`,
         readonly: false
       };
       this.editTIMData.push(newRow);
@@ -1669,8 +1681,8 @@ export default {
     },
     resetTable() {
       this.editTIMData = [
-        { period: '1', placeholder: 'input period1', timeframe: 'Day', readonly: false },
-        { period: '1', placeholder: 'input period2', timeframe: 'Week', readonly: false }
+        { period: '1', placeholder: 'input period', timeframe: 'Day', readonly: false },
+        { period: '1', placeholder: 'input period', timeframe: 'Week', readonly: false }
       ]
     },
     validateData(data) {
