@@ -1029,8 +1029,7 @@ export default {
       return backtestResult
     },
     transformZScoreData(data) {
-      let obj = {}
-      data.map((item) => {
+      return data.map((item) => {
         let timeframe =
           item.period > 1
             ? `${item.period} ${item.timeframe}s`
@@ -1049,9 +1048,8 @@ export default {
           default:
             break
         }
-        obj[value] = timeframe
+        return { timeframe, period: item.period, value }
       })
-      return obj
     },
     calculateZScore(dataSet, periodArray) {
       /*
@@ -1059,14 +1057,14 @@ export default {
       */
       // masterData涓嶅寘鍚玦ndicator value,闃叉鏃爋hlcv鐨勬儏鍐
       let period_dict = this.transformZScoreData(periodArray)
+      console.log(period_dict,periodArray)
       let quotes = CIQ.stxx.chart.masterData
-      const period_list = Object.keys(period_dict).map(Number)
       const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
-      for (var i in period_list) {
+      for (var i in period_dict) {
         quotes = this.generate_period_data(
-          period_dict,
+          period_dict[i].timeframe,
           quotes,
-          period_list[i],
+          period_dict[i].value,
           direction
         )
       }
@@ -1105,45 +1103,45 @@ export default {
         max_loss_list = [],
         max_gain_list = [],
         z_score_list = []
-      for (var i in period_list) {
+      for (var i in period_dict) {
         let temp_median = this.calculate_median(
-          used_quotes.map((obj) => obj[period_dict[period_list[i]]])
+          used_quotes.map((obj) => obj[period_dict[i].timeframe])
         )
         median_list.push(temp_median)
         positive_list.push(
           this.calculate_win_rate(
-            used_quotes.map((obj) => obj[period_dict[period_list[i]]])
+            used_quotes.map((obj) => obj[period_dict[i].timeframe])
           )
         )
         if (direction == 'Short') {
           max_loss_list.push(
             this.calculate_median(
-              used_quotes.map((obj) => obj['MaxGain' + period_list[i]])
+              used_quotes.map((obj) => obj['MaxGain' + period_dict[i].value])
             )
           )
           max_gain_list.push(
             this.calculate_median(
-              used_quotes.map((obj) => obj['MaxLoss' + period_list[i]])
+              used_quotes.map((obj) => obj['MaxLoss' + period_dict[i].value])
             )
           )
         } else {
           max_loss_list.push(
             this.calculate_median(
-              used_quotes.map((obj) => obj['MaxLoss' + period_list[i]])
+              used_quotes.map((obj) => obj['MaxLoss' + period_dict[i].value])
             )
           )
           max_gain_list.push(
             this.calculate_median(
-              used_quotes.map((obj) => obj['MaxGain' + period_list[i]])
+              used_quotes.map((obj) => obj['MaxGain' + period_dict[i].value])
             )
           )
         }
 
         let temp_std = this.calculate_std(
-          used_quotes.map((obj) => obj[period_dict[period_list[i]]])
+          used_quotes.map((obj) => obj[period_dict[i].timeframe])
         )
         let temp_mean = this.calculate_mean(
-          quotes.map((obj) => obj[period_dict[period_list[i]]])
+          quotes.map((obj) => obj[period_dict[i].timeframe])
         )
         z_score_list.push(
           parseFloat(
@@ -1163,13 +1161,12 @@ export default {
         //  console.log('max_gain_list',max_gain_list)
         //  console.log('z_score_list',z_score_list)
       }
-      console.log('activeTIM', this.activeTIM)
-      const res = Object.values(period_dict).map((val, i) => ({
-        Period: val,
+      const res = period_dict.map((val, i) => ({
+        Period: val['timeframe'],
         Median: median_list[i],
-        '% Positive': positive_list[i] * 100 + ' %',
-        'Avg Max Loss': max_loss_list[i],
-        'Avg Max Gain': max_gain_list[i],
+        '% Positive': isNaN(positive_list[i])? '' : positive_list[i]* 100 + ' %',
+        'Avg Max Loss': median_list[i]?max_loss_list[i]:NaN,
+        'Avg Max Gain': median_list[i]?max_gain_list[i]:NaN,
         'Z-Score': z_score_list[i]
       }))
       if (this.activeTIM == 'first') {
@@ -1203,8 +1200,13 @@ export default {
       return std
     },
     calculate_win_rate(arr) {
+      arr = arr.filter(function (x) {
+        return !isNaN(x) // 鍓旈櫎NaN鍊約
+      })
+      if (arr.length == 0) return NaN
+
       let return_series = arr.map((x) => (x > 0 ? 1 : 0))
-      return parseFloat(this.calculate_mean(return_series).toFixed(1))
+      return parseFloat(this.calculate_mean(return_series).toFixed(2))
     },
     calculate_mean(arr) {
       if (arr.length == 0) return NaN
@@ -1222,7 +1224,7 @@ export default {
         ).toFixed(1)
       )
     },
-    generate_period_data(period_dict, quotes, period, direction) {
+    generate_period_data(name, quotes, period, direction) {
       const field = 'Open'
       quotes = quotes.map((row, i) => {
         if (i < quotes.length - period) {
@@ -1239,13 +1241,13 @@ export default {
           return {
             ...row,
             [field + period]: quotes[i + period][field],
-            [period_dict[period]]: change == Infinity ? 0 : change
+            [name]: change == Infinity ? 0 : change
           }
         } else {
           return {
             ...row,
             [field + period]: NaN,
-            [period_dict[period]]: NaN
+            [name]: NaN
           }
         }
       })
@@ -1629,7 +1631,7 @@ export default {
           CIQ.nprogress.done()
           return
         }
-        console.log(periodArray)
+        console.log('saveTable',periodArray)
         const uniqueData = [];
         periodArray.forEach(item => {
           const isDuplicate = uniqueData.some(
@@ -1652,7 +1654,7 @@ export default {
         this.defaultTIMTableLabels = table
         const data = this.calculateBacktestHistory(this.tradesData, uniqueData)
         this.TIMHistoryList = data
-        this.calculateZScore(this.tradesData, periodArray)
+        this.calculateZScore(this.tradesData, uniqueData)
         //this.resetTable()
       } catch (error) {
         console.log(error)
@@ -1702,6 +1704,7 @@ export default {
         this.editTIMData = []
         this.defaultTIMTableLabels = ['Entry Date', '1 Day [%]', '1 Week [%]']
         this.TIMHistoryList = []
+        this.TIMResult_quotes = []
       }
     }
   }

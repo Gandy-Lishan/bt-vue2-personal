@@ -917,7 +917,7 @@ export default {
 						let symbol = vm.$refs.symbolChild[index].saveCondition(index)
 						if(!symbol) {
 						vm.$message({
-						message: 'Please check that the #' + (index+1) + ' entry panel field is filled in correctly',
+						message: 'Please check that the #' + (index+1) + ' exit panel field is filled in correctly',
 						type: 'error'
 						})
 						} 
@@ -1158,7 +1158,7 @@ export default {
 					this.techIndiObj[j] = ''
 				}
 				if (data.exit.signals[j].analysis === 'Symbol') {
-					this.indicatorValArr[j] = data.entry.signals[j].indicator
+					this.indicatorValArr[j] = data.exit.signals[j].indicator
 					this.indicatorRadioArr.splice(j, 1, 'symbol')
 					this.indicatorRadio = 'symbol'
 					this.techIndiObj[j] = ''

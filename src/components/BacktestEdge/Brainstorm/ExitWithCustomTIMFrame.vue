@@ -193,6 +193,43 @@
 				</template>
 			</el-skeleton>
 		</div>
+    <div class="zscore-container">
+      <el-skeleton :rows="2" :loading="loading" animated>
+        <template>
+          <el-table
+            :data="TIMResult_quotes"
+            :show-header="false"
+            stripe
+            style="width: 100%; height: 100%"
+          >
+            <el-table-column prop="property" label="Property">
+            </el-table-column>
+
+            <template v-for="column in periodsTIM">
+              <el-table-column
+                :key="column.period"
+                :label="column.period"
+                :prop="column.period"
+              >
+                <template slot-scope="scope">
+                  <p class="tableText">
+                    {{
+                      !Number.isNaN(scope.row[column.period])
+                        ? typeof scope.row[column.period] == 'string'
+                          ? scope.row[column.period]
+                          : parseFloat(
+                              scope.row[column.period]
+                            ).toFixed(1)
+                        : null
+                    }}
+                  </p>
+                </template>
+              </el-table-column>
+            </template>
+          </el-table>
+        </template>
+      </el-skeleton>
+    </div>
 	</div>
 </template>
 
@@ -220,7 +257,6 @@ export default {
         placeholder: 'select entry date',
         readonly: false
       }], // 存储选择的日期数组
-      tradesData: [],
       showTable: false,
       editTIMData: [
         {
@@ -236,9 +272,10 @@ export default {
           readonly: false
         }
       ],
-      activeTIM: 'first',
       defaultTIMTableLabels: [],
       TIMHistoryList: [],
+      TIMResult_quotes: [],
+      periodsTIM: [],
       symbol: 'SPY',
       options: [],
       symbolList: [],
@@ -261,6 +298,46 @@ export default {
     }
   },
   methods: {
+    generate_table_data() {
+      this.generatePeriods()
+
+      // 鎻愬彇灞炴€т俊鎭
+      let keys = Object.keys(this.TIMResult_quotes[0])
+      keys.splice(keys.indexOf('Period'), 1)
+      let result = []
+      for (let i = 0; i < keys.length; i++) {
+        result.push({
+          property: keys[i]
+        })
+      }
+      // 灏Periods 淇℃伅鎻掑叆鍒data 涓紝灏data 缁戝畾鍒table 涓
+      for (let i = 0; i < this.periodsTIM.length; i++) {
+        for (let j = 0; j < result.length; j++) {
+          this.TIMResult_quotes.forEach((obj) => {
+            if (obj.Period === this.periodsTIM[i].period) {
+              result[j][this.periodsTIM[i].period] = obj[result[j].property]
+            }
+          })
+        }
+      }
+      this.TIMResult_quotes = result
+    },
+    generatePeriods() {
+      let quotes = []
+      quotes = this.TIMResult_quotes
+      let set = new Set()
+      for (let i = 0; i < quotes.length; i++) {
+        set.add(quotes[i].Period)
+      }
+      let values = Array.from(set)
+      let columns = []
+      for (let i = 0; i < values.length; i++) {
+        columns.push({
+          period: values[i]
+        })
+      }
+      this.periodsTIM = columns
+    },
     openDateDialog() {
       this.dialogDateVisible = true;
     },
@@ -365,7 +442,7 @@ export default {
         const data = this.calculateBacktestHistory(this.entryDates, uniqueData)
         this.TIMHistoryList = data
         console.log('data', data)
-        // this.calculateZScore(this.tradesData, periodArray)
+        this.calculateZScore(this.entryDates, uniqueData)
         //this.resetTable()
       } catch (error) {
         console.log(error)
@@ -577,7 +654,6 @@ export default {
           //鎷胯繘鍦轰环鏍煎拰鍓嶄竴澶╀綔姣旇緝
           let entryPrice = chartDataset[res].Open
           const transformData = this.transformData(periodArray)
-          console.log('transformData', transformData)
           let obj = {}
           transformData.map((item) => {
             let exitBar = chartDataset[res + item.value]
@@ -596,6 +672,291 @@ export default {
       }
       return backtestResult
     },
+    transformZScoreData(data) {
+      return data.map((item) => {
+        let timeframe =
+          item.period > 1
+            ? `${item.period} ${item.timeframe}s`
+            : `${item.period} ${item.timeframe}`
+        let value
+        switch (item.timeframe) {
+          case 'Day':
+            value = Number(item.period)
+            break
+          case 'Week':
+            value = Number(item.period) * 5
+            break
+          case 'Month':
+            value = Number(item.period) * 21
+            break
+          default:
+            break
+        }
+        return { timeframe, period: item.period, value }
+      })
+    },
+    calculateZScore(dataSet, periodArray) {
+      /*
+      periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
+      */
+      // masterData涓嶅寘鍚玦ndicator value,闃叉鏃爋hlcv鐨勬儏鍐
+      let period_dict = this.transformZScoreData(periodArray)
+      let quotes = CIQ.stxx.chart.masterData
+      const direction = this.direction
+      for (var i in period_dict) {
+        quotes = this.generate_period_data(
+          period_dict[i].timeframe,
+          quotes,
+          period_dict[i].value,
+          direction
+        )
+      }
+      console.log('trades', dataSet)
+      console.log('鍘熻绠楀悗鐨勬暟鎹', quotes)
+      // 鏁版嵁鍒囩墖
+      // quotes = quotes.filter((x) => {
+      //   return this.start_date.getTime() <= x.DT.getTime()
+      // })
+      //鎶婁氦鏄撳垪琛ㄨ浆鎹㈡垚鏃堕棿鎴
+      let dataTimeList = []
+      for (var data in dataSet) {
+        var datatime = new Date(dataSet[data].value)
+        var offset = datatime.getTimezoneOffset() * 60 * 1000
+        var entryDate = new Date(
+          datatime.setTime(datatime.getTime() + offset)
+        ).getTime()
+        dataTimeList.push(entryDate)
+      }
+      let used_quotes = quotes.filter(
+        (x) => dataTimeList.indexOf(x.DT.getTime()) != -1
+      )
+      console.log('鍒囩墖骞惰繃婊ら潪浜ゆ槗鏃ユ湡鐨勬暟鎹', used_quotes)
+      //鏇挎崲NaN
+      quotes = quotes.map((quote) => {
+        const updatedQuote = {}
+        for (const [key, value] of Object.entries(quote)) {
+          updatedQuote[key] = isNaN(value) ? -100 : value
+        }
+        return updatedQuote
+      })
+
+      let median_list = [],
+        positive_list = [],
+        max_loss_list = [],
+        max_gain_list = [],
+        z_score_list = []
+      for (var i in period_dict) {
+        let temp_median = this.calculate_median(
+          used_quotes.map((obj) => obj[period_dict[i].timeframe])
+        )
+        median_list.push(temp_median)
+        positive_list.push(
+          this.calculate_win_rate(
+            used_quotes.map((obj) => obj[period_dict[i].timeframe])
+          )
+        )
+        if (direction == 'Short') {
+          max_loss_list.push(
+            this.calculate_median(
+              used_quotes.map((obj) => obj['MaxGain' + period_dict[i].value])
+            )
+          )
+          max_gain_list.push(
+            this.calculate_median(
+              used_quotes.map((obj) => obj['MaxLoss' + period_dict[i].value])
+            )
+          )
+        } else {
+          max_loss_list.push(
+            this.calculate_median(
+              used_quotes.map((obj) => obj['MaxLoss' + period_dict[i].value])
+            )
+          )
+          max_gain_list.push(
+            this.calculate_median(
+              used_quotes.map((obj) => obj['MaxGain' + period_dict[i].value])
+            )
+          )
+        }
+
+        let temp_std = this.calculate_std(
+          used_quotes.map((obj) => obj[period_dict[i].timeframe])
+        )
+        let temp_mean = this.calculate_mean(
+          quotes.map((obj) => obj[period_dict[i].timeframe])
+        )
+        z_score_list.push(
+          parseFloat(
+            (
+              (temp_median - temp_mean) /
+              (temp_std / Math.sqrt(used_quotes.length))
+            ).toFixed(1)
+          )
+        )
+
+        //  console.log(period_dict[period_list[i]] + ': ',used_quotes.map(obj=>obj[period_dict[period_list[i]]]))
+
+        //  console.log('positive_list',positive_list)
+        //  console.log("MaxLoss" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxLoss" + period_list[i]]))
+        //  console.log("MaxGain" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxGain" + period_list[i]]))
+        //  console.log('max_loss_list',max_loss_list)
+        //  console.log('max_gain_list',max_gain_list)
+        //  console.log('z_score_list',z_score_list)
+      }
+      const res = period_dict.map((val, i) => ({
+        Period: val['timeframe'],
+        Median: median_list[i],
+        '% Positive': isNaN(positive_list[i])? '' : positive_list[i]* 100 + ' %',
+        'Avg Max Loss': median_list[i]?max_loss_list[i]:NaN,
+        'Avg Max Gain': median_list[i]?max_gain_list[i]:NaN,
+        'Z-Score': z_score_list[i]
+      }))
+
+      this.TIMResult_quotes = res
+      this.generate_table_data()
+    },
+    calculate_std(arr) {
+      arr = arr.filter(function (x) {
+        return !isNaN(x) // 鍓旈櫎NaN鍊約
+      })
+      if (arr.length == 0) return NaN
+
+      const mean =
+        arr.reduce(function (a, b) {
+          return a + b
+        }) / arr.length // 璁＄畻骞冲潎鏁
+      const deviationArr = arr.map(function (x) {
+        return Math.pow(x - mean, 2)
+      })
+
+      const variance =
+        deviationArr.reduce(function (a, b) {
+          return a + b
+        }) /
+        (deviationArr.length - 1) // 璁＄畻鏂瑰樊锛屼娇鐢ㄨ嚜鐢卞害=1
+
+      const std = Math.sqrt(variance) // 璁＄畻鏍囧噯宸
+      return std
+    },
+    calculate_win_rate(arr) {
+      arr = arr.filter(function (x) {
+        return !isNaN(x) // 鍓旈櫎NaN鍊約
+      })
+      if (arr.length == 0) return NaN
+
+      let return_series = arr.map((x) => (x > 0 ? 1 : 0))
+      return parseFloat(this.calculate_mean(return_series).toFixed(2))
+    },
+    calculate_mean(arr) {
+      if (arr.length == 0) return NaN
+      return arr.reduce((a, b) => a + b) / arr.length
+    },
+    calculate_median(arr) {
+      arr = arr.filter((n) => !isNaN(n))
+      if (arr.length == 0) return NaN
+      const mid = Math.floor(arr.length / 2)
+      const nums = [...arr].sort((a, b) => a - b)
+      return parseFloat(
+        (arr.length % 2 !== 0
+          ? nums[mid]
+          : (nums[mid - 1] + nums[mid]) / 2
+        ).toFixed(1)
+      )
+    },
+    generate_period_data(name, quotes, period, direction) {
+      const field = 'Open'
+      quotes = quotes.map((row, i) => {
+        if (i < quotes.length - period) {
+          //const change = parseFloat((100 * (quotes[i + period][field] / row[field] - 1)).toFixed(1))
+          const change = parseFloat(
+            (
+              ((direction == 'Short'
+                ? row[field] - quotes[i + period][field]
+                : quotes[i + period][field] - row[field]) /
+                row[field]) *
+              100
+            ).toFixed(1)
+          )
+          return {
+            ...row,
+            [field + period]: quotes[i + period][field],
+            [name]: change == Infinity ? 0 : change
+          }
+        } else {
+          return {
+            ...row,
+            [field + period]: NaN,
+            [name]: NaN
+          }
+        }
+      })
+      const minCloseArr = this.get_period_parm(
+        quotes.map((row) => row[field + period]),
+        'min',
+        period
+      )
+      const maxCloseArr = this.get_period_parm(
+        quotes.map((row) => row[field + period]),
+        'max',
+        period
+      )
+      quotes = quotes.map((row, i) => {
+        if (i >= period) {
+          const change = parseFloat(
+            (100 * (minCloseArr[i] / row[field] - 1)).toFixed(1)
+          )
+          return {
+            ...row,
+            ['MaxLoss' + period]: change == Infinity ? 0 : change
+          }
+        } else {
+          return {
+            ...row,
+            ['MaxLoss' + period]: NaN
+          }
+        }
+      })
+      quotes = quotes.map((row, i) => {
+        if (i >= period) {
+          const change = parseFloat(
+            (100 * (maxCloseArr[i] / row[field] - 1)).toFixed(1)
+          )
+          return {
+            ...row,
+            ['MaxGain' + period]: change == Infinity ? 0 : change
+          }
+        } else {
+          return {
+            ...row,
+            ['MaxGain' + period]: NaN
+          }
+        }
+      })
+
+      return quotes
+    },
+    get_period_parm(dataSeries, paramType, period) {
+      const typeDict = {
+        max: Math.max,
+        min: Math.min,
+        mean: (arr) => arr.reduce((a, b) => a + b) / arr.length,
+        sum: (arr) => arr.reduce((a, b) => a + b)
+      }
+
+      const dataArr = []
+
+      for (let i = 0; i < dataSeries.length; i++) {
+        if (i >= period) {
+          const tmpData = typeDict[paramType](
+            ...dataSeries.slice(i - period, i).filter((n) => !isNaN(n))
+          )
+          dataArr.push(Number(tmpData.toFixed(3)))
+        } else {
+          dataArr.push(NaN)
+        }
+      }
+      return dataArr
+    },
     runTIM() {
       this.saveTable()
     }
@@ -604,6 +965,9 @@ export default {
 </script>
 
 <style scoped>
+.zscore-container {
+	border-top: solid 3px #00000042 !important;
+}
 .add-date-button {
 	margin-top: 10px;
 }
