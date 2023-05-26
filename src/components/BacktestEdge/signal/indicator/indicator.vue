@@ -1455,19 +1455,16 @@ export default {
       // 发送请求删除服务器上的文件
       const hash = this.file_hash || file.hash
       const fileID = file.name.replace('.csv', '') + 'HASH' + hash
-      if (!hash) { this.fileList = []; return }
+      if (!hash) { this.$refs.upload.clearFiles(); this.fileList = []; return }
       try {
         await csvFileDelete(fileID)
-        // 在需要终止上传的地方调用 cancelToken.cancel() 方法
-        if (this.cancelToken) {
-          this.cancelToken.cancel()
-          console.log('取消上传')
-        }
         console.log('删除成功')
         const index = this.fileList.indexOf(file)
         if (index !== -1) {
           this.fileList.splice(index, 1)
         }
+        this.$refs.upload.clearFiles();
+        this.fileList = []
       } catch (error) {
         console.log('删除失败', error)
       }
@@ -1500,7 +1497,6 @@ export default {
       })
     },
     handleExceed(files, fileList) {
-      console.log('处理超出', file)
       this.$message.warning({ message: 'Only single indicator files can be uploaded.', duration: 5000 })
       return false
     },
@@ -1615,6 +1611,9 @@ export default {
           })
           // this.$refs.upload.submit()
           return
+        } else {
+          CIQ.hideCover()
+          CIQ.nprogress.done()
         }
       })
     },
