@@ -265,9 +265,10 @@ export default {
     }
     var validateIndicatorName = (rule, value, callback) => {
       const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
-      if (!value && this.indicatorRadio == "Users' Own Indicator") {
+      let _value = value.replace(/\s*/g,"")
+      if (!_value && this.indicatorRadio == "Users' Own Indicator") {
         callback(new Error('Name cannot be empty.'))
-      } else if (!reg.test(value)) {
+      } else if (!reg.test(_value)) {
         callback(new Error('It must start with a letter and can only contain letters, numbers, and underscores.'))
       } else {
         callback()
@@ -1347,7 +1348,8 @@ export default {
         return
       }
       const name = file.name.replace(`.${suffix}`, '')
-      formData.append('name', name)
+      const fileName = name.replace(/\s*/g,"")
+      formData.append('name', fileName)
       formData.append('hash', file.hash)
       formData.append('suffix', suffix)
       formData.append('file', file)
@@ -1451,6 +1453,7 @@ export default {
       // 发送请求删除服务器上的文件
       const hash = this.file_hash || file.hash
       const fileID = file.name.replace('.csv', '') + 'HASH' + hash
+      if(!hash) {this.fileList = []; return}
       try {
         await csvFileDelete(fileID)
         // 在需要终止上传的地方调用 cancelToken.cancel() 方法
@@ -1512,13 +1515,14 @@ export default {
         return Promise.reject('The uploaded file must be in CSV format.')
       }
       const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
-      if (!reg.test(file.name.replace('.csv', ''))) {
+      let fileName = file.name.replace(/\s*/g,"")
+      if (!reg.test(fileName.replace('.csv', ''))) {
         CIQ.hideCover()
         CIQ.nprogress.done()
         this.$message.warning(
           'The file name must start with a letter and can only contain letters, numbers, and underscores.'
         )
-        return Promise.eject('The file name must start with a letter and can only contain letters, numbers, and underscores.')
+        return Promise.reject('The file name must start with a letter and can only contain letters, numbers, and underscores.')
       }
       if (file.size === 0) {
         CIQ.hideCover()
@@ -1581,9 +1585,10 @@ export default {
           console.log('this.fileList', this.fileList)
           this.fileList.map((item) => {
             const oldFileName = item.name
+            const _indicatorName =  this.form.indicatorName.replace(/\s*/g,"")
             const newFileName = oldFileName.replace(
               oldFileName.replace('.csv', ''),
-              this.form.indicatorName
+              _indicatorName
             )
             const file = this.fileList[this.fileList.length - 1]
             console.log('弹窗确认')
@@ -1645,7 +1650,7 @@ export default {
               }
               // const trimmedRow = row.data.map((value) => value.trim())
               const dateCell = row.data[dateColumnIndex]
-              const numFormatRegex = /^\d+(\.\d{1,2})?$/
+              const numFormatRegex = /^\d+(\.\d{1,})?$/
               const numColumnIndex = 'Close' // Change this to the index of the column you want to check
               const numCell = row.data[numColumnIndex]
               if (!dateFormatRegex.test(dateCell)) {
@@ -1733,11 +1738,11 @@ export default {
             CIQ.hideCover()
             CIQ.nprogress.done()
             this.$message.warning(
-              `The Close column data format in the file is incorrect. It should be a number with up to two decimal places, for example: 45.55.`
+              `The Close column data format in the file is incorrect. It should be a number, for example: 45.55.`
             )
             return reject(
               new Error(
-                `The Close column data format in the file is incorrect. It should be a number with up to two decimal places, for example: 45.55.`
+                `The Close column data format in the file is incorrect. It should be a number, for example: 45.55.`
               )
             )
           }
