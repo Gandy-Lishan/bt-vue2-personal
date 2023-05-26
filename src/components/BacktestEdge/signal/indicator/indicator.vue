@@ -1793,7 +1793,8 @@ export default {
 					`Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
 				)
 			}
-			const res = await getPairData(startDate, endDate, frequency)
+			const symbol = this.$store.state.backtestSymbol || 'SPY'
+			const res = await getPairData(startDate, endDate, frequency, symbol)
 			const pairDataDate = res.data.map((item) => {
 				const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
 				if (dateRegex.test(item.DT)) {
