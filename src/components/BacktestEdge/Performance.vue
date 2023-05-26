@@ -956,6 +956,15 @@ export default {
       }, 0)
     },
     transformData(data) {
+      data = data.map(item => {
+        if (item.period % 5 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 5, timeframe: 'Week' }
+        }
+        if (item.period % 21 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 21, timeframe: 'Month' }
+        }
+        return item
+      })
       return data.map((item) => {
         let timeframe =
           item.period > 1

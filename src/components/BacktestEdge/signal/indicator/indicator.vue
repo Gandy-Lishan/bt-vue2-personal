@@ -121,8 +121,8 @@
 								>Click to upload custom indicator file</el-button
 							>
 							<div slot="tip" class="el-upload__tip">
-								You can only upload a csv file and don't exceed 1MB.
-                File names only allow spaces, letters, and underscores.
+								You can only upload a csv file and don't exceed 1MB. File names
+								only allow spaces, letters, and underscores.
 								<el-button type="text" @click="exampleDataVisible = true"
 									>View Example Data</el-button
 								>
@@ -266,7 +266,7 @@ export default {
     }
     var validateIndicatorName = (rule, value, callback) => {
       const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
-      let _value = value.replace(/\s*/g,"")
+      let _value = value.replace(/\s*/g, "")
       if (!_value && this.indicatorRadio == "Users' Own Indicator") {
         callback(new Error('Name cannot be empty.'))
       } else if (!reg.test(_value)) {
@@ -1349,7 +1349,7 @@ export default {
         return
       }
       const name = file.name.replace(`.${suffix}`, '')
-      const fileName = name.replace(/\s*/g,"")
+      const fileName = name.replace(/\s*/g, "")
       formData.append('name', fileName)
       formData.append('hash', file.hash)
       formData.append('suffix', suffix)
@@ -1399,7 +1399,7 @@ export default {
           // self.$store.commit('saveUserCustomIndicator', response.data.fileID)
           // 还原文件对象的 raw 属性
           if (status == 200 || status == 201) {
-            self.$message.success({message: 'File uploaded successfully. You can click on the file to preview it.', duration: 5000})
+            self.$message.success({ message: 'File uploaded successfully. You can click on the file to preview it.', duration: 5000 })
             const obj = {}
             obj.index = this.panelIndex
             obj.val = response.data.file_id
@@ -1423,7 +1423,7 @@ export default {
           // 清空文件列表
           self.$refs.upload.clearFiles()
           self.fileList = []
-          self.$message.warning({message: 'File upload failed.', duration: 5000})
+          self.$message.warning({ message: 'File upload failed.', duration: 5000 })
 
           // ...
         })
@@ -1454,7 +1454,7 @@ export default {
       // 发送请求删除服务器上的文件
       const hash = this.file_hash || file.hash
       const fileID = file.name.replace('.csv', '') + 'HASH' + hash
-      if(!hash) {this.fileList = []; return}
+      if (!hash) { this.fileList = []; return }
       try {
         await csvFileDelete(fileID)
         // 在需要终止上传的地方调用 cancelToken.cancel() 方法
@@ -1492,7 +1492,7 @@ export default {
         error: (error) => {
           // 解析错误时的处理逻辑
           console.error('解析错误:', error)
-          this.$message.warning({message: 'File parsing error, unable to preview.', duration: 5000})
+          this.$message.warning({ message: 'File parsing error, unable to preview.', duration: 5000 })
           CIQ.hideCover()
           CIQ.nprogress.done()
         }
@@ -1500,7 +1500,7 @@ export default {
     },
     handleExceed(files, fileList) {
       console.log('处理超出', file)
-      this.$message.warning({message: 'Only single indicator files can be uploaded.', duration: 5000})
+      this.$message.warning({ message: 'Only single indicator files can be uploaded.', duration: 5000 })
       return false
     },
     async beforeUpload(file) {
@@ -1519,11 +1519,11 @@ export default {
       if (!/(CSV)/i.test(file.type)) {
         CIQ.hideCover()
         CIQ.nprogress.done()
-        this.$message.warning({message: 'The uploaded file must be in CSV format.', duration: 5000})
+        this.$message.warning({ message: 'The uploaded file must be in CSV format.', duration: 5000 })
         return Promise.reject('The uploaded file must be in CSV format.')
       }
       const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
-      let fileName = file.name.replace(/\s*/g,"")
+      let fileName = file.name.replace(/\s*/g, "")
       if (!reg.test(fileName.replace('.csv', ''))) {
         CIQ.hideCover()
         CIQ.nprogress.done()
@@ -1538,14 +1538,14 @@ export default {
       if (file.size === 0) {
         CIQ.hideCover()
         CIQ.nprogress.done()
-        this.$message.error({message: 'Empty files cannot be uploaded.', duration: 5000})
+        this.$message.error({ message: 'Empty files cannot be uploaded.', duration: 5000 })
         return Promise.reject('Empty files cannot be uploaded.')
       }
       // 限制文件上传大小 1M
       if (file.size > 1 * 1024 * 1024) {
         CIQ.hideCover()
         CIQ.nprogress.done()
-        this.$message.warning({message: 'The uploaded file cannot exceed 1MB.', duration: 5000})
+        this.$message.warning({ message: 'The uploaded file cannot exceed 1MB.', duration: 5000 })
         return Promise.reject('The uploaded file cannot exceed 1MB.')
       }
       try {
@@ -1596,7 +1596,7 @@ export default {
           console.log('this.fileList', this.fileList)
           this.fileList.map((item) => {
             const oldFileName = item.name
-            const _indicatorName =  this.form.indicatorName.replace(/\s*/g,"")
+            const _indicatorName = this.form.indicatorName.replace(/\s*/g, "")
             const newFileName = oldFileName.replace(
               oldFileName.replace('.csv', ''),
               _indicatorName
@@ -1834,7 +1834,8 @@ export default {
           `Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
         )
       }
-      const res = await getPairData(startDate, endDate, frequency)
+      const symbol = this.$store.state.backtestSymbol || 'SPY'
+      const res = await getPairData(startDate, endDate, frequency, symbol)
       const pairDataDate = res.data.map((item) => {
         const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
         if (dateRegex.test(item.DT)) {
@@ -1854,7 +1855,6 @@ export default {
       })
       const pairStartDate = pairDataDate[0]
       const pairEndDate = pairDataDate[pairDataDate.length - 1]
-
       const filteredArr = dateData.filter(date => date >= pairStartDate && date <= pairEndDate);
       console.log('filteredArr', filteredArr);
       const isDiffDateArr = compareArrays(filteredArr, pairDataDate)
@@ -1988,8 +1988,8 @@ export default {
 	padding: 10px;
 	margin-left: 20px;
 }
-.indicator-form-item /deep/ .el-form-item__content{
-  line-height: 15px;
+.indicator-form-item /deep/ .el-form-item__content {
+	line-height: 15px;
 }
 .upload-indicator-btn {
 	width: 100%;
