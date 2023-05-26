@@ -212,12 +212,12 @@ export default {
       dialogDateVisible: false, // 弹框可见性
       entryDates: [{
         value: '2023-05-09',
-        placeholder: 'select entry date1',
+        placeholder: 'select entry date',
         readonly: false
       },
       {
         value: '2023-05-10',
-        placeholder: 'select entry date2',
+        placeholder: 'select entry date',
         readonly: false
       }], // 存储选择的日期数组
       tradesData: [],
@@ -225,13 +225,13 @@ export default {
       editTIMData: [
         {
           period: '1',
-          placeholder: 'input period1',
+          placeholder: 'input period',
           timeframe: 'Day',
           readonly: false
         },
         {
           period: '1',
-          placeholder: 'input period2',
+          placeholder: 'input period',
           timeframe: 'Week',
           readonly: false
         }
@@ -255,7 +255,7 @@ export default {
           // restrictionDate.setHours(0, 0, 0, 0);
           // 比较时间戳
           // return time.getTime() > currentDate.getTime() || time.getTime() < restrictionDate.getTime();
-          return time.getTime() > currentDate.getTime()
+          return time.getTime() >= currentDate.getTime()
         }
       }
     }
@@ -279,7 +279,7 @@ export default {
       const newRow = {
         period: '1',
         timeframe: 'Day',
-        placeholder: `input period${this.editTIMData.length + 1}`,
+        placeholder: `input period`,
         readonly: false
       };
       this.editTIMData.push(newRow);
@@ -291,13 +291,22 @@ export default {
       }
       const newRow = {
         value: '',
-        placeholder: `select entry date${this.entryDates.length + 1}`,
+        placeholder: `select entry date`,
         readonly: false
       };
       this.entryDates.push(newRow)
       console.log(this.entryDates)
     },
     getValues() {
+      this.editTIMData = this.editTIMData.map(item => {
+        if (item.period % 5 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 5, timeframe: 'Week' }
+        }
+        if (item.period % 21 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 21, timeframe: 'Month' }
+        }
+        return item
+      })
       return this.editTIMData.map(row => {
         return { period: row.period, timeframe: row.timeframe };
       });
@@ -311,13 +320,27 @@ export default {
       CIQ.nprogress.start()
       try {
         const periodArray = this.getValues()
-        const isValid = this.validateData(periodArray)
-        if (!isValid) {
-
+        // 去重
+        this.entryDates = Array.from(new Set(this.entryDates))
+        if (this.entryDates.length === 0 || periodArray.length === 0) {
+          this.$message.warning('Entry Date or Time In Market is empty. Please click Add Row to add data.')
           CIQ.hideCover()
           CIQ.nprogress.done()
           return
         }
+        const isValid = this.validateData(periodArray)
+        const isValidDate = this.validateEntryDate(this.entryDates)
+        if (!isValid || !isValidDate) {
+          CIQ.hideCover()
+          CIQ.nprogress.done()
+          return
+        }
+        // 日期排序
+        this.entryDates = this.entryDates.sort((a, b) => {
+          const dateA = new Date(a.value);
+          const dateB = new Date(b.value);
+          return dateA - dateB;
+        });
         const uniqueData = [];
         periodArray.forEach(item => {
           const isDuplicate = uniqueData.some(
@@ -363,8 +386,8 @@ export default {
     },
     resetTable() {
       this.editTIMData = [
-        { period: '1', placeholder: 'input period1', timeframe: 'Day', readonly: false },
-        { period: '1', placeholder: 'input period2', timeframe: 'Week', readonly: false }
+        { period: '1', placeholder: 'input period', timeframe: 'Day', readonly: false },
+        { period: '1', placeholder: 'input period', timeframe: 'Week', readonly: false }
       ]
     },
     validateData(data) {
@@ -392,6 +415,16 @@ export default {
         }
       }
       return true;
+    },
+    validateEntryDate(data) {
+      for (const item of data) {
+        if (!item.value || item.value === 'Invalid date') {
+          this.$message.warning('There are rows in Entry Date with an unselected date.')
+          return false
+        }
+      }
+      return true
+
     },
     deleteRow(index) {
       this.editTIMData.splice(index, 1)
@@ -427,7 +460,7 @@ export default {
       const formattedDate = moment(value).format('YYYY-MM-DD');
       const newRow = {
         value: formattedDate,
-        placeholder: `select entry date${this.entryDates.length + 1}`,
+        placeholder: `select entry date`,
         readonly: false
       }
       this.entryDates.splice(index, 1, newRow); // 替换原日期为格式化后的日期
@@ -623,7 +656,7 @@ export default {
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
+	align-items: flex-start;
 }
 .table-footer {
 	display: flex;
