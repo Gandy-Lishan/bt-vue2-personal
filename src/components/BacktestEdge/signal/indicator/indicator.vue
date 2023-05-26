@@ -95,7 +95,7 @@
 					>
 					</el-radio>
 				</el-form-item>
-				<el-form-item prop="userIndicator">
+				<el-form-item prop="userIndicator" class="indicator-form-item">
 					<div class="indicatorSearchBox">
 						<el-upload
 							class="upload-demo"
@@ -121,7 +121,8 @@
 								>Click to upload custom indicator file</el-button
 							>
 							<div slot="tip" class="el-upload__tip">
-								You can only upload a csv file and don't exceed 1MB
+								You can only upload a csv file and don't exceed 1MB.
+                File names only allow spaces, letters, and underscores.
 								<el-button type="text" @click="exampleDataVisible = true"
 									>View Example Data</el-button
 								>
@@ -1986,6 +1987,9 @@ export default {
 	border: 1px solid #dcdfe6;
 	padding: 10px;
 	margin-left: 20px;
+}
+.indicator-form-item /deep/ .el-form-item__content{
+  line-height: 15px;
 }
 .upload-indicator-btn {
 	width: 100%;
