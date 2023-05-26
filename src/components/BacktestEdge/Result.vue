@@ -35,8 +35,8 @@
 						</el-form-item>
 					</div>
 					<el-form-item label="Timeframe:" prop="frequency">
-						<div class="selectBox">
-							<el-select
+						<!-- <div class="selectBox"> -->
+							<!-- <el-select
 								v-model="editFrequency"
 								placeholder="— Select Timeframe —"
 								disabled
@@ -49,7 +49,8 @@
 								>
 								</el-option>
 							</el-select>
-						</div>
+						</div> -->
+						<el-input disabled v-model="editFrequency"></el-input>
 					</el-form-item>
 				</el-col>
 			</el-row>
@@ -138,7 +139,7 @@ export default {
 			indexList: [],
 			loading: false,
 			options: [],
-			temp: { commission: '0.1', slippage: '0.1' },
+			temp: { commission: '', slippage: '' },
 			sentimentIndicatorList: []
 		}
 	},
