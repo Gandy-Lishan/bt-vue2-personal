@@ -323,10 +323,11 @@ export default {
 				} else {
 					this.$store.commit('getRunBacktestData', row)
 					// Emit synchronous call
-					this.$emit('goBacktestResultForm', row, () => {
-						this.$emit('goTobacktestSetupForm', row.id, res.data, 'edit',() => {
+					this.$emit('goTobacktestSetupForm', row.id, res.data,'edit',()=>{
+						this.$emit('goBacktestResultForm', row, ()=>{
+							this.$emit('switchTab','first')
 							CIQ.hideCover()
-							CIQ.nprogress.done()
+							CIQ.nprogress.done()						
 						})
 					})
 				}
@@ -506,9 +507,9 @@ export default {
 			var that = this
 			CIQ.addIndicatorsFromBacktest(function () {
 				that.$store.commit('getRunBacktestData', row)
-
-				that.$emit('goBacktestResultForm', row, () => {
-					that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',() => {
+				that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
+					that.$emit('goBacktestResultForm', row, ()=>{
+						that.$emit('switchTab','first')
 						CIQ.hideCover()
 						CIQ.nprogress.done()
 					})
