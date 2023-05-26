@@ -445,12 +445,13 @@ export default {
 				} else {
 					this.$store.commit('getRunBacktestData', row)
 					// emit Synchronous call
-					this.$emit('goBacktestResultForm', row, ()=>{
-						this.$emit('goTobacktestSetupForm', row.id, res.data,'edit',()=>{
+					this.$emit('goTobacktestSetupForm', row.id, res.data,'edit',()=>{
+						this.$emit('goBacktestResultForm', row, ()=>{
+							this.$emit('switchTab','first')
 							CIQ.hideCover()
-							CIQ.nprogress.done()
+							CIQ.nprogress.done()						
 						})
-					})
+					})	
 				}
 			} catch (error) {
 				vm.$message({
@@ -649,17 +650,10 @@ export default {
 				this.reloadData(data, freq)
 				var that = this
 				CIQ.addIndicatorsFromBacktest(function () {
-					// that.$store.commit('getRunBacktestData', row)
-					// that.$emit('goBacktestResultForm', row, ()=>{
-					// 	that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
-					// 		CIQ.hideCover()
-					// 		CIQ.nprogress.done()
-					// 	})
-					// })
 					that.$store.commit('getRunBacktestData', row)
 					that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
 						that.$emit('goBacktestResultForm', row, ()=>{
-							that.$emit('switchToSetupTab','first')
+							that.$emit('switchTab','first')
 							CIQ.hideCover()
 							CIQ.nprogress.done()
 						})
