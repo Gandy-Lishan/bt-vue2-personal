@@ -123,6 +123,72 @@
 					</el-form-item>
 				</div>
 			</div>
+			<!-- <div class="condition-container">
+				<el-form-item>
+					<el-radio
+						v-model="radio"
+						label="Moving Average Ratio"
+						@change="setRadio"
+					></el-radio>
+				</el-form-item>
+				<div class="conditionInput">
+					<el-form-item prop="ma_period">
+
+							<el-input
+								:disabled="!(radio === 'Moving Average')"
+								v-model="tech.ma_period"
+								placeholder="Input Period"
+								@input="getMaPeriodValue"
+							></el-input>
+					</el-form-item>
+				</div>
+				<el-form-item>
+					/
+				</el-form-item>
+				<div class="conditionInput">
+					<el-form-item prop="ma_period">
+
+							<el-input
+								:disabled="!(radio === 'Moving Average')"
+								v-model="tech.ma_period"
+								placeholder="Input Period"
+								@input="getMaPeriodValue"
+							></el-input>
+					</el-form-item>
+				</div>
+				<el-form-item>
+					ratio
+				</el-form-item>
+				<div class="conditionSelect">
+					<el-form-item>
+							<el-select
+								v-model="tech.condition"
+								filterable
+								size="mini"
+								:disabled="!(radio === 'Moving Average')"
+								placeholder="Please select condition"
+							>
+								<el-option
+									v-for="item in conditions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value"
+								>
+								</el-option>
+							</el-select>
+					</el-form-item>
+				</div>
+				<div class="conditionInput">
+					<el-form-item prop="maPeriod">
+							<el-input
+								v-model="tech.maPeriod"
+								:disabled="!(radio === 'Moving Average')"
+								placeholder="Input Period"
+								@input="getMaValue"
+							></el-input>
+					</el-form-item>
+				</div>
+			</div> -->
 		</el-form>
 	</div>
 </template>

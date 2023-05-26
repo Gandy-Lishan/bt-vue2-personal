@@ -337,6 +337,14 @@ export default {
 					})
 				}
 			}
+		},
+		indicatorRadio: {
+			handler(newVal) {
+				if(newVal == 'sentiment') {
+					this.senti.extreme_optimism = ''
+					this.senti.extreme_pessimism = ''
+				}
+			}
 		}
 	},
 	methods: {
