@@ -111,7 +111,7 @@
 						@goBacktestResultForm="goBacktestResultForm"
 						@goToFavoritesForm="goToFavoritesForm"
 						@refFavoritesForm="refFavoritesForm"
-            @switchTab="switchTab"
+						@switchTab="switchTab"
 					></history
 				></el-tab-pane>
 				<el-tab-pane label="Results" name="third"
@@ -134,7 +134,7 @@
 						@goTobacktestSetupForm="goTobacktestSetupForm"
 						@goBacktestResultForm="goBacktestResultForm"
 						@goToFavoritesForm="goToFavoritesForm"
-            @switchTab="switchTab"
+						@switchTab="switchTab"
 					></favorite
 				></el-tab-pane>
 				<el-tab-pane label="Sample Backtests" name="fifth"
@@ -242,7 +242,13 @@ export default {
     this.myBrowser()
 
     const pathname = window.location.pathname
-    if (pathname.includes('backtests')) this.activeName = 'sixth'
+    if (pathname.includes('backtests')) {
+      this.activeName = 'sixth';
+      const targetPath = '/home/backtests';
+      if (this.$route.path !== targetPath) {
+        this.$router.push(targetPath);
+      }
+    }
     if (pathname.includes('brainstorm')) {
       this.activeName = 'seventh'
     }
@@ -396,28 +402,61 @@ export default {
     },
     handleTabClick(tab, event) {
       let tabName = tab.name
+      let targetPath = ''
       switch (tabName) {
+        case 'first':
+          targetPath = '/home/backtester';
+          if (this.$route.path !== targetPath) {
+            this.$router.push(targetPath);
+          }
+          break
+        case 'second':
+          targetPath = '/home/backtester';
+          if (this.$route.path !== targetPath) {
+            this.$router.push(targetPath);
+          }
+          break
+        case 'third':
+          targetPath = '/home/backtester';
+          if (this.$route.path !== targetPath) {
+            this.$router.push(targetPath);
+          }
+          break
         case 'forth':
           if (this.favoriteFlag) {
+            targetPath = '/home/backtester';
+            if (this.$route.path !== targetPath) {
+              this.$router.push(targetPath);
+            }
             this.$refs.favoriteChild.getFavoriteList()
             this.favoriteFlag = false
           }
-          if (window.location.pathname.includes('backtests'))
-            this.$router.push('/home')
           break
         case 'fifth':
+          targetPath = '/home/backtester';
+          if (this.$route.path !== targetPath) {
+            this.$router.push(targetPath);
+          }
           this.$refs.sampleChild.getSampleList()
-          if (window.location.pathname.includes('backtests'))
-            this.$router.push('/home')
           break
         case 'sixth':
-          this.$router.push('/home/backtests')
+          targetPath = '/home/backtests'
+          if (this.$route.path !== targetPath) {
+            this.$router.push(targetPath);
+          }
           break
         case 'seventh':
-          this.$router.push('/home/brainstorm')
+          targetPath = '/home/brainstorm'
+          if (this.$route.path !== targetPath) {
+            this.$router.push(targetPath);
+          }
         default:
-          if (window.location.pathname.includes('backtests'))
-            this.$router.push('/home')
+          if (window.location.pathname.includes('backtests')) {
+            targetPath = '/home/backtests';
+            if (this.$route.path !== targetPath) {
+              this.$router.push(targetPath);
+            }
+          }
       }
     },
     IsRiskControl(val) {
