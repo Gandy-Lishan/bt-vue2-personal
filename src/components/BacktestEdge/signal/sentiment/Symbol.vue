@@ -129,7 +129,7 @@ export default {
 			rules: {
 				value: [{ validator: validateValue, trigger: 'blur' }],
 			},
-			symbolLabel: 'Symbol Open'
+			symbolLabel: 'Symbol Condition'
 		}
 	},
 	computed: {
