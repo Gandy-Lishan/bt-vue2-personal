@@ -377,6 +377,7 @@ export default {
         this.si.sentimentIndicator == '' &&
         this.si.technicalIndicator == '' &&
         this.si.symbolIndicator == '' &&
+        this.si.userIndicator == '' &&
         this.si.riskIndicator == '' &&
         absoluteIndex == this.panelIndex
       ) {
