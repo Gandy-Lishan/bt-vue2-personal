@@ -117,7 +117,7 @@
 				<el-tab-pane label="Results" name="third"
 					><div class="set-up-container">
 						<result
-							:backtestEditData="backtestEditData"
+							:backtestEditData="resultEditData"
 							:editFrequency="editFrequency"
 						></result>
 					</div>
@@ -190,7 +190,7 @@ export default {
       clientHeight: document.body.clientWidth,
       loading: false,
       backtestEditData: {},
-      editFrequency: 'Daily',
+      editFrequency: '',
       historyFlag: true,
       favoriteFlag: true,
       entryLength: 1,
@@ -202,7 +202,8 @@ export default {
       activeTab: '', // 用于存储当前选中的选项卡
       options: [
         { label: 'Exit with custom TIM frame', value: 'exit_with_custom_TIM_frame' }
-      ]
+      ],
+      resultEditData: {}
     }
   },
   components: {
@@ -370,7 +371,11 @@ export default {
       } catch (error) { }
     },
     clearForm() {
+      const resultEditData = JSON.parse(JSON.stringify(this.resultEditData))
+      const editFrequency = this.editFrequency
       Object.assign(this.$data, this.$options.data())
+      this.resultEditData = resultEditData
+      this.editFrequency = editFrequency
       this.$store.commit('initialBacktestInfo')
       this.$refs.setUpChild.clearForm()
       this.$refs.entryChild.clearForm()
@@ -454,8 +459,11 @@ export default {
       ) {
         CIQ.addIndicators()
       }
-
+      const resultEditData = JSON.parse(JSON.stringify(this.resultEditData))
+      const editFrequency = this.editFrequency
       this.clearForm()
+      this.resultEditData = resultEditData
+      this.editFrequency = editFrequency
     },
     addEntrySignalLength(index) {
       let obj = {}
@@ -943,6 +951,7 @@ export default {
                         }
                         // clear oldBacktestName
                         vm.backtestEditData = {}
+                        vm.resultEditData = {}
                         vm.$refs.setUpChild.clearOldBacktestName()
                         vm.$refs.favoriteChild.getFavoriteList()
                       } else {
@@ -1037,6 +1046,7 @@ export default {
       let vm = this
       vm.activeName = 'first'
       vm.backtestEditData = {}
+      vm.resultEditData = {}
       try {
         let data = resData
         if (action === 'edit' || action === 'canDelView') {
@@ -1106,6 +1116,7 @@ export default {
         vm.timeFrame = data.frequency
         vm.$store.commit('getFrequency', vm.editFrequency)
         vm.backtestEditData = data
+        vm.resultEditData = data
         vm.$refs.setUpChild.setEditData(data)
       } catch (error) {
         console.error(error)

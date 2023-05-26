@@ -95,7 +95,7 @@
 					>
 					</el-radio>
 				</el-form-item>
-				<el-form-item prop="userIndicator">
+				<el-form-item prop="userIndicator" class="indicator-form-item">
 					<div class="indicatorSearchBox">
 						<el-upload
 							class="upload-demo"
@@ -121,7 +121,8 @@
 								>Click to upload custom indicator file</el-button
 							>
 							<div slot="tip" class="el-upload__tip">
-								You can only upload a csv file and don't exceed 1MB
+								You can only upload a csv file and don't exceed 1MB. File names
+								only allow spaces, letters, and underscores.
 								<el-button type="text" @click="exampleDataVisible = true"
 									>View Example Data</el-button
 								>
@@ -265,7 +266,7 @@ export default {
     }
     var validateIndicatorName = (rule, value, callback) => {
       const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
-      let _value = value.replace(/\s*/g,"")
+      let _value = value.replace(/\s*/g, "")
       if (!_value && this.indicatorRadio == "Users' Own Indicator") {
         callback(new Error('Name cannot be empty.'))
       } else if (!reg.test(_value)) {
@@ -1349,7 +1350,7 @@ export default {
         return
       }
       const name = file.name.replace(`.${suffix}`, '')
-      const fileName = name.replace(/\s*/g,"")
+      const fileName = name.replace(/\s*/g, "")
       formData.append('name', fileName)
       formData.append('hash', file.hash)
       formData.append('suffix', suffix)
@@ -1399,7 +1400,7 @@ export default {
           // self.$store.commit('saveUserCustomIndicator', response.data.fileID)
           // 还原文件对象的 raw 属性
           if (status == 200 || status == 201) {
-            self.$message.success('File uploaded successfully. You can click on the file to preview it.')
+            self.$message.success({ message: 'File uploaded successfully. You can click on the file to preview it.', duration: 5000 })
             const obj = {}
             obj.index = this.panelIndex
             obj.val = response.data.file_id
@@ -1423,7 +1424,7 @@ export default {
           // 清空文件列表
           self.$refs.upload.clearFiles()
           self.fileList = []
-          self.$message.warning('File upload failed.')
+          self.$message.warning({ message: 'File upload failed.', duration: 5000 })
 
           // ...
         })
@@ -1454,7 +1455,7 @@ export default {
       // 发送请求删除服务器上的文件
       const hash = this.file_hash || file.hash
       const fileID = file.name.replace('.csv', '') + 'HASH' + hash
-      if(!hash) {this.fileList = []; return}
+      if (!hash) { this.fileList = []; return }
       try {
         await csvFileDelete(fileID)
         // 在需要终止上传的地方调用 cancelToken.cancel() 方法
@@ -1472,6 +1473,8 @@ export default {
       }
     },
     handlePreview(file) {
+      CIQ.addCover('Parsing the file....')
+      CIQ.nprogress.start()
       const fileContent = atob(file.raw.split(',')[1]) // 解码 Base64 数据
       Papa.parse(fileContent, {
         header: true,
@@ -1483,17 +1486,22 @@ export default {
           this.previewData = data
           this.previewFileName = file.name
           // 显示预览表格
+          CIQ.hideCover()
+          CIQ.nprogress.done()
           this.previewVisible = true
         },
         error: (error) => {
           // 解析错误时的处理逻辑
           console.error('解析错误:', error)
+          this.$message.warning({ message: 'File parsing error, unable to preview.', duration: 5000 })
+          CIQ.hideCover()
+          CIQ.nprogress.done()
         }
       })
     },
     handleExceed(files, fileList) {
       console.log('处理超出', file)
-      this.$message.warning('Only single indicator files can be uploaded.')
+      this.$message.warning({ message: 'Only single indicator files can be uploaded.', duration: 5000 })
       return false
     },
     async beforeUpload(file) {
@@ -1512,30 +1520,33 @@ export default {
       if (!/(CSV)/i.test(file.type)) {
         CIQ.hideCover()
         CIQ.nprogress.done()
-        this.$message.warning('The uploaded file must be in CSV format.')
+        this.$message.warning({ message: 'The uploaded file must be in CSV format.', duration: 5000 })
         return Promise.reject('The uploaded file must be in CSV format.')
       }
       const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
-      let fileName = file.name.replace(/\s*/g,"")
+      let fileName = file.name.replace(/\s*/g, "")
       if (!reg.test(fileName.replace('.csv', ''))) {
         CIQ.hideCover()
         CIQ.nprogress.done()
         this.$message.warning(
-          'The file name must start with a letter and can only contain letters, numbers, and underscores.'
+          {
+            message: 'The file name must start with a letter and can only contain letters, numbers, and underscores.',
+            duration: 5000
+          }
         )
         return Promise.reject('The file name must start with a letter and can only contain letters, numbers, and underscores.')
       }
       if (file.size === 0) {
         CIQ.hideCover()
         CIQ.nprogress.done()
-        this.$message.error('Empty files cannot be uploaded.')
+        this.$message.error({ message: 'Empty files cannot be uploaded.', duration: 5000 })
         return Promise.reject('Empty files cannot be uploaded.')
       }
       // 限制文件上传大小 1M
       if (file.size > 1 * 1024 * 1024) {
         CIQ.hideCover()
         CIQ.nprogress.done()
-        this.$message.warning('The uploaded file cannot exceed 1MB.')
+        this.$message.warning({ message: 'The uploaded file cannot exceed 1MB.', duration: 5000 })
         return Promise.reject('The uploaded file cannot exceed 1MB.')
       }
       try {
@@ -1586,7 +1597,7 @@ export default {
           console.log('this.fileList', this.fileList)
           this.fileList.map((item) => {
             const oldFileName = item.name
-            const _indicatorName =  this.form.indicatorName.replace(/\s*/g,"")
+            const _indicatorName = this.form.indicatorName.replace(/\s*/g, "")
             const newFileName = oldFileName.replace(
               oldFileName.replace('.csv', ''),
               _indicatorName
@@ -1707,7 +1718,10 @@ export default {
             CIQ.hideCover()
             CIQ.nprogress.done()
             this.$message.warning(
-              `The uploaded CSV file is empty. Please check if the table header and table content are present.`
+              {
+                message: `The uploaded CSV file is empty. Please check if the table header and table content are present.`,
+                duration: 5000
+              }
             )
             return reject(
               new Error('The uploaded CSV file is empty. Please check if the table header and table content are present.')
@@ -1727,7 +1741,10 @@ export default {
             CIQ.hideCover()
             CIQ.nprogress.done()
             this.$message.warning(
-              `The Date column data format in the file is incorrect. It should be in yyyy-MM-dd format, for example: 2023-04-20.`
+              {
+                message: `The Date column data format in the file is incorrect. It should be in yyyy-MM-dd format, for example: 2023-04-20.`,
+                duration: 5000
+              }
             )
             return reject(
               new Error(
@@ -1739,7 +1756,10 @@ export default {
             CIQ.hideCover()
             CIQ.nprogress.done()
             this.$message.warning(
-              `The Close column data format in the file is incorrect. It should be a number, for example: 45.55.`
+              {
+                message: `The Close column data format in the file is incorrect. It should be a number, for example: 45.55.`,
+                duration: 5000
+              }
             )
             return reject(
               new Error(
@@ -1763,7 +1783,10 @@ export default {
       })
       if (errors.length > 0) {
         // 如果有错误，显示错误信息
-        this.$message.warning('Field name validation failed.')
+        this.$message.warning({
+          message: 'Field name validation failed.',
+          duration: 5000
+        })
         return false
       }
       return true
@@ -1780,7 +1803,10 @@ export default {
           nextIndex !== -1 &&
           currentIndex > nextIndex
         ) {
-          this.$message.warning('Field order validation failed.')
+          this.$message.warning({
+            message: 'Field order validation failed.',
+            duration: 5000
+          })
           return false
         }
       }
@@ -1800,13 +1826,17 @@ export default {
       const frequency = this.frequency.toLowerCase()
       if (frequency !== 'daily') {
         this.$message.warning(
-          `Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
+          {
+            message: `Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`,
+            duration: 5000
+          }
         )
         return Promise.reject(
           `Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
         )
       }
-      const res = await getPairData(startDate, endDate, frequency)
+      const symbol = this.$store.state.backtestSymbol || 'SPY'
+      const res = await getPairData(startDate, endDate, frequency, symbol)
       const pairDataDate = res.data.map((item) => {
         const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
         if (dateRegex.test(item.DT)) {
@@ -1817,13 +1847,15 @@ export default {
           console.log('Invalid date format')
           CIQ.hideCover()
           CIQ.nprogress.done()
-          this.$message.warning(`Invalid date format.`)
+          this.$message.warning({
+            message: `Invalid date format.`,
+            duration: 5000
+          })
           return Promise.reject(`Invalid date format.`)
         }
       })
       const pairStartDate = pairDataDate[0]
       const pairEndDate = pairDataDate[pairDataDate.length - 1]
-
       const filteredArr = dateData.filter(date => date >= pairStartDate && date <= pairEndDate);
       console.log('filteredArr', filteredArr);
       const isDiffDateArr = compareArrays(filteredArr, pairDataDate)
@@ -1835,7 +1867,10 @@ export default {
         CIQ.hideCover()
         CIQ.nprogress.done()
         this.$message.warning(
-          `Only daily CSV files can be uploaded. Please ensure that the CSV file does not contain non-trading days such as weekends and public holidays.`
+          {
+            message: `Only daily CSV files can be uploaded. Please ensure that the CSV file does not contain non-trading days such as weekends and public holidays.`,
+            duration: 5000
+          }
         )
         console.log('上传的 CSV 中, 以下时间是非交易日', diffDateArr)
         this.nonBusinessDay = diffDateArr
@@ -1953,6 +1988,9 @@ export default {
 	border: 1px solid #dcdfe6;
 	padding: 10px;
 	margin-left: 20px;
+}
+.indicator-form-item /deep/ .el-form-item__content {
+	line-height: 15px;
 }
 .upload-indicator-btn {
 	width: 100%;
