@@ -1010,6 +1010,7 @@ export default {
           //鎷胯繘鍦轰环鏍煎拰鍓嶄竴澶╀綔姣旇緝
           let entryPrice = chartDataset[res].Open
           const transformData = this.transformData(periodArray)
+          transformData.sort((a, b) => a.value - b.value);
           let obj = {}
           transformData.map((item) => {
             let exitBar = chartDataset[res + item.value]
