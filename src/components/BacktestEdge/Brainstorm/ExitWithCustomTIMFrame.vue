@@ -398,7 +398,20 @@ export default {
       try {
         const periodArray = this.getValues()
         // 去重
-        this.entryDates = Array.from(new Set(this.entryDates))
+        console.log('去重',this.entryDates)
+        const dateUniqueData = [];
+        this.entryDates.forEach(item => {
+          const isDateDuplicate = dateUniqueData.some(
+            uniqueItem =>
+              uniqueItem.value == item.value
+          );
+
+          if (!isDateDuplicate) {
+            dateUniqueData.push(item);
+          }
+        });
+        this.entryDates = dateUniqueData
+        // this.entryDates = Array.from(new Set(this.entryDates))
         if (this.entryDates.length === 0 || periodArray.length === 0) {
           this.$message.warning('Entry Date or Time In Market is empty. Please click Add Row to add data.')
           CIQ.hideCover()
