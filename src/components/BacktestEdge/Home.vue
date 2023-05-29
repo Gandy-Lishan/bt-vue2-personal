@@ -387,6 +387,14 @@ export default {
       this.$refs.entryChild.clearForm()
       this.$refs.exitChild.clearForm()
     },
+    createNewBacktest() {
+      Object.assign(this.$data, this.$options.data())
+      this.$store.commit('initialBacktestInfo')
+      this.$refs.setUpChild.clearForm()
+      this.$refs.entryChild.clearForm()
+      this.$refs.exitChild.clearForm()
+      this.$refs.performanceChild.clearForm()
+    },
     clearAllDataForm() {
       Object.assign(this.$data, this.$options.data())
       this.$store.commit('initialBacktestInfo')
@@ -498,11 +506,7 @@ export default {
       ) {
         CIQ.addIndicators()
       }
-      const resultEditData = JSON.parse(JSON.stringify(this.resultEditData))
-      const editFrequency = this.editFrequency
-      this.clearForm()
-      this.resultEditData = resultEditData
-      this.editFrequency = editFrequency
+      this.createNewBacktest()
     },
     addEntrySignalLength(index) {
       let obj = {}

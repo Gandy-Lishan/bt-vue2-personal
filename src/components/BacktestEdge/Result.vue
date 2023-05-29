@@ -73,8 +73,6 @@
 	</div>
 </template>
 <script>
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import { Store, mapGetters } from 'vuex'
 export default {
 	props: { backtestEditData: Object, editFrequency: String },
 	name: 'setUp',
@@ -147,15 +145,14 @@ export default {
 		backtestEditData: {
 			handler(newVal) {
 				if (JSON.stringify(newVal) != '{}') {
+					console.log('result', newVal)
 					const commission = Number(newVal.commission)
 					this.temp.commission = commission.toFixed(2)
+				}else{
+					this.temp.commission = ''
+					this.temp.slippage = ''
 				}
 			},
-			immediate: true,
-			deep: true
-		},
-		editFrequency: {
-			handler(newVal) {},
 			immediate: true,
 			deep: true
 		}
