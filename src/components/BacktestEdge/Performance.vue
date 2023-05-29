@@ -724,6 +724,9 @@ export default {
     this.getResultData({ id: 0 })
   },
   methods: {
+    clearForm() {
+      Object.assign(this.$data, this.$options.data())
+    },
     generate_table_data() {
       this.generatePeriods()
 
