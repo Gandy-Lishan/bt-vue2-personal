@@ -287,12 +287,7 @@ export default {
           // 获取当前日期
           const currentDate = new Date();
           currentDate.setHours(0, 0, 0, 0);
-          // 获取限制日期
-          // const restrictionDate = new Date('2023-05-01');
-          // restrictionDate.setHours(0, 0, 0, 0);
-          // 比较时间戳
-          // return time.getTime() > currentDate.getTime() || time.getTime() < restrictionDate.getTime();
-          return time.getTime() >= currentDate.getTime()
+          return time.getTime() >= currentDate.getTime() || (time.getDay()===0||time.getDay()===6)
         }
       }
     }

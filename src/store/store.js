@@ -21,6 +21,10 @@ export default new Vuex.Store({
 			url: '',
 			name: ''
 		},
+		currentUser: {
+			url: '',
+			name: ''
+		},
 		restoreFreq: '',
 		backtestSymbol: '',
 		pairDataFreq: '',
@@ -163,6 +167,9 @@ export default new Vuex.Store({
 		 */
 		setCurrentTech(state,val){
 			state.currentTech = val
+		},
+		setCurrentUser(state,val){
+			state.currentUser = val
 		},
 		/**
 		 * Sets up a mutations to restore the timeframe of selected backtest

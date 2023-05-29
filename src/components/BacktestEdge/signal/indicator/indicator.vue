@@ -352,6 +352,9 @@ export default {
     updateTech() {
       return this.$store.state.currentTech
     },
+    updateUser() {
+      return this.$store.state.currentUser
+    },
     frequency() {
       return this.$store.state.exitFrequency
     }
@@ -431,6 +434,8 @@ export default {
           //this.handleTechnicalSelect({value:item.value})
         }
       })
+    },
+    updateUser(val) {
     },
     frequency: {
       handler(newVal) {

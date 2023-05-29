@@ -511,6 +511,9 @@ export default {
 		updateTech() {
 			return this.$store.state.currentTech
 		},
+		updateUser() {
+			return this.$store.state.currentUser
+		},
 		riskControl() {
 			return this.$store.state.riskControl
 		}
@@ -523,6 +526,9 @@ export default {
 		},
 		updateTech(val) {
 			this.indicatorRadio = 'technical'
+		},
+		updateUser(val) {
+			this.indicatorRadio = 'user'
 		},
 		relation: {
 			handler(newVal, oldVal) {
