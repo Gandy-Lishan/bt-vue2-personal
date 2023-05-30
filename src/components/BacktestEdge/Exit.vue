@@ -124,6 +124,7 @@
 							@getTechIndiValue="getTechIndiValue"
 							@getIndicatorRadio="getIndicatorRadio"
 							@getTechIndiObj="getTechIndiObj"
+							@exitUserUploadFileContent="exitUserUploadFileContent"
 						></indicator>
 						<senti
 							v-bind="$attrs"
@@ -443,6 +444,7 @@ import elderRayIndexLike from '@/components/BacktestEdge/signal/technical/Elder-
 import alligatorLike from '@/components/BacktestEdge/signal/technical/Alligator-like.vue'
 import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Linear-RegForecast-like.vue'
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
+import { eventBus } from "@/components/BacktestEdge/EventBus/Bus.ts";
 export default {
 	name: 'exit',
 	inheritAttrs: false,
@@ -511,9 +513,6 @@ export default {
 		updateTech() {
 			return this.$store.state.currentTech
 		},
-		updateUser() {
-			return this.$store.state.currentUser
-		},
 		riskControl() {
 			return this.$store.state.riskControl
 		}
@@ -526,9 +525,6 @@ export default {
 		},
 		updateTech(val) {
 			this.indicatorRadio = 'technical'
-		},
-		updateUser(val) {
-			this.indicatorRadio = 'user'
 		},
 		relation: {
 			handler(newVal, oldVal) {
@@ -586,6 +582,9 @@ export default {
 			immediate: true
 		}
 	},
+	created() {
+  eventBus.$on('userExitFileSelect', this.userExitFileSelect)
+},
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
@@ -1259,6 +1258,17 @@ export default {
 			]
 			this.$emit('isOnlyRiskControl', this.exitItemCheck)
 			this.$emit('getExitRelation', this.relation)
+		},
+		async exitUserUploadFileContent(data) {
+			eventBus.$emit('userEntryFileSelect', data)
+			await this.$refs.indiChild[data.index].changeIndicatorChecked("Users' Own Indicator")
+			await this.$refs.indiChild[data.index].handleUsersOwnIndicatorSelect(data.val.data)
+			await this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
+		},
+		async userExitFileSelect(data) {
+			await this.$refs.indiChild[data.index].changeIndicatorChecked("Users' Own Indicator")
+			await this.$refs.indiChild[data.index].handleUsersOwnIndicatorSelect(data.val.data)
+			await this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
 		}
 	}
 }

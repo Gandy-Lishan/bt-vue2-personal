@@ -124,6 +124,7 @@
 							@getTechIndiValue="getTechIndiValue"
 							@getIndicatorRadio="getIndicatorRadio"
 							@getTechIndiObj="getTechIndiObj"
+							@entryUserUploadFileContent="entryUserUploadFileContent"
 						></indicator>
 						<senti
 							v-bind="$attrs"
@@ -443,6 +444,7 @@ import elderRayIndexLike from '@/components/BacktestEdge/signal/technical/Elder-
 import alligatorLike from '@/components/BacktestEdge/signal/technical/Alligator-like.vue'
 import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Linear-RegForecast-like.vue'
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
+import { eventBus } from "@/components/BacktestEdge/EventBus/Bus.ts";
 export default {
 	name: 'entry',
 	inheritAttrs: false,
@@ -517,9 +519,6 @@ export default {
 		updateTech() {
 			return this.$store.state.currentTech
 		},
-		updateUser() {
-			return this.$store.state.currentUser
-		}
 	},
 	watch: {
 		// todo symbol update senti
@@ -530,9 +529,6 @@ export default {
 		},
 		updateTech(val) {
 			this.indicatorRadio = 'technical'
-		},
-		updateUser(val) {
-			this.indicatorRadio = 'user'
 		},
 		relation: {
 			handler(newVal, oldVal) {
@@ -576,6 +572,9 @@ export default {
 			}
 		}
 	},
+	created() {
+  eventBus.$on('userEntryFileSelect', this.userEntryFileSelect)
+},
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
@@ -1134,6 +1133,17 @@ export default {
 					}
 				}
 			}
+		},
+		async entryUserUploadFileContent(data) {
+			eventBus.$emit('userExitFileSelect', data)
+			await this.$refs.indiChild[data.index].changeIndicatorChecked("Users' Own Indicator")
+			await this.$refs.indiChild[data.index].handleUsersOwnIndicatorSelect(data.val.data)
+			await this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
+		},
+		async userEntryFileSelect(data) {
+			await this.$refs.indiChild[data.index].changeIndicatorChecked("Users' Own Indicator")
+			await this.$refs.indiChild[data.index].handleUsersOwnIndicatorSelect(data.val.data)
+			await this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
 		}
 	}
 }
