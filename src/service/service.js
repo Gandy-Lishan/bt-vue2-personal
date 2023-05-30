@@ -277,6 +277,20 @@ export function csvFileRead(fileName, HASH) {
 	})
 }
 
+export function csvFilePagingRead(fileName, HASH, page) {
+	const url = `/dev/csvfilepagingread/?fileName=${fileName}&HASH=${HASH}&page=${page}`
+
+	return new Promise((resolve, reject) => {
+		axios.get(url, {withCredentials: true})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
 export function csvFileDelete(fileID) {
 	const url = `/dev/csvfiledelete/${fileID}/`
 
