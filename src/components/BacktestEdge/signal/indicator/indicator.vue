@@ -100,7 +100,7 @@
 						<el-upload
 							class="upload-demo"
 							:action="uploadUrl"
-							:on-preview="handlePreview"
+							:on-preview="_handlePreview"
 							:on-progress="handleUploadProgress"
 							:on-remove="handleRemove"
 							:on-success="handleUploadSuccess"
@@ -136,6 +136,15 @@
 								<el-table-column label="Date" prop="Date"></el-table-column>
 								<el-table-column label="Close" prop="Close"></el-table-column>
 							</el-table>
+							<el-pagination
+								small
+								@current-change="handleCurrentChange"
+								:current-page="previewPage.page"
+								:page-size="100"
+								layout="total, prev, pager, next"
+								:total="previewPage.total"
+							>
+							</el-pagination>
 						</el-dialog>
 						<el-dialog
 							:title="previewFileName"
@@ -221,7 +230,8 @@ import {
   getIndicatorsList,
   csvFileDelete,
   csvFileRead,
-  getPairData
+  getPairData,
+  csvFilePagingRead
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
@@ -307,6 +317,11 @@ export default {
       previewVisible: false, // 是否显示预览表格
       previewData: [], // 预览表格的数据
       previewFileName: '',
+      previewFileID: '',
+      previewPage: {
+        page: 1,
+        total: 0
+      },
       cancelToken: null, // 用于保存取消上传请求的取消令牌
       uploadUrl: '/dev/uploadcsvfile/',
       uploadHeaders: {},
@@ -1285,6 +1300,7 @@ export default {
               const obj = {}
               obj.index = index
               obj.val = response.data.data.file_id
+              vm.previewFileID = str
               vm.$emit('getIndicatorUrl', {
                 index: index,
                 url: response.data.data.file_id
@@ -1403,6 +1419,7 @@ export default {
           // 还原文件对象的 raw 属性
           if (status == 200 || status == 201) {
             self.$message.success({ message: 'File uploaded successfully. You can click on the file to preview it.', duration: 5000 })
+            self.previewFileID = response.data.file_id
             const obj = {}
             obj.index = this.panelIndex
             obj.val = response.data.file_id
@@ -1505,6 +1522,48 @@ export default {
           CIQ.nprogress.done()
         }
       })
+    },
+    async _handlePreview(file) {
+      // CIQ.addCover('Parsing the file....')
+      // CIQ.nprogress.start()
+      // const fileContent = atob(file.raw.split(',')[1]) // 解码 Base64 数据
+      // Papa.parse(fileContent, {
+      //   header: true,
+      //   skipEmptyLines: true,
+      //   complete: (result) => {
+      //     // 获取解析后的数据
+      //     const data = result.data
+      //     // 更新预览表格的数据
+      //     this.previewData = data
+      //     this.previewFileName = file.name
+      //     // 显示预览表格
+      //     CIQ.hideCover()
+      //     CIQ.nprogress.done()
+      //     this.previewVisible = true
+      //   },
+      //   error: (error) => {
+      //     // 解析错误时的处理逻辑
+      //     console.error('解析错误:', error)
+      //     this.$message.warning({ message: 'File parsing error, unable to preview.', duration: 5000 })
+      //     CIQ.hideCover()
+      //     CIQ.nprogress.done()
+      //   }
+      // })
+
+      CIQ.addCover('Parsing the file....')
+      CIQ.nprogress.start()
+      const str = this.previewFileID
+      const page = this.previewPage.page
+      const startIndex = str.indexOf('HASH')
+      const endIndex = startIndex + 4 // 假设 "HASH" 的长度为 4
+      if (startIndex !== -1) {
+        const beforeHash = str.substring(0, startIndex)
+        const afterHash = str.substring(endIndex)
+        await this.getPreviewList(beforeHash, afterHash, page)
+        CIQ.hideCover()
+        CIQ.nprogress.done()
+        this.previewVisible = true
+      }
     },
     handleExceed(files, fileList) {
       this.$message.warning({ message: 'Only single indicator files can be uploaded.', duration: 5000 })
@@ -2007,6 +2066,33 @@ export default {
         console.log('error', error)
       }
 
+    },
+    async handleCurrentChange(newpage) {
+      this.previewPage.page = newpage
+      const str = this.previewFileID
+      const startIndex = str.indexOf('HASH')
+      const endIndex = startIndex + 4 // 假设 "HASH" 的长度为 4
+      if (startIndex !== -1) {
+        const beforeHash = str.substring(0, startIndex)
+        const afterHash = str.substring(endIndex)
+        await this.getPreviewList(beforeHash, afterHash, newpage)
+      }
+    },
+    async getPreviewList(name, hash, page) {
+      const response = await csvFilePagingRead(name, hash, page)
+      const res = response.data
+      if (res.status == 200) {
+        const csv_content = res.data.csv_content
+        this.previewData = csv_content.map((item) => ({
+          Date: new Date(item.DT).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+          }),
+          Close: item.indicator_Close
+        }))
+        this.previewPage.total = res.data.total_rows
+      }
     }
   }
 }
