@@ -287,7 +287,8 @@ export default {
           // 获取当前日期
           const currentDate = new Date();
           currentDate.setHours(0, 0, 0, 0);
-          return time.getTime() >= currentDate.getTime() || (time.getDay()===0||time.getDay()===6)
+           const year = time.getFullYear();
+          return time.getTime() >= currentDate.getTime() || (time.getDay()===0||time.getDay()===6) || year < 1993
         }
       }
     }

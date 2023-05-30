@@ -21,10 +21,6 @@ export default new Vuex.Store({
 			url: '',
 			name: ''
 		},
-		currentUser: {
-			url: '',
-			name: ''
-		},
 		restoreFreq: '',
 		backtestSymbol: '',
 		pairDataFreq: '',
@@ -113,6 +109,7 @@ export default new Vuex.Store({
 		role: '',
 		usersOwnEntryFileHash: Array(5).fill(''),
 		usersOwnExitFileHash: Array(5).fill(''),
+		userUploadFileContent: Array(5).fill({}),
 	},
 	getters: {
 		getExtremeValue: (state) => {
@@ -167,9 +164,6 @@ export default new Vuex.Store({
 		 */
 		setCurrentTech(state,val){
 			state.currentTech = val
-		},
-		setCurrentUser(state,val){
-			state.currentUser = val
 		},
 		/**
 		 * Sets up a mutations to restore the timeframe of selected backtest
@@ -624,6 +618,10 @@ export default new Vuex.Store({
 		saveUsersOwnExitFileHash(state, obj) {
 			state.usersOwnExitFileHash[obj.index] = obj.val
 		},
+		saveUserUploadFileContent(state, obj) {
+			console.log('文件上传成功', obj)
+			state.userUploadFileContent[obj.index] = obj.val
+		}
 	},
 	actions: {
 		Try(context, val) {

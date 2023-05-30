@@ -352,9 +352,6 @@ export default {
     updateTech() {
       return this.$store.state.currentTech
     },
-    updateUser() {
-      return this.$store.state.currentUser
-    },
     frequency() {
       return this.$store.state.exitFrequency
     }
@@ -434,8 +431,6 @@ export default {
           //this.handleTechnicalSelect({value:item.value})
         }
       })
-    },
-    updateUser(val) {
     },
     frequency: {
       handler(newVal) {
@@ -763,6 +758,7 @@ export default {
       }
     },
     handleUsersOwnIndicatorSelect(data) {
+      console.log('handleUsersOwnIndicatorSelect')
       const frequency = 'Daily'
       const indicatorName = data.file_name
       const indicatorUrl = data.file_id
@@ -1416,7 +1412,15 @@ export default {
             if (self.criteria === 'exit') {
               self.$store.commit(`saveUsersOwnExitFileHash`, obj)
             }
-            self.handleUsersOwnIndicatorSelect(response.data)
+            let fileObj = {}
+            fileObj.index = self.panelIndex
+            fileObj.val = {
+              data: response.data,
+              criteria: self.criteria,
+              index: self.panelIndex
+            }
+            self.$emit(self.criteria + 'UserUploadFileContent', fileObj)
+            // self.handleUsersOwnIndicatorSelect(response.data)
           } else {
             return Promise.reject(error)
           }
@@ -1941,6 +1945,68 @@ export default {
       }
 
       return data;
+    },
+    async autoFillUserIndicator(data) {
+      this.indicatorRadio = "Users' Own Indicator"
+      let userIndicator = data.file_name
+      this.si.userIndicator = userIndicator
+
+      // let formateList = this.$store.state.formateTechnicalList
+      // if (formateList.length === 0) {
+      // 	formateList = vm.loadShortLong()
+      // }
+      // for (let i = 0; i < formateList.length; i++) {
+      // 	if (technicalIndicator === formateList[i].value) {
+      // 		let obj = formateList[i]
+      // 		let isFromEdit = true
+      // 		vm.handleTechnicalSelect(obj, isFromEdit)
+      // 		break
+      // 	}
+      // }
+      const response = await csvFileRead(userIndicator, data.hash)
+
+      // 还原文件对象的 raw 属性
+      const index = this.panelIndex
+      const obj = {}
+      obj.index = index
+      obj.val = response.data.data.file_id
+      this.$emit('getIndicatorUrl', {
+        index: index,
+        url: response.data.data.file_id
+      })
+      console.log('还原文件对象的 raw 属性', obj)
+      if (this.criteria === 'entry') {
+        this.$store.commit(`saveUsersOwnEntryFileHash`, obj)
+      }
+      if (this.criteria === 'exit') {
+        this.$store.commit(`saveUsersOwnExitFileHash`, obj)
+      }
+      const res = response.data.data.csv_content
+      let fileData = []
+      try {
+        fileData = res.map((item) => ({
+          Date: new Date(item.DT).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+          }),
+          Close: item.indicator_Close
+        }))
+
+        const csvData =
+          'Date,Close\n' +
+          fileData.map((item) => `${item.Date},${item.Close}`).join('\n')
+        const base64Data = btoa(csvData) // 编码为 Base64
+        const rawValue = `data:text/csv;base64,${base64Data}`
+        const file = new File([csvData], `${userIndicator}.csv`, {
+          type: 'text/csv'
+        })
+        file.raw = rawValue
+        this.fileList.splice(-1, 1, file)
+      } catch (error) {
+        console.log('error', error)
+      }
+
     }
   }
 }
