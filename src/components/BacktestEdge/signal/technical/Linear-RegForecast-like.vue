@@ -143,7 +143,10 @@ delay_bars: [String, Number],
 				if(this.relation != 1) {
 					let desObj = {}
 					desObj.criteria = this.criteria
-					desObj.description = commentDes
+					desObj.description = {
+						'commentDes':commentDes,
+						'rocCond':null
+					}
 					desObj.index = index
 					this.$store.commit('saveDescription', desObj)
 				}
@@ -176,11 +179,17 @@ delay_bars: [String, Number],
 			let desObj = {}
 			desObj.criteria = this.criteria
            if(this.relation != 1) {
-					desObj.description = this.description
+					desObj.description = {
+						'commentDes':this.description,
+						'rocCond':null
+					}
 					desObj.index = index + 1
 					}
 					if(this.relation == 1) {
-						desObj.description = commentDes + this.description
+						desObj.description = {
+							'commentDes':commentDes + this.description,
+							'rocCond':null
+						}
 						desObj.index = 0
 					}
 			this.$store.commit('saveDescription', desObj)

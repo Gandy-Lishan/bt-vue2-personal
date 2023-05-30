@@ -1057,7 +1057,6 @@ export default {
       */
       // masterData涓嶅寘鍚玦ndicator value,闃叉鏃爋hlcv鐨勬儏鍐
       let period_dict = this.transformZScoreData(periodArray)
-      console.log(period_dict,periodArray)
       let quotes = CIQ.stxx.chart.masterData
       const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
       for (var i in period_dict) {
@@ -1068,8 +1067,6 @@ export default {
           direction
         )
       }
-      console.log('trades', dataSet)
-      console.log('鍘熻绠楀悗鐨勬暟鎹', quotes)
       // 鏁版嵁鍒囩墖
       quotes = quotes.filter((x) => {
         return this.start_date.getTime() <= x.DT.getTime()
@@ -1088,7 +1085,6 @@ export default {
       let used_quotes = quotes.filter(
         (x) => dataTimeList.indexOf(x.DT.getTime()) != -1
       )
-      console.log('鍒囩墖骞惰繃婊ら潪浜ゆ槗鏃ユ湡鐨勬暟鎹', used_quotes)
       //鏇挎崲NaN
       quotes = quotes.map((quote) => {
         const updatedQuote = {}
@@ -1626,12 +1622,10 @@ export default {
         const periodArray = this.getValues()
         const isValid = this.validateData(periodArray)
         if (!isValid) {
-
           CIQ.hideCover()
           CIQ.nprogress.done()
           return
         }
-        console.log('saveTable',periodArray)
         const uniqueData = [];
         periodArray.forEach(item => {
           const isDuplicate = uniqueData.some(
