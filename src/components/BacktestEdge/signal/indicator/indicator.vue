@@ -492,7 +492,8 @@ export default {
           sentimentIndicator: '',
           technicalIndicator: '',
           symbolIndicator: '',
-          riskIndicator: ''
+          riskIndicator: '',
+          userIndicator: ''
         },
         sentimentIndicatorList: []
       }
