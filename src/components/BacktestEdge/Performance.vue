@@ -582,8 +582,7 @@
 											<template slot-scope="scope">
 												<el-input
 													style="width: 100%"
-													:readonly="scope.row.readonly"
-													:placeholder="scope.row.placeholder"
+													placeholder="input period"
 													v-model="scope.row.period"
 												></el-input>
 											</template>
@@ -597,7 +596,6 @@
 												<el-select
 													style="width: 100%"
 													v-model="scope.row.timeframe"
-													:disabled="scope.row.readonly"
 												>
 													<el-option label="Day(s)" value="Day"></el-option>
 													<el-option label="Week(s)" value="Week"></el-option>
@@ -703,19 +701,15 @@ export default {
       editTIMData: [
         {
           period: '1',
-          placeholder: 'input period',
-          timeframe: 'Day',
-          readonly: false
+          timeframe: 'Week'
         },
         {
           period: '1',
-          placeholder: 'input period',
-          timeframe: 'Week',
-          readonly: false
+          timeframe: 'Month',
         }
       ],
       activeTIM: 'first',
-      defaultTIMTableLabels: ['Entry Date', '1 Day [%]', '1 Week [%]'],
+      defaultTIMTableLabels: ['Entry Date', '1 Week [%]', '1 Month [%]'],
       TIMHistoryList: [],
       TIMResult_quotes: [],
     }
@@ -1180,9 +1174,9 @@ export default {
       const res = period_dict.map((val, i) => ({
         Period: val['timeframe'],
         Median: median_list[i],
-        '% Positive': isNaN(positive_list[i])? '' : positive_list[i]* 100 + ' %',
-        'Avg Max Loss': median_list[i]?max_loss_list[i]:NaN,
-        'Avg Max Gain': median_list[i]?max_gain_list[i]:NaN,
+        '% Positive': isNaN(positive_list[i]) ? '' : (positive_list[i] * 100).toFixed(2) + ' %',
+        'Avg Max Loss': median_list[i] ? max_loss_list[i] : NaN,
+        'Avg Max Gain': median_list[i] ? max_gain_list[i] : NaN,
         'Z-Score': z_score_list[i]
       }))
       if (this.activeTIM == 'first') {
@@ -1612,9 +1606,7 @@ export default {
       }
       const newRow = {
         period: '1',
-        timeframe: 'Day',
-        placeholder: `input period`,
-        readonly: false
+        timeframe: 'Day'
       };
       this.editTIMData.push(newRow);
     },
@@ -1684,8 +1676,8 @@ export default {
     },
     resetTable() {
       this.editTIMData = [
-        { period: '1', placeholder: 'input period', timeframe: 'Day', readonly: false },
-        { period: '1', placeholder: 'input period', timeframe: 'Week', readonly: false }
+        { period: '1', timeframe: 'Week' },
+        { period: '1', timeframe: 'Month' }
       ]
     },
     validateData(data) {
@@ -1718,7 +1710,7 @@ export default {
       this.editTIMData.splice(index, 1)
       if (this.editTIMData.length === 0) {
         this.editTIMData = []
-        this.defaultTIMTableLabels = ['Entry Date', '1 Day [%]', '1 Week [%]']
+        this.defaultTIMTableLabels = ['Entry Date', '1 Week [%]', '1 Month [%]']
         this.TIMHistoryList = []
         this.TIMResult_quotes = []
       }
@@ -1778,7 +1770,6 @@ export default {
 	width: 50% !important;
 }
 .el-table /deep/ th, .el-table /deep/ td {
-  text-align: center;
+	text-align: center;
 }
-
 </style>
