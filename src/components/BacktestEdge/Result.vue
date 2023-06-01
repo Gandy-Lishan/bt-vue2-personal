@@ -23,9 +23,21 @@
 				</el-col>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12" :span="2">
 					<div class="dateBox">
-						<el-form-item label="Start date:">
+						<el-form-item label="Backtest Period:">
+							<el-input disabled v-model="historyValue"> </el-input>
+						</el-form-item>
+						<el-form-item
+							label="Start date:"
+							v-if="backtestEditData.start_date != '1800-10-01'"
+						>
 							<el-input disabled v-model="backtestEditData.start_date">
 							</el-input>
+						</el-form-item>
+						<el-form-item
+							label="Start date:"
+							v-if="backtestEditData.start_date == '1800-10-01'"
+						>
+							<el-input disabled> </el-input>
 						</el-form-item>
 					</div>
 					<div class="dateBox">
@@ -36,7 +48,7 @@
 					</div>
 					<el-form-item label="Timeframe:" prop="frequency">
 						<!-- <div class="selectBox"> -->
-							<!-- <el-select
+						<!-- <el-select
 								v-model="editFrequency"
 								placeholder="— Select Timeframe —"
 								disabled
@@ -74,89 +86,64 @@
 </template>
 <script>
 export default {
-	props: { backtestEditData: Object, editFrequency: String },
-	name: 'setUp',
-	data() {
-		return {
-			historyOptions: [
-				{
-					value: 1,
-					label: '1 Year'
-				},
-				{
-					value: 2,
-					label: '2 Year'
-				},
-				{
-					value: 3,
-					label: '3 Year'
-				},
-				{
-					value: 4,
-					label: '4 Year'
-				},
-				{
-					value: 5,
-					label: '5 Year'
-				},
-				{
-					value: 10,
-					label: '10 Year'
-				},
-				{
-					value: 15,
-					label: '15 Year'
-				},
-				{
-					value: 20,
-					label: '20 Year'
-				},
-				{
-					value: 21,
-					label: 'All History'
-				},
-				{
-					value: 22,
-					label: 'Custom...'
-				}
-			],
-			frequencyOptions: [
-				{ value: 'Daily', label: 'Daily' },
-				{ value: 'Weekly', label: 'Weekly' },
-				{ value: 'Monthly', label: 'Monthly' }
-			],
-			mmValue: 0,
-			mmOptions: [
-				{
-					value: 0,
-					label: 'All In / All Out (CASH)'
-				}
-			],
-			historyValue: 1,
-			symbolList: [],
-			indexList: [],
-			loading: false,
-			options: [],
-			temp: { commission: '', slippage: '' },
-			sentimentIndicatorList: []
-		}
-	},
-	watch: {
-		backtestEditData: {
-			handler(newVal) {
-				if (JSON.stringify(newVal) != '{}') {
-					console.log('result', newVal)
-					const commission = Number(newVal.commission)
-					this.temp.commission = commission.toFixed(2)
-				}else{
-					this.temp.commission = ''
-					this.temp.slippage = ''
-				}
-			},
-			immediate: true,
-			deep: true
-		}
-	}
+  props: { backtestEditData: Object, editFrequency: String },
+  name: 'setUp',
+  data() {
+    return {
+      frequencyOptions: [
+        { value: 'Daily', label: 'Daily' },
+        { value: 'Weekly', label: 'Weekly' },
+        { value: 'Monthly', label: 'Monthly' }
+      ],
+      mmValue: 0,
+      mmOptions: [
+        {
+          value: 0,
+          label: 'All In / All Out (CASH)'
+        }
+      ],
+      historyValue: '',
+      symbolList: [],
+      indexList: [],
+      loading: false,
+      options: [],
+      temp: { commission: '', slippage: '' },
+      sentimentIndicatorList: []
+    }
+  },
+  watch: {
+    backtestEditData: {
+      handler(newVal) {
+        if (JSON.stringify(newVal) != '{}') {
+          console.log('result', newVal)
+          const commission = Number(newVal.commission)
+          this.temp.commission = commission.toFixed(2)
+          let year
+          let month
+          let day
+          if (newVal.start_date && newVal.start_date !== '1800-10-01') {
+            const starArr = newVal.start_date.toString().split('-')
+            const endArr = newVal.end_date.toString().split('-')
+            year = Number(endArr[0]) - Number(starArr[0])
+            month = Number(endArr[1]) - Number(starArr[1])
+            day = Number(endArr[2]) - Number(starArr[2])
+            if (month == 0 && day == 0) {
+              this.historyValue = `${year} Year`
+            } else {
+              this.historyValue = 'Custom...'
+            }
+          } else {
+            this.historyValue = 'All History'
+          }
+        } else {
+          this.temp.commission = ''
+          this.temp.slippage = ''
+        }
+      },
+      immediate: true,
+      deep: true
+    }
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -215,7 +202,7 @@ export default {
 	.el-input__suffix {
 		right: 68px;
 	}
-	.nameBox input[type="text"]:last-child{
+	.nameBox input[type='text']:last-child {
 		width: 30%;
 	}
 }
