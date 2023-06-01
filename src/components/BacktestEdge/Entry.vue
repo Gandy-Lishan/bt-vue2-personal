@@ -21,6 +21,7 @@
 					<i class="iconfont icon-wenhao"></i>
 				</el-tooltip>
 			</div>
+			{{this.indicatorRadioArr}}
 			<div class="signal-container">
 				<span class="scoreNote" v-if="relation === 2">
 					<span>Score: </span>
@@ -1141,6 +1142,7 @@ export default {
 			await this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
 		},
 		async userEntryFileSelect(data) {
+			if(this.indicatorRadioArr[data.index] !== 'user') return
 			await this.$refs.indiChild[data.index].changeIndicatorChecked("Users' Own Indicator")
 			await this.$refs.indiChild[data.index].handleUsersOwnIndicatorSelect(data.val.data)
 			await this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
