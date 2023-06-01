@@ -238,8 +238,10 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import moment from "moment";
 import {
   getIndexsList,
-  getStocksList
+  getStocksList,
+  getPairData
 } from '@/service/service.js'
+import { timestampToTime } from '@/tools/formatDate.js'
 const uniqWith = require('lodash/uniqWith')
 const isEqual = require('lodash/isEqual')
 export default {
@@ -282,18 +284,65 @@ export default {
       indexList: [],
       loading: false,
       direction: 'Long',
-      pickerOptions: {
-        disabledDate(time) {
-          // 获取当前日期
-          const currentDate = new Date();
-          currentDate.setHours(0, 0, 0, 0);
-           const year = time.getFullYear();
-          return time.getTime() >= currentDate.getTime() || (time.getDay()===0||time.getDay()===6) || year < 1993
-        }
-      }
+      dateList: [],
+      // pickerOptions: {
+      //   disabledDate(time) {
+      //     // 获取当前日期
+      //     const currentDate = new Date();
+      //     currentDate.setHours(0, 0, 0, 0);
+      //      const year = time.getFullYear();
+      //     return time.getTime() >= currentDate.getTime() || (time.getDay()===0||time.getDay()===6) || year < 1993
+      //   }
+      // }
     }
   },
+  computed: {
+    pickerOptions() {
+      return {
+        disabledDate: this.disabledDate // 设置禁用日期的函数
+      };
+    }
+  },
+  async created() {
+    await this.getDateList()
+  },
   methods: {
+    disabledDate(date) {
+      // 禁用小于1993年的日期和大于今天的日期
+      const currentDate = new Date();
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const day = date.getDate();
+      
+      const isBefore1993 = year < 1993;
+      const isAfterToday = currentDate < new Date(year, month, day);
+      
+      // 检查日期是否在日期列表中
+      const isInDateList = this.dateList.includes(this.formatDate(date));
+      
+      return isBefore1993 || isAfterToday || !isInDateList;
+    },
+    formatDate(date) {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    },
+    async getDateList() {
+      const startDate = '1993-01-01',
+      endDate = timestampToTime(new Date()),
+      frequency = 'daily',
+      symbol = 'SPX'
+
+      const res = await getPairData(startDate, endDate, frequency, symbol)
+      const pairDataList = res.data.map(item => {
+        const dateObj = new Date(item.DT)
+        const formattedDate = dateObj.toISOString().slice(0, 10)
+        return formattedDate
+      })
+      this.dateList = pairDataList
+      console.log(pairDataList)
+    },
     generate_table_data() {
       this.generatePeriods()
 
