@@ -22,7 +22,6 @@
 					<i class="iconfont icon-wenhao"></i>
 				</el-tooltip>
 			</div>
-			{{this.indicatorRadioArr}}
 			<div class="signal-container">
 				<span class="scoreNote" v-if="relation === 2">
 					<span>Score: </span>
