@@ -141,49 +141,51 @@ delay_bars: [String, Number],
 			let direction = ''
 			let commentDes
 			if(index === 0) {
-			if (this.criteria == 'entry') {
-				criteria = 'E:'
-				direction = this.direction + ':'
-			}
-			if (this.criteria == 'exit') {
-				criteria = 'X:'
-				if (this.direction == 'Long') {
-					direction = 'Close:'
-				} else if (this.direction == 'Short') {
-					direction = 'Cover:'
+				if (this.criteria == 'entry') {
+					criteria = 'E:'
+					direction = this.direction + ':'
 				}
-			}
-			let relation = ''
-				let score = ''
-				let period = ''
-				switch (this.relation) {
-					case 0:
-						relation = "Only Risk;"
-						break;
-					case 1:
-						relation = "Single Condition;"
-						break;
-					case 2:
-						relation = "SameBar Multi Condition;"
-						score = 'Score: ' + this.score + ';'
-						break;
-					case 3:
-						relation = "TimeOrder Multi Condition;"
-						period = 'Period: ' + this.period + ';'
-						break;
-					default:
-						break;
+				if (this.criteria == 'exit') {
+					criteria = 'X:'
+					if (this.direction == 'Long') {
+						direction = 'Close:'
+					} else if (this.direction == 'Short') {
+						direction = 'Cover:'
+					}
 				}
-				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars  + ';':''
-				commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
-				  if(this.relation != 1) {
-					  
-				   let desObj = {}
-					desObj.criteria = this.criteria
-					desObj.description = commentDes
-					desObj.index = index
-					this.$store.commit('saveDescription', desObj)
-				  } 
+				let relation = ''
+					let score = ''
+					let period = ''
+					switch (this.relation) {
+						case 0:
+							relation = "Only Risk;"
+							break;
+						case 1:
+							relation = "Single Condition;"
+							break;
+						case 2:
+							relation = "SameBar Multi Condition;"
+							score = 'Score: ' + this.score + ';'
+							break;
+						case 3:
+							relation = "TimeOrder Multi Condition;"
+							period = 'Period: ' + this.period + ';'
+							break;
+						default:
+							break;
+					}
+					let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars  + ';':''
+					commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
+					if(this.relation != 1) {	  
+						let desObj = {}
+						desObj.criteria = this.criteria
+						desObj.description = {
+							'commentDes':commentDes,
+							'rocCond':null
+						}
+						desObj.index = index
+						this.$store.commit('saveDescription', desObj)
+					} 
 
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
@@ -223,11 +225,17 @@ delay_bars: [String, Number],
 			let desObj = {}
 			desObj.criteria = this.criteria
 					if(this.relation != 1) {
-					desObj.description = this.description
-					desObj.index = index + 1
+						desObj.description = {
+							'commentDes':this.description,
+							'rocCond':null
+						}
+						desObj.index = index + 1
 					}
 					if(this.relation == 1) {
-						desObj.description = commentDes  + this.description
+						desObj.description = {
+							'commentDes':commentDes + this.description,
+							'rocCond':null
+						}
 						desObj.index = 0
 					}
 			this.$store.commit('saveDescription', desObj)
