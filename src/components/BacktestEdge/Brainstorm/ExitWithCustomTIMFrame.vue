@@ -193,43 +193,41 @@
 				</template>
 			</el-skeleton>
 		</div>
-    <div class="zscore-container">
-      <el-skeleton :rows="2" :loading="loading" animated>
-        <template>
-          <el-table
-            :data="TIMResult_quotes"
-            :show-header="false"
-            stripe
-            style="width: 100%; height: 100%"
-          >
-            <el-table-column prop="property" label="Property">
-            </el-table-column>
+		<div class="zscore-container">
+			<el-skeleton :rows="2" :loading="loading" animated>
+				<template>
+					<el-table
+						:data="TIMResult_quotes"
+						:show-header="false"
+						stripe
+						style="width: 100%; height: 100%"
+					>
+						<el-table-column prop="property" label="Property">
+						</el-table-column>
 
-            <template v-for="column in periodsTIM">
-              <el-table-column
-                :key="column.period"
-                :label="column.period"
-                :prop="column.period"
-              >
-                <template slot-scope="scope">
-                  <p class="tableText">
-                    {{
-                      !Number.isNaN(scope.row[column.period])
-                        ? typeof scope.row[column.period] == 'string'
-                          ? scope.row[column.period]
-                          : parseFloat(
-                              scope.row[column.period]
-                            ).toFixed(1)
-                        : null
-                    }}
-                  </p>
-                </template>
-              </el-table-column>
-            </template>
-          </el-table>
-        </template>
-      </el-skeleton>
-    </div>
+						<template v-for="column in periodsTIM">
+							<el-table-column
+								:key="column.period"
+								:label="column.period"
+								:prop="column.period"
+							>
+								<template slot-scope="scope">
+									<p class="tableText">
+										{{
+											!Number.isNaN(scope.row[column.period])
+												? typeof scope.row[column.period] == 'string'
+													? scope.row[column.period]
+													: parseFloat(scope.row[column.period]).toFixed(1)
+												: null
+										}}
+									</p>
+								</template>
+							</el-table-column>
+						</template>
+					</el-table>
+				</template>
+			</el-skeleton>
+		</div>
 	</div>
 </template>
 
@@ -313,13 +311,13 @@ export default {
       const year = date.getFullYear();
       const month = date.getMonth();
       const day = date.getDate();
-      
+
       const isBefore1993 = year < 1993;
       const isAfterToday = currentDate < new Date(year, month, day);
-      
+
       // 检查日期是否在日期列表中
       const isInDateList = this.dateList.includes(this.formatDate(date));
-      
+
       return isBefore1993 || isAfterToday || !isInDateList;
     },
     formatDate(date) {
@@ -330,9 +328,9 @@ export default {
     },
     async getDateList() {
       const startDate = '1993-01-01',
-      endDate = timestampToTime(new Date()),
-      frequency = 'daily',
-      symbol = 'SPX'
+        endDate = timestampToTime(new Date()),
+        frequency = 'daily',
+        symbol = 'SPX'
 
       const res = await getPairData(startDate, endDate, frequency, symbol)
       const pairDataList = res.data.map(item => {
@@ -395,7 +393,11 @@ export default {
     },
     addRow() {
       if (this.editTIMData.length >= 10) {
-        this.$message.warning('Cannot add more than 10 rows.')
+        this.$notify({
+          title: 'Warning',
+          message: 'Cannot add more than 10 rows.',
+          type: 'warning'
+        });
         return
       }
       const newRow = {
@@ -408,7 +410,11 @@ export default {
     },
     addDateRow() {
       if (this.entryDates.length >= 10) {
-        this.$message.warning('Cannot add more than 10 rows.')
+        this.$notify({
+          title: 'Warning',
+          message: 'Cannot add more than 10 rows.',
+          type: 'warning'
+        });
         return
       }
       const newRow = {
@@ -443,7 +449,7 @@ export default {
       try {
         const periodArray = this.getValues()
         // 去重
-        console.log('去重',this.entryDates)
+        console.log('去重', this.entryDates)
         const dateUniqueData = [];
         this.entryDates.forEach(item => {
           const isDateDuplicate = dateUniqueData.some(
@@ -458,7 +464,11 @@ export default {
         this.entryDates = dateUniqueData
         // this.entryDates = Array.from(new Set(this.entryDates))
         if (this.entryDates.length === 0 || periodArray.length === 0) {
-          this.$message.warning('Entry Date or Time In Market is empty. Please click Add Row to add data.')
+          this.$notify({
+            title: 'Warning',
+            message: 'Entry Date or Time In Market is empty. Please click Add Row to add data.',
+            type: 'warning'
+          });
           CIQ.hideCover()
           CIQ.nprogress.done()
           return
@@ -530,21 +540,33 @@ export default {
         if (item.timeframe === 'Day' || item.timeframe === 'Days') {
           const period = parseInt(item.period);
           if (isNaN(period) || period < 1 || period > 252 || !Number.isInteger(Number(item.period))) {
-            this.$message.warning('When the Timeframe is selected as Day(s), only positive integers between 1 and 252 are allowed to be entered.');
+            this.$notify({
+              title: 'Warning',
+              message: 'When the Timeframe is selected as Day(s), only positive integers between 1 and 252 are allowed to be entered.',
+              type: 'warning'
+            });
             return false;
           }
         }
         if (item.timeframe === 'Week' || item.timeframe === 'Weeks') {
           const period = parseInt(item.period);
           if (isNaN(period) || period < 1 || period > 52 || !Number.isInteger(Number(item.period))) {
-            this.$message.warning('When the Timeframe is selected as Week(s), only positive integers between 1 and 52 are allowed to be entered.');
+            this.$notify({
+              title: 'Warning',
+              message: 'When the Timeframe is selected as Week(s), only positive integers between 1 and 52 are allowed to be entered.',
+              type: 'warning'
+            });
             return false;
           }
         }
         if (item.timeframe === 'Month' || item.timeframe === 'Months') {
           const period = parseInt(item.period);
           if (isNaN(period) || period < 1 || period > 120 || !Number.isInteger(Number(item.period))) {
-            this.$message.warning('When the Timeframe is selected as Month(s), only positive integers between 1 and 120 are allowed to be entered.');
+            this.$notify({
+              title: 'Warning',
+              message: 'When the Timeframe is selected as Month(s), only positive integers between 1 and 120 are allowed to be entered.',
+              type: 'warning'
+            });
             return false;
           }
         }
@@ -554,7 +576,11 @@ export default {
     validateEntryDate(data) {
       for (const item of data) {
         if (!item.value || item.value === 'Invalid date') {
-          this.$message.warning('There are rows in Entry Date with an unselected date.')
+          this.$notify({
+            title: 'Warning',
+            message: 'There are rows in Entry Date with an unselected date.',
+            type: 'warning'
+          });
           return false
         }
       }
@@ -864,9 +890,9 @@ export default {
       const res = period_dict.map((val, i) => ({
         Period: val['timeframe'],
         Median: median_list[i],
-        '% Positive': isNaN(positive_list[i])? '' : (positive_list[i]* 100).toFixed(2) + ' %',
-        'Avg Max Loss': median_list[i]?max_loss_list[i]:NaN,
-        'Avg Max Gain': median_list[i]?max_gain_list[i]:NaN,
+        '% Positive': isNaN(positive_list[i]) ? '' : (positive_list[i] * 100).toFixed(2) + ' %',
+        'Avg Max Loss': median_list[i] ? max_loss_list[i] : NaN,
+        'Avg Max Gain': median_list[i] ? max_gain_list[i] : NaN,
         'Z-Score': z_score_list[i]
       }))
 
