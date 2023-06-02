@@ -247,16 +247,7 @@ export default {
   data() {
     return {
       dialogDateVisible: false, // 弹框可见性
-      entryDates: [{
-        value: '2023-05-09',
-        placeholder: 'select entry date',
-        readonly: false
-      },
-      {
-        value: '2023-05-10',
-        placeholder: 'select entry date',
-        readonly: false
-      }], // 存储选择的日期数组
+      entryDates: [], // 存储选择的日期数组
       showTable: false,
       editTIMData: [
         {
@@ -303,8 +294,29 @@ export default {
   },
   async created() {
     await this.getDateList()
+    this.initialEntryDate()
   },
   methods: {
+    initialEntryDate() {
+      let yesterday = this.dateList[this.dateList.length - 1]
+      let beforeYes = this.dateList[this.dateList.length - 2]
+      if (this.dateList.length == 0) {
+        yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1); // 昨天
+        beforeYes = new Date();
+        beforeYes.setDate(beforeYes.getDate() - 2); // 大前天
+      }
+      this.entryDates = [{
+        value: beforeYes,
+        placeholder: 'select entry date',
+        readonly: false
+      },
+      {
+        value: yesterday,
+        placeholder: 'select entry date',
+        readonly: false
+      }]
+    },
     disabledDate(date) {
       // 禁用小于1993年的日期和大于今天的日期
       const currentDate = new Date();
