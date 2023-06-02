@@ -808,7 +808,6 @@ export default {
         )
       }
       console.log('trades', dataSet)
-      console.log('鍘熻绠楀悗鐨勬暟鎹', quotes)
       // 鏁版嵁鍒囩墖
       // quotes = quotes.filter((x) => {
       //   return this.start_date.getTime() <= x.DT.getTime()
@@ -902,7 +901,7 @@ export default {
       const res = period_dict.map((val, i) => ({
         Period: val['timeframe'],
         Median: median_list[i],
-        '% Positive': isNaN(positive_list[i]) ? '' : (positive_list[i] * 100).toFixed(2) + ' %',
+        '% Positive': isNaN(positive_list[i]) ? '' : Math.round(positive_list[i] * 100) + ' %',
         'Avg Max Loss': median_list[i] ? max_loss_list[i] : NaN,
         'Avg Max Gain': median_list[i] ? max_gain_list[i] : NaN,
         'Z-Score': z_score_list[i]
