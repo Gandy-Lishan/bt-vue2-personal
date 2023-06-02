@@ -604,8 +604,9 @@ export default {
       if (this.criteria == 'entry') {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url ==
-            this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+            item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex] &&
+            item.criteria == this.criteria && 
+            item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
@@ -622,8 +623,9 @@ export default {
       } else {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url ==
-            this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+            item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex] &&
+            item.criteria == this.criteria && 
+            item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
@@ -659,8 +661,9 @@ export default {
       if (this.criteria == 'entry') {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url ==
-            this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+            item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex] &&
+            item.criteria == this.criteria && 
+            item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
@@ -677,8 +680,9 @@ export default {
       } else {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url ==
-            this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+            item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex] &&
+            item.criteria == this.criteria && 
+            item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
@@ -723,8 +727,9 @@ export default {
 
         var MAListIndex = activatedMAList.findIndex(
           (ma) =>
-            ma.url ==
-            this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+            ma.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex] &&
+            ma.criteria == this.criteria && 
+            ma.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
@@ -741,8 +746,9 @@ export default {
 
         var MAListIndex = activatedMAList.findIndex(
           (ma) =>
-            ma.url ==
-            this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+            ma.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex] &&
+            ma.criteria == this.criteria && 
+            ma.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
@@ -810,8 +816,9 @@ export default {
       if (this.criteria == 'entry') {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url ==
-            this.$store.state.indicators.formIndicators.entry[this.panelIndex]
+            item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex] &&
+            item.criteria == this.criteria && 
+            item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
@@ -828,8 +835,9 @@ export default {
       } else {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url ==
-            this.$store.state.indicators.formIndicators.exit[this.panelIndex]
+            item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex] &&
+            item.criteria == this.criteria && 
+            item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
