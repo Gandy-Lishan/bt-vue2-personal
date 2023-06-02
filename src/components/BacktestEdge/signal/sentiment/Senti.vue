@@ -515,13 +515,17 @@ export default {
 					}
 					result = obj
 				}
-				console.log('remove ma',result)
+				// 限制只移除当前ma
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					if (
-						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
+						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
+						&& CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'
 					) {
+						// 为什么不直接判断是否为st ma呢
 						// sentiment indicator自带的ROCLike除外
-						if(studyInstanceName.indexOf('‌ST ROCLike‌')!=-1) continue					
+						//if(studyInstanceName.indexOf('‌ST ROCLike‌')!=-1) continue					
 						CIQ.Studies.removeStudy(
 							CIQ.stxx,
 							CIQ.stxx.layout.studies[studyInstanceName]
@@ -532,7 +536,7 @@ export default {
 				var activatedMAList = this.$store.state.activatedMA
 				// remove current MA attached to an indicator
 				var MAListIndex = activatedMAList.findIndex(
-					(item) => item.url == result.url
+					(item) => item.url == result.url && item.criteria == this.criteria && item.index == this.panelIndex
 				)
 				if (MAListIndex != -1) {
 					activatedMAList.splice(MAListIndex, 1)
@@ -627,10 +631,14 @@ export default {
 			if(!result){return}
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				if (
-					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url
+					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url &&
+					CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
+					CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
+					&& CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'
 				) {
+					// 为什么不直接判断是否为st ma呢
 					// sentiment indicator自带的ROCLike除外
-					if(studyInstanceName.indexOf('‌ST ROCLike‌')!=-1) continue	
+					//if(studyInstanceName.indexOf('‌ST ROCLike‌')!=-1) continue	
 					CIQ.Studies.removeStudy(
 						CIQ.stxx,
 						CIQ.stxx.layout.studies[studyInstanceName]
@@ -642,15 +650,23 @@ export default {
 				Period: _val,
 				display: 'ST MA',
 				Field: result.url
+			},null,{
+				criteria: this.criteria,
+				index: this.panelIndex
 			})
-			// console.log(sd,CIQ.stxx.layout.studies)
+
 			// keep current MA
-			var objMA = { period: _val, url: result.url }
+			var objMA = { 
+				period: _val, 
+				url: result.url, 
+				criteria: this.criteria, 
+				index: this.panelIndex
+			}
 			var activatedMAList = this.$store.state.activatedMA
 
 			// remove current MA attached to an indicator
 			var MAListIndex = activatedMAList.findIndex(
-				(item) => item.url == result.url
+				(item) => item.url == result.url && item.criteria == this.criteria && item.index == this.panelIndex
 			)
 			if (MAListIndex != -1) {
 				activatedMAList.splice(MAListIndex, 1)
