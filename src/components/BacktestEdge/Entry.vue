@@ -16,7 +16,6 @@
 						3. TimeOrder Multi-Condition: More than one conditions (limit to 3)
 						occurring within a number of bars,will trigger the backtest
 						condition.<br />
-
 					</span>
 					<i class="iconfont icon-wenhao"></i>
 				</el-tooltip>
