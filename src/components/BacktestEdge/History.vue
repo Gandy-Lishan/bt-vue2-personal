@@ -134,6 +134,20 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
+									content="edit backtest"
+									placement="bottom-start"
+								>
+									<el-button
+										type="success"
+										icon="el-icon-video-play"
+										circle
+										size="mini"
+										@click="rerunBacktest(scope.row)"
+									></el-button>
+								</el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="dark"
 									content="add to favorites"
 									v-if="scope.row.favorites == false"
 									placement="bottom-start"
@@ -461,6 +475,46 @@ export default {
 				})
 			}
 		}, 500),
+
+		rerunBacktest: throttle(async function (row) {
+			console.log('editBacktest', row)
+			let vm = this
+			try {
+				CIQ.addCover('Fetching backtest information...')
+				CIQ.nprogress.start()
+				const res = await seeParams(row.id)
+				document.getElementsByClassName('ciq-period')[0].style.display = ''
+				//  Restore indicator layout
+				this.$store.commit('getBacktestSymbol', res.data.symbol)
+				CIQ.hideMarker()
+				CIQ.isMarkerShown = false
+				if (res.data.indicator_layout) {
+					let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$','\u200c'))
+					this.restoreIndicatorLayoutRerun(
+						parsedData,
+						res.data.frequency,
+						row, res.data
+					)
+				} else {
+					this.$store.commit('getRunBacktestData', row)
+					// emit Synchronous call
+					this.$emit('goTobacktestSetupForm', row.id, res.data,'edit',()=>{
+						this.$emit('goBacktestResultForm', row, ()=>{
+							this.$emit('switchTab','first')
+							this.$emit('rerun')
+							CIQ.hideCover()
+							CIQ.nprogress.done()						
+						})
+					})	
+				}
+			} catch (error) {
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
+				})
+			}
+		}, 500),
 		async deleteBacktest(id) {
 			try {
 				const res = await deleteBacktest(id)
@@ -654,6 +708,21 @@ export default {
 					that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
 						that.$emit('goBacktestResultForm', row, ()=>{
 							that.$emit('switchTab','first')
+							CIQ.hideCover()
+							CIQ.nprogress.done()
+						})
+					})	
+				})
+		}, 
+		restoreIndicatorLayoutRerun(data, freq, row, resData) {
+				this.reloadData(data, freq)
+				var that = this
+				CIQ.addIndicatorsFromBacktest(function () {
+					that.$store.commit('getRunBacktestData', row)
+					that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
+						that.$emit('goBacktestResultForm', row, ()=>{
+							that.$emit('switchTab','first')
+							that.$emit('rerun')
 							CIQ.hideCover()
 							CIQ.nprogress.done()
 						})

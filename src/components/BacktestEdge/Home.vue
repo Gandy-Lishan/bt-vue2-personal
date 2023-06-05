@@ -112,6 +112,7 @@
 						@goToFavoritesForm="goToFavoritesForm"
 						@refFavoritesForm="refFavoritesForm"
 						@switchTab="switchTab"
+            @rerun="rerun"
 					></history
 				></el-tab-pane>
 				<el-tab-pane label="Results" name="third"
@@ -1265,7 +1266,10 @@ export default {
     },
     switchTab(tabName) {
       this.activeName = tabName
-    }
+    },
+    rerun() {
+      this.runBacktest()
+    },
   }
 }
 </script>
