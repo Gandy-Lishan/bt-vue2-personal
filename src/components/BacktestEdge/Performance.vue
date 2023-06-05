@@ -656,7 +656,7 @@
 <script>
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import jutils from 'jutils-src'
-import { seeReport } from '@/service/service'
+import { seeReport, setCustomTIM, getCustomTIM } from '@/service/service'
 // import sortByRule from "@/tools/sortTIM";
 const XLSX = require('xlsx');
 
@@ -712,6 +712,7 @@ export default {
       defaultTIMTableLabels: ['Entry Date', '1 Week [%]', '1 Month [%]'],
       TIMHistoryList: [],
       TIMResult_quotes: [],
+      editBacktestID: null
     }
   },
   created() {
@@ -723,7 +724,6 @@ export default {
     },
     generate_table_data() {
       this.generatePeriods()
-
       if (this.activeTIM == 'first') {
         // 鎻愬彇灞炴€т俊鎭
         let keys = Object.keys(this.result_quotes[0])
@@ -805,6 +805,7 @@ export default {
       let vm = this
       let initalData = {}
       let data = {}
+      vm.editBacktestID = row.id
       // 娓呯┖performance琛ㄥ崟
       vm.clearPerformanceData()
       if (!row.id) {
@@ -917,13 +918,36 @@ export default {
                   vm.tradesData,
                   periodArray
                 )
-
+                let timPeriodArray = []
+                const res = await getCustomTIM(row.id)
+                let result = null
+                try {
+                  result = JSON.parse(res.data[0].tim_data)
+                } catch (error) {
+                  result = [
+                  { period: 1, timeframe: 'Week' },
+                  { period: 1, timeframe: 'Month' }
+                ]
+                }
+                timPeriodArray = result
+                this.editTIMData = timPeriodArray
+                const transformData = this.transformData(timPeriodArray)
+                transformData.sort((a, b) => a.value - b.value);
+                const table = ['Entry Date']
+                transformData.map((item) => {
+                  table.push(item.timeframe)
+                })
+                this.defaultTIMTableLabels = table
+                this.TIMHistoryList = this.calculateBacktestHistory(vm.tradesData, timPeriodArray)
                 // 2.1涓紩鍏ュ垎鏋愬笀鐨刏Score妯″潡
                 var datatime = new Date(initalData['basic']['start_date'])
                 var offset = datatime.getTimezoneOffset() * 60 * 1000
                 this.start_date = new Date(
                   datatime.setTime(datatime.getTime() + offset)
                 )
+                this.activeTIM = 'second'
+                this.calculateZScore(vm.tradesData, timPeriodArray)
+                this.activeTIM = 'first'
                 this.calculateZScore(vm.tradesData, periodArray)
               }
 
@@ -964,16 +988,15 @@ export default {
       })
       const uniqueData = [];
       data.forEach(item => {
-          const isDuplicate = uniqueData.some(
-            uniqueItem =>
-              uniqueItem.period == item.period && uniqueItem.timeframe == item.timeframe
-          );
+        const isDuplicate = uniqueData.some(
+          uniqueItem =>
+            uniqueItem.period == item.period && uniqueItem.timeframe == item.timeframe
+        );
 
-          if (!isDuplicate) {
-            uniqueData.push(item);
-          }
-        });
-        console.log('数据去重', uniqueData)
+        if (!isDuplicate) {
+          uniqueData.push(item);
+        }
+      });
       return uniqueData.map((item) => {
         let timeframe =
           item.period > 1
@@ -1614,14 +1637,14 @@ export default {
     showTableDialog() {
       this.showTable = true;
     },
-    saveTable() {
+    async saveTable() {
       this.showTable = false;
       if (this.tradesData.length === 0) {
         this.$message.warning('No computable trades.')
         return
       }
       const f1 = Array.isArray(this.editTIMData) && !this.editTIMData.length
-      if(f1) {
+      if (f1) {
         return
       }
       CIQ.addCover('Calculating...')
@@ -1658,6 +1681,11 @@ export default {
         this.TIMHistoryList = data
         this.calculateZScore(this.tradesData, uniqueData)
         //this.resetTable()
+        const reqData = {
+          backtest_id: this.editBacktestID,
+          tim_data: uniqueData,
+        }
+        const res = await setCustomTIM(reqData)
       } catch (error) {
         console.log(error)
       }
@@ -1763,7 +1791,8 @@ export default {
 .el-dialog__wrapper /deep/.el-dialog {
 	width: 50% !important;
 }
-.el-table /deep/ th, .el-table /deep/ td {
+.el-table /deep/ th,
+.el-table /deep/ td {
 	text-align: center;
 }
 </style>

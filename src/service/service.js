@@ -319,6 +319,41 @@ export function getPairData(startDate, endDate, frequency, symbol) {
 	})
 }
 
+export function getCustomTIM(backtest_id) {
+	const url = `/dev/tim/?backtest_id=${backtest_id}`
+
+
+	return new Promise((resolve, reject) => {
+		axios.get(url, {withCredentials: true})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+
+export function setCustomTIM(data) {
+  const url = `/dev/tim/`;
+  const headers = {
+    'Content-Type': 'application/json'
+  };
+	const formData = new FormData();
+  formData.append('backtest_id', data.backtest_id);
+  formData.append('tim_data', JSON.stringify(data.tim_data))
+  return new Promise((resolve, reject) => {
+    axios.post(url, formData, { headers, withCredentials: true })
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
+
 // instance.interceptors.request.use((config) => {
 // 	config.headers.Authorization = window.sessionStorage.getItem('token')
 // 	config.auth = {
