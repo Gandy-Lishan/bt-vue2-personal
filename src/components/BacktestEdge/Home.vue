@@ -150,7 +150,8 @@
 				<!-- <el-tab-pane label="Analysts' Backtest" name="sixth">
 						<router-view @goToHistoryForm="goToHistoryForm"  @refHistoryForm="refHistoryForm" @goTobacktestSetupForm="goTobacktestSetupForm" @goBacktestResultForm="goBacktestResultForm"></router-view>
 					</el-tab-pane> -->
-				<el-tab-pane :label="renderLabel()" name="seventh">
+          <!-- 暂时隐藏brinstorm -->
+				<el-tab-pane :label="renderLabel()" name="seventh" v-if="0">
 					<router-view></router-view>
 				</el-tab-pane>
 			</el-tabs>

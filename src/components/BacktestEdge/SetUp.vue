@@ -1012,6 +1012,10 @@ export default {
 					if (this.historyValue == 21) {
 						bd.start_date = '1800-10-01'
 					}
+					//edit后，如果不是用户自定义选择时间，则点击跑回测按钮前把end date 修改为最新日期
+					if (this.historyValue != 22) {
+						bd.end_date = timestampToTime(new Date())
+					}
 					this.$store.commit('setBd', bd)
 					return checked
 				} else {
