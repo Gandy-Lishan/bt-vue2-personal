@@ -83,9 +83,9 @@
 					</el-table-column>
 					<el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
-							{{ scope.row.entry_description[0] }}<br />
+							{{ scope.row.entry_description[0].commentDes }}<br />
 							<br />
-							{{ scope.row.exit_description[0] }}<br />
+							{{ scope.row.exit_description[0].commentDes }}<br />
 						</template>
 					</el-table-column>
 					<el-table-column

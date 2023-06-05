@@ -979,7 +979,6 @@ export default {
             uniqueData.push(item);
           }
         });
-        console.log('数据去重', uniqueData)
       return uniqueData.map((item) => {
         let timeframe =
           item.period > 1
