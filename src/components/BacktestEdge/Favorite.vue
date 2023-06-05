@@ -184,6 +184,21 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
+									content="copy backtest"
+									placement="bottom-start"
+								>
+									<el-button
+										:disabled="scope.row.status == 0"
+										type="info"
+										icon="el-icon-copy-document"
+										circle
+										size="mini"
+										@click="copyBacktest(scope.row)"
+									></el-button>
+								</el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="dark"
 									content="view backtest results"
 									placement="bottom-start"
 								>
@@ -236,341 +251,367 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 const throttle = require('lodash/throttle')
 import { copy, permission } from '@/tools/copyBacktestID'
 import {
-	getFavoriteList,
-	seeParams,
-	deleteBacktest,
-	copyBacktest,
-	favoriteBacktest
+  getFavoriteList,
+  seeParams,
+  deleteBacktest,
+  copyBacktest,
+  favoriteBacktest,
+  getBacktestName
 } from '@/service/service'
 export default {
-	data() {
-		return {
-			backtestList: [],
-			strategyName: '',
-			checkList: [],
-			checked: false,
-			backtestId: [],
-			dialogVisible: false,
-			img_data: '',
-			loading: false,
-			currentBacktestList: [],
-			backtestItemId: 0,
-			backtestResultList: [],
-			editData: {},
-			queryInfo: {
-				page: 1,
-				total: 0
-			}
-		}
-	},
-	directives: {
-		copy,
-		permission
-	},
-	methods: {
-		async getFavoriteList(strategy) {
-			this.loading = true
-			let page = this.queryInfo.page
-			try {
-				const res = await getFavoriteList(page)
-				if (res.status === 200) {
-					this.loading = false
-					this.backtestList = res.data.results
-					if (this.backtestList.length != 0) {
-						this.backtestList.forEach((element) => {
-							if (element.result !== '')
-								element.result = JSON.parse(element.result)
-							if (element.entry_description.indexOf('[') != -1) {
-								element.entry_description = JSON.parse(
-									element.entry_description
-								)
-							} else {
-								element.entry_description = [element.entry_description]
-							}
-							if (element.exit_description.indexOf('[') != -1) {
-								element.exit_description = JSON.parse(element.exit_description)
-							} else {
-								element.exit_description = [element.exit_description]
-							}
-						})
-					}
-					this.queryInfo.total = res.data.count
-				}
-			} catch (error) {
-				console.log(error)
-			}
-		},
-		editBacktest: throttle(async function (row) {
-			let vm = this
-			try {
-				CIQ.addCover('Fetching backtest information...')
-				CIQ.nprogress.start()
+  data() {
+    return {
+      backtestList: [],
+      strategyName: '',
+      checkList: [],
+      checked: false,
+      backtestId: [],
+      dialogVisible: false,
+      img_data: '',
+      loading: false,
+      currentBacktestList: [],
+      backtestItemId: 0,
+      backtestResultList: [],
+      editData: {},
+      queryInfo: {
+        page: 1,
+        total: 0
+      }
+    }
+  },
+  directives: {
+    copy,
+    permission
+  },
+  methods: {
+    async getFavoriteList(strategy) {
+      this.loading = true
+      let page = this.queryInfo.page
+      try {
+        const res = await getFavoriteList(page)
+        if (res.status === 200) {
+          this.loading = false
+          this.backtestList = res.data.results
+          if (this.backtestList.length != 0) {
+            this.backtestList.forEach((element) => {
+              if (element.result !== '')
+                element.result = JSON.parse(element.result)
+              if (element.entry_description.indexOf('[') != -1) {
+                element.entry_description = JSON.parse(
+                  element.entry_description
+                )
+              } else {
+                element.entry_description = [element.entry_description]
+              }
+              if (element.exit_description.indexOf('[') != -1) {
+                element.exit_description = JSON.parse(element.exit_description)
+              } else {
+                element.exit_description = [element.exit_description]
+              }
+            })
+          }
+          this.queryInfo.total = res.data.count
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    editBacktest: throttle(async function (row) {
+      let vm = this
+      try {
+        CIQ.addCover('Fetching backtest information...')
+        CIQ.nprogress.start()
 
-				const res = await seeParams(row.id)
-				document.getElementsByClassName('ciq-period')[0].style.display = ''
-				// Restore indicator layout
-				this.$store.commit('getBacktestSymbol', res.data.symbol)
-				CIQ.hideMarker()
-				CIQ.isMarkerShown = false
-				if (res.data.indicator_layout) {
-					let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$','\u200c'))
-					this.restoreIndicatorLayoutEdit(
-						parsedData,
-						res.data.frequency,
-						row,
-						res.data
-					)
-				} else {
-					this.$store.commit('getRunBacktestData', row)
-					// Emit synchronous call
-					this.$emit('goTobacktestSetupForm', row.id, res.data,'edit',()=>{
-						this.$emit('goBacktestResultForm', row, ()=>{
-							this.$emit('switchTab','first')
-							CIQ.hideCover()
-							CIQ.nprogress.done()						
-						})
-					})
-				}
-			} catch (error) {
-				vm.$message({
-					message: 'The internal server is busy, please try again later ',
-					type: 'error',
-					offset: 300
-				})
-			}
-		}, 500),
-		async deleteBacktest(id) {
-			try {
-				const res = await deleteBacktest(id)
-				if (res.status == 204) {
-					this.getFavoriteList()
-					this.$emit('refHistoryForm')
-				} else {
-					this.$message.error({
-						message: 'The deletion failed',
-						duration: 1000
-					})
-				}
-			} catch (error) {
-				this.$message({
-					message: 'The internal server is busy, please try again later ',
-					type: 'error',
-					offset: 300
-				})
-			}
-		},
-		copyBacktest: throttle(async function (row) {
-			let params = {}
-			let res
-			try {
-				res = await seeParams(row.id)
-			} catch (error) {
-				this.$notify.error({
-					title: 'Service is busy',
-					message: 'The internal server is busy, please try again later ',
-					offset: 100
-				})
-			}
-			this.$store.commit('getBacktestSymbol', res.data.symbol)
+        const res = await seeParams(row.id)
+        document.getElementsByClassName('ciq-period')[0].style.display = ''
+        // Restore indicator layout
+        this.$store.commit('getBacktestSymbol', res.data.symbol)
+        CIQ.hideMarker()
+        CIQ.isMarkerShown = false
+        if (res.data.indicator_layout) {
+          let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
+          this.restoreIndicatorLayoutEdit(
+            parsedData,
+            res.data.frequency,
+            row,
+            res.data
+          )
+        } else {
+          this.$store.commit('getRunBacktestData', row)
+          // Emit synchronous call
+          this.$emit('goTobacktestSetupForm', row.id, res.data, 'edit', () => {
+            this.$emit('goBacktestResultForm', row, () => {
+              this.$emit('switchTab', 'first')
+              CIQ.hideCover()
+              CIQ.nprogress.done()
+            })
+          })
+        }
+      } catch (error) {
+        vm.$message({
+          message: 'The internal server is busy, please try again later ',
+          type: 'error',
+          offset: 300
+        })
+      }
+    }, 500),
+    async deleteBacktest(id) {
+      try {
+        const res = await deleteBacktest(id)
+        if (res.status == 204) {
+          this.getFavoriteList()
+          this.$emit('refHistoryForm')
+        } else {
+          this.$message.error({
+            message: 'The deletion failed',
+            duration: 1000
+          })
+        }
+      } catch (error) {
+        this.$message({
+          message: 'The internal server is busy, please try again later ',
+          type: 'error',
+          offset: 300
+        })
+      }
+    },
+    copyBacktest: throttle(async function (row) {
+			CIQ.addCover('Copying backtest...')
+			CIQ.nprogress.start()
+      try {
+        let params = {}
+        const nameRes = await getBacktestName(row.name + '(copy)')
 
-			params = res.data
-			params.name = params.name + '(copy)'
-			params.user_tag = 'client'
-			params.report_url = ''
-			delete params.uuid
-			delete params.results
-			delete params.user_id
-			delete params.status
-			delete params.backtest_id
-			let paramsStr = this.$qs.stringify(params)
-			try {
-				const copyRes = await copyBacktest(paramsStr)
-				if (copyRes.status === 201) {
-					this.getFavoriteList()
-				} else {
-					this.$message.error('Copy failed')
-				}
-			} catch (error) {
-				if (error.response.status === 403) {
-					this.$notify.error({
-						title: 'Has been Copied',
-						message: 'The backtest has been copied',
-						offset: 100
-					})
-				}
-				if (error.response.status === 500) {
-					this.$notify.error({
-						title: 'Service is busy',
-						message: 'The internal server is busy, please try again later ',
-						offset: 100
-					})
-				}
-			}
-		}, 500),
-		viewBacktestResults: throttle(async function (row) {
-			if (row.result['Total Trades']) {
-				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
-				let vm = this
-				try {
-					CIQ.addCover('Fetching backtest information...')
-					CIQ.nprogress.start()
+        if (nameRes.data.count != 0) {
+					CIQ.hideCover()
+          CIQ.nprogress.done()
+          this.$notify.error({
+            title: 'Has been Copied',
+            message: 'The backtest has been copied',
+            offset: 100
+          })
+          return
+        }
+        const res = await seeParams(row.id)
+        this.$store.commit('getBacktestSymbol', res.data.symbol)
+        this.$store.commit('getRunBacktestData', row)
+        params = res.data
+        params.name = params.name + '(copy)'
+        params.favorites = false
+        params.user_tag = 'client'
+        params.report_url = ''
+        delete params.uuid
+        delete params.results
+        delete params.user_id
+        delete params.status
+        delete params.backtest_id
+        let paramsStr = this.$qs.stringify(params)
+        try {
+          const copyRes = await copyBacktest(paramsStr)
+          if (copyRes.status === 201) {
+            this.$notify({
+              title: 'Copy successfully',
+              message: 'After copying successfully, you can edit the backtest',
+              type: 'success',
+              offset: 100
+            })
+            this.queryInfo.page = 1
+            this.getFavoriteList()
+            this.$emit('refFavoritesForm')
+            this.$emit('goToHistoryForm')
+            this.$emit('refHistoryForm')
+          } else {
+            this.$message.error('Copy failed')
+          }
+					CIQ.hideCover()
+          CIQ.nprogress.done()
+        } catch (error) {
+          console.error(error)
+					CIQ.hideCover()
+          CIQ.nprogress.done()
+          if (error.response.status === 500) {
+            this.$notify.error({
+              title: 'Service is busy',
+              message: 'The internal server is busy, please try again later ',
+              offset: 100
+            })
+          }
+        }
+      } catch (error) {
+        console.error(error)
+				CIQ.hideCover()
+        CIQ.nprogress.done()
+        this.$notify.error({
+          title: 'Service is busy',
+          message: 'The internal server is busy, please try again later ',
+          offset: 100
+        })
+      }
+    }, 1000),
+    viewBacktestResults: throttle(async function (row) {
+      if (row.result['Total Trades']) {
+        document.getElementsByClassName('ciq-period')[0].style.display = 'none'
+        let vm = this
+        try {
+          CIQ.addCover('Fetching backtest information...')
+          CIQ.nprogress.start()
 
-					const res = await seeParams(row.id)
-					this.$store.commit('getBacktestSymbol', res.data.symbol)
-					CIQ.hideMarker()
-					CIQ.isMarkerShown = false
-					if (res.data.indicator_layout) {
-						let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$','\u200c'))
-						this.restoreIndicatorLayoutView(
-							parsedData,
-							res.data.frequency,
-							row,
-							res.data
-						)
-					} else {
-						this.$store.commit('getRunBacktestData', row)
-						this.$emit('goTobacktestSetupForm', row.id, res.data, 'canDelView',() => {
-							this.$emit('goBacktestResultForm', row, () => {
-								CIQ.hideCover()
-								CIQ.nprogress.done()
-							})
-						})
-					}
-				} catch (error) {
-					vm.$message({
-						message: 'The internal server is busy, please try again later ',
-						type: 'error',
-						offset: 300
-					})
-				}
-			} else {
-				this.$notify({
-					title: 'No trades',
-					message: 'No trades, please change parameter.',
-					offset: 100,
-					type: 'warning'
-				})
-			}
-		}, 500),
-		handleCurrentChange(newpage) {
-			this.queryInfo.page = newpage
-			this.getFavoriteList()
-		},
-		reloadData(data, freq) {
-			let frequency = ''
-			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
-			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
-			this.$store.commit('getExtraIndicators', [])
-			// filter garbage in TechnicalIndicators
-			// const technicalIndicators = data.technicalIndicators.filter(item=>{
-			// 	data.formIndicators.entry.indexOf(item) != -1 || data.formIndicators.exit.indexOf(item) != -1
-			// })
-			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
-			this.$store.commit('getMA', data.activatedMA)
-			this.$store.commit('setTechSD', data.savedTechSD)
+          const res = await seeParams(row.id)
+          this.$store.commit('getBacktestSymbol', res.data.symbol)
+          CIQ.hideMarker()
+          CIQ.isMarkerShown = false
+          if (res.data.indicator_layout) {
+            let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
+            this.restoreIndicatorLayoutView(
+              parsedData,
+              res.data.frequency,
+              row,
+              res.data
+            )
+          } else {
+            this.$store.commit('getRunBacktestData', row)
+            this.$emit('goTobacktestSetupForm', row.id, res.data, 'canDelView', () => {
+              this.$emit('goBacktestResultForm', row, () => {
+                CIQ.hideCover()
+                CIQ.nprogress.done()
+              })
+            })
+          }
+        } catch (error) {
+          vm.$message({
+            message: 'The internal server is busy, please try again later ',
+            type: 'error',
+            offset: 300
+          })
+        }
+      } else {
+        this.$notify({
+          title: 'No trades',
+          message: 'No trades, please change parameter.',
+          offset: 100,
+          type: 'warning'
+        })
+      }
+    }, 500),
+    handleCurrentChange(newpage) {
+      this.queryInfo.page = newpage
+      this.getFavoriteList()
+    },
+    reloadData(data, freq) {
+      let frequency = ''
+      this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
+      this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
+      this.$store.commit('getExtraIndicators', [])
+      // filter garbage in TechnicalIndicators
+      // const technicalIndicators = data.technicalIndicators.filter(item=>{
+      // 	data.formIndicators.entry.indexOf(item) != -1 || data.formIndicators.exit.indexOf(item) != -1
+      // })
+      this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
+      this.$store.commit('getMA', data.activatedMA)
+      this.$store.commit('setTechSD', data.savedTechSD)
 
-			switch (freq) {
-				case 'Daily': {
-					frequency = 'daily'
-					break
-				}
-				case 'Weekly': {
-					frequency = 'weekly'
-					break
-				}
-				case 'Monthly': {
-					frequency = 'monthly'
-					break
-				}
-				default: {
-					break
-				}
-			}
-			this.$store.commit('setRestoreFreq', frequency)
-		},
-		restoreIndicatorLayoutView(data, freq, row, resData) {
-			this.reloadData(data, freq)
-			var that = this
-			CIQ.addIndicatorsFromBacktest(function () {
-				that.$store.commit('getRunBacktestData', row)
-				// emit同步调用
-				that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',() => {
-					that.$emit('goBacktestResultForm', row, () => {
-						CIQ.hideCover()
-						CIQ.nprogress.done()
-					})
-				})
-			})
-		},
-		restoreIndicatorLayoutEdit(data, freq, row, resData) {
-			this.reloadData(data, freq)
-			var that = this
-			CIQ.addIndicatorsFromBacktest(function () {
-				that.$store.commit('getRunBacktestData', row)
-				that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
-					that.$emit('goBacktestResultForm', row, ()=>{
-						that.$emit('switchTab','first')
-						CIQ.hideCover()
-						CIQ.nprogress.done()
-					})
-				})
-			})
-		},
-		addToFavorites: throttle(async function (row) {
-			let vm = this
-			row.favorites = true
-			let params = {
-				favorites: true
-			}
-			let paramsStr = vm.$qs.stringify(params)
-			try {
-				const res = await favoriteBacktest(row.id, paramsStr)
-				if (res.status === 200) {
-					this.getFavoriteList()
-					this.$emit('refHistoryForm')
-				} else {
-					this.getFavoriteList()
-					this.$message.error({
-						message: 'Collection failed',
-						duration: 1000
-					})
-				}
-			} catch (error) {
-				vm.$message({
-					message: 'The internal server is busy, please try again later ',
-					type: 'error',
-					offset: 300
-				})
-			}
-		}, 500),
-		moveToFavorites: throttle(async function (row) {
-			let vm = this
-			row.favorites = false
-			let params = {
-				favorites: false
-			}
-			let paramsStr = vm.$qs.stringify(params)
-			try {
-				const res = await favoriteBacktest(row.id, paramsStr)
-				if (res.status === 200) {
-					this.getFavoriteList()
-					this.$emit('refHistoryForm')
-				} else {
-					this.getFavoriteList()
-					this.$message.error({
-						message: 'removed failed',
-						duration: 1000
-					})
-				}
-			} catch (error) {
-				vm.$message({
-					message: 'The internal server is busy, please try again later ',
-					type: 'error',
-					offset: 300
-				})
-			}
-		}, 500)
-	}
+      switch (freq) {
+        case 'Daily': {
+          frequency = 'daily'
+          break
+        }
+        case 'Weekly': {
+          frequency = 'weekly'
+          break
+        }
+        case 'Monthly': {
+          frequency = 'monthly'
+          break
+        }
+        default: {
+          break
+        }
+      }
+      this.$store.commit('setRestoreFreq', frequency)
+    },
+    restoreIndicatorLayoutView(data, freq, row, resData) {
+      this.reloadData(data, freq)
+      var that = this
+      CIQ.addIndicatorsFromBacktest(function () {
+        that.$store.commit('getRunBacktestData', row)
+        // emit同步调用
+        that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {
+          that.$emit('goBacktestResultForm', row, () => {
+            CIQ.hideCover()
+            CIQ.nprogress.done()
+          })
+        })
+      })
+    },
+    restoreIndicatorLayoutEdit(data, freq, row, resData) {
+      this.reloadData(data, freq)
+      var that = this
+      CIQ.addIndicatorsFromBacktest(function () {
+        that.$store.commit('getRunBacktestData', row)
+        that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {
+          that.$emit('goBacktestResultForm', row, () => {
+            that.$emit('switchTab', 'first')
+            CIQ.hideCover()
+            CIQ.nprogress.done()
+          })
+        })
+      })
+    },
+    addToFavorites: throttle(async function (row) {
+      let vm = this
+      row.favorites = true
+      let params = {
+        favorites: true
+      }
+      let paramsStr = vm.$qs.stringify(params)
+      try {
+        const res = await favoriteBacktest(row.id, paramsStr)
+        if (res.status === 200) {
+          this.getFavoriteList()
+          this.$emit('refHistoryForm')
+        } else {
+          this.getFavoriteList()
+          this.$message.error({
+            message: 'Collection failed',
+            duration: 1000
+          })
+        }
+      } catch (error) {
+        vm.$message({
+          message: 'The internal server is busy, please try again later ',
+          type: 'error',
+          offset: 300
+        })
+      }
+    }, 500),
+    moveToFavorites: throttle(async function (row) {
+      let vm = this
+      row.favorites = false
+      let params = {
+        favorites: false
+      }
+      let paramsStr = vm.$qs.stringify(params)
+      try {
+        const res = await favoriteBacktest(row.id, paramsStr)
+        if (res.status === 200) {
+          this.getFavoriteList()
+          this.$emit('refHistoryForm')
+        } else {
+          this.getFavoriteList()
+          this.$message.error({
+            message: 'removed failed',
+            duration: 1000
+          })
+        }
+      } catch (error) {
+        vm.$message({
+          message: 'The internal server is busy, please try again later ',
+          type: 'error',
+          offset: 300
+        })
+      }
+    }, 500)
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -610,7 +651,7 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	flex-wrap: wrap;
-	> *{
+	> * {
 		flex: 1;
 	}
 	.entryBox p:first-child {
