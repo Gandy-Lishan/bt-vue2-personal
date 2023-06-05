@@ -65,7 +65,7 @@
 									>
 										<p :key="index">
 											<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
-											>{{ item }}
+											>{{ item.commentDes }}
 										</p>
 									</template>
 								</div>
@@ -74,7 +74,7 @@
 									<template v-for="(item, index) in scope.row.exit_description">
 										<p :key="index">
 											<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
-											>{{ item }}
+											>{{ item.commentDes }}
 										</p>
 									</template>
 								</div>
@@ -83,9 +83,9 @@
 					</el-table-column>
 					<el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
-							{{ scope.row.entry_description[0] }}<br />
+							{{ scope.row.entry_description[0].commentDes }}<br />
 							<br />
-							{{ scope.row.exit_description[0] }}<br />
+							{{ scope.row.exit_description[0].commentDes }}<br />
 						</template>
 					</el-table-column>
 					<el-table-column
