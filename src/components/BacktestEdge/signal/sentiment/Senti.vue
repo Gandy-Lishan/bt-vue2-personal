@@ -360,7 +360,9 @@ export default {
 					// 如果当前indicator自带ma,indicator_url改为ma_url
 					for (var studyInstanceName in CIQ.stxx.layout.studies) {
 						if (
-							CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url
+							CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url  &&
+							CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
+							CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
 						) {
 							if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
 								indicator_url_with_ma = Object.keys(CIQ.stxx.layout.studies[studyInstanceName].outputMap)[0]
@@ -370,9 +372,11 @@ export default {
 					}
 					for (var studyInstanceName in CIQ.stxx.layout.studies) {
 						if (
-							CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url_with_ma ||
+							(CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url_with_ma ||
 							(CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url && 
-							CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA')
+							CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA')) &&
+							CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
+							CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
 						) {
 							// 在切换回非ROClike后清除ROCLike indicator
 							CIQ.Studies.removeStudy(
@@ -485,7 +489,6 @@ export default {
 						}
 						desObj.index = 0
 					}
-					console.log('saveDescription',desObj,this.criteria)
 					this.$store.commit('saveDescription', desObj)
 
 		},
@@ -557,11 +560,12 @@ export default {
 			let indicator_url = this.$store.state.indicators.formIndicators[this.criteria][this.panelIndex]
 			let indicator_url_with_ma = ''
 			if(indicator_url){
-				console.log(CIQ.stxx.layout.studies)
 				// 如果当前indicator自带ma,indicator_url改为ma_url
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					if (
-						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url
+						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
 					) {
 						if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
 							indicator_url_with_ma = Object.keys(CIQ.stxx.layout.studies[studyInstanceName].outputMap)[0]
@@ -572,9 +576,11 @@ export default {
 
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					if (
-						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url_with_ma ||
+						(CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url_with_ma ||
 						(CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url && 
-						CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA')
+						CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA')) &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
 					) {
 						// 在切换回非ROClike后清除ROCLike indicator
 						CIQ.Studies.removeStudy(
@@ -594,8 +600,10 @@ export default {
 					Field: indicator_url_with_ma?indicator_url_with_ma:indicator_url,
 					condition:conditionMap.get(this.senti.newCondition).abbr,
 					period:this.senti.conditionPeriod
+				},null,{
+					criteria: this.criteria,
+					index: this.panelIndex
 				})
-				console.log('calculateNewConditions',sd)
 			}
 		},
 		setPeriod(val) {
