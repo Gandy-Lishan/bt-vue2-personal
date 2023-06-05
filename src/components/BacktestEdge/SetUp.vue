@@ -1009,8 +1009,18 @@ export default {
 					} else {
 						bd.risk_control = '//'
 					}
+					if(this.historyValue >= 0 && this.historyValue <= 20){
+						// 改成最新的 start end
+						// bd.end_date = '1800-10-01'
+						bd.end_date = timestampToTime(new Date())
+						const str = bd.end_date.split('-')
+						str[0] = Number(str[0]) - Number(this.historyValue) + ''
+						bd.start_date = str.join('-')
+					}
 					if (this.historyValue == 21) {
 						bd.start_date = '1800-10-01'
+						// end 改成最新的
+						bd.end_date = timestampToTime(new Date())
 					}
 					this.$store.commit('setBd', bd)
 					return checked
