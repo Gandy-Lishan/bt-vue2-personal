@@ -1,6 +1,6 @@
 // Set Up Backtest
 <template>
-	<div class="backtest_container">
+	<div class="backtest_container setup_container">
 		<el-form
 			ref="backtestSetupForm"
 			:model="bd"

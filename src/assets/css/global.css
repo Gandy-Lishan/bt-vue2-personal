@@ -702,3 +702,6 @@ input[type="time"] {
 .conditionSelect input {
   height: unset !important;
 }
+.setup_container .dateBox .el-form-item__content{
+  padding-left: 131px;
+}
