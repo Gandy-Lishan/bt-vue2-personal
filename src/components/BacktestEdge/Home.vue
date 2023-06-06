@@ -554,14 +554,15 @@ export default {
         let setUp = this.$refs.setUpChild.saveBacktestData()
         let setUpChecked = true
         let entryChecked = true
-        let isEdit = this.$refs.setUpChild.isEdit()
+        // let isEdit = this.$refs.setUpChild.isEdit()
         let backtestInfo = JSON.parse(JSON.stringify(this.$store.state.backtestInfo))
         this.$refs.entryChild.addEntrySignalLength()
         this.$refs.exitChild.addExitSignalLength()
         let setUpRes = await getBacktestName(
           this.$store.state.backtestInfo.name
         )
-        if (setUpRes.data.count != 0 && !isEdit || (setUpRes.data.count != 0 && !backtestInfo.hasOwnProperty('old_uuid'))) {
+        // if (setUpRes.data.count != 0 && !isEdit || (setUpRes.data.count != 0 && !backtestInfo.hasOwnProperty('old_uuid'))) {
+        if (setUpRes.data.count != 0 && !backtestInfo.hasOwnProperty('old_uuid')) {
           this.$message({
             message: 'The backtest name already exists',
             type: 'error',
@@ -572,9 +573,12 @@ export default {
           return
         }
         // 首次创建
-        if (setUpRes.data.count == 0 && !isEdit) this.$store.commit('clearBacktestUuid')
+        // if (setUpRes.data.count == 0 && !isEdit) this.$store.commit('clearBacktestUuid')
 
-        if (setUpRes.data.count == 0 || isEdit) {
+        // if (setUpRes.data.count == 0 || isEdit) {
+          // 有名字并且是编辑 没名字是编辑 没名字是新建
+          console.log('有无名字：', setUpRes.data.count, '有无 old_uuid：', backtestInfo.hasOwnProperty('old_uuid'))
+        if ((setUpRes.data.count != 0 && backtestInfo.hasOwnProperty('old_uuid')) || (setUpRes.data.count == 0) && backtestInfo.hasOwnProperty('old_uuid') || (setUpRes.data.count == 0) && !backtestInfo.hasOwnProperty('old_uuid')) {
           let entry
           for (let index = 0; index < this.entryLength; index++) {
             this.addEntrySignalLength(index)
