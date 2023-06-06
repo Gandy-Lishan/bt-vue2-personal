@@ -1,10 +1,10 @@
 // CCI-Like input box
 <template>
 	<div class="senti-container">
-		<p class="hint">
+		<!-- <p class="hint">
 			Hint: To change the indicator settings, right click the indicator in the
 			above chart and select "Edit Setting"
-		</p>
+		</p> -->
 		<el-form :model="tech" :rules="rules" ref="cciForm">
 			<div class="condition-container">
 				<el-form-item>

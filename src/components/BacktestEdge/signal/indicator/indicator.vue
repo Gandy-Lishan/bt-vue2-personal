@@ -57,6 +57,12 @@
 							placeholder="Input the technical indicator"
 							@select="handleTechnicalSelect"
 						></el-autocomplete>
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >Hint: To change the indicator settings<br />Right click the indicator in the above chart and select "Edit Setting"
+              </span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
 					</div>
 				</el-form-item>
 			</div>
