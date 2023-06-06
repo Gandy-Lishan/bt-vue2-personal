@@ -1,7 +1,7 @@
 // Linear-RegForecast-Like input box
 <template>
 	<div class="senti-container">
-		<p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p>
+		<!-- <p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p> -->
 		<el-form :model="tech">
 			<div class="condition-container">
 				<el-form-item>
