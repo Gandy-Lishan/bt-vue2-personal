@@ -3,8 +3,8 @@
 	<el-row>
 		<el-col :span="24">
 			<div class="favoriteForm_container">
-				<!-- <el-input class="search" style="width:12vw;" size="mini" v-model="searchItem" placeholder="" @keyup.enter.native="handleQuery" clearable @clear="handleQuery"></el-input>
-				<el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">Search</el-button> -->
+				<el-input class="search" style="width:12vw;" size="mini" v-model="searchItem" placeholder="" @keyup.enter.native="handleQuery" clearable @clear="handleQuery"></el-input>
+				<el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">Search</el-button>
 				<el-table
 					header-align="center"
 					:data="backtestList"
@@ -97,7 +97,8 @@
 						label="Timeframe"
 						show-overflow-tooltip
 						align="center"
-						width="90px"
+						sortable
+						width="115px"
 					>
 						<template slot-scope="scope">
 							<p>{{ scope.row.frequency }}</p>
@@ -107,7 +108,8 @@
 						align="center"
 						show-overflow-tooltip
 						label="Total Trades"
-						width="100px"
+						sortable
+						width="125px"
 					>
 						<template slot-scope="scope">
 							<span v-if="scope.row.result['Total Trades']">{{
@@ -120,7 +122,8 @@
 						align="center"
 						show-overflow-tooltip
 						label="Total Return"
-						width="97px"
+						sortable
+						width="133px"
 						><template slot-scope="scope">
 							<span v-if="scope.row.result['Total Return (%)']">{{
 								scope.row.result['Total Return (%)'] + '%'
