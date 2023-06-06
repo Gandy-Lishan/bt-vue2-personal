@@ -953,6 +953,8 @@ export default {
               backtestParams.symbol = backtestData.symbol
               backtestParams.win_rate = backtestData.win_rate
               backtestParams.backtest_period = backtestData.backtest_period
+              backtestParams.trade_price = backtestData.trade_price
+              backtestParams.exclude_oo = backtestData.exclude_oo
 
               console.log('处理过后的 backtestData', backtestParams)
               backtestParams = JSON.stringify(backtestParams)

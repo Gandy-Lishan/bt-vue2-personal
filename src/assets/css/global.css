@@ -302,12 +302,12 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 .set-up-container .dateBox .el-date-editor input[type="text"] {
   padding-left: 23px;
 }
-.backtest_container .el-form-item .el-form-item__content .selectBox .el-select {
+/* .backtest_container .el-form-item .el-form-item__content .selectBox .el-select {
   width: 320px;
-}
-.backtest_container .el-form-item .el-form-item__content .selectBox .el-select .el-input .el-input__suffix{
+} */
+/* .backtest_container .el-form-item .el-form-item__content .selectBox .el-select .el-input .el-input__suffix{
   right: 120px;
-}
+} */
 
 /* .backtest_container
   .el-form-item
@@ -734,4 +734,13 @@ input[type="time"] {
 }
 .setup_container .dateBox .el-form-item__content{
   padding-left: 131px;
+}
+.result-container .exclude_oo .el-form-item__content {
+  padding-left: 230px;
+}
+.result-container .exclude_oo .el-form-item__label {
+  width: 250px;
+}
+.result-container .exclude_oo .el-input.is-disabled .el-input__inner {
+  width: 65px;
 }
