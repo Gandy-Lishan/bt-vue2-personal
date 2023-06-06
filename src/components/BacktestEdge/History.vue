@@ -134,7 +134,7 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
-									content="edit backtest"
+									content="rerun backtest"
 									placement="bottom-start"
 								>
 									<el-button
