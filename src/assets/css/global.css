@@ -172,6 +172,12 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   color: #333333;
   border-radius: 4px;
 }
+
+.el-tabs__item#tab-second,
+.el-tabs__item#tab-forth,
+.el-tabs__item#tab-fifth{
+    display: none;
+}
 .el-tabs__item.is-active {
   background-color: #f8f8f8;
   font-weight: bold;
