@@ -20,11 +20,14 @@
 					<el-form-item label="Benchmark:" prop="benchmark">
 						<el-input disabled v-model="backtestEditData.benchmark"> </el-input>
 					</el-form-item>
+					<el-form-item label="Trade Price:" prop="trade_price">
+						<el-input disabled v-model="tradePrice"></el-input>
+					</el-form-item>
 				</el-col>
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12" :span="2">
 					<div class="dateBox">
 						<el-form-item label="Backtest Period:">
-							<el-input disabled v-model="backtestEditData.backtest_period"> </el-input>
+							<el-input disabled v-model="backtestPeriod"> </el-input>
 						</el-form-item>
 						<el-form-item
 							label="Start date:"
@@ -47,23 +50,13 @@
 						</el-form-item>
 					</div>
 					<el-form-item label="Timeframe:" prop="frequency">
-						<!-- <div class="selectBox"> -->
-						<!-- <el-select
-								v-model="editFrequency"
-								placeholder="— Select Timeframe —"
-								disabled
-							>
-								<el-option
-									v-for="item in frequencyOptions"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value"
-								>
-								</el-option>
-							</el-select>
-						</div> -->
 						<el-input disabled v-model="editFrequency"></el-input>
 					</el-form-item>
+					<div class="exclude_oo">
+					<el-form-item label="Exclude Overlapping Observations:" prop="exclude_oo" v-if="backtestEditData.exclude_oo != 0">
+						<el-input disabled v-model="backtestEditData.exclude_oo"> </el-input>
+					</el-form-item>
+					</div>
 				</el-col>
 			</el-row>
 			<el-row>
@@ -107,7 +100,25 @@ export default {
       loading: false,
       options: [],
       temp: { commission: '', slippage: '' },
-      sentimentIndicatorList: []
+      sentimentIndicatorList: [],
+			historyOptions: {
+				1: '1 Year',
+				2: '2 Year',
+				3: '3 Year',
+				4: '4 Year',
+				5: '5 Year',
+				10: '10 Year',
+				15: '15 Year',
+				20: '20 Year',
+				21: 'All History',
+				22: 'Custom...'
+			},
+			tradePriceOptions: {
+				0: 'Next Open',
+				1: 'Next Close'
+			},
+			backtestPeriod: '',
+			tradePrice: ''
     }
   },
   watch: {
@@ -134,6 +145,8 @@ export default {
           // } else {
           //   this.bd.backtest_period = 'All History'
           // }
+					this.backtestPeriod = this.historyOptions[newVal.backtest_period]
+					this.tradePrice = this.tradePriceOptions[newVal.trade_price]
         } else {
           this.temp.commission = ''
           this.temp.slippage = ''

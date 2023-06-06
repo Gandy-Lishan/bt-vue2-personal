@@ -169,7 +169,7 @@
 					<div class="dateBox">
 						<el-form-item label="Start Date">
 							<el-date-picker
-								v-if="bd.backtest_period === 22"
+								v-if="bd.backtest_period === '22'"
 								v-model="bd.start_date"
 								@change="formateStartDate"
 								type="date"
@@ -184,7 +184,7 @@
 					<div class="dateBox">
 						<el-form-item prop="endDate" label="End Date">
 							<el-date-picker
-								v-if="bd.backtest_period === 22"
+								v-if="bd.backtest_period === '22'"
 								v-model="bd.end_date"
 								@change="formateEndDate"
 								type="date"
@@ -490,50 +490,50 @@ export default {
         risk_control: '//',
         report_url: '',
         user_tag: 'client',
-        backtest_period: 1,
+        backtest_period: '1',
         trade_price: 0,
         exclude_oo: 0
       },
       permission: Cookies.get('devbt2Userid'),
       historyOptions: [
         {
-          value: 1,
+          value: '1',
           label: '1 Year'
         },
         {
-          value: 2,
+          value: '2',
           label: '2 Year'
         },
         {
-          value: 3,
+          value: '3',
           label: '3 Year'
         },
         {
-          value: 4,
+          value: '4',
           label: '4 Year'
         },
         {
-          value: 5,
+          value: '5',
           label: '5 Year'
         },
         {
-          value: 10,
+          value: '10',
           label: '10 Year'
         },
         {
-          value: 15,
+          value: '15',
           label: '15 Year'
         },
         {
-          value: 20,
+          value: '20',
           label: '20 Year'
         },
         {
-          value: 21,
+          value: '21',
           label: 'All History'
         },
         {
-          value: 22,
+          value: '22',
           label: 'Custom...'
         }
       ],
@@ -686,6 +686,7 @@ export default {
         newVal.user_tag = 'client'
         newVal.commission = (newVal.commission * 100).toFixed(2)
         newVal.slippage = Number(newVal.slippage).toFixed(2)
+				newVal.trade_price = Number(newVal.trade_price)
         this.is_admin = this.$store.state.is_admin
         this.bd = Object.assign(this.bd, newVal)
         this.getFrequency(newVal.frequency)
@@ -694,6 +695,10 @@ export default {
         this.isTakeProfit = false
         this.isStopLoss = false
         this.isTimeInMarket = false
+				this.isExcludeOO = false
+				if(this.bd.exclude_oo > 0) {
+					this.isExcludeOO = true
+				}
         if (newVal.risk_control) {
           let riskValArr = newVal.risk_control.split('/')
           if (riskValArr[0]) {
@@ -736,7 +741,7 @@ export default {
         // 	this.bd.start_date = ''
         // }
         this.bd.backtest_period = newVal.backtest_period
-        if (newVal.backtest_period == 21) {
+        if (newVal.backtest_period == '21') {
           this.bd.start_date = ''
         }
         console.log('处理完成之后的编辑数据', this.bd)
@@ -870,26 +875,26 @@ export default {
     getBacktestHistory(val) {
       this.bd.backtest_period = val
       this.bd.end_date = timestampToTime(new Date())
-      if (val <= 20) {
+      if (val <= 20 || val == 22) {
         this.bd.end_date = timestampToTime(new Date())
         const str = this.bd.end_date.split('-')
         str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
         this.bd.start_date = str.join('-')
       }
-      if (val === 21) {
+      if (val === '21') {
         this.bd.start_date = ''
       }
     },
     setBacktestHistory(val) {
       this.bd.backtest_period = val
       this.bd.end_date = timestampToTime(new Date())
-      if (val <= 20) {
+      if (val <= 20 || val == 22) {
         this.bd.end_date = timestampToTime(new Date())
         const str = this.bd.end_date.split('-')
         str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
         this.bd.start_date = str.join('-')
       }
-      if (val === 21) {
+      if (val === '21') {
         this.bd.start_date = ''
       }
     },
@@ -1045,6 +1050,7 @@ export default {
       let slCheck
       let tpCheck
       let timCheck
+			let excludeCheck = true
       if (this.isRiskControl) {
         if (this.isStopLoss) {
           slCheck = this.validateStopLoss(this.sl)
@@ -1060,9 +1066,13 @@ export default {
           (this.isTakeProfit ? tpCheck : true) &&
           (this.isTimeInMarket ? timCheck : true)
       }
+			if(this.isExcludeOO) {
+				excludeCheck = this.validateExclude(this.bd.exclude_oo)
+			}
 
-      if (validForm && riskCheck) {
+      if (validForm && riskCheck && excludeCheck) {
         if (bd.end_date) {
+					if(!this.isExcludeOO) {bd.exclude_oo = 0}
           bd.commission = bd.commission / 100
           if (this.isRiskControl) {
             let riskStr = `${this.isTakeProfit ? this.tp : ''}/${this.isStopLoss ? this.sl : ''
@@ -1080,7 +1090,7 @@ export default {
             str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
             bd.start_date = str.join('-')
           }
-          if (this.bd.backtest_period == 21) {
+          if (this.bd.backtest_period == '21') {
             bd.start_date = '1800-10-01'
             // end 改成最新的
             bd.end_date = timestampToTime(new Date())
@@ -1195,6 +1205,18 @@ export default {
       }
       return true
     },
+		validateExclude(num) {
+			if (isNaN(num) || num <= 0 || !/^\d+$/.test(num)) {
+        this.$message({
+          message:
+            'Please enter Exclude Overlapping Observations, only positive integers are allowed',
+          type: 'error',
+          offset: 300
+        })
+        return false
+      }
+      return true
+		},
     isEdit() {
       if (this.oldBacktestName == this.bd.name) {
         return true
