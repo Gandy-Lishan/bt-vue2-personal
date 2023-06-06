@@ -148,9 +148,9 @@
 						</el-tooltip>
 						<div class="selectBox historySelectBox">
 							<el-select
-								@change="getBacktestHistory(historyValue)"
-								@blur="setBacktestHistory(historyValue)"
-								v-model="historyValue"
+								@change="getBacktestHistory(bd.backtest_period)"
+								@blur="setBacktestHistory(bd.backtest_period)"
+								v-model="bd.backtest_period"
 							>
 								<el-option
 									v-for="item in historyOptions"
@@ -165,7 +165,7 @@
 					<div class="dateBox">
 						<el-form-item label="Start Date">
 							<el-date-picker
-								v-if="historyValue === 22"
+								v-if="bd.backtest_period === 22"
 								v-model="bd.start_date"
 								@change="formateStartDate"
 								type="date"
@@ -180,7 +180,7 @@
 					<div class="dateBox">
 						<el-form-item prop="endDate" label="End Date">
 							<el-date-picker
-								v-if="historyValue === 22"
+								v-if="bd.backtest_period === 22"
 								v-model="bd.end_date"
 								@change="formateEndDate"
 								type="date"
@@ -436,7 +436,8 @@ export default {
 				frequency: 'Daily',
 				risk_control: '//',
 				report_url: '',
-				user_tag: 'client'
+				user_tag: 'client',
+				backtest_period: 1
 			},
 			permission: Cookies.get('devbt2Userid'),
 			historyOptions: [
@@ -498,7 +499,6 @@ export default {
 					label: 'All In / All Out (CASH)'
 				}
 			],
-			historyValue: 1,
 			symbolList: [],
 			indexList: [],
 			loading: false,
@@ -657,22 +657,26 @@ export default {
 					this.selectRiskControl(this.isRiskControl)
 				}
 				this.oldBacktestName = newVal.name
-				let year
-				let month
-				let day	
-				if (newVal.start_date && newVal.start_date !== '1800-10-01') {
-					const starArr = newVal.start_date.toString().split('-')
-					const endArr = newVal.end_date.toString().split('-')
-					year = Number(endArr[0]) - Number(starArr[0])
-					month = Number(endArr[1]) - Number(starArr[1])
-					day = Number(endArr[2]) - Number(starArr[2])
-					if (month == 0 && day == 0) {
-						this.historyValue = year
-					} else {
-						this.historyValue = 22
-					}
-				} else {
-					this.historyValue = 21
+				// let year
+				// let month
+				// let day	
+				// if (newVal.start_date && newVal.start_date !== '1800-10-01') {
+				// 	const starArr = newVal.start_date.toString().split('-')
+				// 	const endArr = newVal.end_date.toString().split('-')
+				// 	year = Number(endArr[0]) - Number(starArr[0])
+				// 	month = Number(endArr[1]) - Number(starArr[1])
+				// 	day = Number(endArr[2]) - Number(starArr[2])
+				// 	if (month == 0 && day == 0) {
+				// 		this.bd.backtest_period = year
+				// 	} else {
+				// 		this.bd.backtest_period = 22
+				// 	}
+				// } else {
+				// 	this.bd.backtest_period = 21
+				// 	this.bd.start_date = ''
+				// }
+				this.bd.backtest_period = newVal.backtest_period
+				if(newVal.backtest_period == 21) {
 					this.bd.start_date = ''
 				}
 				console.log('处理完成之后的编辑数据', this.bd)
@@ -713,7 +717,7 @@ export default {
 		getEndDate() {
 			this.bd.end_date = timestampToTime(new Date())
 			const str = this.bd.end_date.split('-')
-			str[0] = Number(str[0]) - Number(this.historyValue) + ''
+			str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
 			this.bd.start_date = str.join('-')
 			var that = this
 			var utils = function () {
@@ -804,12 +808,12 @@ export default {
 			}
 		},
 		getBacktestHistory(val) {
-			this.historyValue = val
+			this.bd.backtest_period = val
 			this.bd.end_date = timestampToTime(new Date())
 			if (val <= 20) {
 				this.bd.end_date = timestampToTime(new Date())
 				const str = this.bd.end_date.split('-')
-				str[0] = Number(str[0]) - Number(this.historyValue) + ''
+				str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
 				this.bd.start_date = str.join('-')
 			}
 			if (val === 21) {
@@ -817,12 +821,12 @@ export default {
 			}
 		},
 		setBacktestHistory(val) {
-			this.historyValue = val
+			this.bd.backtest_period = val
 			this.bd.end_date = timestampToTime(new Date())
 			if (val <= 20) {
 				this.bd.end_date = timestampToTime(new Date())
 				const str = this.bd.end_date.split('-')
-				str[0] = Number(str[0]) - Number(this.historyValue) + ''
+				str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
 				this.bd.start_date = str.join('-')
 			}
 			if (val === 21) {
@@ -1009,15 +1013,15 @@ export default {
 					} else {
 						bd.risk_control = '//'
 					}
-					if(this.historyValue >= 0 && this.historyValue <= 20){
+					if(this.bd.backtest_period >= 0 && this.bd.backtest_period <= 20){
 						// 改成最新的 start end
 						// bd.end_date = '1800-10-01'
 						bd.end_date = timestampToTime(new Date())
 						const str = bd.end_date.split('-')
-						str[0] = Number(str[0]) - Number(this.historyValue) + ''
+						str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
 						bd.start_date = str.join('-')
 					}
-					if (this.historyValue == 21) {
+					if (this.bd.backtest_period == 21) {
 						bd.start_date = '1800-10-01'
 						// end 改成最新的
 						bd.end_date = timestampToTime(new Date())

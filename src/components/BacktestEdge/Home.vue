@@ -952,6 +952,7 @@ export default {
               backtestParams.strategy = backtestData.strategy
               backtestParams.symbol = backtestData.symbol
               backtestParams.win_rate = backtestData.win_rate
+              backtestParams.backtest_period = backtestData.backtest_period
 
               console.log('处理过后的 backtestData', backtestParams)
               backtestParams = JSON.stringify(backtestParams)

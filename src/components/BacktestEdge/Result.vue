@@ -24,7 +24,7 @@
 				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12" :span="2">
 					<div class="dateBox">
 						<el-form-item label="Backtest Period:">
-							<el-input disabled v-model="historyValue"> </el-input>
+							<el-input disabled v-model="backtestEditData.backtest_period"> </el-input>
 						</el-form-item>
 						<el-form-item
 							label="Start date:"
@@ -102,7 +102,6 @@ export default {
           label: 'All In / All Out (CASH)'
         }
       ],
-      historyValue: '',
       symbolList: [],
       indexList: [],
       loading: false,
@@ -118,23 +117,23 @@ export default {
           console.log('result', newVal)
           const commission = Number(newVal.commission)
           this.temp.commission = commission.toFixed(2)
-          let year
-          let month
-          let day
-          if (newVal.start_date && newVal.start_date !== '1800-10-01') {
-            const starArr = newVal.start_date.toString().split('-')
-            const endArr = newVal.end_date.toString().split('-')
-            year = Number(endArr[0]) - Number(starArr[0])
-            month = Number(endArr[1]) - Number(starArr[1])
-            day = Number(endArr[2]) - Number(starArr[2])
-            if (month == 0 && day == 0) {
-              this.historyValue = `${year} Year`
-            } else {
-              this.historyValue = 'Custom...'
-            }
-          } else {
-            this.historyValue = 'All History'
-          }
+          // let year
+          // let month
+          // let day
+          // if (newVal.start_date && newVal.start_date !== '1800-10-01') {
+          //   const starArr = newVal.start_date.toString().split('-')
+          //   const endArr = newVal.end_date.toString().split('-')
+          //   year = Number(endArr[0]) - Number(starArr[0])
+          //   month = Number(endArr[1]) - Number(starArr[1])
+          //   day = Number(endArr[2]) - Number(starArr[2])
+          //   if (month == 0 && day == 0) {
+          //     this.bd.backtest_period = `${year} Year`
+          //   } else {
+          //     this.bd.backtest_period = 'Custom...'
+          //   }
+          // } else {
+          //   this.bd.backtest_period = 'All History'
+          // }
         } else {
           this.temp.commission = ''
           this.temp.slippage = ''
