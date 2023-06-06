@@ -41,7 +41,7 @@
 									>
 										<p :key="index">
 											<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
-											>{{ item }}
+											>{{ item.commentDes }}
 										</p>
 									</template>
 								</div>
@@ -50,7 +50,7 @@
 									<template v-for="(item, index) in scope.row.exit_description">
 										<p :key="index">
 											<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
-											>{{ item }}
+											>{{ item.commentDes }}
 										</p>
 									</template>
 								</div>
@@ -59,9 +59,9 @@
 					</el-table-column>
 					<el-table-column label="Entry & Exit" align="center">
 						<template slot-scope="scope">
-							{{ scope.row.entry_description[0] }}<br />
+							{{ scope.row.entry_description[0].commentDes }}<br />
 							<br />
-							{{ scope.row.exit_description[0] }}<br />
+							{{ scope.row.exit_description[0].commentDes }}<br />
 						</template>
 					</el-table-column>
 					<el-table-column
@@ -135,6 +135,20 @@
 					<el-table-column align="center" width="200px">
 						<template slot-scope="scope">
 							<el-row>
+								<el-tooltip
+									class="item"
+									effect="dark"
+									content="edit backtest"
+									placement="bottom-start"
+								>
+									<el-button
+										type="success"
+										icon="el-icon-video-play"
+										circle
+										size="mini"
+										@click="rerunBacktest(scope.row)"
+									></el-button>
+								</el-tooltip>
 								<el-tooltip
 									class="item"
 									effect="dark"
@@ -339,6 +353,45 @@ export default {
 				})
 			}
 		}, 500),
+
+		rerunBacktest: throttle(async function (row) {
+			let vm = this
+			try {
+				CIQ.addCover('Fetching backtest information...')
+				CIQ.nprogress.start()
+
+				const res = await seeParams(row.id)
+				document.getElementsByClassName('ciq-period')[0].style.display = ''
+				// Restore indicator layout
+				this.$store.commit('getBacktestSymbol', res.data.symbol)
+				CIQ.hideMarker()
+				CIQ.isMarkerShown = false
+				if (res.data.indicator_layout) {
+					let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$','\u200c'))
+					this.restoreIndicatorLayoutRerun(
+						parsedData,
+						res.data.frequency,
+						row,
+						res.data
+					)
+				} else {
+					this.$store.commit('getRunBacktestData', row)
+					// Emit synchronous call
+					this.$emit('goTobacktestSetupForm', row.id, res.data,'edit',()=>{
+						this.$emit('goBacktestResultForm', row, ()=>{
+							this.$emit('switchTab','first')
+							this.$emit('rerun')						
+						})
+					})
+				}
+			} catch (error) {
+				vm.$message({
+					message: 'The internal server is busy, please try again later ',
+					type: 'error',
+					offset: 300
+				})
+			}
+		}, 500),
 		async deleteBacktest(id) {
 			try {
 				const res = await deleteBacktest(id)
@@ -512,6 +565,19 @@ export default {
 						that.$emit('switchTab','first')
 						CIQ.hideCover()
 						CIQ.nprogress.done()
+					})
+				})
+			})
+		},
+		restoreIndicatorLayoutRerun(data, freq, row, resData) {
+			this.reloadData(data, freq)
+			var that = this
+			CIQ.addIndicatorsFromBacktest(function () {
+				that.$store.commit('getRunBacktestData', row)
+				that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
+					that.$emit('goBacktestResultForm', row, ()=>{
+						that.$emit('switchTab','first')
+						that.$emit('rerun')
 					})
 				})
 			})

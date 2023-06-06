@@ -501,9 +501,7 @@ export default {
 					this.$emit('goTobacktestSetupForm', row.id, res.data,'edit',()=>{
 						this.$emit('goBacktestResultForm', row, ()=>{
 							this.$emit('switchTab','first')
-							this.$emit('rerun')
-							CIQ.hideCover()
-							CIQ.nprogress.done()						
+							this.$emit('rerun')			
 						})
 					})	
 				}
@@ -723,8 +721,6 @@ export default {
 						that.$emit('goBacktestResultForm', row, ()=>{
 							that.$emit('switchTab','first')
 							that.$emit('rerun')
-							CIQ.hideCover()
-							CIQ.nprogress.done()
 						})
 					})	
 				})

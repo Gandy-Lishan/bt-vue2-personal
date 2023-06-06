@@ -38,7 +38,20 @@
 					></el-tooltip
 				>
 			</div>
+          <el-button
+						@click="switchMainTab('setup')"
+						class="restartBtn"
+						type="primary"
+						>setup and result
+          </el-button>
+          <el-button
+						@click="switchMainTab('lists')"
+						class="restartBtn"
+						type="primary"
+						>lists
+          </el-button>
 			<el-tabs
+        ref='tabs'
 				v-model="activeName"
 				type="card"
 				stretch
@@ -136,6 +149,7 @@
 						@goBacktestResultForm="goBacktestResultForm"
 						@goToFavoritesForm="goToFavoritesForm"
 						@switchTab="switchTab"
+            @rerun="rerun"
 					></favorite
 				></el-tab-pane>
 				<el-tab-pane label="Sample Backtests" name="fifth"
@@ -205,7 +219,8 @@ export default {
       options: [
         { label: 'Exit with custom TIM frame', value: 'exit_with_custom_TIM_frame' }
       ],
-      resultEditData: {}
+      resultEditData: {},
+      mainTabState: 0,
     }
   },
   components: {
@@ -254,6 +269,7 @@ export default {
     if (pathname.includes('brainstorm')) {
       this.activeName = 'seventh'
     }
+
     const searchParams = new URLSearchParams(window.location.search)
     const backtestID = searchParams.get('backtestID')
 
@@ -333,6 +349,24 @@ export default {
     }
   },
   methods: {
+    switchMainTab: function(refName){
+      this.mainTabState = refName=='setup'?0:1
+      if(!this.mainTabState){
+        this.$refs.tabs.$children[0].$refs.tabs[0].style.display = 'unset';
+        this.$refs.tabs.$children[0].$refs.tabs[1].style.display = 'none';
+        this.$refs.tabs.$children[0].$refs.tabs[2].style.display = 'unset';
+        this.$refs.tabs.$children[0].$refs.tabs[3].style.display = 'none';
+        this.$refs.tabs.$children[0].$refs.tabs[4].style.display = 'none';
+        this.activeName = 'first';
+      }else{
+        this.$refs.tabs.$children[0].$refs.tabs[0].style.display = 'none';
+        this.$refs.tabs.$children[0].$refs.tabs[1].style.display = 'unset';
+        this.$refs.tabs.$children[0].$refs.tabs[2].style.display = 'none';
+        this.$refs.tabs.$children[0].$refs.tabs[3].style.display = 'unset';
+        this.$refs.tabs.$children[0].$refs.tabs[4].style.display = 'unset';
+        this.activeName = 'second';
+      }
+    },
     myBrowser: function () {
       //Get the useragent string of the browser
       var userAgent = navigator.userAgent
@@ -1084,12 +1118,13 @@ export default {
     async goTobacktestSetupForm(id, resData, action, callback) {
       CIQ.nprogress.inc()
       CIQ.setCoverText('Restoring Backtest form...')
+      this.switchMainTab('setup')
 
       this.$refs.setUpChild.clearForm()
       this.$refs.entryChild.clearForm()
       this.$refs.exitChild.clearForm()
       let vm = this
-      vm.activeName = 'first'
+      //vm.activeName = 'first'
       vm.backtestEditData = {}
       vm.resultEditData = {}
       try {
