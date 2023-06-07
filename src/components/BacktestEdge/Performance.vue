@@ -1777,8 +1777,8 @@ export default {
 }
 .downLoadCsvBtn {
 	position: absolute;
-	right: 10px;
-	top: 273px;
+	right: 28px;
+	top: 320px;
 	color: #333333;
 }
 .el-dialog .el-dialog__body .el-table /deep/.cell {
