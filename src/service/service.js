@@ -79,8 +79,12 @@ export function getStocksList() {
 	})
 }
 
-export function getSampleList(page) {
-    const url = '/dev/strategy/?ordering=name,status,-create_date&page='
+export function getSampleList(page, sort) {
+	let url = null
+	url = '/dev/strategy/?ordering=name,status,-create_date&page='
+	if(sort) {
+		url = `/dev/strategy/?ordering=${sort}&page=`
+	}
 
     return new Promise((resolve,reject)=>{
 		axios.get(url+page)
@@ -92,11 +96,40 @@ export function getSampleList(page) {
 	})
 }
 
-export function getAnalystList(page) {
-    const url = '/dev/analyst/?ordering=-create_date,name,status&page='
+export function searchSampleList(keyword) {
+  let url = `/dev/strategy/?name=${keyword}`
+
+    return new Promise((resolve,reject)=>{
+		axios.get(url, {withCredentials: true})
+		.then(res=>{
+			resolve(res)
+		}).catch(err=>{
+			reject(err)
+		})
+	})
+}
+
+export function getAnalystList(page, sort) {
+	let url =  null
+  url = '/dev/analyst/?ordering=-create_date,name,status&page='
+	if(sort) {
+		url = `/dev/analyst/?ordering=${sort}&page=`
+	}
 
     return new Promise((resolve,reject)=>{
 		axios.get(url+page)
+		.then(res=>{
+			resolve(res)
+		}).catch(err=>{
+			reject(err)
+		})
+	})
+}
+export function searchAnalystList(keyword) {
+  let url = `/dev/analyst/?name=${keyword}`
+
+    return new Promise((resolve,reject)=>{
+		axios.get(url, {withCredentials: true})
 		.then(res=>{
 			resolve(res)
 		}).catch(err=>{

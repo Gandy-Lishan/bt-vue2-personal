@@ -5,7 +5,7 @@
 			<div class="favoriteForm_container">
         <el-input
 					class="search"
-					style="width: 12vw"
+					style="width: 30vw"
 					size="mini"
 					v-model="searchItem"
 					placeholder=""
