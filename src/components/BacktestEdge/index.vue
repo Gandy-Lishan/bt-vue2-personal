@@ -42,7 +42,7 @@
 				content="Back to the top"
 				placement="bottom"
 			>
-				<button class="toTop" @click="animationUp">
+				<button class="toTop" @click="animationUp(0)">
 					<svg
 						width="22"
 						height="30"
@@ -153,9 +153,9 @@ export default {
 				window.open(path, '_blank')
 			}
 		},
-		animationUp: function () {
+		animationUp: function (ph) {
 			window.scrollTo({
-				top: 0,
+				top: ph,
 				behavior: 'smooth'
 			})
 		},
@@ -238,7 +238,7 @@ export default {
 }
 
 button.toTop {
-	opacity: 0.8;
+	opacity: 0.4;
 	z-index: 999;
 	border: unset;
 	position: fixed;
@@ -250,7 +250,6 @@ button.toTop {
 	width: 80px;
 	height: 80px;
 	border-radius: 100%;
-	background: #111827;
 	background-image: initial;
 	background-position-x: initial;
 	background-position-y: initial;
@@ -260,7 +259,7 @@ button.toTop {
 	background-attachment: initial;
 	background-origin: initial;
 	background-clip: initial;
-	background-color: rgb(17, 24, 39);
+	background-color: #94989f;
 	box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%),
 		0 10px 10px -5px rgb(0 0 0 / 4%);
 }
