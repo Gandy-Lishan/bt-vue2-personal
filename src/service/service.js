@@ -104,9 +104,13 @@ export function getAnalystList(page) {
 		})
 	})
 }
-export function getHistoryList(page) {
-    const url = '/dev/backtest/?ordering=-create_date&page='
-
+export function getHistoryList(page, sort) {
+	let url = null
+	url = '/dev/backtest/?ordering=-create_date&page='
+	// sort -> ,total_return
+	if(sort) {
+		url = `/dev/backtest/?ordering=${sort}&page=`
+	}
     return new Promise((resolve,reject)=>{
 		axios.get(url+page, {withCredentials: true})
 		.then(res=>{
@@ -116,11 +120,13 @@ export function getHistoryList(page) {
 		})
 	})
 }
-export function searchHistoryList(keyword) {
-    const url = '/dev/backtest/?name='
+export function searchHistoryList(keyword, customUrl) {
+	let url = null
+  url = `/dev/backtest/?name=${keyword}`
+	if(customUrl) url = customUrl
 
     return new Promise((resolve,reject)=>{
-		axios.get(url+keyword, {withCredentials: true})
+		axios.get(url, {withCredentials: true})
 		.then(res=>{
 			resolve(res)
 		}).catch(err=>{
@@ -140,8 +146,12 @@ export function getBacktestName(name) {
 		})
 	})
 }
-export function getFavoriteList(page) {
-    const url = '/dev/backtest/?ordering=-create_date&favorites=true&page='
+export function getFavoriteList(page, sort) {
+	let url = null
+  url = '/dev/backtest/?ordering=-create_date&favorites=true&page='
+	if(sort) {
+		url = `/dev/backtest/?ordering=${sort}&favorites=true&page=`
+	}
 
     return new Promise((resolve,reject)=>{
 		axios.get(url+page)
