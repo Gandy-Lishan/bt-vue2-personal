@@ -3,12 +3,30 @@
 	<el-row>
 		<el-col :span="24">
 			<div class="favoriteForm_container">
+        <el-input
+					class="search"
+					style="width: 12vw"
+					size="mini"
+					v-model="searchItem"
+					placeholder=""
+					@keyup.enter.native="handleQuery"
+					clearable
+					@clear="handleQuery"
+				></el-input>
+				<el-button
+					type="primary"
+					icon="el-icon-search"
+					size="mini"
+					@click="handleQuery"
+					>Search</el-button
+				>
 				<el-table
 					:data="backtestList"
 					v-loading="loading"
 					element-loading-text="Loading"
 					element-loading-spinner="el-icon-loading"
 					element-loading-background="rgba(0, 0, 0, 0.8)"
+          @sort-change="onSortChange"
 				>
 					<el-table-column type="index" align="center">
 						<template scope="scope">
@@ -101,7 +119,10 @@
 						label="Timeframe"
 						show-overflow-tooltip
 						align="center"
-						width="90px"
+            prop="frequency"
+						sortable="custom"
+						:sort-orders="['frequency']"
+						width="115px"
 					>
 						<template slot-scope="scope">
 							<p>{{ scope.row.frequency }}</p>
@@ -111,11 +132,17 @@
 						align="center"
 						show-overflow-tooltip
 						label="Total Trades"
-						width="100px"
+            prop="total_trader"
+						sortable="custom"
+						:sort-orders="['total_trader']"
+						width="125px"
 					>
 						<template slot-scope="scope">
-							<span v-if="scope.row.result['Total Trades']">{{
+							<!-- <span v-if="scope.row.result['Total Trades']">{{
 								scope.row.result['Total Trades']
+							}}</span> -->
+              <span v-if="scope.row.total_trader">{{
+								scope.row.total_trader
 							}}</span>
 							<span v-else>{{ 0 }}</span>
 						</template>
@@ -124,10 +151,15 @@
 						align="center"
 						show-overflow-tooltip
 						label="Total Return"
-						width="97px"
+            prop="total_return"
+						sortable="custom"
+						:sort-orders="['total_return']"
 						><template slot-scope="scope">
-							<span v-if="scope.row.result['Total Return (%)']">{{
+							<!-- <span v-if="scope.row.result['Total Return (%)']">{{
 								scope.row.result['Total Return (%)'] + '%'
+							}}</span> -->
+              <span v-if="scope.row.total_return">{{
+								scope.row.total_return + '%'
 							}}</span>
 							<span v-else>{{ 0 + '%' }}</span>
 						</template>
@@ -256,7 +288,8 @@ import {
   deleteBacktest,
   copyBacktest,
   favoriteBacktest,
-  getBacktestName
+  getBacktestName,
+  searchHistoryList
 } from '@/service/service'
 export default {
   data() {
@@ -276,7 +309,9 @@ export default {
       queryInfo: {
         page: 1,
         total: 0
-      }
+      },
+      searchItem: '',
+      currentSort: {}, // 当前的排序信息
     }
   },
   directives: {
@@ -284,13 +319,19 @@ export default {
     permission
   },
   methods: {
-    async getFavoriteList(strategy) {
+    async getFavoriteList(orderby) {
       this.loading = true
-      let page = this.queryInfo.page
       try {
-        const res = await getFavoriteList(page)
+        let res
+        console.log('this.searchItem', this.searchItem)
+        if (this.searchItem) {
+          let customUrl = `/dev/backtest/?favorites=true&name=${this.searchItem}`
+          res = await searchHistoryList(this.searchItem, customUrl)
+        } else {
+          res = await getFavoriteList(this.queryInfo.page, orderby)
+        }
         if (res.status === 200) {
-          this.loading = false
+        this.loading = false
           this.backtestList = res.data.results
           if (this.backtestList.length != 0) {
             this.backtestList.forEach((element) => {
@@ -313,6 +354,7 @@ export default {
           this.queryInfo.total = res.data.count
         }
       } catch (error) {
+        this.loading = false
         console.log(error)
       }
     },
@@ -495,7 +537,7 @@ export default {
     }, 500),
     handleCurrentChange(newpage) {
       this.queryInfo.page = newpage
-      this.getFavoriteList()
+      this.applySort();
     },
     reloadData(data, freq) {
       let frequency = ''
@@ -610,11 +652,67 @@ export default {
           offset: 300
         })
       }
-    }, 500)
+    }, 500),
+    handleQuery: throttle(function () { this.getFavoriteList() }, 500),
+    async onSortChange({ column, prop, order }) {
+			/**
+		 * 表格排序事件处理函数
+		 * @param {object} {column,prop,order} 列数据|排序字段|排序方式
+		 */
+      if (column.sortable !== 'custom') return
+      this.currentSort = {
+        prop: prop,
+        order: order,
+      };
+      await this.applySort()
+    },
+    async applySort() {
+      let { prop, order } = this.currentSort;
+      //  order: 升 'ascending' | 降'descending' | 取消升降 null | order: total_return 
+      if (order == null || order == prop) {
+        // 不排序
+        prop = null
+      }
+      if (order == 'ascending') {
+        // 升序排列
+        prop = `-${prop}`
+      }
+      this.loadTest = 'Loading...'
+      this.loading = true
+      const res = await getFavoriteList(this.queryInfo.page, prop)
+      if (res.status === 200) {
+        this.loading = false
+        this.backtestList = res.data.results
+
+        if (this.backtestList.length != 0) {
+          this.backtestList.forEach((element) => {
+            if (element.result !== '')
+              element.result = JSON.parse(element.result)
+            if (element.entry_description.indexOf('[') != -1) {
+              element.entry_description = JSON.parse(
+                element.entry_description
+              )
+            } else {
+              element.entry_description = [element.entry_description]
+            }
+            if (element.exit_description.indexOf('[') != -1) {
+              element.exit_description = JSON.parse(element.exit_description)
+            } else {
+              element.exit_description = [element.exit_description]
+            }
+          })
+        }
+        this.queryInfo.total = res.data.count
+      }
+      this.loading = false
+    },
   }
 }
 </script>
 <style lang="less" scoped>
+.search {
+	margin-right: 28px;
+}
 .showDate {
 	display: flex;
 	flex-direction: column;
