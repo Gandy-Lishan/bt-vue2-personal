@@ -3,6 +3,23 @@
 	<el-row>
 		<el-col :span="24">
 			<div class="favoriteForm_container">
+				<el-input
+					class="search"
+					style="width: 30vw"
+					size="mini"
+					v-model="searchItem"
+					placeholder=""
+					@keyup.enter.native="handleQuery"
+					clearable
+					@clear="handleQuery"
+				></el-input>
+				<el-button
+					type="primary"
+					icon="el-icon-search"
+					size="mini"
+					@click="handleQuery"
+					>Search</el-button
+				>
 				<el-table
 					:data="backtestList"
 					v-loading="loading"
@@ -10,6 +27,7 @@
 					element-loading-spinner="el-icon-loading"
 					element-loading-background="rgba(0, 0, 0, 0.8)"
 					default-expand-all
+					@sort-change="onSortChange"
 				>
 					<el-table-column type="index" align="center">
 						<template scope="scope">
@@ -148,7 +166,10 @@
 						label="Timeframe"
 						show-overflow-tooltip
 						align="center"
-						width="90px"
+						sortable="custom"
+						prop="frequency"
+						:sort-orders="['frequency']"
+						width="115px"
 					>
 						<template slot-scope="scope">
 							<p>{{ scope.row.frequency }}</p>
@@ -158,11 +179,17 @@
 						align="center"
 						show-overflow-tooltip
 						label="Total Trades"
-						width="100px"
+						prop="total_trader"
+						sortable="custom"
+						:sort-orders="['total_trader']"
+						width="125px"
 					>
 						<template slot-scope="scope">
-							<span v-if="scope.row.result['Total Trades']">{{
+							<!-- <span v-if="scope.row.result['Total Trades']">{{
 								scope.row.result['Total Trades']
+							}}</span> -->
+							<span v-if="scope.row.total_trader">{{
+								scope.row.total_trader
 							}}</span>
 							<span v-else>{{ 0 }}</span>
 						</template>
@@ -171,10 +198,15 @@
 						align="center"
 						show-overflow-tooltip
 						label="Total Return"
-						width="97px"
+						prop="total_return"
+						sortable="custom"
+						:sort-orders="['total_return']"
 						><template slot-scope="scope">
-							<span v-if="scope.row.result['Total Return (%)']">{{
+							<!-- <span v-if="scope.row.result['Total Return (%)']">{{
 								scope.row.result['Total Return (%)'] + '%'
+							}}</span> -->
+							<span v-if="scope.row.total_return">{{
+								scope.row.total_return + '%'
 							}}</span>
 							<span v-else>{{ 0 + '%' }}</span>
 						</template>
@@ -213,7 +245,7 @@
 									></el-button>
 								</el-tooltip>
 								
-								<!-- <el-tooltip
+								<el-tooltip
 									class="item"
 									effect="dark"
 									content="copy backtest link"
@@ -229,7 +261,7 @@
 										v-copy="scope.row.id"
 
 									></el-button>
-								</el-tooltip> -->
+								</el-tooltip>
 							</el-row>
 						</template>
 					</el-table-column>
@@ -259,7 +291,8 @@ import {
 	copyBacktest,
 	seeParams,
 	getAnalystList,
-	getBacktestName
+	getBacktestName,
+	searchAnalystList
 } from '@/service/service'
 export default {
 	data() {
@@ -270,7 +303,9 @@ export default {
 				page: 1,
 				total: 0
 			},
-			loadTest: 'Loading'
+			loadTest: 'Loading',
+			searchItem: '',
+      currentSort: {}, // 当前的排序信息
 		}
 	},
 	directives: {
@@ -281,11 +316,15 @@ export default {
 		this.getAnalystList()
 	},
 	methods: {
-		async getAnalystList() {
+		async getAnalystList(orderby) {
 			this.loading = true
-			let page = this.queryInfo.page
 			try {
-				const res = await getAnalystList(page)
+				let res
+        if (this.searchItem) {
+          res = await searchAnalystList(this.searchItem)
+        } else {
+          res = await getAnalystList(this.queryInfo.page, orderby)
+        }
 				if (res.status === 200) {
 					this.backtestList = res.data.results
 					console.log(this.backtestList)
@@ -312,14 +351,16 @@ export default {
 					this.loading = false
 				}
 			} catch (error) {
+				console.error(error)
 				if(error.response.status === 500){
 			     this.$notify({
 							title: 'Failed',
 							message: 'List request failed',
 							type: 'error',
 							offset: 100
-						})
-				this.loading = false}
+						})}
+						
+				this.loading = false
 			}
 		},
 		copyBacktest: throttle(async function (row) {
@@ -500,12 +541,72 @@ export default {
 		},
 		handleCurrentChange(newpage) {
 			this.queryInfo.page = newpage
-			this.getAnalystList()
+			// this.getAnalystList()
+      this.applySort();
 		},
+		async onSortChange({ column, prop, order }) {
+			/**
+		 * 表格排序事件处理函数
+		 * @param {object} {column,prop,order} 列数据|排序字段|排序方式
+		 */
+      if (column.sortable !== 'custom') return
+      this.currentSort = {
+        prop: prop,
+        order: order,
+      };
+      await this.applySort()
+    },
+    async applySort() {
+			console.log(this.currentSort)
+      let { prop, order } = this.currentSort;
+      //  order: 升 'ascending' | 降'descending' | 取消升降 null | order: total_return 
+      if (order == null || order == prop) {
+        // 不排序
+        prop = null
+      }
+      if (order == 'ascending') {
+        // 升序排列
+        prop = `-${prop}`
+      }
+      this.loadTest = 'Loading...'
+      this.loading = true
+      const res = await getAnalystList(this.queryInfo.page, prop)
+      if (res.status === 200) {
+        this.loading = false
+        this.backtestList = res.data.results
+
+        if (res.data.results.length != 0) {
+          res.data.results.forEach((element) => {
+            if (element.result !== '')
+              element.result = JSON.parse(element.result)
+            if (element.entry_description.indexOf('[') != -1) {
+              element.entry_description = JSON.parse(
+                element.entry_description
+              )
+            } else {
+              element.entry_description = [element.entry_description]
+            }
+            if (element.exit_description.indexOf('[') != -1) {
+              element.exit_description = JSON.parse(element.exit_description)
+            } else {
+              element.exit_description = [element.exit_description]
+            }
+          })
+
+          this.backtestList = res.data.results
+        }
+        this.queryInfo.total = res.data.count
+      }
+      this.loading = false
+    },
+		handleQuery: throttle(function () { this.getAnalystList() }, 500)
 	}
 }
 </script>
 <style lang="less" scoped>
+.search {
+	margin-right: 28px;
+}
 .showDate {
 	display: flex;
 	flex-direction: column;

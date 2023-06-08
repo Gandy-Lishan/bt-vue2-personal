@@ -175,7 +175,8 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 
 .el-tabs__item#tab-second,
 .el-tabs__item#tab-forth,
-.el-tabs__item#tab-fifth{
+.el-tabs__item#tab-fifth,
+.el-tabs__item#tab-sixth{
     display: none;
 }
 .el-tabs__item.is-active {
@@ -226,6 +227,23 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   width: 180px;
   border-radius: unset;
 }
+
+.set-up-container  .excludeBox input:not([type]),
+.set-up-container .excludeBox input[type="text"],
+.set-up-container .excludeBox input[type="number"],
+.set-up-container .excludeBox input[type="date"],
+.set-up-container .excludeBox input[type="time"] {
+  border: #000000 solid 1px;
+  padding: 0 5px 0 5px;
+  height: 25px;
+  width: 50px;
+  border-radius: unset;
+  margin-left: 2px;
+}
+.set-up-container .excludeBox .el-checkbox__label{
+  margin-right: 0;
+}
+
 .set-up-container .risk-control-container input:not([type]),
 .set-up-container .risk-control-container input[type="text"],
 .set-up-container .risk-control-container input[type="number"],
@@ -291,9 +309,22 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 .set-up-container .dateBox .el-date-editor input[type="text"] {
   padding-left: 23px;
 }
-.backtest_container .el-form-item .el-form-item__content .selectBox .el-select {
+/* .backtest_container .el-form-item .el-form-item__content .selectBox .el-select {
   width: 320px;
-}
+} */
+/* .backtest_container .el-form-item .el-form-item__content .selectBox .el-select .el-input .el-input__suffix{
+  right: 120px;
+} */
+
+/* .backtest_container
+  .el-form-item
+  .el-form-item__content
+  .selectBox
+  .el-select
+  .el-input
+  .el-input__inner {
+  width: 293px !important;
+} */
 
 .backtest_container
   .el-form-item
@@ -302,7 +333,7 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   .el-select
   .el-input
   .el-input__inner {
-  width: 293px !important;
+  width: 180px !important;
 }
 .backtest_container .dateBox .el-form-item .el-form-item__label {
   margin-left: 40px;
@@ -711,3 +742,14 @@ input[type="time"] {
 .setup_container .dateBox .el-form-item__content{
   padding-left: 131px;
 }
+
+.result-container .exclude_oo .el-form-item__content {
+  padding-left: 230px;
+}
+.result-container .exclude_oo .el-form-item__label {
+  width: 250px;
+}
+.result-container .exclude_oo .el-input.is-disabled .el-input__inner {
+  width: 65px;
+}
+
