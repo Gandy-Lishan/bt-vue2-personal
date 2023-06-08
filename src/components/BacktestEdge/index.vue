@@ -216,10 +216,10 @@ export default {
 			font-weight: 500 !important;
 		}
 		.strategy-link:hover{
-			color:#409eff !important;
+			color:#5b9bd1 !important;
 		}
 		.home-link:hover{
-			color:#409eff !important;
+			color:#5b9bd1 !important;
 		}
 	}
 	.betaNote {
