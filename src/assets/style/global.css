@@ -25,7 +25,7 @@
 }
 .el-submenu__title,
 .el-menu-item span {
-  color: #409eff;
+  color: #5b9bd1;
 }
 .el-submenu__title {
   height: 78px !important;
@@ -35,11 +35,11 @@
   font-weight: 500 !important;
 }
 .el-submenu__title:hover{
-  color:#409eff !important;
+  color:#5b9bd1 !important;
 }
 
 .el-submenu__title:hover i{
-  color:#409eff !important;
+  color:#5b9bd1 !important;
 }
 
 .el-icon-arrow-down {display: none;}
@@ -60,4 +60,25 @@
 }
 .exit-with-custom-tim-frame-container /deep/.el-input__prefix{
   left: 24px !important;
+}
+
+/* 修改主题色 */
+.el-radio__input.is-checked .el-radio__inner {
+  border-color: #5b9bd1;
+  background: #5b9bd1;
+}
+.el-radio__input.is-checked+.el-radio__label {
+  color: #5b9bd1;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  background-color: #5b9bd1;
+  border-color: #5b9bd1;
+}
+.el-checkbox__input.is-checked+.el-checkbox__label {
+  color: #5b9bd1;
+}
+.el-button--primary {
+  color: #FFF;
+  background-color: #5b9bd1;
+  border-color: #5b9bd1;
 }
