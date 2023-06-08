@@ -71,6 +71,7 @@
 									@getEntryRelation="getEntryRelation"
 									@sendEntrySignalIndex="sendEntrySignalIndex"
 								></entry>
+								<div class="divider"></div>
 								<exit
 									ref="exitChild"
 									:direction="direction"
@@ -176,7 +177,7 @@
 						<span>Backtest list</span>
 						</div></button>
 					</div>
-					<div>
+					<!-- <div>
 					<el-tooltip
 					class="item"
 					effect="dark"
@@ -191,8 +192,26 @@
 						</div>
 						</button>
 					</el-tooltip>
-					</div>
-				</div>
+					</div> -->
+			</div>
+			<el-tooltip
+				class="item"
+				effect="dark"
+				content="Create New Backtest"
+				placement="bottom"
+			>
+				<button class="createNew" @click="refreshPage">
+					<svg class='sidebar_button_icon' width="22" height="30" viewBox="0 0 12 12" fill="white" xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd" clip-rule="evenodd" d="M2.65079 2.59434C3.35727 1.87621 4.22963 1.43305 5.14214 1.26312L4.91451 0C3.75791 0.215381 2.65102 0.77807 1.75752 1.68632C-0.585841 4.06838 -0.585841 7.93048 1.75752 10.3125L0.679249 11.4086H3.72907V8.30844L2.65079 9.40452C0.80077 7.52394 0.80077 4.47492 2.65079 2.59434ZM11.3208 0.591377H8.27093V3.69156L9.34921 2.59548C11.1992 4.47606 11.1992 7.52508 9.3492 9.40566C8.64273 10.1238 7.77037 10.567 6.85785 10.7369L7.08549 12C8.24209 11.7846 9.34898 11.2219 10.2425 10.3137C12.5858 7.93161 12.5858 4.06952 10.2425 1.68746L11.3208 0.591377Z"/>
+						</svg>
+				</button>
+			</el-tooltip>
+			<el-tooltip class="createNew_hint" effect="dark" placement="top">
+              <span slot="content"
+                >Clear current chart & Backtest Setup Form and create a new backtest.
+              </span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
 		</main>
 	</div>
 </template>
@@ -593,6 +612,7 @@ export default {
       }
       this.createNewBacktest()
 	  this.animationUp(0)
+	  this.switchMainTab('setup')
     },
     addEntrySignalLength(index) {
       let obj = {}
@@ -1453,6 +1473,13 @@ header {
 	display: flex;
 	justify-content: space-between;
 	border-bottom: 1px solid #797979;
+	align-items: center;
+}
+.divider {
+    width: 1px;
+    height: 448px;
+    background-color: #e8e6e6;
+    opacity: 0.8;
 }
 @media (min-width: 820px) and (max-width: 1279px) {
 	.criteria-box {
@@ -1608,6 +1635,45 @@ header {
 			fill:white;
 		}
 	}
-
+}
+button.createNew {
+	opacity: 0.4;
+	z-index: 999;
+	border: unset;
+	position: fixed;
+	right: 75px;
+	bottom: 63px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 80px;
+	height: 80px;
+	border-radius: 100%;
+	background-image: initial;
+	background-position-x: initial;
+	background-position-y: initial;
+	background-size: initial;
+	background-repeat-x: initial;
+	background-repeat-y: initial;
+	background-attachment: initial;
+	background-origin: initial;
+	background-clip: initial;
+	background-color: #94989f;
+	box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%),
+		0 10px 10px -5px rgb(0 0 0 / 4%);
+	svg.sidebar_button_icon{
+		// float: left;
+		// margin: 0 5px 0 6px;
+		// width: 16px;
+		// height: 16px;
+		// fill:#666666;
+	}
+}
+.createNew_hint{
+	position: fixed;
+	right: 75px;
+	bottom: 120px;
+	border: 1px solid black;
+	border-radius: 50%;
 }
 </style>
