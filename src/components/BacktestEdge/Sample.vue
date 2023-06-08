@@ -3,23 +3,19 @@
 	<el-row>
 		<el-col :span="24">
 			<div class="favoriteForm_container">
-				<el-input
+        <div class="searchBox">
+									<el-input
 					class="search"
 					style="width: 30vw"
 					size="mini"
 					v-model="searchItem"
-					placeholder=""
+					placeholder="Search for the name of the backtest"
 					@keyup.enter.native="handleQuery"
 					clearable
 					@clear="handleQuery"
-				></el-input>
-				<el-button
-					type="primary"
-					icon="el-icon-search"
-					size="mini"
-					@click="handleQuery"
-					>Search</el-button
 				>
+				<i slot="suffix" class="el-input__icon el-icon-search"></i></el-input>
+				</div>
 				<el-table
 					:data="backtestList"
 					v-loading="loading"
@@ -601,8 +597,12 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.search {
+
+.searchBox {
+  float: right;
+  .search {
 	margin-right: 28px;
+}
 }
 .showDate {
 	display: flex;

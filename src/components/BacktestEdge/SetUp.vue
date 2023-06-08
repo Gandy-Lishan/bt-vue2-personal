@@ -115,7 +115,7 @@
 						<el-form-item
 							label="User Tag"
 							prop="use_tag"
-							v-if="is_admin == true"
+							v-if="is_admin"
 						>
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
@@ -277,7 +277,7 @@
 						<el-form-item
 							label="Report URL"
 							prop="report_url"
-							v-if="bd.user_tag === 'analyst' && is_admin == true"
+							v-if="bd.user_tag === 'analyst' && is_admin"
 						>
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
