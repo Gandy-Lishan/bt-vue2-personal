@@ -112,7 +112,11 @@
 						</div>
 					</el-form-item>
 					<div class="userTagBoc">
-						<el-form-item label="User Tag" prop="use_tag" v-if="is_admin==true">
+						<el-form-item
+							label="User Tag"
+							prop="use_tag"
+							v-if="is_admin == true"
+						>
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
 									>Choose the type of backtest you want to create.<br
@@ -148,9 +152,9 @@
 						</el-tooltip>
 						<div class="selectBox historySelectBox">
 							<el-select
-								@change="getBacktestHistory(historyValue)"
-								@blur="setBacktestHistory(historyValue)"
-								v-model="historyValue"
+								@change="getBacktestHistory(bd.backtest_period)"
+								@blur="setBacktestHistory(bd.backtest_period)"
+								v-model="bd.backtest_period"
 							>
 								<el-option
 									v-for="item in historyOptions"
@@ -165,7 +169,7 @@
 					<div class="dateBox">
 						<el-form-item label="Start Date">
 							<el-date-picker
-								v-if="historyValue === 22"
+								v-if="bd.backtest_period === '22'"
 								v-model="bd.start_date"
 								@change="formateStartDate"
 								type="date"
@@ -180,7 +184,7 @@
 					<div class="dateBox">
 						<el-form-item prop="endDate" label="End Date">
 							<el-date-picker
-								v-if="historyValue === 22"
+								v-if="bd.backtest_period === '22'"
 								v-model="bd.end_date"
 								@change="formateEndDate"
 								type="date"
@@ -224,8 +228,57 @@
 							</el-select>
 						</div>
 					</el-form-item>
+					<el-form-item label="Trade Price" prop="trade_price">
+						<el-tooltip effect="dark" placement="top">
+							<span slot="content"
+								>The price used during the transaction,<br />'Next' indicates
+								that the trade will only be executed on the next bar after the
+								conditions are met on the current day.<br
+							/></span>
+							<i class="iconfont icon-wenhao"></i>
+						</el-tooltip>
+						<div class="selectBox">
+							<el-select
+								v-model="bd.trade_price"
+								placeholder="— Select Trade Price —"
+							>
+								<el-option
+									v-for="item in tradePriceOptions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value"
+								>
+								</el-option>
+							</el-select>
+						</div>
+					</el-form-item>
+					<div class="excludeBox">
+						<!-- <el-form-item prop="exclude_oo"> -->
+						<el-checkbox v-model="isExcludeOO"
+							>Exclude Overlapping Observations
+							<el-tooltip effect="dark" placement="top">
+								<span slot="content"
+									>Select this box if you want to exclude dates that are
+									clustered together.<br />
+									By selecting this option, the test will only allow one trade
+									at a time. <br />
+									For example, if you chose '10 days' in the Observation Period,
+									<br />
+									then once the Indicator meets the Indicator Level you specify,
+									<br />
+									the test will not allow another trade for the next 10 days.<br />
+								</span>
+								<i class="iconfont icon-wenhao"></i> </el-tooltip
+						></el-checkbox>
+						<el-input v-model="bd.exclude_oo"></el-input>
+						<!-- </el-form-item> -->
+					</div>
 					<div class="backtestURLBox">
-						<el-form-item label="Report URL" prop="report_url" v-if="bd.user_tag === 'analyst' && is_admin==true">
+						<el-form-item
+							label="Report URL"
+							prop="report_url"
+							v-if="bd.user_tag === 'analyst' && is_admin == true"
+						>
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
 									>Fill in the analyst's report url here.</span
@@ -344,791 +397,832 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { timestampToTime } from '@/tools/formatDate.js'
 import Cookies from 'vue-cookies'
 import {
-	getIndicatorsList,
-	getIndexsList,
-	getStocksList,
-	getBacktestName
+  getIndicatorsList,
+  getIndexsList,
+  getStocksList,
+  getBacktestName
 } from '@/service/service.js'
 import { permission } from '@/tools/copyBacktestID'
 const throttle = require('lodash/throttle')
 const uniqWith = require('lodash/uniqWith')
 const isEqual = require('lodash/isEqual')
 export default {
-	props: { backtestEditData: Object },
-	name: 'setUp',
-	data() {
-		var validateCapital = (rule, value, callback) => {
-			const pattern = /^\d+(\.\d{1,2})?$/
-			if (value == '') {
-				callback(new Error('Please input starting capital'))
-			}
-			if (!pattern.test(value) && value != 0) {
-				callback(
-					new Error('Values greater than 1000, up to two decimal places')
-				)
-			}
-			if (value < 1000) {
-				callback(
-					new Error('Values greater than 1000, up to two decimal places')
-				)
-			}
-			callback()
-		}
-		var validateCommissionRule = (rule, value, callback) => {
-			const pattern = /^\d+(\.\d{1,2})?$/
-			if (value == '') {
-				callback(new Error('Please input commission'))
-			}
-			if (!pattern.test(value) && value != 0) {
-				callback(new Error('Value less than 50, up to two decimal places'))
-			}
-			if (value > 50) {
-				callback(new Error('Value less than 50, up to two decimal places'))
-			}
-			callback()
-		}
-		var validateSlippageRule = (rule, value, callback) => {
-			const pattern = /^\d+(\.\d{1,2})?$/
-			if (value == '') {
-				callback(new Error('Please input slippage'))
-			}
-			if (!pattern.test(value) && value != 0) {
-				callback(new Error('Value greater than 0, up to two decimal places'))
-			}
-			if (value < 0) {
-				callback(new Error('Value greater than 0, up to two decimal places'))
-			}
-			callback()
-		}
-		var validateNameRule = (rule, value, callback) => {
-			if (value == '') {
-				callback(new Error('Please input backtest name'))
-			} else {
-				callback()
-			}
-		}
-		var validateURLRule = (rule, value, callback) => {
-			const pattern =
-				/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
-			if (value == '') {
-				callback(new Error('Please enter the url of the analyst report'))
-			}
-			if (!pattern.test(value)) {
-				callback(new Error('Url address format error'))
-			}
-			callback()
-		}
-		return {
-			bd: {
-				name: '',
-				symbol: 'SPY',
-				benchmark: 'SPY',
-				strategy: 'Signal',
-				capital: 100000.0,
-				capital_alloc: 1.0,
-				commission: 0.1,
-				win_rate: 0.0,
-				slippage: 0.1,
-				start_date: '',
-				end_date: '',
-				description: 'backtest',
-				direction: 'Long',
-				frequency: 'Daily',
-				risk_control: '//',
-				report_url: '',
-				user_tag: 'client'
-			},
-			permission: Cookies.get('devbt2Userid'),
-			historyOptions: [
-				{
-					value: 1,
-					label: '1 Year'
-				},
-				{
-					value: 2,
-					label: '2 Year'
-				},
-				{
-					value: 3,
-					label: '3 Year'
-				},
-				{
-					value: 4,
-					label: '4 Year'
-				},
-				{
-					value: 5,
-					label: '5 Year'
-				},
-				{
-					value: 10,
-					label: '10 Year'
-				},
-				{
-					value: 15,
-					label: '15 Year'
-				},
-				{
-					value: 20,
-					label: '20 Year'
-				},
-				{
-					value: 21,
-					label: 'All History'
-				},
-				{
-					value: 22,
-					label: 'Custom...'
+  props: { backtestEditData: Object },
+  name: 'setUp',
+  data() {
+    var validateCapital = (rule, value, callback) => {
+      const pattern = /^\d+(\.\d{1,2})?$/
+      if (value == '') {
+        callback(new Error('Please input starting capital'))
+      }
+      if (!pattern.test(value) && value != 0) {
+        callback(
+          new Error('Values greater than 1000, up to two decimal places')
+        )
+      }
+      if (value < 1000) {
+        callback(
+          new Error('Values greater than 1000, up to two decimal places')
+        )
+      }
+      callback()
+    }
+    var validateCommissionRule = (rule, value, callback) => {
+      const pattern = /^\d+(\.\d{1,2})?$/
+      if (value == '') {
+        callback(new Error('Please input commission'))
+      }
+      if (!pattern.test(value) && value != 0) {
+        callback(new Error('Value less than 50, up to two decimal places'))
+      }
+      if (value > 50) {
+        callback(new Error('Value less than 50, up to two decimal places'))
+      }
+      callback()
+    }
+    var validateSlippageRule = (rule, value, callback) => {
+      const pattern = /^\d+(\.\d{1,2})?$/
+      if (value == '') {
+        callback(new Error('Please input slippage'))
+      }
+      if (!pattern.test(value) && value != 0) {
+        callback(new Error('Value greater than 0, up to two decimal places'))
+      }
+      if (value < 0) {
+        callback(new Error('Value greater than 0, up to two decimal places'))
+      }
+      callback()
+    }
+    var validateNameRule = (rule, value, callback) => {
+      if (value == '') {
+        callback(new Error('Please input backtest name'))
+      } else {
+        callback()
+      }
+    }
+    var validateURLRule = (rule, value, callback) => {
+      const pattern =
+        /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
+      if (value == '') {
+        callback(new Error('Please enter the url of the analyst report'))
+      }
+      if (!pattern.test(value)) {
+        callback(new Error('Url address format error'))
+      }
+      callback()
+    }
+    return {
+      bd: {
+        name: '',
+        symbol: 'SPY',
+        benchmark: 'SPY',
+        strategy: 'Signal',
+        capital: 100000.0,
+        capital_alloc: 1.0,
+        commission: 0.1,
+        win_rate: 0.0,
+        slippage: 0.1,
+        start_date: '',
+        end_date: '',
+        description: 'backtest',
+        direction: 'Long',
+        frequency: 'Daily',
+        risk_control: '//',
+        report_url: '',
+        user_tag: 'client',
+        backtest_period: '1',
+        trade_price: 0,
+        exclude_oo: 0
+      },
+      permission: Cookies.get('devbt2Userid'),
+      historyOptions: [
+        {
+          value: '1',
+          label: '1 Year'
+        },
+        {
+          value: '2',
+          label: '2 Year'
+        },
+        {
+          value: '3',
+          label: '3 Year'
+        },
+        {
+          value: '4',
+          label: '4 Year'
+        },
+        {
+          value: '5',
+          label: '5 Year'
+        },
+        {
+          value: '10',
+          label: '10 Year'
+        },
+        {
+          value: '15',
+          label: '15 Year'
+        },
+        {
+          value: '20',
+          label: '20 Year'
+        },
+        {
+          value: '21',
+          label: 'All History'
+        },
+        {
+          value: '22',
+          label: 'Custom...'
+        }
+      ],
+      frequencyOptions: [
+        { value: 'Daily', label: 'Daily' },
+        { value: 'Weekly', label: 'Weekly' },
+        { value: 'Monthly', label: 'Monthly' }
+      ],
+      tradePriceOptions: [
+        { value: 0, label: 'Next Open' },
+        { value: 1, label: 'Next Close' },
+      ],
+      userTagOptions: [
+        { value: 'client', label: 'Client' },
+        { value: 'analyst', label: 'Analyst' },
+        { value: 'system', label: 'System' }
+      ],
+      mmValue: 0,
+      mmOptions: [
+        {
+          value: 0,
+          label: 'All In / All Out (CASH)'
+        }
+      ],
+      symbolList: [],
+      indexList: [],
+      loading: false,
+      options: [],
+      tp: 20,
+      sl: 10,
+      tim: 120,
+      isRiskControl: true,
+      isTakeProfit: true,
+      isStopLoss: true,
+      isTimeInMarket: true,
+      sentimentIndicatorList: [],
+      rules: {
+        capital: [
+          {
+            validator: validateCapital,
+            trigger: 'blur'
+          }
+        ],
+        slippage: [
+          {
+            validator: validateSlippageRule,
+            trigger: 'blur'
+          }
+        ],
+        commission: [
+          {
+            validator: validateCommissionRule,
+            trigger: 'blur'
+          }
+        ],
+        name: [
+          {
+            validator: validateNameRule,
+            trigger: 'blur'
+          }
+        ],
+        report_url: [
+          {
+            validator: validateURLRule,
+            trigger: 'blur'
+          }
+        ]
+      },
+      oldBacktestName: '',
+      is_admin: false,
+      isExcludeOO: false
+    }
+  },
+  directives: {
+    permission
+  },
+  created() {
+    this.is_admin = this.$store.state.is_admin
+  },
+  mounted() {
+    this.loadSentimentList('Daily')
+    this.$emit('IsRiskControl', true)
+    this.getEndDate()
+  },
+  computed: {
+    updateFreq() {
+      return this.$store.state.pairDataFreq
+    },
+    allRiskControlOptions() {
+      return this.isTakeProfit || this.isStopLoss || this.isTimeInMarket
+    }
+  },
+  watch: {
+    updateFreq(val) {
+      switch (val) {
+        case 'daily': {
+          this.getFrequency('Daily')
+          break
+        }
+        case 'weekly': {
+          this.getFrequency('Weekly')
+          break
+        }
+        case 'monthly': {
+          this.getFrequency('Monthly')
+          break
+        }
+      }
+    },
+    backtestEditData: {
+      handler(newVal) { }
+    },
+    allRiskControlOptions: {
+      handler(newVal) {
+        if (!newVal && this.isRiskControl) {
+          this.$message({
+            message: 'Select at least one Risk Control indicator',
+            type: 'error',
+            offset: 300
+          })
+          this.isTakeProfit = true
+          this.selectRiskControl(this.isRiskControl)
+        }
+      }
+    }
+  },
+  methods: {
+    clearForm() {
+      Object.assign(this.$data, this.$options.data())
+      this.is_admin = this.$store.state.is_admin
+      this.getEndDate()
+      this.bd.symbol = this.$store.state.backtestSymbol
+      this.$emit('IsRiskControl', true)
+      this.clearFormValidate()
+    },
+    setEditData(newVal) {
+      if (JSON.stringify(newVal) != '{}') {
+        this.clearForm()
+        delete newVal.entry
+        delete newVal.exit
+        delete newVal.user_id
+        delete newVal.status
+        delete newVal.results
+        delete newVal.uuid
+        delete newVal.entry_description
+        delete newVal.exit_description
+        delete newVal.entry
+        delete newVal.exit
+        delete newVal.results
+        newVal.user_tag = 'client'
+        newVal.commission = (newVal.commission * 100).toFixed(2)
+        newVal.slippage = Number(newVal.slippage).toFixed(2)
+				newVal.trade_price = Number(newVal.trade_price)
+        this.is_admin = this.$store.state.is_admin
+        this.bd = Object.assign(this.bd, newVal)
+        this.getFrequency(newVal.frequency)
+        this.getDirection(newVal.direction)
+        this.isRiskControl = false
+        this.isTakeProfit = false
+        this.isStopLoss = false
+        this.isTimeInMarket = false
+				this.isExcludeOO = false
+				if(this.bd.exclude_oo > 0) {
+					this.isExcludeOO = true
 				}
-			],
-			frequencyOptions: [
-				{ value: 'Daily', label: 'Daily' },
-				{ value: 'Weekly', label: 'Weekly' },
-				{ value: 'Monthly', label: 'Monthly' }
-			],
-			userTagOptions: [
-				{ value: 'client', label: 'Client' },
-				{ value: 'analyst', label: 'Analyst' },
-				{ value: 'system', label: 'System' }
-			],
-			mmValue: 0,
-			mmOptions: [
-				{
-					value: 0,
-					label: 'All In / All Out (CASH)'
-				}
-			],
-			historyValue: 1,
-			symbolList: [],
-			indexList: [],
-			loading: false,
-			options: [],
-			tp: 20,
-			sl: 10,
-			tim: 120,
-			isRiskControl: true,
-			isTakeProfit: true,
-			isStopLoss: true,
-			isTimeInMarket: true,
-			sentimentIndicatorList: [],
-			rules: {
-				capital: [
-					{
-						validator: validateCapital,
-						trigger: 'blur'
-					}
-				],
-				slippage: [
-					{
-						validator: validateSlippageRule,
-						trigger: 'blur'
-					}
-				],
-				commission: [
-					{
-						validator: validateCommissionRule,
-						trigger: 'blur'
-					}
-				],
-				name: [
-					{
-						validator: validateNameRule,
-						trigger: 'blur'
-					}
-				],
-				report_url: [
-					{
-						validator: validateURLRule,
-						trigger: 'blur'
-					}
-				]
-			},
-			oldBacktestName: '',
-			is_admin: false
-		}
-	},
-	directives: {
-		permission
-	},
-	created() {
-		this.is_admin = this.$store.state.is_admin
-	},
-	mounted() {
-		this.loadSentimentList('Daily')
-		this.$emit('IsRiskControl', true)
-		this.getEndDate()
-	},
-	computed: {
-		updateFreq() {
-			return this.$store.state.pairDataFreq
-		},
-		allRiskControlOptions() {
-			return this.isTakeProfit || this.isStopLoss || this.isTimeInMarket
-		}
-	},
-	watch: {
-		updateFreq(val) {
-			switch (val) {
-				case 'daily': {
-					this.getFrequency('Daily')
-					break
-				}
-				case 'weekly': {
-					this.getFrequency('Weekly')
-					break
-				}
-				case 'monthly': {
-					this.getFrequency('Monthly')
-					break
-				}
-			}
-		},
-		backtestEditData: {
-			handler(newVal) {}
-		},
-		allRiskControlOptions: {
-			handler(newVal) {
-				if (!newVal && this.isRiskControl) {
-					this.$message({
-						message: 'Select at least one Risk Control indicator',
-						type: 'error',
-						offset: 300
-					})
-					this.isTakeProfit = true
-					this.selectRiskControl(this.isRiskControl)
-				}
-			}
-		}
-	},
-	methods: {
-		clearForm() {
-			Object.assign(this.$data, this.$options.data())
-			this.is_admin = this.$store.state.is_admin
-			this.getEndDate()
-			this.bd.symbol = this.$store.state.backtestSymbol
-			this.$emit('IsRiskControl', true)
-			this.clearFormValidate()
-		},
-		setEditData(newVal) {			
-			if (JSON.stringify(newVal) != '{}') {
-				this.clearForm()
-				delete newVal.entry
-				delete newVal.exit
-				delete newVal.user_id
-				delete newVal.status
-				delete newVal.results
-				delete newVal.uuid
-				delete newVal.entry_description
-				delete newVal.exit_description
-				delete newVal.entry
-				delete newVal.exit
-				delete newVal.results
-				newVal.user_tag = 'client'
-				newVal.commission = (newVal.commission * 100).toFixed(2)
-				newVal.slippage = Number(newVal.slippage).toFixed(2)
-				this.is_admin = this.$store.state.is_admin
-				this.bd = Object.assign(this.bd, newVal)	
-				this.getFrequency(newVal.frequency)
-				this.getDirection(newVal.direction)
-				this.isRiskControl = false
-				this.isTakeProfit = false
-				this.isStopLoss = false
-				this.isTimeInMarket = false
-				if (newVal.risk_control) {
-					let riskValArr = newVal.risk_control.split('/')
-					if (riskValArr[0]) {
-						this.isTakeProfit = true
-						this.tp = riskValArr[0]
-						this.isRiskControl = true
-						this.$emit('IsRiskControl', true)
-					}
-					if (riskValArr[1]) {
-						this.isStopLoss = true
-						this.sl = riskValArr[1]
-						this.isRiskControl = true
-						this.$emit('IsRiskControl', true)
-					}
-					if (riskValArr[2]) {
-						this.isTimeInMarket = true
-						this.tim = riskValArr[2]
-						this.isRiskControl = true
-						this.$emit('IsRiskControl', true)
-					}
-					this.selectRiskControl(this.isRiskControl)
-				}
-				this.oldBacktestName = newVal.name
-				let year
-				let month
-				let day	
-				if (newVal.start_date && newVal.start_date !== '1800-10-01') {
-					const starArr = newVal.start_date.toString().split('-')
-					const endArr = newVal.end_date.toString().split('-')
-					year = Number(endArr[0]) - Number(starArr[0])
-					month = Number(endArr[1]) - Number(starArr[1])
-					day = Number(endArr[2]) - Number(starArr[2])
-					if (month == 0 && day == 0) {
-						this.historyValue = year
-					} else {
-						this.historyValue = 22
-					}
-				} else {
-					this.historyValue = 21
-					this.bd.start_date = ''
-				}
-				console.log('处理完成之后的编辑数据', this.bd)
-			}
-		},
-		getDirection(val) {
-			// Set direction to vuex
-			this.$store.commit('getDirection', val)
-			// Direction passed to entry and exit
-			this.bd.direction = val
-			this.$emit('setDirection', val)
-		},
-		validateStartingCapital: throttle(function (val) {
-			let re = /^\d+\.?\d{0,2}$/
-			if (val.search(re) !== -1) {
-				this.bd.capital = val
-			} else if (val.search(/^\d+\.?\d+/) !== -1) {
-				this.bd.capital =
-					val.split('.')[0] + '.' + val.split('.')[1].substring(0, 2)
-			} else {
-				this.bd.capital = ''
-			}
-		}, 500),
+        if (newVal.risk_control) {
+          let riskValArr = newVal.risk_control.split('/')
+          if (riskValArr[0]) {
+            this.isTakeProfit = true
+            this.tp = riskValArr[0]
+            this.isRiskControl = true
+            this.$emit('IsRiskControl', true)
+          }
+          if (riskValArr[1]) {
+            this.isStopLoss = true
+            this.sl = riskValArr[1]
+            this.isRiskControl = true
+            this.$emit('IsRiskControl', true)
+          }
+          if (riskValArr[2]) {
+            this.isTimeInMarket = true
+            this.tim = riskValArr[2]
+            this.isRiskControl = true
+            this.$emit('IsRiskControl', true)
+          }
+          this.selectRiskControl(this.isRiskControl)
+        }
+        this.oldBacktestName = newVal.name
+        // let year
+        // let month
+        // let day	
+        // if (newVal.start_date && newVal.start_date !== '1800-10-01') {
+        // 	const starArr = newVal.start_date.toString().split('-')
+        // 	const endArr = newVal.end_date.toString().split('-')
+        // 	year = Number(endArr[0]) - Number(starArr[0])
+        // 	month = Number(endArr[1]) - Number(starArr[1])
+        // 	day = Number(endArr[2]) - Number(starArr[2])
+        // 	if (month == 0 && day == 0) {
+        // 		this.bd.backtest_period = year
+        // 	} else {
+        // 		this.bd.backtest_period = 22
+        // 	}
+        // } else {
+        // 	this.bd.backtest_period = 21
+        // 	this.bd.start_date = ''
+        // }
+        this.bd.backtest_period = newVal.backtest_period
+        if (newVal.backtest_period == '21') {
+          this.bd.start_date = ''
+        }
+        console.log('处理完成之后的编辑数据', this.bd)
+      }
+    },
+    getDirection(val) {
+      // Set direction to vuex
+      this.$store.commit('getDirection', val)
+      // Direction passed to entry and exit
+      this.bd.direction = val
+      this.$emit('setDirection', val)
+    },
+    validateStartingCapital: throttle(function (val) {
+      let re = /^\d+\.?\d{0,2}$/
+      if (val.search(re) !== -1) {
+        this.bd.capital = val
+      } else if (val.search(/^\d+\.?\d+/) !== -1) {
+        this.bd.capital =
+          val.split('.')[0] + '.' + val.split('.')[1].substring(0, 2)
+      } else {
+        this.bd.capital = ''
+      }
+    }, 500),
 
-		getBenchmark(val) {
-			this.bd.benchmark = val
-		},
-		getSymbol(val) {
-			this.$store.commit('getBacktestSymbol', val)
-			CIQ.addSymbol(val)
-		},
-		formateStartDate(val) {
-			this.bd.start_date = val
-		},
-		formateEndDate(val) {
-			this.bd.end_date = val
-		},
-		getEndDate() {
-			this.bd.end_date = timestampToTime(new Date())
-			const str = this.bd.end_date.split('-')
-			str[0] = Number(str[0]) - Number(this.historyValue) + ''
-			this.bd.start_date = str.join('-')
-			var that = this
-			var utils = function () {
-				let vm = this
-				vm.setSymbol = function (symbol) {
-					that.bd.symbol = symbol
-				}
-			}
-			return (window.utils = new utils())
-		},
-		async getIndexsList() {
-			try {
-				let vm = this
-				if (vm.$store.state.indexsList.length != 0) {
-					vm.indexList = vm.$store.state.indexsList.map((item) => {
-						return { value: `${item.symbol}`, label: `${item.symbol}` }
-					})
-				} else {
-					let res = await getIndexsList()
-					vm.indexList = res.data.map((item) => {
-						return { value: `${item.symbol}`, label: `${item.symbol}` }
-					})
-					vm.loading = false
-				}
-			} catch (error) {
-				this.indexList = []
-				vm.loading = false
-			}
-		},
-		async getStocksList() {
-			let vm = this
-			
-			if (vm.$store.state.stocksList.length != 0) {
-				vm.symbolList = vm.$store.state.stocksList.map((item) => {
-					return { value: `${item.stock}`, label: `${item.stock}` }
-				})
-			} else {
-				try {
-					let res = await getStocksList()
-					vm.symbolList = res.data.map((item) => {
-						return { value: `${item.stock}`, label: `${item.stock}` }
-					})
-				} catch (error) {
-					console.warn(error)
-					vm.loading = false
-				}
-			}
-		},
-		async remoteMethod(query) {
-			let vm = this
-			if (query !== '') {
-				vm.loading = true
-				if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
-					await vm.getStocksList()
-					await vm.getIndexsList()
-				}
-				
-				var symbolListTemp = vm.symbolList.filter((item) => {
-					return (
-						item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-						item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
-					)
-				})
-				var IndexListTemp = vm.indexList.filter((item) => {
-					return (
-						item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-						item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
-					)
-				})
+    getBenchmark(val) {
+      this.bd.benchmark = val
+    },
+    getSymbol(val) {
+      this.$store.commit('getBacktestSymbol', val)
+      CIQ.addSymbol(val)
+    },
+    formateStartDate(val) {
+      this.bd.start_date = val
+    },
+    formateEndDate(val) {
+      this.bd.end_date = val
+    },
+    getEndDate() {
+      this.bd.end_date = timestampToTime(new Date())
+      const str = this.bd.end_date.split('-')
+      str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
+      this.bd.start_date = str.join('-')
+      var that = this
+      var utils = function () {
+        let vm = this
+        vm.setSymbol = function (symbol) {
+          that.bd.symbol = symbol
+        }
+      }
+      return (window.utils = new utils())
+    },
+    async getIndexsList() {
+      try {
+        let vm = this
+        if (vm.$store.state.indexsList.length != 0) {
+          vm.indexList = vm.$store.state.indexsList.map((item) => {
+            return { value: `${item.symbol}`, label: `${item.symbol}` }
+          })
+        } else {
+          let res = await getIndexsList()
+          vm.indexList = res.data.map((item) => {
+            return { value: `${item.symbol}`, label: `${item.symbol}` }
+          })
+          vm.loading = false
+        }
+      } catch (error) {
+        this.indexList = []
+        vm.loading = false
+      }
+    },
+    async getStocksList() {
+      let vm = this
 
-				let options = symbolListTemp.concat(IndexListTemp)
-				// keyword全匹配
-				for(var item of options){
-					if(
-						item.value.toLowerCase()===query.toLowerCase() || 
-						item.label.toLowerCase()===query.toLowerCase()
-					){	
-						options.unshift(item)
-						break
-					}
-				} 
-				// 去重
-				this.options = uniqWith(options, isEqual)
-				// 解除遮罩
-				vm.loading = false
-			} else {
-				this.options = []
-			}
-		},
-		getBacktestHistory(val) {
-			this.historyValue = val
-			this.bd.end_date = timestampToTime(new Date())
-			if (val <= 20) {
-				this.bd.end_date = timestampToTime(new Date())
-				const str = this.bd.end_date.split('-')
-				str[0] = Number(str[0]) - Number(this.historyValue) + ''
-				this.bd.start_date = str.join('-')
-			}
-			if (val === 21) {
-				this.bd.start_date = ''
-			}
-		},
-		setBacktestHistory(val) {
-			this.historyValue = val
-			this.bd.end_date = timestampToTime(new Date())
-			if (val <= 20) {
-				this.bd.end_date = timestampToTime(new Date())
-				const str = this.bd.end_date.split('-')
-				str[0] = Number(str[0]) - Number(this.historyValue) + ''
-				this.bd.start_date = str.join('-')
-			}
-			if (val === 21) {
-				this.bd.start_date = ''
-			}
-		},
-		getCommission: throttle(function (val) {
-			this.bd.commission = val
-		}, 500),
-		validateForm(newTag, oldTag) {
-			let data = true
-			this.$refs.backtestSetupForm.validate((valid) => {
-				if (!valid) {
-					this.$emit('validSetUpFail', oldTag)
-					this.$message.error('Please complete the complete fields')
-					data = false
-				} else if (valid) {
-					this.$emit('validSetUpSuccess', newTag)
-				}
-			})
-			return data
-		},
-		clearFormValidate() {
-			this.$refs.backtestSetupForm.clearValidate()
-		},
-		changeTimeframe(val) {
-			this.getFrequency(val)
-			CIQ.addIndicators()
-		},
-		selectRiskControl(val) {
-			if (!this.isRiskControl) {
-				this.$emit('IsRiskControl', false)
-			}
-			if (
-				this.isRiskControl &&
-				(this.isTakeProfit || this.isTimeInMarket || this.isStopLoss)
-			) {
-				this.$emit('IsRiskControl', true)
-			}
-			if (
-				this.isRiskControl &&
-				!(this.isTakeProfit || this.isTimeInMarket || this.isStopLoss)
-			) {
-				this.isTakeProfit = true
-				this.isStopLoss = true
-				this.isTimeInMarket = true
-				this.$emit('IsRiskControl', true)
-			}
-			this.$store.commit('isRiskControl', val)
-		},
-		getFrequency(val) {
-			// getFrequency will no longer call addIndicator and pass a parameter to it
-			this.bd.frequency = val
-			this.$store.commit('getFrequency', val)
-			this.loadSentimentList(val)
-		},
-		async loadSentimentList(val) {
-			const vm = this
-			var frequency = val
-			var indicatorList = []
+      if (vm.$store.state.stocksList.length != 0) {
+        vm.symbolList = vm.$store.state.stocksList.map((item) => {
+          return { value: `${item.stock}`, label: `${item.stock}` }
+        })
+      } else {
+        try {
+          let res = await getStocksList()
+          vm.symbolList = res.data.map((item) => {
+            return { value: `${item.stock}`, label: `${item.stock}` }
+          })
+        } catch (error) {
+          console.warn(error)
+          vm.loading = false
+        }
+      }
+    },
+    async remoteMethod(query) {
+      let vm = this
+      if (query !== '') {
+        vm.loading = true
+        if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
+          await vm.getStocksList()
+          await vm.getIndexsList()
+        }
 
-			if (CIQ.indicatorList) {
-				if (CIQ.indicatorList.length != 0) {
-					indicatorList = this.$store.state.indicatorsList
-					indicatorList = CIQ.indicatorList
-				}
-			}
-			vm.sentimentIndicatorList = []
-			if (frequency) {
-				indicatorList.forEach((element) => {
-					if (
-						frequency.toUpperCase().indexOf(element.updated.toUpperCase()) !==
-						-1
-					) {
-						vm.sentimentIndicatorList.push({
-							value: element.chart_name,
-							url: element.url,
-							updated: element.updated
-						})
-					}
-				})
-			}
-			this.$store.commit('getIndicatorsList', indicatorList)
-			CIQ.indicatorList = indicatorList
+        var symbolListTemp = vm.symbolList.filter((item) => {
+          return (
+            item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+            item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+        var IndexListTemp = vm.indexList.filter((item) => {
+          return (
+            item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+            item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
 
-			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+        let options = symbolListTemp.concat(IndexListTemp)
+        // keyword全匹配
+        for (var item of options) {
+          if (
+            item.value.toLowerCase() === query.toLowerCase() ||
+            item.label.toLowerCase() === query.toLowerCase()
+          ) {
+            options.unshift(item)
+            break
+          }
+        }
+        // 去重
+        this.options = uniqWith(options, isEqual)
+        // 解除遮罩
+        vm.loading = false
+      } else {
+        this.options = []
+      }
+    },
+    getBacktestHistory(val) {
+      this.bd.backtest_period = val
+      this.bd.end_date = timestampToTime(new Date())
+      if (val <= 20 || val == 22) {
+        this.bd.end_date = timestampToTime(new Date())
+        const str = this.bd.end_date.split('-')
+        str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
+        this.bd.start_date = str.join('-')
+      }
+      if (val === '21') {
+        this.bd.start_date = ''
+      }
+    },
+    setBacktestHistory(val) {
+      this.bd.backtest_period = val
+      this.bd.end_date = timestampToTime(new Date())
+      if (val <= 20 || val == 22) {
+        this.bd.end_date = timestampToTime(new Date())
+        const str = this.bd.end_date.split('-')
+        str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
+        this.bd.start_date = str.join('-')
+      }
+      if (val === '21') {
+        this.bd.start_date = ''
+      }
+    },
+    getCommission: throttle(function (val) {
+      this.bd.commission = val
+    }, 500),
+    validateForm(newTag, oldTag) {
+      let data = true
+      this.$refs.backtestSetupForm.validate((valid) => {
+        if (!valid) {
+          this.$emit('validSetUpFail', oldTag)
+          this.$message.error('Please complete the complete fields')
+          data = false
+        } else if (valid) {
+          this.$emit('validSetUpSuccess', newTag)
+        }
+      })
+      return data
+    },
+    clearFormValidate() {
+      this.$refs.backtestSetupForm.clearValidate()
+    },
+    changeTimeframe(val) {
+      this.getFrequency(val)
+      CIQ.addIndicators()
+    },
+    selectRiskControl(val) {
+      if (!this.isRiskControl) {
+        this.$emit('IsRiskControl', false)
+      }
+      if (
+        this.isRiskControl &&
+        (this.isTakeProfit || this.isTimeInMarket || this.isStopLoss)
+      ) {
+        this.$emit('IsRiskControl', true)
+      }
+      if (
+        this.isRiskControl &&
+        !(this.isTakeProfit || this.isTimeInMarket || this.isStopLoss)
+      ) {
+        this.isTakeProfit = true
+        this.isStopLoss = true
+        this.isTimeInMarket = true
+        this.$emit('IsRiskControl', true)
+      }
+      this.$store.commit('isRiskControl', val)
+    },
+    getFrequency(val) {
+      // getFrequency will no longer call addIndicator and pass a parameter to it
+      this.bd.frequency = val
+      this.$store.commit('getFrequency', val)
+      this.loadSentimentList(val)
+    },
+    async loadSentimentList(val) {
+      const vm = this
+      var frequency = val
+      var indicatorList = []
 
-			const data = vm.$store.state.indicatorsList
-			if (frequency !== '') {
-				if (frequency == 'Daily') {
-					vm.setSentiList(['Daily'], data)
-				} else if (frequency == 'Weekly') {
-					vm.setSentiList(['Daily', 'Weekly'], data)
-				} else if (frequency == 'Monthly') {
-					vm.setSentiList(['Daily', 'Weekly', 'Monthly'], data)
-				}
-			}
-		},
-		setSentiList(arr, data) {
-			const vm = this
-			vm.sentimentIndicatorList = []
-			arr.forEach((fre) => {
-				data.forEach((element) => {
-					if (fre.toUpperCase().indexOf(element.updated.toUpperCase()) !== -1) {
-						vm.sentimentIndicatorList.push({
-							value: element.chart_name,
-							url: element.url,
-							updated: element.updated
-						})
-					}
-				})
-			})
-			this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
-		},
-		async getIndicatorsList() {
-			try {
-				const vm = this
-				var indicatorList = []
-				if (CIQ.indicatorList) {
-					if (CIQ.indicatorList.length != 0) {
-						indicatorList = this.$store.state.indicatorsList
-						indicatorList = CIQ.indicatorList
-					}
-				} else {
-					const res = await getIndicatorsList()
-					indicatorList = res.data
-				}
-				this.$store.commit('getIndicatorsList', indicatorList)
-				CIQ.indicatorList = indicatorList
-			} catch (error) {
-				console.error('indicator list request error', error)
-			}
-		},
-		backtestNameCheck() {
-			return getBacktestName(this.bd.name)
-				.then((res) => {
-					console.log('res count', res)
-					if (res.data.count == 0) {
-						this.saveBacktestData()
-					} else {
-					}
-				})
-				.then((res) => {
-					return res
-				})
-		},
-		saveBacktestData() {
-			let checked = true
-			// let nameChecked = true
-			let validForm
-			let bd = JSON.parse(JSON.stringify(this.bd))
-			this.$refs.backtestSetupForm.validate((valid) => {
-				validForm = valid
-			})
-			let riskCheck = true
-			let slCheck
-			let tpCheck
-			let timCheck
-			if (this.isRiskControl) {
-				if (this.isStopLoss) {
-					slCheck = this.validateStopLoss(this.sl)
-				}
-				if (this.isTakeProfit) {
-					tpCheck = this.validateTakeProfit(this.tp)
-				}
-				if (this.isTimeInMarket) {
-					timCheck = this.validateTimeInMarket(this.tim)
-				}
-				riskCheck =
-					(this.isStopLoss ? slCheck : true) &&
-					(this.isTakeProfit ? tpCheck : true) &&
-					(this.isTimeInMarket ? timCheck : true)
-			}
-			
-			if (validForm && riskCheck) {
-				if (bd.end_date) {
-					bd.commission = bd.commission / 100
-					if (this.isRiskControl) {
-						let riskStr = `${this.isTakeProfit ? this.tp : ''}/${
-							this.isStopLoss ? this.sl : ''
-						}/${this.isTimeInMarket ? this.tim : ''}`
-						bd.risk_control = riskStr
-						this.setDesciption()
-					} else {
-						bd.risk_control = '//'
-					}
-					if (this.historyValue == 21) {
-						bd.start_date = '1800-10-01'
-					}
-					this.$store.commit('setBd', bd)
-					return checked
-				} else {
-					this.$message({
-						message: 'Please select end date',
-						type: 'error',
-						offset: 300
-					})
-					checked = false
-					return checked
-				}
-			} else {
-				this.$message({
-					message:
-						'Please check the setup form',
-					type: 'error',
-					offset: 300
-				})
-				checked = false
-				return checked
-			}
-		},
-		clearOldBacktestName() {
-			this.oldBacktestName = ''
-		},
-		setDesciption() {
-			let criteria = 'X:'
-			let direction = ''
-			let description
-			if (this.bd.direction == 'Long') {
-				direction = 'Close:'
-			}
-			if (this.bd.direction == 'Short') {
-				direction = 'Cover:'
-			}
-			let tpStr = ''
-			let slStr = ''
-			let timStr = ''
-			if (this.isRiskControl) {
-				if (this.isTakeProfit) {
-					tpStr = 'Take Profit ' + this.tp + '%'
-				}
-				if (this.isStopLoss) {
-					slStr = 'Stop Loss ' + this.sl + '%'
-				}
-				if (this.isTimeInMarket) {
-					timStr = 'Time In Market ' + this.tim + '(Bars)'
-				}
-			}
-			description = `${criteria} ${direction} ${tpStr} ${slStr} ${timStr}`
-			let desObj = {}
-			desObj.description = description
-			this.$store.commit('saveRiskDescription', desObj)
-		},
+      if (CIQ.indicatorList) {
+        if (CIQ.indicatorList.length != 0) {
+          indicatorList = this.$store.state.indicatorsList
+          indicatorList = CIQ.indicatorList
+        }
+      }
+      vm.sentimentIndicatorList = []
+      if (frequency) {
+        indicatorList.forEach((element) => {
+          if (
+            frequency.toUpperCase().indexOf(element.updated.toUpperCase()) !==
+            -1
+          ) {
+            vm.sentimentIndicatorList.push({
+              value: element.chart_name,
+              url: element.url,
+              updated: element.updated
+            })
+          }
+        })
+      }
+      this.$store.commit('getIndicatorsList', indicatorList)
+      CIQ.indicatorList = indicatorList
 
-		validateStopLoss(num) {
-			if (num < 0) {
-				this.$message({
-					message:
-						'Please enter Stop Loss,only positive numbers less than or equal to 100 are allowed',
-					type: 'error',
-					offset: 300
-				})
-				return false
+      this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+
+      const data = vm.$store.state.indicatorsList
+      if (frequency !== '') {
+        if (frequency == 'Daily') {
+          vm.setSentiList(['Daily'], data)
+        } else if (frequency == 'Weekly') {
+          vm.setSentiList(['Daily', 'Weekly'], data)
+        } else if (frequency == 'Monthly') {
+          vm.setSentiList(['Daily', 'Weekly', 'Monthly'], data)
+        }
+      }
+    },
+    setSentiList(arr, data) {
+      const vm = this
+      vm.sentimentIndicatorList = []
+      arr.forEach((fre) => {
+        data.forEach((element) => {
+          if (fre.toUpperCase().indexOf(element.updated.toUpperCase()) !== -1) {
+            vm.sentimentIndicatorList.push({
+              value: element.chart_name,
+              url: element.url,
+              updated: element.updated
+            })
+          }
+        })
+      })
+      this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+    },
+    async getIndicatorsList() {
+      try {
+        const vm = this
+        var indicatorList = []
+        if (CIQ.indicatorList) {
+          if (CIQ.indicatorList.length != 0) {
+            indicatorList = this.$store.state.indicatorsList
+            indicatorList = CIQ.indicatorList
+          }
+        } else {
+          const res = await getIndicatorsList()
+          indicatorList = res.data
+        }
+        this.$store.commit('getIndicatorsList', indicatorList)
+        CIQ.indicatorList = indicatorList
+      } catch (error) {
+        console.error('indicator list request error', error)
+      }
+    },
+    backtestNameCheck() {
+      return getBacktestName(this.bd.name)
+        .then((res) => {
+          console.log('res count', res)
+          if (res.data.count == 0) {
+            this.saveBacktestData()
+          } else {
+          }
+        })
+        .then((res) => {
+          return res
+        })
+    },
+    saveBacktestData() {
+      let checked = true
+      // let nameChecked = true
+      let validForm
+      let bd = JSON.parse(JSON.stringify(this.bd))
+      this.$refs.backtestSetupForm.validate((valid) => {
+        validForm = valid
+      })
+      let riskCheck = true
+      let slCheck
+      let tpCheck
+      let timCheck
+			let excludeCheck = true
+      if (this.isRiskControl) {
+        if (this.isStopLoss) {
+          slCheck = this.validateStopLoss(this.sl)
+        }
+        if (this.isTakeProfit) {
+          tpCheck = this.validateTakeProfit(this.tp)
+        }
+        if (this.isTimeInMarket) {
+          timCheck = this.validateTimeInMarket(this.tim)
+        }
+        riskCheck =
+          (this.isStopLoss ? slCheck : true) &&
+          (this.isTakeProfit ? tpCheck : true) &&
+          (this.isTimeInMarket ? timCheck : true)
+      }
+			if(this.isExcludeOO) {
+				excludeCheck = this.validateExclude(this.bd.exclude_oo)
 			}
-			const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
-			if (!pattern.test(num) && num !== 0) {
-				this.$message({
-					message:
-						'Please enter Stop Loss, only two decimal places are allowed',
-					type: 'error',
-					offset: 300
-				})
-				return false
-			}
-			return true
+
+      if (validForm && riskCheck && excludeCheck) {
+        if (bd.end_date) {
+					if(!this.isExcludeOO) {bd.exclude_oo = 0}
+          bd.commission = bd.commission / 100
+          if (this.isRiskControl) {
+            let riskStr = `${this.isTakeProfit ? this.tp : ''}/${this.isStopLoss ? this.sl : ''
+              }/${this.isTimeInMarket ? this.tim : ''}`
+            bd.risk_control = riskStr
+            this.setDesciption()
+          } else {
+            bd.risk_control = '//'
+          }
+          if (this.bd.backtest_period >= 0 && this.bd.backtest_period <= 20) {
+            // 改成最新的 start end
+            // bd.end_date = '1800-10-01'
+            bd.end_date = timestampToTime(new Date())
+            const str = bd.end_date.split('-')
+            str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
+            bd.start_date = str.join('-')
+          }
+          if (this.bd.backtest_period == '21') {
+            bd.start_date = '1800-10-01'
+            // end 改成最新的
+            bd.end_date = timestampToTime(new Date())
+          }
+          this.$store.commit('setBd', bd)
+          return checked
+        } else {
+          this.$message({
+            message: 'Please select end date',
+            type: 'error',
+            offset: 300
+          })
+          checked = false
+          return checked
+        }
+      } else {
+        this.$message({
+          message:
+            'Please check the setup form',
+          type: 'error',
+          offset: 300
+        })
+        checked = false
+        return checked
+      }
+    },
+    clearOldBacktestName() {
+      this.oldBacktestName = ''
+    },
+    setDesciption() {
+      let criteria = 'X:'
+      let direction = ''
+      let description
+      if (this.bd.direction == 'Long') {
+        direction = 'Close:'
+      }
+      if (this.bd.direction == 'Short') {
+        direction = 'Cover:'
+      }
+      let tpStr = ''
+      let slStr = ''
+      let timStr = ''
+      if (this.isRiskControl) {
+        if (this.isTakeProfit) {
+          tpStr = 'Take Profit ' + this.tp + '%'
+        }
+        if (this.isStopLoss) {
+          slStr = 'Stop Loss ' + this.sl + '%'
+        }
+        if (this.isTimeInMarket) {
+          timStr = 'Time In Market ' + this.tim + '(Bars)'
+        }
+      }
+      description = `${criteria} ${direction} ${tpStr} ${slStr} ${timStr}`
+      let desObj = {}
+      desObj.description = description
+      this.$store.commit('saveRiskDescription', desObj)
+    },
+    validateStopLoss(num) {
+      if (num < 0) {
+        this.$message({
+          message:
+            'Please enter Stop Loss,only positive numbers less than or equal to 100 are allowed',
+          type: 'error',
+          offset: 300
+        })
+        return false
+      }
+      const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
+      if (!pattern.test(num) && num !== 0) {
+        this.$message({
+          message:
+            'Please enter Stop Loss, only two decimal places are allowed',
+          type: 'error',
+          offset: 300
+        })
+        return false
+      }
+      return true
+    },
+    validateTakeProfit(num) {
+      if (num < 0) {
+        this.$message({
+          message:
+            'Please enter Take Profit, only positive numbers are allowed',
+          type: 'error',
+          offset: 300
+        })
+        return false
+      }
+      const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
+      if (!pattern.test(num) && num !== 0) {
+        this.$message({
+          message:
+            'Please enter Take Profit, only two decimal places are allowed',
+          type: 'error',
+          offset: 300
+        })
+        return false
+      }
+      return true
+    },
+    validateTimeInMarket(num) {
+      if (isNaN(num) || num < 0 || !/^\d+$/.test(num)) {
+        this.$message({
+          message:
+            'Please enter Time in Market, only positive integers are allowed',
+          type: 'error',
+          offset: 300
+        })
+        return false
+      }
+      return true
+    },
+		validateExclude(num) {
+			if (isNaN(num) || num <= 0 || !/^\d+$/.test(num)) {
+        this.$message({
+          message:
+            'Please enter Exclude Overlapping Observations, only positive integers are allowed',
+          type: 'error',
+          offset: 300
+        })
+        return false
+      }
+      return true
 		},
-		validateTakeProfit(num) {
-			if (num < 0) {
-				this.$message({
-					message:
-						'Please enter Take Profit, only positive numbers are allowed',
-					type: 'error',
-					offset: 300
-				})
-				return false
-			}
-			const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
-			if (!pattern.test(num) && num !== 0) {
-				this.$message({
-					message:
-						'Please enter Take Profit, only two decimal places are allowed',
-					type: 'error',
-					offset: 300
-				})
-				return false
-			}
-			return true
-		},
-		validateTimeInMarket(num) {
-			if (isNaN(num) || num < 0 || !/^\d+$/.test(num)) {
-				this.$message({
-					message:
-						'Please enter Time in Market, only positive integers are allowed',
-					type: 'error',
-					offset: 300
-				})
-				return false
-			}
-			return true
-		},
-		isEdit() {
-			if (this.oldBacktestName == this.bd.name) {
-				return true
-			}
-		}
-	}
+    isEdit() {
+      if (this.oldBacktestName == this.bd.name) {
+        return true
+      }
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

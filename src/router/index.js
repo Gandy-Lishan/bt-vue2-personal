@@ -27,9 +27,11 @@ const router = new Router({
 	children: [
 		{path: '/home/brainstorm', name:'brainstorm',component: resolve => require(['@/components/BacktestEdge/Brainstorm/index.vue'], resolve), redirect: '/home/brainstorm/exit_with_custom_TIM_frame',children: [
 			{path: '/home/brainstorm/exit_with_custom_TIM_frame', name: 'ExitWithCustomTIMFrame',component: resolve => require(['@/components/BacktestEdge/Brainstorm/ExitWithCustomTIMFrame.vue'], resolve)},
-		]}
-	]},
+		]},
 		{ path: '/home/strategy', name:'strategy',component: resolve => require(['@/components/BacktestEdge/Strategy.vue'], resolve) },
+		{path: '/home/backtests', name:'backtests',component: resolve => require(['@/components/BacktestEdge/Backtests.vue'], resolve),},
+
+	]},
 	] },
 		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
 		// { path: '/home', component: () => import(/* webpackChunkName: "Home" */ "@/components/BacktestEdge/Home.vue") },

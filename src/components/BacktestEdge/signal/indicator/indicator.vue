@@ -78,7 +78,7 @@
 				<el-form-item prop="symbolIndicator">
 					<el-select
 						v-model="si.symbolIndicator"
-						placeholder="Select a symbol condition"
+						placeholder="Select Symbol Open/High/Low/Close/Volume"
 						:disabled="!(indicatorRadio === 'Symbol OHLCV')"
 						@change="handleSymbolSelect"
 					>
