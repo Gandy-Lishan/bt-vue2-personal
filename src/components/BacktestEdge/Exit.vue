@@ -1302,6 +1302,7 @@ export default {
 .exit-container {
 	margin-right: 40px;
 	margin-bottom: 10px;
+	flex: 1;
 }
 @media (min-width: 1280px) and (max-width: 1365px) {
 	.exit-container {
