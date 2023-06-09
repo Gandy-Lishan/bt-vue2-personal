@@ -332,13 +332,8 @@ export default {
       this.loading = true
       try {
         let res
-        console.log('this.searchItem', this.searchItem)
-        if (this.searchItem) {
-          let customUrl = `/dev/backtest/?favorites=true&name=${this.searchItem}`
-          res = await searchHistoryList(this.searchItem, customUrl)
-        } else {
-          res = await getFavoriteList(this.queryInfo.page, orderby)
-        }
+        res = await getFavoriteList(this.queryInfo.page, orderby, this.searchItem)
+        console.log('响应', res)
         if (res.status === 200) {
         this.loading = false
           this.backtestList = res.data.results
@@ -739,7 +734,7 @@ export default {
       }
       this.loadTest = 'Loading...'
       this.loading = true
-      const res = await getFavoriteList(this.queryInfo.page, prop)
+      const res = await getFavoriteList(this.queryInfo.page, prop, this.searchItem)
       if (res.status === 200) {
         this.loading = false
         this.backtestList = res.data.results

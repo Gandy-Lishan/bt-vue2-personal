@@ -318,11 +318,8 @@ export default {
 			this.loading = true
 			try {
 				let res
-        if (this.searchItem) {
-          res = await searchSampleList(this.searchItem)
-        } else {
-          res = await getSampleList(this.queryInfo.page, orderby)
-        }
+        res = await getSampleList(this.queryInfo.page, orderby, this.searchItem)
+				console.log('响应', res)
 				if (res.status === 200) {
 					this.backtestList = res.data.results
 					if (this.backtestList.length != 0) {
@@ -384,7 +381,7 @@ export default {
       }
       this.loadTest = 'Loading...'
       this.loading = true
-      const res = await getSampleList(this.queryInfo.page, prop)
+      const res = await getSampleList(this.queryInfo.page, prop, this.searchItem)
       if (res.status === 200) {
         this.loading = false
         this.backtestList = res.data.results

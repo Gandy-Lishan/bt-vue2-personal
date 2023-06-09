@@ -385,11 +385,7 @@ export default {
       this.loading = true
       try {
         let res
-        if (this.searchItem) {
-          res = await searchHistoryList(this.searchItem)
-        } else {
-          res = await getHistoryList(this.queryInfo.page, orderby)
-        }
+        res = await getHistoryList(this.queryInfo.page, orderby, this.searchItem)
         if (res.status === 200) {
           this.loading = false
           let historyNameList = []
@@ -449,7 +445,7 @@ export default {
       }
       this.loadTest = 'Loading...'
       this.loading = true
-      const res = await getHistoryList(this.queryInfo.page, prop)
+      const res = await getHistoryList(this.queryInfo.page, prop, this.searchItem)
       if (res.status === 200) {
         this.loading = false
         let historyNameList = []
@@ -727,7 +723,6 @@ export default {
     }, 500),
     handleCurrentChange(newpage) {
       this.queryInfo.page = newpage
-      // this.getHistoryList()
       this.applySort();
     },
     reloadData(data, freq) {
