@@ -164,16 +164,16 @@ export default {
 				const fieldName = this.$store.state.symbolConditions.find(item=>item.label==this.symVal).field
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					if (
-						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName
+						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName  &&
+						CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA' &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
 					) {
 						// 添加ROCLike（包括修改study）前先清除已有的
-						if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST ROCLike'){
-							CIQ.Studies.removeStudy(
-								CIQ.stxx,
-								CIQ.stxx.layout.studies[studyInstanceName]
-							)
-						}
-
+						CIQ.Studies.removeStudy(
+							CIQ.stxx,
+							CIQ.stxx.layout.studies[studyInstanceName]
+						)
 					}
 				}
 			}
@@ -281,16 +281,16 @@ export default {
 				const fieldName = this.$store.state.symbolConditions.find(item=>item.label==this.symVal).field
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					if (
-						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName
+						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName &&
+						CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA' &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
 					) {
 						// 添加ROCLike（包括修改study）前先清除已有的
-						if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST ROCLike'){
-							CIQ.Studies.removeStudy(
-								CIQ.stxx,
-								CIQ.stxx.layout.studies[studyInstanceName]
-							)
-						}
-
+						CIQ.Studies.removeStudy(
+							CIQ.stxx,
+							CIQ.stxx.layout.studies[studyInstanceName]
+						)
 					}
 				}
 				const conditionMap = new Map([
@@ -305,8 +305,10 @@ export default {
 					Field: fieldName,
 					condition:conditionMap.get(this.sym.newCondition).abbr,
 					period:this.sym.conditionPeriod
+				},null,{
+					criteria: this.criteria,
+					index: this.panelIndex
 				})
-				console.log(sd)
 			}
 		},
 		saveCondition(index) {

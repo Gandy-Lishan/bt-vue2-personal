@@ -5,7 +5,7 @@
 			Hint: Markers on the chart point to the buy/sell trade dates on the open
 			<b>ONE</b> bar after entry/exit criteria met.
 		</p>
-		<el-tabs v-model="activePerTag" type="card" v-loading="loading">
+		<el-tabs class="performance_tabs" v-model="activePerTag" type="card" v-loading="loading">
 			<el-tab-pane label="Summary" name="first">
 				<div class="summaryContainer">
 					<el-table :data="tableData" style="width: 100%">
@@ -1270,7 +1270,7 @@ export default {
           return {
             ...row,
             [field + period]: quotes[i + period][field],
-            [name]: change == Infinity ? 0 : change
+            [name]: (change==Infinity || change==-Infinity) ? 0 : change
           }
         } else {
           return {
@@ -1297,7 +1297,7 @@ export default {
           )
           return {
             ...row,
-            ['MaxLoss' + period]: change == Infinity ? 0 : change
+            ['MaxLoss' + period]: (change==Infinity || change==-Infinity) ? 0 : change
           }
         } else {
           return {
@@ -1313,7 +1313,7 @@ export default {
           )
           return {
             ...row,
-            ['MaxGain' + period]: change == Infinity ? 0 : change
+            ['MaxGain' + period]: (change==Infinity || change==-Infinity) ? 0 : change
           }
         } else {
           return {

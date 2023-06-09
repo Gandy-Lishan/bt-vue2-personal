@@ -40,6 +40,7 @@
 			</div>
 			<el-tabs
 				ref="tabs"
+				class="tabs"
 				v-model="activeName"
 				type="card"
 				stretch
