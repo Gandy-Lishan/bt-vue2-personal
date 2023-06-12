@@ -1170,8 +1170,7 @@ export default {
                 ' ' +
                 this.criteria +
                 ' indicator from the drop-down box',
-              type: 'error',
-              offset: 300
+              type: 'error'
             })
           }
           checked = false
@@ -1211,8 +1210,7 @@ export default {
                 ' ' +
                 this.criteria +
                 ' indicator from the drop-down box',
-              type: 'error',
-              offset: 300
+              type: 'error'
             })
           }
           checked = false
@@ -1372,8 +1370,7 @@ export default {
         this.$notify({
           title: 'Failed',
           message: 'The internal server is busy, please try again later',
-          type: 'error',
-          offset: 100
+          type: 'error'
         })
       }
     },

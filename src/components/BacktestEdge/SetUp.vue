@@ -254,7 +254,7 @@
 					</el-form-item>
 					<div class="excludeBox">
 						<!-- <el-form-item prop="exclude_oo"> -->
-						<el-checkbox v-model="isExcludeOO"
+						<el-checkbox v-model="isExcludeOO" @change="changeExcludeOO"
 							>Exclude Overlapping Observations
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
@@ -270,7 +270,7 @@
 								</span>
 								<i class="iconfont icon-wenhao"></i> </el-tooltip
 						></el-checkbox>
-						<el-input v-model="bd.exclude_oo"></el-input>
+						<el-input v-model="bd.exclude_oo" v-if="isExcludeOO"></el-input>
 						<!-- </el-form-item> -->
 					</div>
 					<div class="backtestURLBox">
@@ -651,8 +651,7 @@ export default {
         if (!newVal && this.isRiskControl) {
           this.$message({
             message: 'Select at least one Risk Control indicator',
-            type: 'error',
-            offset: 300
+            type: 'error'
           })
           this.isTakeProfit = true
           this.selectRiskControl(this.isRiskControl)
@@ -1069,8 +1068,17 @@ export default {
 			if(this.isExcludeOO) {
 				excludeCheck = this.validateExclude(this.bd.exclude_oo)
 			}
-
-      if (validForm && riskCheck && excludeCheck) {
+      const filmCheck = validForm && riskCheck && excludeCheck
+      if(!validForm) {
+        this.$message({
+          message:
+            'Please check the setup form',
+          type: 'error',
+          offset: 150
+        })
+      }
+      if(!filmCheck) return false
+      if (filmCheck) {
         if (bd.end_date) {
 					if(!this.isExcludeOO) {bd.exclude_oo = 0}
           bd.commission = bd.commission / 100
@@ -1101,20 +1109,11 @@ export default {
           this.$message({
             message: 'Please select end date',
             type: 'error',
-            offset: 300
+            offset: 200
           })
           checked = false
           return checked
         }
-      } else {
-        this.$message({
-          message:
-            'Please check the setup form',
-          type: 'error',
-          offset: 300
-        })
-        checked = false
-        return checked
       }
     },
     clearOldBacktestName() {
@@ -1155,7 +1154,7 @@ export default {
           message:
             'Please enter Stop Loss,only positive numbers less than or equal to 100 are allowed',
           type: 'error',
-          offset: 300
+          offset: 100
         })
         return false
       }
@@ -1165,7 +1164,7 @@ export default {
           message:
             'Please enter Stop Loss, only two decimal places are allowed',
           type: 'error',
-          offset: 300
+          offset: 100
         })
         return false
       }
@@ -1177,7 +1176,7 @@ export default {
           message:
             'Please enter Take Profit, only positive numbers are allowed',
           type: 'error',
-          offset: 300
+          offset: 100
         })
         return false
       }
@@ -1187,7 +1186,7 @@ export default {
           message:
             'Please enter Take Profit, only two decimal places are allowed',
           type: 'error',
-          offset: 300
+          offset: 100
         })
         return false
       }
@@ -1199,7 +1198,7 @@ export default {
           message:
             'Please enter Time in Market, only positive integers are allowed',
           type: 'error',
-          offset: 300
+          offset: 100
         })
         return false
       }
@@ -1211,12 +1210,15 @@ export default {
           message:
             'Please enter Exclude Overlapping Observations, only positive integers are allowed',
           type: 'error',
-          offset: 300
+          offset: 100
         })
         return false
       }
       return true
 		},
+    changeExcludeOO(val) {
+      if(val) this.bd.exclude_oo = 1
+    },
     isEdit() {
       if (this.oldBacktestName == this.bd.name) {
         return true

@@ -36,7 +36,7 @@
 			
 			<router-view></router-view>
 
-			<el-tooltip
+			<!-- <el-tooltip
 				class="item"
 				effect="dark"
 				content="Back to the top"
@@ -44,8 +44,8 @@
 			>
 				<button class="toTop" @click="animationUp(0)">
 					<svg
-						width="22"
-						height="30"
+						width="15"
+						height="20"
 						viewBox="0 0 22 30"
 						fill="none"
 						xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +70,7 @@
 						></path>
 					</svg>
 				</button>
-			</el-tooltip>
+			</el-tooltip> -->
 			<div class="footer">
 				<p>
 					Copyright © 2001 - 2023 Sundial Capital Research, Inc. All rights
@@ -115,7 +115,6 @@
 	</div>
 </template>
 <script>
-
 export default {
 	name: 'homeLayout',
 	data() {
@@ -247,8 +246,8 @@ button.toTop {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 80px;
-	height: 80px;
+	width: 50px;
+	height: 50px;
 	border-radius: 100%;
 	background-image: initial;
 	background-position-x: initial;

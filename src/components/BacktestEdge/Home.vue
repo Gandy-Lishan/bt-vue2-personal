@@ -195,6 +195,41 @@
 					</el-tooltip>
 					</div> -->
 			</div>
+      <el-tooltip
+				class="item"
+				effect="dark"
+				content="Back to the top"
+				placement="bottom"
+			>
+				<button class="toTop" @click="animationUp(0)">
+					<svg
+						width="12"
+						height="15"
+						viewBox="0 0 22 30"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M-1.31134e-07 1.5C-5.87107e-08 0.671573 0.642374 5.61581e-08 1.43478 1.25433e-07L20.5652 1.79787e-06C21.3576 1.86714e-06 22 0.671574 22 1.5C22 2.32843 21.3576 3 20.5652 3L1.43478 3C0.642374 3 -2.03557e-07 2.32843 -1.31134e-07 1.5Z"
+							fill="#F9FAFB"
+						></path>
+						<path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M11.5 30C10.6716 30 10 29.2645 10 28.3571L10 8.64286C10 7.73553 10.6716 7 11.5 7C12.3284 7 13 7.73553 13 8.64286L13 28.3571C13 29.2645 12.3284 30 11.5 30Z"
+							fill="#F9FAFB"
+						></path>
+						<path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M21.5079 18.5152C20.8519 19.1616 19.7881 19.1616 19.1321 18.5152L11.5 10.9959L3.86794 18.5152C3.21186 19.1616 2.14814 19.1616 1.49206 18.5152C0.835983 17.8688 0.835983 16.8208 1.49206 16.1744L10.3121 7.48479C10.9681 6.8384 12.0319 6.8384 12.6879 7.48479L21.5079 16.1744C22.164 16.8208 22.164 17.8688 21.5079 18.5152Z"
+							fill="#F9FAFB"
+						></path>
+					</svg>
+				</button>
+			</el-tooltip>
 			<el-tooltip
 				class="item"
 				effect="dark"
@@ -202,17 +237,17 @@
 				placement="bottom"
 			>
 				<button class="createNew" @click="refreshPage">
-					<svg class='sidebar_button_icon' width="22" height="30" viewBox="0 0 12 12" fill="white" xmlns="http://www.w3.org/2000/svg">
+					<svg class='sidebar_button_icon' width="12" height="12" viewBox="0 0 12 12" fill="white" xmlns="http://www.w3.org/2000/svg">
 							<path fill-rule="evenodd" clip-rule="evenodd" d="M2.65079 2.59434C3.35727 1.87621 4.22963 1.43305 5.14214 1.26312L4.91451 0C3.75791 0.215381 2.65102 0.77807 1.75752 1.68632C-0.585841 4.06838 -0.585841 7.93048 1.75752 10.3125L0.679249 11.4086H3.72907V8.30844L2.65079 9.40452C0.80077 7.52394 0.80077 4.47492 2.65079 2.59434ZM11.3208 0.591377H8.27093V3.69156L9.34921 2.59548C11.1992 4.47606 11.1992 7.52508 9.3492 9.40566C8.64273 10.1238 7.77037 10.567 6.85785 10.7369L7.08549 12C8.24209 11.7846 9.34898 11.2219 10.2425 10.3137C12.5858 7.93161 12.5858 4.06952 10.2425 1.68746L11.3208 0.591377Z"/>
 						</svg>
 				</button>
 			</el-tooltip>
-			<el-tooltip class="createNew_hint" effect="dark" placement="top">
+			<!-- <el-tooltip class="createNew_hint" effect="dark" placement="top">
               <span slot="content"
                 >Clear current chart & Backtest Setup Form and create a new backtest.
               </span>
               <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
+            </el-tooltip> -->
 		</main>
 	</div>
 </template>
@@ -353,8 +388,7 @@ export default {
     } catch (error) {
       vm.$message({
         message: 'The internal server is busy, please try again later ',
-        type: 'error',
-        offset: 300
+        type: 'error'
       })
     }
   },
@@ -660,6 +694,7 @@ export default {
     runBacktest: throttle(async function () {
       try {
         let setUp = this.$refs.setUpChild.saveBacktestData()
+        if(!setUp) return
         let setUpChecked = true
         let entryChecked = true
         // let isEdit = this.$refs.setUpChild.isEdit()
@@ -673,8 +708,7 @@ export default {
         if (setUpRes.data.count != 0 && !backtestInfo.hasOwnProperty('old_uuid')) {
           this.$message({
             message: 'The backtest name already exists',
-            type: 'error',
-            offset: 300
+            type: 'error'
           })
           setUpChecked = false
           this.$store.commit('clearBacktest')
@@ -685,7 +719,6 @@ export default {
 
         // if (setUpRes.data.count == 0 || isEdit) {
           // 有名字并且是编辑 没名字是编辑 没名字是新建
-          console.log('有无名字：', setUpRes.data.count, '有无 old_uuid：', backtestInfo.hasOwnProperty('old_uuid'))
         if ((setUpRes.data.count != 0 && backtestInfo.hasOwnProperty('old_uuid')) || (setUpRes.data.count == 0) && backtestInfo.hasOwnProperty('old_uuid') || (setUpRes.data.count == 0) && !backtestInfo.hasOwnProperty('old_uuid')) {
           let entry
           for (let index = 0; index < this.entryLength; index++) {
@@ -700,7 +733,9 @@ export default {
             this.$refs.entryChild.saveDelayBar()
             this.$refs.entryChild.saveRelation()
           }
-          if (entryChecked && setUpChecked && setUp) {
+          const checked = entryChecked && setUpChecked && setUp
+          if(!checked) return
+          if (checked) {
             let exit
             let exitChecked
             for (let index = 0; index < this.exitLength; index++) {
@@ -743,8 +778,7 @@ export default {
                       'The current entry ' +
                       str +
                       ' are the same, please change',
-                    type: 'error',
-                    offset: 300
+                    type: 'error'
                   })
                   CIQ.hideCover()
                   CIQ.nprogress.done()
@@ -772,8 +806,7 @@ export default {
                       'The current exit ' +
                       str +
                       ' are the same, please change',
-                    type: 'error',
-                    offset: 300
+                    type: 'error'
                   })
                   CIQ.hideCover()
                   CIQ.nprogress.done()
@@ -1136,15 +1169,13 @@ export default {
                         vm.$message({
                           message:
                             'This backtest is already in your history list',
-                          type: 'error',
-                          offset: 300
+                          type: 'error'
                         })
                       } else {
                         vm.$message({
                           message:
                             'The internal server is busy, please try again later ',
-                          type: 'error',
-                          offset: 300
+                          type: 'error'
                         })
                       }
 
@@ -1188,8 +1219,7 @@ export default {
         this.$notify({
           title: 'Failed',
           message: 'The internal server is busy, please try again later',
-          type: 'error',
-          offset: 100
+          type: 'error'
         })
       }
       this.$refs.setUpChild.clearOldBacktestName()
@@ -1284,8 +1314,7 @@ export default {
         console.error(error)
         vm.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
         CIQ.hideCover()
         CIQ.nprogress.done()
@@ -1325,7 +1354,6 @@ export default {
       this.$notify({
         title: 'Try Another',
         message: 'The backtest cannot request data, please change parameter',
-        offset: 100,
         type: 'warning'
       })
     },
@@ -1393,7 +1421,7 @@ export default {
 </script>
 <style lang="less" scoped>
 main {
-	padding: 0 50px;
+	padding: 0 80px;
 	background: #f9fafb;
 }
 .gradient {
@@ -1641,18 +1669,18 @@ header {
 		}
 	}
 }
-button.createNew {
-	opacity: 0.4;
+button.createNew,.toTop {
+	// opacity: 0.4;
 	z-index: 999;
 	border: unset;
 	position: fixed;
-	right: 75px;
+	right: 60px;
 	bottom: 63px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 80px;
-	height: 80px;
+	width: 40px;
+	height: 40px;
 	border-radius: 100%;
 	background-image: initial;
 	background-position-x: initial;
@@ -1663,9 +1691,12 @@ button.createNew {
 	background-attachment: initial;
 	background-origin: initial;
 	background-clip: initial;
-	background-color: #94989f;
-	box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%),
-		0 10px 10px -5px rgb(0 0 0 / 4%);
+	// background-color: #94989f;
+  // background-color: #f59e0b;
+  background-color:  #fbc05c;
+	// box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%),
+	// 	0 10px 10px -5px rgb(0 0 0 / 4%);
+    box-shadow: 0 6px 20px rgba(0,0,0,.15);
 	svg.sidebar_button_icon{
 		// float: left;
 		// margin: 0 5px 0 6px;
@@ -1673,6 +1704,18 @@ button.createNew {
 		// height: 16px;
 		// fill:#666666;
 	}
+}
+.toTop {
+  background-color: #b8b9bb;
+	bottom: 110px;
+}
+.createNew:hover{
+  background-color: #f59e0b;
+  box-shadow: 0 6px 20px #f59e0b
+}
+.toTop:hover{
+  background-color: #94989f;
+  box-shadow: 0 6px 20px #94989f
 }
 .createNew_hint{
 	position: fixed;
