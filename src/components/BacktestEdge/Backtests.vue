@@ -513,6 +513,8 @@ export default {
 			// })
 			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
 			this.$store.commit('getMA', data.activatedMA)
+			// 暂定，编辑时读取回测携带的ma位置和信息
+			this.$store.commit('getMALayout', data.activatedMALayout)
 			this.$store.commit('setTechSD', data.savedTechSD)
 
 			switch (freq) {

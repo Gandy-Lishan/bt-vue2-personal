@@ -634,6 +634,8 @@ export default {
       this.$store.commit('getExtraIndicators', [])
       this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
       this.$store.commit('getMA', data.activatedMA)
+      // 暂定，读取回测携带的ma位置和信息
+			this.$store.commit('getMALayout', data.activatedMALayout)
       this.$store.commit('setTechSD', data.savedTechSD)
 
       switch (freq) {
@@ -1016,6 +1018,8 @@ export default {
 
               indicatorLayout.savedTechSD = savedTechSD
               indicatorLayout.activatedMA = this.$store.state.activatedMA
+              // 暂定，把MA对应位置和信息存在回测内
+              indicatorLayout.activatedMALayout = this.$store.state.activatedMALayout
 
               backtestData.indicator_layout = JSON.stringify(
                 indicatorLayout
