@@ -20,19 +20,26 @@ const router = new Router({
 	mode: 'history',
 	routes: [
 		{ path: '/', redirect: '/home' },
-		{ path: '/home', component: resolve => require(['@/components/BacktestEdge/index.vue'], resolve),
-		redirect: '/home/backtester',
-	children: [
-		{path: '/home/backtester', name:'backtester',component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
-	children: [
-		{path: '/home/brainstorm', name:'brainstorm',component: resolve => require(['@/components/BacktestEdge/Brainstorm/index.vue'], resolve), redirect: '/home/brainstorm/exit_with_custom_TIM_frame',children: [
-			{path: '/home/brainstorm/exit_with_custom_TIM_frame', name: 'ExitWithCustomTIMFrame',component: resolve => require(['@/components/BacktestEdge/Brainstorm/ExitWithCustomTIMFrame.vue'], resolve)},
-		]},
-		{ path: '/home/strategy', name:'strategy',component: resolve => require(['@/components/BacktestEdge/Strategy.vue'], resolve) },
-		{path: '/home/backtests', name:'backtests',component: resolve => require(['@/components/BacktestEdge/Backtests.vue'], resolve),},
+		{
+			path: '/home', component: resolve => require(['@/components/BacktestEdge/index.vue'], resolve),
+			redirect: '/home/backtester',
+			children: [
+				{
+					path: '/home/backtester', name: 'backtester', component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
+					children: [
+						{
+							path: '/home/brainstorm', name: 'brainstorm', component: resolve => require(['@/components/BacktestEdge/Brainstorm/index.vue'], resolve), redirect: '/home/brainstorm/exit_with_custom_TIM_frame', children: [
+								{ path: '/home/brainstorm/exit_with_custom_TIM_frame', name: 'ExitWithCustomTIMFrame', component: resolve => require(['@/components/BacktestEdge/Brainstorm/ExitWithCustomTIMFrame.vue'], resolve) },
+							]
+						},
+						{ path: '/home/strategy', name: 'strategy', component: resolve => require(['@/components/BacktestEdge/Strategy.vue'], resolve) },
+						{ path: '/home/backtests', name: 'backtests', component: resolve => require(['@/components/BacktestEdge/Backtests.vue'], resolve), },
+						{ path: '/home/ai', name:'ai',component: resolve => require(['@/components/BacktestEdge/Strategy.vue'], resolve) },
 
-	]},
-	] },
+					]
+				},
+			]
+		},
 		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
 		// { path: '/home', component: () => import(/* webpackChunkName: "Home" */ "@/components/BacktestEdge/Home.vue") },
 		// { path: '/doc', component: () => import(/* webpackChunkName: "Doc" */ "@/components/Menu/Doc.vue") }
