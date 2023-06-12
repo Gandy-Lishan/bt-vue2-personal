@@ -348,8 +348,7 @@ export default {
 			     this.$notify({
 							title: 'Failed',
 							message: 'List request failed',
-							type: 'error',
-							offset: 100
+							type: 'error'
 						})}
 						
 				this.loading = false
@@ -362,8 +361,7 @@ export default {
 				if (nameRes.data.count != 0) {
 					this.$notify.error({
 						title: 'Has been Copied',
-						message: 'The backtest has been copied',
-						offset: 100
+						message: 'The backtest has been copied'
 					})
 					return
 				}
@@ -388,8 +386,7 @@ export default {
 								title: 'Copy successfully',
 								message:
 									'After copying successfully, you can edit the backtest',
-									type: 'success',
-									offset: 100
+									type: 'success'
 
 							})
 							this.$emit('goToHistoryForm')
@@ -397,23 +394,20 @@ export default {
 						} else {
 							this.$notify.error({
 								title: 'Failed',
-								message: 'Copy failed',
-								offset: 100
+								message: 'Copy failed'
 							})
 						}
 					} catch (error) {
 						if (error.response.status === 403) {
 							this.$notify.error({
 								title: 'Has been Copied',
-								message: 'The backtest has been copied',
-								offset: 100
+								message: 'The backtest has been copied'
 							})
 						}
 						if (error.response.status === 500) {
 							this.$notify.error({
 								title: 'Service is busy',
-								message: 'The internal server is busy, please try again later ',
-								offset: 100
+								message: 'The internal server is busy, please try again later '
 							})
 						}
 					}
@@ -421,8 +415,7 @@ export default {
 			} catch (error) {
 				this.$notify.error({
 					title: 'Service is busy',
-					message: 'The internal server is busy, please try again later ',
-					offset: 100
+					message: 'The internal server is busy, please try again later '
 				})
 			}
 		}, 500),
@@ -457,15 +450,13 @@ export default {
 					console.error(error)
 					vm.$message({
 						message: 'The internal server is busy, please try again later ',
-						type: 'error',
-						offset: 300
+						type: 'error'
 					})
 				}
 			} else {
 				this.$notify({
 					title: 'No trades',
 					message: 'No trades, please change parameter.',
-					offset: 100,
 					type: 'warning'
 				})
 			}

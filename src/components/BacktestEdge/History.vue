@@ -516,8 +516,7 @@ export default {
         } catch (error) {
           vm.$message({
             message: 'The internal server is busy, please try again later ',
-            type: 'error',
-            offset: 300
+            type: 'error'
           })
           CIQ.addCover()
           CIQ.nprogress.start()
@@ -557,8 +556,7 @@ export default {
       } catch (error) {
         vm.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
       }
     }, 500),
@@ -594,8 +592,7 @@ export default {
 		} catch (error) {
 			vm.$message({
 				message: 'The internal server is busy, please try again later ',
-				type: 'error',
-				offset: 300
+				type: 'error'
 			})
 		}
 	}, 500),
@@ -615,8 +612,7 @@ export default {
         console.log(error)
         this.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
       }
     },
@@ -628,8 +624,7 @@ export default {
         if (nameRes.data.count != 0) {
           this.$notify.error({
             title: 'Has been Copied',
-            message: 'The backtest has been copied',
-            offset: 100
+            message: 'The backtest has been copied'
           })
           return
         }
@@ -653,8 +648,7 @@ export default {
             this.$notify({
               title: 'Copy successfully',
               message: 'After copying successfully, you can edit the backtest',
-              type: 'success',
-              offset: 100
+              type: 'success'
             })
             this.queryInfo.page = 1
             this.getHistoryList()
@@ -666,16 +660,14 @@ export default {
           if (error.response.status === 500) {
             this.$notify.error({
               title: 'Service is busy',
-              message: 'The internal server is busy, please try again later ',
-              offset: 100
+              message: 'The internal server is busy, please try again later '
             })
           }
         }
       } catch (error) {
         this.$notify.error({
           title: 'Service is busy',
-          message: 'The internal server is busy, please try again later ',
-          offset: 100
+          message: 'The internal server is busy, please try again later '
         })
       }
     }, 1000),
@@ -708,15 +700,13 @@ export default {
       } catch (error) {
         vm.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
       }
       if (!row.result['Total Trades']) {
         this.$notify({
           title: 'No trades',
           message: 'No trades, please change parameter.',
-          offset: 100,
           type: 'warning'
         })
       }
@@ -826,8 +816,7 @@ export default {
             title: 'Added to favorites',
             message:
               'Favorites have been added and you can view them in My Favorites',
-            type: 'success',
-            offset: 100
+            type: 'success'
           })
 
           this.$emit('refFavoritesForm')
@@ -841,8 +830,7 @@ export default {
       } catch (error) {
         vm.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
       }
     }, 1000),
@@ -862,8 +850,7 @@ export default {
       } catch (error) {
         vm.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
       }
     }, 1000),

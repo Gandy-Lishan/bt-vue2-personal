@@ -388,8 +388,7 @@ export default {
     } catch (error) {
       vm.$message({
         message: 'The internal server is busy, please try again later ',
-        type: 'error',
-        offset: 300
+        type: 'error'
       })
     }
   },
@@ -693,6 +692,7 @@ export default {
     runBacktest: throttle(async function () {
       try {
         let setUp = this.$refs.setUpChild.saveBacktestData()
+        if(!setUp) return
         let setUpChecked = true
         let entryChecked = true
         // let isEdit = this.$refs.setUpChild.isEdit()
@@ -706,8 +706,7 @@ export default {
         if (setUpRes.data.count != 0 && !backtestInfo.hasOwnProperty('old_uuid')) {
           this.$message({
             message: 'The backtest name already exists',
-            type: 'error',
-            offset: 300
+            type: 'error'
           })
           setUpChecked = false
           this.$store.commit('clearBacktest')
@@ -718,7 +717,6 @@ export default {
 
         // if (setUpRes.data.count == 0 || isEdit) {
           // 有名字并且是编辑 没名字是编辑 没名字是新建
-          console.log('有无名字：', setUpRes.data.count, '有无 old_uuid：', backtestInfo.hasOwnProperty('old_uuid'))
         if ((setUpRes.data.count != 0 && backtestInfo.hasOwnProperty('old_uuid')) || (setUpRes.data.count == 0) && backtestInfo.hasOwnProperty('old_uuid') || (setUpRes.data.count == 0) && !backtestInfo.hasOwnProperty('old_uuid')) {
           let entry
           for (let index = 0; index < this.entryLength; index++) {
@@ -733,7 +731,9 @@ export default {
             this.$refs.entryChild.saveDelayBar()
             this.$refs.entryChild.saveRelation()
           }
-          if (entryChecked && setUpChecked && setUp) {
+          const checked = entryChecked && setUpChecked && setUp
+          if(!checked) return
+          if (checked) {
             let exit
             let exitChecked
             for (let index = 0; index < this.exitLength; index++) {
@@ -776,8 +776,7 @@ export default {
                       'The current entry ' +
                       str +
                       ' are the same, please change',
-                    type: 'error',
-                    offset: 300
+                    type: 'error'
                   })
                   CIQ.hideCover()
                   CIQ.nprogress.done()
@@ -805,8 +804,7 @@ export default {
                       'The current exit ' +
                       str +
                       ' are the same, please change',
-                    type: 'error',
-                    offset: 300
+                    type: 'error'
                   })
                   CIQ.hideCover()
                   CIQ.nprogress.done()
@@ -1167,15 +1165,13 @@ export default {
                         vm.$message({
                           message:
                             'This backtest is already in your history list',
-                          type: 'error',
-                          offset: 300
+                          type: 'error'
                         })
                       } else {
                         vm.$message({
                           message:
                             'The internal server is busy, please try again later ',
-                          type: 'error',
-                          offset: 300
+                          type: 'error'
                         })
                       }
 
@@ -1219,8 +1215,7 @@ export default {
         this.$notify({
           title: 'Failed',
           message: 'The internal server is busy, please try again later',
-          type: 'error',
-          offset: 100
+          type: 'error'
         })
       }
       this.$refs.setUpChild.clearOldBacktestName()
@@ -1315,8 +1310,7 @@ export default {
         console.error(error)
         vm.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
         CIQ.hideCover()
         CIQ.nprogress.done()
@@ -1356,7 +1350,6 @@ export default {
       this.$notify({
         title: 'Try Another',
         message: 'The backtest cannot request data, please change parameter',
-        offset: 100,
         type: 'warning'
       })
     },
