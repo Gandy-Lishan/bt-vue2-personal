@@ -86,6 +86,7 @@ export default new Vuex.Store({
 		saveConditionFormdata: {},
 		exitFrequency: '',
 		activatedMA: [{ period: 21, url: '' }],
+		activatedMALayout: [],
 		// indicators look up
 		allSymbolsList: [],
 		stocksList: [],
@@ -304,6 +305,9 @@ export default new Vuex.Store({
 		 */	
 		getMA(state, val) {
 			state.activatedMA = val
+		},
+		getMALayout(state, val) {
+			state.activatedMALayout = val
 		},
 		getEntryIndicatorRadio(state, val) {
 			state.entryIndicatorRadio = val

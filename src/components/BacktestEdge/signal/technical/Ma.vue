@@ -317,22 +317,36 @@ export default {
 			// update MA period
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
-				if (sd.type == 'ma') {
+				if (
+					sd.type == 'ma' && sd.panel == 'chart' &&
+					sd.parameters.criteria == this.criteria &&
+					sd.parameters.index == this.panelIndex
+				) {
+					
 					var replaceStudy = {
 						name: 'Moving Average',
 						overlay: true,
 						calculateFN: CIQ.Studies.calculateMovingAverage,
 						inputs: {
 							Period: val,
-							Field: 'field',
+							Field: sd.inputs.Field,
 							Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 							Offset: 0
 						},
 						outputs: { MA: '#FF0000' }
 					}
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
-					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
+					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
+						criteria: this.criteria,
+						index: this.panelIndex
+					})
+					console.log(st)
 					CIQ.store.commit('getMaPeriod', val)
+
+					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
+      				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
+
+					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
 				}
 			}			
 		},
@@ -423,10 +437,21 @@ export default {
 			}
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
-				if (sd.type == 'ma') {
-					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, {Field: field})
-					console.log(st,field)
+				if (
+					sd.type == 'ma' && sd.panel == 'chart' &&
+					sd.parameters.criteria == this.criteria &&
+					sd.parameters.index == this.panelIndex
+				) {
+					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, {Field: field}, null, {
+						criteria: this.criteria,
+						index: this.panelIndex
+					})
+					// 解决附属ma或者roc漂移问题
+					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
 					CIQ.store.commit('getMaPeriod', val)
+
+					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
+      				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',field,this.criteria,this.panelIndex)
 				}
 			}
 		},
@@ -562,6 +587,9 @@ export default {
 						index: this.panelIndex
 					})
 					console.log('刷新附属ma',st)
+					
+					// 解决附属ma或者roc漂移问题
+					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
 				}
 			}
 			// keep current MA
@@ -587,7 +615,7 @@ export default {
 			this.$store.commit('getStMaPeriod', val)
 		},
 		getSCvalue(val) {
-			if (this.tech.comparison === 'SC') {
+			if (this.tech.comparison !== 'MA') {
 				this.tech.period = val
 
 				this.updateMAPeriod(val)

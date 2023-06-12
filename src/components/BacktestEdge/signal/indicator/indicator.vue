@@ -773,10 +773,15 @@ export default {
       techIndicators.push(url)
       techIndicators = [...new Set(techIndicators)]
       this.$store.commit('getTechnicalIndicators', techIndicators)
+
+      // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
+      CIQ.setMALayout(url,null,null,null,this.criteria,this.panelIndex)
+
       // avoid add indicator redundantly
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
         var sd = CIQ.stxx.layout.studies[studyInstanceName]
-        if (sd.type == url) {
+        // 暂定，去重除'ma'外
+        if (sd.type == url && sd.type != 'ma') {
           return
         }
       }
@@ -786,6 +791,7 @@ export default {
         CIQ.addIndicators()
       }
     },
+
     handleUsersOwnIndicatorSelect(data) {
       console.log('handleUsersOwnIndicatorSelect')
       const frequency = 'Daily'
