@@ -1053,7 +1053,6 @@ export default {
               indicatorLayout.activatedMA = this.$store.state.activatedMA
               // 暂定，把MA对应位置和信息存在回测内
               indicatorLayout.activatedMALayout = this.$store.state.activatedMALayout
-
               backtestData.indicator_layout = JSON.stringify(
                 indicatorLayout
               ).replaceAll('\u200c', '$r001$')
