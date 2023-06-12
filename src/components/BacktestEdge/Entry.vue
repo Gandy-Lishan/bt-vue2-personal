@@ -552,7 +552,6 @@ export default {
 							}
 							this.$message({
 								type: 'success',
-								offset: 300,
 								message:
 									'The deletion is successful and has been automatically switched to TimeOrder Multi-Condition'
 							})
@@ -562,7 +561,6 @@ export default {
 							this.relation = oldVal
 							this.$message({
 								type: 'info',
-								offset: 300,
 								message:
 									'With the deletion undeleted, you can switch to The SaveBar Multi-Condition to delete the condition panel to less than 3'
 							})
@@ -630,8 +628,7 @@ export default {
 				if (this.editableTabs.length > 5 && this.relation == 2) {
 					this.$message({
 						message: 'Add up to five criterias',
-						type: 'error',
-						offset: 300
+						type: 'error'
 					})
 					this.editableTabs.pop()
 					this.indicatorRadioArr.pop()
@@ -641,8 +638,7 @@ export default {
 				if (this.relation == 3 && this.editableTabs.length > 3) {
 					this.$message({
 						message: 'Add up to five conditions',
-						type: 'error',
-						offset: 300
+						type: 'error'
 					})
 					this.editableTabs.pop()
 					this.indicatorRadioArr.pop()
@@ -654,8 +650,7 @@ export default {
 				if (this.relation == 3 && this.editableTabs.length > 3) {
 					this.$message({
 						message: 'Add up to three conditions',
-						type: 'error',
-						offset: 300
+						type: 'error'
 					})
 					this.editableTabs.pop()
 					this.indicatorRadioArr.pop()
@@ -680,8 +675,7 @@ export default {
 					this.$message({
 						message:
 							'Multiple conditions are currently selected, at least two conditions',
-						type: 'error',
-						offset: 300
+						type: 'error'
 					})
 					return
 				}
