@@ -8,7 +8,7 @@
 import { getAIPick } from '@/service/ai'
 
 export default {
-	name: 'aiscranner',
+	name: 'aiscanner',
 	data() {
 		return {
 			curDate: ''
