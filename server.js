@@ -50,9 +50,14 @@ app.use(express.static(path.join(__dirname, 'dist')))
 
 if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
     let url =get_env("api_url",'https://h7r34cgfvh.execute-api.us-east-1.amazonaws.com/')
-    app.use('/dev',proxy({target:url,changeOrigin:true}))
-
-    let url2 = get_env("api_url",'https://auto-trader-prod.herokuapp.com/')
+    app.use('/dev',proxy({
+        target:url,
+        changeOrigin:true,
+        pathRewrite: {
+            '^/dev': '/dev'
+        }
+    }))
+    let url2 = get_env("api_url",'https://auto-trader-prod.herokuapp.com')
     app.use('/ai',proxy({
         target:url2,
         changeOrigin:true,
