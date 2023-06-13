@@ -297,8 +297,6 @@ const config = {
 		disableHostCheck: true,
 		proxy: {
 			'/dev': {
-				//target: "https://ggfdkkraph.execute-api.us-east-1.amazonaws.com/",
-				// target: "https://lishan-elixir-vigilant-space-system-44vx4vw76vgc79gp-8080.preview.app.github.dev/",
 				target: "https://devbt2api.sentimentrader.com/",
 				// target: "http://127.0.0.1:8000",
 				// ws:true,
@@ -316,6 +314,14 @@ const config = {
 				pathRewrite: {
 					'^/api': '/api'
 				}
+			},
+			'/ai': {
+				target: "https://ai.sentdevsite.com",
+				ws: true,
+				changOrigin: true,
+				pathRewrite: {
+					"^/ai": "",
+				},
 			},
 		}
 	}

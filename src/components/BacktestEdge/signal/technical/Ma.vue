@@ -642,6 +642,8 @@ export default {
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
 					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
 					CIQ.store.commit('getMaPeriod', val)
+
+					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
 				}
 			}
 		}, 500),

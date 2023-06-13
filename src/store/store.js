@@ -8,6 +8,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
+		curDate: '',
 		studySettingMA: '',
 		favoriteIndicatorList: [],
 		favoriteSymbolList: [],
@@ -121,6 +122,9 @@ export default new Vuex.Store({
 		},
 	},
 	mutations: {
+		SET_CUR_DATE: (state,val)=>{
+			state.curDate = val
+		},
 		envokeBeforeCalculateNewConditions(state,val){
 			state.beforeCalculateNewConditions = val
 		},
@@ -630,7 +634,13 @@ export default new Vuex.Store({
 	actions: {
 		Try(context, val) {
 			context.commit('setEntryData', val)
-		}
+		},
+		set_cur_date({commit}, val){
+			return new Promise(resolve=>{
+			  commit('SET_CUR_DATE',val)
+			  resolve();
+			})
+		},
 	}
 
 })

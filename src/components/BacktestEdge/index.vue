@@ -17,9 +17,9 @@
 						mode="horizontal"
 						@select="handleSelect"
 					>
-						<el-menu-item class="home-link" index="1">Home</el-menu-item>
+						<el-menu-item class="home-link" index="1">Backtester</el-menu-item>
 						<el-menu-item class="strategy-link" index="2">Strategy</el-menu-item>
-						<el-menu-item class="ai-link" index="3">AI Recommendation</el-menu-item>
+						<el-menu-item class="ai-link" index="3">AI Scanner</el-menu-item>
 						<el-submenu index="4">
 							<template slot="title">Help</template>
 							<el-menu-item index="4-1">Tutorial</el-menu-item>
@@ -145,7 +145,7 @@ export default {
 				this.$router.push(path)
 			} else if (key == '3') {
 				path = this.$router.resolve({
-					path: '/home/ai'
+					path: '/home/aiscranner'
 				}).href
 				this.$router.push(path)
 			} else if (key == '4-1') {
@@ -215,7 +215,7 @@ export default {
 		margin-right: 7px;
 		.strategy-link,.home-link,.ai-link{
 			height: 78px !important;
-			display: none !important;
+			display: flex !important;
 			align-items: center !important;
 			color: #6b7280 !important;
 			font-weight: 500 !important;
