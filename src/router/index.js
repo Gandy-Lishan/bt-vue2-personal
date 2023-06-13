@@ -8,6 +8,7 @@ import Cookies from 'vue-cookies'
 import axios from '../axios'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { getIndicatorsList, getStocksList, getIndexsList } from "@/service/service"
+import { getCurDate } from '@/service/ai'
 import getQueryVariable from '@/tools/getQueryVariable'
 import store from '../store/store'
 
@@ -20,27 +21,39 @@ const router = new Router({
 	mode: 'history',
 	routes: [
 		{ path: '/', redirect: '/home' },
-		{ path: '/home', component: resolve => require(['@/components/BacktestEdge/index.vue'], resolve),
-		redirect: '/home/backtester',
-	children: [
-		{path: '/home/backtester', name:'backtester',component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
-	children: [
-		{path: '/home/brainstorm', name:'brainstorm',component: resolve => require(['@/components/BacktestEdge/Brainstorm/index.vue'], resolve), redirect: '/home/brainstorm/exit_with_custom_TIM_frame',children: [
-			{path: '/home/brainstorm/exit_with_custom_TIM_frame', name: 'ExitWithCustomTIMFrame',component: resolve => require(['@/components/BacktestEdge/Brainstorm/ExitWithCustomTIMFrame.vue'], resolve)},
-		]},
-		{ path: '/home/strategy', name:'strategy',component: resolve => require(['@/components/BacktestEdge/Strategy.vue'], resolve) },
-		{path: '/home/backtests', name:'backtests',component: resolve => require(['@/components/BacktestEdge/Backtests.vue'], resolve),},
-
-	]},
-	] },
-		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
-		// { path: '/home', component: () => import(/* webpackChunkName: "Home" */ "@/components/BacktestEdge/Home.vue") },
-		// { path: '/doc', component: () => import(/* webpackChunkName: "Doc" */ "@/components/Menu/Doc.vue") }
+		{
+			path: '/home', component: resolve => require(['@/components/BacktestEdge/index.vue'], resolve),
+			redirect: '/home/backtester',
+			children: [
+				{
+					path: 'backtester', name: 'backtester', component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
+					children: [
+						{
+							path: 'brainstorm', name: 'brainstorm', component: resolve => require(['@/components/BacktestEdge/Brainstorm/index.vue'], resolve), 
+							redirect: '/home/backtester/brainstorm/exit_with_custom_TIM_frame', 
+							children: [
+								{ path: 'exit_with_custom_TIM_frame', name: 'ExitWithCustomTIMFrame', component: resolve => require(['@/components/BacktestEdge/Brainstorm/ExitWithCustomTIMFrame.vue'], resolve) },
+							]
+						},
+						{ path: 'strategy', name: 'strategy', component: resolve => require(['@/components/BacktestEdge/Strategy.vue'], resolve) },
+						{ path: 'backtests', name: 'backtests', component: resolve => require(['@/components/BacktestEdge/Backtests.vue'], resolve), },
+					]
+				},
+				{ 
+					path: 'aiscanner', name: 'aiscanner', component: resolve => require(['@/components/BacktestEdge/AIScanner.vue'], resolve)
+				},
+			]
+		},
+		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) },
 	]
 })
 
 router.beforeEach(async (to, from, next) => {
 	await initiateIndicatorList()
+	// if(to.path == '/home/aiscanner'){
+	// 	await initiateCurrentDate()
+	// }
+	
 	CIQ.store = store
 	let loginUrl = 'https://sentimentrader.com/login'
 	//  开发环境无法判断环境变量
@@ -92,6 +105,15 @@ router.beforeEach(async (to, from, next) => {
 		window.location.href = loginUrl
 	}
 })
+
+async function initiateCurrentDate() {
+	//现在外部实现一个获取当前日期并储存的功能，接触验证屏蔽后移到判断条件内部
+	if(store.state.curDate==''){
+		let _res = await getCurDate()
+		let curDate =_res[0]['lastUpdatePickDate']
+		await store.dispatch('set_cur_date',curDate)  
+	}
+}
 
 async function initiateIndicatorList() {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'

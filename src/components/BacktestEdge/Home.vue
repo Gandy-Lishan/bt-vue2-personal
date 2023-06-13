@@ -342,7 +342,7 @@ export default {
     const pathname = window.location.pathname
     if (pathname.includes('backtests')) {
       this.activeName = 'sixth';
-      const targetPath = '/home/backtests';
+      const targetPath = '/home/backtester/backtests';
       if (this.$route.path !== targetPath) {
         this.$router.push(targetPath);
       }
@@ -587,19 +587,19 @@ export default {
           this.$refs.sampleChild.getSampleList()
           break
         case 'sixth':
-          targetPath = '/home/backtests'
+          targetPath = '/home/backtester/backtests'
           if (this.$route.path !== targetPath) {
             this.$router.push(targetPath);
           }
           break
         case 'seventh':
-          targetPath = '/home/brainstorm'
+          targetPath = '/home/backtester/brainstorm'
           if (this.$route.path !== targetPath) {
             this.$router.push(targetPath);
           }
         default:
           if (window.location.pathname.includes('backtests')) {
-            targetPath = '/home/backtests';
+            targetPath = '/home/backtester/backtests';
             if (this.$route.path !== targetPath) {
               this.$router.push(targetPath);
             }
@@ -1404,7 +1404,7 @@ export default {
     },
     handleTabChange(value) {
       this.activeName = 'seventh'
-      const targetPath = `/home/brainstorm/${value}`;
+      const targetPath = `/home/backtester/brainstorm/${value}`;
       if (this.$route.path !== targetPath) {
         this.$router.push(targetPath);
       }
