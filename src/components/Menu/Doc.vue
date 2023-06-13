@@ -127,14 +127,7 @@ nav a:hover {
 	border-top-right-radius: 20px;
 	border-bottom-right-radius: 20px;
 }
-
-.contents {
-	display: flex;
-	justify-content: center;
-}
 .content {
-	display: flex;
-  margin-top: 1.5rem;
-  margin-top: 125px;
+  margin-top: 100px;
 }
 </style>
