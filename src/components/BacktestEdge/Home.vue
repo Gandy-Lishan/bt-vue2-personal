@@ -1534,15 +1534,26 @@ header {
 .backtest-btns {
 	margin-top: 10px;
 	display: flex;
-	justify-content: flex-end;
+	justify-content: center;
+  align-items: center;
 	margin-right: 20px;
 	padding-bottom: 10px;
 	margin-bottom: 12px;
 	.el-button:first-child {
-		background: #d9001b;
+		background: rgb(251, 192, 92);
+    border: none;
+    width: 250px;
+	}
+  .el-button:first-child:hover {
+    background-color: #f59e0b;
 	}
 	.el-button:last-child {
-		background: #03a113;
+		background: #5b9bd1;
+    border: none;
+    width: 250px;
+	}
+  .el-button:last-child:hover {
+    background-color: #409EFF;
 	}
 }
 @media (min-width: 375px) and (max-width: 767px) {
