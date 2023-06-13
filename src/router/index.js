@@ -45,15 +45,14 @@ const router = new Router({
 			]
 		},
 		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) },
-		{ path: '/ai', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
 	]
 })
 
 router.beforeEach(async (to, from, next) => {
 	await initiateIndicatorList()
-	if(to.path == '/home/aiscanner'){
-		await initiateCurrentDate()
-	}
+	// if(to.path == '/home/aiscanner'){
+	// 	await initiateCurrentDate()
+	// }
 	
 	CIQ.store = store
 	let loginUrl = 'https://sentimentrader.com/login'
