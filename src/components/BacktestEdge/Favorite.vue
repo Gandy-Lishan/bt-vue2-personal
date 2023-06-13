@@ -115,8 +115,6 @@
 						show-overflow-tooltip
 						align="center"
             prop="frequency"
-						sortable="custom"
-						:sort-orders="['frequency']"
 						width="115px"
 					>
 						<template slot-scope="scope">
@@ -129,7 +127,7 @@
 						label="Total Trades"
             prop="total_trader"
 						sortable="custom"
-						:sort-orders="['total_trader']"
+            :sort-orders="['ascending','descending', 'total_trader']"
 						width="125px"
 					>
 						<template slot-scope="scope">
@@ -148,7 +146,7 @@
 						label="Total Return"
             prop="total_return"
 						sortable="custom"
-						:sort-orders="['total_return']"
+            :sort-orders="['ascending', 'descending', 'total_return']"
 						><template slot-scope="scope">
 							<!-- <span v-if="scope.row.result['Total Return (%)']">{{
 								scope.row.result['Total Return (%)'] + '%'
