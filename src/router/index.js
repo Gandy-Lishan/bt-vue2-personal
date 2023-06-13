@@ -50,9 +50,9 @@ const router = new Router({
 
 router.beforeEach(async (to, from, next) => {
 	await initiateIndicatorList()
-	// if(to.path == '/home/aiscanner'){
-	// 	await initiateCurrentDate()
-	// }
+	if(to.path == '/home/aiscanner'){
+		await initiateCurrentDate()
+	}
 	
 	CIQ.store = store
 	let loginUrl = 'https://sentimentrader.com/login'
