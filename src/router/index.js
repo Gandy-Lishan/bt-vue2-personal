@@ -44,7 +44,7 @@ const router = new Router({
 				},
 			]
 		},
-		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) },
+		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
 	]
 })
 
