@@ -40,17 +40,18 @@ const router = new Router({
 					]
 				},
 				{ 
-					path: 'aiscranner', name: 'aiscranner', component: resolve => require(['@/components/BacktestEdge/AIScanner.vue'], resolve)
+					path: 'aiscanner', name: 'aiscanner', component: resolve => require(['@/components/BacktestEdge/AIScanner.vue'], resolve)
 				},
 			]
 		},
-		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
+		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) },
+		{ path: '/ai', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) }
 	]
 })
 
 router.beforeEach(async (to, from, next) => {
 	await initiateIndicatorList()
-	if(to.path == '/home/aiscranner'){
+	if(to.path == '/home/aiscanner'){
 		await initiateCurrentDate()
 	}
 	

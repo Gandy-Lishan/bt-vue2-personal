@@ -145,7 +145,7 @@ export default {
 				this.$router.push(path)
 			} else if (key == '3') {
 				path = this.$router.resolve({
-					path: '/home/aiscranner'
+					path: '/home/aiscanner'
 				}).href
 				this.$router.push(path)
 			} else if (key == '4-1') {
