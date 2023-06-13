@@ -63,8 +63,9 @@ if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
         }
     }))
 
+    let url2 = get_env("api_url",'https://ai.sentdevsite.com')
     app.use('/ai',proxy({
-        target:"https://ai.sentdevsite.com",
+        target:url2,
         changeOrigin:true,
         pathRewrite: {
             '^/ai': ''
