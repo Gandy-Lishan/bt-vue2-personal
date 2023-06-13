@@ -55,12 +55,19 @@ if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
 }else if(process.env.ST_ENV === "prod"){
     // app.use("/dev",proxy(get_env("API_URL",`http://18.216.210.200/dev`)))
     let url = get_env("api_url",'https://devbt2api.sentimentrader.com/')
-    //let url =get_env("api_url",'http://10.131.9.43:8000')
     app.use('/dev',proxy({
         target:url,
         changeOrigin:true,
         pathRewrite: {
             '^/dev': '/dev'
+        }
+    }))
+
+    app.use('/ai',proxy({
+        target:"https://ai.sentdevsite.com",
+        changeOrigin:true,
+        pathRewrite: {
+            '^/ai': ''
         }
     }))
 }
