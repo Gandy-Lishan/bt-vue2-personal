@@ -17,18 +17,19 @@
 						mode="horizontal"
 						@select="handleSelect"
 					>
-						<el-menu-item class="home-link" index="1">Home</el-menu-item>
+						<el-menu-item class="home-link" index="1">Backtester</el-menu-item>
 						<el-menu-item class="strategy-link" index="2">Strategy</el-menu-item>
-						<el-submenu index="3">
-							<template slot="title">Help</template>
-							<el-menu-item index="3-1">Tutorial</el-menu-item>
-							<el-menu-item index="3-2">Contant Us</el-menu-item>
-						</el-submenu>
+						<el-menu-item class="ai-link" index="3">AI Scanner</el-menu-item>
 						<el-submenu index="4">
+							<template slot="title">Help</template>
+							<el-menu-item index="4-1">Tutorial</el-menu-item>
+							<el-menu-item index="4-2">Contant Us</el-menu-item>
+						</el-submenu>
+						<el-submenu index="5">
 							<template slot="title"><i class="el-icon-s-tools"></i></template>
-							<!-- <el-menu-item index="4-1">User: {{$store.state.role}}</el-menu-item> -->
-							<!-- <el-menu-item index="4-1">Theme</el-menu-item> -->
-							<!-- <el-menu-item index="4-2">Language</el-menu-item> -->
+							<!-- <el-menu-item index="5-1">User: {{$store.state.role}}</el-menu-item> -->
+							<!-- <el-menu-item index="5-1">Theme</el-menu-item> -->
+							<!-- <el-menu-item index="5-2">Language</el-menu-item> -->
 						</el-submenu>
 					</el-menu>
 				</div>
@@ -127,6 +128,8 @@ export default {
 			this.activeIndex = '2'
 		}else if(this.$route.name == 'backtester'){
 			this.activeIndex = '1'
+		}else if(this.$route.name == 'aiscanner'){
+			this.activeIndex = '3'
 		}
 	},
 	methods: {
@@ -142,12 +145,17 @@ export default {
 					path: '/home/strategy'
 				}).href
 				this.$router.push(path)
-			} else if (key == '3-1') {
+			} else if (key == '3') {
+				path = this.$router.resolve({
+					path: '/home/aiscanner'
+				}).href
+				this.$router.push(path)
+			} else if (key == '4-1') {
 				path = this.$router.resolve({
 					path: '/doc'
 				}).href
 				window.open(path, '_blank')
-			} else if (key == '3-2') {
+			} else if (key == '4-2') {
 				path = 'https://users.sentimentrader.com/users/account/support/'
 				window.open(path, '_blank')
 			}
@@ -207,9 +215,9 @@ export default {
 		justify-self: center;
 		align-self: center;
 		margin-right: 7px;
-		.strategy-link,.home-link{
+		.strategy-link,.home-link,.ai-link{
 			height: 78px !important;
-			display: none !important;
+			display: flex !important;
 			align-items: center !important;
 			color: #6b7280 !important;
 			font-weight: 500 !important;
@@ -219,6 +227,9 @@ export default {
 		}
 		.home-link:hover{
 			color:#5b9bd1 !important;
+		}
+		.ai-link:hover{
+			color:#409eff !important;
 		}
 	}
 	.betaNote {
