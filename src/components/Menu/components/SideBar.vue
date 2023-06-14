@@ -32,10 +32,10 @@ export default {
       this.activeSection = sectionId
       console.log('activeSection', sectionId)
       this.$emit('recv-act-secId', sectionId)
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
+      // const element = document.getElementById(sectionId);
+      // if (element) {
+      //   element.scrollIntoView({ behavior: 'smooth' });
+      // }
     },
     toggleSection(sectionId) {
       // 切换一级标题的展开状态

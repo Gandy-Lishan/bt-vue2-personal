@@ -3,7 +3,7 @@
 		<div class="header">
 			<div class="box">
 				<img src="../../assets/logo.png" />
-				<h1 style="color: rgb(0 50 60); font-weight: 500;">BacktestEdeg Tutorial</h1>
+				<p style="color: rgb(0 50 60); font-weight: 500; font-size: 18px">BacktestEdeg Tutorial</p>
 				<nav>
 					<router-link active-class="active" to="/doc">首页</router-link>
 					<router-link active-class="active" to="/doc/ask">问答</router-link>
@@ -129,5 +129,9 @@ nav a:hover {
 }
 .content {
   margin-top: 100px;
+}
+p {
+	margin: 0;
+	padding: 0;
 }
 </style>
