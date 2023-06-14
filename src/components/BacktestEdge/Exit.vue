@@ -1295,7 +1295,7 @@ export default {
 	margin-bottom: 10px;
 }
 .exit-container {
-	margin-right: 40px;
+	// margin-right: 40px;
 	margin-bottom: 10px;
 	flex: 1;
 }

@@ -40,6 +40,7 @@ export default new Vuex.Store({
 		backtestInfo: {
 			entry_description: [],
 			exit_description: [],
+			description: '',
 			direction: 'Long',
 			frequency: 'Daily',
 			entry: {
@@ -448,6 +449,7 @@ export default new Vuex.Store({
 			state.backtestInfo = {
 				entry_description: [],
 				exit_description: [],
+				description: '',
 				direction: 'Long',
 				frequency: 'Daily',
 				entry: {
@@ -514,6 +516,7 @@ export default new Vuex.Store({
 			state.backtestInfo = {
 				entry_description: [],
 				exit_description: [],
+				description: '',
 				direction: 'Long',
 				frequency: 'Daily',
 				entry: {

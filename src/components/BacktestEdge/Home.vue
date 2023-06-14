@@ -758,6 +758,7 @@ export default {
               let backtestData = JSON.parse(
                 JSON.stringify(vm.$store.state.backtestInfo)
               )
+              console.log('store 中存储的 backtestdata', backtestData)
               let entry_description = JSON.parse(
                 JSON.stringify(vm.$store.state.backtestInfo.entry_description)
               )
@@ -990,7 +991,6 @@ export default {
                   }
                 ]
               }
-
               let entry = {
                 description: backtestData.entry.description,
                 score: backtestData.entry.score,
@@ -1012,6 +1012,7 @@ export default {
               }
               delete backtestData.entry
               delete backtestData.exit
+              backtestData.description = JSON.stringify(backtestData.description)
               backtestData.entry = JSON.stringify(entry)
               backtestData.exit = JSON.stringify(exit)
               if (Array.isArray(entry_description)) {
@@ -1097,6 +1098,7 @@ export default {
               backtestParams.backtest_period = backtestData.backtest_period
               backtestParams.trade_price = backtestData.trade_price
               backtestParams.exclude_oo = backtestData.exclude_oo
+              backtestParams.description = backtestData.description
 
               console.log('处理过后的 backtestData', backtestParams)
               backtestParams = JSON.stringify(backtestParams)
@@ -1492,7 +1494,7 @@ header {
 }
 
 .criteria-container {
-	padding: 10px;
+	// padding: 10px;
 }
 .chart_box {
 	padding: 10px 10px;
@@ -1505,13 +1507,14 @@ header {
 	display: flex;
 	justify-content: space-between;
 	border-bottom: 1px solid #797979;
-	align-items: center;
+	align-items: flex-start;
 }
 .divider {
-    width: 1px;
-    height: 448px;
+    width: 1.5px;
     background-color: #e8e6e6;
     opacity: 0.8;
+    margin: 10px;
+    align-self: stretch
 }
 @media (min-width: 820px) and (max-width: 1279px) {
 	.criteria-box {
