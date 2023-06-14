@@ -128,6 +128,8 @@ export default {
 			this.activeIndex = '2'
 		}else if(this.$route.name == 'backtester'){
 			this.activeIndex = '1'
+		}else if(this.$route.name == 'aiscanner'){
+			this.activeIndex = '3'
 		}
 	},
 	methods: {

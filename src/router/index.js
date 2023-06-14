@@ -45,9 +45,6 @@ const router = new Router({
 			]
 		},
 		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) },
-		{ 
-			path: '/test', component: resolve => require(['@/components/BacktestEdge/AIScanner.vue'], resolve)
-		},
 	]
 })
 
