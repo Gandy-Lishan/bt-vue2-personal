@@ -37,7 +37,7 @@
 			
 			<router-view></router-view>
 
-			<el-tooltip
+			<!-- <el-tooltip
 				class="item"
 				effect="dark"
 				content="Back to the top"
@@ -71,7 +71,7 @@
 						></path>
 					</svg>
 				</button>
-			</el-tooltip>
+			</el-tooltip> -->
 			<Footer></Footer>
 		</div>
 	</div>
