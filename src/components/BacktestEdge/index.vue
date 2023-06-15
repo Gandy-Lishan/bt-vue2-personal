@@ -37,7 +37,7 @@
 			
 			<router-view></router-view>
 
-			<!-- <el-tooltip
+			<el-tooltip
 				class="item"
 				effect="dark"
 				content="Back to the top"
@@ -71,57 +71,22 @@
 						></path>
 					</svg>
 				</button>
-			</el-tooltip> -->
-			<div class="footer">
-				<p>
-					Copyright © 2001 - 2023 Sundial Capital Research, Inc. All rights
-					reserved.
-				</p>
-				<ul class="Footer_social___a7sK">
-					<li>
-						<a
-							href="https://facebook.com/sentimentrader"
-							target="_blank"
-							rel="noopener noreferrer"
-							><i class="fa fa-facebook"></i
-						></a>
-					</li>
-					<li>
-						<a
-							href="https://www.linkedin.com/company/sentimentrader"
-							target="_blank"
-							rel="noopener noreferrer"
-							><i class="fa fa-linkedin"></i
-						></a>
-					</li>
-					<li>
-						<a
-							href="https://youtube.com/sentimentrader"
-							target="_blank"
-							rel="noopener noreferrer"
-							><i class="fa fa-youtube"></i
-						></a>
-					</li>
-					<li>
-						<a
-							href="https://twitter.com/sentimentrader"
-							target="_blank"
-							rel="noopener noreferrer"
-							><i class="fa fa-twitter"></i
-						></a>
-					</li>
-				</ul>
-			</div>
+			</el-tooltip>
+			<Footer></Footer>
 		</div>
 	</div>
 </template>
 <script>
+import Footer from "./Footer.vue";
 export default {
 	name: 'homeLayout',
 	data() {
 		return {
 			activeIndex: '1',
 		}
+	},
+	components: {
+		Footer
 	},
 	mounted() {
 		if(this.$route.name == 'strategy'){
@@ -272,47 +237,5 @@ button.toTop {
 	background-color: #94989f;
 	box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%),
 		0 10px 10px -5px rgb(0 0 0 / 4%);
-}
-
-.footer {
-	background: #fff;
-	display: flex;
-	padding: 16px 16px 48px 16px;
-	border-top: 1px solid #e5e7eb;
-	margin-top: 50px;
-	justify-content: space-between;
-	align-items: center;
-}
-.footer p {
-	text-align: center;
-	color: #9ca3af;
-	line-height: 21px;
-}
-
-.Footer_social___a7sK {
-	display: flex;
-}
-.Footer_social___a7sK li {
-	margin-right: 24px;
-}
-.Footer_social___a7sK a {
-	font-size: 20px;
-	color: #9ca3af;
-}
-.Footer_social___a7sK a:hover {
-	font-size: 20px;
-	color: #0284c7;
-}
-
-a {
-	transition: color 0.3s ease-in-out;
-	text-decoration: none;
-}
-
-ol,
-ul {
-	margin: 0;
-	padding: 0;
-	list-style: none;
 }
 </style>

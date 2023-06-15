@@ -21,30 +21,29 @@ const router = new Router({
 	mode: 'history',
 	routes: [
 		{ path: '/', redirect: '/home' },
-		{
-			path: '/home', component: resolve => require(['@/components/BacktestEdge/index.vue'], resolve),
-			redirect: '/home/backtester',
-			children: [
-				{
-					path: 'backtester', name: 'backtester', component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
-					children: [
-						{
-							path: 'brainstorm', name: 'brainstorm', component: resolve => require(['@/components/BacktestEdge/Brainstorm/index.vue'], resolve), 
-							redirect: '/home/backtester/brainstorm/exit_with_custom_TIM_frame', 
-							children: [
-								{ path: 'exit_with_custom_TIM_frame', name: 'ExitWithCustomTIMFrame', component: resolve => require(['@/components/BacktestEdge/Brainstorm/ExitWithCustomTIMFrame.vue'], resolve) },
-							]
-						},
-						{ path: 'strategy', name: 'strategy', component: resolve => require(['@/components/BacktestEdge/Strategy.vue'], resolve) },
-						{ path: 'backtests', name: 'backtests', component: resolve => require(['@/components/BacktestEdge/Backtests.vue'], resolve), },
-					]
-				},
-				{ 
-					path: 'aiscanner', name: 'aiscanner', component: resolve => require(['@/components/BacktestEdge/AIScanner.vue'], resolve)
-				},
-			]
-		},
-		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) },
+		{ path: '/home', component: resolve => require(['@/components/BacktestEdge/index.vue'], resolve),
+		redirect: '/home/backtester',
+	children: [
+		{path: '/home/backtester', name:'backtester',component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
+	children: [
+		{path: '/home/brainstorm', name:'brainstorm',component: resolve => require(['@/components/BacktestEdge/Brainstorm/index.vue'], resolve), redirect: '/home/brainstorm/exit_with_custom_TIM_frame',children: [
+			{path: '/home/brainstorm/exit_with_custom_TIM_frame', name: 'ExitWithCustomTIMFrame',component: resolve => require(['@/components/BacktestEdge/Brainstorm/ExitWithCustomTIMFrame.vue'], resolve)},
+		]},
+		{ path: '/home/strategy', name:'strategy',component: resolve => require(['@/components/BacktestEdge/Strategy.vue'], resolve) },
+		{path: '/home/backtests', name:'backtests',component: resolve => require(['@/components/BacktestEdge/Backtests.vue'], resolve),},
+
+	]},
+	{ 
+		path: 'aiscanner', name: 'aiscanner', component: resolve => require(['@/components/BacktestEdge/AIScanner.vue'], resolve)
+	},
+	] },
+		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve), redirect: '/doc/home',
+	children: [
+		{path: '/doc/home',  component: resolve => require(['@/components/Menu/components/Doc.vue'], resolve)},
+		{path: '/doc/guide',  component: resolve => require(['@/components/Menu/components/Guide.vue'], resolve)},
+	] }
+		// { path: '/home', component: () => import(/* webpackChunkName: "Home" */ "@/components/BacktestEdge/Home.vue") },
+		// { path: '/doc', component: () => import(/* webpackChunkName: "Doc" */ "@/components/Menu/Doc.vue") }
 	]
 })
 
