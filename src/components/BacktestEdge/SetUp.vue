@@ -744,8 +744,6 @@ export default {
         delete newVal.status
         delete newVal.results
         delete newVal.uuid
-        // delete newVal.entry_description
-        // delete newVal.exit_description
         delete newVal.entry
         delete newVal.exit
         delete newVal.results
@@ -766,6 +764,8 @@ export default {
           newVal.description.Introduction = ''
           newVal.description.Rules = entry_description + exit_description
         }
+        delete newVal.entry_description
+        delete newVal.exit_description
         newVal.commission = (newVal.commission * 100).toFixed(2)
         newVal.slippage = Number(newVal.slippage).toFixed(2)
         newVal.trade_price = Number(newVal.trade_price)
