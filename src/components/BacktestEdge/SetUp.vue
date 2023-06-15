@@ -771,6 +771,7 @@ export default {
         newVal.trade_price = Number(newVal.trade_price)
         this.is_admin = this.$store.state.is_admin
         this.bd = Object.assign(this.bd, newVal)
+        this.$set(this.bd, 'description', Object.assign({}, this.bd.description, newVal));
         this.getFrequency(newVal.frequency)
         this.getDirection(newVal.direction)
         this.isRiskControl = false
