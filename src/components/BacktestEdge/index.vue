@@ -128,6 +128,8 @@ export default {
 			this.activeIndex = '2'
 		}else if(this.$route.name == 'backtester'){
 			this.activeIndex = '1'
+		}else if(this.$route.name == 'scannerai' || this.$route.name == 'scannerai_chart'){
+			this.activeIndex = '3'
 		}
 	},
 	methods: {
@@ -145,7 +147,7 @@ export default {
 				this.$router.push(path)
 			} else if (key == '3') {
 				path = this.$router.resolve({
-					path: '/home/aiscanner'
+					path: '/home/scannerai'
 				}).href
 				this.$router.push(path)
 			} else if (key == '4-1') {
@@ -214,20 +216,20 @@ export default {
 		align-self: center;
 		margin-right: 7px;
 		.strategy-link,.home-link,.ai-link{
-			height: 78px !important;
-			display: flex !important;
-			align-items: center !important;
-			color: #6b7280 !important;
-			font-weight: 500 !important;
+			height: 78px;
+			display: flex;
+			align-items: center;
+			color: #6b7280;
+			font-weight: 500;
 		}
 		.strategy-link:hover{
-			color:#5b9bd1 !important;
+			color:#5b9bd1;
 		}
 		.home-link:hover{
-			color:#5b9bd1 !important;
+			color:#5b9bd1;
 		}
 		.ai-link:hover{
-			color:#409eff !important;
+			color:#5b9bd1;
 		}
 	}
 	.betaNote {

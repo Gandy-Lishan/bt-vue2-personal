@@ -17,7 +17,7 @@ export function getAIPick(date) {
   return new Promise((resolve,reject)=>{
     const url = '/ai/aiPick?date='+ date
     axios.get(url).then(res=>{
-      resolve(res)
+      resolve(res.data)
     }).catch(err=>{
       reject(err)
     })
@@ -28,7 +28,7 @@ export function getBacktestInfo(data) {
   return new Promise((resolve,reject)=>{
     const url = '/ai/bt'
     axios.post(url,qs.stringify(data)).then(res=>{
-      resolve(res)
+      resolve(res.data)
     }).catch(err=>{
       reject(err)
     })

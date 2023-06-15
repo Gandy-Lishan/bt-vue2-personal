@@ -334,7 +334,7 @@ export default {
         _this.tabPosition = 'top'
       }
       var chartBox = document.getElementsByClassName('chart_box')[0]
-      chartBox.style.width = ''
+      if(chartBox) chartBox.style.width = ''
     })
 
     this.myBrowser()
