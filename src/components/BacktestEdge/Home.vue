@@ -135,7 +135,7 @@
 					><favorite
 						ref="favoriteChild"
 						@refHistoryForm="refHistoryForm"
-            @goToHistoryForm="goToHistoryForm"
+						@goToHistoryForm="goToHistoryForm"
 						@goTobacktestSetupForm="goTobacktestSetupForm"
 						@goBacktestResultForm="goBacktestResultForm"
 						@goToFavoritesForm="goToFavoritesForm"
@@ -153,32 +153,65 @@
 					></sample
 				></el-tab-pane>
 				<el-tab-pane label="Analysts' Backtest" name="sixth">
-					<router-view @goToHistoryForm="goToHistoryForm"  @refHistoryForm="refHistoryForm" @goTobacktestSetupForm="goTobacktestSetupForm" @goBacktestResultForm="goBacktestResultForm"></router-view>
+					<router-view
+						@goToHistoryForm="goToHistoryForm"
+						@refHistoryForm="refHistoryForm"
+						@goTobacktestSetupForm="goTobacktestSetupForm"
+						@goBacktestResultForm="goBacktestResultForm"
+					></router-view>
 				</el-tab-pane>
 				<el-tab-pane :label="renderLabel()" name="seventh" v-if="0">
 					<router-view></router-view>
 				</el-tab-pane>
 			</el-tabs>
 			<div class="maintabBtnContainer">
-					<div>
-						<button class='sidebar activated' ref="setup" @click="switchMainTab('setup')">
+				<div>
+					<button
+						class="sidebar activated"
+						ref="setup"
+						@click="switchMainTab('setup')"
+					>
 						<div>
-						<svg class='sidebar_button_icon' width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path fill-rule="evenodd" clip-rule="evenodd" d="M9.54049 8.59834L11 10.1387L10.1839 11L8.72434 9.45968C8.21313 9.83138 7.59301 10.0495 6.92526 10.0495C5.17227 10.0495 3.75119 8.5497 3.75119 6.69964C3.75119 4.84062 5.16378 3.34982 6.92526 3.34982C8.68674 3.34982 10.0993 4.84062 10.0993 6.69964C10.0993 7.40436 9.8927 8.05882 9.54049 8.59834ZM6.96527e-07 -8.88999e-09L10.3879 -2.67563e-08L10.3879 1.21812L6.43281e-07 1.21812L6.96527e-07 -8.88999e-09ZM8.94513 6.69964C8.94513 5.51337 8.04929 4.56794 6.92526 4.56794C5.80123 4.56794 4.9054 5.51337 4.9054 6.69964C4.9054 7.87695 5.80972 8.83135 6.92526 8.83135C7.48319 8.83135 7.98737 8.59342 8.35352 8.20699C8.71968 7.82056 8.94513 7.28847 8.94513 6.69964ZM4.83544e-07 4.87247L2.88552 4.87247L2.88552 6.09058L4.30299e-07 6.09058L4.83544e-07 4.87247ZM2.70562e-07 9.74494L2.88552 9.74494L2.88552 10.9631L2.17316e-07 10.9631L2.70562e-07 9.74494Z"/>
-						</svg>
-						<span>Backtest setup and result</span>
-						</div></button>
-					</div>
-					<div>
-						<button class='sidebar' ref="list" @click="switchMainTab('list')">
+							<svg
+								class="sidebar_button_icon"
+								width="11"
+								height="11"
+								viewBox="0 0 11 11"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									fill-rule="evenodd"
+									clip-rule="evenodd"
+									d="M9.54049 8.59834L11 10.1387L10.1839 11L8.72434 9.45968C8.21313 9.83138 7.59301 10.0495 6.92526 10.0495C5.17227 10.0495 3.75119 8.5497 3.75119 6.69964C3.75119 4.84062 5.16378 3.34982 6.92526 3.34982C8.68674 3.34982 10.0993 4.84062 10.0993 6.69964C10.0993 7.40436 9.8927 8.05882 9.54049 8.59834ZM6.96527e-07 -8.88999e-09L10.3879 -2.67563e-08L10.3879 1.21812L6.43281e-07 1.21812L6.96527e-07 -8.88999e-09ZM8.94513 6.69964C8.94513 5.51337 8.04929 4.56794 6.92526 4.56794C5.80123 4.56794 4.9054 5.51337 4.9054 6.69964C4.9054 7.87695 5.80972 8.83135 6.92526 8.83135C7.48319 8.83135 7.98737 8.59342 8.35352 8.20699C8.71968 7.82056 8.94513 7.28847 8.94513 6.69964ZM4.83544e-07 4.87247L2.88552 4.87247L2.88552 6.09058L4.30299e-07 6.09058L4.83544e-07 4.87247ZM2.70562e-07 9.74494L2.88552 9.74494L2.88552 10.9631L2.17316e-07 10.9631L2.70562e-07 9.74494Z"
+								/>
+							</svg>
+							<span>Backtest setup and result</span>
+						</div>
+					</button>
+				</div>
+				<div>
+					<button class="sidebar" ref="list" @click="switchMainTab('list')">
 						<div>
-						<svg class='sidebar_button_icon' width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path fill-rule="evenodd" clip-rule="evenodd" d="M0 1.2C0 0.537259 0.526723 0 1.17647 0H7.5966L10 2.45147V10.8C10 11.4627 9.47328 12 8.82353 12H1.17647C0.526724 12 0 11.4627 0 10.8V1.2ZM7.10929 1.2L1.17647 1.2V10.8H8.82353V2.94853L7.10929 1.2ZM7.35294 5.7H2.64706V4.5H7.35294V5.7ZM5.58824 8.1H2.64706V6.9H5.58824V8.1Z"/>
-						</svg>
-						<span>Backtest list</span>
-						</div></button>
-					</div>
-					<!-- <div>
+							<svg
+								class="sidebar_button_icon"
+								width="10"
+								height="12"
+								viewBox="0 0 10 12"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									fill-rule="evenodd"
+									clip-rule="evenodd"
+									d="M0 1.2C0 0.537259 0.526723 0 1.17647 0H7.5966L10 2.45147V10.8C10 11.4627 9.47328 12 8.82353 12H1.17647C0.526724 12 0 11.4627 0 10.8V1.2ZM7.10929 1.2L1.17647 1.2V10.8H8.82353V2.94853L7.10929 1.2ZM7.35294 5.7H2.64706V4.5H7.35294V5.7ZM5.58824 8.1H2.64706V6.9H5.58824V8.1Z"
+								/>
+							</svg>
+							<span>Backtest list</span>
+						</div>
+					</button>
+				</div>
+				<!-- <div>
 					<el-tooltip
 					class="item"
 					effect="dark"
@@ -195,7 +228,7 @@
 					</el-tooltip>
 					</div> -->
 			</div>
-      <el-tooltip
+			<el-tooltip
 				class="item"
 				effect="dark"
 				content="Back to the top"
@@ -237,9 +270,20 @@
 				placement="bottom"
 			>
 				<button class="createNew" @click="refreshPage">
-					<svg class='sidebar_button_icon' width="12" height="12" viewBox="0 0 12 12" fill="white" xmlns="http://www.w3.org/2000/svg">
-							<path fill-rule="evenodd" clip-rule="evenodd" d="M2.65079 2.59434C3.35727 1.87621 4.22963 1.43305 5.14214 1.26312L4.91451 0C3.75791 0.215381 2.65102 0.77807 1.75752 1.68632C-0.585841 4.06838 -0.585841 7.93048 1.75752 10.3125L0.679249 11.4086H3.72907V8.30844L2.65079 9.40452C0.80077 7.52394 0.80077 4.47492 2.65079 2.59434ZM11.3208 0.591377H8.27093V3.69156L9.34921 2.59548C11.1992 4.47606 11.1992 7.52508 9.3492 9.40566C8.64273 10.1238 7.77037 10.567 6.85785 10.7369L7.08549 12C8.24209 11.7846 9.34898 11.2219 10.2425 10.3137C12.5858 7.93161 12.5858 4.06952 10.2425 1.68746L11.3208 0.591377Z"/>
-						</svg>
+					<svg
+						class="sidebar_button_icon"
+						width="12"
+						height="12"
+						viewBox="0 0 12 12"
+						fill="white"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M2.65079 2.59434C3.35727 1.87621 4.22963 1.43305 5.14214 1.26312L4.91451 0C3.75791 0.215381 2.65102 0.77807 1.75752 1.68632C-0.585841 4.06838 -0.585841 7.93048 1.75752 10.3125L0.679249 11.4086H3.72907V8.30844L2.65079 9.40452C0.80077 7.52394 0.80077 4.47492 2.65079 2.59434ZM11.3208 0.591377H8.27093V3.69156L9.34921 2.59548C11.1992 4.47606 11.1992 7.52508 9.3492 9.40566C8.64273 10.1238 7.77037 10.567 6.85785 10.7369L7.08549 12C8.24209 11.7846 9.34898 11.2219 10.2425 10.3137C12.5858 7.93161 12.5858 4.06952 10.2425 1.68746L11.3208 0.591377Z"
+						/>
+					</svg>
 				</button>
 			</el-tooltip>
 			<!-- <el-tooltip class="createNew_hint" effect="dark" placement="top">
@@ -299,7 +343,7 @@ export default {
         { label: 'Exit with custom TIM frame', value: 'exit_with_custom_TIM_frame' }
       ],
       resultEditData: {},
-	  mainTabState: 0
+      mainTabState: 0
     }
   },
   components: {
@@ -316,8 +360,8 @@ export default {
   async mounted() {
     let toTop = document.getElementsByClassName('toTop')[0]
     toTop.style.visibility = 'hidden'
-	let maintabBtn = document.getElementsByClassName('maintabBtnContainer')[0]
-	maintabBtn.style.visibility = 'hidden'
+    let maintabBtn = document.getElementsByClassName('maintabBtnContainer')[0]
+    maintabBtn.style.visibility = 'hidden'
     // When DOM renders data, set the height of the lower area to the height of the browser's visible area
     // Listen for the resize event of the window. Set the height of the lower area when the browser window changes
     const _this = this
@@ -396,19 +440,19 @@ export default {
     scroll: {
       handler(val) {
         try {
-		  if(typeof val == 'string') val=360
+          if (typeof val == 'string') val = 360
           let toTop = document.getElementsByClassName('toTop')[0]
-		  let maintabBtn = document.getElementsByClassName('maintabBtnContainer')[0]
+          let maintabBtn = document.getElementsByClassName('maintabBtnContainer')[0]
           if (val <= 600) {
             toTop.style.visibility = 'hidden'
           } else {
             toTop.style.visibility = 'visible'
           }
-		  if (val <= 350) {
-				maintabBtn.style.visibility = 'hidden'
-			} else {
-				maintabBtn.style.visibility = 'visible'
-			}
+          if (val <= 350) {
+            maintabBtn.style.visibility = 'hidden'
+          } else {
+            maintabBtn.style.visibility = 'visible'
+          }
         } catch (err) { }
       },
       immediate: true,
@@ -435,41 +479,41 @@ export default {
     }
   },
   methods: {
-		animationUp: function (ph) {
-			window.scrollTo({
-				top: ph,
-				behavior: 'smooth'
-			})
-		},
-		switchMainTab: function (refName) {
-			this.mainTabState = refName == 'setup' ? 0 : 1
-			if (!this.mainTabState) {
-				
-				this.$refs.tabs.$children[0].$refs.tabs[0].style.display = 'unset'
-				this.$refs.tabs.$children[0].$refs.tabs[1].style.display = 'none'
-				this.$refs.tabs.$children[0].$refs.tabs[2].style.display = 'unset'
-				this.$refs.tabs.$children[0].$refs.tabs[3].style.display = 'none'
-				this.$refs.tabs.$children[0].$refs.tabs[4].style.display = 'none'
-				this.$refs.tabs.$children[0].$refs.tabs[5].style.display = 'none'
-				this.activeName = 'first'
+    animationUp: function (ph) {
+      window.scrollTo({
+        top: ph,
+        behavior: 'smooth'
+      })
+    },
+    switchMainTab: function (refName) {
+      this.mainTabState = refName == 'setup' ? 0 : 1
+      if (!this.mainTabState) {
 
-				this.$refs.setup.classList.add('activated')
-				this.$refs.list.classList.remove('activated')
-				this.animationUp(650)
-			} else {
-				this.$refs.tabs.$children[0].$refs.tabs[0].style.display = 'none'
-				this.$refs.tabs.$children[0].$refs.tabs[1].style.display = 'unset'
-				this.$refs.tabs.$children[0].$refs.tabs[2].style.display = 'none'
-				this.$refs.tabs.$children[0].$refs.tabs[3].style.display = 'unset'
-				this.$refs.tabs.$children[0].$refs.tabs[4].style.display = 'unset'
-				this.$refs.tabs.$children[0].$refs.tabs[5].style.display = 'unset'
-				this.activeName = 'second'
+        this.$refs.tabs.$children[0].$refs.tabs[0].style.display = 'unset'
+        this.$refs.tabs.$children[0].$refs.tabs[1].style.display = 'none'
+        this.$refs.tabs.$children[0].$refs.tabs[2].style.display = 'unset'
+        this.$refs.tabs.$children[0].$refs.tabs[3].style.display = 'none'
+        this.$refs.tabs.$children[0].$refs.tabs[4].style.display = 'none'
+        this.$refs.tabs.$children[0].$refs.tabs[5].style.display = 'none'
+        this.activeName = 'first'
 
-				this.$refs.setup.classList.remove('activated')
-				this.$refs.list.classList.add('activated')
-				this.animationUp(650)
-			}
-		},
+        this.$refs.setup.classList.add('activated')
+        this.$refs.list.classList.remove('activated')
+        this.animationUp(650)
+      } else {
+        this.$refs.tabs.$children[0].$refs.tabs[0].style.display = 'none'
+        this.$refs.tabs.$children[0].$refs.tabs[1].style.display = 'unset'
+        this.$refs.tabs.$children[0].$refs.tabs[2].style.display = 'none'
+        this.$refs.tabs.$children[0].$refs.tabs[3].style.display = 'unset'
+        this.$refs.tabs.$children[0].$refs.tabs[4].style.display = 'unset'
+        this.$refs.tabs.$children[0].$refs.tabs[5].style.display = 'unset'
+        this.activeName = 'second'
+
+        this.$refs.setup.classList.remove('activated')
+        this.$refs.list.classList.add('activated')
+        this.animationUp(650)
+      }
+    },
     myBrowser: function () {
       //Get the useragent string of the browser
       var userAgent = navigator.userAgent
@@ -646,8 +690,8 @@ export default {
         CIQ.addIndicators()
       }
       this.createNewBacktest()
-	  this.animationUp(0)
-	  this.switchMainTab('setup')
+      this.animationUp(0)
+      this.switchMainTab('setup')
     },
     addEntrySignalLength(index) {
       let obj = {}
@@ -669,7 +713,7 @@ export default {
       this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
       this.$store.commit('getMA', data.activatedMA)
       // 暂定，读取回测携带的ma位置和信息
-			this.$store.commit('getMALayout', data.activatedMALayout)
+      this.$store.commit('getMALayout', data.activatedMALayout)
       this.$store.commit('setTechSD', data.savedTechSD)
 
       switch (freq) {
@@ -694,7 +738,7 @@ export default {
     runBacktest: throttle(async function () {
       try {
         let setUp = this.$refs.setUpChild.saveBacktestData()
-        if(!setUp) return
+        if (!setUp) return
         let setUpChecked = true
         let entryChecked = true
         // let isEdit = this.$refs.setUpChild.isEdit()
@@ -718,7 +762,7 @@ export default {
         // if (setUpRes.data.count == 0 && !isEdit) this.$store.commit('clearBacktestUuid')
 
         // if (setUpRes.data.count == 0 || isEdit) {
-          // 有名字并且是编辑 没名字是编辑 没名字是新建
+        // 有名字并且是编辑 没名字是编辑 没名字是新建
         if ((setUpRes.data.count != 0 && backtestInfo.hasOwnProperty('old_uuid')) || (setUpRes.data.count == 0) && backtestInfo.hasOwnProperty('old_uuid') || (setUpRes.data.count == 0) && !backtestInfo.hasOwnProperty('old_uuid')) {
           let entry
           for (let index = 0; index < this.entryLength; index++) {
@@ -734,7 +778,7 @@ export default {
             this.$refs.entryChild.saveRelation()
           }
           const checked = entryChecked && setUpChecked && setUp
-          if(!checked) return
+          if (!checked) return
           if (checked) {
             let exit
             let exitChecked
@@ -759,9 +803,10 @@ export default {
                 JSON.stringify(vm.$store.state.backtestInfo)
               )
               console.log('store 中存储的 backtestdata', backtestData)
-              let entry_description = JSON.parse(
-                JSON.stringify(vm.$store.state.backtestInfo.entry_description)
-              )
+              let entry_description = vm.$store.state.backtestInfo.entry_description
+              if (typeof entry_description == 'string') {
+                entry_description = JSON.parse(vm.$store.state.backtestInfo.entry_description)
+              }
               let sameEntryIndexArr = searchKeys(entry_description)
               if (vm.entryRelation == 3) {
                 sameEntryIndexArr = []
@@ -786,10 +831,10 @@ export default {
                   return
                 }
               }
-              let exit_description = JSON.parse(
-                JSON.stringify(vm.$store.state.backtestInfo.exit_description)
-              )
-
+              let exit_description = vm.$store.state.backtestInfo.exit_description
+              if (typeof exit_description == 'string') {
+                exit_description = JSON.parse(vm.$store.state.backtestInfo.exit_description)
+              }
               let sameExitIndexArr = searchKeys(exit_description)
               if (vm.exitRelation == 3) {
                 sameExitIndexArr = []
@@ -1231,7 +1276,7 @@ export default {
     async goTobacktestSetupForm(id, resData, action, callback) {
       CIQ.nprogress.inc()
       CIQ.setCoverText('Restoring Backtest form...')
-	  this.switchMainTab('setup')
+      this.switchMainTab('setup')
 
       this.$refs.setUpChild.clearForm()
       this.$refs.entryChild.clearForm()
@@ -1414,9 +1459,9 @@ export default {
     switchTab(tabName) {
       this.activeName = tabName
     },
-	rerun() {
-		this.runBacktest()
-	}
+    rerun() {
+      this.runBacktest()
+    }
   }
 }
 </script>
@@ -1510,11 +1555,11 @@ header {
 	align-items: flex-start;
 }
 .divider {
-    width: 1.5px;
-    background-color: #e8e6e6;
-    opacity: 0.8;
-    margin: 10px;
-    align-self: stretch
+	width: 1.5px;
+	background-color: #e8e6e6;
+	opacity: 0.8;
+	margin: 10px;
+	align-self: stretch;
 }
 @media (min-width: 820px) and (max-width: 1279px) {
 	.criteria-box {
@@ -1538,25 +1583,25 @@ header {
 	margin-top: 10px;
 	display: flex;
 	justify-content: center;
-  align-items: center;
+	align-items: center;
 	margin-right: 20px;
 	padding-bottom: 10px;
 	margin-bottom: 12px;
 	.el-button:first-child {
 		background: rgb(251, 192, 92);
-    border: none;
-    width: 250px;
+		border: none;
+		width: 250px;
 	}
-  .el-button:first-child:hover {
-    background-color: #f59e0b;
+	.el-button:first-child:hover {
+		background-color: #f59e0b;
 	}
 	.el-button:last-child {
 		background: #5b9bd1;
-    border: none;
-    width: 250px;
+		border: none;
+		width: 250px;
 	}
-  .el-button:last-child:hover {
-    background-color: #409EFF;
+	.el-button:last-child:hover {
+		background-color: #409eff;
 	}
 }
 @media (min-width: 375px) and (max-width: 767px) {
@@ -1612,15 +1657,15 @@ header {
 // maintab btn
 .maintabBtnContainer {
 	position: fixed;
-    left: 0px;
-    bottom: 160px;
+	left: 0px;
+	bottom: 160px;
 	z-index: 999;
 	> * {
-		margin:15px 0;
+		margin: 15px 0;
 	}
 
-	button.sidebar{
-		width:45px;
+	button.sidebar {
+		width: 45px;
 		height: 40px;
 		border-radius: 0px 20px 20px 0px;
 		border: 0;
@@ -1642,47 +1687,48 @@ header {
 			margin: 0 5px;
 		}
 		&:active {
-			position:relative;
-			top:1px;
+			position: relative;
+			top: 1px;
 		}
-		div{
+		div {
 			align-items: center;
 		}
-		span{
+		span {
 			white-space: nowrap;
 			display: none;
 		}
-		&:hover{
+		&:hover {
 			width: 229px;
 			transition: width 0.2s linear;
 		}
-		&:hover span{
+		&:hover span {
 			white-space: nowrap;
 			display: block;
 		}
-		&.refresh svg.sidebar_button_icon{
+		&.refresh svg.sidebar_button_icon {
 			float: none;
 		}
-		&.refresh:hover svg.sidebar_button_icon{
+		&.refresh:hover svg.sidebar_button_icon {
 			float: left;
 		}
-		svg.sidebar_button_icon{
+		svg.sidebar_button_icon {
 			float: left;
 			margin: 0 5px 0 6px;
 			width: 16px;
 			height: 16px;
-			fill:#666666;
+			fill: #666666;
 		}
-		&.activated svg.sidebar_button_icon{
+		&.activated svg.sidebar_button_icon {
 			float: left;
 			margin: 0 5px 0 6px;
 			width: 16px;
 			height: 16px;
-			fill:white;
+			fill: white;
 		}
 	}
 }
-button.createNew,.toTop {
+button.createNew,
+.toTop {
 	// opacity: 0.4;
 	z-index: 999;
 	border: unset;
@@ -1705,12 +1751,12 @@ button.createNew,.toTop {
 	background-origin: initial;
 	background-clip: initial;
 	// background-color: #94989f;
-  // background-color: #f59e0b;
-  background-color:  #fbc05c;
+	// background-color: #f59e0b;
+	background-color: #fbc05c;
 	// box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%),
 	// 	0 10px 10px -5px rgb(0 0 0 / 4%);
-    box-shadow: 0 6px 20px rgba(0,0,0,.15);
-	svg.sidebar_button_icon{
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+	svg.sidebar_button_icon {
 		// float: left;
 		// margin: 0 5px 0 6px;
 		// width: 16px;
@@ -1719,18 +1765,18 @@ button.createNew,.toTop {
 	}
 }
 .toTop {
-  background-color: #b8b9bb;
+	background-color: #b8b9bb;
 	bottom: 110px;
 }
-.createNew:hover{
-  background-color: #f59e0b;
-  box-shadow: 0 6px 20px #f59e0b
+.createNew:hover {
+	background-color: #f59e0b;
+	box-shadow: 0 6px 20px #f59e0b;
 }
-.toTop:hover{
-  background-color: #94989f;
-  box-shadow: 0 6px 20px #94989f
+.toTop:hover {
+	background-color: #94989f;
+	box-shadow: 0 6px 20px #94989f;
 }
-.createNew_hint{
+.createNew_hint {
 	position: fixed;
 	right: 75px;
 	bottom: 120px;
