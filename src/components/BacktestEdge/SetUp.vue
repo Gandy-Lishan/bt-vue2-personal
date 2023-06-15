@@ -306,10 +306,14 @@
 					</el-form-item>
 				</div>
 				<div class="descriptionBox">
-					<a @click="toggleDes">Backtest Description (click to expand)<i :class="isToggle?'el-icon-minus': 'el-icon-plus'"></i></a>
+					<a @click="toggleDes"
+						>Backtest Description (click to expand)<i
+							:class="isToggle ? 'el-icon-minus' : 'el-icon-plus'"
+						></i
+					></a>
 					<div class="des-content" v-show="isToggle">
-            <div class="des">
-						<el-form-item
+						<div class="des">
+							<!-- <el-form-item
             v-if="bd.description.Introduction != 'edit'"
 							label="Introduction"
 							prop="introduction"
@@ -321,22 +325,48 @@
 								v-model="bd.description.Introduction"
 							>
 							</el-input>
-						</el-form-item>
-						<el-form-item
-              v-if="bd.description.Rules"
-							label="Rules"
-							prop="rules"
-							placeholder="Give the backtest rules"
-						>
-							<el-input
-                disabled
-								type="textarea"
-								:autosize="{ minRows: 2, maxRows: 5 }"
-								v-model="bd.description.Rules"
+						</el-form-item> -->
+            <!-- 开放权限都可以改 -->
+							<el-form-item
+								label="Introduction"
+								prop="introduction"
+								placeholder="Give the backtest a introduction"
 							>
-							</el-input>
-						</el-form-item>
-            </div>
+								<el-input
+									type="textarea"
+									:autosize="{ minRows: 2, maxRows: 5 }"
+									v-model="bd.description.Introduction"
+								>
+								</el-input>
+							</el-form-item>
+							<!-- <el-form-item
+								v-if="bd.description.Rules"
+								label="Rules"
+								prop="rules"
+								placeholder="Give the backtest rules"
+							>
+								<el-input
+                  disabled
+									type="textarea"
+									:autosize="{ minRows: 2, maxRows: 5 }"
+									v-model="bd.description.Rules"
+								>
+								</el-input>
+							</el-form-item> -->
+              <!-- 开放权限都可以改 -->
+              <el-form-item
+								label="Rules"
+								prop="rules"
+								placeholder="Give the backtest rules"
+							>
+								<el-input
+									type="textarea"
+									:autosize="{ minRows: 2, maxRows: 5 }"
+									v-model="bd.description.Rules"
+								>
+								</el-input>
+							</el-form-item>
+						</div>
 					</div>
 				</div>
 			</el-row>
@@ -725,14 +755,15 @@ export default {
         const entry_description = entry_des_list.length !== 0 ? entry_des_list.reduce((accumulator, currentValue) => accumulator + currentValue.commentDes, '') : entry_des_list[0].commentDes
         const exit_description = exit_des_list.length !== 0 ? exit_des_list.reduce((accumulator, currentValue) => accumulator + currentValue.commentDes, '') : exit_des_list[0].commentDes
         try {
-          if(newVal.description == null || newVal.description == undefined) {
+          if (newVal.description == null || newVal.description == undefined) {
             throw new Error('description is null')
           }
           newVal.description = JSON.parse(newVal.description)
         } catch (error) {
           console.log(error)
           newVal.description = {}
-          newVal.description.Introduction = 'edit'
+          // newVal.description.Introduction = 'edit'
+          newVal.description.Introduction = ''
           newVal.description.Rules = entry_description + exit_description
         }
         newVal.commission = (newVal.commission * 100).toFixed(2)
@@ -1384,12 +1415,12 @@ export default {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-  justify-content: space-between
+	justify-content: space-between;
 }
 .descriptionBox a:hover {
 	color: #5b9bd1;
 }
-.des-content{
-  margin-top: 10px;
+.des-content {
+	margin-top: 10px;
 }
 </style>
