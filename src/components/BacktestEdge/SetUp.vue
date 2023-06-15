@@ -725,8 +725,12 @@ export default {
         const entry_description = entry_des_list.length !== 0 ? entry_des_list.reduce((accumulator, currentValue) => accumulator + currentValue.commentDes, '') : entry_des_list[0].commentDes
         const exit_description = exit_des_list.length !== 0 ? exit_des_list.reduce((accumulator, currentValue) => accumulator + currentValue.commentDes, '') : exit_des_list[0].commentDes
         try {
+          if(newVal.description == null || newVal.description == undefined) {
+            throw new Error('description is null')
+          }
           newVal.description = JSON.parse(newVal.description)
         } catch (error) {
+          console.log(error)
           newVal.description = {}
           newVal.description.Introduction = 'edit'
           newVal.description.Rules = entry_description + exit_description
