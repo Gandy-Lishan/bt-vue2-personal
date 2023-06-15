@@ -52,23 +52,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// .toggle-enter-active, .toggle-leave-active {
-//   transition: opacity 0.5s;
-//   transition: transform 0.5s;
-// }
-
-// .toggle-enter-to, .toggle-leave {
-//   opacity: 0;
-// }
-// .toggle-leave-to {
-//   transform: translateX(100%);
-// }
 .toggle-enter-active {
   transition: transform 0.5s;
 }
 
 .toggle-enter-from {
-  transform: translateX(-100%);
+  transform: translateX(50%);
 }
 
 .toggle-leave-active {
@@ -76,7 +65,7 @@ export default {
 }
 
 .toggle-leave-to {
-  transform: translateX(100%);
+  transform: translateX(-100%);
 }
 </style>
 
