@@ -40,6 +40,7 @@
 			</div>
 			<el-tabs
 				ref="tabs"
+				class="tabs"
 				v-model="activeName"
 				type="card"
 				stretch
@@ -71,6 +72,7 @@
 									@getEntryRelation="getEntryRelation"
 									@sendEntrySignalIndex="sendEntrySignalIndex"
 								></entry>
+								<div class="divider"></div>
 								<exit
 									ref="exitChild"
 									:direction="direction"
@@ -176,7 +178,7 @@
 						<span>Backtest list</span>
 						</div></button>
 					</div>
-					<div>
+					<!-- <div>
 					<el-tooltip
 					class="item"
 					effect="dark"
@@ -191,8 +193,61 @@
 						</div>
 						</button>
 					</el-tooltip>
-					</div>
-				</div>
+					</div> -->
+			</div>
+      <el-tooltip
+				class="item"
+				effect="dark"
+				content="Back to the top"
+				placement="bottom"
+			>
+				<button class="toTop" @click="animationUp(0)">
+					<svg
+						width="12"
+						height="15"
+						viewBox="0 0 22 30"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M-1.31134e-07 1.5C-5.87107e-08 0.671573 0.642374 5.61581e-08 1.43478 1.25433e-07L20.5652 1.79787e-06C21.3576 1.86714e-06 22 0.671574 22 1.5C22 2.32843 21.3576 3 20.5652 3L1.43478 3C0.642374 3 -2.03557e-07 2.32843 -1.31134e-07 1.5Z"
+							fill="#F9FAFB"
+						></path>
+						<path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M11.5 30C10.6716 30 10 29.2645 10 28.3571L10 8.64286C10 7.73553 10.6716 7 11.5 7C12.3284 7 13 7.73553 13 8.64286L13 28.3571C13 29.2645 12.3284 30 11.5 30Z"
+							fill="#F9FAFB"
+						></path>
+						<path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M21.5079 18.5152C20.8519 19.1616 19.7881 19.1616 19.1321 18.5152L11.5 10.9959L3.86794 18.5152C3.21186 19.1616 2.14814 19.1616 1.49206 18.5152C0.835983 17.8688 0.835983 16.8208 1.49206 16.1744L10.3121 7.48479C10.9681 6.8384 12.0319 6.8384 12.6879 7.48479L21.5079 16.1744C22.164 16.8208 22.164 17.8688 21.5079 18.5152Z"
+							fill="#F9FAFB"
+						></path>
+					</svg>
+				</button>
+			</el-tooltip>
+			<el-tooltip
+				class="item"
+				effect="dark"
+				content="Create New Backtest"
+				placement="bottom"
+			>
+				<button class="createNew" @click="refreshPage">
+					<svg class='sidebar_button_icon' width="12" height="12" viewBox="0 0 12 12" fill="white" xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd" clip-rule="evenodd" d="M2.65079 2.59434C3.35727 1.87621 4.22963 1.43305 5.14214 1.26312L4.91451 0C3.75791 0.215381 2.65102 0.77807 1.75752 1.68632C-0.585841 4.06838 -0.585841 7.93048 1.75752 10.3125L0.679249 11.4086H3.72907V8.30844L2.65079 9.40452C0.80077 7.52394 0.80077 4.47492 2.65079 2.59434ZM11.3208 0.591377H8.27093V3.69156L9.34921 2.59548C11.1992 4.47606 11.1992 7.52508 9.3492 9.40566C8.64273 10.1238 7.77037 10.567 6.85785 10.7369L7.08549 12C8.24209 11.7846 9.34898 11.2219 10.2425 10.3137C12.5858 7.93161 12.5858 4.06952 10.2425 1.68746L11.3208 0.591377Z"/>
+						</svg>
+				</button>
+			</el-tooltip>
+			<!-- <el-tooltip class="createNew_hint" effect="dark" placement="top">
+              <span slot="content"
+                >Clear current chart & Backtest Setup Form and create a new backtest.
+              </span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip> -->
 		</main>
 	</div>
 </template>
@@ -287,7 +342,7 @@ export default {
     const pathname = window.location.pathname
     if (pathname.includes('backtests')) {
       this.activeName = 'sixth';
-      const targetPath = '/home/backtests';
+      const targetPath = '/home/backtester/backtests';
       if (this.$route.path !== targetPath) {
         this.$router.push(targetPath);
       }
@@ -333,8 +388,7 @@ export default {
     } catch (error) {
       vm.$message({
         message: 'The internal server is busy, please try again later ',
-        type: 'error',
-        offset: 300
+        type: 'error'
       })
     }
   },
@@ -533,19 +587,19 @@ export default {
           this.$refs.sampleChild.getSampleList()
           break
         case 'sixth':
-          targetPath = '/home/backtests'
+          targetPath = '/home/backtester/backtests'
           if (this.$route.path !== targetPath) {
             this.$router.push(targetPath);
           }
           break
         case 'seventh':
-          targetPath = '/home/brainstorm'
+          targetPath = '/home/backtester/brainstorm'
           if (this.$route.path !== targetPath) {
             this.$router.push(targetPath);
           }
         default:
           if (window.location.pathname.includes('backtests')) {
-            targetPath = '/home/backtests';
+            targetPath = '/home/backtester/backtests';
             if (this.$route.path !== targetPath) {
               this.$router.push(targetPath);
             }
@@ -593,6 +647,7 @@ export default {
       }
       this.createNewBacktest()
 	  this.animationUp(0)
+	  this.switchMainTab('setup')
     },
     addEntrySignalLength(index) {
       let obj = {}
@@ -613,6 +668,8 @@ export default {
       this.$store.commit('getExtraIndicators', [])
       this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
       this.$store.commit('getMA', data.activatedMA)
+      // 暂定，读取回测携带的ma位置和信息
+			this.$store.commit('getMALayout', data.activatedMALayout)
       this.$store.commit('setTechSD', data.savedTechSD)
 
       switch (freq) {
@@ -637,6 +694,7 @@ export default {
     runBacktest: throttle(async function () {
       try {
         let setUp = this.$refs.setUpChild.saveBacktestData()
+        if(!setUp) return
         let setUpChecked = true
         let entryChecked = true
         // let isEdit = this.$refs.setUpChild.isEdit()
@@ -650,8 +708,7 @@ export default {
         if (setUpRes.data.count != 0 && !backtestInfo.hasOwnProperty('old_uuid')) {
           this.$message({
             message: 'The backtest name already exists',
-            type: 'error',
-            offset: 300
+            type: 'error'
           })
           setUpChecked = false
           this.$store.commit('clearBacktest')
@@ -662,7 +719,6 @@ export default {
 
         // if (setUpRes.data.count == 0 || isEdit) {
           // 有名字并且是编辑 没名字是编辑 没名字是新建
-          console.log('有无名字：', setUpRes.data.count, '有无 old_uuid：', backtestInfo.hasOwnProperty('old_uuid'))
         if ((setUpRes.data.count != 0 && backtestInfo.hasOwnProperty('old_uuid')) || (setUpRes.data.count == 0) && backtestInfo.hasOwnProperty('old_uuid') || (setUpRes.data.count == 0) && !backtestInfo.hasOwnProperty('old_uuid')) {
           let entry
           for (let index = 0; index < this.entryLength; index++) {
@@ -677,7 +733,9 @@ export default {
             this.$refs.entryChild.saveDelayBar()
             this.$refs.entryChild.saveRelation()
           }
-          if (entryChecked && setUpChecked && setUp) {
+          const checked = entryChecked && setUpChecked && setUp
+          if(!checked) return
+          if (checked) {
             let exit
             let exitChecked
             for (let index = 0; index < this.exitLength; index++) {
@@ -700,6 +758,7 @@ export default {
               let backtestData = JSON.parse(
                 JSON.stringify(vm.$store.state.backtestInfo)
               )
+              console.log('store 中存储的 backtestdata', backtestData)
               let entry_description = JSON.parse(
                 JSON.stringify(vm.$store.state.backtestInfo.entry_description)
               )
@@ -720,8 +779,7 @@ export default {
                       'The current entry ' +
                       str +
                       ' are the same, please change',
-                    type: 'error',
-                    offset: 300
+                    type: 'error'
                   })
                   CIQ.hideCover()
                   CIQ.nprogress.done()
@@ -749,8 +807,7 @@ export default {
                       'The current exit ' +
                       str +
                       ' are the same, please change',
-                    type: 'error',
-                    offset: 300
+                    type: 'error'
                   })
                   CIQ.hideCover()
                   CIQ.nprogress.done()
@@ -934,7 +991,6 @@ export default {
                   }
                 ]
               }
-
               let entry = {
                 description: backtestData.entry.description,
                 score: backtestData.entry.score,
@@ -956,6 +1012,7 @@ export default {
               }
               delete backtestData.entry
               delete backtestData.exit
+              backtestData.description = JSON.stringify(backtestData.description)
               backtestData.entry = JSON.stringify(entry)
               backtestData.exit = JSON.stringify(exit)
               if (Array.isArray(entry_description)) {
@@ -995,7 +1052,8 @@ export default {
 
               indicatorLayout.savedTechSD = savedTechSD
               indicatorLayout.activatedMA = this.$store.state.activatedMA
-
+              // 暂定，把MA对应位置和信息存在回测内
+              indicatorLayout.activatedMALayout = this.$store.state.activatedMALayout
               backtestData.indicator_layout = JSON.stringify(
                 indicatorLayout
               ).replaceAll('\u200c', '$r001$')
@@ -1040,6 +1098,7 @@ export default {
               backtestParams.backtest_period = backtestData.backtest_period
               backtestParams.trade_price = backtestData.trade_price
               backtestParams.exclude_oo = backtestData.exclude_oo
+              backtestParams.description = backtestData.description
 
               console.log('处理过后的 backtestData', backtestParams)
               backtestParams = JSON.stringify(backtestParams)
@@ -1111,15 +1170,13 @@ export default {
                         vm.$message({
                           message:
                             'This backtest is already in your history list',
-                          type: 'error',
-                          offset: 300
+                          type: 'error'
                         })
                       } else {
                         vm.$message({
                           message:
                             'The internal server is busy, please try again later ',
-                          type: 'error',
-                          offset: 300
+                          type: 'error'
                         })
                       }
 
@@ -1163,8 +1220,7 @@ export default {
         this.$notify({
           title: 'Failed',
           message: 'The internal server is busy, please try again later',
-          type: 'error',
-          offset: 100
+          type: 'error'
         })
       }
       this.$refs.setUpChild.clearOldBacktestName()
@@ -1259,8 +1315,7 @@ export default {
         console.error(error)
         vm.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
         CIQ.hideCover()
         CIQ.nprogress.done()
@@ -1300,7 +1355,6 @@ export default {
       this.$notify({
         title: 'Try Another',
         message: 'The backtest cannot request data, please change parameter',
-        offset: 100,
         type: 'warning'
       })
     },
@@ -1352,7 +1406,7 @@ export default {
     },
     handleTabChange(value) {
       this.activeName = 'seventh'
-      const targetPath = `/home/brainstorm/${value}`;
+      const targetPath = `/home/backtester/brainstorm/${value}`;
       if (this.$route.path !== targetPath) {
         this.$router.push(targetPath);
       }
@@ -1368,7 +1422,7 @@ export default {
 </script>
 <style lang="less" scoped>
 main {
-	padding: 0 50px;
+	padding: 0 80px;
 	background: #f9fafb;
 }
 .gradient {
@@ -1440,7 +1494,7 @@ header {
 }
 
 .criteria-container {
-	padding: 10px;
+	// padding: 10px;
 }
 .chart_box {
 	padding: 10px 10px;
@@ -1453,6 +1507,14 @@ header {
 	display: flex;
 	justify-content: space-between;
 	border-bottom: 1px solid #797979;
+	align-items: flex-start;
+}
+.divider {
+    width: 1.5px;
+    background-color: #e8e6e6;
+    opacity: 0.8;
+    margin: 10px;
+    align-self: stretch
 }
 @media (min-width: 820px) and (max-width: 1279px) {
 	.criteria-box {
@@ -1475,15 +1537,26 @@ header {
 .backtest-btns {
 	margin-top: 10px;
 	display: flex;
-	justify-content: flex-end;
+	justify-content: center;
+  align-items: center;
 	margin-right: 20px;
 	padding-bottom: 10px;
 	margin-bottom: 12px;
 	.el-button:first-child {
-		background: #d9001b;
+		background: rgb(251, 192, 92);
+    border: none;
+    width: 250px;
+	}
+  .el-button:first-child:hover {
+    background-color: #f59e0b;
 	}
 	.el-button:last-child {
-		background: #03a113;
+		background: #5b9bd1;
+    border: none;
+    width: 250px;
+	}
+  .el-button:last-child:hover {
+    background-color: #409EFF;
 	}
 }
 @media (min-width: 375px) and (max-width: 767px) {
@@ -1608,6 +1681,60 @@ header {
 			fill:white;
 		}
 	}
-
+}
+button.createNew,.toTop {
+	// opacity: 0.4;
+	z-index: 999;
+	border: unset;
+	position: fixed;
+	right: 60px;
+	bottom: 63px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border-radius: 100%;
+	background-image: initial;
+	background-position-x: initial;
+	background-position-y: initial;
+	background-size: initial;
+	background-repeat-x: initial;
+	background-repeat-y: initial;
+	background-attachment: initial;
+	background-origin: initial;
+	background-clip: initial;
+	// background-color: #94989f;
+  // background-color: #f59e0b;
+  background-color:  #fbc05c;
+	// box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%),
+	// 	0 10px 10px -5px rgb(0 0 0 / 4%);
+    box-shadow: 0 6px 20px rgba(0,0,0,.15);
+	svg.sidebar_button_icon{
+		// float: left;
+		// margin: 0 5px 0 6px;
+		// width: 16px;
+		// height: 16px;
+		// fill:#666666;
+	}
+}
+.toTop {
+  background-color: #b8b9bb;
+	bottom: 110px;
+}
+.createNew:hover{
+  background-color: #f59e0b;
+  box-shadow: 0 6px 20px #f59e0b
+}
+.toTop:hover{
+  background-color: #94989f;
+  box-shadow: 0 6px 20px #94989f
+}
+.createNew_hint{
+	position: fixed;
+	right: 75px;
+	bottom: 120px;
+	border: 1px solid black;
+	border-radius: 50%;
 }
 </style>

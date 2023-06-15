@@ -3,23 +3,20 @@
 	<el-row>
 		<el-col :span="24">
 			<div class="favoriteForm_container">
-				<el-input
+        <div class="searchBox">
+          <el-input
 					class="search"
 					style="width: 30vw"
 					size="mini"
 					v-model="searchItem"
-					placeholder=""
+					placeholder="Search for the name of the backtest"
 					@keyup.enter.native="handleQuery"
 					clearable
 					@clear="handleQuery"
-				></el-input>
-				<el-button
-					type="primary"
-					icon="el-icon-search"
-					size="mini"
-					@click="handleQuery"
-					>Search</el-button
 				>
+        <i slot="suffix" class="el-input__icon el-icon-search"></i>
+      </el-input>
+        </div>
 				<el-table
 					header-align="center"
 					:data="backtestList"
@@ -120,8 +117,6 @@
 						show-overflow-tooltip
 						align="center"
 						prop="frequency"
-						sortable="custom"
-						:sort-orders="['frequency']"
 						width="115px"
 					>
 						<template slot-scope="scope">
@@ -134,7 +129,7 @@
 						label="Total Trades"
 						prop="total_trader"
 						sortable="custom"
-						:sort-orders="['total_trader']"
+						:sort-orders="['ascending','descending', 'total_trader']"
 						width="125px"
 					>
 						<template slot-scope="scope">
@@ -153,7 +148,7 @@
 						label="Total Return"
 						prop="total_return"
 						sortable="custom"
-						:sort-orders="['total_return']"
+						:sort-orders="['ascending', 'descending', 'total_return']"
 					>
 						width="133px" ><template slot-scope="scope">
 							<!-- <span v-if="scope.row.result['Total Return (%)']">{{
@@ -388,11 +383,7 @@ export default {
       this.loading = true
       try {
         let res
-        if (this.searchItem) {
-          res = await searchHistoryList(this.searchItem)
-        } else {
-          res = await getHistoryList(this.queryInfo.page, orderby)
-        }
+        res = await getHistoryList(this.queryInfo.page, orderby, this.searchItem)
         if (res.status === 200) {
           this.loading = false
           let historyNameList = []
@@ -441,6 +432,8 @@ export default {
     },
     async applySort() {
       let { prop, order } = this.currentSort;
+      console.log('order', order)
+      console.log('prop', prop)
       //  order: 升 'ascending' | 降'descending' | 取消升降 null | order: total_return 
       if (order == null || order == prop) {
         // 不排序
@@ -452,7 +445,7 @@ export default {
       }
       this.loadTest = 'Loading...'
       this.loading = true
-      const res = await getHistoryList(this.queryInfo.page, prop)
+      const res = await getHistoryList(this.queryInfo.page, prop, this.searchItem)
       if (res.status === 200) {
         this.loading = false
         let historyNameList = []
@@ -523,8 +516,7 @@ export default {
         } catch (error) {
           vm.$message({
             message: 'The internal server is busy, please try again later ',
-            type: 'error',
-            offset: 300
+            type: 'error'
           })
           CIQ.addCover()
           CIQ.nprogress.start()
@@ -564,8 +556,7 @@ export default {
       } catch (error) {
         vm.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
       }
     }, 500),
@@ -601,8 +592,7 @@ export default {
 		} catch (error) {
 			vm.$message({
 				message: 'The internal server is busy, please try again later ',
-				type: 'error',
-				offset: 300
+				type: 'error'
 			})
 		}
 	}, 500),
@@ -622,8 +612,7 @@ export default {
         console.log(error)
         this.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
       }
     },
@@ -635,8 +624,7 @@ export default {
         if (nameRes.data.count != 0) {
           this.$notify.error({
             title: 'Has been Copied',
-            message: 'The backtest has been copied',
-            offset: 100
+            message: 'The backtest has been copied'
           })
           return
         }
@@ -660,8 +648,7 @@ export default {
             this.$notify({
               title: 'Copy successfully',
               message: 'After copying successfully, you can edit the backtest',
-              type: 'success',
-              offset: 100
+              type: 'success'
             })
             this.queryInfo.page = 1
             this.getHistoryList()
@@ -673,16 +660,14 @@ export default {
           if (error.response.status === 500) {
             this.$notify.error({
               title: 'Service is busy',
-              message: 'The internal server is busy, please try again later ',
-              offset: 100
+              message: 'The internal server is busy, please try again later '
             })
           }
         }
       } catch (error) {
         this.$notify.error({
           title: 'Service is busy',
-          message: 'The internal server is busy, please try again later ',
-          offset: 100
+          message: 'The internal server is busy, please try again later '
         })
       }
     }, 1000),
@@ -715,22 +700,19 @@ export default {
       } catch (error) {
         vm.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
       }
       if (!row.result['Total Trades']) {
         this.$notify({
           title: 'No trades',
           message: 'No trades, please change parameter.',
-          offset: 100,
           type: 'warning'
         })
       }
     }, 500),
     handleCurrentChange(newpage) {
       this.queryInfo.page = newpage
-      // this.getHistoryList()
       this.applySort();
     },
     reloadData(data, freq) {
@@ -744,6 +726,8 @@ export default {
       // })
       this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
       this.$store.commit('getMA', data.activatedMA)
+      // 暂定，编辑时读取回测携带的ma位置和信息
+      this.$store.commit('getMALayout', data.activatedMALayout)
       this.$store.commit('setTechSD', data.savedTechSD)
 
       switch (freq) {
@@ -834,8 +818,7 @@ export default {
             title: 'Added to favorites',
             message:
               'Favorites have been added and you can view them in My Favorites',
-            type: 'success',
-            offset: 100
+            type: 'success'
           })
 
           this.$emit('refFavoritesForm')
@@ -849,8 +832,7 @@ export default {
       } catch (error) {
         vm.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
       }
     }, 1000),
@@ -870,8 +852,7 @@ export default {
       } catch (error) {
         vm.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
       }
     }, 1000),
@@ -881,8 +862,11 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.search {
+.searchBox {
+  float: right;
+  .search {
 	margin-right: 28px;
+}
 }
 .showDate {
 	display: flex;

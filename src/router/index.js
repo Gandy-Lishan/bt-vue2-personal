@@ -8,6 +8,7 @@ import Cookies from 'vue-cookies'
 import axios from '../axios'
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { getIndicatorsList, getStocksList, getIndexsList } from "@/service/service"
+import { getCurDate } from '@/service/ai'
 import getQueryVariable from '@/tools/getQueryVariable'
 import store from '../store/store'
 
@@ -32,6 +33,9 @@ const router = new Router({
 		{path: '/home/backtests', name:'backtests',component: resolve => require(['@/components/BacktestEdge/Backtests.vue'], resolve),},
 
 	]},
+	{ 
+		path: 'aiscanner', name: 'aiscanner', component: resolve => require(['@/components/BacktestEdge/AIScanner.vue'], resolve)
+	},
 	] },
 		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve), redirect: '/doc/home',
 	children: [
@@ -45,6 +49,10 @@ const router = new Router({
 
 router.beforeEach(async (to, from, next) => {
 	await initiateIndicatorList()
+	if(to.path == '/home/aiscanner'){
+		await initiateCurrentDate()
+	}
+	
 	CIQ.store = store
 	let loginUrl = 'https://sentimentrader.com/login'
 	//  开发环境无法判断环境变量
@@ -96,6 +104,15 @@ router.beforeEach(async (to, from, next) => {
 		window.location.href = loginUrl
 	}
 })
+
+async function initiateCurrentDate() {
+	//现在外部实现一个获取当前日期并储存的功能，接触验证屏蔽后移到判断条件内部
+	if(store.state.curDate==''){
+		let _res = await getCurDate()
+		let curDate =_res[0]['lastUpdatePickDate']
+		await store.dispatch('set_cur_date',curDate)  
+	}
+}
 
 async function initiateIndicatorList() {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'

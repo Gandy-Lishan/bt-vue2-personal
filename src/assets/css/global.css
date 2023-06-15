@@ -173,12 +173,20 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   border-radius: 4px;
 }
 
-.el-tabs__item#tab-second,
-.el-tabs__item#tab-forth,
-.el-tabs__item#tab-fifth,
-.el-tabs__item#tab-sixth{
+.tabs .el-tabs__item#tab-second,
+.tabs .el-tabs__item#tab-forth,
+.tabs .el-tabs__item#tab-fifth,
+.tabs .el-tabs__item#tab-sixth{
     display: none;
 }
+
+/* 防止performance的选项卡被动态main tab波及 */
+.performance_tabs .el-tabs__item#tab-first,
+.performance_tabs .el-tabs__item#tab-second,
+.performance_tabs .el-tabs__item#tab-third{
+    display: inline-block;
+}
+
 .el-tabs__item.is-active {
   background-color: #f8f8f8;
   font-weight: bold;
@@ -204,7 +212,9 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   font-size: 16px;
   margin-right: 5px;
 }
-
+.set-up-container {
+  padding: 0 10px;
+}
 .set-up-container input{
     line-height: 24px;
     box-sizing: border-box;
@@ -353,8 +363,6 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   line-height: 25px;
 }
 .backtest_container {
-  padding-left: 40px;
-  padding-right: 40px;
 }
 .senti-container .ids-container input[type="text"],
 input[type="number"],
@@ -752,4 +760,16 @@ input[type="time"] {
 .result-container .exclude_oo .el-input.is-disabled .el-input__inner {
   width: 65px;
 }
-
+.backtest_container .descriptionBox .el-form-item__label {
+  width: 130px;
+}
+.backtest_container .descriptionBox  .el-form-item__content {
+  padding-left: 130px;
+  margin-bottom: 10px;
+}
+/* .backtest_container .descriptionBox .entry-exit-des .el-form-item__label {
+  width: 200px;
+}
+.backtest_container .descriptionBox .entry-exit-des .el-form-item__content {
+  padding-left: 200px;
+} */

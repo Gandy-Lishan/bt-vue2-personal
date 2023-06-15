@@ -975,7 +975,7 @@ export default {
           return {
             ...row,
             [field + period]: quotes[i + period][field],
-            [name]: change == Infinity ? 0 : change
+            [name]: (change==Infinity || change==-Infinity) ? 0 : change
           }
         } else {
           return {
@@ -1002,7 +1002,7 @@ export default {
           )
           return {
             ...row,
-            ['MaxLoss' + period]: change == Infinity ? 0 : change
+            ['MaxLoss' + period]: (change==Infinity || change==-Infinity) ? 0 : change
           }
         } else {
           return {
@@ -1018,7 +1018,7 @@ export default {
           )
           return {
             ...row,
-            ['MaxGain' + period]: change == Infinity ? 0 : change
+            ['MaxGain' + period]: (change==Infinity || change==-Infinity) ? 0 : change
           }
         } else {
           return {

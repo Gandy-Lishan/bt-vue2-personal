@@ -79,11 +79,17 @@ export function getStocksList() {
 	})
 }
 
-export function getSampleList(page, sort) {
+export function getSampleList(page, sort, name) {
 	let url = null
 	url = '/dev/strategy/?ordering=name,status,-create_date&page='
 	if(sort) {
 		url = `/dev/strategy/?ordering=${sort}&page=`
+	}
+	if(name) {
+		url = `/dev/strategy/?name=${name}&page=`
+	}
+	if(name && sort) {
+		url = `/dev/strategy/?ordering=${sort}&name=${name}&page=`
 	}
 
     return new Promise((resolve,reject)=>{
@@ -109,11 +115,17 @@ export function searchSampleList(keyword) {
 	})
 }
 
-export function getAnalystList(page, sort) {
+export function getAnalystList(page, sort, name) {
 	let url =  null
   url = '/dev/analyst/?ordering=-create_date,name,status&page='
 	if(sort) {
 		url = `/dev/analyst/?ordering=${sort}&page=`
+	}
+	if(name) {
+		url = `/dev/analyst/?name=${name}&page=`
+	}
+	if(name && sort) {
+		url = `/dev/analyst/?ordering=${sort}&name=${name}&page=`
 	}
 
     return new Promise((resolve,reject)=>{
@@ -137,12 +149,18 @@ export function searchAnalystList(keyword) {
 		})
 	})
 }
-export function getHistoryList(page, sort) {
+export function getHistoryList(page, sort, name) {
 	let url = null
 	url = '/dev/backtest/?ordering=-create_date&page='
 	// sort -> ,total_return
 	if(sort) {
 		url = `/dev/backtest/?ordering=${sort}&page=`
+	}
+	if(name) {
+		url = `/dev/backtest/?name=${name}&page=`
+	}
+	if(name && sort) {
+		url = `/dev/backtest/?ordering=${sort}&name=${name}&page=`
 	}
     return new Promise((resolve,reject)=>{
 		axios.get(url+page, {withCredentials: true})
@@ -179,13 +197,18 @@ export function getBacktestName(name) {
 		})
 	})
 }
-export function getFavoriteList(page, sort) {
+export function getFavoriteList(page, sort, name) {
 	let url = null
   url = '/dev/backtest/?ordering=-create_date&favorites=true&page='
 	if(sort) {
 		url = `/dev/backtest/?ordering=${sort}&favorites=true&page=`
 	}
-
+	if(name) {
+		url = `/dev/backtest/?name=${name}&favorites=true&page=`
+	}
+	if(name && sort) {
+		url = `/dev/backtest/?ordering=${sort}&name=${name}&favorites=true&page=`
+	}
     return new Promise((resolve,reject)=>{
 		axios.get(url+page)
 		.then(res=>{
