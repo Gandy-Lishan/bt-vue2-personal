@@ -3,23 +3,18 @@
 	<el-row>
 		<el-col :span="24">
 			<div class="favoriteForm_container">
-        <el-input
+        <div class="searchBox">
+                  <el-input
 					class="search"
 					style="width: 30vw"
 					size="mini"
 					v-model="searchItem"
-					placeholder=""
+					placeholder="Search for the name of the backtest"
 					@keyup.enter.native="handleQuery"
 					clearable
 					@clear="handleQuery"
-				></el-input>
-				<el-button
-					type="primary"
-					icon="el-icon-search"
-					size="mini"
-					@click="handleQuery"
-					>Search</el-button
-				>
+				> <i slot="suffix" class="el-input__icon el-icon-search"></i></el-input>
+        </div>
 				<el-table
 					:data="backtestList"
 					v-loading="loading"
@@ -120,8 +115,6 @@
 						show-overflow-tooltip
 						align="center"
             prop="frequency"
-						sortable="custom"
-						:sort-orders="['frequency']"
 						width="115px"
 					>
 						<template slot-scope="scope">
@@ -134,7 +127,7 @@
 						label="Total Trades"
             prop="total_trader"
 						sortable="custom"
-						:sort-orders="['total_trader']"
+            :sort-orders="['ascending','descending', 'total_trader']"
 						width="125px"
 					>
 						<template slot-scope="scope">
@@ -153,7 +146,7 @@
 						label="Total Return"
             prop="total_return"
 						sortable="custom"
-						:sort-orders="['total_return']"
+            :sort-orders="['ascending', 'descending', 'total_return']"
 						><template slot-scope="scope">
 							<!-- <span v-if="scope.row.result['Total Return (%)']">{{
 								scope.row.result['Total Return (%)'] + '%'
@@ -337,13 +330,8 @@ export default {
       this.loading = true
       try {
         let res
-        console.log('this.searchItem', this.searchItem)
-        if (this.searchItem) {
-          let customUrl = `/dev/backtest/?favorites=true&name=${this.searchItem}`
-          res = await searchHistoryList(this.searchItem, customUrl)
-        } else {
-          res = await getFavoriteList(this.queryInfo.page, orderby)
-        }
+        res = await getFavoriteList(this.queryInfo.page, orderby, this.searchItem)
+        console.log('响应', res)
         if (res.status === 200) {
         this.loading = false
           this.backtestList = res.data.results
@@ -406,8 +394,7 @@ export default {
       } catch (error) {
         vm.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
       }
     }, 500),
@@ -444,8 +431,7 @@ export default {
 		} catch (error) {
 			vm.$message({
 				message: 'The internal server is busy, please try again later ',
-				type: 'error',
-				offset: 300
+				type: 'error'
 			})
 		}
 	}, 500),
@@ -464,8 +450,7 @@ export default {
       } catch (error) {
         this.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
       }
     },
@@ -481,8 +466,7 @@ export default {
           CIQ.nprogress.done()
           this.$notify.error({
             title: 'Has been Copied',
-            message: 'The backtest has been copied',
-            offset: 100
+            message: 'The backtest has been copied'
           })
           return
         }
@@ -506,8 +490,7 @@ export default {
             this.$notify({
               title: 'Copy successfully',
               message: 'After copying successfully, you can edit the backtest',
-              type: 'success',
-              offset: 100
+              type: 'success'
             })
             this.queryInfo.page = 1
             this.getFavoriteList()
@@ -526,8 +509,7 @@ export default {
           if (error.response.status === 500) {
             this.$notify.error({
               title: 'Service is busy',
-              message: 'The internal server is busy, please try again later ',
-              offset: 100
+              message: 'The internal server is busy, please try again later '
             })
           }
         }
@@ -537,8 +519,7 @@ export default {
         CIQ.nprogress.done()
         this.$notify.error({
           title: 'Service is busy',
-          message: 'The internal server is busy, please try again later ',
-          offset: 100
+          message: 'The internal server is busy, please try again later '
         })
       }
     }, 1000),
@@ -574,15 +555,13 @@ export default {
         } catch (error) {
           vm.$message({
             message: 'The internal server is busy, please try again later ',
-            type: 'error',
-            offset: 300
+            type: 'error'
           })
         }
       } else {
         this.$notify({
           title: 'No trades',
           message: 'No trades, please change parameter.',
-          offset: 100,
           type: 'warning'
         })
       }
@@ -602,6 +581,8 @@ export default {
       // })
       this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
       this.$store.commit('getMA', data.activatedMA)
+      // 暂定，编辑时读取回测携带的ma位置和信息
+      this.$store.commit('getMALayout', data.activatedMALayout)
       this.$store.commit('setTechSD', data.savedTechSD)
 
       switch (freq) {
@@ -686,8 +667,7 @@ export default {
       } catch (error) {
         vm.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
       }
     }, 500),
@@ -713,8 +693,7 @@ export default {
       } catch (error) {
         vm.$message({
           message: 'The internal server is busy, please try again later ',
-          type: 'error',
-          offset: 300
+          type: 'error'
         })
       }
     }, 500),
@@ -744,7 +723,7 @@ export default {
       }
       this.loadTest = 'Loading...'
       this.loading = true
-      const res = await getFavoriteList(this.queryInfo.page, prop)
+      const res = await getFavoriteList(this.queryInfo.page, prop, this.searchItem)
       if (res.status === 200) {
         this.loading = false
         this.backtestList = res.data.results
@@ -776,8 +755,11 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.search {
+.searchBox {
+  float: right;
+  .search {
 	margin-right: 28px;
+}
 }
 .showDate {
 	display: flex;

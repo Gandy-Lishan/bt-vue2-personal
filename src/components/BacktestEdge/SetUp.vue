@@ -112,11 +112,7 @@
 						</div>
 					</el-form-item>
 					<div class="userTagBoc">
-						<el-form-item
-							label="User Tag"
-							prop="use_tag"
-							v-if="is_admin == true"
-						>
+						<el-form-item label="User Tag" prop="use_tag" v-if="is_admin">
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
 									>Choose the type of backtest you want to create.<br
@@ -254,7 +250,7 @@
 					</el-form-item>
 					<div class="excludeBox">
 						<!-- <el-form-item prop="exclude_oo"> -->
-						<el-checkbox v-model="isExcludeOO"
+						<el-checkbox v-model="isExcludeOO" @change="changeExcludeOO"
 							>Exclude Overlapping Observations
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
@@ -270,14 +266,14 @@
 								</span>
 								<i class="iconfont icon-wenhao"></i> </el-tooltip
 						></el-checkbox>
-						<el-input v-model="bd.exclude_oo"></el-input>
+						<el-input v-model="bd.exclude_oo" v-if="isExcludeOO"></el-input>
 						<!-- </el-form-item> -->
 					</div>
 					<div class="backtestURLBox">
 						<el-form-item
 							label="Report URL"
 							prop="report_url"
-							v-if="bd.user_tag === 'analyst' && is_admin == true"
+							v-if="bd.user_tag === 'analyst' && is_admin"
 						>
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
@@ -308,6 +304,40 @@
 							oninput="value=value.replace(/[\+]/g,'')"
 						></el-input>
 					</el-form-item>
+				</div>
+				<div class="descriptionBox">
+					<a @click="toggleDes">Backtest Description (click to expand)<i :class="isToggle?'el-icon-minus': 'el-icon-plus'"></i></a>
+					<div class="des-content" v-show="isToggle">
+            <div class="des">
+						<el-form-item
+            v-if="bd.description.Introduction != 'edit'"
+							label="Introduction"
+							prop="introduction"
+							placeholder="Give the backtest a introduction"
+						>
+							<el-input
+								type="textarea"
+								:autosize="{ minRows: 2, maxRows: 5 }"
+								v-model="bd.description.Introduction"
+							>
+							</el-input>
+						</el-form-item>
+						<el-form-item
+              v-if="bd.description.Rules"
+							label="Rules"
+							prop="rules"
+							placeholder="Give the backtest rules"
+						>
+							<el-input
+                disabled
+								type="textarea"
+								:autosize="{ minRows: 2, maxRows: 5 }"
+								v-model="bd.description.Rules"
+							>
+							</el-input>
+						</el-form-item>
+            </div>
+					</div>
 				</div>
 			</el-row>
 			<div>
@@ -484,7 +514,6 @@ export default {
         slippage: 0.1,
         start_date: '',
         end_date: '',
-        description: 'backtest',
         direction: 'Long',
         frequency: 'Daily',
         risk_control: '//',
@@ -492,7 +521,11 @@ export default {
         user_tag: 'client',
         backtest_period: '1',
         trade_price: 0,
-        exclude_oo: 0
+        exclude_oo: 0,
+        description: {
+          Introduction: '',
+          Rules: ''
+        }
       },
       permission: Cookies.get('devbt2Userid'),
       historyOptions: [
@@ -604,7 +637,8 @@ export default {
       },
       oldBacktestName: '',
       is_admin: false,
-      isExcludeOO: false
+      isExcludeOO: false,
+      isToggle: false
     }
   },
   directives: {
@@ -651,8 +685,7 @@ export default {
         if (!newVal && this.isRiskControl) {
           this.$message({
             message: 'Select at least one Risk Control indicator',
-            type: 'error',
-            offset: 300
+            type: 'error'
           })
           this.isTakeProfit = true
           this.selectRiskControl(this.isRiskControl)
@@ -661,6 +694,9 @@ export default {
     }
   },
   methods: {
+    toggleDes() {
+      this.isToggle = !this.isToggle
+    },
     clearForm() {
       Object.assign(this.$data, this.$options.data())
       this.is_admin = this.$store.state.is_admin
@@ -678,15 +714,26 @@ export default {
         delete newVal.status
         delete newVal.results
         delete newVal.uuid
-        delete newVal.entry_description
-        delete newVal.exit_description
+        // delete newVal.entry_description
+        // delete newVal.exit_description
         delete newVal.entry
         delete newVal.exit
         delete newVal.results
         newVal.user_tag = 'client'
+        const entry_des_list = JSON.parse(newVal.entry_description)
+        const exit_des_list = JSON.parse(newVal.exit_description)
+        const entry_description = entry_des_list.length !== 0 ? entry_des_list.reduce((accumulator, currentValue) => accumulator + currentValue.commentDes, '') : entry_des_list[0].commentDes
+        const exit_description = exit_des_list.length !== 0 ? exit_des_list.reduce((accumulator, currentValue) => accumulator + currentValue.commentDes, '') : exit_des_list[0].commentDes
+        try {
+          newVal.description = JSON.parse(newVal.description)
+        } catch (error) {
+          newVal.description = {}
+          newVal.description.Introduction = 'edit'
+          newVal.description.Rules = entry_description + exit_description
+        }
         newVal.commission = (newVal.commission * 100).toFixed(2)
         newVal.slippage = Number(newVal.slippage).toFixed(2)
-				newVal.trade_price = Number(newVal.trade_price)
+        newVal.trade_price = Number(newVal.trade_price)
         this.is_admin = this.$store.state.is_admin
         this.bd = Object.assign(this.bd, newVal)
         this.getFrequency(newVal.frequency)
@@ -695,10 +742,10 @@ export default {
         this.isTakeProfit = false
         this.isStopLoss = false
         this.isTimeInMarket = false
-				this.isExcludeOO = false
-				if(this.bd.exclude_oo > 0) {
-					this.isExcludeOO = true
-				}
+        this.isExcludeOO = false
+        if (this.bd.exclude_oo > 0) {
+          this.isExcludeOO = true
+        }
         if (newVal.risk_control) {
           let riskValArr = newVal.risk_control.split('/')
           if (riskValArr[0]) {
@@ -1050,7 +1097,7 @@ export default {
       let slCheck
       let tpCheck
       let timCheck
-			let excludeCheck = true
+      let excludeCheck = true
       if (this.isRiskControl) {
         if (this.isStopLoss) {
           slCheck = this.validateStopLoss(this.sl)
@@ -1066,13 +1113,22 @@ export default {
           (this.isTakeProfit ? tpCheck : true) &&
           (this.isTimeInMarket ? timCheck : true)
       }
-			if(this.isExcludeOO) {
-				excludeCheck = this.validateExclude(this.bd.exclude_oo)
-			}
-
-      if (validForm && riskCheck && excludeCheck) {
+      if (this.isExcludeOO) {
+        excludeCheck = this.validateExclude(this.bd.exclude_oo)
+      }
+      const filmCheck = validForm && riskCheck && excludeCheck
+      if (!validForm) {
+        this.$message({
+          message:
+            'Please check the setup form',
+          type: 'error',
+          offset: 150
+        })
+      }
+      if (!filmCheck) return false
+      if (filmCheck) {
         if (bd.end_date) {
-					if(!this.isExcludeOO) {bd.exclude_oo = 0}
+          if (!this.isExcludeOO) { bd.exclude_oo = 0 }
           bd.commission = bd.commission / 100
           if (this.isRiskControl) {
             let riskStr = `${this.isTakeProfit ? this.tp : ''}/${this.isStopLoss ? this.sl : ''
@@ -1101,20 +1157,11 @@ export default {
           this.$message({
             message: 'Please select end date',
             type: 'error',
-            offset: 300
+            offset: 200
           })
           checked = false
           return checked
         }
-      } else {
-        this.$message({
-          message:
-            'Please check the setup form',
-          type: 'error',
-          offset: 300
-        })
-        checked = false
-        return checked
       }
     },
     clearOldBacktestName() {
@@ -1155,7 +1202,7 @@ export default {
           message:
             'Please enter Stop Loss,only positive numbers less than or equal to 100 are allowed',
           type: 'error',
-          offset: 300
+          offset: 100
         })
         return false
       }
@@ -1165,7 +1212,7 @@ export default {
           message:
             'Please enter Stop Loss, only two decimal places are allowed',
           type: 'error',
-          offset: 300
+          offset: 100
         })
         return false
       }
@@ -1177,7 +1224,7 @@ export default {
           message:
             'Please enter Take Profit, only positive numbers are allowed',
           type: 'error',
-          offset: 300
+          offset: 100
         })
         return false
       }
@@ -1187,7 +1234,7 @@ export default {
           message:
             'Please enter Take Profit, only two decimal places are allowed',
           type: 'error',
-          offset: 300
+          offset: 100
         })
         return false
       }
@@ -1199,24 +1246,27 @@ export default {
           message:
             'Please enter Time in Market, only positive integers are allowed',
           type: 'error',
-          offset: 300
+          offset: 100
         })
         return false
       }
       return true
     },
-		validateExclude(num) {
-			if (isNaN(num) || num <= 0 || !/^\d+$/.test(num)) {
+    validateExclude(num) {
+      if (isNaN(num) || num <= 0 || !/^\d+$/.test(num)) {
         this.$message({
           message:
             'Please enter Exclude Overlapping Observations, only positive integers are allowed',
           type: 'error',
-          offset: 300
+          offset: 100
         })
         return false
       }
       return true
-		},
+    },
+    changeExcludeOO(val) {
+      if (val) this.bd.exclude_oo = 1
+    },
     isEdit() {
       if (this.oldBacktestName == this.bd.name) {
         return true
@@ -1319,5 +1369,23 @@ export default {
 }
 /deep/ .backtestURLBox .el-form-item .el-form-item__content {
 	padding-left: 155px;
+}
+.descriptionBox {
+	padding: 10px;
+	border: 1px solid #dcdfe6;
+	border-radius: 10px;
+}
+.descriptionBox a {
+	font-weight: 500;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  justify-content: space-between
+}
+.descriptionBox a:hover {
+	color: #5b9bd1;
+}
+.des-content{
+  margin-top: 10px;
 }
 </style>

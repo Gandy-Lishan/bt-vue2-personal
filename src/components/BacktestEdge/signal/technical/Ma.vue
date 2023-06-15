@@ -317,22 +317,36 @@ export default {
 			// update MA period
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
-				if (sd.type == 'ma') {
+				if (
+					sd.type == 'ma' && sd.panel == 'chart' &&
+					sd.parameters.criteria == this.criteria &&
+					sd.parameters.index == this.panelIndex
+				) {
+					
 					var replaceStudy = {
 						name: 'Moving Average',
 						overlay: true,
 						calculateFN: CIQ.Studies.calculateMovingAverage,
 						inputs: {
 							Period: val,
-							Field: 'field',
+							Field: sd.inputs.Field,
 							Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 							Offset: 0
 						},
 						outputs: { MA: '#FF0000' }
 					}
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
-					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
+					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
+						criteria: this.criteria,
+						index: this.panelIndex
+					})
+					console.log(st)
 					CIQ.store.commit('getMaPeriod', val)
+
+					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
+      				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
+
+					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
 				}
 			}			
 		},
@@ -347,7 +361,11 @@ export default {
 				this.tech.comparison = 'MA'
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
-					if (sd.type == 'ST MA' && sd.panel == 'chart') {
+					if (
+						sd.type == 'ST MA' && sd.panel == 'chart' &&
+						sd.parameters.criteria == this.criteria &&
+						sd.parameters.index == this.panelIndex
+					) {
 						CIQ.Studies.removeStudy(CIQ.stxx, sd)
 					}
 				}
@@ -355,17 +373,24 @@ export default {
 					Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 					Period: this.tech.ma_period,
 					display: 'ST MA'
+				},null,{
+					criteria: this.criteria,
+					index: this.panelIndex
 				})
 				// keep current MA
 				var objMA = {
 					period: this.tech.ma_period,
 					url: 'ma',
-					type: this.maRadio
+					type: this.maRadio,
+					criteria: this.criteria, 
+					index: this.panelIndex
 				}
 				var activatedMAList = this.$store.state.activatedMA
 
 				// remove current MA attached to an indicator
-				var MAListIndex = activatedMAList.findIndex((item) => item.url == 'ma')
+				var MAListIndex = activatedMAList.findIndex(
+					(item) => item.url == 'ma' && item.criteria == this.criteria && item.index == this.panelIndex
+				)
 				if (MAListIndex != -1) {
 					activatedMAList.splice(MAListIndex, 1)
 				}
@@ -379,13 +404,19 @@ export default {
 				this.tech.comparison = 'SC'
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
-					if (sd.type == 'ST MA' && sd.panel == 'chart') {
+					if (
+						sd.type == 'ST MA' && sd.panel == 'chart' &&
+						sd.parameters.criteria == this.criteria &&
+						sd.parameters.index == this.panelIndex
+					) {
 						CIQ.Studies.removeStudy(CIQ.stxx, sd)
 					}
 				}
 				// remove current MA attached to an indicator
 				var activatedMAList = this.$store.state.activatedMA
-				var MAListIndex = activatedMAList.findIndex((item) => item.url == 'ma')
+				var MAListIndex = activatedMAList.findIndex(
+					(item) => item.url == 'ma' && item.criteria == this.criteria && item.index == this.panelIndex
+				)
 				if (MAListIndex != -1) {
 					activatedMAList.splice(MAListIndex, 1)
 				}
@@ -394,33 +425,35 @@ export default {
 				this.updateMAPeriod(this.tech.period)
 			}
 		},
+		// todo: ma应该随数据源变化而更新
 		getRadioSelect(val) {
+			let field
+			switch(val){
+				case 'SC': field = 'Close';break;
+				case 'SH': field = 'High';break;
+				case 'SO': field = 'Open';break;
+				case 'SL': field = 'Low';break;
+				default: field = 'field'
+			}
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
-				if (sd.type == 'ST MA' && sd.panel == 'chart') {
-					CIQ.Studies.removeStudy(CIQ.stxx, sd)
+				if (
+					sd.type == 'ma' && sd.panel == 'chart' &&
+					sd.parameters.criteria == this.criteria &&
+					sd.parameters.index == this.panelIndex
+				) {
+					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, {Field: field}, null, {
+						criteria: this.criteria,
+						index: this.panelIndex
+					})
+					// 解决附属ma或者roc漂移问题
+					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
+					CIQ.store.commit('getMaPeriod', val)
+
+					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
+      				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',field,this.criteria,this.panelIndex)
 				}
 			}
-			var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
-				Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
-				Period: this.tech.ma_period,
-				display: 'ST MA'
-			})
-			// keep current MA
-			var objMA = {
-				period: this.tech.ma_period,
-				url: 'ma',
-				type: this.maRadio
-			}
-			var activatedMAList = this.$store.state.activatedMA
-
-			// remove current MA attached to an indicator
-			var activatedMAList = this.$store.state.activatedMA
-			var MAListIndex = activatedMAList.findIndex((item) => item.url == 'ma')
-			if (MAListIndex != -1) {
-				activatedMAList.splice(MAListIndex, 1)
-			}
-			this.$store.commit('getMA', activatedMAList)
 		},
 		setDesciption(index) {
 			let criteria = ''
@@ -530,7 +563,11 @@ export default {
 			this.tech.ma_period = val
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
-				if (sd.type == 'ST MA' && sd.panel == 'chart') {
+				if (
+					sd.type == 'ST MA' && sd.panel == 'chart' &&
+					sd.parameters.criteria == this.criteria &&
+					sd.parameters.index == this.panelIndex
+				) {
 					// 刷新附属ma
 					var replaceStudy = {
 						name: 'Moving Average ',
@@ -542,18 +579,33 @@ export default {
 							Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 							Offset: 0
 						},
-						outputs: { MA: '#FF000' }
+						outputs: { MA: '#FF000' },
 					}
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
-					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
+					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
+						criteria: this.criteria,
+						index: this.panelIndex
+					})
+					console.log('刷新附属ma',st)
+					
+					// 解决附属ma或者roc漂移问题
+					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
 				}
 			}
 			// keep current MA
-			var objMA = { period: this.tech.ma_period, url: 'ma', type: this.maRadio }
+			var objMA = { 
+				period: this.tech.ma_period, 
+				url: 'ma', 
+				type: this.maRadio,
+				criteria: this.criteria, 
+				index: this.panelIndex
+			}
 			var activatedMAList = this.$store.state.activatedMA
 
 			// remove current MA attached to an indicator
-			var MAListIndex = activatedMAList.findIndex((item) => item.url == 'ma')
+			var MAListIndex = activatedMAList.findIndex(
+				(item) => item.url == 'ma' && item.criteria == this.criteria && item.index == this.panelIndex
+			)
 			if (MAListIndex != -1) {
 				activatedMAList.splice(MAListIndex, 1)
 			}
@@ -562,100 +614,8 @@ export default {
 			this.$store.commit('getMA', activatedMAList)
 			this.$store.commit('getStMaPeriod', val)
 		},
-		getMaRadio(val) {
-			this.tech.ids.ma_category = val
-			CIQ.store.commit('setMaRadio', val)
-
-			if (val == 'SMA') {
-				for (var studyInstanceName in CIQ.stxx.layout.studies) {
-					var sd = CIQ.stxx.layout.studies[studyInstanceName]
-					if (sd.type == 'ma') {
-
-						var replaceStudy = {
-							name: 'Moving Average',
-							overlay: true,
-							calculateFN: CIQ.Studies.calculateMovingAverage,
-							inputs: {
-								Period: CIQ.store.state.maPeriod
-									? CIQ.store.state.maPeriod
-									: 50,
-								Field: 'field',
-								Type: 'simple',
-								Offset: 0
-							},
-							outputs: { MA: '#FF0000' }
-						}
-						CIQ.Studies.studyLibrary[sd.type] = replaceStudy
-						var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
-					}
-				}
-			} else if (val == 'EMA') {
-				for (var studyInstanceName in CIQ.stxx.layout.studies) {
-					var sd = CIQ.stxx.layout.studies[studyInstanceName]
-					if (sd.type == 'ma') {
-
-						var replaceStudy = {
-							name: 'Moving Average',
-							overlay: true,
-							calculateFN: CIQ.Studies.calculateMovingAverage,
-							inputs: {
-								Period: CIQ.store.state.maPeriod
-									? CIQ.store.state.maPeriod
-									: 50,
-								Field: 'field',
-								Type: 'exponential',
-								Offset: 0
-							},
-							outputs: { MA: '#FF0000' }
-						}
-						CIQ.Studies.studyLibrary[sd.type] = replaceStudy
-						var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
-					}
-				}
-			}
-			if (this.radio == 'Moving Average') {
-				for (var studyInstanceName in CIQ.stxx.layout.studies) {
-					var sd = CIQ.stxx.layout.studies[studyInstanceName]
-					if (sd.type == 'ST MA' && sd.panel == 'chart') {
-						var replaceStudy = {
-							name: 'Moving Average ',
-							overlay: true,
-							calculateFN: CIQ.Studies.calculateSTMovingAverage,
-							inputs: {
-								Period: CIQ.store.state.stMaPeriod
-									? CIQ.store.state.stMaPeriod
-									: 5,
-								Field: 'field',
-								Type:
-									this.tech.ids.ma_category == 'SMA' ? 'simple' : 'exponential',
-								Offset: 0
-							},
-							outputs: { MA: '#FF000' }
-						}
-						CIQ.Studies.studyLibrary[sd.type] = replaceStudy
-						var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
-					}
-				}
-				// keep current MA
-				var objMA = {
-					period: CIQ.store.state.stMaPeriod ? CIQ.store.state.stMaPeriod : 5,
-					url: 'ma',
-					type: this.tech.ids.ma_category
-				}
-				var activatedMAList = this.$store.state.activatedMA
-
-				// remove current MA attached to an indicator
-				var MAListIndex = activatedMAList.findIndex((item) => item.url == 'ma')
-				if (MAListIndex != -1) {
-					activatedMAList.splice(MAListIndex, 1)
-				}
-				activatedMAList.push(objMA)
-
-				this.$store.commit('getMA', activatedMAList)
-			}
-		},
 		getSCvalue(val) {
-			if (this.tech.comparison === 'SC') {
+			if (this.tech.comparison !== 'MA') {
 				this.tech.period = val
 
 				this.updateMAPeriod(val)
@@ -682,6 +642,8 @@ export default {
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
 					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
 					CIQ.store.commit('getMaPeriod', val)
+
+					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
 				}
 			}
 		}, 500),
