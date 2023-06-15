@@ -770,7 +770,7 @@ export default {
 		},
 		getIndicatorVal(obj) {
 			this.techVal = obj.value
-			// this.indicatorValArr.splice(obj.index, 1, obj.value)
+			this.indicatorValArr.splice(obj.index, 1, obj.value)
 		},
 		getTechIndiValue(val) {
 			this.techIndiValue = val
