@@ -106,7 +106,7 @@ export default {
     overflow: hidden;
 }
 .sidebar .sidebar-sub-headers {
-    font-size: .95rem;
+    font-size: .90em;
 }
 .sidebar-group a.sidebar-link {
     padding-left: 2rem;
@@ -114,7 +114,7 @@ export default {
 
 .sidebar /deep/ a.sidebar-link {
     font-size: 1em;
-    font-weight: 400;
+    font-weight: 500;
     display: inline-block;
     color: #2c3e50;
     border-left: 0.25rem solid transparent;
@@ -144,5 +144,8 @@ export default {
   /* border-left: 3px solid #5b9bd1; */
   background-color: #5b9bd11f;
   /* color: #5b9bd1; */
+}
+.sidebar-sub-header a.sidebar-link {
+  padding-left: 0.5rem;
 }
 </style>
