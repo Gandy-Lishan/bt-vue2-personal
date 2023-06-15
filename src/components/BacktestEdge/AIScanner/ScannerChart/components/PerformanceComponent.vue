@@ -45,6 +45,7 @@
 							show-overflow-tooltip
 							prop="averageLoss"
 							label="AVERAGE LOSS %"
+
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -82,6 +83,7 @@
 						<el-table-column
 							prop="totalTrades"
 							label="TOTAL TRADES"
+
 							show-overflow-tooltip
 							align="center"
 						>
@@ -98,6 +100,7 @@
 							show-overflow-tooltip
 							prop="totalPositive"
 							label="TOTAL POSITIVE"
+
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -113,6 +116,7 @@
 							prop="totalNegative"
 							show-overflow-tooltip
 							label="TOTAL NEGATIVE"
+
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -158,47 +162,58 @@
 							type="index"
 							show-overflow-tooltip
 							align="center"
-							width="50"
-						>
+							width="50">
 						</el-table-column>
 						<el-table-column
 							prop="entryDate"
 							label="ENTRY DATE"
+
 							show-overflow-tooltip
 							align="center"
 						>
 							<template slot-scope="scope">
-								<span>{{ scope.row.entryDate }}</span>
+								<span>{{
+									scope.row.entryDate
+								}}</span>
 							</template>
 						</el-table-column>
 						<el-table-column
 							prop="exitDate"
 							label="EXIT DATE"
+
 							show-overflow-tooltip
 							align="center"
 						>
 							<template slot-scope="scope">
-								<span>{{ scope.row.exitDate }}</span>
+								<span>{{
+									scope.row.exitDate
+								}}</span>
 							</template>
 						</el-table-column>
 						<el-table-column
 							prop="exitReason"
 							label="EXIT REASON"
+
 							show-overflow-tooltip
 							align="center"
 						>
 							<template slot-scope="scope">
-								<span>{{ scope.row.exitReason }}</span>
+								<span>{{
+									scope.row.exitReason
+								}}</span>
 							</template>
 						</el-table-column>
 						<el-table-column
 							prop="eachReturn"
 							label="EACH RETURN"
+
 							show-overflow-tooltip
 							align="center"
 						>
 							<template slot-scope="scope">
-								<span>{{ scope.row.eachReturn.toFixed(2) + ' %' }}</span>
+								<span>{{
+									scope.row.eachReturn.toFixed(2) + ' %'
+								}}</span>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -222,7 +237,9 @@ export default class PerformanceComponent extends Vue {
 		super()
 		this.loading = true
 		this.tableData = []
-		this.historyData = []
+		this.historyData = [
+			
+		]
 	}
 	created() {
 		this.getResultData()
@@ -258,17 +275,17 @@ export default class PerformanceComponent extends Vue {
 		const exitTradeDate = eval('(' + this.other['ExitTradeDate'] + ')')
 		const exitReason = eval('(' + this.other['ExitReason'] + ')')
 		const eachReturn = eval('(' + this.other['EachReturn'] + ')')
-		for (let i = 0; i < entryTradeDate.length; i++) {
-			this.historyData.push({
-				entryDate: entryTradeDate[i],
-				exitDate: exitTradeDate[i],
-				eachReturn: eachReturn[i],
-				exitReason: exitReason[i]
-			})
+		for(let i = 0;i<entryTradeDate.length;i++){
+			this.historyData.push( {
+				entryDate: entryTradeDate?entryTradeDate[i]:'',
+				exitDate: exitTradeDate?exitTradeDate[i]:'',
+				eachReturn: eachReturn?eachReturn[i]:0,
+				exitReason: exitReason?exitReason[i]:''
+          })
 		}
 		console.log(this.historyData)
 	}
-	getSummaries(param: any) {
+		getSummaries(param: any) {
 		const { columns, data } = param
 
 		const sums: Array<any> = [] //声明变量
@@ -280,11 +297,11 @@ export default class PerformanceComponent extends Vue {
 			if (index !== 4) {
 				return
 			}
-
+			
 			const values = data.map((item: any) => {
 				return item[column.property]
 			})
-
+			
 			let totalCount = 0 // 求平均数使用
 			sums[index] = values.reduce((prev: any, curr: any) => {
 				const value = Number(curr)
@@ -312,7 +329,7 @@ export default class PerformanceComponent extends Vue {
 }
 </script>
 
-<style scoped lang="less">
+<style scoped lang="scss">
 .hint {
 	position: absolute;
 	font-size: 0.8rem;
@@ -333,7 +350,7 @@ export default class PerformanceComponent extends Vue {
 .result-container {
 	padding-bottom: 20px;
 }
-.historyContainer {
+.historyContainer{
 	margin: 50px 0 0 0;
 }
 </style>

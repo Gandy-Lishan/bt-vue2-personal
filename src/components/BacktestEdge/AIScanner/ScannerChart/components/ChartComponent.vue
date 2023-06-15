@@ -1,8 +1,12 @@
 <template>
-	<div class="TVChartContainer" ref="chartContainer" />
+	<!-- <div class="TVChartContainer" ref="chartContainer" /> -->
+	<div class="chart_box" id="chart_box">
+		<chart symbol="aaon" :onChartReady="onChartReady" width="100%" height="100%"></chart>
+	</div>
 </template>
 
 <script>
+import chart from '@/components/chart/index.vue'
 
 export default {
 	name: 'TVChartContainer',
@@ -16,9 +20,17 @@ export default {
 
 		}
 	},
+	components: {
+    	chart: chart,
+	},
 	created() {
 		console.log(this.other,this.symbol)
 	},
+	methods:{
+		onChartReady(){
+			console.log('chart')
+		}
+	}
 }
 </script>
 

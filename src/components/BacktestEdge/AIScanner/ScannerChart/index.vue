@@ -1,13 +1,11 @@
 <template>
 	<div class="main-content">
-		<div class="chart_box">
-			<Chart
-				v-if="isAsyncDown"
-				:symbol="stockName"
-				:other="other"
-				:direction="rowData ? rowData.Direction : null"
-			/>
-		</div>
+		<Chart
+			v-if="isAsyncDown"
+			:symbol="stockName"
+			:other="other"
+			:direction="rowData ? rowData.Direction : null"
+		/>
 		<div class="gradient"></div>
 		<!-- <el-card class="form-box"> -->
 		<div class="form-box">
