@@ -742,6 +742,7 @@ export default {
     setEditData(newVal) {
       if (JSON.stringify(newVal) != '{}') {
         this.clearForm()
+        console.log('未处理之前的编辑数据', newVal)
         delete newVal.entry
         delete newVal.exit
         delete newVal.user_id

@@ -451,12 +451,14 @@ export default {
 						}
 					} catch (error) {
 						if (error.response.status === 403) {
+							console.error(error)
 							this.$notify.error({
 								title: 'Has been Copied',
 								message: 'The backtest has been copied'
 							})
 						}
 						if (error.response.status === 500) {
+							console.error(error)
 							this.$notify.error({
 								title: 'Service is busy',
 								message: 'The internal server is busy, please try again later '
@@ -465,6 +467,7 @@ export default {
 					}
 				}
 			} catch (error) {
+        console.error(error)
 				this.$notify.error({
 					title: 'Service is busy',
 					message: 'The internal server is busy, please try again later '
@@ -528,6 +531,7 @@ export default {
 						})
 					}
 				} catch (error) {
+					console.error(error)
 					vm.$message({
 						message: 'The internal server is busy, please try again later ',
 						type: 'error'

@@ -1367,6 +1367,7 @@ export default {
           }
         }
       } catch (error) {
+        console.error(error)
         this.$notify({
           title: 'Failed',
           message: 'The internal server is busy, please try again later',
