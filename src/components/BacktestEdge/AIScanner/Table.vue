@@ -6,6 +6,7 @@
 				<h4>AI Picks at the end of today</h4>
 				<el-date-picker
 					v-model="date"
+					class="aiscanner-date"
 					type="date"
 					placeholder="Select Date"
 					:picker-options="pickerOptions"
@@ -17,6 +18,7 @@
 		</div>
 		<el-table
 			ref="tableREF"
+			class="aiscanner-table"
 			:data="data.content"
 			:row-class-name="tableRowClassName"
 			empty-text="No recommendation for today"

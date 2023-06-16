@@ -124,7 +124,7 @@ async function initiateCurrentDate() {
 	if(store.state.curDate==''){
 		let _res = await getCurDate()
 		let curDate =_res[0]['lastUpdatePickDate']
-		await store.dispatch('set_cur_date',curDate)  
+		await store.dispatch('set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
 	}
 }
 
