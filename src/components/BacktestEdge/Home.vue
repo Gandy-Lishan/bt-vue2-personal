@@ -746,9 +746,20 @@ export default {
         let backtestInfo = JSON.parse(JSON.stringify(this.$store.state.backtestInfo))
         this.$refs.entryChild.addEntrySignalLength()
         this.$refs.exitChild.addExitSignalLength()
-        let setUpRes = await getBacktestName(
+        let setUpRes = {}
+        try {
+          setUpRes = await getBacktestName(
           this.$store.state.backtestInfo.name
         )
+        } catch (error) {
+          console.log(error)
+          this.$notify({
+          title: 'Failed',
+          message: 'The internal server is busy, please try again later',
+          type: 'error'
+          })
+          return
+        }
         // if (setUpRes.data.count != 0 && !isEdit || (setUpRes.data.count != 0 && !backtestInfo.hasOwnProperty('old_uuid'))) {
         if (setUpRes.data.count != 0 && !backtestInfo.hasOwnProperty('old_uuid')) {
           this.$message({
@@ -1263,7 +1274,7 @@ export default {
         }
       } catch (error) {
         console.log('抓取error:', error)
-        
+
         this.$notify({
           title: 'Failed',
           message: 'The internal server is busy, please try again later',
