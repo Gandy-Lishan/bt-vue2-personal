@@ -5,8 +5,8 @@
 				<img src="../../assets/logo.png" />
 				<p style="color: rgb(0 50 60); font-weight: 500; font-size: 18px">BacktestEdeg Tutorial</p>
 				<nav>
-					<router-link active-class="active" to="/doc/home">Tutorial</router-link>
-					<router-link active-class="active" to="/doc/ask">问答</router-link>
+					<router-link active-class="active" to="/doc/guide">Tutorial</router-link>
+					<router-link active-class="active" to="/doc/old">Old Tutorial</router-link>
 					<router-link active-class="active" to="/doc/community"
 						>社区</router-link
 					>
@@ -76,8 +76,8 @@ img {
 }
 
 nav {
-	display: flex;
-	align-items: center;
+	/* display: flex; */
+	/* align-items: center; */
 	margin: 0px 40px;
 	font: 16px Arial, Helvetica, sans-serif;
 }
