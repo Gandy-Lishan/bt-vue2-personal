@@ -38,6 +38,12 @@
 						modify settings; select timeframe among Daily/Weekly/Monthly; select
 						the Day/Night theme of chart.
 					</p>
+					<image src="../../../assets/helpImg/chart_clear.jepg" title="chart"></image>
+					<el-image
+      style="width: 100%; height: 300px"
+      :src="chartPath"
+			:preview-src-list="chartPreList"
+      fit="fill"></el-image>
 					<h3 id="0-1-0">How to change Symbol on a chart</h3>
 					<p>
 						Find the search box named symbol in the chart and select the stock
@@ -487,6 +493,7 @@
 	</div>
 </template>
 <script>
+import chartPath from "../img/chart.jpeg";
 import RightMenu from "./RightMenu.vue";
 export default {
   props: {
@@ -498,7 +505,9 @@ export default {
   data() {
     return {
       menuItems: [],
-      isToggle: false
+      isToggle: false,
+			chartPath: chartPath,
+			chartPreList: [chartPath]
     }
   },
   components: {
