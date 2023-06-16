@@ -41,6 +41,7 @@ const router = new Router({
 	children: [
 		{path: '/doc/home',  component: resolve => require(['@/components/Menu/components/Doc.vue'], resolve)},
 		{path: '/doc/guide',  component: resolve => require(['@/components/Menu/components/Guide.vue'], resolve)},
+		{ path: '/doc/old', component: resolve => require(['@/components/Menu/old_doc.vue'], resolve) }
 	] }
 		// { path: '/home', component: () => import(/* webpackChunkName: "Home" */ "@/components/BacktestEdge/Home.vue") },
 		// { path: '/doc', component: () => import(/* webpackChunkName: "Doc" */ "@/components/Menu/Doc.vue") }
