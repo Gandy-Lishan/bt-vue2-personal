@@ -334,6 +334,8 @@
 							>
 								<el-input
 									type="textarea"
+                  :readonly="false"
+                  @input="change($event)"
 									:autosize="{ minRows: 2, maxRows: 5 }"
 									v-model="bd.description.Introduction"
 								>
@@ -361,6 +363,8 @@
 							>
 								<el-input
 									type="textarea"
+                  :readonly="false"
+                  @input="change($event)"
 									:autosize="{ minRows: 2, maxRows: 5 }"
 									v-model="bd.description.Rules"
 								>
@@ -1310,6 +1314,9 @@ export default {
       if (this.oldBacktestName == this.bd.name) {
         return true
       }
+    },
+    change() {
+      this.$forceUpdate()
     }
   }
 }
