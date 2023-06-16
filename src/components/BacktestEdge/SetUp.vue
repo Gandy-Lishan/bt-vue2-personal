@@ -752,18 +752,21 @@ export default {
         const exit_des_list = JSON.parse(newVal.exit_description)
         const entry_description = entry_des_list.length !== 0 ? entry_des_list.reduce((accumulator, currentValue) => accumulator + currentValue.commentDes, '') : entry_des_list[0].commentDes
         const exit_description = exit_des_list.length !== 0 ? exit_des_list.reduce((accumulator, currentValue) => accumulator + currentValue.commentDes, '') : exit_des_list[0].commentDes
+        let description = {}
         try {
           if (newVal.description == null || newVal.description == undefined) {
             throw new Error('description is null')
           }
-          newVal.description = JSON.parse(newVal.description)
+          description = JSON.parse(newVal.description)
         } catch (error) {
           console.log(error)
-          newVal.description = {}
+          description = {}
           // newVal.description.Introduction = 'edit'
-          newVal.description.Introduction = ''
-          newVal.description.Rules = entry_description + exit_description
+          description.Introduction = ''
+          // newVal.description.Rules = entry_description + '<br>'+ exit_description
+          description.Rules = ''
         }
+        newVal.description = description
         delete newVal.entry_description
         delete newVal.exit_description
         newVal.commission = (newVal.commission * 100).toFixed(2)
