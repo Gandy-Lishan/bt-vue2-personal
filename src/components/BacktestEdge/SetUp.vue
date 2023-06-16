@@ -751,7 +751,7 @@ export default {
         delete newVal.entry
         delete newVal.exit
         delete newVal.results
-        newVal.user_tag = 'client'
+        // newVal.user_tag = 'client'
         const entry_des_list = JSON.parse(newVal.entry_description)
         const exit_des_list = JSON.parse(newVal.exit_description)
         const entry_description = entry_des_list.length !== 0 ? entry_des_list.reduce((accumulator, currentValue) => accumulator + currentValue.commentDes, '') : entry_des_list[0].commentDes
