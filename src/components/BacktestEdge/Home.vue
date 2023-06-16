@@ -430,6 +430,7 @@ export default {
         })
       }
     } catch (error) {
+      console.log(error)
       vm.$message({
         message: 'The internal server is busy, please try again later ',
         type: 'error'
@@ -1218,6 +1219,7 @@ export default {
                           type: 'error'
                         })
                       } else {
+                        console.log(error)
                         vm.$message({
                           message:
                             'The internal server is busy, please try again later ',
@@ -1261,7 +1263,7 @@ export default {
         }
       } catch (error) {
         console.log('抓取error:', error)
-
+        
         this.$notify({
           title: 'Failed',
           message: 'The internal server is busy, please try again later',

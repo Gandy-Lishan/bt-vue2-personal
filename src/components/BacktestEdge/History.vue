@@ -384,6 +384,7 @@ export default {
       try {
         let res
         res = await getHistoryList(this.queryInfo.page, orderby, this.searchItem)
+        console.log('History 列表请求结果',res)
         if (res.status === 200) {
           this.loading = false
           let historyNameList = []
@@ -514,6 +515,7 @@ export default {
             // })
           }
         } catch (error) {
+        console.log(error)
           vm.$message({
             message: 'The internal server is busy, please try again later ',
             type: 'error'
@@ -530,6 +532,7 @@ export default {
         CIQ.addCover('Fetching backtest information...')
         CIQ.nprogress.start()
         const res = await seeParams(row.id)
+        console.log('seeParams 结果', res)
         document.getElementsByClassName('ciq-period')[0].style.display = ''
         //  Restore indicator layout
         this.$store.commit('getBacktestSymbol', res.data.symbol)
@@ -554,6 +557,7 @@ export default {
           })
         }
       } catch (error) {
+        console.log(error)
         vm.$message({
           message: 'The internal server is busy, please try again later ',
           type: 'error'
@@ -590,6 +594,7 @@ export default {
 				})	
 			}
 		} catch (error) {
+      console.log(error)
 			vm.$message({
 				message: 'The internal server is busy, please try again later ',
 				type: 'error'
@@ -657,6 +662,7 @@ export default {
             this.$message.error('Copy failed')
           }
         } catch (error) {
+          console.log(error)
           if (error.response.status === 500) {
             this.$notify.error({
               title: 'Service is busy',
@@ -665,6 +671,7 @@ export default {
           }
         }
       } catch (error) {
+        console.log(error)
         this.$notify.error({
           title: 'Service is busy',
           message: 'The internal server is busy, please try again later '
@@ -698,6 +705,7 @@ export default {
           })
         }
       } catch (error) {
+        console.log(error)
         vm.$message({
           message: 'The internal server is busy, please try again later ',
           type: 'error'
@@ -830,6 +838,7 @@ export default {
           })
         }
       } catch (error) {
+        console.log(error)
         vm.$message({
           message: 'The internal server is busy, please try again later ',
           type: 'error'
@@ -850,6 +859,7 @@ export default {
           this.$emit('refFavoritesForm')
         }
       } catch (error) {
+        console.log(error)
         vm.$message({
           message: 'The internal server is busy, please try again later ',
           type: 'error'
