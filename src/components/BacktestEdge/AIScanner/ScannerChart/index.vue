@@ -9,7 +9,7 @@
 		<div class="gradient"></div>
 		<!-- <el-card class="form-box"> -->
 		<div class="form-box">
-			<el-tabs v-model="activePerTag" type="card">
+			<el-tabs v-model="activePerTag" type="card" stretch>
 				<el-tab-pane label="History" name="first">
 					<div class="history-container">
 						<div class="form-label">
@@ -27,8 +27,7 @@
 									:summary-method="getSummaries"
 									style="width: 100%; height: 100%"
 								>
-									<div v-if="tableLabels.length > 0">
-										<template v-for="(l, index) in tableLabels">
+										<template v-for="(l, index) in defaultTableLabels">
 											<el-table-column
 												:label="l"
 												:prop="l"
@@ -41,7 +40,6 @@
 												</template>
 											</el-table-column>
 										</template>
-									</div>
 								</el-table>
 							</template>
 						</el-skeleton>
@@ -65,7 +63,7 @@
 <script>
 import Result from './components/PerformanceComponent.vue'
 import Chart from './components/ChartComponent.vue'
-
+import { mapGetters } from 'vuex'
 import { getBacktestInfo } from '@/service/ai'
 
 export default {
@@ -86,58 +84,36 @@ export default {
 			other : {},
 			isAsyncDown : false,
 			backtestResultList : [],
-			tableLabels : [],
-			defaultTableLabels : [
-				'Exit in 89 day',
-				'Entry Date',
-				'Exit in 1 day',
-				'Exit in 3 day',
-				'Exit in 5 day',
-				'Exit in 8 day',
-				'Exit in 13 day',
-				'Exit in 21 day',
-				'Exit in 34 day',
-				'Exit in 55 day',
-				
+			defaultTableLabels: [
+			'Entry Date',
+			'1 Week [%]',
+			'2 Weeks [%]',
+			'1 Month [%]',
+			'2 Months [%]',
+			'3 Months [%]',
+			'6 Months [%]',
+			'12 Months [%]'
 			],
 			currTabPage : 'BacktestResult',
 			translateTabelCol : []
 		}
 	},
+computed: {
+		...mapGetters(['getBacktestResult']),
+		backtestResult() {
+			return this.getBacktestResult
+		},
+	},
+	watch: {
+		backtestResult: {
+			handler(newVal) {
+				this.backtestResultList = newVal
+			},
+			immediate: true,
+			deep: true
+		},
+	},
 	created() {
-		// this.$store.watch(
-		// 	(state: any, getters: any) => {
-		// 		return getters.backtestResult
-		// 	},
-		// 	(val: Array<any>) => {
-		// 		this.backtestResultList = val
-		// 		let tableLabels =
-		// 			this.backtestResultList.length == 0
-		// 				? this.defaultTableLabels
-		// 				: Object.keys(this.backtestResultList[0])
-		// 		let newTableCol = JSON.parse(JSON.stringify(tableLabels))
-		// 		let colTranslate: { originLabel: string; transLabel: string }[]
-		// 		colTranslate = []
-		// 		newTableCol.map((str: string) => {
-		// 			// 去除字符串中的空格
-		// 			let newStr = str.replace(/\s*/g, '')
-		// 			// 去掉括号以及括号中的内容
-		// 			newStr = newStr.replace(/\(.*?\)/g, '')
-		// 			colTranslate.push({
-		// 				transLabel: this.$t(
-		// 					this.currTabPage + '.History.tableCol.' + newStr
-		// 				),
-		// 				originLabel: str
-		// 			})
-		// 		})
-
-		// 		// 合并数据
-		// 		this.tableLabels = colTranslate
-		// 		this.loading = false
-		// 		//console.log('this.tableLabels', this.tableLabels)
-		// 	}
-		// )
-		this.tableLabels = this.defaultTableLabels
 		this.loading = false
 
 		this.getBacktestInfo({
@@ -198,6 +174,7 @@ export default {
 			})
 			return sums
 		},
+
 	},
 
 }

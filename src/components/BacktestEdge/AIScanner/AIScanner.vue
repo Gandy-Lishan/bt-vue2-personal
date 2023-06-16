@@ -99,6 +99,10 @@ export default {
 .gridContainer {
 	display: grid;
 	grid-template-columns: 100%;
+
+	min-width: 65vw;
+	background: #f9fafb;
+	padding: 50px 50px;
 }
 
 h4 {
@@ -106,6 +110,8 @@ h4 {
 }
 
 .gridContainer,.box-card {
-	height: fit-content
+	height: fit-content;
+	box-shadow: unset;
+	border: unset;
 }
 </style>
