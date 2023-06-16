@@ -39,7 +39,7 @@
 					<h2 style="display: inline-block">Recently Updated</h2>
 				</div>
 			</div>
-			<el-card class="box-card">
+			<el-card class="box-card" shadow="never">
 				<p class="text item">
 					<span class="serialNum">01</span>
 					<a href="">Add Symbol OHLCV function</a>

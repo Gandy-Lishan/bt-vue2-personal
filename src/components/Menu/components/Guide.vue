@@ -79,13 +79,14 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .toggle-enter-active {
   transition: transform 0.5s;
 }
 
 .toggle-enter-from {
   transform: translateX(50%);
+  display: none; /* 设置初始时隐藏 */
 }
 
 .toggle-leave-active {
@@ -94,7 +95,10 @@ export default {
 
 .toggle-leave-to {
   transform: translateX(-100%);
+  display: none; /* 设置最终时隐藏 */
 }
+
+
 </style>
 
 
