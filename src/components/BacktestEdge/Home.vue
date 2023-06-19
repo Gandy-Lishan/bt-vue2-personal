@@ -385,11 +385,13 @@ export default {
 
     const pathname = window.location.pathname
     if (pathname.includes('backtests')) {
-      this.activeName = 'sixth';
+      console.log('包含了backtests')
       const targetPath = '/home/backtester/backtests';
       if (this.$route.path !== targetPath) {
         this.$router.push(targetPath);
       }
+      this.switchMainTab('list')
+      this.activeName = 'sixth';
     }
     if (pathname.includes('brainstorm')) {
       this.activeName = 'seventh'
