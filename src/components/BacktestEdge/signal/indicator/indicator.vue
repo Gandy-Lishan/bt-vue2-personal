@@ -98,7 +98,7 @@
 				v-show="indicatorRadio !== 'Users\' Own Indicator'"
 			>
 				<el-form-item>
-					<el-radio v-model="indicatorRadio" label="Users' Own Indicator">
+					<el-radio v-model="indicatorRadio" label="Users' Own Indicator" @change="changeIndicatorChecked">
 					</el-radio>
 				</el-form-item>
 				<el-form-item prop="userIndicator">
