@@ -303,6 +303,13 @@
 		<cq-side-panel></cq-side-panel>
 		<!-- should be outside context before -->
 		<div class="discription_div"></div>
+
+		<div id="stxEventHover" class="myEvents">
+			<span class="content"></span>
+			<span class="tooltip"></span>
+		</div>
+		<div id="stxMessage" class="myMes">
+		</div>
 	</cq-context>
 </template>
 
@@ -377,6 +384,9 @@ export default class AdvancedChartComponent extends Vue {
 				////(study)
 				CIQ.studys.push(study)
 			}
+			
+			// 默认为折线图
+			CIQ.stxx.setChartType("line"); 
 
 			CIQ.ChartEngine.prototype.prepend("draw", function () {
 	
