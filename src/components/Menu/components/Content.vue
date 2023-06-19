@@ -38,15 +38,12 @@
 						modify settings; select timeframe among Daily/Weekly/Monthly; select
 						the Day/Night theme of chart.
 					</p>
-					<image
-						src="../../../assets/helpImg/chart_clear.jepg"
-						title="chart"
-					></image>
 					<el-image
 						style="width: 100%; height: 300px"
 						:src="chartPath"
 						:preview-src-list="chartPreList"
 						fit="fill"
+						lazy
 					></el-image>
 					<h3 id="0-1-0">How to change Symbol on a chart</h3>
 					<p>
@@ -193,9 +190,9 @@
 						How to view the timeframe of an indicator on a chart
 					</h3>
 					<p>
-						In the search box of the Sentiment Indicator, enter the indicator you
-						want to find, such as "Smart Money Confidence". In the dropdown menu
-						of search results, located on the right side, you will see the
+						In the search box of the Sentiment Indicator, enter the indicator
+						you want to find, such as "Smart Money Confidence". In the dropdown
+						menu of search results, located on the right side, you will see the
 						corresponding indicator's timeframe displayed.
 					</p>
 					<h2 id="0-1">Form section</h2>
@@ -417,6 +414,89 @@
 					<p>
 						Check this option to delay the specified number of bars to exit when
 						the exit criteria is met. Set the value preferred.
+					</p>
+					<h2 id="1-6">
+						Create a new backtest with custom indicator for entry/exit criteria
+					</h2>
+					<h3 id="1-6-0">Fill in the basic information for the backtest</h3>
+					<p>
+						According to your own needs, fill in the relevant parameters of the
+						backtest, including Starting Capital, Commission, Benchmark,
+						Backtest History... Switch the timeframe to daily, as currently
+						custom indicators only support uploading daily data.
+					</p>
+					<h3 id="1-6-1">Fill in the entry criteria</h3>
+					<p>
+						Select 'Single-Condition' from the drop-down list in the upper right
+						corner of the Entry Criteria section. Choose the 'Users' Own
+						Indicator' radio button.
+					</p>
+					<p>
+						If you want to use the same custom indicator file for both entry and
+						exit, select 'Single Condition' from the drop-down list in the upper
+						right corner of the Exit Criteria section. Choose the 'Users' Own
+						Indicator' radio button. This way, when you upload the custom file
+						for Entry Criteria, we will pre-fill the custom indicator file for
+						Exit Criteria. If you are using different custom indicator files for
+						entry and exit, you can skip this step.
+					</p>
+					<p>
+						The Custom indicator files can only be uploaded as CSV files. The
+						file name should only contain English letters, numbers, spaces,
+						underscores, and cannot start with a number. The file size should be
+						less than 1MB. The file content has strict formatting requirements.
+						Please click the 'View Example Data' button to see an example file.
+					</p>
+					<p>
+						Click the 'Click to upload custom indicator file' button to upload
+						your local custom indicator file.
+					</p>
+					<p>
+						If your file format meets the requirements, please ensure that the
+						file does not contain non-trading days. If there are non-trading
+						days in the CSV file, a popup window will appear to alert you. In
+						that case, you can click the 'Ignore' button in the popup window,
+						and we will remove the non-trading days from the file. If you click
+						the 'Cancel' button, the file will not be uploaded.
+					</p>
+					<p>
+						Once the signal name is confirmed, the chart will display the custom
+						signal on it. It is important to note that if the dates in the
+						uploaded indicator file exceed the chart's date range, the exceeding
+						portion will not be plotted on the chart. After successful file
+						upload, you can click on the file list item to preview the uploaded
+						file.
+					</p>
+					<p>
+						Finally, fill in the entry conditions corresponding to the signal
+						panel.
+					</p>
+					<h3 id="1-6-2">Fill in the exit criteria</h3>
+					<p>
+						If your Exit Criteria is pre-filled with a custom indicator file,
+						you only need to fill in the exit conditions corresponding to the
+						signal panel.
+					</p>
+					<p>
+						If your Exit Criteria is not pre-filled with a custom indicator
+						file, you will need to upload your own indicator file from your
+						local device. The uploading process and requirements are the same as
+						mentioned earlier for Entry Criteria. Once the custom indicator file
+						for Exit Criteria is successfully uploaded, fill in the exit
+						conditions corresponding to the signal panel.
+					</p>
+					<h3 id="1-6-3">Run Backtest and view results</h3>
+					<p>
+						Click the 'Run Backtest' button to execute the backtest and view the
+						results. Creating a backtest using custom signals also supports
+						multi-signal creation. Simply switch the 'Single-Condition' to
+						'SameBar Multi-Condition' or 'TimeOrder Multi-Condition' and follow
+						the steps in the multi-signal creation tutorial.
+						<el-link type="primary" @click="jump('1-3')"
+							>Create a sameday multi-signal entry/exit criteria new backtest<i
+								class="el-icon-top-right"
+							></i
+						></el-link>
 					</p>
 				</section>
 			</section>

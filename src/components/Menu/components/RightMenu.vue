@@ -1,90 +1,5 @@
 <template>
 	<div>
-		<!-- <div class="right-menu-wrapper">
-			<div class="right-menu-margin">
-				<div class="right-menu-title">Directory</div>
-				<div class="right-menu-content">
-					<div class="right-menu-item level2 active">
-						<a href="#安装">安装</a>
-					</div>
-					<div class="right-menu-item level2">
-						<a href="#创建版本库-仓库">创建版本库（仓库）</a>
-					</div>
-					<div class="right-menu-item level2">
-						<a href="#添加文件到仓库">添加文件到仓库</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#提交描述规范">提交描述规范</a>
-					</div>
-					<div class="right-menu-item level2">
-						<a href="#版本管理">版本管理</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#提交修改">提交修改</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#查看版本记录">查看版本记录</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#回退版本">回退版本</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#撤销修改">撤销修改</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#删除文件">删除文件</a>
-					</div>
-					<div class="right-menu-item level2">
-						<a href="#远程仓库">远程仓库</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#ssh验证">SSH验证</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#关联远程仓库">关联远程仓库</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#查看远程仓库">查看远程仓库</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#删除远程仓库">删除远程仓库</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#从远程库克隆项目">从远程库克隆项目</a>
-					</div>
-					<div class="right-menu-item level5">
-						<a href="#克隆指定分支">克隆指定分支</a>
-					</div>
-					<div class="right-menu-item level2">
-						<a href="#分支管理">分支管理</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#创建分支">创建分支</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#查看分支">查看分支</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#切换分支">切换分支</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#合并分支">合并分支</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#删除分支">删除分支</a>
-					</div>
-					<div class="right-menu-item level4">
-						<a href="#修改分支名">修改分支名</a>
-					</div>
-					<div class="right-menu-item level2">
-						<a href="#帮助命令">帮助命令</a>
-					</div>
-					<div class="right-menu-item level2">
-						<a href="#参考文档">参考文档</a>
-					</div>
-				</div>
-			</div>
-		</div> -->
 		<div class="right-menu-wrapper">
 			<div class="right-menu-margin">
 				<div class="right-menu-title">Directory</div>
@@ -122,6 +37,12 @@ export default {
       activeSection: '', // 当前活动的章节
     };
   },
+	mounted() {
+    const skipID = this.$route.params.id
+		if(skipID) {
+			this.scrollToSection(skipID)
+		}
+	},
   methods: {
     scrollToSection(id) {
       this.activeSection = id; // 设置当前活动的章节
