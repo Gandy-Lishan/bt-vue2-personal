@@ -818,6 +818,7 @@ export default {
           vm.activePerTag = 'first'
           try {
             const res = await seeReport(id)
+            console.log('report res', res)
 
             if (res.status == 200) {
               if (typeof res.data == 'string') {

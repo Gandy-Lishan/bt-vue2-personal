@@ -36,7 +36,7 @@ const router = new Router({
 							]
 						},
 						{ path: 'strategy', name: 'strategy', component: resolve => require(['@/components/BacktestEdge/Strategy.vue'], resolve) },
-						{ path: 'backtests', name: 'backtests', component: resolve => require(['@/components/BacktestEdge/Backtests.vue'], resolve), },
+						{ path: 'backtests', name: 'Backtests', component: resolve => require(['@/components/BacktestEdge/Backtests.vue'], resolve), },
 					]
 				},
 				{
@@ -57,7 +57,12 @@ const router = new Router({
 				,
 			]
 		},
-		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve) },
+		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve), redirect: '/doc/home',
+    	children: [
+        {path: '/doc/home',  component: resolve => require(['@/components/Menu/components/Doc.vue'], resolve)},
+        {path: '/doc/guide/:id',  component: resolve => require(['@/components/Menu/components/Guide.vue'], resolve)},
+        { path: '/doc/old', component: resolve => require(['@/components/Menu/old_doc.vue'], resolve) }
+      ]},
 	]
 })
 
