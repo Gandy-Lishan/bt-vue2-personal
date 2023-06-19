@@ -7,20 +7,8 @@
 				<nav>
 					<router-link active-class="active" to="/doc/guide">Tutorial</router-link>
 					<router-link active-class="active" to="/doc/old">Old Tutorial</router-link>
-					<router-link active-class="active" to="/doc/community"
-						>社区</router-link
-					>
 				</nav>
 			</div>
-			<!-- <div class="box">
-              <input class="text" type="text" placeholder="请输入关键词~~~" name="search">
-              <input class="button" type="button" value="搜索">
-              <img src="../../assets/logo.png">
-              <nav>
-                  <a >消息</a>
-                  <a>发布</a>
-              </nav>
-          </div> -->
 		</div>
 		<div class="contents">
 			<div class="content">

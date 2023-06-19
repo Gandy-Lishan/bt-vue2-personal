@@ -48,7 +48,7 @@
 				<hr />
 				<p class="text item">
 					<span class="serialNum">02</span>
-					<a href="">Add user upload custom indicator function</a>
+					<a @click="skipUserUpload('1-6')">Add user upload custom indicator function</a>
 					<span class="date">2023-06-12</span>
 				</p>
 			</el-card>
@@ -63,7 +63,14 @@ export default {
   name: 'DocHome',
   components: {
     Footer
-  }
+  },
+	methods: {
+		skipUserUpload(id){
+			this.$router.push({
+          path: `/doc/guide/${id}`,
+        })
+		}
+	}
 }
 </script>
 

@@ -38,7 +38,8 @@ export default {
             { id: '1-2', title: 'Set different backtest timeframe' },
             { id: '1-3', title: 'Create a sameday multi-signal entry/exit criteria new backtest' },
             { id: '1-4', title: 'Create a timeorder multi-signal entry/exit criteria new backtest' },
-            { id: '1-5', title: 'Set the value of delay of bars' }
+            { id: '1-5', title: 'Set the value of delay of bars' },
+            { id: '1-6', title: 'Create a new backtest with custom indicator for entry/exit criteria' }
           ] },
           {
             id: '2', title: 'Add created backtest to My Favorites', subsections: [
@@ -66,6 +67,12 @@ export default {
       activeSection: '0',
       isToggle: false
     }
+  },
+  mounted() {
+    const skipID = this.$route.params.id
+		if(skipID) {
+			this.recvActSecId(skipID)
+		}
   },
   methods: {
     recvActSecId(sectionId) {
