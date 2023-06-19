@@ -38,12 +38,16 @@
 						modify settings; select timeframe among Daily/Weekly/Monthly; select
 						the Day/Night theme of chart.
 					</p>
-					<image src="../../../assets/helpImg/chart_clear.jepg" title="chart"></image>
+					<image
+						src="../../../assets/helpImg/chart_clear.jepg"
+						title="chart"
+					></image>
 					<el-image
-      style="width: 100%; height: 300px"
-      :src="chartPath"
-			:preview-src-list="chartPreList"
-      fit="fill"></el-image>
+						style="width: 100%; height: 300px"
+						:src="chartPath"
+						:preview-src-list="chartPreList"
+						fit="fill"
+					></el-image>
 					<h3 id="0-1-0">How to change Symbol on a chart</h3>
 					<p>
 						Find the search box named symbol in the chart and select the stock
@@ -188,11 +192,19 @@
 					<h2 id="0-1">Form section</h2>
 					<hr />
 					<p>
-						In the chart section of BacktestEdge, users can select stock/index
-						symbol to be backtested and add to favorites; select sentiment
-						indicators and add to favorites; select technical indicators and
-						modify settings; select timeframe among Daily/Weekly/Monthly; select
-						the Day/Night theme of chart.
+						The BacktestEdge form is divided into three parts: Backtest
+						Information, Entry Criteria, and Exit Criteria. The Backtest
+						Information section allows you to fill in parameters for backtesting
+						such as Commission, Slippage, Starting Capital, and more. The Entry
+						Criteria and Exit Criteria sections allow you to set conditions for
+						triggering entry and exit during backtesting. We support both
+						single-signal and multi-signal conditions, as well as the option to
+						use only risk control at exits. Additionally, you can fill in the
+						Delay Of Bars, Score (applicable for multi-signal), and Period
+						(applicable for multi-signal) based on your needs. If you're unsure
+						about the meaning of each parameter, you can hover over the question
+						mark icon next to the parameter, and a pop-up window will explain
+						its meaning and purpose.
 					</p>
 				</section>
 			</section>
@@ -473,18 +485,32 @@
 			</section>
 			<section v-else-if="id[0] == '6'">
 				<h1 id="6">How to view the description of the backtest</h1>
-				<hr>
+				<hr />
 				<section>
 					<h2 id="6-0">Open any list page</h2>
 					<p>
-						The backtesting system has three list pages: Backtest History, My Favorites, and Sample Backtests. The Backtest History contains all the backtests you create; My Favorites
-						Contains all backtests added to the collection; There are many Sample Backtests stored in Sample Backtests, which you can use through copy. Now let's open one of the list pages, such as Backtest History,
-						Then click on the triangle button to see the signal indicators used for the current backtesting. If you open the Sample Backtests tab, you'll find that Sample Backtests displays the basic information indicator by default, and if you don't need it, you can click the triangle button to hide.
+						The backtesting system has three list pages: Backtest History, My
+						Favorites, and Sample Backtests. The Backtest History contains all
+						the backtests you create; My Favorites Contains all backtests added
+						to the collection; There are many Sample Backtests stored in Sample
+						Backtests, which you can use through copy. Now let's open one of the
+						list pages, such as Backtest History, Then click on the triangle
+						button to see the signal indicators used for the current
+						backtesting. If you open the Sample Backtests tab, you'll find that
+						Sample Backtests displays the basic information indicator by
+						default, and if you don't need it, you can click the triangle button
+						to hide.
 					</p>
-					<h2 id="6-1">How to know the indicator parameters used by the backup through description</h2>
+					<h2 id="6-1">
+						How to know the indicator parameters used by the backup through
+						description
+					</h2>
 					<p>
-						How do you know from the description on display what entry and exit conditions are used in backtest? The description is divided into two parts, the Entry description on the left and the Entry description on the right
-						Exit description. The following figure is the meaning of the Entry description and the Exit description.
+						How do you know from the description on display what entry and exit
+						conditions are used in backtest? The description is divided into two
+						parts, the Entry description on the left and the Entry description
+						on the right Exit description. The following figure is the meaning
+						of the Entry description and the Exit description.
 					</p>
 				</section>
 			</section>
@@ -506,8 +532,8 @@ export default {
     return {
       menuItems: [],
       isToggle: false,
-			chartPath: chartPath,
-			chartPreList: [chartPath]
+      chartPath: chartPath,
+      chartPreList: [chartPath]
     }
   },
   components: {
