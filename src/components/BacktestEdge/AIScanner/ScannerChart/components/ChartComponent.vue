@@ -8,6 +8,7 @@
 <script>
 import chart from '@/components/chart/index.vue'
 import { CIQ } from 'chartiq/js/components'
+import jutils from 'jutils-src'
 export default {
 	name: 'TVChartContainer',
 	props: {
@@ -28,7 +29,6 @@ export default {
 	},
 	methods:{
 		onChartReady(){
-			//this.loadDefaultStudy()
 			CIQ.initiateChart(()=>{
 				const periodArray = [
 					{ period: 1, timeframe: 'Week' },
@@ -40,16 +40,33 @@ export default {
 					{ period: 12, timeframe: 'Month' }
 				]
 				this.calculateBacktestHistory(this.other['EntryTradeDate'], periodArray,this.direction)
+				this.loadDefaultStudy()
+				this.loadMarker()
 			})
 
 		},
 		loadDefaultStudy() {
+			 
 			// 默认显示signal indicator 和 tech indicator,如果没有就不显示
 			for(var i in CIQ.technicalCategory){
-				this.indicator = CIQ.technicalCategory[i]['studies'].find(item=>item.name == this.other['_Signal']).url
+				let result = CIQ.technicalCategory[i]['studies'].find(item=>item.name == this.other['_Signal'])
+				if(result){
+					this.indicator = result.url
+					break
+				}
 			}
 
-			CIQ.Studies.addStudy(CIQ.stxx, this.indicator,{display:this.indicator});
+			let patterns = ['UpPattern', 'DownPattern']
+			let tradeStudies = ['Hammer','Shooting']
+			if (patterns.indexOf(this.indicator) != -1){
+				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{points:this.other.Point})
+				CIQ.stxx.setChartType("candle");
+			}else if(tradeStudies.indexOf(this.indicator) != -1){
+				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{trades:this.other.EntryTradeDate})
+			}else{
+				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,{display:this.indicator})
+			}
+			
 			// macd gap和macd绑定显示
 			if (this.indicator == 'macd_hist_gap') {
 				CIQ.Studies.addStudy(CIQ.stxx, 'macd');
@@ -58,33 +75,6 @@ export default {
 			if (this.indicator == 'ma_gap') {
 				CIQ.Studies.addStudy(CIQ.stxx, 'ma');
 			}
-
-
-			// // 默认显示高低线和pattern,如果没有就不显示
-			// let patterns = ['UpPattern', 'DownPattern']
-			// if (patterns.indexOf(this.other['_Signal']) == -1) return
-
-			// // 显示pattern标记
-			// let lastItem = this.other['Point'].slice(this.other['Point'].length - 1)
-			// const shapeOffset = 2
-			// widget.activeChart().createShape(
-			// 	{
-			// 		time: new Date(lastItem[0].Date) / 1000,
-			// 		price: lastItem[0].Value + shapeOffset
-			// 	},
-			// 	{
-			// 		shape: 'note',
-			// 		text: this.other['_Signal'],
-			// 		lock: true,
-			// 		overrides: {
-			// 			backgroundColor: '#5000fc',
-			// 			markerColor: '#5000fc',
-			// 			textColor: '#FFFFFF',
-			// 			fontsize: 14,
-			// 			backgroundTransparency: 40
-			// 		}
-			// 	}
-			// )
 		},
 		calculateBacktestHistory(dataSet, periodArray,direction) {
 			//this.$store.dispatch('app/store_backtestResult', []).then(() => {
@@ -172,6 +162,106 @@ export default {
 				}
 				return { timeframe, period: item.period, value }
 			})
+		},
+		filterFormatMarkerDate(start_date, end_date) {
+			// 把字符串列表entryDates, exitDates格式化为markerSet的对象数组
+			const markerSet= []
+			const dataSource = CIQ.stxx.chart.dataSet
+			
+            let entryTradeDateArr = eval('(' + this.other['EntryTradeDate'] + ')')
+            if(entryTradeDateArr){
+                entryTradeDateArr.forEach((item,index)=>{
+					var datatime = new Date(item)
+					var offset = datatime.getTimezoneOffset() * 60 * 1000
+					const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+                    let quote = dataSource.find(x=>{
+                        return x.DT.getTime() == standardDate.getTime()
+                    })
+                    markerSet.push({
+                        DT: item,
+                        Price: quote.Close,
+                        Type: 'BUY',    
+                    })
+                })
+            }
+            let exitTradeDateArr = eval('(' + this.other['ExitTradeDate'] + ')')
+            if(exitTradeDateArr){
+                exitTradeDateArr.forEach((item,index)=>{
+					var datatime = new Date(item)
+					var offset = datatime.getTimezoneOffset() * 60 * 1000
+					const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+                    let quote = dataSource.find(x=>{
+                        return x.DT.getTime() == standardDate.getTime()
+                    })
+                    markerSet.push({
+                        DT: item,
+                        Price: quote.Close,
+                        Type: 'SELL',    
+                    })
+                })
+            }
+
+			let list = []
+			let _date = {
+				start: jutils.formatDate(start_date, 'YYYYMMDD'),
+				end: jutils.formatDate(end_date, 'YYYYMMDD')
+			}
+			for (var date in markerSet) {
+				let markerSetDate =
+				markerSet[date].DT.slice(0, 4) +
+				markerSet[date].DT.slice(5, 7) +
+				markerSet[date].DT.slice(8, 10)
+				if (markerSetDate > _date.start && markerSetDate <= _date.end) {
+					list.push(markerSet[date])
+				}
+			}
+			return list
+		},
+		loadMarker() {
+			try {
+				//load markers for initial quotefeed
+
+				let list = this.filterFormatMarkerDate(
+					new Date(CIQ.initialDate.start),
+					new Date(CIQ.initialDate.end),
+				)
+				CIQ.isMarkerShown = true
+
+				// split the markers into several groups
+				CIQ.groups = this.group(list)
+				let markers = CIQ.groups.pop()
+
+				// if the last groups has no enough number of items, merge it with the last one
+				//console.log('CIQ.stxx.chart.xaxis[0]',CIQ.stxx.chart.xaxis[0])
+				let c_date = jutils.formatDate(CIQ.stxx.chart.xaxis[0].DT, 'YYYYMMDD')
+				if (CIQ.groups.slice(-1)[0]) {
+				let m_date =
+					CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
+					CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
+					CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
+				if (c_date < m_date) {
+					markers.unshift(...CIQ.groups.pop())
+				}
+				}
+				console.log('initiating Markers...', markers,CIQ.groups)
+				CIQ.loadChart(markers, CIQ.addMarker)
+			} catch (error) {
+				console.error(error)
+				return
+			}
+		},
+		group(data) {
+			var result = []
+			var groupItem
+			for (var i = 0; i < data.length; i++) {
+				if (i % 500 == 0) {
+				groupItem != null && result.push(groupItem)
+				groupItem = []
+				}
+				groupItem.push(data[i])
+			}
+			result.push(groupItem)
+			return result
 		},
 	}
 }
