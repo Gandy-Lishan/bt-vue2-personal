@@ -1,3 +1,6 @@
+/*
+ element-ui 组件样式
+*/
 .el-dialog__wrapper .el-dialog {
   width: 637px;
 }
@@ -62,6 +65,29 @@
   left: 24px !important;
 }
 
+.aiscanner-date .el-input__inner {
+  margin-left: 0;
+}
+.aiscanner-table .demo-table-expand {
+	font-size: 0;
+}
+.aiscanner-table .demo-table-expand label {
+  width: 13.5rem;
+  color: #99a9bf;
+}
+.aiscanner-table .demo-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 60%;
+}
+.aiscanner-table .cell{
+  display: flex !important;
+  align-items: center !important;
+}
+.aiscanner-table .dark-row {
+  background: rgb(219 219 219) !important
+}
+
 /* 修改主题色 */
 .el-radio__input.is-checked .el-radio__inner {
   border-color: #5b9bd1;
@@ -81,4 +107,9 @@
   color: #FFF;
   background-color: #5b9bd1;
   border-color: #5b9bd1;
+}
+
+.el-menu--horizontal>.el-menu-item.is-active {
+  border-bottom: 2px solid #5b9bd1;
+  color: #5b9bd1 !important;
 }

@@ -14,6 +14,16 @@ export default {
 @import '../node_modules/chartiq/css/stx-chart.css'; // Chart API
 @import '../node_modules/chartiq/css/chartiq.css'; // Chart UI
 @import '../node_modules/chartiq/st-development/css/ST-chartiq.css';
+
+a {
+    color: #5b9bd1;
+    text-decoration: none;
+    transition: color .3s;
+}
+a:hover{
+    color: #038cff;
+}
+
 #app {
 	overflow-y: auto;
 	overflow-x: hidden;
