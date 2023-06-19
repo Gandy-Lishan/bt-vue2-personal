@@ -189,6 +189,15 @@
 						and drop down the menu Select Delete Indicator to delete the current
 						indicator.
 					</p>
+					<h3 id="0-1-17">
+						How to view the timeframe of an indicator on a chart
+					</h3>
+					<p>
+						In the search box of the Sentiment Indicator, enter the indicator you
+						want to find, such as "Smart Money Confidence". In the dropdown menu
+						of search results, located on the right side, you will see the
+						corresponding indicator's timeframe displayed.
+					</p>
 					<h2 id="0-1">Form section</h2>
 					<hr />
 					<p>
