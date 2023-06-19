@@ -1022,8 +1022,8 @@ export default {
     },
     calculateBacktestHistory(dataSet, periodArray) {
       /*
-    periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
-    */
+      periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
+      */
       let chartDataset = CIQ.stxx.chart.dataSet
       const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
       dataSet = dataSet.filter((item) => item.TradeStatus == 'BUY')

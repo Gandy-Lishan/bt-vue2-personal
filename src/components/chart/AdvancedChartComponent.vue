@@ -303,6 +303,13 @@
 		<cq-side-panel></cq-side-panel>
 		<!-- should be outside context before -->
 		<div class="discription_div"></div>
+
+		<div id="stxEventHover" class="myEvents">
+			<span class="content"></span>
+			<span class="tooltip"></span>
+		</div>
+		<div id="stxMessage" class="myMes">
+		</div>
 	</cq-context>
 </template>
 
@@ -377,6 +384,9 @@ export default class AdvancedChartComponent extends Vue {
 				////(study)
 				CIQ.studys.push(study)
 			}
+			
+			// 默认为折线图
+			CIQ.stxx.setChartType("line"); 
 
 			CIQ.ChartEngine.prototype.prepend("draw", function () {
 	
@@ -405,10 +415,10 @@ export default class AdvancedChartComponent extends Vue {
 						if(c_date<m_date){
 							let markers = CIQ.groups.pop()
 							
-							// console.log("new pagnigation start from ",
-							// 	CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
-							// 	CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
-							// 	CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10))
+							console.log("new pagnigation start from ",
+								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
+								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
+								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10))
 							CIQ.loadChart(markers, CIQ.addMarker)
 						}
 					}
