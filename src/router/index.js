@@ -21,35 +21,54 @@ const router = new Router({
 	mode: 'history',
 	routes: [
 		{ path: '/', redirect: '/home' },
-		{ path: '/home', component: resolve => require(['@/components/BacktestEdge/index.vue'], resolve),
-		redirect: '/home/backtester',
-	children: [
-		{path: '/home/backtester', name:'backtester',component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
-	children: [
-		{path: '/home/backtester/backtests', name:'Backtests',component: resolve => require(['@/components/BacktestEdge/Backtests.vue'], resolve),},
-		{path: '/home/brainstorm', name:'brainstorm',component: resolve => require(['@/components/BacktestEdge/Brainstorm/index.vue'], resolve), redirect: '/home/brainstorm/exit_with_custom_TIM_frame',children: [
-			{path: '/home/brainstorm/exit_with_custom_TIM_frame', name: 'ExitWithCustomTIMFrame',component: resolve => require(['@/components/BacktestEdge/Brainstorm/ExitWithCustomTIMFrame.vue'], resolve)},
-		]},
-		{ path: '/home/strategy', name:'strategy',component: resolve => require(['@/components/BacktestEdge/Strategy.vue'], resolve) },
-	]},
-	{ 
-		path: 'aiscanner', name: 'aiscanner', component: resolve => require(['@/components/BacktestEdge/AIScanner.vue'], resolve)
-	},
-	] },
+		{
+			path: '/home', component: resolve => require(['@/components/BacktestEdge/index.vue'], resolve),
+			redirect: '/home/backtester',
+			children: [
+				{
+					path: 'backtester', name: 'backtester', component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
+					children: [
+						{
+							path: 'brainstorm', name: 'brainstorm', component: resolve => require(['@/components/BacktestEdge/Brainstorm/index.vue'], resolve), 
+							redirect: '/home/backtester/brainstorm/exit_with_custom_TIM_frame', 
+							children: [
+								{ path: 'exit_with_custom_TIM_frame', name: 'ExitWithCustomTIMFrame', component: resolve => require(['@/components/BacktestEdge/Brainstorm/ExitWithCustomTIMFrame.vue'], resolve) },
+							]
+						},
+						{ path: 'strategy', name: 'strategy', component: resolve => require(['@/components/BacktestEdge/Strategy.vue'], resolve) },
+						{ path: 'backtests', name: 'Backtests', component: resolve => require(['@/components/BacktestEdge/Backtests.vue'], resolve), },
+					]
+				},
+				{
+					path: 'scannerai',
+					component: resolve => require(['@/components/BacktestEdge/AIScanner/index.vue'], resolve),
+					children: [
+						{
+							path: '',
+							name: 'scannerai',
+							component: resolve => require(['@/components/BacktestEdge/AIScanner/AIScanner.vue'], resolve),
+						},
+						{
+							path: 'scannerai_chart', 
+							name: 'scannerai_chart', 
+							component: resolve => require(['@/components/BacktestEdge/AIScanner/ScannerChart/index.vue'], resolve)
+						}
+					]}
+				,
+			]
+		},
 		{ path: '/doc', component: resolve => require(['@/components/Menu/Doc.vue'], resolve), redirect: '/doc/home',
-	children: [
-		{path: '/doc/home',  component: resolve => require(['@/components/Menu/components/Doc.vue'], resolve)},
-		{path: '/doc/guide/:id',  component: resolve => require(['@/components/Menu/components/Guide.vue'], resolve)},
-		{ path: '/doc/old', component: resolve => require(['@/components/Menu/old_doc.vue'], resolve) }
-	] }
-		// { path: '/home', component: () => import(/* webpackChunkName: "Home" */ "@/components/BacktestEdge/Home.vue") },
-		// { path: '/doc', component: () => import(/* webpackChunkName: "Doc" */ "@/components/Menu/Doc.vue") }
+    	children: [
+        {path: '/doc/home',  component: resolve => require(['@/components/Menu/components/Doc.vue'], resolve)},
+        {path: '/doc/guide/:id',  component: resolve => require(['@/components/Menu/components/Guide.vue'], resolve)},
+        { path: '/doc/old', component: resolve => require(['@/components/Menu/old_doc.vue'], resolve) }
+      ]},
 	]
 })
 
 router.beforeEach(async (to, from, next) => {
 	await initiateIndicatorList()
-	if(to.path == '/home/aiscanner'){
+	if(to.path == '/home/scannerai'){
 		await initiateCurrentDate()
 	}
 	
@@ -110,7 +129,7 @@ async function initiateCurrentDate() {
 	if(store.state.curDate==''){
 		let _res = await getCurDate()
 		let curDate =_res[0]['lastUpdatePickDate']
-		await store.dispatch('set_cur_date',curDate)  
+		await store.dispatch('set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
 	}
 }
 
