@@ -62,7 +62,7 @@
 								>Hint: To change the indicator settings<br />Right click the
 								indicator in the above chart and select "Edit Setting"
 							</span>
-							<i class="iconfont icon-wenhao"></i>
+							<i class="el-icon-info" style="margin-left: 5px"></i>
 						</el-tooltip>
 					</div>
 				</el-form-item>

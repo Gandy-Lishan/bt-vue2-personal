@@ -26,12 +26,11 @@ const router = new Router({
 	children: [
 		{path: '/home/backtester', name:'backtester',component: resolve => require(['@/components/BacktestEdge/Home.vue'], resolve),
 	children: [
+		{path: '/home/backtester/backtests', name:'Backtests',component: resolve => require(['@/components/BacktestEdge/Backtests.vue'], resolve),},
 		{path: '/home/brainstorm', name:'brainstorm',component: resolve => require(['@/components/BacktestEdge/Brainstorm/index.vue'], resolve), redirect: '/home/brainstorm/exit_with_custom_TIM_frame',children: [
 			{path: '/home/brainstorm/exit_with_custom_TIM_frame', name: 'ExitWithCustomTIMFrame',component: resolve => require(['@/components/BacktestEdge/Brainstorm/ExitWithCustomTIMFrame.vue'], resolve)},
 		]},
 		{ path: '/home/strategy', name:'strategy',component: resolve => require(['@/components/BacktestEdge/Strategy.vue'], resolve) },
-		{path: '/home/backtests', name:'backtests',component: resolve => require(['@/components/BacktestEdge/Backtests.vue'], resolve),},
-
 	]},
 	{ 
 		path: 'aiscanner', name: 'aiscanner', component: resolve => require(['@/components/BacktestEdge/AIScanner.vue'], resolve)

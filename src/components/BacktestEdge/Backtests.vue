@@ -287,6 +287,7 @@ import {
 	searchAnalystList
 } from '@/service/service'
 export default {
+	name: 'Backtests',
 	data() {
 		return {
 			backtestList: [],
