@@ -113,6 +113,7 @@ export default new Vuex.Store({
 		usersOwnEntryFileHash: Array(5).fill(''),
 		usersOwnExitFileHash: Array(5).fill(''),
 		userUploadFileContent: Array(5).fill({}),
+		backtestResult: [],
 	},
 	getters: {
 		getExtremeValue: (state) => {
@@ -121,8 +122,14 @@ export default new Vuex.Store({
 		getBeforeCalculateNewConditions: (state) => {
 			return state.beforeCalculateNewConditions
 		},
+		getBacktestResult: (state) => {
+			return state.backtestResult
+		}
 	},
 	mutations: {
+		STORE_BACKTESTRESULT: (state,val)=>{
+			state.backtestResult = val
+		},
 		SET_CUR_DATE: (state,val)=>{
 			state.curDate = val
 		},
@@ -641,6 +648,12 @@ export default new Vuex.Store({
 		set_cur_date({commit}, val){
 			return new Promise(resolve=>{
 			  commit('SET_CUR_DATE',val)
+			  resolve();
+			})
+		},
+		store_backtestResult({commit}, val){
+			return new Promise(resolve=>{
+			  commit('STORE_BACKTESTRESULT',val)
 			  resolve();
 			})
 		},
