@@ -23,7 +23,7 @@
 				<div class="edit-page">
 					<div class="edit-link">
 						<a
-							href="/doc/guide"
+							href="/doc/guide/0"
 							target="_blank"
 							rel="noopener noreferrer"
 							>Get Start Now!</a
