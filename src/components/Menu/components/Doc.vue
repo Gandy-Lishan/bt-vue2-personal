@@ -163,6 +163,7 @@ export default {
 		align-items: center;
 		font-weight: normal;
 		word-wrap: none;
+		cursor: pointer;
 	}
 	.date {
 		margin-right: 15px;
