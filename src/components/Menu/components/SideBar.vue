@@ -78,9 +78,10 @@ export default {
   top: 0;
   left: 0;
   width: 300px;
-  height: 100vh;
-  overflow-y: auto;
+  height: 90vh;
+  overflow-y: scroll;
   margin-top: 70px;
+  padding-bottom: 20px;
   background-color: #fff;
 }
 .sidebar-heading {

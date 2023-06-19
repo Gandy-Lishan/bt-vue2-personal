@@ -57,12 +57,13 @@
 							placeholder="Input the technical indicator"
 							@select="handleTechnicalSelect"
 						></el-autocomplete>
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content"
-                >Hint: To change the indicator settings<br />Right click the indicator in the above chart and select "Edit Setting"
-              </span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
+						<el-tooltip effect="dark" placement="top">
+							<span slot="content"
+								>Hint: To change the indicator settings<br />Right click the
+								indicator in the above chart and select "Edit Setting"
+							</span>
+							<i class="iconfont icon-wenhao"></i>
+						</el-tooltip>
 					</div>
 				</el-form-item>
 			</div>
@@ -92,7 +93,31 @@
 					</el-select>
 				</el-form-item>
 			</div>
-			<div class="indicator-container customBox">
+			<div
+				class="indicator-container sentiBox"
+				v-show="indicatorRadio !== 'Users\' Own Indicator'"
+			>
+				<el-form-item>
+					<el-radio v-model="indicatorRadio" label="Users' Own Indicator">
+					</el-radio>
+				</el-form-item>
+				<el-form-item prop="userIndicator">
+					<div class="indicatorSearchBox">
+						<el-autocomplete
+							prefix-icon="el-icon-files"
+							:disabled="!(indicatorRadio === 'Users\' Own Indicator')"
+							class="inline-input"
+							clearable
+							v-model="si.userIndicator"
+							placeholder="Select Users' Own Indicator File."
+						></el-autocomplete>
+						<!-- <el-tooltip effect="dark" placement="top">
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip> -->
+					</div>
+				</el-form-item>
+			</div>
+			<div class="indicator-container customBox" v-show="indicatorRadio === 'Users\' Own Indicator'">
 				<el-form-item>
 					<el-radio
 						v-model="indicatorRadio"
@@ -612,7 +637,7 @@ export default {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
             item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex] &&
-            item.criteria == this.criteria && 
+            item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
@@ -631,7 +656,7 @@ export default {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
             item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex] &&
-            item.criteria == this.criteria && 
+            item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
@@ -669,7 +694,7 @@ export default {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
             item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex] &&
-            item.criteria == this.criteria && 
+            item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
@@ -688,7 +713,7 @@ export default {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
             item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex] &&
-            item.criteria == this.criteria && 
+            item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
@@ -735,7 +760,7 @@ export default {
         var MAListIndex = activatedMAList.findIndex(
           (ma) =>
             ma.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex] &&
-            ma.criteria == this.criteria && 
+            ma.criteria == this.criteria &&
             ma.index == this.panelIndex
         )
         if (MAListIndex != -1) {
@@ -754,7 +779,7 @@ export default {
         var MAListIndex = activatedMAList.findIndex(
           (ma) =>
             ma.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex] &&
-            ma.criteria == this.criteria && 
+            ma.criteria == this.criteria &&
             ma.index == this.panelIndex
         )
         if (MAListIndex != -1) {
@@ -775,7 +800,7 @@ export default {
       this.$store.commit('getTechnicalIndicators', techIndicators)
 
       // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-      CIQ.setMALayout(url,null,null,null,this.criteria,this.panelIndex)
+      CIQ.setMALayout(url, null, null, null, this.criteria, this.panelIndex)
 
       // avoid add indicator redundantly
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -830,7 +855,7 @@ export default {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
             item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex] &&
-            item.criteria == this.criteria && 
+            item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
@@ -849,7 +874,7 @@ export default {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
             item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex] &&
-            item.criteria == this.criteria && 
+            item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
@@ -1439,10 +1464,10 @@ export default {
           // 还原文件对象的 raw 属性
           if (status == 200 || status == 201) {
             self.$notify.success({
-            title: 'Tips',
-            message: 'File uploaded successfully. You can click on the file to preview it.',
-            duration: 0
-          });
+              title: 'Tips',
+              message: 'File uploaded successfully. You can click on the file to preview it.',
+              duration: 0
+            });
             self.previewFileID = response.data.file_id
             const obj = {}
             obj.index = this.panelIndex
@@ -1599,10 +1624,10 @@ export default {
     },
     handleExceed(files, fileList) {
       this.$notify.warning({
-            title: 'Tips',
-            message: 'Only single indicator files can be uploaded.',
-            duration: 0
-          });
+        title: 'Tips',
+        message: 'Only single indicator files can be uploaded.',
+        duration: 0
+      });
       return false
     },
     async beforeUpload(file) {
@@ -1622,9 +1647,9 @@ export default {
         CIQ.hideCover()
         CIQ.nprogress.done()
         this.$notify.warning({
-            title: 'Tips',
-            message: 'The uploaded file must be in CSV format.',
-            duration: 0
+          title: 'Tips',
+          message: 'The uploaded file must be in CSV format.',
+          duration: 0
         });
         return Promise.reject('The uploaded file must be in CSV format.')
       }
@@ -1634,9 +1659,9 @@ export default {
         CIQ.hideCover()
         CIQ.nprogress.done()
         this.$notify.warning({
-            title: 'Tips',
-            message: 'The file name must start with a letter and can only contain letters, numbers, spaces, and underscores.',
-            duration: 0
+          title: 'Tips',
+          message: 'The file name must start with a letter and can only contain letters, numbers, spaces, and underscores.',
+          duration: 0
         });
         return Promise.reject('The file name must start with a letter and can only contain letters, numbers, spaces,and underscores.')
       }
@@ -1644,9 +1669,9 @@ export default {
         CIQ.hideCover()
         CIQ.nprogress.done()
         this.$notify.warning({
-            title: 'Tips',
-            message: 'Empty files cannot be uploaded.',
-            duration: 0
+          title: 'Tips',
+          message: 'Empty files cannot be uploaded.',
+          duration: 0
         });
         return Promise.reject('Empty files cannot be uploaded.')
       }
@@ -1655,9 +1680,9 @@ export default {
         CIQ.hideCover()
         CIQ.nprogress.done()
         this.$notify.warning({
-            title: 'Tips',
-            message: 'The uploaded file cannot exceed 1MB.',
-            duration: 0
+          title: 'Tips',
+          message: 'The uploaded file cannot exceed 1MB.',
+          duration: 0
         });
         return Promise.reject('The uploaded file cannot exceed 1MB.')
       }
@@ -1896,10 +1921,10 @@ export default {
       if (errors.length > 0) {
         // 如果有错误，显示错误信息
         this.$notify.warning({
-              title: 'Tips',
-              message: 'Field name validation failed.',
-              duration: 0
-            });
+          title: 'Tips',
+          message: 'Field name validation failed.',
+          duration: 0
+        });
         return false
       }
       return true
@@ -1917,10 +1942,10 @@ export default {
           currentIndex > nextIndex
         ) {
           this.$notify.warning({
-              title: 'Tips',
-              message: 'Field order validation failed.',
-              duration: 0
-            });
+            title: 'Tips',
+            message: 'Field order validation failed.',
+            duration: 0
+          });
           return false
         }
       }
@@ -1940,10 +1965,10 @@ export default {
       const frequency = this.frequency.toLowerCase()
       if (frequency !== 'daily') {
         this.$notify.warning({
-              title: 'Tips',
-              message: 'Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.',
-              duration: 0
-            });
+          title: 'Tips',
+          message: 'Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.',
+          duration: 0
+        });
         return Promise.reject(
           `Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
         )
@@ -1961,9 +1986,9 @@ export default {
           CIQ.hideCover()
           CIQ.nprogress.done()
           this.$notify.warning({
-              title: 'Tips',
-              message: 'Invalid date format.',
-              duration: 0
+            title: 'Tips',
+            message: 'Invalid date format.',
+            duration: 0
           });
           return Promise.reject(`Invalid date format.`)
         }
@@ -1981,10 +2006,10 @@ export default {
         CIQ.hideCover()
         CIQ.nprogress.done()
         this.$notify.warning({
-              title: 'Tips',
-              message: 'Only daily CSV files can be uploaded. Please ensure that the CSV file does not contain non-trading days such as weekends and public holidays.',
-              duration: 0
-          });
+          title: 'Tips',
+          message: 'Only daily CSV files can be uploaded. Please ensure that the CSV file does not contain non-trading days such as weekends and public holidays.',
+          duration: 0
+        });
         console.log('上传的 CSV 中, 以下时间是非交易日', diffDateArr)
         this.nonBusinessDay = diffDateArr
         this.nonBusinessFile = file
@@ -2156,7 +2181,7 @@ export default {
 .indicator-container {
 	display: flex;
 }
-/deep/ .sentiBox .el-input--prefix .el-input__inner:first-child {
+/deep/ .sentiBox .el-input__inner {
 	width: 334px;
 	padding-left: 30px;
 }
