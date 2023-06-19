@@ -287,6 +287,7 @@ import {
 	searchAnalystList
 } from '@/service/service'
 export default {
+	name: 'Backtests',
 	data() {
 		return {
 			backtestList: [],
@@ -402,6 +403,7 @@ export default {
 							})
 						}
 						if (error.response.status === 500) {
+							console.log(error)
 							this.$notify.error({
 								title: 'Service is busy',
 								message: 'The internal server is busy, please try again later '
@@ -410,6 +412,7 @@ export default {
 					}
 				}
 			} catch (error) {
+				console.log(error)
 				this.$notify.error({
 					title: 'Service is busy',
 					message: 'The internal server is busy, please try again later '

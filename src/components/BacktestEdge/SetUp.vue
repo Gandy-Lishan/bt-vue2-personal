@@ -112,11 +112,7 @@
 						</div>
 					</el-form-item>
 					<div class="userTagBoc">
-						<el-form-item
-							label="User Tag"
-							prop="use_tag"
-							v-if="is_admin"
-						>
+						<el-form-item label="User Tag" prop="use_tag" v-if="is_admin">
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content"
 									>Choose the type of backtest you want to create.<br
@@ -309,6 +305,74 @@
 						></el-input>
 					</el-form-item>
 				</div>
+				<div class="descriptionBox">
+					<a @click="toggleDes"
+						>Backtest Description (click to expand)<i
+							:class="isToggle ? 'el-icon-minus' : 'el-icon-plus'"
+						></i
+					></a>
+					<div class="des-content" v-show="isToggle">
+						<div class="des">
+							<!-- <el-form-item
+            v-if="bd.description.Introduction != 'edit'"
+							label="Introduction"
+							prop="introduction"
+							placeholder="Give the backtest a introduction"
+						>
+							<el-input
+								type="textarea"
+								:autosize="{ minRows: 2, maxRows: 5 }"
+								v-model="bd.description.Introduction"
+							>
+							</el-input>
+						</el-form-item> -->
+            <!-- 开放权限都可以改 -->
+							<el-form-item
+								label="Introduction"
+								prop="introduction"
+								placeholder="Give the backtest a introduction"
+							>
+								<el-input
+									type="textarea"
+                  :readonly="false"
+                  @input="change($event)"
+									:autosize="{ minRows: 2, maxRows: 5 }"
+									v-model="bd.description.Introduction"
+								>
+								</el-input>
+							</el-form-item>
+							<!-- <el-form-item
+								v-if="bd.description.Rules"
+								label="Rules"
+								prop="rules"
+								placeholder="Give the backtest rules"
+							>
+								<el-input
+                  disabled
+									type="textarea"
+									:autosize="{ minRows: 2, maxRows: 5 }"
+									v-model="bd.description.Rules"
+								>
+								</el-input>
+							</el-form-item> -->
+              <!-- 开放权限都可以改 -->
+              <el-form-item
+								label="Rules"
+								prop="rules"
+								placeholder="Give the backtest rules"
+							>
+								<el-input
+									type="textarea"
+                  :readonly="false"
+                  @input="change($event)"
+									:autosize="{ minRows: 2, maxRows: 5 }"
+									v-model="bd.description.Rules"
+								>
+								</el-input>
+							</el-form-item>
+						</div>
+					</div>
+				</div>
 			</el-row>
 			<div>
 				<el-form-item prop="direction" label="Direction">
@@ -484,7 +548,6 @@ export default {
         slippage: 0.1,
         start_date: '',
         end_date: '',
-        description: 'backtest',
         direction: 'Long',
         frequency: 'Daily',
         risk_control: '//',
@@ -492,7 +555,11 @@ export default {
         user_tag: 'client',
         backtest_period: '1',
         trade_price: 0,
-        exclude_oo: 0
+        exclude_oo: 0,
+        description: {
+          Introduction: '',
+          Rules: ''
+        }
       },
       permission: Cookies.get('devbt2Userid'),
       historyOptions: [
@@ -604,7 +671,8 @@ export default {
       },
       oldBacktestName: '',
       is_admin: false,
-      isExcludeOO: false
+      isExcludeOO: false,
+      isToggle: false
     }
   },
   directives: {
@@ -660,6 +728,9 @@ export default {
     }
   },
   methods: {
+    toggleDes() {
+      this.isToggle = !this.isToggle
+    },
     clearForm() {
       Object.assign(this.$data, this.$options.data())
       this.is_admin = this.$store.state.is_admin
@@ -671,33 +742,54 @@ export default {
     setEditData(newVal) {
       if (JSON.stringify(newVal) != '{}') {
         this.clearForm()
+        console.log('未处理之前的编辑数据', newVal)
         delete newVal.entry
         delete newVal.exit
         delete newVal.user_id
         delete newVal.status
         delete newVal.results
         delete newVal.uuid
-        delete newVal.entry_description
-        delete newVal.exit_description
         delete newVal.entry
         delete newVal.exit
         delete newVal.results
-        newVal.user_tag = 'client'
+        // newVal.user_tag = 'client'
+        const entry_des_list = JSON.parse(newVal.entry_description)
+        const exit_des_list = JSON.parse(newVal.exit_description)
+        const entry_description = entry_des_list.length !== 0 ? entry_des_list.reduce((accumulator, currentValue) => accumulator + currentValue.commentDes, '') : entry_des_list[0].commentDes
+        const exit_description = exit_des_list.length !== 0 ? exit_des_list.reduce((accumulator, currentValue) => accumulator + currentValue.commentDes, '') : exit_des_list[0].commentDes
+        let description = {}
+        try {
+          if (newVal.description == null || newVal.description == undefined) {
+            throw new Error('description is null')
+          }
+          description = JSON.parse(newVal.description)
+        } catch (error) {
+          console.log(error)
+          description = {}
+          // newVal.description.Introduction = 'edit'
+          description.Introduction = ''
+          // newVal.description.Rules = entry_description + '<br>'+ exit_description
+          description.Rules = ''
+        }
+        newVal.description = description
+        delete newVal.entry_description
+        delete newVal.exit_description
         newVal.commission = (newVal.commission * 100).toFixed(2)
         newVal.slippage = Number(newVal.slippage).toFixed(2)
-				newVal.trade_price = Number(newVal.trade_price)
+        newVal.trade_price = Number(newVal.trade_price)
         this.is_admin = this.$store.state.is_admin
         this.bd = Object.assign(this.bd, newVal)
+        this.$set(this.bd, 'description', this.bd.description);
         this.getFrequency(newVal.frequency)
         this.getDirection(newVal.direction)
         this.isRiskControl = false
         this.isTakeProfit = false
         this.isStopLoss = false
         this.isTimeInMarket = false
-				this.isExcludeOO = false
-				if(this.bd.exclude_oo > 0) {
-					this.isExcludeOO = true
-				}
+        this.isExcludeOO = false
+        if (this.bd.exclude_oo > 0) {
+          this.isExcludeOO = true
+        }
         if (newVal.risk_control) {
           let riskValArr = newVal.risk_control.split('/')
           if (riskValArr[0]) {
@@ -1049,7 +1141,7 @@ export default {
       let slCheck
       let tpCheck
       let timCheck
-			let excludeCheck = true
+      let excludeCheck = true
       if (this.isRiskControl) {
         if (this.isStopLoss) {
           slCheck = this.validateStopLoss(this.sl)
@@ -1065,11 +1157,11 @@ export default {
           (this.isTakeProfit ? tpCheck : true) &&
           (this.isTimeInMarket ? timCheck : true)
       }
-			if(this.isExcludeOO) {
-				excludeCheck = this.validateExclude(this.bd.exclude_oo)
-			}
+      if (this.isExcludeOO) {
+        excludeCheck = this.validateExclude(this.bd.exclude_oo)
+      }
       const filmCheck = validForm && riskCheck && excludeCheck
-      if(!validForm) {
+      if (!validForm) {
         this.$message({
           message:
             'Please check the setup form',
@@ -1077,10 +1169,10 @@ export default {
           offset: 150
         })
       }
-      if(!filmCheck) return false
+      if (!filmCheck) return false
       if (filmCheck) {
         if (bd.end_date) {
-					if(!this.isExcludeOO) {bd.exclude_oo = 0}
+          if (!this.isExcludeOO) { bd.exclude_oo = 0 }
           bd.commission = bd.commission / 100
           if (this.isRiskControl) {
             let riskStr = `${this.isTakeProfit ? this.tp : ''}/${this.isStopLoss ? this.sl : ''
@@ -1204,8 +1296,8 @@ export default {
       }
       return true
     },
-		validateExclude(num) {
-			if (isNaN(num) || num <= 0 || !/^\d+$/.test(num)) {
+    validateExclude(num) {
+      if (isNaN(num) || num <= 0 || !/^\d+$/.test(num)) {
         this.$message({
           message:
             'Please enter Exclude Overlapping Observations, only positive integers are allowed',
@@ -1215,14 +1307,17 @@ export default {
         return false
       }
       return true
-		},
+    },
     changeExcludeOO(val) {
-      if(val) this.bd.exclude_oo = 1
+      if (val) this.bd.exclude_oo = 1
     },
     isEdit() {
       if (this.oldBacktestName == this.bd.name) {
         return true
       }
+    },
+    change() {
+      this.$forceUpdate()
     }
   }
 }
@@ -1321,5 +1416,23 @@ export default {
 }
 /deep/ .backtestURLBox .el-form-item .el-form-item__content {
 	padding-left: 155px;
+}
+.descriptionBox {
+	padding: 10px;
+	border: 1px solid #dcdfe6;
+	border-radius: 10px;
+}
+.descriptionBox a {
+	font-weight: 500;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	justify-content: space-between;
+}
+.descriptionBox a:hover {
+	color: #5b9bd1;
+}
+.des-content {
+	margin-top: 10px;
 }
 </style>

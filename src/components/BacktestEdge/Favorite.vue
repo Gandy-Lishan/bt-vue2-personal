@@ -392,6 +392,7 @@ export default {
           })
         }
       } catch (error) {
+        console.log(error)
         vm.$message({
           message: 'The internal server is busy, please try again later ',
           type: 'error'
@@ -429,6 +430,7 @@ export default {
 				})
 			}
 		} catch (error) {
+      console.log(error)
 			vm.$message({
 				message: 'The internal server is busy, please try again later ',
 				type: 'error'
@@ -448,6 +450,7 @@ export default {
           })
         }
       } catch (error) {
+        console.log(error)
         this.$message({
           message: 'The internal server is busy, please try again later ',
           type: 'error'
@@ -507,6 +510,7 @@ export default {
 					CIQ.hideCover()
           CIQ.nprogress.done()
           if (error.response.status === 500) {
+            console.log(error)
             this.$notify.error({
               title: 'Service is busy',
               message: 'The internal server is busy, please try again later '
@@ -553,6 +557,7 @@ export default {
             })
           }
         } catch (error) {
+        console.error(error)
           vm.$message({
             message: 'The internal server is busy, please try again later ',
             type: 'error'
@@ -665,6 +670,7 @@ export default {
           })
         }
       } catch (error) {
+        console.error(error)
         vm.$message({
           message: 'The internal server is busy, please try again later ',
           type: 'error'
@@ -691,6 +697,7 @@ export default {
           })
         }
       } catch (error) {
+        console.error(error)
         vm.$message({
           message: 'The internal server is busy, please try again later ',
           type: 'error'
