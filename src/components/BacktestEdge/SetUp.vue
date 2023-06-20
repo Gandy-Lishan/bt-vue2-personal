@@ -335,9 +335,8 @@
 							>
 								<el-input
 									type="textarea"
-                  :readonly="false"
                   @input="change($event)"
-									:autosize="{ minRows: 2, maxRows: 5 }"
+									:autosize="false"
 									v-model="bd.description.Introduction"
 								>
 								</el-input>
@@ -364,9 +363,8 @@
 							>
 								<el-input
 									type="textarea"
-                  :readonly="false"
                   @input="change($event)"
-									:autosize="{ minRows: 2, maxRows: 5 }"
+									:autosize="false"
 									v-model="bd.description.Rules"
 								>
 								</el-input>
