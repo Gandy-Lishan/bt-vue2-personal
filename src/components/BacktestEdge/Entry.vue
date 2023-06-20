@@ -154,7 +154,10 @@
 							:period="signals_in_market"
 							:symUrl="indicatorUrlArr[index]"
 							:symVal="indicatorValArr[index]"
-							v-show="indicatorRadioArr[index] === 'symbol'"
+							v-show="
+								indicatorRadioArr[index] === 'symbol' &&
+								indicatorUrlArr[index] !== ''
+							"
 						></symbol-indi>
 						<cci
 							v-bind="$attrs"
