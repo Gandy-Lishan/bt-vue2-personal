@@ -315,6 +315,7 @@ export default {
 		},
 		updateMAPeriod(val) {
 			// update MA period
+			
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (
@@ -322,7 +323,7 @@ export default {
 					sd.parameters.criteria == this.criteria &&
 					sd.parameters.index == this.panelIndex
 				) {
-					
+					console.log('CIQ.removeDot()')
 					var replaceStudy = {
 						name: 'Moving Average',
 						overlay: true,
@@ -357,7 +358,7 @@ export default {
 			CIQ.store.commit('setConditionRadio', obj)
 			if (val === 'Moving Average') {
 				// 添加附属ma
-				this.tech.ma_period = 5
+				//this.tech.ma_period = 5
 				this.tech.comparison = 'MA'
 				for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]
@@ -626,22 +627,34 @@ export default {
 			this.tech.maPeriod = val
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
-				if (sd.type == 'ma') {
+				if (
+					sd.type == 'ma' && sd.panel == 'chart' &&
+					sd.parameters.criteria == this.criteria &&
+					sd.parameters.index == this.panelIndex
+				) {
+					console.log('getMaValue before ',sd)
 					var replaceStudy = {
 						name: 'Moving Average',
 						overlay: true,
 						calculateFN: CIQ.Studies.calculateMovingAverage,
 						inputs: {
 							Period: val,
-							Field: 'field',
+							Field: sd.inputs.Field,
 							Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 							Offset: 0
 						},
 						outputs: { MA: '#FF0000' }
 					}
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
-					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type)
+					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
+						criteria: this.criteria,
+						index: this.panelIndex
+					})
+					console.log('getMaValue after ',st)
 					CIQ.store.commit('getMaPeriod', val)
+
+					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
+      				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
 
 					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
 				}
