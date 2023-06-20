@@ -114,6 +114,7 @@ export default new Vuex.Store({
 		usersOwnExitFileHash: Array(5).fill(''),
 		userUploadFileContent: Array(5).fill({}),
 		backtestResult: [],
+		tradePrice: 0
 	},
 	getters: {
 		getExtremeValue: (state) => {
@@ -127,6 +128,9 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+		SET_TRADE_PRICE: (state,val)=>{
+			state.tradePrice = val
+		},
 		STORE_BACKTESTRESULT: (state,val)=>{
 			state.backtestResult = val
 		},
