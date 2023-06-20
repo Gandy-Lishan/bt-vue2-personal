@@ -237,6 +237,7 @@
 							<el-select
 								v-model="bd.trade_price"
 								placeholder="— Select Trade Price —"
+                @change="getTradePrice"
 							>
 								<el-option
 									v-for="item in tradePriceOptions"
@@ -726,6 +727,9 @@ export default {
     }
   },
   methods: {
+    getTradePrice(val) {
+      this.$store.commit('SET_TRADE_PRICE',val)
+    },
     toggleDes() {
       this.isToggle = !this.isToggle
     },
@@ -780,6 +784,7 @@ export default {
         this.$set(this.bd, 'description', this.bd.description);
         this.getFrequency(newVal.frequency)
         this.getDirection(newVal.direction)
+        this.getTradePrice(newVal.trade_price)
         this.isRiskControl = false
         this.isTakeProfit = false
         this.isStopLoss = false
