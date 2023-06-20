@@ -485,8 +485,8 @@ export default {
         const _period = this.senti.period
         const _conditionPeriod = this.senti.conditionPeriod
         const _maValue = this.senti.maValue
-        const _description1 = `${sentiVal} ${ma} ${_newCondition} ${_conditionPeriod} ${_condition} ${_value}`
-        const _description2 = `${sentiVal} ${ma} ${_period} ${_newCondition} ${_conditionPeriod} ${_condition} ${_maValue}`
+        const _description1 = `${sentiVal} ${ma} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
+        const _description2 = `${sentiVal} ${ma} ${_period} ${_newCondition}${_conditionPeriod} ${_condition} ${_maValue}`
         this.description = this.conditionRadio === 'Indicator Value' ? _description1 : _description2
       }
       let desObj = {}

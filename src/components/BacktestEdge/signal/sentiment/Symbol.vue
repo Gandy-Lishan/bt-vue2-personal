@@ -267,7 +267,7 @@ export default {
         }
         const _value = this.sym.value
         const _conditionPeriod = this.sym.conditionPeriod
-        const _description1 = `${symVal} ${_newCondition} ${_conditionPeriod} ${_condition} ${_value}`
+        const _description1 = `${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
         this.description = _description1
       }
       let desObj = {}
