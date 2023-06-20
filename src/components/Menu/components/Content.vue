@@ -39,7 +39,7 @@
 						the Day/Night theme of chart.
 					</p>
 					<el-image
-						style="width: 100%; height: 300px"
+						style="width: 100%; height: 50%"
 						:src="chartPath"
 						:preview-src-list="chartPreList"
 						fit="fill"
@@ -53,6 +53,14 @@
 						synchronously. You can use it as a stock parameter for backtesting
 						when running a backtest.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path010"
+						:preview-src-list="path010List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-1">How to change the Sentiment Indicator on a chart</h3>
 					<p>
 						Find the search box named Sentiment Indicator in the chart, and to
@@ -65,6 +73,14 @@
 						You can use it as an indexator for backtesting when running
 						backtesting.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path011"
+						:preview-src-list="path011List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-2">How to change the Technical Indicator on a chart</h3>
 					<p>
 						Find a drop-down option called Studios in the chart and select the
@@ -76,6 +92,14 @@
 						selected, and if you want to use Technical Indicators in
 						backtesting, You can select directly from the form.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path012"
+						:preview-src-list="path012List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-3">How to change the chart type on a chart</h3>
 					<p>
 						Find a drop-down option called Display in the chart and select the
@@ -85,6 +109,14 @@
 						type of chart is determined by the indexer, for example some
 						indexers only support the Candle Style.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path013"
+						:preview-src-list="path013List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-4">How to change the chart period on a chart</h3>
 					<p>
 						Find the drop-down option named 1D in the chart, where 1D represents
@@ -94,40 +126,96 @@
 						tab changes as the period changes , you can use it as a timeframe
 						parameter for backtesting when creating a backtest.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path014"
+						:preview-src-list="path014List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-5">How to change the chart theme</h3>
 					<p>
 						Open Settings in the chart, find Themes in the settings, there are
 						currently two themes for the chart, Dark and Light, which you can
 						change according to your personal preferences.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path015"
+						:preview-src-list="path015List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-6">How to clear chart contents with one click</h3>
 					<p>
 						When you have selected multiple indexers in the chart, you can clear
 						the chart by clicking the Clear Chart button below the chart.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path016"
+						:preview-src-list="path016List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-7">How to hide the stock information prompt box</h3>
 					<p>
 						When you move your mouse into the stock curve box, a blue message
 						box will appear, and if you don't need it, you can click the
 						information button to close it.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path017"
+						:preview-src-list="path017List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-8">How to hide chart gridlines</h3>
 					<p>
 						The chart will display the gridlines of the x-axis and y-axes by
 						default, if you don't need it, you can click the Grid button to hide
 						it.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path018"
+						:preview-src-list="path018List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-9">How to hide Last Price</h3>
 					<p>
 						The chart will show the Price of the last Bar by default, if you
 						don't need it, you can click the Last Price button to hide it.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path019"
+						:preview-src-list="path019List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-10">Add stocks to favorites</h3>
 					<p>
 						Click the Add to Favorites button to the right of the stock name to
 						add the stock to your favorites. At this time, you can click on the
 						Symbol search box to view the stocks in the favorites.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path0110"
+						:preview-src-list="path0110List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-11">Add The Sentiment Indicator to Favorites</h3>
 					<p>
 						Feel free to choose an Indexer in the Sentiment Indicator search
@@ -138,6 +226,14 @@
 						in your favorites, you can click here Sentiment Indicator search box
 						view.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path0111"
+						:preview-src-list="path0111List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-12">
 						How to modify the extremum of the Sentiment Indicator
 					</h3>
@@ -151,6 +247,14 @@
 						editing extremums on the chart, Then when the extremum on the form
 						changes, the corresponding extremum on the form will also change.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path0112"
+						:preview-src-list="path0112List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-13">
 						How to modify the property settings of the Technical Indicator
 					</h3>
@@ -165,12 +269,28 @@
 						Excessive Pessimism (you can modify the color of the Expossage
 						Pessimism)
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path0113"
+						:preview-src-list="path0113List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-14">How to remove Range Selector</h3>
 					<p>
 						There is a Range Select below the chart, and you can drag the
 						selector to see the chart curves within a specified range. If you
 						want to hide it, you can uncheck Range Selector in the settings
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path0114"
+						:preview-src-list="path0114List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-15">Set Y-Axis Preferences</h3>
 					<p>
 						In the chart you can set Y-Axis Preferences, just open the settings,
@@ -178,6 +298,14 @@
 						Preferences. Tick Log Scale to think Your stock graph will grow
 						according to the curve, give invert and your stock graph will flip.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path0115"
+						:preview-src-list="path0115List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-16">How to delete a specified Indexer in a chart</h3>
 					<p>
 						To delete a specified Indexor in the chart, you can click on the X
@@ -186,6 +314,14 @@
 						and drop down the menu Select Delete Indicator to delete the current
 						indicator.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path0116"
+						:preview-src-list="path0116List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="0-1-17">
 						How to view the timeframe of an indicator on a chart
 					</h3>
@@ -212,6 +348,14 @@
 						mark icon next to the parameter, and a pop-up window will explain
 						its meaning and purpose.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path01"
+						:preview-src-list="path01List"
+						fit="fill"
+						lazy
+					></el-image>
 				</section>
 			</section>
 			<section v-else-if="id[0] == '1'">
@@ -233,6 +377,14 @@
 						backtest, including Starting
 						Capital、Commission、Benchmark、Backtest History....
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path100"
+						:preview-src-list="path100List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-0-1">Fill in the entry criteria</h3>
 					<p>
 						Select Single Signal in the drop-down list in the upper right corner
@@ -242,6 +394,14 @@
 						indicator, the Extreme Optimism and Extreme Pessimism values are
 						recommended.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path101"
+						:preview-src-list="path101List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-0-2">Fill in the exit criteria</h3>
 					<p>
 						Select Single Signal in the drop-down list in the upper right corner
@@ -251,6 +411,14 @@
 						indicator, the Extreme Optimism and Extreme Pessimism values are
 						recommended.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path102"
+						:preview-src-list="path102List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-0-3">Run the backtest and view the results</h3>
 					<p>
 						After filling out the backtest form, click "Run Backtest" button to
@@ -261,6 +429,14 @@
 						& exit points etc. If the backtest has no trades, you can go to
 						Backtest History tab and click 'Edit" icon to modify backtest data.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path103"
+						:preview-src-list="path103List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="1-1">Use Risk Control at Exit</h2>
 					<hr />
 					<h3 id="1-1-0">Set stop/loss</h3>
@@ -269,12 +445,28 @@
 						Control at Exit" and then fill in value in the "Take Profit" and
 						"Stop Loss" fieldboxes.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path110"
+						:preview-src-list="path110List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-1-1">Set time-in-market</h3>
 					<p>
 						To use time-in-market as an OR condition with exit criteria, check
 						"Risk Control at Exit" and then fill in value in the "Time in
 						Market" fieldbox.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path111"
+						:preview-src-list="path111List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-1-2">Select Only Use Risk Control in the exit criteria</h3>
 					<p>
 						When Risk Control at Exit is checked and filled in with settings,
@@ -283,6 +475,14 @@
 						as the exit criteria, select "Only Use Risk Control" in the drop
 						down list in the upper right corner of the Exit Criteria section.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path112"
+						:preview-src-list="path112List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="1-2">Set different backtest timeframe</h2>
 					<hr />
 					<h3 id="1-2-0">Set timeframe to Daily</h3>
@@ -291,18 +491,42 @@
 						sentiment indicators in the entry and exit criteria sections will
 						only have sentiment indicators with daily updates.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path120"
+						:preview-src-list="path120List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-2-1">Set timeframe to Weekly</h3>
 					<p>
 						When the timeframe in Set up Backtest tab is set to Weekly, the
 						sentiment indicators in the entry and exit criteria sections will
 						have sentiment indicators with daily and weekly updates.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path121"
+						:preview-src-list="path121List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-2-2">Set timeframe to Monthly</h3>
 					<p>
 						When the timeframe in Set up Backtest tab is set to Monthly, the
 						sentiment indicators in the entry and exit criteria sections will
 						have sentiment indicators with daily/weekly/monthly updates.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path122"
+						:preview-src-list="path122List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="1-3">
 						Create a sameday multi-signal entry/exit criteria new backtest
 					</h2>
@@ -313,6 +537,14 @@
 						backtest, including Starting
 						Capital、Commission、Benchmark、Backtest History....
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path130"
+						:preview-src-list="path130List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-3-1">Fill in the entry criteria</h3>
 					<p>
 						SameBar Multi-Signal means that when multiple signals occur at the
@@ -325,6 +557,14 @@
 						can fill in each signal panel corresponding to the entry condition
 						same as single-signal selection.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path131"
+						:preview-src-list="path131List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-3-2">Fill in the exit criteria</h3>
 					<p>
 						SameBar Multi-Signal means that when multiple signals occur at the
@@ -337,6 +577,14 @@
 						can fill in each signal panel corresponding to the exit condition
 						same as single-signal selection.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path132"
+						:preview-src-list="path132List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-3-3">
 						Set score value in SameBar Multi-Signal entry/exit criteria
 					</h3>
@@ -351,6 +599,14 @@
 						2. If the backtest criteria needs to have a "OR" condition of 2
 						signals, set two signals below and choose score 1. etc.
 					</p>
+					<el-image
+						style="width: 50%; height: 50%"
+						class="image-border"
+						:src="path133"
+						:preview-src-list="path133List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-3-4">Run Backtest and view results</h3>
 					<p>Click Run Backtest button to run the backtest and view results.</p>
 					<h2 id="1-4">
@@ -363,6 +619,14 @@
 						backtest, including Starting
 						Capital、Commission、Benchmark、Backtest History....
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path140"
+						:preview-src-list="path140List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-4-1">Fill in the entry criteria</h3>
 					<p>
 						TimeOrder Multi-Signal means that when multiple signals occur in
@@ -375,6 +639,14 @@
 						3. Then you can fill in each signal panel corresponding to the entry
 						condition same as single-signal selection.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path141"
+						:preview-src-list="path141List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-4-2">Fill in the exit criteria</h3>
 					<p>
 						TimeOrder Multi-Signal means that when multiple signals occur in
@@ -387,6 +659,14 @@
 						3. Then you can fill in each signal panel corresponding to the exit
 						condition same as single-signal selection.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path142"
+						:preview-src-list="path142List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-4-3">
 						Set period value in timeorder Multi-Signal entry/exit criteria
 					</h3>
@@ -401,8 +681,24 @@
 						the backtest criteria needs to have two signals occuring within 3
 						bars, set two signals below and period 3. etc.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path143"
+						:preview-src-list="path143List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-4-4">Run Backtest and view results</h3>
 					<p>Click Run Backtest button to run the backtest and view results.</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path144"
+						:preview-src-list="path144List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="1-5">Set the value of delay of bars</h2>
 					<hr />
 					<h3 id="1-5-0">Set the value of delay of bars in entry criteria</h3>
@@ -410,11 +706,27 @@
 						Check this option to delay the specified number of bars to enter
 						when the entry criteria is met. Set the value preferred.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path150"
+						:preview-src-list="path150List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-5-1">Set the value of delay of bars in exit criteria</h3>
 					<p>
 						Check this option to delay the specified number of bars to exit when
 						the exit criteria is met. Set the value preferred.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path151"
+						:preview-src-list="path151List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="1-6">
 						Create a new backtest with custom indicator for entry/exit criteria
 					</h2>
@@ -492,11 +804,36 @@
 						multi-signal creation. Simply switch the 'Single-Condition' to
 						'SameBar Multi-Condition' or 'TimeOrder Multi-Condition' and follow
 						the steps in the multi-signal creation tutorial.
-						<el-link type="primary" @click="jump('1-3')"
+						<el-link type="warning" @click="jump('1-3')"
 							>Create a sameday multi-signal entry/exit criteria new backtest<i
 								class="el-icon-top-right"
 							></i
 						></el-link>
+					</p>
+					<h2 id="1-7">Set the Trade Price for backtesting</h2>
+					<hr />
+					<p>
+						The trade price (Trade Price) represents the price used in trading.
+						"Next" indicates that the trade will be executed in the next bar
+						after meeting the conditions on the current trading day. There are
+						two options for the trade price: "Next Open" and "Next Close". They
+						indicate the type of price used for simulating trades. "Next Open"
+						means using the opening price of each trading period for trade
+						simulation, while "Next Close" means using the closing price of each
+						trading period for trade simulation. You can select the appropriate
+						trade price option in the basic parameters of the backtest.
+					</p>
+					<h2 id="1-8">Exclude Overlapping Observations for Backtesting</h2>
+					<hr />
+					<p>
+						If you want to exclude densely packed dates during backtesting,
+						please select this option. By choosing this option, the test will
+						allow only one transaction at a time. For example, if you select "10
+						days" as the observation period, once the indicator reaches the
+						specified level, no other transactions will be allowed within the
+						next 10 days. After checking the "Exclude Overlapping Observations"
+						option, enter a time value in the adjacent input box, which must be
+						a positive integer.
 					</p>
 				</section>
 			</section>
@@ -509,12 +846,28 @@
 						Open the Backtest History tab, choose which backtest you want to add
 						to the favorites, and click the add to favorites button.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path20"
+						:preview-src-list="path20List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="2-1">View backtest in My Favorites</h2>
 					<p>
 						Open My Favorites tab to view your favorite backtests, where you can
 						remove backtesting collections, edit backtests, and view backtest
 						results.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path21"
+						:preview-src-list="path21List"
+						fit="fill"
+						lazy
+					></el-image>
 				</section>
 			</section>
 			<section v-else-if="id[0] == '3'">
@@ -526,6 +879,14 @@
 						Open the Backtest History tab, choose which backtest you want to
 						edit, and click the edit backtest button.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path30"
+						:preview-src-list="path30List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="3-1">Edit in Set Up Backtest</h2>
 					<p>
 						When you click the edit backtest button, the information of the
@@ -534,6 +895,14 @@
 						done editing, click Run Backtest Run the modified backtest and view
 						the results.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path31"
+						:preview-src-list="path31List"
+						fit="fill"
+						lazy
+					></el-image>
 				</section>
 			</section>
 			<section v-else-if="id[0] == '4'">
@@ -545,6 +914,14 @@
 						Open the Backtest History tab, choose which backtest you want to
 						edit, and click the view backtest results button.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path40"
+						:preview-src-list="path40List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="4-1">Modify the current backtesting parameters</h2>
 					<p>
 						When you click the button to view the results, Set Up Backtest will
@@ -563,6 +940,14 @@
 					<p>
 						Open the Sample Backtests tab and click the copy backtest button.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path50"
+						:preview-src-list="path50List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="5-1">Edit and run a copied backtest</h2>
 					<p>
 						Open the Backtest History tab, choose the copied backtest to edit.
@@ -570,6 +955,14 @@
 						because for all copied backtests results can only be viewed after
 						edit and run is completed.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path51"
+						:preview-src-list="path51List"
+						fit="fill"
+						lazy
+					></el-image>
 				</section>
 			</section>
 			<section v-else-if="id[0] == '6'">
@@ -590,6 +983,14 @@
 						default, and if you don't need it, you can click the triangle button
 						to hide.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path60"
+						:preview-src-list="path60List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="6-1">
 						How to know the indicator parameters used by the backup through
 						description
@@ -603,12 +1004,80 @@
 					</p>
 				</section>
 			</section>
+			<section v-else-if="id[0] == '7'">
+				<h1 id="7">How to exit with customized Time-In-Market</h1>
+				<hr />
+				<section>
+					<h2 id="7-0">Open the History tab and view the backtest results</h2>
+					<p>
+						Select any backtest with trades from the backtest history list,
+						click on the "View Backtest Result" button next to the backtest, and
+						view the backtest results.
+					</p>
+					<h2 id="7-1">Click button to customize the TIM</h2>
+					<p>
+						Underneath the Results tab, click on the "Exit with different
+						Time-In-Market" frame. This will display two tabs: "Exit With
+						Default Time-In-Market" and "Exit with Customized Time-In-Market".
+						Choose "Exit with Customized Time-In-Market" and click on the "Edit
+						exit with different TIM" button to customize the backtest.
+					</p>
+				</section>
+			</section>
 		</div>
 		<RightMenu :menuItems="menuItems"></RightMenu>
 	</div>
 </template>
 <script>
 import chartPath from "../img/chart.jpeg";
+import path010 from "../img/1.1.1.jpg";
+import path011 from "../img/1.1.2.jpg";
+import path012 from "../img/1.1.3.jpg";
+import path013 from "../img/1.1.4.jpg";
+import path014 from "../img/1.1.5.jpg";
+import path015 from "../img/1.1.6.jpg";
+import path016 from "../img/1.1.7.jpg";
+import path017 from "../img/1.1.8.jpg";
+import path018 from "../img/1.1.9.jpg";
+import path019 from "../img/1.1.10.jpg";
+import path0110 from "../img/1.1.11.jpg";
+import path0111 from "../img/1.1.12.jpg";
+import path0112 from "../img/1.1.13.jpg";
+import path0113 from "../img/1.1.14.jpg";
+import path0114 from "../img/1.1.15.jpg";
+import path0115 from "../img/1.1.16.jpg";
+import path0116 from "../img/1.1.17.jpg";
+import path01 from "../img/1.2.jpg";
+import path100 from "../img/2.1.1.jpg";
+import path101 from "../img/2.1.2.jpg";
+import path102 from "../img/2.1.3.jpg";
+import path103 from "../img/2.1.4.jpg";
+import path110 from "../img/2.2.1.jpg";
+import path111 from "../img/2.2.2.jpg";
+import path112 from "../img/2.2.3.jpg";
+import path120 from "../img/2.3.1.jpg";
+import path121 from "../img/2.3.2.jpg";
+import path122 from "../img/2.3.3.jpg";
+import path130 from "../img/2.4.1.jpg";
+import path131 from "../img/2.4.2.jpg";
+import path132 from "../img/2.4.3.jpg";
+import path133 from "../img/2.4.4.jpg";
+import path140 from "../img/2.5.1.jpg";
+import path141 from "../img/2.5.2.jpg";
+import path142 from "../img/2.5.3.jpg";
+import path143 from "../img/2.5.4.jpg";
+import path144 from "../img/2.5.5.jpg";
+import path150 from "../img/2.6.1.jpg";
+import path151 from "../img/2.6.2.jpg";
+import path20 from "../img/3.1.jpg";
+import path21 from "../img/3.2.jpg";
+import path30 from "../img/4.1.jpg";
+import path31 from "../img/4.2.jpg";
+import path40 from "../img/5.1.jpg";
+import path50 from "../img/6.1.jpg";
+import path51 from "../img/6.2.jpg";
+import path60 from "../img/7.1.jpg";
+
 import RightMenu from "./RightMenu.vue";
 export default {
   props: {
@@ -622,7 +1091,101 @@ export default {
       menuItems: [],
       isToggle: false,
       chartPath: chartPath,
-      chartPreList: [chartPath]
+      chartPreList: [chartPath],
+      path010: path010,
+      path010List: [path010],
+      path011: path011,
+      path011List: [path011],
+      path012: path012,
+      path012List: [path012],
+      path013: path013,
+      path013List: [path013],
+      path014: path014,
+      path014List: [path014],
+      path015: path015,
+      path015List: [path015],
+      path016: path016,
+      path016List: [path016],
+      path017: path017,
+      path017List: [path017],
+      path018: path018,
+      path018List: [path018],
+      path019: path019,
+      path019List: [path019],
+      path0110: path0110,
+      path0110List: [path0110],
+      path0111: path0111,
+      path0111List: [path0111],
+      path0112: path0112,
+      path0112List: [path0112],
+      path0113: path0113,
+      path0113List: [path0113],
+      path0114: path0114,
+      path0114List: [path0114],
+      path0115: path0115,
+      path0115List: [path0115],
+      path0116: path0116,
+      path0116List: [path0116],
+      path01: path01,
+      path01List: [path01],
+			path100: path100,
+			path100List: [path100],
+			path101: path101,
+			path101List: [path101],
+			path102: path102,
+			path102List: [path102],
+			path103: path103,
+			path103List: [path103],
+			path110: path110,
+			path110List: [path110],
+			path111: path111,
+			path111List: [path111],
+			path112: path112,
+			path112List: [path112],
+			path120: path120,
+			path120List: [path120],
+			path121: path121,
+			path121List: [path121],
+			path122: path122,
+			path122List: [path122],
+			path130: path130,
+			path130List: [path130],
+			path131: path131,
+			path131List: [path131],
+			path132: path132,
+			path132List: [path132],
+			path133: path133,
+			path133List: [path133],
+			path140: path140,
+			path140List: [path140],
+			path141: path141,
+			path141List: [path141],
+			path142: path142,
+			path142List: [path142],
+			path143: path143,
+			path143List: [path143],
+			path144: path144,
+			path144List: [path144],
+			path150: path150,
+			path150List: [path150],
+			path151: path151,
+			path151List: [path151],
+			path20: path20,
+			path20List: [path20],
+			path21: path21,
+			path21List: [path21],
+			path30: path30,
+			path30List: [path30],
+			path31: path31,
+			path31List: [path31],
+			path40: path40,
+			path40List: [path40],
+			path50: path50,
+			path50List: [path50],
+			path51: path51,
+			path51List: [path51],
+			path60: path60,
+			path60List: [path60],
     }
   },
   components: {
@@ -750,5 +1313,9 @@ h3 {
 .sidebar-toggle {
 	left: 0;
 	top: 100px;
+}
+.image-border {
+	border: 1px solid #00323c;
+	border-radius: 5px;
 }
 </style>
