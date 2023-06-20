@@ -654,7 +654,7 @@ export default {
       }
       //console.log('setPeriod',result)
       // If the indicator is not loaded when changing to Ma radio, exit
-      if (!result) { return }
+      if (!result || result.url=='') { return }
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
         if (
           CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url &&
@@ -671,7 +671,7 @@ export default {
           )
         }
       }
-
+      console.log(result)
       var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
         Period: _val,
         display: 'ST MA',
