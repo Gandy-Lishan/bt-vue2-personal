@@ -39,7 +39,9 @@ export default {
             { id: '1-3', title: 'Create a sameday multi-signal entry/exit criteria new backtest' },
             { id: '1-4', title: 'Create a timeorder multi-signal entry/exit criteria new backtest' },
             { id: '1-5', title: 'Set the value of delay of bars' },
-            { id: '1-6', title: 'Create a new backtest with custom indicator for entry/exit criteria' }
+            { id: '1-6', title: 'Create a new backtest with custom indicator for entry/exit criteria' },
+            { id: '1-7', title: 'Set the Trade Price for backtesting' },
+            { id: '1-8', title: 'Exclude Overlapping Observations for Backtesting' },
           ] },
           {
             id: '2', title: 'Add created backtest to My Favorites', subsections: [
@@ -62,6 +64,10 @@ export default {
           { id: '6', title: 'How to view the description of the backtest in the list', subsections: [
             { id: '6-0', title: 'Open any list page' },
             { id: '6-1', title: 'How to know the indicator parameters used by the backup through description' },
+          ]},
+          { id: '7', title: 'How to exit with customized Time-In-Market',subsections: [
+            { id: '7-0', title: 'Open the History tab and view the backtest results' },
+            { id: '7-1', title: 'Click button to customize the TIM' }
           ]}
       ],
       activeSection: '0',
