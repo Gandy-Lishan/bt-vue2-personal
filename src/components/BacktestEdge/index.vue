@@ -4,13 +4,15 @@
 		<div class="home-container">
 			<div class="navbar">
 				<div class="header_logo">
-					<span
-						><img
-							style="width: 190px; height: 50px"
-							src="../../assets/logo.png"
-							alt="logo"
-					/></span>
-					<div class="betaNote">BacktestEdge Beta</div>
+					<div class='logo_container'>
+						<span
+							><img
+								style="width: 190px; height: 50px"
+								src="../../assets/logo.png"
+								alt="logo"
+						/></span>
+						<div class="betaNote">BacktestEdge Beta</div>
+					</div>
 					<el-menu
 						:default-active="activeIndex"
 						class="el-menu-demo menu"
@@ -20,13 +22,15 @@
 						<el-menu-item class="home-link" index="1">Backtester</el-menu-item>
 						<el-menu-item class="strategy-link" index="2">Strategy</el-menu-item>
 						<el-menu-item class="ai-link" index="3">AI Scanner</el-menu-item>
-						<el-submenu index="4">
-							<template slot="title">Help</template>
+						<el-submenu class="help-title" index="4">
+							<template slot="title">
+								<span >Help</span>	
+							</template>
 							<el-menu-item index="4-1">Tutorial</el-menu-item>
 							<el-menu-item index="4-2">Contant Us</el-menu-item>
 						</el-submenu>
 						<el-submenu index="5">
-							<template slot="title"><i class="el-icon-s-tools"></i></template>
+							<template slot="title"><i class="el-icon-s-tools tools"></i></template>
 							<!-- <el-menu-item index="5-1">User: {{$store.state.role}}</el-menu-item> -->
 							<!-- <el-menu-item index="5-1">Theme</el-menu-item> -->
 							<!-- <el-menu-item index="5-2">Language</el-menu-item> -->
@@ -34,44 +38,7 @@
 					</el-menu>
 				</div>
 			</div>
-			
 			<router-view></router-view>
-
-			<!-- <el-tooltip
-				class="item"
-				effect="dark"
-				content="Back to the top"
-				placement="bottom"
-			>
-				<button class="toTop" @click="animationUp(0)">
-					<svg
-						width="15"
-						height="20"
-						viewBox="0 0 22 30"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							fill-rule="evenodd"
-							clip-rule="evenodd"
-							d="M-1.31134e-07 1.5C-5.87107e-08 0.671573 0.642374 5.61581e-08 1.43478 1.25433e-07L20.5652 1.79787e-06C21.3576 1.86714e-06 22 0.671574 22 1.5C22 2.32843 21.3576 3 20.5652 3L1.43478 3C0.642374 3 -2.03557e-07 2.32843 -1.31134e-07 1.5Z"
-							fill="#F9FAFB"
-						></path>
-						<path
-							fill-rule="evenodd"
-							clip-rule="evenodd"
-							d="M11.5 30C10.6716 30 10 29.2645 10 28.3571L10 8.64286C10 7.73553 10.6716 7 11.5 7C12.3284 7 13 7.73553 13 8.64286L13 28.3571C13 29.2645 12.3284 30 11.5 30Z"
-							fill="#F9FAFB"
-						></path>
-						<path
-							fill-rule="evenodd"
-							clip-rule="evenodd"
-							d="M21.5079 18.5152C20.8519 19.1616 19.7881 19.1616 19.1321 18.5152L11.5 10.9959L3.86794 18.5152C3.21186 19.1616 2.14814 19.1616 1.49206 18.5152C0.835983 17.8688 0.835983 16.8208 1.49206 16.1744L10.3121 7.48479C10.9681 6.8384 12.0319 6.8384 12.6879 7.48479L21.5079 16.1744C22.164 16.8208 22.164 17.8688 21.5079 18.5152Z"
-							fill="#F9FAFB"
-						></path>
-					</svg>
-				</button>
-			</el-tooltip> -->
 			<Footer></Footer>
 		</div>
 	</div>
@@ -181,6 +148,7 @@ export default {
 		align-self: center;
 		margin-right: 7px;
 		.strategy-link,.home-link,.ai-link{
+			margin: 0 28px;
 			height: 78px;
 			display: flex;
 			align-items: center;
@@ -196,20 +164,49 @@ export default {
 		.ai-link:hover{
 			color:#5b9bd1;
 		}
+		.help-title {
+			margin-left: 28px;
+			span {
+				font-size: 10px;
+				margin-top: 3px;
+				&::after{
+					content: "";
+					position: absolute;
+					right: 7px;
+					top: 37px;
+					display: block;
+					width: 5px;
+					height: 5px;
+					border-right: solid thin #959595;
+					border-bottom: solid thin #959595;
+					transform: rotate(45deg) scale(1);
+				}
+			}
+
+		}
+		.tools {
+			margin-top: 3px;
+			font-size: 10px;
+		}
 	}
-	.betaNote {
-		margin: 1.14rem 0 1.14rem 0px;
-		font-style: italic;
-		color: #6c6c6c;
-		text-align: left;
-		font-size: 2.5rem;
-		margin: 0px;
-		font-weight: lighter;
-		color: #333333;
+	.logo_container {
+		display: flex;
+    	align-items: center;
+		
+		& > span {
+			padding: 12px 24px 6px 24px;
+		}
+		.betaNote {
+			margin: 1.14rem 0 1.14rem 0px;
+			font-style: italic;
+			color: #6c6c6c;
+			text-align: left;
+			font-size: 1.6rem;
+			margin: 0px;
+			font-weight: lighter;
+			color: #333333;
+		}
 	}
-}
-.header_logo > span {
-	padding: 12px 24px;
 }
 
 button.toTop {
