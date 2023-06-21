@@ -381,7 +381,6 @@ export default {
         }
       }
       // 开始计算数据并加载新的附属indicator
-      console.log('ROCLikeChange')
       this.calculateNewConditions()
     },
     change(e) {
@@ -781,7 +780,6 @@ export default {
           this.senti.maValue = this.senti.value
           this.senti.period = obj.period
         }
-        console.log('setEditData')
         this.ROCLikeChange(this.senti.newCondition)
       }
     }
