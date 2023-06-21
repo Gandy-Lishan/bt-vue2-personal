@@ -1132,6 +1132,9 @@ export default {
 		},
 		async entryUserUploadFileContent(data) {
 			eventBus.$emit('userExitFileSelect', data)
+			const exitFileHash = this.$store.state.usersOwnExitFileHash[data.index]
+			console.log('判断 exit 有没有填充的值', exitFileHash)
+			if(exitFileHash) return
 			await this.$refs.indiChild[data.index].changeIndicatorChecked("Users' Own Indicator")
 			await this.$refs.indiChild[data.index].handleUsersOwnIndicatorSelect(data.val.data)
 			await this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
