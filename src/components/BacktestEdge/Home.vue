@@ -1226,9 +1226,14 @@ export default {
                       CIQ.nprogress.done()
 
                       if (error?.response?.status === 403) {
+                        // vm.$message({
+                        //   message:
+                        //     'This backtest is already in your history list',
+                        //   type: 'error'
+                        // })
                         vm.$message({
                           message:
-                            'This backtest is already in your history list',
+                            'The internal server is busy, please try again later ',
                           type: 'error'
                         })
                       } else {

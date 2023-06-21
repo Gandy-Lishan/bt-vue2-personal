@@ -1,4 +1,5 @@
 <template>
+	<!-- <div class="doc-content" :class="isToggle ? 'toggle' : ''"> -->
 	<div class="doc-content" :class="isToggle ? 'toggle' : ''">
 		<div class="section-container">
 			<div
@@ -405,7 +406,7 @@
 					<h3 id="1-0-2">Fill in the exit criteria</h3>
 					<p>
 						Select Single Signal in the drop-down list in the upper right corner
-						of the Entry Criteria section; Select a sentiment or technical
+						of the Exit Criteria section; Select a sentiment or technical
 						indicator from the drop-down box indicator field, fill in required
 						value and choose condition in the signal section. For sentiment
 						indicator, the Extreme Optimism and Extreme Pessimism values are
@@ -430,7 +431,7 @@
 						Backtest History tab and click 'Edit" icon to modify backtest data.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path103"
 						:preview-src-list="path103List"
@@ -528,7 +529,7 @@
 						lazy
 					></el-image>
 					<h2 id="1-3">
-						Create a sameday multi-signal entry/exit criteria new backtest
+						Create a samebar multi-signal entry/exit criteria new backtest
 					</h2>
 					<hr />
 					<h3 id="1-3-0">Fill in the basic information for the backtest</h3>
@@ -635,7 +636,7 @@
 						entry criteria section; then signal1 and signal2 panels will show by
 						default and the default period value is 2. Clicking on the + sign
 						will increase the number of entry signals and also the period value.
-						The maximum number of signals in SameBar Multi-Signal selection is
+						The maximum number of signals in TimeOrder Multi-Signal selection is
 						3. Then you can fill in each signal panel corresponding to the entry
 						condition same as single-signal selection.
 					</p>
@@ -655,7 +656,7 @@
 						exit criteria section; then signal1 and signal2 panels will show by
 						default and the default period value is 2. Clicking on the + sign
 						will increase the number of exit signals and also the period value.
-						The maximum number of signals in SameBar Multi-Signal selection is
+						The maximum number of signals in TimeOrder Multi-Signal selection is
 						3. Then you can fill in each signal panel corresponding to the exit
 						condition same as single-signal selection.
 					</p>
@@ -805,7 +806,7 @@
 						'SameBar Multi-Condition' or 'TimeOrder Multi-Condition' and follow
 						the steps in the multi-signal creation tutorial.
 						<el-link type="warning" @click="jump('1-3')"
-							>Create a sameday multi-signal entry/exit criteria new backtest<i
+							>Create a samebar multi-signal entry/exit criteria new backtest<i
 								class="el-icon-top-right"
 							></i
 						></el-link>
@@ -1024,11 +1025,15 @@
 					</p>
 				</section>
 			</section>
+			<section v-else-if="id[0] == '8'">
+				<Tabs></Tabs>
+			</section>
 		</div>
-		<RightMenu :menuItems="menuItems"></RightMenu>
+		<RightMenu :menuItems="menuItems" v-show="menuItems.length != 0"></RightMenu>
 	</div>
 </template>
 <script>
+import Tabs from "./Tabs.vue"
 import chartPath from "../img/chart.jpeg";
 import path010 from "../img/1.1.1.jpg";
 import path011 from "../img/1.1.2.jpg";
@@ -1189,7 +1194,8 @@ export default {
     }
   },
   components: {
-    RightMenu
+    RightMenu,
+		Tabs
   },
   mounted() {
     // scroll代表滚动条距离页面顶部距离

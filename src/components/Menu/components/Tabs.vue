@@ -1,0 +1,219 @@
+<template>
+	<div>
+		<!-- 头部标签 -->
+		<div class="tabs">
+			<div
+				v-for="(tab, index) in tabs"
+				:key="index"
+				class="tab"
+				:class="{ active: activeTab === index }"
+				@click="changeTab(index)"
+			>
+				<el-tag
+					:type="tab.type"
+					effect="dark"
+					:class="{ 'active-tag': activeTab == tab.index }"
+					>{{ tab.title }}</el-tag
+				>
+			</div>
+		</div>
+
+		<!-- 内容展示区域 -->
+		<div class="content">
+			<div
+				v-for="(tab, index) in tabs"
+				:key="index"
+				v-show="activeTab === index"
+			>
+				<div v-for="(item, index) in tab.content" :key="index">
+					<p>{{ item }}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      activeTab: 0, // 当前激活的标签索引
+      tabs: [
+        {
+          title: 'Sentiment Indicator', content: [
+            'In stock backtesting, a Sentiment Indicator refers to an indicator used to measure the sentiment of market participants or market sentiment. It is determined by analyzing the comments, behavior, or other indicators of market participants.',
+            'Stock backtesting is a strategic analysis method that evaluates the performance of a specific investment strategy or trading system on historical data by reviewing past market data and indicators. Sentiment indicators are used in stock backtesting to examine the sentiment of market participants and attempt to correlate the sentiment indicator with stock prices or market trends.',
+            'Common sentiment indicators include Smart Money Confidence, Dumb Money Confidence, and others. Sentiment indicators can be used as part of an investment strategy to make buy or sell decisions. For example, when a sentiment indicator shows that market sentiment has reached extreme levels, investors may consider adopting a contrarian trading strategy, reducing positions when market sentiment is excessively optimistic or increasing positions when market sentiment is excessively pessimistic.',
+            'However, it is important to note that sentiment indicators are not standalone predictors of market trends but rather auxiliary tools. The stock market is influenced by multiple factors, and sentiment is just one of them. Therefore, when using sentiment indicators, it is necessary to combine them with other technical indicators and fundamental analysis to make more accurate decisions. Additionally, the calculation and interpretation of sentiment indicators should be approached with caution, avoiding excessive reliance on a single indicator to judge the market.'
+          ], type: 'success'
+        },
+        {
+          title: 'Technical Indicator', content: [
+            'A Technical Indicator is a tool used to analyze financial markets. It is based on historical price and volume data and generates visual indicators or signals through mathematical calculations or statistical models. Technical indicators aim to reveal market trends, price dynamics, and trading opportunities to assist investors in making decisions.',
+            'The calculation of technical indicators is typically based on historical price and volume data, including opening price, closing price, high price, low price, and volume. These indicators can be used to identify market trends, cyclical fluctuations, and price support and resistance levels.',
+            'Some common technical indicators include:',
+            '1. Moving Average: Smooths price data by calculating the average price over a specified period and displays the price trend. Common types of moving averages include Simple Moving Average (SMA) and Exponential Moving Average (EMA).',
+            '2. Relative Strength Index (RSI): Measures the overbought and oversold conditions of the market by evaluating the magnitude of price gains and losses.',
+            '3. Moving Average Convergence Divergence (MACD): Combines short-term and long-term moving averages to display price trend conditions and generate buy and sell signals.',
+            'These are just a few examples of common technical indicators. Each indicator has its specific calculation method and interpretation. Investors typically use multiple technical indicators to analyze the market comprehensively and combine them with other analysis methods to develop investment strategies and make trading decisions.'
+          ], type: 'info'
+        },
+        {
+          title: 'Symbol OHLCV', content: [
+            'In the financial field, Symbol OHLCV refers to a common format for representing historical data of financial asset prices and trading volumes. It represents the Open, High, Low, Close, and Volume of a financial asset.',
+            'Each trading period (e.g., minutes, hours, days) generates a Symbol OHLCV data point. Here is an explanation of each data field:',
+            'Open: The starting price of a particular trading period, representing the price of the asset at the beginning of that period.',
+            'High: The highest point reached by the asset price within that trading period.',
+            'Low: The lowest point reached by the asset price within that trading period.',
+            'Close: The closing price of a particular trading period, representing the price of the asset at the end of that period.',
+            'Volume: The number of asset trades that occurred within that trading period.',
+            "Symbol OHLCV data is commonly used in fields such as chart analysis, technical analysis, and algorithmic trading. By analyzing this data, trends in asset prices, support and resistance levels, and market participants' trading activity can be revealed.",
+            "Common financial market data sources and trading platforms provide functionality to store and transmit data in Symbol OHLCV format. Analysts and traders can use this data to construct charts, apply technical indicators, and backtest and optimize models and strategies based on historical prices and volumes.",
+            "It is important to note that the frequency and time periods of Symbol OHLCV data can be set according to specific needs, such as minute data, hourly data, or daily data, among others. Additionally, Symbol OHLCV data only provides information about prices and trading volumes, and other financial indicators and fundamental data may need to be used in conjunction with it for a more comprehensive analysis and decision-making."
+          ], type: 'warning'
+        },
+        {
+          title: 'Extreme Optimism', content: [
+            'In sentiment indicators, "Extreme Optimism" refers to a state where market participants exhibit a highly positive and optimistic outlook. When the market sentiment reaches extreme optimism, investors generally hold high expectations for the market and tend to buy stocks or other assets.',
+            "Extreme optimism in sentiment indicators can be determined based on different sentiment indicators or market participants' behavior. Here are some examples of sentiment indicators that may indicate extreme optimism:",
+            "1. Investor Surveys: For instance, surveys targeting investors may show that a majority of investors have a highly positive and optimistic view of the market. This could indicate that market participants hold high expectations for future economic prospects and stock market performance.",
+            "2. Sentiment Analysis: By conducting sentiment analysis on textual data such as news reports, social media posts, or online forums, the inclination of market participants' sentiment can be evaluated. When sentiment analysis reveals a significant amount of positive sentiment in the text, it may reflect extreme optimism in the market sentiment.",
+            "3. Technical Indicators: Certain technical indicators may indicate an overbought condition in the market, suggesting a bias towards optimistic sentiment among investors. For example, overbought indicators like RSI show that a stock or index has exceeded the range of buying levels, which may imply that market sentiment is in a state of extreme optimism.",
+            'In BacktestEdeg, select the "Sentiment Indicator" radio button and enter the sentiment indicator you want to search for in the search box, such as "Smart Money Confidence." Below Smart Money Confidence, the corresponding value of "Extreme Optimism" will be displayed.',
+            'Extreme optimism in sentiment indicators can influence market behavior and price trends. Investors commonly believe that the market will continue to rise, which can lead to overbuying and overvaluation. However, it is important to note that extreme optimism in sentiment does not always mean that the market will immediately reverse or decline. Market sentiment is a dynamic factor that needs to be combined with other analytical tools and indicators to make more accurate judgments and decisions.'
+          ], type: 'danger'
+        },
+        {
+          title: 'Extreme Pessimism', content: [
+            'In sentiment indicators, "Extreme Pessimism" refers to a state where market participants exhibit a highly negative and pessimistic outlook. When the market sentiment reaches extreme pessimism, investors generally hold very low expectations for the market and tend to sell stocks or other assets.',
+            "Extreme pessimism in sentiment indicators can be determined based on different sentiment indicators or market participants' behavior. Here are some examples of sentiment indicators that may indicate extreme pessimism:",
+            '1. Investor Surveys: For instance, surveys targeting investors may show that a majority of investors have a highly negative and pessimistic view of the market. This could indicate that market participants hold very low expectations for future economic prospects and stock market performance.',
+            "2. Sentiment Analysis: By conducting sentiment analysis on textual data such as news reports, social media posts, or online forums, the inclination of market participants' sentiment can be evaluated. When sentiment analysis reveals a significant amount of negative sentiment in the text, it may reflect extreme pessimism in market sentiment.",
+            "3. Technical Indicators: Certain technical indicators may indicate an oversold condition in the market, suggesting a bias towards pessimistic sentiment among investors. For example, oversold indicators like RSI show that a stock or index has fallen below the range of selling levels, which may imply that market sentiment is in a state of extreme pessimism.",
+            'Extreme pessimism in sentiment indicators can influence market behavior and price trends. Investors commonly believe that the market will continue to decline, which can lead to overselling and the market being undervalued. However, it is important to note that extreme pessimism in sentiment does not always mean that the market will immediately reverse or rise. Market sentiment is a dynamic factor that needs to be combined with other analytical tools and indicators to make more accurate judgments and decisions.'
+          ], type: 'danger'
+        },
+        {
+          title: 'CrossAbove', content: [
+            'In backtesting trading systems, "CrossAbove" is a technical indicator signal used to indicate when one indicator or price line crosses above another indicator or price line.',
+            'Specifically, "CrossAbove" typically refers to a situation where an indicator or price line crosses from below to above another indicator or price line. This crossover is often seen as a potential buying signal, implying a change in price trend.',
+            "For example, let's assume we have two indicators, A and B, and we observe their crossover. When A crosses above B, it means that A was below B before a certain point in time and then crosses over to be above B at that point. This situation is often interpreted as a potential buying signal, suggesting the formation of an upward price trend.",
+            '"CrossAbove" can be applied to various combinations of indicators and price lines. Common examples include crossovers between moving average lines, such as the short-term moving average crossing above the long-term moving average, or when the price line crosses an important horizontal level.',
+            'The "CrossAbove" signal in backtesting trading systems is often used as one of the buying conditions for technical indicators. By backtesting historical data, the effectiveness and profitability of this signal can be evaluated. However, it is important to note that a single signal does not guarantee accurate predictions of market behavior. Therefore, when formulating trading strategies, it is advisable to combine other technical indicators and risk management principles.'
+          ], type: 'info'
+        },
+        {
+          title: 'CrossBelow', content: [
+            'In backtesting trading systems, "CrossBelow" is a technical indicator signal used to indicate when one indicator or price line crosses below another indicator or price line.',
+            'Specifically, "CrossBelow" typically refers to a situation where an indicator or price line crosses from above to below another indicator or price line. This crossover is often seen as a potential selling signal, implying a change in price trend.',
+            "For example, let's assume we have two indicators, A and B, and we observe their crossover. When A crosses below B, it means that A was above B before a certain point in time and then crosses under B at that point. This situation is often interpreted as a potential selling signal, suggesting the formation of a downward price trend.",
+            '"CrossBelow" can be applied to various combinations of indicators and price lines. Common examples include crossovers between moving average lines, such as the short-term moving average crossing below the long-term moving average, or when the price line crosses an important support level.',
+            'The "CrossBelow" signal in backtesting trading systems is often used as one of the selling conditions for technical indicators. By backtesting historical data, the effectiveness and profitability of this signal can be evaluated. However, it is important to note that a single signal does not guarantee accurate predictions of market behavior. Therefore, when formulating trading strategies, it is advisable to combine other technical indicators and risk management principles.'
+          ], type: 'warning'
+        },
+        {
+          title: 'Rate Of Change', content: [
+            'In backtesting trading, "Rate of Change" (ROC) is a technical indicator used to measure the speed of price or indicator changes over a given time period.',
+            'ROC represents the rate of change by calculating the percentage change between the current price or indicator value and a previous price or indicator value. It helps traders and analysts assess the short-term momentum and trend of prices or indicators.',
+            'The steps to calculate ROC are as follows:',
+            '1. Choose a time period (e.g., 20 trading days).',
+            '2. Obtain the current price or indicator value at the current time point.',
+            '3. Retrieve the price or indicator value from the specified time period ago (referred to as the past value).',
+            '4. Calculate the percentage rate of change: ROC = ((current value - past value) / past value) * 100.',
+            'For example, suppose a stock has a current price of $50 and a price from 20 trading days ago of $40. The ROC would be ((50 - 40) / 40) * 100 = 25%. This means that the price of the stock has increased by 25% over the past 20 trading days.',
+            'ROC can be used to assess the speed of price or indicator changes. If the ROC value is positive, it indicates a relatively fast upward movement in prices or indicators. If the ROC value is negative, it suggests a relatively fast downward movement. Traders can combine ROC with other technical indicators or price patterns to confirm market trends, identify overbought or oversold conditions, and develop buy or sell strategies.',
+            'It is important to note that ROC is a short-term indicator and sensitive to market noise. Therefore, it should be used in conjunction with other indicators and analysis tools to obtain more accurate trading signals and decisions.'
+          ], type: 'success'
+        },
+        {
+          title: 'Range Of Rank', content: [
+            "In backtesting trading, 'Range of Rank' is an indicator used to evaluate the relative performance of an asset or indicator over a certain period of time. It is used to determine the position of an asset or indicator's ranking among the overall market or other participating assets.",
+            "The Range of Rank is represented by converting the performance of an asset or indicator relative to others into a percentile range. This range indicates the level of performance of the asset or indicator compared to other participants.",
+            "The steps to calculate ROC (Rate of Change) are as follows:",
+            "1. Select a time period (e.g., 20 trading days).",
+            "2. Obtain the price or indicator value at the current time point (referred to as the current value).",
+            "3. Obtain the price or indicator value at a specified time period in the past from the current time point (referred to as the past value).",
+            "4. Calculate the percentage rate of change: ROC = ((current value - past value) / past value) * 100.",
+            "For example, let's assume a stock has a price of $50 at the current time point and a price of $40 twenty trading days ago. The ROC would be ((50 - 40) / 40) * 100 = 25%. This means that the price of the stock has increased by 25% over the past twenty trading days.",
+            "ROC can be used to assess the rate of price or indicator changes. A positive ROC value indicates a relatively fast increase in price or indicator, while a negative ROC value indicates a relatively fast decrease. Traders can combine ROC with other technical indicators or price patterns to confirm market trends, identify overbought or oversold conditions, and formulate buying or selling strategies.",
+            "It's important to note that ROC is a short-term indicator and is sensitive to market noise. Therefore, it should be used in conjunction with other indicators and analytical tools to obtain more accurate trading signals and decisions."
+          ], type: 'info'
+        },
+        {
+          title: 'MA Ratio', content: [
+            "In backtesting trading, 'MA Ratio' (Moving Average Ratio) is a technical indicator used to measure the ratio between the short-term and long-term moving averages of an asset's price or indicator.",
+            "MA Ratio is represented by converting the difference between the short-term and long-term moving averages into a ratio or percentage. This ratio provides information about the trend changes and relative strength of the asset's price over different time periods.",
+            "The steps to calculate MA Ratio are as follows:",
+            "1. Select a time period for the short-term moving average (e.g., 20 days) and a time period for the long-term moving average (e.g., 50 days).",
+            "2. Calculate the values of the short-term and long-term moving averages.",
+            "3. Calculate the MA Ratio by dividing the value of the short-term moving average by the value of the long-term moving average and convert it into a ratio or percentage.",
+            "For example, let's assume a stock has a 20-day moving average of $50 and a 50-day moving average of $45. The MA Ratio would be $50 / $45 = 1.11. This means that the value ratio of the short-term moving average to the long-term moving average is 1.11.",
+            "MA Ratio can help traders analyze price trends and determine the relative strength of an asset. When the MA Ratio is greater than 1, it indicates relatively strong short-term trends, and the price may be in an upward state. When the MA Ratio is less than 1, it indicates relatively weak short-term trends, and the price may be in a downward state.",
+            "Traders can use MA Ratio as a reference for buying or selling signals. For example, when the MA Ratio crosses above 1 from below, it may indicate a strengthening short-term trend, and a buying opportunity can be considered. When the MA Ratio crosses below 1 from above, it may indicate a weakening short-term trend, and a selling opportunity can be considered.",
+            "It's important to note that MA Ratio is a technical indicator and only serves as a supplementary tool. It should be used in conjunction with other technical indicators and analysis methods to obtain a more comprehensive market analysis and trading decisions."
+          ], type: 'danger'
+        },
+        {
+          title: 'SameBar', content: [
+            "In backtesting trading, 'SameBar' refers to trading operations that occur within the same candlestick (K-line).",
+            "In technical analysis, candlestick charts are commonly used to represent the price movements of assets, where each candlestick represents a specific time period (e.g., 1 minute, 5 minutes, daily, etc.). Trading operations within the same candlestick indicate buying or selling actions taken during that specific time period.",
+            "When trading operations in a backtesting system occur within the same candlestick, it is referred to as a SameBar trade. This situation may occur when backtesting using shorter time periods for candlesticks because shorter time periods represent shorter time spans with more frequent price fluctuations, resulting in trading signals being generated within the same candlestick.",
+            "Trading operations within the same candlestick have certain characteristics and considerations. Firstly, as the trading operations occur at the same price level, multiple trading signals may be triggered simultaneously, increasing the trading frequency and costs. Secondly, trading operations within the same candlestick mean that trading decisions must be based on the information and price dynamics within the current candlestick, requiring more timely decision-making.",
+            "Trading operations within the same candlestick can lead to quick profits or losses within a short period. Therefore, the handling of SameBar trades depends on specific trading strategies and risk management principles. Some trading strategies may limit trading operations within the same candlestick to avoid excessive trading and an overly active portfolio.",
+            "It's important to note that SameBar trades are determined based on the backtesting trading system and the chosen time period. When conducting backtesting and analysis, traders should consider the selection of time periods and how to handle trading operations within the same candlestick to maintain consistency and reliability."
+          ], type: 'info'
+        },
+        {
+          title: 'TimeOrder',
+          content: [
+            "In backtesting trading, 'TimeOrder' refers to the method of executing trading operations based on the chronological order of their occurrence.",
+            "Backtesting involves evaluating the effectiveness of a trading strategy by simulating historical market data and trading rules. During the backtesting process, trading signals may be generated at different time points, requiring determination of the order in which trades are executed.",
+            "TimeOrder specifies the chronological order in which trades are executed. There are two common TimeOrder methods:",
+            "Time Priority: Trades are executed in the order in which the trading signals are generated. In other words, trades generated earlier are executed first, followed by trades generated later. This method simulates the sequential nature of actual market trading and is commonly used.",
+            "Price Priority: Trades are executed based on the price order at the time the trading signals are generated. In other words, trades with higher or lower prices are executed first, followed by trades with lower or higher prices. This method assumes that price has more influence, thus giving priority to trades with higher or lower prices.",
+            "The choice of an appropriate TimeOrder method depends on the characteristics and objectives of the trading strategy. Time Priority is closer to real trading conditions and can accurately simulate the order of trade executions in the market. Price Priority considers the influence of price and may be more suitable for certain strategies or market conditions.",
+            "In backtesting platforms or trading software, options are typically provided to set the TimeOrder, allowing traders to choose the appropriate method according to their needs.",
+            "It's important to note that TimeOrder can have an impact on trading results. Different TimeOrder methods can lead to different trade execution sequences, affecting factors such as trading costs and slippage. Traders should be aware of this impact and conduct thorough testing and validation during the backtesting process to obtain more accurate and reliable backtesting results."
+          ]
+        }
+      ],
+    };
+  },
+  methods: {
+    changeTab(index) {
+      this.activeTab = index; // 切换激活的标签
+    },
+  },
+};
+</script>
+
+<style>
+.tabs {
+	display: flex;
+	justify-content: flex-start;
+	margin: 0 auto;
+	flex-wrap: wrap;
+}
+
+.tab {
+	cursor: pointer;
+	padding: 10px;
+	margin-right: 10px;
+}
+.tab.active .el-tag {
+	background: #5b9bd1;
+	border: 1px solid #5b9bd1;
+	box-shadow: 0px 0px 5px 5px #cee4f7;
+}
+
+.content {
+	margin-top: 20px;
+}
+.content p {
+	line-height: 1.7;
+	word-wrap: break-word;
+	font-weight: 400;
+	color: #00323c;
+	font-size: 1rem;
+}
+</style>
