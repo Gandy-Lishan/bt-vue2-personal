@@ -1687,8 +1687,12 @@ export default {
         return Promise.reject('The uploaded file cannot exceed 1MB.')
       }
       try {
-        await this.validateCSV(file)
-        await this.handleParseResult(this.csvContent, file)
+        try {
+          await this.validateCSV(file)
+          await this.handleParseResult(this.csvContent, file)
+        } catch (error) {
+          throw Error()
+        }
         this.form.indicatorName = file.name.replace('.csv', '')
         this.fileList.push(file)
         CIQ.hideCover()
@@ -1696,6 +1700,9 @@ export default {
         this.dialogFormVisible = true
       } catch (error) {
         console.log('error', error)
+        this.dialogFormVisible = false
+        CIQ.hideCover()
+        CIQ.nprogress.done()
         return Promise.reject(error)
       }
       return false
