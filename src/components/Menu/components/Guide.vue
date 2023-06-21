@@ -36,7 +36,7 @@ export default {
             { id: '1-0', title: 'Create a single-signal entry/exit criteria new backtest' },
             { id: '1-1', title: 'Use Risk Control at Exit' },
             { id: '1-2', title: 'Set different backtest timeframe' },
-            { id: '1-3', title: 'Create a sameday multi-signal entry/exit criteria new backtest' },
+            { id: '1-3', title: 'Create a samebar multi-signal entry/exit criteria new backtest' },
             { id: '1-4', title: 'Create a timeorder multi-signal entry/exit criteria new backtest' },
             { id: '1-5', title: 'Set the value of delay of bars' },
             { id: '1-6', title: 'Create a new backtest with custom indicator for entry/exit criteria' },
@@ -68,7 +68,11 @@ export default {
           { id: '7', title: 'How to exit with customized Time-In-Market',subsections: [
             { id: '7-0', title: 'Open the History tab and view the backtest results' },
             { id: '7-1', title: 'Click button to customize the TIM' }
-          ]}
+          ]},
+          {
+            id: '8', title: 'Backtesting parameter explanation', subsections: [
+            ]
+          }
       ],
       activeSection: '0',
       isToggle: false
