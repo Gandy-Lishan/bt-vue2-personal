@@ -1003,6 +1003,14 @@
 						on the right Exit description. The following figure is the meaning
 						of the Entry description and the Exit description.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path61"
+						:preview-src-list="path61List"
+						fit="fill"
+						lazy
+					></el-image>
 				</section>
 			</section>
 			<section v-else-if="id[0] == '7'">
@@ -1082,7 +1090,7 @@ import path40 from "../img/5.1.jpg";
 import path50 from "../img/6.1.jpg";
 import path51 from "../img/6.2.jpg";
 import path60 from "../img/7.1.jpg";
-
+import path61 from "../img/7.2.jpg";
 import RightMenu from "./RightMenu.vue";
 export default {
   props: {
@@ -1191,6 +1199,8 @@ export default {
 			path51List: [path51],
 			path60: path60,
 			path60List: [path60],
+			path61: path61,
+			path61List: [path61]
     }
   },
   components: {

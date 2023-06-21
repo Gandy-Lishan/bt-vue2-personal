@@ -2000,11 +2000,11 @@ export default {
           return Promise.reject(`Invalid date format.`)
         }
       })
-      const pairStartDate = pairDataDate[0]
-      const pairEndDate = pairDataDate[pairDataDate.length - 1]
-      const filteredArr = dateData.filter(date => date >= pairStartDate && date <= pairEndDate);
-      console.log('filteredArr', filteredArr);
-      const isDiffDateArr = compareArrays(filteredArr, pairDataDate)
+      // const pairStartDate = pairDataDate[0]
+      // const pairEndDate = pairDataDate[pairDataDate.length - 1]
+      // const filteredArr = dateData.filter(date => date >= pairStartDate && date <= pairEndDate);
+      //  const filteredArr = dateData
+      const isDiffDateArr = compareArrays(dateData, pairDataDate)
       if (isDiffDateArr === true) {
         // 用户上传的 Date 和 pairData 的 Date 一致
         return Promise.resolve(true)
