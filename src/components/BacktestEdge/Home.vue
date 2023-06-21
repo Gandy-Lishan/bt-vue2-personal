@@ -1487,7 +1487,7 @@ export default {
 </script>
 <style lang="less" scoped>
 main {
-	padding: 0 80px;
+	padding: 0 30px;
 	background: #f9fafb;
 }
 .gradient {
