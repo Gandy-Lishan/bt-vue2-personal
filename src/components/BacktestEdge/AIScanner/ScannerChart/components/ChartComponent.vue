@@ -25,11 +25,13 @@ export default {
     	chart: chart,
 	},
 	created() {
-		console.log(this.other,this.symbol)
+		CIQ.addCover()
+    	CIQ.nprogress.start()
 	},
 	methods:{
 		onChartReady(){
 			CIQ.initiateChart(()=>{
+				this.hideComponents()
 				const periodArray = [
 					{ period: 1, timeframe: 'Week' },
 					{ period: 2, timeframe: 'Week' },
@@ -42,8 +44,21 @@ export default {
 				this.calculateBacktestHistory(this.other['EntryTradeDate'], periodArray,this.direction)
 				this.loadDefaultStudy()
 				this.loadMarker()
+
+				CIQ.hideCover()
+                CIQ.nprogress.done()
 			})
 
+		},
+		hideComponents() {
+			let search = document.querySelector(".ciq-search")
+			let indicatorSearch = document.querySelector(".ciq-indicators-search")
+			let studies = document.querySelector(".ciq-studies")
+			let favBtnContainer = document.querySelector(".favBtnContainer")
+			search.style.visibility = 'hidden'
+			indicatorSearch.style.visibility = 'hidden'
+			studies.style.visibility = 'hidden'
+			favBtnContainer.style.display = 'none'
 		},
 		loadDefaultStudy() {
 			 

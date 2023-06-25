@@ -86,6 +86,29 @@
 			<!-- :min-width="90" -->
 			<template v-for="(l, index) in tableCol">
 				<!-- :min-width="130" -->
+				<el-table-column
+					v-if="l == 'Select'"
+					:label="l"
+					:prop="l"
+					:key="index"
+				>
+					<template slot-scope="scope">
+						<el-checkbox
+							v-model="scope.row.Subscribe"
+							@change="
+								selectSymbol(
+									scope.row.id,
+									scope.row.Symbol,
+									scope.row.Subscribe,
+									scope.row['Profit Target(%)'],
+									scope.row['Stop Loss(%)'],
+									scope.row['Win Rate(%)'],
+									scope.$index
+								)
+							"
+						></el-checkbox>
+					</template>
+				</el-table-column>
 				<el-table-column		
 					v-if="l == 'Symbol'"
 					:label="l"
@@ -109,7 +132,8 @@
 				</el-table-column>
 				<el-table-column
 					v-if="
-						l != 'Symbol'
+						l != 'Symbol' &&
+						l != 'Select'
 					"
 					:sortable="
 						[
@@ -155,20 +179,68 @@ export default {
 				},
 				date: this.data.Date,
 				btnLoading: false,
+				btInfo: [],
+				
+				idList: new Set(),
+				idListLength: 0,
+				subSymbols: new Set(),
+				checkboxGroupState: {},
 				selectedStopLosses: new Set(),
 				selectedProfitTargets: new Set(),
 				selectedWinRates: new Set(),
-				btInfo: []
 		}
 	},
 	watch: {
+		checkboxGroupState: {
+			handler(newValue, oldValue){
+				this.data.content.map((item)=>{
+					if(this.checkboxGroupState[item.id]){
+						this.idList.add(item['id'])
+						this.subSymbols.add(Symbol)
+						this.selectedStopLosses.add(item['Stop Loss(%)'])
+						this.selectedProfitTargets.add(item['Profit Target(%)'])
+						this.selectedWinRates.add(item['Win Rate(%)'])
+					}
+				})
+				this.idListLength = this.idList.size
+				this.calculateAlloc()
+			},
+			deep: true
+		}
 	},
 	created() {
 	},
 	mounted() {
-		this.calculateAlloc()
+		this.data.content.map((item,index)=>{
+				item['Cash Alloc(%)'] = ''
+		})	
 	},
 	methods: {
+		selectSymbol(id, Symbol, subscribe, pt,sl,wr,rowIndex) {
+			
+			/* 
+			只是起模拟作用，后续要上接口
+			*/
+			// subscribe = !subscribe
+			if(subscribe) {
+				this.idList.add(id)
+				this.subSymbols.add(Symbol)
+				this.selectedStopLosses.add(sl)
+				this.selectedProfitTargets.add(pt)
+				this.selectedWinRates.add(wr)
+			}else {
+				this.idList.delete(id)
+				this.subSymbols.delete(Symbol)
+				this.selectedStopLosses.delete(sl)
+				this.selectedProfitTargets.delete(pt)
+				this.selectedWinRates.delete(wr)
+			}
+			this.checkboxGroupState[id] = subscribe
+			
+			this.idListLength = this.idList.size
+			
+			this.calculateAlloc()
+		},
 		disabledDate(time) {
 			let dis = timestampToTime(time) > this.curDate || (time.getDay() === 0 || time.getDay() === 6)
 			return dis
@@ -257,18 +329,19 @@ export default {
 			}
 			}
 		},
-		calculateAlloc(){
-			this.selectedStopLosses = this.data.content.map(item=>item['Stop Loss(%)'])
-			this.selectedProfitTargets = this.data.content.map(item=>item['Profit Target(%)'])
-			this.selectedWinRates = this.data.content.map(item=>item['Win Rate(%)'])
-			let slMean = this.selectedStopLosses.reduce((sum,value)=>{return Number(sum)+Number(value)},0)/this.selectedStopLosses.length
-			let ptMean = this.selectedProfitTargets.reduce((sum,value)=>{return Number(sum)+Number(value)},0)/this.selectedProfitTargets.length
-			let wrMean = this.selectedWinRates.reduce((sum,value)=>{return Number(sum)+Number(value)},0)/this.selectedWinRates.length*0.01
-			
+		calculateAlloc(){			
+			let slMean = Array.from(this.selectedStopLosses).reduce((sum,value)=>{return Number(sum)+Number(value)},0)/Array.from(this.selectedStopLosses).length
+			let ptMean = Array.from(this.selectedProfitTargets).reduce((sum,value)=>{return Number(sum)+Number(value)},0)/Array.from(this.selectedProfitTargets).length
+			let wrMean = Array.from(this.selectedWinRates).reduce((sum,value)=>{return Number(sum)+Number(value)},0)/Array.from(this.selectedWinRates).length*0.01
+
 			let kellyTotal = ((ptMean+slMean)*wrMean-slMean)/ptMean
 			this.data.content.map((item,index)=>{
-				let kelly = kellyTotal*(item['Win Rate(%)']/Array.from(this.selectedWinRates).reduce((sum,value)=>{return Number(sum)+Number(value)},0))
-				item['Cash Alloc(%)'] = (kelly*100).toFixed(2)
+				if(this.checkboxGroupState[item.id]){
+					let kelly = kellyTotal*(item['Win Rate(%)']/Array.from(this.selectedWinRates).reduce((sum,value)=>{return Number(sum)+Number(value)},0))
+					item['Cash Alloc(%)'] = (kelly*100).toFixed(2)
+				}else{
+					item['Cash Alloc(%)'] = ''
+				}
 			})
 		},
 	}
