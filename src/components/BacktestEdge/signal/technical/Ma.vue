@@ -324,7 +324,6 @@ export default {
 					sd.parameters.criteria == this.criteria &&
 					sd.parameters.index == this.panelIndex
 				) {
-					console.log('CIQ.removeDot()')
 					var replaceStudy = {
 						name: 'Moving Average',
 						overlay: true,
@@ -342,7 +341,7 @@ export default {
 						criteria: this.criteria,
 						index: this.panelIndex
 					})
-					console.log(st)
+
 					CIQ.store.commit('getMaPeriod', val)
 
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
@@ -588,7 +587,6 @@ export default {
 						criteria: this.criteria,
 						index: this.panelIndex
 					})
-					console.log('刷新附属ma',st)
 					
 					// 解决附属ma或者roc漂移问题
 					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
@@ -633,7 +631,6 @@ export default {
 					sd.parameters.criteria == this.criteria &&
 					sd.parameters.index == this.panelIndex
 				) {
-					console.log('getMaValue before ',sd)
 					var replaceStudy = {
 						name: 'Moving Average',
 						overlay: true,

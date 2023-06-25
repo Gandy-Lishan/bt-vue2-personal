@@ -28,6 +28,16 @@ export default {
 		CIQ.addCover()
     	CIQ.nprogress.start()
 	},
+	computed: {
+		updateSettingMA() {
+			return this.$store.state.studySettingMA
+		},
+	},
+	watch: {
+		updateSettingMA(val) {
+			this.updateMAPeriod(val['period'])
+		},
+	},
 	methods:{
 		onChartReady(){
 			CIQ.initiateChart(()=>{
@@ -278,6 +288,35 @@ export default {
 			result.push(groupItem)
 			return result
 		},
+		updateMAPeriod(val) {
+			// update MA period
+			
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+				if (
+					sd.type == 'ma' && sd.panel == 'chart'
+				) {
+					var replaceStudy = {
+						name: 'Moving Average',
+						overlay: true,
+						calculateFN: CIQ.Studies.calculateMovingAverage,
+						inputs: {
+							Period: val,
+							Field: sd.inputs.Field,
+							Type: 'simple',
+							Offset: 0
+						},
+						outputs: { MA: '#FF0000' }
+					}
+					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
+					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
+						criteria: null,
+						index: null
+					})
+					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
+				}
+			}
+		}	
 	}
 }
 </script>
