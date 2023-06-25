@@ -1,6 +1,6 @@
 <template>
 	<!-- <div class="doc-content" :class="isToggle ? 'toggle' : ''"> -->
-	<div class="doc-content" :class="isToggle ? 'toggle' : ''">
+	<div class="doc-content" :class="{ 'toggle': classObj.isToggle, 'hideMargin': classObj.isHideMargin }">
 		<div class="section-container">
 			<div
 				title="Directory"
@@ -332,6 +332,14 @@
 						menu of search results, located on the right side, you will see the
 						corresponding indicator's timeframe displayed.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path0117"
+						:preview-src-list="path0117List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="0-1">Form section</h2>
 					<hr />
 					<p>
@@ -738,12 +746,28 @@
 						Backtest History... Switch the timeframe to daily, as currently
 						custom indicators only support uploading daily data.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path160"
+						:preview-src-list="path160List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-6-1">Fill in the entry criteria</h3>
 					<p>
 						Select 'Single-Condition' from the drop-down list in the upper right
 						corner of the Entry Criteria section. Choose the 'Users' Own
 						Indicator' radio button.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path161"
+						:preview-src-list="path161List"
+						fit="fill"
+						lazy
+					></el-image>
 					<p>
 						If you want to use the same custom indicator file for both entry and
 						exit, select 'Single Condition' from the drop-down list in the upper
@@ -753,6 +777,14 @@
 						Exit Criteria. If you are using different custom indicator files for
 						entry and exit, you can skip this step.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path162"
+						:preview-src-list="path162List"
+						fit="fill"
+						lazy
+					></el-image>
 					<p>
 						The Custom indicator files can only be uploaded as CSV files. The
 						file name should only contain English letters, numbers, spaces,
@@ -760,10 +792,26 @@
 						less than 1MB. The file content has strict formatting requirements.
 						Please click the 'View Example Data' button to see an example file.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path163"
+						:preview-src-list="path163List"
+						fit="fill"
+						lazy
+					></el-image>
 					<p>
 						Click the 'Click to upload custom indicator file' button to upload
 						your local custom indicator file.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path164"
+						:preview-src-list="path164List"
+						fit="fill"
+						lazy
+					></el-image>
 					<p>
 						If your file format meets the requirements, please ensure that the
 						file does not contain non-trading days. If there are non-trading
@@ -772,6 +820,30 @@
 						and we will remove the non-trading days from the file. If you click
 						the 'Cancel' button, the file will not be uploaded.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path165"
+						:preview-src-list="path165List"
+						fit="fill"
+						lazy
+					></el-image>
+					<p>
+						When all the file contents pass the verification, a pop-up window
+						will prompt you to enter the Indicator Name, which will be displayed
+						as the name of the custom signal on the chart. You can directly use
+						the file name as the custom signal name, or you can input a custom
+						signal name. The signal name can only contain letters, numbers,
+						underscores, and spaces, and cannot start with a number.
+					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path166"
+						:preview-src-list="path166List"
+						fit="fill"
+						lazy
+					></el-image>
 					<p>
 						Once the signal name is confirmed, the chart will display the custom
 						signal on it. It is important to note that if the dates in the
@@ -780,16 +852,48 @@
 						upload, you can click on the file list item to preview the uploaded
 						file.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path167"
+						:preview-src-list="path167List"
+						fit="fill"
+						lazy
+					></el-image>
 					<p>
 						Finally, fill in the entry conditions corresponding to the signal
 						panel.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path168"
+						:preview-src-list="path168List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h3 id="1-6-2">Fill in the exit criteria</h3>
 					<p>
 						If your Exit Criteria is pre-filled with a custom indicator file,
 						you only need to fill in the exit conditions corresponding to the
 						signal panel.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path169"
+						:preview-src-list="path169List"
+						fit="fill"
+						lazy
+					></el-image>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path1610"
+						:preview-src-list="path1610List"
+						fit="fill"
+						lazy
+					></el-image>
 					<p>
 						If your Exit Criteria is not pre-filled with a custom indicator
 						file, you will need to upload your own indicator file from your
@@ -824,6 +928,14 @@
 						trading period for trade simulation. You can select the appropriate
 						trade price option in the basic parameters of the backtest.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path171"
+						:preview-src-list="path171List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="1-8">Exclude Overlapping Observations for Backtesting</h2>
 					<hr />
 					<p>
@@ -836,6 +948,14 @@
 						option, enter a time value in the adjacent input box, which must be
 						a positive integer.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path181"
+						:preview-src-list="path181List"
+						fit="fill"
+						lazy
+					></el-image>
 				</section>
 			</section>
 			<section v-else-if="id[0] == '2'">
@@ -1023,6 +1143,14 @@
 						click on the "View Backtest Result" button next to the backtest, and
 						view the backtest results.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path71"
+						:preview-src-list="path71List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="7-1">Click button to customize the TIM</h2>
 					<p>
 						Underneath the Results tab, click on the "Exit with different
@@ -1031,13 +1159,45 @@
 						Choose "Exit with Customized Time-In-Market" and click on the "Edit
 						exit with different TIM" button to customize the backtest.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path72"
+						:preview-src-list="path72List"
+						fit="fill"
+						lazy
+					></el-image>
+					<p>
+						Fill in the custom TIM in the pop-up window. To add multiple TIMs,
+						please click "Add Row." Finally, click "Save" to calculate the
+						custom TIM based on the current backtesting.
+					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path73"
+						:preview-src-list="path73List"
+						fit="fill"
+						lazy
+					></el-image>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path74"
+						:preview-src-list="path74List"
+						fit="fill"
+						lazy
+					></el-image>
 				</section>
 			</section>
 			<section v-else-if="id[0] == '8'">
 				<Tabs></Tabs>
 			</section>
 		</div>
-		<RightMenu :menuItems="menuItems" v-show="menuItems.length != 0"></RightMenu>
+		<RightMenu
+			:menuItems="menuItems"
+			v-show="menuItems.length != 0"
+		></RightMenu>
 	</div>
 </template>
 <script>
@@ -1060,6 +1220,7 @@ import path0113 from "../img/1.1.14.jpg";
 import path0114 from "../img/1.1.15.jpg";
 import path0115 from "../img/1.1.16.jpg";
 import path0116 from "../img/1.1.17.jpg";
+import path0117 from '../img/1.1.18.jpg'
 import path01 from "../img/1.2.jpg";
 import path100 from "../img/2.1.1.jpg";
 import path101 from "../img/2.1.2.jpg";
@@ -1082,6 +1243,19 @@ import path143 from "../img/2.5.4.jpg";
 import path144 from "../img/2.5.5.jpg";
 import path150 from "../img/2.6.1.jpg";
 import path151 from "../img/2.6.2.jpg";
+import path160 from "../img/2.7.1.jpg";
+import path161 from "../img/2.7.2.jpg";
+import path162 from "../img/2.7.3.jpg";
+import path163 from "../img/2.7.4.jpg";
+import path164 from "../img/2.7.5.jpg";
+import path165 from "../img/2.7.6.jpg";
+import path166 from "../img/2.7.7.jpg";
+import path167 from "../img/2.7.8.jpg";
+import path168 from "../img/2.7.9.jpg";
+import path169 from "../img/2.7.10.jpg";
+import path1610 from "../img/2.7.11.jpg";
+import path171 from "../img/2.8.1.jpg";
+import path181 from "../img/2.9.1.jpg";
 import path20 from "../img/3.1.jpg";
 import path21 from "../img/3.2.jpg";
 import path30 from "../img/4.1.jpg";
@@ -1091,6 +1265,10 @@ import path50 from "../img/6.1.jpg";
 import path51 from "../img/6.2.jpg";
 import path60 from "../img/7.1.jpg";
 import path61 from "../img/7.2.jpg";
+import path71 from "../img/8.1.jpg";
+import path72 from "../img/8.2.jpg";
+import path73 from "../img/8.3.jpg";
+import path74 from "../img/8.4.jpg";
 import RightMenu from "./RightMenu.vue";
 export default {
   props: {
@@ -1139,79 +1317,123 @@ export default {
       path0115List: [path0115],
       path0116: path0116,
       path0116List: [path0116],
+      path0117: path0117,
+      path0117List: [path0117],
       path01: path01,
       path01List: [path01],
-			path100: path100,
-			path100List: [path100],
-			path101: path101,
-			path101List: [path101],
-			path102: path102,
-			path102List: [path102],
-			path103: path103,
-			path103List: [path103],
-			path110: path110,
-			path110List: [path110],
-			path111: path111,
-			path111List: [path111],
-			path112: path112,
-			path112List: [path112],
-			path120: path120,
-			path120List: [path120],
-			path121: path121,
-			path121List: [path121],
-			path122: path122,
-			path122List: [path122],
-			path130: path130,
-			path130List: [path130],
-			path131: path131,
-			path131List: [path131],
-			path132: path132,
-			path132List: [path132],
-			path133: path133,
-			path133List: [path133],
-			path140: path140,
-			path140List: [path140],
-			path141: path141,
-			path141List: [path141],
-			path142: path142,
-			path142List: [path142],
-			path143: path143,
-			path143List: [path143],
-			path144: path144,
-			path144List: [path144],
-			path150: path150,
-			path150List: [path150],
-			path151: path151,
-			path151List: [path151],
-			path20: path20,
-			path20List: [path20],
-			path21: path21,
-			path21List: [path21],
-			path30: path30,
-			path30List: [path30],
-			path31: path31,
-			path31List: [path31],
-			path40: path40,
-			path40List: [path40],
-			path50: path50,
-			path50List: [path50],
-			path51: path51,
-			path51List: [path51],
-			path60: path60,
-			path60List: [path60],
-			path61: path61,
-			path61List: [path61]
+      path100: path100,
+      path100List: [path100],
+      path101: path101,
+      path101List: [path101],
+      path102: path102,
+      path102List: [path102],
+      path103: path103,
+      path103List: [path103],
+      path110: path110,
+      path110List: [path110],
+      path111: path111,
+      path111List: [path111],
+      path112: path112,
+      path112List: [path112],
+      path120: path120,
+      path120List: [path120],
+      path121: path121,
+      path121List: [path121],
+      path122: path122,
+      path122List: [path122],
+      path130: path130,
+      path130List: [path130],
+      path131: path131,
+      path131List: [path131],
+      path132: path132,
+      path132List: [path132],
+      path133: path133,
+      path133List: [path133],
+      path140: path140,
+      path140List: [path140],
+      path141: path141,
+      path141List: [path141],
+      path142: path142,
+      path142List: [path142],
+      path143: path143,
+      path143List: [path143],
+      path144: path144,
+      path144List: [path144],
+      path150: path150,
+      path150List: [path150],
+      path151: path151,
+      path151List: [path151],
+      path160: path160,
+      path160List: [path160],
+      path161: path161,
+      path161List: [path161],
+      path162: path162,
+      path162List: [path162],
+      path163: path163,
+      path163List: [path163],
+      path164: path164,
+      path164List: [path164],
+      path165: path165,
+      path165List: [path165],
+      path166: path166,
+      path166List: [path166],
+      path167: path167,
+      path167List: [path167],
+      path168: path168,
+      path168List: [path168],
+      path169: path169,
+      path169List: [path169],
+      path1610: path1610,
+      path1610List: [path1610],
+      path171: path171,
+      path171List: [path171],
+      path181: path181,
+      path181List: [path181],
+      path20: path20,
+      path20List: [path20],
+      path21: path21,
+      path21List: [path21],
+      path30: path30,
+      path30List: [path30],
+      path31: path31,
+      path31List: [path31],
+      path40: path40,
+      path40List: [path40],
+      path50: path50,
+      path50List: [path50],
+      path51: path51,
+      path51List: [path51],
+      path60: path60,
+      path60List: [path60],
+      path61: path61,
+      path61List: [path61],
+      path71: path71,
+      path71List: [path71],
+      path72: path72,
+      path72List: [path72],
+      path73: path73,
+      path73List: [path73],
+      path74: path74,
+      path74List: [path74]
     }
   },
   components: {
     RightMenu,
-		Tabs
+    Tabs
   },
   mounted() {
     // scroll代表滚动条距离页面顶部距离
     // window.addEventListener('scroll', this.dataScroll)
     this.selectAllSubTitle()
   },
+	computed: {
+		classObj() {
+			return {
+				isToggle: this.isToggle,
+				isHideMargin: this.menuItems.length == 0 ? 'hideMargin' : ''
+			}
+		}
+	},
   methods: {
     toggleLeftMenu() {
       this.isToggle = !this.isToggle
@@ -1267,6 +1489,9 @@ export default {
 	color: rgb(0, 50, 60);
 	position: relative;
 	margin-right: 220px;
+}
+.hideMargin{
+	margin-right: 0;
 }
 .section-container {
 	border: 1px solid #f2f6fc;
