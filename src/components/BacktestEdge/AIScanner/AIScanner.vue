@@ -80,9 +80,8 @@ export default {
 			'Cash Alloc(%)'
 		]
 
-		// 如果是当天，则添加勾选栏
 		// 测试
-		
+		AIPickObj['tableCol'].unshift("Select")
 		AIPickObj['content'] = AIPickContent
 		
 		this.tableDataList.push(AIPickObj)

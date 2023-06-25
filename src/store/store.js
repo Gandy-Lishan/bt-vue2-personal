@@ -9,7 +9,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
 		curDate: '',
-		studySettingMA: '',
+		studySettingMA: {period:'',criteria:'',panelIndex:''},
 		favoriteIndicatorList: [],
 		favoriteSymbolList: [],
 		techSD: [],
@@ -143,8 +143,8 @@ export default new Vuex.Store({
 		/**
 		 * Sets up a mutations to store MA period when editting MA study to make sure the MA period is the same in chart and form 
 		 */
-		studySettingMAChange(state,val){
-			state.studySettingMA = val
+		studySettingMAChange(state,obj){
+			state.studySettingMA = obj
 		},
 		/**
 		 * Sets up a mutations to store favoriteIndicatorList that is originally read from API
