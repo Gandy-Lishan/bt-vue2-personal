@@ -45,7 +45,7 @@ export default {
             'Stock backtesting is a strategic analysis method that evaluates the performance of a specific investment strategy or trading system on historical data by reviewing past market data and indicators. Sentiment indicators are used in stock backtesting to examine the sentiment of market participants and attempt to correlate the sentiment indicator with stock prices or market trends.',
             'Common sentiment indicators include Smart Money Confidence, Dumb Money Confidence, and others. Sentiment indicators can be used as part of an investment strategy to make buy or sell decisions. For example, when a sentiment indicator shows that market sentiment has reached extreme levels, investors may consider adopting a contrarian trading strategy, reducing positions when market sentiment is excessively optimistic or increasing positions when market sentiment is excessively pessimistic.',
             'However, it is important to note that sentiment indicators are not standalone predictors of market trends but rather auxiliary tools. The stock market is influenced by multiple factors, and sentiment is just one of them. Therefore, when using sentiment indicators, it is necessary to combine them with other technical indicators and fundamental analysis to make more accurate decisions. Additionally, the calculation and interpretation of sentiment indicators should be approached with caution, avoiding excessive reliance on a single indicator to judge the market.'
-          ], type: 'success'
+          ], type: 'info'
         },
         {
           title: 'Technical Indicator', content: [
@@ -70,7 +70,7 @@ export default {
             "Symbol OHLCV data is commonly used in fields such as chart analysis, technical analysis, and algorithmic trading. By analyzing this data, trends in asset prices, support and resistance levels, and market participants' trading activity can be revealed.",
             "Common financial market data sources and trading platforms provide functionality to store and transmit data in Symbol OHLCV format. Analysts and traders can use this data to construct charts, apply technical indicators, and backtest and optimize models and strategies based on historical prices and volumes.",
             "It is important to note that the frequency and time periods of Symbol OHLCV data can be set according to specific needs, such as minute data, hourly data, or daily data, among others. Additionally, Symbol OHLCV data only provides information about prices and trading volumes, and other financial indicators and fundamental data may need to be used in conjunction with it for a more comprehensive analysis and decision-making."
-          ], type: 'warning'
+          ], type: 'info'
         },
         {
           title: 'Extreme Optimism', content: [
@@ -81,7 +81,7 @@ export default {
             "3. Technical Indicators: Certain technical indicators may indicate an overbought condition in the market, suggesting a bias towards optimistic sentiment among investors. For example, overbought indicators like RSI show that a stock or index has exceeded the range of buying levels, which may imply that market sentiment is in a state of extreme optimism.",
             'In BacktestEdeg, select the "Sentiment Indicator" radio button and enter the sentiment indicator you want to search for in the search box, such as "Smart Money Confidence." Below Smart Money Confidence, the corresponding value of "Extreme Optimism" will be displayed.',
             'Extreme optimism in sentiment indicators can influence market behavior and price trends. Investors commonly believe that the market will continue to rise, which can lead to overbuying and overvaluation. However, it is important to note that extreme optimism in sentiment does not always mean that the market will immediately reverse or decline. Market sentiment is a dynamic factor that needs to be combined with other analytical tools and indicators to make more accurate judgments and decisions.'
-          ], type: 'danger'
+          ], type: 'info'
         },
         {
           title: 'Extreme Pessimism', content: [
@@ -91,7 +91,7 @@ export default {
             "2. Sentiment Analysis: By conducting sentiment analysis on textual data such as news reports, social media posts, or online forums, the inclination of market participants' sentiment can be evaluated. When sentiment analysis reveals a significant amount of negative sentiment in the text, it may reflect extreme pessimism in market sentiment.",
             "3. Technical Indicators: Certain technical indicators may indicate an oversold condition in the market, suggesting a bias towards pessimistic sentiment among investors. For example, oversold indicators like RSI show that a stock or index has fallen below the range of selling levels, which may imply that market sentiment is in a state of extreme pessimism.",
             'Extreme pessimism in sentiment indicators can influence market behavior and price trends. Investors commonly believe that the market will continue to decline, which can lead to overselling and the market being undervalued. However, it is important to note that extreme pessimism in sentiment does not always mean that the market will immediately reverse or rise. Market sentiment is a dynamic factor that needs to be combined with other analytical tools and indicators to make more accurate judgments and decisions.'
-          ], type: 'danger'
+          ], type: 'info'
         },
         {
           title: 'CrossAbove', content: [
@@ -109,7 +109,7 @@ export default {
             "For example, let's assume we have two indicators, A and B, and we observe their crossover. When A crosses below B, it means that A was above B before a certain point in time and then crosses under B at that point. This situation is often interpreted as a potential selling signal, suggesting the formation of a downward price trend.",
             '"CrossBelow" can be applied to various combinations of indicators and price lines. Common examples include crossovers between moving average lines, such as the short-term moving average crossing below the long-term moving average, or when the price line crosses an important support level.',
             'The "CrossBelow" signal in backtesting trading systems is often used as one of the selling conditions for technical indicators. By backtesting historical data, the effectiveness and profitability of this signal can be evaluated. However, it is important to note that a single signal does not guarantee accurate predictions of market behavior. Therefore, when formulating trading strategies, it is advisable to combine other technical indicators and risk management principles.'
-          ], type: 'warning'
+          ], type: 'info'
         },
         {
           title: 'Rate Of Change', content: [
@@ -123,7 +123,7 @@ export default {
             'For example, suppose a stock has a current price of $50 and a price from 20 trading days ago of $40. The ROC would be ((50 - 40) / 40) * 100 = 25%. This means that the price of the stock has increased by 25% over the past 20 trading days.',
             'ROC can be used to assess the speed of price or indicator changes. If the ROC value is positive, it indicates a relatively fast upward movement in prices or indicators. If the ROC value is negative, it suggests a relatively fast downward movement. Traders can combine ROC with other technical indicators or price patterns to confirm market trends, identify overbought or oversold conditions, and develop buy or sell strategies.',
             'It is important to note that ROC is a short-term indicator and sensitive to market noise. Therefore, it should be used in conjunction with other indicators and analysis tools to obtain more accurate trading signals and decisions.'
-          ], type: 'success'
+          ], type: 'info'
         },
         {
           title: 'Range Of Rank', content: [
@@ -151,7 +151,7 @@ export default {
             "MA Ratio can help traders analyze price trends and determine the relative strength of an asset. When the MA Ratio is greater than 1, it indicates relatively strong short-term trends, and the price may be in an upward state. When the MA Ratio is less than 1, it indicates relatively weak short-term trends, and the price may be in a downward state.",
             "Traders can use MA Ratio as a reference for buying or selling signals. For example, when the MA Ratio crosses above 1 from below, it may indicate a strengthening short-term trend, and a buying opportunity can be considered. When the MA Ratio crosses below 1 from above, it may indicate a weakening short-term trend, and a selling opportunity can be considered.",
             "It's important to note that MA Ratio is a technical indicator and only serves as a supplementary tool. It should be used in conjunction with other technical indicators and analysis methods to obtain a more comprehensive market analysis and trading decisions."
-          ], type: 'danger'
+          ], type: 'info'
         },
         {
           title: 'SameBar', content: [
@@ -174,7 +174,8 @@ export default {
             "The choice of an appropriate TimeOrder method depends on the characteristics and objectives of the trading strategy. Time Priority is closer to real trading conditions and can accurately simulate the order of trade executions in the market. Price Priority considers the influence of price and may be more suitable for certain strategies or market conditions.",
             "In backtesting platforms or trading software, options are typically provided to set the TimeOrder, allowing traders to choose the appropriate method according to their needs.",
             "It's important to note that TimeOrder can have an impact on trading results. Different TimeOrder methods can lead to different trade execution sequences, affecting factors such as trading costs and slippage. Traders should be aware of this impact and conduct thorough testing and validation during the backtesting process to obtain more accurate and reliable backtesting results."
-          ]
+          ],
+          type: 'info'
         }
       ],
     };
@@ -204,6 +205,14 @@ export default {
 	background: #5b9bd1;
 	border: 1px solid #5b9bd1;
 	box-shadow: 0px 0px 5px 5px #cee4f7;
+}
+.el-tag {
+  width: 125px;
+}
+.el-tag--dark.el-tag--info{
+  text-align: center;
+  background-color: #B2B6BF;
+  border-color: #B2B6BF;
 }
 
 .content {
