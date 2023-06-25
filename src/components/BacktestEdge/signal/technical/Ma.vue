@@ -290,9 +290,10 @@ export default {
 	},
 	watch: {
 		updateSettingMA(val) {
-			//console.log('updateSettingMA: ',val)
-			this.getMaValue(val)
-			this.getSCvalue(val)
+			if(val['criteria'] == this.criteria && val['panelIndex'] == this.panelIndex){
+				this.getMaValue(val['period'])
+				this.getSCvalue(val['period'])
+			}
 		},
 		isActived: {
 			handler(newVal) {

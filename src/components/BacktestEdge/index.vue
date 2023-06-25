@@ -167,7 +167,7 @@ export default {
 		.help-title {
 			margin-left: 28px;
 			span {
-				font-size: 10px;
+				font-size: 13px;
 				margin-top: 3px;
 				&::after{
 					content: "";
@@ -186,7 +186,7 @@ export default {
 		}
 		.tools {
 			margin-top: 3px;
-			font-size: 10px;
+			font-size: 15px;
 		}
 	}
 	.logo_container {
