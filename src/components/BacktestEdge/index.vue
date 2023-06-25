@@ -23,7 +23,7 @@
 						<el-submenu index="4">
 							<template slot="title">Help</template>
 							<el-menu-item index="4-1">Tutorial</el-menu-item>
-							<el-menu-item index="4-2">Contant Us</el-menu-item>
+							<el-menu-item index="4-2">Disclaimer</el-menu-item>
 						</el-submenu>
 						<el-submenu index="5">
 							<template slot="title"><i class="el-icon-s-tools"></i></template>
@@ -121,7 +121,8 @@ export default {
 				}).href
 				window.open(path, '_blank')
 			} else if (key == '4-2') {
-				path = 'https://users.sentimentrader.com/users/account/support/'
+				// path = 'https://users.sentimentrader.com/users/account/support/'
+				path = '/doc/disclaimer'
 				window.open(path, '_blank')
 			}
 		},
