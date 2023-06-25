@@ -11,7 +11,7 @@
 								src="../../assets/logo.png"
 								alt="logo"
 						/></span>
-						<div class="betaNote">BacktestEdge Beta</div>
+						<div class="betaNote">Sentiment Tech</div>
 					</div>
 					<el-menu
 						:default-active="activeIndex"
@@ -19,9 +19,9 @@
 						mode="horizontal"
 						@select="handleSelect"
 					>
-						<el-menu-item class="home-link" index="1">Backtester</el-menu-item>
+						<el-menu-item class="home-link" index="1">BackteEdge</el-menu-item>
 						<el-menu-item class="strategy-link" index="2">Strategy</el-menu-item>
-						<el-menu-item class="ai-link" index="3">AI Scanner</el-menu-item>
+						<el-menu-item class="ai-link" index="3">AI Stock Scanner</el-menu-item>
 						<el-submenu class="help-title" index="4">
 							<template slot="title">
 								<span >Help</span>	
@@ -56,9 +56,12 @@ export default {
 		Footer
 	},
 	mounted() {
+		// el-menu-item strategy-link
+		let strategy = document.querySelector('.strategy-link')
+		strategy.style.display = 'none'
 		if(this.$route.name == 'strategy'){
 			this.activeIndex = '2'
-		}else if(this.$route.name == 'backtester'){
+		}else if(this.$route.name == 'BackteEdge'){
 			this.activeIndex = '1'
 		}else if(this.$route.name == 'scannerai' || this.$route.name == 'scannerai_chart'){
 			this.activeIndex = '3'
