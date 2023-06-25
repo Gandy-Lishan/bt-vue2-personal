@@ -19,7 +19,7 @@
 						mode="horizontal"
 						@select="handleSelect"
 					>
-						<el-menu-item class="home-link" index="1">BacktetEdge</el-menu-item>
+						<el-menu-item class="home-link" index="1">BacktestEdge</el-menu-item>
 						<el-menu-item class="strategy-link" index="2">Strategy</el-menu-item>
 						<el-menu-item class="ai-link" index="3">AI Stock Scanner</el-menu-item>
 						<el-submenu class="help-title" index="4">
