@@ -489,6 +489,8 @@ export default new Vuex.Store({
 					signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', symbolIndicator: '', usersOwnIndicator: '' }]
 				}
 			}
+			state.usersOwnEntryFileHash = Array(5).fill('')
+			state.usersOwnExitFileHash = Array(5).fill('')
 		},
 		getSentimentList(state,list) {
 			state.sentimentIndicatorList = list

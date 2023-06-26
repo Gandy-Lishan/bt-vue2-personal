@@ -1487,6 +1487,10 @@ export default {
             }
             self.$emit(self.criteria + 'UserUploadFileContent', fileObj)
             // self.handleUsersOwnIndicatorSelect(response.data)
+            // let valObj = {}
+            // valObj.value = this.si.userIndicator
+            // valObj.index = this.panelIndex
+            // self.$emit('getIndicatorVal', valObj)
           } else {
             return Promise.reject(error)
           }
