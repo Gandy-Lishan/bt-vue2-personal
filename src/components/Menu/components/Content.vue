@@ -1222,16 +1222,72 @@
 				<h1 id="ai-1">AI Scanner entrance</h1>
 				<hr>
 				<p>Click 'AI Scanner' in the navigation bar at the top of the homepage</p>
+				<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="pathai1"
+						:preview-src-list="pathai1List"
+						fit="fill"
+						lazy
+					></el-image>
 				<h1 id="ai-2">Modify AI Scanner date</h1>
 				<hr>
 				<p>Select the historical date you want to view in the date picker under 'AI Picks at the end of today'.</p>
+				<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="pathai2"
+						:preview-src-list="pathai2List"
+						fit="fill"
+						lazy
+					></el-image>
 				<h1 id="ai-3">Cash Alloc(%) for auto-adjusted stocks</h1>
 				<hr>
 				<p>Check the symbol you want to calculate for Cash Alloc(%) in the selection box before the symbol name, and the AI Scanner will help you calculate the Cash Alloc(%) corresponding to the current symbol</p>
+				<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="pathai3"
+						:preview-src-list="pathai3List"
+						fit="fill"
+						lazy
+					></el-image>
 				<h1 id="ai-4">View symbol's backtest information</h1>
 				<hr>
 				<p>Click on a stock name to access the stock and its corresponding backtesting information. </p>
+				<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="pathai41"
+						:preview-src-list="pathai41List"
+						fit="fill"
+						lazy
+					></el-image>
 				<p>These backtesting information will help you understand the statistics of this signal under historical data backtesting.</p>
+				<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="pathai42"
+						:preview-src-list="pathai42List"
+						fit="fill"
+						lazy
+					></el-image>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="pathai43"
+						:preview-src-list="pathai43List"
+						fit="fill"
+						lazy
+					></el-image>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="pathai44"
+						:preview-src-list="pathai44List"
+						fit="fill"
+						lazy
+					></el-image>
 			</section>
 		</div>
 		<RightMenu
@@ -1309,6 +1365,13 @@ import path71 from "../img/8.1.jpg";
 import path72 from "../img/8.2.jpg";
 import path73 from "../img/8.3.jpg";
 import path74 from "../img/8.4.jpg";
+import pathai1 from "../img/ai1.jpg";
+import pathai2 from "../img/ai2.jpg";
+import pathai3 from "../img/ai3.jpg";
+import pathai41 from "../img/ai4.1.jpg";
+import pathai42 from "../img/ai4.2.jpg";
+import pathai43 from "../img/ai4.3.jpg";
+import pathai44 from "../img/ai4.4.jpg";
 import RightMenu from "./RightMenu.vue";
 export default {
   props: {
@@ -1454,7 +1517,21 @@ export default {
       path73: path73,
       path73List: [path73],
       path74: path74,
-      path74List: [path74]
+      path74List: [path74],
+			pathai1: pathai1,
+			pathai1List: [pathai1],
+			pathai2: pathai2,
+			pathai2List: [pathai2],
+			pathai3: pathai3,
+			pathai3List: [pathai3],
+			pathai41: pathai41,
+			pathai41List: [pathai41],
+			pathai42: pathai42,
+			pathai42List: [pathai42],
+			pathai43: pathai43,
+			pathai43List: [pathai43],
+			pathai44: pathai44,
+			pathai44List: [pathai44]
     }
   },
   components: {

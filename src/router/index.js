@@ -112,7 +112,6 @@ router.beforeEach(async (to, from, next) => {
 						break;
 					case 500:
 						alert('Internal Server Error')
-
 						break;
 					default:
 						alert('Unknown error')

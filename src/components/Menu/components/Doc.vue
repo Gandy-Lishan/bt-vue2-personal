@@ -93,12 +93,6 @@
 					of Stock and ETF Investments.
 				</h4>
 				<p>
-					AI Scanner provides users with an efficient, accurate, and reliable
-					signal filtering tool through automated screening, historical
-					backtesting, data statistical analysis, and information presentation,
-					helping users make wiser decisions in the stock and ETF markets.
-				</p>
-				<p>
 					<strong>Automated Screening:</strong> AI Scanner utilizes artificial
 					intelligence technology to scan and filter SP1500 and index-based
 					ETFs. It can quickly and accurately analyze a large number of stocks
@@ -135,6 +129,12 @@
 					backtesting information, providing users with an intuitive interface
 					and data visualization, enabling users to better understand and select
 					signals that meet their needs.
+				</p>
+				<p>
+					AI Scanner provides users with an efficient, accurate, and reliable
+					signal filtering tool through automated screening, historical
+					backtesting, data statistical analysis, and information presentation,
+					helping users make wiser decisions in the stock and ETF markets.
 				</p>
 				<p>
 					This tutorial will teach you how to quickly start using AI Scanner and
