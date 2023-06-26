@@ -54,7 +54,7 @@ if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
         target:url,
         changeOrigin:true,
         pathRewrite: {
-            '^/dev': '/dev'
+            '^/dev': ''
         }
     }))
     let url2 = get_env("ai_url",'https://auto-trader-prod.herokuapp.com')
@@ -73,7 +73,7 @@ if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
         target:url,
         changeOrigin:true,
         pathRewrite: {
-            '^/dev': '/dev'
+            '^/dev': ''
         }
     }))
 

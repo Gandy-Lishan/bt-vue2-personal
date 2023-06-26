@@ -4,7 +4,7 @@ import qs from 'qs'
 
 export function getCurDate() {
   return new Promise((resolve,reject)=>{
-    const url = '/ai/currDate'
+    const url = '/dev/ai_scanner/currDate'
     axios.get(url).then(res=>{
       resolve(res.data)
     }).catch(err=>{
@@ -15,9 +15,9 @@ export function getCurDate() {
 
 export function getAIPick(date) {
   return new Promise((resolve,reject)=>{
-    const url = '/ai/aiPick?date='+ date
+    const url = '/dev/ai_scanner/aiPick?date='+ date
     axios.get(url).then(res=>{
-      resolve(res.data)
+      resolve(res.data.results)
     }).catch(err=>{
       reject(err)
     })
@@ -26,7 +26,7 @@ export function getAIPick(date) {
 
 export function getBacktestInfo(data) {
   return new Promise((resolve,reject)=>{
-    const url = '/ai/bt'
+    const url = '/dev/ai_scanner/bt'
     axios.post(url,qs.stringify(data)).then(res=>{
       resolve(res.data)
     }).catch(err=>{

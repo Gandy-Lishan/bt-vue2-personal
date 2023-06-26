@@ -302,7 +302,7 @@ const config = {
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
-					'^/dev': '/dev'
+					'^/dev': ''
 				}
 			},
 			'/api': {

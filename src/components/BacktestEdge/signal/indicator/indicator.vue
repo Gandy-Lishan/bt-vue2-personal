@@ -355,7 +355,7 @@ export default {
         total: 0
       },
       cancelToken: null, // 用于保存取消上传请求的取消令牌
-      uploadUrl: '/dev/uploadcsvfile/',
+      uploadUrl: '/dev/dev/uploadcsvfile/',
       uploadHeaders: {},
       // progress: 0, // 上传进度
       dialogFormVisible: false,

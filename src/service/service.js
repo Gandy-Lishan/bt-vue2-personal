@@ -81,15 +81,15 @@ export function getStocksList() {
 
 export function getSampleList(page, sort, name) {
 	let url = null
-	url = '/dev/strategy/?ordering=name,status,-create_date&page='
+	url = '/dev/dev/strategy/?ordering=name,status,-create_date&page='
 	if(sort) {
-		url = `/dev/strategy/?ordering=${sort}&page=`
+		url = `/dev/dev/strategy/?ordering=${sort}&page=`
 	}
 	if(name) {
-		url = `/dev/strategy/?name=${name}&page=`
+		url = `/dev/dev/strategy/?name=${name}&page=`
 	}
 	if(name && sort) {
-		url = `/dev/strategy/?ordering=${sort}&name=${name}&page=`
+		url = `/dev/dev/strategy/?ordering=${sort}&name=${name}&page=`
 	}
 
     return new Promise((resolve,reject)=>{
@@ -103,7 +103,7 @@ export function getSampleList(page, sort, name) {
 }
 
 export function searchSampleList(keyword) {
-  let url = `/dev/strategy/?name=${keyword}`
+  let url = `/dev/dev/strategy/?name=${keyword}`
 
     return new Promise((resolve,reject)=>{
 		axios.get(url, {withCredentials: true})
@@ -117,15 +117,15 @@ export function searchSampleList(keyword) {
 
 export function getAnalystList(page, sort, name) {
 	let url =  null
-  url = '/dev/analyst/?ordering=-create_date,name,status&page='
+  url = '/dev/dev/analyst/?ordering=-create_date,name,status&page='
 	if(sort) {
-		url = `/dev/analyst/?ordering=${sort}&page=`
+		url = `/dev/dev/analyst/?ordering=${sort}&page=`
 	}
 	if(name) {
-		url = `/dev/analyst/?name=${name}&page=`
+		url = `/dev/dev/analyst/?name=${name}&page=`
 	}
 	if(name && sort) {
-		url = `/dev/analyst/?ordering=${sort}&name=${name}&page=`
+		url = `/dev/dev/analyst/?ordering=${sort}&name=${name}&page=`
 	}
 
     return new Promise((resolve,reject)=>{
@@ -138,7 +138,7 @@ export function getAnalystList(page, sort, name) {
 	})
 }
 export function searchAnalystList(keyword) {
-  let url = `/dev/analyst/?name=${keyword}`
+  let url = `/dev/dev/analyst/?name=${keyword}`
 
     return new Promise((resolve,reject)=>{
 		axios.get(url, {withCredentials: true})
@@ -151,16 +151,16 @@ export function searchAnalystList(keyword) {
 }
 export function getHistoryList(page, sort, name) {
 	let url = null
-	url = '/dev/backtest/?ordering=-create_date&page='
+	url = '/dev/dev/backtest/?ordering=-create_date&page='
 	// sort -> ,total_return
 	if(sort) {
-		url = `/dev/backtest/?ordering=${sort}&page=`
+		url = `/dev/dev/backtest/?ordering=${sort}&page=`
 	}
 	if(name) {
-		url = `/dev/backtest/?name=${name}&page=`
+		url = `/dev/dev/backtest/?name=${name}&page=`
 	}
 	if(name && sort) {
-		url = `/dev/backtest/?ordering=${sort}&name=${name}&page=`
+		url = `/dev/dev/backtest/?ordering=${sort}&name=${name}&page=`
 	}
     return new Promise((resolve,reject)=>{
 		axios.get(url+page, {withCredentials: true})
@@ -173,7 +173,7 @@ export function getHistoryList(page, sort, name) {
 }
 export function searchHistoryList(keyword, customUrl) {
 	let url = null
-  url = `/dev/backtest/?name=${keyword}`
+  url = `/dev/dev/backtest/?name=${keyword}`
 	if(customUrl) url = customUrl
 
     return new Promise((resolve,reject)=>{
@@ -186,7 +186,7 @@ export function searchHistoryList(keyword, customUrl) {
 	})
 }
 export function getBacktestName(name) {
-    const url = '/dev/backtest/?name='
+    const url = '/dev/dev/backtest/?name='
 
     return new Promise((resolve,reject)=>{
 		axios.get(url+name)
@@ -199,15 +199,15 @@ export function getBacktestName(name) {
 }
 export function getFavoriteList(page, sort, name) {
 	let url = null
-  url = '/dev/backtest/?ordering=-create_date&favorites=true&page='
+  url = '/dev/dev/backtest/?ordering=-create_date&favorites=true&page='
 	if(sort) {
-		url = `/dev/backtest/?ordering=${sort}&favorites=true&page=`
+		url = `/dev/dev/backtest/?ordering=${sort}&favorites=true&page=`
 	}
 	if(name) {
-		url = `/dev/backtest/?name=${name}&favorites=true&page=`
+		url = `/dev/dev/backtest/?name=${name}&favorites=true&page=`
 	}
 	if(name && sort) {
-		url = `/dev/backtest/?ordering=${sort}&name=${name}&favorites=true&page=`
+		url = `/dev/dev/backtest/?ordering=${sort}&name=${name}&favorites=true&page=`
 	}
     return new Promise((resolve,reject)=>{
 		axios.get(url+page)
@@ -219,7 +219,7 @@ export function getFavoriteList(page, sort, name) {
 	})
 }
 export function seeParams(id) {
-    const url = '/dev/seeparams/'
+    const url = '/dev/dev/seeparams/'
     
     return new Promise((resolve,reject)=>{
 		axios.get(url + id + '/')
@@ -245,7 +245,7 @@ export function seeParams(id) {
 
 
 export function runBacktest(backtestDataStr) {
-    const url = '/dev/runbt/'
+    const url = '/dev/dev/runbt/'
     //return axios.post(url,backtestDataStr,{withCredentials: true})
 
     return new Promise((resolve,reject)=>{
@@ -258,7 +258,7 @@ export function runBacktest(backtestDataStr) {
 	})
 }
 export function getStatus(id) {
-    const url = '/dev/status/'
+    const url = '/dev/dev/status/'
     //return axios.get(url+id+'/')
 
     return new Promise((resolve,reject)=>{
@@ -271,11 +271,11 @@ export function getStatus(id) {
 	})
 }
 export function deleteBacktest(id) {
-    const url = '/dev/backtest/'
+    const url = '/dev/dev/backtest/'
     return axios.delete(url + id + '/')
 }
 export function copyBacktest(paramsStr) {
-    const url = '/dev/backtest/'
+    const url = '/dev/dev/backtest/'
     //return axios.post(url,paramsStr, {withCredentials: true})
 
     return new Promise((resolve,reject)=>{
@@ -288,7 +288,7 @@ export function copyBacktest(paramsStr) {
 	})
 }
 export function favoriteBacktest(id, paramsStr) {
-    const url = '/dev/backtest/'
+    const url = '/dev/dev/backtest/'
     //return axios.put(url + id + '/', paramsStr)
 
     return new Promise((resolve,reject)=>{
@@ -303,7 +303,7 @@ export function favoriteBacktest(id, paramsStr) {
 
 
 export function seeReport(id) {
-    const url = '/dev/report/?uuid='
+    const url = '/dev/dev/report/?uuid='
     //return axios.get(url + id)
 
     return new Promise((resolve,reject)=>{
@@ -317,7 +317,7 @@ export function seeReport(id) {
 }
 
 export function uploadS3(S3DataStr) {
-    const url = '/dev/upload/'
+    const url = '/dev/dev/upload/'
 
     return new Promise((resolve,reject)=>{
 		axios.post(url,S3DataStr,{withCredentials: true})
@@ -330,7 +330,7 @@ export function uploadS3(S3DataStr) {
 }
 
 export function csvFileRead(fileName, HASH) {
-	const url = `/dev/csvfileread/?fileName=${fileName}&HASH=${HASH}`
+	const url = `/dev/dev/csvfileread/?fileName=${fileName}&HASH=${HASH}`
 
 	return new Promise((resolve, reject) => {
 		axios.get(url, {withCredentials: true})
@@ -344,7 +344,7 @@ export function csvFileRead(fileName, HASH) {
 }
 
 export function csvFilePagingRead(fileName, HASH, page) {
-	const url = `/dev/csvfilepagingread/?fileName=${fileName}&HASH=${HASH}&page=${page}`
+	const url = `/dev/dev/csvfilepagingread/?fileName=${fileName}&HASH=${HASH}&page=${page}`
 
 	return new Promise((resolve, reject) => {
 		axios.get(url, {withCredentials: true})
@@ -358,7 +358,7 @@ export function csvFilePagingRead(fileName, HASH, page) {
 }
 
 export function csvFileDelete(fileID) {
-	const url = `/dev/csvfiledelete/${fileID}/`
+	const url = `/dev/dev/csvfiledelete/${fileID}/`
 
 	return new Promise((resolve, reject) => {
 		axios.delete(url, {withCredentials: true})
@@ -386,7 +386,7 @@ export function getPairData(startDate, endDate, frequency, symbol) {
 }
 
 export function getCustomTIM(backtest_id) {
-	const url = `/dev/tim/?backtest_id=${backtest_id}`
+	const url = `/dev/dev/tim/?backtest_id=${backtest_id}`
 
 
 	return new Promise((resolve, reject) => {
@@ -402,7 +402,7 @@ export function getCustomTIM(backtest_id) {
 
 
 export function setCustomTIM(data) {
-  const url = `/dev/tim/`;
+  const url = `/dev/dev/tim/`;
   const headers = {
     'Content-Type': 'application/json'
   };
