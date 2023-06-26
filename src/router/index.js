@@ -88,7 +88,7 @@ router.beforeEach(async (to, from, next) => {
 	// 当有 sentimen_session 或 devbt2Userid 时才能发请求
 	if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
 		//set 10 sec as default,However, some time-consuming requests are processed separately
-		axios.post('/dev/user/', null, { timeout: 10000, withCredentials: true })
+		axios.post('/dev/dev/user/', null, { timeout: 10000, withCredentials: true })
 			.then((res) => {
 				console.log('lishan res', res)
 				if (res.status == 200) {
@@ -129,7 +129,7 @@ async function initiateCurrentDate() {
 	//现在外部实现一个获取当前日期并储存的功能，接触验证屏蔽后移到判断条件内部
 	if(store.state.curDate==''){
 		let _res = await getCurDate()
-		let curDate =_res[0]['lastUpdatePickDate']
+		let curDate =_res['LastUpdatePickDate']
 		await store.dispatch('set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
 	}
 }
