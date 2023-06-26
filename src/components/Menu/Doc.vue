@@ -3,10 +3,10 @@
 		<div class="header">
 			<div class="box">
 				<img src="../../assets/logo.png" />
-				<p style="color: rgb(0 50 60); font-weight: 500; font-size: 18px">BacktestEdeg Tutorial</p>
+				<p style="color: rgb(0 50 60); font-weight: 500; font-size: 18px">Tutorial</p>
 				<nav>
-					<router-link active-class="active" to="/doc/guide/0">Tutorial</router-link>
-					<router-link active-class="active" to="/doc/old">Old Tutorial</router-link>
+					<router-link active-class="active" to="/doc/guide/0">BacktestEdeg Tutorial</router-link>
+					<router-link active-class="active" to="/doc/scanner">AI Scanner Tutorial</router-link>
 				</nav>
 			</div>
 		</div>
@@ -17,7 +17,7 @@
 			</div>
 		</div>
 	</div>
-</template>
+</template>3
 
 <script>
 export default {
