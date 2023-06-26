@@ -18,7 +18,8 @@ export default {
 	},
 	data() {
 		return {
-			indicator : ''
+			indicator : '',
+			trades : [],
 		}
 	},
 	components: {
@@ -250,8 +251,9 @@ export default {
 					new Date(CIQ.initialDate.start),
 					new Date(CIQ.initialDate.end),
 				)
+				this.trades = list
 				CIQ.isMarkerShown = true
-
+				
 				// split the markers into several groups
 				CIQ.groups = this.group(list)
 				let markers = CIQ.groups.pop()
@@ -313,7 +315,8 @@ export default {
 						criteria: null,
 						index: null
 					})
-					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
+			
+					CIQ.loadChart(this.trades.map(x=>{return {Date:x.DT,TradeStatus:x.Type}}), CIQ.addDot)
 				}
 			}
 		}	
