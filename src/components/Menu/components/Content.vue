@@ -1202,26 +1202,25 @@
 				<Tabs></Tabs>
 			</section>
 			<section v-else-if="id.includes('ai')">
-				<h1 id="ai-0">The generation logic of AI Scanner</h1>
+				<h1 id="ai-0">The generation logic of AI Stock Scanner</h1>
 				<hr />
 				<p>
-					<strong>The logic behind AI Scanner's generation is aimed at improving user
+					<strong>The logic behind AI Stock Scanner's generation is aimed at improving user
 					returns.</strong>
 				</p>
 				<p>
-					<strong>Broad market coverage:</strong> AI Scanner scans SP1500 and
-					select index-based ETFs, covering a wide range of markets. This means
+					<strong>Broad market coverage:</strong> AI Stock Scanner scans stocks included in the S&P 1500 and some common index funds, providing coverage across a wide market. This means
 					it can capture signals from multiple stocks and ETFs, providing users
 					with more investment opportunities.
 				</p>
-				<p><strong>Accurate signal filtering:</strong> AI Scanner utilizes advanced filtering algorithms to extract signals that meet the specified requirements from the scanned stocks and ETFs. This enables users to obtain more precise signals that align with their investment strategies, enhancing the accuracy of investment decisions.</p>
+				<p><strong>Accurate signal filtering:</strong> AI Stock Scanner utilizes advanced filtering algorithms to extract signals that meet the specified requirements from the scanned stocks and ETFs. This enables users to obtain more precise signals that align with their investment strategies, enhancing the accuracy of investment decisions.</p>
 				<p><strong>Evaluation based on historical backtesting:</strong> The selected signals are combined with their corresponding stocks and ETFs for historical backtesting. This historical backtesting evaluation helps users understand the performance history of the signals and assess their potential profitability.</p>
-				<p><strong>Data statistical analysis:</strong> AI Scanner performs data statistical analysis on the backtesting results to filter out stocks that meet the specified requirements along with their corresponding signals. Through data analysis, it identifies signals with a higher probability of success, assisting users in selecting more promising investment opportunities.</p>
-				<p><strong>Information presentation and selection:</strong> AI Scanner presents the qualifying signals along with their backtesting information, offering users an intuitive interface and data visualization. This allows users to better understand and select signals that align with their specific needs, increasing their potential for investment returns.</p>
-				<p>In conclusion, AI Scanner enhances the potential for user returns through broad market coverage, accurate signal filtering, evaluation based on historical backtesting, data statistical analysis, and information presentation and selection. It assists users in identifying more precise signals in stock and ETF investments, providing data support and decision-making guidance to make more informed investment decisions and ultimately improve investment returns.</p>
-				<h1 id="ai-1">AI Scanner entrance</h1>
+				<p><strong>Data statistical analysis:</strong> AI Stock Scanner performs data statistical analysis on the backtesting results to filter out stocks that meet the specified requirements along with their corresponding signals. Through data analysis, it identifies signals with a higher probability of success, assisting users in selecting more promising investment opportunities.</p>
+				<p><strong>Information presentation and selection:</strong> AI Stock Scanner presents the qualifying signals along with their backtesting information, offering users an intuitive interface and data visualization. This allows users to better understand and select signals that align with their specific needs, increasing their potential for investment returns.</p>
+				<p>In conclusion, AI Stock Scanner enhances the potential for user returns through broad market coverage, accurate signal filtering, evaluation based on historical backtesting, data statistical analysis, and information presentation and selection. It assists users in identifying more precise signals in stock and ETF investments, providing data support and decision-making guidance to make more informed investment decisions and ultimately improve investment returns.</p>
+				<h1 id="ai-1">AI Stock Scanner entrance</h1>
 				<hr>
-				<p>Click 'AI Scanner' in the navigation bar at the top of the homepage</p>
+				<p>Click 'AI Stock Scanner' in the navigation bar at the top of the homepage</p>
 				<el-image
 						style="width: 100%; height: 50%"
 						class="image-border"
@@ -1230,7 +1229,7 @@
 						fit="fill"
 						lazy
 					></el-image>
-				<h1 id="ai-2">Modify AI Scanner date</h1>
+				<h1 id="ai-2">Modify AI Stock Scanner date</h1>
 				<hr>
 				<p>Select the historical date you want to view in the date picker under 'AI Picks at the end of today'.</p>
 				<el-image
@@ -1243,7 +1242,7 @@
 					></el-image>
 				<h1 id="ai-3">Cash Alloc(%) for auto-adjusted stocks</h1>
 				<hr>
-				<p>Check the symbol you want to calculate for Cash Alloc(%) in the selection box before the symbol name, and the AI Scanner will help you calculate the Cash Alloc(%) corresponding to the current symbol</p>
+				<p>Check the symbol you want to calculate for Cash Alloc(%) in the selection box before the symbol name, and the AI Stock Scanner will help you calculate the Cash Alloc(%) corresponding to the current symbol</p>
 				<el-image
 						style="width: 100%; height: 50%"
 						class="image-border"
