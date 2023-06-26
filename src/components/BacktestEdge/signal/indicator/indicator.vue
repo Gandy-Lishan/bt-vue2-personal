@@ -1487,6 +1487,10 @@ export default {
             }
             self.$emit(self.criteria + 'UserUploadFileContent', fileObj)
             // self.handleUsersOwnIndicatorSelect(response.data)
+            // let valObj = {}
+            // valObj.value = this.si.userIndicator
+            // valObj.index = this.panelIndex
+            // self.$emit('getIndicatorVal', valObj)
           } else {
             return Promise.reject(error)
           }
@@ -1813,7 +1817,7 @@ export default {
               const numColumnIndex = 'Close' // Change this to the index of the column you want to check
               const numCell = row.data[numColumnIndex]
               if (!dateFormatRegex.test(dateCell)) {
-                console.log('日期格式校验失败')
+                console.log('日期格式校验失败', dateCell)
                 isDateFormat = false
                 // parser.pause()
                 return

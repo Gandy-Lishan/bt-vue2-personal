@@ -378,7 +378,7 @@ export default {
         _this.tabPosition = 'top'
       }
       var chartBox = document.getElementsByClassName('chart_box')[0]
-      if(chartBox) chartBox.style.width = ''
+      if (chartBox) chartBox.style.width = ''
     })
 
     this.myBrowser()
@@ -751,14 +751,14 @@ export default {
         let setUpRes = {}
         try {
           setUpRes = await getBacktestName(
-          this.$store.state.backtestInfo.name
-        )
+            this.$store.state.backtestInfo.name
+          )
         } catch (error) {
           console.log(error)
           this.$notify({
-          title: 'Failed',
-          message: 'The internal server is busy, please try again later',
-          type: 'error'
+            title: 'Failed',
+            message: 'The internal server is busy, please try again later',
+            type: 'error'
           })
           return
         }
@@ -1225,24 +1225,46 @@ export default {
                       CIQ.hideCover()
                       CIQ.nprogress.done()
 
-                      if (error?.response?.status === 403) {
-                        // vm.$message({
-                        //   message:
-                        //     'This backtest is already in your history list',
-                        //   type: 'error'
-                        // })
-                        vm.$message({
-                          message:
-                            'The internal server is busy, please try again later ',
-                          type: 'error'
-                        })
-                      } else {
-                        console.log(error)
-                        vm.$message({
-                          message:
-                            'The internal server is busy, please try again later ',
-                          type: 'error'
-                        })
+                      // if (error?.response?.status === 403) {
+                      //   // vm.$message({
+                      //   //   message:
+                      //   //     'This backtest is already in your history list',
+                      //   //   type: 'error'
+                      //   // })
+                      //   vm.$message({
+                      //     message:
+                      //       'The internal server is busy, please try again later ',
+                      //     type: 'error'
+                      //   })
+                      // } else {
+                      //   console.log(error)
+                      //   vm.$message({
+                      //     message:
+                      //       'The internal server is busy, please try again later ',
+                      //     type: 'error'
+                      //   })
+                      // }
+                      switch (error?.response?.status) {
+                        case 401:
+                          vm.$message({
+                            message:
+                              'Sample backtest can only be viewed but not run',
+                            type: 'error'
+                          })
+                          break;
+                        case 500:
+                          vm.$message({
+                            message:
+                              'Internal Server Error',
+                            type: 'error'
+                          })
+                          break;
+                        default:
+                          vm.$message({
+                            message:
+                              'The internal server is busy, please try again later ',
+                            type: 'error'
+                          })
                       }
 
                       // Initialize the data of backtestinfo
@@ -1281,7 +1303,6 @@ export default {
         }
       } catch (error) {
         console.log('抓取error:', error)
-
         this.$notify({
           title: 'Failed',
           message: 'The internal server is busy, please try again later',

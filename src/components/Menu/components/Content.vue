@@ -1,6 +1,9 @@
 <template>
 	<!-- <div class="doc-content" :class="isToggle ? 'toggle' : ''"> -->
-	<div class="doc-content" :class="{ 'toggle': classObj.isToggle, 'hideMargin': classObj.isHideMargin }">
+	<div
+		class="doc-content"
+		:class="{ toggle: classObj.isToggle, hideMargin: classObj.isHideMargin }"
+	>
 		<div class="section-container">
 			<div
 				title="Directory"
@@ -48,14 +51,14 @@
 					></el-image>
 					<h3 id="0-1-0">How to change Symbol on a chart</h3>
 					<p>
-						Find the search box named symbol in the chart and select the stock
-						you want to replace, such as AAPL, within the search box. When the
-						stock is replaced, The symbol in the form below will be replaced
-						synchronously. You can use it as a stock parameter for backtesting
-						when running a backtest.
+						Find the search box named 'Symbol' in the chart and select the
+						symbol you want to replace, such as AAPL, within the search box.
+						When the symbol is replaced, The symbol in the form below will be
+						replaced synchronously. You can use it as a symbol parameter for
+						backtesting when running a backtest.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path010"
 						:preview-src-list="path010List"
@@ -64,18 +67,18 @@
 					></el-image>
 					<h3 id="0-1-1">How to change the Sentiment Indicator on a chart</h3>
 					<p>
-						Find the search box named Sentiment Indicator in the chart, and to
-						the right of the list item there will be a cycle for each indexer,
-						select the indexer you want to replace, such as Smart Money
-						Confidence. When the indexer is replaced, the corresponding graph
-						will be displayed below the chart, The Entity Criteria and Exit
-						Criteria in the form below are automatically populated into the
+						Find the search box named 'Select Sentiment Indicators' in the
+						chart, and to the right of the list item there will be a cycle for
+						each indexer, select the indexer you want to replace, such as Smart
+						Money Confidence. When the indexer is replaced, the corresponding
+						graph will be displayed below the chart, The Entity Criteria and
+						Exit Criteria in the form below are automatically populated into the
 						form, but do not overwrite the indexer already selected in the form.
 						You can use it as an indexator for backtesting when running
 						backtesting.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path011"
 						:preview-src-list="path011List"
@@ -84,17 +87,17 @@
 					></el-image>
 					<h3 id="0-1-2">How to change the Technical Indicator on a chart</h3>
 					<p>
-						Find a drop-down option called Studios in the chart and select the
+						Find a drop-down option called 'Studies' in the chart and select the
 						indexer you want to replace in the search box, such as the
 						Connectivity Channel Index. When the indexer is replaced, the
-						corresponding graph will be displayed below the chart, 。 The
-						Technical Indicators selected on the chart are not populated with
-						The Entry Criteria and Exit Criteria as the Selection Indicators are
-						selected, and if you want to use Technical Indicators in
-						backtesting, You can select directly from the form.
+						corresponding graph will be displayed below the chart, The Technical
+						Indicators selected on the chart are not populated with The Entry
+						Criteria and Exit Criteria as the Selection Indicators are selected,
+						and if you want to use Technical Indicators in backtesting, You can
+						select directly from the form.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path012"
 						:preview-src-list="path012List"
@@ -103,32 +106,32 @@
 					></el-image>
 					<h3 id="0-1-3">How to change the chart type on a chart</h3>
 					<p>
-						Find a drop-down option called Display in the chart and select the
+						Find a drop-down option called 'Display' in the chart and select the
 						Style you want to replace, such as Bar, in the drop-down box. When
 						the Chart Style is replaced, the corresponding type of curve style
-						will be displayed below the chart. 。 It should be noted that the
-						type of chart is determined by the indexer, for example some
-						indexers only support the Candle Style.
+						will be displayed below the chart. It should be noted that the type
+						of chart is determined by the indexer, for example some indexers
+						only support the Candle Style.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path013"
 						:preview-src-list="path013List"
 						fit="fill"
 						lazy
 					></el-image>
-					<h3 id="0-1-4">How to change the chart period on a chart</h3>
+					<h3 id="0-1-4">How to change the chart timeframe on a chart</h3>
 					<p>
 						Find the drop-down option named 1D in the chart, where 1D represents
 						Daily, 1W means Weekly, 1M represents Montthly, and inside the
-						drop-down box select the period you want to replace, such as 1W. The
-						stock cycle in the chart has and the form under the Set Up Backtest
-						tab changes as the period changes , you can use it as a timeframe
+						drop-down box select the timeframe you want to replace, such as 1W.
+						The stock cycle in the chart has and the form under the Set Up tab
+						changes as the timeframe changes , you can use it as a timeframe
 						parameter for backtesting when creating a backtest.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path014"
 						:preview-src-list="path014List"
@@ -142,7 +145,7 @@
 						change according to your personal preferences.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path015"
 						:preview-src-list="path015List"
@@ -155,59 +158,58 @@
 						the chart by clicking the Clear Chart button below the chart.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path016"
 						:preview-src-list="path016List"
 						fit="fill"
 						lazy
 					></el-image>
-					<h3 id="0-1-7">How to hide the stock information prompt box</h3>
+					<h3 id="0-1-7">How to hide the symbol information prompt box</h3>
 					<p>
-						When you move your mouse into the stock curve box, a blue message
+						When you move your mouse into the symbol curve box, a blue message
 						box will appear, and if you don't need it, you can click the
 						information button to close it.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path017"
 						:preview-src-list="path017List"
 						fit="fill"
 						lazy
 					></el-image>
-					<h3 id="0-1-8">How to hide chart gridlines</h3>
+					<h3 id="0-1-8">How to show chart gridlines</h3>
 					<p>
-						The chart will display the gridlines of the x-axis and y-axes by
-						default, if you don't need it, you can click the Grid button to hide
-						it.
+						The chart will not display the gridlines of the x-axis and y-axes by
+						default, if you need it, you can click the Grid button to show it.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path018"
 						:preview-src-list="path018List"
 						fit="fill"
 						lazy
 					></el-image>
-					<h3 id="0-1-9">How to hide Last Price</h3>
+					<h3 id="0-1-9">How to show Last Price</h3>
 					<p>
-						The chart will show the Price of the last Bar by default, if you
-						don't need it, you can click the Last Price button to hide it.
+						The chart will not show the Price of the last Bar by default, if you
+						need it, you can click the Last Price button to show it.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path019"
 						:preview-src-list="path019List"
 						fit="fill"
 						lazy
 					></el-image>
-					<h3 id="0-1-10">Add stocks to favorites</h3>
+					<h3 id="0-1-10">Add symbols to favorites</h3>
 					<p>
-						Click the Add to Favorites button to the right of the stock name to
-						add the stock to your favorites. At this time, you can click on the
-						Symbol search box to view the stocks in the favorites.
+						Click the Add to Favorites button to the right of the symbol name to
+						add the symbol to your favorites. At this time, you can click on the
+						Symbol search box to view the symbols in the favorites.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -228,7 +230,7 @@
 						view.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path0111"
 						:preview-src-list="path0111List"
@@ -249,7 +251,7 @@
 						changes, the corresponding extremum on the form will also change.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path0112"
 						:preview-src-list="path0112List"
@@ -278,14 +280,15 @@
 						fit="fill"
 						lazy
 					></el-image>
-					<h3 id="0-1-14">How to remove Range Selector</h3>
+					<h3 id="0-1-14">How to show Range Selector</h3>
 					<p>
-						There is a Range Select below the chart, and you can drag the
-						selector to see the chart curves within a specified range. If you
-						want to hide it, you can uncheck Range Selector in the settings
+						There is a 'Range Select' below the chart, and you can drag the
+						selector to see the chart curves within a specified range. But the
+						chart will not show Range Select, If you want to show it, you can
+						check 'Range Selector' in the settings
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path0114"
 						:preview-src-list="path0114List"
@@ -300,7 +303,7 @@
 						according to the curve, give invert and your stock graph will flip.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path0115"
 						:preview-src-list="path0115List"
@@ -316,7 +319,7 @@
 						indicator.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path0116"
 						:preview-src-list="path0116List"
@@ -349,13 +352,13 @@
 						such as Commission, Slippage, Starting Capital, and more. The Entry
 						Criteria and Exit Criteria sections allow you to set conditions for
 						triggering entry and exit during backtesting. We support both
-						single-signal and multi-signal conditions, as well as the option to
-						use only risk control at exits. Additionally, you can fill in the
-						Delay Of Bars, Score (applicable for multi-signal), and Period
-						(applicable for multi-signal) based on your needs. If you're unsure
-						about the meaning of each parameter, you can hover over the question
-						mark icon next to the parameter, and a pop-up window will explain
-						its meaning and purpose.
+						single-condition and multi-condition conditions, as well as the
+						option to use only risk control at exits. Additionally, you can fill
+						in the Delay Of Bars, Score (applicable for multi-condition), and
+						Period (applicable for multi-condition) based on your needs. If
+						you're unsure about the meaning of each parameter, you can hover
+						over the question mark icon next to the parameter, and a pop-up
+						window will explain its meaning and purpose.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -377,7 +380,7 @@
 				</h1>
 				<section>
 					<h2 id="1-0">
-						Create a single-signal entry/exit criteria new backtest
+						Create a single-condition entry/exit criteria new backtest
 					</h2>
 					<hr />
 					<h3 id="1-0-0">Fill in the basic parameters of the backtest</h3>
@@ -396,15 +399,15 @@
 					></el-image>
 					<h3 id="1-0-1">Fill in the entry criteria</h3>
 					<p>
-						Select Single Signal in the drop-down list in the upper right corner
-						of the Entry Criteria section; Select a sentiment or technical
-						indicator from the drop-down box indicator field, fill in required
-						value and choose condition in the signal section. For sentiment
-						indicator, the Extreme Optimism and Extreme Pessimism values are
-						recommended.
+						Select Single Condition in the drop-down list in the upper right
+						corner of the Entry Criteria section; Select a sentiment or
+						technical indicator from the drop-down box indicator field, fill in
+						required value and choose condition in the condition section. For
+						sentiment indicator, the Extreme Optimism and Extreme Pessimism
+						values are recommended.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path101"
 						:preview-src-list="path101List"
@@ -413,15 +416,15 @@
 					></el-image>
 					<h3 id="1-0-2">Fill in the exit criteria</h3>
 					<p>
-						Select Single Signal in the drop-down list in the upper right corner
-						of the Exit Criteria section; Select a sentiment or technical
+						Select Single Condition in the drop-down list in the upper right
+						corner of the Exit Criteria section; Select a sentiment or technical
 						indicator from the drop-down box indicator field, fill in required
-						value and choose condition in the signal section. For sentiment
+						value and choose condition in the condition section. For sentiment
 						indicator, the Extreme Optimism and Extreme Pessimism values are
 						recommended.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path102"
 						:preview-src-list="path102List"
@@ -537,7 +540,7 @@
 						lazy
 					></el-image>
 					<h2 id="1-3">
-						Create a samebar multi-signal entry/exit criteria new backtest
+						Create a samebar multi-condition entry/exit criteria new backtest
 					</h2>
 					<hr />
 					<h3 id="1-3-0">Fill in the basic information for the backtest</h3>
@@ -556,15 +559,16 @@
 					></el-image>
 					<h3 id="1-3-1">Fill in the entry criteria</h3>
 					<p>
-						SameBar Multi-Signal means that when multiple signals occur at the
-						same bar the backtest criteria is met. Select SameBar Multi-Signal
-						in the drop-down box in the upper right corner of the entry criteria
-						section; then signal1 and signal2 panels will show by default and
-						the default score value is 2. Clicking on the + sign will increase
-						the number of entry signals and also the score value. The maximum
-						number of signals in SameBar Multi-Signal selection is 5. Then you
-						can fill in each signal panel corresponding to the entry condition
-						same as single-signal selection.
+						SameBar Multi-Condition means that when multiple conditions occur at
+						the same bar the backtest criteria is met. Select SameBar
+						Multi-Condition in the drop-down box in the upper right corner of
+						the entry criteria section; then condition1 and condition2 panels
+						will show by default and the default score value is 2. Clicking on
+						the + sign will increase the number of entry conditions and also the
+						score value. The maximum number of conditions in SameBar
+						Multi-Condition selection is 5. Then you can fill in each condition
+						panel corresponding to the entry condition same as single-condition
+						selection.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -576,15 +580,16 @@
 					></el-image>
 					<h3 id="1-3-2">Fill in the exit criteria</h3>
 					<p>
-						SameBar Multi-Signal means that when multiple signals occur at the
-						same bar the backtest criteria is met. Select SameBar Multi-Signal
-						in the drop-down box in the upper right corner of the exit criteria
-						section; then signal1 and signal2 panels will show by default and
-						the default score value is 2. Clicking on the + sign will increase
-						the number of exit signals and also the score value. The maximum
-						number of signals in SameBar Multi-Signal selection is 5. Then you
-						can fill in each signal panel corresponding to the exit condition
-						same as single-signal selection.
+						SameBar Multi-Condition means that when multiple consitions occur at
+						the same bar the backtest criteria is met. Select SameBar
+						Multi-Condition in the drop-down box in the upper right corner of
+						the exit criteria section; then condition1 and condition2 panels
+						will show by default and the default score value is 2. Clicking on
+						the + sign will increase the number of exit conditions and also the
+						score value. The maximum number of conditions in SameBar
+						Multi-Condition selection is 5. Then you can fill in each condition
+						panel corresponding to the exit condition same as single-condition
+						selection.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -595,21 +600,22 @@
 						lazy
 					></el-image>
 					<h3 id="1-3-3">
-						Set score value in SameBar Multi-Signal entry/exit criteria
+						Set score value in SameBar Multi-Condition entry/exit criteria
 					</h3>
 					<p>
-						Set a value of score to specify how many signals will occur at the
-						same bar to trigger the backtest criteria. if choose score 1,
-						meanning if any one signal of the selected signals occur the
+						Set a value of score to specify how many conditions will occur at
+						the same bar to trigger the backtest criteria. if choose score 1,
+						meanning if any one condition of the selected conditions occur the
 						backtest criteria is met. if choose score 2, meanning if any two of
-						the signals of the selected signals occur the backtest criteria is
-						met. etc. For example: If the backtest criteria needs to have a
-						"AND" condition of 2 signals, set two signals below and choose score
-						2. If the backtest criteria needs to have a "OR" condition of 2
-						signals, set two signals below and choose score 1. etc.
+						the conditions of the selected conditions occur the backtest
+						criteria is met. etc. For example: If the backtest criteria needs to
+						have a "AND" condition of 2 conditions, set two conditions below and
+						choose score 2. If the backtest criteria needs to have a "OR"
+						condition of 2 conditions, set two conditions below and choose score
+						1. etc.
 					</p>
 					<el-image
-						style="width: 50%; height: 50%"
+						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path133"
 						:preview-src-list="path133List"
@@ -619,7 +625,7 @@
 					<h3 id="1-3-4">Run Backtest and view results</h3>
 					<p>Click Run Backtest button to run the backtest and view results.</p>
 					<h2 id="1-4">
-						Create a timeorder multi-signal entry/exit criteria new backtest
+						Create a timeorder multi-condition entry/exit criteria new backtest
 					</h2>
 					<hr />
 					<h3 id="1-4-0">Fill in the basic information for the backtest</h3>
@@ -638,15 +644,16 @@
 					></el-image>
 					<h3 id="1-4-1">Fill in the entry criteria</h3>
 					<p>
-						TimeOrder Multi-Signal means that when multiple signals occur in
-						time order the backtest criteria is met. Select TimeOrder
-						Multi-Signal in the drop-down box in the upper right corner of the
-						entry criteria section; then signal1 and signal2 panels will show by
-						default and the default period value is 2. Clicking on the + sign
-						will increase the number of entry signals and also the period value.
-						The maximum number of signals in TimeOrder Multi-Signal selection is
-						3. Then you can fill in each signal panel corresponding to the entry
-						condition same as single-signal selection.
+						TimeOrder Multi-Condition means that when multiple conditions occur
+						in time order the backtest criteria is met. Select TimeOrder
+						Multi-Condition in the drop-down box in the upper right corner of
+						the entry criteria section; then condition1 and condition2 panels
+						will show by default and the default period value is 2. Clicking on
+						the + sign will increase the number of entry conditions and also the
+						period value. The maximum number of conditions in TimeOrder
+						Multi-Condition selection is 3. Then you can fill in each condition
+						panel corresponding to the entry condition same as single-condition
+						selection.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -658,15 +665,16 @@
 					></el-image>
 					<h3 id="1-4-2">Fill in the exit criteria</h3>
 					<p>
-						TimeOrder Multi-Signal means that when multiple signals occur in
-						time order the backtest criteria is met. Select TimeOrder
-						Multi-Signal in the drop-down box in the upper right corner of the
-						exit criteria section; then signal1 and signal2 panels will show by
-						default and the default period value is 2. Clicking on the + sign
-						will increase the number of exit signals and also the period value.
-						The maximum number of signals in TimeOrder Multi-Signal selection is
-						3. Then you can fill in each signal panel corresponding to the exit
-						condition same as single-signal selection.
+						TimeOrder Multi-Condition means that when multiple conditions occur
+						in time order the backtest criteria is met. Select TimeOrder
+						Multi-Condition in the drop-down box in the upper right corner of
+						the exit criteria section; then condition1 and condition2 panels
+						will show by default and the default period value is 2. Clicking on
+						the + sign will increase the number of exit conditions and also the
+						period value. The maximum number of conditions in TimeOrder
+						Multi-Condition selection is 3. Then you can fill in each condition
+						panel corresponding to the exit condition same as single-condition
+						selection.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -677,18 +685,19 @@
 						lazy
 					></el-image>
 					<h3 id="1-4-3">
-						Set period value in timeorder Multi-Signal entry/exit criteria
+						Set period value in timeorder Multi-Condition entry/exit criteria
 					</h3>
 					<p>
 						Set a value to specify how many bars within which the selected
-						signals will occur in time order to trigger the backtest criteria.
-						if choose score 1, meaning if the selected signals occuring at the
-						samebar the backtest criteria is met. if choose score 2, meaning if
-						the selected signals occuring within two bars the backtest criteria
-						is met. etc. For example: If the backtest criteria needs to have two
-						consecutive signals, set two signals below and choose period 2. If
-						the backtest criteria needs to have two signals occuring within 3
-						bars, set two signals below and period 3. etc.
+						conditions will occur in time order to trigger the backtest
+						criteria. if choose score 1, meaning if the selected conditions
+						occuring at the samebar the backtest criteria is met. if choose
+						score 2, meaning if the selected conditions occuring within two bars
+						the backtest criteria is met. etc. For example: If the backtest
+						criteria needs to have two consecutive conditions, set two
+						conditions below and choose period 2. If the backtest criteria needs
+						to have two conditions occuring within 3 bars, set two conditions
+						below and period 3. etc.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -831,10 +840,10 @@
 					<p>
 						When all the file contents pass the verification, a pop-up window
 						will prompt you to enter the Indicator Name, which will be displayed
-						as the name of the custom signal on the chart. You can directly use
-						the file name as the custom signal name, or you can input a custom
-						signal name. The signal name can only contain letters, numbers,
-						underscores, and spaces, and cannot start with a number.
+						as the name of the custom indicator on the chart. You can directly
+						use the file name as the custom indicator name, or you can input a
+						custom indicator name. The indicator name can only contain letters,
+						numbers, underscores, and spaces, and cannot start with a number.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -845,12 +854,12 @@
 						lazy
 					></el-image>
 					<p>
-						Once the signal name is confirmed, the chart will display the custom
-						signal on it. It is important to note that if the dates in the
-						uploaded indicator file exceed the chart's date range, the exceeding
-						portion will not be plotted on the chart. After successful file
-						upload, you can click on the file list item to preview the uploaded
-						file.
+						Once the indicator name is confirmed, the chart will display the
+						custom indicator on it. It is important to note that if the dates in
+						the uploaded indicator file exceed the chart's date range, the
+						exceeding portion will not be plotted on the chart. After successful
+						file upload, you can click on the file list item to preview the
+						uploaded file.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -861,7 +870,7 @@
 						lazy
 					></el-image>
 					<p>
-						Finally, fill in the entry conditions corresponding to the signal
+						Finally, fill in the entry conditions corresponding to the condition
 						panel.
 					</p>
 					<el-image
@@ -876,7 +885,7 @@
 					<p>
 						If your Exit Criteria is pre-filled with a custom indicator file,
 						you only need to fill in the exit conditions corresponding to the
-						signal panel.
+						condition panel.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -900,19 +909,18 @@
 						local device. The uploading process and requirements are the same as
 						mentioned earlier for Entry Criteria. Once the custom indicator file
 						for Exit Criteria is successfully uploaded, fill in the exit
-						conditions corresponding to the signal panel.
+						conditions corresponding to the condition panel.
 					</p>
 					<h3 id="1-6-3">Run Backtest and view results</h3>
 					<p>
 						Click the 'Run Backtest' button to execute the backtest and view the
-						results. Creating a backtest using custom signals also supports
-						multi-signal creation. Simply switch the 'Single-Condition' to
+						results. Creating a backtest using custom conditions also supports
+						multi-condition creation. Simply switch the 'Single-Condition' to
 						'SameBar Multi-Condition' or 'TimeOrder Multi-Condition' and follow
-						the steps in the multi-signal creation tutorial.
+						the steps in the multi-condition creation tutorial.
 						<el-link type="warning" @click="jump('1-3')"
-							>Create a samebar multi-signal entry/exit criteria new backtest<i
-								class="el-icon-top-right"
-							></i
+							>Create a samebar multi-condition entry/exit criteria new
+							backtest<i class="el-icon-top-right"></i
 						></el-link>
 					</p>
 					<h2 id="1-7">Set the Trade Price for backtesting</h2>
@@ -1193,6 +1201,94 @@
 			<section v-else-if="id[0] == '8'">
 				<Tabs></Tabs>
 			</section>
+			<section v-else-if="id.includes('ai')">
+				<h1 id="ai-0">The generation logic of AI Scanner</h1>
+				<hr />
+				<p>
+					<strong>The logic behind AI Scanner's generation is aimed at improving user
+					returns.</strong>
+				</p>
+				<p>
+					<strong>Broad market coverage:</strong> AI Scanner scans SP1500 and
+					select index-based ETFs, covering a wide range of markets. This means
+					it can capture signals from multiple stocks and ETFs, providing users
+					with more investment opportunities.
+				</p>
+				<p><strong>Accurate signal filtering:</strong> AI Scanner utilizes advanced filtering algorithms to extract signals that meet the specified requirements from the scanned stocks and ETFs. This enables users to obtain more precise signals that align with their investment strategies, enhancing the accuracy of investment decisions.</p>
+				<p><strong>Evaluation based on historical backtesting:</strong> The selected signals are combined with their corresponding stocks and ETFs for historical backtesting. This historical backtesting evaluation helps users understand the performance history of the signals and assess their potential profitability.</p>
+				<p><strong>Data statistical analysis:</strong> AI Scanner performs data statistical analysis on the backtesting results to filter out stocks that meet the specified requirements along with their corresponding signals. Through data analysis, it identifies signals with a higher probability of success, assisting users in selecting more promising investment opportunities.</p>
+				<p><strong>Information presentation and selection:</strong> AI Scanner presents the qualifying signals along with their backtesting information, offering users an intuitive interface and data visualization. This allows users to better understand and select signals that align with their specific needs, increasing their potential for investment returns.</p>
+				<p>In conclusion, AI Scanner enhances the potential for user returns through broad market coverage, accurate signal filtering, evaluation based on historical backtesting, data statistical analysis, and information presentation and selection. It assists users in identifying more precise signals in stock and ETF investments, providing data support and decision-making guidance to make more informed investment decisions and ultimately improve investment returns.</p>
+				<h1 id="ai-1">AI Scanner entrance</h1>
+				<hr>
+				<p>Click 'AI Scanner' in the navigation bar at the top of the homepage</p>
+				<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="pathai1"
+						:preview-src-list="pathai1List"
+						fit="fill"
+						lazy
+					></el-image>
+				<h1 id="ai-2">Modify AI Scanner date</h1>
+				<hr>
+				<p>Select the historical date you want to view in the date picker under 'AI Picks at the end of today'.</p>
+				<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="pathai2"
+						:preview-src-list="pathai2List"
+						fit="fill"
+						lazy
+					></el-image>
+				<h1 id="ai-3">Cash Alloc(%) for auto-adjusted stocks</h1>
+				<hr>
+				<p>Check the symbol you want to calculate for Cash Alloc(%) in the selection box before the symbol name, and the AI Scanner will help you calculate the Cash Alloc(%) corresponding to the current symbol</p>
+				<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="pathai3"
+						:preview-src-list="pathai3List"
+						fit="fill"
+						lazy
+					></el-image>
+				<h1 id="ai-4">View symbol's backtest information</h1>
+				<hr>
+				<p>Click on a stock name to access the stock and its corresponding backtesting information. </p>
+				<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="pathai41"
+						:preview-src-list="pathai41List"
+						fit="fill"
+						lazy
+					></el-image>
+				<p>These backtesting information will help you understand the statistics of this signal under historical data backtesting.</p>
+				<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="pathai42"
+						:preview-src-list="pathai42List"
+						fit="fill"
+						lazy
+					></el-image>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="pathai43"
+						:preview-src-list="pathai43List"
+						fit="fill"
+						lazy
+					></el-image>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="pathai44"
+						:preview-src-list="pathai44List"
+						fit="fill"
+						lazy
+					></el-image>
+			</section>
 		</div>
 		<RightMenu
 			:menuItems="menuItems"
@@ -1269,6 +1365,13 @@ import path71 from "../img/8.1.jpg";
 import path72 from "../img/8.2.jpg";
 import path73 from "../img/8.3.jpg";
 import path74 from "../img/8.4.jpg";
+import pathai1 from "../img/ai1.jpg";
+import pathai2 from "../img/ai2.jpg";
+import pathai3 from "../img/ai3.jpg";
+import pathai41 from "../img/ai4.1.jpg";
+import pathai42 from "../img/ai4.2.jpg";
+import pathai43 from "../img/ai4.3.jpg";
+import pathai44 from "../img/ai4.4.jpg";
 import RightMenu from "./RightMenu.vue";
 export default {
   props: {
@@ -1414,7 +1517,21 @@ export default {
       path73: path73,
       path73List: [path73],
       path74: path74,
-      path74List: [path74]
+      path74List: [path74],
+			pathai1: pathai1,
+			pathai1List: [pathai1],
+			pathai2: pathai2,
+			pathai2List: [pathai2],
+			pathai3: pathai3,
+			pathai3List: [pathai3],
+			pathai41: pathai41,
+			pathai41List: [pathai41],
+			pathai42: pathai42,
+			pathai42List: [pathai42],
+			pathai43: pathai43,
+			pathai43List: [pathai43],
+			pathai44: pathai44,
+			pathai44List: [pathai44]
     }
   },
   components: {
@@ -1426,14 +1543,14 @@ export default {
     // window.addEventListener('scroll', this.dataScroll)
     this.selectAllSubTitle()
   },
-	computed: {
-		classObj() {
-			return {
-				isToggle: this.isToggle,
-				isHideMargin: this.menuItems.length == 0 ? 'hideMargin' : ''
-			}
-		}
-	},
+  computed: {
+    classObj() {
+      return {
+        isToggle: this.isToggle,
+        isHideMargin: this.menuItems.length == 0 ? 'hideMargin' : ''
+      }
+    }
+  },
   methods: {
     toggleLeftMenu() {
       this.isToggle = !this.isToggle
@@ -1490,7 +1607,7 @@ export default {
 	position: relative;
 	margin-right: 220px;
 }
-.hideMargin{
+.hideMargin {
 	margin-right: 0;
 }
 .section-container {

@@ -7,13 +7,45 @@
 				/>Easy to use of BacktestEdge
 			</h1>
 			<div class="content">
+				<h4>
+					Trading strategies related to emotions and technical indicators
+					through backtesting
+				</h4>
 				<p>
-					BacktestEdge utilizes the real data of financial&stock market and
-					provides users a trading edge by backtesting trading strategies that
-					are related to sentiment and technical indicators. Before you actually
-					apply your trading strategy into live trading, BacktestEdge will help
-					you backtest this strategy with actual result of return, number of
-					trades and many other useful data within seconds!
+					<strong>Using real data:</strong> BacktestEdge utilizes real data from
+					the financial stock market to conduct backtesting, allowing users to
+					evaluate their trading strategies under real market conditions. This
+					enables users to gain a better understanding of how their strategies
+					perform in actual environments.
+				</p>
+				<p>
+					<strong>Providing trading advantage:</strong> BacktestEdge helps users
+					gain a trading advantage by conducting backtesting on trading
+					strategies related to emotions and technical indicators. It simulates
+					historical trades and evaluates the effectiveness of the strategies,
+					providing users with more insights and confidence in their strategies.
+				</p>
+				<p>
+					<strong>Fast backtesting:</strong> BacktestEdge is capable of
+					completing the backtesting process within seconds, providing users
+					with actual profit results, trade quantities, and other useful data.
+					This allows users to quickly assess the potential returns and risks of
+					their trading strategies and make timely adjustments and improvements.
+				</p>
+				<p>
+					<strong>Assisting decision-making:</strong> Through backtesting
+					results and other valuable data, BacktestEdge provides users with
+					decision-making support. Users can evaluate the strengths and
+					weaknesses of their strategies based on the backtesting results and
+					make wiser trading decisions.
+				</p>
+				<p>
+					BacktestEdge utilizes real data for backtesting, focusing on trading
+					strategies related to emotions and technical indicators, to provide
+					users with a trading advantage. It conducts fast backtesting and
+					offers actual profit results and other useful data, helping users
+					evaluate the potential effectiveness of their strategies and assisting
+					them in making more informed decisions.
 				</p>
 				<p>
 					This tutorial will teach you how to quickly start using BacktestEdge
@@ -22,17 +54,14 @@
 				<hr />
 				<div class="edit-page">
 					<div class="edit-link">
-						<a
-							href="/doc/guide/0"
-							target="_blank"
-							rel="noopener noreferrer"
+						<a href="/doc/guide/0" target="_blank" rel="noopener noreferrer"
 							>Get Start Now!</a
 						>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="theme-wrapper">
+		<!-- <div class="theme-wrapper">
 			<div class="article-list">
 				<div class="article-title">
 					<i class="el-icon-date"></i>
@@ -52,6 +81,74 @@
 					<span class="date">2023-06-12</span>
 				</p>
 			</el-card>
+		</div> -->
+		<div class="theme-wrapper">
+			<h1 style="color: #00323c">
+				<i class="el-icon-s-marketing" style="color: #52d6f5"></i>
+				AI Scanner User Guide
+			</h1>
+			<div class="content">
+				<h4>
+					Utilizing Artificial Intelligence Technology to Improve the Efficiency
+					of Stock and ETF Investments.
+				</h4>
+				<p>
+					<strong>Automated Screening:</strong> AI Scanner utilizes artificial
+					intelligence technology to scan and filter SP1500 and index-based
+					ETFs. It can quickly and accurately analyze a large number of stocks
+					and ETFs, helping users quickly identify signals that meet their
+					requirements and saving a significant amount of time and effort.
+				</p>
+				<p>
+					<strong>Historical Backtesting:</strong> The selected signals and
+					their corresponding stocks and ETFs are backtested using historical
+					data. This means that AI Scanner goes beyond simple screening and
+					considers historical performance to evaluate the reliability and
+					effectiveness of the selected signals. This helps users understand the
+					historical performance and potential risks of the signals.
+				</p>
+				<p>
+					<strong>Data Statistical Analysis:</strong> AI Scanner performs data
+					statistical analysis on the backtesting results. It not only provides
+					backtesting results but also extracts useful information and conducts
+					data analysis, helping users better understand the underlying logic of
+					the backtesting results.
+				</p>
+				<p>
+					<strong>Filtering High-Quality Signals:</strong> Through data
+					statistical analysis, AI Scanner can filter out stocks that meet the
+					requirements along with their corresponding signals. This means that
+					it doesn't just provide a large number of backtesting results but
+					helps users find signals that have been validated and have a higher
+					probability of success, improving the accuracy and efficiency of stock
+					selection for users.
+				</p>
+				<p>
+					<strong>Information Presentation and Selection:</strong> AI Scanner
+					displays the signals that meet the requirements along with their
+					backtesting information, providing users with an intuitive interface
+					and data visualization, enabling users to better understand and select
+					signals that meet their needs.
+				</p>
+				<p>
+					AI Scanner provides users with an efficient, accurate, and reliable
+					signal filtering tool through automated screening, historical
+					backtesting, data statistical analysis, and information presentation,
+					helping users make wiser decisions in the stock and ETF markets.
+				</p>
+				<p>
+					This tutorial will teach you how to quickly start using AI Scanner and
+					thanks for reading!
+				</p>
+				<hr />
+				<div class="edit-page">
+					<div class="edit-link">
+						<a href="/doc/scanner" target="_blank" rel="noopener noreferrer"
+							>Get Start Now!</a
+						>
+					</div>
+				</div>
+			</div>
 		</div>
 		<Footer></Footer>
 	</div>
@@ -64,13 +161,13 @@ export default {
   components: {
     Footer
   },
-	methods: {
-		skipUserUpload(id){
-			this.$router.push({
-          path: `/doc/guide/${id}`,
-        })
-		}
-	}
+  methods: {
+    skipUserUpload(id) {
+      this.$router.push({
+        path: `/doc/guide/${id}`,
+      })
+    }
+  }
 }
 </script>
 
@@ -99,7 +196,7 @@ export default {
 	padding-bottom: 1rem;
 	overflow: auto;
 	max-width: 860px;
-	width: fit-content
+	width: fit-content;
 }
 .edit-page .edit-link {
 	border: 1px solid rgb(82 214 245);
@@ -107,28 +204,28 @@ export default {
 }
 .edit-page .edit-link a {
 	/* 文字颜色 */
-	color: rgb(82 214 245); 
-      /* 清除背景色 */
-      background: transparent; 
-      /* 边框样式、颜色、宽度 */
-      border: 2px solid rgb(82 214 245);
-      /* 给边框添加圆角 */
-      border-radius: 6px; 
-      /* 字母转大写 */
-      border: none;
-      padding: 16px 32px;
-      text-align: center;
-      display: inline-block;
-      font-size: 16px;
-      -webkit-transition-duration: 0.4s; /* Safari */
-      transition-duration: 0.4s;
-      cursor: pointer;
-      text-decoration: none;
-      text-transform: uppercase;
+	color: rgb(82 214 245);
+	/* 清除背景色 */
+	background: transparent;
+	/* 边框样式、颜色、宽度 */
+	border: 2px solid rgb(82 214 245);
+	/* 给边框添加圆角 */
+	border-radius: 6px;
+	/* 字母转大写 */
+	border: none;
+	padding: 16px 32px;
+	text-align: center;
+	display: inline-block;
+	font-size: 16px;
+	-webkit-transition-duration: 0.4s; /* Safari */
+	transition-duration: 0.4s;
+	cursor: pointer;
+	text-decoration: none;
+	text-transform: uppercase;
 }
 .edit-page .edit-link a:hover {
-      background-color: #008CBA;
-      color: white;
+	background-color: #008cba;
+	color: white;
 }
 .article-list .article-title i {
 	font-size: 1.2rem;
