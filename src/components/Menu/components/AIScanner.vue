@@ -26,11 +26,11 @@ export default {
       sections: [
         {
           id: 'ai-0',
-          title: 'The generation logic of AI Scanner'
+          title: 'The generation logic of AI Stock Scanner'
         },
-        { id: 'ai-1', title: 'AI Scanner entrance' },
+        { id: 'ai-1', title: 'AI Stock Scanner entrance' },
           {
-            id: 'ai-2', title: 'Modify AI Scanner date'
+            id: 'ai-2', title: 'Modify AI Stock Scanner date'
           },
           { id: 'ai-3', title: 'Cash Alloc(%) for auto-adjusted stocks'},
           { id: 'ai-4', title: "View symbol's backtest information"}
