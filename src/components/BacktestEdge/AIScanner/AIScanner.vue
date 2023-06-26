@@ -43,6 +43,7 @@ export default {
 	async getAIPick(date){
 		this.tableDataList = []
 		let AIPickContent = await getAIPick(date)
+		
 		let AIPickContentString = JSON.stringify(AIPickContent)
 								.replace(/TimeInMarket/g,'Best Time In Market(Bars)')
 								.replace(/_Signal/g,'Signal')

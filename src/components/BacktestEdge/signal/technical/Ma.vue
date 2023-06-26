@@ -648,12 +648,12 @@ export default {
 						criteria: this.criteria,
 						index: this.panelIndex
 					})
-					console.log('getMaValue after ',st)
+					
 					CIQ.store.commit('getMaPeriod', val)
 
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
-
+	
 					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
 				}
 			}
