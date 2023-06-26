@@ -3,10 +3,24 @@
 		<div class="header">
 			<div class="box">
 				<img src="../../assets/logo.png" />
-				<p style="color: rgb(0 50 60); font-weight: 500; font-size: 18px">Tutorial</p>
+				<p style="color: rgb(0 50 60); font-weight: 500; font-size: 18px" class="betaNote">Tutorial</p>
 				<nav>
-					<router-link active-class="active" to="/doc/guide/0">BacktestEdeg Tutorial</router-link>
-					<router-link active-class="active" to="/doc/scanner">AI Scanner Tutorial</router-link>
+					<el-menu
+					:default-active="activeIndex"
+						class="el-menu-demo menu doc-menu"
+						mode="horizontal"
+						@select="handleSelect"
+					>
+					<el-submenu class="doc-title" index="1">
+							<template slot="title">
+								<span>Tutorial</span>	
+							</template>
+							<el-menu-item index="1-1">BacktestEdeg Tutorial</el-menu-item>
+							<el-menu-item index="1-2">AI Scanner Tutorial</el-menu-item>
+						</el-submenu>
+				</el-menu>
+					<!-- <router-link active-class="active" to="/doc/guide/0">BacktestEdeg Tutorial</router-link>
+					<router-link active-class="active" to="/doc/scanner">AI Scanner Tutorial</router-link> -->
 				</nav>
 			</div>
 		</div>
@@ -21,7 +35,34 @@
 
 <script>
 export default {
-  name: "BBSHeader"
+  name: "BBSHeader",
+	data() {
+		return {
+			activeIndex: '1'
+		}
+	},
+	methods: {
+		handleSelect(key) {
+			this.activeIndex = key
+			let path = null
+			if(key == '1') {
+				path = this.$router.resolve({
+					path: '/doc/home'
+				}).href
+				this.$router.push(path)
+			} else if(key == '1-1') {
+				path = this.$router.resolve({
+					path: '/doc/guide/0'
+				}).href
+				this.$router.push(path)
+			}else if(key == '1-2') {
+				path = this.$router.resolve({
+					path: '/doc/scanner'
+				}).href
+				this.$router.push(path)
+			}
+		}
+	}
 }
 </script>
 
@@ -33,7 +74,7 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	height: 70px;
+	height: 78px;
 	background-color: #fff;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
 	color: #333333;
@@ -122,4 +163,17 @@ p {
 	margin: 0;
 	padding: 0;
 }
+.el-submenu__title{
+	height: 0;
+}
+.betaNote {
+			margin: 1.14rem 0 1.14rem 0px;
+			font-style: italic;
+			color: #6c6c6c;
+			text-align: left;
+			font-size: 1.6rem;
+			margin: 0px;
+			font-weight: lighter;
+			color: #333333;
+		}
 </style>
