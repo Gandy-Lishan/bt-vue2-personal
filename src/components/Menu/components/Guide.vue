@@ -72,6 +72,14 @@ export default {
           {
             id: '8', title: 'Backtesting parameter explanation', subsections: [
             ]
+          },
+          {
+            id: '9', title: 'Backtesting in Analyst Reports', subsections: [
+              { id: '9-0', title: 'Copy Backtest' },
+              { id: '9-1', title: 'View Backtest Results' },
+              { id: '9-2', title: 'Analyst Report Link' },
+              { id: '9-3', title: 'Share Backtest' }
+            ]
           }
       ],
       activeSection: '0',

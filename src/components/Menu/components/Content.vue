@@ -1201,6 +1201,20 @@
 			<section v-else-if="id[0] == '8'">
 				<Tabs></Tabs>
 			</section>
+			<section v-else-if="id[0] == '9'">
+				<h1 id="9">Backtesting in Analyst Reports</h1>
+				<hr />
+				<section>
+					<h2 id="9-0">Copy Backtest</h2>
+					<p>If you are interested in a specific backtest, you can click the "copy backtest" button, just like the sample backtest, to make a copy. This allows you to use that backtest strategy in your backtest history list.</p>
+					<h2 id="9-1">View Backtest Results</h2>
+					<p>If you want to see the results of a particular backtest, you can click the "view backtest result" button to see the detailed results of the backtest.</p>
+					<h2 id="9-2">Analyst Report Link</h2>
+					<p>In the "Entry & Exit" column of the backtest list, you can find the URL of the analyst report corresponding to each backtest. Clicking on that URL will take you to the source analyst's report page, where you can gather more information.</p>
+					<h2 id="9-3">Share Backtest</h2>
+					<p> If you want to share a backtest result from a specific analyst with your friends, simply click the "copy backtest link" button and paste the backtest URL to your friends. If they are also subscribed to BacktestEdge, they will be able to see the backtest results and parameters.</p>
+				</section>
+			</section>
 			<section v-else-if="id.includes('ai')">
 				<h1 id="ai-0">The generation logic of AI Stock Scanner</h1>
 				<hr />

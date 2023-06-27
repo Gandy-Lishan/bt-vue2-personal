@@ -27,7 +27,7 @@
 								<span >Help</span>	
 							</template>
 							<el-menu-item index="4-1">Tutorial</el-menu-item>
-							<el-menu-item index="4-2">Disclaimer</el-menu-item>
+							<!-- <el-menu-item index="4-2">Disclaimer</el-menu-item> -->
 						</el-submenu>
 						<el-submenu index="5">
 							<template slot="title"><i class="el-icon-s-tools tools"></i></template>
