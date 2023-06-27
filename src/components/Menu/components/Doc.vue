@@ -8,8 +8,7 @@
 			</h1>
 			<div class="content">
 				<h4>
-					Trading strategies related to emotions and technical indicators
-					through backtesting
+					Trading strategies related to sentiment and technical indicators through backtesting
 				</h4>
 				<p>
 					<strong>Using real data:</strong> BacktestEdge utilizes real data from
