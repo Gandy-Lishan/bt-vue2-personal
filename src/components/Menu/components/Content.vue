@@ -932,8 +932,8 @@
 						after meeting the conditions on the current trading day. There are
 						two options for the trade price: "Next Open" and "Next Close". They
 						indicate the type of price used for simulating trades. "Next Open"
-						means using the opening price of each trading period for trade
-						simulation, while "Next Close" means using the closing price of each
+						means using the opening price of next trading period for trade
+						simulation, while "Next Close" means using the closing price of next
 						trading period for trade simulation. You can select the appropriate
 						trade price option in the basic parameters of the backtest.
 					</p>
@@ -950,12 +950,13 @@
 					<p>
 						If you want to exclude densely packed dates during backtesting,
 						please select this option. By choosing this option, the test will
-						allow only one transaction at a time. For example, if you select "10
-						days" as the observation period, once the indicator reaches the
-						specified level, no other transactions will be allowed within the
-						next 10 days. After checking the "Exclude Overlapping Observations"
-						option, enter a time value in the adjacent input box, which must be
-						a positive integer.
+						allow only one transaction at a time. For example, If you enter 10,
+						it means that within the next ten bars after completing a single
+						transaction (as there can be multiple transactions in one backtest),
+						no further trades will be executed if there is another bar that
+						meets the entry conditions. After checking the "Exclude Overlapping
+						Observations" option, enter a time value in the adjacent input box,
+						which must be a positive integer.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -1128,9 +1129,9 @@
 					<p>
 						How do you know from the description on display what entry and exit
 						conditions are used in backtest? The description is divided into two
-						parts, the Entry description on the left and the Entry description
-						on the right Exit description. The following figure is the meaning
-						of the Entry description and the Exit description.
+						parts. On the left is the entry description, and on the right is the
+						exit description. The following figure is the meaning of the Entry
+						description and the Exit description.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -1630,7 +1631,7 @@ export default {
       path168List: [path168],
       path169: path169,
       path1610: path1610,
-      path1610List: [path169,path1610],
+      path1610List: [path169, path1610],
       path171: path171,
       path171List: [path171],
       path181: path181,
@@ -1659,16 +1660,16 @@ export default {
       path73: path73,
       path74: path74,
       path72List: [path72, path73, path74],
-			path811: path811,
-			path181List: [path811],
-			path812: path812,
-			path812List: [path812],
-			path82: path82,
-			path82List: [path82],
-			path831: path831,
-			path832: path832,
-			path833: path833,
-			path83List: [path831, path832, path833],
+      path811: path811,
+      path181List: [path811],
+      path812: path812,
+      path812List: [path812],
+      path82: path82,
+      path82List: [path82],
+      path831: path831,
+      path832: path832,
+      path833: path833,
+      path83List: [path831, path832, path833],
       pathai1: pathai1,
       pathai1List: [pathai1],
       pathai2: pathai2,
