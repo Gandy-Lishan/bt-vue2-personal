@@ -272,13 +272,13 @@ For sentiment indicator, the Extreme Optimism and Extreme Pessimism values are r
 				<blockquote>
 					<p>
 						<br />
-After filling out the backtest form, click "Run Backtest" button to run the backtest and view the backtest results. The runtime of backtest will take more than 30 seconds to finish. After the backtest is completed, it will jump to Backtest Results tab to display the backtest results, including the number of trades, entry & exit points etc. If the backtest has no trades, you can go to Backtest History tab and click 'Edit" icon to modify backtest data. 
+After filling out the backtest form, click "Run Backtest" button to run the backtest and view the backtest results. The runtime of backtest will take more than 30 seconds to finish. After the backtest is completed, it will jump to Backtest Results tab to display the backtest results, including the Summary, Trades info etc, lf the backtest has no trades, you can go to Backtest History tab and click 'Edit" icon to modify the backtest parameters of Entry/Exit Criteria.
 						<br />
 					</p>
 				</blockquote>
 				<img src="../../assets/helpImg/runBacktest.png" alt="Summary" />
 				<h3>2.2 Use Risk Control at Exit</h3>
-				<h4>2.2.1 Set stop/loss </h4>
+				<h4>2.2.1 Stop Loss/Take Profit </h4>
 				<blockquote>
 					<p>
 						<br />To use stop/loss as an OR condition with exit criteria, check "Risk Control at Exit" and then fill in value in the "Take Profit" and "Stop Loss"

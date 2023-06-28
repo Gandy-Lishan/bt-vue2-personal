@@ -3,6 +3,11 @@
 		<p>
 			Copyright © 2001 - 2023 Sundial Capital Research, Inc. All rights
 			reserved.
+		<span class="footer-link">
+			<el-link href="/doc/disclaimer" type="warning" target="_blank">General Disclaimer</el-link> | 
+			<el-link href="/doc/guide/0" type="warning" target="_blank">BacktestEdeg Tutorial</el-link> | 
+			<el-link href="/doc/scanner" type="warning" target="_blank">AI Scanner Tutorial</el-link>
+		</span>
 		</p>
 		<ul class="Footer_social___a7sK">
 			<li>
@@ -56,6 +61,9 @@ export default {
 	margin-top: 50px;
 	justify-content: space-between;
 	align-items: center;
+}
+.footer .el-link{
+	font-size: 12px;
 }
 .footer p {
 	text-align: center;

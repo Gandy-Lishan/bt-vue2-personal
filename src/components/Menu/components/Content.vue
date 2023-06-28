@@ -437,9 +437,10 @@
 						run the backtest and view the backtest results. The runtime of
 						backtest will take more than 30 seconds to finish. After the
 						backtest is completed, it will jump to Backtest Results tab to
-						display the backtest results, including the number of trades, entry
-						& exit points etc. If the backtest has no trades, you can go to
-						Backtest History tab and click 'Edit" icon to modify backtest data.
+						display the backtest results, including the Summary, Trades info
+						etc, lf the backtest has no trades, you can go to Backtest History
+						tab and click 'Edit" icon to modify the backtest parameters of
+						Entry/Exit Criteria.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -451,7 +452,7 @@
 					></el-image>
 					<h2 id="1-1">Use Risk Control at Exit</h2>
 					<hr />
-					<h3 id="1-1-0">Set stop/loss</h3>
+					<h3 id="1-1-0">Set Stop Loss/Take Profit</h3>
 					<p>
 						To use stop/loss as an OR condition with exit criteria, check "Risk
 						Control at Exit" and then fill in value in the "Take Profit" and
@@ -891,7 +892,7 @@
 						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path169"
-						:preview-src-list="path169List"
+						:preview-src-list="path1610List"
 						fit="fill"
 						lazy
 					></el-image>
@@ -1184,7 +1185,7 @@
 						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path73"
-						:preview-src-list="path73List"
+						:preview-src-list="path72List"
 						fit="fill"
 						lazy
 					></el-image>
@@ -1192,7 +1193,7 @@
 						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path74"
-						:preview-src-list="path74List"
+						:preview-src-list="path72List"
 						fit="fill"
 						lazy
 					></el-image>
@@ -1201,93 +1202,230 @@
 			<section v-else-if="id[0] == '8'">
 				<Tabs></Tabs>
 			</section>
+			<section v-else-if="id[0] == '9'">
+				<h1 id="9">Backtesting in Analyst Reports</h1>
+				<hr />
+				<section>
+					<h2 id="9-0">Copy Backtest</h2>
+					<p>
+						If you are interested in a specific backtest, you can click the
+						"copy backtest" button, just like the sample backtest, to make a
+						copy. This allows you to use that backtest strategy in your backtest
+						history list.
+					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path811"
+						:preview-src-list="path811List"
+						fit="fill"
+						lazy
+					></el-image>
+					<h2 id="9-1">View Backtest Results</h2>
+					<p>
+						If you want to see the results of a particular backtest, you can
+						click the "view backtest result" button to see the detailed results
+						of the backtest.
+					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path812"
+						:preview-src-list="path812List"
+						fit="fill"
+						lazy
+					></el-image>
+					<h2 id="9-2">Analyst Report Link</h2>
+					<p>
+						In the "Entry & Exit" column of the backtest list, you can find the
+						URL of the analyst report corresponding to each backtest. Clicking
+						on that URL will take you to the source analyst's report page, where
+						you can gather more information.
+					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path82"
+						:preview-src-list="path82List"
+						fit="fill"
+						lazy
+					></el-image>
+					<h2 id="9-3">Share Backtest</h2>
+					<p>
+						If you want to share a backtest result from a specific analyst with
+						your friends, simply click the "copy backtest link" button and paste
+						the backtest URL to your friends. If they are also subscribed to
+						BacktestEdge, they will be able to see the backtest results and
+						parameters.
+					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path831"
+						:preview-src-list="path83List"
+						fit="fill"
+						lazy
+					></el-image>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path832"
+						:preview-src-list="path83List"
+						fit="fill"
+						lazy
+					></el-image>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path833"
+						:preview-src-list="path83List"
+						fit="fill"
+						lazy
+					></el-image>
+				</section>
+			</section>
 			<section v-else-if="id.includes('ai')">
-				<h1 id="ai-0">The generation logic of AI Scanner</h1>
+				<h1 id="ai-0">The generation logic of AI Stock Scanner</h1>
 				<hr />
 				<p>
-					<strong>The logic behind AI Scanner's generation is aimed at improving user
-					returns.</strong>
+					<strong
+						>The logic behind AI Stock Scanner's generation is aimed at
+						improving user returns.</strong
+					>
 				</p>
 				<p>
-					<strong>Broad market coverage:</strong> AI Scanner scans SP1500 and
-					select index-based ETFs, covering a wide range of markets. This means
-					it can capture signals from multiple stocks and ETFs, providing users
-					with more investment opportunities.
+					<strong>Broad market coverage:</strong> AI Stock Scanner scans stocks
+					included in the S&P 1500 and some common index funds, providing
+					coverage across a wide market. This means it can capture signals from
+					multiple stocks and ETFs, providing users with more investment
+					opportunities.
 				</p>
-				<p><strong>Accurate signal filtering:</strong> AI Scanner utilizes advanced filtering algorithms to extract signals that meet the specified requirements from the scanned stocks and ETFs. This enables users to obtain more precise signals that align with their investment strategies, enhancing the accuracy of investment decisions.</p>
-				<p><strong>Evaluation based on historical backtesting:</strong> The selected signals are combined with their corresponding stocks and ETFs for historical backtesting. This historical backtesting evaluation helps users understand the performance history of the signals and assess their potential profitability.</p>
-				<p><strong>Data statistical analysis:</strong> AI Scanner performs data statistical analysis on the backtesting results to filter out stocks that meet the specified requirements along with their corresponding signals. Through data analysis, it identifies signals with a higher probability of success, assisting users in selecting more promising investment opportunities.</p>
-				<p><strong>Information presentation and selection:</strong> AI Scanner presents the qualifying signals along with their backtesting information, offering users an intuitive interface and data visualization. This allows users to better understand and select signals that align with their specific needs, increasing their potential for investment returns.</p>
-				<p>In conclusion, AI Scanner enhances the potential for user returns through broad market coverage, accurate signal filtering, evaluation based on historical backtesting, data statistical analysis, and information presentation and selection. It assists users in identifying more precise signals in stock and ETF investments, providing data support and decision-making guidance to make more informed investment decisions and ultimately improve investment returns.</p>
-				<h1 id="ai-1">AI Scanner entrance</h1>
-				<hr>
-				<p>Click 'AI Scanner' in the navigation bar at the top of the homepage</p>
+				<p>
+					<strong>Accurate signal filtering:</strong> AI Stock Scanner utilizes
+					advanced filtering algorithms to extract signals that meet the
+					specified requirements from the scanned stocks and ETFs. This enables
+					users to obtain more precise signals that align with their investment
+					strategies, enhancing the accuracy of investment decisions.
+				</p>
+				<p>
+					<strong>Evaluation based on historical backtesting:</strong> The
+					selected signals are combined with their corresponding stocks and ETFs
+					for historical backtesting. This historical backtesting evaluation
+					helps users understand the performance history of the signals and
+					assess their potential profitability.
+				</p>
+				<p>
+					<strong>Data statistical analysis:</strong> AI Stock Scanner performs
+					data statistical analysis on the backtesting results to filter out
+					stocks that meet the specified requirements along with their
+					corresponding signals. Through data analysis, it identifies signals
+					with a higher probability of success, assisting users in selecting
+					more promising investment opportunities.
+				</p>
+				<p>
+					<strong>Information presentation and selection:</strong> AI Stock
+					Scanner presents the qualifying signals along with their backtesting
+					information, offering users an intuitive interface and data
+					visualization. This allows users to better understand and select
+					signals that align with their specific needs, increasing their
+					potential for investment returns.
+				</p>
+				<p>
+					In conclusion, AI Stock Scanner enhances the potential for user
+					returns through broad market coverage, accurate signal filtering,
+					evaluation based on historical backtesting, data statistical analysis,
+					and information presentation and selection. It assists users in
+					identifying more precise signals in stock and ETF investments,
+					providing data support and decision-making guidance to make more
+					informed investment decisions and ultimately improve investment
+					returns.
+				</p>
+				<h1 id="ai-1">AI Stock Scanner entrance</h1>
+				<hr />
+				<p>
+					Click 'AI Stock Scanner' in the navigation bar at the top of the
+					homepage
+				</p>
 				<el-image
-						style="width: 100%; height: 50%"
-						class="image-border"
-						:src="pathai1"
-						:preview-src-list="pathai1List"
-						fit="fill"
-						lazy
-					></el-image>
-				<h1 id="ai-2">Modify AI Scanner date</h1>
-				<hr>
-				<p>Select the historical date you want to view in the date picker under 'AI Picks at the end of today'.</p>
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai1"
+					:preview-src-list="pathai1List"
+					fit="fill"
+					lazy
+				></el-image>
+				<h1 id="ai-2">Modify AI Stock Scanner date</h1>
+				<hr />
+				<p>
+					Select the historical date you want to view in the date picker under
+					'AI Picks at the end of today'.
+				</p>
 				<el-image
-						style="width: 100%; height: 50%"
-						class="image-border"
-						:src="pathai2"
-						:preview-src-list="pathai2List"
-						fit="fill"
-						lazy
-					></el-image>
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai2"
+					:preview-src-list="pathai2List"
+					fit="fill"
+					lazy
+				></el-image>
 				<h1 id="ai-3">Cash Alloc(%) for auto-adjusted stocks</h1>
-				<hr>
-				<p>Check the symbol you want to calculate for Cash Alloc(%) in the selection box before the symbol name, and the AI Scanner will help you calculate the Cash Alloc(%) corresponding to the current symbol</p>
+				<hr />
+				<p>
+					Check the symbol you want to calculate for Cash Alloc(%) in the
+					selection box before the symbol name, and the AI Stock Scanner will
+					help you calculate the Cash Alloc(%) corresponding to the current
+					symbol
+				</p>
 				<el-image
-						style="width: 100%; height: 50%"
-						class="image-border"
-						:src="pathai3"
-						:preview-src-list="pathai3List"
-						fit="fill"
-						lazy
-					></el-image>
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai3"
+					:preview-src-list="pathai3List"
+					fit="fill"
+					lazy
+				></el-image>
 				<h1 id="ai-4">View symbol's backtest information</h1>
-				<hr>
-				<p>Click on a stock name to access the stock and its corresponding backtesting information. </p>
+				<hr />
+				<p>
+					Click on a stock name to access the stock and its corresponding
+					backtesting information.
+				</p>
 				<el-image
-						style="width: 100%; height: 50%"
-						class="image-border"
-						:src="pathai41"
-						:preview-src-list="pathai41List"
-						fit="fill"
-						lazy
-					></el-image>
-				<p>These backtesting information will help you understand the statistics of this signal under historical data backtesting.</p>
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai41"
+					:preview-src-list="pathai41List"
+					fit="fill"
+					lazy
+				></el-image>
+				<p>
+					These backtesting information will help you understand the statistics
+					of this signal under historical data backtesting.
+				</p>
 				<el-image
-						style="width: 100%; height: 50%"
-						class="image-border"
-						:src="pathai42"
-						:preview-src-list="pathai42List"
-						fit="fill"
-						lazy
-					></el-image>
-					<el-image
-						style="width: 100%; height: 50%"
-						class="image-border"
-						:src="pathai43"
-						:preview-src-list="pathai43List"
-						fit="fill"
-						lazy
-					></el-image>
-					<el-image
-						style="width: 100%; height: 50%"
-						class="image-border"
-						:src="pathai44"
-						:preview-src-list="pathai44List"
-						fit="fill"
-						lazy
-					></el-image>
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai42"
+					:preview-src-list="pathai42List"
+					fit="fill"
+					lazy
+				></el-image>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai43"
+					:preview-src-list="pathai43List"
+					fit="fill"
+					lazy
+				></el-image>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai44"
+					:preview-src-list="pathai44List"
+					fit="fill"
+					lazy
+				></el-image>
 			</section>
 		</div>
 		<RightMenu
@@ -1365,6 +1503,12 @@ import path71 from "../img/8.1.jpg";
 import path72 from "../img/8.2.jpg";
 import path73 from "../img/8.3.jpg";
 import path74 from "../img/8.4.jpg";
+import path811 from "../img/9.1.1.jpg";
+import path812 from "../img/9.1.2.jpg";
+import path82 from "../img/9.2.jpg";
+import path831 from "../img/9.3.1.jpg";
+import path832 from "../img/9.3.2.jpg";
+import path833 from "../img/9.3.3.jpg";
 import pathai1 from "../img/ai1.jpg";
 import pathai2 from "../img/ai2.jpg";
 import pathai3 from "../img/ai3.jpg";
@@ -1485,9 +1629,8 @@ export default {
       path168: path168,
       path168List: [path168],
       path169: path169,
-      path169List: [path169],
       path1610: path1610,
-      path1610List: [path1610],
+      path1610List: [path169,path1610],
       path171: path171,
       path171List: [path171],
       path181: path181,
@@ -1513,25 +1656,33 @@ export default {
       path71: path71,
       path71List: [path71],
       path72: path72,
-      path72List: [path72],
       path73: path73,
-      path73List: [path73],
       path74: path74,
-      path74List: [path74],
-			pathai1: pathai1,
-			pathai1List: [pathai1],
-			pathai2: pathai2,
-			pathai2List: [pathai2],
-			pathai3: pathai3,
-			pathai3List: [pathai3],
-			pathai41: pathai41,
-			pathai41List: [pathai41],
-			pathai42: pathai42,
-			pathai42List: [pathai42],
-			pathai43: pathai43,
-			pathai43List: [pathai43],
-			pathai44: pathai44,
-			pathai44List: [pathai44]
+      path72List: [path72, path73, path74],
+			path811: path811,
+			path181List: [path811],
+			path812: path812,
+			path812List: [path812],
+			path82: path82,
+			path82List: [path82],
+			path831: path831,
+			path832: path832,
+			path833: path833,
+			path83List: [path831, path832, path833],
+      pathai1: pathai1,
+      pathai1List: [pathai1],
+      pathai2: pathai2,
+      pathai2List: [pathai2],
+      pathai3: pathai3,
+      pathai3List: [pathai3],
+      pathai41: pathai41,
+      pathai41List: [pathai41],
+      pathai42: pathai42,
+      pathai42List: [pathai42],
+      pathai43: pathai43,
+      pathai43List: [pathai43],
+      pathai44: pathai44,
+      pathai44List: [pathai44],
     }
   },
   components: {
