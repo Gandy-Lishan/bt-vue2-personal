@@ -65,14 +65,17 @@ const router = new Router({
         { path: '/doc/old', component: resolve => require(['@/components/Menu/old_doc.vue'], resolve) },
 				{path: '/doc/disclaimer', component: resolve => require(['@/components/Menu/components/Disclaimer.vue'], resolve) }
       ]},
+	  { path: '/404', component: resolve => require(['@/components/404.vue'], resolve)},
 	]
 })
 
 router.beforeEach(async (to, from, next) => {
+	// 如果跳入404，则直接进入跳转外链的待定阶段，没有其他cookie或者验证判断
+	if(to.path == "/404") next()
+
 	await initiateIndicatorList()
 	
 	CIQ.store = store
-	let loginUrl = 'https://sentimentrader.com/login'
 	//  开发环境无法判断环境变量
 	// if(process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined) loginUrl = 'https://sentdevsite.com/login'
 	// 先判断有无 sentimen_session
@@ -87,47 +90,55 @@ router.beforeEach(async (to, from, next) => {
 	// 当有 sentimen_session 或 devbt2Userid 时才能发请求
 	//Cookies.set('sentimen_session', 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FamVv8Nu+OjDeax6/BPemIRtLvxe/ttdcR7ljhLshELeg8gSudWpyEePHMAk2Zgg3JTCes8QFI/utKoQKh4FfSDRIj3ItBIJaaC8F4sJB7Og9cT1KH0cHiUPuPpAJGGVErpYw2SdOGms2pbC3ehr6FwcTdrv4U73GMAw9fXMVREXAHhMsnu6RuzW2WLsY+A4NNXLJpwq0V5jt0lz38ofSF9B852k4gmeLLOuPZ6/Ev0oX')
 	if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
-		//set 10 sec as default,However, some time-consuming requests are processed separately
-		axios.post('/dev/dev/user/', null, { timeout: 10000, withCredentials: true })
-			.then(async(res) => {
-				console.log('lishan res', res)
-				if (res.status == 200) {
-					store.commit('setUserRole', { 'is_admin': res.data.is_admin, 'role': res.data.userid })
-					if (getQueryVariable('userid')) window.location.href = location.origin // 去掉？后面的部分
+			//set 10 sec as default,However, some time-consuming requests are processed separately
+			axios.post('/dev/dev/user/', null, { timeout: 10000, withCredentials: true })
+				.then(async(res) => {
+					console.log('lishan res', res)
+					if (res.status == 200) {
+						store.commit('setUserRole', { 'is_admin': res.data.is_admin, 'role': res.data.userid })
+						if (getQueryVariable('userid')) window.location.href = location.origin // 去掉？后面的部分
 
-					// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
-					if(to.path == '/home/scannerai'){
-						await initiateCurrentDate()
-					}
-					next()
-				} else { throw Error('Status code error') }
-			})
-			.catch((error) => {
-				console.error(error)
-				switch (error?.response?.status) {
-					case 401:
-						alert('No permission')
-						break;
-					case 403:
-						alert('Authentication expired')
-						break;
-					case 404:
-						alert('User does not exist')
-						break;
-					case 500:
-						alert('Internal Server Error')
-						break;
-					case 410:
-						alert('you have no access right')
-					default:
-						alert('Unknown error')
-				}
-				window.location.href = loginUrl
-			})
+						// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
+						if(to.path == '/home/scannerai'){
+							await initiateCurrentDate()
+						}
+						next()
+					} else { throw Error('Status code error') }
+				})
+				.catch((error) => {
+					console.error(error)
+					// switch (error?.response?.status) {
+					// 	case 401:
+					// 		alert('No permission')
+					// 		break;
+					// 	case 403:
+					// 		alert('Authentication expired')
+					// 		break;
+					// 	case 404:
+					// 		alert('User does not exist')
+					// 		break;
+					// 	case 500:
+					// 		alert('Internal Server Error')
+					// 		break;
+					// 	case 410:
+					// 		alert('you have no access right')
+					// 		break;
+					// 	default:
+					// 		alert('Unknown error')
+					// }
+					router.push({
+						path: '/404',
+						query: { mes: error?.response?.status } // 携带的参数
+					});
+				})
+
 	} else {
-		alert('No permission')
-
-		window.location.href = loginUrl
+		//alert('No permission')
+		//window.location.href = loginUrl
+		router.push({
+			path: '/404',
+			query: { mes: 401 } // 携带的参数
+		});
 	}
 })
 
