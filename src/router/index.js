@@ -113,6 +113,8 @@ router.beforeEach(async (to, from, next) => {
 					case 500:
 						alert('Internal Server Error')
 						break;
+					case 410:
+						alert('User permission does not exist')
 					default:
 						alert('Unknown error')
 				}
