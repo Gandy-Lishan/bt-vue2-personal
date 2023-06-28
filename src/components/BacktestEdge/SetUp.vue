@@ -878,6 +878,7 @@ export default {
       const str = this.bd.end_date.split('-')
       str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
       this.bd.start_date = str.join('-')
+      
       var that = this
       var utils = function () {
         let vm = this

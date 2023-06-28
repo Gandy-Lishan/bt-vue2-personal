@@ -763,15 +763,31 @@ export default {
       if (JSON.stringify(newVal) != '{}') {
         let obj = newVal[this.criteria].signals[this.panelIndex]
         // test在samebar(relation 2/3)的情况下
-        let cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+
+        // handle unexist property for old backtesters
+        let cond
+        if('cond' in newVal[this.criteria]){
+          cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+        }
+        
         this.senti.extreme_optimism = obj.extreme_optimism
         this.senti.extreme_pessimism = obj.extreme_pessimism
         this.senti.condition = Number(obj.condition)
         this.senti.value = obj.value
         this.senti.comparison = obj.comparison
 
-        this.senti.newCondition = Number(cond.newCondition) ? Number(cond.newCondition) : this.senti.condition
-        this.senti.conditionPeriod = cond.conditionPeriod ? cond.conditionPeriod : ''
+        if(cond && Number(cond.newCondition)){
+          this.senti.newCondition =  Number(cond.newCondition)
+        }else{
+          this.senti.newCondition = this.senti.condition
+        }
+
+        if(cond){
+          this.senti.conditionPeriod = cond.conditionPeriod ? cond.conditionPeriod : ''
+        }else{
+          this.senti.conditionPeriod = ''
+        }
+        
         this.conditionRadio = 'Indicator Value'
 
         this.editSentiVal = obj.indicator

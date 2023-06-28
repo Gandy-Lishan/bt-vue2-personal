@@ -11,7 +11,7 @@
 								src="../../assets/logo.png"
 								alt="logo"
 						/></span>
-						<div class="betaNote">Sentiment Tech</div>
+						<div class="betaNote">SentimenTech</div>
 					</div>
 					<el-menu
 						:default-active="activeIndex"
@@ -40,6 +40,16 @@
 			</div>
 			<router-view></router-view>
 			<Footer></Footer>
+			<!-- <el-dialog
+				title="Edit exit with different TIM Table"
+				:visible.sync="showTable"
+				width="80%"
+			>
+				<div slot="footer" class="dialog-footer">
+					<el-button >Cancel</el-button>
+					<el-button type="primary" >Save</el-button>
+				</div>
+			</el-dialog> -->
 		</div>
 	</div>
 </template>
@@ -50,6 +60,7 @@ export default {
 	data() {
 		return {
 			activeIndex: '1',
+			showTable: true,
 		}
 	},
 	components: {

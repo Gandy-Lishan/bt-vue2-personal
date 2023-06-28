@@ -254,12 +254,12 @@ export default {
 		async changeExpand(row, expanded){
 			// only AI recommendation page can call this function
 			if(this.data.label=="AI Portfolio") return
-
 			if(expanded.find(x=>x.id == row.id)){
 				let BacktestInfoContent = await getBacktestInfo({
 					symbol: row['Symbol'],
 					date: row['Date'],
-					signal: row['Signal']
+					signal: row['Signal'],
+					category: row['Category'],
 				})
 				this.btInfo.push({
 					id: row['id'],

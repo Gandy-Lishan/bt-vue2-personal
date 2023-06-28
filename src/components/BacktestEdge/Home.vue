@@ -1127,8 +1127,8 @@ export default {
                 backtestData.capital_alloc
               )
               backtestData.slippage = parseFloat(backtestData.slippage)
-              backtestData.win_rate = parseFloat(backtestData.win_rate)
-
+              backtestData.win_rate = parseFloat(backtestData.win_rate)              
+              
               CIQ.spanPeriod = {
                 start_date:
                   backtestData.start_date.replace(/-/g, '') * 1000000000,

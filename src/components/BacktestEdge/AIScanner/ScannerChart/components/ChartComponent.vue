@@ -1,8 +1,15 @@
 <template>
 	<!-- <div class="TVChartContainer" ref="chartContainer" /> -->
-	<div class="chart_box" id="chart_box">
-		<chart :symbol="symbol" :onChartReady="onChartReady" width="100%" height="100%"></chart>
-	</div>
+	<!-- <div class=''>
+		<el-button></el-button> -->
+		<div class="chart_box" id="chart_box">
+			<div class="back">
+				<router-link to="/home/scannerai"><i class="el-icon-arrow-left"></i><span>Back to the stock scanner list</span></router-link>
+			</div>
+			<chart :symbol="symbol" :onChartReady="onChartReady" width="100%" height="100%"></chart>
+		</div>
+	<!-- </div> -->
+
 </template>
 
 <script>
@@ -82,13 +89,19 @@ export default {
 				}
 			}
 
-			let patterns = ['UpPattern', 'DownPattern']
+			let patterns = ['UpTrend Pattern', 'DownTrend Pattern']
 			let tradeStudies = ['Hammer','Shooting']
+			let noStudy = ['Idea', 'Trend' ,'Exhaustion']
 			if (patterns.indexOf(this.indicator) != -1){
+				//CIQ.hideMarker()
 				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{points:this.other.Point})
 				CIQ.stxx.setChartType("candle");
 			}else if(tradeStudies.indexOf(this.indicator) != -1){
+				CIQ.hideMarker()
 				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{trades:this.other.EntryTradeDate})
+			}else if(noStudy.indexOf(this.indicator) != -1){
+				
+				// don't load any study
 			}else{
 				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,{display:this.indicator})
 			}
@@ -193,7 +206,6 @@ export default {
 			// 把字符串列表entryDates, exitDates格式化为markerSet的对象数组
 			const markerSet= []
 			const dataSource = CIQ.stxx.chart.dataSet
-			
             let entryTradeDateArr = eval('(' + this.other['EntryTradeDate'] + ')')
             if(entryTradeDateArr){
                 entryTradeDateArr.forEach((item,index)=>{
@@ -203,10 +215,13 @@ export default {
                     let quote = dataSource.find(x=>{
                         return x.DT.getTime() == standardDate.getTime()
                     })
+					let entryReason = this.other['_Signal']
+					
                     markerSet.push({
                         DT: item,
                         Price: quote.Close,
-                        Type: 'BUY',    
+                        Type: 'BUY',  
+						Reason: entryReason,  
                     })
                 })
             }
@@ -219,10 +234,13 @@ export default {
                     let quote = dataSource.find(x=>{
                         return x.DT.getTime() == standardDate.getTime()
                     })
+
+					let exitReasonArr = eval('(' + this.other.ExitReason + ')')
                     markerSet.push({
                         DT: item,
                         Price: quote.Close,
                         Type: 'SELL',    
+						Reason: exitReasonArr[index]
                     })
                 })
             }
@@ -328,5 +346,15 @@ export default {
 .TVChartContainer {
 	//height: calc(100vh - 80px);
 	height: 100%;
+}
+.back {
+    position: absolute;
+    top: 109px;
+    left: 48px;
+	font-size: 1.1rem;
+	a {color: #727475;}
+}
+#chart_box {
+	margin-top: 80px
 }
 </style>
