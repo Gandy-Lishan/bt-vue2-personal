@@ -755,10 +755,6 @@ export default {
         delete newVal.exit
         delete newVal.results
         // newVal.user_tag = 'client'
-        const entry_des_list = JSON.parse(newVal.entry_description)
-        const exit_des_list = JSON.parse(newVal.exit_description)
-        const entry_description = entry_des_list.length !== 0 ? entry_des_list.reduce((accumulator, currentValue) => accumulator + currentValue.commentDes, '') : entry_des_list[0].commentDes
-        const exit_description = exit_des_list.length !== 0 ? exit_des_list.reduce((accumulator, currentValue) => accumulator + currentValue.commentDes, '') : exit_des_list[0].commentDes
         let description = {}
         try {
           if (newVal.description == null || newVal.description == undefined) {
@@ -816,27 +812,34 @@ export default {
           this.selectRiskControl(this.isRiskControl)
         }
         this.oldBacktestName = newVal.name
-        // let year
-        // let month
-        // let day	
-        // if (newVal.start_date && newVal.start_date !== '1800-10-01') {
-        // 	const starArr = newVal.start_date.toString().split('-')
-        // 	const endArr = newVal.end_date.toString().split('-')
-        // 	year = Number(endArr[0]) - Number(starArr[0])
-        // 	month = Number(endArr[1]) - Number(starArr[1])
-        // 	day = Number(endArr[2]) - Number(starArr[2])
-        // 	if (month == 0 && day == 0) {
-        // 		this.bd.backtest_period = year
-        // 	} else {
-        // 		this.bd.backtest_period = 22
-        // 	}
-        // } else {
-        // 	this.bd.backtest_period = 21
-        // 	this.bd.start_date = ''
-        // }
-        this.bd.backtest_period = newVal.backtest_period
+        try {
+          this.bd.backtest_period = newVal.backtest_period
         if (newVal.backtest_period == '21') {
           this.bd.start_date = ''
+        }
+        if(newVal.backtest_period === null || newVal.backtest_period === undefined) {
+          throw Error('不存在 backtest_period')
+        }
+        } catch (error) {
+        console.error('不存在 backtest_period', error)
+        let year
+        let month
+        let day	
+        if (newVal.start_date && newVal.start_date !== '1800-10-01') {
+        	const starArr = newVal.start_date.toString().split('-')
+        	const endArr = newVal.end_date.toString().split('-')
+        	year = Number(endArr[0]) - Number(starArr[0])
+        	month = Number(endArr[1]) - Number(starArr[1])
+        	day = Number(endArr[2]) - Number(starArr[2])
+        	if (month == 0 && day == 0) {
+        		this.bd.backtest_period = year
+        	} else {
+        		this.bd.backtest_period = 22
+        	}
+        } else {
+        	this.bd.backtest_period = 21
+        	this.bd.start_date = ''
+        }
         }
         console.log('处理完成之后的编辑数据', this.bd)
       }
