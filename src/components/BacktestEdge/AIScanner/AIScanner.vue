@@ -1,6 +1,13 @@
 <template>
 	<div class="gridContainer">
 		<el-card class="box-card">
+			<div class="categoryBtnGroup">
+				<template
+					v-for="(item, index) in categories"
+				>
+					<el-button :key="index" @click="loadData('US',item)">{{item}}</el-button>
+				</template>
+			</div>
 			<template
 				v-for="(item, index) in tableDataList" 
 			>
@@ -25,24 +32,27 @@ export default {
   data() {
     return {
       tableDataList: [],
-	  curDate: ''
+	  curDate: '',
+	  category: 'SwingAI',
+	  categories: ['SwingAI','MidTermAI']
     }
   },
   async created(){	
 	this.curDate = this.$store.state.curDate
 
 	//首先初始化数据
-	this.loadData('US')
+	this.loadData('US',this.category)
 },
   methods: {
-	async loadData(marketType){
+	async loadData(marketType,category){
+		this.category = category
 		if(marketType=='US'){
-			this.getAIPick(this.curDate)
+			this.getAIPick(this.curDate,category)
 		}
 	},
-	async getAIPick(date){
+	async getAIPick(date,category){
 		this.tableDataList = []
-		let AIPickContent = await getAIPick(date)
+		let AIPickContent = await getAIPick(date,category)
 		
 		let AIPickContentString = JSON.stringify(AIPickContent)
 								.replace(/TimeInMarket/g,'Best Time In Market(Bars)')
@@ -113,5 +123,14 @@ h4 {
 	height: fit-content;
 	box-shadow: unset;
 	border: unset;
+}
+
+.categoryBtnGroup {
+	position: absolute;
+	left: 330px;
+    top: 209px;
+	button {
+		width: 180px;
+	}
 }
 </style>

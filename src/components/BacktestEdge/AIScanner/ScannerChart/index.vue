@@ -115,11 +115,11 @@ computed: {
 	},
 	created() {
 		this.loading = false
-
 		this.getBacktestInfo({
 			symbol: this.rowData['Symbol'],
 			date: this.rowData['Date'],
-			signal: this.rowData['Signal']
+			signal: this.rowData['Signal'],
+			category: this.rowData['Category'],
 		})
 	},
 	mounted() {},
