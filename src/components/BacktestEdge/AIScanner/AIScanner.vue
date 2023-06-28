@@ -102,7 +102,7 @@ export default {
 		this.tableDataList.push(AIPickObj)
 	},
 	selectDate(date){
-		this.getAIPick(date)
+		this.getAIPick(date,this.categories[this.activeIndex])
 	},
   }
 };

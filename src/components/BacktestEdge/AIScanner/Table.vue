@@ -181,13 +181,10 @@ export default {
 				btnLoading: false,
 				btInfo: [],
 				
-				idList: new Set(),
-				idListLength: 0,
-				subSymbols: new Set(),
 				checkboxGroupState: {},
-				selectedStopLosses: new Set(),
-				selectedProfitTargets: new Set(),
-				selectedWinRates: new Set(),
+				selectedStopLosses: [],
+				selectedProfitTargets: [],
+				selectedWinRates: [],
 		}
 	},
 	watch: {
@@ -195,14 +192,11 @@ export default {
 			handler(newValue, oldValue){
 				this.data.content.map((item)=>{
 					if(this.checkboxGroupState[item.id]){
-						this.idList.add(item['id'])
-						this.subSymbols.add(Symbol)
-						this.selectedStopLosses.add(item['Stop Loss(%)'])
-						this.selectedProfitTargets.add(item['Profit Target(%)'])
-						this.selectedWinRates.add(item['Win Rate(%)'])
+						this.selectedStopLosses.push(item['Stop Loss(%)'])
+						this.selectedProfitTargets.push(item['Profit Target(%)'])
+						this.selectedWinRates.push(item['Win Rate(%)'])
 					}
 				})
-				this.idListLength = this.idList.size
 				this.calculateAlloc()
 			},
 			deep: true
@@ -223,21 +217,15 @@ export default {
 			*/
 			// subscribe = !subscribe
 			if(subscribe) {
-				this.idList.add(id)
-				this.subSymbols.add(Symbol)
-				this.selectedStopLosses.add(sl)
-				this.selectedProfitTargets.add(pt)
-				this.selectedWinRates.add(wr)
+				this.selectedStopLosses.push(sl)
+				this.selectedProfitTargets.push(pt)
+				this.selectedWinRates.push(wr)
 			}else {
-				this.idList.delete(id)
-				this.subSymbols.delete(Symbol)
-				this.selectedStopLosses.delete(sl)
-				this.selectedProfitTargets.delete(pt)
-				this.selectedWinRates.delete(wr)
+				this.selectedStopLosses.pop(sl)
+				this.selectedProfitTargets.pop(pt)
+				this.selectedWinRates.pop(wr)
 			}
 			this.checkboxGroupState[id] = subscribe
-			
-			this.idListLength = this.idList.size
 			
 			this.calculateAlloc()
 		},
@@ -330,9 +318,9 @@ export default {
 			}
 		},
 		calculateAlloc(){			
-			let slMean = Array.from(this.selectedStopLosses).reduce((sum,value)=>{return Number(sum)+Number(value)},0)/Array.from(this.selectedStopLosses).length
-			let ptMean = Array.from(this.selectedProfitTargets).reduce((sum,value)=>{return Number(sum)+Number(value)},0)/Array.from(this.selectedProfitTargets).length
-			let wrMean = Array.from(this.selectedWinRates).reduce((sum,value)=>{return Number(sum)+Number(value)},0)/Array.from(this.selectedWinRates).length*0.01
+			let slMean = this.selectedStopLosses.reduce((sum,value)=>{return Number(sum)+Number(value)},0)/this.selectedStopLosses.length
+			let ptMean = this.selectedProfitTargets.reduce((sum,value)=>{return Number(sum)+Number(value)},0)/this.selectedProfitTargets.length
+			let wrMean = this.selectedWinRates.reduce((sum,value)=>{return Number(sum)+Number(value)},0)/this.selectedWinRates.length*0.01
 
 			let kellyTotal = ((ptMean+slMean)*wrMean-slMean)/ptMean
 			this.data.content.map((item,index)=>{

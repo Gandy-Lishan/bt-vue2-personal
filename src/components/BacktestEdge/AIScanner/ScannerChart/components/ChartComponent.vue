@@ -49,22 +49,28 @@ export default {
 	methods:{
 		onChartReady(){
 			CIQ.initiateChart(()=>{
-				this.hideComponents()
-				const periodArray = [
-					{ period: 1, timeframe: 'Week' },
-					{ period: 2, timeframe: 'Week' },
-					{ period: 1, timeframe: 'Month' },
-					{ period: 2, timeframe: 'Month' },
-					{ period: 3, timeframe: 'Month' },
-					{ period: 6, timeframe: 'Month' },
-					{ period: 12, timeframe: 'Month' }
-				]
-				this.calculateBacktestHistory(this.other['EntryTradeDate'], periodArray,this.direction)
-				this.loadDefaultStudy()
-				this.loadMarker()
-
-				CIQ.hideCover()
-                CIQ.nprogress.done()
+				try{
+					this.hideComponents()
+					const periodArray = [
+						{ period: 1, timeframe: 'Week' },
+						{ period: 2, timeframe: 'Week' },
+						{ period: 1, timeframe: 'Month' },
+						{ period: 2, timeframe: 'Month' },
+						{ period: 3, timeframe: 'Month' },
+						{ period: 6, timeframe: 'Month' },
+						{ period: 12, timeframe: 'Month' }
+					]
+					this.calculateBacktestHistory(this.other['EntryTradeDate'], periodArray,this.direction)
+					this.loadDefaultStudy()
+					this.loadMarker()
+					CIQ.hideCover()
+					CIQ.nprogress.done()
+				}catch(e){
+					console.error(e)
+				}finally{
+					CIQ.hideCover()
+					CIQ.nprogress.done()
+				}
 			})
 
 		},
@@ -88,6 +94,7 @@ export default {
 					break
 				}
 			}
+			
 
 			let patterns = ['UpTrend Pattern', 'DownTrend Pattern']
 			let tradeStudies = ['Hammer','Shooting']
@@ -352,7 +359,12 @@ export default {
     top: 109px;
     left: 48px;
 	font-size: 1.1rem;
-	a {color: #727475;}
+	a {
+		color: #727475;
+		&:hover {
+			color: #5b9bd1;
+		}
+	}
 }
 #chart_box {
 	margin-top: 80px
