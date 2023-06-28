@@ -1,10 +1,11 @@
 <template>
 	<div class="contrainer404">
         <div class='content-card'>
-             <img src="@/assets/404.png" />
+            <div id="img"></div>
+
             <h2>You have no access right</h2>
-            <p>You do not have the access permission, Please go purchase and try it again</p>
-            <el-button @click="jump">More Plans</el-button>
+            <p>{{mesContent}}</p>
+            <el-button @click="jump">{{btnContent}}</el-button>
         </div>
 	</div>
 </template>
@@ -14,17 +15,38 @@ export default {
 	name: '404',
 	data() {
 		return {
-
+            targetPath: '',
+            mesContent: '',
+            btnContent: '',
+            imgSrc: '',
+            state: null
 		}
 	},
+    created() {
+        this.state = this.$route.query['mes']
 
+        switch(this.state){
+            case 410:
+                this.mesContent = 'You do not have the access permission, Please go purchase and try it again'
+                this.btnContent = 'More Plans'
+                this.imgSrc = "../assets/404.png"
+                this.targetPath = 'https://sentimentrader.com/pricing';
+                break;
+            default:
+                this.mesContent = 'You have not logged in and do not have the access permission, Please sign in first'
+                this.btnContent = 'Sign in'
+                 this.imgSrc = "../assets/401.png"
+                this.targetPath = 'https://sentimentrader.com/login';
+        }
+        
+    },
 	mounted() {
-
+        // let img = document.querySelector('#img')
+        // img.cla
 	},
 	methods: {
         jump(){
-            const targetPath = 'https://sentimentrader.com/pricing';
-            window.location.href = targetPath;
+            window.location.href = this.targetPath;
         }
 	}
 }
@@ -45,10 +67,11 @@ export default {
             justify-content: center;
             align-items: center;
 
-            img {
+            #img {
                 width: 329.53px;
                 height: 210px;
                 margin: 100px 175px 0 175px;
+                background: url(../assets/404.png);
             }
             h2{
                 font-size: 20px;

@@ -70,10 +70,12 @@ const router = new Router({
 })
 
 router.beforeEach(async (to, from, next) => {
+	// 如果跳入404，则直接进入跳转外链的待定阶段，没有其他cookie或者验证判断
+	if(to.path == "/404") next()
+
 	await initiateIndicatorList()
 	
 	CIQ.store = store
-	let loginUrl = 'https://sentimentrader.com/login'
 	//  开发环境无法判断环境变量
 	// if(process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined) loginUrl = 'https://sentdevsite.com/login'
 	// 先判断有无 sentimen_session
@@ -88,9 +90,6 @@ router.beforeEach(async (to, from, next) => {
 	// 当有 sentimen_session 或 devbt2Userid 时才能发请求
 	//Cookies.set('sentimen_session', 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FamVv8Nu+OjDeax6/BPemIRtLvxe/ttdcR7ljhLshELeg8gSudWpyEePHMAk2Zgg3JTCes8QFI/utKoQKh4FfSDRIj3ItBIJaaC8F4sJB7Og9cT1KH0cHiUPuPpAJGGVErpYw2SdOGms2pbC3ehr6FwcTdrv4U73GMAw9fXMVREXAHhMsnu6RuzW2WLsY+A4NNXLJpwq0V5jt0lz38ofSF9B852k4gmeLLOuPZ6/Ev0oX')
 	if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
-		if(to.path == "/404"){
-			next()
-		}else{
 			//set 10 sec as default,However, some time-consuming requests are processed separately
 			axios.post('/dev/dev/user/', null, { timeout: 10000, withCredentials: true })
 				.then(async(res) => {
@@ -127,15 +126,19 @@ router.beforeEach(async (to, from, next) => {
 					// 	default:
 					// 		alert('Unknown error')
 					// }
-					window.location.href = '/404'
+					router.push({
+						path: '/404',
+						query: { mes: error?.response?.status } // 携带的参数
+					});
 				})
-		}
 
 	} else {
 		//alert('No permission')
-
 		//window.location.href = loginUrl
-		window.location.href = '/404'
+		router.push({
+			path: '/404',
+			query: { mes: 401 } // 携带的参数
+		});
 	}
 })
 
