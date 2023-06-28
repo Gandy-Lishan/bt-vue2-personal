@@ -5,7 +5,11 @@
 				<template
 					v-for="(item, index) in categories"
 				>
-					<el-button :key="index" @click="loadData('US',item)">{{item}}</el-button>
+					<el-button 
+						:key="index" 
+						:class="{ active: activeIndex === index }" 
+						@click="loadData('US',index)">{{item}}
+					</el-button>
 				</template>
 			</div>
 			<template
@@ -33,7 +37,7 @@ export default {
     return {
       tableDataList: [],
 	  curDate: '',
-	  category: 'SwingAI',
+	  activeIndex: null,
 	  categories: ['SwingAI','MidTermAI']
     }
   },
@@ -41,13 +45,13 @@ export default {
 	this.curDate = this.$store.state.curDate
 
 	//首先初始化数据
-	this.loadData('US',this.category)
+	this.loadData('US',0)
 },
   methods: {
-	async loadData(marketType,category){
-		this.category = category
+	async loadData(marketType,index){
+		this.activeIndex = index
 		if(marketType=='US'){
-			this.getAIPick(this.curDate,category)
+			this.getAIPick(this.curDate,this.categories[index])
 		}
 	},
 	async getAIPick(date,category){
@@ -131,6 +135,13 @@ h4 {
     top: 209px;
 	button {
 		width: 180px;
+		&.active {
+		/* 高亮状态的样式 */
+			color: #409EFF;
+			border-color: #c6e2ff;
+			background-color: #ecf5ff;	
+		}
 	}
 }
+
 </style>
