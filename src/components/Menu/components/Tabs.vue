@@ -61,7 +61,7 @@ export default {
         {
           title: 'Symbol OHLCV', content: [
             'In the financial field, Symbol OHLCV refers to a common format for representing historical data of financial asset prices and trading volumes. It represents the Open, High, Low, Close, and Volume of a financial asset.',
-            'Each trading period (e.g., minutes, hours, days) generates a Symbol OHLCV data point. Here is an explanation of each data field:',
+            'Each trading period (e.g., days, weeks, months) generates a Symbol OHLCV data point. Here is an explanation of each data field:',
             'Open: The starting price of a particular trading period, representing the price of the asset at the beginning of that period.',
             'High: The highest point reached by the asset price within that trading period.',
             'Low: The lowest point reached by the asset price within that trading period.',
@@ -69,7 +69,7 @@ export default {
             'Volume: The number of asset trades that occurred within that trading period.',
             "Symbol OHLCV data is commonly used in fields such as chart analysis, technical analysis, and algorithmic trading. By analyzing this data, trends in asset prices, support and resistance levels, and market participants' trading activity can be revealed.",
             "Common financial market data sources and trading platforms provide functionality to store and transmit data in Symbol OHLCV format. Analysts and traders can use this data to construct charts, apply technical indicators, and backtest and optimize models and strategies based on historical prices and volumes.",
-            "It is important to note that the frequency and time periods of Symbol OHLCV data can be set according to specific needs, such as minute data, hourly data, or daily data, among others. Additionally, Symbol OHLCV data only provides information about prices and trading volumes, and other financial indicators and fundamental data may need to be used in conjunction with it for a more comprehensive analysis and decision-making."
+            "It is important to note that the frequency and time periods of Symbol OHLCV data can be set according to specific needs, such as daily data, weekly data, or monthly data, among others. Additionally, Symbol OHLCV data only provides information about prices and trading volumes, and other financial indicators and fundamental data may need to be used in conjunction with it for a more comprehensive analysis and decision-making."
           ], type: 'info'
         },
         {
@@ -127,30 +127,29 @@ export default {
         },
         {
           title: 'Range Of Rank', content: [
-            "In backtesting trading, 'Range of Rank' is an indicator used to evaluate the relative performance of an asset or indicator over a certain period of time. It is used to determine the position of an asset or indicator's ranking among the overall market or other participating assets.",
-            "The Range of Rank is represented by converting the performance of an asset or indicator relative to others into a percentile range. This range indicates the level of performance of the asset or indicator compared to other participants.",
-            "The steps to calculate ROC (Rate of Change) are as follows:",
+            "ROR stands for Rate of Return, which represents the percentage change in price or indicator. It calculates the rate of change by comparing the current price or indicator value to the previous value. ROR helps traders and analysts assess the momentum and trend of short-term prices or indicators.",
+            "The steps to calculate ROR are as follows:",
             "1. Select a time period (e.g., 20 trading days).",
-            "2. Obtain the price or indicator value at the current time point (referred to as the current value).",
-            "3. Obtain the price or indicator value at a specified time period in the past from the current time point (referred to as the past value).",
-            "4. Calculate the percentage rate of change: ROC = ((current value - past value) / past value) * 100.",
-            "For example, let's assume a stock has a price of $50 at the current time point and a price of $40 twenty trading days ago. The ROC would be ((50 - 40) / 40) * 100 = 25%. This means that the price of the stock has increased by 25% over the past twenty trading days.",
-            "ROC can be used to assess the rate of price or indicator changes. A positive ROC value indicates a relatively fast increase in price or indicator, while a negative ROC value indicates a relatively fast decrease. Traders can combine ROC with other technical indicators or price patterns to confirm market trends, identify overbought or oversold conditions, and formulate buying or selling strategies.",
-            "It's important to note that ROC is a short-term indicator and is sensitive to market noise. Therefore, it should be used in conjunction with other indicators and analytical tools to obtain more accurate trading signals and decisions."
+            "2. Obtain the current price or indicator value at the current point in time.",
+            "3. Retrieve the price or indicator values within the specified time period (referred to as historical values).",
+            "4. Calculate the percentage change: ROR = ((Current Value - Lowest Historical Value) / (Highest Historical Value - Lowest Historical Value)) * 100.",
+            "For example, suppose a stock's current closing price is $50, the highest price 20 trading days ago was $60, and the lowest price was $40. The ROR would be (50 - 40) / (60 - 40) * 100 = 50. This means that the stock's price ranks in the top 50% over the past 20 trading days.",
+            "ROR can be used to assess the relative ranking of prices or indicators compared to previous periods. A positive ROR value indicates a relatively higher ranking within that period, with a larger value indicating a higher ranking. If it exceeds 100, it indicates a breakout above the previous high. Similarly, a negative ROR indicates a relatively lower ranking, possibly reaching a previous low point in the chart.",
+            "Traders can combine ROR with other technical indicators or price patterns to confirm market trends, identify overbought or oversold conditions, and formulate buying or selling strategies. It is important to note that ROR is a short-term indicator and sensitive to market noise. Therefore, it should be used in conjunction with other indicators and analysis tools to obtain more accurate trading signals and decisions.",
+            "Although ROR and ROC (Rate of Change) have slightly different calculation methods, ROR considers the highest and lowest prices within a specific time period to provide a more comprehensive reflection of price changes, while ROC only considers the starting and ending prices. However, both serve the same purpose of measuring the speed of price or indicator changes in the short term and assisting in the formulation of trading strategies."
           ], type: 'info'
         },
         {
           title: 'MA Ratio', content: [
-            "In backtesting trading, 'MA Ratio' (Moving Average Ratio) is a technical indicator used to measure the ratio between the short-term and long-term moving averages of an asset's price or indicator.",
-            "MA Ratio is represented by converting the difference between the short-term and long-term moving averages into a ratio or percentage. This ratio provides information about the trend changes and relative strength of the asset's price over different time periods.",
-            "The steps to calculate MA Ratio are as follows:",
-            "1. Select a time period for the short-term moving average (e.g., 20 days) and a time period for the long-term moving average (e.g., 50 days).",
-            "2. Calculate the values of the short-term and long-term moving averages.",
-            "3. Calculate the MA Ratio by dividing the value of the short-term moving average by the value of the long-term moving average and convert it into a ratio or percentage.",
-            "For example, let's assume a stock has a 20-day moving average of $50 and a 50-day moving average of $45. The MA Ratio would be $50 / $45 = 1.11. This means that the value ratio of the short-term moving average to the long-term moving average is 1.11.",
-            "MA Ratio can help traders analyze price trends and determine the relative strength of an asset. When the MA Ratio is greater than 1, it indicates relatively strong short-term trends, and the price may be in an upward state. When the MA Ratio is less than 1, it indicates relatively weak short-term trends, and the price may be in a downward state.",
-            "Traders can use MA Ratio as a reference for buying or selling signals. For example, when the MA Ratio crosses above 1 from below, it may indicate a strengthening short-term trend, and a buying opportunity can be considered. When the MA Ratio crosses below 1 from above, it may indicate a weakening short-term trend, and a selling opportunity can be considered.",
-            "It's important to note that MA Ratio is a technical indicator and only serves as a supplementary tool. It should be used in conjunction with other technical indicators and analysis methods to obtain a more comprehensive market analysis and trading decisions."
+            "MAR is a technical indicator used to measure the speed of price change relative to its moving average line.",
+            "MAR stands for Moving Average Ratio, which represents the percentage change in price by calculating the percentage difference between the current price and the 20-day moving average. It helps traders and analysts assess short-term price momentum and trend.",
+            "The steps to calculate MAR are as follows:",
+            "1. Select a time period (e.g., 20 trading days).",
+            "2. Obtain the current price at the current point in time.",
+            "3. Retrieve the 20-day moving average price within the specified time period.",
+            "4. Calculate the percentage change: MAR = (Current Price / 20-day Moving Average Price) * 100.",
+            "For example, suppose the current price of a stock is $50, and the 20-day moving average price is $40. The MAR would be (50 / 40) * 100 = 125%. This means that the stock's price is currently 25% above its 20-day moving average. MAR can be used to evaluate the speed of current price change relative to its moving average line. If MAR is greater than 100%, it indicates that the current price is above its moving average, showing a faster upward momentum. If MAR is less than 100%, it indicates that the current price is below its moving average, showing a faster downward momentum.",
+            "Traders can combine MAR with price patterns to confirm market trends and develop buying or selling strategies. It is important to note that MAR is a short-term indicator and sensitive to market noise. Therefore, it should be used in conjunction with other indicators and analysis tools to obtain more accurate trading signals and decisions. MAR differs from ROC (Rate of Change) in calculation method, as MAR considers the relationship between the current price and the moving average over a period of time to evaluate the speed of current price change from a trend and momentum perspective, while ROC only considers price changes between two discrete points. However, both serve the same purpose of measuring the speed of short-term price changes and assisting in the formulation of trading strategies."
           ], type: 'info'
         },
         {
@@ -207,12 +206,12 @@ export default {
 	box-shadow: 0px 0px 5px 5px #cee4f7;
 }
 .el-tag {
-  width: 125px;
+	width: 125px;
 }
-.el-tag--dark.el-tag--info{
-  text-align: center;
-  background-color: #B2B6BF;
-  border-color: #B2B6BF;
+.el-tag--dark.el-tag--info {
+	text-align: center;
+	background-color: #b2b6bf;
+	border-color: #b2b6bf;
 }
 
 .content {
