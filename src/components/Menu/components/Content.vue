@@ -892,7 +892,7 @@
 						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path169"
-						:preview-src-list="path169List"
+						:preview-src-list="path1610List"
 						fit="fill"
 						lazy
 					></el-image>
@@ -1185,7 +1185,7 @@
 						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path73"
-						:preview-src-list="path73List"
+						:preview-src-list="path72List"
 						fit="fill"
 						lazy
 					></el-image>
@@ -1193,7 +1193,7 @@
 						style="width: 100%; height: 50%"
 						class="image-border"
 						:src="path74"
-						:preview-src-list="path74List"
+						:preview-src-list="path72List"
 						fit="fill"
 						lazy
 					></el-image>
@@ -1213,12 +1213,28 @@
 						copy. This allows you to use that backtest strategy in your backtest
 						history list.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path811"
+						:preview-src-list="path811List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="9-1">View Backtest Results</h2>
 					<p>
 						If you want to see the results of a particular backtest, you can
 						click the "view backtest result" button to see the detailed results
 						of the backtest.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path812"
+						:preview-src-list="path812List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="9-2">Analyst Report Link</h2>
 					<p>
 						In the "Entry & Exit" column of the backtest list, you can find the
@@ -1226,6 +1242,14 @@
 						on that URL will take you to the source analyst's report page, where
 						you can gather more information.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path82"
+						:preview-src-list="path82List"
+						fit="fill"
+						lazy
+					></el-image>
 					<h2 id="9-3">Share Backtest</h2>
 					<p>
 						If you want to share a backtest result from a specific analyst with
@@ -1234,6 +1258,30 @@
 						BacktestEdge, they will be able to see the backtest results and
 						parameters.
 					</p>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path831"
+						:preview-src-list="path83List"
+						fit="fill"
+						lazy
+					></el-image>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path832"
+						:preview-src-list="path83List"
+						fit="fill"
+						lazy
+					></el-image>
+					<el-image
+						style="width: 100%; height: 50%"
+						class="image-border"
+						:src="path833"
+						:preview-src-list="path83List"
+						fit="fill"
+						lazy
+					></el-image>
 				</section>
 			</section>
 			<section v-else-if="id.includes('ai')">
@@ -1455,6 +1503,12 @@ import path71 from "../img/8.1.jpg";
 import path72 from "../img/8.2.jpg";
 import path73 from "../img/8.3.jpg";
 import path74 from "../img/8.4.jpg";
+import path811 from "../img/9.1.1.jpg";
+import path812 from "../img/9.1.2.jpg";
+import path82 from "../img/9.2.jpg";
+import path831 from "../img/9.3.1.jpg";
+import path832 from "../img/9.3.2.jpg";
+import path833 from "../img/9.3.3.jpg";
 import pathai1 from "../img/ai1.jpg";
 import pathai2 from "../img/ai2.jpg";
 import pathai3 from "../img/ai3.jpg";
@@ -1575,9 +1629,8 @@ export default {
       path168: path168,
       path168List: [path168],
       path169: path169,
-      path169List: [path169],
       path1610: path1610,
-      path1610List: [path1610],
+      path1610List: [path169,path1610],
       path171: path171,
       path171List: [path171],
       path181: path181,
@@ -1603,11 +1656,19 @@ export default {
       path71: path71,
       path71List: [path71],
       path72: path72,
-      path72List: [path72],
       path73: path73,
-      path73List: [path73],
       path74: path74,
-      path74List: [path74],
+      path72List: [path72, path73, path74],
+			path811: path811,
+			path181List: [path811],
+			path812: path812,
+			path812List: [path812],
+			path82: path82,
+			path82List: [path82],
+			path831: path831,
+			path832: path832,
+			path833: path833,
+			path83List: [path831, path832, path833],
       pathai1: pathai1,
       pathai1List: [pathai1],
       pathai2: pathai2,
@@ -1621,7 +1682,7 @@ export default {
       pathai43: pathai43,
       pathai43List: [pathai43],
       pathai44: pathai44,
-      pathai44List: [pathai44]
+      pathai44List: [pathai44],
     }
   },
   components: {
