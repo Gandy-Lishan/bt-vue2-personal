@@ -88,7 +88,7 @@ router.beforeEach(async (to, from, next) => {
 		if (getQueryVariable('userid')) Cookies.set('devbt2Userid', getQueryVariable('userid'))
 	}
 	// 当有 sentimen_session 或 devbt2Userid 时才能发请求
-	Cookies.set('sentimen_session', 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FamVv8Nu+OjDeax6/BPemIRtLvxe/ttdcR7ljhLshELeg8gSudWpyEePHMAk2Zgg3JTCes8QFI/utKoQKh4FfSDRIj3ItBIJaaC8F4sJB7Og9cT1KH0cHiUPuPpAJGGVErpYw2SdOGms2pbC3ehr6FwcTdrv4U73GMAw9fXMVREXAHhMsnu6RuzW2WLsY+A4NNXLJpwq0V5jt0lz38ofSF9B852k4gmeLLOuPZ6/Ev0oX')
+	//Cookies.set('sentimen_session', 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FamVv8Nu+OjDeax6/BPemIRtLvxe/ttdcR7ljhLshELeg8gSudWpyEePHMAk2Zgg3JTCes8QFI/utKoQKh4FfSDRIj3ItBIJaaC8F4sJB7Og9cT1KH0cHiUPuPpAJGGVErpYw2SdOGms2pbC3ehr6FwcTdrv4U73GMAw9fXMVREXAHhMsnu6RuzW2WLsY+A4NNXLJpwq0V5jt0lz38ofSF9B852k4gmeLLOuPZ6/Ev0oX')
 	if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
 			//set 10 sec as default,However, some time-consuming requests are processed separately
 			axios.post('/dev/dev/user/', null, { timeout: 10000, withCredentials: true })
