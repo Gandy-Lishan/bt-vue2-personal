@@ -1,6 +1,6 @@
 <template>
 	<div class="disclaimer-container">
-		<p>Last updated: December 17, 2021</p>
+		<p>Last updated: June 28, 2023</p>
 		<h2>Interpretation and Definitions</h2>
 		<h3>Interpretation</h3>
 		<p>
@@ -13,7 +13,7 @@
 		<ul>
 			<li>
 				<strong>Company</strong> (referred to as either "the Company", "We",
-				"Us" or "Our" in this Disclaimer) refers to Sundial Capital Research.
+				"Us" or "Our" in this Disclaimer) refers to Sentimentrader.
 			</li>
 			<li><strong>Service</strong> refers to the Website.</li>
 			<li>
@@ -22,12 +22,12 @@
 				accessing or using the Service, as applicable.
 			</li>
 			<li>
-				<strong>Website</strong> refers to OptionScan.AI, accessible from
+				<strong>Website</strong> refers to Sentimentrader, accessible from
 				<a
-					href="https://OptionScan.AI"
+					href="https://sentimentrader.com"
 					rel="external nofollow noopener"
 					target="_blank"
-					>https://OptionScan.AI</a
+					>https://sentimentrader.com</a
 				>
 			</li>
 		</ul>
@@ -143,7 +143,7 @@
 		<h3>Contact Us</h3>
 		<p>If you have any questions about this Disclaimer, You can contact Us:</p>
 		<ul>
-			<li>By email: info@OptionScan.AI</li>
+			<li>By email: admin@sentimentrader.com</li>
 		</ul>
 	</div>
 </template>
