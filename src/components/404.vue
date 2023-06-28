@@ -1,8 +1,7 @@
 <template>
 	<div class="contrainer404">
         <div class='content-card'>
-            <div id="img"></div>
-
+            <img id="img" :src="require(`../assets/404Page/${imgSrc}`)">
             <h2>You have no access right</h2>
             <p>{{mesContent}}</p>
             <el-button @click="jump">{{btnContent}}</el-button>
@@ -29,21 +28,17 @@ export default {
             case 410:
                 this.mesContent = 'You do not have the access permission, Please go purchase and try it again'
                 this.btnContent = 'More Plans'
-                this.imgSrc = "../assets/404.png"
+                this.imgSrc = "410.png"
                 this.targetPath = 'https://sentimentrader.com/pricing';
                 break;
             default:
                 this.mesContent = 'You have not logged in and do not have the access permission, Please sign in first'
                 this.btnContent = 'Sign in'
-                 this.imgSrc = "../assets/401.png"
+                 this.imgSrc = "401.png"
                 this.targetPath = 'https://sentimentrader.com/login';
         }
         
     },
-	mounted() {
-        // let img = document.querySelector('#img')
-        // img.cla
-	},
 	methods: {
         jump(){
             window.location.href = this.targetPath;
@@ -71,7 +66,6 @@ export default {
                 width: 329.53px;
                 height: 210px;
                 margin: 100px 175px 0 175px;
-                background: url(../assets/404.png);
             }
             h2{
                 font-size: 20px;
