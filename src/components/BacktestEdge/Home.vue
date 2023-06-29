@@ -218,6 +218,7 @@
 						</div>
 					</button>
 				</div>
+        <!-- todo: long xue 记得在这里解除注释 -->
 				<!-- <div>
 					<button class="sidebar" ref="chat" @click="switchMainTab('chat')">
 						<div class="chat-sidebar">
