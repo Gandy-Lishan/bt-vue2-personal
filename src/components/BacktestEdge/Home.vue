@@ -385,7 +385,6 @@ export default {
 
     const pathname = window.location.pathname
     if (pathname.includes('backtests')) {
-      console.log('包含了backtests')
       const targetPath = '/home/backtester/backtests';
       if (this.$route.path !== targetPath) {
         this.$router.push(targetPath);

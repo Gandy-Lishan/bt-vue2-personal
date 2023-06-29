@@ -70,10 +70,8 @@ const router = new Router({
 })
 
 router.beforeEach(async (to, from, next) => {
-	// 如果跳入404，则直接进入跳转外链的待定阶段，没有其他cookie或者验证判断
+	// 如果跳入404，则直接进入跳转外链的待定阶段，没有其他cookie或者验证判断(准备弃用，因为登录后或者购买后404应该重新验证并跳转)
 	if(to.path == "/404") next()
-
-	await initiateIndicatorList()
 	
 	CIQ.store = store
 	//  开发环境无法判断环境变量
@@ -99,6 +97,9 @@ router.beforeEach(async (to, from, next) => {
 						if (getQueryVariable('userid')) window.location.href = location.origin // 去掉？后面的部分
 
 						// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
+						if(to.name == 'backtester' || to.name == 'Backtests'){
+							await initiateIndicatorList()
+						}
 						if(to.path == '/home/scannerai'){
 							await initiateCurrentDate()
 						}
@@ -135,6 +136,7 @@ router.beforeEach(async (to, from, next) => {
 	} else {
 		//alert('No permission')
 		//window.location.href = loginUrl
+		console.log('from',from,to)
 		router.push({
 			path: '/404',
 			query: { mes: 401 } // 携带的参数
@@ -148,36 +150,38 @@ async function initiateCurrentDate() {
 		let _res = await getCurDate()
 		let curDate =_res['LastUpdatePickDate']
 		await store.dispatch('set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
-	}
+	}          
 }
 
 async function initiateIndicatorList() {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
-	const res = await getIndicatorsList()
-	let allSymbolsList = res.data
-	const resStocks = await getStocksList()
-	let stocksList = resStocks.data
-	store.commit('getStocksList', stocksList)
-	const resIndexs = await getIndexsList()
-	let indexsList = resIndexs.data
-	store.commit('getIndexsList', indexsList)
-
-	let newAllSymbolsList = []
-	for (var i = 0; i < allSymbolsList.length; i++) {
-		let item = allSymbolsList[i]
-		if (stocksList.find((j) => j.stock == item.url)) {
-			let newName = item.url + ' Optix'
-			newAllSymbolsList.push({
-				chart_name: newName,
-				url: item.url,
-				updated: item.updated
-			})
-		} else {
-			newAllSymbolsList.push(allSymbolsList[i])
+	if(store.state.stocksList.length==0 || store.state.indexsList.length==0){
+		const res = await getIndicatorsList()
+		let allSymbolsList = res.data
+		const resStocks = await getStocksList()
+		let stocksList = resStocks.data
+		store.commit('getStocksList', stocksList)
+		const resIndexs = await getIndexsList()
+		let indexsList = resIndexs.data
+		store.commit('getIndexsList', indexsList)
+	
+		let newAllSymbolsList = []
+		for (var i = 0; i < allSymbolsList.length; i++) {
+			let item = allSymbolsList[i]
+			if (stocksList.find((j) => j.stock == item.url)) {
+				let newName = item.url + ' Optix'
+				newAllSymbolsList.push({
+					chart_name: newName,
+					url: item.url,
+					updated: item.updated
+				})
+			} else {
+				newAllSymbolsList.push(allSymbolsList[i])
+			}
 		}
+		// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
+		CIQ.indicatorList = newAllSymbolsList
 	}
-	// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
-	CIQ.indicatorList = newAllSymbolsList
 }
 
 
