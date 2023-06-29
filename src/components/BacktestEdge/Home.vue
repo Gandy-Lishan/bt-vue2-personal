@@ -163,6 +163,13 @@
 				<el-tab-pane :label="renderLabel()" name="seventh" v-if="0">
 					<router-view></router-view>
 				</el-tab-pane>
+				<el-tab-pane name="eight" label="Hey, Sentimentrader">
+					<!-- <router-view></router-view> -->
+          <Chat
+          @goTobacktestSetupForm="goTobacktestSetupForm"
+          @goBacktestResultForm="goBacktestResultForm"
+          ></Chat>
+				</el-tab-pane>
 			</el-tabs>
 			<div class="maintabBtnContainer">
 				<div>
@@ -208,6 +215,14 @@
 								/>
 							</svg>
 							<span>Backtest list</span>
+						</div>
+					</button>
+				</div>
+				<div>
+					<button class="sidebar" ref="chat" @click="switchMainTab('chat')">
+						<div class="chat-sidebar">
+              <img src="@/assets/heyWhite.svg" alt="hey" class="sidebar_button_icon"/>
+							<span>Hey, Sentimentrader</span>
 						</div>
 					</button>
 				</div>
@@ -309,6 +324,7 @@ import performance from '@/components/BacktestEdge/Performance.vue'
 import history from '@/components/BacktestEdge/History.vue'
 import favorite from '@/components/BacktestEdge/Favorite.vue'
 import sample from '@/components/BacktestEdge/Sample.vue'
+import Chat from "@/components/BacktestEdge/Chat.vue";
 import {
   runBacktest,
   seeParams,
@@ -355,7 +371,8 @@ export default {
     performance,
     history,
     favorite,
-    sample
+    sample,
+    Chat
   },
   async mounted() {
     let toTop = document.getElementsByClassName('toTop')[0]
@@ -488,8 +505,21 @@ export default {
       })
     },
     switchMainTab: function (refName) {
-      this.mainTabState = refName == 'setup' ? 0 : 1
-      if (!this.mainTabState) {
+      // this.mainTabState = refName == 'setup' ? 0 : 1
+      console.log('refName', refName)
+      switch (refName) {
+        case 'setup':
+          this.mainTabState = 0
+          break;
+        case 'list':
+          this.mainTabState = 1
+          break;
+        case 'chat':
+          this.mainTabState = 2
+          break;
+      }
+      console.log('this.mainTabState', this.mainTabState)
+      if (this.mainTabState == 0) {
 
         this.$refs.tabs.$children[0].$refs.tabs[0].style.display = 'unset'
         this.$refs.tabs.$children[0].$refs.tabs[1].style.display = 'none'
@@ -497,23 +527,40 @@ export default {
         this.$refs.tabs.$children[0].$refs.tabs[3].style.display = 'none'
         this.$refs.tabs.$children[0].$refs.tabs[4].style.display = 'none'
         this.$refs.tabs.$children[0].$refs.tabs[5].style.display = 'none'
+        this.$refs.tabs.$children[0].$refs.tabs[6].style.display = 'none'
         this.activeName = 'first'
 
         this.$refs.setup.classList.add('activated')
         this.$refs.list.classList.remove('activated')
+        this.$refs.chat.classList.remove('activated')
         this.animationUp(650)
-      } else {
+      } else if (this.mainTabState == 1) {
         this.$refs.tabs.$children[0].$refs.tabs[0].style.display = 'none'
         this.$refs.tabs.$children[0].$refs.tabs[1].style.display = 'unset'
         this.$refs.tabs.$children[0].$refs.tabs[2].style.display = 'none'
         this.$refs.tabs.$children[0].$refs.tabs[3].style.display = 'unset'
         this.$refs.tabs.$children[0].$refs.tabs[4].style.display = 'unset'
         this.$refs.tabs.$children[0].$refs.tabs[5].style.display = 'unset'
+        this.$refs.tabs.$children[0].$refs.tabs[6].style.display = 'none'
         this.activeName = 'second'
 
         this.$refs.setup.classList.remove('activated')
+        this.$refs.chat.classList.remove('activated')
         this.$refs.list.classList.add('activated')
+
         this.animationUp(650)
+      } else if (this.mainTabState == 2) {
+        this.$refs.tabs.$children[0].$refs.tabs[0].style.display = 'none'
+        this.$refs.tabs.$children[0].$refs.tabs[1].style.display = 'none'
+        this.$refs.tabs.$children[0].$refs.tabs[2].style.display = 'none'
+        this.$refs.tabs.$children[0].$refs.tabs[3].style.display = 'none'
+        this.$refs.tabs.$children[0].$refs.tabs[4].style.display = 'none'
+        this.$refs.tabs.$children[0].$refs.tabs[5].style.display = 'none'
+        this.$refs.tabs.$children[0].$refs.tabs[6].style.display = 'unset'
+        this.activeName = 'eight'
+        this.$refs.chat.classList.add('activated')
+        this.$refs.setup.classList.remove('activated')
+        this.$refs.list.classList.remove('activated')
       }
     },
     myBrowser: function () {
@@ -1126,8 +1173,8 @@ export default {
                 backtestData.capital_alloc
               )
               backtestData.slippage = parseFloat(backtestData.slippage)
-              backtestData.win_rate = parseFloat(backtestData.win_rate)              
-              
+              backtestData.win_rate = parseFloat(backtestData.win_rate)
+
               CIQ.spanPeriod = {
                 start_date:
                   backtestData.start_date.replace(/-/g, '') * 1000000000,
@@ -1759,6 +1806,13 @@ header {
 			fill: #666666;
 		}
 		&.activated svg.sidebar_button_icon {
+			float: left;
+			margin: 0 5px 0 6px;
+			width: 16px;
+			height: 16px;
+			fill: white;
+		}
+    &.activated img {
 			float: left;
 			margin: 0 5px 0 6px;
 			width: 16px;

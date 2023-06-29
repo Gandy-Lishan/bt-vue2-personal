@@ -176,7 +176,8 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 .tabs .el-tabs__item#tab-second,
 .tabs .el-tabs__item#tab-forth,
 .tabs .el-tabs__item#tab-fifth,
-.tabs .el-tabs__item#tab-sixth{
+.tabs .el-tabs__item#tab-sixth,
+.tabs .el-tabs__item#tab-eight{
     display: none;
 }
 
