@@ -85,6 +85,7 @@ export default {
 		loadDefaultStudy() {
 			 
 			// 默认显示signal indicator 和 tech indicator,如果没有就不显示
+			if(this.other['_Signal'] == 'MA') this.other['_Signal'] = 'Moving Average'
 			for(var i in CIQ.technicalCategory){
 				let result = CIQ.technicalCategory[i]['studies'].find(item=>item.name == this.other['_Signal'])
 				if(result){
@@ -93,7 +94,6 @@ export default {
 				}
 			}
 			
-
 			let patterns = ['UpTrend Pattern', 'DownTrend Pattern']
 			let tradeStudies = ['Hammer','Shooting']
 			let noStudy = ['Idea', 'Trend' ,'Exhaustion']
