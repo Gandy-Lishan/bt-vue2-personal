@@ -151,7 +151,7 @@ export default {
   name: 'Chat',
   data() {
     return {
-      inputText: 'I want to create a backtest called simple model: Using the daily line data of the previous two decades of SPY for backtesting, using the Short Term Combined Model less than -10 as the approach criterion and the Short Term Combined Model Greater than 13.5 as an approach criterion.'
+      inputText: 'I want to create a backtest called simple model: Using the daily line data of the previous two decades of SPY for backtesting, using the Short Term Combined Model less than -10 as the approach criterion and the Short Term Combined Model Greater than 13.5 as an approach criterion. '
     };
   },
   methods: {
