@@ -104,7 +104,11 @@ router.beforeEach(async (to, from, next) => {
 						if(to.path == '/home/scannerai'){
 							await initiateCurrentDate()
 						}
-						next()
+						if(to.path == '/404'){
+							next('/home')
+						}else{
+							next()
+						}		
 					} else { throw Error('Status code error') }
 				})
 				.catch((error) => {
@@ -140,13 +144,15 @@ router.beforeEach(async (to, from, next) => {
 		// 这里是判断无cookie情况下进入登录界面，如果是从404
 		
 		if(to.path != '/404'){
-			console.log('from',from,to)
-			router.push({
+			console.log('to',to)
+			next({
 				path: '/404',
 				query: { mes: 401 } // 携带的参数
 			});
+		}else{
+			next()
 		}
-		next()
+		
 	}
 })
 
