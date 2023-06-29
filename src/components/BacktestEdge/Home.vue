@@ -218,8 +218,7 @@
 						</div>
 					</button>
 				</div>
-        <!-- todo: long xue 记得在这里解除注释 -->
-				<!-- <div>
+				<div>
 					<button class="sidebar" ref="chat" @click="switchMainTab('chat')">
 						<div class="chat-sidebar">
               <svg class="sidebar_button_icon" width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -234,7 +233,7 @@
 							<span>Hey, Sentimentrader</span>
 						</div>
 					</button>
-				</div> -->
+				</div>
 				<!-- <div>
 					<el-tooltip
 					class="item"
