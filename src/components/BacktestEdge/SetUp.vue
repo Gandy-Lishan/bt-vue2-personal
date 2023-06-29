@@ -817,7 +817,7 @@ export default {
         if (newVal.backtest_period == '21') {
           this.bd.start_date = ''
         }
-        if(newVal.backtest_period === null || newVal.backtest_period === undefined) {
+        if(newVal.backtest_period == null || newVal.backtest_period == undefined) {
           throw Error('不存在 backtest_period')
         }
         } catch (error) {
@@ -832,12 +832,12 @@ export default {
         	month = Number(endArr[1]) - Number(starArr[1])
         	day = Number(endArr[2]) - Number(starArr[2])
         	if (month == 0 && day == 0) {
-        		this.bd.backtest_period = year
+        		this.bd.backtest_period = year + ''
         	} else {
-        		this.bd.backtest_period = 22
+        		this.bd.backtest_period = 22 + ''
         	}
         } else {
-        	this.bd.backtest_period = 21
+        	this.bd.backtest_period = 21 + ''
         	this.bd.start_date = ''
         }
         }
