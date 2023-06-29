@@ -128,24 +128,33 @@ export default {
           console.log('result', newVal)
           const commission = Number(newVal.commission)
           this.temp.commission = commission.toFixed(2)
-          // let year
-          // let month
-          // let day
-          // if (newVal.start_date && newVal.start_date !== '1800-10-01') {
-          //   const starArr = newVal.start_date.toString().split('-')
-          //   const endArr = newVal.end_date.toString().split('-')
-          //   year = Number(endArr[0]) - Number(starArr[0])
-          //   month = Number(endArr[1]) - Number(starArr[1])
-          //   day = Number(endArr[2]) - Number(starArr[2])
-          //   if (month == 0 && day == 0) {
-          //     this.bd.backtest_period = `${year} Year`
-          //   } else {
-          //     this.bd.backtest_period = 'Custom...'
-          //   }
-          // } else {
-          //   this.bd.backtest_period = 'All History'
-          // }
-					this.backtestPeriod = this.historyOptions[newVal.backtest_period]
+					try {
+						this.backtestPeriod = this.historyOptions[newVal.backtest_period]
+						if(newVal.backtest_period === null || newVal.backtest_period === undefined) {
+							throw Error('不存在 backtest_period')
+						}
+					} catch (error) {
+						console.error(error)
+						let year
+						let month
+						let day
+						let backtest_period
+						if (newVal.start_date && newVal.start_date !== '1800-10-01') {
+							const starArr = newVal.start_date.toString().split('-')
+							const endArr = newVal.end_date.toString().split('-')
+							year = Number(endArr[0]) - Number(starArr[0])
+							month = Number(endArr[1]) - Number(starArr[1])
+							day = Number(endArr[2]) - Number(starArr[2])
+							if (month == 0 && day == 0) {
+								backtest_period = year + ''
+ 							} else {
+								backtest_period = 22 + ''
+							}
+						} else {
+							backtest_period = 21 + ''
+						}
+						this.backtestPeriod = this.historyOptions[backtest_period]
+					}
 					this.tradePrice = this.tradePriceOptions[newVal.trade_price]
         } else {
           this.temp.commission = ''
