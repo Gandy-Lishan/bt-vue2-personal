@@ -97,16 +97,14 @@ router.beforeEach(async (to, from, next) => {
 						store.commit('setUserRole', { 'is_admin': res.data.is_admin, 'role': res.data.userid })
 						if (getQueryVariable('userid')) window.location.href = location.origin // 去掉？后面的部分
 
-						// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
-						if(to.name == 'backtester' || to.name == 'Backtests'){
-							await initiateIndicatorList()
-						}
-						if(to.path == '/home/scannerai'){
-							await initiateCurrentDate()
-						}
 						if(to.path == '/404'){
 							next('/home')
 						}else{
+							// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
+							if(to.path == '/home/scannerai'){
+								await initiateCurrentDate()
+							}
+							await initiateIndicatorList()
 							next()
 						}		
 					} else { throw Error('Status code error') }

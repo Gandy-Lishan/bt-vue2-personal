@@ -98,11 +98,11 @@ export default {
 			let tradeStudies = ['Hammer','Shooting']
 			let noStudy = ['Idea', 'Trend' ,'Exhaustion']
 			if (patterns.indexOf(this.indicator) != -1){
-				CIQ.hideMarker()
+				
 				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{points:this.other.Point})
 				CIQ.stxx.setChartType("candle");
 			}else if(tradeStudies.indexOf(this.indicator) != -1){
-				CIQ.hideMarker()
+				
 				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{trades:this.other.EntryTradeDate})
 			}else if(noStudy.indexOf(this.indicator) != -1){
 				
