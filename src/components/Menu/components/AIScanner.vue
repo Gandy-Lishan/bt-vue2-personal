@@ -33,7 +33,8 @@ export default {
             id: 'ai-2', title: 'Modify AI Stock Scanner date'
           },
           { id: 'ai-3', title: 'Cash Alloc(%) for auto-adjusted stocks'},
-          { id: 'ai-4', title: "View symbol's backtest information"}
+          { id: 'ai-4', title: "View symbol's backtest information"},
+          { id: 'ai-5', title: 'Switching AI Algorithms: SwingAI and MidTermAI' },
       ],
       activeSection: 'ai-0',
       isToggle: false

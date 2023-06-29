@@ -1427,6 +1427,125 @@
 					fit="fill"
 					lazy
 				></el-image>
+				<h1 id="ai-5">Switching AI Algorithms: SwingAI and MidTermAI</h1>
+				<hr />
+				<h2 id="ai-5-0">Opening the AI Stock Scanner System</h2>
+				<p>
+					Make sure you have entered the AI ​​stock scanner system and the
+					corresponding function buttons are displayed on the interface.
+				</p>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai510"
+					:preview-src-list="pathai510List"
+					fit="fill"
+					lazy
+				></el-image>
+				<h2 id="ai-5-1">Switch to SwingAI</h2>
+				<p>
+					When you wish to switch to the SwingAI algorithm, just click the
+					button marked "SwingAI" on the interface. Once you click the button,
+					the system will switch to the SwingAI algorithm for stock analysis.
+				</p>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai511"
+					:preview-src-list="pathai511List"
+					fit="fill"
+					lazy
+				></el-image>
+				<h2 id="ai-5-2">Switch to MidTermAI</h2>
+				<p>
+					Likewise, when you wish to switch to the MidTermAI algorithm, just
+					click the button labeled "MidTermAI" on the interface. After clicking
+					the button, the system will switch to the MidTermAI algorithm for
+					stock analysis.
+				</p>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai512"
+					:preview-src-list="pathai512List"
+					fit="fill"
+					lazy
+				></el-image>
+				<h2 id="ai-5-3">When to Choose SwingAI or MidTermAI</h2>
+				<p>
+					When choosing to use the SwingAI or MidTermAI algorithms, here are
+					some recommendations to help you understand when to use each algorithm
+					and make decisions based on your investment goals and time horizon:
+				</p>
+				<p><strong>SwingAI Algorithm:</strong></p>
+				<ul>
+					<li>
+						Applicability: The SwingAI algorithm is suitable for short-term
+						investments or day traders. It focuses on short-term price
+						fluctuations and technical indicators to identify short-term trading
+						opportunities.
+					</li>
+					<li>
+						Advantages: SwingAI can capture short-term trends in stock prices,
+						helping to identify overbought and oversold signals, trend
+						reversals, and other factors relevant to short-term traders. It can
+						provide quick trading opportunities and entry points.
+					</li>
+					<li>
+						Limitations: SwingAI's analysis has a relatively short time horizon
+						and may not capture longer-term trends. It relies less on
+						fundamental indicators and macroeconomic factors, potentially
+						limiting comprehensive market insights.
+					</li>
+				</ul>
+				<p><strong>MidTermAI Algorithm:</strong></p>
+				<ul>
+					<li>
+						Applicability: The MidTermAI algorithm is suitable for medium to
+						long-term investors or traders. It focuses on predicting the
+						medium-term trend of stock prices, typically covering a longer time
+						horizon.
+					</li>
+					<li>
+						Advantages: MidTermAI can analyze longer-term price data,
+						fundamental indicators, and market sentiment to identify medium-term
+						trends in stocks. It provides more information and guidance for
+						long-term investment decisions. MidTermAI emphasizes overall stock
+						performance and long-term trends, aiding investors in making wiser
+						holding decisions.
+					</li>
+					<li>
+						Limitations: MidTermAI's forecasting time horizon is relatively
+						longer, which may result in weaker capturing of short-term
+						fluctuations and trading opportunities. It may not provide immediate
+						buy and sell points and may require additional validation and
+						confirmation during rapidly changing market conditions.
+					</li>
+				</ul>
+				<p>
+					<strong
+						>When deciding which algorithm to choose, users should consider the
+						following factors:</strong
+					>
+				</p>
+				<ul>
+					<li>
+						Investment Goals: If a user's goal is short-term trading and quick
+						profits, SwingAI may be more suitable. If a user is more focused on
+						long-term holding and investment, MidTermAI may be a better choice.
+					</li>
+					<li>
+						Time Horizon: Select an algorithm that aligns with the user's time
+						horizon and investment or trading strategy. SwingAI is suitable for
+						shorter time horizons, while MidTermAI is better suited for longer
+						time horizons.
+					</li>
+				</ul>
+				<p>
+					However, it is important to note that AI algorithms are not absolutely
+					accurate, and investment decisions still require comprehensive
+					consideration of other factors and a cautious evaluation of risks.
+				</p>
 			</section>
 		</div>
 		<RightMenu
@@ -1517,6 +1636,9 @@ import pathai41 from "../img/ai4.1.jpg";
 import pathai42 from "../img/ai4.2.jpg";
 import pathai43 from "../img/ai4.3.jpg";
 import pathai44 from "../img/ai4.4.jpg";
+import pathai510 from "../img/ai5.1.jpg";
+import pathai511 from "../img/ai5.2.jpg";
+import pathai512 from "../img/ai5.3.jpg";
 import RightMenu from "./RightMenu.vue";
 export default {
   props: {
@@ -1684,6 +1806,12 @@ export default {
       pathai43List: [pathai43],
       pathai44: pathai44,
       pathai44List: [pathai44],
+			pathai510: pathai510,
+			pathai510List: [pathai510],
+			pathai511: pathai511,
+			pathai511List: [pathai511],
+			pathai512: pathai512,
+			pathai512List: [pathai512]
     }
   },
   components: {
@@ -1827,5 +1955,12 @@ h3 {
 .image-border {
 	border: 1px solid #00323c;
 	border-radius: 5px;
+}
+li {
+	line-height: 1.7;
+	word-wrap: break-word;
+	font-weight: 400;
+	color: #00323c;
+	font-size: 1rem;
 }
 </style>
