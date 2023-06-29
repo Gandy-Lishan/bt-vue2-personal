@@ -63,8 +63,6 @@ export default {
 					this.calculateBacktestHistory(this.other['EntryTradeDate'], periodArray,this.direction)
 					this.loadDefaultStudy()
 					this.loadMarker()
-					CIQ.hideCover()
-					CIQ.nprogress.done()
 				}catch(e){
 					console.error(e)
 				}finally{
@@ -100,7 +98,7 @@ export default {
 			let tradeStudies = ['Hammer','Shooting']
 			let noStudy = ['Idea', 'Trend' ,'Exhaustion']
 			if (patterns.indexOf(this.indicator) != -1){
-				//CIQ.hideMarker()
+				CIQ.hideMarker()
 				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{points:this.other.Point})
 				CIQ.stxx.setChartType("candle");
 			}else if(tradeStudies.indexOf(this.indicator) != -1){

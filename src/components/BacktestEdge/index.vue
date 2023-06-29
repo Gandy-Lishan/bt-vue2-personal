@@ -66,13 +66,25 @@ export default {
 	components: {
 		Footer
 	},
+	watch: {
+		'$route'(to, from) {
+			// 在$route对象变化时执行逻辑
+			if(to.name == 'strategy'){
+				this.activeIndex = '2'
+			}else if(to.name == 'backtester' || to.name == 'Backtests'){
+				this.activeIndex = '1'
+			}else if(to.name == 'scannerai' || to.name == 'scannerai_chart'){
+				this.activeIndex = '3'
+			}
+		}
+	},
 	mounted() {
 		// el-menu-item strategy-link
 		let strategy = document.querySelector('.strategy-link')
 		strategy.style.display = 'none'
 		if(this.$route.name == 'strategy'){
 			this.activeIndex = '2'
-		}else if(this.$route.name == 'BackteEdge'){
+		}else if(this.$route.name == 'backtester' || this.$route.name == 'Backtests'){
 			this.activeIndex = '1'
 		}else if(this.$route.name == 'scannerai' || this.$route.name == 'scannerai_chart'){
 			this.activeIndex = '3'
