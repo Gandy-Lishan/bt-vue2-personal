@@ -712,7 +712,7 @@ export default {
       defaultTIMTableLabels: ['Entry Date', '1 Week [%]', '1 Month [%]'],
       TIMHistoryList: [],
       TIMResult_quotes: [],
-      editBacktestID: null
+      editBacktestID: null,
     }
   },
   created() {
@@ -792,6 +792,10 @@ export default {
           set.add(quotes[i].Period)
         }
         let values = Array.from(set)
+        values = this.transformDate(values)
+        values.sort((a, b) => a.value - b.value);
+        values = values.map(x=>x.label)
+        
         let columns = []
         for (let i = 0; i < values.length; i++) {
           columns.push({
@@ -977,6 +981,67 @@ export default {
         }
       }, 0)
     },
+    transformDate(arr){
+      // 创建一个空对象，用于存储处理后的结果
+      var processeArray  = [];
+
+      // 遍历原始数组
+      for (var i = 0; i < arr.length; i++) {
+        var currentItem = arr[i];
+
+        // 将当前项拆分成数字和单位
+        var parts = currentItem.split(" ");
+        var value = parseInt(parts[0]);
+        var unit = parts[1];
+
+        // 将不同天数的项进行合并，根据比率转换
+        if (unit === "Days") {
+          if (value % 5 === 0) {
+            value = value / 5;
+            unit = value==1?"Week":"Weeks";
+          }
+          if (value % 21 === 0) {
+            value = value / 21;
+            unit = value==1?"Month":"Months";
+          }
+        }
+
+        // 生成新的项
+        var newItem = value + " " + unit;
+
+        // 将新的项添加到 processedObj，使用项作为键名
+        let res
+        switch(unit){
+          case "Days" || "Day":
+            res = 1*value
+            break
+          case "Day":
+            res = 1*value
+            break
+          case "Weeks":
+            res = 5*value
+            break
+          case "Week":
+            res = 5*value
+            break
+          case "Months":
+            res = 21*value
+            break
+          case  "Month":
+            res = 21*value
+            break
+          default:
+        }
+        if(processeArray.map(x=>x.label).indexOf(newItem) == -1) processeArray.push({label:newItem,value:res})
+        
+        //processedObj[newItem] = res;
+      }
+      //console.log(processedObj)
+      // 提取处理后的结果数组
+     // var processedArray = Object.keys(processedObj);
+
+      return processeArray;
+    },
     transformData(data) {
       data = data.map(item => {
         if (item.period % 5 === 0 && item.timeframe === 'Day') {
@@ -1043,6 +1108,7 @@ export default {
           //鎷胯繘鍦轰环鏍煎拰鍓嶄竴澶╀綔姣旇緝
           let entryPrice = chartDataset[res].Open
           const transformData = this.transformData(periodArray)
+
           transformData.sort((a, b) => a.value - b.value);
           let obj = {}
           transformData.map((item) => {
