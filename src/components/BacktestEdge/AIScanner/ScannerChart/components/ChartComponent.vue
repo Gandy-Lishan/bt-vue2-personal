@@ -48,7 +48,7 @@ export default {
 	},
 	methods:{
 		onChartReady(){
-			CIQ.initiateChart(()=>{
+			CIQ.initiateChart([CIQ.symbol],()=>{
 				try{
 					this.hideComponents()
 					const periodArray = [
@@ -82,7 +82,7 @@ export default {
 			studies.style.visibility = 'hidden'
 			favBtnContainer.style.display = 'none'
 		},
-		loadDefaultStudy() {
+		async loadDefaultStudy() {
 			 
 			// 默认显示signal indicator 和 tech indicator,如果没有就不显示
 			if(this.other['_Signal'] == 'MA') this.other['_Signal'] = 'Moving Average'
@@ -105,8 +105,17 @@ export default {
 				
 				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{trades:this.other.EntryTradeDate})
 			}else if(noStudy.indexOf(this.indicator) != -1){
-				
-				// don't load any study
+				await CIQ.getIndicatorMatedata([CIQ.symbol])
+				// CIQ.stxx.loadChart(	{ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, function () {
+				// 	CIQ.hideCover()
+				// 	CIQ.nprogress.done()
+				// })
+				CIQ.Studies.addStudy(CIQ.stxx, 'ma',{
+					Type: 'simple',
+					Field: 'Close',
+					Period: 100,
+					//display: indicatorList[i],
+				},{ MA: '#FF0000' })
 			}else{
 				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,{display:this.indicator})
 			}

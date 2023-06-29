@@ -34,14 +34,14 @@
 						align="center"
 						prop="name"
 						show-overflow-tooltip
-						width="150px"
+						width="380px"
 					>
 					</el-table-column>
 					<el-table-column
 						label="Symbol"
 						align="center"
 						prop="symbol"
-						width="70px"
+						width="100px"
 					>
 					</el-table-column>
 					<!-- <el-table-column
@@ -109,7 +109,7 @@
 						label="Period"
 						show-overflow-tooltip
 						align="center"
-						width="90px"
+						width="100px"
 					>
 						<template slot-scope="scope">
 							<div class="showDate">

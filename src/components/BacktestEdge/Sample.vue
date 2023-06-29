@@ -35,7 +35,7 @@
 						align="center"
 						prop="name"
 						show-overflow-tooltip
-						width="150px"
+						width="250px"
 					>
 					</el-table-column>
 					<el-table-column
