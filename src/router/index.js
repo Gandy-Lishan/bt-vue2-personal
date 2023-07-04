@@ -101,10 +101,15 @@ router.beforeEach(async (to, from, next) => {
 							next('/home')
 						}else{
 							// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
-							if(to.path == '/home/scannerai'){
+							if(to.name == 'scannerai' || to.name == 'scannerai_chart'){
 								await initiateCurrentDate()
+								await initiateIndicatorList()
+								CIQ.isScannerAI = true
+							}else{
+								await initiateIndicatorList()
+								CIQ.isScannerAI = false
 							}
-							await initiateIndicatorList()
+							
 							next()
 						}		
 					} else { throw Error('Status code error') }

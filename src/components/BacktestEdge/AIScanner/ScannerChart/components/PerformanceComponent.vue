@@ -271,10 +271,10 @@ export default class PerformanceComponent extends Vue {
 		//data.timeInMarket = resultObj['TimeInMarket']
 		this.tableData.push(data)
 
-		const entryTradeDate = eval('(' + this.other['EntryTradeDate'] + ')')
-		const exitTradeDate = eval('(' + this.other['ExitTradeDate'] + ')')
-		const exitReason = eval('(' + this.other['ExitReason'] + ')')
-		const eachReturn = eval('(' + this.other['EachReturn'] + ')')
+		const entryTradeDate = this.other['EntryTradeDate']? eval('(' + this.other['EntryTradeDate'] + ')') : []
+		const exitTradeDate = this.other['ExitTradeDate']? eval('(' + this.other['ExitTradeDate'] + ')') : []
+		const exitReason = this.other['ExitReason']? eval('(' + this.other['ExitReason'] + ')') : []
+		const eachReturn = this.other['EachReturn']? eval('(' + this.other['EachReturn'] + ')') : []
 		for(let i = 0;i<entryTradeDate.length;i++){
 			this.historyData.push( {
 				entryDate: entryTradeDate?entryTradeDate[i]:'',
