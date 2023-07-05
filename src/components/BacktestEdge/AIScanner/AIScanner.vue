@@ -1,17 +1,6 @@
 <template>
 	<div class="gridContainer">
 		<el-card class="box-card">
-			<div class="categoryBtnGroup">
-				<template
-					v-for="(item, index) in categories"
-				>
-					<el-button 
-						:key="index" 
-						:class="{ active: activeIndex === index }" 
-						@click="loadData('US',index)">{{item}}
-					</el-button>
-				</template>
-			</div>
 			<template
 				v-for="(item, index) in tableDataList" 
 			>
@@ -37,21 +26,21 @@ export default {
     return {
       tableDataList: [],
 	  curDate: '',
-	  activeIndex: null,
-	  categories: ['SwingAI','MidTermAI']
+	  
+	  
     }
   },
   async created(){	
 	this.curDate = this.$store.state.curDate
 
 	//首先初始化数据
-	this.loadData('US',0)
+	this.loadData('US')
 },
   methods: {
-	async loadData(marketType,index){
-		this.activeIndex = index
+	async loadData(marketType){
+		//this.activeIndex = index
 		if(marketType=='US'){
-			this.getAIPick(this.curDate,this.categories[index])
+			this.getAIPick(this.curDate,'SwingAI')
 		}
 	},
 	async getAIPick(date,category){
@@ -82,6 +71,7 @@ export default {
 		AIPickObj['label'] = 'AI Picks at the end of today'
 		AIPickObj['title'] = 'AI Picks at the end of today'
 		AIPickObj['Date'] = date
+		AIPickObj['Category'] = category
 		AIPickObj['tableCol'] = [
 			'Symbol',
 			'Close',
@@ -92,18 +82,20 @@ export default {
 			'Stop Loss(%)',
 			'Profit Target(%)',
 			'Best Time In Market(Bars)',
-			'Cash Alloc(%)'
+			//'Cash Alloc(%)'
 		]
 
 		// 测试
-		AIPickObj['tableCol'].unshift("Select")
+		//AIPickObj['tableCol'].unshift("Select")
 		AIPickObj['content'] = AIPickContent
 		
 		this.tableDataList.push(AIPickObj)
 	},
-	selectDate(date){
-		this.getAIPick(date,this.categories[this.activeIndex])
+	selectDate(date,category){
+		// select category as well
+		this.getAIPick(date,category)
 	},
+
   }
 };
 </script>
@@ -129,19 +121,6 @@ h4 {
 	border: unset;
 }
 
-.categoryBtnGroup {
-	position: absolute;
-	left: 330px;
-    top: 209px;
-	button {
-		width: 180px;
-		&.active {
-		/* 高亮状态的样式 */
-			color: #409EFF;
-			border-color: #c6e2ff;
-			background-color: #ecf5ff;	
-		}
-	}
-}
+
 
 </style>
