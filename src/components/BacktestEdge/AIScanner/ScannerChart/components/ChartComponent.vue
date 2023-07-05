@@ -133,7 +133,7 @@ export default {
 			//this.$store.dispatch('app/store_backtestResult', []).then(() => {
 				let chartDataset = CIQ.stxx.chart.dataSet
 				//const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
-				dataSet = eval('(' + dataSet + ')')
+				dataSet = dataSet? eval('(' + dataSet + ')') : []
 				let backtestResult = []
 				for (var data in dataSet) {
 					var datatime = new Date(dataSet[data])
@@ -220,7 +220,7 @@ export default {
 			// 把字符串列表entryDates, exitDates格式化为markerSet的对象数组
 			const markerSet= []
 			const dataSource = CIQ.stxx.chart.dataSet
-            let entryTradeDateArr = eval('(' + this.other['EntryTradeDate'] + ')')
+            let entryTradeDateArr = this.other['EntryTradeDate'] ? eval('(' + this.other['EntryTradeDate'] + ')') : []
             if(entryTradeDateArr){
                 entryTradeDateArr.forEach((item,index)=>{
 					var datatime = new Date(item)
@@ -239,7 +239,7 @@ export default {
                     })
                 })
             }
-            let exitTradeDateArr = eval('(' + this.other['ExitTradeDate'] + ')')
+            let exitTradeDateArr = this.other['ExitTradeDate'] ? eval('(' + this.other['ExitTradeDate'] + ')') : []
             if(exitTradeDateArr){
                 exitTradeDateArr.forEach((item,index)=>{
 					var datatime = new Date(item)
