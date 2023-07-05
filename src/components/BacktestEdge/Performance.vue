@@ -821,7 +821,13 @@ export default {
           let id = row.id
           vm.activePerTag = 'first'
           try {
-            const res = await seeReport(id)
+            let res = null
+            try {
+              res = await seeReport(id)
+            } catch (error) {
+              console.error(error)
+              throw Error('report error')
+            }
             console.log('report res', res)
 
             if (res.status == 200) {
