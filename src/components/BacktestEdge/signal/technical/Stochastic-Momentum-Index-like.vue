@@ -146,9 +146,9 @@ delay_bars: [String, Number],
 				return callback(new Error('Please enter the correct format'))
 			}
 			const pattern =
-				/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+				/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/
 			if (!pattern.test(value) && value != 0 && value !== 'D') {
-				return callback(new Error('Enter up to two decimal places'))
+				return callback(new Error('Enter up to four decimal places'))
 			}
 			callback()
 		}
@@ -160,9 +160,9 @@ delay_bars: [String, Number],
 				return callback(new Error('Please enter the correct format'))
 			}
 			const pattern =
-				/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+				/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/
 			if (!pattern.test(value) && value != 0 && value !== 'D') {
-				return callback(new Error('Enter up to two decimal places'))
+				return callback(new Error('Enter up to four decimal places'))
 			}
 			callback()
 		}

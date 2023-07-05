@@ -85,9 +85,9 @@ export default {
         callback(new Error('Please enter the correct format'))
       } else {
         const pattern =
-          /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,2}|-?[1-9][0-9]*\.\d{1,2}))$/
+          /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/
         if (!pattern.test(value) && value != 0) {
-          callback(new Error('Enter up to two decimal places'))
+          callback(new Error('Enter up to four decimal places'))
         } else {
           callback()
         }
