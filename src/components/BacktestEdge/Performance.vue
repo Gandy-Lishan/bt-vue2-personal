@@ -1745,7 +1745,9 @@ export default {
         })
         this.defaultTIMTableLabels = table
         const data = this.calculateBacktestHistory(this.tradesData, uniqueData)
-        this.TIMHistoryList = data
+        this.$nextTick(() => {
+          this.TIMHistoryList = data
+        })
         this.calculateZScore(this.tradesData, uniqueData)
         //this.resetTable()
         const reqData = {
