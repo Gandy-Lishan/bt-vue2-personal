@@ -15,6 +15,17 @@
 				>
 				</el-date-picker>
 			</div>
+			<div class="categoryBtnGroup">
+				<template
+					v-for="(item, index) in categories"
+				>
+					<el-button 
+						:key="index" 
+						:class="{ active: activeCategory === item }" 
+						@click="selectCategory(item)">{{item}}
+					</el-button>
+				</template>
+			</div>
 		</div>
 		<el-table
 			ref="tableREF"
@@ -37,13 +48,6 @@
 						</el-form-item> -->
 						<el-form-item label="Signal">
 							<span>{{ props.row['Signal']}}</span>
-						</el-form-item>
-						<el-form-item label="Win Rate(%)">
-							<span>{{
-								btInfo.find(x=>x.id==props.row['id'])
-									?btInfo.find(x=>x.id==props.row['id'])['WinRate']
-									:''
-								}}</span>
 						</el-form-item>
 						<el-form-item label="AVERAGE WIN %">
 							<span>{{
@@ -185,6 +189,9 @@ export default {
 				selectedStopLosses: [],
 				selectedProfitTargets: [],
 				selectedWinRates: [],
+
+				categories: ['SwingAI','MidTermAI'],
+				activeCategory:this.data.Category,
 		}
 	},
 	watch: {
@@ -295,7 +302,11 @@ export default {
 			}
 		},
 		selectDate(){
-			this.$emit('selectDate', this.date)
+			this.$emit('selectDate', this.date,this.activeCategory)
+		},
+		selectCategory(cate){
+			this.activeCategory = cate
+			this.$emit('selectDate', this.date,this.activeCategory)
 		},
 		scrollListner(){
 			var outDiv = document.getElementsByClassName('el-table__body-wrapper');  
@@ -386,6 +397,21 @@ h4 {
 				height: 4rem;
 				border-radius: 8px;
 			}
+		}
+	}
+}
+
+.categoryBtnGroup {
+	position: absolute;
+	left: 330px;
+    top: 209px;
+	button {
+		width: 180px;
+		&.active {
+		/* 高亮状态的样式 */
+			color: #409EFF;
+			border-color: #c6e2ff;
+			background-color: #ecf5ff;	
 		}
 	}
 }

@@ -841,7 +841,7 @@ export default {
         	this.bd.start_date = ''
         }
         }
-        console.log('处理完成之后的编辑数据', this.bd)
+        console.log('处理完成之后的编辑数据', this.bd,CIQ.stxx.chart)
       }
     },
     getDirection(val) {

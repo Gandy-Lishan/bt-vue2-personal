@@ -220,7 +220,7 @@
 				</div>
         <!-- todo: long xue 记得在这里解除注释 -->
 
-				<div>
+				<!-- <div>
 					<button class="sidebar" ref="chat" @click="switchMainTab('chat')">
 						<div class="chat-sidebar">
               <svg class="sidebar_button_icon" width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -235,7 +235,7 @@
 							<span>Hey, Sentimentrader</span>
 						</div>
 					</button>
-				</div>
+				</div> -->
 				<!-- <div>
 					<el-tooltip
 					class="item"
@@ -425,7 +425,6 @@ export default {
     const searchParams = new URLSearchParams(window.location.search)
     const backtestID = searchParams.get('backtestID')
 
-    console.log('backtestID', backtestID)
     if (!backtestID) return
     const vm = this
     try {
@@ -542,7 +541,7 @@ export default {
 
         this.$refs.setup.classList.add('activated')
         this.$refs.list.classList.remove('activated')
-        this.$refs.chat.classList.remove('activated')
+        //this.$refs.chat.classList.remove('activated')
         this.animationUp(650)
       } else if (this.mainTabState == 1) {
         this.$refs.tabs.$children[0].$refs.tabs[0].style.display = 'none'
@@ -555,7 +554,7 @@ export default {
         this.activeName = 'second'
 
         this.$refs.setup.classList.remove('activated')
-        this.$refs.chat.classList.remove('activated')
+        //this.$refs.chat.classList.remove('activated')
         this.$refs.list.classList.add('activated')
 
         this.animationUp(650)
@@ -568,7 +567,7 @@ export default {
         this.$refs.tabs.$children[0].$refs.tabs[5].style.display = 'none'
         this.$refs.tabs.$children[0].$refs.tabs[6].style.display = 'unset'
         this.activeName = 'eight'
-        this.$refs.chat.classList.add('activated')
+       // this.$refs.chat.classList.add('activated')
         this.$refs.setup.classList.remove('activated')
         this.$refs.list.classList.remove('activated')
       }
