@@ -74,63 +74,27 @@ export default {
           id: 1,
           title: 'Add Symbol OHLCV function',
           date: '2023-06-01',
-          sectionId: '1'
+          sectionId: '1-3'
         },
         {
           id: 2,
           title: 'Add user upload custom indicator function',
           date: '2023-06-01',
-          sectionId: '1'
-        },
+          sectionId: '1-6'
+        }
       ],
       allNews: [
         {
           id: 1,
           title: 'Add Symbol OHLCV function',
           date: '2023-06-01',
-          sectionId: '1'
+          sectionId: '1-3'
         },
         {
           id: 2,
           title: 'Add user upload custom indicator function',
           date: '2023-06-01',
-          sectionId: '1'
-        },
-        {
-          id: 3,
-          title: 'AAAAAAALLLL',
-          date: '2023-06-01',
-          sectionId: '1'
-        },
-        {
-          id: 4,
-          title: 'AAAAAAALLLL',
-          date: '2023-06-01',
-          sectionId: '1'
-        },
-        {
-          id: 5,
-          title: 'AAAAAAALLLL',
-          date: '2023-06-01',
-          sectionId: '1'
-        },
-        {
-          id: 6,
-          title: 'AAAAAAALLLL',
-          date: '2023-06-01',
-          sectionId: '1'
-        },
-        {
-          id: 7,
-          title: 'AAAAAAALLLL',
-          date: '2023-06-01',
-          sectionId: '1'
-        },
-        {
-          id: 8,
-          title: 'AAAAAAALLLL',
-          date: '2023-06-01',
-          sectionId: '1'
+          sectionId: '1-6'
         }
       ],
     }
@@ -141,6 +105,7 @@ export default {
     },
     getNewsDetail(sectionId) {
       console.log('sectionId', sectionId)
+      this.$router.push('/doc/guide/' + sectionId)
     }
   }
 }
