@@ -611,6 +611,7 @@ export default {
       tradePriceOptions: [
         { value: 0, label: 'Next Open' },
         { value: 1, label: 'Next Close' },
+        { value: 2, label: 'Current Close' },
       ],
       userTagOptions: [
         { value: 'client', label: 'Client' },
