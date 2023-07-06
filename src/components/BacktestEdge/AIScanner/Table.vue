@@ -2,24 +2,54 @@
 	<div>
 		<!-- <link rel="stylesheet" href="../../../../assets/font/iconfont.css"></link> -->
 		<div class="table-header">
-			<div class="tableLabel">
-				<h4>AI Picks at the end of today</h4>
-				<el-date-picker
-					v-model="date"
-					class="aiscanner-date"
-					type="date"
-					placeholder="Select Date"
-					:picker-options="pickerOptions"
-					@change="selectDate"
-					value-format="yyyy-MM-dd"
-				>
-				</el-date-picker>
+			<div class='header-part1'>
+				<div class="tableLabel">
+					<h4>AI Picks at the end of today</h4>
+					<el-date-picker
+						v-model="date"
+						class="aiscanner-date"
+						type="date"
+						placeholder="Select Date"
+						:picker-options="pickerOptions"
+						@change="selectDate"
+						value-format="yyyy-MM-dd"
+					>
+					</el-date-picker>
+				</div>
+				<div class="categoryBtnGroup">
+					<template
+						v-for="(item, index) in categories"
+					>
+						<el-button 
+							:key="index" 
+							:class="{ active: activeCategory === item }" 
+							@click="selectCategory(item)">{{item}}
+						</el-button>
+					</template>
+				</div>
 			</div>
+
+			<div class="header-part2">
+				<!-- <template
+					v-for="(item, index) in signalList"
+				>
+					<el-button 
+						:key="index" 
+						:class="{ active: activeSignal === item }" 
+						@click="selectSignal(item)">{{item}}
+					</el-button>
+				</template> -->
+				<el-checkbox-group v-model="activeSignal" @change="selectSignal">
+					<el-checkbox-button v-for="item in signalList" :label="item" :key="item" >{{item}}</el-checkbox-button>
+				</el-checkbox-group>
+			</div>
+
+
 		</div>
 		<el-table
 			ref="tableREF"
 			class="aiscanner-table"
-			:data="data.content"
+			:data="tableData.content"
 			:row-class-name="tableRowClassName"
 			empty-text="No recommendation for today"
 			@sort-change="changeTableSort"
@@ -37,13 +67,6 @@
 						</el-form-item> -->
 						<el-form-item label="Signal">
 							<span>{{ props.row['Signal']}}</span>
-						</el-form-item>
-						<el-form-item label="Win Rate(%)">
-							<span>{{
-								btInfo.find(x=>x.id==props.row['id'])
-									?btInfo.find(x=>x.id==props.row['id'])['WinRate']
-									:''
-								}}</span>
 						</el-form-item>
 						<el-form-item label="AVERAGE WIN %">
 							<span>{{
@@ -185,6 +208,14 @@ export default {
 				selectedStopLosses: [],
 				selectedProfitTargets: [],
 				selectedWinRates: [],
+
+				categories: ['SwingAI','MidTermAI'],
+				activeCategory:this.data.Category,
+
+				signalList: [],
+				activeSignal: [],
+
+				tableData: []
 		}
 	},
 	watch: {
@@ -200,7 +231,14 @@ export default {
 				this.calculateAlloc()
 			},
 			deep: true
-		}
+		},
+		data: {
+			handler(newValue, oldValue){
+				this.tableData = JSON.parse(JSON.stringify(this.data))
+				this.signalList = [...new Set(this.data.content.map(item=>item.Signal))]
+			},
+			deep: true
+		},
 	},
 	created() {
 	},
@@ -210,6 +248,17 @@ export default {
 		})	
 	},
 	methods: {
+		selectSignal(signal){	
+			if(signal.length>1){
+				signal.shift()
+			}
+			console.log(signal)
+			if(signal.length!=0){
+				this.tableData.content = this.data.content.filter(item=>item.Signal == signal)
+			}else{
+				this.tableData.content = this.data.content
+			}	
+		},
 		selectSymbol(id, Symbol, subscribe, pt,sl,wr,rowIndex) {
 			
 			/* 
@@ -267,13 +316,13 @@ export default {
 
 			if(['Stop Loss(%)','Best Time In Market(Bars)','Profit Target(%)'].indexOf(colName) !== -1){
 				if(sortingOrder == 'descending'){
-					this.data.content.sort((a,b) => {
+					this.tableData.content.sort((a,b) => {
 						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
 						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
 						return _b - _a
 					})
 				}else if(sortingOrder == 'ascending'){
-					this.data.content.sort((a,b) => {
+					this.tableData.content.sort((a,b) => {
 						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
 						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
 						return _a - _b
@@ -283,11 +332,11 @@ export default {
 			}
 			if(['Win Rate(%)'].indexOf(colName) !== -1){
 				if(sortingOrder == 'descending'){
-					this.data.content.sort((a,b) => {
+					this.tableData.content.sort((a,b) => {
 						return b[colName] - a[colName]
 					})
 				}else if(sortingOrder == 'ascending'){
-					this.data.content.sort((a,b) => {
+					this.tableData.content.sort((a,b) => {
 						return a[colName] - b[colName]
 					})
 				}else{
@@ -295,7 +344,11 @@ export default {
 			}
 		},
 		selectDate(){
-			this.$emit('selectDate', this.date)
+			this.$emit('selectDate', this.date,this.activeCategory)
+		},
+		selectCategory(cate){
+			this.activeCategory = cate
+			this.$emit('selectDate', this.date,this.activeCategory)
 		},
 		scrollListner(){
 			var outDiv = document.getElementsByClassName('el-table__body-wrapper');  
@@ -360,6 +413,26 @@ h4 {
 }
 .table-header {
 	margin-bottom: 10px;
+	
+	.header-part1{
+		display: flex;
+		align-items: end;
+		.categoryBtnGroup {
+			margin-left: 50px;
+			button {
+				width: 180px;
+				&.active {
+				/* 高亮状态的样式 */
+					color: #409EFF;
+					border-color: #c6e2ff;
+					background-color: #ecf5ff;	
+				}
+			}
+		}
+	}
+	.header-part2{
+		margin-top: 20px;
+	}
 }
 .admin-link {
 	position: absolute;
@@ -389,4 +462,6 @@ h4 {
 		}
 	}
 }
+
+
 </style>
