@@ -527,14 +527,14 @@ export default {
               vm.viewBacktestResults(row)
             }else{
               // 没交易不算回测失败，不列为fls的失败情况
-              // // FindLastSignal过程中代表一个项目的运行结束
-              // CIQ.isFindLastSignalRuning = false
-              // this.$store.state.last_signal_array.map(item=>{
-              //   if(item.name == row.name){
-              //     item.state = 2
-              //   }
-              // })
-              // console.log('findLastSignalRuning done, no trade',row,this.$store.state.last_signal_array)
+              // FindLastSignal过程中代表一个项目的运行结束
+              CIQ.isFindLastSignalRuning = false
+              this.$store.state.last_signal_array.map(item=>{
+                if(item.name == row.name){
+                  item.state = 1
+                }
+              })
+              console.log('findLastSignalRuning done, no trade',row,this.$store.state.last_signal_array)
             }
             // vm.$notify({
             // 	title: 'No trades',
@@ -745,7 +745,7 @@ export default {
         this.$notify({
           title: 'No trades',
           message: 'No trades, please change parameter.',
-          type: 'warning'
+          type: 'warning',
         })
       }
     }, 500),

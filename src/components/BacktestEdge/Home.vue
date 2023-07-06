@@ -317,14 +317,15 @@
           <span>Finding the last signal</span> 
           <progress-bar 
             class="progress-bar"
-            bar-color="#dc720f" 
+            bar-color="linear-gradient(to right,#A0E3EC, #66ACE5)" 
             :val="progressBarVal" 
             :text="progressBarVal + '%'"
             :title="progressBarVal + '%'"
             bar-border-radius="20"
-            size="large"
+            size="huge"
           ></progress-bar>
-          <el-button @click="refreshPage">Cancel</el-button>
+          <p>{{numOfProcessedBacktests}} out of {{getLastSignalArray.length}} tasks have been completed</p>
+          <el-button @click="refreshPageTemp">Cancel</el-button>
         </div>    
         <div class="maskContent-sucess" v-if="
           progressBarVal == 100 &&
@@ -408,7 +409,8 @@ export default {
 
       // find the last signal
       progressBarVal: 0,
-      numOfFailedBacktests: 0
+      numOfFailedBacktests: 0,
+      numOfProcessedBacktests:0,
     }
   },
   components: {
@@ -521,7 +523,8 @@ export default {
             progressNum ++
           }
         })
-        this.progressBarVal = progressNum/arrayLenth*100
+        this.numOfProcessedBacktests = progressNum
+        this.progressBarVal = Math.ceil(progressNum/arrayLenth*100)
 
         // 统计fls中失败的回测数量
         let count = 0
@@ -580,6 +583,10 @@ export default {
     this.progressBarVal = 0
   },
   methods: {
+    // 暂定cancel一个回测的解决方案
+    refreshPageTemp(){
+      this.$router.go(0)
+    },
     viewSignal: function() {
       this.switchMainTab('list')
       this.goToFavoritesForm()
@@ -2025,7 +2032,7 @@ button.createNew,
     justify-content: center;
     background-color: #8b8a8a;
     position: fixed !important;
-    z-index: 9999;
+    z-index: 9998;
     margin: 0;
     top: 0;
     right: 0;
@@ -2052,6 +2059,12 @@ button.createNew,
         font-size: 1.1rem;
         font-weight: 500;
       }
+      p {
+        position: relative;
+        right: 73px;
+        font-size: 14px;
+        bottom: 27px;
+      }
       .el-button{
         background: #EBF7FF;
         color: #5C9CD1;
@@ -2059,6 +2072,7 @@ button.createNew,
       }
       .progress-bar{
         width: 60%;
+        margin-top: 30px;
       }
     }
     .maskContent-sucess{
@@ -2082,6 +2096,7 @@ button.createNew,
         background: #EBF7FF;
         color: #5C9CD1;
         width: 200px;
+        margin-top: 92px;
       }
       .progress-bar{
         width: 60%;
@@ -2104,6 +2119,12 @@ button.createNew,
         font-size: 1.1rem;
         font-weight: 500;
       }
+      .el-button{
+        background: #EBF7FF;
+        color: #5C9CD1;
+        width: 200px;
+        margin-top: 92px;
+      }
       ul li{
         display: flex;
         align-items: center;
@@ -2112,10 +2133,10 @@ button.createNew,
           margin-right: 5px; /* 图标与文字之间的间距 */
         }
       }
-
       .progress-bar{
         width: 60%;
       }
     }
+
 }
 </style>

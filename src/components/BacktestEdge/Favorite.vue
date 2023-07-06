@@ -125,6 +125,29 @@
 						</template>
 					</el-table-column>
 					<el-table-column
+						label="Last Signal Date"
+						show-overflow-tooltip
+						align="center"
+						width="150px"
+					>
+						<template slot-scope="scope">
+							<div class="showDate">
+								<el-button
+									size="mini"
+									type="info"
+									plain
+									>{{ scope.row.last_entry_signal_date }}</el-button
+								>
+								<el-button
+									size="mini"
+									type="info"
+									plain
+									>{{ scope.row.last_exit_signal_date }}</el-button
+								>
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column
 						align="center"
 						show-overflow-tooltip
 						label="Total Trades"
@@ -823,6 +846,7 @@ export default {
                   //console.log('轮询等待上一个回测结束.........',CIQ.isFindLastSignalRuning,backtest)
                   var backtest_info = this.processingBacktest(this.backtest_array)
                   if (backtest_info == false){
+                    CIQ.isFindLastSignalRuning = false
                     console.log('处理任务结束',this.$store.state.last_signal_array)
                     //this.removeFLSMASK()
                     return // 处理任务结束

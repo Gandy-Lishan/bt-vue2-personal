@@ -342,6 +342,13 @@
 							align="center"
 						>
 						</el-table-column>
+            <el-table-column
+							prop="ExitReason"
+							label="Exit Reason"
+							width="150px"
+							align="center"
+						>
+						</el-table-column>
 
 						<el-table-column
 							prop="TradeReturn"
@@ -843,6 +850,7 @@ export default {
 
               // -------------------------------------  start ----------------
               const tradeReturn = initalData['Each Return']
+              const exitReason = initalData['Exit Reason']
               data.uuid = initalData['UUID']
               data.symbol = initalData['Symbol']
               data.frequency = initalData['Frequency']
@@ -906,6 +914,10 @@ export default {
                 for (let i = 0; i < initalData['Trades'].length; i++) {
                   initalData['Trades'][i].TradeReturn =
                     tradeReturn[initalData['Trades'][i].trade_number]
+
+                  initalData['Trades'][i].ExitReason =
+                    exitReason[initalData['Trades'][i].trade_number]
+
                   if (i % 2 !== 0) {
                     initalData['Trades'][i - 1].Return =
                       initalData['Trades'][i].Return
@@ -1632,6 +1644,7 @@ export default {
         obj['Action'] = item.TradeStatus
         obj['Indicator'] = item.Indicator.join(',')
         obj['Trade Price'] = item.TradePrice
+        obj['Exit Reason'] = item.ExitReason
         obj['Trade Return %'] = `${item.TradeReturn}%`
         obj['Total Return %'] = `${(item.Return * 100).toFixed(2)}%`
         tradeData.push(obj)
