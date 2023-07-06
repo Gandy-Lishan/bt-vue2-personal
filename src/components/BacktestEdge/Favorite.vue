@@ -5,7 +5,7 @@
 
 
 			<div class="favoriteForm_container">
-        <el-button @click="lastSignalDate">find the last signal</el-button>
+        <el-button @click="lastSignalDate" class='fls-btn'>find last signal</el-button>
         <div class="searchBox">
                   <el-input
 					class="search"
@@ -897,7 +897,9 @@ export default {
 	}
 }
 
-
+.fls-btn{
+  float: right;
+}
 
 
 </style>

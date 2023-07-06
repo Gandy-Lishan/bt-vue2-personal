@@ -111,7 +111,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .el-card__header {
 	background-color: #f7f9fc;
 }
