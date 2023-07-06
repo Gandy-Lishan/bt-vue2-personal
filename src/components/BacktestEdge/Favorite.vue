@@ -2,6 +2,8 @@
 <template>
 	<el-row>
 		<el-col :span="24">
+
+
 			<div class="favoriteForm_container">
         <el-button @click="lastSignalDate">find the last signal</el-button>
         <div class="searchBox">
@@ -320,11 +322,18 @@ export default {
       },
       searchItem: '',
       currentSort: {}, // 当前的排序信息
+
+      backtest_array: [],
+
+      value:70
     }
   },
   directives: {
     copy,
     permission
+  },
+  mounted(){
+    //CIQ.addFLSCover()
   },
   methods: {
     async getFavoriteList(orderby) {
@@ -763,22 +772,20 @@ export default {
             if (backtest_arr.length <= 0) return false; 
 
             var backtest_info = backtest_arr.pop()
-
-
             // 修改开始时间以及结束时间为最新时间,结合backtest_period,以最新一天开始向前倒推 应该有现成代码可以使用
-            period = backtest_info['backtest_period']
-            if (period === undefined || period ==''){
-                // 你看看怎么设置个默认值
-                backtest_info["end_data"] = "2023-07-05"
-                backtest_info["start_data"] = "2022-07-05"
-            }else if (period === "21"){
-                // 记得根据实际时间调整
-                backtest_info["end_data"] = "2023-07-05"
-            }else{
-            // 值在二十以内的处理方案
-            backtest_info["end_data"] = "2023-07-05"
-            backtest_info["end_data"] = "2023-07-05"
-            }
+            // period = backtest_info['backtest_period']
+            // if (period === undefined || period ==''){
+            //     // 你看看怎么设置个默认值
+                // backtest_info["end_date"] = "2023-07-05"
+                // backtest_info["start_date"] = "2022-07-05"
+            // }else if (period === "21"){
+            //     // 记得根据实际时间调整
+            //     backtest_info["end_data"] = "2023-07-05"
+            // }else{
+            // // 值在二十以内的处理方案
+            // backtest_info["end_data"] = "2023-07-05"
+            // backtest_info["end_data"] = "2023-07-05"
+            // }
             // 发送请求要携带old_uuid记得看一下rerun处理吧
             
         
@@ -788,54 +795,48 @@ export default {
 
 
     lastSignalDate(){
-        function checkBacktestStatus(uuid) { 
-            var status_url = "/dev/report/"
-            setInterval(() =>{
-            
-                axios.get(status_url+uuid)
-                .then((response) =>{
-                    if (response.data.data.status == 2){
-                        clearInterval(interval)
-                        // 是否添加一个成功列表
-                    }
+        this.showFLSMASK()
+        CIQ.isFindLastSignalRuning = true
 
-                })
-                .catch(error =>{
-                    // TODO;
-                    
-                });
-            },2000) // 2秒查询一次
+        this.backtest_array = JSON.parse(JSON.stringify(this.backtestList))
+        // 給列表每一项设定识别码，内容和回测状态，0为未跑完，1为成功，2为失败
+        this.$store.commit('SET_LASTSIGNAL_ARRAY',this.backtest_array.map(item=>{return {name:item.name,content:item,state:0}}))
+
+        var backtest_info = this.processingBacktest(this.backtest_array)
+        if (backtest_info == false){
+          console.log('处理任务结束',this.$store.state.last_signal_array)
+          return // 处理任务结束
         }
-
-        function postRunbacktest(backtest){
-            var url= "/dev/runbt"
-
-            axios.post(url,backtest).then(response =>{
-                if (response.status!=201){
-                    error_array.push(backtest_info)
-                }
-                else{
-                    // 递归进行处理
-                    checkBacktestStatus(backtest_info["uuid"])
-                    var backtest_info = processingBacktest(backtest_array)
-                    if (backtest_info == false) return false
-                    postRunbacktest(backtest_info)
-                }
-            })
-            .catch(error => {
-                // 说明连接服务器有问题,重新测试或者结束运行
-            })
-        }
-
-        var backtest_array = this.backtestList
-        var backtest_info = processingBacktest(backtest_array)
-        if (backtest_info == false) return // 处理任务结束
 
         var error_array = new Array();
+        this.postRunbacktest(backtest_info)
+    },
+    postRunbacktest(backtest){
+        //console.log('backtest_info* ******',backtest,CIQ.isFindLastSignalRuning)
+        this.rerunBacktest(backtest)
 
-        postRunbacktest(backtest_info)
-        
-    }
+        // 轮询可用于等待上一个回测结束，也可定时刷新进度条进度
+        let interval = setInterval(() =>{
+                if (CIQ.isFindLastSignalRuning == false){
+                  clearInterval(interval)
+                  CIQ.isFindLastSignalRuning = true
+                  //console.log('轮询等待上一个回测结束.........',CIQ.isFindLastSignalRuning,backtest)
+                  var backtest_info = this.processingBacktest(this.backtest_array)
+                  if (backtest_info == false){
+                    console.log('处理任务结束',this.$store.state.last_signal_array)
+                    //this.removeFLSMASK()
+                    return // 处理任务结束
+                  }
+                  this.postRunbacktest(backtest_info)
+                  
+                  // 是否添加一个成功列表
+                }
+        },1000) // 2秒查询一次
+    },
+    showFLSMASK(){
+      const myFLSbg = document.querySelector('#myFLSbg')
+      myFLSbg.classList.add('activated')
+    },
   }
 
 }
@@ -895,4 +896,8 @@ export default {
 		color: #99a9bf;
 	}
 }
+
+
+
+
 </style>

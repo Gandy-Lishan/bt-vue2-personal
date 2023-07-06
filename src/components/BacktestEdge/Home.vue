@@ -311,12 +311,47 @@
 					</svg>
 				</button>
 			</el-tooltip>
-			<!-- <el-tooltip class="createNew_hint" effect="dark" placement="top">
-              <span slot="content"
-                >Clear current chart & Backtest Setup Form and create a new backtest.
-              </span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip> -->
+      <div id="myFLSbg">
+        <div class="maskContent-loading" v-if="progressBarVal < 100">
+          <img src="@/assets/fls.png"/>
+          <span>Finding the last signal</span> 
+          <progress-bar 
+            class="progress-bar"
+            bar-color="#dc720f" 
+            :val="progressBarVal" 
+            :text="progressBarVal + '%'"
+            :title="progressBarVal + '%'"
+            bar-border-radius="20"
+            size="large"
+          ></progress-bar>
+          <el-button>Cancel</el-button>
+        </div>    
+        <div class="maskContent-sucess" v-if="
+          progressBarVal == 100 &&
+          getLastSignalArray.findIndex(x=>x.state==2) == -1
+        ">
+          <img src="@/assets/allclear.png"/>
+          <span>Find Sucessfully</span> 
+          <p>All of the tasks have been completed</p>
+          <el-button @click="viewSignal">View Signal</el-button>
+        </div>
+        <div class="maskContent-failed" v-if="
+          progressBarVal == 100 &&
+          getLastSignalArray.findIndex(x=>x.state==2) != -1
+        ">
+          <img src="@/assets/errorocuur.png"/>
+          <span>Find Error</span> 
+          <p>Please modify your backtest and try it again</p>
+          <ul>
+            Your signals have the following error:
+            <li><img src="@/assets/erroritem.png"/><span>{{numOfFailedBacktests}} errors were found</span></li>
+          </ul>
+          <div class='maskContent-failed-btn-group'>
+            <el-button>Cancel</el-button>
+            <el-button @click="viewSignal">Return for modification</el-button>
+          </div>
+        </div>
+      </div>
 		</main>
 	</div>
 </template>
@@ -335,6 +370,9 @@ import history from '@/components/BacktestEdge/History.vue'
 import favorite from '@/components/BacktestEdge/Favorite.vue'
 import sample from '@/components/BacktestEdge/Sample.vue'
 import Chat from "@/components/BacktestEdge/Chat.vue";
+import { mapGetters } from 'vuex'
+import ProgressBar from 'vue-simple-progress'
+
 import {
   runBacktest,
   seeParams,
@@ -369,7 +407,11 @@ export default {
         { label: 'Exit with custom TIM frame', value: 'exit_with_custom_TIM_frame' }
       ],
       resultEditData: {},
-      mainTabState: 0
+      mainTabState: 0,
+
+      // find the last signal
+      progressBarVal: 0,
+      numOfFailedBacktests: 0
     }
   },
   components: {
@@ -382,7 +424,8 @@ export default {
     history,
     favorite,
     sample,
-    Chat
+    Chat,
+    ProgressBar,
   },
   async mounted() {
     let toTop = document.getElementsByClassName('toTop')[0]
@@ -464,7 +507,37 @@ export default {
       })
     }
   },
+  computed: {
+    ...mapGetters(['getLastSignalArray']),
+    handleLastSignalArrayChange() {
+      return this.getLastSignalArray
+    },
+  },
   watch: {
+    handleLastSignalArrayChange: {
+      handler(newVal) {
+        
+        let arrayLenth = newVal.length
+        let progressNum = 0
+        newVal.map(item=>{ 
+          if(item.state!=0){
+            progressNum ++
+          }
+        })
+        this.progressBarVal = progressNum/arrayLenth*100
+
+        // 统计fls中失败的回测数量
+        let count = 0
+        newVal.map(x=>{
+          if(x.state==2){
+            count++
+          }
+        })
+        this.numOfFailedBacktests = count
+      },
+      immediate: true,
+      deep: true
+    },
     scroll: {
       handler(val) {
         try {
@@ -506,7 +579,16 @@ export default {
       deep: true
     }
   },
+  created() {
+    this.progressBarVal = 0
+  },
   methods: {
+    viewSignal: function() {
+      this.switchMainTab('list')
+      this.goToFavoritesForm()
+      const myFLSbg = document.querySelector('#myFLSbg')
+      myFLSbg.classList.remove('activated')
+    },
     animationUp: function (ph) {
       window.scrollTo({
         top: ph,
@@ -897,6 +979,15 @@ export default {
                   })
                   CIQ.hideCover()
                   CIQ.nprogress.done()
+
+                  // FindLastSignal过程中代表一个项目的运行结束
+                  CIQ.isFindLastSignalRuning = false
+                  this.$store.state.last_signal_array.map(item=>{
+                    if(item.name == backtestData.name){
+                      item.state = 1
+                    }
+                  })
+                  console.log('FindLastSignalRuning done, The current entry are the same',backtestData,this.$store.state.last_signal_array)
                   return
                 }
               }
@@ -925,6 +1016,15 @@ export default {
                   })
                   CIQ.hideCover()
                   CIQ.nprogress.done()
+
+                  // FindLastSignal过程中代表一个项目的运行结束
+                  CIQ.isFindLastSignalRuning = false
+                  this.$store.state.last_signal_array.map(item=>{
+                    if(item.name == backtestData.name){
+                      item.state = 1
+                    }
+                  })
+                  console.log('FindLastSignalRuning done, The current exit are the same',backtestData,this.$store.state.last_signal_array)
                   return
                 }
               }
@@ -1239,14 +1339,14 @@ export default {
                       file_data: backtestParams
                     })
                     var data = await uploadS3(S3DataStr)
-
                     try {
                       let res = await runBacktest(backtestDataStr)
                       if (res.status === 201) {
+                        
                         CIQ.isBacktestRun = true
+                        
                         //After saving successfully, clear the backtestinfo back to the original state
                         vm.$store.commit('initialBacktestInfo')
-
                         vm.goToHistoryForm()
                         vm.$refs.historyChild.refreshHistory(res.data.id)
                         CIQ.hideMarker()
@@ -1270,6 +1370,15 @@ export default {
                         CIQ.hideMarker()
                         CIQ.isMarkerShown = false
                         vm.$refs.setUpChild.clearOldBacktestName()
+
+                        // FindLastSignal过程中代表一个项目的运行结束
+                        CIQ.isFindLastSignalRuning = false
+                        this.$store.state.last_signal_array.map(item=>{
+                          if(item.name == backtestData.name){
+                            item.state = 1
+                          }
+                        })
+                        console.log('FindLastSignalRuning done, runBacktest status !== 201',backtestData,this.$store.state.last_signal_array)
                       }
                     } catch (error) {
                       console.log('lishan error', error)
@@ -1280,25 +1389,15 @@ export default {
                       CIQ.hideCover()
                       CIQ.nprogress.done()
 
-                      // if (error?.response?.status === 403) {
-                      //   // vm.$message({
-                      //   //   message:
-                      //   //     'This backtest is already in your history list',
-                      //   //   type: 'error'
-                      //   // })
-                      //   vm.$message({
-                      //     message:
-                      //       'The internal server is busy, please try again later ',
-                      //     type: 'error'
-                      //   })
-                      // } else {
-                      //   console.log(error)
-                      //   vm.$message({
-                      //     message:
-                      //       'The internal server is busy, please try again later ',
-                      //     type: 'error'
-                      //   })
-                      // }
+                      // FindLastSignal过程中代表一个项目的运行结束
+                      CIQ.isFindLastSignalRuning = false
+                      this.$store.state.last_signal_array.map(item=>{
+                        if(item.name == backtestData.name){
+                          item.state = 1
+                        }
+                      })
+                      console.log('FindLastSignalRuning done, runBacktest 失败',backtestData,this.$store.state.last_signal_array)
+
                       switch (error?.response?.status) {
                         case 401:
                           vm.$message({
@@ -1337,6 +1436,15 @@ export default {
                       CIQ.nprogress.done()
                       //vm.loading = false
                       alert('Upload JSON failed')
+
+                      // FindLastSignal过程中代表一个项目的运行结束
+                      CIQ.isFindLastSignalRuning = false
+                      this.$store.state.last_signal_array.map(item=>{
+                        if(item.name == backtestData.name){
+                          item.state = 1
+                        }
+                      })
+                      console.log('FindLastSignalRuning done, Upload JSON failed',backtestData,this.$store.state.last_signal_array)
                     }
                   }
                 } else {
@@ -1349,6 +1457,15 @@ export default {
                   } else {
                     CIQ.hideCover()
                     alert('Upload CSV failed')
+
+                    // FindLastSignal过程中代表一个项目的运行结束
+                    CIQ.isFindLastSignalRuning = false
+                    this.$store.state.last_signal_array.map(item=>{
+                      if(item.name == backtestData.name){
+                        item.state = 1
+                      }
+                    })
+                    console.log('FindLastSignalRuning done, Upload CSV failed',backtestData,this.$store.state.last_signal_array)
                   }
                 }
               }
@@ -1460,6 +1577,15 @@ export default {
         })
         CIQ.hideCover()
         CIQ.nprogress.done()
+
+        // FindLastSignal过程中代表一个项目的运行结束
+        CIQ.isFindLastSignalRuning = false
+        this.$store.state.last_signal_array.map(item=>{
+          if(item.name == resData.name){
+            item.state = 1
+          }
+        })
+        console.log('FindLastSignalRuning done, goTobacktestSetupForm',resData,this.$store.state.last_signal_array)
       }
       setTimeout(() => {
         if (callback) {
@@ -1892,5 +2018,116 @@ button.createNew,
 	bottom: 120px;
 	border: 1px solid black;
 	border-radius: 50%;
+}
+
+#myFLSbg {
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #8b8a8a;
+    position: fixed !important;
+    z-index: 9999;
+    margin: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transition: opacity .3s;
+    &.activated {
+      visibility: visible;
+    }
+    .maskContent-loading{
+      width: 60vw;
+      height: 60vh;
+      background: url(../../assets/fls-background.png);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+      img {
+        width: 242px;
+      }
+      span {
+        color: #5C9CD1;
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+      .el-button{
+        background: #EBF7FF;
+        color: #5C9CD1;
+        width: 200px;
+      }
+      .progress-bar{
+        width: 60%;
+      }
+    }
+    .maskContent-sucess{
+      width: 60vw;
+      height: 60vh;
+      background: url(../../assets/fls-background.png);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+      img {
+        width: 60px;
+      }
+      span {
+        color: #5C9CD1;
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+      .el-button{
+        background: #EBF7FF;
+        color: #5C9CD1;
+        width: 200px;
+      }
+      .progress-bar{
+        width: 60%;
+      }
+    }
+    .maskContent-failed{
+      width: 60vw;
+      height: 60vh;
+      background: url(../../assets/fls-background.png);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+      > img {
+        width: 60px;
+      }
+      > span {
+        color: #FBC05C;
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+      ul li{
+        display: flex;
+        align-items: center;
+        img {
+          max-height: 100%;
+          margin-right: 5px; /* 图标与文字之间的间距 */
+        }
+      }
+     .maskContent-failed-btn-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        .el-button{
+          background: #EBF7FF;
+          color: #5C9CD1;
+          width: 200px;
+        }
+      }
+
+      .progress-bar{
+        width: 60%;
+      }
+    }
 }
 </style>

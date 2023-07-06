@@ -114,9 +114,13 @@ export default new Vuex.Store({
 		usersOwnExitFileHash: Array(5).fill(''),
 		userUploadFileContent: Array(5).fill({}),
 		backtestResult: [],
-		tradePrice: 0
+		tradePrice: 0,
+		last_signal_array: []
 	},
 	getters: {
+		getLastSignalArray: (state) => {
+			return state.last_signal_array
+		},
 		getExtremeValue: (state) => {
 			return state.extremeValue
 		},
@@ -128,6 +132,9 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+		SET_LASTSIGNAL_ARRAY: (state,val)=>{
+			state.last_signal_array = val
+		},
 		SET_TRADE_PRICE: (state,val)=>{
 			state.tradePrice = val
 		},
