@@ -113,3 +113,14 @@
   border-bottom: 2px solid #5b9bd1;
   color: #5b9bd1 !important;
 }
+
+.el-notification {
+  z-index: 9999 !important;
+}
+
+.vue-simple-progress-text{
+  position: relative;
+  font-size: 16px !important;
+  top: -30px;
+  color: #FFF !important;
+}
