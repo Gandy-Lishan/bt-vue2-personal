@@ -24,7 +24,6 @@ import Nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 import '@/plugins/element'
 
-
 import './assets/style/global.css'
 import axios from './axios'
 import store from './store/store'

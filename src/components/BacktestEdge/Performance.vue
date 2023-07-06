@@ -529,7 +529,7 @@
 										>
 											<el-table-column prop="property" label="Property">
 											</el-table-column>
-
+                      
 											<template v-for="column in periodsTIM">
 												<el-table-column
 													:key="column.period"
@@ -756,6 +756,7 @@ export default {
           })
         }
         // 灏Periods 淇℃伅鎻掑叆鍒data 涓紝灏data 缁戝畾鍒table 涓
+        
         for (let i = 0; i < this.periodsTIM.length; i++) {
           for (let j = 0; j < result.length; j++) {
             this.TIMResult_quotes.forEach((obj) => {
@@ -766,6 +767,7 @@ export default {
           }
         }
         this.TIMResult_quotes = result
+       
       }
 
     },
@@ -787,15 +789,16 @@ export default {
         this.periods = columns
       } else {
         quotes = this.TIMResult_quotes
+        // 去重
         let set = new Set()
         for (let i = 0; i < quotes.length; i++) {
           set.add(quotes[i].Period)
         }
         let values = Array.from(set)
+        // 为label排序
         values = this.transformDate(values)
         values.sort((a, b) => a.value - b.value);
         values = values.map(x=>x.label)
-        
         let columns = []
         for (let i = 0; i < values.length; i++) {
           columns.push({
@@ -803,6 +806,7 @@ export default {
           })
         }
         this.periodsTIM = columns
+        
       }
     },
     async getResultData(row, callback) {
@@ -1274,7 +1278,21 @@ export default {
       if (this.activeTIM == 'first') {
         this.result_quotes = res
       } else {
+        // 重命名periods属性，和上方表格label一致
         this.TIMResult_quotes = res
+        let TIMResult_quotes_periods = this.TIMResult_quotes.map(x=>x.Period)
+        TIMResult_quotes_periods = this.transformDate(TIMResult_quotes_periods)
+        TIMResult_quotes_periods = TIMResult_quotes_periods.map(x=>x.label)
+
+        this.TIMResult_quotes = this.TIMResult_quotes.map((obj,index) => {
+          if(TIMResult_quotes_periods[index]){
+            obj.Period = TIMResult_quotes_periods[index]
+            return obj
+          }else{
+            return null
+          }
+        })
+        this.TIMResult_quotes = this.TIMResult_quotes.filter(item=>item!=null)
       }
       this.generate_table_data()
     },
@@ -1448,6 +1466,7 @@ export default {
           }
         }
         console.log('initiating Markers...', markers)
+        
         CIQ.loadChart(markers, CIQ.addMarker)
       } catch (error) {
         console.error(error)

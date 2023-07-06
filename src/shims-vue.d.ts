@@ -13,3 +13,4 @@ declare module '*json'
 declare module 'nprogress'
 
 declare module 'chartiq/st-development/js/entryIndicator'
+
