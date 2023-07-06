@@ -1460,6 +1460,7 @@ export default {
           }
         }
         console.log('initiating Markers...', markers)
+        
         CIQ.loadChart(markers, CIQ.addMarker)
       } catch (error) {
         console.error(error)

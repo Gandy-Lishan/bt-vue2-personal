@@ -494,7 +494,23 @@ export default {
 
             let row = res.data
             row.result = JSON.parse(row.result)
-            vm.viewBacktestResults(row)
+
+            //如果是从FindLastSignal来的，CIQ.isFindLastSignalRuning为true
+            if(!CIQ.isFindLastSignalRuning){
+              vm.viewBacktestResults(row)
+            }else{
+              // FindLastSignal过程中代表一个项目的运行结束
+              CIQ.isFindLastSignalRuning = false
+              this.$store.state.last_signal_array.map(item=>{
+                if(item.name == row.name){
+                  item.state = 1
+                }
+              })
+              console.log('FindLastSignalRuning done',row,this.$store.state.last_signal_array)
+              
+              CIQ.hideCover()
+              CIQ.nprogress.done()
+            }
           }
           if (res.data.status == 3) {
             clearPromiseInterval(timer).then(() => { })
@@ -506,7 +522,20 @@ export default {
             CIQ.nprogress.done()
             let row = res.data
             row.result = JSON.parse(row.result)
-            vm.viewBacktestResults(row)
+
+            if(!CIQ.isFindLastSignalRuning){
+              vm.viewBacktestResults(row)
+            }else{
+              // 没交易不算回测失败，不列为fls的失败情况
+              // // FindLastSignal过程中代表一个项目的运行结束
+              // CIQ.isFindLastSignalRuning = false
+              // this.$store.state.last_signal_array.map(item=>{
+              //   if(item.name == row.name){
+              //     item.state = 2
+              //   }
+              // })
+              // console.log('findLastSignalRuning done, no trade',row,this.$store.state.last_signal_array)
+            }
             // vm.$notify({
             // 	title: 'No trades',
             // 	message: 'No trades, please change parameter.',
@@ -515,6 +544,7 @@ export default {
             // })
           }
         } catch (error) {
+          // 会一直保持定时器重复尝试
         console.log(error)
           vm.$message({
             message: 'The internal server is busy, please try again later ',
