@@ -324,7 +324,7 @@
             bar-border-radius="20"
             size="large"
           ></progress-bar>
-          <el-button>Cancel</el-button>
+          <el-button @click="refreshPage">Cancel</el-button>
         </div>    
         <div class="maskContent-sucess" v-if="
           progressBarVal == 100 &&
@@ -346,10 +346,7 @@
             Your signals have the following error:
             <li><img src="@/assets/erroritem.png"/><span>{{numOfFailedBacktests}} errors were found</span></li>
           </ul>
-          <div class='maskContent-failed-btn-group'>
-            <el-button>Cancel</el-button>
-            <el-button @click="viewSignal">Return for modification</el-button>
-          </div>
+          <el-button @click="viewSignal">Return for modification</el-button>
         </div>
       </div>
 		</main>
@@ -1273,6 +1270,7 @@ export default {
               ).replaceAll('\u200c', '$r001$')
 
               let copyBacktestData = JSON.parse(JSON.stringify(backtestData))
+              copyBacktestData.currentdate = new Date().getTime()
               let str = UUID(JSON.stringify(copyBacktestData))
 
               backtestData.pk = str
@@ -1335,7 +1333,7 @@ export default {
                   // He upload JSON
                   try {
                     var S3DataStr = vm.$qs.stringify({
-                      file_name: str + '/' + str + '_backtest_params.json',
+                      file_name: backtestData.pk + '/' + backtestData.pk + '_backtest_params.json',
                       file_data: backtestParams
                     })
                     var data = await uploadS3(S3DataStr)
@@ -2112,16 +2110,6 @@ button.createNew,
         img {
           max-height: 100%;
           margin-right: 5px; /* 图标与文字之间的间距 */
-        }
-      }
-     .maskContent-failed-btn-group {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        .el-button{
-          background: #EBF7FF;
-          color: #5C9CD1;
-          width: 200px;
         }
       }
 
