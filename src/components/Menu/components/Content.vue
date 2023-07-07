@@ -1819,9 +1819,6 @@ export default {
     Tabs
   },
   mounted() {
-    // scroll代表滚动条距离页面顶部距离
-    // window.addEventListener('scroll', this.dataScroll)
-    this.selectAllSubTitle()
   },
   computed: {
     classObj() {
@@ -1836,45 +1833,43 @@ export default {
       this.isToggle = !this.isToggle
       this.$emit('click', this.isToggle)
     },
-    jump(index) {
-      this.selectAllSubTitle()
-      this.$nextTick(() => {
-        let jump = document.getElementById(index);
-        let title = document.querySelectorAll('h1,h2,h3')
-        this.navList = Array.from(title)
-        this.navList.forEach((item) => {
-          item.style.color = 'rgb(0, 50, 60)'
-        })
-        jump.style.color = '#5b9bd1'
-        let total = jump.offsetTop - 80;
-        window.scrollTo({
-          top: total,
-          behavior: 'smooth'
-        });
-      })
-    },
-    selectAllSubTitle() {
-      this.$nextTick(() => {
-        let title = document.querySelectorAll('h2,h3')
-        const navList = Array.from(title)
-        // const menuItem = new Array(navList.length).fill({})
-        this.menuItems = navList.map((item, index) => {
-          const menuItem = {}
-          menuItem['title'] = item.innerHTML
-          menuItem['id'] = item.id
-          // 使用正则表达式提取数字
-          const match = item.tagName.match(/\d+/);
-          if (match) {
-            menuItem['level'] = match[0];
-          } else {
-            console.error("No number found");
-          }
-          return menuItem
-        })
-        console.log('menuItem', this.menuItems)
-        // this.menuItem = menuItem
-      })
-    }
+		jump(index) {
+			this.$nextTick(() => {
+				let jump = document.getElementById(index);
+				let title = document.querySelectorAll('h1,h2,h3')
+				this.navList = Array.from(title)
+				this.navList.forEach((item) => {
+					item.style.color = 'rgb(0, 50, 60)'
+				})
+				jump.style.color = '#5b9bd1'
+				let total = jump.offsetTop - 80;
+				console.log('jump.offsetTop', jump.offsetTop)
+				window.scrollTo({
+					top: total,
+					behavior: 'smooth'
+				});
+				this.selectAllSubTitle();
+			})
+		},
+		selectAllSubTitle() {
+			this.$nextTick(() => {
+				let title = document.querySelectorAll('h2,h3')
+				const navList = Array.from(title)
+				this.menuItems = navList.map((item, index) => {
+					const menuItem = {}
+					menuItem['title'] = item.innerHTML
+					menuItem['id'] = item.id
+					const match = item.tagName.match(/\d+/);
+					if (match) {
+						menuItem['level'] = match[0];
+					} else {
+						console.error("No number found");
+					}
+					return menuItem
+				})
+				console.log('menuItem', this.menuItems)
+			})
+		}
   }
 }
 </script>
