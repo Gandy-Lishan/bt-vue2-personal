@@ -501,12 +501,12 @@ export default {
             }else{
               // FindLastSignal过程中代表一个项目的运行结束
               CIQ.isFindLastSignalRuning = false
-              this.$store.state.last_signal_array.map(item=>{
+              vm.$store.state.last_signal_array.map(item=>{
                 if(item.name == row.name){
                   item.state = 1
                 }
               })
-              console.log('FindLastSignalRuning done',row,this.$store.state.last_signal_array)
+              console.log('FindLastSignalRuning done',row,vm.$store.state.last_signal_array)
               
               CIQ.hideCover()
               CIQ.nprogress.done()
@@ -529,12 +529,12 @@ export default {
               // 没交易不算回测失败，不列为fls的失败情况
               // FindLastSignal过程中代表一个项目的运行结束
               CIQ.isFindLastSignalRuning = false
-              this.$store.state.last_signal_array.map(item=>{
+              vm.$store.state.last_signal_array.map(item=>{
                 if(item.name == row.name){
                   item.state = 1
                 }
               })
-              console.log('findLastSignalRuning done, no trade',row,this.$store.state.last_signal_array)
+              console.log('findLastSignalRuning done, no trade',row,vm.$store.state.last_signal_array)
             }
             // vm.$notify({
             // 	title: 'No trades',
