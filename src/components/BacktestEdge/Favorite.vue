@@ -399,7 +399,11 @@ export default {
         CIQ.addCover('Fetching backtest information...')
         CIQ.nprogress.start()
 
-        const res = await seeParams(row.id)
+        try {
+          res = await seeParams(row.id)
+        } catch (error) {
+          throw Error('Request Failed')
+        }
         document.getElementsByClassName('ciq-period')[0].style.display = ''
         // Restore indicator layout
         this.$store.commit('getBacktestSymbol', res.data.symbol)
@@ -430,6 +434,8 @@ export default {
           message: 'The internal server is busy, please try again later ',
           type: 'error'
         })
+        CIQ.hideCover()
+				CIQ.nprogress.done()
       }
     }, 500),
 	rerunBacktest: throttle(async function (row) {
@@ -437,8 +443,12 @@ export default {
 		try {
 			CIQ.addCover('Fetching backtest information...')
 			CIQ.nprogress.start()
-
-			const res = await seeParams(row.id)
+      let res = null
+			try {
+        res = await seeParams(row.id)
+      } catch (error) {
+        throw Error('Request Failed')
+      }
 			document.getElementsByClassName('ciq-period')[0].style.display = ''
 			// Restore indicator layout
 			this.$store.commit('getBacktestSymbol', res.data.symbol)
@@ -468,6 +478,8 @@ export default {
 				message: 'The internal server is busy, please try again later ',
 				type: 'error'
 			})
+      CIQ.hideCover()
+			CIQ.nprogress.done()
 		}
 	}, 500),
     async deleteBacktest(id) {
@@ -506,7 +518,12 @@ export default {
           })
           return
         }
-        const res = await seeParams(row.id)
+        let res = null
+        try {
+          res = await seeParams(row.id)
+        } catch (error) {
+          throw Error('Request failed')
+        }
         this.$store.commit('getBacktestSymbol', res.data.symbol)
         this.$store.commit('getRunBacktestData', row)
         params = res.data
@@ -548,6 +565,8 @@ export default {
               title: 'Service is busy',
               message: 'The internal server is busy, please try again later '
             })
+            CIQ.hideCover()
+					  CIQ.nprogress.done()
           }
         }
       } catch (error) {
@@ -567,8 +586,12 @@ export default {
         try {
           CIQ.addCover('Fetching backtest information...')
           CIQ.nprogress.start()
-
-          const res = await seeParams(row.id)
+          let res = null
+          try {
+            res = await seeParams(row.id)
+          } catch (error) {
+            throw Error('Request Error')
+          }
           this.$store.commit('getBacktestSymbol', res.data.symbol)
           CIQ.hideMarker()
           CIQ.isMarkerShown = false
@@ -590,11 +613,13 @@ export default {
             })
           }
         } catch (error) {
-        console.error(error)
+          console.error(error)
           vm.$message({
             message: 'The internal server is busy, please try again later ',
             type: 'error'
           })
+          CIQ.hideCover()
+					CIQ.nprogress.done()
         }
       } else {
         this.$notify({
@@ -602,6 +627,8 @@ export default {
           message: 'No trades, please change parameter.',
           type: 'warning'
         })
+        CIQ.hideCover()
+				CIQ.nprogress.done()
       }
     }, 500),
     handleCurrentChange(newpage) {

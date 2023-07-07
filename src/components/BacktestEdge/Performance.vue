@@ -850,7 +850,7 @@ export default {
 
               // -------------------------------------  start ----------------
               const tradeReturn = initalData['Each Return']
-              const exitReason = initalData['Exit Reason']
+              const exitReason = initalData['Exit Reason'] ? initalData['Exit Reason'] : []
               data.uuid = initalData['UUID']
               data.symbol = initalData['Symbol']
               data.frequency = initalData['Frequency']
@@ -904,7 +904,8 @@ export default {
                 vm.drawDownImgUrl = data.ddFileURL
                 vm.monthReturnImgUrl = data.returnsHeatmapFileURL
                 vm.annualReturnImgUrl = data.annualReturnsFileURL
-                for (let i = 0; i < initalData['Trades'].length; i++) {
+                try {
+                  for (let i = 0; i < initalData['Trades'].length; i++) {
                   if (i % 2 == 0) {
                     initalData['Trades'][i].trade_number = i / 2
                     initalData['Trades'][i + 1].trade_number = i / 2
@@ -922,6 +923,9 @@ export default {
                     initalData['Trades'][i - 1].Return =
                       initalData['Trades'][i].Return
                   }
+                }
+                } catch (error) {
+                  console.log(error)
                 }
                 vm.queryInfo.total = initalData['Trades'].length
                 vm.totalTradesNumber = initalData['Trades'].length / 2
