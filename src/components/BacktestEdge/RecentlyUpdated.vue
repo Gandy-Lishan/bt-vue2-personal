@@ -115,10 +115,6 @@ export default {
 .el-card__header {
 	background-color: #f7f9fc;
 }
-.el-card__body {
-	height: 500px;
-  overflow-y: auto;
-}
 .top {
 	display: flex;
 	align-items: center;

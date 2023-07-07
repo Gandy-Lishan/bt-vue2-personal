@@ -27,6 +27,19 @@ export default {
       expandedSections: [] // 用于记录展开的一级标题的数组
     }
   },
+  mounted() {
+    const skipID = this.$route.params.id
+		if(skipID) {
+      let titleID = null
+			if(skipID.includes('-')){
+        titleID = skipID.split('-')[0]
+      }else{
+        titleID = skipID
+      }
+        this.toggleSection(titleID)
+        this.scrollToSection(skipID)
+		}
+  },
   methods: {
     scrollToSection(sectionId) {
       this.activeSection = sectionId

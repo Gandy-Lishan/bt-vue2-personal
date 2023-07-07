@@ -40,8 +40,38 @@
 					</el-button>
 				</template> -->
 				<el-checkbox-group v-model="activeSignal" @change="selectSignal">
-					<el-checkbox-button v-for="item in signalList" :label="item" :key="item" >{{item}}</el-checkbox-button>
+						<el-checkbox-button v-for="item in signalList" :label="item" :key="item" v-hover-popup="{ item: item }">{{item}}</el-checkbox-button>
 				</el-checkbox-group>
+				<el-popover v-model="popupVisible" trigger="manual">
+					<p v-show="currentItem === 'MA'">
+						Long: Symbol Close CrossAbove SMA20;<br/>
+						Short: Symbol Close CrossBelow SMA20
+					</p>
+					<p v-show="currentItem === 'MAGap'">
+						Long: The difference between Symbol Close and SMA20 CrossAbove 0;<br/>
+						Short: The difference between Symbol Close and SMA20 CrossBelow 0
+					</p>
+					<p v-show="currentItem === 'MACDHist'">
+						Long: The MACD CrossAbove Signal Line;<br/>
+						Short: The MACD CrossBelow Signal Line
+					</p>
+					<p v-show="currentItem === 'MACDHistGap'">
+						Long: The difference between MACDHist and its previous day CrossAbove 0;<br/>
+						Short: The difference between MACDHist and its previous day CrossBelow 0
+					</p>
+					<p v-show="currentItem === 'Hammer'">
+						Only Long: The day before the collection of a long shadow line, the next day closed up
+					</p>
+					<p v-show="currentItem === 'Shooting'">
+						Only Short: The day before a long upward thread, the next day closed down
+					</p>
+					<p v-show="currentItem === 'UpTrend Pattern'">
+						Only Long: Symbol Close trend upward
+					</p>
+					<p v-show="currentItem === 'DownTrend Pattern'">
+						Only Long: Symbol Close trend downward
+					</p>
+				</el-popover>
 			</div>
 
 
@@ -215,7 +245,10 @@ export default {
 				signalList: [],
 				activeSignal: [],
 
-				tableData: []
+				tableData: [],
+				popupVisible: false, // 弹窗可见性
+    		popupContent: '', // 弹窗内容
+				hoveredItem: null // 悬停的元素
 		}
 	},
 	watch: {
@@ -238,8 +271,23 @@ export default {
 				this.signalList = [...new Set(this.data.content.map(item=>item.Signal))]
 			},
 			deep: true
-		},
+		}
 	},
+	directives: {
+  'hover-popup': {
+    bind(el, binding, vnode) {
+      el.addEventListener('mouseover', () => {
+        // 显示弹窗
+        vnode.context.showPopup(binding.value.item);
+      });
+
+      el.addEventListener('mouseleave', () => {
+        // 隐藏弹窗
+        vnode.context.hidePopup();
+      });
+    }
+  }
+},
 	created() {
 	},
 	mounted() {
@@ -252,12 +300,12 @@ export default {
 			if(signal.length>1){
 				signal.shift()
 			}
-			console.log(signal)
+			console.log('signal', signal)
 			if(signal.length!=0){
 				this.tableData.content = this.data.content.filter(item=>item.Signal == signal)
 			}else{
 				this.tableData.content = this.data.content
-			}	
+			}
 		},
 		selectSymbol(id, Symbol, subscribe, pt,sl,wr,rowIndex) {
 			
@@ -385,6 +433,19 @@ export default {
 				}
 			})
 		},
+		showPopup(item) {
+    // 设置当前悬停的项
+		const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern']
+		if(signalArr.includes(item)) {
+		this.currentItem = item;
+    // 显示弹窗
+    this.popupVisible = true;
+		}
+  },
+  hidePopup() {
+    // 隐藏弹窗
+    this.popupVisible = false;
+  },
 	}
 };
 </script>
