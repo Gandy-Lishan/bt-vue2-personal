@@ -1203,6 +1203,11 @@ export default {
             // end 改成最新的
             bd.end_date = timestampToTime(new Date())
           }
+          // 这里是小薛的想法
+          if (this.bd.backtest_period == '22') {
+            // end 改成最新的
+            bd.end_date = timestampToTime(new Date())
+          }
           this.$store.commit('setBd', bd)
           return checked
         } else {
