@@ -986,12 +986,12 @@ export default {
 
                   // FindLastSignal过程中代表一个项目的运行结束
                   CIQ.isFindLastSignalRuning = false
-                  this.$store.state.last_signal_array.map(item=>{
+                  vm.$store.state.last_signal_array.map(item=>{
                     if(item.name == backtestData.name){
-                      item.state = 1
+                      item.state = 2
                     }
                   })
-                  console.log('FindLastSignalRuning done, The current entry are the same',backtestData,this.$store.state.last_signal_array)
+                  console.log('FindLastSignalRuning done, The current entry are the same',backtestData,vm.$store.state.last_signal_array)
                   return
                 }
               }
@@ -1023,12 +1023,12 @@ export default {
 
                   // FindLastSignal过程中代表一个项目的运行结束
                   CIQ.isFindLastSignalRuning = false
-                  this.$store.state.last_signal_array.map(item=>{
+                  vm.$store.state.last_signal_array.map(item=>{
                     if(item.name == backtestData.name){
-                      item.state = 1
+                      item.state = 2
                     }
                   })
-                  console.log('FindLastSignalRuning done, The current exit are the same',backtestData,this.$store.state.last_signal_array)
+                  console.log('FindLastSignalRuning done, The current exit are the same',backtestData,vm.$store.state.last_signal_array)
                   return
                 }
               }
@@ -1378,12 +1378,12 @@ export default {
 
                         // FindLastSignal过程中代表一个项目的运行结束
                         CIQ.isFindLastSignalRuning = false
-                        this.$store.state.last_signal_array.map(item=>{
+                        vm.$store.state.last_signal_array.map(item=>{
                           if(item.name == backtestData.name){
-                            item.state = 1
+                            item.state = 2
                           }
                         })
-                        console.log('FindLastSignalRuning done, runBacktest status !== 201',backtestData,this.$store.state.last_signal_array)
+                        console.log('FindLastSignalRuning done, runBacktest status !== 201',backtestData,vm.$store.state.last_signal_array)
                       }
                     } catch (error) {
                       console.log('lishan error', error)
@@ -1396,12 +1396,12 @@ export default {
 
                       // FindLastSignal过程中代表一个项目的运行结束
                       CIQ.isFindLastSignalRuning = false
-                      this.$store.state.last_signal_array.map(item=>{
+                      vm.$store.state.last_signal_array.map(item=>{
                         if(item.name == backtestData.name){
-                          item.state = 1
+                          item.state = 2
                         }
                       })
-                      console.log('FindLastSignalRuning done, runBacktest 失败',backtestData,this.$store.state.last_signal_array)
+                      console.log('FindLastSignalRuning done, runBacktest 失败',backtestData,vm.$store.state.last_signal_array)
 
                       switch (error?.response?.status) {
                         case 401:
@@ -1444,12 +1444,12 @@ export default {
 
                       // FindLastSignal过程中代表一个项目的运行结束
                       CIQ.isFindLastSignalRuning = false
-                      this.$store.state.last_signal_array.map(item=>{
+                      vm.$store.state.last_signal_array.map(item=>{
                         if(item.name == backtestData.name){
-                          item.state = 1
+                          item.state = 2
                         }
                       })
-                      console.log('FindLastSignalRuning done, Upload JSON failed',backtestData,this.$store.state.last_signal_array)
+                      console.log('FindLastSignalRuning done, Upload JSON failed',backtestData,vm.$store.state.last_signal_array)
                     }
                   }
                 } else {
@@ -1465,12 +1465,12 @@ export default {
 
                     // FindLastSignal过程中代表一个项目的运行结束
                     CIQ.isFindLastSignalRuning = false
-                    this.$store.state.last_signal_array.map(item=>{
+                    vm.$store.state.last_signal_array.map(item=>{
                       if(item.name == backtestData.name){
-                        item.state = 1
+                        item.state = 2
                       }
                     })
-                    console.log('FindLastSignalRuning done, Upload CSV failed',backtestData,this.$store.state.last_signal_array)
+                    console.log('FindLastSignalRuning done, Upload CSV failed',backtestData,vm.$store.state.last_signal_array)
                   }
                 }
               }
@@ -1585,12 +1585,12 @@ export default {
 
         // FindLastSignal过程中代表一个项目的运行结束
         CIQ.isFindLastSignalRuning = false
-        this.$store.state.last_signal_array.map(item=>{
+        vm.$store.state.last_signal_array.map(item=>{
           if(item.name == resData.name){
-            item.state = 1
+            item.state = 2
           }
         })
-        console.log('FindLastSignalRuning done, goTobacktestSetupForm',resData,this.$store.state.last_signal_array)
+        console.log('FindLastSignalRuning done, goTobacktestSetupForm',resData,vm.$store.state.last_signal_array)
       }
       setTimeout(() => {
         if (callback) {
@@ -2046,6 +2046,9 @@ button.createNew,
       width: 60vw;
       height: 60vh;
       background: url(../../assets/fls-background.png);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2079,6 +2082,9 @@ button.createNew,
       width: 60vw;
       height: 60vh;
       background: url(../../assets/fls-background.png);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2106,6 +2112,9 @@ button.createNew,
       width: 60vw;
       height: 60vh;
       background: url(../../assets/fls-background.png);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
       display: flex;
       align-items: center;
       justify-content: center;
