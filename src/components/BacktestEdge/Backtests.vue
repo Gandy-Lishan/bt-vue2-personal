@@ -363,7 +363,12 @@ export default {
 					})
 					return
 				}
-				const res = await seeParams(row.id)
+				let res = null
+				try {
+					res = await seeParams(row.id)
+				} catch (error) {
+					throw Error('Request Error')
+				}
 				if (res.status === 200) {
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					this.$store.commit('getRunBacktestData', row)
@@ -409,6 +414,8 @@ export default {
 								message: 'The internal server is busy, please try again later '
 							})
 						}
+						CIQ.hideCover()
+						CIQ.nprogress.done()
 					}
 				}
 			} catch (error) {
@@ -417,6 +424,8 @@ export default {
 					title: 'Service is busy',
 					message: 'The internal server is busy, please try again later '
 				})
+				CIQ.hideCover()
+				CIQ.nprogress.done()
 			}
 		}, 500),
 		viewBacktestResults: throttle(async function (row) {
@@ -426,7 +435,12 @@ export default {
 				try {
 					CIQ.addCover('Fetching backtest information...')
 					CIQ.nprogress.start()
-					const res = await seeParams(row.id)
+					let res = null
+					try {
+						res = await seeParams(row.id)
+					} catch (error) {
+						throw Error('Request Error')
+					}
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
 					CIQ.hideMarker()
 					CIQ.isMarkerShown = false
@@ -452,6 +466,8 @@ export default {
 						message: 'The internal server is busy, please try again later ',
 						type: 'error'
 					})
+					CIQ.hideCover()
+					CIQ.nprogress.done()
 				}
 			} else {
 				this.$notify({
@@ -459,6 +475,8 @@ export default {
 					message: 'No trades, please change parameter.',
 					type: 'warning'
 				})
+				CIQ.hideCover()
+				CIQ.nprogress.done()
 			}
 		}, 500),
 		restoreIndicatorLayoutView(data, freq, row, resData) {

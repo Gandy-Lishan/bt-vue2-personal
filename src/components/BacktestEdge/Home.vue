@@ -472,7 +472,12 @@ export default {
     try {
       CIQ.addCover('Fetching backtest information...')
       CIQ.nprogress.start()
-      const res = await seeParams(backtestID)
+      let res = null
+      try {
+        await seeParams(backtestID)
+      } catch (error) {
+        throw Error('Request Error')
+      }
       res.data.entry_description = JSON.parse(res.data.entry_description)
       res.data.exit_description = JSON.parse(res.data.exit_description)
       res.data.result = JSON.parse(res.data.result)
