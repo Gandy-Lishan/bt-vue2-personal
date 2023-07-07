@@ -1345,7 +1345,44 @@ export default {
                     })
                     var data = await uploadS3(S3DataStr)
                     try {
-                      let res = await runBacktest(backtestDataStr)
+                      let res = null
+                      try {
+                        res = await runBacktest(backtestDataStr)
+                      } catch (error) {
+                        console.error('error', error)
+                        switch (error?.response?.status) {
+                          	case 401:
+                              vm.$message({
+                                message:
+                                  'No permission',
+                                type: 'error'
+                              })
+                          		break;
+                          	case 403:
+                              vm.$message({
+                                message:
+                                  'The backtest name already exists',
+                                type: 'error'
+                              })
+                          		break;
+                          	case 500:
+                              vm.$message({
+                                message:
+                                  'Internal Server Error',
+                                type: 'error'
+                              })
+                          		break;
+                          	default:
+                              vm.$message({
+                                message:
+                                  'Unknown error',
+                                type: 'error'
+                              })
+                        }
+                        CIQ.hideCover()
+                        CIQ.nprogress.done()
+                        return
+                      }
                       if (res.status === 201) {
                         
                         CIQ.isBacktestRun = true
