@@ -419,12 +419,57 @@ export function setCustomTIM(data) {
       });
   });
 }
+export function getAllFavoriteList(page) {
+  let url = '/dev/dev/backtest/?ordering=-create_date&favorites=true&page=';
 
-// instance.interceptors.request.use((config) => {
-// 	config.headers.Authorization = window.sessionStorage.getItem('token')
-// 	config.auth = {
-// 		username: 'sentimentrader_backtest_api',
-// 		password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-// 	}
-// 	return config
-// })
+  return new Promise((resolve, reject) => {
+    const allData = [];
+
+    function fetchPageData(page) {
+      axios.get(url + page)
+        .then(res => {
+          const data = res.data.results;
+
+          // 将当前页的数据添加到总数据数组中
+          allData.push(...data);
+
+          if (res.data.has_more_data) {
+            // 继续递归请求下一页数据
+            fetchPageData(page + 1);
+          } else {
+            // 所有数据已获取完毕，返回结果
+            resolve(allData);
+          }
+        })
+        .catch(err => {
+          reject(err);
+        });
+    }
+
+    // 开始递归请求第一页数据
+    fetchPageData(page);
+  });
+}
+
+export function findLastSignalApi(data) {
+  const url = `/dev/dev/findlastsingal/`;
+  const headers = {
+    'Content-Type': 'application/json'
+  };
+	let csv = data.csv
+	// csv = csv.replace(/\n/g, ",");
+	const formData = new FormData();
+  formData.append('uuid', data.uuid);
+  formData.append('csv', csv)
+  formData.append('entry', data.entry)
+  formData.append('exit', data.exit)
+  return new Promise((resolve, reject) => {
+    axios.post(url, formData, { headers, withCredentials: true })
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}

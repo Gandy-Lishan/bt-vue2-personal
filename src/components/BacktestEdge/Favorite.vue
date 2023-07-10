@@ -5,7 +5,8 @@
 
 
 			<div class="favoriteForm_container">
-        <el-button @click="lastSignalDate" class='fls-btn'>find last signal</el-button>
+        <el-button @click="runAllBacktest" class='fls-btn'>run all backtest</el-button>
+        <el-button @click="_findLastSignal" class='fls-btn'>find last signal</el-button>
         <div class="searchBox">
                   <el-input
 					class="search"
@@ -322,7 +323,8 @@ import {
   copyBacktest,
   favoriteBacktest,
   getBacktestName,
-  searchHistoryList
+  getAllFavoriteList,
+  findLastSignalApi
 } from '@/service/service'
 export default {
   data() {
@@ -348,7 +350,9 @@ export default {
 
       backtest_array: [],
 
-      value:70
+      value:70,
+      allFavoriteList: [],
+      favorite_array: []
     }
   },
   directives: {
@@ -398,10 +402,11 @@ export default {
       try {
         CIQ.addCover('Fetching backtest information...')
         CIQ.nprogress.start()
-
+        let res = null
         try {
           res = await seeParams(row.id)
         } catch (error) {
+          console.log('error', error)
           throw Error('Request Failed')
         }
         document.getElementsByClassName('ciq-period')[0].style.display = ''
@@ -844,7 +849,7 @@ export default {
     },
 
 
-    lastSignalDate(){
+    runAllBacktest(){
         this.showFLSMASK()
         CIQ.isFindLastSignalRuning = true
 
@@ -888,13 +893,94 @@ export default {
       const myFLSbg = document.querySelector('#myFLSbg')
       myFLSbg.classList.add('activated')
     },
-  }
+    async findLastSignal() {
+      this.showFLSMASK()
+      this.allFavoriteList = await this.getAllFavoriteData();
+      let self = this;
+      let currentIndex = 0;
 
+      const pollFunction = async () => {
+        if (currentIndex >= self.allFavoriteList.length) {
+          return;
+        }
+
+        await self.editBacktest(self.allFavoriteList[currentIndex]);
+        currentIndex++;
+
+        if (self.allFavoriteList.length === 0) {
+          return;
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 4000));
+        await pollFunction();
+      };
+
+      await pollFunction();
+    },
+    async _findLastSignal() {
+      this.$store.commit('clearHashTable')
+      this.showFLSMASK()
+      CIQ.isEditFinish = true
+      const allFavoriteList = await this.getAllFavoriteData()
+      this.favorite_array = JSON.parse(JSON.stringify(allFavoriteList))
+      this.$store.commit('_SET_LASTSIGNAL_ARRAY',this.favorite_array.map(item=>{return {name:item.name,content:item,state:0}}))
+      let favorite_info = this.processingBacktest(this.favorite_array)
+      if (favorite_info == false){
+          console.log('处理任务结束',this.$store.state._last_signal_array)
+          return // 处理任务结束
+        }
+        var error_array = new Array();
+        this._postRunbacktest(favorite_info)
+    },
+   _postRunbacktest(favorite) {
+      this.editBacktest(favorite)
+      const content = CIQ.exportEx()
+      console.log('content---------------------content', content)
+      // 轮询可用于等待上一个回测结束，也可定时刷新进度条进度
+      let interval = setInterval(async () =>{
+          if (CIQ.isEditFinish == false){
+            clearInterval(interval)
+            CIQ.isEditFinish = true
+            //console.log('轮询等待上一个回测结束.........',CIQ.isEditFinish,backtest)
+            var favorite_info = this.processingBacktest(this.favorite_array)
+            if (favorite_info == false){
+              CIQ.isEditFinish = false
+              console.log('处理任务结束',this.$store.state._last_signal_array)
+              const list = this.$store.state.hashTable
+              const requestList = []
+              for (let i = 0; i < list.length; i++) {
+                requestList.push(findLastSignalApi(list[i]))
+              }
+              const res = await Promise.all(requestList)
+              console.log('处理任务结束------处理任务结束', res)
+              const resList = res
+              resList.map((item) => {
+                return {
+                  lastEntrySignalDate: item.data.lastEntrySignalDate,
+                  lastExitSignalDate: item.data.lastExitSignalDate
+                }
+              })
+              console.log('请求数据', resList)
+              //this.removeFLSMASK()
+              return // 处理任务结束
+            }
+            this._postRunbacktest(favorite_info)
+            
+            // 是否添加一个成功列表
+          }
+        },1000) // 2秒查询一次
+    },
+    async getAllFavoriteData() {
+      const res = await getAllFavoriteList(1)
+      console.log('拿到所有的favorite列表', res)
+      return res
+    }
+  }
 }
 </script>
 <style lang="less" scoped>
 .searchBox {
-  float: right;
+  float: left;
   .search {
 	margin-right: 28px;
 }

@@ -132,3 +132,6 @@
 	height: 500px;
   overflow-y: auto;
 }
+/* .el-checkbox-button:first-child .el-checkbox-button__inner{
+  border-left: 1px solid #DCDFE6;
+} */

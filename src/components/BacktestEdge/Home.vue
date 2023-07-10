@@ -1639,6 +1639,24 @@ export default {
           callback()
         }
       }, 1000)
+
+      console.log('resData--------------------------', resData)
+      const content = CIQ.exportEx()
+      let parameterRes = null
+        parameterRes = await seeParams(id)
+        console.log('parameterRes-------------------parameterRes', parameterRes.data)
+        const csvObj = {
+            id,
+            csv: content,
+            entry: parameterRes.data.entry,
+            exit: parameterRes.data.exit
+          }
+          this.$store.commit('setHashTable', csvObj)
+          vm.$store.state._last_signal_array.map(item=>{
+              if(item.name == parameterRes.data.name){
+                item.state = 2
+              }
+            })
     },
     goBacktestResultForm(row, callback) {
       try {
@@ -1727,6 +1745,7 @@ export default {
     },
     switchTab(tabName) {
       this.activeName = tabName
+      CIQ.isEditFinish = false
     },
     rerun() {
       this.runBacktest()
