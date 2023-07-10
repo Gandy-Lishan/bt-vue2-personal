@@ -377,7 +377,6 @@ export default {
 			}
 		},
 		viewBacktestResults: throttle(async function (row) {
-			console.log('lishan row',row)
 			let vm = this
 			if (row.result['Total Trades']) {
 				vm.$store.commit('clearBacktestUuid')
