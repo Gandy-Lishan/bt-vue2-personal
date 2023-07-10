@@ -608,7 +608,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .searchBox {
-  float: right;
+  float: left;
   .search {
 	margin-right: 28px;
 }

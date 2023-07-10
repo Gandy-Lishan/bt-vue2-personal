@@ -297,9 +297,9 @@ const config = {
 		disableHostCheck: true,
 		proxy: {
 			'/dev': {
-				//target: "http://10.131.9.229:8000",
+				// target: "http://10.131.9.217:8000",
 				target: "https://devbt2api.sentimentrader.com/",
-				//target: "https://bt2api.sentimentrader.com",
+				// target: "https://bt2api.sentimentrader.com",
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
@@ -308,7 +308,7 @@ const config = {
 			},
 			'/api': {
 				//target: "https://ggfdkkraph.execute-api.us-east-1.amazonaws.com/",
-				// target: "http://10.131.9.93:8000",
+				// target: "http://10.131.9.217:8000",
 				target: "http://localhost:5001",
 				// ws:true,
 				changeOrigin: true,
