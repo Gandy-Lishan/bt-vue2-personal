@@ -1428,7 +1428,6 @@ export default {
                         console.log('FindLastSignalRuning done, runBacktest status !== 201',backtestData,vm.$store.state.last_signal_array)
                       }
                     } catch (error) {
-                      console.log('lishan error', error)
 
                       vm.$store.commit('initialBacktestInfo')
                       vm.$refs.setUpChild.clearOldBacktestName()
@@ -1639,7 +1638,7 @@ export default {
           callback()
         }
       }, 1000)
-
+      // lishan 在这里保存数据到 vuex favorite 中要用
       console.log('resData--------------------------', resData)
       const content = CIQ.exportEx()
       let parameterRes = null
@@ -1745,6 +1744,7 @@ export default {
     },
     switchTab(tabName) {
       this.activeName = tabName
+      // lishan 到这里代表调用完成
       CIQ.isEditFinish = false
     },
     rerun() {

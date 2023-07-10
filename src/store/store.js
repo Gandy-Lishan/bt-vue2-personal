@@ -116,8 +116,8 @@ export default new Vuex.Store({
 		backtestResult: [],
 		tradePrice: 0,
 		last_signal_array: [],
-		_last_signal_array: [],
-		hashTable: []
+		_last_signal_array: [], // lishan 用于控制进度条
+		hashTable: [] // lishan 保存要上传的数据
 	},
 	getters: {
 		getLastSignalArray: (state) => {

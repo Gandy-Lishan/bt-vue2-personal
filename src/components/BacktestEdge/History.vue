@@ -734,7 +734,6 @@ export default {
       }
     }, 1000),
     viewBacktestResults: throttle(async function (row) {
-      console.log('lishan viewBacktestResults', row)
       document.getElementsByClassName('ciq-period')[0].style.display = 'none'
       try {
         CIQ.addCover('Fetching backtest information...')

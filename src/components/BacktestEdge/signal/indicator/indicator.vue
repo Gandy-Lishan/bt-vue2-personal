@@ -1443,7 +1443,6 @@ export default {
             // 	self.$refs.upload.$el.querySelector('.el-progress-bar__inner') ||
             // 	null
             // console.log(
-            // 	'lishan curli',
             // 	curLi,
             // 	self.$refs.upload.$el.querySelector('.el-progress__text')
             // )
@@ -1717,7 +1716,6 @@ export default {
       let { loaded, total } = event
       const progress = (loaded / total) * 100
       this.fileList = fileList.map((item) => {
-        console.log('lishan item', item.uid, uid)
         console.log(item.uid)
         if (item.uid === uid) {
           item.progress = progress

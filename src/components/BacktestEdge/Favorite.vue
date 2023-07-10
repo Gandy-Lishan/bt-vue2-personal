@@ -894,6 +894,7 @@ export default {
       myFLSbg.classList.add('activated')
     },
     async findLastSignal() {
+      // lishan 这个方法不用 有问题
       this.showFLSMASK()
       this.allFavoriteList = await this.getAllFavoriteData();
       let self = this;
@@ -918,6 +919,7 @@ export default {
       await pollFunction();
     },
     async _findLastSignal() {
+      // lishan 批量给列表调用 editBacktest 你的方法名称我并没修改，而是使用 '_' 开头
       this.$store.commit('clearHashTable')
       this.showFLSMASK()
       CIQ.isEditFinish = true
@@ -933,9 +935,8 @@ export default {
         this._postRunbacktest(favorite_info)
     },
    _postRunbacktest(favorite) {
+    // lishan 做迭代 
       this.editBacktest(favorite)
-      const content = CIQ.exportEx()
-      console.log('content---------------------content', content)
       // 轮询可用于等待上一个回测结束，也可定时刷新进度条进度
       let interval = setInterval(async () =>{
           if (CIQ.isEditFinish == false){
@@ -952,6 +953,7 @@ export default {
                 requestList.push(findLastSignalApi(list[i]))
               }
               const res = await Promise.all(requestList)
+              // lishan 这个时候已经处理完，批量发请求给后台， 拿到 lastSignal
               console.log('处理任务结束------处理任务结束', res)
               const resList = res
               resList.map((item) => {
@@ -971,6 +973,7 @@ export default {
         },1000) // 2秒查询一次
     },
     async getAllFavoriteData() {
+    // lishan 用于获取所有的 favorite 列表
       const res = await getAllFavoriteList(1)
       console.log('拿到所有的favorite列表', res)
       return res
