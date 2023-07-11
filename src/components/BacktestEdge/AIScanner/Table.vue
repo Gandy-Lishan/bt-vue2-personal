@@ -40,7 +40,39 @@
 					</el-button>
 				</template> -->
 				<el-checkbox-group v-model="activeSignal" @change="selectSignal">
-						<el-checkbox-button v-for="item in signalList" :label="item" :key="item" v-hover-popup="{ item: item }">{{item}}</el-checkbox-button>
+						<el-checkbox-button v-for="item in signalList" :label="item" :key="item">{{item}}		
+						<!-- <el-tooltip effect="dark" placement="bottom" v-model="popupVisible">
+							<span slot="content" v-if="currentItem === 'MA'">
+								Long: Symbol Close CrossAbove SMA20;<br/>
+								Short: Symbol Close CrossBelow SMA20
+							</span>
+							<span slot="content" v-if="currentItem === 'MAGap'">
+								Long: The difference between Symbol Close and SMA20 CrossAbove 0;<br/>
+								Short: The difference between Symbol Close and SMA20 CrossBelow 0
+							</span>
+							<span slot="content" v-if="currentItem === 'MACDHist'">
+								Long: The MACD CrossAbove Signal Line;<br/>
+								Short: The MACD CrossBelow Signal Line
+							</span>
+							<span slot="content" v-if="currentItem === 'MACDHistGap'">
+								Long: The difference between MACDHist and its previous day CrossAbove 0;<br/>
+								Short: The difference between MACDHist and its previous day CrossBelow 0
+							</span>
+							<span slot="content" v-if="currentItem === 'Hammer'">
+								Only Long: The day before the collection of a long shadow line, the next day closed up
+							</span>
+							<span slot="content" v-if="currentItem === 'Shooting'">
+								Only Short: The day before a long upward thread, the next day closed down
+							</span>
+							<span slot="content" v-if="currentItem === 'UpTrend Pattern'">
+								Only Long: Symbol Close trend upward
+							</span>
+							<span slot="content" v-if="currentItem === 'DownTrend Pattern'">
+								Only Long: Symbol Close trend downward
+							</span>
+							<i class="el-icon-info" v-hover-popup="{ item: item }"></i></el-tooltip> -->
+							<i class="el-icon-info" v-hover-popup="{ item: item }"></i>
+						</el-checkbox-button>
 				</el-checkbox-group>
 				<el-popover v-model="popupVisible" trigger="manual">
 					<p v-show="currentItem === 'MA'">
@@ -73,8 +105,6 @@
 					</p>
 				</el-popover>
 			</div>
-
-
 		</div>
 		<el-table
 			ref="tableREF"
@@ -248,7 +278,7 @@ export default {
 				tableData: [],
 				popupVisible: false, // 弹窗可见性
     		popupContent: '', // 弹窗内容
-				hoveredItem: null // 悬停的元素
+				hoveredItem: null, // 悬停的元素
 		}
 	},
 	watch: {
@@ -285,6 +315,11 @@ export default {
         // 隐藏弹窗
         vnode.context.hidePopup();
       });
+			const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern']
+			if (!signalArr.includes(binding.value.item)) {
+        // 隐藏元素
+        el.style.display = 'none';
+      }
     }
   }
 },
@@ -437,9 +472,11 @@ export default {
     // 设置当前悬停的项
 		const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern']
 		if(signalArr.includes(item)) {
-		this.currentItem = item;
-    // 显示弹窗
-    this.popupVisible = true;
+			this.currentItem = item;
+			// 显示弹窗
+			this.popupVisible = true;
+		}else {
+			this.popupVisible = false;
 		}
   },
   hidePopup() {
