@@ -901,12 +901,15 @@ export default {
 
     },
 
-    runAllBacktest(){
+    async runAllBacktest(){
 
         this.showFLSMASK()
         CIQ.isFindLastSignalRuning = true
 
-        this.backtest_array = JSON.parse(JSON.stringify(this.backtestList))
+        const allFavoriteList = await this.getAllFavoriteData()
+        // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
+        this.backtest_array = JSON.parse(JSON.stringify(allFavoriteList))
+
         // 給列表每一项设定识别码，内容和回测状态，0为未跑完，1为成功，2为失败
         this.$store.commit('SET_LASTSIGNAL_ARRAY',this.backtest_array.map(item=>{return {name:item.name,content:item,state:0}}))
 

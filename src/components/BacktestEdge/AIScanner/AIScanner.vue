@@ -54,6 +54,7 @@ export default {
 								.replace(/StopLoss/g,'Stop Loss(%)')
 								.replace(/ProfitTarget/g,'Profit Target(%)')
 								.replace(/WinRate/g,'Win Rate(%)')
+								.replace(/Z_Score/g,'Z-Score')
 
 		AIPickContent = JSON.parse(AIPickContentString)	
 		AIPickContent.forEach(x=>{

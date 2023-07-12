@@ -148,39 +148,19 @@
 							<span>{{ props.row['Signal']}}</span>
 						</el-form-item>
 						<el-form-item label="AVERAGE WIN %">
-							<span>{{
-								btInfo.find(x=>x.id==props.row['id'])
-									?btInfo.find(x=>x.id==props.row['id'])['AvgWin']
-									:''
-								}}</span>
+							<span>{{ props.row['AvgWin']}}	</span>
 						</el-form-item>
 						<el-form-item label="AVERAGE LOSS %">
-							<span>{{
-								btInfo.find(x=>x.id==props.row['id'])
-									?btInfo.find(x=>x.id==props.row['id'])['AveLoss']
-									:''
-								}}</span>
+							<span>{{ props.row['AvgLoss']}}	</span>
 						</el-form-item>
 						<el-form-item label="TOTAL TRADES">
-							<span>{{
-								btInfo.find(x=>x.id==props.row['id'])
-									?btInfo.find(x=>x.id==props.row['id'])['TradeNumber']
-									:''
-								}}</span>
+							<span>{{ props.row['TradeNumber']}}</span>
 						</el-form-item>
 						<el-form-item label="TOTAL POSITIVE">
-							<span>{{
-								btInfo.find(x=>x.id==props.row['id'])
-									?btInfo.find(x=>x.id==props.row['id'])['TotalPositive']
-									:''
-								}}</span>
+							<span>{{ Math.round((props.row['TradeNumber'] * props.row['Win Rate(%)']) / 100)}}</span>
 						</el-form-item>
 						<el-form-item label="TOTAL NEGATIVE">
-							<span>{{
-								btInfo.find(x=>x.id==props.row['id'])
-									?btInfo.find(x=>x.id==props.row['id'])['TotalNegative']
-									:''
-								}}</span>
+							<span>{{ Math.round(props.row['TradeNumber'] - (props.row['TradeNumber'] * props.row['Win Rate(%)']) / 100)}}</span>
 						</el-form-item>
 					</el-form>
 				</template>
@@ -392,26 +372,27 @@ export default {
 			return '';
 		},
 		async changeExpand(row, expanded){
-			// only AI recommendation page can call this function
-			if(this.data.label=="AI Portfolio") return
-			if(expanded.find(x=>x.id == row.id)){
-				let BacktestInfoContent = await getBacktestInfo({
-					symbol: row['Symbol'],
-					date: row['Date'],
-					signal: row['Signal'],
-					category: row['Category'],
-				})
-				this.btInfo.push({
-					id: row['id'],
-					WinRate:BacktestInfoContent['WinRate'],
-					AvgWin:BacktestInfoContent['AvgWin'],
-					AveLoss:BacktestInfoContent['AvgLoss'],
-					TradeNumber:BacktestInfoContent['TradeNumber'],
-					TotalPositive:Math.round((BacktestInfoContent['TradeNumber'] * BacktestInfoContent['WinRate']) / 100),
-					TotalNegative:Math.round(BacktestInfoContent['TradeNumber'] - 
-					(BacktestInfoContent['TradeNumber'] * BacktestInfoContent['WinRate']) / 100)
-				})
-			}
+			// // only AI recommendation page can call this function
+			// if(this.data.label=="AI Portfolio") return
+			// if(expanded.find(x=>x.id == row.id)){
+			// 	console.log(this.tableData.content,expanded,row)
+			// 	let BacktestInfoContent = await getBacktestInfo({
+			// 		symbol: row['Symbol'],
+			// 		date: row['Date'],
+			// 		signal: row['Signal'],
+			// 		category: row['Category'],
+			// 	})
+			// 	this.btInfo.push({
+			// 		id: row['id'],
+			// 		WinRate:BacktestInfoContent['WinRate'],
+			// 		AvgWin:BacktestInfoContent['AvgWin'],
+			// 		AveLoss:BacktestInfoContent['AvgLoss'],
+			// 		TradeNumber:BacktestInfoContent['TradeNumber'],
+			// 		TotalPositive:Math.round((BacktestInfoContent['TradeNumber'] * BacktestInfoContent['WinRate']) / 100),
+			// 		TotalNegative:Math.round(BacktestInfoContent['TradeNumber'] - 
+			// 		(BacktestInfoContent['TradeNumber'] * BacktestInfoContent['WinRate']) / 100)
+			// 	})
+			// }
 		},
 		changeTableSort(column){
 			var sortingOrder = column.order
