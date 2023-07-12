@@ -62,7 +62,7 @@ export default {
 					]
 					this.calculateBacktestHistory(this.other['EntryTradeDate'], periodArray,this.direction)
 					this.loadDefaultStudy()
-					this.loadMarker()
+					
 				}catch(e){
 					console.error(e)
 				}finally{
@@ -106,10 +106,7 @@ export default {
 				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{trades:this.other.EntryTradeDate})
 			}else if(noStudy.indexOf(this.indicator) != -1){
 				await CIQ.getIndicatorMatedata([CIQ.symbol])
-				// CIQ.stxx.loadChart(	{ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, function () {
-				// 	CIQ.hideCover()
-				// 	CIQ.nprogress.done()
-				// })
+
 				CIQ.Studies.addStudy(CIQ.stxx, 'ma',{
 					Type: 'simple',
 					Field: 'Close',
@@ -128,6 +125,8 @@ export default {
 			if (this.indicator == 'ma_gap') {
 				CIQ.Studies.addStudy(CIQ.stxx, 'ma');
 			}
+
+			this.loadMarker()
 		},
 		calculateBacktestHistory(dataSet, periodArray,direction) {
 			//this.$store.dispatch('app/store_backtestResult', []).then(() => {
