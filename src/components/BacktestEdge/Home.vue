@@ -1653,7 +1653,7 @@ export default {
           this.$store.commit('setHashTable', csvObj)
           vm.$store.state._last_signal_array.map(item=>{
               if(item.name == parameterRes.data.name){
-                item.state = 2
+                item.state = 1
               }
             })
     },
