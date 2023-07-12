@@ -40,11 +40,84 @@
 					</el-button>
 				</template> -->
 				<el-checkbox-group v-model="activeSignal" @change="selectSignal">
-					<el-checkbox-button v-for="item in signalList" :label="item" :key="item" >{{item}}</el-checkbox-button>
+						<el-checkbox-button v-for="item in signalList" :label="item" :key="item">{{item}}		
+						<!-- <el-tooltip effect="dark" placement="bottom" v-model="popupVisible">
+							<span slot="content" v-if="currentItem === 'MA'">
+								Long: Symbol Close CrossAbove SMA20;<br/>
+								Short: Symbol Close CrossBelow SMA20
+							</span>
+							<span slot="content" v-if="currentItem === 'MAGap'">
+								Long: The difference between Symbol Close and SMA20 CrossAbove 0;<br/>
+								Short: The difference between Symbol Close and SMA20 CrossBelow 0
+							</span>
+							<span slot="content" v-if="currentItem === 'MACDHist'">
+								Long: The MACD CrossAbove Signal Line;<br/>
+								Short: The MACD CrossBelow Signal Line
+							</span>
+							<span slot="content" v-if="currentItem === 'MACDHistGap'">
+								Long: The difference between MACDHist and its previous day CrossAbove 0;<br/>
+								Short: The difference between MACDHist and its previous day CrossBelow 0
+							</span>
+							<span slot="content" v-if="currentItem === 'Hammer'">
+								Only Long: The day before the collection of a long shadow line, the next day closed up
+							</span>
+							<span slot="content" v-if="currentItem === 'Shooting'">
+								Only Short: The day before a long upward thread, the next day closed down
+							</span>
+							<span slot="content" v-if="currentItem === 'UpTrend Pattern'">
+								Only Long: Symbol Close trend upward
+							</span>
+							<span slot="content" v-if="currentItem === 'DownTrend Pattern'">
+								Only Long: Symbol Close trend downward
+							</span>
+							<i class="el-icon-info" v-hover-popup="{ item: item }"></i></el-tooltip> -->
+							<i class="el-icon-info" v-hover-popup="{ item: item }"></i>
+						</el-checkbox-button>
 				</el-checkbox-group>
+				<el-popover v-model="popupVisible" trigger="manual">
+					<p v-show="currentItem === 'MA'">
+						This strategy utilizes the crossover of closing prices and moving averages as trading signals.<br/>
+						It can further specify the direction of trades and operating rules,<br/>
+						such as determining buy signals after a golden cross and sell signals after a death cross.
+					</p>
+					<p v-show="currentItem === 'MAGap'">
+						This strategy determines trading signals by comparing the difference between the moving average of the current day and the previous day.<br/>
+						It can further specify the direction of trades and operating rules,<br/>
+						such as determining buy signals after a golden cross and sell signals after a death cross.
+					</p>
+					<p v-show="currentItem === 'MACDHist'">
+						This strategy uses the crossover signals of the MACD histogram as trading signals.<br/>
+						It can further specify the direction of trades and operating rules,<br/>
+						such as determining buy signals after a golden cross and sell signals after a death cross.
+					</p>
+					<p v-show="currentItem === 'MACDHistGap'">
+						This strategy determines trading signals by comparing the difference between the MACDHist and the previous day's value.<br/>
+						It can further specify the direction of trades and operating rules,<br/>
+						such as determining buy signals after a golden cross and sell signals after a death cross.
+					</p>
+					<p v-show="currentItem === 'Hammer'">
+						If the previous day's candlestick shows a long lower shadow,<br/>
+						indicating support at the bottom,<br/>
+						a buy signal is generated when the price rises above a certain threshold after the opening.
+					</p>
+					<p v-show="currentItem === 'Shooting'">
+						If the previous day's candlestick shows a long upper shadow,<br/>
+						indicating resistance at the top,<br/>
+						a sell signal is generated when the price falls below a certain threshold after the opening.
+					</p>
+					<p v-show="currentItem === 'UpTrend Pattern'">
+						When the price surpasses the upward trendline connecting the peak points of an uptrend,<br/>
+						it indicates a potential future rise and generates a buy signal.
+					</p>
+					<p v-show="currentItem === 'DownTrend Pattern'">
+						When the price falls below the downward trendline connecting the trough points of a downtrend,<br/>
+						it indicates a potential future decline and generates a sell signal.
+					</p>
+					<p v-show="currentItem === 'ideas'">
+						we want stocks that are above their 200-day moving average with an Optix 5-day moving average less than 35.
+					</p>
+				</el-popover>
 			</div>
-
-
 		</div>
 		<el-table
 			ref="tableREF"
@@ -215,7 +288,10 @@ export default {
 				signalList: [],
 				activeSignal: [],
 
-				tableData: []
+				tableData: [],
+				popupVisible: false, // 弹窗可见性
+    		popupContent: '', // 弹窗内容
+				hoveredItem: null, // 悬停的元素
 		}
 	},
 	watch: {
@@ -236,10 +312,31 @@ export default {
 			handler(newValue, oldValue){
 				this.tableData = JSON.parse(JSON.stringify(this.data))
 				this.signalList = [...new Set(this.data.content.map(item=>item.Signal))]
+				console.log('signalList', this.signalList)
 			},
 			deep: true
-		},
+		}
 	},
+	directives: {
+  'hover-popup': {
+    bind(el, binding, vnode) {
+      el.addEventListener('mouseover', () => {
+        // 显示弹窗
+        vnode.context.showPopup(binding.value.item);
+      });
+
+      el.addEventListener('mouseleave', () => {
+        // 隐藏弹窗
+        vnode.context.hidePopup();
+      });
+			const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'ideas', 'Trend', 'Exhaustion']
+			if (!signalArr.includes(binding.value.item)) {
+        // 隐藏元素
+        el.style.display = 'none';
+      }
+    }
+  }
+},
 	created() {
 	},
 	mounted() {
@@ -252,12 +349,12 @@ export default {
 			if(signal.length>1){
 				signal.shift()
 			}
-			console.log(signal)
+			console.log('signal', signal)
 			if(signal.length!=0){
 				this.tableData.content = this.data.content.filter(item=>item.Signal == signal)
 			}else{
 				this.tableData.content = this.data.content
-			}	
+			}
 		},
 		selectSymbol(id, Symbol, subscribe, pt,sl,wr,rowIndex) {
 			
@@ -385,6 +482,21 @@ export default {
 				}
 			})
 		},
+		showPopup(item) {
+    // 设置当前悬停的项
+		const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'ideas', 'Trend', 'Exhaustion']
+		if(signalArr.includes(item)) {
+			this.currentItem = item;
+			// 显示弹窗
+			this.popupVisible = true;
+		}else {
+			this.popupVisible = false;
+		}
+  },
+  hidePopup() {
+    // 隐藏弹窗
+    this.popupVisible = false;
+  },
 	}
 };
 </script>

@@ -87,10 +87,6 @@ export default {
     }
   },
   mounted() {
-    const skipID = this.$route.params.id
-		if(skipID) {
-			this.recvActSecId(skipID)
-		}
   },
   methods: {
     recvActSecId(sectionId) {

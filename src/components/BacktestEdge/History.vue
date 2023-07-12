@@ -561,7 +561,12 @@ export default {
       try {
         CIQ.addCover('Fetching backtest information...')
         CIQ.nprogress.start()
-        const res = await seeParams(row.id)
+        let res = null
+        try {
+          res = await seeParams(row.id)
+        } catch (error) {
+          throw Error('Request Error')
+        }
         console.log('seeParams 结果', res)
         document.getElementsByClassName('ciq-period')[0].style.display = ''
         //  Restore indicator layout
@@ -592,6 +597,8 @@ export default {
           message: 'The internal server is busy, please try again later ',
           type: 'error'
         })
+        CIQ.hideCover()
+				CIQ.nprogress.done()
       }
     }, 500),
 	rerunBacktest: throttle(async function (row) {
@@ -600,7 +607,12 @@ export default {
 		try {
 			CIQ.addCover('Fetching backtest information...')
 			CIQ.nprogress.start()
-			const res = await seeParams(row.id)
+      let res = null
+			try {
+        res = await seeParams(row.id)
+      } catch (error) {
+        throw Error('Request Error')
+      }
 			document.getElementsByClassName('ciq-period')[0].style.display = ''
 			//  Restore indicator layout
 			this.$store.commit('getBacktestSymbol', res.data.symbol)
@@ -629,6 +641,8 @@ export default {
 				message: 'The internal server is busy, please try again later ',
 				type: 'error'
 			})
+      CIQ.hideCover()
+			CIQ.nprogress.done()
 		}
 	}, 500),
     async deleteBacktest(id) {
@@ -663,7 +677,12 @@ export default {
           })
           return
         }
-        const res = await seeParams(row.id)
+        let res = null
+        try {
+          res = await seeParams(row.id)
+        } catch (error) {
+          throw Error('Request Error')
+        }
         this.$store.commit('getBacktestSymbol', res.data.symbol)
         this.$store.commit('getRunBacktestData', row)
         params = res.data
@@ -690,6 +709,8 @@ export default {
             this.$emit('refFavoritesForm')
           } else {
             this.$message.error('Copy failed')
+            CIQ.hideCover()
+					  CIQ.nprogress.done()
           }
         } catch (error) {
           console.log(error)
@@ -699,6 +720,8 @@ export default {
               message: 'The internal server is busy, please try again later '
             })
           }
+          CIQ.hideCover()
+					CIQ.nprogress.done()
         }
       } catch (error) {
         console.log(error)
@@ -706,15 +729,21 @@ export default {
           title: 'Service is busy',
           message: 'The internal server is busy, please try again later '
         })
+        CIQ.hideCover()
+				CIQ.nprogress.done()
       }
     }, 1000),
     viewBacktestResults: throttle(async function (row) {
-      console.log('lishan viewBacktestResults', row)
       document.getElementsByClassName('ciq-period')[0].style.display = 'none'
       try {
         CIQ.addCover('Fetching backtest information...')
         CIQ.nprogress.start()
-        const res = await seeParams(row.id)
+        let res = null
+        try {
+          res = await seeParams(row.id)
+        } catch (error) {
+          throw Error('Request Error')
+        }
         this.$store.commit('getBacktestSymbol', res.data.symbol)
         CIQ.hideMarker()
         CIQ.isMarkerShown = false
@@ -736,10 +765,12 @@ export default {
         }
       } catch (error) {
         console.log(error)
-        vm.$message({
+        this.$message({
           message: 'The internal server is busy, please try again later ',
           type: 'error'
         })
+        CIQ.hideCover()
+        CIQ.nprogress.done()
       }
       if (!row.result['Total Trades']) {
         this.$notify({
@@ -747,6 +778,8 @@ export default {
           message: 'No trades, please change parameter.',
           type: 'warning',
         })
+        CIQ.hideCover()
+        CIQ.nprogress.done()
       }
     }, 500),
     handleCurrentChange(newpage) {
@@ -903,7 +936,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .searchBox {
-  float: right;
+  float: left;
   .search {
 	margin-right: 28px;
 }

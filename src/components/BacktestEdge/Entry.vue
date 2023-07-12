@@ -1084,6 +1084,7 @@ export default {
 			})
 		},
 		setEditData(data) {
+			console.log('entry setEditData',data)
 			let length = data.entry.signals.length
 			for (let j = 0; j < length; j++) {
 				this.$refs.indiChild[j].setEditData(data)

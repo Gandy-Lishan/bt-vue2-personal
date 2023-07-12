@@ -115,11 +115,13 @@ export default new Vuex.Store({
 		userUploadFileContent: Array(5).fill({}),
 		backtestResult: [],
 		tradePrice: 0,
-		last_signal_array: []
+		last_signal_array: [],
+		_last_signal_array: [], // lishan 用于控制进度条
+		hashTable: [] // lishan 保存要上传的数据
 	},
 	getters: {
 		getLastSignalArray: (state) => {
-			return state.last_signal_array
+			return state._last_signal_array
 		},
 		getExtremeValue: (state) => {
 			return state.extremeValue
@@ -134,6 +136,9 @@ export default new Vuex.Store({
 	mutations: {
 		SET_LASTSIGNAL_ARRAY: (state,val)=>{
 			state.last_signal_array = val
+		},
+		_SET_LASTSIGNAL_ARRAY: (state,val)=>{
+			state._last_signal_array = val
 		},
 		SET_TRADE_PRICE: (state,val)=>{
 			state.tradePrice = val
@@ -652,6 +657,20 @@ export default new Vuex.Store({
 		saveUserUploadFileContent(state, obj) {
 			console.log('文件上传成功', obj)
 			state.userUploadFileContent[obj.index] = obj.val
+		},
+		setHashTable(state, obj) {
+				const value = {
+					uuid: obj.id,
+					csv: obj.csv,
+					entry: obj.entry,
+					exit: obj.exit
+				}
+				state.hashTable.push(value)
+				console.log('setHashTable', state.hashTable)
+
+		},
+		clearHashTable(state) {
+			state.hashTable = []
 		}
 	},
 	actions: {
