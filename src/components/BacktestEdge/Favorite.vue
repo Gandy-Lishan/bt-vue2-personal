@@ -950,7 +950,7 @@ export default {
               const array = this.$store.state._last_signal_array
               const removedItems = [];
               for (let i = array.length - 1; i >= 0; i--) {
-                if (array[i].status == 2) {
+                if (array[i].state == 2) {
                   removedItems.push(array.splice(i, 1)[0]);
                 }
               }
