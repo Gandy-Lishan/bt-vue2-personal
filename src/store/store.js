@@ -120,6 +120,9 @@ export default new Vuex.Store({
 		hashTable: [] // lishan 保存要上传的数据
 	},
 	getters: {
+		getAllSignalArray: (state) => {
+			return state.last_signal_array
+		},
 		getLastSignalArray: (state) => {
 			return state._last_signal_array
 		},
