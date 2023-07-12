@@ -924,7 +924,9 @@ export default {
       this.showFLSMASK()
       CIQ.isEditFinish = true
       const allFavoriteList = await this.getAllFavoriteData()
+      // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
       this.favorite_array = JSON.parse(JSON.stringify(allFavoriteList))
+      console.log('favorite_array* ******',this.favorite_array)
       this.$store.commit('_SET_LASTSIGNAL_ARRAY',this.favorite_array.map(item=>{return {name:item.name,content:item,state:0,id:item.id}}))
       let favorite_info = this.processingBacktest(this.favorite_array)
       if (favorite_info == false){
@@ -950,7 +952,7 @@ export default {
               const array = this.$store.state._last_signal_array
               const removedItems = [];
               for (let i = array.length - 1; i >= 0; i--) {
-                if (array[i].state == 2) {
+                if (array[i].state == 2 || array[i].state == 0) {
                   removedItems.push(array.splice(i, 1)[0]);
                 }
               }
@@ -963,24 +965,18 @@ export default {
               for (let i = 0; i < filteredArray.length; i++) {
                 requestList.push(findLastSignalApi(filteredArray[i]))
               }
-              const res = await Promise.all(requestList)
-              .then((result) => {
-                // 处理正常情况下的响应
-                console.log('result 结果', result)
-              })
-              .catch((error) => {
-                // 处理错误情况
-                console.error(error);
-              });
+              // const res = await Promise.all(requestList)
+              let res = await Promise.allSettled(requestList)
               // lishan 这个时候已经处理完，批量发请求给后台， 拿到 lastSignal
               console.log('处理任务结束------处理任务结束', res)
-              res.map((item) => {
+              res = res.filter(item => item.status === 'fulfilled')
+              let lastSignalList = res.map((item) => {
                 return {
-                  lastEntrySignalDate: item.data.lastEntrySignalDate,
-                  lastExitSignalDate: item.data.lastExitSignalDate
+                  lastEntrySignalDate: item.value.data.lastEntrySignalDate,
+                  lastExitSignalDate: item.value.data.lastExitSignalDate
                 }
               })
-              console.log('请求数据', resList)
+              console.log('lastSignalList', lastSignalList)
               //this.removeFLSMASK()
               return // 处理任务结束
             }

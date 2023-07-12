@@ -433,7 +433,7 @@ export function getAllFavoriteList(page) {
           // 将当前页的数据添加到总数据数组中
           allData.push(...data);
 
-          if (res.data.has_more_data) {
+          if (res.data.next) {
             // 继续递归请求下一页数据
             fetchPageData(page + 1);
           } else {
