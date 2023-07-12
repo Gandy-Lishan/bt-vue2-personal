@@ -410,6 +410,35 @@ export default {
           console.log('error', error)
           throw Error('Request Failed')
         }
+        document.getElementsByClassName('ciq-period')[0].style.display = ''
+        // Restore indicator layout
+        this.$store.commit('getBacktestSymbol', res.data.symbol)
+        CIQ.hideMarker()
+        CIQ.isMarkerShown = false
+        if (res.data.indicator_layout) {
+          let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
+          this.restoreIndicatorLayoutEdit(
+            parsedData,
+            res.data.frequency,
+            row,
+            res.data
+          )
+        } else {
+          this.$store.commit('getRunBacktestData', row)
+          // Emit synchronous call
+          this.$emit('goTobacktestSetupForm', row.id, res.data, 'edit', () => {
+            this.$emit('goBacktestResultForm', row, () => {
+
+              // 濡傛灉鏄皟鐢ㄤ簡find lst signal,鍒欏湪edit鏃惰幏鍙朿hartiq csv鏁版嵁
+              if(CIQ.isEditFinish) this.uploadCSVWhileFLS(row.id)
+
+              this.$emit('switchTab', 'first')
+
+              CIQ.hideCover()
+              CIQ.nprogress.done()
+            })
+          })
+        }
       } catch (error) {
         console.log(error)
         vm.$message({
@@ -698,7 +727,7 @@ export default {
       }
 
       const content = CIQ.exportEx()
-      console.log('uploadCSVWhileFLS content--------------------------', content)
+      //console.log('uploadCSVWhileFLS content--------------------------', content)
       let parameterRes = null
       try {
         parameterRes = await seeParams(row.id)
