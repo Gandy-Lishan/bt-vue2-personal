@@ -1731,8 +1731,6 @@ export default {
     },
     switchTab(tabName) {
       this.activeName = tabName
-      // lishan 到这里代表调用完成
-      CIQ.isEditFinish = false
     },
     rerun() {
       this.runBacktest()
