@@ -925,7 +925,7 @@ export default {
       CIQ.isEditFinish = true
       const allFavoriteList = await this.getAllFavoriteData()
       this.favorite_array = JSON.parse(JSON.stringify(allFavoriteList))
-      this.$store.commit('_SET_LASTSIGNAL_ARRAY',this.favorite_array.map(item=>{return {name:item.name,content:item,state:0}}))
+      this.$store.commit('_SET_LASTSIGNAL_ARRAY',this.favorite_array.map(item=>{return {name:item.name,content:item,state:0,id:item.id}}))
       let favorite_info = this.processingBacktest(this.favorite_array)
       if (favorite_info == false){
           console.log('处理任务结束',this.$store.state._last_signal_array)
@@ -947,16 +947,34 @@ export default {
             if (favorite_info == false){
               CIQ.isEditFinish = false
               console.log('处理任务结束',this.$store.state._last_signal_array)
+              const array = this.$store.state._last_signal_array
+              const removedItems = [];
+              for (let i = array.length - 1; i >= 0; i--) {
+                if (array[i].status == 2) {
+                  removedItems.push(array.splice(i, 1)[0]);
+                }
+              }
+              console.log('未处理成功的任务', removedItems)
+              // 找出状态不为 2 的 并删除掉 list 中状态不为 2 的
               const list = this.$store.state.hashTable
+              const filteredArray = list.filter(item => !removedItems.includes(item.id))
+              console.log('过滤出来的任务', filteredArray)
               const requestList = []
-              for (let i = 0; i < list.length; i++) {
-                requestList.push(findLastSignalApi(list[i]))
+              for (let i = 0; i < filteredArray.length; i++) {
+                requestList.push(findLastSignalApi(filteredArray[i]))
               }
               const res = await Promise.all(requestList)
+              .then((result) => {
+                // 处理正常情况下的响应
+                console.log('result 结果', result)
+              })
+              .catch((error) => {
+                // 处理错误情况
+                console.error(error);
+              });
               // lishan 这个时候已经处理完，批量发请求给后台， 拿到 lastSignal
               console.log('处理任务结束------处理任务结束', res)
-              const resList = res
-              resList.map((item) => {
+              res.map((item) => {
                 return {
                   lastEntrySignalDate: item.data.lastEntrySignalDate,
                   lastExitSignalDate: item.data.lastExitSignalDate
@@ -974,7 +992,7 @@ export default {
     },
     async getAllFavoriteData() {
     // lishan 用于获取所有的 favorite 列表
-      const res = await getAllFavoriteList(1)
+      const res = await getAllFavoriteList(this.queryInfo.page)
       console.log('拿到所有的favorite列表', res)
       return res
     }
