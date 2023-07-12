@@ -83,6 +83,7 @@ export default {
 			'Profit Target(%)',
 			'Best Time In Market(Bars)',
 			//'Cash Alloc(%)'
+			'Z-Score'
 		]
 
 		// 测试

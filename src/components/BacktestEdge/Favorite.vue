@@ -5,7 +5,8 @@
 
 
 			<div class="favoriteForm_container">
-        <el-button @click="lastSignalDate" class='fls-btn'>find last signal</el-button>
+        <el-button @click="lastSignalDate" class='fls-btn'>Find Last Signal</el-button>
+        <el-button @click="runAll" class='fls-btn'>Run All Backtests</el-button>
         <div class="searchBox">
                   <el-input
 					class="search"
@@ -136,13 +137,13 @@
 									size="mini"
 									type="info"
 									plain
-									>{{ scope.row.last_entry_signal_date }}</el-button
+									>enter: {{ scope.row.last_entry_signal_date }}</el-button
 								>
 								<el-button
 									size="mini"
 									type="info"
 									plain
-									>{{ scope.row.last_exit_signal_date }}</el-button
+									>exit: {{ scope.row.last_exit_signal_date }}</el-button
 								>
 							</div>
 						</template>
@@ -347,8 +348,6 @@ export default {
       currentSort: {}, // 当前的排序信息
 
       backtest_array: [],
-
-      value:70
     }
   },
   directives: {
@@ -794,7 +793,13 @@ export default {
     processingBacktest(backtest_arr) { 
             if (backtest_arr.length <= 0) return false; 
 
-            var backtest_info = backtest_arr.pop()
+            // 跳过用户自定义时间的情况
+            let backtest_info
+            while(1){
+              backtest_info = backtest_arr.pop()
+              if(backtest_info.backtest_period != 22) break
+            }
+            
             // 修改开始时间以及结束时间为最新时间,结合backtest_period,以最新一天开始向前倒推 应该有现成代码可以使用
             // period = backtest_info['backtest_period']
             // if (period === undefined || period ==''){
@@ -816,8 +821,10 @@ export default {
 
     },
 
-
     lastSignalDate(){
+
+    },
+    runAll(){
         this.showFLSMASK()
         CIQ.isFindLastSignalRuning = true
 
@@ -867,7 +874,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .searchBox {
-  float: right;
+  float: left;
   .search {
 	margin-right: 28px;
 }
@@ -923,6 +930,7 @@ export default {
 
 .fls-btn{
   float: right;
+  margin-left: 20px;
 }
 
 
