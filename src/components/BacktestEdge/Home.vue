@@ -366,7 +366,7 @@
         </div>
 
         <div class="maskContent-loading" v-if="getAllSignalArray.length>0 && progressBarValALL < 100">
-          <img src="@/assets/fls.png"/>
+          <img src="@/assets/fls.gif"/>
           <span>Runing all backtests</span> 
           <progress-bar 
             class="progress-bar"
