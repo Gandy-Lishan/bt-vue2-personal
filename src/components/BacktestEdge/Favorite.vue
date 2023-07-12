@@ -976,19 +976,27 @@ export default {
             var favorite_info = this.processingBacktest(this.favorite_array)
             if (favorite_info == false){
               CIQ.isEditFinish = false
-              console.log('处理任务结束',this.$store.state._last_signal_array)
               const array = this.$store.state._last_signal_array
-              const removedItems = [];
+              let removedItems = [];
               for (let i = array.length - 1; i >= 0; i--) {
                 if (array[i].state == 2 || array[i].state == 0) {
                   removedItems.push(array.splice(i, 1)[0]);
                 }
               }
-              console.log('未处理成功的任务', removedItems)
+              if(removedItems.length != 0) {
+                // 把所有 state 为 0 的设置成 2
+                removedItems = removedItems.map(item => {
+                  return {
+                    ...item,
+                    state: 2
+                  }
+                })
+                const new_last_signal_array = [...array, ...removedItems]
+                this.$store.commit('_SET_LASTSIGNAL_ARRAY', new_last_signal_array)
+              }
               // 找出状态不为 2 的 并删除掉 list 中状态不为 2 的
               const list = this.$store.state.hashTable
               const filteredArray = list.filter(item => !removedItems.includes(item.id))
-              console.log('过滤出来的任务', filteredArray)
               const requestList = []
               for (let i = 0; i < filteredArray.length; i++) {
                 requestList.push(findLastSignalApi(filteredArray[i]))
@@ -996,7 +1004,6 @@ export default {
               // const res = await Promise.all(requestList)
               let res = await Promise.allSettled(requestList)
               // lishan 这个时候已经处理完，批量发请求给后台， 拿到 lastSignal
-              console.log('处理任务结束------处理任务结束', res)
               res = res.filter(item => item.status === 'fulfilled')
               let lastSignalList = res.map((item) => {
                 return {
@@ -1004,7 +1011,6 @@ export default {
                   lastExitSignalDate: item.value.data.lastExitSignalDate
                 }
               })
-              console.log('lastSignalList', lastSignalList)
               //this.removeFLSMASK()
               return // 处理任务结束
             }
@@ -1017,8 +1023,7 @@ export default {
     async getAllFavoriteData() {
     // lishan 用于获取所有的 favorite 列表
       const res = await getAllFavoriteList(this.queryInfo.page)
-      console.log('拿到所有的favorite列表', res)
-      return res.slice(0,3)
+      return res
     }
   }
 }
