@@ -113,8 +113,14 @@
 						When the price falls below the downward trendline connecting the trough points of a downtrend,<br/>
 						it indicates a potential future decline and generates a sell signal.
 					</p>
-					<p v-show="currentItem === 'ideas'">
+					<p v-show="currentItem === 'Idea'">
 						we want stocks that are above their 200-day moving average with an Optix 5-day moving average less than 35.
+					</p>
+					<p v-show="currentItem === 'Trend'">
+						Optix indicators with a 10-day moving average > 70 and that day's Optix value is > 80.
+					</p>
+					<p v-show="currentItem === 'Exhaustion'">
+						Optix indicators with a 10-day moving average > 70 and that day's Optix value is > 80.
 					</p>
 				</el-popover>
 			</div>
@@ -329,7 +335,7 @@ export default {
         // 隐藏弹窗
         vnode.context.hidePopup();
       });
-			const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'ideas', 'Trend', 'Exhaustion']
+			const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Idea', 'Trend', 'Exhaustion']
 			if (!signalArr.includes(binding.value.item)) {
         // 隐藏元素
         el.style.display = 'none';
@@ -484,7 +490,7 @@ export default {
 		},
 		showPopup(item) {
     // 设置当前悬停的项
-		const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'ideas', 'Trend', 'Exhaustion']
+		const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Idea', 'Trend', 'Exhaustion']
 		if(signalArr.includes(item)) {
 			this.currentItem = item;
 			// 显示弹窗

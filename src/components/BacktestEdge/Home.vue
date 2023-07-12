@@ -1623,7 +1623,12 @@ export default {
         })
         CIQ.hideCover()
         CIQ.nprogress.done()
-
+        CIQ.isEditFinish = false
+        vm.$store.state._last_signal_array.map(item=>{
+          if(item.name == resData.name){
+            item.state = 2
+          }
+        })
         // FindLastSignal过程中代表一个项目的运行结束
         CIQ.isFindLastSignalRuning = false
         vm.$store.state.last_signal_array.map(item=>{
@@ -1642,6 +1647,7 @@ export default {
       console.log('resData--------------------------', resData)
       const content = CIQ.exportEx()
       let parameterRes = null
+      try {
         parameterRes = await seeParams(id)
         console.log('parameterRes-------------------parameterRes', parameterRes.data)
         const csvObj = {
@@ -1650,12 +1656,20 @@ export default {
             entry: parameterRes.data.entry,
             exit: parameterRes.data.exit
           }
-          this.$store.commit('setHashTable', csvObj)
+          vm.$store.commit('setHashTable', csvObj)
           vm.$store.state._last_signal_array.map(item=>{
               if(item.name == parameterRes.data.name){
                 item.state = 1
               }
             })
+      } catch (error) {
+        console.error('error', error)
+        vm.$store.state._last_signal_array.map(item=>{
+              if(item.name == resData.data.name){
+                item.state = 2
+              }
+            })
+      }
     },
     goBacktestResultForm(row, callback) {
       try {
