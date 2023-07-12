@@ -428,11 +428,12 @@ export default {
           // Emit synchronous call
           this.$emit('goTobacktestSetupForm', row.id, res.data, 'edit', () => {
             this.$emit('goBacktestResultForm', row, () => {
-              this.$emit('switchTab', 'first')
 
               // 如果是调用了find lst signal,则在edit时获取chartiq csv数据
-              if(CIQ.isEditFinish) this,uploadCSVWhileFLS(row.id)
-              
+              if(CIQ.isEditFinish) this.uploadCSVWhileFLS(row.id)
+
+              this.$emit('switchTab', 'first')
+
               CIQ.hideCover()
               CIQ.nprogress.done()
             })
@@ -700,35 +701,50 @@ export default {
         that.$store.commit('getRunBacktestData', row)
         that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {
           that.$emit('goBacktestResultForm', row, () => {
-            that.$emit('switchTab', 'first')
+            
             // 如果是调用了find lst signal,则在edit时获取chartiq csv数据
-            if(CIQ.isEditFinish) this,uploadCSVWhileFLS(row.id)
+            if(CIQ.isEditFinish) that.uploadCSVWhileFLS(row)
 
+            that.$emit('switchTab', 'first')
             CIQ.hideCover()
             CIQ.nprogress.done()
           })
         })
       })
     },
-  async uploadCSVWhileFLS(id) {
+  async uploadCSVWhileFLS(row) {
       // lishan 在这里保存数据到 vuex favorite 中要用
-      const content = CIQ.exportEx()
-      console.log('resData--------------------------', content)
-      let parameterRes = null
-      parameterRes = await seeParams(id)
-      console.log('parameterRes-------------------parameterRes', parameterRes.data)
-      const csvObj = {
-        id,
-        csv: content,
-        entry: parameterRes.data.entry,
-        exit: parameterRes.data.exit
+      CIQ.spanPeriod = {
+        start_date:
+          row.start_date.replace(/-/g, '') * 1000000000,
+        end_date: row.end_date.replace(/-/g, '') * 1000000000
       }
-      this.$store.commit('setHashTable', csvObj)
-      vm.$store.state._last_signal_array.map(item=>{
-          if(item.name == parameterRes.data.name){
-            item.state = 1
+
+      const content = CIQ.exportEx()
+      console.log('uploadCSVWhileFLS content--------------------------', content)
+      let parameterRes = null
+      try {
+        parameterRes = await seeParams(row.id)
+        const csvObj = {
+            id: row.id,
+            csv: content,
+            entry: parameterRes.data.entry,
+            exit: parameterRes.data.exit
           }
-        })
+          this.$store.commit('setHashTable', csvObj)
+          this.$store.state._last_signal_array.map(item=>{
+              if(item.name == parameterRes.data.name){
+                item.state = 1
+              }
+            })
+      } catch (error) {
+        console.error('error', error)
+        this.$store.state._last_signal_array.map(item=>{
+              if(item.name == resData.data.name){
+                item.state = 2
+              }
+            })
+      }
   },
 	restoreIndicatorLayoutRerun(data, freq, row, resData) {
 		this.reloadData(data, freq)
@@ -933,7 +949,9 @@ export default {
       this.showFLSMASK()
       CIQ.isEditFinish = true
       const allFavoriteList = await this.getAllFavoriteData()
+      // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
       this.favorite_array = JSON.parse(JSON.stringify(allFavoriteList))
+      console.log('favorite_array* ******',this.favorite_array)
       this.$store.commit('_SET_LASTSIGNAL_ARRAY',this.favorite_array.map(item=>{return {name:item.name,content:item,state:0,id:item.id}}))
       let favorite_info = this.processingBacktest(this.favorite_array)
       if (favorite_info == false){
@@ -959,7 +977,7 @@ export default {
               const array = this.$store.state._last_signal_array
               const removedItems = [];
               for (let i = array.length - 1; i >= 0; i--) {
-                if (array[i].state == 2) {
+                if (array[i].state == 2 || array[i].state == 0) {
                   removedItems.push(array.splice(i, 1)[0]);
                 }
               }
@@ -972,24 +990,18 @@ export default {
               for (let i = 0; i < filteredArray.length; i++) {
                 requestList.push(findLastSignalApi(filteredArray[i]))
               }
-              const res = await Promise.all(requestList)
-              .then((result) => {
-                // 处理正常情况下的响应
-                console.log('result 结果', result)
-              })
-              .catch((error) => {
-                // 处理错误情况
-                console.error(error);
-              });
+              // const res = await Promise.all(requestList)
+              let res = await Promise.allSettled(requestList)
               // lishan 这个时候已经处理完，批量发请求给后台， 拿到 lastSignal
               console.log('处理任务结束------处理任务结束', res)
-              res.map((item) => {
+              res = res.filter(item => item.status === 'fulfilled')
+              let lastSignalList = res.map((item) => {
                 return {
-                  lastEntrySignalDate: item.data.lastEntrySignalDate,
-                  lastExitSignalDate: item.data.lastExitSignalDate
+                  lastEntrySignalDate: item.value.data.lastEntrySignalDate,
+                  lastExitSignalDate: item.value.data.lastExitSignalDate
                 }
               })
-              console.log('请求数据', resList)
+              console.log('lastSignalList', lastSignalList)
               //this.removeFLSMASK()
               return // 处理任务结束
             }
@@ -1002,8 +1014,8 @@ export default {
     async getAllFavoriteData() {
     // lishan 用于获取所有的 favorite 列表
       const res = await getAllFavoriteList(this.queryInfo.page)
-      console.log('拿到所有的favorite列表', res.slice(5,6))
-      return res.slice(5,6)
+      console.log('拿到所有的favorite列表', res)
+      return res
     }
   }
 }

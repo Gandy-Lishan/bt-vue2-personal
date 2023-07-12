@@ -1623,7 +1623,12 @@ export default {
         })
         CIQ.hideCover()
         CIQ.nprogress.done()
-
+        CIQ.isEditFinish = false
+        vm.$store.state._last_signal_array.map(item=>{
+          if(item.name == resData.name){
+            item.state = 2
+          }
+        })
         // FindLastSignal过程中代表一个项目的运行结束
         CIQ.isFindLastSignalRuning = false
         vm.$store.state.last_signal_array.map(item=>{
@@ -1638,7 +1643,6 @@ export default {
           callback()
         }
       }, 1000)
-
     },
     goBacktestResultForm(row, callback) {
       try {
