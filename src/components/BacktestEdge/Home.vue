@@ -313,7 +313,7 @@
 			</el-tooltip>
       <div id="myFLSbg">
         <div class="maskContent-loading" v-if="progressBarVal < 100">
-          <img src="@/assets/fls.png"/>
+          <img src="@/assets/fls.gif"/>
           <span>Finding the last signal</span> 
           <progress-bar 
             class="progress-bar"
