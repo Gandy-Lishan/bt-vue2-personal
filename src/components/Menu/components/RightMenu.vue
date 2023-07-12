@@ -38,10 +38,6 @@ export default {
     };
   },
 	mounted() {
-    const skipID = this.$route.params.id
-		if(skipID) {
-			this.scrollToSection(skipID)
-		}
 	},
   methods: {
     scrollToSection(id) {

@@ -472,7 +472,12 @@ export default {
     try {
       CIQ.addCover('Fetching backtest information...')
       CIQ.nprogress.start()
-      const res = await seeParams(backtestID)
+      let res = null
+      try {
+        await seeParams(backtestID)
+      } catch (error) {
+        throw Error('Request Error')
+      }
       res.data.entry_description = JSON.parse(res.data.entry_description)
       res.data.exit_description = JSON.parse(res.data.exit_description)
       res.data.result = JSON.parse(res.data.result)
@@ -1423,7 +1428,6 @@ export default {
                         console.log('FindLastSignalRuning done, runBacktest status !== 201',backtestData,vm.$store.state.last_signal_array)
                       }
                     } catch (error) {
-                      console.log('lishan error', error)
 
                       vm.$store.commit('initialBacktestInfo')
                       vm.$refs.setUpChild.clearOldBacktestName()
@@ -1634,6 +1638,7 @@ export default {
           callback()
         }
       }, 1000)
+
     },
     goBacktestResultForm(row, callback) {
       try {
@@ -1722,6 +1727,8 @@ export default {
     },
     switchTab(tabName) {
       this.activeName = tabName
+      // lishan 到这里代表调用完成
+      CIQ.isEditFinish = false
     },
     rerun() {
       this.runBacktest()

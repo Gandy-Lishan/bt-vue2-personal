@@ -778,3 +778,20 @@ input[type="time"] {
 .el-textarea__inner{
   resize: none !important;
 }
+.el-checkbox-button .el-checkbox-button__inner{
+  border: 1px solid #DCDFE6;
+  border-radius: 4px;
+}
+.el-checkbox-button:last-child .el-checkbox-button__inner{
+  border-radius: 4px;
+}
+.el-checkbox-button:first-child .el-checkbox-button__inner{
+  border-radius: 4px;
+}
+.el-checkbox-button, .el-checkbox-button__inner{
+  margin: 0 10px;
+}
+.el-popover{
+  background-color: #303133;
+  color: #fff;
+}

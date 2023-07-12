@@ -5,8 +5,10 @@
 
 
 			<div class="favoriteForm_container">
-        <el-button @click="lastSignalDate" class='fls-btn'>Find Last Signal</el-button>
-        <el-button @click="runAll" class='fls-btn'>Run All Backtests</el-button>
+
+        <el-button @click="runAllBacktest" class='fls-btn'>run all backtest</el-button>
+        <el-button @click="_findLastSignal" class='fls-btn'>find last signal</el-button>
+
         <div class="searchBox">
                   <el-input
 					class="search"
@@ -323,7 +325,8 @@ import {
   copyBacktest,
   favoriteBacktest,
   getBacktestName,
-  searchHistoryList
+  getAllFavoriteList,
+  findLastSignalApi
 } from '@/service/service'
 export default {
   data() {
@@ -348,6 +351,9 @@ export default {
       currentSort: {}, // 当前的排序信息
 
       backtest_array: [],
+
+      allFavoriteList: [],
+      favorite_array: []
     }
   },
   directives: {
@@ -397,8 +403,13 @@ export default {
       try {
         CIQ.addCover('Fetching backtest information...')
         CIQ.nprogress.start()
-
-        const res = await seeParams(row.id)
+        let res = null
+        try {
+          res = await seeParams(row.id)
+        } catch (error) {
+          console.log('error', error)
+          throw Error('Request Failed')
+        }
         document.getElementsByClassName('ciq-period')[0].style.display = ''
         // Restore indicator layout
         this.$store.commit('getBacktestSymbol', res.data.symbol)
@@ -418,6 +429,10 @@ export default {
           this.$emit('goTobacktestSetupForm', row.id, res.data, 'edit', () => {
             this.$emit('goBacktestResultForm', row, () => {
               this.$emit('switchTab', 'first')
+
+              // 如果是调用了find lst signal,则在edit时获取chartiq csv数据
+              if(CIQ.isEditFinish) this,uploadCSVWhileFLS(row.id)
+              
               CIQ.hideCover()
               CIQ.nprogress.done()
             })
@@ -429,6 +444,8 @@ export default {
           message: 'The internal server is busy, please try again later ',
           type: 'error'
         })
+        CIQ.hideCover()
+				CIQ.nprogress.done()
       }
     }, 500),
 	rerunBacktest: throttle(async function (row) {
@@ -436,8 +453,12 @@ export default {
 		try {
 			CIQ.addCover('Fetching backtest information...')
 			CIQ.nprogress.start()
-
-			const res = await seeParams(row.id)
+      let res = null
+			try {
+        res = await seeParams(row.id)
+      } catch (error) {
+        throw Error('Request Failed')
+      }
 			document.getElementsByClassName('ciq-period')[0].style.display = ''
 			// Restore indicator layout
 			this.$store.commit('getBacktestSymbol', res.data.symbol)
@@ -467,6 +488,8 @@ export default {
 				message: 'The internal server is busy, please try again later ',
 				type: 'error'
 			})
+      CIQ.hideCover()
+			CIQ.nprogress.done()
 		}
 	}, 500),
     async deleteBacktest(id) {
@@ -505,7 +528,12 @@ export default {
           })
           return
         }
-        const res = await seeParams(row.id)
+        let res = null
+        try {
+          res = await seeParams(row.id)
+        } catch (error) {
+          throw Error('Request failed')
+        }
         this.$store.commit('getBacktestSymbol', res.data.symbol)
         this.$store.commit('getRunBacktestData', row)
         params = res.data
@@ -547,6 +575,8 @@ export default {
               title: 'Service is busy',
               message: 'The internal server is busy, please try again later '
             })
+            CIQ.hideCover()
+					  CIQ.nprogress.done()
           }
         }
       } catch (error) {
@@ -566,8 +596,12 @@ export default {
         try {
           CIQ.addCover('Fetching backtest information...')
           CIQ.nprogress.start()
-
-          const res = await seeParams(row.id)
+          let res = null
+          try {
+            res = await seeParams(row.id)
+          } catch (error) {
+            throw Error('Request Error')
+          }
           this.$store.commit('getBacktestSymbol', res.data.symbol)
           CIQ.hideMarker()
           CIQ.isMarkerShown = false
@@ -589,11 +623,13 @@ export default {
             })
           }
         } catch (error) {
-        console.error(error)
+          console.error(error)
           vm.$message({
             message: 'The internal server is busy, please try again later ',
             type: 'error'
           })
+          CIQ.hideCover()
+					CIQ.nprogress.done()
         }
       } else {
         this.$notify({
@@ -601,6 +637,8 @@ export default {
           message: 'No trades, please change parameter.',
           type: 'warning'
         })
+        CIQ.hideCover()
+				CIQ.nprogress.done()
       }
     }, 500),
     handleCurrentChange(newpage) {
@@ -663,12 +701,35 @@ export default {
         that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {
           that.$emit('goBacktestResultForm', row, () => {
             that.$emit('switchTab', 'first')
+            // 如果是调用了find lst signal,则在edit时获取chartiq csv数据
+            if(CIQ.isEditFinish) this,uploadCSVWhileFLS(row.id)
+
             CIQ.hideCover()
             CIQ.nprogress.done()
           })
         })
       })
     },
+  async uploadCSVWhileFLS(id) {
+      // lishan 在这里保存数据到 vuex favorite 中要用
+      const content = CIQ.exportEx()
+      console.log('resData--------------------------', content)
+      let parameterRes = null
+      parameterRes = await seeParams(id)
+      console.log('parameterRes-------------------parameterRes', parameterRes.data)
+      const csvObj = {
+        id,
+        csv: content,
+        entry: parameterRes.data.entry,
+        exit: parameterRes.data.exit
+      }
+      this.$store.commit('setHashTable', csvObj)
+      vm.$store.state._last_signal_array.map(item=>{
+          if(item.name == parameterRes.data.name){
+            item.state = 1
+          }
+        })
+  },
 	restoreIndicatorLayoutRerun(data, freq, row, resData) {
 		this.reloadData(data, freq)
 		var that = this
@@ -821,10 +882,8 @@ export default {
 
     },
 
-    lastSignalDate(){
+    runAllBacktest(){
 
-    },
-    runAll(){
         this.showFLSMASK()
         CIQ.isFindLastSignalRuning = true
 
@@ -868,8 +927,85 @@ export default {
       const myFLSbg = document.querySelector('#myFLSbg')
       myFLSbg.classList.add('activated')
     },
+    async _findLastSignal() {
+      // lishan 批量给列表调用 editBacktest 你的方法名称我并没修改，而是使用 '_' 开头
+      this.$store.commit('clearHashTable')
+      this.showFLSMASK()
+      CIQ.isEditFinish = true
+      const allFavoriteList = await this.getAllFavoriteData()
+      this.favorite_array = JSON.parse(JSON.stringify(allFavoriteList))
+      this.$store.commit('_SET_LASTSIGNAL_ARRAY',this.favorite_array.map(item=>{return {name:item.name,content:item,state:0,id:item.id}}))
+      let favorite_info = this.processingBacktest(this.favorite_array)
+      if (favorite_info == false){
+          console.log('处理任务结束',this.$store.state._last_signal_array)
+          return // 处理任务结束
+        }
+        var error_array = new Array();
+        this._postRunbacktest(favorite_info)
+    },
+   _postRunbacktest(favorite) {
+    // lishan 做迭代 
+      this.editBacktest(favorite)
+      // 轮询可用于等待上一个回测结束，也可定时刷新进度条进度
+      let interval = setInterval(async () =>{
+          if (CIQ.isEditFinish == false){
+            clearInterval(interval)
+            CIQ.isEditFinish = true
+            //console.log('轮询等待上一个回测结束.........',CIQ.isEditFinish,backtest)
+            var favorite_info = this.processingBacktest(this.favorite_array)
+            if (favorite_info == false){
+              CIQ.isEditFinish = false
+              console.log('处理任务结束',this.$store.state._last_signal_array)
+              const array = this.$store.state._last_signal_array
+              const removedItems = [];
+              for (let i = array.length - 1; i >= 0; i--) {
+                if (array[i].state == 2) {
+                  removedItems.push(array.splice(i, 1)[0]);
+                }
+              }
+              console.log('未处理成功的任务', removedItems)
+              // 找出状态不为 2 的 并删除掉 list 中状态不为 2 的
+              const list = this.$store.state.hashTable
+              const filteredArray = list.filter(item => !removedItems.includes(item.id))
+              console.log('过滤出来的任务', filteredArray)
+              const requestList = []
+              for (let i = 0; i < filteredArray.length; i++) {
+                requestList.push(findLastSignalApi(filteredArray[i]))
+              }
+              const res = await Promise.all(requestList)
+              .then((result) => {
+                // 处理正常情况下的响应
+                console.log('result 结果', result)
+              })
+              .catch((error) => {
+                // 处理错误情况
+                console.error(error);
+              });
+              // lishan 这个时候已经处理完，批量发请求给后台， 拿到 lastSignal
+              console.log('处理任务结束------处理任务结束', res)
+              res.map((item) => {
+                return {
+                  lastEntrySignalDate: item.data.lastEntrySignalDate,
+                  lastExitSignalDate: item.data.lastExitSignalDate
+                }
+              })
+              console.log('请求数据', resList)
+              //this.removeFLSMASK()
+              return // 处理任务结束
+            }
+            this._postRunbacktest(favorite_info)
+            
+            // 是否添加一个成功列表
+          }
+        },1000) // 2秒查询一次
+    },
+    async getAllFavoriteData() {
+    // lishan 用于获取所有的 favorite 列表
+      const res = await getAllFavoriteList(this.queryInfo.page)
+      console.log('拿到所有的favorite列表', res.slice(5,6))
+      return res.slice(5,6)
+    }
   }
-
 }
 </script>
 <style lang="less" scoped>
