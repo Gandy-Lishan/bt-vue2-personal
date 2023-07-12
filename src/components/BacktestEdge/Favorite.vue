@@ -744,6 +744,9 @@ export default {
                 item.state = 2
               }
             })
+      } finally{
+        // lishan 到这里代表调用完成
+        CIQ.isEditFinish = false
       }
   },
 	restoreIndicatorLayoutRerun(data, freq, row, resData) {
@@ -1015,7 +1018,7 @@ export default {
     // lishan 用于获取所有的 favorite 列表
       const res = await getAllFavoriteList(this.queryInfo.page)
       console.log('拿到所有的favorite列表', res)
-      return res
+      return res.slice(0,3)
     }
   }
 }
