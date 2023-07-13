@@ -3,9 +3,9 @@
 	<el-row>
 		<el-col :span="24">
 			<div class="favoriteForm_container">
-				<el-button @click="runAllBacktest" class="fls-btn"
+				<!-- <el-button @click="runAllBacktest" class="fls-btn"
 					>run all backtest</el-button
-				>
+				> -->
 				<el-button @click="_findLastSignal" class="fls-btn"
 					>find last signal</el-button
 				>
@@ -1030,7 +1030,7 @@ export default {
     },
     async getAllFavoriteData() {
       // lishan 用于获取所有的 favorite 列表
-      const res = await getAllFavoriteList(this.queryInfo.page)
+      const res = await getAllFavoriteList(1)
       return res
     }
   }
