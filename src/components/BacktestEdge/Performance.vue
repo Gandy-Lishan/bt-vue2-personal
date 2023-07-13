@@ -836,6 +836,9 @@ export default {
             try {
               res = await seeReport(id)
             } catch (error) {
+              // 可能是没有交易，所以需要清除当前marker，防止保留上次回测的marker
+              CIQ.hideMarker()
+              CIQ.isMarkerShown = false
               console.error(error)
               throw Error('report error')
             }
