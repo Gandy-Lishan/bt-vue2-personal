@@ -3,9 +3,9 @@
 	<el-row>
 		<el-col :span="24">
 			<div class="favoriteForm_container">
-				<el-button @click="runAllBacktest" class="fls-btn"
+				<!-- <el-button @click="runAllBacktest" class="fls-btn"
 					>run all backtest</el-button
-				>
+				> -->
 				<el-button @click="_findLastSignal" class="fls-btn"
 					>find last signal</el-button
 				>
