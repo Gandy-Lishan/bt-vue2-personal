@@ -115,7 +115,8 @@ export default {
 			},
 			tradePriceOptions: {
 				0: 'Next Open',
-				1: 'Next Close'
+				1: 'Next Close',
+				2: 'Current Close'
 			},
 			backtestPeriod: '',
 			tradePrice: ''

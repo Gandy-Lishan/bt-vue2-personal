@@ -49,6 +49,12 @@ export default {
               { id: '2-1', title: 'View backtest in My Favorites' }
             ]
           },
+          {
+            id: 'fls', title: 'Finding the Last Signal Using BacktestEdeg', subsections: [
+              { id: 'fls-0', title: "Click the 'find last signal' button" },
+              { id: 'fls-1', title: 'Wait for the backtest to finish' }
+            ]
+          },
           { id: '3', title: 'Edit a created backtest', subsections: [
             { id: '3-0', title: 'Open the Backtest History tab' },
             { id: '3-1', title: 'Edit in Set Up Backtest' }
@@ -80,7 +86,7 @@ export default {
               { id: '9-2', title: 'Analyst Report Link' },
               { id: '9-3', title: 'Share Backtest' }
             ]
-          }
+          },
       ],
       activeSection: '0',
       isToggle: false
