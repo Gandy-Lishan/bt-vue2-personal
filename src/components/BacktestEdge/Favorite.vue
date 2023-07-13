@@ -1030,7 +1030,7 @@ export default {
     },
     async getAllFavoriteData() {
       // lishan 用于获取所有的 favorite 列表
-      const res = await getAllFavoriteList(this.queryInfo.page)
+      const res = await getAllFavoriteList(1)
       return res
     }
   }
