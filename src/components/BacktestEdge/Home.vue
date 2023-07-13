@@ -321,8 +321,7 @@
           <p>It might take a few seconds for the Backtests list be ready</p>
         </div>
 
-        <!-- <div class="maskContent-loading" v-if="getLastSignalArray.length>0 && progressBarVal < 100"> -->
-        <div class="maskContent-loading" v-if="1">
+        <div class="maskContent-loading" v-if="getLastSignalArray.length>0 && progressBarVal < 100">
           <img src="@/assets/fls.gif"/>
           <span>Finding the last signal</span> 
           <progress-bar 
