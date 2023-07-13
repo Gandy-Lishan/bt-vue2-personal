@@ -1394,8 +1394,16 @@
 				<el-image
 					style="width: 100%; height: 50%"
 					class="image-border"
-					:src="pathai3"
-					:preview-src-list="pathai3List"
+					:src="pathai311"
+					:preview-src-list="pathai311List"
+					fit="fill"
+					lazy
+				></el-image>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai312"
+					:preview-src-list="pathai311List"
 					fit="fill"
 					lazy
 				></el-image>
@@ -1405,8 +1413,8 @@
 				<el-image
 					style="width: 100%; height: 50%"
 					class="image-border"
-					:src="pathai3"
-					:preview-src-list="pathai3List"
+					:src="pathai32"
+					:preview-src-list="pathai32List"
 					fit="fill"
 					lazy
 				></el-image>
@@ -1416,8 +1424,8 @@
 				<el-image
 					style="width: 100%; height: 50%"
 					class="image-border"
-					:src="pathai3"
-					:preview-src-list="pathai3List"
+					:src="pathai33"
+					:preview-src-list="pathai33List"
 					fit="fill"
 					lazy
 				></el-image>
@@ -1427,9 +1435,25 @@
 					On the AI Scanner page, you will see a stock list that contains information about multiple stocks.
 					Each column of the stock list has a header, including Win Rate(%), Stop Loss(%), Profit Target(%), and Best Time In Market(Bars).
 				</p>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai34"
+					:preview-src-list="pathai35List"
+					fit="fill"
+					lazy
+				></el-image>
 				<p>
 					Next to each header, there is a sorting icon. Clicking the sorting icon allows you to sort the list in ascending or descending order based on the corresponding column. By default, the list is not sorted.
 				</p>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai35"
+					:preview-src-list="pathai35List"
+					fit="fill"
+					lazy
+				></el-image>
 				<p>
 					You can select the column you want to sort based on your requirements. Click the sorting icon next to the respective header to sort the list. Clicking the icon once will sort the list in ascending order for that column, and clicking it again will sort the list in descending order.
 					You can sort the list based on different columns such as Win Rate(%), Stop Loss(%), Profit Target(%), or Best Time In Market(Bars). The stock list will be sorted according to the selected sorting criteria. The sorted list will display the corresponding stock information, making it easier for you to analyze and compare data for different stocks.
@@ -1683,7 +1707,13 @@ import path832 from "../img/9.3.2.jpg";
 import path833 from "../img/9.3.3.jpg";
 import pathai1 from "../img/ai1.jpg";
 import pathai2 from "../img/ai2.jpg";
-import pathai3 from "../img/ai3.jpg";
+// import pathai3 from "../img/ai3.jpg";
+import pathai311 from "../img/ai3.1.1.jpg";
+import pathai312 from "../img/ai3.1.2.jpg";
+import pathai32 from "../img/ai3.2.jpg";
+import pathai33 from "../img/ai3.3.jpg";
+import pathai34 from "../img/ai3.4.jpg";
+import pathai35 from "../img/ai3.5.jpg";
 import pathai41 from "../img/ai4.1.jpg";
 import pathai42 from "../img/ai4.2.jpg";
 import pathai43 from "../img/ai4.3.jpg";
@@ -1848,8 +1878,18 @@ export default {
       pathai1List: [pathai1],
       pathai2: pathai2,
       pathai2List: [pathai2],
-      pathai3: pathai3,
-      pathai3List: [pathai3],
+      // pathai3: pathai3,
+      // pathai3List: [pathai3],
+			pathai311: pathai311,
+      pathai311List: [pathai311, pathai312],
+			pathai312: pathai312,
+			pathai32: pathai32,
+			pathai32List: [pathai32],
+			pathai33: pathai33,
+			pathai33List: [pathai33],
+			pathai34: pathai34,
+			pathai35: pathai35,
+			pathai35List: [pathai34,pathai35],
       pathai41: pathai41,
       pathai41List: [pathai41],
       pathai42: pathai42,
