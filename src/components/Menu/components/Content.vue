@@ -1369,7 +1369,7 @@
 					fit="fill"
 					lazy
 				></el-image>
-				<h1 id="ai-3">Cash Alloc(%) for auto-adjusted stocks</h1>
+				<!-- <h1 id="ai-3">Cash Alloc(%) for auto-adjusted stocks</h1>
 				<hr />
 				<p>
 					Check the symbol you want to calculate for Cash Alloc(%) in the
@@ -1384,8 +1384,84 @@
 					:preview-src-list="pathai3List"
 					fit="fill"
 					lazy
+				></el-image> -->
+			<h1 id="ai-3">Using Filter Buttons</h1>
+				<hr />
+				<p>
+					On the "SwingAI" page, you will see several filter buttons, including 'MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', and 'DownTrend Pattern'.
+					On the "MidTermAI" page, you will see several filter buttons, including 'Idea', 'Trend', and 'Exhaustion'.
+				</p>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai311"
+					:preview-src-list="pathai311List"
+					fit="fill"
+					lazy
 				></el-image>
-				<h1 id="ai-4">View symbol's backtest information</h1>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai312"
+					:preview-src-list="pathai311List"
+					fit="fill"
+					lazy
+				></el-image>
+				<p>
+					These buttons are dynamically displayed. If you're unfamiliar with the meaning of each filter button, you can hover your mouse over the icon next to the button, and a tooltip will appear explaining its meaning.
+				</p>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai32"
+					:preview-src-list="pathai32List"
+					fit="fill"
+					lazy
+				></el-image>
+				<p>
+					Based on your requirements, click the appropriate filter button. As you click different filter buttons, the list below will be filtered accordingly. You can filter out the stocks you are interested in using different filter options. With the information in the filtered list, you can perform a more in-depth analysis.
+				</p>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai33"
+					:preview-src-list="pathai33List"
+					fit="fill"
+					lazy
+				></el-image>
+				<h1 id="ai-4">Stock List Sorting</h1>
+				<hr />
+				<p>
+					On the AI Scanner page, you will see a stock list that contains information about multiple stocks.
+					Each column of the stock list has a header, including Win Rate(%), Stop Loss(%), Profit Target(%), and Best Time In Market(Bars).
+				</p>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai34"
+					:preview-src-list="pathai35List"
+					fit="fill"
+					lazy
+				></el-image>
+				<p>
+					Next to each header, there is a sorting icon. Clicking the sorting icon allows you to sort the list in ascending or descending order based on the corresponding column. By default, the list is not sorted.
+				</p>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathai35"
+					:preview-src-list="pathai35List"
+					fit="fill"
+					lazy
+				></el-image>
+				<p>
+					You can select the column you want to sort based on your requirements. Click the sorting icon next to the respective header to sort the list. Clicking the icon once will sort the list in ascending order for that column, and clicking it again will sort the list in descending order.
+					You can sort the list based on different columns such as Win Rate(%), Stop Loss(%), Profit Target(%), or Best Time In Market(Bars). The stock list will be sorted according to the selected sorting criteria. The sorted list will display the corresponding stock information, making it easier for you to analyze and compare data for different stocks.
+				</p>
+				<p>
+					By following the steps mentioned above, you can utilize the sorting functionality of AI Scanner to sort the stock list in ascending or descending order based on different columns. This enables you to compare and analyze stock data based on various indicators such as Win Rate(%), Stop Loss(%), Profit Target(%), or Best Time In Market(Bars), allowing you to better understand the market conditions and make informed decisions. Remember, sorting is just a tool to facilitate the viewing and comparison of stock data, and the final decisions still need to be based on your own judgment and analysis.
+				</p>
+				<h1 id="ai-5">View symbol's backtest information</h1>
 				<hr />
 				<p>
 					Click on a stock name to access the stock and its corresponding
@@ -1427,9 +1503,9 @@
 					fit="fill"
 					lazy
 				></el-image>
-				<h1 id="ai-5">Switching AI Algorithms: SwingAI and MidTermAI</h1>
+				<h1 id="ai-6">Switching AI Algorithms: SwingAI and MidTermAI</h1>
 				<hr />
-				<h2 id="ai-5-0">Opening the AI Stock Scanner System</h2>
+				<h2 id="ai-6-0">Opening the AI Stock Scanner System</h2>
 				<p>
 					Make sure you have entered the AI ​​stock scanner system and the
 					corresponding function buttons are displayed on the interface.
@@ -1442,7 +1518,7 @@
 					fit="fill"
 					lazy
 				></el-image>
-				<h2 id="ai-5-1">Switch to SwingAI</h2>
+				<h2 id="ai-6-1">Switch to SwingAI</h2>
 				<p>
 					When you wish to switch to the SwingAI algorithm, just click the
 					button marked "SwingAI" on the interface. Once you click the button,
@@ -1456,7 +1532,7 @@
 					fit="fill"
 					lazy
 				></el-image>
-				<h2 id="ai-5-2">Switch to MidTermAI</h2>
+				<h2 id="ai-6-2">Switch to MidTermAI</h2>
 				<p>
 					Likewise, when you wish to switch to the MidTermAI algorithm, just
 					click the button labeled "MidTermAI" on the interface. After clicking
@@ -1471,7 +1547,7 @@
 					fit="fill"
 					lazy
 				></el-image>
-				<h2 id="ai-5-3">When to Choose SwingAI or MidTermAI</h2>
+				<h2 id="ai-6-3">When to Choose SwingAI or MidTermAI</h2>
 				<p>
 					When choosing to use the SwingAI or MidTermAI algorithms, here are
 					some recommendations to help you understand when to use each algorithm
@@ -1631,7 +1707,13 @@ import path832 from "../img/9.3.2.jpg";
 import path833 from "../img/9.3.3.jpg";
 import pathai1 from "../img/ai1.jpg";
 import pathai2 from "../img/ai2.jpg";
-import pathai3 from "../img/ai3.jpg";
+// import pathai3 from "../img/ai3.jpg";
+import pathai311 from "../img/ai3.1.1.jpg";
+import pathai312 from "../img/ai3.1.2.jpg";
+import pathai32 from "../img/ai3.2.jpg";
+import pathai33 from "../img/ai3.3.jpg";
+import pathai34 from "../img/ai3.4.jpg";
+import pathai35 from "../img/ai3.5.jpg";
 import pathai41 from "../img/ai4.1.jpg";
 import pathai42 from "../img/ai4.2.jpg";
 import pathai43 from "../img/ai4.3.jpg";
@@ -1796,8 +1878,18 @@ export default {
       pathai1List: [pathai1],
       pathai2: pathai2,
       pathai2List: [pathai2],
-      pathai3: pathai3,
-      pathai3List: [pathai3],
+      // pathai3: pathai3,
+      // pathai3List: [pathai3],
+			pathai311: pathai311,
+      pathai311List: [pathai311, pathai312],
+			pathai312: pathai312,
+			pathai32: pathai32,
+			pathai32List: [pathai32],
+			pathai33: pathai33,
+			pathai33List: [pathai33],
+			pathai34: pathai34,
+			pathai35: pathai35,
+			pathai35List: [pathai34,pathai35],
       pathai41: pathai41,
       pathai41List: [pathai41],
       pathai42: pathai42,
