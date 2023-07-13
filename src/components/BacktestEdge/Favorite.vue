@@ -142,10 +142,10 @@
 						<template slot-scope="scope">
 							<div class="showDate">
 								<el-button size="mini" type="info" plain
-									>enter: {{ scope.row.last_entry_signal_date }}</el-button
+									>E: {{ scope.row.last_entry_signal_date }}</el-button
 								>
 								<el-button size="mini" type="info" plain
-									>exit: {{ scope.row.last_exit_signal_date }}</el-button
+									>X: {{ scope.row.last_exit_signal_date }}</el-button
 								>
 							</div>
 						</template>
