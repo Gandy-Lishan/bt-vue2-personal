@@ -321,7 +321,8 @@
           <p>It might take a few seconds for the Backtests list be ready</p>
         </div>
 
-        <div class="maskContent-loading" v-if="getLastSignalArray.length>0 && progressBarVal < 100">
+        <!-- <div class="maskContent-loading" v-if="getLastSignalArray.length>0 && progressBarVal < 100"> -->
+        <div class="maskContent-loading" v-if="1">
           <img src="@/assets/fls.gif"/>
           <span>Finding the last signal</span> 
           <progress-bar 
@@ -335,7 +336,7 @@
           ></progress-bar>
           <div class='msg'>
             <div class='desc'>{{numOfProcessedBacktests}} out of {{getLastSignalArray.length}} tasks have been completed</div>
-            <div class='time'>{{ approTime}}</div>
+            <div class='time'><span><img src="@/assets/fls-time.png"/></span>{{ approTime}}</div>
           </div>
 
           <el-button @click="refreshPageTemp">Cancel</el-button>
@@ -2249,7 +2250,7 @@ button.createNew,
       img {
         width: 242px;
       }
-      span {
+      >span {
         color: #5C9CD1;
         font-size: 1.1rem;
         font-weight: 500;
@@ -2265,6 +2266,12 @@ button.createNew,
         .time {
           font-size: 9px;
           color: #bbbbbb;
+          img {
+            position: relative;
+            width: 13px;
+            top: 1px;
+            right: 4px;
+          }
         }
       }
 

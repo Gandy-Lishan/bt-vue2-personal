@@ -196,6 +196,7 @@
 					:label="l"
 					:prop="l"
 					:key="index"
+					min-width="120"
 				>
 					<template slot-scope="scope">
 						<router-link
@@ -231,6 +232,7 @@
 					:label="l"
 					:prop="l"
 					:key="index"
+					min-width="120"
 				>
 					<template slot-scope="scope">
 						<p class="tableText">
