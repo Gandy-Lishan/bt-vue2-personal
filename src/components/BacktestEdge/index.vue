@@ -35,13 +35,13 @@
 							<el-menu-item index="4-1">Tutorial</el-menu-item>
 							<!-- <el-menu-item index="4-2">Disclaimer</el-menu-item> -->
 						</el-submenu>
-						<el-menu-item class="news-icon" index="6">
+						<!-- <el-menu-item class="news-icon" index="6">
 							<div
 								class="svgContainer"
 								v-html="svgCode"
 								@click="changeSvg"
 							></div>
-						</el-menu-item>
+						</el-menu-item> -->
 						<el-submenu index="5">
 							<template slot="title"
 								><i class="el-icon-s-tools tools"></i
