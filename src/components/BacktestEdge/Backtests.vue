@@ -357,11 +357,24 @@ export default {
 				let params = {}
 				const nameRes = await getBacktestName(row.name + '(copy)')
 				if (nameRes.data.count != 0) {
-					this.$notify.error({
-						title: 'Has been Copied',
-						message: 'The backtest has been copied'
-					})
-					return
+          let nameChecked = true
+          const nameResults = nameRes.data.results
+          for (let i = 0; i < nameResults.length; i++) {
+            if (nameResults[i].name == `${row.name}(copy)`) {
+              // 重名
+              nameChecked = false
+              break
+            }
+          }
+          if(!nameChecked){
+            CIQ.hideCover()
+            CIQ.nprogress.done()
+            this.$notify.error({
+              title: 'Has been Copied',
+              message: 'The backtest has been copied'
+            })
+            return
+          }
 				}
 				let res = null
 				try {
