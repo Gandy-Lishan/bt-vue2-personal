@@ -930,12 +930,14 @@
 						The trade price (Trade Price) represents the price used in trading.
 						"Next" indicates that the trade will be executed in the next bar
 						after meeting the conditions on the current trading day. There are
-						two options for the trade price: "Next Open" and "Next Close". They
-						indicate the type of price used for simulating trades. "Next Open"
-						means using the opening price of next trading period for trade
-						simulation, while "Next Close" means using the closing price of next
-						trading period for trade simulation. You can select the appropriate
-						trade price option in the basic parameters of the backtest.
+						three options for the trade price: "Next Open," "Next Close," and
+						"Current Close." They indicate the type of price used for simulating
+						trades. "Next Open" means using the opening price of the next
+						trading period for trade simulation, "Next Close" means using the
+						closing price of the next trading period for trade simulation, and
+						"Current Close" means using the closing price of the current trading
+						period for trade simulation. You can select the appropriate trade
+						price option in the basic parameters of the backtest.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -1000,6 +1002,71 @@
 						lazy
 					></el-image>
 				</section>
+			</section>
+
+			<section v-else-if="id.includes('fls')">
+				<h1 id="fls">Finding the Last Signal Using BacktestEdeg</h1>
+				<hr />
+				<h2 id="fls-0">Click the 'find last signal' button</h2>
+				<p>
+					Enter the "My Favorites" list, where the user's saved backtests are
+					stored. In the top-right corner of the list, you will find a button
+					labeled "find last signal." After clicking the "find last signal"
+					button, BacktestEdeg will begin running all the backtests in the "My
+					Favorites" list. Please be patient and wait until the backtest
+					execution is complete.
+				</p>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathfls11"
+					:preview-src-list="pathfls22List"
+					fit="fill"
+					lazy
+				></el-image>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathfls12"
+					:preview-src-list="pathfls22List"
+					fit="fill"
+					lazy
+				></el-image>
+				<h2 id="fls-1">Wait for the backtest to finish</h2>
+				<p>
+					Once the backtest execution is finished, BacktestEdeg will determine
+					the timestamp of the most recent trade. 'E' represents the entry time
+					of the most recent trade, while 'X' represents the exit time of the
+					most recent trade.
+				</p>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathfls21"
+					:preview-src-list="pathfls22List"
+					fit="fill"
+					lazy
+				></el-image>
+				<el-image
+					style="width: 100%; height: 50%"
+					class="image-border"
+					:src="pathfls22"
+					:preview-src-list="pathfls22List"
+					fit="fill"
+					lazy
+				></el-image>
+				<p>
+					By following the steps outlined above, you can use BacktestEdeg to
+					find the timestamp of the most recent trade in the "My Favorites"
+					list. This functionality assists in understanding recent trading
+					activity and facilitates further analysis and decision-making based on
+					this information. Please note that the backtest results and recent
+					trade timestamps are generated from the saved backtest data, and the
+					results may vary depending on your specific backtest configurations.
+					Ensure the accuracy of your backtest data and settings to obtain
+					precise backtest results and information about recent trade
+					timestamps.
+				</p>
 			</section>
 			<section v-else-if="id[0] == '3'">
 				<h1 id="3">Edit a created backtest</h1>
@@ -1385,11 +1452,14 @@
 					fit="fill"
 					lazy
 				></el-image> -->
-			<h1 id="ai-3">Using Filter Buttons</h1>
+				<h1 id="ai-3">Using Filter Buttons</h1>
 				<hr />
 				<p>
-					On the "SwingAI" page, you will see several filter buttons, including 'MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', and 'DownTrend Pattern'.
-					On the "MidTermAI" page, you will see several filter buttons, including 'Idea', 'Trend', and 'Exhaustion'.
+					On the "SwingAI" page, you will see several filter buttons, including
+					'MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting',
+					'UpTrend Pattern', and 'DownTrend Pattern'. On the "MidTermAI" page,
+					you will see several filter buttons, including 'Idea', 'Trend', and
+					'Exhaustion'.
 				</p>
 				<el-image
 					style="width: 100%; height: 50%"
@@ -1408,7 +1478,9 @@
 					lazy
 				></el-image>
 				<p>
-					These buttons are dynamically displayed. If you're unfamiliar with the meaning of each filter button, you can hover your mouse over the icon next to the button, and a tooltip will appear explaining its meaning.
+					These buttons are dynamically displayed. If you're unfamiliar with the
+					meaning of each filter button, you can hover your mouse over the icon
+					next to the button, and a tooltip will appear explaining its meaning.
 				</p>
 				<el-image
 					style="width: 100%; height: 50%"
@@ -1419,7 +1491,11 @@
 					lazy
 				></el-image>
 				<p>
-					Based on your requirements, click the appropriate filter button. As you click different filter buttons, the list below will be filtered accordingly. You can filter out the stocks you are interested in using different filter options. With the information in the filtered list, you can perform a more in-depth analysis.
+					Based on your requirements, click the appropriate filter button. As
+					you click different filter buttons, the list below will be filtered
+					accordingly. You can filter out the stocks you are interested in using
+					different filter options. With the information in the filtered list,
+					you can perform a more in-depth analysis.
 				</p>
 				<el-image
 					style="width: 100%; height: 50%"
@@ -1432,8 +1508,10 @@
 				<h1 id="ai-4">Stock List Sorting</h1>
 				<hr />
 				<p>
-					On the AI Scanner page, you will see a stock list that contains information about multiple stocks.
-					Each column of the stock list has a header, including Win Rate(%), Stop Loss(%), Profit Target(%), and Best Time In Market(Bars).
+					On the AI Scanner page, you will see a stock list that contains
+					information about multiple stocks. Each column of the stock list has a
+					header, including Win Rate(%), Stop Loss(%), Profit Target(%), and
+					Best Time In Market(Bars).
 				</p>
 				<el-image
 					style="width: 100%; height: 50%"
@@ -1444,7 +1522,9 @@
 					lazy
 				></el-image>
 				<p>
-					Next to each header, there is a sorting icon. Clicking the sorting icon allows you to sort the list in ascending or descending order based on the corresponding column. By default, the list is not sorted.
+					Next to each header, there is a sorting icon. Clicking the sorting
+					icon allows you to sort the list in ascending or descending order
+					based on the corresponding column. By default, the list is not sorted.
 				</p>
 				<el-image
 					style="width: 100%; height: 50%"
@@ -1455,11 +1535,27 @@
 					lazy
 				></el-image>
 				<p>
-					You can select the column you want to sort based on your requirements. Click the sorting icon next to the respective header to sort the list. Clicking the icon once will sort the list in ascending order for that column, and clicking it again will sort the list in descending order.
-					You can sort the list based on different columns such as Win Rate(%), Stop Loss(%), Profit Target(%), or Best Time In Market(Bars). The stock list will be sorted according to the selected sorting criteria. The sorted list will display the corresponding stock information, making it easier for you to analyze and compare data for different stocks.
+					You can select the column you want to sort based on your requirements.
+					Click the sorting icon next to the respective header to sort the list.
+					Clicking the icon once will sort the list in ascending order for that
+					column, and clicking it again will sort the list in descending order.
+					You can sort the list based on different columns such as Win Rate(%),
+					Stop Loss(%), Profit Target(%), or Best Time In Market(Bars). The
+					stock list will be sorted according to the selected sorting criteria.
+					The sorted list will display the corresponding stock information,
+					making it easier for you to analyze and compare data for different
+					stocks.
 				</p>
 				<p>
-					By following the steps mentioned above, you can utilize the sorting functionality of AI Scanner to sort the stock list in ascending or descending order based on different columns. This enables you to compare and analyze stock data based on various indicators such as Win Rate(%), Stop Loss(%), Profit Target(%), or Best Time In Market(Bars), allowing you to better understand the market conditions and make informed decisions. Remember, sorting is just a tool to facilitate the viewing and comparison of stock data, and the final decisions still need to be based on your own judgment and analysis.
+					By following the steps mentioned above, you can utilize the sorting
+					functionality of AI Scanner to sort the stock list in ascending or
+					descending order based on different columns. This enables you to
+					compare and analyze stock data based on various indicators such as Win
+					Rate(%), Stop Loss(%), Profit Target(%), or Best Time In Market(Bars),
+					allowing you to better understand the market conditions and make
+					informed decisions. Remember, sorting is just a tool to facilitate the
+					viewing and comparison of stock data, and the final decisions still
+					need to be based on your own judgment and analysis.
 				</p>
 				<h1 id="ai-5">View symbol's backtest information</h1>
 				<hr />
@@ -1721,6 +1817,10 @@ import pathai44 from "../img/ai4.4.jpg";
 import pathai510 from "../img/ai5.1.jpg";
 import pathai511 from "../img/ai5.2.jpg";
 import pathai512 from "../img/ai5.3.jpg";
+import pathfls11 from "../img/fls1.1.jpg";
+import pathfls12 from "../img/fls1.2.jpg";
+import pathfls21 from "../img/fls2.1.jpg";
+import pathfls22 from "../img/fls2.2.jpg";
 import RightMenu from "./RightMenu.vue";
 export default {
   props: {
@@ -1880,16 +1980,16 @@ export default {
       pathai2List: [pathai2],
       // pathai3: pathai3,
       // pathai3List: [pathai3],
-			pathai311: pathai311,
+      pathai311: pathai311,
       pathai311List: [pathai311, pathai312],
-			pathai312: pathai312,
-			pathai32: pathai32,
-			pathai32List: [pathai32],
-			pathai33: pathai33,
-			pathai33List: [pathai33],
-			pathai34: pathai34,
-			pathai35: pathai35,
-			pathai35List: [pathai34,pathai35],
+      pathai312: pathai312,
+      pathai32: pathai32,
+      pathai32List: [pathai32],
+      pathai33: pathai33,
+      pathai33List: [pathai33],
+      pathai34: pathai34,
+      pathai35: pathai35,
+      pathai35List: [pathai34, pathai35],
       pathai41: pathai41,
       pathai41List: [pathai41],
       pathai42: pathai42,
@@ -1898,12 +1998,17 @@ export default {
       pathai43List: [pathai43],
       pathai44: pathai44,
       pathai44List: [pathai44],
-			pathai510: pathai510,
-			pathai510List: [pathai510],
-			pathai511: pathai511,
-			pathai511List: [pathai511],
-			pathai512: pathai512,
-			pathai512List: [pathai512]
+      pathai510: pathai510,
+      pathai510List: [pathai510],
+      pathai511: pathai511,
+      pathai511List: [pathai511],
+      pathai512: pathai512,
+      pathai512List: [pathai512],
+      pathfls11: pathfls11,
+      pathfls12: pathfls12,
+      pathfls21: pathfls21,
+      pathfls22: pathfls22,
+      pathfls22List: [pathfls11, pathfls12, pathfls21, pathfls22],
     }
   },
   components: {
@@ -1925,43 +2030,43 @@ export default {
       this.isToggle = !this.isToggle
       this.$emit('click', this.isToggle)
     },
-		jump(index) {
-			this.$nextTick(() => {
-				let jump = document.getElementById(index);
-				let title = document.querySelectorAll('h1,h2,h3')
-				this.navList = Array.from(title)
-				this.navList.forEach((item) => {
-					item.style.color = 'rgb(0, 50, 60)'
-				})
-				jump.style.color = '#5b9bd1'
-				let total = jump.offsetTop - 80;
-				console.log('jump.offsetTop', jump.offsetTop)
-				window.scrollTo({
-					top: total,
-					behavior: 'smooth'
-				});
-				this.selectAllSubTitle();
-			})
-		},
-		selectAllSubTitle() {
-			this.$nextTick(() => {
-				let title = document.querySelectorAll('h2,h3')
-				const navList = Array.from(title)
-				this.menuItems = navList.map((item, index) => {
-					const menuItem = {}
-					menuItem['title'] = item.innerHTML
-					menuItem['id'] = item.id
-					const match = item.tagName.match(/\d+/);
-					if (match) {
-						menuItem['level'] = match[0];
-					} else {
-						console.error("No number found");
-					}
-					return menuItem
-				})
-				console.log('menuItem', this.menuItems)
-			})
-		}
+    jump(index) {
+      this.$nextTick(() => {
+        let jump = document.getElementById(index);
+        let title = document.querySelectorAll('h1,h2,h3')
+        this.navList = Array.from(title)
+        this.navList.forEach((item) => {
+          item.style.color = 'rgb(0, 50, 60)'
+        })
+        jump.style.color = '#5b9bd1'
+        let total = jump.offsetTop - 80;
+        console.log('jump.offsetTop', jump.offsetTop)
+        window.scrollTo({
+          top: total,
+          behavior: 'smooth'
+        });
+        this.selectAllSubTitle();
+      })
+    },
+    selectAllSubTitle() {
+      this.$nextTick(() => {
+        let title = document.querySelectorAll('h2,h3')
+        const navList = Array.from(title)
+        this.menuItems = navList.map((item, index) => {
+          const menuItem = {}
+          menuItem['title'] = item.innerHTML
+          menuItem['id'] = item.id
+          const match = item.tagName.match(/\d+/);
+          if (match) {
+            menuItem['level'] = match[0];
+          } else {
+            console.error("No number found");
+          }
+          return menuItem
+        })
+        console.log('menuItem', this.menuItems)
+      })
+    }
   }
 }
 </script>
