@@ -400,7 +400,7 @@ export default {
           this.handleCurrentChange(newPage)
         }
         this.loading = false
-        console.log(error)
+        console.error(error)
       }
     },
     editBacktest: throttle(async function (row) {
@@ -412,7 +412,7 @@ export default {
         try {
           res = await seeParams(row.id)
         } catch (error) {
-          console.log('error', error)
+          console.error('error', error)
           throw Error('Request Failed')
         }
         document.getElementsByClassName('ciq-period')[0].style.display = ''
@@ -445,7 +445,7 @@ export default {
           })
         }
       } catch (error) {
-        console.log(error)
+        console.error(error)
         vm.$message({
           message: 'The internal server is busy, please try again later ',
           type: 'error'
@@ -495,7 +495,7 @@ export default {
           })
         }
       } catch (error) {
-        console.log(error)
+        console.error(error)
         vm.$message({
           message: 'The internal server is busy, please try again later ',
           type: 'error'
@@ -517,7 +517,7 @@ export default {
           })
         }
       } catch (error) {
-        console.log(error)
+        console.error(error)
         this.$message({
           message: 'The internal server is busy, please try again later ',
           type: 'error'
