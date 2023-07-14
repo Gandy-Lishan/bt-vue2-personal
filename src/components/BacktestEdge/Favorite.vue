@@ -7,7 +7,7 @@
 					>run all backtest</el-button
 				> -->
 				<el-button @click="_findLastSignal" class="fls-btn"
-					>find last signal</el-button
+					>Find Last Signal</el-button
 				>
 
 				<div class="searchBox">
@@ -142,10 +142,10 @@
 						<template slot-scope="scope">
 							<div class="showDate">
 								<el-button size="mini" type="info" plain
-									>E: {{ scope.row.last_entry_signal_date }}</el-button
+									>E: {{ scope.row.last_entry_signal_date ? scope.row.last_entry_signal_date : '' }}</el-button
 								>
 								<el-button size="mini" type="info" plain
-									>X: {{ scope.row.last_exit_signal_date }}</el-button
+									>X: {{ scope.row.last_exit_signal_date ? scope.row.last_exit_signal_date : '' }}</el-button
 								>
 							</div>
 						</template>
@@ -446,10 +446,6 @@ export default {
         }
       } catch (error) {
         console.error(error)
-        vm.$message({
-          message: 'The internal server is busy, please try again later ',
-          type: 'error'
-        })
         CIQ.hideCover()
         CIQ.nprogress.done()
         this.$store.state._last_signal_array.map(item => {
@@ -457,6 +453,14 @@ export default {
             item.state = 2
           }
         })
+        if(error.response.status === 404) {
+          console.log('查询不到数据', error)
+        }else{
+          vm.$message({
+          message: 'The internal server is busy, please try again later ',
+          type: 'error'
+        })
+        }
         CIQ.isEditFinish = false
       }
     }, 500),
