@@ -1502,7 +1502,7 @@ export default {
                           	case 401:
                               vm.$message({
                                 message:
-                                  'No permission',
+                                  'Permission denied. Copy and use this backtest again.',
                                 type: 'error'
                               })
                           		break;
