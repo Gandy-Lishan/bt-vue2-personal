@@ -1396,7 +1396,7 @@ export default {
         console.error(error)
         this.$notify({
           title: 'Failed',
-          message: 'The internal server is busy, please try again later',
+          message: 'The internal server is busy, setEditData',
           type: 'error'
         })
       }
