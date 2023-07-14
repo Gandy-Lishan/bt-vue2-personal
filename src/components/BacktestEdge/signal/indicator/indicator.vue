@@ -1316,19 +1316,6 @@ export default {
             vm.indicatorRadio = "Users' Own Indicator"
             let userIndicator = newVal[this.criteria].signals[index].indicator
             vm.si.userIndicator = userIndicator
-
-            // let formateList = this.$store.state.formateTechnicalList
-            // if (formateList.length === 0) {
-            // 	formateList = vm.loadShortLong()
-            // }
-            // for (let i = 0; i < formateList.length; i++) {
-            // 	if (technicalIndicator === formateList[i].value) {
-            // 		let obj = formateList[i]
-            // 		let isFromEdit = true
-            // 		vm.handleTechnicalSelect(obj, isFromEdit)
-            // 		break
-            // 	}
-            // }
             const str =
               this.$store.state.indicators.formIndicators[this.criteria][
               this.panelIndex
