@@ -457,8 +457,7 @@ export default {
           console.log('查询不到数据', error)
         }else{
           vm.$message({
-          // message: 'The internal server is busy, please try again later ',
-          message: 'The internal server is busy, editing backtest failed ',
+          message: 'The internal server is busy, please try again later ',
           type: 'error'
         })
         }
