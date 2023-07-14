@@ -1030,22 +1030,30 @@ export default {
           })
           return
         }
+        // 判断有没有重名
+        const nameResults = setUpRes.data.results
+          for (let i = 0; i < nameResults.length; i++) {
+            if (nameResults[i].name == this.$store.state.backtestInfo.name) {
+              // 重名
+              setUpChecked = false
+              break
+            }
+          }
         // if (setUpRes.data.count != 0 && !isEdit || (setUpRes.data.count != 0 && !backtestInfo.hasOwnProperty('old_uuid'))) {
-        if (setUpRes.data.count != 0 && !backtestInfo.hasOwnProperty('old_uuid')) {
-          this.$message({
-            message: 'The backtest name already exists',
-            type: 'error'
-          })
-          setUpChecked = false
-          this.$store.commit('clearBacktest')
-          return
+        if (!setUpChecked && !backtestInfo.hasOwnProperty('old_uuid')) {
+            this.$message({
+              message: 'The backtest name already exists',
+              type: 'error'
+            })
+            this.$store.commit('clearBacktest')
+            return
         }
         // 首次创建
         // if (setUpRes.data.count == 0 && !isEdit) this.$store.commit('clearBacktestUuid')
 
         // if (setUpRes.data.count == 0 || isEdit) {
         // 有名字并且是编辑 没名字是编辑 没名字是新建
-        if ((setUpRes.data.count != 0 && backtestInfo.hasOwnProperty('old_uuid')) || (setUpRes.data.count == 0) && backtestInfo.hasOwnProperty('old_uuid') || (setUpRes.data.count == 0) && !backtestInfo.hasOwnProperty('old_uuid')) {
+        if ((!setUpChecked && backtestInfo.hasOwnProperty('old_uuid')) || (setUpChecked) && backtestInfo.hasOwnProperty('old_uuid') || (setUpChecked) && !backtestInfo.hasOwnProperty('old_uuid')) {
           let entry
           for (let index = 0; index < this.entryLength; index++) {
             this.addEntrySignalLength(index)
@@ -1059,7 +1067,7 @@ export default {
             this.$refs.entryChild.saveDelayBar()
             this.$refs.entryChild.saveRelation()
           }
-          const checked = entryChecked && setUpChecked && setUp
+          const checked = entryChecked  && setUp
           if (!checked) return
           if (checked) {
             let exit
