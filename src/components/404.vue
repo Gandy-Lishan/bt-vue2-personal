@@ -18,15 +18,23 @@ export default {
             mesContent: '',
             btnContent: '',
             imgSrc: '',
-            state: null
+            state: null,
+            desc: '',
 		}
 	},
     created() {
         this.state = this.$route.query['mes']
+        this.desc = this.$route.query['desc']
 
         switch(this.state){
             case 410:
-                this.mesContent = 'You do not have the access permission, Please go purchase and try it again'
+                this.mesContent = `You do not have the access permission for ${this.desc}, Please go purchase and try it again`
+                this.btnContent = 'More Plans'
+                this.imgSrc = "410.png"
+                this.targetPath = 'https://sentimentrader.com/pricing';
+                break;
+            case '410':
+                this.mesContent = `You do not have the access permission for ${this.desc}, Please go purchase and try it again`
                 this.btnContent = 'More Plans'
                 this.imgSrc = "410.png"
                 this.targetPath = 'https://sentimentrader.com/pricing';
