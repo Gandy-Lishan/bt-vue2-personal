@@ -293,7 +293,6 @@ export default {
         if (this.conditionRadio == 'Indicator Moving Average') {
           this.setPeriod(this.senti.period)
         }
-        console.log('handle extremeValue update')
         this.calculateNewConditions()
 
         newVal.forEach((item) => {

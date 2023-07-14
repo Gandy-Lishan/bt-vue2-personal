@@ -88,7 +88,7 @@ router.beforeEach(async (to, from, next) => {
 	}
 	// 当有 sentimen_session 或 devbt2Userid 时才能发请求
 
-	// Cookies.set('sentimen_session', 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FamVv8Nu+OjDeax6/BPemIRtLvxe/ttdcR7ljhLshELegUCm0rFPbgrGWdcW83syfPlq52MBrFdIeY9ZYtC+cAD5pFdp2G6LT0dk9igezLaZtYsKAygn65XzycKyLwRve3Uu43I0YMsmkuQZBKFZvJuHAH6OB14XcuXq6pkLP6h4UMJ6zxAUj+60qhAqHgV9INEiPci0EglpoLwXiwkHs6D2FRxliWUeyOz+SabIufUFNljDZJ04aazalsLd6GvoXBxN2u/hTvcYwDD19cxVERcAeEyye7pG7NbZYuxj4Dg01csmnCrRXmO3SXPfyh9IX0JFlendkb1dwOV+F0fxJafU=')
+	//Cookies.set('sentimen_session', 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FamVv8Nu+OjDeax6/BPemIRtLvxe/ttdcR7ljhLshELegUCm0rFPbgrGWdcW83syfPlq52MBrFdIeY9ZYtC+cAD5pFdp2G6LT0dk9igezLaZtYsKAygn65XzycKyLwRve3Uu43I0YMsmkuQZBKFZvJuHAH6OB14XcuXq6pkLP6h4UMJ6zxAUj+60qhAqHgV9INEiPci0EglpoLwXiwkHs6D2FRxliWUeyOz+SabIufUFNljDZJ04aazalsLd6GvoXBxN2u/hTvcYwDD19cxVERcAeEyye7pG7NbZYuxj4Dg01csmnCrRXmO3SXPfyh9IX0JFlendkb1dwOV+F0fxJafU=')
 
 	if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
 			//set 10 sec as default,However, some time-consuming requests are processed separately
@@ -100,7 +100,10 @@ router.beforeEach(async (to, from, next) => {
 						if (getQueryVariable('userid')) window.location.href = location.origin // 去掉？后面的部分
 
 						if(to.path == '/404'){
-							next('/home')
+							// todo 再加一层scannerAI或者backtester权限判断，用于在404页面跳转回网站，或者防止网站跳到404又无限循环
+							//next('/home')
+							
+							next()
 						}else{
 							// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
 							if(to.name == 'scannerai' || to.name == 'scannerai_chart'){
@@ -118,30 +121,28 @@ router.beforeEach(async (to, from, next) => {
 				})
 				.catch((error) => {
 					console.error(error)
-					// switch (error?.response?.status) {
-					// 	case 401:
-					// 		alert('No permission')
-					// 		break;
-					// 	case 403:
-					// 		alert('Authentication expired')
-					// 		break;
-					// 	case 404:
-					// 		alert('User does not exist')
-					// 		break;
-					// 	case 500:
-					// 		alert('Internal Server Error')
-					// 		break;
-					// 	case 410:
-					// 		alert('you have no access right')
-					// 		break;
-					// 	default:
-					// 		alert('Unknown error')
-					// }
 					router.push({
 						path: '/404',
 						query: { mes: error?.response?.status } // 携带的参数
 					});
 				})
+
+			// if(to.path == '/404'){
+			// 	//next('/home')
+			// 	next()
+			// }else{
+			// 	// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
+			// 	if(to.name == 'scannerai' || to.name == 'scannerai_chart'){
+			// 		await initiateCurrentDate()
+			// 		await initiateIndicatorList()
+			// 		CIQ.isScannerAI = true
+			// 	}else{
+			// 		await initiateIndicatorList()
+			// 		CIQ.isScannerAI = false
+			// 	}
+				
+			// 	next()
+			// }
 
 	} else {
 		//alert('No permission')
@@ -163,11 +164,29 @@ router.beforeEach(async (to, from, next) => {
 
 async function initiateCurrentDate() {
 	//现在外部实现一个获取当前日期并储存的功能，接触验证屏蔽后移到判断条件内部
-	if(store.state.curDate==''){
+	//if(store.state.curDate==''){
+		// getCurDate().then(async(res)=>{
+		// 	let curDate =res['LastUpdatePickDate']
+		// 	await store.dispatch('set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
+		// }).catch(error=>{
+		// 	router.push({
+		// 		path: '/404',
+		// 		query: { mes: error?.response?.status , desc: 'sorry, you can not access the ScannerAI Page'}
+		// 	})
+		// })
+	//}  
+	
+	// todo 暂时用于权限验证，所以不判断缓存并跳过请求
+	try{
 		let _res = await getCurDate()
 		let curDate =_res['LastUpdatePickDate']
 		await store.dispatch('set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
-	}          
+	}catch(err){
+		router.push({
+			path: '/404',
+			query: { mes: err?.response?.status , desc: ' the ScannerAI Page'}
+		})
+	}
 }
 
 async function initiateIndicatorList() {

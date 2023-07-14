@@ -311,6 +311,19 @@
 					</svg>
 				</button>
 			</el-tooltip>
+      <!-- <Mask
+        :getLastSignalArray = "getLastSignalArray"
+        :progresBarVal = "progressBarVal"
+        :numOfProcessedBacktests = 'numOfProcessedBacktests'
+        :numOfFailedBacktests = 'numOfFailedBacktests'
+        :approTime = 'approTime'
+
+        :getAllSignalArray = 'getAllSignalArray'
+        :progresBarValAll = "progressBarValAll"
+        :numOfProcessedBacktestsAll = 'numOfProcessedBacktestsAll'
+        :numOfFailedBacktestsAll = 'numOfFailedBacktestsAll'
+        @showMask = 'showMask'
+      ></Mask> -->
       <div id="myFLSbg">
         <div class="maskContent-fetch" v-if="
           getLastSignalArray.length==0 &&

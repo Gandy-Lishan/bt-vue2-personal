@@ -879,29 +879,13 @@ export default {
     processingBacktest(backtest_arr) {
       if (backtest_arr.length <= 0) return false;
 
-      // 跳过用户自定义时间的情况
-      let backtest_info
-      while (1) {
-        backtest_info = backtest_arr.pop()
-        if (backtest_info.backtest_period != 22) break
-      }
-
-      // 修改开始时间以及结束时间为最新时间,结合backtest_period,以最新一天开始向前倒推 应该有现成代码可以使用
-      // period = backtest_info['backtest_period']
-      // if (period === undefined || period ==''){
-      //     // 你看看怎么设置个默认值
-      // backtest_info["end_date"] = "2023-07-05"
-      // backtest_info["start_date"] = "2022-07-05"
-      // }else if (period === "21"){
-      //     // 记得根据实际时间调整
-      //     backtest_info["end_data"] = "2023-07-05"
-      // }else{
-      // // 值在二十以内的处理方案
-      // backtest_info["end_data"] = "2023-07-05"
-      // backtest_info["end_data"] = "2023-07-05"
+      let backtest_info = backtest_arr.pop()
+      // // 跳过用户自定义时间的情况
+      // let backtest_info
+      // while (1) {
+      //   backtest_info = backtest_arr.pop()
+      //   if (backtest_info.backtest_period != 22) break
       // }
-      // 发送请求要携带old_uuid记得看一下rerun处理吧
-
 
       return backtest_info
 
@@ -962,7 +946,6 @@ export default {
       const allFavoriteList = await this.getAllFavoriteData()
       // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
       this.favorite_array = JSON.parse(JSON.stringify(allFavoriteList))
-      console.log('favorite_array* ******', this.favorite_array)
       this.$store.commit('_SET_LASTSIGNAL_ARRAY', this.favorite_array.map(item => { return { name: item.name, content: item, state: 0, id: item.id } }))
       let favorite_info = this.processingBacktest(this.favorite_array)
       if (favorite_info == false) {
