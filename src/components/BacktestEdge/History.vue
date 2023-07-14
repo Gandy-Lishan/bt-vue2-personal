@@ -892,6 +892,16 @@ export default {
 			})
 	}, 
     addToFavorites: throttle(async function (row) {
+      if(row.status != 2){
+        // 状态不为 2 不能添加收藏
+        this.$notify({
+            title: 'Warning',
+            message:
+              'Please run the Backtest before adding it to the Favorites.',
+            type: 'warning'
+          })
+          return
+      }
       let vm = this
       row.favorites = true
       let params = {
