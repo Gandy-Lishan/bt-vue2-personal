@@ -582,9 +582,9 @@ export default {
         })
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       vm.$message({
-        message: 'The internal server is busy, please try again later ',
+        message: 'The internal server is busy, mounted ',
         type: 'error'
       })
     }
@@ -1035,7 +1035,7 @@ export default {
             this.$store.state.backtestInfo.name
           )
         } catch (error) {
-          console.log(error)
+          console.error(error)
           this.$notify({
             title: 'Failed',
             message: 'The internal server is busy, please try again later',
@@ -1663,7 +1663,7 @@ export default {
           }
         }
       } catch (error) {
-        console.log('抓取error:', error)
+        console.error('抓取error:', error)
         this.$notify({
           title: 'Failed',
           message: 'The internal server is busy, please try again later',
@@ -1761,7 +1761,7 @@ export default {
       } catch (error) {
         console.error(error)
         vm.$message({
-          message: 'The internal server is busy, please try again later ',
+          message: 'The internal server is busy, goTobacktestSetupForm ',
           type: 'error'
         })
         CIQ.hideCover()
