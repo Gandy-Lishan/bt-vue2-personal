@@ -955,6 +955,8 @@ export default {
       CIQ.store.commit('getEntryIndicatorsList', [])
       CIQ.store.commit('getExitIndicatorsList', [])
       CIQ.store.commit('getMA', [])
+      CIQ.store.commit('getMALayout', [])
+
       CIQ.store.commit('getExtraIndicators', [])
       CIQ.store.commit('getTechnicalIndicators', [])
 
