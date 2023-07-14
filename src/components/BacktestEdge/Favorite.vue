@@ -394,6 +394,11 @@ export default {
           this.queryInfo.total = res.data.count
         }
       } catch (error) {
+        if(error.response.status === 404) {
+          let page = this.queryInfo.page
+          const newPage = page != 1 ? page - 1 : 1
+          this.handleCurrentChange(newPage)
+        }
         this.loading = false
         console.log(error)
       }
