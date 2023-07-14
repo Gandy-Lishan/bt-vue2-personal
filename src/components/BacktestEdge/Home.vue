@@ -584,7 +584,7 @@ export default {
     } catch (error) {
       console.error(error)
       vm.$message({
-        message: 'The internal server is busy, mounted ',
+        message: 'The internal server is busy, please try again later ',
         type: 'error'
       })
     }
@@ -1761,7 +1761,7 @@ export default {
       } catch (error) {
         console.error(error)
         vm.$message({
-          message: 'The internal server is busy, goTobacktestSetupForm ',
+          message: 'The internal server is busy, please try again later ',
           type: 'error'
         })
         CIQ.hideCover()
