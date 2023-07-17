@@ -37,6 +37,7 @@ export default {
     	CIQ.nprogress.start()
 	},
 	beforeDestroy() {
+		// 防止跳转到backtester时保留了hammer等marker
 		CIQ.removeALLStudies()
 	},
 	computed: {
@@ -51,7 +52,7 @@ export default {
 	},
 	methods:{
 		onChartReady(){
-			CIQ.initiateChart([CIQ.symbol],()=>{
+			CIQ.initiateChart([CIQ.symbol],this.other['date'],()=>{
 				try{
 					this.hideComponents()
 					const periodArray = [
@@ -103,19 +104,28 @@ export default {
 			if (patterns.indexOf(this.indicator) != -1){
 				
 				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{points:this.other.Point})
-				CIQ.stxx.setChartType("candle");
 			}else if(tradeStudies.indexOf(this.indicator) != -1){
 				
-				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{trades:this.other.EntryTradeDate})
+				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{
+					trades:this.other.EntryTradeDate,
+					date:this.other.date,
+					signal:this.other._Signal
+				})
 			}else if(noStudy.indexOf(this.indicator) != -1){
 				await CIQ.getIndicatorMatedata([CIQ.symbol])
 
 				CIQ.Studies.addStudy(CIQ.stxx, 'ma',{
 					Type: 'simple',
 					Field: 'Close',
-					Period: 100,
+					Period: 200,
 					//display: indicatorList[i],
 				},{ MA: '#FF0000' })
+				CIQ.Studies.addStudy(CIQ.stxx, 'ma',{
+					Type: 'simple',
+					Field: 'Close',
+					Period: 250,
+					//display: indicatorList[i],
+				},{ MA: '#7257F2' })
 			}else{
 				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,{display:this.indicator})
 			}
@@ -128,7 +138,7 @@ export default {
 			if (this.indicator == 'ma_gap') {
 				CIQ.Studies.addStudy(CIQ.stxx, 'ma');
 			}
-
+			CIQ.stxx.setChartType("candle");
 			this.loadMarker()
 		},
 		calculateBacktestHistory(dataSet, periodArray,direction) {
@@ -260,6 +270,11 @@ export default {
                     })
                 })
             }
+			
+			// 如果推荐日和最后一个退场日重叠，则隐藏退场日marker(一般情况都是重叠的)
+			if(this.other['date'] == exitTradeDateArr[exitTradeDateArr.length-1]){
+				markerSet.pop()
+			}
 
 			let list = []
 			let _date = {

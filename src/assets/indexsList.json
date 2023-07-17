@@ -802,5 +802,13 @@
     {
         "symbol": "EDEN",
         "name": "Denmark (EDEN)"
+    },
+    {
+        "symbol": "BCOMSP",
+        "name": "Bloomberg Spot Index "
+    },
+    {
+        "symbol": "lumber_future",
+        "name": "Lumber Future"
     }
 ]
