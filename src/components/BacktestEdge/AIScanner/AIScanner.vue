@@ -76,6 +76,7 @@ export default {
 		AIPickObj['tableCol'] = [
 			'Symbol',
 			'Close',
+			'Market',
 			'Direction',
 			'Timing To Entry',
 			//'Signal',
