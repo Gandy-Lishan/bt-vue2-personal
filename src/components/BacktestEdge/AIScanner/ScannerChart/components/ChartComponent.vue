@@ -37,7 +37,7 @@ export default {
     	CIQ.nprogress.start()
 	},
 	beforeDestroy() {
-		// 防止跳转到backtester时保留了hammer等marker
+		// 防止跳转到backtester时保留了Hammer followed by a raise等marker
 		CIQ.removeALLStudies()
 	},
 	computed: {
@@ -99,7 +99,7 @@ export default {
 			}
 			
 			let patterns = ['UpTrend Pattern', 'DownTrend Pattern']
-			let tradeStudies = ['Hammer','Shooting']
+			let tradeStudies = ['Hammer followed by a raise','Shooting Star followed by a fall']
 			let noStudy = ['Idea', 'Trend' ,'Exhaustion']
 			if (patterns.indexOf(this.indicator) != -1){
 				
