@@ -96,6 +96,7 @@ export default {
 	},
 	methods: {
 		clearForm() {
+			Object.assign(this.$data, this.$options.data())
 			this.$refs.cciForm.resetFields()
 		},
 		// Clear form authentication

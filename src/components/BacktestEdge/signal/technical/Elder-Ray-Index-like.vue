@@ -154,6 +154,7 @@ delay_bars: [String, Number],
 	},
 	methods: {
 		clearForm() {
+			Object.assign(this.$data, this.$options.data())
 			this.$refs.eriForm.resetFields()
 		},
 		clearFormValidate() {

@@ -6,6 +6,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
+
 export default new Vuex.Store({
 	state: {
 		curDate: '',
@@ -137,6 +138,13 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+		// 重置vuex本地储存状态
+		RESET_STORE: (state)=>{
+			Object.keys(state).forEach(key => {
+				state[key] = JSON.parse(JSON.stringify(window.SITE_CONFIG['storeState'][key]))
+			})
+	  	},
+
 		SET_LASTSIGNAL_ARRAY: (state,val)=>{
 			state.last_signal_array = val
 		},

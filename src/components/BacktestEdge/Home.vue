@@ -951,23 +951,25 @@ export default {
       CIQ.setPanelHeight([])
       const freq = CIQ.store.state.exitFrequency
 
+      CIQ.store.commit('RESET_STORE')
+
       // remove all Studies from Vuex
-      CIQ.store.commit('getEntryIndicatorsList', [])
-      CIQ.store.commit('getExitIndicatorsList', [])
-      CIQ.store.commit('getMA', [])
-      CIQ.store.commit('getMALayout', [])
+      // CIQ.store.commit('getEntryIndicatorsList', [])
+      // CIQ.store.commit('getExitIndicatorsList', [])
+      // CIQ.store.commit('getMA', [])
+      // CIQ.store.commit('getMALayout', [])
 
-      CIQ.store.commit('getExtraIndicators', [])
-      CIQ.store.commit('getTechnicalIndicators', [])
+      // CIQ.store.commit('getExtraIndicators', [])
+      // CIQ.store.commit('getTechnicalIndicators', [])
 
-      CIQ.store.commit('getBacktestSymbol', 'SPY')
-      CIQ.store.commit('getFrequency', 'Daily')
+      // CIQ.store.commit('getBacktestSymbol', 'SPY')
+      // CIQ.store.commit('getFrequency', 'Daily')
 
       // remove markers, prompt, recover timeframe dropdown
       CIQ.removePrompt()
       CIQ.hideMarker()
       CIQ.isMarkerShown = false
-      CIQ.store.commit('getTradesData', [])
+      //CIQ.store.commit('getTradesData', [])
       document.getElementsByClassName('ciq-period')[0].style.display = 'block'
       if (
         stx.chart.symbol != CIQ.store.state.backtestSymbol ||
