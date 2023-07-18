@@ -172,6 +172,7 @@ export default {
 	},
 	methods: {
 		clearForm() {
+			//Object.assign(this.$data, this.$options.data())
 			this.$refs.adxForm.resetFields()
 		},
 		// Clear form authentication

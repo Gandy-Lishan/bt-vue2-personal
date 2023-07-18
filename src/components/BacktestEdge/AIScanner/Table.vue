@@ -58,10 +58,10 @@
 								Long: The difference between MACDHist and its previous day CrossAbove 0;<br/>
 								Short: The difference between MACDHist and its previous day CrossBelow 0
 							</span>
-							<span slot="content" v-if="currentItem === 'Hammer'">
+							<span slot="content" v-if="currentItem === 'Hammer followed by a raise'">
 								Only Long: The day before the collection of a long shadow line, the next day closed up
 							</span>
-							<span slot="content" v-if="currentItem === 'Shooting'">
+							<span slot="content" v-if="currentItem === 'Shooting Star followed by a fall'">
 								Only Short: The day before a long upward thread, the next day closed down
 							</span>
 							<span slot="content" v-if="currentItem === 'UpTrend Pattern'">
@@ -95,12 +95,12 @@
 						It can further specify the direction of trades and operating rules,<br/>
 						such as determining buy signals after a golden cross and sell signals after a death cross.
 					</p>
-					<p v-show="currentItem === 'Hammer'">
+					<p v-show="currentItem === 'Hammer followed by a raise'">
 						If the previous day's candlestick shows a long lower shadow,<br/>
 						indicating support at the bottom,<br/>
 						a buy signal is generated when the price rises above a certain threshold after the opening.
 					</p>
-					<p v-show="currentItem === 'Shooting'">
+					<p v-show="currentItem === 'Shooting Star followed by a fall'">
 						If the previous day's candlestick shows a long upper shadow,<br/>
 						indicating resistance at the top,<br/>
 						a sell signal is generated when the price falls below a certain threshold after the opening.
@@ -317,7 +317,7 @@ export default {
         // 隐藏弹窗
         vnode.context.hidePopup();
       });
-			const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Idea', 'Trend', 'Exhaustion']
+			const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting Star followed by a fall', 'UpTrend Pattern', 'DownTrend Pattern', 'Idea', 'Trend', 'Exhaustion']
 			if (!signalArr.includes(binding.value.item)) {
         // 隐藏元素
         el.style.display = 'none';
@@ -473,7 +473,7 @@ export default {
 		},
 		showPopup(item) {
     // 设置当前悬停的项
-		const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Idea', 'Trend', 'Exhaustion']
+		const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting Star followed by a fall', 'UpTrend Pattern', 'DownTrend Pattern', 'Idea', 'Trend', 'Exhaustion']
 		if(signalArr.includes(item)) {
 			this.currentItem = item;
 			// 显示弹窗

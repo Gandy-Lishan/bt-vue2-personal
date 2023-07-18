@@ -1456,7 +1456,7 @@
 				<hr />
 				<p>
 					On the "SwingAI" page, you will see several filter buttons, including
-					'MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting',
+					'MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting Star followed by a fall',
 					'UpTrend Pattern', and 'DownTrend Pattern'. On the "MidTermAI" page,
 					you will see several filter buttons, including 'Idea', 'Trend', and
 					'Exhaustion'.
