@@ -180,6 +180,7 @@ export default {
       this.$forceUpdate()
     },
     clearForm() {
+      Object.assign(this.$data, this.$options.data())
       this.$refs.symbolForm.resetFields()
     },
     // Clear form authentication
