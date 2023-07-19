@@ -386,9 +386,10 @@ export default {
       this.$forceUpdate()
     },
     clearForm() {
+      //Object.assign(this.$data, this.$options.data())
       this.$refs.sentiForm.resetFields()
-      this.senti.extreme_optimism = ''
-      this.senti.extreme_pessimism = ''
+      this.conditionRadio = 'Indicator Value'
+      this.periodTemp = ''
     },
     // Clear form authentication
     clearFormValidate() {
