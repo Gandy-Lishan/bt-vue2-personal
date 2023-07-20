@@ -962,7 +962,7 @@ export default {
       // CIQ.store.commit('getExtraIndicators', [])
       // CIQ.store.commit('getTechnicalIndicators', [])
 
-      // CIQ.store.commit('getBacktestSymbol', 'SPY')
+      // CIQ.store.commit('getBacktestSymbol', 'SPX')
       // CIQ.store.commit('getFrequency', 'Daily')
 
       // remove markers, prompt, recover timeframe dropdown

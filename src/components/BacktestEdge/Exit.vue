@@ -466,7 +466,7 @@ export default {
 					label: 'TimeOrder Multi-Condition'
 				}
 			],
-			relation: 1,
+			relation: 0,
 			editableTabsValue: '1',
 			editableTabs: [
 				{
@@ -569,7 +569,8 @@ export default {
 							})
 						})
 				}
-			}
+			},
+			immediate: true
 		},
 		riskControl: {
 			handler(newVal) {

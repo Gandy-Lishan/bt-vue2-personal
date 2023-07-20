@@ -267,7 +267,7 @@ export default {
       TIMHistoryList: [],
       TIMResult_quotes: [],
       periodsTIM: [],
-      symbol: 'SPY',
+      symbol: 'SPX',
       options: [],
       symbolList: [],
       indexList: [],
