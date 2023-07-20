@@ -112,7 +112,8 @@ export default {
 			
 			let patterns = ['UpTrend Pattern', 'DownTrend Pattern']
 			let tradeStudies = ['Hammer followed by a raise','Shooting Star followed by a fall']
-			let noStudy = ['Idea', 'Trend' ,'Exhaustion']
+			let noStudy = ['Symbol Close > its\' MA200 and Optix MA5 < 35', 'Symbol Close > its\' MA200 and Optix < 30' ,'Optix MA10 < 30 and Optix < 20']
+			console.log(this.indicator,noStudy)
 			if (patterns.indexOf(this.indicator) != -1){
 				
 				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{points:this.other.Point})
