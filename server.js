@@ -26,7 +26,7 @@ app.use(history());
 
 
 app.get('/api/indicatorsList', (req, res) => {
-    fs.readFile( dataPath+'indicatorsList copy.json', 'utf8', function (err, data) {
+    fs.readFile( dataPath+'indicatorsList.json', 'utf8', function (err, data) {
         res.send(data);
         //res.end( data );
     });
