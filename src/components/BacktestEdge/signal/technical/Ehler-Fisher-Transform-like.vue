@@ -151,8 +151,8 @@ delay_bars: [String, Number],
 	},
 	methods: {
 		clearForm() {
+			Object.assign(this.$data, this.$options.data())
 			this.$refs.eftForm.resetFields()
-			
 		},
 		// Clear form authentication
 		clearFormValidate() {

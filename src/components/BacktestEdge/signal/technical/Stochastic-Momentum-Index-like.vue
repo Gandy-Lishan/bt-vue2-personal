@@ -205,6 +205,7 @@ delay_bars: [String, Number],
 	},
 	methods: {
 		clearForm() {
+			Object.assign(this.$data, this.$options.data())
 			this.$refs.smiForm.resetFields()
 		},
 		clearFormValidate() {
