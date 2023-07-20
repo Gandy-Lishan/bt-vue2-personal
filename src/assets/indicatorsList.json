@@ -477,7 +477,7 @@
     {
         "chart_name": "Retail Money Market Ratio",
         "url": "cash_money_market_retail",
-        "updated": "Monthly"
+        "updated": "Weekly"
     },
     {
         "chart_name": "NYSE Margin Debt",
@@ -9205,12 +9205,12 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "JPMorgan Alerian MLP Optix",
+        "chart_name": "AMJ Optix",
         "url": "etf_amj",
         "updated": "Daily"
     },
     {
-        "chart_name": "Alerian MLP Optix",
+        "chart_name": "AMLP Optix",
         "url": "etf_amlp",
         "updated": "Daily"
     },
@@ -14122,6 +14122,36 @@
     {
         "chart_name": "COPX Optix",
         "url": "etf_copx",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ETF Assets(Leveraged Long/Short Spread)",
+        "url": "vol_etf_long_short_spread",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NYSE Zweig(Breadth Thrust)",
+        "url": "nyse_zweig",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NasDaq Zweig(Breadth Thrust)",
+        "url": "nasdaq_zweig",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "REIT Trading Model Strategy",
+        "url": "reit_trading_model",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lumber Future Optix",
+        "url": "po_lumber_future",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% High Yield Bond NH/Total  - NL/Total",
+        "url": "breadth_bonds_hy_hl_ntmbht",
         "updated": "Daily"
     }
 ]

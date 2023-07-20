@@ -61,7 +61,7 @@
 						indicating support at the bottom,<br/>
 						a buy signal is generated when the price rises above a certain threshold after the opening.
 					</p>
-					<p v-show="currentItem === 'Shooting'">
+					<p v-show="currentItem === 'Shooting Star followed by a fall'">
 						If the previous day's candlestick shows a long upper shadow,<br/>
 						indicating resistance at the top,<br/>
 						a sell signal is generated when the price falls below a certain threshold after the opening.

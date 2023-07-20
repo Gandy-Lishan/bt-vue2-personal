@@ -308,6 +308,7 @@
 			<span class="content"></span>
 			<span class="tooltip"></span>
 		</div>
+
 		<div id="stxMessage" class="myMes">
 		</div>
 	</cq-context>
