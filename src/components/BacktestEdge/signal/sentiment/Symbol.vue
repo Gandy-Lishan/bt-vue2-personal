@@ -294,7 +294,11 @@ export default {
       if (!this.isROCLike) return
       // 用symVal因为symUrl当前生命周期不存在
       if (this.symVal) {
-        const fieldName = this.$store.state.symbolConditions.find(item => item.label == this.symVal).field
+
+        let symbolCond = this.$store.state.symbolConditions.find(item => item.label == this.symVal)
+        const fieldName = symbolCond?symbolCond.field:''
+
+        
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
           if (
             CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName &&

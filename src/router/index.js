@@ -171,22 +171,15 @@ async function initiateCurrentDate() {
 		// }).catch(error=>{
 		// 	router.push({
 		// 		path: '/404',
-		// 		query: { mes: error?.response?.status , desc: 'sorry, you can not access the ScannerAI Page'}
+		// 		query: { mes: error?.response?.status , desc: ' the ScannerAI Page'}
 		// 	})
 		// })
 	//}  
 	
 	// todo 暂时用于权限验证，所以不判断缓存并跳过请求
-	try{
 		let _res = await getCurDate()
 		let curDate =_res['LastUpdatePickDate']
 		await store.dispatch('set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
-	}catch(err){
-		router.push({
-			path: '/404',
-			query: { mes: err?.response?.status , desc: ' the ScannerAI Page'}
-		})
-	}
 }
 
 async function initiateIndicatorList() {

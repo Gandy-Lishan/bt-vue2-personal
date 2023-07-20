@@ -1024,6 +1024,9 @@ export default {
               }
             })
             //this.removeFLSMASK()
+
+          this.getFavoriteList()
+          this.$emit('refHistoryForm')
             return // 处理任务结束
           }
           this._postRunbacktest(favorite_info)
