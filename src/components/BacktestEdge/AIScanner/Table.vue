@@ -74,14 +74,14 @@
 						When the price falls below the downward trendline connecting the trough points of a downtrend,<br/>
 						it indicates a potential future decline and generates a sell signal.
 					</p>
-					<p v-show="currentItem === 'Idea'">
+					<p v-show="currentItem === 'Symbol Close > its\' MA200 and Optix MA5 < 35'">
 						we want stocks that are above their 200-day moving average with an Optix 5-day moving average less than 35.
 					</p>
-					<p v-show="currentItem === 'Trend'">
-						Optix indicators with a 10-day moving average > 70 and that day's Optix value is > 80.
+					<p v-show="currentItem === 'Symbol Close > its\' MA200 and Optix < 30'">
+						we want stocks that are above their 200-day moving average with an Optix less than 30.
 					</p>
-					<p v-show="currentItem === 'Exhaustion'">
-						Optix indicators with a 10-day moving average > 70 and that day's Optix value is > 80.
+					<p v-show="currentItem === 'Optix MA10 < 30 and Optix < 20'">
+						Optix indicators with a 10-day moving average less than 30 and that day's Optix value is less than 20.
 					</p>
 					<p v-show="currentItem === 'PriceBreakout'">
 						When the closing price of a stock ranks above 0 in relation to the closing prices of the past 21 trading days, <br/>
@@ -300,7 +300,7 @@ export default {
         // 隐藏弹窗
         vnode.context.hidePopup();
       });
-			const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Idea', 'Trend', 'Exhaustion', 'PriceBreakout', 'HighPoints', 'LowPoints', 'RSI']
+			const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Symbol Close > its\' MA200 and Optix MA5 < 35', 'Symbol Close > its\' MA200 and Optix < 30', 'Optix MA10 < 30 and Optix < 20', 'PriceBreakout', 'HighPoints', 'LowPoints', 'RSI']
 			if (!signalArr.includes(binding.value.item)) {
         // 隐藏元素
         el.style.display = 'none';
@@ -456,7 +456,7 @@ export default {
 		},
 		showPopup(item) {
     // 设置当前悬停的项
-		const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Idea', 'Trend', 'Exhaustion', 'PriceBreakout', 'HighPoints', 'LowPoints', 'RSI']
+		const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Symbol Close > its\' MA200 and Optix MA5 < 35', 'Symbol Close > its\' MA200 and Optix < 30', 'Optix MA10 < 30 and Optix < 20', 'PriceBreakout', 'HighPoints', 'LowPoints', 'RSI']
 		if(signalArr.includes(item)) {
 			this.currentItem = item;
 			// 显示弹窗
