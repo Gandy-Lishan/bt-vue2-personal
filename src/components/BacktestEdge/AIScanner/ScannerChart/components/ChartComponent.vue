@@ -39,6 +39,9 @@ export default {
 	beforeDestroy() {
 		// 防止跳转到backtester时保留了Hammer followed by a raise等marker
 		CIQ.removeALLStudies()
+
+		// 还原chartiq默认study definition
+		this.editStudies(true)
 	},
 	computed: {
 		updateSettingMA() {
@@ -52,6 +55,9 @@ export default {
 	},
 	methods:{
 		onChartReady(){
+			// 默认让indicator无法编辑
+			this.editStudies(false)
+
 			CIQ.initiateChart([CIQ.symbol],this.other['date'],()=>{
 				try{
 					this.hideComponents()
@@ -75,6 +81,12 @@ export default {
 				}
 			})
 
+		},
+		editStudies(bool){
+			CIQ.extend(CIQ.Studies.studyLibrary["ma"], { edit:bool });
+			CIQ.extend(CIQ.Studies.studyLibrary["macd"], { edit:bool });
+			CIQ.extend(CIQ.Studies.studyLibrary["ma_gap"], { edit:bool });
+			CIQ.extend(CIQ.Studies.studyLibrary["macd_hist_gap"], { edit:bool });
 		},
 		hideComponents() {
 			let search = document.querySelector(".ciq-search")
@@ -132,11 +144,11 @@ export default {
 			
 			// macd gap和macd绑定显示
 			if (this.indicator == 'macd_hist_gap') {
-				CIQ.Studies.addStudy(CIQ.stxx, 'macd');
+				CIQ.Studies.addStudy(CIQ.stxx, 'macd',{display:'macd'});
 			}
 			// ma gap和ma绑定显示
 			if (this.indicator == 'ma_gap') {
-				CIQ.Studies.addStudy(CIQ.stxx, 'ma');
+				CIQ.Studies.addStudy(CIQ.stxx,"ma",{display:'ma'});
 			}
 			CIQ.stxx.setChartType("candle");
 			this.loadMarker()
