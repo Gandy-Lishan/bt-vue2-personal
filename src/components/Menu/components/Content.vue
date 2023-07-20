@@ -382,6 +382,10 @@
 					<h2 id="1-0">
 						Create a single-condition entry/exit criteria new backtest
 					</h2>
+				<!-- <div>
+					嵌入 youtobe 视频
+    			<iframe width="560" height="315" :src="videoUrl" frameborder="0" allowfullscreen></iframe>
+  			</div> -->
 					<hr />
 					<h3 id="1-0-0">Fill in the basic parameters of the backtest</h3>
 					<p>
@@ -2009,6 +2013,7 @@ export default {
       pathfls21: pathfls21,
       pathfls22: pathfls22,
       pathfls22List: [pathfls11, pathfls12, pathfls21, pathfls22],
+			videoUrl: 'https://www.youtube.com/embed/GR9VbSXxouM'
     }
   },
   components: {
