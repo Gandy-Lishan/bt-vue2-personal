@@ -28,9 +28,18 @@ instance.interceptors.request.use((config) => {
 	return config
 })
 
-
 // retry the request(for handling request error or timeout)
-instance.interceptors.response.use(undefined, function axiosRetryInterceptor(err) {
+instance.interceptors.response.use(undefined, function interceptor(err) {
+    if(err?.response?.status == 410){
+      const desc = err.response.config.url.indexOf('ai_scanner')==-1?' Backtester page':' ScannerAi page'
+      window.location.href = "/404?mes="+err.response.status+"&desc=" + desc
+      // router.push({
+      //   path: '/404',
+      //   query: { mes: err.response.status } // 携带的参数
+      // });
+      return Promise.reject(err);
+    }
+
     var config = err.config;
     // If config does not exist or the retry option is not set, reject
     if(!config || !config.retry) return Promise.reject(err);

@@ -36,6 +36,9 @@ export default {
 		CIQ.addCover()
     	CIQ.nprogress.start()
 	},
+	beforeDestroy() {
+		CIQ.removeALLStudies()
+	},
 	computed: {
 		updateSettingMA() {
 			return this.$store.state.studySettingMA
