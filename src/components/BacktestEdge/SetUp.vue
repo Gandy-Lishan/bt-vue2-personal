@@ -12,7 +12,7 @@
 					<el-form-item prop="symbol" label="Symbol">
 						<el-tooltip effect="dark" placement="top">
 							<span slot="content"
-								>Choose a stock/index as backtest symbol. (default: SPY)<br
+								>Choose a stock/index as backtest symbol. (default: SPX)<br
 							/></span>
 							<i class="iconfont icon-wenhao"></i>
 						</el-tooltip>
@@ -73,7 +73,7 @@
 					<el-form-item prop="slippage" label="Slippage">
 						<el-tooltip effect="dark" placement="top">
 							<span slot="content"
-								>Input the value of slippage of trading price. (default: 0.1)<br
+								>Input the value of slippage of trading price. (default: 0)<br
 							/></span>
 							<i class="iconfont icon-wenhao"></i>
 						</el-tooltip>
@@ -84,7 +84,7 @@
 							<span slot="content"
 								>Choose a stock/index with simple entry on the Start date & exit
 								on the End date as benchmark compared with this backtest.
-								(default: SPY)<br
+								(default: SPX)<br
 							/></span>
 							<i class="iconfont icon-wenhao"></i>
 						</el-tooltip>
@@ -475,7 +475,7 @@ export default {
   data() {
     var validateCapital = (rule, value, callback) => {
       const pattern = /^\d+(\.\d{1,2})?$/
-      if (value == '') {
+      if (value === '') {
         callback(new Error('Please input starting capital'))
       }
       if (!pattern.test(value) && value != 0) {
@@ -492,7 +492,7 @@ export default {
     }
     var validateCommissionRule = (rule, value, callback) => {
       const pattern = /^\d+(\.\d{1,2})?$/
-      if (value == '') {
+      if (value === '') {
         callback(new Error('Please input commission'))
       }
       if (!pattern.test(value) && value != 0) {
@@ -505,7 +505,7 @@ export default {
     }
     var validateSlippageRule = (rule, value, callback) => {
       const pattern = /^\d+(\.\d{1,2})?$/
-      if (value == '') {
+      if (value === '') {
         callback(new Error('Please input slippage'))
       }
       if (!pattern.test(value) && value != 0) {
@@ -517,7 +517,7 @@ export default {
       callback()
     }
     var validateNameRule = (rule, value, callback) => {
-      if (value == '') {
+      if (value === '') {
         callback(new Error('Please input backtest name'))
       } else {
         callback()
@@ -526,7 +526,7 @@ export default {
     var validateURLRule = (rule, value, callback) => {
       const pattern =
         /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
-      if (value == '') {
+      if (value === '') {
         callback(new Error('Please enter the url of the analyst report'))
       }
       if (!pattern.test(value)) {
@@ -537,14 +537,14 @@ export default {
     return {
       bd: {
         name: '',
-        symbol: 'SPY',
-        benchmark: 'SPY',
+        symbol: 'SPX',
+        benchmark: 'SPX',
         strategy: 'Signal',
         capital: 100000.0,
         capital_alloc: 1.0,
         commission: 0.1,
         win_rate: 0.0,
-        slippage: 0.1,
+        slippage: 0.0,
         start_date: '',
         end_date: '',
         direction: 'Long',
@@ -552,8 +552,8 @@ export default {
         risk_control: '//',
         report_url: '',
         user_tag: 'client',
-        backtest_period: '1',
-        trade_price: 0,
+        backtest_period: '21',
+        trade_price: 2,
         exclude_oo: 0,
         description: {
           Introduction: '',
@@ -629,12 +629,12 @@ export default {
       indexList: [],
       loading: false,
       options: [],
-      tp: 20,
-      sl: 10,
-      tim: 120,
+      tp: 10,
+      sl: 5,
+      tim: 20,
       isRiskControl: true,
-      isTakeProfit: true,
-      isStopLoss: true,
+      isTakeProfit: false,
+      isStopLoss: false,
       isTimeInMarket: true,
       sentimentIndicatorList: [],
       rules: {
@@ -680,6 +680,7 @@ export default {
   },
   created() {
     this.is_admin = this.$store.state.is_admin
+    this.bd.name = this.bd.symbol+new Date().getTime()
   },
   mounted() {
     this.loadSentimentList('Daily')
