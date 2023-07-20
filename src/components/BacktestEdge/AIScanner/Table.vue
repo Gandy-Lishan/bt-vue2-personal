@@ -30,47 +30,8 @@
 			</div>
 
 			<div class="header-part2">
-				<!-- <template
-					v-for="(item, index) in signalList"
-				>
-					<el-button 
-						:key="index" 
-						:class="{ active: activeSignal === item }" 
-						@click="selectSignal(item)">{{item}}
-					</el-button>
-				</template> -->
 				<el-checkbox-group v-model="activeSignal" @change="selectSignal">
 						<el-checkbox-button v-for="item in signalList" :label="item" :key="item">{{item}}		
-						<!-- <el-tooltip effect="dark" placement="bottom" v-model="popupVisible">
-							<span slot="content" v-if="currentItem === 'MA'">
-								Long: Symbol Close CrossAbove SMA20;<br/>
-								Short: Symbol Close CrossBelow SMA20
-							</span>
-							<span slot="content" v-if="currentItem === 'MAGap'">
-								Long: The difference between Symbol Close and SMA20 CrossAbove 0;<br/>
-								Short: The difference between Symbol Close and SMA20 CrossBelow 0
-							</span>
-							<span slot="content" v-if="currentItem === 'MACDHist'">
-								Long: The MACD CrossAbove Signal Line;<br/>
-								Short: The MACD CrossBelow Signal Line
-							</span>
-							<span slot="content" v-if="currentItem === 'MACDHistGap'">
-								Long: The difference between MACDHist and its previous day CrossAbove 0;<br/>
-								Short: The difference between MACDHist and its previous day CrossBelow 0
-							</span>
-							<span slot="content" v-if="currentItem === 'Hammer'">
-								Only Long: The day before the collection of a long shadow line, the next day closed up
-							</span>
-							<span slot="content" v-if="currentItem === 'Shooting'">
-								Only Short: The day before a long upward thread, the next day closed down
-							</span>
-							<span slot="content" v-if="currentItem === 'UpTrend Pattern'">
-								Only Long: Symbol Close trend upward
-							</span>
-							<span slot="content" v-if="currentItem === 'DownTrend Pattern'">
-								Only Long: Symbol Close trend downward
-							</span>
-							<i class="el-icon-info" v-hover-popup="{ item: item }"></i></el-tooltip> -->
 							<i class="el-icon-info" v-hover-popup="{ item: item }"></i>
 						</el-checkbox-button>
 				</el-checkbox-group>
@@ -95,7 +56,7 @@
 						It can further specify the direction of trades and operating rules,<br/>
 						such as determining buy signals after a golden cross and sell signals after a death cross.
 					</p>
-					<p v-show="currentItem === 'Hammer'">
+					<p v-show="currentItem === 'Hammer followed by a raise'">
 						If the previous day's candlestick shows a long lower shadow,<br/>
 						indicating support at the bottom,<br/>
 						a buy signal is generated when the price rises above a certain threshold after the opening.
@@ -121,6 +82,28 @@
 					</p>
 					<p v-show="currentItem === 'Exhaustion'">
 						Optix indicators with a 10-day moving average > 70 and that day's Optix value is > 80.
+					</p>
+					<p v-show="currentItem === 'PriceBreakout'">
+						When the closing price of a stock ranks above 0 in relation to the closing prices of the past 21 trading days, <br/>
+						a golden cross occurs, indicating an upward breakout and generating a buy signal. <br/>
+						This suggests that the stock's price has entered a breakout phase and is likely to continue rising.
+					</p>
+					<p v-show="currentItem === 'HighPoints'">
+						When the highest price of a stock ranks above 100 in relation to the highest prices of the<br/> 
+						past 13 trading days (higher stock prices correspond to higher rankings), <br/>
+						it forms a 13-day new high and generates a buy signal. This indicates that <br/>
+						the stock is experiencing a positive breakthrough and is in an upward trend.
+					</p>
+					<p v-show="currentItem === 'LowPoints'">
+						When the lowest price of a stock ranks below 0 in relation to the lowest prices of the past 13 trading days, <br/>
+						it forms a 13-day new low and generates a sell signal. <br/>
+						This indicates that the stock is in a downtrend and can be shorted.
+					</p>
+					<p v-show="currentItem === 'RSI'">
+						When the RSI indicator forms a golden cross above 40, it suggests that the indicator is about to<br/>
+					  recover from an oversold state to the midpoint, indicating a potential long entry signal. <br/>
+						RSI can reflect whether a stock is in an overbought or oversold condition <br />
+						but should be used in conjunction with the trend analysis.
 					</p>
 				</el-popover>
 			</div>
@@ -317,7 +300,7 @@ export default {
         // 隐藏弹窗
         vnode.context.hidePopup();
       });
-			const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Idea', 'Trend', 'Exhaustion']
+			const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Idea', 'Trend', 'Exhaustion', 'PriceBreakout', 'HighPoints', 'LowPoints', 'RSI']
 			if (!signalArr.includes(binding.value.item)) {
         // 隐藏元素
         el.style.display = 'none';
@@ -473,7 +456,7 @@ export default {
 		},
 		showPopup(item) {
     // 设置当前悬停的项
-		const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Idea', 'Trend', 'Exhaustion']
+		const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Idea', 'Trend', 'Exhaustion', 'PriceBreakout', 'HighPoints', 'LowPoints', 'RSI']
 		if(signalArr.includes(item)) {
 			this.currentItem = item;
 			// 显示弹窗
