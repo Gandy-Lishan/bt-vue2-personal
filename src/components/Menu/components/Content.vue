@@ -1462,8 +1462,8 @@
 					On the "SwingAI" page, you will see several filter buttons, including
 					'MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting Star followed by a fall',
 					'UpTrend Pattern', and 'DownTrend Pattern'. On the "MidTermAI" page,
-					you will see several filter buttons, including 'Idea', 'Trend', and
-					'Exhaustion'.
+					you will see several filter buttons, including 'Symbol Close > its' MA200 and Optix MA5 < 35', 'Symbol Close > its' MA200 and Optix < 30', and
+					'Optix MA10 < 30 and Optix < 20'.
 				</p>
 				<el-image
 					style="width: 100%; height: 50%"
