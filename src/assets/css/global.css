@@ -66,7 +66,8 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
     background-color: #d7d7d7 !important;
 }
 .el-tabs__item.is-active {
-    background-color: #f8f8f8 !important;
+    background-color: #5b9bd1 !important;
+    color: white;
 }
 .el-tabs--left .el-tabs__item.is-left {
   transition: all 0.2s;
@@ -187,15 +188,13 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 .performance_tabs .el-tabs__item#tab-third{
     display: inline-block;
 }
-
-.el-tabs__item.is-active {
-  background-color: #f8f8f8;
-  font-weight: bold;
-  color: #333333;
+.el-tabs__item.is-active:hover {
+  color: white; 
 }
+
 .el-tabs__item:hover {
-  color: #494848;
   cursor: pointer;
+  color: #5b9bd1;
 }
 .backtest_container .el-form-item__label {
   position: absolute;
