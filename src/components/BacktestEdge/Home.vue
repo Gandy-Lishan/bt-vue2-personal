@@ -1101,7 +1101,7 @@ export default {
               this.$refs.exitChild.saveRelation()
             }
             if (exitChecked) {
-              CIQ.addCover('Start running Backtest...')
+              CIQ.addCover('Running Backtest...')
               CIQ.nprogress.start()
               let vm = this
               let signalEntryList = []
