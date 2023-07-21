@@ -195,43 +195,52 @@ export default {
   data() {
     var validateValue = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('Please input value'))
+        return callback(new Error('Please input value'));
       } else if (isNaN(value)) {
-        callback(new Error('Please enter the correct format'))
+        return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
       } else {
-        const pattern =
-          /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/
+        // Convert ".X" to "0.X" format
+        if (value.startsWith('.') && value.length > 1) {
+          value = '0' + value;
+          this.senti.value = value
+        }
+        const pattern = /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/;
         if (!pattern.test(value) && value != 0) {
-          callback(new Error('Enter up to four decimal places'))
+          return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
         } else {
-          callback()
+          callback();
         }
       }
-    }
+    };
     var validateMaValue = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('Please input value'))
+        return callback(new Error('Please input value'))
       } else if (isNaN(value)) {
-        callback(new Error('Please enter the correct format'))
+        return callback(new Error('Only numbers with a maximum of four decimal places allowed.'))
       } else if (value) {
+        if (value.startsWith('.') && value.length > 1) {
+          value = '0' + value;
+          this.senti.maValue = value
+        }
         const pattern =
           /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/
         if (!pattern.test(value) && value != 0) {
-          callback(new Error('Enter up to four decimal places'))
+          return callback(new Error('Only numbers with a maximum of four decimal places allowed.'))
         } else {
           callback()
         }
       }
     }
     var validatePeriod = (rule, value, callback) => {
+      console.log('period', value)
       if (value === 0 || value === '') {
-        callback(new Error('Please input period'))
+        return callback(new Error('Please input period'))
       } else if (isNaN(value)) {
-        callback(new Error('Please enter the correct format'))
+        return callback(new Error('Only positive integers allowed.'))
       } else if (value) {
-        const pattern = /[1-9]\d*/
+        const pattern = /^[1-9]\d*$/
         if (!pattern.test(value)) {
-          callback(new Error('Please enter a positive integer'))
+          return callback(new Error('Only positive integers allowed.'))
         } else {
           callback()
         }

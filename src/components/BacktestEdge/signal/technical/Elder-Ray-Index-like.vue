@@ -105,19 +105,24 @@ delay_bars: [String, Number],
 	},
 	data() {
 		var validateValue = (rule, value, callback) => {
-			if (value === '') {
-				return callback(new Error('Please input value'))
-			}
-			if (isNaN(value)) {
-				return callback(new Error('Please enter the correct format'))
-			}
-			const pattern =
-				/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/
-			if (!pattern.test(value) && value != 0) {
-				return callback(new Error('Enter up to four decimal places'))
-			}
-			callback()
-		}
+      if (value === '') {
+        return callback(new Error('Please input value'));
+      } else if (isNaN(value)) {
+        return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
+      } else {
+        // Convert ".X" to "0.X" format
+        if (value.startsWith('.') && value.length > 1) {
+          value = '0' + value;
+          this.tech.value = value
+        }
+        const pattern = /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/;
+        if (!pattern.test(value) && value != 0) {
+          return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
+        } else {
+          callback();
+        }
+      }
+    };
 		return {
 			tech: {
 				ids: 'ERI',
