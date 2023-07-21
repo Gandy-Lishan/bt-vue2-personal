@@ -103,35 +103,43 @@ export default {
 	},
 	data() {
 		var validateValueNegative = (rule, value, callback) => {
-			if (value === '') {
-				callback(new Error('Please input value'))
-			} else if (isNaN(value)) {
-				callback(new Error('Please enter the correct format'))
-			} else {
-				const pattern =
-					/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/
-				if (!pattern.test(value) && value != 0) {
-					callback(new Error('Enter up to four decimal places'))
-				} else {
-					callback()
-				}
-			}
-		}
+      if (value === '') {
+        return callback(new Error('Please input value'));
+      } else if (isNaN(value)) {
+        return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
+      } else {
+        // Convert ".X" to "0.X" format
+        if (value.startsWith('.') && value.length > 1) {
+          value = '0' + value;
+          this.tech.valueNegative = value
+        }
+        const pattern = /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/;
+        if (!pattern.test(value) && value != 0) {
+          return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
+        } else {
+          callback();
+        }
+      }
+    };
 		var validateValuePositive = (rule, value, callback) => {
-			if (value === '') {
-				callback(new Error('Please input value'))
-			} else if (isNaN(value)) {
-				callback(new Error('Please enter the correct format'))
-			} else {
-				const pattern =
-					/^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/
-				if (!pattern.test(value) && value != 0) {
-					callback(new Error('Enter up to four decimal places'))
-				} else {
-					callback()
-				}
-			}
-		}
+      if (value === '') {
+        return callback(new Error('Please input value'));
+      } else if (isNaN(value)) {
+        return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
+      } else {
+        // Convert ".X" to "0.X" format
+        if (value.startsWith('.') && value.length > 1) {
+          value = '0' + value;
+          this.tech.valuePositive = value
+        }
+        const pattern = /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/;
+        if (!pattern.test(value) && value != 0) {
+          return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
+        } else {
+          callback();
+        }
+      }
+    };
 		return {
 			tech: {
 				ids: 'ADX',
