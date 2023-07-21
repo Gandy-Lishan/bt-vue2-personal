@@ -109,7 +109,7 @@ export default {
         return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
       } else {
         // Convert ".X" to "0.X" format
-        if (value.startsWith('.') && value.length > 1) {
+        if (typeof value === 'string' && value.startsWith('.') && value.length > 1) {
           value = '0' + value;
           this.tech.valueNegative = value
         }
@@ -128,7 +128,7 @@ export default {
         return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
       } else {
         // Convert ".X" to "0.X" format
-        if (value.startsWith('.') && value.length > 1) {
+        if (typeof value === 'string' && value.startsWith('.') && value.length > 1) {
           value = '0' + value;
           this.tech.valuePositive = value
         }

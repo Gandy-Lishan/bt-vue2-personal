@@ -666,6 +666,7 @@ import jutils from 'jutils-src'
 import { seeReport, setCustomTIM, getCustomTIM } from '@/service/service'
 // import sortByRule from "@/tools/sortTIM";
 const XLSX = require('xlsx');
+import { mapGetters } from 'vuex';
 
 export default {
   data() {
@@ -705,18 +706,9 @@ export default {
       periods: [],
       periodsTIM: [],
       showTable: false,
-      editTIMData: [
-        {
-          period: '1',
-          timeframe: 'Week'
-        },
-        {
-          period: '1',
-          timeframe: 'Month',
-        }
-      ],
+      editTIMData: [],
       activeTIM: 'first',
-      defaultTIMTableLabels: ['Entry Date', '1 Week [%]', '1 Month [%]'],
+      defaultTIMTableLabels: [],
       TIMHistoryList: [],
       TIMResult_quotes: [],
       editBacktestID: null,
@@ -725,9 +717,107 @@ export default {
   created() {
     this.getResultData({ id: 0 })
   },
+  computed: {
+    ...mapGetters(['exitFreqGetter']), // 将getCount映射为组件的计算属性
+  },
   methods: {
     clearForm() {
       Object.assign(this.$data, this.$options.data())
+    },
+    getAllDefaultTableLabels() {
+      let periodArray = [
+              { period: 1, timeframe: 'Week' },
+              { period: 2, timeframe: 'Week' },
+              { period: 1, timeframe: 'Month' },
+              { period: 2, timeframe: 'Month' },
+              { period: 3, timeframe: 'Month' },
+              { period: 6, timeframe: 'Month' },
+              { period: 1, timeframe: 'Year' }
+            ]
+      const frequency = this.exitFreqGetter
+      switch (frequency) {
+        case 'Daily':
+          this.defaultTableLabels = [
+            'Entry Date',
+            '1 Week [%]',
+            '2 Weeks [%]',
+            '1 Month [%]',
+            '2 Months [%]',
+            '3 Months [%]',
+            '6 Months [%]',
+            '1 Year [%]'
+          ]
+          this.defaultTIMTableLabels = ['Entry Date', '1 Week [%]', '1 Month [%]']
+          this.editTIMData = [
+            {
+              period: '1',
+              timeframe: 'Week'
+            },
+            {
+              period: '1',
+              timeframe: 'Month',
+            }
+          ]
+          break;
+        case 'Weekly':
+          this.defaultTableLabels = [
+            'Entry Date',
+            '1 Week [%]',
+            '2 Weeks [%]',
+            '1 Month [%]',
+            '2 Months [%]',
+            '3 Months [%]',
+            '6 Months [%]',
+            '1 Year [%]'
+          ]
+          this.defaultTIMTableLabels = ['Entry Date', '1 Month [%]', '3 Months [%]']
+          this.editTIMData = [
+            {
+              period: '1',
+              timeframe: 'Month'
+            },
+            {
+              period: '3',
+              timeframe: 'Month',
+            }
+          ]
+          break;
+        case 'Monthly':
+          this.defaultTableLabels = [
+            'Entry Date',
+            '1 Month [%]',
+            '3 Months [%]',
+            '6 Months [%]',
+            '9 Months [%]',
+            '1 Year [%]',
+            '2 Years [%]',
+            '3 Years [%]',
+          ]
+          periodArray = [
+              { period: 1, timeframe: 'Month' },
+              { period: 3, timeframe: 'Month' },
+              { period: 6, timeframe: 'Month' },
+              { period: 9, timeframe: 'Month' },
+              { period: 1, timeframe: 'Year' },
+              { period: 2, timeframe: 'Year' },
+              { period: 3, timeframe: 'Year' }
+            ]
+          this.defaultTIMTableLabels = ['Entry Date', '6 Months [%]', '1 Year [%]']
+          this.editTIMData = [
+            {
+              period: '6',
+              timeframe: 'Month'
+            },
+            {
+              period: '1',
+              timeframe: 'Year',
+            }
+          ]
+          break;
+        default:
+          break;
+      }
+      return periodArray
     },
     generate_table_data() {
       this.generatePeriods()
@@ -938,16 +1028,7 @@ export default {
 
                 // 淇濆瓨tradesdata鍒皊tore
                 this.$store.commit('getTradesData', vm.tradesData)
-                // 鏍规嵁entrydate璁＄畻鏈潵鏀剁泭
-                const periodArray = [
-                  { period: 1, timeframe: 'Week' },
-                  { period: 2, timeframe: 'Week' },
-                  { period: 1, timeframe: 'Month' },
-                  { period: 2, timeframe: 'Month' },
-                  { period: 3, timeframe: 'Month' },
-                  { period: 6, timeframe: 'Month' },
-                  { period: 12, timeframe: 'Month' }
-                ]
+                const periodArray = this.getAllDefaultTableLabels()
                 this.backtestHistoryList = this.calculateBacktestHistory(
                   vm.tradesData,
                   periodArray
@@ -1079,6 +1160,18 @@ export default {
         if (item.period % 21 === 0 && item.timeframe === 'Day') {
           return { period: item.period / 21, timeframe: 'Month' }
         }
+        if (item.period % 252 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 252, timeframe: 'Year' }
+        }
+        if (item.period % 4 === 0 && item.timeframe === 'Week') {
+          return { period: item.period / 4, timeframe: 'Month' }
+        }
+        if (item.period % 52 === 0 && item.timeframe === 'Week') {
+          return { period: item.period / 52, timeframe: 'Year' }
+        }
+        if (item.period % 12 === 0 && item.timeframe === 'Month') {
+          return { period: item.period / 12, timeframe: 'Year' }
+        }
         return item
       })
       const uniqueData = [];
@@ -1092,12 +1185,17 @@ export default {
           uniqueData.push(item);
         }
       });
+      /* 
+      1month = 1Bar, 3Month = 3 Bars, 6Months=6Bars, 9Months = 9 Bars, 1year = 12Bars, 2 years = 24 Bars, 3years = 36Bars.
+      */
+      const frequency = this.exitFreqGetter
       return uniqueData.map((item) => {
         let timeframe =
           item.period > 1
             ? `${item.period} ${item.timeframe}s [%]`
             : `${item.period} ${item.timeframe} [%]`
         let value
+        if(frequency == 'Daily') {
         switch (item.timeframe) {
           case 'Day':
             value = Number(item.period)
@@ -1108,8 +1206,44 @@ export default {
           case 'Month':
             value = Number(item.period) * 21
             break
+          case 'Year':
+            value = Number(item.period) * 252
+            break
           default:
             break
+        }
+        }else 
+        if(frequency == 'Weekly') {
+        switch (item.timeframe) {
+          case 'Week':
+            value = Number(item.period)
+            break
+          case 'Month':
+            const period = Number(item.period)
+            let num_3 = null
+            if(period % 3 == 0) {
+              num_3 = Math.trunc(period / 3) // 去除小数点取整数
+            }
+            value = num_3 === null ? period * 4 : period * 4 + num_3
+            break
+          case 'Year':
+            value = Number(item.period) * 52
+            break
+          default:
+            break
+        }
+        }else 
+        if(frequency == 'Monthly') {
+        switch (item.timeframe) {
+          case 'Month':
+            value = Number(item.period)
+            break
+          case 'Year':
+            value = Number(item.period) * 12
+            break
+          default:
+            break
+        }
         }
         return { timeframe, period: item.period, value }
       })
@@ -1137,7 +1271,6 @@ export default {
           //鎷胯繘鍦轰环鏍煎拰鍓嶄竴澶╀綔姣旇緝
           let entryPrice = chartDataset[res].Open
           const transformData = this.transformData(periodArray)
-
           transformData.sort((a, b) => a.value - b.value);
           let obj = {}
           transformData.map((item) => {
@@ -1568,6 +1701,19 @@ export default {
         }
       }
       if (columnIndex === 6) {
+        if (rowIndex % 2 === 0) {
+          return {
+            rowspan: 2,
+            colspan: 1
+          }
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+      }
+      if (columnIndex === 7) {
         if (rowIndex % 2 === 0) {
           return {
             rowspan: 2,
