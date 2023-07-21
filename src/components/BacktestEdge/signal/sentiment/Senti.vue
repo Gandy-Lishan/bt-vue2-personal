@@ -200,7 +200,7 @@ export default {
         return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
       } else {
         // Convert ".X" to "0.X" format
-        if (value.startsWith('.') && value.length > 1) {
+        if (typeof value === 'string' && value.startsWith('.') && value.length > 1) {
           value = '0' + value;
           this.senti.value = value
         }
@@ -218,7 +218,7 @@ export default {
       } else if (isNaN(value)) {
         return callback(new Error('Only numbers with a maximum of four decimal places allowed.'))
       } else if (value) {
-        if (value.startsWith('.') && value.length > 1) {
+        if (typeof value === 'string' && value.startsWith('.') && value.length > 1) {
           value = '0' + value;
           this.senti.maValue = value
         }
