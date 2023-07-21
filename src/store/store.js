@@ -135,6 +135,9 @@ export default new Vuex.Store({
 		},
 		getBacktestResult: (state) => {
 			return state.backtestResult
+		},
+		exitFreqGetter: (state) => {
+			return state.exitFrequency
 		}
 	},
 	mutations: {
