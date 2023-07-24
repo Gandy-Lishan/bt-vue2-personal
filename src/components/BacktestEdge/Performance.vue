@@ -1114,6 +1114,10 @@ export default {
             value = value / 21;
             unit = value==1?"Month":"Months";
           }
+          if (value % 252 === 0) {
+            value = value / 252;
+            unit = value==1?"Year":"Years";
+          }
         }
 
         // 生成新的项
@@ -1125,22 +1129,14 @@ export default {
           case "Days" || "Day":
             res = 1*value
             break
-          case "Day":
-            res = 1*value
-            break
-          case "Weeks":
+          case "Weeks" || "Week":
             res = 5*value
             break
-          case "Week":
-            res = 5*value
-            break
-          case "Months":
-            res = 21*value
-            break
-          case  "Month":
+          case "Months" || "Month":
             res = 21*value
             break
           default:
+            break
         }
         if(processeArray.map(x=>x.label).indexOf(newItem) == -1) processeArray.push({label:newItem,value:res})
         
@@ -1297,6 +1293,8 @@ export default {
             ? `${item.period} ${item.timeframe}s`
             : `${item.period} ${item.timeframe}`
         let value
+        const frequency = this.exitFreqGetter
+        if(frequency == 'Daily') {
         switch (item.timeframe) {
           case 'Day':
             value = Number(item.period)
@@ -1307,9 +1305,46 @@ export default {
           case 'Month':
             value = Number(item.period) * 21
             break
+          case 'Year':
+            value = Number(item.period) * 252
+            break
           default:
             break
         }
+        }else 
+        if(frequency == 'Weekly') {
+        switch (item.timeframe) {
+          case 'Week':
+            value = Number(item.period)
+            break
+          case 'Month':
+            const period = Number(item.period)
+            let num_3 = null
+            if(period % 3 == 0) {
+              num_3 = Math.trunc(period / 3) // 去除小数点取整数
+            }
+            value = num_3 === null ? period * 4 : period * 4 + num_3
+            break
+          case 'Year':
+            value = Number(item.period) * 52
+            break
+          default:
+            break
+        }
+        }else 
+        if(frequency == 'Monthly') {
+        switch (item.timeframe) {
+          case 'Month':
+            value = Number(item.period)
+            break
+          case 'Year':
+            value = Number(item.period) * 12
+            break
+          default:
+            break
+        }
+        }
+
         return { timeframe, period: item.period, value }
       })
     },
