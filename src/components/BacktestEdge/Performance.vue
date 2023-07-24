@@ -604,9 +604,14 @@
 													style="width: 100%"
 													v-model="scope.row.timeframe"
 												>
-													<el-option label="Day(s)" value="Day"></el-option>
+													<!-- <el-option label="Day(s)" value="Day"></el-option>
 													<el-option label="Week(s)" value="Week"></el-option>
-													<el-option label="Month(s)" value="Month"></el-option>
+													<el-option label="Month(s)" value="Month"></el-option> -->
+
+                          <el-option v-if="exitFreqGetter == 'Daily'" label="Day(s)" value="Day"></el-option>
+                          <el-option v-if="exitFreqGetter == 'Weekly' || exitFreqGetter == 'Daily'" value="Week"></el-option>
+                          <el-option v-if="exitFreqGetter == 'Monthly' || exitFreqGetter == 'Daily' || exitFreqGetter == 'Weekly'" label="Month(s)" value="Month"></el-option>
+                          <el-option v-if="exitFreqGetter == 'Monthly' || exitFreqGetter == 'Daily' || exitFreqGetter == 'Weekly'" label="Year(s)" value="Year"></el-option>
 												</el-select>
 											</template>
 										</el-table-column>
@@ -1033,19 +1038,14 @@ export default {
                   vm.tradesData,
                   periodArray
                 )
-                let timPeriodArray = []
                 const res = await getCustomTIM(row.id)
-                let result = null
+                let timPeriodArray = null
                 try {
-                  result = JSON.parse(res.data[0].tim_data)
+                  timPeriodArray = JSON.parse(res.data[0].tim_data)
+                  this.editTIMData = timPeriodArray
                 } catch (error) {
-                  result = [
-                  { period: 1, timeframe: 'Week' },
-                  { period: 1, timeframe: 'Month' }
-                ]
+                  timPeriodArray = this.editTIMData
                 }
-                timPeriodArray = result
-                this.editTIMData = timPeriodArray
                 const transformData = this.transformData(timPeriodArray)
                 transformData.sort((a, b) => a.value - b.value);
                 const table = ['Entry Date']
@@ -1881,10 +1881,31 @@ export default {
         this.$message.warning('Cannot add more than 10 rows.')
         return
       }
-      const newRow = {
-        period: '1',
-        timeframe: 'Day'
-      };
+      const frequency = this.exitFreqGetter
+      let newRow = null
+      switch (frequency) {
+        case 'Daily':
+          newRow = {
+            period: '1',
+            timeframe: 'Day'
+          }
+          break;
+        case 'Weekly':
+          newRow = {
+            period: '1',
+            timeframe: 'Week'
+          }
+          break;
+        case 'Monthly':
+          newRow = {
+            period: '1',
+            timeframe: 'Month'
+          }
+          break;
+      
+        default:
+          break;
+      }
       this.editTIMData.push(newRow);
     },
     getValues() {
@@ -1900,6 +1921,14 @@ export default {
       if (this.tradesData.length === 0) {
         this.$message.warning('No computable trades.')
         return
+      }
+      // 如果row删除为空，其他数据也要清空
+      if (this.editTIMData.length === 0) {
+        this.editTIMData = []
+        // this.getAllDefaultTableLabels()
+        this.defaultTIMTableLabels = []
+        this.TIMHistoryList = []
+        this.TIMResult_quotes = []
       }
       const f1 = Array.isArray(this.editTIMData) && !this.editTIMData.length
       if (f1) {
@@ -1991,10 +2020,12 @@ export default {
     deleteRow(index) {
       this.editTIMData.splice(index, 1)
       if (this.editTIMData.length === 0) {
-        this.editTIMData = []
-        this.defaultTIMTableLabels = ['Entry Date', '1 Week [%]', '1 Month [%]']
-        this.TIMHistoryList = []
-        this.TIMResult_quotes = []
+        // this.editTIMData = []
+        // // this.getAllDefaultTableLabels()
+        // this.defaultTIMTableLabels = []
+        // this.TIMHistoryList = []
+        // this.TIMResult_quotes = []
+        return
       }
     }
   }
