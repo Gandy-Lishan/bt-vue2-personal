@@ -587,6 +587,8 @@ export default {
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
+			// 清空表单时让退场保持为only rik control
+			this.exitItemCheck = true
 			this.addRiskControlOption(true)
 			// Reset data for all subcomponents
 			try {

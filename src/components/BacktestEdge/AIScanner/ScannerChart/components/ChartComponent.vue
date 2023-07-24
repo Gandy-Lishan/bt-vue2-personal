@@ -112,19 +112,16 @@ export default {
 			
 			let patterns = ['UpTrend Pattern', 'DownTrend Pattern']
 			let tradeStudies = ['Hammer followed by a raise','Shooting Star followed by a fall']
-			let noStudy = ['Symbol Close > its\' MA200 and Optix MA5 < 35', 'Symbol Close > its\' MA200 and Optix < 30' ,'Optix MA10 < 30 and Optix < 20']
-			console.log(this.indicator,noStudy)
+			let midtermAI = ['Symbol Close > its\' MA200 and Optix MA5 < 35', 'Symbol Close > its\' MA200 and Optix < 30' ,'Optix MA10 < 30 and Optix < 20']
 			if (patterns.indexOf(this.indicator) != -1){
-				
 				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{points:this.other.Point})
 			}else if(tradeStudies.indexOf(this.indicator) != -1){
-				
 				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{
 					trades:this.other.EntryTradeDate,
 					date:this.other.date,
 					signal:this.other._Signal
 				})
-			}else if(noStudy.indexOf(this.indicator) != -1){
+			}else if(midtermAI.indexOf(this.indicator) != -1){
 				await CIQ.getIndicatorMatedata([CIQ.symbol])
 
 				CIQ.Studies.addStudy(CIQ.stxx, 'ma',{
