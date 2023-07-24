@@ -445,6 +445,8 @@ import alligatorLike from '@/components/BacktestEdge/signal/technical/Alligator-
 import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Linear-RegForecast-like.vue'
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 import { eventBus } from "@/components/BacktestEdge/EventBus/Bus.ts";
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+
 export default {
 	name: 'exit',
 	inheritAttrs: false,
@@ -1120,12 +1122,41 @@ export default {
 				}
 			})
 		},
+		loadShortLong() {
+      const technicalList = CIQ.technicalCategory
+      let formatList = []
+      for (let i = 0; i < technicalList.length; i++) {
+        if (
+          technicalList[i].class === 'No_display_technical_indicator' ||
+          technicalList[i].class ===
+          'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
+        )
+          continue
+        technicalList[i].studies.forEach((item) => {
+          let obj = {}
+          obj.class = technicalList[i].class
+          obj.value = item.name
+          obj.url = item.url
+          formatList.push(obj)
+        })
+      }
+      formatList.sort(function (a, b) {
+        return a.value.localeCompare(b.value)
+      })
+      this.$store.commit('saveFormatTechnicalList', formatList)
+      return formatList
+    },
 		setEditPanel(num, data) {
 			this.relation = data.exit.relation ? data.exit.relation : 1
 
 			let formateTechnicalList
 			if (this.$store.state.formateTechnicalList.length === 0) {
-				this.$refs.indiChild[0].loadShortLong()
+				try {
+					this.$refs.indiChild[0].loadShortLong()
+				} catch (error) {
+					formateTechnicalList = this.loadShortLong()
+					console.log('error', error)
+				}
 			}
 			for (let i = 0; i < num - 1; i++) {
 				this.handleTabsEdit(null, 'add')
