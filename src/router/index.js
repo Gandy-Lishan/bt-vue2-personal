@@ -115,8 +115,8 @@ router.beforeEach(async (to, from, next) => {
 								CIQ.isScannerAI = false
 							}
 							// 保存整站vuex本地储存初始状态
-							window.SITE_CONFIG = {}
-							window.SITE_CONFIG['storeState'] = JSON.parse(JSON.stringify(store.state))
+							// window.SITE_CONFIG = {}
+							// window.SITE_CONFIG['storeState'] = JSON.parse(JSON.stringify(store.state))
 							next()
 						}		
 					} else { throw Error('Status code error') }

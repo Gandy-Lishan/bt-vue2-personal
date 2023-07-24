@@ -143,6 +143,7 @@ export default new Vuex.Store({
 			Object.keys(state).forEach(key => {
 				state[key] = JSON.parse(JSON.stringify(window.SITE_CONFIG['storeState'][key]))
 			})
+			this.state.backtestSymbol = 'SPX'
 	  	},
 
 		SET_LASTSIGNAL_ARRAY: (state,val)=>{
