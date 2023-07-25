@@ -79,6 +79,7 @@ export default {
   },
   data() {
     var validateValue = (rule, value, callback) => {
+      console.log('symbol OHLCV', value)
       if (value === '') {
         return callback(new Error('Please input value'));
       } else if (isNaN(value)) {
@@ -376,6 +377,7 @@ export default {
         this.sym.conditionPeriod = cond.conditionPeriod ? cond.conditionPeriod : ''
         this.editTechVal = obj.indicator
         this.ROCLikeChange(this.sym.newCondition)
+        this.clearFormValidate()
       }
     }
   }
