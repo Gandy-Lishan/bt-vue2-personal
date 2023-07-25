@@ -8,15 +8,41 @@
 					<el-date-picker
 						v-model="date"
 						class="aiscanner-date"
-						type="date"
-						placeholder="Select Date"
+						type="daterange"
+						unlink-panels
+						range-separator="to"
+						start-placeholder="Start date"
+						end-placeholder="End date"
 						:picker-options="pickerOptions"
 						@change="selectDate"
 						value-format="yyyy-MM-dd"
 					>
 					</el-date-picker>
+
 				</div>
-				<div class="categoryBtnGroup">
+
+				<div class="searchBox">
+					<el-input 
+						placeholder="" 
+						v-model="searchItem" 
+						class="search"
+						@keyup.enter.native="handleQuery"
+						clearable
+						@clear="handleQuery"
+					>
+						<el-select v-model="searchCategory" slot="prepend" placeholder="Category">
+							<el-option
+								v-for="category in tableData.tableCol"
+								:key="category"
+								:label="category"
+								:value="category"
+							></el-option>
+						</el-select>
+						<el-button slot="append" icon="el-icon-search"></el-button>
+					</el-input>
+				</div>
+				<!-- swingai & midterm分类组被弃用了 -->
+				<!-- <div class="categoryBtnGroup">
 					<template
 						v-for="(item, index) in categories"
 					>
@@ -26,10 +52,11 @@
 							@click="selectCategory(item)">{{item}}
 						</el-button>
 					</template>
-				</div>
+				</div> -->
 			</div>
 
-			<div class="header-part2">
+			<!-- signal 按钮标签被弃用了 -->
+			<!-- <div class="header-part2">
 				<el-checkbox-group v-model="activeSignal" @change="selectSignal">
 						<el-checkbox-button v-for="item in signalList" :label="item" :key="item">{{item}}		
 							<i class="el-icon-info" v-hover-popup="{ item: item }"></i>
@@ -106,7 +133,7 @@
 						but should be used in conjunction with the trend analysis.
 					</p>
 				</el-popover>
-			</div>
+			</div> -->
 		</div>
 		<el-table
 			ref="tableREF"
@@ -127,9 +154,9 @@
 						<el-form-item label="Symbol Name">
 							<span>{{ props.row.desc }}</span>
 						</el-form-item> -->
-						<el-form-item label="Signal">
+						<!-- <el-form-item label="Signal">
 							<span>{{ props.row['Signal']}}</span>
-						</el-form-item>
+						</el-form-item> -->
 						<el-form-item label="AVERAGE WIN %">
 							<span>{{ props.row['AvgWin']}}	</span>
 						</el-form-item>
@@ -244,7 +271,7 @@ export default {
 				pickerOptions: {
 					disabledDate: this.disabledDate
 				},
-				date: this.data.Date,
+				date: [this.data.Date,this.data.Date],
 				btnLoading: false,
 				btInfo: [],
 				
@@ -253,7 +280,6 @@ export default {
 				selectedProfitTargets: [],
 				selectedWinRates: [],
 
-				categories: ['SwingAI','MidTermAI'],
 				activeCategory:this.data.Category,
 
 				signalList: [],
@@ -261,8 +287,11 @@ export default {
 
 				tableData: [],
 				popupVisible: false, // 弹窗可见性
-    		popupContent: '', // 弹窗内容
+    			popupContent: '', // 弹窗内容
 				hoveredItem: null, // 悬停的元素
+
+				searchItem: '', // 搜索关键词
+				searchCategory: "", // 存储选择的搜索类别
 		}
 	},
 	watch: {
@@ -501,17 +530,21 @@ h4 {
 	.header-part1{
 		display: flex;
 		align-items: end;
-		.categoryBtnGroup {
+		justify-content: space-between;
+		// .categoryBtnGroup {
+		// 	margin-left: 50px;
+		// 	button {
+		// 		width: 180px;
+		// 		&.active {
+		// 		/* 高亮状态的样式 */
+		// 			color: #409EFF;
+		// 			border-color: #c6e2ff;
+		// 			background-color: #ecf5ff;	
+		// 		}
+		// 	}
+		// }
+		.searchBox {
 			margin-left: 50px;
-			button {
-				width: 180px;
-				&.active {
-				/* 高亮状态的样式 */
-					color: #409EFF;
-					border-color: #c6e2ff;
-					background-color: #ecf5ff;	
-				}
-			}
 		}
 	}
 	.header-part2{
@@ -522,6 +555,9 @@ h4 {
 	position: absolute;
 	top: 15px;
 	left: 185px;
+}
+.end-date {
+	margin-left: 20px;
 }
 
 // mobile

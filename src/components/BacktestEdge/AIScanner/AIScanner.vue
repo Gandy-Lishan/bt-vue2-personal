@@ -65,7 +65,7 @@ export default {
 			x['Win Rate(%)'] = Number(x['Win Rate(%)']).toFixed(2)
 
 			// 给一些定值默认值
-			x['Timing To Entry'] = 'Open'
+			//x['Timing To Entry'] = 'Open'
 		})
 		let AIPickObj = {}
 
@@ -74,11 +74,12 @@ export default {
 		AIPickObj['Date'] = date
 		AIPickObj['Category'] = category
 		AIPickObj['tableCol'] = [
+			'Date',
 			'Symbol',
 			'Close',
 			'Market',
 			'Direction',
-			'Timing To Entry',
+			'Signal',
 			//'Signal',
 			'Win Rate(%)',
 			'Stop Loss(%)',
