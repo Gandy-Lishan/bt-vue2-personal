@@ -269,6 +269,7 @@ import Papa from 'papaparse'
 import axios from 'axios'
 import { compareArrays } from '@/tools/compareArrays'
 import moment from 'moment'
+import { mapMutations } from 'vuex'
 export default {
   props: {
     criteria: String,
@@ -505,6 +506,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['getFrequency']),
     myFunction() {
       this.$refs.myDropdown.classList.toggle('show')
     },
@@ -605,6 +607,8 @@ export default {
     },
     handleSentimentSelect(item) {
       this.currentSentiUpdated = item.updated
+      this.getFrequency(item.updated)
+
       // old version only
       var countExistIndicator = 0
       for (var studyInstanceName in CIQ.stxx.layout.studies) {

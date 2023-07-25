@@ -117,8 +117,8 @@ export default new Vuex.Store({
 		backtestResult: [],
 		tradePrice: 0,
 		last_signal_array: [],
-		_last_signal_array: [], // lishan 用于控制进度条
-		hashTable: [] // lishan 保存要上传的数据
+		_last_signal_array: [],
+		hashTable: []
 	},
 	getters: {
 		getAllSignalArray: (state) => {
@@ -239,8 +239,21 @@ export default new Vuex.Store({
 			state.pairDataFreq = val
 		},
 		getFrequency(state, val) {
-			state.exitFrequency = val
-			state.backtestInfo.frequency = val
+			let selectedTimeframe = val
+			let previousTimeframe = state.exitFrequency
+			if (selectedTimeframe !== previousTimeframe) {
+        // 根据时间范围的大小进行比较，取周期较大的那个
+        const timeframes = ["Daily", "Weekly", "Monthly"];
+        const previousIndex = timeframes.indexOf(previousTimeframe);
+        const currentIndex = timeframes.indexOf(selectedTimeframe);
+        const largerIndex = Math.max(previousIndex, currentIndex);
+        selectedTimeframe = timeframes[largerIndex];
+
+        // 更新之前的时间范围为当前选择
+        previousTimeframe = selectedTimeframe;
+      }
+			state.exitFrequency = previousTimeframe
+			state.backtestInfo.frequency = previousTimeframe
 		},
 		/**
 		 * Sets up a mutations to store the condition of selected technical indicator in form, it's used for gennerating output csv
@@ -607,7 +620,6 @@ export default new Vuex.Store({
 			}
 			state.backtestInfo.entry_description = []
 			state.backtestInfo.exit_description = []
-			
 		},
 		clearStoreDesciption(state) {
 			state.backtestInfo.entry_description = []
