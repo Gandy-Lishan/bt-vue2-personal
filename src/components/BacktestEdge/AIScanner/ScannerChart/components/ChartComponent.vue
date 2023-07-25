@@ -85,8 +85,8 @@ export default {
 		editStudies(bool){
 			CIQ.extend(CIQ.Studies.studyLibrary["ma"], { edit:bool });
 			CIQ.extend(CIQ.Studies.studyLibrary["macd"], { edit:bool });
-			CIQ.extend(CIQ.Studies.studyLibrary["ma_gap"], { edit:bool });
-			CIQ.extend(CIQ.Studies.studyLibrary["macd_hist_gap"], { edit:bool });
+			CIQ.extend(CIQ.Studies.studyLibrary["MAGap"], { edit:bool });
+			CIQ.extend(CIQ.Studies.studyLibrary["MACDHistGap"], { edit:bool });
 		},
 		hideComponents() {
 			let search = document.querySelector(".ciq-search")
@@ -101,53 +101,113 @@ export default {
 		async loadDefaultStudy() {
 			 
 			// 默认显示signal indicator 和 tech indicator,如果没有就不显示
-			if(this.other['_Signal'] == 'MA') this.other['_Signal'] = 'Moving Average'
-			for(var i in CIQ.technicalCategory){
-				let result = CIQ.technicalCategory[i]['studies'].find(item=>item.name == this.other['_Signal'])
-				if(result){
-					this.indicator = result.url
-					break
-				}
+			//if(this.other['_Signal'] == 'MA') this.other['_Signal'] = 'Moving Average'
+				
+			switch(this.other['_Signal']){
+				case "Symbol Close > its\' MA200 and Optix MA5 < 35":
+					await CIQ.getIndicatorMatedata([CIQ.symbol])
+					CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{
+						Period: 5,
+						display:"ST MA",
+						Field: CIQ.symbol
+					});
+					CIQ.Studies.addStudy(CIQ.stxx, "ma",{
+						Period: 200,
+						Field: "Close"
+					});
+					CIQ.createOneTimePatternMarker(this.other.date,"Symbol Close > its\' MA200 and Optix MA5 < 35")
+					break;
+				case "Symbol Close > its\' MA200 and Optix < 30":
+					await CIQ.getIndicatorMatedata([CIQ.symbol])
+					CIQ.Studies.addStudy(CIQ.stxx, "ma",{
+						Period: 200,
+						Field: "Close"
+					});
+					CIQ.createOneTimePatternMarker(this.other.date,"Symbol Close > its\' MA200 and Optix < 30")
+					break;
+				case "Optix MA10 < 30 and Optix < 20":
+					await CIQ.getIndicatorMatedata([CIQ.symbol])
+					CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{
+						Period: 5,
+						display:"ST MA",
+						Field: CIQ.symbol
+					});
+					CIQ.createOneTimePatternMarker(this.other.date,"Optix MA10 < 30 and Optix < 20")
+					break;
+				case 'UpTrend Pattern':
+					var points = eval('(' + this.other.Point + ')')
+					CIQ.Studies.addStudy(CIQ.stxx, this.other['_Signal'],{display:this.other['_Signal']},null,{points:points})
+					CIQ.createOneTimeScannerMarkerHighLowLine(points.slice(points.length - 1),this.other._Signal,points)
+					break;
+				case 'DownTrend Pattern':
+					var points = eval('(' + this.other.Point + ')')
+					CIQ.Studies.addStudy(CIQ.stxx, this.other['_Signal'],{display:this.other['_Signal']},null,{points:points})
+					CIQ.createOneTimeScannerMarkerHighLowLine(points.slice(points.length - 1),this.other._Signal,points)
+					break;
+				case 'Hammer followed by a raise':
+					CIQ.createOneTimeScannerMarkerHammer(this.other.EntryTradeDate,this.other.date,this.other._Signal)
+					break;
+				case 'Shooting Star followed by a fall':
+					CIQ.createOneTimeScannerMarkerHammer(this.other.EntryTradeDate,this.other.date,this.other._Signal)
+					break;
+				case 'MAGap':
+					CIQ.Studies.addStudy(CIQ.stxx,"ma",{display:'ma'});
+					CIQ.createOneTimePatternMarker(this.other.date,"MAGap")
+					break;
+				case 'MACDHistGap':
+					CIQ.Studies.addStudy(CIQ.stxx,"macd",{display:'macd'});
+					CIQ.createOneTimePatternMarker(this.other.date,"MACDHistGap")
+					break;
+				case 'PriceBreakout' :
+					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+						display: 'Range Of Rank',
+						Field: 'Close',
+						condition: 'ROR',
+						period: 21
+					})
+					CIQ.createOneTimePatternMarker(this.other.date,"PriceBreakout")
+					break;
+				case 'HighPoints' :
+					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+						display: 'Range Of Rank',
+						Field: 'High',
+						condition: 'ROR',
+						period: 13
+					})
+					CIQ.createOneTimePatternMarker(this.other.date,"HighPoints")
+					break;
+				case 'LowPoints' :
+					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+						display: 'Range Of Rank',
+						Field: 'Low',
+						condition: 'ROR',
+						period: 13
+					})
+					CIQ.createOneTimePatternMarker(this.other.date,"LowPoints")
+					break;
+				case 'RSI' :
+					CIQ.Studies.addStudy(CIQ.stxx, 'rsi')
+					CIQ.createOneTimePatternMarker(this.other.date,"RSI")
+					break;
+				case 'MA' :
+					CIQ.Studies.addStudy(CIQ.stxx, "ma",{
+						Period: 20,
+						Type: 'simple',
+						Field: "Close"
+					});
+					CIQ.createOneTimePatternMarker(this.other.date,"MA")
+					break;
+				case 'MACDHist' :
+					CIQ.Studies.addStudy(CIQ.stxx, "macd",{
+						Period: 20,
+						Type: 'simple',
+						Field: "Close"
+					});
+					CIQ.createOneTimePatternMarker(this.other.date,"MACD")
+					break;
+				default: 
 			}
-			
-			let patterns = ['UpTrend Pattern', 'DownTrend Pattern']
-			let tradeStudies = ['Hammer followed by a raise','Shooting Star followed by a fall']
-			let midtermAI = ['Symbol Close > its\' MA200 and Optix MA5 < 35', 'Symbol Close > its\' MA200 and Optix < 30' ,'Optix MA10 < 30 and Optix < 20']
-			if (patterns.indexOf(this.indicator) != -1){
-				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{points:this.other.Point})
-			}else if(tradeStudies.indexOf(this.indicator) != -1){
-				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,null,null,{
-					trades:this.other.EntryTradeDate,
-					date:this.other.date,
-					signal:this.other._Signal
-				})
-			}else if(midtermAI.indexOf(this.indicator) != -1){
-				await CIQ.getIndicatorMatedata([CIQ.symbol])
 
-				CIQ.Studies.addStudy(CIQ.stxx, 'ma',{
-					Type: 'simple',
-					Field: 'Close',
-					Period: 200,
-					//display: indicatorList[i],
-				},{ MA: '#FF0000' })
-				CIQ.Studies.addStudy(CIQ.stxx, 'ma',{
-					Type: 'simple',
-					Field: 'Close',
-					Period: 250,
-					//display: indicatorList[i],
-				},{ MA: '#7257F2' })
-			}else{
-				CIQ.Studies.addStudy(CIQ.stxx, this.indicator,{display:this.indicator})
-			}
-			
-			// macd gap和macd绑定显示
-			if (this.indicator == 'macd_hist_gap') {
-				CIQ.Studies.addStudy(CIQ.stxx, 'macd',{display:'macd'});
-			}
-			// ma gap和ma绑定显示
-			if (this.indicator == 'ma_gap') {
-				CIQ.Studies.addStudy(CIQ.stxx,"ma",{display:'ma'});
-			}
 			CIQ.stxx.setChartType("candle");
 			this.loadMarker()
 		},
