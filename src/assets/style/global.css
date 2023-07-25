@@ -88,6 +88,17 @@
   background: rgb(219 219 219) !important
 }
 
+.aiscanner-container .el-input-group__prepend {
+  background-color: #fff;
+}
+.aiscanner-container .el-input__inner {
+  margin-left: 0;
+  line-height: 25px;
+}
+.aiscanner-container .el-select .el-input {
+  width: 106px;
+}
+
 /* 修改主题色 */
 .el-radio__input.is-checked .el-radio__inner {
   border-color: #5b9bd1;
