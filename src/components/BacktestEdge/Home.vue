@@ -951,19 +951,20 @@ export default {
       CIQ.setPanelHeight([])
       const freq = CIQ.store.state.exitFrequency
 
-      CIQ.store.commit('RESET_STORE')
+      // 这个虽然清理干净了，但是还得初始化一些东西
+      //CIQ.store.commit('RESET_STORE')
 
       // remove all Studies from Vuex
-      // CIQ.store.commit('getEntryIndicatorsList', [])
-      // CIQ.store.commit('getExitIndicatorsList', [])
-      // CIQ.store.commit('getMA', [])
-      // CIQ.store.commit('getMALayout', [])
+      CIQ.store.commit('getEntryIndicatorsList', [])
+      CIQ.store.commit('getExitIndicatorsList', [])
+      CIQ.store.commit('getMA', [])
+      CIQ.store.commit('getMALayout', [])
 
-      // CIQ.store.commit('getExtraIndicators', [])
-      // CIQ.store.commit('getTechnicalIndicators', [])
+      CIQ.store.commit('getExtraIndicators', [])
+      CIQ.store.commit('getTechnicalIndicators', [])
 
-      // CIQ.store.commit('getBacktestSymbol', 'SPX')
-      // CIQ.store.commit('getFrequency', 'Daily')
+      CIQ.store.commit('getBacktestSymbol', 'SPX')
+      CIQ.store.commit('getFrequency', 'Daily')
 
       // remove markers, prompt, recover timeframe dropdown
       CIQ.removePrompt()
