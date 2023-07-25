@@ -435,7 +435,9 @@
 												<el-table-column :label="l" :prop="l" :key="index">
 													<template slot-scope="scope">
 														<p class="tableText">
-															{{ scope.row[l] }}
+                              {{
+                                Number.isNaN(parseFloat(scope.row[l])) ? '' : parseFloat(scope.row[l])
+                              }}
 														</p>
 													</template>
 												</el-table-column>
@@ -510,7 +512,7 @@
 												<el-table-column :label="l" :prop="l" :key="index">
 													<template slot-scope="scope">
 														<p class="tableText">
-															{{ scope.row[l] }}
+															{{ Number.isNaN(parseFloat(scope.row[l])) ? '' : parseFloat(scope.row[l]) }}
 														</p>
 													</template>
 												</el-table-column>
@@ -609,9 +611,9 @@
 													<el-option label="Month(s)" value="Month"></el-option> -->
 
                           <el-option v-if="exitFreqGetter == 'Daily'" label="Day(s)" value="Day"></el-option>
-                          <el-option v-if="exitFreqGetter == 'Weekly' || exitFreqGetter == 'Daily'" value="Week"></el-option>
+                          <el-option v-if="exitFreqGetter == 'Weekly' || exitFreqGetter == 'Daily'" label="Week(s)" value="Week"></el-option>
                           <el-option v-if="exitFreqGetter == 'Monthly' || exitFreqGetter == 'Daily' || exitFreqGetter == 'Weekly'" label="Month(s)" value="Month"></el-option>
-                          <el-option v-if="exitFreqGetter == 'Monthly' || exitFreqGetter == 'Daily' || exitFreqGetter == 'Weekly'" label="Year(s)" value="Year"></el-option>
+                          <el-option v-if="exitFreqGetter == 'Monthly' || exitFreqGetter == 'Weekly'" label="Year(s)" value="Year"></el-option>
 												</el-select>
 											</template>
 										</el-table-column>

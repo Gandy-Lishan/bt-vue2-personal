@@ -415,7 +415,7 @@
 						<el-tooltip effect="dark" placement="top">
 							<span slot="content"
 								>Input a value of percentage to exit position when the specified
-								profit is reached. (default: 20%)<br
+								profit is reached. (default: 10%)<br
 							/></span>
 							<i class="iconfont icon-wenhao"></i>
 						</el-tooltip>
@@ -430,7 +430,7 @@
 						<el-tooltip effect="dark" placement="top">
 							<span slot="content"
 								>Input a value of percentage to exit position when the specified
-								loss is reached. (default: 10%)<br
+								loss is reached. (default: 5%)<br
 							/></span>
 							<i class="iconfont icon-wenhao"></i> </el-tooltip
 					></el-checkbox>
@@ -444,7 +444,7 @@
 							<span slot="content"
 								>Input a value of bars to stay in market after entry.<br />Exit
 								position when the specified Time In Market is reached. (default:
-								30)<br
+								20)<br
 							/></span>
 							<i class="iconfont icon-wenhao"></i> </el-tooltip
 					></el-checkbox>
@@ -1060,35 +1060,42 @@ export default {
         }
       }
       vm.sentimentIndicatorList = []
-      if (frequency) {
+      // if (frequency) {
+      //   indicatorList.forEach((element) => {
+      //     if (
+      //       frequency.toUpperCase().indexOf(element.updated.toUpperCase()) !==
+      //       -1
+      //     ) {
+      //       vm.sentimentIndicatorList.push({
+      //         value: element.chart_name,
+      //         url: element.url,
+      //         updated: element.updated
+      //       })
+      //     }
+      //   })
+      // }
         indicatorList.forEach((element) => {
-          if (
-            frequency.toUpperCase().indexOf(element.updated.toUpperCase()) !==
-            -1
-          ) {
             vm.sentimentIndicatorList.push({
               value: element.chart_name,
               url: element.url,
               updated: element.updated
             })
-          }
         })
-      }
       this.$store.commit('getIndicatorsList', indicatorList)
       CIQ.indicatorList = indicatorList
 
       this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
 
       const data = vm.$store.state.indicatorsList
-      if (frequency !== '') {
-        if (frequency == 'Daily') {
-          vm.setSentiList(['Daily'], data)
-        } else if (frequency == 'Weekly') {
-          vm.setSentiList(['Daily', 'Weekly'], data)
-        } else if (frequency == 'Monthly') {
-          vm.setSentiList(['Daily', 'Weekly', 'Monthly'], data)
-        }
-      }
+      // if (frequency !== '') {
+        // if (frequency == 'Daily') {
+        //   vm.setSentiList(['Daily'], data)
+        // } else if (frequency == 'Weekly') {
+        //   vm.setSentiList(['Daily', 'Weekly'], data)
+        // } else if (frequency == 'Monthly') {
+        //   vm.setSentiList(['Daily', 'Weekly', 'Monthly'], data)
+        // }
+      // }
     },
     setSentiList(arr, data) {
       const vm = this
