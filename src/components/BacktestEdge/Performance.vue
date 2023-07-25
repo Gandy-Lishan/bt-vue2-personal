@@ -436,7 +436,7 @@
 													<template slot-scope="scope">
 														<p class="tableText">
                               {{
-                                Number.isNaN(parseFloat(scope.row[l])) ? '' : parseFloat(scope.row[l])
+                                displayData(scope.row[l])
                               }}
 														</p>
 													</template>
@@ -512,7 +512,9 @@
 												<el-table-column :label="l" :prop="l" :key="index">
 													<template slot-scope="scope">
 														<p class="tableText">
-															{{ Number.isNaN(parseFloat(scope.row[l])) ? '' : parseFloat(scope.row[l]) }}
+															{{ 
+                              displayData(scope.row[l])
+                              }}
 														</p>
 													</template>
 												</el-table-column>
@@ -730,6 +732,19 @@ export default {
   methods: {
     clearForm() {
       Object.assign(this.$data, this.$options.data())
+    },
+    displayData(data) {
+       const numberRegex = /^-?\d+(\.\d+)?$/;
+      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+      if (numberRegex.test(data)) {
+        return parseFloat(data);
+      } else if (dateRegex.test(data)) {
+        return data
+      } else {
+        // 如果既不是数字也不是日期，则返回空字符串，即不显示"NAN"的数据
+        return '';
+      }
     },
     getAllDefaultTableLabels() {
       let periodArray = [
