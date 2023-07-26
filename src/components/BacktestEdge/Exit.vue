@@ -634,6 +634,7 @@ export default {
 						label: 'Only Use Risk Control'
 					}
 				]
+				this.exitItemCheck = true
 			} else {
 				this.signalOptions = [
 					{
