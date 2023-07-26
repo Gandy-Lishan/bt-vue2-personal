@@ -1552,8 +1552,8 @@ export default {
         Period: val['timeframe'],
         Median: median_list[i],
         '% Positive': isNaN(positive_list[i]) ? '' : Math.round(positive_list[i] * 100) + ' %',
-        'Avg Max Loss': median_list[i] ? max_loss_list[i] : NaN,
-        'Avg Max Gain': median_list[i] ? max_gain_list[i] : NaN,
+        'Avg Max Loss': (!median_list[i] && median_list[i]!=0) ? NaN : max_loss_list[i],
+        'Avg Max Gain': (!median_list[i] && median_list[i]!=0) ? NaN : max_gain_list[i],
         'Z-Score': z_score_list[i]
       }))
       if (this.activeTIM == 'first') {
