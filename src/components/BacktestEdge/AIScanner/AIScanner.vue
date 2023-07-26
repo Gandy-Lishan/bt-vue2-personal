@@ -40,12 +40,12 @@ export default {
 	async loadData(marketType){
 		//this.activeIndex = index
 		if(marketType=='US'){
-			this.getAIPick(this.curDate,'SwingAI')
+			this.getAIPick([this.curDate,this.curDate])
 		}
 	},
-	async getAIPick(date,category){
+	async getAIPick(date){
 		this.tableDataList = []
-		let AIPickContent = await getAIPick(date,category)
+		let AIPickContent = await getAIPick(date)
 		
 		let AIPickContentString = JSON.stringify(AIPickContent)
 								.replace(/TimeInMarket/g,'Best Time In Market(Bars)')
@@ -72,7 +72,6 @@ export default {
 		AIPickObj['label'] = 'AI Picks at the end of today'
 		AIPickObj['title'] = 'AI Picks at the end of today'
 		AIPickObj['Date'] = date
-		AIPickObj['Category'] = category
 		AIPickObj['tableCol'] = [
 			'Date',
 			'Symbol',
@@ -95,9 +94,8 @@ export default {
 		
 		this.tableDataList.push(AIPickObj)
 	},
-	selectDate(date,category){
-		// select category as well
-		this.getAIPick(date,category)
+	selectDate(date){
+		this.getAIPick(date)
 	},
 
   }
