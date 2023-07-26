@@ -680,7 +680,15 @@ export default {
   },
   created() {
     this.is_admin = this.$store.state.is_admin
-    this.bd.name = this.bd.symbol+new Date().getTime()
+
+    const date = new Date()
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const second = date.getSeconds();
+    this.bd.name = this.bd.symbol+' ' + year+'/'+month+'/'+day+'/'+hour+'/'+minute+'/'+second
   },
   mounted() {
     this.loadSentimentList('Daily')
