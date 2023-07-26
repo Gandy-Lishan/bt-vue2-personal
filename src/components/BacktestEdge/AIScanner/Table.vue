@@ -239,7 +239,8 @@
 							'Win Rate(%)',
 							'Best Time In Market(Bars)',
 							'Time In Market(Bars)',
-							'Profit Target(%)'
+							'Profit Target(%)',
+							'Date'
 						].indexOf(l) !== -1
 							? 'custom'
 							: false
@@ -438,6 +439,18 @@ export default {
 				}else if(sortingOrder == 'ascending'){
 					this.tableData.content.sort((a,b) => {
 						return a[colName] - b[colName]
+					})
+				}else{
+				}
+			}
+			if(['Date'].indexOf(colName) !== -1){
+				if(sortingOrder == 'descending'){
+					this.tableData.content.sort((a,b) => {
+						return new Date(b[colName]) - new Date(a[colName])
+					})
+				}else if(sortingOrder == 'ascending'){
+					this.tableData.content.sort((a,b) => {
+						return new Date(a[colName]) - new Date(b[colName])
 					})
 				}else{
 				}
