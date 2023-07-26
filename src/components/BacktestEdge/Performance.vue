@@ -532,6 +532,7 @@
 							<div class="zscore-container">
 								<el-skeleton :rows="2" :loading="loading" animated>
 									<template>
+                    {{TIMResult_quotes}}
 										<el-table
 											:data="TIMResult_quotes"
 											:show-header="false"
@@ -1133,6 +1134,22 @@ export default {
           }
           if (value % 252 === 0) {
             value = value / 252;
+            unit = value==1?"Year":"Years";
+          }
+        }
+        if (unit === "Weeks") {
+          if (value % 4 === 0) {
+            value = value / 4;
+            unit = value==1?"Month":"Months";
+          }
+          if (value % 52 === 0) {
+            value = value / 52;
+            unit = value==1?"Year":"Years";
+          }
+        }
+        if (unit === "Months") {
+          if (value % 12 === 0) {
+            value = value / 12;
             unit = value==1?"Year":"Years";
           }
         }
