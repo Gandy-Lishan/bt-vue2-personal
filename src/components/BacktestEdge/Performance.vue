@@ -532,7 +532,6 @@
 							<div class="zscore-container">
 								<el-skeleton :rows="2" :loading="loading" animated>
 									<template>
-                    {{TIMResult_quotes}}
 										<el-table
 											:data="TIMResult_quotes"
 											:show-header="false"
@@ -878,7 +877,7 @@ export default {
           })
         }
         // 灏Periods 淇℃伅鎻掑叆鍒data 涓紝灏data 缁戝畾鍒table 涓
-        
+        console.log('this.periodsTIM',this.periodsTIM,this.TIMResult_quotes)
         for (let i = 0; i < this.periodsTIM.length; i++) {
           for (let j = 0; j < result.length; j++) {
             this.TIMResult_quotes.forEach((obj) => {
@@ -1164,20 +1163,34 @@ export default {
         // 将新的项添加到 processedObj，使用项作为键名
         let res
         switch(unit){
-          case "Days" || "Day":
+          case "Days":
             res = 1*value
             break
-          case "Weeks" || "Week":
+          case "Day":
+            res = 1*value
+            break
+          case "Weeks":
             res = 5*value
             break
-          case "Months" || "Month":
+          case "Week":
+            res = 5*value
+            break
+          case "Months":
             res = 21*value
+            break
+          case "Month":
+            res = 21*value
+            break
+          case "Years":
+            res = 252*value
+            break
+           case "Year":
+            res = 252*value
             break
           default:
             break
         }
         if(processeArray.map(x=>x.label).indexOf(newItem) == -1) processeArray.push({label:newItem,value:res})
-        
         //processedObj[newItem] = res;
       }
       //console.log(processedObj)
@@ -1187,6 +1200,27 @@ export default {
       return processeArray;
     },
     transformData(data) {
+      data = data.map(item => {
+        if (item.period % 5 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 5, timeframe: 'Week' }
+        }
+        if (item.period % 21 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 21, timeframe: 'Month' }
+        }
+        if (item.period % 252 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 252, timeframe: 'Year' }
+        }
+        if (item.period % 4 === 0 && item.timeframe === 'Week') {
+          return { period: item.period / 4, timeframe: 'Month' }
+        }
+        if (item.period % 52 === 0 && item.timeframe === 'Week') {
+          return { period: item.period / 52, timeframe: 'Year' }
+        }
+        if (item.period % 12 === 0 && item.timeframe === 'Month') {
+          return { period: item.period / 12, timeframe: 'Year' }
+        }
+        return item
+      })
       data = data.map(item => {
         if (item.period % 5 === 0 && item.timeframe === 'Day') {
           return { period: item.period / 5, timeframe: 'Week' }
@@ -1326,6 +1360,27 @@ export default {
       return backtestResult
     },
     transformZScoreData(data) {
+      data = data.map(item => {
+        if (item.period % 5 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 5, timeframe: 'Week' }
+        }
+        if (item.period % 21 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 21, timeframe: 'Month' }
+        }
+        if (item.period % 252 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 252, timeframe: 'Year' }
+        }
+        if (item.period % 4 === 0 && item.timeframe === 'Week') {
+          return { period: item.period / 4, timeframe: 'Month' }
+        }
+        if (item.period % 52 === 0 && item.timeframe === 'Week') {
+          return { period: item.period / 52, timeframe: 'Year' }
+        }
+        if (item.period % 12 === 0 && item.timeframe === 'Month') {
+          return { period: item.period / 12, timeframe: 'Year' }
+        }
+        return item
+      })
       return data.map((item) => {
         let timeframe =
           item.period > 1
@@ -1506,13 +1561,27 @@ export default {
       } else {
         // 重命名periods属性，和上方表格label一致
         this.TIMResult_quotes = res
+        // 去重
+        // 使用一个 Map 来辅助去重
+        const map = new Map();
+
+        // 遍历 data 数组
+        this.TIMResult_quotes.forEach(item => {
+          // 将 name 作为键，如果之前没有存储过该 name，则将整个对象存储到 Map 中
+          if (!map.has(item.Period)) {
+            map.set(item.Period, item);
+          }
+        });
+
+        // 使用 Array.from 将 Map 转换回数组
+        this.TIMResult_quotes = Array.from(map.values());
+
         let TIMResult_quotes_periods = this.TIMResult_quotes.map(x=>x.Period)
         TIMResult_quotes_periods = this.transformDate(TIMResult_quotes_periods)
         TIMResult_quotes_periods = TIMResult_quotes_periods.map(x=>x.label)
 
         this.TIMResult_quotes = this.TIMResult_quotes.map((obj,index) => {
-          if(TIMResult_quotes_periods[index]){
-            obj.Period = TIMResult_quotes_periods[index]
+          if(TIMResult_quotes_periods.includes(obj.Period)) {
             return obj
           }else{
             return null
