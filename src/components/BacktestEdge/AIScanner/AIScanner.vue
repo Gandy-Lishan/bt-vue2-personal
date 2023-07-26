@@ -40,12 +40,12 @@ export default {
 	async loadData(marketType){
 		//this.activeIndex = index
 		if(marketType=='US'){
-			this.getAIPick(this.curDate,'SwingAI')
+			this.getAIPick([this.curDate,this.curDate])
 		}
 	},
-	async getAIPick(date,category){
+	async getAIPick(date){
 		this.tableDataList = []
-		let AIPickContent = await getAIPick(date,category)
+		let AIPickContent = await getAIPick(date)
 		
 		let AIPickContentString = JSON.stringify(AIPickContent)
 								.replace(/TimeInMarket/g,'Best Time In Market(Bars)')
@@ -65,20 +65,20 @@ export default {
 			x['Win Rate(%)'] = Number(x['Win Rate(%)']).toFixed(2)
 
 			// 给一些定值默认值
-			x['Timing To Entry'] = 'Open'
+			//x['Timing To Entry'] = 'Open'
 		})
 		let AIPickObj = {}
 
 		AIPickObj['label'] = 'AI Picks at the end of today'
 		AIPickObj['title'] = 'AI Picks at the end of today'
 		AIPickObj['Date'] = date
-		AIPickObj['Category'] = category
 		AIPickObj['tableCol'] = [
+			'Date',
 			'Symbol',
 			'Close',
 			'Market',
 			'Direction',
-			'Timing To Entry',
+			'Signal',
 			//'Signal',
 			'Win Rate(%)',
 			'Stop Loss(%)',
@@ -94,9 +94,8 @@ export default {
 		
 		this.tableDataList.push(AIPickObj)
 	},
-	selectDate(date,category){
-		// select category as well
-		this.getAIPick(date,category)
+	selectDate(date){
+		this.getAIPick(date)
 	},
 
   }

@@ -13,9 +13,9 @@ export function getCurDate() {
   })
 }
 
-export function getAIPick(date,category) {
+export function getAIPick(date) {
   return new Promise((resolve,reject)=>{
-    const url = `/dev/ai_scanner/aiPick?date=${date}&category=${category}`
+    const url = `/dev/ai_scanner/aiPick?start_date=${date[0]}&end_date=${date[1]}`
     axios.get(url).then(res=>{
       
       resolve(res.data)
