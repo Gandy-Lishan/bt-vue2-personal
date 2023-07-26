@@ -55,6 +55,7 @@ export default {
 	},
 	methods:{
 		onChartReady(){
+			this.overrideStudyDef()
 			// 默认让indicator无法编辑
 			this.editStudies(false)
 
@@ -81,6 +82,12 @@ export default {
 				}
 			})
 
+		},
+		overrideStudyDef(){
+			CIQ.extend(CIQ.Studies.studyLibrary["rsi"], {
+				calculateFN: CIQ.Studies.calculateSTRSI,
+				outputs: { RSI: "auto",supLine:'#9a9a9a' }
+			});
 		},
 		editStudies(bool){
 			CIQ.extend(CIQ.Studies.studyLibrary["ma"], { edit:bool });
@@ -164,7 +171,7 @@ export default {
 						Field: 'Close',
 						condition: 'ROR',
 						period: 21
-					})
+					},null,{showSupLine:0})
 					CIQ.createOneTimePatternMarker(this.other.date,"PriceBreakout")
 					break;
 				case 'HighPoints' :
@@ -173,7 +180,7 @@ export default {
 						Field: 'High',
 						condition: 'ROR',
 						period: 13
-					})
+					},null,{showSupLine:100})
 					CIQ.createOneTimePatternMarker(this.other.date,"HighPoints")
 					break;
 				case 'LowPoints' :
@@ -182,11 +189,11 @@ export default {
 						Field: 'Low',
 						condition: 'ROR',
 						period: 13
-					})
+					},null,{showSupLine:0})
 					CIQ.createOneTimePatternMarker(this.other.date,"LowPoints")
 					break;
 				case 'RSI' :
-					CIQ.Studies.addStudy(CIQ.stxx, 'rsi')
+					CIQ.Studies.addStudy(CIQ.stxx, 'rsi',null,null,{showSupLine:40})
 					CIQ.createOneTimePatternMarker(this.other.date,"RSI")
 					break;
 				case 'MA' :

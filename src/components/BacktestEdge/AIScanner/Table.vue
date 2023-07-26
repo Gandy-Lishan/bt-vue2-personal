@@ -8,15 +8,40 @@
 					<el-date-picker
 						v-model="date"
 						class="aiscanner-date"
-						type="date"
-						placeholder="Select Date"
+						type="daterange"
+						unlink-panels
+						range-separator="to"
+						start-placeholder="Start date"
+						end-placeholder="End date"
 						:picker-options="pickerOptions"
 						@change="selectDate"
 						value-format="yyyy-MM-dd"
 					>
 					</el-date-picker>
 				</div>
-				<div class="categoryBtnGroup">
+
+				<div class="searchBox">
+					<el-input 
+						placeholder="" 
+						v-model="searchItem" 
+						class="search"
+						@input="handleQuery"
+						clearable
+						@clear="handleQuery"
+					>
+						<el-select v-model="searchCategory" slot="prepend" placeholder="Category">
+							<el-option
+								v-for="category in categories"
+								:key="category.value"
+								:label="category.label"
+								:value="category.label"
+							></el-option>
+						</el-select>
+						<el-button slot="append" icon="el-icon-search"></el-button>
+					</el-input>
+				</div>
+				<!-- swingai & midterm分类组被弃用了 -->
+				<!-- <div class="categoryBtnGroup">
 					<template
 						v-for="(item, index) in categories"
 					>
@@ -26,10 +51,18 @@
 							@click="selectCategory(item)">{{item}}
 						</el-button>
 					</template>
+				</div> -->
+			</div>
+			<!-- 预留一个过滤器的div -->
+			<div class="header-part2">
+				<div class="filterBox">
+					<el-checkbox v-model="isPLSChecked"
+						>Profit Target > Stop Loss
+					</el-checkbox>
 				</div>
 			</div>
-
-			<div class="header-part2">
+			<!-- signal 按钮标签被弃用了 -->
+			<!-- <div class="header-part2">
 				<el-checkbox-group v-model="activeSignal" @change="selectSignal">
 						<el-checkbox-button v-for="item in signalList" :label="item" :key="item">{{item}}		
 							<i class="el-icon-info" v-hover-popup="{ item: item }"></i>
@@ -106,16 +139,15 @@
 						but should be used in conjunction with the trend analysis.
 					</p>
 				</el-popover>
-			</div>
+			</div> -->
 		</div>
 		<el-table
 			ref="tableREF"
 			class="aiscanner-table"
-			:data="tableData.content"
+			:data="filteredTableData"
 			:row-class-name="tableRowClassName"
 			empty-text="No recommendation for today"
 			@sort-change="changeTableSort"
-			@expand-change="changeExpand"
 			style="width: 100%; height: 100%"
 		>
 			<el-table-column type="expand">
@@ -127,9 +159,9 @@
 						<el-form-item label="Symbol Name">
 							<span>{{ props.row.desc }}</span>
 						</el-form-item> -->
-						<el-form-item label="Signal">
+						<!-- <el-form-item label="Signal">
 							<span>{{ props.row['Signal']}}</span>
-						</el-form-item>
+						</el-form-item> -->
 						<el-form-item label="AVERAGE WIN %">
 							<span>{{ props.row['AvgWin']}}	</span>
 						</el-form-item>
@@ -230,6 +262,7 @@
 
 <script>
 import { timestampToTime } from '@/tools/formatDate.js'
+const throttle = require('lodash/throttle')
 import { getBacktestInfo } from '@/service/ai'
 export default {
 	name: 'Table',
@@ -253,17 +286,31 @@ export default {
 				selectedProfitTargets: [],
 				selectedWinRates: [],
 
-				categories: ['SwingAI','MidTermAI'],
-				activeCategory:this.data.Category,
-
 				signalList: [],
 				activeSignal: [],
 
 				tableData: [],
 				popupVisible: false, // 弹窗可见性
-    		popupContent: '', // 弹窗内容
+    			popupContent: '', // 弹窗内容
 				hoveredItem: null, // 悬停的元素
+
+				searchItem: '', // 搜索关键词
+				searchCategory: "Symbol", // 存储选择的搜索类别
+				categories: [{label:'Symbol',value:'Symbol'},{label:'Signal',value:'Signal'}],
+
+				isPLSChecked: false,
 		}
+	},
+	computed: {
+		filteredTableData() {
+			if (this.isPLSChecked) {
+				// 当checkbox勾选时，返回被筛选过的数据
+				return this.tableData.content.filter(item=>parseFloat(item["Profit Target(%)"])>parseFloat(item['Stop Loss(%)']))
+			} else {
+				// 当checkbox未勾选时，返回原始数据
+				return this.tableData.content;
+			}
+		},
 	},
 	watch: {
 		checkboxGroupState: {
@@ -316,11 +363,18 @@ export default {
 		})	
 	},
 	methods: {
+		handleQuery: throttle(function () { this.getSearchresult() }, 500),
+		getSearchresult(){
+			if(this.searchItem){
+				this.tableData.content = this.data.content.filter(item=>item[this.searchCategory].toLowerCase().indexOf(this.searchItem.toLowerCase())!=-1)
+			}else{
+				this.tableData.content = this.data.content
+			}
+		},
 		selectSignal(signal){	
 			if(signal.length>1){
 				signal.shift()
 			}
-			console.log('signal', signal)
 			if(signal.length!=0){
 				this.tableData.content = this.data.content.filter(item=>item.Signal == signal)
 			}else{
@@ -356,29 +410,6 @@ export default {
 			}
 			return '';
 		},
-		async changeExpand(row, expanded){
-			// // only AI recommendation page can call this function
-			// if(this.data.label=="AI Portfolio") return
-			// if(expanded.find(x=>x.id == row.id)){
-			// 	console.log(this.tableData.content,expanded,row)
-			// 	let BacktestInfoContent = await getBacktestInfo({
-			// 		symbol: row['Symbol'],
-			// 		date: row['Date'],
-			// 		signal: row['Signal'],
-			// 		category: row['Category'],
-			// 	})
-			// 	this.btInfo.push({
-			// 		id: row['id'],
-			// 		WinRate:BacktestInfoContent['WinRate'],
-			// 		AvgWin:BacktestInfoContent['AvgWin'],
-			// 		AveLoss:BacktestInfoContent['AvgLoss'],
-			// 		TradeNumber:BacktestInfoContent['TradeNumber'],
-			// 		TotalPositive:Math.round((BacktestInfoContent['TradeNumber'] * BacktestInfoContent['WinRate']) / 100),
-			// 		TotalNegative:Math.round(BacktestInfoContent['TradeNumber'] - 
-			// 		(BacktestInfoContent['TradeNumber'] * BacktestInfoContent['WinRate']) / 100)
-			// 	})
-			// }
-		},
 		changeTableSort(column){
 			var sortingOrder = column.order
 			var colName = column.prop
@@ -413,11 +444,7 @@ export default {
 			}
 		},
 		selectDate(){
-			this.$emit('selectDate', this.date,this.activeCategory)
-		},
-		selectCategory(cate){
-			this.activeCategory = cate
-			this.$emit('selectDate', this.date,this.activeCategory)
+			this.$emit('selectDate', this.date)
 		},
 		scrollListner(){
 			var outDiv = document.getElementsByClassName('el-table__body-wrapper');  
@@ -501,17 +528,21 @@ h4 {
 	.header-part1{
 		display: flex;
 		align-items: end;
-		.categoryBtnGroup {
+		justify-content: space-between;
+		// .categoryBtnGroup {
+		// 	margin-left: 50px;
+		// 	button {
+		// 		width: 180px;
+		// 		&.active {
+		// 		/* 高亮状态的样式 */
+		// 			color: #409EFF;
+		// 			border-color: #c6e2ff;
+		// 			background-color: #ecf5ff;	
+		// 		}
+		// 	}
+		// }
+		.searchBox {
 			margin-left: 50px;
-			button {
-				width: 180px;
-				&.active {
-				/* 高亮状态的样式 */
-					color: #409EFF;
-					border-color: #c6e2ff;
-					background-color: #ecf5ff;	
-				}
-			}
 		}
 	}
 	.header-part2{
@@ -522,6 +553,9 @@ h4 {
 	position: absolute;
 	top: 15px;
 	left: 185px;
+}
+.end-date {
+	margin-left: 20px;
 }
 
 // mobile
