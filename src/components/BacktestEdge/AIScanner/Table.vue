@@ -32,10 +32,10 @@
 					>
 						<el-select v-model="searchCategory" slot="prepend" placeholder="Category">
 							<el-option
-								v-for="category in tableData.tableCol"
-								:key="category"
-								:label="category"
-								:value="category"
+								v-for="category in categories"
+								:key="category.value"
+								:label="category.label"
+								:value="category.label"
 							></el-option>
 						</el-select>
 						<el-button slot="append" icon="el-icon-search"></el-button>
@@ -257,6 +257,7 @@
 
 <script>
 import { timestampToTime } from '@/tools/formatDate.js'
+const throttle = require('lodash/throttle')
 import { getBacktestInfo } from '@/service/ai'
 export default {
 	name: 'Table',
@@ -292,6 +293,7 @@ export default {
 
 				searchItem: '', // 搜索关键词
 				searchCategory: "", // 存储选择的搜索类别
+				categories: [{label:'Symbol',value:'Symbol'},{label:'Signal',value:'Signal'}]
 		}
 	},
 	watch: {
@@ -345,6 +347,10 @@ export default {
 		})	
 	},
 	methods: {
+		handleQuery: throttle(function () { this.getSearchresult() }, 500),
+		getSearchresult(){
+			console.log(this.searchItem,this.searchCategory)
+		},
 		selectSignal(signal){	
 			if(signal.length>1){
 				signal.shift()
