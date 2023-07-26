@@ -1093,7 +1093,7 @@ export default {
             console.error('鏈嶅姟鍣ㄦ姤閿', error)
             vm.tableData = []
             vm.tradesData = []
-            vm.$emit('errorCatchPerformance')
+            // vm.$emit('errorCatchPerformance')
           }
         }
       } else {
