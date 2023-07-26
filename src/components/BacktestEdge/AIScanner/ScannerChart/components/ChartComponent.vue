@@ -158,10 +158,12 @@ export default {
 					CIQ.createOneTimeScannerMarkerHammer(this.other.EntryTradeDate,this.other.date,this.other._Signal)
 					break;
 				case 'MAGap':
+					CIQ.Studies.addStudy(CIQ.stxx, this.other['_Signal'],{display:this.other['_Signal']})
 					CIQ.Studies.addStudy(CIQ.stxx,"ma",{display:'ma'});
 					CIQ.createOneTimePatternMarker(this.other.date,"MAGap")
 					break;
 				case 'MACDHistGap':
+					CIQ.Studies.addStudy(CIQ.stxx, this.other['_Signal'],{display:this.other['_Signal']})
 					CIQ.Studies.addStudy(CIQ.stxx,"macd",{display:'macd'});
 					CIQ.createOneTimePatternMarker(this.other.date,"MACDHistGap")
 					break;
