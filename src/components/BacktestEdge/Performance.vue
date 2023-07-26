@@ -721,6 +721,8 @@ export default {
       TIMHistoryList: [],
       TIMResult_quotes: [],
       editBacktestID: null,
+
+      tradePrice: 'Close'
     }
   },
   created() {
@@ -964,6 +966,8 @@ export default {
               }
 
               // -------------------------------------  start ----------------
+              this.tradePrice = initalData['basic']['trade_price'] == 0 ? 'Open' : 'Close'// tim数据计算依赖backtester创建时选择的tradePrice类别，如Close/Open
+
               const tradeReturn = initalData['Each Return']
               const exitReason = initalData['Exit Reason'] ? initalData['Exit Reason'] : []
               data.uuid = initalData['UUID']
@@ -1267,6 +1271,7 @@ export default {
       */
       let chartDataset = CIQ.stxx.chart.dataSet
       const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
+      const field = this.tradePrice
       dataSet = dataSet.filter((item) => item.TradeStatus == 'BUY')
       let backtestResult = []
 
@@ -1282,7 +1287,7 @@ export default {
 
         if (res != -1) {
           //鎷胯繘鍦轰环鏍煎拰鍓嶄竴澶╀綔姣旇緝
-          let entryPrice = chartDataset[res].Open
+          let entryPrice = chartDataset[res][field]
           const transformData = this.transformData(periodArray)
           transformData.sort((a, b) => a.value - b.value);
           let obj = {}
@@ -1290,8 +1295,8 @@ export default {
             let exitBar = chartDataset[res + item.value]
               ? (
                 ((direction == 'Short'
-                  ? entryPrice - chartDataset[res + item.value].Open
-                  : chartDataset[res + item.value].Open - entryPrice) /
+                  ? entryPrice - chartDataset[res + item.value][field]
+                  : chartDataset[res + item.value][field] - entryPrice) /
                   entryPrice) *
                 100
               ).toFixed(2)
@@ -1549,7 +1554,7 @@ export default {
       )
     },
     generate_period_data(name, quotes, period, direction) {
-      const field = 'Open'
+      const field = this.tradePrice
       quotes = quotes.map((row, i) => {
         if (i < quotes.length - period) {
           //const change = parseFloat((100 * (quotes[i + period][field] / row[field] - 1)).toFixed(1))
