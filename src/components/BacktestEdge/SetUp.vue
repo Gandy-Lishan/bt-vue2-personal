@@ -1026,7 +1026,9 @@ export default {
       this.$refs.backtestSetupForm.clearValidate()
     },
     changeTimeframe(val) {
-      this.getFrequency(val)
+      this.bd.frequency = val
+      this.$store.commit('getFreqHighPriority', val)
+      this.loadSentimentList(val)
       CIQ.addIndicators()
     },
     selectRiskControl(val) {
