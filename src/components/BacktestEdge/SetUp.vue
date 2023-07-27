@@ -681,14 +681,7 @@ export default {
   created() {
     this.is_admin = this.$store.state.is_admin
 
-    const date = new Date()
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-    const second = date.getSeconds();
-    this.bd.name = this.bd.symbol+' ' + year+'/'+month+'/'+day+'/'+hour+'/'+minute+'/'+second
+    this.generateBTName()
   },
   mounted() {
     this.loadSentimentList('Daily')
@@ -737,6 +730,16 @@ export default {
     }
   },
   methods: {
+    generateBTName() {
+      const date = new Date()
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const hour = date.getHours();
+      const minute = date.getMinutes();
+      const second = date.getSeconds();
+      this.bd.name = this.bd.symbol+' ' + year+'/'+month+'/'+day+'/'+hour+'/'+minute+'/'+second
+    },
     getTradePrice(val) {
       this.$store.commit('SET_TRADE_PRICE',val)
     },
@@ -748,6 +751,7 @@ export default {
       this.is_admin = this.$store.state.is_admin
       this.getEndDate()
       if(this.$store.state.backtestSymbol) this.bd.symbol = this.$store.state.backtestSymbol
+      this.generateBTName()
       this.$emit('IsRiskControl', true)
       this.clearFormValidate()
     },
