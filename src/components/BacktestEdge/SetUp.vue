@@ -788,7 +788,7 @@ export default {
         this.is_admin = this.$store.state.is_admin
         this.bd = Object.assign(this.bd, newVal)
         this.$set(this.bd, 'description', this.bd.description);
-        this.getFrequency(newVal.frequency)
+        this.changeTimeframe(newVal.frequency)
         this.getDirection(newVal.direction)
         this.getTradePrice(newVal.trade_price)
         this.isRiskControl = false
