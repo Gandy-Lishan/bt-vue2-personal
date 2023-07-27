@@ -255,6 +255,10 @@ export default new Vuex.Store({
 			state.exitFrequency = previousTimeframe
 			state.backtestInfo.frequency = previousTimeframe
 		},
+		getFreqHighPriority(state, val) {
+			state.exitFrequency = val
+			state.backtestInfo.frequency = val
+		},
 		/**
 		 * Sets up a mutations to store the condition of selected technical indicator in form, it's used for gennerating output csv
 		 */
