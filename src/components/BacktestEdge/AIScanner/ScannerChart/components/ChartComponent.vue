@@ -326,7 +326,7 @@ export default {
                         DT: item,
                         Price: quote.Close,
                         Type: 'BUY',  
-						Reason: entryReason,  
+						Indicator: [entryReason],  
                     })
                 })
             }
@@ -345,7 +345,7 @@ export default {
                         DT: item,
                         Price: quote.Close,
                         Type: 'SELL',    
-						Reason: exitReasonArr[index]
+						Indicator: [exitReasonArr[index]]
                     })
                 })
             }
