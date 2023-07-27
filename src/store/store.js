@@ -240,21 +240,13 @@ export default new Vuex.Store({
 			state.pairDataFreq = val
 		},
 		getFrequency(state, val) {
-			let selectedTimeframe = val
-			let previousTimeframe = state.exitFrequency
-			if (selectedTimeframe !== previousTimeframe) {
-        // 根据时间范围的大小进行比较，取周期较大的那个
-        const timeframes = ["Daily", "Weekly", "Monthly"];
-        const previousIndex = timeframes.indexOf(previousTimeframe);
-        const currentIndex = timeframes.indexOf(selectedTimeframe);
-        const largerIndex = Math.max(previousIndex, currentIndex);
-        selectedTimeframe = timeframes[largerIndex];
-
-        // 更新之前的时间范围为当前选择
-        previousTimeframe = selectedTimeframe;
-      }
-			state.exitFrequency = previousTimeframe
-			state.backtestInfo.frequency = previousTimeframe
+			if(val === undefined || val === null || val === ''){
+				state.exitFrequency = 'Daily'
+				state.backtestInfo.frequency = 'Daily'
+				return
+			}
+			state.exitFrequency = val
+			state.backtestInfo.frequency = val
 		},
 		getFreqHighPriority(state, val) {
 			state.exitFrequency = val
