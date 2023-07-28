@@ -509,6 +509,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setFrequencyArray']),
     myFunction() {
       this.$refs.myDropdown.classList.toggle('show')
     },
@@ -630,10 +631,17 @@ export default {
       const item = sentimentIndicatorList.find(i=>i.value ==  this.$refs.sentiInput.value)
 
       this.currentSentiUpdated = item.updated
+      // let freqObj = {}
+      // freqObj.value = ''
+      // freqObj.index = this.panelIndex
+      // this.$emit('getFreqArray', freqObj)
+      // this.freqArray(item.updated)
       let freqObj = {}
       freqObj.value = ''
       freqObj.index = this.panelIndex
-      this.$emit('getFreqArray', freqObj)
+      freqObj.criteria = this.criteria
+      freqObj.key = `${this.criteria}_${this.panelIndex}`
+      this.setFrequencyArray(freqObj)
 
       let indiValObj = {}
       indiValObj.value = ''
@@ -686,12 +694,18 @@ export default {
       CIQ.addIndicators()
     },
     handleSentimentSelect(item) {
-      console.log('item',item)
+      // console.log('item',item)
       this.currentSentiUpdated = item.updated
+      // let freqObj = {}
+      // freqObj.value = item.updated
+      // freqObj.index = this.panelIndex
+      // this.$emit('getFreqArray', freqObj)
       let freqObj = {}
       freqObj.value = item.updated
       freqObj.index = this.panelIndex
-      this.$emit('getFreqArray', freqObj)
+      freqObj.criteria = this.criteria
+      freqObj.key = `${this.criteria}_${this.panelIndex}`
+      this.setFrequencyArray(freqObj)
 
       // old version only
       // 限制同屏显示个数
