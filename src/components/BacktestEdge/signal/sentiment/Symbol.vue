@@ -321,7 +321,7 @@ export default {
         }
         const conditionMap = new Map([
           [5, { name: 'Rate Of Change', abbr: 'ROC' }],
-          [6, { name: 'Range Of Rank', abbr: 'ROR' }],
+          [6, { name: 'Range Of Rank', abbr: 'OPR' }],
           [7, { name: 'MA Ratio', abbr: 'MA' }]
         ])
 
