@@ -171,7 +171,7 @@ export default {
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
 						display: 'Range Of Rank',
 						Field: 'Close',
-						condition: 'ROR',
+						condition: 'OPR',
 						period: 21
 					},null,{showSupLine:0})
 					CIQ.createOneTimePatternMarker(this.other.date,"PriceBreakout")
@@ -180,7 +180,7 @@ export default {
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
 						display: 'Range Of Rank',
 						Field: 'High',
-						condition: 'ROR',
+						condition: 'OPR',
 						period: 13
 					},null,{showSupLine:100})
 					CIQ.createOneTimePatternMarker(this.other.date,"HighPoints")
@@ -189,7 +189,7 @@ export default {
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
 						display: 'Range Of Rank',
 						Field: 'Low',
-						condition: 'ROR',
+						condition: 'OPR',
 						period: 13
 					},null,{showSupLine:0})
 					CIQ.createOneTimePatternMarker(this.other.date,"LowPoints")
@@ -216,7 +216,11 @@ export default {
 					break;
 				default: 
 			}
-
+			CIQ.Studies.addStudy(CIQ.stxx, "ma",{
+				Period: 252,
+				Type: 'simple',
+				Field: "Close"
+			});
 			CIQ.stxx.setChartType("candle");
 			this.loadMarker()
 		},
