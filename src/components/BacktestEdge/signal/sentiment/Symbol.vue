@@ -115,7 +115,7 @@ export default {
         { value: 3, label: 'CrossAbove' },
         { value: 4, label: 'CrossBelow' },
         { value: 5, label: 'Rate Of Change' },
-        { value: 6, label: 'Range Of Rank' },
+        { value: 6, label: '% of Previous Range' },
         { value: 7, label: 'MA Ratio' }
       ],
       conditions: [
@@ -262,8 +262,8 @@ export default {
           case "Rate Of Change":
             _newCondition = 'ROC'
             break;
-          case "Range Of Rank":
-            _newCondition = 'ROR'
+          case "% of Previous Range":
+            _newCondition = 'OPR'
             break;
           case "MA Ratio":
             _newCondition = 'MAR'
@@ -321,7 +321,7 @@ export default {
         }
         const conditionMap = new Map([
           [5, { name: 'Rate Of Change', abbr: 'ROC' }],
-          [6, { name: 'Range Of Rank', abbr: 'ROR' }],
+          [6, { name: '% of Previous Range', abbr: 'OPR' }],
           [7, { name: 'MA Ratio', abbr: 'MA' }]
         ])
 

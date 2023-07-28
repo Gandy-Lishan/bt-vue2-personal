@@ -169,27 +169,27 @@ export default {
 					break;
 				case 'PriceBreakout' :
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-						display: 'Range Of Rank',
+						display: '% of Previous Range',
 						Field: 'Close',
-						condition: 'ROR',
+						condition: 'OPR',
 						period: 21
 					},null,{showSupLine:0})
 					CIQ.createOneTimePatternMarker(this.other.date,"PriceBreakout")
 					break;
 				case 'HighPoints' :
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-						display: 'Range Of Rank',
+						display: '% of Previous Range',
 						Field: 'High',
-						condition: 'ROR',
+						condition: 'OPR',
 						period: 13
 					},null,{showSupLine:100})
 					CIQ.createOneTimePatternMarker(this.other.date,"HighPoints")
 					break;
 				case 'LowPoints' :
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-						display: 'Range Of Rank',
+						display: '% of Previous Range',
 						Field: 'Low',
-						condition: 'ROR',
+						condition: 'OPR',
 						period: 13
 					},null,{showSupLine:0})
 					CIQ.createOneTimePatternMarker(this.other.date,"LowPoints")
