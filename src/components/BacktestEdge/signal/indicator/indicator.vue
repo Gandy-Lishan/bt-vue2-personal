@@ -694,7 +694,6 @@ export default {
       CIQ.addIndicators()
     },
     handleSentimentSelect(item) {
-      // console.log('item',item)
       this.currentSentiUpdated = item.updated
       // let freqObj = {}
       // freqObj.value = item.updated
