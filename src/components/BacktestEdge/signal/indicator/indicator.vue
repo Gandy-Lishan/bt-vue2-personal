@@ -22,6 +22,7 @@
 							:fetch-suggestions="indicatorSentimentSearch"
 							placeholder="Input the sentiment indicator"
 							@select="handleSentimentSelect"
+              @clear="clearSentimentSelect"
 							highlight-first-item
 						></el-autocomplete>
 						<!-- <div class="dropdown">
@@ -506,7 +507,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['getFrequency']),
     myFunction() {
       this.$refs.myDropdown.classList.toggle('show')
     },
@@ -540,6 +540,24 @@ export default {
     },
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
+      if(queryString == '') {
+        let freqObj = {}
+        freqObj.value = ''
+        freqObj.index = this.panelIndex
+        this.$emit('getFreqArray', freqObj)
+
+        let indiValObj = {}
+        indiValObj.value = ''
+        indiValObj.index = this.panelIndex
+        this.$emit('getIndicatorVal', indiValObj)
+
+        let indiUrlObj = {}
+        indiUrlObj.index = this.panelIndex
+        indiUrlObj.url = ''
+        this.$emit('getIndicatorUrl', indiUrlObj)
+
+        // lishn 判断需要小龙写
+      }
       var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
       sentimentIndicatorList.sort(function (a, b) {
         return a.value.localeCompare(b.value)
@@ -605,9 +623,30 @@ export default {
         )
       }
     },
+    clearSentimentSelect() {
+      let freqObj = {}
+      freqObj.value = ''
+      freqObj.index = this.panelIndex
+      this.$emit('getFreqArray', freqObj)
+
+      let indiValObj = {}
+      indiValObj.value = ''
+      indiValObj.index = this.panelIndex
+      this.$emit('getIndicatorVal', indiValObj)
+
+      let indiUrlObj = {}
+      indiUrlObj.index = this.panelIndex
+      indiUrlObj.url = ''
+      this.$emit('getIndicatorUrl', indiUrlObj)
+
+      // lishn 判断需要小龙写
+    },
     handleSentimentSelect(item) {
       this.currentSentiUpdated = item.updated
-      this.getFrequency(item.updated)
+      let freqObj = {}
+      freqObj.value = item.updated
+      freqObj.index = this.panelIndex
+      this.$emit('getFreqArray', freqObj)
 
       // old version only
       var countExistIndicator = 0
