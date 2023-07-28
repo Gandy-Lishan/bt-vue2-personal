@@ -962,6 +962,19 @@ export default {
 						key: `exit_0`
 					}
 					this.setFrequencyArray(freqObj)
+
+				//When only keep the first tab, update the vuex status
+				// 移除senti indicator附属ma
+				var activatedMAList = this.$store.state.activatedMA
+				activatedMAList = activatedMAList.filter((item)=>
+					item.criteria == 'exit' &&
+					item.index == 0
+				)
+				this.$store.commit('getMA', activatedMAList)
+
+				let indicatorList = this.$store.state.indicators.formIndicators.exit
+				this.$store.commit('getExitIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
+				CIQ.addIndicators()
 			}
 			if (val == 2 || val == 3) {
 				if (this.editableTabs.length === 1) {

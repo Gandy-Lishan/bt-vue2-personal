@@ -887,11 +887,12 @@ export default {
 
 				//When only keep the first tab, update the vuex status
 				// 移除senti indicator附属ma
-				// var activatedMAList = this.$store.state.activatedMA
-				// activatedMAList.filter((item)=>
-				// 	item.
-				// )
-				// console.log(activatedMAList)
+				var activatedMAList = this.$store.state.activatedMA
+				activatedMAList = activatedMAList.filter((item)=>
+					item.criteria == 'entry' &&
+					item.index == 0
+				)
+				this.$store.commit('getMA', activatedMAList)
 
 				let indicatorList = this.$store.state.indicators.formIndicators.entry
 				this.$store.commit('getEntryIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
