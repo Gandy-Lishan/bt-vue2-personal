@@ -123,6 +123,7 @@
 							@getTechIndiValue="getTechIndiValue"
 							@getIndicatorRadio="getIndicatorRadio"
 							@getTechIndiObj="getTechIndiObj"
+							@getFreqArray="getFreqArray"
 							@entryUserUploadFileContent="entryUserUploadFileContent"
 						></indicator>
 						<senti
@@ -492,6 +493,7 @@ export default {
 			refs: {},
 			indicatorUrlArr: new Array(5).fill(''),
 			indicatorValArr: new Array(5).fill(''),
+			freqArray: new Array(5).fill(''),
 			techVal: '',
 			exitItemCheck: false,
 			delay_bars: 0,
@@ -715,6 +717,11 @@ export default {
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex, 1)
 				this.techIndiObj.push('')
+				const freqObj = {
+					index: absoluteIndex,
+					value: ''
+				}
+				this.getFreqArray(freqObj)
 				if (
 					this.relation == 2 &&
 					this.score >= this.indicatorRadioArr.length + 1
@@ -746,6 +753,22 @@ export default {
 		getIndicatorRadio(obj) {
 			this.indicatorRadio = obj.value
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
+		},
+		getFreqArray(obj) {
+			this.freqArray.splice(obj.index, 1, obj.value)
+			let freqArray = JSON.parse(JSON.stringify(this.freqArray))
+			freqArray = freqArray.filter(item => (item !== null && item !== undefined && item !== ''))
+			freqArray = Array.from(new Set(freqArray))
+			const customSort = (a, b) => {
+					const indexA = sortOrder.indexOf(a);
+					const indexB = sortOrder.indexOf(b);
+					return indexA - indexB;
+			}
+			const sortOrder = ['Daily', 'Weekly', 'Monthly'];
+			freqArray = freqArray.sort(customSort);
+			const maxFreq = freqArray[freqArray.length - 1]
+			console.log('Entry 最大的周期', maxFreq)
+			this.$emit('sendEntryMaxFreq', maxFreq)
 		},
 		addEntrySignalLength() {
 			if (this.relation == 2 || this.relation == 3) {
@@ -812,6 +835,17 @@ export default {
 				this.editableTabsValue = '1'
 				this.score = 1
 				this.signals_in_market = 1
+				const indiUrl = this.indicatorUrlArr[0]
+				const indiVal = this.indicatorValArr[0]
+				const freq = this.freqArray[0]
+				this.indicatorUrlArr = [indiUrl, ...(new Array(4).fill(''))]
+				this.indicatorValArr = [indiVal, ...(new Array(4).fill(''))]
+				this.freqArray = new Array(5).fill('')
+				const freqObj = {
+					index: 0,
+					value: freq
+				}
+				this.getFreqArray(freqObj)
 			}
 			if (val == 2 || val == 3) {
 				if (this.editableTabs.length === 1) {

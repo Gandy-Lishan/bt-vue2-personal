@@ -558,7 +558,7 @@ export default {
           CIQ.addCover()
           CIQ.nprogress.start()
         }
-      }, 3000)
+      }, 1000)
     },
     editBacktest: throttle(async function (row) {
       let vm = this
