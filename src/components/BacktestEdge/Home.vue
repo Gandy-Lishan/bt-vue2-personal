@@ -857,14 +857,14 @@ export default {
       this.$store.commit('initialBacktestInfo')
       this.$refs.setUpChild.clearForm()
       this.$refs.entryChild.clearForm()
-      this.$refs.exitChild.clearForm()
+      this.$refs.exitChild.resetForm()
     },
     createNewBacktest() {
       Object.assign(this.$data, this.$options.data())
       this.$store.commit('initialBacktestInfo')
       this.$refs.setUpChild.clearForm()
       this.$refs.entryChild.clearForm()
-      this.$refs.exitChild.clearForm()
+      this.$refs.exitChild.resetForm()
       this.$refs.performanceChild.clearForm()
     },
     clearAllDataForm() {

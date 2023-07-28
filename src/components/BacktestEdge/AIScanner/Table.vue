@@ -229,6 +229,22 @@
 					</template>
 				</el-table-column>
 				<el-table-column		
+					v-if="l == 'Market'"
+					:label="l"
+					:prop="l"
+					:key="index"
+					min-width="120"
+				>
+						<template slot="header">
+							Market
+							<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+							<span slot="content" v-html="textContent['Market']">
+							</span>
+							<i class="iconfont icon-wenhao"></i>
+						</el-tooltip>
+					</template>
+				</el-table-column>
+				<el-table-column		
 					v-if="l == 'Signal'"
 					:label="l"
 					:prop="l"
@@ -248,7 +264,8 @@
 					v-if="
 						l != 'Symbol' &&
 						l != 'Select' &&
-						l != 'Signal'
+						l != 'Signal' &&
+						l != 'Market'
 					"
 					:sortable="
 						[
@@ -334,6 +351,7 @@ export default {
 					'HighPoints':"When the highest price of a stock ranks above 100 in relation to the highest prices of the<br/> past 13 trading days (higher stock prices correspond to higher rankings), <br/>it forms a 13-day new high and generates a buy signal. This indicates that <br/>the stock is experiencing a positive breakthrough and is in an upward trend.",
 					'LowPoints':"When the lowest price of a stock ranks below 0 in relation to the lowest prices of the past 13 trading days, <br/>it forms a 13-day new low and generates a sell signal. <br/>This indicates that the stock is in a downtrend and can be shorted.",
 					'RSI':"When the RSI indicator forms a golden cross above 40, it suggests that the indicator is about to<br/>recover from an oversold state to the midpoint, indicating a potential long entry signal. <br/>RSI can reflect whether a stock is in an overbought or oversold condition <br />but should be used in conjunction with the trend analysis.",
+					'Market': 'Closing price above the 252-day moving average is considered as Uptrend.<br/>Closing price below the 252-day moving average is considered as Downtrend.'
 				}
 		}
 	},
@@ -569,6 +587,9 @@ h4 {
 }
 .table-label {
 	margin: 20px 0;
+}
+.el-table /deep/ thead .iconfont{
+	color: #606266;
 }
 .table-header {
 	margin-bottom: 10px;
