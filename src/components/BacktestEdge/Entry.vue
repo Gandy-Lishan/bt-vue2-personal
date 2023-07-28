@@ -99,6 +99,9 @@
 		</div>
 		<div :class="relation === 1 ? 'multi' : ''" v-if="exitItemCheck === false">
 			<div class="multi-box">
+				{{indicatorUrlArr}}
+				{{indicatorValArr}}
+				{{indicatorRadioArr}}
 				<el-tabs
 					v-model="editableTabsValue"
 					type="card"
@@ -448,6 +451,7 @@ import alligatorLike from '@/components/BacktestEdge/signal/technical/Alligator-
 import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Linear-RegForecast-like.vue'
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 import { eventBus } from "@/components/BacktestEdge/EventBus/Bus.ts";
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 export default {
 	name: 'entry',
 	inheritAttrs: false,
@@ -710,6 +714,21 @@ export default {
 					item.title = 'Condition' + (index + 1)
 				})
 				this.editableTabsValue = activeName
+
+				// 移除senti indicator附属ma
+				var activatedMAList = this.$store.state.activatedMA
+				var MAListIndex = activatedMAList.findIndex(
+				(item) =>
+					item.url == this.indicatorUrlArr[absoluteIndex] &&
+					item.criteria == 'entry' &&
+					item.index == absoluteIndex
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				//
+				
 				this.indicatorUrlArr.splice(absoluteIndex, 1)
 				this.indicatorUrlArr.push('')
 				this.indicatorValArr.splice(absoluteIndex, 1)
@@ -738,6 +757,7 @@ export default {
 						value: this.indicatorUrlArr[index]
 					})
 				})
+				CIQ.addIndicators()
 			}
 		},
 		getIndicatorUrl(obj) {
@@ -837,15 +857,29 @@ export default {
 				this.signals_in_market = 1
 				const indiUrl = this.indicatorUrlArr[0]
 				const indiVal = this.indicatorValArr[0]
+				const indiRadio = this.indicatorRadioArr[0]
 				const freq = this.freqArray[0]
 				this.indicatorUrlArr = [indiUrl, ...(new Array(4).fill(''))]
 				this.indicatorValArr = [indiVal, ...(new Array(4).fill(''))]
+				this.indicatorRadioArr = [indiRadio, ...(new Array(4).fill(''))]
 				this.freqArray = new Array(5).fill('')
 				const freqObj = {
 					index: 0,
 					value: freq
 				}
 				this.getFreqArray(freqObj)
+
+				//When only keep the first tab, update the vuex status
+				// 移除senti indicator附属ma
+				// var activatedMAList = this.$store.state.activatedMA
+				// activatedMAList.filter((item)=>
+				// 	item.
+				// )
+				// console.log(activatedMAList)
+
+				let indicatorList = this.$store.state.indicators.formIndicators.entry
+				this.$store.commit('getEntryIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
+				CIQ.addIndicators()
 			}
 			if (val == 2 || val == 3) {
 				if (this.editableTabs.length === 1) {
