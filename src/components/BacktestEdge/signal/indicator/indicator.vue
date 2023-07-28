@@ -1,6 +1,7 @@
 // indicator search box
 <template>
 	<div class="indicator-box">
+    {{si}}
 		<el-form :model="si" ref="siForm" :rules="rules">
 			<div class="indicator-container sentiBox">
 				<el-form-item>
@@ -14,6 +15,7 @@
 				<el-form-item prop="sentimentIndicator">
 					<div class="indicatorSearchBox">
 						<el-autocomplete
+              ref="sentiInput"
 							prefix-icon="el-icon-search"
 							class="inline-input"
 							clearable
@@ -540,24 +542,24 @@ export default {
     },
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
-      if(queryString == '') {
-        let freqObj = {}
-        freqObj.value = ''
-        freqObj.index = this.panelIndex
-        this.$emit('getFreqArray', freqObj)
+      // if(queryString == '') {
+      //   let freqObj = {}
+      //   freqObj.value = ''
+      //   freqObj.index = this.panelIndex
+      //   this.$emit('getFreqArray', freqObj)
 
-        let indiValObj = {}
-        indiValObj.value = ''
-        indiValObj.index = this.panelIndex
-        this.$emit('getIndicatorVal', indiValObj)
+      //   let indiValObj = {}
+      //   indiValObj.value = ''
+      //   indiValObj.index = this.panelIndex
+      //   this.$emit('getIndicatorVal', indiValObj)
 
-        let indiUrlObj = {}
-        indiUrlObj.index = this.panelIndex
-        indiUrlObj.url = ''
-        this.$emit('getIndicatorUrl', indiUrlObj)
-
-        // lishn 判断需要小龙写
-      }
+      //   let indiUrlObj = {}
+      //   indiUrlObj.index = this.panelIndex
+      //   indiUrlObj.url = ''
+      //   this.$emit('getIndicatorUrl', indiUrlObj)
+        
+      //   // lishn 判断需要小龙写
+      // }
       var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
       sentimentIndicatorList.sort(function (a, b) {
         return a.value.localeCompare(b.value)
@@ -624,6 +626,10 @@ export default {
       }
     },
     clearSentimentSelect() {
+      var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
+      const item = sentimentIndicatorList.find(i=>i.value ==  this.$refs.sentiInput.value)
+
+      this.currentSentiUpdated = item.updated
       let freqObj = {}
       freqObj.value = ''
       freqObj.index = this.panelIndex
@@ -634,14 +640,53 @@ export default {
       indiValObj.index = this.panelIndex
       this.$emit('getIndicatorVal', indiValObj)
 
-      let indiUrlObj = {}
-      indiUrlObj.index = this.panelIndex
-      indiUrlObj.url = ''
-      this.$emit('getIndicatorUrl', indiUrlObj)
+      // remove a MA tat already exists in current criteria before loading
+      var activatedMAList = this.$store.state.activatedMA
+      if (this.criteria == 'entry') {
+        var MAListIndex = activatedMAList.findIndex(
+          (item) =>
+            item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex] &&
+            item.criteria == this.criteria &&
+            item.index == this.panelIndex
+        )
+        if (MAListIndex != -1) {
+          activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
+        this.$store.commit('getEntryIndicators', {
+          index: this.panelIndex,
+          value: ''
+        })
+        let indiUrlObj = {}
+        indiUrlObj.index = this.panelIndex
+        indiUrlObj.url = ''
+        this.$emit('getIndicatorUrl', indiUrlObj)
+      } else {
+        var MAListIndex = activatedMAList.findIndex(
+          (item) =>
+            item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex] &&
+            item.criteria == this.criteria &&
+            item.index == this.panelIndex
+        )
+        if (MAListIndex != -1) {
+          activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
+        this.$store.commit('getExitIndicators', {
+          index: this.panelIndex,
+          value: ''
+        })
+        let indiUrlObj = {}
+        indiUrlObj.index = this.panelIndex
+        indiUrlObj.url = ''
+        this.$emit('getIndicatorUrl', indiUrlObj)
+      }
 
       // lishn 判断需要小龙写
+      CIQ.addIndicators()
     },
     handleSentimentSelect(item) {
+      console.log('item',item)
       this.currentSentiUpdated = item.updated
       let freqObj = {}
       freqObj.value = item.updated
@@ -649,6 +694,7 @@ export default {
       this.$emit('getFreqArray', freqObj)
 
       // old version only
+      // 限制同屏显示个数
       var countExistIndicator = 0
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
         for (var i in CIQ.store.state.builtinList) {
@@ -670,7 +716,7 @@ export default {
         return
       }
 
-      this.si.sentimentIndicator = item.value
+      //this.si.sentimentIndicator = item.value
       let obj = {}
       obj.value = item.value
       obj.index = this.panelIndex

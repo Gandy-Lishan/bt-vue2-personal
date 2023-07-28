@@ -748,6 +748,21 @@ export default {
 					item.title = 'Condition' + (index + 1)
 				})
 				this.editableTabsValue = activeName
+
+				// 移除senti indicator附属ma
+				var activatedMAList = this.$store.state.activatedMA
+				var MAListIndex = activatedMAList.findIndex(
+				(item) =>
+					item.url == this.indicatorUrlArr[absoluteIndex] &&
+					item.criteria == 'exit' &&
+					item.index == absoluteIndex
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				//
+
 				this.indicatorValArr.splice(absoluteIndex, 1)
 				this.indicatorValArr.push('')
 				this.indicatorUrlArr.splice(absoluteIndex, 1)
@@ -776,6 +791,7 @@ export default {
 						value: this.indicatorUrlArr[index]
 					})
 				})
+				CIQ.addIndicators()
 			}
 		},
 		getIndicatorUrl(obj) {
@@ -892,9 +908,11 @@ export default {
 				this.signals_in_market = 1
 				const indiUrl = this.indicatorUrlArr[0]
 				const indiVal = this.indicatorValArr[0]
+				const indiRadio = this.indicatorRadioArr[0]
 				const freq = this.freqArray[0]
 				this.indicatorUrlArr = [indiUrl, ...(new Array(4).fill(''))]
 				this.indicatorValArr = [indiVal, ...(new Array(4).fill(''))]
+				this.indicatorRadioArr = [indiRadio, ...(new Array(4).fill(''))]
 				this.freqArray = new Array(5).fill('')
 				const freqObj = {
 					index: 0,
@@ -927,6 +945,10 @@ export default {
 				}
 			this.$emit('getExitRelation', val)
 			this.$store.commit('clearExitSignalArr')
+
+				let indicatorList = this.$store.state.indicators.formIndicators.exit
+				this.$store.commit('getExitIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
+				CIQ.addIndicators()
 		},
 		saveBacktestData(index) {
 			let checked = true
