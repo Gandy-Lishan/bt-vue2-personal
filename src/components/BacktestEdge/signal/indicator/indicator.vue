@@ -1383,6 +1383,13 @@ export default {
                 // Set the tiemframe that currently fills the indicator. If the indicator does not match after switching the timeframe, it will be removed
                 this.currentSentiUpdated = item.updated
                 vm.$emit('getIndicatorUrl', obj)
+
+                let freqObj = {}
+                freqObj.value = item.updated
+                freqObj.index = vm.panelIndex
+                freqObj.criteria = vm.criteria
+                freqObj.key = `${vm.criteria}_${vm.panelIndex}`
+                vm.setFrequencyArray(freqObj)
               }
             })
           }
