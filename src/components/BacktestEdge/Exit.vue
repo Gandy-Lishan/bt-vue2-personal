@@ -591,6 +591,33 @@ export default {
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
+			// Reset data for all subcomponents
+			try {
+				for (let i = 0; i < this.indicatorRadioArr.length; i++) {
+					if (this.indicatorRadioArr[i]) {
+						this.$refs.indiChild[i].clearForm()
+						this.$refs.sentiChild[i].clearForm()
+						this.$refs.symbolChild[i].clearForm()
+						this.$refs.cciChild[i].clearForm()
+						this.$refs.maChild[i].clearForm()
+						this.$refs.macdChild[i].clearForm()
+						this.$refs.bollBandsLikeChild[i].clearForm()
+						this.$refs.EFTLikeChild[i].clearForm()
+						this.$refs.stochasticsLikeChild[i].clearForm()
+						this.$refs.ADXLikeChild[i].clearForm()
+						this.$refs.ERILikeChild[i].clearForm()
+						this.$refs.aligatorLikeChild[i].clearForm()
+						this.$refs.LRFLikeChild[i].clearForm()
+						this.$refs.trailingStopLikeChild[i].clearForm()
+					}
+				}
+			} catch (err) {
+				console.error(err)
+			}
+		},
+		resetForm() {
+			// 给clear form 按钮和crate new backtest 按钮用
+			Object.assign(this.$data, this.$options.data())
 			// 清空表单时让退场保持为only rik control
 			this.exitItemCheck = true
 			this.addRiskControlOption(true)
@@ -638,7 +665,7 @@ export default {
 						label: 'Only Use Risk Control'
 					}
 				]
-				this.exitItemCheck = true
+				// this.exitItemCheck = true
 			} else {
 				this.signalOptions = [
 					{
