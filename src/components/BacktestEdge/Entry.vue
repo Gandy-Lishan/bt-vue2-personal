@@ -879,9 +879,10 @@ export default {
 				// this.getFreqArray(freqObj)
 				const freqObj = {
 						index: 0,
-						value: freq,
+						value: '',
 						criteria: 'entry',
-						key: `entry_0`
+						key: `entry_0`,
+						relation: 1
 					}
 					this.setFrequencyArray(freqObj)
 

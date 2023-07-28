@@ -254,6 +254,16 @@ export default new Vuex.Store({
 		setFrequencyArray(state, obj) {
 			// 不管是exit和entry都推到这个Map里面
 			const key = obj.key
+			const relation = obj.relation
+			const criteria = obj.criteria
+			let entryPanel1 = null
+			let exitPanel1 = null
+			if(relation === 1 && criteria === 'entry') {
+				entryPanel1 = state.frequencyArray.get(obj.key).value
+			}
+			if(relation === 1 && criteria === 'exit') {
+				exitPanel1 = state.frequencyArray.get(obj.key).value
+			}
 			state.frequencyArray.set(key, obj)
 			let freqEntryArray = new Array(5).fill('')
 			let freqExitArray = new Array(5).fill('')
@@ -265,6 +275,10 @@ export default new Vuex.Store({
 					freqExitArray[obj.index] = obj.value
 				}
 			}
+			if(relation === 0 && criteria === 'exit') freqExitArray = []
+			if(relation === 1 && criteria === 'exit') freqExitArray = [entryPanel1, ...new Array(4).fill('')]
+			if(relation === 1 && criteria === 'entry') freqEntryArray = [exitPanel1, ...new Array(4).fill('')]
+
 			freqEntryArray = freqEntryArray.filter(item => (item !== null && item !== undefined && item !== ''))
 			freqExitArray = freqExitArray.filter(item => (item !== null && item !== undefined && item !== ''))
 			freqEntryArray = Array.from(new Set(freqEntryArray))

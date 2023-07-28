@@ -959,7 +959,8 @@ export default {
 						index: 0,
 						value: freq,
 						criteria: 'exit',
-						key: `exit_0`
+						key: `exit_0`,
+						relation: 1
 					}
 					this.setFrequencyArray(freqObj)
 
@@ -1002,7 +1003,8 @@ export default {
 						index: 0,
 						value: '',
 						criteria: 'exit',
-						key: `exit_0`
+						key: `exit_0`,
+						relation: 0
 					}
 					this.setFrequencyArray(freqObj)
 				}
