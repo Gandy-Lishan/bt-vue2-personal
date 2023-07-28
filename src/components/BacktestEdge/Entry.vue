@@ -452,6 +452,7 @@ import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Li
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 import { eventBus } from "@/components/BacktestEdge/EventBus/Bus.ts";
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { mapMutations } from "vuex"
 export default {
 	name: 'entry',
 	inheritAttrs: false,
@@ -582,6 +583,7 @@ export default {
   eventBus.$on('userEntryFileSelect', this.userEntryFileSelect)
 },
 	methods: {
+		...mapMutations(['setFrequencyArray']),
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 			// Reset data for all subcomponents
@@ -736,11 +738,18 @@ export default {
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex, 1)
 				this.techIndiObj.push('')
-				const freqObj = {
-					index: absoluteIndex,
-					value: ''
-				}
-				this.getFreqArray(freqObj)
+				// const freqObj = {
+				// 	index: absoluteIndex,
+				// 	value: ''
+				// }
+				// this.getFreqArray(freqObj)
+					const freqObj = {
+						index: absoluteIndex,
+						value: '',
+						criteria: 'entry',
+						key: `entry_${absoluteIndex}`
+					}
+					this.setFrequencyArray(freqObj)
 				if (
 					this.relation == 2 &&
 					this.score >= this.indicatorRadioArr.length + 1
@@ -863,11 +872,18 @@ export default {
 				this.indicatorValArr = [indiVal, ...(new Array(4).fill(''))]
 				this.indicatorRadioArr = [indiRadio, ...(new Array(4).fill(''))]
 				this.freqArray = new Array(5).fill('')
+				// const freqObj = {
+				// 	index: 0,
+				// 	value: freq
+				// }
+				// this.getFreqArray(freqObj)
 				const freqObj = {
-					index: 0,
-					value: freq
-				}
-				this.getFreqArray(freqObj)
+						index: 0,
+						value: freq,
+						criteria: 'entry',
+						key: `entry_0`
+					}
+					this.setFrequencyArray(freqObj)
 
 				//When only keep the first tab, update the vuex status
 				// 移除senti indicator附属ma

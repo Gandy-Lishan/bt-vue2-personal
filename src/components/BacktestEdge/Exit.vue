@@ -447,6 +447,7 @@ import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Li
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 import { eventBus } from "@/components/BacktestEdge/EventBus/Bus.ts";
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { mapMutations } from "vuex"
 
 export default {
 	name: 'exit',
@@ -589,6 +590,7 @@ export default {
   eventBus.$on('userExitFileSelect', this.userExitFileSelect)
 },
 	methods: {
+		...mapMutations(['setFrequencyArray']),
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 			// Reset data for all subcomponents
@@ -797,11 +799,18 @@ export default {
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex, 1)
 				this.techIndiObj.push('')
+				// const freqObj = {
+				// 	index: absoluteIndex,
+				// 	value: ''
+				// }
+				// this.getFreqArray(freqObj)
 				const freqObj = {
-					index: absoluteIndex,
-					value: ''
-				}
-				this.getFreqArray(freqObj)
+						index: absoluteIndex,
+						value: '',
+						criteria: 'exit',
+						key: `exit_${absoluteIndex}`
+					}
+					this.setFrequencyArray(freqObj)
 				if (
 					this.relation == 2 &&
 					this.score >= this.indicatorRadioArr.length + 1
@@ -941,11 +950,18 @@ export default {
 				this.indicatorValArr = [indiVal, ...(new Array(4).fill(''))]
 				this.indicatorRadioArr = [indiRadio, ...(new Array(4).fill(''))]
 				this.freqArray = new Array(5).fill('')
+				// const freqObj = {
+				// 	index: 0,
+				// 	value: freq
+				// }
+				// this.getFreqArray(freqObj)
 				const freqObj = {
-					index: 0,
-					value: freq
-				}
-				this.getFreqArray(freqObj)
+						index: 0,
+						value: freq,
+						criteria: 'exit',
+						key: `exit_0`
+					}
+					this.setFrequencyArray(freqObj)
 			}
 			if (val == 2 || val == 3) {
 				if (this.editableTabs.length === 1) {
@@ -964,18 +980,25 @@ export default {
 					this.indicatorUrlArr = new Array(5).fill('')
 					this.indicatorValArr = new Array(5).fill('')
 					this.freqArray = new Array(5).fill('')
+					// const freqObj = {
+					// 	index: 0,
+					// 	value: ''
+					// }
+					// this.getFreqArray(freqObj)
 					const freqObj = {
 						index: 0,
-						value: ''
+						value: '',
+						criteria: 'exit',
+						key: `exit_0`
 					}
-					this.getFreqArray(freqObj)
+					this.setFrequencyArray(freqObj)
 				}
 			this.$emit('getExitRelation', val)
 			this.$store.commit('clearExitSignalArr')
 
-				let indicatorList = this.$store.state.indicators.formIndicators.exit
-				this.$store.commit('getExitIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
-				CIQ.addIndicators()
+				// let indicatorList = this.$store.state.indicators.formIndicators.exit
+				// this.$store.commit('getExitIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
+				// CIQ.addIndicators()
 		},
 		saveBacktestData(index) {
 			let checked = true

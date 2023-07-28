@@ -118,7 +118,8 @@ export default new Vuex.Store({
 		tradePrice: 0,
 		last_signal_array: [],
 		_last_signal_array: [],
-		hashTable: []
+		hashTable: [],
+		frequencyArray: new Map()
 	},
 	getters: {
 		getAllSignalArray: (state) => {
@@ -247,6 +248,67 @@ export default new Vuex.Store({
 			}
 			state.exitFrequency = val
 			state.backtestInfo.frequency = val
+
+
+		},
+		setFrequencyArray(state, obj) {
+			// 不管是exit和entry都推到这个Map里面
+			const key = obj.key
+			state.frequencyArray.set(key, obj)
+			let freqEntryArray = new Array(5).fill('')
+			let freqExitArray = new Array(5).fill('')
+			for (let obj of state.frequencyArray.values()) {
+				if(obj.criteria === 'entry'){
+					freqEntryArray[obj.index] = obj.value
+				}
+				if(obj.criteria === 'exit'){
+					freqExitArray[obj.index] = obj.value
+				}
+			}
+			freqEntryArray = freqEntryArray.filter(item => (item !== null && item !== undefined && item !== ''))
+			freqExitArray = freqExitArray.filter(item => (item !== null && item !== undefined && item !== ''))
+			freqEntryArray = Array.from(new Set(freqEntryArray))
+			freqExitArray = Array.from(new Set(freqExitArray))
+			const customSort = (a, b) => {
+					const indexA = sortOrder.indexOf(a);
+					const indexB = sortOrder.indexOf(b);
+					return indexA - indexB;
+			}
+			const findMaxFreq = (currentFreq, previousFreq) => {
+				let selectedTimeframe = currentFreq
+				let previousTimeframe = previousFreq
+				if (selectedTimeframe !== '' && selectedTimeframe !== undefined && selectedTimeframe !== null) {
+					if (selectedTimeframe !== previousTimeframe) {
+						// 根据时间范围的大小进行比较，取周期较大的那个
+						const timeframes = ["Daily", "Weekly", "Monthly"];
+						const previousIndex = timeframes.indexOf(previousTimeframe);
+						const currentIndex = timeframes.indexOf(selectedTimeframe);
+						const largerIndex = Math.max(previousIndex, currentIndex);
+						selectedTimeframe = timeframes[largerIndex];
+	
+						// 更新之前的时间范围为当前选择
+						previousTimeframe = selectedTimeframe;
+					}
+				}
+				return previousTimeframe
+			}
+			const sortOrder = ['Daily', 'Weekly', 'Monthly'];
+			freqEntryArray = freqEntryArray.sort(customSort);
+			freqExitArray = freqExitArray.sort(customSort);
+			console.log('Entry 的数组', freqEntryArray)
+			console.log('Exit 的数组', freqExitArray)
+			const maxEntryFreq = freqEntryArray[freqEntryArray.length - 1]
+			const maxExitFreq = freqExitArray[freqExitArray.length - 1]
+			const maxFreq = findMaxFreq(maxEntryFreq, maxExitFreq)
+			if(maxFreq === undefined || maxFreq === null || maxFreq === ''){
+				state.exitFrequency = 'Daily'
+				state.backtestInfo.frequency = 'Daily'
+				console.log('最大的周期', state.exitFrequency)
+				return
+			}
+			state.exitFrequency = maxFreq
+			state.backtestInfo.frequency = maxFreq
+			console.log('最大的周期', state.exitFrequency)
 		},
 		getFreqHighPriority(state, val) {
 			state.exitFrequency = val
@@ -527,6 +589,7 @@ export default new Vuex.Store({
 			}
 			state.usersOwnEntryFileHash = Array(5).fill('')
 			state.usersOwnExitFileHash = Array(5).fill('')
+			state.frequencyArray = new Map()
 		},
 		getSentimentList(state,list) {
 			state.sentimentIndicatorList = list
@@ -617,6 +680,7 @@ export default new Vuex.Store({
 			}
 			state.backtestInfo.entry_description = []
 			state.backtestInfo.exit_description = []
+			state.frequencyArray = new Map()
 		},
 		clearStoreDesciption(state) {
 			state.backtestInfo.entry_description = []
