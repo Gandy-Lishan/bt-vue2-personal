@@ -543,24 +543,6 @@ export default {
     },
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
-      // if(queryString == '') {
-      //   let freqObj = {}
-      //   freqObj.value = ''
-      //   freqObj.index = this.panelIndex
-      //   this.$emit('getFreqArray', freqObj)
-
-      //   let indiValObj = {}
-      //   indiValObj.value = ''
-      //   indiValObj.index = this.panelIndex
-      //   this.$emit('getIndicatorVal', indiValObj)
-
-      //   let indiUrlObj = {}
-      //   indiUrlObj.index = this.panelIndex
-      //   indiUrlObj.url = ''
-      //   this.$emit('getIndicatorUrl', indiUrlObj)
-        
-      //   // lishn 判断需要小龙写
-      // }
       var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
       sentimentIndicatorList.sort(function (a, b) {
         return a.value.localeCompare(b.value)
@@ -631,11 +613,6 @@ export default {
       const item = sentimentIndicatorList.find(i=>i.value ==  this.$refs.sentiInput.value)
 
       this.currentSentiUpdated = item.updated
-      // let freqObj = {}
-      // freqObj.value = ''
-      // freqObj.index = this.panelIndex
-      // this.$emit('getFreqArray', freqObj)
-      // this.freqArray(item.updated)
       let freqObj = {}
       freqObj.value = ''
       freqObj.index = this.panelIndex
@@ -695,10 +672,6 @@ export default {
     },
     handleSentimentSelect(item) {
       this.currentSentiUpdated = item.updated
-      // let freqObj = {}
-      // freqObj.value = item.updated
-      // freqObj.index = this.panelIndex
-      // this.$emit('getFreqArray', freqObj)
       let freqObj = {}
       freqObj.value = item.updated
       freqObj.index = this.panelIndex
