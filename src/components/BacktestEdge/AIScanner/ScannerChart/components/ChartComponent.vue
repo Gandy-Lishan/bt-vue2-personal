@@ -169,7 +169,7 @@ export default {
 					break;
 				case 'PriceBreakout' :
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-						display: 'Range Of Rank',
+						display: '% of Previous Range',
 						Field: 'Close',
 						condition: 'OPR',
 						period: 21
@@ -178,7 +178,7 @@ export default {
 					break;
 				case 'HighPoints' :
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-						display: 'Range Of Rank',
+						display: '% of Previous Range',
 						Field: 'High',
 						condition: 'OPR',
 						period: 13
@@ -187,7 +187,7 @@ export default {
 					break;
 				case 'LowPoints' :
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-						display: 'Range Of Rank',
+						display: '% of Previous Range',
 						Field: 'Low',
 						condition: 'OPR',
 						period: 13

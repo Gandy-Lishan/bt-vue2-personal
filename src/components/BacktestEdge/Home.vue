@@ -71,6 +71,7 @@
 									:direction="direction"
 									@getEntryRelation="getEntryRelation"
 									@sendEntrySignalIndex="sendEntrySignalIndex"
+                  @sendEntryMaxFreq="sendEntryMaxFreq"
 								></entry>
 								<div class="divider"></div>
 								<exit
@@ -79,6 +80,7 @@
 									@isOnlyRiskControl="isOnlyRiskControl"
 									@getExitRelation="getExitRelation"
 									@sendExitSignalIndex="sendExitSignalIndex"
+                  @sendExitMaxFreq="sendExitMaxFreq"
 								></exit>
 							</div>
 						</div>
@@ -439,7 +441,7 @@ import history from '@/components/BacktestEdge/History.vue'
 import favorite from '@/components/BacktestEdge/Favorite.vue'
 import sample from '@/components/BacktestEdge/Sample.vue'
 import Chat from "@/components/BacktestEdge/Chat.vue";
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import ProgressBar from 'vue-simple-progress'
 
 import {
@@ -488,7 +490,9 @@ export default {
       numOfFailedBacktestsALL: 0,
       numOfProcessedBacktestsALL:0,
 
-      approTime: 0
+      approTime: 0,
+      maxEntryFreq: 'Daily',
+      maxExitFreq: 'Daily',
     }
   },
   components: {
@@ -699,6 +703,7 @@ export default {
     this.progressBarVal = 0
   },
   methods: {
+    ...mapMutations(['getFrequency']),
     formatSec(time) {
             // 转换为式分秒
             let h = parseInt(time / 60 / 60 % 24)
@@ -987,6 +992,34 @@ export default {
       obj.criteria = 'entry'
       obj.index = index
       this.$store.commit('addSignalLength', obj)
+    },
+    sendEntryMaxFreq(freq) {
+      this.maxEntryFreq = freq
+      const result = this.findMaxFreq(this.maxEntryFreq, this.maxExitFreq)
+      this.getFrequency(result)
+    },
+    findMaxFreq(currentFreq, previousFreq) {
+      let selectedTimeframe = currentFreq
+      let previousTimeframe = previousFreq
+      if (selectedTimeframe !== '' && selectedTimeframe !== undefined && selectedTimeframe !== null) {
+        if (selectedTimeframe !== previousTimeframe) {
+          // 根据时间范围的大小进行比较，取周期较大的那个
+          const timeframes = ["Daily", "Weekly", "Monthly"];
+          const previousIndex = timeframes.indexOf(previousTimeframe);
+          const currentIndex = timeframes.indexOf(selectedTimeframe);
+          const largerIndex = Math.max(previousIndex, currentIndex);
+          selectedTimeframe = timeframes[largerIndex];
+
+          // 更新之前的时间范围为当前选择
+          previousTimeframe = selectedTimeframe;
+        }
+      }
+      return previousTimeframe
+    },
+    sendExitMaxFreq(freq) {
+      this.maxExitFreq = freq
+      const result = this.findMaxFreq(this.maxExitFreq, this.maxEntryFreq)
+      this.getFrequency(result)
     },
     addExitSignalLength(index) {
       let obj = {}
@@ -1543,6 +1576,7 @@ export default {
                         //After saving successfully, clear the backtestinfo back to the original state
                         vm.$store.commit('initialBacktestInfo')
                         vm.goToHistoryForm()
+                        await new Promise(resolve => setTimeout(resolve, 3000));
                         vm.$refs.historyChild.refreshHistory(res.data.id)
                         CIQ.hideMarker()
                         CIQ.isMarkerShown = false
