@@ -216,7 +216,11 @@ export default {
 					break;
 				default: 
 			}
-
+			CIQ.Studies.addStudy(CIQ.stxx, "ma",{
+				Period: 252,
+				Type: 'simple',
+				Field: "Close"
+			});
 			CIQ.stxx.setChartType("candle");
 			this.loadMarker()
 		},
