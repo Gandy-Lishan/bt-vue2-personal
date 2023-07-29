@@ -59,6 +59,7 @@
 							:fetch-suggestions="indicatorTechnicalSearch"
 							placeholder="Input the technical indicator"
 							@select="handleTechnicalSelect"
+              @clear="clearTechnicalSelect"
 						></el-autocomplete>
 						<el-tooltip effect="dark" placement="top">
 							<span slot="content"
@@ -841,6 +842,67 @@ export default {
       }
       CIQ.addIndicators()
     },
+    clearTechnicalSelect() {
+      var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
+      const item = sentimentIndicatorList.find(i=>i.value ==  this.$refs.sentiInput.value)
+
+      let valObj = {}
+      valObj.index = this.panelIndex
+      valObj.value = ''
+      this.$emit('getIndicatorVal', valObj)
+      const vm = this
+      let url = ''
+      this.$emit('getTechIndiValue', '')
+      let obj = {}
+      obj.index = this.panelIndex+
+      obj.class = ''
+      this.$emit('getTechIndiObj', obj)
+
+      // remove a MA tat already exists in current criteria before loading
+      var activatedMAList = this.$store.state.activatedMA
+      if (this.criteria == 'entry') {
+        var MAListIndex = activatedMAList.findIndex(
+          (item) =>
+            item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex] &&
+            item.criteria == this.criteria &&
+            item.index == this.panelIndex
+        )
+        if (MAListIndex != -1) {
+          activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
+        this.$store.commit('getEntryIndicators', {
+          index: this.panelIndex,
+          value: ''
+        })
+        let indiUrlObj = {}
+        indiUrlObj.index = this.panelIndex
+        indiUrlObj.url = ''
+        this.$emit('getIndicatorUrl', indiUrlObj)
+      } else {
+        var MAListIndex = activatedMAList.findIndex(
+          (item) =>
+            item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex] &&
+            item.criteria == this.criteria &&
+            item.index == this.panelIndex
+        )
+        if (MAListIndex != -1) {
+          activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
+        this.$store.commit('getExitIndicators', {
+          index: this.panelIndex,
+          value: ''
+        })
+        let indiUrlObj = {}
+        indiUrlObj.index = this.panelIndex
+        indiUrlObj.url = ''
+        this.$emit('getIndicatorUrl', indiUrlObj)
+      }
+
+      // lishn 判断需要小龙写
+      CIQ.addIndicators()
+    },
     handleTechnicalSelect(item) {
       this.si.technicalIndicator = item.value
       let valObj = {}
@@ -848,7 +910,6 @@ export default {
       valObj.value = item.value
       this.$emit('getIndicatorVal', valObj)
       const vm = this
-      let val = item.value
       let url = item.url
       this.$emit('getTechIndiValue', item.class)
       let obj = {}
