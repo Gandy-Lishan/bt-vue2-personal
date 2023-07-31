@@ -126,6 +126,7 @@
 							@getIndicatorRadio="getIndicatorRadio"
 							@getTechIndiObj="getTechIndiObj"
 							@exitUserUploadFileContent="exitUserUploadFileContent"
+							@getFreqArray="getFreqArray"
 						></indicator>
 						<senti
 							v-bind="$attrs"
@@ -486,6 +487,7 @@ export default {
 			refs: {},
 			indicatorUrlArr: new Array(5).fill(''),
 			indicatorValArr: new Array(5).fill(''),
+			freqArray: new Array(5).fill(''),
 			// riskValArr: new Array(5).fill(''),
 			techVal: '',
 			exitItemCheck: false,
@@ -797,6 +799,8 @@ export default {
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex, 1)
 				this.techIndiObj.push('')
+				this.freqArray.splice(absoluteIndex, 1)
+				this.freqArray.push('')
 				const freqObj = {
 						index: absoluteIndex,
 						value: '',
@@ -833,6 +837,9 @@ export default {
 		getIndicatorVal(obj) {
 			this.techVal = obj.value
 			this.indicatorValArr.splice(obj.index, 1, obj.value)
+		},
+		getFreqArray(obj) {
+			this.freqArray.splice(obj.index, 1, obj.value)
 		},
 		getIndicatorRadio(obj) {
 			this.indicatorRadio = obj.value
@@ -924,9 +931,11 @@ export default {
 				const indiUrl = this.indicatorUrlArr[0]
 				const indiVal = this.indicatorValArr[0]
 				const indiRadio = this.indicatorRadioArr[0]
+				const freqVal = this.freqArray[0]
 				this.indicatorUrlArr = [indiUrl, ...(new Array(4).fill(''))]
 				this.indicatorValArr = [indiVal, ...(new Array(4).fill(''))]
 				this.indicatorRadioArr = [indiRadio, ...(new Array(4).fill(''))]
+				this.freqArray = [freqVal, ...(new Array(4).fill(''))]
 				// 移除	indicatorTechArr
 				const techObj = this.techIndiObj[0]
 				this.techIndiObj = [techObj, ...(new Array(4).fill(''))]
@@ -934,7 +943,7 @@ export default {
 				// 设定频率
 				const freqObj = {
 					index: 0,
-					value: '',
+					value: freqVal,
 					criteria: 'exit',
 					key: `exit_0`,
 					relation: 1
