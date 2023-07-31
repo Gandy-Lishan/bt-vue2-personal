@@ -27,6 +27,7 @@ export default {
 		return {
 			indicator : '',
 			trades : [],
+			symbolUrl: '',
 		}
 	},
 	components: {
@@ -59,7 +60,9 @@ export default {
 			// 默认让indicator无法编辑
 			this.editStudies(false)
 
-			CIQ.initiateChart([CIQ.symbol],this.other['date'],()=>{
+			this.symbolUrl = CIQ.indicatorList.find(item=>item.url==CIQ.symbol)?CIQ.symbol:CIQ.indicatorList.find(item=>item["chart_name"]==CIQ.symbol + ' Optix').url
+
+			CIQ.initiateChart([this.symbolUrl],this.other['date'],()=>{
 				try{
 					this.hideComponents()
 					const periodArray = [
@@ -112,11 +115,11 @@ export default {
 				
 			switch(this.other['_Signal']){
 				case "Symbol Close > its\' MA200 and Optix MA5 < 35":
-					await CIQ.getIndicatorMatedata([CIQ.symbol])
+					await CIQ.getIndicatorMatedata([this.symbolUrl])
 					CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{
 						Period: 5,
 						display:"ST MA",
-						Field: CIQ.symbol
+						Field: this.symbolUrl
 					});
 					CIQ.Studies.addStudy(CIQ.stxx, "ma",{
 						Period: 200,
@@ -125,7 +128,7 @@ export default {
 					CIQ.createOneTimePatternMarker(this.other.date,"Symbol Close > its\' MA200 and Optix MA5 < 35")
 					break;
 				case "Symbol Close > its\' MA200 and Optix < 30":
-					await CIQ.getIndicatorMatedata([CIQ.symbol])
+					await CIQ.getIndicatorMatedata([this.symbolUrl])
 					CIQ.Studies.addStudy(CIQ.stxx, "ma",{
 						Period: 200,
 						Field: "Close"
@@ -133,11 +136,11 @@ export default {
 					CIQ.createOneTimePatternMarker(this.other.date,"Symbol Close > its\' MA200 and Optix < 30")
 					break;
 				case "Optix MA10 < 30 and Optix < 20":
-					await CIQ.getIndicatorMatedata([CIQ.symbol])
+					await CIQ.getIndicatorMatedata([this.symbolUrl])
 					CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{
 						Period: 5,
 						display:"ST MA",
-						Field: CIQ.symbol
+						Field: this.symbolUrl
 					});
 					CIQ.createOneTimePatternMarker(this.other.date,"Optix MA10 < 30 and Optix < 20")
 					break;
@@ -169,27 +172,27 @@ export default {
 					break;
 				case 'PriceBreakout' :
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-						display: 'Range Of Rank',
+						display: '% of Previous Range',
 						Field: 'Close',
-						condition: 'ROR',
+						condition: 'OPR',
 						period: 21
 					},null,{showSupLine:0})
 					CIQ.createOneTimePatternMarker(this.other.date,"PriceBreakout")
 					break;
 				case 'HighPoints' :
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-						display: 'Range Of Rank',
+						display: '% of Previous Range',
 						Field: 'High',
-						condition: 'ROR',
+						condition: 'OPR',
 						period: 13
 					},null,{showSupLine:100})
 					CIQ.createOneTimePatternMarker(this.other.date,"HighPoints")
 					break;
 				case 'LowPoints' :
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-						display: 'Range Of Rank',
+						display: '% of Previous Range',
 						Field: 'Low',
-						condition: 'ROR',
+						condition: 'OPR',
 						period: 13
 					},null,{showSupLine:0})
 					CIQ.createOneTimePatternMarker(this.other.date,"LowPoints")
@@ -216,7 +219,11 @@ export default {
 					break;
 				default: 
 			}
-
+			CIQ.Studies.addStudy(CIQ.stxx, "ma",{
+				Period: 252,
+				Type: 'simple',
+				Field: "Close"
+			});
 			CIQ.stxx.setChartType("candle");
 			this.loadMarker()
 		},
@@ -326,7 +333,7 @@ export default {
                         DT: item,
                         Price: quote.Close,
                         Type: 'BUY',  
-						Reason: entryReason,  
+						Indicator: [entryReason],  
                     })
                 })
             }
@@ -345,7 +352,7 @@ export default {
                         DT: item,
                         Price: quote.Close,
                         Type: 'SELL',    
-						Reason: exitReasonArr[index]
+						Indicator: [exitReasonArr[index]]
                     })
                 })
             }
