@@ -1,6 +1,7 @@
 // indicator search box
 <template>
 	<div class="indicator-box">
+    {{si}}
 		<el-form :model="si" ref="siForm" :rules="rules">
 			<div class="indicator-container sentiBox">
 				<el-form-item>
