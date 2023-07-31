@@ -1,8 +1,6 @@
 // Exit Criteria
 <template>
 	<div class="exit-container">
-		{{indicatorUrlArr}}
-		{{indicatorValArr}}
 		<div class="signal-option-box">
 			<div class="entry-title-box">
 				<p class="criteria-title">Exit Criteria</p>
@@ -847,8 +845,9 @@ export default {
 		},
 		addExitSignalLength() {
 			if (this.relation == 2 || this.relation == 3 || this.relation == 0) {
-				this.$emit('sendExitSignalIndex', this.indicatorRadioArr.length)
-				for (let i = 0; i < this.indicatorRadioArr.length; i++) {
+				const filterValArr = this.indicatorValArr.filter(item => item != '')
+				this.$emit('sendExitSignalIndex', filterValArr.length)
+				for (let i = 0; i < filterValArr.length; i++) {
 					// Apply for space
 					let obj = {}
 					obj.criteria = 'exit'

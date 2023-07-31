@@ -1,8 +1,6 @@
 // Entry Criteria
 <template>
 	<div class="entry-container">
-				{{indicatorUrlArr}}
-		{{indicatorValArr}}
 		<div class="signal-option-box">
 			<div class="entry-title-box">
 				<p class="criteria-title">Entry Criteria</p>
@@ -783,7 +781,8 @@ export default {
 		},
 		addEntrySignalLength() {
 			if (this.relation == 2 || this.relation == 3) {
-				this.$emit('sendEntrySignalIndex', this.indicatorRadioArr.length)
+				const filterValArr = this.indicatorValArr.filter(item => item != '')
+				this.$emit('sendEntrySignalIndex', filterValArr.length)
 			}
 			if (this.relation == 1) {
 				this.$emit('sendEntrySignalIndex', 1)
