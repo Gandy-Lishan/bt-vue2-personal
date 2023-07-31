@@ -1,6 +1,8 @@
 // Entry Criteria
 <template>
 	<div class="entry-container">
+				{{indicatorUrlArr}}
+		{{indicatorValArr}}
 		<div class="signal-option-box">
 			<div class="entry-title-box">
 				<p class="criteria-title">Entry Criteria</p>
