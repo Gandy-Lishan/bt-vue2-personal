@@ -933,7 +933,7 @@ export default {
 				const freqVal = this.freqArray[0]
 				this.indicatorUrlArr = [indiUrl, ...(new Array(4).fill(''))]
 				this.indicatorValArr = [indiVal, ...(new Array(4).fill(''))]
-				this.indicatorRadioArr = [indiRadio, ...(new Array(4).fill(''))]
+				this.indicatorRadioArr = [indiRadio]
 				this.freqArray = [freqVal, ...(new Array(4).fill(''))]
 				// 移除	indicatorTechArr
 				const techObj = this.techIndiObj[0]
@@ -989,7 +989,7 @@ export default {
 			if(val == 0) {
 					this.indicatorUrlArr = new Array(5).fill('')
 					this.indicatorValArr = new Array(5).fill('')
-					this.indicatorRadioArr = new Array(5).fill('')
+					this.indicatorRadioArr = ['sentiment']
 					this.techIndiObj = new Array(5).fill('')
 					const freqObj = {
 						index: 0,
