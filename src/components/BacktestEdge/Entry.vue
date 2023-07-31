@@ -99,10 +99,6 @@
 		</div>
 		<div :class="relation === 1 ? 'multi' : ''" v-if="exitItemCheck === false">
 			<div class="multi-box">
-				{{indicatorUrlArr}}
-				{{indicatorValArr}}
-				{{indicatorRadioArr}}
-				{{techIndiObj			}}
 				<el-tabs
 					v-model="editableTabsValue"
 					type="card"
@@ -857,6 +853,13 @@ export default {
 					relation: 1
 				}
 				this.setFrequencyArray(freqObj)
+				try {
+					for (let index = 1; index < this.indicatorUrlArr.length; index++) {
+						this.$refs.indiChild[index]?.resetIndicator()
+					}
+				} catch (error) {
+					console.log(error)
+				}
 
 				//When only keep the first tab, update the vuex status
 				// 移除senti indicator附属ma

@@ -612,6 +612,14 @@ export default {
         )
       }
     },
+    resetIndicator() {
+      this.si.sentimentIndicator = ''
+      this.si.technicalIndicator = ''
+      this.si.symbolIndicator = ''
+      this.si.userIndicator = ''
+      this.$refs.upload.clearFiles()
+      this.fileList = []
+    },
     clearSentimentSelect() {
       var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
       const item = sentimentIndicatorList.find(i=>i.value ==  this.$refs.sentiInput.value)

@@ -934,6 +934,13 @@ export default {
 					relation: 1
 				}
 				this.setFrequencyArray(freqObj)
+				try {
+					for (let index = 1; index < this.indicatorUrlArr.length; index++) {
+					this.$refs.indiChild[index]?.resetIndicator()
+				}
+				} catch (error) {
+					console.log(error)
+				}
 
 				//When only keep the first tab, update the vuex status
 				// 移除senti indicator附属ma
@@ -984,6 +991,13 @@ export default {
 						relation: 0
 					}
 					this.setFrequencyArray(freqObj)
+					try {
+							for (let index = 0; index < this.indicatorUrlArr.length; index++) {
+								this.$refs.indiChild[index]?.resetIndicator()
+							}
+					} catch (error) {
+						console.log(error)
+					}
 				}
 			this.$emit('getExitRelation', val)
 			this.$store.commit('clearExitSignalArr')
