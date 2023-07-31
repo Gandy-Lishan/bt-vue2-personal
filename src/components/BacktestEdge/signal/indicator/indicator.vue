@@ -1000,6 +1000,11 @@ export default {
           index: this.panelIndex,
           value: url
         })
+
+        let obj = {}
+        obj.index = this.panelIndex
+        obj.url = url
+        this.$emit('getIndicatorUrl', obj)
       } else {
         // remove MA from Vuex after loading Tech
         var activatedMAList = CIQ.store.state.activatedMA
@@ -1019,6 +1024,11 @@ export default {
           index: this.panelIndex,
           value: url
         })
+
+        let obj = {}
+        obj.index = this.panelIndex
+        obj.url = url
+        this.$emit('getIndicatorUrl', obj)
       }
       // store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
       let techIndicators = []
