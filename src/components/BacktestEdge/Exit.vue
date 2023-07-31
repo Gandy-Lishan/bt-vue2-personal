@@ -966,15 +966,11 @@ export default {
 				this.$store.commit('getExitIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
 				
 				//只保留第一个techindicator再techindicatorlist
-				let formateList = this.$store.state.formateTechnicalList
-				if (formateList.length === 0) {
-					formateList = this.loadShortLong()
-				}
-				const item = formateList.find(i=>i.value ==  indiVal)
-				this.$store.commit('getTechnicalIndicators', item?[item.url]:[])
+				// todo. 应该是移除exit第一个选项卡以外的tech
+				this.$store.commit('getTechnicalIndicators', [indiUrl])
 				
 				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
-				CIQ.keepTheFirstMALayout(item?.url,'exit')
+				CIQ.keepTheFirstMALayout(indiUrl,'exit')
 
 				CIQ.addIndicators()
 			}
@@ -994,6 +990,8 @@ export default {
 			if(val == 0) {
 					this.indicatorUrlArr = new Array(5).fill('')
 					this.indicatorValArr = new Array(5).fill('')
+					this.indicatorRadioArr = new Array(5).fill('')
+					this.techIndiObj = new Array(5).fill('')
 					const freqObj = {
 						index: 0,
 						value: '',
@@ -1013,9 +1011,22 @@ export default {
 			this.$emit('getExitRelation', val)
 			this.$store.commit('clearExitSignalArr')
 
-				// let indicatorList = this.$store.state.indicators.formIndicators.exit
-				// this.$store.commit('getExitIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
-				// CIQ.addIndicators()
+			//When removing the exit criteria, update the vuex status
+			// 移除senti indicator附属ma
+			var activatedMAList = this.$store.state.activatedMA
+			activatedMAList = activatedMAList.filter((item)=>
+				item.criteria == 'entry'
+			)
+			this.$store.commit('getMA', activatedMAList)
+
+			this.$store.commit('getExitIndicatorsList', [])
+
+			// todo. 应该是移除exit的tech
+
+			// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
+			CIQ.removeExitMALayout()
+
+			CIQ.addIndicators()
 		},
 	// 之后不在这里定义
     // load short and long technical list,从indicator拿来的
