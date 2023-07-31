@@ -818,13 +818,6 @@ export default {
 						value: this.indicatorUrlArr[index]
 					})
 				})
-
-				// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
-				let techIndicators = []
-				techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
-				techIndicators = techIndicators.filter(item=>item!=removedUrl)
-				techIndicators = [...new Set(techIndicators)]
-				this.$store.commit('getTechnicalIndicators', techIndicators)
 				
 				// 如果是MA，则移除它的信息和位置
 				CIQ.removeMALayout(removedUrl, 'exit', absoluteIndex)
@@ -965,10 +958,6 @@ export default {
 				let indicatorList = this.$store.state.indicators.formIndicators.exit
 				this.$store.commit('getExitIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
 				
-				//只保留第一个techindicator再techindicatorlist
-				// todo. 应该是移除exit第一个选项卡以外的tech
-				this.$store.commit('getTechnicalIndicators', [indiUrl])
-				
 				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
 				CIQ.keepTheFirstMALayout(indiUrl,'exit')
 
@@ -1020,8 +1009,6 @@ export default {
 			this.$store.commit('getMA', activatedMAList)
 
 			this.$store.commit('getExitIndicatorsList', [])
-
-			// todo. 应该是移除exit的tech
 
 			// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
 			CIQ.removeExitMALayout()

@@ -754,13 +754,6 @@ export default {
 						value: this.indicatorUrlArr[index]
 					})
 				})
-
-				// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
-				let techIndicators = []
-				techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
-				techIndicators = techIndicators.filter(item=>item!=removedUrl)
-				techIndicators = [...new Set(techIndicators)]
-				this.$store.commit('getTechnicalIndicators', techIndicators)
 				
 				// 如果是MA，则移除它的信息和位置
 				CIQ.removeMALayout(removedUrl, 'entry', absoluteIndex)
@@ -883,9 +876,6 @@ export default {
 
 				let indicatorList = this.$store.state.indicators.formIndicators.entry
 				this.$store.commit('getEntryIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
-				
-				//只保留第一个techindicator再techindicatorlist
-				this.$store.commit('getTechnicalIndicators', [indiUrl])
 				
 				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
 				CIQ.keepTheFirstMALayout(indiUrl,'entry')
