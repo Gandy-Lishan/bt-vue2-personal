@@ -120,11 +120,10 @@
 							:exitItemCheck="exitItemCheck"
 							@getIndicatorUrl="getIndicatorUrl"
 							@getIndicatorVal="getIndicatorVal"
-							@getTechIndiValue="getTechIndiValue"
 							@getIndicatorRadio="getIndicatorRadio"
 							@getTechIndiObj="getTechIndiObj"
-							@getFreqArray="getFreqArray"
 							@entryUserUploadFileContent="entryUserUploadFileContent"
+							@getFreqArray="getFreqArray"
 						></indicator>
 						<senti
 							v-bind="$attrs"
@@ -448,12 +447,13 @@ import alligatorLike from '@/components/BacktestEdge/signal/technical/Alligator-
 import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Linear-RegForecast-like.vue'
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 import { eventBus } from "@/components/BacktestEdge/EventBus/Bus.ts";
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { mapMutations } from "vuex"
 export default {
 	name: 'entry',
 	inheritAttrs: false,
 	data() {
 		return {
-			techIndiValue: '',
 			indicatorRadio: 'sentiment',
 			signalOptions: [
 				{
@@ -578,6 +578,7 @@ export default {
   eventBus.$on('userEntryFileSelect', this.userEntryFileSelect)
 },
 	methods: {
+		...mapMutations(['setFrequencyArray']),
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 			// Reset data for all subcomponents
@@ -710,18 +711,37 @@ export default {
 					item.title = 'Condition' + (index + 1)
 				})
 				this.editableTabsValue = activeName
-				this.indicatorUrlArr.splice(absoluteIndex, 1)
+
+				// 移除senti indicator附属ma
+				var activatedMAList = this.$store.state.activatedMA
+				var MAListIndex = activatedMAList.findIndex(
+				(item) =>
+					item.url == this.indicatorUrlArr[absoluteIndex] &&
+					item.criteria == 'entry' &&
+					item.index == absoluteIndex
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				//
+				
+				let removedUrl = this.indicatorUrlArr.splice(absoluteIndex, 1)
 				this.indicatorUrlArr.push('')
 				this.indicatorValArr.splice(absoluteIndex, 1)
 				this.indicatorValArr.push('')
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex, 1)
 				this.techIndiObj.push('')
-				const freqObj = {
-					index: absoluteIndex,
-					value: ''
-				}
-				this.getFreqArray(freqObj)
+				this.freqArray.splice(absoluteIndex, 1)
+				this.freqArray.push('')
+					const freqObj = {
+						index: absoluteIndex,
+						value: '',
+						criteria: 'entry',
+						key: `entry_${absoluteIndex}`
+					}
+					this.setFrequencyArray(freqObj)
 				if (
 					this.relation == 2 &&
 					this.score >= this.indicatorRadioArr.length + 1
@@ -738,6 +758,11 @@ export default {
 						value: this.indicatorUrlArr[index]
 					})
 				})
+				
+				// 如果是MA，则移除它的信息和位置
+				CIQ.removeMALayout(removedUrl, 'entry', absoluteIndex)
+
+				CIQ.addIndicators()
 			}
 		},
 		getIndicatorUrl(obj) {
@@ -747,32 +772,17 @@ export default {
 			this.techVal = obj.value	// 可能没用到
 			this.indicatorValArr.splice(obj.index, 1, obj.value)
 		},
-		getTechIndiValue(val) {
-			this.techIndiValue = val
+		getFreqArray(obj) {
+			this.freqArray.splice(obj.index, 1, obj.value)
 		},
 		getIndicatorRadio(obj) {
 			this.indicatorRadio = obj.value
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
 		},
-		getFreqArray(obj) {
-			this.freqArray.splice(obj.index, 1, obj.value)
-			let freqArray = JSON.parse(JSON.stringify(this.freqArray))
-			freqArray = freqArray.filter(item => (item !== null && item !== undefined && item !== ''))
-			freqArray = Array.from(new Set(freqArray))
-			const customSort = (a, b) => {
-					const indexA = sortOrder.indexOf(a);
-					const indexB = sortOrder.indexOf(b);
-					return indexA - indexB;
-			}
-			const sortOrder = ['Daily', 'Weekly', 'Monthly'];
-			freqArray = freqArray.sort(customSort);
-			const maxFreq = freqArray[freqArray.length - 1]
-			console.log('Entry 最大的周期', maxFreq)
-			this.$emit('sendEntryMaxFreq', maxFreq)
-		},
 		addEntrySignalLength() {
 			if (this.relation == 2 || this.relation == 3) {
-				this.$emit('sendEntrySignalIndex', this.indicatorRadioArr.length)
+				const filterValArr = this.indicatorValArr.filter(item => item != '')
+				this.$emit('sendEntrySignalIndex', filterValArr.length)
 			}
 			if (this.relation == 1) {
 				this.$emit('sendEntrySignalIndex', 1)
@@ -835,17 +845,52 @@ export default {
 				this.editableTabsValue = '1'
 				this.score = 1
 				this.signals_in_market = 1
+				// 移除	indicatorSentiArr
 				const indiUrl = this.indicatorUrlArr[0]
 				const indiVal = this.indicatorValArr[0]
-				const freq = this.freqArray[0]
+				const indiRadio = this.indicatorRadioArr[0]
+				const freqVal = this.freqArray[0]
 				this.indicatorUrlArr = [indiUrl, ...(new Array(4).fill(''))]
 				this.indicatorValArr = [indiVal, ...(new Array(4).fill(''))]
-				this.freqArray = new Array(5).fill('')
+				this.indicatorRadioArr = [indiRadio, ...(new Array(4).fill(''))]
+				this.freqArray = [freqVal, ...(new Array(4).fill(''))]
+				// 移除	indicatorTechArr
+				const techObj = this.techIndiObj[0]
+				this.techIndiObj = [techObj, ...(new Array(4).fill(''))]
+
+				// 设定频率
 				const freqObj = {
 					index: 0,
-					value: freq
+					value: freqVal,
+					criteria: 'entry',
+					key: `entry_0`,
+					relation: 1
 				}
-				this.getFreqArray(freqObj)
+				this.setFrequencyArray(freqObj)
+				try {
+					for (let index = 1; index < this.indicatorUrlArr.length; index++) {
+						this.$refs.indiChild[index]?.resetIndicator()
+					}
+				} catch (error) {
+					console.log(error)
+				}
+
+				//When only keep the first tab, update the vuex status
+				// 移除senti indicator附属ma
+				var activatedMAList = this.$store.state.activatedMA
+				activatedMAList = activatedMAList.filter((item)=>
+					item.criteria == 'entry' &&
+					item.index == 0
+				)
+				this.$store.commit('getMA', activatedMAList)
+
+				let indicatorList = this.$store.state.indicators.formIndicators.entry
+				this.$store.commit('getEntryIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
+				
+				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
+				CIQ.keepTheFirstMALayout('entry')
+
+				CIQ.addIndicators()
 			}
 			if (val == 2 || val == 3) {
 				if (this.editableTabs.length === 1) {
@@ -1106,7 +1151,6 @@ export default {
 					let indicatorName = data.entry.signals[j].indicator
 					for (let i = 0; i < formateTechnicalList.length; i++) {
 						if (indicatorName === formateTechnicalList[i].value) {
-							this.techIndiValue = formateTechnicalList[i].class
 							this.techIndiObj[j] = formateTechnicalList[i].class
 							break
 						}
