@@ -889,7 +889,7 @@ export default {
 				this.$store.commit('getEntryIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
 				
 				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
-				CIQ.keepTheFirstMALayout(indiUrl,'entry')
+				CIQ.keepTheFirstMALayout('entry')
 
 				CIQ.addIndicators()
 			}

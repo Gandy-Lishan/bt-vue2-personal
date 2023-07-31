@@ -970,7 +970,7 @@ export default {
 				this.$store.commit('getExitIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
 				
 				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
-				CIQ.keepTheFirstMALayout(indiUrl,'exit')
+				CIQ.keepTheFirstMALayout('exit')
 
 				CIQ.addIndicators()
 			}
