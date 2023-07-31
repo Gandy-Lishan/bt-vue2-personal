@@ -102,6 +102,7 @@
 				{{indicatorUrlArr}}
 				{{indicatorValArr}}
 				{{indicatorRadioArr}}
+				{{techIndiObj			}}
 				<el-tabs
 					v-model="editableTabsValue"
 					type="card"
@@ -123,7 +124,6 @@
 							:exitItemCheck="exitItemCheck"
 							@getIndicatorUrl="getIndicatorUrl"
 							@getIndicatorVal="getIndicatorVal"
-							@getTechIndiValue="getTechIndiValue"
 							@getIndicatorRadio="getIndicatorRadio"
 							@getTechIndiObj="getTechIndiObj"
 							@entryUserUploadFileContent="entryUserUploadFileContent"
@@ -457,7 +457,6 @@ export default {
 	inheritAttrs: false,
 	data() {
 		return {
-			techIndiValue: '',
 			indicatorRadio: 'sentiment',
 			signalOptions: [
 				{
@@ -769,9 +768,6 @@ export default {
 			this.techVal = obj.value	// 可能没用到
 			this.indicatorValArr.splice(obj.index, 1, obj.value)
 		},
-		getTechIndiValue(val) {
-			this.techIndiValue = val
-		},
 		getIndicatorRadio(obj) {
 			this.indicatorRadio = obj.value
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
@@ -841,20 +837,26 @@ export default {
 				this.editableTabsValue = '1'
 				this.score = 1
 				this.signals_in_market = 1
+				// 移除	indicatorSentiArr
 				const indiUrl = this.indicatorUrlArr[0]
 				const indiVal = this.indicatorValArr[0]
 				const indiRadio = this.indicatorRadioArr[0]
 				this.indicatorUrlArr = [indiUrl, ...(new Array(4).fill(''))]
 				this.indicatorValArr = [indiVal, ...(new Array(4).fill(''))]
 				this.indicatorRadioArr = [indiRadio, ...(new Array(4).fill(''))]
+				// 移除	indicatorTechArr
+				const techObj = this.techIndiObj[0]
+				this.techIndiObj = [techObj, ...(new Array(4).fill(''))]
+
+				// 设定频率
 				const freqObj = {
-						index: 0,
-						value: '',
-						criteria: 'entry',
-						key: `entry_0`,
-						relation: 1
-					}
-					this.setFrequencyArray(freqObj)
+					index: 0,
+					value: '',
+					criteria: 'entry',
+					key: `entry_0`,
+					relation: 1
+				}
+				this.setFrequencyArray(freqObj)
 
 				//When only keep the first tab, update the vuex status
 				// 移除senti indicator附属ma
@@ -867,6 +869,18 @@ export default {
 
 				let indicatorList = this.$store.state.indicators.formIndicators.entry
 				this.$store.commit('getEntryIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
+				
+				//只保留第一个techindicator再techindicatorlist
+				let formateList = this.$store.state.formateTechnicalList
+				if (formateList.length === 0) {
+					formateList = this.loadShortLong()
+				}
+				const item = formateList.find(i=>i.value ==  indiVal)
+				this.$store.commit('getTechnicalIndicators', item?[item.url]:[])
+				
+				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
+				CIQ.keepTheFirstMALayout(item?.url,'entry')
+
 				CIQ.addIndicators()
 			}
 			if (val == 2 || val == 3) {
@@ -884,6 +898,32 @@ export default {
 			this.$emit('getEntryRelation', val)
 			this.$store.commit('clearEntrySignalArr')
 		},
+	// 之后不在这里定义
+    // load short and long technical list,从indicator拿来的
+    loadShortLong() {
+      const technicalList = CIQ.technicalCategory
+      let formatList = []
+      for (let i = 0; i < technicalList.length; i++) {
+        if (
+          technicalList[i].class === 'No_display_technical_indicator' ||
+          technicalList[i].class ===
+          'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
+        )
+          continue
+        technicalList[i].studies.forEach((item) => {
+          let obj = {}
+          obj.class = technicalList[i].class
+          obj.value = item.name
+          obj.url = item.url
+          formatList.push(obj)
+        })
+      }
+      formatList.sort(function (a, b) {
+        return a.value.localeCompare(b.value)
+      })
+      this.$store.commit('saveFormatTechnicalList', formatList)
+      return formatList
+    },
 		saveBacktestData(index) {
 			let vm = this
 			let checked = true
@@ -1128,7 +1168,6 @@ export default {
 					let indicatorName = data.entry.signals[j].indicator
 					for (let i = 0; i < formateTechnicalList.length; i++) {
 						if (indicatorName === formateTechnicalList[i].value) {
-							this.techIndiValue = formateTechnicalList[i].class
 							this.techIndiObj[j] = formateTechnicalList[i].class
 							break
 						}
