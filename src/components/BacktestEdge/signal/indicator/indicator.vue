@@ -456,6 +456,10 @@ export default {
             valObj.value = CIQ.indicatorList[i].chart_name
             valObj.index = this.panelIndex
             this.$emit('getIndicatorVal', valObj)
+            let freqObj = {}
+            freqObj.value = CIQ.indicatorList[i].updated
+            freqObj.index = this.panelIndex
+            this.$emit('getFreqArray', freqObj)
             // Remove form verification
             this.clearFormValidate()
             let radioObj = {}
@@ -631,6 +635,7 @@ export default {
       freqObj.criteria = this.criteria
       freqObj.key = `${this.criteria}_${this.panelIndex}`
       this.setFrequencyArray(freqObj)
+      this.$emit('getFreqArray', freqObj)
 
       let indiValObj = {}
       indiValObj.value = ''
@@ -690,6 +695,7 @@ export default {
       freqObj.criteria = this.criteria
       freqObj.key = `${this.criteria}_${this.panelIndex}`
       this.setFrequencyArray(freqObj)
+      this.$emit('getFreqArray', freqObj)
 
       // old version only
       // 限制同屏显示个数
@@ -776,6 +782,7 @@ export default {
       freqObj.criteria = this.criteria
       freqObj.key = `${this.criteria}_${this.panelIndex}`
       this.setFrequencyArray(freqObj)
+      this.$emit('getFreqArray', freqObj)
 
       let indiValObj = {}
       indiValObj.value = ''
@@ -838,6 +845,7 @@ export default {
       freqObj.criteria = this.criteria
       freqObj.key = `${this.criteria}_${this.panelIndex}`
       this.setFrequencyArray(freqObj)
+      this.$emit('getFreqArray', freqObj)
 
       let obj = {}
       obj.value = item.label
@@ -906,6 +914,7 @@ export default {
       freqObj.criteria = this.criteria
       freqObj.key = `${this.criteria}_${this.panelIndex}`
       this.setFrequencyArray(freqObj)
+      this.$emit('getFreqArray', freqObj)
 
       let valObj = {}
       valObj.index = this.panelIndex
@@ -970,6 +979,7 @@ export default {
       freqObj.criteria = this.criteria
       freqObj.key = `${this.criteria}_${this.panelIndex}`
       this.setFrequencyArray(freqObj)
+      this.$emit('getFreqArray', freqObj)
 
       let valObj = {}
       valObj.index = this.panelIndex
@@ -1062,6 +1072,7 @@ export default {
       freqObj.criteria = this.criteria
       freqObj.key = `${this.criteria}_${this.panelIndex}`
       this.setFrequencyArray(freqObj)
+      this.$emit('getFreqArray', freqObj)
 
       let indiValObj = {}
       indiValObj.value = ''
@@ -1128,6 +1139,7 @@ export default {
       freqObj.criteria = this.criteria
       freqObj.key = `${this.criteria}_${this.panelIndex}`
       this.setFrequencyArray(freqObj)
+      this.$emit('getFreqArray', freqObj)
       
       // old version only
       var countExistIndicator = 0
@@ -1593,6 +1605,7 @@ export default {
                 freqObj.criteria = vm.criteria
                 freqObj.key = `${vm.criteria}_${vm.panelIndex}`
                 vm.setFrequencyArray(freqObj)
+                vm.$emit('getFreqArray', freqObj)
               }
             })
           }
