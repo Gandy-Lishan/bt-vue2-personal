@@ -974,7 +974,7 @@ export default {
 				this.$store.commit('getTechnicalIndicators', item?[item.url]:[])
 				
 				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
-				CIQ.keepTheFirstMALayout(item?.url,'entry')
+				CIQ.keepTheFirstMALayout(item?.url,'exit')
 
 				CIQ.addIndicators()
 			}
