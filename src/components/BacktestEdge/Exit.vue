@@ -1,6 +1,8 @@
 // Exit Criteria
 <template>
 	<div class="exit-container">
+		{{indicatorUrlArr}}
+		{{indicatorValArr}}
 		<div class="signal-option-box">
 			<div class="entry-title-box">
 				<p class="criteria-title">Exit Criteria</p>
@@ -989,6 +991,22 @@ export default {
 						relation: 0
 					}
 					this.setFrequencyArray(freqObj)
+					
+					//When removing the exit criteria, update the vuex status
+					// 移除senti indicator附属ma
+					var activatedMAList = this.$store.state.activatedMA
+					activatedMAList = activatedMAList.filter((item)=>
+						item.criteria == 'entry'
+					)
+					this.$store.commit('getMA', activatedMAList)
+
+					this.$store.commit('getExitIndicatorsList', [])
+
+					// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
+					CIQ.removeExitMALayout()
+
+					CIQ.addIndicators()
+
 					try {
 							for (let index = 0; index < this.indicatorUrlArr.length; index++) {
 								this.$refs.indiChild[index]?.resetIndicator()
@@ -999,21 +1017,6 @@ export default {
 				}
 			this.$emit('getExitRelation', val)
 			this.$store.commit('clearExitSignalArr')
-
-			//When removing the exit criteria, update the vuex status
-			// 移除senti indicator附属ma
-			var activatedMAList = this.$store.state.activatedMA
-			activatedMAList = activatedMAList.filter((item)=>
-				item.criteria == 'entry'
-			)
-			this.$store.commit('getMA', activatedMAList)
-
-			this.$store.commit('getExitIndicatorsList', [])
-
-			// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
-			CIQ.removeExitMALayout()
-
-			CIQ.addIndicators()
 		},
 	// 之后不在这里定义
     // load short and long technical list,从indicator拿来的
