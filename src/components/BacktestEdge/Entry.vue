@@ -852,7 +852,7 @@ export default {
 				const freqVal = this.freqArray[0]
 				this.indicatorUrlArr = [indiUrl, ...(new Array(4).fill(''))]
 				this.indicatorValArr = [indiVal, ...(new Array(4).fill(''))]
-				this.indicatorRadioArr = [indiRadio, ...(new Array(4).fill(''))]
+				this.indicatorRadioArr = [indiRadio]
 				this.freqArray = [freqVal, ...(new Array(4).fill(''))]
 				// 移除	indicatorTechArr
 				const techObj = this.techIndiObj[0]
