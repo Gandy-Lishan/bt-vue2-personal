@@ -276,8 +276,8 @@ export default new Vuex.Store({
 				}
 			}
 			if(relation === 0 && criteria === 'exit') freqExitArray = []
-			if(relation === 1 && criteria === 'exit') freqExitArray = [entryPanel1, ...new Array(4).fill('')]
-			if(relation === 1 && criteria === 'entry') freqEntryArray = [exitPanel1, ...new Array(4).fill('')]
+			if(relation === 1 && criteria === 'exit') freqExitArray = [exitPanel1, ...new Array(4).fill('')]
+			if(relation === 1 && criteria === 'entry') freqEntryArray = [entryPanel1, ...new Array(4).fill('')]
 
 			freqEntryArray = freqEntryArray.filter(item => (item !== null && item !== undefined && item !== ''))
 			freqExitArray = freqExitArray.filter(item => (item !== null && item !== undefined && item !== ''))
