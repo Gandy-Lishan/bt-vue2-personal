@@ -738,7 +738,7 @@ export default {
       const hour = date.getHours();
       const minute = date.getMinutes();
       const second = date.getSeconds();
-      this.bd.name = this.bd.symbol+' ' + year+'/'+month+'/'+day+'/'+hour+'/'+minute+'/'+second
+      this.bd.name = this.bd.symbol+'  ' + year+'-'+month+'-'+day+'  '+hour+':'+minute+':'+second
     },
     getTradePrice(val) {
       this.$store.commit('SET_TRADE_PRICE',val)
