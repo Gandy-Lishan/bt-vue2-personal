@@ -728,7 +728,7 @@ export default {
 				this.$store.commit('getMA', activatedMAList)
 				//
 				
-				this.indicatorUrlArr.splice(absoluteIndex, 1)
+				let removedUrl = this.indicatorUrlArr.splice(absoluteIndex, 1)
 				this.indicatorUrlArr.push('')
 				this.indicatorValArr.splice(absoluteIndex, 1)
 				this.indicatorValArr.push('')
@@ -758,6 +758,17 @@ export default {
 						value: this.indicatorUrlArr[index]
 					})
 				})
+
+				// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
+				let techIndicators = []
+				techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
+				techIndicators = techIndicators.filter(item=>item!=removedUrl)
+				techIndicators = [...new Set(techIndicators)]
+				this.$store.commit('getTechnicalIndicators', techIndicators)
+				
+				// 如果是MA，则移除它的信息和位置
+				CIQ.removeMALayout(removedUrl, 'entry', absoluteIndex)
+
 				CIQ.addIndicators()
 			}
 		},
@@ -871,15 +882,10 @@ export default {
 				this.$store.commit('getEntryIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
 				
 				//只保留第一个techindicator再techindicatorlist
-				let formateList = this.$store.state.formateTechnicalList
-				if (formateList.length === 0) {
-					formateList = this.loadShortLong()
-				}
-				const item = formateList.find(i=>i.value ==  indiVal)
-				this.$store.commit('getTechnicalIndicators', item?[item.url]:[])
+				this.$store.commit('getTechnicalIndicators', [indiUrl])
 				
 				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
-				CIQ.keepTheFirstMALayout(item?.url,'entry')
+				CIQ.keepTheFirstMALayout(indiUrl,'entry')
 
 				CIQ.addIndicators()
 			}
@@ -898,32 +904,6 @@ export default {
 			this.$emit('getEntryRelation', val)
 			this.$store.commit('clearEntrySignalArr')
 		},
-	// 之后不在这里定义
-    // load short and long technical list,从indicator拿来的
-    loadShortLong() {
-      const technicalList = CIQ.technicalCategory
-      let formatList = []
-      for (let i = 0; i < technicalList.length; i++) {
-        if (
-          technicalList[i].class === 'No_display_technical_indicator' ||
-          technicalList[i].class ===
-          'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
-        )
-          continue
-        technicalList[i].studies.forEach((item) => {
-          let obj = {}
-          obj.class = technicalList[i].class
-          obj.value = item.name
-          obj.url = item.url
-          formatList.push(obj)
-        })
-      }
-      formatList.sort(function (a, b) {
-        return a.value.localeCompare(b.value)
-      })
-      this.$store.commit('saveFormatTechnicalList', formatList)
-      return formatList
-    },
 		saveBacktestData(index) {
 			let vm = this
 			let checked = true

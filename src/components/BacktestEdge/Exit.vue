@@ -790,7 +790,7 @@ export default {
 
 				this.indicatorValArr.splice(absoluteIndex, 1)
 				this.indicatorValArr.push('')
-				this.indicatorUrlArr.splice(absoluteIndex, 1)
+				let removedUrl = this.indicatorUrlArr.splice(absoluteIndex, 1)
 				this.indicatorUrlArr.push('')
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex, 1)
@@ -818,6 +818,17 @@ export default {
 						value: this.indicatorUrlArr[index]
 					})
 				})
+
+				// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
+				let techIndicators = []
+				techIndicators.push(...CIQ.store.state.indicators.technicalIndicators)
+				techIndicators = techIndicators.filter(item=>item!=removedUrl)
+				techIndicators = [...new Set(techIndicators)]
+				this.$store.commit('getTechnicalIndicators', techIndicators)
+				
+				// 如果是MA，则移除它的信息和位置
+				CIQ.removeMALayout(removedUrl, 'exit', absoluteIndex)
+
 				CIQ.addIndicators()
 			}
 		},
