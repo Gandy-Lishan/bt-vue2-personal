@@ -294,7 +294,7 @@
 				content="Create New Backtest"
 				placement="bottom"
 			>
-				<button class="createNew" @click="refreshPage">
+				<button class="createNew" @click="refreshPageTemp">
 					<svg
 						class="sidebar_button_icon"
 						width="12"

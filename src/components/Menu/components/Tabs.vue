@@ -126,17 +126,17 @@ export default {
           ], type: 'info'
         },
         {
-          title: 'Range Of Rank', content: [
-            "ROR stands for Rate of Return, which represents the percentage change in price or indicator. It calculates the rate of change by comparing the current price or indicator value to the previous value. ROR helps traders and analysts assess the momentum and trend of short-term prices or indicators.",
-            "The steps to calculate ROR are as follows:",
+          title: '% of Previous Range', content: [
+            "% of Previous Range stands for Rate of Return, which represents the percentage change in price or indicator. It calculates the rate of change by comparing the current price or indicator value to the previous value. % of Previous Range helps traders and analysts assess the momentum and trend of short-term prices or indicators.",
+            "The steps to calculate % of Previous Range are as follows:",
             "1. Select a time period (e.g., 20 trading days).",
             "2. Obtain the current price or indicator value at the current point in time.",
             "3. Retrieve the price or indicator values within the specified time period (referred to as historical values).",
-            "4. Calculate the percentage change: ROR = ((Current Value - Lowest Historical Value) / (Highest Historical Value - Lowest Historical Value)) * 100.",
-            "For example, suppose a stock's current closing price is $50, the highest price 20 trading days ago was $60, and the lowest price was $40. The ROR would be (50 - 40) / (60 - 40) * 100 = 50. This means that the stock's price ranks in the top 50% over the past 20 trading days.",
-            "ROR can be used to assess the relative ranking of prices or indicators compared to previous periods. A positive ROR value indicates a relatively higher ranking within that period, with a larger value indicating a higher ranking. If it exceeds 100, it indicates a breakout above the previous high. Similarly, a negative ROR indicates a relatively lower ranking, possibly reaching a previous low point in the chart.",
-            "Traders can combine ROR with other technical indicators or price patterns to confirm market trends, identify overbought or oversold conditions, and formulate buying or selling strategies. It is important to note that ROR is a short-term indicator and sensitive to market noise. Therefore, it should be used in conjunction with other indicators and analysis tools to obtain more accurate trading signals and decisions.",
-            "Although ROR and ROC (Rate of Change) have slightly different calculation methods, ROR considers the highest and lowest prices within a specific time period to provide a more comprehensive reflection of price changes, while ROC only considers the starting and ending prices. However, both serve the same purpose of measuring the speed of price or indicator changes in the short term and assisting in the formulation of trading strategies."
+            "4. Calculate the percentage change: % of Previous Range = ((Current Value - Lowest Historical Value) / (Highest Historical Value - Lowest Historical Value)) * 100.",
+            "For example, suppose a stock's current closing price is $50, the highest price 20 trading days ago was $60, and the lowest price was $40. The % of Previous Range would be (50 - 40) / (60 - 40) * 100 = 50. This means that the stock's price ranks in the top 50% over the past 20 trading days.",
+            "% of Previous Range can be used to assess the relative ranking of prices or indicators compared to previous periods. A positive % of Previous Range value indicates a relatively higher ranking within that period, with a larger value indicating a higher ranking. If it exceeds 100, it indicates a breakout above the previous high. Similarly, a negative % of Previous Range indicates a relatively lower ranking, possibly reaching a previous low point in the chart.",
+            "Traders can combine % of Previous Range with other technical indicators or price patterns to confirm market trends, identify overbought or oversold conditions, and formulate buying or selling strategies. It is important to note that % of Previous Range is a short-term indicator and sensitive to market noise. Therefore, it should be used in conjunction with other indicators and analysis tools to obtain more accurate trading signals and decisions.",
+            "Although % of Previous Range and ROC (Rate of Change) have slightly different calculation methods, % of Previous Range considers the highest and lowest prices within a specific time period to provide a more comprehensive reflection of price changes, while ROC only considers the starting and ending prices. However, both serve the same purpose of measuring the speed of price or indicator changes in the short term and assisting in the formulation of trading strategies."
           ], type: 'info'
         },
         {
