@@ -212,6 +212,7 @@ export default {
 				this.tech.value = obj.value
 				this.tech.comparison = obj.comparison
 				this.editTechVal = obj.indicator
+        this.clearFormValidate()
 			}
 		}
 	}
