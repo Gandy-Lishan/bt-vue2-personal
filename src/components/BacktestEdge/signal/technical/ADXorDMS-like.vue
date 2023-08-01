@@ -103,7 +103,7 @@ export default {
 	},
 	data() {
 		var validateValueNegative = (rule, value, callback) => {
-      if (value === '') {
+      if (value === ''){
         return callback(new Error('Please input value'));
       } else if (isNaN(value)) {
         return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
@@ -271,10 +271,12 @@ export default {
 			var obj = CIQ.store.state.conditionRadio
 			obj[this.criteria][this.panelIndex] = val
 			CIQ.store.commit('setConditionRadio', obj)
-			if (val === ' +DI ADX ') {
+			if (val === '+DI ADX') {
 				this.tech.comparison = 'PADX'
+				this.tech.valueNegative = ''
 			} else if (val === '-DI ADX') {
 				this.tech.comparison = 'NADX'
+				this.tech.valuePositive = ''
 			}
 		},
 		saveCondition(index) {
@@ -283,6 +285,12 @@ export default {
 				return checked = true
 			}
 			let validForm
+			if(this.conditionRadio === '+DI ADX') {
+				this.tech.comparison = 'PADX'
+			}
+			if(this.conditionRadio === '-DI ADX') {
+				this.tech.comparison = 'NADX'
+			}
 			let tech = JSON.parse(JSON.stringify(this.tech))
 			if (this.conditionRadio === '+DI ADX') {
 				this.$refs['adxForm'].validateField(['valuePositive'], (errorMsg) => {
@@ -334,6 +342,7 @@ export default {
 					var cr = CIQ.store.state.conditionRadio
 					cr[this.criteria][this.panelIndex] = this.conditionRadio
 					CIQ.store.commit('setConditionRadio', cr)
+					this.clearFormValidate()
 			}
 			
 		}
