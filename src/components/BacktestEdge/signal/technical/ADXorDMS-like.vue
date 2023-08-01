@@ -103,11 +103,11 @@ export default {
 	},
 	data() {
 		var validateValueNegative = (rule, value, callback) => {
-      if (value === '') {
+      if (value === '' && this.conditionRadio === '-DI ADX'){
         return callback(new Error('Please input value'));
-      } else if (isNaN(value)) {
+      } else if (isNaN(value) && this.conditionRadio === '-DI ADX') {
         return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
-      } else {
+      } else if(this.conditionRadio === '-DI ADX'){
         // Convert ".X" to "0.X" format
         if (typeof value === 'string' && value.startsWith('.') && value.length > 1) {
           value = '0' + value;
@@ -122,11 +122,11 @@ export default {
       }
     };
 		var validateValuePositive = (rule, value, callback) => {
-      if (value === '') {
+      if (value === '' && this.conditionRadio === '+DI ADX') {
         return callback(new Error('Please input value'));
-      } else if (isNaN(value)) {
+      } else if (isNaN(value) && this.conditionRadio === '+DI ADX') {
         return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
-      } else {
+      } else if(this.conditionRadio === '+DI ADX'){
         // Convert ".X" to "0.X" format
         if (typeof value === 'string' && value.startsWith('.') && value.length > 1) {
           value = '0' + value;
@@ -273,8 +273,10 @@ export default {
 			CIQ.store.commit('setConditionRadio', obj)
 			if (val === ' +DI ADX ') {
 				this.tech.comparison = 'PADX'
+				this.tech.valueNegative = ''
 			} else if (val === '-DI ADX') {
 				this.tech.comparison = 'NADX'
+				this.tech.valuePositive = ''
 			}
 		},
 		saveCondition(index) {
@@ -283,6 +285,12 @@ export default {
 				return checked = true
 			}
 			let validForm
+			if(this.valueNegative !== '') {
+				this.tech.comparison = 'PADX'
+			}
+			if(this.valuePositive !== '') {
+				this.tech.comparison = 'NADX'
+			}
 			let tech = JSON.parse(JSON.stringify(this.tech))
 			if (this.conditionRadio === '+DI ADX') {
 				this.$refs['adxForm'].validateField(['valuePositive'], (errorMsg) => {
@@ -334,6 +342,7 @@ export default {
 					var cr = CIQ.store.state.conditionRadio
 					cr[this.criteria][this.panelIndex] = this.conditionRadio
 					CIQ.store.commit('setConditionRadio', cr)
+					this.clearFormValidate()
 			}
 			
 		}
