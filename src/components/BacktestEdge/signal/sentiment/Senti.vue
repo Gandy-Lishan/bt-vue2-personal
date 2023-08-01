@@ -324,7 +324,6 @@ export default {
           var obj = CIQ.store.state.conditionRadio
           obj[this.criteria][this.panelIndex] = this.conditionRadio
           CIQ.store.commit('setConditionRadio', obj)
-
           let vm = this
           let extremeValue = this.$store.state.extremeValue
           extremeValue.forEach((item) => {
