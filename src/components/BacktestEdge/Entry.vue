@@ -1,8 +1,6 @@
 // Entry Criteria
 <template>
 	<div class="entry-container">
-		{{indicatorUrlArr}}
-		{{indicatorValArr}}
 		<div class="signal-option-box">
 			<div class="entry-title-box">
 				<p class="criteria-title">Entry Criteria</p>
@@ -716,7 +714,7 @@ export default {
 
 				// 移除senti indicator附属ma
 				let techList = this.loadShortLong()
-				let removedUrl = techList.find(i=>i.value == this.indicatorValArr[absoluteIndex]).url
+				let removedUrl = techList.find(i=>i.value == this.indicatorValArr[absoluteIndex])?.url
 				var activatedMAList = this.$store.state.activatedMA
 				var MAListIndex = activatedMAList.findIndex(
 				(item) =>
