@@ -200,6 +200,7 @@
 									scope.row['Profit Target(%)'],
 									scope.row['Stop Loss(%)'],
 									scope.row['Win Rate(%)'],
+									scope.row['Expected Return(%)'],
 									scope.$index
 								)
 							"
@@ -211,7 +212,7 @@
 					:label="l"
 					:prop="l"
 					:key="index"
-					min-width="80"
+					min-width="70"
 				>
 					<template slot-scope="scope">
 						<router-link
@@ -274,7 +275,8 @@
 							'Best Time In Market(Bars)',
 							'Time In Market(Bars)',
 							'Profit Target(%)',
-							'Date'
+							'Date',
+							'Expected Return(%)'
 						].indexOf(l) !== -1
 							? 'custom'
 							: false
@@ -282,7 +284,11 @@
 					:label="l"
 					:prop="l"
 					:key="index"
-					min-width="90"
+					:min-width="[
+							'Best Time In Market(Bars)',
+							'Time In Market(Bars)',
+							'Expected Return(%)'
+						].indexOf(l) !== -1 ? '90' : '80'"
 				>
 					<template slot-scope="scope">
 						<p class="tableText">
@@ -374,6 +380,7 @@ export default {
 						this.selectedStopLosses.push(item['Stop Loss(%)'])
 						this.selectedProfitTargets.push(item['Profit Target(%)'])
 						this.selectedWinRates.push(item['Win Rate(%)'])
+						this.selectedWinRates.push(item['Expected Return(%)'])
 					}
 				})
 				this.calculateAlloc()
@@ -469,13 +476,13 @@ export default {
 			var colName = column.prop
 
 			if(['Stop Loss(%)','Best Time In Market(Bars)','Profit Target(%)'].indexOf(colName) !== -1){
-				if(sortingOrder == 'descending'){
+				if(sortingOrder == 'ascending'){
 					this.tableData.content.sort((a,b) => {
 						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
 						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
 						return _b - _a
 					})
-				}else if(sortingOrder == 'ascending'){
+				}else if(sortingOrder == 'descending'){
 					this.tableData.content.sort((a,b) => {
 						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
 						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
@@ -484,12 +491,12 @@ export default {
 				}else{
 				}
 			}
-			if(['Win Rate(%)'].indexOf(colName) !== -1){
-				if(sortingOrder == 'descending'){
+			if(['Win Rate(%)', 'Expected Return(%)'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
 					this.tableData.content.sort((a,b) => {
 						return b[colName] - a[colName]
 					})
-				}else if(sortingOrder == 'ascending'){
+				}else if(sortingOrder == 'descending'){
 					this.tableData.content.sort((a,b) => {
 						return a[colName] - b[colName]
 					})
@@ -497,11 +504,11 @@ export default {
 				}
 			}
 			if(['Date'].indexOf(colName) !== -1){
-				if(sortingOrder == 'descending'){
+				if(sortingOrder == 'ascending'){
 					this.tableData.content.sort((a,b) => {
 						return new Date(b[colName]) - new Date(a[colName])
 					})
-				}else if(sortingOrder == 'ascending'){
+				}else if(sortingOrder == 'descending'){
 					this.tableData.content.sort((a,b) => {
 						return new Date(a[colName]) - new Date(b[colName])
 					})
