@@ -57,7 +57,7 @@
 			<div class="header-part2">
 				<div class="filterBox">
 					<el-checkbox v-model="isPLSChecked"
-						>Profit Target > Stop Loss
+						>Only Show Profit Target > Stop Loss
 					</el-checkbox>
 				</div>
 			</div>
@@ -228,10 +228,44 @@
 						>
 					</template>
 				</el-table-column>
+				<el-table-column		
+					v-if="l == 'Market'"
+					:label="l"
+					:prop="l"
+					:key="index"
+					min-width="120"
+				>
+						<template slot="header">
+							Market
+							<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+							<span slot="content" v-html="textContent['Market']">
+							</span>
+							<i class="iconfont icon-wenhao"></i>
+						</el-tooltip>
+					</template>
+				</el-table-column>
+				<el-table-column		
+					v-if="l == 'Signal'"
+					:label="l"
+					:prop="l"
+					:key="index"
+					min-width="120"
+				>
+					<template slot-scope="scope">
+						{{ scope.row.Signal }}
+						<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+							<span slot="content" v-html="textContent[scope.row.Signal]">
+							</span>
+							<i class="iconfont icon-wenhao"></i>
+						</el-tooltip>
+					</template>
+				</el-table-column>
 				<el-table-column
 					v-if="
 						l != 'Symbol' &&
-						l != 'Select'
+						l != 'Select' &&
+						l != 'Signal' &&
+						l != 'Market'
 					"
 					:sortable="
 						[
@@ -258,6 +292,7 @@
 				</el-table-column>
 			</template>
 		</el-table>
+		{{currentItem}}
 	</div>
 </template>
 
@@ -300,6 +335,24 @@ export default {
 				categories: [{label:'Symbol',value:'Symbol'},{label:'Signal',value:'Signal'}],
 
 				isPLSChecked: false,
+				textContent: {
+					'MA':"This strategy utilizes the crossover of closing prices and moving averages as trading signals.<br/>It can further specify the direction of trades and operating rules,<br/>such as determining buy signals after a golden cross and sell signals after a death cross.",
+					'MAGap':"This strategy determines trading signals by comparing the difference between the moving average of the current day and the previous day.<br/>It can further specify the direction of trades and operating rules,<br/>such as determining buy signals after a golden cross and sell signals after a death cross.",
+					'MACDHist':"This strategy uses the crossover signals of the MACD histogram as trading signals.<br/>It can further specify the direction of trades and operating rules,<br/>such as determining buy signals after a golden cross and sell signals after a death cross.",
+					'MACDHistGap':"This strategy determines trading signals by comparing the difference between the MACDHist and the previous day's value.<br/>It can further specify the direction of trades and operating rules,<br/>such as determining buy signals after a golden cross and sell signals after a death cross.",
+					'Hammer followed by a raise':"If the previous day's candlestick shows a long lower shadow,<br/>indicating support at the bottom,<br/>a buy signal is generated when the price rises above a certain threshold after the opening.",
+					'Shooting Star followed by a fall':"If the previous day's candlestick shows a long upper shadow,<br/>indicating resistance at the top,<br/>a sell signal is generated when the price falls below a certain threshold after the opening.",
+					'UpTrend Pattern':"When the price surpasses the upward trendline connecting the peak points of an uptrend,<br/>it indicates a potential future rise and generates a buy signal.",
+					'DownTrend Pattern':"When the price falls below the downward trendline connecting the trough points of a downtrend,<br/>it indicates a potential future decline and generates a sell signal.",
+					'Symbol Close > its\' MA200 and Optix MA5 < 35':"we want stocks that are above their 200-day moving average with an Optix 5-day moving average less than 35.",
+					'Symbol Close > its\' MA200 and Optix < 30':"we want stocks that are above their 200-day moving average with an Optix less than 30.",
+					'Optix MA10 < 30 and Optix < 20':"Optix indicators with a 10-day moving average less than 30 and that day's Optix value is less than 20.",
+					'PriceBreakout':"When the closing price of a stock ranks above 0 in relation to the closing prices of the past 21 trading days, <br/>a golden cross occurs, indicating an upward breakout and generating a buy signal. <br/>This suggests that the stock's price has entered a breakout phase and is likely to continue rising.",
+					'HighPoints':"When the highest price of a stock ranks above 100 in relation to the highest prices of the<br/> past 13 trading days (higher stock prices correspond to higher rankings), <br/>it forms a 13-day new high and generates a buy signal. This indicates that <br/>the stock is experiencing a positive breakthrough and is in an upward trend.",
+					'LowPoints':"When the lowest price of a stock ranks below 0 in relation to the lowest prices of the past 13 trading days, <br/>it forms a 13-day new low and generates a sell signal. <br/>This indicates that the stock is in a downtrend and can be shorted.",
+					'RSI':"When the RSI indicator forms a golden cross above 40, it suggests that the indicator is about to<br/>recover from an oversold state to the midpoint, indicating a potential long entry signal. <br/>RSI can reflect whether a stock is in an overbought or oversold condition <br />but should be used in conjunction with the trend analysis.",
+					'Market': 'Closing price above the 252-day moving average is considered as Uptrend.<br/>Closing price below the 252-day moving average is considered as Downtrend.'
+				}
 		}
 	},
 	computed: {
@@ -495,20 +548,20 @@ export default {
 			})
 		},
 		showPopup(item) {
-    // 设置当前悬停的项
-		const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Symbol Close > its\' MA200 and Optix MA5 < 35', 'Symbol Close > its\' MA200 and Optix < 30', 'Optix MA10 < 30 and Optix < 20', 'PriceBreakout', 'HighPoints', 'LowPoints', 'RSI']
-		if(signalArr.includes(item)) {
-			this.currentItem = item;
-			// 显示弹窗
-			this.popupVisible = true;
-		}else {
+			// 设置当前悬停的项
+				const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Symbol Close > its\' MA200 and Optix MA5 < 35', 'Symbol Close > its\' MA200 and Optix < 30', 'Optix MA10 < 30 and Optix < 20', 'PriceBreakout', 'HighPoints', 'LowPoints', 'RSI']
+				if(signalArr.includes(item)) {
+					this.currentItem = item;
+					// 显示弹窗
+					this.popupVisible = true;
+				}else {
+					this.popupVisible = false;
+				}
+		},
+		hidePopup() {
+			// 隐藏弹窗
 			this.popupVisible = false;
-		}
-  },
-  hidePopup() {
-    // 隐藏弹窗
-    this.popupVisible = false;
-  },
+		},
 	}
 };
 </script>
@@ -534,6 +587,9 @@ h4 {
 }
 .table-label {
 	margin: 20px 0;
+}
+.el-table /deep/ thead .iconfont{
+	color: #606266;
 }
 .table-header {
 	margin-bottom: 10px;

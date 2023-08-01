@@ -121,11 +121,10 @@
 							:exitItemCheck="exitItemCheck"
 							@getIndicatorUrl="getIndicatorUrl"
 							@getIndicatorVal="getIndicatorVal"
-							@getTechIndiValue="getTechIndiValue"
 							@getIndicatorRadio="getIndicatorRadio"
 							@getTechIndiObj="getTechIndiObj"
-							@getFreqArray="getFreqArray"
 							@exitUserUploadFileContent="exitUserUploadFileContent"
+							@getFreqArray="getFreqArray"
 						></indicator>
 						<senti
 							v-bind="$attrs"
@@ -447,13 +446,13 @@ import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Li
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 import { eventBus } from "@/components/BacktestEdge/EventBus/Bus.ts";
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { mapMutations } from "vuex"
 
 export default {
 	name: 'exit',
 	inheritAttrs: false,
 	data() {
 		return {
-			techIndiValue: '',
 			indicatorRadio: 'sentiment',
 			signalOptions: [
 				{
@@ -486,8 +485,8 @@ export default {
 			refs: {},
 			indicatorUrlArr: new Array(5).fill(''),
 			indicatorValArr: new Array(5).fill(''),
-			// riskValArr: new Array(5).fill(''),
 			freqArray: new Array(5).fill(''),
+			// riskValArr: new Array(5).fill(''),
 			techVal: '',
 			exitItemCheck: false,
 			delay_bars: 0,
@@ -589,7 +588,35 @@ export default {
   eventBus.$on('userExitFileSelect', this.userExitFileSelect)
 },
 	methods: {
+		...mapMutations(['setFrequencyArray']),
 		clearForm() {
+			Object.assign(this.$data, this.$options.data())
+			// Reset data for all subcomponents
+			try {
+				for (let i = 0; i < this.indicatorRadioArr.length; i++) {
+					if (this.indicatorRadioArr[i]) {
+						this.$refs.indiChild[i].clearForm()
+						this.$refs.sentiChild[i].clearForm()
+						this.$refs.symbolChild[i].clearForm()
+						this.$refs.cciChild[i].clearForm()
+						this.$refs.maChild[i].clearForm()
+						this.$refs.macdChild[i].clearForm()
+						this.$refs.bollBandsLikeChild[i].clearForm()
+						this.$refs.EFTLikeChild[i].clearForm()
+						this.$refs.stochasticsLikeChild[i].clearForm()
+						this.$refs.ADXLikeChild[i].clearForm()
+						this.$refs.ERILikeChild[i].clearForm()
+						this.$refs.aligatorLikeChild[i].clearForm()
+						this.$refs.LRFLikeChild[i].clearForm()
+						this.$refs.trailingStopLikeChild[i].clearForm()
+					}
+				}
+			} catch (err) {
+				console.error(err)
+			}
+		},
+		resetForm() {
+			// 给clear form 按钮和crate new backtest 按钮用
 			Object.assign(this.$data, this.$options.data())
 			// 清空表单时让退场保持为only rik control
 			this.exitItemCheck = true
@@ -638,7 +665,7 @@ export default {
 						label: 'Only Use Risk Control'
 					}
 				]
-				this.exitItemCheck = true
+				// this.exitItemCheck = true
 			} else {
 				this.signalOptions = [
 					{
@@ -748,18 +775,37 @@ export default {
 					item.title = 'Condition' + (index + 1)
 				})
 				this.editableTabsValue = activeName
+
+				// 移除senti indicator附属ma
+				var activatedMAList = this.$store.state.activatedMA
+				var MAListIndex = activatedMAList.findIndex(
+				(item) =>
+					item.url == this.indicatorUrlArr[absoluteIndex] &&
+					item.criteria == 'exit' &&
+					item.index == absoluteIndex
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('getMA', activatedMAList)
+				//
+
 				this.indicatorValArr.splice(absoluteIndex, 1)
 				this.indicatorValArr.push('')
-				this.indicatorUrlArr.splice(absoluteIndex, 1)
+				let removedUrl = this.indicatorUrlArr.splice(absoluteIndex, 1)
 				this.indicatorUrlArr.push('')
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex, 1)
 				this.techIndiObj.push('')
+				this.freqArray.splice(absoluteIndex, 1)
+				this.freqArray.push('')
 				const freqObj = {
-					index: absoluteIndex,
-					value: ''
-				}
-				this.getFreqArray(freqObj)
+						index: absoluteIndex,
+						value: '',
+						criteria: 'exit',
+						key: `exit_${absoluteIndex}`
+					}
+					this.setFrequencyArray(freqObj)
 				if (
 					this.relation == 2 &&
 					this.score >= this.indicatorRadioArr.length + 1
@@ -776,6 +822,11 @@ export default {
 						value: this.indicatorUrlArr[index]
 					})
 				})
+				
+				// 如果是MA，则移除它的信息和位置
+				CIQ.removeMALayout(removedUrl, 'exit', absoluteIndex)
+
+				CIQ.addIndicators()
 			}
 		},
 		getIndicatorUrl(obj) {
@@ -785,33 +836,18 @@ export default {
 			this.techVal = obj.value
 			this.indicatorValArr.splice(obj.index, 1, obj.value)
 		},
-		getTechIndiValue(val) {
-			this.techIndiValue = val
+		getFreqArray(obj) {
+			this.freqArray.splice(obj.index, 1, obj.value)
 		},
 		getIndicatorRadio(obj) {
 			this.indicatorRadio = obj.value
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
 		},
-		getFreqArray(obj) {
-			this.freqArray.splice(obj.index, 1, obj.value)
-			let freqArray = JSON.parse(JSON.stringify(this.freqArray))
-			freqArray = freqArray.filter(item => (item !== null && item !== undefined && item !== ''))
-			freqArray = Array.from(new Set(freqArray))
-			const customSort = (a, b) => {
-					const indexA = sortOrder.indexOf(a);
-					const indexB = sortOrder.indexOf(b);
-					return indexA - indexB;
-			}
-			const sortOrder = ['Daily', 'Weekly', 'Monthly'];
-			freqArray = freqArray.sort(customSort);
-			const maxFreq = freqArray[freqArray.length - 1]
-			console.log('maxFreq 最大的周期', maxFreq)
-      this.$emit('sendExitMaxFreq', maxFreq)
-		},
 		addExitSignalLength() {
 			if (this.relation == 2 || this.relation == 3 || this.relation == 0) {
-				this.$emit('sendExitSignalIndex', this.indicatorRadioArr.length)
-				for (let i = 0; i < this.indicatorRadioArr.length; i++) {
+				const filterValArr = this.indicatorValArr.filter(item => item != '')
+				this.$emit('sendExitSignalIndex', filterValArr.length)
+				for (let i = 0; i < filterValArr.length; i++) {
 					// Apply for space
 					let obj = {}
 					obj.criteria = 'exit'
@@ -890,17 +926,52 @@ export default {
 				this.editableTabsValue = '1'
 				this.score = 1
 				this.signals_in_market = 1
+				// 移除	indicatorSentiArr
 				const indiUrl = this.indicatorUrlArr[0]
 				const indiVal = this.indicatorValArr[0]
-				const freq = this.freqArray[0]
+				const indiRadio = this.indicatorRadioArr[0]
+				const freqVal = this.freqArray[0]
 				this.indicatorUrlArr = [indiUrl, ...(new Array(4).fill(''))]
 				this.indicatorValArr = [indiVal, ...(new Array(4).fill(''))]
-				this.freqArray = new Array(5).fill('')
+				this.indicatorRadioArr = [indiRadio]
+				this.freqArray = [freqVal, ...(new Array(4).fill(''))]
+				// 移除	indicatorTechArr
+				const techObj = this.techIndiObj[0]
+				this.techIndiObj = [techObj, ...(new Array(4).fill(''))]
+
+				// 设定频率
 				const freqObj = {
 					index: 0,
-					value: freq
+					value: freqVal,
+					criteria: 'exit',
+					key: `exit_0`,
+					relation: 1
 				}
-				this.getFreqArray(freqObj)
+				this.setFrequencyArray(freqObj)
+				try {
+					for (let index = 1; index < this.indicatorUrlArr.length; index++) {
+					this.$refs.indiChild[index]?.resetIndicator()
+				}
+				} catch (error) {
+					console.log(error)
+				}
+
+				//When only keep the first tab, update the vuex status
+				// 移除senti indicator附属ma
+				var activatedMAList = this.$store.state.activatedMA
+				activatedMAList = activatedMAList.filter((item)=>
+					item.criteria == 'exit' &&
+					item.index == 0
+				)
+				this.$store.commit('getMA', activatedMAList)
+
+				let indicatorList = this.$store.state.indicators.formIndicators.exit
+				this.$store.commit('getExitIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
+				
+				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
+				CIQ.keepTheFirstMALayout('exit')
+
+				CIQ.addIndicators()
 			}
 			if (val == 2 || val == 3) {
 				if (this.editableTabs.length === 1) {
@@ -918,16 +989,69 @@ export default {
 			if(val == 0) {
 					this.indicatorUrlArr = new Array(5).fill('')
 					this.indicatorValArr = new Array(5).fill('')
-					this.freqArray = new Array(5).fill('')
+					this.indicatorRadioArr = ['sentiment']
+					this.techIndiObj = new Array(5).fill('')
 					const freqObj = {
 						index: 0,
-						value: ''
+						value: '',
+						criteria: 'exit',
+						key: `exit_0`,
+						relation: 0
 					}
-					this.getFreqArray(freqObj)
+					this.setFrequencyArray(freqObj)
+					
+					//When removing the exit criteria, update the vuex status
+					// 移除senti indicator附属ma
+					var activatedMAList = this.$store.state.activatedMA
+					activatedMAList = activatedMAList.filter((item)=>
+						item.criteria == 'entry'
+					)
+					this.$store.commit('getMA', activatedMAList)
+
+					this.$store.commit('getExitIndicatorsList', [])
+
+					// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
+					CIQ.removeExitMALayout()
+
+					CIQ.addIndicators()
+
+					try {
+							for (let index = 0; index < this.indicatorUrlArr.length; index++) {
+								this.$refs.indiChild[index]?.resetIndicator()
+							}
+					} catch (error) {
+						console.log(error)
+					}
 				}
 			this.$emit('getExitRelation', val)
 			this.$store.commit('clearExitSignalArr')
 		},
+	// 之后不在这里定义
+    // load short and long technical list,从indicator拿来的
+    loadShortLong() {
+      const technicalList = CIQ.technicalCategory
+      let formatList = []
+      for (let i = 0; i < technicalList.length; i++) {
+        if (
+          technicalList[i].class === 'No_display_technical_indicator' ||
+          technicalList[i].class ===
+          'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
+        )
+          continue
+        technicalList[i].studies.forEach((item) => {
+          let obj = {}
+          obj.class = technicalList[i].class
+          obj.value = item.name
+          obj.url = item.url
+          formatList.push(obj)
+        })
+      }
+      formatList.sort(function (a, b) {
+        return a.value.localeCompare(b.value)
+      })
+      this.$store.commit('saveFormatTechnicalList', formatList)
+      return formatList
+    },
 		saveBacktestData(index) {
 			let checked = true
 			// Save the selected indicator to vuex
@@ -1170,30 +1294,6 @@ export default {
 				}
 			})
 		},
-		loadShortLong() {
-      const technicalList = CIQ.technicalCategory
-      let formatList = []
-      for (let i = 0; i < technicalList.length; i++) {
-        if (
-          technicalList[i].class === 'No_display_technical_indicator' ||
-          technicalList[i].class ===
-          'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
-        )
-          continue
-        technicalList[i].studies.forEach((item) => {
-          let obj = {}
-          obj.class = technicalList[i].class
-          obj.value = item.name
-          obj.url = item.url
-          formatList.push(obj)
-        })
-      }
-      formatList.sort(function (a, b) {
-        return a.value.localeCompare(b.value)
-      })
-      this.$store.commit('saveFormatTechnicalList', formatList)
-      return formatList
-    },
 		setEditPanel(num, data) {
 			this.relation = data.exit.relation ? data.exit.relation : 1
 
@@ -1251,7 +1351,6 @@ export default {
 					let indicatorName = data.exit.signals[j].indicator
 					for (let i = 0; i < formateTechnicalList.length; i++) {
 						if (indicatorName === formateTechnicalList[i].value) {
-							this.techIndiValue = formateTechnicalList[i].class
 							this.techIndiObj[j] = formateTechnicalList[i].class
 							break
 						}

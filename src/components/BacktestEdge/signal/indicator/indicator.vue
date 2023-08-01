@@ -14,6 +14,7 @@
 				<el-form-item prop="sentimentIndicator">
 					<div class="indicatorSearchBox">
 						<el-autocomplete
+              ref="sentiInput"
 							prefix-icon="el-icon-search"
 							class="inline-input"
 							clearable
@@ -49,6 +50,7 @@
 				<el-form-item prop="technicalIndicator">
 					<div class="indicatorSearchBox">
 						<el-autocomplete
+              ref="techInput"
 							:disabled="!(indicatorRadio === 'Technical Indicator')"
 							class="inline-input"
 							clearable
@@ -57,6 +59,7 @@
 							:fetch-suggestions="indicatorTechnicalSearch"
 							placeholder="Input the technical indicator"
 							@select="handleTechnicalSelect"
+              @clear="clearTechnicalSelect"
 						></el-autocomplete>
 						<el-tooltip effect="dark" placement="top">
 							<span slot="content"
@@ -71,9 +74,11 @@
 			<div class="indicator-container symbolBox">
 				<el-form-item>
 					<el-radio
+            ref="symbolInput"
 						v-model="indicatorRadio"
 						label="Symbol OHLCV"
 						@change="changeIndicatorChecked"
+            @clear="clearSymbolSelect"
 					>
 					</el-radio>
 				</el-form-item>
@@ -450,6 +455,10 @@ export default {
             valObj.value = CIQ.indicatorList[i].chart_name
             valObj.index = this.panelIndex
             this.$emit('getIndicatorVal', valObj)
+            let freqObj = {}
+            freqObj.value = CIQ.indicatorList[i].updated
+            freqObj.index = this.panelIndex
+            this.$emit('getFreqArray', freqObj)
             // Remove form verification
             this.clearFormValidate()
             let radioObj = {}
@@ -507,6 +516,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setFrequencyArray']),
     myFunction() {
       this.$refs.myDropdown.classList.toggle('show')
     },
@@ -540,24 +550,6 @@ export default {
     },
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
-      if(queryString == '') {
-        let freqObj = {}
-        freqObj.value = ''
-        freqObj.index = this.panelIndex
-        this.$emit('getFreqArray', freqObj)
-
-        let indiValObj = {}
-        indiValObj.value = ''
-        indiValObj.index = this.panelIndex
-        this.$emit('getIndicatorVal', indiValObj)
-
-        let indiUrlObj = {}
-        indiUrlObj.index = this.panelIndex
-        indiUrlObj.url = ''
-        this.$emit('getIndicatorUrl', indiUrlObj)
-
-        // lishn 判断需要小龙写
-      }
       var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
       sentimentIndicatorList.sort(function (a, b) {
         return a.value.localeCompare(b.value)
@@ -623,10 +615,25 @@ export default {
         )
       }
     },
+    resetIndicator() {
+      this.si.sentimentIndicator = ''
+      this.si.technicalIndicator = ''
+      this.si.symbolIndicator = ''
+      this.si.userIndicator = ''
+      this.$refs.upload.clearFiles()
+      this.fileList = []
+    },
     clearSentimentSelect() {
+      var sentimentIndicatorList = this.$store.state.sentimentIndicatorList
+      const item = sentimentIndicatorList.find(i=>i.value ==  this.$refs.sentiInput.value)
+
+      this.currentSentiUpdated = item.updated
       let freqObj = {}
       freqObj.value = ''
       freqObj.index = this.panelIndex
+      freqObj.criteria = this.criteria
+      freqObj.key = `${this.criteria}_${this.panelIndex}`
+      this.setFrequencyArray(freqObj)
       this.$emit('getFreqArray', freqObj)
 
       let indiValObj = {}
@@ -634,21 +641,63 @@ export default {
       indiValObj.index = this.panelIndex
       this.$emit('getIndicatorVal', indiValObj)
 
-      let indiUrlObj = {}
-      indiUrlObj.index = this.panelIndex
-      indiUrlObj.url = ''
-      this.$emit('getIndicatorUrl', indiUrlObj)
+      // remove a MA tat already exists in current criteria before loading
+      var activatedMAList = this.$store.state.activatedMA
+      if (this.criteria == 'entry') {
+        var MAListIndex = activatedMAList.findIndex(
+          (item) =>
+            item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex] &&
+            item.criteria == this.criteria &&
+            item.index == this.panelIndex
+        )
+        if (MAListIndex != -1) {
+          activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
+        this.$store.commit('getEntryIndicators', {
+          index: this.panelIndex,
+          value: ''
+        })
+        let indiUrlObj = {}
+        indiUrlObj.index = this.panelIndex
+        indiUrlObj.url = ''
+        this.$emit('getIndicatorUrl', indiUrlObj)
+      } else {
+        var MAListIndex = activatedMAList.findIndex(
+          (item) =>
+            item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex] &&
+            item.criteria == this.criteria &&
+            item.index == this.panelIndex
+        )
+        if (MAListIndex != -1) {
+          activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
+        this.$store.commit('getExitIndicators', {
+          index: this.panelIndex,
+          value: ''
+        })
+        let indiUrlObj = {}
+        indiUrlObj.index = this.panelIndex
+        indiUrlObj.url = ''
+        this.$emit('getIndicatorUrl', indiUrlObj)
+      }
 
       // lishn 判断需要小龙写
+      CIQ.addIndicators()
     },
     handleSentimentSelect(item) {
       this.currentSentiUpdated = item.updated
       let freqObj = {}
       freqObj.value = item.updated
       freqObj.index = this.panelIndex
+      freqObj.criteria = this.criteria
+      freqObj.key = `${this.criteria}_${this.panelIndex}`
+      this.setFrequencyArray(freqObj)
       this.$emit('getFreqArray', freqObj)
 
       // old version only
+      // 限制同屏显示个数
       var countExistIndicator = 0
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
         for (var i in CIQ.store.state.builtinList) {
@@ -670,7 +719,7 @@ export default {
         return
       }
 
-      this.si.sentimentIndicator = item.value
+      //this.si.sentimentIndicator = item.value
       let obj = {}
       obj.value = item.value
       obj.index = this.panelIndex
@@ -725,9 +774,78 @@ export default {
       }
       CIQ.addIndicators()
     },
-    // todo handle symobl select
+    clearSymbolSelect() {
+      let freqObj = {}
+      freqObj.value = ''
+      freqObj.index = this.panelIndex
+      freqObj.criteria = this.criteria
+      freqObj.key = `${this.criteria}_${this.panelIndex}`
+      this.setFrequencyArray(freqObj)
+      this.$emit('getFreqArray', freqObj)
+
+      let indiValObj = {}
+      indiValObj.value = ''
+      indiValObj.index = this.panelIndex
+      this.$emit('getIndicatorVal', indiValObj)
+
+      // remove a MA tat already exists in current criteria before loading
+      var activatedMAList = this.$store.state.activatedMA
+      if (this.criteria == 'entry') {
+        var MAListIndex = activatedMAList.findIndex(
+          (item) =>
+            item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex] &&
+            item.criteria == this.criteria &&
+            item.index == this.panelIndex
+        )
+        if (MAListIndex != -1) {
+          activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
+        this.$store.commit('getEntryIndicators', {
+          index: this.panelIndex,
+          value: ''
+        })
+        let indiUrlObj = {}
+        indiUrlObj.index = this.panelIndex
+        indiUrlObj.url = ''
+        this.$emit('getIndicatorUrl', indiUrlObj)
+      } else {
+        var MAListIndex = activatedMAList.findIndex(
+          (item) =>
+            item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex] &&
+            item.criteria == this.criteria &&
+            item.index == this.panelIndex
+        )
+        if (MAListIndex != -1) {
+          activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
+        this.$store.commit('getExitIndicators', {
+          index: this.panelIndex,
+          value: ''
+        })
+        let indiUrlObj = {}
+        indiUrlObj.index = this.panelIndex
+        indiUrlObj.url = ''
+        this.$emit('getIndicatorUrl', indiUrlObj)
+      }
+
+      // lishn 判断需要小龙写
+      CIQ.addIndicators()
+    },
     handleSymbolSelect(item) {
       this.si.symbolIndicator = item.label
+
+      // symbol也需要设置daily的FrequencyArray
+      // 防止changeRelation到singleCondition后报错
+      let freqObj = {}
+      freqObj.value = 'Daily'
+      freqObj.index = this.panelIndex
+      freqObj.criteria = this.criteria
+      freqObj.key = `${this.criteria}_${this.panelIndex}`
+      this.setFrequencyArray(freqObj)
+      this.$emit('getFreqArray', freqObj)
+
       let obj = {}
       obj.value = item.label
       obj.index = this.panelIndex
@@ -782,16 +900,92 @@ export default {
       }
       CIQ.addIndicators()
     },
+    clearTechnicalSelect() {
+        let formateList = this.$store.state.formateTechnicalList
+        if (formateList.length === 0) {
+          formateList = vm.loadShortLong()
+        }
+      const item = formateList.find(i=>i.value ==  this.$refs.techInput.value)
+
+      let freqObj = {}
+      freqObj.value = ''
+      freqObj.index = this.panelIndex
+      freqObj.criteria = this.criteria
+      freqObj.key = `${this.criteria}_${this.panelIndex}`
+      this.setFrequencyArray(freqObj)
+      this.$emit('getFreqArray', freqObj)
+
+      let valObj = {}
+      valObj.index = this.panelIndex
+      valObj.value = ''
+      this.$emit('getIndicatorVal', valObj)
+      const vm = this
+      let url = item.url
+      let obj = {}
+      obj.index = this.panelIndex
+      obj.class = ''
+      this.$emit('getTechIndiObj', obj)
+
+      // remove a MA tat already exists in current criteria before loading
+      var activatedMAList = this.$store.state.activatedMA
+      if (this.criteria == 'entry') {
+        var MAListIndex = activatedMAList.findIndex(
+          (item) =>
+            item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex] &&
+            item.criteria == this.criteria &&
+            item.index == this.panelIndex
+        )
+        if (MAListIndex != -1) {
+          activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
+        this.$store.commit('getEntryIndicators', {
+          index: this.panelIndex,
+          value: ''
+        })
+      } else {
+        var MAListIndex = activatedMAList.findIndex(
+          (item) =>
+            item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex] &&
+            item.criteria == this.criteria &&
+            item.index == this.panelIndex
+        )
+        if (MAListIndex != -1) {
+          activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
+        this.$store.commit('getExitIndicators', {
+          index: this.panelIndex,
+          value: ''
+        })
+      }
+      
+      // 如果是MA，则移除它的信息和位置
+      CIQ.removeMALayout(url, this.criteria, this.panelIndex)
+      // lishn 判断需要小龙写
+     if (arguments[1] != true) {
+        CIQ.addIndicators()
+      }
+    },
     handleTechnicalSelect(item) {
       this.si.technicalIndicator = item.value
+
+      // tech也需要设置daily的FrequencyArray
+      // 防止changeRelation到singleCondition后报错
+      let freqObj = {}
+      freqObj.value = 'Daily'
+      freqObj.index = this.panelIndex
+      freqObj.criteria = this.criteria
+      freqObj.key = `${this.criteria}_${this.panelIndex}`
+      this.setFrequencyArray(freqObj)
+      this.$emit('getFreqArray', freqObj)
+
       let valObj = {}
       valObj.index = this.panelIndex
       valObj.value = item.value
       this.$emit('getIndicatorVal', valObj)
       const vm = this
-      let val = item.value
       let url = item.url
-      this.$emit('getTechIndiValue', item.class)
       let obj = {}
       obj.index = this.panelIndex
       obj.class = item.class
@@ -816,6 +1010,11 @@ export default {
           index: this.panelIndex,
           value: url
         })
+
+        let obj = {}
+        obj.index = this.panelIndex
+        obj.url = url
+        this.$emit('getIndicatorUrl', obj)
       } else {
         // remove MA from Vuex after loading Tech
         var activatedMAList = CIQ.store.state.activatedMA
@@ -835,6 +1034,11 @@ export default {
           index: this.panelIndex,
           value: url
         })
+
+        let obj = {}
+        obj.index = this.panelIndex
+        obj.url = url
+        this.$emit('getIndicatorUrl', obj)
       }
       // store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
       let techIndicators = []
@@ -860,13 +1064,82 @@ export default {
         CIQ.addIndicators()
       }
     },
+    clearUserOwnIndicatorSelect() {
+      let freqObj = {}
+      freqObj.value = ''
+      freqObj.index = this.panelIndex
+      freqObj.criteria = this.criteria
+      freqObj.key = `${this.criteria}_${this.panelIndex}`
+      this.setFrequencyArray(freqObj)
+      this.$emit('getFreqArray', freqObj)
 
+      let indiValObj = {}
+      indiValObj.value = ''
+      indiValObj.index = this.panelIndex
+      this.$emit('getIndicatorVal', indiValObj)
+
+      // remove a MA tat already exists in current criteria before loading
+      var activatedMAList = this.$store.state.activatedMA
+      if (this.criteria == 'entry') {
+        var MAListIndex = activatedMAList.findIndex(
+          (item) =>
+            item.url == this.$store.state.indicators.formIndicators.entry[this.panelIndex] &&
+            item.criteria == this.criteria &&
+            item.index == this.panelIndex
+        )
+        if (MAListIndex != -1) {
+          activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
+        this.$store.commit('getEntryIndicators', {
+          index: this.panelIndex,
+          value: ''
+        })
+        let indiUrlObj = {}
+        indiUrlObj.index = this.panelIndex
+        indiUrlObj.url = ''
+        this.$emit('getIndicatorUrl', indiUrlObj)
+      } else {
+        var MAListIndex = activatedMAList.findIndex(
+          (item) =>
+            item.url == this.$store.state.indicators.formIndicators.exit[this.panelIndex] &&
+            item.criteria == this.criteria &&
+            item.index == this.panelIndex
+        )
+        if (MAListIndex != -1) {
+          activatedMAList.splice(MAListIndex, 1)
+        }
+        this.$store.commit('getMA', activatedMAList)
+        this.$store.commit('getExitIndicators', {
+          index: this.panelIndex,
+          value: ''
+        })
+        let indiUrlObj = {}
+        indiUrlObj.index = this.panelIndex
+        indiUrlObj.url = ''
+        this.$emit('getIndicatorUrl', indiUrlObj)
+      }
+
+      // lishn 判断需要小龙写
+      CIQ.addIndicators()
+    },
     handleUsersOwnIndicatorSelect(data) {
-      console.log('handleUsersOwnIndicatorSelect')
       const frequency = 'Daily'
       const indicatorName = data.file_name
       const indicatorUrl = data.file_id
       this.currentSentiUpdated = frequency
+
+      // user也需要设置daily的FrequencyArray
+      // 防止changeRelation到singleCondition后报错
+
+      let freqObj = {}
+      freqObj.value = 'Daily'
+      freqObj.index = this.panelIndex
+      freqObj.criteria = this.criteria
+      freqObj.key = `${this.criteria}_${this.panelIndex}`
+      this.setFrequencyArray(freqObj)
+      this.$emit('getFreqArray', freqObj)
+      
       // old version only
       var countExistIndicator = 0
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -1324,6 +1597,14 @@ export default {
                 // Set the tiemframe that currently fills the indicator. If the indicator does not match after switching the timeframe, it will be removed
                 this.currentSentiUpdated = item.updated
                 vm.$emit('getIndicatorUrl', obj)
+
+                let freqObj = {}
+                freqObj.value = item.updated
+                freqObj.index = vm.panelIndex
+                freqObj.criteria = vm.criteria
+                freqObj.key = `${vm.criteria}_${vm.panelIndex}`
+                vm.setFrequencyArray(freqObj)
+                vm.$emit('getFreqArray', freqObj)
               }
             })
           }
@@ -1579,6 +1860,8 @@ export default {
         }
         this.$refs.upload.clearFiles();
         this.fileList = []
+
+        this.clearUserOwnIndicatorSelect()
       } catch (error) {
         console.log('删除失败', error)
       }
