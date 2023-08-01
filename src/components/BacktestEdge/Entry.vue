@@ -713,10 +713,13 @@ export default {
 				this.editableTabsValue = activeName
 
 				// 移除senti indicator附属ma
+				let techList = this.loadShortLong()
+				let removedUrl = techList.find(i=>i.value == this.indicatorValArr[absoluteIndex]).url
+
 				var activatedMAList = this.$store.state.activatedMA
 				var MAListIndex = activatedMAList.findIndex(
 				(item) =>
-					item.url == this.indicatorUrlArr[absoluteIndex] &&
+					item.url == removedUrl &&
 					item.criteria == 'entry' &&
 					item.index == absoluteIndex
 				)
@@ -726,7 +729,7 @@ export default {
 				this.$store.commit('getMA', activatedMAList)
 				//
 				
-				let removedUrl = this.indicatorUrlArr.splice(absoluteIndex, 1)
+				this.indicatorUrlArr.splice(absoluteIndex, 1)
 				this.indicatorUrlArr.push('')
 				this.indicatorValArr.splice(absoluteIndex, 1)
 				this.indicatorValArr.push('')
@@ -1221,7 +1224,33 @@ export default {
 			await this.$refs.indiChild[data.index].changeIndicatorChecked("Users' Own Indicator")
 			await this.$refs.indiChild[data.index].handleUsersOwnIndicatorSelect(data.val.data)
 			await this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
-		}
+		},
+		// 之后不在这里定义
+		// load short and long technical list,从indicator拿来的
+		loadShortLong() {
+			const technicalList = CIQ.technicalCategory
+			let formatList = []
+			for (let i = 0; i < technicalList.length; i++) {
+				if (
+				technicalList[i].class === 'No_display_technical_indicator' ||
+				technicalList[i].class ===
+				'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
+				)
+				continue
+				technicalList[i].studies.forEach((item) => {
+				let obj = {}
+				obj.class = technicalList[i].class
+				obj.value = item.name
+				obj.url = item.url
+				formatList.push(obj)
+				})
+			}
+			formatList.sort(function (a, b) {
+				return a.value.localeCompare(b.value)
+			})
+			this.$store.commit('saveFormatTechnicalList', formatList)
+			return formatList
+		},
 	}
 }
 </script>

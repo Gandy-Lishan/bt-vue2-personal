@@ -777,10 +777,13 @@ export default {
 				this.editableTabsValue = activeName
 
 				// 移除senti indicator附属ma
+				let techList = this.loadShortLong()
+				let removedUrl = techList.find(i=>i.value == this.indicatorValArr[absoluteIndex]).url
+
 				var activatedMAList = this.$store.state.activatedMA
 				var MAListIndex = activatedMAList.findIndex(
 				(item) =>
-					item.url == this.indicatorUrlArr[absoluteIndex] &&
+					item.url == removedUrl &&
 					item.criteria == 'exit' &&
 					item.index == absoluteIndex
 				)
@@ -792,7 +795,7 @@ export default {
 
 				this.indicatorValArr.splice(absoluteIndex, 1)
 				this.indicatorValArr.push('')
-				let removedUrl = this.indicatorUrlArr.splice(absoluteIndex, 1)
+				this.indicatorUrlArr.splice(absoluteIndex, 1)
 				this.indicatorUrlArr.push('')
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex, 1)

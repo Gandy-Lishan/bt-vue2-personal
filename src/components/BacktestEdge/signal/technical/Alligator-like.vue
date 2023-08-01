@@ -414,6 +414,7 @@ delay_bars: [String, Number],
 						radioValue: this.comparison2,
 						techValue: this.radio === 'first' ? this.tech.value : this.value2
 					}
+					
 					var cr = CIQ.store.state.conditionRadio
 					cr[this.criteria][this.panelIndex] = JSON.stringify(_obj)
 					CIQ.store.commit('setConditionRadio', cr)
