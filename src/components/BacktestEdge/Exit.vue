@@ -844,7 +844,7 @@ export default {
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
 		},
 		addExitSignalLength() {
-			if (this.relation == 2 || this.relation == 3 || this.relation == 0) {
+			if (this.relation == 2 || this.relation == 3) {
 				const filterValArr = this.indicatorValArr.filter(item => item != '')
 				this.$emit('sendExitSignalIndex', filterValArr.length)
 				for (let i = 0; i < filterValArr.length; i++) {
@@ -855,7 +855,7 @@ export default {
 					this.$store.commit('addSignalLength', obj)
 				}
 			}
-			if (this.relation == 1) {
+			if (this.relation == 1 || this.relation == 0) {
 				this.$emit('sendExitSignalIndex', 1)
 			}
 		},

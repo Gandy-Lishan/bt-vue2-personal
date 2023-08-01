@@ -55,6 +55,7 @@ export default {
 								.replace(/ProfitTarget/g,'Profit Target(%)')
 								.replace(/WinRate/g,'Win Rate(%)')
 								.replace(/Z_Score/g,'Z-Score')
+								.replace(/ExpectedReturn/g,'Expected Return(%)')
 
 		AIPickContent = JSON.parse(AIPickContentString)	
 		AIPickContent.forEach(x=>{
@@ -63,6 +64,7 @@ export default {
 			x['Stop Loss(%)'] = Number(x['Stop Loss(%)']).toFixed(2)
 			x['Profit Target(%)'] = Number(x['Profit Target(%)']).toFixed(2)
 			x['Win Rate(%)'] = Number(x['Win Rate(%)']).toFixed(2)
+			x['Expected Return(%)'] = Number(x['Expected Return(%)']).toFixed(2)
 
 			// 给一些定值默认值
 			//x['Timing To Entry'] = 'Open'
@@ -86,6 +88,7 @@ export default {
 			'Best Time In Market(Bars)',
 			//'Cash Alloc(%)'
 			//'Z-Score' // 数据有误，先不显示
+			'Expected Return(%)'
 		]
 
 		// 测试
