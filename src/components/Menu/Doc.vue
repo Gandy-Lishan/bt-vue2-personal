@@ -16,7 +16,7 @@
 								<span>Tutorial</span>	
 							</template>
 							<el-menu-item index="1-1">BacktestEdeg Tutorial</el-menu-item>
-							<el-menu-item index="1-2">AI Scanner Tutorial</el-menu-item>
+							<!-- <el-menu-item index="1-2">AI Scanner Tutorial</el-menu-item> -->
 						</el-submenu>
 				</el-menu>
 					<!-- <router-link active-class="active" to="/doc/guide/0">BacktestEdeg Tutorial</router-link>

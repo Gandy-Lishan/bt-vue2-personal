@@ -5,8 +5,9 @@
 			reserved.
 		<span class="footer-link">
 			<el-link href="/doc/disclaimer" type="warning" target="_blank">General Disclaimer</el-link> | 
-			<el-link href="/doc/guide/0" type="warning" target="_blank">BacktestEdeg Tutorial</el-link> | 
-			<el-link href="/doc/scanner" type="warning" target="_blank">AI Stock Scanner Tutorial</el-link>
+			<el-link href="/doc/guide/0" type="warning" target="_blank">BacktestEdeg Tutorial</el-link>
+				<!-- | 
+			<el-link href="/doc/scanner" type="warning" target="_blank">AI Stock Scanner Tutorial</el-link> -->
 		</span>
 		</p>
 		<ul class="Footer_social___a7sK">
