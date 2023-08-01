@@ -61,90 +61,11 @@
 					</el-checkbox>
 				</div>
 			</div>
-			<!-- signal 按钮标签被弃用了 -->
-			<!-- <div class="header-part2">
-				<el-checkbox-group v-model="activeSignal" @change="selectSignal">
-						<el-checkbox-button v-for="item in signalList" :label="item" :key="item">{{item}}		
-							<i class="el-icon-info" v-hover-popup="{ item: item }"></i>
-						</el-checkbox-button>
-				</el-checkbox-group>
-				<el-popover v-model="popupVisible" trigger="manual">
-					<p v-show="currentItem === 'MA'">
-						This strategy utilizes the crossover of closing prices and moving averages as trading signals.<br/>
-						It can further specify the direction of trades and operating rules,<br/>
-						such as determining buy signals after a golden cross and sell signals after a death cross.
-					</p>
-					<p v-show="currentItem === 'MAGap'">
-						This strategy determines trading signals by comparing the difference between the moving average of the current day and the previous day.<br/>
-						It can further specify the direction of trades and operating rules,<br/>
-						such as determining buy signals after a golden cross and sell signals after a death cross.
-					</p>
-					<p v-show="currentItem === 'MACDHist'">
-						This strategy uses the crossover signals of the MACD histogram as trading signals.<br/>
-						It can further specify the direction of trades and operating rules,<br/>
-						such as determining buy signals after a golden cross and sell signals after a death cross.
-					</p>
-					<p v-show="currentItem === 'MACDHistGap'">
-						This strategy determines trading signals by comparing the difference between the MACDHist and the previous day's value.<br/>
-						It can further specify the direction of trades and operating rules,<br/>
-						such as determining buy signals after a golden cross and sell signals after a death cross.
-					</p>
-					<p v-show="currentItem === 'Hammer followed by a raise'">
-						If the previous day's candlestick shows a long lower shadow,<br/>
-						indicating support at the bottom,<br/>
-						a buy signal is generated when the price rises above a certain threshold after the opening.
-					</p>
-					<p v-show="currentItem === 'Shooting Star followed by a fall'">
-						If the previous day's candlestick shows a long upper shadow,<br/>
-						indicating resistance at the top,<br/>
-						a sell signal is generated when the price falls below a certain threshold after the opening.
-					</p>
-					<p v-show="currentItem === 'UpTrend Pattern'">
-						When the price surpasses the upward trendline connecting the peak points of an uptrend,<br/>
-						it indicates a potential future rise and generates a buy signal.
-					</p>
-					<p v-show="currentItem === 'DownTrend Pattern'">
-						When the price falls below the downward trendline connecting the trough points of a downtrend,<br/>
-						it indicates a potential future decline and generates a sell signal.
-					</p>
-					<p v-show="currentItem === 'Symbol Close > its\' MA200 and Optix MA5 < 35'">
-						we want stocks that are above their 200-day moving average with an Optix 5-day moving average less than 35.
-					</p>
-					<p v-show="currentItem === 'Symbol Close > its\' MA200 and Optix < 30'">
-						we want stocks that are above their 200-day moving average with an Optix less than 30.
-					</p>
-					<p v-show="currentItem === 'Optix MA10 < 30 and Optix < 20'">
-						Optix indicators with a 10-day moving average less than 30 and that day's Optix value is less than 20.
-					</p>
-					<p v-show="currentItem === 'PriceBreakout'">
-						When the closing price of a stock ranks above 0 in relation to the closing prices of the past 21 trading days, <br/>
-						a golden cross occurs, indicating an upward breakout and generating a buy signal. <br/>
-						This suggests that the stock's price has entered a breakout phase and is likely to continue rising.
-					</p>
-					<p v-show="currentItem === 'HighPoints'">
-						When the highest price of a stock ranks above 100 in relation to the highest prices of the<br/> 
-						past 13 trading days (higher stock prices correspond to higher rankings), <br/>
-						it forms a 13-day new high and generates a buy signal. This indicates that <br/>
-						the stock is experiencing a positive breakthrough and is in an upward trend.
-					</p>
-					<p v-show="currentItem === 'LowPoints'">
-						When the lowest price of a stock ranks below 0 in relation to the lowest prices of the past 13 trading days, <br/>
-						it forms a 13-day new low and generates a sell signal. <br/>
-						This indicates that the stock is in a downtrend and can be shorted.
-					</p>
-					<p v-show="currentItem === 'RSI'">
-						When the RSI indicator forms a golden cross above 40, it suggests that the indicator is about to<br/>
-					  recover from an oversold state to the midpoint, indicating a potential long entry signal. <br/>
-						RSI can reflect whether a stock is in an overbought or oversold condition <br />
-						but should be used in conjunction with the trend analysis.
-					</p>
-				</el-popover>
-			</div> -->
 		</div>
 		<el-table
 			ref="tableREF"
 			class="aiscanner-table"
-			:data="filteredTableData"
+			:data="paginatedData"
 			:row-class-name="tableRowClassName"
 			empty-text="No recommendation for today"
 			@sort-change="changeTableSort"
@@ -292,7 +213,14 @@
 				</el-table-column>
 			</template>
 		</el-table>
-		{{currentItem}}
+		<el-pagination
+		@size-change="handleSizeChange"
+		@current-change="handleCurrentChange"
+		:page-sizes="[10, 20, 50, 100]"
+		:page-size="pageSize"
+		:total="tableData.content.length"
+		layout="total, sizes, prev, pager, next, jumper"
+		></el-pagination>
 	</div>
 </template>
 
@@ -352,17 +280,35 @@ export default {
 					'LowPoints':"When the lowest price of a stock ranks below 0 in relation to the lowest prices of the past 13 trading days, <br/>it forms a 13-day new low and generates a sell signal. <br/>This indicates that the stock is in a downtrend and can be shorted.",
 					'RSI':"When the RSI indicator forms a golden cross above 40, it suggests that the indicator is about to<br/>recover from an oversold state to the midpoint, indicating a potential long entry signal. <br/>RSI can reflect whether a stock is in an overbought or oversold condition <br />but should be used in conjunction with the trend analysis.",
 					'Market': 'Closing price above the 252-day moving average is considered as Uptrend.<br/>Closing price below the 252-day moving average is considered as Downtrend.'
-				}
+				},
+
+				pageSize: 10, // Default page size
+      			currentPage: 1, // Default current page
 		}
 	},
 	computed: {
-		filteredTableData() {
+		// filteredTableData() {
+		// 	if (this.isPLSChecked) {
+		// 		// 当checkbox勾选时，返回被筛选过的数据
+		// 		return this.tableData.content.filter(item=>parseFloat(item["Profit Target(%)"])>parseFloat(item['Stop Loss(%)']))
+		// 	} else {
+		// 		// 当checkbox未勾选时，返回原始数据
+		// 		return this.tableData.content;
+		// 	}
+		// },
+		// Filtered and paginated data to be displayed in the table
+		paginatedData() {
+			const startIndex = (this.currentPage - 1) * this.pageSize;
+			const endIndex = startIndex + this.pageSize;
+
 			if (this.isPLSChecked) {
 				// 当checkbox勾选时，返回被筛选过的数据
-				return this.tableData.content.filter(item=>parseFloat(item["Profit Target(%)"])>parseFloat(item['Stop Loss(%)']))
+				return this.tableData.content
+						.filter(item=>parseFloat(item["Profit Target(%)"])>parseFloat(item['Stop Loss(%)']))
+						.slice(startIndex, endIndex);
 			} else {
 				// 当checkbox未勾选时，返回原始数据
-				return this.tableData.content;
+				return this.tableData.content?.slice(startIndex, endIndex);
 			}
 		},
 	},
@@ -417,6 +363,15 @@ export default {
 		})	
 	},
 	methods: {
+		handleSizeChange(size) {
+			this.pageSize = size;
+			this.currentPage = 1; // Reset to the first page when the page size changes
+		},
+
+		handleCurrentChange(currentPage) {
+			this.currentPage = currentPage;
+		},
+
 		handleQuery: throttle(function () { this.getSearchresult() }, 500),
 		getSearchresult(){
 			if(this.searchItem){
