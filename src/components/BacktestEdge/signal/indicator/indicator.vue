@@ -1,7 +1,6 @@
 // indicator search box
 <template>
 	<div class="indicator-box">
-    {{si}}
 		<el-form :model="si" ref="siForm" :rules="rules">
 			<div class="indicator-container sentiBox">
 				<el-form-item>
@@ -421,7 +420,6 @@ export default {
       })
     },
     updateSenti(val) {
-      console.log(val)
       let tabs = this.editableTabs
       var absoluteIndex = ''
       tabs.forEach((tab, index) => {
@@ -457,6 +455,8 @@ export default {
             valObj.value = CIQ.indicatorList[i].chart_name
             valObj.index = this.panelIndex
             this.$emit('getIndicatorVal', valObj)
+
+            this.currentSentiUpdated = CIQ.indicatorList[i].updated
             let freqObj = {}
             freqObj.value = CIQ.indicatorList[i].updated
             freqObj.index = this.panelIndex
