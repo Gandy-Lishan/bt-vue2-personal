@@ -3,7 +3,7 @@
 	<el-row>
 		<el-col :span="24">
 			<div class="favoriteForm_container">
-        <el-button @click="runAllBacktest" class="fls-btn"
+        <el-button v-if="isSystem == 'system'" @click="runAllBacktest" class="fls-btn"
 					>run all backtest</el-button
 				>
         <div class="searchBox">
@@ -375,6 +375,7 @@ export default {
 
       // 以下是run all bt
       backtest_array: [],
+      isSystem: false,
     }
   },
   directives: {
@@ -383,6 +384,8 @@ export default {
   },
   created() {
     this.getHistoryList()
+
+    this.isSystem = this.$store.state.role
   },
   methods: {
     async runAllBacktest(){
