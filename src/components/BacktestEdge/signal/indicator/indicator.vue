@@ -1,6 +1,7 @@
 // indicator search box
 <template>
 	<div class="indicator-box">
+    {{si}}
 		<el-form :model="si" ref="siForm" :rules="rules">
 			<div class="indicator-container sentiBox">
 				<el-form-item>
@@ -420,6 +421,7 @@ export default {
       })
     },
     updateSenti(val) {
+      console.log(val)
       let tabs = this.editableTabs
       var absoluteIndex = ''
       tabs.forEach((tab, index) => {
@@ -458,6 +460,9 @@ export default {
             let freqObj = {}
             freqObj.value = CIQ.indicatorList[i].updated
             freqObj.index = this.panelIndex
+            freqObj.criteria = this.criteria
+            freqObj.key = `${this.criteria}_${this.panelIndex}`
+            this.setFrequencyArray(freqObj)
             this.$emit('getFreqArray', freqObj)
             // Remove form verification
             this.clearFormValidate()
@@ -471,6 +476,7 @@ export default {
             this.$emit('getIndicatorUrl', obj)
           }
         }
+       
       }
     },
     updateTech(val) {
@@ -658,6 +664,7 @@ export default {
           index: this.panelIndex,
           value: ''
         })
+         
         let indiUrlObj = {}
         indiUrlObj.index = this.panelIndex
         indiUrlObj.url = ''
@@ -682,6 +689,12 @@ export default {
         indiUrlObj.url = ''
         this.$emit('getIndicatorUrl', indiUrlObj)
       }
+
+      // 移除chartiq对应的extraIndicators
+      let extraIndicators = []
+			extraIndicators.push(...this.$store.state.indicators.extraIndicators)
+      extraIndicators = extraIndicators.filter(x=>x!=item.url)
+			this.$store.commit('getExtraIndicators',extraIndicators)
 
       // lishn 判断需要小龙写
       CIQ.addIndicators()
@@ -968,6 +981,7 @@ export default {
       }
     },
     handleTechnicalSelect(item) {
+      console.log('handleTechnicalSelect',item)
       this.si.technicalIndicator = item.value
 
       // tech也需要设置daily的FrequencyArray

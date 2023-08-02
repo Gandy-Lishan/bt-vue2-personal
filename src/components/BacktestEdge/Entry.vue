@@ -1,6 +1,8 @@
 // Entry Criteria
 <template>
 	<div class="entry-container">
+		{{indicatorUrlArr}}
+		{{indicatorValArr}}
 		<div class="signal-option-box">
 			<div class="entry-title-box">
 				<p class="criteria-title">Entry Criteria</p>
@@ -728,7 +730,7 @@ export default {
 				this.$store.commit('getMA', activatedMAList)
 				//
 				
-				this.indicatorUrlArr.splice(absoluteIndex, 1)
+				let removedSenti = this.indicatorUrlArr.splice(absoluteIndex, 1)
 				this.indicatorUrlArr.push('')
 				this.indicatorValArr.splice(absoluteIndex, 1)
 				this.indicatorValArr.push('')
@@ -761,6 +763,12 @@ export default {
 				
 				// 如果是MA，则移除它的信息和位置
 				CIQ.removeMALayout(removedUrl, 'entry', absoluteIndex)
+
+				// 移除chartiq对应的extraIndicators
+				let extraIndicators = []
+				extraIndicators.push(...this.$store.state.indicators.extraIndicators)
+				extraIndicators = extraIndicators.filter(x=>x!=removedSenti)
+				this.$store.commit('getExtraIndicators',extraIndicators)
 
 				CIQ.addIndicators()
 			}
@@ -845,6 +853,13 @@ export default {
 				this.editableTabsValue = '1'
 				this.score = 1
 				this.signals_in_market = 1
+
+				// 移除chartiq对应的extraIndicators
+				let extraIndicators = []
+				extraIndicators.push(...this.$store.state.indicators.extraIndicators)
+				extraIndicators = extraIndicators.filter(x=>this.indicatorUrlArr.slice(1,5).indexOf(x)==-1)
+				this.$store.commit('getExtraIndicators',extraIndicators)
+
 				// 移除	indicatorSentiArr
 				const indiUrl = this.indicatorUrlArr[0]
 				const indiVal = this.indicatorValArr[0]
@@ -866,6 +881,7 @@ export default {
 					key: `entry_0`,
 					relation: 1
 				}
+				console.log('freqobj',freqObj)
 				this.setFrequencyArray(freqObj)
 				try {
 					for (let index = 1; index < this.indicatorUrlArr.length; index++) {
@@ -886,7 +902,6 @@ export default {
 
 				let indicatorList = this.$store.state.indicators.formIndicators.entry
 				this.$store.commit('getEntryIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
-				
 				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
 				CIQ.keepTheFirstMALayout('entry')
 
