@@ -80,6 +80,7 @@ export default {
 				}catch(e){
 					console.error(e)
 				}finally{
+					this.loadMarker()
 					CIQ.hideCover()
 					CIQ.nprogress.done()
 				}
@@ -225,7 +226,7 @@ export default {
 				Field: "Close"
 			});
 			CIQ.stxx.setChartType("candle");
-			this.loadMarker()
+			
 		},
 		calculateBacktestHistory(dataSet, periodArray,direction) {
 			//this.$store.dispatch('app/store_backtestResult', []).then(() => {
@@ -316,7 +317,7 @@ export default {
 		},
 		filterFormatMarkerDate(start_date, end_date) {
 			// 把字符串列表entryDates, exitDates格式化为markerSet的对象数组
-			const markerSet= []
+			let markerSet= []
 			const dataSource = CIQ.stxx.chart.dataSet
             let entryTradeDateArr = this.other['EntryTradeDate'] ? eval('(' + this.other['EntryTradeDate'] + ')') : []
             if(entryTradeDateArr){
@@ -356,6 +357,7 @@ export default {
                     })
                 })
             }
+			markerSet = markerSet.sort((a,b)=>new Date(a['DT'])-new Date(b['DT']))
 			
 			// 如果推荐日和最后一个退场日重叠，则隐藏退场日marker(一般情况都是重叠的)
 			if(this.other['date'] == exitTradeDateArr[exitTradeDateArr.length-1]){
