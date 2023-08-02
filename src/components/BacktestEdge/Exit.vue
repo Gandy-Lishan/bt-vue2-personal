@@ -1026,7 +1026,7 @@ export default {
 					this.techIndiObj = new Array(5).fill('')
 					const freqObj = {
 						index: 0,
-						value: '',
+						value: 'Daily',
 						criteria: 'exit',
 						key: `exit_0`,
 						relation: 0
