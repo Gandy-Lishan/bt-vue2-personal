@@ -324,6 +324,10 @@ export default new Vuex.Store({
 			state.backtestInfo.frequency = maxFreq
 			console.log('最大的周期', state.exitFrequency)
 		},
+		setFreqencyLP(state, obj) {
+			const key = obj.key
+			state.frequencyArray.set(key, obj)
+		},
 		getFreqHighPriority(state, val) {
 			state.exitFrequency = val
 			state.backtestInfo.frequency = val
