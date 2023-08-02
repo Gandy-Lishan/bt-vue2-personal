@@ -522,7 +522,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setFrequencyArray']),
+    ...mapMutations(['setFrequencyArray', 'setFreqencyLP']),
     myFunction() {
       this.$refs.myDropdown.classList.toggle('show')
     },
@@ -1607,7 +1607,7 @@ export default {
                 freqObj.index = vm.panelIndex
                 freqObj.criteria = vm.criteria
                 freqObj.key = `${vm.criteria}_${vm.panelIndex}`
-                vm.setFrequencyArray(freqObj)
+                vm.setFreqencyLP(freqObj)
                 vm.$emit('getFreqArray', freqObj)
               }
             })
