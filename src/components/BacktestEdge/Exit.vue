@@ -925,6 +925,13 @@ export default {
 		changeRelation(val) {
 			if (val == 1) {
 				this.editableTabsValue = '1'
+				this.editableTabs = [
+				{
+					title: 'Condition 1',
+					name: '1',
+					content: 'Condition 1 content'
+				}
+				]
 				this.score = 1
 				this.signals_in_market = 1
 				// 移除	indicatorSentiArr
@@ -988,6 +995,11 @@ export default {
 			}
 			
 			if(val == 0) {
+				this.score = 1
+				this.signals_in_market = 1
+				this.delay_bars = 0
+				this.editableTabs = [
+				]
 					this.indicatorUrlArr = new Array(5).fill('')
 					this.indicatorValArr = new Array(5).fill('')
 					this.indicatorRadioArr = ['sentiment']
