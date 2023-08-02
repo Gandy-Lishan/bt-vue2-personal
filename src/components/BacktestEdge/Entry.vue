@@ -843,6 +843,13 @@ export default {
 		changeRelation(val) {
 			if (val == 1) {
 				this.editableTabsValue = '1'
+				this.editableTabs = [
+				{
+					title: 'Condition 1',
+					name: '1',
+					content: 'Condition 1 content'
+				}
+				]
 				this.score = 1
 				this.signals_in_market = 1
 				// 移除	indicatorSentiArr
