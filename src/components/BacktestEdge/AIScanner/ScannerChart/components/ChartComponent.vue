@@ -80,7 +80,7 @@ export default {
 				}catch(e){
 					console.error(e)
 				}finally{
-					this.loadMarker()
+					
 					CIQ.hideCover()
 					CIQ.nprogress.done()
 				}
@@ -127,6 +127,7 @@ export default {
 						Field: "Close"
 					});
 					CIQ.createOneTimePatternMarker(this.other.date,"Symbol Close > its\' MA200 and Optix MA5 < 35")
+					this.loadMarker()
 					break;
 				case "Symbol Close > its\' MA200 and Optix < 30":
 					await CIQ.getIndicatorMatedata([this.symbolUrl])
@@ -135,6 +136,7 @@ export default {
 						Field: "Close"
 					});
 					CIQ.createOneTimePatternMarker(this.other.date,"Symbol Close > its\' MA200 and Optix < 30")
+					this.loadMarker()
 					break;
 				case "Optix MA10 < 30 and Optix < 20":
 					await CIQ.getIndicatorMatedata([this.symbolUrl])
@@ -144,32 +146,39 @@ export default {
 						Field: this.symbolUrl
 					});
 					CIQ.createOneTimePatternMarker(this.other.date,"Optix MA10 < 30 and Optix < 20")
+					this.loadMarker()
 					break;
 				case 'UpTrend Pattern':
 					var points = eval('(' + this.other.Point + ')')
 					CIQ.Studies.addStudy(CIQ.stxx, this.other['_Signal'],{display:this.other['_Signal']},null,{points:points})
 					CIQ.createOneTimeScannerMarkerHighLowLine(points.slice(points.length - 1),this.other._Signal,points)
+					this.loadMarker()
 					break;
 				case 'DownTrend Pattern':
 					var points = eval('(' + this.other.Point + ')')
 					CIQ.Studies.addStudy(CIQ.stxx, this.other['_Signal'],{display:this.other['_Signal']},null,{points:points})
 					CIQ.createOneTimeScannerMarkerHighLowLine(points.slice(points.length - 1),this.other._Signal,points)
+					this.loadMarker()
 					break;
 				case 'Hammer followed by a raise':
 					CIQ.createOneTimeScannerMarkerHammer(this.other.EntryTradeDate,this.other.date,this.other._Signal)
+					this.loadMarker()
 					break;
 				case 'Shooting Star followed by a fall':
 					CIQ.createOneTimeScannerMarkerHammer(this.other.EntryTradeDate,this.other.date,this.other._Signal)
+					this.loadMarker()
 					break;
 				case 'MAGap':
 					CIQ.Studies.addStudy(CIQ.stxx, this.other['_Signal'],{display:this.other['_Signal']})
 					CIQ.Studies.addStudy(CIQ.stxx,"ma",{display:'ma'});
 					CIQ.createOneTimePatternMarker(this.other.date,"MAGap")
+					this.loadMarker()
 					break;
 				case 'MACDHistGap':
 					CIQ.Studies.addStudy(CIQ.stxx, this.other['_Signal'],{display:this.other['_Signal']})
 					CIQ.Studies.addStudy(CIQ.stxx,"macd",{display:'macd'});
 					CIQ.createOneTimePatternMarker(this.other.date,"MACDHistGap")
+					this.loadMarker()
 					break;
 				case 'PriceBreakout' :
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
@@ -179,6 +188,7 @@ export default {
 						period: 21
 					},null,{showSupLine:0})
 					CIQ.createOneTimePatternMarker(this.other.date,"PriceBreakout")
+					this.loadMarker()
 					break;
 				case 'HighPoints' :
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
@@ -188,6 +198,7 @@ export default {
 						period: 13
 					},null,{showSupLine:100})
 					CIQ.createOneTimePatternMarker(this.other.date,"HighPoints")
+					this.loadMarker()
 					break;
 				case 'LowPoints' :
 					CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
@@ -197,10 +208,12 @@ export default {
 						period: 13
 					},null,{showSupLine:0})
 					CIQ.createOneTimePatternMarker(this.other.date,"LowPoints")
+					this.loadMarker()
 					break;
 				case 'RSI' :
 					CIQ.Studies.addStudy(CIQ.stxx, 'rsi',null,null,{showSupLine:40})
 					CIQ.createOneTimePatternMarker(this.other.date,"RSI")
+					this.loadMarker()
 					break;
 				case 'MA' :
 					CIQ.Studies.addStudy(CIQ.stxx, "ma",{
@@ -209,6 +222,7 @@ export default {
 						Field: "Close"
 					});
 					CIQ.createOneTimePatternMarker(this.other.date,"MA")
+					this.loadMarker()
 					break;
 				case 'MACDHist' :
 					CIQ.Studies.addStudy(CIQ.stxx, "macd",{
@@ -217,6 +231,7 @@ export default {
 						Field: "Close"
 					});
 					CIQ.createOneTimePatternMarker(this.other.date,"MACD")
+					this.loadMarker()
 					break;
 				default: 
 			}
