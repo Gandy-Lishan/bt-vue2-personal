@@ -804,7 +804,7 @@ export default {
 				this.freqArray.push('')
 				const freqObj = {
 						index: absoluteIndex,
-						value: '',
+						value: 'Daily',
 						criteria: 'exit',
 						key: `exit_${absoluteIndex}`
 					}

@@ -739,7 +739,7 @@ export default {
 				this.freqArray.push('')
 					const freqObj = {
 						index: absoluteIndex,
-						value: '',
+						value: 'Daily',
 						criteria: 'entry',
 						key: `entry_${absoluteIndex}`
 					}
