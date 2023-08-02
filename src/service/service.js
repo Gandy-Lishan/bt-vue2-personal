@@ -450,6 +450,37 @@ export function getAllFavoriteList(page) {
     fetchPageData(page);
   });
 }
+export function getAllHistoryList(page) {
+	let url = '/dev/dev/backtest/?ordering=-create_date&page=';
+  
+	return new Promise((resolve, reject) => {
+	  const allData = [];
+  
+	  function fetchPageData(page) {
+		axios.get(url + page)
+		  .then(res => {
+			const data = res.data.results;
+  
+			// 将当前页的数据添加到总数据数组中
+			allData.push(...data);
+  
+			if (res.data.next) {
+			  // 继续递归请求下一页数据
+			  fetchPageData(page + 1);
+			} else {
+			  // 所有数据已获取完毕，返回结果
+			  resolve(allData);
+			}
+		  })
+		  .catch(err => {
+			reject(err);
+		  });
+	  }
+  
+	  // 开始递归请求第一页数据
+	  fetchPageData(page);
+	});
+  }
 
 export function findLastSignalApi(data) {
   const url = `/dev/dev/findlastsingal/`;

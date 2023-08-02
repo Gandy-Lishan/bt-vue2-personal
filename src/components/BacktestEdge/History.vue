@@ -3,6 +3,9 @@
 	<el-row>
 		<el-col :span="24">
 			<div class="favoriteForm_container">
+        <el-button @click="runAllBacktest" class="fls-btn"
+					>run all backtest</el-button
+				>
         <div class="searchBox">
           <el-input
 					class="search"
@@ -343,6 +346,7 @@ import {
   seeParams,
   deleteBacktest,
   getBacktestName,
+  getAllHistoryList,
   searchHistoryList
 } from '@/service/service.js'
 export default {
@@ -368,6 +372,9 @@ export default {
       permission: Cookies.get('devbt2Userid'),
       searchItem: '',
       currentSort: {}, // 当前的排序信息
+
+      // 以下是run all bt
+      backtest_array: [],
     }
   },
   directives: {
@@ -378,6 +385,64 @@ export default {
     this.getHistoryList()
   },
   methods: {
+    async runAllBacktest(){
+
+      this.showFLSMASK()
+      CIQ.isFindLastSignalRuning = true
+
+        const allHistoryList = await this.getAllHistoryData()
+        // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
+        this.backtest_array = JSON.parse(JSON.stringify(allHistoryList))
+
+        // 給列表每一项设定识别码，内容和回测状态，0为未跑完，1为成功，2为失败
+        this.$store.commit('SET_LASTSIGNAL_ARRAY',this.backtest_array.map(item=>{return {name:item.name,content:item,state:0}}))
+
+      var backtest_info = this.processingBacktest(this.backtest_array)
+      if (backtest_info == false) {
+        console.log('处理任务结束', this.$store.state.last_signal_array)
+        return // 处理任务结束
+      }
+
+      var error_array = new Array();
+      this.postRunbacktest(backtest_info)
+    },
+    async getAllHistoryData() {
+      // lishan 用于获取所有的 favorite 列表
+      const res = await getAllHistoryList(1)
+      return res
+    },
+    showFLSMASK() {
+      const myFLSbg = document.querySelector('#myFLSbg')
+      myFLSbg.classList.add('activated')
+    },
+    processingBacktest(backtest_arr) {
+      if (backtest_arr.length <= 0) return false;
+      let backtest_info = backtest_arr.pop()
+      return backtest_info
+    },
+    postRunbacktest(backtest) {
+      this.rerunBacktest(backtest)
+
+      // 轮询可用于等待上一个回测结束，也可定时刷新进度条进度
+      let interval = setInterval(() => {
+        if (CIQ.isFindLastSignalRuning == false) {
+          clearInterval(interval)
+          CIQ.isFindLastSignalRuning = true
+          //console.log('轮询等待上一个回测结束.........',CIQ.isFindLastSignalRuning,backtest)
+          var backtest_info = this.processingBacktest(this.backtest_array)
+          if (backtest_info == false) {
+            CIQ.isFindLastSignalRuning = false
+            console.log('处理任务结束', this.$store.state.last_signal_array)
+            //this.removeFLSMASK()
+            return // 处理任务结束
+          }
+          this.postRunbacktest(backtest_info)
+
+          // 是否添加一个成功列表
+        }
+      }, 1000) // 2秒查询一次
+    },
+    // ******************以上是run all bt********************
     async getHistoryList(orderby) {
       this.loadTest = 'Loading...'
       this.loading = true
