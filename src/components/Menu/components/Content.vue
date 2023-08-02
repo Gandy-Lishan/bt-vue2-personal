@@ -1009,14 +1009,14 @@
 			</section>
 
 			<section v-else-if="id.includes('fls')">
-				<h1 id="fls">Finding the Last Signal Using BacktestEdeg</h1>
+				<h1 id="fls">Finding the Last Signal Using BacktestEdge</h1>
 				<hr />
 				<h2 id="fls-0">Click the 'find last signal' button</h2>
 				<p>
 					Enter the "My Favorites" list, where the user's saved backtests are
 					stored. In the top-right corner of the list, you will find a button
 					labeled "find last signal." After clicking the "find last signal"
-					button, BacktestEdeg will begin running all the backtests in the "My
+					button, BacktestEdge will begin running all the backtests in the "My
 					Favorites" list. Please be patient and wait until the backtest
 					execution is complete.
 				</p>
@@ -1038,7 +1038,7 @@
 				></el-image>
 				<h2 id="fls-1">Wait for the backtest to finish</h2>
 				<p>
-					Once the backtest execution is finished, BacktestEdeg will determine
+					Once the backtest execution is finished, BacktestEdge will determine
 					the timestamp of the most recent trade. 'E' represents the entry time
 					of the most recent trade, while 'X' represents the exit time of the
 					most recent trade.
@@ -1060,7 +1060,7 @@
 					lazy
 				></el-image>
 				<p>
-					By following the steps outlined above, you can use BacktestEdeg to
+					By following the steps outlined above, you can use BacktestEdge to
 					find the timestamp of the most recent trade in the "My Favorites"
 					list. This functionality assists in understanding recent trading
 					activity and facilitates further analysis and decision-making based on
@@ -1462,8 +1462,8 @@
 					On the "SwingAI" page, you will see several filter buttons, including
 					'MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting Star followed by a fall',
 					'UpTrend Pattern', and 'DownTrend Pattern'. On the "MidTermAI" page,
-					you will see several filter buttons, including 'Symbol Close > its' MA200 and Optix MA5 < 35', 'Symbol Close > its' MA200 and Optix < 30', and
-					'Optix MA10 < 30 and Optix < 20'.
+					you will see several filter buttons, including 'Symbol Close > its' MA200 and Optix MA5 &lt; 35', 'Symbol Close > its' MA200 and Optix &lt; 30', and
+					'Optix MA10 &lt; 30 and Optix &lt; 20'.
 				</p>
 				<el-image
 					style="width: 100%; height: 50%"
