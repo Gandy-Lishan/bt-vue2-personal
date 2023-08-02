@@ -795,7 +795,7 @@ export default {
 
 				this.indicatorValArr.splice(absoluteIndex, 1)
 				this.indicatorValArr.push('')
-				this.indicatorUrlArr.splice(absoluteIndex, 1)
+				let removedSenti = this.indicatorUrlArr.splice(absoluteIndex, 1)
 				this.indicatorUrlArr.push('')
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex, 1)
@@ -826,6 +826,12 @@ export default {
 				
 				// 如果是MA，则移除它的信息和位置
 				CIQ.removeMALayout(removedUrl, 'exit', absoluteIndex)
+
+				// 移除chartiq对应的extraIndicators
+				let extraIndicators = []
+				extraIndicators.push(...this.$store.state.indicators.extraIndicators)
+				extraIndicators = extraIndicators.filter(x=>x!=removedSenti)
+				this.$store.commit('getExtraIndicators',extraIndicators)
 
 				CIQ.addIndicators()
 			}
@@ -927,6 +933,13 @@ export default {
 				this.editableTabsValue = '1'
 				this.score = 1
 				this.signals_in_market = 1
+
+				// 移除chartiq对应的extraIndicators
+				let extraIndicators = []
+				extraIndicators.push(...this.$store.state.indicators.extraIndicators)
+				extraIndicators = extraIndicators.filter(x=>this.indicatorUrlArr.slice(1,5).indexOf(x)==-1)
+				this.$store.commit('getExtraIndicators',extraIndicators)
+
 				// 移除	indicatorSentiArr
 				const indiUrl = this.indicatorUrlArr[0]
 				const indiVal = this.indicatorValArr[0]
@@ -988,6 +1001,12 @@ export default {
 			}
 			
 			if(val == 0) {
+					// 移除chartiq对应的extraIndicators
+					let extraIndicators = []
+					extraIndicators.push(...this.$store.state.indicators.extraIndicators)
+					extraIndicators = extraIndicators.filter(x=>this.indicatorUrlArr.indexOf(x)==-1)
+					this.$store.commit('getExtraIndicators',extraIndicators)
+
 					this.indicatorUrlArr = new Array(5).fill('')
 					this.indicatorValArr = new Array(5).fill('')
 					this.indicatorRadioArr = ['sentiment']
