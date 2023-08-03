@@ -24,10 +24,6 @@
         "stock": "AAT"
     },
     {
-        "name": "Atlas Air Worldw",
-        "stock": "AAWW"
-    },
-    {
         "name": "Abbvie Inc",
         "stock": "ABBV"
     },
@@ -40,16 +36,8 @@
         "stock": "ABM"
     },
     {
-        "name": "Abiomed Inc",
-        "stock": "ABMD"
-    },
-    {
         "name": "Abbott Labs",
         "stock": "ABT"
-    },
-    {
-        "name": "American Campus",
-        "stock": "ACC"
     },
     {
         "name": "Aci Worldwide In",
@@ -82,10 +70,6 @@
     {
         "name": "Automatic Data",
         "stock": "ADP"
-    },
-    {
-        "name": "Alliance Data",
-        "stock": "ADS"
     },
     {
         "name": "Autodesk Inc",
@@ -288,10 +272,6 @@
         "stock": "APD"
     },
     {
-        "name": "American Public",
-        "stock": "APEI"
-    },
-    {
         "name": "Amphenol Corp-A",
         "stock": "APH"
     },
@@ -428,10 +408,6 @@
         "stock": "BCO"
     },
     {
-        "name": "Blucora Inc",
-        "stock": "BCOR"
-    },
-    {
         "name": "Balchem Corp",
         "stock": "BCPC"
     },
@@ -458,10 +434,6 @@
     {
         "name": "Benchmark Electr",
         "stock": "BHE"
-    },
-    {
-        "name": "Big Lots Inc",
-        "stock": "BIG"
     },
     {
         "name": "Biogen Idec Inc",
@@ -568,20 +540,12 @@
         "stock": "CALM"
     },
     {
-        "name": "Calamp Corp",
-        "stock": "CAMP"
-    },
-    {
         "name": "Casey'S General",
         "stock": "CASY"
     },
     {
         "name": "Caterpillar Inc",
         "stock": "CAT"
-    },
-    {
-        "name": "Cato Corp-A",
-        "stock": "CATO"
     },
     {
         "name": "Cathay General B",
@@ -620,16 +584,8 @@
         "stock": "CCL"
     },
     {
-        "name": "Cabot Microelec",
-        "stock": "CCMP"
-    },
-    {
         "name": "Cross Country He",
         "stock": "CCRN"
-    },
-    {
-        "name": "Cdk Global Inc",
-        "stock": "CDK"
     },
     {
         "name": "Cadence Design",
@@ -642,10 +598,6 @@
     {
         "name": "Century Aluminum",
         "stock": "CENX"
-    },
-    {
-        "name": "Cerner Corp",
-        "stock": "CERN"
     },
     {
         "name": "Ceva Inc",
@@ -708,10 +660,6 @@
         "stock": "CLH"
     },
     {
-        "name": "Mack-Cali Realty",
-        "stock": "CLI"
-    },
-    {
         "name": "Clearwater",
         "stock": "CLW"
     },
@@ -744,20 +692,12 @@
         "stock": "CMI"
     },
     {
-        "name": "Capstead Mortgag",
-        "stock": "CMO"
-    },
-    {
         "name": "Compass Minerals",
         "stock": "CMP"
     },
     {
         "name": "Cms Energy Corp",
         "stock": "CMS"
-    },
-    {
-        "name": "Comtech Telecomm",
-        "stock": "CMTL"
     },
     {
         "name": "Centene Corp",
@@ -788,10 +728,6 @@
         "stock": "COF"
     },
     {
-        "name": "Cabot Oil & Gas",
-        "stock": "COG"
-    },
-    {
         "name": "Coherent Inc",
         "stock": "COHR"
     },
@@ -810,10 +746,6 @@
     {
         "name": "Conocophillips",
         "stock": "COP"
-    },
-    {
-        "name": "Coresite Realty",
-        "stock": "COR"
     },
     {
         "name": "Costco Wholesale",
@@ -838,10 +770,6 @@
     {
         "name": "Crane Co",
         "stock": "CR"
-    },
-    {
-        "name": "Cree Inc",
-        "stock": "CREE"
     },
     {
         "name": "Carter'S Inc",
@@ -870,10 +798,6 @@
     {
         "name": "Corvel Corp",
         "stock": "CRVL"
-    },
-    {
-        "name": "Cryolife Inc",
-        "stock": "CRY"
     },
     {
         "name": "Cisco Systems",
@@ -952,20 +876,12 @@
         "stock": "D"
     },
     {
-        "name": "Daktronics Inc",
-        "stock": "DAKT"
-    },
-    {
         "name": "Delta Air Li",
         "stock": "DAL"
     },
     {
         "name": "Darling Ingredie",
         "stock": "DAR"
-    },
-    {
-        "name": "Diebold Inc",
-        "stock": "DBD"
     },
     {
         "name": "Donaldson Co Inc",
@@ -1024,14 +940,6 @@
         "stock": "DIS"
     },
     {
-        "name": "Discovery Comm-A",
-        "stock": "DISCA"
-    },
-    {
-        "name": "Discovery Comm-C",
-        "stock": "DISCK"
-    },
-    {
         "name": "Dick'S Sporting",
         "stock": "DKS"
     },
@@ -1074,10 +982,6 @@
     {
         "name": "Dril-Quip Inc",
         "stock": "DRQ"
-    },
-    {
-        "name": "Dsp Group Inc",
-        "stock": "DSPG"
     },
     {
         "name": "Dte Energy Co",
@@ -1128,10 +1032,6 @@
         "stock": "ECL"
     },
     {
-        "name": "Us Ecology Inc",
-        "stock": "ECOL"
-    },
-    {
         "name": "Encore Capital G",
         "stock": "ECPG"
     },
@@ -1150,10 +1050,6 @@
     {
         "name": "Eastgroup Prop",
         "stock": "EGP"
-    },
-    {
-        "name": "Ehealth Inc",
-        "stock": "EHTH"
     },
     {
         "name": "Employers Holdin",
@@ -1184,10 +1080,6 @@
         "stock": "EMR"
     },
     {
-        "name": "Endo Internation",
-        "stock": "ENDP"
-    },
-    {
         "name": "Energizer Holdgs",
         "stock": "ENR"
     },
@@ -1202,10 +1094,6 @@
     {
         "name": "Eog Resources",
         "stock": "EOG"
-    },
-    {
-        "name": "Bottomline Tech",
-        "stock": "EPAY"
     },
     {
         "name": "Epr Properties",
@@ -1292,20 +1180,12 @@
         "stock": "FAF"
     },
     {
-        "name": "Faro Tech",
-        "stock": "FARO"
-    },
-    {
         "name": "Fastenal Co",
         "stock": "FAST"
     },
     {
         "name": "Facebook Inc-A",
         "stock": "FB"
-    },
-    {
-        "name": "Fortune Brands H",
-        "stock": "FBHS"
     },
     {
         "name": "First Bancorp Pr",
@@ -1372,10 +1252,6 @@
         "stock": "FIS"
     },
     {
-        "name": "Fiserv Inc",
-        "stock": "FISV"
-    },
-    {
         "name": "Fifth Third Banc",
         "stock": "FITB"
     },
@@ -1400,10 +1276,6 @@
         "stock": "FLS"
     },
     {
-        "name": "First Midwest/Il",
-        "stock": "FMBI"
-    },
-    {
         "name": "Fmc Corp",
         "stock": "FMC"
     },
@@ -1420,10 +1292,6 @@
         "stock": "FORR"
     },
     {
-        "name": "Fossil Group Inc",
-        "stock": "FOSL"
-    },
-    {
         "name": "Twenty-First C-A",
         "stock": "FOXA"
     },
@@ -1434,10 +1302,6 @@
     {
         "name": "First Solar Inc",
         "stock": "FSLR"
-    },
-    {
-        "name": "Franklin Street",
-        "stock": "FSP"
     },
     {
         "name": "Fed Signal Corp",
@@ -1462,10 +1326,6 @@
     {
         "name": "Glacier Bancorp",
         "stock": "GBCI"
-    },
-    {
-        "name": "Gannett Co",
-        "stock": "GCI"
     },
     {
         "name": "Genesco Inc",
@@ -1508,10 +1368,6 @@
         "stock": "GHC"
     },
     {
-        "name": "Greenhill & Co",
-        "stock": "GHL"
-    },
-    {
         "name": "G Iii Apparel",
         "stock": "GIII"
     },
@@ -1522,10 +1378,6 @@
     {
         "name": "General Mills In",
         "stock": "GIS"
-    },
-    {
-        "name": "Glatfelter",
-        "stock": "GLT"
     },
     {
         "name": "Corning Inc",
@@ -1656,10 +1508,6 @@
         "stock": "HES"
     },
     {
-        "name": "Hollyfrontier Co",
-        "stock": "HFC"
-    },
-    {
         "name": "Hillenbrand Inc",
         "stock": "HI"
     },
@@ -1728,16 +1576,8 @@
         "stock": "HRB"
     },
     {
-        "name": "Hill-Rom Holding",
-        "stock": "HRC"
-    },
-    {
         "name": "Hormel Foods Crp",
         "stock": "HRL"
-    },
-    {
-        "name": "Harsco Corp",
-        "stock": "HSC"
     },
     {
         "name": "Henry Schein Inc",
@@ -1828,20 +1668,12 @@
         "stock": "IFF"
     },
     {
-        "name": "Ii-Vi Inc",
-        "stock": "IIVI"
-    },
-    {
         "name": "Indep Bank/Ma",
         "stock": "INDB"
     },
     {
         "name": "Ingredion Inc",
         "stock": "INGR"
-    },
-    {
-        "name": "World Fuel Svcs",
-        "stock": "INT"
     },
     {
         "name": "Intel Corp",
@@ -1894,10 +1726,6 @@
     {
         "name": "Illinois Tool Wo",
         "stock": "ITW"
-    },
-    {
-        "name": "Invacare Corp",
-        "stock": "IVC"
     },
     {
         "name": "Invesco Ltd",
@@ -2044,10 +1872,6 @@
         "stock": "KR"
     },
     {
-        "name": "Kraton Performan",
-        "stock": "KRA"
-    },
-    {
         "name": "Kilroy Realty",
         "stock": "KRC"
     },
@@ -2084,10 +1908,6 @@
         "stock": "LANC"
     },
     {
-        "name": "Lydall Inc",
-        "stock": "LDL"
-    },
-    {
         "name": "Leidos Holdings",
         "stock": "LDOS"
     },
@@ -2116,20 +1936,12 @@
         "stock": "LH"
     },
     {
-        "name": "Lhc Group Inc",
-        "stock": "LHCG"
-    },
-    {
         "name": "Lennox Intl Inc",
         "stock": "LII"
     },
     {
         "name": "Lkq Corp",
         "stock": "LKQ"
-    },
-    {
-        "name": "Lumber Liquidato",
-        "stock": "LL"
     },
     {
         "name": "Eli Lilly & Co",
@@ -2154,10 +1966,6 @@
     {
         "name": "Lowe'S Cos Inc",
         "stock": "LOW"
-    },
-    {
-        "name": "Liveperson Inc",
-        "stock": "LPSN"
     },
     {
         "name": "Louisiana-Pacifi",
@@ -2224,10 +2032,6 @@
         "stock": "MANH"
     },
     {
-        "name": "Mantech Intl-A",
-        "stock": "MANT"
-    },
-    {
         "name": "Marriott Intl-A",
         "stock": "MAR"
     },
@@ -2292,10 +2096,6 @@
         "stock": "MDLZ"
     },
     {
-        "name": "Meredith Corp",
-        "stock": "MDP"
-    },
-    {
         "name": "Allscripts Healt",
         "stock": "MDRX"
     },
@@ -2320,10 +2120,6 @@
         "stock": "MET"
     },
     {
-        "name": "Magellan Health",
-        "stock": "MGLN"
-    },
-    {
         "name": "Mohawk Inds",
         "stock": "MHK"
     },
@@ -2342,10 +2138,6 @@
     {
         "name": "Marketaxess",
         "stock": "MKTX"
-    },
-    {
-        "name": "Herman Miller",
-        "stock": "MLHR"
     },
     {
         "name": "Mueller Inds",
@@ -2460,10 +2252,6 @@
         "stock": "MTRN"
     },
     {
-        "name": "Matrix Service",
-        "stock": "MTRX"
-    },
-    {
         "name": "Minerals Tech",
         "stock": "MTX"
     },
@@ -2548,10 +2336,6 @@
         "stock": "NKE"
     },
     {
-        "name": "Nielsen Nv",
-        "stock": "NLSN"
-    },
-    {
         "name": "National Retail",
         "stock": "NNN"
     },
@@ -2562,10 +2346,6 @@
     {
         "name": "Natl Oilwell Var",
         "stock": "NOV"
-    },
-    {
-        "name": "Neenah Paper Inc",
-        "stock": "NP"
     },
     {
         "name": "Natl Presto Inds",
@@ -2760,10 +2540,6 @@
         "stock": "PB"
     },
     {
-        "name": "People'S United",
-        "stock": "PBCT"
-    },
-    {
         "name": "Prestige Brands",
         "stock": "PBH"
     },
@@ -2836,16 +2612,8 @@
         "stock": "PII"
     },
     {
-        "name": "Park Electrochem",
-        "stock": "PKE"
-    },
-    {
         "name": "Packaging Corp",
         "stock": "PKG"
-    },
-    {
-        "name": "Perkinelmer Inc",
-        "stock": "PKI"
     },
     {
         "name": "Children'S Place",
@@ -2940,10 +2708,6 @@
         "stock": "PSA"
     },
     {
-        "name": "Ps Business Park",
-        "stock": "PSB"
-    },
-    {
         "name": "Phillips 66",
         "stock": "PSX"
     },
@@ -2984,16 +2748,8 @@
         "stock": "R"
     },
     {
-        "name": "Regal Beloit",
-        "stock": "RBC"
-    },
-    {
         "name": "Rent-A-Center",
         "stock": "RCII"
-    },
-    {
-        "name": "Everest Re Group",
-        "stock": "RE"
     },
     {
         "name": "Regency Centers",
@@ -3022,10 +2778,6 @@
     {
         "name": "Sturm Ruger & Co",
         "stock": "RGR"
-    },
-    {
-        "name": "Regis Corp",
-        "stock": "RGS"
     },
     {
         "name": "Robert Half Intl",
@@ -3088,10 +2840,6 @@
         "stock": "RRC"
     },
     {
-        "name": "Red Robin Gourme",
-        "stock": "RRGB"
-    },
-    {
         "name": "Reliance Steel",
         "stock": "RS"
     },
@@ -3100,20 +2848,8 @@
         "stock": "RSG"
     },
     {
-        "name": "Ruth'S Hospitali",
-        "stock": "RUTH"
-    },
-    {
-        "name": "Rayonier Adv",
-        "stock": "RYAM"
-    },
-    {
         "name": "Rayonier Inc",
         "stock": "RYN"
-    },
-    {
-        "name": "Sanderson Farms",
-        "stock": "SAFM"
     },
     {
         "name": "Safety Insurance",
@@ -3138,10 +2874,6 @@
     {
         "name": "Sanmina Corp",
         "stock": "SANM"
-    },
-    {
-        "name": "Signature Bank",
-        "stock": "SBNY"
     },
     {
         "name": "Sabra Health Car",
@@ -3180,20 +2912,12 @@
         "stock": "SEIC"
     },
     {
-        "name": "Seneca Foods-A",
-        "stock": "SENEA"
-    },
-    {
         "name": "Stifel Financial",
         "stock": "SF"
     },
     {
         "name": "Simmons First -A",
         "stock": "SFNC"
-    },
-    {
-        "name": "Scientific Gam-A",
-        "stock": "SGMS"
     },
     {
         "name": "Steven Madden",
@@ -3210,14 +2934,6 @@
     {
         "name": "Select Ins Grp",
         "stock": "SIGI"
-    },
-    {
-        "name": "Svb Financial Gr",
-        "stock": "SIVB"
-    },
-    {
-        "name": "South Jersey Ind",
-        "stock": "SJI"
     },
     {
         "name": "Jm Smucker Co",
@@ -3304,20 +3020,12 @@
         "stock": "SPG"
     },
     {
-        "name": "Spectrum Pharmac",
-        "stock": "SPPI"
-    },
-    {
         "name": "Spartannash Co",
         "stock": "SPTN"
     },
     {
         "name": "Stericycle Inc",
         "stock": "SRCL"
-    },
-    {
-        "name": "Surmodics Inc",
-        "stock": "SRDX"
     },
     {
         "name": "Sempra Energy",
@@ -3340,16 +3048,8 @@
         "stock": "STC"
     },
     {
-        "name": "Sterling Bancorp",
-        "stock": "STL"
-    },
-    {
         "name": "Steel Dynamics",
         "stock": "STLD"
-    },
-    {
-        "name": "Stamps.Com Inc",
-        "stock": "STMP"
     },
     {
         "name": "Strayer Educatio",
@@ -3374,10 +3074,6 @@
     {
         "name": "Skyworks Solutio",
         "stock": "SWKS"
-    },
-    {
-        "name": "Schweitzer-Maudu",
-        "stock": "SWM"
     },
     {
         "name": "Southwestrn Engy",
@@ -3458,10 +3154,6 @@
     {
         "name": "Teleflex Inc",
         "stock": "TFX"
-    },
-    {
-        "name": "Tredegar Corp",
-        "stock": "TG"
     },
     {
         "name": "Triumph Group",
@@ -3584,10 +3276,6 @@
         "stock": "TTWO"
     },
     {
-        "name": "Tupperware Brand",
-        "stock": "TUP"
-    },
-    {
         "name": "Titan Intl Inc",
         "stock": "TWI"
     },
@@ -3628,20 +3316,12 @@
         "stock": "UDR"
     },
     {
-        "name": "Universal Elec",
-        "stock": "UEIC"
-    },
-    {
         "name": "United Fire Grou",
         "stock": "UFCS"
     },
     {
         "name": "Universal Forest",
         "stock": "UFPI"
-    },
-    {
-        "name": "Domtar Corp",
-        "stock": "UFS"
     },
     {
         "name": "Ugi Corp",
@@ -3658,10 +3338,6 @@
     {
         "name": "Umb Financial",
         "stock": "UMBF"
-    },
-    {
-        "name": "Umpqua Holdings",
-        "stock": "UMPQ"
     },
     {
         "name": "Unifirst Corp/Ma",
@@ -3730,10 +3406,6 @@
     {
         "name": "Vicor Corp",
         "stock": "VICR"
-    },
-    {
-        "name": "Meridian Biosci",
-        "stock": "VIVO"
     },
     {
         "name": "Valero Energy",
@@ -3920,16 +3592,8 @@
         "stock": "X"
     },
     {
-        "name": "Cimarex Energy C",
-        "stock": "XEC"
-    },
-    {
         "name": "Xcel Energy Inc",
         "stock": "XEL"
-    },
-    {
-        "name": "Xilinx Inc",
-        "stock": "XLNX"
     },
     {
         "name": "Exxon Mobil Corp",
@@ -3946,10 +3610,6 @@
     {
         "name": "Xylem Inc",
         "stock": "XYL"
-    },
-    {
-        "name": "Alleghany Corp",
-        "stock": "Y"
     },
     {
         "name": "Yum! Brands Inc",
@@ -3972,10 +3632,6 @@
         "stock": "ZTS"
     },
     {
-        "name": "Zumiez Inc",
-        "stock": "ZUMZ"
-    },
-    {
         "name": "American Airline",
         "stock": "AAL"
     },
@@ -3992,10 +3648,6 @@
         "stock": "ANIP"
     },
     {
-        "name": "Anthem Inc",
-        "stock": "ANTM"
-    },
-    {
         "name": "Assoc Banc-Corp",
         "stock": "ASB"
     },
@@ -4006,10 +3658,6 @@
     {
         "name": "Topbuild Cor",
         "stock": "BLD"
-    },
-    {
-        "name": "Barnes & Noble E",
-        "stock": "BNED"
     },
     {
         "name": "Cable One Inc",
@@ -4048,10 +3696,6 @@
         "stock": "DEI"
     },
     {
-        "name": "Echo Global Logi",
-        "stock": "ECHO"
-    },
-    {
         "name": "Enanta Pharmaceu",
         "stock": "ENTA"
     },
@@ -4066,10 +3710,6 @@
     {
         "name": "Eversource Energ",
         "stock": "ES"
-    },
-    {
-        "name": "Spx Flow Inc",
-        "stock": "FLOW"
     },
     {
         "name": "Twenty-First - B",
@@ -4090,10 +3730,6 @@
     {
         "name": "Healthequity Inc",
         "stock": "HQY"
-    },
-    {
-        "name": "Inogen Inc",
-        "stock": "INGN"
     },
     {
         "name": "Summit Hotel Pro",
@@ -4124,10 +3760,6 @@
         "stock": "LITE"
     },
     {
-        "name": "Motorcar Parts",
-        "stock": "MPAA"
-    },
-    {
         "name": "Marten Transport",
         "stock": "MRTN"
     },
@@ -4138,10 +3770,6 @@
     {
         "name": "Northfield Banco",
         "stock": "NFBK"
-    },
-    {
-        "name": "Nektar Therapeut",
-        "stock": "NKTR"
     },
     {
         "name": "News Corp-Cl B",
@@ -4204,20 +3832,12 @@
         "stock": "TPH"
     },
     {
-        "name": "Lendingtree Inc",
-        "stock": "TREE"
-    },
-    {
         "name": "United Continent",
         "stock": "UAL"
     },
     {
         "name": "Urban Edge P",
         "stock": "UE"
-    },
-    {
-        "name": "Unifi Inc",
-        "stock": "UFI"
     },
     {
         "name": "Us Physical Ther",
@@ -4242,10 +3862,6 @@
     {
         "name": "Walker & Dunlop",
         "stock": "WD"
-    },
-    {
-        "name": "Wisdomtree Inves",
-        "stock": "WETF"
     },
     {
         "name": "Westrock Co",
@@ -4344,14 +3960,6 @@
         "stock": "TREX"
     },
     {
-        "name": "VERA BRADLEY INC",
-        "stock": "VRA"
-    },
-    {
-        "name": "WILLIS TOWERS WA",
-        "stock": "WLTW"
-    },
-    {
         "name": "WORLD WRESTLIN-A",
         "stock": "WWE"
     },
@@ -4404,10 +4012,6 @@
         "stock": "COTY"
     },
     {
-        "name": "COOPER-STANDARD",
-        "stock": "CPS"
-    },
-    {
         "name": "CUSTOMERS BANCOR",
         "stock": "CUBI"
     },
@@ -4424,20 +4028,12 @@
         "stock": "DLR"
     },
     {
-        "name": "EAGLE PHARMACEUT",
-        "stock": "EGRX"
-    },
-    {
         "name": "FOX FACTORY HOLD",
         "stock": "FOXF"
     },
     {
         "name": "FIRST IND REALTY",
         "stock": "FR"
-    },
-    {
-        "name": "FIESTA RESTAURAN",
-        "stock": "FRGI"
     },
     {
         "name": "FORTIVE CORP",
@@ -4450,14 +4046,6 @@
     {
         "name": "GLOBUS MEDICAL I",
         "stock": "GMED"
-    },
-    {
-        "name": "GREAT WESTERN BA",
-        "stock": "GWB"
-    },
-    {
-        "name": "HOMESTREET INC",
-        "stock": "HMST"
     },
     {
         "name": "HOPE BANCORP INC",
@@ -4478,14 +4066,6 @@
     {
         "name": "LGI HOMES INC",
         "stock": "LGIH"
-    },
-    {
-        "name": "EL POLLO LOCO HO",
-        "stock": "LOCO"
-    },
-    {
-        "name": "LIFE STORAGE INC",
-        "stock": "LSI"
     },
     {
         "name": "LAMB WESTON",
@@ -4510,10 +4090,6 @@
     {
         "name": "DAVE & BUSTERS",
         "stock": "PLAY"
-    },
-    {
-        "name": "RAVEN INDUSTRIES",
-        "stock": "RAVN"
     },
     {
         "name": "RESTORATION HARD",
@@ -4566,10 +4142,6 @@
     {
         "name": "WABASH NATIONAL",
         "stock": "WNC"
-    },
-    {
-        "name": "Applied Optoelectronics Inc",
-        "stock": "AAOI"
     },
     {
         "name": "Acadia Healthcare Co Inc",
@@ -4632,20 +4204,12 @@
         "stock": "COKE"
     },
     {
-        "name": "CyrusOne Inc",
-        "stock": "CONE"
-    },
-    {
         "name": "Corcept Therapeutics Inc",
         "stock": "CORT"
     },
     {
         "name": "Callon Petroleum Co",
         "stock": "CPE"
-    },
-    {
-        "name": "Cutera Inc",
-        "stock": "CUTR"
     },
     {
         "name": "Cytokinetics Inc",
@@ -4672,20 +4236,8 @@
         "stock": "HLT"
     },
     {
-        "name": "Heska Corp",
-        "stock": "HSKA"
-    },
-    {
-        "name": "Hersha Hospitality Trust",
-        "stock": "HT"
-    },
-    {
         "name": "Incyte Corp",
         "stock": "INCY"
-    },
-    {
-        "name": "IHS Markit Ltd",
-        "stock": "INFO"
     },
     {
         "name": "IQVIA Holdings Inc",
@@ -4820,16 +4372,8 @@
         "stock": "SYNH"
     },
     {
-        "name": "Tactile Systems Technology Inc",
-        "stock": "TCMD"
-    },
-    {
         "name": "Tapestry Inc",
         "stock": "TPR"
-    },
-    {
-        "name": "Tivity Health Inc",
-        "stock": "TVTY"
     },
     {
         "name": "Ultra Clean Holdings Inc",
@@ -4838,10 +4382,6 @@
     {
         "name": "Uniti Group Inc",
         "stock": "UNIT"
-    },
-    {
-        "name": "Vonage Holdings Corp",
-        "stock": "VG"
     },
     {
         "name": "Varex Imaging Corp",
@@ -4872,20 +4412,12 @@
         "stock": "WELL"
     },
     {
-        "name": "TWITTER INC",
-        "stock": "TWTR"
-    },
-    {
         "name": "ARISTA NETWORKS INC",
         "stock": "ANET"
     },
     {
         "name": "FLEETCOR TECHNOLOGIES INC",
         "stock": "FLT"
-    },
-    {
-        "name": "FIRST REPUBLIC BANK/CA",
-        "stock": "FRC"
     },
     {
         "name": "CBRE GROUP INC - A",
@@ -4952,10 +4484,6 @@
         "stock": "OZK"
     },
     {
-        "name": "COVETRUS INC",
-        "stock": "CVET"
-    },
-    {
         "name": "HANCOCK WHITNEY CORP",
         "stock": "HWC"
     },
@@ -4970,10 +4498,6 @@
     {
         "name": "RESIDEO TECHNOLOGIES INC",
         "stock": "REZI"
-    },
-    {
-        "name": "WASHINGTON REIT",
-        "stock": "WRE"
     },
     {
         "name": "VISTEON CORP",
@@ -5016,10 +4540,6 @@
         "stock": "LTHM"
     },
     {
-        "name": "FLAGSTAR BANCORP INC",
-        "stock": "FBC"
-    },
-    {
         "name": "ARCOSA INC",
         "stock": "ACA"
     },
@@ -5038,10 +4558,6 @@
     {
         "name": "SEACOAST BANKING CORP/FL",
         "stock": "SBCF"
-    },
-    {
-        "name": "CARDIOVASCULAR SYSTEMS INC",
-        "stock": "CSII"
     },
     {
         "name": "VERITEX HOLDINGS INC",
@@ -5064,16 +4580,8 @@
         "stock": "BHLB"
     },
     {
-        "name": "REALOGY HOLDINGS CORP",
-        "stock": "RLGY"
-    },
-    {
         "name": "OFFICE PROPERTIES INCOME TRU",
         "stock": "OPI"
-    },
-    {
-        "name": "TABULA RASA HEALTHCARE INC",
-        "stock": "TRHC"
     },
     {
         "name": "JAMES RIVER GROUP HOLDINGS L",
@@ -5100,10 +4608,6 @@
         "stock": "VNDA"
     },
     {
-        "name": "GRANITE POINT MORTGAGE TRUST",
-        "stock": "GPMT"
-    },
-    {
         "name": "CHEFS WAREHOUSE INC/THE",
         "stock": "CHEF"
     },
@@ -5124,14 +4628,6 @@
         "stock": "REGI"
     },
     {
-        "name": "PENN VIRGINIA CORP",
-        "stock": "PVAC"
-    },
-    {
-        "name": "TRIUMPH BANCORP INC",
-        "stock": "TBK"
-    },
-    {
         "name": "ONESPAN INC",
         "stock": "OSPN"
     },
@@ -5140,28 +4636,12 @@
         "stock": "ADUS"
     },
     {
-        "name": "CONNS INC",
-        "stock": "CONN"
-    },
-    {
         "name": "PREFERRED BANK/LOS ANGELES",
         "stock": "PFBC"
     },
     {
         "name": "INNOVATIVE INDUSTRIAL PROPER",
         "stock": "IIPR"
-    },
-    {
-        "name": "LAREDO PETROLEUM INC",
-        "stock": "LPI"
-    },
-    {
-        "name": "UNISYS CORP",
-        "stock": "UIS"
-    },
-    {
-        "name": "ISTAR INC",
-        "stock": "STAR"
     },
     {
         "name": "SMART GLOBAL HOLDINGS INC",
@@ -5300,14 +4780,6 @@
         "stock": "FHB"
     },
     {
-        "name": "Pennant Group Inc/The",
-        "stock": "PNTG"
-    },
-    {
-        "name": "Hanger Inc",
-        "stock": "HNGR"
-    },
-    {
         "name": "Truist Financial Corp",
         "stock": "TFC"
     },
@@ -5348,20 +4820,12 @@
         "stock": "UNVR"
     },
     {
-        "name": "WW International Inc",
-        "stock": "WW"
-    },
-    {
         "name": "St Joe Co/The",
         "stock": "JOE"
     },
     {
         "name": "Fulgent Genetics Inc",
         "stock": "FLGT"
-    },
-    {
-        "name": "GCP Applied Technologies Inc",
-        "stock": "GCP"
     },
     {
         "name": "Independent Bank Group Inc",
@@ -5378,18 +4842,6 @@
     {
         "name": "Xenia Hotels & Resorts Inc",
         "stock": "XHR"
-    },
-    {
-        "name": "Sailpoint Technologies Holdings Inc",
-        "stock": "SAIL"
-    },
-    {
-        "name": "NortonLifeLock Inc",
-        "stock": "NLOK"
-    },
-    {
-        "name": "IAA Inc",
-        "stock": "IAA"
     },
     {
         "name": "Essential Properties Realty Trust Inc",
@@ -5444,16 +4896,8 @@
         "stock": "HXL"
     },
     {
-        "name": "ViacomCBS Inc",
-        "stock": "VIAC"
-    },
-    {
         "name": "RPC Inc",
         "stock": "RES"
-    },
-    {
-        "name": "DMC Global Inc",
-        "stock": "BOOM"
     },
     {
         "name": "ServiceNow Inc",
@@ -5466,10 +4910,6 @@
     {
         "name": "RadNet Inc",
         "stock": "RDNT"
-    },
-    {
-        "name": "Natus Medical Inc",
-        "stock": "NTUS"
     },
     {
         "name": "Chesapeake Utilities Corp",
@@ -5506,10 +4946,6 @@
     {
         "name": "Arrowhead Pharmaceuticals Inc",
         "stock": "ARWR"
-    },
-    {
-        "name": "CIT Group Inc",
-        "stock": "CIT"
     },
     {
         "name": "Designer Brands Inc",
@@ -5552,20 +4988,8 @@
         "stock": "ENPH"
     },
     {
-        "name": "Retail Properties of America Inc",
-        "stock": "RPAI"
-    },
-    {
         "name": "Baker Hughes Co",
         "stock": "BKR"
-    },
-    {
-        "name": "Ferro Corp",
-        "stock": "FOE"
-    },
-    {
-        "name": "Meritor Inc",
-        "stock": "MTOR"
     },
     {
         "name": "Carrier Global Corp",
@@ -5652,10 +5076,6 @@
         "stock": "MIDD"
     },
     {
-        "name": "Allegiance Bancshares Inc",
-        "stock": "ABTX"
-    },
-    {
         "name": "Pacira BioSciences Inc",
         "stock": "PCRX"
     },
@@ -5666,10 +5086,6 @@
     {
         "name": "Xencor Inc",
         "stock": "XNCR"
-    },
-    {
-        "name": "Colfax Corp",
-        "stock": "CFX"
     },
     {
         "name": "Park National Corp",
@@ -5686,10 +5102,6 @@
     {
         "name": "National Beverage Corp",
         "stock": "FIZZ"
-    },
-    {
-        "name": "Industrial Logistics Properties Trust",
-        "stock": "ILPT"
     },
     {
         "name": "Spirit Realty Capital Inc",
@@ -5760,14 +5172,6 @@
         "stock": "SVC"
     },
     {
-        "name": "Diversified Healthcare Trust",
-        "stock": "DHC"
-    },
-    {
-        "name": "STORE Capital Corp",
-        "stock": "STOR"
-    },
-    {
         "name": "Trinseo SA",
         "stock": "TSE"
     },
@@ -5810,10 +5214,6 @@
     {
         "name": "Biolife Solutions Inc",
         "stock": "BLFS"
-    },
-    {
-        "name": "Cara Therapeutics Inc",
-        "stock": "CARA"
     },
     {
         "name": "Celsius Holdings Inc",
@@ -5860,24 +5260,12 @@
         "stock": "HTH"
     },
     {
-        "name": "Investors Bancorp Inc",
-        "stock": "ISBC"
-    },
-    {
-        "name": "Joint Corp",
-        "stock": "JYNT"
-    },
-    {
         "name": "Lakeland Financial Corp.",
         "stock": "LKFN"
     },
     {
         "name": "Lattice Semiconductor Corp.",
         "stock": "LSCC"
-    },
-    {
-        "name": "Mimecast Ltd",
-        "stock": "MIME"
     },
     {
         "name": "ModivCare Inc",
@@ -5916,10 +5304,6 @@
         "stock": "OPCH"
     },
     {
-        "name": "Organogenesis Holdings Inc - Class A",
-        "stock": "ORGO"
-    },
-    {
         "name": "Performance Food Group Company",
         "stock": "PFGC"
     },
@@ -5928,20 +5312,12 @@
         "stock": "PGNY"
     },
     {
-        "name": "Plantronics, Inc.",
-        "stock": "POLY"
-    },
-    {
         "name": "uniQure N.V.",
         "stock": "QURE"
     },
     {
         "name": "B. Riley Financial Inc",
         "stock": "RILY"
-    },
-    {
-        "name": "SelectQuote Inc",
-        "stock": "SLQT"
     },
     {
         "name": "Sylvamo Corp",
@@ -5994,5 +5370,701 @@
     {
         "name": "WSFS Financial Corp.",
         "stock": "WSFS"
+    },
+    {
+        "name": "Alcoa Corp",
+        "stock": "AA"
+    },
+    {
+        "name": "Ironwood Pharmaceuticals Inc",
+        "stock": "IRWD"
+    },
+    {
+        "name": "Catalyst Pharmaceuticals Inc",
+        "stock": "CPRX"
+    },
+    {
+        "name": "Ball Corp",
+        "stock": "BALL"
+    },
+    {
+        "name": "Berkshire Hathaway Inc",
+        "stock": "BRK_B"
+    },
+    {
+        "name": "Brown-Forman Corp",
+        "stock": "BF_B"
+    },
+    {
+        "name": "Coterra Energy Inc",
+        "stock": "CTRA"
+    },
+    {
+        "name": "BellRing Brands Inc",
+        "stock": "BRBR"
+    },
+    {
+        "name": "Insulet Corp",
+        "stock": "PODD"
+    },
+    {
+        "name": "Revvity Inc",
+        "stock": "RVTY"
+    },
+    {
+        "name": "Westlake Corp",
+        "stock": "WLK"
+    },
+    {
+        "name": "Meta Platforms Inc",
+        "stock": "META"
+    },
+    {
+        "name": "PG&E Corp",
+        "stock": "PCG"
+    },
+    {
+        "name": "Civitas Resources Inc",
+        "stock": "CIVI"
+    },
+    {
+        "name": "Stride Inc",
+        "stock": "LRN"
+    },
+    {
+        "name": "Cushman & Wakefield PLC",
+        "stock": "CWK"
+    },
+    {
+        "name": "SiTime Corp",
+        "stock": "SITM"
+    },
+    {
+        "name": "Gen Digital Inc",
+        "stock": "GEN"
+    },
+    {
+        "name": "Phillips Edison & Co Inc",
+        "stock": "PECO"
+    },
+    {
+        "name": "Ormat Technologies Inc",
+        "stock": "ORA"
+    },
+    {
+        "name": "Autoliv Inc",
+        "stock": "ALV"
+    },
+    {
+        "name": "ON Semiconductor Corp",
+        "stock": "ON"
+    },
+    {
+        "name": "BWX Technologies Inc",
+        "stock": "BWXT"
+    },
+    {
+        "name": "Bunge Ltd",
+        "stock": "BG"
+    },
+    {
+        "name": "Elevance Health Inc",
+        "stock": "ELV"
+    },
+    {
+        "name": "Thryv Holdings Inc",
+        "stock": "THRY"
+    },
+    {
+        "name": "SunPower Corp",
+        "stock": "SPWR"
+    },
+    {
+        "name": "Chord Energy Corp",
+        "stock": "CHRD"
+    },
+    {
+        "name": "Sunstone Hotel Investors Inc",
+        "stock": "SHO"
+    },
+    {
+        "name": "Sonos Inc",
+        "stock": "SONO"
+    },
+    {
+        "name": "CubeSmart",
+        "stock": "CUBE"
+    },
+    {
+        "name": "Outfront Media Inc",
+        "stock": "OUT"
+    },
+    {
+        "name": "Planet Fitness Inc",
+        "stock": "PLNT"
+    },
+    {
+        "name": "Arch Capital Group Ltd",
+        "stock": "ACGL"
+    },
+    {
+        "name": "Everest Group Ltd",
+        "stock": "EG"
+    },
+    {
+        "name": "Embecta Corp",
+        "stock": "EMBC"
+    },
+    {
+        "name": "Annaly Capital Management Inc",
+        "stock": "NLY"
+    },
+    {
+        "name": "Nexstar Media Group Inc",
+        "stock": "NXST"
+    },
+    {
+        "name": "Bread Financial Holdings Inc",
+        "stock": "BFH"
+    },
+    {
+        "name": "Verra Mobility Corp",
+        "stock": "VRRM"
+    },
+    {
+        "name": "Palo Alto Networks Inc",
+        "stock": "PANW"
+    },
+    {
+        "name": "Enviri Corp",
+        "stock": "NVRI"
+    },
+    {
+        "name": "eXp World Holdings Inc",
+        "stock": "EXPI"
+    },
+    {
+        "name": "Privia Health Group Inc",
+        "stock": "PRVA"
+    },
+    {
+        "name": "Stellar Bancorp Inc",
+        "stock": "STEL"
+    },
+    {
+        "name": "Consensus Cloud Solutions Inc",
+        "stock": "CCSI"
+    },
+    {
+        "name": "Fortrea Holdings Inc",
+        "stock": "FTRE"
+    },
+    {
+        "name": "Hertz Global Holdings Inc",
+        "stock": "HTZ"
+    },
+    {
+        "name": "Inari Medical Inc",
+        "stock": "NARI"
+    },
+    {
+        "name": "Crane NXT Co",
+        "stock": "CXT"
+    },
+    {
+        "name": "Enhabit Inc",
+        "stock": "EHAB"
+    },
+    {
+        "name": "Radian Group Inc",
+        "stock": "RDN"
+    },
+    {
+        "name": "Doximity Inc",
+        "stock": "DOCS"
+    },
+    {
+        "name": "Berry Global Group Inc",
+        "stock": "BERY"
+    },
+    {
+        "name": "Fiserv Inc",
+        "stock": "FI"
+    },
+    {
+        "name": "Hilton Grand Vacations Inc",
+        "stock": "HGV"
+    },
+    {
+        "name": "Constellation Energy Corp",
+        "stock": "CEG"
+    },
+    {
+        "name": "Topgolf Callaway Brands Corp",
+        "stock": "MODG"
+    },
+    {
+        "name": "iTeos Therapeutics Inc",
+        "stock": "ITOS"
+    },
+    {
+        "name": "Masterbrand Inc",
+        "stock": "MBC"
+    },
+    {
+        "name": "Academy Sports & Outdoors Inc",
+        "stock": "ASO"
+    },
+    {
+        "name": "Triumph Financial Inc",
+        "stock": "TFIN"
+    },
+    {
+        "name": "Harmony Biosciences Holdings I",
+        "stock": "HRMY"
+    },
+    {
+        "name": "Warner Bros Discovery Inc",
+        "stock": "WBD"
+    },
+    {
+        "name": "California Resources Corp",
+        "stock": "CRC"
+    },
+    {
+        "name": "AdaptHealth Corp",
+        "stock": "AHCO"
+    },
+    {
+        "name": "GE HealthCare Technologies Inc",
+        "stock": "GEHC"
+    },
+    {
+        "name": "Valaris Ltd",
+        "stock": "VAL"
+    },
+    {
+        "name": "Otter Tail Corp",
+        "stock": "OTTR"
+    },
+    {
+        "name": "RXO Inc",
+        "stock": "RXO"
+    },
+    {
+        "name": "Vir Biotechnology Inc",
+        "stock": "VIR"
+    },
+    {
+        "name": "Antero Resources Corp",
+        "stock": "AR"
+    },
+    {
+        "name": "SJW Group",
+        "stock": "SJW"
+    },
+    {
+        "name": "Payoneer Global Inc",
+        "stock": "PAYO"
+    },
+    {
+        "name": "HF Sinclair Corp",
+        "stock": "DINO"
+    },
+    {
+        "name": "Voya Financial Inc",
+        "stock": "VOYA"
+    },
+    {
+        "name": "Mister Car Wash Inc",
+        "stock": "MCW"
+    },
+    {
+        "name": "Avid Bioservices Inc",
+        "stock": "CDMO"
+    },
+    {
+        "name": "Clearfield Inc",
+        "stock": "CLFD"
+    },
+    {
+        "name": "Corsair Gaming Inc",
+        "stock": "CRSR"
+    },
+    {
+        "name": "CVR Energy Inc",
+        "stock": "CVI"
+    },
+    {
+        "name": "Dropbox Inc",
+        "stock": "DBX"
+    },
+    {
+        "name": "Frontdoor Inc",
+        "stock": "FTDR"
+    },
+    {
+        "name": "Artisan Partners Asset Managem",
+        "stock": "APAM"
+    },
+    {
+        "name": "Kennedy-Wilson Holdings Inc",
+        "stock": "KW"
+    },
+    {
+        "name": "Elme Communities",
+        "stock": "ELME"
+    },
+    {
+        "name": "DoubleVerify Holdings Inc",
+        "stock": "DV"
+    },
+    {
+        "name": "Schrodinger Inc/United States",
+        "stock": "SDGR"
+    },
+    {
+        "name": "Phinia Inc",
+        "stock": "PHIN"
+    },
+    {
+        "name": "Gogo Inc",
+        "stock": "GOGO"
+    },
+    {
+        "name": "EPAM Systems Inc",
+        "stock": "EPAM"
+    },
+    {
+        "name": "Paramount Global",
+        "stock": "PARA"
+    },
+    {
+        "name": "Crown Holdings Inc",
+        "stock": "CCK"
+    },
+    {
+        "name": "ZoomInfo Technologies Inc",
+        "stock": "ZI"
+    },
+    {
+        "name": "Calix Inc",
+        "stock": "CALX"
+    },
+    {
+        "name": "Cytek Biosciences Inc",
+        "stock": "CTKB"
+    },
+    {
+        "name": "World Kinect Corp",
+        "stock": "WKC"
+    },
+    {
+        "name": "MillerKnoll Inc",
+        "stock": "MLKN"
+    },
+    {
+        "name": "Equity LifeStyle Properties In",
+        "stock": "ELS"
+    },
+    {
+        "name": "STAG Industrial Inc",
+        "stock": "STAG"
+    },
+    {
+        "name": "Comstock Resources Inc",
+        "stock": "CRK"
+    },
+    {
+        "name": "Frontier Communications Parent",
+        "stock": "FYBR"
+    },
+    {
+        "name": "Invitation Homes Inc",
+        "stock": "INVH"
+    },
+    {
+        "name": "Moog Inc",
+        "stock": "MOG_A"
+    },
+    {
+        "name": "Regal Rexnord Corp",
+        "stock": "RRX"
+    },
+    {
+        "name": "Esab Corp",
+        "stock": "ESAB"
+    },
+    {
+        "name": "Ovintiv Inc",
+        "stock": "OVV"
+    },
+    {
+        "name": "US Foods Holding Corp",
+        "stock": "USFD"
+    },
+    {
+        "name": "Light & Wonder Inc",
+        "stock": "LNW"
+    },
+    {
+        "name": "Wolfspeed Inc",
+        "stock": "WOLF"
+    },
+    {
+        "name": "UFP Technologies Inc",
+        "stock": "UFPT"
+    },
+    {
+        "name": "John Wiley & Sons Inc",
+        "stock": "WLY"
+    },
+    {
+        "name": "Sotera Health Co",
+        "stock": "SHC"
+    },
+    {
+        "name": "Artivion Inc",
+        "stock": "AORT"
+    },
+    {
+        "name": "Kyndryl Holdings Inc",
+        "stock": "KD"
+    },
+    {
+        "name": "Certara Inc",
+        "stock": "CERT"
+    },
+    {
+        "name": "Moelis & Co",
+        "stock": "MC"
+    },
+    {
+        "name": "N-able Inc",
+        "stock": "NABL"
+    },
+    {
+        "name": "Veris Residential Inc",
+        "stock": "VRE"
+    },
+    {
+        "name": "Dynatrace Inc",
+        "stock": "DT"
+    },
+    {
+        "name": "Sun Country Airlines Holdings",
+        "stock": "SNCY"
+    },
+    {
+        "name": "Azenta Inc",
+        "stock": "AZTA"
+    },
+    {
+        "name": "Upbound Group Inc",
+        "stock": "UPBD"
+    },
+    {
+        "name": "MACOM Technology Solutions Hol",
+        "stock": "MTSI"
+    },
+    {
+        "name": "Mativ Holdings Inc",
+        "stock": "MATV"
+    },
+    {
+        "name": "Shockwave Medical Inc",
+        "stock": "SWAV"
+    },
+    {
+        "name": "Avantax Inc",
+        "stock": "AVTA"
+    },
+    {
+        "name": "Arbor Realty Trust Inc",
+        "stock": "ABR"
+    },
+    {
+        "name": "Agiliti Inc",
+        "stock": "AGTI"
+    },
+    {
+        "name": "Vital Energy Inc",
+        "stock": "VTLE"
+    },
+    {
+        "name": "Ziff Davis Inc",
+        "stock": "ZD"
+    },
+    {
+        "name": "Leslies Inc",
+        "stock": "LESL"
+    },
+    {
+        "name": "Allegro MicroSystems Inc",
+        "stock": "ALGM"
+    },
+    {
+        "name": "Starwood Property Trust Inc",
+        "stock": "STWD"
+    },
+    {
+        "name": "Axalta Coating Systems Ltd",
+        "stock": "AXTA"
+    },
+    {
+        "name": "Orion Office REIT Inc",
+        "stock": "ONL"
+    },
+    {
+        "name": "Keurig Dr Pepper Inc",
+        "stock": "KDP"
+    },
+    {
+        "name": "Anywhere Real Estate Inc",
+        "stock": "HOUS"
+    },
+    {
+        "name": "Willis Towers Watson PLC",
+        "stock": "WTW"
+    },
+    {
+        "name": "XPEL Inc",
+        "stock": "XPEL"
+    },
+    {
+        "name": "Super Micro Computer Inc",
+        "stock": "SMCI"
+    },
+    {
+        "name": "VICI Properties Inc",
+        "stock": "VICI"
+    },
+    {
+        "name": "Portland General Electric Co",
+        "stock": "POR"
+    },
+    {
+        "name": "Fortune Brands Innovations Inc",
+        "stock": "FBIN"
+    },
+    {
+        "name": "Atlantic Union Bankshares Corp",
+        "stock": "AUB"
+    },
+    {
+        "name": "Adeia Inc",
+        "stock": "ADEA"
+    },
+    {
+        "name": "Novanta Inc",
+        "stock": "NOVT"
+    },
+    {
+        "name": "Aramark",
+        "stock": "ARMK"
+    },
+    {
+        "name": "NexTier Oilfield Solutions Inc",
+        "stock": "NEX"
+    },
+    {
+        "name": "Knife River Corp",
+        "stock": "KNF"
+    },
+    {
+        "name": "Alpha & Omega Semiconductor Lt",
+        "stock": "AOSL"
+    },
+    {
+        "name": "A10 Networks Inc",
+        "stock": "ATEN"
+    },
+    {
+        "name": "Graphic Packaging Holding Co",
+        "stock": "GPK"
+    },
+    {
+        "name": "Green Brick Partners Inc",
+        "stock": "GRBK"
+    },
+    {
+        "name": "Cars.com Inc",
+        "stock": "CARS"
+    },
+    {
+        "name": "Euronet Worldwide Inc",
+        "stock": "EEFT"
+    },
+    {
+        "name": "SouthState Corp",
+        "stock": "SSB"
+    },
+    {
+        "name": "Northern Oil and Gas Inc",
+        "stock": "NOG"
+    },
+    {
+        "name": "Advanced Drainage Systems Inc",
+        "stock": "WMS"
+    },
+    {
+        "name": "MP Materials Corp",
+        "stock": "MP"
+    },
+    {
+        "name": "WESCO International Inc",
+        "stock": "WCC"
+    },
+    {
+        "name": "National Vision Holdings Inc",
+        "stock": "EYE"
+    },
+    {
+        "name": "Avid Technology Inc",
+        "stock": "AVID"
+    },
+    {
+        "name": "Cargurus Inc",
+        "stock": "CARG"
+    },
+    {
+        "name": "CoStar Group Inc",
+        "stock": "CSGP"
+    },
+    {
+        "name": "Enovis Corp",
+        "stock": "ENOV"
+    },
+    {
+        "name": "Franklin BSP Realty Trust Inc",
+        "stock": "FBRT"
+    },
+    {
+        "name": "Arcus Biosciences Inc",
+        "stock": "RCUS"
+    },
+    {
+        "name": "Golden Entertainment Inc",
+        "stock": "GDEN"
+    },
+    {
+        "name": "NV5 Global Inc",
+        "stock": "NVEE"
+    },
+    {
+        "name": "Bruker Corp",
+        "stock": "BRKR"
+    },
+    {
+        "name": "Hostess Brands Inc",
+        "stock": "TWNK"
+    },
+    {
+        "name": "WisdomTree Inc",
+        "stock": "WT"
+    },
+    {
+        "name": "Dynavax Technologies Corp",
+        "stock": "DVAX"
     }
 ]
