@@ -225,6 +225,7 @@
 							'Time In Market(Bars)',
 							'Profit Target(%)',
 							'Date',
+							'Z-Score',
 							'Expected Return(%)'
 						].indexOf(l) !== -1
 							? 'custom'
@@ -475,7 +476,7 @@ export default {
 				}else{
 				}
 			}
-			if(['Win Rate(%)', 'Expected Return(%)'].indexOf(colName) !== -1){
+			if(['Win Rate(%)', 'Expected Return(%)', 'Z-Score'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.tableData.content.sort((a,b) => {
 						return b[colName] - a[colName]
