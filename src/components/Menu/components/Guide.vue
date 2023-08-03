@@ -50,7 +50,7 @@ export default {
             ]
           },
           {
-            id: 'fls', title: 'Finding the Last Signal Using BacktestEdeg', subsections: [
+            id: 'fls', title: 'Finding the Last Signal Using BacktestEdge', subsections: [
               { id: 'fls-0', title: "Click the 'find last signal' button" },
               { id: 'fls-1', title: 'Wait for the backtest to finish' }
             ]
