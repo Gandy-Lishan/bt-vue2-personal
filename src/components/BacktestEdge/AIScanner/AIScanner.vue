@@ -58,6 +58,7 @@ export default {
 		}
 	},
 	async getAIPick(date){
+		if(!date) return
 		this.tableDataList = []
 		let AIPickContent = await getAIPick(date)
 		
