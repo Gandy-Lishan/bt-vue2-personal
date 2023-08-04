@@ -77,7 +77,7 @@
 						</el-table-column>
 						<el-table-column
 							prop="tzScore"
-							label="Z_SCORE"
+							label="Z-SCORE"
 							align="center"
 							show-overflow-tooltip
 						>
@@ -1200,48 +1200,71 @@ export default {
       return processeArray;
     },
     transformData(data) {
+      console.log('trnasformData', data)
+      // data = data.map(item => {
+      //   if (item.period % 5 === 0 && item.timeframe === 'Day') {
+      //     return { period: item.period / 5, timeframe: 'Week' }
+      //   }
+      //   if (item.period % 21 === 0 && item.timeframe === 'Day') {
+      //     return { period: item.period / 21, timeframe: 'Month' }
+      //   }
+      //   if (item.period % 252 === 0 && item.timeframe === 'Day') {
+      //     return { period: item.period / 252, timeframe: 'Year' }
+      //   }
+      //   if (item.period % 4 === 0 && item.timeframe === 'Week') {
+      //     return { period: item.period / 4, timeframe: 'Month' }
+      //   }
+      //   if (item.period % 52 === 0 && item.timeframe === 'Week') {
+      //     return { period: item.period / 52, timeframe: 'Year' }
+      //   }
+      //   if (item.period % 12 === 0 && item.timeframe === 'Month') {
+      //     return { period: item.period / 12, timeframe: 'Year' }
+      //   }
+      //   return item
+      // })
+      // 更正一直判断到 Year
       data = data.map(item => {
-        if (item.period % 5 === 0 && item.timeframe === 'Day') {
-          return { period: item.period / 5, timeframe: 'Week' }
+        let period = item.period;
+        let timeframe = item.timeframe;
+
+        if (timeframe === 'Day') {
+          if (period % 5 === 0) {
+            period = period / 5;
+            timeframe = 'Week';
+          }
+          if (period % 13 === 0) {
+            period = (period / 13) * 3;
+            timeframe = 'Month';
+          }else if(period % 4 === 0){
+            period = period / 4;
+            timeframe = 'Month';
+          }
+          if(period % 12 === 0) {
+            period = period / 21;
+            timeframe = 'Year';
+          }
+        } else if (timeframe === 'Week') {
+          if (period % 13 === 0) {
+            period = (period / 13) * 3;
+            timeframe = 'Month';
+          } else if (period % 4 === 0) {
+            period = period / 4;
+            timeframe = 'Month';
+          }
+          if (period % 12 === 0) {
+            period = period / 12;
+            timeframe = 'Year';
+          }
+        } else if (timeframe === 'Month') {
+          if (period % 12 === 0) {
+            period = period / 12;
+            timeframe = 'Year';
+          }
         }
-        if (item.period % 21 === 0 && item.timeframe === 'Day') {
-          return { period: item.period / 21, timeframe: 'Month' }
-        }
-        if (item.period % 252 === 0 && item.timeframe === 'Day') {
-          return { period: item.period / 252, timeframe: 'Year' }
-        }
-        if (item.period % 4 === 0 && item.timeframe === 'Week') {
-          return { period: item.period / 4, timeframe: 'Month' }
-        }
-        if (item.period % 52 === 0 && item.timeframe === 'Week') {
-          return { period: item.period / 52, timeframe: 'Year' }
-        }
-        if (item.period % 12 === 0 && item.timeframe === 'Month') {
-          return { period: item.period / 12, timeframe: 'Year' }
-        }
-        return item
-      })
-      data = data.map(item => {
-        if (item.period % 5 === 0 && item.timeframe === 'Day') {
-          return { period: item.period / 5, timeframe: 'Week' }
-        }
-        if (item.period % 21 === 0 && item.timeframe === 'Day') {
-          return { period: item.period / 21, timeframe: 'Month' }
-        }
-        if (item.period % 252 === 0 && item.timeframe === 'Day') {
-          return { period: item.period / 252, timeframe: 'Year' }
-        }
-        if (item.period % 4 === 0 && item.timeframe === 'Week') {
-          return { period: item.period / 4, timeframe: 'Month' }
-        }
-        if (item.period % 52 === 0 && item.timeframe === 'Week') {
-          return { period: item.period / 52, timeframe: 'Year' }
-        }
-        if (item.period % 12 === 0 && item.timeframe === 'Month') {
-          return { period: item.period / 12, timeframe: 'Year' }
-        }
-        return item
-      })
+
+        return { period, timeframe };
+      });
+
       const uniqueData = [];
       data.forEach(item => {
         const isDuplicate = uniqueData.some(
