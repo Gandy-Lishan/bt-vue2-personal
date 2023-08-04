@@ -1,6 +1,20 @@
 <template>
 	<div class="gridContainer">
 		<el-card class="box-card">
+<el-collapse class='collape-title'>
+  <el-collapse-item>
+    <template slot="title">
+      AI Stock Scanner<i class="header-icon el-icon-info"></i>
+    </template>
+    <h4>Our AI stock scanner is updated nightly by 8:00 PM Eastern Time. This system is designed to provide you with a list of stocks that have triggered a "Signal-for-Action", worthy of consideration for trading at the opening of the next market day. Currently, our system can scan the 1500 S&P stocks. We will announce when additional stocks from other market indices are included.</h4>
+    <div>•	The system’s default setting displays the “end of today” shortlisting results. You can find historical results by selecting start and end dates from the past.</div>
+	<div>•	Since our scan includes all stocks that trigger a signal, we've built a filter that sorts the list to show only "profit > stop loss"</div>
+	<div>•	The list can also be filtered by entering a symbol or a specific signal for a specific day or period of time.</div>
+	<div>•	In addition to the default display of key metrics, there's a dropdown menu for each stock that displays additional metrics.</div>
+	<div>•	By clicking on the stock symbol, the system will direct you to detailed historical backtest results and a summary of key metrics for that stock. These backtest results ensure the reliability and accuracy of the "Signal-for-Action" list displayed by our system.</div>
+  </el-collapse-item>
+</el-collapse>
+			
 			<template
 				v-for="(item, index) in tableDataList" 
 			>
@@ -87,8 +101,9 @@ export default {
 			'Profit Target(%)',
 			'Best Time In Market(Bars)',
 			//'Cash Alloc(%)'
+			'Expected Return(%)',
 			'Z-Score', // 数据有误，先不显示
-			'Expected Return(%)'
+			
 		]
 
 		// 测试
@@ -126,6 +141,8 @@ h4 {
 	border: unset;
 }
 
-
+.collape-title {
+	margin-bottom: 20px;
+}
 
 </style>
