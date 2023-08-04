@@ -235,11 +235,14 @@ export default {
 					break;
 				default: 
 			}
-			CIQ.Studies.addStudy(CIQ.stxx, "ma",{
-				Period: 252,
-				Type: 'simple',
-				Field: "Close"
-			});
+			if(this.other['Category'] != 'MidTermAI'){
+				CIQ.Studies.addStudy(CIQ.stxx, "ma",{
+					Period: 252,
+					Type: 'simple',
+					Field: "Close"
+				});
+			}
+
 			CIQ.stxx.setChartType("candle");
 			
 		},
@@ -486,8 +489,12 @@ export default {
     top: 109px;
     left: 48px;
 	font-size: 1.1rem;
+	i {
+		font-weight: bold;
+	}
 	a {
-		color: #727475;
+		color: #525456;
+		font-weight: bold;
 		&:hover {
 			color: #5b9bd1;
 		}
