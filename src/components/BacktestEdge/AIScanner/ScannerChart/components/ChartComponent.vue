@@ -157,7 +157,7 @@ export default {
 					case "Optix MA10 < 30 and Optix < 20":
 						await CIQ.getIndicatorMatedata([this.symbolUrl])
 						CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{
-							Period: 5,
+							Period: 10,
 							display:"ST MA",
 							Field: this.symbolUrl
 						});
@@ -167,13 +167,13 @@ export default {
 					case 'UpTrend Pattern':
 						var points = eval('(' + this.other.Point + ')')
 						CIQ.Studies.addStudy(CIQ.stxx, this.other['_Signal'],{display:this.other['_Signal']},null,{points:points})
-						CIQ.createOneTimeScannerMarkerHighLowLine(points.slice(points.length - 1),this.other._Signal,points)
+						CIQ.createOneTimeScannerMarkerHighLowLine(this.other.date,this.other._Signal,points)
 						
 						break;
 					case 'DownTrend Pattern':
 						var points = eval('(' + this.other.Point + ')')
 						CIQ.Studies.addStudy(CIQ.stxx, this.other['_Signal'],{display:this.other['_Signal']},null,{points:points})
-						CIQ.createOneTimeScannerMarkerHighLowLine(points.slice(points.length - 1),this.other._Signal,points)
+						CIQ.createOneTimeScannerMarkerHighLowLine(this.other.date,this.other._Signal,points)
 						
 						break;
 					case 'Hammer followed by a raise':
