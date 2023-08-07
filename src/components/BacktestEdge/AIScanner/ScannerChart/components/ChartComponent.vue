@@ -43,16 +43,29 @@ export default {
 
 		// 还原chartiq默认study definition
 		this.editStudies(true)
+
+		this.$store.commit('RESET_STORE')
+		// Destroy the ChartEngine instance when unloading the component.
+		// This will stop internal processes such as quotefeed polling.
+		CIQ.stxx?.destroy()
 	},
 	computed: {
 		updateSettingMA() {
 			return this.$store.state.studySettingMA
+		},
+		updateTimeframe() {
+			return this.$store.state.exitFrequency
 		},
 	},
 	watch: {
 		updateSettingMA(val) {
 			this.updateMAPeriod(val['period'])
 		},
+		updateTimeframe(val) {
+			this.loadDefaultStudy().then(()=>{
+				this.loadMarker()
+			})
+		}
 	},
 	methods:{
 		onChartReady(){

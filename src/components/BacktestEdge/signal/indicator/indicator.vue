@@ -1607,7 +1607,8 @@ export default {
                 freqObj.index = vm.panelIndex
                 freqObj.criteria = vm.criteria
                 freqObj.key = `${vm.criteria}_${vm.panelIndex}`
-                vm.setFreqencyLP(freqObj)
+                vm.setFrequencyArray(freqObj)
+                // vm.setFreqencyLP(freqObj)
                 vm.$emit('getFreqArray', freqObj)
               }
             })

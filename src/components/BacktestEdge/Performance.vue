@@ -1290,6 +1290,7 @@ export default {
         }
         return item
       })
+
       // 更正一直判断到 Year
       data = data.map(item => {
         let period = item.period;

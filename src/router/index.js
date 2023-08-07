@@ -113,9 +113,6 @@ router.beforeEach(async (to, from, next) => {
 								await initiateIndicatorList()
 								CIQ.isScannerAI = false
 							}
-							// 保存整站vuex本地储存初始状态
-							// window.SITE_CONFIG = {}
-							// window.SITE_CONFIG['storeState'] = JSON.parse(JSON.stringify(store.state))
 							next()
 						}		
 					} else { throw Error('Status code error') }
@@ -184,6 +181,7 @@ async function initiateCurrentDate() {
 }
 
 async function initiateIndicatorList() {
+	console.log('initiateIndicatorList')
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	if(store.state.stocksList.length==0 || store.state.indexsList.length==0){
 		const res = await getIndicatorsList()
