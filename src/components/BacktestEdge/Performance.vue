@@ -1200,7 +1200,7 @@ export default {
       return processeArray;
     },
     transformData(data) {
-      console.log('trnasformData', data)
+     // console.log('trnasformData', data)
       // data = data.map(item => {
       //   if (item.period % 5 === 0 && item.timeframe === 'Day') {
       //     return { period: item.period / 5, timeframe: 'Week' }
