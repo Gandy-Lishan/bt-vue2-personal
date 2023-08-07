@@ -263,7 +263,7 @@
 		<el-pagination
 		@size-change="handleSizeChange"
 		@current-change="handleCurrentChange"
-		:page-sizes="[10, 20, 50, 100]"
+		:page-sizes="[10]"
 		:page-size="pageSize"
 		:total="tableData.content.length"
 		layout="total, sizes, prev, pager, next, jumper"
