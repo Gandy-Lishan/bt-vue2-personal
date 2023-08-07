@@ -143,11 +143,20 @@ export default new Vuex.Store({
 	},
 	mutations: {
 		// 重置vuex本地储存状态
+		// RESET_STORE: (state)=>{
+		// 	Object.keys(state).forEach(key => {
+		// 		state[key] = JSON.parse(JSON.stringify(window.SITE_CONFIG['storeState'][key]))
+		// 	})
+		// 	state.backtestSymbol = 'SPX'
+		// 	console.log('RESET_STORE',state)
+	  	// },
 		RESET_STORE: (state)=>{
-			Object.keys(state).forEach(key => {
-				state[key] = JSON.parse(JSON.stringify(window.SITE_CONFIG['storeState'][key]))
-			})
-			this.state.backtestSymbol = 'SPX'
+			console.log(' before RESET_STORE',state)
+			// todo 还有其他情况，目前就是scannerai销毁前调用,之后chartiq 要做两套状态用作backtester和scanner ai而不是这样切换
+			state.pairDataFreq = ''
+			state.backtestSymbol = 'SPX'
+			state.exitFrequency = ''
+			
 	  	},
 
 		SET_LASTSIGNAL_ARRAY: (state,val)=>{

@@ -462,6 +462,7 @@ export default class AdvancedChartComponent extends Vue {
 	}
 
 	beforeDestroy() {
+		CIQ.store.commit('RESET_STORE')
 		// Destroy the ChartEngine instance when unloading the component.
 		// This will stop internal processes such as quotefeed polling.
 		CIQ.stxx.destroy()
