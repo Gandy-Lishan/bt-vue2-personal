@@ -1127,33 +1127,88 @@ export default {
 
         // 将不同天数的项进行合并，根据比率转换
         if (unit === "Days") {
-          if (value % 5 === 0) {
-            value = value / 5;
-            unit = value==1?"Week":"Weeks";
+          if (value % 252 === 0) {
+            value = value / 252;
+            unit = value==1?"Year":"Years";
           }
           if (value % 21 === 0) {
             value = value / 21;
             unit = value==1?"Month":"Months";
           }
-          if (value % 252 === 0) {
-            value = value / 252;
-            unit = value==1?"Year":"Years";
-          }
+          // if (value % 5 === 0) {
+          //   value = value / 5;
+          //   unit = value==1?"Week":"Weeks";
+          // }
         }
         if (unit === "Weeks") {
-          if (value % 4 === 0) {
-            value = value / 4;
-            unit = value==1?"Month":"Months";
-          }
           if (value % 52 === 0) {
             value = value / 52;
             unit = value==1?"Year":"Years";
           }
+          // if (value % 4 === 0) {
+          //   value = value / 4;
+          //   unit = value==1?"Month":"Months";
+          // }
         }
         if (unit === "Months") {
           if (value % 12 === 0) {
             value = value / 12;
             unit = value==1?"Year":"Years";
+          }
+        }
+        if(this.exitFreqGetter === 'Daily') {
+          if (unit === "Days") {
+            if (value % 5 === 0) {
+              value = value / 5;
+              unit = value==1?"Week":"Weeks";
+            }
+            if (value % 13 === 0) {
+              value = (value / 13) * 3;
+              unit = value==1?"Month":"Months";
+            }
+            if(value % 12 === 0) {
+              value = value / 12;
+              unit = value==1?"Year":"Years";
+            }
+          }else if (unit === "Weeks") {
+            if (value % 13 === 0) {
+              value = (value / 13) * 3;
+              unit = value==1?"Month":"Months";
+            }
+            if (value % 12 === 0) {
+              value = value / 12;
+              unit = value==1?"Year":"Years";
+            }
+          }else if (unit === "Months") {
+            if (value % 12 === 0) {
+              value = value / 12;
+              unit = value==1?"Year":"Years";
+            }
+          }
+          }else if(this.exitFreqGetter === 'Weekly') {
+            if (unit === 'Week') {
+              if(value % 4 === 0 && value <= 8) {
+                value = value / 4;
+                unit = value==1?"Month":"Months"
+              }else if(value % 13 === 0 && value > 8) {
+                value = (value / 13) * 3;
+                unit = value==1?"Month":"Months"
+              }
+              if (value % 12 === 0) {
+                value = value / 12;
+                unit = value==1?"Year":"Years";
+              }
+            } else if (unit === 'Month') {
+              if (value % 12 === 0) {
+                value = value / 12;
+                unit = value==1?"Year":"Years";
+              }
+            }
+        }else if(this.exitFreqGetter === 'Monthly') {
+          if (unit === 'Month') {
+            if (value % 12 === 0) {
+              value = value / 12;
+            }
           }
         }
 
@@ -1201,54 +1256,48 @@ export default {
     },
     transformData(data) {
       console.log('trnasformData', data)
-      // data = data.map(item => {
-      //   if (item.period % 5 === 0 && item.timeframe === 'Day') {
-      //     return { period: item.period / 5, timeframe: 'Week' }
-      //   }
-      //   if (item.period % 21 === 0 && item.timeframe === 'Day') {
-      //     return { period: item.period / 21, timeframe: 'Month' }
-      //   }
-      //   if (item.period % 252 === 0 && item.timeframe === 'Day') {
-      //     return { period: item.period / 252, timeframe: 'Year' }
-      //   }
-      //   if (item.period % 4 === 0 && item.timeframe === 'Week') {
-      //     return { period: item.period / 4, timeframe: 'Month' }
-      //   }
-      //   if (item.period % 52 === 0 && item.timeframe === 'Week') {
-      //     return { period: item.period / 52, timeframe: 'Year' }
-      //   }
-      //   if (item.period % 12 === 0 && item.timeframe === 'Month') {
-      //     return { period: item.period / 12, timeframe: 'Year' }
-      //   }
-      //   return item
-      // })
+      data = data.map(item => {
+        if (item.period % 252 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 252, timeframe: 'Year' }
+        }
+        if (item.period % 21 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 21, timeframe: 'Month' }
+        }
+        // if (item.period % 5 === 0 && item.timeframe === 'Day') {
+        //   return { period: item.period / 5, timeframe: 'Week' }
+        // }
+        if (item.period % 52 === 0 && item.timeframe === 'Week') {
+          return { period: item.period / 52, timeframe: 'Year' }
+        }
+        // if (item.period % 4 === 0 && item.timeframe === 'Week') {
+        //   return { period: item.period / 4, timeframe: 'Month' }
+        // }
+        if (item.period % 12 === 0 && item.timeframe === 'Month') {
+          return { period: item.period / 12, timeframe: 'Year' }
+        }
+        return item
+      })
       // 更正一直判断到 Year
       data = data.map(item => {
         let period = item.period;
         let timeframe = item.timeframe;
-
+        if(this.exitFreqGetter === 'Daily') {
         if (timeframe === 'Day') {
-          if (period % 5 === 0) {
+          if(period % 5 === 0) {
             period = period / 5;
             timeframe = 'Week';
           }
           if (period % 13 === 0) {
             period = (period / 13) * 3;
             timeframe = 'Month';
-          }else if(period % 4 === 0){
-            period = period / 4;
-            timeframe = 'Month';
           }
           if(period % 12 === 0) {
-            period = period / 21;
+            period = period / 12;
             timeframe = 'Year';
           }
         } else if (timeframe === 'Week') {
           if (period % 13 === 0) {
             period = (period / 13) * 3;
-            timeframe = 'Month';
-          } else if (period % 4 === 0) {
-            period = period / 4;
             timeframe = 'Month';
           }
           if (period % 12 === 0) {
@@ -1261,10 +1310,36 @@ export default {
             timeframe = 'Year';
           }
         }
-
-        return { period, timeframe };
-      });
-
+        return { period, timeframe }
+        }else if(this.exitFreqGetter === 'Weekly') {
+        if (timeframe === 'Week') {
+          if(period % 4 === 0 && period <= 8) {
+            period = period / 4;
+            timeframe = 'Month';
+          }else if(period % 13 === 0 && period > 8) {
+            period = (period / 13) * 3;
+            timeframe = 'Month';
+          }
+          if (period % 12 === 0) {
+            period = period / 12;
+            timeframe = 'Year';
+          }
+        } else if (timeframe === 'Month') {
+          if (period % 12 === 0) {
+            period = period / 12;
+            timeframe = 'Year';
+          }
+        }
+        return { period, timeframe }
+        }else if(this.exitFreqGetter === 'Monthly') {
+          if (timeframe === 'Month') {
+            if (period % 12 === 0) {
+              period = period / 12;
+            }
+          }
+        return { period, timeframe }
+        }
+        })
       const uniqueData = [];
       data.forEach(item => {
         const isDuplicate = uniqueData.some(
@@ -1384,26 +1459,88 @@ export default {
     },
     transformZScoreData(data) {
       data = data.map(item => {
-        if (item.period % 5 === 0 && item.timeframe === 'Day') {
-          return { period: item.period / 5, timeframe: 'Week' }
+        if (item.period % 252 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 252, timeframe: 'Year' }
         }
         if (item.period % 21 === 0 && item.timeframe === 'Day') {
           return { period: item.period / 21, timeframe: 'Month' }
         }
-        if (item.period % 252 === 0 && item.timeframe === 'Day') {
-          return { period: item.period / 252, timeframe: 'Year' }
-        }
-        if (item.period % 4 === 0 && item.timeframe === 'Week') {
-          return { period: item.period / 4, timeframe: 'Month' }
-        }
+        // if (item.period % 5 === 0 && item.timeframe === 'Day') {
+        //   return { period: item.period / 5, timeframe: 'Week' }
+        // }
         if (item.period % 52 === 0 && item.timeframe === 'Week') {
           return { period: item.period / 52, timeframe: 'Year' }
         }
+        // if (item.period % 4 === 0 && item.timeframe === 'Week') {
+        //   return { period: item.period / 4, timeframe: 'Month' }
+        // }
         if (item.period % 12 === 0 && item.timeframe === 'Month') {
           return { period: item.period / 12, timeframe: 'Year' }
         }
         return item
       })
+      data = data.map(item => {
+        let period = item.period;
+        let timeframe = item.timeframe;
+        if(this.exitFreqGetter === 'Daily') {
+        if (timeframe === 'Day') {
+          if(period % 5 === 0) {
+            period = period / 5;
+            timeframe = 'Week';
+          }
+          if (period % 13 === 0) {
+            period = (period / 13) * 3;
+            timeframe = 'Month';
+          }
+          if(period % 12 === 0) {
+            period = period / 12;
+            timeframe = 'Year';
+          }
+        } else if (timeframe === 'Week') {
+          if (period % 13 === 0) {
+            period = (period / 13) * 3;
+            timeframe = 'Month';
+          }
+          if (period % 12 === 0) {
+            period = period / 12;
+            timeframe = 'Year';
+          }
+        } else if (timeframe === 'Month') {
+          if (period % 12 === 0) {
+            period = period / 12;
+            timeframe = 'Year';
+          }
+        }
+        return { period, timeframe }
+        }else if(this.exitFreqGetter === 'Weekly') {
+        if (timeframe === 'Week') {
+          if(period % 4 === 0 && period <= 8) {
+            period = period / 4;
+            timeframe = 'Month';
+          }else if(period % 13 === 0 && period > 8) {
+            period = (period / 13) * 3;
+            timeframe = 'Month';
+          }
+          if (period % 12 === 0) {
+            period = period / 12;
+            timeframe = 'Year';
+          }
+        } else if (timeframe === 'Month') {
+          if (period % 12 === 0) {
+            period = period / 12;
+            timeframe = 'Year';
+          }
+        }
+        return { period, timeframe }
+        }else if(this.exitFreqGetter === 'Monthly') {
+          if (timeframe === 'Month') {
+            if (period % 12 === 0) {
+              period = period / 12;
+            }
+          }
+        return { period, timeframe }
+        }
+        })
       return data.map((item) => {
         let timeframe =
           item.period > 1
