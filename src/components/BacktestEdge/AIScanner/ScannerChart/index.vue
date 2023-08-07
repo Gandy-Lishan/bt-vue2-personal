@@ -118,7 +118,7 @@ computed: {
 		this.getBacktestInfo({
 			symbol: this.rowData['Symbol'],
 			date: this.rowData['Date'],
-			signal: this.rowData['Signal'],
+			signal: this.rowData['_Signal'],
 			category: this.rowData['Category'],
 		})
 	},
