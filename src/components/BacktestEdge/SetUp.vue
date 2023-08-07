@@ -684,7 +684,7 @@ export default {
     this.generateBTName()
   },
   mounted() {
-    this.loadSentimentList('Daily')
+    this.loadSentimentList()
     this.$emit('IsRiskControl', true)
     this.getEndDate()
   },
@@ -792,7 +792,10 @@ export default {
         this.is_admin = this.$store.state.is_admin
         this.bd = Object.assign(this.bd, newVal)
         this.$set(this.bd, 'description', this.bd.description);
-        this.changeTimeframe(newVal.frequency)
+        //this.changeTimeframe(newVal.frequency)
+        // 还是用getFrequency因为无需edit后再次调用addIndicators()
+        this.getFrequency(newVal.frequency)
+
         this.getDirection(newVal.direction)
         this.getTradePrice(newVal.trade_price)
         this.isRiskControl = false
@@ -1032,7 +1035,6 @@ export default {
     changeTimeframe(val) {
       this.bd.frequency = val
       this.$store.commit('getFreqHighPriority', val)
-      this.loadSentimentList(val)
       CIQ.addIndicators()
     },
     selectRiskControl(val) {
@@ -1060,11 +1062,9 @@ export default {
       // getFrequency will no longer call addIndicator and pass a parameter to it
       this.bd.frequency = val
       this.$store.commit('getFrequency', val)
-      this.loadSentimentList(val)
     },
-    async loadSentimentList(val) {
+    async loadSentimentList() {
       const vm = this
-      var frequency = val
       var indicatorList = []
 
       if (CIQ.indicatorList) {
@@ -1074,20 +1074,7 @@ export default {
         }
       }
       vm.sentimentIndicatorList = []
-      // if (frequency) {
-      //   indicatorList.forEach((element) => {
-      //     if (
-      //       frequency.toUpperCase().indexOf(element.updated.toUpperCase()) !==
-      //       -1
-      //     ) {
-      //       vm.sentimentIndicatorList.push({
-      //         value: element.chart_name,
-      //         url: element.url,
-      //         updated: element.updated
-      //       })
-      //     }
-      //   })
-      // }
+
         indicatorList.forEach((element) => {
             vm.sentimentIndicatorList.push({
               value: element.chart_name,
@@ -1099,34 +1086,8 @@ export default {
       CIQ.indicatorList = indicatorList
 
       this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+    },
 
-      const data = vm.$store.state.indicatorsList
-      // if (frequency !== '') {
-        // if (frequency == 'Daily') {
-        //   vm.setSentiList(['Daily'], data)
-        // } else if (frequency == 'Weekly') {
-        //   vm.setSentiList(['Daily', 'Weekly'], data)
-        // } else if (frequency == 'Monthly') {
-        //   vm.setSentiList(['Daily', 'Weekly', 'Monthly'], data)
-        // }
-      // }
-    },
-    setSentiList(arr, data) {
-      const vm = this
-      vm.sentimentIndicatorList = []
-      arr.forEach((fre) => {
-        data.forEach((element) => {
-          if (fre.toUpperCase().indexOf(element.updated.toUpperCase()) !== -1) {
-            vm.sentimentIndicatorList.push({
-              value: element.chart_name,
-              url: element.url,
-              updated: element.updated
-            })
-          }
-        })
-      })
-      this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
-    },
     async getIndicatorsList() {
       try {
         const vm = this

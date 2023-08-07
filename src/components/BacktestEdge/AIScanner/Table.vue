@@ -29,7 +29,7 @@
 						clearable
 						@clear="handleQuery"
 					>
-						<el-select v-model="searchCategory" slot="prepend" placeholder="Category">
+						<el-select v-model="searchCategory" slot="prepend" placeholder="Category" @change="handleQuery">
 							<el-option
 								v-for="category in categories"
 								:key="category.value"
@@ -37,7 +37,7 @@
 								:value="category.label"
 							></el-option>
 						</el-select>
-						<el-button slot="append" icon="el-icon-search"></el-button>
+						<el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
 					</el-input>
 				</div>
 				<!-- swingai & midterm分类组被弃用了 -->
@@ -156,9 +156,16 @@
 					:prop="l"
 					:key="index"
 					min-width="90"
+					:sortable="
+						[
+							'Market'
+						].indexOf(l) !== -1
+							? 'custom'
+							: false
+					"
 				>
 						<template slot="header">
-							Market
+							Trend
 							<el-tooltip effect="dark" placement="top" style="diaplay: inline">
 							<span slot="content" v-html="textContent['Market']">
 							</span>
@@ -172,13 +179,17 @@
 					:prop="l"
 					:key="index"
 					min-width="100"
+					:sortable="
+						[
+							'Signal'
+						].indexOf(l) !== -1
+							? 'custom'
+							: false
+					"
 				>
 					<template slot-scope="scope">
 						<!-- {{ scope.row.Signal }} -->
-						<span v-if="scope.row.Signal == 'Symbol Close > its\' MA200 and Optix MA5 < 35'">Optix #1</span>
-						<span v-else-if="scope.row.Signal == 'Symbol Close > its\' MA200 and Optix < 30'">Optix #2</span>
-						<span v-else-if="scope.row.Signal == 'Optix MA10 < 30 and Optix < 20'">Optix #3</span>
-						<span v-else>{{ scope.row.Signal }}</span>
+						<span>{{midTermMap[scope.row.Signal]?midTermMap[scope.row.Signal]:scope.row.Signal}}</span>
 						<el-tooltip effect="dark" placement="top" style="diaplay: inline">
 							<span slot="content" v-html="textContent[scope.row.Signal]">
 							</span>
@@ -226,7 +237,8 @@
 							'Profit Target(%)',
 							'Date',
 							'Z-Score',
-							'Expected Return(%)'
+							'Expected Return(%)',
+							'Close','Direction'
 						].indexOf(l) !== -1
 							? 'custom'
 							: false
@@ -320,6 +332,11 @@ export default {
 
 				pageSize: 10, // Default page size
       			currentPage: 1, // Default current page
+				midTermMap: {
+					'Symbol Close > its\' MA200 and Optix MA5 < 35':'Optix #1',
+					'Symbol Close > its\' MA200 and Optix < 30':'Optix #2',
+					'Optix MA10 < 30 and Optix < 20':'Optix #3'
+				}
 		}
 	},
 	computed: {
@@ -412,10 +429,21 @@ export default {
 		handleQuery: throttle(function () { this.getSearchresult() }, 500),
 		getSearchresult(){
 			if(this.searchItem){
-				this.tableData.content = this.data.content.filter(item=>item[this.searchCategory].toLowerCase().indexOf(this.searchItem.toLowerCase())!=-1)
+				// 在搜索之前对搜索关键词进行转义
+				const trimmedStr = this.searchItem.trim()
+				const regex = new RegExp(this.escapeRegExp(trimmedStr), "i");
+				this.tableData.content = this.data.content.filter(item => {
+					let searchTarget = this.midTermMap[item[this.searchCategory]]?this.midTermMap[item[this.searchCategory]]:item[this.searchCategory]
+					return regex.test(searchTarget)
+				});
+				//this.tableData.content = this.data.content.filter(item=>item[this.searchCategory].toLowerCase().indexOf(this.searchItem.toLowerCase())!=-1)
 			}else{
 				this.tableData.content = this.data.content
 			}
+		},
+		// 使用反斜杠转义特殊字符
+		escapeRegExp(str) {
+			return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 		},
 		selectSignal(signal){	
 			if(signal.length>1){
@@ -460,6 +488,7 @@ export default {
 			var sortingOrder = column.order
 			var colName = column.prop
 
+			// 数字字符串转数字类型排序
 			if(['Stop Loss(%)','Best Time In Market(Bars)','Profit Target(%)'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.tableData.content.sort((a,b) => {
@@ -476,7 +505,8 @@ export default {
 				}else{
 				}
 			}
-			if(['Win Rate(%)', 'Expected Return(%)', 'Z-Score'].indexOf(colName) !== -1){
+			// 数字类型排序
+			if(['Win Rate(%)', 'Expected Return(%)', 'Z-Score', 'Close'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.tableData.content.sort((a,b) => {
 						return b[colName] - a[colName]
@@ -488,6 +518,7 @@ export default {
 				}else{
 				}
 			}
+			// 日期类型排序
 			if(['Date'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.tableData.content.sort((a,b) => {
@@ -497,6 +528,15 @@ export default {
 					this.tableData.content.sort((a,b) => {
 						return new Date(a[colName]) - new Date(b[colName])
 					})
+				}else{
+				}
+			}
+			// 字符串类型排序
+			if(['Market','Signal','Direction'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.tableData.content.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
+				}else if(sortingOrder == 'descending'){
+					this.tableData.content.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
 				}else{
 				}
 			}
