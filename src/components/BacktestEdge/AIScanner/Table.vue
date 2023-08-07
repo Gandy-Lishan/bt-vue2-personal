@@ -34,7 +34,7 @@
 								v-for="category in categories"
 								:key="category.value"
 								:label="category.label"
-								:value="category.label"
+								:value="category.value"
 							></el-option>
 						</el-select>
 						<el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
@@ -93,10 +93,10 @@
 							<span>{{ props.row['TradeNumber']}}</span>
 						</el-form-item>
 						<el-form-item label="TOTAL POSITIVE">
-							<span>{{ Math.round((props.row['TradeNumber'] * props.row['Win Rate(%)']) / 100)}}</span>
+							<span>{{ Math.round((props.row['TradeNumber'] * props.row['WinRate']) / 100)}}</span>
 						</el-form-item>
 						<el-form-item label="TOTAL NEGATIVE">
-							<span>{{ Math.round(props.row['TradeNumber'] - (props.row['TradeNumber'] * props.row['Win Rate(%)']) / 100)}}</span>
+							<span>{{ Math.round(props.row['TradeNumber'] - (props.row['TradeNumber'] * props.row['WinRate']) / 100)}}</span>
 						</el-form-item>
 					</el-form>
 				</template>
@@ -105,9 +105,9 @@
 			<template v-for="(l, index) in tableCol">
 				<!-- :min-width="130" -->
 				<el-table-column
-					v-if="l == 'Select'"
-					:label="l"
-					:prop="l"
+					v-if="l.label == 'Select'"
+					:label="l.label"
+					:prop="l.value"
 					:key="index"
 				>
 					<template slot-scope="scope">
@@ -118,10 +118,10 @@
 									scope.row.id,
 									scope.row.Symbol,
 									scope.row.Subscribe,
-									scope.row['Profit Target(%)'],
-									scope.row['Stop Loss(%)'],
-									scope.row['Win Rate(%)'],
-									scope.row['Expected Return(%)'],
+									scope.row['ProfitTarget'],
+									scope.row['StopLoss'],
+									scope.row['WinRate'],
+									scope.row['ExpectedReturn'],
 									scope.$index
 								)
 							"
@@ -129,9 +129,9 @@
 					</template>
 				</el-table-column>
 				<el-table-column		
-					v-if="l == 'Symbol'"
-					:label="l"
-					:prop="l"
+					v-if="l.label == 'Symbol'"
+					:label="l.label"
+					:prop="l.value"
 					:key="index"
 					min-width="70"
 				>
@@ -140,26 +140,26 @@
 							:to="{
 								path: '/home/scannerai/scannerai_chart',
 								query: {
-									stock: scope.row.Symbol,
+									stock: scope.row[l.value],
 									id: 'test',
 									rowData: JSON.stringify(scope.row)
 								}
 								
 							}"
-							>{{ scope.row.Symbol }}</router-link
+							>{{ scope.row[l.value] }}</router-link
 						>
 					</template>
 				</el-table-column>
 				<el-table-column		
-					v-if="l == 'Market'"
-					:label="l"
-					:prop="l"
+					v-if="l.label == 'Trend'"
+					:label="l.label"
+					:prop="l.value"
 					:key="index"
 					min-width="90"
 					:sortable="
 						[
-							'Market'
-						].indexOf(l) !== -1
+							'Trend'
+						].indexOf(l.label) !== -1
 							? 'custom'
 							: false
 					"
@@ -167,46 +167,46 @@
 						<template slot="header">
 							Trend
 							<el-tooltip effect="dark" placement="top" style="diaplay: inline">
-							<span slot="content" v-html="textContent['Market']">
+							<span slot="content" v-html="textContent['Trend']">
 							</span>
 							<i class="iconfont icon-wenhao"></i>
 						</el-tooltip>
 					</template>
 				</el-table-column>
 				<el-table-column		
-					v-if="l == 'Signal'"
-					:label="l"
-					:prop="l"
+					v-if="l.label == 'Signal'"
+					:label="l.label"
+					:prop="l.value"
 					:key="index"
 					min-width="100"
 					:sortable="
 						[
 							'Signal'
-						].indexOf(l) !== -1
+						].indexOf(l.label) !== -1
 							? 'custom'
 							: false
 					"
 				>
 					<template slot-scope="scope">
 						<!-- {{ scope.row.Signal }} -->
-						<span>{{midTermMap[scope.row.Signal]?midTermMap[scope.row.Signal]:scope.row.Signal}}</span>
+						<span>{{midTermMap[scope.row[l.value]]?midTermMap[scope.row[l.value]]:scope.row[l.value]}}</span>
 						<el-tooltip effect="dark" placement="top" style="diaplay: inline">
-							<span slot="content" v-html="textContent[scope.row.Signal]">
+							<span slot="content" v-html="textContent[scope.row[l.value]]">
 							</span>
 							<i class="iconfont icon-wenhao"></i>
 						</el-tooltip>
 					</template>
 				</el-table-column>
 				<el-table-column		
-					v-if="l == 'Expected Return(%)'"
-					:label="l"
-					:prop="l"
+					v-if="l.label == 'Expected Return(%)'"
+					:label="l.label"
+					:prop="l.value"
 					:key="index"
 					min-width="90"
 					:sortable="
 						[
 							'Expected Return(%)'
-						].indexOf(l) !== -1
+						].indexOf(l.label) !== -1
 							? 'custom'
 							: false
 					"
@@ -222,11 +222,11 @@
 				</el-table-column>
 				<el-table-column
 					v-if="
-						l != 'Symbol' &&
-						l != 'Select' &&
-						l != 'Signal' &&
-						l != 'Market' &&
-						l != 'Expected Return(%)'
+						l.label != 'Symbol' &&
+						l.label != 'Select' &&
+						l.label != 'Signal' &&
+						l.label != 'Trend' &&
+						l.label != 'Expected Return(%)'
 					"
 					:sortable="
 						[
@@ -239,22 +239,22 @@
 							'Z-Score',
 							'Expected Return(%)',
 							'Close','Direction'
-						].indexOf(l) !== -1
+						].indexOf(l.label) !== -1
 							? 'custom'
 							: false
 					"
-					:label="l"
-					:prop="l"
+					:label="l.label"
+					:prop="l.value"
 					:key="index"
 					:min-width="[
 							'Best Time In Market(Bars)',
 							'Time In Market(Bars)',
 							'Expected Return(%)'
-						].indexOf(l) !== -1 ? '90' : '80'"
+						].indexOf(l.label) !== -1 ? '90' : '80'"
 				>
 					<template slot-scope="scope">
 						<p class="tableText">
-							{{ scope.row[l] }}
+							{{ scope.row[l.value] }}
 						</p>
 					</template>
 				</el-table-column>
@@ -307,7 +307,7 @@ export default {
 
 				searchItem: '', // 搜索关键词
 				searchCategory: "Symbol", // 存储选择的搜索类别
-				categories: [{label:'Symbol',value:'Symbol'},{label:'Signal',value:'Signal'}],
+				categories: [{label:'Symbol',value:'Symbol'},{label:'Signal',value:'_Signal'}],
 
 				isPLSChecked: false,
 				textContent: {
@@ -326,7 +326,7 @@ export default {
 					'HighPoints':"When the highest price of a stock ranks above 100 in relation to the highest prices of the<br/> past 13 trading days (higher stock prices correspond to higher rankings), <br/>it forms a 13-day new high and generates a buy signal. This indicates that <br/>the stock is experiencing a positive breakthrough and is in an upward trend.",
 					'LowPoints':"When the lowest price of a stock ranks below 0 in relation to the lowest prices of the past 13 trading days, <br/>it forms a 13-day new low and generates a sell signal. <br/>This indicates that the stock is in a downtrend and can be shorted.",
 					'RSI':"When the RSI indicator forms a golden cross above 40, it suggests that the indicator is about to<br/>recover from an oversold state to the midpoint, indicating a potential long entry signal. <br/>RSI can reflect whether a stock is in an overbought or oversold condition <br />but should be used in conjunction with the trend analysis.",
-					'Market': 'Closing price above the 252-day moving average is considered as Uptrend.<br/>Closing price below the 252-day moving average is considered as Downtrend.',
+					'Trend': 'Closing price above the 252-day moving average is considered as Uptrend.<br/>Closing price below the 252-day moving average is considered as Downtrend.',
 					'ExpectedReturn': 'ExpectedReturn = (WinRate * ProfitTarget - (100.0 - WinRate) * StopLoss) / 100.0'
 				},
 
@@ -357,7 +357,7 @@ export default {
 			if (this.isPLSChecked) {
 				// 当checkbox勾选时，返回被筛选过的数据
 				return this.tableData.content
-						.filter(item=>parseFloat(item["Profit Target(%)"])>parseFloat(item['Stop Loss(%)']))
+						.filter(item=>parseFloat(item["ProfitTarget"])>parseFloat(item['StopLoss']))
 						.slice(startIndex, endIndex);
 			} else {
 				// 当checkbox未勾选时，返回原始数据
@@ -370,10 +370,10 @@ export default {
 			handler(newValue, oldValue){
 				this.data.content.map((item)=>{
 					if(this.checkboxGroupState[item.id]){
-						this.selectedStopLosses.push(item['Stop Loss(%)'])
-						this.selectedProfitTargets.push(item['Profit Target(%)'])
-						this.selectedWinRates.push(item['Win Rate(%)'])
-						this.selectedWinRates.push(item['Expected Return(%)'])
+						this.selectedStopLosses.push(item['StopLoss'])
+						this.selectedProfitTargets.push(item['ProfitTarget'])
+						this.selectedWinRates.push(item['WinRate'])
+						this.selectedWinRates.push(item['ExpectedReturn'])
 					}
 				})
 				this.calculateAlloc()
@@ -383,8 +383,7 @@ export default {
 		data: {
 			handler(newValue, oldValue){
 				this.tableData = JSON.parse(JSON.stringify(this.data))
-				this.signalList = [...new Set(this.data.content.map(item=>item.Signal))]
-				console.log('signalList', this.signalList)
+				this.signalList = [...new Set(this.data.content.map(item=>item._Signal))]
 			},
 			deep: true
 		}
@@ -413,7 +412,7 @@ export default {
 	},
 	mounted() {
 		this.data.content.map((item,index)=>{
-				item['Cash Alloc(%)'] = ''
+				item['Alloc'] = ''
 		})	
 	},
 	methods: {
@@ -450,7 +449,7 @@ export default {
 				signal.shift()
 			}
 			if(signal.length!=0){
-				this.tableData.content = this.data.content.filter(item=>item.Signal == signal)
+				this.tableData.content = this.data.content.filter(item=>item._Signal == signal)
 			}else{
 				this.tableData.content = this.data.content
 			}
@@ -487,9 +486,8 @@ export default {
 		changeTableSort(column){
 			var sortingOrder = column.order
 			var colName = column.prop
-
 			// 数字字符串转数字类型排序
-			if(['Stop Loss(%)','Best Time In Market(Bars)','Profit Target(%)'].indexOf(colName) !== -1){
+			if(['StopLoss','TimeInMarket','ProfitTarget'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.tableData.content.sort((a,b) => {
 						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
@@ -506,7 +504,7 @@ export default {
 				}
 			}
 			// 数字类型排序
-			if(['Win Rate(%)', 'Expected Return(%)', 'Z-Score', 'Close'].indexOf(colName) !== -1){
+			if(['WinRate', 'ExpectedReturn', 'Z_Score', 'Close'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.tableData.content.sort((a,b) => {
 						return b[colName] - a[colName]
@@ -532,7 +530,7 @@ export default {
 				}
 			}
 			// 字符串类型排序
-			if(['Market','Signal','Direction'].indexOf(colName) !== -1){
+			if(['Market','_Signal','Direction'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.tableData.content.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
 				}else if(sortingOrder == 'descending'){
@@ -572,10 +570,10 @@ export default {
 			let kellyTotal = ((ptMean+slMean)*wrMean-slMean)/ptMean
 			this.data.content.map((item,index)=>{
 				if(this.checkboxGroupState[item.id]){
-					let kelly = kellyTotal*(item['Win Rate(%)']/Array.from(this.selectedWinRates).reduce((sum,value)=>{return Number(sum)+Number(value)},0))
-					item['Cash Alloc(%)'] = (kelly*100).toFixed(2)
+					let kelly = kellyTotal*(item['WinRate']/Array.from(this.selectedWinRates).reduce((sum,value)=>{return Number(sum)+Number(value)},0))
+					item['Alloc'] = (kelly*100).toFixed(2)
 				}else{
-					item['Cash Alloc(%)'] = ''
+					item['Alloc'] = ''
 				}
 			})
 		},
