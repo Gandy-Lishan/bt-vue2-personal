@@ -1063,8 +1063,15 @@ export default {
                 let timPeriodArray = null
                 try {
                   timPeriodArray = JSON.parse(res.data[0].tim_data)
+                  let timeframe = vm.exitFreqGetter
+                  if (timeframe === 'Weekly') {
+                    timPeriodArray = timPeriodArray.filter(item => item.timeframe !== 'Day');
+                  } else if (timeframe === 'Monthly') {
+                    timPeriodArray =  timPeriodArray.filter(item => item.timeframe !== 'Day' && item.timeframe !== 'Week');
+                  }
                   this.editTIMData = timPeriodArray
                 } catch (error) {
+                  console.error(error)
                   timPeriodArray = this.editTIMData
                 }
                 const transformData = this.transformData(timPeriodArray)
@@ -1162,11 +1169,11 @@ export default {
               value = value / 5;
               unit = value==1?"Week":"Weeks";
             }
-            if (value % 13 === 0) {
+            if (value % 13 === 0 && unit.includes('Week')) {
               value = (value / 13) * 3;
               unit = value==1?"Month":"Months";
             }
-            if(value % 12 === 0) {
+            if(value % 12 === 0 && unit.includes('Month')) {
               value = value / 12;
               unit = value==1?"Year":"Years";
             }
@@ -1175,7 +1182,7 @@ export default {
               value = (value / 13) * 3;
               unit = value==1?"Month":"Months";
             }
-            if (value % 12 === 0) {
+            if (value % 12 === 0 && unit.includes('Month')) {
               value = value / 12;
               unit = value==1?"Year":"Years";
             }
@@ -1187,14 +1194,20 @@ export default {
           }
           }else if(this.exitFreqGetter === 'Weekly') {
             if (unit === 'Week') {
-              if(value % 4 === 0 && value <= 8) {
-                value = value / 4;
-                unit = value==1?"Month":"Months"
-              }else if(value % 13 === 0 && value > 8) {
-                value = (value / 13) * 3;
+              // if(value % 4 === 0 && value <= 8) {
+              //   value = value / 4;
+              //   unit = value==1?"Month":"Months"
+              // }else if(value % 13 === 0 && value > 8) {
+              //   value = (value / 13) * 3;
+              //   unit = value==1?"Month":"Months"
+              // }
+              if(((value % 13) % 4) === 0) {
+                let num = Math.trunc(value / 13)
+                let end = (value % 13) / 4
+                value = num * 3 + end
                 unit = value==1?"Month":"Months"
               }
-              if (value % 12 === 0) {
+              if (value % 12 === 0  && unit.includes('Month')) {
                 value = value / 12;
                 unit = value==1?"Year":"Years";
               }
@@ -1287,11 +1300,11 @@ export default {
             period = period / 5;
             timeframe = 'Week';
           }
-          if (period % 13 === 0) {
+          if (period % 13 === 0 && timeframe.includes('Week')) {
             period = (period / 13) * 3;
             timeframe = 'Month';
           }
-          if(period % 12 === 0) {
+          if(period % 12 === 0 && timeframe.includes('Month')) {
             period = period / 12;
             timeframe = 'Year';
           }
@@ -1300,7 +1313,7 @@ export default {
             period = (period / 13) * 3;
             timeframe = 'Month';
           }
-          if (period % 12 === 0) {
+          if (period % 12 === 0 && timeframe.includes('Month')) {
             period = period / 12;
             timeframe = 'Year';
           }
@@ -1313,14 +1326,20 @@ export default {
         return { period, timeframe }
         }else if(this.exitFreqGetter === 'Weekly') {
         if (timeframe === 'Week') {
-          if(period % 4 === 0 && period <= 8) {
-            period = period / 4;
-            timeframe = 'Month';
-          }else if(period % 13 === 0 && period > 8) {
-            period = (period / 13) * 3;
+          // if(period % 4 === 0 && period <= 8) {
+          //   period = period / 4;
+          //   timeframe = 'Month';
+          // }else if(period % 13 === 0 && period > 8) {
+          //   period = (period / 13) * 3;
+          //   timeframe = 'Month';
+          // }
+          if(((period % 13) % 4) === 0) {
+            let num = Math.trunc(period / 13)
+            let end = (period % 13) / 4
+            period = num * 3 + end
             timeframe = 'Month';
           }
-          if (period % 12 === 0) {
+          if (period % 12 === 0  && timeframe.includes('Month')) {
             period = period / 12;
             timeframe = 'Year';
           }
@@ -1387,10 +1406,10 @@ export default {
           case 'Month':
             const period = Number(item.period)
             let num_3 = null
-            if(period % 3 == 0) {
               num_3 = Math.trunc(period / 3) // 去除小数点取整数
-            }
-            value = num_3 === null ? period * 4 : period * 4 + num_3
+              let end_3 = period % 3 // 余数
+            // value = num_3 === null ? period * 4 : period * 4 + num_3
+            value = num_3 * 13 + end_3 * 4
             break
           case 'Year':
             value = Number(item.period) * 52
@@ -1488,11 +1507,11 @@ export default {
             period = period / 5;
             timeframe = 'Week';
           }
-          if (period % 13 === 0) {
+          if (period % 13 === 0 && timeframe.includes('Week')) {
             period = (period / 13) * 3;
             timeframe = 'Month';
           }
-          if(period % 12 === 0) {
+          if(period % 12 === 0 && timeframe.includes('Month')) {
             period = period / 12;
             timeframe = 'Year';
           }
@@ -1501,7 +1520,7 @@ export default {
             period = (period / 13) * 3;
             timeframe = 'Month';
           }
-          if (period % 12 === 0) {
+          if (period % 12 === 0 && timeframe.includes('Month')) {
             period = period / 12;
             timeframe = 'Year';
           }
@@ -1514,14 +1533,20 @@ export default {
         return { period, timeframe }
         }else if(this.exitFreqGetter === 'Weekly') {
         if (timeframe === 'Week') {
-          if(period % 4 === 0 && period <= 8) {
-            period = period / 4;
-            timeframe = 'Month';
-          }else if(period % 13 === 0 && period > 8) {
-            period = (period / 13) * 3;
-            timeframe = 'Month';
+          // if(period % 4 === 0 && period <= 8) {
+          //   period = period / 4;
+          //   timeframe = 'Month';
+          // }else if(period % 13 === 0 && period > 8) {
+          //   period = (period / 13) * 3;
+          //   timeframe = 'Month';
+          // }
+          if(((period % 13) % 4) === 0) {
+              let num = Math.trunc(period / 13)
+              let end = (period % 13) / 4
+              period = num * 3 + end
+              timeframe = 'Month';
           }
-          if (period % 12 === 0) {
+          if (period % 12 === 0  && timeframe.includes('Month')) {
             period = period / 12;
             timeframe = 'Year';
           }
@@ -1573,11 +1598,15 @@ export default {
             break
           case 'Month':
             const period = Number(item.period)
+            // if(period % 3 == 0) {
+            //   num_3 = Math.trunc(period / 3) // 去除小数点取整数
+            // }
+            // value = num_3 === null ? period * 4 : period * 4 + num_3
             let num_3 = null
-            if(period % 3 == 0) {
               num_3 = Math.trunc(period / 3) // 去除小数点取整数
-            }
-            value = num_3 === null ? period * 4 : period * 4 + num_3
+              let end_3 = period % 3 // 余数
+            // value = num_3 === null ? period * 4 : period * 4 + num_3
+            value = num_3 * 13 + end_3 * 4
             break
           case 'Year':
             value = Number(item.period) * 52
