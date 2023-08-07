@@ -461,6 +461,12 @@ export default class AdvancedChartComponent extends Vue {
 		this.isCollapse = true
 	}
 
+	beforeDestroy() {
+		// Destroy the ChartEngine instance when unloading the component.
+		// This will stop internal processes such as quotefeed polling.
+		CIQ.stxx.destroy()
+	}
+
 	createChartAndUI(config: any) {
 		const container = this.container
 		const chart = new CIQ.UI.Chart()

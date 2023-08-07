@@ -43,6 +43,10 @@ export default {
 
 		// 还原chartiq默认study definition
 		this.editStudies(true)
+
+		// Destroy the ChartEngine instance when unloading the component.
+		// This will stop internal processes such as quotefeed polling.
+		CIQ.stxx?.destroy()
 	},
 	computed: {
 		updateSettingMA() {
