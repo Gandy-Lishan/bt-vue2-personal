@@ -612,10 +612,10 @@
 													<el-option label="Week(s)" value="Week"></el-option>
 													<el-option label="Month(s)" value="Month"></el-option> -->
 
-                          <el-option v-if="exitFreqGetter == 'Daily'" label="Day(s)" value="Day"></el-option>
-                          <el-option v-if="exitFreqGetter == 'Weekly' || exitFreqGetter == 'Daily'" label="Week(s)" value="Week"></el-option>
-                          <el-option v-if="exitFreqGetter == 'Monthly' || exitFreqGetter == 'Daily' || exitFreqGetter == 'Weekly'" label="Month(s)" value="Month"></el-option>
-                          <el-option v-if="exitFreqGetter == 'Monthly' || exitFreqGetter == 'Weekly'" label="Year(s)" value="Year"></el-option>
+                          <el-option v-if="rowFrequency == 'Daily'" label="Day(s)" value="Day"></el-option>
+                          <el-option v-if="rowFrequency == 'Weekly' || rowFrequency == 'Daily'" label="Week(s)" value="Week"></el-option>
+                          <el-option v-if="rowFrequency == 'Monthly' || rowFrequency == 'Daily' || rowFrequency == 'Weekly'" label="Month(s)" value="Month"></el-option>
+                          <el-option v-if="rowFrequency == 'Monthly' || rowFrequency == 'Weekly'" label="Year(s)" value="Year"></el-option>
 												</el-select>
 											</template>
 										</el-table-column>
@@ -675,7 +675,6 @@ import jutils from 'jutils-src'
 import { seeReport, setCustomTIM, getCustomTIM } from '@/service/service'
 // import sortByRule from "@/tools/sortTIM";
 const XLSX = require('xlsx');
-import { mapGetters } from 'vuex';
 
 export default {
   data() {
@@ -721,15 +720,12 @@ export default {
       TIMHistoryList: [],
       TIMResult_quotes: [],
       editBacktestID: null,
-
-      tradePrice: 'Close'
+      tradePrice: 'Close',
+      rowFrequency: 'Daily'
     }
   },
   created() {
     this.getResultData({ id: 0 })
-  },
-  computed: {
-    ...mapGetters(['exitFreqGetter']), // 将getCount映射为组件的计算属性
   },
   methods: {
     clearForm() {
@@ -758,7 +754,7 @@ export default {
               { period: 6, timeframe: 'Month' },
               { period: 1, timeframe: 'Year' }
             ]
-      const frequency = this.exitFreqGetter
+      const frequency = this.rowFrequency
       switch (frequency) {
         case 'Daily':
           this.defaultTableLabels = [
@@ -945,6 +941,7 @@ export default {
         if (this.$store.state.favoriteBacktestRowData.id) {
           let id = row.id
           vm.activePerTag = 'first'
+          vm.rowFrequency = row.frequency
           try {
             let res = null
             try {
@@ -1063,7 +1060,7 @@ export default {
                 let timPeriodArray = null
                 try {
                   timPeriodArray = JSON.parse(res.data[0].tim_data)
-                  let timeframe = vm.exitFreqGetter
+                  let timeframe = vm.rowFrequency
                   if (timeframe === 'Weekly') {
                     timPeriodArray = timPeriodArray.filter(item => item.timeframe !== 'Day');
                   } else if (timeframe === 'Monthly') {
@@ -1163,7 +1160,7 @@ export default {
             unit = value==1?"Year":"Years";
           }
         }
-        if(this.exitFreqGetter === 'Daily') {
+        if(this.rowFrequency === 'Daily') {
           if (unit === "Days") {
             if (value % 5 === 0) {
               value = value / 5;
@@ -1192,7 +1189,7 @@ export default {
               unit = value==1?"Year":"Years";
             }
           }
-          }else if(this.exitFreqGetter === 'Weekly') {
+          }else if(this.rowFrequency === 'Weekly') {
             if (unit === 'Week') {
               // if(value % 4 === 0 && value <= 8) {
               //   value = value / 4;
@@ -1217,7 +1214,7 @@ export default {
                 unit = value==1?"Year":"Years";
               }
             }
-        }else if(this.exitFreqGetter === 'Monthly') {
+        }else if(this.rowFrequency === 'Monthly') {
           if (unit === 'Month') {
             if (value % 12 === 0) {
               value = value / 12;
@@ -1295,7 +1292,7 @@ export default {
       data = data.map(item => {
         let period = item.period;
         let timeframe = item.timeframe;
-        if(this.exitFreqGetter === 'Daily') {
+        if(this.rowFrequency === 'Daily') {
         if (timeframe === 'Day') {
           if(period % 5 === 0) {
             period = period / 5;
@@ -1325,7 +1322,7 @@ export default {
           }
         }
         return { period, timeframe }
-        }else if(this.exitFreqGetter === 'Weekly') {
+        }else if(this.rowFrequency === 'Weekly') {
         if (timeframe === 'Week') {
           // if(period % 4 === 0 && period <= 8) {
           //   period = period / 4;
@@ -1351,7 +1348,7 @@ export default {
           }
         }
         return { period, timeframe }
-        }else if(this.exitFreqGetter === 'Monthly') {
+        }else if(this.rowFrequency === 'Monthly') {
           if (timeframe === 'Month') {
             if (period % 12 === 0) {
               period = period / 12;
@@ -1374,7 +1371,7 @@ export default {
       /* 
       1month = 1Bar, 3Month = 3 Bars, 6Months=6Bars, 9Months = 9 Bars, 1year = 12Bars, 2 years = 24 Bars, 3years = 36Bars.
       */
-      const frequency = this.exitFreqGetter
+      const frequency = this.rowFrequency
       return uniqueData.map((item) => {
         let timeframe =
           item.period > 1
@@ -1502,7 +1499,7 @@ export default {
       data = data.map(item => {
         let period = item.period;
         let timeframe = item.timeframe;
-        if(this.exitFreqGetter === 'Daily') {
+        if(this.rowFrequency === 'Daily') {
         if (timeframe === 'Day') {
           if(period % 5 === 0) {
             period = period / 5;
@@ -1532,7 +1529,7 @@ export default {
           }
         }
         return { period, timeframe }
-        }else if(this.exitFreqGetter === 'Weekly') {
+        }else if(this.rowFrequency === 'Weekly') {
         if (timeframe === 'Week') {
           // if(period % 4 === 0 && period <= 8) {
           //   period = period / 4;
@@ -1558,7 +1555,7 @@ export default {
           }
         }
         return { period, timeframe }
-        }else if(this.exitFreqGetter === 'Monthly') {
+        }else if(this.rowFrequency === 'Monthly') {
           if (timeframe === 'Month') {
             if (period % 12 === 0) {
               period = period / 12;
@@ -1573,7 +1570,7 @@ export default {
             ? `${item.period} ${item.timeframe}s`
             : `${item.period} ${item.timeframe}`
         let value
-        const frequency = this.exitFreqGetter
+        const frequency = this.rowFrequency
         if(frequency == 'Daily') {
         switch (item.timeframe) {
           case 'Day':
@@ -2214,7 +2211,8 @@ export default {
         this.$message.warning('Cannot add more than 10 rows.')
         return
       }
-      const frequency = this.exitFreqGetter
+      const frequency = this.rowFrequency
+      console.log('frequency--------', frequency)
       let newRow = null
       switch (frequency) {
         case 'Daily':
