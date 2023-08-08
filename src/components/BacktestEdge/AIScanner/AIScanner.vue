@@ -4,7 +4,7 @@
 <el-collapse class='collape-title'>
   <el-collapse-item>
     <template slot="title">
-      AI Stock Scanner<i class="header-icon el-icon-info"></i>
+      Click here to view AI Stock Scanner Description<i class="header-icon el-icon-info"></i>
     </template>
     <h4>Our AI stock scanner is updated nightly by 11:40 PM Eastern Time. This system is designed to provide you with a list of stocks that have triggered a "Signal-for-Action", worthy of consideration for trading at the opening of the next market day. Currently, our system can scan the 1500 S&P stocks. We will announce when additional stocks from other market indices are included.</h4>
     <div>•	The system’s default setting displays the “end of today” shortlisting results. You can find historical results by selecting start and end dates from the past.</div>

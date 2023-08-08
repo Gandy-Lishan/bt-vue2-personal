@@ -21,6 +21,7 @@
 				</div>
 
 				<div class="searchBox">
+					<h6>Today's pick will be completed by 11:40pm US Eastern Time .</h6>
 					<el-input 
 						placeholder="" 
 						v-model="searchItem" 
@@ -326,7 +327,7 @@ export default {
 					'HighPoints':"When the highest price of a stock ranks above 100 in relation to the highest prices of the<br/> past 13 trading days (higher stock prices correspond to higher rankings), <br/>it forms a 13-day new high and generates a buy signal. This indicates that <br/>the stock is experiencing a positive breakthrough and is in an upward trend.",
 					'LowPoints':"When the lowest price of a stock ranks below 0 in relation to the lowest prices of the past 13 trading days, <br/>it forms a 13-day new low and generates a sell signal. <br/>This indicates that the stock is in a downtrend and can be shorted.",
 					'RSI':"When the RSI indicator forms a golden cross above 40, it suggests that the indicator is about to<br/>recover from an oversold state to the midpoint, indicating a potential long entry signal. <br/>RSI can reflect whether a stock is in an overbought or oversold condition <br />but should be used in conjunction with the trend analysis.",
-					'Trend': 'Closing price above the 252-day moving average is considered as Uptrend.<br/>Closing price below the 252-day moving average is considered as Downtrend.',
+					'Trend': 'Closing price above the 252-day moving average is considered as Uptrend.<br/>Closing price below the 252-day moving average is considered as Downtrend.<br/>The whole backtest period is considered as ALL.',
 					'ExpectedReturn': 'ExpectedReturn = (WinRate * ProfitTarget - (100.0 - WinRate) * StopLoss) / 100.0'
 				},
 
