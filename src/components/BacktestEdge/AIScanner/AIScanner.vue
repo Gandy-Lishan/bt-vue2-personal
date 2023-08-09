@@ -68,7 +68,6 @@
 				:data="tableData" 
 				:label="tableData.label" 
 				:key="index" 
-				:curDate="curDate" 
 				:tableCol="tableData.tableCol" 
 				currTabPage="AIRecommendation" 
 				:loading="loading"
@@ -117,11 +116,27 @@ export default {
     }
   },
   async created(){	
+	// 进入组件时还原筛选条件状态
+	const state = this.$store.getters.getScannerAIFilterState
+
 	this.curDate = this.$store.state.curDate
-	this.date = [this.curDate,this.curDate]
+	this.date = state?.date || [this.curDate,this.curDate]
+
+	this.searchItem = state?.searchItem || ''
+	this.searchCategory = state?.searchCategory || ''
+	this.isPLSChecked = state?.isPLSChecked || ''
 	//首先初始化数据
 	this.loadData('US')
 },
+	beforeDestroy() {
+		// 离开此组件前保存筛选条件状态
+		this.$store.dispatch('set_scannerai_filter_state',{
+			searchItem:this.searchItem,
+			searchCategory:this.searchCategory,
+			isPLSChecked:this.isPLSChecked,
+			date:this.date,
+		})
+	},
 	watch: {
 		// 数据源更新时tableData同时响应,只会在getAIPick时获取originData
 		originData: {
@@ -179,13 +194,12 @@ export default {
 	async loadData(marketType){
 		//this.activeIndex = index
 		if(marketType=='US'){
-			this.getAIPick(this.date)
+			this.getAIPick()
 		}
 	},
-	async getAIPick(date){
+	async getAIPick(){
 		this.loading = true
-		if(!date) date = this.date
-		let AIPickContent = await getAIPick(date)
+		let AIPickContent = await getAIPick(this.date || [this.curDate,this.curDate])
 		
 		// let AIPickContentString = JSON.stringify(AIPickContent)
 		// 						.replace(/TimeInMarket/g,'Best Time In Market(Bars)')
@@ -233,12 +247,13 @@ export default {
 		AIPickObj['content'] = AIPickContent
 		
 		this.originData = AIPickObj
+
+		if(!this.date) this.date = [this.curDate,this.curDate]
 		
 		this.loading = false
 	},
-	selectDate(date){
-		this.getAIPick(date)
-		
+	selectDate(){
+		this.getAIPick()
 	},
 
   }
