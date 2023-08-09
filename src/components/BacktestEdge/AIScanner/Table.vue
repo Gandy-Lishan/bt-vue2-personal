@@ -83,11 +83,15 @@
 							:to="{
 								path: '/home/scannerai/scannerai_chart',
 								query: {
-									stock: scope.row[l.value],
-									id: 'test',
-									rowData: JSON.stringify(scope.row)
+									rowData: JSON.stringify({
+										id: 'test',
+										Symbol:scope.row['Symbol'],
+										Date:scope.row['Date'],
+										_Signal:scope.row['_Signal'],
+										Category:scope.row['Category'],
+										Direction:scope.row['Direction'],
+									})
 								}
-								
 							}"
 							>{{ scope.row[l.value] }}</router-link
 						>
@@ -222,7 +226,6 @@ export default {
 		data: Object,
 		tableCol :Array,
 		currTabPage: String,
-		curDate: String,
 		loading: Boolean,
 	},
 	data() {

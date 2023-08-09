@@ -2,7 +2,7 @@
 	<div class="main-content">
 		<Chart
 			v-if="isAsyncDown"
-			:symbol="stockName"
+			:symbol="rowData ? rowData.Symbol : 'AAPL'"
 			:other="other"
 			:direction="rowData ? rowData.Direction : null"
 		/>
@@ -76,8 +76,6 @@ export default {
 		return {
 			activePerTag : 'first',
 			loading : true,
-			stockName : this.$route.query.stock || 'AAPL',
-			AIRobot_id : this.$route.query.id || '',
 			rowData : this.$route.query.rowData
 				? JSON.parse(this.$route.query.rowData)
 				: null,

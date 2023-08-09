@@ -119,7 +119,8 @@ export default new Vuex.Store({
 		last_signal_array: [],
 		_last_signal_array: [],
 		hashTable: [],
-		frequencyArray: new Map()
+		frequencyArray: new Map(),
+		scannerai_filter: {},
 	},
 	getters: {
 		getAllSignalArray: (state) => {
@@ -139,6 +140,9 @@ export default new Vuex.Store({
 		},
 		exitFreqGetter: (state) => {
 			return state.exitFrequency
+		},
+		getScannerAIFilterState: (state) => {
+			return state.scannerai_filter
 		}
 	},
 	mutations: {
@@ -151,7 +155,6 @@ export default new Vuex.Store({
 		// 	console.log('RESET_STORE',state)
 	  	// },
 		RESET_STORE: (state)=>{
-			console.log(' before RESET_STORE',state)
 			// todo 还有其他情况，目前就是scannerai销毁前调用,之后chartiq 要做两套状态用作backtester和scanner ai而不是这样切换
 			state.pairDataFreq = ''
 			state.backtestSymbol = 'SPX'
@@ -785,9 +788,19 @@ export default new Vuex.Store({
 		},
 		clearHashTable(state) {
 			state.hashTable = []
+		},
+		// TODO 整理是归类到state
+		SET_SCANNERAI_FILTER_STATE(state,obj) {
+			state.scannerai_filter = obj
 		}
 	},
 	actions: {
+		set_scannerai_filter_state({commit}, obj){
+			return new Promise(resolve=>{
+			  commit('SET_SCANNERAI_FILTER_STATE',obj)
+			  resolve();
+			})
+		},
 		Try(context, val) {
 			context.commit('setEntryData', val)
 		},
