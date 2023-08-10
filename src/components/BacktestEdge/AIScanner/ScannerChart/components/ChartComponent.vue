@@ -62,8 +62,22 @@ export default {
 			this.updateMAPeriod(val['period'])
 		},
 		updateTimeframe(val) {
-			this.loadDefaultStudy().then(()=>{
-				this.loadMarker()
+			CIQ.addCover()
+    		CIQ.nprogress.start()
+			CIQ.initiateChart([this.symbolUrl],this.other['date'],()=>{
+				try{
+					// 切换timeframe前先清空已有studies
+					CIQ.removeALLStudies()
+					this.loadDefaultStudy().then(()=>{
+						this.loadMarker()
+					})
+					
+				}catch(e){
+					console.error(e)
+				}finally{	
+					CIQ.hideCover()
+					CIQ.nprogress.done()
+				}
 			})
 		}
 	},
@@ -89,7 +103,6 @@ export default {
 					]
 					this.calculateBacktestHistory(this.other['EntryTradeDate'], periodArray,this.direction)
 					this.loadDefaultStudy().then(()=>{
-						console.log('aiscanner loadMarker')
 						this.loadMarker()
 					})
 					
@@ -162,6 +175,11 @@ export default {
 							Field: this.symbolUrl
 						});
 						CIQ.createOneTimePatternMarker(this.other.date,"Optix MA10 < 30 and Optix < 20")
+						
+						break;
+					case "Optix #4":
+						await CIQ.getIndicatorMatedata([this.symbolUrl])
+						CIQ.createOneTimePatternMarker(this.other.date,"Optix CrossBelow 0.5")
 						
 						break;
 					case 'UpTrend Pattern':
@@ -260,7 +278,6 @@ export default {
 				}
 
 				CIQ.stxx.setChartType("candle");
-				console.log('aiscanner loadStudy end')
 				resolve()
 			 })	
 		},
@@ -356,38 +373,40 @@ export default {
 			let markerSet= []
 			const dataSource = CIQ.stxx.chart.dataSet
             let entryTradeDateArr = this.other['EntryTradeDate'] ? eval('(' + this.other['EntryTradeDate'] + ')') : []
+			let entryTradePriceArr = this.other['EntryTradePrice'] ? eval('(' + this.other['EntryTradePrice'] + ')') : []
             if(entryTradeDateArr){
                 entryTradeDateArr.forEach((item,index)=>{
-					var datatime = new Date(item)
-					var offset = datatime.getTimezoneOffset() * 60 * 1000
-					const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
-                    let quote = dataSource.find(x=>{
-                        return x.DT.getTime() == standardDate.getTime()
-                    })
+					// var datatime = new Date(item)
+					// var offset = datatime.getTimezoneOffset() * 60 * 1000
+					// const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+                    // let quote = dataSource.find(x=>{
+                    //     return x.DT.getTime() == standardDate.getTime()
+                    // })
 					let entryReason = this.other['_Signal']
 					
                     markerSet.push({
                         DT: item,
-                        Price: quote.Close,
+                        Price: entryTradePriceArr[index],
                         Type: 'BUY',  
 						Indicator: [entryReason],  
                     })
                 })
             }
             let exitTradeDateArr = this.other['ExitTradeDate'] ? eval('(' + this.other['ExitTradeDate'] + ')') : []
+			let exitTradePriceArr = this.other['ExitTradePrice'] ? eval('(' + this.other['ExitTradePrice'] + ')') : []
             if(exitTradeDateArr){
                 exitTradeDateArr.forEach((item,index)=>{
-					var datatime = new Date(item)
-					var offset = datatime.getTimezoneOffset() * 60 * 1000
-					const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
-                    let quote = dataSource.find(x=>{
-                        return x.DT.getTime() == standardDate.getTime()
-                    })
+					// var datatime = new Date(item)
+					// var offset = datatime.getTimezoneOffset() * 60 * 1000
+					// const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+                    // let quote = dataSource.find(x=>{
+                    //     return x.DT.getTime() == standardDate.getTime()
+                    // })
 
 					let exitReasonArr = eval('(' + this.other.ExitReason + ')')
                     markerSet.push({
                         DT: item,
-                        Price: quote.Close,
+                        Price: exitTradePriceArr[index],
                         Type: 'SELL',    
 						Indicator: [exitReasonArr[index]]
                     })
