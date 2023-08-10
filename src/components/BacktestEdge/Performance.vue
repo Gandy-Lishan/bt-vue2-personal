@@ -1199,10 +1199,15 @@ export default {
               //   unit = value==1?"Month":"Months"
               // }
               if(((value % 13) % 4) === 0) {
-                let num = Math.trunc(value / 13)
-                let end = (value % 13) / 4
-                value = num * 3 + end
-                unit = value==1?"Month":"Months"
+                if(value % 13 === 12) {
+                  // 不转
+                  unit = value==1?"Week":"Weeks"
+                }else{
+                  let num = Math.trunc(value / 13)
+                  let end = (value % 13) / 4
+                  value = num * 3 + end
+                  unit = value==1?"Month":"Months"
+                }
               }
               if (value % 12 === 0  && unit.includes('Month')) {
                 value = value / 12;
@@ -1332,10 +1337,15 @@ export default {
           //   timeframe = 'Month';
           // }
           if(((period % 13) % 4) === 0) {
-            let num = Math.trunc(period / 13)
-            let end = (period % 13) / 4
-            period = num * 3 + end
-            timeframe = 'Month';
+            if(period % 13 === 12) {
+              // 不转
+              timeframe = "Week"
+            }else{
+              let num = Math.trunc(period / 13)
+              let end = (period % 13) / 4
+              period = num * 3 + end
+              timeframe = 'Month';
+            }
           }
           if (period % 12 === 0  && timeframe.includes('Month')) {
             period = period / 12;
@@ -1539,10 +1549,16 @@ export default {
           //   timeframe = 'Month';
           // }
           if(((period % 13) % 4) === 0) {
+            if(period % 13 === 12) {
+              // 不转
+              period = period
+              timeframe = "Week"
+            }else{
               let num = Math.trunc(period / 13)
               let end = (period % 13) / 4
               period = num * 3 + end
               timeframe = 'Month';
+            }
           }
           if (period % 12 === 0  && timeframe.includes('Month')) {
             period = period / 12;
