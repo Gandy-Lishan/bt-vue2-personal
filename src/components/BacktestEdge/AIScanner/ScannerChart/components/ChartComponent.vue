@@ -39,12 +39,11 @@ export default {
 	},
 	beforeDestroy() {
 		// 防止跳转到backtester时保留了Hammer followed by a raise等marker
-		CIQ.removeALLStudies()
-
+		this.$store.dispatch('reset_chart_study_state')
+		this.$store.dispatch('reset_chart_config_state')
 		// 还原chartiq默认study definition
 		this.editStudies(true)
-
-		this.$store.commit('RESET_STORE')
+		
 		// Destroy the ChartEngine instance when unloading the component.
 		// This will stop internal processes such as quotefeed polling.
 		CIQ.stxx?.destroy()
@@ -67,7 +66,7 @@ export default {
 			CIQ.initiateChart([this.symbolUrl],this.other['date'],()=>{
 				try{
 					// 切换timeframe前先清空已有studies
-					CIQ.removeALLStudies()
+					this.$store.dispatch('reset_chart_study_state')
 					this.loadDefaultStudy().then(()=>{
 						this.loadMarker()
 					})

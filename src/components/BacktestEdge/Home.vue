@@ -943,28 +943,10 @@ export default {
     },
     refreshPage() {
       if (!CIQ.Studies) return
-      var stx = CIQ.stxx
-      for (var id in stx.layout.studies) {
-        var sd = stx.layout.studies[id]
-        if (!sd.customLegend && !sd.permanent) CIQ.Studies.removeStudy(stx, sd)
-      }
-      stx.draw()
-      CIQ.setPanelHeight([])
       const freq = CIQ.store.state.exitFrequency
 
-      // 这个虽然清理干净了，但是还得初始化一些东西
-      //CIQ.store.commit('RESET_STORE')
-
-      // remove all Studies from Vuex
-      CIQ.store.commit('getEntryIndicatorsList', [])
-      CIQ.store.commit('getExitIndicatorsList', [])
-      CIQ.store.commit('getMA', [])
-      CIQ.store.commit('getMALayout', [])
-
-      CIQ.store.commit('getExtraIndicators', [])
-      CIQ.store.commit('getTechnicalIndicators', [])
-
-      CIQ.store.commit('getBacktestSymbol', 'SPX')
+      this.$store.dispatch('reset_chart_study_state')
+      this.$store.dispatch('reset_chart_config_state')
       CIQ.store.commit('getFrequency', 'Daily')
 
       // remove markers, prompt, recover timeframe dropdown
@@ -974,7 +956,7 @@ export default {
       //CIQ.store.commit('getTradesData', [])
       document.getElementsByClassName('ciq-period')[0].style.display = 'block'
       if (
-        stx.chart.symbol != CIQ.store.state.backtestSymbol ||
+        CIQ.stxx.chart.symbol != CIQ.store.state.backtestSymbol ||
         freq != 'Daily'
       ) {
         CIQ.addIndicators()
