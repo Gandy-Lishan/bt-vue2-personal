@@ -5,6 +5,7 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -154,13 +155,25 @@ export default new Vuex.Store({
 		// 	state.backtestSymbol = 'SPX'
 		// 	console.log('RESET_STORE',state)
 	  	// },
-		RESET_STORE: (state)=>{
-			// todo 还有其他情况，目前就是scannerai销毁前调用,之后chartiq 要做两套状态用作backtester和scanner ai而不是这样切换
-			state.pairDataFreq = ''
+		RESET_CHART_CONDIG_STATE: (state)=>{
+			// 清空chartiq图表配置
+			state.pairDataFreq = 'daily'
 			state.backtestSymbol = 'SPX'
-			state.exitFrequency = ''
-			
+			state.exitFrequency = 'Daily'
 	  	},
+		RESET_CHART_STUDY_STATE: (state)=> {
+			// 清空表单indicator列表信息
+			state.indicators =  {
+				formIndicators: {
+					entry: new Array(5),
+					exit: new Array(5)
+				},
+				extraIndicators: [],
+				technicalIndicators: []
+			},
+			state.activatedMA = [{ period: 21, url: '' }]
+			state.activatedMALayout = []
+		},
 
 		SET_LASTSIGNAL_ARRAY: (state,val)=>{
 			state.last_signal_array = val
@@ -792,7 +805,7 @@ export default new Vuex.Store({
 		// TODO 整理是归类到state
 		SET_SCANNERAI_FILTER_STATE(state,obj) {
 			state.scannerai_filter = obj
-		}
+		},
 	},
 	actions: {
 		set_scannerai_filter_state({commit}, obj){
@@ -814,6 +827,27 @@ export default new Vuex.Store({
 			return new Promise(resolve=>{
 			  commit('STORE_BACKTESTRESULT',val)
 			  resolve();
+			})
+		},
+		reset_chart_config_state({commit}){
+			return new Promise(resolve=>{
+				// 清空chartiq图表配置
+				commit('RESET_CHART_CONDIG_STATE')
+				resolve();
+			})
+		},
+		reset_chart_study_state({commit}){
+			return new Promise(resolve=>{
+				// 清空chartiq indicator内容
+				for (var id in CIQ.stxx.layout.studies) {
+					var sd = CIQ.stxx.layout.studies[id];
+					if (!sd.customLegend && !sd.permanent) CIQ.Studies.removeStudy(CIQ.stxx, sd);
+				}
+				CIQ.stxx.draw();
+				CIQ.setPanelHeight([])
+
+				commit('RESET_CHART_STUDY_STATE')
+				resolve();
 			})
 		},
 	}
