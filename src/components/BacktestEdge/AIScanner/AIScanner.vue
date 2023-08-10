@@ -109,7 +109,7 @@ export default {
 	midTermMap: {
 		'Symbol Close > its\' MA200 and Optix MA5 < 35':'Optix #1',
 		'Symbol Close > its\' MA200 and Optix < 30':'Optix #2',
-		'Optix MA10 < 30 and Optix < 20':'Optix #3'
+		'Optix MA10 < 30 and Optix < 20':'Optix #3',
 	},
 	isPLSChecked: false,
 	loading: false,
@@ -123,8 +123,8 @@ export default {
 	this.date = state?.date || [this.curDate,this.curDate]
 
 	this.searchItem = state?.searchItem || ''
-	this.searchCategory = state?.searchCategory || ''
-	this.isPLSChecked = state?.isPLSChecked || ''
+	this.searchCategory = state?.searchCategory || 'Symbol'
+	this.isPLSChecked = state?.isPLSChecked || false
 	//首先初始化数据
 	this.loadData('US')
 },
