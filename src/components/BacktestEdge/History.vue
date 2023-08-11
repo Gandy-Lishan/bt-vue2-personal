@@ -391,7 +391,7 @@ export default {
     async runAllBacktest(){
 
       this.showFLSMASK()
-      CIQ.isFindLastSignalRuning = true
+      this.$store.dispatch('set_isFindLastSignalRuning_flag',true)
 
         const allHistoryList = await this.getAllHistoryData()
         // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
@@ -428,13 +428,12 @@ export default {
 
       // 轮询可用于等待上一个回测结束，也可定时刷新进度条进度
       let interval = setInterval(() => {
-        if (CIQ.isFindLastSignalRuning == false) {
+        if (this.$store.getters.getIsFindLastSignalRuningFlagState == false) {
           clearInterval(interval)
-          CIQ.isFindLastSignalRuning = true
-          //console.log('轮询等待上一个回测结束.........',CIQ.isFindLastSignalRuning,backtest)
+          this.$store.dispatch('set_isFindLastSignalRuning_flag',true)
           var backtest_info = this.processingBacktest(this.backtest_array)
           if (backtest_info == false) {
-            CIQ.isFindLastSignalRuning = false
+            this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
             console.log('处理任务结束', this.$store.state.last_signal_array)
             //this.removeFLSMASK()
             return // 处理任务结束
@@ -568,12 +567,12 @@ export default {
             let row = res.data
             row.result = JSON.parse(row.result)
 
-            //如果是从FindLastSignal来的，CIQ.isFindLastSignalRuning为true
-            if(!CIQ.isFindLastSignalRuning){
+            //如果是从FindLastSignal来的，isFindLastSignalRuning为true
+            if(!vm.$store.getters.getIsFindLastSignalRuningFlagState){
               vm.viewBacktestResults(row)
             }else{
               // FindLastSignal过程中代表一个项目的运行结束
-              CIQ.isFindLastSignalRuning = false
+              vm.$store.dispatch('set_isFindLastSignalRuning_flag',false)
               vm.$store.state.last_signal_array.map(item=>{
                 if(item.name == row.name){
                   item.state = 1
@@ -596,12 +595,12 @@ export default {
             let row = res.data
             row.result = JSON.parse(row.result)
 
-            if(!CIQ.isFindLastSignalRuning){
+            if(!vm.$store.getters.getIsFindLastSignalRuningFlagState){
               vm.viewBacktestResults(row)
             }else{
               // 没交易不算回测失败，不列为fls的失败情况
               // FindLastSignal过程中代表一个项目的运行结束
-              CIQ.isFindLastSignalRuning = false
+              vm.$store.dispatch('set_isFindLastSignalRuning_flag',false)
               vm.$store.state.last_signal_array.map(item=>{
                 if(item.name == row.name){
                   item.state = 1

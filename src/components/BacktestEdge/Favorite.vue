@@ -914,7 +914,7 @@ export default {
     async runAllBacktest(){
 
       this.showFLSMASK()
-      CIQ.isFindLastSignalRuning = true
+      this.$store.dispatch('set_isFindLastSignalRuning_flag',true)
 
         const allFavoriteList = await this.getAllFavoriteData()
         // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
@@ -933,20 +933,17 @@ export default {
       this.postRunbacktest(backtest_info)
     },
     postRunbacktest(backtest) {
-      //console.log('backtest_info* ******',backtest,CIQ.isFindLastSignalRuning)
       this.rerunBacktest(backtest)
 
       // 轮询可用于等待上一个回测结束，也可定时刷新进度条进度
       let interval = setInterval(() => {
-        if (CIQ.isFindLastSignalRuning == false) {
+        if (this.$store.getters.getIsFindLastSignalRuningFlagState == false) {
           clearInterval(interval)
-          CIQ.isFindLastSignalRuning = true
-          //console.log('轮询等待上一个回测结束.........',CIQ.isFindLastSignalRuning,backtest)
+          this.$store.dispatch('set_isFindLastSignalRuning_flag',true)
           var backtest_info = this.processingBacktest(this.backtest_array)
           if (backtest_info == false) {
-            CIQ.isFindLastSignalRuning = false
+            this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
             console.log('处理任务结束', this.$store.state.last_signal_array)
-            //this.removeFLSMASK()
             return // 处理任务结束
           }
           this.postRunbacktest(backtest_info)
