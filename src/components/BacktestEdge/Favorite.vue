@@ -1022,7 +1022,7 @@ export default {
                 lastEntrySignalDate: item.value.data.lastEntrySignalDate,
                 lastExitSignalDate: item.value.data.lastExitSignalDate
               }
-            })
+            })``
             //this.removeFLSMASK()
 
           this.getFavoriteList()

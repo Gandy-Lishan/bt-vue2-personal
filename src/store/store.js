@@ -122,6 +122,8 @@ export default new Vuex.Store({
 		hashTable: [],
 		frequencyArray: new Map(),
 		scannerai_filter: {},
+		scannerai_flag: false,
+		isBacktestRunning_flag:false,
 	},
 	getters: {
 		getAllSignalArray: (state) => {
@@ -144,37 +146,15 @@ export default new Vuex.Store({
 		},
 		getScannerAIFilterState: (state) => {
 			return state.scannerai_filter
+		},
+		getScannerAIFlagState: (state) => {
+			return state.scannerai_flag
+		},
+		getIsBacktestRunningFlagState: (state) => {
+			return state.isBacktestRunning_flag
 		}
 	},
 	mutations: {
-		// 重置vuex本地储存状态
-		// RESET_STORE: (state)=>{
-		// 	Object.keys(state).forEach(key => {
-		// 		state[key] = JSON.parse(JSON.stringify(window.SITE_CONFIG['storeState'][key]))
-		// 	})
-		// 	state.backtestSymbol = 'SPX'
-		// 	console.log('RESET_STORE',state)
-	  	// },
-		RESET_CHART_CONDIG_STATE: (state)=>{
-			// 清空chartiq图表配置
-			state.pairDataFreq = 'daily'
-			state.backtestSymbol = 'SPX'
-			state.exitFrequency = 'Daily'
-	  	},
-		RESET_CHART_STUDY_STATE: (state)=> {
-			// 清空表单indicator列表信息
-			state.indicators =  {
-				formIndicators: {
-					entry: new Array(5),
-					exit: new Array(5)
-				},
-				extraIndicators: [],
-				technicalIndicators: []
-			},
-			state.activatedMA = [{ period: 21, url: '' }]
-			state.activatedMALayout = []
-		},
-
 		SET_LASTSIGNAL_ARRAY: (state,val)=>{
 			state.last_signal_array = val
 		},
@@ -802,9 +782,42 @@ export default new Vuex.Store({
 		clearHashTable(state) {
 			state.hashTable = []
 		},
-		// TODO 整理是归类到state
+	// TODO 整理是归类到state
+		// 重置vuex本地储存状态
+		// RESET_STORE: (state)=>{
+		// 	Object.keys(state).forEach(key => {
+		// 		state[key] = JSON.parse(JSON.stringify(window.SITE_CONFIG['storeState'][key]))
+		// 	})
+		// 	state.backtestSymbol = 'SPX'
+		// 	console.log('RESET_STORE',state)
+	  	// },
+		RESET_CHART_CONDIG_STATE: (state)=>{
+			// 清空chartiq图表配置
+			state.pairDataFreq = 'daily'
+			state.backtestSymbol = 'SPX'
+			state.exitFrequency = 'Daily'
+	  	},
+		RESET_CHART_STUDY_STATE: (state)=> {
+			// 清空表单indicator列表信息
+			state.indicators =  {
+				formIndicators: {
+					entry: new Array(5),
+					exit: new Array(5)
+				},
+				extraIndicators: [],
+				technicalIndicators: []
+			},
+			state.activatedMA = [{ period: 21, url: '' }]
+			state.activatedMALayout = []
+		},
 		SET_SCANNERAI_FILTER_STATE(state,obj) {
 			state.scannerai_filter = obj
+		},
+		SET_SCANNERAI_FLAG(state,val) {
+			state.scannerai_flag = val
+		},
+		SET_ISBACKTESTRUNNING_FLAG(state,val) {
+			state.isBacktestRunning_flag = val
 		},
 	},
 	actions: {
@@ -847,6 +860,20 @@ export default new Vuex.Store({
 				CIQ.setPanelHeight([])
 
 				commit('RESET_CHART_STUDY_STATE')
+				resolve();
+			})
+		},
+		set_scannerai_flag({commit},val){
+			return new Promise(resolve=>{
+				// 清空chartiq图表配置
+				commit('SET_SCANNERAI_FLAG',val)
+				resolve();
+			})
+		},
+		set_isBacktestRunning_flag({commit},val){
+			return new Promise(resolve=>{
+				// 清空chartiq图表配置
+				commit('SET_ISBACKTESTRUNNING_FLAG',val)
 				resolve();
 			})
 		},

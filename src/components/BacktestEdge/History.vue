@@ -907,8 +907,8 @@ export default {
     },
     restoreIndicatorLayoutView(data, freq, row, resData) {
       // After the run back test and between the view result, a chart will be loaded to output signalouput
-      if (CIQ.isBacktestRun == true) {
-        CIQ.isBacktestRun = false
+      if (that.$store.getters.getIsBacktestRunningFlagState == true) {
+        that.$store.dispatch('set_isBacktestRunning_flag',false)
         var that = this
         //The outputsignalsresult is no longer used. The exportcsv is placed before the backtest and the callback is placed in place
         that.$store.commit('getRunBacktestData', row)

@@ -108,10 +108,10 @@ router.beforeEach(async (to, from, next) => {
 							if(to.name == 'scannerai' || to.name == 'scannerai_chart'){
 								await initiateCurrentDate()
 								await initiateIndicatorList()
-								CIQ.isScannerAI = true
+								store.dispatch('set_scannerai_flag',true)
 							}else{
 								await initiateIndicatorList()
-								CIQ.isScannerAI = false
+								store.dispatch('set_scannerai_flag',false)
 							}
 							next()
 						}		
@@ -133,10 +133,10 @@ router.beforeEach(async (to, from, next) => {
 			// 	if(to.name == 'scannerai' || to.name == 'scannerai_chart'){
 			// 		await initiateCurrentDate()
 			// 		await initiateIndicatorList()
-			// 		CIQ.isScannerAI = true
+			// 		store.dispatch('set_scannerai_flag',true)
 			// 	}else{
 			// 		await initiateIndicatorList()
-			// 		CIQ.isScannerAI = false
+			// 		store.dispatch('set_scannerai_flag',false)
 			// 	}
 				
 			// 	next()
