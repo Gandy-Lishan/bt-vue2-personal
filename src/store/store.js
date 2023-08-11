@@ -124,6 +124,7 @@ export default new Vuex.Store({
 		scannerai_filter: {},
 		scannerai_flag: false,
 		isBacktestRunning_flag:false,
+		isFindLastSignalRuning_flag:false,
 	},
 	getters: {
 		getAllSignalArray: (state) => {
@@ -152,6 +153,9 @@ export default new Vuex.Store({
 		},
 		getIsBacktestRunningFlagState: (state) => {
 			return state.isBacktestRunning_flag
+		},
+		getIsFindLastSignalRuningFlagState: (state) => {
+			return state.isFindLastSignalRuning_flag
 		}
 	},
 	mutations: {
@@ -819,6 +823,9 @@ export default new Vuex.Store({
 		SET_ISBACKTESTRUNNING_FLAG(state,val) {
 			state.isBacktestRunning_flag = val
 		},
+		SET_ISFINDLASTSIGNALRUNNING_FLAG(state,val) {
+			state.isFindLastSignalRuning_flag = val
+		},
 	},
 	actions: {
 		set_scannerai_filter_state({commit}, obj){
@@ -851,7 +858,7 @@ export default new Vuex.Store({
 		},
 		reset_chart_study_state({commit}){
 			return new Promise(resolve=>{
-				// 清空chartiq indicator内容
+				// 清空表单indicator列表信息
 				for (var id in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[id];
 					if (!sd.customLegend && !sd.permanent) CIQ.Studies.removeStudy(CIQ.stxx, sd);
@@ -865,15 +872,22 @@ export default new Vuex.Store({
 		},
 		set_scannerai_flag({commit},val){
 			return new Promise(resolve=>{
-				// 清空chartiq图表配置
+				// 判断是否在scanner ai
 				commit('SET_SCANNERAI_FLAG',val)
 				resolve();
 			})
 		},
 		set_isBacktestRunning_flag({commit},val){
 			return new Promise(resolve=>{
-				// 清空chartiq图表配置
+				// 判断Backtest是否运行中
 				commit('SET_ISBACKTESTRUNNING_FLAG',val)
+				resolve();
+			})
+		},
+		set_isFindLastSignalRuning_flag({commit},val){
+			return new Promise(resolve=>{
+				// 判断FLS是否运行结束
+				commit('SET_ISFINDLASTSIGNALRUNNING_FLAG',val)
 				resolve();
 			})
 		},

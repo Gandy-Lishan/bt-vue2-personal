@@ -1121,7 +1121,7 @@ export default {
                   CIQ.nprogress.done()
 
                   // FindLastSignal过程中代表一个项目的运行结束
-                  CIQ.isFindLastSignalRuning = false
+                  this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
                   vm.$store.state.last_signal_array.map(item=>{
                     if(item.name == backtestData.name){
                       item.state = 2
@@ -1158,7 +1158,7 @@ export default {
                   CIQ.nprogress.done()
 
                   // FindLastSignal过程中代表一个项目的运行结束
-                  CIQ.isFindLastSignalRuning = false
+                  this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
                   vm.$store.state.last_signal_array.map(item=>{
                     if(item.name == backtestData.name){
                       item.state = 2
@@ -1551,7 +1551,7 @@ export default {
                         vm.$refs.setUpChild.clearOldBacktestName()
 
                         // FindLastSignal过程中代表一个项目的运行结束
-                        CIQ.isFindLastSignalRuning = false
+                        this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
                         vm.$store.state.last_signal_array.map(item=>{
                           if(item.name == backtestData.name){
                             item.state = 2
@@ -1568,7 +1568,7 @@ export default {
                       CIQ.nprogress.done()
 
                       // FindLastSignal过程中代表一个项目的运行结束
-                      CIQ.isFindLastSignalRuning = false
+                      this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
                       vm.$store.state.last_signal_array.map(item=>{
                         if(item.name == backtestData.name){
                           item.state = 2
@@ -1616,7 +1616,7 @@ export default {
                       alert('Upload JSON failed')
 
                       // FindLastSignal过程中代表一个项目的运行结束
-                      CIQ.isFindLastSignalRuning = false
+                      this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
                       vm.$store.state.last_signal_array.map(item=>{
                         if(item.name == backtestData.name){
                           item.state = 2
@@ -1637,7 +1637,7 @@ export default {
                     alert('Upload CSV failed')
 
                     // FindLastSignal过程中代表一个项目的运行结束
-                    CIQ.isFindLastSignalRuning = false
+                    this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
                     vm.$store.state.last_signal_array.map(item=>{
                       if(item.name == backtestData.name){
                         item.state = 2
@@ -1762,7 +1762,7 @@ export default {
           }
         })
         // FindLastSignal过程中代表一个项目的运行结束
-        CIQ.isFindLastSignalRuning = false
+        this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
         vm.$store.state.last_signal_array.map(item=>{
           if(item.name == resData.name){
             item.state = 2
