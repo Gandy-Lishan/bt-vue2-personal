@@ -502,8 +502,8 @@ export default {
 			}
 		}, 500),
 		restoreIndicatorLayoutView(data, freq, row, resData) {
-			if (CIQ.isBacktestRun == true) {
-				CIQ.isBacktestRun = false
+			if (that.$store.getters.getIsBacktestRunningFlagState == true) {
+				that.$store.dispatch('set_isBacktestRunning_flag',false)
 				var that = this
 				that.$store.commit('getRunBacktestData', row)
 				that.$emit('goTobacktestSetupForm', row.id, resData, 'cannotDelView',() => {
