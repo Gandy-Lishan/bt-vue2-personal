@@ -1521,7 +1521,7 @@ export default {
                       }
                       if (res.status === 201) {
                         
-                        CIQ.isBacktestRun = true
+                        vm.$store.dispatch('set_isBacktestRunning_flag',true)
                         
                         //After saving successfully, clear the backtestinfo back to the original state
                         vm.$store.commit('initialBacktestInfo')
