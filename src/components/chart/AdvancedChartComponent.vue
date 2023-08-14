@@ -406,7 +406,7 @@ export default class AdvancedChartComponent extends Vue {
 			CIQ.stxx.addEventListener("scroll", function(object: Record<string, any> = {}) {
 
 				// an event handle for updating trade marker when dragging the chart
-				if(CIQ.isMarkerShown){
+				if(CIQ.store.getters.getIsMarkerShownFlagState){
 					let c_date = jutils.formatDate(object.stx.chart.xaxis[0].DT, 'YYYYMMDD');
 					if(CIQ.groups.slice(-1)[0]){
 						let m_date =

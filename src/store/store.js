@@ -125,6 +125,7 @@ export default new Vuex.Store({
 		scannerai_flag: false,
 		isBacktestRunning_flag:false,
 		isFindLastSignalRuning_flag:false,
+		isMarkerShown_flag:false,
 	},
 	getters: {
 		getAllSignalArray: (state) => {
@@ -156,6 +157,9 @@ export default new Vuex.Store({
 		},
 		getIsFindLastSignalRuningFlagState: (state) => {
 			return state.isFindLastSignalRuning_flag
+		},
+		getIsMarkerShownFlagState: (state) => {
+			return state.isMarkerShown_flag
 		}
 	},
 	mutations: {
@@ -826,6 +830,9 @@ export default new Vuex.Store({
 		SET_ISFINDLASTSIGNALRUNNING_FLAG(state,val) {
 			state.isFindLastSignalRuning_flag = val
 		},
+		SET_ISMARKERSHOWN_FLAG(state,val) {
+			state.isMarkerShown_flag = val
+		}
 	},
 	actions: {
 		set_scannerai_filter_state({commit}, obj){
@@ -888,6 +895,13 @@ export default new Vuex.Store({
 			return new Promise(resolve=>{
 				// 判断FLS是否运行结束
 				commit('SET_ISFINDLASTSIGNALRUNNING_FLAG',val)
+				resolve();
+			})
+		},
+		set_isMarkerShown_flag({commit},val){
+			return new Promise(resolve=>{
+				// 判断marker是否加载
+				commit('SET_ISMARKERSHOWN_FLAG',val)
 				resolve();
 			})
 		},

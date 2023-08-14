@@ -448,7 +448,7 @@ export default {
 					new Date(CIQ.initialDate.end),
 				)
 				this.trades = list
-				CIQ.isMarkerShown = true
+				this.$store.dispatch('set_isMarkerShown_flag',true)
 				
 				// split the markers into several groups
 				CIQ.groups = this.group(list)

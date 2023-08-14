@@ -564,7 +564,7 @@ export default {
       //  Restore indicator layout
       this.$store.commit('getBacktestSymbol', res.data.symbol)
       CIQ.hideMarker()
-      CIQ.isMarkerShown = false
+      this.$store.dispatch('set_isMarkerShown_flag',false)
       if (res.data.indicator_layout) {
         this.$refs.historyChild.restoreIndicatorLayoutEdit(
           JSON.parse(res.data.indicator_layout),
@@ -952,7 +952,7 @@ export default {
       // remove markers, prompt, recover timeframe dropdown
       CIQ.removePrompt()
       CIQ.hideMarker()
-      CIQ.isMarkerShown = false
+      this.$store.dispatch('set_isMarkerShown_flag',false)
       //CIQ.store.commit('getTradesData', [])
       document.getElementsByClassName('ciq-period')[0].style.display = 'block'
       if (
@@ -1529,7 +1529,7 @@ export default {
                         await new Promise(resolve => setTimeout(resolve, 3000));
                         vm.$refs.historyChild.refreshHistory(res.data.id)
                         CIQ.hideMarker()
-                        CIQ.isMarkerShown = false
+                        vm.$store.dispatch('set_isMarkerShown_flag',false)
                         let backtestInfo = JSON.parse(
                           JSON.stringify(vm.$store.state.backtestInfo)
                         )
@@ -1547,7 +1547,7 @@ export default {
                         CIQ.hideCover()
                         CIQ.nprogress.done()
                         CIQ.hideMarker()
-                        CIQ.isMarkerShown = false
+                        vm.$store.dispatch('set_isMarkerShown_flag',false)
                         vm.$refs.setUpChild.clearOldBacktestName()
 
                         // FindLastSignal过程中代表一个项目的运行结束
