@@ -632,6 +632,7 @@ export default {
       }
     },
     setPeriod(val) {
+      var stma_color = ["#bfad94","#b07858","#a14516","#6f3516","#402818"]
       let _val = val
       if (!_val) {
         _val = 5
@@ -683,7 +684,7 @@ export default {
         Period: _val,
         display: 'ST MA',
         Field: result.url
-      }, null, {
+      }, { MA: stma_color[this.panelIndex%5] }, {
         criteria: this.criteria,
         index: this.panelIndex
       })
