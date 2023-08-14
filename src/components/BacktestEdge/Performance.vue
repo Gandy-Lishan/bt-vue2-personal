@@ -949,7 +949,7 @@ export default {
             } catch (error) {
               // 可能是没有交易，所以需要清除当前marker，防止保留上次回测的marker
               CIQ.hideMarker()
-              CIQ.isMarkerShown = false
+              vm.$store.dispatch('set_isMarkerShown_flag',false)
               console.error(error)
               throw Error('report error')
             }
@@ -1945,7 +1945,7 @@ export default {
           new Date(CIQ.initialDate.end),
           markerSet
         )
-        CIQ.isMarkerShown = true
+        this.$store.dispatch('set_isMarkerShown_flag',true)
 
         // split the markers into several groups
         CIQ.groups = this.group(list)

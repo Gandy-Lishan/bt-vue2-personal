@@ -419,7 +419,7 @@ export default {
         // Restore indicator layout
         this.$store.commit('getBacktestSymbol', res.data.symbol)
         CIQ.hideMarker()
-        CIQ.isMarkerShown = false
+        this.$store.dispatch('set_isMarkerShown_flag',false)
         if (res.data.indicator_layout) {
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
           this.restoreIndicatorLayoutEdit(
@@ -479,7 +479,7 @@ export default {
         // Restore indicator layout
         this.$store.commit('getBacktestSymbol', res.data.symbol)
         CIQ.hideMarker()
-        CIQ.isMarkerShown = false
+        this.$store.dispatch('set_isMarkerShown_flag',false)
         if (res.data.indicator_layout) {
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
           this.restoreIndicatorLayoutRerun(
@@ -632,7 +632,7 @@ export default {
           }
           this.$store.commit('getBacktestSymbol', res.data.symbol)
           CIQ.hideMarker()
-          CIQ.isMarkerShown = false
+          this.$store.dispatch('set_isMarkerShown_flag',false)
           if (res.data.indicator_layout) {
             let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
             this.restoreIndicatorLayoutView(
