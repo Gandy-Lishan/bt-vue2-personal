@@ -12,7 +12,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import AdvancedChartComponent from './AdvancedChartComponent.vue'
 import { getCustomConfig } from './resources' // ChartIQ library resources
-import store from '../../store/store'
+import store from '../../store'
 
 // @ts-ignore
 //import { CIQ } from 'chartiq/st-development/js/entryIndicator'

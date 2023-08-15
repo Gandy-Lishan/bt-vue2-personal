@@ -168,9 +168,9 @@ export default {
 		isActived: {
 			handler(newVal) {
 				if(newVal){
-					var obj = CIQ.store.state.conditionRadio
+					var obj = CIQ.store.state.app.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.conditionRadio
-					CIQ.store.commit('setConditionRadio', obj)
+					CIQ.store.commit('app/setConditionRadio', obj)
 				}
 
 			},
@@ -236,7 +236,7 @@ export default {
 						'rocCond':null
 					}
 					desObj.index = index
-					this.$store.commit('saveDescription', desObj)
+					this.$store.commit('app/saveDescription', desObj)
 				}
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
@@ -264,13 +264,13 @@ export default {
 						}
 						desObj.index = 0
 					}
-				this.$store.commit('saveDescription', desObj)
+				this.$store.commit('app/saveDescription', desObj)
 		},
 		getConditionRadio(val) {
 			this.clearFormValidate()
-			var obj = CIQ.store.state.conditionRadio
+			var obj = CIQ.store.state.app.conditionRadio
 			obj[this.criteria][this.panelIndex] = val
-			CIQ.store.commit('setConditionRadio', obj)
+			CIQ.store.commit('app/setConditionRadio', obj)
 			if (val === '+DI ADX') {
 				this.tech.comparison = 'PADX'
 				this.tech.valueNegative = ''
@@ -315,7 +315,7 @@ export default {
 			if (validForm) {
 				tech.criteria = this.criteria
 				tech.index = index
-				this.$store.commit('saveCondition', tech)
+				this.$store.commit('app/saveCondition', tech)
 				return checked
 			} else {
 				checked = false
@@ -339,9 +339,9 @@ export default {
 				}
 				this.editTechVal = obj.indicator
 
-					var cr = CIQ.store.state.conditionRadio
+					var cr = CIQ.store.state.app.conditionRadio
 					cr[this.criteria][this.panelIndex] = this.conditionRadio
-					CIQ.store.commit('setConditionRadio', cr)
+					CIQ.store.commit('app/setConditionRadio', cr)
 					this.clearFormValidate()
 			}
 			

@@ -39,8 +39,8 @@ export default {
 	},
 	beforeDestroy() {
 		// 防止跳转到backtester时保留了Hammer followed by a raise等marker
-		this.$store.dispatch('reset_chart_study_state')
-		this.$store.dispatch('reset_chart_config_state')
+		this.$store.dispatch('app/reset_chart_study_state')
+		this.$store.dispatch('app/reset_chart_config_state')
 		// 还原chartiq默认study definition
 		this.editStudies(true)
 		
@@ -50,10 +50,10 @@ export default {
 	},
 	computed: {
 		updateSettingMA() {
-			return this.$store.state.studySettingMA
+			return this.$store.state.app.studySettingMA
 		},
 		updateTimeframe() {
-			return this.$store.state.exitFrequency
+			return this.$store.state.app.exitFrequency
 		},
 	},
 	watch: {
@@ -66,7 +66,7 @@ export default {
 			CIQ.initiateChart([this.symbolUrl],this.other['date'],()=>{
 				try{
 					// 切换timeframe前先清空已有studies
-					this.$store.dispatch('reset_chart_study_state')
+					this.$store.dispatch('app/reset_chart_study_state')
 					this.loadDefaultStudy().then(()=>{
 						this.loadMarker()
 					})
@@ -286,48 +286,44 @@ export default {
 			 })	
 		},
 		calculateBacktestHistory(dataSet, periodArray,direction) {
-			//this.$store.dispatch('app/store_backtestResult', []).then(() => {
-				let chartDataset = CIQ.stxx.chart.dataSet
-				//const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
-				dataSet = dataSet? eval('(' + dataSet + ')') : []
-				let backtestResult = []
-				for (var data in dataSet) {
-					var datatime = new Date(dataSet[data])
+			let chartDataset = CIQ.stxx.chart.dataSet
+			//const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
+			dataSet = dataSet? eval('(' + dataSet + ')') : []
+			let backtestResult = []
+			for (var data in dataSet) {
+				var datatime = new Date(dataSet[data])
 
-					var offset = datatime.getTimezoneOffset() * 60 * 1000
-					var entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
+				var offset = datatime.getTimezoneOffset() * 60 * 1000
+				var entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
 
-					let res = chartDataset.findIndex((x) => {
-						return entryDate.getTime() == x.DT.getTime()
+				let res = chartDataset.findIndex((x) => {
+					return entryDate.getTime() == x.DT.getTime()
+				})
+				
+
+				if (res != -1) {
+					//console.log('backtestResult',dataSet[data])
+					//鎷胯繘鍦轰环鏍煎拰鍓嶄竴澶╀綔姣旇緝
+					let entryPrice = chartDataset[res].Open
+					const transformData = this.transformData(periodArray)
+					transformData.sort((a, b) => a.value - b.value);
+					let obj = {}
+					transformData.map((item) => {
+						let exitBar = chartDataset[res + item.value]
+						? (
+							((direction == 'Short'
+							? entryPrice - chartDataset[res + item.value].Open
+							: chartDataset[res + item.value].Open - entryPrice) /
+							entryPrice) *
+							100
+						).toFixed(2)
+						: ''
+						obj[item.timeframe] = exitBar
 					})
-					
-
-					if (res != -1) {
-						//console.log('backtestResult',dataSet[data])
-						//鎷胯繘鍦轰环鏍煎拰鍓嶄竴澶╀綔姣旇緝
-						let entryPrice = chartDataset[res].Open
-						const transformData = this.transformData(periodArray)
-						transformData.sort((a, b) => a.value - b.value);
-						let obj = {}
-						transformData.map((item) => {
-							let exitBar = chartDataset[res + item.value]
-							? (
-								((direction == 'Short'
-								? entryPrice - chartDataset[res + item.value].Open
-								: chartDataset[res + item.value].Open - entryPrice) /
-								entryPrice) *
-								100
-							).toFixed(2)
-							: ''
-							obj[item.timeframe] = exitBar
-						})
-						backtestResult.push({ 'Entry Date': dataSet[data], ...obj })
-					}
+					backtestResult.push({ 'Entry Date': dataSet[data], ...obj })
 				}
-				this.$store.commit('STORE_BACKTESTRESULT',backtestResult)
-				//this.$store.dispatch('app/store_backtestResult', backtestResult)
-			// }).catch(() => {
-    		// })
+			}
+			this.$store.commit('app/STORE_BACKTESTRESULT',backtestResult)
 		},
 		transformData(data) {
 			data = data.map(item => {
@@ -439,7 +435,7 @@ export default {
 					this.concatenateEntryAndExit()
 				)
 				this.trades = list
-				this.$store.dispatch('set_isMarkerShown_flag',true)
+				this.$store.dispatch('app/set_isMarkerShown_flag',true)
 				
 				// split the markers into several groups
 				CIQ.groups = this.group(list)

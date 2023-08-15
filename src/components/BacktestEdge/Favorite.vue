@@ -417,9 +417,9 @@ export default {
         }
         document.getElementsByClassName('ciq-period')[0].style.display = ''
         // Restore indicator layout
-        this.$store.commit('getBacktestSymbol', res.data.symbol)
+        this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-        this.$store.dispatch('set_isMarkerShown_flag',false)
+        this.$store.dispatch('app/set_isMarkerShown_flag',false)
         if (res.data.indicator_layout) {
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
           this.restoreIndicatorLayoutEdit(
@@ -429,7 +429,7 @@ export default {
             res.data
           )
         } else {
-          this.$store.commit('getRunBacktestData', row)
+          this.$store.commit('app/getRunBacktestData', row)
           // Emit synchronous call
           this.$emit('goTobacktestSetupForm', row.id, res.data, 'edit', () => {
             this.$emit('goBacktestResultForm', row, () => {
@@ -448,7 +448,7 @@ export default {
         console.error(error)
         CIQ.hideCover()
         CIQ.nprogress.done()
-        this.$store.state._last_signal_array.map(item => {
+        this.$store.state.app._last_signal_array.map(item => {
           if (item.name == row.name) {
             item.state = 2
           }
@@ -461,7 +461,7 @@ export default {
           type: 'error'
         })
         }
-        this.$store.dispatch('set_isEditFinish_flag',false)
+        this.$store.dispatch('app/set_isEditFinish_flag',false)
       }
     }, 500),
     rerunBacktest: throttle(async function (row) {
@@ -477,9 +477,9 @@ export default {
         }
         document.getElementsByClassName('ciq-period')[0].style.display = ''
         // Restore indicator layout
-        this.$store.commit('getBacktestSymbol', res.data.symbol)
+        this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-        this.$store.dispatch('set_isMarkerShown_flag',false)
+        this.$store.dispatch('app/set_isMarkerShown_flag',false)
         if (res.data.indicator_layout) {
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
           this.restoreIndicatorLayoutRerun(
@@ -489,7 +489,7 @@ export default {
             res.data
           )
         } else {
-          this.$store.commit('getRunBacktestData', row)
+          this.$store.commit('app/getRunBacktestData', row)
           // Emit synchronous call
           this.$emit('goTobacktestSetupForm', row.id, res.data, 'edit', () => {
             this.$emit('goBacktestResultForm', row, () => {
@@ -562,8 +562,8 @@ export default {
         } catch (error) {
           throw Error('Request failed')
         }
-        this.$store.commit('getBacktestSymbol', res.data.symbol)
-        this.$store.commit('getRunBacktestData', row)
+        this.$store.commit('app/getBacktestSymbol', res.data.symbol)
+        this.$store.commit('app/getRunBacktestData', row)
         params = res.data
         params.name = params.name + '(copy)'
         params.favorites = false
@@ -630,9 +630,9 @@ export default {
           } catch (error) {
             throw Error('Request Error')
           }
-          this.$store.commit('getBacktestSymbol', res.data.symbol)
+          this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-          this.$store.dispatch('set_isMarkerShown_flag',false)
+          this.$store.dispatch('app/set_isMarkerShown_flag',false)
           if (res.data.indicator_layout) {
             let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
             this.restoreIndicatorLayoutView(
@@ -642,7 +642,7 @@ export default {
               res.data
             )
           } else {
-            this.$store.commit('getRunBacktestData', row)
+            this.$store.commit('app/getRunBacktestData', row)
             this.$emit('goTobacktestSetupForm', row.id, res.data, 'canDelView', () => {
               this.$emit('goBacktestResultForm', row, () => {
                 CIQ.hideCover()
@@ -675,18 +675,18 @@ export default {
     },
     reloadData(data, freq) {
       let frequency = ''
-      this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
-      this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
-      this.$store.commit('getExtraIndicators', [])
+      this.$store.commit('app/getEntryIndicatorsList', data.formIndicators.entry)
+      this.$store.commit('app/getExitIndicatorsList', data.formIndicators.exit)
+      this.$store.commit('app/getExtraIndicators', [])
       // filter garbage in TechnicalIndicators
       // const technicalIndicators = data.technicalIndicators.filter(item=>{
       // 	data.formIndicators.entry.indexOf(item) != -1 || data.formIndicators.exit.indexOf(item) != -1
       // })
-      this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
-      this.$store.commit('getMA', data.activatedMA)
+      this.$store.commit('app/getTechnicalIndicators', data.technicalIndicators)
+      this.$store.commit('app/getMA', data.activatedMA)
       // 暂定，编辑时读取回测携带的ma位置和信息
-      this.$store.commit('getMALayout', data.activatedMALayout)
-      this.$store.commit('setTechSD', data.savedTechSD)
+      this.$store.commit('app/getMALayout', data.activatedMALayout)
+      this.$store.commit('app/setTechSD', data.savedTechSD)
 
       switch (freq) {
         case 'Daily': {
@@ -705,13 +705,13 @@ export default {
           break
         }
       }
-      this.$store.commit('setRestoreFreq', frequency)
+      this.$store.commit('app/setRestoreFreq', frequency)
     },
     restoreIndicatorLayoutView(data, freq, row, resData) {
       this.reloadData(data, freq)
       var that = this
       CIQ.addIndicatorsFromBacktest(function () {
-        that.$store.commit('getRunBacktestData', row)
+        that.$store.commit('app/getRunBacktestData', row)
         // emit同步调用
         that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {
           that.$emit('goBacktestResultForm', row, () => {
@@ -725,7 +725,7 @@ export default {
       this.reloadData(data, freq)
       var that = this
       CIQ.addIndicatorsFromBacktest(function () {
-        that.$store.commit('getRunBacktestData', row)
+        that.$store.commit('app/getRunBacktestData', row)
         that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {
           that.$emit('goBacktestResultForm', row, () => {
 
@@ -758,29 +758,29 @@ export default {
           entry: parameterRes.data.entry,
           exit: parameterRes.data.exit
         }
-        this.$store.commit('setHashTable', csvObj)
-        this.$store.state._last_signal_array.map(item => {
+        this.$store.commit('app/setHashTable', csvObj)
+        this.$store.state.app._last_signal_array.map(item => {
           if (item.name == parameterRes.data.name) {
             item.state = 1
           }
         })
       } catch (error) {
         console.error('error', error)
-        this.$store.state._last_signal_array.map(item => {
+        this.$store.state.app._last_signal_array.map(item => {
           if (item.name == resData.data.name) {
             item.state = 2
           }
         })
       } finally {
         // lishan 到这里代表调用完成
-        this.$store.dispatch('set_isEditFinish_flag',false)
+        this.$store.dispatch('app/set_isEditFinish_flag',false)
       }
     },
     restoreIndicatorLayoutRerun(data, freq, row, resData) {
       this.reloadData(data, freq)
       var that = this
       CIQ.addIndicatorsFromBacktest(function () {
-        that.$store.commit('getRunBacktestData', row)
+        that.$store.commit('app/getRunBacktestData', row)
         that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {
           that.$emit('goBacktestResultForm', row, () => {
             that.$emit('switchTab', 'first')
@@ -914,18 +914,18 @@ export default {
     async runAllBacktest(){
 
       this.showFLSMASK()
-      this.$store.dispatch('set_isFindLastSignalRuning_flag',true)
+      this.$store.dispatch('app/set_isFindLastSignalRuning_flag',true)
 
         const allFavoriteList = await this.getAllFavoriteData()
         // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
         this.backtest_array = JSON.parse(JSON.stringify(allFavoriteList))
 
         // 給列表每一项设定识别码，内容和回测状态，0为未跑完，1为成功，2为失败
-        this.$store.commit('SET_LASTSIGNAL_ARRAY',this.backtest_array.map(item=>{return {name:item.name,content:item,state:0}}))
+        this.$store.commit('app/SET_LASTSIGNAL_ARRAY',this.backtest_array.map(item=>{return {name:item.name,content:item,state:0}}))
 
       var backtest_info = this.processingBacktest(this.backtest_array)
       if (backtest_info == false) {
-        console.log('处理任务结束', this.$store.state.last_signal_array)
+        console.log('处理任务结束', this.$store.state.app.last_signal_array)
         return // 处理任务结束
       }
 
@@ -939,11 +939,11 @@ export default {
       let interval = setInterval(() => {
         if (this.$store.getters.getIsFindLastSignalRuningFlagState == false) {
           clearInterval(interval)
-          this.$store.dispatch('set_isFindLastSignalRuning_flag',true)
+          this.$store.dispatch('app/set_isFindLastSignalRuning_flag',true)
           var backtest_info = this.processingBacktest(this.backtest_array)
           if (backtest_info == false) {
-            this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
-            console.log('处理任务结束', this.$store.state.last_signal_array)
+            this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+            console.log('处理任务结束', this.$store.state.app.last_signal_array)
             return // 处理任务结束
           }
           this.postRunbacktest(backtest_info)
@@ -958,16 +958,16 @@ export default {
     },
     async _findLastSignal() {
       // lishan 批量给列表调用 editBacktest 你的方法名称我并没修改，而是使用 '_' 开头
-      this.$store.commit('clearHashTable')
+      this.$store.commit('app/clearHashTable')
       this.showFLSMASK()
-      this.$store.dispatch('set_isEditFinish_flag',true)
+      this.$store.dispatch('app/set_isEditFinish_flag',true)
       const allFavoriteList = await this.getAllFavoriteData()
       // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
       this.favorite_array = JSON.parse(JSON.stringify(allFavoriteList))
-      this.$store.commit('_SET_LASTSIGNAL_ARRAY', this.favorite_array.map(item => { return { name: item.name, content: item, state: 0, id: item.id } }))
+      this.$store.commit('app/_SET_LASTSIGNAL_ARRAY', this.favorite_array.map(item => { return { name: item.name, content: item, state: 0, id: item.id } }))
       let favorite_info = this.processingBacktest(this.favorite_array)
       if (favorite_info == false) {
-        console.log('处理任务结束', this.$store.state._last_signal_array)
+        console.log('处理任务结束', this.$store.state.app._last_signal_array)
         return // 处理任务结束
       }
       var error_array = new Array();
@@ -980,12 +980,12 @@ export default {
       let interval = setInterval(async () => {
         if (this.$store.getters.getIsEditFinishFlagState == false) {
           clearInterval(interval)
-          this.$store.dispatch('set_isEditFinish_flag',true)
+          this.$store.dispatch('app/set_isEditFinish_flag',true)
 
           var favorite_info = this.processingBacktest(this.favorite_array)
           if (favorite_info == false) {
-            this.$store.dispatch('set_isEditFinish_flag',false)
-            const array = this.$store.state._last_signal_array
+            this.$store.dispatch('app/set_isEditFinish_flag',false)
+            const array = this.$store.state.app._last_signal_array
             let removedItems = [];
             for (let i = array.length - 1; i >= 0; i--) {
               if (array[i].state == 2 || array[i].state == 0) {
@@ -1001,10 +1001,10 @@ export default {
                 }
               })
               const new_last_signal_array = [...array, ...removedItems]
-              this.$store.commit('_SET_LASTSIGNAL_ARRAY', new_last_signal_array)
+              this.$store.commit('app/_SET_LASTSIGNAL_ARRAY', new_last_signal_array)
             }
             // 找出状态不为 2 的 并删除掉 list 中状态不为 2 的
-            const list = this.$store.state.hashTable
+            const list = this.$store.state.app.hashTable
             const filteredArray = list.filter(item => !removedItems.includes(item.id))
             const requestList = []
             for (let i = 0; i < filteredArray.length; i++) {

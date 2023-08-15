@@ -938,7 +938,7 @@ export default {
       }
 
       if (row.status != 0) {
-        if (this.$store.state.favoriteBacktestRowData.id) {
+        if (this.$store.state.app.favoriteBacktestRowData.id) {
           let id = row.id
           vm.activePerTag = 'first'
           vm.rowFrequency = row.frequency
@@ -949,7 +949,7 @@ export default {
             } catch (error) {
               // 可能是没有交易，所以需要清除当前marker，防止保留上次回测的marker
 
-              vm.$store.dispatch('set_isMarkerShown_flag',false)
+              vm.$store.dispatch('app/set_isMarkerShown_flag',false)
               console.error(error)
               throw Error('report error')
             }
@@ -1050,7 +1050,7 @@ export default {
                 vm.unSplitTadeData = vm.tradesData
 
                 // 淇濆瓨tradesdata鍒皊tore
-                this.$store.commit('getTradesData', vm.tradesData)
+                this.$store.commit('app/getTradesData', vm.tradesData)
                 const periodArray = this.getAllDefaultTableLabels()
                 this.backtestHistoryList = this.calculateBacktestHistory(
                   vm.tradesData,
@@ -1945,7 +1945,7 @@ export default {
           new Date(CIQ.initialDate.end),
           markerSet
         )
-        this.$store.dispatch('set_isMarkerShown_flag',true)
+        this.$store.dispatch('app/set_isMarkerShown_flag',true)
 
         // split the markers into several groups
         CIQ.groups = this.group(list)

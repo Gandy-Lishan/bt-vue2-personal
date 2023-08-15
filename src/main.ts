@@ -26,7 +26,7 @@ import '@/plugins/element'
 
 import './assets/style/global.css'
 import axios from './axios'
-import store from './store/store'
+import store from './store'
 import 'vue-directive-image-previewer/dist/assets/style.css'
 import locale from 'element-ui/lib/locale/lang/en'
 import '@/assets/iconfont/iconfont.css'

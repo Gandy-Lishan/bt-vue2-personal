@@ -679,7 +679,7 @@ export default {
     permission
   },
   created() {
-    this.is_admin = this.$store.state.is_admin
+    this.is_admin = this.$store.state.app.is_admin
 
     this.generateBTName()
   },
@@ -690,7 +690,7 @@ export default {
   },
   computed: {
     updateFreq() {
-      return this.$store.state.pairDataFreq
+      return this.$store.state.app.pairDataFreq
     },
     allRiskControlOptions() {
       return this.isTakeProfit || this.isStopLoss || this.isTimeInMarket
@@ -741,16 +741,16 @@ export default {
       this.bd.name = this.bd.symbol+'  ' + year+'-'+month+'-'+day+'  '+hour+':'+minute+':'+second
     },
     getTradePrice(val) {
-      this.$store.commit('SET_TRADE_PRICE',val)
+      this.$store.commit('app/SET_TRADE_PRICE',val)
     },
     toggleDes() {
       this.isToggle = !this.isToggle
     },
     clearForm() {
       Object.assign(this.$data, this.$options.data())
-      this.is_admin = this.$store.state.is_admin
+      this.is_admin = this.$store.state.app.is_admin
       this.getEndDate()
-      if(this.$store.state.backtestSymbol) this.bd.symbol = this.$store.state.backtestSymbol
+      if(this.$store.state.app.backtestSymbol) this.bd.symbol = this.$store.state.app.backtestSymbol
       this.generateBTName()
       this.$emit('IsRiskControl', true)
       this.clearFormValidate()
@@ -789,7 +789,7 @@ export default {
         newVal.commission = (newVal.commission * 100).toFixed(2)
         newVal.slippage = Number(newVal.slippage).toFixed(2)
         newVal.trade_price = Number(newVal.trade_price)
-        this.is_admin = this.$store.state.is_admin
+        this.is_admin = this.$store.state.app.is_admin
         this.bd = Object.assign(this.bd, newVal)
         this.$set(this.bd, 'description', this.bd.description);
         //this.changeTimeframe(newVal.frequency)
@@ -863,7 +863,7 @@ export default {
     },
     getDirection(val) {
       // Set direction to vuex
-      this.$store.commit('getDirection', val)
+      this.$store.commit('app/getDirection', val)
       // Direction passed to entry and exit
       this.bd.direction = val
       this.$emit('setDirection', val)
@@ -884,7 +884,7 @@ export default {
       this.bd.benchmark = val
     },
     getSymbol(val) {
-      this.$store.commit('getBacktestSymbol', val)
+      this.$store.commit('app/getBacktestSymbol', val)
       CIQ.addSymbol(val)
     },
     formateStartDate(val) {
@@ -911,8 +911,8 @@ export default {
     async getIndexsList() {
       try {
         let vm = this
-        if (vm.$store.state.indexsList.length != 0) {
-          vm.indexList = vm.$store.state.indexsList.map((item) => {
+        if (vm.$store.state.app.indexsList.length != 0) {
+          vm.indexList = vm.$store.state.app.indexsList.map((item) => {
             return { value: `${item.symbol}`, label: `${item.symbol}` }
           })
         } else {
@@ -930,8 +930,8 @@ export default {
     async getStocksList() {
       let vm = this
 
-      if (vm.$store.state.stocksList.length != 0) {
-        vm.symbolList = vm.$store.state.stocksList.map((item) => {
+      if (vm.$store.state.app.stocksList.length != 0) {
+        vm.symbolList = vm.$store.state.app.stocksList.map((item) => {
           return { value: `${item.stock}`, label: `${item.stock}` }
         })
       } else {
@@ -1034,7 +1034,7 @@ export default {
     },
     changeTimeframe(val) {
       this.bd.frequency = val
-      this.$store.commit('getFreqHighPriority', val)
+      this.$store.commit('app/getFreqHighPriority', val)
       CIQ.addIndicators()
     },
     selectRiskControl(val) {
@@ -1056,12 +1056,12 @@ export default {
         this.isTimeInMarket = true
         this.$emit('IsRiskControl', true)
       }
-      this.$store.commit('isRiskControl', val)
+      this.$store.commit('app/isRiskControl', val)
     },
     getFrequency(val) {
       // getFrequency will no longer call addIndicator and pass a parameter to it
       this.bd.frequency = val
-      this.$store.commit('getFrequency', val)
+      this.$store.commit('app/getFrequency', val)
     },
     async loadSentimentList() {
       const vm = this
@@ -1069,7 +1069,7 @@ export default {
 
       if (CIQ.indicatorList) {
         if (CIQ.indicatorList.length != 0) {
-          indicatorList = this.$store.state.indicatorsList
+          indicatorList = this.$store.state.app.indicatorsList
           indicatorList = CIQ.indicatorList
         }
       }
@@ -1082,10 +1082,10 @@ export default {
               updated: element.updated
             })
         })
-      this.$store.commit('getIndicatorsList', indicatorList)
+      this.$store.commit('app/getIndicatorsList', indicatorList)
       CIQ.indicatorList = indicatorList
 
-      this.$store.commit('getSentimentList', vm.sentimentIndicatorList)
+      this.$store.commit('app/getSentimentList', vm.sentimentIndicatorList)
     },
 
     async getIndicatorsList() {
@@ -1094,14 +1094,14 @@ export default {
         var indicatorList = []
         if (CIQ.indicatorList) {
           if (CIQ.indicatorList.length != 0) {
-            indicatorList = this.$store.state.indicatorsList
+            indicatorList = this.$store.state.app.indicatorsList
             indicatorList = CIQ.indicatorList
           }
         } else {
           const res = await getIndicatorsList()
           indicatorList = res.data
         }
-        this.$store.commit('getIndicatorsList', indicatorList)
+        this.$store.commit('app/getIndicatorsList', indicatorList)
         CIQ.indicatorList = indicatorList
       } catch (error) {
         console.error('indicator list request error', error)
@@ -1191,7 +1191,7 @@ export default {
             // end 改成最新的
             bd.end_date = timestampToTime(new Date())
           }
-          this.$store.commit('setBd', bd)
+          this.$store.commit('app/setBd', bd)
           return checked
         } else {
           this.$message({
@@ -1234,7 +1234,7 @@ export default {
       description = `${criteria} ${direction} ${tpStr} ${slStr} ${timStr}`
       let desObj = {}
       desObj.description = description
-      this.$store.commit('saveRiskDescription', desObj)
+      this.$store.commit('app/saveRiskDescription', desObj)
     },
     validateStopLoss(num) {
       if (num < 0) {
