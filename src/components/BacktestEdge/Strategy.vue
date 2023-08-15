@@ -351,9 +351,9 @@ export default {
 			}
 		}, 500),
 		restoreIndicatorLayoutView(data, freq, row, resData) {
+			var that = this
 			if (that.$store.getters.getIsBacktestRunningFlagState == true) {
 				that.$store.dispatch('set_isBacktestRunning_flag',false)
-				var that = this
 				that.$store.commit('getRunBacktestData', row)
 				that.$emit('goTobacktestSetupForm', row.id, resData, 'cannotDelView',() => {
 					that.$emit('goBacktestResultForm', row, () => {
@@ -363,7 +363,6 @@ export default {
 				})
 			} else {
 				this.reloadData(data, freq)
-				var that = this
 				CIQ.addIndicatorsFromBacktest(function () {
 					that.$store.commit('getRunBacktestData', row)
 
@@ -391,7 +390,7 @@ export default {
 						throw Error('Request Error')
 					}
 					this.$store.commit('getBacktestSymbol', res.data.symbol)
-					CIQ.hideMarker()
+
 					this.$store.dispatch('set_isMarkerShown_flag',false)
 					if (res.data.indicator_layout) {
 						let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$','\u200c'))

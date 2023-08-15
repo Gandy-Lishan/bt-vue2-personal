@@ -372,20 +372,14 @@ export default {
 				return { timeframe, period: item.period, value }
 			})
 		},
-		filterFormatMarkerDate(start_date, end_date) {
+		concatenateEntryAndExit(){
 			// 把字符串列表entryDates, exitDates格式化为markerSet的对象数组
 			let markerSet= []
-			const dataSource = CIQ.stxx.chart.dataSet
+
             let entryTradeDateArr = this.other['EntryTradeDate'] ? eval('(' + this.other['EntryTradeDate'] + ')') : []
 			let entryTradePriceArr = this.other['EntryTradePrice'] ? eval('(' + this.other['EntryTradePrice'] + ')') : []
             if(entryTradeDateArr){
                 entryTradeDateArr.forEach((item,index)=>{
-					// var datatime = new Date(item)
-					// var offset = datatime.getTimezoneOffset() * 60 * 1000
-					// const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
-                    // let quote = dataSource.find(x=>{
-                    //     return x.DT.getTime() == standardDate.getTime()
-                    // })
 					let entryReason = this.other['_Signal']
 					
                     markerSet.push({
@@ -400,12 +394,6 @@ export default {
 			let exitTradePriceArr = this.other['ExitTradePrice'] ? eval('(' + this.other['ExitTradePrice'] + ')') : []
             if(exitTradeDateArr){
                 exitTradeDateArr.forEach((item,index)=>{
-					// var datatime = new Date(item)
-					// var offset = datatime.getTimezoneOffset() * 60 * 1000
-					// const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
-                    // let quote = dataSource.find(x=>{
-                    //     return x.DT.getTime() == standardDate.getTime()
-                    // })
 
 					let exitReasonArr = eval('(' + this.other.ExitReason + ')')
                     markerSet.push({
@@ -422,7 +410,9 @@ export default {
 			if(this.other['date'] == exitTradeDateArr[exitTradeDateArr.length-1]){
 				markerSet.pop()
 			}
-
+			return markerSet
+		},
+		filterFormatMarkerDate(start_date, end_date, markerSet) {
 			let list = []
 			let _date = {
 				start: jutils.formatDate(start_date, 'YYYYMMDD'),
@@ -446,6 +436,7 @@ export default {
 				let list = this.filterFormatMarkerDate(
 					new Date(CIQ.initialDate.start),
 					new Date(CIQ.initialDate.end),
+					this.concatenateEntryAndExit()
 				)
 				this.trades = list
 				this.$store.dispatch('set_isMarkerShown_flag',true)

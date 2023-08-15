@@ -162,7 +162,7 @@ export default {
       const res = await seeParams(id)
       console.log('RES', res)
       this.$store.commit('getBacktestSymbol', res.data.symbol)
-      CIQ.hideMarker()
+
       this.$store.dispatch('set_isMarkerShown_flag',false)
       if (res.data.indicator_layout) {
         let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
@@ -185,9 +185,9 @@ export default {
     },
     restoreIndicatorLayoutView(data, freq, row, resData) {
       // After the run back test and between the view result, a chart will be loaded to output signalouput
+	  var that = this
       if (that.$store.getters.getIsBacktestRunningFlagState == true) {
         that.$store.dispatch('set_isBacktestRunning_flag',false)
-        var that = this
         //The outputsignalsresult is no longer used. The exportcsv is placed before the backtest and the callback is placed in place
         that.$store.commit('getRunBacktestData', row)
         that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {
@@ -198,7 +198,6 @@ export default {
         })
       } else {
         this.reloadData(data, freq)
-        var that = this
         CIQ.addIndicatorsFromBacktest(function () {
           that.$store.commit('getRunBacktestData', row)
           that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {
