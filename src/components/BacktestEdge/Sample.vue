@@ -438,8 +438,8 @@ export default {
 					throw Error('Request Error')
 				}
 				if (res.status === 200) {
-					this.$store.commit('getBacktestSymbol', res.data.symbol)
-					this.$store.commit('getRunBacktestData', row)
+					this.$store.commit('app/getBacktestSymbol', res.data.symbol)
+					this.$store.commit('app/getRunBacktestData', row)
 					params = res.data
 					params.name = params.name + '(copy)'
 					params.user_tag = 'client'
@@ -504,8 +504,8 @@ export default {
 		restoreIndicatorLayoutView(data, freq, row, resData) {
 			var that = this
 			if (that.$store.getters.getIsBacktestRunningFlagState == true) {
-				that.$store.dispatch('set_isBacktestRunning_flag',false)
-				that.$store.commit('getRunBacktestData', row)
+				that.$store.dispatch('app/set_isBacktestRunning_flag',false)
+				that.$store.commit('app/getRunBacktestData', row)
 				that.$emit('goTobacktestSetupForm', row.id, resData, 'cannotDelView',() => {
 					that.$emit('goBacktestResultForm', row, () => {
 						CIQ.hideCover()
@@ -515,7 +515,7 @@ export default {
 			} else {
 				this.reloadData(data, freq)
 				CIQ.addIndicatorsFromBacktest(function () {
-					that.$store.commit('getRunBacktestData', row)
+					that.$store.commit('app/getRunBacktestData', row)
 
 					that.$emit('goTobacktestSetupForm', row.id, resData,'cannotDelView',() => {
 						that.$emit('goBacktestResultForm', row, () => {
@@ -529,7 +529,7 @@ export default {
 		viewBacktestResults: throttle(async function (row) {
 			let vm = this
 			if (row.result['Total Trades']) {
-				vm.$store.commit('clearBacktestUuid')
+				vm.$store.commit('app/clearBacktestUuid')
 				document.getElementsByClassName('ciq-period')[0].style.display = 'none'
 				try {
 					CIQ.addCover('Fetching backtest information...')
@@ -540,9 +540,9 @@ export default {
 					} catch (error) {
 						throw Error('Request Error')
 					}
-					this.$store.commit('getBacktestSymbol', res.data.symbol)
+					this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-					this.$store.dispatch('set_isMarkerShown_flag',false)
+					this.$store.dispatch('app/set_isMarkerShown_flag',false)
 					if (res.data.indicator_layout) {
 						let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$','\u200c'))
 						this.restoreIndicatorLayoutView(
@@ -552,7 +552,7 @@ export default {
 							res.data
 						)
 					} else {
-						this.$store.commit('getRunBacktestData', row)
+						this.$store.commit('app/getRunBacktestData', row)
 						this.$emit('goTobacktestSetupForm', row.id, res.data,'cannotDelView', () => {
 							this.$emit('goBacktestResultForm', row, () => {
 								CIQ.hideCover()
@@ -586,18 +586,18 @@ export default {
 		},
 		reloadData(data, freq) {
 			let frequency = ''
-			this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
-			this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
-			this.$store.commit('getExtraIndicators', [])
+			this.$store.commit('app/getEntryIndicatorsList', data.formIndicators.entry)
+			this.$store.commit('app/getExitIndicatorsList', data.formIndicators.exit)
+			this.$store.commit('app/getExtraIndicators', [])
 			// filter garbage in TechnicalIndicators
 			// const technicalIndicators = data.technicalIndicators.filter(item=>{
 			// 	data.formIndicators.entry.indexOf(item) != -1 || data.formIndicators.exit.indexOf(item) != -1
 			// })
-			this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
-			this.$store.commit('getMA', data.activatedMA)
+			this.$store.commit('app/getTechnicalIndicators', data.technicalIndicators)
+			this.$store.commit('app/getMA', data.activatedMA)
 			// 暂定，编辑时读取回测携带的ma位置和信息
-			this.$store.commit('getMALayout', data.activatedMALayout)
-			this.$store.commit('setTechSD', data.savedTechSD)
+			this.$store.commit('app/getMALayout', data.activatedMALayout)
+			this.$store.commit('app/setTechSD', data.savedTechSD)
 
 			switch (freq) {
 				case 'Daily': {
@@ -616,7 +616,7 @@ export default {
 					break
 				}
 			}
-			this.$store.commit('setRestoreFreq', frequency)
+			this.$store.commit('app/setRestoreFreq', frequency)
 		},
 		handleQuery: throttle(function () { this.getSampleList() }, 500)
 	}

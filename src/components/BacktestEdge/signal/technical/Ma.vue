@@ -285,7 +285,7 @@ export default {
 	},
 	computed: {
 		updateSettingMA() {
-			return this.$store.state.studySettingMA
+			return this.$store.state.app.studySettingMA
 		},
 	},
 	watch: {
@@ -298,9 +298,9 @@ export default {
 		isActived: {
 			handler(newVal) {
 				if (newVal) {
-					var obj = CIQ.store.state.conditionRadio
+					var obj = CIQ.store.state.app.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.radio
-					CIQ.store.commit('setConditionRadio', obj)
+					CIQ.store.commit('app/setConditionRadio', obj)
 				}
 			},
 			immediate: true,
@@ -343,20 +343,20 @@ export default {
 						index: this.panelIndex
 					})
 
-					CIQ.store.commit('getMaPeriod', val)
+					CIQ.store.commit('app/getMaPeriod', val)
 
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
 
-					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
+					CIQ.loadChart(CIQ.store.state.app.trades, CIQ.addDot)
 				}
 			}			
 		},
 		setRadio(val) {
 			this.clearFormValidate()
-			var obj = CIQ.store.state.conditionRadio
+			var obj = CIQ.store.state.app.conditionRadio
 			obj[this.criteria][this.panelIndex] = val
-			CIQ.store.commit('setConditionRadio', obj)
+			CIQ.store.commit('app/setConditionRadio', obj)
 			if (val === 'Moving Average') {
 				// 添加附属ma
 				//this.tech.ma_period = 5
@@ -387,7 +387,7 @@ export default {
 					criteria: this.criteria, 
 					index: this.panelIndex
 				}
-				var activatedMAList = this.$store.state.activatedMA
+				var activatedMAList = this.$store.state.app.activatedMA
 
 				// remove current MA attached to an indicator
 				var MAListIndex = activatedMAList.findIndex(
@@ -398,7 +398,7 @@ export default {
 				}
 				activatedMAList.push(objMA)
 
-				this.$store.commit('getMA', activatedMAList)
+				this.$store.commit('app/getMA', activatedMAList)
 
 				this.updateMAPeriod(this.tech.maPeriod)
 			}
@@ -415,14 +415,14 @@ export default {
 					}
 				}
 				// remove current MA attached to an indicator
-				var activatedMAList = this.$store.state.activatedMA
+				var activatedMAList = this.$store.state.app.activatedMA
 				var MAListIndex = activatedMAList.findIndex(
 					(item) => item.url == 'ma' && item.criteria == this.criteria && item.index == this.panelIndex
 				)
 				if (MAListIndex != -1) {
 					activatedMAList.splice(MAListIndex, 1)
 				}
-				this.$store.commit('getMA', activatedMAList)
+				this.$store.commit('app/getMA', activatedMAList)
 
 				this.updateMAPeriod(this.tech.period)
 			}
@@ -449,8 +449,8 @@ export default {
 						index: this.panelIndex
 					})
 					// 解决附属ma或者roc漂移问题
-					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
-					CIQ.store.commit('getMaPeriod', val)
+					CIQ.loadChart(CIQ.store.state.app.trades, CIQ.addDot)
+					CIQ.store.commit('app/getMaPeriod', val)
 
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',field,this.criteria,this.panelIndex)
@@ -508,7 +508,7 @@ export default {
 					'rocCond':null
 				}
 				desObj.index = index
-				this.$store.commit('saveDescription', desObj)}
+				this.$store.commit('app/saveDescription', desObj)}
 			}
 				let techVal = this.techVal ? this.techVal : this.editTechVal
 				let period =
@@ -558,7 +558,7 @@ export default {
 						}
 						desObj.index = 0
 				}
-				this.$store.commit('saveDescription', desObj)
+				this.$store.commit('app/saveDescription', desObj)
 		},
 		getMaPeriodValue(val) {
 			
@@ -590,7 +590,7 @@ export default {
 					})
 					
 					// 解决附属ma或者roc漂移问题
-					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
+					CIQ.loadChart(CIQ.store.state.app.trades, CIQ.addDot)
 				}
 			}
 			// keep current MA
@@ -601,7 +601,7 @@ export default {
 				criteria: this.criteria, 
 				index: this.panelIndex
 			}
-			var activatedMAList = this.$store.state.activatedMA
+			var activatedMAList = this.$store.state.app.activatedMA
 
 			// remove current MA attached to an indicator
 			var MAListIndex = activatedMAList.findIndex(
@@ -612,8 +612,8 @@ export default {
 			}
 			activatedMAList.push(objMA)
 
-			this.$store.commit('getMA', activatedMAList)
-			this.$store.commit('getStMaPeriod', val)
+			this.$store.commit('app/getMA', activatedMAList)
+			this.$store.commit('app/getStMaPeriod', val)
 		},
 		getSCvalue(val) {
 			if (this.tech.comparison !== 'MA') {
@@ -650,12 +650,12 @@ export default {
 						index: this.panelIndex
 					})
 					
-					CIQ.store.commit('getMaPeriod', val)
+					CIQ.store.commit('app/getMaPeriod', val)
 
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
 	
-					CIQ.loadChart(CIQ.store.state.trades, CIQ.addDot)
+					CIQ.loadChart(CIQ.store.state.app.trades, CIQ.addDot)
 				}
 			}
 		}, 500),
@@ -677,7 +677,7 @@ export default {
 					delete tech.maPeriod
 					tech.criteria = this.criteria
 					tech.index = index
-					this.$store.commit('saveCondition', tech)
+					this.$store.commit('app/saveCondition', tech)
 					return checked
 				} else {
 					checked = false
@@ -703,7 +703,7 @@ export default {
 					delete tech.maPeriod
 					tech.criteria = this.criteria
 					tech.index = index
-					this.$store.commit('saveCondition', tech)
+					this.$store.commit('app/saveCondition', tech)
 					return checked
 				} else {
 					checked = false
@@ -731,9 +731,9 @@ export default {
 				}
 				this.editTechVal = obj.indicator
 
-					var cr = CIQ.store.state.conditionRadio
+					var cr = CIQ.store.state.app.conditionRadio
 					cr[this.criteria][this.panelIndex] = this.radio
-					CIQ.store.commit('setConditionRadio', cr)
+					CIQ.store.commit('app/setConditionRadio', cr)
 			}
 		}
 	}

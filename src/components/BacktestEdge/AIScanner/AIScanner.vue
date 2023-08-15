@@ -119,7 +119,7 @@ export default {
 	// 进入组件时还原筛选条件状态
 	const state = this.$store.getters.getScannerAIFilterState
 
-	this.curDate = this.$store.state.curDate
+	this.curDate = this.$store.state.app.curDate
 	this.date = state?.date || [this.curDate,this.curDate]
 
 	this.searchItem = state?.searchItem || ''
@@ -130,7 +130,7 @@ export default {
 },
 	beforeDestroy() {
 		// 离开此组件前保存筛选条件状态
-		this.$store.dispatch('set_scannerai_filter_state',{
+		this.$store.dispatch('app/set_scannerai_filter_state',{
 			searchItem:this.searchItem,
 			searchCategory:this.searchCategory,
 			isPLSChecked:this.isPLSChecked,

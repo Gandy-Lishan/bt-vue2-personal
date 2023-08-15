@@ -562,9 +562,9 @@ export default {
       console.log('backtest res', res)
       document.getElementsByClassName('ciq-period')[0].style.display = ''
       //  Restore indicator layout
-      this.$store.commit('getBacktestSymbol', res.data.symbol)
+      this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-      this.$store.dispatch('set_isMarkerShown_flag',false)
+      this.$store.dispatch('app/set_isMarkerShown_flag',false)
       if (res.data.indicator_layout) {
         this.$refs.historyChild.restoreIndicatorLayoutEdit(
           JSON.parse(res.data.indicator_layout),
@@ -573,7 +573,7 @@ export default {
           res.data
         )
       } else {
-        this.$store.commit('getRunBacktestData', res.data)
+        this.$store.commit('app/getRunBacktestData', res.data)
         this.goBacktestResultForm(res.data, () => {
           this.$emit('goTobacktestSetupForm', backtestID, res.data, () => {
             CIQ.hideCover()
@@ -602,7 +602,6 @@ export default {
   watch: {
     handleLastSignalArrayChange: {
       handler(newVal) {
-        
         let arrayLenth = newVal.length
         let progressNum = 0
         newVal.map(item=>{ 
@@ -731,8 +730,8 @@ export default {
 
       this.approTime = 0
 
-      this.$store.commit('SET_LASTSIGNAL_ARRAY',[])
-      this.$store.commit('_SET_LASTSIGNAL_ARRAY',[])
+      this.$store.commit('app/SET_LASTSIGNAL_ARRAY',[])
+      this.$store.commit('app/_SET_LASTSIGNAL_ARRAY',[])
     },
     animationUp: function (ph) {
       window.scrollTo({
@@ -850,14 +849,14 @@ export default {
       Object.assign(this.$data, this.$options.data())
       this.resultEditData = resultEditData
       this.editFrequency = editFrequency
-      this.$store.commit('initialBacktestInfo')
+      this.$store.commit('app/initialBacktestInfo')
       this.$refs.setUpChild.clearForm()
       this.$refs.entryChild.clearForm()
       this.$refs.exitChild.resetForm()
     },
     createNewBacktest() {
       Object.assign(this.$data, this.$options.data())
-      this.$store.commit('initialBacktestInfo')
+      this.$store.commit('app/initialBacktestInfo')
       this.$refs.setUpChild.clearForm()
       this.$refs.entryChild.clearForm()
       this.$refs.exitChild.resetForm()
@@ -865,7 +864,7 @@ export default {
     },
     clearAllDataForm() {
       Object.assign(this.$data, this.$options.data())
-      this.$store.commit('initialBacktestInfo')
+      this.$store.commit('app/initialBacktestInfo')
       this.$refs.setUpChild.clearForm()
       this.$refs.entryChild.clearForm()
       this.$refs.exitChild.clearForm()
@@ -943,20 +942,20 @@ export default {
     },
     refreshPage() {
       if (!CIQ.Studies) return
-      const freq = CIQ.store.state.exitFrequency
+      const freq = CIQ.store.state.app.exitFrequency
 
-      this.$store.dispatch('reset_chart_study_state')
-      this.$store.dispatch('reset_chart_config_state')
-      CIQ.store.commit('getFrequency', 'Daily')
+      this.$store.dispatch('app/reset_chart_study_state')
+      this.$store.dispatch('app/reset_chart_config_state')
+      CIQ.store.commit('app/getFrequency', 'Daily')
 
       // remove markers, prompt, recover timeframe dropdown
       CIQ.removePrompt()
 
-      this.$store.dispatch('set_isMarkerShown_flag',false)
-      //CIQ.store.commit('getTradesData', [])
+      this.$store.dispatch('app/set_isMarkerShown_flag',false)
+      //CIQ.store.commit('app/getTradesData', [])
       document.getElementsByClassName('ciq-period')[0].style.display = 'block'
       if (
-        CIQ.stxx.chart.symbol != CIQ.store.state.backtestSymbol ||
+        CIQ.stxx.chart.symbol != CIQ.store.state.app.backtestSymbol ||
         freq != 'Daily'
       ) {
         CIQ.addIndicators()
@@ -969,24 +968,24 @@ export default {
       let obj = {}
       obj.criteria = 'entry'
       obj.index = index
-      this.$store.commit('addSignalLength', obj)
+      this.$store.commit('app/addSignalLength', obj)
     },
     addExitSignalLength(index) {
       let obj = {}
       obj.criteria = 'exit'
       obj.index = index
-      this.$store.commit('addSignalLength', obj)
+      this.$store.commit('app/addSignalLength', obj)
     },
     reloadData(data, freq) {
       let frequency = ''
-      this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
-      this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
-      this.$store.commit('getExtraIndicators', [])
-      this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
-      this.$store.commit('getMA', data.activatedMA)
+      this.$store.commit('app/getEntryIndicatorsList', data.formIndicators.entry)
+      this.$store.commit('app/getExitIndicatorsList', data.formIndicators.exit)
+      this.$store.commit('app/getExtraIndicators', [])
+      this.$store.commit('app/getTechnicalIndicators', data.technicalIndicators)
+      this.$store.commit('app/getMA', data.activatedMA)
       // 暂定，读取回测携带的ma位置和信息
-      this.$store.commit('getMALayout', data.activatedMALayout)
-      this.$store.commit('setTechSD', data.savedTechSD)
+      this.$store.commit('app/getMALayout', data.activatedMALayout)
+      this.$store.commit('app/setTechSD', data.savedTechSD)
 
       switch (freq) {
         case 'Daily': {
@@ -1005,7 +1004,7 @@ export default {
           break
         }
       }
-      this.$store.commit('setRestoreFreq', frequency)
+      this.$store.commit('app/setRestoreFreq', frequency)
     },
     runBacktest: throttle(async function () {
       try {
@@ -1014,13 +1013,13 @@ export default {
         let setUpChecked = true
         let entryChecked = true
         // let isEdit = this.$refs.setUpChild.isEdit()
-        let backtestInfo = JSON.parse(JSON.stringify(this.$store.state.backtestInfo))
+        let backtestInfo = JSON.parse(JSON.stringify(this.$store.state.app.backtestInfo))
         this.$refs.entryChild.addEntrySignalLength()
         this.$refs.exitChild.addExitSignalLength()
         let setUpRes = {}
         try {
           setUpRes = await getBacktestName(
-            this.$store.state.backtestInfo.name
+            this.$store.state.app.backtestInfo.name
           )
         } catch (error) {
           console.error(error)
@@ -1034,7 +1033,7 @@ export default {
         // 判断有没有重名
         const nameResults = setUpRes.data.results
           for (let i = 0; i < nameResults.length; i++) {
-            if (nameResults[i].name == this.$store.state.backtestInfo.name) {
+            if (nameResults[i].name == this.$store.state.app.backtestInfo.name) {
               // 重名
               setUpChecked = false
               break
@@ -1046,11 +1045,11 @@ export default {
               message: 'The backtest name already exists',
               type: 'error'
             })
-            this.$store.commit('clearBacktest')
+            this.$store.commit('app/clearBacktest')
             return
         }
         // 首次创建
-        // if (setUpRes.data.count == 0 && !isEdit) this.$store.commit('clearBacktestUuid')
+        // if (setUpRes.data.count == 0 && !isEdit) this.$store.commit('app/clearBacktestUuid')
 
         // if (setUpRes.data.count == 0 || isEdit) {
         // 有名字并且是编辑 没名字是编辑 没名字是新建
@@ -1091,12 +1090,12 @@ export default {
               let signalEntryList = []
               let signalExitList = []
               let backtestData = JSON.parse(
-                JSON.stringify(vm.$store.state.backtestInfo)
+                JSON.stringify(vm.$store.state.app.backtestInfo)
               )
               console.log('store 中存储的 backtestdata', backtestData)
-              let entry_description = vm.$store.state.backtestInfo.entry_description
+              let entry_description = vm.$store.state.app.backtestInfo.entry_description
               if (typeof entry_description == 'string') {
-                entry_description = JSON.parse(vm.$store.state.backtestInfo.entry_description)
+                entry_description = JSON.parse(vm.$store.state.app.backtestInfo.entry_description)
               }
               let sameEntryIndexArr = searchKeys(entry_description)
               if (vm.entryRelation == 3) {
@@ -1121,19 +1120,19 @@ export default {
                   CIQ.nprogress.done()
 
                   // FindLastSignal过程中代表一个项目的运行结束
-                  this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
-                  vm.$store.state.last_signal_array.map(item=>{
+                  this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+                  vm.$store.state.app.last_signal_array.map(item=>{
                     if(item.name == backtestData.name){
                       item.state = 2
                     }
                   })
-                  console.log('FindLastSignalRuning done, The current entry are the same',backtestData,vm.$store.state.last_signal_array)
+                  console.log('FindLastSignalRuning done, The current entry are the same',backtestData,vm.$store.state.app.last_signal_array)
                   return
                 }
               }
-              let exit_description = vm.$store.state.backtestInfo.exit_description
+              let exit_description = vm.$store.state.app.backtestInfo.exit_description
               if (typeof exit_description == 'string') {
-                exit_description = JSON.parse(vm.$store.state.backtestInfo.exit_description)
+                exit_description = JSON.parse(vm.$store.state.app.backtestInfo.exit_description)
               }
               let sameExitIndexArr = searchKeys(exit_description)
               if (vm.exitRelation == 3) {
@@ -1158,13 +1157,13 @@ export default {
                   CIQ.nprogress.done()
 
                   // FindLastSignal过程中代表一个项目的运行结束
-                  this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
-                  vm.$store.state.last_signal_array.map(item=>{
+                  this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+                  vm.$store.state.app.last_signal_array.map(item=>{
                     if(item.name == backtestData.name){
                       item.state = 2
                     }
                   })
-                  console.log('FindLastSignalRuning done, The current exit are the same',backtestData,vm.$store.state.last_signal_array)
+                  console.log('FindLastSignalRuning done, The current exit are the same',backtestData,vm.$store.state.app.last_signal_array)
                   return
                 }
               }
@@ -1255,7 +1254,7 @@ export default {
               var exit_signal_list = []
 
               let formateTechnicalList
-              formateTechnicalList = vm.$store.state.formateTechnicalList
+              formateTechnicalList = vm.$store.state.app.formateTechnicalList
               if (formateTechnicalList.length === 0) {
                 formateTechnicalList = vm.loadShortLong()
               }
@@ -1275,19 +1274,19 @@ export default {
                 }
                 // 在 symbol indicator list内检索url
                 if (!signal) {
-                  if (this.$store.state.symbolConditions.findIndex(i => i.label == item.indicator) !== -1) {
+                  if (this.$store.state.app.symbolConditions.findIndex(i => i.label == item.indicator) !== -1) {
                     return item.indicator
                   }
                 }
-                console.log('runbacktest', vm.$store.state.usersOwnEntryFileHash)
-                let usersOwnEntryList = vm.$store.state.usersOwnEntryFileHash
+                console.log('runbacktest', vm.$store.state.app.usersOwnEntryFileHash)
+                let usersOwnEntryList = vm.$store.state.app.usersOwnEntryFileHash
                 if (usersOwnEntryList[index] != '') {
                   return usersOwnEntryList[index]
                 }
                 return signal?.url || ''
               })
 
-              //entrySignal = entrySignal.concat(this.$store.state.usersOwnEntryFileHash).filter(item => item !== '')
+              //entrySignal = entrySignal.concat(this.$store.state.app.usersOwnEntryFileHash).filter(item => item !== '')
               let exitSignal
               if (!this.isOnlyRisk) {
                 exitSignal = backtestData.exit.signals.map((item, index) => {
@@ -1304,17 +1303,17 @@ export default {
                   }
                   // 在 symbol indicator list内检索url
                   if (!signal) {
-                    if (this.$store.state.symbolConditions.findIndex(i => i.label == item.indicator) !== -1) {
+                    if (this.$store.state.app.symbolConditions.findIndex(i => i.label == item.indicator) !== -1) {
                       return item.indicator
                     }
                   }
-                  let usersOwnExitList = vm.$store.state.usersOwnExitFileHash
+                  let usersOwnExitList = vm.$store.state.app.usersOwnExitFileHash
                   if (usersOwnExitList[index] != '') {
                     return usersOwnExitList[index]
                   }
                   return signal?.url || ''
                 })
-                //exitSignal = exitSignal.concat(this.$store.state.usersOwnExitFileHash).filter(item => item !== '')
+                //exitSignal = exitSignal.concat(this.$store.state.app.usersOwnExitFileHash).filter(item => item !== '')
               } else {
                 exitSignal = ['']
               }
@@ -1384,7 +1383,7 @@ export default {
                 exit: exitSignal
               }
               indicatorLayout.technicalIndicators =
-                this.$store.state.indicators.technicalIndicators
+                this.$store.state.app.indicators.technicalIndicators
               var savedTechSD = []
               for (var i in CIQ.stxx.layout.studies) {
                 var output = {}
@@ -1405,9 +1404,9 @@ export default {
               }
 
               indicatorLayout.savedTechSD = savedTechSD
-              indicatorLayout.activatedMA = this.$store.state.activatedMA
+              indicatorLayout.activatedMA = this.$store.state.app.activatedMA
               // 暂定，把MA对应位置和信息存在回测内
-              indicatorLayout.activatedMALayout = this.$store.state.activatedMALayout
+              indicatorLayout.activatedMALayout = this.$store.state.app.activatedMALayout
               backtestData.indicator_layout = JSON.stringify(
                 indicatorLayout
               ).replaceAll('\u200c', '$r001$')
@@ -1521,21 +1520,21 @@ export default {
                       }
                       if (res.status === 201) {
                         
-                        vm.$store.dispatch('set_isBacktestRunning_flag',true)
+                        vm.$store.dispatch('app/set_isBacktestRunning_flag',true)
                         
                         //After saving successfully, clear the backtestinfo back to the original state
-                        vm.$store.commit('initialBacktestInfo')
+                        vm.$store.commit('app/initialBacktestInfo')
                         vm.goToHistoryForm()
                         await new Promise(resolve => setTimeout(resolve, 3000));
                         vm.$refs.historyChild.refreshHistory(res.data.id)
 
-                        vm.$store.dispatch('set_isMarkerShown_flag',false)
+                        vm.$store.dispatch('app/set_isMarkerShown_flag',false)
                         let backtestInfo = JSON.parse(
-                          JSON.stringify(vm.$store.state.backtestInfo)
+                          JSON.stringify(vm.$store.state.app.backtestInfo)
                         )
                         //clear old_ uuid
                         if (backtestInfo.old_uuid) {
-                          vm.$store.commit('clearBacktestUuid')
+                          vm.$store.commit('app/clearBacktestUuid')
                         }
                         // clear oldBacktestName
                         vm.backtestEditData = {}
@@ -1547,34 +1546,34 @@ export default {
                         CIQ.hideCover()
                         CIQ.nprogress.done()
 
-                        vm.$store.dispatch('set_isMarkerShown_flag',false)
+                        vm.$store.dispatch('app/set_isMarkerShown_flag',false)
                         vm.$refs.setUpChild.clearOldBacktestName()
 
                         // FindLastSignal过程中代表一个项目的运行结束
-                        this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
-                        vm.$store.state.last_signal_array.map(item=>{
+                        this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+                        vm.$store.state.app.last_signal_array.map(item=>{
                           if(item.name == backtestData.name){
                             item.state = 2
                           }
                         })
-                        console.log('FindLastSignalRuning done, runBacktest status !== 201',backtestData,vm.$store.state.last_signal_array)
+                        console.log('FindLastSignalRuning done, runBacktest status !== 201',backtestData,vm.$store.state.app.last_signal_array)
                       }
                     } catch (error) {
 
-                      vm.$store.commit('initialBacktestInfo')
+                      vm.$store.commit('app/initialBacktestInfo')
                       vm.$refs.setUpChild.clearOldBacktestName()
                       vm.$refs.favoriteChild.getFavoriteList()
                       CIQ.hideCover()
                       CIQ.nprogress.done()
 
                       // FindLastSignal过程中代表一个项目的运行结束
-                      this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
-                      vm.$store.state.last_signal_array.map(item=>{
+                      this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+                      vm.$store.state.app.last_signal_array.map(item=>{
                         if(item.name == backtestData.name){
                           item.state = 2
                         }
                       })
-                      console.log('FindLastSignalRuning done, runBacktest 失败',backtestData,vm.$store.state.last_signal_array)
+                      console.log('FindLastSignalRuning done, runBacktest 失败',backtestData,vm.$store.state.app.last_signal_array)
 
                       switch (error?.response?.status) {
                         case 401:
@@ -1600,7 +1599,7 @@ export default {
                       }
 
                       // Initialize the data of backtestinfo
-                      vm.$store.commit('clearStoreDesciption')
+                      vm.$store.commit('app/clearStoreDesciption')
                     }
                   } catch (error) {
                     // If uploading JSON fails, try again. Because it is not an Axios request, the retry logic should be written by yourself
@@ -1616,13 +1615,13 @@ export default {
                       alert('Upload JSON failed')
 
                       // FindLastSignal过程中代表一个项目的运行结束
-                      this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
-                      vm.$store.state.last_signal_array.map(item=>{
+                      this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+                      vm.$store.state.app.last_signal_array.map(item=>{
                         if(item.name == backtestData.name){
                           item.state = 2
                         }
                       })
-                      console.log('FindLastSignalRuning done, Upload JSON failed',backtestData,vm.$store.state.last_signal_array)
+                      console.log('FindLastSignalRuning done, Upload JSON failed',backtestData,vm.$store.state.app.last_signal_array)
                     }
                   }
                 } else {
@@ -1637,13 +1636,13 @@ export default {
                     alert('Upload CSV failed')
 
                     // FindLastSignal过程中代表一个项目的运行结束
-                    this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
-                    vm.$store.state.last_signal_array.map(item=>{
+                    this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+                    vm.$store.state.app.last_signal_array.map(item=>{
                       if(item.name == backtestData.name){
                         item.state = 2
                       }
                     })
-                    console.log('FindLastSignalRuning done, Upload CSV failed',backtestData,vm.$store.state.last_signal_array)
+                    console.log('FindLastSignalRuning done, Upload CSV failed',backtestData,vm.$store.state.app.last_signal_array)
                   }
                 }
               }
@@ -1743,7 +1742,7 @@ export default {
         // Get the value of frequency
         vm.editFrequency = data.frequency
         vm.timeFrame = data.frequency
-        vm.$store.commit('getFrequency', vm.editFrequency)
+        vm.$store.commit('app/getFrequency', vm.editFrequency)
         vm.backtestEditData = data
         vm.resultEditData = data
         vm.$refs.setUpChild.setEditData(data)
@@ -1755,20 +1754,20 @@ export default {
         })
         CIQ.hideCover()
         CIQ.nprogress.done()
-        vm.$store.dispatch('set_isEditFinish_flag',false)
-        vm.$store.state._last_signal_array.map(item=>{
+        vm.$store.dispatch('app/set_isEditFinish_flag',false)
+        vm.$store.state.app._last_signal_array.map(item=>{
           if(item.name == resData.name){
             item.state = 2
           }
         })
         // FindLastSignal过程中代表一个项目的运行结束
-        this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
-        vm.$store.state.last_signal_array.map(item=>{
+        this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+        vm.$store.state.app.last_signal_array.map(item=>{
           if(item.name == resData.name){
             item.state = 2
           }
         })
-        console.log('FindLastSignalRuning done, goTobacktestSetupForm',resData,vm.$store.state.last_signal_array)
+        console.log('FindLastSignalRuning done, goTobacktestSetupForm',resData,vm.$store.state.app.last_signal_array)
       }
       setTimeout(() => {
         if (callback) {

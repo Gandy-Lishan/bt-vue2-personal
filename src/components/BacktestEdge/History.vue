@@ -385,24 +385,24 @@ export default {
   created() {
     this.getHistoryList()
 
-    this.isSystem = this.$store.state.role
+    this.isSystem = this.$store.state.app.role
   },
   methods: {
     async runAllBacktest(){
 
       this.showFLSMASK()
-      this.$store.dispatch('set_isFindLastSignalRuning_flag',true)
+      this.$store.dispatch('app/set_isFindLastSignalRuning_flag',true)
 
         const allHistoryList = await this.getAllHistoryData()
         // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
         this.backtest_array = JSON.parse(JSON.stringify(allHistoryList))
 
         // 給列表每一项设定识别码，内容和回测状态，0为未跑完，1为成功，2为失败
-        this.$store.commit('SET_LASTSIGNAL_ARRAY',this.backtest_array.map(item=>{return {name:item.name,content:item,state:0}}))
+        this.$store.commit('app/SET_LASTSIGNAL_ARRAY',this.backtest_array.map(item=>{return {name:item.name,content:item,state:0}}))
 
       var backtest_info = this.processingBacktest(this.backtest_array)
       if (backtest_info == false) {
-        console.log('处理任务结束', this.$store.state.last_signal_array)
+        console.log('处理任务结束', this.$store.state.app.last_signal_array)
         return // 处理任务结束
       }
 
@@ -430,11 +430,11 @@ export default {
       let interval = setInterval(() => {
         if (this.$store.getters.getIsFindLastSignalRuningFlagState == false) {
           clearInterval(interval)
-          this.$store.dispatch('set_isFindLastSignalRuning_flag',true)
+          this.$store.dispatch('app/set_isFindLastSignalRuning_flag',true)
           var backtest_info = this.processingBacktest(this.backtest_array)
           if (backtest_info == false) {
-            this.$store.dispatch('set_isFindLastSignalRuning_flag',false)
-            console.log('处理任务结束', this.$store.state.last_signal_array)
+            this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+            console.log('处理任务结束', this.$store.state.app.last_signal_array)
             //this.removeFLSMASK()
             return // 处理任务结束
           }
@@ -477,7 +477,7 @@ export default {
             })
 
             this.backtestList = res.data.results
-            this.$store.commit('getBacktestName', historyNameList)
+            this.$store.commit('app/getBacktestName', historyNameList)
           }
           this.queryInfo.total = res.data.count
         }
@@ -544,7 +544,7 @@ export default {
           })
 
           this.backtestList = res.data.results
-          this.$store.commit('getBacktestName', historyNameList)
+          this.$store.commit('app/getBacktestName', historyNameList)
         }
         this.queryInfo.total = res.data.count
       }
@@ -572,13 +572,13 @@ export default {
               vm.viewBacktestResults(row)
             }else{
               // FindLastSignal过程中代表一个项目的运行结束
-              vm.$store.dispatch('set_isFindLastSignalRuning_flag',false)
-              vm.$store.state.last_signal_array.map(item=>{
+              vm.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+              vm.$store.state.app.last_signal_array.map(item=>{
                 if(item.name == row.name){
                   item.state = 1
                 }
               })
-              console.log('FindLastSignalRuning done',row,vm.$store.state.last_signal_array)
+              console.log('FindLastSignalRuning done',row,vm.$store.state.app.last_signal_array)
               
               CIQ.hideCover()
               CIQ.nprogress.done()
@@ -600,13 +600,13 @@ export default {
             }else{
               // 没交易不算回测失败，不列为fls的失败情况
               // FindLastSignal过程中代表一个项目的运行结束
-              vm.$store.dispatch('set_isFindLastSignalRuning_flag',false)
-              vm.$store.state.last_signal_array.map(item=>{
+              vm.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+              vm.$store.state.app.last_signal_array.map(item=>{
                 if(item.name == row.name){
                   item.state = 1
                 }
               })
-              console.log('findLastSignalRuning done, no trade',row,vm.$store.state.last_signal_array)
+              console.log('findLastSignalRuning done, no trade',row,vm.$store.state.app.last_signal_array)
             }
             // vm.$notify({
             // 	title: 'No trades',
@@ -641,9 +641,9 @@ export default {
         console.log('seeParams 结果', res)
         document.getElementsByClassName('ciq-period')[0].style.display = ''
         //  Restore indicator layout
-        this.$store.commit('getBacktestSymbol', res.data.symbol)
+        this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-        this.$store.dispatch('set_isMarkerShown_flag',false)
+        this.$store.dispatch('app/set_isMarkerShown_flag',false)
         if (res.data.indicator_layout) {
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
           this.restoreIndicatorLayoutEdit(
@@ -652,7 +652,7 @@ export default {
             row, res.data
           )
         } else {
-          this.$store.commit('getRunBacktestData', row)
+          this.$store.commit('app/getRunBacktestData', row)
           // emit Synchronous call
           this.$emit('goTobacktestSetupForm', row.id, res.data, 'edit', () => {
             this.$emit('goBacktestResultForm', row, () => {
@@ -686,9 +686,9 @@ export default {
       }
 			document.getElementsByClassName('ciq-period')[0].style.display = ''
 			//  Restore indicator layout
-			this.$store.commit('getBacktestSymbol', res.data.symbol)
+			this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-			this.$store.dispatch('set_isMarkerShown_flag',false)
+			this.$store.dispatch('app/set_isMarkerShown_flag',false)
 			if (res.data.indicator_layout) {
 				let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$','\u200c'))
 				this.restoreIndicatorLayoutRerun(
@@ -697,7 +697,7 @@ export default {
 					row, res.data
 				)
 			} else {
-				this.$store.commit('getRunBacktestData', row)
+				this.$store.commit('app/getRunBacktestData', row)
 				// emit Synchronous call
 				this.$emit('goTobacktestSetupForm', row.id, res.data,'edit',()=>{
 					this.$emit('goBacktestResultForm', row, ()=>{
@@ -767,8 +767,8 @@ export default {
         } catch (error) {
           throw Error('Request Error')
         }
-        this.$store.commit('getBacktestSymbol', res.data.symbol)
-        this.$store.commit('getRunBacktestData', row)
+        this.$store.commit('app/getBacktestSymbol', res.data.symbol)
+        this.$store.commit('app/getRunBacktestData', row)
         params = res.data
         params.name = params.name + '(copy)'
         params.favorites = false
@@ -828,9 +828,9 @@ export default {
         } catch (error) {
           throw Error('Request Error')
         }
-        this.$store.commit('getBacktestSymbol', res.data.symbol)
+        this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-        this.$store.dispatch('set_isMarkerShown_flag',false)
+        this.$store.dispatch('app/set_isMarkerShown_flag',false)
         if (res.data.indicator_layout) {
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
           this.restoreIndicatorLayoutView(
@@ -839,7 +839,7 @@ export default {
             row, res.data
           )
         } else {
-          this.$store.commit('getRunBacktestData', row)
+          this.$store.commit('app/getRunBacktestData', row)
           this.$emit('goTobacktestSetupForm', row.id, res.data, 'canDelView', () => {
             this.$emit('goBacktestResultForm', row, () => {
               CIQ.hideCover()
@@ -872,18 +872,18 @@ export default {
     },
     reloadData(data, freq) {
       let frequency = ''
-      this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
-      this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
-      this.$store.commit('getExtraIndicators', [])
+      this.$store.commit('app/getEntryIndicatorsList', data.formIndicators.entry)
+      this.$store.commit('app/getExitIndicatorsList', data.formIndicators.exit)
+      this.$store.commit('app/getExtraIndicators', [])
       // filter garbage in TechnicalIndicators
       // const technicalIndicators = data.technicalIndicators.filter(item=>{
       // 	data.formIndicators.entry.indexOf(item) != -1 || data.formIndicators.exit.indexOf(item) != -1
       // })
-      this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
-      this.$store.commit('getMA', data.activatedMA)
+      this.$store.commit('app/getTechnicalIndicators', data.technicalIndicators)
+      this.$store.commit('app/getMA', data.activatedMA)
       // 暂定，编辑时读取回测携带的ma位置和信息
-      this.$store.commit('getMALayout', data.activatedMALayout)
-      this.$store.commit('setTechSD', data.savedTechSD)
+      this.$store.commit('app/getMALayout', data.activatedMALayout)
+      this.$store.commit('app/setTechSD', data.savedTechSD)
 
       switch (freq) {
         case 'Daily': {
@@ -902,15 +902,15 @@ export default {
           break
         }
       }
-      this.$store.commit('setRestoreFreq', frequency)
+      this.$store.commit('app/setRestoreFreq', frequency)
     },
     restoreIndicatorLayoutView(data, freq, row, resData) {
       // After the run back test and between the view result, a chart will be loaded to output signalouput
       var that = this
       if (that.$store.getters.getIsBacktestRunningFlagState == true) {
-        that.$store.dispatch('set_isBacktestRunning_flag',false)
+        that.$store.dispatch('app/set_isBacktestRunning_flag',false)
         //The outputsignalsresult is no longer used. The exportcsv is placed before the backtest and the callback is placed in place
-        that.$store.commit('getRunBacktestData', row)
+        that.$store.commit('app/getRunBacktestData', row)
         that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {
           that.$emit('goBacktestResultForm', row, () => {
             CIQ.hideCover()
@@ -920,7 +920,7 @@ export default {
       } else {
         this.reloadData(data, freq)
         CIQ.addIndicatorsFromBacktest(function () {
-          that.$store.commit('getRunBacktestData', row)
+          that.$store.commit('app/getRunBacktestData', row)
           that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {
             that.$emit('goBacktestResultForm', row, () => {
               CIQ.hideCover()
@@ -934,7 +934,7 @@ export default {
       this.reloadData(data, freq)
       var that = this
       CIQ.addIndicatorsFromBacktest(function () {
-        that.$store.commit('getRunBacktestData', row)
+        that.$store.commit('app/getRunBacktestData', row)
         that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {
           that.$emit('goBacktestResultForm', row, () => {
             that.$emit('switchTab', 'first')
@@ -948,7 +948,7 @@ export default {
 			this.reloadData(data, freq)
 			var that = this
 			CIQ.addIndicatorsFromBacktest(function () {
-				that.$store.commit('getRunBacktestData', row)
+				that.$store.commit('app/getRunBacktestData', row)
 				that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView',()=>{
 					that.$emit('goBacktestResultForm', row, ()=>{
 						that.$emit('switchTab','first')

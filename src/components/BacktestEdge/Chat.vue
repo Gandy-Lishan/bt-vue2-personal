@@ -161,9 +161,9 @@ export default {
       CIQ.nprogress.start()
       const res = await seeParams(id)
       console.log('RES', res)
-      this.$store.commit('getBacktestSymbol', res.data.symbol)
+      this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-      this.$store.dispatch('set_isMarkerShown_flag',false)
+      this.$store.dispatch('app/set_isMarkerShown_flag',false)
       if (res.data.indicator_layout) {
         let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
         this.restoreIndicatorLayoutView(
@@ -173,7 +173,7 @@ export default {
           res.data
         )
       } else {
-        this.$store.commit('getRunBacktestData', res.data)
+        this.$store.commit('app/getRunBacktestData', res.data)
         this.$emit('goTobacktestSetupForm', id, res.data, 'canDelView', () => {
           this.$emit('goBacktestResultForm', res.data, () => {
             CIQ.hideCover()
@@ -187,9 +187,9 @@ export default {
       // After the run back test and between the view result, a chart will be loaded to output signalouput
 	  var that = this
       if (that.$store.getters.getIsBacktestRunningFlagState == true) {
-        that.$store.dispatch('set_isBacktestRunning_flag',false)
+        that.$store.dispatch('app/set_isBacktestRunning_flag',false)
         //The outputsignalsresult is no longer used. The exportcsv is placed before the backtest and the callback is placed in place
-        that.$store.commit('getRunBacktestData', row)
+        that.$store.commit('app/getRunBacktestData', row)
         that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {
           that.$emit('goBacktestResultForm', row, () => {
             CIQ.hideCover()
@@ -199,7 +199,7 @@ export default {
       } else {
         this.reloadData(data, freq)
         CIQ.addIndicatorsFromBacktest(function () {
-          that.$store.commit('getRunBacktestData', row)
+          that.$store.commit('app/getRunBacktestData', row)
           that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {
             that.$emit('goBacktestResultForm', row, () => {
               CIQ.hideCover()
@@ -211,18 +211,18 @@ export default {
     },
     reloadData(data, freq) {
       let frequency = ''
-      this.$store.commit('getEntryIndicatorsList', data.formIndicators.entry)
-      this.$store.commit('getExitIndicatorsList', data.formIndicators.exit)
-      this.$store.commit('getExtraIndicators', [])
+      this.$store.commit('app/getEntryIndicatorsList', data.formIndicators.entry)
+      this.$store.commit('app/getExitIndicatorsList', data.formIndicators.exit)
+      this.$store.commit('app/getExtraIndicators', [])
       // filter garbage in TechnicalIndicators
       // const technicalIndicators = data.technicalIndicators.filter(item=>{
       // 	data.formIndicators.entry.indexOf(item) != -1 || data.formIndicators.exit.indexOf(item) != -1
       // })
-      this.$store.commit('getTechnicalIndicators', data.technicalIndicators)
-      this.$store.commit('getMA', data.activatedMA)
+      this.$store.commit('app/getTechnicalIndicators', data.technicalIndicators)
+      this.$store.commit('app/getMA', data.activatedMA)
       // 暂定，编辑时读取回测携带的ma位置和信息
-      this.$store.commit('getMALayout', data.activatedMALayout)
-      this.$store.commit('setTechSD', data.savedTechSD)
+      this.$store.commit('app/getMALayout', data.activatedMALayout)
+      this.$store.commit('app/setTechSD', data.savedTechSD)
 
       switch (freq) {
         case 'Daily': {
@@ -241,7 +241,7 @@ export default {
           break
         }
       }
-      this.$store.commit('setRestoreFreq', frequency)
+      this.$store.commit('app/setRestoreFreq', frequency)
     },
   }
 };

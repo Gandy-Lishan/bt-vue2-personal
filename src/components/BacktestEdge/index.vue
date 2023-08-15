@@ -46,7 +46,7 @@
 							<template slot="title"
 								><i class="el-icon-s-tools tools"></i
 							></template>
-							<!-- <el-menu-item index="5-1">User: {{$store.state.role}}</el-menu-item> -->
+							<!-- <el-menu-item index="5-1">User: {{$store.state.app.role}}</el-menu-item> -->
 							<!-- <el-menu-item index="5-1">Theme</el-menu-item> -->
 							<!-- <el-menu-item index="5-2">Language</el-menu-item> -->
 						</el-submenu>

@@ -10,7 +10,7 @@ import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { getIndicatorsList, getStocksList, getIndexsList } from "@/service/service"
 import { getCurDate } from '@/service/ai'
 import getQueryVariable from '@/tools/getQueryVariable'
-import store from '../store/store'
+import store from '../store'
 
 Vue.use(Router)
 // Route lazy loading
@@ -88,14 +88,14 @@ router.beforeEach(async (to, from, next) => {
 	}
 	// 当有 sentimen_session 或 devbt2Userid 时才能发请求
 
-	//Cookies.set('sentimen_session', 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3Fagvvi8jor+gaZaFZdBZwr8dzDEnzXTHSvpE+r12+VM25ToycuPQkt97utVpuFtWo1MCeEyON1QPkFA6suPxEVy8Whaj01x4oo9U/3dfNy9RY+PPLBh0IReWlHKWiDziortiuJXZZ1xi0lq9R6vfCbfzwdn0M5UK2SWWDAoPkFHOsNCY7h8ZakkGtYk91wYY5nDaTF3b5UNg8relsZQNRs91clVnYsxmpFZi3NdLYTvjLBX3w2gk4F+aCKGALjHEjm9lkuSwK+nG44FW6fl7zWw84w/AQJYljtGzq4u84hYoqMPF353jCRCELdC9D/sn4lUhAp61FKCynYbthLq6Bbf4NCQAh9+xvvctTMFcqAnpJga+GfTHJCqyPdnmYvbKiTQ==')
+	Cookies.set('sentimen_session', 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3Fagvvi8jor+gaZaFZdBZwr8dzDEnzXTHSvpE+r12+VM25ToycuPQkt97utVpuFtWo1MCeEyON1QPkFA6suPxEVy8Whaj01x4oo9U/3dfNy9RY+PPLBh0IReWlHKWiDziortiuJXZZ1xi0lq9R6vfCbfzwdn0M5UK2SWWDAoPkFHOsNCY7h8ZakkGtYk91wYY5nDaTF3b5UNg8relsZQNRs91clVnYsxmpFZi3NdLYTvjLBX3w2gk4F+aCKGALjHEjm9lkuSwK+nG44FW6fl7zWw84w/AQJYljtGzq4u84hYoqMPF353jCRCELdC9D/sn4lUhAp61FKCynYbthLq6Bbf4NCQAh9+xvvctTMFcqAnpJga+GfTHJCqyPdnmYvbKiTQ==')
 	if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
 			//set 10 sec as default,However, some time-consuming requests are processed separately
 			axios.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
 				.then(async(res) => {
 					console.log('lishan res', res)
 					if (res.status == 200) {
-						store.commit('setUserRole', { 'is_admin': res.data.is_admin, 'role': res.data.userid })
+						store.commit('app/setUserRole', { 'is_admin': res.data.is_admin, 'role': res.data.userid })
 						if (getQueryVariable('userid')) window.location.href = location.origin // 去掉？后面的部分
 
 						if(to.path == '/404'){
@@ -108,10 +108,10 @@ router.beforeEach(async (to, from, next) => {
 							if(to.name == 'scannerai' || to.name == 'scannerai_chart'){
 								await initiateCurrentDate()
 								await initiateIndicatorList()
-								store.dispatch('set_scannerai_flag',true)
+								store.dispatch('app/set_scannerai_flag',true)
 							}else{
 								await initiateIndicatorList()
-								store.dispatch('set_scannerai_flag',false)
+								store.dispatch('app/set_scannerai_flag',false)
 							}
 							next()
 						}		
@@ -133,10 +133,10 @@ router.beforeEach(async (to, from, next) => {
 			// 	if(to.name == 'scannerai' || to.name == 'scannerai_chart'){
 			// 		await initiateCurrentDate()
 			// 		await initiateIndicatorList()
-			// 		store.dispatch('set_scannerai_flag',true)
+			// 		store.dispatch('app/set_scannerai_flag',true)
 			// 	}else{
 			// 		await initiateIndicatorList()
-			// 		store.dispatch('set_scannerai_flag',false)
+			// 		store.dispatch('app/set_scannerai_flag',false)
 			// 	}
 				
 			// 	next()
@@ -162,10 +162,10 @@ router.beforeEach(async (to, from, next) => {
 
 async function initiateCurrentDate() {
 	//现在外部实现一个获取当前日期并储存的功能，接触验证屏蔽后移到判断条件内部
-	//if(store.state.curDate==''){
+	//if(store.state.app.curDate==''){
 		// getCurDate().then(async(res)=>{
 		// 	let curDate =res['LastUpdatePickDate']
-		// 	await store.dispatch('set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
+		// 	await store.dispatch('app/set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
 		// }).catch(error=>{
 		// 	router.push({
 		// 		path: '/404',
@@ -177,21 +177,21 @@ async function initiateCurrentDate() {
 	// todo 暂时用于权限验证，所以不判断缓存并跳过请求
 		let _res = await getCurDate()
 		let curDate =_res['LastUpdatePickDate']
-		await store.dispatch('set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
+		await store.dispatch('app/set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
 }
 
 async function initiateIndicatorList() {
-	console.log('initiateIndicatorList')
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
-	if(store.state.stocksList.length==0 || store.state.indexsList.length==0){
+	console.log('initiateIndicatorList')
+	if(store.state.app.stocksList.length==0 || store.state.app.indexsList.length==0){
 		const res = await getIndicatorsList()
 		let allSymbolsList = res.data
 		const resStocks = await getStocksList()
 		let stocksList = resStocks.data
-		store.commit('getStocksList', stocksList)
+		store.commit('app/getStocksList', stocksList)
 		const resIndexs = await getIndexsList()
 		let indexsList = resIndexs.data
-		store.commit('getIndexsList', indexsList)
+		store.commit('app/getIndexsList', indexsList)
 	
 		let newAllSymbolsList = []
 		for (var i = 0; i < allSymbolsList.length; i++) {
