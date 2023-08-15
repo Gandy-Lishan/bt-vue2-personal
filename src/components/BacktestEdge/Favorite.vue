@@ -418,7 +418,7 @@ export default {
         document.getElementsByClassName('ciq-period')[0].style.display = ''
         // Restore indicator layout
         this.$store.commit('getBacktestSymbol', res.data.symbol)
-        CIQ.hideMarker()
+
         this.$store.dispatch('set_isMarkerShown_flag',false)
         if (res.data.indicator_layout) {
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
@@ -435,7 +435,7 @@ export default {
             this.$emit('goBacktestResultForm', row, () => {
 
               // 濡傛灉鏄皟鐢ㄤ簡find lst signal,鍒欏湪edit鏃惰幏鍙朿hartiq csv鏁版嵁
-              if(CIQ.isEditFinish) this.uploadCSVWhileFLS(row.id)
+              if(this.$store.getters.getIsEditFinishFlagState) this.uploadCSVWhileFLS(row.id)
 
               this.$emit('switchTab', 'first')
 
@@ -461,7 +461,7 @@ export default {
           type: 'error'
         })
         }
-        CIQ.isEditFinish = false
+        this.$store.dispatch('set_isEditFinish_flag',false)
       }
     }, 500),
     rerunBacktest: throttle(async function (row) {
@@ -478,7 +478,7 @@ export default {
         document.getElementsByClassName('ciq-period')[0].style.display = ''
         // Restore indicator layout
         this.$store.commit('getBacktestSymbol', res.data.symbol)
-        CIQ.hideMarker()
+
         this.$store.dispatch('set_isMarkerShown_flag',false)
         if (res.data.indicator_layout) {
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
@@ -631,7 +631,7 @@ export default {
             throw Error('Request Error')
           }
           this.$store.commit('getBacktestSymbol', res.data.symbol)
-          CIQ.hideMarker()
+
           this.$store.dispatch('set_isMarkerShown_flag',false)
           if (res.data.indicator_layout) {
             let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
@@ -730,7 +730,7 @@ export default {
           that.$emit('goBacktestResultForm', row, () => {
 
             // 如果是调用了find lst signal,则在edit时获取chartiq csv数据
-            if (CIQ.isEditFinish) that.uploadCSVWhileFLS(row)
+            if (that.$store.getters.getIsEditFinishFlagState) that.uploadCSVWhileFLS(row)
 
             that.$emit('switchTab', 'first')
             CIQ.hideCover()
@@ -773,7 +773,7 @@ export default {
         })
       } finally {
         // lishan 到这里代表调用完成
-        CIQ.isEditFinish = false
+        this.$store.dispatch('set_isEditFinish_flag',false)
       }
     },
     restoreIndicatorLayoutRerun(data, freq, row, resData) {
@@ -960,7 +960,7 @@ export default {
       // lishan 批量给列表调用 editBacktest 你的方法名称我并没修改，而是使用 '_' 开头
       this.$store.commit('clearHashTable')
       this.showFLSMASK()
-      CIQ.isEditFinish = true
+      this.$store.dispatch('set_isEditFinish_flag',true)
       const allFavoriteList = await this.getAllFavoriteData()
       // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
       this.favorite_array = JSON.parse(JSON.stringify(allFavoriteList))
@@ -978,13 +978,13 @@ export default {
       this.editBacktest(favorite)
       // 轮询可用于等待上一个回测结束，也可定时刷新进度条进度
       let interval = setInterval(async () => {
-        if (CIQ.isEditFinish == false) {
+        if (this.$store.getters.getIsEditFinishFlagState == false) {
           clearInterval(interval)
-          CIQ.isEditFinish = true
-          //console.log('轮询等待上一个回测结束.........',CIQ.isEditFinish,backtest)
+          this.$store.dispatch('set_isEditFinish_flag',true)
+
           var favorite_info = this.processingBacktest(this.favorite_array)
           if (favorite_info == false) {
-            CIQ.isEditFinish = false
+            this.$store.dispatch('set_isEditFinish_flag',false)
             const array = this.$store.state._last_signal_array
             let removedItems = [];
             for (let i = array.length - 1; i >= 0; i--) {
