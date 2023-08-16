@@ -353,7 +353,7 @@ export default {
 		restoreIndicatorLayoutView(data, freq, row, resData) {
 			var that = this
 			if (that.$store.getters.getIsBacktestRunningFlagState == true) {
-				that.$store.dispatch('app/set_isBacktestRunning_flag',false)
+				that.$store.dispatch('states/set_isBacktestRunning_flag',false)
 				that.$store.commit('app/getRunBacktestData', row)
 				that.$emit('goTobacktestSetupForm', row.id, resData, 'cannotDelView',() => {
 					that.$emit('goBacktestResultForm', row, () => {
@@ -391,7 +391,7 @@ export default {
 					}
 					this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-					this.$store.dispatch('app/set_isMarkerShown_flag',false)
+					this.$store.dispatch('states/set_isMarkerShown_flag',false)
 					if (res.data.indicator_layout) {
 						let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$','\u200c'))
 						this.restoreIndicatorLayoutView(

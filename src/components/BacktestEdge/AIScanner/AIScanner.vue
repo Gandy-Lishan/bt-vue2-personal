@@ -130,7 +130,7 @@ export default {
 },
 	beforeDestroy() {
 		// 离开此组件前保存筛选条件状态
-		this.$store.dispatch('app/set_scannerai_filter_state',{
+		this.$store.dispatch('states/set_scannerai_filter_state',{
 			searchItem:this.searchItem,
 			searchCategory:this.searchCategory,
 			isPLSChecked:this.isPLSChecked,

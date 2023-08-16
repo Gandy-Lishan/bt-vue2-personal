@@ -679,7 +679,7 @@ export default {
     permission
   },
   created() {
-    this.is_admin = this.$store.state.app.is_admin
+    this.is_admin = this.$store.getters.getIsAdmin
 
     this.generateBTName()
   },
@@ -748,7 +748,7 @@ export default {
     },
     clearForm() {
       Object.assign(this.$data, this.$options.data())
-      this.is_admin = this.$store.state.app.is_admin
+      this.is_admin = this.$store.getters.getIsAdmin
       this.getEndDate()
       if(this.$store.state.app.backtestSymbol) this.bd.symbol = this.$store.state.app.backtestSymbol
       this.generateBTName()
@@ -789,7 +789,7 @@ export default {
         newVal.commission = (newVal.commission * 100).toFixed(2)
         newVal.slippage = Number(newVal.slippage).toFixed(2)
         newVal.trade_price = Number(newVal.trade_price)
-        this.is_admin = this.$store.state.app.is_admin
+        this.is_admin = this.$store.getters.getIsAdmin
         this.bd = Object.assign(this.bd, newVal)
         this.$set(this.bd, 'description', this.bd.description);
         //this.changeTimeframe(newVal.frequency)

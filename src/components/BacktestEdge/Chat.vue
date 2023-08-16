@@ -163,7 +163,7 @@ export default {
       console.log('RES', res)
       this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-      this.$store.dispatch('app/set_isMarkerShown_flag',false)
+      this.$store.dispatch('states/set_isMarkerShown_flag',false)
       if (res.data.indicator_layout) {
         let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
         this.restoreIndicatorLayoutView(
@@ -187,7 +187,7 @@ export default {
       // After the run back test and between the view result, a chart will be loaded to output signalouput
 	  var that = this
       if (that.$store.getters.getIsBacktestRunningFlagState == true) {
-        that.$store.dispatch('app/set_isBacktestRunning_flag',false)
+        that.$store.dispatch('states/set_isBacktestRunning_flag',false)
         //The outputsignalsresult is no longer used. The exportcsv is placed before the backtest and the callback is placed in place
         that.$store.commit('app/getRunBacktestData', row)
         that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {

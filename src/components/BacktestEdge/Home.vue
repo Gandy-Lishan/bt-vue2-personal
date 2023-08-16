@@ -564,7 +564,7 @@ export default {
       //  Restore indicator layout
       this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-      this.$store.dispatch('app/set_isMarkerShown_flag',false)
+      this.$store.dispatch('states/set_isMarkerShown_flag',false)
       if (res.data.indicator_layout) {
         this.$refs.historyChild.restoreIndicatorLayoutEdit(
           JSON.parse(res.data.indicator_layout),
@@ -951,7 +951,7 @@ export default {
       // remove markers, prompt, recover timeframe dropdown
       CIQ.removePrompt()
 
-      this.$store.dispatch('app/set_isMarkerShown_flag',false)
+      this.$store.dispatch('states/set_isMarkerShown_flag',false)
       //CIQ.store.commit('app/getTradesData', [])
       document.getElementsByClassName('ciq-period')[0].style.display = 'block'
       if (
@@ -1120,7 +1120,7 @@ export default {
                   CIQ.nprogress.done()
 
                   // FindLastSignal过程中代表一个项目的运行结束
-                  this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+                  this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
                   vm.$store.state.app.last_signal_array.map(item=>{
                     if(item.name == backtestData.name){
                       item.state = 2
@@ -1157,7 +1157,7 @@ export default {
                   CIQ.nprogress.done()
 
                   // FindLastSignal过程中代表一个项目的运行结束
-                  this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+                  this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
                   vm.$store.state.app.last_signal_array.map(item=>{
                     if(item.name == backtestData.name){
                       item.state = 2
@@ -1520,7 +1520,7 @@ export default {
                       }
                       if (res.status === 201) {
                         
-                        vm.$store.dispatch('app/set_isBacktestRunning_flag',true)
+                        vm.$store.dispatch('states/set_isBacktestRunning_flag',true)
                         
                         //After saving successfully, clear the backtestinfo back to the original state
                         vm.$store.commit('app/initialBacktestInfo')
@@ -1528,7 +1528,7 @@ export default {
                         await new Promise(resolve => setTimeout(resolve, 3000));
                         vm.$refs.historyChild.refreshHistory(res.data.id)
 
-                        vm.$store.dispatch('app/set_isMarkerShown_flag',false)
+                        vm.$store.dispatch('states/set_isMarkerShown_flag',false)
                         let backtestInfo = JSON.parse(
                           JSON.stringify(vm.$store.state.app.backtestInfo)
                         )
@@ -1546,11 +1546,11 @@ export default {
                         CIQ.hideCover()
                         CIQ.nprogress.done()
 
-                        vm.$store.dispatch('app/set_isMarkerShown_flag',false)
+                        vm.$store.dispatch('states/set_isMarkerShown_flag',false)
                         vm.$refs.setUpChild.clearOldBacktestName()
 
                         // FindLastSignal过程中代表一个项目的运行结束
-                        this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+                        this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
                         vm.$store.state.app.last_signal_array.map(item=>{
                           if(item.name == backtestData.name){
                             item.state = 2
@@ -1567,7 +1567,7 @@ export default {
                       CIQ.nprogress.done()
 
                       // FindLastSignal过程中代表一个项目的运行结束
-                      this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+                      this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
                       vm.$store.state.app.last_signal_array.map(item=>{
                         if(item.name == backtestData.name){
                           item.state = 2
@@ -1615,7 +1615,7 @@ export default {
                       alert('Upload JSON failed')
 
                       // FindLastSignal过程中代表一个项目的运行结束
-                      this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+                      this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
                       vm.$store.state.app.last_signal_array.map(item=>{
                         if(item.name == backtestData.name){
                           item.state = 2
@@ -1636,7 +1636,7 @@ export default {
                     alert('Upload CSV failed')
 
                     // FindLastSignal过程中代表一个项目的运行结束
-                    this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+                    this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
                     vm.$store.state.app.last_signal_array.map(item=>{
                       if(item.name == backtestData.name){
                         item.state = 2
@@ -1754,14 +1754,14 @@ export default {
         })
         CIQ.hideCover()
         CIQ.nprogress.done()
-        vm.$store.dispatch('app/set_isEditFinish_flag',false)
+        vm.$store.dispatch('states/set_isEditFinish_flag',false)
         vm.$store.state.app._last_signal_array.map(item=>{
           if(item.name == resData.name){
             item.state = 2
           }
         })
         // FindLastSignal过程中代表一个项目的运行结束
-        this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+        this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
         vm.$store.state.app.last_signal_array.map(item=>{
           if(item.name == resData.name){
             item.state = 2

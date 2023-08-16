@@ -419,7 +419,7 @@ export default {
         // Restore indicator layout
         this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-        this.$store.dispatch('app/set_isMarkerShown_flag',false)
+        this.$store.dispatch('states/set_isMarkerShown_flag',false)
         if (res.data.indicator_layout) {
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
           this.restoreIndicatorLayoutEdit(
@@ -461,7 +461,7 @@ export default {
           type: 'error'
         })
         }
-        this.$store.dispatch('app/set_isEditFinish_flag',false)
+        this.$store.dispatch('states/set_isEditFinish_flag',false)
       }
     }, 500),
     rerunBacktest: throttle(async function (row) {
@@ -479,7 +479,7 @@ export default {
         // Restore indicator layout
         this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-        this.$store.dispatch('app/set_isMarkerShown_flag',false)
+        this.$store.dispatch('states/set_isMarkerShown_flag',false)
         if (res.data.indicator_layout) {
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
           this.restoreIndicatorLayoutRerun(
@@ -632,7 +632,7 @@ export default {
           }
           this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-          this.$store.dispatch('app/set_isMarkerShown_flag',false)
+          this.$store.dispatch('states/set_isMarkerShown_flag',false)
           if (res.data.indicator_layout) {
             let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
             this.restoreIndicatorLayoutView(
@@ -773,7 +773,7 @@ export default {
         })
       } finally {
         // lishan 到这里代表调用完成
-        this.$store.dispatch('app/set_isEditFinish_flag',false)
+        this.$store.dispatch('states/set_isEditFinish_flag',false)
       }
     },
     restoreIndicatorLayoutRerun(data, freq, row, resData) {
@@ -914,7 +914,7 @@ export default {
     async runAllBacktest(){
 
       this.showFLSMASK()
-      this.$store.dispatch('app/set_isFindLastSignalRuning_flag',true)
+      this.$store.dispatch('states/set_isFindLastSignalRuning_flag',true)
 
         const allFavoriteList = await this.getAllFavoriteData()
         // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
@@ -939,10 +939,10 @@ export default {
       let interval = setInterval(() => {
         if (this.$store.getters.getIsFindLastSignalRuningFlagState == false) {
           clearInterval(interval)
-          this.$store.dispatch('app/set_isFindLastSignalRuning_flag',true)
+          this.$store.dispatch('states/set_isFindLastSignalRuning_flag',true)
           var backtest_info = this.processingBacktest(this.backtest_array)
           if (backtest_info == false) {
-            this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+            this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
             console.log('处理任务结束', this.$store.state.app.last_signal_array)
             return // 处理任务结束
           }
@@ -960,7 +960,7 @@ export default {
       // lishan 批量给列表调用 editBacktest 你的方法名称我并没修改，而是使用 '_' 开头
       this.$store.commit('app/clearHashTable')
       this.showFLSMASK()
-      this.$store.dispatch('app/set_isEditFinish_flag',true)
+      this.$store.dispatch('states/set_isEditFinish_flag',true)
       const allFavoriteList = await this.getAllFavoriteData()
       // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
       this.favorite_array = JSON.parse(JSON.stringify(allFavoriteList))
@@ -980,11 +980,11 @@ export default {
       let interval = setInterval(async () => {
         if (this.$store.getters.getIsEditFinishFlagState == false) {
           clearInterval(interval)
-          this.$store.dispatch('app/set_isEditFinish_flag',true)
+          this.$store.dispatch('states/set_isEditFinish_flag',true)
 
           var favorite_info = this.processingBacktest(this.favorite_array)
           if (favorite_info == false) {
-            this.$store.dispatch('app/set_isEditFinish_flag',false)
+            this.$store.dispatch('states/set_isEditFinish_flag',false)
             const array = this.$store.state.app._last_signal_array
             let removedItems = [];
             for (let i = array.length - 1; i >= 0; i--) {

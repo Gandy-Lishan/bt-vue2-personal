@@ -18,7 +18,6 @@ const state = {
 	restoreFreq: '',
 	backtestSymbol: '',
 	pairDataFreq: '',
-	stateCopy: {},
 	conditionRadio: {
 		entry:new Array(5).fill(''),
 		exit:new Array(5).fill(''),
@@ -99,10 +98,6 @@ const state = {
 		{label:'Symbol Close',field:'Close'},
 		{label:'Symbol Volume',field:'Volume'},
 	],
-	// a status before symbol is loaded as a study
-	beforeCalculateNewConditions: false, 
-	is_admin: false,
-	role: '',
 	usersOwnEntryFileHash: Array(5).fill(''),
 	usersOwnExitFileHash: Array(5).fill(''),
 	userUploadFileContent: Array(5).fill({}),
@@ -112,12 +107,6 @@ const state = {
 	_last_signal_array: [],
 	hashTable: [],
 	frequencyArray: new Map(),
-	scannerai_filter: {},
-	scannerai_flag: false,
-	isBacktestRunning_flag:false,
-	isFindLastSignalRuning_flag:false,
-	isMarkerShown_flag:false,
-	isEditFinish_flag:false,
 }
 
 const mutations = {
@@ -135,9 +124,6 @@ const mutations = {
 	},
 	SET_CUR_DATE: (state,val)=>{
 		state.curDate = val
-	},
-	envokeBeforeCalculateNewConditions(state,val){
-		state.beforeCalculateNewConditions = val
 	},
 	/**
 	 * Sets up a mutations to store MA period when editting MA study to make sure the MA period is the same in chart and form 
@@ -192,18 +178,6 @@ const mutations = {
 	 */	
 	getBacktestSymbol(state,val){
 		state.backtestSymbol = val
-	},
-	/**
-	 * not in use
-	 */	
-	resetState(state,val){
-	state = val
-	},
-	/**
-	 * not in use
-	 */	
-	setCopy(state,val){
-	state.stateCopy = val
 	},
 	/**
 	 * no bug occurs, however, the logic inside is confusing
@@ -307,20 +281,20 @@ const mutations = {
 	 * Sets up a mutations to store the condition of selected technical indicator in form, it's used for gennerating output csv
 	 */
 	setConditionRadio(state,val){
-	state.conditionRadio = val
+		state.conditionRadio = val
 	},
 	/**
 	 * these 3 mutations below are used to update status of Moving average in MA.vue
 	 */
 	setMaRadio(state,val){
-	state.maRadio = val
+		state.maRadio = val
 	}
 	,
 	getStMaPeriod(state,val){
-	state.stMaPeriod = val
+		state.stMaPeriod = val
 	},
 	getMaPeriod(state,val){
-	state.maPeriod = val
+		state.maPeriod = val
 	},
 	/**
 	 * Sets up a mutations to store the extremeValue of an indicator
@@ -719,10 +693,6 @@ const mutations = {
 	isRiskControl(state, val) {
 		state.riskControl = val
 	},
-	setUserRole(state, val){
-		state.is_admin = val.is_admin
-		state.role = val.role
-	},
 	saveUsersOwnEntryFileHash(state, obj) {
 		//console.log('saveUsersOwnEntryFileHash',obj)
 		state.usersOwnEntryFileHash[obj.index] = obj.val
@@ -748,7 +718,7 @@ const mutations = {
 	clearHashTable(state) {
 		state.hashTable = []
 	},
-// TODO 整理是归类到state
+
 	// 重置vuex本地储存状态
 	// RESET_STORE: (state)=>{
 	// 	Object.keys(state).forEach(key => {
@@ -776,33 +746,9 @@ const mutations = {
 		state.activatedMA = [{ period: 21, url: '' }]
 		state.activatedMALayout = []
 	},
-	SET_SCANNERAI_FILTER_STATE(state,obj) {
-		state.scannerai_filter = obj
-	},
-	SET_SCANNERAI_FLAG(state,val) {
-		state.scannerai_flag = val
-	},
-	SET_ISBACKTESTRUNNING_FLAG(state,val) {
-		state.isBacktestRunning_flag = val
-	},
-	SET_ISFINDLASTSIGNALRUNNING_FLAG(state,val) {
-		state.isFindLastSignalRuning_flag = val
-	},
-	SET_ISMARKERSHOWN_FLAG(state,val) {
-		state.isMarkerShown_flag = val
-	},
-	SET_ISEDITFINISH_FLAG(state,val) {
-		state.isEditFinish_flag = val
-	}
 }
 
 const actions = {
-	set_scannerai_filter_state({commit}, obj){
-		return new Promise(resolve=>{
-			commit('SET_SCANNERAI_FILTER_STATE',obj)
-			resolve();
-		})
-	},
 	Try(context, val) {
 		context.commit('setEntryData', val)
 	},
@@ -818,7 +764,7 @@ const actions = {
 			resolve();
 		})
 	},
-	reset_chart_config_state({commit}){
+    reset_chart_config_state({commit}){
 		return new Promise(resolve=>{
 			// 清空chartiq图表配置
 			commit('RESET_CHART_CONDIG_STATE')
@@ -836,42 +782,6 @@ const actions = {
 			CIQ.setPanelHeight([])
 
 			commit('RESET_CHART_STUDY_STATE')
-			resolve();
-		})
-	},
-	set_scannerai_flag({commit},val){
-		return new Promise(resolve=>{
-			// 判断是否在scanner ai
-			commit('SET_SCANNERAI_FLAG',val)
-			resolve();
-		})
-	},
-	set_isBacktestRunning_flag({commit},val){
-		return new Promise(resolve=>{
-			// 判断Backtest是否运行中
-			commit('SET_ISBACKTESTRUNNING_FLAG',val)
-			resolve();
-		})
-	},
-	set_isFindLastSignalRuning_flag({commit},val){
-		return new Promise(resolve=>{
-			// 判断FLS是否运行结束
-			commit('SET_ISFINDLASTSIGNALRUNNING_FLAG',val)
-			resolve();
-		})
-	},
-	set_isMarkerShown_flag({commit},val){
-		return new Promise(resolve=>{
-			// 判断marker是否加载
-			if(!val) CIQ.hideMarker()
-			commit('SET_ISMARKERSHOWN_FLAG',val)
-			resolve();
-		})
-	},
-	set_isEditFinish_flag({commit},val){
-		return new Promise(resolve=>{
-			//  用来判断find last signal时是否编辑操作结束
-			commit('SET_ISEDITFINISH_FLAG',val)
 			resolve();
 		})
 	},
