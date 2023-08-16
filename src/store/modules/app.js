@@ -1,36 +1,36 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 
 const state = {
-	curDate: '',
-	studySettingMA: {period:'',criteria:'',panelIndex:''},
-	favoriteIndicatorList: [],
-	favoriteSymbolList: [],
-	techSD: [],
-	savedTechSD: [],
-	currentSenti: {
+	curDate: '',//ai
+	studySettingMA: {period:'',criteria:'',panelIndex:''},//chartiq
+	favoriteIndicatorList: [],//chartiq
+	favoriteSymbolList: [],//chartiq
+	techSD: [],//chartiq
+	savedTechSD: [],//chartiq
+	currentSenti: {//chartiq
 		url: '',
 		name: ''
 	},
-	currentTech: {
+	currentTech: {//chartiq
 		url: '',
 		name: ''
 	},
-	restoreFreq: '',
-	backtestSymbol: '',
-	pairDataFreq: '',
-	conditionRadio: {
+	restoreFreq: '',//form
+	backtestSymbol: '',//form
+	pairDataFreq: '',//form
+	conditionRadio: {//form
 		entry:new Array(5).fill(''),
 		exit:new Array(5).fill(''),
 	},
-	maRadio: '',
-	stMaPeriod: '',
-	maPeriod: '',
-	newPorfolioInputsValues: {
+	maRadio: '',//form
+	stMaPeriod: '',//form
+	maPeriod: '',//form
+	newPorfolioInputsValues: {//form
 		inputNameValue: '',
 		inputDescriptionValue: '',
 		inputOriginalAssetValue: ''
 	},
-	backtestInfo: {
+	backtestInfo: {//form
 		entry_description: [],
 		exit_description: [],
 		description: '',
@@ -58,11 +58,11 @@ const state = {
 			signals: [{ sentimentIndicator: '', technicalIndicator: '', riskIndicator: '', symbolIndicator: '', usersOwnIndicator: ''}]
 		}
 	},
-	riskDescription: '',
-	openedPorfolioBacktests: [],
-	favoriteBacktestRowData: { id: 0 },
-	favoriteBacktestData: [],
-	indicators: {
+	riskDescription: '',//form
+	openedPorfolioBacktests: [],//form
+	favoriteBacktestRowData: { id: 0 },//form
+	favoriteBacktestData: [],//form
+	indicators: {//chartiq
 		formIndicators: {
 			entry: new Array(5),
 			exit: new Array(5)
@@ -70,43 +70,42 @@ const state = {
 		extraIndicators: [],
 		technicalIndicators: []
 	},
-	extremeValue: [],
-	strategyId: '',
-	indicatorsList: [],
-	builtinList: [],
-	trades: [],
-	entryIndicatorRadio: 'sentiment',
-	exitIndicatorRadio: 'Sentiment_Indicators:',
-	saveConditionFormdata: {},
-	exitFrequency: '',
-	activatedMA: [{ period: 21, url: '' }],
-	activatedMALayout: [],
+	extremeValue: [],//chartiq
+	strategyId: '',//form
+	indicatorsList: [],//chartiq 准备用AllSymbolsList代替
+	builtinList: [],//chartiq 包含完整techList
+	trades: [],//chartiq
+	entryIndicatorRadio: 'sentiment',//form
+	exitIndicatorRadio: 'Sentiment_Indicators:',//form
+	saveConditionFormdata: {},//form
+	exitFrequency: '',//form 考虑放到timeframe组件
+	activatedMA: [{ period: 21, url: '' }],//chartiq
+	activatedMALayout: [],//chartiq
 	// indicators look up
-	allSymbolsList: [],
-	stocksList: [],
-	indexsList: [],
-	tabIndex: 0,
-	sentimentIndicatorList: [],
-	backtestNameList: [],
-	formateTechnicalList: [],
-	riskControl: 'true',
+	allSymbolsList: [],//chartiq
+	stocksList: [],//chartiq
+	indexsList: [],//chartiq
+	tabIndex: 0,//form
+	sentimentIndicatorList: [],//chartiq 纯属多余，被allSymbolList取代，只是name key不同
+	formateTechnicalList: [],//chartiq 和builtinList不同，这个是只给表单提供的techList
+	riskControl: 'true',//form
 	// read only
-	symbolConditions : [
+	symbolConditions : [//form
 		{label:'Symbol Open',field:'Open'},
 		{label:'Symbol High',field:'High'},
 		{label:'Symbol Low',field:'Low'},
 		{label:'Symbol Close',field:'Close'},
 		{label:'Symbol Volume',field:'Volume'},
 	],
-	usersOwnEntryFileHash: Array(5).fill(''),
-	usersOwnExitFileHash: Array(5).fill(''),
-	userUploadFileContent: Array(5).fill({}),
-	backtestResult: [],
-	tradePrice: 0,
-	last_signal_array: [],
-	_last_signal_array: [],
-	hashTable: [],
-	frequencyArray: new Map(),
+	usersOwnEntryFileHash: Array(5).fill(''),//form
+	usersOwnExitFileHash: Array(5).fill(''),//form
+	userUploadFileContent: Array(5).fill({}),//form
+	backtestResult: [],//form
+	tradePrice: 0,//form
+	last_signal_array: [],//form
+	_last_signal_array: [],//form
+	hashTable: [],//form
+	frequencyArray: new Map(),//form
 }
 
 const mutations = {
@@ -144,7 +143,7 @@ const mutations = {
 		state.favoriteSymbolList = val
 	},
 	/**
-	 * Sets up a mutations to store the study objects that are read from API
+	 * Sets up a mutations to store the study objects that are read from API,只是读取回测携带的indicator study信息
 	 */	
 	setTechSD(state, val){
 		state.techSD = val
@@ -193,8 +192,6 @@ const mutations = {
 		}
 		state.exitFrequency = val
 		state.backtestInfo.frequency = val
-
-
 	},
 	setFrequencyArray(state, obj) {
 		// 不管是exit和entry都推到这个Map里面
@@ -648,9 +645,6 @@ const mutations = {
 	clearStoreDesciption(state) {
 		state.backtestInfo.entry_description = []
 		state.backtestInfo.exit_description = []	
-	},
-	getBacktestName(state, list) {
-		state.backtestNameList = list
 	},
 	clearBacktestUuid(state) {
 		if(state.backtestInfo.old_uuid) {

@@ -1256,10 +1256,10 @@ export default {
 				continue
 				technicalList[i].studies.forEach((item) => {
 				let obj = {}
-				obj.class = technicalList[i].class
-				obj.value = item.name
-				obj.url = item.url
-				formatList.push(obj)
+					obj.class = technicalList[i].class
+					obj.value = item.name
+					obj.url = item.url
+					formatList.push(obj)
 				})
 			}
 			formatList.sort(function (a, b) {
