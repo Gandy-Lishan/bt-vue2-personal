@@ -391,7 +391,7 @@ export default {
     async runAllBacktest(){
 
       this.showFLSMASK()
-      this.$store.dispatch('app/set_isFindLastSignalRuning_flag',true)
+      this.$store.dispatch('states/set_isFindLastSignalRuning_flag',true)
 
         const allHistoryList = await this.getAllHistoryData()
         // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
@@ -430,10 +430,10 @@ export default {
       let interval = setInterval(() => {
         if (this.$store.getters.getIsFindLastSignalRuningFlagState == false) {
           clearInterval(interval)
-          this.$store.dispatch('app/set_isFindLastSignalRuning_flag',true)
+          this.$store.dispatch('states/set_isFindLastSignalRuning_flag',true)
           var backtest_info = this.processingBacktest(this.backtest_array)
           if (backtest_info == false) {
-            this.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+            this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
             console.log('处理任务结束', this.$store.state.app.last_signal_array)
             //this.removeFLSMASK()
             return // 处理任务结束
@@ -572,7 +572,7 @@ export default {
               vm.viewBacktestResults(row)
             }else{
               // FindLastSignal过程中代表一个项目的运行结束
-              vm.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+              vm.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
               vm.$store.state.app.last_signal_array.map(item=>{
                 if(item.name == row.name){
                   item.state = 1
@@ -600,7 +600,7 @@ export default {
             }else{
               // 没交易不算回测失败，不列为fls的失败情况
               // FindLastSignal过程中代表一个项目的运行结束
-              vm.$store.dispatch('app/set_isFindLastSignalRuning_flag',false)
+              vm.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
               vm.$store.state.app.last_signal_array.map(item=>{
                 if(item.name == row.name){
                   item.state = 1
@@ -643,7 +643,7 @@ export default {
         //  Restore indicator layout
         this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-        this.$store.dispatch('app/set_isMarkerShown_flag',false)
+        this.$store.dispatch('states/set_isMarkerShown_flag',false)
         if (res.data.indicator_layout) {
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
           this.restoreIndicatorLayoutEdit(
@@ -688,7 +688,7 @@ export default {
 			//  Restore indicator layout
 			this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-			this.$store.dispatch('app/set_isMarkerShown_flag',false)
+			this.$store.dispatch('states/set_isMarkerShown_flag',false)
 			if (res.data.indicator_layout) {
 				let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$','\u200c'))
 				this.restoreIndicatorLayoutRerun(
@@ -830,7 +830,7 @@ export default {
         }
         this.$store.commit('app/getBacktestSymbol', res.data.symbol)
 
-        this.$store.dispatch('app/set_isMarkerShown_flag',false)
+        this.$store.dispatch('states/set_isMarkerShown_flag',false)
         if (res.data.indicator_layout) {
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
           this.restoreIndicatorLayoutView(
@@ -908,7 +908,7 @@ export default {
       // After the run back test and between the view result, a chart will be loaded to output signalouput
       var that = this
       if (that.$store.getters.getIsBacktestRunningFlagState == true) {
-        that.$store.dispatch('app/set_isBacktestRunning_flag',false)
+        that.$store.dispatch('states/set_isBacktestRunning_flag',false)
         //The outputsignalsresult is no longer used. The exportcsv is placed before the backtest and the callback is placed in place
         that.$store.commit('app/getRunBacktestData', row)
         that.$emit('goTobacktestSetupForm', row.id, resData, 'canDelView', () => {

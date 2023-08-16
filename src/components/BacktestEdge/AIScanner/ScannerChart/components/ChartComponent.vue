@@ -435,7 +435,7 @@ export default {
 					this.concatenateEntryAndExit()
 				)
 				this.trades = list
-				this.$store.dispatch('app/set_isMarkerShown_flag',true)
+				this.$store.dispatch('states/set_isMarkerShown_flag',true)
 				
 				// split the markers into several groups
 				CIQ.groups = this.group(list)
