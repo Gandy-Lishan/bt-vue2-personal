@@ -640,12 +640,12 @@ export default {
       console.log(this.entryDates)
     },
     getSymbol(val) {
-      this.$store.commit('app/getBacktestSymbol', val)
+      this.$store.commit('form/getBacktestSymbol', val)
       CIQ.addSymbol(val)
     },
     getDirection(val) {
       // Set direction to vuex
-      this.$store.commit('app/getDirection', val)
+      this.$store.commit('form/getDirection', val)
       // Direction passed to entry and exit
       this.direction = val
     },
@@ -693,8 +693,8 @@ export default {
     async getIndexsList() {
       try {
         let vm = this
-        if (vm.$store.state.app.indexsList.length != 0) {
-          vm.indexList = vm.$store.state.app.indexsList.map((item) => {
+        if (vm.$store.state.chart.indexsList.length != 0) {
+          vm.indexList = vm.$store.state.chart.indexsList.map((item) => {
             return { value: `${item.symbol}`, label: `${item.symbol}` }
           })
         } else {
@@ -712,8 +712,8 @@ export default {
     async getStocksList() {
       let vm = this
 
-      if (vm.$store.state.app.stocksList.length != 0) {
-        vm.symbolList = vm.$store.state.app.stocksList.map((item) => {
+      if (vm.$store.state.chart.stocksList.length != 0) {
+        vm.symbolList = vm.$store.state.chart.stocksList.map((item) => {
           return { value: `${item.stock}`, label: `${item.stock}` }
         })
       } else {

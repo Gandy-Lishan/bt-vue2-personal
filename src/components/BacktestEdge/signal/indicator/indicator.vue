@@ -333,7 +333,7 @@ export default {
         riskIndicator: '',
         userIndicator: ''
       },
-      sentimentIndicatorList: this.$store.state.app.sentimentIndicatorList,
+      sentimentIndicatorList: this.$store.state.chart.sentimentIndicatorList,
       symbolConditions: [
         { value: 0, obj: { label: 'Symbol Open', field: 'Open' } },
         { value: 1, obj: { label: 'Symbol High', field: 'High' } },
@@ -398,16 +398,16 @@ export default {
   },
   computed: {
     updateFreq() {
-      return this.$store.state.app.pairDataFreq
+      return this.$store.state.form.pairDataFreq
     },
     updateSenti() {
-      return this.$store.state.app.currentSenti
+      return this.$store.state.chart.currentSenti
     },
     updateTech() {
-      return this.$store.state.app.currentTech
+      return this.$store.state.chart.currentTech
     },
     frequency() {
-      return this.$store.state.app.exitFrequency
+      return this.$store.state.form.exitFrequency
     }
   },
   watch: {
@@ -440,12 +440,12 @@ export default {
           if (CIQ.indicatorList[i].chart_name == val.name) {
             this.indicatorRadio = 'Sentiment Indicator'
             if (this.criteria == 'entry') {
-              this.$store.commit('app/getEntryIndicators', {
+              this.$store.commit('chart/getEntryIndicators', {
                 index: this.panelIndex,
                 value: CIQ.indicatorList[i].url
               })
             } else {
-              this.$store.commit('app/getExitIndicators', {
+              this.$store.commit('chart/getExitIndicators', {
                 index: this.panelIndex,
                 value: CIQ.indicatorList[i].url
               })
@@ -480,7 +480,7 @@ export default {
       }
     },
     updateTech(val) {
-      var builtinList = this.$store.state.app.builtinList
+      var builtinList = this.$store.state.chart.builtinList
       builtinList.find((item) => {
         if (item.url == val.url) {
           // this.si.technicalIndicator = item.value
@@ -547,7 +547,7 @@ export default {
         },
         sentimentIndicatorList: []
       }
-      data.sentimentIndicatorList = this.$store.state.app.sentimentIndicatorList
+      data.sentimentIndicatorList = this.$store.state.chart.sentimentIndicatorList
       Object.assign(this.$data, data)
       this.$refs.siForm.clearValidate()
       this.$refs.upload.clearFiles()
@@ -556,7 +556,7 @@ export default {
     },
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
-      var sentimentIndicatorList = this.$store.state.app.sentimentIndicatorList
+      var sentimentIndicatorList = this.$store.state.chart.sentimentIndicatorList
       sentimentIndicatorList.sort(function (a, b) {
         return a.value.localeCompare(b.value)
       })
@@ -630,7 +630,7 @@ export default {
       this.fileList = []
     },
     clearSentimentSelect() {
-      var sentimentIndicatorList = this.$store.state.app.sentimentIndicatorList
+      var sentimentIndicatorList = this.$store.state.chart.sentimentIndicatorList
       const item = sentimentIndicatorList.find(i=>i.value ==  this.$refs.sentiInput.value)
 
       this.currentSentiUpdated = item.updated
@@ -648,19 +648,19 @@ export default {
       this.$emit('getIndicatorVal', indiValObj)
 
       // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.app.activatedMA
+      var activatedMAList = this.$store.state.chart.activatedMA
       if (this.criteria == 'entry') {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.app.indicators.formIndicators.entry[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getEntryIndicators', {
+        this.$store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getEntryIndicators', {
           index: this.panelIndex,
           value: ''
         })
@@ -672,15 +672,15 @@ export default {
       } else {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.app.indicators.formIndicators.exit[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getExitIndicators', {
+        this.$store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getExitIndicators', {
           index: this.panelIndex,
           value: ''
         })
@@ -692,9 +692,9 @@ export default {
 
       // 移除chartiq对应的extraIndicators
       let extraIndicators = []
-			extraIndicators.push(...this.$store.state.app.indicators.extraIndicators)
+			extraIndicators.push(...this.$store.state.chart.indicators.extraIndicators)
       extraIndicators = extraIndicators.filter(x=>x!=item.url)
-			this.$store.commit('app/getExtraIndicators',extraIndicators)
+			this.$store.commit('chart/getExtraIndicators',extraIndicators)
 
       // lishn 判断需要小龙写
       CIQ.addIndicators()
@@ -713,9 +713,9 @@ export default {
       // 限制同屏显示个数
       var countExistIndicator = 0
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        for (var i in CIQ.store.state.app.builtinList) {
+        for (var i in CIQ.store.state.chart.builtinList) {
           if (
-            CIQ.store.state.app.builtinList[i].url ==
+            CIQ.store.state.chart.builtinList[i].url ==
             CIQ.stxx.layout.studies[studyInstanceName].type
           ) {
             countExistIndicator--
@@ -738,19 +738,19 @@ export default {
       obj.index = this.panelIndex
       this.$emit('getIndicatorVal', obj)
       // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.app.activatedMA
+      var activatedMAList = this.$store.state.chart.activatedMA
       if (this.criteria == 'entry') {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.app.indicators.formIndicators.entry[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getEntryIndicators', {
+        this.$store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getEntryIndicators', {
           index: this.panelIndex,
           value: item.url
         })
@@ -761,15 +761,15 @@ export default {
       } else {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.app.indicators.formIndicators.exit[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getExitIndicators', {
+        this.$store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getExitIndicators', {
           index: this.panelIndex,
           value: item.url
         })
@@ -802,19 +802,19 @@ export default {
       this.$emit('getIndicatorVal', indiValObj)
 
       // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.app.activatedMA
+      var activatedMAList = this.$store.state.chart.activatedMA
       if (this.criteria == 'entry') {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.app.indicators.formIndicators.entry[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getEntryIndicators', {
+        this.$store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getEntryIndicators', {
           index: this.panelIndex,
           value: ''
         })
@@ -825,15 +825,15 @@ export default {
       } else {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.app.indicators.formIndicators.exit[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getExitIndicators', {
+        this.$store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getExitIndicators', {
           index: this.panelIndex,
           value: ''
         })
@@ -864,19 +864,19 @@ export default {
       obj.index = this.panelIndex
       this.$emit('getIndicatorVal', obj)
       // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.app.activatedMA
+      var activatedMAList = this.$store.state.chart.activatedMA
       if (this.criteria == 'entry') {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.app.indicators.formIndicators.entry[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getEntryIndicators', {
+        this.$store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getEntryIndicators', {
           index: this.panelIndex,
           value: item.label
         })
@@ -887,15 +887,15 @@ export default {
       } else {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.app.indicators.formIndicators.exit[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getExitIndicators', {
+        this.$store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getExitIndicators', {
           index: this.panelIndex,
           value: item.label
         })
@@ -914,7 +914,7 @@ export default {
       CIQ.addIndicators()
     },
     clearTechnicalSelect() {
-        let formateList = this.$store.state.app.formateTechnicalList
+        let formateList = this.$store.state.chart.formateTechnicalList
         if (formateList.length === 0) {
           formateList = vm.loadShortLong()
         }
@@ -940,34 +940,34 @@ export default {
       this.$emit('getTechIndiObj', obj)
 
       // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.app.activatedMA
+      var activatedMAList = this.$store.state.chart.activatedMA
       if (this.criteria == 'entry') {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.app.indicators.formIndicators.entry[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getEntryIndicators', {
+        this.$store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getEntryIndicators', {
           index: this.panelIndex,
           value: ''
         })
       } else {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.app.indicators.formIndicators.exit[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getExitIndicators', {
+        this.$store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getExitIndicators', {
           index: this.panelIndex,
           value: ''
         })
@@ -1007,11 +1007,11 @@ export default {
       // remove a MA tat already exists in current criteria before loadin
       if (this.criteria == 'entry') {
         // remove MA from Vuex after loading Tech
-        var activatedMAList = CIQ.store.state.app.activatedMA
+        var activatedMAList = CIQ.store.state.chart.activatedMA
 
         var MAListIndex = activatedMAList.findIndex(
           (ma) =>
-            ma.url == this.$store.state.app.indicators.formIndicators.entry[this.panelIndex] &&
+            ma.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
             ma.criteria == this.criteria &&
             ma.index == this.panelIndex
         )
@@ -1019,18 +1019,18 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
 
-        CIQ.store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getEntryIndicators', {
+        CIQ.store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getEntryIndicators', {
           index: this.panelIndex,
           value: url
         })
       } else {
         // remove MA from Vuex after loading Tech
-        var activatedMAList = CIQ.store.state.app.activatedMA
+        var activatedMAList = CIQ.store.state.chart.activatedMA
 
         var MAListIndex = activatedMAList.findIndex(
           (ma) =>
-            ma.url == this.$store.state.app.indicators.formIndicators.exit[this.panelIndex] &&
+            ma.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
             ma.criteria == this.criteria &&
             ma.index == this.panelIndex
         )
@@ -1038,18 +1038,18 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
 
-        CIQ.store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getExitIndicators', {
+        CIQ.store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getExitIndicators', {
           index: this.panelIndex,
           value: url
         })
       }
       // store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
       let techIndicators = []
-      techIndicators.push(...CIQ.store.state.app.indicators.technicalIndicators)
+      techIndicators.push(...CIQ.store.state.chart.indicators.technicalIndicators)
       techIndicators.push(url)
       techIndicators = [...new Set(techIndicators)]
-      this.$store.commit('app/getTechnicalIndicators', techIndicators)
+      this.$store.commit('chart/getTechnicalIndicators', techIndicators)
 
       // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       CIQ.setMALayout(url, null, null, null, this.criteria, this.panelIndex)
@@ -1083,19 +1083,19 @@ export default {
       this.$emit('getIndicatorVal', indiValObj)
 
       // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.app.activatedMA
+      var activatedMAList = this.$store.state.chart.activatedMA
       if (this.criteria == 'entry') {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.app.indicators.formIndicators.entry[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getEntryIndicators', {
+        this.$store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getEntryIndicators', {
           index: this.panelIndex,
           value: ''
         })
@@ -1106,15 +1106,15 @@ export default {
       } else {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.app.indicators.formIndicators.exit[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getExitIndicators', {
+        this.$store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getExitIndicators', {
           index: this.panelIndex,
           value: ''
         })
@@ -1147,9 +1147,9 @@ export default {
       // old version only
       var countExistIndicator = 0
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        for (var i in CIQ.store.state.app.builtinList) {
+        for (var i in CIQ.store.state.chart.builtinList) {
           if (
-            CIQ.store.state.app.builtinList[i].url ==
+            CIQ.store.state.chart.builtinList[i].url ==
             CIQ.stxx.layout.studies[studyInstanceName].type
           ) {
             countExistIndicator--
@@ -1171,19 +1171,19 @@ export default {
       valObj.value = indicatorName
       this.$emit('getIndicatorVal', valObj)
       // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.app.activatedMA
+      var activatedMAList = this.$store.state.chart.activatedMA
       if (this.criteria == 'entry') {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.app.indicators.formIndicators.entry[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getEntryIndicators', {
+        this.$store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getEntryIndicators', {
           index: this.panelIndex,
           value: indicatorUrl
         })
@@ -1194,15 +1194,15 @@ export default {
       } else {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.app.indicators.formIndicators.exit[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
-        this.$store.commit('app/getExitIndicators', {
+        this.$store.commit('chart/getMA', activatedMAList)
+        this.$store.commit('chart/getExitIndicators', {
           index: this.panelIndex,
           value: indicatorUrl
         })
@@ -1234,19 +1234,19 @@ export default {
       const obj = {}
       obj.criteria = this.criteria
       obj.index = this.panelIndex
-      this.$store.commit('app/deleteIndicator', obj)
+      this.$store.commit('form/deleteIndicator', obj)
       let radioObj = {}
       radioObj.index = this.panelIndex
       if (this.indicatorRadio === arr[0]) {
         // 切换radio后移除usersOwnEntryFileHash
         if (this.criteria === 'entry') {
-          this.$store.commit(`app/saveUsersOwnEntryFileHash`, {
+          this.$store.commit(`form/saveUsersOwnEntryFileHash`, {
             index: this.panelIndex,
             val: ''
           })
         }
         if (this.criteria === 'exit') {
-          this.$store.commit(`app/saveUsersOwnExitFileHash`, {
+          this.$store.commit(`form/saveUsersOwnExitFileHash`, {
             index: this.panelIndex,
             val: ''
           })
@@ -1254,7 +1254,7 @@ export default {
 
         radioObj.value = 'sentiment'
         this.$emit('getIndicatorRadio', radioObj)
-        this.$store.commit('app/getEntryIndicatorRadio', 'sentiment')
+        this.$store.commit('form/getEntryIndicatorRadio', 'sentiment')
 
         // console.log('store',this.$store.indicators.formIndicators.entry)
         let valObj = {}
@@ -1269,20 +1269,20 @@ export default {
       } else if (this.indicatorRadio === arr[1]) {
         // 切换radio后移除usersOwnEntryFileHash
         if (this.criteria === 'entry') {
-          this.$store.commit(`app/saveUsersOwnEntryFileHash`, {
+          this.$store.commit(`form/saveUsersOwnEntryFileHash`, {
             index: this.panelIndex,
             val: ''
           })
         }
         if (this.criteria === 'exit') {
-          this.$store.commit(`app/saveUsersOwnExitFileHash`, {
+          this.$store.commit(`form/saveUsersOwnExitFileHash`, {
             index: this.panelIndex,
             val: ''
           })
         }
         radioObj.value = 'technical'
         this.$emit('getIndicatorRadio', radioObj)
-        this.$store.commit('app/getEntryIndicatorRadio', 'technical')
+        this.$store.commit('form/getEntryIndicatorRadio', 'technical')
 
         let valObj = {}
         valObj.value = this.si.technicalIndicator
@@ -1295,37 +1295,37 @@ export default {
       } else if (this.indicatorRadio === arr[2]) {
         // 切换radio后移除usersOwnEntryFileHash
         if (this.criteria === 'entry') {
-          this.$store.commit(`app/saveUsersOwnEntryFileHash`, {
+          this.$store.commit(`form/saveUsersOwnEntryFileHash`, {
             index: this.panelIndex,
             val: ''
           })
         }
         if (this.criteria === 'exit') {
-          this.$store.commit(`app/saveUsersOwnExitFileHash`, {
+          this.$store.commit(`form/saveUsersOwnExitFileHash`, {
             index: this.panelIndex,
             val: ''
           })
         }
         radioObj.value = 'risk'
         this.$emit('getIndicatorRadio', radioObj)
-        this.$store.commit('app/getEntryIndicatorRadio', 'risk')
+        this.$store.commit('form/getEntryIndicatorRadio', 'risk')
       } else if (this.indicatorRadio === arr[3]) {
         // 切换radio后移除usersOwnEntryFileHash
         if (this.criteria === 'entry') {
-          this.$store.commit(`app/saveUsersOwnEntryFileHash`, {
+          this.$store.commit(`form/saveUsersOwnEntryFileHash`, {
             index: this.panelIndex,
             val: ''
           })
         }
         if (this.criteria === 'exit') {
-          this.$store.commit(`app/saveUsersOwnExitFileHash`, {
+          this.$store.commit(`form/saveUsersOwnExitFileHash`, {
             index: this.panelIndex,
             val: ''
           })
         }
         radioObj.value = 'symbol'
         this.$emit('getIndicatorRadio', radioObj)
-        this.$store.commit('app/getEntryIndicatorRadio', 'symbol')
+        this.$store.commit('form/getEntryIndicatorRadio', 'symbol')
 
         let valObj = {}
         valObj.value = this.si.symbolIndicator
@@ -1339,20 +1339,20 @@ export default {
         // 切换radio后还原usersOwnEntryFileHash
         const userUrl = this.si.userIndicator + 'HASH' + this.file_hash
         if (this.criteria === 'entry') {
-          this.$store.commit(`app/saveUsersOwnEntryFileHash`, {
+          this.$store.commit(`form/saveUsersOwnEntryFileHash`, {
             index: this.panelIndex,
             val: userUrl
           })
         }
         if (this.criteria === 'exit') {
-          this.$store.commit(`app/saveUsersOwnExitFileHash`, {
+          this.$store.commit(`form/saveUsersOwnExitFileHash`, {
             index: this.panelIndex,
             val: userUrl
           })
         }
         radioObj.value = 'user'
         this.$emit('getIndicatorRadio', radioObj)
-        this.$store.commit('app/getEntryIndicatorRadio', 'user')
+        this.$store.commit('form/getEntryIndicatorRadio', 'user')
 
         let valObj = {}
         valObj.value = this.si.userIndicator
@@ -1387,7 +1387,7 @@ export default {
       formatList.sort(function (a, b) {
         return a.value.localeCompare(b.value)
       })
-      this.$store.commit('app/saveFormatTechnicalList', formatList)
+      this.$store.commit('chart/saveFormatTechnicalList', formatList)
       return formatList
     },
     loadRiskList() {
@@ -1404,12 +1404,12 @@ export default {
         this.$refs.siForm.validate((valid) => {
           validForm = valid
         })
-        let sentimentList = this.$store.state.app.sentimentIndicatorList
+        let sentimentList = this.$store.state.chart.sentimentIndicatorList
         if (sentimentList.length == 0) {
           var indicatorList = []
           if (CIQ.indicatorList) {
             if (CIQ.indicatorList.length != 0) {
-              indicatorList = this.$store.state.app.indicatorsList
+              indicatorList = this.$store.state.chart.indicatorsList
               indicatorList = CIQ.indicatorList
             }
           }
@@ -1434,7 +1434,7 @@ export default {
           obj.criteria = this.criteria
           obj.index = index
           obj.value = this.si.sentimentIndicator
-          this.$store.commit('app/getSentiValue', obj)
+          this.$store.commit('form/getSentiValue', obj)
           return checked
         } else {
           if (!validName) {
@@ -1465,7 +1465,7 @@ export default {
           obj.criteria = this.criteria
           obj.index = index
           obj.value = this.si.userIndicator
-          this.$store.commit('app/getUserValue', obj)
+          this.$store.commit('form/getUserValue', obj)
           return checked
         } else {
           if (!validName) {
@@ -1490,7 +1490,7 @@ export default {
         this.$refs.siForm.validate((valid) => {
           validForm = valid
         })
-        let formateList = this.$store.state.app.formateTechnicalList
+        let formateList = this.$store.state.chart.formateTechnicalList
         if (formateList.length === 0) {
           formateList = vm.loadShortLong()
         }
@@ -1505,7 +1505,7 @@ export default {
           obj.criteria = this.criteria
           obj.index = index
           obj.value = this.si.technicalIndicator
-          this.$store.commit('app/getTechValue', obj)
+          this.$store.commit('form/getTechValue', obj)
           return checked
         } else {
           if (!validName) {
@@ -1528,7 +1528,7 @@ export default {
           validForm = valid
         })
         console.log('validForm', validForm)
-        // let formateList = this.$store.state.app.formateTechnicalList
+        // let formateList = this.$store.state.chart.formateTechnicalList
         // if (formateList.length === 0) {
         // 	formateList = this.loadShortLong()
         // }
@@ -1545,7 +1545,7 @@ export default {
           obj.criteria = this.criteria
           obj.index = index
           obj.value = this.si.symbolIndicator
-          this.$store.commit('app/getSymValue', obj)
+          this.$store.commit('form/getSymValue', obj)
           return checked
         } else {
           if (!validName) {
@@ -1579,7 +1579,7 @@ export default {
             this.indicatorRadio = 'Sentiment Indicator'
             this.si.sentimentIndicator =
               newVal[this.criteria].signals[index].indicator
-            let sentimentList = this.$store.state.app.sentimentIndicatorList
+            let sentimentList = this.$store.state.chart.sentimentIndicatorList
             if (sentimentList.length == 0) {
               let res = await getIndicatorsList()
               sentimentList = res.data.map((obj) => {
@@ -1628,7 +1628,7 @@ export default {
             let technicalIndicator =
               newVal[this.criteria].signals[index].indicator
             vm.si.technicalIndicators = technicalIndicator
-            let formateList = this.$store.state.app.formateTechnicalList
+            let formateList = this.$store.state.chart.formateTechnicalList
             if (formateList.length === 0) {
               formateList = vm.loadShortLong()
             }
@@ -1646,7 +1646,7 @@ export default {
             let userIndicator = newVal[this.criteria].signals[index].indicator
             vm.si.userIndicator = userIndicator
             const str =
-              this.$store.state.app.indicators.formIndicators[this.criteria][
+              this.$store.state.chart.indicators.formIndicators[this.criteria][
               this.panelIndex
               ]
             const startIndex = str.indexOf('HASH')
@@ -1669,10 +1669,10 @@ export default {
               })
               console.log('还原文件对象的 raw 属性', obj)
               if (this.criteria === 'entry') {
-                this.$store.commit(`app/saveUsersOwnEntryFileHash`, obj)
+                this.$store.commit(`form/saveUsersOwnEntryFileHash`, obj)
               }
               if (this.criteria === 'exit') {
-                this.$store.commit(`app/saveUsersOwnExitFileHash`, obj)
+                this.$store.commit(`form/saveUsersOwnExitFileHash`, obj)
               }
               const res = response.data.data.csv_content
               let data = []
@@ -1776,7 +1776,7 @@ export default {
           // 文件上传完成后的处理逻辑
           console.log('文件上传成功', response)
           const { status, error } = response.data
-          // self.$store.commit('app/saveUserCustomIndicator', response.data.fileID)
+          // self.$store.commit('form/saveUserCustomIndicator', response.data.fileID)
           // 还原文件对象的 raw 属性
           if (status == 200 || status == 201) {
             self.$notify.success({
@@ -1789,10 +1789,10 @@ export default {
             obj.index = this.panelIndex
             obj.val = response.data.file_id
             if (self.criteria === 'entry') {
-              self.$store.commit(`app/saveUsersOwnEntryFileHash`, obj)
+              self.$store.commit(`form/saveUsersOwnEntryFileHash`, obj)
             }
             if (self.criteria === 'exit') {
-              self.$store.commit(`app/saveUsersOwnExitFileHash`, obj)
+              self.$store.commit(`form/saveUsersOwnExitFileHash`, obj)
             }
             let fileObj = {}
             fileObj.index = self.panelIndex
@@ -2301,7 +2301,7 @@ export default {
           `Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
         )
       }
-      const symbol = this.$store.state.app.backtestSymbol || 'SPX'
+      const symbol = this.$store.state.form.backtestSymbol || 'SPX'
       const res = await getPairData(startDate, endDate, frequency, symbol)
       const pairDataDate = res.data.map((item) => {
         const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
@@ -2408,7 +2408,7 @@ export default {
       let userIndicator = data.file_name
       this.si.userIndicator = userIndicator
 
-      // let formateList = this.$store.state.app.formateTechnicalList
+      // let formateList = this.$store.state.chart.formateTechnicalList
       // if (formateList.length === 0) {
       // 	formateList = vm.loadShortLong()
       // }
@@ -2433,10 +2433,10 @@ export default {
       })
       console.log('还原文件对象的 raw 属性', obj)
       if (this.criteria === 'entry') {
-        this.$store.commit(`app/saveUsersOwnEntryFileHash`, obj)
+        this.$store.commit(`form/saveUsersOwnEntryFileHash`, obj)
       }
       if (this.criteria === 'exit') {
-        this.$store.commit(`app/saveUsersOwnExitFileHash`, obj)
+        this.$store.commit(`form/saveUsersOwnExitFileHash`, obj)
       }
       const res = response.data.data.csv_content
       let fileData = []

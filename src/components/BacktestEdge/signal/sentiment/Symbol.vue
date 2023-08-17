@@ -149,7 +149,7 @@ export default {
     },
     symVal: {
       handler(newVal) {
-        if (this.$store.state.app.symbolConditions.findIndex(item => item.label == this.symVal) != -1) this.symbolLabel = newVal
+        if (this.$store.state.form.symbolConditions.findIndex(item => item.label == this.symVal) != -1) this.symbolLabel = newVal
       },
       immediate: true,
       deep: true
@@ -162,7 +162,7 @@ export default {
       if (!this.isROCLike) {
         this.sym.condition = this.sym.newCondition
 
-        const fieldName = this.$store.state.app.symbolConditions.find(item => item.label == this.symVal).field
+        const fieldName = this.$store.state.form.symbolConditions.find(item => item.label == this.symVal).field
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
           if (
             CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName &&
@@ -247,7 +247,7 @@ export default {
           desObj.index = index
 
           console.log('this.relation != 1', this.criteria, desObj)
-          this.$store.commit('app/saveDescription', desObj)
+          this.$store.commit('form/saveDescription', desObj)
         }
 
       }
@@ -293,7 +293,7 @@ export default {
         desObj.index = 0
       }
       console.log('saveDescription', desObj, this.criteria)
-      this.$store.commit('app/saveDescription', desObj)
+      this.$store.commit('form/saveDescription', desObj)
 
     },
     calculateNewConditions() {
@@ -301,7 +301,7 @@ export default {
       // 用symVal因为symUrl当前生命周期不存在
       if (this.symVal) {
 
-        let symbolCond = this.$store.state.app.symbolConditions.find(item => item.label == this.symVal)
+        let symbolCond = this.$store.state.form.symbolConditions.find(item => item.label == this.symVal)
         const fieldName = symbolCond?symbolCond.field:''
 
         
@@ -336,7 +336,7 @@ export default {
           index: this.panelIndex
         })
         // 解决附属ma或者roc漂移问题
-        CIQ.loadChart(CIQ.store.state.app.trades, CIQ.addDot)
+        CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
       }
     },
     saveCondition(index) {
@@ -353,7 +353,7 @@ export default {
           sym.criteria = this.criteria
           sym.index = index
           // 定义一个 vuex 新事件用于保存 condition数据
-          this.$store.commit('app/saveCondition', sym)
+          this.$store.commit('form/saveCondition', sym)
           return checked
         } else {
           checked = false

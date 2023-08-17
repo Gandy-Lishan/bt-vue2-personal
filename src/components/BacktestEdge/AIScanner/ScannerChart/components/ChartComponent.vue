@@ -39,8 +39,8 @@ export default {
 	},
 	beforeDestroy() {
 		// 防止跳转到backtester时保留了Hammer followed by a raise等marker
-		this.$store.dispatch('app/reset_chart_study_state')
-		this.$store.dispatch('app/reset_chart_config_state')
+		this.$store.dispatch('chart/reset_chart_study_state')
+		this.$store.dispatch('form/reset_chart_config_state')
 		// 还原chartiq默认study definition
 		this.editStudies(true)
 		
@@ -50,10 +50,10 @@ export default {
 	},
 	computed: {
 		updateSettingMA() {
-			return this.$store.state.app.studySettingMA
+			return this.$store.state.chart.studySettingMA
 		},
 		updateTimeframe() {
-			return this.$store.state.app.exitFrequency
+			return this.$store.state.form.exitFrequency
 		},
 	},
 	watch: {
@@ -66,7 +66,7 @@ export default {
 			CIQ.initiateChart([this.symbolUrl],this.other['date'],()=>{
 				try{
 					// 切换timeframe前先清空已有studies
-					this.$store.dispatch('app/reset_chart_study_state')
+					this.$store.dispatch('chart/reset_chart_study_state')
 					this.loadDefaultStudy().then(()=>{
 						this.loadMarker()
 					})
@@ -323,7 +323,7 @@ export default {
 					backtestResult.push({ 'Entry Date': dataSet[data], ...obj })
 				}
 			}
-			this.$store.commit('app/STORE_BACKTESTRESULT',backtestResult)
+			this.$store.commit('form/STORE_BACKTESTRESULT',backtestResult)
 		},
 		transformData(data) {
 			data = data.map(item => {

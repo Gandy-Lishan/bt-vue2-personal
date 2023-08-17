@@ -153,7 +153,7 @@ export default {
 						'rocCond':null
 					}
 					desObj.index = index
-					this.$store.commit('app/saveDescription', desObj)
+					this.$store.commit('form/saveDescription', desObj)
 				}
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
@@ -192,7 +192,7 @@ export default {
 				}
 				desObj.index = 0
 			}
-			this.$store.commit('app/saveDescription', desObj)
+			this.$store.commit('form/saveDescription', desObj)
 		},
 		saveCondition(index) {
 			let checked = true
@@ -205,7 +205,7 @@ export default {
 			let tech = this.tech
 			tech.criteria = this.criteria
 			tech.index = index
-			this.$store.commit('app/saveCondition', tech)
+			this.$store.commit('form/saveCondition', tech)
 			return checked
 		},
 		setEditData(newVal) {
