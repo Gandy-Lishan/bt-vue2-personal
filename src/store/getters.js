@@ -1,10 +1,11 @@
 const getters = {
 	// app
-	getAllSignalArray: state => state.app.last_signal_array,
-	getLastSignalArray: state => state.app._last_signal_array,
-	getExtremeValue: state => state.app.extremeValue,
-	getBacktestResult: state =>  state.app.backtestResult,
-	exitFreqGetter: state => state.app.exitFrequency,
+	getAllSignalArray: state => state.form.last_signal_array,
+	getLastSignalArray: state => state.form._last_signal_array,
+	getBacktestResult: state =>  state.form.backtestResult,
+	exitFreqGetter: state => state.form.exitFrequency,
+
+	getExtremeValue: state => state.chart.extremeValue,
 
 	// states
 	getScannerAIFilterState: state => state.states.scannerai_filter,

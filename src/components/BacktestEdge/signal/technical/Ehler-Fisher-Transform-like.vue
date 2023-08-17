@@ -144,9 +144,9 @@ delay_bars: [String, Number],
 		isActived: {
 			handler(newVal) {
 				if(newVal){
-					var obj = CIQ.store.state.app.conditionRadio
+					var obj = CIQ.store.state.form.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.conditionRadio
-					CIQ.store.commit('app/setConditionRadio', obj)
+					CIQ.store.commit('form/setConditionRadio', obj)
 				}
 
 			},
@@ -213,7 +213,7 @@ delay_bars: [String, Number],
 						'rocCond':null
 					}
 					desObj.index = index
-					this.$store.commit('app/saveDescription', desObj)
+					this.$store.commit('form/saveDescription', desObj)
 				 }  
 			}
 			let value = this.tech.value
@@ -239,14 +239,14 @@ delay_bars: [String, Number],
 						}
 						desObj.index = 0
 					}
-				this.$store.commit('app/saveDescription', desObj)
+				this.$store.commit('form/saveDescription', desObj)
 
 		},
 		getConditionRadio(val) {
 			this.conditionRadio = val
-			var obj = CIQ.store.state.app.conditionRadio
+			var obj = CIQ.store.state.form.conditionRadio
 			obj[this.criteria][this.panelIndex] = val
-			CIQ.store.commit('app/setConditionRadio', obj)
+			CIQ.store.commit('form/setConditionRadio', obj)
 			if (val === 'Indicator Value') {
 				this.tech.value = 0
 			} else if (val === 'Indicator Value ') {
@@ -269,7 +269,7 @@ delay_bars: [String, Number],
 				let tech = JSON.parse(JSON.stringify(this.tech))
 				tech.criteria = this.criteria
 				tech.index = index
-				this.$store.commit('app/saveCondition', tech)
+				this.$store.commit('form/saveCondition', tech)
 				return checked
 			} else {
 				checked = false
@@ -288,9 +288,9 @@ delay_bars: [String, Number],
 				}
 				this.editTechVal = obj.indicator
 
-					var cr = CIQ.store.state.app.conditionRadio
+					var cr = CIQ.store.state.form.conditionRadio
 					cr[this.criteria][this.panelIndex] = this.conditionRadio
-					CIQ.store.commit('app/setConditionRadio', cr)
+					CIQ.store.commit('form/setConditionRadio', cr)
 			}
 		}
 	}

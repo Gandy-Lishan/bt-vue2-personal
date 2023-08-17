@@ -321,11 +321,11 @@ export default {
     sentiUrl: {
       handler(newVal) {
         if (newVal) {
-          var obj = CIQ.store.state.app.conditionRadio
+          var obj = CIQ.store.state.form.conditionRadio
           obj[this.criteria][this.panelIndex] = this.conditionRadio
-          CIQ.store.commit('app/setConditionRadio', obj)
+          CIQ.store.commit('form/setConditionRadio', obj)
           let vm = this
-          let extremeValue = this.$store.state.app.extremeValue
+          let extremeValue = this.$store.state.chart.extremeValue
           extremeValue.forEach((item) => {
 
             if (item.indicator) {
@@ -354,7 +354,7 @@ export default {
       if (!this.isROCLike) {
         this.senti.condition = this.senti.newCondition
 
-        let indicator_url = this.$store.state.app.indicators.formIndicators[this.criteria][this.panelIndex]
+        let indicator_url = this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex]
         let indicator_url_with_ma = ''
         if (indicator_url) {
           // 如果当前indicator自带ma,indicator_url改为ma_url
@@ -459,7 +459,7 @@ export default {
           desObj.index = index
 
           console.log('this.relation != 1', this.criteria, desObj)
-          this.$store.commit('app/saveDescription', desObj)
+          this.$store.commit('form/saveDescription', desObj)
         }
 
       }
@@ -512,14 +512,14 @@ export default {
         }
         desObj.index = 0
       }
-      this.$store.commit('app/saveDescription', desObj)
+      this.$store.commit('form/saveDescription', desObj)
 
     },
     getConditionRadio(val) {
       this.clearFormValidate()
-      var obj = CIQ.store.state.app.conditionRadio
+      var obj = CIQ.store.state.form.conditionRadio
       obj[this.criteria][this.panelIndex] = val
-      CIQ.store.commit('app/setConditionRadio', obj)
+      CIQ.store.commit('form/setConditionRadio', obj)
 
       if (val === 'Indicator Value') {
         // Clear moving average before switching back to the default senti radio
@@ -527,7 +527,7 @@ export default {
         this.senti.period = ''
         this.senti.comparison = 'SV'
         let result
-        this.$store.state.app.indicatorsList.forEach((value, index) => {
+        this.$store.state.chart.indicatorsList.forEach((value, index) => {
           if (value.url == this.sentiUrl) {
             result = value
           }
@@ -535,9 +535,9 @@ export default {
         if (!result) {
           let obj = {}
           if (this.criteria == 'entry') {
-            obj.url = this.$store.state.app.usersOwnEntryFileHash[this.panelIndex]
+            obj.url = this.$store.state.form.usersOwnEntryFileHash[this.panelIndex]
           } else {
-            obj.url = this.$store.state.app.usersOwnExitFileHash[this.panelIndex]
+            obj.url = this.$store.state.form.usersOwnExitFileHash[this.panelIndex]
           }
           result = obj
         }
@@ -559,7 +559,7 @@ export default {
           }
         }
 
-        var activatedMAList = this.$store.state.app.activatedMA
+        var activatedMAList = this.$store.state.chart.activatedMA
         // remove current MA attached to an indicator
         var MAListIndex = activatedMAList.findIndex(
           (item) => item.url == result.url && item.criteria == this.criteria && item.index == this.panelIndex
@@ -567,7 +567,7 @@ export default {
         if (MAListIndex != -1) {
           activatedMAList.splice(MAListIndex, 1)
         }
-        this.$store.commit('app/getMA', activatedMAList)
+        this.$store.commit('chart/getMA', activatedMAList)
 
         this.calculateNewConditions()
       }
@@ -580,7 +580,7 @@ export default {
     calculateNewConditions() {
       if (!this.isROCLike) return
 
-      let indicator_url = this.$store.state.app.indicators.formIndicators[this.criteria][this.panelIndex]
+      let indicator_url = this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex]
       let indicator_url_with_ma = ''
       if (indicator_url) {
         // 如果当前indicator自带ma,indicator_url改为ma_url
@@ -628,7 +628,7 @@ export default {
         })
 
         // 解决附属ma或者roc漂移问题
-        CIQ.loadChart(CIQ.store.state.app.trades, CIQ.addDot)
+        CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
       }
     },
     setPeriod(val) {
@@ -644,7 +644,7 @@ export default {
       }
       let result
 
-      this.$store.state.app.indicatorsList.forEach((value, index) => {
+      this.$store.state.chart.indicatorsList.forEach((value, index) => {
         if (this.sentiUrl) {
           if (value.url == this.sentiUrl) {
             result = value
@@ -654,9 +654,9 @@ export default {
       if (!result) {
         let obj = {}
         if (this.criteria == 'entry') {
-          obj.url = this.$store.state.app.usersOwnEntryFileHash[this.panelIndex]
+          obj.url = this.$store.state.form.usersOwnEntryFileHash[this.panelIndex]
         } else {
-          obj.url = this.$store.state.app.usersOwnExitFileHash[this.panelIndex]
+          obj.url = this.$store.state.form.usersOwnExitFileHash[this.panelIndex]
         }
         result = obj
       }
@@ -689,7 +689,7 @@ export default {
         index: this.panelIndex
       })
       // 解决附属ma或者roc漂移问题
-      CIQ.loadChart(CIQ.store.state.app.trades, CIQ.addDot)
+      CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
 
       // keep current MA
       var objMA = {
@@ -698,7 +698,7 @@ export default {
         criteria: this.criteria,
         index: this.panelIndex
       }
-      var activatedMAList = this.$store.state.app.activatedMA
+      var activatedMAList = this.$store.state.chart.activatedMA
 
       // remove current MA attached to an indicator
       var MAListIndex = activatedMAList.findIndex(
@@ -709,7 +709,7 @@ export default {
       }
       activatedMAList.push(objMA)
 
-      this.$store.commit('app/getMA', activatedMAList)
+      this.$store.commit('chart/getMA', activatedMAList)
 
       this.calculateNewConditions()
     },
@@ -730,7 +730,7 @@ export default {
           senti.criteria = this.criteria
           senti.index = index
           // 定义一个 vuex 新事件用于保存 condition数据
-          this.$store.commit('app/saveCondition', senti)
+          this.$store.commit('form/saveCondition', senti)
           return checked
         } else {
           checked = false
@@ -757,7 +757,7 @@ export default {
           delete senti.maValue
           senti.criteria = this.criteria
           senti.index = index
-          this.$store.commit('app/saveCondition', senti)
+          this.$store.commit('form/saveCondition', senti)
           return checked
         } else {
           checked = false
