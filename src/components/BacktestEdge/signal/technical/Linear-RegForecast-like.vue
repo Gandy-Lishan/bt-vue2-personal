@@ -148,7 +148,7 @@ delay_bars: [String, Number],
 						'rocCond':null
 					}
 					desObj.index = index
-					this.$store.commit('app/saveDescription', desObj)
+					this.$store.commit('form/saveDescription', desObj)
 				}
 				  
 			}
@@ -192,7 +192,7 @@ delay_bars: [String, Number],
 						}
 						desObj.index = 0
 					}
-			this.$store.commit('app/saveDescription', desObj)
+			this.$store.commit('form/saveDescription', desObj)
 		},
 		saveCondition(index) {
 			let checked = true
@@ -205,7 +205,7 @@ delay_bars: [String, Number],
 			let tech = JSON.parse(JSON.stringify(this.tech))
 			tech.criteria = this.criteria
 			tech.index = index
-			this.$store.commit('app/saveCondition', tech)
+			this.$store.commit('form/saveCondition', tech)
 			return checked
 		},
 		setEditData(newVal) {

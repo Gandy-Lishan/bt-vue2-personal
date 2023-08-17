@@ -518,10 +518,10 @@ export default {
 	},
 	computed: {
 		updateSenti() {
-			return this.$store.state.app.currentSenti
+			return this.$store.state.chart.currentSenti
 		},
 		updateTech() {
-			return this.$store.state.app.currentTech
+			return this.$store.state.chart.currentTech
 		},
 	},
 	watch: {
@@ -715,7 +715,7 @@ export default {
 				// 移除senti indicator附属ma
 				let techList = this.loadShortLong()
 				let removedUrl = techList.find(i=>i.value == this.indicatorValArr[absoluteIndex])?.url
-				var activatedMAList = this.$store.state.app.activatedMA
+				var activatedMAList = this.$store.state.chart.activatedMA
 				var MAListIndex = activatedMAList.findIndex(
 				(item) =>
 					item.url == removedUrl &&
@@ -725,7 +725,7 @@ export default {
 				if (MAListIndex != -1) {
 					activatedMAList.splice(MAListIndex, 1)
 				}
-				this.$store.commit('app/getMA', activatedMAList)
+				this.$store.commit('chart/getMA', activatedMAList)
 				//
 				
 				let removedSenti = this.indicatorUrlArr.splice(absoluteIndex, 1)
@@ -754,7 +754,7 @@ export default {
 				// 	this.signals_in_market = this.indicatorRadioArr.length
 				// }
 				//When removing a tab, remove the corresponding indicator from vuex to refresh the status
-				this.$store.commit('app/getEntryIndicators', {
+				this.$store.commit('chart/getEntryIndicators', {
 					index: absoluteIndex,
 					value: ''
 				})
@@ -764,9 +764,9 @@ export default {
 
 				// 移除chartiq对应的extraIndicators
 				let extraIndicators = []
-				extraIndicators.push(...this.$store.state.app.indicators.extraIndicators)
+				extraIndicators.push(...this.$store.state.chart.indicators.extraIndicators)
 				extraIndicators = extraIndicators.filter(x=>x!=removedSenti)
-				this.$store.commit('app/getExtraIndicators',extraIndicators)
+				this.$store.commit('chart/getExtraIndicators',extraIndicators)
 
 				CIQ.addIndicators()
 			}
@@ -804,7 +804,7 @@ export default {
 			if (this.relation == 2) {
 				obj.value = this.score
 			}
-			this.$store.commit('app/saveScoreValue', obj)
+			this.$store.commit('form/saveScoreValue', obj)
 		},
 		saveSignalsInMarket() {
 			let obj = {}
@@ -816,7 +816,7 @@ export default {
 			if (this.relation == 3) {
 				obj.value = this.signals_in_market
 			}
-			this.$store.commit('app/saveSignalsInMarket', obj)
+			this.$store.commit('form/saveSignalsInMarket', obj)
 		},
 		saveDelayBar() {
 			let obj = {}
@@ -826,7 +826,7 @@ export default {
 			} else {
 				obj.value = 0
 			}
-			this.$store.commit('app/saveDelayBar', obj)
+			this.$store.commit('form/saveDelayBar', obj)
 		},
 		isCheckDelayBar(val) {
 			if (val) {
@@ -844,7 +844,7 @@ export default {
 			if (this.indicatorRadioArr.length == 1) {
 				obj.value = 1
 			}
-			this.$store.commit('app/saveRelation', obj)
+			this.$store.commit('form/saveRelation', obj)
 		},
 		changeRelation(val) {
 			if (val == 1) {
@@ -861,9 +861,9 @@ export default {
 
 				// 移除chartiq对应的extraIndicators
 				let extraIndicators = []
-				extraIndicators.push(...this.$store.state.app.indicators.extraIndicators)
+				extraIndicators.push(...this.$store.state.chart.indicators.extraIndicators)
 				extraIndicators = extraIndicators.filter(x=>this.indicatorUrlArr.slice(1,5).indexOf(x)==-1)
-				this.$store.commit('app/getExtraIndicators',extraIndicators)
+				this.$store.commit('chart/getExtraIndicators',extraIndicators)
 
 				// 移除	indicatorSentiArr
 				const indiUrl = this.indicatorUrlArr[0]
@@ -898,15 +898,15 @@ export default {
 
 				//When only keep the first tab, update the vuex status
 				// 移除senti indicator附属ma
-				var activatedMAList = this.$store.state.app.activatedMA
+				var activatedMAList = this.$store.state.chart.activatedMA
 				activatedMAList = activatedMAList.filter((item)=>
 					item.criteria == 'entry' &&
 					item.index == 0
 				)
-				this.$store.commit('app/getMA', activatedMAList)
+				this.$store.commit('chart/getMA', activatedMAList)
 
-				let indicatorList = this.$store.state.app.indicators.formIndicators.entry
-				this.$store.commit('app/getEntryIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
+				let indicatorList = this.$store.state.chart.indicators.formIndicators.entry
+				this.$store.commit('chart/getEntryIndicatorsList', [indicatorList[0], ...(new Array(4).fill(''))])
 				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
 				CIQ.keepTheFirstMALayout('entry')
 
@@ -925,7 +925,7 @@ export default {
 				}
 			}
 			this.$emit('getEntryRelation', val)
-			this.$store.commit('app/clearEntrySignalArr')
+			this.$store.commit('form/clearEntrySignalArr')
 		},
 		saveBacktestData(index) {
 			let vm = this
@@ -1121,7 +1121,7 @@ export default {
 		setEditPanel(num, data) {
 			this.relation = data.entry.relation ? data.entry.relation : 1
 			let formateTechnicalList
-			if (this.$store.state.app.formateTechnicalList.length === 0) {
+			if (this.$store.state.chart.formateTechnicalList.length === 0) {
 				this.$refs.indiChild[0].loadShortLong()
 			}
 			for (let i = 0; i < num - 1; i++) {
@@ -1167,7 +1167,7 @@ export default {
 					this.indicatorRadio = 'technical'
 					this.indicatorRadioArr.splice(j, 1, 'technical')
 
-					formateTechnicalList = this.$store.state.app.formateTechnicalList
+					formateTechnicalList = this.$store.state.chart.formateTechnicalList
 					let indicatorName = data.entry.signals[j].indicator
 					for (let i = 0; i < formateTechnicalList.length; i++) {
 						if (indicatorName === formateTechnicalList[i].value) {
@@ -1232,7 +1232,7 @@ export default {
 			await this.$refs.indiChild[data.index].changeIndicatorChecked("Users' Own Indicator")
 			await this.$refs.indiChild[data.index].handleUsersOwnIndicatorSelect(data.val.data)
 			await this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
-			const exitFileHash = this.$store.state.app.usersOwnExitFileHash[data.index]
+			const exitFileHash = this.$store.state.form.usersOwnExitFileHash[data.index]
 			console.log('判断 exit 有没有填充的值', exitFileHash)
 			if(exitFileHash == '' || exitFileHash == 'HASH') eventBus.$emit('userExitFileSelect', data)
 		},
@@ -1265,7 +1265,7 @@ export default {
 			formatList.sort(function (a, b) {
 				return a.value.localeCompare(b.value)
 			})
-			this.$store.commit('app/saveFormatTechnicalList', formatList)
+			this.$store.commit('chart/saveFormatTechnicalList', formatList)
 			return formatList
 		},
 	}

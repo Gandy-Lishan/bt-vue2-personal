@@ -1,23 +1,11 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 
 const state = {
-	curDate: '',//ai
-	studySettingMA: {period:'',criteria:'',panelIndex:''},//chartiq
-	favoriteIndicatorList: [],//chartiq
-	favoriteSymbolList: [],//chartiq
-	techSD: [],//chartiq
-	savedTechSD: [],//chartiq
-	currentSenti: {//chartiq
-		url: '',
-		name: ''
-	},
-	currentTech: {//chartiq
-		url: '',
-		name: ''
-	},
 	restoreFreq: '',//form
 	backtestSymbol: '',//form
 	pairDataFreq: '',//form
+    exitFrequency: '',//form 考虑放到timeframe组件
+
 	conditionRadio: {//form
 		entry:new Array(5).fill(''),
 		exit:new Array(5).fill(''),
@@ -62,33 +50,13 @@ const state = {
 	openedPorfolioBacktests: [],//form
 	favoriteBacktestRowData: { id: 0 },//form
 	favoriteBacktestData: [],//form
-	indicators: {//chartiq
-		formIndicators: {
-			entry: new Array(5),
-			exit: new Array(5)
-		},
-		extraIndicators: [],
-		technicalIndicators: []
-	},
-	extremeValue: [],//chartiq
-	strategyId: '',//form
-	indicatorsList: [],//chartiq 准备用AllSymbolsList代替
-	builtinList: [],//chartiq 包含完整techList
-	trades: [],//chartiq
+    strategyId: '',//form
 	entryIndicatorRadio: 'sentiment',//form
 	exitIndicatorRadio: 'Sentiment_Indicators:',//form
 	saveConditionFormdata: {},//form
-	exitFrequency: '',//form 考虑放到timeframe组件
-	activatedMA: [{ period: 21, url: '' }],//chartiq
-	activatedMALayout: [],//chartiq
-	// indicators look up
-	allSymbolsList: [],//chartiq
-	stocksList: [],//chartiq
-	indexsList: [],//chartiq
+	
 	tabIndex: 0,//form
-	sentimentIndicatorList: [],//chartiq 纯属多余，被allSymbolList取代，只是name key不同
-	formateTechnicalList: [],//chartiq 和builtinList不同，这个是只给表单提供的techList
-	riskControl: 'true',//form
+    riskControl: 'true',//form
 	// read only
 	symbolConditions : [//form
 		{label:'Symbol Open',field:'Open'},
@@ -109,80 +77,61 @@ const state = {
 }
 
 const mutations = {
-	SET_LASTSIGNAL_ARRAY: (state,val)=>{
-		state.last_signal_array = val
-	},
-	_SET_LASTSIGNAL_ARRAY: (state,val)=>{
-		state._last_signal_array = val
-	},
-	SET_TRADE_PRICE: (state,val)=>{
-		state.tradePrice = val
-	},
-	STORE_BACKTESTRESULT: (state,val)=>{
-		state.backtestResult = val
-	},
-	SET_CUR_DATE: (state,val)=>{
-		state.curDate = val
-	},
-	/**
-	 * Sets up a mutations to store MA period when editting MA study to make sure the MA period is the same in chart and form 
-	 */
-	studySettingMAChange(state,obj){
-		state.studySettingMA = obj
-	},
-	/**
-	 * Sets up a mutations to store favoriteIndicatorList that is originally read from API
-	 */
-	setFavoriteIndicatorList(state, val){
-		state.favoriteIndicatorList = val
-	},
-	/**
-	 * Sets up a mutations to store favoriteSymbolList that is originally read from API
-	 */
-	setFavoriteSymbolList(state, val){
-		state.favoriteSymbolList = val
-	},
-	/**
-	 * Sets up a mutations to store the study objects that are read from API,只是读取回测携带的indicator study信息
-	 */	
-	setTechSD(state, val){
-		state.techSD = val
-	},
-	/**
-	 * Sets up a mutations to store the current study objects on chart
-	 */
-	setSavedTechSD(state, val){
-		state.savedTechSD = val
-	},
-	/**
-	 * Sets up a mutations to store the current selected sentiment indicator, it's used to trigger the listener for updating indicator in form
-	 */
-	setCurrentSenti(state,val){
-		state.currentSenti = val
-	},
-	/**
-	 * Sets up a mutations to store the current selected technical indicator, it's used to trigger the listener for updating indicator in form
-	 */
-	setCurrentTech(state,val){
-		state.currentTech = val
-	},
 	/**
 	 * Sets up a mutations to restore the timeframe of selected backtest
 	 */	
-	setRestoreFreq(state,val){
+     setRestoreFreq(state,val){
 		state.restoreFreq = val
 	},
 	/**
 	 * Sets up a mutations to restore the symbol of selected backtest
 	 */	
-	getBacktestSymbol(state,val){
+     getBacktestSymbol(state,val){
 		state.backtestSymbol = val
+	},
+	// 重置vuex本地储存状态
+	// RESET_STORE: (state)=>{
+	// 	Object.keys(state).forEach(key => {
+	// 		state[key] = JSON.parse(JSON.stringify(window.SITE_CONFIG['storeState'][key]))
+	// 	})
+	// 	state.backtestSymbol = 'SPX'
+	// 	console.log('RESET_STORE',state)
+	// },
+	RESET_CHART_CONDIG_STATE: (state)=>{
+		// 还原默认timeframe和symbol配置
+		state.pairDataFreq = 'daily'
+		state.backtestSymbol = 'SPX'
+		state.exitFrequency = 'Daily'
 	},
 	/**
 	 * no bug occurs, however, the logic inside is confusing
 	 */	
-	setFreqency(state,val){
+     setFreqency(state,val){
 		state.pairDataFreq = val
+	},
+	/**
+	 * Sets up a mutations to store the condition of selected technical indicator in form, it's used for gennerating output csv
+	 */
+     setConditionRadio(state,val){
+		state.conditionRadio = val
+	},
+	/**
+	 * these 3 mutations below are used to update status of Moving average in MA.vue
+	 */
+     setMaRadio(state,val){
+		state.maRadio = val
+	},
+	getStMaPeriod(state,val){
+		state.stMaPeriod = val
+	},
+	getMaPeriod(state,val){
+		state.maPeriod = val
+	},
+	getNewPorfolioInputsValues(state, row) {
+		state.newPorfolioInputsValues.inputNameValue = row.name
+		state.newPorfolioInputsValues.inputDescriptionValue = row.description
+		state.newPorfolioInputsValues.inputOriginalAssetValue = row.original_asset
+		state.openedPorfolioBacktests = row.backtests
 	},
 	getFrequency(state, val) {
 		if(val === undefined || val === null || val === ''){
@@ -266,145 +215,17 @@ const mutations = {
 		state.backtestInfo.frequency = maxFreq
 		console.log('最大的周期', state.exitFrequency)
 	},
-	setFreqencyLP(state, obj) {
-		const key = obj.key
-		state.frequencyArray.set(key, obj)
-	},
 	getFreqHighPriority(state, val) {
 		state.exitFrequency = val
 		state.backtestInfo.frequency = val
 	},
-	/**
-	 * Sets up a mutations to store the condition of selected technical indicator in form, it's used for gennerating output csv
-	 */
-	setConditionRadio(state,val){
-		state.conditionRadio = val
-	},
-	/**
-	 * these 3 mutations below are used to update status of Moving average in MA.vue
-	 */
-	setMaRadio(state,val){
-		state.maRadio = val
-	}
-	,
-	getStMaPeriod(state,val){
-		state.stMaPeriod = val
-	},
-	getMaPeriod(state,val){
-		state.maPeriod = val
-	},
-	/**
-	 * Sets up a mutations to store the extremeValue of an indicator
-	 */	
-	getExtremeValue: (state, list) => {
-		state.extremeValue = list
-	},
-	/**
-	 * Sets up a mutations to store the list of all indicators which is loaded from getAllSymbolsList API in project initiation
-	 */	
-	getAllSymbolsList(state, list) {
-		state.allSymbolsList = list
-	},
-	/**
-	 * Sets up a mutations to store the StocksList, it's usually called when the project is initiated
-	 */	
-	getStocksList(state, list) {
-		state.stocksList = list
-	},
-	/**
-	 * Sets up a mutations to store the IndexsList, it's usually called when the project is initiated
-	 */	
-	getIndexsList(state, list) {
-		state.indexsList = list
-	},
-	getNewPorfolioInputsValues(state, row) {
-		state.newPorfolioInputsValues.inputNameValue = row.name
-		state.newPorfolioInputsValues.inputDescriptionValue = row.description
-		state.newPorfolioInputsValues.inputOriginalAssetValue = row.original_asset
-		state.openedPorfolioBacktests = row.backtests
-	},
-	getRunBacktestData(state, row) {
-		state.favoriteBacktestRowData = row
-	},
-	getRunBacktestAllResult(state, list) {
-		state.favoriteBacktestData = list
-	},
-	/**
-	 * set a single indicator to the indicator list
-	 */	
-	getEntryIndicators(state, obj) {
-		let {index,value} = obj
-		state.indicators.formIndicators.entry[index] = value
-	},
-	/**
-	 * store a list of entry indicators
-	 */	
-	getEntryIndicatorsList(state, list) {
-		state.indicators.formIndicators.entry = list
-	},
-	getExitIndicators(state, obj) {
-		let {index,value} = obj
-		state.indicators.formIndicators.exit[index] = value
-	},
-	getExitIndicatorsList(state, list) {
-		state.indicators.formIndicators.exit = list
-	},
-	/**
-	 * no bug occurs, however, the logic inside is confusing
-	 */	
-	getExtraIndicators(state, val) {
-		state.indicators.extraIndicators = val
-	},
-	getStrategyId(state, id) {
-		state.strategyId = id
-	},
-	/**
-	 * no bug occurs, however, the logic inside is confusing
-	 */	
-	getIndicatorsList(state, data) {
-		state.indicatorsList = data
-	},
-	/**
-	 * Sets up a mutations to store the technical indicators
-	 */	
-	getBuiltinList(state, data) {
-		state.builtinList = data
-	},
-
-	getTradesData(state, data) {
-		state.trades = data
-	},
-	/**
-	 * Sets up a mutations to store a list of the name of all rendered moving average line 
-	 */	
-	getMA(state, val) {
-		state.activatedMA = val
-	},
-	getMALayout(state, val) {
-		state.activatedMALayout = val
-	},
-	getEntryIndicatorRadio(state, val) {
-		state.entryIndicatorRadio = val
-	},
-	getExitIndicatorRadio(state, val) {
-		state.exitIndicatorRadio = val
-	},
-	saveCondictionData(state, val) {
-		state.saveConditionFormdata = val
-	},
 	getDirection(state, val) {
 		state.backtestInfo.direction = val
 	},
-	getTechnicalIndicators(state, val) {
-		state.indicators.technicalIndicators = val
-	},
-	addSignal(state, val) {
+    addSignal(state, val) {
 		state.backtestInfo[val]['signals'].push({})
 	},
-	moveSignal(state, val) {
-		state.backtestInfo[val]['signals'].slice(state.tabIndex, 1)
-	},
-	setEntryData(state, obj) {
+    setEntryData(state, obj) {
 		var index = obj.index
 		state.tabIndex = index
 		var criteria = obj.criteria
@@ -429,7 +250,7 @@ const mutations = {
 
 		}
 	},
-	setFd(state, obj) {
+    setFd(state, obj) {
 		let criteria = obj.criteria
 		delete obj.index
 		delete obj.criteria
@@ -507,7 +328,6 @@ const mutations = {
 		]
 	},
 	clearExitSignalArr(state) {
-		
 		state.backtestInfo.exit.signals = [
 			{
 				sentimentIndicator: '',
@@ -518,7 +338,7 @@ const mutations = {
 			}
 		]
 	},
-	clearBacktest(state) {
+    clearBacktest(state) {
 		state.backtestInfo = {
 			entry_description: [],
 			exit_description: [],
@@ -551,10 +371,7 @@ const mutations = {
 		state.usersOwnExitFileHash = Array(5).fill('')
 		state.frequencyArray = new Map()
 	},
-	getSentimentList(state,list) {
-		state.sentimentIndicatorList = list
-	},
-	saveCondition(state, obj) {
+    saveCondition(state, obj) {
 		let criteria = obj.criteria
 		let index = obj.index
 		delete obj.criteria
@@ -579,16 +396,13 @@ const mutations = {
 		}
 		
 	},
-	saveDescription(state, desObj) {
+    saveDescription(state, desObj) {
 		if(Array.isArray(state.backtestInfo[desObj.criteria+'_description'])) {
 			state.backtestInfo[desObj.criteria+'_description'][desObj.index] = desObj.description
 		
 		}
 	},
-	saveRiskDescription(state, desObj) {
-		state.riskDescription = desObj.description
-	},
-	initialBacktestInfo(state) {
+    initialBacktestInfo(state) {
 		state.backtestInfo = {
 			entry_description: [],
 			exit_description: [],
@@ -650,10 +464,7 @@ const mutations = {
 		if(state.backtestInfo.old_uuid) {
 		delete state.backtestInfo.old_uuid}
 	},
-	saveFormatTechnicalList(state,list) {
-		state.formateTechnicalList = list
-	},
-	addSignalLength(state,obj) {
+    addSignalLength(state,obj) {
 		let newEntrySignal = {
 			sentimentIndicator: '',
 			technicalIndicator: '',
@@ -684,74 +495,77 @@ const mutations = {
 	saveRelation(state,obj) {
 		state.backtestInfo[obj.criteria].relation = Number(obj.value)
 	},
-	isRiskControl(state, val) {
+	saveRiskDescription(state, desObj) {
+		state.riskDescription = desObj.description
+	},
+
+    getRunBacktestData(state, row) {
+		state.favoriteBacktestRowData = row
+	},
+	getRunBacktestAllResult(state, list) {
+		state.favoriteBacktestData = list
+	},
+    getStrategyId(state, id) {
+		state.strategyId = id
+	},
+    getEntryIndicatorRadio(state, val) {
+		state.entryIndicatorRadio = val
+	},
+	getExitIndicatorRadio(state, val) {
+		state.exitIndicatorRadio = val
+	},
+    saveCondictionData(state, val) {
+		state.saveConditionFormdata = val
+	},
+    moveSignal(state, val) {
+		state.backtestInfo[val]['signals'].slice(state.tabIndex, 1)
+	},
+    isRiskControl(state, val) {
 		state.riskControl = val
 	},
-	saveUsersOwnEntryFileHash(state, obj) {
+    saveUsersOwnEntryFileHash(state, obj) {
 		//console.log('saveUsersOwnEntryFileHash',obj)
 		state.usersOwnEntryFileHash[obj.index] = obj.val
 	},
 	saveUsersOwnExitFileHash(state, obj) {
 		state.usersOwnExitFileHash[obj.index] = obj.val
 	},
-	saveUserUploadFileContent(state, obj) {
+    saveUserUploadFileContent(state, obj) {
 		console.log('文件上传成功', obj)
 		state.userUploadFileContent[obj.index] = obj.val
 	},
-	setHashTable(state, obj) {
-			const value = {
-				uuid: obj.id,
-				csv: obj.csv,
-				entry: obj.entry,
-				exit: obj.exit
-			}
-			state.hashTable.push(value)
-			console.log('setHashTable', state.hashTable)
-
+    STORE_BACKTESTRESULT: (state,val)=>{
+		state.backtestResult = val
 	},
-	clearHashTable(state) {
-		state.hashTable = []
+    SET_TRADE_PRICE: (state,val)=>{
+		state.tradePrice = val
 	},
-
-	// 重置vuex本地储存状态
-	// RESET_STORE: (state)=>{
-	// 	Object.keys(state).forEach(key => {
-	// 		state[key] = JSON.parse(JSON.stringify(window.SITE_CONFIG['storeState'][key]))
-	// 	})
-	// 	state.backtestSymbol = 'SPX'
-	// 	console.log('RESET_STORE',state)
-	// },
-	RESET_CHART_CONDIG_STATE: (state)=>{
-		// 清空chartiq图表配置
-		state.pairDataFreq = 'daily'
-		state.backtestSymbol = 'SPX'
-		state.exitFrequency = 'Daily'
+    SET_LASTSIGNAL_ARRAY: (state,val)=>{
+		state.last_signal_array = val
 	},
-	RESET_CHART_STUDY_STATE: (state)=> {
-		// 清空表单indicator列表信息
-		state.indicators =  {
-			formIndicators: {
-				entry: new Array(5),
-				exit: new Array(5)
-			},
-			extraIndicators: [],
-			technicalIndicators: []
-		},
-		state.activatedMA = [{ period: 21, url: '' }]
-		state.activatedMALayout = []
+	_SET_LASTSIGNAL_ARRAY: (state,val)=>{
+		state._last_signal_array = val
+	},
+    setHashTable(state, obj) {
+        const value = {
+            uuid: obj.id,
+            csv: obj.csv,
+            entry: obj.entry,
+            exit: obj.exit
+        }
+        state.hashTable.push(value)
+        console.log('setHashTable', state.hashTable)
+    },
+    clearHashTable(state) {
+        state.hashTable = []
+    },
+    setFreqencyLP(state, obj) {
+		const key = obj.key
+		state.frequencyArray.set(key, obj)
 	},
 }
 
 const actions = {
-	Try(context, val) {
-		context.commit('setEntryData', val)
-	},
-	set_cur_date({commit}, val){
-		return new Promise(resolve=>{
-			commit('SET_CUR_DATE',val)
-			resolve();
-		})
-	},
 	store_backtestResult({commit}, val){
 		return new Promise(resolve=>{
 			commit('STORE_BACKTESTRESULT',val)
@@ -762,20 +576,6 @@ const actions = {
 		return new Promise(resolve=>{
 			// 清空chartiq图表配置
 			commit('RESET_CHART_CONDIG_STATE')
-			resolve();
-		})
-	},
-	reset_chart_study_state({commit}){
-		return new Promise(resolve=>{
-			// 清空表单indicator列表信息
-			for (var id in CIQ.stxx.layout.studies) {
-				var sd = CIQ.stxx.layout.studies[id];
-				if (!sd.customLegend && !sd.permanent) CIQ.Studies.removeStudy(CIQ.stxx, sd);
-			}
-			CIQ.stxx.draw();
-			CIQ.setPanelHeight([])
-
-			commit('RESET_CHART_STUDY_STATE')
 			resolve();
 		})
 	},

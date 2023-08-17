@@ -204,9 +204,9 @@ delay_bars: [String, Number],
 		isActived: {
 			handler(newVal) {
 				if(newVal){
-					var obj = CIQ.store.state.app.conditionRadio
+					var obj = CIQ.store.state.form.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.radio
-					CIQ.store.commit('app/setConditionRadio', obj)
+					CIQ.store.commit('form/setConditionRadio', obj)
 				}
 			},
 			immediate: true,
@@ -270,7 +270,7 @@ delay_bars: [String, Number],
 						'rocCond':null
 					}
 					desObj.index = index
-					this.$store.commit('app/saveDescription', desObj)
+					this.$store.commit('form/saveDescription', desObj)
 				}  
 			}
 			let techVal = this.techVal ? this.techVal : this.editTechVal
@@ -304,13 +304,13 @@ delay_bars: [String, Number],
 						}
 						desObj.index = 0
 					}
-				this.$store.commit('app/saveDescription', desObj)
+				this.$store.commit('form/saveDescription', desObj)
 		},
 		getConditionRadio(val) {
 			this.clearFormValidate()
-			var obj = CIQ.store.state.app.conditionRadio
+			var obj = CIQ.store.state.form.conditionRadio
 			obj[this.criteria][this.panelIndex] = val
-			CIQ.store.commit('app/setConditionRadio', obj)
+			CIQ.store.commit('form/setConditionRadio', obj)
 			switch (val) {
 				case '%K':
 					this.tech.value = 0
@@ -346,7 +346,7 @@ delay_bars: [String, Number],
 					tech.value = tech.valueD
 				}
 				delete tech.valueD
-				this.$store.commit('app/saveCondition', tech)
+				this.$store.commit('form/saveCondition', tech)
 				return checked
 			} else {
 				checked = false
@@ -371,9 +371,9 @@ delay_bars: [String, Number],
 					this.tech.valueD = obj.value
 				}
 				this.editTechVal = obj.indicator
-					var cr = CIQ.store.state.app.conditionRadio
+					var cr = CIQ.store.state.form.conditionRadio
 					cr[this.criteria][this.panelIndex] = this.radio
-					CIQ.store.commit('app/setConditionRadio', cr)
+					CIQ.store.commit('form/setConditionRadio', cr)
 			}
 		}
 	}

@@ -206,9 +206,9 @@ delay_bars: [String, Number],
 						radioValue: this.comparison2,
 						techValue: this.radio === 'first' ? this.tech.value : this.value2
 					}
-					var obj = CIQ.store.state.app.conditionRadio
+					var obj = CIQ.store.state.form.conditionRadio
 					obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
-					CIQ.store.commit('app/setConditionRadio', obj)
+					CIQ.store.commit('form/setConditionRadio', obj)
 				}	
 			},
 			immediate: true,
@@ -226,9 +226,9 @@ delay_bars: [String, Number],
 				radioValue: this.comparison2,
 				techValue: this.radio === 'first' ? this.tech.value : this.value2
 			}
-			var obj = CIQ.store.state.app.conditionRadio
+			var obj = CIQ.store.state.form.conditionRadio
 			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
-			CIQ.store.commit('app/setConditionRadio', obj)
+			CIQ.store.commit('form/setConditionRadio', obj)
 		},
 		setRadio(val) {
 			var _obj = {
@@ -236,9 +236,9 @@ delay_bars: [String, Number],
 				radioValue: this.comparison2,
 				techValue: this.radio === 'first' ? this.tech.value : this.value2
 			}
-			var obj = CIQ.store.state.app.conditionRadio
+			var obj = CIQ.store.state.form.conditionRadio
 			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
-			CIQ.store.commit('app/setConditionRadio', obj)
+			CIQ.store.commit('form/setConditionRadio', obj)
 		},
 		getRadio2Select(val) {
 			for (let i = 0; i < this.valueConditions.length; i++) {
@@ -252,9 +252,9 @@ delay_bars: [String, Number],
 				radioValue: this.comparison2,
 				techValue: this.value2
 			}
-			var obj = CIQ.store.state.app.conditionRadio
+			var obj = CIQ.store.state.form.conditionRadio
 			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
-			CIQ.store.commit('app/setConditionRadio', obj)
+			CIQ.store.commit('form/setConditionRadio', obj)
 		},
 		getValue2Select(val) {
 			for (let i = 0; i < this.radioConditions.length; i++) {
@@ -268,9 +268,9 @@ delay_bars: [String, Number],
 				radioValue: this.comparison2,
 				techValue: this.value2
 			}
-			var obj = CIQ.store.state.app.conditionRadio
+			var obj = CIQ.store.state.form.conditionRadio
 			obj[this.criteria][this.panelIndex] = JSON.stringify(_obj)
-			CIQ.store.commit('app/setConditionRadio', obj)
+			CIQ.store.commit('form/setConditionRadio', obj)
 		},
 		setDesciption(index) {
 			let criteria = ''
@@ -321,7 +321,7 @@ delay_bars: [String, Number],
 						'rocCond':null
 					}
 					desObj.index = index
-					this.$store.commit('app/saveDescription', desObj)
+					this.$store.commit('form/saveDescription', desObj)
 				}  
 				   
 			}
@@ -363,7 +363,7 @@ delay_bars: [String, Number],
 				}
 				desObj.index = 0
 			}
-			this.$store.commit('app/saveDescription', desObj)
+			this.$store.commit('form/saveDescription', desObj)
 		},
 		saveCondition(index) {
 			let checked = true
@@ -378,7 +378,7 @@ delay_bars: [String, Number],
 			let tech = JSON.parse(JSON.stringify(this.tech))
 			tech.criteria = this.criteria
 			tech.index = index
-			this.$store.commit('app/saveCondition', tech)
+			this.$store.commit('form/saveCondition', tech)
 			return checked
 		},
 		// Set edited data
@@ -415,9 +415,9 @@ delay_bars: [String, Number],
 						techValue: this.radio === 'first' ? this.tech.value : this.value2
 					}
 					
-					var cr = CIQ.store.state.app.conditionRadio
+					var cr = CIQ.store.state.form.conditionRadio
 					cr[this.criteria][this.panelIndex] = JSON.stringify(_obj)
-					CIQ.store.commit('app/setConditionRadio', cr)
+					CIQ.store.commit('form/setConditionRadio', cr)
 			}
 		}
 	}

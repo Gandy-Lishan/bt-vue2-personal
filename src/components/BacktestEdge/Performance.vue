@@ -938,7 +938,7 @@ export default {
       }
 
       if (row.status != 0) {
-        if (this.$store.state.app.favoriteBacktestRowData.id) {
+        if (this.$store.state.form.favoriteBacktestRowData.id) {
           let id = row.id
           vm.activePerTag = 'first'
           vm.rowFrequency = row.frequency
@@ -1050,7 +1050,7 @@ export default {
                 vm.unSplitTadeData = vm.tradesData
 
                 // 淇濆瓨tradesdata鍒皊tore
-                this.$store.commit('app/getTradesData', vm.tradesData)
+                this.$store.commit('chart/getTradesData', vm.tradesData)
                 const periodArray = this.getAllDefaultTableLabels()
                 this.backtestHistoryList = this.calculateBacktestHistory(
                   vm.tradesData,
