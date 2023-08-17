@@ -162,10 +162,10 @@ router.beforeEach(async (to, from, next) => {
 
 async function initiateCurrentDate() {
 	//现在外部实现一个获取当前日期并储存的功能，接触验证屏蔽后移到判断条件内部
-	//if(store.state.app.curDate==''){
+	//if(store.state.chart.curDate==''){
 		// getCurDate().then(async(res)=>{
 		// 	let curDate =res['LastUpdatePickDate']
-		// 	await store.dispatch('app/set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
+		// 	await store.dispatch('chart/set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
 		// }).catch(error=>{
 		// 	router.push({
 		// 		path: '/404',
@@ -177,21 +177,21 @@ async function initiateCurrentDate() {
 	// todo 暂时用于权限验证，所以不判断缓存并跳过请求
 		let _res = await getCurDate()
 		let curDate =_res['LastUpdatePickDate']
-		await store.dispatch('app/set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
+		await store.dispatch('chart/set_cur_date',curDate).then(() => {console.log('set curdate',curDate)})
 }
 
 async function initiateIndicatorList() {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	console.log('initiateIndicatorList')
-	if(store.state.app.stocksList.length==0 || store.state.app.indexsList.length==0){
+	if(store.state.chart.stocksList.length==0 || store.state.chart.indexsList.length==0){
 		const res = await getIndicatorsList()
 		let allSymbolsList = res.data
 		const resStocks = await getStocksList()
 		let stocksList = resStocks.data
-		store.commit('app/getStocksList', stocksList)
+		store.commit('chart/getStocksList', stocksList)
 		const resIndexs = await getIndexsList()
 		let indexsList = resIndexs.data
-		store.commit('app/getIndexsList', indexsList)
+		store.commit('chart/getIndexsList', indexsList)
 	
 		let newAllSymbolsList = []
 		for (var i = 0; i < allSymbolsList.length; i++) {
