@@ -20,7 +20,10 @@ Vue.use(Router)
 const router = new Router({
 	mode: 'history',
 	routes: [
-		{ path: '/', redirect: '/home' },
+		// { path: '/', redirect: '/backtester'},
+		// { path: '/backtester', component: resolve => require(['@/components/backtester/index.vue'], resolve),
+		// },
+		{ path: '/', redirect: '/home'},
 		{
 			path: '/home', component: resolve => require(['@/components/BacktestEdge/index.vue'], resolve),
 			redirect: '/home/backtester',
