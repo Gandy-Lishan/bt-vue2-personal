@@ -1,5 +1,5 @@
 .mybg{
-  /* background-image: url(../../css/img/loading-spin.svg);
+  /* background-image: url(img/loading-spin.svg);
   background-size: 100px 100px; */
   position: fixed !important;
   z-index: 9997;
@@ -243,7 +243,7 @@ cq-indicators-lookup-input {
     .chartContainer .stLogo{
       background-size: 246px;
       background-repeat: no-repeat;
-      background-image: url(../../css/img/logo.png);
+      background-image: url(img/logo.png);
       opacity: 0.35;
       height: 71px;
       width: 300px;
@@ -255,7 +255,7 @@ cq-indicators-lookup-input {
   height: 27px;
   width: 27px;
   top: -6px;
-  background-image: url(../../css/img/stx-sprite-ui.svg);
+  background-image: url(img/stx-sprite-ui.svg);
   background-position: -50px -25px;
   opacity: 0.6;
   transition: opacity 0.2s 0s;
