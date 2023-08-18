@@ -317,10 +317,10 @@
 <script lang="ts">
 import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
 // @ts-ignore
-//import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+//import { CIQ } from './st-development/js/entryIndicator'
 import { CIQ } from 'chartiq/js/components'
 // import jutils from 'jutils-src'
-import { getCustomConfig, marker } from './resources' // ChartIQ library resources
+import { getCustomConfig, marker } from './resources.js' // ChartIQ library resources
 const jutils = require("jutils-src")
 
 @Component({})

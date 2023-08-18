@@ -19,14 +19,15 @@ import 'chartiq/examples/feeds/symbolLookupChartIQ'
 
 import 'chartiq/examples/translations/translationSample'
 
-import 'chartiq/js/componentUI'
-import 'chartiq/js/components'
+// 这里是多余的
+// import 'chartiq/js/componentUI'
+// import 'chartiq/js/components'
 
 // Event Markers
 // @ts-ignore
-import marker from 'chartiq/st-development/components/markers/markersSample.js'
-import 'chartiq/st-development/components/markers/tradeAnalyticsSample.js'
-import "chartiq/st-development/components/markers/mMarker.js"
+import marker from './st-development/components/markers/markersSample.js'
+import './st-development/components/markers/tradeAnalyticsSample.js'
+import "./st-development/components/markers/mMarker.js"
 import 'chartiq/examples/markers/videoSample'
 
 import 'chartiq/js/extras/svgcharts/piechart.js'
@@ -35,8 +36,8 @@ import 'chartiq/js/extras/svgcharts/piechart.js'
 // import 'chartiq/examples/help/helpContent.js'
 
 // @ts-ignore
-import quoteFeed from 'chartiq/st-development/feeds/STStockDataFeed.js'
-import "chartiq/st-development/feeds/STIndicatorSymbols.js"
+import quoteFeed from './st-development/feeds/STStockDataFeed'
+import "./st-development/feeds/STIndicatorSymbols.js"
 
 // Uncomment the following for the forecasting simulator (required for the forecasting sample).
 // @ts-ignore
@@ -46,7 +47,8 @@ import forecastQuoteFeed from 'chartiq/examples/feeds/quoteFeedForecastSimulator
 import PerfectScrollbar from 'chartiq/js/thirdparty/perfect-scrollbar.esm.js'
 
 // @ts-ignore
-import defaultConfig from 'chartiq/js/defaultConfiguration'
+//import defaultConfig from 'chartiq/st-development/js/defaultConfiguration'
+import defaultConfig from './st-development/js/defaultConfiguration'
 
 // Plugins
 
@@ -99,11 +101,6 @@ function getCustomConfig({
 	symbol,
 	restore,
 	onChartReady
-}: {
-	chartId?: string
-	symbol?: string | { symbol: string; name?: string; exchDisp?: string }
-	restore?: boolean
-	onChartReady?: Function
 } = {}) {
 	const config = getConfig()
 	// Update chart configuration by modifying default configuration
