@@ -9,11 +9,11 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '../node_modules/chartiq/css/normalize.css';
-@import '../node_modules/chartiq/css/page-defaults.css';
-@import '../node_modules/chartiq/css/stx-chart.css'; // Chart API
-@import '../node_modules/chartiq/css/chartiq.css'; // Chart UI
-@import '../node_modules/chartiq/st-development/css/ST-chartiq.css';
+@import 'components/chart/st-development/css/normalize.css';
+@import 'components/chart/st-development/css/page-defaults.css';
+@import 'components/chart/st-development/css/stx-chart.css'; // Chart API
+@import 'components/chart/st-development/css/chartiq.css'; // Chart UI
+@import 'components/chart/st-development/css/ST-chartiq.css';
 
 a {
     color: #5b9bd1;
