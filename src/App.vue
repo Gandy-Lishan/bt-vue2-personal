@@ -8,6 +8,7 @@
 					:isClosed="isClosed"
 					@click="changeSvg"
 			></RecentUpdate>
+			<FloatBtns></FloatBtns>
 			<div class="content-wrapper">
 				<router-view></router-view>
 			</div>
@@ -17,7 +18,7 @@
 	</div>
 </template>
 <script>
-import { Header, Footer, RecentUpdate } from "@/components/common"
+import { Header, Footer, RecentUpdate, FloatBtns } from "@/components/common"
 export default {
 	name: 'app',
 	data() {
@@ -29,7 +30,8 @@ export default {
 	components: {
 		Header,
 		Footer,
-		RecentUpdate
+		RecentUpdate,
+		FloatBtns
 	},
 	mounted() {
 		// 判断用户是否是首次进入
@@ -76,7 +78,7 @@ export default {
 	}
 }
 </script>
-<style lang="scss">
+<style lang="less">
 @import 'components/chart/st-development/css/normalize.css';
 @import 'components/chart/st-development/css/page-defaults.css';
 @import 'components/chart/st-development/css/stx-chart.css'; // Chart API
