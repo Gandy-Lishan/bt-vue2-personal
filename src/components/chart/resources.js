@@ -25,9 +25,9 @@ import 'chartiq/examples/translations/translationSample'
 
 // Event Markers
 // @ts-ignore
-import marker from './st-development/components/markers/markersSample.js'
-import './st-development/components/markers/tradeAnalyticsSample.js'
-import "./st-development/components/markers/mMarker.js"
+import marker from 'chartiq/st-development/components/markers/markersSample.js'
+import 'chartiq/st-development/components/markers/tradeAnalyticsSample.js'
+import "chartiq/st-development/components/markers/mMarker.js"
 import 'chartiq/examples/markers/videoSample'
 
 import 'chartiq/js/extras/svgcharts/piechart.js'
@@ -36,8 +36,8 @@ import 'chartiq/js/extras/svgcharts/piechart.js'
 // import 'chartiq/examples/help/helpContent.js'
 
 // @ts-ignore
-import quoteFeed from './st-development/feeds/STStockDataFeed'
-import "./st-development/feeds/STIndicatorSymbols.js"
+import quoteFeed from 'chartiq/st-development/feeds/STStockDataFeed'
+import "chartiq/st-development/feeds/STIndicatorSymbols.js"
 
 // Uncomment the following for the forecasting simulator (required for the forecasting sample).
 // @ts-ignore
@@ -48,7 +48,7 @@ import PerfectScrollbar from 'chartiq/js/thirdparty/perfect-scrollbar.esm.js'
 
 // @ts-ignore
 //import defaultConfig from 'chartiq/st-development/js/defaultConfiguration'
-import defaultConfig from './st-development/js/defaultConfiguration'
+import defaultConfig from 'chartiq/st-development/js/defaultConfiguration'
 
 // Plugins
 
