@@ -30,6 +30,8 @@
 		"src/**/*.vue",
 		"tests/**/*.ts",
 		"tests/**/*.tsx"
-, "src/cache.js", "src/axios.js", "src/main.ts", "src/store/modules/app.js", "src/router/index.jsd.js", "src/components/chart/resources.js"	],
+
+, "src/cache.js", "src/axios.js", "src/main.ts", "src/store/modules/app.js", "src/router/index.jsd.js", "src/components/chart/resources.js", "src/components/common/recentUpdate/index.js"	],
+
 	"exclude": ["node_modules","src/@type/**/*"]
 }
