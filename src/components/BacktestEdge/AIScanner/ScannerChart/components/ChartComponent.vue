@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import chart from '@/components/chart/index.vue'
-import { CIQ } from '@/components/chart/st-development/js/components'
+import chart from '@/components/common/chart/index.vue'
+import { CIQ } from '@/components/common/chart/st-development/js/components'
 import jutils from 'jutils-src'
 export default {
 	name: 'TVChartContainer',

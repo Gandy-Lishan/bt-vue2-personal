@@ -52,7 +52,7 @@
 	</div>
 </template>
 <script>
-import { CIQ } from 'chartiq/st-development/js'
+import { CIQ } from '@/components/common/chart/st-development/js'
 import { Store, mapGetters } from 'vuex'
 const _ = require('lodash')
 const throttle = _.throttle

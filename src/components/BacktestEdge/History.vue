@@ -333,7 +333,7 @@
 	</el-row>
 </template>
 <script>
-import { CIQ } from 'chartiq/st-development/js'
+import { CIQ } from '@/components/common/chart/st-development/js'
 import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
 import { copy, permission } from "@/tools/copyBacktestID";
 import Cookies from 'vue-cookies'

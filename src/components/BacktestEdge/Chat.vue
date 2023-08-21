@@ -145,7 +145,7 @@
 </template>
 
 <script>
-import { CIQ } from 'chartiq/st-development/js'
+import { CIQ } from '@/components/common/chart/st-development/js'
 import { seeParams } from '@/service/service';
 export default {
   name: 'Chat',

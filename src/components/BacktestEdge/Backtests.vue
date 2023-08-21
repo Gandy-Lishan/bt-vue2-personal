@@ -277,7 +277,7 @@
 import isJson from '@/tools/isJson.js'
 import {copy,permission} from "@/tools/copyBacktestID";
 const throttle = require('lodash/throttle')
-import { CIQ } from 'chartiq/st-development/js'
+import { CIQ } from '@/components/common/chart/st-development/js'
 
 import {
 	copyBacktest,

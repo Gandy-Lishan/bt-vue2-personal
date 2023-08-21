@@ -33,7 +33,7 @@ import '@/assets/iconfont/iconfont.css'
 import VueCookies from 'vue-cookies'
 
 import 'github-markdown-css'
-import { CIQ } from 'chartiq/st-development/js'
+import { CIQ } from '@/components/common/chart/st-development/js'
 //import { CIQ } from 'chartiq'
 
 Vue.use(VueCookies)

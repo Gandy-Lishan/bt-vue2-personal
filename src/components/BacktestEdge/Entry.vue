@@ -447,7 +447,7 @@ import alligatorLike from '@/components/BacktestEdge/signal/technical/Alligator-
 import linearRegForecastLike from '@/components/BacktestEdge/signal/technical/Linear-RegForecast-like.vue'
 import trailingStopLike from '@/components/BacktestEdge/signal/technical/Trailing-Stops-like.vue'
 import { eventBus } from "@/components/BacktestEdge/EventBus/Bus.ts";
-import { CIQ } from 'chartiq/st-development/js'
+import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapMutations } from "vuex"
 export default {
 	name: 'entry',
