@@ -1,7 +1,7 @@
-import { CIQ } from 'chartiq/st-development/js/componentUI'
+import { CIQ } from '@/components/chart/st-development/js/componentUI'
 import "vue-direction-key"
 declare module 'vue-direction-key';
-declare module 'chartiq/st-development/js/componentUI' {
+declare module '@/components/chart/st-development/js/componentUI' {
 	export namespace CIQ {
 		let dialog: boolean
 		function simulateL2(params: {

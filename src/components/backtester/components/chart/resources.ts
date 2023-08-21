@@ -5,7 +5,7 @@
 
 // @ts-ignore
 //import { CIQ } from 'chartiq/st-development/js'
-import { CIQ } from 'chartiq/st-development/js/components'
+import { CIQ } from '@/components/chart/st-development/js/components'
 // @ts-ignore
 import 'chartiq/js/advanced'
 

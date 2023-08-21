@@ -16,7 +16,7 @@ import store from '../../../store'
 
 // @ts-ignore
 //import { CIQ } from 'chartiq/st-development/js'
-import { CIQ } from 'chartiq/st-development/js/components' // Required for types in chartInitialized
+import { CIQ } from '@/components/chart/st-development/js/components' // Required for types in chartInitialized
 
 @Component({
 	components: {
