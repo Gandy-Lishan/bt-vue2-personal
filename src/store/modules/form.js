@@ -1,4 +1,4 @@
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { timestampToTime } from '@/tools/formatDate.js'
 
 const state = {
 	restoreFreq: '',//form
@@ -24,6 +24,7 @@ const state = {
 		description: '',
 		direction: 'Long',
 		frequency: 'Daily',
+		backtest_period: '21',
 		entry: {
 			relation: 0,
 			score: 1,
@@ -118,7 +119,7 @@ const mutations = {
 	/**
 	 * these 3 mutations below are used to update status of Moving average in MA.vue
 	 */
-     setMaRadio(state,val){
+  setMaRadio(state,val){
 		state.maRadio = val
 	},
 	getStMaPeriod(state,val){
@@ -563,6 +564,22 @@ const mutations = {
 		const key = obj.key
 		state.frequencyArray.set(key, obj)
 	},
+	GET_END_DATE(state, that) {
+		// 设置 end_date 和 start_date
+		let end_date = timestampToTime(new Date())
+		let backtest_period = state.bd.backtest_period
+		const str = end_date.split('-')
+		str[0] = Number(str[0]) - Number(backtest_period) + ''
+		state.bd.start_date = str.join('-')
+
+		const utils = function () {
+			let vm = this
+			vm.setSymbol = function (symbol) {
+				that.bd.symbol = symbol
+			}
+		}
+		window.utils = new utils()
+	}
 }
 
 const actions = {
@@ -572,13 +589,13 @@ const actions = {
 			resolve();
 		})
 	},
-    reset_chart_config_state({commit}){
+  reset_chart_config_state({commit}){
 		return new Promise(resolve=>{
 			// 清空chartiq图表配置
 			commit('RESET_CHART_CONDIG_STATE')
 			resolve();
 		})
-	},
+	}
 }
 export default {
 	namespaced: true,

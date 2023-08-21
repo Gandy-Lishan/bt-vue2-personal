@@ -1,6 +1,10 @@
 import BTHeader from "./header"
-// BTChart 只能直接引入 不能通过 index.js 暴露
+import BasicInfo from "./basicInfo"
+import Tabs from "./tabs"
+// BTChart 只能直接引入 不能通过 index.js 进行暴露
 
 export {
-  BTHeader
+  BTHeader,
+  BasicInfo,
+  Tabs
 }
