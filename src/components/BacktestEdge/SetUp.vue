@@ -459,6 +459,7 @@
 import { CIQ } from 'chartiq/st-development/js/entryIndicator'
 import { timestampToTime } from '@/tools/formatDate.js'
 import Cookies from 'vue-cookies'
+import { mapMutations } from "vuex"
 import {
   getIndicatorsList,
   getIndexsList,
@@ -730,6 +731,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['form', 'GET_END_DATE']), 
     generateBTName() {
       const date = new Date()
       const year = date.getFullYear();
@@ -894,19 +896,20 @@ export default {
       this.bd.end_date = val
     },
     getEndDate() {
-      this.bd.end_date = timestampToTime(new Date())
-      const str = this.bd.end_date.split('-')
-      str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
-      this.bd.start_date = str.join('-')
-      
-      var that = this
-      var utils = function () {
-        let vm = this
-        vm.setSymbol = function (symbol) {
-          that.bd.symbol = symbol
-        }
-      }
-      return (window.utils = new utils())
+      // this.bd.end_date = timestampToTime(new Date())
+      // const str = this.bd.end_date.split('-')
+      // str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
+      // this.bd.start_date = str.join('-')
+
+      // var that = this
+      // var utils = function () {
+      //   let vm = this
+      //   vm.setSymbol = function (symbol) {
+      //     that.bd.symbol = symbol
+      //   }
+      // }
+      // return (window.utils = new utils())
+      this.GET_END_DATE(this)
     },
     async getIndexsList() {
       try {

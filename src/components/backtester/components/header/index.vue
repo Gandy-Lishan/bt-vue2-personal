@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import BTChart from "../chart/index.vue";
+import BTChart from "@/components/common/chart/index.vue"
 export default {
   name: 'BTHeader',
   components: {

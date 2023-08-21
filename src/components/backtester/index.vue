@@ -1,14 +1,16 @@
 <template>
 	<div>
     <BTHeader></BTHeader>
+    <Tabs></Tabs>
 	</div>
 </template>
 <script>
-import { BTHeader } from "./components"
+import { BTHeader, Tabs } from "./components"
 export default {
   name: 'Backtester',
   components: {
-    BTHeader
+    BTHeader,
+    Tabs
   }
 }
 </script>
