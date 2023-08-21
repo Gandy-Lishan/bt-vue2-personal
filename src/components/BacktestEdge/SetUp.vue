@@ -456,7 +456,7 @@
 	</div>
 </template>
 <script>
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { CIQ } from '@/components/common/chart/st-development/js'
 import { timestampToTime } from '@/tools/formatDate.js'
 import Cookies from 'vue-cookies'
 import { mapMutations } from "vuex"
@@ -896,20 +896,20 @@ export default {
       this.bd.end_date = val
     },
     getEndDate() {
-      // this.bd.end_date = timestampToTime(new Date())
-      // const str = this.bd.end_date.split('-')
-      // str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
-      // this.bd.start_date = str.join('-')
+      this.bd.end_date = timestampToTime(new Date())
+      const str = this.bd.end_date.split('-')
+      str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
+      this.bd.start_date = str.join('-')
 
-      // var that = this
-      // var utils = function () {
-      //   let vm = this
-      //   vm.setSymbol = function (symbol) {
-      //     that.bd.symbol = symbol
-      //   }
-      // }
-      // return (window.utils = new utils())
-      this.GET_END_DATE(this)
+      var that = this
+      var utils = function () {
+        let vm = this
+        vm.setSymbol = function (symbol) {
+          that.bd.symbol = symbol
+        }
+      }
+      return (window.utils = new utils())
+      //this.GET_END_DATE(this)
     },
     async getIndexsList() {
       try {

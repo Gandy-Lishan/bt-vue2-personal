@@ -263,7 +263,7 @@
 </template>
 <script>
 import SparkMD5 from 'spark-md5'
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { CIQ } from '@/components/common/chart/st-development/js'
 import {
   getIndicatorsList,
   csvFileDelete,

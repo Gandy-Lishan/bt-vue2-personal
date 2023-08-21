@@ -571,7 +571,6 @@ const mutations = {
 		const str = end_date.split('-')
 		str[0] = Number(str[0]) - Number(backtest_period) + ''
 		state.bd.start_date = str.join('-')
-
 		const utils = function () {
 			let vm = this
 			vm.setSymbol = function (symbol) {

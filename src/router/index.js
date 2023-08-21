@@ -6,7 +6,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Cookies from 'vue-cookies'
 import axios from '../axios'
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { CIQ } from '@/components/common/chart/st-development/js'
 import { getIndicatorsList, getStocksList, getIndexsList } from "@/service/service"
 import { getCurDate } from '@/service/ai'
 import getQueryVariable from '@/tools/getQueryVariable'
@@ -76,9 +76,9 @@ const router = new Router({
     //     {path: '/doc/guide/:id',  component: resolve => require(['@/components/Menu/components/Guide.vue'], resolve)},
     //     {path: '/doc/scanner',  component: resolve => require(['@/components/Menu/components/AIScanner.vue'], resolve)},
     //     { path: '/doc/old', component: resolve => require(['@/components/Menu/old_doc.vue'], resolve) },
-		// 		{path: '/doc/disclaimer', component: resolve => require(['@/components/Menu/components/Disclaimer.vue'], resolve) }
+	// 			{path: '/doc/disclaimer', component: resolve => require(['@/components/Menu/components/Disclaimer.vue'], resolve) }
     //   ]},
-	  // { path: '/404', component: resolve => require(['@/components/404.vue'], resolve)},
+	//   { path: '/404', component: resolve => require(['@/components/404.vue'], resolve)},
 	]
 })
 
