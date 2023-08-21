@@ -200,7 +200,7 @@
 	</el-row>
 </template>
 <script>
-import { CIQ } from 'chartiq/st-development/js'
+import { CIQ } from '@/components/common/chart/st-development/js'
 const throttle = require('lodash/throttle')
 import { copy, permission } from '@/tools/copyBacktestID'
 

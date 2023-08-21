@@ -1,4 +1,4 @@
-import { CIQ } from 'chartiq/st-development/js'
+import { CIQ } from '@/components/common/chart/st-development/js'
 
 const state = {
     scannerai_filter: {},

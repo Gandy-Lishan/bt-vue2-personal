@@ -4,8 +4,8 @@
  */
 
 // @ts-ignore
-//import { CIQ } from 'chartiq/st-development/js'
-import { CIQ } from '@/components/chart/st-development/js/components'
+//import { CIQ } from '@/components/common/chart/st-development/js'
+import { CIQ } from '@/components/common/chart/st-development/js/components'
 // @ts-ignore
 import 'chartiq/js/advanced'
 
@@ -25,9 +25,9 @@ import 'chartiq/examples/translations/translationSample'
 
 // Event Markers
 // @ts-ignore
-import marker from '@/components/chart/st-development/components/markers/markersSample.js'
-import '@/components/chart/st-development/components/markers/tradeAnalyticsSample.js'
-import "@/components/chart/st-development/components/markers/mMarker.js"
+import marker from '@/components/common/chart/st-development/components/markers/markersSample.js'
+import '@/components/common/chart/st-development/components/markers/tradeAnalyticsSample.js'
+import "@/components/common/chart/st-development/components/markers/mMarker.js"
 import 'chartiq/examples/markers/videoSample'
 
 import 'chartiq/js/extras/svgcharts/piechart.js'
@@ -36,8 +36,8 @@ import 'chartiq/js/extras/svgcharts/piechart.js'
 // import 'chartiq/examples/help/helpContent.js'
 
 // @ts-ignore
-import quoteFeed from '@/components/chart/st-development/feeds/STStockDataFeed'
-import "@/components/chart/st-development/feeds/STIndicatorSymbols.js"
+import quoteFeed from '@/components/common/chart/st-development/feeds/STStockDataFeed'
+import "@/components/common/chart/st-development/feeds/STIndicatorSymbols.js"
 
 // Uncomment the following for the forecasting simulator (required for the forecasting sample).
 // @ts-ignore
@@ -48,7 +48,7 @@ import PerfectScrollbar from 'chartiq/js/thirdparty/perfect-scrollbar.esm.js'
 
 // @ts-ignore
 //import defaultConfig from 'chartiq/st-development/js/defaultConfiguration'
-import defaultConfig from '@/components/chart/st-development/js/defaultConfiguration'
+import defaultConfig from '@/components/common/chart/st-development/js/defaultConfiguration'
 
 // Plugins
 
