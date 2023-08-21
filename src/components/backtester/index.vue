@@ -1,18 +1,20 @@
 <template>
-	<div>
+	<div class="backtester">
     <BTHeader></BTHeader>
-    <Tabs></Tabs>
+    <router-view></router-view>
 	</div>
 </template>
 <script>
-import { BTHeader, Tabs } from "./components"
+import { BTHeader } from "./components"
 export default {
   name: 'Backtester',
   components: {
-    BTHeader,
-    Tabs
+    BTHeader
   }
 }
 </script>
 <style lang="less" scoped>
+.backtester {
+  padding: 0 20px;
+}
 </style>

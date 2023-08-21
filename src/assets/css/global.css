@@ -202,7 +202,7 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   font-size: 16px;
 }
 .backtest_container .el-form-item__content {
-  padding-left: 115px;
+  padding-left: 126px;
   height: 25px;
 }
 .backtest_container .risk-control-container .el-form-item__content{
@@ -233,9 +233,11 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 .set-up-container input[type="time"] {
   border: #000000 solid 1px;
   padding: 0 5px 0 10px;
-  height: 25px;
+  /* height: 25px; */
   width: 180px;
   border-radius: unset;
+}
+.el-form-item--mini .el-form-item__content, .el-form-item--mini .el-form-item__label{
 }
 
 .set-up-container  .excludeBox input:not([type]),
@@ -345,11 +347,14 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   .el-input__inner {
   width: 180px !important;
 }
-.backtest_container .dateBox .el-form-item .el-form-item__label {
+/* .backtest_container .dateBox .el-form-item .el-form-item__label {
   margin-left: 40px;
-}
+} */
 .result-container .dateBox .el-form-item .el-form-item__label{
   margin-left: 0px;
+}
+.backtest_container .dateBox .el-form-item__content {
+  padding-left: 138px;
 }
 .backtest_container .nameBox input[type="text"]:last-child {
   width: 80%;
@@ -397,6 +402,7 @@ input[type="time"] {
 }
 .backtest_container .el-form-item {
   margin-right: 0 !important;
+  /* width: 50%; */
 }
 .el-dialog__wrapper .el-dialog {
   width: 60% !important;
@@ -557,9 +563,25 @@ input[type="time"] {
   .backtest_container .nameBox input[type="text"]:last-child {
     width: 866px;
   }
+  .backtest_container .nameBox .el-form-item{
+    width: unset; 
+  }
+  .backtest_container .descriptionBox .el-form-item {
+    width: unset; 
+  }
+  .backtest_container .direction .el-form-item {
+    width: unset; 
+    margin-top: 10px;
+  }
 }
 
 @media (min-width: 1680px) {
+  .backtest_container .nameBox {
+    width: 75%;
+  }
+  .backtest_container .nameBox .el-form-item {
+    width: unset;
+  }
   .set-up-container input:not([type]),
   .set-up-container input[type="text"],
   .set-up-container input[type="number"],
@@ -604,7 +626,7 @@ input[type="time"] {
     width: 301px !important;
   }
   .backtest_container .nameBox input[type="text"]:last-child {
-    width: 78%;
+    width: 80%;
   }
 }
 .el-table .cell {
@@ -748,9 +770,9 @@ input[type="time"] {
 .conditionSelect input {
   height: unset !important;
 }
-.setup_container .dateBox .el-form-item__content{
+/* .setup_container .dateBox .el-form-item__content{
   padding-left: 131px;
-}
+} */
 
 .result-container .exclude_oo .el-form-item__content {
   padding-left: 230px;
