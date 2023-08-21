@@ -5,7 +5,7 @@
 
 // @ts-ignore
 //import { CIQ } from 'chartiq/st-development/js'
-import { CIQ } from 'chartiq/js/components'
+import { CIQ } from 'chartiq/st-development/js/components'
 // @ts-ignore
 import 'chartiq/js/advanced'
 
@@ -21,7 +21,7 @@ import 'chartiq/examples/translations/translationSample'
 
 // 这里是多余的
 // import 'chartiq/js/componentUI'
-// import 'chartiq/js/components'
+// import 'chartiq/st-development/js/components'
 
 // Event Markers
 // @ts-ignore

@@ -2,7 +2,16 @@
  *	2.2.0
  *	add a mask on screen during loading
  */
-import { CIQ } from "chartiq/js/chartiq.js";
+ import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
+
+
+
+
+ let __st_js_mask_ = (_exports) => {
+ 
+ /* global _CIQ, _timezoneJS, _SplinePlotter */
+ 
+ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
 
 CIQ.addCover = function coverDiv(content){   
     let coverList = document.getElementsByClassName('mybg')
@@ -44,4 +53,5 @@ CIQ.hideCover = function hide() {
     }
 }
 
-export { CIQ }
+}
+export {__st_js_mask_}
