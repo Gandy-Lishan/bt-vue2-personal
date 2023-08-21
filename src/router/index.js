@@ -6,7 +6,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Cookies from 'vue-cookies'
 import axios from '../axios'
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { CIQ } from 'chartiq/st-development/js'
 import { getIndicatorsList, getStocksList, getIndexsList } from "@/service/service"
 import { getCurDate } from '@/service/ai'
 import getQueryVariable from '@/tools/getQueryVariable'
