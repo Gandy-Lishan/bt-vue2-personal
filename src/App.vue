@@ -9,6 +9,7 @@
 					@click="changeSvg"
 			></RecentUpdate>
 			<FloatBtns></FloatBtns>
+			测试
 			<div class="content-wrapper">
 				<router-view></router-view>
 			</div>
