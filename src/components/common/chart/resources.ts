@@ -4,7 +4,7 @@
  */
 
 // @ts-ignore
-//import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+//import { CIQ } from 'chartiq/st-development/js'
 import { CIQ } from 'chartiq/js/components'
 // @ts-ignore
 import 'chartiq/js/advanced'

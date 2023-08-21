@@ -670,7 +670,7 @@
 </template>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 <script>
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { CIQ } from 'chartiq/st-development/js'
 import jutils from 'jutils-src'
 import { seeReport, setCustomTIM, getCustomTIM } from '@/service/service'
 // import sortByRule from "@/tools/sortTIM";

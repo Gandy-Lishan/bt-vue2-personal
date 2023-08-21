@@ -232,7 +232,7 @@
 </template>
 
 <script>
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { CIQ } from 'chartiq/st-development/js'
 import moment from "moment";
 import {
   getIndexsList,

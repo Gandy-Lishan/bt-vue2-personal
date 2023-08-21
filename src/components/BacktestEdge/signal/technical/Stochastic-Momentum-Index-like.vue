@@ -117,7 +117,7 @@
 	</div>
 </template>
 <script>
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { CIQ } from 'chartiq/st-development/js'
 import { Store, mapGetters } from 'vuex'
 const throttle = require('lodash/throttle')
 export default {
