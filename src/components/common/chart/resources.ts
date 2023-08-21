@@ -5,7 +5,7 @@
 
 // @ts-ignore
 //import { CIQ } from 'chartiq/st-development/js'
-import { CIQ } from 'chartiq/js/components'
+import { CIQ } from 'chartiq/st-development/js/components'
 // @ts-ignore
 import 'chartiq/js/advanced'
 
@@ -20,7 +20,7 @@ import 'chartiq/examples/feeds/symbolLookupChartIQ'
 import 'chartiq/examples/translations/translationSample'
 
 import 'chartiq/js/componentUI'
-import 'chartiq/js/components'
+import 'chartiq/st-development/js/components'
 
 // Event Markers
 // @ts-ignore

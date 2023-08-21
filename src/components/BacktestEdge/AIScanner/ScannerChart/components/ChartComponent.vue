@@ -14,7 +14,7 @@
 
 <script>
 import chart from '@/components/chart/index.vue'
-import { CIQ } from 'chartiq/js/components'
+import { CIQ } from 'chartiq/st-development/js/components'
 import jutils from 'jutils-src'
 export default {
 	name: 'TVChartContainer',
