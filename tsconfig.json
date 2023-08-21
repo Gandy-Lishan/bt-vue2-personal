@@ -31,7 +31,7 @@
 		"tests/**/*.ts",
 		"tests/**/*.tsx"
 
-, "src/cache.js", "src/axios.js", "src/main.ts", "src/store/modules/app.js", "src/router/index.jsd.js", "src/components/chart/resources.js", "src/components/common/recentUpdate/index.js"	],
+, "src/cache.js", "src/axios.js", "src/main.ts", "src/store/modules/app.js", "src/router/index.jsd.js", "src/components/common/recentUpdate/index.js", "src/components/common/chart/resources.js"	],
 
 	"exclude": ["node_modules","src/@type/**/*"]
 }

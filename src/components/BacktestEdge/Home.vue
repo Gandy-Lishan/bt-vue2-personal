@@ -427,9 +427,9 @@
 <script>
 const throttle = require('lodash/throttle')
 
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { CIQ } from '@/components/common/chart/st-development/js'
 import SignalCode from '@/tools/codeTool.js'
-import chart from '@/components/chart/index.vue'
+import chart from '@/components/common/chart/index.vue'
 import setUp from '@/components/BacktestEdge/SetUp.vue'
 import entry from '@/components/BacktestEdge/Entry.vue'
 import exit from '@/components/BacktestEdge/Exit.vue'

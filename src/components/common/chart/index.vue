@@ -11,12 +11,12 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import AdvancedChartComponent from './AdvancedChartComponent.vue'
-import { getCustomConfig } from './resources' // ChartIQ library resources
+import { getCustomConfig } from './resources.js' // ChartIQ library resources
 import store from '../../../store'
 
 // @ts-ignore
-//import { CIQ } from 'chartiq/st-development/js/entryIndicator'
-import { CIQ } from 'chartiq/js/components' // Required for types in chartInitialized
+//import { CIQ } from './st-development/js/entryIndicator'
+import { CIQ } from '@/components/common/chart/st-development/js/components' // Required for types in chartInitialized
 
 @Component({
 	components: {

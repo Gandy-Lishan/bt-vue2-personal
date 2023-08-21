@@ -2,10 +2,16 @@
  *	2.2.0
  *	contains customized functions related to indicator loading and CSV output file generation
  */
- import {CIQ} from "./STMask.js"
+ //import {CIQ} from "./STMask.js"
+ import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
  import {config} from "../feeds/STDataFeedAccessUrl.js"
  import "./STMovingAverages.js"
  import qs from 'querystring'
+
+ let __st_js_entryIndicator_ = (_exports) => {
+ /* global _CIQ, _timezoneJS, _SplinePlotter */
+ 
+ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  
  // description pop up window
  CIQ.description = function(value){
@@ -1492,4 +1498,6 @@
      // Otherwise, return 0
      return decimalMatch ? decimalMatch[1].length>4 ? 4 : decimalMatch[1].length : 0;
    }
- export {CIQ}
+ }
+ export {__st_js_entryIndicator_}
+ //export {CIQ}
