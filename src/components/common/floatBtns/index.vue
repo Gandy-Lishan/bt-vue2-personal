@@ -1,12 +1,12 @@
 <template>
-  <main>
-	 <div> Main</div>
-	     <div class="maintabBtnContainer">
+  <div>
+    
+    <div class="maintabBtnContainer">
 				<div>
 					<button
 						class="sidebar activated"
 						ref="setup"
-						@click="switchMainTab('setup')"
+						@click="switchMainTab('sr')"
 					>
 							<svg
 								class="sidebar_button_icon"
@@ -139,18 +139,25 @@
 					</svg>
 				</button>
 			</el-tooltip>
-	</main>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'Tabs',
+  name: 'FloatBtns',
+	methods: {
+		switchMainTab(subUrl) {
+			// setup or list
+			const url = `/backtester/${subUrl}`
+			this.$router.push({
+				path: url
+			})
+		}
+	}
 }
 </script>
 
 <style lang="less" scoped>
-
-  
 .maintabBtnContainer {
 	position: fixed;
 	left: 0px;
@@ -277,11 +284,5 @@ button.createNew,
 	bottom: 120px;
 	border: 1px solid black;
 	border-radius: 50%;
-}
-
-main {
-  background-color: #E9EEF3;
-  color: #333;
-  height: 160px;
 }
 </style>
