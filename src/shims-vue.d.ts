@@ -12,8 +12,6 @@ declare module '*json'
 
 declare module 'nprogress'
 
-declare module 'chartiq/st-development/js'
-
 // 声明 AdvancedChartComponent 模块
 declare module './AdvancedChartComponent.vue'
 

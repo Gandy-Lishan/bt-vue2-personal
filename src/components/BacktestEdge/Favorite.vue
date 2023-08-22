@@ -741,11 +741,11 @@ export default {
     },
     async uploadCSVWhileFLS(row) {
       // lishan 在这里保存数据到 vuex favorite 中要用
-      CIQ.spanPeriod = {
+      this.$store.dispatch('chart/set_span_period',{
         start_date:
           row.start_date.replace(/-/g, '') * 1000000000,
         end_date: row.end_date.replace(/-/g, '') * 1000000000
-      }
+      })
 
       const content = CIQ.exportEx()
       //console.log('uploadCSVWhileFLS content--------------------------', content)

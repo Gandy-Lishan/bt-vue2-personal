@@ -35,6 +35,7 @@ const state = {
 	indexsList: [],//chartiq
 	sentimentIndicatorList: [],//chartiq 纯属多余，被allSymbolList取代，只是name key不同
 	formateTechnicalList: [],//chartiq 和builtinList不同，这个是只给表单提供的techList
+	spanPeriod : {},
 }
 
 const mutations = {
@@ -181,6 +182,9 @@ const mutations = {
 		state.activatedMA = [{ period: 21, url: '' }]
 		state.activatedMALayout = []
 	},
+	SET_SPAN_PERIOD: (state,val)=> {
+		state.spanPeriod = val
+	}
 }
 
 const actions = {
@@ -207,6 +211,12 @@ const actions = {
 			resolve();
 		})
 	},
+	set_span_period({commit}, val){
+		return new Promise(resolve=>{
+			commit('SET_SPAN_PERIOD',val)
+			resolve()
+		})
+	}
 }
 export default {
 	namespaced: true,
