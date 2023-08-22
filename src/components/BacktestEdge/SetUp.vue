@@ -1403,7 +1403,7 @@ export default {
 	display: inline;
 }
 .el-select {
-	top: -41px;
+	top: -33px;
 	left: 16px;
 }
 /deep/.el-radio__input {

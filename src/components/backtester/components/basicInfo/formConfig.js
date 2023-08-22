@@ -5,8 +5,14 @@
             field:'symbol',
             label:'Symbol',
             type:'select',
+            id: 'symbolName',
             placeholder:'enter keywords',
-            options: [] // 这个是接口请求下来的列表
+            options: [], // 这个是接口请求下来的列表
+            tooltip: {
+                content: `Choose a stock/index as backtest symbol. (default: SPX)`,
+                placement: 'top',
+                effect: 'dark'
+            }
         },
         {
             field:'capital',
@@ -208,14 +214,39 @@
         },
 
         ],
-        labelWidth:'80px',
-        labelPosition: 'left',
-        size: 'mini',
-        colLayout:{
+    formData: {
+        name: '',
+        symbol: 'SPX',
+        benchmark: 'SPX',
+        strategy: 'Signal',
+        capital: 100000.0,
+        capital_alloc: 1.0,
+        commission: 0.1,
+        win_rate: 0.0,
+        slippage: 0.0,
+        start_date: '',
+        end_date: '',
+        direction: 'Long',
+        frequency: 'Daily',
+        risk_control: '//',
+        report_url: '',
+        user_tag: 'client',
+        backtest_period: '21',
+        trade_price: 2,
+        exclude_oo: 0,
+        description: {
+          Introduction: '',
+          Rules: ''
+        }
+    },
+    labelWidth:'80px',
+    labelPosition: 'left',
+    size: 'mini',
+    colLayout:{
         xl:5,
         lg:8,
         md:12,
         sm:24,
         xs:24
-        }
+    }
 }
