@@ -5,10 +5,7 @@
 import {CIQ} from "chartiq/js/standard.js"
 import {config} from "../feeds/STDataFeedAccessUrl.js"
 import {config as mostPopularItems} from "../feeds/mostPopularItems.js"
-import axios from "axios"
 
-// import { SortArray } from "../js/STTools.js";
-//import store from '../../../../src/store/store.ts'
 const collator = new Intl.Collator('en');
 function SortArray(x, y){
    return collator.compare(x.data.name, y.data.name);

@@ -23,7 +23,6 @@
 //import store from '../../../../stocksystemui/src/store/store.ts'
 import { CIQ } from "chartiq/js/chartiq.js";
 import * as mqs from 'qs'
-import axios from "axios"
 var claims = [];
 /**
  * The following is a set of web components used in our sample templates to illustrate how the API can be leveraged to build a full featured UI to control the chart.

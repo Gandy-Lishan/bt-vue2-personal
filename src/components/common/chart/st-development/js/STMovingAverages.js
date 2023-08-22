@@ -794,7 +794,7 @@ if (!CIQ.Studies) {
             name: "Symbol Low Line",
             calculateFN: CIQ.Studies.calculateSymbolOhlcv,
             inputs: { Field: "Low",overlay: false},
-			//outputs: { "Symbol High": "auto" },
+			//outputs: { "Symbol High": "#398BFF" },
         },
 		"Symbol Close": {
             name: "Symbol Close Line",
@@ -913,4 +913,5 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_st_studies_movingAverages_(typeof window !== "undefined" ? window : global);
+export {__js_st_studies_movingAverages_}
+//__js_st_studies_movingAverages_(typeof window !== "undefined" ? window : global);
