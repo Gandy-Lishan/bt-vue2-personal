@@ -1424,11 +1424,11 @@ export default {
               backtestData.slippage = parseFloat(backtestData.slippage)
               backtestData.win_rate = parseFloat(backtestData.win_rate)
 
-              CIQ.spanPeriod = {
+              this.$store.dispatch('chart/set_span_period',{
                 start_date:
                   backtestData.start_date.replace(/-/g, '') * 1000000000,
                 end_date: backtestData.end_date.replace(/-/g, '') * 1000000000
-              }
+              })
               var backtestParams = {}
               backtestParams.uuid = backtestData.pk
               backtestParams.benchmark = backtestData.benchmark

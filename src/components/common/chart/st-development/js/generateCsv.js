@@ -3,7 +3,7 @@ let __st_js_generateCsv_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
 
- CIQ.labelOption = new Array(10).fill('')
+ let labelOption = new Array(10).fill('')
  
  // csv output file generation function
  CIQ.exportEx = function(){  
@@ -12,7 +12,7 @@ let __st_js_generateCsv_ = (_exports) => {
      let study = CIQ.stxx.layout.studies[Object.keys(CIQ.stxx.layout.studies).pop()]
      if(study == undefined){ return }
      let JSONData = study.chart.scrubbed
-     let timePeriod = CIQ.spanPeriod
+     let timePeriod = CIQ.store.getters.getSpanPeriod
      //先转化json
      let _arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
      // 根据time period筛选数据
@@ -115,13 +115,13 @@ let __st_js_generateCsv_ = (_exports) => {
      let newIndexs = indexs.map((val,index)=>{
          if(index>=6 && index<=10){
              if(CIQ.store.state.chart.indicators.formIndicators.entry[index-6]){
-                 return CIQ.store.state.chart.indicators.formIndicators.entry[index-6] + CIQ.labelOption[index-6]
+                 return CIQ.store.state.chart.indicators.formIndicators.entry[index-6] + labelOption[index-6]
              }else{
                  return Object.keys(finalData[0])[index]
              }  
          }else if(index>10){
              if(CIQ.store.state.chart.indicators.formIndicators.exit[index-11]){
-                 return CIQ.store.state.chart.indicators.formIndicators.exit[index-11] + CIQ.labelOption[index-6]
+                 return CIQ.store.state.chart.indicators.formIndicators.exit[index-11] + labelOption[index-6]
              }else{
                  return Object.keys(finalData[0])[index]
              }  
@@ -188,7 +188,7 @@ let __st_js_generateCsv_ = (_exports) => {
                              :null;      
                          }
                          
-                         CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
+                         labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
                          break
                      }
                      case("MACD_like"):{
@@ -200,17 +200,17 @@ let __st_js_generateCsv_ = (_exports) => {
                              switch(conditionRadio){
                                  case('Indicator Value'):{
                                      keywordList = ['MACD ‌macd‌','Klinger ‌Klinger‌','Rel Vig ‌Rel Vig‌']
-                                     CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
+                                     labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
                                      break
                                  }
                                  case('Indicator Value '):{
                                      keywordList = ['_hist']
-                                     CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_SL'
+                                     labelOption[criteria=='entry'?indexNum:indexNum+5] = '_SL'
                                      break
                                  }
                                  case('Indicator Hist'):{
                                      keywordList = ['_hist']
-                                     CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_hist'
+                                     labelOption[criteria=='entry'?indexNum:indexNum+5] = '_hist'
                                      break
                                  }
                                  default:
@@ -252,7 +252,7 @@ let __st_js_generateCsv_ = (_exports) => {
                                  }
                                  default:
                              }
-                             CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_'+conditionRadio
+                             labelOption[criteria=='entry'?indexNum:indexNum+5] = '_'+conditionRadio
                              for(var k in keywordList){
                                  // todo, 防止 'High Low Top High Low'这样的outputMap扰乱了keywordList的判断
                                  if(Object.keys(sd.outputMap)[i].replaceAll(sd.type,'').search(keywordList[k]) != -1){
@@ -286,7 +286,7 @@ let __st_js_generateCsv_ = (_exports) => {
                                              resultIndex = Object.keys(sd.outputMap)[i]
                                          }
                                      }
-                                     CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
+                                     labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
                                      break
                                  }
                                  case('Indicator Value '):{
@@ -302,7 +302,7 @@ let __st_js_generateCsv_ = (_exports) => {
                                              resultIndex = Object.keys(sd.outputMap)[i]
                                          }
                                      }
-                                     CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_SL'
+                                     labelOption[criteria=='entry'?indexNum:indexNum+5] = '_SL'
                                      break
                                  }
                                  default:
@@ -342,14 +342,14 @@ let __st_js_generateCsv_ = (_exports) => {
                                      if(Object.keys(sd.outputMap)[i].search(conditionRadio) != -1){
                                          resultIndexK = Object.keys(sd.outputMap)[i]
                                      }
-                                     CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_%K'
+                                     labelOption[criteria=='entry'?indexNum:indexNum+5] = '_%K'
                                      break
                                  }
                                  case('%D'):{
                                      if(Object.keys(sd.outputMap)[i].search(conditionRadio) != -1){
                                          resultIndexD = Object.keys(sd.outputMap)[i]
                                      }
-                                     CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_%D'
+                                     labelOption[criteria=='entry'?indexNum:indexNum+5] = '_%D'
                                      break
                                  }
                                  case('%K '):{
@@ -359,7 +359,7 @@ let __st_js_generateCsv_ = (_exports) => {
                                      if(Object.keys(sd.outputMap)[i].search('%D') != -1){
                                          resultIndexD = Object.keys(sd.outputMap)[i]
                                      }
-                                     CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_%K-%D'
+                                     labelOption[criteria=='entry'?indexNum:indexNum+5] = '_%K-%D'
                                      break
                                  }
                                  default:
@@ -399,14 +399,14 @@ let __st_js_generateCsv_ = (_exports) => {
                                      if(Object.keys(sd.outputMap)[i].search('_hist1') != -1){
                                          resultIndex = Object.keys(sd.outputMap)[i]
                                      }
-                                     CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_hist1'
+                                     labelOption[criteria=='entry'?indexNum:indexNum+5] = '_hist1'
                                      break
                                  }
                                  case('Indicator hist2'):{
                                      if(Object.keys(sd.outputMap)[i].search('_hist2') != -1){
                                          resultIndex = Object.keys(sd.outputMap)[i]
                                      }
-                                    CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_hist2'
+                                    labelOption[criteria=='entry'?indexNum:indexNum+5] = '_hist2'
                                      break
                                  }
                                  default:
@@ -429,14 +429,14 @@ let __st_js_generateCsv_ = (_exports) => {
                                      if(sd.outputMap[Object.keys(sd.outputMap)[i]]=="+DI"){
                                          resultIndex = Object.keys(sd.outputMap)[i]
                                      }
-                                     CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_+DI'
+                                     labelOption[criteria=='entry'?indexNum:indexNum+5] = '_+DI'
                                      break
                                  }
                                  case('-DI ADX'):{
                                      if(sd.outputMap[Object.keys(sd.outputMap)[i]]=="-DI"){
                                          resultIndex = Object.keys(sd.outputMap)[i]
                                      }
-                                    CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_-DI'
+                                    labelOption[criteria=='entry'?indexNum:indexNum+5] = '_-DI'
                                      break
                                  }
                                  default:
@@ -462,7 +462,7 @@ let __st_js_generateCsv_ = (_exports) => {
                              ?parseFloat(result.toFixed(CIQ.countDecimalPlaces(result)))
                              :null;
                          }
-                         CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
+                         labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
                          break
                      }
                      case("Aligator_like"):{
@@ -478,7 +478,7 @@ let __st_js_generateCsv_ = (_exports) => {
                                      if(Object.keys(sd.outputMap)[i].toLowerCase().search(techValue.toLowerCase()) != -1){
                                          resultIndex = Object.keys(sd.outputMap)[i]
                                      }
-                                     CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_'+techValue
+                                     labelOption[criteria=='entry'?indexNum:indexNum+5] = '_'+techValue
                                      break
                                  }
                                  case('second'):{
@@ -488,7 +488,7 @@ let __st_js_generateCsv_ = (_exports) => {
                                      if(Object.keys(sd.outputMap)[i].toLowerCase().search(techValue.toLowerCase()) != -1){
                                          resultIndexTechValue = Object.keys(sd.outputMap)[i]
                                      }
-                                     CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_'+ radioValue + '-' + techValue
+                                     labelOption[criteria=='entry'?indexNum:indexNum+5] = '_'+ radioValue + '-' + techValue
                                      break
                                  }
                                  default:
@@ -531,7 +531,7 @@ let __st_js_generateCsv_ = (_exports) => {
                              ?parseFloat(result.toFixed(CIQ.countDecimalPlaces(result)))
                              :null;
                          }
-                         CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
+                         labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
                          break
                      }
                      case("Trailingstop_like"):{
@@ -551,7 +551,7 @@ let __st_js_generateCsv_ = (_exports) => {
                              ?parseFloat(result.toFixed(CIQ.countDecimalPlaces(result)))
                              :null;
                          }
-                         CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
+                         labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
                          break
                      }
                      default:{
@@ -601,7 +601,7 @@ let __st_js_generateCsv_ = (_exports) => {
                  ?parseFloat(result.toFixed(CIQ.countDecimalPlaces(result)))
                  :null;
              }
-             CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_'+matchedSubstring
+             labelOption[criteria=='entry'?indexNum:indexNum+5] = '_'+matchedSubstring
              return finalData
          }
  
@@ -632,7 +632,7 @@ let __st_js_generateCsv_ = (_exports) => {
                  ?parseFloat(result.toFixed(CIQ.countDecimalPlaces(result)))
                  :null;
              }
-             CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_ma' + s.days
+             labelOption[criteria=='entry'?indexNum:indexNum+5] = '_ma' + s.days
              return finalData
          }
  
@@ -663,7 +663,7 @@ let __st_js_generateCsv_ = (_exports) => {
                  let resultMinus = formatSmallNum(result - resultMA)
                  finalData[item][index] = parseFloat(resultMinus.toFixed(CIQ.countDecimalPlaces(resultMinus)));
              }
-             CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = '_ma' + s.days
+             labelOption[criteria=='entry'?indexNum:indexNum+5] = '_ma' + s.days
              return finalData
          }
      }
@@ -682,7 +682,7 @@ let __st_js_generateCsv_ = (_exports) => {
              :null;     
          }
  
-         CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
+         labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
      }else if( CIQ.isSymbolIndicator(sd.type)){
          resultIndex = Object.keys(sd.outputMap)[0]
          // load a value of this study to dataframe(important note: the value of correspond resultIndex is caculated differently)
@@ -694,7 +694,7 @@ let __st_js_generateCsv_ = (_exports) => {
              :null;     
          }
  
-         CIQ.labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
+         labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
      }   
      
      return finalData

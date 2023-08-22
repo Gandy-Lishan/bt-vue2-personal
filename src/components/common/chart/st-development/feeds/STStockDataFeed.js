@@ -165,7 +165,7 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
             this.indicatorsList = CIQ.indicatorList
 
             CIQ.store.commit('chart/getIndicatorsList',this.indicatorsList)
-            CIQ.store.commit('chart/getAllSymbolsList',this.indicatorsList);
+            CIQ.store.commit('chart/getAllSymbolsList',this.indicatorsList)
 
             var orignalFreq = 'daily'
             var selectedFreq = 'daily'
