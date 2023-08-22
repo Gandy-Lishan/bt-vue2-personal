@@ -1348,9 +1348,9 @@ export default {
 		left: 107px;
 	}
 }
-.border-set {
-	border-bottom: 1px solid #797979;
-}
+// .border-set {
+// 	border-bottom: 1px solid #797979;
+// }
 .riskItem {
 	display: flex;
 	margin: 0px 5px 5px 5px;
