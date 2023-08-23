@@ -37,10 +37,21 @@ const routes = [
 			{
 				path: 'list',
 				name: 'List',
+				redirect: '/backtester/list/history',
 				component: resolve =>
 					require([
 						'@/components/backtester/components/list/index.vue'
-					], resolve)
+					], resolve),
+				children: [
+					{
+						path: 'history',
+						name: 'History',
+						component: resolve =>
+							require([
+								'@/components/backtester/components/list/history/index.vue'
+							], resolve)
+					}
+				]
 			}
 		]
 	}
