@@ -15,6 +15,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .backtester {
-  padding: 0 20px;
+  //padding: 0 20px;
 }
 </style>

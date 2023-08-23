@@ -115,13 +115,13 @@ a:hover{
 
 }
 .home {
-  display: flex;
-  flex-direction: column;
+//   display: flex;
+//   flex-direction: column;
   min-height: 100vh; /* 设置容器最小高度为视窗高度，确保 footer 能够推到底部 */
 }
 .home-container {
 	margin: 0 auto;
-	flex-grow: 1; /* 让内容占据剩余的空间，推动 footer 到底部 */
+	//flex-grow: 1; /* 让内容占据剩余的空间，推动 footer 到底部 */
 }
 @media (min-width: 375px) and (max-width: 767px) {
 	.home-container {
