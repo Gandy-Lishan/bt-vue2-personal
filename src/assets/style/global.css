@@ -146,3 +146,26 @@
 /* .el-checkbox-button:first-child .el-checkbox-button__inner{
   border-left: 1px solid #DCDFE6;
 } */
+
+.el-dropdown-link {
+	cursor: pointer;
+	font-weight: 500;
+	line-height: 24px;
+	display: inline-flex;
+	align-items: center;
+	padding: 0;
+	transition: color 0.3s ease-in-out;
+	color: #6b7280;
+	border: none;
+	outline: none;
+	background: transparent;
+}
+.el-dropdown-link:hover {
+	color: #111827;
+}
+.el-icon-arrow-down {
+	font-size: 12px;
+}
+.el-input__icon {
+	line-height: 27px !important;
+}

@@ -482,7 +482,7 @@
 	</div>
 </template>
 <script>
-import { CIQ } from 'chartiq/st-development/js/entryIndicator'
+import { CIQ } from '@/components/common/chart/st-development/js'
 import { timestampToTime } from '@/tools/formatDate.js'
 import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule } from '@/utils/formValidate'
 import Cookies from 'vue-cookies'
@@ -1300,12 +1300,12 @@ export default {
 .comUnitNote {
 	position: absolute;
 
-	left: 520px;
+	left: 346px;
 	top: 92px;
 }
 .sliUnitNote {
 	position: absolute;
-	left: 520px;
+	left: 346px;
 	top: 135px;
 }
 @media (min-width: 1680px) {
@@ -1412,21 +1412,22 @@ export default {
 	display: flex;
 	flex-direction: column;
 	justify-content: center; /* 水平居中 */
-	align-items: center; /* 垂直居中 */
+	align-items: start; /* 垂直居中 */
 	height: 100%; /* 确保内容占据整个列的高度 */
   width: 50%;
 }
 .backtest_container .el-form-item__content {
 }
 .setupTop {
+  position: relative;
   display: flex;
   justify-content: space-around;
-  align-items: center;
+  align-items: start;
 }
 .setupFooter {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  align-items: center;
+  align-items: start;
 }
 </style>

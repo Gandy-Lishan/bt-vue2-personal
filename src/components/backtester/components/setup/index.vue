@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="setup">
     <div class="setupBox">
       <BasicInfo></BasicInfo>
   </div>
@@ -52,6 +52,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.setup {
+	padding: 5px;
+    background-color: #fff;
+    border-radius: 12px;
+	.setupBox{
+		width: 100%;
+	}
+}
 .criteria {
 	// margin-left: 40px;
 	margin-bottom: 10px;
@@ -125,4 +133,5 @@ export default {
 		font-size: 15px;
 	}
 }
+
 </style>
