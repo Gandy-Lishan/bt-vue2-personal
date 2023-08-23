@@ -1429,5 +1429,8 @@ export default {
   flex-direction: column;
   justify-content: space-around;
   align-items: start;
+  .nameBox{
+		width: 100%;
+	}
 }
 </style>

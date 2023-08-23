@@ -56,10 +56,9 @@ export default {
 	padding: 5px;
     background-color: #fff;
     border-radius: 12px;
-	.setupBox{
-		width: 100%;
-	}
+
 }
+
 .criteria {
 	// margin-left: 40px;
 	margin-bottom: 10px;
