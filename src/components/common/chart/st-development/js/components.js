@@ -7649,7 +7649,7 @@ class Studies extends CIQ.UI.ContextTag {
 
 			    // 用sentiLIST过滤tech
 				let sentiList = []
-				CIQ.indicatorList.forEach(e => {
+				CIQ.store.state.chart.indicatorsList.forEach(e => {
 					sentiList.push(e.url)
 				})
 		for (var field in CIQ.Studies.studyLibrary) {
@@ -7818,7 +7818,7 @@ class Studies extends CIQ.UI.ContextTag {
 
 			// 用sentiLIST过滤tech
 			let sentiList = []
-			CIQ.indicatorList.forEach(e => {
+			CIQ.store.state.chart.indicatorsList.forEach(e => {
 				sentiList.push(e.url)
 			})
 			// console.log(CIQ.Studies.studyLibrary,CIQ.Studies.studyLibrary['COG'])

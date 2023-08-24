@@ -436,29 +436,29 @@ export default {
         absoluteIndex == this.panelIndex
       ) {
         this.si.sentimentIndicator = val.name
-        for (var i in CIQ.indicatorList) {
-          if (CIQ.indicatorList[i].chart_name == val.name) {
+        for (var i in this.$store.state.chart.indicatorsList) {
+          if (this.$store.state.chart.indicatorsList[i].chart_name == val.name) {
             this.indicatorRadio = 'Sentiment Indicator'
             if (this.criteria == 'entry') {
               this.$store.commit('chart/getEntryIndicators', {
                 index: this.panelIndex,
-                value: CIQ.indicatorList[i].url
+                value: this.$store.state.chart.indicatorsList[i].url
               })
             } else {
               this.$store.commit('chart/getExitIndicators', {
                 index: this.panelIndex,
-                value: CIQ.indicatorList[i].url
+                value: this.$store.state.chart.indicatorsList[i].url
               })
             }
             // extract this statement from handleSentimentSelect
             let valObj = {}
-            valObj.value = CIQ.indicatorList[i].chart_name
+            valObj.value = this.$store.state.chart.indicatorsList[i].chart_name
             valObj.index = this.panelIndex
             this.$emit('getIndicatorVal', valObj)
 
-            this.currentSentiUpdated = CIQ.indicatorList[i].updated
+            this.currentSentiUpdated = this.$store.state.chart.indicatorsList[i].updated
             let freqObj = {}
-            freqObj.value = CIQ.indicatorList[i].updated
+            freqObj.value = this.$store.state.chart.indicatorsList[i].updated
             freqObj.index = this.panelIndex
             freqObj.criteria = this.criteria
             freqObj.key = `${this.criteria}_${this.panelIndex}`
@@ -472,7 +472,7 @@ export default {
             this.$emit('getIndicatorRadio', radioObj)
             let obj = {}
             obj.index = this.panelIndex
-            obj.url = CIQ.indicatorList[i].url
+            obj.url = this.$store.state.chart.indicatorsList[i].url
             this.$emit('getIndicatorUrl', obj)
           }
         }
@@ -1261,7 +1261,7 @@ export default {
         valObj.index = this.panelIndex
         this.$emit('getIndicatorVal', valObj)
         let urlObj = {}
-        let res = CIQ.indicatorList.find((i) => { return i.chart_name == this.si.sentimentIndicator })
+        let res = this.$store.state.chart.indicatorsList.find((i) => { return i.chart_name == this.si.sentimentIndicator })
         urlObj.url = res ? res.url : ''
         urlObj.index = this.panelIndex
         this.$emit('getIndicatorUrl', urlObj)

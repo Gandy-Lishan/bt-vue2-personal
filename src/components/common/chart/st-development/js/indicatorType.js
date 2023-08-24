@@ -14,7 +14,7 @@ let __st_js_indicatorType_ = (_exports) => {
 }
 CIQ.isSentiIndicator = function(indicator){
     let sentiList = []
-    CIQ.indicatorList.forEach(e => {
+    CIQ.store.state.chart.indicatorsList.forEach(e => {
         sentiList.push(e.url)
     })
     if(sentiList.indexOf(indicator) == -1){
@@ -22,6 +22,21 @@ CIQ.isSentiIndicator = function(indicator){
     }
     return true
 }
+// CIQ.findSentiIndicator = function(name,url){
+//     let signal
+//     if(name){
+//         signal = CIQ.store.state.chart.indicatorsList.find((i) => {
+//             return i.chart_name == name
+//         })
+//     }
+//     if(url){
+//         signal = CIQ.store.state.chart.indicatorsList.find((i) => {
+//             return i.url == url
+//         })
+//     }
+//     return signal
+// }
+
 CIQ.isUserIndicator = function(indicator){
     if(!indicator || indicator.indexOf('HASH') == -1){
         return false

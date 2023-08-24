@@ -215,10 +215,10 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 CIQ.symbols = []
                 if (filter == "ALL"){
                     var results = []
-                    let allSymbolsList = CIQ.store.state.chart.indicatorsList
+                    let list = CIQ.store.state.chart.indicatorsList
                     let wholeWord = null
-                    for(var i=0;i<allSymbolsList.length;i++){
-                        var fields = allSymbolsList[i]
+                    for(var i=0;i<list.length;i++){
+                        var fields = list[i]
                         
                         var item = {
                             name: fields.chart_name,
