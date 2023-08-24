@@ -1433,4 +1433,7 @@ export default {
 		width: 100%;
 	}
 }
+.backtest_container{
+	border-bottom: 1px solid #797979;
+}
 </style>
