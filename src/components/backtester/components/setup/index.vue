@@ -1,7 +1,7 @@
 <template>
   <div class="setup">
     <div class="setupBox">
-      <BasicInfo></BasicInfo>
+      <BasicInfo ref="basicInfo"></BasicInfo>
   </div>
   <div class="set-up-container">
 			<div class="criteria-container">
@@ -68,8 +68,14 @@ export default {
   },
   methods: {
     setConfig(criteria) {
+			// 传入 entry 和 exit 的配置
       return generateConfig(criteria)
-    }
+    },
+		runBacktest() {
+			// 将所有数据存入 vuex 中
+			const vm = this
+			vm.$refs['basicInfo'].saveData()
+		}
   }
 }
 </script>

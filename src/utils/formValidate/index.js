@@ -22,6 +22,29 @@ const createLDVRule = (minVal, maxVal, errorMsgEmpty, errorMsgGreater) => {
     callback()
   }
 }
+export const createTPSLValidate = (minVal, value) => {
+  // 给 Stop Loss 和 Take Profit 用
+  const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
+  const isLessThanMin = value < minVal
+  const isMatched = !pattern.test(value) && value != 0
+  if(isLessThanMin) {
+    return `Only positive numbers are allowed`
+  }
+  if (isMatched) {
+    return `Numeric input with two decimal places.`
+  }
+  return ''
+}
+export const createPositiveIntegerValidate = (value) => {
+  // 给 Time In Market 和 exclude 用
+  const pattern = /^\d+$/;
+  const isPositiveInteger = isNaN(value) || value < 0  || !pattern.test(value)
+  if(isPositiveInteger) {
+    return `Enter positive integers only.`
+  }
+  return ''
+}
+
 export const validateURLRule = (_, value, callback) => {
   const pattern =
     /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/

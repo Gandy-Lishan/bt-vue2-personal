@@ -277,7 +277,11 @@
 									v-model="bd.exclude_oo"
 									:style="{ visibility: isExcludeOO ? 'visible' : 'hidden' }"
 									size="mini"
+                  @blur="_validateExclude"
 								></el-input>
+                <div class="exclude-error-message" v-if="excludeOOErrMsg">
+                   {{ excludeOOErrMsg }}
+                </div>
 								<!-- </el-form-item> -->
 							</div>
 							<div class="backtestURLBox">
@@ -318,7 +322,7 @@
 								</el-form-item>
 							</div>
 							<div class="descriptionBox">
-								<a @click="toggleDes"
+								<a @click="isToggle = !isToggle"
 									>Backtest Description (click to expand)<i
 										:class="isToggle ? 'el-icon-minus' : 'el-icon-plus'"
 									></i
@@ -432,10 +436,13 @@
 									</el-checkbox>
 									<el-input
 										v-model="tp"
-										@input="setDesciption"
+                    @blur="validateTP"
 										size="mini"
 									></el-input>
-									<p style="margin: 0px">(%)</p>
+									<p style="margin: 0px;">(%)</p>
+                  <div class="error-message" v-if="tpValidErrMsg">
+                   {{ tpValidErrMsg }}
+                  </div>
 								</div>
 								<div class="slContainer riskItem" v-if="isRiskControl">
 									<el-checkbox v-model="isStopLoss"
@@ -450,10 +457,14 @@
 									></el-checkbox>
 									<el-input
 										v-model="sl"
+                    @blur="validateSL"
 										@input="setDesciption"
 										size="mini"
 									></el-input>
 									<p>(%)</p>
+                  <div class="error-message" v-if="slValidErrMsg">
+                   {{ slValidErrMsg }}
+                  </div>
 								</div>
 								<div class="timContainer riskItem" v-if="isRiskControl">
 									<el-checkbox v-model="isTimeInMarket"
@@ -469,10 +480,14 @@
 									></el-checkbox>
 									<el-input
 										v-model="tim"
+                    @blur="validateTIM"
 										@input="setDesciption"
 										size="mini"
 									></el-input>
 									<p>(Bars)</p>
+                  <div class="error-message" v-if="timValidErrMsg">
+                   {{ timValidErrMsg }}
+                  </div>
 								</div>
 							</div>
 
@@ -484,8 +499,7 @@
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { timestampToTime } from '@/tools/formatDate.js'
-import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule } from '@/utils/formValidate'
-import Cookies from 'vue-cookies'
+import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule, createTPSLValidate, createPositiveIntegerValidate } from '@/utils/formValidate'
 import { mapMutations } from "vuex"
 import {
   getIndicatorsList,
@@ -493,7 +507,6 @@ import {
   getStocksList,
   getBacktestName
 } from '@/service/service.js'
-import { permission } from '@/tools/copyBacktestID'
 const throttle = require('lodash/throttle')
 const uniqWith = require('lodash/uniqWith')
 const isEqual = require('lodash/isEqual')
@@ -525,9 +538,8 @@ export default {
         description: {
           Introduction: '',
           Rules: ''
-        }
+        },
       },
-      permission: Cookies.get('devbt2Userid'),
       historyOptions: [
         {
           value: '1',
@@ -636,11 +648,12 @@ export default {
       oldBacktestName: '',
       is_admin: false,
       isExcludeOO: false,
-      isToggle: false
+      isToggle: false,
+      tpValidErrMsg: '',
+      slValidErrMsg: '',
+      timValidErrMsg: '',
+      excludeOOErrMsg: '',
     }
-  },
-  directives: {
-    permission
   },
   created() {
     this.is_admin = this.$store.getters.getIsAdmin
@@ -695,6 +708,18 @@ export default {
   },
   methods: {
     ...mapMutations(['form', 'GET_END_DATE']),
+    validateTP({ target: { value } }) {
+      this.tpValidErrMsg = createTPSLValidate(0, value)
+    },
+    validateSL({ target: { value } }) {
+      this.slValidErrMsg = createTPSLValidate(0, value)
+    },
+    validateTIM({ target: { value } }) {
+      this.timValidErrMsg = createPositiveIntegerValidate(value)
+    },
+    _validateExclude({ target: { value } }) {
+      this.excludeOOErrMsg = createPositiveIntegerValidate(value)
+    },
     generateBTName() {
       const date = new Date()
       const year = date.getFullYear();
@@ -707,9 +732,6 @@ export default {
     },
     getTradePrice(val) {
       this.$store.commit('form/SET_TRADE_PRICE', val)
-    },
-    toggleDes() {
-      this.isToggle = !this.isToggle
     },
     clearForm() {
       Object.assign(this.$data, this.$options.data())
@@ -830,8 +852,6 @@ export default {
       // Set direction to vuex
       this.$store.commit('form/getDirection', val)
       // Direction passed to entry and exit
-      this.bd.direction = val
-      this.$emit('setDirection', val)
     },
     validateStartingCapital: throttle(function (val) {
       let re = /^\d+\.?\d{0,2}$/
@@ -1073,19 +1093,6 @@ export default {
         console.error('indicator list request error', error)
       }
     },
-    backtestNameCheck() {
-      return getBacktestName(this.bd.name)
-        .then((res) => {
-          console.log('res count', res)
-          if (res.data.count == 0) {
-            this.saveBacktestData()
-          } else {
-          }
-        })
-        .then((res) => {
-          return res
-        })
-    },
     saveBacktestData() {
       let checked = true
       // let nameChecked = true
@@ -1169,9 +1176,6 @@ export default {
           return checked
         }
       }
-    },
-    clearOldBacktestName() {
-      this.oldBacktestName = ''
     },
     setDesciption() {
       let criteria = 'X:'
@@ -1319,9 +1323,6 @@ export default {
 		left: 700px;
 		top: 133px;
 	}
-  .excludeBox {
-    width: 50%;
-  }
 }
 @media (min-width: 375px) and (max-width: 767px) {
 	.comUnitNote {
@@ -1356,6 +1357,7 @@ export default {
 	margin: 0px 5px 5px 5px;
 	justify-content: center;
 	align-items: center;
+  position: relative;
 }
 .risk-control-container {
 	display: flex;
@@ -1435,5 +1437,21 @@ export default {
 }
 .backtest_container{
 	border-bottom: 1px solid #797979;
+}
+
+.excludeBox {
+    position: relative;
+    padding-bottom: 20px;
+  }
+.error-message,.exclude-error-message  {
+    margin-top: 40px;
+    position: absolute;
+    line-height: 1;
+    font-size: 10px;
+    color: #F56C6C;
+}
+.exclude-error-message{
+  margin-top: 0px;
+  right: 0;
 }
 </style>
