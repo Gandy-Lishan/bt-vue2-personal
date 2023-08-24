@@ -1406,7 +1406,7 @@ export default {
 	margin-top: 10px;
 }
 .set-up-container {
-	padding-top: 50px;
+	padding-top: 20px;
 }
 .setupCenter {
 	display: flex;
