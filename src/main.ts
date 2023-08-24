@@ -4,8 +4,8 @@
  */
 
 import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
+import App from './App_old.vue'
+import router from './router/index_old'
 import ElementUI from 'element-ui'
 import qs from 'querystring'
 // import 'element-ui/lib/theme-chalk/index.css'
