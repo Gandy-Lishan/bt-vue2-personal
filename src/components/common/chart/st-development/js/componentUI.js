@@ -3637,7 +3637,7 @@ CIQ.UI.StudyEdit.prototype.editOverlay = function (params) {
 	
 	// 用sentiLIST过滤tech
 	let sentiList = []
-	CIQ.indicatorList.forEach(e => {
+	CIQ.store.state.chart.indicatorsList.forEach(e => {
 		sentiList.push(e.url)
 	})
 	

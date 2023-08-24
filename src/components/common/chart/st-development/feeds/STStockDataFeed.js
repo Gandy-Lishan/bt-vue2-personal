@@ -45,7 +45,6 @@ quoteFeedSimulator.sendAjax = async function (url, cb) {
 };
 
 quoteFeedSimulator.url = config.pairDataUrl;
-quoteFeedSimulator.indicatorsList = []
 
 quoteFeedSimulator.sendReq = async function(symbol,start,end,new_str,freq,cb){
         var queryUrl = this.url + 
@@ -155,10 +154,6 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
     }
     var new_str = ''
 
-
-            this.indicatorsList = CIQ.store.state.chart.indicatorsList
-            console.log('this.indicatorsList',this.indicatorsList)
-
             var orignalFreq = 'daily'
             var selectedFreq = 'daily'
 
@@ -178,13 +173,10 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
             }else{
                 try{
                     var freqList = []
-                    // console.log("CIQ.objIndicator: ",CIQ.objIndicator)
-                    // console.log('current entry/exit: ',CIQ.store.state.chart.indicators.formIndicators)
-
                     for ( var  i = 0,valid = 0 ; i < CIQ.objIndicator.length;i++) {
                         // when both sentiment and tech exist in CIQ.objIndicator, filter tech indicator
                         if(CIQ.isSentiIndicator(CIQ.objIndicator[i])){
-                            let _obj = this.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
+                            let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
                             freqList.push(_obj.updated)
                             
                             new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
@@ -378,7 +370,7 @@ quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
             // when both sentiment and tech exist in CIQ.objIndicator, filter tech indicator
             //let alphabetized = CIQ.alphabetized
             let sentiList = []
-            CIQ.indicatorList.forEach(e => {
+            CIQ.store.state.chart.indicatorsList.forEach(e => {
                 sentiList.push(e.url)
             })
             if(sentiList){
@@ -389,10 +381,10 @@ quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
 
             // check if this indicator was selected from setup form
             if(CIQ.objIndicator[i] == CIQ.store.state.chart.indicators.formIndicators.entry || CIQ.objIndicator[i] == CIQ.store.state.chart.indicators.formIndicators.exit){
-                let _obj = this.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
+                let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
                 freqList.push(_obj.updated)
             }else{
-                let _obj = this.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
+                let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
                 freqList.push(_obj.updated)
             }
             new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
@@ -465,7 +457,7 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
             // when both sentiment and tech exist in CIQ.objIndicator, filter tech indicator
             //let alphabetized = CIQ.alphabetized
             let sentiList = []
-            CIQ.indicatorList.forEach(e => {
+            CIQ.store.state.chart.indicatorsList.forEach(e => {
                 sentiList.push(e.url)
             })
             if(sentiList){
@@ -476,10 +468,10 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
 
             // check if this indicator was selected from setup form
             if(CIQ.objIndicator[i] == CIQ.store.state.chart.indicators.formIndicators.entry || CIQ.objIndicator[i] == CIQ.store.state.chart.indicators.formIndicators.exit){
-                let _obj = this.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
+                let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
                 freqList.push(_obj.updated)
             }else{
-                let _obj = this.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
+                let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
                 freqList.push(_obj.updated)
             }
             new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];

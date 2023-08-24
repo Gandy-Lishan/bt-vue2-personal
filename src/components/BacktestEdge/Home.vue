@@ -1261,7 +1261,7 @@ export default {
 
               let entrySignal = backtestData.entry.signals.map((item, index) => {
                 // if it is senti
-                let signal = CIQ.indicatorList.find((i) => {
+                let signal = vm.$store.state.chart.indicatorsList.find((i) => {
                   return i.chart_name == item.indicator
                 })
                 // if it is not senti?
@@ -1290,7 +1290,7 @@ export default {
               let exitSignal
               if (!this.isOnlyRisk) {
                 exitSignal = backtestData.exit.signals.map((item, index) => {
-                  let signal = CIQ.indicatorList.find((i) => {
+                  let signal = vm.$store.state.chart.indicatorsList.find((i) => {
                     return i.chart_name == item.indicator
                   })
 
@@ -1388,7 +1388,7 @@ export default {
               for (var i in CIQ.stxx.layout.studies) {
                 var output = {}
                 if (
-                  CIQ.indicatorList.find((j) => {
+                  this.$store.state.chart.indicatorsList.find((j) => {
                     return j.url == CIQ.stxx.layout.studies[i].type
                   }) == undefined
                 ) {
