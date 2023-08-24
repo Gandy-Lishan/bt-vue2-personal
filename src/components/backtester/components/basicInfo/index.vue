@@ -1361,7 +1361,7 @@ export default {
 	margin-top: 10px;
 }
 .set-up-container {
-	padding-top: 50px;
+	padding-top: 20px;
 }
 .setupCenter {
 	display: flex;
@@ -1387,5 +1387,8 @@ export default {
   .nameBox{
 		width: 100%;
 	}
+}
+.backtest_container{
+	border-bottom: 1px solid #797979;
 }
 </style>

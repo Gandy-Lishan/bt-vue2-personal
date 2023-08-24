@@ -19,6 +19,7 @@ const routes = [
 					{
 						path: 'setup',
 						name: 'SetUp',
+						meta: { activeItem: 'setup' },
 						component: resolve =>
 							require([
 								'@/components/backtester/components/setup/index.vue'
@@ -27,6 +28,7 @@ const routes = [
 					{
 						path: 'results',
 						name: 'Results',
+						meta: { activeItem: 'results' },
 						component: resolve =>
 							require([
 								'@/components/backtester/components/results/index.vue'
@@ -37,10 +39,49 @@ const routes = [
 			{
 				path: 'list',
 				name: 'List',
+				redirect: '/backtester/list/history',
 				component: resolve =>
 					require([
 						'@/components/backtester/components/list/index.vue'
-					], resolve)
+					], resolve),
+				children: [
+					{
+						path: 'history',
+						name: 'History',
+						meta: { activeItem: 'history' },
+						component: resolve =>
+							require([
+								'@/components/backtester/components/list/history/index.vue'
+							], resolve)
+					},
+					{
+						path: 'favorites',
+						name: 'Favorites',
+						meta: { activeItem: 'favorites' },
+						component: resolve =>
+							require([
+								'@/components/backtester/components/list/favorites/index.vue'
+							], resolve)
+					},
+					{
+						path: 'sample',
+						name: 'Sample',
+						meta: { activeItem: 'sample' },
+						component: resolve =>
+							require([
+								'@/components/backtester/components/list/sample/index.vue'
+							], resolve)
+					},
+					{
+						path: 'analyst',
+						name: 'Analyst',
+						meta: { activeItem: 'analyst' },
+						component: resolve =>
+							require([
+								'@/components/backtester/components/list/analyst/index.vue'
+							], resolve)
+					}
+				]
 			}
 		]
 	}
