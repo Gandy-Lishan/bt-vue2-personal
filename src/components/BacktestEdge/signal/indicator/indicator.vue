@@ -333,7 +333,7 @@ export default {
         riskIndicator: '',
         userIndicator: ''
       },
-      sentimentIndicatorList: this.$store.state.chart.sentimentIndicatorList,
+      sentimentIndicatorList: JSON.parse(JSON.stringify(this.$store.state.chart.indicatorsList).replace(/chart_name/g, 'value')),
       symbolConditions: [
         { value: 0, obj: { label: 'Symbol Open', field: 'Open' } },
         { value: 1, obj: { label: 'Symbol High', field: 'High' } },
@@ -545,9 +545,7 @@ export default {
           riskIndicator: '',
           userIndicator: ''
         },
-        sentimentIndicatorList: []
       }
-      data.sentimentIndicatorList = this.$store.state.chart.sentimentIndicatorList
       Object.assign(this.$data, data)
       this.$refs.siForm.clearValidate()
       this.$refs.upload.clearFiles()
@@ -556,15 +554,15 @@ export default {
     },
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
-      var sentimentIndicatorList = this.$store.state.chart.sentimentIndicatorList
-      sentimentIndicatorList.sort(function (a, b) {
+      var list = this.sentimentIndicatorList
+      list.sort(function (a, b) {
         return a.value.localeCompare(b.value)
       })
       var results = queryString
-        ? sentimentIndicatorList.filter(
+        ? list.filter(
           this.createStateSentimentFilter(queryString)
         )
-        : sentimentIndicatorList
+        : list
       cb(results)
     },
     createStateSentimentFilter(queryString) {
@@ -630,8 +628,7 @@ export default {
       this.fileList = []
     },
     clearSentimentSelect() {
-      var sentimentIndicatorList = this.$store.state.chart.sentimentIndicatorList
-      const item = sentimentIndicatorList.find(i=>i.value ==  this.$refs.sentiInput.value)
+      const item = this.sentimentIndicatorList.find(i=>i.value ==  this.$refs.sentiInput.value)
 
       this.currentSentiUpdated = item.updated
       let freqObj = {}
@@ -1404,25 +1401,8 @@ export default {
         this.$refs.siForm.validate((valid) => {
           validForm = valid
         })
-        let sentimentList = this.$store.state.chart.sentimentIndicatorList
-        if (sentimentList.length == 0) {
-          var indicatorList = []
-          if (CIQ.indicatorList) {
-            if (CIQ.indicatorList.length != 0) {
-              indicatorList = this.$store.state.chart.indicatorsList
-              indicatorList = CIQ.indicatorList
-            }
-          }
-          sentimentList = indicatorList.map((obj) => {
-            if (obj.chart_name && obj.url && obj.updated) {
-              return {
-                value: obj.chart_name,
-                url: obj.url,
-                updated: obj.updated
-              }
-            }
-          })
-        }
+        let sentimentList = JSON.parse(JSON.stringify(this.$store.state.chart.indicatorsList).replace(/chart_name/g, 'value'))
+
         for (let i = 0; i < sentimentList.length; i++) {
           if (this.si.sentimentIndicator === sentimentList[i].value) {
             validName = true
@@ -1579,19 +1559,8 @@ export default {
             this.indicatorRadio = 'Sentiment Indicator'
             this.si.sentimentIndicator =
               newVal[this.criteria].signals[index].indicator
-            let sentimentList = this.$store.state.chart.sentimentIndicatorList
-            if (sentimentList.length == 0) {
-              let res = await getIndicatorsList()
-              sentimentList = res.data.map((obj) => {
-                if (obj.chart_name && obj.url && obj.updated) {
-                  return {
-                    value: obj.chart_name,
-                    url: obj.url,
-                    updated: obj.updated
-                  }
-                }
-              })
-            }
+            let sentimentList = JSON.parse(JSON.stringify(this.$store.state.chart.indicatorsList).replace(/chart_name/g, 'value'))
+
             let indi = this.si.sentimentIndicator
             sentimentList.forEach((item) => {
               if (indi.toUpperCase() == item.value.toUpperCase()) {
