@@ -163,6 +163,7 @@ async function initiateIndicatorList() {
 			}
 		}
 		// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
+		store.commit('chart/getIndicatorsList',newAllSymbolsList)
 		CIQ.indicatorList = newAllSymbolsList
 	}
 }
