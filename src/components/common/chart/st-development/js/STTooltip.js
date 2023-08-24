@@ -493,7 +493,6 @@ if (!CIQ.Marker) {
                      var sd = this.layout.studies[study];
                      panel = this.panels[sd.panel];
                      yAxis = panel && sd.getYAxis(this);
-                     let _obj2 = CIQ.store.state.chart.builtinList.find(x=> x.url == this.layout.studies[study].type)
                      for (var output in this.layout.studies[study].outputMap) {
                          //a dumb way to show full name of indicator
                          let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == output)

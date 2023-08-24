@@ -577,7 +577,7 @@ export default {
     },
     // technical search
     indicatorTechnicalSearch(queryString, cb) {
-      var technicaltIndicatorList = this.loadShortLong()
+      var technicaltIndicatorList = this.$store.state.chart.formateTechnicalList
       if (this.criteria === 'entry') {
         let valueArr = ['ATR Trailing Stops', 'Parabolic SAR']
         technicaltIndicatorList = technicaltIndicatorList.filter(
@@ -911,10 +911,7 @@ export default {
       CIQ.addIndicators()
     },
     clearTechnicalSelect() {
-        let formateList = this.$store.state.chart.formateTechnicalList
-        if (formateList.length === 0) {
-          formateList = vm.loadShortLong()
-        }
+      let formateList = this.$store.state.chart.formateTechnicalList
       const item = formateList.find(i=>i.value ==  this.$refs.techInput.value)
 
       let freqObj = {}
@@ -1361,32 +1358,6 @@ export default {
         this.$emit('getIndicatorUrl', urlObj)
       }
     },
-
-    // load short and long technical list
-    loadShortLong() {
-      const technicalList = CIQ.technicalCategory
-      let formatList = []
-      for (let i = 0; i < technicalList.length; i++) {
-        if (
-          technicalList[i].class === 'No_display_technical_indicator' ||
-          technicalList[i].class ===
-          'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
-        )
-          continue
-        technicalList[i].studies.forEach((item) => {
-          let obj = {}
-          obj.class = technicalList[i].class
-          obj.value = item.name
-          obj.url = item.url
-          formatList.push(obj)
-        })
-      }
-      formatList.sort(function (a, b) {
-        return a.value.localeCompare(b.value)
-      })
-      this.$store.commit('chart/saveFormatTechnicalList', formatList)
-      return formatList
-    },
     loadRiskList() {
       return [{ value: 'Time In Market' }, { value: 'Profit/Loss' }]
     },
@@ -1471,9 +1442,6 @@ export default {
           validForm = valid
         })
         let formateList = this.$store.state.chart.formateTechnicalList
-        if (formateList.length === 0) {
-          formateList = vm.loadShortLong()
-        }
         for (let i = 0; i < formateList.length; i++) {
           if (this.si.technicalIndicator === formateList[i].value) {
             validName = true
@@ -1507,18 +1475,7 @@ export default {
         this.$refs.siForm.validate((valid) => {
           validForm = valid
         })
-        console.log('validForm', validForm)
-        // let formateList = this.$store.state.chart.formateTechnicalList
-        // if (formateList.length === 0) {
-        // 	formateList = this.loadShortLong()
-        // }
 
-        // for (let i = 0; i < formateList.length; i++) {
-        // 	if (this.si.technicalIndicator === formateList[i].value) {
-        // 		validName = true
-        // 		break
-        // 	}
-        // }
         validName = true
         if (validForm && validName) {
           let obj = {}
@@ -1598,9 +1555,6 @@ export default {
               newVal[this.criteria].signals[index].indicator
             vm.si.technicalIndicators = technicalIndicator
             let formateList = this.$store.state.chart.formateTechnicalList
-            if (formateList.length === 0) {
-              formateList = vm.loadShortLong()
-            }
             for (let i = 0; i < formateList.length; i++) {
               if (technicalIndicator === formateList[i].value) {
                 let obj = formateList[i]
@@ -2377,18 +2331,6 @@ export default {
       let userIndicator = data.file_name
       this.si.userIndicator = userIndicator
 
-      // let formateList = this.$store.state.chart.formateTechnicalList
-      // if (formateList.length === 0) {
-      // 	formateList = vm.loadShortLong()
-      // }
-      // for (let i = 0; i < formateList.length; i++) {
-      // 	if (technicalIndicator === formateList[i].value) {
-      // 		let obj = formateList[i]
-      // 		let isFromEdit = true
-      // 		vm.handleTechnicalSelect(obj, isFromEdit)
-      // 		break
-      // 	}
-      // }
       const response = await csvFileRead(userIndicator, data.hash)
 
       // 还原文件对象的 raw 属性
