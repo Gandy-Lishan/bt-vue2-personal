@@ -384,7 +384,7 @@ input[type="time"] {
   width: 60% !important;
 }
 .backtest_container .el-form-item .el-form-item__content .el-form-item__error {
-  padding-top: 11px;
+  padding-top: 5px;
   left: -1px;
 }
 
