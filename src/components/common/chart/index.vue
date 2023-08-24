@@ -57,9 +57,34 @@ export default class AdvancedWrapper extends Vue {
 		// 设置chartBox为单例以统一管理高度
 		CIQ.chartBox = document.getElementsByClassName("chart_box")[0] as HTMLElement;
 		CIQ.setPanelHeight([])
-		CIQ.technicalCategory = config.technicalClassCategory
+
+		this.loadShortLong(config)
 	}
 
+	// load short and long technical list
+    loadShortLong(config:any) {
+		CIQ.technicalCategory = config.technicalClassCategory
+		let formatList = []
+		for (let i = 0; i < CIQ.technicalCategory.length; i++) {
+			if (
+			CIQ.technicalCategory[i].class === 'No_display_technical_indicator' ||
+			CIQ.technicalCategory[i].class ===
+			'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
+			)
+			continue
+			CIQ.technicalCategory[i].studies.forEach((item) => {
+				let obj:any = {}
+				obj.class = CIQ.technicalCategory[i].class
+				obj.value = item.name
+				obj.url = item.url
+				formatList.push(obj)
+			})
+		}
+		formatList.sort(function (a, b) {
+			return a.value.localeCompare(b.value)
+		})
+		store.commit('chart/saveFormatTechnicalList', formatList)
+    }
 }
 </script>
 <style lang="scss" scoped>
