@@ -26,6 +26,29 @@
       </div>
     </div>
   </div>
+	<div class="backtest-btns">
+		<el-tooltip
+			class="item"
+			effect="dark"
+			content="Clear the backtest set up form "
+			placement="bottom"
+		>
+			<el-button type="danger" @click="clearForm">
+				Clear Form</el-button
+			>
+		</el-tooltip>
+		<el-tooltip
+			class="item"
+			effect="dark"
+			content="Complete the form filling, run the backtest, and view the results"
+			placement="bottom"
+		>
+			<el-button type="success" @click="runBacktest"
+				>Run Backtest</el-button
+			></el-tooltip
+		>
+		<!-- <el-checkbox style="margin-left:10px" v-model="test" label="download test csv" border></el-checkbox> -->
+	</div>
   </div>
 </template>
 
@@ -70,6 +93,31 @@ export default {
 	border-bottom: 1px solid #797979;
 	align-items: flex-start;
 }
+.backtest-btns {
+	margin-top: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-right: 20px;
+	padding-bottom: 10px;
+	margin-bottom: 12px;
+	.el-button:first-child {
+		background: rgb(251, 192, 92);
+		border: none;
+		width: 250px;
+	}
+	.el-button:first-child:hover {
+		background-color: #f59e0b;
+	}
+	.el-button:last-child {
+		background: #5b9bd1;
+		border: none;
+		width: 250px;
+	}
+	.el-button:last-child:hover {
+		background-color: #409eff;
+	}
+}
 @media (min-width: 820px) and (max-width: 1279px) {
 	.criteria-container {
 		display: flex;
@@ -95,6 +143,12 @@ export default {
 		justify-content: center;
 		align-items: center;
 		border-bottom: 1px solid #797979;
+	}
+	.backtest-btns {
+		.el-button {
+			padding: 7px;
+			font-size: 12px;
+		}
 	}
 }
 .divider {
