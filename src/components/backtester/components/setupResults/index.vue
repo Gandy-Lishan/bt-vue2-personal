@@ -1,5 +1,5 @@
 <template>
-  <Tabs :activeIndex="activeIndex" :mode="mode" :menuItems="menuItems" :handle-select="handleSelect"></Tabs>
+  <Tabs :activeIndex="activeItem" :mode="mode" :menuItems="menuItems" :handle-select="handleSelect"></Tabs>
 </template>
 
 <script>
@@ -11,23 +11,26 @@ export default {
   },
   data() {
     return {
-      activeIndex: '1',
       mode: 'horizontal',
       menuItems: [
         {
-          index: '1',
+          index: 'setup',
           lable: 'Set Up'
         },
         {
-          index: '2',
+          index: 'results',
           lable: 'Results'
         }
       ]
     }
   },
+  computed: {
+    activeItem() {
+      return this.$route.meta.activeItem
+    }
+  },
   methods: {
-    handleSelect(index) {
-      const subUrl = index == '1' ? 'setup' : 'results'
+    handleSelect(subUrl) {
       const url = `/backtester/sr/${subUrl}`
       this.$router.push(url)
     }

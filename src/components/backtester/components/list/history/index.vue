@@ -2,6 +2,7 @@
   <Table
     :tableCol="tableCol"
     :currentPage="currentPage"
+    :isExpandAll="isExpandAll"
   >
   </Table>
 </template>
@@ -53,6 +54,7 @@ export default {
           width: '125px'
         }
       ],
+      isExpandAll: false,
       currentPage: 'History',
     }
   },
