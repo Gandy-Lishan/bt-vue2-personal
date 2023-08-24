@@ -6,6 +6,7 @@
 			class="fls-btn"
 			>run all backtest</el-button
 		>
+		<el-button v-if="currentPage == 'Favorites'" @click="_findLastSignal" class="fls-btn" size="mini">Find Last Signal</el-button>
 		<div class="searchBox">
 			<el-input
 				class="search"
@@ -25,6 +26,7 @@
       :data="dataList"
       v-loading="loading"
       :element-loading-text="loadTest"
+			:default-expand-all="isExpandAll"
       element-loading-spinner="el-icon-loading"
 			element-loading-background="rgba(0, 0, 0, 0.8)"
 			@sort-change="onSortChange"
@@ -51,7 +53,8 @@
 				:key="item.label"
 				>
 				<template slot-scope="scope">
-					<div class="descriptionBox">
+					<div class="expandArea">
+						<div class="descriptionBox">
 						<div class="entryBox">
 							<p>Entry Description</p>
 							<template
@@ -72,6 +75,11 @@
 								</p>
 							</template>
 						</div>
+					</div>
+					<div class="urlBox" v-if="currentPage == 'Analyst'">
+						<p>Analyst Report URL</p>
+						<el-link :underline="false" :href="scope.row.report_url" target="_blank" type="primary">{{scope.row.report_url}}</el-link>
+					</div>
 					</div>
 				</template>
 			</el-table-column>
@@ -131,6 +139,28 @@
 				>
 			</el-table-column>
 			<el-table-column
+				v-if="item.label == 'Last Signal Date'"
+				:key="item.label"
+				:prop="item.field"
+				align="center"
+				show-overflow-tooltip
+				:label="item.label"
+				:sortable="item.label == 'Last Signal Date' ? 'custom' : false"
+				:sort-orders="['ascending', 'descending', item.field]"
+				:width="item.width"
+			>
+			<template slot-scope="scope">
+					<div class="showDate">
+						<el-button size="mini" type="info" plain
+							>E: {{ scope.row.last_entry_signal_date ? scope.row.last_entry_signal_date : '' }}</el-button
+						>
+						<el-button size="mini" type="info" plain
+							>X: {{ scope.row.last_exit_signal_date ? scope.row.last_exit_signal_date : '' }}</el-button
+						>
+					</div>
+				</template>
+			</el-table-column>
+			<el-table-column
 				v-if="['Total Trades', 'Total Return'].includes(item.label)"
 				:label="item.label"
 				:key="item.label"
@@ -145,6 +175,7 @@
 				:sort-orders="['ascending', 'descending', item.field]"
 				>
 			</el-table-column>
+
     </template>
 		<el-table-column align="center" width="250px">
 						<template slot-scope="scope">
@@ -156,6 +187,7 @@
 									placement="bottom-start"
 								>
 									<el-button
+										v-if="['History', 'Favorites'].includes(currentPage)"
 										type="success"
 										icon="el-icon-video-play"
 										circle
@@ -171,7 +203,7 @@
 									placement="bottom-start"
 								>
 									<el-button
-										v-if="scope.row.favorites == false"
+										v-if="scope.row.favorites == false && currentPage == 'History'"
 										plain
 										icon="el-icon-star-off"
 										circle
@@ -183,7 +215,7 @@
 									class="item"
 									effect="dark"
 									content="remove from favorites"
-									v-if="scope.row.favorites == true"
+									v-if="scope.row.favorites == true && ['History', 'Favorites'].includes(currentPage)"
 									placement="bottom-start"
 								>
 									<el-button
@@ -202,6 +234,7 @@
 									placement="bottom-start"
 								>
 									<el-button
+										v-if="['History', 'Favorites'].includes(currentPage)"
 										type="primary"
 										icon="el-icon-edit"
 										circle
@@ -216,6 +249,7 @@
 									placement="bottom-start"
 								>
 									<el-button
+										v-if="['History', 'Favorites', 'Sample', 'Analyst'].includes(currentPage)"
 										:disabled="scope.row.status == 0"
 										type="info"
 										icon="el-icon-copy-document"
@@ -240,6 +274,7 @@
 										@confirm="deleteBacktest(scope.row.id)"
 									>
 										<el-button
+											v-if="currentPage == 'History' && scope.row.favorites == false"
 											type="danger"
 											icon="el-icon-delete"
 											circle
@@ -257,6 +292,7 @@
 										@confirm="deleteBacktest(scope.row.id)"
 									>
 										<el-button
+											v-if="currentPage == 'History' && scope.row.favorites == true"
 											type="danger"
 											icon="el-icon-delete"
 											circle
@@ -280,14 +316,15 @@
 										@click="viewBacktestResults(scope.row)"
 									></el-button>
 								</el-tooltip>
-								<!-- <el-tooltip
+								<el-tooltip
 									class="item"
 									effect="dark"
 									content="copy backtest link"
 									placement="bottom-start"
 								>
 									<el-button
-									:disabled="scope.row.status == 0 || scope.row.status == 3"
+										v-if="currentPage == 'Analyst'"
+										:disabled="scope.row.status == 0 || scope.row.status == 3"
 										plain
 										icon="el-icon-link"
 										circle
@@ -295,7 +332,7 @@
 										type="success"
 										v-copy="scope.row.id"
 									></el-button>
-								</el-tooltip> -->
+								</el-tooltip>
 							</el-row>
 						</template>
 		</el-table-column>
@@ -319,19 +356,23 @@ import {
   copyBacktest,
   favoriteBacktest,
   getHistoryList,
+	getSampleList,
   getStatus,
   seeParams,
   deleteBacktest,
   getBacktestName,
   getAllHistoryList,
-  searchHistoryList
+  searchHistoryList,
+  getFavoriteList,
+	getAnalystList
 } from '@/service/service.js'
 import isJson from "@/tools/isJson"
 export default {
 	name: 'Table',
 	props: {
 		tableCol: Array,
-		currentPage: String
+		currentPage: String,
+		isExpandAll: Boolean
 	},
 	data() {
 		return {
@@ -357,6 +398,12 @@ export default {
 			try {
 				if(this.currentPage == 'History'){
 					res = await getHistoryList(this.queryInfo.page, orderby, this.searchItem)
+				}else if(this.currentPage == 'Favorites'){
+					res = await getFavoriteList(this.queryInfo.page, orderby, this.searchItem)
+				}else if(this.currentPage == 'Sample'){
+					res = await getSampleList(this.queryInfo.page, orderby, this.searchItem)
+				}else if(this.currentPage == 'Analyst'){
+					res = await getAnalystList(this.queryInfo.page, orderby, this.searchItem)
 				}
 				if (res.status == 200) {
 					let data = res.data.results
@@ -412,6 +459,8 @@ export default {
     },
 		async applySort() {
       let { prop, order } = this.currentSort;
+			console.log('order', order)
+			console.log('prop', prop)
       //  order: 升 'ascending' | 降'descending' | 取消升降 null | order: total_return 
       if (order == null || order == prop) {
         // 不排序
@@ -486,5 +535,14 @@ export default {
 		font-weight: 500;
 		color: #99a9bf;
 	}
+}
+.fls-btn {
+	float: right;
+	margin-left: 20px;
+	margin: 20px 28px 10px 10px;
+}
+.urlBox p:first-child {
+		font-weight: 500;
+		color: #99a9bf;
 }
 </style>

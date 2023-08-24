@@ -1,5 +1,5 @@
 <template>
-  <Tabs :activeIndex="activeIndex" :mode="mode" :menuItems="menuItems" :handle-select="handleSelect"></Tabs>
+  <Tabs :activeIndex="activeItem" :mode="mode" :menuItems="menuItems" :handle-select="handleSelect"></Tabs>
 </template>
 
 <script>
@@ -11,48 +11,34 @@ export default {
   },
   data() {
     return {
-      activeIndex: '1',
       mode: 'horizontal',
       menuItems: [
         {
-          index: '1',
+          index: 'history',
           lable: 'History'
         },
         {
-          index: '2',
+          index: 'favorites',
           lable: 'My Favorites'
         },
         {
-          index: '3',
+          index: 'sample',
           lable: 'Sample Backtests'
         },
         {
-          index: '4',
+          index: 'analyst',
           lable: "Analysts' Backtest"
         }
       ]
     }
   },
+  computed: {
+    activeItem() {
+      return this.$route.meta.activeItem;
+    },
+  },
   methods: {
-    handleSelect(index) {
-      let subUrl = null
-      switch (index) {
-        case '1':
-          subUrl = 'history'
-          break;
-        case '2':
-          subUrl = 'favorites'
-          break;
-        case '3':
-          subUrl = 'sample'
-          break;
-        case '4':
-          subUrl = 'analysts'
-          break;
-        default:
-          subUrl = 'history'
-          break;
-      }
+    handleSelect(subUrl) {
       const url = `/backtester/list/${subUrl}`
       this.$router.push(url)
     }
