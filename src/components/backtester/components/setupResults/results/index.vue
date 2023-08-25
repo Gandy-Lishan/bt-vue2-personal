@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ResForm from "./resForm"
+import ResForm from "./resultForm"
 import Performance from "./performance"
 export default {
   name: 'Results',
