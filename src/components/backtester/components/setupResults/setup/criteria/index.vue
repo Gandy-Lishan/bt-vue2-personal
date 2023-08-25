@@ -63,7 +63,7 @@
 				</el-select>
 			</div>
 		</div>
-		<div :class="relation === 1 ? 'multi' : ''" v-if="exitItemCheck === false">
+		<div :class="relation === 1 ? 'multi' : ''" v-if="isRiskControl === false">
 			<div class="multi-box">
 				<el-tabs
 					v-model="editableTabsValue"
@@ -83,12 +83,12 @@
 							:editableTabs="editableTabs"
 							:editableTabsValue="editableTabsValue"
 							ref="indiChild"
-							:exitItemCheck="exitItemCheck"
+							:isRiskControl="isRiskControl"
 							@getIndicatorUrl="getIndicatorUrl"
 							@getIndicatorVal="getIndicatorVal"
 							@getIndicatorRadio="getIndicatorRadio"
 							@getTechIndiObj="getTechIndiObj"
-							@entryUserUploadFileContent="entryUserUploadFileContent"
+							@userUploadFileContent="userUploadFileContent"
 							@getFreqArray="getFreqArray"
 						></indicator>
 						<senti
@@ -96,7 +96,7 @@
 							:tabLength="indicatorRadioArr.length"
 							:criteria="config['criteria']"
 							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
+							:isRiskControl="isRiskControl"
 							ref="sentiChild"
 							:relation="relation"
 							:score="score"
@@ -112,7 +112,7 @@
 							:tabLength="indicatorRadioArr.length"
 							:criteria="config['criteria']"
 							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
+							:isRiskControl="isRiskControl"
 							ref="symbolChild"
 							:relation="relation"
 							:score="score"
@@ -133,7 +133,7 @@
 								techIndiObj[index] === 'CCI_like'
 							"
 							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
+							:isRiskControl="isRiskControl"
 							:criteria="config['criteria']"
 							ref="cciChild"
 							:relation="relation"
@@ -155,7 +155,7 @@
 								techIndiObj[index] === 'MACD_like'
 							"
 							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
+							:isRiskControl="isRiskControl"
 							:criteria="config['criteria']"
 							ref="macdChild"
 							:relation="relation"
@@ -177,7 +177,7 @@
 								techIndiObj[index] === 'MovingAverage_like'
 							"
 							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
+							:isRiskControl="isRiskControl"
 							:criteria="config['criteria']"
 							ref="maChild"
 							:relation="relation"
@@ -199,7 +199,7 @@
 								techIndiObj[index] === 'BollingerBands_like'
 							"
 							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
+							:isRiskControl="isRiskControl"
 							:criteria="config['criteria']"
 							ref="bollBandsLikeChild"
 							:relation="relation"
@@ -221,7 +221,7 @@
 								techIndiObj[index] === 'EFT_like'
 							"
 							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
+							:isRiskControl="isRiskControl"
 							:criteria="config['criteria']"
 							ref="EFTLikeChild"
 							:relation="relation"
@@ -243,7 +243,7 @@
 								techIndiObj[index] === 'Stochastics_like'
 							"
 							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
+							:isRiskControl="isRiskControl"
 							:criteria="config['criteria']"
 							ref="stochasticsLikeChild"
 							:relation="relation"
@@ -265,7 +265,7 @@
 								techIndiObj[index] === 'ADX_like'
 							"
 							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
+							:isRiskControl="isRiskControl"
 							:criteria="config['criteria']"
 							ref="ADXLikeChild"
 							:relation="relation"
@@ -287,7 +287,7 @@
 								techIndiObj[index] === 'ERI_like'
 							"
 							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
+							:isRiskControl="isRiskControl"
 							:criteria="config['criteria']"
 							ref="ERILikeChild"
 							:relation="relation"
@@ -309,7 +309,7 @@
 								techIndiObj[index] === 'Aligator_like'
 							"
 							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
+							:isRiskControl="isRiskControl"
 							:criteria="config['criteria']"
 							ref="aligatorLikeChild"
 							:relation="relation"
@@ -331,7 +331,7 @@
 								techIndiObj[index] === 'LRF_like'
 							"
 							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
+							:isRiskControl="isRiskControl"
 							:criteria="config['criteria']"
 							ref="LRFLikeChild"
 							:relation="relation"
@@ -353,7 +353,7 @@
 								techIndiObj[index] === 'Trailingstop_like'
 							"
 							:panelIndex="index"
-							:exitItemCheck="exitItemCheck"
+							:isRiskControl="isRiskControl"
 							:criteria="config['criteria']"
 							ref="trailingStopLikeChild"
 							:relation="relation"
@@ -368,7 +368,7 @@
 							"
 						></trailing-stop-like>
 						<div class="delay-bar-box">
-							<el-checkbox v-model="isDelayBar" @change="isCheckDelayBar">
+							<el-checkbox v-model="isDelayBar" @change="(val) => {delay_bars = val ? 1 : 0}">
 								<span>Delay of Bars </span>
 								<el-tooltip
 									effect="dark"
@@ -420,7 +420,8 @@ export default {
   name: 'Criteria',
   inheritAttrs: false,
   props: {
-    config: Object
+    config: Object,
+		isRiskControl: Boolean
   },
   components: {
     indicator,
@@ -440,7 +441,6 @@ export default {
   },
   data() {
     return {
-      indicatorRadio: 'sentiment',
 			editableTabsValue: '1',
 			editableTabs: [
 				{
@@ -459,7 +459,6 @@ export default {
 			indicatorValArr: new Array(5).fill(''),
 			freqArray: new Array(5).fill(''),
 			// riskValArr: new Array(5).fill(''),
-			techVal: '',
 			delay_bars: 0,
 			isDelayBar: false
     }
@@ -480,10 +479,10 @@ export default {
 					label: 'TimeOrder Multi-Condition'
 				}
 			]
-      if (!this.exitCheck) {
-        return options // 如果 exitCheck 为 true，则返回原始选项
+      if (!this.isRiskControl) {
+        return options // 如果 isRiskControl 为 true，则返回原始选项
       } else {
-        // 如果 exitCheck 为 false，则返回修改后的选项
+        // 如果 isRiskControl 为 false，则返回修改后的选项
         return [
           {
               value: 0,
@@ -494,15 +493,282 @@ export default {
       }
     },
     relation() {
-      
-      // return this.config['criteria'] == 'entry' ? 1 : 0
-      return this.config['criteria'] == 'entry' ? 1 : 1
+      return this.config['criteria'] == 'entry' ? 1 : 0
     },
-    exitItemCheck() {
-      // return this.config['criteria'] == 'entry' ? false : true
-      return this.config['criteria'] == 'entry' ? false : false
-    }
-}
+		criteriaCapFirstL() {
+			/* Entry or Exit */
+			return this.config['criteriaCapFirstL']
+		},
+		criteria() {
+			/* entry or exit */
+			return this.config['criteria']
+		}
+	},
+	created() {
+		/* 用于自动填充 user custom indicators file */
+  	eventBus.$on(`user${this.criteriaCapFirstL}FileSelect`, this.userFileSelect)
+	},
+	methods: {
+		...mapMutations('form', ['setFrequencyArray']),
+		clearForm() {
+			/* todolishan */
+		},
+		resetForm() {
+			/* todolishan */
+		},
+		getTechIndiObj(obj) {
+			this.techIndiObj.splice(obj.index, 1, obj.class)
+		},
+		handleTabsEdit(targetName, action) {
+			if (action === 'add') {
+				if (this.relation == 2 || this.relation == 3) {
+					let num_key
+					try {
+						num_key =
+							Number(this.editableTabs[this.editableTabs.length - 1].name) + 1
+					} catch (err) {
+						num_key = 1
+					}
+					let num = this.editableTabs.length
+					let newTabName = num + 1 + ''
+					this.editableTabs.push({
+						title: 'Condition' + newTabName,
+						name: num_key + '',
+						content: 'Condition' + newTabName + 'content'
+					})
+					this.editableTabsValue = Number(this.editableTabsValue) + 1 + ''
+					this.indicatorRadioArr.push('sentiment')
+				}
+				if (this.editableTabs.length > 5 && this.relation == 2) {
+					this.$message({
+						message: 'Add up to five conditions',
+						type: 'error'
+					})
+					this.editableTabs.pop()
+					this.indicatorRadioArr.pop()
+					// this.editableTabsValue = this.editableTabs.length + ''
+					this.editableTabsValue = '5'
+					// this.tabIndex = this.editableTabs.length
+					this.tabIndex = 5
+				}
+				if (this.relation == 3 && this.editableTabs.length > 3) {
+					this.$message({
+						message: 'Add up to three conditions',
+						type: 'error'
+					})
+					this.editableTabs.pop()
+					this.indicatorRadioArr.pop()
+					// this.editableTabsValue = this.editableTabs.length + ''
+					this.editableTabsValue = '3'
+					// this.tabIndex = this.editableTabs.length
+					this.tabIndex = 3
+				}
+				if (this.relation == 2) {
+					this.score = this.indicatorRadioArr.length
+				}
+				if (this.relation == 3) {
+					this.signals_in_market = this.indicatorRadioArr.length
+				}
+			}
+			if (action === 'remove') {
+				if (
+					(this.relation == 2 || this.relation == 3) &&
+					this.editableTabs.length == 2
+				) {
+					// At least two conditions
+					this.$message({
+						message:
+							'Multiple conditions are currently selected, at least two conditions',
+						type: 'error'
+					})
+					return
+				}
+				let tabs = this.editableTabs
+				let activeName = this.editableTabsValue
+				var absoluteIndex = ''
+				tabs.forEach((tab, index) => {
+					if (tab.name == targetName) {
+						absoluteIndex = index
+					}
+				})
+				if (activeName === targetName) {
+					tabs.forEach((tab, index) => {
+						if (tab.name === targetName) {
+							let nextTab = tabs[index + 1] || tabs[index - 1]
+							if (nextTab) {
+								activeName = nextTab.name
+							}
+						}
+					})
+				}
+				let panelArr = tabs.filter((tab) => tab.name !== targetName)
+				this.editableTabs = panelArr
+				panelArr.forEach((item, index) => {
+					item.title = 'Condition' + (index + 1)
+				})
+				this.editableTabsValue = activeName
+
+				// 移除senti indicator附属ma
+				let techList = this.$store.state.chart.formateTechnicalList
+				let removedUrl = techList.find(i=>i.value == this.indicatorValArr[absoluteIndex])?.url
+
+				var activatedMAList = this.$store.state.chart.activatedMA
+				var MAListIndex = activatedMAList.findIndex(
+				(item) =>
+					item.url == removedUrl &&
+					item.criteria == 'exit' &&
+					item.index == absoluteIndex
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('chart/getMA', activatedMAList)
+				//
+
+				this.indicatorValArr.splice(absoluteIndex, 1)
+				this.indicatorValArr.push('')
+				let removedSenti = this.indicatorUrlArr.splice(absoluteIndex, 1)
+				this.indicatorUrlArr.push('')
+				this.indicatorRadioArr.splice(absoluteIndex, 1)
+				this.techIndiObj.splice(absoluteIndex, 1)
+				this.techIndiObj.push('')
+				this.freqArray.splice(absoluteIndex, 1)
+				this.freqArray.push('')
+				const freqObj = {
+						index: absoluteIndex,
+						value: 'Daily',
+						criteria: 'exit',
+						key: `exit_${absoluteIndex}`
+					}
+					this.setFrequencyArray(freqObj)
+				if (
+					this.relation == 2 &&
+					this.score >= this.indicatorRadioArr.length + 1
+				) {
+					this.score = this.indicatorRadioArr.length
+				}
+				// if (this.relation == 3 && this.signals_in_market >= (this.indicatorRadioArr.length + 1)) {
+				// 	this.signals_in_market = this.indicatorRadioArr.length
+				// }
+				//When removing a tab, remove the corresponding indicator from vuex to refresh the status
+				this.$store.commit('chart/getEntryIndicators', {
+					index: absoluteIndex,
+					value: ''
+				})
+				
+				// 如果是MA，则移除它的信息和位置
+				CIQ.removeMALayout(removedUrl, 'exit', absoluteIndex)
+
+				// 移除chartiq对应的extraIndicators
+				let extraIndicators = []
+				extraIndicators.push(...this.$store.state.chart.indicators.extraIndicators)
+				extraIndicators = extraIndicators.filter(x=>x!=removedSenti)
+				this.$store.commit('chart/getExtraIndicators',extraIndicators)
+
+				CIQ.addIndicators()
+			}
+		},
+		getIndicatorUrl(obj) {
+			this.indicatorUrlArr.splice(obj.index, 1, obj.url)
+		},
+		getIndicatorVal(obj) {
+			this.indicatorValArr.splice(obj.index, 1, obj.value)
+		},
+		getFreqArray(obj) {
+			this.freqArray.splice(obj.index, 1, obj.value)
+		},
+		getIndicatorRadio(obj) {
+			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
+		},
+		addSignalLength() {
+			if (this.relation == 2 || this.relation == 3) {
+				const filterValArr = this.indicatorValArr.filter(item => item != '')
+				this.$emit('sendSignalIndex', filterValArr.length)
+				for (let i = 0; i < filterValArr.length; i++) {
+					// Apply for space
+					let obj = {}
+					obj.criteria = this.criteria
+					obj.index = i
+					this.$store.commit('form/addSignalLength', obj)
+				}
+			}
+			if (this.relation == 1 || this.relation == 0) {
+				this.$emit('sendSignalIndex', 1)
+			}
+		},
+		saveScoreValue() {
+			let obj = {}
+			obj.criteria = this.criteria
+			if (this.relation == 1 || this.relation == 3 || this.relation == 0) {
+				obj.value = 1
+			}
+			if (this.relation == 2) {
+				obj.value = this.score
+			}
+			this.$store.commit('form/saveScoreValue', obj)
+		},
+		saveSignalsInMarket() {
+			let obj = {}
+			obj.criteria = this.criteria
+			if (this.relation == 1 || this.relation == 2 || this.relation == 0) {
+				obj.value = 1
+			}
+			if (this.relation == 3) {
+				obj.value = this.signals_in_market
+			}
+			this.$store.commit('form/saveSignalsInMarket', obj)
+		},
+		saveDelayBar() {
+			let obj = {}
+			obj.criteria = this.criteria
+			// Do not select isdelaybar
+			if (!this.isDelayBar) {
+				obj.value = 0
+			}
+			// Choose delaybar instead of only risk
+			if (this.isDelayBar && !this.isRiskControl) {
+				obj.value = this.delay_bars
+			}
+			// Select delaybar and only risk
+			if (this.isDelayBar && this.isRiskControl) {
+				obj.value = 0
+			}
+			this.$store.commit('form/saveDelayBar', obj)
+		},
+		saveRelation() {
+			let obj = {}
+			obj.criteria = this.criteria
+
+			if (this.indicatorRadioArr.length > 1 && !this.isRiskControl) {
+				obj.value = this.relation
+			}
+			if (this.indicatorRadioArr.length == 1 && !this.isRiskControl) {
+				obj.value = 1
+			}
+			if (this.isRiskControl) {
+				obj.value = 0
+			}
+
+			this.$store.commit('form/saveRelation', obj)
+		},
+		async userUploadFileContent(data) {
+			let _this = this
+			await _this.$refs.indiChild[data.index].changeIndicatorChecked("Users' Own Indicator")
+			await _this.$refs.indiChild[data.index].handleUsersOwnIndicatorSelect(data.val.data)
+			await _this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
+			const fileHash = _this.$store.state.form[`usersOwn${_this.criteriaCapFirstL}FileHash`][data.index]
+			console.log(`判断 ${_this.criteria} 有没有填充的值`, fileHash)
+			if(fileHash == '' || fileHash == 'HASH') eventBus.$emit(`user${this.criteriaCapFirstL}FileSelect`, data)
+		},
+		async userFileSelect(data) {
+			let _this = this
+			if(_this.indicatorRadioArr[data.index] !== 'user') return
+			await _this.$refs.indiChild[data.index].changeIndicatorChecked("Users' Own Indicator")
+			await _this.$refs.indiChild[data.index].handleUsersOwnIndicatorSelect(data.val.data)
+			await _this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
+		},
+		
+	}
 }
 </script>
 

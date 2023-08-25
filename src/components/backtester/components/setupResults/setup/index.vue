@@ -9,7 +9,7 @@
         <Criteria
         ref="entryChild"
         :config="setConfig('entry')"
-        :direction="direction"
+				:isRiskControl="false"
         @getEntryRelation="getEntryRelation"
         @sendEntrySignalIndex="sendEntrySignalIndex"
       ></Criteria>
@@ -19,6 +19,7 @@
       <Criteria
         ref="exitChild"
         :config="setConfig('exit')"
+				:isRiskControl="isRiskControl"
         @isOnlyRiskControl="isOnlyRiskControl"
         @getExitRelation="getExitRelation"
         @sendExitSignalIndex="sendExitSignalIndex"
@@ -64,6 +65,7 @@ export default {
   },
   data() {
     return {
+			isRiskControl: true
     }
   },
   methods: {
