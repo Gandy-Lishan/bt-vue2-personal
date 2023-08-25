@@ -461,7 +461,6 @@ import { timestampToTime } from '@/tools/formatDate.js'
 import Cookies from 'vue-cookies'
 import { mapMutations } from "vuex"
 import {
-  getIndicatorsList,
   getIndexsList,
   getStocksList,
   getBacktestName
@@ -637,7 +636,6 @@ export default {
       isTakeProfit: false,
       isStopLoss: false,
       isTimeInMarket: true,
-      sentimentIndicatorList: [],
       rules: {
         capital: [
           {
@@ -685,7 +683,6 @@ export default {
     this.generateBTName()
   },
   mounted() {
-    this.loadSentimentList()
     this.$emit('IsRiskControl', true)
     this.getEndDate()
   },
@@ -1065,50 +1062,6 @@ export default {
       // getFrequency will no longer call addIndicator and pass a parameter to it
       this.bd.frequency = val
       this.$store.commit('form/getFrequency', val)
-    },
-    async loadSentimentList() {
-      const vm = this
-      var indicatorList = []
-
-      if (CIQ.indicatorList) {
-        if (CIQ.indicatorList.length != 0) {
-          indicatorList = this.$store.state.chart.indicatorsList
-          indicatorList = CIQ.indicatorList
-        }
-      }
-      vm.sentimentIndicatorList = []
-
-        indicatorList.forEach((element) => {
-            vm.sentimentIndicatorList.push({
-              value: element.chart_name,
-              url: element.url,
-              updated: element.updated
-            })
-        })
-      this.$store.commit('chart/getIndicatorsList', indicatorList)
-      CIQ.indicatorList = indicatorList
-
-      this.$store.commit('chart/getSentimentList', vm.sentimentIndicatorList)
-    },
-
-    async getIndicatorsList() {
-      try {
-        const vm = this
-        var indicatorList = []
-        if (CIQ.indicatorList) {
-          if (CIQ.indicatorList.length != 0) {
-            indicatorList = this.$store.state.chart.indicatorsList
-            indicatorList = CIQ.indicatorList
-          }
-        } else {
-          const res = await getIndicatorsList()
-          indicatorList = res.data
-        }
-        this.$store.commit('chart/getIndicatorsList', indicatorList)
-        CIQ.indicatorList = indicatorList
-      } catch (error) {
-        console.error('indicator list request error', error)
-      }
     },
     backtestNameCheck() {
       return getBacktestName(this.bd.name)

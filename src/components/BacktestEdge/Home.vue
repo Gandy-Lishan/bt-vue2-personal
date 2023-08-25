@@ -1253,15 +1253,11 @@ export default {
               var entry_signal_list = []
               var exit_signal_list = []
 
-              let formateTechnicalList
-              formateTechnicalList = vm.$store.state.chart.formateTechnicalList
-              if (formateTechnicalList.length === 0) {
-                formateTechnicalList = vm.loadShortLong()
-              }
+              let formateTechnicalList = vm.$store.state.chart.formateTechnicalList
 
               let entrySignal = backtestData.entry.signals.map((item, index) => {
                 // if it is senti
-                let signal = CIQ.indicatorList.find((i) => {
+                let signal = vm.$store.state.chart.indicatorsList.find((i) => {
                   return i.chart_name == item.indicator
                 })
                 // if it is not senti?
@@ -1278,7 +1274,7 @@ export default {
                     return item.indicator
                   }
                 }
-                console.log('runbacktest', vm.$store.state.form.usersOwnEntryFileHash)
+                
                 let usersOwnEntryList = vm.$store.state.form.usersOwnEntryFileHash
                 if (usersOwnEntryList[index] != '') {
                   return usersOwnEntryList[index]
@@ -1290,7 +1286,7 @@ export default {
               let exitSignal
               if (!this.isOnlyRisk) {
                 exitSignal = backtestData.exit.signals.map((item, index) => {
-                  let signal = CIQ.indicatorList.find((i) => {
+                  let signal = vm.$store.state.chart.indicatorsList.find((i) => {
                     return i.chart_name == item.indicator
                   })
 
@@ -1388,7 +1384,7 @@ export default {
               for (var i in CIQ.stxx.layout.studies) {
                 var output = {}
                 if (
-                  CIQ.indicatorList.find((j) => {
+                  this.$store.state.chart.indicatorsList.find((j) => {
                     return j.url == CIQ.stxx.layout.studies[i].type
                   }) == undefined
                 ) {
@@ -1809,26 +1805,6 @@ export default {
     },
     isOnlyRiskControl(val) {
       this.isOnlyRisk = val
-    },
-    loadShortLong() {
-      const technicalList = CIQ.technicalCategory
-      let formatList = []
-      for (let i = 0; i < technicalList.length; i++) {
-        if (
-          technicalList[i].class === 'No_display_technical_indicator' ||
-          technicalList[i].class ===
-          'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
-        )
-          continue
-        technicalList[i].studies.forEach((item) => {
-          let obj = {}
-          obj.class = technicalList[i].class
-          obj.value = item.name
-          obj.url = item.url
-          formatList.push(obj)
-        })
-      }
-      return formatList
     },
     getExitRelation(val) {
       this.exitRelation = val

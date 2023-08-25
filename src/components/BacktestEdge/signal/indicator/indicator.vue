@@ -333,7 +333,7 @@ export default {
         riskIndicator: '',
         userIndicator: ''
       },
-      sentimentIndicatorList: this.$store.state.chart.sentimentIndicatorList,
+      sentimentIndicatorList: JSON.parse(JSON.stringify(this.$store.state.chart.indicatorsList).replace(/chart_name/g, 'value')),
       symbolConditions: [
         { value: 0, obj: { label: 'Symbol Open', field: 'Open' } },
         { value: 1, obj: { label: 'Symbol High', field: 'High' } },
@@ -436,29 +436,29 @@ export default {
         absoluteIndex == this.panelIndex
       ) {
         this.si.sentimentIndicator = val.name
-        for (var i in CIQ.indicatorList) {
-          if (CIQ.indicatorList[i].chart_name == val.name) {
+        for (var i in this.$store.state.chart.indicatorsList) {
+          if (this.$store.state.chart.indicatorsList[i].chart_name == val.name) {
             this.indicatorRadio = 'Sentiment Indicator'
             if (this.criteria == 'entry') {
               this.$store.commit('chart/getEntryIndicators', {
                 index: this.panelIndex,
-                value: CIQ.indicatorList[i].url
+                value:this.$store.state.chart.indicatorsList[i].url
               })
             } else {
               this.$store.commit('chart/getExitIndicators', {
                 index: this.panelIndex,
-                value: CIQ.indicatorList[i].url
+                value: this.$store.state.chart.indicatorsList[i].url
               })
             }
             // extract this statement from handleSentimentSelect
             let valObj = {}
-            valObj.value = CIQ.indicatorList[i].chart_name
+            valObj.value = this.$store.state.chart.indicatorsList[i].chart_name
             valObj.index = this.panelIndex
             this.$emit('getIndicatorVal', valObj)
 
-            this.currentSentiUpdated = CIQ.indicatorList[i].updated
+            this.currentSentiUpdated = this.$store.state.chart.indicatorsList[i].updated
             let freqObj = {}
-            freqObj.value = CIQ.indicatorList[i].updated
+            freqObj.value = this.$store.state.chart.indicatorsList[i].updated
             freqObj.index = this.panelIndex
             freqObj.criteria = this.criteria
             freqObj.key = `${this.criteria}_${this.panelIndex}`
@@ -472,7 +472,7 @@ export default {
             this.$emit('getIndicatorRadio', radioObj)
             let obj = {}
             obj.index = this.panelIndex
-            obj.url = CIQ.indicatorList[i].url
+            obj.url = this.$store.state.chart.indicatorsList[i].url
             this.$emit('getIndicatorUrl', obj)
           }
         }
@@ -545,9 +545,7 @@ export default {
           riskIndicator: '',
           userIndicator: ''
         },
-        sentimentIndicatorList: []
       }
-      data.sentimentIndicatorList = this.$store.state.chart.sentimentIndicatorList
       Object.assign(this.$data, data)
       this.$refs.siForm.clearValidate()
       this.$refs.upload.clearFiles()
@@ -556,15 +554,15 @@ export default {
     },
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
-      var sentimentIndicatorList = this.$store.state.chart.sentimentIndicatorList
-      sentimentIndicatorList.sort(function (a, b) {
+      var list = this.sentimentIndicatorList
+      list.sort(function (a, b) {
         return a.value.localeCompare(b.value)
       })
       var results = queryString
-        ? sentimentIndicatorList.filter(
+        ? list.filter(
           this.createStateSentimentFilter(queryString)
         )
-        : sentimentIndicatorList
+        : list
       cb(results)
     },
     createStateSentimentFilter(queryString) {
@@ -579,7 +577,7 @@ export default {
     },
     // technical search
     indicatorTechnicalSearch(queryString, cb) {
-      var technicaltIndicatorList = this.loadShortLong()
+      var technicaltIndicatorList = this.$store.state.chart.formateTechnicalList
       if (this.criteria === 'entry') {
         let valueArr = ['ATR Trailing Stops', 'Parabolic SAR']
         technicaltIndicatorList = technicaltIndicatorList.filter(
@@ -630,8 +628,7 @@ export default {
       this.fileList = []
     },
     clearSentimentSelect() {
-      var sentimentIndicatorList = this.$store.state.chart.sentimentIndicatorList
-      const item = sentimentIndicatorList.find(i=>i.value ==  this.$refs.sentiInput.value)
+      const item = this.sentimentIndicatorList.find(i=>i.value ==  this.$refs.sentiInput.value)
 
       this.currentSentiUpdated = item.updated
       let freqObj = {}
@@ -914,10 +911,7 @@ export default {
       CIQ.addIndicators()
     },
     clearTechnicalSelect() {
-        let formateList = this.$store.state.chart.formateTechnicalList
-        if (formateList.length === 0) {
-          formateList = vm.loadShortLong()
-        }
+      let formateList = this.$store.state.chart.formateTechnicalList
       const item = formateList.find(i=>i.value ==  this.$refs.techInput.value)
 
       let freqObj = {}
@@ -1262,7 +1256,7 @@ export default {
         valObj.index = this.panelIndex
         this.$emit('getIndicatorVal', valObj)
         let urlObj = {}
-        let res = CIQ.indicatorList.find((i) => { return i.chart_name == this.si.sentimentIndicator })
+        let res = this.$store.state.chart.indicatorsList.find((i) => { return i.chart_name == this.si.sentimentIndicator })
         urlObj.url = res ? res.url : ''
         urlObj.index = this.panelIndex
         this.$emit('getIndicatorUrl', urlObj)
@@ -1364,32 +1358,6 @@ export default {
         this.$emit('getIndicatorUrl', urlObj)
       }
     },
-
-    // load short and long technical list
-    loadShortLong() {
-      const technicalList = CIQ.technicalCategory
-      let formatList = []
-      for (let i = 0; i < technicalList.length; i++) {
-        if (
-          technicalList[i].class === 'No_display_technical_indicator' ||
-          technicalList[i].class ===
-          'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
-        )
-          continue
-        technicalList[i].studies.forEach((item) => {
-          let obj = {}
-          obj.class = technicalList[i].class
-          obj.value = item.name
-          obj.url = item.url
-          formatList.push(obj)
-        })
-      }
-      formatList.sort(function (a, b) {
-        return a.value.localeCompare(b.value)
-      })
-      this.$store.commit('chart/saveFormatTechnicalList', formatList)
-      return formatList
-    },
     loadRiskList() {
       return [{ value: 'Time In Market' }, { value: 'Profit/Loss' }]
     },
@@ -1404,25 +1372,8 @@ export default {
         this.$refs.siForm.validate((valid) => {
           validForm = valid
         })
-        let sentimentList = this.$store.state.chart.sentimentIndicatorList
-        if (sentimentList.length == 0) {
-          var indicatorList = []
-          if (CIQ.indicatorList) {
-            if (CIQ.indicatorList.length != 0) {
-              indicatorList = this.$store.state.chart.indicatorsList
-              indicatorList = CIQ.indicatorList
-            }
-          }
-          sentimentList = indicatorList.map((obj) => {
-            if (obj.chart_name && obj.url && obj.updated) {
-              return {
-                value: obj.chart_name,
-                url: obj.url,
-                updated: obj.updated
-              }
-            }
-          })
-        }
+        let sentimentList = JSON.parse(JSON.stringify(this.$store.state.chart.indicatorsList).replace(/chart_name/g, 'value'))
+
         for (let i = 0; i < sentimentList.length; i++) {
           if (this.si.sentimentIndicator === sentimentList[i].value) {
             validName = true
@@ -1491,9 +1442,6 @@ export default {
           validForm = valid
         })
         let formateList = this.$store.state.chart.formateTechnicalList
-        if (formateList.length === 0) {
-          formateList = vm.loadShortLong()
-        }
         for (let i = 0; i < formateList.length; i++) {
           if (this.si.technicalIndicator === formateList[i].value) {
             validName = true
@@ -1527,18 +1475,7 @@ export default {
         this.$refs.siForm.validate((valid) => {
           validForm = valid
         })
-        console.log('validForm', validForm)
-        // let formateList = this.$store.state.chart.formateTechnicalList
-        // if (formateList.length === 0) {
-        // 	formateList = this.loadShortLong()
-        // }
 
-        // for (let i = 0; i < formateList.length; i++) {
-        // 	if (this.si.technicalIndicator === formateList[i].value) {
-        // 		validName = true
-        // 		break
-        // 	}
-        // }
         validName = true
         if (validForm && validName) {
           let obj = {}
@@ -1579,19 +1516,8 @@ export default {
             this.indicatorRadio = 'Sentiment Indicator'
             this.si.sentimentIndicator =
               newVal[this.criteria].signals[index].indicator
-            let sentimentList = this.$store.state.chart.sentimentIndicatorList
-            if (sentimentList.length == 0) {
-              let res = await getIndicatorsList()
-              sentimentList = res.data.map((obj) => {
-                if (obj.chart_name && obj.url && obj.updated) {
-                  return {
-                    value: obj.chart_name,
-                    url: obj.url,
-                    updated: obj.updated
-                  }
-                }
-              })
-            }
+            let sentimentList = JSON.parse(JSON.stringify(this.$store.state.chart.indicatorsList).replace(/chart_name/g, 'value'))
+
             let indi = this.si.sentimentIndicator
             sentimentList.forEach((item) => {
               if (indi.toUpperCase() == item.value.toUpperCase()) {
@@ -1629,9 +1555,6 @@ export default {
               newVal[this.criteria].signals[index].indicator
             vm.si.technicalIndicators = technicalIndicator
             let formateList = this.$store.state.chart.formateTechnicalList
-            if (formateList.length === 0) {
-              formateList = vm.loadShortLong()
-            }
             for (let i = 0; i < formateList.length; i++) {
               if (technicalIndicator === formateList[i].value) {
                 let obj = formateList[i]
@@ -2408,18 +2331,6 @@ export default {
       let userIndicator = data.file_name
       this.si.userIndicator = userIndicator
 
-      // let formateList = this.$store.state.chart.formateTechnicalList
-      // if (formateList.length === 0) {
-      // 	formateList = vm.loadShortLong()
-      // }
-      // for (let i = 0; i < formateList.length; i++) {
-      // 	if (technicalIndicator === formateList[i].value) {
-      // 		let obj = formateList[i]
-      // 		let isFromEdit = true
-      // 		vm.handleTechnicalSelect(obj, isFromEdit)
-      // 		break
-      // 	}
-      // }
       const response = await csvFileRead(userIndicator, data.hash)
 
       // 还原文件对象的 raw 属性

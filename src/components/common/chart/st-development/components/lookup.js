@@ -191,9 +191,6 @@ let __js_webcomponents_lookup_ = (_exports) => {
             }
     
             initialize() {
-                // this.loadAllSymbolsList();
-                // this.loadStocksList();
-                // this.loadIndexsList();
                 this.addDefaultMarkup();
                 var node = this.node;
                 this.resultList = node.find("cq-scroll");

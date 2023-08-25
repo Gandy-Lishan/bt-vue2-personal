@@ -151,7 +151,7 @@
 								</el-tooltip>
 								<div class="selectBox historySelectBox">
 									<el-select
-										@change="getBacktestHistory(bd.backtest_period)"
+										@change="setBacktestHistory(bd.backtest_period)"
 										@blur="setBacktestHistory(bd.backtest_period)"
 										v-model="bd.backtest_period"
 									>
@@ -502,7 +502,6 @@ import { timestampToTime } from '@/tools/formatDate.js'
 import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule, createTPSLValidate, createPositiveIntegerValidate } from '@/utils/formValidate'
 import { mapMutations } from "vuex"
 import {
-  getIndicatorsList,
   getIndexsList,
   getStocksList,
   getBacktestName
@@ -615,7 +614,7 @@ export default {
       isTakeProfit: false,
       isStopLoss: false,
       isTimeInMarket: true,
-      sentimentIndicatorList: [],
+
       rules: {
         capital: [
           {
@@ -657,11 +656,9 @@ export default {
   },
   created() {
     this.is_admin = this.$store.getters.getIsAdmin
-
     this.generateBTName()
   },
   mounted() {
-    this.loadSentimentList()
     this.$emit('IsRiskControl', true)
     this.getEndDate()
   },
@@ -974,7 +971,6 @@ export default {
       }
     },
     getBacktestHistory(val) {
-      this.bd.backtest_period = val
       this.bd.end_date = timestampToTime(new Date())
       if (val <= 20 || val == 22) {
         this.bd.end_date = timestampToTime(new Date())
@@ -982,12 +978,11 @@ export default {
         str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
         this.bd.start_date = str.join('-')
       }
-      if (val === '21') {
+      if (val == '21') {
         this.bd.start_date = ''
       }
     },
     setBacktestHistory(val) {
-      this.bd.backtest_period = val
       this.bd.end_date = timestampToTime(new Date())
       if (val <= 20 || val == 22) {
         this.bd.end_date = timestampToTime(new Date())
@@ -1046,34 +1041,8 @@ export default {
     },
     getFrequency(val) {
       // getFrequency will no longer call addIndicator and pass a parameter to it
-      this.bd.frequency = val
       this.$store.commit('form/getFrequency', val)
     },
-    async loadSentimentList() {
-      const vm = this
-      var indicatorList = []
-
-      if (CIQ.indicatorList) {
-        if (CIQ.indicatorList.length != 0) {
-          indicatorList = this.$store.state.chart.indicatorsList
-          indicatorList = CIQ.indicatorList
-        }
-      }
-      vm.sentimentIndicatorList = []
-
-      indicatorList.forEach((element) => {
-        vm.sentimentIndicatorList.push({
-          value: element.chart_name,
-          url: element.url,
-          updated: element.updated
-        })
-      })
-      this.$store.commit('chart/getIndicatorsList', indicatorList)
-      CIQ.indicatorList = indicatorList
-
-      this.$store.commit('chart/getSentimentList', vm.sentimentIndicatorList)
-    },
-
     async getIndicatorsList() {
       try {
         const vm = this

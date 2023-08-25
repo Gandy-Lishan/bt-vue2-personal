@@ -24,16 +24,14 @@ const state = {
 		technicalIndicators: []
 	},
 	extremeValue: [],//chartiq
-	indicatorsList: [],//chartiq 准备用AllSymbolsList代替
+	indicatorsList: [],//chartiq 代替了AllSymbolsList
 	builtinList: [],//chartiq 包含完整techList
 	trades: [],//chartiq
 	activatedMA: [{ period: 21, url: '' }],//chartiq
 	activatedMALayout: [],//chartiq
 	// indicators look up
-	allSymbolsList: [],//chartiq
 	stocksList: [],//chartiq
 	indexsList: [],//chartiq
-	sentimentIndicatorList: [],//chartiq 纯属多余，被allSymbolList取代，只是name key不同
 	formateTechnicalList: [],//chartiq 和builtinList不同，这个是只给表单提供的techList
 	spanPeriod : {},
 }
@@ -89,12 +87,6 @@ const mutations = {
 	 */	
 	getExtremeValue: (state, list) => {
 		state.extremeValue = list
-	},
-	/**
-	 * Sets up a mutations to store the list of all indicators which is loaded from getAllSymbolsList API in project initiation
-	 */	
-	getAllSymbolsList(state, list) {
-		state.allSymbolsList = list
 	},
 	/**
 	 * Sets up a mutations to store the StocksList, it's usually called when the project is initiated
@@ -162,9 +154,6 @@ const mutations = {
 	},
 	getTechnicalIndicators(state, val) {
 		state.indicators.technicalIndicators = val
-	},
-	getSentimentList(state,list) {
-		state.sentimentIndicatorList = list
 	},
 	saveFormatTechnicalList(state,list) {
 		state.formateTechnicalList = list
