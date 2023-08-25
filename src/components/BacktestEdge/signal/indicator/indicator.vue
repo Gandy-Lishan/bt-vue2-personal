@@ -911,8 +911,7 @@ export default {
       CIQ.addIndicators()
     },
     clearTechnicalSelect() {
-      let formateList = this.$store.state.chart.formateTechnicalList
-      const item = formateList.find(i=>i.value ==  this.$refs.techInput.value)
+      const item = CIQ.findTechIndicator(this.$refs.techInput.value,null)
 
       let freqObj = {}
       freqObj.value = ''
@@ -1441,13 +1440,8 @@ export default {
         this.$refs.siForm.validate((valid) => {
           validForm = valid
         })
-        let formateList = this.$store.state.chart.formateTechnicalList
-        for (let i = 0; i < formateList.length; i++) {
-          if (this.si.technicalIndicator === formateList[i].value) {
-            validName = true
-            break
-          }
-        }
+        if(CIQ.findTechIndicator(this.si.technicalIndicator,null)) validName = true
+
         if (validForm && validName) {
           let obj = {}
           obj.criteria = this.criteria
@@ -1551,17 +1545,12 @@ export default {
           }
           if (newVal[this.criteria].signals[index].analysis === 'Technical') {
             vm.indicatorRadio = 'Technical Indicator'
-            let technicalIndicator =
-              newVal[this.criteria].signals[index].indicator
-            vm.si.technicalIndicators = technicalIndicator
-            let formateList = this.$store.state.chart.formateTechnicalList
-            for (let i = 0; i < formateList.length; i++) {
-              if (technicalIndicator === formateList[i].value) {
-                let obj = formateList[i]
-                let isFromEdit = true
-                vm.handleTechnicalSelect(obj, isFromEdit)
-                break
-              }
+            vm.si.technicalIndicator = newVal[this.criteria].signals[index].indicator
+
+            let techIndicatorResult = CIQ.findTechIndicator(vm.si.technicalIndicator,null)
+            if(techIndicatorResult){
+              let isFromEdit = true
+              vm.handleTechnicalSelect(techIndicatorResult, isFromEdit) 
             }
           }
           if (newVal[this.criteria].signals[index].analysis === 'User') {

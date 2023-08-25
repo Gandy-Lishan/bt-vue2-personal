@@ -777,8 +777,8 @@ export default {
 				this.editableTabsValue = activeName
 
 				// 移除senti indicator附属ma
-				let techList = this.$store.state.chart.formateTechnicalList
-				let removedUrl = techList.find(i=>i.value == this.indicatorValArr[absoluteIndex])?.url
+				// 移除ma的
+				let removedUrl = CIQ.findTechIndicator(this.indicatorValArr[absoluteIndex],null)?.url
 
 				var activatedMAList = this.$store.state.chart.activatedMA
 				var MAListIndex = activatedMAList.findIndex(
@@ -1346,14 +1346,7 @@ export default {
 					this.indicatorRadio = 'technical'
 					this.indicatorRadioArr.splice(j, 1, 'technical')
 					
-					let formateTechnicalList = this.$store.state.chart.formateTechnicalList
-					let indicatorName = data.exit.signals[j].indicator
-					for (let i = 0; i < formateTechnicalList.length; i++) {
-						if (indicatorName === formateTechnicalList[i].value) {
-							this.techIndiObj[j] = formateTechnicalList[i].class
-							break
-						}
-					}
+					this.techIndiObj[j] = CIQ.findTechIndicator(data.exit.signals[j].indicator,null)?.class
 				}
 			}
 			this.$nextTick(() => {
