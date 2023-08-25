@@ -70,7 +70,7 @@ export default {
     symVal: String,
     panelIndex: Number,
     direction: String,
-    exitItemCheck: Boolean,
+    isRiskControl: Boolean,
     relation: [String, Number],
     score: [String, Number],
     period: [String, Number],
@@ -342,7 +342,7 @@ export default {
     saveCondition(index) {
       let checked = true
       let validForm
-      if (!this.exitItemCheck) {
+      if (!this.isRiskControl) {
         this.$refs['symbolForm'].validateField(['value'], (errorMsg) => {
           if (!errorMsg) {
             validForm = true
@@ -360,7 +360,7 @@ export default {
           return checked
         }
       }
-      if (this.exitItemCheck) {
+      if (this.isRiskControl) {
         return checked = true
       }
     },

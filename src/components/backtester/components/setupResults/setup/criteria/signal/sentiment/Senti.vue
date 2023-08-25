@@ -184,7 +184,7 @@ export default {
     sentiVal: String,
     panelIndex: Number,
     direction: String,
-    exitItemCheck: Boolean,
+    isRiskControl: Boolean,
     relation: [String, Number],
     score: [String, Number],
     period: [String, Number],
@@ -717,7 +717,7 @@ export default {
     saveCondition(index) {
       let checked = true
       let validForm
-      if (this.conditionRadio === 'Indicator Value' && !this.exitItemCheck) {
+      if (this.conditionRadio === 'Indicator Value' && !this.isRiskControl) {
         this.$refs['sentiForm'].validateField(['value'], (errorMsg) => {
           if (!errorMsg) {
             validForm = true
@@ -737,7 +737,7 @@ export default {
           return checked
         }
       }
-      if (this.conditionRadio === 'Indicator Moving Average' && !this.exitItemCheck) {
+      if (this.conditionRadio === 'Indicator Moving Average' && !this.isRiskControl) {
         let validMaValue = false
         let validatePeriod = false
         this.$refs['sentiForm'].validateField(['maValue'], (errorMsg) => {
@@ -764,7 +764,7 @@ export default {
           return checked
         }
       }
-      if (this.exitItemCheck) {
+      if (this.isRiskControl) {
         return checked = true
       }
     },
