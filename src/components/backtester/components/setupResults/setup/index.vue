@@ -53,9 +53,9 @@
 </template>
 
 <script>
-import { BasicInfo } from "@/components/backtester/components"
-import { Criteria } from "@/components/backtester/components"
-import { generateConfig } from "../criteria/config"
+import BasicInfo from "./basicInfo"
+import Criteria from "./criteria"
+import { generateConfig } from "./criteria/config"
 export default {
   name: 'SetUp',
   components: {

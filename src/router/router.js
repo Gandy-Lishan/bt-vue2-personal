@@ -22,7 +22,7 @@ const routes = [
 						meta: { activeItem: 'setup' },
 						component: resolve =>
 							require([
-								'@/components/backtester/components/setup/index.vue'
+								'@/components/backtester/components/setupResults/setup/index.vue'
 							], resolve)
 					},
 					{
@@ -31,7 +31,7 @@ const routes = [
 						meta: { activeItem: 'results' },
 						component: resolve =>
 							require([
-								'@/components/backtester/components/results/index.vue'
+								'@/components/backtester/components/setupResults/results/index.vue'
 							], resolve)
 					}
 				]

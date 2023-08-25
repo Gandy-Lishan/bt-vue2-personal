@@ -1,15 +1,15 @@
 <template>
 	<div class="backtester">
-    <BTHeader></BTHeader>
+    <BTChart></BTChart>
     <router-view></router-view>
 	</div>
 </template>
 <script>
-import { BTHeader } from "./components"
+import { BTChart } from "./components"
 export default {
   name: 'Backtester',
   components: {
-    BTHeader
+    BTChart
   }
 }
 </script>

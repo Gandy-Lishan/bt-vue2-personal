@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import Table from "../../table"
+import Table from "../table"
 export default {
   name: 'Favorites',
   components: {

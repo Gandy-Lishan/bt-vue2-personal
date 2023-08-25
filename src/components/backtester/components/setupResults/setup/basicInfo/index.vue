@@ -596,13 +596,6 @@ export default {
         { value: 'analyst', label: 'Analyst' },
         { value: 'system', label: 'System' }
       ],
-      mmValue: 0,
-      mmOptions: [
-        {
-          value: 0,
-          label: 'All In / All Out (CASH)'
-        }
-      ],
       symbolList: [],
       indexList: [],
       loading: false,
