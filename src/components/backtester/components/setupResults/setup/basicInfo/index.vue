@@ -55,7 +55,7 @@
 								</el-tooltip>
 								<el-input
 									v-model="bd.capital"
-									@input="validateStartingCapital"
+									@blur="bd.capital = removeDecimalPlaces(bd.capital)"
 								></el-input>
 							</el-form-item>
 							<el-form-item prop="commission" label="Commission">
@@ -68,7 +68,7 @@
 								</el-tooltip>
 								<el-input
 									v-model="bd.commission"
-									@change="getCommission"
+									@blur="bd.commission = removeDecimalPlaces(bd.commission)"
 								></el-input>
 							</el-form-item>
 							<span class="comUnitNote">(%)</span>
@@ -80,7 +80,7 @@
 									/></span>
 									<i class="iconfont icon-wenhao"></i>
 								</el-tooltip>
-								<el-input v-model="bd.slippage"></el-input> </el-form-item
+								<el-input v-model="bd.slippage" @blur="bd.slippage = removeDecimalPlaces(bd.slippage)"></el-input> </el-form-item
 							><span class="sliUnitNote">(per trade)</span>
 							<el-form-item prop="benchmark" label="Benchmark">
 								<el-tooltip effect="dark" placement="top">
@@ -99,7 +99,6 @@
 										remote
 										reserve-keyword
 										automatic-dropdown
-										@change="getBenchmark(bd.benchmark)"
 										placeholder="enter keywords"
 										:remote-method="remoteMethod"
 										:loading="loading"
@@ -168,7 +167,7 @@
 							<div class="dateBox">
 								<el-form-item label="Start Date">
 									<el-date-picker
-										v-if="bd.backtest_period === '22'"
+										v-if="bd.backtest_period == '22'"
 										v-model="bd.start_date"
 										@change="formateStartDate"
 										type="date"
@@ -183,7 +182,7 @@
 							<div class="dateBox">
 								<el-form-item prop="endDate" label="End Date">
 									<el-date-picker
-										v-if="bd.backtest_period === '22'"
+										v-if="bd.backtest_period == '22'"
 										v-model="bd.end_date"
 										@change="formateEndDate"
 										type="date"
@@ -277,7 +276,7 @@
 									v-model="bd.exclude_oo"
 									:style="{ visibility: isExcludeOO ? 'visible' : 'hidden' }"
 									size="mini"
-                  @blur="_validateExclude"
+                  @blur="validateExclude(bd.exclude_oo)"
 								></el-input>
                 <div class="exclude-error-message" v-if="excludeOOErrMsg">
                    {{ excludeOOErrMsg }}
@@ -436,7 +435,7 @@
 									</el-checkbox>
 									<el-input
 										v-model="tp"
-                    @blur="validateTP"
+                    @blur="tp = removeDecimalPlaces(tp); validateTP(tp)"
 										size="mini"
 									></el-input>
 									<p style="margin: 0px;">(%)</p>
@@ -457,8 +456,7 @@
 									></el-checkbox>
 									<el-input
 										v-model="sl"
-                    @blur="validateSL"
-										@input="setDesciption"
+                    @blur="sl = removeDecimalPlaces(sl); validateSL(sl)"
 										size="mini"
 									></el-input>
 									<p>(%)</p>
@@ -480,8 +478,7 @@
 									></el-checkbox>
 									<el-input
 										v-model="tim"
-                    @blur="validateTIM"
-										@input="setDesciption"
+                    @blur="validateTIM(tim)"
 										size="mini"
 									></el-input>
 									<p>(Bars)</p>
@@ -498,9 +495,10 @@
 </template>
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { timestampToTime } from '@/tools/formatDate.js'
+import { timestampToTime } from '@/tools/formatDate'
+import isJson from '@/tools/isJson'
 import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule, createTPSLValidate, createPositiveIntegerValidate } from '@/utils/formValidate'
-import { mapMutations } from "vuex"
+import { mapGetters } from "vuex"
 import {
   getIndexsList,
   getStocksList,
@@ -637,7 +635,6 @@ export default {
           }
         ]
       },
-      oldBacktestName: '',
       is_admin: false,
       isExcludeOO: false,
       isToggle: false,
@@ -653,15 +650,17 @@ export default {
   },
   mounted() {
     this.$emit('IsRiskControl', true)
-    this.getEndDate()
+    // 用于获取 start_date & end_date
+    this.getBTDate()
   },
   computed: {
+    ...mapGetters(['getterBacktestInfo']),
     updateFreq() {
       return this.$store.state.form.pairDataFreq
     },
     allRiskControlOptions() {
       return this.isTakeProfit || this.isStopLoss || this.isTimeInMarket
-    }
+    },
   },
   watch: {
     updateFreq(val) {
@@ -697,18 +696,33 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['form', 'GET_END_DATE']),
-    validateTP({ target: { value } }) {
+    clearForm() {
+      Object.assign(this.$data, this.$options.data())
+      this.is_admin = this.$store.getters.getIsAdmin
+      this.getBTDate()
+      if (this.$store.state.form.backtestSymbol) this.bd.symbol = this.$store.state.form.backtestSymbol
+      this.generateBTName()
+      this.$emit('IsRiskControl', true)
+      this.clearFormValidate()
+    },
+    clearFormValidate() {
+      this.$refs.backtestSetupForm.clearValidate()
+    },
+    validateTP(value) {
       this.tpValidErrMsg = createTPSLValidate(0, value)
+      return this.tpValidErrMsg
     },
-    validateSL({ target: { value } }) {
+    validateSL(value) {
       this.slValidErrMsg = createTPSLValidate(0, value)
+      return this.slValidErrMsg
     },
-    validateTIM({ target: { value } }) {
+    validateTIM(value) {
       this.timValidErrMsg = createPositiveIntegerValidate(value)
+      return this.timValidErrMsg
     },
-    _validateExclude({ target: { value } }) {
+    validateExclude(value) {
       this.excludeOOErrMsg = createPositiveIntegerValidate(value)
+      return this.excludeOOErrMsg
     },
     generateBTName() {
       const date = new Date()
@@ -723,167 +737,60 @@ export default {
     getTradePrice(val) {
       this.$store.commit('form/SET_TRADE_PRICE', val)
     },
-    clearForm() {
-      Object.assign(this.$data, this.$options.data())
-      this.is_admin = this.$store.getters.getIsAdmin
-      this.getEndDate()
-      if (this.$store.state.form.backtestSymbol) this.bd.symbol = this.$store.state.form.backtestSymbol
-      this.generateBTName()
-      this.$emit('IsRiskControl', true)
-      this.clearFormValidate()
+    getSymbol(val) {
+      this.$store.commit('form/getBacktestSymbol', val)
+      CIQ.addSymbol(val)
     },
-    setEditData(newVal) {
-      if (JSON.stringify(newVal) != '{}') {
-        this.clearForm()
-        console.log('未处理之前的编辑数据', newVal)
-        delete newVal.entry
-        delete newVal.exit
-        delete newVal.user_id
-        delete newVal.status
-        delete newVal.results
-        delete newVal.uuid
-        delete newVal.entry
-        delete newVal.exit
-        delete newVal.results
-        // newVal.user_tag = 'client'
-        let description = {}
-        try {
-          if (newVal.description == null || newVal.description == undefined) {
-            throw new Error('description is null')
-          }
-          description = JSON.parse(newVal.description)
-        } catch (error) {
-          console.log(error)
-          description = {}
-          // newVal.description.Introduction = 'edit'
-          description.Introduction = ''
-          // newVal.description.Rules = entry_description + '<br>'+ exit_description
-          description.Rules = ''
-        }
-        newVal.description = description
-        delete newVal.entry_description
-        delete newVal.exit_description
-        newVal.commission = (newVal.commission * 100).toFixed(2)
-        newVal.slippage = Number(newVal.slippage).toFixed(2)
-        newVal.trade_price = Number(newVal.trade_price)
-        this.is_admin = this.$store.getters.getIsAdmin
-        this.bd = Object.assign(this.bd, newVal)
-        this.$set(this.bd, 'description', this.bd.description);
-        //this.changeTimeframe(newVal.frequency)
-        // 还是用getFrequency因为无需edit后再次调用addIndicators()
-        this.getFrequency(newVal.frequency)
+    getBTDate() {
+      this.bd.end_date = timestampToTime(new Date())
+      if(this.bd.backtest_period == '21') {this.bd.start_date = ''; return}
+      const str = this.bd.end_date.split('-')
+      str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
+      this.bd.start_date = str.join('-')
 
-        this.getDirection(newVal.direction)
-        this.getTradePrice(newVal.trade_price)
-        this.isRiskControl = false
-        this.isTakeProfit = false
-        this.isStopLoss = false
-        this.isTimeInMarket = false
-        this.isExcludeOO = false
-        if (this.bd.exclude_oo > 0) {
-          this.isExcludeOO = true
+      var that = this
+      var utils = function () {
+        let vm = this
+        vm.setSymbol = function (symbol) {
+          that.bd.symbol = symbol
         }
-        if (newVal.risk_control) {
-          let riskValArr = newVal.risk_control.split('/')
-          if (riskValArr[0]) {
-            this.isTakeProfit = true
-            this.tp = riskValArr[0]
-            this.isRiskControl = true
-            this.$emit('IsRiskControl', true)
-          }
-          if (riskValArr[1]) {
-            this.isStopLoss = true
-            this.sl = riskValArr[1]
-            this.isRiskControl = true
-            this.$emit('IsRiskControl', true)
-          }
-          if (riskValArr[2]) {
-            this.isTimeInMarket = true
-            this.tim = riskValArr[2]
-            this.isRiskControl = true
-            this.$emit('IsRiskControl', true)
-          }
-          this.selectRiskControl(this.isRiskControl)
-        }
-        this.oldBacktestName = newVal.name
-        try {
-          this.bd.backtest_period = newVal.backtest_period
-          if (newVal.backtest_period == '21') {
-            this.bd.start_date = ''
-          }
-          if (newVal.backtest_period == null || newVal.backtest_period == undefined) {
-            throw Error('不存在 backtest_period')
-          }
-        } catch (error) {
-          console.error('不存在 backtest_period', error)
-          let year
-          let month
-          let day
-          if (newVal.start_date && newVal.start_date !== '1800-10-01') {
-            const starArr = newVal.start_date.toString().split('-')
-            const endArr = newVal.end_date.toString().split('-')
-            year = Number(endArr[0]) - Number(starArr[0])
-            month = Number(endArr[1]) - Number(starArr[1])
-            day = Number(endArr[2]) - Number(starArr[2])
-            if (month == 0 && day == 0) {
-              this.bd.backtest_period = year + ''
-            } else {
-              this.bd.backtest_period = 22 + ''
-            }
-          } else {
-            this.bd.backtest_period = 21 + ''
-            this.bd.start_date = ''
-          }
-        }
-        console.log('处理完成之后的编辑数据', this.bd, CIQ.stxx.chart)
       }
+      return (window.utils = new utils())
     },
     getDirection(val) {
       // Set direction to vuex
       this.$store.commit('form/getDirection', val)
       // Direction passed to entry and exit
     },
-    validateStartingCapital: throttle(function (val) {
+    setBacktestHistory(val) {
+      this.bd.end_date = timestampToTime(new Date())
+      if (val <= 20 || val == 22) {
+        const str = this.bd.end_date.split('-')
+        str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
+        this.bd.start_date = str.join('-')
+      }
+      if (val == '21') {
+        this.bd.start_date = ''
+      }
+    },
+    changeTimeframe(val) {
+      this.$store.commit('form/getFreqHighPriority', val)
+      CIQ.addIndicators()
+    },
+    changeExcludeOO(val) {
+      if (val) this.bd.exclude_oo = 1
+    },
+    /* blur 时移除小数点多余位 remove decimal places */
+    removeDecimalPlaces: throttle(function (val) {
       let re = /^\d+\.?\d{0,2}$/
       if (val.search(re) !== -1) {
-        this.bd.capital = val
-      } else if (val.search(/^\d+\.?\d+/) !== -1) {
-        this.bd.capital =
-          val.split('.')[0] + '.' + val.split('.')[1].substring(0, 2)
+        return val
+      } else if (/^\d+\.\d{2,}$/.test(val)) {
+        return val.split('.')[0] + '.' + val.split('.')[1].substring(0, 2)
       } else {
-        this.bd.capital = ''
+        return val
       }
     }, 500),
-
-    getBenchmark(val) {
-      this.bd.benchmark = val
-    },
-    getSymbol(val) {
-      this.$store.commit('form/getBacktestSymbol', val)
-      CIQ.addSymbol(val)
-    },
-    formateStartDate(val) {
-      this.bd.start_date = val
-    },
-    formateEndDate(val) {
-      this.bd.end_date = val
-    },
-    getEndDate() {
-      // this.bd.end_date = timestampToTime(new Date())
-      // const str = this.bd.end_date.split('-')
-      // str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
-      // this.bd.start_date = str.join('-')
-
-      // var that = this
-      // var utils = function () {
-      //   let vm = this
-      //   vm.setSymbol = function (symbol) {
-      //     that.bd.symbol = symbol
-      //   }
-      // }
-      // return (window.utils = new utils())
-      this.GET_END_DATE(this)
-    },
     async getIndexsList() {
       try {
         let vm = this
@@ -963,54 +870,6 @@ export default {
         this.options = []
       }
     },
-    getBacktestHistory(val) {
-      this.bd.end_date = timestampToTime(new Date())
-      if (val <= 20 || val == 22) {
-        this.bd.end_date = timestampToTime(new Date())
-        const str = this.bd.end_date.split('-')
-        str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
-        this.bd.start_date = str.join('-')
-      }
-      if (val == '21') {
-        this.bd.start_date = ''
-      }
-    },
-    setBacktestHistory(val) {
-      this.bd.end_date = timestampToTime(new Date())
-      if (val <= 20 || val == 22) {
-        this.bd.end_date = timestampToTime(new Date())
-        const str = this.bd.end_date.split('-')
-        str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
-        this.bd.start_date = str.join('-')
-      }
-      if (val === '21') {
-        this.bd.start_date = ''
-      }
-    },
-    getCommission: throttle(function (val) {
-      this.bd.commission = val
-    }, 500),
-    validateForm(newTag, oldTag) {
-      let data = true
-      this.$refs.backtestSetupForm.validate((valid) => {
-        if (!valid) {
-          this.$emit('validSetUpFail', oldTag)
-          this.$message.error('Please complete the complete fields')
-          data = false
-        } else if (valid) {
-          this.$emit('validSetUpSuccess', newTag)
-        }
-      })
-      return data
-    },
-    clearFormValidate() {
-      this.$refs.backtestSetupForm.clearValidate()
-    },
-    changeTimeframe(val) {
-      this.bd.frequency = val
-      this.$store.commit('form/getFreqHighPriority', val)
-      CIQ.addIndicators()
-    },
     selectRiskControl(val) {
       if (!this.isRiskControl) {
         this.$emit('IsRiskControl', false)
@@ -1034,6 +893,7 @@ export default {
     },
     getFrequency(val) {
       // getFrequency will no longer call addIndicator and pass a parameter to it
+      this.bd.frequency = val
       this.$store.commit('form/getFrequency', val)
     },
     async getIndicatorsList() {
@@ -1055,197 +915,163 @@ export default {
         console.error('indicator list request error', error)
       }
     },
-    saveBacktestData() {
-      let checked = true
-      // let nameChecked = true
-      let validForm
+    saveData() {
+      /* 校验表单字段 */
+      if(!this.validateForm()) return
       let bd = JSON.parse(JSON.stringify(this.bd))
-      this.$refs.backtestSetupForm.validate((valid) => {
-        validForm = valid
+      /* 处理数据 */
+      if(bd.backtest_period == '21') bd.start_date = '1800-10-01'
+      if(!this.isExcludeOO) bd.exclude_oo = 0
+      bd.commission = (bd.commission / 100).toFixed(2)
+      bd.risk_control = this.isRiskControl ? `${this.isTakeProfit ? this.tp : ''}/${this.isStopLoss ? this.sl : ''}/${this.isTimeInMarket ? this.tim : ''}` : '//'
+      if(this.isRiskControl) this.setDesciption()
+      console.log(bd)
+      this.$store.commit('form/setBd', bd)
+    },
+    async validateForm() {
+      /* 校验表单字段 */
+      let formValid, riskControlValid, stopLossValid, takeProfitValid, timeInMarketValid, excludeValid, nameValid, setUpValid, nameLookupRes, nameValidPass
+      let _this = this
+      if(!_this.bd.end_date) {
+        _this.$message.error('Please select end date')
+        return false
+      }
+      _this.$refs['backtestSetupForm'].validate((valid) => {
+        if(valid) {
+          formValid = true
+        }else {
+          formValid = false
+          _this.$message.error('Kindly ensure that the form fields are filled correctly.')
+          return false
+        }
       })
-      let riskCheck = true
-      let slCheck
-      let tpCheck
-      let timCheck
-      let excludeCheck = true
-      if (this.isRiskControl) {
-        if (this.isStopLoss) {
-          slCheck = this.validateStopLoss(this.sl)
-        }
-        if (this.isTakeProfit) {
-          tpCheck = this.validateTakeProfit(this.tp)
-        }
-        if (this.isTimeInMarket) {
-          timCheck = this.validateTimeInMarket(this.tim)
-        }
-        riskCheck =
-          (this.isStopLoss ? slCheck : true) &&
-          (this.isTakeProfit ? tpCheck : true) &&
-          (this.isTimeInMarket ? timCheck : true)
+      /* 如果勾选了 risk control,则校验 stop loss, take profit, time in market */
+      if(_this.isRiskControl) {
+        if(_this.isStopLoss) stopLossValid = _this.validateTP(_this.sl)
+        if(_this.isTakeProfit) takeProfitValid = _this.validateSL(_this.tp)
+        if(_this.isTimeInMarket) timeInMarketValid = _this.validateTIM(_this.tim)
+        riskControlValid = (_this.isStopLoss ? (stopLossValid === '') : true) && (_this.isTakeProfit ? (takeProfitValid === '') : true) && (_this.isTimeInMarket ? (timeInMarketValid === '') : true)
       }
-      if (this.isExcludeOO) {
-        excludeCheck = this.validateExclude(this.bd.exclude_oo)
-      }
-      const filmCheck = validForm && riskCheck && excludeCheck
-      if (!validForm) {
-        this.$message({
-          message:
-            'Please check the setup form',
-          type: 'error',
-          offset: 150
-        })
-      }
-      if (!filmCheck) return false
-      if (filmCheck) {
-        if (bd.end_date) {
-          if (!this.isExcludeOO) { bd.exclude_oo = 0 }
-          bd.commission = bd.commission / 100
-          if (this.isRiskControl) {
-            let riskStr = `${this.isTakeProfit ? this.tp : ''}/${this.isStopLoss ? this.sl : ''
-              }/${this.isTimeInMarket ? this.tim : ''}`
-            bd.risk_control = riskStr
-            this.setDesciption()
-          } else {
-            bd.risk_control = '//'
+      /* 如果勾选了 exclude overlapping observations,则校验 exclude overlapping observations */
+      if(_this.isExcludeOO) excludeValid = (_this.validateExclude(_this.bd.exclude_oo) === '')
+      /* 表单总验证 */
+      setUpValid = (formValid && ((_this.isRiskControl && riskControlValid) || !_this.isRiskControl) && ((_this.isExcludeOO && excludeValid) || !_this.isExcludeOO) )
+      if(!setUpValid){ _this.$message.error('Kindly ensure that the form fields are filled correctly.'); return false }
+      /* backtest name 校验 */
+      nameLookupRes = await getBacktestName(_this.bd.name)
+      const nameList = nameLookupRes.data.results
+      if(nameList.length === 0) nameValid = true
+        for (let i = 0; i < nameList.length; i++) {
+          if (nameList[i].name == _this.bd.name) {
+            // 重名
+            nameValid = false
+            break
           }
-          if (this.bd.backtest_period >= 0 && this.bd.backtest_period <= 20) {
-            // 改成最新的 start end
-            // bd.end_date = '1800-10-01'
-            bd.end_date = timestampToTime(new Date())
-            const str = bd.end_date.split('-')
-            str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
-            bd.start_date = str.join('-')
-          }
-          if (this.bd.backtest_period == '21') {
-            bd.start_date = '1800-10-01'
-            // end 改成最新的
-            bd.end_date = timestampToTime(new Date())
-          }
-          // 这里是小薛的想法
-          if (this.bd.backtest_period == '22') {
-            // end 改成最新的
-            bd.end_date = timestampToTime(new Date())
-          }
-          this.$store.commit('form/setBd', bd)
-          return checked
-        } else {
-          this.$message({
-            message: 'Please select end date',
-            type: 'error',
-            offset: 200
-          })
-          checked = false
-          return checked
+          nameValid = true
         }
-      }
+      /* 重名且编辑 没名字是编辑 没名字是新建 */
+      nameValidPass = (!nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid')) || (nameValid) && _this.getterBacktestInfo.hasOwnProperty('old_uuid') || (nameValid) && !_this.getterBacktestInfo.hasOwnProperty('old_uuid')
+      if(!nameValidPass) {_this.$message.error('The backtest name already exists.'); return false}
+      return setUpValid && nameValidPass
     },
     setDesciption() {
-      let criteria = 'X:'
-      let direction = ''
-      let description
-      if (this.bd.direction == 'Long') {
-        direction = 'Close:'
-      }
-      if (this.bd.direction == 'Short') {
-        direction = 'Cover:'
-      }
-      let tpStr = ''
-      let slStr = ''
-      let timStr = ''
+      let criteria = 'X:', desObj = {}, description, tpStr, slStr, timStr
+      let direction = this.bd.direction == 'Long' ? 'Close' : 'Cover'
       if (this.isRiskControl) {
         if (this.isTakeProfit) {
-          tpStr = 'Take Profit ' + this.tp + '%'
+          tpStr = `Take Profit ${this.tp}%`
         }
         if (this.isStopLoss) {
-          slStr = 'Stop Loss ' + this.sl + '%'
+          slStr = `Stop Loss ${this.sl}%`
         }
         if (this.isTimeInMarket) {
-          timStr = 'Time In Market ' + this.tim + '(Bars)'
+          timStr = `Time In Marke ${this.tim}(Bars)`
         }
       }
       description = `${criteria} ${direction} ${tpStr} ${slStr} ${timStr}`
-      let desObj = {}
       desObj.description = description
       this.$store.commit('form/saveRiskDescription', desObj)
     },
-    validateStopLoss(num) {
-      if (num < 0) {
-        this.$message({
-          message:
-            'Please enter Stop Loss,only positive numbers less than or equal to 100 are allowed',
-          type: 'error',
-          offset: 100
+    setEditData(editData) {
+      if(Object.keys(obj).length === 0) return
+        let description = {}, riskValArr = [], backtestPeriod, propertiesToDelete = [
+          'entry', 
+          'exit', 
+          'user_id', 
+          'status', 
+          'results', 
+          'uuid',
+          'entry_description',
+          'exit_description'
+        ]
+        propertiesToDelete.forEach(property => {
+          delete editData[property];
         })
-        return false
-      }
-      const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
-      if (!pattern.test(num) && num !== 0) {
-        this.$message({
-          message:
-            'Please enter Stop Loss, only two decimal places are allowed',
-          type: 'error',
-          offset: 100
-        })
-        return false
-      }
-      return true
+        this.clearForm() // clear set up form before editting
+        if(isJson(exitData.description)) {
+          description = JSON.parse(exitData.description)
+        }else {
+          description.Introduction = ''
+          description.Rules = ''
+        }
+        /* 设置编辑数据 */
+        editData.description = description
+        editData.commission = (editData.commission * 100).toFixed(2)
+        editData.slippage = Number(editData.slippage).toFixed(2)
+        editData.trade_price = Number(editData.trade_price)
+        this.is_admin = this.$store.getters.getIsAdmin
+        this.bd = Object.assign(this.bd, editData)
+        if (this.bd.exclude_oo > 0) this.isExcludeOO = true
+        if (editData.risk_control) {
+          riskValArr = editData.risk_control.split('/')
+          riskValArr.forEach((value, index) => {
+            if (value) {
+              this.isRiskControl = true;
+              if (index === 0) {
+                this.isTakeProfit = true;
+                this.tp = value;
+              } else if (index === 1) {
+                this.isStopLoss = true;
+                this.sl = value;
+              } else if (index === 2) {
+                this.isTimeInMarket = true;
+                this.tim = value;
+              }
+            }
+          });
+          if (this.isRiskControl) {
+            this.selectRiskControl(true);
+          }
+        }
+        // 还是用getFrequency因为无需edit后再次调用addIndicators()
+        this.getFrequency(editData.frequency)
+        this.getDirection(editData.direction)
+        this.getTradePrice(editData.trade_price)
+        /* set latest backtest period */
+        backtestPeriod = editData.backtest_period
+        if(!backtestPeriod) {this.caculateBacktestPeriod()}
+        this.bd.end_date = timestampToTime(new Date())
+        if(this.bd.backtest_period <= 20 || this.bd.backtest_period == 22) {
+          // end_date 改成最新的
+          this.bd.end_date.split('-')[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
+          this.bd.start_date = str.join('-')
+        }else if(this.bd.backtest_period == '21') {
+          this.bd.start_date = ''
+        }
     },
-    validateTakeProfit(num) {
-      if (num < 0) {
-        this.$message({
-          message:
-            'Please enter Take Profit, only positive numbers are allowed',
-          type: 'error',
-          offset: 100
-        })
-        return false
+    caculateBacktestPeriod() {
+      let { start_date, end_date } = this.bd;
+      if (!start_date || start_date === '1800-10-01') {
+        // All History
+        this.bd.backtest_period = '21';
+      } else {
+        let startArr = start_date.toString().split('-');
+        let endArr = end_date.toString().split('-');
+        let year = Number(endArr[0]) - Number(startArr[0]);
+        let month = Number(endArr[1]) - Number(startArr[1]);
+        let day = Number(endArr[2]) - Number(startArr[2]);
+        this.bd.backtest_period = month === 0 && day === 0 ? year.toString() : '22';
       }
-      const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
-      if (!pattern.test(num) && num !== 0) {
-        this.$message({
-          message:
-            'Please enter Take Profit, only two decimal places are allowed',
-          type: 'error',
-          offset: 100
-        })
-        return false
-      }
-      return true
-    },
-    validateTimeInMarket(num) {
-      if (isNaN(num) || num < 0 || !/^\d+$/.test(num)) {
-        this.$message({
-          message:
-            'Please enter Time in Market, only positive integers are allowed',
-          type: 'error',
-          offset: 100
-        })
-        return false
-      }
-      return true
-    },
-    validateExclude(num) {
-      if (isNaN(num) || num <= 0 || !/^\d+$/.test(num)) {
-        this.$message({
-          message:
-            'Please enter Exclude Overlapping Observations, only positive integers are allowed',
-          type: 'error',
-          offset: 100
-        })
-        return false
-      }
-      return true
-    },
-    changeExcludeOO(val) {
-      if (val) this.bd.exclude_oo = 1
-    },
-    isEdit() {
-      if (this.oldBacktestName == this.bd.name) {
-        return true
-      }
-    },
-    change() {
-      this.$forceUpdate()
     }
   }
 }
