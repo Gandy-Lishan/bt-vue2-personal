@@ -75,6 +75,9 @@ export default {
 			// 将所有数据存入 vuex 中
 			const vm = this
 			vm.$refs['basicInfo'].saveData()
+		},
+		clearForm() {
+			this.$refs['basicInfo'].clearForm()
 		}
   }
 }

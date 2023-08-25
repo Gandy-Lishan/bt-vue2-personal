@@ -672,7 +672,7 @@ input[type="time"] {
 	color: #797979;
 }
 .dateBox .el-input__prefix{
-	top: -10px;
+	top: -6px;
 }
 .dateBox .el-input__suffix{
   top: -10px;
