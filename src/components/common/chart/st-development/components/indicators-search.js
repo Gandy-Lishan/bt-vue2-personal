@@ -215,10 +215,10 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 CIQ.symbols = []
                 if (filter == "ALL"){
                     var results = []
-                    let allSymbolsList = CIQ.store.state.chart.allSymbolsList
+                    let list = CIQ.store.state.chart.indicatorsList
                     let wholeWord = null
-                    for(var i=0;i<allSymbolsList.length;i++){
-                        var fields = allSymbolsList[i]
+                    for(var i=0;i<list.length;i++){
+                        var fields = list[i]
                         
                         var item = {
                             name: fields.chart_name,
@@ -277,7 +277,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                             var item = {
                                 symbol: element.url,
                                 name: element.name,
-                                updated: CIQ.store.state.chart.allSymbolsList.find(item=> {return item.url == element.url}).updated,
+                                updated: CIQ.store.state.chart.indicatorsList.find(item=> {return item.url == element.url}).updated,
                                 exchDisp: ""
                             }
                             if (item.symbol.toUpperCase().indexOf(value.toUpperCase()) !== -1){
@@ -293,8 +293,8 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 }else if (filter == "MOST POPULAR"){
                     var results = []
                     let wholeWord = null
-                    for(var i=0;i<CIQ.store.state.chart.allSymbolsList.length;i++){
-                        var fields = CIQ.store.state.chart.allSymbolsList[i]
+                    for(var i=0;i<CIQ.store.state.chart.indicatorsList.length;i++){
+                        var fields = CIQ.store.state.chart.indicatorsList[i]
                         
                         var item = {
                             name: fields.chart_name,
@@ -369,10 +369,6 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 this.close();
                 input.value = "";
             }
-            // async loadAllSymbolsList() {
-            //     const res = await CIQ.axios.get(
-            //         config.getAllSymbols
-            //     )
                 
             async loadStocksList(){
                 let list = []
@@ -419,11 +415,6 @@ window.onclick = function(event) {
     }
   }
 }
-
-                // allSymbolsList for ALL tag is initiated in StockDataFeed
-                //this.loadAllSymbolsList();
-                // this.loadStocksList();
-                // this.loadIndexsList();
 
                 this.addDefaultMarkup();
                 var node = this.node;
@@ -585,8 +576,8 @@ window.onclick = function(event) {
                                 -1;
                             if (toUpperCase) val = val.toUpperCase();
                             if(self.currentFilter == 'ALL'){
-                                for(var i=0;i<CIQ.store.state.chart.allSymbolsList.length;i++){
-                                    var fields = CIQ.store.state.chart.allSymbolsList[i]
+                                for(var i=0;i<CIQ.store.state.chart.indicatorsList.length;i++){
+                                    var fields = CIQ.store.state.chart.indicatorsList[i]
                                     if(scrollable[0].firstChild.firstChild.innerHTML == fields.chart_name){       
                                         var item = {
                                             name: fields.chart_name,

@@ -777,7 +777,7 @@ export default {
 				this.editableTabsValue = activeName
 
 				// 移除senti indicator附属ma
-				let techList = this.loadShortLong()
+				let techList = this.$store.state.chart.formateTechnicalList
 				let removedUrl = techList.find(i=>i.value == this.indicatorValArr[absoluteIndex])?.url
 
 				var activatedMAList = this.$store.state.chart.activatedMA
@@ -1059,32 +1059,6 @@ export default {
 			this.$emit('getExitRelation', val)
 			this.$store.commit('form/clearExitSignalArr')
 		},
-	// 之后不在这里定义
-    // load short and long technical list,从indicator拿来的
-    loadShortLong() {
-      const technicalList = CIQ.technicalCategory
-      let formatList = []
-      for (let i = 0; i < technicalList.length; i++) {
-        if (
-          technicalList[i].class === 'No_display_technical_indicator' ||
-          technicalList[i].class ===
-          'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
-        )
-          continue
-        technicalList[i].studies.forEach((item) => {
-          let obj = {}
-          obj.class = technicalList[i].class
-          obj.value = item.name
-          obj.url = item.url
-          formatList.push(obj)
-        })
-      }
-      formatList.sort(function (a, b) {
-        return a.value.localeCompare(b.value)
-      })
-      this.$store.commit('chart/saveFormatTechnicalList', formatList)
-      return formatList
-    },
 		saveBacktestData(index) {
 			let checked = true
 			// Save the selected indicator to vuex
@@ -1330,15 +1304,6 @@ export default {
 		setEditPanel(num, data) {
 			this.relation = data.exit.relation ? data.exit.relation : 1
 
-			let formateTechnicalList
-			if (this.$store.state.chart.formateTechnicalList.length === 0) {
-				try {
-					this.$refs.indiChild[0].loadShortLong()
-				} catch (error) {
-					formateTechnicalList = this.loadShortLong()
-					console.log('error', error)
-				}
-			}
 			for (let i = 0; i < num - 1; i++) {
 				this.handleTabsEdit(null, 'add')
 			}
@@ -1380,7 +1345,8 @@ export default {
 					this.indicatorValArr[j] = data.exit.signals[j].indicator
 					this.indicatorRadio = 'technical'
 					this.indicatorRadioArr.splice(j, 1, 'technical')
-					formateTechnicalList = this.$store.state.chart.formateTechnicalList
+					
+					let formateTechnicalList = this.$store.state.chart.formateTechnicalList
 					let indicatorName = data.exit.signals[j].indicator
 					for (let i = 0; i < formateTechnicalList.length; i++) {
 						if (indicatorName === formateTechnicalList[i].value) {

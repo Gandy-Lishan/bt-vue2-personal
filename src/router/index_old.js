@@ -194,8 +194,9 @@ async function initiateCurrentDate() {
 
 async function initiateIndicatorList() {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
-	console.log('initiateIndicatorList')
-	if(store.state.chart.stocksList.length==0 || store.state.chart.indexsList.length==0){
+	
+	if(store.state.chart.indicatorsList.length==0 || store.state.chart.stocksList.length==0 || store.state.chart.indexsList.length==0){
+		console.log('initiateIndicatorList')
 		const res = await getIndicatorsList()
 		let allSymbolsList = res.data
 		const resStocks = await getStocksList()
@@ -219,8 +220,8 @@ async function initiateIndicatorList() {
 				newAllSymbolsList.push(allSymbolsList[i])
 			}
 		}
-		// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
-		CIQ.indicatorList = newAllSymbolsList
+
+		store.commit('chart/getIndicatorsList',newAllSymbolsList)
 	}
 }
 

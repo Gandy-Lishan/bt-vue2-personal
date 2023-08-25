@@ -45,7 +45,6 @@ quoteFeedSimulator.sendAjax = async function (url, cb) {
 };
 
 quoteFeedSimulator.url = config.pairDataUrl;
-quoteFeedSimulator.indicatorsList = []
 
 quoteFeedSimulator.sendReq = async function(symbol,start,end,new_str,freq,cb){
         var queryUrl = this.url + 
@@ -155,18 +154,6 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
     }
     var new_str = ''
 
-    if (CIQ.indicatorList) {
-        if (CIQ.indicatorList.length != 0) {
-            // console.log(
-            //     'data already in indicatorList from datafeed',
-            //     CIQ.indicatorList.length
-            // )
-            this.indicatorsList = CIQ.store.state.chart.indicatorsList
-            this.indicatorsList = CIQ.indicatorList
-
-            CIQ.store.commit('chart/getIndicatorsList',this.indicatorsList)
-            CIQ.store.commit('chart/getAllSymbolsList',this.indicatorsList)
-
             var orignalFreq = 'daily'
             var selectedFreq = 'daily'
 
@@ -186,13 +173,10 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
             }else{
                 try{
                     var freqList = []
-                    // console.log("CIQ.objIndicator: ",CIQ.objIndicator)
-                    // console.log('current entry/exit: ',CIQ.store.state.chart.indicators.formIndicators)
-
                     for ( var  i = 0,valid = 0 ; i < CIQ.objIndicator.length;i++) {
                         // when both sentiment and tech exist in CIQ.objIndicator, filter tech indicator
                         if(CIQ.isSentiIndicator(CIQ.objIndicator[i])){
-                            let _obj = this.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
+                            let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
                             freqList.push(_obj.updated)
                             
                             new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
@@ -354,179 +338,6 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
             }
             //console.log('selectedFreq: ',selectedFreq)
             this.sendReq(symbol,start,end,new_str,selectedFreq,cb)
-        }
-    }else{
-        CIQ.axios.get(
-            config.getAllSymbols,
-            {
-                cache:true,
-                auth: {
-                    username: 'sentimentrader_backtest_api',
-                    password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
-                }
-            }
-        ).then(res=>{
-            CIQ.store.commit('chart/getIndicatorsList', res.data)
-            CIQ.store.commit('chart/getAllSymbolsList',res.data);
-            this.indicatorsList = res.data
-        
-            CIQ.indicatorList = this.indicatorList
-
-            var orignalFreq = 'daily'
-            var selectedFreq = 'daily'
-            if(params.symbolObject.indicator === undefined){
-                //console.log("freq is daily when using default indicator")
-                // freq is daily when using default indicator
-                new_str += '&indicator=' +CIQ.objIndicator;
-            }else{
-                try{
-                    var freqList = []
-                    for ( var  i = 0; i < CIQ.objIndicator.length; i++) {
-                        // if(CIQ.objIndicator[i] == CIQ.store.state.chart.indicators.formIndicators.entry || CIQ.objIndicator[i] == CIQ.store.state.chart.indicators.formIndicators.exit){
-                        //     //console.log(CIQ.store.state.form.exitFrequency)
-                        //     freqList.push(CIQ.store.state.form.exitFrequency)
-                        // }else{
-                            let _obj = this.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
-                            freqList.push(_obj.updated)
-                       // }
-                        
-                        new_str += `${i==0?'&indicator=':`&indicator_${i+1}=`}`+CIQ.objIndicator[i];
-                    }
-                    
-                    if(freqList.find(item => item=="Weekly"))  orignalFreq= 'weekly';   
-                    if(freqList.find(item => item=="Monthly"))  orignalFreq= 'monthly';  
-                }catch(err){
-                    console.error(err)
-                }
-            } 
-            selectedFreq = orignalFreq
-            switch(CIQ.store.state.form.exitFrequency){
-                case "month":{
-                    selectedFreq = "monthly"
-                    break;
-                }
-                case "week":{
-                    selectedFreq = "weekly"
-                    break;
-                }
-                case "day":{
-                    selectedFreq = "daily"
-                    break;
-                }
-                default:
-            }
-            // commment it becasue commit cannot be use in this js
-             CIQ.store.commit('form/setFreqency',selectedFreq)
-            
-            
-            switch(selectedFreq){
-                case "monthly":{
-                    CIQ.periodicity.timeUnit = 'month'
-                    break;
-                }
-                case "weekly":{
-                    CIQ.periodicity.timeUnit = 'week'
-                    break;
-                }
-                case "daily":{    
-                    CIQ.periodicity.timeUnit = 'day'
-                    break;
-                }
-                default:
-            }
-        
-            var daily=[],weekly=[],monthly=[]
-            var nodeSetup = document.getElementsByTagName('li')
-            for(var i =0;i<nodeSetup.length;i++){
-                for(var j in nodeSetup[i].firstChild){
-                    if(j == 'textContent'){
-                        if(nodeSetup[i].firstChild.textContent === 'Daily'){
-                            daily.push(nodeSetup[i])
-                        }
-                        if(nodeSetup[i].firstChild.textContent === 'Weekly'){
-                            weekly.push(nodeSetup[i])
-                        }
-                        if(nodeSetup[i].firstChild.textContent === 'Monthly'){
-                            monthly.push(nodeSetup[i])
-                        }
-                    }
-                }		
-			}
-        
-            var node = document.querySelector("cq-menu-container[cq-name = 'menuPeriodicity']")
-            for(var i = 0;i < node.children.length;i++){
-                node.children[i].style.display = "inherit"
-            }
-
-            //console.log("orignalFreq: ",orignalFreq)
-
-            if(orignalFreq == "monthly"){
-                for(var i = 0;i < node.children.length;i++){            
-                    if(node.children[i].firstChild.nodeValue == '1 D'){
-                        node.children[i].setAttribute('tf','disabled')
-                    }
-                }
-                for(var i = 0;i < node.children.length;i++){            
-                    if(node.children[i].firstChild.nodeValue == '1 W'){
-                        node.children[i].setAttribute('tf','disabled')
-                    }
-                }
-                
-
-                for(var i = 0;i <daily.length;i++){
-                    daily[i].setAttribute('tf','disabled')
-                }
-                for(var i = 0;i <weekly.length;i++){
-                    weekly[i].setAttribute('tf','disabled')
-                }
-            }else if(orignalFreq == "weekly"){
-                for(var i = 0;i <node.children.length;i++){
-                    if(node.children[i].firstChild.nodeValue == '1 D'){
-                        node.children[i].setAttribute('tf','disabled')
-                    }
-                }
-
-                for(var i = 0;i < node.children.length;i++){            
-                    if(node.children[i].firstChild.nodeValue == '1 W'){
-                        node.children[i].setAttribute('tf','enabled')
-                    }
-                }
-
-                for(var i = 0;i <daily.length;i++){
-                    daily[i].setAttribute('tf','disabled')
-                }
-
-                for(var i = 0;i <weekly.length;i++){
-                    weekly[i].setAttribute('tf','enabled')
-   
-                }
-            }else{
-                for(var i = 0;i < node.children.length;i++){            
-                    if(node.children[i].firstChild.nodeValue == '1 D'){
-                        node.children[i].setAttribute('tf','enabled')
-  
-                    }
-                }
-                for(var i = 0;i < node.children.length;i++){            
-                    if(node.children[i].firstChild.nodeValue == '1 W'){
-                        node.children[i].setAttribute('tf','enabled')
- 
-                    }
-                }
-    
-                for(var i = 0;i <daily.length;i++){
-                    daily[i].setAttribute('tf','enabled')
-  
-                }
-                for(var i = 0;i <weekly.length;i++){
-                    weekly[i].setAttribute('tf','enabled')
-
-                }
-            }
-            this.sendReq(symbol,start,end,new_str,selectedFreq,cb)
-        })
-    }
-
 };
 
 quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
@@ -559,7 +370,7 @@ quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
             // when both sentiment and tech exist in CIQ.objIndicator, filter tech indicator
             //let alphabetized = CIQ.alphabetized
             let sentiList = []
-            CIQ.indicatorList.forEach(e => {
+            CIQ.store.state.chart.indicatorsList.forEach(e => {
                 sentiList.push(e.url)
             })
             if(sentiList){
@@ -570,10 +381,10 @@ quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
 
             // check if this indicator was selected from setup form
             if(CIQ.objIndicator[i] == CIQ.store.state.chart.indicators.formIndicators.entry || CIQ.objIndicator[i] == CIQ.store.state.chart.indicators.formIndicators.exit){
-                let _obj = this.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
+                let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
                 freqList.push(_obj.updated)
             }else{
-                let _obj = this.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
+                let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
                 freqList.push(_obj.updated)
             }
             new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
@@ -646,7 +457,7 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
             // when both sentiment and tech exist in CIQ.objIndicator, filter tech indicator
             //let alphabetized = CIQ.alphabetized
             let sentiList = []
-            CIQ.indicatorList.forEach(e => {
+            CIQ.store.state.chart.indicatorsList.forEach(e => {
                 sentiList.push(e.url)
             })
             if(sentiList){
@@ -657,10 +468,10 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
 
             // check if this indicator was selected from setup form
             if(CIQ.objIndicator[i] == CIQ.store.state.chart.indicators.formIndicators.entry || CIQ.objIndicator[i] == CIQ.store.state.chart.indicators.formIndicators.exit){
-                let _obj = this.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
+                let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
                 freqList.push(_obj.updated)
             }else{
-                let _obj = this.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
+                let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
                 freqList.push(_obj.updated)
             }
             new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
