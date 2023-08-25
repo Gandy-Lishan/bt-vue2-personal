@@ -4,6 +4,7 @@ const getters = {
 	getLastSignalArray: state => state.form._last_signal_array,
 	getBacktestResult: state =>  state.form.backtestResult,
 	exitFreqGetter: state => state.form.exitFrequency,
+	getterBacktestInfo: state => state.form.backtestInfo,
 
 	// chart
 	getExtremeValue: state => state.chart.extremeValue,
