@@ -1253,20 +1253,12 @@ export default {
               var entry_signal_list = []
               var exit_signal_list = []
 
-              let formateTechnicalList = vm.$store.state.chart.formateTechnicalList
-
               let entrySignal = backtestData.entry.signals.map((item, index) => {
                 // if it is senti
-                let signal = vm.$store.state.chart.indicatorsList.find((i) => {
-                  return i.chart_name == item.indicator
-                })
+                let signal = CIQ.findSentiIndicator(item.indicator,null)
                 // if it is not senti?
                 if (!signal) {
-                  for (let i = 0; i < formateTechnicalList.length; i++) {
-                    if (formateTechnicalList[i].value == item.indicator) {
-                      return formateTechnicalList[i].url
-                    }
-                  }
+                  signal = CIQ.findTechIndicator(item.indicator,null)
                 }
                 // 在 symbol indicator list内检索url
                 if (!signal) {
@@ -1286,16 +1278,10 @@ export default {
               let exitSignal
               if (!this.isOnlyRisk) {
                 exitSignal = backtestData.exit.signals.map((item, index) => {
-                  let signal = vm.$store.state.chart.indicatorsList.find((i) => {
-                    return i.chart_name == item.indicator
-                  })
+                  let signal = CIQ.findSentiIndicator(item.indicator,null)
 
                   if (!signal) {
-                    for (let i = 0; i < formateTechnicalList.length; i++) {
-                      if (formateTechnicalList[i].value == item.indicator) {
-                        return formateTechnicalList[i].url
-                      }
-                    }
+                    signal = CIQ.findTechIndicator(item.indicator,null)
                   }
                   // 在 symbol indicator list内检索url
                   if (!signal) {

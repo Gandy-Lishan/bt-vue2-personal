@@ -1,0 +1,312 @@
+<template>
+    <div>
+        <div class="summaryContainer">
+            <el-table :data="tableData" style="width: 100%">
+                <el-table-column
+                    prop="totalReturn"
+                    show-overflow-tooltip
+                    label="TOTAL RETURN %"
+                    align="center"
+                    algin="center"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.totalReturn >= 0">{{
+                            scope.row.totalReturn + '%'
+                        }}</span>
+                        <span v-else-if="isNaN(scope.row.totalReturn)">0</span>
+                        <span v-else style="color: red">{{
+                            scope.row.totalReturn + '%'
+                        }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="CAGR"
+                    show-overflow-tooltip
+                    label="Annual Return % (CAGR)"
+                    align="center"
+                    algin="center"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.CAGR >= 0">{{
+                            scope.row.CAGR + '%'
+                        }}</span>
+                        <span v-else-if="isNaN(scope.row.CAGR)">0</span>
+                        <span v-else style="color: red">{{
+                            scope.row.CAGR + '%'
+                        }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    show-overflow-tooltip
+                    prop="medianReturn"
+                    label="MEDIAN RETURN %"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.medianReturn >= 0">{{
+                            scope.row.medianReturn + '%'
+                        }}</span>
+                        <span v-else-if="isNaN(scope.row.medianReturn)">0</span>
+                        <span v-else style="color: red">{{
+                            scope.row.medianReturn + '%'
+                        }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    show-overflow-tooltip
+                    prop="averageReturn"
+                    label="AVERAGE RETURN %"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.averageReturn >= 0">{{
+                            scope.row.averageReturn + '%'
+                        }}</span>
+                        <span v-else-if="isNaN(scope.row.averageReturn)">0</span>
+                        <span v-else style="color: red">{{
+                            scope.row.averageReturn + '%'
+                        }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="tzScore"
+                    label="Z-SCORE"
+                    align="center"
+                    show-overflow-tooltip
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.tzScore >= 0">{{
+                            scope.row.tzScore
+                        }}</span>
+                        <span v-else-if="isNaN(scope.row.tzScore)">0</span>
+                        <span v-else style="color: red">{{ scope.row.tzScore }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="standardDeviation"
+                    label="STD. DEV"
+                    show-overflow-tooltip
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.standardDeviation >= 0">{{
+                            scope.row.standardDeviation
+                        }}</span>
+                        <span v-else-if="isNaN(scope.row.standardDeviation)">0</span>
+                        <span v-else style="color: red">{{
+                            scope.row.standardDeviation
+                        }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    show-overflow-tooltip
+                    prop="buyHoldGain"
+                    label="BUY & HOLD %"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.buyHoldGain >= 0">{{
+                            scope.row.buyHoldGain + '%'
+                        }}</span>
+                        <span v-else-if="isNaN(scope.row.buyHoldGain)">0</span>
+                        <span v-else style="color: red">{{
+                            scope.row.buyHoldGain + '%'
+                        }}</span>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <el-table
+                header-align="center"
+                :data="tableData"
+                style="width: 100%; margin-top: 20px"
+            >
+                <el-table-column
+                    prop="winRate"
+                    label="WIN RATE %"
+                    show-overflow-tooltip
+                    width="180"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.winRate >= 0">{{
+                            scope.row.winRate + '%'
+                        }}</span>
+                        <span v-else-if="isNaN(scope.row.winRate)">0</span>
+                        <span v-else style="color: red">{{
+                            scope.row.winRate + '%'
+                        }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    show-overflow-tooltip
+                    prop="averageWin"
+                    label="AVERAGE WIN %"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.averageWin >= 0">{{
+                            scope.row.averageWin + '%'
+                        }}</span>
+                        <span v-else-if="isNaN(scope.row.averageWin)">0</span>
+                        <span v-else style="color: red">{{
+                            scope.row.averageWin + '%'
+                        }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    show-overflow-tooltip
+                    prop="averageLoss"
+                    label="AVERAGE LOSS %"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.averageLoss >= 0">{{
+                            scope.row.averageLoss + '%'
+                        }}</span>
+                        <span v-else-if="isNaN(scope.row.averageLoss)">0</span>
+                        <span v-else style="color: red">{{
+                            scope.row.averageLoss + '%'
+                        }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="drawDown"
+                    label="MAX RISK %"
+                    align="center"
+                    show-overflow-tooltip
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.drawDown >= 0">{{
+                            scope.row.drawDown + '%'
+                        }}</span>
+                        <span v-else-if="isNaN(scope.row.drawDown)">0</span>
+                        <span v-else style="color: red">{{
+                            scope.row.drawDown + '%'
+                        }}</span>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-table
+                header-align="center"
+                :data="tableData"
+                style="width: 100%; margin-top: 20px"
+            >
+                <el-table-column
+                    prop="totalTrades"
+                    label="TOTAL TRADES"
+                    width="180"
+                    show-overflow-tooltip
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.totalTrades >= 0">{{
+                            scope.row.totalTrades
+                        }}</span>
+                        <span v-else style="color: red">{{
+                            scope.row.totalTrades
+                        }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    show-overflow-tooltip
+                    prop="totalPositive"
+                    label="TOTAL POSITIVE"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.totalPositive >= 0">{{
+                            scope.row.totalPositive
+                        }}</span>
+                        <span v-else style="color: red">{{
+                            scope.row.totalPositive
+                        }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="totalNegative"
+                    show-overflow-tooltip
+                    label="TOTAL NEGATIVE"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.totalNegative >= 0">{{
+                            scope.row.totalNegative
+                        }}</span>
+                        <span v-else style="color: red">{{
+                            scope.row.totalNegative
+                        }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="timeInMarket"
+                    show-overflow-tooltip
+                    label="TIME IN MARKET %"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.timeInMarket >= 0">{{
+                            scope.row.timeInMarket + '%'
+                        }}</span>
+                        <span v-else style="color: red">{{
+                            scope.row.timeInMarket + '%'
+                        }}</span>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <div class="imgBox">
+            <div
+                v-if="
+                    !returnImgUrl &&
+                    !drawDownImgUrl &&
+                    !monthReturnImgUrl &&
+                    !annualReturnImgUrl
+                "
+                style="text-align: left"
+            >
+                <el-empty image-size="80" description="No Data"></el-empty>
+            </div>
+            <div class="benchmarkReturnImg">
+                <img :src="returnImgUrl" alt="" width="100%" />
+            </div>
+            <div class="drawDownReturnImg">
+                <img :src="drawDownImgUrl" alt="" width="100%" />
+            </div>
+            <div class="monthReturnImg">
+                <img :src="monthReturnImgUrl" alt="" width="100%" />
+            </div>
+            <div class="annualReturnImg">
+                <img :src="annualReturnImgUrl" alt="" width="100%" />
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+
+export default {
+	name: 'Summary',
+	data() {
+		return {
+		}
+	},
+	props: {
+		tableData: Array,
+        returnImgUrl: String,
+        drawDownImgUrl: String,
+        monthReturnImgUrl: String,
+        annualReturnImgUrl: String
+	},
+    created(){
+
+    },
+	methods: {
+
+    }
+}
+</script>
+
+<style lang="less" scoped>
+
+</style>
