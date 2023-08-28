@@ -683,7 +683,7 @@ export default {
 		addSignalLength() {
 			if (this.relation == 2 || this.relation == 3) {
 				const filterValArr = this.indicatorValArr.filter(item => item != '')
-				this.$emit('sendSignalIndex', filterValArr.length)
+				this.$emit(`send${this.criteriaCapFirstL}SignalIndex`, filterValArr.length)
 				for (let i = 0; i < filterValArr.length; i++) {
 					// Apply for space
 					let obj = {}
@@ -693,7 +693,7 @@ export default {
 				}
 			}
 			if (this.relation == 1 || this.relation == 0) {
-				this.$emit('sendSignalIndex', 1)
+				this.$emit(`send${this.criteriaCapFirstL}SignalIndex`, 1)
 			}
 		},
 		saveScoreValue() {
@@ -750,6 +750,380 @@ export default {
 			}
 
 			this.$store.commit('form/saveRelation', obj)
+		},
+		changeRelation(val) {
+			if (val == 1) {
+				this.editableTabsValue = '1'
+				this.editableTabs = [
+				{
+					title: 'Condition 1',
+					name: '1',
+					content: 'Condition 1 content'
+				}
+				]
+				this.score = 1
+				this.signals_in_market = 1
+
+				// 移除chartiq对应的extraIndicators
+				let extraIndicators = []
+				extraIndicators.push(...this.$store.state.chart.indicators.extraIndicators)
+				extraIndicators = extraIndicators.filter(x=>this.indicatorUrlArr.slice(1,5).indexOf(x)==-1)
+				this.$store.commit('chart/getExtraIndicators',extraIndicators)
+
+				// 移除	indicatorSentiArr
+				const indiUrl = this.indicatorUrlArr[0]
+				const indiVal = this.indicatorValArr[0]
+				const indiRadio = this.indicatorRadioArr[0]
+				const freqVal = this.freqArray[0]
+				this.indicatorUrlArr = [indiUrl, ...(new Array(4).fill(''))]
+				this.indicatorValArr = [indiVal, ...(new Array(4).fill(''))]
+				this.indicatorRadioArr = [indiRadio]
+				this.freqArray = [freqVal, ...(new Array(4).fill(''))]
+				// 移除	indicatorTechArr
+				const techObj = this.techIndiObj[0]
+				this.techIndiObj = [techObj, ...(new Array(4).fill(''))]
+
+				// 设定频率
+				const freqObj = {
+					index: 0,
+					value: freqVal,
+					criteria: this.criteria,
+					key: `${this.criteria}_0`,
+					relation: 1
+				}
+				this.setFrequencyArray(freqObj)
+				try {
+					for (let index = 1; index < this.indicatorUrlArr.length; index++) {
+					this.$refs.indiChild[index]?.resetIndicator()
+				}
+				} catch (error) {
+					console.log(error)
+				}
+
+				//When only keep the first tab, update the vuex status
+				// 移除senti indicator附属ma
+				var activatedMAList = this.$store.state.chart.activatedMA
+				activatedMAList = activatedMAList.filter((item)=>
+					item.criteria == this.criteria &&
+					item.index == 0
+				)
+				this.$store.commit('chart/getMA', activatedMAList)
+
+				let indicatorList = this.$store.state.chart.indicators.formIndicators.exit
+				this.$store.commit(`chart/get${this.criteriaCapFirstL}IndicatorsList`, [indicatorList[0], ...(new Array(4).fill(''))])
+				
+				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
+				CIQ.keepTheFirstMALayout(this.criteria)
+
+				CIQ.addIndicators()
+			}
+			if (val == 2 || val == 3) {
+				if (this.editableTabs.length === 1) {
+					this.handleTabsEdit(null, 'add')
+					this.editableTabsValue = '1'
+				}
+				if (val == 2) {
+					this.score = 2
+				}
+				if (val == 3) {
+					this.signals_in_market = 2
+				}
+			}
+			
+			if(val == 0) {
+					// 移除chartiq对应的extraIndicators
+					let extraIndicators = []
+					extraIndicators.push(...this.$store.state.chart.indicators.extraIndicators)
+					extraIndicators = extraIndicators.filter(x=>this.indicatorUrlArr.indexOf(x)==-1)
+					this.$store.commit('chart/getExtraIndicators',extraIndicators)
+
+					this.score = 1
+					this.signals_in_market = 1
+					this.delay_bars = 0
+					this.editableTabs = [
+					]
+
+					this.indicatorUrlArr = new Array(5).fill('')
+					this.indicatorValArr = new Array(5).fill('')
+					this.indicatorRadioArr = ['sentiment']
+					this.techIndiObj = new Array(5).fill('')
+					const freqObj = {
+						index: 0,
+						value: 'Daily',
+						criteria: this.criteria,
+						key: `${this.criteria}_0`,
+						relation: 0
+					}
+					this.setFrequencyArray(freqObj)
+					
+					//When removing the exit criteria, update the vuex status
+					// 移除senti indicator附属ma
+					const oppositeCriteria = this.criteria == 'entry' ? 'exit' : 'entry'
+					var activatedMAList = this.$store.state.chart.activatedMA
+					activatedMAList = activatedMAList.filter((item)=>
+						item.criteria == oppositeCriteria
+					)
+					this.$store.commit('chart/getMA', activatedMAList)
+
+					this.$store.commit(`chart/get${this.criteria}IndicatorsList`, [])
+
+					// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
+					CIQ.removeExitMALayout()
+
+					CIQ.addIndicators()
+
+					try {
+							for (let index = 0; index < this.indicatorUrlArr.length; index++) {
+								this.$refs.indiChild[index]?.resetIndicator()
+							}
+					} catch (error) {
+						console.log(error)
+					}
+				}
+			this.$emit(`get${this.criteria}Relation`, val)
+			this.$store.commit(`form/clear${this.criteria}SignalArr`)
+		},
+		saveBacktestData(index) {
+			let checked = true
+			// Save the selected indicator to vuex
+			let _this = this
+			if (_this.isRiskControl) {
+				// Save risk description
+				let desObj = {}
+				desObj.criteria = 'exit'
+				desObj.index = 0
+				//desObj.description = _this.$store.state.form.riskDescription
+				desObj.description = {
+					'commentDes':_this.$store.state.form.riskDescription,
+					'rocCond':null
+				}
+				this.$store.commit('form/saveDescription', desObj)
+				return (checked = true)
+			}
+
+			let indi = this.$refs.indiChild[index].saveIndicator(index)
+			return indi.then((val) => {
+				if (val) {
+					if (_this.indicatorRadioArr[index] === 'sentiment' || _this.indicatorRadioArr[index] === 'user') {
+						_this.$refs.sentiChild[index].setDesciption(index)
+						let senti = this.$refs.sentiChild[index].saveCondition(index)
+						if (!senti) {
+							this.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = senti)
+					}
+					if (_this.indicatorRadioArr[index] === 'symbol') {
+						_this.$refs.symbolChild[index].setDesciption(index)
+						let symbol = _this.$refs.symbolChild[index].saveCondition(index)
+						if(!symbol) {
+						_this.$message({
+						message: 'Please check that the #' + (index+1) + ' exit panel field is filled in correctly',
+						type: 'error'
+						})
+						} 
+						return (checked = symbol)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'CCI_like'
+					) {
+						this.$refs.cciChild[index].setDesciption(index)
+						let cci = this.$refs.cciChild[index].saveCondition(index)
+						if (!cci) {
+							this.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = cci)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'MACD_like'
+					) {
+						this.$refs.macdChild[index].setDesciption(index)
+						let macd = this.$refs.macdChild[index].saveCondition(index)
+						if (!macd) {
+							this.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = macd)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'MovingAverage_like'
+					) {
+						this.$refs.maChild[index].setDesciption(index)
+						let ma = this.$refs.maChild[index].saveCondition(index)
+						if (!ma) {
+							this.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = ma)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'EFT_like'
+					) {
+						this.$refs.EFTLikeChild[index].setDesciption(index)
+						let eft = this.$refs.EFTLikeChild[index].saveCondition(index)
+						if (!eft) {
+							this.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = eft)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'ADX_like'
+					) {
+						this.$refs.ADXLikeChild[index].setDesciption(index)
+						let adx = this.$refs.ADXLikeChild[index].saveCondition(index)
+						if (!adx) {
+							this.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = adx)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'Aligator_like'
+					) {
+						this.$refs.aligatorLikeChild[index].setDesciption(index)
+						let aligator =
+							this.$refs.aligatorLikeChild[index].saveCondition(index)
+						if (!aligator) {
+							this.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = aligator)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'LRF_like'
+					) {
+						this.$refs.LRFLikeChild[index].setDesciption(index)
+						let lrf = this.$refs.LRFLikeChild[index].saveCondition(index)
+						if (!lrf) {
+							this.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = lrf)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'BollingerBands_like'
+					) {
+						this.$refs.bollBandsLikeChild[index].setDesciption(index)
+						let blb = this.$refs.bollBandsLikeChild[index].saveCondition(index)
+						if (!blb) {
+							this.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = blb)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'Stochastics_like'
+					) {
+						this.$refs.stochasticsLikeChild[index].setDesciption(index)
+						let smi =
+							this.$refs.stochasticsLikeChild[index].saveCondition(index)
+						if (!smi) {
+							this.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = smi)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'ERI_like'
+					) {
+						this.$refs.ERILikeChild[index].setDesciption(index)
+						let eri = this.$refs.ERILikeChild[index].saveCondition(index)
+						if (!eri) {
+							this.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = eri)
+					}
+					if (
+						this.indicatorRadioArr[index] === 'technical' &&
+						this.techIndiObj[index] === 'Trailingstop_like'
+					) {
+						this.$refs.trailingStopLikeChild[index].setDesciption(index)
+						let ts =
+							this.$refs.trailingStopLikeChild[index].saveCondition(index)
+						if (!ts) {
+							this.$message({
+								message:
+									'Please check that the #' +
+									(index + 1) +
+									' exit panel field is filled in correctly',
+								type: 'error'
+							})
+						}
+						return (checked = ts)
+					}
+				} else {
+					checked = false
+					return checked
+				}
+			})
 		},
 		async userUploadFileContent(data) {
 			let _this = this
