@@ -4,21 +4,6 @@ let __st_js_indicatorType_ = (_exports) => {
  
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  
-// tech list that found in setup form
-CIQ.findTechIndicator = function(value,url){
-    let signal
-    if(value){
-        signal = CIQ.store.state.chart.formateTechnicalList.find((i) => {
-            return i.value == value
-        })
-    }
-    if(url){
-        signal = CIQ.store.state.chart.formateTechnicalList.find((i) => {
-            return i.url == url
-        })
-    }
-    return signal
-}
 // the whole tech list that found in Chartiq searchbox
 CIQ.findBuiltinTechIndicator = function(value,url){
     let signal
@@ -33,16 +18,6 @@ CIQ.findBuiltinTechIndicator = function(value,url){
         })
     }
     return signal
-}
-CIQ.isSentiIndicator = function(indicator){
-    let sentiList = []
-    CIQ.store.state.chart.indicatorsList.forEach(e => {
-        sentiList.push(e.url)
-    })
-    if(sentiList.indexOf(indicator) == -1){
-        return false
-    }
-    return true
 }
 CIQ.findSentiIndicator = function(name,url){
     let signal

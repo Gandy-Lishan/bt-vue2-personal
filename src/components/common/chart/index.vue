@@ -64,25 +64,23 @@ export default class AdvancedWrapper extends Vue {
 	// load short and long technical list
     loadShortLong(config:any) {
 		CIQ.technicalCategory = config.technicalClassCategory
-		let formatList = []
+		let buildinTechList = []
 		for (let i = 0; i < CIQ.technicalCategory.length; i++) {
-			if (
-			CIQ.technicalCategory[i].class === 'No_display_technical_indicator' ||
-			CIQ.technicalCategory[i].class ===
-			'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
-			)
-			continue
-			CIQ.technicalCategory[i].studies.forEach((item) => {
-				let obj:any = {}
-				obj.class = CIQ.technicalCategory[i].class
-				obj.value = item.name
-				obj.url = item.url
-				formatList.push(obj)
+			CIQ.technicalCategory[i].studies.forEach((item:any) => {
+				buildinTechList.push({
+					class:CIQ.technicalCategory[i].class,
+					value:item.name,
+					url:item.url
+				})
 			})
 		}
-		formatList.sort(function (a, b) {
+		let formatList = buildinTechList.filter(item=>
+			item.class !== 'No_display_technical_indicator' &&
+			item.class !== 'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
+		).sort(function (a, b) {
 			return a.value.localeCompare(b.value)
 		})
+		store.commit('chart/getBuiltinList',buildinTechList);
 		store.commit('chart/saveFormatTechnicalList', formatList)
     }
 }

@@ -403,9 +403,6 @@ export default {
     updateSenti() {
       return this.$store.state.chart.currentSenti
     },
-    updateTech() {
-      return this.$store.state.chart.currentTech
-    },
     frequency() {
       return this.$store.state.form.exitFrequency
     }
@@ -478,23 +475,6 @@ export default {
         }
        
       }
-    },
-    updateTech(val) {
-      var builtinList = this.$store.state.chart.builtinList
-      builtinList.find((item) => {
-        if (item.url == val.url) {
-          // this.si.technicalIndicator = item.value
-          /*
-          Note it out for the time being, because most of the technologies are not added to the back test
-          */
-          //this.indicatorRadio = 'Technical Indicators'
-          // 					let radioObj = {}
-          // radioObj.value = 'technical'
-          // radioObj.index = this.panelIndex
-          // this.$emit('getIndicatorRadio', radioObj)
-          //this.handleTechnicalSelect({value:item.value})
-        }
-      })
     },
     frequency: {
       handler(newVal) {
@@ -712,13 +692,8 @@ export default {
       // 限制同屏显示个数
       var countExistIndicator = 0
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        for (var i in CIQ.store.state.chart.builtinList) {
-          if (
-            CIQ.store.state.chart.builtinList[i].url ==
-            CIQ.stxx.layout.studies[studyInstanceName].type
-          ) {
-            countExistIndicator--
-          }
+        if (CIQ.findBuiltinTechIndicator(null,CIQ.stxx.layout.studies[studyInstanceName].type)){
+          countExistIndicator--
         }
         if (CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
           countExistIndicator--
@@ -913,7 +888,7 @@ export default {
       CIQ.addIndicators()
     },
     clearTechnicalSelect() {
-      const item = CIQ.findTechIndicator(this.$refs.techInput.value,null)
+      const item = CIQ.findBuiltinTechIndicator(this.$refs.techInput.value,null)
 
       let freqObj = {}
       freqObj.value = ''
@@ -1142,13 +1117,8 @@ export default {
       // old version only
       var countExistIndicator = 0
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        for (var i in CIQ.store.state.chart.builtinList) {
-          if (
-            CIQ.store.state.chart.builtinList[i].url ==
-            CIQ.stxx.layout.studies[studyInstanceName].type
-          ) {
-            countExistIndicator--
-          }
+        if (CIQ.findBuiltinTechIndicator(null,CIQ.stxx.layout.studies[studyInstanceName].type)){
+          countExistIndicator--
         }
         if (CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
           countExistIndicator--
@@ -1442,7 +1412,7 @@ export default {
         this.$refs.siForm.validate((valid) => {
           validForm = valid
         })
-        if(CIQ.findTechIndicator(this.si.technicalIndicator,null)) validName = true
+        if(CIQ.findBuiltinTechIndicator(this.si.technicalIndicator,null)) validName = true
         
         if (validForm && validName) {
           let obj = {}
@@ -1548,7 +1518,7 @@ export default {
             vm.indicatorRadio = 'Technical Indicator'
             vm.si.technicalIndicator = newVal[this.criteria].signals[index].indicator
 
-            let techIndicatorResult = CIQ.findTechIndicator(vm.si.technicalIndicator,null)
+            let techIndicatorResult = CIQ.findBuiltinTechIndicator(vm.si.technicalIndicator,null)
             if(techIndicatorResult){
               let isFromEdit = true
               vm.handleTechnicalSelect(techIndicatorResult, isFromEdit) 

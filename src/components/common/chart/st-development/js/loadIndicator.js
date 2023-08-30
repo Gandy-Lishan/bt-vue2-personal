@@ -281,13 +281,13 @@
              // old version only
              var countExistIndicator = 0
              for (var studyInstanceName in CIQ.stxx.layout.studies) {
-                 for (var i in CIQ.store.state.chart.builtinList){
-                     if(CIQ.store.state.chart.builtinList[i].url == CIQ.stxx.layout.studies[studyInstanceName].type){countExistIndicator--}
-                 }
-                 if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'){
-                     countExistIndicator--
-                 }
-                 countExistIndicator++          
+                if (CIQ.findBuiltinTechIndicator(null,CIQ.stxx.layout.studies[studyInstanceName].type)){
+                    countExistIndicator--
+                }
+                if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'){
+                    countExistIndicator--
+                }
+                countExistIndicator++          
              } 
              
              if(countExistIndicator>=10){
@@ -349,7 +349,7 @@
      return new Promise(resolve=>{
          for(var i in indicatorList){
              // 是tech
-             if(CIQ.findTechIndicator(null,indicatorList[i]) || CIQ.isSymbolIndicator(indicatorList[i])){
+             if(CIQ.findBuiltinTechIndicator(null,indicatorList[i]) || CIQ.isSymbolIndicator(indicatorList[i])){
                      // load technical study, no need for adding MA
                      // if it's a technical study, skip sending query
  

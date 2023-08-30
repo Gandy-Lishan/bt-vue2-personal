@@ -3629,7 +3629,6 @@ CIQ.UI.StudyEdit.prototype.editPanel = function (params) {
 CIQ.UI.StudyEdit.prototype.editOverlay = function (params) {
 	this.params = params;
 	params.context = this.context;
-	let builtinList = CIQ.store.state.chart.builtinList;
 	
 	if (params.forceEdit) {
 		this.editPanel(params);
@@ -3642,13 +3641,6 @@ CIQ.UI.StudyEdit.prototype.editOverlay = function (params) {
 			params.y = CIQ.ChartEngine.crosshairY;
 			if (studyContextDefault.open) studyContextDefault.open(params);
 		});		
-	//}
-	// else if(builtinList.map(item=>item.url).indexOf(params.sd.type)!=-1){
-    //     this.contextDialogDefault.forEach(function (studyContextDefault) {
-	// 		params.x = CIQ.ChartEngine.crosshairX;
-	// 		params.y = CIQ.ChartEngine.crosshairY;
-	// 		if (studyContextDefault.open) studyContextDefault.open(params);
-	// 	});
 	} else{
 		this.contextDialog.forEach(function (studyContext) {
 			params.x = CIQ.ChartEngine.crosshairX;

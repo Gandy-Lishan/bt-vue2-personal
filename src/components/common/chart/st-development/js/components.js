@@ -7644,7 +7644,6 @@ class Studies extends CIQ.UI.ContextTag {
 		if (!CIQ.Studies) return;
 		var stx = this.context.stx;
 		var alphabetized = [];
-		var builtinList = [];
 		var sd;
 
 		for (var field in CIQ.Studies.studyLibrary) {
@@ -7663,11 +7662,7 @@ class Studies extends CIQ.UI.ContextTag {
 			}
 						
 			alphabetized.push(field);
-			builtinList.push({value: sd.name, url: field});
-
 		}
-		//console.log(CIQ.store.state.chart.builtinList)
-		CIQ.store.commit('chart/getBuiltinList',builtinList);
 		CIQ.alphabetized = alphabetized
 
 		alphabetized.sort(function (lhs, rhs) {
@@ -7786,6 +7781,7 @@ class Studies extends CIQ.UI.ContextTag {
 			CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
 
 			await CIQ.getIndicatorMatedata(indicatorsList)
+			console.log(indicatorsList)
 
 			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
 		}
@@ -8029,10 +8025,9 @@ if (!CIQ.Studies) {
 		open(params) {
 			// ----提前声明8473-8483， 是为了先判断tech然后不让它加载edit界面------
 			this.helper = new CIQ.Studies.DialogHelper(params);
-			const builtinList = CIQ.store.state.chart.builtinList
 
 			let _obj = CIQ.findSentiIndicator(null,this.helper.name)
-			let _obj2 = builtinList.find(x => x.url == this.helper.name)
+			let _obj2 = CIQ.findBuiltinTechIndicator(null,this.helper.name)
 			// if(_obj2){	
 			// 	return
 			// }
@@ -8081,9 +8076,8 @@ if (!CIQ.Studies) {
 		}
 
 		refreshInputs(empty) {
-			const builtinList = CIQ.store.state.chart.builtinList
 			let _obj = CIQ.findSentiIndicator(null,this.helper.name)
-			let _obj2 = builtinList.find(x => x.url == this.helper.name)
+			let _obj2 = CIQ.findBuiltinTechIndicator(null,this.helper.name)
 			if(_obj){
 				this.helper.inputs = [];
 			}
@@ -8189,9 +8183,8 @@ if (!CIQ.Studies) {
 		}
 
 		refreshOutputs(empty) {
-			const builtinList = CIQ.store.state.chart.builtinList
 			let _obj = CIQ.findSentiIndicator(null,this.helper.name)
-			let _obj2 = builtinList.find(x => x.url == this.helper.name)
+			let _obj2 = CIQ.findBuiltinTechIndicator(null,this.helper.name)
 			// if(_obj || _obj2){
 			// 	this.helper.outputs = [];
 			// }
@@ -8230,9 +8223,8 @@ if (!CIQ.Studies) {
 		}
 
 		refreshParameters(params, empty) {
-			const builtinList = CIQ.store.state.chart.builtinList
 			let _obj = CIQ.findSentiIndicator(null,this.helper.name)
-			let _obj2 = builtinList.find(x => x.url == this.helper.name)
+			let _obj2 = CIQ.findBuiltinTechIndicator(null,this.helper.name)
 
 			if(_obj){
 				var parameters = [];
@@ -8934,9 +8926,8 @@ if (!CIQ.Studies) {
 					// edited
 					//newChild.find("cq-label").html(sd.inputs.display);
 
-					const builtinList = CIQ.store.state.chart.builtinList
 					let _obj = CIQ.findSentiIndicator(null,sd.type)
-					let _obj2 = builtinList.find(x => x.url == sd.type);
+					let _obj2 = CIQ.findBuiltinTechIndicator(null,sd.type)
 					
 					if(_obj){		
 						newChild.find("cq-label").html(_obj.chart_name)	

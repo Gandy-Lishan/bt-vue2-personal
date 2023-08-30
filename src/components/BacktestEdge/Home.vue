@@ -1258,7 +1258,7 @@ export default {
                 let signal = CIQ.findSentiIndicator(item.indicator,null)
                 // if it is not senti?
                 if (!signal) {
-                  signal = CIQ.findTechIndicator(item.indicator,null)
+                  signal = CIQ.findBuiltinTechIndicator(item.indicator,null)
                 }
                 // 在 symbol indicator list内检索url
                 if (!signal) {
@@ -1281,7 +1281,7 @@ export default {
                   let signal = CIQ.findSentiIndicator(item.indicator,null)
 
                   if (!signal) {
-                    signal = CIQ.findTechIndicator(item.indicator,null)
+                    signal = CIQ.findBuiltinTechIndicator(item.indicator,null)
                   }
                   // 在 symbol indicator list内检索url
                   if (!signal) {
