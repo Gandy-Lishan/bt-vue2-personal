@@ -545,7 +545,7 @@ quoteFeedSimulator.formatChartData = async function(response){
     let objIndicatorFirstDate = {};
     if(CIQ.objIndicator && typeof CIQ.objIndicator !== 'string'){
         CIQ.objIndicator.forEach((item) => {
-            if(CIQ.isSentiIndicator(item)) objIndicatorFirstDate[item] = null;
+            if(CIQ.findSentiIndicator(null,item)) objIndicatorFirstDate[item] = null;
         });
     }
 
