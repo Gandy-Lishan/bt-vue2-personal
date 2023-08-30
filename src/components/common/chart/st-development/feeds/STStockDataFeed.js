@@ -175,14 +175,14 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
                     var freqList = []
                     for ( var  i = 0,valid = 0 ; i < CIQ.objIndicator.length;i++) {
                         // when both sentiment and tech exist in CIQ.objIndicator, filter tech indicator
-                        if(CIQ.isSentiIndicator(CIQ.objIndicator[i])){
-                            let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
-                            freqList.push(_obj.updated)
-                            
+                        let sentiIndicatorRes = CIQ.findSentiIndicator(null,CIQ.objIndicator[i])
+                        if(sentiIndicatorRes){
+                            freqList.push(sentiIndicatorRes.updated)
                             new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
                             valid++
                             continue
                         }
+                        
                         // 之后加一个symbol判断和小李新senti判断
                         if(CIQ.isUserIndicator(CIQ.objIndicator[i]) || CIQ.isSymbolIndicator(CIQ.objIndicator[i])){       
                             new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
@@ -365,34 +365,31 @@ quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
     }else if(list.length == 0){
         new_str += '&indicator=' +'AAPL'
     }else{
-        var freqList = []
-        for ( var  i = 0,valid = 0; i < CIQ.objIndicator.length; i++) {
-            // when both sentiment and tech exist in CIQ.objIndicator, filter tech indicator
-            //let alphabetized = CIQ.alphabetized
-            let sentiList = []
-            CIQ.store.state.chart.indicatorsList.forEach(e => {
-                sentiList.push(e.url)
-            })
-            if(sentiList){
-                if(sentiList.indexOf(CIQ.objIndicator[i]) == -1){
+        try{
+            var freqList = []
+            for ( var  i = 0,valid = 0 ; i < CIQ.objIndicator.length;i++) {
+                // when both sentiment and tech exist in CIQ.objIndicator, filter tech indicator
+                let sentiIndicatorRes = CIQ.findSentiIndicator(null,CIQ.objIndicator[i])
+                if(sentiIndicatorRes){
+                    freqList.push(sentiIndicatorRes.updated)
+                    new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
+                    valid++
+                    continue
+                }
+                
+                // 之后加一个symbol判断和小李新senti判断
+                if(CIQ.isUserIndicator(CIQ.objIndicator[i]) || CIQ.isSymbolIndicator(CIQ.objIndicator[i])){       
+                    new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
+                    valid++
                     continue
                 }
             }
-
-            // check if this indicator was selected from setup form
-            if(CIQ.objIndicator[i] == CIQ.store.state.chart.indicators.formIndicators.entry || CIQ.objIndicator[i] == CIQ.store.state.chart.indicators.formIndicators.exit){
-                let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
-                freqList.push(_obj.updated)
-            }else{
-                let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
-                freqList.push(_obj.updated)
-            }
-            new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
-            valid++
+            
+            if(freqList.find(item => item=="Weekly"))  freq= 'weekly';   
+            if(freqList.find(item => item=="Monthly"))  freq= 'monthly';  
+        }catch(err){
+            console.error(err)
         }
-        
-        if(freqList.find(item => item=="Weekly"))  freq= 'weekly';
-        if(freqList.find(item => item=="Monthly"))  freq= 'monthly';
     }   
     switch(CIQ.store.state.form.exitFrequency){
         case "Monthly":{
@@ -452,34 +449,31 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
     }else if(list.length == 0){
         new_str += '&indicator=' +'AAPL'
     }else{
-        var freqList = []
-        for ( var  i = 0, valid = 0; i < CIQ.objIndicator.length; i++) {
-            // when both sentiment and tech exist in CIQ.objIndicator, filter tech indicator
-            //let alphabetized = CIQ.alphabetized
-            let sentiList = []
-            CIQ.store.state.chart.indicatorsList.forEach(e => {
-                sentiList.push(e.url)
-            })
-            if(sentiList){
-                if(sentiList.indexOf(CIQ.objIndicator[i]) == -1){
+        try{
+            var freqList = []
+            for ( var  i = 0,valid = 0 ; i < CIQ.objIndicator.length;i++) {
+                // when both sentiment and tech exist in CIQ.objIndicator, filter tech indicator
+                let sentiIndicatorRes = CIQ.findSentiIndicator(null,CIQ.objIndicator[i])
+                if(sentiIndicatorRes){
+                    freqList.push(sentiIndicatorRes.updated)
+                    new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
+                    valid++
+                    continue
+                }
+                
+                // 之后加一个symbol判断和小李新senti判断
+                if(CIQ.isUserIndicator(CIQ.objIndicator[i]) || CIQ.isSymbolIndicator(CIQ.objIndicator[i])){       
+                    new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
+                    valid++
                     continue
                 }
             }
-
-            // check if this indicator was selected from setup form
-            if(CIQ.objIndicator[i] == CIQ.store.state.chart.indicators.formIndicators.entry || CIQ.objIndicator[i] == CIQ.store.state.chart.indicators.formIndicators.exit){
-                let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
-                freqList.push(_obj.updated)
-            }else{
-                let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == CIQ.objIndicator[i])
-                freqList.push(_obj.updated)
-            }
-            new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
-            valid++
+            
+            if(freqList.find(item => item=="Weekly"))  freq= 'weekly';   
+            if(freqList.find(item => item=="Monthly"))  freq= 'monthly';  
+        }catch(err){
+            console.error(err)
         }
-        
-        if(freqList.find(item => item=="Weekly"))  freq= 'weekly';
-        if(freqList.find(item => item=="Monthly"))  freq= 'monthly';
     }   
    
     switch(CIQ.store.state.form.exitFrequency){
