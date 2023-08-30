@@ -585,7 +585,7 @@ export default {
 		}
 	},
 	created() {
-  eventBus.$on('userExitFileSelect', this.userExitFileSelect)
+  	eventBus.$on('userExitFileSelect', this.userExitFileSelect)
 },
 	methods: {
 		...mapMutations(['setFrequencyArray']),

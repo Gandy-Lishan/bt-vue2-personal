@@ -75,7 +75,7 @@ export default {
 		panelIndex: Number,
 		direction: String,
 		isActived: Boolean,
-		exitItemCheck: Boolean,
+		isRiskControl: Boolean,
 		relation: [String, Number],
 score: [String, Number],
 period: [String, Number],
@@ -243,7 +243,7 @@ delay_bars: [String, Number],
 		},
 		saveCondition(index) {
 			let checked = true
-			if(this.exitItemCheck) {
+			if(this.isRiskControl) {
 				return checked = true
 			}
 			if (this.description) {

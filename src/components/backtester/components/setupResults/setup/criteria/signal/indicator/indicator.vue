@@ -282,7 +282,7 @@ export default {
     panelIndex: Number,
     editableTabsValue: String,
     editableTabs: Array,
-    exitItemCheck: Boolean
+    isRiskControl: Boolean
   },
   data() {
     var validateSenti = (rule, value, callback) => {
@@ -1338,7 +1338,7 @@ export default {
       let validName = false
       if (
         this.indicatorRadio === 'Sentiment Indicator' &&
-        !this.exitItemCheck
+        !this.isRiskControl
       ) {
         this.$refs.siForm.validate((valid) => {
           validForm = valid
@@ -1376,7 +1376,7 @@ export default {
       }
       if (
         this.indicatorRadio === "Users' Own Indicator" &&
-        !this.exitItemCheck
+        !this.isRiskControl
       ) {
         // this.$refs.siForm.validate((valid) => {
         // 	validForm = valid
@@ -1407,7 +1407,7 @@ export default {
       }
       if (
         this.indicatorRadio === 'Technical Indicator' &&
-        !this.exitItemCheck
+        !this.isRiskControl
       ) {
         this.$refs.siForm.validate((valid) => {
           validForm = valid
@@ -1437,7 +1437,7 @@ export default {
           return checked
         }
       }
-      if (this.indicatorRadio === 'Symbol OHLCV' && !this.exitItemCheck) {
+      if (this.indicatorRadio === 'Symbol OHLCV' && !this.isRiskControl) {
         this.$refs.siForm.validate((valid) => {
           validForm = valid
         })
@@ -1465,7 +1465,7 @@ export default {
           return checked
         }
       }
-      if (this.exitItemCheck) {
+      if (this.isRiskControl) {
         checked = true
         return checked
       }
@@ -1684,7 +1684,7 @@ export default {
               criteria: self.criteria,
               index: self.panelIndex
             }
-            self.$emit(self.criteria + 'UserUploadFileContent', fileObj)
+            self.$emit('userUploadFileContent', fileObj)
             // self.handleUsersOwnIndicatorSelect(response.data)
             // let valObj = {}
             // valObj.value = this.si.userIndicator
