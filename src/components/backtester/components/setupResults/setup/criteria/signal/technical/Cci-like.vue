@@ -51,7 +51,7 @@ export default {
 		techVal: String,
 		panelIndex: Number,
 		direction: String,
-		exitItemCheck: Boolean,
+		isRiskControl: Boolean,
 		relation: [String, Number],
 		score: [String, Number],
 		period: [String, Number],
@@ -186,7 +186,7 @@ export default {
 		},
 		saveCondition(index) {
 			let checked = true
-			if (this.exitItemCheck) {
+			if (this.isRiskControl) {
 				return (checked = true)
 			}
 			let validForm

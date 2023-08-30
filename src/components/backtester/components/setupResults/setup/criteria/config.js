@@ -14,6 +14,7 @@ export function generateConfig(criteria) {
 `
 	const config = {
 		criteria: criteria,
+    criteriaCapFirstL: capFirstL,
 		criteriaTitle: `${capFirstL} Criteria`,
 		criteriaTitleTP: `Set the criteria/criterias which trigger the backtest ${criteria}
     criteria.<br />
