@@ -495,7 +495,7 @@ if (!CIQ.Marker) {
                      yAxis = panel && sd.getYAxis(this);
                      for (var output in this.layout.studies[study].outputMap) {
                          //a dumb way to show full name of indicator
-                         let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == output)
+                         let _obj = CIQ.findSentiIndicator(null,output)
                          if(_obj){
                              //console.log(_obj)
                              fields.push({

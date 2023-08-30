@@ -3,7 +3,8 @@ let __st_js_indicatorType_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
  
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
-
+ 
+// tech list that found in setup form
 CIQ.findTechIndicator = function(value,url){
     let signal
     if(value){
@@ -13,6 +14,21 @@ CIQ.findTechIndicator = function(value,url){
     }
     if(url){
         signal = CIQ.store.state.chart.formateTechnicalList.find((i) => {
+            return i.url == url
+        })
+    }
+    return signal
+}
+// the whole tech list that found in Chartiq searchbox
+CIQ.findBuiltinTechIndicator = function(value,url){
+    let signal
+    if(value){
+        signal = CIQ.store.state.chart.builtinList.find((i) => {
+            return i.value == value
+        })
+    }
+    if(url){
+        signal = CIQ.store.state.chart.builtinList.find((i) => {
             return i.url == url
         })
     }
