@@ -149,7 +149,7 @@ export default {
     },
     symVal: {
       handler(newVal) {
-        if (this.$store.state.form.symbolConditions.findIndex(item => item.label == this.symVal) != -1) this.symbolLabel = newVal
+        if (CIQ.findSymbolIndicator(this.symVal,null)) this.symbolLabel = newVal
       },
       immediate: true,
       deep: true
@@ -161,8 +161,7 @@ export default {
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.sym.condition = this.sym.newCondition
-
-        const fieldName = this.$store.state.form.symbolConditions.find(item => item.label == this.symVal).field
+        const fieldName = CIQ.findSymbolIndicator(this.symVal,null).field
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
           if (
             CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName &&
@@ -300,8 +299,7 @@ export default {
       if (!this.isROCLike) return
       // 用symVal因为symUrl当前生命周期不存在
       if (this.symVal) {
-
-        let symbolCond = this.$store.state.form.symbolConditions.find(item => item.label == this.symVal)
+        let symbolCond = CIQ.findSymbolIndicator(this.symVal,null)
         const fieldName = symbolCond?symbolCond.field:''
 
         

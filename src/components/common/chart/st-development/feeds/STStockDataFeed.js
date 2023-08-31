@@ -184,7 +184,7 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
                         }
                         
                         // 之后加一个symbol判断和小李新senti判断
-                        if(CIQ.isUserIndicator(CIQ.objIndicator[i]) || CIQ.isSymbolIndicator(CIQ.objIndicator[i])){       
+                        if(CIQ.isUserIndicator(CIQ.objIndicator[i]) || CIQ.findSymbolIndicator(CIQ.objIndicator[i],null)){       
                             new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
                             valid++
                             continue
@@ -378,7 +378,7 @@ quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
                 }
                 
                 // 之后加一个symbol判断和小李新senti判断
-                if(CIQ.isUserIndicator(CIQ.objIndicator[i]) || CIQ.isSymbolIndicator(CIQ.objIndicator[i])){       
+                if(CIQ.isUserIndicator(CIQ.objIndicator[i]) || CIQ.findSymbolIndicator(CIQ.objIndicator[i],null)){       
                     new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
                     valid++
                     continue
@@ -462,7 +462,7 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
                 }
                 
                 // 之后加一个symbol判断和小李新senti判断
-                if(CIQ.isUserIndicator(CIQ.objIndicator[i]) || CIQ.isSymbolIndicator(CIQ.objIndicator[i])){       
+                if(CIQ.isUserIndicator(CIQ.objIndicator[i]) || CIQ.findSymbolIndicator(CIQ.objIndicator[i],null)){       
                     new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
                     valid++
                     continue
