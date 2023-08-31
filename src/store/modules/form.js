@@ -58,14 +58,6 @@ const state = {
 	
 	tabIndex: 0,//form
     riskControl: 'true',//form
-	// read only
-	symbolConditions : [//form
-		{label:'Symbol Open',field:'Open'},
-		{label:'Symbol High',field:'High'},
-		{label:'Symbol Low',field:'Low'},
-		{label:'Symbol Close',field:'Close'},
-		{label:'Symbol Volume',field:'Volume'},
-	],
 	usersOwnEntryFileHash: Array(5).fill(''),//form
 	usersOwnExitFileHash: Array(5).fill(''),//form
 	userUploadFileContent: Array(5).fill({}),//form

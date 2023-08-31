@@ -349,7 +349,7 @@
      return new Promise(resolve=>{
          for(var i in indicatorList){
              // 是tech
-             if(CIQ.findBuiltinTechIndicator(null,indicatorList[i]) || CIQ.isSymbolIndicator(indicatorList[i])){
+             if(CIQ.findBuiltinTechIndicator(null,indicatorList[i]) || CIQ.findSymbolIndicator(indicatorList[i],null)){
                      // load technical study, no need for adding MA
                      // if it's a technical study, skip sending query
  
@@ -388,7 +388,7 @@
                          }
                      }
  
-                     if(CIQ.isSymbolIndicator(indicatorList[i])){
+                     if(CIQ.findSymbolIndicator(indicatorList[i],null)){
                          if(CIQ.store.getters.getBeforeCalculateNewConditions == false){
                              CIQ.store.commit("states/envokeBeforeCalculateNewConditions", true)
                          }else{

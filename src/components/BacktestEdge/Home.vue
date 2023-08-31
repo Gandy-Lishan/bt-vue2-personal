@@ -1262,7 +1262,7 @@ export default {
                 }
                 // 在 symbol indicator list内检索url
                 if (!signal) {
-                  if (this.$store.state.form.symbolConditions.findIndex(i => i.label == item.indicator) !== -1) {
+                  if (CIQ.findSymbolIndicator(item.indicator,null)) {
                     return item.indicator
                   }
                 }
@@ -1285,7 +1285,7 @@ export default {
                   }
                   // 在 symbol indicator list内检索url
                   if (!signal) {
-                    if (this.$store.state.form.symbolConditions.findIndex(i => i.label == item.indicator) !== -1) {
+                    if (CIQ.findSymbolIndicator(item.indicator,null)) {
                       return item.indicator
                     }
                   }
