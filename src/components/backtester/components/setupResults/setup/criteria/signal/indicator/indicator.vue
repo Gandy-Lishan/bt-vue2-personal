@@ -433,47 +433,45 @@ export default {
         absoluteIndex == this.panelIndex
       ) {
         this.si.sentimentIndicator = val.name
-        for (var i in this.$store.state.chart.indicatorsList) {
-          if (this.$store.state.chart.indicatorsList[i].chart_name == val.name) {
-            this.indicatorRadio = 'Sentiment Indicator'
-            if (this.criteria == 'entry') {
-              this.$store.commit('chart/getEntryIndicators', {
-                index: this.panelIndex,
-                value: this.$store.state.chart.indicatorsList[i].url
-              })
-            } else {
-              this.$store.commit('chart/getExitIndicators', {
-                index: this.panelIndex,
-                value: this.$store.state.chart.indicatorsList[i].url
-              })
-            }
-            // extract this statement from handleSentimentSelect
-            let valObj = {}
-            valObj.value = this.$store.state.chart.indicatorsList[i].chart_name
-            valObj.index = this.panelIndex
-            this.$emit('getIndicatorVal', valObj)
-
-            this.currentSentiUpdated = this.$store.state.chart.indicatorsList[i].updated
-            let freqObj = {}
-            freqObj.value = this.$store.state.chart.indicatorsList[i].updated
-            freqObj.index = this.panelIndex
-            freqObj.criteria = this.criteria
-            freqObj.key = `${this.criteria}_${this.panelIndex}`
-            this.setFrequencyArray(freqObj)
-            this.$emit('getFreqArray', freqObj)
-            // Remove form verification
-            this.clearFormValidate()
-            let radioObj = {}
-            radioObj.value = 'sentiment'
-            radioObj.index = this.panelIndex
-            this.$emit('getIndicatorRadio', radioObj)
-            let obj = {}
-            obj.index = this.panelIndex
-            obj.url = this.$store.state.chart.indicatorsList[i].url
-            this.$emit('getIndicatorUrl', obj)
+        let sentiIndicatorResult = CIQ.findSentiIndicator(val.name,null)
+        if (sentiIndicatorResult) {
+          this.indicatorRadio = 'Sentiment Indicator'
+          if (this.criteria == 'entry') {
+            this.$store.commit('chart/getEntryIndicators', {
+              index: this.panelIndex,
+              value: sentiIndicatorResult.url
+            })
+          } else {
+            this.$store.commit('chart/getExitIndicators', {
+              index: this.panelIndex,
+              value: sentiIndicatorResult.url
+            })
           }
+          // extract this statement from handleSentimentSelect
+          let valObj = {}
+          valObj.value = sentiIndicatorResult.chart_name
+          valObj.index = this.panelIndex
+          this.$emit('getIndicatorVal', valObj)
+
+          this.currentSentiUpdated = sentiIndicatorResult.updated
+          let freqObj = {}
+          freqObj.value = sentiIndicatorResult.updated
+          freqObj.index = this.panelIndex
+          freqObj.criteria = this.criteria
+          freqObj.key = `${this.criteria}_${this.panelIndex}`
+          this.setFrequencyArray(freqObj)
+          this.$emit('getFreqArray', freqObj)
+          // Remove form verification
+          this.clearFormValidate()
+          let radioObj = {}
+          radioObj.value = 'sentiment'
+          radioObj.index = this.panelIndex
+          this.$emit('getIndicatorRadio', radioObj)
+          let obj = {}
+          obj.index = this.panelIndex
+          obj.url = sentiIndicatorResult.url
+          this.$emit('getIndicatorUrl', obj)
         }
-       
       }
     },
     frequency: {
@@ -1227,7 +1225,7 @@ export default {
         valObj.index = this.panelIndex
         this.$emit('getIndicatorVal', valObj)
         let urlObj = {}
-        let res = this.$store.state.chart.indicatorsList.find((i) => { return i.chart_name == this.si.sentimentIndicator })
+        let res = CIQ.findSentiIndicator(this.si.sentimentIndicator,null)
         urlObj.url = res ? res.url : ''
         urlObj.index = this.panelIndex
         this.$emit('getIndicatorUrl', urlObj)
