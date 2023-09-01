@@ -596,8 +596,8 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         // old version only
                         var countExistIndicator = 0
                         for (var studyInstanceName in CIQ.stxx.layout.studies) {
-                            for (var i in CIQ.store.state.chart.builtinList){
-                                if(CIQ.store.state.chart.builtinList[i].url == CIQ.stxx.layout.studies[studyInstanceName].type){countExistIndicator--}
+                            if (CIQ.findBuiltinTechIndicator(null,CIQ.stxx.layout.studies[studyInstanceName].type)){
+                                countExistIndicator--
                             }
                             if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'){
                                 countExistIndicator--

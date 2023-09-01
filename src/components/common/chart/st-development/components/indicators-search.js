@@ -277,10 +277,11 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                             var item = {
                                 symbol: element.url,
                                 name: element.name,
-                                updated: CIQ.store.state.chart.indicatorsList.find(item=> {return item.url == element.url}).updated,
+                                updated: CIQ.findSentiIndicator(null,element.url).updated,
                                 exchDisp: ""
                             }
-                            if (item.symbol.toUpperCase().indexOf(value.toUpperCase()) !== -1){
+
+                            if (item.name.toUpperCase().indexOf(value.toUpperCase()) !== -1){
                                 results.push({
                                     display: [item.name, item.updated],
                                     data: item
@@ -576,16 +577,12 @@ window.onclick = function(event) {
                                 -1;
                             if (toUpperCase) val = val.toUpperCase();
                             if(self.currentFilter == 'ALL'){
-                                for(var i=0;i<CIQ.store.state.chart.indicatorsList.length;i++){
-                                    var fields = CIQ.store.state.chart.indicatorsList[i]
-                                    if(scrollable[0].firstChild.firstChild.innerHTML == fields.chart_name){       
-                                        var item = {
-                                            name: fields.chart_name,
-                                            url: fields.url
-                                        };
-                                        this.selectItem(item)
-                                    }   
-                                }
+                                let fields = CIQ.findSentiIndicator(scrollable[0].firstChild.firstChild.innerHTML,null)
+                                if(fields) this.selectItem({
+                                    name: fields.chart_name,
+                                    url: fields.url
+                                })
+
                             }else{
                                 CIQ.getFavorite().then(data=>{
                                     var favoriteSymbolList = []
@@ -836,9 +833,8 @@ window.onclick = function(event) {
                         // old version only
                         var countExistIndicator = 0
                         for (var studyInstanceName in CIQ.stxx.layout.studies) {
-                            for (var i in CIQ.store.state.chart.builtinList){
-                                if(CIQ.store.state.chart.builtinList[i].url == CIQ.stxx.layout.studies[studyInstanceName].type
-                                ){countExistIndicator--}
+                            if (CIQ.findBuiltinTechIndicator(null,CIQ.stxx.layout.studies[studyInstanceName].type)){
+                                countExistIndicator--
                             }
                             if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'){
                                 countExistIndicator--

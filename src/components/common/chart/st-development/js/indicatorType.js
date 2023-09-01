@@ -3,30 +3,21 @@ let __st_js_indicatorType_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
  
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
-
-CIQ.findTechIndicator = function(value,url){
+ 
+// the whole tech list that found in Chartiq searchbox
+CIQ.findBuiltinTechIndicator = function(value,url){
     let signal
     if(value){
-        signal = CIQ.store.state.chart.formateTechnicalList.find((i) => {
+        signal = CIQ.store.state.chart.builtinList.find((i) => {
             return i.value == value
         })
     }
     if(url){
-        signal = CIQ.store.state.chart.formateTechnicalList.find((i) => {
+        signal = CIQ.store.state.chart.builtinList.find((i) => {
             return i.url == url
         })
     }
     return signal
-}
-CIQ.isSentiIndicator = function(indicator){
-    let sentiList = []
-    CIQ.store.state.chart.indicatorsList.forEach(e => {
-        sentiList.push(e.url)
-    })
-    if(sentiList.indexOf(indicator) == -1){
-        return false
-    }
-    return true
 }
 CIQ.findSentiIndicator = function(name,url){
     let signal
@@ -49,12 +40,27 @@ CIQ.isUserIndicator = function(indicator){
     }
     return true
 }
-CIQ.isSymbolIndicator = function(indicator){
-    let symbolOhlcvList = ['Symbol Open','Symbol High','Symbol Close','Symbol Low','Symbol Volume']
-    if(symbolOhlcvList.indexOf(indicator) == -1){
-        return false
+
+CIQ.findSymbolIndicator = function(label,field){
+    let symbolOhlcvList = [//form
+		{label:'Symbol Open',field:'Open'},
+		{label:'Symbol High',field:'High'},
+		{label:'Symbol Low',field:'Low'},
+		{label:'Symbol Close',field:'Close'},
+		{label:'Symbol Volume',field:'Volume'},
+	]
+    let signal
+    if(label){
+        signal = symbolOhlcvList.find((i) => {
+            return i.label == label
+        })
     }
-    return true
+    if(field){
+        signal = symbolOhlcvList.find((i) => {
+            return i.field == field
+        })
+    }
+    return signal
 }
 }
 export {__st_js_indicatorType_}

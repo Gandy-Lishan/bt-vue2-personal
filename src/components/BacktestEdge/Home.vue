@@ -1258,11 +1258,11 @@ export default {
                 let signal = CIQ.findSentiIndicator(item.indicator,null)
                 // if it is not senti?
                 if (!signal) {
-                  signal = CIQ.findTechIndicator(item.indicator,null)
+                  signal = CIQ.findBuiltinTechIndicator(item.indicator,null)
                 }
                 // 在 symbol indicator list内检索url
                 if (!signal) {
-                  if (this.$store.state.form.symbolConditions.findIndex(i => i.label == item.indicator) !== -1) {
+                  if (CIQ.findSymbolIndicator(item.indicator,null)) {
                     return item.indicator
                   }
                 }
@@ -1281,11 +1281,11 @@ export default {
                   let signal = CIQ.findSentiIndicator(item.indicator,null)
 
                   if (!signal) {
-                    signal = CIQ.findTechIndicator(item.indicator,null)
+                    signal = CIQ.findBuiltinTechIndicator(item.indicator,null)
                   }
                   // 在 symbol indicator list内检索url
                   if (!signal) {
-                    if (this.$store.state.form.symbolConditions.findIndex(i => i.label == item.indicator) !== -1) {
+                    if (CIQ.findSymbolIndicator(item.indicator,null)) {
                       return item.indicator
                     }
                   }
@@ -1370,9 +1370,7 @@ export default {
               for (var i in CIQ.stxx.layout.studies) {
                 var output = {}
                 if (
-                  this.$store.state.chart.indicatorsList.find((j) => {
-                    return j.url == CIQ.stxx.layout.studies[i].type
-                  }) == undefined
+                  !CIQ.findSentiIndicator(null,CIQ.stxx.layout.studies[i].type)
                 ) {
                   output = CIQ.stxx.layout.studies[i].outputs
                 }

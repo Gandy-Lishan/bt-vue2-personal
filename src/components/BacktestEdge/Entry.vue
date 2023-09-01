@@ -715,7 +715,7 @@ export default {
 				// 移除senti indicator附属ma
 				
 				// 移除ma的
-				let removedUrl = CIQ.findTechIndicator(this.indicatorValArr[absoluteIndex],null)?.url
+				let removedUrl = CIQ.findBuiltinTechIndicator(this.indicatorValArr[absoluteIndex],null)?.url
 				var activatedMAList = this.$store.state.chart.activatedMA
 				var MAListIndex = activatedMAList.findIndex(
 				(item) =>
@@ -1165,7 +1165,7 @@ export default {
 					this.indicatorRadio = 'technical'
 					this.indicatorRadioArr.splice(j, 1, 'technical')
 
-					this.techIndiObj[j] = CIQ.findTechIndicator(data.entry.signals[j].indicator,null)?.class
+					this.techIndiObj[j] = CIQ.findBuiltinTechIndicator(data.entry.signals[j].indicator,null)?.class
 				}
 			}
 			this.$nextTick(() => {

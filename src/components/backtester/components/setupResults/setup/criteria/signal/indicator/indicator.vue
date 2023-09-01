@@ -403,9 +403,6 @@ export default {
     updateSenti() {
       return this.$store.state.chart.currentSenti
     },
-    updateTech() {
-      return this.$store.state.chart.currentTech
-    },
     frequency() {
       return this.$store.state.form.exitFrequency
     }
@@ -436,65 +433,46 @@ export default {
         absoluteIndex == this.panelIndex
       ) {
         this.si.sentimentIndicator = val.name
-        for (var i in this.$store.state.chart.indicatorsList) {
-          if (this.$store.state.chart.indicatorsList[i].chart_name == val.name) {
-            this.indicatorRadio = 'Sentiment Indicator'
-            if (this.criteria == 'entry') {
-              this.$store.commit('chart/getEntryIndicators', {
-                index: this.panelIndex,
-                value: this.$store.state.chart.indicatorsList[i].url
-              })
-            } else {
-              this.$store.commit('chart/getExitIndicators', {
-                index: this.panelIndex,
-                value: this.$store.state.chart.indicatorsList[i].url
-              })
-            }
-            // extract this statement from handleSentimentSelect
-            let valObj = {}
-            valObj.value = this.$store.state.chart.indicatorsList[i].chart_name
-            valObj.index = this.panelIndex
-            this.$emit('getIndicatorVal', valObj)
-
-            this.currentSentiUpdated = this.$store.state.chart.indicatorsList[i].updated
-            let freqObj = {}
-            freqObj.value = this.$store.state.chart.indicatorsList[i].updated
-            freqObj.index = this.panelIndex
-            freqObj.criteria = this.criteria
-            freqObj.key = `${this.criteria}_${this.panelIndex}`
-            this.setFrequencyArray(freqObj)
-            this.$emit('getFreqArray', freqObj)
-            // Remove form verification
-            this.clearFormValidate()
-            let radioObj = {}
-            radioObj.value = 'sentiment'
-            radioObj.index = this.panelIndex
-            this.$emit('getIndicatorRadio', radioObj)
-            let obj = {}
-            obj.index = this.panelIndex
-            obj.url = this.$store.state.chart.indicatorsList[i].url
-            this.$emit('getIndicatorUrl', obj)
+        let sentiIndicatorResult = CIQ.findSentiIndicator(val.name,null)
+        if (sentiIndicatorResult) {
+          this.indicatorRadio = 'Sentiment Indicator'
+          if (this.criteria == 'entry') {
+            this.$store.commit('chart/getEntryIndicators', {
+              index: this.panelIndex,
+              value: sentiIndicatorResult.url
+            })
+          } else {
+            this.$store.commit('chart/getExitIndicators', {
+              index: this.panelIndex,
+              value: sentiIndicatorResult.url
+            })
           }
+          // extract this statement from handleSentimentSelect
+          let valObj = {}
+          valObj.value = sentiIndicatorResult.chart_name
+          valObj.index = this.panelIndex
+          this.$emit('getIndicatorVal', valObj)
+
+          this.currentSentiUpdated = sentiIndicatorResult.updated
+          let freqObj = {}
+          freqObj.value = sentiIndicatorResult.updated
+          freqObj.index = this.panelIndex
+          freqObj.criteria = this.criteria
+          freqObj.key = `${this.criteria}_${this.panelIndex}`
+          this.setFrequencyArray(freqObj)
+          this.$emit('getFreqArray', freqObj)
+          // Remove form verification
+          this.clearFormValidate()
+          let radioObj = {}
+          radioObj.value = 'sentiment'
+          radioObj.index = this.panelIndex
+          this.$emit('getIndicatorRadio', radioObj)
+          let obj = {}
+          obj.index = this.panelIndex
+          obj.url = sentiIndicatorResult.url
+          this.$emit('getIndicatorUrl', obj)
         }
-       
       }
-    },
-    updateTech(val) {
-      var builtinList = this.$store.state.chart.builtinList
-      builtinList.find((item) => {
-        if (item.url == val.url) {
-          // this.si.technicalIndicator = item.value
-          /*
-          Note it out for the time being, because most of the technologies are not added to the back test
-          */
-          //this.indicatorRadio = 'Technical Indicators'
-          // 					let radioObj = {}
-          // radioObj.value = 'technical'
-          // radioObj.index = this.panelIndex
-          // this.$emit('getIndicatorRadio', radioObj)
-          //this.handleTechnicalSelect({value:item.value})
-        }
-      })
     },
     frequency: {
       handler(newVal) {
@@ -712,13 +690,8 @@ export default {
       // 限制同屏显示个数
       var countExistIndicator = 0
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        for (var i in CIQ.store.state.chart.builtinList) {
-          if (
-            CIQ.store.state.chart.builtinList[i].url ==
-            CIQ.stxx.layout.studies[studyInstanceName].type
-          ) {
-            countExistIndicator--
-          }
+        if (CIQ.findBuiltinTechIndicator(null,CIQ.stxx.layout.studies[studyInstanceName].type)){
+          countExistIndicator--
         }
         if (CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
           countExistIndicator--
@@ -913,7 +886,7 @@ export default {
       CIQ.addIndicators()
     },
     clearTechnicalSelect() {
-      const item = CIQ.findTechIndicator(this.$refs.techInput.value,null)
+      const item = CIQ.findBuiltinTechIndicator(this.$refs.techInput.value,null)
 
       let freqObj = {}
       freqObj.value = ''
@@ -1142,13 +1115,8 @@ export default {
       // old version only
       var countExistIndicator = 0
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        for (var i in CIQ.store.state.chart.builtinList) {
-          if (
-            CIQ.store.state.chart.builtinList[i].url ==
-            CIQ.stxx.layout.studies[studyInstanceName].type
-          ) {
-            countExistIndicator--
-          }
+        if (CIQ.findBuiltinTechIndicator(null,CIQ.stxx.layout.studies[studyInstanceName].type)){
+          countExistIndicator--
         }
         if (CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
           countExistIndicator--
@@ -1257,7 +1225,7 @@ export default {
         valObj.index = this.panelIndex
         this.$emit('getIndicatorVal', valObj)
         let urlObj = {}
-        let res = this.$store.state.chart.indicatorsList.find((i) => { return i.chart_name == this.si.sentimentIndicator })
+        let res = CIQ.findSentiIndicator(this.si.sentimentIndicator,null)
         urlObj.url = res ? res.url : ''
         urlObj.index = this.panelIndex
         this.$emit('getIndicatorUrl', urlObj)
@@ -1442,7 +1410,7 @@ export default {
         this.$refs.siForm.validate((valid) => {
           validForm = valid
         })
-        if(CIQ.findTechIndicator(this.si.technicalIndicator,null)) validName = true
+        if(CIQ.findBuiltinTechIndicator(this.si.technicalIndicator,null)) validName = true
         
         if (validForm && validName) {
           let obj = {}
@@ -1548,7 +1516,7 @@ export default {
             vm.indicatorRadio = 'Technical Indicator'
             vm.si.technicalIndicator = newVal[this.criteria].signals[index].indicator
 
-            let techIndicatorResult = CIQ.findTechIndicator(vm.si.technicalIndicator,null)
+            let techIndicatorResult = CIQ.findBuiltinTechIndicator(vm.si.technicalIndicator,null)
             if(techIndicatorResult){
               let isFromEdit = true
               vm.handleTechnicalSelect(techIndicatorResult, isFromEdit) 

@@ -669,7 +669,7 @@ let __st_js_generateCsv_ = (_exports) => {
      }
  
      // find if this study is a normal sentiment indicator
-     if( CIQ.isSentiIndicator(sd.type) || CIQ.isUserIndicator(sd.type)){
+     if(CIQ.findSentiIndicator(null,sd.type) || CIQ.isUserIndicator(sd.type)){
          
          let conditions = CIQ.store.state.form.backtestInfo[criteria]['signals'][indexNum]
          resultIndex = sd.type
@@ -683,7 +683,7 @@ let __st_js_generateCsv_ = (_exports) => {
          }
  
          labelOption[criteria=='entry'?indexNum:indexNum+5] = ''
-     }else if( CIQ.isSymbolIndicator(sd.type)){
+     }else if( CIQ.findSymbolIndicator(sd.type,null) ){
          resultIndex = Object.keys(sd.outputMap)[0]
          // load a value of this study to dataframe(important note: the value of correspond resultIndex is caculated differently)
  
