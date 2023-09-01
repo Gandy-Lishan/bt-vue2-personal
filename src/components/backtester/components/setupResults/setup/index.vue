@@ -214,12 +214,12 @@ export default {
 					if (CIQ.findSymbolIndicator(item.indicator, null)) {
 						return item.indicator
 					}
-					const usersOwnList =
-						this.$store.state.form[`usersOwn${criteriaCapFirstL}FileHash`]
-					return usersOwnList[index] !== ''
+				}
+
+				const usersOwnList = this.$store.state.form[`usersOwn${criteriaCapFirstL}FileHash`]
+				return usersOwnList[index] !== ''
 						? usersOwnList[index]
 						: signal?.url || ''
-				}
 			}
 
 			let signal = backtestData[criteria].signals.map(findSignal)
@@ -323,27 +323,27 @@ export default {
 				{},
 				...selectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
 			)
-
 			 // Before the back test, load the data of the whole period and generate CSV to upload S3, and then update the form when the results come out
 			 this.reloadData(indicatorLayout, backtestInfo.frequency)
 			// 1. Upload data file
 			// 2. Upload parameter file
 			// 3. Judge the file upload status. If an error is reported, run back test will not be performed
 			const callback = this.handleCallback(backtestParams, backtestInfo)
-			CIQ.outputSignalsResult(backtestInfo.uuid, callback)
+			CIQ.outputSignalsResult(backtestInfo.pk, callback)
 		},
 		handleCallback(backtestParams, backtestInfo) {
 			// todo lishan
 			const _this = this
-			backtestParams.uuid = backtestInfo.pk
+			backtestParams.uuid = backtestParams.pk
+			delete backtestParams.pk
 			backtestParams = JSON.stringify(backtestParams)
-			const uuid = backtestInfo.uuid
+			const uuid = backtestInfo.pk
 			const backtestDataStr = _this.$qs.stringify(backtestInfo)
 			return async function() {
 				if(arguments[0] == 200) {
 					const S3DataStr = _this.$qs.stringify({
 						file_name: `${uuid}/${uuid}__backtest_params.json`,
-						file_name: backtestParams
+						file_data: backtestParams
 					})
 					await uploadS3(S3DataStr)
 					const res = await runBacktest(backtestDataStr)
