@@ -1683,7 +1683,7 @@ export default {
               criteria: self.criteria,
               index: self.panelIndex
             }
-            self.$emit(self.criteria + 'UserUploadFileContent', fileObj)
+            self.$emit('userUploadFileContent', fileObj)
             // self.handleUsersOwnIndicatorSelect(response.data)
             // let valObj = {}
             // valObj.value = this.si.userIndicator

@@ -1,6 +1,5 @@
 /* Find items with the same array */
 function searchKeys(data) {
-	console.log('searchKeys', data)
   let sameArr = [];
   let list = [];
 
