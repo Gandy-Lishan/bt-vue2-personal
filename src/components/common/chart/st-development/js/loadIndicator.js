@@ -50,7 +50,6 @@
          }
          indicatorsList = indicatorsList.concat(technicalIndicators).filter(item=>{return item !== ''})
          await CIQ.getIndicatorMatedata(indicatorsList)
-         console.log('after CIQ.getIndicatorMatedata')
  
          if(CIQ.store.state.form.backtestSymbol){
              CIQ.symbol = CIQ.store.state.form.backtestSymbol
@@ -282,13 +281,13 @@
              // old version only
              var countExistIndicator = 0
              for (var studyInstanceName in CIQ.stxx.layout.studies) {
-                 for (var i in CIQ.store.state.chart.builtinList){
-                     if(CIQ.store.state.chart.builtinList[i].url == CIQ.stxx.layout.studies[studyInstanceName].type){countExistIndicator--}
-                 }
-                 if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'){
-                     countExistIndicator--
-                 }
-                 countExistIndicator++          
+                if (CIQ.findBuiltinTechIndicator(null,CIQ.stxx.layout.studies[studyInstanceName].type)){
+                    countExistIndicator--
+                }
+                if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'){
+                    countExistIndicator--
+                }
+                countExistIndicator++          
              } 
              
              if(countExistIndicator>=10){
@@ -350,7 +349,7 @@
      return new Promise(resolve=>{
          for(var i in indicatorList){
              // 是tech
-             if(CIQ.isTechIndicator(indicatorList[i]) || CIQ.isSymbolIndicator(indicatorList[i])){
+             if(CIQ.findBuiltinTechIndicator(null,indicatorList[i]) || CIQ.findSymbolIndicator(indicatorList[i],null)){
                      // load technical study, no need for adding MA
                      // if it's a technical study, skip sending query
  
@@ -389,13 +388,12 @@
                          }
                      }
  
-                     if(CIQ.isSymbolIndicator(indicatorList[i])){
+                     if(CIQ.findSymbolIndicator(indicatorList[i],null)){
                          if(CIQ.store.getters.getBeforeCalculateNewConditions == false){
-                             CIQ.store.commit("form/envokeBeforeCalculateNewConditions", true)
+                             CIQ.store.commit("states/envokeBeforeCalculateNewConditions", true)
                          }else{
-                             CIQ.store.commit("form/envokeBeforeCalculateNewConditions", false)
-                         }
-                         
+                             CIQ.store.commit("states/envokeBeforeCalculateNewConditions", false)
+                         }              
                      }
                      
                      for(var j in CIQ.store.state.chart.activatedMA){                            

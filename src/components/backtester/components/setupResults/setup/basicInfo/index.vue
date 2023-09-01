@@ -896,25 +896,6 @@ export default {
       this.bd.frequency = val
       this.$store.commit('form/getFrequency', val)
     },
-    async getIndicatorsList() {
-      try {
-        const vm = this
-        var indicatorList = []
-        if (CIQ.indicatorList) {
-          if (CIQ.indicatorList.length != 0) {
-            indicatorList = this.$store.state.chart.indicatorsList
-            indicatorList = CIQ.indicatorList
-          }
-        } else {
-          const res = await getIndicatorsList()
-          indicatorList = res.data
-        }
-        this.$store.commit('chart/getIndicatorsList', indicatorList)
-        CIQ.indicatorList = indicatorList
-      } catch (error) {
-        console.error('indicator list request error', error)
-      }
-    },
     saveData() {
       /* 校验表单字段 */
       if(!this.validateForm()) return

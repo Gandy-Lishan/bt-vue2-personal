@@ -86,7 +86,7 @@ export default {
 			// 默认让indicator无法编辑
 			this.editStudies(false)
 
-			this.symbolUrl = this.$store.state.chart.indicatorsList.find(item=>item.url==CIQ.symbol)?CIQ.symbol:this.$store.state.chart.indicatorsList.find(item=>item["chart_name"]==CIQ.symbol + ' Optix').url
+			this.symbolUrl = CIQ.findSentiIndicator(null,CIQ.symbol)?CIQ.symbol:CIQ.findSentiIndicator(CIQ.symbol + ' Optix',null).url
 
 			CIQ.initiateChart([this.symbolUrl],this.other['date'],()=>{
 				try{

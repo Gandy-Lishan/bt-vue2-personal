@@ -526,12 +526,7 @@ export default {
         this.periodTemp = this.senti.period
         this.senti.period = ''
         this.senti.comparison = 'SV'
-        let result
-        this.$store.state.chart.indicatorsList.forEach((value, index) => {
-          if (value.url == this.sentiUrl) {
-            result = value
-          }
-        })
+        let result = CIQ.findSentiIndicator(null,this.sentiUrl)
         if (!result) {
           let obj = {}
           if (this.criteria == 'entry') {
@@ -643,14 +638,7 @@ export default {
         this.senti.period = ''
       }
       let result
-
-      this.$store.state.chart.indicatorsList.forEach((value, index) => {
-        if (this.sentiUrl) {
-          if (value.url == this.sentiUrl) {
-            result = value
-          }
-        }
-      })
+      if(this.sentiUrl) result = CIQ.findSentiIndicator(null,this.sentiUrl)
       if (!result) {
         let obj = {}
         if (this.criteria == 'entry') {

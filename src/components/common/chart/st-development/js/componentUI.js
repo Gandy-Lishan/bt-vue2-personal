@@ -3223,13 +3223,11 @@ CIQ.inheritsFrom(CIQ.UI.StudyEdit, CIQ.UI.Helper);
 CIQ.UI.StudyEdit.prototype.remove = function () {
 	// clear indicators in Vuex
 	try{
-		var indicatorsList = CIQ.store.state.chart.indicatorsList
 		var freqList = []
-		var selectedStudy = indicatorsList.find(x=> x.url == this.params.sd.type)
+		var selectedStudy = CIQ.findSentiIndicator(null,this.params.sd.type)
 		var orignalFreq = 'daily'
 		for ( var  i = 0; i < CIQ.objIndicator.length; i++) {
-			
-			let _obj = indicatorsList.find(x => x.url == CIQ.objIndicator[i])
+			let _obj = CIQ.findSentiIndicator(null,CIQ.objIndicator[i])
 			if(selectedStudy != _obj){
 				freqList.push(_obj.updated)
 				
@@ -3468,8 +3466,7 @@ CIQ.UI.StudyEdit.prototype.addIndicatorCookie = async function(node){
 	if(!data.favorite_indicator){
 		favoriteIndicatorList  = []
 	}
-
-	let _obj = CIQ.store.state.chart.indicatorsList.find(x => x.url == this.params.sd.type)
+	let _obj = CIQ.findSentiIndicator(null,this.params.sd.type)
 	var mFavorite = {}
 	mFavorite.url = this.params.sd.type
 	mFavorite.name = _obj.chart_name
@@ -3538,8 +3535,7 @@ CIQ.UI.StudyEdit.prototype.descriptionPanel = function (params) {
 	const { stx, config } = this.context;
 	params.context = this.context;
 
-	const indicatorList = CIQ.store.state.chart.indicatorsList;
-	let _obj = indicatorList.find(x => x.url == params.outputs.url);
+	let _obj = CIQ.findSentiIndicator(null,params.outputs.url)
 	let name = 'Study';
 	if(_obj){
 		name = _obj.chart_name;
@@ -3633,32 +3629,18 @@ CIQ.UI.StudyEdit.prototype.editPanel = function (params) {
 CIQ.UI.StudyEdit.prototype.editOverlay = function (params) {
 	this.params = params;
 	params.context = this.context;
-	let builtinList = CIQ.store.state.chart.builtinList;
-	
-	// 用sentiLIST过滤tech
-	let sentiList = []
-	CIQ.store.state.chart.indicatorsList.forEach(e => {
-		sentiList.push(e.url)
-	})
 	
 	if (params.forceEdit) {
 		this.editPanel(params);
 		
 	} 
-	else if(sentiList.indexOf(params.sd.type) == -1){
+	else if(!CIQ.findSentiIndicator(null,params.sd.type)){
 		if(params.sd.type == 'ST MA') return
         this.contextDialogDefault.forEach(function (studyContextDefault) {
 			params.x = CIQ.ChartEngine.crosshairX;
 			params.y = CIQ.ChartEngine.crosshairY;
 			if (studyContextDefault.open) studyContextDefault.open(params);
 		});		
-	//}
-	// else if(builtinList.map(item=>item.url).indexOf(params.sd.type)!=-1){
-    //     this.contextDialogDefault.forEach(function (studyContextDefault) {
-	// 		params.x = CIQ.ChartEngine.crosshairX;
-	// 		params.y = CIQ.ChartEngine.crosshairY;
-	// 		if (studyContextDefault.open) studyContextDefault.open(params);
-	// 	});
 	} else{
 		this.contextDialog.forEach(function (studyContext) {
 			params.x = CIQ.ChartEngine.crosshairX;
