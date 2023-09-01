@@ -82,9 +82,7 @@
 </template>
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { Store, mapGetters } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+import { mapGetters } from 'vuex'
 export default {
 	name: 'cci',
 	props: {
@@ -93,7 +91,6 @@ export default {
 		techVal: String,
 
 		panelIndex: Number,
-		direction: String,
 		isActived: Boolean,
 		isRiskControl: Boolean,
 		relation: [String, Number],
@@ -156,6 +153,12 @@ delay_bars: [String, Number],
 			immediate: true,
 			deep: true
 		}
+	},
+	computed: {
+		...mapGetters(['getterDirection']),
+		direction() {
+      return this.getterDirection
+    }
 	},
 	methods: {
 		clearForm() {

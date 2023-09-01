@@ -174,8 +174,7 @@
 </template>
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { Store, mapGetters } from 'vuex'
-const throttle = require('lodash/throttle')
+import { mapGetters } from 'vuex'
 export default {
   name: 'senti',
   props: {
@@ -183,7 +182,6 @@ export default {
     sentiUrl: String,
     sentiVal: String,
     panelIndex: Number,
-    direction: String,
     isRiskControl: Boolean,
     relation: [String, Number],
     score: [String, Number],
@@ -289,10 +287,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getExtremeValue']),
+    ...mapGetters(['getExtremeValue', 'getterDirection']),
     extremeValue() {
       return this.getExtremeValue
     },
+    direction() {
+      return this.getterDirection
+    }
   },
   watch: {
     extremeValue: {
@@ -408,6 +409,7 @@ export default {
         'newCondition': this.senti.newCondition,
         'conditionPeriod': this.senti.conditionPeriod,
       }
+      debugger
       let criteria = ''
       let direction = ''
       let commentDes
