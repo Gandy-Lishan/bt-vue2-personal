@@ -52,10 +52,7 @@
 	</div>
 </template>
 <script>
-import { CIQ } from '@/components/common/chart/st-development/js'
-import { Store, mapGetters } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
+import { mapGetters } from 'vuex'
 export default {
 	name: 'cci',
 	props: {
@@ -63,7 +60,6 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		direction: String,
 		isRiskControl: Boolean,
 		relation: [String, Number],
 		score: [String, Number],
@@ -96,6 +92,12 @@ export default {
 			editTechVal: '',
 			emptyRadio: ' '
 		}
+	},
+	computed: {
+		...mapGetters(['getterDirection']),
+		direction() {
+      return this.getterDirection
+    }
 	},
 	methods: {
 		clearForm() {

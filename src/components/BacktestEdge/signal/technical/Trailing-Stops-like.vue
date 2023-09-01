@@ -54,8 +54,6 @@
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { Store, mapGetters } from 'vuex'
-const _ = require('lodash')
-const throttle = _.throttle
 export default {
 	name: 'cci',
 	props: {
