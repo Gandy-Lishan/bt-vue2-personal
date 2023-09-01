@@ -58,6 +58,9 @@ import { generateConfig } from "./criteria/config"
 import cloneDeep from 'lodash/cloneDeep'
 import capitalizeFirstLetter from "@/tools/capitalizeFirstLetter"
 import isJson from '@/tools/isJson'
+import SignalCode from '@/tools/codeTool.js'
+import { CIQ } from '@/components/common/chart/st-development/js'
+
 export default {
   name: 'SetUp',
   components: {
@@ -155,19 +158,20 @@ export default {
           }
         });
       }
-      const findSignal = (item) => {
+      const findSignal = (item, index) => {
         let signal = CIQ.findSentiIndicator(item.indicator, null);
         if (!signal) {
-          signal = CIQ.findTechIndicator(item.indicator, null);
+          signal = CIQ.findBuiltinTechIndicator(item.indicator, null);
         }
-        if (!signal) {
-          if (this.$store.state.form.symbolConditions.some(i => i.label === item.indicator)) {
-            return item.indicator;
-          }
-        }
-        const usersOwnList = vm.$store.state.form[`usersOwn${criteriaCapFirstL}FileHash`];
+				// 在 symbol indicator list内检索url
+			 if (!signal) {
+					if (CIQ.findSymbolIndicator(item.indicator,null)) {
+						return item.indicator
+					}
+        const usersOwnList = this.$store.state.form[`usersOwn${criteriaCapFirstL}FileHash`];
         return usersOwnList[index] !== '' ? usersOwnList[index] : signal?.url || '';
-      };
+      	};
+			}
 
       let signal = backtestData[criteria].signals.map(findSignal);
 

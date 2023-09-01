@@ -5,6 +5,7 @@ const getters = {
 	getBacktestResult: state =>  state.form.backtestResult,
 	exitFreqGetter: state => state.form.exitFrequency,
 	getterBacktestInfo: state => state.form.backtestInfo,
+	getterDirection: state => state.form.backtestInfo.direction,
 
 	// chart
 	getExtremeValue: state => state.chart.extremeValue,

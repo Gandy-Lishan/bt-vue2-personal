@@ -60,8 +60,7 @@
 </template>
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { Store, mapGetters } from 'vuex'
-const throttle = require('lodash/throttle')
+import { mapGetters } from 'vuex'
 export default {
   name: 'symbol',
   props: {
@@ -69,7 +68,6 @@ export default {
     symUrl: String,
     symVal: String,
     panelIndex: Number,
-    direction: String,
     isRiskControl: Boolean,
     relation: [String, Number],
     score: [String, Number],
@@ -134,10 +132,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getBeforeCalculateNewConditions']),
+    ...mapGetters(['getBeforeCalculateNewConditions', 'getterDirection']),
     beforeCalculateNewConditions() {
       return this.getBeforeCalculateNewConditions
     },
+    direction() {
+      return this.getterDirection
+    }
   },
   watch: {
     beforeCalculateNewConditions: {

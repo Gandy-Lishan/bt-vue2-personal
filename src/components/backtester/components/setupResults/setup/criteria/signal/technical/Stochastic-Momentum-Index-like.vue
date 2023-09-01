@@ -118,8 +118,7 @@
 </template>
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { Store, mapGetters } from 'vuex'
-const throttle = require('lodash/throttle')
+import { mapGetters } from 'vuex'
 export default {
 	name: 'stochastic',
 	props: {
@@ -127,7 +126,6 @@ export default {
 		techUrl: String,
 		techVal: String,
 		panelIndex: Number,
-		direction: String,
 		isActived: Boolean,
 		isRiskControl: Boolean,
 		relation: [String, Number],
@@ -212,6 +210,12 @@ delay_bars: [String, Number],
 			immediate: true,
 			deep: true
 		}
+	},
+	computed: {
+		...mapGetters(['getterDirection']),
+		direction() {
+      return this.getterDirection
+    }
 	},
 	methods: {
 		clearForm() {

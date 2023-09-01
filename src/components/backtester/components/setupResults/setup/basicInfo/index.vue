@@ -956,20 +956,20 @@ export default {
       return setUpValid && nameValidPass
     },
     setDesciption() {
-      let criteria = 'X:', desObj = {}, description, tpStr, slStr, timStr
+      let criteria = 'X:', desObj = {}, description, tpStr='', slStr='', timStr=''
       let direction = this.bd.direction == 'Long' ? 'Close' : 'Cover'
+      description = `${criteria} ${direction}:`
       if (this.isRiskControl) {
         if (this.isTakeProfit) {
-          tpStr = `Take Profit ${this.tp}%`
+          description += ` Take Profit ${this.tp}%`
         }
         if (this.isStopLoss) {
-          slStr = `Stop Loss ${this.sl}%`
+          description += ` Stop Loss ${this.sl}%`
         }
         if (this.isTimeInMarket) {
-          timStr = `Time In Marke ${this.tim}(Bars)`
+          description += ` Time In Marke ${this.tim}(Bars)`
         }
       }
-      description = `${criteria} ${direction} ${tpStr} ${slStr} ${timStr}`
       desObj.description = description
       this.$store.commit('form/saveRiskDescription', desObj)
     },
