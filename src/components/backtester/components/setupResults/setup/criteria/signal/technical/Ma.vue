@@ -195,6 +195,7 @@
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapGetters } from 'vuex'
+const throttle = require('lodash/throttle')
 export default {
 	name: 'ma',
 	props: {
