@@ -1,7 +1,4 @@
-// 字符串首字母大写
-const capitalizeFirstLetter = str => {
-	return str.charAt(0).toUpperCase() + str.slice(1)
-}
+import capitalizeFirstLetter from "@/tools/capitalizeFirstLetter"
 // 传入不同的 criteria 生成不同的配置
 export function generateConfig(criteria) {
 	const capFirstL = capitalizeFirstLetter(criteria)
