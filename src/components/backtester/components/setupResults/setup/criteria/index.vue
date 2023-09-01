@@ -416,6 +416,8 @@ import trailingStopLike from './signal/technical/Trailing-Stops-like.vue'
 import { eventBus } from "./EventBus/Bus.ts";
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapMutations } from "vuex"
+import isJson from '@/tools/isJson'
+import searchKeys from '@/tools/searchKeys'
 export default {
   name: 'Criteria',
   inheritAttrs: false,
@@ -506,7 +508,7 @@ export default {
 	},
 	created() {
 		/* 用于自动填充 user custom indicators file */
-  	eventBus.$on(`user${this.criteriaCapFirstL}FileSelect`, this.userFileSelect)
+  	eventBus.$on(`userFileSelect`, this.userFileSelect)
 	},
 	methods: {
 		...mapMutations('form', ['setFrequencyArray']),
@@ -809,7 +811,7 @@ export default {
 				)
 				this.$store.commit('chart/getMA', activatedMAList)
 
-				let indicatorList = this.$store.state.chart.indicators.formIndicators.exit
+				let indicatorList = this.$store.state.chart.indicators.formIndicators[this.criteria]
 				this.$store.commit(`chart/get${this.criteriaCapFirstL}IndicatorsList`, [indicatorList[0], ...(new Array(4).fill(''))])
 				
 				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
@@ -883,14 +885,54 @@ export default {
 			this.$emit(`get${this.criteria}Relation`, val)
 			this.$store.commit(`form/clear${this.criteria}SignalArr`)
 		},
-		saveBacktestData(index) {
+		addSignalLength() {
+			if (this.relation == 2 || this.relation == 3) {
+				const filterValArr = this.indicatorValArr.filter(item => item != '')
+				for (let i = 0; i < filterValArr.length; i++) {
+					// Apply for space
+					let obj = {}
+					obj.criteria = this.criteria
+					obj.index = i
+					this.$store.commit('form/addSignalLength', obj)
+				}
+				return filterValArr.length
+			}
+			if (this.relation == 1 || this.relation == 0) {
+				return 1
+			}
+		},
+		isSameSignal() {
+			const description = this.$store.state.form.backtestInfo[`${this.criteria}_description`]
+			if (isJson(description)) {
+					description = JSON.parse(vm.$store.state.form.backtestInfo.description)
+      }
+			let sameSignalArr = searchKeys(description)
+			if(this.relation == 3) sameSignalArr = []
+			if(sameSignalArr.length >= 1) {
+				for (let j = 0; j < sameSignalArr.length; j++) {
+					let sameItem = []
+					let str = ''
+					sameItem = sameSignalArr[j].split(',')
+					for (let n = 0; n < sameItem.length; n++) {
+						str += 'Condition' + Number(sameItem[n]) + ' '
+					}
+					this.$message({
+						message: `The current ${this.criteria} ${str} are the same, please change`,
+						type: 'error'
+					})
+					return false
+        	}
+			}
+			return true
+		},
+		saveData(index) {
 			let checked = true
 			// Save the selected indicator to vuex
 			let _this = this
 			if (_this.isRiskControl) {
 				// Save risk description
 				let desObj = {}
-				desObj.criteria = 'exit'
+				desObj.criteria = this.criteria
 				desObj.index = 0
 				//desObj.description = _this.$store.state.form.riskDescription
 				desObj.description = {
@@ -910,9 +952,9 @@ export default {
 						if (!senti) {
 							this.$message({
 								message:
-									'Please check that the #' +
-									(index + 1) +
-									' exit panel field is filled in correctly',
+									`Please check that the #
+									${index + 1}
+									${this.criteria} panel field is filled in correctly`,
 								type: 'error'
 							})
 						}
@@ -923,7 +965,9 @@ export default {
 						let symbol = _this.$refs.symbolChild[index].saveCondition(index)
 						if(!symbol) {
 						_this.$message({
-						message: 'Please check that the #' + (index+1) + ' exit panel field is filled in correctly',
+						message: `Please check that the #
+									${index + 1}
+									${this.criteria} panel field is filled in correctly`,
 						type: 'error'
 						})
 						} 
@@ -938,9 +982,9 @@ export default {
 						if (!cci) {
 							this.$message({
 								message:
-									'Please check that the #' +
-									(index + 1) +
-									' exit panel field is filled in correctly',
+								`Please check that the #
+									${index + 1}
+									${this.criteria} panel field is filled in correctly`,
 								type: 'error'
 							})
 						}
@@ -955,9 +999,9 @@ export default {
 						if (!macd) {
 							this.$message({
 								message:
-									'Please check that the #' +
-									(index + 1) +
-									' exit panel field is filled in correctly',
+								`Please check that the #
+									${index + 1}
+									${this.criteria} panel field is filled in correctly`,
 								type: 'error'
 							})
 						}
@@ -972,9 +1016,9 @@ export default {
 						if (!ma) {
 							this.$message({
 								message:
-									'Please check that the #' +
-									(index + 1) +
-									' exit panel field is filled in correctly',
+								`Please check that the #
+									${index + 1}
+									${this.criteria} panel field is filled in correctly`,
 								type: 'error'
 							})
 						}
@@ -989,9 +1033,9 @@ export default {
 						if (!eft) {
 							this.$message({
 								message:
-									'Please check that the #' +
-									(index + 1) +
-									' exit panel field is filled in correctly',
+								`Please check that the #
+									${index + 1}
+									${this.criteria} panel field is filled in correctly`,
 								type: 'error'
 							})
 						}
@@ -1006,9 +1050,9 @@ export default {
 						if (!adx) {
 							this.$message({
 								message:
-									'Please check that the #' +
-									(index + 1) +
-									' exit panel field is filled in correctly',
+								`Please check that the #
+									${index + 1}
+									${this.criteria} panel field is filled in correctly`,
 								type: 'error'
 							})
 						}
@@ -1024,9 +1068,9 @@ export default {
 						if (!aligator) {
 							this.$message({
 								message:
-									'Please check that the #' +
-									(index + 1) +
-									' exit panel field is filled in correctly',
+								`Please check that the #
+									${index + 1}
+									${this.criteria} panel field is filled in correctly`,
 								type: 'error'
 							})
 						}
@@ -1041,9 +1085,9 @@ export default {
 						if (!lrf) {
 							this.$message({
 								message:
-									'Please check that the #' +
-									(index + 1) +
-									' exit panel field is filled in correctly',
+								`Please check that the #
+									${index + 1}
+									${this.criteria} panel field is filled in correctly`,
 								type: 'error'
 							})
 						}
@@ -1058,9 +1102,9 @@ export default {
 						if (!blb) {
 							this.$message({
 								message:
-									'Please check that the #' +
-									(index + 1) +
-									' exit panel field is filled in correctly',
+								`Please check that the #
+									${index + 1}
+									${this.criteria} panel field is filled in correctly`,
 								type: 'error'
 							})
 						}
@@ -1076,9 +1120,9 @@ export default {
 						if (!smi) {
 							this.$message({
 								message:
-									'Please check that the #' +
-									(index + 1) +
-									' exit panel field is filled in correctly',
+								`Please check that the #
+									${index + 1}
+									${this.criteria} panel field is filled in correctly`,
 								type: 'error'
 							})
 						}
@@ -1093,9 +1137,9 @@ export default {
 						if (!eri) {
 							this.$message({
 								message:
-									'Please check that the #' +
-									(index + 1) +
-									' exit panel field is filled in correctly',
+								`Please check that the #
+									${index + 1}
+									${this.criteria} panel field is filled in correctly`,
 								type: 'error'
 							})
 						}
@@ -1111,9 +1155,9 @@ export default {
 						if (!ts) {
 							this.$message({
 								message:
-									'Please check that the #' +
-									(index + 1) +
-									' exit panel field is filled in correctly',
+								`Please check that the #
+									${index + 1}
+									${this.criteria} panel field is filled in correctly`,
 								type: 'error'
 							})
 						}
@@ -1130,9 +1174,10 @@ export default {
 			await _this.$refs.indiChild[data.index].changeIndicatorChecked("Users' Own Indicator")
 			await _this.$refs.indiChild[data.index].handleUsersOwnIndicatorSelect(data.val.data)
 			await _this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
-			const fileHash = _this.$store.state.form[`usersOwn${_this.criteriaCapFirstL}FileHash`][data.index]
-			console.log(`判断 ${_this.criteria} 有没有填充的值`, fileHash)
-			if(fileHash == '' || fileHash == 'HASH') eventBus.$emit(`user${this.criteriaCapFirstL}FileSelect`, data)
+			const oppositeCriteria = _this.criteria == 'entry' ? 'Exit' : 'Entry'
+			const fileHash = _this.$store.state.form[`usersOwn${oppositeCriteria}FileHash`][data.index]
+			console.log(`判断 ${oppositeCriteria} 有没有填充的值`, fileHash)
+			if(fileHash == '' || fileHash == 'HASH') eventBus.$emit(`userFileSelect`, data)
 		},
 		async userFileSelect(data) {
 			let _this = this
