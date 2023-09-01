@@ -409,7 +409,6 @@ export default {
         'newCondition': this.senti.newCondition,
         'conditionPeriod': this.senti.conditionPeriod,
       }
-      debugger
       let criteria = ''
       let direction = ''
       let commentDes

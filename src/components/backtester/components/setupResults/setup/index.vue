@@ -61,6 +61,9 @@ import isJson from '@/tools/isJson'
 import SignalCode from '@/tools/codeTool.js'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { runBacktest, getStatus, uploadS3} from '@/service/service'
+import UUID from '@/tools/uuid.js'
+import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
+
 
 export default {
 	name: 'SetUp',
@@ -144,7 +147,7 @@ export default {
 				relation: backtestData[criteria].relation,
 				delay_bars: backtestData[criteria].delay_bars,
 				signals: signal_list,
-				cond: description.map((i) => i.rocCond)
+				cond: criteriaDescription.map((i) => i.rocCond)
 			}
 			saveObj[criteria] = JSON.stringify(criteriaObj)
 			if (Array.isArray(criteriaDescription)) {
@@ -152,7 +155,12 @@ export default {
 			} else {
 				saveObj[`${criteria}_description`] = criteriaDescription
 			}
-			saveObj.indicatorLayout.formIndicators[`${criteria}Signal`] = signal
+			// saveObj.indicatorLayout.formIndicators[`${criteria}Signal`] = signal
+			saveObj.indicatorLayout = {
+				formIndicators: {
+					[`${criteria}Signal`]: signal
+				}
+			}
 			return saveObj
 		},
 		encodeSignalList(criteria) {
@@ -338,7 +346,7 @@ export default {
 						file_name: backtestParams
 					})
 					await uploadS3(S3DataStr)
-					res = await runBacktest(backtestDataStr)
+					const res = await runBacktest(backtestDataStr)
 					if(res.status != 201) return
 					//After saving successfully, clear the backtestinfo back to the original state
 					_this.$store.commit('form/initialBacktestInfo')
@@ -367,7 +375,37 @@ export default {
 					// 接下来会调用 view result 和 edit 方法
 				}
 			}, 1000)
-		}
+		},
+		reloadData(data, freq) {
+      let frequency = ''
+      this.$store.commit('chart/getEntryIndicatorsList', data.formIndicators.entry)
+      this.$store.commit('chart/getExitIndicatorsList', data.formIndicators.exit)
+      this.$store.commit('chart/getExtraIndicators', [])
+      this.$store.commit('chart/getTechnicalIndicators', data.technicalIndicators)
+      this.$store.commit('chart/getMA', data.activatedMA)
+      // 暂定，读取回测携带的ma位置和信息
+      this.$store.commit('chart/getMALayout', data.activatedMALayout)
+      this.$store.commit('chart/setTechSD', data.savedTechSD)
+
+      switch (freq) {
+        case 'Daily': {
+          frequency = 'daily'
+          break
+        }
+        case 'Weekly': {
+          frequency = 'weekly'
+          break
+        }
+        case 'Monthly': {
+          frequency = 'monthly'
+          break
+        }
+        default: {
+          break
+        }
+      }
+      this.$store.commit('form/setRestoreFreq', frequency)
+    },
 	}
 }
 </script>
