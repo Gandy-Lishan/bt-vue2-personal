@@ -35,63 +35,26 @@ export function setRouterPermission(router) {
 		)
 		if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
 			//set 10 sec as default,However, some time-consuming requests are processed separately
-			axios
-				.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
-				.then(async res => {
-					console.log('lishan res', res)
-					if (res.status == 200) {
-						store.dispatch('user/set_user_role', {
-							is_admin: res.data.is_admin,
-							role: res.data.userid
-						})
-						if (getQueryVariable('userid'))
-							window.location.href = location.origin // 去掉？后面的部分
+			if (getQueryVariable('userid'))
+				window.location.href = location.origin // 去掉？后面的部分
 
-						if (to.path == '/404') {
-							// todo 再加一层scannerAI或者backtester权限判断，用于在404页面跳转回网站，或者防止网站跳到404又无限循环
-							//next('/home')
-
-							next()
-						} else {
-							// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
-							if (to.name == 'scannerai' || to.name == 'scannerai_chart') {
-								await initiateCurrentDate()
-								await initiateIndicatorList()
-								store.dispatch('states/set_scannerai_flag', true)
-							} else {
-								await initiateIndicatorList()
-								store.dispatch('states/set_scannerai_flag', false)
-							}
-							next()
-						}
-					} else {
-						throw Error('Status code error')
-					}
-				})
-				.catch(error => {
-					console.error(error)
-					router.push({
-						path: '/404',
-						query: { mes: error?.response?.status } // 携带的参数
-					})
-				})
-
-			// if(to.path == '/404'){
-			// 	//next('/home')
-			// 	next()
-			// }else{
-			// 	// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
-			// 	if(to.name == 'scannerai' || to.name == 'scannerai_chart'){
-			// 		await initiateCurrentDate()
-			// 		await initiateIndicatorList()
-			// 		store.dispatch('states/set_scannerai_flag',true)
-			// 	}else{
-			// 		await initiateIndicatorList()
-			// 		store.dispatch('states/set_scannerai_flag',false)
-			// 	}
-
-			// 	next()
-			// }
+			if (to.path == '/404') {
+				// todo 再加一层scannerAI或者backtester权限判断，用于在404页面跳转回网站，或者防止网站跳到404又无限循环
+				//next('/home')
+				next()
+			} else {
+				// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
+				if (to.name == 'scannerai' || to.name == 'scannerai_chart') {
+					await initiateCurrentDate()
+					await initiateIndicatorList()
+					store.dispatch('states/set_scannerai_flag', true)
+				} else {
+					await getUserState()
+					await initiateIndicatorList()
+					store.dispatch('states/set_scannerai_flag', false)
+				}
+				next()
+			}		
 		} else {
 			//alert('No permission')
 			//window.location.href = loginUrl
@@ -109,7 +72,33 @@ export function setRouterPermission(router) {
 		}
 	})
 }
-
+function getUserState(){
+	if(store.getters.getRole) return
+	return new Promise(async (resolve,reject)=>{
+		axios
+		.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
+		.then(async res => {
+			console.log('lishan res', res)
+			if (res.status == 200) {
+				store.dispatch('user/set_user_role', {
+					is_admin: res.data.is_admin,
+					role: res.data.userid
+				})
+				resolve()
+			}else {
+				reject()
+				throw Error('Status code error')
+			}
+		}).catch(error => {
+			reject()
+			console.error(error)
+			router.push({
+				path: '/404',
+				query: { mes: error?.response?.status } // 携带的参数
+			})
+		})
+	})
+}
 async function initiateCurrentDate() {
 	//现在外部实现一个获取当前日期并储存的功能，接触验证屏蔽后移到判断条件内部
 	//if(store.state.chart.curDate==''){
