@@ -280,18 +280,12 @@ export default {
 		},
 		reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout) {
 			const backtestInfo = cloneDeep(this.$store.state.form.backtestInfo)
-			if(!isSerialized(backtestInfo.indicator_layout)) backtestInfo.indicator_layout = JSON.stringify(
-				indicatorLayout
-			).replaceAll('\u200c', '$r001$')
-			if(!isSerialized(backtestInfo.description)) backtestInfo.description = JSON.stringify(backtestInfo.description)
-			if(!isSerialized(entrySaveObj.entry)) backtestInfo.entry = JSON.stringify(entrySaveObj.entry)
-			if(!isSerialized(exitSaveObj.exit)) backtestInfo.exit = JSON.stringify(exitSaveObj.exit)
-			if(!isSerialized(backtestInfo.entry_description)) backtestInfo.entry_description = JSON.stringify(
-				entrySaveObj.entry_description
-			)
-			if(!isSerialized(backtestInfo.exit_description)) backtestInfo.exit_description = JSON.stringify(
-				exitSaveObj.exit_description
-			)
+			backtestInfo.indicator_layout = JSON.stringify(indicatorLayout).replaceAll('\u200c', '$r001$')
+			backtestInfo.description = JSON.stringify(backtestInfo.description)
+			backtestInfo.entry = JSON.stringify(entrySaveObj.entry)
+			backtestInfo.exit = JSON.stringify(exitSaveObj.exit)
+			backtestInfo.entry_description = JSON.stringify(entrySaveObj.entry_description)
+			backtestInfo.exit_description = JSON.stringify(exitSaveObj.exit_description)
 
 			const copyBacktestData = cloneDeep(backtestInfo)
 			copyBacktestData.currentdate = new Date().getTime()
@@ -334,7 +328,6 @@ export default {
 				{},
 				...selectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
 			)
-			console.log('backtestParams', backtestParams)
 			// Before the back test, load the data of the whole period and generate CSV to upload S3, and then update the form when the results come out
 			this.reloadData(indicatorLayout, backtestInfo.frequency)
 			// 1. Upload data file
@@ -346,15 +339,19 @@ export default {
 		handleCallback(backtestParams, backtestInfo) {
 			// todo lishan
 			const _this = this
-			backtestParams.uuid = backtestParams.pk
+			// backtestParams.uuid = backtestParams.pk
 			delete backtestParams.pk
+			backtestParams = {
+				uuid: backtestInfo.pk,
+				...backtestParams
+			}
 			backtestParams = JSON.stringify(backtestParams)
 			const uuid = backtestInfo.pk
 			const backtestDataStr = _this.$qs.stringify(backtestInfo)
 			return async function() {
 				if(arguments[0] == 200) {
 					const S3DataStr = _this.$qs.stringify({
-						file_name: `${uuid}/${uuid}__backtest_params.json`,
+						file_name: `${uuid}/${uuid}_backtest_params.json`,
 						file_data: backtestParams
 					})
 					await uploadS3(S3DataStr)
@@ -365,7 +362,7 @@ export default {
 					//clear old_ uuid
 					if (_this.$store.state.form.backtestInfo.old_uuid) _this.$store.commit('form/clearBacktestUuid')
 					// _this.$refs.historyChild.refreshHistory(res.data.id)
-					await _this.pollingBTRunResults(res.data.id)
+					_this.pollingBTRunResults(res.data.id)
 				}
 			}
 		},
