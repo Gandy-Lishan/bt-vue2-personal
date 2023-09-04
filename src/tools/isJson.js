@@ -13,4 +13,15 @@ const isJson = function(str){
         }
     }
 }
-export default isJson
+
+const isSerialized = function(obj) {
+    try {
+      JSON.parse(obj);
+      return true; // 解析成功，是已序列化的 JSON 字符串
+    } catch (e) {
+      return false; // 解析失败，不是已序列化的 JSON 字符串
+    }
+  }
+
+  
+export {isJson, isSerialized}

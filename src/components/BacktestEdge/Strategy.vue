@@ -204,7 +204,7 @@ import { CIQ } from '@/components/common/chart/st-development/js'
 const throttle = require('lodash/throttle')
 import { copy, permission } from '@/tools/copyBacktestID'
 
-import isJson from '@/tools/isJson.js'
+import {isJson} from '@/tools/isJson'
 import {
 	copyBacktest,
 	getSampleList,
