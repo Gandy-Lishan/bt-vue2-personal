@@ -121,7 +121,6 @@ export default {
 			saveObj should be like this:
 			{
 				[entry or exit]: {
-					description: '',
 					score: '',
 					signals_in_market: '',
 					relation: '',
@@ -142,7 +141,6 @@ export default {
 			let criteriaDescription = backtestData[`${criteria}_description`]
 			let saveObj = {}
 			const criteriaObj = {
-				description: backtestData[criteria].description,
 				score: backtestData[criteria].score,
 				signals_in_market: backtestData[criteria].signals_in_market,
 				relation: backtestData[criteria].relation,
@@ -150,12 +148,8 @@ export default {
 				signals: signal_list,
 				cond: criteriaDescription.map((i) => i.rocCond)
 			}
-			if(!isSerialized(criteriaObj)) saveObj[criteria] = JSON.stringify(criteriaObj)
-			if (Array.isArray(criteriaDescription)) {
-				saveObj[`${criteria}_description`] = JSON.stringify(criteriaDescription)
-			} else {
-				saveObj[`${criteria}_description`] = criteriaDescription
-			}
+			saveObj[criteria] = criteriaObj
+			saveObj[`${criteria}_description`] = criteriaDescription
 			// saveObj.indicatorLayout.formIndicators[`${criteria}Signal`] = signal
 			saveObj.indicatorLayout = {
 				formIndicators: {
@@ -290,8 +284,8 @@ export default {
 				indicatorLayout
 			).replaceAll('\u200c', '$r001$')
 			if(!isSerialized(backtestInfo.description)) backtestInfo.description = JSON.stringify(backtestInfo.description)
-			if(!isSerialized(backtestInfo.entry)) backtestInfo.entry = JSON.stringify(entrySaveObj.entry)
-			if(!isSerialized(backtestInfo.exit)) backtestInfo.exit = JSON.stringify(exitSaveObj.exit)
+			if(!isSerialized(entrySaveObj.entry)) backtestInfo.entry = JSON.stringify(entrySaveObj.entry)
+			if(!isSerialized(exitSaveObj.exit)) backtestInfo.exit = JSON.stringify(exitSaveObj.exit)
 			if(!isSerialized(backtestInfo.entry_description)) backtestInfo.entry_description = JSON.stringify(
 				entrySaveObj.entry_description
 			)
@@ -335,12 +329,14 @@ export default {
 				'exclude_oo',
 				'description'
 			]
+			console.log('backtestInfo', backtestInfo)
 			let backtestParams = Object.assign(
 				{},
 				...selectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
 			)
-			 // Before the back test, load the data of the whole period and generate CSV to upload S3, and then update the form when the results come out
-			 this.reloadData(indicatorLayout, backtestInfo.frequency)
+			console.log('backtestParams', backtestParams)
+			// Before the back test, load the data of the whole period and generate CSV to upload S3, and then update the form when the results come out
+			this.reloadData(indicatorLayout, backtestInfo.frequency)
 			// 1. Upload data file
 			// 2. Upload parameter file
 			// 3. Judge the file upload status. If an error is reported, run back test will not be performed
