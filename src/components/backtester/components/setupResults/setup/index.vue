@@ -57,7 +57,7 @@ import Criteria from './criteria'
 import { generateConfig } from './criteria/config'
 import cloneDeep from 'lodash/cloneDeep'
 import capitalizeFirstLetter from '@/tools/capitalizeFirstLetter'
-import isJson from '@/tools/isJson'
+import {isJson, isSerialized} from '@/tools/isJson'
 import SignalCode from '@/tools/codeTool.js'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { runBacktest, getStatus, uploadS3} from '@/service/service'
@@ -84,11 +84,12 @@ export default {
 		clearForm() {
 			this.$refs['basicInfo'].clearForm()
 		},
-		runBacktest() {
+		async runBacktest() {
 			const _this = this
 			_this.$refs['basicInfo'].saveData()
-			const entryErr = _this.saveCriteriaData('entryChild')
-			const exitErr = _this.saveCriteriaData('exitChild')
+			const entryErr = await _this.saveCriteriaData('entryChild')
+			const exitErr = await _this.saveCriteriaData('exitChild')
+			console.log('entryErr', entryErr, 'exitErr', exitErr)
 			if (!entryErr || !exitErr) return
 			// 处理上传到后端的数据
 			let entrySaveObj = _this.handleSavedData('entry')
@@ -149,7 +150,7 @@ export default {
 				signals: signal_list,
 				cond: criteriaDescription.map((i) => i.rocCond)
 			}
-			saveObj[criteria] = JSON.stringify(criteriaObj)
+			if(!isSerialized(criteriaObj)) saveObj[criteria] = JSON.stringify(criteriaObj)
 			if (Array.isArray(criteriaDescription)) {
 				saveObj[`${criteria}_description`] = JSON.stringify(criteriaDescription)
 			} else {
@@ -166,30 +167,44 @@ export default {
 		encodeSignalList(criteria) {
 			const backtestData = cloneDeep(this.$store.state.form.backtestInfo)
 			const signalList = backtestData[criteria].signals
-			const isOnlyUseRiskControl = backtestData.relation == 0
+			const isOnlyUseRiskControl = backtestData.risk_control.split('/').some(item => (item !== ''))
 			const criteriaCapFirstL = capitalizeFirstLetter(criteria)
 			const signal_list = []
 			const b = new SignalCode()
-
-			if (!isOnlyUseRiskControl) {
+			const isHandleIndicator = criteria == 'entry' || (criteria == 'exit' && !isOnlyUseRiskControl)
+			if (isHandleIndicator) {
 				signalList.forEach((item) => {
+					const publicProperties = {
+						extreme_optimism: 0.3,
+						extreme_pessimism: 0.7,
+						comparison: "SV",
+						condition: 3,
+						newCondition: 3,
+						value: "0.6",
+						conditionPeriod: "5",
+						period: 1
+					}
 					const indicators = {
 						sentimentIndicator: {
 							indicator: item.sentimentIndicator,
-							analysis: 'Sentiment'
+							analysis: 'Sentiment',
+							...publicProperties
 						},
 						technicalIndicator: {
 							indicator: item.technicalIndicator,
-							analysis: 'Technical'
+							analysis: 'Technical',
+							...publicProperties
 						},
-						riskIndicator: { indicator: 'RC', analysis: 'Exit' },
+						riskIndicator: { indicator: 'RC', analysis: 'Exit', ...publicProperties },
 						symbolIndicator: {
 							indicator: item.symbolIndicator,
-							analysis: 'Symbol'
+							analysis: 'Symbol',
+							...publicProperties
 						},
 						usersOwnIndicator: {
 							indicator: item.usersOwnIndicator,
-							analysis: 'User'
+							analysis: 'User',
+							...publicProperties
 						}
 					}
 
@@ -222,9 +237,10 @@ export default {
 						: signal?.url || ''
 			}
 
-			let signal = backtestData[criteria].signals.map(findSignal)
+			let signal = null
+			if(isHandleIndicator) signal = backtestData[criteria].signals.map(findSignal)
 
-			if (isOnlyUseRiskControl) {
+			if (isOnlyUseRiskControl && criteria == 'exit') {
 				signal = ['']
 				signal_list.push({
 					code: 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'
@@ -270,16 +286,16 @@ export default {
 		},
 		reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout) {
 			const backtestInfo = cloneDeep(this.$store.state.form.backtestInfo)
-			backtestInfo.indicator_layout = JSON.stringify(
+			if(!isSerialized(backtestInfo.indicator_layout)) backtestInfo.indicator_layout = JSON.stringify(
 				indicatorLayout
 			).replaceAll('\u200c', '$r001$')
-			backtestInfo.description = JSON.stringify(backtestInfo.description)
-			backtestInfo.entry = JSON.stringify(entrySaveObj.entry)
-			backtestInfo.exit = JSON.stringify(exitSaveObj.exit)
-			backtestInfo.entry_description = JSON.stringify(
+			if(!isSerialized(backtestInfo.description)) backtestInfo.description = JSON.stringify(backtestInfo.description)
+			if(!isSerialized(backtestInfo.entry)) backtestInfo.entry = JSON.stringify(entrySaveObj.entry)
+			if(!isSerialized(backtestInfo.exit)) backtestInfo.exit = JSON.stringify(exitSaveObj.exit)
+			if(!isSerialized(backtestInfo.entry_description)) backtestInfo.entry_description = JSON.stringify(
 				entrySaveObj.entry_description
 			)
-			backtestInfo.exit_description = JSON.stringify(
+			if(!isSerialized(backtestInfo.exit_description)) backtestInfo.exit_description = JSON.stringify(
 				exitSaveObj.exit_description
 			)
 
@@ -353,7 +369,7 @@ export default {
 					//clear old_ uuid
 					if (_this.$store.state.form.backtestInfo.old_uuid) _this.$store.commit('form/clearBacktestUuid')
 					// _this.$refs.historyChild.refreshHistory(res.data.id)
-					_this.pollingBTRunResults(res.data.id)
+					await _this.pollingBTRunResults(res.data.id)
 				}
 			}
 		},
@@ -369,6 +385,7 @@ export default {
 				CIQ.nprogress.inc()
 				const status = res.data.status
 				const data = res.data
+				console.log('回测运行状态', status)
 				if(status == 2) {
 					clearPromiseInterval(timer).then(() => {console.log('回测跑完了')})
 					data.result = isJson(data.result) ? JSON.parse(data.result) : data.result

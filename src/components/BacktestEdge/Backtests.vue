@@ -274,7 +274,8 @@
 	</el-row>
 </template>
 <script>
-import isJson from '@/tools/isJson.js'
+import {isJson} from '@/tools/isJson'
+
 import {copy,permission} from "@/tools/copyBacktestID";
 const throttle = require('lodash/throttle')
 import { CIQ } from '@/components/common/chart/st-development/js'
