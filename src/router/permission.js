@@ -9,6 +9,7 @@ import {
 import { getCurDate } from '@/service/ai'
 import getQueryVariable from '@/tools/getQueryVariable'
 import store from '../store'
+import { uniqueObjectArray } from '@/utils/formValidate'
 
 export function setRouterPermission(router) {
 	router.beforeEach(async (to, from, next) => {
@@ -125,7 +126,7 @@ async function initiateIndicatorList() {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	if(store.state.chart.indicatorsList.length==0 || store.state.chart.stocksList.length==0 || store.state.chart.indexsList.length==0){
 		const res = await getIndicatorsList()
-		let allSymbolsList = res.data
+		let allSymbolsList = uniqueObjectArray(res.data)
 		const resStocks = await getStocksList()
 		let stocksList = resStocks.data
 		store.commit('chart/getStocksList', stocksList)
