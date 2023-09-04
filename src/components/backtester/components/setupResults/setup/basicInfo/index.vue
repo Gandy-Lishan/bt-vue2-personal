@@ -496,7 +496,7 @@
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { timestampToTime } from '@/tools/formatDate'
-import isJson from '@/tools/isJson'
+import {isJson} from '@/tools/isJson'
 import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule, createTPSLValidate, createPositiveIntegerValidate } from '@/utils/formValidate'
 import { mapGetters } from "vuex"
 import {
@@ -900,10 +900,11 @@ export default {
       /* 校验表单字段 */
       if(!this.validateForm()) return
       let bd = JSON.parse(JSON.stringify(this.bd))
+      this.getTradePrice(bd.trade_price)
       /* 处理数据 */
       if(bd.backtest_period == '21') bd.start_date = '1800-10-01'
       if(!this.isExcludeOO) bd.exclude_oo = 0
-      bd.commission = (bd.commission / 100).toFixed(2)
+      bd.commission = (bd.commission / 100)
       bd.risk_control = this.isRiskControl ? `${this.isTakeProfit ? this.tp : ''}/${this.isStopLoss ? this.sl : ''}/${this.isTimeInMarket ? this.tim : ''}` : '//'
       if(this.isRiskControl) this.setDesciption()
       console.log(bd)

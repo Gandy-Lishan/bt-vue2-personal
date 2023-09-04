@@ -416,7 +416,7 @@ import trailingStopLike from './signal/technical/Trailing-Stops-like.vue'
 import { eventBus } from "./EventBus/Bus.ts";
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapMutations } from "vuex"
-import isJson from '@/tools/isJson'
+import {isJson} from '@/tools/isJson'
 import searchKeys from '@/tools/searchKeys'
 export default {
   name: 'Criteria',

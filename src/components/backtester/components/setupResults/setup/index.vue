@@ -52,147 +52,374 @@
 </template>
 
 <script>
-import BasicInfo from "./basicInfo"
-import Criteria from "./criteria"
-import { generateConfig } from "./criteria/config"
+import BasicInfo from './basicInfo'
+import Criteria from './criteria'
+import { generateConfig } from './criteria/config'
 import cloneDeep from 'lodash/cloneDeep'
-import capitalizeFirstLetter from "@/tools/capitalizeFirstLetter"
-import isJson from '@/tools/isJson'
+import capitalizeFirstLetter from '@/tools/capitalizeFirstLetter'
+import {isJson, isSerialized} from '@/tools/isJson'
 import SignalCode from '@/tools/codeTool.js'
 import { CIQ } from '@/components/common/chart/st-development/js'
+import { runBacktest, getStatus, uploadS3} from '@/service/service'
+import UUID from '@/tools/uuid.js'
+import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
+
 
 export default {
-  name: 'SetUp',
-  components: {
-    BasicInfo,
-    Criteria
-  },
-  data() {
-    return {
-      isRiskControl: true
-    }
-  },
-  methods: {
-    setConfig(criteria) {
-      // 传入 entry 和 exit 的配置
-      return generateConfig(criteria)
-    },
-    clearForm() {
-      this.$refs['basicInfo'].clearForm()
-    },
-    runBacktest() {
-      const _this = this
-      _this.$refs['basicInfo'].saveData()
-      const entryErr = _this.saveCriteriaData('entryChild')
-      const exitErr = _this.saveCriteriaData('exitChild')
-      if (!entryErr || !exitErr) return
-      // 处理上传到后端的数据
-      let entrySaveObj = _this.handleSavedData('entry')
-     	let exitSaveObj =  _this.handleSavedData('exit')
+	name: 'SetUp',
+	components: {
+		BasicInfo,
+		Criteria
+	},
+	data() {
+		return {
+			isRiskControl: true
+		}
+	},
+	methods: {
+		setConfig(criteria) {
+			// 传入 entry 和 exit 的配置
+			return generateConfig(criteria)
+		},
+		clearForm() {
+			this.$refs['basicInfo'].clearForm()
+		},
+		async runBacktest() {
+			const _this = this
+			_this.$refs['basicInfo'].saveData()
+			const entryErr = await _this.saveCriteriaData('entryChild')
+			const exitErr = await _this.saveCriteriaData('exitChild')
+			console.log('entryErr', entryErr, 'exitErr', exitErr)
+			if (!entryErr || !exitErr) return
+			// 处理上传到后端的数据
+			let entrySaveObj = _this.handleSavedData('entry')
+			let exitSaveObj = _this.handleSavedData('exit')
 			console.log('entrySaveObj', entrySaveObj)
 			console.log('exitSaveObj', exitSaveObj)
-    },
-    async saveCriteriaData(criteriaRef) {
-      const _this = this
-      const tabLength = _this.$refs[criteriaRef].addSignalLength()
-      for (let index = 0; index < tabLength; index++) {
-        const valid = await _this.$refs[criteriaRef].saveData(index)
-        if (!valid) return false
-      }
-      _this.$refs[criteriaRef].saveScoreValue()
-      _this.$refs[criteriaRef].saveSignalsInMarket()
-      _this.$refs[criteriaRef].saveDelayBar()
-      _this.$refs[criteriaRef].saveRelation()
-      return _this.$refs[criteriaRef].isSameSignal()
-    },
-    handleSavedData(criteria) {
-      const backtestData = cloneDeep(this.$store.state.form.backtestInfo);
-      const { signal_list } = this.encodeSignalList(criteria)
-			let description = backtestData[`${criteria}_description`]
-			let saveObj = {}
-			if(isJson(description)) {
-				description = JSON.parse(description)
+			let indicatorLayout = _this.saveIndicatorLayoutData()
+			indicatorLayout.formIndicators = {
+				entry: entrySaveObj.indicatorLayout.formIndicators.entrySignal,
+				exit: exitSaveObj.indicatorLayout.formIndicators.exitSignal
 			}
+			_this.reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout)
+		},
+		async saveCriteriaData(criteriaRef) {
+			const _this = this
+			const tabLength = _this.$refs[criteriaRef].addSignalLength()
+			for (let index = 0; index < tabLength; index++) {
+				const valid = await _this.$refs[criteriaRef].saveData(index)
+				if (!valid) return false
+			}
+			_this.$refs[criteriaRef].saveScoreValue()
+			_this.$refs[criteriaRef].saveSignalsInMarket()
+			_this.$refs[criteriaRef].saveDelayBar()
+			_this.$refs[criteriaRef].saveRelation()
+			return _this.$refs[criteriaRef].isSameSignal()
+		},
+		handleSavedData(criteria) {
+			/*
+			saveObj should be like this:
+			{
+				[entry or exit]: {
+					score: '',
+					signals_in_market: '',
+					relation: '',
+					delay_bars: '',
+					signals: [],
+					cond: []
+				},
+				[entry or exit description]: JSON parsed array,
+				indicatorLayout: {
+					formIndicators: {
+						[entry or exit Signal]: ''
+					},
+				}
+			}
+		*/
+			const backtestData = cloneDeep(this.$store.state.form.backtestInfo)
+			const { signal_list, signal } = this.encodeSignalList(criteria)
+			let criteriaDescription = backtestData[`${criteria}_description`]
+			let saveObj = {}
 			const criteriaObj = {
-				description: backtestData[criteria].description,
 				score: backtestData[criteria].score,
 				signals_in_market: backtestData[criteria].signals_in_market,
 				relation: backtestData[criteria].relation,
 				delay_bars: backtestData[criteria].delay_bars,
 				signals: signal_list,
-				cond: description.map((i) => i.rocCond)
+				cond: criteriaDescription.map((i) => i.rocCond)
 			}
-			saveObj['description'] = JSON.stringify(backtestData.description)
-			saveObj[criteria] = JSON.stringify(criteriaObj)
-			if(Array.isArray(description)) {
-				saveObj[`${criteria}_description`] = JSON.stringify(description)
+			saveObj[criteria] = criteriaObj
+			saveObj[`${criteria}_description`] = criteriaDescription
+			// saveObj.indicatorLayout.formIndicators[`${criteria}Signal`] = signal
+			saveObj.indicatorLayout = {
+				formIndicators: {
+					[`${criteria}Signal`]: signal
+				}
 			}
 			return saveObj
-    },
-    encodeSignalList(criteria) {
-      const backtestData = cloneDeep(this.$store.state.form.backtestInfo);
-      const signalList = backtestData[criteria].signals;
-      const isOnlyUseRiskControl = backtestData.relation == 0;
-      const criteriaCapFirstL = capitalizeFirstLetter(criteria);
-      const signal_list = []
+		},
+		encodeSignalList(criteria) {
+			const backtestData = cloneDeep(this.$store.state.form.backtestInfo)
+			const signalList = backtestData[criteria].signals
+			const isOnlyUseRiskControl = backtestData.risk_control.split('/').some(item => (item !== ''))
+			const criteriaCapFirstL = capitalizeFirstLetter(criteria)
+			const signal_list = []
 			const b = new SignalCode()
+			const isHandleIndicator = criteria == 'entry' || (criteria == 'exit' && !isOnlyUseRiskControl)
+			if (isHandleIndicator) {
+				signalList.forEach((item) => {
+					const publicProperties = {
+						extreme_optimism: 0.3,
+						extreme_pessimism: 0.7,
+						comparison: "SV",
+						condition: 3,
+						newCondition: 3,
+						value: "0.6",
+						conditionPeriod: "5",
+						period: 1
+					}
+					const indicators = {
+						sentimentIndicator: {
+							indicator: item.sentimentIndicator,
+							analysis: 'Sentiment',
+							...publicProperties
+						},
+						technicalIndicator: {
+							indicator: item.technicalIndicator,
+							analysis: 'Technical',
+							...publicProperties
+						},
+						riskIndicator: { indicator: 'RC', analysis: 'Exit', ...publicProperties },
+						symbolIndicator: {
+							indicator: item.symbolIndicator,
+							analysis: 'Symbol',
+							...publicProperties
+						},
+						usersOwnIndicator: {
+							indicator: item.usersOwnIndicator,
+							analysis: 'User',
+							...publicProperties
+						}
+					}
 
-      if (!isOnlyUseRiskControl) {
-        signalList.forEach(item => {
-          const indicators = {
-            sentimentIndicator: { indicator: item.sentimentIndicator, analysis: 'Sentiment' },
-            technicalIndicator: { indicator: item.technicalIndicator, analysis: 'Technical' },
-            riskIndicator: { indicator: 'RC', analysis: 'Exit' },
-            symbolIndicator: { indicator: item.symbolIndicator, analysis: 'Symbol' },
-            usersOwnIndicator: { indicator: item.usersOwnIndicator, analysis: 'User' }
-          };
-
-          for (const [key, value] of Object.entries(indicators)) {
-            if (item[key]) {
-              item.indicator = value.indicator;
-              item.analysis = value.analysis;
-              for (const deleteKey of Object.keys(indicators)) {
-                delete item[deleteKey];
-              }
-            }
-          }
-        });
-      }
-      const findSignal = (item, index) => {
-        let signal = CIQ.findSentiIndicator(item.indicator, null);
-        if (!signal) {
-          signal = CIQ.findBuiltinTechIndicator(item.indicator, null);
-        }
+					for (const [key, value] of Object.entries(indicators)) {
+						if (item[key]) {
+							item.indicator = value.indicator
+							item.analysis = value.analysis
+							for (const deleteKey of Object.keys(indicators)) {
+								delete item[deleteKey]
+							}
+						}
+					}
+				})
+			}
+			const findSignal = (item, index) => {
+				let signal = CIQ.findSentiIndicator(item.indicator, null)
+				if (!signal) {
+					signal = CIQ.findBuiltinTechIndicator(item.indicator, null)
+				}
 				// 在 symbol indicator list内检索url
-			 if (!signal) {
-					if (CIQ.findSymbolIndicator(item.indicator,null)) {
+				if (!signal) {
+					if (CIQ.findSymbolIndicator(item.indicator, null)) {
 						return item.indicator
 					}
-        const usersOwnList = this.$store.state.form[`usersOwn${criteriaCapFirstL}FileHash`];
-        return usersOwnList[index] !== '' ? usersOwnList[index] : signal?.url || '';
-      	};
+				}
+
+				const usersOwnList = this.$store.state.form[`usersOwn${criteriaCapFirstL}FileHash`]
+				return usersOwnList[index] !== ''
+						? usersOwnList[index]
+						: signal?.url || ''
 			}
 
-      let signal = backtestData[criteria].signals.map(findSignal);
+			let signal = null
+			if(isHandleIndicator) signal = backtestData[criteria].signals.map(findSignal)
 
-      if (isOnlyUseRiskControl) {
-        signal = [''];
-        signal_list.push({
-          code: 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'
-        });
-      } else {
-        for (let i = 0; i < signalList.length; i++) {
-          const code = b.encode(signalList[i]);
-          signal_list.push({
-            code: code
-          });
+			if (isOnlyUseRiskControl && criteria == 'exit') {
+				signal = ['']
+				signal_list.push({
+					code: 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'
+				})
+			} else {
+				for (let i = 0; i < signalList.length; i++) {
+					const code = b.encode(signalList[i])
+					signal_list.push({
+						code: code
+					})
+				}
+			}
+			delete backtestData[criteria].signals
+			return { signal_list, signal }
+		},
+		saveIndicatorLayoutData() {
+			/*
+				保存除了 formIndicators 之外的 indicatorLayout 属性
+			*/
+			let indicatorLayout = {}
+			indicatorLayout.technicalIndicators =
+				this.$store.state.chart.indicators.technicalIndicators
+			let savedTechSD = []
+			for (let i in CIQ.stxx.layout.studies) {
+				let output = {}
+				if (!CIQ.findSentiIndicator(null, CIQ.stxx.layout.studies[i].type)) {
+					output = CIQ.stxx.layout.studies[i].outputs
+				}
+				savedTechSD.push({
+					type: CIQ.stxx.layout.studies[i].type,
+					inputs: CIQ.stxx.layout.studies[i].inputs,
+					outputs: output,
+					parameters: CIQ.stxx.layout.studies[i].parameters,
+					panel: CIQ.stxx.layout.studies[i].panel
+				})
+			}
+			indicatorLayout.savedTechSD = savedTechSD
+			indicatorLayout.activatedMA = this.$store.state.chart.activatedMA
+			// 暂定，把MA对应位置和信息存在回测内
+			indicatorLayout.activatedMALayout =
+				this.$store.state.chart.activatedMALayout
+			return indicatorLayout
+		},
+		reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout) {
+			const backtestInfo = cloneDeep(this.$store.state.form.backtestInfo)
+			if(!isSerialized(backtestInfo.indicator_layout)) backtestInfo.indicator_layout = JSON.stringify(
+				indicatorLayout
+			).replaceAll('\u200c', '$r001$')
+			if(!isSerialized(backtestInfo.description)) backtestInfo.description = JSON.stringify(backtestInfo.description)
+			if(!isSerialized(entrySaveObj.entry)) backtestInfo.entry = JSON.stringify(entrySaveObj.entry)
+			if(!isSerialized(exitSaveObj.exit)) backtestInfo.exit = JSON.stringify(exitSaveObj.exit)
+			if(!isSerialized(backtestInfo.entry_description)) backtestInfo.entry_description = JSON.stringify(
+				entrySaveObj.entry_description
+			)
+			if(!isSerialized(backtestInfo.exit_description)) backtestInfo.exit_description = JSON.stringify(
+				exitSaveObj.exit_description
+			)
+
+			const copyBacktestData = cloneDeep(backtestInfo)
+			copyBacktestData.currentdate = new Date().getTime()
+
+			backtestInfo.pk = UUID(JSON.stringify(copyBacktestData))
+			// Restore a numeric string in an object to a number
+			backtestInfo.capital_alloc = parseFloat(backtestInfo.capital_alloc)
+			backtestInfo.slippage = parseFloat(backtestInfo.slippage)
+			backtestInfo.win_rate = parseFloat(backtestInfo.win_rate)
+			this.$store.dispatch('chart/set_span_period', {
+				start_date: backtestInfo.start_date.replace(/-/g, '') * 1000000000,
+				end_date: backtestInfo.end_date.replace(/-/g, '') * 1000000000
+			})
+			const selectedProps = [
+				'pk',
+				'benchmark',
+				'capital',
+				'capital_alloc',
+				'commission',
+				'create_date',
+				'direction',
+				'end_date',
+				'entry',
+				'exit',
+				'frequency',
+				'name',
+				'risk_control',
+				'slippage',
+				'start_date',
+				'strategy',
+				'symbol',
+				'win_rate',
+				'backtest_period',
+				'trade_price',
+				'exclude_oo',
+				'description'
+			]
+			console.log('backtestInfo', backtestInfo)
+			let backtestParams = Object.assign(
+				{},
+				...selectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
+			)
+			console.log('backtestParams', backtestParams)
+			// Before the back test, load the data of the whole period and generate CSV to upload S3, and then update the form when the results come out
+			this.reloadData(indicatorLayout, backtestInfo.frequency)
+			// 1. Upload data file
+			// 2. Upload parameter file
+			// 3. Judge the file upload status. If an error is reported, run back test will not be performed
+			const callback = this.handleCallback(backtestParams, backtestInfo)
+			CIQ.outputSignalsResult(backtestInfo.pk, callback)
+		},
+		handleCallback(backtestParams, backtestInfo) {
+			// todo lishan
+			const _this = this
+			backtestParams.uuid = backtestParams.pk
+			delete backtestParams.pk
+			backtestParams = JSON.stringify(backtestParams)
+			const uuid = backtestInfo.pk
+			const backtestDataStr = _this.$qs.stringify(backtestInfo)
+			return async function() {
+				if(arguments[0] == 200) {
+					const S3DataStr = _this.$qs.stringify({
+						file_name: `${uuid}/${uuid}__backtest_params.json`,
+						file_data: backtestParams
+					})
+					await uploadS3(S3DataStr)
+					const res = await runBacktest(backtestDataStr)
+					if(res.status != 201) return
+					//After saving successfully, clear the backtestinfo back to the original state
+					_this.$store.commit('form/initialBacktestInfo')
+					//clear old_ uuid
+					if (_this.$store.state.form.backtestInfo.old_uuid) _this.$store.commit('form/clearBacktestUuid')
+					// _this.$refs.historyChild.refreshHistory(res.data.id)
+					await _this.pollingBTRunResults(res.data.id)
+				}
+			}
+		},
+		pollingBTRunResults(id) {
+			/*
+			根据 id 轮询回测结果
+			todo lishan
+			*/
+			const _this = this
+			_this.clearInterval = clearPromiseInterval
+			let timer = setPromiseInterval(async () => {
+				const res = await getStatus(id)
+				CIQ.nprogress.inc()
+				const status = res.data.status
+				const data = res.data
+				console.log('回测运行状态', status)
+				if(status == 2) {
+					clearPromiseInterval(timer).then(() => {console.log('回测跑完了')})
+					data.result = isJson(data.result) ? JSON.parse(data.result) : data.result
+					// 接下来会调用 view result 和 edit 方法
+				}
+			}, 1000)
+		},
+		reloadData(data, freq) {
+      let frequency = ''
+      this.$store.commit('chart/getEntryIndicatorsList', data.formIndicators.entry)
+      this.$store.commit('chart/getExitIndicatorsList', data.formIndicators.exit)
+      this.$store.commit('chart/getExtraIndicators', [])
+      this.$store.commit('chart/getTechnicalIndicators', data.technicalIndicators)
+      this.$store.commit('chart/getMA', data.activatedMA)
+      // 暂定，读取回测携带的ma位置和信息
+      this.$store.commit('chart/getMALayout', data.activatedMALayout)
+      this.$store.commit('chart/setTechSD', data.savedTechSD)
+
+      switch (freq) {
+        case 'Daily': {
+          frequency = 'daily'
+          break
+        }
+        case 'Weekly': {
+          frequency = 'weekly'
+          break
+        }
+        case 'Monthly': {
+          frequency = 'monthly'
+          break
+        }
+        default: {
+          break
         }
       }
-      delete backtestData[criteria].signals;
-			return {signal_list, signal}
-    }
-
-  }
+      this.$store.commit('form/setRestoreFreq', frequency)
+    },
+	}
 }
 </script>
 

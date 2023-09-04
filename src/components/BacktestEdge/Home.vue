@@ -1390,7 +1390,7 @@ export default {
               backtestData.indicator_layout = JSON.stringify(
                 indicatorLayout
               ).replaceAll('\u200c', '$r001$')
-
+              console.log('old-----backtestData', backtestData)
               let copyBacktestData = JSON.parse(JSON.stringify(backtestData))
               copyBacktestData.currentdate = new Date().getTime()
               let str = UUID(JSON.stringify(copyBacktestData))

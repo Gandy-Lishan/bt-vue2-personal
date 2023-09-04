@@ -366,7 +366,7 @@ import {
   getFavoriteList,
 	getAnalystList
 } from '@/service/service.js'
-import isJson from "@/tools/isJson"
+import {isJson} from '@/tools/isJson'
 export default {
 	name: 'Table',
 	props: {
