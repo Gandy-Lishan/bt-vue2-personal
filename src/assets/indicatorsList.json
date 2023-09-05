@@ -2830,7 +2830,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Dick'S Sporting",
+        "chart_name": "Dick's Sporting",
         "url": "DKS",
         "updated": "Daily"
     },
@@ -4165,7 +4165,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Macy'S Inc",
+        "chart_name": "Macy's Inc",
         "url": "M",
         "updated": "Daily"
     },
@@ -14242,6 +14242,511 @@
     {
         "chart_name": "Dynavax Technologies Corp",
         "url": "DVAX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MercadoLibre Inc",
+        "url": "MELI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mondelez International Inc",
+        "url": "MDLZ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Copart Inc",
+        "url": "CPRT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Amazon.com Inc",
+        "url": "AMZN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Datadog Inc",
+        "url": "DDOG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alphabet Inc",
+        "url": "GOOG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IDEXX Laboratories Inc",
+        "url": "IDXX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Airbnb Inc",
+        "url": "ABNB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CoStar Group Inc",
+        "url": "CSGP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Charter Communications Inc",
+        "url": "CHTR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Atlassian Corp",
+        "url": "TEAM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cisco Systems Inc",
+        "url": "CSCO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Palo Alto Networks Inc",
+        "url": "PANW",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Intel Corp",
+        "url": "INTC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Microsoft Corp",
+        "url": "MSFT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NVIDIA Corp",
+        "url": "NVDA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cognizant Technology Solutions",
+        "url": "CTSH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Intuitive Surgical Inc",
+        "url": "ISRG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Align Technology Inc",
+        "url": "ALGN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "eBay Inc",
+        "url": "EBAY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Marvell Technology Inc",
+        "url": "MRVL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Booking Holdings Inc",
+        "url": "BKNG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Baker Hughes Co",
+        "url": "BKR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Illumina Inc",
+        "url": "ILMN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "JD.com Inc",
+        "url": "JD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Texas Instruments Inc",
+        "url": "TXN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Kraft Heinz Co/The",
+        "url": "KHC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alphabet Inc",
+        "url": "GOOGL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Netflix Inc",
+        "url": "NFLX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Keurig Dr Pepper Inc",
+        "url": "KDP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Automatic Data Processing Inc",
+        "url": "ADP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Xcel Energy Inc",
+        "url": "XEL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Crowdstrike Holdings Inc",
+        "url": "CRWD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Walgreens Boots Alliance Inc",
+        "url": "WBA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PDD Holdings Inc",
+        "url": "PDD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Advanced Micro Devices Inc",
+        "url": "AMD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Old Dominion Freight Line Inc",
+        "url": "ODFL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Adobe Inc",
+        "url": "ADBE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Amgen Inc",
+        "url": "AMGN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CSX Corp",
+        "url": "CSX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Apple Inc",
+        "url": "AAPL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Autodesk Inc",
+        "url": "ADSK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cintas Corp",
+        "url": "CTAS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Comcast Corp",
+        "url": "CMCSA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Constellation Energy Corp",
+        "url": "CEG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "American Electric Power Co Inc",
+        "url": "AEP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "KLA Corp",
+        "url": "KLAC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Broadcom Inc",
+        "url": "AVGO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cadence Design Systems Inc",
+        "url": "CDNS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PACCAR Inc",
+        "url": "PCAR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Costco Wholesale Corp",
+        "url": "COST",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Regeneron Pharmaceuticals Inc",
+        "url": "REGN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Zscaler Inc",
+        "url": "ZS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Applied Materials Inc",
+        "url": "AMAT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lululemon Athletica Inc",
+        "url": "LULU",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GE HealthCare Technologies Inc",
+        "url": "GEHC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Synopsys Inc",
+        "url": "SNPS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lucid Group Inc",
+        "url": "LCID",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Electronic Arts Inc",
+        "url": "EA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fastenal Co",
+        "url": "FAST",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ANSYS Inc",
+        "url": "ANSS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Meta Platforms Inc",
+        "url": "META",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gilead Sciences Inc",
+        "url": "GILD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Seagen Inc",
+        "url": "SGEN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Exelon Corp",
+        "url": "EXC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lam Research Corp",
+        "url": "LRCX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Biogen Inc",
+        "url": "BIIB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GLOBALFOUNDRIES Inc",
+        "url": "GFS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vertex Pharmaceuticals Inc",
+        "url": "VRTX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ON Semiconductor Corp",
+        "url": "ON",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Paychex Inc",
+        "url": "PAYX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Analog Devices Inc",
+        "url": "ADI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PayPal Holdings Inc",
+        "url": "PYPL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "QUALCOMM Inc",
+        "url": "QCOM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Marriott International Inc/MD",
+        "url": "MAR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ross Stores Inc",
+        "url": "ROST",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Starbucks Corp",
+        "url": "SBUX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PepsiCo Inc",
+        "url": "PEP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Intuit Inc",
+        "url": "INTU",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Microchip Technology Inc",
+        "url": "MCHP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Monster Beverage Corp",
+        "url": "MNST",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Workday Inc",
+        "url": "WDAY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "OReilly Automotive Inc",
+        "url": "ORLY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tesla Inc",
+        "url": "TSLA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ASML Holding NV",
+        "url": "ASML",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Enphase Energy Inc",
+        "url": "ENPH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NXP Semiconductors NV",
+        "url": "NXPI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Honeywell International Inc",
+        "url": "HON",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AstraZeneca PLC",
+        "url": "AZN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Moderna Inc",
+        "url": "MRNA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sirius XM Holdings Inc",
+        "url": "SIRI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Micron Technology Inc",
+        "url": "MU",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Warner Bros Discovery Inc",
+        "url": "WBD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "T-Mobile US Inc",
+        "url": "TMUS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Verisk Analytics Inc",
+        "url": "VRSK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dollar Tree Inc",
+        "url": "DLTR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Diamondback Energy Inc",
+        "url": "FANG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Zoom Video Communications Inc",
+        "url": "ZM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fortinet Inc",
+        "url": "FTNT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dexcom Inc",
+        "url": "DXCM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Trade Desk Inc/The",
+        "url": "TTD",
         "updated": "Daily"
     }
 ]

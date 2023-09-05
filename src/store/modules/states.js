@@ -4,7 +4,7 @@ const state = {
     scannerai_filter: {},
 	scannerai_flag: false,
 	isBacktestRunning_flag:false,
-	isFindLastSignalRuning_flag:false,
+	isRunAllSignalProcessing_flag:false,
 	isMarkerShown_flag:false,
 	isEditFinish_flag:false,
     // a status before symbol is loaded as a study
@@ -21,8 +21,8 @@ const mutations = {
 	SET_ISBACKTESTRUNNING_FLAG(state,val) {
 		state.isBacktestRunning_flag = val
 	},
-	SET_ISFINDLASTSIGNALRUNNING_FLAG(state,val) {
-		state.isFindLastSignalRuning_flag = val
+	SET_ISRUNALLSIGNALPROCESSING_FLAG(state,val) {
+		state.isRunAllSignalProcessing_flag = val
 	},
 	SET_ISMARKERSHOWN_FLAG(state,val) {
 		state.isMarkerShown_flag = val
@@ -56,10 +56,10 @@ const actions = {
 			resolve();
 		})
 	},
-	set_isFindLastSignalRuning_flag({commit},val){
+	set_isRunAllSignalProcessing_flag({commit},val){
 		return new Promise(resolve=>{
-			// 判断FLS是否运行结束
-			commit('SET_ISFINDLASTSIGNALRUNNING_FLAG',val)
+			// 判断Run all backest中每个任务的执行状态
+			commit('SET_ISRUNALLSIGNALPROCESSING_FLAG',val)
 			resolve();
 		})
 	},
