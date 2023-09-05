@@ -975,8 +975,8 @@ export default {
       this.$store.commit('form/saveRiskDescription', desObj)
     },
     setEditData(editData) {
-      if(Object.keys(obj).length === 0) return
-        let description = {}, riskValArr = [], backtestPeriod, propertiesToDelete = [
+      if(Object.keys(editData).length === 0) return
+        let description, riskValArr = [], backtestPeriod, propertiesToDelete = [
           'entry', 
           'exit', 
           'user_id', 
@@ -986,13 +986,14 @@ export default {
           'entry_description',
           'exit_description'
         ]
+        this.clearForm() // clear set up form before editting
         propertiesToDelete.forEach(property => {
           delete editData[property];
         })
-        this.clearForm() // clear set up form before editting
-        if(isJson(exitData.description)) {
+        try {
           description = JSON.parse(exitData.description)
-        }else {
+        } catch (error) {
+          description = {}
           description.Introduction = ''
           description.Rules = ''
         }

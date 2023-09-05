@@ -472,6 +472,9 @@ export default {
       }
 			this.getDataList(prop)
 		},
+		viewBacktestResults(row) {
+			console.log(row)
+		}
 	}
 }
 </script>

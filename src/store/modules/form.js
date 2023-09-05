@@ -67,6 +67,7 @@ const state = {
 	_last_signal_array: [],//form
 	hashTable: [],//form
 	frequencyArray: new Map(),//form
+	resultDataForSetupDisplay: {}, // 用于保存BT运行结束后的数据
 }
 
 const mutations = {
@@ -570,6 +571,9 @@ const mutations = {
 			}
 		}
 		window.utils = new utils()
+	},
+	RESULT_DATA_FOR_SETUP_DISPLAY(state, obj) {
+		state.resultDataForSetupDisplay = obj
 	}
 }
 
