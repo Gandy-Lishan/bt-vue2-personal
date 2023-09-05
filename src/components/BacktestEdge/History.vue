@@ -498,7 +498,9 @@ export default {
         try {
           const res = await getStatus(id)
           CIQ.nprogress.inc()
-          if (res.data.status == 2) {
+          // 发现status2和3判断后代码逻辑都一样, no trade notify显示在后面判断
+          if (res.data.status == 2 || res.data.status == 3) {
+            // 回测包含交易
             clearPromiseInterval(timer).then(() => { })
             vm.queryInfo.page = 1
             vm.getHistoryList()
@@ -523,38 +525,6 @@ export default {
               CIQ.hideCover()
               CIQ.nprogress.done()
             }
-          }
-          if (res.data.status == 3) {
-            // 回测没交易
-            clearPromiseInterval(timer).then(() => { })
-            vm.queryInfo.page = 1
-            vm.getHistoryList()
-            this.$emit('refFavoritesForm')
-
-            CIQ.hideCover()
-            CIQ.nprogress.done()
-            let row = res.data
-            row.result = JSON.parse(row.result)
-
-            if(!vm.$store.getters.getIsRunAllSignalProcessingFlagState){
-              vm.viewBacktestResults(row)
-            }else{
-              // 没交易不算回测失败，不列为fls的失败情况
-              // FindLastSignal过程中代表一个项目的运行结束
-              vm.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
-              vm.$store.state.form.last_signal_array.map(item=>{
-                if(item.name == row.name){
-                  item.state = 1
-                }
-              })
-              console.log('Run all backtest singer task done, no trade',row,vm.$store.state.form.last_signal_array)
-            }
-            // vm.$notify({
-            // 	title: 'No trades',
-            // 	message: 'No trades, please change parameter.',
-            // 	offset: 100,
-            // 	type: 'warning'
-            // })
           }
         } catch (error) {
           // 会一直保持定时器重复尝试
@@ -825,7 +795,7 @@ export default {
       // After the run back test and between the view result, a chart will be loaded to output signalouput
       var that = this
       if (that.$store.getters.getIsBacktestRunningFlagState == true) {
-        //run backtest之后
+        //run backtest之后(从refreshHistory调用后会进这层判断结果)
         that.$store.dispatch('states/set_isBacktestRunning_flag',false)
         //The outputsignalsresult is no longer used. The exportcsv is placed before the backtest and the callback is placed in place
         that.$store.commit('form/getRunBacktestData', row)
