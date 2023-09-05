@@ -3,9 +3,6 @@
 	<el-row>
 		<el-col :span="24">
 			<div class="favoriteForm_container">
-        <el-button v-if="isSystem == 'system'" @click="runAllBacktest" class="fls-btn"
-					>run all backtest</el-button
-				>
         <div class="searchBox">
           <el-input
 					class="search"
@@ -388,63 +385,6 @@ export default {
     this.isSystem = this.$store.state.form.role
   },
   methods: {
-    async runAllBacktest(){
-
-      this.showFLSMASK()
-      this.$store.dispatch('states/set_isFindLastSignalRuning_flag',true)
-
-        const allHistoryList = await this.getAllHistoryData()
-        // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
-        this.backtest_array = JSON.parse(JSON.stringify(allHistoryList))
-
-        // 給列表每一项设定识别码，内容和回测状态，0为未跑完，1为成功，2为失败
-        this.$store.commit('form/SET_LASTSIGNAL_ARRAY',this.backtest_array.map(item=>{return {name:item.name,content:item,state:0}}))
-
-      var backtest_info = this.processingBacktest(this.backtest_array)
-      if (backtest_info == false) {
-        console.log('处理任务结束', this.$store.state.form.last_signal_array)
-        return // 处理任务结束
-      }
-
-      var error_array = new Array();
-      this.postRunbacktest(backtest_info)
-    },
-    async getAllHistoryData() {
-      // lishan 用于获取所有的 favorite 列表
-      const res = await getAllHistoryList(1)
-      return res
-    },
-    showFLSMASK() {
-      const myFLSbg = document.querySelector('#myFLSbg')
-      myFLSbg.classList.add('activated')
-    },
-    processingBacktest(backtest_arr) {
-      if (backtest_arr.length <= 0) return false;
-      let backtest_info = backtest_arr.pop()
-      return backtest_info
-    },
-    postRunbacktest(backtest) {
-      this.rerunBacktest(backtest)
-
-      // 轮询可用于等待上一个回测结束，也可定时刷新进度条进度
-      let interval = setInterval(() => {
-        if (this.$store.getters.getIsFindLastSignalRuningFlagState == false) {
-          clearInterval(interval)
-          this.$store.dispatch('states/set_isFindLastSignalRuning_flag',true)
-          var backtest_info = this.processingBacktest(this.backtest_array)
-          if (backtest_info == false) {
-            this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
-            console.log('处理任务结束', this.$store.state.form.last_signal_array)
-            //this.removeFLSMASK()
-            return // 处理任务结束
-          }
-          this.postRunbacktest(backtest_info)
-
-          // 是否添加一个成功列表
-        }
-      }, 1000) // 2秒查询一次
-    },
-    // ******************以上是run all bt********************
     async getHistoryList(orderby) {
       this.loadTest = 'Loading...'
       this.loading = true
@@ -567,24 +507,25 @@ export default {
             let row = res.data
             row.result = JSON.parse(row.result)
 
-            //如果是从FindLastSignal来的，isFindLastSignalRuning为true
-            if(!vm.$store.getters.getIsFindLastSignalRuningFlagState){
+            //如果不是从run all backtest来的，还原chartiq和表单
+            if(!vm.$store.getters.getIsRunAllSignalProcessingFlagState){
               vm.viewBacktestResults(row)
             }else{
-              // FindLastSignal过程中代表一个项目的运行结束
-              vm.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
+              // FindLastSignal过程中代表一个项目的运行结束,因为只是run all backtest不需要显示chartiq和还原表单
+              vm.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
               vm.$store.state.form.last_signal_array.map(item=>{
                 if(item.name == row.name){
                   item.state = 1
                 }
               })
-              console.log('FindLastSignalRuning done',row,vm.$store.state.form.last_signal_array)
+              console.log('Run all backtest singer task done',row,vm.$store.state.form.last_signal_array)
               
               CIQ.hideCover()
               CIQ.nprogress.done()
             }
           }
           if (res.data.status == 3) {
+            // 回测没交易
             clearPromiseInterval(timer).then(() => { })
             vm.queryInfo.page = 1
             vm.getHistoryList()
@@ -595,18 +536,18 @@ export default {
             let row = res.data
             row.result = JSON.parse(row.result)
 
-            if(!vm.$store.getters.getIsFindLastSignalRuningFlagState){
+            if(!vm.$store.getters.getIsRunAllSignalProcessingFlagState){
               vm.viewBacktestResults(row)
             }else{
               // 没交易不算回测失败，不列为fls的失败情况
               // FindLastSignal过程中代表一个项目的运行结束
-              vm.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
+              vm.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
               vm.$store.state.form.last_signal_array.map(item=>{
                 if(item.name == row.name){
                   item.state = 1
                 }
               })
-              console.log('findLastSignalRuning done, no trade',row,vm.$store.state.form.last_signal_array)
+              console.log('Run all backtest singer task done, no trade',row,vm.$store.state.form.last_signal_array)
             }
             // vm.$notify({
             // 	title: 'No trades',
@@ -644,24 +585,15 @@ export default {
         this.$store.commit('form/getBacktestSymbol', res.data.symbol)
 
         this.$store.dispatch('states/set_isMarkerShown_flag',false)
-        if (res.data.indicator_layout) {
+
+          // indicator_layout肯定有，所以这里不用判断res.data.indicator_layout没有的情况
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
           this.restoreIndicatorLayoutEdit(
             parsedData,
             res.data.frequency,
             row, res.data
           )
-        } else {
-          this.$store.commit('form/getRunBacktestData', row)
-          // emit Synchronous call
-          this.$emit('goTobacktestSetupForm', row.id, res.data, 'edit', () => {
-            this.$emit('goBacktestResultForm', row, () => {
-              this.$emit('switchTab', 'first')
-              CIQ.hideCover()
-              CIQ.nprogress.done()
-            })
-          })
-        }
+
       } catch (error) {
         console.log(error)
         vm.$message({
@@ -673,7 +605,6 @@ export default {
       }
     }, 500),
 	rerunBacktest: throttle(async function (row) {
-		console.log('editBacktest', row)
 		let vm = this
 		try {
 			CIQ.addCover('Fetching backtest information...')
@@ -689,23 +620,15 @@ export default {
 			this.$store.commit('form/getBacktestSymbol', res.data.symbol)
 
 			this.$store.dispatch('states/set_isMarkerShown_flag',false)
-			if (res.data.indicator_layout) {
+
+			  // indicator_layout肯定有，所以这里不用判断res.data.indicator_layout没有的情况
 				let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$','\u200c'))
 				this.restoreIndicatorLayoutRerun(
 					parsedData,
 					res.data.frequency,
 					row, res.data
 				)
-			} else {
-				this.$store.commit('form/getRunBacktestData', row)
-				// emit Synchronous call
-				this.$emit('goTobacktestSetupForm', row.id, res.data,'edit',()=>{
-					this.$emit('goBacktestResultForm', row, ()=>{
-						this.$emit('switchTab','first')
-						this.$emit('rerun')			
-					})
-				})	
-			}
+
 		} catch (error) {
       console.log(error)
 			vm.$message({
@@ -817,6 +740,7 @@ export default {
 				CIQ.nprogress.done()
       }
     }, 1000),
+    // 点击按钮或者run backtest之后，如果是find last signal则不触发
     viewBacktestResults: throttle(async function (row) {
       document.getElementsByClassName('ciq-period')[0].style.display = 'none'
       try {
@@ -831,22 +755,15 @@ export default {
         this.$store.commit('form/getBacktestSymbol', res.data.symbol)
 
         this.$store.dispatch('states/set_isMarkerShown_flag',false)
-        if (res.data.indicator_layout) {
+
+          // indicator_layout肯定有，所以这里不用判断res.data.indicator_layout没有的情况
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
           this.restoreIndicatorLayoutView(
             parsedData,
             res.data.frequency,
             row, res.data
           )
-        } else {
-          this.$store.commit('form/getRunBacktestData', row)
-          this.$emit('goTobacktestSetupForm', row.id, res.data, 'canDelView', () => {
-            this.$emit('goBacktestResultForm', row, () => {
-              CIQ.hideCover()
-              CIQ.nprogress.done()
-            })
-          })
-        }
+
       } catch (error) {
         console.log(error)
         this.$message({
@@ -908,6 +825,7 @@ export default {
       // After the run back test and between the view result, a chart will be loaded to output signalouput
       var that = this
       if (that.$store.getters.getIsBacktestRunningFlagState == true) {
+        //run backtest之后
         that.$store.dispatch('states/set_isBacktestRunning_flag',false)
         //The outputsignalsresult is no longer used. The exportcsv is placed before the backtest and the callback is placed in place
         that.$store.commit('form/getRunBacktestData', row)
@@ -918,6 +836,7 @@ export default {
           })
         })
       } else {
+        // 如果是view按钮，还原chariq
         this.reloadData(data, freq)
         CIQ.addIndicatorsFromBacktest(function () {
           that.$store.commit('form/getRunBacktestData', row)

@@ -420,7 +420,8 @@ export default {
         this.$store.commit('form/getBacktestSymbol', res.data.symbol)
 
         this.$store.dispatch('states/set_isMarkerShown_flag',false)
-        if (res.data.indicator_layout) {
+
+          // indicator_layout肯定有，所以这里不用判断res.data.indicator_layout没有的情况
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
           this.restoreIndicatorLayoutEdit(
             parsedData,
@@ -428,22 +429,7 @@ export default {
             row,
             res.data
           )
-        } else {
-          this.$store.commit('form/getRunBacktestData', row)
-          // Emit synchronous call
-          this.$emit('goTobacktestSetupForm', row.id, res.data, 'edit', () => {
-            this.$emit('goBacktestResultForm', row, () => {
 
-              // 濡傛灉鏄皟鐢ㄤ簡find lst signal,鍒欏湪edit鏃惰幏鍙朿hartiq csv鏁版嵁
-              if(this.$store.getters.getIsEditFinishFlagState) this.uploadCSVWhileFLS(row.id)
-
-              this.$emit('switchTab', 'first')
-
-              CIQ.hideCover()
-              CIQ.nprogress.done()
-            })
-          })
-        }
       } catch (error) {
         console.error(error)
         CIQ.hideCover()
@@ -480,7 +466,7 @@ export default {
         this.$store.commit('form/getBacktestSymbol', res.data.symbol)
 
         this.$store.dispatch('states/set_isMarkerShown_flag',false)
-        if (res.data.indicator_layout) {
+          // indicator_layout肯定有，所以这里不用判断res.data.indicator_layout没有的情况
           let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
           this.restoreIndicatorLayoutRerun(
             parsedData,
@@ -488,16 +474,6 @@ export default {
             row,
             res.data
           )
-        } else {
-          this.$store.commit('form/getRunBacktestData', row)
-          // Emit synchronous call
-          this.$emit('goTobacktestSetupForm', row.id, res.data, 'edit', () => {
-            this.$emit('goBacktestResultForm', row, () => {
-              this.$emit('switchTab', 'first')
-              this.$emit('rerun')
-            })
-          })
-        }
       } catch (error) {
         console.error(error)
         vm.$message({
@@ -633,7 +609,8 @@ export default {
           this.$store.commit('form/getBacktestSymbol', res.data.symbol)
 
           this.$store.dispatch('states/set_isMarkerShown_flag',false)
-          if (res.data.indicator_layout) {
+            
+            // indicator_layout肯定有，所以这里不用判断res.data.indicator_layout没有的情况
             let parsedData = JSON.parse(res.data.indicator_layout.replaceAll('$r001$', '\u200c'))
             this.restoreIndicatorLayoutView(
               parsedData,
@@ -641,15 +618,7 @@ export default {
               row,
               res.data
             )
-          } else {
-            this.$store.commit('form/getRunBacktestData', row)
-            this.$emit('goTobacktestSetupForm', row.id, res.data, 'canDelView', () => {
-              this.$emit('goBacktestResultForm', row, () => {
-                CIQ.hideCover()
-                CIQ.nprogress.done()
-              })
-            })
-          }
+          
         } catch (error) {
           console.error(error)
           vm.$message({
@@ -914,7 +883,8 @@ export default {
     async runAllBacktest(){
 
       this.showFLSMASK()
-      this.$store.dispatch('states/set_isFindLastSignalRuning_flag',true)
+      // 其实应该叫isRunAllDone_flag
+      this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',true)
 
         const allFavoriteList = await this.getAllFavoriteData()
         // const allFavoriteList = JSON.parse(JSON.stringify(this.backtestList))
@@ -937,12 +907,12 @@ export default {
 
       // 轮询可用于等待上一个回测结束，也可定时刷新进度条进度
       let interval = setInterval(() => {
-        if (this.$store.getters.getIsFindLastSignalRuningFlagState == false) {
+        if (this.$store.getters.getIsRunAllSignalProcessingFlagState == false) {
           clearInterval(interval)
-          this.$store.dispatch('states/set_isFindLastSignalRuning_flag',true)
+          this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',true)
           var backtest_info = this.processingBacktest(this.backtest_array)
           if (backtest_info == false) {
-            this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
+            this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
             console.log('处理任务结束', this.$store.state.form.last_signal_array)
             return // 处理任务结束
           }
