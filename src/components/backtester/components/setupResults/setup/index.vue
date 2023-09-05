@@ -24,6 +24,7 @@
 						@getExitRelation="getExitRelation"
 						@sendExitSignalIndex="sendExitSignalIndex"
 					></Criteria>
+					<el-button @click="displaySetUpForm">按钮</el-button>
 				</div>
 			</div>
 		</div>
@@ -60,22 +61,37 @@ import capitalizeFirstLetter from '@/tools/capitalizeFirstLetter'
 import {isJson, isSerialized} from '@/tools/isJson'
 import SignalCode from '@/tools/codeTool.js'
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { runBacktest, getStatus, uploadS3} from '@/service/service'
+import { runBacktest, getStatus, uploadS3, seeParams} from '@/service/service'
 import UUID from '@/tools/uuid.js'
 import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
+import { ButtonBehaviorMixin } from "@/components/common/mixins/buttonBehaviorMixin.js"
+import { chartLegend } from '@/components/common/chart/st-development/js/components'
 
 
 export default {
-	name: 'SetUp',
+	name: 'SetUpResults',
 	components: {
 		BasicInfo,
 		Criteria
 	},
+	mixins: [ButtonBehaviorMixin],
 	data() {
 		return {
 			isRiskControl: true
 		}
 	},
+	beforeRouteEnter(to, from, next) {
+		if(!to.params.data) {next(); return}
+    // 在路由进入前的钩子函数中获取参数
+    const objectAsString = to.params.data;
+    const myLargeObject = JSON.parse(objectAsString);
+    
+    // 可以在这里做一些预处理
+    console.log("beforeRouteEnter", myLargeObject);
+
+    // 调用 next() 来继续路由导航
+    next();
+  },
 	methods: {
 		setConfig(criteria) {
 			// 传入 entry 和 exit 的配置
@@ -168,42 +184,45 @@ export default {
 			const isHandleIndicator = criteria == 'entry' || (criteria == 'exit' && !isOnlyUseRiskControl)
 			if (isHandleIndicator) {
 				signalList.forEach((item) => {
-					const publicProperties = {
-						extreme_optimism: 0.3,
-						extreme_pessimism: 0.7,
-						comparison: "SV",
-						condition: 3,
-						newCondition: 3,
-						value: "0.6",
-						conditionPeriod: "5",
-						period: 1
-					}
+					// publicProperties 中的属性列表都应该保留
+					const publicProperties = [
+						'extreme_optimism',
+						'extreme_pessimism',
+						'comparison',
+						'condition',
+						'newCondition',
+						'value',
+						'conditionPeriod',
+						'period',
+						'ids',
+						'comparison',
+						'ma_period',
+						'take_profit',
+						'time_in_market',
+						'stop_loss'
+				]
 					const indicators = {
 						sentimentIndicator: {
 							indicator: item.sentimentIndicator,
-							analysis: 'Sentiment',
-							...publicProperties
+							analysis: 'Sentiment'
 						},
 						technicalIndicator: {
 							indicator: item.technicalIndicator,
-							analysis: 'Technical',
-							...publicProperties
+							analysis: 'Technical'
 						},
-						riskIndicator: { indicator: 'RC', analysis: 'Exit', ...publicProperties },
+						riskIndicator: { indicator: 'RC', analysis: 'Exit' },
 						symbolIndicator: {
 							indicator: item.symbolIndicator,
-							analysis: 'Symbol',
-							...publicProperties
+							analysis: 'Symbol'
 						},
 						usersOwnIndicator: {
 							indicator: item.usersOwnIndicator,
-							analysis: 'User',
-							...publicProperties
+							analysis: 'User'
 						}
 					}
 
 					for (const [key, value] of Object.entries(indicators)) {
-						if (item[key]) {
+						if (item[key] || publicProperties.includes(item[key])) {
 							item.indicator = value.indicator
 							item.analysis = value.analysis
 							for (const deleteKey of Object.keys(indicators)) {
@@ -241,6 +260,7 @@ export default {
 				})
 			} else {
 				for (let i = 0; i < signalList.length; i++) {
+					console.log('未加密前的数据结构', signalList[i])
 					const code = b.encode(signalList[i])
 					signal_list.push({
 						code: code
@@ -357,12 +377,14 @@ export default {
 					await uploadS3(S3DataStr)
 					const res = await runBacktest(backtestDataStr)
 					if(res.status != 201) return
+					_this.$store.dispatch('states/set_isBacktestRunning_flag',true)
 					//After saving successfully, clear the backtestinfo back to the original state
 					_this.$store.commit('form/initialBacktestInfo')
-					//clear old_ uuid
-					if (_this.$store.state.form.backtestInfo.old_uuid) _this.$store.commit('form/clearBacktestUuid')
 					// _this.$refs.historyChild.refreshHistory(res.data.id)
 					_this.pollingBTRunResults(res.data.id)
+					_this.$store.dispatch('states/set_isMarkerShown_flag',false)
+					//clear old_ uuid
+					if (_this.$store.state.form.backtestInfo.old_uuid) _this.$store.commit('form/clearBacktestUuid')
 				}
 			}
 		},
@@ -379,12 +401,100 @@ export default {
 				const status = res.data.status
 				const data = res.data
 				console.log('回测运行状态', status)
-				if(status == 2) {
-					clearPromiseInterval(timer).then(() => {console.log('回测跑完了')})
+				if(status == 2 || status == 3) {
+					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status)})
 					data.result = isJson(data.result) ? JSON.parse(data.result) : data.result
-					// 接下来会调用 view result 和 edit 方法
+					// _this.viewBacktestResults(data)
+					await _this.displaySetUpForm(data)
 				}
 			}, 1000)
+		},
+		async displaySetUpForm(data) {
+			/* 填充和展示 Set Up 表单的数据 */
+			let _this = this
+			data = {
+				id: "04c846e4-63a5-9c78-b06d-0d2492e4efd3",
+				user: "04f7c8dc-93fb-4f38-b680-638b06e108b7",
+				name: "SPX  2023-9-4  17:56:22",
+				capital: 100000,
+				symbol: "SPX",
+				benchmark: "SPX",
+				create_date: "2023-09-04T09:56:51.783347Z",
+				start_date: "1800-10-01",
+				end_date: "2023-09-04",
+				capital_alloc: "1.000000",
+				commission: "0.10",
+				slippage: "0.00",
+				frequency: "Daily",
+				win_rate: "0.0000",
+				risk_control: "//20",
+				user_tag: "client",
+				report_url: "",
+				direction: "Long",
+				favorites: false,
+				indicator_layout: "{\"technicalIndicators\":[],\"savedTechSD\":[{\"type\":\"model_smart_money\",\"inputs\":{\"Period\":13,\"Overlay\":false,\"id\":\"$r001$model_smart_money$r001$ (13,n)\",\"display\":\"$r001$model_smart_money$r001$ (13,n)\"},\"outputs\":{},\"parameters\":{\"studyOverZonesEnabled\":false,\"studyOverBoughtValue\":0.3,\"studyOverBoughtColor\":\"#FF0000\",\"studyOverSoldValue\":0.7,\"studyOverSoldColor\":\"#00DD00\",\"chartName\":\"chart\",\"editMode\":true,\"panelName\":\"$r001$model_smart_money$r001$ (13,n)\"},\"panel\":\"$r001$model_smart_money$r001$ (13,n)\"}],\"activatedMA\":[{\"period\":21,\"url\":\"\"}],\"activatedMALayout\":[],\"formIndicators\":{\"entry\":[\"model_smart_money\"],\"exit\":[\"\"]}}",
+				strategy: "Signal",
+				result: {
+				"Total Trades": 62,
+				"Total Return (%)": -24.84
+				},
+				seconds: 12,
+				url_data: "",
+				backtest_period: "21",
+				trade_price: 2,
+				exclude_oo: 0,
+				total_trader: 62,
+				total_return: -24.84,
+				description: {
+				Introduction: "",
+				Rules: ""
+				},
+				last_entry_signal_date: null,
+				last_exit_signal_date: null
+			}
+			_this.$refs['basicInfo'].setEditData(data)
+			/*
+				data 中并没有 entry 和 exit
+				但是 view result 和 edit backtest 按钮拿到的 row 数据中有 entry 和 exit,
+				所以先判断点击按钮时有没有存，没存再发请求
+			*/
+			let displayData = _this.$store.getters.resultDataForSetupDisplay
+			const hasEntryOrExit = Object.hasOwnProperty.call(displayData, 'entry') && Object.hasOwnProperty.call(displayData, 'exit')
+			if(!hasEntryOrExit) {
+				const res = await seeParams(data.id)
+				displayData = res.data
+			}
+			console.log('displayData', displayData)
+			let signalCode = new SignalCode()
+			if(isJson(displayData.entry)) displayData.entry = JSON.parse(displayData.entry)
+			if(isJson(displayData.exit)) displayData.exit = JSON.parse(displayData.exit)
+			if(Array.isArray(displayData.entry.signals)) {
+				displayData.entry.signals = displayData.entry.signals
+				.filter(item => item.code) // 过滤掉没有 code 属性的元素
+				.map(value => {return signalCode.decode(value.code)});
+			}
+			let entryPanel = displayData.entry.signals.length
+			let entryData = {}
+			entryData.entry = displayData.entry
+			_this.$refs.entryChild.setEditPanel(entryPanel, entryData)
+			if(Array.isArray(displayData.exit.signals)) {
+				data.exit.signals = data.exit.signals
+				.filter(item => item.code && item.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999')
+				.map(value => signalCode.decode(value.code))
+
+			if (displayData.exit.signals.length === 0 || displayData.exit.signals.includes(undefined)) {
+						displayData.exit.signals = [{ code: '' }]
+						_this.$nextTick(() => {
+								_this.$refs.exitChild.setRiskEditData(displayData)
+						})
+			} else {
+				let exitPanel = displayData.exit.signals.length
+				let exitData = { exit: displayData.exit }
+				_this.$refs.exitChild.setEditPanel(exitPanel, exitData)
+			}
+			}
+			// this.$refs['entryChild'].setEditData()
+			// this.$refs['exitChild'].setEditData()
 		},
 		reloadData(data, freq) {
       let frequency = ''

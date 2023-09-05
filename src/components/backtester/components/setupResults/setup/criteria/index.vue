@@ -609,7 +609,7 @@ export default {
 					item.title = 'Condition' + (index + 1)
 				})
 				this.editableTabsValue = activeName
-
+				let criteria = this.criteria
 				// 移除senti indicator附属ma
 				let techList = this.$store.state.chart.formateTechnicalList
 				let removedUrl = techList.find(i=>i.value == this.indicatorValArr[absoluteIndex])?.url
@@ -618,7 +618,7 @@ export default {
 				var MAListIndex = activatedMAList.findIndex(
 				(item) =>
 					item.url == removedUrl &&
-					item.criteria == 'exit' &&
+					item.criteria == criteria &&
 					item.index == absoluteIndex
 				)
 				if (MAListIndex != -1) {
@@ -639,8 +639,8 @@ export default {
 				const freqObj = {
 						index: absoluteIndex,
 						value: 'Daily',
-						criteria: 'exit',
-						key: `exit_${absoluteIndex}`
+						criteria,
+						key: `${criteria}_${absoluteIndex}`
 					}
 					this.setFrequencyArray(freqObj)
 				if (
@@ -659,7 +659,7 @@ export default {
 				})
 				
 				// 如果是MA，则移除它的信息和位置
-				CIQ.removeMALayout(removedUrl, 'exit', absoluteIndex)
+				CIQ.removeMALayout(removedUrl, criteria, absoluteIndex)
 
 				// 移除chartiq对应的extraIndicators
 				let extraIndicators = []
@@ -1168,6 +1168,133 @@ export default {
 					return checked
 				}
 			})
+		},
+		setEditPanel(num, data) {
+			let criteria = this.criteria
+			console.log(`传入 ${criteria} 的数据`, data[criteria])
+			this.relation = data[criteria].relation ? data[criteria].relation : 1
+
+			for (let i = 0; i < num - 1; i++) {
+				this.handleTabsEdit(null, 'add')
+			}
+			this.refs = data
+			this.score = data[criteria].score
+			this.delay_bars = data[criteria].delay_bars ? data[criteria].delay_bars : 0
+			if (this.delay_bars != 0) {
+				this.isDelayBar = true
+			} else {
+				this.isDelayBar = false
+			}
+			this.signals_in_market = data[criteria].signals_in_market
+				? data[criteria].signals_in_market
+				: 1
+			this.relation = data[criteria].relation ? data[criteria].relation : 1
+			// this.$emit('getExitRelation', this.relation)
+			let length = data[criteria].signals.length
+			this.tabIndex = length
+			for (let j = 0; j < length; j++) {
+				if (data[criteria].signals[j].analysis === 'Sentiment') {
+					this.indicatorValArr[j] = data[criteria].signals[j].indicator
+					this.indicatorRadioArr.splice(j, 1, 'sentiment')
+					this.indicatorRadio = 'sentiment'
+					this.techIndiObj[j] = ''
+				}
+				if (data[criteria].signals[j].analysis === 'User') {
+					this.indicatorValArr[j] = data[criteria].signals[j].indicator
+					this.indicatorRadioArr.splice(j, 1, 'user')
+					this.indicatorRadio = 'user'
+					this.techIndiObj[j] = ''
+				}
+				if (data[criteria].signals[j].analysis === 'Symbol') {
+					this.indicatorValArr[j] = data[criteria].signals[j].indicator
+					this.indicatorRadioArr.splice(j, 1, 'symbol')
+					this.indicatorRadio = 'symbol'
+					this.techIndiObj[j] = ''
+				}
+				if (data[criteria].signals[j].analysis === 'Technical') {
+					this.indicatorValArr[j] = data[criteria].signals[j].indicator
+					this.indicatorRadio = 'technical'
+					this.indicatorRadioArr.splice(j, 1, 'technical')
+					
+					this.techIndiObj[j] = CIQ.findBuiltinTechIndicator(data[criteria].signals[j].indicator,null)?.class
+				}
+			}
+			this.$nextTick(() => {
+				this.setEditData(this.refs)
+			})
+		},
+		setEditData(data) {
+			let criteria = this.criteria
+			let length = data[criteria].signals.length
+			for (let j = 0; j < length; j++) {
+				this.$refs.indiChild[j].setEditData(data)
+				this.$refs.indiChild[j].setEditData(data)
+				if (this.indicatorRadioArr[j] === 'sentiment' || this.indicatorRadioArr[j] === 'user') {
+					this.$refs.sentiChild[j].setEditData(data)
+				}
+				if (this.indicatorRadioArr[j] === 'symbol') {
+					this.$refs.symbolChild[j].setEditData(data)
+				}
+				if (this.indicatorRadioArr[j] === 'technical') {
+					if (this.techIndiObj[j] === 'CCI_like') {
+						this.$refs.cciChild[j].setEditData(data)
+					}
+					if (this.techIndiObj[j] === 'MovingAverage_like') {
+						this.$refs.maChild[j].setEditData(data)
+					}
+					if (this.techIndiObj[j] === 'MACD_like') {
+						this.$refs.macdChild[j].setEditData(data)
+					}
+					if (this.techIndiObj[j] === 'EFT_like') {
+						this.$refs.EFTLikeChild[j].setEditData(data)
+					}
+					if (this.techIndiObj[j] === 'ADX_like') {
+						this.$refs.ADXLikeChild[j].setEditData(data)
+					}
+					if (this.techIndiObj[j] === 'Aligator_like') {
+						this.$refs.aligatorLikeChild[j].setEditData(data)
+					}
+					if (this.techIndiObj[j] === 'LRF_like') {
+						this.$refs.LRFLikeChild[j].setEditData(data)
+					}
+					if (this.techIndiObj[j] === 'BollingerBands_like') {
+						this.$refs.bollBandsLikeChild[j].setEditData(data)
+					}
+					if (this.techIndiObj[j] === 'Stochastics_like') {
+						this.$refs.stochasticsLikeChild[j].setEditData(data)
+					}
+					if (this.techIndiObj[j] === 'ERI_like') {
+						this.$refs.ERILikeChild[j].setEditData(data)
+					}
+					if (this.techIndiObj[j] === 'Trailingstop_like') {
+						this.$refs.trailingStopLikeChild[j].setEditData(data)
+					}
+				}
+			}
+		},
+		setRiskEditData(data) {
+			this.relation = 0
+			this.exitItemCheck = true
+			this.signalOptions = [
+				{
+					value: 1,
+					label: 'Single-Condition'
+				},
+				{
+					value: 2,
+					label: 'SameBar Multi-Condition'
+				},
+				{
+					value: 3,
+					label: 'TimeOrder Multi-Condition'
+				},
+				{
+					value: 0,
+					label: 'Only Use Risk Control'
+				}
+			]
+			// this.$emit('isOnlyRiskControl', this.exitItemCheck)
+			// this.$emit('getExitRelation', this.relation)
 		},
 		async userUploadFileContent(data) {
 			let _this = this
