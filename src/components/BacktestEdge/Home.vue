@@ -1120,13 +1120,13 @@ export default {
                   CIQ.nprogress.done()
 
                   // FindLastSignal过程中代表一个项目的运行结束
-                  this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
+                  this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
                   vm.$store.state.form.last_signal_array.map(item=>{
                     if(item.name == backtestData.name){
                       item.state = 2
                     }
                   })
-                  console.log('FindLastSignalRuning done, The current entry are the same',backtestData,vm.$store.state.form.last_signal_array)
+                  console.log('Run all backtest singer task done, The current entry are the same',backtestData,vm.$store.state.form.last_signal_array)
                   return
                 }
               }
@@ -1157,13 +1157,13 @@ export default {
                   CIQ.nprogress.done()
 
                   // FindLastSignal过程中代表一个项目的运行结束
-                  this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
+                  this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
                   vm.$store.state.form.last_signal_array.map(item=>{
                     if(item.name == backtestData.name){
                       item.state = 2
                     }
                   })
-                  console.log('FindLastSignalRuning done, The current exit are the same',backtestData,vm.$store.state.form.last_signal_array)
+                  console.log('Run all backtest singer task done, The current exit are the same',backtestData,vm.$store.state.form.last_signal_array)
                   return
                 }
               }
@@ -1530,13 +1530,13 @@ export default {
                         vm.$refs.setUpChild.clearOldBacktestName()
 
                         // FindLastSignal过程中代表一个项目的运行结束
-                        this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
+                        this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
                         vm.$store.state.form.last_signal_array.map(item=>{
                           if(item.name == backtestData.name){
                             item.state = 2
                           }
                         })
-                        console.log('FindLastSignalRuning done, runBacktest status !== 201',backtestData,vm.$store.state.form.last_signal_array)
+                        console.log('Run all backtest singer task done, runBacktest status !== 201',backtestData,vm.$store.state.form.last_signal_array)
                       }
                     } catch (error) {
 
@@ -1547,13 +1547,13 @@ export default {
                       CIQ.nprogress.done()
 
                       // FindLastSignal过程中代表一个项目的运行结束
-                      this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
+                      this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
                       vm.$store.state.form.last_signal_array.map(item=>{
                         if(item.name == backtestData.name){
                           item.state = 2
                         }
                       })
-                      console.log('FindLastSignalRuning done, runBacktest 失败',backtestData,vm.$store.state.form.last_signal_array)
+                      console.log('Run all backtest singer task done, runBacktest 失败',backtestData,vm.$store.state.form.last_signal_array)
 
                       switch (error?.response?.status) {
                         case 401:
@@ -1595,13 +1595,13 @@ export default {
                       alert('Upload JSON failed')
 
                       // FindLastSignal过程中代表一个项目的运行结束
-                      this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
+                      this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
                       vm.$store.state.form.last_signal_array.map(item=>{
                         if(item.name == backtestData.name){
                           item.state = 2
                         }
                       })
-                      console.log('FindLastSignalRuning done, Upload JSON failed',backtestData,vm.$store.state.form.last_signal_array)
+                      console.log('Run all backtest singer task done, Upload JSON failed',backtestData,vm.$store.state.form.last_signal_array)
                     }
                   }
                 } else {
@@ -1616,13 +1616,13 @@ export default {
                     alert('Upload CSV failed')
 
                     // FindLastSignal过程中代表一个项目的运行结束
-                    this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
+                    this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
                     vm.$store.state.form.last_signal_array.map(item=>{
                       if(item.name == backtestData.name){
                         item.state = 2
                       }
                     })
-                    console.log('FindLastSignalRuning done, Upload CSV failed',backtestData,vm.$store.state.form.last_signal_array)
+                    console.log('Run all backtest singer task done, Upload CSV failed',backtestData,vm.$store.state.form.last_signal_array)
                   }
                 }
               }
@@ -1741,13 +1741,13 @@ export default {
           }
         })
         // FindLastSignal过程中代表一个项目的运行结束
-        this.$store.dispatch('states/set_isFindLastSignalRuning_flag',false)
+        this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
         vm.$store.state.form.last_signal_array.map(item=>{
           if(item.name == resData.name){
             item.state = 2
           }
         })
-        console.log('FindLastSignalRuning done, goTobacktestSetupForm',resData,vm.$store.state.form.last_signal_array)
+        console.log('Run all backtest singer task done, goTobacktestSetupForm',resData,vm.$store.state.form.last_signal_array)
       }
       setTimeout(() => {
         if (callback) {
