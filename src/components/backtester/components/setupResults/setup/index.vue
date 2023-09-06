@@ -6,24 +6,24 @@
 		<div class="set-up-container">
 			<div class="criteria-container">
 				<div class="criteria">
-					<Criteria
-						ref="entryChild"
-						:config="setConfig('entry')"
-						:isRiskControl="false"
-						@getEntryRelation="getEntryRelation"
-						@sendEntrySignalIndex="sendEntrySignalIndex"
-					></Criteria>
+						<Criteria
+							ref="entryChild"
+							:config="setConfig('entry')"
+							:isRiskControl="false"
+							@getEntryRelation="getEntryRelation"
+							@sendEntrySignalIndex="sendEntrySignalIndex"
+						></Criteria>
 				</div>
 				<div class="divider"></div>
 				<div class="criteria">
-					<Criteria
-						ref="exitChild"
-						:config="setConfig('exit')"
-						:isRiskControl="isRiskControl"
-						@isOnlyRiskControl="isOnlyRiskControl"
-						@getExitRelation="getExitRelation"
-						@sendExitSignalIndex="sendExitSignalIndex"
-					></Criteria>
+						<Criteria
+							ref="exitChild"
+							:config="setConfig('exit')"
+							:isRiskControl="isRiskControl"
+							@isOnlyRiskControl="isOnlyRiskControl"
+							@getExitRelation="getExitRelation"
+							@sendExitSignalIndex="sendExitSignalIndex"
+						></Criteria>
 					<el-button @click="displaySetUpForm">按钮</el-button>
 				</div>
 			</div>
@@ -58,14 +58,13 @@ import Criteria from './criteria'
 import { generateConfig } from './criteria/config'
 import cloneDeep from 'lodash/cloneDeep'
 import capitalizeFirstLetter from '@/tools/capitalizeFirstLetter'
-import {isJson, isSerialized} from '@/tools/isJson'
+import {isJson} from '@/tools/isJson'
 import SignalCode from '@/tools/codeTool.js'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { runBacktest, getStatus, uploadS3, seeParams} from '@/service/service'
 import UUID from '@/tools/uuid.js'
 import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
-import { ButtonBehaviorMixin } from "@/components/common/mixins/buttonBehaviorMixin.js"
-import { chartLegend } from '@/components/common/chart/st-development/js/components'
+import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 
 
 export default {
@@ -74,24 +73,26 @@ export default {
 		BasicInfo,
 		Criteria
 	},
-	mixins: [ButtonBehaviorMixin],
+	mixins: [CommonMethodsMixin],
 	data() {
 		return {
 			isRiskControl: true
 		}
 	},
 	beforeRouteEnter(to, from, next) {
-		if(!to.params.data) {next(); return}
-    // 在路由进入前的钩子函数中获取参数
-    const objectAsString = to.params.data;
-    const myLargeObject = JSON.parse(objectAsString);
-    
-    // 可以在这里做一些预处理
-    console.log("beforeRouteEnter", myLargeObject);
+		debugger
+		if (to.path !== '/backtester/sr/setup') {
+			next()
+			return
+		}
 
-    // 调用 next() 来继续路由导航
-    next();
-  },
+  next(async  _this => {
+    const cachedData = _this.$store.getters.cachedBTBasicInfoData;
+    if (Object.keys(cachedData).length !== 0) {
+      await _this.displaySetUpForm(cachedData)
+    }
+  })
+},
 	methods: {
 		setConfig(criteria) {
 			// 传入 entry 和 exit 的配置
@@ -404,54 +405,61 @@ export default {
 				if(status == 2 || status == 3) {
 					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status)})
 					data.result = isJson(data.result) ? JSON.parse(data.result) : data.result
-					// _this.viewBacktestResults(data)
-					await _this.displaySetUpForm(data)
+					// 存入缓存数据，因为路由跳转时表单数据会丢失
+					_this.$store.dispatch('form/cached_BT_basic_info_data', data)
+					_this.viewBacktestResults(data)
+					// 回测跑完不一定要调用这个去展示 set up form， 因为刚跑完这个 set up form 肯定是有数据的
+					// await _this.displaySetUpForm(data)
 				}
 			}, 1000)
 		},
 		async displaySetUpForm(data) {
 			/* 填充和展示 Set Up 表单的数据 */
 			let _this = this
-			data = {
-				id: "04c846e4-63a5-9c78-b06d-0d2492e4efd3",
-				user: "04f7c8dc-93fb-4f38-b680-638b06e108b7",
-				name: "SPX  2023-9-4  17:56:22",
-				capital: 100000,
-				symbol: "SPX",
-				benchmark: "SPX",
-				create_date: "2023-09-04T09:56:51.783347Z",
-				start_date: "1800-10-01",
-				end_date: "2023-09-04",
-				capital_alloc: "1.000000",
-				commission: "0.10",
-				slippage: "0.00",
-				frequency: "Daily",
-				win_rate: "0.0000",
-				risk_control: "//20",
-				user_tag: "client",
-				report_url: "",
-				direction: "Long",
-				favorites: false,
-				indicator_layout: "{\"technicalIndicators\":[],\"savedTechSD\":[{\"type\":\"model_smart_money\",\"inputs\":{\"Period\":13,\"Overlay\":false,\"id\":\"$r001$model_smart_money$r001$ (13,n)\",\"display\":\"$r001$model_smart_money$r001$ (13,n)\"},\"outputs\":{},\"parameters\":{\"studyOverZonesEnabled\":false,\"studyOverBoughtValue\":0.3,\"studyOverBoughtColor\":\"#FF0000\",\"studyOverSoldValue\":0.7,\"studyOverSoldColor\":\"#00DD00\",\"chartName\":\"chart\",\"editMode\":true,\"panelName\":\"$r001$model_smart_money$r001$ (13,n)\"},\"panel\":\"$r001$model_smart_money$r001$ (13,n)\"}],\"activatedMA\":[{\"period\":21,\"url\":\"\"}],\"activatedMALayout\":[],\"formIndicators\":{\"entry\":[\"model_smart_money\"],\"exit\":[\"\"]}}",
-				strategy: "Signal",
-				result: {
-				"Total Trades": 62,
-				"Total Return (%)": -24.84
-				},
-				seconds: 12,
-				url_data: "",
-				backtest_period: "21",
-				trade_price: 2,
-				exclude_oo: 0,
-				total_trader: 62,
-				total_return: -24.84,
-				description: {
-				Introduction: "",
-				Rules: ""
-				},
-				last_entry_signal_date: null,
-				last_exit_signal_date: null
-			}
+			/* 用于测试是否能查看结果 start */
+			// data = {
+			// 	id: "04c846e4-63a5-9c78-b06d-0d2492e4efd3",
+			// 	user: "04f7c8dc-93fb-4f38-b680-638b06e108b7",
+			// 	name: "SPX  2023-9-4  17:56:22",
+			// 	capital: 100000,
+			// 	symbol: "SPX",
+			// 	benchmark: "SPX",
+			// 	create_date: "2023-09-04T09:56:51.783347Z",
+			// 	start_date: "1800-10-01",
+			// 	end_date: "2023-09-04",
+			// 	capital_alloc: "1.000000",
+			// 	commission: "0.10",
+			// 	slippage: "0.00",
+			// 	frequency: "Daily",
+			// 	win_rate: "0.0000",
+			// 	risk_control: "//20",
+			// 	user_tag: "client",
+			// 	report_url: "",
+			// 	direction: "Long",
+			// 	favorites: false,
+			// 	indicator_layout: "{\"technicalIndicators\":[],\"savedTechSD\":[{\"type\":\"model_smart_money\",\"inputs\":{\"Period\":13,\"Overlay\":false,\"id\":\"$r001$model_smart_money$r001$ (13,n)\",\"display\":\"$r001$model_smart_money$r001$ (13,n)\"},\"outputs\":{},\"parameters\":{\"studyOverZonesEnabled\":false,\"studyOverBoughtValue\":0.3,\"studyOverBoughtColor\":\"#FF0000\",\"studyOverSoldValue\":0.7,\"studyOverSoldColor\":\"#00DD00\",\"chartName\":\"chart\",\"editMode\":true,\"panelName\":\"$r001$model_smart_money$r001$ (13,n)\"},\"panel\":\"$r001$model_smart_money$r001$ (13,n)\"}],\"activatedMA\":[{\"period\":21,\"url\":\"\"}],\"activatedMALayout\":[],\"formIndicators\":{\"entry\":[\"model_smart_money\"],\"exit\":[\"\"]}}",
+			// 	strategy: "Signal",
+			// 	result: {
+			// 	"Total Trades": 62,
+			// 	"Total Return (%)": -24.84
+			// 	},
+			// 	seconds: 12,
+			// 	url_data: "",
+			// 	backtest_period: "21",
+			// 	trade_price: 2,
+			// 	exclude_oo: 0,
+			// 	total_trader: 62,
+			// 	total_return: -24.84,
+			// 	description: {
+			// 	Introduction: "",
+			// 	Rules: ""
+			// 	},
+			// 	last_entry_signal_date: null,
+			// 	last_exit_signal_date: null
+			// }
+			// _this.$store.dispatch('form/cached_BT_basic_info_data', data)
+			// _this.viewBacktestResults(data)
+			/* 用于测试是否能查看结果 end */
 			_this.$refs['basicInfo'].setEditData(data)
 			/*
 				data 中并没有 entry 和 exit
@@ -465,67 +473,45 @@ export default {
 				displayData = res.data
 			}
 			console.log('displayData', displayData)
-			let signalCode = new SignalCode()
-			if(isJson(displayData.entry)) displayData.entry = JSON.parse(displayData.entry)
-			if(isJson(displayData.exit)) displayData.exit = JSON.parse(displayData.exit)
-			if(Array.isArray(displayData.entry.signals)) {
-				displayData.entry.signals = displayData.entry.signals
-				.filter(item => item.code) // 过滤掉没有 code 属性的元素
-				.map(value => {return signalCode.decode(value.code)});
-			}
-			let entryPanel = displayData.entry.signals.length
-			let entryData = {}
-			entryData.entry = displayData.entry
-			_this.$refs.entryChild.setEditPanel(entryPanel, entryData)
-			if(Array.isArray(displayData.exit.signals)) {
-				data.exit.signals = data.exit.signals
-				.filter(item => item.code && item.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999')
-				.map(value => signalCode.decode(value.code))
+			let signalCode = new SignalCode();
 
-			if (displayData.exit.signals.length === 0 || displayData.exit.signals.includes(undefined)) {
-						displayData.exit.signals = [{ code: '' }]
-						_this.$nextTick(() => {
-								_this.$refs.exitChild.setRiskEditData(displayData)
-						})
-			} else {
-				let exitPanel = displayData.exit.signals.length
-				let exitData = { exit: displayData.exit }
-				_this.$refs.exitChild.setEditPanel(exitPanel, exitData)
+			// 解析 JSON 字符串
+			displayData.entry = isJson(displayData.entry) ? JSON.parse(displayData.entry) : displayData.entry;
+			displayData.exit = isJson(displayData.exit) ? JSON.parse(displayData.exit) : displayData.exit;
+
+			// 处理 entry.signals
+			if (Array.isArray(displayData.entry.signals)) {
+				displayData.entry.signals = displayData.entry.signals
+					.filter(item => item.code) // 过滤掉没有 code 属性的元素
+					.map(value => signalCode.decode(value.code));
 			}
+
+			// 设置 entryChild 的编辑面板
+			let entryPanel = displayData.entry.signals.length;
+			let entryData = { entry: displayData.entry };
+			_this.$refs.entryChild.setEditPanel(entryPanel, entryData);
+
+			// 处理 exit.signals
+			if (Array.isArray(displayData.exit.signals)) {
+				displayData.exit.signals = displayData.exit.signals
+					.filter(item => item.code && item.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999')
+					.map(value => signalCode.decode(value.code));
+
+				if (displayData.exit.signals.length === 0 || displayData.exit.signals.includes(undefined)) {
+					displayData.exit.signals = [{ code: '' }];
+					_this.$nextTick(() => {
+						_this.$refs.exitChild.setRiskEditData(displayData);
+					});
+				} else {
+					let exitPanel = displayData.exit.signals.length;
+					let exitData = { exit: displayData.exit };
+					_this.$refs.exitChild.setEditPanel(exitPanel, exitData);
+				}
 			}
+
 			// this.$refs['entryChild'].setEditData()
 			// this.$refs['exitChild'].setEditData()
 		},
-		reloadData(data, freq) {
-      let frequency = ''
-      this.$store.commit('chart/getEntryIndicatorsList', data.formIndicators.entry)
-      this.$store.commit('chart/getExitIndicatorsList', data.formIndicators.exit)
-      this.$store.commit('chart/getExtraIndicators', [])
-      this.$store.commit('chart/getTechnicalIndicators', data.technicalIndicators)
-      this.$store.commit('chart/getMA', data.activatedMA)
-      // 暂定，读取回测携带的ma位置和信息
-      this.$store.commit('chart/getMALayout', data.activatedMALayout)
-      this.$store.commit('chart/setTechSD', data.savedTechSD)
-
-      switch (freq) {
-        case 'Daily': {
-          frequency = 'daily'
-          break
-        }
-        case 'Weekly': {
-          frequency = 'weekly'
-          break
-        }
-        case 'Monthly': {
-          frequency = 'monthly'
-          break
-        }
-        default: {
-          break
-        }
-      }
-      this.$store.commit('form/setRestoreFreq', frequency)
-    },
 	}
 }
 </script>

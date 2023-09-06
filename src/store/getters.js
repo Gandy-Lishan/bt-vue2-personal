@@ -7,6 +7,7 @@ const getters = {
 	getterBacktestInfo: state => state.form.backtestInfo,
 	getterDirection: state => state.form.backtestInfo.direction,
 	resultDataForSetupDisplay: state => state.form.resultDataForSetupDisplay,
+	cachedBTBasicInfoData: state => state.form.cachedBTBasicInfoData,
 
 	// chart
 	getExtremeValue: state => state.chart.extremeValue,
