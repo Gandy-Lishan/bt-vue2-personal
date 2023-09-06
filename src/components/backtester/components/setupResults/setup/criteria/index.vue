@@ -1171,7 +1171,6 @@ export default {
 		},
 		setEditPanel(num, data) {
 			let criteria = this.criteria
-			console.log(`传入 ${criteria} 的数据`, data[criteria])
 			this.relation = data[criteria].relation ? data[criteria].relation : 1
 
 			for (let i = 0; i < num - 1; i++) {
@@ -1227,7 +1226,6 @@ export default {
 			let criteria = this.criteria
 			let length = data[criteria].signals.length
 			for (let j = 0; j < length; j++) {
-				this.$refs.indiChild[j].setEditData(data)
 				this.$refs.indiChild[j].setEditData(data)
 				if (this.indicatorRadioArr[j] === 'sentiment' || this.indicatorRadioArr[j] === 'user') {
 					this.$refs.sentiChild[j].setEditData(data)

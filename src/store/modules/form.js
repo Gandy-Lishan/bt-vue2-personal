@@ -68,6 +68,7 @@ const state = {
 	hashTable: [],//form
 	frequencyArray: new Map(),//form
 	resultDataForSetupDisplay: {}, // 用于保存BT运行结束后的数据
+	cachedBTBasicInfoData: {}, // 用于缓存BT基本信息
 }
 
 const mutations = {
@@ -574,6 +575,9 @@ const mutations = {
 	},
 	RESULT_DATA_FOR_SETUP_DISPLAY(state, obj) {
 		state.resultDataForSetupDisplay = obj
+	},
+	CACHED_BT_BASIC_INFO_DATA(state, obj) {
+		state.cachedBTBasicInfoData = obj
 	}
 }
 
@@ -588,6 +592,13 @@ const actions = {
 		return new Promise(resolve=>{
 			// 清空chartiq图表配置
 			commit('RESET_CHART_CONDIG_STATE')
+			resolve();
+		})
+	},
+	cached_BT_basic_info_data({commit}, val){
+		return new Promise(resolve=>{
+			console.log('触发了cached_BT_basic_info_data', val)
+			commit('CACHED_BT_BASIC_INFO_DATA',val)
 			resolve();
 		})
 	}
