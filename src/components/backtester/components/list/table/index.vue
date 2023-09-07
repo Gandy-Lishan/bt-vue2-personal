@@ -367,6 +367,8 @@ import {
 	getAnalystList
 } from '@/service/service.js'
 import {isJson} from '@/tools/isJson'
+import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
+
 export default {
 	name: 'Table',
 	props: {
@@ -374,6 +376,7 @@ export default {
 		currentPage: String,
 		isExpandAll: Boolean
 	},
+	mixins: [CommonMethodsMixin],
 	data() {
 		return {
 			dataList: [],
@@ -471,9 +474,6 @@ export default {
         prop = `-${prop}`
       }
 			this.getDataList(prop)
-		},
-		viewBacktestResults(row) {
-			console.log(row)
 		}
 	}
 }

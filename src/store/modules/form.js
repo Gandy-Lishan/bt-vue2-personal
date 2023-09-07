@@ -67,7 +67,7 @@ const state = {
 	_last_signal_array: [],//form
 	hashTable: [],//form
 	frequencyArray: new Map(),//form
-	resultDataForSetupDisplay: {}, // 用于保存BT运行结束后的数据
+	rowDataForDisplay: {}, // 用于保存BT运行结束后的数据
 	cachedBTBasicInfoData: {}, // 用于缓存BT基本信息
 }
 
@@ -574,7 +574,8 @@ const mutations = {
 		window.utils = new utils()
 	},
 	RESULT_DATA_FOR_SETUP_DISPLAY(state, obj) {
-		state.resultDataForSetupDisplay = obj
+		console.log('缓存了 row 数据', obj)
+		state.rowDataForDisplay = obj
 	},
 	CACHED_BT_BASIC_INFO_DATA(state, obj) {
 		state.cachedBTBasicInfoData = obj

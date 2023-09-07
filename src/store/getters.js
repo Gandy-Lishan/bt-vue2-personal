@@ -6,7 +6,7 @@ const getters = {
 	exitFreqGetter: state => state.form.exitFrequency,
 	getterBacktestInfo: state => state.form.backtestInfo,
 	getterDirection: state => state.form.backtestInfo.direction,
-	resultDataForSetupDisplay: state => state.form.resultDataForSetupDisplay,
+	rowDataForDisplay: state => state.form.rowDataForDisplay,
 	cachedBTBasicInfoData: state => state.form.cachedBTBasicInfoData,
 
 	// chart
