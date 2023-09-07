@@ -80,18 +80,42 @@ export default {
 		}
 	},
 	beforeRouteEnter(to, from, next) {
-		debugger
-		if (to.path !== '/backtester/sr/setup') {
-			next()
-			return
-		}
+	// 	if (to.path !== '/backtester/sr/setup') {
+	// 		next()
+	// 		return
+	// 	}
 
-  next(async  _this => {
-    const cachedData = _this.$store.getters.cachedBTBasicInfoData;
-    if (Object.keys(cachedData).length !== 0) {
-      await _this.displaySetUpForm(cachedData)
-    }
-  })
+  // next(async  _this => {
+  //   const cachedData = _this.$store.getters.cachedBTBasicInfoData;
+  //   if (Object.keys(cachedData).length !== 0) {
+  //     await _this.displaySetUpForm(cachedData)
+  //   }
+  // })
+	if (to.path === '/backtester/sr/setup') {
+    next(async _this => {
+      if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
+        console.log('说明是路由跳转过来携带参数的，用于展示表单数据')
+        // 说明是路由跳转过来携带参数的
+        const { data } = to.params
+        const backtestEditData = isJson(data) ? JSON.parse(data) : data
+        await _this.displaySetUpForm(backtestEditData)
+      }else {
+        // 说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存
+        console.log('说明不是路由跳转，而是从其他界面访问过来的，这个时候先用编辑数据没有再读缓存')
+        let editData = _this.$store.getters.rowDataForDisplay
+        let cachedData = _this.$store.getters.cachedBTBasicInfoData
+				let dataToUse = editData || cachedData
+				console.log('editData', editData)
+				console.log('cachedData', cachedData)
+        if (Object.keys(dataToUse).length !== 0) {
+          dataToUse = isJson(dataToUse) ? JSON.parse(dataToUse) : dataToUse
+          await _this.displaySetUpForm(dataToUse)
+        }
+      }
+    });
+  } else {
+    next();
+  }
 },
 	methods: {
 		setConfig(criteria) {
@@ -102,6 +126,12 @@ export default {
 			this.$refs['basicInfo'].clearForm()
 		},
 		async runBacktest() {
+			const date = new Date()
+      const hour = date.getHours();
+      const minute = date.getMinutes();
+      const second = date.getSeconds();
+      const time = hour + ':' + minute + ':' + second
+			console.log('回测开始了', time)
 			const _this = this
 			_this.$refs['basicInfo'].saveData()
 			const entryErr = await _this.saveCriteriaData('entryChild')
@@ -394,6 +424,7 @@ export default {
 			根据 id 轮询回测结果
 			todo lishan
 			*/
+			console.log('进入轮询')
 			const _this = this
 			_this.clearInterval = clearPromiseInterval
 			let timer = setPromiseInterval(async () => {
@@ -403,7 +434,12 @@ export default {
 				const data = res.data
 				console.log('回测运行状态', status)
 				if(status == 2 || status == 3) {
-					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status)})
+					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status); 			const date = new Date()
+					const hour = date.getHours();
+					const minute = date.getMinutes();
+					const second = date.getSeconds();
+					const time = hour + ':' + minute + ':' + second
+					console.log('回测结束了', time)})
 					data.result = isJson(data.result) ? JSON.parse(data.result) : data.result
 					// 存入缓存数据，因为路由跳转时表单数据会丢失
 					_this.$store.dispatch('form/cached_BT_basic_info_data', data)
@@ -466,7 +502,7 @@ export default {
 				但是 view result 和 edit backtest 按钮拿到的 row 数据中有 entry 和 exit,
 				所以先判断点击按钮时有没有存，没存再发请求
 			*/
-			let displayData = _this.$store.getters.resultDataForSetupDisplay
+			let displayData = _this.$store.getters.rowDataForDisplay
 			const hasEntryOrExit = Object.hasOwnProperty.call(displayData, 'entry') && Object.hasOwnProperty.call(displayData, 'exit')
 			if(!hasEntryOrExit) {
 				const res = await seeParams(data.id)
