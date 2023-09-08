@@ -126,12 +126,6 @@ export default {
 			this.$refs['basicInfo'].clearForm()
 		},
 		async runBacktest() {
-			const date = new Date()
-      const hour = date.getHours();
-      const minute = date.getMinutes();
-      const second = date.getSeconds();
-      const time = hour + ':' + minute + ':' + second
-			console.log('回测开始了', time)
 			const _this = this
 			_this.$refs['basicInfo'].saveData()
 			const entryErr = await _this.saveCriteriaData('entryChild')
@@ -434,12 +428,7 @@ export default {
 				const data = res.data
 				console.log('回测运行状态', status)
 				if(status == 2 || status == 3) {
-					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status); 			const date = new Date()
-					const hour = date.getHours();
-					const minute = date.getMinutes();
-					const second = date.getSeconds();
-					const time = hour + ':' + minute + ':' + second
-					console.log('回测结束了', time)})
+					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status)})
 					data.result = isJson(data.result) ? JSON.parse(data.result) : data.result
 					// 存入缓存数据，因为路由跳转时表单数据会丢失
 					_this.$store.dispatch('form/cached_BT_basic_info_data', data)
