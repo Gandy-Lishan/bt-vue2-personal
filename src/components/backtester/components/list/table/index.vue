@@ -353,20 +353,13 @@
 
 <script>
 import {
-  copyBacktest,
-  favoriteBacktest,
   getHistoryList,
 	getSampleList,
-  getStatus,
-  seeParams,
-  deleteBacktest,
-  getBacktestName,
-  getAllHistoryList,
-  searchHistoryList,
   getFavoriteList,
 	getAnalystList
 } from '@/service/service.js'
 import {isJson} from '@/tools/isJson'
+import { throttle } from 'lodash'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 
 export default {
@@ -374,13 +367,13 @@ export default {
 	props: {
 		tableCol: Array,
 		currentPage: String,
-		isExpandAll: Boolean
+		isExpandAll: Boolean,
+		loading: Boolean
 	},
 	mixins: [CommonMethodsMixin],
 	data() {
 		return {
 			dataList: [],
-			loading: false,
 			loadTest: 'Loading...',
 			queryInfo: {
         page: 1,
@@ -396,7 +389,6 @@ export default {
 	},
 	methods: {
 		async getDataList(orderby) {
-			this.loading = true
 			let res = null
 			try {
 				if(this.currentPage == 'History'){
@@ -433,7 +425,6 @@ export default {
 					})
 					this.dataList = data
 					this.queryInfo.total = res.data.count
-					this.loading = false
 				}
 			} catch(error) {
         if(error.response.status === 404) {
@@ -441,7 +432,6 @@ export default {
           const newPage = page != 1 ? page - 1 : 1
           this.handleCurrentChange(newPage)
         }
-        this.loading = false
 			}
 		},
 		handleCurrentChange(newpage) {
@@ -474,7 +464,10 @@ export default {
         prop = `-${prop}`
       }
 			this.getDataList(prop)
-		}
+		},
+		handleQuery: throttle(function() {
+			this.getDataList()
+		}, 500),
 	}
 }
 </script>

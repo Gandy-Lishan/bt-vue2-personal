@@ -3,6 +3,7 @@
     :tableCol="tableCol"
     :currentPage="currentPage"
     :isExpandAll="isExpandAll"
+    :loading="isListLoading"
   >
   </Table>
 </template>
@@ -57,6 +58,12 @@ export default {
       isExpandAll: true,
       currentPage: 'Sample',
     }
+  },
+  computed: {
+    isListLoading() {
+      // 从 Vuex store 中获取全局 loading 状态
+      return this.$store.state.form.isListLoading
+    },
   },
 }
 </script>
