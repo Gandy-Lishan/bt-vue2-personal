@@ -896,9 +896,16 @@ export default {
       this.bd.frequency = val
       this.$store.commit('form/getFrequency', val)
     },
+    setSetUpLoadingSetting(isSetupLoading, percentage, progressText) {
+			this.$store.commit('form/SET_SETUP_LOADING', {
+				isSetupLoading,
+				percentage,
+				progressText
+			})
+		},
     saveData() {
       /* 校验表单字段 */
-      if(!this.validateForm()) return
+      if(!this.validateForm()) {this.setSetUpLoadingSetting(false, 0, '');return}
       let bd = JSON.parse(JSON.stringify(this.bd))
       this.getTradePrice(bd.trade_price)
       /* 处理数据 */
