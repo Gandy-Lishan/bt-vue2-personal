@@ -1,6 +1,7 @@
 <template>
 	<div class="setup">
-		<div class="setupBox">
+		<div v-show="!setUpLoadingSetting.isSetupLoading">
+			<div class="setupBox">
 			<BasicInfo ref="basicInfo"></BasicInfo>
 		</div>
 		<div class="set-up-container">
@@ -48,6 +49,12 @@
 				></el-tooltip
 			>
 			<!-- <el-checkbox style="margin-left:10px" v-model="test" label="download test csv" border></el-checkbox> -->
+		</div></div>
+		<div v-show="setUpLoadingSetting.isSetupLoading">
+			<div class="progress-container">
+			<el-progress :text-inside="true" :stroke-width="26" :percentage="setUpLoadingSetting.percentage" :color="customColorMethod"></el-progress>
+			<span class="progress-text"><i class="el-icon-loading"></i>{{setUpLoadingSetting.progressText}}</span>
+		</div>
 		</div>
 	</div>
 </template>
@@ -79,18 +86,7 @@ export default {
 			isRiskControl: true
 		}
 	},
-	beforeRouteEnter(to, from, next) {
-	// 	if (to.path !== '/backtester/sr/setup') {
-	// 		next()
-	// 		return
-	// 	}
-
-  // next(async  _this => {
-  //   const cachedData = _this.$store.getters.cachedBTBasicInfoData;
-  //   if (Object.keys(cachedData).length !== 0) {
-  //     await _this.displaySetUpForm(cachedData)
-  //   }
-  // })
+	beforeRouteEnter(to, _, next) {
 	if (to.path === '/backtester/sr/setup') {
     next(async _this => {
       if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
@@ -116,8 +112,34 @@ export default {
   } else {
     next();
   }
-},
+	},
+	computed: {
+    setUpLoadingSetting() {
+      // 从 Vuex store 中获取全局 loading 状态
+      return this.$store.state.form.setUpLoadingSetting
+    },
+  },
+	watch: {
+    setUpLoadingSetting: {
+      handler(newValue, oldValue) {
+        // 在对象属性发生变化时触发的处理逻辑
+				this.setUpLoadingSetting = newValue
+      },
+      deep: true, // 启用深度监听，监视对象属性的变化
+    },
+  },
 	methods: {
+    customColorMethod(percentage) {
+      if (percentage < 50) {
+        return '#909399'
+      } else if (percentage < 70) {
+        return '#f56c6c';
+      } else if(percentage < 90){
+        return '#e6a23c';
+      }else {
+        return '#67c23a';
+      }
+    },
 		setConfig(criteria) {
 			// 传入 entry 和 exit 的配置
 			return generateConfig(criteria)
@@ -125,23 +147,34 @@ export default {
 		clearForm() {
 			this.$refs['basicInfo'].clearForm()
 		},
+		setSetUpLoadingSetting(isSetupLoading, percentage, progressText) {
+			this.$store.commit('form/SET_SETUP_LOADING', {
+				isSetupLoading,
+				percentage,
+				progressText
+			})
+		},
 		async runBacktest() {
 			const _this = this
+			_this.setSetUpLoadingSetting(true, 5, 'Saving backtest basic information...')
 			_this.$refs['basicInfo'].saveData()
+			_this.setSetUpLoadingSetting(true, 10, 'Saving backtest entry and exit criteria...')
 			const entryErr = await _this.saveCriteriaData('entryChild')
 			const exitErr = await _this.saveCriteriaData('exitChild')
 			console.log('entryErr', entryErr, 'exitErr', exitErr)
-			if (!entryErr || !exitErr) return
+			if (!entryErr || !exitErr) {_this.setSetUpLoadingSetting(false, 0, 'Error saving backtest entry and exit criteria...');return}
 			// 处理上传到后端的数据
 			let entrySaveObj = _this.handleSavedData('entry')
 			let exitSaveObj = _this.handleSavedData('exit')
 			console.log('entrySaveObj', entrySaveObj)
 			console.log('exitSaveObj', exitSaveObj)
+			_this.setSetUpLoadingSetting(true, 20, 'Saving backtest indicator...')
 			let indicatorLayout = _this.saveIndicatorLayoutData()
 			indicatorLayout.formIndicators = {
 				entry: entrySaveObj.indicatorLayout.formIndicators.entrySignal,
 				exit: exitSaveObj.indicatorLayout.formIndicators.exitSignal
 			}
+			_this.setSetUpLoadingSetting(true, 25, 'Processing saved backtest information...')
 			_this.reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout)
 		},
 		async saveCriteriaData(criteriaRef) {
@@ -374,6 +407,7 @@ export default {
 				...selectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
 			)
 			// Before the back test, load the data of the whole period and generate CSV to upload S3, and then update the form when the results come out
+			this.setSetUpLoadingSetting(true, 30, 'Processing saved backtest information...')
 			this.reloadData(indicatorLayout, backtestInfo.frequency)
 			// 1. Upload data file
 			// 2. Upload parameter file
@@ -399,13 +433,16 @@ export default {
 						file_name: `${uuid}/${uuid}_backtest_params.json`,
 						file_data: backtestParams
 					})
+					_this.setSetUpLoadingSetting(true, 40, 'Uploading backtest data...')
 					await uploadS3(S3DataStr)
+					_this.setSetUpLoadingSetting(true, 45, 'Uploading backtest data...')
 					const res = await runBacktest(backtestDataStr)
 					if(res.status != 201) return
 					_this.$store.dispatch('states/set_isBacktestRunning_flag',true)
 					//After saving successfully, clear the backtestinfo back to the original state
 					_this.$store.commit('form/initialBacktestInfo')
 					// _this.$refs.historyChild.refreshHistory(res.data.id)
+					_this.setSetUpLoadingSetting(true, 50, 'Backtest data upload successful, backtest is in progress, please wait patiently for the results...')
 					_this.pollingBTRunResults(res.data.id)
 					_this.$store.dispatch('states/set_isMarkerShown_flag',false)
 					//clear old_ uuid
@@ -421,14 +458,17 @@ export default {
 			console.log('进入轮询')
 			const _this = this
 			_this.clearInterval = clearPromiseInterval
+			let percentage = 60
 			let timer = setPromiseInterval(async () => {
 				const res = await getStatus(id)
-				CIQ.nprogress.inc()
+				// CIQ.nprogress.inc()
+				if(percentage + 2 != 100) percentage += 2; // 在每次轮询中递增 2
+				_this.setSetUpLoadingSetting(true, percentage, 'Backtest data upload successful, backtest is in progress, please wait patiently for the results...')
 				const status = res.data.status
 				const data = res.data
 				console.log('回测运行状态', status)
 				if(status == 2 || status == 3) {
-					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status)})
+					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status); _this.setSetUpLoadingSetting(false, 100, 'Backtest completed successfully, navigate to the Results page to view the backtest results....')})
 					data.result = isJson(data.result) ? JSON.parse(data.result) : data.result
 					// 存入缓存数据，因为路由跳转时表单数据会丢失
 					_this.$store.dispatch('form/cached_BT_basic_info_data', data)
@@ -651,5 +691,27 @@ export default {
 	.criteria-title {
 		font-size: 15px;
 	}
+}
+.progress-text{
+	font-size: 12px;
+	color: #409eff;
+	margin-top: 10px;
+	i {
+		margin-right: 10px;
+	}
+}
+.progress-container {
+	background: rgba(0, 0, 0, 0.8);
+	border-radius: 20px;
+	height: 100vh;
+	/* opacity: 0.5; */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 auto;
+	flex-direction: column;
+}
+.el-progress{
+	width: 80%;
 }
 </style>

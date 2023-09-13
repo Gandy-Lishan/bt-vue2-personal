@@ -80,7 +80,13 @@ const state = {
 	frequencyArray: new Map(), //form
 	rowDataForDisplay: {}, // 用于保存BT运行结束后的数据,不包含 entry 和 exit
 	cachedBTBasicInfoData: {}, // 用于缓存BT基本信息
-	isListLoading: false // 控制 list 的loading 状态
+	isListLoading: false, // 控制 list 的loading 状态
+	setUpLoadingSetting: { // 控制 setup 的loading 状态
+		isSetupLoading: false,
+		percentage: 0,
+		progressText: 'Loading...'
+	},
+	isResultsLoading: false, // 控制 results 的loading 状态
 }
 
 const mutations = {
@@ -641,8 +647,18 @@ const mutations = {
 		state.cachedBTBasicInfoData = obj
 	},
 	SET_LIST_LOADING(state, loading) {
-		console.log('触发了 store', loading)
 		state.isListLoading = loading
+	},
+	SET_SETUP_LOADING(state, obj) {
+		const { isSetupLoading, percentage, progressText } = obj
+		state.setUpLoadingSetting = {
+			isSetupLoading,
+			percentage,
+			progressText
+		}
+	},
+	SET_RESULTS_LOADING(state, loading) {
+		state.isResultsLoading = loading
 	}
 }
 

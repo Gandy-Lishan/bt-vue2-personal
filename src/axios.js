@@ -110,6 +110,11 @@ instance.interceptors.response.use(
 	function interceptor(err) {
 		console.log('报错了。。。。', err)
 		store.commit('form/SET_LIST_LOADING', false)
+		store.commit('form/SET_SETUP_LOADING', {
+			isSetupLoading: false,
+			percentage: 0,
+			progressText: ''
+		})
 		if (err?.response?.status == 410) {
 			const desc =
 				err.response.config.url.indexOf('ai_scanner') == -1
