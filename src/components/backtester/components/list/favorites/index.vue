@@ -1,4 +1,5 @@
 <template>
+<div>
   <Table
     :tableCol="tableCol"
     :currentPage="currentPage"
@@ -6,14 +7,18 @@
     :loading="isListLoading"
   >
   </Table>
+  <FLGbg></FLGbg>
+</div>
 </template>
 
 <script>
+import FLGbg from "@/components/common/FLSbg/FLGbackground.vue";
 import Table from "../table"
 export default {
   name: 'Favorites',
   components: {
-    Table
+    Table,
+    FLGbg
   },
   data() {
     return {

@@ -5,10 +5,23 @@ import {
 	seeParams,
 	copyBacktest,
 	deleteBacktest,
-	favoriteBacktest
+	favoriteBacktest,
+	getAllFavoriteList,
+	uploadS3,
+	runBacktest,
+	getStatus
 } from '@/service/service.js'
+import UUID from '@/tools/uuid.js'
+import cloneDeep from 'lodash/cloneDeep'
+import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
+
 
 export const CommonMethodsMixin = {
+	data() {
+		return {
+			favorite_array: []
+		}
+	},
 	methods: {
 		async viewBacktestResults(data) {
 			console.log('公共方法 viewBacktestResults', data)
@@ -102,6 +115,147 @@ export const CommonMethodsMixin = {
 			const res = await favoriteBacktest(data.id, this.$qs.stringify(params))
 			this.getDataList(null)
 		},
+		async findLastSignal() {
+      this.$store.commit('form/clearHashTable')
+      this.showFLSMASK()
+      this.$store.dispatch('states/set_isEditFinish_flag',true)
+      this.favorite_array = await this.getAllFavoriteData(1)
+			this.$store.commit('form/_SET_LASTSIGNAL_ARRAY', this.favorite_array.map(item => { return { name: item.name, content: item, state: 0, id: item.id } }))
+      let favorite_info = this.processingBacktest(this.favorite_array)
+      if (favorite_info == false) {
+        console.log('处理任务结束', this.$store.state.form._last_signal_array)
+        return // 处理任务结束
+      }
+      this.postRunbacktest(favorite_info)
+		},
+		async getAllFavoriteData(reqAfterPage) {
+      // lishan 用于获取所有的 favorite 列表 Request the specified data on the following page
+      const res = await getAllFavoriteList(reqAfterPage)
+      return res
+    },
+		processingBacktest(backtest_arr) {
+      if (backtest_arr.length <= 0) return false;
+
+      let backtest_info = backtest_arr.shift()
+      // // 跳过用户自定义时间的情况
+      // let backtest_info
+      // while (1) {
+      //   backtest_info = backtest_arr.pop()
+      //   if (backtest_info.backtest_period != 22) break
+      // }
+
+      return backtest_info
+
+    },
+		postRunbacktest(favorite) {
+      // lishan 做迭代 
+      this.findThisBTSignal(favorite)
+      // 轮询可用于等待上一个回测结束，也可定时刷新进度条进度
+      let interval = setInterval(async () => {
+        if (this.$store.getters.getIsEditFinishFlagState == false) {
+          clearInterval(interval)
+          this.$store.dispatch('states/set_isEditFinish_flag',true)
+
+          var favorite_info = this.processingBacktest(this.favorite_array)
+          if (favorite_info == false) {
+            this.$store.dispatch('states/set_isEditFinish_flag',false)
+            const array = this.$store.state.form._last_signal_array
+            let removedItems = [];
+            for (let i = array.length - 1; i >= 0; i--) {
+              if (array[i].state == 2 || array[i].state == 0) {
+                removedItems.push(array.splice(i, 1)[0]);
+              }
+            }
+            if (removedItems.length != 0) {
+              // 把所有 state 为 0 的设置成 2
+              removedItems = removedItems.map(item => {
+                return {
+                  ...item,
+                  state: 2
+                }
+              })
+              const new_last_signal_array = [...array, ...removedItems]
+              this.$store.commit('form/_SET_LASTSIGNAL_ARRAY', new_last_signal_array)
+            }
+            // 找出状态不为 2 的 并删除掉 list 中状态不为 2 的
+            const list = this.$store.state.form.hashTable
+            const filteredArray = list.filter(item => !removedItems.includes(item.id))
+            const requestList = []
+            for (let i = 0; i < filteredArray.length; i++) {
+              requestList.push(findLastSignalApi(filteredArray[i]))
+            }
+            // const res = await Promise.all(requestList)
+            let res = await Promise.allSettled(requestList)
+            // lishan 这个时候已经处理完，批量发请求给后台， 拿到 lastSignal
+            res = res.filter(item => item.status === 'fulfilled')
+            let lastSignalList = res.map((item) => {
+              return {
+                lastEntrySignalDate: item.value.data.lastEntrySignalDate,
+                lastExitSignalDate: item.value.data.lastExitSignalDate
+              }
+            })
+            //this.removeFLSMASK()
+
+          this.getFavoriteList()
+          this.$emit('refHistoryForm')
+            return // 处理任务结束
+          }
+          this.postRunbacktest(favorite_info)
+
+          // 是否添加一个成功列表
+        }
+      }, 1000) // 2秒查询一次
+    },
+		findThisBTSignal(backtestInfo) {
+			// 这里只需要执行两个请求，上传 S3 和直接运行当前的 backtest
+			const copyBacktestData = cloneDeep(backtestInfo)
+			copyBacktestData.currentdate = new Date().getTime()
+			backtestInfo.pk = UUID(JSON.stringify(copyBacktestData))
+			backtestInfo.capital_alloc = parseFloat(backtestInfo.capital_alloc)
+			backtestInfo.slippage = parseFloat(backtestInfo.slippage)
+			backtestInfo.win_rate = parseFloat(backtestInfo.win_rate)
+			backtestInfo.commission = parseFloat(backtestInfo.commission)
+			if(backtestInfo.has)
+			this.$store.dispatch('chart/set_span_period', {
+				start_date: backtestInfo.start_date.replace(/-/g, '') * 1000000000,
+				end_date: backtestInfo.end_date.replace(/-/g, '') * 1000000000
+			})
+			const selectedProps = [
+				'pk',
+				'benchmark',
+				'capital',
+				'capital_alloc',
+				'commission',
+				'create_date',
+				'direction',
+				'end_date',
+				'entry',
+				'exit',
+				'frequency',
+				'name',
+				'risk_control',
+				'slippage',
+				'start_date',
+				'strategy',
+				'symbol',
+				'win_rate',
+				'backtest_period',
+				'trade_price',
+				'exclude_oo',
+				'description'
+			]
+			let backtestParams = Object.assign(
+				{},
+				...selectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
+			)
+			this.reloadData(backtestInfo.indicator_layout, backtestInfo.frequency)
+			const callback = this.handleFLSCallback(backtestParams, backtestInfo)
+			CIQ.outputSignalsResult(backtestInfo.pk, callback)
+		},
+		showFLSMASK() {
+      const myFLSbg = document.querySelector('#myFLSbg')
+      myFLSbg.classList.add('activated')
+    },
 		restoreIndicatorLayoutView(data, freq, row, resData) {
 			// 跳转 result 去查看回测结果
 			if (this.$store.getters.getIsBacktestRunningFlagState) {
@@ -172,6 +326,119 @@ export const CommonMethodsMixin = {
 				}
 			}
 			this.$store.commit('form/setRestoreFreq', frequency)
-		}
+		},
+		handleFLSCallback(backtestParams, backtestInfo) {
+			const _this = this
+			delete backtestParams.pk
+			backtestParams = {
+				uuid: backtestInfo.pk,
+				...backtestParams
+			}
+			backtestParams = JSON.stringify(backtestParams)
+			const uuid = backtestInfo.pk
+			const backtestDataStr = _this.$qs.stringify(backtestInfo)
+			return async function() {
+				if(arguments[0] == 200) {
+					const S3DataStr = _this.$qs.stringify({
+						file_name: `${uuid}/${uuid}_backtest_params.json`,
+						file_data: backtestParams
+					})
+					await uploadS3(S3DataStr)
+					const res = await runBacktest(backtestDataStr)
+					if(res.status != 201) return
+					_this.$store.dispatch('states/set_isBacktestRunning_flag',true)
+					//After saving successfully, clear the backtestinfo back to the original state
+					_this.$store.commit('form/initialBacktestInfo')
+					// _this.$refs.historyChild.refreshHistory(res.data.id)
+					_this.pollingFLSBTRunResults(res.data.id)
+					_this.$store.dispatch('states/set_isMarkerShown_flag',false)
+					//clear old_ uuid
+					if (_this.$store.state.form.backtestInfo.old_uuid) _this.$store.commit('form/clearBacktestUuid')
+				}
+			}
+		},
+		pollingFLSBTRunResults(id) {
+			/*
+				根据 id 轮询回测结果
+				todo lishan
+			*/
+			console.log('进入轮询')
+			const _this = this
+			_this.clearInterval = clearPromiseInterval
+			let timer = setPromiseInterval(async () => {
+				const res = await getStatus(id)
+				// CIQ.nprogress.inc()
+				const status = res.data.status
+				const data = res.data
+				console.log('回测运行状态', status)
+				if(status == 2 || status == 3) {
+					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status)})
+					data.result = isJson(data.result) ? JSON.parse(data.result) : data.result
+				}
+			}, 1000)
+		},
+		handleCallback(backtestParams, backtestInfo) {
+			// todo lishan
+			const _this = this
+			// backtestParams.uuid = backtestParams.pk
+			delete backtestParams.pk
+			backtestParams = {
+				uuid: backtestInfo.pk,
+				...backtestParams
+			}
+			backtestParams = JSON.stringify(backtestParams)
+			const uuid = backtestInfo.pk
+			const backtestDataStr = _this.$qs.stringify(backtestInfo)
+			return async function() {
+				if(arguments[0] == 200) {
+					const S3DataStr = _this.$qs.stringify({
+						file_name: `${uuid}/${uuid}_backtest_params.json`,
+						file_data: backtestParams
+					})
+					_this.setSetUpLoadingSetting(true, 40, 'Uploading backtest data...')
+					await uploadS3(S3DataStr)
+					_this.setSetUpLoadingSetting(true, 45, 'Uploading backtest data...')
+					const res = await runBacktest(backtestDataStr)
+					if(res.status != 201) return
+					_this.$store.dispatch('states/set_isBacktestRunning_flag',true)
+					//After saving successfully, clear the backtestinfo back to the original state
+					_this.$store.commit('form/initialBacktestInfo')
+					// _this.$refs.historyChild.refreshHistory(res.data.id)
+					_this.setSetUpLoadingSetting(true, 50, 'Backtest data upload successful, backtest is in progress, please wait patiently for the results...')
+					_this.pollingBTRunResults(res.data.id)
+					_this.$store.dispatch('states/set_isMarkerShown_flag',false)
+					//clear old_ uuid
+					if (_this.$store.state.form.backtestInfo.old_uuid) _this.$store.commit('form/clearBacktestUuid')
+				}
+			}
+		},
+		pollingBTRunResults(id) {
+			/*
+			根据 id 轮询回测结果
+			todo lishan
+			*/
+			console.log('进入轮询')
+			const _this = this
+			_this.clearInterval = clearPromiseInterval
+			let percentage = 60
+			let timer = setPromiseInterval(async () => {
+				const res = await getStatus(id)
+				// CIQ.nprogress.inc()
+				if(percentage + 2 != 100) percentage += 2; // 在每次轮询中递增 2
+				_this.setSetUpLoadingSetting(true, percentage, 'Backtest data upload successful, backtest is in progress, please wait patiently for the results...')
+				const status = res.data.status
+				const data = res.data
+				console.log('回测运行状态', status)
+				if(status == 2 || status == 3) {
+					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status); _this.setSetUpLoadingSetting(false, 100, 'Backtest completed successfully, navigate to the Results page to view the backtest results....')})
+					data.result = isJson(data.result) ? JSON.parse(data.result) : data.result
+					// 存入缓存数据，因为路由跳转时表单数据会丢失
+					_this.$store.dispatch('form/cached_BT_basic_info_data', data)
+					_this.viewBacktestResults(data)
+					// 回测跑完不一定要调用这个去展示 set up form， 因为刚跑完这个 set up form 肯定是有数据的
+					// await _this.displaySetUpForm(data)
+				}
+			}, 1000)
+		},
 	}
 }
