@@ -415,69 +415,6 @@ export default {
 			const callback = this.handleCallback(backtestParams, backtestInfo)
 			CIQ.outputSignalsResult(backtestInfo.pk, callback)
 		},
-		handleCallback(backtestParams, backtestInfo) {
-			// todo lishan
-			const _this = this
-			// backtestParams.uuid = backtestParams.pk
-			delete backtestParams.pk
-			backtestParams = {
-				uuid: backtestInfo.pk,
-				...backtestParams
-			}
-			backtestParams = JSON.stringify(backtestParams)
-			const uuid = backtestInfo.pk
-			const backtestDataStr = _this.$qs.stringify(backtestInfo)
-			return async function() {
-				if(arguments[0] == 200) {
-					const S3DataStr = _this.$qs.stringify({
-						file_name: `${uuid}/${uuid}_backtest_params.json`,
-						file_data: backtestParams
-					})
-					_this.setSetUpLoadingSetting(true, 40, 'Uploading backtest data...')
-					await uploadS3(S3DataStr)
-					_this.setSetUpLoadingSetting(true, 45, 'Uploading backtest data...')
-					const res = await runBacktest(backtestDataStr)
-					if(res.status != 201) return
-					_this.$store.dispatch('states/set_isBacktestRunning_flag',true)
-					//After saving successfully, clear the backtestinfo back to the original state
-					_this.$store.commit('form/initialBacktestInfo')
-					// _this.$refs.historyChild.refreshHistory(res.data.id)
-					_this.setSetUpLoadingSetting(true, 50, 'Backtest data upload successful, backtest is in progress, please wait patiently for the results...')
-					_this.pollingBTRunResults(res.data.id)
-					_this.$store.dispatch('states/set_isMarkerShown_flag',false)
-					//clear old_ uuid
-					if (_this.$store.state.form.backtestInfo.old_uuid) _this.$store.commit('form/clearBacktestUuid')
-				}
-			}
-		},
-		pollingBTRunResults(id) {
-			/*
-			根据 id 轮询回测结果
-			todo lishan
-			*/
-			console.log('进入轮询')
-			const _this = this
-			_this.clearInterval = clearPromiseInterval
-			let percentage = 60
-			let timer = setPromiseInterval(async () => {
-				const res = await getStatus(id)
-				// CIQ.nprogress.inc()
-				if(percentage + 2 != 100) percentage += 2; // 在每次轮询中递增 2
-				_this.setSetUpLoadingSetting(true, percentage, 'Backtest data upload successful, backtest is in progress, please wait patiently for the results...')
-				const status = res.data.status
-				const data = res.data
-				console.log('回测运行状态', status)
-				if(status == 2 || status == 3) {
-					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status); _this.setSetUpLoadingSetting(false, 100, 'Backtest completed successfully, navigate to the Results page to view the backtest results....')})
-					data.result = isJson(data.result) ? JSON.parse(data.result) : data.result
-					// 存入缓存数据，因为路由跳转时表单数据会丢失
-					_this.$store.dispatch('form/cached_BT_basic_info_data', data)
-					_this.viewBacktestResults(data)
-					// 回测跑完不一定要调用这个去展示 set up form， 因为刚跑完这个 set up form 肯定是有数据的
-					// await _this.displaySetUpForm(data)
-				}
-			}, 1000)
-		},
 		async displaySetUpForm(data) {
 			/* 填充和展示 Set Up 表单的数据 */
 			let _this = this

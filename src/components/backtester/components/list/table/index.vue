@@ -6,7 +6,7 @@
 			class="fls-btn"
 			>run all backtest</el-button
 		>
-		<el-button v-if="currentPage == 'Favorites'" @click="_findLastSignal" class="fls-btn" size="mini">Find Last Signal</el-button>
+		<el-button v-if="currentPage == 'Favorites'" @click="findLastSignal" class="fls-btn" size="mini">Find Last Signal</el-button>
 		<div class="searchBox">
 			<el-input
 				class="search"
@@ -385,7 +385,7 @@ export default {
 		}
 	},
 	created() {
-		this.getDataList()
+		this.getDataList(null)
 	},
 	methods: {
 		async getDataList(orderby) {
@@ -427,6 +427,7 @@ export default {
 					this.queryInfo.total = res.data.count
 				}
 			} catch(error) {
+				console.log('报错了', error)
         if(error.response.status === 404) {
           let page = this.queryInfo.page
           const newPage = page != 1 ? page - 1 : 1

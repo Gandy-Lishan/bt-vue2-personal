@@ -32,7 +32,7 @@ export function setRouterPermission(router) {
 
 		Cookies.set(
 			'sentimen_session',
-			'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3Fagvvi8jor+gaZaFZdBZwr8dzDEnzXTHSvpE+r12+VM25ToycuPQkt97utVpuFtWo1MCeEyON1QPkFA6suPxEVy8Whaj01x4oo9U/3dfNy9RY+PPLBh0IReWlHKWiDziortiuJXZZ1xi0lq9R6vfCbfzwdn0M5UK2SWWDAoPkFHOsNCY7h8ZakkGtYk91wYY5nDaTF3b5UNg8relsZQNRs91clVnYsxmpFZi3NdLYTvjLBX3w2gk4F+aCKGALjHEjm9lkuSwK+nG44FW6fl7zWw84w/AQJYljtGzq4u84hYoqMPF353jCRCELdC9D/sn4lUhAp61FKCynYbthLq6Bbf4NCQAh9+xvvctTMFcqAnpJga+GfTHJCqyPdnmYvbKiTQ=='
+			'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FamVv8Nu+OjDeax6/BPemIRtLvxe/ttdcR7ljhLshELegopMNz+YDb73aumgbPJjL/N9dHtRcLmiQd4obvi/ZBgpyj6lX3zBFTA1oLIF7vZgAKOAsuoRHWZg/asNtL34ZUNswnMAUy6RQmkXiJ4OJLqXEs5kLemATonJ2JQf58AXOkQsWfVDfi9glN+sw1OPlHwandKE6qHzWxlibvTrUJsc2kxd2+VDYPK3pbGUDUbPdXJVZ2LMZqRWYtzXS2E74ywV98NoJOBfmgihgC4xxI5toN6zORyAhX1wt5EUPbBETOMPwECWJY7Rs6uLvOIWKKjDxd+d4wkQhC3QvQ/7J+JVIQKetRSgsp2G7YS6ugW3+ncSCcdQoCfcFYziACDCJ8Q=='
 		)
 		if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
 			//set 10 sec as default,However, some time-consuming requests are processed separately
