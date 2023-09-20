@@ -414,16 +414,31 @@ export default {
 						if(isJson(item.entry_description)) {
 							item.entry_description = JSON.parse(item.entry_description)
 						}else if(typeof item.entry_description === 'string') {
-							item.entry_description = [item.entry_description]
+							const entryObj = {
+								commentDes: item.entry_description,
+								rocCond: {
+									newCondition: 3,
+									conditionPeriod: 5
+								}
+							}
+							item.entry_description = [entryObj]
 						}
 						if(isJson(item.exit_description)) {
 							item.exit_description = JSON.parse(item.exit_description)
-						}else if(typeof item.entry_description === 'string'){
-							item.exit_description = [item.exit_description]
+						}else if(typeof item.exit_description === 'string'){
+							const exitObj = {
+								commentDes: item.exit_description,
+								rocCond: {
+									newCondition: 3,
+									conditionPeriod: 5
+								}
+							}
+							item.exit_description = [exitObj]
 						}
 						return item
 					})
 					this.dataList = data
+					console.log('data', data)
 					this.queryInfo.total = res.data.count
 				}
 			} catch(error) {

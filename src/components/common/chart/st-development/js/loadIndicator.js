@@ -110,26 +110,31 @@
          if(CIQ.store.state.form.backtestSymbol){
              CIQ.symbol = CIQ.store.state.form.backtestSymbol
           }
-         CIQ.stxx.loadChart({ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, async function () {
-             // callback - your code to be executed after the chart is loaded
-             console.log("loadChart加载完毕",CIQ.stxx.layout.studies);
-             CIQ.stxx.resizeChart();
-             CIQ.stxx.draw();
-             var csvContent = CIQ.exportEx()
-             console.log("csvContent created Success");
-             var promise = 200
-             try{
-                 var S3DataStr = qs.stringify({file_name:pk + '/' + pk + '_backtest_data.csv',file_data:csvContent})
-                 var data = await uploadS3(S3DataStr)
-                 console.log("Upload csv Success",data);
-                 promise = 200	
-             }catch(error){
-                 console.log("Error", error);
-                 promise = 500
-             }
- 
-             callback(promise)
-         })     
+         await new Promise((resolve) => {
+            CIQ.stxx.loadChart({ symbol: CIQ.symbol, startDate: new Date(parseInt(process.env.VUE_APP_START_DATE)), endDate: new Date(), indicator: indicatorsList }, async function () {
+              // callback - your code to be executed after the chart is loaded
+              console.log("loadChart加载完毕", CIQ.stxx.layout.studies);
+              CIQ.stxx.resizeChart();
+              CIQ.stxx.draw();
+              var csvContent = CIQ.exportEx();
+              console.log("csvContent created Success");
+              var promise = 200
+              try {
+                var S3DataStr = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data.csv', file_data: csvContent })
+                var data = await uploadS3(S3DataStr)
+                console.log("Upload csv Success", data);
+                promise = 200
+              } catch (error) {
+                console.log("Error", error);
+                promise = 500
+              }
+          
+              await callback(promise);
+          
+              resolve(); // 表示回调执行完成
+            });
+          });
+            
    
  }
  function uploadS3(S3DataStr) {

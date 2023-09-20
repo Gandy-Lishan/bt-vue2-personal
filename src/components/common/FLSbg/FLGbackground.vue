@@ -213,7 +213,7 @@ export default {
       this.approTime = 0
 
       this.$store.commit('form/SET_LASTSIGNAL_ARRAY',[])
-      this.$store.commit('form/_SET_LASTSIGNAL_ARRAY',[])
+      this.$store.commit('form/SET_RUNALL_BACKTEST_ARRAY',[])
     },
   }
 }

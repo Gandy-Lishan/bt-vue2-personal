@@ -1,12 +1,13 @@
 import { isJson } from '@/tools/isJson'
 import { CIQ } from '@/components/common/chart/st-development/js'
+import { timestampToTime } from '@/tools/formatDate'
 import {
 	getBacktestName,
 	seeParams,
 	copyBacktest,
 	deleteBacktest,
 	favoriteBacktest,
-	getAllFavoriteList,
+	getAllHistoryList,
 	uploadS3,
 	runBacktest,
 	getStatus,
@@ -45,7 +46,7 @@ export const CommonMethodsMixin = {
 			const currentPage = this.currentPage
 			/* 如果 currentPage 是 History 或者 Favorites,则传入 old_uuid，否则不传*/
 			if (['History', 'Favorites'].includes(currentPage)) {
-				data.old_uuid = id
+				data.old_uuid = data.id
 			} else{
 				if (data.hasOwnProperty('old_uuid')) delete data.old_uuid
 			}
@@ -124,32 +125,28 @@ export const CommonMethodsMixin = {
 			this.getDataList(null)
 		},
 		async rerunBacktest(data) {
-
+			console.log(data)
+			await this.rerunThisBacktest(data)
+			// rerun 后重新请求列表
+			await this.getDataList(null)
 		},
-		async findLastSignal() {
-      // this.$store.commit('form/clearHashTable')
+		async runAllBacktest() {
       this.showFLSMASK()
-      // this.$store.dispatch('states/set_isEditFinish_flag',true)
-      this.favorite_array = await this.getAllFavoriteData(1)
-			this.$store.commit('form/_SET_LASTSIGNAL_ARRAY', this.favorite_array.map(item => { return { name: item.name, state: 0 } }))
-      // let favorite_info = this.processingBacktest(this.favorite_array)
+      this.favorite_array = await this.getAllHistoryListData(1)
+      this.$store.commit('form/SET_RUNALL_BACKTEST_ARRAY', this.favorite_array.map(item => { return { name: item.name, content: item, state: 0, id: item.id } }))
 			// 对数组做批量的上传 S3 和运行回测就行了
-			await this.loopAllFavorites()
-			// const favorite_info = this.favorite_array.shift()
-      // if (!favorite_info) {
-      //   console.log('处理任务结束', this.$store.state.form._last_signal_array)
-      //   return // 处理任务结束
-      // }
-      // this.postRunbacktest(favorite_info)
+			await this.loopAllHistories()
 		},
-		async loopAllFavorites() {
+		async loopAllHistories() {
 			for (let i = 0; i < this.favorite_array.length; i++) {
-				await this.findThisBTSignal(this.favorite_array[i])
+				await this.rerunThisBacktest(this.favorite_array[i])
 			}
+			// 循环结束之后请求一次列表
+			await this.getDataList(null)
 		},
-		async getAllFavoriteData(reqAfterPage) {
+		async getAllHistoryListData(reqAfterPage) {
       // lishan 用于获取所有的 favorite 列表 Request the specified data on the following page
-      const res = await getAllFavoriteList(reqAfterPage)
+      const res = await getAllHistoryList(reqAfterPage)
       return res
     },
 		processingBacktest(backtest_arr) {
@@ -195,7 +192,7 @@ export const CommonMethodsMixin = {
                 }
               })
               const new_last_signal_array = [...array, ...removedItems]
-              this.$store.commit('form/_SET_LASTSIGNAL_ARRAY', new_last_signal_array)
+              this.$store.commit('form/SET_RUNALL_BACKTEST_ARRAY', new_last_signal_array)
             }
             // 找出状态不为 2 的 并删除掉 list 中状态不为 2 的
             const list = this.$store.state.form.hashTable
@@ -226,7 +223,7 @@ export const CommonMethodsMixin = {
         }
       }, 1000) // 2秒查询一次
     },
-		async findThisBTSignal(backtestInfo) {
+		async rerunThisBacktest(backtestInfo) {
 			// 这里只需要执行两个请求，上传 S3 和直接运行当前的 backtest
 			const copyBacktestData = cloneDeep(backtestInfo)
 			copyBacktestData.currentdate = new Date().getTime()
@@ -236,6 +233,25 @@ export const CommonMethodsMixin = {
 			backtestInfo.win_rate = parseFloat(backtestInfo.win_rate)
 			backtestInfo.commission = parseFloat(backtestInfo.commission)
 			backtestInfo.old_uuid = backtestInfo.id
+			backtestInfo.favorites = backtestInfo.hasOwnProperty('favorites') ? backtestInfo.favorites : false
+			const entry_description = backtestInfo.entry_description
+			const exit_description = backtestInfo.exit_description
+			backtestInfo.entry_description = Array.isArray(entry_description) ? JSON.stringify(entry_description) : entry_description
+			backtestInfo.exit_description = Array.isArray(exit_description) ? JSON.stringify(exit_description) : exit_description
+			// end_date 改成最新的，于此同时改变 start_date
+			const end_date = timestampToTime(new Date())
+			const backtest_period = backtestInfo.backtest_period
+			if(backtest_period <= 20) {
+				const str = end_date.split('-')
+				str[0] = Number(str[0]) - Number(backtest_period) + ''
+				const start_date = str.join('-')
+				backtestInfo.start_date = start_date
+			}else if(backtest_period == 21) {
+				backtestInfo.start_date = '1800-10-01'
+			}
+			backtestInfo.end_date = end_date
+			// 运行回测之前需要把 status 变成 0
+			backtestInfo.status = 0
 			if(backtestInfo.hasOwnProperty('total_trader')) delete backtestInfo.total_trader
 			if(backtestInfo.hasOwnProperty('total_return')) delete backtestInfo.total_return
 			this.$store.dispatch('chart/set_span_period', {
@@ -266,7 +282,25 @@ export const CommonMethodsMixin = {
 				'exclude_oo',
 				'description'
 			]
-			const backtestInfoSelectedProps = ['entry_description', 'exit_description', 'description', 'frequency', 'entry', 'exit', 'name', 'symbol', 'benchmark', 'strategy', 'capital', 'capital_alloc', 'commission', 'win_rate', 'slippage', 'start_date', 'end_date', 'risk_control', 'report_url', 'user_tag', 'backtest_period', 'trade_price', 'exclude_oo', 'id', 'user', 'create_date', 'favorites', 'indicator_layout', 'result', 'seconds', 'url_data', 'total_trader', 'total_return', 'last_entry_signal_date', 'last_exit_signal_date', 'pk', 'old_uuid']
+			const backtestInfoSelectedProps = [
+				'entry_description', 
+				'exit_description', 
+				'description', 
+				'direction',
+				'frequency', 
+				'backtest_period', 
+				'entry', 'exit', 
+				'name', 'symbol', 
+				'benchmark', 'strategy', 
+				'capital', 'capital_alloc', 
+				'commission', 'win_rate', 
+				'slippage', 'start_date', 
+				'end_date', 'risk_control', 
+				'report_url', 'user_tag', 
+				'trade_price', 'exclude_oo', 
+				'indicator_layout',
+				'favorites',
+				'pk', 'old_uuid']
 			let backtestParams = Object.assign(
 				{},
 				...selectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
@@ -276,17 +310,9 @@ export const CommonMethodsMixin = {
 				...backtestInfoSelectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
 			)
 			this.reloadData(backtestInfo.indicator_layout, backtestInfo.frequency)
-			const callback = this.handleFLSCallback(backtestParams, selectedBacktestInfo)
+			const callback = this.handleRunAllCallback(backtestParams, selectedBacktestInfo)
 			await CIQ.outputSignalsResult(backtestInfo.pk, callback)
 			// await this.executeOutputSignalsResult(backtestInfo.pk, callback);
-		},
-		async executeOutputSignalsResult(pk, callback) {
-			return new Promise((resolve, reject) => {
-				CIQ.outputSignalsResult(pk, async function() {
-					await callback(); // 等待回调执行
-					resolve(); // 完成 Promise
-				});
-			});
 		},
 		showFLSMASK() {
       const myFLSbg = document.querySelector('#myFLSbg')
@@ -363,7 +389,7 @@ export const CommonMethodsMixin = {
 			}
 			this.$store.commit('form/setRestoreFreq', frequency)
 		},
-		handleFLSCallback(backtestParams, backtestInfo) {
+		handleRunAllCallback(backtestParams, backtestInfo) {
 			const _this = this
 			delete backtestParams.pk
 			backtestParams = {
@@ -386,39 +412,20 @@ export const CommonMethodsMixin = {
 					//After saving successfully, clear the backtestinfo back to the original state
 					_this.$store.commit('form/initialBacktestInfo')
 					// _this.$refs.historyChild.refreshHistory(res.data.id)
-					_this.pollingFLSBTRunResults(res.data)
+					const pollingRes = await _this.pollingRunAllBTRunResults(res.data)
+					console.log('pollingRes', pollingRes)
 					_this.$store.dispatch('states/set_isMarkerShown_flag',false)
 					//clear old_ uuid
 					if (_this.$store.state.form.backtestInfo.old_uuid) _this.$store.commit('form/clearBacktestUuid')
 				}
 			}
 		},
-		async pollingFLSBTRunResults(data) {
+		async pollingRunAllBTRunResults(data) {
 			/*
 				根据 id 轮询回测结果
 				todo lishan
 			*/
-			// const {id, name} = data
-			console.log('进入轮询')
 			const _this = this
-			// _this.clearInterval = clearPromiseInterval
-			// let timer = await setPromiseInterval(async () => {
-			// 	const res = await getStatus(id)
-			// 	// CIQ.nprogress.inc()
-			// 	const status = res.data.status
-			// 	const response = res.data
-			// 	if(status == 2 || status == 3) {
-			// 		await clearPromiseInterval(timer)
-			// 		// FindLastSignal过程中代表一个项目的运行结束,因为只是run all backtest不需要显示chartiq和还原表单
-			// 		_this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
-			// 		_this.$store.state.form._last_signal_array.map(item=>{
-			// 			if(item.name == name){
-			// 				item.state = 1
-			// 			}
-			// 		});
-			// 		console.log('回测跑完了 状态码是', status, response)
-			// 	}
-			// }, 1000)
 			return new Promise(async (resolve, reject) => {
 				const { id, name } = data;
 					console.log('进入轮询');
@@ -427,17 +434,18 @@ export const CommonMethodsMixin = {
 						const res = await getStatus(id);
 						// CIQ.nprogress.inc()
 						const status = res.data.status;
+						console.log('回测状态', status)
 						const response = res.data;
 						if (status == 2 || status == 3) {
-							await clearPromiseInterval(timer); // 使用 await 等待清除计时器
 							console.log('结束轮询');
 							_this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
-							_this.$store.state.form._last_signal_array.map(item=>{
+							_this.$store.state.form.run_all_backtest_array.map(item=>{
 								if(item.name == name){
 									item.state = 1
 								}
 							});
-							resolve(); // 解决 Promise 表示轮询完成
+							resolve('fullfiled'); // 解决 Promise 表示轮询完成
+							await clearPromiseInterval(timer); // 使用 await 等待清除计时器
 						}
 					}, 1000);
 			})
