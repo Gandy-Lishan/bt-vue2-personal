@@ -1042,8 +1042,9 @@ export default {
         if(!backtestPeriod) {this.caculateBacktestPeriod()}
         this.bd.end_date = timestampToTime(new Date())
         if(this.bd.backtest_period <= 20 || this.bd.backtest_period == 22) {
-          // end_date 改成最新的
-          this.bd.end_date.split('-')[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
+          // start_date 也要改
+          const str = this.bd.end_date.split('-')
+          str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
           this.bd.start_date = str.join('-')
         }else if(this.bd.backtest_period == '21') {
           this.bd.start_date = ''
