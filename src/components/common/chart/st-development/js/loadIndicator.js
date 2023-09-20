@@ -110,7 +110,7 @@
          if(CIQ.store.state.form.backtestSymbol){
              CIQ.symbol = CIQ.store.state.form.backtestSymbol
           }
-         CIQ.stxx.loadChart(	{ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, async function () {
+         CIQ.stxx.loadChart({ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, async function () {
              // callback - your code to be executed after the chart is loaded
              console.log("loadChart加载完毕",CIQ.stxx.layout.studies);
              CIQ.stxx.resizeChart();
@@ -132,7 +132,6 @@
          })     
    
  }
- 
  function uploadS3(S3DataStr) {
      const url = '/dev/dev/upload/'
      return new Promise((resolve,reject)=>{

@@ -9,7 +9,8 @@ import {
 	getAllFavoriteList,
 	uploadS3,
 	runBacktest,
-	getStatus
+	getStatus,
+	findLastSignalApi
 } from '@/service/service.js'
 import UUID from '@/tools/uuid.js'
 import cloneDeep from 'lodash/cloneDeep'
@@ -41,6 +42,13 @@ export const CommonMethodsMixin = {
 			this.restoreIndicatorLayoutView(parsedData, data.frequency, data, data)
 		},
 		editBacktest(data) {
+			const currentPage = this.currentPage
+			/* 如果 currentPage 是 History 或者 Favorites,则传入 old_uuid，否则不传*/
+			if (['History', 'Favorites'].includes(currentPage)) {
+				data.old_uuid = id
+			} else{
+				if (data.hasOwnProperty('old_uuid')) delete data.old_uuid
+			}
 			this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', data)
 			//  Restore indicator layout
 			this.$store.commit('form/getBacktestSymbol', data.symbol)
@@ -115,18 +123,29 @@ export const CommonMethodsMixin = {
 			const res = await favoriteBacktest(data.id, this.$qs.stringify(params))
 			this.getDataList(null)
 		},
+		async rerunBacktest(data) {
+
+		},
 		async findLastSignal() {
-      this.$store.commit('form/clearHashTable')
+      // this.$store.commit('form/clearHashTable')
       this.showFLSMASK()
-      this.$store.dispatch('states/set_isEditFinish_flag',true)
+      // this.$store.dispatch('states/set_isEditFinish_flag',true)
       this.favorite_array = await this.getAllFavoriteData(1)
-			this.$store.commit('form/_SET_LASTSIGNAL_ARRAY', this.favorite_array.map(item => { return { name: item.name, content: item, state: 0, id: item.id } }))
-      let favorite_info = this.processingBacktest(this.favorite_array)
-      if (favorite_info == false) {
-        console.log('处理任务结束', this.$store.state.form._last_signal_array)
-        return // 处理任务结束
-      }
-      this.postRunbacktest(favorite_info)
+			this.$store.commit('form/_SET_LASTSIGNAL_ARRAY', this.favorite_array.map(item => { return { name: item.name, state: 0 } }))
+      // let favorite_info = this.processingBacktest(this.favorite_array)
+			// 对数组做批量的上传 S3 和运行回测就行了
+			await this.loopAllFavorites()
+			// const favorite_info = this.favorite_array.shift()
+      // if (!favorite_info) {
+      //   console.log('处理任务结束', this.$store.state.form._last_signal_array)
+      //   return // 处理任务结束
+      // }
+      // this.postRunbacktest(favorite_info)
+		},
+		async loopAllFavorites() {
+			for (let i = 0; i < this.favorite_array.length; i++) {
+				await this.findThisBTSignal(this.favorite_array[i])
+			}
 		},
 		async getAllFavoriteData(reqAfterPage) {
       // lishan 用于获取所有的 favorite 列表 Request the specified data on the following page
@@ -148,17 +167,18 @@ export const CommonMethodsMixin = {
 
     },
 		postRunbacktest(favorite) {
+			// 继续上传数据并且运行回测
       // lishan 做迭代 
       this.findThisBTSignal(favorite)
       // 轮询可用于等待上一个回测结束，也可定时刷新进度条进度
       let interval = setInterval(async () => {
         if (this.$store.getters.getIsEditFinishFlagState == false) {
           clearInterval(interval)
-          this.$store.dispatch('states/set_isEditFinish_flag',true)
+          // this.$store.dispatch('states/set_isEditFinish_flag',true)
 
           var favorite_info = this.processingBacktest(this.favorite_array)
           if (favorite_info == false) {
-            this.$store.dispatch('states/set_isEditFinish_flag',false)
+            // this.$store.dispatch('states/set_isEditFinish_flag',false)
             const array = this.$store.state.form._last_signal_array
             let removedItems = [];
             for (let i = array.length - 1; i >= 0; i--) {
@@ -194,10 +214,10 @@ export const CommonMethodsMixin = {
                 lastExitSignalDate: item.value.data.lastExitSignalDate
               }
             })
+						console.log('lastSignalList', lastSignalList)
             //this.removeFLSMASK()
 
-          this.getFavoriteList()
-          this.$emit('refHistoryForm')
+          this.getDataList(null)
             return // 处理任务结束
           }
           this.postRunbacktest(favorite_info)
@@ -206,7 +226,7 @@ export const CommonMethodsMixin = {
         }
       }, 1000) // 2秒查询一次
     },
-		findThisBTSignal(backtestInfo) {
+		async findThisBTSignal(backtestInfo) {
 			// 这里只需要执行两个请求，上传 S3 和直接运行当前的 backtest
 			const copyBacktestData = cloneDeep(backtestInfo)
 			copyBacktestData.currentdate = new Date().getTime()
@@ -215,7 +235,9 @@ export const CommonMethodsMixin = {
 			backtestInfo.slippage = parseFloat(backtestInfo.slippage)
 			backtestInfo.win_rate = parseFloat(backtestInfo.win_rate)
 			backtestInfo.commission = parseFloat(backtestInfo.commission)
-			if(backtestInfo.has)
+			backtestInfo.old_uuid = backtestInfo.id
+			if(backtestInfo.hasOwnProperty('total_trader')) delete backtestInfo.total_trader
+			if(backtestInfo.hasOwnProperty('total_return')) delete backtestInfo.total_return
 			this.$store.dispatch('chart/set_span_period', {
 				start_date: backtestInfo.start_date.replace(/-/g, '') * 1000000000,
 				end_date: backtestInfo.end_date.replace(/-/g, '') * 1000000000
@@ -244,13 +266,27 @@ export const CommonMethodsMixin = {
 				'exclude_oo',
 				'description'
 			]
+			const backtestInfoSelectedProps = ['entry_description', 'exit_description', 'description', 'frequency', 'entry', 'exit', 'name', 'symbol', 'benchmark', 'strategy', 'capital', 'capital_alloc', 'commission', 'win_rate', 'slippage', 'start_date', 'end_date', 'risk_control', 'report_url', 'user_tag', 'backtest_period', 'trade_price', 'exclude_oo', 'id', 'user', 'create_date', 'favorites', 'indicator_layout', 'result', 'seconds', 'url_data', 'total_trader', 'total_return', 'last_entry_signal_date', 'last_exit_signal_date', 'pk', 'old_uuid']
 			let backtestParams = Object.assign(
 				{},
 				...selectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
 			)
+			let selectedBacktestInfo = Object.assign(
+				{},
+				...backtestInfoSelectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
+			)
 			this.reloadData(backtestInfo.indicator_layout, backtestInfo.frequency)
-			const callback = this.handleFLSCallback(backtestParams, backtestInfo)
-			CIQ.outputSignalsResult(backtestInfo.pk, callback)
+			const callback = this.handleFLSCallback(backtestParams, selectedBacktestInfo)
+			await CIQ.outputSignalsResult(backtestInfo.pk, callback)
+			// await this.executeOutputSignalsResult(backtestInfo.pk, callback);
+		},
+		async executeOutputSignalsResult(pk, callback) {
+			return new Promise((resolve, reject) => {
+				CIQ.outputSignalsResult(pk, async function() {
+					await callback(); // 等待回调执行
+					resolve(); // 完成 Promise
+				});
+			});
 		},
 		showFLSMASK() {
       const myFLSbg = document.querySelector('#myFLSbg')
@@ -350,32 +386,61 @@ export const CommonMethodsMixin = {
 					//After saving successfully, clear the backtestinfo back to the original state
 					_this.$store.commit('form/initialBacktestInfo')
 					// _this.$refs.historyChild.refreshHistory(res.data.id)
-					_this.pollingFLSBTRunResults(res.data.id)
+					_this.pollingFLSBTRunResults(res.data)
 					_this.$store.dispatch('states/set_isMarkerShown_flag',false)
 					//clear old_ uuid
 					if (_this.$store.state.form.backtestInfo.old_uuid) _this.$store.commit('form/clearBacktestUuid')
 				}
 			}
 		},
-		pollingFLSBTRunResults(id) {
+		async pollingFLSBTRunResults(data) {
 			/*
 				根据 id 轮询回测结果
 				todo lishan
 			*/
+			// const {id, name} = data
 			console.log('进入轮询')
 			const _this = this
-			_this.clearInterval = clearPromiseInterval
-			let timer = setPromiseInterval(async () => {
-				const res = await getStatus(id)
-				// CIQ.nprogress.inc()
-				const status = res.data.status
-				const data = res.data
-				console.log('回测运行状态', status)
-				if(status == 2 || status == 3) {
-					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status)})
-					data.result = isJson(data.result) ? JSON.parse(data.result) : data.result
-				}
-			}, 1000)
+			// _this.clearInterval = clearPromiseInterval
+			// let timer = await setPromiseInterval(async () => {
+			// 	const res = await getStatus(id)
+			// 	// CIQ.nprogress.inc()
+			// 	const status = res.data.status
+			// 	const response = res.data
+			// 	if(status == 2 || status == 3) {
+			// 		await clearPromiseInterval(timer)
+			// 		// FindLastSignal过程中代表一个项目的运行结束,因为只是run all backtest不需要显示chartiq和还原表单
+			// 		_this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
+			// 		_this.$store.state.form._last_signal_array.map(item=>{
+			// 			if(item.name == name){
+			// 				item.state = 1
+			// 			}
+			// 		});
+			// 		console.log('回测跑完了 状态码是', status, response)
+			// 	}
+			// }, 1000)
+			return new Promise(async (resolve, reject) => {
+				const { id, name } = data;
+					console.log('进入轮询');
+					this.clearInterval = clearPromiseInterval;
+					let timer = await setPromiseInterval(async () => {
+						const res = await getStatus(id);
+						// CIQ.nprogress.inc()
+						const status = res.data.status;
+						const response = res.data;
+						if (status == 2 || status == 3) {
+							await clearPromiseInterval(timer); // 使用 await 等待清除计时器
+							console.log('结束轮询');
+							_this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
+							_this.$store.state.form._last_signal_array.map(item=>{
+								if(item.name == name){
+									item.state = 1
+								}
+							});
+							resolve(); // 解决 Promise 表示轮询完成
+						}
+					}, 1000);
+			})
 		},
 		handleCallback(backtestParams, backtestInfo) {
 			// todo lishan
