@@ -1041,7 +1041,8 @@ export default {
         backtestPeriod = editData.backtest_period
         if(!backtestPeriod) {this.caculateBacktestPeriod()}
         this.bd.end_date = timestampToTime(new Date())
-        if(this.bd.backtest_period <= 20 || this.bd.backtest_period == 22) {
+        // 如果是 custom 不改变 start_date, 如果是 all history, start_date 为空, 其他的都要改 start_date
+        if(this.bd.backtest_period <= 20) {
           // start_date 也要改
           const str = this.bd.end_date.split('-')
           str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''

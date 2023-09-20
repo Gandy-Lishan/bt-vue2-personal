@@ -75,7 +75,7 @@ const state = {
 	backtestResult: [], //form
 	tradePrice: 0, //form
 	last_signal_array: [], //form
-	_last_signal_array: [], //form
+	run_all_backtest_array: [], //form
 	hashTable: [], //form
 	frequencyArray: new Map(), //form
 	rowDataForDisplay: {}, // 用于保存BT运行结束后的数据,不包含 entry 和 exit
@@ -604,8 +604,8 @@ const mutations = {
 	SET_LASTSIGNAL_ARRAY: (state, val) => {
 		state.last_signal_array = val
 	},
-	_SET_LASTSIGNAL_ARRAY: (state, val) => {
-		state._last_signal_array = val
+	SET_RUNALL_BACKTEST_ARRAY: (state, val) => {
+		state.run_all_backtest_array = val
 	},
 	setHashTable(state, obj) {
 		const value = {

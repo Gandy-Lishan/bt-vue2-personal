@@ -1,7 +1,7 @@
 const getters = {
 	// form
 	getAllSignalArray: state => state.form.last_signal_array,
-	getLastSignalArray: state => state.form._last_signal_array,
+	getLastSignalArray: state => state.form.run_all_backtest_array,
 	getBacktestResult: state =>  state.form.backtestResult,
 	exitFreqGetter: state => state.form.exitFrequency,
 	getterBacktestInfo: state => state.form.backtestInfo,
