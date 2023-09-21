@@ -364,6 +364,8 @@ export default {
 			backtestInfo.exit = JSON.stringify(exitSaveObj.exit)
 			backtestInfo.entry_description = JSON.stringify(entrySaveObj.entry_description)
 			backtestInfo.exit_description = JSON.stringify(exitSaveObj.exit_description)
+			// 判断是否有 direction 没有设置默认值
+			backtestInfo.direction = backtestInfo.direction ? backtestInfo.direction : 'Long'
 
 			const copyBacktestData = cloneDeep(backtestInfo)
 			copyBacktestData.currentdate = new Date().getTime()

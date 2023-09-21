@@ -8,7 +8,7 @@ const state = {
 	isMarkerShown_flag:false,
 	isEditFinish_flag:false,
     // a status before symbol is loaded as a study
-	beforeCalculateNewConditions: false, 
+	beforeCalculateNewConditions: false,
 }
 
 const mutations = {
