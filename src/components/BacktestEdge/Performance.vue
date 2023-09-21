@@ -673,7 +673,6 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import jutils from 'jutils-src'
 import { seeReport, setCustomTIM, getCustomTIM } from '@/service/service'
-// import sortByRule from "@/tools/sortTIM";
 const XLSX = require('xlsx');
 
 export default {

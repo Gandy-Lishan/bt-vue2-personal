@@ -10,7 +10,7 @@
 <script>
 import ResForm from "./resultForm"
 import Performance from "./performance"
-import {isJson} from '@/tools/isJson'
+import {isJson} from '@/utils'
 
 export default {
   name: 'Results',

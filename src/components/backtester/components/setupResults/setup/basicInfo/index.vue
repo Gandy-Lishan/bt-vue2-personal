@@ -495,8 +495,7 @@
 </template>
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { timestampToTime } from '@/tools/formatDate'
-import {isJson} from '@/tools/isJson'
+import { timestampToTime } from '@/utils'
 import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule, createTPSLValidate, createPositiveIntegerValidate } from '@/utils/formValidate'
 import { mapGetters } from "vuex"
 import {

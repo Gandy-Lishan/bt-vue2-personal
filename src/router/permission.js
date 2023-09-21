@@ -7,7 +7,7 @@ import {
 	getIndexsList
 } from '@/service/service'
 import { getCurDate } from '@/service/ai'
-import getQueryVariable from '@/tools/getQueryVariable'
+import {getQueryVariable} from '@/utils'
 import store from '../store'
 import { uniqueObjectArray } from '@/utils/formValidate'
 

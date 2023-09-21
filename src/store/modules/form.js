@@ -1,4 +1,4 @@
-import { timestampToTime } from '@/tools/formatDate.js'
+import { timestampToTime } from '@/utils'
 
 const state = {
 	restoreFreq: '', //form

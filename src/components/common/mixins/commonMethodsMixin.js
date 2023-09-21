@@ -1,6 +1,5 @@
-import { isJson } from '@/tools/isJson'
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { timestampToTime } from '@/tools/formatDate'
+import { timestampToTime, isJson } from '@/utils'
 import {
 	getBacktestName,
 	seeParams,
@@ -14,7 +13,7 @@ import {
 	getStatus,
 	findLastSignalApi
 } from '@/service/service.js'
-import UUID from '@/tools/uuid.js'
+import UUID from '@/utils/cryptoUtils/uuid'
 import cloneDeep from 'lodash/cloneDeep'
 import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
 

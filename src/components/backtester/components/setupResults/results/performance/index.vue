@@ -287,7 +287,6 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import jutils from 'jutils-src'
 import { seeReport, setCustomTIM, getCustomTIM } from '@/service/service'
-// import sortByRule from "@/tools/sortTIM";
 import Summary from './summary'
 import Trades from './trades'
 const XLSX = require('xlsx');
