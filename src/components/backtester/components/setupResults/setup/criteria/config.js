@@ -1,4 +1,4 @@
-import capitalizeFirstLetter from "@/tools/capitalizeFirstLetter"
+import {capitalizeFirstLetter} from "@/utils"
 // 传入不同的 criteria 生成不同的配置
 export function generateConfig(criteria) {
 	const capFirstL = capitalizeFirstLetter(criteria)

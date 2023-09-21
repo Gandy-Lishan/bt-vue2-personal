@@ -1,4 +1,4 @@
-import toast from '@/tools/toast.js'
+import {Toast} from '@/utils'
 
 export const copy = {
   bind(el, { value }) {
@@ -6,7 +6,7 @@ export const copy = {
     el.handler = () => {
       if (!el.$value) {
         // 值为空的时候，给出提示
-        toast('No copy content', 1000)
+        Toast('No copy content', 1000)
         return
       }
       // 动态创建 textarea 标签
@@ -24,7 +24,7 @@ export const copy = {
       textarea.select()
       const result = document.execCommand('Copy')
       if (result) {
-        toast('Copy successfully', 1000)
+        Toast('Copy successfully', 1000)
       }
       document.body.removeChild(textarea)
     }

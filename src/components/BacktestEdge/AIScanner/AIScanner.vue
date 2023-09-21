@@ -80,7 +80,7 @@
 <script>
 const throttle = require('lodash/throttle')
 import { getAIPick } from '@/service/ai'
-import { timestampToTime } from '@/tools/formatDate.js'
+import { timestampToTime } from '@/utils'
 
 import Table from "./Table.vue";
 

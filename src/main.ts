@@ -9,7 +9,6 @@ import router from './router/index'
 import ElementUI from 'element-ui'
 import qs from 'querystring'
 // import 'element-ui/lib/theme-chalk/index.css'
-import en from './tools/en.js'
 
 // import global css rule
 import './assets/css/global.css'

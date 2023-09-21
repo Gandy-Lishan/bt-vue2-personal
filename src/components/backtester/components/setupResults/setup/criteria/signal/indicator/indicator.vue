@@ -265,7 +265,6 @@
 import SparkMD5 from 'spark-md5'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import {
-  getIndicatorsList,
   csvFileDelete,
   csvFileRead,
   getPairData,
@@ -273,7 +272,7 @@ import {
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
-import { compareArrays } from '@/tools/compareArrays'
+import {compareArrays} from '@/utils'
 import moment from 'moment'
 import { mapMutations } from 'vuex'
 export default {

@@ -358,7 +358,7 @@ import {
   getFavoriteList,
 	getAnalystList
 } from '@/service/service.js'
-import {isJson} from '@/tools/isJson'
+import {isJson} from '@/utils'
 import { throttle } from 'lodash'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 

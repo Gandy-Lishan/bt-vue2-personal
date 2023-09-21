@@ -64,13 +64,11 @@ import BasicInfo from './basicInfo'
 import Criteria from './criteria'
 import { generateConfig } from './criteria/config'
 import cloneDeep from 'lodash/cloneDeep'
-import capitalizeFirstLetter from '@/tools/capitalizeFirstLetter'
-import {isJson} from '@/tools/isJson'
-import SignalCode from '@/tools/codeTool.js'
+import {capitalizeFirstLetter, isJson} from "@/utils"
+import SignalCode from '@/utils/cryptoUtils/codeTool'
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { runBacktest, getStatus, uploadS3, seeParams} from '@/service/service'
-import UUID from '@/tools/uuid.js'
-import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
+import { seeParams} from '@/service/service'
+import UUID from '@/utils/cryptoUtils/uuid'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 
 

@@ -404,7 +404,6 @@ import cci from './signal/technical/Cci-like'
 import macd from './signal/technical/Macd-like.vue'
 import ma from './signal/technical/Ma.vue'
 import indicator from './signal/indicator/indicator'
-import SignalCode from '@/tools/codeTool.js'
 import bollingerBandsLike from './signal/technical/Bollinger-Bands-like.vue'
 import ehlerFisherTransformLike from './signal/technical/Ehler-Fisher-Transform-like.vue'
 import stochasticMomentumIndexLike from './signal/technical/Stochastic-Momentum-Index-like.vue'
@@ -416,8 +415,7 @@ import trailingStopLike from './signal/technical/Trailing-Stops-like.vue'
 import { eventBus } from "./EventBus/Bus.ts";
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapMutations } from "vuex"
-import {isJson} from '@/tools/isJson'
-import searchKeys from '@/tools/searchKeys'
+import {searchKeys, isJson} from '@/utils'
 export default {
   name: 'Criteria',
   inheritAttrs: false,
