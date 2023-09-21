@@ -155,7 +155,6 @@ export default {
     },
     handleAllSignalArrayChange: {
       handler(newVal) {
-        
         let arrayLenth = newVal.length
         let progressNum = 0
         newVal.map(item=>{ 
@@ -198,7 +197,7 @@ export default {
       this.$router.go(0)
     },
     viewSignal: function() {
-      this.$router.push('/backtester/list/favorites')
+      // this.$router.push('/backtester/list/favorites')
       const myFLSbg = document.querySelector('#myFLSbg')
       myFLSbg.classList.remove('activated')
 

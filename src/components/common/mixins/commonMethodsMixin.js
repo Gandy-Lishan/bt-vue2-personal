@@ -8,6 +8,7 @@ import {
 	deleteBacktest,
 	favoriteBacktest,
 	getAllHistoryList,
+	getAllFavoriteList,
 	uploadS3,
 	runBacktest,
 	getStatus,
@@ -26,13 +27,15 @@ export const CommonMethodsMixin = {
 	},
 	methods: {
 		async viewBacktestResults(data) {
-			console.log('公共方法 viewBacktestResults', data)
+			const currentPage = this.currentPage
+			/* 如果 currentPage 是 History 或者 Favorites,则传入 old_uuid，否则不传*/
+			if (['History', 'Favorites'].includes(currentPage)) {
+				data.old_uuid = data.id
+			} else{
+				if (data.hasOwnProperty('old_uuid')) delete data.old_uuid
+			}
 			this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', data)
 			// 在发送组件中进行路由跳转并传递参数
-			// this.$router.push({
-			//   name: 'SetUpResults',
-			//   params: { data: JSON.stringify(data), usedFor: 'viewResults' },
-			// });
 			this.$store.commit('form/getBacktestSymbol', data.symbol)
 			this.$store.dispatch('states/set_isMarkerShown_flag', false)
 			// indicator_layout肯定有，所以这里不用判断res.data.indicator_layout没有的情况
@@ -126,16 +129,103 @@ export const CommonMethodsMixin = {
 		},
 		async rerunBacktest(data) {
 			console.log(data)
-			await this.rerunThisBacktest(data)
-			// rerun 后重新请求列表
+			// 打开遮罩层，改变 loadingTest
+			this.$store.commit('form/SET_LIST_LOADING', true)
+			this.loadTest = 'Re-running Backtest in Progress...'
+			await this.rerunThisBacktest(cloneDeep(data))
+			// rerun 后重新请求列表 我并不需要把所有列表都更新
 			await this.getDataList(null)
 		},
+		async runOrFindAndLoop(actionType) {
+			this.showFLSMASK()
+			if (actionType === 'signal') {
+				this.$store.commit('form/clearHashTable');
+				this.favorite_array = await this.getAllFavoriteData(1);
+				this.$store.commit('form/SET_LASTSIGNAL_ARRAY', this.favorite_array.map(item => { return { name: item.name, content: item, state: 0, id: item.id } }));
+				await this.loopAllFavorites();
+			}else if (actionType === 'backtest') {
+				this.favorite_array = await this.getAllHistoryListData(1);
+				this.$store.commit('form/SET_RUNALL_BACKTEST_ARRAY', this.favorite_array.map(item => { return { name: item.name, content: item, state: 0, id: item.id } }));
+				await this.loopAllHistories();
+			}
+		},
+		async findLastSignal() {
+			// lishan 批量给列表调用
+			// this.$store.commit('form/clearHashTable')
+      // this.showFLSMASK()
+			// this.favorite_array = await this.getAllFavoriteData(1)
+			// this.$store.commit('form/SET_LASTSIGNAL_ARRAY', this.favorite_array.map(item => { return { name: item.name, content: item, state: 0, id: item.id } }))
+			// await this.loopAllFavorites()
+			await this.runOrFindAndLoop('signal')
+		},
+		async loopAllFavorites() {
+			for (let i = 0; i < this.favorite_array.length; i++) {
+				const item = this.favorite_array[i]
+				this.reloadData(item.indicator_layout, item.frequency)
+				await CIQ.addIndicatorsFromBacktest(() => {
+					this.uploadCSVWhileFLS(item)
+				})
+			}
+			await this.findAllFavoritesSignal()
+			// 循环结束之后请求一次列表
+			await this.getDataList(null)
+		},
+
+		uploadCSVWhileFLS(row) {
+      // lishan 在这里保存数据到 vuex favorite 中要用
+      this.$store.dispatch('chart/set_span_period',{
+        start_date:
+          row.start_date.replace(/-/g, '') * 1000000000,
+        end_date: row.end_date.replace(/-/g, '') * 1000000000
+      })
+
+      const content = CIQ.exportEx()
+			const csvObj = {
+				id: row.id,
+				csv: content,
+				entry: row.entry,
+				exit: row.exit
+			}
+			this.$store.commit('form/setHashTable', csvObj)
+    },
+		async findAllFavoritesSignal() {
+			const list = this.$store.state.form.hashTable;
+			const requestMap = {}; // 用于将请求和 uuid 关联起来的对象
+		
+			for (let i = 0; i < list.length; i++) {
+				const uuid = list[i].uuid;
+				const request = findLastSignalApi(list[i]);
+				requestMap[uuid] = request; // 将请求与 uuid 关联起来
+			}
+		
+			let res = await Promise.allSettled(Object.values(requestMap)); // 等待所有请求完成
+		
+			// 获取成功的请求及其对应的 uuid
+			const successRes = [];
+			for (const uuid in requestMap) {
+				if (res[Object.keys(requestMap).indexOf(uuid)].status === 'fulfilled') {
+					successRes.push({ uuid, result: res[Object.keys(requestMap).indexOf(uuid)].value });
+				}
+			}
+			const last_signal_array = this.$store.state.form.last_signal_array
+			const successUUID = successRes.map(item => item.uuid)
+			// 遍历 last_signal_array，并根据成功的 uuid 来更新 status
+			last_signal_array.forEach(item => {
+				if (successUUID.includes(item.id)) {
+					item.state = 1
+				}else{
+					item.state = 2
+				}
+			})
+			this.$store.commit('form/SET_LASTSIGNAL_ARRAY', last_signal_array)
+		},		
 		async runAllBacktest() {
-      this.showFLSMASK()
-      this.favorite_array = await this.getAllHistoryListData(1)
-      this.$store.commit('form/SET_RUNALL_BACKTEST_ARRAY', this.favorite_array.map(item => { return { name: item.name, content: item, state: 0, id: item.id } }))
-			// 对数组做批量的上传 S3 和运行回测就行了
-			await this.loopAllHistories()
+      // this.showFLSMASK()
+      // this.favorite_array = await this.getAllHistoryListData(1)
+      // this.$store.commit('form/SET_RUNALL_BACKTEST_ARRAY', this.favorite_array.map(item => { return { name: item.name, content: item, state: 0, id: item.id } }))
+			// // 对数组做批量的上传 S3 和运行回测就行了
+			// await this.loopAllHistories()
+			await this.runOrFindAndLoop('backtest')
 		},
 		async loopAllHistories() {
 			for (let i = 0; i < this.favorite_array.length; i++) {
@@ -145,94 +235,22 @@ export const CommonMethodsMixin = {
 			await this.getDataList(null)
 		},
 		async getAllHistoryListData(reqAfterPage) {
-      // lishan 用于获取所有的 favorite 列表 Request the specified data on the following page
       const res = await getAllHistoryList(reqAfterPage)
       return res
     },
-		processingBacktest(backtest_arr) {
-      if (backtest_arr.length <= 0) return false;
-
-      let backtest_info = backtest_arr.shift()
-      // // 跳过用户自定义时间的情况
-      // let backtest_info
-      // while (1) {
-      //   backtest_info = backtest_arr.pop()
-      //   if (backtest_info.backtest_period != 22) break
-      // }
-
-      return backtest_info
-
-    },
-		postRunbacktest(favorite) {
-			// 继续上传数据并且运行回测
-      // lishan 做迭代 
-      this.findThisBTSignal(favorite)
-      // 轮询可用于等待上一个回测结束，也可定时刷新进度条进度
-      let interval = setInterval(async () => {
-        if (this.$store.getters.getIsEditFinishFlagState == false) {
-          clearInterval(interval)
-          // this.$store.dispatch('states/set_isEditFinish_flag',true)
-
-          var favorite_info = this.processingBacktest(this.favorite_array)
-          if (favorite_info == false) {
-            // this.$store.dispatch('states/set_isEditFinish_flag',false)
-            const array = this.$store.state.form._last_signal_array
-            let removedItems = [];
-            for (let i = array.length - 1; i >= 0; i--) {
-              if (array[i].state == 2 || array[i].state == 0) {
-                removedItems.push(array.splice(i, 1)[0]);
-              }
-            }
-            if (removedItems.length != 0) {
-              // 把所有 state 为 0 的设置成 2
-              removedItems = removedItems.map(item => {
-                return {
-                  ...item,
-                  state: 2
-                }
-              })
-              const new_last_signal_array = [...array, ...removedItems]
-              this.$store.commit('form/SET_RUNALL_BACKTEST_ARRAY', new_last_signal_array)
-            }
-            // 找出状态不为 2 的 并删除掉 list 中状态不为 2 的
-            const list = this.$store.state.form.hashTable
-            const filteredArray = list.filter(item => !removedItems.includes(item.id))
-            const requestList = []
-            for (let i = 0; i < filteredArray.length; i++) {
-              requestList.push(findLastSignalApi(filteredArray[i]))
-            }
-            // const res = await Promise.all(requestList)
-            let res = await Promise.allSettled(requestList)
-            // lishan 这个时候已经处理完，批量发请求给后台， 拿到 lastSignal
-            res = res.filter(item => item.status === 'fulfilled')
-            let lastSignalList = res.map((item) => {
-              return {
-                lastEntrySignalDate: item.value.data.lastEntrySignalDate,
-                lastExitSignalDate: item.value.data.lastExitSignalDate
-              }
-            })
-						console.log('lastSignalList', lastSignalList)
-            //this.removeFLSMASK()
-
-          this.getDataList(null)
-            return // 处理任务结束
-          }
-          this.postRunbacktest(favorite_info)
-
-          // 是否添加一个成功列表
-        }
-      }, 1000) // 2秒查询一次
+		async getAllFavoriteData(reqAfterPage) {
+      const res = await getAllFavoriteList(reqAfterPage)
+      return res
     },
 		async rerunThisBacktest(backtestInfo) {
 			// 这里只需要执行两个请求，上传 S3 和直接运行当前的 backtest
-			const copyBacktestData = cloneDeep(backtestInfo)
-			copyBacktestData.currentdate = new Date().getTime()
-			backtestInfo.pk = UUID(JSON.stringify(copyBacktestData))
 			backtestInfo.capital_alloc = parseFloat(backtestInfo.capital_alloc)
 			backtestInfo.slippage = parseFloat(backtestInfo.slippage)
 			backtestInfo.win_rate = parseFloat(backtestInfo.win_rate)
 			backtestInfo.commission = parseFloat(backtestInfo.commission)
 			backtestInfo.old_uuid = backtestInfo.id
+			// 判断是否有 direction 没有设置默认值
+			backtestInfo.direction = backtestInfo.direction ? backtestInfo.direction : 'Long'
 			backtestInfo.favorites = backtestInfo.hasOwnProperty('favorites') ? backtestInfo.favorites : false
 			const entry_description = backtestInfo.entry_description
 			const exit_description = backtestInfo.exit_description
@@ -258,6 +276,9 @@ export const CommonMethodsMixin = {
 				start_date: backtestInfo.start_date.replace(/-/g, '') * 1000000000,
 				end_date: backtestInfo.end_date.replace(/-/g, '') * 1000000000
 			})
+			const copyBacktestData = cloneDeep(backtestInfo)
+			copyBacktestData.currentdate = new Date().getTime()
+			backtestInfo.pk = UUID(JSON.stringify(copyBacktestData))
 			const selectedProps = [
 				'pk',
 				'benchmark',
@@ -300,7 +321,7 @@ export const CommonMethodsMixin = {
 				'trade_price', 'exclude_oo', 
 				'indicator_layout',
 				'favorites',
-				'pk', 'old_uuid']
+				'pk', 'old_uuid', 'results']
 			let backtestParams = Object.assign(
 				{},
 				...selectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
@@ -416,7 +437,7 @@ export const CommonMethodsMixin = {
 					console.log('pollingRes', pollingRes)
 					_this.$store.dispatch('states/set_isMarkerShown_flag',false)
 					//clear old_ uuid
-					if (_this.$store.state.form.backtestInfo.old_uuid) _this.$store.commit('form/clearBacktestUuid')
+					// if (_this.$store.state.form.backtestInfo.old_uuid) _this.$store.commit('form/clearBacktestUuid')
 				}
 			}
 		},
@@ -429,13 +450,13 @@ export const CommonMethodsMixin = {
 			return new Promise(async (resolve, reject) => {
 				const { id, name } = data;
 					console.log('进入轮询');
-					this.clearInterval = clearPromiseInterval;
+					_this.clearInterval = clearPromiseInterval;
 					let timer = await setPromiseInterval(async () => {
 						const res = await getStatus(id);
 						// CIQ.nprogress.inc()
 						const status = res.data.status;
 						console.log('回测状态', status)
-						const response = res.data;
+						const response = res.data
 						if (status == 2 || status == 3) {
 							console.log('结束轮询');
 							_this.$store.dispatch('states/set_isRunAllSignalProcessing_flag',false)
@@ -444,6 +465,8 @@ export const CommonMethodsMixin = {
 									item.state = 1
 								}
 							});
+							// 把数据存起来，用于局部更新 rerun
+							_this.$store.commit('states/CACHE_RERUN_DATA', response)
 							resolve('fullfiled'); // 解决 Promise 表示轮询完成
 							await clearPromiseInterval(timer); // 使用 await 等待清除计时器
 						}

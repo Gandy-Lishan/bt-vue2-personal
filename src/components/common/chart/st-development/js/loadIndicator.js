@@ -54,15 +54,17 @@
          if(CIQ.store.state.form.backtestSymbol){
              CIQ.symbol = CIQ.store.state.form.backtestSymbol
          }
- 
-         CIQ.stxx.loadChart({ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, function () {
-             // callback - your code to be executed after the chart is loaded
-             //CIQ.hideCover()
-             //CIQ.exportEx()
-             //CIQ.stxx.layout.rangeSlider = true;
-             //CIQ.stxx.changeOccurred("layout");
- 
-             callback()
+         await new Promise((resolve) => {
+            CIQ.stxx.loadChart({ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, function () {
+                // callback - your code to be executed after the chart is loaded
+                //CIQ.hideCover()
+                //CIQ.exportEx()
+                //CIQ.stxx.layout.rangeSlider = true;
+                //CIQ.stxx.changeOccurred("layout");
+    
+                callback()
+                resolve()
+            })
          })
              
  }
