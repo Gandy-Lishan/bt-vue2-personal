@@ -334,7 +334,7 @@ export const CommonMethodsMixin = {
 			const callback = this.handleRunAllCallback(backtestParams, selectedBacktestInfo)
 			// symbol ohlcv 要做特殊处理
 			const _this = this
-			CIQ.addIndicatorsFromBacktest(() => {
+			await CIQ.addIndicatorsFromBacktest(() => {
 				// 展示 result 时要用
 				_this.$store.commit('form/getRunBacktestData', backtestInfo)
 			})
@@ -344,7 +344,6 @@ export const CommonMethodsMixin = {
 			// await this.executeOutputSignalsResult(backtestInfo.pk, callback);
 		},
 		async loopCalculateNewConditions(backtestInfo) {
-			debugger
 			let {signals: entrySignals} = this.decodeCriteria(backtestInfo, 'entry')
 			let {signals: exitSignals} = this.decodeCriteria(backtestInfo, 'exit')
 			// 循环计算出显示在 chartIQ 的数据,只有当 analysis 是 'Symbol' 'Sentiment' 'User' 才计算
@@ -359,7 +358,6 @@ export const CommonMethodsMixin = {
 			}
 		},
 		calculateNewConditions(signals, criteria, panelIndex) {
-			debugger
 			const isROCLike = signals.isROCLike
 			const indicator = signals.indicator
 			const newCondition = signals.newCondition
@@ -428,7 +426,6 @@ export const CommonMethodsMixin = {
 			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
 		},		
 		decodeCriteria(backtestInfo, criteriaStr) {
-			debugger
 			let signalCode = new SignalCode()
 			let criteria = isJson(backtestInfo[criteriaStr]) ? JSON.parse(backtestInfo[criteriaStr]) : backtestInfo[criteriaStr]
 			// 删除第一个 cond 元素
