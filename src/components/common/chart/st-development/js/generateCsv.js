@@ -667,7 +667,7 @@ let __st_js_generateCsv_ = (_exports) => {
              return finalData
          }
      }
- 
+     debugger
      // find if this study is a normal sentiment indicator
      if(CIQ.findSentiIndicator(null,sd.type) || CIQ.isUserIndicator(sd.type)){
          

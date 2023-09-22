@@ -139,6 +139,27 @@
             
    
  }
+
+ CIQ.uploadCSVJSON = async function(pk,callback) {
+    // lishan 仅仅用于上传 csv json 文件
+    CIQ.stxx.resizeChart();
+    CIQ.stxx.draw();
+    let csvContent = CIQ.exportEx();
+    console.log("csvContent created Success");
+    let promise = 200
+    try {
+      let S3DataStr = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data.csv', file_data: csvContent })
+      let data = await uploadS3(S3DataStr)
+      console.log("Upload csv Success", data);
+      promise = 200
+    } catch (error) {
+      console.log("Error", error);
+      promise = 500
+    }
+
+    await callback(promise);
+ }
+
  function uploadS3(S3DataStr) {
      const url = '/dev/dev/upload/'
      return new Promise((resolve,reject)=>{
