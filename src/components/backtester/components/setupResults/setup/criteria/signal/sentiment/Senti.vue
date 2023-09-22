@@ -580,6 +580,7 @@ export default {
       let indicator_url_with_ma = ''
       if (indicator_url) {
         // 如果当前indicator自带ma,indicator_url改为ma_url
+        console.log('CIQ.stxx.layout.studies', CIQ.stxx.layout.studies)
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
           if (
             CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url &&

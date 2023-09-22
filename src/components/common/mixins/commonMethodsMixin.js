@@ -14,6 +14,7 @@ import {
 	findLastSignalApi
 } from '@/service/service.js'
 import UUID from '@/utils/cryptoUtils/uuid'
+import SignalCode from '@/utils/cryptoUtils/codeTool'
 import cloneDeep from 'lodash/cloneDeep'
 import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
 
@@ -331,8 +332,116 @@ export const CommonMethodsMixin = {
 			)
 			this.reloadData(backtestInfo.indicator_layout, backtestInfo.frequency)
 			const callback = this.handleRunAllCallback(backtestParams, selectedBacktestInfo)
-			await CIQ.outputSignalsResult(backtestInfo.pk, callback)
+			// symbol ohlcv 要做特殊处理
+			const _this = this
+			CIQ.addIndicatorsFromBacktest(() => {
+				// 展示 result 时要用
+				_this.$store.commit('form/getRunBacktestData', backtestInfo)
+			})
+			await this.loopCalculateNewConditions(backtestInfo)
+			await CIQ.uploadCSVJSON(backtestInfo.pk, callback)
+			// await CIQ.outputSignalsResult(backtestInfo.pk, callback)
 			// await this.executeOutputSignalsResult(backtestInfo.pk, callback);
+		},
+		async loopCalculateNewConditions(backtestInfo) {
+			debugger
+			let {signals: entrySignals} = this.decodeCriteria(backtestInfo, 'entry')
+			let {signals: exitSignals} = this.decodeCriteria(backtestInfo, 'exit')
+			// 循环计算出显示在 chartIQ 的数据,只有当 analysis 是 'Symbol' 'Sentiment' 'User' 才计算
+			exitSignals = exitSignals.filter(item => item) // 过滤出 exit 的 only use risk control
+			if(entrySignals.length !== 0) entrySignals = entrySignals.filter(item => ['Symbol', 'Sentiment', 'User'].includes(item.analysis))
+			if(exitSignals.length !== 0) exitSignals = exitSignals.filter(item => ['Symbol', 'Sentiment', 'User'].includes(item.analysis))
+			for (let index = 0; index < entrySignals.length; index++) {
+				await this.calculateNewConditions(entrySignals[index], 'entry', index)
+			}
+			for (let index = 0; index < exitSignals.length; index++) {
+				await this.calculateNewConditions(exitSignals[index], 'exit', index)
+			}
+		},
+		calculateNewConditions(signals, criteria, panelIndex) {
+			debugger
+			const isROCLike = signals.isROCLike
+			const indicator = signals.indicator
+			const newCondition = signals.newCondition
+			const conditionPeriod = signals.conditionPeriod
+			const analysis = signals.analysis
+		
+			if (!isROCLike) return
+	
+			const conditionMap = new Map([
+				[5, { name: 'Rate Of Change', abbr: 'ROC' }],
+				[6, { name: '% of Previous Range', abbr: 'OPR' }],
+				[7, { name: 'MA Ratio', abbr: 'MA' }]
+			]);
+			let indicator_url = ''
+      let indicator_url_with_ma = ''
+			let fieldName = ''
+			if(analysis == 'Sentiment') {
+				let signal = CIQ.findSentiIndicator(indicator)
+				indicator_url = signal.url
+			}
+			console.log('CIQ.stxx.layout.studies', CIQ.stxx.layout.studies)
+			if (indicator_url && analysis === 'Sentiment') {
+				for (const studyInstanceName in CIQ.stxx.layout.studies) {
+					if (
+						CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == criteria &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.index == panelIndex
+					) {
+						if (CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
+							indicator_url_with_ma = Object.keys(CIQ.stxx.layout.studies[studyInstanceName].outputMap)[0];
+							break
+						}
+					}
+				}
+			} else if (indicator && analysis === 'Symbol') {
+				const symbolCond = CIQ.findSymbolIndicator(indicator, null)
+				fieldName = symbolCond ? symbolCond.field : ''
+			}
+		
+			for (const studyInstanceName in CIQ.stxx.layout.studies) {
+				const f1 = CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url_with_ma ||
+					(CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url &&
+						CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA')
+				const f2 =   (CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName &&
+					CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA')
+				const fc = CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == criteria &&
+				CIQ.stxx.layout.studies[studyInstanceName].parameters.index == panelIndex
+				if ((f1 || f2) && fc) {
+					CIQ.Studies.removeStudy(
+						CIQ.stxx,
+						CIQ.stxx.layout.studies[studyInstanceName]
+					)
+				}
+			}
+		
+			const sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+				display: conditionMap.get(newCondition).name,
+				Field: fieldName || (indicator_url_with_ma ? indicator_url_with_ma : indicator_url),
+				condition: conditionMap.get(newCondition).abbr,
+				period: conditionPeriod
+			}, null, {
+				criteria: criteria,
+				index: panelIndex
+			})
+		
+			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+		},		
+		decodeCriteria(backtestInfo, criteriaStr) {
+			debugger
+			let signalCode = new SignalCode()
+			let criteria = isJson(backtestInfo[criteriaStr]) ? JSON.parse(backtestInfo[criteriaStr]) : backtestInfo[criteriaStr]
+			// 删除第一个 cond 元素
+			if(criteria.cond.length > 1) criteria.cond.shift()
+			criteria.cond =  criteria.cond.map(item => {
+				if(item) return {...item, isROCLike: 5 <= item.newCondition && item.newCondition <= 7}
+				return null
+			})
+			criteria.signals = criteria.signals.map((item,index) => {
+				if(item.code == 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999' && criteriaStr == 'exit') return null
+				return {...signalCode.decode(item.code), ...criteria.cond[index]}
+			})
+			return criteria
 		},
 		showFLSMASK() {
       const myFLSbg = document.querySelector('#myFLSbg')

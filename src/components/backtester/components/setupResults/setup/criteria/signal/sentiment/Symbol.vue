@@ -303,7 +303,6 @@ export default {
         let symbolCond = CIQ.findSymbolIndicator(this.symVal,null)
         const fieldName = symbolCond?symbolCond.field:''
 
-        
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
           if (
             CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName &&

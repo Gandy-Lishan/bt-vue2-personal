@@ -1466,7 +1466,6 @@ CIQ.Studies.addStudy = function (
 	study
 ) {
 	var libraryEntry = study ? study : CIQ.Studies.studyLibrary[type];
-
 	if (!parameters) parameters = {};
 	if (libraryEntry) {
 		if (libraryEntry.inputs) {
