@@ -83,6 +83,7 @@ const state = {
 	isListLoading: false, // 控制 list 的loading 状态
 	setUpLoadingSetting: { // 控制 setup 的loading 状态
 		isSetupLoading: false,
+		showProgress: false,
 		percentage: 0,
 		progressText: 'Loading...'
 	},
@@ -650,9 +651,10 @@ const mutations = {
 		state.isListLoading = loading
 	},
 	SET_SETUP_LOADING(state, obj) {
-		const { isSetupLoading, percentage, progressText } = obj
+		const { isSetupLoading, percentage, progressText, showProgress } = obj
 		state.setUpLoadingSetting = {
 			isSetupLoading,
+			showProgress,
 			percentage,
 			progressText
 		}

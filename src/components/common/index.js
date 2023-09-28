@@ -4,6 +4,7 @@ import Footer from "./footer/Footer"
 import BTChart from "./chart/index"
 import FloatBtns from "./floatBtns" 
 import Tabs from "./tabs" 
+import LoadingOverlay from "./progress/LoadingOverlay" 
 
 export {
   Header,
@@ -11,5 +12,6 @@ export {
   Footer,
   BTChart,
   FloatBtns,
-  Tabs
+  Tabs,
+  LoadingOverlay
 }
