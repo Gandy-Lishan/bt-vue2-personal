@@ -50,12 +50,15 @@
 			>
 			<!-- <el-checkbox style="margin-left:10px" v-model="test" label="download test csv" border></el-checkbox> -->
 		</div></div>
-		<div v-show="setUpLoadingSetting.isSetupLoading">
-			<div class="progress-container">
-			<el-progress :text-inside="true" :stroke-width="26" :percentage="setUpLoadingSetting.percentage" :color="customColorMethod"></el-progress>
-			<span class="progress-text"><i class="el-icon-loading"></i>{{setUpLoadingSetting.progressText}}</span>
-		</div>
-		</div>
+		<LoadingOverlay
+			v-show="setUpLoadingSetting.isSetupLoading"
+			:isLoading="setUpLoadingSetting.isSetupLoading"
+			:showProgress="setUpLoadingSetting.showProgress"
+			:percentage="setUpLoadingSetting.percentage"
+			:progressText="setUpLoadingSetting.progressText"
+			:customColorMethod="customColorMethod"
+		>
+		</LoadingOverlay>
 	</div>
 </template>
 
@@ -67,6 +70,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import {capitalizeFirstLetter, isJson} from "@/utils"
 import SignalCode from '@/utils/cryptoUtils/codeTool'
 import { CIQ } from '@/components/common/chart/st-development/js'
+import { LoadingOverlay } from "@/components/common"
 import { seeParams} from '@/service/service'
 import UUID from '@/utils/cryptoUtils/uuid'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
@@ -76,7 +80,8 @@ export default {
 	name: 'SetUpResults',
 	components: {
 		BasicInfo,
-		Criteria
+		Criteria,
+		LoadingOverlay
 	},
 	mixins: [CommonMethodsMixin],
 	data() {
@@ -87,6 +92,7 @@ export default {
 	beforeRouteEnter(to, _, next) {
 	if (to.path === '/backtester/sr/setup') {
     next(async _this => {
+			_this.setSetUpLoadingSetting(true, false, 0, 'Loading...')
       if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
         console.log('说明是路由跳转过来携带参数的，用于展示表单数据')
         // 说明是路由跳转过来携带参数的
@@ -106,6 +112,7 @@ export default {
           await _this.displaySetUpForm(dataToUse)
         }
       }
+			_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')
     });
   } else {
     next();
@@ -145,34 +152,35 @@ export default {
 		clearForm() {
 			this.$refs['basicInfo'].clearForm()
 		},
-		setSetUpLoadingSetting(isSetupLoading, percentage, progressText) {
+		setSetUpLoadingSetting(isSetupLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_SETUP_LOADING', {
 				isSetupLoading,
+				showProgress,
 				percentage,
 				progressText
 			})
 		},
 		async runBacktest() {
 			const _this = this
-			_this.setSetUpLoadingSetting(true, 5, 'Saving backtest basic information...')
+			_this.setSetUpLoadingSetting(true, true, 5, 'Saving backtest basic information...')
 			_this.$refs['basicInfo'].saveData()
-			_this.setSetUpLoadingSetting(true, 10, 'Saving backtest entry and exit criteria...')
+			_this.setSetUpLoadingSetting(true, true, 10, 'Saving backtest entry and exit criteria...')
 			const entryErr = await _this.saveCriteriaData('entryChild')
 			const exitErr = await _this.saveCriteriaData('exitChild')
 			console.log('entryErr', entryErr, 'exitErr', exitErr)
-			if (!entryErr || !exitErr) {_this.setSetUpLoadingSetting(false, 0, 'Error saving backtest entry and exit criteria...');return}
+			if (!entryErr || !exitErr) {_this.setSetUpLoadingSetting(false, false, 0, 'Error saving backtest entry and exit criteria...');return}
 			// 处理上传到后端的数据
 			let entrySaveObj = _this.handleSavedData('entry')
 			let exitSaveObj = _this.handleSavedData('exit')
 			console.log('entrySaveObj', entrySaveObj)
 			console.log('exitSaveObj', exitSaveObj)
-			_this.setSetUpLoadingSetting(true, 20, 'Saving backtest indicator...')
+			_this.setSetUpLoadingSetting(true, true, 20, 'Saving backtest indicator...')
 			let indicatorLayout = _this.saveIndicatorLayoutData()
 			indicatorLayout.formIndicators = {
 				entry: entrySaveObj.indicatorLayout.formIndicators.entrySignal,
 				exit: exitSaveObj.indicatorLayout.formIndicators.exitSignal
 			}
-			_this.setSetUpLoadingSetting(true, 25, 'Processing saved backtest information...')
+			_this.setSetUpLoadingSetting(true, true, 25, 'Processing saved backtest information...')
 			_this.reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout)
 		},
 		async saveCriteriaData(criteriaRef) {
@@ -407,7 +415,7 @@ export default {
 				...selectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
 			)
 			// Before the back test, load the data of the whole period and generate CSV to upload S3, and then update the form when the results come out
-			this.setSetUpLoadingSetting(true, 30, 'Processing saved backtest information...')
+			this.setSetUpLoadingSetting(true, true, 30, 'Processing saved backtest information...')
 			this.reloadData(indicatorLayout, backtestInfo.frequency)
 			// 1. Upload data file
 			// 2. Upload parameter file
@@ -636,19 +644,5 @@ export default {
 	i {
 		margin-right: 10px;
 	}
-}
-.progress-container {
-	background: rgba(0, 0, 0, 0.8);
-	border-radius: 20px;
-	height: 100vh;
-	/* opacity: 0.5; */
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 0 auto;
-	flex-direction: column;
-}
-.el-progress{
-	width: 80%;
 }
 </style>

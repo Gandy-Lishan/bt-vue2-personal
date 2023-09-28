@@ -127,6 +127,9 @@ export const CommonMethodsMixin = {
 			const res = await favoriteBacktest(data.id, this.$qs.stringify(params))
 			this.getDataList(null)
 		},
+		copyBacktest(data) {
+
+		},
 		async rerunBacktest(data) {
 			console.log(data)
 			// 打开遮罩层，改变 loadingTest
@@ -596,16 +599,16 @@ export const CommonMethodsMixin = {
 						file_name: `${uuid}/${uuid}_backtest_params.json`,
 						file_data: backtestParams
 					})
-					_this.setSetUpLoadingSetting(true, 40, 'Uploading backtest data...')
+					_this.setSetUpLoadingSetting(true, true, 40, 'Uploading backtest data...')
 					await uploadS3(S3DataStr)
-					_this.setSetUpLoadingSetting(true, 45, 'Uploading backtest data...')
+					_this.setSetUpLoadingSetting(true, true, 45, 'Uploading backtest data...')
 					const res = await runBacktest(backtestDataStr)
 					if(res.status != 201) return
 					_this.$store.dispatch('states/set_isBacktestRunning_flag',true)
 					//After saving successfully, clear the backtestinfo back to the original state
 					_this.$store.commit('form/initialBacktestInfo')
 					// _this.$refs.historyChild.refreshHistory(res.data.id)
-					_this.setSetUpLoadingSetting(true, 50, 'Backtest data upload successful, backtest is in progress, please wait patiently for the results...')
+					_this.setSetUpLoadingSetting(true, true, 50, 'Backtest data upload successful, backtest is in progress, please wait patiently for the results...')
 					_this.pollingBTRunResults(res.data.id)
 					_this.$store.dispatch('states/set_isMarkerShown_flag',false)
 					//clear old_ uuid
@@ -626,12 +629,12 @@ export const CommonMethodsMixin = {
 				const res = await getStatus(id)
 				// CIQ.nprogress.inc()
 				if(percentage + 2 != 100) percentage += 2; // 在每次轮询中递增 2
-				_this.setSetUpLoadingSetting(true, percentage, 'Backtest data upload successful, backtest is in progress, please wait patiently for the results...')
+				_this.setSetUpLoadingSetting(true, true, percentage, 'Backtest data upload successful, backtest is in progress, please wait patiently for the results...')
 				const status = res.data.status
 				const data = res.data
 				console.log('回测运行状态', status)
 				if(status == 2 || status == 3) {
-					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status); _this.setSetUpLoadingSetting(false, 100, 'Backtest completed successfully, navigate to the Results page to view the backtest results....')})
+					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status); _this.setSetUpLoadingSetting(false, false, 100, 'Backtest completed successfully, navigate to the Results page to view the backtest results....')})
 					data.result = isJson(data.result) ? JSON.parse(data.result) : data.result
 					// 存入缓存数据，因为路由跳转时表单数据会丢失
 					_this.$store.dispatch('form/cached_BT_basic_info_data', data)

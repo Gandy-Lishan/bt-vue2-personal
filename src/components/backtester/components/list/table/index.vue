@@ -361,6 +361,7 @@ import {
 import {isJson} from '@/utils'
 import { throttle } from 'lodash'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
+import { copy } from "@/components/common/directives/copyBacktestID"
 
 export default {
 	name: 'Table',
@@ -383,6 +384,9 @@ export default {
       currentSort: {}, // 当前的排序信息
 			searchItem: ''
 		}
+	},
+	directives: {
+		copy
 	},
 	created() {
 		this.getDataList(null)
