@@ -1,31 +1,44 @@
 <template>
-  <div class="set-up-container">
-    <ResForm
-      :backtestEditData="backtestEditData"
-    />
-    <Performance ref="performanceChild"></Performance>
-  </div>
+    <div class="set-up-container">
+     <div v-show="!resultsLoadingSetting.isResultsLoading">
+        <ResForm
+          :backtestEditData="backtestEditData"
+        />
+        <Performance ref="performanceChild"></Performance>
+     </div>
+      <LoadingOverlay
+        v-show="resultsLoadingSetting.isResultsLoading"
+        :isLoading="resultsLoadingSetting.isResultsLoading"
+        :showProgress="resultsLoadingSetting.showProgress"
+        :percentage="resultsLoadingSetting.percentage"
+        :progressText="resultsLoadingSetting.progressText"
+      >
+      </LoadingOverlay>
+    </div>
 </template>
 
 <script>
 import ResForm from "./resultForm"
 import Performance from "./performance"
 import {isJson} from '@/utils'
+import { LoadingOverlay } from "@/components/common"
 
 export default {
   name: 'Results',
   components: {
     ResForm,
-    Performance
+    Performance,
+    LoadingOverlay
   },
   data() {
     return {
       backtestEditData: {}
     }
   },
-  beforeRouteEnter(to, from, next) {
+  beforeRouteEnter(to, _, next) {
   if (to.path === '/backtester/sr/results') {
     next(async _this => {
+			_this.setResultsLoadingSetting(true, false, 0, 'Loading data...')
       if(to.params.usedFor && to.params.usedFor === 'showBTResults'){
         console.log('说明是路由跳转过来携带参数的')
         // 说明是路由跳转过来携带参数的
@@ -41,11 +54,37 @@ export default {
           await _this.$refs.performanceChild.getResultData(editData)
         }
       }
+			_this.setResultsLoadingSetting(false, false, 0, 'Loading data...')
     });
-  } else {
-    next();
+    } else {
+      next();
+    }
+  },
+  computed: {
+    resultsLoadingSetting() {
+      // 从 Vuex store 中获取全局 loading 状态
+      return this.$store.state.form.resultsLoadingSetting
+    },
+  },
+	watch: {
+    resultsLoadingSetting: {
+      handler(newValue, _) {
+        // 在对象属性发生变化时触发的处理逻辑
+				this.resultsLoadingSetting = newValue
+      },
+      deep: true, // 启用深度监听，监视对象属性的变化
+    },
+  },
+  methods: {
+    setResultsLoadingSetting(isResultsLoading, showProgress, percentage, progressText) {
+			this.$store.commit('form/SET_RESULTS_LOADING', {
+				isResultsLoading,
+				showProgress,
+				percentage,
+				progressText
+			})
+		},
   }
-},
 
 }
 </script>

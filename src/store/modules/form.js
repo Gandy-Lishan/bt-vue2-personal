@@ -87,7 +87,12 @@ const state = {
 		percentage: 0,
 		progressText: 'Loading...'
 	},
-	isResultsLoading: false, // 控制 results 的loading 状态
+	resultsLoadingSetting: { // 控制 setup 的loading 状态
+		isResultsLoading: false,
+		showProgress: false,
+		percentage: 0,
+		progressText: 'Loading...'
+	}, // 控制 results 的 loading 状态
 }
 
 const mutations = {
@@ -659,8 +664,14 @@ const mutations = {
 			progressText
 		}
 	},
-	SET_RESULTS_LOADING(state, loading) {
-		state.isResultsLoading = loading
+	SET_RESULTS_LOADING(state, obj) {
+		const { isResultsLoading, percentage, progressText, showProgress } = obj
+		state.resultsLoadingSetting = {
+			isResultsLoading,
+			showProgress,
+			percentage,
+			progressText
+		}
 	}
 }
 
@@ -680,7 +691,6 @@ const actions = {
 	},
 	cached_BT_basic_info_data({ commit }, val) {
 		return new Promise(resolve => {
-			console.log('触发了cached_BT_basic_info_data', val)
 			commit('CACHED_BT_BASIC_INFO_DATA', val)
 			resolve()
 		})

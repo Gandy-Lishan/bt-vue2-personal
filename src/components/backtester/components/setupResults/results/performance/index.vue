@@ -344,8 +344,8 @@ export default {
       rowFrequency: 'Daily'
     }
   },
-  created() {
-    this.getResultData({ id: 0 })
+  async created() {
+    await this.getResultData({ id: 0 })
   },
   methods: {
     clearForm() {
@@ -1956,16 +1956,6 @@ export default {
 	right: 8px;
 	font-weight: 300;
 	margin: 0;
-}
-
-.imgBox {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-}
-.imgBox div {
-	margin: 60px 0px 20px 0px;
 }
 .perfprmance-container {
 	padding-bottom: 20px;

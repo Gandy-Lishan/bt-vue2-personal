@@ -49,14 +49,14 @@
 				></el-tooltip
 			>
 			<!-- <el-checkbox style="margin-left:10px" v-model="test" label="download test csv" border></el-checkbox> -->
-		</div></div>
+		</div>
+	</div>
 		<LoadingOverlay
 			v-show="setUpLoadingSetting.isSetupLoading"
 			:isLoading="setUpLoadingSetting.isSetupLoading"
 			:showProgress="setUpLoadingSetting.showProgress"
 			:percentage="setUpLoadingSetting.percentage"
 			:progressText="setUpLoadingSetting.progressText"
-			:customColorMethod="customColorMethod"
 		>
 		</LoadingOverlay>
 	</div>
@@ -126,7 +126,7 @@ export default {
   },
 	watch: {
     setUpLoadingSetting: {
-      handler(newValue, oldValue) {
+      handler(newValue, _) {
         // 在对象属性发生变化时触发的处理逻辑
 				this.setUpLoadingSetting = newValue
       },
@@ -134,17 +134,6 @@ export default {
     },
   },
 	methods: {
-    customColorMethod(percentage) {
-      if (percentage < 50) {
-        return '#909399'
-      } else if (percentage < 70) {
-        return '#f56c6c';
-      } else if(percentage < 90){
-        return '#e6a23c';
-      }else {
-        return '#67c23a';
-      }
-    },
 		setConfig(criteria) {
 			// 传入 entry 和 exit 的配置
 			return generateConfig(criteria)
@@ -635,14 +624,6 @@ export default {
 	}
 	.criteria-title {
 		font-size: 15px;
-	}
-}
-.progress-text{
-	font-size: 12px;
-	color: #409eff;
-	margin-top: 10px;
-	i {
-		margin-right: 10px;
 	}
 }
 </style>
