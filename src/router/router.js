@@ -84,6 +84,65 @@ const routes = [
 				]
 			}
 		]
+	},
+	{
+		path: '/scannerai',
+		component: resolve =>
+			require(['@/components/AIScanner/index.vue'], resolve),
+		children: [
+			{
+				path: '',
+				name: 'scannerai',
+				component: resolve =>
+					require([
+						'@/components/AIScanner/AIScanner.vue'
+					], resolve)
+			},
+			{
+				path: 'scannerai_chart',
+				name: 'scannerai_chart',
+				component: resolve =>
+					require([
+						'@/components/AIScanner/ScannerChart/index.vue'
+					], resolve)
+			}
+		]
+	},
+	{
+		path: '/doc',
+		component: resolve => require(['@/components/Tutorial/Doc.vue'], resolve),
+		redirect: '/doc/home',
+		children: [
+			{
+				path: '/doc/home',
+				component: resolve =>
+					require(['@/components/Tutorial/components/Doc.vue'], resolve)
+			},
+			{
+				path: '/doc/guide/:id',
+				component: resolve =>
+					require(['@/components/Tutorial/components/Guide.vue'], resolve)
+			},
+			{
+				path: '/doc/scanner',
+				component: resolve =>
+					require(['@/components/Tutorial/components/AIScanner.vue'], resolve)
+			},
+			{
+				path: '/doc/old',
+				component: resolve =>
+					require(['@/components/Tutorial/old_doc.vue'], resolve)
+			},
+			{
+				path: '/doc/disclaimer',
+				component: resolve =>
+					require(['@/components/Tutorial/components/Disclaimer.vue'], resolve)
+			}
+		]
+	},
+	{
+		path: '/404',
+		component: resolve => require(['@/components/404.vue'], resolve)
 	}
 ]
 

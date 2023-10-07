@@ -66,13 +66,14 @@ export default {
     }
   },
   watch: {
-    '$route'(to, from) {
+    '$route'(to, _) {
+      console.log('to', to)
       // 在$route对象变化时执行逻辑
-      if (to.name == 'strategy') {
+      if (to.path == '/strategy') {
         this.activeIndex = '2'
-      } else if (to.name == 'backtester' || to.name == 'Backtests') {
+      } else if (to.path == '/backtester' || to.name == 'Backtests') {
         this.activeIndex = '1'
-      } else if (to.name == 'scannerai' || to.name == 'scannerai_chart') {
+      } else if (to.path == '/scannerai' || to.name == 'scannerai_chart') {
         this.activeIndex = '3'
       }
     }
@@ -90,11 +91,11 @@ export default {
     }
   },
   methods: {
-    handleSelect(key, keyPath) {
+    handleSelect(key, _) {
       let path = ''
       if (key == '1') {
         path = this.$router.resolve({
-          path: '/home'
+          path: '/'
         }).href
         this.$router.push(path)
       } else if (key == '2') {
@@ -104,7 +105,7 @@ export default {
         this.$router.push(path)
       } else if (key == '3') {
         path = this.$router.resolve({
-          path: '/home/scannerai'
+          path: '/scannerai'
         }).href
         this.$router.push(path)
       } else if (key == '4-1') {
