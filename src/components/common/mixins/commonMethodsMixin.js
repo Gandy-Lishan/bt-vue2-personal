@@ -34,6 +34,7 @@ export const CommonMethodsMixin = {
 			} else{
 				if (data.hasOwnProperty('old_uuid')) delete data.old_uuid
 			}
+			data.commission = (data.commission * 100).toFixed(2)
 			this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', data)
 			// 在发送组件中进行路由跳转并传递参数
 			this.$store.commit('form/getBacktestSymbol', data.symbol)
@@ -53,6 +54,7 @@ export const CommonMethodsMixin = {
 			} else{
 				if (data.hasOwnProperty('old_uuid')) delete data.old_uuid
 			}
+			data.commission = (data.commission * 100).toFixed(2)
 			this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', data)
 			//  Restore indicator layout
 			this.$store.commit('form/getBacktestSymbol', data.symbol)
@@ -637,6 +639,7 @@ export const CommonMethodsMixin = {
 					clearPromiseInterval(timer).then(() => {console.log('回测跑完了 状态码是', status); _this.setSetUpLoadingSetting(false, false, 100, 'Backtest completed successfully, navigate to the Results page to view the backtest results....')})
 					data.result = isJson(data.result) ? JSON.parse(data.result) : data.result
 					// 存入缓存数据，因为路由跳转时表单数据会丢失
+					console.log('轮询后保存编辑数据', data)
 					_this.$store.dispatch('form/cached_BT_basic_info_data', data)
 					_this.viewBacktestResults(data)
 					// 回测跑完不一定要调用这个去展示 set up form， 因为刚跑完这个 set up form 肯定是有数据的

@@ -1005,7 +1005,6 @@ export default {
         }
         /* 设置编辑数据 */
         editData.description = description
-        editData.commission = (editData.commission * 100).toFixed(2)
         editData.slippage = Number(editData.slippage).toFixed(2)
         editData.trade_price = Number(editData.trade_price)
         this.is_admin = this.$store.getters.getIsAdmin

@@ -308,5 +308,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+.imgBox {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+.imgBox div {
+	margin: 60px 0px 20px 0px;
+}
 </style>

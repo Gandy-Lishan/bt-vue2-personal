@@ -15,12 +15,25 @@ export default {
     showProgress: Boolean,       // 是否显示进度条
     percentage: Number,          // 进度条百分比
     progressText: String,        // 进度文本
-    customColorMethod: Function, // 自定义颜色方法
+    // customColorMethod: Function, // 自定义颜色方法
+  },
+  methods: {
+    customColorMethod(percentage) {
+      if (percentage < 50) {
+        return '#909399'
+      } else if (percentage < 70) {
+        return '#f56c6c';
+      } else if(percentage < 90){
+        return '#e6a23c';
+      }else {
+        return '#67c23a';
+      }
+    },
   }
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .progress-container {
 	background: rgba(0, 0, 0, 0.8);
 	border-radius: 20px;
@@ -34,5 +47,13 @@ export default {
 }
 .el-progress{
 	width: 80%;
+}
+.progress-text{
+	font-size: 12px;
+	color: #409eff;
+	margin-top: 10px;
+	i {
+		margin-right: 10px;
+	}
 }
 </style>
