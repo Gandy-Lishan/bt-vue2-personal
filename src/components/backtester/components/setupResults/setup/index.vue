@@ -25,7 +25,6 @@
 							@getExitRelation="getExitRelation"
 							@sendExitSignalIndex="sendExitSignalIndex"
 						></Criteria>
-					<el-button @click="displaySetUpForm">按钮</el-button>
 				</div>
 			</div>
 		</div>
@@ -415,50 +414,6 @@ export default {
 		async displaySetUpForm(data) {
 			/* 填充和展示 Set Up 表单的数据 */
 			let _this = this
-			/* 用于测试是否能查看结果 start */
-			// data = {
-			// 	id: "04c846e4-63a5-9c78-b06d-0d2492e4efd3",
-			// 	user: "04f7c8dc-93fb-4f38-b680-638b06e108b7",
-			// 	name: "SPX  2023-9-4  17:56:22",
-			// 	capital: 100000,
-			// 	symbol: "SPX",
-			// 	benchmark: "SPX",
-			// 	create_date: "2023-09-04T09:56:51.783347Z",
-			// 	start_date: "1800-10-01",
-			// 	end_date: "2023-09-04",
-			// 	capital_alloc: "1.000000",
-			// 	commission: "0.10",
-			// 	slippage: "0.00",
-			// 	frequency: "Daily",
-			// 	win_rate: "0.0000",
-			// 	risk_control: "//20",
-			// 	user_tag: "client",
-			// 	report_url: "",
-			// 	direction: "Long",
-			// 	favorites: false,
-			// 	indicator_layout: "{\"technicalIndicators\":[],\"savedTechSD\":[{\"type\":\"model_smart_money\",\"inputs\":{\"Period\":13,\"Overlay\":false,\"id\":\"$r001$model_smart_money$r001$ (13,n)\",\"display\":\"$r001$model_smart_money$r001$ (13,n)\"},\"outputs\":{},\"parameters\":{\"studyOverZonesEnabled\":false,\"studyOverBoughtValue\":0.3,\"studyOverBoughtColor\":\"#FF0000\",\"studyOverSoldValue\":0.7,\"studyOverSoldColor\":\"#00DD00\",\"chartName\":\"chart\",\"editMode\":true,\"panelName\":\"$r001$model_smart_money$r001$ (13,n)\"},\"panel\":\"$r001$model_smart_money$r001$ (13,n)\"}],\"activatedMA\":[{\"period\":21,\"url\":\"\"}],\"activatedMALayout\":[],\"formIndicators\":{\"entry\":[\"model_smart_money\"],\"exit\":[\"\"]}}",
-			// 	strategy: "Signal",
-			// 	result: {
-			// 	"Total Trades": 62,
-			// 	"Total Return (%)": -24.84
-			// 	},
-			// 	seconds: 12,
-			// 	url_data: "",
-			// 	backtest_period: "21",
-			// 	trade_price: 2,
-			// 	exclude_oo: 0,
-			// 	total_trader: 62,
-			// 	total_return: -24.84,
-			// 	description: {
-			// 	Introduction: "",
-			// 	Rules: ""
-			// 	},
-			// 	last_entry_signal_date: null,
-			// 	last_exit_signal_date: null
-			// }
-			// _this.$store.dispatch('form/cached_BT_basic_info_data', data)
-			// _this.viewBacktestResults(data)
-			/* 用于测试是否能查看结果 end */
 			_this.$refs['basicInfo'].setEditData(data)
 			/*
 				data 中并没有 entry 和 exit

@@ -5,19 +5,24 @@
 			<el-form
 				ref="backtestSetupForm"
 				:model="bd"
-				label-position="left"
+				label-position="top"
 				:rules="rules"
 				size="mini"
 			>
 				<div class="setupTop">
 						<div class="setupCenter">
-							<el-form-item prop="symbol" label="Symbol">
-								<el-tooltip effect="dark" placement="top">
-									<span slot="content"
-										>Choose a stock/index as backtest symbol. (default: SPX)<br
-									/></span>
-									<i class="iconfont icon-wenhao"></i>
-								</el-tooltip>
+							<el-form-item prop="symbol">
+                <template slot="label">
+                  <label>
+                    Symbol
+                    <el-tooltip effect="dark" placement="top">
+                      <span slot="content"
+                        >Choose a stock/index as backtest symbol. (default: SPX)<br
+                      /></span>
+                      <i class="iconfont icon-wenhao"></i>
+                    </el-tooltip>
+                  </label>
+                </template>
 								<div class="enterSymbolBox">
 									<el-select
 										v-model="bd.symbol"
@@ -43,54 +48,72 @@
 							</el-form-item>
 							<el-form-item
 								prop="capital"
-								label="
-							Starting Capital"
 							>
-								<el-tooltip effect="dark" placement="top">
-									<span slot="content"
-										>Input the value of starting capital of the backtest.
+              <template slot="label">
+                  <label>
+                    Starting Capital
+                    <el-tooltip effect="dark" placement="top">
+                      <span slot="content"
+                        >Input the value of starting capital of the backtest.
 										(default: 100000)<br
-									/></span>
-									<i class="iconfont icon-wenhao"></i>
-								</el-tooltip>
+                      /></span>
+                      <i class="iconfont icon-wenhao"></i>
+                    </el-tooltip>
+                  </label>
+                </template>
 								<el-input
 									v-model="bd.capital"
 									@blur="bd.capital = removeDecimalPlaces(bd.capital)"
 								></el-input>
 							</el-form-item>
-							<el-form-item prop="commission" label="Commission">
-								<el-tooltip effect="dark" placement="top">
-									<span slot="content"
-										>Input the percentage value of trading commission. (default:
+							<el-form-item prop="commission">
+                <template slot="label">
+                  <label>
+                    Commission
+                    <el-tooltip effect="dark" placement="top">
+                      <span slot="content"
+                        >Input the percentage value of trading commission. (default:
 										0.1%)<br
-									/></span>
-									<i class="iconfont icon-wenhao"></i>
-								</el-tooltip>
+                      /></span>
+                      <i class="iconfont icon-wenhao"></i>
+                    </el-tooltip>
+                  </label>
+                </template>
 								<el-input
 									v-model="bd.commission"
 									@blur="bd.commission = removeDecimalPlaces(bd.commission)"
 								></el-input>
 							</el-form-item>
 							<span class="comUnitNote">(%)</span>
-							<el-form-item prop="slippage" label="Slippage">
-								<el-tooltip effect="dark" placement="top">
-									<span slot="content"
-										>Input the value of slippage of trading price. (default:
+							<el-form-item prop="slippage">
+                <template slot="label">
+                  <label>
+                    Slippage
+                    <el-tooltip effect="dark" placement="top">
+                      <span slot="content"
+                        >Input the value of slippage of trading price. (default:
 										0)<br
-									/></span>
-									<i class="iconfont icon-wenhao"></i>
-								</el-tooltip>
+                      /></span>
+                      <i class="iconfont icon-wenhao"></i>
+                    </el-tooltip>
+                  </label>
+                </template>
 								<el-input v-model="bd.slippage" @blur="bd.slippage = removeDecimalPlaces(bd.slippage)"></el-input> </el-form-item
 							><span class="sliUnitNote">(per trade)</span>
 							<el-form-item prop="benchmark" label="Benchmark">
-								<el-tooltip effect="dark" placement="top">
-									<span slot="content"
-										>Choose a stock/index with simple entry on the Start date &
+                <template slot="label">
+                  <label>
+                    Benchmark
+                    <el-tooltip effect="dark" placement="top">
+                      <span slot="content"
+                        >Choose a stock/index with simple entry on the Start date &
 										exit on the End date as benchmark compared with this
 										backtest. (default: SPX)<br
-									/></span>
-									<i class="iconfont icon-wenhao"></i>
-								</el-tooltip>
+                      /></span>
+                      <i class="iconfont icon-wenhao"></i>
+                    </el-tooltip>
+                  </label>
+                </template>
 								<div class="enterSymbolBox">
 									<el-select
 										v-model="bd.benchmark"
@@ -140,14 +163,19 @@
 						</div>
 						<div class="setupCenter">
 							<el-form-item prop="backtestHistory" label="Backtest Period">
-								<el-tooltip effect="dark" placement="top">
-									<span slot="content"
-										>Specify the start and end date of the backtest.<br />Choose
+                <template slot="label">
+                  <label>
+                    Backtest Period
+                    <el-tooltip effect="dark" placement="top">
+                      <span slot="content"
+                        >Specify the start and end date of the backtest.<br />Choose
 										'All History' to include all data since the inception of the
 										backtesting stock/index.<br
-									/></span>
-									<i class="iconfont icon-wenhao"></i>
-								</el-tooltip>
+                      /></span>
+                      <i class="iconfont icon-wenhao"></i>
+                    </el-tooltip>
+                  </label>
+                </template>
 								<div class="selectBox historySelectBox">
 									<el-select
 										@change="setBacktestHistory(bd.backtest_period)"
@@ -193,10 +221,13 @@
 									<el-input v-else disabled v-model="bd.end_date"> </el-input>
 								</el-form-item>
 							</div>
-							<el-form-item label="Timeframe" prop="frequency">
-								<el-tooltip effect="dark" placement="top">
-									<span slot="content"
-										>Choose the timeframe of the backtest. The chart above will
+							<el-form-item prop="frequency">
+                <template slot="label">
+                  <label>
+                    Timeframe
+                    <el-tooltip effect="dark" placement="top">
+                      <span slot="content"
+                        >Choose the timeframe of the backtest. The chart above will
 										change accordingly to the selection of the timeframe.<br />if
 										Daily is chosen, only daily sentiment indicators will be
 										included in the below criteria sentiment indicators
@@ -207,9 +238,12 @@
 										if Monthly is chosen, all monthly/weekly/daily sentiment
 										indicators will be included in the below criteria sentiment
 										indicators selection.<br
-									/></span>
-									<i class="iconfont icon-wenhao"></i>
-								</el-tooltip>
+									/>
+                      </span>
+                      <i class="iconfont icon-wenhao"></i>
+                    </el-tooltip>
+                  </label>
+                </template>
 								<div class="selectBox">
 									<el-select
 										v-model="bd.frequency"
@@ -226,15 +260,21 @@
 									</el-select>
 								</div>
 							</el-form-item>
-							<el-form-item label="Trade Price" prop="trade_price">
-								<el-tooltip effect="dark" placement="top">
-									<span slot="content"
-										>The price used during the transaction,<br />'Next'
+							<el-form-item prop="trade_price">
+                <template slot="label">
+                  <label>
+                    Trade Price
+                    <el-tooltip effect="dark" placement="top">
+                      <span slot="content"
+                        >The price used during the transaction,<br />'Next'
 										indicates that the trade will only be executed on the next
 										bar after the conditions are met on the current day.<br
-									/></span>
-									<i class="iconfont icon-wenhao"></i>
-								</el-tooltip>
+									/>
+                      </span>
+                      <i class="iconfont icon-wenhao"></i>
+                    </el-tooltip>
+                  </label>
+                </template>
 								<div class="selectBox">
 									<el-select
 										v-model="bd.trade_price"
@@ -304,16 +344,20 @@
 				<div class="setupFooter">
 							<div class="nameBox">
 								<el-form-item
-									label="Backtest Name"
 									prop="name"
 									placeholder="Give the backtest a name"
 								>
-									<el-tooltip effect="dark" placement="top">
-										<span slot="content"
-											>Input a unique name for each backtest.<br
-										/></span>
-										<i class="iconfont icon-wenhao"></i>
-									</el-tooltip>
+                <template slot="label">
+                  <label>
+                    Backtest Name
+                    <el-tooltip effect="dark" placement="top">
+                      <span slot="content"
+                        >Input a unique name for each backtest.<br
+                      /></span>
+                      <i class="iconfont icon-wenhao"></i>
+                    </el-tooltip>
+                  </label>
+                </template>
 									<el-input
 										v-model="bd.name"
 										oninput="value=value.replace(/[\+]/g,'')"
@@ -387,14 +431,19 @@
 								</div>
 							</div>
 							<div class="direction">
-								<el-form-item prop="direction" label="Direction">
-									<el-tooltip effect="dark" placement="top">
-										<span slot="content"
-											>Select Long or Short to specify the starting position of
+								<el-form-item prop="direction">
+                  <template slot="label">
+                  <label>
+                    Direction
+                    <el-tooltip effect="dark" placement="top">
+                      <span slot="content"
+                        >Select Long or Short to specify the starting position of
 											the backtest.<br
-										/></span>
-										<i class="iconfont icon-wenhao"></i>
-									</el-tooltip>
+                      /></span>
+                      <i class="iconfont icon-wenhao"></i>
+                    </el-tooltip>
+                  </label>
+                </template>
 									<el-radio-group v-model="bd.direction" @change="getDirection">
 										<el-radio label="Long">Long</el-radio>
 										<el-radio label="Short">Short</el-radio>
@@ -1139,7 +1188,7 @@ export default {
 }
 .risk-control-container {
 	display: flex;
-	justify-content: flex-end;
+	justify-content: space-around;
 }
 
 .el-checkbox-group {
@@ -1147,30 +1196,26 @@ export default {
 	margin-bottom: 10px;
 }
 .el-input {
-	display: inline;
-}
-.el-select {
-	top: -30px;
-	left: 16px;
+	// display: inline;
 }
 /deep/.el-radio__input {
-	margin-left: 10px;
+	// margin-left: 10px;
 }
 
 /deep/ .backtestURLBox .el-form-item .el-form-item__label {
-	width: 170px;
+	// width: 170px;
 }
 /deep/ .backtestURLBox .el-form-item .el-form-item__content {
-	padding-left: 155px;
+	// padding-left: 155px;
 }
 .descriptionBox {
-  width: 73%;
-	padding: 10px;
-	border: 1px solid #dcdfe6;
-	border-radius: 10px;
+  // width: 73%;
+	// padding: 10px;
+	// border: 1px solid #dcdfe6;
+	// border-radius: 10px;
 }
 .direction {
-  width: 73%;
+  // width: 73%;
 }
 .descriptionBox a {
 	font-weight: 500;
@@ -1188,31 +1233,31 @@ export default {
 .set-up-container {
 	padding-top: 20px;
 }
-.setupCenter {
-	display: flex;
-	flex-direction: column;
-	justify-content: center; /* 水平居中 */
-	align-items: start; /* 垂直居中 */
-	height: 100%; /* 确保内容占据整个列的高度 */
-  width: 50%;
-}
+// .setupCenter {
+// 	display: flex;
+// 	flex-direction: column;
+// 	justify-content: center; /* 水平居中 */
+// 	align-items: start; /* 垂直居中 */
+// 	height: 100%; /* 确保内容占据整个列的高度 */
+//   width: 50%;
+// }
 .backtest_container .el-form-item__content {
 }
-.setupTop {
-  position: relative;
-  display: flex;
-  justify-content: space-around;
-  align-items: start;
-}
-.setupFooter {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: start;
-  .nameBox{
-		width: 100%;
-	}
-}
+// .setupTop {
+//   position: relative;
+//   display: flex;
+//   justify-content: space-around;
+//   align-items: start;
+// }
+// .setupFooter {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-around;
+//   align-items: start;
+//   .nameBox{
+// 		width: 100%;
+// 	}
+// }
 .backtest_container{
 	border-bottom: 1px solid #797979;
 }
