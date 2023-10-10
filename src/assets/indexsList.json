@@ -810,5 +810,21 @@
     {
         "symbol": "lumber_future",
         "name": "Lumber Future"
+    },
+    {
+        "symbol": "IWF",
+        "name": "Russell 1000 Growth ETF (IWF)"
+    },
+    {
+        "symbol": "IWB",
+        "name": "Russell 1000 ETF (IWB)"
+    },
+    {
+        "symbol": "IWD",
+        "name": "Ressell 1000 ETF Value (IWD)"
+    },
+    {
+        "symbol": "CDX",
+        "name": "Credit Default Swaps (CDX Index)"
     }
 ]
