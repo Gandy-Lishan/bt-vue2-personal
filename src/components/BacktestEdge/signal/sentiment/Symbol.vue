@@ -386,7 +386,8 @@ export default {
 	.el-form-item {
 		display: inline-flex;
 	}
-	border-bottom: 1px solid #797979;
+  display: flex;
+  justify-content: space-between;
 }
 .condition-container {
 	display: flex;
@@ -400,7 +401,7 @@ export default {
 }
 
 /deep/ .el-form-item__label {
-	margin-right: 36px;
+	margin-right: 5px;
 }
 @media (min-width: 1280px) and (max-width: 1365px) {
 	/deep/ .el-form-item__label {

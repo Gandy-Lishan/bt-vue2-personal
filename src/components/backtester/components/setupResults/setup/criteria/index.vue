@@ -52,6 +52,7 @@
 					v-model="relation"
 					placeholder="Please select signal"
 					@change="changeRelation"
+					size="mini"
 				>
 					<el-option
 						v-for="item in signalOptions"

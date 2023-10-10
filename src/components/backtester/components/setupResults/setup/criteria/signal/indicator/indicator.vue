@@ -1,7 +1,148 @@
 // indicator search box
 <template>
 	<div class="indicator-box">
-		<el-form :model="si" ref="siForm" :rules="rules">
+		<el-form :model="si" ref="siForm" :rules="rules" label-position="left" size="mini">
+      <div class="labelWithSelectBox indicatorTypeBox">
+        <el-form-item prop="indicatorRadio">
+            <template slot="label">
+              <label>
+                Type
+                <el-tooltip effect="dark" placement="top">
+                  <span slot="content">
+                  </span>
+                  <i class="iconfont icon-wenhao"></i>
+                </el-tooltip>
+              </label>
+            </template>
+            <div class="selectBox">
+              <el-select
+                v-model="indicatorRadio"
+                placeholder="— Select Indicator Type —"
+                @change="changeIndicatorType"
+              >
+                <el-option
+                  v-for="item in typeOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+        </el-form-item>
+      </div>
+      <el-divider></el-divider>
+      <div class="labelWithSelectBox indicatorTypeBox">
+        <el-form-item prop="sentimentIndicator">
+            <template slot="label">
+              <label>
+                Indicator
+                <el-tooltip effect="dark" placement="top">
+                  <span slot="content">
+                  </span>
+                  <i class="iconfont icon-wenhao"></i>
+                </el-tooltip>
+              </label>
+            </template>
+            <div class="selectBox">
+              <el-autocomplete
+              ref="sentiInput"
+							prefix-icon="el-icon-search"
+							class="inline-input"
+							clearable
+							v-model="si.sentimentIndicator"
+							:disabled="!(indicatorRadio === 'Sentiment Indicator')"
+							:fetch-suggestions="indicatorSentimentSearch"
+							placeholder="Input the sentiment indicator"
+							@select="handleSentimentSelect"
+              @clear="clearSentimentSelect"
+							highlight-first-item
+						></el-autocomplete>
+            </div>
+        </el-form-item>
+      </div>
+      <div class="labelWithSelectBox indicatorTypeBox">
+        <el-form-item prop="technicalIndicator">
+            <template slot="label">
+              <label>
+                Indicator
+                <el-tooltip effect="dark" placement="top">
+                  <span slot="content">
+                  </span>
+                  <i class="iconfont icon-wenhao"></i>
+                </el-tooltip>
+              </label>
+            </template>
+            <div class="selectBox">
+              <el-autocomplete
+              ref="techInput"
+							:disabled="!(indicatorRadio === 'Technical Indicator')"
+							class="inline-input"
+							clearable
+							prefix-icon="el-icon-search"
+							v-model="si.technicalIndicator"
+							:fetch-suggestions="indicatorTechnicalSearch"
+							placeholder="Input the technical indicator"
+							@select="handleTechnicalSelect"
+              @clear="clearTechnicalSelect"
+						></el-autocomplete>
+            </div>
+        </el-form-item>
+      </div>
+      <div class="labelWithSelectBox indicatorTypeBox">
+        <el-form-item prop="symbolIndicator">
+            <template slot="label">
+              <label>
+                Indicator
+                <el-tooltip effect="dark" placement="top">
+                  <span slot="content">
+                  </span>
+                  <i class="iconfont icon-wenhao"></i>
+                </el-tooltip>
+              </label>
+            </template>
+            <div class="selectBox">
+              <el-select
+                v-model="si.symbolIndicator"
+                placeholder="Select Symbol Open/High/Low/Close/Volume"
+                :disabled="!(indicatorRadio === 'Symbol OHLCV')"
+                @change="handleSymbolSelect"
+              >
+                <el-option
+                  v-for="item in symbolConditions"
+                  :key="item.value"
+                  :label="item.obj.label"
+                  :value="item.obj"
+                >
+                </el-option>
+              </el-select>
+            </div>
+        </el-form-item>
+      </div>
+      <div class="labelWithSelectBox indicatorTypeBox">
+        <el-form-item prop="userIndicator">
+            <template slot="label">
+              <label>
+                Indicator
+                <el-tooltip effect="dark" placement="top">
+                  <span slot="content">
+                  </span>
+                  <i class="iconfont icon-wenhao"></i>
+                </el-tooltip>
+              </label>
+            </template>
+            <div class="selectBox">
+                <el-autocomplete
+                prefix-icon="el-icon-files"
+                :disabled="!(indicatorRadio === 'Users\' Own Indicator')"
+                class="inline-input"
+                clearable
+                v-model="si.userIndicator"
+                placeholder="Select Users' Own Indicator File."
+              ></el-autocomplete>
+            </div>
+        </el-form-item>
+      </div>
 			<div class="indicator-container sentiBox">
 				<el-form-item>
 					<el-radio
@@ -392,7 +533,13 @@ export default {
         { 'Date': '2018-01-12', 'Close': '62.6' },
         { 'Date': '2018-01-16', 'Close': '50.63' }
       ],
-      exampleDataVisible: false
+      exampleDataVisible: false,
+      typeOptions: [
+        {value: 'Sentiment Indicator', label: 'Sentiment Indicator'},
+        {value: 'Technical Indicator', label: 'Technical Indicator'},
+        {value: 'Symbol OHLCV', label: 'Symbol OHLCV'},
+        {value: "Users' Own Indicator", label: "Users' Own Indicator"},
+      ]
     }
   },
   computed: {
@@ -2393,9 +2540,6 @@ export default {
 	display: inline-block;
 	width: 136px;
 }
-/deep/ .el-input__icon {
-	width: 60px;
-}
 /deep/ .el-form-item {
 	margin-bottom: 10px;
 }
@@ -2433,5 +2577,33 @@ export default {
 
 .box-card {
 	width: 100%;
+}
+.labelWithSelectBox{
+  .el-form-item--mini /deep/ .el-form-item__content{
+      display: flex;
+      flex: 1;
+  }
+  /deep/ .el-form-item__label {
+    width: 136px;
+  }
+  .selectBox {
+    display: flex;
+    flex: 1;
+  }
+  .el-form-item {
+    display: flex;
+    width: 100%;
+    .el-form-item__content {
+      flex: 1;
+      display: flex;
+    }
+    .el-select, .el-autocomplete{
+      display: flex;
+      flex: 1;
+    }
+  }
+}
+.indicatorTypeBox {
+  // padding: 18px 0;
 }
 </style>

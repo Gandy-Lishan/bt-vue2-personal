@@ -252,7 +252,7 @@ export default {
 	padding-right: 5px;
 }
 /deep/ .el-form-item__label {
-	margin-right: 36px;
+	margin-right: 5px;
 }
 /deep/ .el-radio {
 	margin-right: -3px;

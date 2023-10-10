@@ -426,7 +426,7 @@ delay_bars: [String, Number],
 	padding-right: 5px;
 }
 /deep/ .el-form-item__label {
-	margin-right: 36px;
+	margin-right: 5px;
 }
 @media (min-width: 1280px) and (max-width: 1365px) {
 	/deep/ .el-form-item__label {
