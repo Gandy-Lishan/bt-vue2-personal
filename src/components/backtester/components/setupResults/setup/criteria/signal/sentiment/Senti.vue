@@ -1,9 +1,9 @@
 // sentiment indicator input box
 <template>
 	<div class="senti-container">
-		<el-form :model="senti" :rules="rules" ref="sentiForm">
+		<el-form :model="senti" :rules="rules" ref="sentiForm" label-position="left">
 			<div class="ids-container" v-if="indicatorRadio === 'sentiment'">
-				<el-form-item label="Extreme Optimism" prop="extreme_optimism">
+				<el-form-item label="Extreme Optimism" prop="extreme_optimism" size="mini">
 					<span slot="label">
 						<span class="span-box">
 							<span>Extreme Optimism:</span>
@@ -11,7 +11,7 @@
 					</span>
 					<el-input disabled v-model="senti.extreme_optimism"></el-input>
 				</el-form-item>
-				<el-form-item label="Extreme Pessimism" prop="extreme_pessimism">
+				<el-form-item label="Extreme Pessimism" prop="extreme_pessimism"  size="mini">
 					<span slot="label">
 						<span class="span-box">
 							<span>Extreme Pessimism:</span>
@@ -806,7 +806,8 @@ export default {
 	.el-form-item {
 		display: inline-flex;
 	}
-	border-bottom: 1px solid #797979;
+  display: flex;
+  justify-content: space-between;
 }
 .condition-container {
 	display: flex;
@@ -820,7 +821,7 @@ export default {
 }
 
 /deep/ .el-form-item__label {
-	margin-right: 36px;
+	margin-right: 5px;
 }
 @media (min-width: 1280px) and (max-width: 1365px) {
 	/deep/ .el-form-item__label {

@@ -200,30 +200,6 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
   font-size: 16px;
   margin-right: 5px;
 }
-.criteria-box input:not([type]),
-.criteria-box input[type="text"],
-.criteria-box input[type="number"],
-.criteria-box input[type="date"],
-.criteria-box input[type="time"] {
-  border: #000000 solid 1px;
-  padding: 0 5px 0 10px;
-  height: 25px;
-  width: 124px;
-  border-radius: unset;
-  font-size: 0.7rem;
-}
-.criteria-box .delay-bar-box input:not([type]),
-.criteria-box .delay-bar-box input[type="text"],
-.criteria-box .delay-bar-box input[type="number"],
-.criteria-box .delay-bar-box input[type="date"],
-.criteria-box .delay-bar-box input[type="time"] {
-  border: #000000 solid 1px;
-  padding: 0 5px 0 10px;
-  height: 25px;
-  width: 72px;
-  border-radius: unset;
-  font-size: 0.7rem;
-}
 /* .backtest_container .dateBox .el-form-item .el-form-item__label {
   margin-left: 40px;
 } */
@@ -375,17 +351,6 @@ input[type="date"],
 input[type="time"] {
   width: 91px;
 }
-  .criteria-box input:not([type]),
-  .criteria-box input[type="text"],
-  .criteria-box input[type="number"],
-  .criteria-box input[type="date"],
-  .criteria-box input[type="time"] {
-    border: #000000 solid 1px;
-    padding: 0 5px 0 10px;
-    height: 25px;
-    width: 105px;
-    border-radius: unset;
-  }
 }
 @media (min-width: 820px) and (max-width: 1099px) {
   .el-tabs__item {
@@ -443,17 +408,7 @@ input[type="time"] {
     width: 300px;
     border-radius: unset;
   } */
-  .criteria-box input:not([type]),
-  .criteria-box input[type="text"],
-  .criteria-box input[type="number"],
-  .criteria-box input[type="date"],
-  .criteria-box input[type="time"] {
-    border: #000000 solid 1px;
-    padding: 0 5px 0 10px;
-    height: 25px;
-    width: 124px;
-    border-radius: unset;
-  }
+
   /* .backtest_container
     .el-form-item
     .el-form-item__content
@@ -477,43 +432,13 @@ input[type="time"] {
 .el-table th.el-table__cell > .cell {
   word-break: break-word;
 }
-.criteria-box .signal-option-box .signal-container input:not([type]):first-child, 
-.criteria-box .signal-option-box .signal-container input[type='text']:first-child, 
-.criteria-box .signal-option-box .signal-container input[type='number']:first-child, 
-.criteria-box .signal-option-box .signal-container input[type='date']:first-child,
-.criteria-box .signal-option-box .signal-container input[type='time']:first-child {
-	width: 200px;
-}
-.criteria-box .signal-option-box .signal-container .score-container input:not([type]), 
-.criteria-box .signal-option-box .signal-container .score-container input[type='text'], 
-.criteria-box .signal-option-box .signal-container .score-container input[type='number'], 
-.criteria-box .signal-option-box .signal-container .score-container input[type='date'],
-.criteria-box .signal-option-box .signal-container .score-container input[type='time'] {
-	width: 50px;
-}
 
-.criteria-box .signal-option-box .signal-container .el-input__inner {
-	margin-left: 5px;
-}
-.criteria-box .signal-option-box .signal-container input:not([type]):last-child, 
-.criteria-box .signal-option-box .signal-container input[type='text']:last-child, 
-.criteria-box .signal-option-box .signal-container input[type='number']:last-child, 
-.criteria-box .signal-option-box .signal-container input[type='date']:last-child,
-.criteria-box .signal-option-box .signal-container input[type='time']:last-child {
-	width: 100px;
-}
 
-.criteria-box .custom-indicator-form input:not([type]),
-.criteria-box .custom-indicator-form input[type="text"],
-.criteria-box .custom-indicator-form input[type="number"],
-.criteria-box .custom-indicator-form input[type="date"],
-.criteria-box .custom-indicator-form input[type="time"] {
-  border: #000000 solid 1px;
-  padding: 0 5px 0 10px;
-  height: 40px;
-  width: 280px;
-  border-radius: unset;
-}
+
+
+
+
+
 
 .el-tabs__new-tab{
   margin: 12px 5px 9px 10px;
@@ -556,14 +481,6 @@ input[type="time"] {
 	border: 1px solid #797979;
 	color: #797979;
 }
-.dateBox .el-input__prefix{
-	top: -6px;
-}
-.dateBox .el-input__suffix{
-  top: -10px;
-  right: -15px;
-}
-
 .history-container td{
 	padding:0 !important;
 }

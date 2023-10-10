@@ -101,6 +101,32 @@
 .set-up-container input[type="date"],
 .set-up-container input[type="time"] {
   border: #cacaca solid 1px;
+  padding: 0 5px 0 25px;
+  border-radius: 4 !important;
+}
+.set-up-container .el-form-item__label {
+  width: auto;
+}
+.set-up-container .descriptionBox {
+  border: #cacaca solid 1px;
   padding: 0 5px 0 10px;
-  border-radius: 4;
+  border-radius: 4px;
+  line-height: 28px;
+  margin-bottom: 18px;
+}
+.set-up-container .excludeBox .el-checkbox__input.is-checked+.el-checkbox__label {
+  margin-bottom: 18px;
+}
+.set-up-container .el-input-group__append, .el-input-group__prepend {
+  padding: 0 5px;
+  background-color: inherit
+}
+.dateBox .el-input__prefix{
+	left: 0px;
+}
+.set-up-container .el-date-editor.el-input, .el-date-editor.el-input__inner {
+  width: 100%;
+}
+.indicator-box .el-form-item__label {
+  margin-right: 10px;
 }
