@@ -219,28 +219,7 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 input[type="number"],
 input[type="date"],
 input[type="time"] {
-  width: 80px;
-}
-.senti-container .ids-container input[type="text"],
-input[type="number"],
-input[type="date"],
-input[type="time"] {
-  width: 80px;
-}
-.condition-container {
-  margin-top: 16px;
-}
-.senti-container .condition-container .conditionInput input[type="text"],
-input[type="number"],
-input[type="date"],
-input[type="time"] {
-  width: 103px;
-}
-.senti-container .condition-container .check-box input[type="text"],
-input[type="number"],
-input[type="date"],
-input[type="time"] {
-  width: 90px;
+  width: 100%;
 }
 .el-radio__label {
   font-size: 15px !important;

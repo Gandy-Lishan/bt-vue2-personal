@@ -1524,11 +1524,6 @@ export default {
 /deep/.el-tabs__nav .el-tabs__item:nth-child(1) span {
 	display: none;
 }
-.delay-bar-box {
-	display: flex;
-	border-top: 1px solid #797979;
-	padding-top: 10px;
-}
 /deep/ .el-input-number--mini {
 	width: 118px;
 }

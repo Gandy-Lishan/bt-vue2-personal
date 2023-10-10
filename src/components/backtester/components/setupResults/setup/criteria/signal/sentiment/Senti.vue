@@ -1,7 +1,7 @@
 // sentiment indicator input box
 <template>
 	<div class="senti-container">
-		<el-form :model="senti" :rules="rules" ref="sentiForm" label-position="left">
+		<el-form :model="senti" :rules="rules" ref="sentiForm" label-position="left" size="mini">
 			<div class="ids-container" v-if="indicatorRadio === 'sentiment'">
 				<el-form-item label="Extreme Optimism" prop="extreme_optimism" size="mini">
 					<span slot="label">
@@ -34,7 +34,7 @@
 
 				</el-form-item> -->
 				<div class="conditionSelect new">
-					<el-form-item>
+					<el-form-item size="mini">
 						<el-select
 							:disabled="!(conditionRadio === 'Indicator Value')"
 							v-model="senti.newCondition"
@@ -54,7 +54,7 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput period" v-show="isROCLike">
-					<el-form-item prop="value">
+					<el-form-item prop="value" size="mini">
 						<el-input
 							@input="calculateNewConditions"
 							:disabled="!(conditionRadio === 'Indicator Value')"
@@ -64,7 +64,7 @@
 					</el-form-item>
 				</div>
 				<div class="conditionSelect" v-show="isROCLike">
-					<el-form-item>
+					<el-form-item size="mini">
 						<el-select
 							:disabled="!(conditionRadio === 'Indicator Value')"
 							v-model="senti.condition"
@@ -82,7 +82,7 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
-					<el-form-item prop="value">
+					<el-form-item prop="value" size="mini">
 						<el-input
 							:disabled="!(conditionRadio === 'Indicator Value')"
 							v-model="senti.value"
@@ -811,31 +811,12 @@ export default {
 }
 .condition-container {
 	display: flex;
+  align-items: center;
 }
-/deep/ .el-input__inner {
-	padding-left: 5px;
-	margin-left: 5px;
+.el-select {
+  margin: 0 5px;
 }
-/deep/.el-input--suffix .el-input__inner {
-	padding-right: 5px;
-}
-
-/deep/ .el-form-item__label {
-	margin-right: 5px;
-}
-@media (min-width: 1280px) and (max-width: 1365px) {
-	/deep/ .el-form-item__label {
-		margin-right: 10px;
-	}
-}
-@media (min-width: 375px) and (max-width: 767px) {
-	/deep/ .el-form-item__label {
-		margin-right: 0px;
-		font-size: 12px;
-	}
-	.condition-container {
-		display: flex;
-		flex-wrap: wrap;
-	}
+.el-radio, /deep/ .el-form-item__label {
+  margin-right: 5px;
 }
 </style>
