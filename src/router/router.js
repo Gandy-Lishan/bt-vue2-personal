@@ -109,6 +109,22 @@ const routes = [
 		]
 	},
 	{
+		path: '/myindicator',
+		component: resolve => require(['@/components/MyIndicator/index.vue'], resolve),
+		children: [
+			{
+				path: '',
+				name: 'MIList',
+				component: resolve => require(['@/components/MyIndicator/list/index.vue'], resolve),
+			},
+			{
+				path: 'create',
+				name: 'MIcreate',
+				component: resolve => require(['@/components/MyIndicator/create/index.vue'], resolve),
+			}
+		]
+	},
+	{
 		path: '/doc',
 		component: resolve => require(['@/components/Tutorial/Doc.vue'], resolve),
 		redirect: '/doc/home',

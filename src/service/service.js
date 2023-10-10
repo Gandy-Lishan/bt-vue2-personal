@@ -544,3 +544,129 @@ export function findLastSignalApi(data) {
 			})
 	})
 }
+
+export function getMyIndicatorsList(page) {
+	const url = `/dev/my_indicator/get_records/?page=${page}`;
+
+	return new Promise((resolve, reject) => {
+		axios.get(url)
+			.then(res => {
+				resolve(res);
+			})
+			.catch(err => {
+				reject(err);
+			});
+	});
+}
+export function getAllMyIndicatorsList(page) {
+	const url = `/dev/my_indicator/get_records/?page=${page}`;
+
+	return new Promise((resolve, reject) => {
+		const allData = [];
+
+		function fetchPageData(page) {
+			axios.get(url)
+				.then(res => {
+					const data = res.data.results;
+
+					// 将当前页的数据添加到总数据数组中
+					allData.push(...data);
+
+					if (res.data.next) {
+						// 继续递归请求下一页数据
+						fetchPageData(page + 1);
+					} else {
+						// 所有数据已获取完毕，返回结果
+						resolve(allData);
+					}
+				})
+				.catch(err => {
+					reject(err);
+				});
+}
+		// 开始递归请求第一页数据
+		fetchPageData(page);
+})
+	}
+export function getMyIndicatorData(url) {
+	const path = `/dev/my_indicator/get_data/?url='${url}'`
+
+	return new Promise((resolve, reject) => {
+		axios.get(path)
+			.then(res => {
+				resolve(res);
+			})
+			.catch(err => {
+				reject(err);
+			});
+	});
+}
+
+export function delMyIndicator(url) {
+	const path = `/dev/my_indicator/del_record/?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.delete(path)
+			.then((res) => {
+			resolve(res);
+			})
+			.catch((err) => {
+				reject(err);
+			});
+	});
+}
+export function searchIndicator(data) {
+	const url = `/dev/my_indicator/search_records/`
+	const formData = new FormData();
+
+	// 将data对象的属性添加到FormData
+	console.log('data', data)
+	for (const key in data) {
+		console.log('data', data[key])
+			formData.append(key, data[key])
+	}
+	console.log('查询的 formData', formData)
+
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data', // 设置请求头为form-data格式
+				},
+			})
+			.then((res) => {
+				resolve(res);
+			})
+			.catch((err) => {
+				reject(err);
+			});
+	});
+}
+
+export function saveMyIndicators(data) {
+	const url = '/dev/my_indicator/add_record';
+	const formData = new FormData();
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data', // 设置请求头为form-data格式
+				},
+			})
+			.then((res) => {
+				resolve(res);
+			})
+			.catch((err) => {
+				reject(err);
+			});
+	});
+}
