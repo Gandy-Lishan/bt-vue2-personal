@@ -34,6 +34,7 @@ const state = {
 	indexsList: [],//chartiq
 	formateTechnicalList: [],//chartiq 和builtinList不同，这个是只给表单提供的techList
 	spanPeriod : {},
+	sentimentIndicatorList: []
 }
 
 const mutations = {
@@ -173,7 +174,10 @@ const mutations = {
 	},
 	SET_SPAN_PERIOD: (state,val)=> {
 		state.spanPeriod = val
-	}
+	},
+	getSentimentList(state,list) {
+		state.sentimentIndicatorList = list
+	},
 }
 
 const actions = {

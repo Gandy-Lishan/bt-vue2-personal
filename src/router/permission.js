@@ -126,6 +126,14 @@ async function initiateIndicatorList() {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	if(store.state.chart.indicatorsList.length==0 || store.state.chart.stocksList.length==0 || store.state.chart.indexsList.length==0){
 		const res = await getIndicatorsList()
+		const sentimentList = res.data.map(element => {
+			return {
+				value: element.chart_name,
+				url: element.url,
+				updated: element.updated
+			}
+		})
+		store.commit('chart/getSentimentList', sentimentList)
 		let allSymbolsList = uniqueObjectArray(res.data)
 		const resStocks = await getStocksList()
 		let stocksList = resStocks.data
