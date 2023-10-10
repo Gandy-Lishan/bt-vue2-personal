@@ -809,10 +809,7 @@ export default {
 }
 .condition-container {
 	display: flex;
-}
-/deep/ .el-input__inner {
-	padding-left: 5px;
-	margin-left: 5px;
+  align-items: center;
 }
 /deep/.el-input--suffix .el-input__inner {
 	padding-right: 5px;

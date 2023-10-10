@@ -559,19 +559,18 @@ export function getMyIndicatorsList(page) {
 	});
 }
 export function getAllMyIndicatorsList(page) {
-	const url = `/dev/my_indicator/get_records/?page=${page}`;
+	const url = `/dev/my_indicator/get_records/?page=`;
 
 	return new Promise((resolve, reject) => {
 		const allData = [];
 
 		function fetchPageData(page) {
-			axios.get(url)
+			axios.get(url + page)
 				.then(res => {
 					const data = res.data.results;
-
+					console.log('响应数据', res)
 					// 将当前页的数据添加到总数据数组中
-					allData.push(...data);
-
+					allData.push(...data)
 					if (res.data.next) {
 						// 继续递归请求下一页数据
 						fetchPageData(page + 1);
@@ -583,11 +582,12 @@ export function getAllMyIndicatorsList(page) {
 				.catch(err => {
 					reject(err);
 				});
+			}
+					// 开始递归请求第一页数据
+					fetchPageData(page);
+			})
 }
-		// 开始递归请求第一页数据
-		fetchPageData(page);
-})
-	}
+
 export function getMyIndicatorData(url) {
 	const path = `/dev/my_indicator/get_data/?url='${url}'`
 
