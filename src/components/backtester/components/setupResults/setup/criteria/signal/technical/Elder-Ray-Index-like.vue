@@ -4,7 +4,7 @@
 		<!-- <p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p> -->
 		<el-form :model="tech" :rules="rules" ref="eriForm" size="mini">
 			<div class="condition-container">
-				<el-form-item>
+				<el-form-item class="indicator-alignment">
 					<el-radio
 						v-model="conditionRadio"
 						label="Indicator hist1"
@@ -41,7 +41,7 @@
 				</div>
 			</div>
 			<div class="condition-container">
-				<el-form-item>
+				<el-form-item class="indicator-alignment">
 					<el-radio
 						v-model="conditionRadio"
 						label="Indicator hist2"
@@ -315,5 +315,9 @@ delay_bars: [String, Number],
 }
 .el-radio, /deep/ .el-form-item__label {
   margin-right: 5px;
+}
+
+.indicator-alignment /deep/ label.el-radio {
+  width: 135px;
 }
 </style>

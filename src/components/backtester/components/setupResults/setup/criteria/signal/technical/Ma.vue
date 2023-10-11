@@ -9,6 +9,7 @@
 						effect="light"
 						content="Compare with indicator value"
 						placement="bottom"
+						class="indicator-alignment"
 					>
 					<el-radio v-model="radio" label=" " @change="setRadio"></el-radio>
 						<el-select
@@ -54,7 +55,7 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item>
-						<el-button type="text">Moving Average</el-button>
+						<el-link type="info" :underline="false" class="ISL-text">Moving Average </el-link>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
@@ -108,7 +109,7 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item>
-						<el-button type="text">Moving Average</el-button>
+						<el-link type="info" :underline="false" class="ISL-text">Moving Average </el-link>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
@@ -759,5 +760,16 @@ export default {
 }
 .el-radio, /deep/ .el-form-item__label {
   margin-right: 5px;
+}
+.indicator-alignment /deep/ label.el-radio {
+	margin-right: -6px;
+}
+.ISL-text {
+	cursor: auto;
+	font-size: 12px;
+	margin-right: 5px;
+}
+.ISL-text:hover {
+	color: #909399;
 }
 </style>

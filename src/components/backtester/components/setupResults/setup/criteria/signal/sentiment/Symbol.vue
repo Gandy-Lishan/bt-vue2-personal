@@ -3,7 +3,7 @@
 	<div class="senti-container">
 		<el-form :model="sym" :rules="rules" ref="symbolForm" size="mini">
 			<div class="condition-container">
-				<el-form-item :label="symbolLabel"></el-form-item>
+				<el-form-item :label="symbolLabel" class="indicator-alignment"></el-form-item>
 				<div class="conditionSelect new">
 					<el-form-item>
 						<el-select
@@ -398,5 +398,9 @@ export default {
 }
 .el-radio, /deep/ .el-form-item__label {
   margin-right: 5px;
+}
+.indicator-alignment /deep/ label.el-form-item__label {
+  width: 135px;
+  text-align: left;
 }
 </style>

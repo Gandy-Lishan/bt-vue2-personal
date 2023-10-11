@@ -41,7 +41,7 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item>
-						<el-button type="text">Indicator Value</el-button>
+						<el-link type="info" :underline="false" class="ISL-text">Indicator Value</el-link>
 					</el-form-item>
 				</div>
 			</div>
@@ -241,5 +241,12 @@ delay_bars: [String, Number],
 }
 .el-radio, /deep/ .el-form-item__label {
   margin-right: 5px;
+}
+.ISL-text {
+	cursor: auto;
+	font-size: 12px;
+}
+.ISL-text:hover {
+	color: #909399;
 }
 </style>

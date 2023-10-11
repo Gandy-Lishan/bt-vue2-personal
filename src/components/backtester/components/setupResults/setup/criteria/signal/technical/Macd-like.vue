@@ -4,7 +4,7 @@
 		<!-- <p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p> -->
 		<el-form :model="tech" ref="macdForm" :rules="rules" size="mini">
 			<div class="condition-container">
-				<el-form-item>
+				<el-form-item class="indicator-alignment">
 					<el-radio
 						v-model="radio"
 						label="Indicator Value"
@@ -41,7 +41,7 @@
 				</div>
 			</div>
 			<div class="condition-container">
-				<el-form-item>
+				<el-form-item class="indicator-alignment">
 					<el-radio
 						v-model="radio"
 						label="Indicator Value "
@@ -69,12 +69,12 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item>
-						<el-button type="text"> Indicator Signal line </el-button>
+						<el-link type="info" :underline="false" class="ISL-text"> Indicator Signal line </el-link>
 					</el-form-item>
 				</div>
 			</div>
 			<div class="condition-container">
-				<el-form-item>
+				<el-form-item class="indicator-alignment">
 					<el-radio
 						v-model="radio"
 						label="Indicator Hist"
@@ -420,5 +420,16 @@ delay_bars: [String, Number],
 }
 .el-radio, /deep/ .el-form-item__label {
   margin-right: 5px;
+}
+.indicator-alignment /deep/ label.el-radio {
+  width: 135px;
+}
+
+.ISL-text {
+	cursor: auto;
+	font-size: 12px;
+}
+.ISL-text:hover {
+	color: #909399;
 }
 </style>

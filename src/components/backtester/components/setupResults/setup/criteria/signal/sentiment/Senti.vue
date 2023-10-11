@@ -3,7 +3,7 @@
 	<div class="senti-container">
 		<el-form :model="senti" :rules="rules" ref="sentiForm" label-position="left" size="mini">
 			<div class="ids-container" v-if="indicatorRadio === 'sentiment'">
-				<el-form-item label="Extreme Optimism" prop="extreme_optimism" size="mini">
+				<el-form-item label="Extreme Optimism" prop="extreme_optimism" size="mini" class="extreme-optimism">
 					<span slot="label">
 						<span class="span-box">
 							<span>Extreme Optimism:</span>
@@ -21,7 +21,7 @@
 				</el-form-item>
 			</div>
 			<div class="condition-container">
-				<el-form-item>
+				<el-form-item class="indicator-alignment">
 					<el-radio
 						class="condition-radio"
 						v-model="conditionRadio"
@@ -818,5 +818,11 @@ export default {
 }
 .el-radio, /deep/ .el-form-item__label {
   margin-right: 5px;
+}
+.extreme-optimism /deep/ .el-form-item__label {
+  width: 140px;
+}
+.indicator-alignment /deep/ label.el-radio.condition-radio {
+  width: 135px;
 }
 </style>
