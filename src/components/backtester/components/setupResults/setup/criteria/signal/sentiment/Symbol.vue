@@ -1,7 +1,7 @@
 // symbol indicator input box
 <template>
 	<div class="senti-container">
-		<el-form :model="sym" :rules="rules" ref="symbolForm">
+		<el-form :model="sym" :rules="rules" ref="symbolForm" size="mini">
 			<div class="condition-container">
 				<el-form-item :label="symbolLabel"></el-form-item>
 				<div class="conditionSelect new">
@@ -391,31 +391,12 @@ export default {
 }
 .condition-container {
 	display: flex;
+  align-items: center;
 }
-/deep/ .el-input__inner {
-	padding-left: 5px;
-	margin-left: 5px;
+.el-select {
+  margin: 0 5px;
 }
-/deep/.el-input--suffix .el-input__inner {
-	padding-right: 5px;
-}
-
-/deep/ .el-form-item__label {
-	margin-right: 5px;
-}
-@media (min-width: 1280px) and (max-width: 1365px) {
-	/deep/ .el-form-item__label {
-		margin-right: 10px;
-	}
-}
-@media (min-width: 375px) and (max-width: 767px) {
-	/deep/ .el-form-item__label {
-		margin-right: 0px;
-		font-size: 12px;
-	}
-	.condition-container {
-		display: flex;
-		flex-wrap: wrap;
-	}
+.el-radio, /deep/ .el-form-item__label {
+  margin-right: 5px;
 }
 </style>

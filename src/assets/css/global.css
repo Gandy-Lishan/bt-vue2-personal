@@ -482,16 +482,6 @@ input[type="time"] {
 /* .setup_container .dateBox .el-form-item__content{
   padding-left: 131px;
 } */
-
-.result-container .exclude_oo .el-form-item__content {
-  padding-left: 230px;
-}
-.result-container .exclude_oo .el-form-item__label {
-  width: 250px;
-}
-.result-container .exclude_oo .el-input.is-disabled .el-input__inner {
-  width: 65px;
-}
 /* .backtest_container .descriptionBox .entry-exit-des .el-form-item__label {
   width: 200px;
 }
@@ -517,4 +507,8 @@ input[type="time"] {
 .el-popover{
   background-color: #303133;
   color: #fff;
+}
+
+.empty-senti-container {
+  min-height: 142px;
 }

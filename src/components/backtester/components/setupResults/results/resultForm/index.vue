@@ -2,55 +2,28 @@
 <template>
 	<div class="backtest_container result-container">
 		<el-form :model="backtestEditData" label-position="left" size="mini">
-			<el-row>
-				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12">
+			<el-row :gutter="20">
+				<el-col :span="6">
 					<el-form-item label="Starting Capital:" prop="startingCapital">
 						<el-input v-model="backtestEditData.capital" disabled></el-input>
 					</el-form-item>
-					<el-form-item label="Commission:" prop="commission">
-						<el-input v-model="temp.commission" disabled></el-input>
-					</el-form-item>
-					<span class="comUnitNote">(%)</span>
-					<el-form-item label="Slippage:" prop="slippage">
-						<el-input
-							v-model="backtestEditData.slippage"
-							disabled
-						></el-input> </el-form-item
-					><span class="sliUnitNote">(per trade)</span>
-					<el-form-item label="Benchmark:" prop="benchmark">
-						<el-input disabled v-model="backtestEditData.benchmark"> </el-input>
+					<el-form-item label="Timeframe:" prop="frequency">
+						<el-input disabled v-model="editFrequency"></el-input>
 					</el-form-item>
 					<el-form-item label="Trade Price:" prop="trade_price">
 						<el-input disabled v-model="tradePrice"></el-input>
 					</el-form-item>
 				</el-col>
-				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12" :span="2">
-					<div class="dateBox">
-						<el-form-item label="Backtest Period:">
-							<el-input disabled v-model="backtestPeriod"> </el-input>
-						</el-form-item>
-						<el-form-item
-							label="Start date:"
-							v-if="backtestEditData.start_date != '1800-10-01'"
-						>
-							<el-input disabled v-model="backtestEditData.start_date">
-							</el-input>
-						</el-form-item>
-						<el-form-item
-							label="Start date:"
-							v-if="backtestEditData.start_date == '1800-10-01'"
-						>
-							<el-input disabled> </el-input>
-						</el-form-item>
-					</div>
-					<div class="dateBox">
-						<el-form-item label="End date:">
-							<el-input disabled v-model="backtestEditData.end_date">
-							</el-input>
-						</el-form-item>
-					</div>
-					<el-form-item label="Timeframe:" prop="frequency">
-						<el-input disabled v-model="editFrequency"></el-input>
+				<el-col :span="6">
+					<el-form-item label="Commission:" prop="commission">
+						<el-input v-model="temp.commission" disabled>
+							<template v-slot:append>
+								(%)
+							</template>
+						</el-input>
+					</el-form-item>
+					<el-form-item label="Backtest Period:">
+						<el-input disabled v-model="backtestPeriod"> </el-input>
 					</el-form-item>
 					<div class="exclude_oo">
 					<el-form-item label="Exclude Overlapping Observations:" prop="exclude_oo" v-if="backtestEditData.exclude_oo != 0">
@@ -58,9 +31,30 @@
 					</el-form-item>
 					</div>
 				</el-col>
-			</el-row>
-			<el-row>
-				<div class="nameBox border-set">
+				<el-col :span="6">
+					<el-form-item label="Slippage:" prop="slippage">
+						<el-input
+							v-model="backtestEditData.slippage"
+							disabled
+						>
+						<template v-slot:append>
+							(per trade)
+						</template>
+						</el-input>
+					</el-form-item>
+					<el-form-item
+						label="Start date:"
+						v-if="backtestEditData.start_date != '1800-10-01'"
+					>
+						<el-input disabled v-model="backtestEditData.start_date">
+						</el-input>
+					</el-form-item>
+					<el-form-item
+						label="Start date:"
+						v-if="backtestEditData.start_date == '1800-10-01'"
+					>
+						<el-input disabled> </el-input>
+					</el-form-item>
 					<el-form-item
 						label="Backtest Name:"
 						prop="name"
@@ -70,9 +64,32 @@
 						<el-input
 							v-model="backtestEditData.name"
 							disabled
-							style="width: 720px"
 						></el-input>
 					</el-form-item>
+				</el-col>
+				<el-col :span="6">
+					<el-form-item label="Benchmark:" prop="benchmark">
+						<el-input disabled v-model="backtestEditData.benchmark"> </el-input>
+					</el-form-item>
+					<el-form-item label="End date:">
+						<el-input disabled v-model="backtestEditData.end_date">
+						</el-input>
+					</el-form-item>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12">
+					<span class="comUnitNote">(%)</span>
+				</el-col>
+				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12" :span="2">
+					<div class="dateBox">
+					</div>
+					<div class="dateBox">
+					</div>
+				</el-col>
+			</el-row>
+			<el-row>
+				<div class="nameBox border-set">
 				</div>
 			</el-row>
 		</el-form>
@@ -195,6 +212,7 @@ export default {
 	border-bottom: 1px solid #797979;
 }
 .result-container {
+	padding: 20px 20px 0 20px;
 	margin-bottom: 20px;
 }
 @media (min-width: 1680px) {

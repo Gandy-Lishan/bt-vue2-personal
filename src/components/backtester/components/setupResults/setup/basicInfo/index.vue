@@ -1297,7 +1297,7 @@ export default {
 // 	}
 // }
 .backtest_container{
-	border-bottom: 1px solid #ababab;
+	border-bottom: 2px solid #cacaca;
 }
 
 .excludeBox {

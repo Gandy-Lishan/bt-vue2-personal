@@ -1,7 +1,7 @@
 // ADX-Like input box
 <template>
 	<div class="senti-container">
-		<el-form :model="tech" :rules="rules" ref="adxForm">
+		<el-form :model="tech" :rules="rules" ref="adxForm" size="mini">
 			<div class="condition-container">
 				<!-- <p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p> -->
 				<el-form-item>
@@ -354,51 +354,21 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.hint{
-    position: absolute;
-    font-size: 0.7rem;
-    color: black !important;
-    top: 74px;
-    left: 231px;
-    font-weight: 300;
-}
 .ids-container {
-	// hide attributes of technical indicators
-	display: none;
-	flex-wrap: wrap;
 	.el-form-item {
 		display: inline-flex;
 	}
+  display: flex;
+  justify-content: space-between;
 }
 .condition-container {
 	display: flex;
-	&:first-child {
-		border-top: 1px solid #797979;
-	}
+  align-items: center;
 }
-/deep/ .el-input__inner {
-	padding-left: 5px;
-	margin-left: 5px;
+.el-select {
+  margin: 0 5px;
 }
-/deep/.el-input--suffix .el-input__inner {
-	padding-right: 5px;
-}
-/deep/ .el-form-item__label {
-	margin-right: 5px;
-}
-@media (min-width: 1280px) and (max-width: 1365px) {
-	/deep/ .el-form-item__label {
-		margin-right: 10px;
-	}
-}
-@media (min-width: 375px) and (max-width: 767px) {
-	/deep/ .el-form-item__label {
-		margin-right: 0px;
-		font-size: 12px;
-	}
-	.condition-container {
-		display: flex;
-		flex-wrap: wrap;
-	}
+.el-radio, /deep/ .el-form-item__label {
+  margin-right: 5px;
 }
 </style>

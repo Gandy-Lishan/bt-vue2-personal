@@ -2,7 +2,7 @@
 <template>
 	<div class="senti-container">
 		<!-- <p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p> -->
-		<el-form :model="tech">
+		<el-form :model="tech" size="mini">
 			<div class="condition-container">
 				<el-form-item>
 					<el-radio
@@ -428,50 +428,21 @@ delay_bars: [String, Number],
 }
 </script>
 <style lang="less" scoped>
-.hint{
-    position: absolute;
-    font-size: 0.7rem;
-    color: black !important;
-    top: 74px;
-    left: 231px;
-    font-weight: 300;
-}
 .ids-container {
-	// hide attributes of technical indicators
-	display: none;
-	flex-wrap: wrap;
 	.el-form-item {
 		display: inline-flex;
 	}
+  display: flex;
+  justify-content: space-between;
 }
 .condition-container {
 	display: flex;
+  align-items: center;
 }
-/deep/ .el-input__inner {
-	padding-left: 5px;
-	margin-left: 5px;
+.el-select {
+  margin: 0 5px;
 }
-/deep/.el-input--suffix .el-input__inner {
-	padding-right: 5px;
-}
-/deep/ .el-form-item__label {
-	margin-right: 5px;
-}
-/deep/ .el-radio {
-	margin-right: -3px;
-}
-@media (min-width: 1280px) and (max-width: 1365px) {
-	/deep/ .el-form-item__label {
-		margin-right: 10px;
-	}
-}
-@media (min-width: 375px) and (max-width: 767px) {
-	/deep/ .el-form-item__label {
-		margin-right: 0px;
-	}
-	.condition-container {
-		display: flex;
-		flex-wrap: wrap;
-	}
+.el-radio, /deep/ .el-form-item__label {
+  margin-right: 5px;
 }
 </style>

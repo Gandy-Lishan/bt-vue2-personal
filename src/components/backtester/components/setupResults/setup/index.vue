@@ -485,8 +485,9 @@ export default {
 .criteria-container {
 	display: flex;
 	justify-content: space-between;
-	border-bottom: 1px solid #797979;
 	align-items: flex-start;
+	margin: 20px;
+	border-bottom: 2px solid #cacaca;
 }
 .backtest-btns {
 	margin-top: 10px;
@@ -548,7 +549,7 @@ export default {
 }
 .divider {
 	width: 1.5px;
-	background-color: #e8e6e6;
+	background-color: #cacaca;
 	opacity: 0.8;
 	margin: 10px;
 	align-self: stretch;
