@@ -77,21 +77,6 @@
 					</el-form-item>
 				</el-col>
 			</el-row>
-			<el-row>
-				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12">
-					<span class="comUnitNote">(%)</span>
-				</el-col>
-				<el-col :xs="15" :sm="14" :md="12" :lg="12" :xl="12" :span="2">
-					<div class="dateBox">
-					</div>
-					<div class="dateBox">
-					</div>
-				</el-col>
-			</el-row>
-			<el-row>
-				<div class="nameBox border-set">
-				</div>
-			</el-row>
 		</el-form>
 	</div>
 </template>

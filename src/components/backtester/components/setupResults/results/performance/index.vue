@@ -1953,7 +1953,7 @@ export default {
 	position: absolute;
 	font-size: 0.8rem;
 	color: black !important;
-	right: 8px;
+	right: 45px;
 	font-weight: 300;
 	margin: 0;
 }

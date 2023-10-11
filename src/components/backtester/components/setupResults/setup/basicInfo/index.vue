@@ -434,8 +434,56 @@
                     </div>
                   </div>
                 </el-col>
-                <el-col :span="6"></el-col>
-                <el-col :span="6"></el-col>
+                <el-col :span="6">
+                  <el-form-item label="User Tag" prop="use_tag" v-if="is_admin">
+                  <template slot="label">
+                    <label>
+                      User Tag
+                      <el-tooltip effect="dark" placement="top">
+                        <span slot="content"
+                          >Choose the type of backtest you want to create.<br
+                        /></span>
+                        <i class="iconfont icon-wenhao"></i>
+                      </el-tooltip>
+                    </label>
+                  </template>
+									<div class="selectBox">
+										<el-select
+											v-model="bd.user_tag"
+											placeholder="— Select User Tag —"
+										>
+											<el-option
+												v-for="item in userTagOptions"
+												:key="item.value"
+												:label="item.label"
+												:value="item.value"
+											>
+											</el-option>
+										</el-select>
+									</div>
+								</el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item
+									label="Report URL"
+									prop="report_url"
+									size="mini"
+									v-if="bd.user_tag === 'analyst' && is_admin"
+								>
+                  <template slot="label">
+                    <label>
+                      Report URL
+                      <el-tooltip effect="dark" placement="top">
+                        <span slot="content"
+                          >Fill in the analyst's report url here.<br
+                        /></span>
+                        <i class="iconfont icon-wenhao"></i>
+                      </el-tooltip>
+                    </label>
+                  </template>
+									<el-input v-model="bd.report_url"></el-input>
+								</el-form-item>
+                </el-col>
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="24">
@@ -531,48 +579,6 @@
                   </div>
                 </el-col>
               </el-row>
-							<div class="userTagBoc">
-								<el-form-item label="User Tag" prop="use_tag" v-if="is_admin">
-									<el-tooltip effect="dark" placement="top">
-										<span slot="content"
-											>Choose the type of backtest you want to create.<br
-										/></span>
-										<i class="iconfont icon-wenhao"></i>
-									</el-tooltip>
-									<div class="selectBox">
-										<el-select
-											v-model="bd.user_tag"
-											placeholder="— Select User Tag —"
-										>
-											<el-option
-												v-for="item in userTagOptions"
-												:key="item.value"
-												:label="item.label"
-												:value="item.value"
-											>
-											</el-option>
-										</el-select>
-									</div>
-								</el-form-item>
-							</div>
-						</div>
-						<div class="setupCenter">
-							<div class="backtestURLBox">
-								<el-form-item
-									label="Report URL"
-									prop="report_url"
-									size="mini"
-									v-if="bd.user_tag === 'analyst' && is_admin"
-								>
-									<el-tooltip effect="dark" placement="top">
-										<span slot="content"
-											>Fill in the analyst's report url here.</span
-										>
-										<i class="iconfont icon-wenhao"></i>
-									</el-tooltip>
-									<el-input v-model="bd.report_url"></el-input>
-								</el-form-item>
-							</div>
 						</div>
 				</div>
 			</el-form>
@@ -581,6 +587,7 @@
 </template>
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
+import Cookies from 'vue-cookies'
 import { timestampToTime } from '@/utils'
 import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule, createTPSLValidate, createPositiveIntegerValidate } from '@/utils/formValidate'
 import { mapGetters } from "vuex"
@@ -589,6 +596,7 @@ import {
   getStocksList,
   getBacktestName
 } from '@/service/service.js'
+import axios from "@/axios"
 const throttle = require('lodash/throttle')
 const uniqWith = require('lodash/uniqWith')
 const isEqual = require('lodash/isEqual')
@@ -733,9 +741,23 @@ export default {
       excludeOOErrMsg: '',
     }
   },
-  created() {
+  async created() {
     this.is_admin = this.$store.getters.getIsAdmin
     this.generateBTName()
+    const userid = Cookies.get('devbt2Userid')
+    if(!userid) return
+    try {
+      const res = await axios.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
+      this.is_admin = res.data.is_admin
+      if(res.status == 200) this.$store.commit('setUserRole', { 'is_admin': res.data.is_admin, 'role': res.data.userid })
+      if(res.status != 200) throw Error('Status code error')
+    } catch (error) {
+      console.error(error)
+      router.push({
+        path: '/404',
+        query: { mes: error?.response?.status } // 携带的参数
+      });
+    }
   },
   mounted() {
     this.$emit('IsRiskControl', true)
