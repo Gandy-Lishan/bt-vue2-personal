@@ -368,6 +368,9 @@
 								techIndiObj[index] === 'Trailingstop_like'
 							"
 						></trailing-stop-like>
+						<div class="empty-senti-container" v-show="(indicatorRadioArr[index] === 'technical' && !techIndiObj[index]) || (indicatorRadioArr[index] === 'symbol' &&
+								indicatorUrlArr[index] == '')">
+						</div>
 						<div class="delay-bar-box">
 							<el-checkbox v-model="isDelayBar" @change="(val) => {delay_bars = val ? 1 : 0}">
 								<span>Delay of Bars </span>

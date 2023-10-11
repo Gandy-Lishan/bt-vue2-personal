@@ -32,7 +32,7 @@
         </el-form-item>
       </div>
       <el-divider></el-divider>
-      <div class="labelWithSelectBox indicatorTypeBox">
+      <div class="labelWithSelectBox indicatorTypeBox" v-show="indicatorRadio === 'Sentiment Indicator'">
         <el-form-item prop="sentimentIndicator">
             <template slot="label">
               <label>
@@ -51,7 +51,6 @@
 							class="inline-input"
 							clearable
 							v-model="si.sentimentIndicator"
-							:disabled="!(indicatorRadio === 'Sentiment Indicator')"
 							:fetch-suggestions="indicatorSentimentSearch"
 							placeholder="Input the sentiment indicator"
 							@select="handleSentimentSelect"
@@ -61,7 +60,7 @@
             </div>
         </el-form-item>
       </div>
-      <div class="labelWithSelectBox indicatorTypeBox">
+      <div class="labelWithSelectBox indicatorTypeBox"  v-show="indicatorRadio === 'Technical Indicator'">
         <el-form-item prop="technicalIndicator">
             <template slot="label">
               <label>
@@ -76,7 +75,6 @@
             <div class="selectBox">
               <el-autocomplete
               ref="techInput"
-							:disabled="!(indicatorRadio === 'Technical Indicator')"
 							class="inline-input"
 							clearable
 							prefix-icon="el-icon-search"
@@ -89,7 +87,7 @@
             </div>
         </el-form-item>
       </div>
-      <div class="labelWithSelectBox indicatorTypeBox">
+      <div class="labelWithSelectBox indicatorTypeBox" v-show="indicatorRadio === 'Symbol OHLCV'">
         <el-form-item prop="symbolIndicator">
             <template slot="label">
               <label>
@@ -105,7 +103,6 @@
               <el-select
                 v-model="si.symbolIndicator"
                 placeholder="Select Symbol Open/High/Low/Close/Volume"
-                :disabled="!(indicatorRadio === 'Symbol OHLCV')"
                 @change="handleSymbolSelect"
               >
                 <el-option
@@ -119,7 +116,7 @@
             </div>
         </el-form-item>
       </div>
-      <div class="labelWithSelectBox indicatorTypeBox">
+      <div class="labelWithSelectBox indicatorTypeBox" v-show="indicatorRadio === 'Users\' Own Indicator'">
         <el-form-item prop="userIndicator">
             <template slot="label">
               <label>
@@ -133,8 +130,7 @@
             </template>
             <div class="selectBox userIndicatorBox">
                 <el-autocomplete
-                prefix-icon="el-icon-files"
-                :disabled="!(indicatorRadio === 'Users\' Own Indicator')"
+                prefix-icon="el-icon-search"
                 class="inline-input"
                 clearable
                 v-model="si.userIndicator"
@@ -161,7 +157,6 @@
 							:on-exceed="handleExceed"
 							:file-list="fileList"
 							ref="upload"
-							:disabled="!(indicatorRadio === 'Users\' Own Indicator')"
 						>
 							<el-button
 								size="mini"
@@ -520,9 +515,6 @@ export default {
   },
   methods: {
     ...mapMutations(['setFrequencyArray', 'setFreqencyLP']),
-    myFunction() {
-      this.$refs.myDropdown.classList.toggle('show')
-    },
     /* 当用户选择indicator类别，进行搜索筛选*/
     selectCategory(e) {
       this.category = e.target.innerHTML
@@ -597,6 +589,9 @@ export default {
           state.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1
         )
       }
+    },
+    changeIndicatorType(type) {
+      this.changeIndicatorChecked(type)
     },
     // technical search
     indicatorTechnicalSearch(queryString, cb) {
@@ -1226,12 +1221,7 @@ export default {
       }
       CIQ.addIndicators()
     },
-    handleUsersSelect(data) {
-      console.log('选择的项', data)
-    },
     changeIndicatorChecked(val) {
-      console.log('indicatorRadio', val)
-      this.indicatorRadio = val
       this.clearFormValidate()
       const arr = [
         'Sentiment Indicator',
