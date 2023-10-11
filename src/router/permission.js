@@ -7,7 +7,7 @@ import {
 	getIndexsList
 } from '@/service/service'
 import { getCurDate } from '@/service/ai'
-import {getQueryVariable} from '@/utils'
+import { getQueryVariable, LocalStorageUtil } from '@/utils'
 import store from '../store'
 import { uniqueObjectArray } from '@/utils/formValidate'
 
@@ -28,6 +28,9 @@ export function setRouterPermission(router) {
 			if (getQueryVariable('userid'))
 				Cookies.set('devbt2Userid', getQueryVariable('userid'))
 		}
+		// 当跳转携带 backtestID 时，填充
+    const backtestID = getQueryVariable('backtestID')
+		if(backtestID) LocalStorageUtil.set('backtestID', backtestID)
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求
 
 		// Cookies.set(
@@ -36,9 +39,7 @@ export function setRouterPermission(router) {
 		// )
 		if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
 			//set 10 sec as default,However, some time-consuming requests are processed separately
-			if (getQueryVariable('userid'))
-				window.location.href = location.origin // 去掉？后面的部分
-
+			if (getQueryVariable('userid') || getQueryVariable('backtestID')) window.location.href = location.origin // 去掉？后面的部分
 			if (to.path == '/404') {
 				// todo 再加一层scannerAI或者backtester权限判断，用于在404页面跳转回网站，或者防止网站跳到404又无限循环
 				//next('/home')
