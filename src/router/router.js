@@ -80,9 +80,16 @@ const routes = [
 							require([
 								'@/components/backtester/components/list/analyst/index.vue'
 							], resolve)
-					}
+					},
 				]
-			}
+			},
+			{
+				path: 'brainstorm', name: 'Brainstorm', component: resolve => require(['@/components/backtester/components/Brainstorm/index.vue'], resolve), 
+				redirect: '/backtester/brainstorm/exit_with_custom_TIM_frame', 
+				children: [
+					{ path: 'exit_with_custom_TIM_frame', name: 'ExitWithCustomTIMFrame', component: resolve => require(['@/components/backtester/components/Brainstorm/ExitWithCustomTIMFrame.vue'], resolve) },
+				]
+			},
 		]
 	},
 	{

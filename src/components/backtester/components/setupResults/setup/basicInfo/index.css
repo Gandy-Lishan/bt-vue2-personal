@@ -105,9 +105,14 @@
   border-radius: 4 !important;
 }
 .set-up-container .delay-bar-box input[type="text"] {
-  border: #cacaca solid 1px;
   padding: 0;
-  border-radius: 4 !important;
+}
+.set-up-container .signal-container .el-input-number input[type="text"] {
+  padding: 0;
+}
+.set-up-container .signal-container .el-select input[type="text"] {
+  padding: 0 30px 0 10px;
+  margin-left: 5px;
 }
 .set-up-container .el-form-item__label {
   width: auto;

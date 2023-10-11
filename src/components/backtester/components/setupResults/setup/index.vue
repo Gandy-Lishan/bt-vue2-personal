@@ -2,7 +2,7 @@
 	<div class="setup">
 		<div v-show="!setUpLoadingSetting.isSetupLoading">
 			<div class="setupBox">
-			<BasicInfo ref="basicInfo"></BasicInfo>
+			<BasicInfo ref="basicInfo" @IsRiskControl="IsRiskControl"></BasicInfo>
 		</div>
 		<div class="set-up-container">
 			<div class="criteria-container">
@@ -35,7 +35,7 @@
 				content="Clear the backtest set up form "
 				placement="bottom"
 			>
-				<el-button type="danger" @click="clearForm"> Clear Form</el-button>
+				<el-button type="danger" @click="clearForm">Clear Form</el-button>
 			</el-tooltip>
 			<el-tooltip
 				class="item"
@@ -136,6 +136,9 @@ export default {
 		setConfig(criteria) {
 			// 传入 entry 和 exit 的配置
 			return generateConfig(criteria)
+		},
+		IsRiskControl(isRiskControl) {
+			this.isRiskControl = isRiskControl
 		},
 		clearForm() {
 			this.$refs['basicInfo'].clearForm()

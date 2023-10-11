@@ -7,7 +7,7 @@
 		</p> -->
 		<el-form :model="tech" :rules="rules" ref="cciForm" size="mini">
 			<div class="condition-container">
-				<el-form-item>
+				<el-form-item class="indicator-alignment">
 					<el-radio
 						v-model="conditionRadio"
 						label=" Indicator Value"
@@ -238,5 +238,8 @@ export default {
 }
 .el-radio, /deep/ .el-form-item__label {
   margin-right: 5px;
+}
+.indicator-alignment /deep/ label.el-radio {
+  width: 135px;
 }
 </style>

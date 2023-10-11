@@ -21,7 +21,6 @@
 						<i class="iconfont icon-wenhao"></i>
 					</el-tooltip>
 				</span>
-
 				<el-input-number
 					v-model="score"
 					:step="1"
@@ -64,7 +63,7 @@
 				</el-select>
 			</div>
 		</div>
-		<div :class="relation === 1 ? 'multi' : ''" v-if="isRiskControl === false">
+		<div :class="{'single': relation == 1, 'risk-control': relation == 0}">
 			<div class="multi-box">
 				<el-tabs
 					v-model="editableTabsValue"
@@ -464,7 +463,8 @@ export default {
 			freqArray: new Array(5).fill(''),
 			// riskValArr: new Array(5).fill(''),
 			delay_bars: 0,
-			isDelayBar: false
+			isDelayBar: false,
+			relation: 0
     }
   },
   computed: {
@@ -496,9 +496,6 @@ export default {
         ];
       }
     },
-    relation() {
-      return this.config['criteria'] == 'entry' ? 1 : 0
-    },
 		criteriaCapFirstL() {
 			/* Entry or Exit */
 			return this.config['criteriaCapFirstL']
@@ -511,6 +508,12 @@ export default {
 	created() {
 		/* 用于自动填充 user custom indicators file */
   	eventBus.$on(`userFileSelect`, this.userFileSelect)
+		 // 在 created 钩子中根据 criteria 计算 relation 的初始值
+		if (this.criteria === 'entry') {
+      this.relation = 1;
+		} else {
+			this.relation = 0;
+		}
 	},
 	methods: {
 		...mapMutations('form', ['setFrequencyArray']),
@@ -1324,6 +1327,7 @@ export default {
 	font-weight: bold;
 	margin-right: 5px;
 	display: inline-block;
+	margin: 0;
 }
 .radioBox .el-form-item {
 	display: flex;
@@ -1378,14 +1382,12 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	padding: 5px;
 }
 .signal-container {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-}
-/deep/ .multi .multi-box .el-tabs--card > .el-tabs__header {
-	display: none;
 }
 .scoreNote {
 	font-size: 16px;
@@ -1404,7 +1406,10 @@ export default {
 	justify-content: center;
 	align-items: center;
 }
-/deep/ .multi .multi-box .el-tabs--card > .el-tabs__header {
+/deep/ .single .multi-box .el-tabs--card > .el-tabs__header {
+		opacity: 0;
+}
+.risk-control {
 	display: none;
 }
 /deep/.el-tabs__nav .el-tabs__item:nth-child(1) span {
@@ -1412,5 +1417,8 @@ export default {
 }
 /deep/ .el-input-number--mini {
 	width: 118px;
+}
+.delay-bar-box /deep/ label.el-checkbox {
+	width: 146px;
 }
 </style>
