@@ -66,7 +66,7 @@ import BasicInfo from './basicInfo'
 import Criteria from './criteria'
 import { generateConfig } from './criteria/config'
 import cloneDeep from 'lodash/cloneDeep'
-import {capitalizeFirstLetter, isJson} from "@/utils"
+import {capitalizeFirstLetter, isJson, LocalStorageUtil} from "@/utils"
 import SignalCode from '@/utils/cryptoUtils/codeTool'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { LoadingOverlay } from "@/components/common"
@@ -91,6 +91,7 @@ export default {
 	beforeRouteEnter(to, _, next) {
 	if (to.path === '/backtester/sr/setup') {
     next(async _this => {
+			debugger
 			_this.setSetUpLoadingSetting(true, false, 0, 'Loading...')
       if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
         console.log('说明是路由跳转过来携带参数的，用于展示表单数据')
@@ -110,12 +111,29 @@ export default {
           dataToUse = isJson(dataToUse) ? JSON.parse(dataToUse) : dataToUse
           await _this.displaySetUpForm(dataToUse)
         }
+				// 如果跳转携带 backtestID 则填充
+				const backtestID = LocalStorageUtil.get('backtestID')
+				if(backtestID) {
+					const res = await seeParams(backtestID)
+					res.data.commission = (res.data.commission * 100).toFixed(2)
+					_this.displaySetUpForm(res.data)
+				}
       }
 			_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')
     });
   } else {
     next();
   }
+	},
+	async created() {
+		// 如果跳转携带 backtestID 则填充
+    // const backtestID = LocalStorageUtil.get('backtestID')
+		// if(!backtestID) return
+		// const res = await seeParams(backtestID)
+		// res.data.entry_description = isJson(res.data.entry_description) ? JSON.parse(res.data.entry_description) : res.data.entry_description
+		// res.data.exit_description = isJson(res.data.exit_description) ? JSON.parse(res.data.exit_description) : res.data.exit_description
+		// res.data.result = isJson(res.data.result) ? JSON.parse(res.data.result) : res.data.result
+		// this.editBacktest(res.data)
 	},
 	computed: {
     setUpLoadingSetting() {
