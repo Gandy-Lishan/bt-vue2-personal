@@ -115,22 +115,23 @@ instance.interceptors.response.use(
 			percentage: 0,
 			progressText: ''
 		})
-		if (err?.response?.status == 410) {
-			if(store.state.states.backtesterAuthorized){
-				store.commit('states/setShowScannerAILink',false)
-				return Promise.reject(err);
-			}
-			try{
-				const desc = err.response.config.url.indexOf('ai_scanner')==-1?' Backtester services':' ScannerAi services'
-				store.commit('states/setErrorMessage404',{status:err.response.status,message:desc})
-				router.push("/404")
-			}catch(error){
-				// 如果返回的属性不全，比如测试请求返回里只存在response.status
-				store.commit('states/setErrorMessage404',{status:err.response.status,message:''})
-				router.push("/404")
-			}
-			return Promise.reject(err)
-		}
+		// 取消权限控制
+		// if (err?.response?.status == 410) {
+		// 	if(store.state.states.backtesterAuthorized){
+		// 		store.commit('states/setShowScannerAILink',false)
+		// 		return Promise.reject(err);
+		// 	}
+		// 	try{
+		// 		const desc = err.response.config.url.indexOf('ai_scanner')==-1?' Backtester services':' ScannerAi services'
+		// 		store.commit('states/setErrorMessage404',{status:err.response.status,message:desc})
+		// 		router.push("/404")
+		// 	}catch(error){
+		// 		// 如果返回的属性不全，比如测试请求返回里只存在response.status
+		// 		store.commit('states/setErrorMessage404',{status:err.response.status,message:''})
+		// 		router.push("/404")
+		// 	}
+		// 	return Promise.reject(err)
+		// }
 
 		if (err?.response?.status == 404) {
 			console.log('url 找不到')
