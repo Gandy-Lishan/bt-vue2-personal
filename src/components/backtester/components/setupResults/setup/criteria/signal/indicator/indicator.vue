@@ -280,7 +280,7 @@ import {
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
-import {compareArrays} from '@/utils'
+import {compareArrays, LocalStorageUtil} from '@/utils'
 import moment from 'moment'
 import { mapMutations } from 'vuex'
 export default {
@@ -419,6 +419,9 @@ export default {
     },
     frequency() {
       return this.$store.state.form.exitFrequency
+    },
+    isBTChartReady() {
+      return this.$store.state.chart.isBTChartReady
     }
   },
   watch: {
@@ -511,6 +514,17 @@ export default {
           }
         }
       }
+    },
+    isBTChartReady(val) {
+      if(!val) return
+      // 预填充 btv2 按钮跳转过来携带的 indicator
+			let indicator = LocalStorageUtil.get('indicator')
+      if(!indicator) return
+      indicator = indicator.replace(/"/g, '')
+      let ele = CIQ.findSentiIndicator(null, indicator)
+      ele = {...ele, value: ele.chart_name}
+      if(this.criteria == 'entry') this.handleSentimentSelect(ele)
+      LocalStorageUtil.remove('indicator')
     }
   },
   methods: {
