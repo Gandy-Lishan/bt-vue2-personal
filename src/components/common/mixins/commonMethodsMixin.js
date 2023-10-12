@@ -374,7 +374,8 @@ export const CommonMethodsMixin = {
 			const conditionMap = new Map([
 				[5, { name: 'Rate Of Change', abbr: 'ROC' }],
 				[6, { name: '% of Previous Range', abbr: 'OPR' }],
-				[7, { name: 'MA Ratio', abbr: 'MA' }]
+				[7, { name: 'MA Ratio', abbr: 'MA' }],
+				[8, { name: 'Range Rank', abbr: 'RR' }],
 			]);
 			let indicator_url = ''
       let indicator_url_with_ma = ''
