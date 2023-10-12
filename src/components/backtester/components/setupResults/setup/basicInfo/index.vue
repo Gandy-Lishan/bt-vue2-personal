@@ -588,7 +588,7 @@
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
 import Cookies from 'vue-cookies'
-import { timestampToTime } from '@/utils'
+import { timestampToTime, LocalStorageUtil } from '@/utils'
 import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule, createTPSLValidate, createPositiveIntegerValidate } from '@/utils/formValidate'
 import { mapGetters } from "vuex"
 import {
@@ -772,6 +772,9 @@ export default {
     allRiskControlOptions() {
       return this.isTakeProfit || this.isStopLoss || this.isTimeInMarket
     },
+    isBTChartReady() {
+      return this.$store.state.chart.isBTChartReady
+    }
   },
   watch: {
     updateFreq(val) {
@@ -804,6 +807,16 @@ export default {
           this.selectRiskControl(this.isRiskControl)
         }
       }
+    },
+    isBTChartReady(val) {
+      if(!val) return
+      // 预填充 btv2 按钮跳转过来携带的 symbol
+      let symbol = LocalStorageUtil.get('symbol')
+      if(!symbol) return
+      symbol = symbol.replace(/"/g, '')
+      this.bd.symbol = symbol
+      this.getSymbol(symbol)
+      LocalStorageUtil.remove('symbol')
     }
   },
   methods: {

@@ -31,22 +31,27 @@ export function setRouterPermission(router) {
 				Cookies.set('devbt2Userid', getQueryVariable('userid'))
 		}
 		// 当跳转携带 backtestID 时，填充
-    const backtestID = getQueryVariable('backtestID')
-		if(backtestID) LocalStorageUtil.set('backtestID', backtestID)
+		const backtestID = getQueryVariable('backtestID')
+		if (backtestID) LocalStorageUtil.set('backtestID', backtestID)
 		// 当跳转携带 indicator 和 symbol 时，填充
 		const indicator = getQueryVariable('indicator')
 		const symbol = getQueryVariable('index')
-		if(indicator) LocalStorageUtil.set('indicator', indicator)
-		if(symbol) LocalStorageUtil.set('symbol', symbol)
+		if (indicator) LocalStorageUtil.set('indicator', indicator)
+		if (symbol) LocalStorageUtil.set('symbol', symbol)
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求
 
-		// Cookies.set(
-		// 	'sentimen_session',
-		// 	'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FamVv8Nu+OjDeax6/BPemIRtLvxe/ttdcR7ljhLshELegopMNz+YDb73aumgbPJjL/N9dHtRcLmiQd4obvi/ZBgpyj6lX3zBFTA1oLIF7vZgAKOAsuoRHWZg/asNtL34ZUNswnMAUy6RQmkXiJ4OJLqXEs5kLemATonJ2JQf58AXOkQsWfVDfi9glN+sw1OPlHwandKE6qHzWxlibvTrUJsc2kxd2+VDYPK3pbGUDUbPdXJVZ2LMZqRWYtzXS2E74ywV98NoJOBfmgihgC4xxI5toN6zORyAhX1wt5EUPbBETOMPwECWJY7Rs6uLvOIWKKjDxd+d4wkQhC3QvQ/7J+JVIQKetRSgsp2G7YS6ugW3+ncSCcdQoCfcFYziACDCJ8Q=='
-		// )
+		Cookies.set(
+			'sentimen_session',
+			'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FamVv8Nu+OjDeax6/BPemIRtLvxe/ttdcR7ljhLshELegopMNz+YDb73aumgbPJjL/N9dHtRcLmiQd4obvi/ZBgpyj6lX3zBFTA1oLIF7vZgAKOAsuoRHWZg/asNtL34ZUNswnMAUy6RQmkXiJ4OJLqXEs5kLemATonJ2JQf58AXOkQsWfVDfi9glN+sw1OPlHwandKE6qHzWxlibvTrUJsc2kxd2+VDYPK3pbGUDUbPdXJVZ2LMZqRWYtzXS2E74ywV98NoJOBfmgihgC4xxI5toN6zORyAhX1wt5EUPbBETOMPwECWJY7Rs6uLvOIWKKjDxd+d4wkQhC3QvQ/7J+JVIQKetRSgsp2G7YS6ugW3+ncSCcdQoCfcFYziACDCJ8Q=='
+		)
 		if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
 			//set 10 sec as default,However, some time-consuming requests are processed separately
-			if (getQueryVariable('userid') || getQueryVariable('backtestID') || (getQueryVariable('index') && getQueryVariable('indicator'))) window.location.href = location.origin // 去掉？后面的部分
+			if (
+				getQueryVariable('userid') ||
+				getQueryVariable('backtestID') ||
+				(getQueryVariable('index') && getQueryVariable('indicator'))
+			)
+				window.location.href = location.origin // 去掉？后面的部分
 			if (to.path == '/404') {
 				// todo 再加一层scannerAI或者backtester权限判断，用于在404页面跳转回网站，或者防止网站跳到404又无限循环
 				//next('/home')
@@ -58,12 +63,11 @@ export function setRouterPermission(router) {
 					await initiateIndicatorList()
 					store.dispatch('states/set_scannerai_flag', true)
 				} else {
-					await getUserState()
 					await initiateIndicatorList()
 					store.dispatch('states/set_scannerai_flag', false)
 				}
 				next()
-			}		
+			}
 		} else {
 			//alert('No permission')
 			//window.location.href = loginUrl
@@ -79,33 +83,6 @@ export function setRouterPermission(router) {
 				next()
 			}
 		}
-	})
-}
-function getUserState(){
-	if(store.getters.getRole) return
-	return new Promise(async (resolve,reject)=>{
-		axios
-		.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
-		.then(async res => {
-			console.log('lishan res', res)
-			if (res.status == 200) {
-				store.dispatch('user/set_user_role', {
-					is_admin: res.data.is_admin,
-					role: res.data.userid
-				})
-				resolve()
-			}else {
-				reject()
-				throw Error('Status code error')
-			}
-		}).catch(error => {
-			reject()
-			console.error(error)
-			router.push({
-				path: '/404',
-				query: { mes: error?.response?.status } // 携带的参数
-			})
-		})
 	})
 }
 async function initiateCurrentDate() {
@@ -133,7 +110,11 @@ async function initiateCurrentDate() {
 async function initiateIndicatorList() {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	// 这个数据基本不会变，存起来
-	if(store.state.chart.indicatorsList.length==0 || store.state.chart.stocksList.length==0 || store.state.chart.indexsList.length==0){
+	if (
+		store.state.chart.indicatorsList.length == 0 ||
+		store.state.chart.stocksList.length == 0 ||
+		store.state.chart.indexsList.length == 0
+	) {
 		const res = await getIndicatorsList()
 		const sentimentList = res.data.map(element => {
 			return {
@@ -157,7 +138,7 @@ async function initiateIndicatorList() {
 		let newAllSymbolsList = []
 		for (var i = 0; i < allSymbolsList.length; i++) {
 			let item = allSymbolsList[i]
-			if (stocksList.find((j) => j.stock == item.url)) {
+			if (stocksList.find(j => j.stock == item.url)) {
 				let newName = item.url + ' Optix'
 				newAllSymbolsList.push({
 					chart_name: newName,
@@ -170,7 +151,7 @@ async function initiateIndicatorList() {
 		}
 		// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
 		CIQ.indicatorList = newAllSymbolsList
-		store.commit('chart/getIndicatorsList',newAllSymbolsList)
+		store.commit('chart/getIndicatorsList', newAllSymbolsList)
 		LocalStorageUtil.set('indicatorList', newAllSymbolsList)
 		LocalStorageUtil.set('symbolsList', symbolsList)
 	}
