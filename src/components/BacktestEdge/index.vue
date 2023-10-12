@@ -76,6 +76,7 @@
 <script>
 import Footer from "./Footer.vue";
 import RecentlyUpdated from "./RecentlyUpdated.vue";
+import { mapGetters } from 'vuex'
 export default {
   name: 'homeLayout',
   data() {
@@ -90,7 +91,23 @@ export default {
     Footer,
     RecentlyUpdated
   },
+  computed: {
+    ...mapGetters(['getShowScannerAILink']),
+    showScannerAILink() {
+      return this.getShowScannerAILink
+    },
+  },
   watch: {
+	showScannerAILink: {
+      handler(newVal) {
+		if(newVal == false){
+			let scannerai = document.querySelector('.ai-link')
+    		scannerai.style.display = 'none'
+		}
+	  },
+	  immediate: true,
+      deep: true
+	},
     '$route'(to, from) {
       // 在$route对象变化时执行逻辑
       if (to.name == 'strategy') {

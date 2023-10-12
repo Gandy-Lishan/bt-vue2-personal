@@ -346,6 +346,7 @@ import {
   getAllHistoryList,
   searchHistoryList
 } from '@/service/service.js'
+import { getCurDate } from '@/service/ai'
 export default {
   data() {
     return {
@@ -379,9 +380,9 @@ export default {
     copy,
     permission
   },
-  created() {
-    this.getHistoryList()
-
+  async created() {
+    await this.getHistoryList()
+    await getCurDate()
     this.isSystem = this.$store.state.form.role
   },
   methods: {
@@ -420,6 +421,7 @@ export default {
             this.$store.commit('form/getBacktestName', historyNameList)
           }
           this.queryInfo.total = res.data.count
+          this.$store.commit('states/setBacktesterAuthorized',true)
         }
       } catch (error) {
         console.log(error)

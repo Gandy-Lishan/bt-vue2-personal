@@ -116,15 +116,19 @@ instance.interceptors.response.use(
 			progressText: ''
 		})
 		if (err?.response?.status == 410) {
-			const desc =
-				err.response.config.url.indexOf('ai_scanner') == -1
-					? ' Backtester page'
-					: ' ScannerAi page'
-			window.location.href = '/404?mes=' + err.response.status + '&desc=' + desc
-			// router.push({
-			//   path: '/404',
-			//   query: { mes: err.response.status } // 携带的参数
-			// });
+			if(store.state.states.backtesterAuthorized){
+				store.commit('states/setShowScannerAILink',false)
+				return Promise.reject(err);
+			}
+			try{
+				const desc = err.response.config.url.indexOf('ai_scanner')==-1?' Backtester services':' ScannerAi services'
+				store.commit('states/setErrorMessage404',{status:err.response.status,message:desc})
+				router.push("/404")
+			}catch(error){
+				// 如果返回的属性不全，比如测试请求返回里只存在response.status
+				store.commit('states/setErrorMessage404',{status:err.response.status,message:''})
+				router.push("/404")
+			}
 			return Promise.reject(err)
 		}
 

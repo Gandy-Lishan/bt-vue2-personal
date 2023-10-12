@@ -1,6 +1,9 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 
 const state = {
+	errorMessage404:{status:null,message:''},
+	showScannerAILink:true,
+	backtesterAuthorized: false,
     scannerai_filter: {},
 	scannerai_flag: false,
 	isBacktestRunning_flag:false,
@@ -32,6 +35,15 @@ const mutations = {
 	},
     envokeBeforeCalculateNewConditions(state,val){
 		state.beforeCalculateNewConditions = val
+	},
+	setShowScannerAILink: (state,val) => {
+		state.showScannerAILink = val
+	},
+	setBacktesterAuthorized: (state,val) => {
+		state.backtesterAuthorized = val
+	},
+	setErrorMessage404: (state,obj) => {
+		state.errorMessage404 = obj
 	},
 }
 

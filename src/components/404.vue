@@ -23,18 +23,21 @@ export default {
 		}
 	},
     created() {
-        this.state = this.$route.query['mes']
-        this.desc = this.$route.query['desc']
+        // this.state = this.$route.query['mes']
+        // this.desc = this.$route.query['desc']
+        const respond = this.$store.state.states.errorMessage404
+        this.state = respond['status']
+        this.desc = respond['message']
 
         switch(this.state){
             case 410:
-                this.mesContent = `You do not have the access permission for ${this.desc}, Please go purchase and try it again`
+                this.mesContent = `You do not have the access permission for ${this.desc}, Please extend your plan`
                 this.btnContent = 'More Plans'
                 this.imgSrc = "410.png"
                 this.targetPath = 'https://sentimentrader.com/pricing';
                 break;
             case '410':
-                this.mesContent = `You do not have the access permission for ${this.desc}, Please go purchase and try it again`
+                this.mesContent = `You do not have the access permission for ${this.desc}, Please extend your plan`
                 this.btnContent = 'More Plans'
                 this.imgSrc = "410.png"
                 this.targetPath = 'https://sentimentrader.com/pricing';

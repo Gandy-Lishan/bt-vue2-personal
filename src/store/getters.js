@@ -21,6 +21,7 @@ const getters = {
 	getIsMarkerShownFlagState: state => state.states.isMarkerShown_flag,
 	getIsEditFinishFlagState: state => state.states.isEditFinish_flag,
 	getBeforeCalculateNewConditions: state => state.states.beforeCalculateNewConditions,
+	getShowScannerAILink: state => state.states.showScannerAILink,
 
 	// user
 	getIsAdmin: state => state.user.is_admin,

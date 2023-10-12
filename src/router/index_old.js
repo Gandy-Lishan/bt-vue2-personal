@@ -102,73 +102,41 @@ router.beforeEach(async (to, from, next) => {
 
 	Cookies.set('sentimen_session', 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3Fagvvi8jor+gaZaFZdBZwr8dzDEnzXTHSvpE+r12+VM25ToycuPQkt97utVpuFtWo1MCeEyON1QPkFA6suPxEVy8Whaj01x4oo9U/3dfNy9RY+PPLBh0IReWlHKWiDziortiuJXZZ1xi0lq9R6vfCbfzwdn0M5UK2SWWDAoPkFHOsNCY7h8ZakkGtYk91wYY5nDaTF3b5UNg8relsZQNRs91clVnYsxmpFZi3NdLYTvjLBX3w2gk4F+aCKGALjHEjm9lkuSwK+nG44FW6fl7zWw84w/AQJYljtGzq4u84hYoqMPF353jCRCELdC9D/sn4lUhAp61FKCynYbthLq6Bbf4NCQAh9+xvvctTMFcqAnpJga+GfTHJCqyPdnmYvbKiTQ==')
 	if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
-			//set 10 sec as default,However, some time-consuming requests are processed separately
-			axios.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
-				.then(async(res) => {
-					console.log('lishan res', res)
-					if (res.status == 200) {
-						store.dispatch('user/set_user_role', { 'is_admin': res.data.is_admin, 'role': res.data.userid })
-						if (getQueryVariable('userid')) window.location.href = location.origin // 去掉？后面的部分
-
-						if(to.path == '/404'){
-							// todo 再加一层scannerAI或者backtester权限判断，用于在404页面跳转回网站，或者防止网站跳到404又无限循环
-							//next('/home')
-							
-							next()
-						}else{
-							// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
-							if(to.name == 'scannerai' || to.name == 'scannerai_chart'){
-								await initiateCurrentDate()
-								await initiateIndicatorList()
-								store.dispatch('states/set_scannerai_flag',true)
-							}else{
-								await initiateIndicatorList()
-								store.dispatch('states/set_scannerai_flag',false)
-							}
-							next()
-						}		
-					} else { throw Error('Status code error') }
-				})
-				.catch((error) => {
-					console.error(error)
-					router.push({
-						path: '/404',
-						query: { mes: error?.response?.status } // 携带的参数
-					});
-				})
-
-			// if(to.path == '/404'){
-			// 	//next('/home')
-			// 	next()
-			// }else{
-			// 	// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
-			// 	if(to.name == 'scannerai' || to.name == 'scannerai_chart'){
-			// 		await initiateCurrentDate()
-			// 		await initiateIndicatorList()
-			// 		store.dispatch('states/set_scannerai_flag',true)
-			// 	}else{
-			// 		await initiateIndicatorList()
-			// 		store.dispatch('states/set_scannerai_flag',false)
-			// 	}
-				
-			// 	next()
-			// }
-
+		//set 10 sec as default,However, some time-consuming requests are processed separately
+		if (
+			getQueryVariable('userid')
+		)
+			window.location.href = location.origin // 去掉？后面的部分
+		if (to.path == '/404') {
+			// todo 再加一层scannerAI或者backtester权限判断，用于在404页面跳转回网站，或者防止网站跳到404又无限循环
+			//next('/home')
+			next()
+		} else {
+			// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
+			if (to.name == 'scannerai' || to.name == 'scannerai_chart') {
+				await initiateCurrentDate()
+				await initiateIndicatorList()
+				store.dispatch('states/set_scannerai_flag', true)
+			} else {
+				await initiateIndicatorList()
+				store.dispatch('states/set_scannerai_flag', false)
+			}
+			next()
+		}
 	} else {
 		//alert('No permission')
 		//window.location.href = loginUrl
 		// 这里是判断无cookie情况下进入登录界面，如果是从404
-		
-		if(to.path != '/404'){
-			console.log('to',to)
+
+		if (to.path != '/404') {
+			console.log('to', to)
 			next({
 				path: '/404',
 				query: { mes: 401 } // 携带的参数
-			});
-		}else{
+			})
+		} else {
 			next()
 		}
-		
 	}
 })
 
