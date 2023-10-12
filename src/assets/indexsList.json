@@ -826,5 +826,9 @@
     {
         "symbol": "CDX",
         "name": "Credit Default Swaps (CDX Index)"
+    },
+    {
+        "symbol": "USGG10YR",
+        "name": "10 year yield "
     }
 ]
