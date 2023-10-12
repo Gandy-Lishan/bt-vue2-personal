@@ -583,7 +583,8 @@ let __st_js_generateCsv_ = (_exports) => {
              const conditionMap = new Map([
                  ['Rate Of Change','ROC'],
                  ['% of Previous Range','OPR'],
-                 ['MA Ratio','MA']
+                 ['MA Ratio','MA'],
+                 ['Range Rank','RR']
              ])
              let matchedSubstring = '';
              for(var i in Object.keys(arrData[arrData.length-10])){

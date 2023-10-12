@@ -114,7 +114,8 @@ export default {
         { value: 4, label: 'CrossBelow' },
         { value: 5, label: 'Rate Of Change' },
         { value: 6, label: '% of Previous Range' },
-        { value: 7, label: 'MA Ratio' }
+        { value: 7, label: 'MA Ratio' },
+        { value: 8, label: 'Range Rank' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -158,7 +159,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val) {
-      this.isROCLike = 5 <= val && val <= 7
+      this.isROCLike = 5 <= val && val <= 8
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.sym.condition = this.sym.newCondition
@@ -268,6 +269,9 @@ export default {
           case "MA Ratio":
             _newCondition = 'MAR'
             break;
+          case "Range Rank":
+            _newCondition = 'RR'
+            break;
           default:
             break;
         }
@@ -320,7 +324,8 @@ export default {
         const conditionMap = new Map([
           [5, { name: 'Rate Of Change', abbr: 'ROC' }],
           [6, { name: '% of Previous Range', abbr: 'OPR' }],
-          [7, { name: 'MA Ratio', abbr: 'MA' }]
+          [7, { name: 'MA Ratio', abbr: 'MA' }],
+          [8, { name: 'Range Rank', abbr: 'RR' }],
         ])
 
 
