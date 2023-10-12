@@ -53,6 +53,7 @@
 						</el-select>
 						<el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
 					</el-input>
+					<el-button @click="exportTable" type="primary" round size="mini" style="float: right; margin-top: 20px;"><i class="el-icon-arrow-left el-icon-download" style="margin-right: 5px;"></i>Export table</el-button>
 				</div>
 			</div>
 			<!-- 预留一个过滤器的div -->
@@ -85,7 +86,7 @@ import { timestampToTime } from '@/utils'
 import Table from "./Table.vue";
 
 export default {
-  name: 'aiscanner',
+  name: 'scannerai',
 	components: {
 		Table
 	},
@@ -255,7 +256,9 @@ export default {
 	selectDate(){
 		this.getAIPick()
 	},
-
+	exportTable() {
+		this.$refs.tableChild.exportTable()
+	}
   }
 };
 </script>
