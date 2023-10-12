@@ -866,12 +866,6 @@ export default {
       CIQ.addSymbol(val)
     },
     getBTDate() {
-      this.bd.end_date = timestampToTime(new Date())
-      if(this.bd.backtest_period == '21') {this.bd.start_date = ''; return}
-      const str = this.bd.end_date.split('-')
-      str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
-      this.bd.start_date = str.join('-')
-
       var that = this
       var utils = function () {
         let vm = this
@@ -879,7 +873,13 @@ export default {
           that.bd.symbol = symbol
         }
       }
-      return (window.utils = new utils())
+      window.utils = new utils()  //前置定义utils语句防止此代码块无法执行
+
+      this.bd.end_date = timestampToTime(new Date())
+      if(this.bd.backtest_period == '21') {this.bd.start_date = ''; return}
+      const str = this.bd.end_date.split('-')
+      str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
+      this.bd.start_date = str.join('-')
     },
     getDirection(val) {
       // Set direction to vuex
