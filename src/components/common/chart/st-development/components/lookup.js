@@ -566,7 +566,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
 
                 // set AAPL as default indicator params
                 if(indicatorsList.length==0){
-                    indicatorsList = ['AAPL']
+                    //indicatorsList = ['AAPL']
                 }
 
                 // sort indicatorsList into a "[senti,tech]" style (however, tech is selected lastly in this case, so it doesn't matter)
