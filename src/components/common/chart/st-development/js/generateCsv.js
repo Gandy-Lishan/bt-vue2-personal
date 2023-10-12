@@ -136,15 +136,17 @@ let __st_js_generateCsv_ = (_exports) => {
      for (let i = 0; i < finalData.length; i++) {
      csvArray.push(Object.values(finalData[i]))
      }
-     
- 
+     // 停用ohlcv截断
+    //  csvArray = dropOHLCV(csvArray)
      if(CIQ.downloadCSV){
          downloadCSV(csvArray)
      }
      let csvContent = csvArray.map(e => e.join(",")).join("\n");
      return csvContent 
  };
- 
+ function dropOHLCV(content){
+    return content.map(array => array.slice(-10));
+ }
  function downloadCSV(csvArray){
      let csvContent = "data:text/csv;charset=utf-8," 
      + csvArray.map(e => e.join(",")).join("\n");
