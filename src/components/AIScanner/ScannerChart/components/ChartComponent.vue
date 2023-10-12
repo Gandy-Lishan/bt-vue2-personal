@@ -39,6 +39,7 @@ export default {
 	},
 	beforeDestroy() {
 		// 防止跳转到backtester时保留了Hammer followed by a raise等marker
+		CIQ.objIndicator = []
 		this.$store.dispatch('chart/reset_chart_study_state')
 		this.$store.dispatch('form/reset_chart_config_state')
 		// 还原chartiq默认study definition
