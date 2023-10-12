@@ -418,6 +418,8 @@ export default {
 			// 1. Upload data file
 			// 2. Upload parameter file
 			// 3. Judge the file upload status. If an error is reported, run back test will not be performed
+			
+			this.setSetUpLoadingSetting(true, true, 40, 'Uploading backtest data...')
 			const callback = this.handleCallback(backtestParams, backtestInfo)
 			CIQ.outputSignalsResult(backtestInfo.pk, callback)
 		},

@@ -155,7 +155,7 @@ score: [String, Number],
 period: [String, Number],
 delay_bars: [String, Number],
 		tabLength: Number,
-
+    isLimit: Boolean
 	},
 	data() {
 		return {
@@ -310,7 +310,8 @@ delay_bars: [String, Number],
 						break;
 					case 3:
 						relation = "TimeOrder Multi Condition;"
-						period = 'Period: ' + this.period + ';'
+						const periodText = !this.isLimit ? 'No Limit' : this.period;
+            period = 'Period: ' + periodText + ';'
 						break;
 					default:
 						break;

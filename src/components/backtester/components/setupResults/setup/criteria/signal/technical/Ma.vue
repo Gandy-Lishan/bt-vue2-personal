@@ -211,7 +211,7 @@ export default {
 		period: [String, Number],
 		delay_bars: [String, Number],
 		tabLength: Number,
-
+		isLimit: Boolean
 	},
 	data() {
 		let validatePeriod = (rule, value, callback) => {
@@ -495,7 +495,8 @@ export default {
 						break
 					case 3:
 						relation = 'TimeOrder Multi Condition;'
-						period = 'Period: ' + this.period + ';'
+            const periodText = !this.isLimit ? 'No Limit' : this.period;
+            period = 'Period: ' + periodText + ';'
 						break
 					default:
 						break

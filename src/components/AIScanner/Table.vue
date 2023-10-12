@@ -29,17 +29,33 @@
 						<el-form-item label="AVERAGE WIN %">
 							<span>{{ props.row['AvgWin']}}	</span>
 						</el-form-item>
+						<el-form-item label="MAX RISK %">
+							<span>{{ props.row['MaxRisk'] }}</span>
+						</el-form-item>
 						<el-form-item label="AVERAGE LOSS %">
 							<span>{{ props.row['AvgLoss']}}	</span>
+						</el-form-item>
+						<el-form-item label="MEDIAN RETURN %">
+							<span>{{ props.row['MedianReturn'] }}</span>
 						</el-form-item>
 						<el-form-item label="TOTAL TRADES">
 							<span>{{ props.row['TradeNumber']}}</span>
 						</el-form-item>
+
+						<el-form-item label="ANNUAL RETURN % (CAGR)">
+							<span>{{ props.row['AnnualReturn'] }}</span>
+						</el-form-item>
 						<el-form-item label="TOTAL POSITIVE">
 							<span>{{ Math.round((props.row['TradeNumber'] * props.row['WinRate']) / 100)}}</span>
 						</el-form-item>
+						<el-form-item label="AVERAGE RETURN %">
+							<span>{{ props.row['AvgReturn'] }}</span>
+						</el-form-item>
 						<el-form-item label="TOTAL NEGATIVE">
 							<span>{{ Math.round(props.row['TradeNumber'] - (props.row['TradeNumber'] * props.row['WinRate']) / 100)}}</span>
+						</el-form-item>
+						<el-form-item label="STD. DEV">
+							<span>{{ props.row['StdDev'] }}</span>
 						</el-form-item>
 					</el-form>
 				</template>
@@ -210,7 +226,7 @@
 		<el-pagination
 		@size-change="handleSizeChange"
 		@current-change="handleCurrentChange"
-		:page-sizes="[10]"
+		:page-sizes="[10, 30, 50, 100, 200]"
 		:page-size="pageSize"
 		:total="data.content.length"
 		layout="total, sizes, prev, pager, next, jumper"
@@ -219,6 +235,8 @@
 </template>
 
 <script>
+const XLSX = require('xlsx')
+
 export default {
 	name: 'Table',
 	props: {
@@ -469,6 +487,39 @@ export default {
 			// 隐藏弹窗
 			this.popupVisible = false;
 		},
+		exportTable() {
+			console.log('this.data.content', this.data.content)
+			const data = this.data.content
+			const processedData = data.map(item => {
+				return {
+					'Date': item.Date,
+					'Symbol': item.Symbol,
+					'Close': item.Close,
+					'Trend': item.Market,
+					'Direction': item.Direction,
+					'Signal': this.midTermMap[item._Signal] || item._Signal,
+					'Win Rate(%)': item.WinRate,
+					'Stop Loss(%)': item.StopLoss,
+					'Profit Target(%)': item.ProfitTarget,
+					'Best Time In Market(Bars)': item.TimeInMarket,
+					'Z-Score': item.Z_Score,
+					'AVERAGE WIN %': item.AvgWin,
+					'AVERAGE LOSS %': item.AvgLoss,
+					'TOTAL TRADES': item.TradeNumber,
+					'TOTAL POSITIVE': Math.round((item['TradeNumber'] * item['WinRate']) / 100),
+					'TOTAL NEGATIVE': Math.round(item['TradeNumber'] - (item['TradeNumber'] * item['WinRate']) / 100),
+					'MAX RISK %': item.MaxRisk,
+					'MEDIAN RETURN %': item.MedianReturn,
+					'ANNUAL RETURN % (CAGR)': item.AnnualReturn,
+					'AVERAGE RETURN %': item.AvgReturn,
+					'STD. DEV': item.StdDev
+				}
+			})
+			const ws = XLSX.utils.json_to_sheet(processedData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'AI Picks at the end of today');
+      XLSX.writeFile(wb, 'AI_Stock_Recommended.xlsx');
+		}
 	}
 };
 </script>

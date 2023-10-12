@@ -7,6 +7,96 @@
 					<el-table
 						header-align="center"
 						:data="tableData"
+						style="width: 100%; margin-top: 20px">
+						<el-table-column
+								show-overflow-tooltip
+								prop="CAGR"
+								label="ANNUAL RETURN % (CAGR)"
+
+								align="center"
+							>
+								<template slot-scope="scope">
+									<span v-if="scope.row.CAGR >= 0">{{
+										scope.row.CAGR + ' %'
+									}}</span>
+									<span v-else-if="isNaN(scope.row.CAGR) || !scope.row.CAGR || scope.row.CAGR=='null' || scope.row.CAGR=='0'"></span>
+									<span v-else style="color: red">{{
+										scope.row.CAGR + ' %'
+									}}</span>
+								</template>
+						</el-table-column>
+						<el-table-column
+								show-overflow-tooltip
+								prop="medianReturn"
+								label="MEDIAN RETURN %"
+
+								align="center"
+						>
+								<template slot-scope="scope">
+									<span v-if="scope.row.medianReturn >= 0">{{
+										scope.row.medianReturn + ' %'
+									}}</span>
+									<span v-else-if="isNaN(scope.row.medianReturn) || !scope.row.medianReturn || scope.row.medianReturn=='null' || scope.row.medianReturn=='0'"></span>
+									<span v-else style="color: red">{{
+										scope.row.medianReturn + ' %'
+									}}</span>
+								</template>
+						</el-table-column>
+						<el-table-column
+							show-overflow-tooltip
+							prop="averageReturn"
+							label="AVERAGE RETURN %"
+
+							align="center"
+						>
+							<template slot-scope="scope">
+								<span v-if="scope.row.averageReturn >= 0">{{
+									scope.row.averageReturn + ' %'
+								}}</span>
+								<span v-else-if="isNaN(scope.row.averageReturn) || !scope.row.averageReturn || scope.row.averageReturn=='null' || scope.row.averageReturn=='0'"></span>
+								<span v-else style="color: red">{{
+									scope.row.averageReturn + ' %'
+								}}</span>
+							</template>
+						</el-table-column>
+						<el-table-column
+							show-overflow-tooltip
+							prop="standardDeviation"
+							label="STD. DEV"
+
+							align="center"
+						>
+							<template slot-scope="scope">
+								<span v-if="scope.row.standardDeviation >= 0">{{
+									scope.row.standardDeviation
+								}}</span>
+								<span v-else-if="isNaN(scope.row.standardDeviation) || !scope.row.standardDeviation || scope.row.standardDeviation=='null' || scope.row.standardDeviation=='0'"></span>
+								<span v-else style="color: red">{{
+									scope.row.standardDeviation
+								}}</span>
+							</template>
+						</el-table-column>
+						<el-table-column
+							show-overflow-tooltip
+							prop="maxRisk"
+							label="MAX RISK %"
+
+							align="center"
+						>
+							<template slot-scope="scope">
+								<span v-if="scope.row.maxRisk >= 0">{{
+									scope.row.maxRisk + ' %'
+								}}</span>
+								<span v-else-if="isNaN(scope.row.maxRisk) || !scope.row.maxRisk || scope.row.maxRisk=='null' || scope.row.maxRisk=='0'"></span>
+								<span v-else style="color: red">{{
+									scope.row.maxRisk + ' %'
+								}}</span>
+							</template>
+						</el-table-column>
+					</el-table>
+					<el-table
+						header-align="center"
+						:data="tableData"
 						style="width: 100%; margin-top: 20px"
 					>
 						<el-table-column
@@ -268,6 +358,12 @@ export default class PerformanceComponent extends Vue {
 			resultObj['TradeNumber'] -
 				(resultObj['TradeNumber'] * resultObj['WinRate']) / 100
 		)
+		// lishan 新增字段
+		data.CAGR = resultObj['AnnualReturn']
+		data.medianReturn = resultObj['MedianReturn']
+		data.averageReturn = resultObj['AvgReturn']
+		data.standardDeviation = resultObj['StdDev']
+		data.maxRisk = resultObj['MaxRisk']
 		//data.timeInMarket = resultObj['TimeInMarket']
 		this.tableData.push(data)
 

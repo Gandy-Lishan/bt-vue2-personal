@@ -43,6 +43,45 @@
 								</el-table>
 							</template>
 						</el-skeleton>
+						<div class="zscore-container">
+							<el-skeleton :rows="2" :loading="loading" animated>
+								<template>
+									<el-table
+										:data="result_quotes"
+										:show-header="false"
+										stripe
+										style="width: 100%; height: 100%"
+									>
+
+										<template v-for="column in defaultTableLabels">
+											
+										<el-table-column prop="property" label="Property" v-if="column == 'Entry Date'" :key="column">
+										</el-table-column>
+											<el-table-column
+												v-else
+												:key="column"
+												:label="column"
+												:prop="column"
+											>
+												<template slot-scope="scope">
+													<p class="tableText">
+														{{
+															!Number.isNaN(scope.row[column])
+																? typeof scope.row[column] == 'string'
+																	? scope.row[column]
+																	: parseFloat(
+																			scope.row[column]
+																		).toFixed(1)
+																: null
+														}}
+													</p>
+												</template>
+											</el-table-column>
+										</template>
+									</el-table>
+								</template>
+							</el-skeleton>
+						</div>
 					</div>
 				</el-tab-pane>
 				<el-tab-pane
@@ -67,7 +106,7 @@ import { mapGetters } from 'vuex'
 import { getBacktestInfo } from '@/service/ai'
 
 export default {
-	name: 'AiscannerChart',
+	name: 'scannerai_chart',
 	components: {
 		Chart,
 		Result
@@ -93,19 +132,31 @@ export default {
 			'12 Months [%]'
 			],
 			currTabPage : 'BacktestResult',
-			translateTabelCol : []
+			translateTabelCol : [],
+			result_quotes: []
 		}
 	},
 computed: {
-		...mapGetters(['getBacktestResult']),
+		...mapGetters(['getBacktestResult', 'getBacktestZScoreResult']),
 		backtestResult() {
 			return this.getBacktestResult
+		},
+		backtestZScoreResult() {
+			return this.getBacktestZScoreResult
 		},
 	},
 	watch: {
 		backtestResult: {
 			handler(newVal) {
 				this.backtestResultList = newVal
+			},
+			immediate: true,
+			deep: true
+		},
+		backtestZScoreResult: {
+			handler(newVal) {
+				this.result_quotes = newVal
+				console.log('this.backtestZScoreResult',newVal)
 			},
 			immediate: true,
 			deep: true

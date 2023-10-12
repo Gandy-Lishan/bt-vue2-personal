@@ -81,18 +81,21 @@ const state = {
 	rowDataForDisplay: {}, // 用于保存BT运行结束后的数据,不包含 entry 和 exit
 	cachedBTBasicInfoData: {}, // 用于缓存BT基本信息
 	isListLoading: false, // 控制 list 的loading 状态
-	setUpLoadingSetting: { // 控制 setup 的loading 状态
+	setUpLoadingSetting: {
+		// 控制 setup 的loading 状态
 		isSetupLoading: false,
 		showProgress: false,
 		percentage: 0,
 		progressText: 'Loading...'
 	},
-	resultsLoadingSetting: { // 控制 setup 的loading 状态
+	resultsLoadingSetting: {
+		// 控制 setup 的loading 状态
 		isResultsLoading: false,
 		showProgress: false,
 		percentage: 0,
 		progressText: 'Loading...'
 	}, // 控制 results 的 loading 状态
+	backtestZScoreResult: []
 }
 
 const mutations = {
@@ -672,6 +675,9 @@ const mutations = {
 			percentage,
 			progressText
 		}
+	},
+	STORE_BACKTEST_ZSCORE_RESULT: (state, val) => {
+		state.backtestZScoreResult = val
 	}
 }
 
