@@ -16,14 +16,11 @@
         mode="horizontal"
         @select="handleSelect"
       >
-        <el-menu-item class="home-link" index="1"
-          >BacktestEdge</el-menu-item
-        >
-        <el-menu-item class="strategy-link" index="2"
-          >Strategy</el-menu-item
-        >
-        <el-menu-item class="ai-link" index="3"
+        <el-menu-item class="ai-link" v-if="activeIndex==3"
           >AI Stock Scanner</el-menu-item
+        >
+        <el-menu-item class="home-link" v-if="activeIndex==1"
+          >BacktestEdge</el-menu-item
         >
         <el-submenu class="help-title" index="4">
           <template slot="title">
@@ -96,9 +93,6 @@ export default {
     }
   },
   mounted() {
-    // el-menu-item strategy-link
-    let strategy = document.querySelector('.strategy-link')
-    strategy.style.display = 'none'
     if (this.$route.name == 'strategy') {
       this.activeIndex = '2'
     } else if (this.$route.name == 'backtester' || this.$route.name == 'Backtests') {
