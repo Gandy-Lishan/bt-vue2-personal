@@ -1038,7 +1038,7 @@ export default {
       bd.commission = (bd.commission / 100)
       bd.risk_control = this.isRiskControl ? `${this.isTakeProfit ? this.tp : ''}/${this.isStopLoss ? this.sl : ''}/${this.isTimeInMarket ? this.tim : ''}` : '//'
       if(this.isRiskControl) this.setDesciption()
-      console.log(bd)
+      if(!bd.direction) bd.direction = 'Long'
       this.$store.commit('form/setBd', bd)
     },
     async validateForm() {

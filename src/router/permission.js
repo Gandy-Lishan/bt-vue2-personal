@@ -1,5 +1,4 @@
 import Cookies from 'vue-cookies'
-import axios from '../axios'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import {
 	getIndicatorsList,
@@ -10,8 +9,6 @@ import { getCurDate } from '@/service/ai'
 import { getQueryVariable, LocalStorageUtil } from '@/utils'
 import store from '../store'
 import { uniqueObjectArray } from '@/utils/formValidate'
-const uniqWith = require('lodash/uniqWith')
-const isEqual = require('lodash/isEqual')
 
 export function setRouterPermission(router) {
 	router.beforeEach(async (to, from, next) => {
@@ -50,8 +47,9 @@ export function setRouterPermission(router) {
 				getQueryVariable('userid') ||
 				getQueryVariable('backtestID') ||
 				(getQueryVariable('index') && getQueryVariable('indicator'))
-			)
-				window.location.href = location.origin // 去掉？后面的部分
+			) {
+				window.location.href = location.origin
+			}
 			if (to.path == '/404') {
 				// todo 再加一层scannerAI或者backtester权限判断，用于在404页面跳转回网站，或者防止网站跳到404又无限循环
 				//next('/home')
@@ -132,9 +130,6 @@ async function initiateIndicatorList() {
 		let indexsList = resIndexs.data
 		store.commit('chart/getIndexsList', indexsList)
 
-		let symbolsList = stocksList.concat(indexsList)
-		symbolsList = uniqWith(symbolsList, isEqual)
-
 		let newAllSymbolsList = []
 		for (var i = 0; i < allSymbolsList.length; i++) {
 			let item = allSymbolsList[i]
@@ -151,8 +146,5 @@ async function initiateIndicatorList() {
 		}
 		// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
 		CIQ.indicatorList = newAllSymbolsList
-		store.commit('chart/getIndicatorsList', newAllSymbolsList)
-		LocalStorageUtil.set('indicatorList', newAllSymbolsList)
-		LocalStorageUtil.set('symbolsList', symbolsList)
 	}
 }

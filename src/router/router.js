@@ -80,16 +80,28 @@ const routes = [
 							require([
 								'@/components/backtester/components/list/analyst/index.vue'
 							], resolve)
-					},
+					}
 				]
 			},
 			{
-				path: 'brainstorm', name: 'Brainstorm', component: resolve => require(['@/components/backtester/components/Brainstorm/index.vue'], resolve), 
-				redirect: '/backtester/brainstorm/exit_with_custom_TIM_frame', 
+				path: 'brainstorm',
+				name: 'Brainstorm',
+				component: resolve =>
+					require([
+						'@/components/backtester/components/Brainstorm/index.vue'
+					], resolve),
+				redirect: '/backtester/brainstorm/exit_with_custom_TIM_frame',
 				children: [
-					{ path: 'exit_with_custom_TIM_frame', name: 'ExitWithCustomTIMFrame', component: resolve => require(['@/components/backtester/components/Brainstorm/ExitWithCustomTIMFrame.vue'], resolve) },
+					{
+						path: 'exit_with_custom_TIM_frame',
+						name: 'ExitWithCustomTIMFrame',
+						component: resolve =>
+							require([
+								'@/components/backtester/components/Brainstorm/ExitWithCustomTIMFrame.vue'
+							], resolve)
+					}
 				]
-			},
+			}
 		]
 	},
 	{
@@ -101,33 +113,32 @@ const routes = [
 				path: '',
 				name: 'scannerai',
 				component: resolve =>
-					require([
-						'@/components/AIScanner/AIScanner.vue'
-					], resolve)
+					require(['@/components/AIScanner/AIScanner.vue'], resolve)
 			},
 			{
 				path: 'scannerai_chart',
 				name: 'scannerai_chart',
 				component: resolve =>
-					require([
-						'@/components/AIScanner/ScannerChart/index.vue'
-					], resolve)
+					require(['@/components/AIScanner/ScannerChart/index.vue'], resolve)
 			}
 		]
 	},
 	{
 		path: '/myindicator',
-		component: resolve => require(['@/components/MyIndicator/index.vue'], resolve),
+		component: resolve =>
+			require(['@/components/MyIndicator/index.vue'], resolve),
 		children: [
 			{
 				path: '',
 				name: 'MIList',
-				component: resolve => require(['@/components/MyIndicator/list/index.vue'], resolve),
+				component: resolve =>
+					require(['@/components/MyIndicator/list/index.vue'], resolve)
 			},
 			{
 				path: 'create',
 				name: 'MIcreate',
-				component: resolve => require(['@/components/MyIndicator/create/index.vue'], resolve),
+				component: resolve =>
+					require(['@/components/MyIndicator/create/index.vue'], resolve)
 			}
 		]
 	},

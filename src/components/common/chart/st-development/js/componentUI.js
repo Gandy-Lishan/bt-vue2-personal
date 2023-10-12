@@ -12,7 +12,7 @@
 /***********************************************************
  * Copyright by ChartIQ, Inc.
  * Licensed under the ChartIQ, Inc. Developer License Agreement https://www.chartiq.com/developer-license-agreement
-*************************************************************/
+ *************************************************************/
 /*************************************** DO NOT MAKE CHANGES TO THIS LIBRARY FILE!! **************************************/
 /* If you wish to overwrite default functionality, create a separate file with a copy of the methods you are overwriting */
 /* and load that file right after the library has been loaded, but before the chart engine is instantiated.              */
@@ -21,9 +21,9 @@
 /* eslint-disable no-extra-parens */
 
 //import store from '../../../../stocksystemui/src/store/store.ts'
-import { CIQ } from "chartiq/js/chartiq.js";
+import { CIQ } from 'chartiq/js/chartiq.js'
 import * as mqs from 'qs'
-var claims = [];
+var claims = []
 /**
  * The following is a set of web components used in our sample templates to illustrate how the API can be leveraged to build a full featured UI to control the chart.
  *
@@ -61,7 +61,7 @@ function WebComponents() {}
  * @namespace
  * @name CIQ.UI
  */
-if (!CIQ.UI) CIQ.UI = {};
+if (!CIQ.UI) CIQ.UI = {}
 /**
  * Attaches an event listener to the supplied element.
  *
@@ -77,14 +77,14 @@ if (!CIQ.UI) CIQ.UI = {};
  * @memberof CIQ.UI
  * @since 8.1.0
  */
-CIQ.UI.stxtap = function (element, listener, selector) {
-	if (!element) return;
-	CIQ.installTapEvent(element);
-	if (typeof selector == "string") {
-		element = element.querySelector(selector);
+CIQ.UI.stxtap = function(element, listener, selector) {
+	if (!element) return
+	CIQ.installTapEvent(element)
+	if (typeof selector == 'string') {
+		element = element.querySelector(selector)
 	}
-	if (element) element.addEventListener("stxtap", listener);
-};
+	if (element) element.addEventListener('stxtap', listener)
+}
 
 /**
  * Attaches a callback to listen for resize events on the DOM.
@@ -99,10 +99,10 @@ CIQ.UI.stxtap = function (element, listener, selector) {
  * @memberof CIQ.UI
  * @since 7.4.0 Replaces {@link CIQ.addResizeListener}.
  */
-CIQ.UI.addResizeListener = function (element, fn) {
-	CIQ.UI.getUIManager().registerForResize(element);
-	element.resizeHandle = CIQ.resizeObserver(element, fn, null, 250);
-};
+CIQ.UI.addResizeListener = function(element, fn) {
+	CIQ.UI.getUIManager().registerForResize(element)
+	element.resizeHandle = CIQ.resizeObserver(element, fn, null, 250)
+}
 /**
  * Removes an attached resize event listener from a DOM element.
  *
@@ -115,10 +115,10 @@ CIQ.UI.addResizeListener = function (element, fn) {
  * @memberof CIQ.UI
  * @since 7.4.0 Replaces {@link CIQ.removeResizeListener}.
  */
-CIQ.UI.removeResizeListener = function (element) {
-	CIQ.UI.getUIManager().unregisterForResize(element);
-	CIQ.resizeObserver(element, null, element.resizeHandle);
-};
+CIQ.UI.removeResizeListener = function(element) {
+	CIQ.UI.getUIManager().unregisterForResize(element)
+	CIQ.resizeObserver(element, null, element.resizeHandle)
+}
 /**
  * Executes a function in the nearest parent component (container). For instance, a `cq-close`
  * component might call "close" on its containing component.
@@ -134,19 +134,19 @@ CIQ.UI.removeResizeListener = function (element) {
  *
  * @memberof CIQ.UI
  */
-CIQ.UI.containerExecute = function (self, fn, args) {
-	var myArgs = args;
+CIQ.UI.containerExecute = function(self, fn, args) {
+	var myArgs = args
 	if (args && myArgs.constructor !== Array)
-		myArgs = Array.prototype.slice.call(arguments, 2);
-	var parent = self.parentElement;
+		myArgs = Array.prototype.slice.call(arguments, 2)
+	var parent = self.parentElement
 	while (parent) {
 		if (parent[fn] && parent[fn].constructor == Function) {
-			return parent[fn].apply(parent, myArgs);
+			return parent[fn].apply(parent, myArgs)
 		}
-		parent = parent.parentElement;
+		parent = parent.parentElement
 	}
-	return null;
-};
+	return null
+}
 /**
  * Convenience function to display the changing price of a node (price flash green/red).
  *
@@ -167,20 +167,20 @@ CIQ.UI.containerExecute = function (self, fn, args) {
  * @memberof CIQ.UI
  * @since 7.2.0 Added the `fade` argument.
  */
-CIQ.UI.animatePrice = function (node, newPrice, oldPrice, fade) {
-	if (node[0]) node = node[0];
+CIQ.UI.animatePrice = function(node, newPrice, oldPrice, fade) {
+	if (node[0]) node = node[0]
 	if (node.timeoutHandle) {
-		clearTimeout(node.timeoutHandle);
-		node.timeoutHandle = null;
+		clearTimeout(node.timeoutHandle)
+		node.timeoutHandle = null
 	}
-	node.classList.remove("cq-stable", "cq-up", "cq-down");
-	if (newPrice > oldPrice) node.classList.add("cq-up");
-	else if (newPrice < oldPrice) node.classList.add("cq-down");
+	node.classList.remove('cq-stable', 'cq-up', 'cq-down')
+	if (newPrice > oldPrice) node.classList.add('cq-up')
+	else if (newPrice < oldPrice) node.classList.add('cq-down')
 	if (fade)
-		node.timeoutHandle = setTimeout(function () {
-			node.classList.add("cq-stable").classList.remove("cq-up", "cq-down");
-		}, 0);
-};
+		node.timeoutHandle = setTimeout(function() {
+			node.classList.add('cq-stable').classList.remove('cq-up', 'cq-down')
+		}, 0)
+}
 /**
  * Convenience function for making a new node collection from an HTML5 template.
  *
@@ -199,37 +199,37 @@ CIQ.UI.animatePrice = function (node, newPrice, oldPrice, fade) {
  * @since 8.1.0 Input parameters continue to support jQuery elements. If `node` is a jQuery
  * 		element, then the return type is also a jQuery element.
  */
-CIQ.UI.makeFromTemplate = function (node, appendTo) {
-	if (typeof node === "string") node = document.querySelector(node);
+CIQ.UI.makeFromTemplate = function(node, appendTo) {
+	if (typeof node === 'string') node = document.querySelector(node)
 	if (node[0] && CIQ.UI.$(node)[0] == node[0]) {
-		node = node[0];
+		node = node[0]
 	}
-	var n = node.content; // regular way
-	var newNode;
+	var n = node.content // regular way
+	var newNode
 	function copyNodes(n) {
-		return function (i) {
-			n.appendChild(i.cloneNode(true));
-		};
+		return function(i) {
+			n.appendChild(i.cloneNode(true))
+		}
 	}
 	function appendNodes(n) {
-		return function (i) {
-			if (n === true) node.parentElement.appendChild(i);
-			else if (n[0]) n[0].appendChild(i);
-			else n.appendChild(i);
-		};
+		return function(i) {
+			if (n === true) node.parentElement.appendChild(i)
+			else if (n[0]) n[0].appendChild(i)
+			else n.appendChild(i)
+		}
 	}
 	if (!n.childNodes.length) {
 		// React can't read content past the document-fragment
-		n = document.createElement("DIV");
-		Array.from(node.children).forEach(copyNodes(n));
-		newNode = n.cloneNode(true);
+		n = document.createElement('DIV')
+		Array.from(node.children).forEach(copyNodes(n))
+		newNode = n.cloneNode(true)
 	} else {
-		newNode = document.importNode(n, true);
+		newNode = document.importNode(n, true)
 	}
-	var children = Array.from(newNode.children);
-	if (appendTo) children.forEach(appendNodes(appendTo));
-	return CIQ.UI.$(children);
-};
+	var children = Array.from(newNode.children)
+	if (appendTo) children.forEach(appendNodes(appendTo))
+	return CIQ.UI.$(children)
+}
 /**
  * Utility to splits a string form function into function name and arguments
  *
@@ -243,53 +243,53 @@ CIQ.UI.makeFromTemplate = function (node, appendTo) {
  * @memberof CIQ.UI
  * @private
  */
-CIQ.UI.splitMethod = function (cmd) {
-	if (!cmd) return null;
-	var openParentheses = cmd.indexOf("(");
-	var closeParentheses = cmd.lastIndexOf(")");
+CIQ.UI.splitMethod = function(cmd) {
+	if (!cmd) return null
+	var openParentheses = cmd.indexOf('(')
+	var closeParentheses = cmd.lastIndexOf(')')
 	if (openParentheses == -1 || closeParentheses == -1) {
-		console.log("malformed stxtap attribute: " + cmd);
-		return null;
+		console.log('malformed stxtap attribute: ' + cmd)
+		return null
 	}
 	var helperName = null,
-		functionName;
-	var beforeParentheses = cmd.substring(0, openParentheses);
-	var period = beforeParentheses.indexOf(".");
+		functionName
+	var beforeParentheses = cmd.substring(0, openParentheses)
+	var period = beforeParentheses.indexOf('.')
 	if (period == -1) {
 		// web component
-		functionName = beforeParentheses;
+		functionName = beforeParentheses
 	} else {
-		helperName = beforeParentheses.substring(0, period);
-		functionName = cmd.substring(period + 1, openParentheses);
+		helperName = beforeParentheses.substring(0, period)
+		functionName = cmd.substring(period + 1, openParentheses)
 	}
-	var args = cmd.substring(openParentheses + 1, closeParentheses);
-	var parsed = args.match(/('[^']+'|[^,]+)/g);
-	var isFloat = new RegExp("^[0-9]+([,.][0-9]+)?$", "g");
-	var isInteger = new RegExp("^\\d+$");
-	var argArray = [];
+	var args = cmd.substring(openParentheses + 1, closeParentheses)
+	var parsed = args.match(/('[^']+'|[^,]+)/g)
+	var isFloat = new RegExp('^[0-9]+([,.][0-9]+)?$', 'g')
+	var isInteger = new RegExp('^\\d+$')
+	var argArray = []
 	if (parsed) {
 		for (var i = 0; i < parsed.length; i++) {
-			var arg = parsed[i];
-			while (arg.charAt(0) == " ") arg = arg.substring(1);
+			var arg = parsed[i]
+			while (arg.charAt(0) == ' ') arg = arg.substring(1)
 			if (arg.indexOf('"') != -1 || arg.indexOf("'") != -1) {
-				argArray.push(arg.substring(1, arg.length - 1));
-			} else if (arg == "true") {
-				argArray.push(true);
-			} else if (arg == "false") {
-				argArray.push(false);
-			} else if (arg == "null") {
-				argArray.push(null);
+				argArray.push(arg.substring(1, arg.length - 1))
+			} else if (arg == 'true') {
+				argArray.push(true)
+			} else if (arg == 'false') {
+				argArray.push(false)
+			} else if (arg == 'null') {
+				argArray.push(null)
 			} else if (isInteger.test(arg)) {
-				argArray.push(parseInt(arg, 10));
+				argArray.push(parseInt(arg, 10))
 			} else if (isFloat.test(arg)) {
-				argArray.push(parseFloat(arg));
+				argArray.push(parseFloat(arg))
 			} else {
-				var a = arg.split(".");
-				var aObj = window;
+				var a = arg.split('.')
+				var aObj = window
 				for (var b = 0; b < a.length; b++) {
-					aObj = aObj[a[b]];
+					aObj = aObj[a[b]]
 				}
-				argArray.push(aObj);
+				argArray.push(aObj)
 			}
 		}
 	}
@@ -297,8 +297,8 @@ CIQ.UI.splitMethod = function (cmd) {
 		helperName: helperName,
 		functionName: functionName,
 		args: argArray
-	};
-};
+	}
+}
 /**
  * Observes an object's property. The listener receives an object of the form:
  * `{obj, property, value}`. This uses getters and setters. Thus, you should not attempt to
@@ -322,42 +322,42 @@ CIQ.UI.splitMethod = function (cmd) {
  * };
  * CIQ.UI.observeProperty("flipped", stx.layout, listener);
  */
-CIQ.UI.observeProperty = function (property, obj, listener) {
-	if (!obj || !property || !listener) return; // must have a listener
-	if (!(property in obj)) obj[property] = undefined;
-	if (!CIQ.UI.observables) CIQ.UI.observables = {};
-	var observables = CIQ.UI.observables;
-	if (!observables[property]) observables[property] = [];
-	var found; // this will become the observed object
+CIQ.UI.observeProperty = function(property, obj, listener) {
+	if (!obj || !property || !listener) return // must have a listener
+	if (!(property in obj)) obj[property] = undefined
+	if (!CIQ.UI.observables) CIQ.UI.observables = {}
+	var observables = CIQ.UI.observables
+	if (!observables[property]) observables[property] = []
+	var found // this will become the observed object
 	for (var obsIter = 0; obsIter < observables[property].length; obsIter++) {
-		var ap = observables[property][obsIter];
-		if (ap.obj == obj) found = ap;
+		var ap = observables[property][obsIter]
+		if (ap.obj == obj) found = ap
 	}
 	if (!found) {
 		found = {
 			obj: obj,
 			value: obj[property],
 			listeners: []
-		};
-		observables[property].push(found);
+		}
+		observables[property].push(found)
 	}
-	found.listeners.push(listener);
-	listener({ obj: obj, property: property, value: found.value });
+	found.listeners.push(listener)
+	listener({ obj: obj, property: property, value: found.value })
 	Object.defineProperty(obj, property, {
 		enumerable: true,
-		get: function () {
-			return found.value;
+		get: function() {
+			return found.value
 		},
-		set: function (value) {
+		set: function(value) {
 			if (found.value !== value) {
-				found.value = value;
-				var params = { obj: obj, property: property, value: value };
+				found.value = value
+				var params = { obj: obj, property: property, value: value }
 				for (var l = 0; l < found.listeners.length; l++)
-					found.listeners[l](params);
+					found.listeners[l](params)
 			}
 		}
-	});
-};
+	})
+}
 /**
  * Removes the listener from an object's property.
  *
@@ -369,17 +369,17 @@ CIQ.UI.observeProperty = function (property, obj, listener) {
  * @memberof CIQ.UI
  * @since 7.2.0 Replaces {@link CIQ.UI.unobserve}.
  */
-CIQ.UI.unobserveProperty = function (property, obj, listener) {
-	if (!property || !obj || !CIQ.UI.observables) return;
-	var observables = CIQ.UI.observables[property];
+CIQ.UI.unobserveProperty = function(property, obj, listener) {
+	if (!property || !obj || !CIQ.UI.observables) return
+	var observables = CIQ.UI.observables[property]
 	if (observables) {
 		for (var obs = observables.length - 1; obs >= 0; obs--) {
-			var observable = observables[obs];
+			var observable = observables[obs]
 			if (observable.obj == obj) {
 				if (listener) {
-					var listenerArr = observable.listeners;
+					var listenerArr = observable.listeners
 					for (var l = listenerArr.length; l >= 0; l--) {
-						if (listenerArr[l] === listener) listenerArr.splice(l, 1);
+						if (listenerArr[l] === listener) listenerArr.splice(l, 1)
 					}
 				}
 				if (!listener || !observable.listeners.length) {
@@ -389,14 +389,14 @@ CIQ.UI.unobserveProperty = function (property, obj, listener) {
 						configurable: true,
 						writable: true,
 						value: observable.value
-					});
-					observables.splice(obs, 1);
+					})
+					observables.splice(obs, 1)
 				}
 			}
 		}
-		if (!observables.length) delete CIQ.UI.observables[property];
+		if (!observables.length) delete CIQ.UI.observables[property]
 	}
-};
+}
 /**
  * Utility to get the context for a tag.
  *
@@ -412,14 +412,14 @@ CIQ.UI.unobserveProperty = function (property, obj, listener) {
  *
  * @memberof CIQ.UI
  */
-CIQ.UI.getMyContext = function (me) {
+CIQ.UI.getMyContext = function(me) {
 	while (me) {
-		if (me.context) return me.context;
-		if (me.CIQ && me.CIQ.UI) return me.CIQ.UI.context;
-		me = me.parentElement;
+		if (me.context) return me.context
+		if (me.CIQ && me.CIQ.UI) return me.CIQ.UI.context
+		me = me.parentElement
 	}
-	return null;
-};
+	return null
+}
 /**
  * Utility to run a function across all contexts.
  *
@@ -438,13 +438,13 @@ CIQ.UI.getMyContext = function (me) {
  *  	this.stx.doSomething();
  *  });
  */
-CIQ.UI.contextsForEach = function (func) {
-	var contexts = document.querySelectorAll("cq-context,*[cq-context]");
-	contexts.forEach(function (node) {
-		func.apply(node.CIQ.UI.context);
-	});
-};
-CIQ.UI.release = false;
+CIQ.UI.contextsForEach = function(func) {
+	var contexts = document.querySelectorAll('cq-context,*[cq-context]')
+	contexts.forEach(function(node) {
+		func.apply(node.CIQ.UI.context)
+	})
+}
+CIQ.UI.release = false
 /**
  * Set this flag to true to bypass bindings when adding a component to the DOM.
  *
@@ -459,7 +459,7 @@ CIQ.UI.release = false;
  *
  * @memberof CIQ.UI
  */
-CIQ.UI.bypassBindings = false;
+CIQ.UI.bypassBindings = false
 /**
  * Starts the UI.
  *
@@ -471,13 +471,13 @@ CIQ.UI.bypassBindings = false;
  *
  * @memberof CIQ.UI
  */
-CIQ.UI.begin = function (cb) {
-	CIQ.UI.release = true;
-	setTimeout(function () {
-		BaseComponent.nextTick();
-		if (cb) cb();
-	}, 0); // release the bindings
-};
+CIQ.UI.begin = function(cb) {
+	CIQ.UI.release = true
+	setTimeout(function() {
+		BaseComponent.nextTick()
+		if (cb) cb()
+	}, 0) // release the bindings
+}
 /**
  * Activates the user interface of a plug-in or add-on.
  *
@@ -508,11 +508,11 @@ CIQ.UI.begin = function (cb) {
  * @private
  * @since 8.2.0
  */
-CIQ.UI.activatePluginUI = function (stx, pluginName) {
-	const { uiContext = {}, container } = stx;
-	const topNode = uiContext.topNode || container.closest("cq-context");
-	if (topNode) topNode.setAttribute(pluginName.toLowerCase() + "-active", "");
-};
+CIQ.UI.activatePluginUI = function(stx, pluginName) {
+	const { uiContext = {}, container } = stx
+	const topNode = uiContext.topNode || container.closest('cq-context')
+	if (topNode) topNode.setAttribute(pluginName.toLowerCase() + '-active', '')
+}
 /**
  * Adds a web component definition to the list of web components.
  *
@@ -531,20 +531,20 @@ CIQ.UI.activatePluginUI = function (stx, pluginName) {
  * @memberof CIQ.UI
  * @since 7.5.0
  */
-CIQ.UI.addComponentDefinition = function (customTagName, classDefinition) {
-	const registered = !!CIQ.UI.registerComponentsImmediately;
+CIQ.UI.addComponentDefinition = function(customTagName, classDefinition) {
+	const registered = !!CIQ.UI.registerComponentsImmediately
 	if (!CIQ.UI._webcomponents) {
-		CIQ.UI._webcomponents = { list: {}, registered };
+		CIQ.UI._webcomponents = { list: {}, registered }
 	}
 	CIQ.UI._webcomponents.list[customTagName] = {
 		tag: customTagName,
 		classDefinition,
 		registered
-	};
-	if (registered) {
-		customElements.define(customTagName, classDefinition);
 	}
-};
+	if (registered) {
+		customElements.define(customTagName, classDefinition)
+	}
+}
 /**
  * Registers components added with {@link CIQ.UI.addComponentDefinition}.
  *
@@ -555,21 +555,21 @@ CIQ.UI.addComponentDefinition = function (customTagName, classDefinition) {
  * @memberof CIQ.UI
  * @since 7.5.0
  */
-CIQ.UI.registerComponents = function ({ except = [] } = {}) {
-	if (!CIQ.UI._webcomponents) return;
-	const { exceptions = {} } = CIQ.UI._webcomponents;
-	except.forEach((name) => (exceptions[name] = true));
-	CIQ.UI._webcomponents.exceptions = exceptions;
-	const { list } = CIQ.UI._webcomponents;
-	const tags = Object.keys(list).filter((tag) => !except.includes[tag]);
-	tags.forEach((tag) => {
-		const component = list[tag];
+CIQ.UI.registerComponents = function({ except = [] } = {}) {
+	if (!CIQ.UI._webcomponents) return
+	const { exceptions = {} } = CIQ.UI._webcomponents
+	except.forEach(name => (exceptions[name] = true))
+	CIQ.UI._webcomponents.exceptions = exceptions
+	const { list } = CIQ.UI._webcomponents
+	const tags = Object.keys(list).filter(tag => !except.includes[tag])
+	tags.forEach(tag => {
+		const component = list[tag]
 		if (component && !component.registered && !exceptions[tag]) {
-			customElements.define(tag, component.classDefinition);
-			component.registered = true;
+			customElements.define(tag, component.classDefinition)
+			component.registered = true
 		}
-	});
-};
+	})
+}
 /**
  * Ensures that all web components in the web component list (see
  * [addComponentDefinition]{@link CIQ.UI.addComponentDefinition}) have been registered.
@@ -579,9 +579,9 @@ CIQ.UI.registerComponents = function ({ except = [] } = {}) {
  *
  * @see {@link CIQ.UI.registerComponents}
  */
-CIQ.UI.ensureComponentsRegistered = function () {
-	if (CIQ.UI._webcomponents) CIQ.UI.registerComponents();
-};
+CIQ.UI.ensureComponentsRegistered = function() {
+	if (CIQ.UI._webcomponents) CIQ.UI.registerComponents()
+}
 /**
  * Gets an array of components from the list of registered components.
  *
@@ -594,7 +594,7 @@ CIQ.UI.ensureComponentsRegistered = function () {
  * @memberof CIQ.UI
  * @since 8.0.0
  */
-CIQ.UI.components = function (identifier) {
+CIQ.UI.components = function(identifier) {
 	const collection = Object.values(CIQ.UI._webcomponents.list).filter(
 		({ tag, classDefinition }) => {
 			return (
@@ -602,11 +602,11 @@ CIQ.UI.components = function (identifier) {
 				identifier === tag ||
 				identifier === classDefinition.name ||
 				identifier === classDefinition
-			);
+			)
 		}
-	);
-	return collection;
-};
+	)
+	return collection
+}
 /**
  * Getter and setter for component markup.
  *
@@ -621,28 +621,28 @@ CIQ.UI.components = function (identifier) {
  * @memberof CIQ.UI
  * @since 7.5.0
  */
-CIQ.UI.componentMarkup = function (identifier, markup) {
-	const collection = this.components(identifier);
+CIQ.UI.componentMarkup = function(identifier, markup) {
+	const collection = this.components(identifier)
 	if (markup === undefined) {
 		// return results
-		if (!collection.length) return;
-		const selected = collection.map(toMarkupObject);
-		return identifier ? selected[0] : selected;
+		if (!collection.length) return
+		const selected = collection.map(toMarkupObject)
+		return identifier ? selected[0] : selected
 	}
-	const [component] = collection;
+	const [component] = collection
 	// if component does not exist or its definition already does not have markup
-	if (!component || !component.classDefinition.markup) return;
-	component.classDefinition.markup = markup;
-	return toMarkupObject(component);
+	if (!component || !component.classDefinition.markup) return
+	component.classDefinition.markup = markup
+	return toMarkupObject(component)
 	function toMarkupObject(component) {
 		const {
 			tag,
 			registered,
 			classDefinition: { markup, name }
-		} = component;
-		return { tag, name, registered, markup };
+		} = component
+		return { tag, name, registered, markup }
 	}
-};
+}
 /**
  * Returns the dependencies of all web components based on the web component markup.
  *
@@ -711,28 +711,28 @@ CIQ.UI.componentMarkup = function (identifier, markup) {
  * @memberof CIQ.UI
  * @since 8.0.0
  */
-CIQ.UI.markupDependencies = function () {
-	const markups = CIQ.UI.componentMarkup();
-	const dependencies = {};
-	markups.forEach((m) => {
+CIQ.UI.markupDependencies = function() {
+	const markups = CIQ.UI.componentMarkup()
+	const dependencies = {}
+	markups.forEach(m => {
 		if (m.markup) {
 			for (let c in CIQ.UI._webcomponents.list) {
-				const comp = CIQ.UI._webcomponents.list[c];
-				if (m.markup.indexOf("</" + comp.tag + ">") > -1) {
-					if (!dependencies[m.tag]) dependencies[m.tag] = [];
-					dependencies[m.tag].push(comp.tag);
+				const comp = CIQ.UI._webcomponents.list[c]
+				if (m.markup.indexOf('</' + comp.tag + '>') > -1) {
+					if (!dependencies[m.tag]) dependencies[m.tag] = []
+					dependencies[m.tag].push(comp.tag)
 				}
 			}
 		}
-	});
-	const timesNeeded = {};
+	})
+	const timesNeeded = {}
 	for (let d in dependencies) {
-		dependencies[d].forEach((i) => {
-			timesNeeded[i] = (timesNeeded[i] || 0) + 1;
-		});
+		dependencies[d].forEach(i => {
+			timesNeeded[i] = (timesNeeded[i] || 0) + 1
+		})
 	}
-	return { dependencies, timesNeeded };
-};
+	return { dependencies, timesNeeded }
+}
 /**
  * Utility method for adding multiple inheritances to a base object.
  *
@@ -745,15 +745,15 @@ CIQ.UI.markupDependencies = function () {
  *
  * @memberof CIQ.UI
  */
-CIQ.UI.addInheritance = function (target, source) {
+CIQ.UI.addInheritance = function(target, source) {
 	// We put this in a catch loop because BaseComponent is itself an HTMLElement and the browser barfs on trying to copy some of those values
 	for (var key in source.prototype) {
 		try {
-			target.prototype[key] = source.prototype[key];
+			target.prototype[key] = source.prototype[key]
 		} catch (e) {}
 	}
-};
-var inputTypesSupported = {};
+}
+var inputTypesSupported = {}
 /**
  * Utility method for checking if an HTML5 input type is supported.
  *
@@ -769,15 +769,15 @@ var inputTypesSupported = {};
  * @memberof CIQ.UI
  * @since 6.3.0
  */
-CIQ.UI.supportedInputType = function (type) {
+CIQ.UI.supportedInputType = function(type) {
 	if (!inputTypesSupported[type]) {
 		// https://stackoverflow.com/questions/10193294/how-can-i-tell-if-a-browser-supports-input-type-date
-		var input = document.createElement("input");
-		input.setAttribute("type", type);
-		inputTypesSupported[type] = input.type;
+		var input = document.createElement('input')
+		input.setAttribute('type', type)
+		inputTypesSupported[type] = input.type
 	}
-	return inputTypesSupported[type];
-};
+	return inputTypesSupported[type]
+}
 /**
  * UI context helper class.
  *
@@ -793,35 +793,35 @@ CIQ.UI.supportedInputType = function (type) {
  * @name CIQ.UI.Context
  * @constructor
  */
-CIQ.UI.Context = function (stx, topNode, params) {
-	this.params = params ? params : {};
-	this.stx = stx;
+CIQ.UI.Context = function(stx, topNode, params) {
+	this.params = params ? params : {}
+	this.stx = stx
 	if (stx) {
-		stx.uiContext = this;
+		stx.uiContext = this
 	}
-	this.node = CIQ.UI.$(topNode);
-	this.topNode = this.node[0];
-	if (CIQ.isMobile) topNode.setAttribute("ciq-mobile", "");
-	var storage = CIQ.UI.Context.assembleContext(topNode);
-	this.advertised = {};
-	var self = (topNode.CIQ.UI.context = this);
+	this.node = CIQ.UI.$(topNode)
+	this.topNode = this.node[0]
+	if (CIQ.isMobile) topNode.setAttribute('ciq-mobile', '')
+	var storage = CIQ.UI.Context.assembleContext(topNode)
+	this.advertised = {}
+	var self = (topNode.CIQ.UI.context = this)
 	// Search through all of the components that have registered themselves. Call setContext() on each
 	// so that they can get their context. This usually initializes and makes the component active.
-	var selectors = [];
+	var selectors = []
 	for (var i = 0; i < storage.Components.length; i++) {
-		selectors.push(storage.Components[i].tagName.toLowerCase());
+		selectors.push(storage.Components[i].tagName.toLowerCase())
 	}
 	// Make sure to call setContextPrivate on elements in the order they appear in the DOM, not the order
 	// they are initialized in (which may be different for example if using a plugin)
 	if (selectors.length) {
 		this.topNode
-			.querySelectorAll(selectors.join(","))
-			.forEach(function (component) {
-				component.setContextPrivate(self);
-			});
+			.querySelectorAll(selectors.join(','))
+			.forEach(function(component) {
+				component.setContextPrivate(self)
+			})
 	}
-};
-var Context = CIQ.UI.Context;
+}
+var Context = CIQ.UI.Context
 /**
  * The DOM tag for a context that needs some storage.
  *
@@ -838,12 +838,12 @@ var Context = CIQ.UI.Context;
  * @memberof CIQ.UI.Context
  * @private
  */
-Context.assembleContext = function (contextElement) {
-	if (!contextElement.CIQ) contextElement.CIQ = {}; // claim our namespace
-	if (!contextElement.CIQ.UI) contextElement.CIQ.UI = {};
-	if (!contextElement.CIQ.UI.Components) contextElement.CIQ.UI.Components = [];
-	return contextElement.CIQ.UI;
-};
+Context.assembleContext = function(contextElement) {
+	if (!contextElement.CIQ) contextElement.CIQ = {} // claim our namespace
+	if (!contextElement.CIQ.UI) contextElement.CIQ.UI = {}
+	if (!contextElement.CIQ.UI.Components) contextElement.CIQ.UI.Components = []
+	return contextElement.CIQ.UI
+}
 /**
  * Executes a symbol change request on the UI context.
  *
@@ -886,9 +886,9 @@ Context.assembleContext = function (contextElement) {
  * };
  *
  */
-Context.prototype.changeSymbol = function (data, cb) {
-	console.log("Please implement CIQ.UI.Context.prototype.changeSymbol");
-};
+Context.prototype.changeSymbol = function(data, cb) {
+	console.log('Please implement CIQ.UI.Context.prototype.changeSymbol')
+}
 /**
  * Lookup driver interface placeholder to be augmented in standard.js with properties
  * @tsinterface {object} CIQ.ChartEngine.Driver~Lookup
@@ -921,13 +921,13 @@ Context.prototype.changeSymbol = function (data, cb) {
  *     context.changeSymbol(data);
  * });
  */
-Context.prototype.setLookupDriver = function (driver) {
-	this.lookupDriver = driver;
+Context.prototype.setLookupDriver = function(driver) {
+	this.lookupDriver = driver
 	if (driver.deprecated)
 		console.warn(
-			"Using deprecated Lookup Driver, please see documentation: CIQ.ChartEngine.Driver.Lookup"
-		);
-};
+			'Using deprecated Lookup Driver, please see documentation: CIQ.ChartEngine.Driver.Lookup'
+		)
+}
 /**
  * Attaches a Helper to the context, so that it can be found later on.
  *
@@ -938,9 +938,9 @@ Context.prototype.setLookupDriver = function (driver) {
  * @memberof CIQ.UI.Context
  * @alias advertiseAs
  */
-Context.prototype.advertiseAs = function (uiHelper, helperName) {
-	this.advertised[helperName] = uiHelper;
-};
+Context.prototype.advertiseAs = function(uiHelper, helperName) {
+	this.advertised[helperName] = uiHelper
+}
 /**
  * Finds the nearest (parent) node that contains the class (CIQ.UI.Element type) referenced by an stxtap attribute.
  *
@@ -952,9 +952,9 @@ Context.prototype.advertiseAs = function (uiHelper, helperName) {
  * @memberof CIQ.UI.Context
  * @private
  */
-Context.prototype.getAdvertised = function (helperName) {
-	return this.advertised[helperName];
-};
+Context.prototype.getAdvertised = function(helperName) {
+	return this.advertised[helperName]
+}
 /**
  * Web component instance to show loading status and having show and hide methods
  * @typedef {object} CIQ.UI~Loader
@@ -970,9 +970,9 @@ Context.prototype.getAdvertised = function (helperName) {
  * @memberof CIQ.UI.Context
  * @alias setLoader
  */
-Context.prototype.setLoader = function (loader) {
-	this.loader = loader;
-};
+Context.prototype.setLoader = function(loader) {
+	this.loader = loader
+}
 /**
  * Checks if the context in modal mode.
  *
@@ -982,9 +982,9 @@ Context.prototype.setLoader = function (loader) {
  * @memberof CIQ.UI.Context
  * @alias isModal
  */
-Context.prototype.isModal = function () {
-	return this.stx.openDialog !== "";
-};
+Context.prototype.isModal = function() {
+	return this.stx.openDialog !== ''
+}
 /**
  * Checks the chart for a study legend that is active and has keyboard navigation control.
  *
@@ -995,20 +995,20 @@ Context.prototype.isModal = function () {
  * @alias isLegendKeyboardActive
  * @since 8.3.0
  */
-Context.prototype.isLegendKeyboardActive = function () {
-	const legends = document.querySelectorAll("cq-study-legend");
+Context.prototype.isLegendKeyboardActive = function() {
+	const legends = document.querySelectorAll('cq-study-legend')
 	if (legends.length) {
 		for (let i = 0; i < legends.length; i++) {
 			// Verify the legend is active and has keyboard control
 			if (
-				legends[i].classList.contains("ciq-active") &&
+				legends[i].classList.contains('ciq-active') &&
 				legends[i].keyboardNavigation
 			)
-				return true;
+				return true
 		}
 	}
-	return false;
-};
+	return false
+}
 /**
  * Abstract class for {@link WebComponents} using this framework.
  *
@@ -1022,9 +1022,9 @@ Context.prototype.isLegendKeyboardActive = function () {
  */
 class BaseComponent extends HTMLElement {
 	constructor() {
-		super();
-		this.node = CIQ.UI.$(this);
-		this.eventListeners = [];
+		super()
+		this.node = CIQ.UI.$(this)
+		this.eventListeners = []
 	}
 	/**
 	 * Called automatically when a tag is instantiated.
@@ -1034,10 +1034,10 @@ class BaseComponent extends HTMLElement {
 	 * @private
 	 */
 	connectedCallback() {
-		if (this.attached) return;
+		if (this.attached) return
 		// "this" will be the instance of the tag that extends BaseComponent.
-		BaseComponent.buildReverseBindings(this);
-		this.attached = true;
+		BaseComponent.buildReverseBindings(this)
+		this.attached = true
 	}
 	/**
 	 * Called automatically when a tag is removed from the DOM.
@@ -1047,10 +1047,10 @@ class BaseComponent extends HTMLElement {
 	 * @private
 	 */
 	disconnectedCallback() {
-		this.attached = false;
+		this.attached = false
 		if (this.context) {
 			for (var i = 0; i < this.eventListeners.length; i++) {
-				this.context.stx.removeEventListener(this.eventListeners[i]);
+				this.context.stx.removeEventListener(this.eventListeners[i])
 			}
 		}
 	}
@@ -1067,27 +1067,27 @@ class BaseComponent extends HTMLElement {
 	 * @since 7.5.0
 	 */
 	addDefaultMarkup(component, markup) {
-		const node = component || this;
-		const isEmpty = (node) => node.children.length === 0;
+		const node = component || this
+		const isEmpty = node => node.children.length === 0
 		if (isEmpty(node) && (node.constructor.markup || markup)) {
-			const startTime = +new Date();
-			node.innerHTML = markup || node.constructor.markup;
-			BaseComponent.buildReverseBindings(node);
+			const startTime = +new Date()
+			node.innerHTML = markup || node.constructor.markup
+			BaseComponent.buildReverseBindings(node)
 			if (CIQ.debug) {
-				const timeToBuild = +new Date() - startTime;
+				const timeToBuild = +new Date() - startTime
 				BaseComponent.createMarkupTime =
-					timeToBuild + (BaseComponent.createMarkupTime || 0);
+					timeToBuild + (BaseComponent.createMarkupTime || 0)
 				console.log(
-					"Building markup " +
+					'Building markup ' +
 						this.constructor.name +
-						" " +
-						(this.getAttribute("cq-name") || "") +
-						" built in=" +
+						' ' +
+						(this.getAttribute('cq-name') || '') +
+						' built in=' +
 						timeToBuild,
-					"total=" + BaseComponent.createMarkupTime
-				);
+					'total=' + BaseComponent.createMarkupTime
+				)
 			}
-			if (CIQ.I18N && CIQ.I18N.localized) CIQ.I18N.translateUI(null, node);
+			if (CIQ.I18N && CIQ.I18N.localized) CIQ.I18N.translateUI(null, node)
 		}
 	}
 	/**
@@ -1102,11 +1102,11 @@ class BaseComponent extends HTMLElement {
 	 * @since 7.5.0
 	 */
 	channelWrite(path, value, stx) {
-		const { obj, prop } = CIQ.UI.BaseComponent.getChannel(path, stx, this);
+		const { obj, prop } = CIQ.UI.BaseComponent.getChannel(path, stx, this)
 		if (!obj) {
-			return;
+			return
 		}
-		obj[prop] = value;
+		obj[prop] = value
 	}
 	/**
 	 * Merges an object in the chart engine communication channel.
@@ -1120,11 +1120,11 @@ class BaseComponent extends HTMLElement {
 	 * @since 7.5.0
 	 */
 	channelMergeObject(path, value, stx) {
-		const { obj, prop } = CIQ.UI.BaseComponent.getChannel(path, stx, this);
+		const { obj, prop } = CIQ.UI.BaseComponent.getChannel(path, stx, this)
 		if (!obj) {
-			return;
+			return
 		}
-		obj[prop] = Object.assign({}, obj[prop], value);
+		obj[prop] = Object.assign({}, obj[prop], value)
 	}
 	/**
 	 * Reads the current value in the chart engine communication channel.
@@ -1138,11 +1138,11 @@ class BaseComponent extends HTMLElement {
 	 * @since 7.5.0
 	 */
 	channelRead(path, stx) {
-		const { obj, prop } = CIQ.UI.BaseComponent.getChannel(path, stx, this);
+		const { obj, prop } = CIQ.UI.BaseComponent.getChannel(path, stx, this)
 		if (!obj) {
-			return;
+			return
 		}
-		return obj && obj[prop];
+		return obj && obj[prop]
 	}
 	/**
 	 * Subscribes to the chart engine messaging channel.
@@ -1158,17 +1158,17 @@ class BaseComponent extends HTMLElement {
 	 * @since 7.5.0
 	 */
 	channelSubscribe(path, cb, stx) {
-		const { obj, prop } = CIQ.UI.BaseComponent.getChannel(path, stx, this);
+		const { obj, prop } = CIQ.UI.BaseComponent.getChannel(path, stx, this)
 		if (!obj) {
-			return;
+			return
 		}
 		function wrapper({ value }) {
-			cb(value);
+			cb(value)
 		}
-		CIQ.UI.observeProperty(prop, obj, wrapper);
+		CIQ.UI.observeProperty(prop, obj, wrapper)
 		return () => {
-			CIQ.UI.unobserveProperty(prop, obj, wrapper);
-		};
+			CIQ.UI.unobserveProperty(prop, obj, wrapper)
+		}
 	}
 	// DOM manipulation adapters
 	/**
@@ -1188,10 +1188,10 @@ class BaseComponent extends HTMLElement {
 	 * @since 7.5.0
 	 */
 	qs(path, context) {
-		if (context === "thisChart") {
-			context = this.getContextContainer();
+		if (context === 'thisChart') {
+			context = this.getContextContainer()
 		}
-		return (context || document).querySelector(path);
+		return (context || document).querySelector(path)
 	}
 	/**
 	 * Adapts the
@@ -1211,12 +1211,12 @@ class BaseComponent extends HTMLElement {
 	 * @since 7.5.0
 	 */
 	qsa(path, context) {
-		if (context === "thisChart") {
-			context = this.getContextContainer();
+		if (context === 'thisChart') {
+			context = this.getContextContainer()
 		}
 		return Array.prototype.slice.call(
 			(context || document).querySelectorAll(path) || []
-		);
+		)
 	}
 	/**
 	 * Searches the DOM for the chart context element. Begins the search with `el` (or `this`
@@ -1234,15 +1234,15 @@ class BaseComponent extends HTMLElement {
 	 */
 	getContextContainer(el) {
 		if (el) {
-			return BaseComponent.selfOrParentElement(el, "cq-context");
+			return BaseComponent.selfOrParentElement(el, 'cq-context')
 		}
 		if (!this.contextContainer) {
 			this.contextContainer = BaseComponent.selfOrParentElement(
 				this,
-				"cq-context"
-			);
+				'cq-context'
+			)
 		}
-		return this.contextContainer;
+		return this.contextContainer
 	}
 	/**
 	 * Searches the DOM for the chart container element. Begins the search with `el`
@@ -1259,7 +1259,7 @@ class BaseComponent extends HTMLElement {
 	 * @since 7.5.0
 	 */
 	getChartContainer(el) {
-		return BaseComponent.selfOrParentElement(el || this, "ciq-chart");
+		return BaseComponent.selfOrParentElement(el || this, 'ciq-chart')
 	}
 	/**
 	 * Locates the nearest UI helper for a given attribute. If none exists, then it is created
@@ -1280,55 +1280,55 @@ class BaseComponent extends HTMLElement {
 	 * @memberof CIQ.UI.BaseComponent
 	 */
 	static getHelper(node, binding, attribute) {
-		if (!node) return;
+		if (!node) return
 		if (!binding) {
-			binding = node.getAttribute(attribute);
-			if (!binding) return null;
+			binding = node.getAttribute(attribute)
+			if (!binding) return null
 		}
-		var helper;
-		var paren = binding.indexOf("(");
-		var beforeParen = binding.substring(0, paren);
-		var period = binding.indexOf(".");
-		if (paren == -1 || beforeParen.indexOf(".") != -1) {
+		var helper
+		var paren = binding.indexOf('(')
+		var beforeParen = binding.substring(0, paren)
+		var period = binding.indexOf('.')
+		if (paren == -1 || beforeParen.indexOf('.') != -1) {
 			// Layout or Layout.Chart or Layout.Chart('blah')
-			var helperName = period === -1 ? binding : binding.substring(0, period);
-			var context = node.context;
+			var helperName = period === -1 ? binding : binding.substring(0, period)
+			var context = node.context
 			if (!context) {
-				if (!node.context) node.context = CIQ.UI.getMyContext(node);
-				context = node.context;
+				if (!node.context) node.context = CIQ.UI.getMyContext(node)
+				context = node.context
 			}
 			if (!context) {
-				const contextElement = node.closest("cq-context, [cq-context]");
+				const contextElement = node.closest('cq-context, [cq-context]')
 				if (!contextElement) {
 					console.log(
 						node.tagName +
-							" is not inside cq-context element" +
-							". A context element is required when binding to a helper."
-					);
-					return null;
+							' is not inside cq-context element' +
+							'. A context element is required when binding to a helper.'
+					)
+					return null
 				}
 				if (contextElement.bindingInitiated) {
 					console.log(
-						"No context attached to " +
+						'No context attached to ' +
 							node.tagName +
-							". A context is required when binding to a helper."
-					);
+							'. A context is required when binding to a helper.'
+					)
 				}
-				return null;
+				return null
 			}
-			helper = context.getAdvertised(helperName);
+			helper = context.getAdvertised(helperName)
 		} else {
 			// bind to nearest web component // chart()
-			var f = binding.substring(0, paren);
-			var parent = node.parentElement;
+			var f = binding.substring(0, paren)
+			var parent = node.parentElement
 			while (parent) {
-				if (typeof parent[f] == "function") {
-					return parent;
+				if (typeof parent[f] == 'function') {
+					return parent
 				}
-				parent = parent.parentElement;
+				parent = parent.parentElement
 			}
 		}
-		return helper;
+		return helper
 	}
 	/**
 	 * Activates an element that was tapped on via the stxtap attribute.
@@ -1354,29 +1354,29 @@ class BaseComponent extends HTMLElement {
 	 * @private
 	 */
 	static activate(node, e, params, setter) {
-		var attribute = setter ? "stxsetget" : "stxtap";
-		var method = CIQ.UI.splitMethod(node.getAttribute(attribute));
-		if (!method) return;
-		var helperName = method.helperName;
-		var f = method.functionName;
-		if (setter) f = "set" + f;
+		var attribute = setter ? 'stxsetget' : 'stxtap'
+		var method = CIQ.UI.splitMethod(node.getAttribute(attribute))
+		if (!method) return
+		var helperName = method.helperName
+		var f = method.functionName
+		if (setter) f = 'set' + f
 		// All helper methods take the node that was activated as the first argument
-		var argArray = [{ node: node, e: e, params: params }].concat(method.args);
+		var argArray = [{ node: node, e: e, params: params }].concat(method.args)
 		if (helperName) {
-			var helper = BaseComponent.getHelper(node, null, attribute);
+			var helper = BaseComponent.getHelper(node, null, attribute)
 			if (!helper[f]) {
-				console.log("Method '" + f + "' not found in helper", helper);
-				return;
+				console.log("Method '" + f + "' not found in helper", helper)
+				return
 			}
-			helper[f].apply(helper, argArray);
+			helper[f].apply(helper, argArray)
 		} else {
 			// Look for nearest parent web component that contains our desired activation function
-			var parent = node.parentElement;
+			var parent = node.parentElement
 			while (parent) {
-				if (typeof parent[f] === "function") {
-					parent[f].apply(parent, argArray);
+				if (typeof parent[f] === 'function') {
+					parent[f].apply(parent, argArray)
 				}
-				parent = parent.parentElement;
+				parent = parent.parentElement
 			}
 		}
 	}
@@ -1395,11 +1395,11 @@ class BaseComponent extends HTMLElement {
 	 * @private
 	 */
 	makeTap(node, cb) {
-		BaseComponent.makeTap(node, cb);
+		BaseComponent.makeTap(node, cb)
 	}
 	static makeTap(node, cb) {
-		node.selectFC = cb;
-		CIQ.UI.stxtap(node, cb);
+		node.selectFC = cb
+		CIQ.UI.stxtap(node, cb)
 	}
 	/**
 	 * Set bindings for a node that has been created dynamically. The attribute can be either
@@ -1438,70 +1438,70 @@ class BaseComponent extends HTMLElement {
 	 * stxtap = "DrawingToolbar.tool('gartley')"
 	 */
 	static bindNode(node, params) {
-		var helper;
-		var binding = node.getAttribute("stxbind");
-		var tap = node.getAttribute("stxtap");
-		var setget = node.getAttribute("stxsetget");
+		var helper
+		var binding = node.getAttribute('stxbind')
+		var tap = node.getAttribute('stxtap')
+		var setget = node.getAttribute('stxsetget')
 		// One way binding
 		function bindHelper(helper) {
-			var method;
-			var paren = binding.indexOf("(");
-			method = binding.substring(binding.indexOf(".") + 1);
+			var method
+			var paren = binding.indexOf('(')
+			method = binding.substring(binding.indexOf('.') + 1)
 			if (paren !== -1) {
-				method = binding.substring(0, paren);
+				method = binding.substring(0, paren)
 			}
-			if (helper) helper[method](node);
+			if (helper) helper[method](node)
 		}
-		if (binding && binding !== "") {
-			helper = BaseComponent.getHelper(node, binding, "stxbind");
-			if (!helper) return false;
-			bindHelper(helper);
+		if (binding && binding !== '') {
+			helper = BaseComponent.getHelper(node, binding, 'stxbind')
+			if (!helper) return false
+			bindHelper(helper)
 		}
 		// "tap" binding
 		function closure(node) {
-			return function (e) {
+			return function(e) {
 				// BaseComponent.e=e;
-				BaseComponent.activate(node, e, params, false);
-			};
+				BaseComponent.activate(node, e, params, false)
+			}
 		}
-		if (tap && tap !== "") {
+		if (tap && tap !== '') {
 			if (
-				node.tagName == "INPUT" &&
-				(node.type === "text" || node.type === "number")
+				node.tagName == 'INPUT' &&
+				(node.type === 'text' || node.type === 'number')
 			) {
-				BaseComponent.inputEntry(node, closure(node));
+				BaseComponent.inputEntry(node, closure(node))
 			} else {
-				BaseComponent.makeTap(node, closure(node));
+				BaseComponent.makeTap(node, closure(node))
 			}
 		}
 		// Setter/Getter binding
 		function setGetHelper(helper) {
 			function createSetter() {
-				return function (e) {
+				return function(e) {
 					// BaseComponent.e=e;
-					BaseComponent.activate(node, e, params, true);
-				};
+					BaseComponent.activate(node, e, params, true)
+				}
 			}
-			var method = CIQ.UI.splitMethod(setget);
+			var method = CIQ.UI.splitMethod(setget)
 			if (!method) {
-				console.log("Syntax error " + setget);
-				return;
+				console.log('Syntax error ' + setget)
+				return
 			}
-			var argArray = [node].concat(method.args).concat(params);
-			var getter = "get" + method.functionName;
-			if (helper && helper[getter]) helper[getter].apply(helper, argArray);
-			if (node.type === "text" || node.type === "number") {
-				BaseComponent.inputEntry(node, createSetter());
+			var argArray = [node].concat(method.args).concat(params)
+			var getter = 'get' + method.functionName
+			if (helper && helper[getter]) helper[getter].apply(helper, argArray)
+			if (node.type === 'text' || node.type === 'number') {
+				BaseComponent.inputEntry(node, createSetter())
 			} else {
-				BaseComponent.makeTap(node, createSetter());
+				BaseComponent.makeTap(node, createSetter())
 			}
 		}
 		if (setget) {
-			helper = BaseComponent.getHelper(node, setget, "stxsetget");
-			if (!helper) return false;
-			setGetHelper(helper);
+			helper = BaseComponent.getHelper(node, setget, 'stxsetget')
+			if (!helper) return false
+			setGetHelper(helper)
 		}
-		return true;
+		return true
 	}
 	/**
 	 * Schedules a node to be processed for binding. The binding occurs in the next tick, in
@@ -1514,10 +1514,10 @@ class BaseComponent extends HTMLElement {
 	 * @private
 	 */
 	static scheduleForBinding(node, holder) {
-		BaseComponent.scheduledBindings.push({ node: node, parentTag: holder });
+		BaseComponent.scheduledBindings.push({ node: node, parentTag: holder })
 		// This ensures that one and only one nextTick event will occur
-		if (BaseComponent.timeout) clearTimeout(BaseComponent.timeout);
-		BaseComponent.timeout = setTimeout(BaseComponent.nextTick, 0);
+		if (BaseComponent.timeout) clearTimeout(BaseComponent.timeout)
+		BaseComponent.timeout = setTimeout(BaseComponent.nextTick, 0)
 	}
 	/**
 	 * Attaches a keyboard input entry event.
@@ -1529,16 +1529,16 @@ class BaseComponent extends HTMLElement {
 	 * @memberof CIQ.UI.BaseComponent.prototype
 	 */
 	inputEntry(node, cb) {
-		BaseComponent.inputEntry(node, cb);
+		BaseComponent.inputEntry(node, cb)
 	}
 	static inputEntry(node, cb) {
-		node.addEventListener("keypress", function (e) {
+		node.addEventListener('keypress', function(e) {
 			switch (e.which) {
 				case 13:
 				case 9:
-					cb();
+					cb()
 			}
-		});
+		})
 	}
 	/**
 	 * Claim any keystrokes that come in. Once claimed, any keystrokes that come in are passed
@@ -1551,7 +1551,7 @@ class BaseComponent extends HTMLElement {
 	 * @memberof CIQ.UI.BaseComponent.prototype
 	 */
 	addClaim(helper) {
-		claims.push({ helper: helper });
+		claims.push({ helper: helper })
 	}
 	/**
 	 * Remove a claim on keystrokes.
@@ -1565,8 +1565,8 @@ class BaseComponent extends HTMLElement {
 	removeClaim(helper) {
 		for (var i = 0; i < claims.length; i++) {
 			if (claims[i].helper === helper) {
-				claims.splice(i, 1);
-				return;
+				claims.splice(i, 1)
+				return
 			}
 		}
 	}
@@ -1591,27 +1591,27 @@ class BaseComponent extends HTMLElement {
 	 * @memberof CIQ.UI.BaseComponent
 	 */
 	static buildReverseBindings(traverseNode) {
-		if (CIQ.UI.bypassBindings) return;
-		var acceptFunc = function (node) {
+		if (CIQ.UI.bypassBindings) return
+		var acceptFunc = function(node) {
 			if (
-				node.hasAttribute("stxbind") ||
-				node.hasAttribute("stxtap") ||
-				node.hasAttribute("stxsetget")
+				node.hasAttribute('stxbind') ||
+				node.hasAttribute('stxtap') ||
+				node.hasAttribute('stxsetget')
 			) {
-				return NodeFilter.FILTER_ACCEPT;
+				return NodeFilter.FILTER_ACCEPT
 			}
-		};
+		}
 		var walker = document.createNodeIterator(
 			traverseNode,
 			NodeFilter.SHOW_ELEMENT,
 			CIQ.isIE ? acceptFunc : { acceptNode: acceptFunc },
 			false
-		);
-		var node;
-		node = walker.nextNode();
+		)
+		var node
+		node = walker.nextNode()
 		while (node) {
-			BaseComponent.scheduleForBinding(node, traverseNode);
-			node = walker.nextNode();
+			BaseComponent.scheduleForBinding(node, traverseNode)
+			node = walker.nextNode()
 		}
 	}
 	/**
@@ -1623,17 +1623,17 @@ class BaseComponent extends HTMLElement {
 	 * @private
 	 */
 	static nextTick() {
-		if (!CIQ.UI.release) return; // UI hasn't started yet
-		clearTimeout(BaseComponent.timeout);
-		var scheduledBindings = BaseComponent.scheduledBindings;
+		if (!CIQ.UI.release) return // UI hasn't started yet
+		clearTimeout(BaseComponent.timeout)
+		var scheduledBindings = BaseComponent.scheduledBindings
 		// We traverse through the bindings backwards which ensures that we attempt to bind to the closest
 		// web component ancestor to the actual binding.
 		for (var i = scheduledBindings.length - 1; i >= 0; i--) {
-			var binding = scheduledBindings[i];
-			if (binding.node.ciqAlreadyBound) continue; // a node can only be bound once in it's lifetime
+			var binding = scheduledBindings[i]
+			if (binding.node.ciqAlreadyBound) continue // a node can only be bound once in it's lifetime
 			binding.node.ciqAlreadyBound = BaseComponent.bindNode(binding.node, {
 				parent: binding.parentTag
-			});
+			})
 		}
 	}
 	/**
@@ -1654,15 +1654,15 @@ class BaseComponent extends HTMLElement {
 	 * @since 7.5.0
 	 */
 	static selfOrParentElement(startEl, classOrAttributeOrTag) {
-		let el = startEl;
+		let el = startEl
 		while (el) {
 			if (
 				el.classList.contains(classOrAttributeOrTag) ||
 				el.getAttribute(classOrAttributeOrTag) !== null ||
 				el.nodeName.toLowerCase() === classOrAttributeOrTag
 			)
-				return el;
-			el = el.parentElement;
+				return el
+			el = el.parentElement
 		}
 	}
 	/**
@@ -1687,13 +1687,13 @@ class BaseComponent extends HTMLElement {
 	 * @since 7.5.0
 	 */
 	static toPropAndObject(path, startObj) {
-		const arr = path.split(".");
-		const prop = arr.pop();
+		const arr = path.split('.')
+		const prop = arr.pop()
 		const obj = arr.reduce(
 			(obj, name) => (obj[name] !== undefined ? obj[name] : (obj[name] = {})),
 			startObj
-		);
-		return { prop, obj };
+		)
+		return { prop, obj }
 	}
 	/**
 	 * Retrieves a channel object and property from the given path.
@@ -1712,21 +1712,21 @@ class BaseComponent extends HTMLElement {
 	 */
 	static getChannel(path, stx, self) {
 		if (!path) {
-			console.warn("Missing channel path");
-			return {};
+			console.warn('Missing channel path')
+			return {}
 		}
 		if (!stx && !self) {
-			console.warn("Chart engine not provided while retrieving ", path);
-			return {};
+			console.warn('Chart engine not provided while retrieving ', path)
+			return {}
 		}
 		if (!stx && !self.stx) {
 			if (!self.container) {
-				self.container = CIQ.UI.getMyContext(self);
+				self.container = CIQ.UI.getMyContext(self)
 			}
-			self.stx = self.container.stx;
+			self.stx = self.container.stx
 		}
-		const { obj, prop } = BaseComponent.toPropAndObject(path, stx || self.stx);
-		return { obj, prop };
+		const { obj, prop } = BaseComponent.toPropAndObject(path, stx || self.stx)
+		return { obj, prop }
 	}
 	/**
 	 * Finds the elements in `items` that have a `cq-focused` attribute.
@@ -1740,9 +1740,7 @@ class BaseComponent extends HTMLElement {
 	 * @since 8.3.0
 	 */
 	findFocused(items) {
-		return Array.from(items || []).filter((item) =>
-			item.matches("[cq-focused]")
-		);
+		return Array.from(items || []).filter(item => item.matches('[cq-focused]'))
 	}
 	/**
 	 * Focuses the next item in the tab order.
@@ -1768,31 +1766,31 @@ class BaseComponent extends HTMLElement {
 	 * @see [focusItem]{@link CIQ.UI.BaseComponent#focusItem}
 	 */
 	focusNextItem(items, reverse) {
-		const focused = this.findFocused(items);
-		let i = -1;
+		const focused = this.findFocused(items)
+		let i = -1
 		if (focused.length) {
 			// find our location in the list of items
-			for (i = 0; i < items.length; i++) if (items[i] === focused[0]) break;
+			for (i = 0; i < items.length; i++) if (items[i] === focused[0]) break
 		}
 		if (reverse) {
 			// Find the previous available item
 			do {
-				i--;
-				if (i < 0) break;
-			} while (!CIQ.trulyVisible(items[i]));
+				i--
+				if (i < 0) break
+			} while (!CIQ.trulyVisible(items[i]))
 		} else {
 			// Find the next available item
 			do {
-				i++;
-				if (i >= items.length) break;
-			} while (!CIQ.trulyVisible(items[i]));
+				i++
+				if (i >= items.length) break
+			} while (!CIQ.trulyVisible(items[i]))
 		}
 		if (i > -1 && i < items.length && items[i] !== focused[0]) {
-			this.removeFocused(items);
-			this.focusItem(items[i]);
-			return true;
+			this.removeFocused(items)
+			this.focusItem(items[i])
+			return true
 		}
-		return false;
+		return false
 	}
 	/**
 	 * Adds a `cq-focused` attribute to `item` and highlights `item`.
@@ -1804,8 +1802,8 @@ class BaseComponent extends HTMLElement {
 	 * @since 8.3.0
 	 */
 	focusItem(item) {
-		item.setAttribute("cq-focused", "true");
-		this.highlightItem(item);
+		item.setAttribute('cq-focused', 'true')
+		this.highlightItem(item)
 	}
 	/**
 	 * Removes the `cq-focused` attribute from all elements in `items`.
@@ -1817,7 +1815,7 @@ class BaseComponent extends HTMLElement {
 	 * @since 8.3.0
 	 */
 	removeFocused(items) {
-		items.forEach((item) => item.removeAttribute("cq-focused"));
+		items.forEach(item => item.removeAttribute('cq-focused'))
 	}
 	/**
 	 * Sets the navigation highlight DOM element to the size and position of the provided element
@@ -1836,12 +1834,12 @@ class BaseComponent extends HTMLElement {
 			!this.keyboardNavigation ||
 			!this.keyboardNavigation.highlightPosition
 		)
-			return;
-		const { x, y, width, height } = item.getBoundingClientRect();
+			return
+		const { x, y, width, height } = item.getBoundingClientRect()
 		this.keyboardNavigation.highlightPosition({
 			element: item,
 			position: { x, y, width, height }
-		});
+		})
 	}
 	/**
 	 * Highlights the first element in the provided node list that has a `cq-focused` attribute.
@@ -1854,8 +1852,8 @@ class BaseComponent extends HTMLElement {
 	 * @since 8.3.0
 	 */
 	highlightFocusedItem(items) {
-		let focused = this.findFocused(items);
-		if (focused.length) this.highlightItem(focused[0]);
+		let focused = this.findFocused(items)
+		if (focused.length) this.highlightItem(focused[0])
 	}
 	/**
 	 * Simulates a mouse click on the provided element as the result of a keystroke.
@@ -1870,15 +1868,15 @@ class BaseComponent extends HTMLElement {
 	 * @since 8.3.0
 	 */
 	clickItem(item, e) {
-		if (!item) return;
+		if (!item) return
 		if (item.selectFC) {
-			item.selectFC.call(item, e);
+			item.selectFC.call(item, e)
 		} else {
 			// Simulate a click
-			item.dispatchEvent(new Event("pointerdown"));
-			item.dispatchEvent(new Event("pointerup"));
+			item.dispatchEvent(new Event('pointerdown'))
+			item.dispatchEvent(new Event('pointerup'))
 		}
-		return true;
+		return true
 	}
 	/**
 	 * Selects (clicks) the first element in `items` that has a `cq-focused` attribute.
@@ -1891,12 +1889,12 @@ class BaseComponent extends HTMLElement {
 	 * @since 8.3.0
 	 */
 	clickFocusedItem(items, e) {
-		let focused = this.findFocused(items);
-		if (focused.length) this.clickItem(focused[0], e);
+		let focused = this.findFocused(items)
+		if (focused.length) this.clickItem(focused[0], e)
 	}
 }
-BaseComponent.scheduledBindings = [];
-CIQ.UI.BaseComponent = BaseComponent;
+BaseComponent.scheduledBindings = []
+CIQ.UI.BaseComponent = BaseComponent
 /**
  * Abstract class for web components that use a {@link CIQ.UI.Context} to gain access to an
  * instance of the chart engine.
@@ -1909,8 +1907,8 @@ CIQ.UI.BaseComponent = BaseComponent;
  */
 class ContextTag extends BaseComponent {
 	constructor() {
-		super();
-		this.injections = [];
+		super()
+		this.injections = []
 	}
 	/**
 	 * Convenience function that creates an array of injections for the component and sets a
@@ -1924,9 +1922,9 @@ class ContextTag extends BaseComponent {
 	 * @memberof CIQ.UI.ContextTag.prototype
 	 */
 	connectedCallback() {
-		if (this.attached) return;
-		this.setContextHolder();
-		super.connectedCallback();
+		if (this.attached) return
+		this.setContextHolder()
+		super.connectedCallback()
 	}
 	/**
 	 * Removes all the the injections for a context tag and resets the tag to its default
@@ -1941,19 +1939,19 @@ class ContextTag extends BaseComponent {
 	 */
 	disconnectedCallback() {
 		if (this.context) {
-			var i;
+			var i
 			for (i = 0; i < this.injections.length; i++) {
-				this.context.stx.removeInjection(this.injections[i]);
+				this.context.stx.removeInjection(this.injections[i])
 			}
-			this.injections = [];
+			this.injections = []
 			for (i = 0; i < this.eventListeners.length; i++) {
-				this.context.stx.removeEventListener(this.eventListeners[i]);
+				this.context.stx.removeEventListener(this.eventListeners[i])
 			}
-			this.eventListeners = [];
+			this.eventListeners = []
 		}
 		if (this.timeout) {
-			clearTimeout(this.timeout);
-			this.timeout = null;
+			clearTimeout(this.timeout)
+			this.timeout = null
 		}
 	}
 	/**
@@ -1968,17 +1966,17 @@ class ContextTag extends BaseComponent {
 	 * @memberof CIQ.UI.ContextTag.prototype
 	 */
 	setContextHolder() {
-		var nearestContext = this.closest("cq-context,*[cq-context]");
+		var nearestContext = this.closest('cq-context,*[cq-context]')
 		if (!nearestContext) {
-			console.log("No cq-context found for " + this.tagName);
-			return;
+			console.log('No cq-context found for ' + this.tagName)
+			return
 		}
-		var contextElement = nearestContext;
-		var storage = Context.assembleContext(contextElement);
-		storage.Components.push(this);
+		var contextElement = nearestContext
+		var storage = Context.assembleContext(contextElement)
+		storage.Components.push(this)
 		// This will only get called for components that are generated dynamically, after a context
 		// has already been established
-		if (storage.context) this.setContextPrivate(storage.context);
+		if (storage.context) this.setContextPrivate(storage.context)
 	}
 	/**
 	 * Called for a registered component when the context is constructed. This method does
@@ -2002,27 +2000,27 @@ class ContextTag extends BaseComponent {
 	 * @private
 	 */
 	setContextPrivate(context) {
-		this.context = context;
-		this.uiManager = CIQ.UI.getUIManager();
-		if (this.hasAttribute("cq-marker") && !this.convertedToMarker) {
-			this.convertedToMarker = true;
+		this.context = context
+		this.uiManager = CIQ.UI.getUIManager()
+		if (this.hasAttribute('cq-marker') && !this.convertedToMarker) {
+			this.convertedToMarker = true
 			this.marker = new CIQ.Marker({
 				stx: context.stx,
 				node: this,
-				xPositioner: "none",
-				yPositioner: "none",
-				label: "component",
+				xPositioner: 'none',
+				yPositioner: 'none',
+				label: 'component',
 				permanent: true
-			});
+			})
 		}
 		this.timeout = setTimeout(
-			(function (s, c) {
-				return function () {
-					s.setContext(c);
-					s.timeout = null;
-				};
+			(function(s, c) {
+				return function() {
+					s.setContext(c)
+					s.timeout = null
+				}
 			})(this, context)
-		);
+		)
 	}
 	/**
 	 * Adds an injection to the chart engine.
@@ -2037,10 +2035,10 @@ class ContextTag extends BaseComponent {
 	 * @private
 	 */
 	addInjection(position, injection, code) {
-		this.injections.push(this.context.stx[position](injection, code));
+		this.injections.push(this.context.stx[position](injection, code))
 	}
 }
-CIQ.UI.ContextTag = ContextTag;
+CIQ.UI.ContextTag = ContextTag
 /**
  * A tag that is modally aware of the chart.
  *
@@ -2050,7 +2048,7 @@ CIQ.UI.ContextTag = ContextTag;
  */
 class ModalTag extends ContextTag {
 	constructor() {
-		super();
+		super()
 	}
 	/**
 	 * @alias connectedCallback
@@ -2058,14 +2056,14 @@ class ModalTag extends ContextTag {
 	 * @private
 	 */
 	connectedCallback() {
-		if (this.attached) return;
-		this.onpointerover = function () {
-			this.modalBegin();
-		};
-		this.onpointerout = function () {
-			this.modalEnd();
-		};
-		super.connectedCallback();
+		if (this.attached) return
+		this.onpointerover = function() {
+			this.modalBegin()
+		}
+		this.onpointerout = function() {
+			this.modalEnd()
+		}
+		super.connectedCallback()
 	}
 	/**
 	 * @alias modalBegin
@@ -2073,8 +2071,8 @@ class ModalTag extends ContextTag {
 	 * @private
 	 */
 	modalBegin() {
-		if (!this.context) return;
-		this.context.stx.modalBegin();
+		if (!this.context) return
+		this.context.stx.modalBegin()
 	}
 	/**
 	 * @alias modalEnd
@@ -2082,12 +2080,12 @@ class ModalTag extends ContextTag {
 	 * @private
 	 */
 	modalEnd() {
-		if (!this.context) return;
-		if (this.uiManager.activeMenuStack.length) return; // If an active menu then don't turn off the modal. Let uiManager handle it.
-		this.context.stx.modalEnd();
+		if (!this.context) return
+		if (this.uiManager.activeMenuStack.length) return // If an active menu then don't turn off the modal. Let uiManager handle it.
+		this.context.stx.modalEnd()
 	}
 }
-CIQ.UI.ModalTag = ModalTag;
+CIQ.UI.ModalTag = ModalTag
 /**
  * Base class for tags that are contained in a `cq-dialog` tag.
  *
@@ -2101,7 +2099,7 @@ CIQ.UI.ModalTag = ModalTag;
  */
 class DialogContentTag extends BaseComponent {
 	constructor() {
-		super();
+		super()
 	}
 	/**
 	 * Closes the dialog.
@@ -2114,11 +2112,11 @@ class DialogContentTag extends BaseComponent {
 	 * @memberof CIQ.UI.DialogContentTag.prototype
 	 */
 	close() {
-		var dialog = this.closest("cq-dialog");
-		if (dialog) dialog.close();
-		Array.from(this.querySelectorAll("cq-swatch")).forEach(function (el) {
-			if (el.colorPicker) el.colorPicker.close();
-		});
+		var dialog = this.closest('cq-dialog')
+		if (dialog) dialog.close()
+		Array.from(this.querySelectorAll('cq-swatch')).forEach(function(el) {
+			if (el.colorPicker) el.colorPicker.close()
+		})
 	}
 	/**
 	 * Opens the parent dialog, the nearest `cq-dialog` element. Sets the chart context if a
@@ -2136,12 +2134,12 @@ class DialogContentTag extends BaseComponent {
 	 * @memberof CIQ.UI.DialogContentTag.prototype
 	 */
 	open(params) {
-		if (params && params.context) this.setContext(params.context);
-		
-		var tagName = this.tagName.toLowerCase();
-		var closest = this.closest("cq-dialog,cq-menu");
-		closest.addActiveAttribute(tagName);
-		closest.open(params);
+		if (params && params.context) this.setContext(params.context)
+
+		var tagName = this.tagName.toLowerCase()
+		var closest = this.closest('cq-dialog,cq-menu')
+		closest.addActiveAttribute(tagName)
+		closest.open(params)
 	}
 	/**
 	 * Dynamically sets the context for a dialog so that it knows which chart to change when
@@ -2157,13 +2155,13 @@ class DialogContentTag extends BaseComponent {
 		// If there are ever multiple possible contexts (as is the case for multi-chart), the context
 		// of a component may get set (eg in BaseComponent.getHelper()) and subsequently never changed,
 		// even when it should, causing unexpected behavior.
-		this.node.find("[stxtap],[stxbind],[stxsetget]").each(function () {
-			this.context = context;
-		});
-		this.context = context;
+		this.node.find('[stxtap],[stxbind],[stxsetget]').each(function() {
+			this.context = context
+		})
+		this.context = context
 	}
 }
-CIQ.UI.DialogContentTag = DialogContentTag;
+CIQ.UI.DialogContentTag = DialogContentTag
 /**
  * Abstract class for UI Helpers.
  *
@@ -2174,11 +2172,11 @@ CIQ.UI.DialogContentTag = DialogContentTag;
  * @name CIQ.UI.Helper
  * @constructor
  */
-CIQ.UI.Helper = function (node, context) {
-	this.node = node;
-	this.context = context;
-	this.injections = []; // To keep track of injections for later removal
-};
+CIQ.UI.Helper = function(node, context) {
+	this.node = node
+	this.context = context
+	this.injections = [] // To keep track of injections for later removal
+}
 /**
  * Adds an injection. These will be automatically destroyed if the helper object is destroyed.
  *
@@ -2189,9 +2187,9 @@ CIQ.UI.Helper = function (node, context) {
  * @param {Function} code      The code to be run
  * @memberof CIQ.UI.Helper
  */
-CIQ.UI.Helper.prototype.addInjection = function (position, injection, code) {
-	this.injections.push(this.context.stx[position](injection, code));
-};
+CIQ.UI.Helper.prototype.addInjection = function(position, injection, code) {
+	this.injections.push(this.context.stx[position](injection, code))
+}
 /**
  * Removes injections from the ChartEngine
  *
@@ -2199,12 +2197,12 @@ CIQ.UI.Helper.prototype.addInjection = function (position, injection, code) {
  *
  * @memberof CIQ.UI.Helper
  */
-CIQ.UI.Helper.prototype.destroy = function () {
+CIQ.UI.Helper.prototype.destroy = function() {
 	for (var i = 0; i < this.injections.length; i++) {
-		this.context.stx.removeInjection(this.injections[i]);
+		this.context.stx.removeInjection(this.injections[i])
 	}
-	this.injections = [];
-};
+	this.injections = []
+}
 /**
  * UI Helper that keeps the heads up display operating.
  *
@@ -2229,26 +2227,26 @@ CIQ.UI.Helper.prototype.destroy = function () {
  * - 3.0.0
  * - 6.0.0 Now also has internationalizer support for dates. See {@link CIQ.I18N.setLocale} or {@link CIQ.I18N.localize}.
  */
-CIQ.UI.HeadsUp = function (node, context, params) {
-	this.params = params ? params : {};
-	if (typeof this.params.autoStart == "undefined") this.params.autoStart = true;
-	this.node = node;
-	node.remove();
-	this.context = context;
-	this.injections = []; // Keep track on instance level, not on prototype (CIQ.UI.Helper)
-	this.maxVolume = { lastCheckDate: null, value: 0 }; // This contains the maximum volume in the dataSet, used to generate the volume icon element
-	if (this.params.autoStart) this.begin();
-};
-CIQ.inheritsFrom(CIQ.UI.HeadsUp, CIQ.UI.Helper);
+CIQ.UI.HeadsUp = function(node, context, params) {
+	this.params = params ? params : {}
+	if (typeof this.params.autoStart == 'undefined') this.params.autoStart = true
+	this.node = node
+	node.remove()
+	this.context = context
+	this.injections = [] // Keep track on instance level, not on prototype (CIQ.UI.Helper)
+	this.maxVolume = { lastCheckDate: null, value: 0 } // This contains the maximum volume in the dataSet, used to generate the volume icon element
+	if (this.params.autoStart) this.begin()
+}
+CIQ.inheritsFrom(CIQ.UI.HeadsUp, CIQ.UI.Helper)
 /**
  * Begins the heads up operation. This uses injections to manage the contents and location of the display. See {@link CIQ.UI.HeadsUp#end} to stop
  * the heads up.
  * @memberof CIQ.UI.HeadsUp
  * @private
  */
-CIQ.UI.HeadsUp.prototype.begin = function () {
-	if (this.injections.length) return; //we've already begun since the injections are there
-	if (!CIQ.Marker) return;
+CIQ.UI.HeadsUp.prototype.begin = function() {
+	if (this.injections.length) return //we've already begun since the injections are there
+	if (!CIQ.Marker) return
 	if (!CIQ.Marker.HeadsUp) {
 		/**
 		 * A heads up marker for displaying OHLC values on the chart.
@@ -2260,13 +2258,13 @@ CIQ.UI.HeadsUp.prototype.begin = function () {
 		 * @param {Object} params
 		 * @param {string} showClass
 		 */
-		CIQ.Marker.HeadsUp = function (params, showClass) {
-			if (!this.className) this.className = "CIQ.Marker.HeadsUp";
-			CIQ.Marker.call(this, params);
-			this.prevTick = null;
-			this.showClass = showClass;
-		};
-		CIQ.inheritsFrom(CIQ.Marker.HeadsUp, CIQ.Marker, false);
+		CIQ.Marker.HeadsUp = function(params, showClass) {
+			if (!this.className) this.className = 'CIQ.Marker.HeadsUp'
+			CIQ.Marker.call(this, params)
+			this.prevTick = null
+			this.showClass = showClass
+		}
+		CIQ.inheritsFrom(CIQ.Marker.HeadsUp, CIQ.Marker, false)
 		/**
 		 * Determines the location of the HeadsUp Marker.
 		 *
@@ -2275,88 +2273,88 @@ CIQ.UI.HeadsUp.prototype.begin = function () {
 		 * @memberof CIQ.Marker.HeadsUp
 		 * @param {Object} params
 		 */
-		CIQ.Marker.HeadsUp.placementFunction = function (params) {
+		CIQ.Marker.HeadsUp.placementFunction = function(params) {
 			function getBottomPixel(stx, panel, containerHeight, price) {
-				return Math.round(containerHeight - stx.pixelFromPrice(price, panel));
+				return Math.round(containerHeight - stx.pixelFromPrice(price, panel))
 			}
-			var panel = params.panel;
-			var chart = panel.chart;
-			var stx = params.stx;
-			var useHighs = stx.chart.highLowBars;
-			if (!params.showClass) params.showClass = "stx-show";
+			var panel = params.panel
+			var chart = panel.chart
+			var stx = params.stx
+			var useHighs = stx.chart.highLowBars
+			if (!params.showClass) params.showClass = 'stx-show'
 			for (var i = 0; i < params.arr.length; ++i) {
-				var marker = params.arr[i];
-				var node = marker.node;
-				var nodeClass = node.classList;
+				var marker = params.arr[i]
+				var node = marker.node
+				var nodeClass = node.classList
 				if (panel.hidden || !stx.insideChart) {
-					nodeClass.remove(params.showClass);
-					return;
+					nodeClass.remove(params.showClass)
+					return
 				}
 				if (marker.params.x < 0 || marker.params.x >= chart.dataSet.length) {
-					nodeClass.remove(params.showClass);
-					return;
+					nodeClass.remove(params.showClass)
+					return
 				}
 				// show the hud if on, except if the crosshair is on or a drawing tool is selected
 				if (stx.currentVectorParameters.vectorType) {
-					nodeClass.remove(params.showClass);
-					return;
+					nodeClass.remove(params.showClass)
+					return
 				}
-				var quote = chart.dataSet[marker.params.x];
-				var x = stx.pixelFromTick(marker.params.x);
+				var quote = chart.dataSet[marker.params.x]
+				var x = stx.pixelFromTick(marker.params.x)
 				if (!quote || x < chart.left || x > chart.right) {
-					nodeClass.remove(params.showClass);
-					return;
+					nodeClass.remove(params.showClass)
+					return
 				}
 				// gap bar, hide HUD
 				if (
 					!quote[stx.chart.defaultPlotField] &&
 					quote[stx.chart.defaultPlotField] !== 0
 				) {
-					nodeClass.remove(params.showClass);
-					return;
+					nodeClass.remove(params.showClass)
+					return
 				}
-				nodeClass.add(params.showClass);
-				var hw = CIQ.elementDimensions(node);
-				if (!marker.clientWidth) marker.clientWidth = hw.width;
-				if (!marker.clientHeight) marker.clientHeight = hw.height;
+				nodeClass.add(params.showClass)
+				var hw = CIQ.elementDimensions(node)
+				if (!marker.clientWidth) marker.clientWidth = hw.width
+				if (!marker.clientHeight) marker.clientHeight = hw.height
 				if (marker.clientWidth > x) {
-					nodeClass.remove("stx-left");
-					nodeClass.add("stx-right");
+					nodeClass.remove('stx-left')
+					nodeClass.add('stx-right')
 					Object.assign(marker.node.style, {
-						left: x + "px",
-						right: "auto"
-					});
+						left: x + 'px',
+						right: 'auto'
+					})
 				} else {
-					nodeClass.add("stx-left");
-					nodeClass.remove("stx-right");
+					nodeClass.add('stx-left')
+					nodeClass.remove('stx-right')
 					Object.assign(marker.node.style, {
-						right: stx.chart.canvasWidth - x + "px",
-						left: "auto"
-					});
+						right: stx.chart.canvasWidth - x + 'px',
+						left: 'auto'
+					})
 				}
-				var bottom;
+				var bottom
 				var containerHeight = marker.params.chartContainer
 					? stx.chart.canvasHeight
-					: panel.bottom;
+					: panel.bottom
 				if (useHighs) {
 					bottom = getBottomPixel(
 						stx,
 						panel,
 						containerHeight,
-						stx.getBarBounds(quote)[panel.yAxis.flipped ? "low" : "high"]
-					);
+						stx.getBarBounds(quote)[panel.yAxis.flipped ? 'low' : 'high']
+					)
 				} else {
 					bottom = getBottomPixel(
 						stx,
 						panel,
 						containerHeight,
 						quote[stx.chart.defaultPlotField]
-					);
+					)
 				}
 				// Keep below top of screen
-				var top = containerHeight - bottom - marker.clientHeight + stx.top;
+				var top = containerHeight - bottom - marker.clientHeight + stx.top
 				if (top < 0) {
-					nodeClass.add("stx-below");
+					nodeClass.add('stx-below')
 					bottom =
 						(useHighs
 							? getBottomPixel(
@@ -2365,208 +2363,208 @@ CIQ.UI.HeadsUp.prototype.begin = function () {
 									containerHeight,
 									stx.getBarBounds(quote).low
 							  )
-							: bottom) - marker.clientHeight;
+							: bottom) - marker.clientHeight
 				} else {
-					nodeClass.remove("stx-below");
+					nodeClass.remove('stx-below')
 				}
-				var bottomPX = bottom + "px";
+				var bottomPX = bottom + 'px'
 				if (marker.node.style.bottom != bottomPX) {
-					marker.node.style.bottom = bottomPX;
+					marker.node.style.bottom = bottomPX
 				}
 			}
-		};
+		}
 	}
-	var params;
+	var params
 	if (this.params.followMouse) {
-		this.node.style.top = "auto"; // allow style.bottom to override the default top value
+		this.node.style.top = 'auto' // allow style.bottom to override the default top value
 		params = {
 			stx: this.context.stx,
-			label: "headsup",
-			xPositioner: "bar",
+			label: 'headsup',
+			xPositioner: 'bar',
 			chartContainer: true,
 			x: 0,
 			node: this.node
-		};
-		this.marker = new CIQ.Marker.HeadsUp(params, this.params.showClass);
+		}
+		this.marker = new CIQ.Marker.HeadsUp(params, this.params.showClass)
 		this.addInjection(
-			"append",
-			"handleMouseOut",
-			(function (self) {
-				return function () {
-					self.followMouse(-1);
-				};
+			'append',
+			'handleMouseOut',
+			(function(self) {
+				return function() {
+					self.followMouse(-1)
+				}
 			})(this)
-		);
+		)
 	} else if (this.params.staticNode) {
 		// placeholder
 	} else {
-		Object.assign(this.node.style, { top: "", left: "" }); // Remove any existing styles
+		Object.assign(this.node.style, { top: '', left: '' }) // Remove any existing styles
 		params = {
 			stx: this.context.stx,
-			label: "headsup",
-			xPositioner: "none",
+			label: 'headsup',
+			xPositioner: 'none',
 			chartContainer: false,
 			node: this.node
-		};
-		CIQ.extend(params, this.params); // Override default marker setup by passing marker parameters into CIQ.UI.HaedsUp
-		this.marker = new CIQ.Marker(params);
+		}
+		CIQ.extend(params, this.params) // Override default marker setup by passing marker parameters into CIQ.UI.HaedsUp
+		this.marker = new CIQ.Marker(params)
 	}
-	this.calculateMaxVolume();
+	this.calculateMaxVolume()
 	this.addInjection(
-		"prepend",
-		"headsUpHR",
-		(function (self) {
-			return function () {
-				self.position();
-			};
+		'prepend',
+		'headsUpHR',
+		(function(self) {
+			return function() {
+				self.position()
+			}
 		})(this)
-	);
+	)
 	this.addInjection(
-		"append",
-		"createXAxis",
-		(function (self) {
-			return function () {
-				self.position();
-			};
+		'append',
+		'createXAxis',
+		(function(self) {
+			return function() {
+				self.position()
+			}
 		})(this)
-	);
+	)
 	this.addInjection(
-		"append",
-		"createDataSet",
-		(function (self) {
-			return function (dontRoll, whichChart, params) {
-				self.calculateMaxVolume(params.appending);
-			};
+		'append',
+		'createDataSet',
+		(function(self) {
+			return function(dontRoll, whichChart, params) {
+				self.calculateMaxVolume(params.appending)
+			}
 		})(this)
-	);
-};
+	)
+}
 /**
  * Stops the heads up from operating by removing injections and hiding. You can start it again by calling {@link CIQ.UI.HeadsUp#begin}.
  * @memberOf CIQ.UI.HeadsUp
  * @private
  */
-CIQ.UI.HeadsUp.prototype.end = function () {
-	if (this.marker) this.marker.remove();
-	this.destroy();
-	this.marker = null;
-};
+CIQ.UI.HeadsUp.prototype.end = function() {
+	if (this.marker) this.marker.remove()
+	this.destroy()
+	this.marker = null
+}
 /**
  * @memberof CIQ.UI.HeadsUp
  * @param {boolean} appending
  * @private
  */
-CIQ.UI.HeadsUp.prototype.calculateMaxVolume = function (appending) {
-	if (!appending) this.maxVolume = { lastCheckDate: null, value: 0 };
-	var dataSet = this.context.stx.chart.dataSet;
-	if (!dataSet || !dataSet.length) return;
+CIQ.UI.HeadsUp.prototype.calculateMaxVolume = function(appending) {
+	if (!appending) this.maxVolume = { lastCheckDate: null, value: 0 }
+	var dataSet = this.context.stx.chart.dataSet
+	if (!dataSet || !dataSet.length) return
 	for (var i = dataSet.length - 1; i >= 0; i--) {
-		var q = dataSet[i];
-		if (q.DT < this.maxVolume.lastCheckDate) break;
-		if (q.Volume > this.maxVolume.value) this.maxVolume.value = q.Volume;
+		var q = dataSet[i]
+		if (q.DT < this.maxVolume.lastCheckDate) break
+		if (q.Volume > this.maxVolume.value) this.maxVolume.value = q.Volume
 	}
-	this.maxVolume.lastCheckDate = dataSet[dataSet.length - 1].DT;
-};
+	this.maxVolume.lastCheckDate = dataSet[dataSet.length - 1].DT
+}
 /**
  * Determines information inside of the HeadsUp display based on position.
  * @memberof CIQ.UI.HeadsUp
  * @private
  */
-CIQ.UI.HeadsUp.prototype.position = function () {
-	var stx = this.context.stx;
-	var bar = stx.barFromPixel(stx.cx);
-	this.tick = stx.tickFromPixel(stx.cx);
-	var prices = stx.chart.xaxis[bar];
+CIQ.UI.HeadsUp.prototype.position = function() {
+	var stx = this.context.stx
+	var bar = stx.barFromPixel(stx.cx)
+	this.tick = stx.tickFromPixel(stx.cx)
+	var prices = stx.chart.xaxis[bar]
 	//var currentQuote=stx.chart.currentQuote;
-	var plotField = stx.chart.defaultPlotField;
-	var highLowBars = stx.chart.highLowBars;
-	if (!plotField || highLowBars) plotField = "Close";
-	var node = this.node;
-	var self = this;
+	var plotField = stx.chart.defaultPlotField
+	var highLowBars = stx.chart.highLowBars
+	if (!plotField || highLowBars) plotField = 'Close'
+	var node = this.node
+	var self = this
 	function formatPrice(value) {
-		var numStr = "";
+		var numStr = ''
 		var chartScale = stx.layout.chartScale,
 			panel = stx.chart.panel,
-			yAxis = stx.chart.yAxis;
+			yAxis = stx.chart.yAxis
 		if (yAxis.originalPriceFormatter && yAxis.originalPriceFormatter.func) {
-			numStr = yAxis.originalPriceFormatter.func(stx, panel, value);
+			numStr = yAxis.originalPriceFormatter.func(stx, panel, value)
 		} else if (
 			yAxis.priceFormatter &&
-			chartScale != "percent" &&
-			chartScale != "relative"
+			chartScale != 'percent' &&
+			chartScale != 'relative'
 		) {
-			numStr = yAxis.priceFormatter(stx, panel, value);
+			numStr = yAxis.priceFormatter(stx, panel, value)
 		} else {
-			numStr = stx.formatYAxisPrice(value, panel);
+			numStr = stx.formatYAxisPrice(value, panel)
 		}
-		return numStr.replace(/(\.[0-9]*[1-9])0+$|\.0*$/, "$1");
+		return numStr.replace(/(\.[0-9]*[1-9])0+$|\.0*$/, '$1')
 	}
 	function printValues() {
-		var $node = CIQ.UI.$(node);
-		self.timeout = null;
-		$node.find("cq-hu-price").text("N/A");
-		$node.find("cq-hu-open").text("N/A");
-		$node.find("cq-hu-close").text("N/A");
-		$node.find("cq-hu-high").text("N/A");
-		$node.find("cq-hu-low").text("N/A");
-		$node.find("cq-hu-date").text("N/A");
-		$node.find("cq-hu-volume").text("N/A");
-		$node.find("cq-volume-rollup").text("");
+		var $node = CIQ.UI.$(node)
+		self.timeout = null
+		$node.find('cq-hu-price').text('N/A')
+		$node.find('cq-hu-open').text('N/A')
+		$node.find('cq-hu-close').text('N/A')
+		$node.find('cq-hu-high').text('N/A')
+		$node.find('cq-hu-low').text('N/A')
+		$node.find('cq-hu-date').text('N/A')
+		$node.find('cq-hu-volume').text('N/A')
+		$node.find('cq-volume-rollup').text('')
 		function valOrNA(text) {
-			return CIQ.isValidNumber(parseFloat(text)) ? text : "N/A";
+			return CIQ.isValidNumber(parseFloat(text)) ? text : 'N/A'
 		}
 		if (prices) {
 			if (prices.data) {
-				var quote = CIQ.clone(prices.data);
-				if (quote.Open === undefined) quote.Open = quote.Close;
+				var quote = CIQ.clone(prices.data)
+				if (quote.Open === undefined) quote.Open = quote.Close
 				if (quote.High === undefined)
-					quote.High = Math.max(quote.Open, quote.Close);
+					quote.High = Math.max(quote.Open, quote.Close)
 				if (quote.Low === undefined)
-					quote.Low = Math.min(quote.Open, quote.Close);
-				$node.find("cq-hu-open").text(formatPrice(valOrNA(quote.Open)));
-				$node.find("cq-hu-price").text(formatPrice(valOrNA(quote[plotField])));
-				$node.find("cq-hu-close").text(formatPrice(valOrNA(quote.Close)));
-				$node.find("cq-hu-high").text(formatPrice(valOrNA(quote.High)));
-				$node.find("cq-hu-low").text(formatPrice(valOrNA(quote.Low)));
-				var volume = CIQ.condenseInt(quote.Volume);
-				var rollup = volume.charAt(volume.length - 1);
-				if (rollup > "9") {
-					volume = volume.substring(0, volume.length - 1);
-					$node.find("cq-volume-rollup").text(rollup.toUpperCase());
+					quote.Low = Math.min(quote.Open, quote.Close)
+				$node.find('cq-hu-open').text(formatPrice(valOrNA(quote.Open)))
+				$node.find('cq-hu-price').text(formatPrice(valOrNA(quote[plotField])))
+				$node.find('cq-hu-close').text(formatPrice(valOrNA(quote.Close)))
+				$node.find('cq-hu-high').text(formatPrice(valOrNA(quote.High)))
+				$node.find('cq-hu-low').text(formatPrice(valOrNA(quote.Low)))
+				var volume = CIQ.condenseInt(quote.Volume)
+				var rollup = volume.charAt(volume.length - 1)
+				if (rollup > '9') {
+					volume = volume.substring(0, volume.length - 1)
+					$node.find('cq-volume-rollup').text(rollup.toUpperCase())
 				}
-				$node.find("cq-hu-volume").text(volume);
-				var tickDate = quote.displayDate;
-				if (!tickDate) tickDate = quote.DT;
+				$node.find('cq-hu-volume').text(volume)
+				var tickDate = quote.displayDate
+				if (!tickDate) tickDate = quote.DT
 				if (stx.internationalizer) {
 					if (CIQ.ChartEngine.isDailyInterval(stx.layout.interval)) {
 						$node
-							.find("cq-hu-date")
-							.text(stx.internationalizer.yearMonthDay.format(tickDate));
+							.find('cq-hu-date')
+							.text(stx.internationalizer.yearMonthDay.format(tickDate))
 					} else {
 						$node
-							.find("cq-hu-date")
+							.find('cq-hu-date')
 							.text(
 								stx.internationalizer.yearMonthDay.format(tickDate) +
-									" " +
+									' ' +
 									stx.internationalizer.hourMinute.format(tickDate)
-							);
+							)
 					}
 				} else {
 					if (CIQ.ChartEngine.isDailyInterval(stx.layout.interval)) {
 						$node
-							.find("cq-hu-date")
-							.text(CIQ.mmddyyyy(CIQ.yyyymmddhhmm(tickDate)));
+							.find('cq-hu-date')
+							.text(CIQ.mmddyyyy(CIQ.yyyymmddhhmm(tickDate)))
 					} else {
 						$node
-							.find("cq-hu-date")
-							.text(CIQ.mmddhhmm(CIQ.yyyymmddhhmmssmmm(tickDate)));
+							.find('cq-hu-date')
+							.text(CIQ.mmddhhmm(CIQ.yyyymmddhhmmssmmm(tickDate)))
 					}
 				}
-				var visuals = $node.find("cq-volume-visual");
+				var visuals = $node.find('cq-volume-visual')
 				if (visuals.length) {
 					var relativeCandleSize = self.maxVolume.value
 						? quote.Volume / self.maxVolume.value
-						: 0;
-					visuals.css({ width: Math.round(relativeCandleSize * 100) + "%" });
+						: 0
+					visuals.css({ width: Math.round(relativeCandleSize * 100) + '%' })
 				}
 			}
 			// not sure why we'd need this, commenting out for now
@@ -2579,22 +2577,22 @@ CIQ.UI.HeadsUp.prototype.position = function () {
 		this.tick != this.prevTick ||
 		(prices && +prices.DT == +stx.chart.endPoints.end)
 	) {
-		if (this.timeout) clearTimeout(this.timeout);
-		var ms = this.params.followMouse ? 0 : 0; // IE and FF struggle to keep up with the dynamic heads up.
-		this.timeout = setTimeout(printValues, ms);
+		if (this.timeout) clearTimeout(this.timeout)
+		var ms = this.params.followMouse ? 0 : 0 // IE and FF struggle to keep up with the dynamic heads up.
+		this.timeout = setTimeout(printValues, ms)
 	}
-	this.prevTick = this.tick; // We don't want to update the dom every pixel, just when we cross into a new candle
+	this.prevTick = this.tick // We don't want to update the dom every pixel, just when we cross into a new candle
 	if (this.params.followMouse) {
-		if (stx.openDialog) this.tick = -1; // Turn off the headsup when a modal is on
-		this.followMouse(this.tick);
+		if (stx.openDialog) this.tick = -1 // Turn off the headsup when a modal is on
+		this.followMouse(this.tick)
 	}
-};
-CIQ.UI.HeadsUp.prototype.followMouse = function (tick) {
-	this.marker.params.x = tick;
-	var self = this;
-	self.marker.render();
-};
-CIQ.UI.DrawingEdit = DrawingEdit;
+}
+CIQ.UI.HeadsUp.prototype.followMouse = function(tick) {
+	this.marker.params.x = tick
+	var self = this
+	self.marker.render()
+}
+CIQ.UI.DrawingEdit = DrawingEdit
 /**
  * UI Helper to allow drawings to be edited, cloned, or deleted with a context menu via <cq-drawing-context>.
  *
@@ -2621,34 +2619,34 @@ CIQ.UI.DrawingEdit = DrawingEdit;
  * @since 6.2.0
  */
 function DrawingEdit(node, context) {
-	var stx = context.stx;
-	var $node = CIQ.UI.$(node || context.topNode);
-	this.node = $node[0];
-	this.context = context;
-	this.editing = null;
-	this.drawingContext = document.querySelector("cq-drawing-context");
-	this.cvpController = $node.find("cq-cvp-controller");
-	this.toolbar = $node.find("cq-toolbar");
+	var stx = context.stx
+	var $node = CIQ.UI.$(node || context.topNode)
+	this.node = $node[0]
+	this.context = context
+	this.editing = null
+	this.drawingContext = document.querySelector('cq-drawing-context')
+	this.cvpController = $node.find('cq-cvp-controller')
+	this.toolbar = $node.find('cq-toolbar')
 	if (!this.toolbar.length) {
-		this.toolbar = $node.find("cq-drawing-settings");
+		this.toolbar = $node.find('cq-drawing-settings')
 	}
-	var self = this;
-	Array.from(this.toolbar).forEach(function (t) {
-		t.addEventListener("change", onToolbarChangeEditOrEnd(stx, self));
-	});
-	this.count = stx.drawingObjects.length;
-	context.advertiseAs(this, "DrawingEdit");
-	stx.addEventListener("drawing", onDrawingEndEdit(this));
-	stx.addEventListener("drawingEdit", onDrawingEditShowContext(this));
-	$node.find("cq-toolbar .ciq-drawing-edit-only").each(function (i, el) {
-		if (el.querySelector(".ciq-btn")) {
-			["mouseenter", "mouseleave"].forEach(function (ev) {
-				el.addEventListener(ev, onButtonHoverHighlightDrawing(stx, self));
-			});
+	var self = this
+	Array.from(this.toolbar).forEach(function(t) {
+		t.addEventListener('change', onToolbarChangeEditOrEnd(stx, self))
+	})
+	this.count = stx.drawingObjects.length
+	context.advertiseAs(this, 'DrawingEdit')
+	stx.addEventListener('drawing', onDrawingEndEdit(this))
+	stx.addEventListener('drawingEdit', onDrawingEditShowContext(this))
+	$node.find('cq-toolbar .ciq-drawing-edit-only').each(function(i, el) {
+		if (el.querySelector('.ciq-btn')) {
+			;['mouseenter', 'mouseleave'].forEach(function(ev) {
+				el.addEventListener(ev, onButtonHoverHighlightDrawing(stx, self))
+			})
 		}
-	});
+	})
 }
-CIQ.inheritsFrom(DrawingEdit, CIQ.UI.Helper);
+CIQ.inheritsFrom(DrawingEdit, CIQ.UI.Helper)
 /**
  * Listens for the "change" event from the <cq-toolbar> component.
  * Applies the new currentVectorParameters to the drawing in edit mode.
@@ -2658,16 +2656,16 @@ CIQ.inheritsFrom(DrawingEdit, CIQ.UI.Helper);
  * @private
  */
 function onToolbarChangeEditOrEnd(stx, self) {
-	return function () /* onChange */ {
-		if (!self.editing) return;
+	return function() /* onChange */ {
+		if (!self.editing) return
 		if (self.editing.name !== stx.currentVectorParameters.vectorType) {
-			self.endEdit(null, "tool");
-			return;
+			self.endEdit(null, 'tool')
+			return
 		}
-		self.editing.copyConfig();
-		stx.draw();
-		stx.changeOccurred("vector");
-	};
+		self.editing.copyConfig()
+		stx.draw()
+		stx.changeOccurred('vector')
+	}
 }
 /**
  * Listens for the "drawing" event from the CIQ.ChartEngine instance.
@@ -2677,13 +2675,13 @@ function onToolbarChangeEditOrEnd(stx, self) {
  * @private
  */
 function onDrawingEndEdit(self) {
-	return function (/* stx:onDrawing */ params) {
-		var count = params.drawings.length;
+	return function(/* stx:onDrawing */ params) {
+		var count = params.drawings.length
 		if (self.count !== count) {
-			self.endEdit(null, "count");
-			self.count = count;
+			self.endEdit(null, 'count')
+			self.count = count
 		}
-	};
+	}
 }
 /**
  * Listens for the "drawingEdit" event from the CIQ.ChartEngine instance.
@@ -2694,15 +2692,15 @@ function onDrawingEndEdit(self) {
  * @private
  */
 function onDrawingEditShowContext(self) {
-	return function (/* stx:onDrawingEdit */ params) {
+	return function(/* stx:onDrawingEdit */ params) {
 		if (params.forceEdit === true) {
-			self.endEdit(null, "edit");
-			self.showToolbar(params.drawing);
-			self.beginEdit(params.drawing);
+			self.endEdit(null, 'edit')
+			self.showToolbar(params.drawing)
+			self.beginEdit(params.drawing)
 		} else {
-			self.showContext(params);
+			self.showContext(params)
 		}
-	};
+	}
 }
 /**
  * Listens for the "mouseenter" & "mouseleave" events from the done editing button.
@@ -2713,13 +2711,13 @@ function onDrawingEditShowContext(self) {
  * @private
  */
 function onButtonHoverHighlightDrawing(stx, self) {
-	return function (/* onHover */ event) {
-		var enter = event.type === "mouseenter";
+	return function(/* onHover */ event) {
+		var enter = event.type === 'mouseenter'
 		if (self.editing && self.editing.highlighted !== enter) {
-			self.editing.highlighted = enter;
-			stx.draw();
+			self.editing.highlighted = enter
+			stx.draw()
 		}
-	};
+	}
 }
 /**
  * Show the drawing context menu at the current cursor position.
@@ -2732,23 +2730,23 @@ function onButtonHoverHighlightDrawing(stx, self) {
  * @since 6.2.0
  * @private
  */
-DrawingEdit.prototype.showContext = function (params) {
-	params.context = this.context;
-	params.x = CIQ.ChartEngine.crosshairX;
-	params.y = CIQ.ChartEngine.crosshairY;
-	this.count = this.context.stx.drawingObjects.length; // update to avoid race conditions
+DrawingEdit.prototype.showContext = function(params) {
+	params.context = this.context
+	params.x = CIQ.ChartEngine.crosshairX
+	params.y = CIQ.ChartEngine.crosshairY
+	this.count = this.context.stx.drawingObjects.length // update to avoid race conditions
 	if (this.drawingContext) {
-		if (this.drawingContext.open) this.drawingContext.open(params);
+		if (this.drawingContext.open) this.drawingContext.open(params)
 	}
-};
-DrawingEdit.prototype.getToolActivator = function (tool) {
-	var menuitem = this.toolbar.find('cq-item[cq-tool="' + tool + '"]');
+}
+DrawingEdit.prototype.getToolActivator = function(tool) {
+	var menuitem = this.toolbar.find('cq-item[cq-tool="' + tool + '"]')
 	if (!menuitem.length)
-		menuitem = this.toolbar.find("cq-item[stxtap=\"tool('" + tool + "')\"]");
+		menuitem = this.toolbar.find('cq-item[stxtap="tool(\'' + tool + '\')"]')
 	return {
 		node: menuitem[0]
-	};
-};
+	}
+}
 /**
  * Update all instances of <cq-toolbar> and dispatch a showToolbar event.
  * Used internally by the DrawingEdit instance.
@@ -2758,19 +2756,19 @@ DrawingEdit.prototype.getToolActivator = function (tool) {
  * @since 6.2.0
  * @private
  */
-DrawingEdit.prototype.showToolbar = function (drawing) {
-	var self = this;
-	var activator = self.getToolActivator(drawing.name);
-	var node = self.node;
-	this.toolbar.each(function () {
-		var lineWidth = drawing.lineWidth;
-		var pattern = drawing.pattern;
-		var isFib = drawing.parameters && drawing instanceof CIQ.Drawing.fibonacci;
+DrawingEdit.prototype.showToolbar = function(drawing) {
+	var self = this
+	var activator = self.getToolActivator(drawing.name)
+	var node = self.node
+	this.toolbar.each(function() {
+		var lineWidth = drawing.lineWidth
+		var pattern = drawing.pattern
+		var isFib = drawing.parameters && drawing instanceof CIQ.Drawing.fibonacci
 		if (isFib) {
-			lineWidth = drawing.parameters.fibs[0].parameters.lineWidth;
-			pattern = drawing.parameters.fibs[0].parameters.pattern;
+			lineWidth = drawing.parameters.fibs[0].parameters.lineWidth
+			pattern = drawing.parameters.fibs[0].parameters.pattern
 		}
-		this.tool(activator, drawing.name);
+		this.tool(activator, drawing.name)
 		this.sync({
 			lineWidth: lineWidth,
 			pattern: pattern,
@@ -2780,19 +2778,19 @@ DrawingEdit.prototype.showToolbar = function (drawing) {
 			fillColor: drawing.fillColor,
 			currentColor: drawing.color,
 			axisLabel: drawing.axisLabel
-		});
-		self.cvpController.each(function () {
-			this.sync(drawing);
-		});
-		this.dirty(false);
+		})
+		self.cvpController.each(function() {
+			this.sync(drawing)
+		})
+		this.dirty(false)
 		// tool called the drawing initializeParameters method, so we now need to override the defaults
 		if (isFib) {
 			this.context.stx.currentVectorParameters.fibonacci = CIQ.clone(
 				drawing.parameters
-			);
+			)
 		}
-	});
-};
+	})
+}
 /**
  * Setup the given drawing for edit mode.
  * Used internally by the DrawingEdit instance.
@@ -2806,19 +2804,19 @@ DrawingEdit.prototype.showToolbar = function (drawing) {
  * 	<div class="ciq-drawing-edit-hidden">This element is hidden</div>
  * </cq-toolbar>
  */
-DrawingEdit.prototype.beginEdit = function (drawing) {
+DrawingEdit.prototype.beginEdit = function(drawing) {
 	// the property is enough, the editing is handled by <cq-toolbar>'s change event and the drawing copyConfig method
-	this.editing = drawing;
-	this.beforeEdit = drawing.serialize();
-	this.toolbar.attr("cq-drawing-edit", drawing.name);
-	var beginEvent = new CustomEvent("drawing-edit-begin", {
+	this.editing = drawing
+	this.beforeEdit = drawing.serialize()
+	this.toolbar.attr('cq-drawing-edit', drawing.name)
+	var beginEvent = new CustomEvent('drawing-edit-begin', {
 		bubbles: true,
 		cancelable: true,
 		detail: {
 			drawing: drawing,
 			tool: drawing.name
 		}
-	});
+	})
 	/**
 	 * Drawing edit begin - the start of "edit mode" for a specific drawing.
 	 *
@@ -2835,8 +2833,8 @@ DrawingEdit.prototype.beginEdit = function (drawing) {
 	 * 	});
 	 * }, false);
 	 */
-	this.node.dispatchEvent(beginEvent);
-};
+	this.node.dispatchEvent(beginEvent)
+}
 /**
  * Teardown the current edit mode.
  *
@@ -2856,13 +2854,13 @@ DrawingEdit.prototype.beginEdit = function (drawing) {
  * @private
  * @since 6.2.0
  */
-DrawingEdit.prototype.endEdit = function (activator, action) {
-	var stx = this.context.stx;
-	var endEvent = null;
-	var toolName = null;
+DrawingEdit.prototype.endEdit = function(activator, action) {
+	var stx = this.context.stx
+	var endEvent = null
+	var toolName = null
 	if (this.editing) {
-		toolName = this.editing.name;
-		endEvent = new CustomEvent("drawing-edit-end", {
+		toolName = this.editing.name
+		endEvent = new CustomEvent('drawing-edit-end', {
 			bubbles: true,
 			cancelable: true,
 			detail: {
@@ -2870,30 +2868,30 @@ DrawingEdit.prototype.endEdit = function (activator, action) {
 				drawing: this.editing,
 				tool: toolName
 			}
-		});
-		var index = stx.drawingObjects.indexOf(this.editing);
-		var before = stx.exportDrawings();
+		})
+		var index = stx.drawingObjects.indexOf(this.editing)
+		var before = stx.exportDrawings()
 		if (index > -1 && this.beforeEdit) {
-			before[index] = this.beforeEdit;
-			stx.undoStamp(before, stx.exportDrawings());
+			before[index] = this.beforeEdit
+			stx.undoStamp(before, stx.exportDrawings())
 		}
-		if (action === "close" && this.editing.highlighted) {
-			this.editing.highlighted = false;
-			stx.draw();
+		if (action === 'close' && this.editing.highlighted) {
+			this.editing.highlighted = false
+			stx.draw()
 		}
 	}
-	this.editing = null;
-	this.beforeEdit = null;
-	this.toolbar.attr("cq-drawing-edit", "none");
-	if (action === "close") {
+	this.editing = null
+	this.beforeEdit = null
+	this.toolbar.attr('cq-drawing-edit', 'none')
+	if (action === 'close') {
 		// display the saved parameters if they exist in localStorage
 		if (toolName) {
-			activator = this.getToolActivator(toolName);
-			this.toolbar.each(function () {
-				this.tool(activator, toolName);
-			});
+			activator = this.getToolActivator(toolName)
+			this.toolbar.each(function() {
+				this.tool(activator, toolName)
+			})
 		}
-		stx.changeVectorType(toolName);
+		stx.changeVectorType(toolName)
 	}
 	if (endEvent) {
 		/**
@@ -2913,9 +2911,9 @@ DrawingEdit.prototype.endEdit = function (activator, action) {
 		 * 	}
 		 * }, false);
 		 */
-		this.node.dispatchEvent(endEvent);
+		this.node.dispatchEvent(endEvent)
 	}
-};
+}
 /**
  * Drawing context menu edit settings option.
  *
@@ -2925,34 +2923,34 @@ DrawingEdit.prototype.endEdit = function (activator, action) {
  * @memberof CIQ.UI.DrawingEdit
  * @since 6.2.0
  */
-DrawingEdit.prototype.edit = function () {
-	var self = this;
+DrawingEdit.prototype.edit = function() {
+	var self = this
 	if (this.drawingContext) {
-		var drawing = this.drawingContext.drawing;
+		var drawing = this.drawingContext.drawing
 		// Get the closest context in case there is more than one on the page
-		var localContext = CIQ.UI.getMyContext(drawing.stx.container).topNode;
+		var localContext = CIQ.UI.getMyContext(drawing.stx.container).topNode
 		// The drawing context menu element is created outside of any instant chart so query the document
-		var contextContainer = document.querySelector("cq-drawing-context")
-			.parentNode;
-		var settingsPalette = localContext.querySelector("cq-drawing-settings");
+		var contextContainer = document.querySelector('cq-drawing-context')
+			.parentNode
+		var settingsPalette = localContext.querySelector('cq-drawing-settings')
 		var contextLocation = {
 			left: contextContainer.offsetLeft,
 			top: contextContainer.offsetTop
-		};
-		this.drawingContext.close();
-		self.endEdit(null, "edit");
-		self.showToolbar(drawing, contextLocation);
-		self.beginEdit(drawing);
+		}
+		this.drawingContext.close()
+		self.endEdit(null, 'edit')
+		self.showToolbar(drawing, contextLocation)
+		self.beginEdit(drawing)
 		// Check for the settings palette here because this method may be called by the legacy toolbar
 		// Also do not detach the palette when at the small screen breakpoints
 		if (
 			settingsPalette &&
 			!/break.*sm\b/.test(self.context.topNode.className)
 		) {
-			settingsPalette.detach(contextLocation.left, contextLocation.top);
+			settingsPalette.detach(contextLocation.left, contextLocation.top)
 		}
 	}
-};
+}
 /**
  * Drawing context menu edit text option.
  *
@@ -2963,15 +2961,15 @@ DrawingEdit.prototype.edit = function () {
  * @memberof CIQ.UI.DrawingEdit
  * @since 7.0.0
  */
-DrawingEdit.prototype.text = function () {
-	var self = this;
+DrawingEdit.prototype.text = function() {
+	var self = this
 	if (this.drawingContext) {
-		this.drawingContext.close();
-		self.endEdit(null, "text");
+		this.drawingContext.close()
+		self.endEdit(null, 'text')
 		if (this.drawingContext.drawing.edit)
-			this.drawingContext.drawing.edit(null, true);
+			this.drawingContext.drawing.edit(null, true)
 	}
-};
+}
 /**
  * Drawing context menu clone option.
  *
@@ -2980,24 +2978,24 @@ DrawingEdit.prototype.text = function () {
  * @memberof CIQ.UI.DrawingEdit
  * @since 6.2.0
  */
-DrawingEdit.prototype.clone = function () {
-	var self = this;
-	var stx = this.context.stx;
-	this.endEdit(null, "clone");
+DrawingEdit.prototype.clone = function() {
+	var self = this
+	var stx = this.context.stx
+	this.endEdit(null, 'clone')
 	if (this.drawingContext) {
-		this.drawingContext.close();
-		var drawing = this.drawingContext.drawing;
-		var clone = new CIQ.Drawing[drawing.name]();
-		var dehydrate = drawing.serialize();
-		clone.reconstruct(stx, dehydrate);
-		clone.repositioner = drawing.repositioner;
-		clone.highlighted = true;
-		drawing.highlighted = false;
-		self.count += 1;
-		stx.addDrawing(clone);
-		stx.activateRepositioning(clone);
+		this.drawingContext.close()
+		var drawing = this.drawingContext.drawing
+		var clone = new CIQ.Drawing[drawing.name]()
+		var dehydrate = drawing.serialize()
+		clone.reconstruct(stx, dehydrate)
+		clone.repositioner = drawing.repositioner
+		clone.highlighted = true
+		drawing.highlighted = false
+		self.count += 1
+		stx.addDrawing(clone)
+		stx.activateRepositioning(clone)
 	}
-};
+}
 /**
  * Change the order of the drawingObjects array, which determines the layering of drawings.
  *
@@ -3008,47 +3006,47 @@ DrawingEdit.prototype.clone = function () {
  * @memberof CIQ.UI.DrawingEdit
  * @since 6.2.0
  */
-DrawingEdit.prototype.reorderLayer = function (activator, layer) {
-	var self = this;
-	var stx = this.context.stx;
-	this.endEdit(null, "reorderLayer");
+DrawingEdit.prototype.reorderLayer = function(activator, layer) {
+	var self = this
+	var stx = this.context.stx
+	this.endEdit(null, 'reorderLayer')
 	if (this.drawingContext) {
-		this.drawingContext.close();
-		var lastIndex = stx.drawingObjects.length - 1;
-		var removeIndex = stx.drawingObjects.indexOf(this.drawingContext.drawing);
-		var insertIndex = NaN;
-		if (removeIndex === -1) return;
+		this.drawingContext.close()
+		var lastIndex = stx.drawingObjects.length - 1
+		var removeIndex = stx.drawingObjects.indexOf(this.drawingContext.drawing)
+		var insertIndex = NaN
+		if (removeIndex === -1) return
 		switch (layer) {
-			case "up":
+			case 'up':
 				if (removeIndex < lastIndex) {
-					insertIndex = removeIndex + 1;
+					insertIndex = removeIndex + 1
 				}
-				break;
-			case "down":
+				break
+			case 'down':
 				if (removeIndex > 0) {
-					insertIndex = removeIndex - 1;
+					insertIndex = removeIndex - 1
 				}
-				break;
-			case "top":
+				break
+			case 'top':
 				if (removeIndex < lastIndex) {
-					insertIndex = lastIndex;
+					insertIndex = lastIndex
 				}
-				break;
-			case "bottom":
+				break
+			case 'bottom':
 				if (removeIndex > 0) {
-					insertIndex = 0;
+					insertIndex = 0
 				}
-				break;
+				break
 		}
-		if (insertIndex !== insertIndex) return; // NaN check
-		var before = stx.exportDrawings();
-		stx.drawingObjects.splice(removeIndex, 1);
-		stx.drawingObjects.splice(insertIndex, 0, this.drawingContext.drawing);
-		stx.undoStamp(before, stx.exportDrawings());
-		stx.draw();
-		stx.changeOccurred("vector");
+		if (insertIndex !== insertIndex) return // NaN check
+		var before = stx.exportDrawings()
+		stx.drawingObjects.splice(removeIndex, 1)
+		stx.drawingObjects.splice(insertIndex, 0, this.drawingContext.drawing)
+		stx.undoStamp(before, stx.exportDrawings())
+		stx.draw()
+		stx.changeOccurred('vector')
 	}
-};
+}
 /**
  * Drawing context menu remove/delete option.
  *
@@ -3057,120 +3055,129 @@ DrawingEdit.prototype.reorderLayer = function (activator, layer) {
  * @memberof CIQ.UI.DrawingEdit
  * @since 6.2.0
  */
-DrawingEdit.prototype.remove = function () {
-	var self = this;
-	var stx = this.context.stx;
-	this.endEdit(null, "remove");
+DrawingEdit.prototype.remove = function() {
+	var self = this
+	var stx = this.context.stx
+	this.endEdit(null, 'remove')
 	if (this.drawingContext) {
-		if (this.drawingContext.drawing.permanent) return;
-		var before = stx.exportDrawings();
-		self.count -= 1;
-		stx.removeDrawing(this.drawingContext.drawing);
-		stx.undoStamp(before, stx.exportDrawings());
-		this.drawingContext.close();
+		if (this.drawingContext.drawing.permanent) return
+		var before = stx.exportDrawings()
+		self.count -= 1
+		stx.removeDrawing(this.drawingContext.drawing)
+		stx.undoStamp(before, stx.exportDrawings())
+		this.drawingContext.close()
 	}
-};
-
+}
 
 // customized features
-CIQ.UI.SentimentLook = function (node, context) {
+CIQ.UI.SentimentLook = function(node, context) {
 	//console.log('SentimentLook')
-	this.context = context;
-	this.node = node ? node : context.topNode;
-	this.contextDialog = [];
-	var sc = document.querySelectorAll("cq-sentiment-lookup");
+	this.context = context
+	this.node = node ? node : context.topNode
+	this.contextDialog = []
+	var sc = document.querySelectorAll('cq-sentiment-lookup')
 	for (var i = 0; i < sc.length; i++) {
-		this.contextDialog.push(sc[i]);
+		this.contextDialog.push(sc[i])
 	}
-	
-	context.advertiseAs(this, "SentimentLook");
+
+	context.advertiseAs(this, 'SentimentLook')
 	//this.initialize();
 
 	// this.addSymbolCookie();
-};
-CIQ.inheritsFrom(CIQ.UI.SentimentLook, CIQ.UI.Helper);
-
-CIQ.UI.SentimentLook.prototype.remove = function(){
-	CIQ.Studies.removeStudy(this.params.stx, this.params.sd);
-	this.contextDialog.forEach(function (studyContext) {
-		if (studyContext.close) studyContext.close();
-	});
 }
+CIQ.inheritsFrom(CIQ.UI.SentimentLook, CIQ.UI.Helper)
 
+CIQ.UI.SentimentLook.prototype.remove = function() {
+	CIQ.Studies.removeStudy(this.params.stx, this.params.sd)
+	this.contextDialog.forEach(function(studyContext) {
+		if (studyContext.close) studyContext.close()
+	})
+}
 
 /**
  * add a symbol to favoriteList
  */
-CIQ.UI.SentimentLook.prototype.addSymbolCookie = async function(){
+CIQ.UI.SentimentLook.prototype.addSymbolCookie = async function() {
 	const data = await CIQ.getFavorite()
 	var favoriteSymbolList = []
 	var favoriteIndicatorList = []
-	try{
+	try {
 		favoriteSymbolList = JSON.parse(data.favorite_symbol)
 		favoriteIndicatorList = JSON.parse(data.favorite_indicator)
-	}catch{}
+	} catch {}
 
 	//console.log('addSYmbolCookie,getFavorite: ',data)
-	if(!data.favorite_symbol){
-		favoriteSymbolList  = []
+	if (!data.favorite_symbol) {
+		favoriteSymbolList = []
 	}
-	if(!data.favorite_indicator){
-		favoriteIndicatorList  = []
+	if (!data.favorite_indicator) {
+		favoriteIndicatorList = []
 	}
 
 	// if a symbol doesn't exist in list, switch button
-	var div = document.querySelectorAll(".favBtnContainer")[0].querySelectorAll("button")[0]
-	
-	div.style.cssText = "width: 188px;height: 35px;border-radius: 20px;border: 0.1rem rgb(80, 166, 252) solid;font-size: 0.6rem;font-weight:bold;background: #409EFF;color: white;font-family: Helvetica, sans-serif;cursor:pointer"
-	div.innerHTML = "<div><svg t='1638255076868' class='button_icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2654' width='200' height='200'><path d='M885.942179 427.687756l-267.445168-22.933315-104.470353-246.470461L409.553235 404.75444l-267.336698 22.933315 202.846918 175.770236-60.789505 261.34524 229.753731-138.569986 229.859132 138.569986-60.785411-261.34524L885.942179 427.687756zM514.026658 656.403854l-139.875724 84.425831 37.038568-159.160953-123.591853-106.975407 162.91751-14.053064 63.511499-150.116973 63.620993 150.116973 162.860205 14.053064-123.534548 106.975407 37.038568 159.160953L514.026658 656.403854z' p-id='2655' fill='#FFFFFF'></path></svg><span>Remove from favorites</span></div>";
-	div.attributes.stxtap.nodeValue="SentimentLook.delSymbolCookie()";
-	
+	var div = document
+		.querySelectorAll('.favBtnContainer')[0]
+		.querySelectorAll('button')[0]
+
+	div.style.cssText =
+		'width: 188px;height: 35px;border-radius: 20px;border: 0.1rem rgb(80, 166, 252) solid;font-size: 0.6rem;font-weight:bold;background: #409EFF;color: white;font-family: Helvetica, sans-serif;cursor:pointer'
+	div.innerHTML =
+		"<div><svg t='1638255076868' class='button_icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2654' width='200' height='200'><path d='M885.942179 427.687756l-267.445168-22.933315-104.470353-246.470461L409.553235 404.75444l-267.336698 22.933315 202.846918 175.770236-60.789505 261.34524 229.753731-138.569986 229.859132 138.569986-60.785411-261.34524L885.942179 427.687756zM514.026658 656.403854l-139.875724 84.425831 37.038568-159.160953-123.591853-106.975407 162.91751-14.053064 63.511499-150.116973 63.620993 150.116973 162.860205 14.053064-123.534548 106.975407 37.038568 159.160953L514.026658 656.403854z' p-id='2655' fill='#FFFFFF'></path></svg><span>Remove from favorites</span></div>"
+	div.attributes.stxtap.nodeValue = 'SentimentLook.delSymbolCookie()'
+
 	// filter redundant items
-	if (favoriteSymbolList.indexOf(CIQ.symbol) === -1){
-		favoriteSymbolList.push(CIQ.symbol);
+	if (favoriteSymbolList.indexOf(CIQ.symbol) === -1) {
+		favoriteSymbolList.push(CIQ.symbol)
 		//console.log('addSYmbolCookie,updateFavorite: ',favoriteSymbolList)
-		CIQ.updateFavorite(JSON.stringify(favoriteIndicatorList),JSON.stringify(favoriteSymbolList))
+		CIQ.updateFavorite(
+			JSON.stringify(favoriteIndicatorList),
+			JSON.stringify(favoriteSymbolList)
+		)
 	}
-	
 }
 
 /**
  * remove a symbol from favoriteList
  */
-CIQ.UI.SentimentLook.prototype.delSymbolCookie = async function(){
-	
+CIQ.UI.SentimentLook.prototype.delSymbolCookie = async function() {
 	const data = await CIQ.getFavorite()
 	var favoriteSymbolList = []
 	var favoriteIndicatorList = []
-	try{
+	try {
 		favoriteSymbolList = JSON.parse(data.favorite_symbol)
 		favoriteIndicatorList = JSON.parse(data.favorite_indicator)
-	}catch{}
-		//console.log('delSYmbolCookie: ',favoriteSymbolList)
-		
-	if(!data.favorite_symbol){
-		favoriteSymbolList  = []
+	} catch {}
+	//console.log('delSYmbolCookie: ',favoriteSymbolList)
+
+	if (!data.favorite_symbol) {
+		favoriteSymbolList = []
 	}
-	if(!data.favorite_indicator){
-		favoriteIndicatorList  = []
+	if (!data.favorite_indicator) {
+		favoriteIndicatorList = []
 	}
 
-	for(var item in favoriteSymbolList){
-		
-		if(favoriteSymbolList[item] == CIQ.symbol){
-			favoriteSymbolList.splice(item,1)	
+	for (var item in favoriteSymbolList) {
+		if (favoriteSymbolList[item] == CIQ.symbol) {
+			favoriteSymbolList.splice(item, 1)
 		}
 	}
-	var div = document.querySelectorAll(".favBtnContainer")[0].querySelectorAll("button")[0]
+	var div = document
+		.querySelectorAll('.favBtnContainer')[0]
+		.querySelectorAll('button')[0]
 	//document.querySelectorAll(".cq-comparison-new")[0].classList.remove('stxMenuActive')
-	div.style.cssText = "width: 188px;height: 32px;border-radius: 20px;border: 0.1rem rgb(80, 166, 252) solid;font-size: 0.6rem;font-weight:bold;background: #f8f8f9;font-family: Helvetica, sans-serif;cursor:pointer;color: #666"
-	div.innerHTML = "<div><svg t='1638255076868' class='button_icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2654' width='200' height='200'><path d='M885.942179 427.687756l-267.445168-22.933315-104.470353-246.470461L409.553235 404.75444l-267.336698 22.933315 202.846918 175.770236-60.789505 261.34524 229.753731-138.569986 229.859132 138.569986-60.785411-261.34524L885.942179 427.687756zM514.026658 656.403854l-139.875724 84.425831 37.038568-159.160953-123.591853-106.975407 162.91751-14.053064 63.511499-150.116973 63.620993 150.116973 162.860205 14.053064-123.534548 106.975407 37.038568 159.160953L514.026658 656.403854z' p-id='2655' fill='#1296db'></path></svg><span>Add to favorites</span></div>";
-	div.attributes.stxtap.nodeValue="SentimentLook.addSymbolCookie()";
-	CIQ.updateFavorite(JSON.stringify(favoriteIndicatorList),JSON.stringify(favoriteSymbolList))	
+	div.style.cssText =
+		'width: 188px;height: 32px;border-radius: 20px;border: 0.1rem rgb(80, 166, 252) solid;font-size: 0.6rem;font-weight:bold;background: #f8f8f9;font-family: Helvetica, sans-serif;cursor:pointer;color: #666'
+	div.innerHTML =
+		"<div><svg t='1638255076868' class='button_icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2654' width='200' height='200'><path d='M885.942179 427.687756l-267.445168-22.933315-104.470353-246.470461L409.553235 404.75444l-267.336698 22.933315 202.846918 175.770236-60.789505 261.34524 229.753731-138.569986 229.859132 138.569986-60.785411-261.34524L885.942179 427.687756zM514.026658 656.403854l-139.875724 84.425831 37.038568-159.160953-123.591853-106.975407 162.91751-14.053064 63.511499-150.116973 63.620993 150.116973 162.860205 14.053064-123.534548 106.975407 37.038568 159.160953L514.026658 656.403854z' p-id='2655' fill='#1296db'></path></svg><span>Add to favorites</span></div>"
+	div.attributes.stxtap.nodeValue = 'SentimentLook.addSymbolCookie()'
+	CIQ.updateFavorite(
+		JSON.stringify(favoriteIndicatorList),
+		JSON.stringify(favoriteSymbolList)
+	)
 
-	this.contextDialog.forEach(function (studyContext) {
-		if (studyContext.close) studyContext.close();
-	});	
+	this.contextDialog.forEach(function(studyContext) {
+		if (studyContext.close) studyContext.close()
+	})
 }
 
 /**
@@ -3195,24 +3202,24 @@ CIQ.UI.SentimentLook.prototype.delSymbolCookie = async function(){
  * @constructor
  * @since 4.1.0 The `contextDialog` parameter is no longer passed in.
  */
-CIQ.UI.StudyEdit = function (node, context) {
-	this.context = context;
-	this.node = node ? node : context.topNode;
-	this.contextDialog = [];
-	this.contextDialogDefault = [];
-	var sc = document.querySelectorAll("cq-study-context");
-	var sc2 = document.querySelectorAll("cq-study-context-default");
+CIQ.UI.StudyEdit = function(node, context) {
+	this.context = context
+	this.node = node ? node : context.topNode
+	this.contextDialog = []
+	this.contextDialogDefault = []
+	var sc = document.querySelectorAll('cq-study-context')
+	var sc2 = document.querySelectorAll('cq-study-context-default')
 	for (var i = 0; i < sc.length; i++) {
-		this.contextDialog.push(sc[i]);
+		this.contextDialog.push(sc[i])
 	}
 	for (var i = 0; i < sc2.length; i++) {
-		this.contextDialogDefault.push(sc2[i]);
+		this.contextDialogDefault.push(sc2[i])
 	}
 
-	context.advertiseAs(this, "StudyEdit");
-	this.initialize();
-};
-CIQ.inheritsFrom(CIQ.UI.StudyEdit, CIQ.UI.Helper);
+	context.advertiseAs(this, 'StudyEdit')
+	this.initialize()
+}
+CIQ.inheritsFrom(CIQ.UI.StudyEdit, CIQ.UI.Helper)
 /**
  * Closes Study Edit dialog, update timeframe status.
  *
@@ -3220,178 +3227,209 @@ CIQ.inheritsFrom(CIQ.UI.StudyEdit, CIQ.UI.Helper);
  *
  * @memberof CIQ.UI.StudyEdit
  */
-CIQ.UI.StudyEdit.prototype.remove = function () {
+CIQ.UI.StudyEdit.prototype.remove = function() {
 	// clear indicators in Vuex
-	try{
+	try {
 		var freqList = []
-		var selectedStudy = CIQ.findSentiIndicator(null,this.params.sd.type)
+		var selectedStudy = CIQ.findSentiIndicator(null, this.params.sd.type)
 		var orignalFreq = 'daily'
-		for ( var  i = 0; i < CIQ.objIndicator.length; i++) {
-			let _obj = CIQ.findSentiIndicator(null,CIQ.objIndicator[i])
-			if(selectedStudy != _obj){
+		for (var i = 0; i < CIQ.objIndicator.length; i++) {
+			let _obj = CIQ.findSentiIndicator(null, CIQ.objIndicator[i])
+			if (selectedStudy != _obj) {
 				freqList.push(_obj.updated)
-				
 			}
 		}
-		CIQ.objIndicator.splice(CIQ.objIndicator.indexOf(this.params.sd.type),1)
+		CIQ.objIndicator.splice(CIQ.objIndicator.indexOf(this.params.sd.type), 1)
 
-		if(freqList.find(item => item=="Weekly"))  orignalFreq= 'weekly';   
-		if(freqList.find(item => item=="Monthly"))  orignalFreq= 'monthly';  
+		if (freqList.find(item => item == 'Weekly')) orignalFreq = 'weekly'
+		if (freqList.find(item => item == 'Monthly')) orignalFreq = 'monthly'
 
-		var node = document.querySelector("cq-menu-container[cq-name = 'menuPeriodicity']")
+		var node = document.querySelector(
+			"cq-menu-container[cq-name = 'menuPeriodicity']"
+		)
 
-		var daily=[],weekly=[],monthly=[]
-            var nodeSetup = document.getElementsByTagName('li')
+		var daily = [],
+			weekly = [],
+			monthly = []
+		var nodeSetup = document.getElementsByTagName('li')
 
-            for(var i =0;i<nodeSetup.length;i++){
-                for(var j in nodeSetup[i].firstChild){
-                    if(j == 'textContent'){
-                        if(nodeSetup[i].firstChild.textContent === 'Daily'){
-                            daily.push(nodeSetup[i])
-                        }
-                        if(nodeSetup[i].firstChild.textContent === 'Weekly'){
-                            weekly.push(nodeSetup[i])
-                        }
-                        if(nodeSetup[i].firstChild.textContent === 'Monthly'){
-                            monthly.push(nodeSetup[i])
-                        }
-                    }
-                }		
+		for (var i = 0; i < nodeSetup.length; i++) {
+			for (var j in nodeSetup[i].firstChild) {
+				if (j == 'textContent') {
+					if (nodeSetup[i].firstChild.textContent === 'Daily') {
+						daily.push(nodeSetup[i])
+					}
+					if (nodeSetup[i].firstChild.textContent === 'Weekly') {
+						weekly.push(nodeSetup[i])
+					}
+					if (nodeSetup[i].firstChild.textContent === 'Monthly') {
+						monthly.push(nodeSetup[i])
+					}
+				}
 			}
-		
-		if(orignalFreq == "monthly"){
+		}
+
+		if (orignalFreq == 'monthly') {
 			CIQ.periodicity.timeUnit = 'month'
-			CIQ.store.commit('form/setFreqency',"monthly")
-			for(var i = 0;i < node.children.length;i++){            
-				if(node.children[i].firstChild.nodeValue == '1 D'){
-					node.children[i].setAttribute('tf','disabled')
+			CIQ.store.commit('form/setFreqency', 'monthly')
+			for (var i = 0; i < node.children.length; i++) {
+				if (node.children[i].firstChild.nodeValue == '1 D') {
+					node.children[i].setAttribute('tf', 'disabled')
 				}
 			}
-			for(var i = 0;i < node.children.length;i++){            
-				if(node.children[i].firstChild.nodeValue == '1 W'){
-					node.children[i].setAttribute('tf','disabled')
+			for (var i = 0; i < node.children.length; i++) {
+				if (node.children[i].firstChild.nodeValue == '1 W') {
+					node.children[i].setAttribute('tf', 'disabled')
 				}
 			}
-			
 
-			for(var i = 0;i <daily.length;i++){
-				daily[i].setAttribute('tf','disabled')
+			for (var i = 0; i < daily.length; i++) {
+				daily[i].setAttribute('tf', 'disabled')
 			}
-			for(var i = 0;i <weekly.length;i++){
-				weekly[i].setAttribute('tf','disabled')
+			for (var i = 0; i < weekly.length; i++) {
+				weekly[i].setAttribute('tf', 'disabled')
 			}
-		}else if(orignalFreq == "weekly"){
-			CIQ.store.commit('form/setFreqency',"weekly")
+		} else if (orignalFreq == 'weekly') {
+			CIQ.store.commit('form/setFreqency', 'weekly')
 			CIQ.periodicity.timeUnit = 'week'
-			for(var i = 0;i <node.children.length;i++){
-				if(node.children[i].firstChild.nodeValue == '1 D'){
-					node.children[i].setAttribute('tf','disabled')
+			for (var i = 0; i < node.children.length; i++) {
+				if (node.children[i].firstChild.nodeValue == '1 D') {
+					node.children[i].setAttribute('tf', 'disabled')
 				}
 			}
-			for(var i = 0;i <node.children.length;i++){
-				if(node.children[i].firstChild.nodeValue == '1 W'){
-					node.children[i].setAttribute('tf','enabled')
+			for (var i = 0; i < node.children.length; i++) {
+				if (node.children[i].firstChild.nodeValue == '1 W') {
+					node.children[i].setAttribute('tf', 'enabled')
 				}
 			}
 
-			for(var i = 0;i <daily.length;i++){
-				daily[i].setAttribute('tf','disabled')
+			for (var i = 0; i < daily.length; i++) {
+				daily[i].setAttribute('tf', 'disabled')
 			}
-			for(var i = 0;i <weekly.length;i++){
-				weekly[i].setAttribute('tf','enabled')
+			for (var i = 0; i < weekly.length; i++) {
+				weekly[i].setAttribute('tf', 'enabled')
 			}
-		}else{
-			CIQ.store.commit('form/setFreqency',"daily")
+		} else {
+			CIQ.store.commit('form/setFreqency', 'daily')
 			CIQ.periodicity.timeUnit = 'day'
-			for(var i = 0;i < node.children.length;i++){            
-				if(node.children[i].firstChild.nodeValue == '1 D'){
-					node.children[i].setAttribute('tf','enabled')
+			for (var i = 0; i < node.children.length; i++) {
+				if (node.children[i].firstChild.nodeValue == '1 D') {
+					node.children[i].setAttribute('tf', 'enabled')
 				}
 			}
-			for(var i = 0;i < node.children.length;i++){            
-				if(node.children[i].firstChild.nodeValue == '1 W'){
-					node.children[i].setAttribute('tf','enabled')
+			for (var i = 0; i < node.children.length; i++) {
+				if (node.children[i].firstChild.nodeValue == '1 W') {
+					node.children[i].setAttribute('tf', 'enabled')
 				}
 			}
 
-			for(var i = 0;i <daily.length;i++){
-				daily[i].setAttribute('tf','enabled')
+			for (var i = 0; i < daily.length; i++) {
+				daily[i].setAttribute('tf', 'enabled')
 			}
-			for(var i = 0;i <weekly.length;i++){
-				weekly[i].setAttribute('tf','enabled')
-			}		
+			for (var i = 0; i < weekly.length; i++) {
+				weekly[i].setAttribute('tf', 'enabled')
+			}
 		}
 
-		var indexOfEntry = CIQ.store.state.chart.indicators.formIndicators.entry.indexOf(this.params.sd.type)
-		var indexOfExit = CIQ.store.state.chart.indicators.formIndicators.exit.indexOf(this.params.sd.type)
+		var indexOfEntry = CIQ.store.state.chart.indicators.formIndicators.entry.indexOf(
+			this.params.sd.type
+		)
+		var indexOfExit = CIQ.store.state.chart.indicators.formIndicators.exit.indexOf(
+			this.params.sd.type
+		)
 		//console.log(indexOfEntry,indexOfExit)
-		if(indexOfEntry != -1){
-			if(indexOfExit != -1){
-				CIQ.store.commit('chart/getExitIndicators',{index:indexOfExit,value:''})
+		if (indexOfEntry != -1) {
+			if (indexOfExit != -1) {
+				CIQ.store.commit('chart/getExitIndicators', {
+					index: indexOfExit,
+					value: ''
+				})
 			}
-			CIQ.store.commit('chart/getEntryIndicators',{index:indexOfEntry,value:''})
-		}else if(indexOfExit != -1){
-			if(indexOfEntry != -1){
-				CIQ.store.commit('chart/getEntryIndicators',{index:indexOfEntry,value:''})
+			CIQ.store.commit('chart/getEntryIndicators', {
+				index: indexOfEntry,
+				value: ''
+			})
+		} else if (indexOfExit != -1) {
+			if (indexOfEntry != -1) {
+				CIQ.store.commit('chart/getEntryIndicators', {
+					index: indexOfEntry,
+					value: ''
+				})
 			}
-			CIQ.store.commit('chart/getExitIndicators',{index:indexOfExit,value:''})
+			CIQ.store.commit('chart/getExitIndicators', {
+				index: indexOfExit,
+				value: ''
+			})
 		}
-		if(CIQ.store.state.chart.indicators.extraIndicators.indexOf(this.params.sd.type) != -1){
+		if (
+			CIQ.store.state.chart.indicators.extraIndicators.indexOf(
+				this.params.sd.type
+			) != -1
+		) {
 			// if(CIQ.store.state.chart.indicators.extraIndicators.indexOf(this.params.sd.type) != -1){
 			// 	CIQ.store.commit('chart/getExtraIndicators',[])
 			// }
 			var extraIndicators = CIQ.store.state.chart.indicators.extraIndicators
-			extraIndicators.splice(extraIndicators.indexOf(this.params.sd.type),1)
-			CIQ.store.commit('chart/getExtraIndicators',extraIndicators)
-		}else{
+			extraIndicators.splice(extraIndicators.indexOf(this.params.sd.type), 1)
+			CIQ.store.commit('chart/getExtraIndicators', extraIndicators)
+		} else {
 		}
 
 		// remove MA
 		var activatedMAList = CIQ.store.state.chart.activatedMA
-		activatedMAList.splice(activatedMAList.findIndex(item=>item.url==this.params.sd.type),1)
-		CIQ.store.commit("chart/getMA",activatedMAList)
-	}catch(err){console.log(err);}
+		activatedMAList.splice(
+			activatedMAList.findIndex(item => item.url == this.params.sd.type),
+			1
+		)
+		CIQ.store.commit('chart/getMA', activatedMAList)
+	} catch (err) {
+		console.log(err)
+	}
 	//CIQ.addIndicators();
-	
-	if (!this.params.sd.permanent) CIQ.Studies.removeStudy(CIQ.stxx, this.params.sd);
+
+	if (!this.params.sd.permanent)
+		CIQ.Studies.removeStudy(CIQ.stxx, this.params.sd)
 
 	CIQ.setPanelHeight(Object.keys(CIQ.stxx.layout.studies))
 
-	this.contextDialog.forEach(function (studyContext) {
-		if (studyContext.close) studyContext.close();
-	});
+	this.contextDialog.forEach(function(studyContext) {
+		if (studyContext.close) studyContext.close()
+	})
 
-	this.contextDialogDefault.forEach(function (studyContextDefault) {
-		if (studyContextDefault.close) studyContextDefault.close();
-	});
+	this.contextDialogDefault.forEach(function(studyContextDefault) {
+		if (studyContextDefault.close) studyContextDefault.close()
+	})
 
 	// reload chart when removing a study
 	//CIQ.addIndicators()
-};
-
+}
 
 /**
  * customized features below
  * get favorites indicators and symbol from backend and update vuex store
  */
-CIQ.getFavorite = function(){
-	return new Promise((resolve,reject)=>{
+CIQ.getFavorite = function() {
+	return new Promise((resolve, reject) => {
 		//set 10 sec as default,However, some time-consuming requests are processed separately
 		// todo 先不加5秒的超时检测，因为这样会和响应拦截器冲突
-		CIQ.axios.get("/dev/dev/favorites/",{cache:true, withCredentials: true}
-		).then(res=>{
-			//console.log(res.data.favorite_symbol)
-			var favoriteSymbolList = []
-			var favoriteIndicatorList = []
-			try{
-				favoriteSymbolList = JSON.parse(res.data.favorite_symbol)
-				favoriteIndicatorList = JSON.parse(res.data.favorite_indicator)
-			}catch{}
-			CIQ.store.commit('chart/setFavoriteIndicatorList',favoriteIndicatorList)
-			CIQ.store.commit('chart/setFavoriteSymbolList',favoriteSymbolList)
+		CIQ.axios
+			.get('/dev/dev/favorites/', { cache: true, withCredentials: true })
+			.then(res => {
+				//console.log(res.data.favorite_symbol)
+				var favoriteSymbolList = []
+				var favoriteIndicatorList = []
+				try {
+					favoriteSymbolList = JSON.parse(res.data.favorite_symbol)
+					favoriteIndicatorList = JSON.parse(res.data.favorite_indicator)
+				} catch {}
+				CIQ.store.commit(
+					'chart/setFavoriteIndicatorList',
+					favoriteIndicatorList
+				)
+				CIQ.store.commit('chart/setFavoriteSymbolList', favoriteSymbolList)
 
-			resolve(res.data)
-		})
+				resolve(res.data)
+			})
 		// .catch(err=>{
 		// 	// todo, 暂时用于进入backteser路由的权限控制
 		// 	console.log(err)
@@ -3405,68 +3443,73 @@ CIQ.getFavorite = function(){
  * customized features below
  * update favorites indicators and symbol in backend and update vuex store
  */
-CIQ.updateFavorite = function(indicator,symbol){
+CIQ.updateFavorite = function(indicator, symbol) {
 	//console.log("updateFavorite",symbol)
-	CIQ.store.commit('chart/setFavoriteIndicatorList',JSON.parse(indicator))
-	CIQ.store.commit('chart/setFavoriteSymbolList',JSON.parse(symbol))
+	CIQ.store.commit('chart/setFavoriteIndicatorList', JSON.parse(indicator))
+	CIQ.store.commit('chart/setFavoriteSymbolList', JSON.parse(symbol))
 	var mFavorite = {}
 	mFavorite.favorite_indicator = indicator
 	mFavorite.favorite_symbol = symbol
 	console.log(mFavorite)
 
-	return new Promise((resolve,reject)=>{
-		CIQ.axios.put("/dev/dev/favorites/",mqs.stringify(mFavorite),{cache:true, withCredentials: true}
-		).then(res=>{
-			resolve(res.data)
-		}).catch(err=>{
-			reject(err)
-		})
+	return new Promise((resolve, reject) => {
+		CIQ.axios
+			.put('/dev/dev/favorites/', mqs.stringify(mFavorite), {
+				cache: true,
+				withCredentials: true
+			})
+			.then(res => {
+				resolve(res.data)
+			})
+			.catch(err => {
+				reject(err)
+			})
 	})
 }
-CIQ.UI.StudyEdit.prototype.updateOverlayEdit = async function(){
+CIQ.UI.StudyEdit.prototype.updateOverlayEdit = async function() {
 	var favoriteIndicatorList = []
 	const data = await CIQ.getFavorite()
-	try{
+	try {
 		favoriteIndicatorList = JSON.parse(data.favorite_indicator)
-	}catch{}
+	} catch {}
 
-	for(var item in favoriteIndicatorList){
-		if(favoriteIndicatorList[item].url == this.params.sd.type){
-			var node = document.getElementsByClassName("cookie")
-			node[0].innerHTML = "Remove From Favorite Indicators"
-			node[0].attributes.stxtap.nodeValue="StudyEdit.delIndicatorCookie()";
+	for (var item in favoriteIndicatorList) {
+		if (favoriteIndicatorList[item].url == this.params.sd.type) {
+			var node = document.getElementsByClassName('cookie')
+			node[0].innerHTML = 'Remove From Favorite Indicators'
+			node[0].attributes.stxtap.nodeValue = 'StudyEdit.delIndicatorCookie()'
 			return
 		}
 	}
-	var node = document.getElementsByClassName("cookie")
-	node[0].innerHTML = "Add To Favorite Indicators"
-	node[0].attributes.stxtap.nodeValue="StudyEdit.addIndicatorCookie()";
+	var node = document.getElementsByClassName('cookie')
+	node[0].innerHTML = 'Add To Favorite Indicators'
+	node[0].attributes.stxtap.nodeValue = 'StudyEdit.addIndicatorCookie()'
 }
 
 /**
  * add an indicator to favoriteList
  */
-CIQ.UI.StudyEdit.prototype.addIndicatorCookie = async function(node){
-	this.contextDialog.forEach(function (studyContext) {
-		if (studyContext.close) studyContext.close();
-	});	
+CIQ.UI.StudyEdit.prototype.addIndicatorCookie = async function(node) {
+	this.contextDialog.forEach(function(studyContext) {
+		if (studyContext.close) studyContext.close()
+	})
 
 	const data = await CIQ.getFavorite()
 	// after getting the res....
 	var favoriteSymbolList = []
 	var favoriteIndicatorList = []
-	try{
+	try {
 		var favoriteSymbolList = JSON.parse(data.favorite_symbol)
 		var favoriteIndicatorList = JSON.parse(data.favorite_indicator)
-	}catch{}
+	} catch {}
 
-	if(!data.favorite_symbol){
-		favoriteSymbolList  = []
+	if (!data.favorite_symbol) {
+		favoriteSymbolList = []
 	}
-	if(!data.favorite_indicator){
-		favoriteIndicatorList  = []
+	if (!data.favorite_indicator) {
+		favoriteIndicatorList = []
 	}
-	let _obj = CIQ.findSentiIndicator(null,this.params.sd.type)
+	let _obj = CIQ.findSentiIndicator(null, this.params.sd.type)
 	var mFavorite = {}
 	mFavorite.url = this.params.sd.type
 	mFavorite.name = _obj.chart_name
@@ -3478,41 +3521,44 @@ CIQ.UI.StudyEdit.prototype.addIndicatorCookie = async function(node){
 	favoriteIndicatorList.push(mFavorite)
 	// 1. 去重
 	// 2. 过滤
-	const filterDuplicate = (arr) => {
-		let res = new Map();
-		return arr.filter((a) => !res.has(a.url) && res.set(a.url, 1));
+	const filterDuplicate = arr => {
+		let res = new Map()
+		return arr.filter(a => !res.has(a.url) && res.set(a.url, 1))
 	}
-	
-	await CIQ.updateFavorite(JSON.stringify(filterDuplicate(favoriteIndicatorList)),JSON.stringify(favoriteSymbolList))
-	console.log('after add:',filterDuplicate(favoriteIndicatorList))	
+
+	await CIQ.updateFavorite(
+		JSON.stringify(filterDuplicate(favoriteIndicatorList)),
+		JSON.stringify(favoriteSymbolList)
+	)
+	console.log('after add:', filterDuplicate(favoriteIndicatorList))
 }
 /**
  * remove an indicator from favoriteList
  */
-CIQ.UI.StudyEdit.prototype.delIndicatorCookie = async function(node){
-	this.contextDialog.forEach(function (studyContext) {
-		if (studyContext.close) studyContext.close();
-	});	
+CIQ.UI.StudyEdit.prototype.delIndicatorCookie = async function(node) {
+	this.contextDialog.forEach(function(studyContext) {
+		if (studyContext.close) studyContext.close()
+	})
 
 	const data = await CIQ.getFavorite()
 	// after getting the res....
 	var favoriteSymbolList = []
 	var favoriteIndicatorList = []
-	try{
+	try {
 		var favoriteSymbolList = JSON.parse(data.favorite_symbol)
 		var favoriteIndicatorList = JSON.parse(data.favorite_indicator)
-	}catch{}
+	} catch {}
 
-	if(!data.favorite_symbol){
-		favoriteSymbolList  = []
+	if (!data.favorite_symbol) {
+		favoriteSymbolList = []
 	}
-	if(!data.favorite_indicator){
-		favoriteIndicatorList  = []
+	if (!data.favorite_indicator) {
+		favoriteIndicatorList = []
 	}
 
-	for(var item in favoriteIndicatorList){
-		if(favoriteIndicatorList[item].url == this.params.sd.type){
-			favoriteIndicatorList.splice(item,1)
+	for (var item in favoriteIndicatorList) {
+		if (favoriteIndicatorList[item].url == this.params.sd.type) {
+			favoriteIndicatorList.splice(item, 1)
 		}
 	}
 
@@ -3520,39 +3566,49 @@ CIQ.UI.StudyEdit.prototype.delIndicatorCookie = async function(node){
 	// node[0].innerHTML = "Add To Favorite Indicators"
 	// node[0].attributes.stxtap.nodeValue="StudyEdit.addIndicatorCookie()";
 
-	await CIQ.updateFavorite(JSON.stringify(favoriteIndicatorList),JSON.stringify(favoriteSymbolList))
-	
-	console.log('after del:',favoriteIndicatorList)	
+	await CIQ.updateFavorite(
+		JSON.stringify(favoriteIndicatorList),
+		JSON.stringify(favoriteSymbolList)
+	)
+
+	console.log('after del:', favoriteIndicatorList)
 }
 
-CIQ.UI.StudyEdit.prototype.description = function () {
-	this.contextDialog.forEach(function (studyContext) {
-		if (studyContext.close) studyContext.close();
-	});	
-	this.descriptionPanel(this.params);
-};
-CIQ.UI.StudyEdit.prototype.descriptionPanel = function (params) {
-	const { stx, config } = this.context;
-	params.context = this.context;
+CIQ.UI.StudyEdit.prototype.description = function() {
+	this.contextDialog.forEach(function(studyContext) {
+		if (studyContext.close) studyContext.close()
+	})
+	this.descriptionPanel(this.params)
+}
+CIQ.UI.StudyEdit.prototype.descriptionPanel = function(params) {
+	const { stx, config } = this.context
+	params.context = this.context
 
-	let _obj = CIQ.findSentiIndicator(null,params.outputs.url)
-	let name = 'Study';
-	if(_obj){
-		name = _obj.chart_name;
-	}else{
-		name = 'Technical Indicators';
+	let _obj = CIQ.findSentiIndicator(null, params.outputs.url)
+	let name = 'Study'
+	if (_obj) {
+		name = _obj.chart_name
+	} else {
+		name = 'Technical Indicators'
 	}
 
 	// Make sure we don't open the dialog in the context menu position
-	document.querySelector(".discription_div").innerHTML = `<cq-study-dialog class="discription_dialog"></cq-study-dialog>`;
-	document.querySelector(".discription_dialog").innerHTML = `
+	document.querySelector(
+		'.discription_div'
+	).innerHTML = `<cq-study-dialog class="discription_dialog"></cq-study-dialog>`
+	document.querySelector('.discription_dialog').innerHTML =
+		`
             <cq-dialog class="ciq-day" cq-study-dialog="true" cq-active="true" style="top: 50%; left: 50%; transform: translate(-50%, -20%);">
             <cq-study-dialog cq-study-axis="true" cq-study-panel="alias">
-            <h4 class="title">`+ name +`</h4>
+            <h4 class="title">` +
+		name +
+		`</h4>
             <cq-scroll cq-no-maximize="" class="ps ps--active-y" style="overflow-y: auto; max-height: 373px;">
              <cq-study-inputs><cq-study-input fieldname="m_description">
                 <div class="ciq-disHeading">
-                 `+ params.outputs.description +`</div>
+                 ` +
+		params.outputs.description +
+		`</div>
                </cq-study-input><hr><cq-study-input fieldname="Channel Fill">
                 <div class="ciq-disHeading"></div>
                </cq-study-input><hr></cq-study-inputs>
@@ -3560,14 +3616,15 @@ CIQ.UI.StudyEdit.prototype.descriptionPanel = function (params) {
             <div class="ciq-dialog-cntrls">
              <div class="ciq-btn discription-btn" >Done</div>
             </div>
-           </cq-study-dialog></cq-dialog>`;
-			document.querySelector(".discription-btn").addEventListener("click",function(){
-				document.querySelector(".discription_div").innerHTML = ""
-			})
-		   //document.querySelector(".discription_dialog").open()
-};
+           </cq-study-dialog></cq-dialog>`
+	document
+		.querySelector('.discription-btn')
+		.addEventListener('click', function() {
+			document.querySelector('.discription_div').innerHTML = ''
+		})
+	//document.querySelector(".discription_dialog").open()
+}
 // customized features above
-
 
 /**
  * Proxy for editing a study.
@@ -3577,16 +3634,16 @@ CIQ.UI.StudyEdit.prototype.descriptionPanel = function (params) {
  * Assumes the params for the study have already been set.
  * @memberof CIQ.UI.StudyEdit
  */
-CIQ.UI.StudyEdit.prototype.edit = function () {
-	this.contextDialog.forEach(function (studyContext) {
-		if (studyContext.close) studyContext.close();
-	});
+CIQ.UI.StudyEdit.prototype.edit = function() {
+	this.contextDialog.forEach(function(studyContext) {
+		if (studyContext.close) studyContext.close()
+	})
 
-	this.contextDialogDefault.forEach(function (studyContextDefault) {
-		if (studyContextDefault.close) studyContextDefault.close();
-	});
-	this.editPanel(this.params);
-};
+	this.contextDialogDefault.forEach(function(studyContextDefault) {
+		if (studyContextDefault.close) studyContextDefault.close()
+	})
+	this.editPanel(this.params)
+}
 /**
  * Finds the [cq-study-dialog]{@link WebComponents.cq-study-dialog} web component and proxies
  * the parameters over to it.
@@ -3599,21 +3656,21 @@ CIQ.UI.StudyEdit.prototype.edit = function () {
  * @param {object} params Parameters from the
  * 		[studyPanelEditEventListener]{@link CIQ.ChartEngine~studyPanelEditEventListener}.
  */
-CIQ.UI.StudyEdit.prototype.editPanel = function (params) {
-	const { stx, config } = this.context;
-	
-	params.context = this.context;
+CIQ.UI.StudyEdit.prototype.editPanel = function(params) {
+	const { stx, config } = this.context
+
+	params.context = this.context
 	// Make sure we don't open the dialog in the context menu position
-	params.x = null;
-	params.y = null;
-	const { channelWrite } = CIQ.UI.BaseComponent.prototype;
+	params.x = null
+	params.y = null
+	const { channelWrite } = CIQ.UI.BaseComponent.prototype
 	if (config) {
-		const channel = (config.channels || {}).dialog || "channel.dialog";
-		channelWrite(channel, { type: "study", params }, stx);
+		const channel = (config.channels || {}).dialog || 'channel.dialog'
+		channelWrite(channel, { type: 'study', params }, stx)
 	} else {
-		document.querySelector("cq-study-dialog").open(params);
+		document.querySelector('cq-study-dialog').open(params)
 	}
-};
+}
 /**
  * Displays the Edit Settings, Delete Study context dialog for overlay studies and
  * prepares the parameters for editing.
@@ -3626,29 +3683,27 @@ CIQ.UI.StudyEdit.prototype.editPanel = function (params) {
  * @param {object} params Parameters from the
  * 		[studyOverlayEditEventListener]{@link CIQ.ChartEngine~studyOverlayEditEventListener}.
  */
-CIQ.UI.StudyEdit.prototype.editOverlay = function (params) {
-	this.params = params;
-	params.context = this.context;
-	
+CIQ.UI.StudyEdit.prototype.editOverlay = function(params) {
+	this.params = params
+	params.context = this.context
+
 	if (params.forceEdit) {
-		this.editPanel(params);
-		
-	} 
-	else if(!CIQ.findSentiIndicator(null,params.sd.type)){
-		if(params.sd.type == 'ST MA') return
-        this.contextDialogDefault.forEach(function (studyContextDefault) {
-			params.x = CIQ.ChartEngine.crosshairX;
-			params.y = CIQ.ChartEngine.crosshairY;
-			if (studyContextDefault.open) studyContextDefault.open(params);
-		});		
-	} else{
-		this.contextDialog.forEach(function (studyContext) {
-			params.x = CIQ.ChartEngine.crosshairX;
-			params.y = CIQ.ChartEngine.crosshairY;
-			if (studyContext.open) studyContext.open(params);
-		});
+		this.editPanel(params)
+	} else if (!CIQ.findSentiIndicator(null, params.sd.type)) {
+		if (params.sd.type == 'ST MA') return
+		this.contextDialogDefault.forEach(function(studyContextDefault) {
+			params.x = CIQ.ChartEngine.crosshairX
+			params.y = CIQ.ChartEngine.crosshairY
+			if (studyContextDefault.open) studyContextDefault.open(params)
+		})
+	} else {
+		this.contextDialog.forEach(function(studyContext) {
+			params.x = CIQ.ChartEngine.crosshairX
+			params.y = CIQ.ChartEngine.crosshairY
+			if (studyContext.open) studyContext.open(params)
+		})
 	}
-};
+}
 /**
  * Creates the callbacks for self and the context.
  *
@@ -3656,18 +3711,18 @@ CIQ.UI.StudyEdit.prototype.editOverlay = function (params) {
  *
  * @memberof CIQ.UI.StudyEdit
  */
-CIQ.UI.StudyEdit.prototype.initialize = function () {
-	var stx = this.context.stx;
-	var self = this;
+CIQ.UI.StudyEdit.prototype.initialize = function() {
+	var stx = this.context.stx
+	var self = this
 	function closure(fc) {
-		return function () {
-			fc.apply(self, arguments);
+		return function() {
+			fc.apply(self, arguments)
 			self.updateOverlayEdit()
-		};
+		}
 	}
-	stx.addEventListener("studyOverlayEdit", closure(self.editOverlay));
-	stx.addEventListener("studyPanelEdit", closure(self.editPanel));
-};
+	stx.addEventListener('studyOverlayEdit', closure(self.editOverlay))
+	stx.addEventListener('studyPanelEdit', closure(self.editPanel))
+}
 /**
  * UI Helper for Layout changes, for instance tapping items on the display menu.
  *
@@ -3697,13 +3752,13 @@ CIQ.UI.StudyEdit.prototype.initialize = function () {
  * @constructor
  * @since 4.1.0 Layout no longer takes a node as its first parameter
  */
-CIQ.UI.Layout = function (context, params) {
-	this.params = params ? params : {};
-	if (!this.params.activeClassName) this.params.activeClassName = "ciq-active";
-	this.context = context;
-	context.advertiseAs(this, "Layout");
-};
-CIQ.inheritsFrom(CIQ.UI.Layout, CIQ.UI.Helper);
+CIQ.UI.Layout = function(context, params) {
+	this.params = params ? params : {}
+	if (!this.params.activeClassName) this.params.activeClassName = 'ciq-active'
+	this.context = context
+	context.advertiseAs(this, 'Layout')
+}
+CIQ.inheritsFrom(CIQ.UI.Layout, CIQ.UI.Helper)
 /**
  * Activates the chart style or aggregation type radio button on the Display drop-down menu.
  *
@@ -3723,7 +3778,7 @@ CIQ.inheritsFrom(CIQ.UI.Layout, CIQ.UI.Helper);
  * restore chart layout, store the indicator information in vuex store
  */
 CIQ.UI.Layout.prototype.reloadChart = function() {
-	if (!CIQ.Studies) return;
+	if (!CIQ.Studies) return
 	const freq = CIQ.store.state.form.exitFrequency
 
 	// remove all Studies from Vuex
@@ -3734,37 +3789,36 @@ CIQ.UI.Layout.prototype.reloadChart = function() {
 	CIQ.removePrompt()
 
 	//CIQ.isMarkerShown = false
-	CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
-	CIQ.store.commit('chart/getTradesData',[])
-	document.getElementsByClassName("ciq-period")[0].style.display = "block"
-	
-	if(freq != 'Daily'){
+	CIQ.store.dispatch('states/set_isMarkerShown_flag', false)
+	CIQ.store.commit('chart/getTradesData', [])
+	document.getElementsByClassName('ciq-period')[0].style.display = 'block'
+
+	if (freq != 'Daily') {
 		CIQ.addIndicators()
 	}
-	
 }
-CIQ.UI.Layout.prototype.getChartType = function (node, chartType) {
+CIQ.UI.Layout.prototype.getChartType = function(node, chartType) {
 	var stx = this.context.stx,
-		className = this.params.activeClassName;
-	var listener = function (obj) {
-		var layout = obj.obj;
-		if (layout.aggregationType && layout.aggregationType != "ohlc") {
+		className = this.params.activeClassName
+	var listener = function(obj) {
+		var layout = obj.obj
+		if (layout.aggregationType && layout.aggregationType != 'ohlc') {
 			if (chartType !== layout.aggregationType) {
-				node.classList.remove(className);
+				node.classList.remove(className)
 			} else {
-				node.classList.add(className);
+				node.classList.add(className)
 			}
 		} else {
 			if (chartType !== layout.chartType) {
-				node.classList.remove(className);
+				node.classList.remove(className)
 			} else {
-				node.classList.add(className);
+				node.classList.add(className)
 			}
 		}
-	};
-	CIQ.UI.observeProperty("chartType", stx.layout, listener);
-	CIQ.UI.observeProperty("aggregationType", stx.layout, listener);
-};
+	}
+	CIQ.UI.observeProperty('chartType', stx.layout, listener)
+	CIQ.UI.observeProperty('aggregationType', stx.layout, listener)
+}
 /**
  * Convenience function to set the chart style or aggregation type from the Display drop-down
  * menu.
@@ -3782,7 +3836,7 @@ CIQ.UI.Layout.prototype.getChartType = function (node, chartType) {
  *
  * @memberof CIQ.UI.Layout
  */
-CIQ.UI.Layout.prototype.setChartType = function (node, chartType) {
+CIQ.UI.Layout.prototype.setChartType = function(node, chartType) {
 	var aggregations = {
 		heikinashi: true,
 		kagi: true,
@@ -3790,13 +3844,13 @@ CIQ.UI.Layout.prototype.setChartType = function (node, chartType) {
 		pandf: true,
 		rangebars: true,
 		renko: true
-	};
-	if (aggregations[chartType]) {
-		this.context.stx.setAggregationType(chartType);
-	} else {
-		this.context.stx.setChartType(chartType);
 	}
-};
+	if (aggregations[chartType]) {
+		this.context.stx.setAggregationType(chartType)
+	} else {
+		this.context.stx.setChartType(chartType)
+	}
+}
 /**
  * Activates the chart scaling control on the Display drop-down menu.
  *
@@ -3808,15 +3862,15 @@ CIQ.UI.Layout.prototype.setChartType = function (node, chartType) {
  * @memberof CIQ.UI.Layout
  * @private
  */
-CIQ.UI.Layout.prototype.getChartScale = function (node, chartScale) {
+CIQ.UI.Layout.prototype.getChartScale = function(node, chartScale) {
 	var stx = this.context.stx,
-		className = this.params.activeClassName;
-	var listener = function (obj) {
-		if (obj.value == chartScale) node.classList.add(className);
-		else node.classList.remove(className);
-	};
-	CIQ.UI.observeProperty("chartScale", stx.layout, listener);
-};
+		className = this.params.activeClassName
+	var listener = function(obj) {
+		if (obj.value == chartScale) node.classList.add(className)
+		else node.classList.remove(className)
+	}
+	CIQ.UI.observeProperty('chartScale', stx.layout, listener)
+}
 /**
  * Convenience function to set the chart scale from the Display drop-down menu.
  *
@@ -3833,15 +3887,15 @@ CIQ.UI.Layout.prototype.getChartScale = function (node, chartScale) {
  *
  * @memberof CIQ.UI.Layout
  */
-CIQ.UI.Layout.prototype.setChartScale = function (node, chartScale) {
-	var stx = this.context.stx;
-	var layoutScale = stx.layout.chartScale;
+CIQ.UI.Layout.prototype.setChartScale = function(node, chartScale) {
+	var stx = this.context.stx
+	var layoutScale = stx.layout.chartScale
 	if (layoutScale == chartScale) {
-		stx.setChartScale(null);
-	} else if (!layoutScale || layoutScale == "linear") {
-		stx.setChartScale(chartScale);
+		stx.setChartScale(null)
+	} else if (!layoutScale || layoutScale == 'linear') {
+		stx.setChartScale(chartScale)
 	}
-};
+}
 /**
  * Activates the invert y-axis control on the Display drop-down menu.
  *
@@ -3852,15 +3906,15 @@ CIQ.UI.Layout.prototype.setChartScale = function (node, chartScale) {
  * @private
  * @since 6.3.0
  */
-CIQ.UI.Layout.prototype.getFlippedChart = function (node) {
+CIQ.UI.Layout.prototype.getFlippedChart = function(node) {
 	var stx = this.context.stx,
-		className = this.params.activeClassName;
-	var listener = function (obj) {
-		if (obj.value) node.classList.add(className);
-		else node.classList.remove(className);
-	};
-	CIQ.UI.observeProperty("flipped", stx.layout, listener);
-};
+		className = this.params.activeClassName
+	var listener = function(obj) {
+		if (obj.value) node.classList.add(className)
+		else node.classList.remove(className)
+	}
+	CIQ.UI.observeProperty('flipped', stx.layout, listener)
+}
 /**
  * Convenience function to set the inverted y-axis mode from the Display drop-down menu.
  *
@@ -3875,10 +3929,10 @@ CIQ.UI.Layout.prototype.getFlippedChart = function (node) {
  * @memberof CIQ.UI.Layout
  * @since 6.3.0
  */
-CIQ.UI.Layout.prototype.setFlippedChart = function (node) {
-	var stx = this.context.stx;
-	stx.flipChart(!stx.layout.flipped);
-};
+CIQ.UI.Layout.prototype.setFlippedChart = function(node) {
+	var stx = this.context.stx
+	stx.flipChart(!stx.layout.flipped)
+}
 /**
  * Activates the extended hours control on the Display drop-down menu.
  *
@@ -3888,15 +3942,15 @@ CIQ.UI.Layout.prototype.setFlippedChart = function (node) {
  * @memberof CIQ.UI.Layout
  * @private
  */
-CIQ.UI.Layout.prototype.getExtendedHours = function (node) {
+CIQ.UI.Layout.prototype.getExtendedHours = function(node) {
 	var stx = this.context.stx,
-		className = this.params.activeClassName;
-	var listener = function (obj) {
-		if (obj.value) node.classList.add(className);
-		else node.classList.remove(className);
-	};
-	CIQ.UI.observeProperty("extended", stx.layout, listener);
-};
+		className = this.params.activeClassName
+	var listener = function(obj) {
+		if (obj.value) node.classList.add(className)
+		else node.classList.remove(className)
+	}
+	CIQ.UI.observeProperty('extended', stx.layout, listener)
+}
 /**
  * Convenience function to set extended hours mode from the Display drop-down menu.
  *
@@ -3911,79 +3965,76 @@ CIQ.UI.Layout.prototype.getExtendedHours = function (node) {
  *
  * @memberof CIQ.UI.Layout
  */
-CIQ.UI.Layout.prototype.setExtendedHours = function (node) {
-	var stx = this.context.stx;
-	stx.layout.extended = !stx.layout.extended;
-	stx.changeOccurred("layout");
+CIQ.UI.Layout.prototype.setExtendedHours = function(node) {
+	var stx = this.context.stx
+	stx.layout.extended = !stx.layout.extended
+	stx.changeOccurred('layout')
 	// check if extended hours exists for this security
 	if (
 		stx.layout.extended &&
 		!(stx.chart.market.market_def && stx.chart.market.sessions.length)
 	) {
-		CIQ.alert("There are no Extended Hours for this instrument.");
+		CIQ.alert('There are no Extended Hours for this instrument.')
 	}
 	if (stx.extendedHours) {
-		var loader = this.context.loader;
-		if (loader) loader.show();
-		stx.extendedHours.set(stx.layout.extended, null, function () {
-			if (loader) loader.hide();
-		});
+		var loader = this.context.loader
+		if (loader) loader.show()
+		stx.extendedHours.set(stx.layout.extended, null, function() {
+			if (loader) loader.hide()
+		})
 	}
-};
+}
 
 /**
  * Convenience function to update status of GridLine(related to Grid button on chart)
  */
-CIQ.UI.Layout.prototype.xAixsGridLine = function () {
-	var stx = this.context.stx;
-	stx.layout.xAixsGridLine = !stx.layout.xAixsGridLine;
-	stx.changeOccurred("layout");
+CIQ.UI.Layout.prototype.xAixsGridLine = function() {
+	var stx = this.context.stx
+	stx.layout.xAixsGridLine = !stx.layout.xAixsGridLine
+	stx.changeOccurred('layout')
 	// check if extended hours exists for this security
 
-	var listener = function () {	
-		var mNode = document.getElementsByClassName("grid")[0]
-		if (stx.layout.xAixsGridLine){
-			mNode.classList.add("active");			
-			CIQ.stxx.chart.yAxis.displayGridLines = true;
-			CIQ.stxx.chart.xAxis.displayGridLines = true;
-			CIQ.stxx.draw();
-
+	var listener = function() {
+		var mNode = document.getElementsByClassName('grid')[0]
+		if (stx.layout.xAixsGridLine) {
+			mNode.classList.add('active')
+			CIQ.stxx.chart.yAxis.displayGridLines = true
+			CIQ.stxx.chart.xAxis.displayGridLines = true
+			CIQ.stxx.draw()
+		} else {
+			mNode.classList.remove('active')
+			CIQ.stxx.chart.yAxis.displayGridLines = false
+			CIQ.stxx.chart.xAxis.displayGridLines = false
+			CIQ.stxx.draw()
 		}
-		else{
-			mNode.classList.remove("active");
-			CIQ.stxx.chart.yAxis.displayGridLines = false;
-			CIQ.stxx.chart.xAxis.displayGridLines = false;
-			CIQ.stxx.draw();
-		}
-	};
-	CIQ.UI.observeProperty("xAixsGridLine", stx.layout, listener);
-};
+	}
+	CIQ.UI.observeProperty('xAixsGridLine', stx.layout, listener)
+}
 
 /**
  * Convenience function to update status of LastPrice label(related to LastPrice button on chart)
  */
-CIQ.UI.Layout.prototype.lastPriceLabel = function () {
+CIQ.UI.Layout.prototype.lastPriceLabel = function() {
 	// 操作后对值取反并触发observeProperty双向绑定
-	var stx = this.context.stx;
-	stx.layout.lastPriceLabel = !stx.layout.lastPriceLabel;
-	stx.changeOccurred("layout");
+	var stx = this.context.stx
+	stx.layout.lastPriceLabel = !stx.layout.lastPriceLabel
+	stx.changeOccurred('layout')
 	// check if extended hours exists for this security
 
-	var listener = function () {	
-		var mNode = document.getElementsByClassName("lastP")[0]
-		if (stx.layout.lastPriceLabel){
-			mNode.classList.add("active");
-			CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = true;
-			CIQ.stxx.draw();
+	var listener = function() {
+		var mNode = document.getElementsByClassName('lastP')[0]
+		if (stx.layout.lastPriceLabel) {
+			mNode.classList.add('active')
+			CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = true
+			CIQ.stxx.draw()
+		} else {
+			mNode.classList.remove('active')
+			CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = false
+			CIQ.stxx.draw()
 		}
-		else{
-			mNode.classList.remove("active");
-			CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = false;
-			CIQ.stxx.draw();
-		}
-	};
-	CIQ.UI.observeProperty("xAixsGridLine", stx.layout, listener);
-};
+	}
+	CIQ.UI.observeProperty('xAixsGridLine', stx.layout, listener)
+}
 /**
  * Activates the range selector control on the Display drop-down menu.
  *
@@ -3993,15 +4044,15 @@ CIQ.UI.Layout.prototype.lastPriceLabel = function () {
  * @memberof CIQ.UI.Layout
  * @private
  */
-CIQ.UI.Layout.prototype.getRangeSlider = function (node) {
+CIQ.UI.Layout.prototype.getRangeSlider = function(node) {
 	var stx = this.context.stx,
-		className = this.params.activeClassName;
-	var listener = function (obj) {
-		if (obj.value) node.classList.add(className);
-		else node.classList.remove(className);
-	};
-	CIQ.UI.observeProperty("rangeSlider", stx.layout, listener);
-};
+		className = this.params.activeClassName
+	var listener = function(obj) {
+		if (obj.value) node.classList.add(className)
+		else node.classList.remove(className)
+	}
+	CIQ.UI.observeProperty('rangeSlider', stx.layout, listener)
+}
 /**
  * Convenience function to toggle the range slider mode from the Display drop-down menu.
  *
@@ -4016,12 +4067,12 @@ CIQ.UI.Layout.prototype.getRangeSlider = function (node) {
  *
  * @memberof CIQ.UI.Layout
  */
-CIQ.UI.Layout.prototype.setRangeSlider = function (node) {
-	var stx = this.context.stx;
-	stx.layout.rangeSlider = !stx.layout.rangeSlider;
-	if (stx.slider) stx.slider.display(stx.layout.rangeSlider);
-	stx.changeOccurred("layout");
-};
+CIQ.UI.Layout.prototype.setRangeSlider = function(node) {
+	var stx = this.context.stx
+	stx.layout.rangeSlider = !stx.layout.rangeSlider
+	if (stx.slider) stx.slider.display(stx.layout.rangeSlider)
+	stx.changeOccurred('layout')
+}
 /**
  * Activates the Display menu user interface element that shows and hides outliers.
  *
@@ -4034,15 +4085,15 @@ CIQ.UI.Layout.prototype.setRangeSlider = function (node) {
  * - 7.5.0
  * - 8.0.0 Changed access to private.
  */
-CIQ.UI.Layout.prototype.getOutliers = function (node) {
+CIQ.UI.Layout.prototype.getOutliers = function(node) {
 	var stx = this.context.stx,
-		className = this.params.activeClassName;
-	var listener = function (obj) {
-		if (obj.value) node.classList.add(className);
-		else node.classList.remove(className);
-	};
-	CIQ.UI.observeProperty("outliers", stx.layout, listener);
-};
+		className = this.params.activeClassName
+	var listener = function(obj) {
+		if (obj.value) node.classList.add(className)
+		else node.classList.remove(className)
+	}
+	CIQ.UI.observeProperty('outliers', stx.layout, listener)
+}
 /**
  * Convenience function that toggles the outliers layout property between on and off (true
  * and false). Invoked from the Display drop-down menu.
@@ -4053,12 +4104,12 @@ CIQ.UI.Layout.prototype.getOutliers = function (node) {
  * @memberof CIQ.UI.Layout
  * @since 7.5.0
  */
-CIQ.UI.Layout.prototype.setOutliers = function (node) {
-	var stx = this.context.stx;
-	stx.layout.outliers = !stx.layout.outliers;
-	stx.draw();
-	stx.changeOccurred("layout");
-};
+CIQ.UI.Layout.prototype.setOutliers = function(node) {
+	var stx = this.context.stx
+	stx.layout.outliers = !stx.layout.outliers
+	stx.draw()
+	stx.changeOccurred('layout')
+}
 /**
  * Activates the chart aggregation type radio button on the Display drop-down menu.
  *
@@ -4069,15 +4120,15 @@ CIQ.UI.Layout.prototype.setOutliers = function (node) {
  * @memberof CIQ.UI.Layout
  * @private
  */
-CIQ.UI.Layout.prototype.getAggregationType = function (node, aggregationType) {
+CIQ.UI.Layout.prototype.getAggregationType = function(node, aggregationType) {
 	var stx = this.context.stx,
-		className = this.params.activeClassName;
-	var listener = function (obj) {
-		if (obj.value == aggregationType) node.classList.add(className);
-		else node.classList.remove(className);
-	};
-	CIQ.UI.observeProperty("aggregationType", stx.layout, listener);
-};
+		className = this.params.activeClassName
+	var listener = function(obj) {
+		if (obj.value == aggregationType) node.classList.add(className)
+		else node.classList.remove(className)
+	}
+	CIQ.UI.observeProperty('aggregationType', stx.layout, listener)
+}
 /**
  * Convenience function to set the aggregation type from the Display drop-down menu.
  *
@@ -4093,13 +4144,13 @@ CIQ.UI.Layout.prototype.getAggregationType = function (node, aggregationType) {
  *
  * @memberof CIQ.UI.Layout
  */
-CIQ.UI.Layout.prototype.setAggregationType = function (node, aggregationType) {
+CIQ.UI.Layout.prototype.setAggregationType = function(node, aggregationType) {
 	if (this.context.stx.layout.aggregationType == aggregationType) {
-		this.context.stx.setAggregationType(null);
+		this.context.stx.setAggregationType(null)
 	} else {
-		this.context.stx.setAggregationType(aggregationType);
+		this.context.stx.setAggregationType(aggregationType)
 	}
-};
+}
 /**
  * Activates the edit control on the Display drop-down menu for the aggregation type
  * identified by `field`.
@@ -4111,19 +4162,19 @@ CIQ.UI.Layout.prototype.setAggregationType = function (node, aggregationType) {
  * @memberof CIQ.UI.Layout
  * @private
  */
-CIQ.UI.Layout.prototype.getAggregationEdit = function (node, field) {
-	var stx = this.context.stx;
-	var tuple = CIQ.deriveFromObjectChain(stx.layout, field);
-	var listener = function (obj) {
-		var value = obj.value;
+CIQ.UI.Layout.prototype.getAggregationEdit = function(node, field) {
+	var stx = this.context.stx
+	var tuple = CIQ.deriveFromObjectChain(stx.layout, field)
+	var listener = function(obj) {
+		var value = obj.value
 		if (!value && stx.chart.defaultChartStyleConfig[node.name]) {
-			node.value = stx.chart.defaultChartStyleConfig[node.name];
+			node.value = stx.chart.defaultChartStyleConfig[node.name]
 		} else {
-			node.value = value;
+			node.value = value
 		}
-	};
-	CIQ.UI.observeProperty(tuple.member, tuple.obj, listener);
-};
+	}
+	CIQ.UI.observeProperty(tuple.member, tuple.obj, listener)
+}
 /**
  * Updates settings for the aggregation type specified by `field`.
  *
@@ -4134,73 +4185,73 @@ CIQ.UI.Layout.prototype.getAggregationEdit = function (node, field) {
  * @memberof CIQ.UI.Layout
  * @private
  */
-CIQ.UI.Layout.prototype.setAggregationEdit = function (node, field) {
-	var stx = this.context.stx;
+CIQ.UI.Layout.prototype.setAggregationEdit = function(node, field) {
+	var stx = this.context.stx
 	function completeAggEdit() {
-		stx.changeOccurred("layout");
-		stx.createDataSet();
-		stx.draw();
+		stx.changeOccurred('layout')
+		stx.createDataSet()
+		stx.draw()
 	}
-	if (field === "auto") {
-		if (stx.layout.aggregationType === "kagi") {
-			stx.layout.kagi = null;
-		} else if (stx.layout.aggregationType === "renko") {
-			stx.layout.renko = null;
-		} else if (stx.layout.aggregationType === "linebreak") {
-			stx.layout.priceLines = null;
-		} else if (stx.layout.aggregationType === "rangebars") {
-			stx.layout.rangebars = null;
-		} else if (stx.layout.aggregationType === "pandf") {
+	if (field === 'auto') {
+		if (stx.layout.aggregationType === 'kagi') {
+			stx.layout.kagi = null
+		} else if (stx.layout.aggregationType === 'renko') {
+			stx.layout.renko = null
+		} else if (stx.layout.aggregationType === 'linebreak') {
+			stx.layout.priceLines = null
+		} else if (stx.layout.aggregationType === 'rangebars') {
+			stx.layout.rangebars = null
+		} else if (stx.layout.aggregationType === 'pandf') {
 			if (!stx.layout.pandf) {
-				stx.layout.pandf = { box: null, reversal: null };
+				stx.layout.pandf = { box: null, reversal: null }
 			}
-			stx.layout.pandf.box = null;
-			stx.layout.pandf.reversal = null;
+			stx.layout.pandf.box = null
+			stx.layout.pandf.reversal = null
 		}
-		completeAggEdit();
-		const parent = node.params.parent;
-		if (!parent) return;
+		completeAggEdit()
+		const parent = node.params.parent
+		if (!parent) return
 		Array.from(
-			parent.querySelectorAll(".ciq" + stx.layout.aggregationType + " input")
-		).forEach(function (input) {
-			var name = input.name;
-			if (name == "box" || name == "reversal") name = "pandf." + name;
-			var tuple = CIQ.deriveFromObjectChain(stx.layout, name);
+			parent.querySelectorAll('.ciq' + stx.layout.aggregationType + ' input')
+		).forEach(function(input) {
+			var name = input.name
+			if (name == 'box' || name == 'reversal') name = 'pandf.' + name
+			var tuple = CIQ.deriveFromObjectChain(stx.layout, name)
 			if (
 				tuple &&
 				!tuple.obj[tuple.member] &&
 				stx.chart.defaultChartStyleConfig[input.name]
 			)
-				input.value = stx.chart.defaultChartStyleConfig[input.name];
-		});
+				input.value = stx.chart.defaultChartStyleConfig[input.name]
+		})
 	} else {
-		var tuple = CIQ.deriveFromObjectChain(stx.layout, field);
-		tuple.obj[tuple.member] = node.node.value;
-		completeAggEdit();
+		var tuple = CIQ.deriveFromObjectChain(stx.layout, field)
+		tuple.obj[tuple.member] = node.node.value
+		completeAggEdit()
 	}
-};
+}
 /**
  * @memberof CIQ.UI.Layout
  * @param {HTMLElement} [node]
  * @param {String} aggregationType
  * @private
  */
-CIQ.UI.Layout.prototype.showAggregationEdit = function (node, aggregationType) {
-	const { context } = this;
+CIQ.UI.Layout.prototype.showAggregationEdit = function(node, aggregationType) {
+	const { context } = this
 	if (context.config) {
-		const { channelWrite } = CIQ.UI.BaseComponent.prototype;
-		const channel = (context.config.channels || {}).dialog || "channel.dialog";
+		const { channelWrite } = CIQ.UI.BaseComponent.prototype
+		const channel = (context.config.channels || {}).dialog || 'channel.dialog'
 		channelWrite(
 			channel,
-			{ type: "aggregation", params: { context, aggregationType } },
+			{ type: 'aggregation', params: { context, aggregationType } },
 			context.stx
-		);
+		)
 	} else {
 		// configuration not available reverting to legacy dialog opening
-		const dialog = document.querySelector("cq-aggregation-dialog");
-		dialog.open({ context: this.context, aggregationType: aggregationType });
+		const dialog = document.querySelector('cq-aggregation-dialog')
+		dialog.open({ context: this.context, aggregationType: aggregationType })
 	}
-};
+}
 /**
  * Removes all studies from the top most node.
  *
@@ -4209,10 +4260,10 @@ CIQ.UI.Layout.prototype.showAggregationEdit = function (node, aggregationType) {
  * @memberof CIQ.UI.Layout
  * @param {HTMLElement} [node] The HTML user interface element used to clear all studies from the chart.
  */
-CIQ.UI.Layout.prototype.clearStudies = function (node) {
-	if (!CIQ.Studies) return;
+CIQ.UI.Layout.prototype.clearStudies = function(node) {
+	if (!CIQ.Studies) return
 	CIQ.store.dispatch('chart/reset_chart_study_state')
-};
+}
 
 /**
  * createNewBacktest, remove all studies, markers, prompt, recover timeframe dropdown
@@ -4237,7 +4288,7 @@ CIQ.UI.Layout.prototype.clearStudies = function (node) {
  *
  * @memberof CIQ.UI.Layout
  */
-CIQ.UI.Layout.prototype.setPeriodicity = function (
+CIQ.UI.Layout.prototype.setPeriodicity = function(
 	node,
 	periodicity,
 	interval,
@@ -4246,26 +4297,26 @@ CIQ.UI.Layout.prototype.setPeriodicity = function (
 	// only need the timeUnit which is the frequency
 	// change frequency by choosing a timeunit, technical indicator will not call loadchart()
 	var selectedFreq = ''
-	switch(timeUnit){
-		case "month":{
-			selectedFreq = "Monthly"
-			break;
+	switch (timeUnit) {
+		case 'month': {
+			selectedFreq = 'Monthly'
+			break
 		}
-		case "week":{
-			selectedFreq = "Weekly"
-			break;
+		case 'week': {
+			selectedFreq = 'Weekly'
+			break
 		}
-		case "day":{
-			selectedFreq = "Daily"
-			break;
+		case 'day': {
+			selectedFreq = 'Daily'
+			break
 		}
 		default:
 	}
-	
+
 	CIQ.store.commit('form/getFrequency', selectedFreq)
 
 	// 在scanner ai里面修改timeframe后会自己调用CIQ.initiateChart
-	if(!CIQ.store.getters.getScannerAIFlagState) CIQ.addIndicators()
+	if (!CIQ.store.getters.getScannerAIFlagState) CIQ.addIndicators()
 
 	// var self = this;
 	// if (self.context.loader) self.context.loader.show();
@@ -4275,7 +4326,7 @@ CIQ.UI.Layout.prototype.setPeriodicity = function (
 	// 		if (self.context.loader) self.context.loader.hide();
 	// 	}
 	// );
-};
+}
 /**
  * Sets the display periodicity.
  *
@@ -4288,42 +4339,42 @@ CIQ.UI.Layout.prototype.setPeriodicity = function (
  * @param {HTMLElement} params.selector The selector to update
  * @memberof CIQ.UI.Layout
  */
-CIQ.UI.Layout.prototype.showPeriodicity = function (stx, params) {
-	var text = "";
+CIQ.UI.Layout.prototype.showPeriodicity = function(stx, params) {
+	var text = ''
 	var { period, interval, timeUnit } = CIQ.periodicity
 
-	period *= interval;
-	text = period;
-	if (timeUnit == "day") {
-		text += "D";
-	} else if (timeUnit == "week") {
-		text += "W";
-	} else if (timeUnit == "month") {
-		text += "M";
-	} else if (timeUnit == "second") {
-		text += "s";
-	} else if (timeUnit == "millisecond") {
-		text += "ms";
+	period *= interval
+	text = period
+	if (timeUnit == 'day') {
+		text += 'D'
+	} else if (timeUnit == 'week') {
+		text += 'W'
+	} else if (timeUnit == 'month') {
+		text += 'M'
+	} else if (timeUnit == 'second') {
+		text += 's'
+	} else if (timeUnit == 'millisecond') {
+		text += 'ms'
 	} else if (period >= 60 && period % 15 === 0) {
-		text = period / 60 + "H";
-	} else if (timeUnit == "tick") {
-		text = (period > 1 ? period : "") + "T";
+		text = period / 60 + 'H'
+	} else if (timeUnit == 'tick') {
+		text = (period > 1 ? period : '') + 'T'
 	} else {
-		text += "m";
+		text += 'm'
 	}
-	params.selector.innerHTML = "";
-	params.selector.appendChild(CIQ.translatableTextNode(stx, text));
-};
-CIQ.UI.Layout.prototype.periodicity = function (node) {
+	params.selector.innerHTML = ''
+	params.selector.appendChild(CIQ.translatableTextNode(stx, text))
+}
+CIQ.UI.Layout.prototype.periodicity = function(node) {
 	var self = this,
-		stx = this.context.stx;
-	var listener = function (obj) {
-		self.showPeriodicity(stx, { selector: node });
-	};
+		stx = this.context.stx
+	var listener = function(obj) {
+		self.showPeriodicity(stx, { selector: node })
+	}
 	// CIQ.UI.observeProperty("interval", CIQ.periodicity, listener);
 	// CIQ.UI.observeProperty("period", CIQ.periodicity, listener);
-	CIQ.UI.observeProperty("timeUnit", CIQ.periodicity, listener);
-};
+	CIQ.UI.observeProperty('timeUnit', CIQ.periodicity, listener)
+}
 
 /**
  * Populates and displays the language widget.
@@ -4332,18 +4383,18 @@ CIQ.UI.Layout.prototype.periodicity = function (node) {
  *
  * @memberof CIQ.UI.Layout
  */
-CIQ.UI.Layout.prototype.setLanguage = function () {
-	const { config, stx } = this.context;
+CIQ.UI.Layout.prototype.setLanguage = function() {
+	const { config, stx } = this.context
 	if (config) {
-		const { channelWrite } = CIQ.UI.BaseComponent.prototype;
-		const channel = (config.channels || {}).dialog || "channel.dialog";
-		const params = { context: stx.uiContext };
-		channelWrite(channel, { type: "language", params }, stx);
+		const { channelWrite } = CIQ.UI.BaseComponent.prototype
+		const channel = (config.channels || {}).dialog || 'channel.dialog'
+		const params = { context: stx.uiContext }
+		channelWrite(channel, { type: 'language', params }, stx)
 	} else {
 		// config is not available revert to direct component access
-		document.querySelector("cq-language-dialog").open();
+		document.querySelector('cq-language-dialog').open()
 	}
-};
+}
 /**
  * Displays the current language in the language widget.
  *
@@ -4357,19 +4408,19 @@ CIQ.UI.Layout.prototype.setLanguage = function () {
  * @memberof CIQ.UI.Layout
  * @since 6.1.0 Defaults to English.
  */
-CIQ.UI.Layout.prototype.getLanguage = function (node) {
-	var stx = this.context.stx;
-	var listener = function (obj) {
-		if (!CIQ.I18N.languages) CIQ.I18N.languages = { en: "English" };
-		var lang = node.querySelector("cq-language-name");
+CIQ.UI.Layout.prototype.getLanguage = function(node) {
+	var stx = this.context.stx
+	var listener = function(obj) {
+		if (!CIQ.I18N.languages) CIQ.I18N.languages = { en: 'English' }
+		var lang = node.querySelector('cq-language-name')
 		if (lang) {
-			lang.innerText = CIQ.I18N.languages[CIQ.I18N.language];
-			var flag = node.querySelector("cq-flag");
-			if (flag) flag.setAttribute("cq-lang", CIQ.I18N.language);
+			lang.innerText = CIQ.I18N.languages[CIQ.I18N.language]
+			var flag = node.querySelector('cq-flag')
+			if (flag) flag.setAttribute('cq-lang', CIQ.I18N.language)
 		}
-	};
-	CIQ.UI.observeProperty("language", CIQ.I18N, listener);
-};
+	}
+	CIQ.UI.observeProperty('language', CIQ.I18N, listener)
+}
 /**
  * UI Helper for managing the 'Events' menu drop down for showing markers on the chart.
  *
@@ -4382,15 +4433,15 @@ CIQ.UI.Layout.prototype.getLanguage = function (node) {
  * @constructor
  * @since 7.1.0
  */
-CIQ.UI.Markers = function (context, params) {
-	this.context = context;
-	if (!params) params = {};
-	this.menuItemSelector = params.menuItemSelector;
-	this.activeClassName = params.activeClassName || "ciq-active";
-	this.implementation = params.implementation;
-	context.advertiseAs(this, "Markers");
-};
-CIQ.inheritsFrom(CIQ.UI.Markers, CIQ.UI.Helper);
+CIQ.UI.Markers = function(context, params) {
+	this.context = context
+	if (!params) params = {}
+	this.menuItemSelector = params.menuItemSelector
+	this.activeClassName = params.activeClassName || 'ciq-active'
+	this.implementation = params.implementation
+	context.advertiseAs(this, 'Markers')
+}
+CIQ.inheritsFrom(CIQ.UI.Markers, CIQ.UI.Helper)
 /**
  * Displays the markers specified by the `type` parameter. If `type` is not provided, all
  * currently displayed markers are removed. Must be called from a menu item.
@@ -4443,33 +4494,33 @@ CIQ.inheritsFrom(CIQ.UI.Markers, CIQ.UI.Helper);
  *     Simple Square<span class="ciq-radio"><span></span></span>
  * </cq-item>
  */
-CIQ.UI.Markers.prototype.showMarkers = function (node, type, markerType) {
-	var activeClassName = this.activeClassName;
-	var topNode = this.context.topNode;
+CIQ.UI.Markers.prototype.showMarkers = function(node, type, markerType) {
+	var activeClassName = this.activeClassName
+	var topNode = this.context.topNode
 
-	var implementation = this.implementation;
-	
+	var implementation = this.implementation
+
 	if (!implementation) {
-		return;
+		return
 	}
 	// hide markers
-	implementation.showMarkers();
+	implementation.showMarkers()
 	if (type) {
-		implementation.showMarkers(type, markerType);
+		implementation.showMarkers(type, markerType)
 	}
-	Array.from(topNode.querySelectorAll(this.menuItemSelector)).forEach(function (
+	Array.from(topNode.querySelectorAll(this.menuItemSelector)).forEach(function(
 		item
 	) {
 		// Previously event markers were one for all. Click one and the rest disappeared. Life Cycle Events breaks that chain
 		// and can have as many as you want on the screen. So leave whichever have checkboxes alone.
-		var hasCheckbox = item.querySelector(".ciq-checkbox");
+		var hasCheckbox = item.querySelector('.ciq-checkbox')
 		if (node.node == item) {
-			item.classList.add(activeClassName);
+			item.classList.add(activeClassName)
 		} else if (!hasCheckbox) {
-			item.classList.remove(activeClassName);
+			item.classList.remove(activeClassName)
 		}
-	});
-};
+	})
+}
 /**
  * UI Helper for capturing and handling keystrokes. cb to capture the key.
  *
@@ -4481,42 +4532,42 @@ CIQ.UI.Markers.prototype.showMarkers = function (node, type, markerType) {
  * @param {array} [params.keysToRepeat] Keys to process multiple times if key is held down
  * @constructor
  */
-CIQ.UI.Keystroke = function (cb, { keysToRepeat = [] } = {}) {
-	this.cb = cb;
-	this.shift = false;
-	this.ctrl = false;
-	this.cmd = false;
-	this.alt = false;
-	this.capsLock = false;
-	this.downValue = ""; // Android Chrome bug requires a workaround for keyup.
-	this.keysToRepeat = keysToRepeat;
-	this.recentKeys = {};
-	this.commandKeys = {}; // all `KeyboardEvent.code` values that map to a command
-	this.initialize();
-};
+CIQ.UI.Keystroke = function(cb, { keysToRepeat = [] } = {}) {
+	this.cb = cb
+	this.shift = false
+	this.ctrl = false
+	this.cmd = false
+	this.alt = false
+	this.capsLock = false
+	this.downValue = '' // Android Chrome bug requires a workaround for keyup.
+	this.keysToRepeat = keysToRepeat
+	this.recentKeys = {}
+	this.commandKeys = {} // all `KeyboardEvent.code` values that map to a command
+	this.initialize()
+}
 /**
  * Set this to true to bypass key capture. Shift, CTRL, CMD will still be toggled however.
  *
  * @memberof CIQ.UI.Keystroke
  * @type {Boolean}
  */
-CIQ.UI.Keystroke.noKeyCapture = false;
+CIQ.UI.Keystroke.noKeyCapture = false
 // http://stackoverflow.com/questions/30743490/capture-keys-typed-on-android-virtual-keyboard-using-javascript
 // On Chrome Android, the keydown/keyup events are broken. We have to figure out the key that was pressed by
 // examining the value of an input box before (keydown) and after (keyup) and identifying what changed
 // Note that CIQ.isAndroid is false when the user requests "desktop site" and so some input boxes won't work
 // in that situation. There is no workaround other than to always treat 229 as a false value (it is a swedish character)
-CIQ.UI.Keystroke.prototype.androidWorkaroundKeyup = function (e) {
-	var newValue = e.target.value;
-	var key;
+CIQ.UI.Keystroke.prototype.androidWorkaroundKeyup = function(e) {
+	var newValue = e.target.value
+	var key
 	if (newValue.length > this.downValue.length) {
-		key = newValue.charAt(newValue.length - 1);
+		key = newValue.charAt(newValue.length - 1)
 	} else {
-		key = "Delete";
+		key = 'Delete'
 	}
-	this.key = key;
-	this.cb({ key: key, e: e, keystroke: this });
-};
+	this.key = key
+	this.cb({ key: key, e: e, keystroke: this })
+}
 /**
  * Map command key values from keyboard to their internal values.
  *
@@ -4526,16 +4577,16 @@ CIQ.UI.Keystroke.prototype.androidWorkaroundKeyup = function (e) {
  * @param {string} key
  * @returns {string}
  */
-CIQ.UI.Keystroke.prototype.mapKey = function (key) {
+CIQ.UI.Keystroke.prototype.mapKey = function(key) {
 	const keyMapping = {
-		Shift: "shift",
-		Control: "ctrl",
-		Alt: "alt",
-		Meta: "cmd",
-		Win: "cmd"
-	};
-	return keyMapping[key] || key;
-};
+		Shift: 'shift',
+		Control: 'ctrl',
+		Alt: 'alt',
+		Meta: 'cmd',
+		Win: 'cmd'
+	}
+	return keyMapping[key] || key
+}
 // Managing keystroke events. We will get three key events from the browser: keydown, keyup, keypress
 // These come in a specific order: http://www.quirksmode.org/dom/events/keys.html
 // keypress gives you the capitalized or uncapitalized key, unlike keyup/keydown
@@ -4547,125 +4598,125 @@ CIQ.UI.Keystroke.prototype.mapKey = function (key) {
 // before the input field is updated, we save any key that has been handled by these in this.key
 // but we don't process the stroke until the keyup event is fired. This ensures that our handlers
 // will always have the right key (capitalized) and that input field value will be up to date.
-CIQ.UI.Keystroke.prototype.keyup = function (e) {
+CIQ.UI.Keystroke.prototype.keyup = function(e) {
 	if (this.implementAndroidWorkaround) {
-		this.androidWorkaroundKeyup(e);
-		this.implementAndroidWorkaround = false;
-		return;
+		this.androidWorkaroundKeyup(e)
+		this.implementAndroidWorkaround = false
+		return
 	}
-	const { recentKeys } = this;
-	const { key, code } = e;
-	const mappedKey = this.mapKey(key);
-	const isCommandKey = key !== mappedKey;
-	const currentTime = new Date().getTime();
-	if (!recentKeys[code]) recentKeys[code] = {};
-	recentKeys[code].keyup = currentTime;
+	const { recentKeys } = this
+	const { key, code } = e
+	const mappedKey = this.mapKey(key)
+	const isCommandKey = key !== mappedKey
+	const currentTime = new Date().getTime()
+	if (!recentKeys[code]) recentKeys[code] = {}
+	recentKeys[code].keyup = currentTime
 	if (isCommandKey) {
-		this.commandKeys[code].pressed = false;
+		this.commandKeys[code].pressed = false
 		if (
 			!Object.values(this.commandKeys).some(
 				({ command, pressed }) => pressed && command === mappedKey
 			)
 		) {
 			// only set to false if no other keys with the same command are currently pressed
-			this[mappedKey] = false;
+			this[mappedKey] = false
 		}
-		return this.cb({ key, e, keystroke: this });
+		return this.cb({ key, e, keystroke: this })
 	}
 	// Ensure the key combinations are registered even if the command key is released slightly before
 	// the combination key. A command key is still considered "live" if the current key was pressed between
 	// the command key's down and up and the command key was pressed no more than 500 ms ago. Note: this
 	// will not work for keys in `keysToRepeat` due to them being handled in `keydown`.
-	let liveCommandKeys = [];
+	let liveCommandKeys = []
 	Object.entries(this.commandKeys).forEach(([commandKey, { command }]) => {
-		let recentCommand = recentKeys[commandKey] || {};
-		let recentKey = recentKeys[code] || {};
+		let recentCommand = recentKeys[commandKey] || {}
+		let recentKey = recentKeys[code] || {}
 		if (
 			recentCommand.keydown < recentKey.keydown &&
 			recentKey.keydown < recentCommand.keyup &&
 			recentCommand.keyup + 500 > currentTime
 		) {
-			liveCommandKeys.push(commandKey);
-			this[command] = true;
+			liveCommandKeys.push(commandKey)
+			this[command] = true
 		}
-	});
+	})
 	// Reset command key values on next tick (as soon as current processing has completed)
 	if (liveCommandKeys.length) {
 		setTimeout(() => {
-			liveCommandKeys.forEach((commandKey) => {
+			liveCommandKeys.forEach(commandKey => {
 				if (recentKeys[commandKey].keydown < currentTime) {
-					this[this.commandKeys[commandKey].command] = false;
+					this[this.commandKeys[commandKey].command] = false
 				}
-			});
-		});
+			})
+		})
 	}
 	// This is where we handle the keystroke, regardless of whether we captured the key with a down or press event
 	// The exception to this are the `keysToRepeat` (arrow keys, etc), which are processed in keydown
 	if (!this.keysToRepeat.includes(key)) {
-		this.key = key;
-		this.cb({ key, e, keystroke: this });
+		this.key = key
+		this.cb({ key, e, keystroke: this })
 	} else {
-		this.key = null;
+		this.key = null
 	}
-};
-CIQ.UI.Keystroke.prototype.keydown = function (e) {
-	if (this.noKeyCapture) return;
+}
+CIQ.UI.Keystroke.prototype.keydown = function(e) {
+	if (this.noKeyCapture) return
 	if (e.which == 229 && CIQ.isAndroid) {
-		this.implementAndroidWorkaround = true;
-		return;
+		this.implementAndroidWorkaround = true
+		return
 	}
-	const { key, code } = e;
-	const mappedKey = this.mapKey(key);
-	const isCommandKey = key !== mappedKey;
-	if (!this.recentKeys[code]) this.recentKeys[code] = {};
-	this.recentKeys[code].keydown = new Date().getTime();
+	const { key, code } = e
+	const mappedKey = this.mapKey(key)
+	const isCommandKey = key !== mappedKey
+	if (!this.recentKeys[code]) this.recentKeys[code] = {}
+	this.recentKeys[code].keydown = new Date().getTime()
 	if (isCommandKey) {
-		this.commandKeys[code] = { command: mappedKey, pressed: true };
+		this.commandKeys[code] = { command: mappedKey, pressed: true }
 	}
 	// Prevent default tab key behavior
-	if (key == "Tab") e.preventDefault();
-	this.key = key;
+	if (key == 'Tab') e.preventDefault()
+	this.key = key
 	if (isCommandKey) {
-		this[mappedKey] = true;
-	} else if (key === "CapsLock") {
-		this.capsLock = !this.capsLock;
+		this[mappedKey] = true
+	} else if (key === 'CapsLock') {
+		this.capsLock = !this.capsLock
 	} else if (this.keysToRepeat.includes(key)) {
 		// If you hold a key down, then keydown will repeat. These are the keys
 		// that we want to capture repeat action.
-		this.key = null;
-		this.cb({ key, e, keystroke: this });
+		this.key = null
+		this.cb({ key, e, keystroke: this })
 	}
-};
+}
 /**
  * Identifies a keypress event.
  * @param {KeyboardEvent} e
  * @memberof CIQ.UI.Keystroke
  */
-CIQ.UI.Keystroke.prototype.keypress = function (e) {
-	if (this.noKeyCapture) return;
-	var keyCode = e.which;
-	if (keyCode < 32 || keyCode > 222) return; // handled by keydown
-	this.key = e.key;
-};
+CIQ.UI.Keystroke.prototype.keypress = function(e) {
+	if (this.noKeyCapture) return
+	var keyCode = e.which
+	if (keyCode < 32 || keyCode > 222) return // handled by keydown
+	this.key = e.key
+}
 /**
  * Initializes member functions.
  * @memberof CIQ.UI.Keystroke
  * @private
  */
-CIQ.UI.Keystroke.prototype.initialize = function () {
-	var self = this;
-	["keyup", "keydown", "keypress"].forEach(function (ev) {
-		document.addEventListener(ev, function (e) {
-			if (ev === "keydown") self.downValue = e.target.value;
-			self[ev](e);
-		});
-	});
-	window.addEventListener("blur", function (e) {
+CIQ.UI.Keystroke.prototype.initialize = function() {
+	var self = this
+	;['keyup', 'keydown', 'keypress'].forEach(function(ev) {
+		document.addEventListener(ev, function(e) {
+			if (ev === 'keydown') self.downValue = e.target.value
+			self[ev](e)
+		})
+	})
+	window.addEventListener('blur', function(e) {
 		// otherwise ctrl-t to switch tabs causes ctrl to get stuck
-		self.ctrl = false;
-		self.cb({ key: "Control", e: e, keystroke: self });
-	});
-};
+		self.ctrl = false
+		self.cb({ key: 'Control', e: e, keystroke: self })
+	})
+}
 /**
  * UI Helper for capturing and handling keystrokes.
  *
@@ -4680,91 +4731,91 @@ CIQ.UI.Keystroke.prototype.initialize = function () {
  * @since 5.1.0 Setting `node` to anything other than `document` allows keystrokes to be restricted by hover focus.
  * @constructor
  */
-CIQ.UI.KeystrokeHub = function (node, context, params) {
-	node = CIQ.UI.$(node || "document")[0];
-	this.infocus = false;
-	var self = this;
+CIQ.UI.KeystrokeHub = function(node, context, params) {
+	node = CIQ.UI.$(node || 'document')[0]
+	this.infocus = false
+	var self = this
 	if (node === document || node === document.body || node === window) {
-		this.infocus = true;
+		this.infocus = true
 	} else {
-		node.addEventListener("mouseout", function () {
-			self.infocus = false;
-		});
-		node.addEventListener("mouseover", function () {
-			self.infocus = true;
-		});
+		node.addEventListener('mouseout', function() {
+			self.infocus = false
+		})
+		node.addEventListener('mouseover', function() {
+			self.infocus = true
+		})
 	}
-	this.context = context;
-	this.params = params ? params : {};
-	({ hotkeyConfig: this.hotkeyConfig } = context.config || {});
-	this.uiManager = CIQ.UI.getUIManager();
-	this.uiManager.keystrokeHub = this; // Register the keystroke hub so that it can be found
+	this.context = context
+	this.params = params ? params : {}
+	;({ hotkeyConfig: this.hotkeyConfig } = context.config || {})
+	this.uiManager = CIQ.UI.getUIManager()
+	this.uiManager.keystrokeHub = this // Register the keystroke hub so that it can be found
 	function handler() {
-		return function () {
-			self.handler.apply(self, arguments);
-		};
+		return function() {
+			self.handler.apply(self, arguments)
+		}
 	}
 	this.keystroke = new CIQ.UI.Keystroke(handler(), {
 		keysToRepeat: this.hotkeyConfig.keysToRepeat
-	});
+	})
 	// Array of element references for keyboard navigation. No element placed at index 0. This
 	// allows tabIndex to represent either a positive (selected) and negative (deselected) value
 	// for the selected element.
-	this.tabOrder = [null];
+	this.tabOrder = [null]
 	// Index of selected element for keyboard navigation.
-	this.tabIndex = 0;
+	this.tabIndex = 0
 	// Get the value of 5% of the total context element height. Used to normalize y coordinates when sorting elements by position
 	this.yNormalizationThreshold =
-		this.context.topNode.getBoundingClientRect().height / 25;
+		this.context.topNode.getBoundingClientRect().height / 25
 	// Queryselectors for elements that will be added to the tabOrder array
 	this.tabElementSelectors = [
-		"cq-lookup",
-		"cq-comparison[cq-marker]",
-		"cq-study-legend[cq-panel-only]",
-		"cq-menu.ciq-menu",
-		".ciq-toggles cq-toggle",
-		"cq-chartcontrol-group cq-toggle",
-		".chartControls .chartSize span",
-		"cq-show-range div",
+		'cq-lookup',
+		'cq-comparison[cq-marker]',
+		'cq-study-legend[cq-panel-only]',
+		'cq-menu.ciq-menu',
+		'.ciq-toggles cq-toggle',
+		'cq-chartcontrol-group cq-toggle',
+		'.chartControls .chartSize span',
+		'cq-show-range div',
 		"[keyboard-navigation='true']"
-	];
+	]
 	// The element that the highlight will position over, as well as its position. An object of the following type is expected:
 	// {element: HTMLElement, {x: number, y: number, width: number, height: number}}
 	// This can be set by keyboard navigable components so the element isn't necessarily in the tabOrder array.
-	this.tabActiveElement = null;
+	this.tabActiveElement = null
 	// A reference to a component that has been handed control for internal navigation by setting its keyboardNavigation
 	// property equal to a reference to this object.
-	this.keyControlElement = null;
+	this.keyControlElement = null
 	// A reference to the highlight rectangle element
-	this.highlightElement = null;
+	this.highlightElement = null
 	// Halt keyboard navigation if the mouse button is used anywhere else.
-	this.context.topNode.addEventListener("pointerdown", () =>
+	this.context.topNode.addEventListener('pointerdown', () =>
 		this.tabOrderDeselect()
-	);
+	)
 	// Reenable the mouse pointer when the mouse is moved
-	this.context.topNode.addEventListener("pointermove", () =>
-		this.context.topNode.classList.remove("disable-mouse-pointer")
-	);
+	this.context.topNode.addEventListener('pointermove', () =>
+		this.context.topNode.classList.remove('disable-mouse-pointer')
+	)
 	// Update the highlight position on resize
-	this.context.stx.append("resizeChart", () => {
-		this.highlightAlign();
-	});
+	this.context.stx.append('resizeChart', () => {
+		this.highlightAlign()
+	})
 	// Subscribe to the keyboardNavigation channel and listen for calls to register elements
-	const { channelSubscribe } = CIQ.UI.BaseComponent.prototype;
+	const { channelSubscribe } = CIQ.UI.BaseComponent.prototype
 	const channel =
 		(this.context.config.channels || {}).keyboardNavigation ||
-		"channel.keyboardNavigation";
+		'channel.keyboardNavigation'
 	channelSubscribe(
 		channel,
-		(value) => {
-			if (value && value.action === "registerElements") {
-				this.setTabOrderElements();
+		value => {
+			if (value && value.action === 'registerElements') {
+				this.setTabOrderElements()
 			}
 		},
 		this.context.stx
-	);
-};
-CIQ.inheritsFrom(CIQ.UI.KeystrokeHub, CIQ.UI.Helper);
+	)
+}
+CIQ.inheritsFrom(CIQ.UI.KeystrokeHub, CIQ.UI.Helper)
 /**
  * Global default hotkey method. Pass this or your own method in to {@link CIQ.UI.KeystrokeHub}
  * @memberof CIQ.UI.KeystrokeHub
@@ -4775,62 +4826,63 @@ CIQ.inheritsFrom(CIQ.UI.KeystrokeHub, CIQ.UI.Helper);
  * @param  {KeyboardEvent} e The KeyboardEvent that triggered the function call
  * @return {boolean}     Return true if you captured the key
  */
-CIQ.UI.KeystrokeHub.defaultHotKeys = function (key, hub, e = {}) {
-	const { hotkeyConfig = {}, keystroke, context } = hub;
-	const { hotkeys = [] } = hotkeyConfig;
-	const { stx } = context;
-	const { code, keyCode } = e || {};
-	const numpadCode = code && code.includes("Numpad");
-	if (key === "Unidentified") key = String.fromCharCode(keyCode); // legacy edge support
+CIQ.UI.KeystrokeHub.defaultHotKeys = function(key, hub, e = {}) {
+	const { hotkeyConfig = {}, keystroke, context } = hub
+	const { hotkeys = [] } = hotkeyConfig
+	const { stx } = context
+	const { code, keyCode } = e || {}
+	const numpadCode = code && code.includes('Numpad')
+	if (key === 'Unidentified') key = String.fromCharCode(keyCode) // legacy edge support
 	return hotkeys
 		.slice()
 		.reverse() // process in reverse order to allow dev/user to override existing functionality
 		.reduce(function flattenCommands(acc, { action, commands, options }) {
-			return acc.concat(
-				commands.map((command) => ({ action, command, options }))
-			);
+			return acc.concat(commands.map(command => ({ action, command, options })))
 		}, [])
 		.map(function parseCommands({ action, command, options }) {
-			if (command === "+") command = ["+"];
-			else if (command.slice(-2) === "++") {
-				command = command.slice(0, -2).split("+").concat("+");
-			} else command = command.split("+");
+			if (command === '+') command = ['+']
+			else if (command.slice(-2) === '++') {
+				command = command
+					.slice(0, -2)
+					.split('+')
+					.concat('+')
+			} else command = command.split('+')
 			return {
 				action,
 				options,
 				modifiers: command.slice(0, -1),
 				commandKey: command.slice(-1)[0],
 				specificity: command.length
-			};
+			}
 		})
 		.filter(function filterCommands({ modifiers, commandKey }) {
 			// numpad keys have to match code, other keys can match either code or key
 			let commandKeyMatches = (numpadCode ? [code] : [code, key]).includes(
 				commandKey
-			);
+			)
 			let modifiersMatch =
 				!modifiers.length ||
-				modifiers.every((modifier) => keystroke[keystroke.mapKey(modifier)]);
-			return commandKeyMatches && modifiersMatch;
+				modifiers.every(modifier => keystroke[keystroke.mapKey(modifier)])
+			return commandKeyMatches && modifiersMatch
 		})
 		.sort(function sortHigherSpecificityCommandsToFront(a, b) {
-			return b.specificity - a.specificity;
+			return b.specificity - a.specificity
 		})
 		.some(function executeCommands({ action, options }) {
 			// some returns true as soon as soon any of its callbacks return true
-			if (typeof action === "string") {
+			if (typeof action === 'string') {
 				return CIQ.UI.KeystrokeHub.executeHotkeyCommand({
 					stx,
 					action,
 					options
-				});
+				})
 			}
-			if (typeof action === "function") {
+			if (typeof action === 'function') {
 				// if user wants to chain commands that must be specified by returning false
-				return action({ stx, options }) !== false;
+				return action({ stx, options }) !== false
 			}
-		});
-};
+		})
+}
 /**
  * Global method to add a hot key handler. Hot keys are defined in `hotkeyConfig.hotkeys` in *js/defaultConfiguration.js*).
  * @memberof CIQ.UI.KeystrokeHub
@@ -4838,22 +4890,22 @@ CIQ.UI.KeystrokeHub.defaultHotKeys = function (key, hub, e = {}) {
  * @param  {function} handler Function to call when the hot key combination is pressed.
  * @param {CIQ.ChartEngine} stx A reference to the chart engine.
  */
-CIQ.UI.KeystrokeHub.addHotKeyHandler = function (identifier, handler, stx) {
-	CIQ.UI.observeProperty("uiContext", stx, ({ value: uiContext }) => {
-		if (!uiContext) return;
+CIQ.UI.KeystrokeHub.addHotKeyHandler = function(identifier, handler, stx) {
+	CIQ.UI.observeProperty('uiContext', stx, ({ value: uiContext }) => {
+		if (!uiContext) return
 		setTimeout(() => {
 			// Updated hotkey alias if available to action
 			const configKeyEntry = CIQ.getFromNS(
 				uiContext.config,
-				"hotkeyConfig.hotkeys",
+				'hotkeyConfig.hotkeys',
 				[]
-			).find(({ action }) => action === identifier);
+			).find(({ action }) => action === identifier)
 			if (configKeyEntry) {
-				configKeyEntry.action = handler;
+				configKeyEntry.action = handler
 			}
-		});
-	});
-};
+		})
+	})
+}
 /**
  * Default hotkey execution. Called from {@link CIQ.UI.KeystrokeHub.defaultHotKeys}.
  *
@@ -4864,157 +4916,157 @@ CIQ.UI.KeystrokeHub.addHotKeyHandler = function (identifier, handler, stx) {
  * @param {object} [params.options] Any options specified in the config
  * @return {boolean} Return true if command was executed, false if invalid command
  */
-CIQ.UI.KeystrokeHub.executeHotkeyCommand = function ({
+CIQ.UI.KeystrokeHub.executeHotkeyCommand = function({
 	stx,
 	action,
 	options = {}
 }) {
-	const { crosshair, candleWidth } = stx.layout;
-	const { left, right, panel } = stx.chart;
-	const height = stx.height - stx.xaxisHeight;
-	const { percent = 0, bars = 0 } = options;
-	const keystrokeHub = document.body.keystrokeHub;
-	const { topNode } = stx.uiContext;
+	const { crosshair, candleWidth } = stx.layout
+	const { left, right, panel } = stx.chart
+	const height = stx.height - stx.xaxisHeight
+	const { percent = 0, bars = 0 } = options
+	const keystrokeHub = document.body.keystrokeHub
+	const { topNode } = stx.uiContext
 	const positionCrosshairs = ({ axis, direction = 1 } = {}) => {
-		const { cx, cy } = stx;
-		let change = 0; // default case: initial positioning, no adjustment
-		if (axis === "x") change = candleWidth * bars;
-		if (axis === "y") change = height * percent;
-		if (!(cx || cx === 0)) stx.cx = Math.round(stx.width / 2);
-		if (!(cy || cy === 0)) stx.cy = Math.round(height / 2);
+		const { cx, cy } = stx
+		let change = 0 // default case: initial positioning, no adjustment
+		if (axis === 'x') change = candleWidth * bars
+		if (axis === 'y') change = height * percent
+		if (!(cx || cx === 0)) stx.cx = Math.round(stx.width / 2)
+		if (!(cy || cy === 0)) stx.cy = Math.round(height / 2)
 		if (change) {
-			let newValue = stx["c" + axis] + change * direction;
-			newValue = Math.max(newValue, axis === "x" ? left + 1 : 0);
-			newValue = Math.min(newValue, axis === "x" ? right - 1 : height);
-			stx["c" + axis] = Math.round(newValue);
+			let newValue = stx['c' + axis] + change * direction
+			newValue = Math.max(newValue, axis === 'x' ? left + 1 : 0)
+			newValue = Math.min(newValue, axis === 'x' ? right - 1 : height)
+			stx['c' + axis] = Math.round(newValue)
 		}
-		stx.mousemoveinner(stx.resolveX(stx.cx), stx.resolveY(stx.cy));
-		stx.draw();
-	};
+		stx.mousemoveinner(stx.resolveX(stx.cx), stx.resolveY(stx.cy))
+		stx.draw()
+	}
 	const scrollChart = ({ direction = 1, page } = {}) => {
-		const { dataSet, scroll, maxTicks } = stx.chart;
-		let change = page ? maxTicks : bars;
-		change *= direction; // will flip negative if direction is -1
+		const { dataSet, scroll, maxTicks } = stx.chart
+		let change = page ? maxTicks : bars
+		change *= direction // will flip negative if direction is -1
 		if (scroll + change >= dataSet.length) {
-			stx.chart.scroll = dataSet.length;
+			stx.chart.scroll = dataSet.length
 		} else {
-			stx.chart.scroll += change;
+			stx.chart.scroll += change
 		}
-		stx.draw();
-		stx.headsUpHR();
-	};
+		stx.draw()
+		stx.headsUpHR()
+	}
 	const scrollYAxis = (direction = 1) => {
-		let change = height * percent * direction;
-		stx.chart.yAxis.scroll += change;
-		stx.draw();
-	};
+		let change = height * percent * direction
+		stx.chart.yAxis.scroll += change
+		stx.draw()
+	}
 	const zoomYAxis = (direction = 1) => {
-		const allAxes = [...panel.yaxisLHS, ...panel.yaxisRHS];
-		allAxes.forEach((axis) => {
-			let newZoom = axis.zoom + 25 * direction;
+		const allAxes = [...panel.yaxisLHS, ...panel.yaxisRHS]
+		allAxes.forEach(axis => {
+			let newZoom = axis.zoom + 25 * direction
 			// Prevent zooming past the "flip" boundary
-			if (newZoom < axis.height) axis.zoom = newZoom;
-		});
-		stx.draw();
-	};
+			if (newZoom < axis.height) axis.zoom = newZoom
+		})
+		stx.draw()
+	}
 
 	switch (action) {
-		case "up":
-			if (crosshair) positionCrosshairs({ axis: "y", direction: -1 });
-			else scrollYAxis();
-			break;
-		case "down":
-			if (crosshair) positionCrosshairs({ axis: "y" });
-			else scrollYAxis(-1);
-			break;
-		case "right":
-			if (crosshair) positionCrosshairs({ axis: "x" });
-			else scrollChart({ direction: -1 });
-			break;
-		case "left":
-			if (crosshair) positionCrosshairs({ axis: "x", direction: -1 });
-			else scrollChart();
-			break;
-		case "pageRight":
-			scrollChart({ direction: -1, page: true });
-			break;
-		case "pageLeft":
-			scrollChart({ page: true });
-			break;
-		case "zoomInXAxis":
-			if (stx.allowZoom) stx.zoomIn();
-			break;
-		case "zoomOutXAxis":
-			if (stx.allowZoom) stx.zoomOut();
-			break;
-		case "zoomInYAxis":
-			zoomYAxis(-1);
-			break;
-		case "zoomOutYAxis":
-			zoomYAxis();
-			break;
-		case "toggleCrosshairs":
-			const toggle = topNode.querySelector('cq-toggle[cq-member="crosshair"]');
-			if (toggle) toggle.dispatchEvent(new Event("stxtap"));
-			else stx.layout.crosshair = !stx.layout.crosshair;
-			positionCrosshairs();
-			break;
-		case "toggleContinuousZoom":
-			if (stx.continuousZoom) stx.continuousZoom.smartZoomToggle();
-			break;
-		case "symbolLookup":
+		case 'up':
+			if (crosshair) positionCrosshairs({ axis: 'y', direction: -1 })
+			else scrollYAxis()
+			break
+		case 'down':
+			if (crosshair) positionCrosshairs({ axis: 'y' })
+			else scrollYAxis(-1)
+			break
+		case 'right':
+			if (crosshair) positionCrosshairs({ axis: 'x' })
+			else scrollChart({ direction: -1 })
+			break
+		case 'left':
+			if (crosshair) positionCrosshairs({ axis: 'x', direction: -1 })
+			else scrollChart()
+			break
+		case 'pageRight':
+			scrollChart({ direction: -1, page: true })
+			break
+		case 'pageLeft':
+			scrollChart({ page: true })
+			break
+		case 'zoomInXAxis':
+			if (stx.allowZoom) stx.zoomIn()
+			break
+		case 'zoomOutXAxis':
+			if (stx.allowZoom) stx.zoomOut()
+			break
+		case 'zoomInYAxis':
+			zoomYAxis(-1)
+			break
+		case 'zoomOutYAxis':
+			zoomYAxis()
+			break
+		case 'toggleCrosshairs':
+			const toggle = topNode.querySelector('cq-toggle[cq-member="crosshair"]')
+			if (toggle) toggle.dispatchEvent(new Event('stxtap'))
+			else stx.layout.crosshair = !stx.layout.crosshair
+			positionCrosshairs()
+			break
+		case 'toggleContinuousZoom':
+			if (stx.continuousZoom) stx.continuousZoom.smartZoomToggle()
+			break
+		case 'symbolLookup':
 			let lookupNode = topNode.querySelector(
-				".ciq-search cq-lookup cq-lookup-input input"
-			);
-			if (lookupNode) lookupNode.focus();
-			break;
-		case "home":
-			stx.home();
-			stx.headsUpHR();
-			break;
-		case "end":
-			stx.chart.scroll = stx.chart.dataSet.length;
-			stx.draw();
-			stx.headsUpHR();
-			break;
-		case "delete":
+				'.ciq-search cq-lookup cq-lookup-input input'
+			)
+			if (lookupNode) lookupNode.focus()
+			break
+		case 'home':
+			stx.home()
+			stx.headsUpHR()
+			break
+		case 'end':
+			stx.chart.scroll = stx.chart.dataSet.length
+			stx.draw()
+			stx.headsUpHR()
+			break
+		case 'delete':
 			if (CIQ.ChartEngine.drawingLine) {
-				stx.undo();
+				stx.undo()
 			} else if (stx.anyHighlighted) {
-				stx.deleteHighlighted();
+				stx.deleteHighlighted()
 			} else {
-				return false;
+				return false
 			}
-			break;
-		case "escape":
+			break
+		case 'escape':
 			// Uncomment the following line if you wish to use the escape key to exit keyboard navigation.
 			// Do not use this if you enable the full screen feature as the escape key is reserved by the browser for exiting full screen mode.
 			// Check for modal state first because we don't want to deselect when escaping out of a menu
 			// if (!stx.uiContext.isModal()) keystrokeHub.tabOrderDeselect();
 			if (CIQ.ChartEngine.drawingLine) {
-				stx.undo();
+				stx.undo()
 			} else {
-				const uiManager = CIQ.UI.getUIManager();
-				if (uiManager) uiManager.closeMenu();
+				const uiManager = CIQ.UI.getUIManager()
+				if (uiManager) uiManager.closeMenu()
 			}
-			break;
-		case "keyboardNavigateDeselect":
-			keystrokeHub.tabOrderDeselect();
-			break;
-		case "keyboardNavigateNext":
-			keystrokeHub.tabIndexNext();
-			break;
-		case "keyboardNavigatePrevious":
-			keystrokeHub.tabIndexNext(true);
-			break;
-		case "keyboardNavigateClick":
-			keystrokeHub.tabOrderClickSelected();
-			break;
+			break
+		case 'keyboardNavigateDeselect':
+			keystrokeHub.tabOrderDeselect()
+			break
+		case 'keyboardNavigateNext':
+			keystrokeHub.tabIndexNext()
+			break
+		case 'keyboardNavigatePrevious':
+			keystrokeHub.tabIndexNext(true)
+			break
+		case 'keyboardNavigateClick':
+			keystrokeHub.tabOrderClickSelected()
+			break
 		default:
-			return false; // not captured
+			return false // not captured
 	}
-	return true;
-};
+	return true
+}
 /**
  * Queries elements assigned for keyboard navigation and adds references to an internal tab order
  * array.
@@ -5030,46 +5082,46 @@ CIQ.UI.KeystrokeHub.executeHotkeyCommand = function ({
  * @private
  * @since 8.2.0
  */
-CIQ.UI.KeystrokeHub.prototype.setTabOrderElements = function () {
+CIQ.UI.KeystrokeHub.prototype.setTabOrderElements = function() {
 	// Check for an existing selected element
-	let selectedElement = null;
+	let selectedElement = null
 	if (this.tabIndex !== 0) {
 		// An item is selected. Hold on to it in case its position in the array changes.
-		selectedElement = this.tabOrder[Math.abs(this.tabIndex)].element;
+		selectedElement = this.tabOrder[Math.abs(this.tabIndex)].element
 	}
 	// No element placed at index 0. This allows tabIndex to represent either a positive (selected)
 	// and negative (deselected) value for the selected element.
-	this.tabOrder = [null];
+	this.tabOrder = [null]
 	for (let idx = 0; idx < this.tabElementSelectors.length; idx++) {
 		const elements = this.context.topNode.querySelectorAll(
 			this.tabElementSelectors[idx]
-		);
+		)
 		for (let idx = 0; idx < elements.length; idx++) {
-			const element = elements[idx];
-			if (element.getAttribute("keyboard-navigation") === "false") continue;
+			const element = elements[idx]
+			if (element.getAttribute('keyboard-navigation') === 'false') continue
 			// Add a stxtap listener to the element to move the index to this element if click/tapped
 			element.addEventListener(
-				"stxtap",
-				function (element) {
+				'stxtap',
+				function(element) {
 					// Find the tabOrder index of the element
 					let targetIndex = this.tabOrder.findIndex(
-						(item) => item && item.element === element
-					);
+						item => item && item.element === element
+					)
 					if (targetIndex != this.tabIndex) {
 						// Something else received an interaction, likely with the mouse. Shift keyboard focus to this element.
-						this.tabOrderDeselect();
-						this.tabIndex = -targetIndex;
+						this.tabOrderDeselect()
+						this.tabIndex = -targetIndex
 					}
-					return true;
+					return true
 				}.bind(this, element)
-			);
+			)
 			this.tabOrder.push({
 				element: element
-			});
+			})
 		}
 	}
-	this.sortTabOrderElements(selectedElement);
-};
+	this.sortTabOrderElements(selectedElement)
+}
 /**
  * Sorts elements in the tabOrder array based on their screen position; first from left to right,
  * then from top to bottom.
@@ -5085,40 +5137,38 @@ CIQ.UI.KeystrokeHub.prototype.setTabOrderElements = function () {
  * @private
  * @since 8.3.0
  */
-CIQ.UI.KeystrokeHub.prototype.sortTabOrderElements = function (
-	elementToSelect
-) {
-	const isNeg = this.tabIndex < 0;
+CIQ.UI.KeystrokeHub.prototype.sortTabOrderElements = function(elementToSelect) {
+	const isNeg = this.tabIndex < 0
 	// If elementToSelect is not set, check for an existing selected element
 	if (!elementToSelect && this.tabIndex !== 0) {
 		// An item is selected. Hold on to it in case its position in the array changes.
 		if (this.tabOrder[Math.abs(this.tabIndex)])
-			elementToSelect = this.tabOrder[Math.abs(this.tabIndex)].element;
+			elementToSelect = this.tabOrder[Math.abs(this.tabIndex)].element
 	}
 	// Update each element position
-	this.tabOrder.forEach((tabItem) => {
-		if (!tabItem) return;
-		const { x, y, width, height } = tabItem.element.getBoundingClientRect();
-		tabItem.position = { x, y, width, height };
-	});
+	this.tabOrder.forEach(tabItem => {
+		if (!tabItem) return
+		const { x, y, width, height } = tabItem.element.getBoundingClientRect()
+		tabItem.position = { x, y, width, height }
+	})
 	// Sort elements based on their position
 	this.tabOrder.sort((a, b) => {
-		if (a === null || b === null) return;
+		if (a === null || b === null) return
 		return (
 			Math.floor(a.position.y / this.yNormalizationThreshold) -
 				Math.floor(b.position.y / this.yNormalizationThreshold) ||
 			a.position.x - b.position.x
-		);
-	});
+		)
+	})
 	// Update the tabIndex to match the previously selected element
 	if (elementToSelect)
 		this.tabOrder.forEach((tabItem, idx) => {
-			if (!tabItem) return;
+			if (!tabItem) return
 			if (tabItem.element == elementToSelect) {
-				this.tabIndex = isNeg ? -idx : idx;
+				this.tabIndex = isNeg ? -idx : idx
 			}
-		});
-};
+		})
+}
 /**
  * Sets an element as the active keyboard control element.
  *
@@ -5139,28 +5189,25 @@ CIQ.UI.KeystrokeHub.prototype.sortTabOrderElements = function (
  * @private
  * @since 8.2.0
  */
-CIQ.UI.KeystrokeHub.prototype.setKeyControlElement = function (
+CIQ.UI.KeystrokeHub.prototype.setKeyControlElement = function(
 	element,
 	skipDeselectionCallback
 ) {
 	// If there's no current element to disable and no new element to enable, give up.
-	if (!this.keyControlElement && !element) return;
+	if (!this.keyControlElement && !element) return
 	// Disable the element that has keyboard control
-	this.disableKeyControlElement(
-		this.keyControlElement,
-		skipDeselectionCallback
-	);
+	this.disableKeyControlElement(this.keyControlElement, skipDeselectionCallback)
 	if (element) {
 		// If provided, hand keyboard control to the new element
-		this.keyControlElement = element;
+		this.keyControlElement = element
 		// Pass a reference to the keystroke hub to the active element
-		this.keyControlElement.keyboardNavigation = this;
+		this.keyControlElement.keyboardNavigation = this
 		// Call onKeyBoardNavigation in the element if available. This is used to
 		// signal the component to take over with its internal keyboard navigation.
-		if (typeof this.keyControlElement.onKeyboardSelection === "function")
-			this.keyControlElement.onKeyboardSelection();
+		if (typeof this.keyControlElement.onKeyboardSelection === 'function')
+			this.keyControlElement.onKeyboardSelection()
 	}
-};
+}
 /**
  * Disables internal keyboard navigation in `element` by setting its internal `keyboardNavigation`
  * property to null. Calls the element's `onKeyboardDeselection` method if available.
@@ -5173,20 +5220,20 @@ CIQ.UI.KeystrokeHub.prototype.setKeyControlElement = function (
  * @private
  * @since 8.2.0
  */
-CIQ.UI.KeystrokeHub.prototype.disableKeyControlElement = function (
+CIQ.UI.KeystrokeHub.prototype.disableKeyControlElement = function(
 	element,
 	skipDeselectionCallback
 ) {
-	if (!element) return;
+	if (!element) return
 	// Remove keyboard navigation from the current element
 	if (
 		!skipDeselectionCallback &&
-		typeof element.onKeyboardDeselection === "function"
+		typeof element.onKeyboardDeselection === 'function'
 	)
-		element.onKeyboardDeselection();
+		element.onKeyboardDeselection()
 	// Remove the component reference to the keystroke hub
-	element.keyboardNavigation = null;
-};
+	element.keyboardNavigation = null
+}
 /**
  * Sets the currently selected element in the tab order to a deselected state and, if `eventsOnly`
  * is false, removes the selected element highlighting.
@@ -5201,19 +5248,19 @@ CIQ.UI.KeystrokeHub.prototype.disableKeyControlElement = function (
  * @private
  * @since 8.2.0
  */
-CIQ.UI.KeystrokeHub.prototype.tabOrderDeselect = function (eventsOnly) {
-	const { tabOrder, tabIndex } = this;
-	if (tabIndex <= 0) return;
+CIQ.UI.KeystrokeHub.prototype.tabOrderDeselect = function(eventsOnly) {
+	const { tabOrder, tabIndex } = this
+	if (tabIndex <= 0) return
 	if (tabOrder[tabIndex])
-		this.disableKeyControlElement(tabOrder[tabIndex].element);
+		this.disableKeyControlElement(tabOrder[tabIndex].element)
 	if (!eventsOnly) {
-		this.tabActiveElement = null;
-		this.tabIndex = -this.tabIndex;
-		this.highlightHide();
+		this.tabActiveElement = null
+		this.tabIndex = -this.tabIndex
+		this.highlightHide()
 		// Restore the mouse pointer
-		this.context.topNode.classList.remove("disable-mouse-pointer");
+		this.context.topNode.classList.remove('disable-mouse-pointer')
 	}
-};
+}
 /**
  * Highlights the selected element in the tab order.
  *
@@ -5221,11 +5268,11 @@ CIQ.UI.KeystrokeHub.prototype.tabOrderDeselect = function (eventsOnly) {
  * @private
  * @since 8.2.0
  */
-CIQ.UI.KeystrokeHub.prototype.tabOrderSelect = function () {
-	const { tabOrder, tabIndex } = this;
-	if (tabIndex <= 0) return;
-	this.highlightPosition(tabOrder[tabIndex]);
-};
+CIQ.UI.KeystrokeHub.prototype.tabOrderSelect = function() {
+	const { tabOrder, tabIndex } = this
+	if (tabIndex <= 0) return
+	this.highlightPosition(tabOrder[tabIndex])
+}
 /**
  * Simulates a mouse click on the selected element in the tab order.
  *
@@ -5233,16 +5280,16 @@ CIQ.UI.KeystrokeHub.prototype.tabOrderSelect = function () {
  * @private
  * @since 8.2.0
  */
-CIQ.UI.KeystrokeHub.prototype.tabOrderClickSelected = function () {
-	const { tabOrder, tabIndex } = this;
-	if (tabOrder.length <= 1) return;
-	if (tabIndex <= 0) return;
+CIQ.UI.KeystrokeHub.prototype.tabOrderClickSelected = function() {
+	const { tabOrder, tabIndex } = this
+	if (tabOrder.length <= 1) return
+	if (tabIndex <= 0) return
 	// Give key control to the selected element
-	this.setKeyControlElement(tabOrder[tabIndex].element);
+	this.setKeyControlElement(tabOrder[tabIndex].element)
 	// Simulate a click
-	tabOrder[tabIndex].element.dispatchEvent(new Event("pointerdown"));
-	tabOrder[tabIndex].element.dispatchEvent(new Event("pointerup"));
-};
+	tabOrder[tabIndex].element.dispatchEvent(new Event('pointerdown'))
+	tabOrder[tabIndex].element.dispatchEvent(new Event('pointerup'))
+}
 /**
  * Sets the keystroke hub tab index to the next available element. Elements that are not visible
  * are skipped. If the last element in the tab order is bypassed, indexing loops back to the
@@ -5256,37 +5303,37 @@ CIQ.UI.KeystrokeHub.prototype.tabOrderClickSelected = function () {
  * @private
  * @since 8.2.0
  */
-CIQ.UI.KeystrokeHub.prototype.tabIndexNext = function (reverse) {
-	if (this.tabOrder.length <= 1) return;
-	let setNextElement = function (self, reverse) {
+CIQ.UI.KeystrokeHub.prototype.tabIndexNext = function(reverse) {
+	if (this.tabOrder.length <= 1) return
+	let setNextElement = function(self, reverse) {
 		// Change the tabIndex
 		if (reverse === true) {
-			self.tabIndex--;
+			self.tabIndex--
 		} else {
-			self.tabIndex++;
+			self.tabIndex++
 		}
 		// Loop back when out of the array bounds
-		if (self.tabIndex >= self.tabOrder.length) self.tabIndex = 1;
-		if (self.tabIndex < 1) self.tabIndex = self.tabOrder.length - 1;
-	};
+		if (self.tabIndex >= self.tabOrder.length) self.tabIndex = 1
+		if (self.tabIndex < 1) self.tabIndex = self.tabOrder.length - 1
+	}
 	// Sort the elements based on screen position.
-	this.sortTabOrderElements();
+	this.sortTabOrderElements()
 	// A negative index represents a deselected state of that index
 	// invert it to select the current index rather than change it
 	// This allows the user to re-select a previously deselected item
 	if (this.tabIndex < 0) {
-		this.tabIndex = Math.abs(this.tabIndex);
+		this.tabIndex = Math.abs(this.tabIndex)
 	} else {
 		// If the tabIndex is already positive, deselect the current element but keep the index unchanged.
-		this.tabOrderDeselect(true);
-		setNextElement(this, reverse);
+		this.tabOrderDeselect(true)
+		setNextElement(this, reverse)
 	}
 	// If the current selected element isn't visible, find the next in line that is
 	while (!CIQ.trulyVisible(this.tabOrder[this.tabIndex].element)) {
-		setNextElement(this, reverse);
+		setNextElement(this, reverse)
 	}
-	this.tabOrderSelect();
-};
+	this.tabOrderSelect()
+}
 /**
  * Sets the size and position of the highlight DOM element to match the bounding box of the
  * active keyboard navigation element specified by `targetInfo.element`. If a highlight DOM
@@ -5306,16 +5353,16 @@ CIQ.UI.KeystrokeHub.prototype.tabIndexNext = function (reverse) {
  * @private
  * @since 8.2.0
  */
-CIQ.UI.KeystrokeHub.prototype.highlightPosition = function (targetInfo) {
+CIQ.UI.KeystrokeHub.prototype.highlightPosition = function(targetInfo) {
 	if (!targetInfo || !targetInfo.element || !targetInfo.position) {
-		const { tabOrder, tabIndex } = this;
+		const { tabOrder, tabIndex } = this
 		// Give up if nothing was passed and tabIndex is pointing to nothing
-		if (tabIndex <= 0) return;
-		targetInfo = tabOrder[tabIndex];
+		if (tabIndex <= 0) return
+		targetInfo = tabOrder[tabIndex]
 	}
-	this.tabActiveElement = targetInfo;
-	this.highlightAlign();
-};
+	this.tabActiveElement = targetInfo
+	this.highlightAlign()
+}
 /**
  * Positions the highlight DOM element using the coordinates and dimensions of the bounding
  * rectangle of the active keyboard navigation element.
@@ -5329,7 +5376,7 @@ CIQ.UI.KeystrokeHub.prototype.highlightPosition = function (targetInfo) {
  */
 
 // hide highlight on key stroke
-CIQ.UI.KeystrokeHub.prototype.highlightAlign = function () {
+CIQ.UI.KeystrokeHub.prototype.highlightAlign = function() {
 	// if (this.tabActiveElement) {
 	// 	// The element position can change over time, during a window resize for example. getBoundingClientRect
 	// 	// is called every time to ensire the highlight is aligned with the current position of the element.
@@ -5347,7 +5394,7 @@ CIQ.UI.KeystrokeHub.prototype.highlightAlign = function () {
 	// 		height: selectedElementRect.height + "px"
 	// 	});
 	// }
-};
+}
 /**
  * Creates a `cq-keyboard-selected-highlight` element if one does not already exist, and attaches
  * it to the top node of the chart UI context. If a `cq-keyboard-selected-highlight` element
@@ -5359,19 +5406,19 @@ CIQ.UI.KeystrokeHub.prototype.highlightAlign = function () {
  * @private
  * @since 8.2.0
  */
-CIQ.UI.KeystrokeHub.prototype.highlightCreate = function () {
+CIQ.UI.KeystrokeHub.prototype.highlightCreate = function() {
 	if (!this.highlightElement) {
 		this.highlightElement = document.createElement(
-			"cq-keyboard-selected-highlight"
-		);
-		this.context.topNode.appendChild(this.highlightElement);
+			'cq-keyboard-selected-highlight'
+		)
+		this.context.topNode.appendChild(this.highlightElement)
 	} else {
-		this.highlightElement.classList.remove("disabled");
+		this.highlightElement.classList.remove('disabled')
 	}
 	// Hide the mouse pointer
-	this.context.topNode.classList.add("disable-mouse-pointer");
-	return this.highlightElement;
-};
+	this.context.topNode.classList.add('disable-mouse-pointer')
+	return this.highlightElement
+}
 /**
  * Removes the `cq-keyboard-selected-highlight` element from the display.
  *
@@ -5379,18 +5426,18 @@ CIQ.UI.KeystrokeHub.prototype.highlightCreate = function () {
  * @private
  * @since 8.2.0
  */
-CIQ.UI.KeystrokeHub.prototype.highlightHide = function () {
-	if (this.highlightElement) this.highlightElement.classList.add("disabled");
-};
+CIQ.UI.KeystrokeHub.prototype.highlightHide = function() {
+	if (this.highlightElement) this.highlightElement.classList.add('disabled')
+}
 /**
  * Change the active context for the hub, for instance when dealing with multiple charts.
  *
  * @param {CIQ.UI.Context} context The context
  * @memberof CIQ.UI.KeystrokeHub
  */
-CIQ.UI.KeystrokeHub.prototype.setActiveContext = function (context) {
-	this.context = context;
-};
+CIQ.UI.KeystrokeHub.prototype.setActiveContext = function(context) {
+	this.context = context
+}
 /**
  * @param hub
  * @param key
@@ -5399,72 +5446,72 @@ CIQ.UI.KeystrokeHub.prototype.setActiveContext = function (context) {
  * @memberof CIQ.UI.KeystrokeHub
  * @private
  */
-CIQ.UI.KeystrokeHub.prototype.processKeyStrokeClaims = function (
+CIQ.UI.KeystrokeHub.prototype.processKeyStrokeClaims = function(
 	hub,
 	key,
 	e,
 	keystroke
 ) {
 	for (var i = claims.length - 1; i > -1; i--) {
-		var helper = claims[i].helper;
-		var response = helper.keyStroke(hub, key, e, keystroke);
+		var helper = claims[i].helper
+		var response = helper.keyStroke(hub, key, e, keystroke)
 		if (response) {
-			if (!response.allowDefault) e.preventDefault();
-			return true;
+			if (!response.allowDefault) e.preventDefault()
+			return true
 		}
 	}
-	return false;
-};
+	return false
+}
 /**
  * Handles keystrokes
  * @param  {Object} obj Event object
  * @memberof CIQ.UI.KeystrokeHub
  * @private
  */
-CIQ.UI.KeystrokeHub.prototype.handler = function (obj) {
-	var stx = this.context.stx;
-	if (stx.editingAnnotation) return;
+CIQ.UI.KeystrokeHub.prototype.handler = function(obj) {
+	var stx = this.context.stx
+	if (stx.editingAnnotation) return
 	// If the keystrokehub is associated with a specific element, then it will only
 	// process key events when that element is in focus
-	if (!this.infocus) return;
+	if (!this.infocus) return
 	var e = obj.e,
 		key = obj.key,
 		keystroke = obj.keystroke,
-		targetTagName = obj.e.target.tagName;
+		targetTagName = obj.e.target.tagName
 	switch (key) {
-		case "Shift":
-			stx.shift = keystroke.shift;
-			break;
-		case "Control":
-		case "Alt":
-			stx.ctrl = keystroke.ctrl;
-			break;
-		case "Meta":
-		case "Win":
-			stx.cmd = keystroke.cmd;
-			break;
-		case "CapsLock":
-			this.capsLock = !this.capsLock;
-			break;
+		case 'Shift':
+			stx.shift = keystroke.shift
+			break
+		case 'Control':
+		case 'Alt':
+			stx.ctrl = keystroke.ctrl
+			break
+		case 'Meta':
+		case 'Win':
+			stx.cmd = keystroke.cmd
+			break
+		case 'CapsLock':
+			this.capsLock = !this.capsLock
+			break
 		default:
-			break;
+			break
 	}
-	let escTabPress = e.key === "Escape" || e.key === "Esc" || e.key === "Tab";
+	let escTabPress = e.key === 'Escape' || e.key === 'Esc' || e.key === 'Tab'
 	// process default claims before added claims
 	if (
 		this.params.cb &&
 		// Allow an escape or tab press on an input field.
-		((targetTagName === "INPUT" && escTabPress) || targetTagName !== "INPUT") &&
-		targetTagName !== "TEXTAREA" &&
+		((targetTagName === 'INPUT' && escTabPress) || targetTagName !== 'INPUT') &&
+		targetTagName !== 'TEXTAREA' &&
 		!this.context.isLegendKeyboardActive() &&
 		!(this.context.isModal() && !escTabPress)
 	) {
-		if (this.params.cb(key, this, e)) return e.preventDefault();
+		if (this.params.cb(key, this, e)) return e.preventDefault()
 	}
 	if (!CIQ.ChartEngine.drawingLine) {
-		if (this.processKeyStrokeClaims(this, key, e, keystroke)) return;
+		if (this.processKeyStrokeClaims(this, key, e, keystroke)) return
 	}
-};
+}
 /**
  * Self-registering global web component that manages the overall UI on the attached `div` tag.
  *
@@ -5496,16 +5543,16 @@ class UIManager extends HTMLElement {
 	 * @constructor
 	 */
 	constructor() {
-		super();
-		this.activeMenuStack = [];
-		this.registeredForResize = [];
-		this.keystrokehub = null;
-		CIQ.installTapEvent(document.body, { preventUnderlayClick: false });
-		var self = this;
+		super()
+		this.activeMenuStack = []
+		this.registeredForResize = []
+		this.keystrokehub = null
+		CIQ.installTapEvent(document.body, { preventUnderlayClick: false })
+		var self = this
 		function handleTap() {
-			self.closeTopMenu();
+			self.closeTopMenu()
 		}
-		document.body.addEventListener("stxtap", handleTap);
+		document.body.addEventListener('stxtap', handleTap)
 	}
 	/**
 	 * Attaches a "resize" event listener to an individual component as part of the context.
@@ -5518,18 +5565,18 @@ class UIManager extends HTMLElement {
 	 * @alias attachedCallback
 	 */
 	connectedCallback() {
-		var self = this;
-		this.resize = function () {
-			var rr = self.registeredForResize;
+		var self = this
+		this.resize = function() {
+			var rr = self.registeredForResize
 			for (var i = 0; i < rr.length; i++) {
-				if (typeof rr[i].resize == "function") rr[i].resize();
+				if (typeof rr[i].resize == 'function') rr[i].resize()
 			}
-		};
-		window.addEventListener("resize", this.resize);
+		}
+		window.addEventListener('resize', this.resize)
 		if (document.body.contains(this)) {
 			// cq-ui-manager tag exists, must want old way of loading components
-			CIQ.UI.registerComponentsImmediately = true;
-			CIQ.UI.ensureComponentsRegistered();
+			CIQ.UI.registerComponentsImmediately = true
+			CIQ.UI.ensureComponentsRegistered()
 		}
 	}
 	/**
@@ -5543,7 +5590,7 @@ class UIManager extends HTMLElement {
 	 * @memberof CIQ.UI.UIManager
 	 */
 	disconnectedCallback() {
-		window.removeEventListener("resize", this.resize);
+		window.removeEventListener('resize', this.resize)
 	}
 	/**
 	 * Closes the current active menu and resets the active menu stack.
@@ -5559,30 +5606,30 @@ class UIManager extends HTMLElement {
 	 * @alias closeMenu
 	 */
 	closeMenu(menu) {
-		var activeMenuStack = this.activeMenuStack;
-		var closeThese = [];
+		var activeMenuStack = this.activeMenuStack
+		var closeThese = []
 		if (menu) {
 			// if menu is specified then close it
-			closeThese.push(menu);
+			closeThese.push(menu)
 			// along with any active parent menus
-			menu = menu.parentElement;
+			menu = menu.parentElement
 			while (menu) {
-				if (menu.matches("cq-menu") && menu.active) closeThese.push(menu);
-				menu = menu.parentElement;
+				if (menu.matches('cq-menu') && menu.active) closeThese.push(menu)
+				menu = menu.parentElement
 			}
 		} else {
 			// close them all if no menu is specified
-			closeThese = activeMenuStack;
+			closeThese = activeMenuStack
 		}
 		// hide all the items we've decided to close
 		for (var j = 0; j < closeThese.length; j++) {
-			closeThese[j].hide();
+			closeThese[j].hide()
 		}
 		// filter out the ones that are inactive
-		this.activeMenuStack = activeMenuStack.filter(function (item) {
-			return item.active;
-		});
-		this.ifAllClosed();
+		this.activeMenuStack = activeMenuStack.filter(function(item) {
+			return item.active
+		})
+		this.ifAllClosed()
 	}
 	/**
 	 * Closes the menu that is at the top of the active menu stack.
@@ -5605,24 +5652,24 @@ class UIManager extends HTMLElement {
 	 * </cq-dialog>
 	 */
 	closeTopMenu() {
-		var activeMenuStack = this.activeMenuStack;
-		if (!activeMenuStack.length) return;
-		var menu = activeMenuStack[activeMenuStack.length - 1];
+		var activeMenuStack = this.activeMenuStack
+		if (!activeMenuStack.length) return
+		var menu = activeMenuStack[activeMenuStack.length - 1]
 		// If the top menu is a dialog, and isn't active yet then it has just been added, don't remove it
-		var self = this;
+		var self = this
 		if (!menu.isDialog || menu.active) {
-			activeMenuStack.pop();
-			menu.hide();
-			if (menu.onClose) menu.onClose();
-			setTimeout(function () {
-				self.ifAllClosed(); // Put this in a timeout so that a click on the body doesn't start a drawing
-			}, 0);
+			activeMenuStack.pop()
+			menu.hide()
+			if (menu.onClose) menu.onClose()
+			setTimeout(function() {
+				self.ifAllClosed() // Put this in a timeout so that a click on the body doesn't start a drawing
+			}, 0)
 		}
-		var close = menu.getAttribute("cq-close-top");
+		var close = menu.getAttribute('cq-close-top')
 		if (close) {
-			CIQ.climbUpDomTree(menu.parentElement, close).forEach(function (m) {
-				self.closeMenu(m);
-			});
+			CIQ.climbUpDomTree(menu.parentElement, close).forEach(function(m) {
+				self.closeMenu(m)
+			})
 		}
 	}
 	/**
@@ -5639,12 +5686,12 @@ class UIManager extends HTMLElement {
 	 */
 	findLifts(menu) {
 		return CIQ.UI.$(
-			Array.from(menu.querySelectorAll("*[cq-lift]")).filter(function (lift) {
+			Array.from(menu.querySelectorAll('*[cq-lift]')).filter(function(lift) {
 				// only valid if the closest cq-menu or cq-dialog parent is the menu itself
 				// otherwise the lift is in a nested menu
-				return lift.closest("cq-menu,cq-dialog") == menu;
+				return lift.closest('cq-menu,cq-dialog') == menu
 			})
-		);
+		)
 	}
 	/**
 	 * Ends modal mode if there are no active menus. See also {@link CIQ.ChartEngine#modalEnd}.
@@ -5654,17 +5701,17 @@ class UIManager extends HTMLElement {
 	 */
 	ifAllClosed() {
 		if (!this.activeMenuStack.length) {
-			Array.from(document.querySelectorAll("cq-context,*[cq-context]")).forEach(
-				function (context) {
+			Array.from(document.querySelectorAll('cq-context,*[cq-context]')).forEach(
+				function(context) {
 					if (
 						context.CIQ &&
 						context.CIQ.UI &&
 						context.CIQ.UI.context &&
 						context.CIQ.UI.context.stx
 					)
-						context.CIQ.UI.context.stx.modalEnd();
+						context.CIQ.UI.context.stx.modalEnd()
 				}
-			);
+			)
 		}
 	}
 	/**
@@ -5683,8 +5730,8 @@ class UIManager extends HTMLElement {
 	 * @alias lift
 	 */
 	lift(element) {
-		var n = element;
-		if (!n) return;
+		var n = element
+		if (!n) return
 		n.remember = {
 			parentNode: n.parentNode,
 			css: {
@@ -5696,24 +5743,24 @@ class UIManager extends HTMLElement {
 				width: n.style.width,
 				opacity: n.style.opacity
 			}
-		};
-		var offset = n.getBoundingClientRect();
-		var height = n.scrollHeight;
-		n.remove();
-		n.reduceMenuHeight = 5;
+		}
+		var offset = n.getBoundingClientRect()
+		var height = n.scrollHeight
+		n.remove()
+		n.reduceMenuHeight = 5
 		Object.assign(n.style, {
-			position: "absolute",
-			display: "block",
-			left: offset.left + "px",
-			top: offset.top + "px",
-			height: height + "px",
+			position: 'absolute',
+			display: 'block',
+			left: offset.left + 'px',
+			top: offset.top + 'px',
+			height: height + 'px',
 			opacity: 1
-		});
-		document.body.appendChild(n);
-		if (typeof n.resize != "undefined") n.resize();
-		Array.from(n.querySelectorAll("cq-scroll")).forEach(function (scroll) {
-			scroll.resize();
-		});
+		})
+		document.body.appendChild(n)
+		if (typeof n.resize != 'undefined') n.resize()
+		Array.from(n.querySelectorAll('cq-scroll')).forEach(function(scroll) {
+			scroll.resize()
+		})
 	}
 	/**
 	 * Opens a menu item within the chart {@link CIQ.UI.Context}.
@@ -5730,23 +5777,23 @@ class UIManager extends HTMLElement {
 	 */
 	openMenu(menu, params) {
 		// Find the first input box, if any, and give focus
-		setTimeout(function () {
-			var input = menu.querySelector("input[cq-focus]:first-child");
-			if (input) input.focus();
-		}, 0);
-		this.activeMenuStack.push(menu);
-		menu.show(params);
-		Array.from(document.querySelectorAll("cq-context,*[cq-context]")).forEach(
-			function (context) {
+		setTimeout(function() {
+			var input = menu.querySelector('input[cq-focus]:first-child')
+			if (input) input.focus()
+		}, 0)
+		this.activeMenuStack.push(menu)
+		menu.show(params)
+		Array.from(document.querySelectorAll('cq-context,*[cq-context]')).forEach(
+			function(context) {
 				if (
 					context.CIQ &&
 					context.CIQ.UI &&
 					context.CIQ.UI.context &&
 					context.CIQ.UI.context.stx
 				)
-					context.CIQ.UI.context.stx.modalBegin();
+					context.CIQ.UI.context.stx.modalBegin()
 			}
-		);
+		)
 	}
 	/**
 	 * Registers a resize event listener for `element`.
@@ -5760,7 +5807,7 @@ class UIManager extends HTMLElement {
 	 * @private
 	 */
 	registerForResize(element) {
-		this.registeredForResize.push(element);
+		this.registeredForResize.push(element)
 	}
 	/**
 	 * Restores `element` to its position in the DOM tree before the element was lifted. Also
@@ -5773,11 +5820,11 @@ class UIManager extends HTMLElement {
 	 * @alias restoreLift
 	 */
 	restoreLift(element) {
-		if (!element) return;
-		var remember = element.remember;
-		element.remove();
-		Object.assign(element.style, remember.css);
-		remember.parentNode.appendChild(element);
+		if (!element) return
+		var remember = element.remember
+		element.remove()
+		Object.assign(element.style, remember.css)
+		remember.parentNode.appendChild(element)
 	}
 	/**
 	 * Gets the topmost menu in the active menu stack.
@@ -5792,9 +5839,9 @@ class UIManager extends HTMLElement {
 	 * @alias topMenu
 	 */
 	topMenu() {
-		var activeMenuStack = this.activeMenuStack;
-		if (!activeMenuStack.length) return null;
-		return activeMenuStack[activeMenuStack.length - 1];
+		var activeMenuStack = this.activeMenuStack
+		if (!activeMenuStack.length) return null
+		return activeMenuStack[activeMenuStack.length - 1]
 	}
 	/**
 	 * Unregisters the resize event listener for `element`.
@@ -5806,16 +5853,16 @@ class UIManager extends HTMLElement {
 	 * @private
 	 */
 	unregisterForResize(element) {
-		var rr = this.registeredForResize;
+		var rr = this.registeredForResize
 		for (var i = 0; i < rr.length; i++) {
 			if (rr[i] === element) {
-				rr.splice(i, 1);
-				return;
+				rr.splice(i, 1)
+				return
 			}
 		}
 	}
 }
-CIQ.UI.UIManager = UIManager;
+CIQ.UI.UIManager = UIManager
 /**
  * Obtains a reference to the document's [cq-ui-manager]{@link WebComponents.cq-ui-manager}
  * instance or, if one does not exist, creates an instance.
@@ -5828,18 +5875,18 @@ CIQ.UI.UIManager = UIManager;
  * @memberof CIQ.UI
  * @since 7.5.0
  */
-CIQ.UI.getUIManager = function () {
-	if (CIQ.UI._uiManager) return CIQ.UI._uiManager;
-	let uiManager = document.querySelector("cq-ui-manager");
+CIQ.UI.getUIManager = function() {
+	if (CIQ.UI._uiManager) return CIQ.UI._uiManager
+	let uiManager = document.querySelector('cq-ui-manager')
 	if (!uiManager) {
 		// if node has not been attached create and initiate uiManager
-		uiManager = new CIQ.UI.UIManager();
-		uiManager.connectedCallback();
+		uiManager = new CIQ.UI.UIManager()
+		uiManager.connectedCallback()
 	}
-	CIQ.UI._uiManager = uiManager;
-	return uiManager;
-};
-customElements.define("cq-ui-manager", UIManager);
+	CIQ.UI._uiManager = uiManager
+	return uiManager
+}
+customElements.define('cq-ui-manager', UIManager)
 // extract methods to use as functions
 const {
 	qs,
@@ -5847,7 +5894,7 @@ const {
 	channelWrite,
 	channelRead,
 	channelSubscribe
-} = CIQ.UI.BaseComponent.prototype;
+} = CIQ.UI.BaseComponent.prototype
 /**
  * The Chart class contains a collection of methods used to instantiate and configure charts
  * and the chart user interface.
@@ -5878,51 +5925,51 @@ class Chart {
 	 * @since 7.5.0
 	 */
 	createChartAndUI({ container, config }) {
-		if (!container) container = document.body;
-		if (config && !config.chartId) config.chartId = container.id;
-		const contextContainer = getContextContainer(container);
+		if (!container) container = document.body
+		if (config && !config.chartId) config.chartId = container.id
+		const contextContainer = getContextContainer(container)
 		const stx = CIQ.ChartEngine.create({
-			container: qs(".chartContainer", contextContainer),
+			container: qs('.chartContainer', contextContainer),
 			config,
 			deferLoad: true
-		});
-		CIQ.UI.scrollbarStyling = config.scrollbarStyling;
-		CIQ.UI.ensureComponentsRegistered();
-		const uiContext = new CIQ.UI.Context(stx, contextContainer);
-		uiContext.config = config;
-		container.context = uiContext; // make context available for grid
+		})
+		CIQ.UI.scrollbarStyling = config.scrollbarStyling
+		CIQ.UI.ensureComponentsRegistered()
+		const uiContext = new CIQ.UI.Context(stx, contextContainer)
+		uiContext.config = config
+		container.context = uiContext // make context available for grid
 		// create UI helpers
-		new CIQ.UI.Layout(uiContext);
-		new CIQ.UI.StudyEdit(null, uiContext);
+		new CIQ.UI.Layout(uiContext)
+		new CIQ.UI.StudyEdit(null, uiContext)
 		new CIQ.UI.SentimentLook(null, uiContext)
-		this.initLookup(uiContext);
-		this.initContainerListeners(uiContext);
-		this.initEventMarkers(uiContext);
-		this.initDrawingTools(uiContext);
-		this.initDrawingEditListeners(uiContext);
-		this.initDialogHandler(uiContext);
-		this.initColorPicker();
-		this.initExtensions({ stx, uiContext, config, type: "plugins" });
-		
-		this.loadChart(uiContext);
-		if (config.language) CIQ.I18N.setLanguage(stx, config.language);
-		CIQ.UI.BaseComponent.buildReverseBindings(contextContainer);
-		contextContainer.bindingInitiated = true;
-		CIQ.UI.begin(config.onWebComponentsReady); // initiates webcomponent taps and binding
+		this.initLookup(uiContext)
+		this.initContainerListeners(uiContext)
+		this.initEventMarkers(uiContext)
+		this.initDrawingTools(uiContext)
+		this.initDrawingEditListeners(uiContext)
+		this.initDialogHandler(uiContext)
+		this.initColorPicker()
+		this.initExtensions({ stx, uiContext, config, type: 'plugins' })
+
+		this.loadChart(uiContext)
+		if (config.language) CIQ.I18N.setLanguage(stx, config.language)
+		CIQ.UI.BaseComponent.buildReverseBindings(contextContainer)
+		contextContainer.bindingInitiated = true
+		CIQ.UI.begin(config.onWebComponentsReady) // initiates webcomponent taps and binding
 		// Call to setTabOrderElements is moved to the event queue so the dom has a chance to render
-		window.setTimeout(function () {
+		window.setTimeout(function() {
 			// Update the keystrokeHub tabOrder array
-			document.body.keystrokeHub.setTabOrderElements();
-		}, 0);
-		return uiContext;
+			document.body.keystrokeHub.setTabOrderElements()
+		}, 0)
+		return uiContext
 		function getContextContainer(container) {
 			if (
 				container.nodeName.match(/cq-context/i) ||
-				container.getAttribute("cq-container")
+				container.getAttribute('cq-container')
 			) {
-				return container;
+				return container
 			}
-			return container.querySelector("cq-context, [cq-context]");
+			return container.querySelector('cq-context, [cq-context]')
 		}
 	}
 	/**
@@ -5939,35 +5986,31 @@ class Chart {
 		const {
 			config: {
 				channels: {
-					breakpoint = "channel.breakpoint",
-					sidenavSize = "channel.sidenavSize",
-					sidepanelSize = "channel.sidepanelSize",
-					drawingPalettes = "channel.drawingPalettes",
-					pluginPanelHeight = "channel.pluginPanelHeight"
+					breakpoint = 'channel.breakpoint',
+					sidenavSize = 'channel.sidenavSize',
+					sidepanelSize = 'channel.sidepanelSize',
+					drawingPalettes = 'channel.drawingPalettes',
+					pluginPanelHeight = 'channel.pluginPanelHeight'
 				} = {}
 			} = {},
 			stx,
 			topNode: contextContainer
-		} = uiContext;
+		} = uiContext
 		CIQ.UI.addResizeListener(contextContainer, () =>
 			this.notifySizeChanges(uiContext)
-		);
-		this.notifySizeChanges(uiContext);
-		channelSubscribe(breakpoint, this.breakpointSetter(uiContext), stx);
-		channelSubscribe(sidenavSize, this.sidenavSizeSetter(uiContext), stx);
-		channelSubscribe(sidepanelSize, this.sidepanelSizeSetter(uiContext), stx);
-		channelSubscribe(drawingPalettes, this.chartPositionSetter(uiContext), stx);
-		channelSubscribe(
-			pluginPanelHeight,
-			this.chartAreaTopSetter(uiContext),
-			stx
-		);
-		const keystrokeHub = this.initKeystrokeHub(uiContext);
+		)
+		this.notifySizeChanges(uiContext)
+		channelSubscribe(breakpoint, this.breakpointSetter(uiContext), stx)
+		channelSubscribe(sidenavSize, this.sidenavSizeSetter(uiContext), stx)
+		channelSubscribe(sidepanelSize, this.sidepanelSizeSetter(uiContext), stx)
+		channelSubscribe(drawingPalettes, this.chartPositionSetter(uiContext), stx)
+		channelSubscribe(pluginPanelHeight, this.chartAreaTopSetter(uiContext), stx)
+		const keystrokeHub = this.initKeystrokeHub(uiContext)
 		const keystrokeHubSetter = this.getKeystrokeHubSetter(
 			uiContext,
 			keystrokeHub
-		);
-		contextContainer.addEventListener("mouseover", keystrokeHubSetter);
+		)
+		contextContainer.addEventListener('mouseover', keystrokeHubSetter)
 	}
 	/**
 	 * Creates a symbol change filter and attaches it to the chart UI context and lookup
@@ -5994,45 +6037,41 @@ class Chart {
 	 * @since 7.5.0
 	 */
 	initLookup(uiContext) {
-		const { config, topNode: contextContainer } = uiContext;
-		this.initKeystrokeHub(uiContext);
-		uiContext.changeSymbol = function (data, cb) {
-			const { stx, loader,node } = uiContext;
-			
+		const { config, topNode: contextContainer } = uiContext
+		this.initKeystrokeHub(uiContext)
+		uiContext.changeSymbol = function(data, cb) {
+			const { stx, loader, node } = uiContext
+
 			console.log('before createChartAndUI: ')
 			// to replace the useless loader
-			var loaderMain = document.querySelector(".loaderMain");
-			if (loaderMain) loaderMain.show();
+			var loaderMain = document.querySelector('.loaderMain')
+			if (loaderMain) loaderMain.show()
 			if (data.symbol == data.symbol.toLowerCase()) {
-				data.symbol = data.symbol.toUpperCase(); // set a pretty display version
+				data.symbol = data.symbol.toUpperCase() // set a pretty display version
 			}
-			const { removeSeries, loadError } = config.onNewSymbolLoad || {};
+			const { removeSeries, loadError } = config.onNewSymbolLoad || {}
 			if (removeSeries) {
 				Object.values(stx.chart.series)
 					.filter(removeSeries)
-					.forEach((series) => stx.removeSeries(series.id));
+					.forEach(series => stx.removeSeries(series.id))
 			}
-			stx.loadChart(data, { masterData: data._masterData }, function (err) {
+			stx.loadChart(data, { masterData: data._masterData }, function(err) {
 				// don't add mask when initiating a chart
 				// CIQ.hideCover()
 				// CIQ.nprogress.done()
-				var loaderMain = document.querySelector(".loaderMain");
-				if (loaderMain) loaderMain.hide();
+				var loaderMain = document.querySelector('.loaderMain')
+				if (loaderMain) loaderMain.hide()
 				if (err) {
-					if (loadError) loadError(err, uiContext);
-					return;
+					if (loadError) loadError(err, uiContext)
+					return
 				}
-				if (cb) cb(stx);
+				if (cb) cb(stx)
 				if (config.restore)
-					CIQ.ChartEngine.restoreDrawings(
-						stx,
-						stx.chart.symbol,
-						config.chartId
-					);
-			});
-		};
+					CIQ.ChartEngine.restoreDrawings(stx, stx.chart.symbol, config.chartId)
+			})
+		}
 		if (config.lookupDriver) {
-			uiContext.setLookupDriver(new config.lookupDriver());
+			uiContext.setLookupDriver(new config.lookupDriver())
 		}
 	}
 	/**
@@ -6050,14 +6089,14 @@ class Chart {
 	 */
 	initKeystrokeHub(uiContext) {
 		if (document.body.keystrokeHub) {
-			return document.body.keystrokeHub;
+			return document.body.keystrokeHub
 		}
 		document.body.keystrokeHub = new CIQ.UI.KeystrokeHub(
 			document.body,
 			uiContext,
 			{ cb: CIQ.UI.KeystrokeHub.defaultHotKeys }
-		);
-		return document.body.keystrokeHub;
+		)
+		return document.body.keystrokeHub
 	}
 	/**
 	 * Gets a callback that set the the active context of the keystroke hub based on the mouse
@@ -6077,17 +6116,17 @@ class Chart {
 	getKeystrokeHubSetter(uiContext, keystrokeHub) {
 		return function setKeystrokeHub() {
 			if (keystrokeHub.context === uiContext) {
-				return;
+				return
 			}
-			keystrokeHub.setActiveContext(uiContext);
-			qsa("cq-lookup").forEach((item) =>
-				item.removeAttribute("cq-keystroke-default")
-			);
-			qs("cq-menu.ciq-search cq-lookup", uiContext.topNode).setAttribute(
-				"cq-keystroke-default",
-				""
-			);
-		};
+			keystrokeHub.setActiveContext(uiContext)
+			qsa('cq-lookup').forEach(item =>
+				item.removeAttribute('cq-keystroke-default')
+			)
+			qs('cq-menu.ciq-search cq-lookup', uiContext.topNode).setAttribute(
+				'cq-keystroke-default',
+				''
+			)
+		}
 	}
 	/**
 	 * Subscribes to the dialog channel.
@@ -6102,38 +6141,38 @@ class Chart {
 	 * @since 7.5.0
 	 */
 	initDialogHandler(uiContext) {
-		const { config: { channels = {}, dialogs = {} } = {}, stx } = uiContext;
-		channelSubscribe(channels.dialog || "channel.dialog", handleDialog, stx);
+		const { config: { channels = {}, dialogs = {} } = {}, stx } = uiContext
+		channelSubscribe(channels.dialog || 'channel.dialog', handleDialog, stx)
 		function handleDialog({ type = null, params = {} } = {}) {
 			if (!type) {
-				return;
+				return
 			}
-			const itemConfig = dialogs[type] || dialogs[CIQ.makeCamelCase(type)];
+			const itemConfig = dialogs[type] || dialogs[CIQ.makeCamelCase(type)]
 			if (!itemConfig) {
-				return;
+				return
 			}
-			let el = qs(itemConfig.tag);
+			let el = qs(itemConfig.tag)
 			if (!el) {
 				// create and add to dialogs
-				const dialogs = getDialogContainer();
-				const dialogWrapper = document.createElement("cq-dialog");
-				el = document.createElement(itemConfig.tag);
+				const dialogs = getDialogContainer()
+				const dialogWrapper = document.createElement('cq-dialog')
+				el = document.createElement(itemConfig.tag)
 				Object.entries(itemConfig.attributes || {}).forEach(([name, value]) =>
 					el.setAttribute(name, value)
-				);
-				dialogWrapper.append(el);
-				dialogs.append(dialogWrapper);
+				)
+				dialogWrapper.append(el)
+				dialogs.append(dialogWrapper)
 			}
 			if (el && el.open) {
-				el.open(params);
+				el.open(params)
 			}
 			function getDialogContainer() {
-				let container = qs(".cq-dialogs");
-				if (container) return container;
-				container = document.createElement("div");
-				container.classList.add("cq-dialogs");
-				document.body.append(container);
-				return container;
+				let container = qs('.cq-dialogs')
+				if (container) return container
+				container = document.createElement('div')
+				container.classList.add('cq-dialogs')
+				document.body.append(container)
+				return container
 			}
 		}
 	}
@@ -6152,15 +6191,15 @@ class Chart {
 			stx,
 			config: { channels = {} } = {},
 			topNode: contextContainer
-		} = uiContext;
+		} = uiContext
 		channelSubscribe(
-			channels.drawing || "channel.drawing",
+			channels.drawing || 'channel.drawing',
 			setDrawingToolsAvailable,
 			stx
-		);
+		)
 		function setDrawingToolsAvailable(value) {
-			contextContainer.classList[value ? "add" : "remove"]("toolbar-on");
-			stx.resizeChart();
+			contextContainer.classList[value ? 'add' : 'remove']('toolbar-on')
+			stx.resizeChart()
 		}
 	}
 	/**
@@ -6174,30 +6213,30 @@ class Chart {
 	 * @since 7.5.0
 	 */
 	initDrawingEditListeners(uiContext) {
-		const { config: { channels = {} } = {}, stx } = uiContext;
-		const editHelper = new CIQ.UI.DrawingEdit(null, uiContext);
-		let preventAutoClose = true;
-		const drawingChannel = channels.drawing || "channel.drawing";
+		const { config: { channels = {} } = {}, stx } = uiContext
+		const editHelper = new CIQ.UI.DrawingEdit(null, uiContext)
+		let preventAutoClose = true
+		const drawingChannel = channels.drawing || 'channel.drawing'
 		editHelper.node.addEventListener(
-			"drawing-edit-begin",
-			function (event) {
-				if (channelRead(drawingChannel, stx)) return;
+			'drawing-edit-begin',
+			function(event) {
+				if (channelRead(drawingChannel, stx)) return
 				// if not already in drawing mode set it up so it closes on
-				preventAutoClose = false;
-				channelWrite(drawingChannel, true, stx);
+				preventAutoClose = false
+				channelWrite(drawingChannel, true, stx)
 			},
 			false
-		);
+		)
 		editHelper.node.addEventListener(
-			"drawing-edit-end",
-			function ({ detail }) {
-				if (preventAutoClose) return;
-				if (detail.action !== "edit") preventAutoClose = true;
-				if (detail.action !== "close") return;
-				channelWrite(drawingChannel, false, stx);
+			'drawing-edit-end',
+			function({ detail }) {
+				if (preventAutoClose) return
+				if (detail.action !== 'edit') preventAutoClose = true
+				if (detail.action !== 'close') return
+				channelWrite(drawingChannel, false, stx)
 			},
 			false
-		);
+		)
 	}
 	/**
 	 * Creates and appends a [cq-color-picker]{@link WebComponents.cq-color-picker} component
@@ -6208,9 +6247,9 @@ class Chart {
 	 * @since 7.5.0
 	 */
 	initColorPicker() {
-		const colorPicker = document.querySelector("cq-color-picker");
-		if (colorPicker) return;
-		document.body.append(document.createElement("cq-color-picker"));
+		const colorPicker = document.querySelector('cq-color-picker')
+		if (colorPicker) return
+		document.body.append(document.createElement('cq-color-picker'))
 	}
 	/**
 	 * Loads a chart with an initial symbol. When configured to restore the layout (which is
@@ -6250,48 +6289,48 @@ class Chart {
 				initialData
 			} = {},
 			loader
-		} = uiContext;
-		if (loader) loader.show();
+		} = uiContext
+		if (loader) loader.show()
 		if (restore) {
-			CIQ.ChartEngine.restorePreferences(stx, chartId || topNode.id);
+			CIQ.ChartEngine.restorePreferences(stx, chartId || topNode.id)
 			CIQ.ChartEngine.restoreLayout(
 				stx,
-				function () {
-					if (loader) loader.hide();
+				function() {
+					if (loader) loader.hide()
 					if (!stx.chart.symbol) {
-						loadSymbol();
-						return;
+						loadSymbol()
+						return
 					}
-					cbChartReady();
+					cbChartReady()
 				},
 				chartId
-			);
+			)
 		} else {
-			loadSymbol();
+			loadSymbol()
 		}
 		function loadSymbol() {
 			if (stx.crossSection) {
-				stx.setChartType("crosssection");
+				stx.setChartType('crosssection')
 			}
 			if (!initialSymbol) {
-				cbChartReady();
-				return;
+				cbChartReady()
+				return
 			}
 			const data =
-				typeof initialSymbol === "string"
+				typeof initialSymbol === 'string'
 					? { symbol: initialSymbol }
-					: initialSymbol;
-			data._masterData = initialData;
+					: initialSymbol
+			data._masterData = initialData
 			// **Load an initial symbol. Change to null or one of your choice
-			uiContext.changeSymbol(data, cbChartReady);
+			uiContext.changeSymbol(data, cbChartReady)
 		}
 		function cbChartReady() {
-			if (!onChartReady) return;
+			if (!onChartReady) return
 			// execute configuration callback on next tick
 			// as this function can be invoked synchronously, for example if there is no
 			// symbol in layout and default symbol is not providing, leading to configuration
 			// callback executed before call stack is cleard
-			setTimeout(() => onChartReady(stx));
+			setTimeout(() => onChartReady(stx))
 		}
 	}
 	/**
@@ -6317,45 +6356,45 @@ class Chart {
 				classList: contextClasses
 			},
 			config: { channels = {} } = {}
-		} = uiContext;
+		} = uiContext
 		// avoid notification if there are no changes in dimensions
 		const previous = channelRead(
-			channels.containerSize || "channel.containerSize",
+			channels.containerSize || 'channel.containerSize',
 			stx
-		);
+		)
 		if (
 			// has been set and is the same dimensions
 			previous &&
 			previous.width === width &&
 			previous.height === height
 		) {
-			return;
+			return
 		}
-		const breakpoint = this.getBreakpoint(width, height);
+		const breakpoint = this.getBreakpoint(width, height)
 		if (!contextClasses.contains(breakpoint[1])) {
 			channelWrite(
-				channels.breakpoint || "channel.breakpoint",
+				channels.breakpoint || 'channel.breakpoint',
 				breakpoint[1],
 				stx
-			);
+			)
 		}
 		if (breakpoint[0] !== stx.chart.breakpoint) {
 			// Move the second breakpoint channelWrite to the event queue so it doesn't immediately overwrite the first
 			window.setTimeout(() =>
 				channelWrite(
-					channels.breakpoint || "channel.breakpoint",
+					channels.breakpoint || 'channel.breakpoint',
 					breakpoint[0],
 					stx
 				)
-			);
-			stx.notifyBreakpoint(breakpoint[0]);
+			)
+			stx.notifyBreakpoint(breakpoint[0])
 		}
 		channelWrite(
-			channels.containerSize || "channel.containerSize",
+			channels.containerSize || 'channel.containerSize',
 			{ width, height },
 			stx
-		);
-		stx.resizeChart();
+		)
+		stx.resizeChart()
 	}
 	/**
 	 * Determines responsive design breakpoints based on numeric width and height values.
@@ -6384,15 +6423,15 @@ class Chart {
 	 */
 	getBreakpoint(width, height) {
 		//console.log('width: ',width)
-		let breakWidth = "break-sm";
-		if (width > 768) breakWidth = "break-lg";
-		else if (width > 584) breakWidth = "break-md";
+		let breakWidth = 'break-sm'
+		if (width > 768) breakWidth = 'break-lg'
+		else if (width > 584) breakWidth = 'break-md'
 		// If no height is provided, return the single string.
-		if (typeof height === "undefined") return breakWidth;
-		let breakHeight = "break-height-sm";
-		if (height > 768) breakHeight = "break-height-lg";
-		else if (height > 400) breakHeight = "break-height-md";
-		return [breakWidth, breakHeight];
+		if (typeof height === 'undefined') return breakWidth
+		let breakHeight = 'break-height-sm'
+		if (height > 768) breakHeight = 'break-height-lg'
+		else if (height > 400) breakHeight = 'break-height-md'
+		return [breakWidth, breakHeight]
 	}
 	/**
 	 * Initiates event marker functionality.
@@ -6404,13 +6443,13 @@ class Chart {
 	 * @since 7.5.0
 	 */
 	initEventMarkers(uiContext) {
-		const config = uiContext.config;
+		const config = uiContext.config
 		if (CIQ.UI.Markers) {
 			const implementation =
 				config.eventMarkersImplementation &&
-				new config.eventMarkersImplementation(uiContext.stx);
-			const menuItemSelector = config.selector.markersMenuItem;
-			new CIQ.UI.Markers(uiContext, { menuItemSelector, implementation });
+				new config.eventMarkersImplementation(uiContext.stx)
+			const menuItemSelector = config.selector.markersMenuItem
+			new CIQ.UI.Markers(uiContext, { menuItemSelector, implementation })
 		}
 	}
 	/**
@@ -6430,39 +6469,39 @@ class Chart {
 	 * @since 7.5.0
 	 */
 	initExtensions({ stx, uiContext, config, type }) {
-		const collection = config[type];
+		const collection = config[type]
 		Object.entries(collection)
 			.filter(([, params]) => !!params) // remove inactive addOns
 			.forEach(([itemName, params]) => {
-				const extensionName = params.moduleName || CIQ.capitalize(itemName);
+				const extensionName = params.moduleName || CIQ.capitalize(itemName)
 				try {
 					if (!CIQ[extensionName]) {
 						if (CIQ.debug) {
 							console.log(
 								`${extensionName} not available for ${type} with params:`,
 								params
-							);
+							)
 						}
-						return;
+						return
 					}
 					const extensionParams = Object.assign(
 						{ stx, context: uiContext },
 						params
-					);
-					const extension = new CIQ[extensionName](extensionParams);
-					CIQ.UI.activatePluginUI(stx, extensionName);
-					if (params.postInstall) params.postInstall({ uiContext, extension });
+					)
+					const extension = new CIQ[extensionName](extensionParams)
+					CIQ.UI.activatePluginUI(stx, extensionName)
+					if (params.postInstall) params.postInstall({ uiContext, extension })
 				} catch (err) {
 					if (CIQ.debug) {
 						console.error(
-							"Error configuring " + type + " using params ",
+							'Error configuring ' + type + ' using params ',
 							params,
-							"error",
+							'error',
 							err
-						);
+						)
 					}
 				}
-			});
+			})
 	}
 	/* #region UI element setters  */
 	/**
@@ -6477,15 +6516,15 @@ class Chart {
 	 * @since 7.5.0
 	 */
 	chartPositionSetter(uiContext) {
-		const chartContainer = qs(".chartContainer", uiContext.topNode);
+		const chartContainer = qs('.chartContainer', uiContext.topNode)
 		return function setSidenavSize(value) {
 			if (!value) {
-				return;
+				return
 			}
-			const { top, left } = value;
-			chartContainer.style.marginTop = top + "px";
-			chartContainer.style.marginLeft = left + "px";
-		};
+			const { top, left } = value
+			chartContainer.style.marginTop = top + 'px'
+			chartContainer.style.marginLeft = left + 'px'
+		}
 	}
 	/**
 	 * Returns a setter that updates the width of the side navigation panel by positioning the
@@ -6499,12 +6538,12 @@ class Chart {
 	 * @since 7.5.0
 	 */
 	sidenavSizeSetter(uiContext) {
-		const chartArea = qs(".ciq-chart-area", uiContext.topNode);
-		const stx = uiContext.stx;
+		const chartArea = qs('.ciq-chart-area', uiContext.topNode)
+		const stx = uiContext.stx
 		return function setSidenavSize(value) {
-			chartArea.style.left = value + "px";
-			stx.resizeChart();
-		};
+			chartArea.style.left = value + 'px'
+			stx.resizeChart()
+		}
 	}
 	/**
 	 * Returns a setter that updates the top position of the chart area (the HTML element that
@@ -6518,17 +6557,17 @@ class Chart {
 	 * @since 7.5.0
 	 */
 	chartAreaTopSetter(uiContext) {
-		const chartArea = qs(".ciq-chart-area", uiContext.topNode);
+		const chartArea = qs('.ciq-chart-area', uiContext.topNode)
 		// const { pluginPanelHeight } = uiContext.config.channels;
 		// const height = (channel) => channelRead(channel, uiContext.stx) || 0;
 		return function setTopHeight(value) {
 			const top = Object.values(value || {}).reduce(
 				(acc, item) => acc + item,
 				0
-			);
-			chartArea.style.marginTop = top + "px";
-			uiContext.stx.resizeChart();
-		};
+			)
+			chartArea.style.marginTop = top + 'px'
+			uiContext.stx.resizeChart()
+		}
 	}
 	/**
 	 * Returns a setter that updates the width of the side panel by setting the right position
@@ -6544,16 +6583,16 @@ class Chart {
 	 * @since 7.5.0
 	 */
 	sidepanelSizeSetter(uiContext) {
-		const chartArea = qs(".ciq-chart-area", uiContext.topNode);
+		const chartArea = qs('.ciq-chart-area', uiContext.topNode)
 		const analystViews =
-			qs("cq-analystviews", uiContext.topNode) ||
-			qs("cq-tradingcentral", uiContext.topNode); // backwards compatibility
-		const stx = uiContext.stx;
+			qs('cq-analystviews', uiContext.topNode) ||
+			qs('cq-tradingcentral', uiContext.topNode) // backwards compatibility
+		const stx = uiContext.stx
 		return function setSidepanelSize(value) {
-			chartArea.style.right = value + "px";
-			if (analystViews) analystViews.style.marginRight = value + "px";
-			stx.resizeChart();
-		};
+			chartArea.style.right = value + 'px'
+			if (analystViews) analystViews.style.marginRight = value + 'px'
+			stx.resizeChart()
+		}
 	}
 	/**
 	 * Returns a setter that updates the responsive break point of the top node of the chart
@@ -6568,21 +6607,21 @@ class Chart {
 	 */
 	breakpointSetter(uiContext) {
 		return function setBreakpointClass(value) {
-			const { classList: contextClasses } = uiContext.topNode;
+			const { classList: contextClasses } = uiContext.topNode
 			let breakpoints = [
-				["break-lg", "break-md", "break-sm"], // width breakpoints
-				["break-height-lg", "break-height-md", "break-height-sm"] // height breakpoints
-			];
-			breakpoints.forEach((breakpointGroup) => {
+				['break-lg', 'break-md', 'break-sm'], // width breakpoints
+				['break-height-lg', 'break-height-md', 'break-height-sm'] // height breakpoints
+			]
+			breakpoints.forEach(breakpointGroup => {
 				if (breakpointGroup.includes(value))
-					contextClasses.remove(...breakpointGroup);
-			});
-			uiContext.topNode.classList.add(value);
-		};
+					contextClasses.remove(...breakpointGroup)
+			})
+			uiContext.topNode.classList.add(value)
+		}
 	}
 	/* #endregion */
 }
-CIQ.UI.Chart = Chart;
+CIQ.UI.Chart = Chart
 /**
  * Approximates a subset of jQuery functionality.
  *
@@ -6599,220 +6638,220 @@ CIQ.UI.Chart = Chart;
 class Faquery {
 	constructor(input, invalid) {
 		if (invalid !== undefined)
-			console.log("CIQ.UI.$() only accepts one input parameter.");
-		let elements = [];
-		if (input instanceof Faquery) return input;
-		if (input instanceof Node) elements.push(input);
-		else if (input instanceof NodeList) elements = Array.from(input);
-		else if (input instanceof Array) elements = input;
-		else if (typeof input === "string")
-			elements = elements = Array.from(document.querySelectorAll(input));
-		const length = (this.length = elements.length);
+			console.log('CIQ.UI.$() only accepts one input parameter.')
+		let elements = []
+		if (input instanceof Faquery) return input
+		if (input instanceof Node) elements.push(input)
+		else if (input instanceof NodeList) elements = Array.from(input)
+		else if (input instanceof Array) elements = input
+		else if (typeof input === 'string')
+			elements = elements = Array.from(document.querySelectorAll(input))
+		const length = (this.length = elements.length)
 		for (let i = 0; i < length; i++) {
-			this[i] = elements[i];
+			this[i] = elements[i]
 		}
 	}
 	_(func, selector) {
-		const result = [];
-		const insertFunc = (j) => {
+		const result = []
+		const insertFunc = j => {
 			if (!selector || j.matches(selector)) {
-				if (!result.includes(j)) result.push(j);
+				if (!result.includes(j)) result.push(j)
 			}
-		};
-		for (let i = 0; i < this.length; i++) {
-			const el = this[i];
-			const newEl = Array.from(func(el));
-			newEl.forEach(insertFunc);
 		}
-		return new Faquery(result);
+		for (let i = 0; i < this.length; i++) {
+			const el = this[i]
+			const newEl = Array.from(func(el))
+			newEl.forEach(insertFunc)
+		}
+		return new Faquery(result)
 	}
 	addClass(classes) {
-		if (typeof classes == "string") {
-			classes = classes.split(" ");
+		if (typeof classes == 'string') {
+			classes = classes.split(' ')
 		}
-		classes.forEach((cls) =>
-			this._((el) => {
-				el.classList.add(cls);
-				return [el];
+		classes.forEach(cls =>
+			this._(el => {
+				el.classList.add(cls)
+				return [el]
 			})
-		);
-		return this;
+		)
+		return this
 	}
 	append(content, invalid) {
-		if (typeof invalid !== "undefined")
-			console.log("CIQ.UI.$#append only accepts one argument.");
+		if (typeof invalid !== 'undefined')
+			console.log('CIQ.UI.$#append only accepts one argument.')
 		if (content instanceof Array) {
 			for (let i = 0; i < content.length; i++) {
-				this.append(content[i]);
+				this.append(content[i])
 			}
-		} else if (typeof content === "string") {
-			return this._((el) => {
-				el[content[0] === "<" ? "innerHTML" : "innerText"] += content;
-				return [el];
-			});
+		} else if (typeof content === 'string') {
+			return this._(el => {
+				el[content[0] === '<' ? 'innerHTML' : 'innerText'] += content
+				return [el]
+			})
 		} else if (content instanceof HTMLElement || content instanceof Text) {
-			const result = this._((el) => {
-				el.appendChild(content.cloneNode(true));
-				return [el];
-			});
-			const lastEl = result[result.length - 1];
-			lastEl.replaceChild(content, lastEl.lastChild);
-			return result;
+			const result = this._(el => {
+				el.appendChild(content.cloneNode(true))
+				return [el]
+			})
+			const lastEl = result[result.length - 1]
+			lastEl.replaceChild(content, lastEl.lastChild)
+			return result
 		} else if (content instanceof Faquery) {
-			return this.append(Array.from(content));
+			return this.append(Array.from(content))
 		}
-		return this;
+		return this
 	}
 	attr(nameOrObject, value) {
-		if (typeof nameOrObject == "object") {
-			return this._((el) => {
-				Object.keys(nameOrObject).forEach((attr) =>
+		if (typeof nameOrObject == 'object') {
+			return this._(el => {
+				Object.keys(nameOrObject).forEach(attr =>
 					el.setAttribute(attr, nameOrObject[attr])
-				);
-				return [el];
-			});
-		} else if (typeof value == "undefined") {
-			if (!this[0]) return undefined;
-			const attrib = this[0].getAttribute(nameOrObject);
-			if (attrib === null) return undefined;
-			return attrib;
+				)
+				return [el]
+			})
+		} else if (typeof value == 'undefined') {
+			if (!this[0]) return undefined
+			const attrib = this[0].getAttribute(nameOrObject)
+			if (attrib === null) return undefined
+			return attrib
 		}
-		return this._((el) => {
-			el.setAttribute(nameOrObject, value);
-			return [el];
-		});
+		return this._(el => {
+			el.setAttribute(nameOrObject, value)
+			return [el]
+		})
 	}
 	children(selector) {
-		return this._((el) => el.children, selector);
+		return this._(el => el.children, selector)
 	}
 	css(nameOrObject, value) {
-		if (typeof nameOrObject == "object") {
-			return this._((el) => {
-				Object.assign(el.style, nameOrObject);
-				return [el];
-			});
-		} else if (typeof value == "undefined") {
-			return this[0] ? getComputedStyle(this[0])[nameOrObject] : undefined;
+		if (typeof nameOrObject == 'object') {
+			return this._(el => {
+				Object.assign(el.style, nameOrObject)
+				return [el]
+			})
+		} else if (typeof value == 'undefined') {
+			return this[0] ? getComputedStyle(this[0])[nameOrObject] : undefined
 		}
-		return this._((el) => {
-			el.style[nameOrObject] = value;
-			return [el];
-		});
+		return this._(el => {
+			el.style[nameOrObject] = value
+			return [el]
+		})
 	}
 	each(func) {
-		for (let i = 0; i < this.length; i++) func.call(this[i], i, this[i]);
-		return this;
+		for (let i = 0; i < this.length; i++) func.call(this[i], i, this[i])
+		return this
 	}
 	empty() {
-		return this._((el) => {
-			el.innerHTML = "";
-			return [el];
-		});
+		return this._(el => {
+			el.innerHTML = ''
+			return [el]
+		})
 	}
 	find(selector) {
 		return selector
-			? this._((el) => el.querySelectorAll(selector))
-			: new Faquery([]);
+			? this._(el => el.querySelectorAll(selector))
+			: new Faquery([])
 	}
 	hasClass(className) {
-		return this._((el) => el.classList.contains(className) && [el]).length > 0;
+		return this._(el => el.classList.contains(className) && [el]).length > 0
 	}
 	hide() {
-		return this._((el) => {
-			if (el.style.display !== "none") {
-				el.style.displayCache = el.style.display;
-				el.style.display = "none";
+		return this._(el => {
+			if (el.style.display !== 'none') {
+				el.style.displayCache = el.style.display
+				el.style.display = 'none'
 			}
-			return [el];
-		});
+			return [el]
+		})
 	}
 	html(value) {
-		return this.prop("innerHTML", value);
+		return this.prop('innerHTML', value)
 	}
 	nextAll(selector) {
-		return this._((el) => {
-			const children = Array.from(el.parentNode.children);
-			return children.slice(children.indexOf(el) + 1);
-		}, selector);
+		return this._(el => {
+			const children = Array.from(el.parentNode.children)
+			return children.slice(children.indexOf(el) + 1)
+		}, selector)
 	}
 	not(selector) {
-		return this._((el) => !el.matches(selector) && [el]);
+		return this._(el => !el.matches(selector) && [el])
 	}
 	parent(selector) {
-		return this._((el) => [el.parentNode], selector);
+		return this._(el => [el.parentNode], selector)
 	}
 	parents(selector) {
-		return this._((el) => CIQ.climbUpDomTree(el.parentElement, selector));
+		return this._(el => CIQ.climbUpDomTree(el.parentElement, selector))
 	}
 	prop(nameOrObject, value) {
-		if (typeof nameOrObject == "object") {
-			return this._((el) => {
+		if (typeof nameOrObject == 'object') {
+			return this._(el => {
 				Object.keys(nameOrObject).forEach(
-					(prop) => (el[prop] = nameOrObject[prop])
-				);
-				return [el];
-			});
-		} else if (typeof value == "undefined") {
-			return this[0] ? this[0][nameOrObject] : undefined;
+					prop => (el[prop] = nameOrObject[prop])
+				)
+				return [el]
+			})
+		} else if (typeof value == 'undefined') {
+			return this[0] ? this[0][nameOrObject] : undefined
 		}
-		return this._((el) => {
-			el[nameOrObject] = value;
-			return [el];
-		});
+		return this._(el => {
+			el[nameOrObject] = value
+			return [el]
+		})
 	}
 	remove(selector) {
-		Array.from(this).forEach((el) => {
-			if (!selector || el.matches(selector)) el.parentNode.removeChild(el);
-		});
-		return this;
+		Array.from(this).forEach(el => {
+			if (!selector || el.matches(selector)) el.parentNode.removeChild(el)
+		})
+		return this
 	}
 	removeAttr(attributes) {
-		if (typeof attributes == "string") {
-			attributes = attributes.split(" ");
+		if (typeof attributes == 'string') {
+			attributes = attributes.split(' ')
 		}
-		attributes.forEach((attr) =>
-			this._((el) => {
-				el.removeAttribute(attr);
-				return [el];
+		attributes.forEach(attr =>
+			this._(el => {
+				el.removeAttribute(attr)
+				return [el]
 			})
-		);
-		return this;
+		)
+		return this
 	}
 	removeClass(classes) {
-		if (typeof classes == "string") {
-			classes = classes.split(" ");
+		if (typeof classes == 'string') {
+			classes = classes.split(' ')
 		}
 		if (classes)
-			classes.forEach((cls) =>
-				this._((el) => {
-					el.classList.remove(cls);
-					return [el];
+			classes.forEach(cls =>
+				this._(el => {
+					el.classList.remove(cls)
+					return [el]
 				})
-			);
+			)
 		else
-			this._((el) => {
-				el.className = "";
-				return [el];
-			});
-		return this;
+			this._(el => {
+				el.className = ''
+				return [el]
+			})
+		return this
 	}
 	show() {
-		return this._((el) => {
-			if (el.style.display === "none") {
-				if (el.style.displayCache === undefined) el.style.display = "block";
+		return this._(el => {
+			if (el.style.display === 'none') {
+				if (el.style.displayCache === undefined) el.style.display = 'block'
 				else {
-					el.style.display = el.style.displayCache;
-					el.style.displayCache = undefined;
+					el.style.display = el.style.displayCache
+					el.style.displayCache = undefined
 				}
 			}
-			return [el];
-		});
+			return [el]
+		})
 	}
 	text(value) {
-		return this.prop("innerText", value);
+		return this.prop('innerText', value)
 	}
 	val(value) {
-		return this.prop("value", value);
+		return this.prop('value', value)
 	}
 }
 /**
@@ -6831,16 +6870,16 @@ class Faquery {
  * @memberof CIQ.UI
  * @since 8.1.0
  */
-CIQ.UI.$ = function (element, force) {
+CIQ.UI.$ = function(element, force) {
 	/* global $ */
-	if (!force && typeof $ === "function" && $.fn) {
+	if (!force && typeof $ === 'function' && $.fn) {
 		if (!usingJquery) {
-			console.log("Using jQuery.");
-			usingJquery = true;
+			console.log('Using jQuery.')
+			usingJquery = true
 		}
-		return $(element);
+		return $(element)
 	}
-	return new Faquery(element);
-};
-let usingJquery = false;
-export { CIQ };
+	return new Faquery(element)
+}
+let usingJquery = false
+export { CIQ }
