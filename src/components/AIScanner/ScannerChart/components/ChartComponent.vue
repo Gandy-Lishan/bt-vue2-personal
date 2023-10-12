@@ -4,7 +4,7 @@
 		<el-button></el-button> -->
 		<div class="chart_box" id="chart_box">
 			<div class="back">
-				<router-link to="/home/scannerai"><i class="el-icon-arrow-left"></i><span>Back to the stock scanner list</span></router-link>
+				<router-link to="/scannerai"><i class="el-icon-arrow-left"></i><span>Back to the stock scanner list</span></router-link>
 			</div>
 			<chart :symbol="symbol" :onChartReady="onChartReady" width="100%" height="100%"></chart>
 		</div>
@@ -16,6 +16,7 @@
 import chart from '@/components/common/chart/index.vue'
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 import jutils from 'jutils-src'
+import { isJson } from '@/utils'
 export default {
 	name: 'TVChartContainer',
 	props: {
@@ -28,6 +29,8 @@ export default {
 			indicator : '',
 			trades : [],
 			symbolUrl: '',
+			result_quotes: [],
+			periods: []
 		}
 	},
 	components: {
@@ -86,9 +89,7 @@ export default {
 			this.overrideStudyDef()
 			// 默认让indicator无法编辑
 			this.editStudies(false)
-
 			this.symbolUrl = CIQ.findSentiIndicator(null,CIQ.symbol)?CIQ.symbol:CIQ.findSentiIndicator(CIQ.symbol + ' Optix',null).url
-
 			CIQ.initiateChart([this.symbolUrl],this.other['date'],()=>{
 				try{
 					this.hideComponents()
@@ -102,6 +103,7 @@ export default {
 						{ period: 12, timeframe: 'Month' }
 					]
 					this.calculateBacktestHistory(this.other['EntryTradeDate'], periodArray,this.direction)
+					this.calculateZScore(this.other, periodArray, this.direction)
 					this.loadDefaultStudy().then(()=>{
 						this.loadMarker()
 					})
@@ -328,6 +330,451 @@ export default {
 			}
 			this.$store.commit('form/STORE_BACKTESTRESULT',backtestResult)
 		},
+		calculateZScore(dataSet, periodArray, direction) {
+      /*
+      periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
+      */
+      // masterData涓嶅寘鍚玦ndicator value,闃叉鏃爋hlcv鐨勬儏鍐
+      let period_dict = this.transformZScoreData(periodArray)
+      let quotes = CIQ.stxx.chart.masterData
+      for (var i in period_dict) {
+        quotes = this.generate_period_data(
+          period_dict[i].timeframe,
+          quotes,
+          period_dict[i].value,
+          direction
+        )
+      }
+      // 鏁版嵁鍒囩墖
+      // quotes = quotes.filter((x) => {
+      //   return this.start_date.getTime() <= x.DT.getTime()
+      // })
+      //鎶婁氦鏄撳垪琛ㄨ浆鎹㈡垚鏃堕棿鎴
+			const dateString = dataSet.EntryTradeDate
+      if(!dateString) return
+			// 将单引号替换为双引号以构成有效的 JSON 字符串
+			const validJsonString = dateString.replace(/'/g, "\"")
+
+			// 解析 JSON 字符串为数组
+			const dateArray = isJson(validJsonString) ? JSON.parse(validJsonString) : []
+      if(dateArray.length == 0) return
+      // for (var date in dateArray) {
+      //   var datatime = new Date(date)
+      //   var offset = datatime.getTimezoneOffset() * 60 * 1000
+      //   var entryDate = new Date(
+      //     datatime.setTime(datatime.getTime() + offset)
+      //   ).getTime()
+      //   dataTimeList.push(entryDate)
+      // }
+			// quotes = quotes.filter((x) => {
+      //   return new Date(dateArray[0]) <= new Date(x.DT)
+      // })
+      let used_quotes = quotes.map(
+        (x) => {
+					// 创建一个日期对象
+					const originalDate = new Date(x.DT);
+
+					// 获取年、月、日信息
+					const year = originalDate.getFullYear();
+					const month = (originalDate.getMonth() + 1).toString().padStart(2, '0'); // 月份从0开始，需要加1，并确保是两位数
+					const day = originalDate.getDate().toString().padStart(2, '0'); // 确保是两位数的日期 2020-10-10
+
+					// 构建新的日期格式
+					const formattedDate = `${year}-${month}-${day}`;
+					if(dateArray.includes(formattedDate)) return x
+			}
+      )
+			
+			// 使用filter()方法过滤掉空值项
+			used_quotes = used_quotes.filter(item => item !== null && item !== undefined && item !== '');
+      //鏇挎崲NaN
+      quotes = quotes.map((quote) => {
+        const updatedQuote = {}
+        for (const [key, value] of Object.entries(quote)) {
+          updatedQuote[key] = isNaN(value) ? -100 : value
+        }
+        return updatedQuote
+      })
+
+      let median_list = [],
+        positive_list = [],
+        max_loss_list = [],
+        max_gain_list = [],
+        z_score_list = []
+      for (var i in period_dict) {
+        let temp_median = this.calculate_median(
+          used_quotes.map((obj) => obj[period_dict[i].timeframe])
+        )
+        median_list.push(temp_median)
+        positive_list.push(
+          this.calculate_win_rate(
+            used_quotes.map((obj) => obj[period_dict[i].timeframe])
+          )
+        )
+        if (direction == 'Short') {
+          max_loss_list.push(
+            this.calculate_median(
+              used_quotes.map((obj) => obj['MaxGain' + period_dict[i].value])
+            )
+          )
+          max_gain_list.push(
+            this.calculate_median(
+              used_quotes.map((obj) => obj['MaxLoss' + period_dict[i].value])
+            )
+          )
+        } else {
+          max_loss_list.push(
+            this.calculate_median(
+              used_quotes.map((obj) => obj['MaxLoss' + period_dict[i].value])
+            )
+          )
+          max_gain_list.push(
+            this.calculate_median(
+              used_quotes.map((obj) => obj['MaxGain' + period_dict[i].value])
+            )
+          )
+        }
+
+        let temp_std = this.calculate_std(
+          used_quotes.map((obj) => obj[period_dict[i].timeframe])
+        )
+        let temp_mean = this.calculate_mean(
+          quotes.map((obj) => obj[period_dict[i].timeframe])
+        )
+        z_score_list.push(
+          parseFloat(
+            (
+              (temp_median - temp_mean) /
+              (temp_std / Math.sqrt(used_quotes.length))
+            ).toFixed(1)
+          )
+        )
+
+        //  console.log(period_dict[period_list[i]] + ': ',used_quotes.map(obj=>obj[period_dict[period_list[i]]]))
+
+        //  console.log('positive_list',positive_list)
+        //  console.log("MaxLoss" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxLoss" + period_list[i]]))
+        //  console.log("MaxGain" + period_list[i] + ': ',used_quotes.map(obj=>obj["MaxGain" + period_list[i]]))
+        //  console.log('max_loss_list',max_loss_list)
+        //  console.log('max_gain_list',max_gain_list)
+        //  console.log('z_score_list',z_score_list)
+      }
+      const res = period_dict.map((val, i) => ({
+        Period: val['timeframe'],
+        Median: median_list[i],
+        '% Positive': isNaN(positive_list[i]) ? '' : Math.round(positive_list[i] * 100) + ' %',
+        'Avg Max Loss': (!median_list[i] && median_list[i]!=0) ? NaN : max_loss_list[i],
+        'Avg Max Gain': (!median_list[i] && median_list[i]!=0) ? NaN : max_gain_list[i],
+        'Z-Score': z_score_list[i]
+      }))
+      this.result_quotes = res
+      this.generate_table_data()
+    },
+		generate_period_data(name, quotes, period, direction) {
+      // const field = this.tradePrice
+      const field = 'Open'
+      quotes = quotes.map((row, i) => {
+        if (i < quotes.length - period) {
+          //const change = parseFloat((100 * (quotes[i + period][field] / row[field] - 1)).toFixed(1))
+          const change = parseFloat(
+            (
+              ((direction == 'Short'
+                ? row[field] - quotes[i + period][field]
+                : quotes[i + period][field] - row[field]) /
+                row[field]) *
+              100
+            ).toFixed(1)
+          )
+          return {
+            ...row,
+            [field + period]: quotes[i + period][field],
+            [name]: (change==Infinity || change==-Infinity) ? 0 : change
+          }
+        } else {
+          return {
+            ...row,
+            [field + period]: NaN,
+            [name]: NaN
+          }
+        }
+      })
+      const minCloseArr = this.get_period_parm(
+        quotes.map((row) => row[field + period]),
+        'min',
+        period
+      )
+      const maxCloseArr = this.get_period_parm(
+        quotes.map((row) => row[field + period]),
+        'max',
+        period
+      )
+      quotes = quotes.map((row, i) => {
+        if (i >= period) {
+          const change = parseFloat(
+            (100 * (minCloseArr[i] / row[field] - 1)).toFixed(1)
+          )
+          return {
+            ...row,
+            ['MaxLoss' + period]: (change==Infinity || change==-Infinity) ? 0 : change
+          }
+        } else {
+          return {
+            ...row,
+            ['MaxLoss' + period]: NaN
+          }
+        }
+      })
+      quotes = quotes.map((row, i) => {
+        if (i >= period) {
+          const change = parseFloat(
+            (100 * (maxCloseArr[i] / row[field] - 1)).toFixed(1)
+          )
+          return {
+            ...row,
+            ['MaxGain' + period]: (change==Infinity || change==-Infinity) ? 0 : change
+          }
+        } else {
+          return {
+            ...row,
+            ['MaxGain' + period]: NaN
+          }
+        }
+      })
+
+      return quotes
+    },
+		calculate_win_rate(arr) {
+      arr = arr.filter(function (x) {
+        return !isNaN(x) // 鍓旈櫎NaN鍊約
+      })
+      if (arr.length == 0) return NaN
+
+      let return_series = arr.map((x) => (x > 0 ? 1 : 0))
+      return parseFloat(this.calculate_mean(return_series).toFixed(2))
+    },
+		calculate_mean(arr) {
+      if (arr.length == 0) return NaN
+      return arr.reduce((a, b) => a + b) / arr.length
+    },
+		calculate_median(arr) {
+      arr = arr.filter((n) => !isNaN(n))
+      if (arr.length == 0) return NaN
+      const mid = Math.floor(arr.length / 2)
+      const nums = [...arr].sort((a, b) => a - b)
+      return parseFloat(
+        (arr.length % 2 !== 0
+          ? nums[mid]
+          : (nums[mid - 1] + nums[mid]) / 2
+        ).toFixed(1)
+      )
+    },
+		calculate_std(arr) {
+      arr = arr.filter(function (x) {
+        return !isNaN(x) // 鍓旈櫎NaN鍊約
+      })
+      if (arr.length == 0) return NaN
+
+      const mean =
+        arr.reduce(function (a, b) {
+          return a + b
+        }) / arr.length // 璁＄畻骞冲潎鏁
+      const deviationArr = arr.map(function (x) {
+        return Math.pow(x - mean, 2)
+      })
+
+      const variance =
+        deviationArr.reduce(function (a, b) {
+          return a + b
+        }) /
+        (deviationArr.length - 1) // 璁＄畻鏂瑰樊锛屼娇鐢ㄨ嚜鐢卞害=1
+
+      const std = Math.sqrt(variance) // 璁＄畻鏍囧噯宸
+      return std
+    },
+		get_period_parm(dataSeries, paramType, period) {
+      const typeDict = {
+        max: Math.max,
+        min: Math.min,
+        mean: (arr) => arr.reduce((a, b) => a + b) / arr.length,
+        sum: (arr) => arr.reduce((a, b) => a + b)
+      }
+
+      const dataArr = []
+
+      for (let i = 0; i < dataSeries.length; i++) {
+        if (i >= period) {
+          const tmpData = typeDict[paramType](
+            ...dataSeries.slice(i - period, i).filter((n) => !isNaN(n))
+          )
+          dataArr.push(Number(tmpData.toFixed(3)))
+        } else {
+          dataArr.push(NaN)
+        }
+      }
+      return dataArr
+    },
+		transformZScoreData(data) {
+			const rowFrequency = 'Daily'
+      data = data.map(item => {
+        if (item.period % 252 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 252, timeframe: 'Year' }
+        }
+        if (item.period % 21 === 0 && item.timeframe === 'Day') {
+          return { period: item.period / 21, timeframe: 'Month' }
+        }
+        // if (item.period % 5 === 0 && item.timeframe === 'Day') {
+        //   return { period: item.period / 5, timeframe: 'Week' }
+        // }
+        if (item.period % 52 === 0 && item.timeframe === 'Week') {
+          return { period: item.period / 52, timeframe: 'Year' }
+        }
+        // if (item.period % 4 === 0 && item.timeframe === 'Week') {
+        //   return { period: item.period / 4, timeframe: 'Month' }
+        // }
+        if (item.period % 12 === 0 && item.timeframe === 'Month') {
+          return { period: item.period / 12, timeframe: 'Year' }
+        }
+        return item
+      })
+      data = data.map(item => {
+        let period = item.period;
+        let timeframe = item.timeframe;
+        if(rowFrequency === 'Daily') {
+        if (timeframe === 'Day') {
+          if(period % 5 === 0) {
+            period = period / 5;
+            timeframe = 'Week';
+          }
+          if (period % 13 === 0 && timeframe.includes('Week')) {
+            period = (period / 13) * 3;
+            timeframe = 'Month';
+          }
+          if(period % 12 === 0 && timeframe.includes('Month')) {
+            period = period / 12;
+            timeframe = 'Year';
+          }
+        } else if (timeframe === 'Week') {
+          if (period % 13 === 0) {
+            period = (period / 13) * 3;
+            timeframe = 'Month';
+          }
+          if (period % 12 === 0 && timeframe.includes('Month')) {
+            period = period / 12;
+            timeframe = 'Year';
+          }
+        } else if (timeframe === 'Month') {
+          if (period % 12 === 0) {
+            period = period / 12;
+            timeframe = 'Year';
+          }
+        }
+        return { period, timeframe }
+        }else if(rowFrequency === 'Weekly') {
+        if (timeframe === 'Week') {
+          // if(period % 4 === 0 && period <= 8) {
+          //   period = period / 4;
+          //   timeframe = 'Month';
+          // }else if(period % 13 === 0 && period > 8) {
+          //   period = (period / 13) * 3;
+          //   timeframe = 'Month';
+          // }
+          if(((period % 13) % 4) === 0) {
+            if(period % 13 === 12) {
+              // 不转
+              period = period
+              timeframe = "Week"
+            }else{
+              let num = Math.trunc(period / 13)
+              let end = (period % 13) / 4
+              period = num * 3 + end
+              timeframe = 'Month';
+            }
+          }
+          if (period % 12 === 0  && timeframe.includes('Month')) {
+            period = period / 12;
+            timeframe = 'Year';
+          }
+        } else if (timeframe === 'Month') {
+          if (period % 12 === 0) {
+            period = period / 12;
+            timeframe = 'Year';
+          }
+        }
+        return { period, timeframe }
+        }else if(rowFrequency === 'Monthly') {
+          if (timeframe === 'Month') {
+            if (period % 12 === 0) {
+              period = period / 12;
+            }
+          }
+        return { period, timeframe }
+        }
+        })
+      return data.map((item) => {
+        let timeframe =
+          item.period > 1
+            ? `${item.period} ${item.timeframe}s`
+            : `${item.period} ${item.timeframe}`
+        let value
+        const frequency = rowFrequency
+        if(frequency == 'Daily') {
+        switch (item.timeframe) {
+          case 'Day':
+            value = Number(item.period)
+            break
+          case 'Week':
+            value = Number(item.period) * 5
+            break
+          case 'Month':
+            value = Number(item.period) * 21
+            break
+          case 'Year':
+            value = Number(item.period) * 252
+            break
+          default:
+            break
+        }
+        }else 
+        if(frequency == 'Weekly') {
+        switch (item.timeframe) {
+          case 'Week':
+            value = Number(item.period)
+            break
+          case 'Month':
+            const period = Number(item.period)
+            // if(period % 3 == 0) {
+            //   num_3 = Math.trunc(period / 3) // 去除小数点取整数
+            // }
+            // value = num_3 === null ? period * 4 : period * 4 + num_3
+            let num_3 = null
+              num_3 = Math.trunc(period / 3) // 去除小数点取整数
+              let end_3 = period % 3 // 余数
+            // value = num_3 === null ? period * 4 : period * 4 + num_3
+            value = num_3 * 13 + end_3 * 4
+            break
+          case 'Year':
+            value = Number(item.period) * 52
+            break
+          default:
+            break
+        }
+        }else 
+        if(frequency == 'Monthly') {
+        switch (item.timeframe) {
+          case 'Month':
+            value = Number(item.period)
+            break
+          case 'Year':
+            value = Number(item.period) * 12
+            break
+          default:
+            break
+        }
+        }
+
+        return { timeframe, period: item.period, value }
+      })
+    },
 		transformData(data) {
 			data = data.map(item => {
 				if (item.period % 5 === 0 && item.timeframe === 'Day') {
@@ -371,6 +818,214 @@ export default {
 				return { timeframe, period: item.period, value }
 			})
 		},
+		transformDate(arr){
+      // 创建一个空对象，用于存储处理后的结果
+      var processeArray  = [];
+
+      // 遍历原始数组
+      for (var i = 0; i < arr.length; i++) {
+        var currentItem = arr[i];
+
+        // 将当前项拆分成数字和单位
+        var parts = currentItem.split(" ");
+        var value = parseInt(parts[0]);
+        var unit = parts[1];
+
+        // 将不同天数的项进行合并，根据比率转换
+        if (unit === "Days") {
+          if (value % 252 === 0) {
+            value = value / 252;
+            unit = value==1?"Year":"Years";
+          }
+          if (value % 21 === 0) {
+            value = value / 21;
+            unit = value==1?"Month":"Months";
+          }
+          // if (value % 5 === 0) {
+          //   value = value / 5;
+          //   unit = value==1?"Week":"Weeks";
+          // }
+        }
+        if (unit === "Weeks") {
+          if (value % 52 === 0) {
+            value = value / 52;
+            unit = value==1?"Year":"Years";
+          }
+          // if (value % 4 === 0) {
+          //   value = value / 4;
+          //   unit = value==1?"Month":"Months";
+          // }
+        }
+        if (unit === "Months") {
+          if (value % 12 === 0) {
+            value = value / 12;
+            unit = value==1?"Year":"Years";
+          }
+        }
+        if(this.rowFrequency === 'Daily') {
+          if (unit === "Days") {
+            if (value % 5 === 0) {
+              value = value / 5;
+              unit = value==1?"Week":"Weeks";
+            }
+            if (value % 13 === 0 && unit.includes('Week')) {
+              value = (value / 13) * 3;
+              unit = value==1?"Month":"Months";
+            }
+            if(value % 12 === 0 && unit.includes('Month')) {
+              value = value / 12;
+              unit = value==1?"Year":"Years";
+            }
+          }else if (unit === "Weeks") {
+            if (value % 13 === 0) {
+              value = (value / 13) * 3;
+              unit = value==1?"Month":"Months";
+            }
+            if (value % 12 === 0 && unit.includes('Month')) {
+              value = value / 12;
+              unit = value==1?"Year":"Years";
+            }
+          }else if (unit === "Months") {
+            if (value % 12 === 0) {
+              value = value / 12;
+              unit = value==1?"Year":"Years";
+            }
+          }
+          }else if(this.rowFrequency === 'Weekly') {
+            if (unit === 'Week') {
+              // if(value % 4 === 0 && value <= 8) {
+              //   value = value / 4;
+              //   unit = value==1?"Month":"Months"
+              // }else if(value % 13 === 0 && value > 8) {
+              //   value = (value / 13) * 3;
+              //   unit = value==1?"Month":"Months"
+              // }
+              if(((value % 13) % 4) === 0) {
+                if(value % 13 === 12) {
+                  // 不转
+                  unit = value==1?"Week":"Weeks"
+                }else{
+                  let num = Math.trunc(value / 13)
+                  let end = (value % 13) / 4
+                  value = num * 3 + end
+                  unit = value==1?"Month":"Months"
+                }
+              }
+              if (value % 12 === 0  && unit.includes('Month')) {
+                value = value / 12;
+                unit = value==1?"Year":"Years";
+              }
+            } else if (unit === 'Month') {
+              if (value % 12 === 0) {
+                value = value / 12;
+                unit = value==1?"Year":"Years";
+              }
+            }
+        }else if(this.rowFrequency === 'Monthly') {
+          if (unit === 'Month') {
+            if (value % 12 === 0) {
+              value = value / 12;
+            }
+          }
+        }
+
+        // 生成新的项
+        var newItem = value + " " + unit;
+
+        // 将新的项添加到 processedObj，使用项作为键名
+        let res
+        switch(unit){
+          case "Days":
+            res = 1*value
+            break
+          case "Day":
+            res = 1*value
+            break
+          case "Weeks":
+            res = 5*value
+            break
+          case "Week":
+            res = 5*value
+            break
+          case "Months":
+            res = 21*value
+            break
+          case "Month":
+            res = 21*value
+            break
+          case "Years":
+            res = 252*value
+            break
+           case "Year":
+            res = 252*value
+            break
+          default:
+            break
+        }
+        if(processeArray.map(x=>x.label).indexOf(newItem) == -1) processeArray.push({label:newItem,value:res})
+        //processedObj[newItem] = res;
+      }
+      //console.log(processedObj)
+      // 提取处理后的结果数组
+     // var processedArray = Object.keys(processedObj);
+
+      return processeArray;
+    },
+		generate_table_data() {
+      this.generatePeriods()
+        // 鎻愬彇灞炴€т俊鎭
+        let keys = Object.keys(this.result_quotes[0])
+        keys.splice(keys.indexOf('Period'), 1)
+        let result = []
+        for (let i = 0; i < keys.length; i++) {
+          result.push({
+            property: keys[i]
+          })
+        }
+        // 灏Periods 淇℃伅鎻掑叆鍒data 涓紝灏data 缁戝畾鍒table 涓
+        for (let i = 0; i < this.periods.length; i++) {
+          for (let j = 0; j < result.length; j++) {
+            this.result_quotes.forEach((obj) => {
+              if (obj.Period === this.periods[i].period) {
+                result[j][this.periods[i].period] = obj[result[j].property]
+              }
+            })
+          }
+        }
+				result = result.map((item) => {
+					// 创建一个新的对象，将key值修改为'key [%]'
+					return {
+						'1 Month [%]': item['1 Month'],
+						'1 Week [%]': item['1 Week'],
+						'12 Months [%]': item['1 Year'],
+						'2 Months [%]': item['2 Months'],
+						'2 Weeks [%]': item['2 Weeks'],
+						'3 Months [%]': item['3 Months'],
+						'6 Months [%]': item['6 Months'],
+						property: item.property
+					 }
+				})
+        this.result_quotes = result
+				console.log('zscode结果', result)
+				this.$store.commit('form/STORE_BACKTEST_ZSCORE_RESULT',this.result_quotes)
+    },
+		generatePeriods() {
+      let quotes = []
+        quotes = this.result_quotes
+        let set = new Set()
+        for (let i = 0; i < quotes.length; i++) {
+          set.add(quotes[i].Period)
+        }
+        let values = Array.from(set)
+        let columns = []
+        for (let i = 0; i < values.length; i++) {
+          columns.push({
+            period: values[i]
+          })
+        }
+        this.periods = columns
+				console.log('this.periods-', this.periods)
+    },
 		concatenateEntryAndExit(){
 			// 把字符串列表entryDates, exitDates格式化为markerSet的对象数组
 			let markerSet= []

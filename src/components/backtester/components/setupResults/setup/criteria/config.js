@@ -1,4 +1,4 @@
-import {capitalizeFirstLetter} from "@/utils"
+import { capitalizeFirstLetter } from '@/utils'
 // 传入不同的 criteria 生成不同的配置
 export function generateConfig(criteria) {
 	const capFirstL = capitalizeFirstLetter(criteria)
@@ -11,7 +11,7 @@ export function generateConfig(criteria) {
 `
 	const config = {
 		criteria: criteria,
-    criteriaCapFirstL: capFirstL,
+		criteriaCapFirstL: capFirstL,
 		criteriaTitle: `${capFirstL} Criteria`,
 		criteriaTitleTP: `Set the criteria/criterias which trigger the backtest ${criteria}
     criteria.<br />
@@ -38,6 +38,12 @@ export function generateConfig(criteria) {
     If the backtest condition needs to have a "OR" relation of 2
     conditions, set two conditions below and choose score 1.<br />
     etc.<br />`,
+		timeLimitTP: `By default, there is no time period restriction. <br/>
+    When you select this box, it signifies that you are <br/>
+    requiring these conditions to be sequentially met within the entered period. <br/>
+    For instance, if you choose to input "5" for the period, <br/>
+    it means that if the selected conditions are met in sequence within 5 bars, <br/>
+    it indicates you can enter/exit.`,
 		periodTP: `Choose a value to specify how many bars within which the
     following conditions will occur in time order to trigger the
     backtest condition.<br />

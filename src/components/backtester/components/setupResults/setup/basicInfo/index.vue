@@ -496,15 +496,17 @@
                         >Risk Control at Exit
 
                         <el-tooltip effect="dark" placement="top">
-                          <span slot="content"
-                            >Check this option to include three methods of risk
-                            control to exit position.<br />
+                          <span slot="content">
+                            Check this option to include three methods of risk control to
+                            exit position.<br />
                             The specified methods will serve as first-come,
                             first-execute.<br />
-                            This option can be used combinedly as an OR condition
-                            with the Exit Criteria selection or be solely used in
-                            the Exit Criteria "Only Use Risk Control".<br
-                          /></span>
+                            This option can be used combinedly as an OR condition with the <br/>
+                            Exit Criteria selection or be solely used in the Exit Criteria
+                            "Only Use Risk Control".<br/>
+                            Note: When short selling, to prevent unlimited additional margin, <br/>
+                            it is mandatory to ensure that the take-profit ratio is greater than the stop-loss ratio.
+                          </span>
                           <i class="iconfont icon-wenhao"></i> </el-tooltip
                       ></el-checkbox>
                     </div>
@@ -1038,7 +1040,7 @@ export default {
       bd.commission = (bd.commission / 100)
       bd.risk_control = this.isRiskControl ? `${this.isTakeProfit ? this.tp : ''}/${this.isStopLoss ? this.sl : ''}/${this.isTimeInMarket ? this.tim : ''}` : '//'
       if(this.isRiskControl) this.setDesciption()
-      console.log(bd)
+      if(!bd.direction) bd.direction = 'Long'
       this.$store.commit('form/setBd', bd)
     },
     async validateForm() {

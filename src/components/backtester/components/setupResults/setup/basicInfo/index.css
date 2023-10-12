@@ -128,7 +128,7 @@
   margin-bottom: 18px;
 }
 .set-up-container .el-input-group__append, .el-input-group__prepend {
-  padding: 0 5px;
+  padding: 0 25px;
   background-color: inherit
 }
 .dateBox .el-input__prefix{
