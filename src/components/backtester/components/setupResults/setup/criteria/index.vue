@@ -31,22 +31,35 @@
 					size="mini"
 				></el-input-number>
 				<span class="scoreNote" v-if="relation === 3">
-					<span>Period: </span>
-					<el-tooltip effect="dark" placement="top" style="diaplay: inline">
-						<span slot="content">
-              {{config['periodTP']}}
-						</span>
-						<i class="iconfont icon-wenhao"></i>
-					</el-tooltip>
+					<div class="excludeBox">
+						<el-checkbox v-model="isUsePeriodLimit" @change="changePeriodLimit"
+							>Use Time Period Limit
+							<el-tooltip effect="dark" placement="top">
+								<span slot="content">
+									{{config['timeLimitTP']}}
+								</span>
+								<i class="iconfont icon-wenhao"></i>
+							</el-tooltip>
+						</el-checkbox>
+					</div>
+					<div class="period-box" v-if="isUsePeriodLimit">
+						<span>Period: </span>
+						<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+							<span slot="content">
+								{{config['periodTP']}}
+							</span>
+							<i class="iconfont icon-wenhao"></i>
+						</el-tooltip>
+						<el-input-number
+							v-model="signals_in_market"
+							:step="1"
+							step-strictly
+							v-if="relation === 3"
+							:min="1"
+							size="mini"
+						></el-input-number>
+					</div>
 				</span>
-				<el-input-number
-					v-model="signals_in_market"
-					:step="1"
-					step-strictly
-					v-if="relation === 3"
-					:min="1"
-					size="mini"
-				></el-input-number>
 				<el-select
 					v-model="relation"
 					placeholder="Please select signal"
@@ -102,6 +115,7 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
+							:isLimit="isUsePeriodLimit"
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
 							:indicatorRadio="indicatorRadioArr[index]"
@@ -118,6 +132,7 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
+							:isLimit="isUsePeriodLimit"
 							:symUrl="indicatorUrlArr[index]"
 							:symVal="indicatorValArr[index]"
 							v-show="
@@ -140,6 +155,7 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
+							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -162,6 +178,7 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
+							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -184,6 +201,7 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
+							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -206,6 +224,7 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
+							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -228,6 +247,7 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
+							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -250,6 +270,7 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
+							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -272,6 +293,7 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
+							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -294,6 +316,7 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
+							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -316,6 +339,7 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
+							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -338,6 +362,7 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
+							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -360,6 +385,7 @@
 							:score="score"
 							:delay_bars="delay_bars"
 							:period="signals_in_market"
+							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
 							v-show="
@@ -464,7 +490,8 @@ export default {
 			// riskValArr: new Array(5).fill(''),
 			delay_bars: 0,
 			isDelayBar: false,
-			relation: 0
+			relation: 0,
+			isUsePeriodLimit: false
     }
   },
   computed: {
@@ -720,8 +747,10 @@ export default {
 			if (this.relation == 1 || this.relation == 2 || this.relation == 0) {
 				obj.value = 1
 			}
-			if (this.relation == 3) {
+			if (this.relation == 3 && this.isUsePeriodLimit) {
 				obj.value = this.signals_in_market
+			}else if(this.relation == 3 && !this.isUsePeriodLimit) {
+				obj.value = 100000
 			}
 			this.$store.commit('form/saveSignalsInMarket', obj)
 		},
@@ -757,6 +786,12 @@ export default {
 			}
 
 			this.$store.commit('form/saveRelation', obj)
+		},
+		changePeriodLimit(val) {
+			this.isUsePeriodLimit = val
+			if(this.signals_in_market == 100000) {
+				this.signals_in_market = this.editableTabs.length
+			}
 		},
 		changeRelation(val) {
 			if (val == 1) {
@@ -1192,6 +1227,7 @@ export default {
 			this.signals_in_market = data[criteria].signals_in_market
 				? data[criteria].signals_in_market
 				: 1
+			this.isUsePeriodLimit = Boolean(data[criteria].signals_in_market != 100000)
 			this.relation = data[criteria].relation ? data[criteria].relation : 1
 			// this.$emit('getExitRelation', this.relation)
 			let length = data[criteria].signals.length
@@ -1392,6 +1428,7 @@ export default {
 .scoreNote {
 	font-size: 16px;
 	font-weight: 500;
+	margin-right: 5px;
 }
 /deep/.el-tabs__nav .el-tabs__item:nth-child(1) span {
 	display: none;
