@@ -74,10 +74,9 @@ export function setRouterPermission(router) {
 			// 这里是判断无cookie情况下进入登录界面，如果是从404
 
 			if (to.path != '/404') {
-				console.log('to', to)
+				store.commit('states/setErrorMessage404',{status:401,message:null})
 				next({
-					path: '/404',
-					query: { mes: 401 } // 携带的参数
+					path: '/404'
 				})
 			} else {
 				next()

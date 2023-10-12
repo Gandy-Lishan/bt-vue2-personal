@@ -73,7 +73,7 @@ const state = {
 	usersOwnExitFileHash: Array(5).fill(''), //form
 	userUploadFileContent: Array(5).fill({}), //form
 	backtestResult: [], //form
-	tradePrice: 0, //form
+	tradePrice: 2, //form
 	last_signal_array: [], //form
 	run_all_backtest_array: [], //form
 	hashTable: [], //form
