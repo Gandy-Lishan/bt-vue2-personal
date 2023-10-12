@@ -521,7 +521,7 @@ if (!CIQ.Studies) {
 							// 如果分母为0，直接返回0
 							if(quotes[i - period][field] == 0) return 0
 							
-							const change = parseFloat((100 * (row[field] / quotes[i - period][field]- 1)).toFixed(2))
+							const change = parseFloat((100 * (row[field] / quotes[i - period][field]- 1)).toFixed(4))
 							//console.log(row[field] , quotes[i - period][field],row,i)
 							return (change==Infinity || change==-Infinity) ? 0 : change
 						}
@@ -535,19 +535,45 @@ if (!CIQ.Studies) {
 				}
 				break;
 			case 'OPR':
-				// ROR
+				// OPR
 				// 从当前indicator数据出现那天开始计算
-				let indexROR = quotes.findIndex(row=> field in row &&  row[field]!=null)
-				quotes = quotes.slice(indexROR) 
-				const minCloseArr = getPeriodParam(quotes.map(row => row[field]), "min", period);
-				const maxCloseArr = getPeriodParam(quotes.map(row => row[field]), "max", period);
+				let indexOPR = quotes.findIndex(row=> field in row &&  row[field]!=null)
+				quotes = quotes.slice(indexOPR) 
+				const minCloseArrOPR = getPeriodParam(quotes.map(row => row[field]), "min", period, 0);
+				const maxCloseArrOPR = getPeriodParam(quotes.map(row => row[field]), "max", period, 0);
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
 						if(i>=period){
 							// 如果分母为0，直接返回0
-							if(maxCloseArr[i] - minCloseArr[i] == 0) return 0
+							if(maxCloseArrOPR[i] - minCloseArrOPR[i] == 0) return 0
 
-							const change = parseFloat((100 * (row[field] - minCloseArr[i]) / (maxCloseArr[i] - minCloseArr[i])).toFixed(2))
+							const change = parseFloat((100 * (row[field] - minCloseArrOPR[i]) / (maxCloseArrOPR[i] - minCloseArrOPR[i])).toFixed(4))
+							
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+				break;
+			case 'RR':
+				// Range Rank
+				// 计算含当天值的排名，即数值保证在 0 - 100 之间
+				let indexRR = quotes.findIndex(row=> field in row &&  row[field]!=null)
+				quotes = quotes.slice(indexRR) 
+				const minCloseArrRR = getPeriodParam(quotes.map(row => row[field]), "min", period, 1);
+				const maxCloseArrRR = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
+				resArr = quotes.map((row, i) => {
+					if(field in quotes[i] &&  quotes[i][field]!=null){
+						if(i>=period){
+							// 如果分母为0，直接返回0
+							if(maxCloseArrRR[i] - minCloseArrRR[i] == 0) return 0
+
+							const change = parseFloat((100 * (row[field] - minCloseArrRR[i]) / (maxCloseArrRR[i] - minCloseArrRR[i])).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
 						}
@@ -578,7 +604,7 @@ if (!CIQ.Studies) {
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
 						if(i>=period - 1){
-							return parseFloat((row[field] / maArr[i]).toFixed(2))
+							return parseFloat((row[field] / maArr[i]).toFixed(4))
 						}
 						return NaN
 					}else{
@@ -607,7 +633,7 @@ if (!CIQ.Studies) {
 		sd.outputMap['supLine'] = "supLine";
 		
 		// 给上面函数用的工具函数
-		function getPeriodParam(dataSeries, paramType, period) {
+		function getPeriodParam(dataSeries, paramType, period, add_bar) {
 			const typeDict = {
 			  max: Math.max,
 			  min: Math.min,
@@ -619,7 +645,7 @@ if (!CIQ.Studies) {
 		  
 			for (let i = 0; i < dataSeries.length; i++) {
 			  if (i >= period) {
-				const tmpData = typeDict[paramType](...dataSeries.slice(i - period, i));
+				const tmpData = typeDict[paramType](...dataSeries.slice(i - period + add_bar, i + add_bar));
 				dataArr.push(Number(tmpData.toFixed(3)));
 			  } else {
 				dataArr.push(NaN);
@@ -628,17 +654,6 @@ if (!CIQ.Studies) {
 		  
 			return dataArr;
 		  }
-
-		// 默认study模板
-		// for (var i = sd.startFrom; i < quotes.length; i++) {
-		// 	var quote = quotes[i];
-		// 	var RSIValue = quote[field];
-		// 	if (RSIValue) {
-		// 		var customStudyValue = RSIValue; // add code here to operate on the RSI to compute your final value based on it.
-		// 		quote["Result " + sd.name] = customStudyValue; // assign to the final field to be used by your display function.
-		// 	}
-		// }
-		// sd.outputMap["Result " + sd.name] = "ROCLike";
 	};
 	CIQ.Studies.calculateSymbolOhlcv = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
