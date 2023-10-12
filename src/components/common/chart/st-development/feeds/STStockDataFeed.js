@@ -142,13 +142,13 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
     
     if (params.symbolObject.indicator === undefined){
         if (CIQ.objIndicator === undefined){
-            CIQ.objIndicator = 'AAPL'
+            // CIQ.objIndicator = 'AAPL'
             // AAPL
         }
     }else if(params.symbolObject.indicator.length == 0){
         //console.log('load default symbol as indicator', CIQ.objIndicator)
         // when first time loading a technical indicator, no params of indicators in query, pick default value
-        CIQ.objIndicator = ['AAPL']
+        //CIQ.objIndicator = ['AAPL']
     }else {
         CIQ.objIndicator = params.symbolObject.indicator
     }
@@ -167,9 +167,11 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
 
             if(params.symbolObject.indicator === undefined){
                 // freq is daily when using default indicator
-                new_str += '&indicator=' +CIQ.objIndicator;
+                // new_str += '&indicator=' +CIQ.objIndicator;
+                new_str += '&indicator='
             }else if(list.length == 0){
-                new_str += '&indicator=' +'AAPL'
+                //new_str += '&indicator=' +'AAPL'
+                new_str += '&indicator='
             }else{
                 try{
                     var freqList = []
@@ -361,9 +363,11 @@ quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
 
     if(params.symbolObject.indicator === undefined){
         //console.log('CIQ.objIndicator is not defined');
-        new_str += '&indicator=' +CIQ.objIndicator;
+        //new_str += '&indicator=' +CIQ.objIndicator;
+        new_str += '&indicator='
     }else if(list.length == 0){
-        new_str += '&indicator=' +'AAPL'
+        //new_str += '&indicator=' +'AAPL'
+        new_str += '&indicator='
     }else{
         try{
             var freqList = []
@@ -445,9 +449,11 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
 
     if(params.symbolObject.indicator === undefined){
         //console.log('CIQ.objIndicator is not defined');
-        new_str += '&indicator=' +CIQ.objIndicator;
+        //new_str += '&indicator=' +CIQ.objIndicator;
+        new_str += '&indicator='
     }else if(list.length == 0){
-        new_str += '&indicator=' +'AAPL'
+        //new_str += '&indicator=' +'AAPL'
+        new_str += '&indicator='
     }else{
         try{
             var freqList = []
@@ -667,9 +673,9 @@ quoteFeedSimulator.formatChartData = async function(response){
                     }
                 }
             }
-            
-            const earliestIndicator = findEarliestIndicator(objIndicatorFirstDate)
-            newQuotes = earliestIndicator=='Invalid Date'?newQuotes:newQuotes.slice(newQuotes.findIndex(item=>item.DT - earliestIndicator == 0))
+            // 停用数据截断，因为technical indicator不能被截断
+            // const earliestIndicator = findEarliestIndicator(objIndicatorFirstDate)
+            // newQuotes = earliestIndicator=='Invalid Date'?newQuotes:newQuotes.slice(newQuotes.findIndex(item=>item.DT - earliestIndicator == 0))
         }
     //})
 
