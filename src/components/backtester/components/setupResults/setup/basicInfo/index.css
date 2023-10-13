@@ -124,9 +124,6 @@
   line-height: 28px;
   margin-bottom: 18px;
 }
-.set-up-container .excludeBox .el-checkbox__input.is-checked+.el-checkbox__label {
-  margin-bottom: 18px;
-}
 .set-up-container .el-input-group__append, .el-input-group__prepend {
   padding: 0 10px;
   background-color: inherit

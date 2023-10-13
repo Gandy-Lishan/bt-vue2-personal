@@ -197,7 +197,7 @@ export default {
 	border-bottom: 1px solid #797979;
 }
 .result-container {
-	padding: 20px 20px 0 20px;
+	padding: 40px 10px 0 10px;
 	margin-bottom: 20px;
 }
 @media (min-width: 1680px) {

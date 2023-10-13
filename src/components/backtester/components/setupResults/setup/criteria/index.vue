@@ -30,7 +30,7 @@
 					:max="editableTabs.length"
 					size="mini"
 				></el-input-number>
-				<span class="scoreNote" v-if="relation === 3">
+				<span class="scoreNote timeLimitBox" v-if="relation === 3">
 					<div class="excludeBox">
 						<el-checkbox v-model="isUsePeriodLimit" @change="changePeriodLimit"
 							>Use Time Period Limit
@@ -44,7 +44,7 @@
 					</div>
 					<div class="period-box" v-if="isUsePeriodLimit">
 						<span>Period: </span>
-						<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+						<el-tooltip effect="dark" placement="top" style="diaplay: inline; margin-right: 5px;">
 							<span slot="content">
 								{{config['periodTP']}}
 							</span>
@@ -1457,5 +1457,13 @@ export default {
 }
 .delay-bar-box /deep/ label.el-checkbox {
 	width: 146px;
+}
+.timeLimitBox{
+	position: relative;
+}
+.period-box{
+	position: absolute;
+	top: 100%;
+	left: 0;
 }
 </style>
