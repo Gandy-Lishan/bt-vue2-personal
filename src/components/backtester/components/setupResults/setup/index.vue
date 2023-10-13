@@ -116,6 +116,7 @@ export default {
 					const res = await seeParams(backtestID)
 					res.data.commission = (res.data.commission * 100).toFixed(2)
 					_this.displaySetUpForm(res.data)
+					LocalStorageUtil.remove('backtestID')
 				}
       }
 			_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')

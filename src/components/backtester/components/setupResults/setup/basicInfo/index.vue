@@ -1259,6 +1259,7 @@ export default {
 	justify-content: center;
 	align-items: center;
   position: relative;
+  margin-right: 5px;
 }
 .risk-control-container {
 	display: flex;
