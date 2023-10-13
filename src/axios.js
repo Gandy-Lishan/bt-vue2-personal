@@ -5,6 +5,7 @@
 import axios from 'axios'
 import Cache from './cache'
 import store from '@/store'
+import {Toast} from '@/utils'
 
 // Custom instances of Axios
 let instance = axios.create({
@@ -135,6 +136,13 @@ instance.interceptors.response.use(
 
 		if (err?.response?.status == 404) {
 			console.log('url 找不到')
+			// 明确返回一个 rejected 的 Promise，以避免重试
+			return Promise.reject(err)
+		}
+		if (err?.response?.status == 410) {
+			console.log('未购买回测')
+			Toast('Backtest is not purchased', 1000)
+			alert('Backtest is not purchased')
 			// 明确返回一个 rejected 的 Promise，以避免重试
 			return Promise.reject(err)
 		}

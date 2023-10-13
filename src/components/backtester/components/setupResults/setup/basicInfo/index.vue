@@ -823,6 +823,7 @@ export default {
   },
   methods: {
     clearForm() {
+      const timeframe = this.bd.frequency
       Object.assign(this.$data, this.$options.data())
       this.is_admin = this.$store.getters.getIsAdmin
       this.getBTDate()
@@ -830,6 +831,7 @@ export default {
       this.generateBTName()
       this.$emit('IsRiskControl', true)
       this.clearFormValidate()
+      this.bd.timeframe = timeframe
     },
     clearFormValidate() {
       this.$refs.backtestSetupForm.clearValidate()

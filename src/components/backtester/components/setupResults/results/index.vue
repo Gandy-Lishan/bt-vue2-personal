@@ -1,13 +1,12 @@
 <template>
     <div class="set-up-container">
-     <div v-show="!resultsLoadingSetting.isResultsLoading">
+     <div>
         <ResForm
           :backtestEditData="backtestEditData"
         />
         <Performance ref="performanceChild"></Performance>
      </div>
       <LoadingOverlay
-        v-show="resultsLoadingSetting.isResultsLoading"
         :isLoading="resultsLoadingSetting.isResultsLoading"
         :showProgress="resultsLoadingSetting.showProgress"
         :percentage="resultsLoadingSetting.percentage"
@@ -93,5 +92,6 @@ export default {
   .set-up-container{
     padding-top: 20px;
     background-color: #fff;
+    position: relative;
   }
 </style>

@@ -26,6 +26,7 @@ export const CommonMethodsMixin = {
 	},
 	methods: {
 		async viewBacktestResults(data) {
+			this.loading = true
 			const currentPage = this.currentPage
 			/* 如果 currentPage 是 History 或者 Favorites,则传入 old_uuid，否则不传*/
 			if (['History', 'Favorites'].includes(currentPage)) {
@@ -46,6 +47,7 @@ export const CommonMethodsMixin = {
 			this.restoreIndicatorLayoutView(parsedData, data.frequency, data, data)
 		},
 		editBacktest(data) {
+			this.loading = true
 			const currentPage = this.currentPage
 			/* 如果 currentPage 是 History 或者 Favorites,则传入 old_uuid，否则不传*/
 			if (['History', 'Favorites'].includes(currentPage)) {
@@ -68,6 +70,7 @@ export const CommonMethodsMixin = {
 		},
 		async copyBacktest(data) {
 			try {
+				this.loading = true
 				const copyName = `${data.name}(copy)`
 
 				// 检查是否已经存在同名的 backtest
@@ -77,10 +80,13 @@ export const CommonMethodsMixin = {
 				)
 
 				if (isDuplicate) {
-					this.$notify.error({
-						title: 'Has been Copied',
-						message: 'The backtest has been copied'
-					})
+					this.$message({
+						message: '<strong>The backtest has been copied</strong>',
+						center: true,
+						dangerouslyUseHTMLString: true,
+						showClose: true,
+						duration: 0
+					});
 				} else {
 					// 获取参数并准备复制
 					const paramsRes = await seeParams(data.id)
@@ -103,40 +109,76 @@ export const CommonMethodsMixin = {
 					// 重置查询页码并获取数据
 					this.queryInfo.page = 1
 					await this.getDataList(null)
+
+					this.$message({
+						message: '<strong>Copy successfully</strong>',
+						center: true,
+						dangerouslyUseHTMLString: true,
+						showClose: true,
+						duration: 8000
+					});
 				}
+				this.loading = false
 			} catch (error) {
 				console.error('An error occurred:', error)
+				this.loading = false
 			}
 		},
 		async deleteBacktest(id) {
-			const res = await deleteBacktest(id)
+			this.loading = true
+			await deleteBacktest(id)
 			this.getDataList(null)
+			this.loading = false
+			this.$message({
+				message: '<strong>Successfully deleted</strong>',
+				center: true,
+				dangerouslyUseHTMLString: true,
+				showClose: true,
+				duration: 8000
+			});
 		},
 		async addToFavorites(data) {
-			data.favorites = true
+			this.loading = true
 			const params = {
 				favorites: true
 			}
-			const res = await favoriteBacktest(data.id, this.$qs.stringify(params))
+			await favoriteBacktest(data.id, this.$qs.stringify(params))
 			this.getDataList(null)
+			this.loading = true
+			this.$message({
+				message: '<strong>Successfully added to favorites</strong>',
+				center: true,
+				dangerouslyUseHTMLString: true,
+				showClose: true,
+				duration: 8000
+			});
 		},
 		async moveToFavorites(data) {
-			data.favorites = false
+			this.loading = true
 			const params = {
 				favorites: false
 			}
-			const res = await favoriteBacktest(data.id, this.$qs.stringify(params))
+			await favoriteBacktest(data.id, this.$qs.stringify(params))
 			this.getDataList(null)
+			this.loading = false
+			this.$message({
+				message: '<strong>Removed from favorites</strong>',
+				center: true,
+				dangerouslyUseHTMLString: true,
+				showClose: true,
+				duration: 8000
+			});
 		},
-		copyBacktest(data) {},
 		async rerunBacktest(data) {
-			console.log(data)
+			this.loading = true
 			// 打开遮罩层，改变 loadingTest
 			this.$store.commit('form/SET_LIST_LOADING', true)
 			this.loadTest = 'Re-running Backtest in Progress...'
 			await this.rerunThisBacktest(cloneDeep(data))
 			// rerun 后重新请求列表 我并不需要把所有列表都更新
-			await this.getDataList(null)
+			// await this.getDataList(null)
+			await this.viewBacktestResults(data)
+			this.loading = false
 		},
 		async runOrFindAndLoop(actionType) {
 			this.showFLSMASK()
@@ -533,6 +575,7 @@ export const CommonMethodsMixin = {
 					name: 'Results',
 					params: { data: JSON.stringify(row), usedFor: 'showBTResults' }
 				})
+				this.loading = false
 			} else {
 				this.reloadData(data, freq)
 				CIQ.addIndicatorsFromBacktest(() => {
@@ -541,6 +584,7 @@ export const CommonMethodsMixin = {
 						name: 'Results',
 						params: { data: JSON.stringify(row), usedFor: 'showBTResults' }
 					})
+					this.loading = false
 				})
 			}
 		},
@@ -553,6 +597,7 @@ export const CommonMethodsMixin = {
 					name: 'SetUp',
 					params: { data: JSON.stringify(row), usedFor: 'showBTForm' }
 				})
+				that.loading = true
 			})
 		},
 		reloadData(data, freq) {
