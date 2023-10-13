@@ -485,7 +485,6 @@ export default {
 
 <style lang="less" scoped>
 .setup {
-	padding: 5px;
 	background-color: #fff;
 	border-radius: 12px;
 }
@@ -499,7 +498,7 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
-	margin: 20px;
+	margin: 10px;
 	border-bottom: 2px solid #cacaca;
 }
 .backtest-btns {

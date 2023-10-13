@@ -1307,7 +1307,7 @@ export default {
 	margin-top: 10px;
 }
 .set-up-container {
-	padding: 20px 20px 0 20px;
+	padding: 10px 10px 0 10px;
 }
 // .setupCenter {
 // 	display: flex;
