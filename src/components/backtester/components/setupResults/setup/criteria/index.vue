@@ -545,7 +545,31 @@ export default {
 	methods: {
 		...mapMutations('form', ['setFrequencyArray']),
 		clearForm() {
-			/* todolishan */
+			Object.assign(this.$data, this.$options.data())
+			if (this.criteria === 'entry') {
+				this.relation = 1;
+			} else {
+				this.relation = 0;
+			}
+			// Reset data for all subcomponents
+			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
+				if (this.indicatorRadioArr[i]) {
+					this.$refs.indiChild[i].clearForm()
+					this.$refs.sentiChild[i].clearForm()
+					this.$refs.symbolChild[i].clearForm()
+					this.$refs.cciChild[i].clearForm()
+					this.$refs.maChild[i].clearForm()
+					this.$refs.macdChild[i].clearForm()
+					this.$refs.bollBandsLikeChild[i].clearForm()
+					this.$refs.EFTLikeChild[i].clearForm()
+					this.$refs.stochasticsLikeChild[i].clearForm()
+					this.$refs.ADXLikeChild[i].clearForm()
+					this.$refs.ERILikeChild[i].clearForm()
+					this.$refs.aligatorLikeChild[i].clearForm()
+					this.$refs.LRFLikeChild[i].clearForm()
+					this.$refs.trailingStopLikeChild[i].clearForm()
+				}
+			}
 		},
 		resetForm() {
 			/* todolishan */

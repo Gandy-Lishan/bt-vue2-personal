@@ -25,11 +25,17 @@
 					<el-form-item label="Backtest Period:">
 						<el-input disabled v-model="backtestPeriod"> </el-input>
 					</el-form-item>
-					<div class="exclude_oo">
-					<el-form-item label="Exclude Overlapping Observations:" prop="exclude_oo" v-if="backtestEditData.exclude_oo != 0">
-						<el-input disabled v-model="backtestEditData.exclude_oo"> </el-input>
+					<el-form-item
+						label="Backtest Name:"
+						prop="name"
+						placeholder="Give the backtest a name"
+            size="mini"
+					>
+						<el-input
+							v-model="backtestEditData.name"
+							disabled
+						></el-input>
 					</el-form-item>
-					</div>
 				</el-col>
 				<el-col :span="6">
 					<el-form-item label="Slippage:" prop="slippage">
@@ -55,17 +61,11 @@
 					>
 						<el-input disabled> </el-input>
 					</el-form-item>
-					<el-form-item
-						label="Backtest Name:"
-						prop="name"
-						placeholder="Give the backtest a name"
-            size="mini"
-					>
-						<el-input
-							v-model="backtestEditData.name"
-							disabled
-						></el-input>
+					<div class="exclude_oo">
+					<el-form-item label="Exclude Overlapping Observations:" prop="exclude_oo" v-if="backtestEditData.exclude_oo != 0">
+						<el-input disabled v-model="backtestEditData.exclude_oo"> </el-input>
 					</el-form-item>
+					</div>
 				</el-col>
 				<el-col :span="6">
 					<el-form-item label="Benchmark:" prop="benchmark">
