@@ -186,7 +186,9 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
                         }
                         
                         // 之后加一个symbol判断和小李新senti判断
-                        if(CIQ.isUserIndicator(CIQ.objIndicator[i]) || CIQ.findSymbolIndicator(CIQ.objIndicator[i],null)){       
+                        /********************lishan modify start*************************/
+                        if(CIQ.isUserIndicator(CIQ.objIndicator[i]) || CIQ.isOwnIndicator(CIQ.objIndicator[i]) || CIQ.findSymbolIndicator(CIQ.objIndicator[i],null)){       
+                        /********************lishan modify end*************************/    
                             new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
                             valid++
                             continue
@@ -651,28 +653,63 @@ quoteFeedSimulator.formatChartData = async function(response){
     // 可以封装成promise
     //return new Promise(async(resolve)=>{
         if(CIQ.objIndicator && typeof CIQ.objIndicator !== 'string'){
-            for(var j in CIQ.objIndicator){
-                //console.log(CIQ.objIndicator[j])
-                // 之后加一个symbol判断和小李新senti判断
-                if(CIQ.isUserIndicator(CIQ.objIndicator[j])){
-                    let [name,hash] = CIQ.objIndicator[j].split(/HASH/)
-                    let res = await config.csvFileRead(name,hash)
-                    let datafeed = res.data.data.csv_content  
-                    
+            /********************lishan modify start*************************/
+            for (const j in CIQ.objIndicator) {
+                const indicator = CIQ.objIndicator[j];
+            
+                // 进行 symbol 和 senti 判断，如果需要的话
+                // if (indicator.includes('symbol')) {
+                //     // 进行相应操作
+                // }
+                // if (indicator.includes('senti')) {
+                //     // 进行相应操作
+                // }
+            
+                if (CIQ.isUserIndicator(indicator)) {
+                    const [name, hash] = indicator.split(/HASH/);
+                    const res = await config.csvFileRead(name, hash);
+                    const datafeed = res.data.data.csv_content;
+            
                     const sortedRows = datafeed.sort(
                         (a, b) => new Date(a.DT) - new Date(b.DT)
-                    ) 
-
-                    for (var i = 0; i < sortedRows.length; i++) {
-                        var index = data.findIndex(item=>item.DT == sortedRows[i].DT)    
-                        if(index == -1){
-                            continue
-                        }   
-                        if(objIndicatorFirstDate[CIQ.objIndicator[j]] == null) objIndicatorFirstDate[CIQ.objIndicator[j]] = newQuotes[index].DT
-                        newQuotes[index][CIQ.objIndicator[j]] = parseFloat(sortedRows[i]['indicator_Close'])
+                    );
+            
+                    for (const i in sortedRows) {
+                        const index = data.findIndex(item => item.DT == sortedRows[i].DT);
+                        if (index == -1) {
+                            continue;
+                        }
+                        if (objIndicatorFirstDate[indicator] == null) {
+                            objIndicatorFirstDate[indicator] = newQuotes[index].DT;
+                        }
+                        newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
+                    }
+                }
+            
+                if (CIQ.isOwnIndicator(indicator)) {
+                    const [_, url] = indicator.split(/CREATE/);
+                    const res = await config.getMyIndicatorData(url);
+                    const datafeed = res.data.data;
+            
+                    let sortedRows = datafeed.sort(
+                        (a, b) => new Date(a.DT) - new Date(b.DT)
+                    );
+            
+                    sortedRows = sortedRows.map(item => ({ ...item, indicator_Close: item.close, DT: item.DT + '.000Z' }));
+            
+                    for (const i in sortedRows) {
+                        const index = data.findIndex(item => item.DT == sortedRows[i].DT);
+                        if (index == -1) {
+                            continue;
+                        }
+                        if (objIndicatorFirstDate[indicator] == null) {
+                            objIndicatorFirstDate[indicator] = newQuotes[index].DT;
+                        }
+                        newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
                     }
                 }
             }
+            /********************lishan modify end*************************/
             // 停用数据截断，因为technical indicator不能被截断
             // const earliestIndicator = findEarliestIndicator(objIndicatorFirstDate)
             // newQuotes = earliestIndicator=='Invalid Date'?newQuotes:newQuotes.slice(newQuotes.findIndex(item=>item.DT - earliestIndicator == 0))

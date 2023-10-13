@@ -37,7 +37,22 @@ var config = {
                     reject(err)
                 })
         })
+    },
+    /********************lishan modify start*************************/
+    getMyIndicatorData : function(url) {
+        const path = `/dev/my_indicator/get_data/?url='${url}'`
+    
+        return new Promise((resolve, reject) => {
+            CIQ.axios.get(path, {withCredentials: true})
+                .then(res => {
+                    resolve(res)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
     }
+    /********************lishan modify end*************************/
 }
 
 export {config};
