@@ -672,7 +672,7 @@ let __st_js_generateCsv_ = (_exports) => {
      }
      // find if this study is a normal sentiment indicator
     /********************lishan modify start*************************/
-    if( CIQ.isSentiIndicator(sd.type) || CIQ.isUserIndicator(sd.type) || CIQ.isOwnIndicator(sd.type)){
+    if( CIQ.findSentiIndicator(null,sd.type) || CIQ.isUserIndicator(sd.type) || CIQ.isOwnIndicator(sd.type)){
     /********************lishan modify end*************************/
          
          let conditions = CIQ.store.state.form.backtestInfo[criteria]['signals'][indexNum]
