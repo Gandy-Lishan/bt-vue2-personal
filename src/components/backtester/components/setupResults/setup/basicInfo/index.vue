@@ -823,6 +823,7 @@ export default {
   },
   methods: {
     clearForm() {
+      const timeframe = this.bd.frequency
       Object.assign(this.$data, this.$options.data())
       this.is_admin = this.$store.getters.getIsAdmin
       this.getBTDate()
@@ -830,6 +831,7 @@ export default {
       this.generateBTName()
       this.$emit('IsRiskControl', true)
       this.clearFormValidate()
+      this.bd.timeframe = timeframe
     },
     clearFormValidate() {
       this.$refs.backtestSetupForm.clearValidate()
@@ -1259,6 +1261,7 @@ export default {
 	justify-content: center;
 	align-items: center;
   position: relative;
+  margin-right: 5px;
 }
 .risk-control-container {
 	display: flex;
@@ -1306,7 +1309,7 @@ export default {
 	margin-top: 10px;
 }
 .set-up-container {
-	padding: 20px 20px 0 20px;
+	padding: 60px 10px 0 10px;
 }
 // .setupCenter {
 // 	display: flex;

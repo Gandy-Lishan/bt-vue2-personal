@@ -7,7 +7,9 @@
     <el-menu-item index="2">Results</el-menu-item> -->
     <el-menu-item v-for="item in menuItems" :key="item.index" :index="item.index">{{item.lable}}</el-menu-item>
     </el-menu>
-    <router-view></router-view>
+    <keep-alive include="SetUp, Results">
+      <router-view></router-view>
+    </keep-alive>
 	</main>
 </div>
 </template>

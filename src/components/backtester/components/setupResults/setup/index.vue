@@ -1,12 +1,13 @@
 <template>
 	<div class="setup">
-		<div v-show="!setUpLoadingSetting.isSetupLoading">
+		<div>
 			<div class="setupBox">
 			<BasicInfo ref="basicInfo" @IsRiskControl="IsRiskControl"></BasicInfo>
 		</div>
 		<div class="set-up-container">
 			<div class="criteria-container">
 				<div class="criteria">
+					<keep-alive include="Criteria">
 						<Criteria
 							ref="entryChild"
 							:config="setConfig('entry')"
@@ -14,9 +15,11 @@
 							@getEntryRelation="getEntryRelation"
 							@sendEntrySignalIndex="sendEntrySignalIndex"
 						></Criteria>
+					</keep-alive>
 				</div>
 				<div class="divider"></div>
 				<div class="criteria">
+					<keep-alive include="Criteria">
 						<Criteria
 							ref="exitChild"
 							:config="setConfig('exit')"
@@ -25,6 +28,7 @@
 							@getExitRelation="getExitRelation"
 							@sendExitSignalIndex="sendExitSignalIndex"
 						></Criteria>
+					</keep-alive>
 				</div>
 			</div>
 		</div>
@@ -51,7 +55,6 @@
 		</div>
 	</div>
 		<LoadingOverlay
-			v-show="setUpLoadingSetting.isSetupLoading"
 			:isLoading="setUpLoadingSetting.isSetupLoading"
 			:showProgress="setUpLoadingSetting.showProgress"
 			:percentage="setUpLoadingSetting.percentage"
@@ -76,7 +79,7 @@ import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixi
 
 
 export default {
-	name: 'SetUpResults',
+	name: 'SetUp',
 	components: {
 		BasicInfo,
 		Criteria,
@@ -92,6 +95,8 @@ export default {
 	if (to.path === '/backtester/sr/setup') {
     next(async _this => {
 			_this.setSetUpLoadingSetting(true, false, 0, 'Loading...')
+			_this.$refs['entryChild'].clearForm()
+      _this.$refs['exitChild'].resetForm()
       if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
         console.log('说明是路由跳转过来携带参数的，用于展示表单数据')
         // 说明是路由跳转过来携带参数的
@@ -116,6 +121,7 @@ export default {
 					const res = await seeParams(backtestID)
 					res.data.commission = (res.data.commission * 100).toFixed(2)
 					_this.displaySetUpForm(res.data)
+					LocalStorageUtil.remove('backtestID')
 				}
       }
 			_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')
@@ -149,7 +155,11 @@ export default {
 			this.isRiskControl = isRiskControl
 		},
 		clearForm() {
+      Object.assign(this.$data, this.$options.data())
+      this.$store.commit('initialBacktestInfo')
 			this.$refs['basicInfo'].clearForm()
+			this.$refs['entryChild'].clearForm()
+      this.$refs['exitChild'].resetForm()
 		},
 		setSetUpLoadingSetting(isSetupLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_SETUP_LOADING', {
@@ -489,9 +499,9 @@ export default {
 
 <style lang="less" scoped>
 .setup {
-	padding: 5px;
 	background-color: #fff;
 	border-radius: 12px;
+	position: relative;
 }
 
 .criteria {
@@ -503,7 +513,7 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
-	margin: 20px;
+	margin: 10px;
 	border-bottom: 2px solid #cacaca;
 }
 .backtest-btns {
