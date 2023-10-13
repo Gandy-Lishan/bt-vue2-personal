@@ -5,6 +5,7 @@
 			:config="config"
 			:chartInitialized="chartInitialized"
 		/>
+		<slot></slot>
 	</div>
 </template>
 
@@ -20,7 +21,7 @@ import { CIQ } from '@/components/common/chart/st-development/js/components' // 
 
 @Component({
 	components: {
-		AdvancedChartComponent
+		AdvancedChartComponent,
 	}
 })
 export default class AdvancedWrapper extends Vue {

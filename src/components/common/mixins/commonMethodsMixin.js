@@ -26,6 +26,8 @@ export const CommonMethodsMixin = {
 	},
 	methods: {
 		async viewBacktestResults(data) {
+			CIQ.addCover('Fetching backtest information...')
+
 			const currentPage = this.currentPage
 			/* 如果 currentPage 是 History 或者 Favorites,则传入 old_uuid，否则不传*/
 			if (['History', 'Favorites'].includes(currentPage)) {
@@ -46,6 +48,8 @@ export const CommonMethodsMixin = {
 			this.restoreIndicatorLayoutView(parsedData, data.frequency, data, data)
 		},
 		editBacktest(data) {
+			CIQ.addCover('Fetching backtest information...')
+
 			const currentPage = this.currentPage
 			/* 如果 currentPage 是 History 或者 Favorites,则传入 old_uuid，否则不传*/
 			if (['History', 'Favorites'].includes(currentPage)) {
@@ -56,6 +60,7 @@ export const CommonMethodsMixin = {
 			data.commission = (data.commission * 100).toFixed(2)
 			this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', data)
 			//  Restore indicator layout
+			document.getElementsByClassName('ciq-period')[0].style.display = ''
 			this.$store.commit('form/getBacktestSymbol', data.symbol)
 			this.$store.dispatch('states/set_isMarkerShown_flag', false)
 
@@ -541,6 +546,7 @@ export const CommonMethodsMixin = {
 						name: 'Results',
 						params: { data: JSON.stringify(row), usedFor: 'showBTResults' }
 					})
+
 				})
 			}
 		},

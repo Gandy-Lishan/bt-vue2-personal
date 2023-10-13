@@ -1,5 +1,5 @@
 <template>
-  <header class="header">
+  	<header class="header">
 			<p class="hint">
 				Hint: Move cursor out of chart area to scroll down the page below
 			</p>
@@ -10,9 +10,20 @@
 					</el-col>
 				</el-row> -->
 			<div class="chart_box" id="chart_box">
-        <BTChart width="100%" height="100%" :onChartReady="onChartReady"></BTChart>  
+        		<BTChart width="100%" height="100%" :onChartReady="onChartReady">
+					
+					<LoadingOverlay
+						:v-show="chartLoadingSetting.isChartLoading"
+						:isLoading="chartLoadingSetting.isChartLoading"
+						:showProgress="chartLoadingSetting.showProgress"
+						:percentage="chartLoadingSetting.percentage"
+						:progressText="chartLoadingSetting.progressText"
+					>
+					</LoadingOverlay>
+				</BTChart>  
+
 			</div>
-		</header>
+	</header>
 </template>
 
 <script>
@@ -20,12 +31,29 @@ import BTChart from "@/components/common/chart/index.vue"
 import { LocalStorageUtil } from '@/utils'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapMutations } from "vuex"
+import { LoadingOverlay } from "@/components/common"
 
 export default {
   name: 'BTHeader',
   components: {
-    BTChart
+    BTChart,
+	LoadingOverlay
   },
+	computed: {
+		chartLoadingSetting() {
+			// 从 Vuex store 中获取全局 loading 状态
+			return this.$store.state.chart.chartLoadingSetting
+		},
+	},
+	watch: {
+		chartLoadingSetting: {
+			handler(newValue, _) {
+				// 在对象属性发生变化时触发的处理逻辑
+				this.chartLoadingSetting = newValue
+			},
+			deep: true, // 启用深度监听，监视对象属性的变化
+		},
+	},
 	mounted() {
 		const chartBox = document.getElementsByClassName('chart_box')[0]
 		console.log('chartBox', chartBox)   
@@ -42,6 +70,7 @@ export default {
 
 <style lang="less" scoped>
 // 暂时的样式
+
 header {
 	margin-bottom: 28px;
 }
