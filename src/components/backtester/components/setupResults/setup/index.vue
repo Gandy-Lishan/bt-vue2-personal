@@ -119,6 +119,7 @@ export default {
 				}
       }
 			_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')
+			CIQ.hideCover()
     });
   } else {
     next();
@@ -166,7 +167,11 @@ export default {
 			const entryErr = await _this.saveCriteriaData('entryChild')
 			const exitErr = await _this.saveCriteriaData('exitChild')
 			console.log('entryErr', entryErr, 'exitErr', exitErr)
-			if (!entryErr || !exitErr) {_this.setSetUpLoadingSetting(false, false, 0, 'Error saving backtest entry and exit criteria...');return}
+			if (!entryErr || !exitErr) {
+				_this.setSetUpLoadingSetting(false, false, 0, 'Error saving backtest entry and exit criteria...');
+				CIQ.hideCover()
+				return
+			}
 			// 处理上传到后端的数据
 			let entrySaveObj = _this.handleSavedData('entry')
 			let exitSaveObj = _this.handleSavedData('exit')

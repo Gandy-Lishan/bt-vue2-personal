@@ -1,10 +1,8 @@
 <template>
-  <div v-show="isLoading">
-    <div class="progress-container">
+    <div class="progress-container" v-show="isLoading">
       <el-progress v-if="showProgress" :text-inside="true" :stroke-width="26" :percentage="percentage" :color="customColorMethod"></el-progress>
       <span class="progress-text"><i class="el-icon-loading"></i>{{ progressText }}</span>
     </div>
-  </div>
 </template>
 
 <script>
@@ -29,7 +27,7 @@ export default {
         return '#67c23a';
       }
     },
-  }
+  },
 };
 </script>
 
@@ -37,13 +35,17 @@ export default {
 .progress-container {
 	background: rgba(0, 0, 0, 0.8);
 	border-radius: 20px;
-	height: 100vh;
+	height: 100%;
+  min-height: 500px;
 	/* opacity: 0.5; */
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	margin: 0 auto;
 	flex-direction: column;
+
+  position: relative;
+  z-index: 999;
 }
 .el-progress{
 	width: 80%;

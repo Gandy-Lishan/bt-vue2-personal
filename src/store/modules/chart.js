@@ -38,7 +38,14 @@ const state = {
 	formateTechnicalList: [], //chartiq 和builtinList不同，这个是只给表单提供的techList
 	spanPeriod: {},
 	sentimentIndicatorList: [],
-	isBTChartReady: false
+	isBTChartReady: false,
+	chartLoadingSetting: {
+		// 控制 setup 的loading 状态
+		isChartLoading: false,
+		showProgress: false,
+		percentage: 0,
+		progressText: 'Loading...'
+	},
 }
 
 const mutations = {
@@ -194,7 +201,16 @@ const mutations = {
 	},
 	SET_CHART_READY_STATE(state, _state) {
 		state.isBTChartReady = _state
-	}
+	},
+	SET_CHART_LOADING(state, obj) {
+		const { isChartLoading, percentage, progressText, showProgress } = obj
+		state.chartLoadingSetting = {
+			isChartLoading,
+			showProgress,
+			percentage,
+			progressText
+		}
+	},
 }
 
 const actions = {

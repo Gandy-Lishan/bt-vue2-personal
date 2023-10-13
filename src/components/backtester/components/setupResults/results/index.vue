@@ -22,6 +22,7 @@ import ResForm from "./resultForm"
 import Performance from "./performance"
 import {isJson} from '@/utils'
 import { LoadingOverlay } from "@/components/common"
+import { CIQ } from '@/components/common/chart/st-development/js'
 
 export default {
   name: 'Results',
@@ -55,6 +56,7 @@ export default {
         }
       }
 			_this.setResultsLoadingSetting(false, false, 0, 'Loading data...')
+      CIQ.hideCover()
     });
     } else {
       next();
