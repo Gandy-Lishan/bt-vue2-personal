@@ -451,8 +451,9 @@
  
              }
              // 之后加一个symbol判断和小李新senti判断
-             if(CIQ.isUserIndicator(indicatorList[i])){
-                 
+            /********************lishan modify start*************************/
+            if(CIQ.isUserIndicator(indicatorList[i]) || CIQ.isOwnIndicator(indicatorList[i])){
+            /********************lishan modify end*************************/
                  var newStudy = {
                      inputs: { Period: 13, Overlay: false},
                      outputs: 
@@ -485,7 +486,9 @@
                      }
                  }
                  if(count==0){
-                     var indicatorName = indicatorList[i].split(/HASH/)[0]
+                    /********************lishan modify start*************************/
+                    var indicatorName = indicatorList[i].match(/(CREATE|HASH)/) ? indicatorList[i].split(/(CREATE|HASH)/)[0] : indicatorList[i]
+                    /********************lishan modify end*************************/
                      var sd = CIQ.Studies.addStudy(CIQ.stxx,indicatorList[i],{display:indicatorName})   
                  }
  

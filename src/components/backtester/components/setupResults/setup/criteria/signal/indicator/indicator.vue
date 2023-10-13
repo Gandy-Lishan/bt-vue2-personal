@@ -157,6 +157,7 @@
 							:on-exceed="handleExceed"
 							:file-list="fileList"
 							ref="upload"
+              :disabled="si.userIndicator != ''"
 						>
 							<el-button
 								size="mini"
@@ -1163,6 +1164,18 @@ export default {
       freqObj.key = `${this.criteria}_${this.panelIndex}`
       this.setFrequencyArray(freqObj)
       this.$emit('getFreqArray', freqObj)
+
+      if(indicatorUrl.includes('CREATE')) {
+        const obj = {}
+        obj.index = this.panelIndex
+        obj.val = indicatorUrl
+        if (this.criteria === 'entry') {
+            this.$store.commit(`form/saveUsersOwnEntryFileHash`, obj)
+          }
+          if (this.criteria === 'exit') {
+            this.$store.commit(`form/saveUsersOwnExitFileHash`, obj)
+          }
+      }
       
       // old version only
       var countExistIndicator = 0
@@ -1583,6 +1596,9 @@ export default {
             const startIndex = str.indexOf('HASH')
             const endIndex = startIndex + 4 // 假设 "HASH" 的长度为 4
 
+            const createdStartIndex = str.indexOf('CREATED')
+            const createdEndIndex = createdStartIndex + 7
+
             if (startIndex !== -1) {
               const beforeHash = str.substring(0, startIndex)
               const afterHash = str.substring(endIndex)
@@ -1634,8 +1650,26 @@ export default {
               } catch (error) {
                 console.log('error', error)
               }
-            } else {
-              console.log('HASH not found in the string.')
+            } else if(createdStartIndex !== -1){
+              const beforeHash = str.substring(0, createdStartIndex)
+              const afterHash = str.substring(createdEndIndex)
+
+              // 还原文件对象的 raw 属性
+              const obj = {}
+              obj.index = index
+              obj.val = afterHash
+              vm.si.userIndicator = beforeHash
+              vm.$emit('getIndicatorUrl', {
+                index: index,
+                url: afterHash
+              })
+              console.log('还原文件对象的 raw 属性', obj)
+              if (this.criteria === 'entry') {
+                this.$store.commit(`form/saveUsersOwnEntryFileHash`, obj)
+              }
+              if (this.criteria === 'exit') {
+                this.$store.commit(`form/saveUsersOwnExitFileHash`, obj)
+              }
             }
           }
         }

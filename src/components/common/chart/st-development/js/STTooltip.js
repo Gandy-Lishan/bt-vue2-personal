@@ -515,6 +515,17 @@ if (!CIQ.Marker) {
                              });
                              dupMap[output] = 1;
                          }
+                        /********************lishan modify start*************************/
+                        else if(CIQ.isOwnIndicator(output)){
+                            fields.push({
+                                member: output,
+                                display:output.split(/CREATE/)[0],
+                                panel: panel,
+                                yAxis: yAxis
+                            });
+                            dupMap[output] = 1;
+                        }
+                        /********************lishan modify end*************************/
                          // 为了给一些scanner ai的indicator加辅助线，但是又得隐藏这条线的tooltip显示
                          else if (output == 'supLine') {
                             continue

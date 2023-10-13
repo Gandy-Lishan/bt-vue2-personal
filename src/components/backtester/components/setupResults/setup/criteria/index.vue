@@ -30,7 +30,7 @@
 					:max="editableTabs.length"
 					size="mini"
 				></el-input-number>
-				<span class="scoreNote" v-if="relation === 3">
+				<span class="scoreNote timeLimitBox" v-if="relation === 3">
 					<div class="excludeBox">
 						<el-checkbox v-model="isUsePeriodLimit" @change="changePeriodLimit"
 							>Use Time Period Limit
@@ -44,7 +44,7 @@
 					</div>
 					<div class="period-box" v-if="isUsePeriodLimit">
 						<span>Period: </span>
-						<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+						<el-tooltip effect="dark" placement="top" style="diaplay: inline; margin-right: 5px;">
 							<span slot="content">
 								{{config['periodTP']}}
 							</span>
@@ -545,7 +545,31 @@ export default {
 	methods: {
 		...mapMutations('form', ['setFrequencyArray']),
 		clearForm() {
-			/* todolishan */
+			Object.assign(this.$data, this.$options.data())
+			if (this.criteria === 'entry') {
+				this.relation = 1;
+			} else {
+				this.relation = 0;
+			}
+			// Reset data for all subcomponents
+			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
+				if (this.indicatorRadioArr[i]) {
+					this.$refs.indiChild[i].clearForm()
+					this.$refs.sentiChild[i].clearForm()
+					this.$refs.symbolChild[i].clearForm()
+					this.$refs.cciChild[i].clearForm()
+					this.$refs.maChild[i].clearForm()
+					this.$refs.macdChild[i].clearForm()
+					this.$refs.bollBandsLikeChild[i].clearForm()
+					this.$refs.EFTLikeChild[i].clearForm()
+					this.$refs.stochasticsLikeChild[i].clearForm()
+					this.$refs.ADXLikeChild[i].clearForm()
+					this.$refs.ERILikeChild[i].clearForm()
+					this.$refs.aligatorLikeChild[i].clearForm()
+					this.$refs.LRFLikeChild[i].clearForm()
+					this.$refs.trailingStopLikeChild[i].clearForm()
+				}
+			}
 		},
 		resetForm() {
 			/* todolishan */
@@ -1457,5 +1481,13 @@ export default {
 }
 .delay-bar-box /deep/ label.el-checkbox {
 	width: 146px;
+}
+.timeLimitBox{
+	position: relative;
+}
+.period-box{
+	position: absolute;
+	top: 100%;
+	left: 0;
 }
 </style>
