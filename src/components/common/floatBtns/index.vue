@@ -4,7 +4,8 @@
     <div class="maintabBtnContainer">
 				<div>
 					<button
-						class="sidebar activated"
+						class="sidebar"
+						:class="{'activated': dynamicClass == 'SR'}"
 						ref="setup"
 						@click="switchMainTab('sr')"
 					>
@@ -26,7 +27,10 @@
 					</button>
 				</div>
 				<div>
-					<button class="sidebar" ref="list" @click="switchMainTab('list')">
+					<button
+					class="sidebar" 
+					:class="{'activated': dynamicClass == 'LIST'}"
+					ref="list" @click="switchMainTab('list')">
 						<div class="svgBox">
 							<svg
 								class="sidebar_button_icon"
@@ -145,6 +149,17 @@
 <script>
 export default {
   name: 'FloatBtns',
+	computed: {
+    dynamicClass() {
+      // 根据当前路由或其他条件来计算动态类名
+      return this.$route.meta.actived || 'SR';
+    }
+  },
+	watch: {
+    '$route'(to, from) {
+      this.updateDynamicClass();
+    }
+  },
 	methods: {
 		switchMainTab(subUrl) {
 			// setup or list
@@ -162,6 +177,10 @@ export default {
     },
 		refreshPageTemp(){
       this.$router.go(0)
+    },
+		updateDynamicClass() {
+      // 根据当前路由或其他条件来计算动态类名 // SR or LIST
+      this.dynamicClass = this.$route.meta.actived || 'SR'
     },
 	}
 }

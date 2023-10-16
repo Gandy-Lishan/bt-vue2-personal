@@ -243,6 +243,12 @@ export const CommonMethodsMixin = {
 				exit: row.exit
 			}
 			this.$store.commit('form/setHashTable', csvObj)
+			// 暂时设置成成功
+			this.$store.state.form.last_signal_array.map(item => {
+				if (item.name == row.name) {
+					item.state = 1
+				}
+			})
 		},
 		async findAllFavoritesSignal() {
 			const list = this.$store.state.form.hashTable
