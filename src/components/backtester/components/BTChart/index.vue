@@ -10,18 +10,13 @@
 					</el-col>
 				</el-row> -->
 			<div class="chart_box" id="chart_box">
-        		<BTChart width="100%" height="100%" :onChartReady="onChartReady">
-					
-					<LoadingOverlay
-						:v-show="chartLoadingSetting.isChartLoading"
+        		<BTChart width="100%" height="100%" :onChartReady="onChartReady">	
+					<LoadingOverlayChart
 						:isLoading="chartLoadingSetting.isChartLoading"
-						:showProgress="chartLoadingSetting.showProgress"
-						:percentage="chartLoadingSetting.percentage"
 						:progressText="chartLoadingSetting.progressText"
 					>
-					</LoadingOverlay>
+					</LoadingOverlayChart>	
 				</BTChart>  
-
 			</div>
 	</header>
 </template>
@@ -31,13 +26,13 @@ import BTChart from "@/components/common/chart/index.vue"
 import { LocalStorageUtil } from '@/utils'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapMutations } from "vuex"
-import { LoadingOverlay } from "@/components/common"
+import { LoadingOverlayChart } from "@/components/common"
 
 export default {
   name: 'BTHeader',
   components: {
     BTChart,
-	LoadingOverlay
+	LoadingOverlayChart
   },
 	computed: {
 		chartLoadingSetting() {

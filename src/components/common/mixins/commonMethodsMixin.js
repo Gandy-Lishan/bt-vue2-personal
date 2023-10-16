@@ -419,6 +419,12 @@ export const CommonMethodsMixin = {
 					[prop]: backtestInfo[prop]
 				}))
 			)
+
+			//  Restore indicator layout
+			document.getElementsByClassName('ciq-period')[0].style.display = ''
+			this.$store.commit('form/getBacktestSymbol', backtestInfo.symbol)
+			this.$store.dispatch('states/set_isMarkerShown_flag', false)
+			
 			this.reloadData(backtestInfo.indicator_layout, backtestInfo.frequency)
 			const callback = this.handleRunAllCallback(
 				backtestParams,
@@ -430,6 +436,7 @@ export const CommonMethodsMixin = {
 				// 展示 result 时要用
 				_this.$store.commit('form/getRunBacktestData', backtestInfo)
 			})
+			debugger
 			await this.loopCalculateNewConditions(backtestInfo)
 			await CIQ.uploadCSVJSON(backtestInfo.pk, callback)
 			// await CIQ.outputSignalsResult(backtestInfo.pk, callback)
