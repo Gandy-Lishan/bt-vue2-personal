@@ -330,7 +330,6 @@
          count++
      }
  
-     utils.setSymbol(symbol)
      CIQ.store.commit('form/getBacktestSymbol',symbol)
      if(count>0){
          await this.getIndicatorMatedata(indicatorsList)
