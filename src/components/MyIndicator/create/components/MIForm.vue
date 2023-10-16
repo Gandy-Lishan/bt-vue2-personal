@@ -63,8 +63,9 @@
 								<span v-if="item.type === 'Symbol'" class="type-label"
 									>Symbol</span
 								>
-								<span v-else-if="item.type === 'Indicator'" class="type-label"
-									>Indicator</span
+								<span v-if="item.type === 'Indicator'" class="type-label"
+									><span class="updated-label">{{item.updated}}</span>
+                  Indicator</span
 								>
 							</div>
 						</template>
@@ -217,28 +218,32 @@ export default {
         placeholder: 'Please input the moving average value',
         checked: false,
         field: 'ma1',
-        value: ''
+        value: '',
+        type: 'SelectInput'
       },
       MA2CheckInputConfig: {
         label: 'Moving Average',
         placeholder: 'Please input the moving average value',
         checked: false,
         field: 'ma2',
-        value: ''
+        value: '',
+        type: 'SelectInput'
       },
       EOCheckInputConfig: {
         label: 'Extreme Optimism',
         placeholder: 'Please input the extreme optimism value',
         checked: true,
         field: 'extreme_optimism',
-        value: ''
+        value: '',
+        type: 'CheckInput'
       },
       EPCheckInputConfig: {
         label: 'Extreme Pessimism',
         placeholder: 'Please input the extreme pessimism value',
         checked: true,
         field: 'extreme_pessimism',
-        value: ''
+        value: '',
+        type: 'CheckInput'
       },
       data: {
         categories: '',
@@ -251,7 +256,7 @@ export default {
       },
       sentimentList: [],
       loading: false,
-      symbolList: []
+      symbolList: [],
     }
   },
   computed: {
@@ -382,8 +387,14 @@ export default {
       this.dropdownList = this.getList()
     },
     handleSelect(item, source) {
-      console.log(item)
+      console.log('item', item)
       const type = item.type
+      if(type === 'Indicator') {
+        this.data.time_frame = this.findMaxFreq(this.data.time_frame, item.updated.toLowerCase()) 
+      }else {
+        this.data.time_frame = 'daily'
+      }
+      console.log('当前最大的 timeframe 是', this.data.time_frame)
 
       const selectIndicator = (item) => {
         this.data[source] = item.label
@@ -424,7 +435,28 @@ export default {
         }
       }
     },
+    findMaxFreq(currentFreq, previousFreq) {
+      let selectedTimeframe = currentFreq
+			let previousTimeframe = previousFreq
+			if (
+				selectedTimeframe !== '' &&
+				selectedTimeframe !== undefined &&
+				selectedTimeframe !== null
+			) {
+				if (selectedTimeframe !== previousTimeframe) {
+					// 根据时间范围的大小进行比较，取周期较大的那个
+					const timeframes = ['daily', 'weekly', 'monthly']
+					const previousIndex = timeframes.indexOf(previousTimeframe)
+					const currentIndex = timeframes.indexOf(selectedTimeframe)
+					const largerIndex = Math.max(previousIndex, currentIndex)
+					selectedTimeframe = timeframes[largerIndex]
 
+					// 更新之前的时间范围为当前选择
+					previousTimeframe = selectedTimeframe
+				}
+			}
+			return previousTimeframe
+    },
     changeSymbol(url) {
       // 改变 chartiqIQ 中的 symbol
     },
@@ -527,12 +559,12 @@ h4 {
 }
 .MI-form-middle {
 	display: inline-grid;
-	grid-template-columns: 1fr 0.5fr 1fr;
+	grid-template-columns: 1fr 0.3fr 1fr;
 }
 .MI-form-bottom {
 	display: inline-grid;
 	align-items: center;
-	grid-template-columns: 1fr 0.5fr 1fr;
+	grid-template-columns: 1fr 0.3fr 1fr;
 }
 .MI-form-btn {
 	display: flex;
@@ -559,6 +591,12 @@ h4 {
 .type-label {
 	font-size: 12px;
 	color: #999999;
+}
+.updated-label{
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 10px;
+  text-align: center;
 }
 
 .item-label {
