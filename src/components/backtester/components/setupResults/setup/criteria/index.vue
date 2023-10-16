@@ -4,9 +4,8 @@
 		<div class="signal-option-box">
 			<div class="entry-title-box">
 				<p class="criteria-title">{{config['criteriaTitle']}}</p>
-				<el-tooltip effect="dark" placement="top" style="diaplay: inline">
-					<span slot="content">
-            {{config['criteriaTitleTP']}}
+				<el-tooltip  effect="dark" placement="top" style="word-wrap: break-word;diaplay: inline">
+					<span slot="content" v-html="config['criteriaTitleTP']">
           </span>
 					<i class="iconfont icon-wenhao"></i>
 				</el-tooltip>
@@ -15,8 +14,7 @@
 				<span class="scoreNote" v-if="relation === 2">
 					<span>Score: </span>
 					<el-tooltip effect="dark" placement="top" style="diaplay: inline">
-						<span slot="content">
-              {{config['scoreTP']}}
+						<span slot="content" v-html="config['scoreTP']">
             </span>
 						<i class="iconfont icon-wenhao"></i>
 					</el-tooltip>
@@ -35,8 +33,7 @@
 						<el-checkbox v-model="isUsePeriodLimit" @change="changePeriodLimit"
 							>Use Time Period Limit
 							<el-tooltip effect="dark" placement="top">
-								<span slot="content">
-									{{config['timeLimitTP']}}
+								<span slot="content" v-html="config['timeLimitTP']">
 								</span>
 								<i class="iconfont icon-wenhao"></i>
 							</el-tooltip>
@@ -45,8 +42,7 @@
 					<div class="period-box" v-if="isUsePeriodLimit">
 						<span>Period: </span>
 						<el-tooltip effect="dark" placement="top" style="diaplay: inline; margin-right: 5px;">
-							<span slot="content">
-								{{config['periodTP']}}
+							<span slot="content" v-html="config['periodTP']">
 							</span>
 							<i class="iconfont icon-wenhao"></i>
 						</el-tooltip>
@@ -404,8 +400,7 @@
 									placement="top"
 									style="diaplay: inline"
 								>
-									<span slot="content">
-                    {{config['DOBTP']}}
+									<span slot="content" v-html="config['DOBTP']">
 									</span>
 									<i class="iconfont icon-wenhao"></i> </el-tooltip
 							></el-checkbox>
