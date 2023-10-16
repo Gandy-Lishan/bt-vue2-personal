@@ -640,13 +640,6 @@ const mutations = {
 		const str = end_date.split('-')
 		str[0] = Number(str[0]) - Number(backtest_period) + ''
 		state.bd.start_date = str.join('-')
-		const utils = function() {
-			let vm = this
-			vm.setSymbol = function(symbol) {
-				that.bd.symbol = symbol
-			}
-		}
-		window.utils = new utils()
 	},
 	RESULT_DATA_FOR_SETUP_DISPLAY(state, obj) {
 		console.log('缓存了 row 数据', obj)

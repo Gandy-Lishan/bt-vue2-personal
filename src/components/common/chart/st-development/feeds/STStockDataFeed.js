@@ -53,9 +53,6 @@ quoteFeedSimulator.sendReq = async function(symbol,start,end,new_str,freq,cb){
         "&start="+start+
         "&end=" + end +
         "&freq=" + freq
-       
-    // set initial symbol value to the form
-    //utils.setSymbol(symbol)
 
     CIQ.symbol = symbol;
     try{
