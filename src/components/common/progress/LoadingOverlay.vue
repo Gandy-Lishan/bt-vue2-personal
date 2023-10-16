@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ 'progress-container': isLoading }">
+    <div :class="{ 'progress-container': isLoading, 'dont-show-content': !isLoading }">
       <el-progress v-if="showProgress" :text-inside="true" :stroke-width="26" :percentage="percentage" :color="customColorMethod"></el-progress>
       <span class="progress-text"><i class="el-icon-loading"></i>{{ progressText }}</span>
     </div>
@@ -64,5 +64,8 @@ export default {
 	i {
 		margin-right: 10px;
 	}
+}
+.dont-show-content {
+  opacity: 0;
 }
 </style>

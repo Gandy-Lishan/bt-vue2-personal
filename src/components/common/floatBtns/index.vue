@@ -151,8 +151,18 @@ export default {
 			const url = `/backtester/${subUrl}`
 			this.$router.push({
 				path: url
-			})
-		}
+			}),
+			this.animationUp(650)
+		},
+		animationUp: function (ph) {
+      window.scrollTo({
+        top: ph,
+        behavior: 'smooth'
+      })
+    },
+		refreshPageTemp(){
+      this.$router.go(0)
+    },
 	}
 }
 </script>
