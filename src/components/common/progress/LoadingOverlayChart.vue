@@ -36,7 +36,7 @@ export default {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	transition: opacity .3s;
+	transition: visibility .3s;
 }
 .progress-text{
 	font-size: 12px;
@@ -73,6 +73,6 @@ export default {
   }
 }
 .dont-show-content {
-  opacity: 0;
+  visibility:hidden;
 }
 </style>
