@@ -10,18 +10,14 @@
 					</el-col>
 				</el-row> -->
 			<div class="chart_box" id="chart_box">
-        		<BTChart width="100%" height="100%" :onChartReady="onChartReady">
-					
+        		<BTChart width="100%" height="100%" :onChartReady="onChartReady">	
 					<LoadingOverlayChart
 						:isLoading="chartLoadingSetting.isChartLoading"
 						:progressText="chartLoadingSetting.progressText"
 					>
-					</LoadingOverlayChart>
-					
+					</LoadingOverlayChart>	
 				</BTChart>  
-				
 			</div>
-			{{ chartLoadingSetting }}
 	</header>
 </template>
 
