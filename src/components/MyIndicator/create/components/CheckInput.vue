@@ -1,6 +1,15 @@
 <template>
   <div class="checkbox-with-input">
-    <el-checkbox v-model="showInput">{{ config.label }}</el-checkbox>
+    <el-checkbox v-model="showInput" v-if="config['type'] == 'CheckInput'">{{ config.label }}</el-checkbox>
+    <el-checkbox v-model="showInput" v-if="config['type'] == 'SelectInput'" style="margin-right: 10px;"></el-checkbox>
+    <el-select v-model="MAType" @change="handleSelect" placeholder="-Select-" size="mini" v-if="config['type'] == 'SelectInput'" style="margin-right: 5px;">
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+    </el-select>
     <el-input
       size="mini"
       v-show="showInput"
@@ -17,7 +26,7 @@ export default {
   props: {
     config: {
       type: Object,
-      required: true
+      required: true,
     }
   },
   data() {
@@ -25,6 +34,14 @@ export default {
       value: '',
       showInput: false,
       inputVisibility: 'hidden', // 初始化时设置为隐藏
+      options: [{
+          value: 'MA',
+          label: 'Moving Average'
+        }, {
+          value: 'EMA',
+          label: 'Exponential Moving Average'
+        }],
+        MAType: 'MA',
     };
   },
   computed: {
@@ -71,12 +88,14 @@ export default {
   align-items: center;
 }
 
-/* 可选的样式，根据需要自定义 */
-.checkbox {
-  margin-right: 10px;
-}
-
 .input {
   visibility: hidden;
+}
+.el-select.el-select--mini{
+  min-width: 195px;
+}
+.el-checkbox__input.is-checked+.el-checkbox__label {
+  width: 195px;
+  font-size: 14px !important;
 }
 </style>

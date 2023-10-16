@@ -39,7 +39,12 @@ export default {
 						url: item[urlField],
 						type
 					}
-					if(item.updated === 'Daily') {
+					// if(item.updated === 'Daily') {
+					// 	obj.updated = item.updated
+					// 	return obj
+					// }
+					// 不需要限制 timeframe 为 Daily
+					if(item.updated) {
 						obj.updated = item.updated
 						return obj
 					}
