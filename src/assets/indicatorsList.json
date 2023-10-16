@@ -14748,5 +14748,10 @@
         "chart_name": "Trade Desk Inc/The",
         "url": "TTD",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "JK Employment",
+        "url": "jk_employment",
+        "updated": "Monthly"
     }
 ]
