@@ -7743,6 +7743,11 @@ class Studies extends CIQ.UI.ContextTag {
 			
 			CIQ.store.commit('chart/getExtraIndicators',extraIndicators)
 
+			if(indicator == 'ma'){
+				// 给study list上选择的ma加上为panelIndex和criteria空值的ma study layout,getIndicatorMatedata会遍历到它
+				CIQ.setMALayout(indicator,null,null,null,null,null)
+			}
+
 			let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
 			// remove redundant elements and empty string
 
@@ -8061,6 +8066,8 @@ if (!CIQ.Studies) {
 				dialog.find(".title").text(_obj.chart_name)		
 			}else if(_obj2){	
 				dialog.find(".title").text(_obj2.value);	
+			}else if(this.helper.name == "ST ROCLike"){		// 因为roc类型condition在study里面只注册了一个，所以需要判断显示title
+				dialog.find(".title").text(params.inputs.display);	
 			}else{
 				dialog.find(".title").text(this.helper.title);
 			}
@@ -8184,14 +8191,10 @@ if (!CIQ.Studies) {
 
 		refreshOutputs(empty) {
 			let _obj = CIQ.findSentiIndicator(null,this.helper.name)
-			let _obj2 = CIQ.findBuiltinTechIndicator(null,this.helper.name)
-			// if(_obj || _obj2){
-			// 	this.helper.outputs = [];
-			// }
 			if(_obj){
 				this.helper.outputs = [];
 			}
-
+			this.helper.outputs = this.helper.outputs.filter(x=>x.name != "supLine")
 			var outputs = this.node.find("cq-study-outputs");
 			if (empty) outputs.empty();
 			for (var i = 0; i < this.helper.outputs.length; i++) {
@@ -8872,6 +8875,11 @@ if (!CIQ.Studies) {
 							var activatedMAList = CIQ.store.state.chart.activatedMA
 							activatedMAList.splice(activatedMAList.findIndex(item=>item.url==sd.type),1)
 							CIQ.store.commit("chart/getMA",activatedMAList)
+
+							// 给study list上选择的ma移除为panelIndex和criteria空值的ma study layout,getIndicatorMatedata会遍历到它
+							if(sd.parameters.index == null && sd.parameters.criteria == null){
+								CIQ.removeMALayout(sd.type, null, null)
+							}
 						}catch(err){console.log(err);}
 						//CIQ.addIndicators();
 						if (!sd.permanent) CIQ.Studies.removeStudy(self.context.stx, sd);
