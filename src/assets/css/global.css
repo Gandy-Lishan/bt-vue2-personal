@@ -505,3 +505,7 @@ input[type="time"] {
 .empty-senti-container {
   min-height: 142px;
 }
+.el-message{
+  background-color: #5b9bd121;
+  border-color: #dae0ed
+}
