@@ -12,6 +12,7 @@ const state = {
 	isEditFinish_flag:false,
     // a status before symbol is loaded as a study
 	beforeCalculateNewConditions: false,
+	cacheReRunData: {}
 }
 
 const mutations = {
@@ -44,6 +45,9 @@ const mutations = {
 	},
 	setErrorMessage404: (state,obj) => {
 		state.errorMessage404 = obj
+	},
+	CACHE_RERUN_DATA: (state,obj) => {
+		state.cacheReRunData = obj
 	},
 }
 
@@ -96,7 +100,7 @@ const actions = {
 			commit('envokeBeforeCalculateNewConditions',val)
 			resolve();
 		})
-	},
+	}
 }
 export default {
 	namespaced: true,
