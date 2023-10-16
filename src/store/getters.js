@@ -9,6 +9,7 @@ const getters = {
 	rowDataForDisplay: state => state.form.rowDataForDisplay,
 	cachedBTBasicInfoData: state => state.form.cachedBTBasicInfoData,
 	getBacktestZScoreResult: state => state.form.backtestZScoreResult,
+	getBacktestSymbol: state => state.form.backtestSymbol,
 
 	// chart
 	getExtremeValue: state => state.chart.extremeValue,

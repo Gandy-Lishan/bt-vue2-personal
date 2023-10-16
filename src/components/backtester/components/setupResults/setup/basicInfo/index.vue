@@ -767,6 +767,10 @@ export default {
     this.getBTDate()
   },
   computed: {
+    ...mapGetters(['getBacktestSymbol']), // 监听chartiq和表单的symbol改动以双向响应
+    handleGetBacktestSymbol() {
+      return this.getBacktestSymbol
+    },
     ...mapGetters(['getterBacktestInfo']),
     updateFreq() {
       return this.$store.state.form.pairDataFreq
@@ -776,9 +780,16 @@ export default {
     },
     isBTChartReady() {
       return this.$store.state.chart.isBTChartReady
-    }
+    },
   },
   watch: {
+    handleGetBacktestSymbol: {
+      handler(newVal) {
+        this.bd.symbol = newVal
+      },
+      immediate: true,
+      deep: true
+    },
     updateFreq(val) {
       switch (val) {
         case 'daily': {
@@ -873,15 +884,6 @@ export default {
       CIQ.addSymbol(val)
     },
     getBTDate() {
-      var that = this
-      var utils = function () {
-        let vm = this
-        vm.setSymbol = function (symbol) {
-          that.bd.symbol = symbol
-        }
-      }
-      window.utils = new utils()  //前置定义utils语句防止此代码块无法执行
-
       this.bd.end_date = timestampToTime(new Date())
       if(this.bd.backtest_period == '21') {this.bd.start_date = ''; return}
       const str = this.bd.end_date.split('-')
