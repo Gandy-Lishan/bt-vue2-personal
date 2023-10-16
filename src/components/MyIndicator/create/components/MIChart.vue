@@ -9,6 +9,7 @@
 
 <script>
 import chart from '@/components/common/chart/index.vue'
+import { CIQ } from '@/components/common/chart/st-development/js/components'
 export default {
 	name: 'MIChart',
 	data() {
