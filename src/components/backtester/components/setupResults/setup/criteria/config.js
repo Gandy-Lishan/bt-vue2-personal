@@ -19,7 +19,7 @@ export function generateConfig(criteria) {
     1. Single Condition: One condition will trigger the backtest
     condition.<br />
     2. SameBar Multi-Condition: More than one conditions (limit to 5)
-    occurring at the same bar,will trigger the backtest condition.<br />
+    occurring at the same bar,will trigger the backtest condition.<br>
     3. TimeOrder Multi-Condition: More than one conditions (limit to 3)
     occurring within a number of bars,will trigger the backtest
     condition.<br />
