@@ -48,10 +48,29 @@ export default {
 }
 
 .loading-icon{
-  height: 50px;
-  width: 50px;
+
 	background-image:url(../../../assets/loading-spin-white.svg);
 	background-size:cover;
+
+  animation: spin 0.8s infinite linear;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 6px solid white;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-top-color: transparent;
+  margin-left: 30px;
+}
+@keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
 }
 .dont-show-content {
   opacity: 0;

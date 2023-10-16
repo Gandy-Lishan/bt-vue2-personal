@@ -32,7 +32,7 @@ export default {
   name: 'BTHeader',
   components: {
     BTChart,
-	LoadingOverlayChart
+	LoadingOverlayChart,
   },
 	computed: {
 		chartLoadingSetting() {
