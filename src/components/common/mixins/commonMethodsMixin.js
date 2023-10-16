@@ -180,7 +180,7 @@ export const CommonMethodsMixin = {
 			await this.rerunThisBacktest(cloneDeep(data))
 			// rerun 后重新请求列表 我并不需要把所有列表都更新
 			// await this.getDataList(null)
-			await this.viewBacktestResults(data)
+			await this.viewBacktestResults(this.$store.state.states.cacheReRunData)
 			this.loading = false
 		},
 		async runOrFindAndLoop(actionType) {
@@ -436,7 +436,6 @@ export const CommonMethodsMixin = {
 				// 展示 result 时要用
 				_this.$store.commit('form/getRunBacktestData', backtestInfo)
 			})
-			debugger
 			await this.loopCalculateNewConditions(backtestInfo)
 			await CIQ.uploadCSVJSON(backtestInfo.pk, callback)
 			// await CIQ.outputSignalsResult(backtestInfo.pk, callback)
