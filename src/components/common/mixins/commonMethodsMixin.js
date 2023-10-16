@@ -308,6 +308,7 @@ export const CommonMethodsMixin = {
 			return res
 		},
 		async rerunThisBacktest(backtestInfo) {
+			CIQ.addCover('Fetching backtest information...')
 			// 这里只需要执行两个请求，上传 S3 和直接运行当前的 backtest
 			backtestInfo.capital_alloc = parseFloat(backtestInfo.capital_alloc)
 			backtestInfo.slippage = parseFloat(backtestInfo.slippage)
