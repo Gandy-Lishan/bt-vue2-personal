@@ -27,8 +27,25 @@
 					<cq-menu class="ciq-indicators-search">
 						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
 					</cq-menu>
-
 					<cq-info-toggle-dropdown>
+						<cq-toggle
+                class="ciq-CH"
+                cq-member="crosshair">
+                <span></span>
+                <cq-tooltip>Crosshair (Alt + \)</cq-tooltip>
+            </cq-toggle>
+
+            <cq-menu class="ciq-menu toggle-options collapse">
+                <span></span>
+                <cq-menu-dropdown>
+                    <cq-item
+                        cq-member="crosshair">Hide Heads-Up Display<span class="ciq-radio"><span></span></span>
+                    </cq-item>
+                    <cq-item
+                        cq-member="headsUp-static">Show Heads-Up Display<span class="ciq-radio"><span></span></span>
+                    </cq-item>
+                </cq-menu-dropdown>
+            </cq-menu>
 						<cq-toggle class="ciq-HU" id="ciq-HU" cq-member="headsUp">
 							<span></span>
 							<cq-tooltip>Info</cq-tooltip>
