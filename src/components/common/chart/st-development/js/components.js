@@ -7743,6 +7743,11 @@ class Studies extends CIQ.UI.ContextTag {
 			
 			CIQ.store.commit('chart/getExtraIndicators',extraIndicators)
 
+			if(indicator == 'ma'){
+				// 给study list上选择的ma加上为panelIndex和criteria空值的ma study layout,getIndicatorMatedata会遍历到它
+				CIQ.setMALayout(indicator,null,null,null,null,null)
+			}
+
 			let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
 			// remove redundant elements and empty string
 
@@ -8870,6 +8875,11 @@ if (!CIQ.Studies) {
 							var activatedMAList = CIQ.store.state.chart.activatedMA
 							activatedMAList.splice(activatedMAList.findIndex(item=>item.url==sd.type),1)
 							CIQ.store.commit("chart/getMA",activatedMAList)
+
+							// 给study list上选择的ma移除为panelIndex和criteria空值的ma study layout,getIndicatorMatedata会遍历到它
+							if(sd.parameters.index == null && sd.parameters.criteria == null){
+								CIQ.removeMALayout(sd.type, null, null)
+							}
 						}catch(err){console.log(err);}
 						//CIQ.addIndicators();
 						if (!sd.permanent) CIQ.Studies.removeStudy(self.context.stx, sd);
