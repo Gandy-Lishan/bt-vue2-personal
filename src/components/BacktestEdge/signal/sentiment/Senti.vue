@@ -548,9 +548,7 @@ export default {
             CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
             && CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'
           ) {
-            // 为什么不直接判断是否为st ma呢
-            // sentiment indicator自带的ROCLike除外
-            //if(studyInstanceName.indexOf('‌ST ROCLike‌')!=-1) continue					
+            // 直接判断是否为st ma
             CIQ.Studies.removeStudy(
               CIQ.stxx,
               CIQ.stxx.layout.studies[studyInstanceName]
@@ -663,9 +661,7 @@ export default {
           CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
           && CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'
         ) {
-          // 为什么不直接判断是否为st ma呢
-          // sentiment indicator自带的ROCLike除外
-          //if(studyInstanceName.indexOf('‌ST ROCLike‌')!=-1) continue	
+          // 直接判断是否为st ma
           CIQ.Studies.removeStudy(
             CIQ.stxx,
             CIQ.stxx.layout.studies[studyInstanceName]

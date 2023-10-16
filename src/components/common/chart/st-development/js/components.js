@@ -8061,6 +8061,8 @@ if (!CIQ.Studies) {
 				dialog.find(".title").text(_obj.chart_name)		
 			}else if(_obj2){	
 				dialog.find(".title").text(_obj2.value);	
+			}else if(this.helper.name == "ST ROCLike"){		// 因为roc类型condition在study里面只注册了一个，所以需要判断显示title
+				dialog.find(".title").text(params.inputs.display);	
 			}else{
 				dialog.find(".title").text(this.helper.title);
 			}
@@ -8184,14 +8186,10 @@ if (!CIQ.Studies) {
 
 		refreshOutputs(empty) {
 			let _obj = CIQ.findSentiIndicator(null,this.helper.name)
-			let _obj2 = CIQ.findBuiltinTechIndicator(null,this.helper.name)
-			// if(_obj || _obj2){
-			// 	this.helper.outputs = [];
-			// }
 			if(_obj){
 				this.helper.outputs = [];
 			}
-
+			this.helper.outputs = this.helper.outputs.filter(x=>x.name != "supLine")
 			var outputs = this.node.find("cq-study-outputs");
 			if (empty) outputs.empty();
 			for (var i = 0; i < this.helper.outputs.length; i++) {

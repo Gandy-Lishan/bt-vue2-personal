@@ -629,7 +629,7 @@ if (!CIQ.Studies) {
 			quote['supLine'] = showSupLine;
 		}
 
-		sd.outputMap[sd.inputs.display+desc] = "ROCLike";
+		sd.outputMap[sd.inputs.display+desc] = "Line";
 		sd.outputMap['supLine'] = "supLine";
 		
 		// 给上面函数用的工具函数
@@ -791,7 +791,7 @@ if (!CIQ.Studies) {
             name: "ROCLike Line",
             calculateFN: CIQ.Studies.calculateSTROCLike,
             inputs: { Field: "field",condition: "ROC",period: 5,overlay: false},
-			outputs: { ROCLike: "auto",supLine:'#9a9a9a' },
+			outputs: { Line: "auto",supLine:'#9a9a9a' },
         },
 		"Symbol Open": {
             name: "Symbol Open Line",
