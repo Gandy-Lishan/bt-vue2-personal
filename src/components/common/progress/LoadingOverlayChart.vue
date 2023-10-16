@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ 'progress-container': isLoading }">
+    <div :class="{ 'progress-container': isLoading, 'dont-show-content': !isLoading }">
       <span class="progress-text"><div class="loading-icon"></div></span>
     </div>
 </template>
@@ -52,5 +52,8 @@ export default {
   width: 50px;
 	background-image:url(../../../assets/loading-spin-white.svg);
 	background-size:cover;
+}
+.dont-show-content {
+  opacity: 0;
 }
 </style>
