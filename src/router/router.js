@@ -11,6 +11,7 @@ const routes = [
 				path: 'sr',
 				name: 'SetUpResults',
 				redirect: '/backtester/sr/setup',
+				meta: {actived: 'SR'},
 				component: resolve =>
 					require([
 						'@/components/backtester/components/setupResults/index.vue'
@@ -19,7 +20,7 @@ const routes = [
 					{
 						path: 'setup',
 						name: 'SetUp',
-						meta: { activeItem: 'setup' },
+						meta: { activeItem: 'setup', actived: 'SR' },
 						component: resolve =>
 							require([
 								'@/components/backtester/components/setupResults/setup/index.vue'
@@ -28,7 +29,7 @@ const routes = [
 					{
 						path: 'results',
 						name: 'Results',
-						meta: { activeItem: 'results' },
+						meta: { activeItem: 'results', actived: 'SR' },
 						component: resolve =>
 							require([
 								'@/components/backtester/components/setupResults/results/index.vue'
@@ -40,6 +41,7 @@ const routes = [
 				path: 'list',
 				name: 'List',
 				redirect: '/backtester/list/history',
+				meta: {actived: 'LIST'},
 				component: resolve =>
 					require([
 						'@/components/backtester/components/list/index.vue'
@@ -48,7 +50,7 @@ const routes = [
 					{
 						path: 'history',
 						name: 'History',
-						meta: { activeItem: 'history' },
+						meta: { activeItem: 'history', actived: 'LIST' },
 						component: resolve =>
 							require([
 								'@/components/backtester/components/list/history/index.vue'
@@ -57,7 +59,7 @@ const routes = [
 					{
 						path: 'favorites',
 						name: 'Favorites',
-						meta: { activeItem: 'favorites' },
+						meta: { activeItem: 'favorites', actived: 'LIST' },
 						component: resolve =>
 							require([
 								'@/components/backtester/components/list/favorites/index.vue'
@@ -66,7 +68,7 @@ const routes = [
 					{
 						path: 'sample',
 						name: 'Sample',
-						meta: { activeItem: 'sample' },
+						meta: { activeItem: 'sample', actived: 'LIST' },
 						component: resolve =>
 							require([
 								'@/components/backtester/components/list/sample/index.vue'
@@ -75,7 +77,7 @@ const routes = [
 					{
 						path: 'analyst',
 						name: 'Analyst',
-						meta: { activeItem: 'analyst' },
+						meta: { activeItem: 'analyst', actived: 'LIST' },
 						component: resolve =>
 							require([
 								'@/components/backtester/components/list/analyst/index.vue'
