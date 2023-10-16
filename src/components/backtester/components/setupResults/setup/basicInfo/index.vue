@@ -802,9 +802,12 @@ export default {
       handler(newVal) {
         if (!newVal && this.isRiskControl) {
           this.$message({
-            message: 'Select at least one Risk Control indicator',
-            type: 'error'
-          })
+						message: "<strong>Select at least one 'Risk Control' indicator</strong>",
+						center: true,
+						dangerouslyUseHTMLString: true,
+						showClose: true,
+						duration: 8000
+					});
           this.isTakeProfit = true
           this.selectRiskControl(this.isRiskControl)
         }
@@ -1050,7 +1053,13 @@ export default {
       let formValid, riskControlValid, stopLossValid, takeProfitValid, timeInMarketValid, excludeValid, nameValid, setUpValid, nameLookupRes, nameValidPass
       let _this = this
       if(!_this.bd.end_date) {
-        _this.$message.error('Please select end date')
+        _this.$message({
+						message: "<strong>Please select 'End Date'</strong>",
+						center: true,
+						dangerouslyUseHTMLString: true,
+						showClose: true,
+						duration: 8000
+					});
         return false
       }
       _this.$refs['backtestSetupForm'].validate((valid) => {
@@ -1058,7 +1067,13 @@ export default {
           formValid = true
         }else {
           formValid = false
-          _this.$message.error('Kindly ensure that the form fields are filled correctly.')
+          _this.$message({
+						message: "<strong>Kindly ensure that the form fields are filled correctly.</strong>",
+						center: true,
+						dangerouslyUseHTMLString: true,
+						showClose: true,
+						duration: 8000
+					});
           return false
         }
       })
@@ -1073,7 +1088,15 @@ export default {
       if(_this.isExcludeOO) excludeValid = (_this.validateExclude(_this.bd.exclude_oo) === '')
       /* 表单总验证 */
       setUpValid = (formValid && ((_this.isRiskControl && riskControlValid) || !_this.isRiskControl) && ((_this.isExcludeOO && excludeValid) || !_this.isExcludeOO) )
-      if(!setUpValid){ _this.$message.error('Kindly ensure that the form fields are filled correctly.'); return false }
+      if(!setUpValid){
+        _this.$message({
+						message: "<strong>Kindly ensure that the form fields are filled correctly.</strong>",
+						center: true,
+						dangerouslyUseHTMLString: true,
+						showClose: true,
+						duration: 8000
+					});
+          return false }
       /* backtest name 校验 */
       nameLookupRes = await getBacktestName(_this.bd.name)
       const nameList = nameLookupRes.data.results
@@ -1088,7 +1111,15 @@ export default {
         }
       /* 重名且编辑 没名字是编辑 没名字是新建 */
       nameValidPass = (!nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid')) || (nameValid) && _this.getterBacktestInfo.hasOwnProperty('old_uuid') || (nameValid) && !_this.getterBacktestInfo.hasOwnProperty('old_uuid')
-      if(!nameValidPass) {_this.$message.error('The backtest name already exists.'); return false}
+      if(!nameValidPass) {
+        _this.$message({
+						message: "The backtest name already exists.",
+						center: true,
+						dangerouslyUseHTMLString: true,
+						showClose: true,
+						duration: 8000
+				});
+        return false}
       return setUpValid && nameValidPass
     },
     setDesciption() {
