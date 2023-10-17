@@ -33,7 +33,7 @@
 			</el-form-item>
 		</div>
 		<el-divider></el-divider>
-		<div class="MI-form-middle">
+		<div class="MI-form-middle" v-if="data.categories != 'WIC'">
 			<div class="left">
 				<el-form-item v-model="data.indicator_1">
 					<el-autocomplete
@@ -155,8 +155,8 @@
 			</div>
 		</div>
 
-		<el-divider></el-divider>
-		<div class="MI-form-bottom">
+		<el-divider v-if="data.categories != 'WIC'"></el-divider>
+		<div class="MI-form-bottom" v-if="data.categories != 'WIC'">
 			<CheckInput
 				:config="EOCheckInputConfig"
 				ref="EOForm"
@@ -169,7 +169,8 @@
 				@saveData="saveSubData"
 			></CheckInput>
 		</div>
-    <div class="WIC-container">
+    <div class="WIC-container"
+      v-if="data.categories == 'WIC'">
       <el-table
       :data="weightData"
       :row-class-name="tableRowClassName"
@@ -179,12 +180,12 @@
       stripe
       border
       size="mini"
-      highlight-current-row                                                       
+      highlight-current-row                                                    
       >
-      <el-table-column label="Index" header-align="center" align="center">
+      <el-table-column label="Index" header-align="center" align="center" width="200px">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="Weight" header-align="center" align="center" prop="weight">
+      <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="200px">
         <template slot-scope="scope">
           <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule" @blur="validateTotalPercentage">
             <template v-slot:append>(%)</template>
@@ -232,7 +233,7 @@
           </el-autocomplete>
         </template>
       </el-table-column>
-      <el-table-column header-align="center" align="center">
+      <el-table-column header-align="center" align="center" width="200px">
         <template slot-scope="scope" v-if="scope.$index === 0">
           <el-button @click="addRow" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Indicator</el-button>
         </template>
@@ -240,7 +241,7 @@
           <el-button round size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope.$index)"></el-button> 
         </template>
       </el-table-column>
-    </el-table>
+      </el-table>
     </div>
 		<el-divider></el-divider>
 		<div class="MI-form-btn">
@@ -361,7 +362,7 @@ export default {
   methods: {
     async submitForm() {
       let saveData = null
-      if(this.categories != 'WIC') {
+      if(this.data.categories != 'WIC') {
         this.$store.commit('SET_CREACT_LOADING', true)
         const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
 
@@ -378,7 +379,7 @@ export default {
           extreme_optimism: this.data.extreme_optimism,
           extreme_pessimism: this.data.extreme_pessimism
         }
-      }else {
+      }else if(this.data.categories == 'WIC'){
         if(this.weightValidErrMsg) return
         const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(1))
         const indicator_weight = percentageStrings.join('_')
@@ -390,11 +391,11 @@ export default {
 
         saveData = {
           name: this.data.name,
-          indicator_1: 'spx',
-          indicator_2: 'spx',
+          indicator_1: 'model_smart_money',
+          indicator_2: 'model_smart_money',
           time_frame: this.data.time_frame,
           ma: '1_1_1',
-          categories: 'ratio',
+          calculate: 'ratio',
           extreme_optimism: 0,
           extreme_pessimism: 0,
           indicator_weight,
@@ -403,7 +404,6 @@ export default {
       }
 
       console.log('保存的数据', saveData)
-      return
       const saveRes = await saveMyIndicators(saveData)
       const code = saveRes.data.code
 				if(saveRes.status == 201) {
@@ -435,6 +435,7 @@ export default {
       this.data[field] = value // ma1, ma2, extreme_pessimism, extreme_optimism
     },
     querySearch(queryString, cb) {
+      if(!this.dropdownList || !this.dropdownList.length) {this.dropdownList = this.getList()}
       var dropdownList = this.dropdownList
       var results = queryString
         ? dropdownList.filter(this.createFilter(queryString))
@@ -458,7 +459,7 @@ export default {
       const data = this.data
       const isIndicator = data.categories.includes('Indicator')
       const isSymbol = data.categories.includes('Symbol')
-      const neitherOfThem = data.categories == ''
+      const neitherOfThem = data.categories == '' || data.categories == 'WIC'
       if (neitherOfThem) {
         return this.sentimentList.concat(this.symbolList)
       }
@@ -580,42 +581,43 @@ export default {
       
     },
     displayData(data) {
-      this.data.categories = data.categories;
-      this.data.indicator_1 = data.former;
-      this.data.indicator_2 = data.latter;
-      this.data.indicator_1_url = data.indicator_1_url;
-      this.data.indicator_2_url = data.indicator_2_url;
+      this.data.categories = data.mul_indicator && data.indicator_weight ? 'WIC' : data.categories;
+      this.data.indicator_1 = data.mul_indicator && data.indicator_weight ? '' : data.former;
+      this.data.indicator_2 = data.mul_indicator && data.indicator_weight ? '' : data.latter;
+      this.data.indicator_1_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_1_url;
+      this.data.indicator_2_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_2_url;
       this.data.name = data.name;
 
-      const configMap = [
-        { key: 'ma', index: 0 },
-        { key: 'ma', index: 1 },
-        { key: 'upper_extreme_value' },
-        { key: 'lower_extreme_value' }
-      ];
+      if (data.mul_indicator && data.indicator_weight) {
+        const mul_indicator_obj = JSON.parse(data.mul_indicator);
+        const indicator_weight_arr = data.indicator_weight.includes('_') ? data.indicator_weight.split('_') : [data.indicator_weight];
+        this.weightData = indicator_weight_arr.map((weight, index) => ({
+          weight: (weight * 100).toFixed(2),
+          indicator: CIQ.findSentiIndicator(null, mul_indicator_obj[`indicator_${index + 1}`]).chart_name,
+          indicator_url: mul_indicator_obj[`indicator_${index + 1}`],
+        }));
+        console.log('处理后的结果', this.weightData);
+      } else {
+        const configMap = [
+          { key: 'ma', index: 0 },
+          { key: 'ma', index: 1 },
+          { key: 'upper_extreme_value' },
+          { key: 'lower_extreme_value' },
+        ];
 
-      configMap.forEach(item => {
-        const value = data[item.key];
-
-        if (item.key === 'ma') {
-          const maList = value.split('_');
+        configMap.forEach(item => {
+          const value = data[item.key];
           item.config = {
-            value: maList[item.index] != '1' ? maList[item.index] : '',
-            checked: maList[item.index] != '1'
+            value: (item.key === 'ma' ? (value.split('_')[item.index] !== '1' ? value.split('_')[item.index] : '') : (value !== '0' ? value : '')),
+            checked: (item.key === 'ma' ? (value.split('_')[item.index] !== '1') : (value !== '0')),
           };
-        } else {
-          item.config = {
-            value: value != '0' ? value : '',
-            checked: value != '0'
-          };
-        }
-      });
+        });
 
-      // 现在，将配置应用于属性
-      this.MA1CheckInputConfig = { ...this.MA1CheckInputConfig, ...configMap[0].config };
-      this.MA2CheckInputConfig = { ...this.MA2CheckInputConfig, ...configMap[1].config };
-      this.EOCheckInputConfig = { ...this.EOCheckInputConfig, ...configMap[2].config };
-      this.EPCheckInputConfig = { ...this.EPCheckInputConfig, ...configMap[3].config };
+        this.MA1CheckInputConfig = { ...this.MA1CheckInputConfig, ...configMap[0].config };
+        this.MA2CheckInputConfig = { ...this.MA2CheckInputConfig, ...configMap[1].config };
+        this.EOCheckInputConfig = { ...this.EOCheckInputConfig, ...configMap[2].config };
+        this.EPCheckInputConfig = { ...this.EPCheckInputConfig, ...configMap[3].config };
+      }
     },
     tableRowClassName({row, rowIndex}) {
 			if (rowIndex%2 === 1) {
