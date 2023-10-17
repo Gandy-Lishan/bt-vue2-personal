@@ -138,8 +138,9 @@
 								<span v-if="item.type === 'Symbol'" class="type-label"
 									>Symbol</span
 								>
-								<span v-if="item.type === 'Indicator'" class="type-label"
-									>Indicator</span
+                <span v-if="item.type === 'Indicator'" class="type-label"
+									><span class="updated-label">{{item.updated}}</span>
+                  Indicator</span
 								>
 							</div>
 						</template>
