@@ -127,7 +127,7 @@ export default {
 			CIQ.extend(CIQ.Studies.studyLibrary["macd"], { edit:bool });
 			CIQ.extend(CIQ.Studies.studyLibrary["MAGap"], { edit:bool });
 			CIQ.extend(CIQ.Studies.studyLibrary["MACDHistGap"], { edit:bool });
-      CIQ.extend(CIQ.Studies.studyLibrary["rsi"], { edit:bool });
+      		CIQ.extend(CIQ.Studies.studyLibrary["rsi"], { edit:bool });
 			CIQ.extend(CIQ.Studies.studyLibrary["ST ROCLike"], { edit:bool });
 		},
 		hideComponents() {

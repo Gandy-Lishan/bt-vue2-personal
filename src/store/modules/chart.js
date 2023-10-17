@@ -46,9 +46,26 @@ const state = {
 		percentage: 0,
 		progressText: 'Loading...'
 	},
+
+	// 以下管理user's own indicator chartiq 状态
+	miFormState: {
+        categories: '',
+        name: '',
+        indicator_1: '',
+        indicator_2: '',
+        indicator_1_url: '',
+        indicator_2_url: '',
+        time_frame: 'daily'
+    },
 }
 
 const mutations = {
+	/**
+	 * 更新user's own indicator chartiq 状态
+	 */
+	miFormStateChange(state, obj) {
+		state.miFormState = obj
+	},
 	SET_CUR_DATE: (state, val) => {
 		state.curDate = val
 	},
