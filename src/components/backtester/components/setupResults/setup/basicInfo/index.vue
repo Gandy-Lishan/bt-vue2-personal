@@ -1391,4 +1391,7 @@ export default {
 .set-up-container .el-select {
   width: 100%;
 }
+.el-checkbox__label {
+  margin-bottom: 18px;
+}
 </style>

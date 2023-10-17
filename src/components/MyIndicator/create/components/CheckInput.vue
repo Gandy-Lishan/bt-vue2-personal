@@ -1,6 +1,15 @@
 <template>
   <div class="checkbox-with-input">
-    <el-checkbox v-model="showInput">{{ config.label }}</el-checkbox>
+    <el-checkbox v-model="showInput" v-if="config['type'] == 'CheckInput'">{{ config.label }}</el-checkbox>
+    <el-checkbox v-model="showInput" v-if="config['type'] == 'SelectInput'" style="margin-right: 10px;"></el-checkbox>
+    <el-select v-model="MAType" @change="handleSelect" placeholder="-Select-" size="mini" v-if="config['type'] == 'SelectInput'" style="margin-right: 5px;">
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+    </el-select>
     <el-input
       size="mini"
       v-show="showInput"
@@ -17,7 +26,7 @@ export default {
   props: {
     config: {
       type: Object,
-      required: true
+      required: true,
     }
   },
   data() {
@@ -25,6 +34,14 @@ export default {
       value: '',
       showInput: false,
       inputVisibility: 'hidden', // 初始化时设置为隐藏
+      options: [{
+          value: 'MA',
+          label: 'Moving Average'
+        }, {
+          value: 'EMA',
+          label: 'Exponential Moving Average'
+        }],
+        MAType: 'MA',
     };
   },
   computed: {
@@ -46,6 +63,7 @@ export default {
         console.log('newValue', newValue)
         this.showInput = newValue.checked
         this.value = newValue.value
+        if(newValue.value.includes('e'))  this.value =  newValue.value.toString().replace(/e$/, '');
       },
       deep: true, // 启用深度监听，监视对象属性的变化
     },
@@ -54,12 +72,15 @@ export default {
     saveData() {
       if(this.config.field === 'ma1' || this.config.field === 'ma2') {
         if(!this.showInput) this.value = 1
-        this.$emit('saveData', this.config.field, this.value)
+        if(this.showInput && this.MAType == 'EMA') this.value = `${this.value}e`
+        this.$emit('saveData', this.config.field, this.value || 1)
       } else if(this.config.field === 'extreme_optimism' || this.config.field === 'extreme_pessimism') {
         if(!this.showInput) this.value = 0
-        this.$emit('saveData', this.config.field, this.value)
-        
+        this.$emit('saveData', this.config.field, this.value || 0)
       }
+    },
+    handleSelect(val) {
+      this.MAType = val
     }
   }
 };
@@ -71,12 +92,18 @@ export default {
   align-items: center;
 }
 
-/* 可选的样式，根据需要自定义 */
-.checkbox {
-  margin-right: 10px;
-}
-
 .input {
   visibility: hidden;
+}
+.el-select.el-select--mini{
+  min-width: 195px;
+}
+.el-checkbox__input.is-checked+.el-checkbox__label {
+  width: 195px;
+  font-size: 14px !important;
+}
+.el-checkbox.is-bordered.el-checkbox--medium .el-checkbox__inner, .el-checkbox__inner {
+  width: 18px;
+  height: 18px;
 }
 </style>

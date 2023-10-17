@@ -114,6 +114,9 @@
 .el-checkbox__input.is-checked+.el-checkbox__label {
   color: #5b9bd1;
 }
+.backtest_container .excludeBox .el-checkbox__input.is-checked+.el-checkbox__label {
+  margin-bottom: 18px;
+}
 .el-button--primary {
   color: #FFF;
   background-color: #5b9bd1;
