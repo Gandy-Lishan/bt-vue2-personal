@@ -102,7 +102,7 @@ export default {
     }
   },
   beforeRouteEnter(to, _, next) {
-		if (to.path === '/home/myindicator/create') {
+		if (to.path === '/myindicator/create') {
 			next((_this) => {
 				if (to.params.usedFor && to.params.usedFor === 'showMyIndicators') {
 					console.log('说明是路由跳转过来携带参数的')
