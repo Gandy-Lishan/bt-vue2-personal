@@ -172,3 +172,17 @@
 .el-input__icon {
 	line-height: 27px !important;
 }
+.MI-form-container .el-form-item__label {
+  width: auto;
+  margin-right: 10px;
+}
+.MI-form-container .el-input-group__append{
+  background-color: #ffffff;
+}
+.MI-form-container .el-input-group__append, .el-input-group__prepend {
+  padding: 0 10px;
+}
+
+.MI-form-container .el-table--mini .el-table__cell {
+  padding: 5px 0px 10px 0px;
+}

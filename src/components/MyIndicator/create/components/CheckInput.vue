@@ -96,11 +96,7 @@ export default {
   visibility: hidden;
 }
 .el-select.el-select--mini{
-  min-width: 195px;
-}
-.el-checkbox__input.is-checked+.el-checkbox__label {
-  width: 195px;
-  font-size: 14px !important;
+  min-width: 220px;
 }
 .el-checkbox.is-bordered.el-checkbox--medium .el-checkbox__inner, .el-checkbox__inner {
   width: 18px;
