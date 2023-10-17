@@ -180,7 +180,7 @@
   background-color: #ffffff;
 }
 .MI-form-container .el-input-group__append, .el-input-group__prepend {
-  padding: 0 10px;
+  padding: 0 5px;
 }
 
 .MI-form-container .el-table--mini .el-table__cell {
