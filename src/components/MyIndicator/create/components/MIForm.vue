@@ -9,13 +9,14 @@
 		<h4>Create My Own Indicator</h4>
 		<div class="MI-form-top">
 			<el-form-item
-				label="Name"
+				label="1.Name"
 				:props="name"
 				placeholder="Please input the name of your custom indicator"
 			>
 				<el-input v-model="data.name"></el-input>
 			</el-form-item>
-			<el-form-item label="Categories" v-model="data.categories">
+      <div></div>
+			<el-form-item label="2.Categories" v-model="data.categories">
 				<el-select
 					v-model="data.categories"
 					placeholder="Please choose categories"
@@ -168,7 +169,79 @@
 				@saveData="saveSubData"
 			></CheckInput>
 		</div>
-
+    <div class="WIC-container">
+      <el-table
+      :data="weightData"
+      :row-class-name="tableRowClassName"
+      v-loading="loading" :element-loading-text="loadTest"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
+      stripe
+      border
+      size="mini"
+      highlight-current-row                                                       
+      >
+      <el-table-column label="Index" header-align="center" align="center">
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+      </el-table-column>
+      <el-table-column label="Weight" header-align="center" align="center" prop="weight">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule" @blur="validateTotalPercentage">
+            <template v-slot:append>(%)</template>
+          </el-input>
+          <div class="error-message">
+            {{ weightValidErrMsg }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="Indicator" header-align="center" align="center" prop="indicator">
+        <template slot-scope="scope" >
+          <el-autocomplete
+            v-model="scope.row.indicator"
+            size="mini"
+            :fetch-suggestions="querySearch"
+            @select="
+							(item) => {
+								handleRowSelect(item, scope.row)
+							}
+						"
+            >
+            <i slot="prefix" class="el-input__icon el-icon-search"></i>
+            <!-- 使用 scoped slot 自定义选项 -->
+						<template slot-scope="{ item }">
+							<div class="custom-option">
+								<span class="item-label" v-if="item.type === 'Indicator'">{{
+									item.label
+								}}</span>
+								<span class="item-label" v-else-if="item.type === 'Symbol'">{{
+									item.url
+								}}</span>
+								<!-- 在选项后面添加标识 -->
+								<span v-if="item.type === 'Symbol'" class="symbol-label">{{
+									item.label
+								}}</span>
+								<span v-if="item.type === 'Symbol'" class="type-label"
+									>Symbol</span
+								>
+								<span v-if="item.type === 'Indicator'" class="type-label"
+									><span class="updated-label">{{item.updated}}</span>
+                  Indicator</span
+								>
+							</div>
+						</template>
+          </el-autocomplete>
+        </template>
+      </el-table-column>
+      <el-table-column header-align="center" align="center">
+        <template slot-scope="scope" v-if="scope.$index === 0">
+          <el-button @click="addRow" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Indicator</el-button>
+        </template>
+        <template slot-scope="scope" v-else>
+          <el-button round size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope.$index)"></el-button> 
+        </template>
+      </el-table-column>
+    </el-table>
+    </div>
 		<el-divider></el-divider>
 		<div class="MI-form-btn">
 			<el-form-item>
@@ -182,6 +255,7 @@
  <script>
 import CheckInput from './CheckInput.vue'
 import { saveMyIndicators, getMyIndicatorData } from '@/service/service'
+import {  validatePercentageRule } from "@/utils/formValidate"
 export default {
   name: 'MIForm',
   props: {
@@ -212,6 +286,10 @@ export default {
         {
           label: 'Symbol ratio',
           value: 'Symbol ratio'
+        },
+        {
+          label: 'Weighted Indicator Combination',
+          value: 'WIC'
         }
       ],
       MA1CheckInputConfig: {
@@ -258,6 +336,12 @@ export default {
       sentimentList: [],
       loading: false,
       symbolList: [],
+      weightData: [
+        {weight: '', indicator: '', indicator_url: ''}
+      ],
+      loadTest: 'Loading...',
+      loading: false,
+      weightValidErrMsg: ''
     }
   },
   computed: {
@@ -274,23 +358,50 @@ export default {
   },
   methods: {
     async submitForm() {
-      this.$store.commit('SET_CREACT_LOADING', true)
-      const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
+      let saveData = null
+      if(this.categories != 'WIC') {
+        this.$store.commit('SET_CREACT_LOADING', true)
+        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
 
-      for (const formRef of formsToSave) {
-        this.$refs[formRef].saveData()
+        for (const formRef of formsToSave) {
+          this.$refs[formRef].saveData()
+        }
+        saveData = {
+          name: this.data.name,
+          indicator_1: this.data.indicator_1_url,
+          indicator_2: this.data.indicator_2_url,
+          time_frame: this.data.time_frame,
+          ma: `${this.data.ma1}_${this.data.ma2}_1`,
+          calculate: this.data.categories.split(' ')[1],
+          extreme_optimism: this.data.extreme_optimism,
+          extreme_pessimism: this.data.extreme_pessimism
+        }
+      }else {
+        if(this.weightValidErrMsg) return
+        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(1))
+        const indicator_weight = percentageStrings.join('_')
+
+        const mul_indicator = this.weightData.reduce((acc, item, index) => {
+          acc[`indicator_${index + 1}`] = item.indicator_url
+          return acc
+        }, {})
+
+        saveData = {
+          name: this.data.name,
+          indicator_1: 'spx',
+          indicator_2: 'spx',
+          time_frame: this.data.time_frame,
+          ma: '1_1_1',
+          categories: 'ratio',
+          extreme_optimism: 0,
+          extreme_pessimism: 0,
+          indicator_weight,
+          mul_indicator: JSON.stringify(mul_indicator)
+        }
       }
-      const saveData = {
-        name: this.data.name,
-        indicator_1: this.data.indicator_1_url,
-        indicator_2: this.data.indicator_2_url,
-        time_frame: this.data.time_frame,
-        ma: `${this.data.ma1}_${this.data.ma2}_1`,
-        calculate: this.data.categories.split(' ')[1],
-        extreme_optimism: this.data.extreme_optimism,
-        extreme_pessimism: this.data.extreme_pessimism
-      }
+
       console.log('保存的数据', saveData)
+      return
       const saveRes = await saveMyIndicators(saveData)
       const code = saveRes.data.code
 				if(saveRes.status == 201) {
@@ -501,9 +612,34 @@ export default {
       this.MA2CheckInputConfig = { ...this.MA2CheckInputConfig, ...configMap[1].config };
       this.EOCheckInputConfig = { ...this.EOCheckInputConfig, ...configMap[2].config };
       this.EPCheckInputConfig = { ...this.EPCheckInputConfig, ...configMap[3].config };
-    }
-
-
+    },
+    tableRowClassName({row, rowIndex}) {
+			if (rowIndex%2 === 1) {
+			return 'dark-row'
+			}
+			return ''
+		},
+    validateTotalPercentage() {
+      let weight = 0
+      for (const row of this.weightData) {
+        weight += parseFloat(row.weight) || 0
+      }
+      if(weight > 100) {this.weightValidErrMsg = 'Total weight percentages cannot exceed 100%'}
+    },
+    validateWeightRule(value) {
+      this.weightValidErrMsg = validatePercentageRule(_, value)
+      return this.weightValidErrMsg
+    },
+    handleRowSelect(item, row) {
+      console.log('item', item, row)
+      row.indicator = item.label
+      row.indicator_url = item.url
+      console.log(this.weightData)
+    },
+    addRow() {
+      this.weightData.push({ weight: '', indicator: '', indicator_url: '' });
+    },
+    deleteRow(index) {this.weightData.splice(index, 1)}
   }
 }
 </script>
@@ -548,8 +684,7 @@ h4 {
 }
 .MI-form-top {
 	display: grid;
-	grid-template-rows: repeat(2, 1fr);
-	align-items: center;
+	grid-template-columns: 1fr 0.3fr 1fr;
 	.el-form-item {
 		display: flex;
 		align-items: center;
@@ -602,5 +737,14 @@ h4 {
 
 .item-label {
 	font-weight: 500;
+}
+.el-select.el-select--mini {
+  min-width: 220px;
+}
+.error-message {
+  position: absolute;
+  line-height: 1;
+  font-size: 10px;
+  color: #F56C6C;
 }
 </style>
