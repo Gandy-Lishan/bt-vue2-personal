@@ -415,9 +415,6 @@ input[type="time"] {
 .el-tabs__new-tab{
   margin: 12px 5px 9px 10px;
 }
-.el-autocomplete-suggestion li{
-  margin: 0 10px;
-}
 .el-table__footer-wrapper{
   font-weight: bold;
 }
