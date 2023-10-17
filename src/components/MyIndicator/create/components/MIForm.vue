@@ -175,9 +175,11 @@
 				>
 			</el-form-item>
 		</div>
+    {{data}}
 	</el-form>
 </template>
  <script>
+ import { CIQ } from '@/components/common/chart/st-development/js/components'
 import CheckInput from './CheckInput.vue'
 import { saveMyIndicators, getMyIndicatorData } from '@/service/service'
 export default {
@@ -389,13 +391,13 @@ export default {
         this.data[source] = item.label
         this.data[`${source}_url`] = item.url
         // this.data.time_frame = item.updated;
-        this.changeIndicator(item.url)
+        this.changeIndicator(this.data)
       }
 
       const selectSymbol = (item) => {
         this.data[source] = item.label
         this.data[`${source}_url`] = item.url
-        this.changeSymbol(item.url)
+        this.changeSymbol(this.data)
       }
 
       if (type === 'Indicator') {
@@ -425,11 +427,13 @@ export default {
       }
     },
 
-    changeSymbol(url) {
+    changeSymbol(data) {
       // 改变 chartiqIQ 中的 symbol
+      CIQ.updateUserOwnIndicator(data)
     },
-    changeIndicator(url) {
+    changeIndicator(data) {
       // 改变 chartiqIQ 中的 indicator
+      
     },
     displayData(data) {
       this.data.categories = data.categories;

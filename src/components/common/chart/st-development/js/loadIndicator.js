@@ -621,6 +621,35 @@
  
  }
  
+ CIQ.updateUserOwnIndicator = function(data){
+    console.log('updateUserOwnIndicator',data,source)
+    let {
+        categories,
+        indicator_1,
+        indicator_2,
+        indicator_1_url,
+        indicator_2_url
+    } = CIQ.store.state.chart.miFormState
+    if(categories != data.categories){
+        // remove existing studies and series
+        for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+            var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+            CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+        }
+        for(var s in CIQ.stxx.chart.series){
+            var series=CIQ.stxx.chart.series[s];
+            CIQ.stxx.removeSeries(series);
+        }
+        return
+    }
+
+    if(indicator_1_url != data.indicator_1_url){
+        var sd = CIQ.stxx.layout.studies[indicator_1_url]; 
+        CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+    }
+    CIQ.stxx.addSeries("GE", { display:"Sony",isComparison: true, color: "#FF0000" });
+	CIQ.stxx.addSeries("AAON", { isComparison: true, color: "#FF0000" });
+ }
  }
  export {__st_js_loadIndicator_}
  //export {CIQ}
