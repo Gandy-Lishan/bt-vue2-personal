@@ -2,6 +2,7 @@
 	<el-form
 		ref="MICreateForm"
 		class="MI-form-container"
+    :class="{'WIC-form-container': data.categories == 'WIC'}"
 		:model="data"
 		label-position="left"
 		size="mini"
@@ -182,16 +183,16 @@
       size="mini"
       highlight-current-row                                                    
       >
-      <el-table-column label="Index" header-align="center" align="center" width="200px">
+      <el-table-column label="Index" header-align="center" align="center" width="80px">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="200px">
+      <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="250px">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule" @blur="validateTotalPercentage">
+          <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)" @blur="validateTotalPercentage(scope.row)">
             <template v-slot:append>(%)</template>
           </el-input>
           <div class="error-message">
-            {{ weightValidErrMsg }}
+            {{ scope.row.weightValidErrMsg }}
           </div>
         </template>
       </el-table-column>
@@ -233,12 +234,10 @@
           </el-autocomplete>
         </template>
       </el-table-column>
-      <el-table-column header-align="center" align="center" width="200px">
-        <template slot-scope="scope" v-if="scope.$index === 0">
-          <el-button @click="addRow" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Indicator</el-button>
-        </template>
-        <template slot-scope="scope" v-else>
-          <el-button round size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope.$index)"></el-button> 
+      <el-table-column header-align="center" align="center" width="250px">
+        <template slot-scope="scope">
+          <el-button v-if="scope.$index === 0" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Indicator</el-button>
+          <el-button v-else size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope.$index)">Delete Indicator</el-button> 
         </template>
       </el-table-column>
       </el-table>
@@ -339,7 +338,7 @@ export default {
       loading: false,
       symbolList: [],
       weightData: [
-        {weight: '', indicator: '', indicator_url: ''}
+        {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: ''}
       ],
       loadTest: 'Loading...',
       loading: false,
@@ -394,8 +393,8 @@ export default {
           indicator_2: 'model_smart_money',
           time_frame: this.data.time_frame,
           ma: '1_1_1',
-          // calculate: 'Weighted indicator combination', // 存起来
-          calculate: 'ratio', // 存起来
+          calculate: 'weight_combination', // 存起来
+          // calculate: 'ratio', // 存起来
           extreme_optimism: 0,
           extreme_pessimism: 0,
           indicator_weight,
@@ -595,6 +594,7 @@ export default {
           weight: (weight * 100).toFixed(2),
           indicator: CIQ.findSentiIndicator(null, mul_indicator_obj[`indicator_${index + 1}`]).chart_name,
           indicator_url: mul_indicator_obj[`indicator_${index + 1}`],
+          weightValidErrMsg: ''
         }));
         console.log('处理后的结果', this.weightData);
       } else {
@@ -625,16 +625,17 @@ export default {
 			}
 			return ''
 		},
-    validateTotalPercentage() {
+    validateTotalPercentage(row) {
       let weight = 0
       for (const row of this.weightData) {
         weight += parseFloat(row.weight) || 0
       }
-      if(weight > 100) {this.weightValidErrMsg = 'Total weight percentages cannot exceed 100%'}
+      if(weight > 100) {row.weightValidErrMsg = 'Total weight percentages cannot exceed 100%'}
+      return weight
     },
-    validateWeightRule(value) {
-      this.weightValidErrMsg = validatePercentageRule(_, value)
-      return this.weightValidErrMsg
+    validateWeightRule(row) {
+      console.log(row.weight)
+      row.weightValidErrMsg = validatePercentageRule(_, row.weight)
     },
     handleRowSelect(item, row) {
       console.log('item', item, row)
@@ -650,8 +651,12 @@ export default {
       }
       console.log('当前最大的 timeframe 是', this.data.time_frame)
     },
-    addRow() {
-      this.weightData.push({ weight: '', indicator: '', indicator_url: '' });
+    addRow(row) {
+      let weight = null
+      const totalWeight = this.validateTotalPercentage(row)
+      if(totalWeight > 0 && totalWeight < 100) {weight = 100 - totalWeight}
+      else {weight = ''}
+      this.weightData.push({ weight, indicator: '', indicator_url: '', weightValidErrMsg: '' });
     },
     deleteRow(index) {this.weightData.splice(index, 1)}
   }
@@ -674,28 +679,39 @@ h4 {
 	border: 1px solid #5b9bd1;
 	border-radius: 5px;
 	padding: 0 10px 10px 10px;
-	.center {
-		display: flex;
-		align-items: stretch;
-		justify-content: space-evenly;
-		svg.icon {
-			align-self: center;
-			background: #dfdddd;
-			border: 1px solid #b1b1b1;
-			border-radius: 5px;
-		}
-	}
-	.el-autocomplete {
-		width: 100%;
-	}
-	/deep/.el-input__inner {
-		margin-left: 0;
-	}
-	/deep/.el-divider--vertical {
-		height: auto;
-		margin: 0;
-	}
 }
+.WIC-form-container {
+	display: grid;
+	grid-template-rows: 0fr 0fr 0fr auto 0fr 0fr 0fr;
+	margin: 0 auto;
+	align-items: start;
+	border: 1px solid #5b9bd1;
+	border-radius: 5px;
+	padding: 0 10px 10px 10px;
+  min-height: 500px;
+}
+.center {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-evenly;
+  svg.icon {
+    align-self: center;
+    background: #dfdddd;
+    border: 1px solid #b1b1b1;
+    border-radius: 5px;
+  }
+}
+.el-autocomplete {
+  width: 100%;
+}
+/deep/.el-input__inner {
+  margin-left: 0;
+}
+/deep/.el-divider--vertical {
+  height: auto;
+  margin: 0;
+}
+
 .MI-form-top {
 	display: grid;
 	grid-template-columns: 1fr 0.3fr 1fr;
@@ -760,5 +776,9 @@ h4 {
   line-height: 1;
   font-size: 10px;
   color: #F56C6C;
+  white-space: nowrap;
+}
+.el-button--primary {
+  width: 150px;
 }
 </style>
