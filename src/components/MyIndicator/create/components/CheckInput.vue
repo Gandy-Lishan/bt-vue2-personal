@@ -14,6 +14,7 @@
       size="mini"
       v-show="showInput"
       v-model="value"
+      @input="handleInput"
       :placeholder="config.placeholder"
       :style="{ visibility: inputVisibility }"
     ></el-input>
@@ -31,7 +32,7 @@ export default {
   },
   data() {
     return {
-      value: '',
+      value: '5',
       showInput: false,
       inputVisibility: 'hidden', // 初始化时设置为隐藏
       options: [{
@@ -56,6 +57,7 @@ export default {
       } else {
         this.inputVisibility = 'hidden';
       }
+      this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
     },
     _config: {
       handler(newValue, oldValue) {
@@ -81,6 +83,10 @@ export default {
     },
     handleSelect(val) {
       this.MAType = val
+      this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
+    },
+    handleInput(val) {
+      this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
     }
   }
 };

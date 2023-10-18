@@ -45,13 +45,14 @@ cq-indicators-lookup {
 cq-dialog {
   min-width: 320px;
 }
-cq-menu.cq-comparison-new {
-  /* left:192px;
-  bottom:55px;   */
+/* 当初是为了把fav btn放置在cq-comparison-new里面并和symbol title并排，所以改成inline,现已移出并启用 */
+/* cq-menu.cq-comparison-new {
+  left:192px;
+  bottom:55px;  
 }
 cq-comparison[cq-show], .ciq-comparison[cq-show] {
   display: inline;
-}
+} */
 cq-study-legend[cq-hovershow][cq-marker] {
   float: unset;
 }

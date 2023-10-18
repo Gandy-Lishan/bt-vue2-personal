@@ -621,35 +621,166 @@
  
  }
  
- CIQ.updateUserOwnIndicator = function(data){
-    console.log('updateUserOwnIndicator',data,source)
-    let {
-        categories,
-        indicator_1,
-        indicator_2,
-        indicator_1_url,
-        indicator_2_url
-    } = CIQ.store.state.chart.miFormState
-    if(categories != data.categories){
-        // remove existing studies and series
-        for (var studyInstanceName in CIQ.stxx.layout.studies) { 
-            var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
-            CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+    // 以下管理user's own indicator 图表函数
+    CIQ.updateUserOwnIndicator = function(newData,oldData){
+        
+        if(oldData.categories != newData.categories){
+            // remove existing studies and series
+            for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+                var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+                CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+            }
+            for(var s in CIQ.stxx.chart.series){
+                var series=CIQ.stxx.chart.series[s];
+                CIQ.stxx.removeSeries(series);
+            }
+            return
         }
-        for(var s in CIQ.stxx.chart.series){
-            var series=CIQ.stxx.chart.series[s];
-            CIQ.stxx.removeSeries(series);
+
+        if(newData.categories.includes('Symbol')){
+            if(oldData.indicator1.url != newData.indicator1.url){
+                var series = CIQ.stxx.chart.series[oldData.indicator1.url]; 
+                CIQ.stxx.removeSeries(series); 
+                CIQ.stxx.addSeries(newData.indicator1.url, {
+                    display:newData.indicator1.name, 
+                    isComparison: false, 
+                    color: "#5B9BD1",
+                    panel:newData.indicator1.url,
+                    // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
+                    // yAxis:{ 
+                    //     position:"left",
+                    //     textStyle:"#FFBE00"
+                    // },
+                    // shareYAxis: true
+                });
+                console.log(newData.indicator1.url)
+            }
+            if(oldData.indicator2.url != newData.indicator2.url){
+                var series = CIQ.stxx.chart.series[oldData.indicator2.url]; 
+                CIQ.stxx.removeSeries(series); 
+                CIQ.stxx.addSeries(newData.indicator2.url, {
+                    display:newData.indicator1.name, 
+                    isComparison: false, 
+                    color: "#368DF0",
+                    panel:newData.indicator2.url,
+                    // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
+                    // yAxis:{ 
+                    //     position:"left",
+                    //     textStyle:"#FFBE00"
+                    // },
+                    // shareYAxis: true
+                });
+            }
         }
-        return
+        
+        if(newData.categories.includes('Indicator')){
+            if(oldData != newData){
+                var sd = CIQ.stxx.layout.studies[oldData.indicator1.url];
+                if(sd) CIQ.Studies.removeStudy(CIQ.stxx,sd); 
+                addUserOwnIndicators([newData.indicator1.url,newData.indicator2.url]);
+            }
+        }
     }
 
-    if(indicator_1_url != data.indicator_1_url){
-        var sd = CIQ.stxx.layout.studies[indicator_1_url]; 
-        CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+    const addUserOwnIndicators = async function(indicatorList){
+        // fetch indicator information and add studies to chart
+        await getUserOwnIndicatorMatedata(indicatorList)
+
+        CIQ.stxx.loadChart(	{ symbol: 'SPX', indicator:indicatorList}, function () {
+
+        }) 
     }
-    CIQ.stxx.addSeries("GE", { display:"Sony",isComparison: true, color: "#FF0000" });
-	CIQ.stxx.addSeries("AAON", { isComparison: true, color: "#FF0000" });
- }
+    const getUserOwnIndicatorMatedata = async function(indicatorList){
+        for (var studyInstanceName in CIQ.stxx.layout.studies) {
+         
+            var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+            //if (CIQ.studys.indexOf(sd.type) === -1){
+                CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+           // }
+        }
+        var color = ["#7257F2","#21CE6B"]
+        let resArr = []
+        return new Promise(resolve=>{
+            for(var i in indicatorList){
+    
+                var queryUrl =  config.indicatorMetadata + 
+                "?indicator=" + indicatorList[i];
+                let _res = new Promise((resolve,reject)=>{ 
+                    CIQ.axios.get(
+                        queryUrl,
+                    ).then(res=>{
+                        resolve(res.data)
+                    }).catch(err=>{
+                        reject(err)
+                    })
+                })
+                resArr.push(_res)
+            }
+    
+            // handle all response for sentiment indicator information and load them
+            Promise.all(resArr).then(res => {
+                var newQuotes = res;
+                
+                for(var i in newQuotes){
+                    if (newQuotes[i] !== null){
+                        var newStudy = {
+                            inputs: { Period: 13, Overlay: false},
+                            outputs: 
+                            {indicatorClose:color[i%2],description: newQuotes[i].description,url:indicatorList[i]},
+                            parameters: { init: {
+                                studyOverZonesEnabled: false,
+                                studyOverBoughtValue: newQuotes[i].opt_extreme?newQuotes[i].opt_extreme:NaN,
+                                studyOverBoughtColor: "#FF0000",
+                                studyOverSoldValue: newQuotes[i].pess_extreme?newQuotes[i].pess_extreme:NaN,
+                                studyOverSoldColor: "#00DD00",
+                            }},
+                            attributes:{
+                                studyOverBoughtValue:{"step":0.01},
+                                studyOverSoldValue:{"step":0.01}
+                            }
+                        }
+                        
+                            var str = JSON.stringify(newStudy);                                   
+                            str = str.replace(/indicatorClose/g, indicatorList[i]);
+                            newStudy = JSON.parse(str)                                     
+                            
+                            CIQ.Studies.studyLibrary[indicatorList[i]] = newStudy
+                            CIQ.Studies.addStudy(CIQ.stxx,indicatorList[i])                
+                    }
+                }   
+                resolve()                     
+            }).catch(err => {
+                
+            })
+        })
+
+    }
+
+    CIQ.userOwnIndicatorMAStudies = function(value,type,field,showInput,categories) {
+        for (var studyInstanceName in CIQ.stxx.layout.studies) {
+            if (
+                CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == field &&
+                CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'
+            ) {
+              // 直接判断是否为st ma
+              CIQ.Studies.removeStudy(
+                CIQ.stxx,
+                CIQ.stxx.layout.studies[studyInstanceName]
+              )
+            }
+          }
+        if(!showInput) return
+        var stma_color = "#bfad94"
+        CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
+            Type: type == 'SMA' ? 'simple' : 'exponential',
+            Period: value,
+            display: 'ST MA',
+            Field: field
+          }, 
+          { MA: stma_color },
+          null,
+          categories.includes('Indicator')?null:field
+        )
+    }
  }
  export {__st_js_loadIndicator_}
- //export {CIQ}

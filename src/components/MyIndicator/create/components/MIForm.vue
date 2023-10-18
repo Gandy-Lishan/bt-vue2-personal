@@ -74,6 +74,7 @@
 				<CheckInput
 					:config="MA1CheckInputConfig"
 					ref="ma1Form"
+          @manageMAStudies="manageMAStudies"
 					@saveData="saveSubData"
 				></CheckInput>
 			</div>
@@ -149,6 +150,7 @@
 				<CheckInput
 					:config="MA2CheckInputConfig"
 					ref="ma2Form"
+          @manageMAStudies="manageMAStudies"
 					@saveData="saveSubData"
 				></CheckInput>
 			</div>
@@ -249,7 +251,7 @@ export default {
         type: 'CheckInput'
       },
       data: {
-        categories: '',
+        categories: 'Indicator spread',
         name: '',
         indicator_1: '',
         indicator_2: '',
@@ -275,6 +277,15 @@ export default {
     console.log('this.dropdownList', this.dropdownList)
   },
   methods: {
+    manageMAStudies(value,type,field,showInput) {
+      CIQ.userOwnIndicatorMAStudies(
+        value,
+        type,
+        field=='ma1'?this.data.indicator_1_url:this.data.indicator_2_url,
+        showInput,
+        this.data.categories
+        ) 
+    },
     async submitForm() {
       this.$store.commit('SET_CREACT_LOADING', true)
       const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
@@ -388,6 +399,8 @@ export default {
       }
 
       this.dropdownList = this.getList()
+
+      this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
     handleSelect(item, source) {
       console.log('item', item)
@@ -437,6 +450,7 @@ export default {
           selectSymbol(item)
         }
       }
+      this.manageMAStudies(this.value,this.MAType,this.config.field,this.showInput)
     },
     findMaxFreq(currentFreq, previousFreq) {
       let selectedTimeframe = currentFreq
@@ -460,13 +474,13 @@ export default {
 			}
 			return previousTimeframe
     },
-    changeSymbol(url) {
+    changeSymbol(data) {
       // 改变 chartiqIQ 中的 symbol
-      CIQ.updateUserOwnIndicator(data)
+      this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
     changeIndicator(data) {
       // 改变 chartiqIQ 中的 indicator
-      
+      this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
     displayData(data) {
       this.data.categories = data.categories;

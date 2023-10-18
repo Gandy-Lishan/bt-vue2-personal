@@ -48,15 +48,9 @@ const state = {
 	},
 
 	// 以下管理user's own indicator chartiq 状态
-	miFormState: {
-        categories: '',
-        name: '',
-        indicator_1: '',
-        indicator_2: '',
-        indicator_1_url: '',
-        indicator_2_url: '',
-        time_frame: 'daily'
-    },
+	miFormCategories: 'Indicator spread',
+	miFormCategoriesIndicator1:{name:'',url:''},
+	miFormCategoriesIndicator2:{name:'',url:''},
 }
 
 const mutations = {
@@ -64,7 +58,9 @@ const mutations = {
 	 * 更新user's own indicator chartiq 状态
 	 */
 	miFormStateChange(state, obj) {
-		state.miFormState = obj
+		state.miFormCategories = obj.categories
+		state.miFormCategoriesIndicator1 = {name:obj.indicator_1,url:obj.indicator_1_url}
+		state.miFormCategoriesIndicator2 = {name:obj.indicator_2,url:obj.indicator_2_url}
 	},
 	SET_CUR_DATE: (state, val) => {
 		state.curDate = val
@@ -231,6 +227,25 @@ const mutations = {
 }
 
 const actions = {
+	set_miFormStateChange({ commit }, val) {
+		return new Promise(resolve => {
+		
+			const newVal = 	{
+				categories : val.categories,
+				indicator1 : {name:val.indicator_1,url:val.indicator_1_url},
+				indicator2 : {name:val.indicator_2,url:val.indicator_2_url},
+			}
+			const oldVal = {
+				categories : state.miFormCategories,
+				indicator1 : state.miFormCategoriesIndicator1,
+				indicator2 : state.miFormCategoriesIndicator2,
+			}
+			CIQ.updateUserOwnIndicator(newVal,oldVal)
+			
+			commit('miFormStateChange', val)
+			resolve()
+		})
+	},
 	Try(context, val) {
 		context.commit('setEntryData', val)
 	},
