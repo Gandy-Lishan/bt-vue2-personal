@@ -251,7 +251,6 @@
 				>
 			</el-form-item>
 		</div>
-    {{data}}
 	</el-form>
 </template>
  <script>
@@ -642,6 +641,14 @@ export default {
       row.indicator = item.label
       row.indicator_url = item.url
       console.log(this.weightData)
+
+      const type = item.type
+      if(type === 'Indicator') {
+        this.data.time_frame = this.findMaxFreq(this.data.time_frame, item.updated.toLowerCase()) 
+      }else {
+        this.data.time_frame = 'daily'
+      }
+      console.log('当前最大的 timeframe 是', this.data.time_frame)
     },
     addRow() {
       this.weightData.push({ weight: '', indicator: '', indicator_url: '' });

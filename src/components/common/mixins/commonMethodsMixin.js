@@ -17,6 +17,7 @@ import UUID from '@/utils/cryptoUtils/uuid'
 import SignalCode from '@/utils/cryptoUtils/codeTool'
 import cloneDeep from 'lodash/cloneDeep'
 import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
+import { RefreshBus } from '@/components/backtester/components/list/EventBus/Bus'
 
 export const CommonMethodsMixin = {
 	data() {
@@ -109,10 +110,15 @@ export const CommonMethodsMixin = {
 					// 发起复制请求
 					await copyBacktest(this.$qs.stringify(params))
 
-					// 重置查询页码并获取数据
-					this.queryInfo.page = 1
-					await this.getDataList(null)
-
+					// 重置查询页码并获取数据 History
+					if (this.currentPage === 'History') {
+						this.queryInfo.page = 1
+						await this.getDataList(null)
+					}
+					if (['Sample', 'Favorites', 'Analyst'].includes(this.currentPage)) {
+						this.$router.push('/backtester/list/history')
+						await this.getDataList(null)
+					}
 					this.$message({
 						message: '<strong>Copy successfully</strong>',
 						center: true,
@@ -139,6 +145,7 @@ export const CommonMethodsMixin = {
 				showClose: true,
 				duration: 8000
 			})
+			RefreshBus.$emit('refresh-list')
 		},
 		async addToFavorites(data) {
 			this.loading = true
@@ -155,6 +162,7 @@ export const CommonMethodsMixin = {
 				showClose: true,
 				duration: 8000
 			})
+			RefreshBus.$emit('refresh-list')
 		},
 		async moveToFavorites(data) {
 			this.loading = true
@@ -171,6 +179,7 @@ export const CommonMethodsMixin = {
 				showClose: true,
 				duration: 8000
 			})
+			RefreshBus.$emit('refresh-list')
 		},
 		async rerunBacktest(data) {
 			this.loading = true
