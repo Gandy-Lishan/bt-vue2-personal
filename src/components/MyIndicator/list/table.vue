@@ -21,11 +21,58 @@
       @row-click="handleRowClick"
 			style="width: 100%; height: 100%"
 		>
-			<template v-for="(l, index) in tableCol">
+    
+      <el-table-column
+        type="expand">
+        <template slot-scope="scope">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <!-- <el-row :gutter="20">
+              <el-col :span="8">
+              <el-form-item label="Name">
+                  <span>{{ scope.row['name']}}</span>
+              </el-form-item>
+              </el-col>
+              <el-col :span="8">
+              <el-form-item label="Categories">
+                <span>{{ scope.row['categories']}}</span>
+              </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="Indicators included">
+                  <template v-for="(item, index) in scope.row['included']">
+                    <span :key="index">{{`${index + 1}. ${item}`}}<br/></span>
+                  </template>
+                </el-form-item>
+              </el-col>
+            </el-row> -->
+            <el-row :gutter="20">
+              <el-row :span="8">
+              <el-form-item label="Name">
+                  <span>{{ scope.row['name']}}</span>
+              </el-form-item>
+              </el-row>
+              <el-row :span="8">
+              <el-form-item label="Categories">
+                <span>{{ scope.row['categories']}}</span>
+              </el-form-item>
+              </el-row>
+              <el-row :span="8">
+                <el-form-item label="Indicators included">
+                  <template v-for="(item, index) in scope.row['included']">
+                    <span :key="index" style="margin-right: 5px">{{`${index + 1}. ${item}`}}</span>
+                  </template>
+                </el-form-item>
+              </el-row>
+            </el-row>
+          </el-form>
+        </template>
+      </el-table-column>
+			<template v-for="(l) in tableCol">
 				<el-table-column
 					:label="l.label"
 					:prop="l.value"
-					:key="index"
+					:key="l.key"
+          v-if="['Name', 'Categories'].includes(l.label)"
 				>
 					<template slot-scope="scope">
 						<p class="tableText">
@@ -33,6 +80,18 @@
 						</p>
             <!-- <el-link type="primary">主要链接</el-link> -->
 					</template>
+				</el-table-column>
+        <el-table-column
+					:label="l.label"
+					:prop="l.value"
+					:key="l.key"
+          v-if="l.label == 'Indicators included'"
+				>
+          <template slot-scope="scope">
+            <p v-for="(item, index) in scope.row.included" :key="index">
+              <span v-if="index == 0 || index == 1">{{ `${index + 1}. ${item}` }}</span>
+            </p>
+          </template>
 				</el-table-column>
 			</template>
       <el-table-column
@@ -54,6 +113,7 @@
 
 <script>
 import { delMyIndicator, getMyIndicatorsList, searchIndicator } from '@/service/service'
+import { capitalizeFirstLetter } from "@/utils"
 
 export default {
   name: 'MITable',
@@ -74,16 +134,12 @@ export default {
           value: 'categories'
         },
         {
-          label: 'The former',
-          value: 'former',
-        },
-        {
-          label: 'The latter',
-          value: 'latter'
-        },
+          label: 'Indicators included',
+          value: 'included'
+        }
       ],
       tableData: [],
-      total: 0
+      total: 0,
     }
   },
   async created() {
@@ -103,28 +159,52 @@ export default {
       // 从localStorage获取数据
       const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
       const symbolList = JSON.parse(localStorage.getItem('symbolList'))
-      console.log('listRes.data.results', listRes.data.results)
-      const data = listRes.data.results.map(item => {
-        const indicator_1 = sentimentList.find(ele => (ele.url === item.indicator_1_url))
-        const symbol_1 = symbolList.find(ele => (ele.url === item.indicator_1_url))
-        const indicator_2 = sentimentList.find(ele => (ele.url === item.indicator_2_url))
-        const symbol_2 = symbolList.find(ele => (ele.url === item.indicator_2_url))
-        const isIndicator = indicator_1 || indicator_2
-        const maList = item.ma.split('_')
-        const ma_1 = maList[0] !== '1' ? ` Moving Average ${maList[0]}` : ''
-        const ma_2 = maList[1] !== '1' ? ` Moving Average ${maList[1]}` : ''
-        const former = indicator_1?.label || symbol_1?.label
-        const latter = indicator_2?.label || symbol_2?.label
-        console.log('former latter', former, latter)
+
+      let data = listRes.data.results.map(item => {
+      if (['ratio', 'spread'].includes(item.calculate)) {
+        const included = this.getIncludedData(item, sentimentList, symbolList);
         return {
           ...item,
-          categories: `${isIndicator ? 'Indicator' : 'Symbol'} ${item.calculate}`,
-          former: `${former}${ma_1}`,
-          latter: `${latter}${ma_2}`,
-        }
-      })
+          categories: `${included.some(i => i) ? 'Indicator' : 'Symbol'} ${capitalizeFirstLetter(item.calculate)}`,
+          included,
+          key: item.url
+        };
+      }
+      if (item.calculate === 'weight_c' && (item.indicator_weight && item.mul_indicator)) {
+        const included = this.getWeightedIndicatorData(item, sentimentList);
+        return {
+          ...item,
+          categories: 'Indicator Weight Combination',
+          included,
+          key: item.url
+        };
+      }
+    });
+    
+      data = data.filter(
+			item => item !== null && item !== undefined && item !== ''
+		  )
+      console.log('处理过后的数据', data)
       this.tableData = data
       this.loading = false
+    },
+    getIncludedData(item, sentimentList, symbolList) {
+      const indicator1 = sentimentList.find(ele => ele.url === item.indicator_1_url) || symbolList.find(ele => ele.url === item.indicator_1_url);
+      const indicator2 = sentimentList.find(ele => ele.url === item.indicator_2_url) || symbolList.find(ele => ele.url === item.indicator_2_url);
+      const maList = item.ma.split('_');
+      const ma1 = maList[0] !== '1' ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
+      const ma2 = maList[1] !== '1' ? ` Moving Average ${maList[1].includes('e') ? maList[1].toString().replace(/e$/, '') : maList[1]}` : '';
+      const former = indicator1?.label;
+      const latter = indicator2?.label;
+      return [`${former}${ma1}`, `${latter}${ma2}`];
+    },
+    getWeightedIndicatorData(item, sentimentList) {
+      const mulIndicatorObj = JSON.parse(item.mul_indicator);
+      const indicatorWeightArr = item.indicator_weight.includes('_') ? item.indicator_weight.split('_') : [item.indicator_weight];
+      return indicatorWeightArr.map((weight, index) => {
+        const indicator = sentimentList.find(ele => ele.url === mulIndicatorObj[`indicator_${index + 1}`])?.label;
+        return `${indicator} (weight ${(weight * 100).toFixed()}%)`;
+      });
     },
     tableRowClassName({row, rowIndex}) {
 			if (rowIndex%2 === 1) {
@@ -216,5 +296,8 @@ export default {
 }
 .my-indicator-table.el-table /deep/tr{
   cursor: pointer;
+}
+.el-form-item{
+  margin-bottom: 0;
 }
 </style>

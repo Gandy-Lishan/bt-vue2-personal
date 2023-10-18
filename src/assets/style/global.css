@@ -186,3 +186,6 @@
 .MI-form-container .el-table--mini .el-table__cell {
   padding: 5px 0px 10px 0px;
 }
+.dark-row {
+  background: rgb(219 219 219) !important
+}

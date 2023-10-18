@@ -65,27 +65,27 @@ export const validateURLRule = (_, value, callback) => {
 }
 
 export const validatePercentageRule = (_, value, callback) => {
-  if (value === '') {
-    return 'Please enter a numeric value'
-  }
+	if (value === '') {
+		return 'Please enter a numeric value'
+	}
 
-  const numericValue = parseFloat(value)
+	const numericValue = parseFloat(value)
 
-  if (isNaN(numericValue)) {
-    return 'Please enter a valid numeric value'
-  }
+	if (isNaN(numericValue)) {
+		return 'Please enter a valid numeric value'
+	}
 
-  if (numericValue < 0 || numericValue > 100) {
-    return 'Please enter a value between 0 and 100'
-  }
+	if (numericValue < 0 || numericValue > 100) {
+		return 'Please enter a value between 0 and 100'
+	}
 
-  const decimalPlaces = (numericValue.toString().split('.')[1] || '').length
+	const decimalPlaces = (numericValue.toString().split('.')[1] || '').length
 
-  if (decimalPlaces > 2) {
-    return 'Only two decimal places are allowed'
-  }
+	if (decimalPlaces > 2) {
+		return 'Only two decimal places are allowed'
+	}
 
-  return ''
+	return ''
 }
 
 // 验证 indicator 不能为空
@@ -137,4 +137,3 @@ export const uniqueObjectArray = objectArray => {
 	})
 	return uniqueArray
 }
-
