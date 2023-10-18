@@ -1264,7 +1264,7 @@ export default {
         backtestPeriod = editData.backtest_period
         if(!backtestPeriod) {this.caculateBacktestPeriod()}
         this.bd.end_date = timestampToTime(new Date())
-        // 如果是 custom 不改变 start_date, 如果是 all history, start_date 为空, 其他的都要改 start_date
+        // 如果是 custom 不改变 start_date, end_date 如果是 all history, start_date 为空, 其他的都要改 start_date
         if(this.bd.backtest_period <= 20) {
           // start_date 也要改
           const str = this.bd.end_date.split('-')
@@ -1272,6 +1272,9 @@ export default {
           this.bd.start_date = str.join('-')
         }else if(this.bd.backtest_period == '21') {
           this.bd.start_date = ''
+        }else if(this.bd.backtestSymbol == '22') {
+          this.bd.start_date = editData.start_date
+          this.bd.end_date = editData.end_date
         }
     },
     caculateBacktestPeriod() {
