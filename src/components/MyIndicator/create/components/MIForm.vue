@@ -2,6 +2,7 @@
 	<el-form
 		ref="MICreateForm"
 		class="MI-form-container"
+    :class="{'WIC-form-container': data.categories == 'WIC'}"
 		:model="data"
 		label-position="left"
 		size="mini"
@@ -9,13 +10,14 @@
 		<h4>Create My Own Indicator</h4>
 		<div class="MI-form-top">
 			<el-form-item
-				label="Name"
+				label="1.Name"
 				:props="name"
 				placeholder="Please input the name of your custom indicator"
 			>
 				<el-input v-model="data.name"></el-input>
 			</el-form-item>
-			<el-form-item label="Categories" v-model="data.categories">
+      <div></div>
+			<el-form-item label="2.Categories" v-model="data.categories">
 				<el-select
 					v-model="data.categories"
 					placeholder="Please choose categories"
@@ -32,7 +34,7 @@
 			</el-form-item>
 		</div>
 		<el-divider></el-divider>
-		<div class="MI-form-middle">
+		<div class="MI-form-middle" v-if="data.categories != 'WIC'">
 			<div class="left">
 				<el-form-item v-model="data.indicator_1">
 					<el-autocomplete
@@ -156,8 +158,8 @@
 			</div>
 		</div>
 
-		<el-divider></el-divider>
-		<div class="MI-form-bottom">
+		<el-divider v-if="data.categories != 'WIC'"></el-divider>
+		<div class="MI-form-bottom" v-if="data.categories != 'WIC'">
 			<CheckInput
 				:config="EOCheckInputConfig"
 				ref="EOForm"
@@ -170,7 +172,78 @@
 				@saveData="saveSubData"
 			></CheckInput>
 		</div>
-
+    <div class="WIC-container"
+      v-if="data.categories == 'WIC'">
+      <el-table
+      :data="weightData"
+      :row-class-name="tableRowClassName"
+      v-loading="loading" :element-loading-text="loadTest"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
+      stripe
+      border
+      size="mini"
+      highlight-current-row                                                    
+      >
+      <el-table-column label="Index" header-align="center" align="center" width="80px">
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+      </el-table-column>
+      <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="250px">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)" @blur="validateTotalPercentage(scope.row)">
+            <template v-slot:append>(%)</template>
+          </el-input>
+          <div class="error-message">
+            {{ scope.row.weightValidErrMsg }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="Indicator" header-align="center" align="center" prop="indicator">
+        <template slot-scope="scope" >
+          <el-autocomplete
+            v-model="scope.row.indicator"
+            size="mini"
+            :fetch-suggestions="querySearch"
+            @select="
+							(item) => {
+								handleRowSelect(item, scope.row)
+							}
+						"
+            >
+            <i slot="prefix" class="el-input__icon el-icon-search"></i>
+            <!-- 使用 scoped slot 自定义选项 -->
+						<template slot-scope="{ item }">
+							<div class="custom-option">
+								<span class="item-label" v-if="item.type === 'Indicator'">{{
+									item.label
+								}}</span>
+								<span class="item-label" v-else-if="item.type === 'Symbol'">{{
+									item.url
+								}}</span>
+								<!-- 在选项后面添加标识 -->
+								<span v-if="item.type === 'Symbol'" class="symbol-label">{{
+									item.label
+								}}</span>
+								<span v-if="item.type === 'Symbol'" class="type-label"
+									>Symbol</span
+								>
+								<span v-if="item.type === 'Indicator'" class="type-label"
+									><span class="updated-label">{{item.updated}}</span>
+                  Indicator</span
+								>
+							</div>
+						</template>
+          </el-autocomplete>
+        </template>
+      </el-table-column>
+      <el-table-column header-align="center" align="center" width="250px">
+        <template slot-scope="scope">
+          <el-button v-if="scope.$index === 0" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Indicator</el-button>
+          <el-button v-else size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope.$index)">Delete Indicator</el-button> 
+        </template>
+      </el-table-column>
+      </el-table>
+    </div>
 		<el-divider></el-divider>
 		<div class="MI-form-btn">
 			<el-form-item>
@@ -179,13 +252,13 @@
 				>
 			</el-form-item>
 		</div>
-    {{data}}
 	</el-form>
 </template>
  <script>
  import { CIQ } from '@/components/common/chart/st-development/js/components'
 import CheckInput from './CheckInput.vue'
 import { saveMyIndicators, getMyIndicatorData } from '@/service/service'
+import {  validatePercentageRule } from "@/utils/formValidate"
 export default {
   name: 'MIForm',
   props: {
@@ -216,6 +289,10 @@ export default {
         {
           label: 'Symbol ratio',
           value: 'Symbol ratio'
+        },
+        {
+          label: 'Weighted Indicator Combination',
+          value: 'WIC'
         }
       ],
       MA1CheckInputConfig: {
@@ -262,6 +339,12 @@ export default {
       sentimentList: [],
       loading: false,
       symbolList: [],
+      weightData: [
+        {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: ''}
+      ],
+      loadTest: 'Loading...',
+      loading: false,
+      weightValidErrMsg: ''
     }
   },
   computed: {
@@ -287,22 +370,49 @@ export default {
         ) 
     },
     async submitForm() {
-      this.$store.commit('SET_CREACT_LOADING', true)
-      const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
+      let saveData = null
+      if(this.data.categories != 'WIC') {
+        this.$store.commit('SET_CREACT_LOADING', true)
+        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
 
-      for (const formRef of formsToSave) {
-        this.$refs[formRef].saveData()
+        for (const formRef of formsToSave) {
+          this.$refs[formRef].saveData()
+        }
+        saveData = {
+          name: this.data.name,
+          indicator_1: this.data.indicator_1_url,
+          indicator_2: this.data.indicator_2_url,
+          time_frame: this.data.time_frame,
+          ma: `${this.data.ma1}_${this.data.ma2}_1`,
+          calculate: this.data.categories.split(' ')[1],
+          extreme_optimism: this.data.extreme_optimism,
+          extreme_pessimism: this.data.extreme_pessimism
+        }
+      }else if(this.data.categories == 'WIC'){
+        if(this.weightValidErrMsg) return
+        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(1))
+        const indicator_weight = percentageStrings.join('_')
+
+        const mul_indicator = this.weightData.reduce((acc, item, index) => {
+          acc[`indicator_${index + 1}`] = item.indicator_url
+          return acc
+        }, {})
+
+        saveData = {
+          name: this.data.name,
+          indicator_1: 'model_smart_money',
+          indicator_2: 'model_smart_money',
+          time_frame: this.data.time_frame,
+          ma: '1_1_1',
+          calculate: 'weight_combination', // 存起来
+          // calculate: 'ratio', // 存起来
+          extreme_optimism: 0,
+          extreme_pessimism: 0,
+          indicator_weight,
+          mul_indicator: JSON.stringify(mul_indicator)
+        }
       }
-      const saveData = {
-        name: this.data.name,
-        indicator_1: this.data.indicator_1_url,
-        indicator_2: this.data.indicator_2_url,
-        time_frame: this.data.time_frame,
-        ma: `${this.data.ma1}_${this.data.ma2}_1`,
-        calculate: this.data.categories.split(' ')[1],
-        extreme_optimism: this.data.extreme_optimism,
-        extreme_pessimism: this.data.extreme_pessimism
-      }
+
       console.log('保存的数据', saveData)
       const saveRes = await saveMyIndicators(saveData)
       const code = saveRes.data.code
@@ -335,6 +445,7 @@ export default {
       this.data[field] = value // ma1, ma2, extreme_pessimism, extreme_optimism
     },
     querySearch(queryString, cb) {
+      if(!this.dropdownList || !this.dropdownList.length) {this.dropdownList = this.getList()}
       var dropdownList = this.dropdownList
       var results = queryString
         ? dropdownList.filter(this.createFilter(queryString))
@@ -358,7 +469,7 @@ export default {
       const data = this.data
       const isIndicator = data.categories.includes('Indicator')
       const isSymbol = data.categories.includes('Symbol')
-      const neitherOfThem = data.categories == ''
+      const neitherOfThem = data.categories == '' || data.categories == 'WIC'
       if (neitherOfThem) {
         return this.sentimentList.concat(this.symbolList)
       }
@@ -483,45 +594,85 @@ export default {
       this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
     displayData(data) {
-      this.data.categories = data.categories;
-      this.data.indicator_1 = data.former;
-      this.data.indicator_2 = data.latter;
-      this.data.indicator_1_url = data.indicator_1_url;
-      this.data.indicator_2_url = data.indicator_2_url;
+      this.data.categories = data.mul_indicator && data.indicator_weight ? 'WIC' : data.categories;
+      this.data.indicator_1 = data.mul_indicator && data.indicator_weight ? '' : data.former;
+      this.data.indicator_2 = data.mul_indicator && data.indicator_weight ? '' : data.latter;
+      this.data.indicator_1_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_1_url;
+      this.data.indicator_2_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_2_url;
       this.data.name = data.name;
 
-      const configMap = [
-        { key: 'ma', index: 0 },
-        { key: 'ma', index: 1 },
-        { key: 'upper_extreme_value' },
-        { key: 'lower_extreme_value' }
-      ];
+      if (data.mul_indicator && data.indicator_weight) {
+        const mul_indicator_obj = JSON.parse(data.mul_indicator);
+        const indicator_weight_arr = data.indicator_weight.includes('_') ? data.indicator_weight.split('_') : [data.indicator_weight];
+        this.weightData = indicator_weight_arr.map((weight, index) => ({
+          weight: (weight * 100).toFixed(2),
+          indicator: CIQ.findSentiIndicator(null, mul_indicator_obj[`indicator_${index + 1}`]).chart_name,
+          indicator_url: mul_indicator_obj[`indicator_${index + 1}`],
+          weightValidErrMsg: ''
+        }));
+        console.log('处理后的结果', this.weightData);
+      } else {
+        const configMap = [
+          { key: 'ma', index: 0 },
+          { key: 'ma', index: 1 },
+          { key: 'upper_extreme_value' },
+          { key: 'lower_extreme_value' },
+        ];
 
-      configMap.forEach(item => {
-        const value = data[item.key];
-
-        if (item.key === 'ma') {
-          const maList = value.split('_');
+        configMap.forEach(item => {
+          const value = data[item.key];
           item.config = {
-            value: maList[item.index] != '1' ? maList[item.index] : '',
-            checked: maList[item.index] != '1'
+            value: (item.key === 'ma' ? (value.split('_')[item.index] !== '1' ? value.split('_')[item.index] : '') : (value !== '0' ? value : '')),
+            checked: (item.key === 'ma' ? (value.split('_')[item.index] !== '1') : (value !== '0')),
           };
-        } else {
-          item.config = {
-            value: value != '0' ? value : '',
-            checked: value != '0'
-          };
-        }
-      });
+        });
 
-      // 现在，将配置应用于属性
-      this.MA1CheckInputConfig = { ...this.MA1CheckInputConfig, ...configMap[0].config };
-      this.MA2CheckInputConfig = { ...this.MA2CheckInputConfig, ...configMap[1].config };
-      this.EOCheckInputConfig = { ...this.EOCheckInputConfig, ...configMap[2].config };
-      this.EPCheckInputConfig = { ...this.EPCheckInputConfig, ...configMap[3].config };
-    }
+        this.MA1CheckInputConfig = { ...this.MA1CheckInputConfig, ...configMap[0].config };
+        this.MA2CheckInputConfig = { ...this.MA2CheckInputConfig, ...configMap[1].config };
+        this.EOCheckInputConfig = { ...this.EOCheckInputConfig, ...configMap[2].config };
+        this.EPCheckInputConfig = { ...this.EPCheckInputConfig, ...configMap[3].config };
+      }
+    },
+    tableRowClassName({row, rowIndex}) {
+			if (rowIndex%2 === 1) {
+			return 'dark-row'
+			}
+			return ''
+		},
+    validateTotalPercentage(row) {
+      let weight = 0
+      for (const row of this.weightData) {
+        weight += parseFloat(row.weight) || 0
+      }
+      if(weight > 100) {row.weightValidErrMsg = 'Total weight percentages cannot exceed 100%'}
+      return weight
+    },
+    validateWeightRule(row) {
+      console.log(row.weight)
+      row.weightValidErrMsg = validatePercentageRule(_, row.weight)
+    },
+    handleRowSelect(item, row) {
+      console.log('item', item, row)
+      row.indicator = item.label
+      row.indicator_url = item.url
+      console.log(this.weightData)
 
-
+      const type = item.type
+      if(type === 'Indicator') {
+        this.data.time_frame = this.findMaxFreq(this.data.time_frame, item.updated.toLowerCase()) 
+      }else {
+        this.data.time_frame = 'daily'
+      }
+      console.log('当前最大的 timeframe 是', this.data.time_frame)
+    },
+    addRow(row) {
+      let weight = null
+      const totalWeight = this.validateTotalPercentage(row)
+      if(totalWeight > 0 && totalWeight < 100) {weight = 100 - totalWeight}
+      else {weight = ''}
+      this.weightData.push({ weight, indicator: '', indicator_url: '', weightValidErrMsg: '' });
+    },
+    deleteRow(index) {this.weightData.splice(index, 1)}
   }
 }
 </script>
@@ -542,32 +693,42 @@ h4 {
 	border: 1px solid #5b9bd1;
 	border-radius: 5px;
 	padding: 0 10px 10px 10px;
-	.center {
-		display: flex;
-		align-items: stretch;
-		justify-content: space-evenly;
-		svg.icon {
-			align-self: center;
-			background: #dfdddd;
-			border: 1px solid #b1b1b1;
-			border-radius: 5px;
-		}
-	}
-	.el-autocomplete {
-		width: 100%;
-	}
-	/deep/.el-input__inner {
-		margin-left: 0;
-	}
-	/deep/.el-divider--vertical {
-		height: auto;
-		margin: 0;
-	}
 }
+.WIC-form-container {
+	display: grid;
+	grid-template-rows: 0fr 0fr 0fr auto 0fr 0fr 0fr;
+	margin: 0 auto;
+	align-items: start;
+	border: 1px solid #5b9bd1;
+	border-radius: 5px;
+	padding: 0 10px 10px 10px;
+  min-height: 500px;
+}
+.center {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-evenly;
+  svg.icon {
+    align-self: center;
+    background: #dfdddd;
+    border: 1px solid #b1b1b1;
+    border-radius: 5px;
+  }
+}
+.el-autocomplete {
+  width: 100%;
+}
+/deep/.el-input__inner {
+  margin-left: 0;
+}
+/deep/.el-divider--vertical {
+  height: auto;
+  margin: 0;
+}
+
 .MI-form-top {
 	display: grid;
-	grid-template-rows: repeat(2, 1fr);
-	align-items: center;
+	grid-template-columns: 1fr 0.3fr 1fr;
 	.el-form-item {
 		display: flex;
 		align-items: center;
@@ -620,5 +781,18 @@ h4 {
 
 .item-label {
 	font-weight: 500;
+}
+.el-select.el-select--mini {
+  min-width: 220px;
+}
+.error-message {
+  position: absolute;
+  line-height: 1;
+  font-size: 10px;
+  color: #F56C6C;
+  white-space: nowrap;
+}
+.el-button--primary {
+  width: 150px;
 }
 </style>

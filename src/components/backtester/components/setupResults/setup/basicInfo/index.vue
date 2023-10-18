@@ -114,6 +114,32 @@
                       </el-select>
                     </div>
                   </el-form-item>
+                  <el-form-item prop="market_environment" label="Market Environment">
+                    <template slot="label">
+                      <label>
+                        12. Market Environment
+                        <el-tooltip effect="dark" placement="top">
+                          <span slot="content"
+                            >If you'd like to backtest a specific market environments like a <br /> 'bull
+                            market', select the environment here.</span>
+                          <i class="iconfont icon-wenhao"></i>
+                        </el-tooltip>
+                      </label>
+                    </template>
+                    <div class="selectBox">
+                      <el-select
+                        v-model="bd.market_environment"
+                      >
+                        <el-option
+                          v-for="item in MEOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item
@@ -190,6 +216,31 @@
                       <el-input v-else disabled v-model="bd.start_date"> </el-input>
                     </el-form-item>
                   </div>
+                  <el-form-item prop="index_moving_average_slope" label="Index Moving Average Slope">
+                    <template slot="label">
+                      <label>
+                        13. Index Moving Average Slope
+                        <el-tooltip effect="dark" placement="top">
+                          <span slot="content"
+                            >If you'd like to backtest based on the slope of the 200 Day Moving Average of the Index, <br />select the appropriate slope direction here.</span>
+                          <i class="iconfont icon-wenhao"></i>
+                        </el-tooltip>
+                      </label>
+                    </template>
+                    <div class="selectBox">
+                      <el-select
+                        v-model="bd.index_moving_average_slope"
+                      >
+                        <el-option
+                          v-for="item in IMASOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item prop="commission">
@@ -631,6 +682,8 @@ export default {
           Introduction: '',
           Rules: ''
         },
+        market_environment: 0,
+        index_moving_average_slope: 0
       },
       historyOptions: [
         {
@@ -692,6 +745,16 @@ export default {
       directionOptions:  [
         { value: 'Long', label: 'Long' },
         { value: 'Short', label: 'Short' }
+      ],
+      MEOptions: [
+        { value: 0, label: 'Market Environment' },
+        { value: 1, label: 'Only include bull markets' },
+        { value: 2, label: 'Only include bear markets' },
+      ],
+      IMASOptions: [
+        { value: 0, label: 'Index Moving Average Slope' },
+        { value: 1, label: 'Only include upward sloping' },
+        { value: 2, label: 'Only include downward sloping' },
       ],
       symbolList: [],
       indexList: [],
@@ -1169,6 +1232,9 @@ export default {
         editData.description = description
         editData.slippage = Number(editData.slippage).toFixed(2)
         editData.trade_price = Number(editData.trade_price)
+        // 兼容之前不存在的两个参数
+        editData.market_environment = editData.market_environment || 0
+        editData.index_moving_average_slope = editData.index_moving_average_slope || 0
         this.is_admin = this.$store.getters.getIsAdmin
         this.bd = Object.assign(this.bd, editData)
         if (this.bd.exclude_oo > 0) this.isExcludeOO = true
@@ -1201,7 +1267,7 @@ export default {
         backtestPeriod = editData.backtest_period
         if(!backtestPeriod) {this.caculateBacktestPeriod()}
         this.bd.end_date = timestampToTime(new Date())
-        // 如果是 custom 不改变 start_date, 如果是 all history, start_date 为空, 其他的都要改 start_date
+        // 如果是 custom 不改变 start_date, end_date 如果是 all history, start_date 为空, 其他的都要改 start_date
         if(this.bd.backtest_period <= 20) {
           // start_date 也要改
           const str = this.bd.end_date.split('-')
@@ -1209,6 +1275,9 @@ export default {
           this.bd.start_date = str.join('-')
         }else if(this.bd.backtest_period == '21') {
           this.bd.start_date = ''
+        }else if(this.bd.backtestSymbol == '22') {
+          this.bd.start_date = editData.start_date
+          this.bd.end_date = editData.end_date
         }
     },
     caculateBacktestPeriod() {

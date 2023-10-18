@@ -7,19 +7,23 @@
 		<div class="set-up-container">
 			<div class="criteria-container">
 				<div class="criteria">
-					<keep-alive include="Criteria">
+					<keep-alive>
 						<Criteria
 							ref="entryChild"
 							:config="setConfig('entry')"
 							:isRiskControl="false"
 							@getEntryRelation="getEntryRelation"
 							@sendEntrySignalIndex="sendEntrySignalIndex"
-						></Criteria>
+						>
+						<keep-alive include="['ChildComponent']">
+							<ChildComponent></ChildComponent>
+						</keep-alive>
+						</Criteria>
 					</keep-alive>
 				</div>
 				<div class="divider"></div>
 				<div class="criteria">
-					<keep-alive include="Criteria">
+					<keep-alive>
 						<Criteria
 							ref="exitChild"
 							:config="setConfig('exit')"
@@ -27,7 +31,11 @@
 							@isOnlyRiskControl="isOnlyRiskControl"
 							@getExitRelation="getExitRelation"
 							@sendExitSignalIndex="sendExitSignalIndex"
-						></Criteria>
+						>
+							<keep-alive include="['ChildComponent']">
+								<ChildComponent></ChildComponent>
+							</keep-alive>
+						</Criteria>
 					</keep-alive>
 				</div>
 			</div>
@@ -120,7 +128,7 @@ export default {
 				if(backtestID) {
 					const res = await seeParams(backtestID)
 					res.data.commission = (res.data.commission * 100).toFixed(2)
-					_this.displaySetUpForm(res.data)
+					await _this.displaySetUpForm(res.data)
 					LocalStorageUtil.remove('backtestID')
 				}
       }
@@ -334,7 +342,7 @@ export default {
 			if (isOnlyUseRiskControl && criteria == 'exit') {
 				signal = ['']
 				signal_list.push({
-					code: 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'
+					code: 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999'
 				})
 			} else {
 				for (let i = 0; i < signalList.length; i++) {
@@ -476,7 +484,7 @@ export default {
 			// 处理 exit.signals
 			if (Array.isArray(displayData.exit.signals)) {
 				displayData.exit.signals = displayData.exit.signals
-					.filter(item => item.code && item.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999')
+					.filter(item => item.code && item.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999')
 					.map(value => signalCode.decode(value.code));
 
 				if (displayData.exit.signals.length === 0 || displayData.exit.signals.includes(undefined)) {
