@@ -89,7 +89,7 @@ export const CommonMethodsMixin = {
 						dangerouslyUseHTMLString: true,
 						showClose: true,
 						duration: 0
-					});
+					})
 				} else {
 					// 获取参数并准备复制
 					const paramsRes = await seeParams(data.id)
@@ -119,7 +119,7 @@ export const CommonMethodsMixin = {
 						dangerouslyUseHTMLString: true,
 						showClose: true,
 						duration: 8000
-					});
+					})
 				}
 				this.loading = false
 			} catch (error) {
@@ -138,7 +138,7 @@ export const CommonMethodsMixin = {
 				dangerouslyUseHTMLString: true,
 				showClose: true,
 				duration: 8000
-			});
+			})
 		},
 		async addToFavorites(data) {
 			this.loading = true
@@ -154,7 +154,7 @@ export const CommonMethodsMixin = {
 				dangerouslyUseHTMLString: true,
 				showClose: true,
 				duration: 8000
-			});
+			})
 		},
 		async moveToFavorites(data) {
 			this.loading = true
@@ -170,7 +170,7 @@ export const CommonMethodsMixin = {
 				dangerouslyUseHTMLString: true,
 				showClose: true,
 				duration: 8000
-			});
+			})
 		},
 		async rerunBacktest(data) {
 			this.loading = true
@@ -425,7 +425,7 @@ export const CommonMethodsMixin = {
 			document.getElementsByClassName('ciq-period')[0].style.display = ''
 			this.$store.commit('form/getBacktestSymbol', backtestInfo.symbol)
 			this.$store.dispatch('states/set_isMarkerShown_flag', false)
-			
+
 			this.reloadData(backtestInfo.indicator_layout, backtestInfo.frequency)
 			const callback = this.handleRunAllCallback(
 				backtestParams,
@@ -475,8 +475,8 @@ export const CommonMethodsMixin = {
 				[5, { name: 'Rate Of Change', abbr: 'ROC' }],
 				[6, { name: '% of Previous Range', abbr: 'OPR' }],
 				[7, { name: 'MA Ratio', abbr: 'MA' }],
-				[8, { name: 'Range Rank', abbr: 'RR' }],
-			]);
+				[8, { name: 'Range Rank', abbr: 'RR' }]
+			])
 			let indicator_url = ''
 			let indicator_url_with_ma = ''
 			let fieldName = ''
@@ -570,7 +570,7 @@ export const CommonMethodsMixin = {
 			criteria.signals = criteria.signals.map((item, index) => {
 				if (
 					item.code ==
-						'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999' &&
+						'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999' &&
 					criteriaStr == 'exit'
 				)
 					return null
