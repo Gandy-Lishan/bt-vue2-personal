@@ -395,7 +395,8 @@ export default {
           indicator_2: 'model_smart_money',
           time_frame: this.data.time_frame,
           ma: '1_1_1',
-          calculate: 'ratio',
+          // calculate: 'Weighted indicator combination', // 存起来
+          calculate: 'ratio', // 存起来
           extreme_optimism: 0,
           extreme_pessimism: 0,
           indicator_weight,
