@@ -60,12 +60,12 @@ export default {
       this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
     },
     _config: {
-      handler(newValue, oldValue) {
+      handler(newValue, _) {
         if(Object.keys(newValue).length === 0) return
         console.log('newValue', newValue)
         this.showInput = newValue.checked
         this.value = newValue.value
-        if(newValue.value.includes('e'))  this.value =  newValue.value.toString().replace(/e$/, '');
+        if(typeof newValue.value === 'string' && newValue.value.includes('e'))  this.value =  newValue.value.toString().replace(/e$/, '');
       },
       deep: true, // 启用深度监听，监视对象属性的变化
     },
@@ -102,11 +102,7 @@ export default {
   visibility: hidden;
 }
 .el-select.el-select--mini{
-  min-width: 195px;
-}
-.el-checkbox__input.is-checked+.el-checkbox__label {
-  width: 195px;
-  font-size: 14px !important;
+  min-width: 220px;
 }
 .el-checkbox.is-bordered.el-checkbox--medium .el-checkbox__inner, .el-checkbox__inner {
   width: 18px;
