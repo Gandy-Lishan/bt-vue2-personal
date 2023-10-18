@@ -30,7 +30,7 @@ function getCachedData(url) {
 quoteFeedSimulator.sendAjax = async function (url, cb) {
     let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==CIQ.stxx.chart.symbol)
     let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==CIQ.stxx.chart.symbol)
-    CIQ.stxx.chart.symbolDisplay = stockName?stockName.name:indexName.name
+    CIQ.stxx.chart.symbolDisplay = stockName?stockName?.name:indexName?.name
     try{
         const res = await getCachedData(url)
         if(res.status==200){

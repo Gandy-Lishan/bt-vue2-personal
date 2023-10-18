@@ -9,6 +9,7 @@
 
 <script>
 import chart from '@/components/common/chart/index.vue'
+import { mapGetters } from 'vuex'
 export default {
 	name: 'MIChart',
 	data() {
@@ -21,10 +22,14 @@ export default {
 	components: {
     	chart: chart,
 	},
+	beforeDestroy() {
+		// Destroy the ChartEngine instance when unloading the component.
+		// This will stop internal processes such as quotefeed polling.
+		CIQ.stxx?.destroy()
+	},
 	methods:{
 		onChartReady(){
-			this.hideComponents()
-			
+			this.hideComponents()	
 		},
 		hideComponents() {
 			let search = document.querySelector(".ciq-search")
