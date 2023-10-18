@@ -1232,6 +1232,9 @@ export default {
         editData.description = description
         editData.slippage = Number(editData.slippage).toFixed(2)
         editData.trade_price = Number(editData.trade_price)
+        // 兼容之前不存在的两个参数
+        editData.market_environment = editData.market_environment || 0
+        editData.index_moving_average_slope = editData.index_moving_average_slope || 0
         this.is_admin = this.$store.getters.getIsAdmin
         this.bd = Object.assign(this.bd, editData)
         if (this.bd.exclude_oo > 0) this.isExcludeOO = true

@@ -362,6 +362,7 @@ import {isJson} from '@/utils'
 import { throttle } from 'lodash'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 import { copy } from "@/components/common/directives/copyBacktestID"
+import { RefreshBus } from "../EventBus/Bus"
 
 export default {
 	name: 'Table',
@@ -390,6 +391,11 @@ export default {
 	},
 	created() {
 		this.getDataList(null)
+	// 监听事件总线中的 refresh-list 事件
+  	RefreshBus.$on(`refresh-list`, (_) => {
+      // 在这里执行刷新列表的操作，重新获取数据
+      this.getDataList(null)
+    })
 	},
 	methods: {
 		async getDataList(orderby) {
