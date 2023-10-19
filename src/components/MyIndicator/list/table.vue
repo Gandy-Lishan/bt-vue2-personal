@@ -18,7 +18,6 @@
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.8)"
       @sort-change="changeTableSort"
-      @row-click="handleRowClick"
 			style="width: 100%; height: 100%"
 		>
     
@@ -46,20 +45,20 @@
               </el-col>
             </el-row> -->
             <el-row :gutter="20">
-              <el-row :span="8">
+              <el-row :span="4">
               <el-form-item label="Name">
                   <span>{{ scope.row['name']}}</span>
               </el-form-item>
               </el-row>
-              <el-row :span="8">
+              <el-row :span="4">
               <el-form-item label="Categories">
                 <span>{{ scope.row['categories']}}</span>
               </el-form-item>
               </el-row>
-              <el-row :span="8">
-                <el-form-item label="Indicators included">
+              <el-row :span="16">
+                <el-form-item label="Indicators included" class="included-box">
                   <template v-for="(item, index) in scope.row['included']">
-                    <span :key="index" style="margin-right: 5px">{{`${index + 1}. ${item}`}}</span>
+                    <span :key="index" style="margin-right: 10px">{{`${index + 1}. ${item}`}}</span>
                   </template>
                 </el-form-item>
               </el-row>
@@ -72,7 +71,19 @@
 					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
-          v-if="['Name', 'Categories'].includes(l.label)"
+          v-if="l.label == 'Name'"
+				>
+					<template slot-scope="scope">
+						<p class="tableText">
+            <el-button type="text" @click="handleRowClick(scope.row)">{{ scope.row[l.value] }}</el-button>
+						</p>
+					</template>
+				</el-table-column>
+        <el-table-column
+					:label="l.label"
+					:prop="l.value"
+					:key="l.key"
+          v-if="l.label == 'Categories'"
 				>
 					<template slot-scope="scope">
 						<p class="tableText">
@@ -114,6 +125,7 @@
 <script>
 import { delMyIndicator, getMyIndicatorsList, searchIndicator } from '@/service/service'
 import { capitalizeFirstLetter } from "@/utils"
+import { indicators } from '../../common/chart/st-development/js/components'
 
 export default {
   name: 'MITable',
@@ -162,12 +174,14 @@ export default {
 
       let data = listRes.data.results.map(item => {
       if (['ratio', 'spread'].includes(item.calculate)) {
-        const included = this.getIncludedData(item, sentimentList, symbolList);
+        const {included, former, latter} = this.getIncludedData(item, sentimentList, symbolList);
         return {
           ...item,
           categories: `${included.some(i => i) ? 'Indicator' : 'Symbol'} ${capitalizeFirstLetter(item.calculate)}`,
           included,
-          key: item.url
+          key: item.url,
+          former,
+          latter
         };
       }
       if (item.calculate === 'weight_c' && (item.indicator_weight && item.mul_indicator)) {
@@ -196,7 +210,11 @@ export default {
       const ma2 = maList[1] !== '1' ? ` Moving Average ${maList[1].includes('e') ? maList[1].toString().replace(/e$/, '') : maList[1]}` : '';
       const former = indicator1?.label;
       const latter = indicator2?.label;
-      return [`${former}${ma1}`, `${latter}${ma2}`];
+      return {
+        included: [`${former}${ma1}`, `${latter}${ma2}`],
+        former,
+        latter
+      }
     },
     getWeightedIndicatorData(item, sentimentList) {
       const mulIndicatorObj = JSON.parse(item.mul_indicator);
@@ -299,5 +317,8 @@ export default {
 }
 .el-form-item{
   margin-bottom: 0;
+  span {
+    color: #5b9bd1;
+  }
 }
 </style>
