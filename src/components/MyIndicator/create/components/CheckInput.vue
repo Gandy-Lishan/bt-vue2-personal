@@ -1,8 +1,8 @@
 <template>
   <div class="checkbox-with-input">
-    <el-checkbox v-model="showInput" v-if="config['type'] == 'CheckInput'">{{ config.label }}</el-checkbox>
-    <el-checkbox v-model="showInput" v-if="config['type'] == 'SelectInput'" style="margin-right: 10px;"></el-checkbox>
-    <el-select v-model="MAType" @change="handleSelect" placeholder="-Select-" size="mini" v-if="config['type'] == 'SelectInput'" style="margin-right: 5px;">
+    <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'CheckInput'">{{ config.label }}</el-checkbox>
+    <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'SelectInput'" style="margin-right: 10px;"></el-checkbox>
+    <el-select :disabled="isDisabled" v-model="MAType" @change="handleSelect" placeholder="-Select-" size="mini" v-if="config['type'] == 'SelectInput'" style="margin-right: 5px;">
       <el-option
         v-for="item in options"
         :key="item.value"
@@ -28,7 +28,8 @@ export default {
     config: {
       type: Object,
       required: true,
-    }
+    },
+    isDisabled: Boolean
   },
   data() {
     return {
@@ -71,6 +72,12 @@ export default {
     },
   },
   methods: {
+    clearForm() {
+      this.showInput = false
+      this.value = 5
+      this.inputVisibility = 'hidden'
+      this.MAType = 'MA'
+    },
     saveData() {
       if(this.config.field === 'ma1' || this.config.field === 'ma2') {
         if(!this.showInput) this.value = 1

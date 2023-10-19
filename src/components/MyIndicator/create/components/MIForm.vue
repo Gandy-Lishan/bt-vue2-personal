@@ -75,6 +75,7 @@
 				</el-form-item>
 				<CheckInput
 					:config="MA1CheckInputConfig"
+          :isDisabled="data.indicator_1==''"
 					ref="ma1Form"
           @manageMAStudies="manageMAStudies"
 					@saveData="saveSubData"
@@ -151,6 +152,7 @@
 				</el-form-item>
 				<CheckInput
 					:config="MA2CheckInputConfig"
+          :isDisabled="data.indicator_2==''"
 					ref="ma2Form"
           @manageMAStudies="manageMAStudies"
 					@saveData="saveSubData"
@@ -508,13 +510,18 @@ export default {
           'indicator_2'
         )
       }
+  
+      const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
+      for (const formRef of formsToSave) {
+        this.$refs[formRef].clearForm()
+      }
 
       this.dropdownList = this.getList()
 
       this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
     handleSelect(item, source) {
-      console.log('item', item)
+      console.log('item', item,source)
       const type = item.type
       if(type === 'Indicator') {
         this.data.time_frame = this.findMaxFreq(this.data.time_frame, item.updated.toLowerCase()) 
@@ -561,7 +568,8 @@ export default {
           selectSymbol(item)
         }
       }
-      this.manageMAStudies(this.value,this.MAType,this.config.field,this.showInput)
+      console.log('data',this.data)
+      this.manageMAStudies(this.value,this.MAType,source=="indicator_1"?'ma1':'ma2',this.showInput)
     },
     findMaxFreq(currentFreq, previousFreq) {
       let selectedTimeframe = currentFreq
