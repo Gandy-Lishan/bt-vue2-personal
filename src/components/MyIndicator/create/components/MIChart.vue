@@ -13,6 +13,9 @@ import { CIQ } from '@/components/common/chart/st-development/js/components'
 import { mapGetters } from 'vuex'
 export default {
 	name: 'MIChart',
+	props: {
+		chart_data: Object
+	},
 	data() {
 		return {
 			indicator : '',
@@ -31,6 +34,9 @@ export default {
 	methods:{
 		onChartReady(){
 			this.hideComponents()	
+			debugger
+			 CIQ.displayUserOwnIndicator(this.chart_data.name+'CREATE'+this.chart_data.url)
+			console.log('chart_data',this.chart_data)
 		},
 		hideComponents() {
 			let search = document.querySelector(".ciq-search")

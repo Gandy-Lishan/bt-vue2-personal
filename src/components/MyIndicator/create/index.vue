@@ -1,7 +1,7 @@
 <template>
   <div class="create-indicator-container">
     <div class="chart">
-      <MIChart></MIChart>
+      <MIChart :chart_data="chart_data"></MIChart>
     </div>
     <div class="form">
       <MIForm :formConfig="formConfig" :formData="formData" ref="MIForm" v-show="!isCreateLoading"></MIForm>
@@ -24,6 +24,7 @@ export default {
   name: "CreateIndicator",
   data() {
     return {
+      chart_data: {},
       formConfig: [
         {
           label: 'Name',
@@ -109,6 +110,8 @@ export default {
 					// 说明是路由跳转过来携带参数的
 					const { data } = to.params
 					const _data = isJson(data) ? JSON.parse(data) : data
+
+          _this.chart_data = _data
 					// 展示出 indicator 那一行的数据
 					_this.$refs['MIForm'].displayData(_data)
 				}

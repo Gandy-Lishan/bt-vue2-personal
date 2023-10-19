@@ -682,6 +682,10 @@
         }
     }
 
+    CIQ.displayUserOwnIndicator = function(indicator){
+        addUserOwnIndicators([indicator]);
+    }
+
     const addUserOwnIndicators = async function(indicatorList){
         // fetch indicator information and add studies to chart
         await getUserOwnIndicatorMatedata(indicatorList)
@@ -700,9 +704,41 @@
         }
         var color = ["#7257F2","#21CE6B"]
         let resArr = []
+        let sentiUrlList = []
+
         return new Promise(resolve=>{
             for(var i in indicatorList){
-    
+                if(CIQ.isOwnIndicator(indicatorList[i])){
+                /********************lishan modify end*************************/
+                    var newStudy = {
+                        inputs: { Period: 13, Overlay: false},
+                        outputs: 
+                        {indicatorClose:color[i%7],description: '',url:indicatorList[i]},
+                        parameters: { init: {
+                            studyOverZonesEnabled: false,
+                            studyOverBoughtValue: 999,
+                            studyOverBoughtColor: "#FF0000",
+                            studyOverSoldValue: 999,
+                            studyOverSoldColor: "#00DD00",
+                        }},
+                        attributes:{
+                            studyOverBoughtValue:{"step":0.01},
+                            studyOverSoldValue:{"step":0.01}
+                        }
+                    }
+                    
+                    var str = JSON.stringify(newStudy);                                   
+                    str = str.replace(/indicatorClose/g, indicatorList[i]);
+                    newStudy = JSON.parse(str)                                     
+                    
+                    CIQ.Studies.studyLibrary[indicatorList[i]] = newStudy
+
+                    /********************lishan modify start*************************/
+                    var indicatorName = indicatorList[i].match(/(CREATE|HASH)/) ? indicatorList[i].split(/(CREATE|HASH)/)[0] : indicatorList[i]
+                    /********************lishan modify end*************************/
+                    CIQ.Studies.addStudy(CIQ.stxx,indicatorList[i],{display:indicatorName})   
+                    continue
+                }
                 var queryUrl =  config.indicatorMetadata + 
                 "?indicator=" + indicatorList[i];
                 let _res = new Promise((resolve,reject)=>{ 
@@ -715,6 +751,7 @@
                     })
                 })
                 resArr.push(_res)
+                sentiUrlList.push(indicatorList[i])
             }
     
             // handle all response for sentiment indicator information and load them
@@ -726,7 +763,7 @@
                         var newStudy = {
                             inputs: { Period: 13, Overlay: false},
                             outputs: 
-                            {indicatorClose:color[i%2],description: newQuotes[i].description,url:indicatorList[i]},
+                            {indicatorClose:color[i%2],description: newQuotes[i].description,url:sentiUrlList[i]},
                             parameters: { init: {
                                 studyOverZonesEnabled: false,
                                 studyOverBoughtValue: newQuotes[i].opt_extreme?newQuotes[i].opt_extreme:NaN,
@@ -741,11 +778,11 @@
                         }
                         
                             var str = JSON.stringify(newStudy);                                   
-                            str = str.replace(/indicatorClose/g, indicatorList[i]);
+                            str = str.replace(/indicatorClose/g, sentiUrlList[i]);
                             newStudy = JSON.parse(str)                                     
                             
-                            CIQ.Studies.studyLibrary[indicatorList[i]] = newStudy
-                            CIQ.Studies.addStudy(CIQ.stxx,indicatorList[i])                
+                            CIQ.Studies.studyLibrary[sentiUrlList[i]] = newStudy
+                            CIQ.Studies.addStudy(CIQ.stxx,sentiUrlList[i])                
                     }
                 }   
                 resolve()                     
