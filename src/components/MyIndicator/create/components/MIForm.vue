@@ -437,9 +437,7 @@ export default {
             })
 				}
       console.log('保存数据 res', saveRes.data.url)
-      const indicatorData = await getMyIndicatorData(saveRes.data.url)
-      console.log('indicatorData res', indicatorData.data.data)
-      // 需要在 chartIQ 中显示出创建的 indicator
+
       this.$store.commit('SET_CREACT_LOADING', false)
     },
     saveSubData(field, value) {
@@ -601,8 +599,7 @@ export default {
       // 改变 chartiqIQ 中的 indicator
       this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
-    displayData(data) {
-      debugger
+    async displayData(data) {
       // 从localStorage获取数据
       const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
 
@@ -613,6 +610,7 @@ export default {
       this.data.indicator_2_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_2_url;
       this.data.name = data.name;
 
+      //如果类型时weight_C
       if (data.mul_indicator && data.indicator_weight && data.calculate == 'weight_c') {
         const mul_indicator_obj = JSON.parse(data.mul_indicator);
         const indicator_weight_arr = data.indicator_weight.includes('_') ? data.indicator_weight.split('_') : [data.indicator_weight];
@@ -623,7 +621,7 @@ export default {
           weightValidErrMsg: ''
         }));
         console.log('处理后的结果', this.weightData);
-      } else {
+      } else {  //其他类型
         const configMap = [
           { key: 'ma', index: 0 },
           { key: 'ma', index: 1 },
@@ -639,11 +637,18 @@ export default {
           };
         });
 
+        //覆盖checkbox初始化配置
         this.MA1CheckInputConfig = { ...this.MA1CheckInputConfig, ...configMap[0].config };
         this.MA2CheckInputConfig = { ...this.MA2CheckInputConfig, ...configMap[1].config };
         this.EOCheckInputConfig = { ...this.EOCheckInputConfig, ...configMap[2].config };
         this.EPCheckInputConfig = { ...this.EPCheckInputConfig, ...configMap[3].config };
       }
+
+      //获取合并后的新indicator数据
+      // const indicatorData = await getMyIndicatorData(data.url)
+      // console.log('indicatorData res', indicatorData.data.data)
+      // 需要在 chartIQ 中显示出创建的 indicator
+      
     },
     tableRowClassName({row, rowIndex}) {
 			if (rowIndex%2 === 1) {

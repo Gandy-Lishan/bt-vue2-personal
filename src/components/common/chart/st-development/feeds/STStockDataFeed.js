@@ -646,7 +646,6 @@ quoteFeedSimulator.formatChartData = async function(response){
             } 
         }
     }catch(err){}
-
     // 可以封装成promise
     //return new Promise(async(resolve)=>{
         if(CIQ.objIndicator && typeof CIQ.objIndicator !== 'string'){
@@ -704,6 +703,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                         }
                         newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
                     }
+                    debugger
                 }
             }
             /********************lishan modify end*************************/
