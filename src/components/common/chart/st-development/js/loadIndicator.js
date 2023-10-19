@@ -757,6 +757,7 @@
     }
 
     CIQ.userOwnIndicatorMAStudies = function(value,type,field,showInput,categories) {
+        
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
             if (
                 CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == field &&
@@ -769,7 +770,7 @@
               )
             }
           }
-        if(!showInput) return
+        if(!showInput || !field) return
         var stma_color = "#bfad94"
         CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
             Type: type == 'SMA' ? 'simple' : 'exponential',
