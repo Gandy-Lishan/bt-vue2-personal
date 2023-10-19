@@ -125,7 +125,6 @@
 <script>
 import { delMyIndicator, getMyIndicatorsList, searchIndicator } from '@/service/service'
 import { capitalizeFirstLetter } from "@/utils"
-import { indicators } from '../../common/chart/st-development/js/components'
 
 export default {
   name: 'MITable',
