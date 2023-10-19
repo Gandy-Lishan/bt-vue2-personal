@@ -91,7 +91,7 @@
 					p-id="1199"
 					width="30"
 					height="30"
-					v-show="data.categories.includes('ratio') || data.categories == ''"
+					v-show="data.categories.includes('Ratio') || data.categories == ''"
 				>
 					<path
 						d="M179.18 801.854l624.856-623.767 45.067 45.146L224.247 847z"
@@ -105,7 +105,7 @@
 					width="30"
 					height="30"
 					viewBox="0 0 1024 1024"
-					v-show="data.categories.includes('spread')"
+					v-show="data.categories.includes('Spread')"
 				>
 					<line
 						x1="128"
@@ -279,16 +279,16 @@ export default {
           value: 'Indicator spread'
         },
         {
-          label: 'Indicator ratio',
-          value: 'Indicator ratio'
+          label: 'Indicator Ratio',
+          value: 'Indicator Ratio'
         },
         {
-          label: 'Symbol spread',
-          value: 'Symbol spread'
+          label: 'Symbol Spread',
+          value: 'Symbol Spread'
         },
         {
-          label: 'Symbol ratio',
-          value: 'Symbol ratio'
+          label: 'Symbol Ratio',
+          value: 'Symbol Ratio'
         },
         {
           label: 'Weighted Indicator Combination',
@@ -384,7 +384,7 @@ export default {
           indicator_2: this.data.indicator_2_url,
           time_frame: this.data.time_frame,
           ma: `${this.data.ma1}_${this.data.ma2}_1`,
-          calculate: this.data.categories.split(' ')[1],
+          calculate: this.data.categories.split(' ')[1].toLowerCase(),
           extreme_optimism: this.data.extreme_optimism,
           extreme_pessimism: this.data.extreme_pessimism
         }
@@ -594,6 +594,10 @@ export default {
       this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
     displayData(data) {
+      debugger
+      // 从localStorage获取数据
+      const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
+
       this.data.categories = data.mul_indicator && data.indicator_weight ? 'WIC' : data.categories;
       this.data.indicator_1 = data.mul_indicator && data.indicator_weight ? '' : data.former;
       this.data.indicator_2 = data.mul_indicator && data.indicator_weight ? '' : data.latter;
@@ -601,12 +605,12 @@ export default {
       this.data.indicator_2_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_2_url;
       this.data.name = data.name;
 
-      if (data.mul_indicator && data.indicator_weight) {
+      if (data.mul_indicator && data.indicator_weight && data.calculate == 'weight_c') {
         const mul_indicator_obj = JSON.parse(data.mul_indicator);
         const indicator_weight_arr = data.indicator_weight.includes('_') ? data.indicator_weight.split('_') : [data.indicator_weight];
         this.weightData = indicator_weight_arr.map((weight, index) => ({
           weight: (weight * 100).toFixed(2),
-          indicator: CIQ.findSentiIndicator(null, mul_indicator_obj[`indicator_${index + 1}`]).chart_name,
+          indicator: sentimentList.find(ele => ele.url === item.mul_indicator_obj[`indicator_${index + 1}`]) || symbolList.find(ele => ele.url === item.mul_indicator_obj[`indicator_${index + 1}`]),
           indicator_url: mul_indicator_obj[`indicator_${index + 1}`],
           weightValidErrMsg: ''
         }));
