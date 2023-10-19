@@ -275,8 +275,8 @@ export default {
       inputVisibility: 'hidden', // 初始化时设置为隐藏
       options: [
         {
-          label: 'Indicator spread',
-          value: 'Indicator spread'
+          label: 'Indicator Spread',
+          value: 'Indicator Spread'
         },
         {
           label: 'Indicator Ratio',
@@ -328,7 +328,7 @@ export default {
         type: 'CheckInput'
       },
       data: {
-        categories: 'Indicator spread',
+        categories: 'Indicator Spread',
         name: '',
         indicator_1: '',
         indicator_2: '',
@@ -540,24 +540,24 @@ export default {
         if (this.data.categories.includes('Indicator')) {
           selectIndicator(item)
         } else if (this.data.categories.includes('Symbol')) {
-          this.data.categories = 'Indicator spread'
-          this.changeCategories('Indicator spread')
+          this.data.categories = 'Indicator Spread'
+          this.changeCategories('Indicator Spread')
           selectIndicator(item)
         } else {
-          this.data.categories = 'Indicator spread'
-          this.changeCategories('Indicator spread')
+          this.data.categories = 'Indicator Spread'
+          this.changeCategories('Indicator Spread')
           selectIndicator(item)
         }
       } else if (type === 'Symbol') {
         if (this.data.categories.includes('Symbol')) {
           selectSymbol(item)
         } else if (this.data.categories.includes('Indicator')) {
-          this.data.categories = 'Symbol spread'
-          this.changeCategories('Symbol spread')
+          this.data.categories = 'Symbol Spread'
+          this.changeCategories('Symbol Spread')
           selectSymbol(item)
         } else {
-          this.data.categories = 'Symbol spread'
-          this.changeCategories('Symbol spread')
+          this.data.categories = 'Symbol Spread'
+          this.changeCategories('Symbol Spread')
           selectSymbol(item)
         }
       }
