@@ -167,9 +167,10 @@ let __st_js_generateCsv_ = (_exports) => {
      var categoryList = CIQ.technicalCategory
      var conditionRadio = CIQ.store.state.form.conditionRadio[criteria][indexNum]
      var formatSmallNum = function(num){
-         if(num>-0.005 && num<0){return -0.01}
-         else if(num>0 && num<0.005){return 0.01}
-         else{return num}
+        //  if(num>-0.005 && num<0){return -0.01}
+        //  else if(num>0 && num<0.005){return 0.01}
+        //  else{return num}
+        return num
      }
      // technical indicators
      for(var _class in categoryList){
