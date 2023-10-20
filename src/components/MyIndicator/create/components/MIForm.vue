@@ -507,6 +507,9 @@ export default {
           'indicator_2_url',
           'indicator_2'
         )
+
+        // 隐藏主图表面板的默认符号
+        CIQ.stxx.mainSeriesRenderer.scrubbed = true;
       }
   
       const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
