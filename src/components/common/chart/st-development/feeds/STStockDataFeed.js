@@ -692,7 +692,6 @@ quoteFeedSimulator.formatChartData = async function(response){
                     );
             
                     sortedRows = sortedRows.map(item => ({ ...item, indicator_Close: item.close, DT: item.DT + '.000Z' }));
-            
                     for (const i in sortedRows) {
                         const index = data.findIndex(item => item.DT == sortedRows[i].DT);
                         if (index == -1) {
@@ -703,7 +702,6 @@ quoteFeedSimulator.formatChartData = async function(response){
                         }
                         newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
                     }
-                    debugger
                 }
             }
             /********************lishan modify end*************************/

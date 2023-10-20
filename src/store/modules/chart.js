@@ -48,7 +48,7 @@ const state = {
 	},
 
 	// 以下管理user's own indicator chartiq 状态
-	miFormCategories: 'Indicator spread',
+	miFormCategories: 'Indicator Spread',
 	miFormCategoriesIndicator1:{name:'',url:''},
 	miFormCategoriesIndicator2:{name:'',url:''},
 }

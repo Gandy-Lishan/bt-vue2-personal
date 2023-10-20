@@ -34,7 +34,6 @@ export default {
 	methods:{
 		onChartReady(){
 			this.hideComponents()	
-			debugger
 			 CIQ.displayUserOwnIndicator(this.chart_data.name+'CREATE'+this.chart_data.url)
 			console.log('chart_data',this.chart_data)
 		},

@@ -623,7 +623,6 @@
  
     // 以下管理user's own indicator 图表函数
     CIQ.updateUserOwnIndicator = function(newData,oldData){
-        
         if(oldData.categories != newData.categories){
             // remove existing studies and series
             for (var studyInstanceName in CIQ.stxx.layout.studies) { 
@@ -636,7 +635,7 @@
             }
             return
         }
-
+        
         if(newData.categories.includes('Symbol')){
             if(oldData.indicator1.url != newData.indicator1.url){
                 var series = CIQ.stxx.chart.series[oldData.indicator1.url]; 
