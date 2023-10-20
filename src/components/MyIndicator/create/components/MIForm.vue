@@ -200,16 +200,6 @@
       <el-table-column label="Index" header-align="center" align="center" width="80px">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="280px">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)" @blur="validateTotalPercentage(scope.row)">
-            <template v-slot:append>(%)</template>
-          </el-input>
-          <div class="error-message">
-            {{ scope.row.weightValidErrMsg }}
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column label="Indicator" header-align="center" align="center" prop="indicator">
         <template slot-scope="scope" >
           <el-autocomplete
@@ -246,6 +236,18 @@
 							</div>
 						</template>
           </el-autocomplete>
+        </template>
+      </el-table-column>
+      <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="150px">
+        <template slot-scope="scope">
+          <!-- 注释掉：无需校验 totalWeight <= 100 -->
+          <!-- <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)" @blur="validateTotalPercentage(scope.row)"> -->
+          <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)">
+            <template v-slot:append>(%)</template>
+          </el-input>
+          <div class="error-message">
+            {{ scope.row.weightValidErrMsg }}
+          </div>
         </template>
       </el-table-column>
       <el-table-column header-align="center" align="center" width="250px">
@@ -725,17 +727,17 @@ export default {
       }else {
         // 需要验证百分比总和，和每一列的indicator是否都在允许范围
         const data = this.weightData
-        let totalWeight = 0
+        // let totalWeight = 0
         let rowWeightValid = true
         let inAllowedList = true
         for (const row of data) {
-          totalWeight += parseFloat(row.weight) || 0
+          // totalWeight += parseFloat(row.weight) || 0
           row.weightValidErrMsg = validatePercentageRule(_, row.weight)
           if(row.weightValidErrMsg) rowWeightValid = false
           const isIn = ((sentimentList.find(ele => ele.url === row.indicator_url) || symbolList.find(ele => ele.url === row.indicator_url))?.label || false)
           if(!isIn) inAllowedList = false
         }
-        if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
+        // if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
         if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
         if(!inAllowedList) {this.popUpMsgBox('Please choose indicators from the dropdown.'); return false}
       }
@@ -768,11 +770,15 @@ export default {
       console.log('当前最大的 timeframe 是', this.data.time_frame)
     },
     addRow(row) {
+      /*
+      lishan 注释掉，因为不需要限制 totalWeight 为 100 了
       let weight = null
       const totalWeight = this.validateTotalPercentage(row)
       if(totalWeight > 0 && totalWeight < 100) {weight = 100 - totalWeight}
       else {weight = ''}
       this.weightData.push({ weight, indicator: '', indicator_url: '', weightValidErrMsg: '' });
+      */
+      this.weightData.push({ weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '' });
     },
     deleteRow(index) {this.weightData.splice(index, 1)},
   }
