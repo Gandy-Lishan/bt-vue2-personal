@@ -55,6 +55,11 @@
                 <span>{{ scope.row['categories']}}</span>
               </el-form-item>
               </el-row>
+              <el-row :span="4">
+              <el-form-item label="Timeframe">
+                <span>{{ scope.row['time_frame']}}</span>
+              </el-form-item>
+              </el-row>
               <el-row :span="16">
                 <el-form-item label="Indicators included" class="included-box">
                   <template v-for="(item, index) in scope.row['included']">
@@ -327,10 +332,10 @@ export default {
   }
 }
 .delete-btn {
-  background-color: rgb(251, 192, 92);
+	background-color: #f59e0b;
   border: unset;
 }
 .delete-btn:hover {
-	background-color: #f59e0b;
+  background-color: rgb(251, 192, 92);
 }
 </style>
