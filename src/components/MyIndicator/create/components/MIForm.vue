@@ -370,10 +370,19 @@ export default {
   },
   methods: {
     manageMAStudies(value,type,field,showInput) {
+      let fieldName = 'field'
+      if(field == 'ma1'){
+        // 如果symbol则input1 的field为main panel的默认值
+        if(!this.data.categories.includes('Symbol')){
+          fieldName = this.data.indicator_1_url
+        }
+      }else{
+        fieldName = this.data.indicator_2_url
+      }
       CIQ.userOwnIndicatorMAStudies(
         value,
         type,
-        field=='ma1'?this.data.indicator_1_url:this.data.indicator_2_url,
+        fieldName,
         showInput,
         this.data.categories
         ) 
@@ -503,6 +512,9 @@ export default {
       if (isIndicator) {
         clearIndicatorIfMatch(this.symbolList, 'indicator_1_url', 'indicator_1')
         clearIndicatorIfMatch(this.symbolList, 'indicator_2_url', 'indicator_2')
+
+        // 通过初始化默认SPX chart还原deleted series
+        //CIQ.stxx.loadChart("SPX")
       }
 
       if (isSymbol) {
@@ -517,8 +529,13 @@ export default {
           'indicator_2'
         )
 
-        // 隐藏主图表面板的默认符号
-        CIQ.stxx.mainSeriesRenderer.scrubbed = true;
+        //CIQ.stxx.setPeriodicity(1,1,'day')
+        // 隐藏主图表面板的默认符号和series
+        // var renderer = CIQ.stxx.chart.seriesRenderers._main_series.seriesParams[0].id;
+        // CIQ.stxx.removeSeries(renderer);
+
+        // document.getElementsByTagName('cq-chart-title')[0].classList.remove('stx-show')
+
       }
   
       const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']

@@ -638,21 +638,28 @@
         
         if(newData.categories.includes('Symbol')){
             if(oldData.indicator1.url != newData.indicator1.url){
-                var series = CIQ.stxx.chart.series[oldData.indicator1.url]; 
-                CIQ.stxx.removeSeries(series); 
-                CIQ.stxx.addSeries(newData.indicator1.url, {
-                    display:newData.indicator1.name, 
-                    isComparison: false, 
-                    color: "#5B9BD1",
-                    //panel:newData.indicator1.url,
-                    // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
-                    yAxis:{ 
-                        position:"left",
-                        textStyle:"#FFBE00"
-                    },
-                    shareYAxis: true
-                });
-                console.log(newData.indicator1.url)
+                // var series = CIQ.stxx.chart.series[oldData.indicator1.url]; 
+                // CIQ.stxx.removeSeries(series); 
+                // CIQ.stxx.addSeries(newData.indicator1.url, {
+                //     display:newData.indicator1.name, 
+                //     isComparison: false, 
+                //     color: "#5B9BD1",
+                //     //panel:newData.indicator1.url,
+                //     // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
+                //     yAxis:{ 
+                //         position:"right",
+                //         //textStyle:"#FFBE00"
+                //     },
+                //     //shareYAxis: true
+                // });
+                // console.log(newData.indicator1.url)
+                // CIQ.stxx.loadChart(	{ symbol: 'SPX', indicator:indicatorList}, function () {
+
+                // }) 
+
+                // 清空之前的indicator(比如weekly的AIM)
+                CIQ.objIndicator = []
+                CIQ.stxx.loadChart({symbol: newData.indicator1.url})
             }
             if(oldData.indicator2.url != newData.indicator2.url){
                 var series = CIQ.stxx.chart.series[oldData.indicator2.url]; 
@@ -667,16 +674,29 @@
                         position:"left",
                         textStyle:"#FFBE00"
                     },
-                    shareYAxis: true
+                    //shareYAxis: true
                 });
             }
         }
         
         if(newData.categories.includes('Indicator')){
-            if(oldData != newData){
-                var sd = CIQ.stxx.layout.studies[oldData.indicator1.url];
-                if(sd) CIQ.Studies.removeStudy(CIQ.stxx,sd); 
-                addUserOwnIndicators([newData.indicator1.url,newData.indicator2.url]);
+            if(oldData.indicator1.url != newData.indicator1.url){
+                for (var studyInstanceName in CIQ.stxx.layout.studies) {
+                    var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+                    if (sd.type== oldData.indicator1.url){
+                        CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+                    }
+                }
+                addUserOwnIndicators([newData.indicator1.url,newData.indicator2.url],newData.indicator1.url);
+            }
+            if(oldData.indicator2.url != newData.indicator2.url){
+                for (var studyInstanceName in CIQ.stxx.layout.studies) {
+                    var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+                    if (sd.type== oldData.indicator2.url){
+                        CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+                    }
+                }
+                addUserOwnIndicators([newData.indicator1.url,newData.indicator2.url],newData.indicator2.url);
             }
         }
     }
@@ -685,34 +705,33 @@
         addUserOwnIndicators([indicator]);
     }
 
-    const addUserOwnIndicators = async function(indicatorList){
+    const addUserOwnIndicators = async function(indicatorList,indicator){
+        // remove redundant elements and empty string
+        for(var i=0;i<indicatorList.length;i++){
+        if(indicatorList[i]=='' || indicatorList[i]==undefined){
+            indicatorList.splice(i,1)
+            i--;
+        }
+        }
+
         // fetch indicator information and add studies to chart
-        await getUserOwnIndicatorMatedata(indicatorList)
+        await getUserOwnIndicatorMatedata(indicator)
 
         CIQ.stxx.loadChart(	{ symbol: 'SPX', indicator:indicatorList}, function () {
 
         }) 
     }
-    const getUserOwnIndicatorMatedata = async function(indicatorList){
-        for (var studyInstanceName in CIQ.stxx.layout.studies) {
-         
-            var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
-            //if (CIQ.studys.indexOf(sd.type) === -1){
-                CIQ.Studies.removeStudy(CIQ.stxx, sd); 
-           // }
-        }
-        var color = ["#7257F2","#21CE6B"]
-        let resArr = []
-        let sentiUrlList = []
+    const getUserOwnIndicatorMatedata = async function(indicator){
+        var color = "#7257F2"
 
         return new Promise(resolve=>{
-            for(var i in indicatorList){
-                if(CIQ.isOwnIndicator(indicatorList[i])){
+
+                if(CIQ.isOwnIndicator(indicator)){
                 /********************lishan modify end*************************/
                     var newStudy = {
                         inputs: { Period: 13, Overlay: false},
                         outputs: 
-                        {indicatorClose:color[i%7],description: '',url:indicatorList[i]},
+                        {indicatorClose:color,description: '',url:indicator},
                         parameters: { init: {
                             studyOverZonesEnabled: false,
                             studyOverBoughtValue: 999,
@@ -727,67 +746,61 @@
                     }
                     
                     var str = JSON.stringify(newStudy);                                   
-                    str = str.replace(/indicatorClose/g, indicatorList[i]);
+                    str = str.replace(/indicatorClose/g, indicator);
                     newStudy = JSON.parse(str)                                     
                     
-                    CIQ.Studies.studyLibrary[indicatorList[i]] = newStudy
+                    CIQ.Studies.studyLibrary[indicator] = newStudy
 
                     /********************lishan modify start*************************/
-                    var indicatorName = indicatorList[i].match(/(CREATE|HASH)/) ? indicatorList[i].split(/(CREATE|HASH)/)[0] : indicatorList[i]
+                    var indicatorName = indicator.match(/(CREATE|HASH)/) ? indicator.split(/(CREATE|HASH)/)[0] : indicator
                     /********************lishan modify end*************************/
-                    CIQ.Studies.addStudy(CIQ.stxx,indicatorList[i],{display:indicatorName})   
-                    continue
-                }
-                var queryUrl =  config.indicatorMetadata + 
-                "?indicator=" + indicatorList[i];
-                let _res = new Promise((resolve,reject)=>{ 
-                    CIQ.axios.get(
-                        queryUrl,
-                    ).then(res=>{
-                        resolve(res.data)
-                    }).catch(err=>{
-                        reject(err)
+                    CIQ.Studies.addStudy(CIQ.stxx,indicator,{display:indicatorName})   
+                }else{
+                    var queryUrl =  config.indicatorMetadata + 
+                    "?indicator=" + indicator;
+                    let _res = new Promise((resolve,reject)=>{ 
+                        CIQ.axios.get(
+                            queryUrl,
+                        ).then(res=>{
+                            resolve(res.data)
+                        }).catch(err=>{
+                            reject(err)
+                        })
                     })
-                })
-                resArr.push(_res)
-                sentiUrlList.push(indicatorList[i])
-            }
-    
-            // handle all response for sentiment indicator information and load them
-            Promise.all(resArr).then(res => {
-                var newQuotes = res;
-                
-                for(var i in newQuotes){
-                    if (newQuotes[i] !== null){
-                        var newStudy = {
-                            inputs: { Period: 13, Overlay: false},
-                            outputs: 
-                            {indicatorClose:color[i%2],description: newQuotes[i].description,url:sentiUrlList[i]},
-                            parameters: { init: {
-                                studyOverZonesEnabled: false,
-                                studyOverBoughtValue: newQuotes[i].opt_extreme?newQuotes[i].opt_extreme:NaN,
-                                studyOverBoughtColor: "#FF0000",
-                                studyOverSoldValue: newQuotes[i].pess_extreme?newQuotes[i].pess_extreme:NaN,
-                                studyOverSoldColor: "#00DD00",
-                            }},
-                            attributes:{
-                                studyOverBoughtValue:{"step":0.01},
-                                studyOverSoldValue:{"step":0.01}
+                    _res.then(res => {
+                        var newQuotes = res;
+                            if (newQuotes !== null){
+                                var newStudy = {
+                                    inputs: { Period: 13, Overlay: false},
+                                    outputs: 
+                                    {indicatorClose:color,description: newQuotes.description,url:indicator},
+                                    parameters: { init: {
+                                        studyOverZonesEnabled: false,
+                                        studyOverBoughtValue: newQuotes.opt_extreme?newQuotes.opt_extreme:NaN,
+                                        studyOverBoughtColor: "#FF0000",
+                                        studyOverSoldValue: newQuotes.pess_extreme?newQuotes.pess_extreme:NaN,
+                                        studyOverSoldColor: "#00DD00",
+                                    }},
+                                    attributes:{
+                                        studyOverBoughtValue:{"step":0.01},
+                                        studyOverSoldValue:{"step":0.01}
+                                    }
+                                }
+                                
+                                    var str = JSON.stringify(newStudy);                                   
+                                    str = str.replace(/indicatorClose/g, indicator);
+                                    newStudy = JSON.parse(str)                                     
+                                    
+                                    CIQ.Studies.studyLibrary[indicator] = newStudy
+                                    CIQ.Studies.addStudy(CIQ.stxx,indicator)                
                             }
-                        }
+  
+                        resolve()                     
+                    }).catch(err => {
                         
-                            var str = JSON.stringify(newStudy);                                   
-                            str = str.replace(/indicatorClose/g, sentiUrlList[i]);
-                            newStudy = JSON.parse(str)                                     
-                            
-                            CIQ.Studies.studyLibrary[sentiUrlList[i]] = newStudy
-                            CIQ.Studies.addStudy(CIQ.stxx,sentiUrlList[i])                
-                    }
-                }   
-                resolve()                     
-            }).catch(err => {
-                
-            })
+                    })
+
+                }
         })
 
     }
@@ -809,7 +822,7 @@
         if(!showInput || !field) return
         var stma_color = "#bfad94"
         CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
-            Type: type == 'SMA' ? 'simple' : 'exponential',
+            Type: type == 'MA' ? 'simple' : 'exponential',
             Period: value,
             display: 'ST MA',
             Field: field
@@ -818,6 +831,20 @@
           null,
           categories.includes('Indicator')?null:field
         )
+    }
+
+    // layout management
+    CIQ.localStorage.saveLayout = function(){
+        var layout = JSON.stringify(CIQ.stxx.exportLayout(true));
+	    localStorage.setItem("myChartLayout", layout);
+    }
+    CIQ.localStorage.restoreLayout = function(){
+        var savedLayout = localStorage.getItem("myChartLayout");
+        var importOptions = {
+            managePeriodicity: true,
+            preserveTicksAndCandleWidth: true
+        };
+        if (savedLayout) CIQ.stxx.importLayout(JSON.parse(savedLayout), importOptions);
     }
  }
  export {__st_js_loadIndicator_}
