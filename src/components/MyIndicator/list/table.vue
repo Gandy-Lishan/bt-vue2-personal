@@ -58,7 +58,7 @@
               <el-row :span="16">
                 <el-form-item label="Indicators included" class="included-box">
                   <template v-for="(item, index) in scope.row['included']">
-                    <span :key="index" style="margin-right: 10px">{{`${index + 1}. ${item}`}}</span>
+                    <span :key="index" style="margin-right: 10px">{{`${index + 1}. ${item}`}};</span>
                   </template>
                 </el-form-item>
               </el-row>
@@ -83,7 +83,7 @@
 					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
-          v-if="l.label == 'Categories'"
+          v-if="['Categories', 'Timeframe'].includes(l.label)"
 				>
 					<template slot-scope="scope">
 						<p class="tableText">
@@ -109,7 +109,7 @@
       min-width="40"
       >
 				<template slot-scope="scope">
-          <el-button round size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteIndicator(scope.row)"></el-button>
+          <el-button class="delete-btn" round size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteIndicator(scope.row)"></el-button>
         </template>
       </el-table-column>
 		</el-table>
@@ -143,6 +143,10 @@ export default {
         {
           label: 'Categories',
           value: 'categories'
+        },
+        {
+          label: 'Timeframe',
+          value: 'time_frame'
         },
         {
           label: 'Indicators included',
@@ -180,7 +184,8 @@ export default {
           included,
           key: item.url,
           former,
-          latter
+          latter,
+          time_frame: capitalizeFirstLetter(item.timeframe)
         };
       }
       if (item.calculate === 'weight_c' && (item.indicator_weight && item.mul_indicator)) {
@@ -189,7 +194,8 @@ export default {
           ...item,
           categories: 'Indicator Weight Combination',
           included,
-          key: item.url
+          key: item.url,
+          time_frame: capitalizeFirstLetter(item.timeframe)
         };
       }
     });
@@ -319,5 +325,12 @@ export default {
   span {
     color: #5b9bd1;
   }
+}
+.delete-btn {
+  background-color: rgb(251, 192, 92);
+  border: unset;
+}
+.delete-btn:hover {
+	background-color: #f59e0b;
 }
 </style>

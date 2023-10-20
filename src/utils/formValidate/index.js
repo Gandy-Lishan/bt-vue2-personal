@@ -88,6 +88,11 @@ export const validatePercentageRule = (_, value, callback) => {
 	return ''
 }
 
+export const validateValueEmpty = (value, errorMsgEmpty) => {
+	if(value === '') return `Please input ${errorMsgEmpty}`
+	return ''
+}
+
 // 验证 indicator 不能为空
 const createIndicatorValidate = indicatorType => {
 	return (rule, value, callback) => {
