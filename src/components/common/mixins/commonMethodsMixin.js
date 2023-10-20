@@ -89,7 +89,7 @@ export const CommonMethodsMixin = {
 						center: true,
 						dangerouslyUseHTMLString: true,
 						showClose: true,
-						duration: 0
+						duration: 8000
 					})
 				} else {
 					// 获取参数并准备复制
