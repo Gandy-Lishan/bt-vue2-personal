@@ -327,10 +327,10 @@ export default {
   }
 }
 .delete-btn {
-  background-color: rgb(251, 192, 92);
+	background-color: #f59e0b;
   border: unset;
 }
 .delete-btn:hover {
-	background-color: #f59e0b;
+  background-color: rgb(251, 192, 92);
 }
 </style>

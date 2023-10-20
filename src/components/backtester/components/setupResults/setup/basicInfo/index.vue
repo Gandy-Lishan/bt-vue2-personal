@@ -403,7 +403,7 @@
                     >
                     <template slot="label">
                       <label>
-                        12. Backtest Name
+                        14. Backtest Name
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >Input a unique name for each backtest.<br

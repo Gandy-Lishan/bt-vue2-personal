@@ -90,7 +90,8 @@
 			</div>
 			<div class="center">
 				<el-divider direction="vertical" class="is-vertical"></el-divider>
-				<svg
+        <div class="category-box">
+          <svg
 					t="1694137466462"
 					class="icon"
 					viewBox="0 0 1024 1024"
@@ -99,7 +100,7 @@
 					p-id="1199"
 					width="30"
 					height="30"
-					v-show="data.categories.includes('Ratio') || data.categories == ''"
+					v-if="data.categories.includes('Ratio') || data.categories == ''"
 				>
 					<path
 						d="M179.18 801.854l624.856-623.767 45.067 45.146L224.247 847z"
@@ -113,7 +114,7 @@
 					width="30"
 					height="30"
 					viewBox="0 0 1024 1024"
-					v-show="data.categories.includes('Spread')"
+					v-if="data.categories.includes('Spread')"
 				>
 					<line
 						x1="128"
@@ -124,7 +125,9 @@
 						stroke-width="60"
 					/>
 				</svg>
-
+        <span class="category-text" v-if="data.categories.includes('Ratio') || data.categories == ''">(minus)</span>
+        <span class="category-text" v-if="data.categories.includes('Spread')">(divided by)</span>
+        </div>
 				<el-divider direction="vertical" class="is-vertical"></el-divider>
 			</div>
 			<div class="right">
@@ -255,9 +258,14 @@
     </div>
 		<el-divider></el-divider>
 		<div class="MI-form-btn">
+      <el-form-item>
+				<el-button type="primary" @click="previewIndicator()" class="delete-btn"
+					>Preview the created indicator</el-button
+				>
+			</el-form-item>
 			<el-form-item>
 				<el-button type="primary" @click="submitForm()"
-					>Save My Indicator</el-button
+					>Save the created indicator</el-button
 				>
 			</el-form-item>
 		</div>
@@ -266,7 +274,7 @@
  <script>
  import { CIQ } from '@/components/common/chart/st-development/js/components'
 import CheckInput from './CheckInput.vue'
-import { saveMyIndicators, getMyIndicatorData } from '@/service/service'
+import { saveMyIndicators, getMyIndicatorData, delMyIndicator } from '@/service/service'
 import {  validatePercentageRule } from "@/utils/formValidate"
 export default {
   name: 'MIForm',
@@ -369,6 +377,16 @@ export default {
     console.log('this.dropdownList', this.dropdownList)
   },
   methods: {
+    popUpMsgBox(msg) {
+      this.$message({
+        message: `<strong>${msg}</strong>`,
+        center: true,
+        dangerouslyUseHTMLString: true,
+        showClose: true,
+        duration: 8000,
+        customClass: 'no-icon'
+      })
+    },
     manageMAStudies(value,type,field,showInput) {
       CIQ.userOwnIndicatorMAStudies(
         value,
@@ -379,75 +397,64 @@ export default {
         ) 
     },
     async submitForm() {
-      // 保存数据之前先校验字段是否为空，特定字段是否从下拉框中选择 todo lishan
+     const saveRes = await this.saveIndicator()
+     console.log('saveRes', saveRes)
+     const code = saveRes.data.code
+      if(code == 404) {this.popUpMsgBox('Permission denied')}
+      if(code == 406) {this.popUpMsgBox('This combination of indicators is already in the list')}
+      if(saveRes.status == 201) {this.popUpMsgBox('Indicator created successfully');this.$router.push('/myindicator')}
+      // this.$store.commit('SET_CREACT_LOADING', false)
+    },
+    async saveIndicator() {
+       // 保存数据之前先校验字段是否为空，特定字段是否从下拉框中选择 todo lishan
       // this.validForm()
-      let saveData = null
-      if(this.data.categories != 'WIC') {
-        // this.$store.commit('SET_CREACT_LOADING', true)
-        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
-
+      let saveData = null;
+      const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
         for (const formRef of formsToSave) {
-          this.$refs[formRef].saveData()
+          this.$refs[formRef].saveData();
         }
+      const commonData = {
+        name: this.data.name,
+        indicator_1: this.data.indicator_1_url,
+        indicator_2: this.data.indicator_2_url,
+        time_frame: this.data.time_frame,
+        ma: `${this.data.ma1}_${this.data.ma2}_1`,
+        calculate: this.data.categories === 'WIC' ? 'weight_combination' : this.data.categories.split(' ')[1].toLowerCase(),
+        extreme_optimism: this.data.extreme_optimism,
+        extreme_pessimism: this.data.extreme_pessimism,
+      };
+      if(this.data.categories !== 'WIC') {  
         saveData = {
-          name: this.data.name,
-          indicator_1: this.data.indicator_1_url,
-          indicator_2: this.data.indicator_2_url,
-          time_frame: this.data.time_frame,
-          ma: `${this.data.ma1}_${this.data.ma2}_1`,
-          calculate: this.data.categories.split(' ')[1].toLowerCase(),
-          extreme_optimism: this.data.extreme_optimism,
-          extreme_pessimism: this.data.extreme_pessimism
+          ...commonData,
         }
-      }else if(this.data.categories == 'WIC'){
-        if(this.weightValidErrMsg) return
-        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(1))
-        const indicator_weight = percentageStrings.join('_')
+      } else {
+        // if (this.weightValidErrMsg) return;
+
+        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(1));
+        const indicator_weight = percentageStrings.join('_');
 
         const mul_indicator = this.weightData.reduce((acc, item, index) => {
-          acc[`indicator_${index + 1}`] = item.indicator_url
-          return acc
-        }, {})
+          acc[`indicator_${index + 1}`] = item.indicator_url;
+          return acc;
+        }, {});
 
         saveData = {
-          name: this.data.name,
-          indicator_1: 'model_smart_money',
-          indicator_2: 'model_smart_money',
-          time_frame: this.data.time_frame,
-          ma: '1_1_1',
+          ...commonData,
           calculate: 'weight_combination', // 存起来
-          // calculate: 'ratio', // 存起来
-          extreme_optimism: 0,
-          extreme_pessimism: 0,
           indicator_weight,
-          mul_indicator: JSON.stringify(mul_indicator)
-        }
+          mul_indicator: JSON.stringify(mul_indicator),
+        };
       }
 
-      console.log('保存的数据', saveData)
-      const saveRes = await saveMyIndicators(saveData)
-      const code = saveRes.data.code
-				if(saveRes.status == 201) {
-            this.$message({
-              message: 'Indicator created successfully',
-              center: true
-            })
-					}
-					if(code == 404) {
-            this.$message({
-                message: 'Permission denied',
-                center: true
-            })
-					}
-					if(code == 406) {
-            this.$message({
-              message: 'This combination of indicators is already in the list',
-              center: true
-            })
-				}
-      console.log('保存数据 res', saveRes.data.url)
-
-      // this.$store.commit('SET_CREACT_LOADING', false)
+      return await saveMyIndicators(saveData);
+    },
+    async previewIndicator() {
+      const { data: { url } } = await this.saveIndicator()
+      const indicatorData = await getMyIndicatorData(url)
+      await delMyIndicator(url)
+      console.log('indicatorData code', indicatorData.data.code)
+      console.log('indicatorData res', indicatorData.data.data)
+      // todo display the indicator on chartIQ
     },
     saveSubData(field, value) {
       console.log(field, value)
@@ -702,7 +709,7 @@ export default {
       else {weight = ''}
       this.weightData.push({ weight, indicator: '', indicator_url: '', weightValidErrMsg: '' });
     },
-    deleteRow(index) {this.weightData.splice(index, 1)}
+    deleteRow(index) {this.weightData.splice(index, 1)},
   }
 }
 </script>
@@ -740,7 +747,7 @@ h4 {
   justify-content: space-evenly;
   svg.icon {
     align-self: center;
-    background: #dfdddd;
+    background: #f9f9f9;
     border: 1px solid #b1b1b1;
     border-radius: 5px;
   }
@@ -785,6 +792,9 @@ h4 {
 	.el-button {
 		width: 300px;
 	}
+  .delete-btn {
+    margin-right: 30px;
+  }
 }
 /* 添加虚线样式 */
 .el-divider.is-vertical {
@@ -828,10 +838,21 @@ h4 {
   width: 150px;
 }
 .delete-btn {
-  background-color: rgb(251, 192, 92);
+	background-color: #f59e0b;
   border: unset;
 }
 .delete-btn:hover {
-	background-color: #f59e0b;
+  background-color: rgb(251, 192, 92);
+}
+.category-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  span{
+    font-size: 12px;
+    margin-top: 5px;
+    color: #6f7174;
+  }
 }
 </style>
