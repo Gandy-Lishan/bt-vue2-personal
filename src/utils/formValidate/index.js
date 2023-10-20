@@ -66,23 +66,23 @@ export const validateURLRule = (_, value, callback) => {
 
 export const validatePercentageRule = (_, value, callback) => {
 	if (value === '') {
-		return 'Please enter a numeric value'
+		return 'Enter a number'
 	}
 
 	const numericValue = parseFloat(value)
 
 	if (isNaN(numericValue)) {
-		return 'Please enter a valid numeric value'
+		return 'Enter a valid number'
 	}
 
-	if (numericValue < 0 || numericValue > 100) {
-		return 'Please enter a value between 0 and 100'
-	}
+	// if (numericValue < 0 || numericValue > 100) {
+	// 	return 'Enter a value <= 100'
+	// }
 
 	const decimalPlaces = (numericValue.toString().split('.')[1] || '').length
 
 	if (decimalPlaces > 2) {
-		return 'Only two decimal places are allowed'
+		return 'Limit to two decimal places'
 	}
 
 	return ''
