@@ -160,8 +160,8 @@
 			</div>
 		</div>
 
-		<el-divider v-if="data.categories != 'WIC'"></el-divider>
-		<div class="MI-form-bottom" v-if="data.categories != 'WIC'">
+		<el-divider v-if="data.categories != 'WIC' && showEOEP"></el-divider>
+		<div class="MI-form-bottom" v-if="data.categories != 'WIC' && showEOEP">
 			<CheckInput
 				:config="EOCheckInputConfig"
 				ref="EOForm"
@@ -272,6 +272,7 @@ export default {
   },
   data() {
     return {
+      showEOEP: false,
       dropdownList: [],
       state1: '',
       inputVisibility: 'hidden', // 初始化时设置为隐藏
@@ -600,6 +601,7 @@ export default {
       this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
     async displayData(data) {
+      this.showEOEP = true
       // 从localStorage获取数据
       const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
 
