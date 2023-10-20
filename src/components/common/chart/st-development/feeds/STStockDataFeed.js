@@ -703,7 +703,6 @@ quoteFeedSimulator.formatChartData = async function(response){
                         }
                         newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
                     }
-                    debugger
                 }
             }
             /********************lishan modify end*************************/

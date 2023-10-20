@@ -16,7 +16,7 @@
 			>
 				<el-input v-model="data.name"></el-input>
 			</el-form-item>
-      <div></div>
+      <!-- <div></div> -->
 			<el-form-item label="2.Categories" v-model="data.categories">
 				<el-select
 					v-model="data.categories"
@@ -31,6 +31,13 @@
 					>
 					</el-option>
 				</el-select>
+			</el-form-item>
+      
+      <el-form-item
+				label="3.Timeframe"
+				:props="time_frame"
+			>
+				<el-input v-model="data.time_frame" disabled></el-input>
 			</el-form-item>
 		</div>
 		<el-divider></el-divider>
@@ -190,7 +197,7 @@
       <el-table-column label="Index" header-align="center" align="center" width="80px">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="250px">
+      <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="280px">
         <template slot-scope="scope">
           <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)" @blur="validateTotalPercentage(scope.row)">
             <template v-slot:append>(%)</template>
@@ -241,7 +248,7 @@
       <el-table-column header-align="center" align="center" width="250px">
         <template slot-scope="scope">
           <el-button v-if="scope.$index === 0" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Indicator</el-button>
-          <el-button v-else size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope.$index)">Delete Indicator</el-button> 
+          <el-button v-else size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope.$index)" class="delete-btn">Delete Indicator</el-button> 
         </template>
       </el-table-column>
       </el-table>
@@ -372,9 +379,11 @@ export default {
         ) 
     },
     async submitForm() {
+      // 保存数据之前先校验字段是否为空，特定字段是否从下拉框中选择 todo lishan
+      // this.validForm()
       let saveData = null
       if(this.data.categories != 'WIC') {
-        this.$store.commit('SET_CREACT_LOADING', true)
+        // this.$store.commit('SET_CREACT_LOADING', true)
         const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
 
         for (const formRef of formsToSave) {
@@ -438,7 +447,7 @@ export default {
 				}
       console.log('保存数据 res', saveRes.data.url)
 
-      this.$store.commit('SET_CREACT_LOADING', false)
+      // this.$store.commit('SET_CREACT_LOADING', false)
     },
     saveSubData(field, value) {
       console.log(field, value)
@@ -602,6 +611,7 @@ export default {
     async displayData(data) {
       // 从localStorage获取数据
       const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
+      const symbolList = JSON.parse(localStorage.getItem('symbolList'))
 
       this.data.categories = data.mul_indicator && data.indicator_weight ? 'WIC' : data.categories;
       this.data.indicator_1 = data.mul_indicator && data.indicator_weight ? '' : data.former;
@@ -616,7 +626,7 @@ export default {
         const indicator_weight_arr = data.indicator_weight.includes('_') ? data.indicator_weight.split('_') : [data.indicator_weight];
         this.weightData = indicator_weight_arr.map((weight, index) => ({
           weight: (weight * 100).toFixed(2),
-          indicator: sentimentList.find(ele => ele.url === item.mul_indicator_obj[`indicator_${index + 1}`]) || symbolList.find(ele => ele.url === item.mul_indicator_obj[`indicator_${index + 1}`]),
+          indicator: (sentimentList.find(ele => ele.url === mul_indicator_obj[`indicator_${index + 1}`]) || symbolList.find(ele => ele.url === mul_indicator_obj[`indicator_${index + 1}`]))?.label,
           indicator_url: mul_indicator_obj[`indicator_${index + 1}`],
           weightValidErrMsg: ''
         }));
@@ -632,8 +642,8 @@ export default {
         configMap.forEach(item => {
           const value = data[item.key];
           item.config = {
-            value: (item.key === 'ma' ? (value.split('_')[item.index] !== '1' ? value.split('_')[item.index] : '') : (value !== '0' ? value : '')),
-            checked: (item.key === 'ma' ? (value.split('_')[item.index] !== '1') : (value !== '0')),
+            value: (item.key === 'ma' ? (value.split('_')[item.index] != '1' ? value.split('_')[item.index] : '') : (value != '0' ? value : '')),
+            checked: (item.key === 'ma' ? (value.split('_')[item.index] != '1') : (value != '0')),
           };
         });
 
@@ -745,10 +755,12 @@ h4 {
 
 .MI-form-top {
 	display: grid;
-	grid-template-columns: 1fr 0.3fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 15px;
 	.el-form-item {
 		display: flex;
-		align-items: center;
+    align-items: flex-start;
+    flex-direction: column;
 		/deep/.el-form-item__content {
 			width: 100%;
 		}
@@ -756,12 +768,12 @@ h4 {
 }
 .MI-form-middle {
 	display: inline-grid;
-	grid-template-columns: 1fr 0.3fr 1fr;
+	grid-template-columns: 1fr 0.2fr 1fr;
 }
 .MI-form-bottom {
 	display: inline-grid;
 	align-items: center;
-	grid-template-columns: 1fr 0.3fr 1fr;
+	grid-template-columns: 1fr 0.2fr 1fr;
 }
 .MI-form-btn {
 	display: flex;
@@ -800,7 +812,7 @@ h4 {
 	font-weight: 500;
 }
 .el-select.el-select--mini {
-  min-width: 220px;
+  width: 100%;
 }
 .error-message {
   position: absolute;
@@ -811,5 +823,12 @@ h4 {
 }
 .el-button--primary {
   width: 150px;
+}
+.delete-btn {
+  background-color: rgb(251, 192, 92);
+  border: unset;
+}
+.delete-btn:hover {
+	background-color: #f59e0b;
 }
 </style>
