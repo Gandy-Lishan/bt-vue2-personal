@@ -1265,7 +1265,7 @@ export default {
         this.getTradePrice(editData.trade_price)
         /* set latest backtest period */
         backtestPeriod = editData.backtest_period
-        if(!backtestPeriod) {this.caculateBacktestPeriod()}
+        if(!backtestPeriod) {this.calculateBacktestPeriod()}
         this.bd.end_date = timestampToTime(new Date())
         // 如果是 custom 不改变 start_date, end_date 如果是 all history, start_date 为空, 其他的都要改 start_date
         if(this.bd.backtest_period <= 20) {
@@ -1280,7 +1280,7 @@ export default {
           this.bd.end_date = editData.end_date
         }
     },
-    caculateBacktestPeriod() {
+    calculateBacktestPeriod() {
       let { start_date, end_date } = this.bd;
       if (!start_date || start_date === '1800-10-01') {
         // All History
