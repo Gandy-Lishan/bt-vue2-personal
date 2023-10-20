@@ -6,12 +6,13 @@
 		:model="data"
 		label-position="left"
 		size="mini"
+    :rules="rules"
 	>
 		<h4>Create My Own Indicator</h4>
 		<div class="MI-form-top">
 			<el-form-item
 				label="1.Name"
-				:props="name"
+				prop="name"
 				placeholder="Please input the name of your custom indicator"
 			>
 				<el-input v-model="data.name"></el-input>
@@ -35,7 +36,6 @@
       
       <el-form-item
 				label="3.Timeframe"
-				:props="time_frame"
 			>
 				<el-input v-model="data.time_frame" disabled></el-input>
 			</el-form-item>
@@ -125,8 +125,8 @@
 						stroke-width="60"
 					/>
 				</svg>
-        <span class="category-text" v-if="data.categories.includes('Ratio') || data.categories == ''">(minus)</span>
-        <span class="category-text" v-if="data.categories.includes('Spread')">(divided by)</span>
+        <span class="category-text" v-if="data.categories.includes('Spread') || data.categories == ''">(minus)</span>
+        <span class="category-text" v-if="data.categories.includes('Ratio')">(divided by)</span>
         </div>
 				<el-divider direction="vertical" class="is-vertical"></el-divider>
 			</div>
@@ -361,7 +361,12 @@ export default {
       ],
       loadTest: 'Loading...',
       loading: false,
-      weightValidErrMsg: ''
+      weightValidErrMsg: '',
+      rules: {
+        name: [
+          { required: true, message: 'Please input a name', trigger: 'blur' }
+        ]
+      }
     }
   },
   computed: {
@@ -399,6 +404,7 @@ export default {
     async submitForm() {
      const saveRes = await this.saveIndicator()
      console.log('saveRes', saveRes)
+     if(!saveRes) return
      const code = saveRes.data.code
       if(code == 404) {this.popUpMsgBox('Permission denied')}
       if(code == 406) {this.popUpMsgBox('This combination of indicators is already in the list')}
@@ -407,12 +413,15 @@ export default {
     },
     async saveIndicator() {
        // 保存数据之前先校验字段是否为空，特定字段是否从下拉框中选择 todo lishan
-      // this.validForm()
+      const validForm = this.validForm()
+      if(!validForm) return
       let saveData = null;
-      const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
+      if(this.data.categories !== 'WIC') {
+        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
         for (const formRef of formsToSave) {
           this.$refs[formRef].saveData();
         }
+      }
       const commonData = {
         name: this.data.name,
         indicator_1: this.data.indicator_1_url,
@@ -443,13 +452,21 @@ export default {
           calculate: 'weight_combination', // 存起来
           indicator_weight,
           mul_indicator: JSON.stringify(mul_indicator),
+          indicator_1: 'model_smart_money',
+          indicator_2: 'model_smart_money',
+          ma: '1_1_1',
+          extreme_optimism: 0,
+          extreme_pessimism: 0,
         };
       }
 
       return await saveMyIndicators(saveData);
     },
     async previewIndicator() {
-      const { data: { url } } = await this.saveIndicator()
+      const res = await this.saveIndicator()
+      if(!res) return
+      const url = res.data.url
+      console.log('data', data)
       const indicatorData = await getMyIndicatorData(url)
       await delMyIndicator(url)
       console.log('indicatorData code', indicatorData.data.code)
@@ -676,6 +693,54 @@ export default {
 			}
 			return ''
 		},
+    validForm() {
+      let formValid = null
+      this.$refs['MICreateForm'].validate((valid) => {
+        if(valid) {
+          formValid = true
+        }else {
+          formValid = false
+          this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.')
+          return false
+        }
+      })
+      if(!formValid) return formValid
+      // 按照选项校验 indicator 是否在允许范围
+      const categories = this.data.categories
+      const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
+      const symbolList = JSON.parse(localStorage.getItem('symbolList'))
+
+      if(categories !== 'WIC') {
+        // 只需要校验 indicator_1 和 indicator_2
+        const indicator_1_url = this.data.indicator_1_url
+        const indicator_2_url = this.data.indicator_2_url
+
+        const inAllowedList_1 = ((sentimentList.find(ele => ele.url === indicator_1_url) || symbolList.find(ele => ele.url === indicator_1_url))?.label || false)
+        const inAllowedList_2 = ((sentimentList.find(ele => ele.url === indicator_2_url) || symbolList.find(ele => ele.url === indicator_2_url))?.label || false)
+
+        if(!indicator_1_url || !indicator_2_url || !inAllowedList_1 || !inAllowedList_2 ) {
+          this.popUpMsgBox('Please choose an indicator from the dropdown.')
+          return false
+        }
+      }else {
+        // 需要验证百分比总和，和每一列的indicator是否都在允许范围
+        const data = this.weightData
+        let totalWeight = 0
+        let rowWeightValid = true
+        let inAllowedList = true
+        for (const row of data) {
+          totalWeight += parseFloat(row.weight) || 0
+          row.weightValidErrMsg = validatePercentageRule(_, row.weight)
+          if(row.weightValidErrMsg) rowWeightValid = false
+          const isIn = ((sentimentList.find(ele => ele.url === row.indicator_url) || symbolList.find(ele => ele.url === row.indicator_url))?.label || false)
+          if(!isIn) inAllowedList = false
+        }
+        if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
+        if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
+        if(!inAllowedList) {this.popUpMsgBox('Please choose indicators from the dropdown.'); return false}
+      }
+      return true
+    },
     validateTotalPercentage(row) {
       let weight = 0
       for (const row of this.weightData) {
