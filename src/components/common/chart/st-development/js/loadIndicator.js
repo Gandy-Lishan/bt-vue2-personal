@@ -644,13 +644,13 @@
                     display:newData.indicator1.name, 
                     isComparison: false, 
                     color: "#5B9BD1",
-                    panel:newData.indicator1.url,
+                    //panel:newData.indicator1.url,
                     // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
-                    // yAxis:{ 
-                    //     position:"left",
-                    //     textStyle:"#FFBE00"
-                    // },
-                    // shareYAxis: true
+                    yAxis:{ 
+                        position:"left",
+                        textStyle:"#FFBE00"
+                    },
+                    shareYAxis: true
                 });
                 console.log(newData.indicator1.url)
             }
@@ -658,16 +658,16 @@
                 var series = CIQ.stxx.chart.series[oldData.indicator2.url]; 
                 CIQ.stxx.removeSeries(series); 
                 CIQ.stxx.addSeries(newData.indicator2.url, {
-                    display:newData.indicator1.name, 
+                    display:newData.indicator2.name, 
                     isComparison: false, 
                     color: "#368DF0",
-                    panel:newData.indicator2.url,
+                    //panel:newData.indicator2.url,
                     // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
-                    // yAxis:{ 
-                    //     position:"left",
-                    //     textStyle:"#FFBE00"
-                    // },
-                    // shareYAxis: true
+                    yAxis:{ 
+                        position:"left",
+                        textStyle:"#FFBE00"
+                    },
+                    shareYAxis: true
                 });
             }
         }
