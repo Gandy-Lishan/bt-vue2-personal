@@ -477,12 +477,29 @@ export default {
       const res = await this.saveIndicator()
       if(!res) return
       const url = res.data.url
-      console.log('data', data)
+      console.log('data', res)
       const indicatorData = await getMyIndicatorData(url)
+      // 暂存
+      localStorage.setItem('previewIndicatorData', JSON.stringify(indicatorData.data.data))
+
       await delMyIndicator(url)
       console.log('indicatorData code', indicatorData.data.code)
       console.log('indicatorData res', indicatorData.data.data)
       // todo display the indicator on chartIQ
+
+      if(this.data.categories.includes('Symbol')){
+        CIQ.previewUserOwnIndicator(
+          [this.data.indicator_1_url,this.data.indicator_2_url,this.data.name+'CREATE'+url],
+          this.data.name+'CREATE'+url,
+          this.data.indicator_1_url
+        )
+      }else{
+        CIQ.previewUserOwnIndicator(
+          [this.data.indicator_1_url,this.data.indicator_2_url,this.data.name+'CREATE'+url],
+          this.data.name+'CREATE'+url
+        )
+      }
+
     },
     saveSubData(field, value) {
       console.log(field, value)
