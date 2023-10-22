@@ -701,11 +701,56 @@
         }
     }
 
-    CIQ.displayUserOwnIndicator = function(indicator){
-        addUserOwnIndicators([indicator]);
+    // 预览生成的新indicator
+    CIQ.previewUserOwnIndicator = function(indicatorList,indicator,symbol){
+        addUserOwnIndicators(indicatorList,indicator,symbol);
     }
 
-    const addUserOwnIndicators = async function(indicatorList,indicator){
+    // 从列表进入后还原new indicator的设定和新的indicator
+    CIQ.displayUserOwnIndicatorLayout = async function(_newVal){
+        const newData = {
+            categories : _newVal.categories,
+            indicator1 : {name:_newVal.former,url:_newVal.indicator_1_url},
+            indicator2 : {name:_newVal.latter,url:_newVal.indicator_2_url},
+            url : _newVal.name+'CREATE'+_newVal.url
+        }
+        if(newData.categories.includes('Symbol')){
+                // indicator1,包括主symbol和new indicator
+                CIQ.objIndicator = []
+                await getUserOwnIndicatorMatedata(newData.url)
+                CIQ.stxx.loadChart({symbol: newData.indicator1.url, indicator:[newData.url]})
+
+                //indicator2,即comparison symbol
+                var series = CIQ.stxx.chart.series[oldData.indicator2.url]; 
+                CIQ.stxx.removeSeries(series); 
+                CIQ.stxx.addSeries(newData.indicator2.url, {
+                    display:newData.indicator2.name, 
+                    isComparison: false, 
+                    color: "#368DF0",
+                    //panel:newData.indicator2.url,
+                    // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
+                    yAxis:{ 
+                        position:"left",
+                        textStyle:"#FFBE00"
+                    },
+                    //shareYAxis: true
+                });
+        }
+        
+        if(newData.categories.includes('Indicator')){
+            await getUserOwnIndicatorMatedata(newData.indicator1.url)
+            await getUserOwnIndicatorMatedata(newData.indicator2.url)
+            await getUserOwnIndicatorMatedata(newData.url)
+            CIQ.stxx.loadChart(	{ symbol: 'SPX', indicator:[newData.indicator1.url,newData.indicator2.url,newData.url]}, function () {
+
+            }) 
+        }
+    }
+
+    // 第一个参数是默认值为SPX的symbol，own indicator quotefeed请求时为默认symbol，own symbol quotefeed请求时为表单第一个symbol
+    // 第2个参数是给quotefeed请求提供的indicator列表，
+    // 第3个是要加载的当前indicator
+    const addUserOwnIndicators = async function(indicatorList,indicator,symbol='SPX'){
         // remove redundant elements and empty string
         for(var i=0;i<indicatorList.length;i++){
         if(indicatorList[i]=='' || indicatorList[i]==undefined){
@@ -716,16 +761,13 @@
 
         // fetch indicator information and add studies to chart
         await getUserOwnIndicatorMatedata(indicator)
-
-        CIQ.stxx.loadChart(	{ symbol: 'SPX', indicator:indicatorList}, function () {
+        CIQ.stxx.loadChart(	{ symbol: symbol, indicator:indicatorList}, function () {
 
         }) 
     }
     const getUserOwnIndicatorMatedata = async function(indicator){
         var color = "#7257F2"
-
         return new Promise(resolve=>{
-
                 if(CIQ.isOwnIndicator(indicator)){
                 /********************lishan modify end*************************/
                     var newStudy = {
@@ -754,7 +796,8 @@
                     /********************lishan modify start*************************/
                     var indicatorName = indicator.match(/(CREATE|HASH)/) ? indicator.split(/(CREATE|HASH)/)[0] : indicator
                     /********************lishan modify end*************************/
-                    CIQ.Studies.addStudy(CIQ.stxx,indicator,{display:indicatorName})   
+                    CIQ.Studies.addStudy(CIQ.stxx,indicator,{display:indicatorName}) 
+                    resolve()   
                 }else{
                     var queryUrl =  config.indicatorMetadata + 
                     "?indicator=" + indicator;
