@@ -145,6 +145,12 @@ const routes = [
 		]
 	},
 	{
+		path: '/seasonality',
+		name: 'Seasonality',
+		component: resolve =>
+			require(['@/components/Seasonality/index.vue'], resolve),
+	},
+	{
 		path: '/doc',
 		component: resolve => require(['@/components/Tutorial/Doc.vue'], resolve),
 		redirect: '/doc/home',
