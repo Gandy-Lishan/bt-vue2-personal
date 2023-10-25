@@ -194,4 +194,7 @@ export default {
 .symbol-label {
 	font-weight: 500;
 }
+.DOM-container-bottom{
+  margin: 0 auto;
+}
 </style>
