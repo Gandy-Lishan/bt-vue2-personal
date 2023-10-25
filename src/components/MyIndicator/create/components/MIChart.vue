@@ -27,6 +27,8 @@ export default {
     	chart: chart,
 	},
 	beforeDestroy() {
+		// 清除预览缓存
+		localStorage.setItem('previewIndicatorData', null)
 		// Destroy the ChartEngine instance when unloading the component.
 		// This will stop internal processes such as quotefeed polling.
 		CIQ.stxx?.destroy()
@@ -34,7 +36,9 @@ export default {
 	methods:{
 		onChartReady(){
 			this.hideComponents()	
-			CIQ.displayUserOwnIndicator(this.chart_data.name+'CREATE'+this.chart_data.url)
+			//还原自定义indicator Layout
+			if(this.chart_data.name) CIQ.displayUserOwnIndicatorLayout(this.chart_data)
+
 			console.log('chart_data',this.chart_data)
 		},
 		hideComponents() {

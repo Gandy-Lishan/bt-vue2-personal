@@ -6,12 +6,13 @@
 		:model="data"
 		label-position="left"
 		size="mini"
+    :rules="rules"
 	>
 		<h4>Create My Own Indicator</h4>
 		<div class="MI-form-top">
 			<el-form-item
 				label="1.Name"
-				:props="name"
+				prop="name"
 				placeholder="Please input the name of your custom indicator"
 			>
 				<el-input v-model="data.name"></el-input>
@@ -35,7 +36,6 @@
       
       <el-form-item
 				label="3.Timeframe"
-				:props="time_frame"
 			>
 				<el-input v-model="data.time_frame" disabled></el-input>
 			</el-form-item>
@@ -90,7 +90,8 @@
 			</div>
 			<div class="center">
 				<el-divider direction="vertical" class="is-vertical"></el-divider>
-				<svg
+        <div class="category-box">
+          <svg
 					t="1694137466462"
 					class="icon"
 					viewBox="0 0 1024 1024"
@@ -99,7 +100,7 @@
 					p-id="1199"
 					width="30"
 					height="30"
-					v-show="data.categories.includes('Ratio') || data.categories == ''"
+					v-if="data.categories.includes('Ratio') || data.categories == ''"
 				>
 					<path
 						d="M179.18 801.854l624.856-623.767 45.067 45.146L224.247 847z"
@@ -113,7 +114,7 @@
 					width="30"
 					height="30"
 					viewBox="0 0 1024 1024"
-					v-show="data.categories.includes('Spread')"
+					v-if="data.categories.includes('Spread')"
 				>
 					<line
 						x1="128"
@@ -124,7 +125,9 @@
 						stroke-width="60"
 					/>
 				</svg>
-
+        <span class="category-text" v-if="data.categories.includes('Spread') || data.categories == ''">(minus)</span>
+        <span class="category-text" v-if="data.categories.includes('Ratio')">(divided by)</span>
+        </div>
 				<el-divider direction="vertical" class="is-vertical"></el-divider>
 			</div>
 			<div class="right">
@@ -197,16 +200,6 @@
       <el-table-column label="Index" header-align="center" align="center" width="80px">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="280px">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)" @blur="validateTotalPercentage(scope.row)">
-            <template v-slot:append>(%)</template>
-          </el-input>
-          <div class="error-message">
-            {{ scope.row.weightValidErrMsg }}
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column label="Indicator" header-align="center" align="center" prop="indicator">
         <template slot-scope="scope" >
           <el-autocomplete
@@ -245,6 +238,18 @@
           </el-autocomplete>
         </template>
       </el-table-column>
+      <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="150px">
+        <template slot-scope="scope">
+          <!-- 注释掉：无需校验 totalWeight <= 100 -->
+          <!-- <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)" @blur="validateTotalPercentage(scope.row)"> -->
+          <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)">
+            <template v-slot:append>(%)</template>
+          </el-input>
+          <div class="error-message">
+            {{ scope.row.weightValidErrMsg }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column header-align="center" align="center" width="250px">
         <template slot-scope="scope">
           <el-button v-if="scope.$index === 0" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Indicator</el-button>
@@ -255,9 +260,14 @@
     </div>
 		<el-divider></el-divider>
 		<div class="MI-form-btn">
+      <el-form-item>
+				<el-button type="primary" @click="previewIndicator()" class="delete-btn"
+					>Preview the created indicator</el-button
+				>
+			</el-form-item>
 			<el-form-item>
 				<el-button type="primary" @click="submitForm()"
-					>Save My Indicator</el-button
+					>Save the created indicator</el-button
 				>
 			</el-form-item>
 		</div>
@@ -266,7 +276,7 @@
  <script>
  import { CIQ } from '@/components/common/chart/st-development/js/components'
 import CheckInput from './CheckInput.vue'
-import { saveMyIndicators, getMyIndicatorData } from '@/service/service'
+import { saveMyIndicators, getMyIndicatorData, delMyIndicator } from '@/service/service'
 import {  validatePercentageRule } from "@/utils/formValidate"
 export default {
   name: 'MIForm',
@@ -353,7 +363,12 @@ export default {
       ],
       loadTest: 'Loading...',
       loading: false,
-      weightValidErrMsg: ''
+      weightValidErrMsg: '',
+      rules: {
+        name: [
+          { required: true, message: 'Please input a name', trigger: 'blur' }
+        ]
+      }
     }
   },
   computed: {
@@ -369,85 +384,122 @@ export default {
     console.log('this.dropdownList', this.dropdownList)
   },
   methods: {
+    popUpMsgBox(msg) {
+      this.$message({
+        message: `<strong>${msg}</strong>`,
+        center: true,
+        dangerouslyUseHTMLString: true,
+        showClose: true,
+        duration: 8000,
+        customClass: 'no-icon'
+      })
+    },
     manageMAStudies(value,type,field,showInput) {
+      let fieldName = 'field'
+      if(field == 'ma1'){
+        // 如果symbol则input1 的field为main panel的默认值
+        if(!this.data.categories.includes('Symbol')){
+          fieldName = this.data.indicator_1_url
+        }
+      }else{
+        fieldName = this.data.indicator_2_url
+      }
       CIQ.userOwnIndicatorMAStudies(
         value,
         type,
-        field=='ma1'?this.data.indicator_1_url:this.data.indicator_2_url,
+        fieldName,
         showInput,
         this.data.categories
         ) 
     },
     async submitForm() {
-      // 保存数据之前先校验字段是否为空，特定字段是否从下拉框中选择 todo lishan
-      // this.validForm()
-      let saveData = null
-      if(this.data.categories != 'WIC') {
-        // this.$store.commit('SET_CREACT_LOADING', true)
-        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
-
+     const saveRes = await this.saveIndicator()
+     console.log('saveRes', saveRes)
+     if(!saveRes) return
+     const code = saveRes.data.code
+      if(code == 404) {this.popUpMsgBox('Permission denied')}
+      if(code == 406) {this.popUpMsgBox('This combination of indicators is already in the list')}
+      if(saveRes.status == 201) {this.popUpMsgBox('Indicator created successfully');this.$router.push('/myindicator')}
+      // this.$store.commit('SET_CREACT_LOADING', false)
+    },
+    async saveIndicator() {
+       // 保存数据之前先校验字段是否为空，特定字段是否从下拉框中选择 todo lishan
+      const validForm = this.validForm()
+      if(!validForm) return
+      let saveData = null;
+      if(this.data.categories !== 'WIC') {
+        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
         for (const formRef of formsToSave) {
-          this.$refs[formRef].saveData()
-        }
-        saveData = {
-          name: this.data.name,
-          indicator_1: this.data.indicator_1_url,
-          indicator_2: this.data.indicator_2_url,
-          time_frame: this.data.time_frame,
-          ma: `${this.data.ma1}_${this.data.ma2}_1`,
-          calculate: this.data.categories.split(' ')[1].toLowerCase(),
-          extreme_optimism: this.data.extreme_optimism,
-          extreme_pessimism: this.data.extreme_pessimism
-        }
-      }else if(this.data.categories == 'WIC'){
-        if(this.weightValidErrMsg) return
-        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(1))
-        const indicator_weight = percentageStrings.join('_')
-
-        const mul_indicator = this.weightData.reduce((acc, item, index) => {
-          acc[`indicator_${index + 1}`] = item.indicator_url
-          return acc
-        }, {})
-
-        saveData = {
-          name: this.data.name,
-          indicator_1: 'model_smart_money',
-          indicator_2: 'model_smart_money',
-          time_frame: this.data.time_frame,
-          ma: '1_1_1',
-          calculate: 'weight_combination', // 存起来
-          // calculate: 'ratio', // 存起来
-          extreme_optimism: 0,
-          extreme_pessimism: 0,
-          indicator_weight,
-          mul_indicator: JSON.stringify(mul_indicator)
+          this.$refs[formRef].saveData();
         }
       }
+      const commonData = {
+        name: this.data.name,
+        indicator_1: this.data.indicator_1_url,
+        indicator_2: this.data.indicator_2_url,
+        time_frame: this.data.time_frame,
+        ma: `${this.data.ma1}_${this.data.ma2}_1`,
+        calculate: this.data.categories === 'WIC' ? 'weight_combination' : this.data.categories.split(' ')[1].toLowerCase(),
+        extreme_optimism: this.data.extreme_optimism,
+        extreme_pessimism: this.data.extreme_pessimism,
+      };
+      if(this.data.categories !== 'WIC') {  
+        saveData = {
+          ...commonData,
+        }
+      } else {
+        // if (this.weightValidErrMsg) return;
 
-      console.log('保存的数据', saveData)
-      const saveRes = await saveMyIndicators(saveData)
-      const code = saveRes.data.code
-				if(saveRes.status == 201) {
-            this.$message({
-              message: 'Indicator created successfully',
-              center: true
-            })
-					}
-					if(code == 404) {
-            this.$message({
-                message: 'Permission denied',
-                center: true
-            })
-					}
-					if(code == 406) {
-            this.$message({
-              message: 'This combination of indicators is already in the list',
-              center: true
-            })
-				}
-      console.log('保存数据 res', saveRes.data.url)
+        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(1));
+        const indicator_weight = percentageStrings.join('_');
 
-      // this.$store.commit('SET_CREACT_LOADING', false)
+        const mul_indicator = this.weightData.reduce((acc, item, index) => {
+          acc[`indicator_${index + 1}`] = item.indicator_url;
+          return acc;
+        }, {});
+
+        saveData = {
+          ...commonData,
+          calculate: 'weight_combination', // 存起来
+          indicator_weight,
+          mul_indicator: JSON.stringify(mul_indicator),
+          indicator_1: 'model_smart_money',
+          indicator_2: 'model_smart_money',
+          ma: '1_1_1',
+          extreme_optimism: 0,
+          extreme_pessimism: 0,
+        };
+      }
+
+      return await saveMyIndicators(saveData);
+    },
+    async previewIndicator() {
+      const res = await this.saveIndicator()
+      if(!res) return
+      const url = res.data.url
+      console.log('data', res)
+      const indicatorData = await getMyIndicatorData(url)
+      // 暂存
+      localStorage.setItem('previewIndicatorData', JSON.stringify(indicatorData.data.data))
+
+      await delMyIndicator(url)
+      console.log('indicatorData code', indicatorData.data.code)
+      console.log('indicatorData res', indicatorData.data.data)
+      // todo display the indicator on chartIQ
+
+      if(this.data.categories.includes('Symbol')){
+        CIQ.previewUserOwnIndicator(
+          [this.data.indicator_1_url,this.data.indicator_2_url,this.data.name+'CREATE'+url],
+          this.data.name+'CREATE'+url,
+          this.data.indicator_1_url
+        )
+      }else{
+        CIQ.previewUserOwnIndicator(
+          [this.data.indicator_1_url,this.data.indicator_2_url,this.data.name+'CREATE'+url],
+          this.data.name+'CREATE'+url
+        )
+      }
+
     },
     saveSubData(field, value) {
       console.log(field, value)
@@ -503,6 +555,9 @@ export default {
       if (isIndicator) {
         clearIndicatorIfMatch(this.symbolList, 'indicator_1_url', 'indicator_1')
         clearIndicatorIfMatch(this.symbolList, 'indicator_2_url', 'indicator_2')
+
+        // 通过初始化默认SPX chart还原deleted series
+        //CIQ.stxx.loadChart("SPX")
       }
 
       if (isSymbol) {
@@ -516,6 +571,14 @@ export default {
           'indicator_2_url',
           'indicator_2'
         )
+
+        //CIQ.stxx.setPeriodicity(1,1,'day')
+        // 隐藏主图表面板的默认符号和series
+        // var renderer = CIQ.stxx.chart.seriesRenderers._main_series.seriesParams[0].id;
+        // CIQ.stxx.removeSeries(renderer);
+
+        // document.getElementsByTagName('cq-chart-title')[0].classList.remove('stx-show')
+
       }
   
       const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
@@ -575,8 +638,9 @@ export default {
           selectSymbol(item)
         }
       }
-      console.log('data',this.data)
-      this.manageMAStudies(this.value,this.MAType,source=="indicator_1"?'ma1':'ma2',this.showInput)
+      // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
+      const checkInputRef = source=="indicator_1"?'ma1Form':'ma2Form'
+      this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,source=="indicator_1"?'ma1':'ma2',this.$refs[checkInputRef].showInput)
     },
     findMaxFreq(currentFreq, previousFreq) {
       let selectedTimeframe = currentFreq
@@ -666,6 +730,54 @@ export default {
 			}
 			return ''
 		},
+    validForm() {
+      let formValid = null
+      this.$refs['MICreateForm'].validate((valid) => {
+        if(valid) {
+          formValid = true
+        }else {
+          formValid = false
+          this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.')
+          return false
+        }
+      })
+      if(!formValid) return formValid
+      // 按照选项校验 indicator 是否在允许范围
+      const categories = this.data.categories
+      const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
+      const symbolList = JSON.parse(localStorage.getItem('symbolList'))
+
+      if(categories !== 'WIC') {
+        // 只需要校验 indicator_1 和 indicator_2
+        const indicator_1_url = this.data.indicator_1_url
+        const indicator_2_url = this.data.indicator_2_url
+
+        const inAllowedList_1 = ((sentimentList.find(ele => ele.url === indicator_1_url) || symbolList.find(ele => ele.url === indicator_1_url))?.label || false)
+        const inAllowedList_2 = ((sentimentList.find(ele => ele.url === indicator_2_url) || symbolList.find(ele => ele.url === indicator_2_url))?.label || false)
+
+        if(!indicator_1_url || !indicator_2_url || !inAllowedList_1 || !inAllowedList_2 ) {
+          this.popUpMsgBox('Please choose an indicator from the dropdown.')
+          return false
+        }
+      }else {
+        // 需要验证百分比总和，和每一列的indicator是否都在允许范围
+        const data = this.weightData
+        // let totalWeight = 0
+        let rowWeightValid = true
+        let inAllowedList = true
+        for (const row of data) {
+          // totalWeight += parseFloat(row.weight) || 0
+          row.weightValidErrMsg = validatePercentageRule(_, row.weight)
+          if(row.weightValidErrMsg) rowWeightValid = false
+          const isIn = ((sentimentList.find(ele => ele.url === row.indicator_url) || symbolList.find(ele => ele.url === row.indicator_url))?.label || false)
+          if(!isIn) inAllowedList = false
+        }
+        // if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
+        if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
+        if(!inAllowedList) {this.popUpMsgBox('Please choose indicators from the dropdown.'); return false}
+      }
+      return true
+    },
     validateTotalPercentage(row) {
       let weight = 0
       for (const row of this.weightData) {
@@ -693,13 +805,17 @@ export default {
       console.log('当前最大的 timeframe 是', this.data.time_frame)
     },
     addRow(row) {
+      /*
+      lishan 注释掉，因为不需要限制 totalWeight 为 100 了
       let weight = null
       const totalWeight = this.validateTotalPercentage(row)
       if(totalWeight > 0 && totalWeight < 100) {weight = 100 - totalWeight}
       else {weight = ''}
       this.weightData.push({ weight, indicator: '', indicator_url: '', weightValidErrMsg: '' });
+      */
+      this.weightData.push({ weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '' });
     },
-    deleteRow(index) {this.weightData.splice(index, 1)}
+    deleteRow(index) {this.weightData.splice(index, 1)},
   }
 }
 </script>
@@ -737,7 +853,7 @@ h4 {
   justify-content: space-evenly;
   svg.icon {
     align-self: center;
-    background: #dfdddd;
+    background: #f9f9f9;
     border: 1px solid #b1b1b1;
     border-radius: 5px;
   }
@@ -782,6 +898,9 @@ h4 {
 	.el-button {
 		width: 300px;
 	}
+  .delete-btn {
+    margin-right: 30px;
+  }
 }
 /* 添加虚线样式 */
 .el-divider.is-vertical {
@@ -825,10 +944,21 @@ h4 {
   width: 150px;
 }
 .delete-btn {
-  background-color: rgb(251, 192, 92);
+	background-color: #f59e0b;
   border: unset;
 }
 .delete-btn:hover {
-	background-color: #f59e0b;
+  background-color: rgb(251, 192, 92);
+}
+.category-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  span{
+    font-size: 12px;
+    margin-top: 5px;
+    color: #6f7174;
+  }
 }
 </style>

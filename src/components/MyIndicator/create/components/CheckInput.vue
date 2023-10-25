@@ -17,11 +17,14 @@
       @input="handleInput"
       :placeholder="config.placeholder"
       :style="{ visibility: inputVisibility }"
+      @blur="validateValue(value)"
     ></el-input>
   </div>
 </template>
 
 <script>
+import { validateCapitalRule } from '@/utils/formValidate';
+
 export default {
   name: 'CheckInput',
   props: {
@@ -94,6 +97,9 @@ export default {
     },
     handleInput(val) {
       this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
+    },
+    validateValue(value) {
+      console.log('value', value)
     }
   }
 };

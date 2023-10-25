@@ -189,3 +189,15 @@
 .dark-row {
   background: rgb(219 219 219) !important
 }
+.el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap>.el-form-item__label:before, .el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before{
+  content: '';
+}
+.DOM-form-container .el-input__icon {
+	line-height: 20px !important;
+}
+.specific-form-container .el-input__icon {
+	line-height: 20px !important;
+}
+text.highcharts-credits{
+  display: none;
+}

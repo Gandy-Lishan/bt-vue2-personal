@@ -136,7 +136,6 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
 
     //this.fetchStatus(symbol,start,end,params.symbolObject.indicator)
     CIQ.symbol = symbol;
-    
     if (params.symbolObject.indicator === undefined){
         if (CIQ.objIndicator === undefined){
             // CIQ.objIndicator = 'AAPL'
@@ -681,11 +680,13 @@ quoteFeedSimulator.formatChartData = async function(response){
                         newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
                     }
                 }
-            
                 if (CIQ.isOwnIndicator(indicator)) {
-                    const [_, url] = indicator.split(/CREATE/);
-                    const res = await config.getMyIndicatorData(url);
-                    const datafeed = res.data.data;
+                    let datafeed = JSON.parse(localStorage.getItem('previewIndicatorData'))
+                    if(!datafeed){
+                        const [_, url] = indicator.split(/CREATE/);
+                        const res = await config.getMyIndicatorData(url);
+                        datafeed = res.data.data;
+                    }               
             
                     let sortedRows = datafeed.sort(
                         (a, b) => new Date(a.DT) - new Date(b.DT)
