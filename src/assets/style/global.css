@@ -195,3 +195,9 @@
 .DOM-form-container .el-input__icon {
 	line-height: 20px !important;
 }
+.specific-form-container .el-input__icon {
+	line-height: 20px !important;
+}
+text.highcharts-credits{
+  display: none;
+}
