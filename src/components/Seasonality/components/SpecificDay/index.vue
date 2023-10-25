@@ -119,6 +119,7 @@
             align="right"
             unlink-panels="true"
             range-separator="to"
+            :picker-options="datePickerOptions"
           >
           </el-date-picker>
         </div>
@@ -145,7 +146,7 @@ export default {
         holidays: 0,
         start_date: null,
         end_date: null,
-        customizeDate: '01-01'
+        customizeDate: null
       },
       dropdownList: [],
       options: [
@@ -202,6 +203,11 @@ export default {
           label: 'Custom...'
         }
       ],
+      datePickerOptions: {
+      disabledDate(time) {
+        return time.getFullYear() < 2013 || time.getFullYear() > 1800;
+      },
+    },
   }
   },
   components: {
