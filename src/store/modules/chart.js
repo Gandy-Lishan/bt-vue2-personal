@@ -51,9 +51,17 @@ const state = {
 	miFormCategories: 'Indicator Spread',
 	miFormCategoriesIndicator1:{name:'',url:''},
 	miFormCategoriesIndicator2:{name:'',url:''},
+
+	miFormWeightedList: [],
 }
 
 const mutations = {
+	/**
+	 * 更新user's own indicator Weighted列表状态
+	 */
+	miFormWeightedListChange(state, val) {
+		state.miFormWeightedList = val
+	},
 	/**
 	 * 更新user's own indicator chartiq 状态
 	 */
@@ -201,10 +209,11 @@ const mutations = {
 				exit: new Array(5)
 			},
 			extraIndicators: [],
-			technicalIndicators: []
+			technicalIndicators: [],
 		}),
 			(state.activatedMA = [{ period: 21, url: '' }])
-		state.activatedMALayout = []
+		state.activatedMALayout = [],
+		state.extremeValue = []
 	},
 	SET_SPAN_PERIOD: (state, val) => {
 		state.spanPeriod = val
@@ -227,6 +236,17 @@ const mutations = {
 }
 
 const actions = {
+	set_miFormWeightedListChange({ commit }, val) {
+		return new Promise(resolve => {
+		
+			const newVal = val
+			const oldVal = state.miFormWeightedList
+			CIQ.displayWeightOwnIndicator(newVal,oldVal)
+			
+			commit('miFormWeightedListChange', val)
+			resolve()
+		})
+	},
 	set_miFormStateChange({ commit }, val) {
 		return new Promise(resolve => {
 		

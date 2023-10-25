@@ -13284,6 +13284,7 @@ import {__st_js_indicatorType_} from "./indicatorType"
 import {__st_js_generateCsv_} from "./generateCsv"
 import {__st_js_utils_} from "./utils"
 import {__st_js_maLayout_} from "./maLayout"
+import {__st_js_userownIndicator_} from "./userownIndicator"
 
 let _exports = {CIQ};
 export {__js_webcomponents_indicators_ as indicators}
@@ -13380,6 +13381,7 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__st_js_generateCsv_,
 		__st_js_utils_,
 		__st_js_maLayout_,
+		__st_js_userownIndicator_,
 		// customized features above
 		__js_webcomponents_abstractMarker_,
 		__js_webcomponents_advertisement_,

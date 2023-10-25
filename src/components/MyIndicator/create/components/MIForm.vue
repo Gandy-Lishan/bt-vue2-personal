@@ -175,12 +175,14 @@
 			<CheckInput
 				:config="EOCheckInputConfig"
 				ref="EOForm"
+        @handleExtremeLineChange="handleExtremeLineChange"
 				@saveData="saveSubData"
 			></CheckInput>
 			<div></div>
 			<CheckInput
 				:config="EPCheckInputConfig"
 				ref="EPForm"
+        @handleExtremeLineChange="handleExtremeLineChange"
 				@saveData="saveSubData"
 			></CheckInput>
 		</div>
@@ -394,6 +396,9 @@ export default {
         customClass: 'no-icon'
       })
     },
+    handleExtremeLineChange(value,field) {
+      CIQ.editOwnIndicatorExtremeLines(value,field)
+    },
     manageMAStudies(value,type,field,showInput) {
       let fieldName = 'field'
       if(field == 'ma1'){
@@ -401,7 +406,7 @@ export default {
         if(!this.data.categories.includes('Symbol')){
           fieldName = this.data.indicator_1_url
         }
-      }else{
+      }else if(field == 'ma2'){
         fieldName = this.data.indicator_2_url
       }
       CIQ.userOwnIndicatorMAStudies(
@@ -477,7 +482,6 @@ export default {
       const res = await this.saveIndicator()
       if(!res) return
       const url = res.data.url
-      console.log('data', res)
       const indicatorData = await getMyIndicatorData(url)
       // 暂存
       localStorage.setItem('previewIndicatorData', JSON.stringify(indicatorData.data.data))
@@ -491,12 +495,15 @@ export default {
         CIQ.previewUserOwnIndicator(
           [this.data.indicator_1_url,this.data.indicator_2_url,this.data.name+'CREATE'+url],
           this.data.name+'CREATE'+url,
-          this.data.indicator_1_url
+          this.data.indicator_1_url,
+          {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism}
         )
       }else{
         CIQ.previewUserOwnIndicator(
           [this.data.indicator_1_url,this.data.indicator_2_url,this.data.name+'CREATE'+url],
-          this.data.name+'CREATE'+url
+          this.data.name+'CREATE'+url,
+          null,
+          {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism}
         )
       }
 
