@@ -638,8 +638,9 @@ export default {
           selectSymbol(item)
         }
       }
-      console.log('data',this.data)
-      this.manageMAStudies(this.value,this.MAType,source=="indicator_1"?'ma1':'ma2',this.showInput)
+      // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
+      const checkInputRef = source=="indicator_1"?'ma1Form':'ma2Form'
+      this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,source=="indicator_1"?'ma1':'ma2',this.$refs[checkInputRef].showInput)
     },
     findMaxFreq(currentFreq, previousFreq) {
       let selectedTimeframe = currentFreq
