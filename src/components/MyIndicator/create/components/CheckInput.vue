@@ -61,7 +61,11 @@ export default {
       } else {
         this.inputVisibility = 'hidden';
       }
-      this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
+      if(this.config.type == 'SelectInput'){
+        this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
+      }else{
+        this.$emit('handleExtremeLineChange',this.value,this.config.field)
+      }
     },
     _config: {
       handler(newValue, _) {
@@ -96,7 +100,11 @@ export default {
       this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
     },
     handleInput(val) {
-      this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
+      if(this.config.type == 'SelectInput'){
+        this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
+      }else {
+        this.$emit('handleExtremeLineChange',this.value,this.config.field)
+      }
     },
     validateValue(value) {
       console.log('value', value)
