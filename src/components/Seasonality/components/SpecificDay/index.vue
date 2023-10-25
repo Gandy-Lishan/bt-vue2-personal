@@ -122,6 +122,7 @@
             :picker-options="datePickerOptions"
           >
           </el-date-picker>
+          <MonthDays v-model="data.customizeDate" :monthDaysOptions="monthDaysOptions" @getValue="getValue" :customText="englishText"></MonthDays>
         </div>
         </div>
       </el-form-item>
@@ -135,6 +136,7 @@
 
 <script>
 import SNChart from "../SNChart/index.vue"
+import MonthDays from "month-days-element";
 export default {
   name: 'SpecificDay',
   data() {
@@ -204,14 +206,31 @@ export default {
         }
       ],
       datePickerOptions: {
-      disabledDate(time) {
-        return time.getFullYear() < 2013 || time.getFullYear() > 1800;
+        disabledDate(time) {
+          return time.getFullYear() < 2013 || time.getFullYear() > 1800;
+        },
       },
-    },
+      monthDaysOptions: {
+				placeholder: 'Please select', // 占位内容，默认为选择日期
+				size: 'mini', // 输入框尺寸 large, small, mini 默认large
+				clearable: true, // 是否显示清除按钮，默认true
+				disabled: false, // 禁用，默认false
+				readonly: false, // 只读，默认false
+				popperClass: '' // 弹出框类名
+			},
+      englishText: {
+        months: [
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ],
+        days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+      }
+      
   }
   },
   components: {
-    SNChart
+    SNChart,
+    MonthDays
   },
   created() {
     const currentYear = new Date().getFullYear();
@@ -221,6 +240,12 @@ export default {
   mounted() {
     this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
     console.log('this.dropdownList', this.dropdownList)
+  },
+  computed: {
+    monthDaysText() {
+      return {
+      }
+    }
   },
   methods: {
     pickStartDate() {
@@ -282,6 +307,9 @@ export default {
       console.log(value)
     },
     pickCustomizeDate(value) {
+      console.log(value)
+    },
+    getValue(value) {
       console.log(value)
     }
   }
