@@ -8,7 +8,7 @@
     "lint": "eslint --fix --ext .js,.vue src",
     "dev": "vue-cli-service serve --mode dev",
     "pro": "vue-cli-service serve --mode pro",
-    "postinstall": "npm run build",
+    "postinstall": "npm run build && patch-package",
     "start": "node server.js"
   },
   "publicPath": "/sentimentrader.com",

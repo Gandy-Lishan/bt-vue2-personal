@@ -8,7 +8,9 @@
     <el-tab-pane label="Performance Around Official NYSE Specific Days" name="second">
 			<SpecificDay></SpecificDay>
 		</el-tab-pane>
-    <el-tab-pane label="Other Charts & Data" name="third">角色管理</el-tab-pane>
+    <el-tab-pane label="Other Charts & Data" name="third">
+			<Others></Others>
+		</el-tab-pane>
   </el-tabs>
   </div>
 </template>
@@ -16,6 +18,7 @@
 <script>
 import DayOfMonth from "./components/DayOfMonth/index.vue"
 import SpecificDay from "./components/SpecificDay/index.vue"
+import Others from "./components/Others/index.vue"
 import { getStocksList, getIndexsList } from '@/service/service'
 import { uniqWith, isEqual } from "lodash"
 export default {
@@ -27,7 +30,8 @@ export default {
   },
   components: {
     DayOfMonth,
-		SpecificDay
+		SpecificDay,
+		Others
   },
   async mounted() {
     await this.loadData()

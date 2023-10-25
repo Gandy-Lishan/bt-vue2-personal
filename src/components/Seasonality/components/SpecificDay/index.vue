@@ -109,21 +109,36 @@
             >
           </el-option>
         </el-select>
-        <div class="customize-box">
+        <div class="customize-box" v-if="data.holidays == 9">
+         <div class="dateSelect">
           <span>Date</span>
-          <el-date-picker
-            @change="pickCustomizeDate"
-            value-format="MM-dd"
-            v-model="data.customizeDate"
-            type="date"
-            align="right"
-            unlink-panels="true"
-            range-separator="to"
-            :picker-options="datePickerOptions"
-          >
-          </el-date-picker>
           <MonthDays v-model="data.customizeDate" :monthDaysOptions="monthDaysOptions" @getValue="getValue" :customText="englishText"></MonthDays>
+         </div>
+          <el-button class="button-new-tag" size="mini" @click="showInput">+ Add Customize Time</el-button>
         </div>
+        <div class="dateTag">
+            <el-tag
+            :key="tag"
+            size="small"
+            v-for="(tag,index) in dynamicTags"
+            :closable="index !== 0"
+            :disable-transitions="false"
+            @close="handleClose(tag)"
+            effect="dark">
+            {{tag}}
+          </el-tag>
+          <el-input
+            class="input-new-tag"
+            v-if="inputVisible"
+            v-model="inputValue"
+            ref="saveTagInput"
+            size="mini"
+            @keyup.enter.native="handleInputConfirm"
+            @blur="handleInputConfirm"
+          >
+          </el-input>
+          <el-button class="button-new-tag" size="mini" @click="showInput" v-if="data.holidays != 9">+ Add Customize Time</el-button>
+          </div>
         </div>
       </el-form-item>
     </div>
@@ -161,7 +176,7 @@ export default {
         {label: 'Good Friday', value: 6},
         {label: 'Christmas Day', value: 7},
         {label: 'Memorial Day', value: 8},
-        {label: 'Custom Day', value: 9},
+        {label: 'Custom Time', value: 9},
       ],
       periodOptions: [
         {
@@ -224,8 +239,10 @@ export default {
           "July", "August", "September", "October", "November", "December"
         ],
         days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-      }
-      
+      },
+      dynamicTags: ['1 day'],
+      inputVisible: false,
+      inputValue: '' 
   }
   },
   components: {
@@ -311,6 +328,25 @@ export default {
     },
     getValue(value) {
       console.log(value)
+    },
+    handleClose(tag) {
+        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      },
+
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.dynamicTags.push(inputValue + ' day');
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
     }
   }
 }
@@ -336,11 +372,19 @@ export default {
   /deep/ .el-select{
     width: 100%;
   }
+  .input-new-tag.el-input.el-input--mini {
+    width: 67px;
+    margin-right: 10px;
+  }
+  .input-new-tag.el-input.el-input--mini /deep/ input.el-input__inner {
+    width: 67px;
+    display: inline-block;
+  }
   .customize-box span{
     font-weight: 500;
     color: #606266;
     font-size: 14px;
-    margin-right: 5px;
+    margin-right: 10px;
   }
 }
 .custom-option {
@@ -371,5 +415,29 @@ export default {
     margin: 0 5px;
   }
 }
-
+.popover {
+  display: inline-block;
+}
+.customize-box{
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px dashed #DCDFE6;
+}
+.dateTag{
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+  .el-tag--small{
+    text-align: center;
+    width: 67px;
+    height: 28px;
+    line-height: 28px;
+    margin-right: 10px;
+    background: #5b9bd1;
+    border: 1px solid #5b9bd1;
+  }
+}
 </style>
