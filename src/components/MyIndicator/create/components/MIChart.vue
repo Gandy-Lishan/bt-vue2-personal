@@ -34,11 +34,7 @@ export default {
 	methods:{
 		onChartReady(){
 			this.hideComponents()	
-<<<<<<< HEAD
 			CIQ.displayUserOwnIndicator(this.chart_data.name+'CREATE'+this.chart_data.url)
-=======
-			 CIQ.displayUserOwnIndicator(this.chart_data.name+'CREATE'+this.chart_data.url)
->>>>>>> 128c6b4f4f7901df3bf61a48750242aa9dcb190b
 			console.log('chart_data',this.chart_data)
 		},
 		hideComponents() {
