@@ -82,13 +82,14 @@
       </el-form-item>
     </div>
     <div class="DOM-container-bottom">
-
+      <SNChart></SNChart>
     </div>
     </el-form>
   </div>
 </template>
 
 <script>
+import SNChart from "../SNChart/index.vue"
 export default {
   name: 'DayOfMonth',
   data() {
@@ -114,6 +115,9 @@ export default {
           {label: 'December', value: 11}
         ]
     }
+  },
+  components: {
+    SNChart
   },
   mounted() {
     this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
@@ -156,7 +160,6 @@ export default {
 <style lang="less" scoped>
 .DOM-form-container{
   display: grid;
-  grid-template-rows: repeat(2, 1fr);
   .DOM-container-top{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
