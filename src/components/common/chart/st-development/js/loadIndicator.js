@@ -662,8 +662,22 @@
                 CIQ.stxx.loadChart({symbol: newData.indicator1.url})
             }
             if(oldData.indicator2.url != newData.indicator2.url){
-                var series = CIQ.stxx.chart.series[oldData.indicator2.url]; 
-                CIQ.stxx.removeSeries(series); 
+                var series = CIQ.stxx.chart.series[oldData.indicator2.url];
+                // 移除旧的field的ma 
+                for (var studyInstanceName in CIQ.stxx.layout.studies) {
+                    if (
+                        CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == series.id &&
+                        CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'
+                    ) {
+                      // 直接判断是否为st ma
+                      CIQ.Studies.removeStudy(
+                        CIQ.stxx,
+                        CIQ.stxx.layout.studies[studyInstanceName]
+                      )
+                    }
+                  }
+                CIQ.stxx.removeSeries(series);
+
                 CIQ.stxx.addSeries(newData.indicator2.url, {
                     display:newData.indicator2.name, 
                     isComparison: false, 
@@ -687,7 +701,7 @@
                         CIQ.Studies.removeStudy(CIQ.stxx, sd); 
                     }
                 }
-                addUserOwnIndicators([newData.indicator1.url,newData.indicator2.url],newData.indicator1.url);
+                addSingleIndicator([newData.indicator1.url,newData.indicator2.url],newData.indicator1.url);
             }
             if(oldData.indicator2.url != newData.indicator2.url){
                 for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -696,14 +710,14 @@
                         CIQ.Studies.removeStudy(CIQ.stxx, sd); 
                     }
                 }
-                addUserOwnIndicators([newData.indicator1.url,newData.indicator2.url],newData.indicator2.url);
+                addSingleIndicator([newData.indicator1.url,newData.indicator2.url],newData.indicator2.url);
             }
         }
     }
 
     // 预览生成的新indicator
     CIQ.previewUserOwnIndicator = function(indicatorList,indicator,symbol){
-        addUserOwnIndicators(indicatorList,indicator,symbol);
+        addSingleIndicator(indicatorList,indicator,symbol);
     }
 
     // 从列表进入后还原new indicator的设定和新的indicator
@@ -714,10 +728,11 @@
             indicator2 : {name:_newVal.latter,url:_newVal.indicator_2_url},
             url : _newVal.name+'CREATE'+_newVal.url
         }
+        const extremeLines = {op:_newVal.upper_extreme_value,ep:_newVal.lower_extreme_value}
         if(newData.categories.includes('Symbol')){
                 // indicator1,包括主symbol和new indicator
                 CIQ.objIndicator = []
-                await getUserOwnIndicatorMatedata(newData.url)
+                await getUserOwnIndicatorMatedata(newData.url,extremeLines)
                 CIQ.stxx.loadChart({symbol: newData.indicator1.url, indicator:[newData.url]})
 
                 //indicator2,即comparison symbol
@@ -738,9 +753,12 @@
         }
         
         if(newData.categories.includes('Indicator')){
+            // indicator
             await getUserOwnIndicatorMatedata(newData.indicator1.url)
+            // indicator2
             await getUserOwnIndicatorMatedata(newData.indicator2.url)
-            await getUserOwnIndicatorMatedata(newData.url)
+            // 自定义indicator
+            await getUserOwnIndicatorMatedata(newData.url,extremeLines)
             CIQ.stxx.loadChart(	{ symbol: 'SPX', indicator:[newData.indicator1.url,newData.indicator2.url,newData.url]}, function () {
 
             }) 
@@ -750,7 +768,7 @@
     // 第一个参数是默认值为SPX的symbol，own indicator quotefeed请求时为默认symbol，own symbol quotefeed请求时为表单第一个symbol
     // 第2个参数是给quotefeed请求提供的indicator列表，
     // 第3个是要加载的当前indicator
-    const addUserOwnIndicators = async function(indicatorList,indicator,symbol='SPX'){
+    const addSingleIndicator = async function(indicatorList,indicator,symbol='SPX'){
         // remove redundant elements and empty string
         for(var i=0;i<indicatorList.length;i++){
         if(indicatorList[i]=='' || indicatorList[i]==undefined){
@@ -765,7 +783,7 @@
 
         }) 
     }
-    const getUserOwnIndicatorMatedata = async function(indicator){
+    const getUserOwnIndicatorMatedata = async function(indicator,extremeLines){
         var color = "#7257F2"
         return new Promise(resolve=>{
                 if(CIQ.isOwnIndicator(indicator)){
@@ -776,9 +794,9 @@
                         {indicatorClose:color,description: '',url:indicator},
                         parameters: { init: {
                             studyOverZonesEnabled: false,
-                            studyOverBoughtValue: 999,
+                            studyOverBoughtValue: extremeLines?extremeLines.op:NaN,
                             studyOverBoughtColor: "#FF0000",
-                            studyOverSoldValue: 999,
+                            studyOverSoldValue: extremeLines?extremeLines.ep:NaN,
                             studyOverSoldColor: "#00DD00",
                         }},
                         attributes:{
@@ -849,7 +867,7 @@
     }
 
     CIQ.userOwnIndicatorMAStudies = function(value,type,field,showInput,categories) {
-        
+        // 更新ma前移除当前field的旧ma
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
             if (
                 CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == field &&
@@ -876,7 +894,7 @@
         )
     }
 
-    // layout management
+    // 预留：layout management
     CIQ.localStorage.saveLayout = function(){
         var layout = JSON.stringify(CIQ.stxx.exportLayout(true));
 	    localStorage.setItem("myChartLayout", layout);
