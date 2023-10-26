@@ -116,7 +116,7 @@
           <span>Date</span>
           <MonthDays v-model="data.customizeDate" :monthDaysOptions="monthDaysOptions" @getValue="getValue" :customText="englishText"></MonthDays>
          </div>
-          <el-button class="button-new-tag" size="mini" @click="showInput">+ Add Customize Time</el-button>
+          <!-- <el-button class="button-new-tag" size="mini" @click="showInput">+ Add Customize Time</el-button> -->
         </div>
         <div class="dateTag">
             <el-tag
@@ -139,7 +139,7 @@
             @blur="handleInputConfirm"
           >
           </el-input>
-          <el-button class="button-new-tag" size="mini" @click="showInput" v-if="data.holidays != 9">+ Add Customize Time</el-button>
+          <el-button class="button-new-tag" size="mini" @click="showInput">+ Add Customize Time</el-button>
           </div>
         </div>
       </el-form-item>
@@ -163,8 +163,8 @@ export default {
         period: 5,
         dateRange: [],
         holidays: 0,
-        start_date: null,
-        end_date: null,
+        start_date: (new Date().getFullYear() - 5).toString(),
+        end_date:  new Date().getFullYear().toString(),
         customizeDate: null
       },
       dropdownList: [],
@@ -180,10 +180,11 @@ export default {
         {label: 'Memorial Day', value: 8},
         {label: 'Custom Time', value: 9},
       ],
-      datePickerOptions: {
-        disabledDate(time) {
-          return time.getFullYear() < 2013 || time.getFullYear() > 1800;
-        },
+      startPickerOptions: {
+        disabledDate: this.handleDisabledStartDate
+      },
+      endPickerOptions: {
+        disabledDate: this.handleDisabledEndDate
       },
       monthDaysOptions: {
 				placeholder: 'Please select', // 占位内容，默认为选择日期
@@ -201,7 +202,7 @@ export default {
         days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
       },
       dynamicTags: ['1 day'],
-      inputVisible: false,
+      inputVisible: true,
       inputValue: '' 
   }
   },
@@ -243,22 +244,17 @@ export default {
     }
   },
   methods: {
+    handleDisabledStartDate(time) {
+      const end_date = this.data.end_date
+      return time.getFullYear() > end_date || time.getFullYear() < 1800;
+    },
+    handleDisabledEndDate(time) {
+      return time.getFullYear() > new Date().getFullYear() || time.getFullYear() < 1800;
+    },
     pickStartDate() {
-    // 更新结束日期选择器的可选范围
-    this.$refs.endDatePicker.pickerOptions = {
-      disabledDate(time) {
-        return time.getFullYear() < 2013 || time.getFullYear() > 1800 || time > new Date();
-      },
-    };
-  },
-  pickEndDate() {
-    // 更新开始日期选择器的可选范围
-    this.$refs.startDatePicker.pickerOptions = {
-      disabledDate(time) {
-        return time.getFullYear() < 2013 || time.getFullYear() > 1800 || time > new Date();
-      },
-    };
-  },
+    },
+    pickEndDate() {
+    },
     querySearch(queryString, cb) {
       var dropdownList = this.dropdownList
       var results = queryString
@@ -332,7 +328,10 @@ export default {
 
 <style lang="less" scoped>
 .specific-form-container{
+  grid-row-gap: 20px;
+  min-height: 610px;
   display: grid;
+  padding: 20px;
   .specific-container-top{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -353,6 +352,7 @@ export default {
   .input-new-tag.el-input.el-input--mini {
     width: 67px;
     margin-right: 10px;
+    margin-bottom: 10px;
   }
   .input-new-tag.el-input.el-input--mini /deep/ input.el-input__inner {
     width: 67px;
@@ -393,21 +393,23 @@ export default {
     margin: 0 5px;
   }
 }
-.popover {
-  display: inline-block;
-}
 .customize-box{
-  margin: 10px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px dashed #DCDFE6;
+  padding: 20px 5px;
+  border-bottom: 1px dashed #8e9fc5;
+  border-right: 1px dashed #5b9bd1;
+  border-left: 1px dashed #5b9bd1;
 }
 .dateTag{
   display: flex;
-  margin-top: 10px;
+  padding: 20px 5px 10px 5px;
   align-items: center;
+  border: 1px dashed #5b9bd1;
+  border-radius: 4px;
+  border-top: unset;
+  flex-wrap: wrap;
   .el-tag--small{
     text-align: center;
     width: 67px;
@@ -416,6 +418,22 @@ export default {
     margin-right: 10px;
     background: #5b9bd1;
     border: 1px solid #5b9bd1;
+    margin-bottom: 10px;
+  }
+}
+.specific-container-bottom{
+  margin: 0 auto;
+}
+.button-new-tag {
+  margin-bottom: 10px;
+}
+.dateSelect{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .popover{
+    width: 100%;
   }
 }
 </style>
