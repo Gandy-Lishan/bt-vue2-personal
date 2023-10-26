@@ -113,8 +113,8 @@ export default {
     return {
       data: {
         symbol: 'SPY',
-        start_date: null,
-        end_date: null,
+        start_date: (new Date().getFullYear() - 5).toString(),
+        end_date:  new Date().getFullYear().toString(),
         monthSelection: 0
       },
       dropdownList: [],
@@ -131,7 +131,13 @@ export default {
           {label: 'October', value: 9},
           {label: 'November', value: 10},
           {label: 'December', value: 11}
-        ]
+        ],
+        startPickerOptions: {
+          disabledDate: this.handleDisabledStartDate
+        },
+        endPickerOptions: {
+          disabledDate: this.handleDisabledEndDate
+        },
     }
   },
   components: {
@@ -139,9 +145,15 @@ export default {
   },
   mounted() {
     this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
-    console.log('this.dropdownList', this.dropdownList)
   },
   methods: {
+    handleDisabledStartDate(time) {
+      const end_date = this.data.end_date
+      return time.getFullYear() > end_date || time.getFullYear() < 1800;
+    },
+    handleDisabledEndDate(time) {
+      return time.getFullYear() > new Date().getFullYear() || time.getFullYear() < 1800;
+    },
     querySearch(queryString, cb) {
       var dropdownList = this.dropdownList
       var results = queryString
@@ -167,7 +179,13 @@ export default {
     },
     changeMonth(month) {
       console.log(month)
-    }
+    },
+    pickStartDate(date) {
+      console.log(date)
+    },
+    pickEndDate(date) {
+      console.log(date)
+    },
   }
 }
 </script>
@@ -175,6 +193,9 @@ export default {
 <style lang="less" scoped>
 .DOM-form-container{
   display: grid;
+  grid-row-gap: 20px;
+  min-height: 610px;
+  padding: 20px;
   .DOM-container-top{
     display: grid;
     grid-template-columns: repeat(3, 1fr);

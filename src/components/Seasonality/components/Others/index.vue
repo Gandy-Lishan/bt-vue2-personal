@@ -113,7 +113,9 @@ export default {
     return {
       data: {
         symbol: 'SPY',
-        category: 0
+        category: 0,
+        start_date: (new Date().getFullYear() - 5).toString(),
+        end_date:  new Date().getFullYear().toString(),
       },
       dropdownList: [],
         options: [
@@ -121,7 +123,13 @@ export default {
           {label: 'Return by Month', value: 1},
           {label: 'Performance by Day of Month', value: 2},
           {label: 'Performance by Day of Year', value: 3}
-        ]
+        ],
+        startPickerOptions: {
+          disabledDate: this.handleDisabledStartDate
+        },
+        endPickerOptions: {
+          disabledDate: this.handleDisabledEndDate
+        },
     }
   },
   components: {
@@ -132,6 +140,13 @@ export default {
     console.log('this.dropdownList', this.dropdownList)
   },
   methods: {
+    handleDisabledStartDate(time) {
+      const end_date = this.data.end_date
+      return time.getFullYear() > end_date || time.getFullYear() < 1800;
+    },
+    handleDisabledEndDate(time) {
+      return time.getFullYear() > new Date().getFullYear() || time.getFullYear() < 1800;
+    },
     querySearch(queryString, cb) {
       var dropdownList = this.dropdownList
       var results = queryString
@@ -165,6 +180,9 @@ export default {
 <style lang="less" scoped>
 .others-form-container{
   display: grid;
+  grid-row-gap: 20px;
+  min-height: 610px;
+  padding: 20px;
   .others-container-top{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -215,4 +233,5 @@ export default {
     margin: 0 5px;
   }
 }
+.others-container-bottom{margin: 0 auto;}
 </style>
