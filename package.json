@@ -29,6 +29,8 @@
     "font-awesome": "^4.7.0",
     "github-markdown-css": "^5.1.0",
     "highcharts": "^11.1.0",
+    "highcharts-export-data": "^0.1.7",
+    "highcharts-exporting": "^0.1.7",
     "http-proxy-middleware": "^2.0.4",
     "https": "^1.0.0",
     "i": "^0.3.7",

@@ -50,20 +50,37 @@
       </el-form-item>
       <el-form-item
         label="2.Date Range"
-        prop="dateRange"
       >
-        <div class="block">
-        <el-date-picker
-          @change="pickDate"
-          value-format="yyyy-MM-dd"
-          v-model="data.dateRange"
-          type="daterange"
+        <div class="select-container">
+        <div class="startAndEndBox">
+          <el-date-picker
+          ref="startDatePicker"
+          @change="pickStartDate"
+          value-format="yyyy"
+          v-model="data.start_date"
+          type="year"
           align="right"
-          unlink-panels
+          unlink-panels="true"
           range-separator="to"
-          start-placeholder="Start Date"
-          end-placeholder="End Date">
+          placeholder="Start Date"
+          :picker-options="startPickerOptions"
+          >
         </el-date-picker>
+        <span>to</span>
+        <el-date-picker
+        ref="endDatePicker"
+          @change="pickEndDate"
+          value-format="yyyy"
+          v-model="data.end_date"
+          type="year"
+          align="right"
+          unlink-panels="true"
+          range-separator="to"
+          :picker-options="endPickerOptions"
+          placeholder="End Date"
+          >
+        </el-date-picker>
+        </div>
       </div>
       </el-form-item>
       <el-form-item
@@ -89,14 +106,15 @@
 </template>
 
 <script>
-import SNChart from "../SNChart/index.vue"
+import SNChart from "../SNChart/DOMChart.vue"
 export default {
   name: 'DayOfMonth',
   data() {
     return {
       data: {
         symbol: 'SPY',
-        dateRange: [],
+        start_date: null,
+        end_date: null,
         monthSelection: 0
       },
       dropdownList: [],
@@ -147,9 +165,6 @@ export default {
     handleSelect(item) {
       this.data.symbol = item.url
     },
-    pickDate(date) {
-      console.log(date)
-    },
     changeMonth(month) {
       console.log(month)
     }
@@ -178,6 +193,9 @@ export default {
   /deep/ .el-select{
     width: 100%;
   }
+  /deep/ .el-date-editor.el-input, .el-date-editor.el-input__inner{
+    width: 100%;
+  }
 }
 .custom-option {
 	display: flex;
@@ -196,5 +214,18 @@ export default {
 }
 .DOM-container-bottom{
   margin: 0 auto;
+}
+.select-container {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+}
+.startAndEndBox {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: space-between;
+  width: 100%;
+  span{
+    margin: 0 5px;
+  }
 }
 </style>

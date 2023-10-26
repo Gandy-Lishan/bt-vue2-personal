@@ -73,6 +73,7 @@
           unlink-panels="true"
           range-separator="to"
           :picker-options="startPickerOptions"
+          placeholder="Start Date"
           >
         </el-date-picker>
         <span>to</span>
@@ -87,6 +88,7 @@
           unlink-panels="true"
           range-separator="to"
           :picker-options="endPickerOptions"
+          placeholder="End Date"
           >
         </el-date-picker>
         </div>
@@ -143,14 +145,14 @@
       </el-form-item>
     </div>
     <div class="specific-container-bottom">
-      <SNChart></SNChart>
+      <SDChart></SDChart>
     </div>
     </el-form>
   </div>
 </template>
 
 <script>
-import SNChart from "../SNChart/index.vue"
+import SDChart from "../SNChart/SDChart.vue";
 import MonthDays from "month-days-element";
 export default {
   name: 'SpecificDay',
@@ -178,48 +180,6 @@ export default {
         {label: 'Memorial Day', value: 8},
         {label: 'Custom Time', value: 9},
       ],
-      periodOptions: [
-        {
-          value: 1,
-          label: '1 Year'
-        },
-        {
-          value: 2,
-          label: '2 Year'
-        },
-        {
-          value: 3,
-          label: '3 Year'
-        },
-        {
-          value: 4,
-          label: '4 Year'
-        },
-        {
-          value: 5,
-          label: '5 Year'
-        },
-        {
-          value: 10,
-          label: '10 Year'
-        },
-        {
-          value: 15,
-          label: '15 Year'
-        },
-        {
-          value: 20,
-          label: '20 Year'
-        },
-        {
-          value: 21,
-          label: 'All History'
-        },
-        {
-          value: 22,
-          label: 'Custom...'
-        }
-      ],
       datePickerOptions: {
         disabledDate(time) {
           return time.getFullYear() < 2013 || time.getFullYear() > 1800;
@@ -246,13 +206,31 @@ export default {
   }
   },
   components: {
-    SNChart,
+    SDChart,
     MonthDays
   },
   created() {
     const currentYear = new Date().getFullYear();
     this.data.end_date = (currentYear) + ''
     this.data.start_date = (currentYear - this.data.period) + ''
+
+    // 创建一个函数来生成标签
+    function generateLabel(year, range) {
+        const startYear = year - range + 1;
+        return `${startYear} -> ${year}`;
+    }
+
+    // 生成动态标签数组
+    const years = [1,2,3,4,5,10,15,20]
+    const periodOptions = [{label: `Current Year (${currentYear})`, value: 0}, ...years.map(item => ({label: `${currentYear - item} -> ${currentYear}`, value: item}))]
+
+    // 添加其他选项
+    periodOptions.push({ label: 'All History', value: currentYear - 2003 + 1 });
+    periodOptions.push({ label: 'Custom...', value: currentYear - 2003 + 2 });
+
+    // 输出生成的选项
+    this.periodOptions = periodOptions
+
   },
   mounted() {
     this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))

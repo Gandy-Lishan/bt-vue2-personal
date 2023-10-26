@@ -1,30 +1,43 @@
 <template>
-  <div class="SNChart-container">
-    <div id="container"></div>
+  <div class="OCDChart-container">
+    <div id="OCDContainer"></div>
   </div>
 </template>
 
 <script>
 import Highcharts from "highcharts";
-import data from "./mock";
+import Exporting from 'highcharts/modules/exporting';
+import ExportData from 'highcharts/modules/export-data';
+import data from "../Others/mock";
 
 export default {
   mounted() {
+    Exporting(Highcharts);
+    ExportData(Highcharts);
     // 传入的数据格式
-    const mergedList = data.map(item => [item[2], item[1], item[3]])
+    const mergedList = data.map(item => [item[0], item[1] * 100 , item[2]])
     console.log(mergedList)
 
     // 绘制图表的配置
     const plotConfiguration = {
-      title: 'Your Title',
-      subtitle: 'Your Subtitle',
-      xAxisTitle: 'X-Axis Title',
+      title: 'Performance Surrounding Independence Day',
+      subtitle: 'S&P 500, 1950-2011',
+      xAxisTitle: 'Days Surrounding Holiday',
       customScale: true, // 如果需要自定义刻度
       formatter: true // 如果需要自定义数据提示
     };
 
     // 在 mounted 钩子中调用绘图函数
     this.plotData(mergedList, plotConfiguration);
+    // Hide default Highcharts export button
+    document.querySelectorAll('.highcharts-button').forEach(button => {
+      button.style.display = 'none';
+    });
+
+    // Show the custom export button
+    document.querySelectorAll('.highcharts-contextbutton').forEach(button => {
+      button.style.display = 'block';
+    });
   },
   methods: {
     plotData(mergedList, plotConfiguration) {
@@ -38,10 +51,10 @@ export default {
       for (const dataPoint of mergedList) {
           categories.push(dataPoint[0]);
           tData.push(dataPoint[1]);
-          pData.push(dataPoint[2] * 100);
+          pData.push(dataPoint[2]);
       }
 
-      const H = Highcharts.chart('container', {
+      const H = Highcharts.chart('OCDContainer', {
           title: {
               text: plotConfiguration.title,
               style: {
@@ -52,6 +65,23 @@ export default {
           subtitle: {
               text: plotConfiguration.subtitle
           },
+          credits: {
+                enabled: false
+            },
+            exporting: {
+                enabled: true, // 启用导出按钮
+                buttons: {
+                contextButton: {
+                    menuItems: [
+                    'printChart',
+                    'downloadPNG',
+                    'downloadJPEG',
+                    'downloadSVG',
+                    'downloadPDF'
+                    ]
+                }
+                }
+            },
           xAxis: {
               categories: categories,
               gridLineWidth: 1,
@@ -65,7 +95,7 @@ export default {
               {
                   gridLineDashStyle: 'Dash',
                   labels: {
-                      format: '{value}',
+                      format: '{value} %',
                       style: {
                           color: Highcharts.getOptions().colors[1]
                       }
@@ -77,12 +107,12 @@ export default {
                           color: Highcharts.getOptions().colors[1]
                       }
                   },
-                  tickPositions: [-0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5], // 设置左边的刻度值
-                  max: 0.5, // 设置最大值
-                  min: -0.5, // 设置最小值
+                  tickPositions: [-4, -3, -2, -1, 0, 1, 2, 3, 4], // 设置左边的刻度值
+                  max: 4, // 设置最大值
+                  min: -4, // 设置最小值
               },
               {
-                  tickPositions: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100], // 设置右边的刻度值
+                  tickPositions: [20, 30, 40, 50, 60, 70, 80], // 设置右边的刻度值
                   gridLineDashStyle: 'Dash',
                   labels: {
                       format: '{value} %',
@@ -139,11 +169,31 @@ export default {
 
       if (plotConfiguration.formatter) {
           H.tooltip.options.formatter = function () {
+            var barColor = this.points[0].color;
+
               return '<b>Day: ' + this.x + '</b><br/>' +
-                  'Avg Return (%): ' + this.points[0].y + '<br/>' +
-                  'Percent Positive (%) ' + this.points[1].y;
+                  'Avg Return (%): ' + this.points[0].y.toFixed(2) + '<br/>' +
+                  'Percent Positive (%) ' + this.points[1].y.toFixed(2);
           };
       }
+
+    // if (plotConfiguration.formatter) {
+    //     H.tooltip.options.formatter = function () {
+    //         // 获取当前柱子的颜色
+    //         var barColor = this.points[0].color;
+            
+    //         // 创建 CSS 样式字符串来设置边框和背景颜色
+    //         var style = `background-color: ${barColor};`;
+            
+    //         // 创建 'Avg Return (%) ' 和 'Percent Positive (%) ' 的圆点样式
+    //         var dotStyle = "width: 10px; height: 10px; background-color: " + barColor + "; display: inline-block; margin-right: 5px; border-radius: 50%;";
+            
+    //         return '<div style="' + style + '"><b>Day: ' + this.x + '</b><br/>' +
+    //             '<span style="' + dotStyle + '"></span> Avg Return (%): ' + this.points[0].y.toFixed(2) + '<br/>' +
+    //             '<span style="' + dotStyle + '"></span> Percent Positive (%) ' + this.points[1].y.toFixed(2) + '</div>';
+    //     };
+    // }
+
 
       const positiveColor = '#00B050';
       const negativeColor = '#C0504D';
@@ -191,8 +241,10 @@ export default {
 </script>
 
 <style>
-#container {
+#OCDContainer {
     width: 1100px;
     height: 400px;
+    border: 1px solid #ddd;
+    padding: 10px;
 }
 </style>

@@ -11,23 +11,11 @@
     <div class="others-container-top">
       
       <el-form-item
-          label="1.Category"
-        >
-          <el-select v-model="data.category" placeholder="Please select category" @change="changeCategory">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item
           prop="symbol"
         >
         <template slot="label">
             <label>
-              2.Symbol
+              1.Symbol
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
                   ><br
@@ -61,16 +49,64 @@
 						</template>
 					</el-autocomplete>
       </el-form-item>
+      
+      <el-form-item
+        label="2.Date Range"
+      >
+        <div class="select-container">
+        <div class="startAndEndBox">
+          <el-date-picker
+          ref="startDatePicker"
+          @change="pickStartDate"
+          value-format="yyyy"
+          v-model="data.start_date"
+          type="year"
+          align="right"
+          unlink-panels="true"
+          range-separator="to"
+          placeholder="Start Date"
+          :picker-options="startPickerOptions"
+          >
+        </el-date-picker>
+        <span>to</span>
+        <el-date-picker
+        ref="endDatePicker"
+          @change="pickEndDate"
+          value-format="yyyy"
+          v-model="data.end_date"
+          type="year"
+          align="right"
+          unlink-panels="true"
+          range-separator="to"
+          :picker-options="endPickerOptions"
+          placeholder="End Date"
+          >
+        </el-date-picker>
+        </div>
+      </div>
+      </el-form-item>
+      <el-form-item
+          label="2.Category"
+        >
+          <el-select v-model="data.category" placeholder="Please select category" @change="changeCategory">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
     </div>
     <div class="others-container-bottom">
-      <SNChart></SNChart>
+      <OCDChart></OCDChart>
     </div>
     </el-form>
   </div>
 </template>
 
 <script>
-import SNChart from "../SNChart/index.vue"
+import OCDChart from "../SNChart/OCDChart.vue"
 export default {
   name: 'Others',
   data() {
@@ -89,7 +125,7 @@ export default {
     }
   },
   components: {
-    SNChart
+    OCDChart
   },
   mounted() {
     this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
@@ -131,7 +167,7 @@ export default {
   display: grid;
   .others-container-top{
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-column-gap: 10px;
   }
   /deep/ input.el-input__inner{
@@ -145,6 +181,9 @@ export default {
     width: 100%;
   }
   /deep/ .el-select{
+    width: 100%;
+  }
+  /deep/ .el-date-editor.el-input, .el-date-editor.el-input__inner{
     width: 100%;
   }
 }
@@ -162,5 +201,18 @@ export default {
 
 .symbol-label {
 	font-weight: 500;
+}
+.select-container {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+}
+.startAndEndBox {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: space-between;
+  width: 100%;
+  span{
+    margin: 0 5px;
+  }
 }
 </style>
