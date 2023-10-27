@@ -1,0 +1,299 @@
+// -------------------------------------------------------------------------------------------
+// Copyright 2001 - 2021, Sundial Capital Research, Inc. All rights reserved
+// -------------------------------------------------------------------------------------------
+
+import {config}  from "./STDataFeedAccessUrl.js";
+// import { CIQ, quoteFeed, symbolLookupBase } from "./jsDemo/js/standard.js";
+import { CIQ, quoteFeed, symbolLookupBase } from "chartiq/js/standard.js";
+import axios from "axios"
+import { result } from "lodash";
+CIQ.activateImports(quoteFeed, symbolLookupBase); // so we can use CIQ.inheritsFrom
+/**
+ * An example of an asynchronous Lookup.Driver that uses ChartIQ's suggestive search as its source for symbol search
+ * @name CIQ.ChartEngine.Driver.Lookup.ChartIQ
+ * @constructor
+ * @param {string[]} exchanges An array of exchanges that can be searched against
+ * @private
+ * @since 6.0.0
+ */
+CIQ.ChartEngine.Driver.Lookup.ChartIQ = function (exchanges) {
+	this.exchanges = exchanges;
+	this.requestCounter = 0; //used to invalidate old requests
+};
+
+// CIQ.postAjax = function (params, arg1, arg2, arg3, arg4) {
+//     //console.log("postajax")
+// 	var server = new XMLHttpRequest();   
+// 	// url += (url.indexOf("?") === -1 ? "?" : "&") + new Date().getTime();
+// 	server.open("GET", params.url);
+
+//     server.setRequestHeader("Authorization", "Basic " + btoa(config.username+":"+config.password));  
+
+// 	server.onload = function () {
+// 		params.cb(this.status, this.responseText,{results:params.results,text:params.text});
+// 	};
+// 	server.onerror = function () {
+// 		cb(500);
+// 	};
+// 	server.send();
+// };
+CIQ.inheritsFrom(
+	CIQ.ChartEngine.Driver.Lookup.ChartIQ,
+	CIQ.ChartEngine.Driver.Lookup
+);
+/**
+ * @memberof CIQ.ChartEngine.Driver.Lookup.ChartIQ
+ * @param {string} text Text to search for
+ * @param {string} filter Any filter to be applied to the search results
+ * @param {number} maxResults Max number of results to return from the server
+ * @param {function} cb Callback upon results
+ * @private
+ * @since 6.0.0
+ */
+ const collator = new Intl.Collator('en');
+ function SortArray(x, y){
+    return collator.compare(x.data.symbol, y.data.symbol);
+}
+async function loadStocksList(){
+    let list = []
+    if (CIQ.store.state.chart.stocksList.length != 0) {
+        list = CIQ.store.state.chart.stocksList
+    }else{
+        var loader = document.querySelector(".loaderLookup");
+        if (loader) loader.show();  
+           
+        const res = await CIQ.axios.get(
+            config.getStocks, {cache:true}
+        )
+        loader.hide()
+        list = res.data
+        CIQ.store.commit('chart/getStocksList',res.data);
+    }
+    return list
+}
+async function loadIndexsList(){
+    let list = []
+    
+    if (CIQ.store.state.chart.indexsList.length != 0) {
+        list = CIQ.store.state.chart.indexsList
+    }else{
+        var loader = document.querySelector(".loaderLookup");
+        if (loader) loader.show();    
+        const res = await CIQ.axios.get(
+            config.getIndexes, {cache:true}
+        )
+        loader.hide()
+        list = res.data
+        CIQ.store.commit('chart/getIndexsList',res.data);  
+    }
+    return list
+}
+
+CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
+	text,
+	filter,
+	maxResults,
+	cb
+) {
+    if (filter == 'ALL'){
+        var resultsIndexsList = [];
+        let indexsList = await loadIndexsList()
+        let wholeWord = null
+        for (var i = 0; i < indexsList.length; i++) {
+            var fields = indexsList[i];
+            
+            var item = {
+                symbol: fields.symbol,
+                name: fields.name,
+                exchDisp: ""
+            };
+
+            if (item.symbol.indexOf(text) === -1 && item.symbol.indexOf(text.toUpperCase()) === -1)
+            {
+                continue
+            }
+
+            if(item.symbol.toUpperCase() === text.toUpperCase()){
+                wholeWord = {
+                    display: [item.symbol, item.name, item.exchDisp],
+                    data: item
+                }
+                continue
+            }
+
+            resultsIndexsList.push({
+                display: [item.symbol, item.name, item.exchDisp],
+                data: item
+            });
+        }
+        resultsIndexsList.sort(SortArray)
+
+        var resultsStocksList = [];
+        let stocksList = await loadStocksList()
+        for (var i = 0; i < stocksList.length; i++) {
+            var fields = stocksList[i];
+            var item = {
+                symbol: fields.stock,
+                name: fields.name,
+                exchDisp: " "
+            };
+            if (item.symbol.indexOf(text) === -1 && item.symbol.indexOf(text.toUpperCase()) === -1)
+            {
+                continue
+            }
+
+            if(item.symbol.toUpperCase() === text.toUpperCase()){
+                wholeWord = {
+                    display: [item.symbol, item.name, item.exchDisp],
+                    data: item
+                }
+                continue
+            }
+
+            resultsStocksList.push({
+                display: [item.symbol, item.name, item.exchDisp],
+                data: item
+            });
+        }
+        resultsStocksList.sort(SortArray)
+        let res = resultsIndexsList.concat(resultsStocksList)
+        if(wholeWord)   res.unshift(wholeWord)
+        cb(res);    
+    }
+    else if (filter == 'INDEXES'){
+			var results = [];
+            let indexsList = await loadIndexsList()
+            let wholeWord = null
+			for (var i = 0; i < indexsList.length; i++) {
+				var fields = indexsList[i];
+                
+                var item = {
+                    symbol: fields.symbol,
+                    name: fields.name,
+                    exchDisp: ""
+                };
+
+                if (item.symbol.indexOf(text) === -1 && item.symbol.indexOf(text.toUpperCase()) === -1)
+                {
+                    continue
+                }
+
+                if(item.symbol.toUpperCase() === text.toUpperCase()){
+                    wholeWord = {
+                        display: [item.symbol, item.name, item.exchDisp],
+                        data: item
+                    }
+                    continue
+                }
+
+				results.push({
+					display: [item.symbol, item.name, item.exchDisp],
+					data: item
+				});
+			}
+            results.sort(SortArray)
+            if(wholeWord)   results.unshift(wholeWord)
+			cb(results);    
+	}else if (filter == 'STOCKS') {
+        var results = [];
+        let stocksList = await loadStocksList()
+        let wholeWord = null
+        for (var i = 0; i < stocksList.length; i++) {
+            var fields = stocksList[i];
+            var item = {
+                symbol: fields.stock,
+                name: fields.name,
+                exchDisp: " "
+            };
+            if (item.symbol.indexOf(text) === -1 && item.symbol.indexOf(text.toUpperCase()) === -1)
+            {
+                continue
+            }
+
+            if(item.symbol.toUpperCase() === text.toUpperCase()){
+                wholeWord = {
+                    display: [item.symbol, item.name, item.exchDisp],
+                    data: item
+                }
+                continue
+            }
+            
+            results.push({
+                display: [item.symbol, item.name, item.exchDisp],
+                data: item
+            });
+        }
+        results.sort(SortArray)
+        if(wholeWord)   results.unshift(wholeWord)
+        cb(results);  
+    } else if (filter == 'MY FAVORITES'){
+        var results = []
+        var resu = CIQ.store.state.chart.favoriteSymbolList
+        // var resu = []
+        // const data = await CIQ.getFavorite()
+        // try{
+        //     resu = JSON.parse(data.favorite_indicator)
+        // }catch{}
+
+            try {
+                var listStock = []
+                if(CIQ.store.state.chart.stocksList.length == 0){
+                    var res = await loadStocksList()
+                    listStock = res.map(_obj=>{
+                        var newObj = {}
+                        newObj['name'] = _obj.name
+                        newObj['url'] = _obj.stock
+                        return newObj
+                    })
+                }else{
+                    listStock = CIQ.store.state.chart.stocksList.map(_obj=>{
+                        var newObj = {}
+                        newObj['name'] = _obj.name
+                        newObj['url'] = _obj.stock
+                        return newObj
+                    })
+                }
+
+                var listIndex = []
+                if(CIQ.store.state.chart.indexsList.length == 0){
+                    var res = await loadIndexsList()
+                    listIndex = res.map(_obj=>{
+                        var newObj = {}
+                        newObj['name'] = _obj.name
+                        newObj['url'] = _obj.symbol
+                        return newObj
+                    })
+                }else{
+                    listIndex = CIQ.store.state.chart.indexsList.map(_obj=>{
+                        var newObj = {}
+                        newObj['name'] = _obj.name
+                        newObj['url'] = _obj.symbol
+                        return newObj
+                    })
+                }
+
+                var list = [...listStock,...listIndex]
+                
+                resu.forEach(element => {
+                    var item = {
+                        symbol: element,
+                        name: list.find(item=>item.url == element).name,
+                        exchDisp: ""
+                    }
+                    
+                    if (item.symbol.toUpperCase().indexOf(text.toUpperCase()) !== -1){
+                        results.push({
+                            display: [item.symbol, item.name, item.exchDisp],
+                            data: item
+                        });
+                    }         
+                }); 
+               // console.log(results)
+            } catch (e) {}
+            results.sort(SortArray)    
+            cb(results);
+    }
+   
+
+};
+export { CIQ };

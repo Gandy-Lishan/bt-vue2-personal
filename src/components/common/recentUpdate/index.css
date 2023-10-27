@@ -1,0 +1,43 @@
+.el-card__header {
+	background-color: #f7f9fc;
+}
+.top {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.update-container .box-card {
+	width: 480px;
+}
+.title {
+	display: flex;
+	align-items: center;
+	font-size: 15px;
+	color: #666666;
+	font-weight: 400;
+	.notice {
+		margin-left: 15px;
+	}
+}
+.newsItem {
+	color: #666666;
+	font-size: 14px;
+	font-weight: 400;
+  cursor: pointer;
+	p {
+		margin: 0;
+		padding: 0;
+	}
+	.news-centent {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-top: 10px;
+		margin-bottom: 20px;
+		.date {
+			color: #999999;
+			font-size: 12px;
+		}
+	}
+}

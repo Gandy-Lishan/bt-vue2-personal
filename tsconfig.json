@@ -1,0 +1,37 @@
+{
+	"compilerOptions": {
+		"suppressImplicitAnyIndexErrors": true,
+		"noImplicitAny": true,
+		"target": "esnext",
+		"module": "esnext",
+		"strict": true,
+		"jsx": "preserve",
+		"allowJs": true,
+		"checkJs": false,
+		"importHelpers": true,
+		"moduleResolution": "node",
+		"experimentalDecorators": true,
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"sourceMap": true,
+		"typeRoots": ["src/@type","./node_modules/@types"],
+		"baseUrl": ".",
+		// "types": ["webpack-env"],
+		"paths": {
+			"@/*": ["src/*"]
+		},
+		"lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+	},
+
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.tsx",
+		"src/**/*.vue",
+		"tests/**/*.ts",
+		"tests/**/*.tsx"
+
+, "src/cache.js", "src/axios.js", "src/main.ts", "src/store/modules/app.js", "src/router/index.jsd.js", "src/components/common/recentUpdate/index.js", "src/components/common/chart/resources.js"	],
+
+	"exclude": ["node_modules","src/@type/**/*"]
+}
