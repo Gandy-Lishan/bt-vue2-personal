@@ -1,0 +1,834 @@
+[
+    {
+        "symbol": "SPX",
+        "name": "S&P 500 (SPX)"
+    },
+    {
+        "symbol": "DJIA",
+        "name": "Dow Jones Industrial (DJIA)"
+    },
+    {
+        "symbol": "COMP",
+        "name": "NASDAQ Composite (COMP)"
+    },
+    {
+        "symbol": "RUT",
+        "name": "Russell 2000 (RUT)"
+    },
+    {
+        "symbol": "NDX",
+        "name": "NASDAQ 100 (NDX)"
+    },
+    {
+        "symbol": "NYA",
+        "name": "NYSE Composite (NYA)"
+    },
+    {
+        "symbol": "IBB",
+        "name": "Biotechnology (IBB)"
+    },
+    {
+        "symbol": "XLY",
+        "name": "Consumer Discretionary (XLY)"
+    },
+    {
+        "symbol": "XLP",
+        "name": "Consumer Staples (XLP)"
+    },
+    {
+        "symbol": "XLE",
+        "name": "Energy (XLE)"
+    },
+    {
+        "symbol": "XLF",
+        "name": "Financials (XLF)"
+    },
+    {
+        "symbol": "XLV",
+        "name": "Healthcare (XLV)"
+    },
+    {
+        "symbol": "XLI",
+        "name": "Industrials (XLI)"
+    },
+    {
+        "symbol": "XLK",
+        "name": "Technology (XLK)"
+    },
+    {
+        "symbol": "XLU",
+        "name": "Utilities (XLU)"
+    },
+    {
+        "symbol": "XLB",
+        "name": "Basic Materials (XLB)"
+    },
+    {
+        "symbol": "XHB",
+        "name": "Homebuilders (XHB)"
+    },
+    {
+        "symbol": "GLD",
+        "name": "Gold (GLD)"
+    },
+    {
+        "symbol": "EEM",
+        "name": "Emerging Markets (EEM)"
+    },
+    {
+        "symbol": "TLT",
+        "name": "20-Year Treasuries (TLT)"
+    },
+    {
+        "symbol": "thirty",
+        "name": "30-Year Treasury"
+    },
+    {
+        "symbol": "ten",
+        "name": "10-Year Treasury"
+    },
+    {
+        "symbol": "two",
+        "name": "2-Year Treasury"
+    },
+    {
+        "symbol": "five",
+        "name": "5-Year Treasury"
+    },
+    {
+        "symbol": "LQD",
+        "name": "Investment Grade (LQD)"
+    },
+    {
+        "symbol": "JNK",
+        "name": "High Yield Bonds (JNK)"
+    },
+    {
+        "symbol": "HYG",
+        "name": "High Yield Corp (HYG)"
+    },
+    {
+        "symbol": "BND",
+        "name": "Total Bond (BND)"
+    },
+    {
+        "symbol": "aussie",
+        "name": "Aussie Dollar"
+    },
+    {
+        "symbol": "pound",
+        "name": "British Pound"
+    },
+    {
+        "symbol": "canada",
+        "name": "Canadian Dollar"
+    },
+    {
+        "symbol": "euro",
+        "name": "Euro"
+    },
+    {
+        "symbol": "peso",
+        "name": "Mexican Peso"
+    },
+    {
+        "symbol": "franc",
+        "name": "Swiss Franc"
+    },
+    {
+        "symbol": "dollar",
+        "name": "US Dollar"
+    },
+    {
+        "symbol": "crude",
+        "name": "Crude Oil"
+    },
+    {
+        "symbol": "USO",
+        "name": "Crude Oil (USO)"
+    },
+    {
+        "symbol": "gold",
+        "name": "Gold"
+    },
+    {
+        "symbol": "copper",
+        "name": "Copper"
+    },
+    {
+        "symbol": "unleaded",
+        "name": "Unleaded Gas"
+    },
+    {
+        "symbol": "heating",
+        "name": "Heating Oil"
+    },
+    {
+        "symbol": "OIH",
+        "name": "Crude Oil Services (OIH)"
+    },
+    {
+        "symbol": "GDX",
+        "name": "Gold Miners (GDX)"
+    },
+    {
+        "symbol": "GDXJ",
+        "name": "Gold Miners - Junior (GDXJ)"
+    },
+    {
+        "symbol": "palladium",
+        "name": "Palladium"
+    },
+    {
+        "symbol": "platinum",
+        "name": "Platinum"
+    },
+    {
+        "symbol": "silver",
+        "name": "Silver"
+    },
+    {
+        "symbol": "corn",
+        "name": "Corn"
+    },
+    {
+        "symbol": "soybeans",
+        "name": "Soybeans"
+    },
+    {
+        "symbol": "wheat",
+        "name": "Wheat"
+    },
+    {
+        "symbol": "coffee",
+        "name": "Coffee"
+    },
+    {
+        "symbol": "cotton",
+        "name": "Cotton"
+    },
+    {
+        "symbol": "cocoa",
+        "name": "Cocoa"
+    },
+    {
+        "symbol": "lumber",
+        "name": "Lumber"
+    },
+    {
+        "symbol": "oj",
+        "name": "Orange Juice"
+    },
+    {
+        "symbol": "sugar",
+        "name": "Sugar"
+    },
+    {
+        "symbol": "cattle",
+        "name": "Cattle"
+    },
+    {
+        "symbol": "hogs",
+        "name": "Hogs"
+    },
+    {
+        "symbol": "UNG",
+        "name": "Natural Gas (UNG)"
+    },
+    {
+        "symbol": "XME",
+        "name": "Metals & Mining (XME)"
+    },
+    {
+        "symbol": "XOP",
+        "name": "Oil & Gas (XOP)"
+    },
+    {
+        "symbol": "IYR",
+        "name": "Real Estate (IYR)"
+    },
+    {
+        "symbol": "VNQ",
+        "name": "REITs (VNQ)"
+    },
+    {
+        "symbol": "XRT",
+        "name": "Retail (XRT)"
+    },
+    {
+        "symbol": "SMH",
+        "name": "Semiconductors (SMH)"
+    },
+    {
+        "symbol": "VXX",
+        "name": "Volatility (VXX)"
+    },
+    {
+        "symbol": "SPY",
+        "name": "S&P 500 ETF (SPY)"
+    },
+    {
+        "symbol": "QQQ",
+        "name": "NASDAQ 100 ETF (QQQ)"
+    },
+    {
+        "symbol": "IWM",
+        "name": "Russell 2000 ETF (IWM)"
+    },
+    {
+        "symbol": "HUI",
+        "name": "Gold Bugs Index (HUI)"
+    },
+    {
+        "symbol": "ewa",
+        "name": "Australia (EWA)"
+    },
+    {
+        "symbol": "ewz",
+        "name": "Brazil (EWZ)"
+    },
+    {
+        "symbol": "ewc",
+        "name": "Canada (EWC)"
+    },
+    {
+        "symbol": "fxi",
+        "name": "China (FXI)"
+    },
+    {
+        "symbol": "ewq",
+        "name": "France (EWQ)"
+    },
+    {
+        "symbol": "ewg",
+        "name": "Germany (EWG)"
+    },
+    {
+        "symbol": "pin",
+        "name": "India (PIN)"
+    },
+    {
+        "symbol": "ewi",
+        "name": "Italy (EWI)"
+    },
+    {
+        "symbol": "ewj",
+        "name": "Japan (EWJ)"
+    },
+    {
+        "symbol": "eww",
+        "name": "Mexico (EWW)"
+    },
+    {
+        "symbol": "rsx",
+        "name": "Russia (RSX)"
+    },
+    {
+        "symbol": "ewp",
+        "name": "Spain (EWP)"
+    },
+    {
+        "symbol": "ewu",
+        "name": "United Kingdom (EWU)"
+    },
+    {
+        "symbol": "yen",
+        "name": "Japanese Yen"
+    },
+    {
+        "symbol": "crb",
+        "name": "CRB Index"
+    },
+    {
+        "symbol": "dba",
+        "name": "PowerShares Agriculture (DBA)"
+    },
+    {
+        "symbol": "SLV",
+        "name": "Silver (SLV)"
+    },
+    {
+        "symbol": "DIA",
+        "name": "Dow Jones Industrial (DIA)"
+    },
+    {
+        "symbol": "natural",
+        "name": "Natural Gas"
+    },
+    {
+        "symbol": "oats",
+        "name": "Oats"
+    },
+    {
+        "symbol": "eurodollar",
+        "name": "Eurodollar"
+    },
+    {
+        "symbol": "VOX",
+        "name": "Telecommunications (VOX)"
+    },
+    {
+        "symbol": "EZU",
+        "name": "Eurozone (EZU)"
+    },
+    {
+        "symbol": "FDN",
+        "name": "Internet Index Fund (FDN)"
+    },
+    {
+        "symbol": "IYT",
+        "name": "Transportation (IYT)"
+    },
+    {
+        "symbol": "VIX",
+        "name": "CBOE Volatility Index (VIX)"
+    },
+    {
+        "symbol": "TSX",
+        "name": "Toronto Stock Exchange (TSX)"
+    },
+    {
+        "symbol": "eurostoxx",
+        "name": "Euro Stocks 50 (EUROSTOXX)"
+    },
+    {
+        "symbol": "ftse",
+        "name": "FTSE 100 (FTSE)"
+    },
+    {
+        "symbol": "cac",
+        "name": "CAC 40 (CAC)"
+    },
+    {
+        "symbol": "dax",
+        "name": "DAX (DAX)"
+    },
+    {
+        "symbol": "SMI",
+        "name": "Swiss Market Index (SMI)"
+    },
+    {
+        "symbol": "nky",
+        "name": "Nikkei 225 (NKY)"
+    },
+    {
+        "symbol": "hsi",
+        "name": "Hang Seng (HSI)"
+    },
+    {
+        "symbol": "shcomp",
+        "name": "Shanghai (SHCOMP)"
+    },
+    {
+        "symbol": "bitcoin",
+        "name": "Bitcoin"
+    },
+    {
+        "symbol": "ARGT",
+        "name": "Argentina (ARGT)"
+    },
+    {
+        "symbol": "EWO",
+        "name": "Austria (EWO)"
+    },
+    {
+        "symbol": "EWK",
+        "name": "Belgium (EWK)"
+    },
+    {
+        "symbol": "ECH",
+        "name": "Chile (ECH)"
+    },
+    {
+        "symbol": "GXG",
+        "name": "Colombia (GXG)"
+    },
+    {
+        "symbol": "EGPT",
+        "name": "Egypt (EGPT)"
+    },
+    {
+        "symbol": "GREK",
+        "name": "Greece (GREK)"
+    },
+    {
+        "symbol": "EWH",
+        "name": "Hong Kong (EWH)"
+    },
+    {
+        "symbol": "IDX",
+        "name": "Indonesia (IDX)"
+    },
+    {
+        "symbol": "EIRL",
+        "name": "Ireland (EIRL)"
+    },
+    {
+        "symbol": "EIS",
+        "name": "Israel (EIS)"
+    },
+    {
+        "symbol": "EWM",
+        "name": "Malaysia (EWM)"
+    },
+    {
+        "symbol": "EWN",
+        "name": "Netherlands (EWN)"
+    },
+    {
+        "symbol": "ENZL",
+        "name": "New Zealand (ENZL)"
+    },
+    {
+        "symbol": "NGE",
+        "name": "Nigeria (NGE)"
+    },
+    {
+        "symbol": "NORW",
+        "name": "Norway (NORW)"
+    },
+    {
+        "symbol": "EPU",
+        "name": "Peru (EPU)"
+    },
+    {
+        "symbol": "EPHE",
+        "name": "Philippines (EPHE)"
+    },
+    {
+        "symbol": "PLND",
+        "name": "Poland (PLND)"
+    },
+    {
+        "symbol": "PGAL",
+        "name": "Portugal (PGAL)"
+    },
+    {
+        "symbol": "QAT",
+        "name": "Qatar (QAT)"
+    },
+    {
+        "symbol": "KSA",
+        "name": "Saudi Arabia (KSA)"
+    },
+    {
+        "symbol": "EWS",
+        "name": "Singapore (EWS)"
+    },
+    {
+        "symbol": "EZA",
+        "name": "South Africa (EZA)"
+    },
+    {
+        "symbol": "EWY",
+        "name": "South Korea (EWY)"
+    },
+    {
+        "symbol": "EWD",
+        "name": "Sweden (EWD)"
+    },
+    {
+        "symbol": "EWL",
+        "name": "Switzerland (EWL)"
+    },
+    {
+        "symbol": "EWT",
+        "name": "Taiwan (EWT)"
+    },
+    {
+        "symbol": "THD",
+        "name": "Thailand (THD)"
+    },
+    {
+        "symbol": "TUR",
+        "name": "Turkey (TUR)"
+    },
+    {
+        "symbol": "UAE",
+        "name": "United Arab Emirates (UAE)"
+    },
+    {
+        "symbol": "VNM",
+        "name": "Vietnam (VNM)"
+    },
+    {
+        "symbol": "AMLP",
+        "name": "Alerian MLP (AMLP)"
+    },
+    {
+        "symbol": "AMJ",
+        "name": "JPM Alerian MLP (AMJ)"
+    },
+    {
+        "symbol": "MLPI",
+        "name": "UBS Alerian MLP (MLPI)"
+    },
+    {
+        "symbol": "pak",
+        "name": "Pakistan (PAK)"
+    },
+    {
+        "symbol": "inda",
+        "name": "India (INDA)"
+    },
+    {
+        "symbol": "epol",
+        "name": "Poland (EPOL)"
+    },
+    {
+        "symbol": "eido",
+        "name": "Indonesia (EIDO)"
+    },
+    {
+        "symbol": "ibov",
+        "name": "Brazil Stock Index (IBOV)"
+    },
+    {
+        "symbol": "KOSPI",
+        "name": "Korea Stock Index (KOSPI)"
+    },
+    {
+        "symbol": "MEXBOL",
+        "name": "BMV IPC (MEXBOL)"
+    },
+    {
+        "symbol": "MXEF",
+        "name": "Emerging Markets (MXEF)"
+    },
+    {
+        "symbol": "EFA",
+        "name": "MSCI EAFE ETF (EFA)"
+    },
+    {
+        "symbol": "AS30",
+        "name": "AS30 Index"
+    },
+    {
+        "symbol": "ATX",
+        "name": "ATX Index"
+    },
+    {
+        "symbol": "BEL20",
+        "name": "BEL20 Index"
+    },
+    {
+        "symbol": "HEX",
+        "name": "HEX Index"
+    },
+    {
+        "symbol": "ISEQ",
+        "name": "ISEQ Index"
+    },
+    {
+        "symbol": "TA-35",
+        "name": "TA-35 Index"
+    },
+    {
+        "symbol": "FTSEMIB",
+        "name": "FTSEMIB Index"
+    },
+    {
+        "symbol": "AEX",
+        "name": "AEX Index"
+    },
+    {
+        "symbol": "NZSE",
+        "name": "NZSE Index"
+    },
+    {
+        "symbol": "OSEBX",
+        "name": "OSEBX Index"
+    },
+    {
+        "symbol": "PSI20",
+        "name": "PSI20 Index"
+    },
+    {
+        "symbol": "STI",
+        "name": "STI Index"
+    },
+    {
+        "symbol": "IBEX",
+        "name": "IBEX Index"
+    },
+    {
+        "symbol": "OMX",
+        "name": "OMX Index"
+    },
+    {
+        "symbol": "MXWD",
+        "name": "MXWD Index"
+    },
+    {
+        "symbol": "MXWO",
+        "name": "MXWO Index"
+    },
+    {
+        "symbol": "NIFTY",
+        "name": "NIfty 50 Index"
+    },
+    {
+        "symbol": "GDM",
+        "name": "GDM Index"
+    },
+    {
+        "symbol": "HEAVYTRUCK",
+        "name": "Heavy Truck Index"
+    },
+    {
+        "symbol": "IVOL",
+        "name": "IVOL"
+    },
+    {
+        "symbol": "COW",
+        "name": "COW"
+    },
+    {
+        "symbol": "MLPI",
+        "name": "UBS Alerian MLP (MLPI)"
+    },
+    {
+        "symbol": "ICLN",
+        "name": "Clean Energy (ICLN)"
+    },
+    {
+        "symbol": "MJ",
+        "name": "Alternative Harvest (MJ)"
+    },
+    {
+        "symbol": "SENSEX",
+        "name": "SENSEX Index"
+    },
+    {
+        "symbol": "JPY",
+        "name": "Japanese Yen"
+    },
+    {
+        "symbol": "RAG",
+        "name": "Russell 3000 Growth Index"
+    },
+    {
+        "symbol": "RAY",
+        "name": "Russell 3000 Index"
+    },
+    {
+        "symbol": "RAV",
+        "name": "Russell 3000 Value Index"
+    },
+    {
+        "symbol": "RWR",
+        "name": "Dow Jones REIT ETF"
+    },
+    {
+        "symbol": "NAPMPMI",
+        "name": "PMI Manufacturing Index"
+    },
+    {
+        "symbol": "BLOK",
+        "name": "Amplify Trans Data ETF (BLOK)"
+    },
+    {
+        "symbol": "TAN",
+        "name": "Invesco Solar (TAN)"
+    },
+    {
+        "symbol": "IYT",
+        "name": "iShares US Trans (IYT)"
+    },
+    {
+        "symbol": "XBI",
+        "name": "S&P Biotech (XBI)"
+    },
+    {
+        "symbol": "IBUY",
+        "name": "Amplify Online Retail (IBUY)"
+    },
+    {
+        "symbol": "LIT",
+        "name": "Lithuium & Battery (LIT)"
+    },
+    {
+        "symbol": "EMQQ",
+        "name": "Emerging Mkts Internet (EMQQ)"
+    },
+    {
+        "symbol": "WCLD",
+        "name": "Cloud Computing (WCLD)"
+    },
+    {
+        "symbol": "KWEB",
+        "name": "KWEB"
+    },
+    {
+        "symbol": "XLRE",
+        "name": "XLRE"
+    },
+    {
+        "symbol": "PUTW",
+        "name": "PUTW"
+    },
+    {
+        "symbol": "XLC",
+        "name": "XLC"
+    },
+    {
+        "symbol": "KRE",
+        "name": "KRE"
+    },
+    {
+        "symbol": "KBE",
+        "name": "KBE"
+    },
+    {
+        "symbol": "KRBN",
+        "name": "KRBN"
+    },
+    {
+        "symbol": "ITB",
+        "name": "ITB"
+    },
+    {
+        "symbol": "COPX",
+        "name": "COPX"
+    },
+    {
+        "symbol": "REMX",
+        "name": "REMX"
+    },
+    {
+        "symbol": "EFNL",
+        "name": "Finland (EFNL)"
+    },
+    {
+        "symbol": "EDEN",
+        "name": "Denmark (EDEN)"
+    },
+    {
+        "symbol": "BCOMSP",
+        "name": "Bloomberg Spot Index "
+    },
+    {
+        "symbol": "lumber_future",
+        "name": "Lumber Future"
+    },
+    {
+        "symbol": "IWF",
+        "name": "Russell 1000 Growth ETF (IWF)"
+    },
+    {
+        "symbol": "IWB",
+        "name": "Russell 1000 ETF (IWB)"
+    },
+    {
+        "symbol": "IWD",
+        "name": "Ressell 1000 ETF Value (IWD)"
+    },
+    {
+        "symbol": "CDX",
+        "name": "Credit Default Swaps (CDX Index)"
+    },
+    {
+        "symbol": "USGG10YR",
+        "name": "10 year yield "
+    }
+]

@@ -1,0 +1,206 @@
+/*
+ element-ui 组件样式
+*/
+.el-dialog__wrapper .el-dialog {
+  width: 637px;
+}
+.el-dialog__wrapper .el-dialog .el-dialog__header .el-dialog__body {
+  width: 600px;
+  height: auto;
+}
+.el-form-item__label {
+  padding: 0px;
+}
+.el-dialog__body {
+  padding: 30px 20px 20px 20px;
+}
+.el-form-item__label {
+  width: 136px;
+}
+.el-radio__label {
+  font-size: 10px;
+}
+.el-radio-group label {
+  margin-right: 10px;
+}
+.el-input__inner {
+  padding: 0 6px;
+}
+.el-submenu__title,
+.el-menu-item span {
+  color: #5b9bd1;
+}
+.el-submenu__title {
+  height: 78px !important;
+  display: flex !important;
+  align-items: center !important;
+  color: #6b7280 !important;
+  font-weight: 500 !important;
+}
+.el-submenu__title:hover{
+  color:#5b9bd1 !important;
+}
+
+.el-submenu__title:hover i{
+  color:#5b9bd1 !important;
+}
+
+.el-icon-arrow-down {display: none;}
+.el-menu--inline .el-menu-item {
+  padding-left: 10px !important;
+}
+.brainstorm-select {
+  background-color: #d7d7d7;
+}
+.brainstorm-select .el-input__inner, .el-select-dropdown__item.is-disabled:hover{
+  background-color: #d7d7d7;
+  margin-left: 0;
+  font-weight: bold;
+  color: #333333;
+}
+#tab-seventh{
+  padding: 0;
+}
+.exit-with-custom-tim-frame-container /deep/.el-input__prefix{
+  left: 24px !important;
+}
+
+.aiscanner-date .el-input__inner {
+  margin-left: 0;
+}
+.aiscanner-table .demo-table-expand {
+	font-size: 0;
+}
+.aiscanner-table .demo-table-expand label {
+  width: 13.5rem;
+  color: #99a9bf;
+}
+.aiscanner-table .demo-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 50%;
+}
+.aiscanner-table .cell{
+  display: flex !important;
+  align-items: center !important;
+}
+.aiscanner-table .dark-row {
+  background: rgb(219 219 219) !important
+}
+
+.aiscanner-container .el-input-group__prepend {
+  background-color: #fff;
+}
+.aiscanner-container .el-input__inner {
+  margin-left: 0;
+  line-height: 25px;
+}
+.aiscanner-container .el-select .el-input {
+  width: 106px;
+}
+
+/* 修改主题色 */
+.el-radio__input.is-checked .el-radio__inner {
+  border-color: #5b9bd1;
+  background: #5b9bd1;
+}
+.el-radio__input.is-checked+.el-radio__label {
+  color: #5b9bd1;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  background-color: #5b9bd1;
+  border-color: #5b9bd1;
+}
+.el-checkbox__input.is-checked+.el-checkbox__label {
+  color: #5b9bd1;
+}
+.backtest_container .excludeBox .el-checkbox__input.is-checked+.el-checkbox__label {
+  margin-bottom: 18px;
+}
+.el-button--primary {
+  color: #FFF;
+  background-color: #5b9bd1;
+  border-color: #5b9bd1;
+}
+
+.el-menu--horizontal>.el-menu-item.is-active {
+  border-bottom: 2px solid #5b9bd1;
+  color: #5b9bd1 !important;
+}
+.el-menu--horizontal>.el-menu-item.news-icon.is-active {
+  border-bottom: none;
+  color: #5b9bd1 !important;
+}
+
+.el-notification {
+  z-index: 9999 !important;
+}
+
+.vue-simple-progress-text{
+  position: relative;
+  font-size: 16px !important;
+  top: -30px;
+  color: #FFF !important;
+}
+.update-container .el-card__body {
+	height: 500px;
+  overflow-y: auto;
+}
+/* .el-checkbox-button:first-child .el-checkbox-button__inner{
+  border-left: 1px solid #DCDFE6;
+} */
+
+.el-dropdown-link {
+	cursor: pointer;
+	font-weight: 500;
+	line-height: 24px;
+	display: inline-flex;
+	align-items: center;
+	padding: 0;
+	transition: color 0.3s ease-in-out;
+	color: #6b7280;
+	border: none;
+	outline: none;
+	background: transparent;
+}
+.el-dropdown-link:hover {
+	color: #111827;
+}
+.el-icon-arrow-down {
+	font-size: 12px;
+}
+.el-input__icon {
+	line-height: 27px !important;
+}
+.MI-form-container .el-form-item__label {
+  width: auto;
+  margin-right: 10px;
+}
+.MI-form-container .el-input-group__append{
+  background-color: #ffffff;
+}
+.MI-form-container .el-input-group__append, .el-input-group__prepend {
+  padding: 0 5px;
+}
+
+.MI-form-container .el-table--mini .el-table__cell {
+  padding: 5px 0px 10px 0px;
+}
+.dark-row {
+  background: rgb(219 219 219) !important
+}
+.el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap>.el-form-item__label:before, .el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before{
+  content: '';
+}
+.DOM-form-container .el-input__icon {
+	line-height: 20px !important;
+}
+.specific-form-container .el-input__icon {
+	line-height: 20px !important;
+}
+/* text.highcharts-credits{
+  display: none;
+} */
+.mouth-days-value {
+  width: 100% !important;
+}
