@@ -1,0 +1,16 @@
+{
+  "id": "3117164",
+  "name": "new version",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "新版本图标",
+  "glyphs": [
+    {
+      "icon_id": "11493558",
+      "name": "问号",
+      "font_class": "wenhao",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    }
+  ]
+}
