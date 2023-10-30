@@ -18,8 +18,8 @@ export default {
 			const sourceMap = {
 				indexsList: { labelField: 'name', urlField: 'symbol', type: 'Symbol' },
 				stocksList: { labelField: 'name', urlField: 'stock', type: 'Symbol' },
-				sentimentIndicatorList: {
-					labelField: 'value',
+				indicatorsList: {
+					labelField: 'chart_name',
 					urlField: 'url',
 					updateField: 'updated',
 					type: 'Indicator'
@@ -60,7 +60,7 @@ export default {
 						res = await getStocksList()
 					} else if (source === 'indexsList') {
 						res = await getIndexsList()
-					} else if (source === 'sentimentIndicatorList') {
+					} else if (source === 'indicatorsList') {
 						res = await getIndicatorsList()
 					}
 
@@ -76,8 +76,12 @@ export default {
 							}else {
 								mappedItem.label = item['chart_name']
 							}
-							// 限制只展示 Daily 的列表项
-							if (updateField == "Daily") {
+							// // 限制只展示 Daily 的列表项
+							// if (updateField == "Daily") {
+							// 	mappedItem.updated = item[updateField];
+							// 	return mappedItem;
+							// }
+							if(item[updateField]) {
 								mappedItem.updated = item[updateField];
 								return mappedItem;
 							}
@@ -94,7 +98,7 @@ export default {
 		},
     async loadData() {
       // 初次渲染 两个列表都要请求
-      let sentimentList = await this.fetchDataList('sentimentIndicatorList')
+      let sentimentList = await this.fetchDataList('indicatorsList')
 			sentimentList = sentimentList.filter(item => item !== null && item !== undefined && item !== '');
 		  const stocksList = await this.fetchDataList('stocksList')
 			const indexsList = await this.fetchDataList('indexsList')
