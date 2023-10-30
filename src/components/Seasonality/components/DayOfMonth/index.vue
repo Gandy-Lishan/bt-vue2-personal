@@ -2,13 +2,13 @@
   <div>
     <el-form
 		ref="DOMForm"
-		class="DOM-form-container"
+		class="DOM-form-container seasonality-form-container"
 		:model="data"
 		label-position="top"
 		size="mini"
     :rules="rules"
 	>
-    <div class="DOM-container-top">
+    <div class=" top">
       <el-form-item
           prop="symbol"
         >
@@ -98,15 +98,15 @@
         </el-select>
       </el-form-item>
     </div>
-    <div class="DOM-container-bottom">
-      <SNChart></SNChart>
+    <div class="DOM-container-bottom bottom">
+      <DOMChart :plotConfiguration="plotConfiguration"></DOMChart>
     </div>
     </el-form>
   </div>
 </template>
 
 <script>
-import SNChart from "../SNChart/DOMChart.vue"
+import DOMChart from "../SNChart/DOMChart.vue"
 export default {
   name: 'DayOfMonth',
   data() {
@@ -138,10 +138,45 @@ export default {
         endPickerOptions: {
           disabledDate: this.handleDisabledEndDate
         },
+        plotConfiguration: {
+          title: 'Seasonality in the S&P 500',
+          subtitle: 'Month of October',
+          xAxisTitle: 'Day Of The Month',
+          customScale: true, // 如果需要自定义刻度
+          formatter: true, // 如果需要自定义数据提示
+          scaleSettings: {
+              positiveColor: '#00B050',
+              negativeColor: '#C0504D',
+              yAxis_1: {
+              tickPositions: [-0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5],
+              max: 0.5,
+              min: -0.5,
+              format: '{value}'
+              },
+              yAxis_2: {
+              tickPositions: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+              format: '{value} %'
+              },
+          }
+          },
     }
   },
   components: {
-    SNChart
+    DOMChart
+  },
+  watch: {
+     data: {
+      handler(newVal, _) {
+        if(Object.keys(newVal).length == 0) return
+        this.plotConfiguration = {
+          ...this.plotConfiguration,
+          title: `Seasonality in the ${newVal.symbol || 'S&P 500'}`,
+          subtitle: `Month of ${this.options[newVal.monthSelection].label}`
+        }
+      },
+      deep: true,
+      immediate: true,
+     },
   },
   mounted() {
     this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
@@ -191,62 +226,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.DOM-form-container{
-  display: grid;
-  grid-row-gap: 20px;
-  min-height: 610px;
-  padding: 20px;
-  .DOM-container-top{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 10px;
-  }
-  /deep/ input.el-input__inner{
-    margin: 0;
-  }
-  /deep/ .el-range-editor--mini.el-input__inner{
-    margin: 0;
-    width: 100%;
-  }
-  /deep/ .el-autocomplete{
-    width: 100%;
-  }
-  /deep/ .el-select{
-    width: 100%;
-  }
-  /deep/ .el-date-editor.el-input, .el-date-editor.el-input__inner{
-    width: 100%;
-  }
+@import "../../index.less";
+.seasonality-form-container .el-date-editor.el-input.el-input--mini.el-input--prefix.el-input--suffix.el-date-editor--year {
+  width: 100%;
 }
-.custom-option {
-	display: flex;
-	align-items: center; /* 垂直居中对齐 */
-	justify-content: space-between;
-}
-.symbol-url{
-  font-size: 12px;
-  margin-right: 10px;
-  text-align: center;
-	color: #999999;
-}
-
-.symbol-label {
-	font-weight: 500;
-}
-.DOM-container-bottom{
-  margin: 0 auto;
-}
-.select-container {
-  display: flex;
-  align-items: center; /* 垂直居中 */
-}
-.startAndEndBox {
-  display: flex;
-  align-items: center; /* 垂直居中 */
+.seasonality-form-container .startAndEndBox {
   justify-content: space-between;
   width: 100%;
-  span{
-    margin: 0 5px;
-  }
 }
 </style>

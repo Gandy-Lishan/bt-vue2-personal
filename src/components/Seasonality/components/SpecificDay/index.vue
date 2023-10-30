@@ -2,13 +2,13 @@
   <div>
     <el-form
 		ref="specificForm"
-		class="specific-form-container"
+		class="specific-form-container seasonality-form-container"
 		:model="data"
 		label-position="top"
 		size="mini"
     :rules="rules"
 	>
-    <div class="specific-container-top">
+    <div class="specific-container-top top">
       <el-form-item
           prop="symbol"
         >
@@ -144,8 +144,8 @@
         </div>
       </el-form-item>
     </div>
-    <div class="specific-container-bottom">
-      <SDChart></SDChart>
+    <div class="specific-container-bottom bottom">
+      <SDChart :plotConfiguration="plotConfiguration"></SDChart>
     </div>
     </el-form>
   </div>
@@ -203,17 +203,54 @@ export default {
       },
       dynamicTags: ['1 day'],
       inputVisible: true,
-      inputValue: '' 
+      inputValue: '',
+      plotConfiguration: {
+        title: 'Performance Surrounding Independence Day',
+        subtitle: 'S&P 500, 1950-2011',
+        xAxisTitle: 'Days Surrounding Holiday',
+        customScale: true, // 如果需要自定义刻度
+        formatter: true, // 如果需要自定义数据提示
+        scaleSettings: {
+          positiveColor: '#00B050',
+          negativeColor: '#C0504D',
+          yAxis_1: {
+          tickPositions: [-0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3],
+          max: 0.3,
+          min: -0.3,
+          format: '{value} %'
+          },
+          yAxis_2: {
+          tickPositions: [20, 30, 40, 50, 60, 70, 80],
+          format: '{value} %'
+          },
+        }
+    },
   }
   },
   components: {
     SDChart,
     MonthDays
   },
+  watch: {
+    data: {
+    handler(newVal, _) {
+      if(Object.keys(newVal).length == 0) return
+      this.plotConfiguration = {
+        ...this.plotConfiguration,
+        subtitle: `${newVal.symbol || 'S&P 500'} ${newVal.start_date}-${newVal.end_date}`
+      }
+    },
+    deep: true,
+    immediate: true,
+    },
+  },
   created() {
     const currentYear = new Date().getFullYear();
+    const month = new Date().getMonth() + 1; // 获取当前月份（0 到 11，需要加 1）
+    const day = new Date().getDate(); // 获取当前日期（1 到 31）
     this.data.end_date = (currentYear) + ''
     this.data.start_date = (currentYear - this.data.period) + ''
+    this.data.customizeDate = `${month}-${day}`
 
     // 创建一个函数来生成标签
     function generateLabel(year, range) {
@@ -235,7 +272,6 @@ export default {
   },
   mounted() {
     this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
-    console.log('this.dropdownList', this.dropdownList)
   },
   computed: {
     monthDaysText() {
@@ -316,12 +352,34 @@ export default {
 
     handleInputConfirm() {
       let inputValue = this.inputValue;
-      if (inputValue) {
-        this.dynamicTags.push(inputValue + ' day');
+      const regex = /^[1-9]\d*$/
+      if (inputValue && regex.test(inputValue)) {
+        const day = `${inputValue} ${inputValue > 1 ? 'days': 'day'}`
+        this.dynamicTags.push(day);
       }
       this.inputVisible = false;
       this.inputValue = '';
-    }
+      const result = this.dynamicTags.map((dateStr) => {
+      // 使用正则表达式匹配数字和时间单位
+      const match = dateStr.match(/(-?\d+) (\w+)/);
+      if (match) {
+        const number = parseInt(match[1], 10); // 解析数字部分
+        return number
+      }
+      });
+      // 复制数组中的数字到新数组
+      const symmetricArray = [...result, 0]
+
+      // 添加每个数字的相反数到新数组
+      result.forEach((number) => {
+        symmetricArray.push(-number);
+      });
+
+      // 对新数组进行排序
+      symmetricArray.sort((a, b) => a - b);
+
+      console.log('result', symmetricArray)
+  }
   }
 }
 </script>
@@ -341,7 +399,7 @@ export default {
     margin: 0;
   }
   .el-date-editor.el-input.el-input--mini.el-input--prefix.el-input--suffix.el-date-editor--year {
-    width: 150px;
+    width: 150px; // 不一样
   }
   /deep/ .el-autocomplete{
     width: 100%;
@@ -407,7 +465,7 @@ export default {
   padding: 20px 5px 10px 5px;
   align-items: center;
   border: 1px dashed #5b9bd1;
-  border-radius: 4px;
+  border-radius: 0 0 4px 4px;
   border-top: unset;
   flex-wrap: wrap;
   .el-tag--small{
@@ -436,4 +494,5 @@ export default {
     width: 100%;
   }
 }
+@import "../../index.less";
 </style>
