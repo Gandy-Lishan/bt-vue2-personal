@@ -19,6 +19,12 @@
         <el-menu-item class="ai-link" v-if="activeIndex==3"
           >AI Stock Scanner</el-menu-item
         >
+        <el-menu-item class="my-indicator-link home-link" index="6"
+          >My Indicator</el-menu-item
+        >
+        <el-menu-item class="seasonality-link home-link" index="7"
+          >Seasonality</el-menu-item
+        >
         <el-menu-item class="home-link" v-if="activeIndex==1"
           >BacktestEdge</el-menu-item
         >
@@ -89,8 +95,12 @@ export default {
         this.activeIndex = '1'
       } else if (to.path == '/scannerai' || to.name == 'scannerai_chart') {
         this.activeIndex = '3'
+      }else if(to.path == '/myindicator' || to.name ==  'MIList'){
+        this.activeIndex = '6'
+      }else if(to.path == '/seasonality' || to.name == 'seasonality'){
+        this.activeIndex = '7'
       }
-    }
+      }
   },
   mounted() {
     if (this.$route.name == 'strategy') {
@@ -99,6 +109,10 @@ export default {
       this.activeIndex = '1'
     } else if (this.$route.name == 'scannerai' || this.$route.name == 'scannerai_chart') {
       this.activeIndex = '3'
+    } else if(this.$route.name == 'myindicator' || this.$route.name == 'MIList'){
+      this.activeIndex = '6'
+    } else if(this.$route.name == 'seasonality' || this.$route.name == 'seasonality'){
+      this.activeIndex = '7'
     }
   },
   methods: {
@@ -128,6 +142,16 @@ export default {
         // path = 'https://users.sentimentrader.com/users/account/support/'
         path = '/doc/disclaimer'
         window.open(path, '_blank')
+      } else if (key == '6') {
+        path = this.$router.resolve({
+          path: '/myindicator'
+        }).href
+        this.$router.push(path)
+      } else if (key == '7') {
+        path = this.$router.resolve({
+          path: '/seasonality'
+        }).href
+        this.$router.push(path)
       }
     },
   }
