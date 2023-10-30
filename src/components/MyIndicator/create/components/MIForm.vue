@@ -699,7 +699,7 @@ export default {
           weight: (weight * 100).toFixed(2),
           indicator: (sentimentList.find(ele => ele.url === mul_indicator_obj[`indicator_${index + 1}`]) || symbolList.find(ele => ele.url === mul_indicator_obj[`indicator_${index + 1}`]))?.label,
           indicator_url: mul_indicator_obj[`indicator_${index + 1}`],
-          weightValidErrMsg: ''
+          weightValidErrMsg: '',
         }));
         console.log('处理后的结果', this.weightData);
       } else {  //其他类型
@@ -810,6 +810,9 @@ export default {
         this.data.time_frame = 'daily'
       }
       console.log('当前最大的 timeframe 是', this.data.time_frame)
+
+      // 更新weightList并刷新chartiq状态
+      this.$store.dispatch('chart/set_miFormWeightedListChange',this.weightData,item.type)
     },
     addRow(row) {
       /*
