@@ -2,13 +2,13 @@
   <div>
     <el-form
 		ref="othersForm"
-		class="others-form-container"
+		class="others-form-container seasonality-form-container"
 		:model="data"
 		label-position="top"
 		size="mini"
     :rules="rules"
 	>
-    <div class="others-container-top">
+    <div class="others-container-top top">
       
       <el-form-item
           prop="symbol"
@@ -98,8 +98,8 @@
         </el-select>
       </el-form-item>
     </div>
-    <div class="others-container-bottom">
-      <OCDChart></OCDChart>
+    <div class="others-container-bottom bottom">
+      <OCDChart :plotConfiguration="plotConfiguration"></OCDChart>
     </div>
     </el-form>
   </div>
@@ -130,10 +130,47 @@ export default {
         endPickerOptions: {
           disabledDate: this.handleDisabledEndDate
         },
+        plotConfiguration: {
+          title: 'Nasdaq Composite Avg Return Month',
+          subtitle: '1971-2011',
+          xAxisTitle: 'Month',
+          customScale: true, // 如果需要自定义刻度
+          formatter: true, // 如果需要自定义数据提示
+          scaleSettings: {
+              positiveColor: '#00B050',
+              negativeColor: '#C0504D',
+              yAxis_1: {
+              tickPositions: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
+              max: 4,
+              min: -4,
+              format: '{value} %'
+              },
+              yAxis_2: {
+              tickPositions: [20, 30, 40, 50, 60, 70, 80],
+              format: '{value} %'
+              },
+          }
+        },
     }
   },
   components: {
     OCDChart
+  },
+  watch: {
+    data: {
+    handler(newVal, _) {
+      if(Object.keys(newVal).length == 0) return
+      const category = this.options[newVal.category].label.includes('Month') ? 'Month' : 'WeekDay'
+      this.plotConfiguration = {
+        ...this.plotConfiguration,
+        title: `${newVal.symbol || 'S&P 500'} Avg Return By ${category}`,
+        subtitle: `${newVal.start_date} - ${newVal.end_date}`,
+        xAxisTitle: `${category}`,
+      }
+    },
+    deep: true,
+    immediate: true,
+    },
   },
   mounted() {
     this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
@@ -178,60 +215,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.others-form-container{
-  display: grid;
-  grid-row-gap: 20px;
-  min-height: 610px;
-  padding: 20px;
-  .others-container-top{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 10px;
-  }
-  /deep/ input.el-input__inner{
-    margin: 0;
-  }
-  /deep/ .el-range-editor--mini.el-input__inner{
-    margin: 0;
-    width: 100%;
-  }
-  /deep/ .el-autocomplete{
-    width: 100%;
-  }
-  /deep/ .el-select{
-    width: 100%;
-  }
-  /deep/ .el-date-editor.el-input, .el-date-editor.el-input__inner{
-    width: 100%;
-  }
+@import "../../index.less";
+.seasonality-form-container .el-date-editor.el-input.el-input--mini.el-input--prefix.el-input--suffix.el-date-editor--year {
+  width: 100%;
 }
-.custom-option {
-	display: flex;
-	align-items: center; /* 垂直居中对齐 */
-	justify-content: space-between;
-}
-.symbol-url{
-  font-size: 12px;
-  margin-right: 10px;
-  text-align: center;
-	color: #999999;
-}
-
-.symbol-label {
-	font-weight: 500;
-}
-.select-container {
-  display: flex;
-  align-items: center; /* 垂直居中 */
-}
-.startAndEndBox {
-  display: flex;
-  align-items: center; /* 垂直居中 */
+.seasonality-form-container .startAndEndBox {
   justify-content: space-between;
   width: 100%;
-  span{
-    margin: 0 5px;
-  }
 }
-.others-container-bottom{margin: 0 auto;}
 </style>
