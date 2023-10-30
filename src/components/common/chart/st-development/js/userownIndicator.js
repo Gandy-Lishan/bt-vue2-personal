@@ -10,13 +10,139 @@
  
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
     // user's own indicator的 weight indicator加载函数单独设定
-    CIQ.displayWeightOwnIndicator = function(newData,oldData){
-        console.log('displayWeightOwnIndicator',newData,oldData)
-        // 提取移除列表和新增列表
-        // 分离symbol和indicator
-        // symbol加载，识别第一个为默认图标symbol,其它symbol作为serie加载
-        // indicator加载，可以直接套用CIQ.getIndicatorMatedata, 图表组件摧毁时会清空chartiq状态包括extremeValue
+    CIQ.displayWeightOwnIndicator = async function(previousState,updatedState){
+        console.log('updatedState',previousState,updatedState)
+        // 提取移除列表和新增列表,
+        // const { addedItems, removedItems } = findAddedAndRemovedItems(previousState.map(item=>item.indicator_url), updatedState.map(item=>item.indicator_url));
+        // // 移除项
+        // // for(var item in removedItems){
+        // //     var sd = CIQ.stxx.layout.studies[item]; 
+        // //     var serie = CIQ.stxx.layout.series[item]; 
+        // //     console.log(sd,serie)
+        // // }
+
+        // // 加载项
+        // const addedItemsIndicator = addedItems.filter(item=> CIQ.findSentiIndicator(null,item) || CIQ.isOwnIndicator(item))
+        // const addedItemsSymbol = addedItems.filter(item=> !(CIQ.findSentiIndicator(null,item) || CIQ.isOwnIndicator(item)))
+        // // symbol加载，识别第一个为默认图标symbol,其它symbol作为serie加载
+
+        // console.log('addedItems',addedItems,addedItemsIndicator,addedItemsSymbol)
+        
+        // // indicator加载
+        // await getWeightOwnMatedata(addedItems)
+        // var symbol
+        // CIQ.stxx.loadChart(    { symbol: symbol?symbol:'SPX', indicator:updatedState.map(item=>item.indicator_url)}, function () {
+
+        // }) 
     }
+    const getWeightOwnMatedata = function(indicatorList){
+        var color = ["#5B9BD1","#368DF0","#7257F2","#21CE6B","#24CBB7","#EC4D4E","#F4803D"]
+   
+        let indicatorHeight = CIQ.setPanelHeight(indicatorList)
+    
+        let resArr = []
+        let sentiUrlList = []
+    
+        return new Promise(resolve=>{
+            for(var i in indicatorList){
+               if(CIQ.isOwnIndicator(indicatorList[i])){
+               /********************lishan modify end*************************/
+                    var newStudy = {
+                        inputs: { Period: 13, Overlay: false},
+                        outputs: 
+                        {indicatorClose:color[i%7],description: '',url:indicatorList[i]},
+                        panelHeight:indicatorHeight,
+                        parameters: { init: {
+                            studyOverZonesEnabled: false,
+                            studyOverBoughtValue: 999,
+                            studyOverBoughtColor: "#FF0000",
+                            studyOverSoldValue: 999,
+                            studyOverSoldColor: "#00DD00",
+                        }},
+                        attributes:{
+                            studyOverBoughtValue:{"step":0.01},
+                            studyOverSoldValue:{"step":0.01}
+                        }
+                    }
+                    
+                    var str = JSON.stringify(newStudy);                                   
+                    str = str.replace(/indicatorClose/g, indicatorList[i]);
+                    newStudy = JSON.parse(str)                                     
+                    
+                    CIQ.Studies.studyLibrary[indicatorList[i]] = newStudy    
+
+                       /********************lishan modify start*************************/
+                       var indicatorName = indicatorList[i].match(/(CREATE|HASH)/) ? indicatorList[i].split(/(CREATE|HASH)/)[0] : indicatorList[i]
+                       /********************lishan modify end*************************/
+                      CIQ.Studies.addStudy(CIQ.stxx,indicatorList[i],{display:indicatorName})   
+
+                    continue
+                }
+    
+                var queryUrl =  config.indicatorMetadata + 
+                "?indicator=" + indicatorList[i];
+                let _res = new Promise((resolve,reject)=>{ 
+                    CIQ.axios.get(
+                        queryUrl,
+                    ).then(res=>{
+                        resolve(res.data)
+                    }).catch(err=>{
+                        reject(err)
+                    })
+                })
+                resArr.push(_res)
+                sentiUrlList.push(indicatorList[i])
+            }
+    
+            // handle all response for sentiment indicator information and load them
+            Promise.all(resArr).then(res => {
+                var newQuotes = res;
+                
+                for(var i in newQuotes){
+                    if (newQuotes[i] !== null){
+                        var newStudy = {
+                            inputs: { Period: 13, Overlay: false},
+                            outputs: 
+                            {indicatorClose:color[i%7],description: newQuotes[i].description,url:sentiUrlList[i]},
+                            panelHeight:indicatorHeight,
+                            parameters: { init: {
+                                studyOverZonesEnabled: false,
+                                studyOverBoughtValue: newQuotes[i].opt_extreme?newQuotes[i].opt_extreme:NaN,
+                                studyOverBoughtColor: "#FF0000",
+                                studyOverSoldValue: newQuotes[i].pess_extreme?newQuotes[i].pess_extreme:NaN,
+                                studyOverSoldColor: "#00DD00",
+                            }},
+                            attributes:{
+                                studyOverBoughtValue:{"step":0.01},
+                                studyOverSoldValue:{"step":0.01}
+                            }
+                        }
+                        
+                            var str = JSON.stringify(newStudy);                                   
+                            str = str.replace(/indicatorClose/g, sentiUrlList[i]);
+                            newStudy = JSON.parse(str)                                     
+                            
+                            CIQ.Studies.studyLibrary[sentiUrlList[i]] = newStudy
+                            CIQ.Studies.addStudy(CIQ.stxx,sentiUrlList[i])    
+                        
+                    }
+                }   
+                resolve()                     
+            }).catch(err => {
+                
+            })
+        })
+    
+    }
+    function findAddedAndRemovedItems(previousList, updatedList) {
+        // 找出添加的项
+        const addedItems = updatedList.filter(item => !previousList.includes(item));
+      
+        // 找出移除的项
+        const removedItems = previousList.filter(item => !updatedList.includes(item));
+      
+        return { addedItems, removedItems };
+      }
 
     // 以下管理user's own indicator 图表函数
     CIQ.updateUserOwnIndicator = function(newData,oldData){
