@@ -40,17 +40,18 @@ let __st_js_indicatorType_ = _exports => {
 		}
 		return true
 	}
-	 /********************lishan modify start*************************/
-	CIQ.isOwnIndicator = function(indicator){
-    // 定义正则表达式
-    const pattern = /^.*CREATE[0-9]{0,4}-[0-9]{0,4}-[0-9]+_[0-9]+_[0-9]+-[0-9]+-[0-9]+$/
+	/********************lishan modify start*************************/
+	CIQ.isOwnIndicator = function(indicator) {
+		// 定义正则表达式
+		// const pattern = /^.*CREATE[0-9]{0,4}-[0-9]{0,4}-[0-9]+_[0-9]+_[0-9]+-[0-9]+-[0-9]+$/
+		const pattern = /CREATE/
 
-    if(!pattern.test(indicator)){
-        return false
-    }
-    return true
+		if (!pattern.test(indicator)) {
+			return false
+		}
+		return true
 	}
- /********************lishan modify end*************************/
+	/********************lishan modify end*************************/
 	CIQ.findSymbolIndicator = function(label, field) {
 		let symbolOhlcvList = [
 			//form
