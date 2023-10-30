@@ -11,29 +11,29 @@
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
     // user's own indicator的 weight indicator加载函数单独设定
     CIQ.displayWeightOwnIndicator = async function(previousState,updatedState){
-        
+        console.log('updatedState',previousState,updatedState)
         // 提取移除列表和新增列表,
-        const { addedItems, removedItems } = findAddedAndRemovedItems(previousState.map(item=>item.indicator_url), updatedState.map(item=>item.indicator_url));
-        // 移除项
-        // for(var item in removedItems){
-        //     var sd = CIQ.stxx.layout.studies[item]; 
-        //     var serie = CIQ.stxx.layout.series[item]; 
-        //     console.log(sd,serie)
-        // }
+        // const { addedItems, removedItems } = findAddedAndRemovedItems(previousState.map(item=>item.indicator_url), updatedState.map(item=>item.indicator_url));
+        // // 移除项
+        // // for(var item in removedItems){
+        // //     var sd = CIQ.stxx.layout.studies[item]; 
+        // //     var serie = CIQ.stxx.layout.series[item]; 
+        // //     console.log(sd,serie)
+        // // }
 
-        // 加载项
-        const addedItemsIndicator = addedItems.filter(item=> CIQ.findSentiIndicator(null,item) || CIQ.isOwnIndicator(item))
-        const addedItemsSymbol = addedItems.filter(item=> !(CIQ.findSentiIndicator(null,item) || CIQ.isOwnIndicator(item)))
-        // symbol加载，识别第一个为默认图标symbol,其它symbol作为serie加载
+        // // 加载项
+        // const addedItemsIndicator = addedItems.filter(item=> CIQ.findSentiIndicator(null,item) || CIQ.isOwnIndicator(item))
+        // const addedItemsSymbol = addedItems.filter(item=> !(CIQ.findSentiIndicator(null,item) || CIQ.isOwnIndicator(item)))
+        // // symbol加载，识别第一个为默认图标symbol,其它symbol作为serie加载
 
-        console.log('addedItems',addedItems,addedItemsIndicator,addedItemsSymbol)
+        // console.log('addedItems',addedItems,addedItemsIndicator,addedItemsSymbol)
         
-        // indicator加载
-        await getWeightOwnMatedata(addedItems)
-        var symbol
-        CIQ.stxx.loadChart(    { symbol: symbol?symbol:'SPX', indicator:updatedState.map(item=>item.indicator_url)}, function () {
+        // // indicator加载
+        // await getWeightOwnMatedata(addedItems)
+        // var symbol
+        // CIQ.stxx.loadChart(    { symbol: symbol?symbol:'SPX', indicator:updatedState.map(item=>item.indicator_url)}, function () {
 
-        }) 
+        // }) 
     }
     const getWeightOwnMatedata = function(indicatorList){
         var color = ["#5B9BD1","#368DF0","#7257F2","#21CE6B","#24CBB7","#EC4D4E","#F4803D"]
