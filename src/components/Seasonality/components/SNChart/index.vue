@@ -8,7 +8,6 @@
 import Highcharts from "highcharts";
 import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
-import data from "../SpecificDay/mock";
 
 
 export default {
@@ -27,6 +26,17 @@ export default {
         padding: '10px'
       }
     }
+  },
+  watch: {
+    plotConfiguration: {
+    handler(newVal, _) {
+      if(Object.keys(newVal).length == 0) return
+      this.plotConfiguration = newVal
+      this.plotData(this.dataList, this.plotConfiguration);
+    },
+    deep: true,
+    immediate: true,
+    },
   },
   mounted() {
     Exporting(Highcharts);

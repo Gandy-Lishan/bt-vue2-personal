@@ -1,0 +1,117 @@
+.seasonality-form-container {
+  display: grid;
+  grid-row-gap: 20px;
+  min-height: 610px;
+  padding: 20px;
+  .top {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 10px;
+    align-items: start;
+  }
+  /deep/ input.el-input__inner{
+    margin: 0;
+  }
+  .el-date-editor.el-input.el-input--mini.el-input--prefix.el-input--suffix.el-date-editor--year {
+    width: 150px;
+  }
+  /deep/ .el-range-editor--mini.el-input__inner{
+    margin: 0;
+    width: 100%;
+  }
+  /deep/ .el-date-editor.el-input, .el-date-editor.el-input__inner{
+    width: 100%;
+  }
+  /deep/ .el-autocomplete{
+    width: 100%;
+  }
+  /deep/ .el-select{
+    width: 100%;
+  }
+  .input-new-tag.el-input.el-input--mini {
+    width: 67px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  .input-new-tag.el-input.el-input--mini /deep/ input.el-input__inner {
+    width: 67px;
+    display: inline-block;
+  }
+  .dateTag{
+    display: flex;
+    padding: 20px 5px 10px 5px;
+    align-items: center;
+    border: 1px dashed #5b9bd1;
+    border-radius: 0 0 4px 4px;
+    border-top: unset;
+    flex-wrap: wrap;
+    .el-tag--small{
+      text-align: center;
+      width: 67px;
+      height: 28px;
+      line-height: 28px;
+      margin-right: 10px;
+      background: #5b9bd1;
+      border: 1px solid #5b9bd1;
+      margin-bottom: 10px;
+    }
+  }
+  .dateSelect{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .popover{
+      width: 100%;
+    }
+  }
+  .select-container {
+    display: flex;
+    align-items: center; /* 垂直居中 */
+  }
+  .startAndEndBox {
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    margin-left: 5px; /* 可根据需要调整间距 */
+    span{
+      margin: 0 5px;
+    }
+  }
+  .customize-box{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 5px;
+    border-bottom: 1px dashed #8e9fc5;
+    border-right: 1px dashed #5b9bd1;
+    border-left: 1px dashed #5b9bd1;
+    span{
+      font-weight: 500;
+      color: #606266;
+      font-size: 14px;
+      margin-right: 10px;
+    }
+  }
+  .bottom{
+    margin: 0 auto;
+  }
+  .button-new-tag {
+    margin-bottom: 10px;
+  }
+}
+
+.custom-option {
+  display: flex;
+  align-items: center; /* 垂直居中对齐 */
+  justify-content: space-between;
+}
+.symbol-url{
+  font-size: 12px;
+  margin-right: 10px;
+  text-align: center;
+  color: #999999;
+}
+
+.symbol-label {
+  font-weight: 500;
+}
