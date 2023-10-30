@@ -361,7 +361,7 @@ export default {
       loading: false,
       symbolList: [],
       weightData: [
-        {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: ''}
+        {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
       ],
       loadTest: 'Loading...',
       loading: false,
@@ -690,7 +690,6 @@ export default {
       this.data.indicator_1_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_1_url;
       this.data.indicator_2_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_2_url;
       this.data.name = data.name;
-
       //如果类型时weight_C
       if (data.mul_indicator && data.indicator_weight && data.calculate == 'weight_c') {
         const mul_indicator_obj = JSON.parse(data.mul_indicator);
@@ -700,6 +699,7 @@ export default {
           indicator: (sentimentList.find(ele => ele.url === mul_indicator_obj[`indicator_${index + 1}`]) || symbolList.find(ele => ele.url === mul_indicator_obj[`indicator_${index + 1}`]))?.label,
           indicator_url: mul_indicator_obj[`indicator_${index + 1}`],
           weightValidErrMsg: '',
+          type: sentimentList.find(ele => ele.url === mul_indicator_obj[`indicator_${index + 1}`])?'Indicator':'Symbol'
         }));
         console.log('处理后的结果', this.weightData);
       } else {  //其他类型
@@ -801,6 +801,8 @@ export default {
       console.log('item', item, row)
       row.indicator = item.label
       row.indicator_url = item.url
+      row.type = item.type
+      
       console.log(this.weightData)
 
       const type = item.type
@@ -812,7 +814,7 @@ export default {
       console.log('当前最大的 timeframe 是', this.data.time_frame)
 
       // 更新weightList并刷新chartiq状态
-      this.$store.dispatch('chart/set_miFormWeightedListChange',this.weightData,item.type)
+      this.$store.dispatch('chart/set_miFormWeightedListChange',this.weightData)
     },
     addRow(row) {
       /*
@@ -823,7 +825,7 @@ export default {
       else {weight = ''}
       this.weightData.push({ weight, indicator: '', indicator_url: '', weightValidErrMsg: '' });
       */
-      this.weightData.push({ weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '' });
+      this.weightData.push({ weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: '' });
     },
     deleteRow(index) {this.weightData.splice(index, 1)},
   }
