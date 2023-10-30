@@ -37,7 +37,6 @@ const state = {
 	indexsList: [], //chartiq
 	formateTechnicalList: [], //chartiq 和builtinList不同，这个是只给表单提供的techList
 	spanPeriod: {},
-	sentimentIndicatorList: [],
 	isBTChartReady: false,
 	chartLoadingSetting: {
 		// 控制 setup 的loading 状态
@@ -218,9 +217,6 @@ const mutations = {
 	SET_SPAN_PERIOD: (state, val) => {
 		state.spanPeriod = val
 	},
-	getSentimentList(state, list) {
-		state.sentimentIndicatorList = list
-	},
 	SET_CHART_READY_STATE(state, _state) {
 		state.isBTChartReady = _state
 	},
@@ -239,11 +235,11 @@ const actions = {
 	set_miFormWeightedListChange({ commit }, val) {
 		return new Promise(resolve => {
 		
-			const newVal = val
-			const oldVal = state.miFormWeightedList
-			CIQ.displayWeightOwnIndicator(newVal,oldVal)
+			const newVal = JSON.parse(JSON.stringify(val));
+			const oldVal = JSON.parse(JSON.stringify(state.miFormWeightedList));
+            CIQ.displayWeightOwnIndicator(oldVal,newVal)
 			
-			commit('miFormWeightedListChange', val)
+			commit('miFormWeightedListChange', newVal)
 			resolve()
 		})
 	},
