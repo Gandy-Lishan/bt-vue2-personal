@@ -280,6 +280,7 @@
 import CheckInput from './CheckInput.vue'
 import { saveMyIndicators, getMyIndicatorData, delMyIndicator } from '@/service/service'
 import {  validatePercentageRule } from "@/utils/formValidate"
+import { off } from 'process'
 export default {
   name: 'MIForm',
   props: {
@@ -498,12 +499,18 @@ export default {
           this.data.indicator_1_url,
           {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism}
         )
-      }else{
+      }else if(this.data.categories.includes('Indicator')){
         CIQ.previewUserOwnIndicator(
           [this.data.indicator_1_url,this.data.indicator_2_url,this.data.name+'CREATE'+url],
           this.data.name+'CREATE'+url,
           null,
           {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism}
+        )
+      }else if(this.data.categories == 'WIC'){
+        CIQ.previewWeightedUserOwnIndicator(
+          [...this.weightData.map(item=>item.indicator_url),this.data.name+'CREATE'+url],
+          this.data.name+'CREATE'+url,
+          CIQ.stxx.chart.symbol
         )
       }
 
@@ -827,7 +834,11 @@ export default {
       */
       this.weightData.push({ weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: '' });
     },
-    deleteRow(index) {this.weightData.splice(index, 1)},
+    deleteRow(index) {
+      this.weightData.splice(index, 1)
+      // 更新weightList并刷新chartiq状态
+      this.$store.dispatch('chart/set_miFormWeightedListChange',this.weightData)
+    },
   }
 }
 </script>

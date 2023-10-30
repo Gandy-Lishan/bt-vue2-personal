@@ -10,32 +10,35 @@
  
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
     // user's own indicator的 weight indicator加载函数单独设定
+    var symbol
+
     CIQ.displayWeightOwnIndicator = async function(previousState,updatedState){
-        console.log('updatedState',previousState,updatedState)
-        // 提取移除列表和新增列表,
-        // const { addedItems, removedItems } = findAddedAndRemovedItems(previousState.map(item=>item.indicator_url), updatedState.map(item=>item.indicator_url));
-        // // 移除项
-        // // for(var item in removedItems){
-        // //     var sd = CIQ.stxx.layout.studies[item]; 
-        // //     var serie = CIQ.stxx.layout.series[item]; 
-        // //     console.log(sd,serie)
-        // // }
+        // 提取indicator移除列表和新增列表,
+        const { addedItems, removedItems } = findAddedAndRemovedItems(previousState, updatedState);
 
-        // // 加载项
-        // const addedItemsIndicator = addedItems.filter(item=> CIQ.findSentiIndicator(null,item) || CIQ.isOwnIndicator(item))
-        // const addedItemsSymbol = addedItems.filter(item=> !(CIQ.findSentiIndicator(null,item) || CIQ.isOwnIndicator(item)))
-        // // symbol加载，识别第一个为默认图标symbol,其它symbol作为serie加载
-
-        // console.log('addedItems',addedItems,addedItemsIndicator,addedItemsSymbol)
+        console.log('addedItems',addedItems,removedItems)
         
-        // // indicator加载
-        // await getWeightOwnMatedata(addedItems)
-        // var symbol
-        // CIQ.stxx.loadChart(    { symbol: symbol?symbol:'SPX', indicator:updatedState.map(item=>item.indicator_url)}, function () {
+        
+        // symbol加载，识别第一个为默认图标symbol,其它symbol作为serie加载,必须遍历加载，不然很难管理
+        manageSymbolSerie(updatedState.filter(item=> item.type=='Symbol'))
 
-        // }) 
+        // indicator移除
+        for (var studyInstanceName in CIQ.stxx.layout.studies) {
+            var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+            if (removedItems.find(item=>item.indicator_url==sd.type)){
+                CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+            }
+        }
+        // indicator加载
+        await addIndicatorStudy(addedItems.map(item=>item.indicator_url))
+        CIQ.stxx.loadChart(    { symbol: symbol?symbol:'SPX', indicator:updatedState.map(item=>item.indicator_url)}, function () {
+
+        }) 
+        
     }
-    const getWeightOwnMatedata = function(indicatorList){
+
+    // 同metaData
+    const addIndicatorStudy = function(indicatorList){
         var color = ["#5B9BD1","#368DF0","#7257F2","#21CE6B","#24CBB7","#EC4D4E","#F4803D"]
    
         let indicatorHeight = CIQ.setPanelHeight(indicatorList)
@@ -134,15 +137,57 @@
         })
     
     }
-    function findAddedAndRemovedItems(previousList, updatedList) {
-        // 找出添加的项
-        const addedItems = updatedList.filter(item => !previousList.includes(item));
+    const manageSymbolSerie = function(symbolList){
+        // 先清空series
+        for(var s in CIQ.stxx.chart.series){
+            var series=CIQ.stxx.chart.series[s];
+            CIQ.stxx.removeSeries(series);
+        }
+
+        for(var i in symbolList){
+            // 第一个symbol为默认图表symbol
+            if(i==0){
+                CIQ.objIndicator = []
+                symbol = symbolList[i].indicator_url
+            }else{
+                CIQ.stxx.addSeries(symbolList[i].indicator_url, {
+                    display:symbolList[i].indicator, 
+                    isComparison: false, 
+                    color: "#368DF0",
+                    yAxis:{ 
+                        position:"left",
+                        textStyle:"#FFBE00"
+                    },
+                });
+            }
+        }
+    }
+    function findAddedAndRemovedItems(previousState, currentState) {
+        const addedItems = currentState.filter(currentItem => 
+          !previousState.some(previousItem => 
+            JSON.stringify(previousItem) === JSON.stringify(currentItem)
+          )
+        ).filter(item=> item.type=='Indicator');
       
-        // 找出移除的项
-        const removedItems = previousList.filter(item => !updatedList.includes(item));
+        const removedItems = previousState.filter(previousItem =>
+          !currentState.some(currentItem =>
+            JSON.stringify(currentItem) === JSON.stringify(previousItem)
+          )
+        ).filter(item=> item.type=='Indicator');
       
-        return { addedItems, removedItems };
+        return {
+          addedItems,
+          removedItems
+        };
       }
+    CIQ.previewWeightedUserOwnIndicator = async function(indicatorList,indicator,symbol){
+        await addIndicatorStudy([indicator])
+        CIQ.stxx.loadChart({ symbol: symbol, indicator:indicatorList}, function () {
+
+        }) 
+    }
+
+
 
     // 以下管理user's own indicator 图表函数
     CIQ.updateUserOwnIndicator = function(newData,oldData){
