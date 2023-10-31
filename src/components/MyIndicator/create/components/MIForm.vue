@@ -687,9 +687,6 @@ export default {
       this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
     async displayData(data) {
-      // 从localStorage获取数据
-      const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
-      const symbolList = JSON.parse(localStorage.getItem('symbolList'))
 
       this.data.categories = data.mul_indicator && data.indicator_weight ? 'WIC' : data.categories;
       this.data.indicator_1 = data.mul_indicator && data.indicator_weight ? '' : data.former;
@@ -699,16 +696,7 @@ export default {
       this.data.name = data.name;
       //如果类型时weight_C
       if (data.mul_indicator && data.indicator_weight && data.calculate == 'weight_c') {
-        const mul_indicator_obj = JSON.parse(data.mul_indicator);
-        const indicator_weight_arr = data.indicator_weight.includes('_') ? data.indicator_weight.split('_') : [data.indicator_weight];
-        this.weightData = indicator_weight_arr.map((weight, index) => ({
-          weight: (weight * 100).toFixed(2),
-          indicator: (sentimentList.find(ele => ele.url === mul_indicator_obj[`indicator_${index + 1}`]) || symbolList.find(ele => ele.url === mul_indicator_obj[`indicator_${index + 1}`]))?.label,
-          indicator_url: mul_indicator_obj[`indicator_${index + 1}`],
-          weightValidErrMsg: '',
-          type: sentimentList.find(ele => ele.url === mul_indicator_obj[`indicator_${index + 1}`])?'Indicator':'Symbol'
-        }));
-        console.log('处理后的结果', this.weightData);
+        this.weightData = data.weightData
       } else {  //其他类型
         const configMap = [
           { key: 'ma', index: 0 },
