@@ -386,7 +386,9 @@ export const CommonMethodsMixin = {
 				'backtest_period',
 				'trade_price',
 				'exclude_oo',
-				'description'
+				'description',
+				'market_environment',
+				'index_moving_average_slope'
 			]
 			const backtestInfoSelectedProps = [
 				'entry_description',
@@ -417,7 +419,9 @@ export const CommonMethodsMixin = {
 				'favorites',
 				'pk',
 				'old_uuid',
-				'results'
+				'results',
+				'market_environment',
+				'index_moving_average_slope'
 			]
 			let backtestParams = Object.assign(
 				{},
