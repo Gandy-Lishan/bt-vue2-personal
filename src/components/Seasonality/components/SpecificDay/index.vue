@@ -165,15 +165,16 @@ export default {
         holidays: 0,
         start_date: (new Date().getFullYear() - 5).toString(),
         end_date:  new Date().getFullYear().toString(),
-        customizeDate: null
+        customizeDate: null,
+        shift: [1]
       },
       dropdownList: [],
       options: [
-        {label: 'New Year\'s Day', value: 0},
+        {label: "New Year's Day", value: 0},
         {label: 'Independence Day', value: 1},
         {label: 'MLK Jr. Day', value: 2},
         {label: 'Labor Day', value: 3},
-        {label: 'President\'s Day', value: 4},
+        {label: "President's Day", value: 4},
         {label: 'Thanksgiving Day', value: 5},
         {label: 'Good Friday', value: 6},
         {label: 'Christmas Day', value: 7},
@@ -237,7 +238,13 @@ export default {
       if(Object.keys(newVal).length == 0) return
       this.plotConfiguration = {
         ...this.plotConfiguration,
-        subtitle: `${newVal.symbol || 'S&P 500'} ${newVal.start_date}-${newVal.end_date}`
+        subtitle: `${newVal.symbol || 'S&P 500'} ${newVal.start_date}-${newVal.end_date}`,
+        start_date: newVal.start_date,
+        end_date: newVal.end_date,
+        symbol: newVal.symbol || 'S&P 500',
+        holidays: this.options[newVal.holidays].label,
+        customizeDate: newVal.customizeDate,
+        shift: newVal.shift
       }
     },
     deep: true,
@@ -340,8 +347,9 @@ export default {
       console.log(value)
     },
     handleClose(tag) {
-        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
-      },
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      this.data.shift = this.getShift(this.dynamicTags)
+    },
 
     showInput() {
       this.inputVisible = true;
@@ -349,7 +357,27 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus();
       });
     },
+    getShift(dynamicTags) {
+      const result = dynamicTags.map((dateStr) => {
+      // 使用正则表达式匹配数字和时间单位
+      const match = dateStr.match(/(-?\d+) (\w+)/);
+      if (match) {
+        const number = parseInt(match[1], 10); // 解析数字部分
+        return number
+      }
+      });
+      // 复制数组中的数字到新数组
+      const symmetricArray = [...result]
 
+      // 添加每个数字的相反数到新数组
+      // result.forEach((number) => {
+      //   symmetricArray.push(-number);
+      // });
+
+      // 对新数组进行排序
+      symmetricArray.sort((a, b) => a - b);
+      return symmetricArray
+    },
     handleInputConfirm() {
       let inputValue = this.inputValue;
       const regex = /^[1-9]\d*$/
@@ -359,26 +387,7 @@ export default {
       }
       this.inputVisible = false;
       this.inputValue = '';
-      const result = this.dynamicTags.map((dateStr) => {
-      // 使用正则表达式匹配数字和时间单位
-      const match = dateStr.match(/(-?\d+) (\w+)/);
-      if (match) {
-        const number = parseInt(match[1], 10); // 解析数字部分
-        return number
-      }
-      });
-      // 复制数组中的数字到新数组
-      const symmetricArray = [...result, 0]
-
-      // 添加每个数字的相反数到新数组
-      result.forEach((number) => {
-        symmetricArray.push(-number);
-      });
-
-      // 对新数组进行排序
-      symmetricArray.sort((a, b) => a - b);
-
-      console.log('result', symmetricArray)
+      this.data.shift = this.getShift(this.dynamicTags)
   }
   }
 }

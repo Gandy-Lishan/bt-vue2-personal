@@ -99,7 +99,7 @@
       </el-form-item>
     </div>
     <div class="DOM-container-bottom bottom">
-      <DOMChart :plotConfiguration="plotConfiguration"></DOMChart>
+      <DOMChart :plotConfiguration="plotConfiguration" :data="data"></DOMChart>
     </div>
     </el-form>
   </div>
@@ -171,7 +171,11 @@ export default {
         this.plotConfiguration = {
           ...this.plotConfiguration,
           title: `Seasonality in the ${newVal.symbol || 'S&P 500'}`,
-          subtitle: `Month of ${this.options[newVal.monthSelection].label}`
+          subtitle: `Month of ${this.options[newVal.monthSelection].label}`,
+          start_date: newVal.start_date,
+          end_date: newVal.end_date,
+          month: this.options[newVal.monthSelection].label,
+          symbol: newVal.symbol || 'S&P 500'
         }
       },
       deep: true,
@@ -210,6 +214,7 @@ export default {
       }
     },
     handleSelect(item) {
+      console.log('item', item)
       this.data.symbol = item.url
     },
     changeMonth(month) {
