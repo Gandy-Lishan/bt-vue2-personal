@@ -70,22 +70,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getShowScannerAILink']),
-    showScannerAILink() {
-      return this.getShowScannerAILink
-    },
+
   },
   watch: {
-    showScannerAILink: {
-      handler(newVal) {
-        if(newVal == false){
-          let scannerai = document.querySelector('.ai-link')
-            scannerai.style.display = 'none'
-        }
-      },
-      immediate: true,
-        deep: true
-    },
     '$route'(to, _) {
       console.log('to', to)
       // 在$route对象变化时执行逻辑
