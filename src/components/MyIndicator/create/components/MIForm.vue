@@ -448,9 +448,9 @@ export default {
         calculate: this.data.categories === 'WIC' ? 'weight_combination' : this.data.categories.split(' ')[1].toLowerCase(),
         extreme_optimism: this.data.extreme_optimism,
         extreme_pessimism: this.data.extreme_pessimism,
-        type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase()
+        combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase() // combine_type : indicator or symbol
       };
-      if(this.data.categories !== 'WIC') {  
+      if(this.data.categories !== 'WIC') {
         saveData = {
           ...commonData
         }
@@ -461,9 +461,12 @@ export default {
 
         const mul_indicator = this.weightData.reduce((acc, item, index) => {
           acc[`indicator_${index + 1}`] = item.indicator_url;
-          acc[`type_${index + 1}`] = item.type.toLowerCase();
           return acc;
         }, {});
+        mul_indicator.type = this.weightData.map(item => {
+          if(item.type == 'Indicator') return 'si'
+          if(item.type == 'Symbol') return 'sy'
+        }).join('_');
 
         saveData = {
           ...commonData,
@@ -475,7 +478,7 @@ export default {
           ma: '1_1_1',
           extreme_optimism: 0,
           extreme_pessimism: 0,
-          type: null
+          combine_type: null
         };
       }
 
