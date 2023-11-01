@@ -6,7 +6,13 @@
 			<div class="back">
 				<router-link to="/scannerai"><i class="el-icon-arrow-left"></i><span>Back to the stock scanner list</span></router-link>
 			</div>
-			<chart :symbol="symbol" :onChartReady="onChartReady" width="100%" height="100%"></chart>
+			<chart :symbol="symbol" :onChartReady="onChartReady" width="100%" height="100%">
+        <LoadingOverlayChart
+						:isLoading="chartLoadingSetting.isChartLoading"
+						:progressText="chartLoadingSetting.progressText"
+					>
+					</LoadingOverlayChart>	
+      </chart>
 		</div>
 	<!-- </div> -->
 
@@ -17,6 +23,7 @@ import chart from '@/components/common/chart/index.vue'
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 import jutils from 'jutils-src'
 import { isJson } from '@/utils'
+import { LoadingOverlayChart } from "@/components/common"
 export default {
 	name: 'TVChartContainer',
 	props: {
@@ -35,10 +42,10 @@ export default {
 	},
 	components: {
     	chart: chart,
+      LoadingOverlayChart,
 	},
 	created() {
 		CIQ.addCover()
-    	CIQ.nprogress.start()
 	},
 	beforeDestroy() {
 		// 防止跳转到backtester时保留了Hammer followed by a raise等marker
@@ -59,6 +66,10 @@ export default {
 		updateTimeframe() {
 			return this.$store.state.form.exitFrequency
 		},
+    chartLoadingSetting() {
+			// 从 Vuex store 中获取全局 loading 状态
+			return this.$store.state.chart.chartLoadingSetting
+		},
 	},
 	watch: {
 		updateSettingMA(val) {
@@ -66,7 +77,6 @@ export default {
 		},
 		updateTimeframe(val) {
 			CIQ.addCover()
-    		CIQ.nprogress.start()
 			CIQ.initiateChart([this.symbolUrl],this.other['date'],()=>{
 				try{
 					// 切换timeframe前先清空已有studies
@@ -79,10 +89,16 @@ export default {
 					console.error(e)
 				}finally{	
 					CIQ.hideCover()
-					CIQ.nprogress.done()
 				}
 			})
-		}
+		},
+    chartLoadingSetting: {
+			handler(newValue, _) {
+				// 在对象属性发生变化时触发的处理逻辑
+				this.chartLoadingSetting = newValue
+			},
+			deep: true, // 启用深度监听，监视对象属性的变化
+		},
 	},
 	methods:{
 		onChartReady(){
@@ -111,9 +127,7 @@ export default {
 				}catch(e){
 					console.error(e)
 				}finally{
-					
 					CIQ.hideCover()
-					CIQ.nprogress.done()
 				}
 			})
 

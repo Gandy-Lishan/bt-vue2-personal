@@ -38,6 +38,7 @@ app.get('/api/indicatorsList', (req, res) => {
         res.send(data);
         //res.end( data );
     });
+    // 用algolia index导出来代替本地文件读取（这个操作是出现在首屏加载，用来首次获取数据列表，但是这样反而增加首屏加载时间）
     // const index_indicatorList = searchClient.initIndex('indicatorList');
     // let hits = [];
     // index_indicatorList.browseObjects({
@@ -62,6 +63,19 @@ app.get('/api/indexsList', (req, res) => {
 // 寻找静态文件夹
 //app.use(serveStatic(path.join(__dirname, 'dist')))    //自带gzip
 app.use(express.static(path.join(__dirname, 'dist')))
+
+// 中间件：
+
+// 设置响应头来针对/ai路径禁用缓存
+// 备选方案：
+//  const nocache = require('nocache');
+//  app.use('/ai', nocache());
+app.use('/ai', (req, res, next) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    next();
+});
 
 if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
     let url =get_env("api_url",'https://h7r34cgfvh.execute-api.us-east-1.amazonaws.com/')

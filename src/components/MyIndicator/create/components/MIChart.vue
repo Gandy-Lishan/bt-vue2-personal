@@ -3,7 +3,13 @@
 			<div class="back">
 				<router-link to="/myindicator"><i class="el-icon-arrow-left"></i><span>Back to my indicators list</span></router-link>
 			</div>
-			<chart width="100%" height="100%" :onChartReady="onChartReady"></chart>
+			<chart width="100%" height="100%" :onChartReady="onChartReady">
+				<LoadingOverlayChart
+						:isLoading="chartLoadingSetting.isChartLoading"
+						:progressText="chartLoadingSetting.progressText"
+					>
+				</LoadingOverlayChart>	
+			</chart>
 		</div>
 </template>
 
@@ -11,6 +17,7 @@
 import chart from '@/components/common/chart/index.vue'
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 import { mapGetters } from 'vuex'
+import { LoadingOverlayChart } from "@/components/common"
 export default {
 	name: 'MIChart',
 	props: {
@@ -25,6 +32,25 @@ export default {
 	},
 	components: {
     	chart: chart,
+		LoadingOverlayChart,
+	},
+	computed: {
+		chartLoadingSetting() {
+			// 从 Vuex store 中获取全局 loading 状态
+			return this.$store.state.chart.chartLoadingSetting
+		},
+	},
+	watch: {
+		chartLoadingSetting: {
+			handler(newValue, _) {
+				// 在对象属性发生变化时触发的处理逻辑
+				this.chartLoadingSetting = newValue
+			},
+			deep: true, // 启用深度监听，监视对象属性的变化
+		},
+	},
+	created() {
+		CIQ.addCover()
 	},
 	beforeDestroy() {
 		// 清除预览缓存
@@ -42,6 +68,7 @@ export default {
 			this.hideComponents()	
 			//还原自定义indicator Layout
 			if(this.chart_data.name) CIQ.displayUserOwnIndicatorLayout(this.chart_data)
+			else CIQ.hideCover()
 
 			console.log('chart_data',this.chart_data)
 		},
