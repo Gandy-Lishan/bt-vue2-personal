@@ -12,7 +12,7 @@
     // user's own indicator的 weight indicator加载函数单独设定
     var symbol
 
-    CIQ.displayWeightOwnIndicator = async function(previousState,updatedState){
+    CIQ.displayWeightOwnIndicator = async function(previousState,updatedState,combinedStudy){
         CIQ.addCover()
         // 提取indicator移除列表和新增列表,
         const { addedItems, removedItems } = findAddedAndRemovedItems(previousState, updatedState);
@@ -32,7 +32,7 @@
         }
         // indicator加载
         await addIndicatorStudy(addedItems.map(item=>item.indicator_url))
-        CIQ.stxx.loadChart(    { symbol: symbol?symbol:'SPX', indicator:updatedState.map(item=>item.indicator_url)}, function () {
+        CIQ.stxx.loadChart(    { symbol: symbol?symbol:'SPX', indicator:[...updatedState.map(item=>item.indicator_url),combinedStudy]}, function () {
             CIQ.hideCover()
         }) 
         
@@ -267,20 +267,23 @@
 
     // 预览生成的新indicator
     CIQ.previewUserOwnIndicator = function(indicatorList,indicator,symbol,extremeLines){
+        CIQ.addCover()
         addSingleIndicator(indicatorList,indicator,symbol,extremeLines);
     }
 
     // 从列表进入后还原new indicator的设定和新的indicator
+    // 我这里不用重新触发inputSelectHandler的思路来复现图表，因为这样会导致图表加载流程冗余
     CIQ.displayUserOwnIndicatorLayout = async function(_newVal){
         const newData = {
             categories : _newVal.categories,
             indicator1 : {name:_newVal.former,url:_newVal.indicator_1_url},
             indicator2 : {name:_newVal.latter,url:_newVal.indicator_2_url},
             url : _newVal.name+'CREATE'+_newVal.url,
-            mul_indicator : _newVal.mul_indicator
+            mul_indicator : _newVal.mul_indicator,
+            weight_list: _newVal.weightData
         }
         const extremeLines = {op:_newVal.upper_extreme_value,ep:_newVal.lower_extreme_value}
-        if(newData.categories.includes('Symbol')){
+        if(newData.categories == 'Symbol Spread' || newData.categories == 'Symbol Ratio'){
                 // indicator1,包括主symbol和new indicator
                 CIQ.objIndicator = []
                 await getUserOwnIndicatorMatedata(newData.url,extremeLines)
@@ -289,8 +292,6 @@
                 })
 
                 //indicator2,即comparison symbol
-                var series = CIQ.stxx.chart.series[oldData.indicator2.url]; 
-                CIQ.stxx.removeSeries(series); 
                 CIQ.stxx.addSeries(newData.indicator2.url, {
                     display:newData.indicator2.name, 
                     isComparison: false, 
@@ -305,7 +306,7 @@
                 });
         }
         
-        if(newData.categories.includes('Indicator')){
+        if(newData.categories == 'Indicator Spread' || newData.categories == 'Indicator Ratio'){
             // indicator
             await getUserOwnIndicatorMatedata(newData.indicator1.url)
             // indicator2
@@ -317,12 +318,12 @@
             }) 
         }
 
-        if(newData.categories == 'WIC'){
+        if(newData.categories == "Indicator Weight Combination"){
             // WIC 列表加载
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)
             // 预留给何总新加的weightlist
-            CIQ.displayWeightOwnIndicator([],)
+            CIQ.displayWeightOwnIndicator([],newData.weight_list,newData.url)
         }
     }
 

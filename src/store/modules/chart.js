@@ -237,7 +237,7 @@ const actions = {
 		
 			const newVal = JSON.parse(JSON.stringify(val));
 			const oldVal = JSON.parse(JSON.stringify(state.miFormWeightedList));
-            CIQ.displayWeightOwnIndicator(oldVal,newVal)
+            CIQ.displayWeightOwnIndicator(oldVal,newVal,null)
 			
 			commit('miFormWeightedListChange', newVal)
 			resolve()
