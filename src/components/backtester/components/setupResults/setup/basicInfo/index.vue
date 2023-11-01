@@ -46,6 +46,13 @@
                         >
                         </el-option>
                       </el-select>
+                      <!-- <searchBar 
+                        id_name="autocomplete-symbol" 
+                        placeholder="enter keywords" 
+                        :index="['stocksList','indexsList']"
+                        @select="handleSentimentSelect"
+                        display="name"
+                      /> -->
                     </div>
                   </el-form-item>
                   <el-form-item prop="benchmark" label="Benchmark">
@@ -650,12 +657,17 @@ import {
   getBacktestName
 } from '@/service/service.js'
 import axios from "@/axios"
+import searchBar from "@/components/common/searchBar"
+
 const throttle = require('lodash/throttle')
 const uniqWith = require('lodash/uniqWith')
 const isEqual = require('lodash/isEqual')
 export default {
   props: { backtestEditData: Object },
   name: 'BasicInfo',
+  components: {
+    searchBar,
+  },
   data() {
     return {
       bd: {

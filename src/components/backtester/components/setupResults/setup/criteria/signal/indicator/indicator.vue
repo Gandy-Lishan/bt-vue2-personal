@@ -57,6 +57,13 @@
               @clear="clearSentimentSelect"
 							highlight-first-item
 						></el-autocomplete>
+            <!-- <searchBar 
+              :id_name="'autocomplete-' + criteria + '-' + panelIndex" 
+              placeholder="Input the sentiment indicator" 
+              :index="['indicatorList']"
+              @select="handleSentimentSelect"
+              display="chart_name"
+            /> -->
             </div>
         </el-form-item>
       </div>
@@ -284,6 +291,9 @@ import axios from 'axios'
 import {compareArrays, LocalStorageUtil} from '@/utils'
 import moment from 'moment'
 import { mapMutations } from 'vuex'
+
+import searchBar from "@/components/common/searchBar"
+
 export default {
   props: {
     criteria: String,
@@ -291,6 +301,9 @@ export default {
     editableTabsValue: String,
     editableTabs: Array,
     isRiskControl: Boolean
+  },
+  components: {
+    searchBar,
   },
   data() {
     var validateSenti = (rule, value, callback) => {

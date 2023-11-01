@@ -421,7 +421,6 @@ export default {
             this.$store.commit('form/getBacktestName', historyNameList)
           }
           this.queryInfo.total = res.data.count
-          this.$store.commit('states/setBacktesterAuthorized',true)
         }
       } catch (error) {
         console.log(error)

@@ -180,12 +180,7 @@
           removedItems
         };
       }
-    CIQ.previewWeightedUserOwnIndicator = async function(indicatorList,indicator,symbol){
-        await addIndicatorStudy([indicator])
-        CIQ.stxx.loadChart({ symbol: symbol, indicator:indicatorList}, function () {
 
-        }) 
-    }
 
 
 
@@ -274,7 +269,8 @@
             categories : _newVal.categories,
             indicator1 : {name:_newVal.former,url:_newVal.indicator_1_url},
             indicator2 : {name:_newVal.latter,url:_newVal.indicator_2_url},
-            url : _newVal.name+'CREATE'+_newVal.url
+            url : _newVal.name+'CREATE'+_newVal.url,
+            mul_indicator : _newVal.mul_indicator
         }
         const extremeLines = {op:_newVal.upper_extreme_value,ep:_newVal.lower_extreme_value}
         if(newData.categories.includes('Symbol')){
@@ -310,6 +306,14 @@
             CIQ.stxx.loadChart(	{ symbol: 'SPX', indicator:[newData.indicator1.url,newData.indicator2.url,newData.url]}, function () {
 
             }) 
+        }
+
+        if(newData.categories == 'WIC'){
+            // WIC 列表加载
+            // 自定义indicator
+            await getUserOwnIndicatorMatedata(newData.url,extremeLines)
+            // 预留给何总新加的weightlist
+            CIQ.displayWeightOwnIndicator([],)
         }
     }
 

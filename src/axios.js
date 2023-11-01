@@ -118,11 +118,6 @@ instance.interceptors.response.use(
 		})
 		// 取消权限控制
 		// if (err?.response?.status == 410) {
-			// //如果有bt权限但没ai权限，进入bt时通过验证但是后续curdate被这里拦截，不调整，只是不显示ai link
-		// 	if(store.state.states.backtesterAuthorized){
-		// 		store.commit('states/setShowScannerAILink',false)
-		// 		return Promise.reject(err);
-		// 	}
 		// 	try{
 		// 		const desc = err.response.config.url.indexOf('ai_scanner')==-1?' Backtester services':' ScannerAi services'
 		// 		store.commit('states/setErrorMessage404',{status:err.response.status,message:desc})
