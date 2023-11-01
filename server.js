@@ -6,6 +6,14 @@ const proxy = require("http-proxy-middleware").createProxyMiddleware;
 var serveStatic = require('serve-static')
 var history = require('connect-history-api-fallback');
 
+// algolia search
+const algoliasearch = require('algoliasearch')
+const searchClient = algoliasearch(
+    'PV3Q0OLVHA',
+    'fca7a5c6e8b1aba5d7d909e68dce9ad9'
+)
+
+
 var dataPath = './src/assets/'
 // const proxy = require("express-http-proxy")
 
@@ -26,10 +34,17 @@ app.use(history());
 
 
 app.get('/api/indicatorsList', (req, res) => {
-    fs.readFile( dataPath+'indicatorsList.json', 'utf8', function (err, data) {
-        res.send(data);
-        //res.end( data );
-    });
+    // fs.readFile( dataPath+'indicatorsList.json', 'utf8', function (err, data) {
+    //     res.send(data);
+    //     //res.end( data );
+    // });
+    const index_indicatorList = searchClient.initIndex('indicatorList');
+    let hits = [];
+    index_indicatorList.browseObjects({
+        batch: batch => {
+        hits = hits.concat(batch);
+        }
+    }).then(() => res.send(hits));
  });
 app.get('/api/stocksList', (req, res) => {
     fs.readFile( dataPath+'stocksList.json', 'utf8', function (err, data) {
