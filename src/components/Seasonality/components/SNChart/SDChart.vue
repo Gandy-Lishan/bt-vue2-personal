@@ -29,7 +29,7 @@ import { getSeasonalityData } from "@/service/service";
                 if(Object.keys(newVal).length == 0) return
                 let url
                 let shift = newVal.shift.length > 1 ? newVal.shift.join(',') : newVal.shift[0]
-                if(newVal.holiday != 'Custom Time'){
+                if(newVal.holidays != 'Custom Time'){
                   url = `/sn/get_holiday_data?name=${newVal.symbol}&shift=${shift}&start=${newVal.start_date}&end=${newVal.end_date}&holiday=${newVal.holidays}`
                 }else {
                   const [month, day] = newVal.customizeDate.split('-')
