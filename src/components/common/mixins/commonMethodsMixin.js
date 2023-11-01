@@ -324,6 +324,8 @@ export const CommonMethodsMixin = {
 			backtestInfo.win_rate = parseFloat(backtestInfo.win_rate)
 			backtestInfo.commission = parseFloat(backtestInfo.commission)
 			backtestInfo.old_uuid = backtestInfo.id
+			backtestInfo.market_environment = backtestInfo.market_environment || 0
+			backtestInfo.index_moving_average_slope = backtestInfo.index_moving_average_slope || 0
 			// 判断是否有 direction 没有设置默认值
 			backtestInfo.direction = backtestInfo.direction
 				? backtestInfo.direction
@@ -386,7 +388,9 @@ export const CommonMethodsMixin = {
 				'backtest_period',
 				'trade_price',
 				'exclude_oo',
-				'description'
+				'description',
+				'market_environment',
+				'index_moving_average_slope'
 			]
 			const backtestInfoSelectedProps = [
 				'entry_description',
@@ -417,7 +421,9 @@ export const CommonMethodsMixin = {
 				'favorites',
 				'pk',
 				'old_uuid',
-				'results'
+				'results',
+				'market_environment',
+				'index_moving_average_slope'
 			]
 			let backtestParams = Object.assign(
 				{},

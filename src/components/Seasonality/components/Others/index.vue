@@ -98,7 +98,7 @@
         </el-select>
       </el-form-item>
     </div>
-    <div class="others-container-bottom bottom">
+    <div class="others-container-bottom bottom" :class="{'show-table': [2, 3].includes(data.category)}">
       <OCDChart :plotConfiguration="plotConfiguration"></OCDChart>
     </div>
     </el-form>
@@ -160,12 +160,17 @@ export default {
     data: {
     handler(newVal, _) {
       if(Object.keys(newVal).length == 0) return
-      const category = this.options[newVal.category].label.includes('Month') ? 'Month' : 'WeekDay'
+      const category = this.options[newVal.category].label.includes('Month') ? 'Month' : 'Weekday'
       this.plotConfiguration = {
         ...this.plotConfiguration,
         title: `${newVal.symbol || 'S&P 500'} Avg Return By ${category}`,
         subtitle: `${newVal.start_date} - ${newVal.end_date}`,
         xAxisTitle: `${category}`,
+        start_date: newVal.start_date,
+        end_date: newVal.end_date,
+        category,
+        option: newVal.category,
+        symbol: newVal.symbol
       }
     },
     deep: true,
@@ -222,5 +227,9 @@ export default {
 .seasonality-form-container .startAndEndBox {
   justify-content: space-between;
   width: 100%;
+}
+.seasonality-form-container .show-table {
+  margin: unset;
+  border-top: 2px solid #dbdbdb;
 }
 </style>

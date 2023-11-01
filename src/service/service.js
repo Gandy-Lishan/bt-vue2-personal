@@ -670,3 +670,17 @@ export function saveMyIndicators(data) {
 			});
 	});
 }
+
+export function getSeasonalityData(url) {
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}

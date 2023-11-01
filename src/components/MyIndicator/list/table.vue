@@ -176,11 +176,14 @@ export default {
         this.currentPage = 1; listRes = await getMyIndicatorsList(1)
       }
       this.total = listRes.data.count
-      // 从localStorage获取数据
+      this.tableData = this.processRowData(listRes.data.results)
+      this.loading = false
+    },
+    processRowData(resData) {
       const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
       const symbolList = JSON.parse(localStorage.getItem('symbolList'))
 
-      let data = listRes.data.results.map(item => {
+      let data = resData.map(item => {
       if (['ratio', 'spread'].includes(item.calculate)) {
         const {included, former, latter} = this.getIncludedData(item, sentimentList, symbolList);
         return {
@@ -209,8 +212,7 @@ export default {
 			item => item !== null && item !== undefined && item !== ''
 		  )
       console.log('处理过后的数据', data)
-      this.tableData = data
-      this.loading = false
+      return data
     },
     getIncludedData(item, sentimentList, symbolList) {
       const indicator1 = sentimentList.find(ele => ele.url === item.indicator_1_url) || symbolList.find(ele => ele.url === item.indicator_1_url);
@@ -259,7 +261,8 @@ export default {
         searchRes = await searchIndicator(data)
         console.log('searchRes', searchRes)
         if(searchRes.status == 200) {
-          this.tableData = searchRes.data
+          this.tableData = this.processRowData(searchRes.data)
+          // this.tableData = searchRes.data
         }
         if(searchRes.data.code == 406 || searchRes.data.code == 404) {
           this.tableData = []
