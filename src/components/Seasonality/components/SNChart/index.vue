@@ -28,10 +28,9 @@ export default {
     }
   },
   watch: {
-    plotConfiguration: {
+    dataList: {
     handler(newVal, _) {
       if(Object.keys(newVal).length == 0) return
-      this.plotConfiguration = newVal
       this.plotData(this.dataList, this.plotConfiguration);
     },
     deep: true,

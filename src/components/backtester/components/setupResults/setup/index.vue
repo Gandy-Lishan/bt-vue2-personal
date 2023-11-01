@@ -429,7 +429,9 @@ export default {
 				'backtest_period',
 				'trade_price',
 				'exclude_oo',
-				'description'
+				'description',
+				'market_environment',
+				'index_moving_average_slope'
 			]
 			console.log('backtestInfo', backtestInfo)
 			let backtestParams = Object.assign(

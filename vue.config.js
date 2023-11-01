@@ -324,6 +324,14 @@ const config = {
 					"^/ai": "",
 				},
 			},
+			'/sn': {
+				target: "http://192.168.2.101:5000",
+				ws: true,
+				changOrigin: true,
+				pathRewrite: {
+					"^/sn": "",
+				},
+			},
 		}
 	}
 }
