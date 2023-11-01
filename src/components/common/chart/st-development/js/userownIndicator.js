@@ -13,6 +13,7 @@
     var symbol
 
     CIQ.displayWeightOwnIndicator = async function(previousState,updatedState){
+        CIQ.addCover()
         // 提取indicator移除列表和新增列表,
         const { addedItems, removedItems } = findAddedAndRemovedItems(previousState, updatedState);
 
@@ -32,7 +33,7 @@
         // indicator加载
         await addIndicatorStudy(addedItems.map(item=>item.indicator_url))
         CIQ.stxx.loadChart(    { symbol: symbol?symbol:'SPX', indicator:updatedState.map(item=>item.indicator_url)}, function () {
-
+            CIQ.hideCover()
         }) 
         
     }
@@ -186,6 +187,7 @@
 
     // 以下管理user's own indicator 图表函数
     CIQ.updateUserOwnIndicator = function(newData,oldData){
+        CIQ.addCover()
         if(oldData.categories != newData.categories){
             // remove existing studies and series
             for (var studyInstanceName in CIQ.stxx.layout.studies) { 
@@ -196,13 +198,16 @@
                 var series=CIQ.stxx.chart.series[s];
                 CIQ.stxx.removeSeries(series);
             }
+            CIQ.hideCover()
             return
         }
         
         if(newData.categories.includes('Symbol')){
             if(oldData.indicator1.url != newData.indicator1.url){
                 CIQ.objIndicator = []
-                CIQ.stxx.loadChart({symbol: newData.indicator1.url})
+                CIQ.stxx.loadChart({symbol: newData.indicator1.url},()=>{
+                    CIQ.hideCover()
+                })
             }
             if(oldData.indicator2.url != newData.indicator2.url){
                 var series = CIQ.stxx.chart.series[oldData.indicator2.url];
@@ -232,6 +237,8 @@
                         textStyle:"#FFBE00"
                     },
                     //shareYAxis: true
+                },()=>{
+                    CIQ.hideCover()
                 });
             }
         }
@@ -277,7 +284,9 @@
                 // indicator1,包括主symbol和new indicator
                 CIQ.objIndicator = []
                 await getUserOwnIndicatorMatedata(newData.url,extremeLines)
-                CIQ.stxx.loadChart({symbol: newData.indicator1.url, indicator:[newData.url]})
+                CIQ.stxx.loadChart({symbol: newData.indicator1.url, indicator:[newData.url]}, function(){
+                    CIQ.hideCover()
+                })
 
                 //indicator2,即comparison symbol
                 var series = CIQ.stxx.chart.series[oldData.indicator2.url]; 
@@ -303,8 +312,8 @@
             await getUserOwnIndicatorMatedata(newData.indicator2.url)
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)
-            CIQ.stxx.loadChart(	{ symbol: 'SPX', indicator:[newData.indicator1.url,newData.indicator2.url,newData.url]}, function () {
-
+            CIQ.stxx.loadChart(	{ symbol: 'SPX', indicator:[newData.indicator1.url,newData.indicator2.url,newData.url]}, function(){
+                CIQ.hideCover()
             }) 
         }
 
@@ -331,8 +340,8 @@
 
         // fetch indicator information and add studies to chart
         await getUserOwnIndicatorMatedata(indicator,extremeLines)
-        CIQ.stxx.loadChart(	{ symbol: symbol?symbol:'SPX', indicator:indicatorList}, function () {
-
+        CIQ.stxx.loadChart(	{ symbol: symbol?symbol:'SPX', indicator:indicatorList},()=>{
+            CIQ.hideCover()
         }) 
     }
     const getUserOwnIndicatorMatedata = async function(indicator,extremeLines){
