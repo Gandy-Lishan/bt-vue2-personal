@@ -675,3 +675,7 @@ stx-hu-tooltip-field-value {
   display: inline-block;
 }
 
+/* 防止和home的min-height冲突 */
+.stx_jump_today.home {
+  min-height: 0;
+}
