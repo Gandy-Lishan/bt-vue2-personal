@@ -45,7 +45,7 @@
               </label>
             </template>
             <div class="selectBox">
-              <!-- <el-autocomplete
+              <el-autocomplete
               ref="sentiInput"
 							prefix-icon="el-icon-search"
 							class="inline-input"
@@ -56,14 +56,14 @@
 							@select="handleSentimentSelect"
               @clear="clearSentimentSelect"
 							highlight-first-item
-						></el-autocomplete> -->
-            <searchBar 
+						></el-autocomplete>
+            <!-- <searchBar 
               :id_name="'autocomplete-' + criteria + '-' + panelIndex" 
               placeholder="Input the sentiment indicator" 
               :index="['indicatorList']"
               @select="handleSentimentSelect"
               display="chart_name"
-            />
+            /> -->
             </div>
         </el-form-item>
       </div>

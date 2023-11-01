@@ -26,7 +26,7 @@
                       </label>
                     </template>
                     <div class="enterSymbolBox">
-                      <!-- <el-select
+                      <el-select
                         v-model="bd.symbol"
                         id="symbolName"
                         filterable
@@ -45,14 +45,14 @@
                           :value="item.value"
                         >
                         </el-option>
-                      </el-select> -->
-                      <searchBar 
+                      </el-select>
+                      <!-- <searchBar 
                         id_name="autocomplete-symbol" 
                         placeholder="enter keywords" 
                         :index="['stocksList','indexsList']"
                         @select="handleSentimentSelect"
                         display="name"
-                      />
+                      /> -->
                     </div>
                   </el-form-item>
                   <el-form-item prop="benchmark" label="Benchmark">
