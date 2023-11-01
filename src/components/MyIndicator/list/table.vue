@@ -185,15 +185,16 @@ export default {
 
       let data = resData.map(item => {
       if (['ratio', 'spread'].includes(item.calculate)) {
-        const {included, former, latter} = this.getIncludedData(item, sentimentList, symbolList);
+        const {included, former, latter, type} = this.getIncludedData(item, sentimentList, symbolList);
         return {
           ...item,
-          categories: `${included.some(i => i) ? 'Indicator' : 'Symbol'} ${capitalizeFirstLetter(item.calculate)}`,
+          categories: `${capitalizeFirstLetter(type)} ${capitalizeFirstLetter(item.calculate)}`,
           included,
           key: item.url,
           former,
           latter,
-          time_frame: capitalizeFirstLetter(item.timeframe)
+          time_frame: capitalizeFirstLetter(item.timeframe),
+          type,
         };
       }
       if (item.calculate === 'weight_c' && (item.indicator_weight && item.mul_indicator)) {
@@ -203,7 +204,8 @@ export default {
           categories: 'Indicator Weight Combination',
           included,
           key: item.url,
-          time_frame: capitalizeFirstLetter(item.timeframe)
+          time_frame: capitalizeFirstLetter(item.timeframe),
+          type: null
         };
       }
     });
@@ -215,17 +217,25 @@ export default {
       return data
     },
     getIncludedData(item, sentimentList, symbolList) {
-      const indicator1 = sentimentList.find(ele => ele.url === item.indicator_1_url) || symbolList.find(ele => ele.url === item.indicator_1_url);
-      const indicator2 = sentimentList.find(ele => ele.url === item.indicator_2_url) || symbolList.find(ele => ele.url === item.indicator_2_url);
+
+      const url_1 = item.indicator_1_url
+      const url_2 = item.indicator_2_url
+      const typeAttribute = item.type || 'indicator'
+      const indicator_1 = (typeAttribute == 'indicator') && sentimentList.find(ele => ele.url === url_1)?.label
+      const symbol_1 = (typeAttribute == 'symbol') && symbolList.find(ele => ele.url === url_1)?.label
+      const indicator_2 = (typeAttribute == 'indicator') && sentimentList.find(ele => ele.url === url_2)?.label
+      const symbol_2 = (typeAttribute == 'symbol') && symbolList.find(ele => ele.url === url_2)?.label
+      const former = indicator_1 || symbol_1;
+      const latter = indicator_2 || symbol_2;
       const maList = item.ma.split('_');
       const ma1 = maList[0] !== '1' ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
       const ma2 = maList[1] !== '1' ? ` Moving Average ${maList[1].includes('e') ? maList[1].toString().replace(/e$/, '') : maList[1]}` : '';
-      const former = indicator1?.label;
-      const latter = indicator2?.label;
+
       return {
         included: [`${former}${ma1}`, `${latter}${ma2}`],
         former,
-        latter
+        latter,
+        type: typeAttribute
       }
     },
     getWeightedIndicatorData(item, sentimentList) {

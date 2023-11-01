@@ -18,7 +18,7 @@
 <script>
 import MIForm from "./components/MIForm"
 import MIChart from "./components/MIChart.vue"
-import {isJson} from '@/utils'
+import {capitalizeFirstLetter, isJson} from '@/utils'
 
 export default {
   name: "CreateIndicator",
@@ -117,13 +117,21 @@ export default {
           if (_data.mul_indicator && _data.indicator_weight && _data.calculate == 'weight_c') {
             const mul_indicator_obj = JSON.parse(_data.mul_indicator);
             const indicator_weight_arr = _data.indicator_weight.includes('_') ? _data.indicator_weight.split('_') : [_data.indicator_weight];
-            const weightData = indicator_weight_arr.map((weight, index) => ({
+            const weightData = indicator_weight_arr.map((weight, index) => {
+            const url = mul_indicator_obj[`indicator_${index + 1}`]
+            const typeAttribute = mul_indicator_obj[`type_${index + 1}`] || 'indicator'
+            const indicator = (typeAttribute == 'indicator') && sentimentList.find(ele => ele.url === url)?.label
+            const symbol = (typeAttribute == 'symbol') && symbolList.find(ele => ele.url === url)?.label
+            const result = indicator || symbol
+            const type = typeAttribute ? capitalizeFirstLetter(typeAttribute) : (symbol && 'Symbol') || (indicator && 'Indicator')
+              return {
               weight: (weight * 100).toFixed(2),
-              indicator: (sentimentList.find(ele => ele.url === mul_indicator_obj[`indicator_${index + 1}`]) || symbolList.find(ele => ele.url === mul_indicator_obj[`indicator_${index + 1}`]))?.label,
-              indicator_url: mul_indicator_obj[`indicator_${index + 1}`],
+              indicator: result,
+              indicator_url: url,
               weightValidErrMsg: '',
-              type: sentimentList.find(ele => ele.url === mul_indicator_obj[`indicator_${index + 1}`])?'Indicator':'Symbol'
-            }));
+              type
+              }
+            });
             console.log('处理后的结果------', weightData);
             _data.weightData = weightData
           }

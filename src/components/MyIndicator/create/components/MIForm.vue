@@ -448,19 +448,20 @@ export default {
         calculate: this.data.categories === 'WIC' ? 'weight_combination' : this.data.categories.split(' ')[1].toLowerCase(),
         extreme_optimism: this.data.extreme_optimism,
         extreme_pessimism: this.data.extreme_pessimism,
+        type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase()
       };
       if(this.data.categories !== 'WIC') {  
         saveData = {
-          ...commonData,
+          ...commonData
         }
       } else {
         // if (this.weightValidErrMsg) return;
-
         const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(1));
         const indicator_weight = percentageStrings.join('_');
 
         const mul_indicator = this.weightData.reduce((acc, item, index) => {
           acc[`indicator_${index + 1}`] = item.indicator_url;
+          acc[`type_${index + 1}`] = item.type.toLowerCase();
           return acc;
         }, {});
 
@@ -474,6 +475,7 @@ export default {
           ma: '1_1_1',
           extreme_optimism: 0,
           extreme_pessimism: 0,
+          type: null
         };
       }
 
