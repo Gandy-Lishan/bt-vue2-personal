@@ -345,6 +345,7 @@ export default {
     },
     getValue(value) {
       console.log(value)
+      this.data.customizeDate = value
     },
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
