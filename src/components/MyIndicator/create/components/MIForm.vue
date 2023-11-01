@@ -507,7 +507,7 @@ export default {
           {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism}
         )
       }else if(this.data.categories == 'WIC'){
-        CIQ.previewWeightedUserOwnIndicator(
+        CIQ.previewUserOwnIndicator(
           [...this.weightData.map(item=>item.indicator_url),this.data.name+'CREATE'+url],
           this.data.name+'CREATE'+url,
           CIQ.stxx.chart.symbol
