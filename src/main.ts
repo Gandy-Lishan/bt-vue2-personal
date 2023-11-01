@@ -35,6 +35,15 @@ import 'github-markdown-css'
 import { CIQ } from '@/components/common/chart/st-development/js'
 //import { CIQ } from 'chartiq'
 
+// import Algolia
+// import InstantSearch from 'vue-instantsearch';
+// import 'instantsearch.css/themes/algolia-min.css';
+
+// Vue.use(InstantSearch);
+import '@algolia/autocomplete-theme-classic';
+import '@/assets/css/searchBar.css';
+
+
 Vue.use(VueCookies)
 
 Vue.prototype.$qs = qs

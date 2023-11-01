@@ -3,25 +3,27 @@ body .ta_markers-ui {
 }
 
 /* override chartiq.css & ciq-components.scss */
-
+.stx-marker {
+	/* transform: translateX(10px); */
+}
 .stx-marker.analysis .stx-visual {
-	width: 0;
-    height: 0;
+	width: 0 !important;
+    height: 0 !important;
 	border-bottom: 21px #1afa29 solid;
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
 	background-color: transparent !important;
 
 	position: relative;
-    top: 11px;
+    top: -5px;
 	right: 0px;
 	transform-style: preserve-3d;
 	z-index: 2;
 }
 
 .stx-marker.dividend .stx-visual {
-	width: 0;
-    height: 0;
+	width: 0 !important;
+    height: 0 !important;
 	border-top: 21px #d81e06 solid;
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
@@ -52,25 +54,25 @@ body .ta_markers-ui {
 	height: 22px;
 	width: 50%;
 	float: right;
-	margin-bottom: -11px;
+	margin-bottom: 5px;
 	border-left: 1px dotted rgb(26 250 41); 
 	position: relative;
 	z-index: 1;
 }
 
-.stx-marker.dot.dot-buy .stx-visual{
-	border-radius: 50%;
-	width: 10px;
-	height: 10px;
-	background-color: rgb(26 250 41);
-	background-position: -20px -20px;
+.stx-marker.trade-buy .stx-visual{
+	border-radius: 50% !important ;
+	width: 10px !important;
+	height: 10px !important;
+	background-color: rgb(26 250 41) !important;
+	background-position: -20px -20px !important;
 }
-.stx-marker.dot.dot-sell .stx-visual{
-	border-radius: 50%;
-	width: 10px;
-	height: 10px;
-	background-color: rgb(216 30 6);
-	background-position: -20px -20px;
+.stx-marker.trade-sell .stx-visual{
+	border-radius: 50% !important;
+	width: 10px !important;
+	height: 10px !important;
+	background-color: rgb(216 30 6) !important;
+	background-position: -20px -20px !important;
 }
 
 .ciq-night .stx-marker.dividend .stx-visual:after {
