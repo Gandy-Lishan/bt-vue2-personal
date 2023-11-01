@@ -267,10 +267,12 @@
 
     // 预览生成的新indicator
     CIQ.previewUserOwnIndicator = function(indicatorList,indicator,symbol,extremeLines){
+        CIQ.addCover()
         addSingleIndicator(indicatorList,indicator,symbol,extremeLines);
     }
 
     // 从列表进入后还原new indicator的设定和新的indicator
+    // 我这里不用重新触发inputSelectHandler的思路来复现图表，因为这样会导致图表加载流程冗余
     CIQ.displayUserOwnIndicatorLayout = async function(_newVal){
         const newData = {
             categories : _newVal.categories,
