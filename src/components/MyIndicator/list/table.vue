@@ -129,7 +129,7 @@
 
 <script>
 import { delMyIndicator, getMyIndicatorsList, searchIndicator } from '@/service/service'
-import { capitalizeFirstLetter } from "@/utils"
+import { capitalizeFirstLetter, isJson } from "@/utils"
 
 export default {
   name: 'MITable',
@@ -198,13 +198,16 @@ export default {
         };
       }
       if (item.calculate === 'weight_c' && (item.indicator_weight && item.mul_indicator)) {
-        const included = this.getWeightedIndicatorData(item, sentimentList);
+        const includedWeightDataArr = this.getWeightedIndicatorData(item, sentimentList, symbolList);
+        const included = includedWeightDataArr.map(item=>(item.included))
+        const weightData = includedWeightDataArr.map(item=>(item.weightData))
         return {
           ...item,
           categories: 'Indicator Weight Combination',
           included,
           key: item.url,
           time_frame: capitalizeFirstLetter(item.timeframe),
+          weightData,
           type: null
         };
       }
@@ -220,7 +223,7 @@ export default {
 
       const url_1 = item.indicator_1_url
       const url_2 = item.indicator_2_url
-      const typeAttribute = item.type || 'indicator'
+      const typeAttribute = item.combine_type || 'indicator'
       const indicator_1 = (typeAttribute == 'indicator') && sentimentList.find(ele => ele.url === url_1)?.label
       const symbol_1 = (typeAttribute == 'symbol') && symbolList.find(ele => ele.url === url_1)?.label
       const indicator_2 = (typeAttribute == 'indicator') && sentimentList.find(ele => ele.url === url_2)?.label
@@ -238,12 +241,33 @@ export default {
         type: typeAttribute
       }
     },
-    getWeightedIndicatorData(item, sentimentList) {
-      const mulIndicatorObj = JSON.parse(item.mul_indicator);
-      const indicatorWeightArr = item.indicator_weight.includes('_') ? item.indicator_weight.split('_') : [item.indicator_weight];
-      return indicatorWeightArr.map((weight, index) => {
-        const indicator = sentimentList.find(ele => ele.url === mulIndicatorObj[`indicator_${index + 1}`])?.label;
-        return `${indicator} (weight ${(weight * 100).toFixed()}%)`;
+    getWeightedIndicatorData(item, sentimentList, symbolList) {
+      const mul_indicator_obj = isJson(item.mul_indicator) ? JSON.parse(item.mul_indicator) : item.mul_indicator;
+      const indicator_weight_arr = item.indicator_weight.includes('_') ? item.indicator_weight.split('_') : [item.indicator_weight];
+      let combine_type_arr = mul_indicator_obj.type ? (mul_indicator_obj.type.includes('_') ? mul_indicator_obj.type.split('_') : [mulIndicatorObj.type]) : new Array(indicator_weight_arr.length).fill('si')
+      combine_type_arr = combine_type_arr.map(item => {
+        if(item == 'si') return 'Indicator'
+        if(item == 'sy') return 'Symbol'
+      })
+      return indicator_weight_arr.map((weight, index) => {
+        const url = mul_indicator_obj[`indicator_${index + 1}`]
+        const typeAttribute = combine_type_arr[index]
+        const indicator = (typeAttribute == 'Indicator') && sentimentList.find(ele => ele.url === url)?.label
+        const symbol = (typeAttribute == 'Symbol') && symbolList.find(ele => ele.url === url)?.label
+        const result = indicator || symbol
+        const type = typeAttribute
+        const weightData = {
+              weight: (weight * 100).toFixed(2),
+              indicator: result,
+              indicator_url: url,
+              weightValidErrMsg: '',
+              type
+              }
+        const included = `${result} (weight ${(weight * 100).toFixed()}%)`;
+        return {
+          included,
+          weightData
+        }
       });
     },
     tableRowClassName({row, rowIndex}) {
