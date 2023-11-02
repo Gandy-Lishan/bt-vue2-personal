@@ -197,7 +197,7 @@
       stripe
       border
       size="mini"
-      highlight-current-row                                                    
+      highlight-current-row                                       
       >
       <el-table-column label="Index" header-align="center" align="center" width="80px">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
@@ -410,7 +410,7 @@ export default {
       }else if(field == 'ma2'){
         fieldName = this.data.indicator_2_url
       }
-      CIQ.userOwnIndicatorMAStudies(
+      CIQ.addOwnIndicatorMAStudy(
         value,
         type,
         fieldName,
@@ -560,9 +560,9 @@ export default {
         return this.symbolList
       }
     },
-    changeCategories(data) {
-      const isIndicator = data.includes('Indicator')
-      const isSymbol = data.includes('Symbol')
+    changeCategories(category) {
+      const isIndicator = category.includes('Indicator')
+      const isSymbol = category.includes('Symbol')
 
       const clearIndicatorIfMatch = (list, urlProp, indicatorProp) => {
         if (list.some((item) => item.url === this.data[urlProp])) {
@@ -602,8 +602,13 @@ export default {
   
       const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
       for (const formRef of formsToSave) {
-        this.$refs[formRef].clearForm()
+        // 从WIC到其他选项时组件不存在，需要判断
+        this.$refs[formRef]?.clearForm()
       }
+      // 还原weightData初始状态
+      this.weightData =  [
+        {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
+      ]
 
       this.dropdownList = this.getList()
 

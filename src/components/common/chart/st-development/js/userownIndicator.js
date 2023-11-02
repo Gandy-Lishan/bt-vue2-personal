@@ -280,7 +280,8 @@
             indicator2 : {name:_newVal.latter,url:_newVal.indicator_2_url},
             url : _newVal.name+'CREATE'+_newVal.url,
             mul_indicator : _newVal.mul_indicator,
-            weight_list: _newVal.weightData
+            weight_list: _newVal.weightData,
+            ma: _newVal.ma
         }
         const extremeLines = {op:_newVal.upper_extreme_value,ep:_newVal.lower_extreme_value}
         if(newData.categories == 'Symbol Spread' || newData.categories == 'Symbol Ratio'){
@@ -304,6 +305,7 @@
                     },
                     //shareYAxis: true
                 });
+                displayOwnIndicatorMAStudies(newData)
         }
         
         if(newData.categories == 'Indicator Spread' || newData.categories == 'Indicator Ratio'){
@@ -314,6 +316,7 @@
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)
             CIQ.stxx.loadChart(	{ symbol: 'SPX', indicator:[newData.indicator1.url,newData.indicator2.url,newData.url]}, function(){
+                displayOwnIndicatorMAStudies(newData)
                 CIQ.hideCover()
             }) 
         }
@@ -325,6 +328,46 @@
             // 预留给何总新加的weightlist
             CIQ.displayWeightOwnIndicator([],newData.weight_list,newData.url)
         }
+    }
+
+    const displayOwnIndicatorMAStudies = function(newData){
+        let ma_parse_list = newData.ma.split('_')
+        const ma1_index = ma_parse_list[0].indexOf('e')
+        const ma1_type = ma1_index == -1 ? 'EMA' : 'MA'
+        const ma1_value = ma1_index == -1 ? ma_parse_list[0] : ma_parse_list[0].slice(0,ma1_index)
+        const ma1_showInput = ma1_value != '1'
+        const ma2_index = ma_parse_list[1].indexOf('e')
+        const ma2_type = ma2_index == -1 ? 'EMA' : 'MA'
+        const ma2_value = ma2_index == -1 ? ma_parse_list[1] : ma_parse_list[1].slice(0,ma2_index)
+        const ma2_showInput = ma2_value != '1'
+
+        // ma1
+        if(newData.categories.includes('Indicator')){
+            CIQ.addOwnIndicatorMAStudy(
+                ma1_value,
+                ma1_type,
+                newData.indicator1.url,
+                ma1_showInput,
+                newData.categories
+            )
+        }else{
+            CIQ.addOwnIndicatorMAStudy(
+                ma1_value,
+                ma1_type,
+                'field',
+                ma1_showInput,
+                newData.categories
+            )
+        }
+
+        // ma2
+        CIQ.addOwnIndicatorMAStudy(
+            ma2_value,
+            ma2_type,
+            newData.indicator2.url,
+            ma2_showInput,
+            newData.categories
+        )
     }
 
     // 第一个参数是默认值为SPX的symbol，own indicator quotefeed请求时为默认symbol，own symbol quotefeed请求时为表单第一个symbol
@@ -428,9 +471,9 @@
 
     }
 
-    CIQ.userOwnIndicatorMAStudies = function(value,type,field,showInput,categories) {
+    CIQ.addOwnIndicatorMAStudy = function(value,type,field,showInput,categories) {
         // 更新ma前移除当前field的旧ma
-        for (var studyInstanceName in CIQ.stxx.layout.studies) {
+        for (var studyInstanceName in CIQ.stxx.layout?.studies) {
             if (
                 CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == field &&
                 CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'
