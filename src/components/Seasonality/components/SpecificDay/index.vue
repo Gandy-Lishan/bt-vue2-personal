@@ -259,12 +259,6 @@ export default {
     this.data.start_date = (currentYear - this.data.period) + ''
     this.data.customizeDate = `${month}-${day}`
 
-    // 创建一个函数来生成标签
-    function generateLabel(year, range) {
-        const startYear = year - range + 1;
-        return `${startYear} -> ${year}`;
-    }
-
     // 生成动态标签数组
     const years = [1,2,3,4,5,10,15,20]
     const periodOptions = [{label: `Current Year (${currentYear})`, value: 0}, ...years.map(item => ({label: `${currentYear - item} -> ${currentYear}`, value: item}))]
@@ -332,7 +326,7 @@ export default {
       this.data.end_date = currentYear + ''
       if(this.data.period != 22 && this.data.period != 21)  this.data.start_date = (currentYear - period) + ''
       if(this.data.period == 22)  this.data.start_date = (currentYear - 5) + ''
-      if(this.data.period == 21)  this.data.start_date = '-'
+      if(this.data.period == 21)  {this.data.start_date = ''; this.data.end_date = ''}
     },
     pickStartDate(value) {
       console.log(value)
