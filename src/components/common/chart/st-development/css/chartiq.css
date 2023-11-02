@@ -1076,7 +1076,7 @@ html:not([ciq-last-interaction='touch']) .break-sm .ciq-menu.collapse:hover > sp
     background-position: -1443px -25px;
 }
 .ciq-HU {
-  /* margin-left: -20px; */
+  margin-left: 10px;
 }
 .ciq-HU span {
   background-position: -400px -25px; }

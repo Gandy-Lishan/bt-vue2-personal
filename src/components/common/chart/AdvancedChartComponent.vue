@@ -28,24 +28,25 @@
 						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
 					</cq-menu>
 					<cq-info-toggle-dropdown>
-						<cq-toggle
-                class="ciq-CH"
-                cq-member="crosshair">
-                <span></span>
-                <cq-tooltip>Crosshair (Alt + \)</cq-tooltip>
-            </cq-toggle>
-
-            <cq-menu class="ciq-menu toggle-options collapse">
-                <span></span>
-                <cq-menu-dropdown>
-                    <cq-item
-                        cq-member="crosshair">Hide Heads-Up Display<span class="ciq-radio"><span></span></span>
-                    </cq-item>
-                    <cq-item
-                        cq-member="headsUp-static">Show Heads-Up Display<span class="ciq-radio"><span></span></span>
-                    </cq-item>
-                </cq-menu-dropdown>
-            </cq-menu>
+					<cq-toggle
+							class="ciq-CH"
+							cq-member="crosshair">
+							<span></span>
+							<cq-tooltip>Crosshair (Alt + \)</cq-tooltip>
+					</cq-toggle>
+					<cq-menu class="ciq-menu toggle-options collapse">
+						<span></span>
+						<cq-menu-dropdown>
+							<cq-item
+								cq-member="crosshair">Hide Heads-Up Display<span class="ciq-radio"><span></span></span>
+							</cq-item>
+							<cq-item
+								cq-member="headsUp-static">Show Heads-Up Display<span class="ciq-radio"><span></span></span>
+							</cq-item>
+						</cq-menu-dropdown>
+					</cq-menu>
+					</cq-info-toggle-dropdown>
+					<cq-info-toggle-dropdown>
 						<cq-toggle class="ciq-HU" id="ciq-HU" cq-member="headsUp">
 							<span></span>
 							<cq-tooltip>Info</cq-tooltip>
@@ -62,14 +63,20 @@
 								></cq-item>		
 							</cq-menu-dropdown>
 						</cq-menu>
+					</cq-info-toggle-dropdown>
+					<cq-info-toggle-dropdown>
 						<cq-toggle class="grid" id="grid" stxtap="Layout.xAixsGridLine()">
 							<span></span>
 							<cq-tooltip>grid</cq-tooltip>
 						</cq-toggle>
+					</cq-info-toggle-dropdown>
+					<cq-info-toggle-dropdown>
 						<cq-toggle class="lastP" id="lastP" stxtap="Layout.lastPriceLabel()">
-						<span></span>
-						<cq-tooltip>last price</cq-tooltip>
+							<span></span>
+							<cq-tooltip>last price</cq-tooltip>
 						</cq-toggle>
+					</cq-info-toggle-dropdown>
+					<cq-info-toggle-dropdown>
 						<cq-toggle class="buy" id="buy" style="visibility:hidden;margin-left:28px">
 							<span style='margin-right:10px'><svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'><path d='M512 124L64 900h896z' p-id='2093' fill='#1afa29'></path></svg></span>
 							<cq-tooltip>BUY</cq-tooltip>
@@ -360,19 +367,6 @@ export default class AdvancedChartComponent extends Vue {
 		
 		const container = this.container
 
-		// a listener for observing tooltip button's action
-		const tooltip = document.getElementsByClassName("ciq-HU")[0] as HTMLButtonElement;
-		tooltip.onclick = function(){
-			tooltip.classList.remove("active");	
-			if (CIQ.stxx.layout.headsUp.floating == true){	
-				tooltip.classList.remove("activated");	
-				CIQ.stxx.layout.headsUp.floating = false	
-			}
-			else{
-				tooltip.classList.add("activated");
-				CIQ.stxx.layout.headsUp.floating = true
-			}
-		}
 		this.overrideStudyDef()
 		
 		portalizeContextDialogs(container)
@@ -418,7 +412,7 @@ export default class AdvancedChartComponent extends Vue {
 			
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })		
 
-			this.initializeToggle()
+			this.initializeToggle(uiContext.stx)
 			
 			CIQ.stxx.addEventListener("scroll", function(object: Record<string, any> = {}) {
 
@@ -442,36 +436,36 @@ export default class AdvancedChartComponent extends Vue {
 		}, 0)			
 	}
 	// initiate lastPrice and grid button
-	initializeToggle() {
-		CIQ.stxx.layout.headsUp = "floating";
+	initializeToggle(stx: any) {
+		// a listener for observing tooltip button's action
+		const tooltip = document.getElementsByClassName("ciq-HU")[0] as HTMLButtonElement;
+		tooltip.onclick = function(){
+			tooltip.classList.remove("active");	
+			if (stx.layout.headsUp.floating == true){	
+				tooltip.classList.remove("activated");	
+				stx.layout.headsUp.floating = false	
+			}
+			else{
+				tooltip.classList.add("activated");
+				stx.layout.headsUp.floating = true
+			}
+		}
+
+		stx.layout.headsUp = "floating";
 		var mNode = document.getElementsByClassName("ciq-HU")[0]
 		mNode.classList.add("activated");
 		
-		var mNode = document.getElementsByClassName("lastP")[0]
-		CIQ.stxx.layout.lastPriceLabel = false;
-		CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = false;
-		CIQ.stxx.draw();
+		stx.layout.lastPriceLabel = false;
+		stx.chart.yAxis.drawCurrentPriceLabel = false;
 
-		// if (CIQ.stxx.layout.lastPriceLabel){
-		// 	mNode.classList.remove("active");
-		// 	CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = false;
-		// 	CIQ.stxx.draw();
-		// }
-		// else{
-		// 	mNode.classList.add("active");
-		// 	CIQ.stxx.chart.yAxis.drawCurrentPriceLabel = true;
-		// 	CIQ.stxx.draw();
-		// }
-		var mNode = document.getElementsByClassName("grid")[0]
-		CIQ.stxx.layout.xAixsGridLine = false
-		CIQ.stxx.chart.yAxis.displayGridLines = false;
-		CIQ.stxx.chart.xAxis.displayGridLines = false;
-		// if (CIQ.stxx.layout.xAixsGridLine){
-		// 	mNode.classList.remove("active");
-		// }
-		// else{
-		// 	mNode.classList.add("active");
-		// }
+		stx.layout.xAixsGridLine = false
+		stx.chart.yAxis.displayGridLines = false;
+		stx.chart.xAxis.displayGridLines = false;
+
+		stx.layout.crosshair = true;
+
+		stx.changeOccurred("layout");
+		stx.draw();
 	}
 
 	collapseStudies() {

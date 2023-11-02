@@ -330,6 +330,7 @@
         }
     }
 
+    // 展示还原study附属的ma
     const displayOwnIndicatorMAStudies = function(newData){
         let ma_parse_list = newData.ma.split('_')
         const ma1_index = ma_parse_list[0].indexOf('e')
