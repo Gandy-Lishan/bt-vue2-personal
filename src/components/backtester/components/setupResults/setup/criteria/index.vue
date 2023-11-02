@@ -525,6 +525,39 @@ export default {
 		criteria() {
 			/* entry or exit */
 			return this.config['criteria']
+		},
+	},
+	watch: {
+		isRiskControl(val) {
+				const options =  [
+				{
+					value: 1,
+					label: 'Single-Condition'
+				},
+				{
+					value: 2,
+					label: 'SameBar Multi-Condition'
+				},
+				{
+					value: 3,
+					label: 'TimeOrder Multi-Condition'
+				}
+			]
+			if (!val) {
+			this.signalOptions = options
+			this.relation = 1
+			this.changeRelation(this.relation)
+			}else {
+				this.signalOptions = [
+          {
+              value: 0,
+              label: 'Only Use Risk Control'
+          },
+          ...options
+        ];
+				this.relation = 0
+				this.changeRelation(this.relation)
+			}
 		}
 	},
 	created() {

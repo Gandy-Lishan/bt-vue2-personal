@@ -31,6 +31,7 @@
 			element-loading-background="rgba(0, 0, 0, 0.8)"
 			@sort-change="onSortChange"
 			style="width: 100%; height: 100%"
+			:row-class-name="tableRowClassName"
     >
     <el-table-column type="index" align="center">
         <template scope="scope">
@@ -139,7 +140,7 @@
 				>
 			</el-table-column>
 			<el-table-column
-				v-if="item.label == 'Last Signal Date'"
+				v-if="item.label == 'Last Signal Date' && currentPage == 'Favorites'"
 				:key="item.label"
 				:prop="item.field"
 				align="center"
@@ -460,6 +461,12 @@ export default {
         }
 			}
 		},
+		tableRowClassName({row, rowIndex}) {
+			if (rowIndex%2 === 0) {
+			return 'dark-row'
+			}
+			return ''
+		},
 		handleCurrentChange(newpage) {
       this.queryInfo.page = newpage
       this.applySort()
@@ -560,8 +567,11 @@ export default {
 }
 .fls-btn {
 	float: right;
+	color: white;
+	background: #5b9bd1;
+	width: 200px;
 	margin-left: 20px;
-	margin: 20px 28px 10px 10px;
+	margin: 20px 28px 10px 10px
 }
 .urlBox p:first-child {
 		font-weight: 500;
