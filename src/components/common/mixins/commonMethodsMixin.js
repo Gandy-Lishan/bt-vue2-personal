@@ -99,13 +99,18 @@ export const CommonMethodsMixin = {
 						name: copyName,
 						favorites: false,
 						user_tag: 'client',
-						report_url: '',
-						uuid: undefined,
-						results: undefined,
-						user_id: undefined,
-						status: undefined,
-						backtest_id: undefined
+						report_url: ''
+						// uuid: undefined,
+						// results: undefined,
+						// user_id: undefined,
+						// status: undefined,
+						// backtest_id: undefined
 					}
+					delete params.uuid
+					delete params.results
+					delete params.user_id
+					delete params.status
+					delete params.backtest_id
 
 					// 发起复制请求
 					await copyBacktest(this.$qs.stringify(params))
@@ -117,6 +122,7 @@ export const CommonMethodsMixin = {
 					}
 					if (['Sample', 'Favorites', 'Analyst'].includes(this.currentPage)) {
 						this.$router.push('/backtester/list/history')
+						this.queryInfo.page = 1
 						await this.getDataList(null)
 					}
 					this.$message({
@@ -574,6 +580,8 @@ export const CommonMethodsMixin = {
 				? JSON.parse(backtestInfo[criteriaStr])
 				: backtestInfo[criteriaStr]
 			// 删除第一个 cond 元素
+			if (!criteria.cond)
+				throw Error('Missing cond attribute in entry and exit')
 			if (criteria.cond.length > 1) criteria.cond.shift()
 			criteria.cond = criteria.cond.map(item => {
 				if (item)
