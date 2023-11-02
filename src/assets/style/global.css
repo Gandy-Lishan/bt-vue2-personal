@@ -87,6 +87,9 @@
 .aiscanner-table .dark-row {
   background: rgb(219 219 219) !important
 }
+.favoriteForm_container .dark-row {
+  background: rgb(239, 240, 240) !important
+}
 
 .aiscanner-container .el-input-group__prepend {
   background-color: #fff;
