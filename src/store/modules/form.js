@@ -2,7 +2,7 @@ import { timestampToTime } from '@/utils'
 
 const state = {
 	restoreFreq: '', //form
-	backtestSymbol: '', //form
+	backtestSymbol: 'SPX', //form
 	pairDataFreq: '', //form
 	exitFrequency: '', //form 考虑放到timeframe组件
 

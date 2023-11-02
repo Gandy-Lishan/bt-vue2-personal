@@ -463,7 +463,7 @@ export default {
           acc[`indicator_${index + 1}`] = item.indicator_url;
           return acc;
         }, {});
-        mul_indicator.type = this.weightData.map(item => {
+        mul_indicator.combine_type = this.weightData.map(item => {
           if(item.type == 'Indicator') return 'si'
           if(item.type == 'Symbol') return 'sy'
         }).join('_');
@@ -478,7 +478,7 @@ export default {
           ma: '1_1_1',
           extreme_optimism: 0,
           extreme_pessimism: 0,
-          combine_type: null
+          combine_type: 'indicator'
         };
       }
 

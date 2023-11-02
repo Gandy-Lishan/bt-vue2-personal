@@ -145,7 +145,7 @@ export const CommonMethodsMixin = {
 				showClose: true,
 				duration: 8000
 			})
-			RefreshBus.$emit('refresh-list')
+			// RefreshBus.$emit('refresh-list')
 		},
 		async addToFavorites(data) {
 			this.loading = true
@@ -162,7 +162,7 @@ export const CommonMethodsMixin = {
 				showClose: true,
 				duration: 8000
 			})
-			RefreshBus.$emit('refresh-list')
+			// RefreshBus.$emit('refresh-list')
 		},
 		async moveToFavorites(data) {
 			this.loading = true
@@ -179,7 +179,7 @@ export const CommonMethodsMixin = {
 				showClose: true,
 				duration: 8000
 			})
-			RefreshBus.$emit('refresh-list')
+			// RefreshBus.$emit('refresh-list')
 		},
 		async rerunBacktest(data) {
 			this.loading = true
@@ -325,7 +325,8 @@ export const CommonMethodsMixin = {
 			backtestInfo.commission = parseFloat(backtestInfo.commission)
 			backtestInfo.old_uuid = backtestInfo.id
 			backtestInfo.market_environment = backtestInfo.market_environment || 0
-			backtestInfo.index_moving_average_slope = backtestInfo.index_moving_average_slope || 0
+			backtestInfo.index_moving_average_slope =
+				backtestInfo.index_moving_average_slope || 0
 			// 判断是否有 direction 没有设置默认值
 			backtestInfo.direction = backtestInfo.direction
 				? backtestInfo.direction
