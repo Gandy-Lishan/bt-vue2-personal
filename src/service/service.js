@@ -546,60 +546,63 @@ export function findLastSignalApi(data) {
 }
 
 export function getMyIndicatorsList(page) {
-	const url = `/dev/my_indicator/get_records/?page=${page}`;
+	const url = `/dev/my_indicator/get_records/?ordering=-create_date&page=${page}`
 
 	return new Promise((resolve, reject) => {
-		axios.get(url)
+		axios
+			.get(url)
 			.then(res => {
-				resolve(res);
+				resolve(res)
 			})
 			.catch(err => {
-				reject(err);
-			});
-	});
+				reject(err)
+			})
+	})
 }
 export function getAllMyIndicatorsList(page) {
-	const url = `/dev/my_indicator/get_records/?page=`;
+	const url = `/dev/my_indicator/get_records/?page=`
 
 	return new Promise((resolve, reject) => {
-		const allData = [];
+		const allData = []
 
 		function fetchPageData(page) {
-			axios.get(url + page)
+			axios
+				.get(url + page)
 				.then(res => {
-					const data = res.data.results;
+					const data = res.data.results
 					console.log('响应数据', res)
 					// 将当前页的数据添加到总数据数组中
 					allData.push(...data)
 					if (res.data.next) {
 						// 继续递归请求下一页数据
-						fetchPageData(page + 1);
+						fetchPageData(page + 1)
 					} else {
 						// 所有数据已获取完毕，返回结果
-						resolve(allData);
+						resolve(allData)
 					}
 				})
 				.catch(err => {
-					reject(err);
-				});
-			}
-					// 开始递归请求第一页数据
-					fetchPageData(page);
-			})
+					reject(err)
+				})
+		}
+		// 开始递归请求第一页数据
+		fetchPageData(page)
+	})
 }
 
 export function getMyIndicatorData(url) {
 	const path = `/dev/my_indicator/get_data/?url='${url}'`
 
 	return new Promise((resolve, reject) => {
-		axios.get(path)
+		axios
+			.get(path)
 			.then(res => {
-				resolve(res);
+				resolve(res)
 			})
 			.catch(err => {
-				reject(err);
-			});
-	});
+				reject(err)
+			})
+	})
 }
 
 export function delMyIndicator(url) {
@@ -608,23 +611,23 @@ export function delMyIndicator(url) {
 	return new Promise((resolve, reject) => {
 		axios
 			.delete(path)
-			.then((res) => {
-			resolve(res);
+			.then(res => {
+				resolve(res)
 			})
-			.catch((err) => {
-				reject(err);
-			});
-	});
+			.catch(err => {
+				reject(err)
+			})
+	})
 }
 export function searchIndicator(data) {
 	const url = `/dev/my_indicator/search_records/`
-	const formData = new FormData();
+	const formData = new FormData()
 
 	// 将data对象的属性添加到FormData
 	console.log('data', data)
 	for (const key in data) {
 		console.log('data', data[key])
-			formData.append(key, data[key])
+		formData.append(key, data[key])
 	}
 	console.log('查询的 formData', formData)
 
@@ -632,21 +635,21 @@ export function searchIndicator(data) {
 		axios
 			.post(url, formData, {
 				headers: {
-					'Content-Type': 'multipart/form-data', // 设置请求头为form-data格式
-				},
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
 			})
-			.then((res) => {
-				resolve(res);
+			.then(res => {
+				resolve(res)
 			})
-			.catch((err) => {
-				reject(err);
-			});
-	});
+			.catch(err => {
+				reject(err)
+			})
+	})
 }
 
 export function saveMyIndicators(data) {
-	const url = '/dev/my_indicator/add_record';
-	const formData = new FormData();
+	const url = '/dev/my_indicator/add_record'
+	const formData = new FormData()
 
 	// 将data对象的属性添加到FormData
 	for (const key in data) {
@@ -659,20 +662,19 @@ export function saveMyIndicators(data) {
 		axios
 			.post(url, formData, {
 				headers: {
-					'Content-Type': 'multipart/form-data', // 设置请求头为form-data格式
-				},
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
 			})
-			.then((res) => {
-				resolve(res);
+			.then(res => {
+				resolve(res)
 			})
-			.catch((err) => {
-				reject(err);
-			});
-	});
+			.catch(err => {
+				reject(err)
+			})
+	})
 }
 
 export function getSeasonalityData(url) {
-
 	return new Promise((resolve, reject) => {
 		axios
 			.get(url, { withCredentials: true })

@@ -1,6 +1,7 @@
 const path = require('path')
 const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+	.BundleAnalyzerPlugin
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 
@@ -12,7 +13,7 @@ const utcTimestamp = Date.UTC(
 	Timestamp.getUTCHours(),
 	Timestamp.getUTCMinutes(),
 	Timestamp.getUTCSeconds()
-  );
+)
 function resolve(dir) {
 	return path.join(__dirname, dir)
 }
@@ -29,20 +30,20 @@ const config = {
 				{
 					test: /\.js$/,
 					include: path.resolve(__dirname, 'node_modules/cesium/Source'),
-					loader: require.resolve('@open-wc/webpack-import-meta-loader'),
+					loader: require.resolve('@open-wc/webpack-import-meta-loader')
 				},
 				// 在这里添加 lru-cache 的配置
 				{
 					test: /node_modules[\\/]lru-cache[\\/]/,
 					use: [
-					  {
-						loader: 'babel-loader',
-						options: {
-						  presets: ['@babel/preset-env'],
-						},
-					  },
-					],
-				  },
+						{
+							loader: 'babel-loader',
+							options: {
+								presets: ['@babel/preset-env']
+							}
+						}
+					]
+				}
 			]
 		},
 		plugins: [
@@ -59,28 +60,27 @@ const config = {
 					mode: 'history',
 					routes: [
 						{ path: '/home', skeletonId: 'homeSkeleton' },
-						{ path: '/', skeletonId: 'homeSkeleton' },
+						{ path: '/', skeletonId: 'homeSkeleton' }
 					]
 				}
 			})
-			,
 			// new UglifyJsPlugin({
-            //     uglifyOptions: {
-            //         compress:{
-            //             drop_console:true,
+			//     uglifyOptions: {
+			//         compress:{
+			//             drop_console:true,
 			// 			dead_code:true,
 			// 			drop_debugger:true,
-            //         },
+			//         },
 			// 		warnings: false
-            //     },
+			//     },
 			// 	sourceMap: false,
 			// 	parallel: true	//多进程提高构建速度
-            // }),
+			// }),
 			// new CompressionPlugin({
 			// 	// 压缩成gzip
 			// 	algorithm: 'gzip',
 			// 	// 使用正则给匹配到的文件做压缩，这里是给html、css、js以及字体做压缩
-			// 	test: /\.js$|\.css$|\.html$|\.ttf$|\.eot$|\.woff$/, 
+			// 	test: /\.js$|\.css$|\.html$|\.ttf$|\.eot$|\.woff$/,
 			// 	// 只有大小大于该值的资源会被处理。单位是 bytes。默认值是 0。
 			// 	threshold: 10240,
 			// 	// 只有压缩率小于这个值的资源才会被处理。默认值是 0.8。
@@ -104,11 +104,11 @@ const config = {
 		modules: false
 	},
 	//chainWebpack 通过链式编程的形式，来修改默认的webpack配置
-	chainWebpack: (config) => {
+	chainWebpack: config => {
 		config.resolve.alias
 			.set('assets', resolve('src/assets'))
 			.set('styles', resolve('src/assets/styles'))
-		config.plugin('copy').tap((args) => {
+		config.plugin('copy').tap(args => {
 			args[0].push({
 				from: path.resolve(__dirname, './node_modules/chartiq/js/thirdparty/'),
 				to: path.resolve(__dirname, 'dist/js/thirdparty'),
@@ -121,7 +121,7 @@ const config = {
 			/* ChartIQ using cur files so it is important to add file support to config */
 			.test(/\.(png|jpe?g|gif|webp|cur)(\?.*)?$/)
 			.use('url-loader')
-			.tap((options) => {
+			.tap(options => {
 				return options
 			})
 		// 「尽量将第三方库拆为独立分包」
@@ -129,8 +129,9 @@ const config = {
 		// 「尽量保持」 chunks = 'all'
 		//分包1
 		config.optimization.splitChunks({
-			cacheGroups:{
-				vendors: { // 自定义打包模块
+			cacheGroups: {
+				vendors: {
+					// 自定义打包模块
 					name: 'chunk-vendors', // 打包后的文件名
 					test: /[\\/]node_modules[\\/]/, // 匹配对应文件
 					priority: 1, // 优先级，先打包到哪个组里面，值越大，优先级越高
@@ -139,7 +140,7 @@ const config = {
 					// all: 匹配文件无论是否动态模块，都打包进该vendor
 					chunks: 'initial',
 					enforce: true, // true/false。为true时，忽略minSize，minChunks
-					reuseExistingChunk: true,
+					reuseExistingChunk: true
 				},
 				'element-ui': {
 					name: 'element-ui',
@@ -147,16 +148,16 @@ const config = {
 					priority: 2,
 					chunks: 'initial',
 					enforce: true,
-					reuseExistingChunk: true,
+					reuseExistingChunk: true
 				},
-				'chartiq': {
+				chartiq: {
 					name: 'chartiq',
 					test: /[\\/]node_modules[\\/](chartiq)[\\/]/,
 					priority: 2,
 					chunks: 'initial',
 					enforce: true,
-					reuseExistingChunk: true,
-				},
+					reuseExistingChunk: true
+				}
 			}
 		})
 
@@ -220,31 +221,31 @@ const config = {
 		// 再考虑将 node_modules 中的剩余项打成一个 chunk；
 		// 将被引用次数大于等于 3 次的公共模块拆分出来；
 		// config.optimization.splitChunks({
-		// 	chunks: 'all', 
+		// 	chunks: 'all',
 		// 	cacheGroups: {
-		// 		vendor: { 
-		// 			name: 'chunk-vendors', 
-		// 			test: /[\\/]node_modules[\\/]/, 
-		// 			priority: 10, chunks: 'initial' 
-		// 		}, 
-		// 		chartiq: { 
-		// 			name: 'chunk-chartiq', 
-		// 			priority: 20, 
-		// 			test: /[\\/]node_modules[\\/]_?chartiq|zrender(.*)/ 
-		// 		}, 
-		// 		'aws-sdk': { 
-		// 			name: 'chunk-aws-sdk', 
-		// 			priority: 20, 
-		// 			test: /[\\/]node_modules[\\/]_?aws-sdk|zrender(.*)/ 
-		// 		}, 
-		// 		'element-ui': { 
-		// 			name: 'chunk-element-ui', 
-		// 			priority: 20, 
-		// 			test: /[\\/]node_modules[\\/]_?element-ui|zrender(.*)/ 
+		// 		vendor: {
+		// 			name: 'chunk-vendors',
+		// 			test: /[\\/]node_modules[\\/]/,
+		// 			priority: 10, chunks: 'initial'
+		// 		},
+		// 		chartiq: {
+		// 			name: 'chunk-chartiq',
+		// 			priority: 20,
+		// 			test: /[\\/]node_modules[\\/]_?chartiq|zrender(.*)/
+		// 		},
+		// 		'aws-sdk': {
+		// 			name: 'chunk-aws-sdk',
+		// 			priority: 20,
+		// 			test: /[\\/]node_modules[\\/]_?aws-sdk|zrender(.*)/
+		// 		},
+		// 		'element-ui': {
+		// 			name: 'chunk-element-ui',
+		// 			priority: 20,
+		// 			test: /[\\/]node_modules[\\/]_?element-ui|zrender(.*)/
 		// 		},
 		// 		commons: {
-		// 			name: 'chunk-commons', 
-		// 			minChunks: 3, 
+		// 			name: 'chunk-commons',
+		// 			minChunks: 3,
 		// 			// minimum common number
 		// 			priority: 5,
 		// 			reuseExistingChunk: true
@@ -264,15 +265,15 @@ const config = {
 		// 			reuseExistingChunk: true,
 		// 		},
 		// 	}
-		// })	
+		// })
 
 		//CDN代理挂载，打包忽略nodemoudle内的以下包
 		config.externals({
 			vue: 'Vue',
 			vuex: 'Vuex',
-			'vue-router': 'VueRouter',
-		});
-		
+			'vue-router': 'VueRouter'
+		})
+
 		// if(process.env.ST_ENV === "prod"){
 		// 	config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
 		// 		{
@@ -280,7 +281,6 @@ const config = {
 		// 		}
 		// 	])
 		// }
-
 	},
 	devServer: {
 		// open:true,
@@ -298,8 +298,8 @@ const config = {
 		proxy: {
 			'/dev': {
 				//target: "http://10.131.9.217:8000",
-				target: "https://devbt2api.sentimentrader.com/",
-				// target: "https://bt2api.sentimentrader.com",
+				target: 'https://devbt2api.sentimentrader.com/',
+				// target: 'https://bt2api.sentimentrader.com',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
@@ -309,7 +309,7 @@ const config = {
 			'/api': {
 				//target: "https://ggfdkkraph.execute-api.us-east-1.amazonaws.com/",
 				// target: "http://10.131.9.217:8000",
-				target: "http://localhost:5001",
+				target: 'http://localhost:5001',
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {
@@ -317,21 +317,21 @@ const config = {
 				}
 			},
 			'/ai': {
-				target: "https://ai.sentdevsite.com",
+				target: 'https://ai.sentdevsite.com',
 				ws: true,
 				changOrigin: true,
 				pathRewrite: {
-					"^/ai": "",
-				},
+					'^/ai': ''
+				}
 			},
 			'/sn': {
-				target: "http://192.168.2.101:5000",
+				target: 'http://192.168.2.101:5000',
 				ws: true,
 				changOrigin: true,
 				pathRewrite: {
-					"^/sn": "",
-				},
-			},
+					'^/sn': ''
+				}
+			}
 		}
 	}
 }
