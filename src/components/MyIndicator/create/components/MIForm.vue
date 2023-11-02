@@ -764,8 +764,8 @@ export default {
         const indicator_1_url = this.data.indicator_1_url
         const indicator_2_url = this.data.indicator_2_url
 
-        const inAllowedList_1 = ((sentimentList.find(ele => ele.url === indicator_1_url) || symbolList.find(ele => ele.url === indicator_1_url))?.label || false)
-        const inAllowedList_2 = ((sentimentList.find(ele => ele.url === indicator_2_url) || symbolList.find(ele => ele.url === indicator_2_url))?.label || false)
+        const inAllowedList_1 = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()))?.label || false)
+        const inAllowedList_2 = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()))?.label || false)
 
         if(!indicator_1_url || !indicator_2_url || !inAllowedList_1 || !inAllowedList_2 ) {
           this.popUpMsgBox('Please choose an indicator from the dropdown.')
@@ -781,7 +781,7 @@ export default {
           // totalWeight += parseFloat(row.weight) || 0
           row.weightValidErrMsg = validatePercentageRule(_, row.weight)
           if(row.weightValidErrMsg) rowWeightValid = false
-          const isIn = ((sentimentList.find(ele => ele.url === row.indicator_url) || symbolList.find(ele => ele.url === row.indicator_url))?.label || false)
+          const isIn = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === row.indicator_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === row.indicator_url.toLocaleLowerCase()))?.label || false)
           if(!isIn) inAllowedList = false
         }
         // if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
