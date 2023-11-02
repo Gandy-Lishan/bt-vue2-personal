@@ -28,7 +28,7 @@
 				>
 					<template slot-scope="scope">
 						<p class="tableText">
-							{{ scope.row[l.value] }}
+              {{ scope.row[l.value] != undefined ? scope.row[l.value] : '' }}
 						</p>
 					</template>
 				</el-table-column>
@@ -42,7 +42,7 @@
 				>
 					<template slot-scope="scope">
 						<p class="tableText">
-							{{ `${scope.row[l.value]} %` }}
+              {{ scope.row[l.value] != undefined ? `${scope.row[l.value]} %` : '' }}
 						</p>
 					</template>
 				</el-table-column>
