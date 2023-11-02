@@ -373,7 +373,7 @@ export default class AdvancedChartComponent extends Vue {
 				CIQ.stxx.layout.headsUp.floating = true
 			}
 		}
-
+		this.overrideStudyDef()
 		
 		portalizeContextDialogs(container)
 		// Delay the call to createChartAndUI so any other AdvancedChart components on the page
@@ -480,10 +480,10 @@ export default class AdvancedChartComponent extends Vue {
 
 	beforeDestroy() {
 		// 防止跳转到backtester时保留了Hammer followed by a raise等marker
-		CIQ.store.dispatch('app/reset_chart_study_state')
-		CIQ.store.dispatch('app/reset_chart_config_state')
+		CIQ.store.dispatch('chart/reset_chart_study_state')
+		CIQ.store.dispatch('form/reset_chart_config_state')
 
-		CIQ.store.commit('app/RESET_CHART_CONDIG_STATE')
+		CIQ.store.commit('chart/RESET_CHART_CONDIG_STATE')
 		// Destroy the ChartEngine instance when unloading the component.
 		// This will stop internal processes such as quotefeed polling.
 		CIQ.stxx.destroy()
@@ -497,6 +497,13 @@ export default class AdvancedChartComponent extends Vue {
 		return uiContext
 	}
 	
+	// 统一复写默认Study(已存在的，不然则在STMovingAverages中配置)配置
+	overrideStudyDef() {
+		CIQ.extend(CIQ.Studies.studyLibrary["MA Dev"], {
+			calculateFN: CIQ.Studies.calculateSTMADev,
+			inputs: { "Points Or Percent": ["Percent","Points"] },
+		});
+	}
 }
 
 /**

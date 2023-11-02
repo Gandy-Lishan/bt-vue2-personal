@@ -213,6 +213,9 @@ const mutations = {
 			(state.activatedMA = [{ period: 21, url: '' }])
 		state.activatedMALayout = [],
 		state.extremeValue = []
+
+		//重置交易结果列表
+		state.trades = []
 	},
 	SET_SPAN_PERIOD: (state, val) => {
 		state.spanPeriod = val

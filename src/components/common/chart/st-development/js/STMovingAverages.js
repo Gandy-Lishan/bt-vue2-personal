@@ -399,7 +399,7 @@ if (!CIQ.Studies) {
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
 		var pts = sd.inputs["Points Or Percent"];
-		if (!pts) pts = "Points";
+		if (!pts) pts = "Percent";
 		var maType = sd.inputs["Moving Average Type"];
 		if (!maType) maType = "exponential";
 		CIQ.Studies.MA(maType, sd.days, field, 0, "_MA", stx, sd);
@@ -868,38 +868,6 @@ if (!CIQ.Studies) {
             inputs: { Period: 20, Field: "field", Type: "ma", Offset: 0 },
             outputs: { MA: "#FF000" },
         },
-		"MA Env": {
-			name: "Moving Average Envelope",
-			overlay: true,
-			seriesFN: CIQ.Studies.displayChannel,
-			calculateFN: CIQ.Studies.calculateMAEnvelope,
-			inputs: {
-				Period: 50,
-				Field: "field",
-				"Shift Type": ["percent", "points"],
-				Shift: 5,
-				"Moving Average Type": "ma",
-				"Channel Fill": true
-			},
-			outputs: {
-				"MA Env Top": "auto",
-				"MA Env Median": "auto",
-				"MA Env Bottom": "auto"
-			},
-			attributes: {
-				Shift: { min: 0.1, step: 0.1 }
-			}
-		},
-		"MA Dev": {
-			name: "Moving Average Deviation",
-                            calculateFN: CIQ.Studies.calculateSTMADev,
-                            seriesFN: CIQ.Studies.displayHistogramWithSeries,
-                            inputs: { Period: 13, Overlay: false, Field: "field", "Moving Average Type": "ma",
-                            "Points Or Percent": ["Points", "Percent"] },
-                            outputs: 
-                            {"Increasing Bar": "#00DD00", "Decreasing Bar": "#FF0000"},
-                            
-		},
 		"High Low": {
 			name: "High Low Bands",
 			overlay: true,

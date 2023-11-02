@@ -1565,7 +1565,7 @@ export default {
           new Date(CIQ.initialDate.end),
           markerSet
         )
-        this.$store.dispatch('states/set_isMarkerShown_flag',true)
+        
 
         // split the markers into several groups
         CIQ.groups = this.group(list)
@@ -1585,7 +1585,10 @@ export default {
         }
         console.log('initiating Markers...', markers)
         
-        CIQ.loadChart(markers, CIQ.addMarker)
+        // 如果marker已经加载了，则无需重复加载，主要是防止重构后反复查看result tab导致的重复加载
+        if(!CIQ.store.getters.getIsMarkerShownFlagState) CIQ.loadChart(markers, CIQ.addMarker)
+        
+        this.$store.dispatch('states/set_isMarkerShown_flag',true)
       } catch (error) {
         console.error(error)
         return
