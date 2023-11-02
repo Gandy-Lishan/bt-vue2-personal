@@ -392,10 +392,10 @@ export default {
 	created() {
 		this.getDataList(null)
 	// 监听事件总线中的 refresh-list 事件
-  	RefreshBus.$on(`refresh-list`, (_) => {
-      // 在这里执行刷新列表的操作，重新获取数据
-      this.getDataList(null)
-    })
+  	// RefreshBus.$on(`refresh-list`, (_) => {
+    //   // 在这里执行刷新列表的操作，重新获取数据
+    //   this.getDataList(null)
+    // })
 	},
 	methods: {
 		async getDataList(orderby) {
