@@ -7,7 +7,7 @@
 		<div class="set-up-container">
 			<div class="criteria-container">
 				<div class="criteria">
-					<keep-alive>
+					<!-- <keep-alive> -->
 						<Criteria
 							ref="entryChild"
 							:config="setConfig('entry')"
@@ -15,15 +15,15 @@
 							@getEntryRelation="getEntryRelation"
 							@sendEntrySignalIndex="sendEntrySignalIndex"
 						>
-						<keep-alive include="['ChildComponent']">
+						<!-- <keep-alive include="['ChildComponent']"> -->
 							<ChildComponent></ChildComponent>
-						</keep-alive>
+						<!-- </keep-alive> -->
 						</Criteria>
-					</keep-alive>
+					<!-- </keep-alive> -->
 				</div>
 				<div class="divider"></div>
 				<div class="criteria">
-					<keep-alive>
+					<!-- <keep-alive> -->
 						<Criteria
 							ref="exitChild"
 							:config="setConfig('exit')"
@@ -32,11 +32,11 @@
 							@getExitRelation="getExitRelation"
 							@sendExitSignalIndex="sendExitSignalIndex"
 						>
-							<keep-alive include="['ChildComponent']">
+							<!-- <keep-alive include="['ChildComponent']"> -->
 								<ChildComponent></ChildComponent>
-							</keep-alive>
+							<!-- </keep-alive> -->
 						</Criteria>
-					</keep-alive>
+					<!-- </keep-alive> -->
 				</div>
 			</div>
 		</div>
