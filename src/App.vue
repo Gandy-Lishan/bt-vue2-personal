@@ -15,9 +15,9 @@
 						<!-- <component :is="Component" /> -->
 					<!-- </keep-alive> -->
     <!-- </router-view> -->
-		 <keep-alive>
+		 <!-- <keep-alive> -->
 			<router-view></router-view>
-		 </keep-alive>
+		 <!-- </keep-alive> -->
 			</div>
 				<Footer></Footer>
 			</div>

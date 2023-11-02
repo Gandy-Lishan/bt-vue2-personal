@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <div class="header_logo">
-      <div class="logo_container">
+      <div class="logo_container" @click="$router.push('/backtester/sr/setup')">
         <span
           ><img
             style="width: 190px; height: 50px"

@@ -244,7 +244,7 @@ export default {
     getWeightedIndicatorData(item, sentimentList, symbolList) {
       const mul_indicator_obj = isJson(item.mul_indicator) ? JSON.parse(item.mul_indicator) : item.mul_indicator;
       const indicator_weight_arr = item.indicator_weight.includes('_') ? item.indicator_weight.split('_') : [item.indicator_weight];
-      let combine_type_arr = mul_indicator_obj.type ? (mul_indicator_obj.type.includes('_') ? mul_indicator_obj.type.split('_') : [mulIndicatorObj.type]) : new Array(indicator_weight_arr.length).fill('si')
+      let combine_type_arr = mul_indicator_obj.combine_type ? (mul_indicator_obj.combine_type.includes('_') ? mul_indicator_obj.combine_type.split('_') : [mulIndicatorObj.combine_type]) : new Array(indicator_weight_arr.length).fill('si')
       combine_type_arr = combine_type_arr.map(item => {
         if(item == 'si') return 'Indicator'
         if(item == 'sy') return 'Symbol'

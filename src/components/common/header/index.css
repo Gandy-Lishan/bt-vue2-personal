@@ -80,6 +80,7 @@
 	.logo_container {
 		display: flex;
 		align-items: center;
+		cursor: pointer;
 
 		& > span {
 			padding: 12px 24px 6px 24px;
