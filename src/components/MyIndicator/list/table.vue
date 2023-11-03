@@ -105,7 +105,8 @@
 				>
           <template slot-scope="scope">
             <p v-for="(item, index) in scope.row.included" :key="index">
-              <span v-if="index == 0 || index == 1">{{ `${index + 1}. ${item}` }}</span>
+              <span v-if="index == 0">{{ `${index + 1}. ${item}` }}</span>
+              <span v-if="index == 1">{{ `${index + 1}. ${item}${scope.row.included.length > 2 ? '...': ''}` }}</span>
             </p>
           </template>
 				</el-table-column>
@@ -175,6 +176,7 @@ export default {
       } catch (error) {
         this.currentPage = 1; listRes = await getMyIndicatorsList(1)
       }
+      console.log('listRes', listRes)
       this.total = listRes.data.count
       this.tableData = this.processRowData(listRes.data.results)
       this.loading = false
@@ -244,7 +246,7 @@ export default {
     getWeightedIndicatorData(item, sentimentList, symbolList) {
       const mul_indicator_obj = isJson(item.mul_indicator) ? JSON.parse(item.mul_indicator) : item.mul_indicator;
       const indicator_weight_arr = item.indicator_weight.includes('_') ? item.indicator_weight.split('_') : [item.indicator_weight];
-      let combine_type_arr = mul_indicator_obj.combine_type ? (mul_indicator_obj.combine_type.includes('_') ? mul_indicator_obj.combine_type.split('_') : [mulIndicatorObj.combine_type]) : new Array(indicator_weight_arr.length).fill('si')
+      let combine_type_arr = mul_indicator_obj.combine_type ? (mul_indicator_obj.combine_type.includes('_') ? mul_indicator_obj.combine_type.split('_') : [mul_indicator_obj.combine_type]) : new Array(indicator_weight_arr.length).fill('si')
       combine_type_arr = combine_type_arr.map(item => {
         if(item == 'si') return 'Indicator'
         if(item == 'sy') return 'Symbol'
@@ -287,25 +289,59 @@ export default {
       if(!this.searchKey) {this.getTableData(this.currentPage);return}
       this.loading = true
       console.log(this.searchKey)
-      const data = {
-        name: this.searchKey
+
+      const inputString = this.searchKey.toLowerCase();
+      const keywords = {
+        timeframe: ['daily', 'weekly', 'monthly'],
+        calculate: ['ratio', 'spread'],
+        combine_type: ['indicator', 'symbol']
+      };
+
+      let matchedStrings = [];
+
+      const regex = /(daily|weekly|monthly|ratio|spread|indicator|symbol)/gi;
+      let match;
+
+      while ((match = regex.exec(inputString)) !== null) {
+        matchedStrings.push(match[0]);
       }
-      let searchRes
+
+      const extractedValues = {
+        timeframe: null,
+        calculate: null,
+        combine_type: null
+      };
+
+      matchedStrings.forEach(item => {
+        for (const key in keywords) {
+          if (keywords[key].includes(item)) {
+            extractedValues[key] = item;
+          }
+        }
+      });
+
+      const substringsToRemove = matchedStrings.join('|');
+      const name = inputString.replace(new RegExp(substringsToRemove, 'g'), '');
+
+      console.log('matchedStrings', matchedStrings);
+      console.log('Extracted Values:', extractedValues);
+      console.log('Name:', name);
+
+      const calculate = extractedValues.calculate
+      const combine_type = extractedValues.combine_type
+      const timeframe = extractedValues.timeframe
       try {
-        searchRes = await searchIndicator(data)
-        console.log('searchRes', searchRes)
-        if(searchRes.status == 200) {
-          this.tableData = this.processRowData(searchRes.data)
-          // this.tableData = searchRes.data
-        }
-        if(searchRes.data.code == 406 || searchRes.data.code == 404) {
-          this.tableData = []
-        }
+        const searchRes = await searchIndicator(name, calculate, combine_type, timeframe)
+        if(searchRes.status == 200) {this.tableData = this.processRowData(searchRes.data.results); this.total = searchRes.data.count; this.currentPage = 1}
+        if(searchRes.data.code == 406 || searchRes.data.code == 404) {this.tableData = [];this.total = 0; this.currentPage = 1}
       } catch (error) {
+        if(error?.response?.status == 404) this.popUpMsgBox('No results found')
         this.tableData = []
+        this.total = 0
+        this.currentPage = 1
+        console.log(error)
       }
       this.loading = false
-      console.log(searchRes)
     },
     handleCreate() {
       this.$router.push('/myindicator/create')
@@ -322,29 +358,15 @@ export default {
       })
     },
     async deleteIndicator(row) {
+      this.loading = true
       let res = await delMyIndicator(row.url)
       const code = res.data.code
-				if(code == 200) {
-            this.$message({
-              message: 'The indicator has been removed from the list',
-              center: true
-            })
-					}
-					if(code == 404) {
-              this.$message({
-              message: 'The indicator is no longer in the list',
-              center: true
-            })
-					}
-					if(code == 403) {
-            this.$message({
-              message: 'Permission denied',
-              center: true
-            })
-				}
-      console.log('删除 res', res)
+      if(code == 200) this.popUpMsgBox('The indicator has been removed from the list')
+      if(code == 404) this.popUpMsgBox('The indicator is no longer in the list')
+      if(code == 403) this.popUpMsgBox('Permission denied')
       await this.getTableData(this.currentPage)
-    }
+      this.loading = false
+    },
   }
 }
 </script>
