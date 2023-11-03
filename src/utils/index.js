@@ -104,7 +104,13 @@ const LocalStorageUtil = {
   // 存储数据
   set(key, value) {
     try {
-      localStorage.setItem(key, JSON.stringify(value))
+      if (value === null) {
+        localStorage.setItem(key, value)
+      } else if (typeof value === 'boolean') {
+        localStorage.setItem(key, value);
+      } else {
+        localStorage.setItem(key, JSON.stringify(value));
+      }
       return true
     } catch (error) {
       console.error('LocalStorage存储失败:', error)

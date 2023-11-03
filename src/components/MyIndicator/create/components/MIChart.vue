@@ -16,7 +16,6 @@
 <script>
 import chart from '@/components/common/chart/index.vue'
 import { CIQ } from '@/components/common/chart/st-development/js/components'
-import { mapGetters } from 'vuex'
 import { LoadingOverlayChart } from "@/components/common"
 export default {
 	name: 'MIChart',
