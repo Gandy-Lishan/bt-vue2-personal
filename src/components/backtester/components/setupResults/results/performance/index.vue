@@ -1660,7 +1660,7 @@ export default {
           this.backtestHistoryList.length
         )
       ) {
-        this.$message.warning('No data available for download.')
+        this.popUpMsgBox('No data available for download')
         return
       }
       const summary = []
@@ -1794,7 +1794,7 @@ export default {
     },
     addRow() {
       if (this.editTIMData.length >= 10) {
-        this.$message.warning('Cannot add more than 10 rows.')
+        this.popUpMsgBox('Cannot add more than 10 rows')
         return
       }
       const frequency = this.rowFrequency
@@ -1836,7 +1836,7 @@ export default {
     async saveTable() {
       this.showTable = false;
       if (this.tradesData.length === 0) {
-        this.$message.warning('No computable trades.')
+        this.popUpMsgBox('No computable trades')
         return
       }
       // 如果row删除为空，其他数据也要清空
@@ -1913,21 +1913,21 @@ export default {
         if (item.timeframe === 'Day' || item.timeframe === 'Days') {
           const period = parseInt(item.period);
           if (isNaN(period) || period < 1 || period > 252 || !Number.isInteger(Number(item.period))) {
-            this.$message.warning('When the Timeframe is selected as Day(s), only positive integers between 1 and 252 are allowed to be entered.');
+            this.popUpMsgBox('When the Timeframe is set to "Day(s)", only positive integers from 1 to 252 are allowed');
             return false;
           }
         }
         if (item.timeframe === 'Week' || item.timeframe === 'Weeks') {
           const period = parseInt(item.period);
           if (isNaN(period) || period < 1 || period > 52 || !Number.isInteger(Number(item.period))) {
-            this.$message.warning('When the Timeframe is selected as Week(s), only positive integers between 1 and 52 are allowed to be entered.');
+            this.popUpMsgBox('When the Timeframe is set to "Week(s)", only positive integers between 1 and 52 are allowed');
             return false;
           }
         }
         if (item.timeframe === 'Month' || item.timeframe === 'Months') {
           const period = parseInt(item.period);
           if (isNaN(period) || period < 1 || period > 120 || !Number.isInteger(Number(item.period))) {
-            this.$message.warning('When the Timeframe is selected as Month(s), only positive integers between 1 and 120 are allowed to be entered.');
+            this.popUpMsgBox('When the Timeframe is set to "Month(s)", only positive integers between 1 and 120 are allowed');
             return false;
           }
         }

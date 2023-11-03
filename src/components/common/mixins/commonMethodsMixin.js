@@ -84,13 +84,7 @@ export const CommonMethodsMixin = {
 				)
 
 				if (isDuplicate) {
-					this.$message({
-						message: '<strong>The backtest has been copied</strong>',
-						center: true,
-						dangerouslyUseHTMLString: true,
-						showClose: true,
-						duration: 8000
-					})
+					this.popUpMsgBox('The backtest has been copied')
 				} else {
 					// 获取参数并准备复制
 					const paramsRes = await seeParams(data.id)
@@ -125,13 +119,7 @@ export const CommonMethodsMixin = {
 						this.queryInfo.page = 1
 						await this.getDataList(null)
 					}
-					this.$message({
-						message: '<strong>Copy successfully</strong>',
-						center: true,
-						dangerouslyUseHTMLString: true,
-						showClose: true,
-						duration: 8000
-					})
+					this.popUpMsgBox('Copy successfully')
 				}
 				this.loading = false
 			} catch (error) {
@@ -144,13 +132,7 @@ export const CommonMethodsMixin = {
 			await deleteBacktest(id)
 			this.getDataList(null)
 			this.loading = false
-			this.$message({
-				message: '<strong>Successfully deleted</strong>',
-				center: true,
-				dangerouslyUseHTMLString: true,
-				showClose: true,
-				duration: 8000
-			})
+			this.popUpMsgBox('Successfully deleted')
 			// RefreshBus.$emit('refresh-list')
 		},
 		async addToFavorites(data) {
@@ -161,13 +143,7 @@ export const CommonMethodsMixin = {
 			await favoriteBacktest(data.id, this.$qs.stringify(params))
 			this.getDataList(null)
 			this.loading = true
-			this.$message({
-				message: '<strong>Successfully added to favorites</strong>',
-				center: true,
-				dangerouslyUseHTMLString: true,
-				showClose: true,
-				duration: 8000
-			})
+			this.popUpMsgBox('Successfully added to favorites')
 			// RefreshBus.$emit('refresh-list')
 		},
 		async moveToFavorites(data) {
@@ -178,13 +154,7 @@ export const CommonMethodsMixin = {
 			await favoriteBacktest(data.id, this.$qs.stringify(params))
 			this.getDataList(null)
 			this.loading = false
-			this.$message({
-				message: '<strong>Removed from favorites</strong>',
-				center: true,
-				dangerouslyUseHTMLString: true,
-				showClose: true,
-				duration: 8000
-			})
+			this.popUpMsgBox('Removed from favorites')
 			// RefreshBus.$emit('refresh-list')
 		},
 		async rerunBacktest(data) {
