@@ -142,7 +142,7 @@ export const CommonMethodsMixin = {
 			}
 			await favoriteBacktest(data.id, this.$qs.stringify(params))
 			this.getDataList(null)
-			this.loading = true
+			this.loading = false
 			this.popUpMsgBox('Successfully added to favorites')
 			// RefreshBus.$emit('refresh-list')
 		},
