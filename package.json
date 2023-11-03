@@ -31,7 +31,7 @@
     "express-http-proxy": "^1.6.3",
     "font-awesome": "^4.7.0",
     "github-markdown-css": "^5.1.0",
-    "highcharts": "^11.1.0",
+    "highcharts": "^10.3.3",
     "http-proxy-middleware": "^2.0.4",
     "https": "^1.0.0",
     "i": "^0.3.7",
@@ -66,6 +66,8 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/preset-env": "^7.23.2",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-typescript": "~4.5.0",
