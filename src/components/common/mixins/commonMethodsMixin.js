@@ -160,7 +160,7 @@ export const CommonMethodsMixin = {
 		async rerunBacktest(data) {
 			this.loading = true
 			// 打开遮罩层，改变 loadingTest
-			this.$store.commit('form/SET_LIST_LOADING', true)
+			// this.$store.commit('form/SET_LIST_LOADING', true)
 			this.loadTest = 'Re-running Backtest in Progress...'
 			await this.rerunThisBacktest(cloneDeep(data))
 			// rerun 后重新请求列表 我并不需要把所有列表都更新
