@@ -21,11 +21,11 @@ let __st_js_generateCsv_ = (_exports) => {
          let item = _arrData[i]
          let dateNum = item.Date?item.Date:''
          if(timePeriod){
-             if(dateNum<timePeriod.start_date || dateNum>timePeriod.end_date){continue}
+             if(dateNum<adjustStartDateToLastYear(timePeriod.start_date) || dateNum>timePeriod.end_date){continue}
          }
          arrData.push(_arrData[i])
      }
- 
+
      const tradePriceType = CIQ.store.state.form.tradePrice
      // 给数组内容换好位置
      for(var i in arrData){
@@ -144,6 +144,10 @@ let __st_js_generateCsv_ = (_exports) => {
      let csvContent = csvArray.map(e => e.join(",")).join("\n");
      return csvContent 
  };
+ function adjustStartDateToLastYear(startDate){
+    const year = Math.floor(startDate / 10000000000000); // 提取年份
+    return parseInt(year-1 + '' + '0101')*1000000000
+ }
  function dropOHLCV(content){
     return content.map(array => array.slice(-10));
  }
