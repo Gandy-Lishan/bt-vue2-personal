@@ -42,12 +42,13 @@ import { CIQ } from '@/components/common/chart/st-development/js'
 // Vue.use(InstantSearch);
 import '@algolia/autocomplete-theme-classic';
 import '@/assets/css/searchBar.css';
-
+import GlobalMixins from "@/components/common/mixins/globalMixins";
 
 Vue.use(VueCookies)
 
 Vue.prototype.$qs = qs
 Vue.use(ElementUI, { locale })
+Vue.mixin(GlobalMixins);
 Vue.prototype.$http = axios
 CIQ.axios = axios
 CIQ.nprogress = Nprogress

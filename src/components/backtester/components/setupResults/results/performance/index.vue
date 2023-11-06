@@ -304,7 +304,7 @@ export default {
           this.backtestHistoryList.length
         )
       ) {
-        this.$message.warning('No data available for download.')
+        this.popUpMsgBox('No data available for download')
         return
       }
       const summary = []

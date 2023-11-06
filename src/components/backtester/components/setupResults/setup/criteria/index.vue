@@ -626,10 +626,7 @@ export default {
 					this.indicatorRadioArr.push('sentiment')
 				}
 				if (this.editableTabs.length > 5 && this.relation == 2) {
-					this.$message({
-						message: 'Add up to five conditions',
-						type: 'error'
-					})
+					this.popUpMsgBox('Add up to five conditions')
 					this.editableTabs.pop()
 					this.indicatorRadioArr.pop()
 					// this.editableTabsValue = this.editableTabs.length + ''
@@ -638,10 +635,7 @@ export default {
 					this.tabIndex = 5
 				}
 				if (this.relation == 3 && this.editableTabs.length > 3) {
-					this.$message({
-						message: 'Add up to three conditions',
-						type: 'error'
-					})
+					this.popUpMsgBox('Add up to three conditions')
 					this.editableTabs.pop()
 					this.indicatorRadioArr.pop()
 					// this.editableTabsValue = this.editableTabs.length + ''
@@ -662,11 +656,7 @@ export default {
 					this.editableTabs.length == 2
 				) {
 					// At least two conditions
-					this.$message({
-						message:
-							'Multiple conditions are currently selected, at least two conditions',
-						type: 'error'
-					})
+					this.popUpMsgBox('Multiple conditions are currently selected, at least two conditions')
 					return
 				}
 				let tabs = this.editableTabs
@@ -1008,10 +998,7 @@ export default {
 					for (let n = 0; n < sameItem.length; n++) {
 						str += 'Condition' + Number(sameItem[n]) + ' '
 					}
-					this.$message({
-						message: `The current ${this.criteria} ${str} are the same, please change`,
-						type: 'error'
-					})
+					this.popUpMsgBox(`The current ${this.criteria} ${str} are the same, please change`)
 					return false
         	}
 			}
@@ -1042,13 +1029,9 @@ export default {
 						_this.$refs.sentiChild[index].setDesciption(index)
 						let senti = this.$refs.sentiChild[index].saveCondition(index)
 						if (!senti) {
-							this.$message({
-								message:
-									`Please check that the #
+							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`,
-								type: 'error'
-							})
+									${this.criteria} panel field is filled in correctly`)
 						}
 						return (checked = senti)
 					}
@@ -1056,12 +1039,9 @@ export default {
 						_this.$refs.symbolChild[index].setDesciption(index)
 						let symbol = _this.$refs.symbolChild[index].saveCondition(index)
 						if(!symbol) {
-						_this.$message({
-						message: `Please check that the #
+						_this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`,
-						type: 'error'
-						})
+									${this.criteria} panel field is filled in correctly`)
 						} 
 						return (checked = symbol)
 					}
@@ -1072,13 +1052,9 @@ export default {
 						this.$refs.cciChild[index].setDesciption(index)
 						let cci = this.$refs.cciChild[index].saveCondition(index)
 						if (!cci) {
-							this.$message({
-								message:
-								`Please check that the #
+							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`,
-								type: 'error'
-							})
+									${this.criteria} panel field is filled in correctly`)
 						}
 						return (checked = cci)
 					}
@@ -1089,13 +1065,9 @@ export default {
 						this.$refs.macdChild[index].setDesciption(index)
 						let macd = this.$refs.macdChild[index].saveCondition(index)
 						if (!macd) {
-							this.$message({
-								message:
-								`Please check that the #
+							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`,
-								type: 'error'
-							})
+									${this.criteria} panel field is filled in correctly`)
 						}
 						return (checked = macd)
 					}
@@ -1106,13 +1078,9 @@ export default {
 						this.$refs.maChild[index].setDesciption(index)
 						let ma = this.$refs.maChild[index].saveCondition(index)
 						if (!ma) {
-							this.$message({
-								message:
-								`Please check that the #
+							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`,
-								type: 'error'
-							})
+									${this.criteria} panel field is filled in correctly`)
 						}
 						return (checked = ma)
 					}
@@ -1123,13 +1091,9 @@ export default {
 						this.$refs.EFTLikeChild[index].setDesciption(index)
 						let eft = this.$refs.EFTLikeChild[index].saveCondition(index)
 						if (!eft) {
-							this.$message({
-								message:
-								`Please check that the #
+							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`,
-								type: 'error'
-							})
+									${this.criteria} panel field is filled in correctly`)
 						}
 						return (checked = eft)
 					}
@@ -1140,13 +1104,9 @@ export default {
 						this.$refs.ADXLikeChild[index].setDesciption(index)
 						let adx = this.$refs.ADXLikeChild[index].saveCondition(index)
 						if (!adx) {
-							this.$message({
-								message:
-								`Please check that the #
+							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`,
-								type: 'error'
-							})
+									${this.criteria} panel field is filled in correctly`)
 						}
 						return (checked = adx)
 					}
@@ -1158,13 +1118,9 @@ export default {
 						let aligator =
 							this.$refs.aligatorLikeChild[index].saveCondition(index)
 						if (!aligator) {
-							this.$message({
-								message:
-								`Please check that the #
+							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`,
-								type: 'error'
-							})
+									${this.criteria} panel field is filled in correctly`)
 						}
 						return (checked = aligator)
 					}
@@ -1175,13 +1131,9 @@ export default {
 						this.$refs.LRFLikeChild[index].setDesciption(index)
 						let lrf = this.$refs.LRFLikeChild[index].saveCondition(index)
 						if (!lrf) {
-							this.$message({
-								message:
-								`Please check that the #
+							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`,
-								type: 'error'
-							})
+									${this.criteria} panel field is filled in correctly`)
 						}
 						return (checked = lrf)
 					}
@@ -1192,13 +1144,9 @@ export default {
 						this.$refs.bollBandsLikeChild[index].setDesciption(index)
 						let blb = this.$refs.bollBandsLikeChild[index].saveCondition(index)
 						if (!blb) {
-							this.$message({
-								message:
-								`Please check that the #
+							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`,
-								type: 'error'
-							})
+									${this.criteria} panel field is filled in correctly`)
 						}
 						return (checked = blb)
 					}
@@ -1210,13 +1158,9 @@ export default {
 						let smi =
 							this.$refs.stochasticsLikeChild[index].saveCondition(index)
 						if (!smi) {
-							this.$message({
-								message:
-								`Please check that the #
+							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`,
-								type: 'error'
-							})
+									${this.criteria} panel field is filled in correctly`)
 						}
 						return (checked = smi)
 					}
@@ -1227,13 +1171,9 @@ export default {
 						this.$refs.ERILikeChild[index].setDesciption(index)
 						let eri = this.$refs.ERILikeChild[index].saveCondition(index)
 						if (!eri) {
-							this.$message({
-								message:
-								`Please check that the #
+							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`,
-								type: 'error'
-							})
+									${this.criteria} panel field is filled in correctly`)
 						}
 						return (checked = eri)
 					}
@@ -1245,13 +1185,9 @@ export default {
 						let ts =
 							this.$refs.trailingStopLikeChild[index].saveCondition(index)
 						if (!ts) {
-							this.$message({
-								message:
-								`Please check that the #
+							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`,
-								type: 'error'
-							})
+									${this.criteria} panel field is filled in correctly`)
 						}
 						return (checked = ts)
 					}

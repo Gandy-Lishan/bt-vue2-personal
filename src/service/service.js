@@ -619,25 +619,25 @@ export function delMyIndicator(url) {
 			})
 	})
 }
-export function searchIndicator(data) {
-	const url = `/dev/my_indicator/search_records/`
-	const formData = new FormData()
-
-	// 将data对象的属性添加到FormData
-	console.log('data', data)
-	for (const key in data) {
-		console.log('data', data[key])
-		formData.append(key, data[key])
-	}
-	console.log('查询的 formData', formData)
+export function searchIndicator(name, calculate, combine_type, timeframe) {
+	let url = '/dev/my_indicator/get_records/?';
+  if (name) url += `name=${name}`;
+  if (calculate) {
+    if (name) url += `&`;
+    url += `calculate=${calculate}`;
+  }
+  if (combine_type) {
+    if (name || calculate) url += `&`;
+    url += `combine_type=${combine_type}`;
+  }
+  if (timeframe) {
+    if (name || calculate || combine_type) url += `&`;
+    url += `timeframe=${timeframe}`;
+  }
 
 	return new Promise((resolve, reject) => {
 		axios
-			.post(url, formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
-				}
-			})
+			.get(url)
 			.then(res => {
 				resolve(res)
 			})
@@ -661,6 +661,33 @@ export function saveMyIndicators(data) {
 	return new Promise((resolve, reject) => {
 		axios
 			.post(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+export function editMyIndicators(data, rowUrl) {
+	const url = `/dev/my_indicator/update_record?url=${rowUrl}`
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.put(url, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
 				}
