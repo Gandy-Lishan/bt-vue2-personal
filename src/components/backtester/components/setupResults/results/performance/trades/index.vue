@@ -1,7 +1,7 @@
 <template>
     <div class="trades-container">
         <el-table
-            :data="splitTradeData"
+            :data="paginatedData"
             style="width: 100%"
             border
             :span-method="objectSpanMethod"
@@ -120,16 +120,36 @@ export default {
 	name: 'Summary',
 	data() {
 		return {
+            queryInfo: {
+                total: 0,
+                page: 1
+            },
+            totalTradesNumber: 0,
 		}
 	},
 	props: {
-		splitTradeData: Array,
-        totalTradesNumber: Number,
-        queryInfo: Object,
+        tradesData: Array,
 	},
     created(){
-
     },
+    computed: {
+		// Filtered and paginated data to be displayed in the table
+		paginatedData() {
+			return this.tradesData.slice(
+                20 * (this.queryInfo.page - 1),
+                this.queryInfo.page * 20
+            )
+		},
+	},
+    watch: {
+		tradesData: {
+			handler(newValue, oldValue){
+                this.queryInfo.total = newValue.length
+                this.totalTradesNumber = newValue.length / 2
+			},
+			deep: true
+		},
+	},
 	methods: {
         objectSpanMethod({ row, column, rowIndex, columnIndex }) {
         if (columnIndex === 0) {
@@ -185,9 +205,9 @@ export default {
             }
         }
         },
-        handleCurrentChange(page) {
-            this.$emit('handleCurrentChange', page)
-        },
+        handleCurrentChange(page){
+            this.queryInfo.page = page
+        }
     }
 }
 </script>

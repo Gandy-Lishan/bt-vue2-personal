@@ -258,26 +258,26 @@
         <div class="imgBox">
             <div
                 v-if="
-                    !returnImgUrl &&
-                    !drawDownImgUrl &&
-                    !monthReturnImgUrl &&
-                    !annualReturnImgUrl
+                    !tableData[0]?.returnsFileURL &&
+                    !tableData[0]?.ddFileURL &&
+                    !tableData[0]?.returnsHeatmapFileURL &&
+                    !tableData[0]?.annualReturnsFileURL
                 "
                 style="text-align: left"
             >
                 <el-empty image-size="80" description="No Data"></el-empty>
             </div>
             <div class="benchmarkReturnImg">
-                <img :src="returnImgUrl" alt="" width="100%" />
+                <img :src="tableData[0]?.returnsFileURL" alt="" width="100%" />
             </div>
             <div class="drawDownReturnImg">
-                <img :src="drawDownImgUrl" alt="" width="100%" />
+                <img :src="tableData[0]?.ddFileURL" alt="" width="100%" />
             </div>
             <div class="monthReturnImg">
-                <img :src="monthReturnImgUrl" alt="" width="100%" />
+                <img :src="tableData[0]?.returnsHeatmapFileURL" alt="" width="100%" />
             </div>
             <div class="annualReturnImg">
-                <img :src="annualReturnImgUrl" alt="" width="100%" />
+                <img :src="tableData[0]?.annualReturnsFileURL" alt="" width="100%" />
             </div>
         </div>
     </div>
@@ -293,10 +293,6 @@ export default {
 	},
 	props: {
 		tableData: Array,
-        returnImgUrl: String,
-        drawDownImgUrl: String,
-        monthReturnImgUrl: String,
-        annualReturnImgUrl: String
 	},
     created(){
 
