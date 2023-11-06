@@ -3790,7 +3790,6 @@ CIQ.UI.Layout.prototype.reloadChart = function() {
 
 	//CIQ.isMarkerShown = false
 	CIQ.store.dispatch('states/set_isMarkerShown_flag', false)
-	CIQ.store.commit('chart/getTradesData', [])
 	document.getElementsByClassName('ciq-period')[0].style.display = 'block'
 
 	if (freq != 'Daily') {
