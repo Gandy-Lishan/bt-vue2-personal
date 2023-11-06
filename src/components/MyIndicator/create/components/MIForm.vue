@@ -278,9 +278,9 @@
  <script>
  import { CIQ } from '@/components/common/chart/st-development/js/components'
 import CheckInput from './CheckInput.vue'
-import { saveMyIndicators, getMyIndicatorData, delMyIndicator } from '@/service/service'
+import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators } from '@/service/service'
 import {  validatePercentageRule } from "@/utils/formValidate"
-import { off } from 'process'
+
 export default {
   name: 'MIForm',
   props: {
@@ -371,7 +371,8 @@ export default {
         name: [
           { required: true, message: 'Please input a name', trigger: 'blur' }
         ]
-      }
+      },
+      rowUrl: null
     }
   },
   computed: {
@@ -387,16 +388,6 @@ export default {
     console.log('this.dropdownList', this.dropdownList)
   },
   methods: {
-    popUpMsgBox(msg) {
-      this.$message({
-        message: `<strong>${msg}</strong>`,
-        center: true,
-        dangerouslyUseHTMLString: true,
-        showClose: true,
-        duration: 8000,
-        customClass: 'no-icon'
-      })
-    },
     handleExtremeLineChange(value,field) {
       CIQ.editOwnIndicatorExtremeLines(value,field)
     },
@@ -431,6 +422,7 @@ export default {
     async saveIndicator() {
        // 保存数据之前先校验字段是否为空，特定字段是否从下拉框中选择 todo lishan
       const validForm = this.validForm()
+      const rowUrl = this.rowUrl
       if(!validForm) return
       let saveData = null;
       if(this.data.categories !== 'WIC') {
@@ -481,7 +473,7 @@ export default {
           combine_type: 'indicator'
         };
       }
-
+      if(rowUrl) return await editMyIndicators(saveData, rowUrl)
       return await saveMyIndicators(saveData);
     },
     async previewIndicator() {
@@ -704,6 +696,7 @@ export default {
       this.data.indicator_1_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_1_url;
       this.data.indicator_2_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_2_url;
       this.data.name = data.name;
+      this.rowUrl = data.url
       //如果类型时weight_C
       if (data.mul_indicator && data.indicator_weight && data.calculate == 'weight_c') {
         this.weightData = data.weightData

@@ -1434,15 +1434,11 @@ export default {
           return checked
         } else {
           if (!validName) {
-            this.$message({
-              message:
-                'Please select #' +
+            this.popUpMsgBox('Please select #' +
                 (index + 1) +
                 ' ' +
                 this.criteria +
-                ' indicator from the drop-down box',
-              type: 'error'
-            })
+                ' indicator from the drop-down box')
           }
           checked = false
           return checked
@@ -1465,15 +1461,11 @@ export default {
           return checked
         } else {
           if (!validName) {
-            this.$message({
-              message:
-                'Please select #' +
+            this.popUpMsgBox('Please select #' +
                 (index + 1) +
                 ' ' +
                 this.criteria +
-                ' indicator from the drop-down box',
-              type: 'error'
-            })
+                ' indicator from the drop-down box')
           }
           checked = false
           return checked
@@ -1497,15 +1489,11 @@ export default {
           return checked
         } else {
           if (!validName) {
-            this.$message({
-              message:
-                'Please select #' +
+            this.popUpMsgBox('Please select #' +
                 (index + 1) +
                 ' ' +
                 this.criteria +
-                ' indicator from the drop-down box',
-              type: 'error'
-            })
+                ' indicator from the drop-down box')
           }
           checked = false
           return checked
@@ -1525,15 +1513,11 @@ export default {
           return checked
         } else {
           if (!validName) {
-            this.$message({
-              message:
-                'Please select #' +
+            this.popUpMsgBox('Please select #' +
                 (index + 1) +
                 ' ' +
                 this.criteria +
-                ' indicator from the drop-down box',
-              type: 'error'
-            })
+                ' indicator from the drop-down box')
           }
           checked = false
           return checked
@@ -1901,7 +1885,7 @@ export default {
       //   error: (error) => {
       //     // 解析错误时的处理逻辑
       //     console.error('解析错误:', error)
-      //     this.$message.warning({ message: 'File parsing error, unable to preview.', duration: 5000 })
+      //     this.popUpMsgBox('File parsing error, unable to preview.')
       //     CIQ.hideCover()
       //     CIQ.nprogress.done()
       //   }

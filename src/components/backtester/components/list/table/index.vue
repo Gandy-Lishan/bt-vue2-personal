@@ -390,13 +390,14 @@ export default {
 	directives: {
 		copy
 	},
-	created() {
-		this.getDataList(null)
+	async created() {
+		await this.getDataList(null)
 	// 监听事件总线中的 refresh-list 事件
   	// RefreshBus.$on(`refresh-list`, (_) => {
     //   // 在这里执行刷新列表的操作，重新获取数据
     //   this.getDataList(null)
     // })
+		this.loading = false
 	},
 	methods: {
 		async getDataList(orderby) {
