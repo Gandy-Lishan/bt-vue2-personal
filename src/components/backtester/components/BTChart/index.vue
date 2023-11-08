@@ -58,6 +58,7 @@ export default {
     	...mapMutations('chart', ['SET_CHART_READY_STATE']),
 		async onChartReady() {
 			this.SET_CHART_READY_STATE(true)
+			CIQ.hideCover()
 		},
 	}
 }
