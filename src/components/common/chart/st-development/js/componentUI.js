@@ -6289,6 +6289,9 @@ class Chart {
 			} = {},
 			loader
 		} = uiContext
+
+		// 初始化chartiq加遮罩层
+		CIQ.addCover()
 		if (loader) loader.show()
 		if (restore) {
 			CIQ.ChartEngine.restorePreferences(stx, chartId || topNode.id)

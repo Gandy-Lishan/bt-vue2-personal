@@ -515,17 +515,17 @@
     }
 
     // 预留：layout management
-    CIQ.localStorage.saveLayout = function(){
-        var layout = JSON.stringify(CIQ.stxx.exportLayout(true));
-	    localStorage.setItem("myChartLayout", layout);
-    }
-    CIQ.localStorage.restoreLayout = function(){
-        var savedLayout = localStorage.getItem("myChartLayout");
-        var importOptions = {
-            managePeriodicity: true,
-            preserveTicksAndCandleWidth: true
-        };
-        if (savedLayout) CIQ.stxx.importLayout(JSON.parse(savedLayout), importOptions);
-    }
+    // CIQ.localStorage.saveLayout = function(){
+    //     var layout = JSON.stringify(CIQ.stxx.exportLayout(true));
+	//     localStorage.setItem("myChartLayout", layout);
+    // }
+    // CIQ.localStorage.restoreLayout = function(){
+    //     var savedLayout = localStorage.getItem("myChartLayout");
+    //     var importOptions = {
+    //         managePeriodicity: true,
+    //         preserveTicksAndCandleWidth: true
+    //     };
+    //     if (savedLayout) CIQ.stxx.importLayout(JSON.parse(savedLayout), importOptions);
+    // }
  }
  export {__st_js_userownIndicator_}
