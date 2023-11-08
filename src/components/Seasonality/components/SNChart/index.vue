@@ -8,6 +8,7 @@
 import Highcharts from "highcharts";
 import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
+import logoPNG from "@/assets/logo.png";
 
 
 export default {
@@ -41,29 +42,6 @@ export default {
     Exporting(Highcharts);
     ExportData(Highcharts);
     // 传入的数据格式
-
-    // 绘制图表的配置
-    const plotConfiguration = {
-      title: 'Nasdaq Composite Avg Return Month',
-      subtitle: '1971-2011',
-      xAxisTitle: 'Month',
-      customScale: true, // 如果需要自定义刻度
-      formatter: true, // 如果需要自定义数据提示
-      scaleSettings: {
-        positiveColor: '#00B050',
-        negativeColor: '#C0504D',
-        yAxis_1: {
-          tickPositions: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
-          max: 4,
-          min: -4,
-          format: '{value} %'
-        },
-        yAxis_2: {
-          tickPositions: [20, 30, 40, 50, 60, 70, 80],
-          format: '{value} %'
-        },
-      }
-    };
 
     // 在 mounted 钩子中调用绘图函数
     this.plotData(this.dataList, this.plotConfiguration);
@@ -192,19 +170,19 @@ export default {
               floating: true,
               backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
           },
-          credits: {
-              enabled: true,
-              href: 'https://sentimentrader.com/',
-              style: {
-                  fontSize: '15px'
-              },
-              position: {
-                  align: 'right',
-                  x: -90,
-                  y: -70
-              },
-              text: 'sentimentrader'
-          }
+          // credits: {
+          //     enabled: true,
+          //     href: 'https://sentimentrader.com/',
+          //     style: {
+          //         fontSize: '15px'
+          //     },
+          //     position: {
+          //         align: 'right',
+          //         x: -90,
+          //         y: -70
+          //     },
+          //     text: 'sentimentrader'
+          // }
       });
 
     //   if (plotConfiguration.customScale) {
@@ -250,6 +228,20 @@ export default {
           color: value >= 0 ? positiveColor : negativeColor
       }));
 
+      // 添加水印图片
+      H.renderer.image(logoPNG, 0, 0, 200, 50) // 请替换 'watermark.png' 为你的水印图片的路径
+        .attr({
+          zIndex: 5, // 确保水印显示在图表的顶层
+          opacity: 0.5, // 设置水印图片透明度
+        })
+        .add()
+        .align({
+          align: 'right',
+          verticalAlign: 'bottom',
+          x: -200, // 可以根据需要调整水印相对于右下角的位置
+          y: -50, // 可以根据需要调整水印相对于右下角的位置
+        }, false, 'plotBox');
+
       H.addSeries({
           data: dataWithColor,
           type: 'column',
@@ -280,7 +272,6 @@ export default {
               symbol: 'diamond'
           }
       });
-
       return H;
     }
   }

@@ -1032,7 +1032,8 @@ export default {
 			let chartDataset = CIQ.stxx.chart.dataSet
 			const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
 			const field = this.tradePrice
-			dataSet = dataSet.filter((item) => item.TradeStatus == 'BUY')
+			// dataSet = dataSet.filter((item) => item.TradeStatus == 'BUY')
+			dataSet = dataSet.filter((_, index) => index % 2 === 0)
 			let backtestResult = []
 
 			for (var data in dataSet) {
