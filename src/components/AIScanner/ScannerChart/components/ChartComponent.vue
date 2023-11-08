@@ -1044,34 +1044,36 @@ export default {
 			// 把字符串列表entryDates, exitDates格式化为markerSet的对象数组
 			let markerSet= []
 
-            let entryTradeDateArr = this.other['EntryTradeDate'] ? eval('(' + this.other['EntryTradeDate'] + ')') : []
+      let entryTradeDateArr = this.other['EntryTradeDate'] ? eval('(' + this.other['EntryTradeDate'] + ')') : []
 			let entryTradePriceArr = this.other['EntryTradePrice'] ? eval('(' + this.other['EntryTradePrice'] + ')') : []
-            if(entryTradeDateArr){
-                entryTradeDateArr.forEach((item,index)=>{
-					let entryReason = this.other['_Signal']
-					
-                    markerSet.push({
-                        DT: item,
-                        Price: entryTradePriceArr[index],
-                        Type: 'BUY',  
-						Indicator: [entryReason],  
-                    })
-                })
-            }
-            let exitTradeDateArr = this.other['ExitTradeDate'] ? eval('(' + this.other['ExitTradeDate'] + ')') : []
+      const entryMarkerType = this.direction == 'Short' ? 'SELL' : 'BUY'
+      if(entryTradeDateArr){
+          entryTradeDateArr.forEach((item,index)=>{
+            let entryReason = this.other['_Signal']
+      
+            markerSet.push({
+                DT: item,
+                Price: entryTradePriceArr[index],
+                Type: entryMarkerType,  
+                Indicator: [entryReason],  
+            })
+          })
+      }
+      let exitTradeDateArr = this.other['ExitTradeDate'] ? eval('(' + this.other['ExitTradeDate'] + ')') : []
 			let exitTradePriceArr = this.other['ExitTradePrice'] ? eval('(' + this.other['ExitTradePrice'] + ')') : []
-            if(exitTradeDateArr){
-                exitTradeDateArr.forEach((item,index)=>{
+      const exitMarkerType = this.direction == 'Short' ? 'BUY' : 'SELL'
+      if(exitTradeDateArr){
+          exitTradeDateArr.forEach((item,index)=>{
+            let exitReasonArr = eval('(' + this.other.ExitReason + ')')
 
-					let exitReasonArr = eval('(' + this.other.ExitReason + ')')
-                    markerSet.push({
-                        DT: item,
-                        Price: exitTradePriceArr[index],
-                        Type: 'SELL',    
-						Indicator: [exitReasonArr[index]]
-                    })
-                })
-            }
+            markerSet.push({
+                DT: item,
+                Price: exitTradePriceArr[index],
+                Type: exitMarkerType,    
+                Indicator: [exitReasonArr[index]]
+            })
+          })
+      }
 			markerSet = markerSet.sort((a,b)=>new Date(a['DT'])-new Date(b['DT']))
 			
 			// 如果推荐日和最后一个退场日重叠，则隐藏退场日marker(一般情况都是重叠的)
