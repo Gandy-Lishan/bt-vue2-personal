@@ -1,4 +1,5 @@
 <template>
+  <div class="MI-container">
 	<el-form
 		ref="MICreateForm"
 		class="MI-form-container"
@@ -18,7 +19,7 @@
 				<el-input v-model="data.name"></el-input>
 			</el-form-item>
       <!-- <div></div> -->
-			<el-form-item label="2.Categories" v-model="data.categories">
+			<el-form-item label="2.Categorie" v-model="data.categories">
 				<el-select
 					v-model="data.categories"
 					placeholder="Please choose categories"
@@ -274,12 +275,21 @@
 			</el-form-item>
 		</div>
 	</el-form>
+  <LoadingOverlay
+			:isLoading="isCreateLoading"
+			:showProgress="false"
+			:percentage="0"
+			:progressText="progressText"
+		>
+		</LoadingOverlay>
+  </div>
 </template>
  <script>
  import { CIQ } from '@/components/common/chart/st-development/js/components'
 import CheckInput from './CheckInput.vue'
 import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators } from '@/service/service'
 import {  validatePercentageRule } from "@/utils/formValidate"
+import { LoadingOverlay } from "@/components/common"
 
 export default {
   name: 'MIForm',
@@ -288,7 +298,8 @@ export default {
     formData: Object
   },
   components: {
-    CheckInput
+    CheckInput,
+    LoadingOverlay
   },
   data() {
     return {
@@ -372,12 +383,17 @@ export default {
           { required: true, message: 'Please input a name', trigger: 'blur' }
         ]
       },
-      rowUrl: null
+      rowUrl: null,
+      progressText: 'Loading...'
     }
   },
   computed: {
     data() {
       return this.formData
+    },
+    isCreateLoading() {
+      // 从 Vuex store 中获取全局 loading 状态
+      return this.$store.state.states.isCreateLoading
     }
   },
   async mounted() {
@@ -477,8 +493,9 @@ export default {
       return await saveMyIndicators(saveData);
     },
     async previewIndicator() {
+      this.$store.commit('states/SET_MI_CREATE_LOADING', true)
       const res = await this.saveIndicator()
-      if(!res) return
+      if(!res) {this.$store.commit('states/SET_MI_CREATE_LOADING', true);return}
       const url = res.data.url
       const indicatorData = await getMyIndicatorData(url)
       // 暂存
@@ -510,6 +527,7 @@ export default {
           CIQ.stxx.chart.symbol
         )
       }
+      this.$store.commit('states/SET_MI_CREATE_LOADING', false)
 
     },
     saveSubData(field, value) {
@@ -834,6 +852,9 @@ export default {
 }
 </script>
  <style lang="less" scoped>
+ .MI-container{
+  position: relative;
+ }
 h4 {
 	text-align: center;
 	margin: 0 0 30px 0;
