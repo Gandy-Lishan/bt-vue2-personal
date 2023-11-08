@@ -10,7 +10,8 @@ const state = {
 	isEditFinish_flag:false,
     // a status before symbol is loaded as a study
 	beforeCalculateNewConditions: false,
-	cacheReRunData: {}
+	cacheReRunData: {},
+	isCreateLoading: false
 }
 
 const mutations = {
@@ -41,6 +42,9 @@ const mutations = {
 	CACHE_RERUN_DATA: (state,obj) => {
 		state.cacheReRunData = obj
 	},
+	SET_MI_CREATE_LOADING: (state,loading) => {
+		state.isCreateLoading = loading
+	}
 }
 
 const actions = {
