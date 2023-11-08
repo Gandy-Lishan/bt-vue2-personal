@@ -9,6 +9,7 @@
                 Type
                 <el-tooltip effect="dark" placement="top">
                   <span slot="content">
+                    Indicator type or stock fundamental data, currently encompassing four indicator categories
                   </span>
                   <i class="iconfont icon-wenhao"></i>
                 </el-tooltip>
@@ -39,6 +40,7 @@
                 Indicator
                 <el-tooltip effect="dark" placement="top">
                   <span slot="content">
+                    Here, you have access to multiple indicators, which you can select from a dropdown menu based on your preferences.
                   </span>
                   <i class="iconfont icon-wenhao"></i>
                 </el-tooltip>
