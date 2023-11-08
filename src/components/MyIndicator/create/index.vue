@@ -4,12 +4,12 @@
       <MIChart :chart_data="chart_data"></MIChart>
     </div>
     <div class="form">
-      <MIForm :formConfig="formConfig" :formData="formData" ref="MIForm" v-show="!isCreateLoading"></MIForm>
-      <div v-show="isCreateLoading">
+      <MIForm :formConfig="formConfig" :formData="formData" ref="MIForm"></MIForm>
+      <!-- <div v-show="isCreateLoading">
         <div class="loading">
           <span class="progress-text"><i class="el-icon-loading"></i>{{progressText}}</span>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 
@@ -18,7 +18,7 @@
 <script>
 import MIForm from "./components/MIForm"
 import MIChart from "./components/MIChart.vue"
-import {capitalizeFirstLetter, isJson} from '@/utils'
+import {isJson} from '@/utils'
 
 export default {
   name: "CreateIndicator",
@@ -94,12 +94,6 @@ export default {
         extremePessimism: ''
       },
       progressText: 'Loading...'
-    }
-  },
-  computed: {
-    isCreateLoading() {
-      // 从 Vuex store 中获取全局 loading 状态
-      return this.$store.state.isCreateLoading
     }
   },
   beforeRouteEnter(to, _, next) {

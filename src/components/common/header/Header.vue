@@ -19,7 +19,10 @@
         <el-menu-item class="ai-link" v-if="activeIndex==3"
           >AI Stock Scanner</el-menu-item
         >
-        <el-menu-item class="home-link" v-if="activeIndex==1"
+        <!-- <el-menu-item class="home-link" v-if="activeIndex==1"
+          >BacktestEdge</el-menu-item
+        > -->
+        <el-menu-item class="home-link" index="1"
           >BacktestEdge</el-menu-item
         >
         <el-menu-item class="my-indicator-link home-link" index="6"
@@ -79,13 +82,13 @@ export default {
       // 在$route对象变化时执行逻辑
       if (to.path == '/strategy') {
         this.activeIndex = '2'
-      } else if (to.path == '/backtester' || to.name == 'Backtests') {
+      } else if (to.path.includes('/backtester') || to.name == 'Backtests') {
         this.activeIndex = '1'
-      } else if (to.path == '/scannerai' || to.name == 'scannerai_chart') {
+      } else if (to.path.includes('/scannerai') || to.name == 'scannerai_chart') {
         this.activeIndex = '3'
-      }else if(to.path == '/myindicator' || to.name ==  'MIList'){
+      }else if(to.path.includes('/myindicator') || to.name ==  'MIList'){
         this.activeIndex = '6'
-      }else if(to.path == '/seasonality' || to.name == 'seasonality'){
+      }else if(to.path.includes('/seasonality') || to.name == 'seasonality'){
         this.activeIndex = '7'
       }
       }
