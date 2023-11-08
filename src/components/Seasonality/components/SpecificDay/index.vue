@@ -122,8 +122,7 @@
             <el-tag
             :key="tag"
             size="small"
-            v-for="(tag,index) in dynamicTags"
-            :closable="index !== 0"
+            v-for="(tag) in dynamicTags"
             :disable-transitions="false"
             @close="handleClose(tag)"
             effect="dark">
@@ -166,7 +165,7 @@ export default {
         start_date: (new Date().getFullYear() - 5).toString(),
         end_date:  new Date().getFullYear().toString(),
         customizeDate: null,
-        shift: [1]
+        shift: [10]
       },
       dropdownList: [],
       options: [
@@ -202,13 +201,13 @@ export default {
         ],
         days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
       },
-      dynamicTags: ['1 day'],
-      inputVisible: true,
+      dynamicTags: ['10 days'],
+      inputVisible: false,
       inputValue: '',
       plotConfiguration: {
         title: 'Performance Surrounding Independence Day',
         subtitle: 'S&P 500, 1950-2011',
-        xAxisTitle: 'Days Surrounding Holiday',
+        xAxisTitle: 'Days Surrounding the Selected Day',
         customScale: true, // 如果需要自定义刻度
         formatter: true, // 如果需要自定义数据提示
         scaleSettings: {
@@ -378,7 +377,8 @@ export default {
       const regex = /^[1-9]\d*$/
       if (inputValue && regex.test(inputValue)) {
         const day = `${inputValue} ${inputValue > 1 ? 'days': 'day'}`
-        this.dynamicTags.push(day);
+        // this.dynamicTags.push(day);
+        this.dynamicTags = [day];
       }
       this.inputVisible = false;
       this.inputValue = '';
@@ -474,7 +474,7 @@ export default {
   flex-wrap: wrap;
   .el-tag--small{
     text-align: center;
-    width: 67px;
+    width: 100px;
     height: 28px;
     line-height: 28px;
     margin-right: 10px;
