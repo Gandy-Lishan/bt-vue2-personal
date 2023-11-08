@@ -5,7 +5,7 @@
     <el-tab-pane label="Performance by Day of Month" name="first">
       <DayOfMonth></DayOfMonth>
     </el-tab-pane>
-    <el-tab-pane label="Performance Around Official NYSE Specific Days" name="second">
+    <el-tab-pane label="Performance Around Specific Days" name="second">
 			<SpecificDay></SpecificDay>
 		</el-tab-pane>
     <el-tab-pane label="Other Charts & Data" name="third">
