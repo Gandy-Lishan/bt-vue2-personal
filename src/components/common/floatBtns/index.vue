@@ -1,6 +1,5 @@
 <template>
-  <div>
-    
+  <div v-if="isVisible">
     <div class="maintabBtnContainer">
 				<div>
 					<button
@@ -149,6 +148,11 @@
 <script>
 export default {
   name: 'FloatBtns',
+	data() {
+		return {
+			isVisible: true
+		}
+	},
 	computed: {
     dynamicClass() {
       // 根据当前路由或其他条件来计算动态类名
@@ -156,8 +160,13 @@ export default {
     }
   },
 	watch: {
-    '$route'(to, from) {
+    '$route'(to, _) {
       this.updateDynamicClass();
+			if (to.path.includes('/backtester') || to.name == 'Backtests') {
+        this.isVisible = true
+      }else {
+				this.isVisible = false
+			}
     }
   },
 	methods: {
