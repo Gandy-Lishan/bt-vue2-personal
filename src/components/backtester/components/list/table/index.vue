@@ -6,6 +6,11 @@
 			class="fls-btn"
 			>run all backtest</el-button
 		>
+		<el-button
+			@click="runBTV1Backtest"
+			class="fls-btn"
+			>rerun BTV1Backtest</el-button
+		>
 		<el-button v-if="currentPage == 'Favorites'" @click="findLastSignal" class="fls-btn" size="mini">Find Last Signal</el-button>
 		<div class="searchBox">
 			<el-input
