@@ -7,6 +7,7 @@
 			>run all backtest</el-button
 		>
 		<el-button
+			v-if="currentPage == 'Favorites'"
 			@click="runBTV1Backtest"
 			class="fls-btn"
 			>rerun BTV1Backtest</el-button
