@@ -67,6 +67,7 @@
 			:showProgress="setUpLoadingSetting.showProgress"
 			:percentage="setUpLoadingSetting.percentage"
 			:progressText="setUpLoadingSetting.progressText"
+			backgroundColor="hsla(0,0%,100%,.9)"
 		>
 		</LoadingOverlay>
 	</div>
@@ -188,6 +189,7 @@ export default {
 			console.log('entryErr', entryErr, 'exitErr', exitErr)
 			if (!entryErr || !exitErr) {
 				_this.setSetUpLoadingSetting(false, false, 0, 'Error saving backtest entry and exit criteria...');
+				_this.popUpMsgBox('Error saving backtest entry and exit criteria...')
 				CIQ.hideCover()
 				return
 			}
