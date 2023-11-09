@@ -488,7 +488,7 @@ export default {
 			// 处理 exit.signals
 			if (Array.isArray(displayData.exit.signals)) {
 				displayData.exit.signals = displayData.exit.signals
-					.filter(item => item.code && item.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999')
+					.filter(item => item.code && (item.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999'  && item.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'))
 					.map(value => signalCode.decode(value.code));
 
 				if (displayData.exit.signals.length === 0 || displayData.exit.signals.includes(undefined)) {
