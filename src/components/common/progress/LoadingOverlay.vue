@@ -1,7 +1,7 @@
 <template>
-    <div :class="{ 'progress-container': isLoading, 'dont-show-content': !isLoading }">
+    <div :class="{ 'progress-container': isLoading, 'dont-show-content': !isLoading }" :style="{ 'backgroundColor': backgroundColor }">
       <el-progress v-if="showProgress" :text-inside="true" :stroke-width="26" :percentage="percentage" :color="customColorMethod"></el-progress>
-      <span class="progress-text"><i class="el-icon-loading"></i>{{ progressText }}</span>
+      <span class="progress-text" :style="{'color': progressTextColor}"><i class="el-icon-loading"></i>{{ progressText }}</span>
     </div>
 </template>
 
@@ -14,16 +14,29 @@ export default {
     percentage: Number,          // 进度条百分比
     progressText: String,        // 进度文本
     // customColorMethod: Function, // 自定义颜色方法
+    backgroundColor: {
+      type: String,
+      default: 'rgba(0, 0, 0, 0.8)'
+    }, // 背景颜色
+  },
+  data() {
+    return {
+      progressTextColor: '#409eff'
+    }
   },
   methods: {
     customColorMethod(percentage) {
       if (percentage < 50) {
+        this.progressTextColor = '#909399'
         return '#909399'
       } else if (percentage < 70) {
+        this.progressTextColor = '#f56c6c'
         return '#f56c6c';
       } else if(percentage < 90){
+        this.progressTextColor = '#e6a23c'
         return '#e6a23c';
       }else {
+        this.progressTextColor = '#67c23a'
         return '#67c23a';
       }
     },
@@ -32,8 +45,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 .progress-container {
-	background: rgba(0, 0, 0, 0.8);
 	border-radius: 20px;
 	height: 100%;
   min-height: 500px;

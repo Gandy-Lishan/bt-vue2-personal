@@ -5,7 +5,7 @@
 import axios from 'axios'
 import Cache from './cache'
 import store from '@/store'
-import {Toast} from '@/utils'
+import _this from "@/main";
 
 // Custom instances of Axios
 let instance = axios.create({
@@ -111,12 +111,17 @@ instance.interceptors.response.use(
 	},
 	function interceptor(err) {
 		console.log('报错了。。。。', err)
-		store.commit('form/SET_LIST_LOADING', false)
-		store.commit('form/SET_SETUP_LOADING', {
-			isSetupLoading: false,
-			percentage: 0,
-			progressText: ''
-		})
+		console.log('错误的URL：', err.config.url)
+		const allowedListUrl = ['backtest', 'analyst', 'strategy', 'upload', 'runbt']
+		const isAllowedUrl = allowedListUrl.some(item => err.config.url.includes(item))
+		if (isAllowedUrl) {
+			store.commit('form/SET_LIST_LOADING', false);
+			store.commit('form/SET_SETUP_LOADING', {
+				isSetupLoading: false,
+				percentage: 0,
+				progressText: ''
+			})
+		}
 		// 取消权限控制
 		// if (err?.response?.status == 410) {
 		// 	try{
@@ -130,18 +135,25 @@ instance.interceptors.response.use(
 		// 	}
 		// 	return Promise.reject(err)
 		// }
-
-		if (err?.response?.status == 404) {
-			console.log('url 找不到')
-			// 明确返回一个 rejected 的 Promise，以避免重试
-			return Promise.reject(err)
-		}
-		if (err?.response?.status == 410) {
-			console.log('未购买回测')
-			Toast('Backtest is not purchased', 1000)
-			alert('Backtest is not purchased')
-			// 明确返回一个 rejected 的 Promise，以避免重试
-			return Promise.reject(err)
+		switch (err?.response?.status) {
+			case 401:
+				_this.popUpMsgBox('Sample backtest can only be viewed but not run')
+				break;
+			case 403:
+				_this.popUpMsgBox('Permission denied')
+				break;
+			case 404:
+				console.log('url 找不到,独自处理')
+				break;
+			case 410:
+				_this.popUpMsgBox('Backtest is not purchased')
+				break;
+			case 500:
+			case 503:
+				_this.popUpMsgBox('The internal server is busy, please try again later')
+				break;
+			default:
+				break;
 		}
 
 		// 不执行重试逻辑，直接将错误传递给.catch()处理程序
