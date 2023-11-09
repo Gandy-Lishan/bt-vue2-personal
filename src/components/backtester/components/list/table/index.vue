@@ -4,6 +4,7 @@
 			v-if="isSystem == 'system'"
 			@click="runAllBacktest"
 			class="fls-btn"
+			size="mini"
 			>run all backtest</el-button
 		>
 		<el-button
@@ -389,7 +390,8 @@ export default {
       },
 			searchItem: '',
       currentSort: {}, // 当前的排序信息
-			searchItem: ''
+			searchItem: '',
+			isSystem: false
 		}
 	},
 	directives: {
@@ -403,6 +405,7 @@ export default {
     //   this.getDataList(null)
     // })
 		this.loading = false
+    this.isSystem = this.$store.state.form.role
 	},
 	methods: {
 		async getDataList(orderby) {
