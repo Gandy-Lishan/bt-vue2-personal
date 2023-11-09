@@ -17,11 +17,10 @@
         // 提取indicator移除列表和新增列表,
         const { addedItems, removedItems } = findAddedAndRemovedItems(previousState, updatedState);
 
-        console.log('addedItems',addedItems,removedItems)
-        
-        
+        const indicatorList = updatedState.filter(item=> item.type=='Indicator')
+
         // symbol加载，识别第一个为默认图标symbol,其它symbol作为serie加载,必须遍历加载，不然很难管理
-        manageSymbolSerie(updatedState.filter(item=> item.type=='Symbol'))
+        manageSymbolSerie(updatedState.filter(item=> item.type=='Symbol'),findTimeFrame(indicatorList))
 
         // indicator移除
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -32,9 +31,11 @@
         }
         // indicator加载
         await addIndicatorStudy(addedItems.map(item=>item.indicator_url))
-        CIQ.stxx.loadChart(    { symbol: symbol?symbol:'SPX', indicator:[...updatedState.map(item=>item.indicator_url),combinedStudy]}, function () {
-            CIQ.hideCover()
-        }) 
+        CIQ.stxx.loadChart(    { 
+            symbol: symbol?symbol:'SPX', 
+            indicator:[...indicatorList.map(item=>item.indicator_url),combinedStudy]}, 
+            function () {CIQ.hideCover()}
+        ) 
         
     }
 
@@ -138,7 +139,7 @@
         })
     
     }
-    const manageSymbolSerie = function(symbolList){
+    const manageSymbolSerie = function(symbolList,timeframe){
         // 先清空series
         for(var s in CIQ.stxx.chart.series){
             var series=CIQ.stxx.chart.series[s];
@@ -151,6 +152,7 @@
                 CIQ.objIndicator = []
                 symbol = symbolList[i].indicator_url
             }else{
+                CIQ.store.commit('form/getFrequency', timeframe)
                 CIQ.stxx.addSeries(symbolList[i].indicator_url, {
                     display:symbolList[i].indicator, 
                     isComparison: false, 
@@ -527,5 +529,24 @@
     //     };
     //     if (savedLayout) CIQ.stxx.importLayout(JSON.parse(savedLayout), importOptions);
     // }
+
+    //utils
+
+    //因为addSeries调用的quotefeed函数内无法判断timeframe，需要在外部判断timeframe并设置到store的exitFrequency内
+    const findTimeFrame = function(indicatorList){
+        let orignalFreq= 'Daily'
+        var freqList = []
+        for ( var  i = 0; i < indicatorList.length;i++) {
+            // when both sentiment and tech exist in CIQ.objIndicator, filter tech indicator
+            let sentiIndicatorRes = CIQ.findSentiIndicator(null,indicatorList[i]['indicator_url'])
+            if(sentiIndicatorRes){
+                freqList.push(sentiIndicatorRes.updated)
+                continue
+            }
+        }
+        if(freqList.find(item => item=="Weekly"))  orignalFreq= 'Weekly';   
+        if(freqList.find(item => item=="Monthly"))  orignalFreq= 'Monthly';  
+        return orignalFreq
+    }
  }
  export {__st_js_userownIndicator_}
