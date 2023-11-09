@@ -98,16 +98,29 @@ const config = {
 		}
 	},
 	css: {
-		// Whether to use CSS separation plug-in extracttextplugin
-		extract: {
-			filename: `css/[name].${utcTimestamp}.css`,
-			chunkFilename: `css/[name].${utcTimestamp}.css`
-		},
-		// Open CSS source maps?
-		sourceMap: false,
-		// Enable CSS modules for all CSS / pre processor files
-		modules: false
-	},
+    loaderOptions: {
+      less: {
+        // 如果使用了 less-loader，请添加以下配置
+        lessOptions: {
+          javascriptEnabled: true,
+        },
+      },
+      postcss: {
+        plugins: [
+          require('autoprefixer'),
+        ],
+      },
+    },
+    // Whether to use CSS separation plug-in extracttextplugin
+    extract: {
+      filename: `css/[name].${utcTimestamp}.css`,
+      chunkFilename: `css/[name].${utcTimestamp}.css`
+    },
+    // Open CSS source maps?
+    sourceMap: false,
+    // Enable CSS modules for all CSS / pre processor files
+    modules: false
+  },
 	//chainWebpack 通过链式编程的形式，来修改默认的webpack配置
 	chainWebpack: config => {
 		config.resolve.alias
