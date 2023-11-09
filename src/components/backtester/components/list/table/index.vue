@@ -28,7 +28,6 @@
       :element-loading-text="loadTest"
 			:default-expand-all="isExpandAll"
       element-loading-spinner="el-icon-loading"
-			element-loading-background="rgba(0, 0, 0, 0.8)"
 			@sort-change="onSortChange"
 			style="width: 100%; height: 100%"
 			:row-class-name="tableRowClassName"

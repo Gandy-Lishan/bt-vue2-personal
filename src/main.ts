@@ -66,8 +66,10 @@ Vue.component('template-placeholder', {
 window.SITE_CONFIG = {}
 window.SITE_CONFIG['storeState'] = JSON.parse(JSON.stringify(store.state))
 
-new Vue({
+const app = new Vue({
 	store,
 	router,
 	render: (h) => h(App)
 }).$mount('#app')
+
+export default app
