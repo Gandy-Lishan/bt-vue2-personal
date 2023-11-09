@@ -4,12 +4,14 @@
 			v-if="isSystem == 'system'"
 			@click="runAllBacktest"
 			class="fls-btn"
+			size="mini"
 			>run all backtest</el-button
 		>
 		<el-button
 			v-if="currentPage == 'Favorites'"
 			@click="runBTV1Backtest"
 			class="fls-btn"
+			size="mini"
 			>rerun BTV1Backtest</el-button
 		>
 		<el-button v-if="currentPage == 'Favorites'" @click="findLastSignal" class="fls-btn" size="mini">Find Last Signal</el-button>

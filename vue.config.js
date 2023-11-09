@@ -336,7 +336,15 @@ const config = {
 				pathRewrite: {
 					'^/sn': ''
 				}
-			}
+			},
+			'/bt': {
+				target: 'http://192.168.2.105:8000',
+				ws: true,
+				changOrigin: true,
+				pathRewrite: {
+					'^/bt': ''
+				}
+			},
 		}
 	}
 }
