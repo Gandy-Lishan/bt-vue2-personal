@@ -11,6 +11,7 @@
         :showProgress="resultsLoadingSetting.showProgress"
         :percentage="resultsLoadingSetting.percentage"
         :progressText="resultsLoadingSetting.progressText"
+			  backgroundColor="hsla(0,0%,100%,.9)"
       >
       </LoadingOverlay>
     </div>

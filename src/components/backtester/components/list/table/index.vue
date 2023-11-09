@@ -36,7 +36,6 @@
       :element-loading-text="loadTest"
 			:default-expand-all="isExpandAll"
       element-loading-spinner="el-icon-loading"
-			element-loading-background="rgba(0, 0, 0, 0.8)"
 			@sort-change="onSortChange"
 			style="width: 100%; height: 100%"
 			:row-class-name="tableRowClassName"
@@ -392,7 +391,8 @@ export default {
       },
 			searchItem: '',
       currentSort: {}, // 当前的排序信息
-			searchItem: ''
+			searchItem: '',
+			isSystem: false
 		}
 	},
 	directives: {
@@ -406,6 +406,7 @@ export default {
     //   this.getDataList(null)
     // })
 		this.loading = false
+    this.isSystem = this.$store.state.form.role
 	},
 	methods: {
 		async getDataList(orderby) {
