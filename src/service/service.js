@@ -1,5 +1,7 @@
 import axios from '../axios'
 
+import axios_new from 'axios'
+
 function get_env(name, value) {
 	if (process.env[name] === undefined) {
 		return value
@@ -705,6 +707,23 @@ export function getSeasonalityData(url) {
 	return new Promise((resolve, reject) => {
 		axios
 			.get(url, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+//临时设一个没有authorization的axios实例
+let instance = axios_new.create({
+	baseURL: ''
+})
+export function getBTV1Backtest() {
+	return new Promise((resolve, reject) => {
+		instance
+			.get('/bt/favorite_backtest/', { withCredentials: true })
 			.then(res => {
 				resolve(res)
 			})

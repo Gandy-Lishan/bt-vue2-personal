@@ -22,6 +22,7 @@ let instance = axios.create({
 instance.interceptors.request.use(
 	config => {
 		config.headers.Authorization = window.sessionStorage.getItem('token')
+		
 		config.auth = {
 			username: 'sentimentrader_backtest_api',
 			password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
