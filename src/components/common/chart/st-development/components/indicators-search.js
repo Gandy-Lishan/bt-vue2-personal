@@ -845,8 +845,8 @@ window.onclick = function(event) {
                         if(countExistIndicator>=10){
                             // CIQ.hideCover()
                             // CIQ.nprogress.done()
-                            var loader = document.querySelector(".loaderMain");
-                            if (loader) loader.hide();
+                            // var loader = document.querySelector(".loaderMain");
+                            // if (loader) loader.hide();
                             CIQ.description("Maximum 10 signals can be displayed on chart")
                             return
                         }

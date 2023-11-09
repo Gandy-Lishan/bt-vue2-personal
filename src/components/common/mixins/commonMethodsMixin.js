@@ -189,6 +189,49 @@ export const CommonMethodsMixin = {
 					})
 				)
 				await this.loopAllHistories()
+			} else if (actionType === 'btv1') {
+				this.favorite_array = [{
+					"id": "e913c437-0d0a-8488-3959-966bc039a849",
+					"entry_description": "[{\"commentDes\": \"E: Long; Single Condition % S&P 1500 RSI 14-day < 30 > 30.0;\", \"rocCond\": {\"newCondition\": 3, \"conditionPeriod\": \"5\"}}, {\"commentDes\": \"% S&P 1500 RSI 14-day < 30 > 30.0\", \"rocCond\": {\"newCondition\": 3, \"conditionPeriod\": \"5\"}}]",
+					"exit_description": "[{\"commentDes\":\"X: Close:   Time In Market 1(Bars)\",\"rocCond\":null}]",
+					"direction": "Long",
+					"frequency": "Daily",
+					"name": "bull_market test11",
+					"symbol": "DJIA",
+					"benchmark": "DJIA",
+					"strategy": "Signal",
+					"capital": "100000",
+					"capital_alloc": "1",
+					"commission": "0.001",
+					"win_rate": "0",
+					"slippage": "0.1",
+					"start_date": "1800-10-01",
+					"end_date": "2023-11-08",
+					"description": "backtest",
+					"risk_control": "//1",
+					"report_url": "",
+					"user_tag": "client",
+					"user": "5",
+					"trade_price": 2,
+					"exclude_oo": "0",
+					"entry": "{\"relation\": 1, \"score\": 1, \"delay_bars\": 0, \"signals_in_market\": 1, \"signals\": [{\"code\": \"SI:% S&P 1500 RSI 14-day < 30;IDS:EO80/EP20;SC:SV/0/30.0\"}], \"cond\": [{\"newCondition\": 3, \"conditionPeriod\": \"5\"}]}",
+					"exit": "{\"score\":1,\"signals_in_market\":1,\"relation\":0,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999\"}],\"cond\":[null]}",
+					"indicator_layout": "{\"formIndicators\": {\"entry\": [\"sp1500_rsi_14_under_30\"], \"exit\": [\"\"]}, \"technicalIndicators\": [], \"savedTechSD\": [{\"type\": \"sp1500_rsi_14_under_30\", \"inputs\": {\"Period\": 13, \"Overlay\": false, \"id\": \"$r001$sp1500_rsi_14_under_30$r001$ (13,n)\", \"display\": \"$r001$ssp1500_rsi_14_under_30$r001$ (13,n)\"}, \"outputs\": {}, \"parameters\": {\"studyOverZonesEnabled\": false, \"studyOverBoughtValue\": 70, \"studyOverBoughtColor\": \"#FF0000\", \"studyOverSoldValue\": null, \"studyOverSoldColor\": \"#00DD00\", \"chartName\": \"chart\", \"editMode\": true}, \"panel\": \"$r001$sp1500_rsi_14_under_30$r001$ (13,n)\"}], \"activatedMA\": []}",
+					"pk": "68f01e66-956e-48a6-964f-c18aec8ea2b3",
+					"favorites": "true",
+					"backtest_period": 21,
+					"index_moving_average_slope": 0,
+					"market_environment": 1,
+					"uuid": "68f01e66-956e-48a6-964f-c18aec8ea2b3",
+					"dataset": "68f01e66-956e-48a6-964f-c18aec8ea2b3/68f01e66-956e-48a6-964f-c18aec8ea2b3_backtest_data.csv"
+				}]
+				this.$store.commit(
+					'form/SET_RUNALL_BACKTEST_ARRAY',
+					this.favorite_array.map(item => {
+						return { name: item.name, content: item, state: 0, id: item.id }
+					})
+				)
+				await this.loopAllHistories()
 			}
 		},
 		async findLastSignal() {
@@ -276,6 +319,9 @@ export const CommonMethodsMixin = {
 			// // 对数组做批量的上传 S3 和运行回测就行了
 			// await this.loopAllHistories()
 			await this.runOrFindAndLoop('backtest')
+		},
+		async runBTV1Backtest() {
+			await this.runOrFindAndLoop('btv1')
 		},
 		async loopAllHistories() {
 			for (let i = 0; i < this.favorite_array.length; i++) {

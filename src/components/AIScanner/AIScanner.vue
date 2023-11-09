@@ -62,6 +62,9 @@
 					<el-checkbox v-model="isPLSChecked" @change="PLSChecked"
 						>Only Show Profit Target > Stop Loss
 					</el-checkbox>
+					<el-checkbox v-model="isShowShortChecked" @change="ShowShortChecked"
+						>Only Show Direction Is Short
+					</el-checkbox>
 				</div>
 			</div>
 		</div>
@@ -113,6 +116,7 @@ export default {
 		'Optix MA10 < 30 and Optix < 20':'Optix #3',
 	},
 	isPLSChecked: false,
+	isShowShortChecked: false,
 	loading: false,
     }
   },
@@ -157,7 +161,7 @@ export default {
 
 	handleQuery: throttle(function () { this.filterData() }, 500),
 	filterData(){
-		this.tableData.content = this.filterPLSCondition(this.getSearchresult())
+		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition(this.getSearchresult()))
 		this.$refs.tableChild.pageReset()
 	},
 	filterPLSCondition(searchResult){
@@ -165,6 +169,14 @@ export default {
 			// 当checkbox勾选时，返回被筛选过的数据
 			return searchResult
 					.filter(item=>parseFloat(item["ProfitTarget"])>parseFloat(item['StopLoss']));
+		}
+		return searchResult
+	},
+	filterShowShortCondition(searchResult){
+		if (this.isShowShortChecked) {
+			// 当checkbox勾选时，返回被筛选过的数据
+			return searchResult
+					.filter(item=>item["Direction"] == 'Short');
 		}
 		return searchResult
 	},
@@ -187,6 +199,9 @@ export default {
 		return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 	},
 	PLSChecked(){
+		this.handleQuery()
+	},
+	ShowShortChecked(){
 		this.handleQuery()
 	},
     //**************table filter

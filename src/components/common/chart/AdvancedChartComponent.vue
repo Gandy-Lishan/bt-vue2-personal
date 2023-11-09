@@ -281,7 +281,8 @@
 
 						<cq-chart-legend></cq-chart-legend>
 
-						<cq-loader class="loaderMain"></cq-loader>
+						<!-- 用loadingOverlay替代原装loader -->
+						<!-- <cq-loader class="loaderMain"></cq-loader> -->
 					</div>
 				</div>
 			</div>
