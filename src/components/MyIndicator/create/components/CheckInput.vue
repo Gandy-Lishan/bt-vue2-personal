@@ -73,7 +73,7 @@ export default {
         console.log('newValue', newValue)
         this.showInput = newValue.checked
         this.value = newValue.value
-        if(typeof newValue.value === 'string' && newValue.value.includes('e'))  this.value =  newValue.value.toString().replace(/e$/, '');
+        if(typeof newValue.value === 'string' && newValue.value.includes('e'))  {this.value =  newValue.value.toString().replace(/e$/, ''); this.MAType = 'EMA'}
       },
       deep: true, // 启用深度监听，监视对象属性的变化
     },
