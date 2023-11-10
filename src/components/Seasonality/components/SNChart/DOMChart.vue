@@ -7,6 +7,7 @@
 <script>
 import SNChart from "./index.vue"
 import { getSeasonalityData } from "@/service/service";
+import { checkProperties } from "@/utils";
 
 export default {
     name: 'DOMChart',
@@ -27,6 +28,8 @@ export default {
         plotConfiguration: {
             async handler(newVal, _) {
                 if(Object.keys(newVal).length == 0) return
+                const commonPropertiesToCheck = ['symbol', 'month', 'start_date', 'end_date'];
+                if (!checkProperties(newVal, commonPropertiesToCheck)) {console.log('公共属性存在空值'); return}
 
                 const url = `/sn/get_month_data?name=${newVal.symbol}&month=${newVal.month}&start=${newVal.start_date}&end=${newVal.end_date}`
                 const {data} = await getSeasonalityData(url)
