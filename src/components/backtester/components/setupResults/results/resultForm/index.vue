@@ -8,7 +8,7 @@
 						<el-input v-model="backtestEditData.capital" disabled></el-input>
 					</el-form-item>
 					<el-form-item label="Timeframe:" prop="frequency">
-						<el-input disabled v-model="editFrequency"></el-input>
+						<el-input disabled v-model="backtestEditData.frequency"></el-input>
 					</el-form-item>
 					<el-form-item label="Trade Price:" prop="trade_price">
 						<el-input disabled v-model="tradePrice"></el-input>
@@ -110,6 +110,10 @@ export default {
 				3: '3 Year',
 				4: '4 Year',
 				5: '5 Year',
+				6: '6 Year',
+				7: '7 Year',
+				8: '8 Year',
+				9: '9 Year',
 				10: '10 Year',
 				15: '15 Year',
 				20: '20 Year',
