@@ -719,6 +719,22 @@ export default {
           label: '5 Year'
         },
         {
+          value: '6',
+          label: '6 Year'
+        },
+        {
+          value: '7',
+          label: '7 Year'
+        },
+        {
+          value: '8',
+          label: '8 Year'
+        },
+        {
+          value: '9',
+          label: '9 Year'
+        },
+        {
           value: '10',
           label: '10 Year'
         },
