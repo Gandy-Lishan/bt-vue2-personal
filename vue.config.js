@@ -338,7 +338,7 @@ const config = {
 				}
 			},
 			'/bt': {
-				target: 'http://192.168.2.105:8000',
+				target: 'https://devbt2api.sentimentrader.com/my_indicator',
 				ws: true,
 				changOrigin: true,
 				pathRewrite: {
