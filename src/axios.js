@@ -13,7 +13,7 @@ let instance = axios.create({
 })
 
 //set 10 sec as default,However, some time-consuming requests are processed separately
-//instance.defaults.timeout = 30000;
+instance.defaults.timeout = 30000;
 // //define the global retry count in main.js
 // instance.defaults.retry = 4;
 // instance.defaults.retryDelay = 1000;

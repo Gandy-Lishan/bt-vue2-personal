@@ -713,6 +713,7 @@ export default {
       this.data.indicator_2 = data.mul_indicator && data.indicator_weight ? '' : data.latter;
       this.data.indicator_1_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_1_url;
       this.data.indicator_2_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_2_url;
+      this.data.time_frame = data.timeframe
       this.data.name = data.name;
       this.rowUrl = data.url
       //如果类型时weight_C
