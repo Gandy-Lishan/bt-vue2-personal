@@ -159,5 +159,15 @@ const LocalStorageUtil = {
 //   console.log('删除数据失败');
 // }
 
+// 用于判断对象中是否存在空属性,只要存在空属性直接返回 false
+const checkProperties = (obj, properties) => {
+  for (let i = 0; i < properties.length; i++) {
+    if (obj[properties[i]] === null || obj[properties[i]] === undefined) {
+      return false; // 如果属性为空，直接返回 false
+    }
+  }
+  return true; // 如果所有属性都不为空，返回 true
+}
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil}
+
+export {capitalizeFirstLetter, compareArrays, timestampToTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties}
