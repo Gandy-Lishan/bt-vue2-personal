@@ -114,7 +114,7 @@ instance.interceptors.response.use(
 		const url = err?.message?.data?.config?.url
 		console.log('错误的URL：', url)
 		const allowedListUrl = ['backtest', 'analyst', 'strategy', 'upload', 'runbt']
-		const isAllowedUrl = allowedListUrl.some(item => url.includes(item))
+		const isAllowedUrl = allowedListUrl.some(item => url?.includes(item))
 		if (isAllowedUrl) {
 			store.commit('form/SET_LIST_LOADING', false);
 			store.commit('form/SET_SETUP_LOADING', {
@@ -123,6 +123,7 @@ instance.interceptors.response.use(
 				progressText: ''
 			})
 		}
+
 		// 取消权限控制
 		// if (err?.response?.status == 410) {
 		// 	try{
