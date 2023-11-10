@@ -7,13 +7,19 @@
 			size="mini"
 			>run all backtest</el-button
 		>
+		<el-tooltip
+			class="item"
+			effect="dark"
+			content="Migrate from backtest engine v1 to backtest engine v2"
+			placement="bottom-start"
+								>
 		<el-button
 			v-if="currentPage == 'Favorites'"
 			@click="runBTV1Backtest"
 			class="fls-btn"
 			size="mini"
-			>rerun BTV1Backtest</el-button
-		>
+			>Migrate Backtest </el-button
+		></el-tooltip>
 		<el-button v-if="currentPage == 'Favorites'" @click="findLastSignal" class="fls-btn" size="mini">Find Last Signal</el-button>
 		<div class="searchBox">
 			<el-input
