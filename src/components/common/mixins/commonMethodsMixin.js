@@ -193,8 +193,13 @@ export const CommonMethodsMixin = {
 			} else if (actionType === 'btv1') {
 
 				this.favorite_array = await this.getAllBTV1Data()
+				for (var i = 0; i < this.favorite_array.length; i++) {
+					// 为每个对象添加属性
+					//this.favorite_array[i].id = this.favorite_array[i].uuid;
+					//this.favorite_array[i].name = this.favorite_array[i].name + ' (from btv1)test1';
+				}
 				// 先截取第一个结果看能不能跑
-				this.favorite_array = this.favorite_array.slice(0,5)
+				this.favorite_array = this.favorite_array.slice(0,3)
 
 				// 用假数据，如果跑不了改个name就行了
 				// this.favorite_array = [{
@@ -355,7 +360,6 @@ export const CommonMethodsMixin = {
 			backtestInfo.capital_alloc = parseFloat(backtestInfo.capital_alloc)
 			backtestInfo.slippage = parseFloat(backtestInfo.slippage)
 			backtestInfo.win_rate = parseFloat(backtestInfo.win_rate)
-			backtestInfo.name = backtestInfo.name + ' (from btv1)test1'
 			backtestInfo.commission = parseFloat(backtestInfo.commission)
 			backtestInfo.old_uuid = backtestInfo.id || backtestInfo.uuid
 			backtestInfo.market_environment = backtestInfo.market_environment || 0
@@ -486,6 +490,7 @@ export const CommonMethodsMixin = {
 			await CIQ.addIndicatorsFromBacktest(() => {
 				// 展示 result 时要用
 				_this.$store.commit('form/getRunBacktestData', backtestInfo)
+				CIQ.hideCover()
 			})
 			await this.loopCalculateNewConditions(backtestInfo)
 			await CIQ.uploadCSVJSON(backtestInfo.pk, callback)
@@ -725,8 +730,16 @@ export const CommonMethodsMixin = {
 						file_data: backtestParams
 					})
 					await uploadS3(S3DataStr)
-					const res = await runBacktest(backtestDataStr)
-					if (res.status != 201) return
+
+					let res
+					try {
+						res = await runBacktest(backtestDataStr)
+					} catch (error) {
+						if(error.response?.status != 201) {
+							return
+						}
+					}
+
 					_this.$store.dispatch('states/set_isBacktestRunning_flag', true)
 					//After saving successfully, clear the backtestinfo back to the original state
 					_this.$store.commit('form/initialBacktestInfo')

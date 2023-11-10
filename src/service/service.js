@@ -723,7 +723,20 @@ let instance = axios_new.create({
 export function getBTV1Backtest() {
 	return new Promise((resolve, reject) => {
 		instance
-			.get('/bt/favorite_backtest/', { withCredentials: true })
+			.get('/bt/get_btv1_favorite_backtests/', { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+export function getBTV1FavIndicator() {
+	return new Promise((resolve, reject) => {
+		instance
+			.get('/bt/get_btv1_favorite_indicators/', { withCredentials: true })
 			.then(res => {
 				resolve(res)
 			})

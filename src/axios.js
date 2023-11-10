@@ -112,10 +112,10 @@ instance.interceptors.response.use(
 	function interceptor(err) {
 		console.log('报错了。。。。', err)
 
-		console.log('错误的URL：', err.message.data.config.url)
+		//console.log('错误的URL：', err.message.data.config.url)
 		const url = err?.message?.data?.config?.url
 		const allowedListUrl = ['backtest', 'analyst', 'strategy', 'upload', 'runbt']
-		const isAllowedUrl = allowedListUrl.some(item => url.includes(item))
+		const isAllowedUrl = allowedListUrl.some(item => url?.includes(item))
 		if (isAllowedUrl) {
 			store.commit('form/SET_LIST_LOADING', false);
 			store.commit('form/SET_SETUP_LOADING', {
