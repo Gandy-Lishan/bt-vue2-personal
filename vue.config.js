@@ -98,19 +98,6 @@ const config = {
 		}
 	},
 	css: {
-    loaderOptions: {
-      less: {
-        // 如果使用了 less-loader，请添加以下配置
-        lessOptions: {
-          javascriptEnabled: true,
-        },
-      },
-      postcss: {
-        plugins: [
-          require('autoprefixer'),
-        ],
-      },
-    },
     // Whether to use CSS separation plug-in extracttextplugin
     extract: {
       filename: `css/[name].${utcTimestamp}.css`,
