@@ -111,17 +111,17 @@ instance.interceptors.response.use(
 	},
 	function interceptor(err) {
 		console.log('报错了。。。。', err)
-		console.log('错误的URL：', err.config.url)
-		const allowedListUrl = ['backtest', 'analyst', 'strategy', 'upload', 'runbt']
-		const isAllowedUrl = allowedListUrl.some(item => err.config.url.includes(item))
-		if (isAllowedUrl) {
-			store.commit('form/SET_LIST_LOADING', false);
-			store.commit('form/SET_SETUP_LOADING', {
-				isSetupLoading: false,
-				percentage: 0,
-				progressText: ''
-			})
-		}
+		// console.log('错误的URL：', err.config.url)
+		// const allowedListUrl = ['backtest', 'analyst', 'strategy', 'upload', 'runbt']
+		// const isAllowedUrl = allowedListUrl.some(item => err.config.url.includes(item))
+		// if (isAllowedUrl) {
+		// 	store.commit('form/SET_LIST_LOADING', false);
+		// 	store.commit('form/SET_SETUP_LOADING', {
+		// 		isSetupLoading: false,
+		// 		percentage: 0,
+		// 		progressText: ''
+		// 	})
+		// }
 		// 取消权限控制
 		// if (err?.response?.status == 410) {
 		// 	try{

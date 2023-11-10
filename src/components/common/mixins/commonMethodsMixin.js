@@ -194,8 +194,7 @@ export const CommonMethodsMixin = {
 
 				this.favorite_array = await this.getAllBTV1Data()
 				// 先截取第一个结果看能不能跑
-				this.favorite_array = this.favorite_array.slice(0,1)
-				debugger
+				this.favorite_array = this.favorite_array.slice(0,5)
 
 				// 用假数据，如果跑不了改个name就行了
 				// this.favorite_array = [{
@@ -356,6 +355,7 @@ export const CommonMethodsMixin = {
 			backtestInfo.capital_alloc = parseFloat(backtestInfo.capital_alloc)
 			backtestInfo.slippage = parseFloat(backtestInfo.slippage)
 			backtestInfo.win_rate = parseFloat(backtestInfo.win_rate)
+			backtestInfo.name = backtestInfo.name + ' (from btv1)test1'
 			backtestInfo.commission = parseFloat(backtestInfo.commission)
 			backtestInfo.old_uuid = backtestInfo.id || backtestInfo.uuid
 			backtestInfo.market_environment = backtestInfo.market_environment || 0
@@ -718,7 +718,6 @@ export const CommonMethodsMixin = {
 			backtestParams = JSON.stringify(backtestParams)
 			const uuid = backtestInfo.pk
 			const backtestDataStr = _this.$qs.stringify(backtestInfo)
-			debugger
 			return async function() {
 				if (arguments[0] == 200) {
 					const S3DataStr = _this.$qs.stringify({
