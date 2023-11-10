@@ -138,7 +138,7 @@
             @blur="handleInputConfirm"
           >
           </el-input>
-          <el-button class="button-new-tag" size="mini" @click="showInput">+ Add Customize Time</el-button>
+          <el-button class="button-new-tag" size="mini" @click="showInput">+ Modify Customize Time</el-button>
           </div>
         </div>
       </el-form-item>

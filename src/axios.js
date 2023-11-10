@@ -111,8 +111,8 @@ instance.interceptors.response.use(
 	},
 	function interceptor(err) {
 		console.log('报错了。。。。', err)
-		console.log('错误的URL：', err.message.data.config.url)
 		const url = err?.message?.data?.config?.url
+		console.log('错误的URL：', url)
 		const allowedListUrl = ['backtest', 'analyst', 'strategy', 'upload', 'runbt']
 		const isAllowedUrl = allowedListUrl.some(item => url.includes(item))
 		if (isAllowedUrl) {
