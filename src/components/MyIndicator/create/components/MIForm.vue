@@ -16,10 +16,32 @@
 				prop="name"
 				placeholder="Please input the name of your custom indicator"
 			>
+        <template slot="label">
+          <label>
+            1.Name
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content">
+                Enter a custom indicator name
+              </span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
 				<el-input v-model="data.name"></el-input>
 			</el-form-item>
       <!-- <div></div> -->
 			<el-form-item label="2.Categorie" v-model="data.categories">
+        <template slot="label">
+          <label>
+            2.Categorie
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content">
+                Select the indicator calculation method
+              </span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
 				<el-select
 					v-model="data.categories"
 					placeholder="Please choose categories"
@@ -38,6 +60,17 @@
       <el-form-item
 				label="3.Timeframe"
 			>
+        <template slot="label">
+          <label>
+            3.Timeframe
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content">
+                Timeframe for the composite indicator is the maximum of all indicators
+              </span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
 				<el-input v-model="data.time_frame" disabled></el-input>
 			</el-form-item>
 		</div>

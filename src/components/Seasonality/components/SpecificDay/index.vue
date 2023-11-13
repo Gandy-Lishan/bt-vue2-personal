@@ -17,8 +17,7 @@
               1.Symbol
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  ><br
-                /></span>
+                  >Enter stock symbol or name</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -51,6 +50,16 @@
       <el-form-item
         label="2.Period"
       >
+      <template slot="label">
+        <label>
+          2.Period
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content"
+              >Select time period</span>
+            <i class="iconfont icon-wenhao"></i>
+          </el-tooltip>
+        </label>
+      </template>
         <div class="select-container">
         <el-select v-model="data.period" @change="handlePeriodChange">
           <el-option
@@ -100,6 +109,16 @@
           placeholder="Please input the name of your custom indicator"
           class="holidays-box"
         >
+      <template slot="label">
+        <label>
+          3.Specific Days
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content"
+              >Choose specific days</span>
+            <i class="iconfont icon-wenhao"></i>
+          </el-tooltip>
+        </label>
+      </template>
         <div class="holiday-box">
           <el-select v-model="data.holidays" placeholder="Please select month" @change="changeMonth">
           <el-option

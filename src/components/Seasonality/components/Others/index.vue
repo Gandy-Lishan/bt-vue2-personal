@@ -18,8 +18,7 @@
               1.Symbol
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  ><br
-                /></span>
+                  >Enter stock symbol or name</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -53,6 +52,16 @@
       <el-form-item
         label="2.Date Range"
       >
+      <template slot="label">
+        <label>
+          2.Date Range
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content"
+              >Select date range</span>
+            <i class="iconfont icon-wenhao"></i>
+          </el-tooltip>
+        </label>
+      </template>
         <div class="select-container">
         <div class="startAndEndBox">
           <el-date-picker
@@ -86,8 +95,18 @@
       </div>
       </el-form-item>
       <el-form-item
-          label="2.Category"
+          label="3.Category"
         >
+      <template slot="label">
+        <label>
+          3.Category
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content"
+              >Choose category</span>
+            <i class="iconfont icon-wenhao"></i>
+          </el-tooltip>
+        </label>
+      </template>
           <el-select v-model="data.category" placeholder="Please select category" @change="changeCategory">
           <el-option
             v-for="item in options"
