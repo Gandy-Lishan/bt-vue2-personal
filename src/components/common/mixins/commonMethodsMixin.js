@@ -193,6 +193,7 @@ export const CommonMethodsMixin = {
 			} else if (actionType === 'btv1') {
 
 				this.favorite_array = await this.getAllBTV1Data()
+
 				for (var i = 0; i < this.favorite_array.length; i++) {
 					// 为每个对象添加属性
 					//this.favorite_array[i].id = this.favorite_array[i].uuid;
