@@ -765,6 +765,11 @@ export default {
           return false
         }
       })
+      const formsToValid = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
+      const childFormValid = formsToValid.some((formRef) => {
+        return this.$refs[formRef].validateForm() == false
+      })
+      if(childFormValid) return false
       if(!formValid) return formValid
       // 按照选项校验 indicator 是否在允许范围
       const categories = this.data.categories
