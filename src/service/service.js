@@ -1,6 +1,6 @@
 import axios from '../axios'
 
-import axios_new from 'axios'
+// import axios_new from 'axios'
 
 function get_env(name, value) {
 	if (process.env[name] === undefined) {
@@ -717,13 +717,13 @@ export function getSeasonalityData(url) {
 }
 
 //临时设一个没有authorization的axios实例
-let instance = axios_new.create({
-	baseURL: ''
-})
+// let instance = axios_new.create({
+// 	baseURL: ''
+// })
 export function getBTV1Backtest() {
 	return new Promise((resolve, reject) => {
-		instance
-			.get('/bt/get_btv1_favorite_backtests/', { withCredentials: true })
+		axios
+			.get('/bt/my_indicator/get_btv1_favorite_backtests/', { withCredentials: true })
 			.then(res => {
 				resolve(res)
 			})
@@ -733,10 +733,11 @@ export function getBTV1Backtest() {
 	})
 }
 
+// 这里加了缓存防止响应时间过长
 export function getBTV1FavIndicator() {
 	return new Promise((resolve, reject) => {
-		instance
-			.get('/bt/get_btv1_favorite_indicators/', { withCredentials: true })
+		axios
+			.get('/bt/my_indicator/get_btv1_favorite_indicators/', { cache: true, withCredentials: true })
 			.then(res => {
 				resolve(res)
 			})

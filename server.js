@@ -86,6 +86,7 @@ if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
             '^/dev': ''
         }
     }))
+
     let url2 = get_env("ai_url",'https://auto-trader-prod.herokuapp.com')
     app.use('/ai',proxy({
         target:url2,
@@ -95,6 +96,15 @@ if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
         }
     }))
 
+    let url3= get_env("bt_url",'https://devbt2api.sentimentrader.com/')
+    app.use('/bt',proxy({
+        target:url3,
+        ws: true,
+        changeOrigin:true,
+        pathRewrite: {
+            '^/bt': ''
+        }
+    }))
 }else if(process.env.ST_ENV === "prod"){
     // app.use("/dev",proxy(get_env("API_URL",`http://18.216.210.200/dev`)))
     let url = get_env("api_url",'https://devbt2api.sentimentrader.com/')
@@ -112,6 +122,16 @@ if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
         changeOrigin:true,
         pathRewrite: {
             '^/ai': ''
+        }
+    }))
+
+    let url3= get_env("bt_url",'https://devbt2api.sentimentrader.com/')
+    app.use('/bt',proxy({
+        target:url3,
+        ws: true,
+        changeOrigin:true,
+        pathRewrite: {
+            '^/bt': ''
         }
     }))
 }
