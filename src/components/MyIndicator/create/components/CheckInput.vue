@@ -1,6 +1,6 @@
 <template>
   <div class="checkbox-with-input">
-    <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'CheckInput'">{{ config.label }}</el-checkbox>
+    <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'CheckInput'" @change="validateValue(config.value)">{{ config.label }}</el-checkbox>
     <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'SelectInput'" style="margin-right: 10px;"></el-checkbox>
     <el-select :disabled="isDisabled" v-model="MAType" @change="handleSelect" placeholder="-Select-" size="mini" v-if="config['type'] == 'SelectInput'" style="margin-right: 5px;">
       <el-option
@@ -10,7 +10,8 @@
         :value="item.value">
       </el-option>
     </el-select>
-    <el-input
+    <div class="input-box">
+      <el-input
       size="mini"
       v-show="showInput"
       v-model="value"
@@ -19,11 +20,13 @@
       :style="{ visibility: inputVisibility }"
       @blur="validateValue(value)"
     ></el-input>
+    <div class="error-message">{{ errMsg }}</div>
+    </div>
   </div>
 </template>
 
 <script>
-import { validateCapitalRule } from '@/utils/formValidate';
+import { createPositiveIntegerValidate, createTPSLValidate } from '@/utils/formValidate';
 
 export default {
   name: 'CheckInput',
@@ -47,6 +50,7 @@ export default {
           label: 'Exponential Moving Average'
         }],
         MAType: 'MA',
+        errMsg: ''
     };
   },
   computed: {
@@ -106,9 +110,33 @@ export default {
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
       }
     },
+    validateForm() {
+      if(this.showInput) {
+        this.validateValue(this.config.value)
+        if(this.errMsg) {
+          this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.');
+          return false;
+        }
+      }else {
+        this.config.value = 5
+      }
+      return true
+    },
     validateValue(value) {
       console.log('value', value)
-    }
+      console.log('_config', this._config)
+      const _config = this._config
+      if(_config.label == "Extreme Optimism") {
+        // 限制小数点后两位
+        this.errMsg = createTPSLValidate(0,value)
+      }else if(_config.label == "Extreme Pessimism") {
+        this.errMsg = createTPSLValidate(0,value)
+      }else if(_config.field == "ma1") {
+        this.errMsg = createPositiveIntegerValidate(value)
+      }else if(_config.field == "ma2") {
+        this.errMsg = createPositiveIntegerValidate(value)
+      }
+    },
   }
 };
 </script>
@@ -118,7 +146,10 @@ export default {
   display: flex;
   align-items: center;
 }
-
+.input-box{
+  width: 100%;
+  position: relative;
+}
 .input {
   visibility: hidden;
 }
@@ -128,5 +159,12 @@ export default {
 .el-checkbox.is-bordered.el-checkbox--medium .el-checkbox__inner, .el-checkbox__inner {
   width: 18px;
   height: 18px;
+}
+.error-message {
+  position: absolute;
+  line-height: 1;
+  font-size: 10px;
+  color: #F56C6C;
+  white-space: nowrap;
 }
 </style>
