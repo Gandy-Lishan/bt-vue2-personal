@@ -622,20 +622,20 @@ export function delMyIndicator(url) {
 	})
 }
 export function searchIndicator(name, calculate, combine_type, timeframe) {
-	let url = '/dev/my_indicator/get_records/?';
-  if (name) url += `name=${name}`;
-  if (calculate) {
-    if (name) url += `&`;
-    url += `calculate=${calculate}`;
-  }
-  if (combine_type) {
-    if (name || calculate) url += `&`;
-    url += `combine_type=${combine_type}`;
-  }
-  if (timeframe) {
-    if (name || calculate || combine_type) url += `&`;
-    url += `timeframe=${timeframe}`;
-  }
+	let url = '/dev/my_indicator/get_records/?'
+	if (name) url += `name=${name}`
+	if (calculate) {
+		if (name) url += `&`
+		url += `calculate=${calculate}`
+	}
+	if (combine_type) {
+		if (name || calculate) url += `&`
+		url += `combine_type=${combine_type}`
+	}
+	if (timeframe) {
+		if (name || calculate || combine_type) url += `&`
+		url += `timeframe=${timeframe}`
+	}
 
 	return new Promise((resolve, reject) => {
 		axios
@@ -708,9 +708,13 @@ export function getSeasonalityData(url) {
 		axios
 			.get(url, { withCredentials: true })
 			.then(res => {
+				console.log('getSeasonalityData res', res)
+				const status = res.data.Status
+				if (status === 404) resolve({ data: { data: [] } })
 				resolve(res)
 			})
 			.catch(err => {
+				console.log('getSeasonalityData err', err)
 				reject(err)
 			})
 	})
@@ -723,7 +727,9 @@ export function getSeasonalityData(url) {
 export function getBTV1Backtest() {
 	return new Promise((resolve, reject) => {
 		axios
-			.get('/bt/my_indicator/get_btv1_favorite_backtests/', { withCredentials: true })
+			.get('/bt/my_indicator/get_btv1_favorite_backtests/', {
+				withCredentials: true
+			})
 			.then(res => {
 				resolve(res)
 			})
@@ -737,7 +743,10 @@ export function getBTV1Backtest() {
 export function getBTV1FavIndicator() {
 	return new Promise((resolve, reject) => {
 		axios
-			.get('/bt/my_indicator/get_btv1_favorite_indicators/', { cache: true, withCredentials: true })
+			.get('/bt/my_indicator/get_btv1_favorite_indicators/', {
+				cache: true,
+				withCredentials: true
+			})
 			.then(res => {
 				resolve(res)
 			})

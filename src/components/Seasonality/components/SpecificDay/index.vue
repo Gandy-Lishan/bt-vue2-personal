@@ -344,7 +344,7 @@ export default {
       this.data.end_date = currentYear + ''
       if(this.data.period != 22 && this.data.period != 21)  this.data.start_date = (currentYear - period) + ''
       if(this.data.period == 22)  this.data.start_date = (currentYear - 5) + ''
-      if(this.data.period == 21)  {this.data.start_date = ''; this.data.end_date = ''}
+      if(this.data.period == 21)  {this.data.start_date = '1800'; this.data.end_date = currentYear}
     },
     pickStartDate(value) {
       console.log(value)
