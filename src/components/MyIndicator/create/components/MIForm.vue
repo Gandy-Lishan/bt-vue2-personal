@@ -409,7 +409,6 @@ export default {
         {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
       ],
       loadTest: 'Loading...',
-      loading: false,
       weightValidErrMsg: '',
       rules: {
         name: [
@@ -837,6 +836,7 @@ export default {
         // if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
         if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
         if(!inAllowedList) {this.popUpMsgBox('Please choose indicators from the dropdown.'); return false}
+        if(data.length<=1) {this.popUpMsgBox('Please select at least 2 indicators.'); return false}
       }
       return true
     },
@@ -864,7 +864,8 @@ export default {
       if(type === 'Indicator') {
         this.data.time_frame = this.findMaxFreq(this.data.time_frame, item.updated.toLowerCase()) 
       }else {
-        this.data.time_frame = 'daily'
+        // symbol类型对timeframe不产生影响
+        //this.data.time_frame = 'daily'
       }
       console.log('当前最大的 timeframe 是', this.data.time_frame)
 

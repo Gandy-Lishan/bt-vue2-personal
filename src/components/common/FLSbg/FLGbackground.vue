@@ -31,7 +31,8 @@
       <div class="maskContent-sucess" v-if="
         getLastSignalArray.length>0 &&
         progressBarVal == 100 &&
-        getLastSignalArray.findIndex(x=>x.state==2) == -1
+        getLastSignalArray.findIndex(x=>x.state==2) == -1 &&
+        getAllSignalArray.findIndex(x=>x.state==3) == -1
       ">
         <img src="@/assets/allclear.png"/>
         <span>Find Sucessfully</span> 
@@ -74,11 +75,12 @@
       <div class="maskContent-sucess" v-if="
         getAllSignalArray.length>0 &&
         progressBarValALL == 100 &&
-        getAllSignalArray.findIndex(x=>x.state==2) == -1
+        getAllSignalArray.findIndex(x=>x.state==2) == -1 &&
+        getAllSignalArray.findIndex(x=>x.state==3) == -1
       ">
         <img src="@/assets/allclear.png"/>
         <span>Find Sucessfully</span> 
-        <p>All of the tasks have been completed</p>
+        <p>All of the tasks have been completedss</p>
         <el-button @click="viewSignal">View Signal</el-button>
       </div>
       <div class="maskContent-failed" v-if="
@@ -94,6 +96,15 @@
           <li><img src="@/assets/erroritem.png"/><span>{{numOfFailedBacktestsALL}} errors were found</span></li>
         </ul>
         <el-button @click="viewSignal">Return for modification</el-button>
+      </div>
+      <div class="maskContent-noItem" v-if="
+        getAllSignalArray.length==1 &&
+        getAllSignalArray.findIndex(x=>x.state==3) == 0
+      ">
+        <img src="@/assets/allclear.png"/>
+        <span>All Backtests From Old Version Have Been Migrated</span> 
+        <p>All of the tasks have been completed</p>
+        <el-button @click="viewSignal">View Signal</el-button>
       </div>
     </div>
 </template>
@@ -311,7 +322,7 @@ export default {
         margin-top: 30px;
       }
     }
-    .maskContent-sucess{
+    .maskContent-sucess,.maskContent-noItem{
       width: 60vw;
       height: 60vh;
       background: url(../../../assets/fls-background.png);
