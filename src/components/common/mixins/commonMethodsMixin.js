@@ -193,13 +193,14 @@ export const CommonMethodsMixin = {
 			} else if (actionType === 'btv1') {
 
 				this.favorite_array = await this.getAllBTV1Data()
+
 				for (var i = 0; i < this.favorite_array.length; i++) {
 					// 为每个对象添加属性
 					//this.favorite_array[i].id = this.favorite_array[i].uuid;
 					//this.favorite_array[i].name = this.favorite_array[i].name + ' (from btv1)test1';
 				}
 				// 先截取第一个结果看能不能跑
-				this.favorite_array = this.favorite_array.slice(0,3)
+				this.favorite_array = this.favorite_array.slice(0,10)
 
 				// 用假数据，如果跑不了改个name就行了
 				// this.favorite_array = [{
