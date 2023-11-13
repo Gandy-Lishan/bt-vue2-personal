@@ -722,7 +722,6 @@ export function getSeasonalityData(url) {
 // })
 export function getBTV1Backtest() {
 	return new Promise((resolve, reject) => {
-		console.log('getBTV1Backtest')
 		axios
 			.get('/bt/my_indicator/get_btv1_favorite_backtests/', { withCredentials: true })
 			.then(res => {

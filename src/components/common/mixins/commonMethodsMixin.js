@@ -200,7 +200,7 @@ export const CommonMethodsMixin = {
 					//this.favorite_array[i].name = this.favorite_array[i].name + ' (from btv1)test1';
 				}
 				// 先截取第一个结果看能不能跑
-				this.favorite_array = this.favorite_array.slice(0,3)
+				this.favorite_array = this.favorite_array.slice(0,10)
 
 				// 用假数据，如果跑不了改个name就行了
 				// this.favorite_array = [{
