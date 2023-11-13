@@ -30,8 +30,8 @@ export default {
         this.progressTextColor = '#909399'
         return '#909399'
       } else if (percentage < 70) {
-        this.progressTextColor = '#f56c6c'
-        return '#f56c6c';
+        this.progressTextColor = '#409EFF'
+        return '#409EFF';
       } else if(percentage < 90){
         this.progressTextColor = '#e6a23c'
         return '#e6a23c';

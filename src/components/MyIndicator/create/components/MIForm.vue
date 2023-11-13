@@ -527,7 +527,7 @@ export default {
     async previewIndicator() {
       this.$store.commit('states/SET_MI_CREATE_LOADING', true)
       const res = await this.saveIndicator()
-      if(!res) {this.$store.commit('states/SET_MI_CREATE_LOADING', true);return}
+      if(!res) {this.$store.commit('states/SET_MI_CREATE_LOADING', false);return}
       const url = res.data.url
       const indicatorData = await getMyIndicatorData(url)
       // 暂存
