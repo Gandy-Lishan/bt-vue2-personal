@@ -56,7 +56,8 @@ const state = {
 					usersOwnIndicator: ''
 				}
 			]
-		}
+		},
+		user_tag: 'client'
 	},
 	riskDescription: '', //form
 	openedPorfolioBacktests: [], //form
@@ -644,9 +645,15 @@ const mutations = {
 	RESULT_DATA_FOR_SETUP_DISPLAY(state, obj) {
 		console.log('缓存了 row 数据', obj)
 		state.rowDataForDisplay = obj
+		// 这是edit view之后保存的数据
+		state.backtestInfo.old_uuid = obj.id
+		state.backtestInfo.user_tag = obj.user_tag
 	},
 	CACHED_BT_BASIC_INFO_DATA(state, obj) {
 		state.cachedBTBasicInfoData = obj
+		// 这是轮询之后保存的数据
+		state.backtestInfo.old_uuid = obj.id
+		state.backtestInfo.user_tag = obj.user_tag
 	},
 	SET_LIST_LOADING(state, loading) {
 		state.isListLoading = loading
