@@ -31,7 +31,6 @@ export default {
   watch: {
     dataList: {
     handler(newVal, _) {
-      if(Object.keys(newVal).length == 0) return
       this.plotData(this.dataList, this.plotConfiguration);
     },
     deep: true,
