@@ -17,12 +17,11 @@
               1.Symbol
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  ><br
-                /></span>
+                  >Enter stock symbol or name</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
-          </template>
+        </template>
         <el-autocomplete
 						class="inline-input"
 						v-model="data.symbol"
@@ -51,6 +50,16 @@
       <el-form-item
         label="2.Date Range"
       >
+      <template slot="label">
+        <label>
+          2.Date Range
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content"
+              >Select date range</span>
+            <i class="iconfont icon-wenhao"></i>
+          </el-tooltip>
+        </label>
+      </template>
         <div class="select-container">
         <div class="startAndEndBox">
           <el-date-picker
@@ -88,6 +97,16 @@
           prop="monthSelection"
           placeholder="Please input the name of your custom indicator"
         >
+        <template slot="label">
+          <label>
+            3.Month Selection
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >Choose a month</span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
           <el-select v-model="data.monthSelection" placeholder="Please select month" @change="changeMonth">
           <el-option
             v-for="item in options"
