@@ -39,19 +39,19 @@ import { checkProperties } from "@/utils";
                 let url
 
                 if(newVal.option == 0) {
-                  url = `/sn/Week_or_Month_data?name=${newVal.symbol}&option=${newVal.category}&start=${newVal.start_date}&end=${newVal.end_date}`
+                  url = `/dev/seasonality/get_weekday_or_month_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}&option=${newVal.category}`
                 }
                 else if(newVal.option == 1){
-                  url = `/sn/Week_or_Month_data?name=${newVal.symbol}&option=${newVal.category}&start=${newVal.start_date}&end=${newVal.end_date}`
+                  url = `/dev/seasonality/get_weekday_or_month_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}&option=${newVal.category}`
                 }
                 else if(newVal.option == 2){
-                  url = `/sn/get_day_of_month_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}`
+                  url = `/dev/seasonality/get_day_of_month_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}`
                 }
                 else if(newVal.option == 3) {
-                  url = `/sn/get_day_of_year_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}`
+                  url = `/dev/seasonality/get_day_of_year_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}`
                 }
 
-                const {data} = await getSeasonalityData(url)
+                const {data: {data}} = await getSeasonalityData(url)
                 console.log('data', data)
                 if([0, 1].includes(newVal.option)) {
                   this.dataList = data.map(item => [item['Month'], parseFloat((item['Return'] * 100).toFixed(2)), parseFloat(item['Positive'].toFixed(2))])

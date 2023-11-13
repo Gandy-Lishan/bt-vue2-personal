@@ -37,14 +37,15 @@ import { checkProperties } from "@/utils";
                 if(newVal.holidays != 'Custom Time'){
                   const propertiesToCheck = ['holidays']
                   if (!checkProperties(newVal, propertiesToCheck)) {console.log('holidays 为空'); return}
-                  url = `/sn/get_holiday_data?name=${newVal.symbol}&shift=${shift}&start=${newVal.start_date}&end=${newVal.end_date}&holiday=${newVal.holidays}`
+                  url = `/dev/seasonality/get_holiday_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}&holiday=${newVal.holidays}&shift=${shift}`
                 }else {
                   const [month, day] = newVal.customizeDate.split('-')
                   const propertiesToCheck = ['month', 'day']
                   if (!checkProperties(newVal, propertiesToCheck)) {console.log('month 或 day 为空'); return}
-                  url = `/sn/get_custom_day_data?name=${newVal.symbol}&shift=${shift}&start=${newVal.start_date}&end=${newVal.end_date}&month=${month}&day=${day}`
+                  url = `/dev/seasonality/get_custom_day_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}&month=${month}&day=${day}&shift=${shift}`
                 }
-                const {data} = await getSeasonalityData(url)
+                const {data: {data}} = await getSeasonalityData(url)
+                if(data?.length === 0) {this.popUpMsgBox('Stock data is empty')}
                 this.dataList = data.map(item => [parseFloat(item['period']), parseFloat(item['Return'].toFixed(2)), parseFloat(item['Positive'].toFixed(2))])
                 },
             deep: true,
