@@ -199,7 +199,7 @@ export default {
           type,
         };
       }
-      if (item.calculate === 'weight_c' && (item.indicator_weight && item.mul_indicator)) {
+      if (item.calculate === 'weight_combination' && (item.indicator_weight && item.mul_indicator)) {
         const includedWeightDataArr = this.getWeightedIndicatorData(item, sentimentList, symbolList);
         const included = includedWeightDataArr.map(item=>(item.included))
         const weightData = includedWeightDataArr.map(item=>(item.weightData))

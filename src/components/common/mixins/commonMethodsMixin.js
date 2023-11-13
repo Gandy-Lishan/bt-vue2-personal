@@ -193,7 +193,11 @@ export const CommonMethodsMixin = {
 			} else if (actionType === 'btv1') {
 
 				this.favorite_array = await this.getAllBTV1Data()
-
+				if(!this.favorite_array) {
+					// 如果没有更多需要迁移的bt，则设为state == 3,并在弹窗判断为无需迁移值
+					this.$store.commit('form/SET_RUNALL_BACKTEST_ARRAY',[{ state: 3}])
+					return
+				}
 				for (var i = 0; i < this.favorite_array.length; i++) {
 					// 为每个对象添加属性
 					//this.favorite_array[i].id = this.favorite_array[i].uuid;
