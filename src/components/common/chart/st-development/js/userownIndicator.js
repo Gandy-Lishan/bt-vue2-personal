@@ -20,7 +20,7 @@
         const indicatorList = updatedState.filter(item=> item.type=='Indicator')
 
         // symbol加载，识别第一个为默认图标symbol,其它symbol作为serie加载,必须遍历加载，不然很难管理
-        manageSymbolSerie(updatedState.filter(item=> item.type=='Symbol'),findTimeFrame(indicatorList))
+        manageSymbolSerie(updatedState.filter(item=> item.type=='Symbol'),findTimeFrame(indicatorList));
 
         // indicator移除
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -33,7 +33,9 @@
         await addIndicatorStudy(addedItems.map(item=>item.indicator_url))
         CIQ.stxx.loadChart(    { 
             symbol: symbol?symbol:'SPX', 
-            indicator:[...indicatorList.map(item=>item.indicator_url),combinedStudy]}, 
+            indicator:[...indicatorList.map(item=>item.indicator_url),combinedStudy] ,
+            // 这边先写死范围，防止其他indicator无法pagination
+            startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),},
             function () {CIQ.hideCover()}
         ) 
         
