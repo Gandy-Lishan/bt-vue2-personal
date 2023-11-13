@@ -528,7 +528,7 @@ export default {
     async previewIndicator() {
       this.$store.commit('states/SET_MI_CREATE_LOADING', true)
       const res = await this.saveIndicator()
-      if(!res) {this.$store.commit('states/SET_MI_CREATE_LOADING', true);return}
+      if(!res) {this.$store.commit('states/SET_MI_CREATE_LOADING', false);return}
       const url = res.data.url
       const indicatorData = await getMyIndicatorData(url)
       // 暂存
@@ -800,7 +800,7 @@ export default {
       })
       const formsToValid = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
       const childFormValid = formsToValid.some((formRef) => {
-        return this.$refs[formRef].validateForm() == false
+        return this.$refs[formRef]?.validateForm() == false
       })
       if(childFormValid) return false
       if(!formValid) return formValid
