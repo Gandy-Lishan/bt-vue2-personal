@@ -12,7 +12,7 @@ import {
 	runBacktest,
 	getStatus,
 	findLastSignalApi,
-	getBTV1Backtest,
+	getBTV1Backtest
 } from '@/service/service.js'
 import UUID from '@/utils/cryptoUtils/uuid'
 import SignalCode from '@/utils/cryptoUtils/codeTool'
@@ -191,11 +191,10 @@ export const CommonMethodsMixin = {
 				)
 				await this.loopAllHistories()
 			} else if (actionType === 'btv1') {
-
 				this.favorite_array = await this.getAllBTV1Data()
-				if(!this.favorite_array) {
+				if (!this.favorite_array) {
 					// 如果没有更多需要迁移的bt，则设为state == 3,并在弹窗判断为无需迁移值
-					this.$store.commit('form/SET_RUNALL_BACKTEST_ARRAY',[{ state: 3}])
+					this.$store.commit('form/SET_RUNALL_BACKTEST_ARRAY', [{ state: 3 }])
 					return
 				}
 				for (var i = 0; i < this.favorite_array.length; i++) {
@@ -204,7 +203,7 @@ export const CommonMethodsMixin = {
 					//this.favorite_array[i].name = this.favorite_array[i].name + ' (from btv1)test1';
 				}
 				// 先截取第一个结果看能不能跑
-				this.favorite_array = this.favorite_array.slice(0,10)
+				this.favorite_array = this.favorite_array.slice(0, 10)
 
 				// 用假数据，如果跑不了改个name就行了
 				// this.favorite_array = [{
@@ -740,7 +739,7 @@ export const CommonMethodsMixin = {
 					try {
 						res = await runBacktest(backtestDataStr)
 					} catch (error) {
-						if(error.response?.status != 201) {
+						if (error.response?.status != 201) {
 							return
 						}
 					}

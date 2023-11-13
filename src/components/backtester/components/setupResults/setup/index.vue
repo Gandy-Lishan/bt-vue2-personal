@@ -122,6 +122,7 @@ export default {
 				console.log('cachedData', cachedData)
         if (Object.keys(dataToUse).length !== 0) {
           dataToUse = isJson(dataToUse) ? JSON.parse(dataToUse) : dataToUse
+					dataToUse.old_uuid = dataToUse.id
           await _this.displaySetUpForm(dataToUse)
         }
 				// 如果跳转携带 backtestID 则填充
@@ -394,6 +395,8 @@ export default {
 			backtestInfo.exit = JSON.stringify(exitSaveObj.exit)
 			backtestInfo.entry_description = JSON.stringify(entrySaveObj.entry_description)
 			backtestInfo.exit_description = JSON.stringify(exitSaveObj.exit_description)
+			backtestInfo.old_uuid = backtestInfo.old_uuid
+			if(!backtestInfo.old_uuid) delete backtestInfo.old_uuid
 			// 判断是否有 direction 没有设置默认值
 			backtestInfo.direction = backtestInfo.direction ? backtestInfo.direction : 'Long'
 
