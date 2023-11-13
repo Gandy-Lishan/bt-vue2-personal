@@ -46,7 +46,7 @@ import { checkProperties } from "@/utils";
                 }
                 const {data: {data}} = await getSeasonalityData(url)
                 if(data?.length === 0) {this.popUpMsgBox('Stock data is empty')}
-                this.dataList = data.map(item => [parseFloat(item['period']), parseFloat(item['Return'].toFixed(2)), parseFloat(item['Positive'].toFixed(2))])
+                this.dataList = data.map(item => [parseFloat(item['period']), parseFloat((item['Return']).toFixed(2)), parseFloat(item['Positive'].toFixed(2))])
                 },
             deep: true,
             immediate: true,

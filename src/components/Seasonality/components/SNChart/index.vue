@@ -55,7 +55,30 @@ export default {
     });
   },
   methods: {
+    calculateTickPositions(minValue, maxValue, numberOfTicks) {
+      const range = maxValue - minValue;
+      const unroundedTickSize = range / (numberOfTicks - 1); // 计算未圆整的刻度大小
+      const x = Math.ceil(Math.log10(unroundedTickSize) - 1); // 取对数，计算刻度的数量级
+      const pow10X = Math.pow(10, x); // 计算数量级对应的值
+
+      const roundedTickSize = Math.ceil(unroundedTickSize / pow10X) * pow10X; // 圆整刻度大小
+      const newMin = Math.floor(minValue / roundedTickSize) * roundedTickSize; // 计算新的最小刻度
+      const newMax = Math.ceil(maxValue / roundedTickSize) * roundedTickSize; // 计算新的最大刻度
+
+      const tickPositions = [];
+      for (let i = newMin; i <= newMax; i += roundedTickSize) {
+        tickPositions.push(Number(i.toFixed(1)));
+      }
+
+      return tickPositions;
+    },
     plotData(dataList, plotConfiguration) {
+      console.log('绘制的图表数据', dataList)
+      const tList = dataList.map(item => (item[1]))
+      // const pList = dataList.map(item => (item[2]))
+      const yAxis_1 = this.calculateTickPositions(Math.min(...tList), Math.max(...tList), 10)
+      // const yAxis_2 = this.calculateTickPositions(Math.min(...pList), Math.max(...pList), 10)
+      console.log('y 轴左边刻度', yAxis_1)
       // 将上述 JavaScript 代码放在这里
       // 确保导入 Highcharts 库以使此代码正常工作
       // 传入的数据 dataList 和配置 plotConfiguration 作为参数
@@ -68,8 +91,10 @@ export default {
       const xAxisTitle = plotConfiguration.xAxisTitle
       const positiveColor = plotConfiguration.scaleSettings.positiveColor
       const negativeColor = plotConfiguration.scaleSettings.negativeColor
-      const tickPositions_1 = plotConfiguration.scaleSettings.yAxis_1.tickPositions
+      // const tickPositions_1 = plotConfiguration.scaleSettings.yAxis_1.tickPositions
+      const tickPositions_1 = yAxis_1
       const tickPositions_2 = plotConfiguration.scaleSettings.yAxis_2.tickPositions
+      // const tickPositions_2 = yAxis_2
       const max_1 = plotConfiguration.scaleSettings.yAxis_1.max
       const min_1 = plotConfiguration.scaleSettings.yAxis_1.min
       const format_1 = plotConfiguration.scaleSettings.yAxis_1.format
