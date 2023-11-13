@@ -31,8 +31,9 @@ export default {
                 const commonPropertiesToCheck = ['symbol', 'month', 'start_date', 'end_date'];
                 if (!checkProperties(newVal, commonPropertiesToCheck)) {console.log('公共属性存在空值'); return}
 
-                const url = `/sn/get_month_data?name=${newVal.symbol}&month=${newVal.month}&start=${newVal.start_date}&end=${newVal.end_date}`
-                const {data} = await getSeasonalityData(url)
+                const url = `/dev/seasonality/get_month_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}&month=${newVal.month}`
+                const {data: {data}} = await getSeasonalityData(url)
+                if(data?.length === 0) {this.popUpMsgBox('Stock data is empty')}
                 this.dataList = data.map(item => [parseFloat(item['Day']), parseFloat(item['Return'].toFixed(2)), parseFloat(item['Positive'].toFixed(2))])
                 },
             deep: true,

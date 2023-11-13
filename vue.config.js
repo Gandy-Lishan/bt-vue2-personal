@@ -33,10 +33,10 @@ const config = {
 					loader: require.resolve('@open-wc/webpack-import-meta-loader')
 				},
 				{
-          test: /\.js$/,
-          include: [require.resolve('highcharts')],
-          use: 'babel-loader', // 使用babel-loader来处理Highcharts的模块
-        },
+					test: /\.js$/,
+					include: [require.resolve('highcharts')],
+					use: 'babel-loader' // 使用babel-loader来处理Highcharts的模块
+				},
 				// 在这里添加 lru-cache 的配置
 				{
 					test: /node_modules[\\/]lru-cache[\\/]/,
@@ -98,16 +98,16 @@ const config = {
 		}
 	},
 	css: {
-    // Whether to use CSS separation plug-in extracttextplugin
-    extract: {
-      filename: `css/[name].${utcTimestamp}.css`,
-      chunkFilename: `css/[name].${utcTimestamp}.css`
-    },
-    // Open CSS source maps?
-    sourceMap: false,
-    // Enable CSS modules for all CSS / pre processor files
-    modules: false
-  },
+		// Whether to use CSS separation plug-in extracttextplugin
+		extract: {
+			filename: `css/[name].${utcTimestamp}.css`,
+			chunkFilename: `css/[name].${utcTimestamp}.css`
+		},
+		// Open CSS source maps?
+		sourceMap: false,
+		// Enable CSS modules for all CSS / pre processor files
+		modules: false
+	},
 	//chainWebpack 通过链式编程的形式，来修改默认的webpack配置
 	chainWebpack: config => {
 		config.resolve.alias
@@ -345,7 +345,7 @@ const config = {
 				pathRewrite: {
 					'^/bt': ''
 				}
-			},
+			}
 		}
 	}
 }
