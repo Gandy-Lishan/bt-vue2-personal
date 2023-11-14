@@ -1129,7 +1129,6 @@ export default {
         CIQ.hideCover()
         return
       }
-      debugger
       let bd = JSON.parse(JSON.stringify(this.bd))
       this.getTradePrice(bd.trade_price)
       /* 处理数据 */
