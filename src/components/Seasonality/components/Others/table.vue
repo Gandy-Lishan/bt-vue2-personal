@@ -23,7 +23,7 @@
           v-if="
           (l.label == 'Day' && option == 3)
           ||
-          option == 2
+          (l.label == 'Day' && option == 2) || (l.label == 'Month' && option == 2) 
           "
 				>
 					<template slot-scope="scope">
@@ -76,12 +76,12 @@ export default {
       searchKey: '',
       tableCol: [
         {
-          label: 'Day',
-          value: 'Day'
-        },
-        {
           label: 'Month',
           value: 'Month'
+        },
+        {
+          label: 'Day',
+          value: 'Day'
         },
         {
           label: 'AVG RET',
