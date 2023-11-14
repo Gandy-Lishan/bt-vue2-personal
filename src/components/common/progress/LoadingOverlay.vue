@@ -27,17 +27,17 @@ export default {
   methods: {
     customColorMethod(percentage) {
       if (percentage < 50) {
-        this.progressTextColor = '#909399'
-        return '#909399'
+        this.progressTextColor = '#a0e3ec'
+        return '#a0e3ec'
       } else if (percentage < 70) {
-        this.progressTextColor = '#409EFF'
-        return '#409EFF';
+        this.progressTextColor = '#58d9ea'
+        return '#58d9ea';
       } else if(percentage < 90){
-        this.progressTextColor = '#e6a23c'
-        return '#e6a23c';
+        this.progressTextColor = '#15cfe7'
+        return '#15cfe7';
       }else {
-        this.progressTextColor = '#67c23a'
-        return '#67c23a';
+        this.progressTextColor = '#66ace5'
+        return '#66ace5';
       }
     },
   },

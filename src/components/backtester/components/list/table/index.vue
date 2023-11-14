@@ -45,6 +45,7 @@
 			@sort-change="onSortChange"
 			style="width: 100%; height: 100%"
 			:row-class-name="tableRowClassName"
+			element-loading-background="rgba(0, 0, 0, 0.8)"
     >
     <el-table-column type="index" align="center">
         <template scope="scope">
