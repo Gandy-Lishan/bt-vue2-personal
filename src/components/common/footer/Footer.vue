@@ -1,5 +1,5 @@
 <template>
-	<div class="footer">
+	<div class="footer" :class="{'isFixedAtBottom': isFixedAtBottom }">
 		<p>
 			Copyright © 2001 - 2023 Sundial Capital Research, Inc. All rights
 			reserved.
@@ -49,10 +49,23 @@
 
 <script>
 export default {
-  name: 'Footer'
+  name: 'Footer',
+	data() {
+		return {isFixedAtBottom: false}
+	},
+	watch: {
+    '$route'(to, _) {
+			if (!to.path.includes('/backtester')) {
+        this.isFixedAtBottom = true
+      }else {
+				this.isFixedAtBottom = false
+			}
+    }
+  }
 }
 </script>
 
 <style lang="less" scoped>
 @import "./index.css";
+
 </style>

@@ -254,8 +254,10 @@ export default {
     data: {
     handler(newVal, _) {
       if(Object.keys(newVal).length == 0) return
+      const holidays = this.options[newVal.holidays].label
       this.plotConfiguration = {
         ...this.plotConfiguration,
+        title: `Performance Surrounding ${holidays}`,
         subtitle: `${newVal.symbol || 'S&P 500'} ${newVal.start_date}-${newVal.end_date}`,
         start_date: newVal.start_date,
         end_date: newVal.end_date,
