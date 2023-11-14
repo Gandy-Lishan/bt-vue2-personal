@@ -67,7 +67,6 @@
 			:showProgress="setUpLoadingSetting.showProgress"
 			:percentage="setUpLoadingSetting.percentage"
 			:progressText="setUpLoadingSetting.progressText"
-			backgroundColor="hsla(0,0%,100%,.9)"
 		>
 		</LoadingOverlay>
 	</div>
@@ -141,6 +140,32 @@ export default {
     next();
   }
 	},
+	// beforeRouteLeave(to, from, next) {
+	// 	if(from.name == 'SetUp' || from.path == '/backtester/sr/setup') {
+	// 		// 提醒用户表单更改会失效
+	// 		this.$confirm('Unsaved changes detected. Would you like to save them before leaving the page?', 'Confirmation message', {
+  //         distinguishCancelAndClose: true,
+  //         confirmButtonText: 'Save',
+  //         cancelButtonText: 'Discard changes'
+  //       })
+  //         .then(() => {
+  //           this.$message({
+  //             type: 'info',
+  //             message: 'Save changes'
+  //           });
+	// 				next()
+  //         })
+  //         .catch(action => {
+  //           this.$message({
+  //             type: 'info',
+  //             message: action === 'cancel'
+  //               ? 'Discard changes and leave the page'
+  //               : 'Stay on the current page'
+  //           })
+	// 		   next()
+  //         });
+	// 	}else {next()}
+  // },
 	computed: {
     setUpLoadingSetting() {
       // 从 Vuex store 中获取全局 loading 状态
