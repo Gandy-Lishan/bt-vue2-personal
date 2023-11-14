@@ -205,42 +205,6 @@ export const CommonMethodsMixin = {
 				// 先截取第一个结果看能不能跑
 				this.favorite_array = this.favorite_array.slice(0, 10)
 
-				// 用假数据，如果跑不了改个name就行了
-				// this.favorite_array = [{
-				// 	"entry_description": "[{\"commentDes\": \"E: Long; Single Condition % S&P 1500 RSI 14-day < 30 > 30.0;\", \"rocCond\": {\"newCondition\": 3, \"conditionPeriod\": \"5\"}}, {\"commentDes\": \"% S&P 1500 RSI 14-day < 30 > 30.0\", \"rocCond\": {\"newCondition\": 3, \"conditionPeriod\": \"5\"}}]",
-				// 	"exit_description": "[{\"commentDes\":\"X: Close:   Time In Market 1(Bars)\",\"rocCond\":null}]",
-				// 	"direction": "Long",
-				// 	"frequency": "Daily",
-				// 	"name": "bull_market test1121",
-				// 	"symbol": "DJIA",
-				// 	"benchmark": "DJIA",
-				// 	"strategy": "Signal",
-				// 	"capital": "100000",
-				// 	"capital_alloc": "1",
-				// 	"commission": "0.001",
-				// 	"win_rate": "0",
-				// 	"slippage": "0.1",
-				// 	"start_date": "1800-10-01",
-				// 	"end_date": "2023-11-08",
-				// 	"description": "backtest",
-				// 	"risk_control": "//1",
-				// 	"report_url": "",
-				// 	"user_tag": "client",
-				// 	"user": "5",
-				// 	"trade_price": 2,
-				// 	"exclude_oo": "0",
-				// 	"entry": "{\"relation\": 1, \"score\": 1, \"delay_bars\": 0, \"signals_in_market\": 1, \"signals\": [{\"code\": \"SI:% S&P 1500 RSI 14-day < 30;IDS:EO80/EP20;SC:SV/0/30.0\"}], \"cond\": [{\"newCondition\": 3, \"conditionPeriod\": \"5\"}]}",
-				// 	"exit": "{\"score\":1,\"signals_in_market\":1,\"relation\":0,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999\"}],\"cond\":[null]}",
-				// 	"indicator_layout": "{\"formIndicators\": {\"entry\": [\"sp1500_rsi_14_under_30\"], \"exit\": [\"\"]}, \"technicalIndicators\": [], \"savedTechSD\": [{\"type\": \"sp1500_rsi_14_under_30\", \"inputs\": {\"Period\": 13, \"Overlay\": false, \"id\": \"$r001$sp1500_rsi_14_under_30$r001$ (13,n)\", \"display\": \"$r001$ssp1500_rsi_14_under_30$r001$ (13,n)\"}, \"outputs\": {}, \"parameters\": {\"studyOverZonesEnabled\": false, \"studyOverBoughtValue\": 70, \"studyOverBoughtColor\": \"#FF0000\", \"studyOverSoldValue\": null, \"studyOverSoldColor\": \"#00DD00\", \"chartName\": \"chart\", \"editMode\": true}, \"panel\": \"$r001$sp1500_rsi_14_under_30$r001$ (13,n)\"}], \"activatedMA\": []}",
-				// 	"pk": "68f01e66-956e-48a6-964f-c18aec8ea2b3",
-				// 	"favorites": "true",
-				// 	"backtest_period": 21,
-				// 	"index_moving_average_slope": 0,
-				// 	"market_environment": 1,
-				// 	"uuid": "68f01e66-956e-48a6-964f-c18aec8ea2b3",
-				// 	"dataset": "68f01e66-956e-48a6-964f-c18aec8ea2b3/68f01e66-956e-48a6-964f-c18aec8ea2b3_backtest_data.csv"
-				// }]
-
 				this.$store.commit(
 					'form/SET_RUNALL_BACKTEST_ARRAY',
 					this.favorite_array.map(item => {
@@ -767,26 +731,43 @@ export const CommonMethodsMixin = {
 				console.log('进入轮询')
 				_this.clearInterval = clearPromiseInterval
 				let timer = await setPromiseInterval(async () => {
-					const res = await getStatus(id)
-					// CIQ.nprogress.inc()
-					const status = res.data.status
-					console.log('回测状态', status)
-					const response = res.data
-					if (status == 2 || status == 3) {
-						console.log('结束轮询')
+					try{
+						const res = await getStatus(id)
+						// CIQ.nprogress.inc()
+						const status = res.data.status
+						console.log('回测状态', status)
+						const response = res.data
+						if (status == 2 || status == 3) {
+							console.log('结束轮询')
+							_this.$store.dispatch(
+								'states/set_isRunAllSignalProcessing_flag',
+								false
+							)
+							_this.$store.state.form.run_all_backtest_array.map(item => {
+								if (item.name == name) {
+									item.state = 1
+								}
+							})
+							// 把数据存起来，用于局部更新 rerun
+							_this.$store.commit('states/CACHE_RERUN_DATA', response)
+							resolve('fullfiled') // 解决 Promise 表示轮询完成
+							await clearPromiseInterval(timer) // 使用 await 等待清除计时器
+						}
+					}catch(err){
+						console.log('轮询出现错误')
 						_this.$store.dispatch(
 							'states/set_isRunAllSignalProcessing_flag',
 							false
 						)
 						_this.$store.state.form.run_all_backtest_array.map(item => {
 							if (item.name == name) {
-								item.state = 1
+								item.state = 2
 							}
 						})
-						// 把数据存起来，用于局部更新 rerun
-						_this.$store.commit('states/CACHE_RERUN_DATA', response)
-						resolve('fullfiled') // 解决 Promise 表示轮询完成
+						reject(err); // 如果错误是无法处理的，可以在这里调用 reject 并传递错误信息
 						await clearPromiseInterval(timer) // 使用 await 等待清除计时器
+					}finally{
+						
 					}
 				}, 1000)
 			})
