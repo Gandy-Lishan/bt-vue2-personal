@@ -80,7 +80,7 @@
       ">
         <img src="@/assets/allclear.png"/>
         <span>Find Sucessfully</span> 
-        <p>All of the tasks have been completeds</p>
+        <p>All of the tasks have been completed</p>
         <el-button @click="viewSignal">View Signal</el-button>
       </div>
       <div class="maskContent-failed" v-if="
@@ -111,9 +111,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import ProgressBar from 'vue-simple-progress'
 
 export default {
   name: 'FLGbackground',
+  components: {
+    ProgressBar,
+  },
   data() {
     return {
       // find the last signal

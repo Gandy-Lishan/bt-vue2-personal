@@ -10,7 +10,7 @@
  
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
     // user's own indicator的 weight indicator加载函数单独设定
-    var symbol
+    //var symbol
 
     CIQ.displayWeightOwnIndicator = async function(previousState,updatedState,combinedStudy){
         CIQ.addCover()
@@ -18,9 +18,9 @@
         const { addedItems, removedItems } = findAddedAndRemovedItems(previousState, updatedState);
 
         const indicatorList = updatedState.filter(item=> item.type=='Indicator')
+        const symbolList = updatedState.filter(item=> item.type=='Symbol')
 
-        // symbol加载，识别第一个为默认图标symbol,其它symbol作为serie加载,必须遍历加载，不然很难管理
-        manageSymbolSerie(updatedState.filter(item=> item.type=='Symbol'),findTimeFrame(indicatorList));
+        
 
         // indicator移除
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -30,13 +30,19 @@
             }
         }
         // indicator加载
+        CIQ.store.commit('form/getFrequency', findTimeFrame(indicatorList)) //考虑到addSeries必须写死timeframe
         await addIndicatorStudy(addedItems.map(item=>item.indicator_url))
-        CIQ.stxx.loadChart(    { 
-            symbol: symbol?symbol:'SPX', 
-            indicator:[...indicatorList.map(item=>item.indicator_url),combinedStudy] ,
-            // 这边先写死范围，防止其他indicator无法pagination
-            startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),},
-            function () {CIQ.hideCover()}
+        CIQ.stxx.loadChart({ 
+                symbol: symbolList.length?symbolList[0].indicator_url:'SPX', 
+                indicator:[...indicatorList.map(item=>item.indicator_url),combinedStudy] ,
+                // 这边先写死范围，防止其他indicator无法pagination
+                //startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+            },
+            function () {
+                // symbol加载，识别第一个为默认图标symbol,其它symbol作为serie加载,必须遍历加载，不然很难管理
+                manageSymbolSerie(symbolList);
+                CIQ.hideCover()
+            }
         ) 
         
     }
@@ -141,7 +147,7 @@
         })
     
     }
-    const manageSymbolSerie = function(symbolList,timeframe){
+    const manageSymbolSerie = function(symbolList){
         // 先清空series
         for(var s in CIQ.stxx.chart.series){
             var series=CIQ.stxx.chart.series[s];
@@ -150,11 +156,7 @@
 
         for(var i in symbolList){
             // 第一个symbol为默认图表symbol
-            if(i==0){
-                CIQ.objIndicator = []
-                symbol = symbolList[i].indicator_url
-            }else{
-                CIQ.store.commit('form/getFrequency', timeframe)
+            if(i>0){
                 CIQ.stxx.addSeries(symbolList[i].indicator_url, {
                     display:symbolList[i].indicator, 
                     isComparison: false, 
