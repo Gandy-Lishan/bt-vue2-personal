@@ -592,6 +592,7 @@ export default {
       const isIndicator = data.categories.includes('Indicator')
       const isSymbol = data.categories.includes('Symbol')
       const neitherOfThem = data.categories == '' || data.categories == 'WIC'
+
       if (neitherOfThem) {
         return this.sentimentList.concat(this.symbolList)
       }
@@ -748,9 +749,12 @@ export default {
       this.data.time_frame = data.timeframe
       this.data.name = data.name;
       this.rowUrl = data.url
+
+      this.dropdownList = this.getList()
       //如果类型时weight_combination
       if (data.mul_indicator && data.indicator_weight && data.calculate == 'weight_combination') {
         this.weightData = data.weightData
+        this.$store.dispatch('chart/set_miFormWeightedListChange',this.weightData)
       } else {  //其他类型
         const configMap = [
           { key: 'ma', index: 0 },
