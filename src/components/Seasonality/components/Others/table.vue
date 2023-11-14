@@ -21,9 +21,9 @@
 					:key="l.key"
           sortable
           v-if="
-          (l.label == 'Month' && option == 2)
-          ||
           (l.label == 'Day' && option == 3)
+          ||
+          option == 2
           "
 				>
 					<template slot-scope="scope">

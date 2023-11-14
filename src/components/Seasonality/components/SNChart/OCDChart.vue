@@ -55,7 +55,7 @@ import { checkProperties } from "@/utils";
                 console.log('data', data)
                 if(data?.length === 0) {this.popUpMsgBox('Stock data is empty')}
                 if([0, 1].includes(newVal.option)) {
-                  this.dataList = data.map(item => [item['Month'], parseFloat((item['Return'] * 100).toFixed(2)), parseFloat(item['Positive'].toFixed(2))])
+                  this.dataList = data.map(item => [item['Date'] || item['Month'], parseFloat((item['Return']).toFixed(2)), parseFloat(item['Positive'].toFixed(2))])
                 }else {
                   this.dataList = data.map(obj => {
                     for (const key in obj) {
@@ -64,6 +64,7 @@ import { checkProperties } from "@/utils";
                           obj[key] = parseFloat(obj[key]).toFixed(2);
                           // 去掉多余的零
                           obj[key] = parseFloat(obj[key]);
+                          
                       }
                     }
                     return obj;

@@ -1114,16 +1114,17 @@ export default {
       this.bd.frequency = val
       this.$store.commit('form/getFrequency', val)
     },
-    setSetUpLoadingSetting(isSetupLoading, percentage, progressText) {
+    setSetUpLoadingSetting(isSetupLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_SETUP_LOADING', {
 				isSetupLoading,
+				showProgress,
 				percentage,
 				progressText
 			})
 		},
     saveData() {
       /* 校验表单字段 */
-      if(!this.validateForm()) {this.setSetUpLoadingSetting(false, 0, '');return}
+      if(!this.validateForm()) {this.setSetUpLoadingSetting(false, false, 0, '');return}
       let bd = JSON.parse(JSON.stringify(this.bd))
       this.getTradePrice(bd.trade_price)
       /* 处理数据 */
@@ -1166,6 +1167,11 @@ export default {
       if(!setUpValid){
         _this.popUpMsgBox('Kindly ensure that the form fields are filled correctly');
           return false }
+      const isClient = _this.getterBacktestInfo.hasOwnProperty('user_tag') && _this.getterBacktestInfo.user_tag == 'client'
+      if(!isClient) {
+        _this.popUpMsgBox('Permission denied');
+        return false
+      }
       /* backtest name 校验 */
       nameLookupRes = await getBacktestName(_this.bd.name)
       const nameList = nameLookupRes.data.results
@@ -1179,7 +1185,7 @@ export default {
           nameValid = true
         }
       /* 重名且编辑 没名字是编辑 没名字是新建 */
-      nameValidPass = (!nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid')) || (nameValid) && _this.getterBacktestInfo.hasOwnProperty('old_uuid') || (nameValid) && !_this.getterBacktestInfo.hasOwnProperty('old_uuid')
+      nameValidPass = (!nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && _this.getterBacktestInfo.old_uuid) || (nameValid) && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && _this.getterBacktestInfo.old_uuid || (nameValid) && !_this.getterBacktestInfo.hasOwnProperty('old_uuid')
       if(!nameValidPass) {
         _this.popUpMsgBox('The backtest name already exists');
         return false}
