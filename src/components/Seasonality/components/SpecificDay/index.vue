@@ -258,10 +258,10 @@ export default {
       this.plotConfiguration = {
         ...this.plotConfiguration,
         title: `Performance Surrounding ${holidays}`,
-        subtitle: `${newVal.symbol || 'SPY'} ${newVal.start_date}-${newVal.end_date}`,
+        subtitle: `${newVal.symbol || ''} ${newVal.start_date}-${newVal.end_date}`,
         start_date: newVal.start_date,
         end_date: newVal.end_date,
-        symbol: newVal.symbol || 'SPY',
+        symbol: newVal.symbol || '',
         holidays: this.options[newVal.holidays].label,
         customizeDate: newVal.customizeDate,
         shift: newVal.shift
