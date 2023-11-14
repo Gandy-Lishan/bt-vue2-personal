@@ -131,6 +131,7 @@ export default {
 <style lang="less" scoped>
 .seasonality-container{
   margin-top: 80px;
+	margin-bottom: 50px;
 /deep/ .el-tabs__nav.is-top{
   width: 100%;
 }

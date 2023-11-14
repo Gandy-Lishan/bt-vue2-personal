@@ -911,6 +911,7 @@ h4 {
 	border: 1px solid #5b9bd1;
 	border-radius: 5px;
 	padding: 0 10px 10px 10px;
+  margin-bottom: 50px;
 }
 .WIC-form-container {
 	display: grid;

@@ -8,6 +8,11 @@
   align-items: center;
 	margin-top: 50px;
 }
+.isFixedAtBottom {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+}
 .footer .el-link{
 	font-size: 12px;
 }

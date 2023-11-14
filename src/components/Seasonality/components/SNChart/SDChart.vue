@@ -40,8 +40,7 @@ import { checkProperties } from "@/utils";
                   url = `/dev/seasonality/get_holiday_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}&holiday=${newVal.holidays}&shift=${shift}`
                 }else {
                   const [month, day] = newVal.customizeDate.split('-')
-                  const propertiesToCheck = ['month', 'day']
-                  if (!checkProperties(newVal, propertiesToCheck)) {console.log('month 或 day 为空'); return}
+                  if (!month || !day) {console.log('month 或 day 为空'); return}
                   url = `/dev/seasonality/get_custom_day_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}&month=${month}&day=${day}&shift=${shift}`
                 }
                 const {data: {data}} = await getSeasonalityData(url)
