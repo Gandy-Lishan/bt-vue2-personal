@@ -569,7 +569,7 @@
                       ></el-checkbox>
                     </div>
                     <div class="tpContainer riskItem" v-if="isRiskControl">
-                      <el-checkbox v-model="isTakeProfit">
+                      <el-checkbox v-model="isTakeProfit" @change="generateRiskControl">
                         Take Profit
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
@@ -592,7 +592,7 @@
                       </div>
                     </div>
                     <div class="slContainer riskItem" v-if="isRiskControl">
-                      <el-checkbox v-model="isStopLoss"
+                      <el-checkbox v-model="isStopLoss" @change="generateRiskControl"
                         >Stop Loss
 
                         <el-tooltip effect="dark" placement="top">
@@ -614,7 +614,7 @@
                       </div>
                     </div>
                     <div class="timContainer riskItem" v-if="isRiskControl">
-                      <el-checkbox v-model="isTimeInMarket"
+                      <el-checkbox v-model="isTimeInMarket" @change="generateRiskControl"
                       size="mini"
                         >Time In Market
                         <el-tooltip effect="dark" placement="top">
@@ -918,6 +918,15 @@ export default {
       this.bd.symbol = symbol
       this.getSymbol(symbol)
       LocalStorageUtil.remove('symbol')
+    },
+    bd: {
+      handler(newVal, oldVal) {
+        console.log('表单变化了', newVal)
+        const whetherChanged = isEqual(newVal, oldVal)
+        if(whetherChanged) LocalStorageUtil.set('basicInfoChangeData', newVal)
+        console.log('whetherChanged', whetherChanged)
+      },
+      deep: true
     }
   },
   methods: {
@@ -1107,7 +1116,11 @@ export default {
         this.isTimeInMarket = true
         this.$emit('IsRiskControl', true)
       }
+      this.generateRiskControl()
       this.$store.commit('form/isRiskControl', val)
+    },
+    generateRiskControl() {
+      this.bd.risk_control = this.isRiskControl ? `${this.isTakeProfit ? this.tp : ''}/${this.isStopLoss ? this.sl : ''}/${this.isTimeInMarket ? this.tim : ''}` : '//'
     },
     getFrequency(val) {
       // getFrequency will no longer call addIndicator and pass a parameter to it
