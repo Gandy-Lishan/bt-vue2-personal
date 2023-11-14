@@ -183,7 +183,7 @@ export default {
 			const _this = this
 			CIQ.addCover()
 			_this.setSetUpLoadingSetting(true, true, 5, 'Saving backtest basic information...')
-			_this.$refs['basicInfo'].saveData()
+			await _this.$refs['basicInfo'].saveData()
 			_this.setSetUpLoadingSetting(true, true, 10, 'Saving backtest entry and exit criteria...')
 			const entryErr = await _this.saveCriteriaData('entryChild')
 			const exitErr = await _this.saveCriteriaData('exitChild')
