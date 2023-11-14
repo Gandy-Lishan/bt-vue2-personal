@@ -748,8 +748,8 @@ export default {
       this.data.time_frame = data.timeframe
       this.data.name = data.name;
       this.rowUrl = data.url
-      //如果类型时weight_C
-      if (data.mul_indicator && data.indicator_weight && data.calculate == 'weight_c') {
+      //如果类型时weight_combination
+      if (data.mul_indicator && data.indicator_weight && data.calculate == 'weight_combination') {
         this.weightData = data.weightData
       } else {  //其他类型
         const configMap = [
