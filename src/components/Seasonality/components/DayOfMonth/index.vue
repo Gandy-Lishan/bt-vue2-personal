@@ -189,12 +189,12 @@ export default {
         if(Object.keys(newVal).length == 0) return
         this.plotConfiguration = {
           ...this.plotConfiguration,
-          title: `Seasonality in the ${newVal.symbol || 'SPY'}`,
+          title: `Seasonality in the ${newVal.symbol || ''}`,
           subtitle: `Month of ${this.options[newVal.monthSelection].label}`,
           start_date: newVal.start_date,
           end_date: newVal.end_date,
           month: this.options[newVal.monthSelection].label,
-          symbol: newVal.symbol || 'SPY'
+          symbol: newVal.symbol || ''
         }
       },
       deep: true,

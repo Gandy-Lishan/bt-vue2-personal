@@ -162,7 +162,7 @@ const LocalStorageUtil = {
 // 用于判断对象中是否存在空属性,只要存在空属性直接返回 false
 const checkProperties = (obj, properties) => {
   for (let i = 0; i < properties.length; i++) {
-    if (obj[properties[i]] === null || obj[properties[i]] === undefined) {
+    if (obj[properties[i]] === null || obj[properties[i]] === undefined || obj[properties[i]] === '') {
       return false; // 如果属性为空，直接返回 false
     }
   }
