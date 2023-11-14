@@ -1122,9 +1122,13 @@ export default {
 				progressText
 			})
 		},
-    saveData() {
+    async saveData() {
       /* 校验表单字段 */
-      if(!this.validateForm()) {this.setSetUpLoadingSetting(false, false, 0, '');return}
+      if(! await this.validateForm()) {
+        this.setSetUpLoadingSetting(false, false, 0, '');
+        CIQ.hideCover()
+        return
+      }
       let bd = JSON.parse(JSON.stringify(this.bd))
       this.getTradePrice(bd.trade_price)
       /* 处理数据 */
