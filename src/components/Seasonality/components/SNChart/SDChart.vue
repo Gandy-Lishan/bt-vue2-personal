@@ -34,14 +34,17 @@ import { checkProperties } from "@/utils";
                 // 需要判断请求的属性是否为空 null
                 let url
                 let shift = newVal.shift.length > 1 ? newVal.shift.join(',') : newVal.shift[0]
+                let start_date = newVal.start_date
+                if(start_date == '_') start_date = '1800'
+                
                 if(newVal.holidays != 'Custom Time'){
                   const propertiesToCheck = ['holidays']
                   if (!checkProperties(newVal, propertiesToCheck)) {console.log('holidays 为空'); return}
-                  url = `/dev/seasonality/get_holiday_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}&holiday=${newVal.holidays}&shift=${shift}`
+                  url = `/dev/seasonality/get_holiday_data?name=${newVal.symbol}&start=${start_date}&end=${newVal.end_date}&holiday=${newVal.holidays}&shift=${shift}`
                 }else {
-                  const [month, day] = newVal.customizeDate.split('-')
+                  let [month, day] = newVal.customizeDate.split('-')
                   if (!month || !day) {console.log('month 或 day 为空'); return}
-                  url = `/dev/seasonality/get_custom_day_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}&month=${month}&day=${day}&shift=${shift}`
+                  url = `/dev/seasonality/get_custom_day_data?name=${newVal.symbol}&start=${start_date}&end=${newVal.end_date}&month=${month}&day=${day}&shift=${shift}`
                 }
                 const {data: {data}} = await getSeasonalityData(url)
                 if(data?.length === 0) {this.popUpMsgBox('Stock data is empty')}
