@@ -466,7 +466,7 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
                 }
                 
                 // 之后加一个symbol判断和小李新senti判断
-                if(CIQ.isUserIndicator(CIQ.objIndicator[i]) || CIQ.findSymbolIndicator(CIQ.objIndicator[i],null)){       
+                if(CIQ.isUserIndicator(CIQ.objIndicator[i]) || CIQ.isOwnIndicator(CIQ.objIndicator[i]) || CIQ.findSymbolIndicator(CIQ.objIndicator[i],null)){       
                     new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
                     valid++
                     continue
@@ -479,7 +479,6 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
             console.error(err)
         }
     }   
-   
     switch(CIQ.store.state.form.exitFrequency){
         case "Monthly":{
             freq = "monthly"
@@ -686,6 +685,8 @@ quoteFeedSimulator.formatChartData = async function(response){
                         const [_, url] = indicator.split(/CREATE/);
                         const res = await config.getMyIndicatorData(url);
                         datafeed = res.data.data;
+                        // 暂存
+                        localStorage.setItem('previewIndicatorData', JSON.stringify(datafeed))
                     }               
             
                     let sortedRows = datafeed.sort(
