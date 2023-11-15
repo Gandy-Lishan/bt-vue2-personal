@@ -235,12 +235,24 @@ const mutations = {
 }
 
 const actions = {
-	set_miFormWeightedListChange({ commit }, val) {
+	reset_miFormState({ commit }, val) {
+		return new Promise(resolve => {
+			commit('miFormStateChange', {
+				categories:'Indicator Spread',
+				indicator_1: '',indicator_1_url:'',
+				indicator_2: '',indicator_2_url:'',
+			})
+			commit('miFormWeightedListChange', [])
+			resolve()
+		})
+	},
+	set_miFormWeightedListChange({ commit }, val ) {
 		return new Promise(resolve => {
 		
-			const newVal = JSON.parse(JSON.stringify(val));
+			const newVal = JSON.parse(JSON.stringify(val.data));
 			const oldVal = JSON.parse(JSON.stringify(state.miFormWeightedList));
-            CIQ.displayWeightOwnIndicator(oldVal,newVal,null)
+
+            CIQ.displayWeightOwnIndicator(oldVal,newVal,val.url)
 			
 			commit('miFormWeightedListChange', newVal)
 			resolve()
@@ -259,6 +271,7 @@ const actions = {
 				indicator1 : state.miFormCategoriesIndicator1,
 				indicator2 : state.miFormCategoriesIndicator2,
 			}
+
 			CIQ.updateUserOwnIndicator(newVal,oldVal)
 			
 			commit('miFormStateChange', val)
