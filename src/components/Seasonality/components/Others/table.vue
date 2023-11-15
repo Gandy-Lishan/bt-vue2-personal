@@ -103,24 +103,29 @@ export default {
           value: 'MIN'
         }
       ],
-      sortOrders: {}
+      sortOrders: {},
+      paginatedData: []
     }
   },
   computed: {
-		// Filtered and paginated data to be displayed in the table
-		paginatedData() {
-      this.loading = true
-			const startIndex = (this.currentPage - 1) * this.pageSize;
-			const endIndex = startIndex + this.pageSize;
-			// 当checkbox未勾选时，返回原始数据
-      this.loading = false
-      console.log('会不会变化')
-			return this.parentData.slice(startIndex, endIndex);
-		},
     parentData() {
       return this.tableData
     }
 	},
+  watch: {
+    tableData: {
+      handler(newVal) {
+        this.loading = true
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        // 当checkbox未勾选时，返回原始数据
+        this.loading = false
+        this.paginatedData =  newVal.slice(startIndex, endIndex);
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   methods: {
     tableRowClassName({row, rowIndex}) {
 			if (rowIndex%2 === 1) {
@@ -142,9 +147,10 @@ export default {
       this.sortOrders = column
 			var sortingOrder = column.order
 			var colName = column.prop
+      console.log('Original Data', this.tableData);
       const tableData = JSON.parse(JSON.stringify(this.tableData))
 			// 数字类型排序
-			if(['Day', 'Month', 'AVG RET', '% POS', 'MAX', 'MIN'].indexOf(colName) !== -1){
+			if(['Day', 'Month', 'AVG RET', '% POS', 'MAX', 'MIN'].includes(colName)){
 				if(sortingOrder == 'ascending'){
 				  tableData.sort((a,b) => {
 						return Number(b[colName]) - Number(a[colName])
@@ -154,8 +160,9 @@ export default {
 						return Number(a[colName]) - Number(b[colName])
 					})
 				}
-        this.parentData = tableData
-        console.log('排序结果', this.tableData)
+        console.log('Sorted Data', tableData);
+        // Update the existing array instead of assigning a new one
+        this.tableData = tableData
 			}
 		},
     async handleQuery() {
