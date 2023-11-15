@@ -12,6 +12,7 @@
       element-loading-background="rgba(0, 0, 0, 0.8)"
       @sort-change="changeTableSort"
 			style="width: 100%; height: 100%"
+      size="mini"
 		>
 			<template v-for="(l) in tableCol">
         <el-table-column
@@ -20,6 +21,7 @@
 					:prop="l.value"
 					:key="l.key"
           sortable
+          :sort-orders="['ascending', 'descending']"
           v-if="
           (l.label == 'Day' && option == 3)
           ||
@@ -38,6 +40,7 @@
 					:prop="l.value"
 					:key="l.key"
           sortable
+          :sort-orders="['ascending', 'descending']"
           v-if="l.label != 'Month' && l.label != 'Day'"
 				>
 					<template slot-scope="scope">
@@ -53,7 +56,7 @@
 		@current-change="handleCurrentChange"
 		:page-sizes="[10, 30, 50, 100, 200]"
 		:page-size="pageSize"
-		:total="tableData.length"
+		:total="parentData.length"
 		layout="total, sizes, prev, pager, next, jumper"
 		></el-pagination>
   </div>
@@ -100,19 +103,29 @@ export default {
           value: 'MIN'
         }
       ],
+      sortOrders: {},
+      paginatedData: []
     }
   },
   computed: {
-		// Filtered and paginated data to be displayed in the table
-		paginatedData() {
-      this.loading = true
-			const startIndex = (this.currentPage - 1) * this.pageSize;
-			const endIndex = startIndex + this.pageSize;
-			// 当checkbox未勾选时，返回原始数据
-      this.loading = false
-			return this.tableData?.slice(startIndex, endIndex);
-		},
+    parentData() {
+      return this.tableData
+    }
 	},
+  watch: {
+    tableData: {
+      handler(newVal) {
+        this.loading = true
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        // 当checkbox未勾选时，返回原始数据
+        this.loading = false
+        this.paginatedData =  newVal.slice(startIndex, endIndex);
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   methods: {
     tableRowClassName({row, rowIndex}) {
 			if (rowIndex%2 === 1) {
@@ -123,25 +136,33 @@ export default {
     handleSizeChange(size) {
 			this.pageSize = size;
 			this.currentPage = 1; // Reset to the first page when the page size changes
+      this.changeTableSort(this.sortOrders)
 		},
     async handleCurrentChange(currentPage) {
 			this.currentPage = currentPage;
+      this.changeTableSort(this.sortOrders)
 		},
     changeTableSort(column){
       console.log('column', column)
+      this.sortOrders = column
 			var sortingOrder = column.order
 			var colName = column.prop
+      console.log('Original Data', this.tableData);
+      const tableData = JSON.parse(JSON.stringify(this.tableData))
 			// 数字类型排序
-			if(['Day', 'Month', 'AVG RET', '% POS', 'MAX', 'MIN'].indexOf(colName) !== -1){
+			if(['Day', 'Month', 'AVG RET', '% POS', 'MAX', 'MIN'].includes(colName)){
 				if(sortingOrder == 'ascending'){
-					this.tableData.sort((a,b) => {
-						return b[colName] - a[colName]
+				  tableData.sort((a,b) => {
+						return Number(b[colName]) - Number(a[colName])
 					})
 				}else if(sortingOrder == 'descending'){
-					this.tableData.sort((a,b) => {
-						return a[colName] - b[colName]
+					tableData.sort((a,b) => {
+						return Number(a[colName]) - Number(b[colName])
 					})
 				}
+        console.log('Sorted Data', tableData);
+        // Update the existing array instead of assigning a new one
+        this.tableData = tableData
 			}
 		},
     async handleQuery() {
