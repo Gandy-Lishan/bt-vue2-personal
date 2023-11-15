@@ -1164,7 +1164,24 @@ export default {
       CIQ.addIndicators()
     },
     handleUsersOwnIndicatorSelect(data) {
-      const frequency = 'Daily'
+      let frequency = 'Daily'
+      switch (data.updated) {
+        case 'monthly': {
+          frequency = 'Monthly'
+          break
+        }
+        case 'weekly': {
+          frequency = 'Weekly'
+          break
+        }
+        case 'daily': {
+          frequency = 'Daily'
+          break
+        }
+        default:
+      }
+      // 用户自定义指标也有周期，直接设定
+      CIQ.store.commit('form/getFrequency', frequency)
       const indicatorName = data.file_name
       const indicatorUrl = data.file_id
       this.currentSentiUpdated = frequency
@@ -1173,7 +1190,7 @@ export default {
       // 防止changeRelation到singleCondition后报错
 
       let freqObj = {}
-      freqObj.value = 'Daily'
+      freqObj.value = frequency
       freqObj.index = this.panelIndex
       freqObj.criteria = this.criteria
       freqObj.key = `${this.criteria}_${this.panelIndex}`
