@@ -158,7 +158,7 @@ export default {
           disabledDate: this.handleDisabledEndDate
         },
         plotConfiguration: {
-          title: 'Seasonality in the S&P 500',
+          title: 'Seasonality in the SPY',
           subtitle: 'Month of October',
           xAxisTitle: 'Day Of The Month',
           customScale: true, // 如果需要自定义刻度
@@ -189,12 +189,12 @@ export default {
         if(Object.keys(newVal).length == 0) return
         this.plotConfiguration = {
           ...this.plotConfiguration,
-          title: `Seasonality in the ${newVal.symbol || 'S&P 500'}`,
+          title: `Seasonality in the ${newVal.symbol || ''}`,
           subtitle: `Month of ${this.options[newVal.monthSelection].label}`,
           start_date: newVal.start_date,
           end_date: newVal.end_date,
           month: this.options[newVal.monthSelection].label,
-          symbol: newVal.symbol || 'S&P 500'
+          symbol: newVal.symbol || ''
         }
       },
       deep: true,
@@ -203,6 +203,7 @@ export default {
   },
   mounted() {
     this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
+    this.data.monthSelection = new Date().getMonth()
   },
   methods: {
     handleDisabledStartDate(time) {

@@ -898,6 +898,7 @@ export default {
  <style lang="less" scoped>
  .MI-container{
   position: relative;
+  margin-bottom: 80px;
  }
 h4 {
 	text-align: center;

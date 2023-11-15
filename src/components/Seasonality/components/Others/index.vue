@@ -182,7 +182,7 @@ export default {
       const category = this.options[newVal.category].label.includes('Month') ? 'Month' : 'Weekday'
       this.plotConfiguration = {
         ...this.plotConfiguration,
-        title: `${newVal.symbol || 'S&P 500'} Avg Return By ${category}`,
+        title: `${newVal.symbol || ''} Avg Return By ${category}`,
         subtitle: `${newVal.start_date} - ${newVal.end_date}`,
         xAxisTitle: `${category}`,
         start_date: newVal.start_date,
