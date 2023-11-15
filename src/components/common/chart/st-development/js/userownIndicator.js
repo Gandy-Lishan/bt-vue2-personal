@@ -14,6 +14,16 @@
 
     CIQ.displayWeightOwnIndicator = async function(previousState,updatedState,combinedStudy){
         CIQ.addCover()
+        
+        //编辑时对内容修改或者preview应该移除生成的indicator
+        if(!combinedStudy){
+            for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+                var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+                if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+            }
+        }
+
+
         // 提取indicator移除列表和新增列表,
         const { addedItems, removedItems } = findAddedAndRemovedItems(previousState, updatedState);
         
@@ -194,6 +204,12 @@
     // 以下管理user's own indicator 图表函数
     CIQ.updateUserOwnIndicator = function(newData,oldData){
         CIQ.addCover()
+
+        //编辑时对内容修改或者preview应该移除生成的indicator
+        for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+            var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+            if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+        }
         if(oldData.categories != newData.categories){
             // remove existing studies and series
             for (var studyInstanceName in CIQ.stxx.layout.studies) { 
