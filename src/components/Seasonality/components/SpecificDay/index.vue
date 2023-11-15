@@ -24,7 +24,7 @@
           </template>
         <el-autocomplete
 						class="inline-input"
-						v-model="data.symbol"
+						v-model="symbol"
 						:fetch-suggestions="querySearch"
 						placeholder="Please select indicator from the dropdown menu"
 						@select="
@@ -67,6 +67,7 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
+            :disabled="item.disabled"
           >
           </el-option>
         </el-select>
@@ -172,32 +173,33 @@
 <script>
 import SDChart from "../SNChart/SDChart.vue";
 import MonthDays from "month-days-element";
+import { format } from 'date-fns';
 export default {
   name: 'SpecificDay',
   data() {
     return {
       data: {
         symbol: 'SPY',
-        period: 5,
+        period: 20,
         dateRange: [],
         holidays: 0,
-        start_date: (new Date().getFullYear() - 5).toString(),
+        start_date: (new Date().getFullYear() - 20).toString(),
         end_date:  new Date().getFullYear().toString(),
         customizeDate: null,
         shift: [5]
       },
       dropdownList: [],
       options: [
-        {label: "New Year's Day", value: 0},
-        {label: 'Independence Day', value: 1},
-        {label: 'MLK Jr. Day', value: 2},
-        {label: 'Labor Day', value: 3},
-        {label: "President's Day", value: 4},
-        {label: 'Thanksgiving Day', value: 5},
-        {label: 'Good Friday', value: 6},
-        {label: 'Christmas Day', value: 7},
-        {label: 'Memorial Day', value: 8},
-        {label: 'Custom Time', value: 9},
+        { label: "New Year's Day", month: 1, day: 1, value: 0 },
+        { label: 'Independence Day', month: 7, day: 4, value: 1 },
+        { label: 'MLK Jr. Day', month: 1, day: 16, value: 2 },
+        { label: 'Labor Day', month: 9, day: 4, value: 3 },
+        { label: "President's Day", month: 2, day: 20, value: 4 },
+        { label: 'Thanksgiving Day', month: 11, day: 23, value: 5 },
+        { label: 'Good Friday', month: 4, day: 7, value: 6 },
+        { label: 'Christmas Day', month: 12, day: 25, value: 7 },
+        { label: 'Memorial Day', month: 5, day: 29, value: 8 },
+        { label: 'Custom Time', value: 9 },
       ],
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
@@ -223,6 +225,8 @@ export default {
       dynamicTags: ['5 days'],
       inputVisible: false,
       inputValue: '',
+      previousCustomDateRef: null,
+      symbol: 'SPY',
       plotConfiguration: {
         title: 'Performance Surrounding Independence Day',
         subtitle: 'SPY, 1950-2011',
@@ -278,6 +282,7 @@ export default {
     this.data.end_date = (currentYear) + ''
     this.data.start_date = (currentYear - this.data.period) + ''
     this.data.customizeDate = `${month}-${day}`
+    this.previousCustomDateRef = this.data.customizeDate
 
     // 生成动态标签数组
     const years = [1,2,3,4,5,10,15,20]
@@ -289,7 +294,7 @@ export default {
 
     // 输出生成的选项
     this.periodOptions = periodOptions
-
+    this.calculateHolidayDates()
   },
   mounted() {
     this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
@@ -301,12 +306,22 @@ export default {
     }
   },
   methods: {
+    calculateHolidayDates() {
+      const year = new Date().getFullYear()
+      const holidayDates = this.options.map((holiday) => {
+        let date = null
+        if(holiday.month && holiday.day) {date = new Date(year, holiday.month - 1, holiday.day); return { ...holiday, date: format(date, 'MM-dd') }}
+        else {return {label: 'Custom Time', value: 9}}
+      })
+      console.log('节假日', holidayDates)
+      this.options = holidayDates
+    },
     handleDisabledStartDate(time) {
       const end_date = this.data.end_date
       return time.getFullYear() > end_date || time.getFullYear() < 1800;
     },
     handleDisabledEndDate(time) {
-      return time.getFullYear() > new Date().getFullYear() || time.getFullYear() < 1800;
+      return time.getFullYear() > new Date().getFullYear() || time.getFullYear() < 1800  || time.getFullYear() < this.data.start_date;;
     },
     pickStartDate() {
     },
@@ -334,6 +349,7 @@ export default {
     },
     handleSelect(item) {
       this.data.symbol = item.url
+      this.symbol = item.url
     },
     pickDate(date) {
       console.log(date)
@@ -346,7 +362,27 @@ export default {
       this.data.end_date = currentYear + ''
       if(this.data.period != 22 && this.data.period != 21)  this.data.start_date = (currentYear - period) + ''
       if(this.data.period == 22)  this.data.start_date = (currentYear - 5) + ''
-      if(this.data.period == 21)  {this.data.start_date = '_'; this.data.end_date = currentYear}
+      if(this.data.period == 21)  {
+        this.data.start_date = '_'; 
+        this.data.end_date = currentYear;
+      }
+      if(this.data.period == 0) {
+
+        // 将日期字符串转换为 Date 对象
+        const dateObjects = this.options.map(ele => {
+          if(ele.date) {
+            const month = new Date().getMonth();
+            const day = new Date().getDate();
+            const [_month, _day] = ele.date.split('-').map(Number);
+            const currentTime = new Date(currentYear, month, day)
+            const time = new Date(currentYear, _month - 1, _day)
+            if(time <= currentTime) {return ele}else{return {...ele, disabled: true}}
+          }else {return ele}
+        })
+        this.options = dateObjects
+      }else {
+        this.options = this.options.map(ele => ({...ele, disabled: false}))
+      }
     },
     pickStartDate(value) {
       console.log(value)
@@ -358,8 +394,25 @@ export default {
       console.log(value)
     },
     getValue(value) {
-      console.log(value)
-      this.data.customizeDate = value
+      const _this = this
+      const compareDates = (today, selectDay) => {
+        const year = new Date().getFullYear()
+        const todayDate = new Date(`${year}-${today}`)
+        const selectDate = new Date(`${year}-${selectDay}`)
+        if (selectDate <= todayDate) return true
+        return false
+      }
+      const today = `${new Date().getMonth() + 1}-${new Date().getDate()}`
+      const result = compareDates(today, value);
+      if(result) {
+          _this.data.customizeDate = value
+          _this.previousCustomDateRef = value
+        }else{
+          _this.data.customizeDate = _this.previousCustomDateRef
+          // this.popUpMsgBox('选择的日期应小于等于今天')
+          console.log('选择的日期应小于等于今天')
+        }
+      console.log('---------', _this.data.customizeDate)
     },
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
@@ -400,6 +453,8 @@ export default {
         const day = `${inputValue} ${inputValue > 1 ? 'days': 'day'}`
         // this.dynamicTags.push(day);
         this.dynamicTags = [day];
+      }else if(inputValue && !regex.test(inputValue)){
+        this.popUpMsgBox('Only positive numbers are allowed')
       }
       this.inputVisible = false;
       this.inputValue = '';

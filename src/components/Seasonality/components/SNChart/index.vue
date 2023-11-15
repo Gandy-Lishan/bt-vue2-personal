@@ -56,22 +56,25 @@ export default {
   },
   methods: {
     calculateTickPositions(minValue, maxValue, numberOfTicks) {
-      const range = maxValue - minValue;
-      const unroundedTickSize = range / (numberOfTicks - 1); // 计算未圆整的刻度大小
-      const x = Math.ceil(Math.log10(unroundedTickSize) - 1); // 取对数，计算刻度的数量级
-      const pow10X = Math.pow(10, x); // 计算数量级对应的值
+  const range = maxValue - minValue;
+  const unroundedTickSize = range / (numberOfTicks - 1); // 计算未圆整的刻度大小
+  const x = Math.ceil(Math.log10(unroundedTickSize) - 1); // 取对数，计算刻度的数量级
+  const pow10X = Math.pow(10, x); // 计算数量级对应的值
 
-      const roundedTickSize = Math.ceil(unroundedTickSize / pow10X) * pow10X; // 圆整刻度大小
-      const newMin = Math.floor(minValue / roundedTickSize) * roundedTickSize; // 计算新的最小刻度
-      const newMax = Math.ceil(maxValue / roundedTickSize) * roundedTickSize; // 计算新的最大刻度
+  const roundedTickSize = Math.ceil(unroundedTickSize / pow10X) * pow10X; // 圆整刻度大小
 
-      const tickPositions = [];
-      for (let i = newMin; i <= newMax; i += roundedTickSize) {
-        tickPositions.push(Number(i.toFixed(1)));
-      }
+  const newMin = Math.floor(minValue / roundedTickSize) * roundedTickSize;
+  const newMax = Math.ceil(maxValue / roundedTickSize) * roundedTickSize;
 
-      return tickPositions;
-    },
+  const tickPositions = [];
+  for (let i = newMin; i <= newMax + 0.0001; i += roundedTickSize) {
+    tickPositions.push(Number(i.toFixed(2))); // 使用 toFixed(2) 以确保小数点后两位
+  }
+
+  return tickPositions;
+}
+
+,
     plotData(dataList, plotConfiguration) {
       console.log('绘制的图表数据', dataList)
       const tList = dataList.map(item => (item[1]))
@@ -190,7 +193,7 @@ export default {
               verticalAlign: 'top',
               align: 'right',
               x: -60,
-              y: 20,
+              y: 0,
               floating: true,
               backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
           },

@@ -24,7 +24,7 @@
         </template>
         <el-autocomplete
 						class="inline-input"
-						v-model="data.symbol"
+						v-model="symbol"
 						:fetch-suggestions="querySearch"
 						placeholder="Please select indicator from the dropdown menu"
 						@select="
@@ -132,7 +132,7 @@ export default {
     return {
       data: {
         symbol: 'SPY',
-        start_date: (new Date().getFullYear() - 5).toString(),
+        start_date: (new Date().getFullYear() - 20).toString(),
         end_date:  new Date().getFullYear().toString(),
         monthSelection: 0
       },
@@ -157,6 +157,7 @@ export default {
         endPickerOptions: {
           disabledDate: this.handleDisabledEndDate
         },
+        symbol: 'SPY',
         plotConfiguration: {
           title: 'Seasonality in the SPY',
           subtitle: 'Month of October',
@@ -211,7 +212,7 @@ export default {
       return time.getFullYear() > end_date || time.getFullYear() < 1800;
     },
     handleDisabledEndDate(time) {
-      return time.getFullYear() > new Date().getFullYear() || time.getFullYear() < 1800;
+      return time.getFullYear() > new Date().getFullYear() || time.getFullYear() < 1800 || time.getFullYear() < this.data.start_date;
     },
     querySearch(queryString, cb) {
       var dropdownList = this.dropdownList
@@ -234,7 +235,7 @@ export default {
       }
     },
     handleSelect(item) {
-      console.log('item', item)
+      this.symbol = item.url
       this.data.symbol = item.url
     },
     changeMonth(month) {

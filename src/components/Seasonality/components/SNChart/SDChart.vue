@@ -46,8 +46,8 @@ import { checkProperties } from "@/utils";
                   if (!month || !day) {console.log('month 或 day 为空'); return}
                   url = `/dev/seasonality/get_custom_day_data?name=${newVal.symbol}&start=${start_date}&end=${newVal.end_date}&month=${month}&day=${day}&shift=${shift}`
                 }
-                const {data: {data}} = await getSeasonalityData(url)
-                if(data?.length === 0) {this.popUpMsgBox('Stock data is empty')}
+                let {data: {data}} = await getSeasonalityData(url)
+                if(data?.length === 0 || !data) {this.popUpMsgBox('Stock data is empty'); data = []}
                 this.dataList = data.map(item => [parseFloat(item['period']), parseFloat((item['Return']).toFixed(2)), parseFloat(item['Positive'].toFixed(2))])
                 },
             deep: true,

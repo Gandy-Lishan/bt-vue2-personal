@@ -25,7 +25,7 @@
           </template>
         <el-autocomplete
 						class="inline-input"
-						v-model="data.symbol"
+						v-model="symbol"
 						:fetch-suggestions="querySearch"
 						placeholder="Please select indicator from the dropdown menu"
 						@select="
@@ -133,7 +133,7 @@ export default {
       data: {
         symbol: 'SPY',
         category: 0,
-        start_date: (new Date().getFullYear() - 5).toString(),
+        start_date: (new Date().getFullYear() - 20).toString(),
         end_date:  new Date().getFullYear().toString(),
       },
       dropdownList: [],
@@ -149,6 +149,7 @@ export default {
         endPickerOptions: {
           disabledDate: this.handleDisabledEndDate
         },
+        symbol: 'SPY',
         plotConfiguration: {
           title: 'Nasdaq Composite Avg Return Month',
           subtitle: '1971-2011',
@@ -206,7 +207,7 @@ export default {
       return time.getFullYear() > end_date || time.getFullYear() < 1800;
     },
     handleDisabledEndDate(time) {
-      return time.getFullYear() > new Date().getFullYear() || time.getFullYear() < 1800;
+      return time.getFullYear() > new Date().getFullYear() || time.getFullYear() < 1800 || time.getFullYear() < this.data.start_date;;
     },
     querySearch(queryString, cb) {
       var dropdownList = this.dropdownList
@@ -230,6 +231,7 @@ export default {
     },
     handleSelect(item) {
       this.data.symbol = item.url
+      this.symbol = item.url
     },
     changeCategory(value) {
       console.log(value)
