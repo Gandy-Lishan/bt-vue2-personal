@@ -184,7 +184,7 @@ export default {
         start_date: (new Date().getFullYear() - 5).toString(),
         end_date:  new Date().getFullYear().toString(),
         customizeDate: null,
-        shift: [10]
+        shift: [5]
       },
       dropdownList: [],
       options: [
@@ -220,12 +220,12 @@ export default {
         ],
         days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
       },
-      dynamicTags: ['10 days'],
+      dynamicTags: ['5 days'],
       inputVisible: false,
       inputValue: '',
       plotConfiguration: {
         title: 'Performance Surrounding Independence Day',
-        subtitle: 'S&P 500, 1950-2011',
+        subtitle: 'SPY, 1950-2011',
         xAxisTitle: 'Days Surrounding the Selected Day',
         customScale: true, // 如果需要自定义刻度
         formatter: true, // 如果需要自定义数据提示
@@ -258,10 +258,10 @@ export default {
       this.plotConfiguration = {
         ...this.plotConfiguration,
         title: `Performance Surrounding ${holidays}`,
-        subtitle: `${newVal.symbol || 'S&P 500'} ${newVal.start_date}-${newVal.end_date}`,
+        subtitle: `${newVal.symbol || ''} ${newVal.start_date}-${newVal.end_date}`,
         start_date: newVal.start_date,
         end_date: newVal.end_date,
-        symbol: newVal.symbol || 'S&P 500',
+        symbol: newVal.symbol || '',
         holidays: this.options[newVal.holidays].label,
         customizeDate: newVal.customizeDate,
         shift: newVal.shift
@@ -346,7 +346,7 @@ export default {
       this.data.end_date = currentYear + ''
       if(this.data.period != 22 && this.data.period != 21)  this.data.start_date = (currentYear - period) + ''
       if(this.data.period == 22)  this.data.start_date = (currentYear - 5) + ''
-      if(this.data.period == 21)  {this.data.start_date = '1800'; this.data.end_date = currentYear}
+      if(this.data.period == 21)  {this.data.start_date = '_'; this.data.end_date = currentYear}
     },
     pickStartDate(value) {
       console.log(value)

@@ -919,15 +919,15 @@ export default {
       this.getSymbol(symbol)
       LocalStorageUtil.remove('symbol')
     },
-    bd: {
+    $data: {
       handler(newVal, oldVal) {
         console.log('表单变化了', newVal)
         const whetherChanged = isEqual(newVal, oldVal)
         if(whetherChanged) LocalStorageUtil.set('basicInfoChangeData', newVal)
         console.log('whetherChanged', whetherChanged)
       },
-      deep: true
-    }
+      deep: true, // 开启深度监听，以便监听嵌套对象或数组的变化
+    },
   },
   methods: {
     clearForm() {
