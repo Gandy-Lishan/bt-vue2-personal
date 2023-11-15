@@ -534,6 +534,7 @@ export default {
       localStorage.setItem('previewIndicatorData', JSON.stringify(indicatorData.data.data))
 
       await delMyIndicator(url)
+      this.rowUrl = ''
       console.log('indicatorData code', indicatorData.data.code)
       console.log('indicatorData res', indicatorData.data.data)
       // todo display the indicator on chartIQ
