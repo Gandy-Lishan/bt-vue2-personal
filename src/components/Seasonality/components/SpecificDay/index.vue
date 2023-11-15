@@ -258,7 +258,8 @@ export default {
     data: {
     handler(newVal, _) {
       if(Object.keys(newVal).length == 0) return
-      const holidays = this.options[newVal.holidays].label
+      let holidays = this.options[newVal.holidays].label
+      if(holidays == 'Custom Time') holidays = this.data.customizeDate
       this.plotConfiguration = {
         ...this.plotConfiguration,
         title: `Performance Surrounding ${holidays}`,
@@ -409,8 +410,7 @@ export default {
           _this.previousCustomDateRef = value
         }else{
           _this.data.customizeDate = _this.previousCustomDateRef
-          // this.popUpMsgBox('选择的日期应小于等于今天')
-          console.log('选择的日期应小于等于今天')
+          this.popUpMsgBox('The selected date should be less than or equal to today')
         }
       console.log('---------', _this.data.customizeDate)
     },
