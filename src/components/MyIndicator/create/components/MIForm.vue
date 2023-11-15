@@ -754,7 +754,6 @@ export default {
       //如果类型时weight_combination
       if (data.mul_indicator && data.indicator_weight && data.calculate == 'weight_combination') {
         this.weightData = data.weightData
-        this.$store.dispatch('chart/set_miFormWeightedListChange',this.weightData)
       } else {  //其他类型
         const configMap = [
           { key: 'ma', index: 0 },
@@ -874,7 +873,7 @@ export default {
       console.log('当前最大的 timeframe 是', this.data.time_frame)
 
       // 更新weightList并刷新chartiq状态
-      this.$store.dispatch('chart/set_miFormWeightedListChange',this.weightData)
+      this.$store.dispatch('chart/set_miFormWeightedListChange',{data:this.weightData,url:null})
     },
     addRow(row) {
       /*
@@ -890,7 +889,7 @@ export default {
     deleteRow(index) {
       this.weightData.splice(index, 1)
       // 更新weightList并刷新chartiq状态
-      this.$store.dispatch('chart/set_miFormWeightedListChange',this.weightData)
+      this.$store.dispatch('chart/set_miFormWeightedListChange',{data:this.weightData,url:null})
     },
   }
 }
