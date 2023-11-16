@@ -124,9 +124,9 @@ const mutations = {
 	// },
 	RESET_CHART_CONDIG_STATE: state => {
 		// 还原默认timeframe和symbol配置
-		state.pairDataFreq = 'daily'
+		state.pairDataFreq = ''
 		state.backtestSymbol = 'SPX'
-		state.exitFrequency = 'Daily'
+		state.exitFrequency = ''
 	},
 	/**
 	 * no bug occurs, however, the logic inside is confusing
@@ -161,7 +161,7 @@ const mutations = {
 	},
 	getFrequency(state, val) {
 		if (val === undefined || val === null || val === '') {
-			state.exitFrequency = 'Daily'
+			state.exitFrequency = ''
 			state.backtestInfo.frequency = 'Daily'
 			return
 		}
@@ -242,7 +242,7 @@ const mutations = {
 		const maxExitFreq = freqExitArray[freqExitArray.length - 1]
 		const maxFreq = findMaxFreq(maxEntryFreq, maxExitFreq)
 		if (maxFreq === undefined || maxFreq === null || maxFreq === '') {
-			state.exitFrequency = 'Daily'
+			state.exitFrequency = ''
 			state.backtestInfo.frequency = 'Daily'
 			console.log('最大的周期', state.exitFrequency)
 			return
