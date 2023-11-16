@@ -956,7 +956,7 @@ export default {
 					CIQ.removeExitMALayout()
 
 					CIQ.addIndicators()
-
+					console.log('this.indicatorRadioArr',this.indicatorRadioArr)
 					try {
 							for (let index = 0; index < this.indicatorUrlArr.length; index++) {
 								this.$refs.indiChild[index]?.resetIndicator()
@@ -1010,7 +1010,6 @@ export default {
 			return true
 		},
 		saveData(index) {
-			debugger
 			let checked = true
 			// Save the selected indicator to vuex
 			let _this = this
