@@ -258,7 +258,7 @@ export default {
     data: {
     handler(newVal, _) {
       if(Object.keys(newVal).length == 0) return
-      let holidays = this.options[newVal.holidays].label
+      let holidays = this.options.find(ele => ele.value == newVal.holidays).label
       if(holidays == 'Custom Time') holidays = this.data.customizeDate
       this.plotConfiguration = {
         ...this.plotConfiguration,
@@ -267,7 +267,7 @@ export default {
         start_date: newVal.start_date,
         end_date: newVal.end_date,
         symbol: newVal.symbol || '',
-        holidays: this.options[newVal.holidays].label,
+        holidays,
         customizeDate: newVal.customizeDate,
         shift: newVal.shift
       }
