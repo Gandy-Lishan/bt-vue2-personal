@@ -1175,7 +1175,7 @@ export default {
       CIQ.addIndicators()
     },
     handleUsersOwnIndicatorSelect(data) {
-      let frequency = 'Daily'
+       let frequency = 'Daily'
       switch (data.updated) {
         case 'monthly': {
           frequency = 'Monthly'
@@ -1191,8 +1191,6 @@ export default {
         }
         default:
       }
-      // 用户自定义指标也有周期，直接设定
-      CIQ.store.commit('form/getFrequency', frequency)
       const indicatorName = data.file_name
       const indicatorUrl = data.file_id
       this.currentSentiUpdated = frequency
