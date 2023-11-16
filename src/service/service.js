@@ -640,6 +640,7 @@ export function searchIndicator(name, calculate, combine_type, timeframe) {
 		if (name || calculate || combine_type) url += `&`
 		url += `timeframe=${timeframe}`
 	}
+	if(!name && !calculate && !combine_type && !timeframe) url = '/dev/my_indicator/get_records'
 
 	return new Promise((resolve, reject) => {
 		axios
