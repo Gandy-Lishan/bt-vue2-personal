@@ -321,7 +321,8 @@ export default {
       });
 
       const substringsToRemove = matchedStrings.join('|');
-      const name = inputString.replace(new RegExp(substringsToRemove, 'g'), '');
+      let name = inputString.replace(new RegExp(substringsToRemove, 'g'), '');
+      name = name.trim()
 
       console.log('matchedStrings', matchedStrings);
       console.log('Extracted Values:', extractedValues);
