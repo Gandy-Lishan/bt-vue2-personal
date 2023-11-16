@@ -91,12 +91,14 @@ export default {
     },
     saveData() {
       if(this.config.field === 'ma1' || this.config.field === 'ma2') {
-        if(!this.showInput) this.value = 1
-        if(this.showInput && this.MAType == 'EMA') this.value = `${this.value}e`
-        this.$emit('saveData', this.config.field, this.value || 1)
+        let value = this.value
+        if(!this.showInput) value = 1
+        if(this.showInput && this.MAType == 'EMA') value = `${this.value}e`
+        this.$emit('saveData', this.config.field, value || 1)
       } else if(this.config.field === 'extreme_optimism' || this.config.field === 'extreme_pessimism') {
-        if(!this.showInput) this.value = 0
-        this.$emit('saveData', this.config.field, this.value || 0)
+        let value = this.value
+        if(!this.showInput) value = 0
+        this.$emit('saveData', this.config.field, value || 0)
       }
     },
     handleSelect(val) {
