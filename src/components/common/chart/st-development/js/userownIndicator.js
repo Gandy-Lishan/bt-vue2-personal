@@ -332,14 +332,6 @@
                     //shareYAxis: true
                 });
                 displayOwnIndicatorMAStudies(newData)
-
-                CIQ.store.commit('chart/miFormStateChange',{
-                    categories: newData.categories,
-                    indicator_1: newData.indicator1.name,
-                    indicator_2: newData.indicator2.name,
-                    indicator_1_url: newData.indicator1.url,
-                    indicator_2_url: newData.indicator2.url,
-                })
         }
         
         if(newData.categories == 'Indicator Spread' || newData.categories == 'Indicator Ratio'){
@@ -353,13 +345,6 @@
                 displayOwnIndicatorMAStudies(newData)
                 CIQ.hideCover()
             }) 
-            CIQ.store.commit('chart/miFormStateChange',{
-                categories: newData.categories,
-                indicator_1: newData.indicator1.name,
-                indicator_2: newData.indicator2.name,
-                indicator_1_url: newData.indicator1.url,
-                indicator_2_url: newData.indicator2.url,
-            })
         }
 
         if(newData.categories == "Indicator Weight Combination"){
@@ -370,6 +355,15 @@
 
             CIQ.store.dispatch('chart/set_miFormWeightedListChange',{data:newData.weight_list,url:newData.url})
         }
+
+        // WIC也需要初始化miFormState,主要是用到设定category
+        CIQ.store.commit('chart/miFormStateChange',{
+            categories: newData.categories,
+            indicator_1: newData.indicator1.name,
+            indicator_2: newData.indicator2.name,
+            indicator_1_url: newData.indicator1.url,
+            indicator_2_url: newData.indicator2.url,
+        })
     }
 
     // 展示还原study附属的ma
