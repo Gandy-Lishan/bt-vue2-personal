@@ -381,9 +381,6 @@ export default {
 .el-input-group{
   width: 40%;
 }
-.my-indicator-table {
-  margin-bottom: 50px;
-}
 .my-indicator-table.el-table /deep/tr{
   cursor: pointer;
 }
