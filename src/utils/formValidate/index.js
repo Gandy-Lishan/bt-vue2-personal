@@ -43,6 +43,15 @@ export const createTPSLValidate = (minVal, value) => {
 	}
 	return ''
 }
+export const createEOEPValidate = (value) => {
+	// 只验证小数点后两位
+	const pattern = /^-?(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/;
+	const isMatched = !pattern.test(value) && value != 0
+	if (isMatched) {
+		return `Numeric input with two decimal places.`
+	}
+	return ''
+}
 export const createPositiveIntegerValidate = value => {
 	// 给 Time In Market 和 exclude 用
 	const pattern = /^\d+$/

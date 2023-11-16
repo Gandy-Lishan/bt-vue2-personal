@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { createPositiveIntegerValidate, createTPSLValidate } from '@/utils/formValidate';
+import { createPositiveIntegerValidate, createEOEPValidate } from '@/utils/formValidate';
 
 export default {
   name: 'CheckInput',
@@ -111,14 +111,13 @@ export default {
       }
     },
     validateForm() {
+      debugger
       if(this.showInput) {
-        this.validateValue(this.config.value)
+        this.validateValue(this.value)
         if(this.errMsg) {
           this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.');
           return false;
         }
-      }else {
-        this.config.value = 5
       }
       return true
     },
@@ -128,9 +127,9 @@ export default {
       const _config = this._config
       if(_config.label == "Extreme Optimism") {
         // 限制小数点后两位
-        this.errMsg = createTPSLValidate(0,value)
+        this.errMsg = createEOEPValidate(value)
       }else if(_config.label == "Extreme Pessimism") {
-        this.errMsg = createTPSLValidate(0,value)
+        this.errMsg = createEOEPValidate(value)
       }else if(_config.field == "ma1") {
         this.errMsg = createPositiveIntegerValidate(value)
       }else if(_config.field == "ma2") {
