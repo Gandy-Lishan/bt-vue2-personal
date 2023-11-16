@@ -1621,9 +1621,8 @@ export default {
             const startIndex = str.indexOf('HASH')
             const endIndex = startIndex + 4 // 假设 "HASH" 的长度为 4
 
-            const createdStartIndex = str.indexOf('CREATED')
+            const createdStartIndex = str.indexOf('CREATE')
             const createdEndIndex = createdStartIndex + 7
-
             if (startIndex !== -1) {
               const beforeHash = str.substring(0, startIndex)
               const afterHash = str.substring(endIndex)
@@ -1682,11 +1681,11 @@ export default {
               // 还原文件对象的 raw 属性
               const obj = {}
               obj.index = index
-              obj.val = afterHash
+              obj.val = str
               vm.si.userIndicator = beforeHash
               vm.$emit('getIndicatorUrl', {
                 index: index,
-                url: afterHash
+                url: str
               })
               console.log('还原文件对象的 raw 属性', obj)
               if (this.criteria === 'entry') {
