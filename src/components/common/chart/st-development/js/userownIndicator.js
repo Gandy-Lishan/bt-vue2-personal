@@ -289,7 +289,11 @@
 
     // 预览生成的新indicator
     CIQ.previewUserOwnIndicator = function(indicatorList,indicator,symbol,extremeLines){
-        CIQ.addCover()
+                //编辑时对内容修改或者preview应该移除生成的indicator
+                for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+                    var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+                    if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+                }
         addSingleIndicator(indicatorList,indicator,symbol,extremeLines);
     }
 
