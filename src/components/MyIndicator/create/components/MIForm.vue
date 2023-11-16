@@ -464,7 +464,7 @@ export default {
      const code = saveRes.data.code
       if(code == 404) {this.popUpMsgBox('Permission denied')}
       if(code == 406) {this.popUpMsgBox('This combination of indicators is already in the list')}
-      if(saveRes.status == 201) {this.popUpMsgBox('Indicator created successfully');this.$router.push('/myindicator')}
+      if(saveRes.status == 201) {this.$router.push('/myindicator')}
       // this.$store.commit('SET_CREACT_LOADING', false)
     },
     async saveIndicator() {
