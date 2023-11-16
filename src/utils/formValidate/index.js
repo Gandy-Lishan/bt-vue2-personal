@@ -74,27 +74,32 @@ export const validateURLRule = (_, value, callback) => {
 }
 
 export const validatePercentageRule = (_, value, callback) => {
-	if (value === '') {
-		return 'Enter a number'
-	}
+  if (value === '') {
+    return 'Enter a number';
+  }
 
-	const numericValue = parseFloat(value)
+  const numericValue = parseFloat(value);
 
-	if (isNaN(numericValue)) {
-		return 'Enter a valid number'
-	}
+  if (isNaN(numericValue)) {
+    return 'Enter a valid number';
+  }
 
-	// if (numericValue < 0 || numericValue > 100) {
-	// 	return 'Enter a value <= 100'
-	// }
+  if (numericValue < 0) {
+    return 'Enter a non-negative value';
+  }
 
-	const decimalPlaces = (numericValue.toString().split('.')[1] || '').length
+  // Uncomment the following block to restrict values to <= 100
+  // if (numericValue > 100) {
+  //   return 'Enter a value <= 100';
+  // }
 
-	if (decimalPlaces > 2) {
-		return 'Limit to two decimal places'
-	}
+  const decimalPlaces = (numericValue.toString().split('.')[1] || '').length;
 
-	return ''
+  if (decimalPlaces > 2) {
+    return 'Limit to two decimal places';
+  }
+
+  return '';
 }
 
 // 验证 indicator 不能为空
