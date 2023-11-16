@@ -16,6 +16,7 @@ export default {
           showClose: true,
           duration,
           customClass: 'no-icon',
+          type: 'warning',
           onClose: () => {
             // 弹窗关闭时重置状态变量
             this.isMessageBoxVisible = false;

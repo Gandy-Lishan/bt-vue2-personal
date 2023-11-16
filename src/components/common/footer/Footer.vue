@@ -55,10 +55,10 @@ export default {
 	},
 	watch: {
     '$route'(to, _) {
-			if (!to.path.includes('/backtester')) {
-        this.isFixedAtBottom = true
+			if (to.path.includes('/backtester') || to.path.includes('/myindicator')) {
+        this.isFixedAtBottom = false
       }else {
-				this.isFixedAtBottom = false
+				this.isFixedAtBottom = true
 			}
     }
   }
