@@ -14,9 +14,19 @@
 
     CIQ.displayWeightOwnIndicator = async function(previousState,updatedState,combinedStudy){
         CIQ.addCover()
+        
+        //编辑时对内容修改或者preview应该移除生成的indicator
+        if(!combinedStudy){
+            for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+                var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+                if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+            }
+        }
+
+
         // 提取indicator移除列表和新增列表,
         const { addedItems, removedItems } = findAddedAndRemovedItems(previousState, updatedState);
-
+        
         const indicatorList = updatedState.filter(item=> item.type=='Indicator')
         const symbolList = updatedState.filter(item=> item.type=='Symbol')
 
@@ -194,6 +204,12 @@
     // 以下管理user's own indicator 图表函数
     CIQ.updateUserOwnIndicator = function(newData,oldData){
         CIQ.addCover()
+
+        //编辑时对内容修改或者preview应该移除生成的indicator
+        for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+            var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+            if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+        }
         if(oldData.categories != newData.categories){
             // remove existing studies and series
             for (var studyInstanceName in CIQ.stxx.layout.studies) { 
@@ -312,6 +328,14 @@
                     //shareYAxis: true
                 });
                 displayOwnIndicatorMAStudies(newData)
+
+                CIQ.store.commit('chart/miFormStateChange',{
+                    categories: newData.categories,
+                    indicator_1: newData.indicator1.name,
+                    indicator_2: newData.indicator2.name,
+                    indicator_1_url: newData.indicator1.url,
+                    indicator_2_url: newData.indicator2.url,
+                })
         }
         
         if(newData.categories == 'Indicator Spread' || newData.categories == 'Indicator Ratio'){
@@ -325,6 +349,13 @@
                 displayOwnIndicatorMAStudies(newData)
                 CIQ.hideCover()
             }) 
+            CIQ.store.commit('chart/miFormStateChange',{
+                categories: newData.categories,
+                indicator_1: newData.indicator1.name,
+                indicator_2: newData.indicator2.name,
+                indicator_1_url: newData.indicator1.url,
+                indicator_2_url: newData.indicator2.url,
+            })
         }
 
         if(newData.categories == "Indicator Weight Combination"){
@@ -332,7 +363,8 @@
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)
             // 预留给何总新加的weightlist
-            CIQ.displayWeightOwnIndicator([],newData.weight_list,newData.url)
+
+            CIQ.store.dispatch('chart/set_miFormWeightedListChange',{data:newData.weight_list,url:newData.url})
         }
     }
 

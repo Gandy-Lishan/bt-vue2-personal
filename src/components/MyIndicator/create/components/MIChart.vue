@@ -52,12 +52,14 @@ export default {
 		CIQ.addCover()
 	},
 	beforeDestroy() {
-		// 清除预览缓存
+		// 清除预览和编辑产生的ownIndicator serie缓存
 		localStorage.setItem('previewIndicatorData', null)
 		
 		CIQ.objIndicator = []
 		this.$store.dispatch('chart/reset_chart_study_state')
 		this.$store.dispatch('form/reset_chart_config_state')
+
+		this.$store.dispatch('chart/reset_miFormState')
 		// Destroy the ChartEngine instance when unloading the component.
 		// This will stop internal processes such as quotefeed polling.
 		CIQ.stxx?.destroy()

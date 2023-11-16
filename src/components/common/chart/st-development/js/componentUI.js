@@ -3798,7 +3798,7 @@ CIQ.UI.Layout.prototype.reloadChart = function() {
 	// remove all Studies from Vuex
 	CIQ.store.dispatch('chart/reset_chart_study_state')
 	CIQ.store.dispatch('form/reset_chart_config_state')
-	CIQ.store.commit('form/getFrequency', 'Daily')
+	CIQ.store.commit('form/getFrequency', '')
 	// remove markers, prompt, recover timeframe dropdown
 	CIQ.removePrompt()
 
