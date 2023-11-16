@@ -184,7 +184,12 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
                         // 之后加一个symbol判断和小李新senti判断
                         /********************lishan modify start*************************/
                         if(CIQ.isUserIndicator(CIQ.objIndicator[i]) || CIQ.isOwnIndicator(CIQ.objIndicator[i]) || CIQ.findSymbolIndicator(CIQ.objIndicator[i],null)){       
-                        /********************lishan modify end*************************/    
+                        /********************lishan modify end*************************/  
+                            // ownIndicator根据url的最后一位决定timeframe
+                            if(CIQ.isOwnIndicator(CIQ.objIndicator[i])){
+                                let timeframeCode = CIQ.objIndicator[i].slice(-1)
+                                freqList.push(timeframeCode=='0'?'Daily':timeframeCode=='1'?'Weekly':'Monthly')
+                            }
                             new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
                             valid++
                             continue
