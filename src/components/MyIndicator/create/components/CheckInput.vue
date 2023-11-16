@@ -111,7 +111,6 @@ export default {
       }
     },
     validateForm() {
-      debugger
       if(this.showInput) {
         this.validateValue(this.value)
         if(this.errMsg) {
