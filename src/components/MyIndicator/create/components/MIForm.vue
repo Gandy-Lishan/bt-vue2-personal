@@ -580,7 +580,6 @@ export default {
       return await saveMyIndicators(saveData);
     },
     async previewIndicator() {
-      debugger
       CIQ.addCover()
       this.$store.commit('states/SET_MI_CREATE_LOADING', true)
       // 先存名字
@@ -734,7 +733,6 @@ export default {
 
       this.dropdownList = this.getList()
 
-      debugger
       this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
     handleSelect(item, source) {
