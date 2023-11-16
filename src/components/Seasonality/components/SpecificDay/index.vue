@@ -267,7 +267,7 @@ export default {
         start_date: newVal.start_date,
         end_date: newVal.end_date,
         symbol: newVal.symbol || '',
-        holidays,
+        holidays: this.options.find(ele => ele.value == newVal.holidays).label,
         customizeDate: newVal.customizeDate,
         shift: newVal.shift
       }

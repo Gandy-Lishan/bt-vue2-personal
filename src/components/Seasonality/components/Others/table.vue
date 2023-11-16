@@ -3,7 +3,7 @@
     <el-table
 			ref="MITable"
 			class="my-indicator-table other-table"
-			:data="paginatedData"
+			:data="tableData"
 			:row-class-name="tableRowClassName"
       empty-text="No data"
       v-loading="loading"
@@ -51,14 +51,14 @@
 				</el-table-column>
 			</template>
 		</el-table>
-		<el-pagination
+		<!-- <el-pagination
 		@size-change="handleSizeChange"
 		@current-change="handleCurrentChange"
 		:page-sizes="[10, 30, 50, 100, 200]"
 		:page-size="pageSize"
 		:total="parentData.length"
 		layout="total, sizes, prev, pager, next, jumper"
-		></el-pagination>
+		></el-pagination> -->
   </div>
 </template>
 
@@ -115,12 +115,12 @@ export default {
   watch: {
     tableData: {
       handler(newVal) {
-        this.loading = true
-        const startIndex = (this.currentPage - 1) * this.pageSize;
-        const endIndex = startIndex + this.pageSize;
-        // 当checkbox未勾选时，返回原始数据
-        this.loading = false
-        this.paginatedData =  newVal.slice(startIndex, endIndex);
+        // this.loading = true
+        // const startIndex = (this.currentPage - 1) * this.pageSize;
+        // const endIndex = startIndex + this.pageSize;
+        // // 当checkbox未勾选时，返回原始数据
+        // this.loading = false
+        // this.paginatedData =  newVal.slice(startIndex, endIndex);
       },
       deep: true,
       immediate: true
