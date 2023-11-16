@@ -738,12 +738,6 @@ export default {
     handleSelect(item, source) {
       console.log('item', item,source)
       const type = item.type
-      if(type === 'Indicator') {
-        this.data.time_frame = this.findMaxFreq(this.data.time_frame, item.updated.toLowerCase()) 
-      }else {
-        this.data.time_frame = 'daily'
-      }
-      console.log('当前最大的 timeframe 是', this.data.time_frame)
 
       const selectIndicator = (item) => {
         this.data[source] = item.label
@@ -783,11 +777,64 @@ export default {
           selectSymbol(item)
         }
       }
+
+      if(type === 'Indicator') {
+        this.data.time_frame = this.findMaxFreq() 
+      }else {
+        this.data.time_frame = 'daily'
+      }
+      console.log('当前最大的 timeframe 是', this.data.time_frame)
+
       // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
       const checkInputRef = source=="indicator_1"?'ma1Form':'ma2Form'
       this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,source=="indicator_1"?'ma1':'ma2',this.$refs[checkInputRef].showInput)
     },
-    findMaxFreq(currentFreq, previousFreq) {
+    findMaxFreq() {
+      const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
+      if(this.data.categories !== 'WIC') {
+        const url_1 = this.data.indicator_1_url
+        const url_2 = this.data.indicator_2_url
+        if(this.data.categories.includes('Indicator')) {
+          // 这个数据时 Daily
+          const updated_1 = sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.updated?.toLowerCase()
+          const updated_2 = sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_2.toLocaleLowerCase())?.updated?.toLowerCase()
+          const frequencyArray = [updated_1, updated_2].filter(item => item)
+          console.log('updated_1 updated_2数组', [updated_1, updated_2])
+          return this.getMaxTimeframe(frequencyArray)
+        }else if(this.data.categories.includes('Symbol')){
+          // 重置成 daily
+          return 'daily'
+        }
+      }else {
+        let frequencyArray = this.weightData.map(item => {
+          const url = item.indicator_url
+          if(item.type == 'Indicator') {
+            return sentimentList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.updated?.toLowerCase()
+          }
+          return null
+        })
+        frequencyArray = frequencyArray.filter(item => item)
+        return this.getMaxTimeframe(frequencyArray)
+      }
+    },
+    
+    getMaxTimeframe(timeframes) {
+        const validTimeframes = ['daily', 'weekly', 'monthly'];
+        const filteredTimeframes = timeframes.filter(timeframe =>
+          validTimeframes.includes(timeframe)
+        );
+        if (filteredTimeframes.length === 0) {
+          return 'daily';
+        } else if (filteredTimeframes.length === 1) {
+          return filteredTimeframes[0];
+        }
+        const maxTimeframe = filteredTimeframes.reduce((max, timeframe) => {
+          return validTimeframes.indexOf(timeframe) > validTimeframes.indexOf(max) ? timeframe : max;
+        });
+
+        return maxTimeframe;
+      },
+    _findMaxFreq(currentFreq, previousFreq) {
       let selectedTimeframe = currentFreq
 			let previousTimeframe = previousFreq
 			if (
@@ -941,13 +988,7 @@ export default {
       
       console.log(this.weightData)
 
-      const type = item.type
-      if(type === 'Indicator') {
-        this.data.time_frame = this.findMaxFreq(this.data.time_frame, item.updated.toLowerCase()) 
-      }else {
-        // symbol类型对timeframe不产生影响
-        //this.data.time_frame = 'daily'
-      }
+      this.data.time_frame = this.findMaxFreq() 
       console.log('当前最大的 timeframe 是', this.data.time_frame)
 
       // 更新weightList并刷新chartiq状态
