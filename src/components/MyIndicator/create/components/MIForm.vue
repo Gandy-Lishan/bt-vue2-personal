@@ -464,7 +464,7 @@ export default {
      const code = saveRes.data.code
       if(code == 404) {this.popUpMsgBox('Permission denied')}
       if(code == 406) {this.popUpMsgBox('This combination of indicators is already in the list')}
-      if(saveRes.status == 201) {this.popUpMsgBox('Indicator created successfully');this.$router.push('/myindicator')}
+      if(saveRes.status == 201) {this.$router.push('/myindicator')}
       // this.$store.commit('SET_CREACT_LOADING', false)
     },
     async saveIndicator() {
@@ -524,21 +524,100 @@ export default {
       if(rowUrl) return await editMyIndicators(saveData, rowUrl)
       return await saveMyIndicators(saveData);
     },
+    async savePreviewIndicator() {
+       // preview 按钮直接走新建不走 update
+      const validForm = this.validForm()
+      if(!validForm) return
+      let saveData = null;
+      if(this.data.categories !== 'WIC') {
+        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
+        for (const formRef of formsToSave) {
+          this.$refs[formRef].saveData();
+        }
+      }
+      const commonData = {
+        name: this.data.name,
+        indicator_1: this.data.indicator_1_url,
+        indicator_2: this.data.indicator_2_url,
+        time_frame: this.data.time_frame,
+        ma: `${this.data.ma1}_${this.data.ma2}_1`,
+        calculate: this.data.categories === 'WIC' ? 'weight_combination' : this.data.categories.split(' ')[1].toLowerCase(),
+        extreme_optimism: this.data.extreme_optimism,
+        extreme_pessimism: this.data.extreme_pessimism,
+        combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase() // combine_type : indicator or symbol
+      };
+      if(this.data.categories !== 'WIC') {
+        saveData = {
+          ...commonData
+        }
+      } else {
+        // if (this.weightValidErrMsg) return;
+        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(1));
+        const indicator_weight = percentageStrings.join('_');
+
+        const mul_indicator = this.weightData.reduce((acc, item, index) => {
+          acc[`indicator_${index + 1}`] = item.indicator_url;
+          return acc;
+        }, {});
+        mul_indicator.combine_type = this.weightData.map(item => {
+          if(item.type == 'Indicator') return 'si'
+          if(item.type == 'Symbol') return 'sy'
+        }).join('_');
+
+        saveData = {
+          ...commonData,
+          calculate: 'weight_combination', // 存起来
+          indicator_weight,
+          mul_indicator: JSON.stringify(mul_indicator),
+          indicator_1: 'model_smart_money',
+          indicator_2: 'model_smart_money',
+          ma: '1_1_1',
+          extreme_optimism: 0,
+          extreme_pessimism: 0,
+          combine_type: 'indicator'
+        };
+      }
+      return await saveMyIndicators(saveData);
+    },
     async previewIndicator() {
+      debugger
       CIQ.addCover()
       this.$store.commit('states/SET_MI_CREATE_LOADING', true)
-      const res = await this.saveIndicator()
+      // 先存名字
+      const previewName = this.data.name
+      const res = await this.savePreviewIndicator()
+      console.log('preview 响应', res)
+      const status = res?.data?.code || res?.status
+      let url = null
+      if(status == 406) {
+        url = res?.data?.data?.url
+        // 说明这条数据已经存在了,不让我新建,并且说明用户并没有该除名字外的内容, 直接请求数据
+        const indicatorData = await getMyIndicatorData(url)
+        // 暂存
+        localStorage.setItem('previewIndicatorData', JSON.stringify(indicatorData.data.data))
+        // 修改名字为预览名字
+        this.data.name = previewName
+      }
+      if(status == 201) {
+        url = res.data.url
+        const indicatorData = await getMyIndicatorData(url)
+        // 更新 rowUrl
+        this.rowUrl = ''
+        // 暂存
+        localStorage.setItem('previewIndicatorData', JSON.stringify(indicatorData.data.data))
+        const delRes = await delMyIndicator(url)
+      }
       if(!res) {this.$store.commit('states/SET_MI_CREATE_LOADING', false);CIQ.hideCover();return}
-      const url = res.data.url
-      const indicatorData = await getMyIndicatorData(url)
-      // 暂存
-      localStorage.setItem('previewIndicatorData', JSON.stringify(indicatorData.data.data))
-
-      await delMyIndicator(url)
-      this.rowUrl = ''
-      console.log('indicatorData code', indicatorData.data.code)
-      console.log('indicatorData res', indicatorData.data.data)
-      // todo display the indicator on chartIQ
+      // const url = res.data.url
+      // const indicatorData = await getMyIndicatorData(url)
+      // // 暂存
+      // localStorage.setItem('previewIndicatorData', JSON.stringify(indicatorData.data.data))
+      // // 先
+      // await delMyIndicator(url)
+      // this.rowUrl = ''
+      // console.log('indicatorData code', indicatorData.data.code)
+      // console.log('indicatorData res', indicatorData.data.data)
+      // // todo display the indicator on chartIQ
 
       if(this.data.categories.includes('Symbol')){
         CIQ.previewUserOwnIndicator(

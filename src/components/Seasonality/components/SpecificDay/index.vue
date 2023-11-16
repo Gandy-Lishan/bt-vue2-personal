@@ -314,7 +314,13 @@ export default {
         if(holiday.month && holiday.day) {date = new Date(year, holiday.month - 1, holiday.day); return { ...holiday, date: format(date, 'MM-dd') }}
         else {return {label: 'Custom Time', value: 9}}
       })
-      console.log('节假日', holidayDates)
+      // 先按照月份从小到大排序，再按照日期从小到大排序
+      holidayDates.sort((a, b) => {
+        if (a.month !== b.month) {
+          return a.month - b.month;
+        } else {
+          return a.day - b.day;
+        }})
       this.options = holidayDates
     },
     handleDisabledStartDate(time) {
@@ -369,8 +375,7 @@ export default {
       }
       if(this.data.period == 0) {
 
-        // 将日期字符串转换为 Date 对象
-        const dateObjects = this.options.map(ele => {
+        let dateObjects = this.options.map(ele => {
           if(ele.date) {
             const month = new Date().getMonth();
             const day = new Date().getDate();
@@ -380,7 +385,14 @@ export default {
             if(time <= currentTime) {return ele}else{return {...ele, disabled: true}}
           }else {return ele}
         })
+
         this.options = dateObjects
+        dateObjects = dateObjects.filter(ele => !ele.disabled)
+        const allowedOptions = dateObjects.map(item => item.value)
+        if(!allowedOptions.includes(this.data.holidays)) {
+          this.data.holidays = allowedOptions[0]
+        }
+
       }else {
         this.options = this.options.map(ele => ({...ele, disabled: false}))
       }
@@ -453,12 +465,11 @@ export default {
         const day = `${inputValue} ${inputValue > 1 ? 'days': 'day'}`
         // this.dynamicTags.push(day);
         this.dynamicTags = [day];
+        this.data.shift = this.getShift(this.dynamicTags)
       }else if(inputValue && !regex.test(inputValue)){
         this.popUpMsgBox('Only positive numbers are allowed')
       }
       this.inputVisible = false;
-      this.inputValue = '';
-      this.data.shift = this.getShift(this.dynamicTags)
   }
   }
 }
