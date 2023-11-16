@@ -92,7 +92,7 @@
 							:editableTabs="editableTabs"
 							:editableTabsValue="editableTabsValue"
 							ref="indiChild"
-							:isRiskControl="isRiskControl"
+							:isRiskControl="relation == 0"
 							@getIndicatorUrl="getIndicatorUrl"
 							@getIndicatorVal="getIndicatorVal"
 							@getIndicatorRadio="getIndicatorRadio"
@@ -105,7 +105,7 @@
 							:tabLength="indicatorRadioArr.length"
 							:criteria="config['criteria']"
 							:panelIndex="index"
-							:isRiskControl="isRiskControl"
+							:isRiskControl="relation == 0"
 							ref="sentiChild"
 							:relation="relation"
 							:score="score"
@@ -122,7 +122,7 @@
 							:tabLength="indicatorRadioArr.length"
 							:criteria="config['criteria']"
 							:panelIndex="index"
-							:isRiskControl="isRiskControl"
+							:isRiskControl="relation == 0"
 							ref="symbolChild"
 							:relation="relation"
 							:score="score"
@@ -144,7 +144,7 @@
 								techIndiObj[index] === 'CCI_like'
 							"
 							:panelIndex="index"
-							:isRiskControl="isRiskControl"
+							:isRiskControl="relation == 0"
 							:criteria="config['criteria']"
 							ref="cciChild"
 							:relation="relation"
@@ -167,7 +167,7 @@
 								techIndiObj[index] === 'MACD_like'
 							"
 							:panelIndex="index"
-							:isRiskControl="isRiskControl"
+							:isRiskControl="relation == 0"
 							:criteria="config['criteria']"
 							ref="macdChild"
 							:relation="relation"
@@ -190,7 +190,7 @@
 								techIndiObj[index] === 'MovingAverage_like'
 							"
 							:panelIndex="index"
-							:isRiskControl="isRiskControl"
+							:isRiskControl="relation == 0"
 							:criteria="config['criteria']"
 							ref="maChild"
 							:relation="relation"
@@ -213,7 +213,7 @@
 								techIndiObj[index] === 'BollingerBands_like'
 							"
 							:panelIndex="index"
-							:isRiskControl="isRiskControl"
+							:isRiskControl="relation == 0"
 							:criteria="config['criteria']"
 							ref="bollBandsLikeChild"
 							:relation="relation"
@@ -236,7 +236,7 @@
 								techIndiObj[index] === 'EFT_like'
 							"
 							:panelIndex="index"
-							:isRiskControl="isRiskControl"
+							:isRiskControl="relation == 0"
 							:criteria="config['criteria']"
 							ref="EFTLikeChild"
 							:relation="relation"
@@ -259,7 +259,7 @@
 								techIndiObj[index] === 'Stochastics_like'
 							"
 							:panelIndex="index"
-							:isRiskControl="isRiskControl"
+							:isRiskControl="relation == 0"
 							:criteria="config['criteria']"
 							ref="stochasticsLikeChild"
 							:relation="relation"
@@ -282,7 +282,7 @@
 								techIndiObj[index] === 'ADX_like'
 							"
 							:panelIndex="index"
-							:isRiskControl="isRiskControl"
+							:isRiskControl="relation == 0"
 							:criteria="config['criteria']"
 							ref="ADXLikeChild"
 							:relation="relation"
@@ -305,7 +305,7 @@
 								techIndiObj[index] === 'ERI_like'
 							"
 							:panelIndex="index"
-							:isRiskControl="isRiskControl"
+							:isRiskControl="relation == 0"
 							:criteria="config['criteria']"
 							ref="ERILikeChild"
 							:relation="relation"
@@ -328,7 +328,7 @@
 								techIndiObj[index] === 'Aligator_like'
 							"
 							:panelIndex="index"
-							:isRiskControl="isRiskControl"
+							:isRiskControl="relation == 0"
 							:criteria="config['criteria']"
 							ref="aligatorLikeChild"
 							:relation="relation"
@@ -351,7 +351,7 @@
 								techIndiObj[index] === 'LRF_like'
 							"
 							:panelIndex="index"
-							:isRiskControl="isRiskControl"
+							:isRiskControl="relation == 0"
 							:criteria="config['criteria']"
 							ref="LRFLikeChild"
 							:relation="relation"
@@ -374,7 +374,7 @@
 								techIndiObj[index] === 'Trailingstop_like'
 							"
 							:panelIndex="index"
-							:isRiskControl="isRiskControl"
+							:isRiskControl="relation == 0"
 							:criteria="config['criteria']"
 							ref="trailingStopLikeChild"
 							:relation="relation"
@@ -799,16 +799,17 @@ export default {
 		saveDelayBar() {
 			let obj = {}
 			obj.criteria = this.criteria
+			const isRiskControl = this.relation == 0
 			// Do not select isdelaybar
 			if (!this.isDelayBar) {
 				obj.value = 0
 			}
 			// Choose delaybar instead of only risk
-			if (this.isDelayBar && !this.isRiskControl) {
+			if (this.isDelayBar && !isRiskControl) {
 				obj.value = this.delay_bars
 			}
 			// Select delaybar and only risk
-			if (this.isDelayBar && this.isRiskControl) {
+			if (this.isDelayBar && isRiskControl) {
 				obj.value = 0
 			}
 			this.$store.commit('form/saveDelayBar', obj)
@@ -816,16 +817,16 @@ export default {
 		saveRelation() {
 			let obj = {}
 			obj.criteria = this.criteria
-
-			if (this.indicatorRadioArr.length > 1 && !this.isRiskControl) {
-				obj.value = this.relation
-			}
-			if (this.indicatorRadioArr.length == 1 && !this.isRiskControl) {
-				obj.value = 1
-			}
-			if (this.isRiskControl) {
-				obj.value = 0
-			}
+			obj.value = this.relation
+			// if (this.indicatorRadioArr.length > 1) {
+			// 	obj.value = this.relation
+			// }
+			// if (this.indicatorRadioArr.length == 1) {
+			// 	obj.value = 1
+			// }
+			// if (this.indicatorRadioArr.length == 0) {
+			// 	obj.value = 0
+			// }
 
 			this.$store.commit('form/saveRelation', obj)
 		},
@@ -966,6 +967,10 @@ export default {
 				}
 			this.$emit(`get${this.criteria}Relation`, val)
 			this.$store.commit(`form/clear${this.criteria}SignalArr`)
+			this.$store.commit('form/saveRelation', {
+				criteria: this.criteria,
+				value: this.relation
+			})
 		},
 		addSignalLength() {
 			if (this.relation == 2 || this.relation == 3) {
@@ -1005,10 +1010,11 @@ export default {
 			return true
 		},
 		saveData(index) {
+			debugger
 			let checked = true
 			// Save the selected indicator to vuex
 			let _this = this
-			if (_this.isRiskControl) {
+			if (_this.relation == 0) {
 				// Save risk description
 				let desObj = {}
 				desObj.criteria = this.criteria
