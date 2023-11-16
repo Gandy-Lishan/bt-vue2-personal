@@ -286,7 +286,7 @@ import {
   csvFileRead,
   getPairData,
   csvFilePagingRead,
-  getAllMyIndicatorsList
+  searchIndicator
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
@@ -598,31 +598,20 @@ export default {
       }
     },
     async indicatorUsersSearch(queryString, cb) {
-      if(this.createdIndicatorOptions.length === 0) {
-        //this.createdIndicatorOptions = await getAllMyIndicatorsList(1)
-        await getAllMyIndicatorsList(1, (data) => {
-          this.createdIndicatorOptions = data
-          const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
-            var results = queryString
-              ? list.filter(
-                this.createStateUsersFilter(queryString)
-              )
-              : list
-            cb(results)
-        })
-      }else{
-        const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
-            list.sort(function (a, b) {
-              return a.value.localeCompare(b.value)
-            })
-            var results = queryString
-              ? list.filter(
-                this.createStateUsersFilter(queryString)
-              )
-              : list
-            cb(results)
-      }
+      try {
+        const res = await searchIndicator(queryString);
+        const data = res?.data?.results
+        const list = data.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}));
+        
+        list.sort(function (a, b) {
+          return a.value.localeCompare(b.value);
+        });
 
+        const results = queryString ? list.filter(this.createStateUsersFilter(queryString)) : list;
+        cb(results);
+      } catch (error) {
+        console.error('Error fetching indicator results:', error);
+      }
     },
     createStateUsersFilter(queryString) {
       return (state) => {
