@@ -36,7 +36,6 @@ import { checkProperties } from "@/utils";
                 let shift = newVal.shift.length > 1 ? newVal.shift.join(',') : newVal.shift[0]
                 let start_date = newVal.start_date
                 if(start_date == '_') start_date = '1800'
-                
                 if(newVal.holidays != 'Custom Time'){
                   const propertiesToCheck = ['holidays']
                   if (!checkProperties(newVal, propertiesToCheck)) {console.log('holidays 为空'); return}
