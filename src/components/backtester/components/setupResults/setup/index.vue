@@ -289,7 +289,6 @@ export default {
 			return saveObj
 		},
 		encodeSignalList(criteria) {
-			debugger
 			const backtestData = cloneDeep(this.$store.state.form.backtestInfo)
 			const signalList = backtestData[criteria].signals
 			const isOnlyUseRiskControl = backtestData[criteria].relation == 0
