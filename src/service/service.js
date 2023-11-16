@@ -561,7 +561,7 @@ export function getMyIndicatorsList(page) {
 			})
 	})
 }
-export function getAllMyIndicatorsList(page) {
+export function getAllMyIndicatorsList(page, callback) {
 	const url = `/dev/my_indicator/get_records/?page=`
 
 	return new Promise((resolve, reject) => {
@@ -575,6 +575,10 @@ export function getAllMyIndicatorsList(page) {
 					console.log('响应数据', res)
 					// 将当前页的数据添加到总数据数组中
 					allData.push(...data)
+
+					// 执行回调函数，将当前获取的数据传递给回调函数处理
+					callback(allData)
+
 					if (res.data.next) {
 						// 继续递归请求下一页数据
 						fetchPageData(page + 1)

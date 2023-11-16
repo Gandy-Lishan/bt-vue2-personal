@@ -599,19 +599,30 @@ export default {
     },
     async indicatorUsersSearch(queryString, cb) {
       if(this.createdIndicatorOptions.length === 0) {
-        this.createdIndicatorOptions = await getAllMyIndicatorsList(1)
+        //this.createdIndicatorOptions = await getAllMyIndicatorsList(1)
+        await getAllMyIndicatorsList(1, (data) => {
+          this.createdIndicatorOptions = data
+          const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
+            var results = queryString
+              ? list.filter(
+                this.createStateUsersFilter(queryString)
+              )
+              : list
+            cb(results)
+        })
+      }else{
+        const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
+            list.sort(function (a, b) {
+              return a.value.localeCompare(b.value)
+            })
+            var results = queryString
+              ? list.filter(
+                this.createStateUsersFilter(queryString)
+              )
+              : list
+            cb(results)
       }
-    // url -> nameCREATEurl
-      const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
-      list.sort(function (a, b) {
-        return a.value.localeCompare(b.value)
-      })
-      var results = queryString
-        ? list.filter(
-          this.createStateUsersFilter(queryString)
-        )
-        : list
-      cb(results)
+
     },
     createStateUsersFilter(queryString) {
       return (state) => {
