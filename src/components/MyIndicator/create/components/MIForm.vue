@@ -581,6 +581,7 @@ export default {
     },
     async previewIndicator() {
       debugger
+      CIQ.addCover()
       this.$store.commit('states/SET_MI_CREATE_LOADING', true)
       // 先存名字
       const previewName = this.data.name
@@ -606,7 +607,7 @@ export default {
         localStorage.setItem('previewIndicatorData', JSON.stringify(indicatorData.data.data))
         const delRes = await delMyIndicator(url)
       }
-      if(!res) {this.$store.commit('states/SET_MI_CREATE_LOADING', false);return}
+      if(!res) {this.$store.commit('states/SET_MI_CREATE_LOADING', false);CIQ.hideCover();return}
       // const url = res.data.url
       // const indicatorData = await getMyIndicatorData(url)
       // // 暂存
@@ -686,6 +687,9 @@ export default {
     changeCategories(category) {
       const isIndicator = category.includes('Indicator')
       const isSymbol = category.includes('Symbol')
+      const isWIC = category.includes('WIC')
+
+      this.data['time_frame'] = 'daily'
 
       const clearIndicatorIfMatch = (list, urlProp, indicatorProp) => {
         if (list.some((item) => item.url === this.data[urlProp])) {
@@ -698,29 +702,27 @@ export default {
         clearIndicatorIfMatch(this.symbolList, 'indicator_1_url', 'indicator_1')
         clearIndicatorIfMatch(this.symbolList, 'indicator_2_url', 'indicator_2')
 
-        // 通过初始化默认SPX chart还原deleted series
-        //CIQ.stxx.loadChart("SPX")
+        // 还原weightData初始状态
+        this.weightData =  [
+          {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
+        ]
       }
 
       if (isSymbol) {
-        clearIndicatorIfMatch(
-          this.sentimentList,
-          'indicator_1_url',
-          'indicator_1'
-        )
-        clearIndicatorIfMatch(
-          this.sentimentList,
-          'indicator_2_url',
-          'indicator_2'
-        )
+        clearIndicatorIfMatch(this.sentimentList,'indicator_1_url','indicator_1')
+        clearIndicatorIfMatch(this.sentimentList,'indicator_2_url','indicator_2')
 
-        //CIQ.stxx.setPeriodicity(1,1,'day')
-        // 隐藏主图表面板的默认符号和series
-        // var renderer = CIQ.stxx.chart.seriesRenderers._main_series.seriesParams[0].id;
-        // CIQ.stxx.removeSeries(renderer);
+        // 还原weightData初始状态
+        this.weightData =  [
+          {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
+        ]
+      }
 
-        // document.getElementsByTagName('cq-chart-title')[0].classList.remove('stx-show')
-
+      if(isWIC) {
+        clearIndicatorIfMatch(this.symbolList, 'indicator_1_url', 'indicator_1')
+        clearIndicatorIfMatch(this.symbolList, 'indicator_2_url', 'indicator_2')
+        clearIndicatorIfMatch(this.sentimentList,'indicator_1_url','indicator_1')
+        clearIndicatorIfMatch(this.sentimentList,'indicator_2_url','indicator_2')
       }
   
       const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
@@ -728,13 +730,11 @@ export default {
         // 从WIC到其他选项时组件不存在，需要判断
         this.$refs[formRef]?.clearForm()
       }
-      // 还原weightData初始状态
-      this.weightData =  [
-        {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
-      ]
+
 
       this.dropdownList = this.getList()
 
+      debugger
       this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
     handleSelect(item, source) {
