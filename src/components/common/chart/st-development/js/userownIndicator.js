@@ -210,7 +210,8 @@
             var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
             if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
         }
-        if(oldData.categories != newData.categories){
+
+        if((oldData.categories != newData.categories) && (oldData.categories.split(' ')[0] != newData.categories.split(' ')[0])){
             // remove existing studies and series
             for (var studyInstanceName in CIQ.stxx.layout.studies) { 
                 var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
@@ -285,6 +286,7 @@
                 addSingleIndicator([newData.indicator1.url,newData.indicator2.url],newData.indicator2.url);
             }
         }
+        CIQ.hideCover()
     }
 
     // 预览生成的新indicator
