@@ -207,3 +207,9 @@
 .mouth-days-value {
   width: 100% !important;
 }
+.el-popover .popper__arrow{
+  border-bottom-color: #303133 !important;
+}
+.el-popover .popper__arrow::after{
+  border-bottom-color: #303133 !important;
+}
