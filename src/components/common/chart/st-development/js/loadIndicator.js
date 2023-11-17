@@ -466,9 +466,9 @@
                      panelHeight:indicatorHeight,
                      parameters: { init: {
                          studyOverZonesEnabled: false,
-                         studyOverBoughtValue: ownIndicatorInfo.lower_extreme_value,
+                         studyOverBoughtValue: ownIndicatorInfo?ownIndicatorInfo.lower_extreme_value:999,
                          studyOverBoughtColor: "#FF0000",
-                         studyOverSoldValue: ownIndicatorInfo.upper_extreme_value,
+                         studyOverSoldValue: ownIndicatorInfo?ownIndicatorInfo.upper_extreme_value:-999,
                          studyOverSoldColor: "#00DD00",
                      }},
                      attributes:{

@@ -8,6 +8,7 @@ import {CIQ} from "chartiq/js/standard.js"
 import axios from "axios"
 import jutils from 'jutils-src'
 import LRUCache from 'lru-cache';
+import _this from "@/main";
 
 // 目前只给pairdata LRU缓存
 const cache = new LRUCache({
@@ -690,6 +691,12 @@ quoteFeedSimulator.formatChartData = async function(response){
                     if(!datafeed){
                         
                         const res = await config.getMyIndicatorData(url);
+                        if(res.data.code == 404) {
+                            _this.popUpMsgBox('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds')
+                            setTimeout(() => {
+                                window.location.reload();
+                              }, 2000); // 2000毫秒 = 3秒
+                        }
                         datafeed = res.data.data;
                         // 暂存
                         localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(datafeed))
