@@ -685,13 +685,14 @@ quoteFeedSimulator.formatChartData = async function(response){
                     }
                 }
                 if (CIQ.isOwnIndicator(indicator)) {
-                    let datafeed = JSON.parse(localStorage.getItem('previewIndicatorData'))
+                    const [_, url] = indicator.split(/CREATE/);
+                    let datafeed = JSON.parse(localStorage.getItem(`previewIndicatorData_${url}`))
                     if(!datafeed){
-                        const [_, url] = indicator.split(/CREATE/);
+                        
                         const res = await config.getMyIndicatorData(url);
                         datafeed = res.data.data;
                         // 暂存
-                        localStorage.setItem('previewIndicatorData', JSON.stringify(datafeed))
+                        localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(datafeed))
                     }               
             
                     let sortedRows = datafeed.sort(
