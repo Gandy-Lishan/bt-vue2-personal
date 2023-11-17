@@ -684,7 +684,6 @@ export default {
       }
     },
     changeCategories(category) {
-      debugger
       const isIndicator = category.includes('Indicator')
       const isSymbol = category.includes('Symbol')
       const isWIC = category.includes('WIC')
