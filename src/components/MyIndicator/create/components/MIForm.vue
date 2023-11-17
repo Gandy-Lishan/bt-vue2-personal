@@ -684,22 +684,25 @@ export default {
       }
     },
     changeCategories(category) {
+      debugger
       const isIndicator = category.includes('Indicator')
       const isSymbol = category.includes('Symbol')
       const isWIC = category.includes('WIC')
 
       this.data['time_frame'] = 'daily'
 
-      const clearIndicatorIfMatch = (list, urlProp, indicatorProp) => {
-        if (list.some((item) => item.url === this.data[urlProp])) {
+      const clearIndicatorIfMatch = (list, urlProp, indicatorProp, type) => {
+        const exitItem = list.find((item) => item.label === this.data[indicatorProp])
+        if (exitItem && exitItem?.type == type) {
+        }else{
           this.data[indicatorProp] = ''
           this.data[urlProp] = ''
         }
       }
 
       if (isIndicator) {
-        clearIndicatorIfMatch(this.symbolList, 'indicator_1_url', 'indicator_1')
-        clearIndicatorIfMatch(this.symbolList, 'indicator_2_url', 'indicator_2')
+        clearIndicatorIfMatch(this.sentimentList, 'indicator_1_url', 'indicator_1', 'Indicator')
+        clearIndicatorIfMatch(this.sentimentList, 'indicator_2_url', 'indicator_2', 'Indicator')
 
         // 还原weightData初始状态
         this.weightData =  [
@@ -708,8 +711,8 @@ export default {
       }
 
       if (isSymbol) {
-        clearIndicatorIfMatch(this.sentimentList,'indicator_1_url','indicator_1')
-        clearIndicatorIfMatch(this.sentimentList,'indicator_2_url','indicator_2')
+        clearIndicatorIfMatch(this.symbolList,'indicator_1_url','indicator_1', 'Symbol')
+        clearIndicatorIfMatch(this.symbolList,'indicator_2_url','indicator_2', 'Symbol')
 
         // 还原weightData初始状态
         this.weightData =  [
@@ -718,10 +721,10 @@ export default {
       }
 
       if(isWIC) {
-        clearIndicatorIfMatch(this.symbolList, 'indicator_1_url', 'indicator_1')
-        clearIndicatorIfMatch(this.symbolList, 'indicator_2_url', 'indicator_2')
-        clearIndicatorIfMatch(this.sentimentList,'indicator_1_url','indicator_1')
-        clearIndicatorIfMatch(this.sentimentList,'indicator_2_url','indicator_2')
+        this.data['indicator_1'] = ''
+        this.data['indicator_1_url'] = ''
+        this.data['indicator_2'] = ''
+        this.data['indicator_2_url'] = ''
       }
   
       const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
