@@ -46,7 +46,7 @@
                 symbol: symbolList.length?symbolList[0].indicator_url:'SPX', 
                 indicator:[...indicatorList.map(item=>item.indicator_url),combinedStudy] ,
                 // 这边先写死范围，防止其他indicator无法pagination
-                //startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+                startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
             },
             function () {
                 // symbol加载，识别第一个为默认图标symbol,其它symbol作为serie加载,必须遍历加载，不然很难管理
@@ -228,7 +228,11 @@
         if(newData.categories.includes('Symbol')){
             if(oldData.indicator1.url != newData.indicator1.url){
                 CIQ.objIndicator = []
-                CIQ.stxx.loadChart({symbol: newData.indicator1.url},()=>{
+                CIQ.stxx.loadChart({
+                    symbol: newData.indicator1.url,
+                    startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
+                    endDate:new Date(),
+                },()=>{
                     CIQ.hideCover()
                 })
             }
@@ -316,7 +320,11 @@
                 // indicator1,包括主symbol和new indicator
                 CIQ.objIndicator = []
                 await getUserOwnIndicatorMatedata(newData.url,extremeLines)
-                CIQ.stxx.loadChart({symbol: newData.indicator1.url, indicator:[newData.url]}, function(){
+                CIQ.stxx.loadChart({
+                    symbol: newData.indicator1.url, 
+                    indicator:[newData.url],
+                    startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+                }, function(){
                     CIQ.hideCover()
                 })
 
@@ -343,7 +351,11 @@
             await getUserOwnIndicatorMatedata(newData.indicator2.url)
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)
-            CIQ.stxx.loadChart(	{ symbol: 'SPX', indicator:[newData.indicator1.url,newData.indicator2.url,newData.url]}, function(){
+            CIQ.stxx.loadChart(	{ 
+                symbol: 'SPX', 
+                indicator:[newData.indicator1.url,newData.indicator2.url,newData.url],
+                startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+            }, function(){
                 displayOwnIndicatorMAStudies(newData)
                 CIQ.hideCover()
             }) 
@@ -423,7 +435,11 @@
 
         // fetch indicator information and add studies to chart
         await getUserOwnIndicatorMatedata(indicator,extremeLines)
-        CIQ.stxx.loadChart(	{ symbol: symbol?symbol:'SPX', indicator:indicatorList},()=>{
+        CIQ.stxx.loadChart(	{ 
+            symbol: symbol?symbol:'SPX', 
+            indicator:indicatorList,
+            startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+        },()=>{
             CIQ.hideCover()
         }) 
     }
