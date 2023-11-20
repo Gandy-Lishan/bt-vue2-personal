@@ -62,7 +62,7 @@
               </el-row>
               <el-row :span="16">
                 <el-form-item label="Indicators included" class="included-box">
-                  <template v-for="(item, index) in scope.row['included']">
+                  <template v-for="(item, index) in scope.row['included_url']">
                     <span :key="index" style="margin-right: 10px">{{`${index + 1}. ${item}`}};</span>
                   </template>
                 </el-form-item>
@@ -104,9 +104,9 @@
           v-if="l.label == 'Indicators included'"
 				>
           <template slot-scope="scope">
-            <p v-for="(item, index) in scope.row.included" :key="index">
+            <p v-for="(item, index) in scope.row.included_url" :key="index">
               <span v-if="index == 0">{{ `${index + 1}. ${item}` }}</span>
-              <span v-if="index == 1">{{ `${index + 1}. ${item}${scope.row.included.length > 2 ? '...': ''}` }}</span>
+              <span v-if="index == 1">{{ `${index + 1}. ${item}${scope.row.included_url.length > 2 ? '...': ''}` }}</span>
             </p>
           </template>
 				</el-table-column>
@@ -164,7 +164,7 @@ export default {
         },
         {
           label: 'Indicators included',
-          value: 'included'
+          value: 'included_url'
         }
       ],
       tableData: [],
@@ -195,14 +195,17 @@ export default {
 
       let data = resData.map(item => {
       if (['ratio', 'spread'].includes(item.calculate)) {
-        const {included, former, latter, type} = this.getIncludedData(item, sentimentList, symbolList);
+        const {included, included_url, former, latter, former_url, latter_url, type} = this.getIncludedData(item, sentimentList, symbolList);
         return {
           ...item,
           categories: `${capitalizeFirstLetter(type)} ${capitalizeFirstLetter(item.calculate)}`,
           included,
+          included_url,
           key: item.url,
           former,
           latter,
+          former_url,
+          latter_url,
           time_frame: capitalizeFirstLetter(item.timeframe),
           type,
         };
@@ -210,11 +213,13 @@ export default {
       if (item.calculate === 'weight_combination' && (item.indicator_weight && item.mul_indicator)) {
         const includedWeightDataArr = this.getWeightedIndicatorData(item, sentimentList, symbolList);
         const included = includedWeightDataArr.map(item=>(item.included))
+        const included_url = includedWeightDataArr.map(item=>(item.included_url))
         const weightData = includedWeightDataArr.map(item=>(item.weightData))
         return {
           ...item,
           categories: 'Indicator Weight Combination',
           included,
+          included_url,
           key: item.url,
           time_frame: capitalizeFirstLetter(item.timeframe),
           weightData,
@@ -238,16 +243,23 @@ export default {
       const symbol_1 = (typeAttribute == 'symbol') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.label
       const indicator_2 = (typeAttribute == 'indicator') && sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_2.toLocaleLowerCase())?.label
       const symbol_2 = (typeAttribute == 'symbol') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url_2.toLocaleLowerCase())?.label
+      const symbol_1_url = (typeAttribute == 'symbol') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.url
+      const symbol_2_url = (typeAttribute == 'symbol') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url_2.toLocaleLowerCase())?.url
       const former = indicator_1 || symbol_1;
       const latter = indicator_2 || symbol_2;
+      const former_url = indicator_1 || symbol_1_url;
+      const latter_url = indicator_1 || symbol_2_url;
       const maList = item.ma.split('_');
       const ma1 = maList[0] !== '1' ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
       const ma2 = maList[1] !== '1' ? ` Moving Average ${maList[1].includes('e') ? maList[1].toString().replace(/e$/, '') : maList[1]}` : '';
 
       return {
         included: [`${former}${ma1}`, `${latter}${ma2}`],
+        included_url: [`${former_url}${ma1}`, `${latter_url}${ma2}`],
         former,
         latter,
+        former_url,
+        latter_url,
         type: typeAttribute
       }
     },
@@ -264,18 +276,22 @@ export default {
         const typeAttribute = combine_type_arr[index]
         const indicator = (typeAttribute == 'Indicator') && sentimentList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.label
         const symbol = (typeAttribute == 'Symbol') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.label
+        const symbol_url = (typeAttribute == 'Symbol') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.url
         const result = indicator || symbol
+        const result_url = indicator || symbol_url
         const type = typeAttribute
         const weightData = {
               weight: (weight * 100).toFixed(2),
-              indicator: result,
+              indicator: result_url,
               indicator_url: url,
               weightValidErrMsg: '',
               type
               }
         const included = `${result} (weight ${(weight * 100).toFixed()}%)`;
+        const included_url = `${result_url} (weight ${(weight * 100).toFixed()}%)`;
         return {
           included,
+          included_url,
           weightData
         }
       });

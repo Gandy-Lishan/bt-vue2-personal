@@ -102,6 +102,7 @@ export default {
       const min_1 = plotConfiguration.scaleSettings.yAxis_1.min
       const format_1 = plotConfiguration.scaleSettings.yAxis_1.format
       const format_2 = plotConfiguration.scaleSettings.yAxis_2.format
+      const DayOrMonthTag = plotConfiguration.option != 1 ? 'Day' : 'Month'
 
 
       for (const dataPoint of dataList) {
@@ -227,7 +228,7 @@ export default {
           H.tooltip.options.formatter = function () {
             var barColor = this.points[0].color;
 
-              return '<b>Day: ' + this.x + '</b><br/>' +
+              return `<b>${DayOrMonthTag}: ` + this.x + '</b><br/>' +
                   'Avg Return (%): ' + this.points[0].y + '<br/>' +
                   'Percent Positive (%) ' + this.points[1].y;
           };

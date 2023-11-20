@@ -181,12 +181,20 @@
 						<!-- 使用 scoped slot 自定义选项 -->
 						<template slot-scope="{ item }">
 							<div class="custom-option">
-								<span class="item-label">{{ item.label }}</span>
+								<span class="item-label" v-if="item.type === 'Indicator'">{{
+									item.label
+								}}</span>
+								<span class="item-label" v-else-if="item.type === 'Symbol'">{{
+									item.url
+								}}</span>
 								<!-- 在选项后面添加标识 -->
+								<span v-if="item.type === 'Symbol'" class="symbol-label">{{
+									item.label
+								}}</span>
 								<span v-if="item.type === 'Symbol'" class="type-label"
 									>Symbol</span
 								>
-                <span v-if="item.type === 'Indicator'" class="type-label"
+								<span v-if="item.type === 'Indicator'" class="type-label"
 									><span class="updated-label">{{item.updated}}</span>
                   Indicator</span
 								>
@@ -760,7 +768,7 @@ export default {
       }
 
       const selectSymbol = (item) => {
-        this.data[source] = item.label
+        this.data[source] = item.url
         this.data[`${source}_url`] = item.url
         this.changeSymbol(this.data)
       }
@@ -880,8 +888,8 @@ export default {
     async displayData(data) {
 
       this.data.categories = data.mul_indicator && data.indicator_weight ? 'WIC' : data.categories;
-      this.data.indicator_1 = data.mul_indicator && data.indicator_weight ? '' : data.former;
-      this.data.indicator_2 = data.mul_indicator && data.indicator_weight ? '' : data.latter;
+      this.data.indicator_1 = data.mul_indicator && data.indicator_weight ? '' : data.former_url;
+      this.data.indicator_2 = data.mul_indicator && data.indicator_weight ? '' : data.latter_url;
       this.data.indicator_1_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_1_url;
       this.data.indicator_2_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_2_url;
       this.data.time_frame = data.timeframe
@@ -996,6 +1004,7 @@ export default {
     handleRowSelect(item, row) {
       console.log('item', item, row)
       row.indicator = item.label
+      if(item.type == 'Symbol') row.indicator = item.url
       row.indicator_url = item.url
       row.type = item.type
       
