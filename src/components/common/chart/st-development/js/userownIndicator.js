@@ -453,7 +453,7 @@
                         outputs: 
                         {indicatorClose:color,description: '',url:indicator},
                         parameters: { init: {
-                            studyOverZonesEnabled: true,
+                            studyOverZonesEnabled: false,
                             studyOverBoughtValue: extremeLines?extremeLines.op:NaN,
                             studyOverBoughtColor: "#FF0000",
                             studyOverSoldValue: extremeLines?extremeLines.ep:NaN,
