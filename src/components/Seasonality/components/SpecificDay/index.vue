@@ -390,6 +390,9 @@ export default {
         dateObjects = dateObjects.filter(ele => !ele.disabled)
         const allowedOptions = dateObjects.map(item => item.value)
         if(!allowedOptions.includes(this.data.holidays)) {
+          const holiday = this.options[this.data.holidays].label
+          const allowedHoliday = this.options[allowedOptions[0]].label
+          this.popUpMsgBox(`Not ${holiday} yet this year, automatically switched to ${allowedHoliday}`)
           this.data.holidays = allowedOptions[0]
         }
 
