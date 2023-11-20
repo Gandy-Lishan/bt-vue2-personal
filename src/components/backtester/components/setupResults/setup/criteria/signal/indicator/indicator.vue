@@ -295,6 +295,7 @@ import moment from 'moment'
 import { mapMutations } from 'vuex'
 
 import searchBar from "@/components/common/searchBar"
+const throttle = require('lodash/throttle')
 
 export default {
   props: {
@@ -597,17 +598,30 @@ export default {
         )
       }
     },
-    async indicatorUsersSearch(queryString, cb) {
+    indicatorUsersSearch: throttle(function(queryString, cb){this._indicatorUsersSearch(queryString, cb)}, 500),
+    async _indicatorUsersSearch(queryString, cb) {
       try {
-        const res = await searchIndicator(queryString);
-        const data = res?.data?.results
-        const list = data.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}));
-        
+        let res = null;
+        let list = []
+        if ((!queryString && !this.createdIndicatorOptions.length) || queryString) {
+          res = await searchIndicator(queryString);
+          list = res?.data?.results;
+        }
+        list = list.map(item => ({
+          ...item,
+          url: item.url,
+          value: item.name,
+          file_name: item.name,
+          file_id: `${item.name}CREATE${item.url}`,
+          updated: item.timeframe
+        }));
+
         list.sort(function (a, b) {
           return a.value.localeCompare(b.value);
         });
+        if(!queryString && !this.createdIndicatorOptions.length) this.createdIndicatorOptions = list
 
-        const results = queryString ? list.filter(this.createStateUsersFilter(queryString)) : list;
+        const results = queryString ? list.filter(this.createStateUsersFilter(queryString)) : this.createdIndicatorOptions;
         cb(results);
       } catch (error) {
         console.error('Error fetching indicator results:', error);
@@ -1610,9 +1624,8 @@ export default {
             const startIndex = str.indexOf('HASH')
             const endIndex = startIndex + 4 // 假设 "HASH" 的长度为 4
 
-            const createdStartIndex = str.indexOf('CREATED')
+            const createdStartIndex = str.indexOf('CREATE')
             const createdEndIndex = createdStartIndex + 7
-
             if (startIndex !== -1) {
               const beforeHash = str.substring(0, startIndex)
               const afterHash = str.substring(endIndex)
@@ -1671,11 +1684,11 @@ export default {
               // 还原文件对象的 raw 属性
               const obj = {}
               obj.index = index
-              obj.val = afterHash
+              obj.val = str
               vm.si.userIndicator = beforeHash
               vm.$emit('getIndicatorUrl', {
                 index: index,
-                url: afterHash
+                url: str
               })
               console.log('还原文件对象的 raw 属性', obj)
               if (this.criteria === 'entry') {

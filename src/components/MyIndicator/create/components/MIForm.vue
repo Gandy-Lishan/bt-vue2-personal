@@ -471,7 +471,18 @@ export default {
      if(!saveRes) return
      const code = saveRes.data.code
       if(code == 404) {this.popUpMsgBox('Permission denied')}
-      if(code == 406) {this.popUpMsgBox('This combination of indicators is already in the list')}
+      if(code == 406) {
+        const url =  saveRes.data.data.url
+        const name =  saveRes.data.data.name
+        this.$notify({
+          title: `Duplicate Indicator: ${name} Exists`,
+          message: `The same combination indicator <strong>${name}</strong> already exists. Please adjust your input to avoid duplicates.`,
+          type: 'warning',
+          dangerouslyUseHTMLString: true,
+          duration: 8000
+        });
+        // this.popUpMsgBox(`The same combination already exists. Please review and adjust your input. The existing combination is named: ${name}.`)
+      }
       if(saveRes.status == 201) {this.$router.push('/myindicator')}
       // this.$store.commit('SET_CREACT_LOADING', false)
     },
@@ -601,7 +612,7 @@ export default {
         // 说明这条数据已经存在了,不让我新建,并且说明用户并没有该除名字外的内容, 直接请求数据
         const indicatorData = await getMyIndicatorData(url)
         // 暂存
-        localStorage.setItem('previewIndicatorData', JSON.stringify(indicatorData.data.data))
+        localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(indicatorData.data.data))
         // 修改名字为预览名字
         this.data.name = previewName
       }
@@ -611,7 +622,7 @@ export default {
         // 更新 rowUrl
         this.rowUrl = ''
         // 暂存
-        localStorage.setItem('previewIndicatorData', JSON.stringify(indicatorData.data.data))
+        localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(indicatorData.data.data))
         const delRes = await delMyIndicator(url)
       }
       if(!res) {this.$store.commit('states/SET_MI_CREATE_LOADING', false);CIQ.hideCover();return}
@@ -698,16 +709,18 @@ export default {
 
       this.data['time_frame'] = 'daily'
 
-      const clearIndicatorIfMatch = (list, urlProp, indicatorProp) => {
-        if (list.some((item) => item.url === this.data[urlProp])) {
+      const clearIndicatorIfMatch = (list, urlProp, indicatorProp, type) => {
+        const exitItem = list.find((item) => item.label === this.data[indicatorProp])
+        if (exitItem && exitItem?.type == type) {
+        }else{
           this.data[indicatorProp] = ''
           this.data[urlProp] = ''
         }
       }
 
       if (isIndicator) {
-        clearIndicatorIfMatch(this.symbolList, 'indicator_1_url', 'indicator_1')
-        clearIndicatorIfMatch(this.symbolList, 'indicator_2_url', 'indicator_2')
+        clearIndicatorIfMatch(this.sentimentList, 'indicator_1_url', 'indicator_1', 'Indicator')
+        clearIndicatorIfMatch(this.sentimentList, 'indicator_2_url', 'indicator_2', 'Indicator')
 
         // 还原weightData初始状态
         this.weightData =  [
@@ -716,8 +729,8 @@ export default {
       }
 
       if (isSymbol) {
-        clearIndicatorIfMatch(this.sentimentList,'indicator_1_url','indicator_1')
-        clearIndicatorIfMatch(this.sentimentList,'indicator_2_url','indicator_2')
+        clearIndicatorIfMatch(this.symbolList,'indicator_1_url','indicator_1', 'Symbol')
+        clearIndicatorIfMatch(this.symbolList,'indicator_2_url','indicator_2', 'Symbol')
 
         // 还原weightData初始状态
         this.weightData =  [
@@ -726,10 +739,10 @@ export default {
       }
 
       if(isWIC) {
-        clearIndicatorIfMatch(this.symbolList, 'indicator_1_url', 'indicator_1')
-        clearIndicatorIfMatch(this.symbolList, 'indicator_2_url', 'indicator_2')
-        clearIndicatorIfMatch(this.sentimentList,'indicator_1_url','indicator_1')
-        clearIndicatorIfMatch(this.sentimentList,'indicator_2_url','indicator_2')
+        this.data['indicator_1'] = ''
+        this.data['indicator_1_url'] = ''
+        this.data['indicator_2'] = ''
+        this.data['indicator_2_url'] = ''
       }
   
       const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']

@@ -112,10 +112,18 @@
 				</el-table-column>
 			</template>
       <el-table-column
-      min-width="40"
       >
 				<template slot-scope="scope">
-          <el-button class="delete-btn" round size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteIndicator(scope.row)"></el-button>
+          <el-popconfirm
+        confirm-button-text="yes"
+        cancel-button-text="no"
+        icon="el-icon-info"
+        icon-color="red"
+        title="Are you sure you want to delete? This will impact the related backtesting that utilizes this indicator"
+        @confirm="deleteIndicator(scope.row)"
+      >
+          <el-button class="delete-btn" slot="reference" round size="mini" type="primary" icon="el-icon-delete"></el-button>
+      </el-popconfirm>
         </template>
       </el-table-column>
 		</el-table>
