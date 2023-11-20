@@ -393,7 +393,6 @@ export default {
           const holiday = this.options[this.data.holidays].label
           const allowedHoliday = this.options[allowedOptions[0]].label
           this.popUpMsgBox(`Not ${holiday} yet this year, automatically switched to ${allowedHoliday}`)
-          
           this.data.holidays = allowedOptions[0]
         }
 
