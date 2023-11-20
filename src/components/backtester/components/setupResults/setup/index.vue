@@ -99,8 +99,8 @@ export default {
 			isRiskControl: true
 		}
 	},
-	beforeRouteEnter(to, _, next) {
-	if (to.path === '/backtester/sr/setup') {
+	beforeRouteEnter(to, from, next) {
+	if (to.path === '/backtester/sr/setup' && from.path.includes('/backtester')) {
     next(async _this => {
 			_this.setSetUpLoadingSetting(true, false, 0, 'Loading...')
 			_this.$refs['entryChild'].clearForm()
@@ -137,7 +137,7 @@ export default {
 			CIQ.hideCover()
     });
   } else {
-    next();
+    next(_this => {_this.$store.state.form.rowDataForDisplay = {}});
   }
 	},
 	// beforeRouteLeave(to, from, next) {

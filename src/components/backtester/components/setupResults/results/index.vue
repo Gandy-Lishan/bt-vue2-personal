@@ -35,8 +35,8 @@ export default {
       backtestEditData: {}
     }
   },
-  beforeRouteEnter(to, _, next) {
-  if (to.path === '/backtester/sr/results') {
+  beforeRouteEnter(to, from, next) {
+  if (to.path === '/backtester/sr/results' && from.path.includes('/backtester')) {
     next(async _this => {
 			_this.setResultsLoadingSetting(true, false, 0, 'Loading data...')
       if(to.params.usedFor && to.params.usedFor === 'showBTResults'){
@@ -58,6 +58,7 @@ export default {
       CIQ.hideCover()
     });
     } else {
+      next(_this => {_this.$store.state.form.rowDataForDisplay = {}});
       next();
     }
   },

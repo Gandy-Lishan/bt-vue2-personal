@@ -7,6 +7,9 @@
  import {config} from "../feeds/STDataFeedAccessUrl.js"
  //import "./STMovingAverages.js"
  import qs from 'querystring'
+ import {
+    searchIndicator
+  } from '@/service/service'
 
  let __st_js_loadIndicator_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -372,7 +375,7 @@
  
  
  
-     return new Promise(resolve=>{
+     return new Promise(async resolve=>{
          for(var i in indicatorList){
              // 是tech
              if(CIQ.findBuiltinTechIndicator(null,indicatorList[i]) || CIQ.findSymbolIndicator(indicatorList[i],null)){
@@ -452,6 +455,9 @@
              // 之后加一个symbol判断和小李新senti判断
             /********************lishan modify start*************************/
             if(CIQ.isUserIndicator(indicatorList[i]) || CIQ.isOwnIndicator(indicatorList[i])){
+                let res = await searchIndicator(indicatorList[i].split('CREATE')[0]);
+                const ownIndicatorInfo = res?.data?.results[0];
+
             /********************lishan modify end*************************/
                  var newStudy = {
                      inputs: { Period: 13, Overlay: false},
@@ -460,9 +466,9 @@
                      panelHeight:indicatorHeight,
                      parameters: { init: {
                          studyOverZonesEnabled: false,
-                         studyOverBoughtValue: 999,
+                         studyOverBoughtValue: ownIndicatorInfo?ownIndicatorInfo.lower_extreme_value:999,
                          studyOverBoughtColor: "#FF0000",
-                         studyOverSoldValue: 999,
+                         studyOverSoldValue: ownIndicatorInfo?ownIndicatorInfo.upper_extreme_value:-999,
                          studyOverSoldColor: "#00DD00",
                      }},
                      attributes:{
