@@ -264,9 +264,9 @@ export default {
         })
         .add()
         .align({
-          align: 'right',
+          align: 'left',
           verticalAlign: 'bottom',
-          x: -200, // 可以根据需要调整水印相对于右下角的位置
+          x: 0, // 可以根据需要调整水印相对于右下角的位置
           y: -50, // 可以根据需要调整水印相对于右下角的位置
         }, false, 'plotBox');
 
