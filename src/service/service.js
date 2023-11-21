@@ -562,7 +562,7 @@ export function getMyIndicatorsList(page) {
 	})
 }
 export function getAllMyIndicatorsList(page, callback) {
-	const url = `/dev/my_indicator/get_records/?page=`
+	const url = `/dev/my_indicator/get_records/?ordering=-create_date&page=`
 
 	return new Promise((resolve, reject) => {
 		const allData = []
@@ -625,9 +625,9 @@ export function delMyIndicator(url) {
 			})
 	})
 }
-export function searchIndicator(name, calculate, combine_type, timeframe) {
-	let url = '/dev/my_indicator/get_records/?'
-	if (name) url += `name=${name}`
+export function searchIndicator(name, calculate, combine_type, timeframe, page) {
+	let url = '/dev/my_indicator/get_records/?ordering=-create_date'
+	if (name) url += `&name=${name}`
 	if (calculate) {
 		if (name) url += `&`
 		url += `calculate=${calculate}`
@@ -640,7 +640,10 @@ export function searchIndicator(name, calculate, combine_type, timeframe) {
 		if (name || calculate || combine_type) url += `&`
 		url += `timeframe=${timeframe}`
 	}
-	if(!name && !calculate && !combine_type && !timeframe) url = '/dev/my_indicator/get_records'
+	if(page) {
+		if (name || calculate || combine_type || page) url += `&`
+		url += `page=${page}`
+	}
 
 	return new Promise((resolve, reject) => {
 		axios

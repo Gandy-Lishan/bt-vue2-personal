@@ -286,7 +286,7 @@ import {
   csvFileRead,
   getPairData,
   csvFilePagingRead,
-  searchIndicator
+  getAllMyIndicatorsList
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
@@ -598,33 +598,27 @@ export default {
         )
       }
     },
-    indicatorUsersSearch: throttle(function(queryString, cb){this._indicatorUsersSearch(queryString, cb)}, 500),
-    async _indicatorUsersSearch(queryString, cb) {
-      try {
-        let res = null;
-        let list = []
-        if ((!queryString && !this.createdIndicatorOptions.length) || queryString) {
-          res = await searchIndicator(queryString);
-          list = res?.data?.results;
-        }
-        list = list.map(item => ({
-          ...item,
-          url: item.url,
-          value: item.name,
-          file_name: item.name,
-          file_id: `${item.name}CREATE${item.url}`,
-          updated: item.timeframe
-        }));
-
-        list.sort(function (a, b) {
-          return a.value.localeCompare(b.value);
-        });
-        if(!queryString && !this.createdIndicatorOptions.length) this.createdIndicatorOptions = list
-
-        const results = queryString ? list.filter(this.createStateUsersFilter(queryString)) : this.createdIndicatorOptions;
-        cb(results);
-      } catch (error) {
-        console.error('Error fetching indicator results:', error);
+    async indicatorUsersSearch(queryString, cb) {
+      if(this.createdIndicatorOptions.length === 0) {
+        //this.createdIndicatorOptions = await getAllMyIndicatorsList(1)
+        await getAllMyIndicatorsList(1, (data) => {
+          this.createdIndicatorOptions = data
+          const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
+            var results = queryString
+              ? list.filter(
+                this.createStateUsersFilter(queryString)
+              )
+              : list
+            cb(results)
+        })
+      }else{
+        const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
+            var results = queryString
+              ? list.filter(
+                this.createStateUsersFilter(queryString)
+              )
+              : list
+            cb(results)
       }
     },
     createStateUsersFilter(queryString) {
