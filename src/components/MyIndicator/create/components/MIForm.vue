@@ -1002,6 +1002,7 @@ export default {
       row.weightValidErrMsg = validatePercentageRule(_, row.weight)
     },
     handleRowSelect(item, row) {
+      
       console.log('item', item, row)
       row.indicator = item.label
       if(item.type == 'Symbol') row.indicator = item.url

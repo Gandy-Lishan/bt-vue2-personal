@@ -235,7 +235,6 @@ export default {
       return data
     },
     getIncludedData(item, sentimentList, symbolList) {
-
       const url_1 = item.indicator_1_url
       const url_2 = item.indicator_2_url
       const typeAttribute = item.combine_type || 'indicator'
@@ -248,7 +247,7 @@ export default {
       const former = indicator_1 || symbol_1;
       const latter = indicator_2 || symbol_2;
       const former_url = indicator_1 || symbol_1_url;
-      const latter_url = indicator_1 || symbol_2_url;
+      const latter_url = indicator_2 || symbol_2_url;
       const maList = item.ma.split('_');
       const ma1 = maList[0] !== '1' ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
       const ma2 = maList[1] !== '1' ? ` Moving Average ${maList[1].includes('e') ? maList[1].toString().replace(/e$/, '') : maList[1]}` : '';
