@@ -461,6 +461,7 @@ export default {
         value,
         type,
         fieldName,
+        field,
         showInput,
         this.data.categories
         ) 
