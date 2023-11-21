@@ -711,6 +711,21 @@ export function editMyIndicators(data, rowUrl) {
 	})
 }
 
+export function getRelatedBacktest(url) {
+	let path = `/dev/my_indicator/relate_backtests/?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
 export function getSeasonalityData(url) {
 	return new Promise((resolve, reject) => {
 		axios
