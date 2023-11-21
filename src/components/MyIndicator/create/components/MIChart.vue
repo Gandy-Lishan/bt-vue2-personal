@@ -49,7 +49,7 @@ export default {
 		},
 	},
 	created() {
-		CIQ.addCover()
+		
 	},
 	beforeDestroy() {
 		// 清除预览和编辑产生的ownIndicator serie缓存
