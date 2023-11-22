@@ -538,17 +538,27 @@
 
     CIQ.addOwnIndicatorMAStudy = function(value,type,field,index,showInput,categories) {
         // 更新ma前移除当前field的旧ma
+        let panel
         for (var studyInstanceName in CIQ.stxx.layout?.studies) {
+            let sd = CIQ.stxx.layout.studies[studyInstanceName]
             if (
-                CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == field &&
-                CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA' &&
-                CIQ.stxx.layout.studies[studyInstanceName].parameters.index == index
+                sd.inputs.Field == field &&
+                sd.type == 'ST MA' &&
+                sd.parameters.index == index
             ) {
               // 直接判断是否为st ma
               CIQ.Studies.removeStudy(
                 CIQ.stxx,
-                CIQ.stxx.layout.studies[studyInstanceName]
+                sd
               )
+            }
+
+            // 找到对应indicator的panel name
+            if(
+                sd.type == field && 
+                sd.parameters.index == index
+            ) {
+                panel = sd.panel
             }
           }
         if(!showInput || !field) return
@@ -558,10 +568,10 @@
             Period: value,
             display: 'ST MA',
             Field: field
-          }, 
+        }, 
           { MA: stma_color },
           { index: index },
-          categories.includes('Indicator')?null:field
+          panel
         )
     }
     CIQ.editOwnIndicatorExtremeLines = function(value,field){
