@@ -757,7 +757,7 @@ export default {
 
       this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
-    handleSelect(item, source) {
+    async handleSelect(item, source) {
       console.log('item', item,source)
       const type = item.type
 
@@ -765,14 +765,13 @@ export default {
         this.data[source] = item.label
         this.data[`${source}_url`] = item.url
         // this.data.time_frame = item.updated;
-        this.changeIndicator(this.data)
       }
 
       const selectSymbol = (item) => {
         this.data[source] = item.url
         this.data[`${source}_url`] = item.url
-        this.changeSymbol(this.data)
       }
+
 
       if (type === 'Indicator') {
         if (this.data.categories.includes('Indicator')) {
@@ -799,6 +798,9 @@ export default {
           selectSymbol(item)
         }
       }
+
+      // 用promise包裹indicator加载流程确保其在stma加载之前执行
+      await this.$store.dispatch('chart/set_miFormStateChange',this.data)
 
       if(type === 'Indicator') {
         this.data.time_frame = this.findMaxFreq() 
@@ -877,14 +879,6 @@ export default {
 				}
 			}
 			return previousTimeframe
-    },
-    changeSymbol(data) {
-      // 改变 chartiqIQ 中的 symbol
-      this.$store.dispatch('chart/set_miFormStateChange',this.data)
-    },
-    changeIndicator(data) {
-      // 改变 chartiqIQ 中的 indicator
-      this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
     async displayData(data) {
 
