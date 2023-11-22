@@ -137,7 +137,7 @@ export default {
 			CIQ.hideCover()
     });
   } else {
-    next(_this => {_this.$store.state.form.rowDataForDisplay = {}; _this.$store.form.cachedBTBasicInfoData = {}});
+    next(_this => {_this.$store.state.form.rowDataForDisplay = {}; _this.$store.state.form.cachedBTBasicInfoData = {}});
   }
 	},
 	// beforeRouteLeave(to, from, next) {
