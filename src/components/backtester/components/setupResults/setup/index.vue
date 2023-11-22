@@ -114,8 +114,8 @@ export default {
       }else {
         // 说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存
         console.log('说明不是路由跳转，而是从其他界面访问过来的，这个时候先用编辑数据没有再读缓存')
-        let editData = _this.$store.getters.rowDataForDisplay
-        let cachedData = _this.$store.getters.cachedBTBasicInfoData
+        let editData = _this.$store.state.form.rowDataForDisplay // scope.row 点击过来的缓存
+        let cachedData = _this.$store.state.form.cachedBTBasicInfoData // 回测运行结束的缓存
 				let dataToUse = editData || cachedData
 				console.log('editData', editData)
 				console.log('cachedData', cachedData)
@@ -137,7 +137,7 @@ export default {
 			CIQ.hideCover()
     });
   } else {
-    next(_this => {_this.$store.state.form.rowDataForDisplay = {}});
+    next(_this => {_this.$store.state.form.rowDataForDisplay = {}; _this.$store.state.form.cachedBTBasicInfoData = {}});
   }
 	},
 	// beforeRouteLeave(to, from, next) {

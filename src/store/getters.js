@@ -10,7 +10,7 @@ const getters = {
 	cachedBTBasicInfoData: state => state.form.cachedBTBasicInfoData,
 	getBacktestZScoreResult: state => state.form.backtestZScoreResult,
 	getBacktestSymbol: state => state.form.backtestSymbol,
-
+	getCachedScopedRowDataImmutable: state => state.form.cachedScopedRowDataImmutable,
 	// chart
 	getExtremeValue: state => state.chart.extremeValue,
 	getSpanPeriod: state => state.chart.spanPeriod,

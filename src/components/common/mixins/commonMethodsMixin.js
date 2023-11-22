@@ -38,7 +38,8 @@ export const CommonMethodsMixin = {
 				if (data.hasOwnProperty('old_uuid')) delete data.old_uuid
 			}
 			data.commission = (data.commission * 100).toFixed(2)
-			this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', data)
+			this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', data) 
+			this.$store.commit('form/CACHED_SCOPED_ROW_IMMUTABLE', data)
 			// 在发送组件中进行路由跳转并传递参数
 			this.$store.commit('form/getBacktestSymbol', data.symbol)
 			this.$store.dispatch('states/set_isMarkerShown_flag', false)
@@ -61,6 +62,7 @@ export const CommonMethodsMixin = {
 			}
 			data.commission = (data.commission * 100).toFixed(2)
 			this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', data)
+			this.$store.commit('form/CACHED_SCOPED_ROW_IMMUTABLE', data)
 			//  Restore indicator layout
 			document.getElementsByClassName('ciq-period')[0].style.display = ''
 			this.$store.commit('form/getBacktestSymbol', data.symbol)
@@ -849,6 +851,7 @@ export const CommonMethodsMixin = {
 						: data.result
 					// 存入缓存数据，因为路由跳转时表单数据会丢失
 					console.log('轮询后保存编辑数据', data)
+					// 回测运行结束之后存缓存不可变缓存
 					_this.$store.dispatch('form/cached_BT_basic_info_data', data)
 					_this.viewBacktestResults(data)
 					// 回测跑完不一定要调用这个去展示 set up form， 因为刚跑完这个 set up form 肯定是有数据的

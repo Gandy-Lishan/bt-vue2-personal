@@ -48,7 +48,7 @@ export default {
       }else {
         // 说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存
         console.log('说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存')
-        const editData = _this.$store.getters.rowDataForDisplay
+        const editData = _this.$store.getters.getCachedScopedRowDataImmutable
         if (Object.keys(editData).length !== 0) {
           _this.backtestEditData = isJson(editData) ? JSON.parse(editData) : editData
           await _this.$refs.performanceChild.getResultData(editData)
@@ -58,7 +58,7 @@ export default {
       CIQ.hideCover()
     });
     } else {
-      next(_this => {_this.$store.state.form.rowDataForDisplay = {}});
+      next(_this => {_this.$store.state.form.getCachedScopedRowDataImmutable = {}});
       next();
     }
   },
