@@ -14,6 +14,7 @@
 
     CIQ.displayWeightOwnIndicator = async function(previousState,updatedState,combinedStudy){
         CIQ.addCover()
+        CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
         
         //编辑时对内容修改或者preview应该移除生成的indicator
         if(!combinedStudy){
@@ -46,12 +47,13 @@
                 symbol: symbolList.length?symbolList[0].indicator_url:'SPX', 
                 indicator:[...indicatorList.map(item=>item.indicator_url),combinedStudy] ,
                 // 这边先写死范围，防止其他indicator无法pagination
-                //startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+                startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
             },
             function () {
                 // symbol加载，识别第一个为默认图标symbol,其它symbol作为serie加载,必须遍历加载，不然很难管理
                 manageSymbolSerie(symbolList);
                 CIQ.hideCover()
+                CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
             }
         ) 
         
@@ -204,6 +206,7 @@
     // 以下管理user's own indicator 图表函数
     CIQ.updateUserOwnIndicator = function(newData,oldData){
         CIQ.addCover()
+        CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
 
         //编辑时对内容修改或者preview应该移除生成的indicator
         for (var studyInstanceName in CIQ.stxx.layout.studies) { 
@@ -222,14 +225,20 @@
                 CIQ.stxx.removeSeries(series);
             }
             CIQ.hideCover()
+            CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
             return
         }
         
         if(newData.categories.includes('Symbol')){
             if(oldData.indicator1.url != newData.indicator1.url){
                 CIQ.objIndicator = []
-                CIQ.stxx.loadChart({symbol: newData.indicator1.url},()=>{
+                CIQ.stxx.loadChart({
+                    symbol: newData.indicator1.url,
+                    startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
+                    endDate:new Date(),
+                },()=>{
                     CIQ.hideCover()
+                    CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
                 })
             }
             if(oldData.indicator2.url != newData.indicator2.url){
@@ -262,6 +271,7 @@
                     //shareYAxis: true
                 },()=>{
                     CIQ.hideCover()
+                    CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
                 });
             }
         }
@@ -286,7 +296,6 @@
                 addSingleIndicator([newData.indicator1.url,newData.indicator2.url],newData.indicator2.url);
             }
         }
-        CIQ.hideCover()
     }
 
     // 预览生成的新indicator
@@ -302,6 +311,8 @@
     // 从列表进入后还原new indicator的设定和新的indicator
     // 我这里不用重新触发inputSelectHandler的思路来复现图表，因为这样会导致图表加载流程冗余
     CIQ.displayUserOwnIndicatorLayout = async function(_newVal){
+        CIQ.addCover()
+        CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
         const newData = {
             categories : _newVal.categories,
             indicator1 : {name:_newVal.former,url:_newVal.indicator_1_url},
@@ -316,8 +327,13 @@
                 // indicator1,包括主symbol和new indicator
                 CIQ.objIndicator = []
                 await getUserOwnIndicatorMatedata(newData.url,extremeLines)
-                CIQ.stxx.loadChart({symbol: newData.indicator1.url, indicator:[newData.url]}, function(){
+                CIQ.stxx.loadChart({
+                    symbol: newData.indicator1.url, 
+                    indicator:[newData.url],
+                    startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+                }, function(){
                     CIQ.hideCover()
+                    CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
                 })
 
                 //indicator2,即comparison symbol
@@ -343,9 +359,14 @@
             await getUserOwnIndicatorMatedata(newData.indicator2.url)
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)
-            CIQ.stxx.loadChart(	{ symbol: 'SPX', indicator:[newData.indicator1.url,newData.indicator2.url,newData.url]}, function(){
+            CIQ.stxx.loadChart(	{ 
+                symbol: 'SPX', 
+                indicator:[newData.indicator1.url,newData.indicator2.url,newData.url],
+                startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+            }, function(){
                 displayOwnIndicatorMAStudies(newData)
                 CIQ.hideCover()
+                CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
             }) 
         }
 
@@ -423,8 +444,13 @@
 
         // fetch indicator information and add studies to chart
         await getUserOwnIndicatorMatedata(indicator,extremeLines)
-        CIQ.stxx.loadChart(	{ symbol: symbol?symbol:'SPX', indicator:indicatorList},()=>{
+        CIQ.stxx.loadChart(	{ 
+            symbol: symbol?symbol:'SPX', 
+            indicator:indicatorList,
+            startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+        },()=>{
             CIQ.hideCover()
+            CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
         }) 
     }
     const getUserOwnIndicatorMatedata = async function(indicator,extremeLines){
@@ -437,7 +463,7 @@
                         outputs: 
                         {indicatorClose:color,description: '',url:indicator},
                         parameters: { init: {
-                            studyOverZonesEnabled: true,
+                            studyOverZonesEnabled: false,
                             studyOverBoughtValue: extremeLines?extremeLines.op:NaN,
                             studyOverBoughtColor: "#FF0000",
                             studyOverSoldValue: extremeLines?extremeLines.ep:NaN,

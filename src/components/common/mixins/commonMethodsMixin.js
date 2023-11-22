@@ -662,7 +662,9 @@ export const CommonMethodsMixin = {
 			this.$store.commit('chart/getMA', data.activatedMA)
 			// 暂定，读取回测携带的ma位置和信息
 			this.$store.commit('chart/getMALayout', data.activatedMALayout)
-			//this.$store.commit('chart/setTechSD', data.savedTechSD)
+
+			// 导入btv1时不调用这个
+			this.$store.commit('chart/setTechSD', data.savedTechSD)
 
 			switch (freq) {
 				case 'Daily': {
