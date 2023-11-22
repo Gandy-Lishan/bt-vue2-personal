@@ -461,7 +461,7 @@ export default {
         value,
         type,
         fieldName,
-        field,
+        field == 'ma1'?0:1,
         showInput,
         this.data.categories
         ) 
