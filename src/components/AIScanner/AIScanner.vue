@@ -178,7 +178,7 @@ export default {
 			return searchResult
 					.filter(item=>item["Direction"] == 'Short');
 		}
-		return searchResult
+		return searchResult.filter(item=>item["Direction"] == 'Long');
 	},
 	getSearchresult(){
 		if(this.searchItem){

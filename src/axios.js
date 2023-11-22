@@ -110,56 +110,72 @@ instance.interceptors.response.use(
 		return response
 	},
 	function interceptor(err) {
-		console.log('报错了。。。。', err)
-		const url = err?.message?.data?.config?.url
-		console.log('错误的URL：', url)
-		const allowedListUrl = ['backtest', 'analyst', 'strategy', 'upload', 'runbt']
-		const isAllowedUrl = allowedListUrl.some(item => url?.includes(item))
-		if (isAllowedUrl) {
-			store.commit('form/SET_LIST_LOADING', false);
-			store.commit('form/SET_SETUP_LOADING', {
-				isSetupLoading: false,
-				percentage: 0,
-				progressText: ''
-			})
+		// 请求失败，进行重试
+		const config = err.config;
+		if (!config || !config.retry) return Promise.reject(err);
+
+		config.retryCount = config.retryCount || 0;
+		if (config.retryCount >= config.retry) {
+			// 达到最大重试次数，直接返回错误
+			console.log('报错了。。。。', err)
+			const url = err?.message?.data?.config?.url
+			console.log('错误的URL：', url)
+			const allowedListUrl = ['backtest', 'analyst', 'strategy', 'upload', 'runbt']
+			const isAllowedUrl = allowedListUrl.some(item => url?.includes(item))
+			if (isAllowedUrl) {
+				store.commit('form/SET_LIST_LOADING', false);
+				store.commit('form/SET_SETUP_LOADING', {
+					isSetupLoading: false,
+					percentage: 0,
+					progressText: ''
+				})
+			}
+	
+			// 取消权限控制
+			// if (err?.response?.status == 410) {
+			// 	try{
+			// 		const desc = err.response.config.url.indexOf('ai_scanner')==-1?' Backtester services':' ScannerAi services'
+			// 		store.commit('states/setErrorMessage404',{status:err.response.status,message:desc})
+			// 		router.push("/404")
+			// 	}catch(error){
+			// 		// 如果返回的属性不全，比如测试请求返回里只存在response.status
+			// 		store.commit('states/setErrorMessage404',{status:err.response.status,message:''})
+			// 		router.push("/404")
+			// 	}
+			// 	return Promise.reject(err)
+			// }
+			switch (err?.response?.status) {
+				case 401:
+					_this.popUpMsgBox('Sample backtest can only be viewed but not run')
+					break;
+				case 403:
+					_this.popUpMsgBox('Permission denied')
+					break;
+				case 404:
+					console.log('url 找不到,独自处理')
+					break;
+				case 410:
+					_this.popUpMsgBox('Backtest is not purchased')
+					break;
+				case 500:
+				case 503:
+					_this.popUpMsgBox('The internal server is busy, please try again later')
+					break;
+				default:
+					break;
+			}
+	
+			// 不执行重试逻辑，直接将错误传递给.catch()处理程序
+			return Promise.reject(err)
 		}
 
-		// 取消权限控制
-		// if (err?.response?.status == 410) {
-		// 	try{
-		// 		const desc = err.response.config.url.indexOf('ai_scanner')==-1?' Backtester services':' ScannerAi services'
-		// 		store.commit('states/setErrorMessage404',{status:err.response.status,message:desc})
-		// 		router.push("/404")
-		// 	}catch(error){
-		// 		// 如果返回的属性不全，比如测试请求返回里只存在response.status
-		// 		store.commit('states/setErrorMessage404',{status:err.response.status,message:''})
-		// 		router.push("/404")
-		// 	}
-		// 	return Promise.reject(err)
-		// }
-		switch (err?.response?.status) {
-			case 401:
-				_this.popUpMsgBox('Sample backtest can only be viewed but not run')
-				break;
-			case 403:
-				_this.popUpMsgBox('Permission denied')
-				break;
-			case 404:
-				console.log('url 找不到,独自处理')
-				break;
-			case 410:
-				_this.popUpMsgBox('Backtest is not purchased')
-				break;
-			case 500:
-			case 503:
-				_this.popUpMsgBox('The internal server is busy, please try again later')
-				break;
-			default:
-				break;
-		}
+		config.retryCount++;
 
-		// 不执行重试逻辑，直接将错误传递给.catch()处理程序
-		return Promise.reject(err)
+		// 创建新的 Promise 来进行重试
+		return new Promise((resolve) => {
+			console.log('请求失败，正在进行重试...')
+			setTimeout(() => resolve(instance(config)), config.retryDelay || 0);
+		});
 	}
 )
 

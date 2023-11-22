@@ -5,7 +5,6 @@
 const quoteFeedSimulator = {};
 import {config} from "./STDataFeedAccessUrl.js"
 import {CIQ} from "chartiq/js/standard.js"
-import axios from "axios"
 import jutils from 'jutils-src'
 import LRUCache from 'lru-cache';
 import _this from "@/main";

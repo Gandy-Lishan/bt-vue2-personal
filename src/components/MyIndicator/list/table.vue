@@ -115,13 +115,13 @@
       >
 				<template slot-scope="scope">
           <el-popconfirm
-        confirm-button-text="yes"
-        cancel-button-text="no"
-        icon="el-icon-info"
-        icon-color="red"
-        title="Are you sure you want to delete? This will impact the related backtesting that utilizes this indicator"
-        @confirm="deleteIndicator(scope.row)"
-      >
+            confirm-button-text="yes"
+            cancel-button-text="no"
+            icon="el-icon-info"
+            icon-color="red"
+            @confirm="deleteIndicator(scope.row)"
+            :title="scope.row.popTitle"
+          >
           <el-button class="delete-btn" slot="reference" round size="mini" type="primary" icon="el-icon-delete"></el-button>
       </el-popconfirm>
         </template>
@@ -137,7 +137,7 @@
 </template>
 
 <script>
-import { delMyIndicator, getMyIndicatorsList, searchIndicator } from '@/service/service'
+import { delMyIndicator, getMyIndicatorsList, searchIndicator, getRelatedBacktest, deleteBacktest } from '@/service/service'
 import { capitalizeFirstLetter, isJson } from "@/utils"
 
 export default {
@@ -186,14 +186,15 @@ export default {
       }
       console.log('listRes', listRes)
       this.total = listRes.data.count
-      this.tableData = this.processRowData(listRes.data.results)
+      this.tableData = await this.processRowData(listRes.data.results)
       this.loading = false
     },
-    processRowData(resData) {
+    async processRowData(resData) {
       const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
       const symbolList = JSON.parse(localStorage.getItem('symbolList'))
 
-      let data = resData.map(item => {
+      let promise = resData.map(async item => {
+      const {popTitle, idList} = await this.getRelated(item)
       if (['ratio', 'spread'].includes(item.calculate)) {
         const {included, included_url, former, latter, former_url, latter_url, type} = this.getIncludedData(item, sentimentList, symbolList);
         return {
@@ -208,6 +209,8 @@ export default {
           latter_url,
           time_frame: capitalizeFirstLetter(item.timeframe),
           type,
+          popTitle,
+          idList
         };
       }
       if (item.calculate === 'weight_combination' && (item.indicator_weight && item.mul_indicator)) {
@@ -223,11 +226,13 @@ export default {
           key: item.url,
           time_frame: capitalizeFirstLetter(item.timeframe),
           weightData,
-          type: null
+          type: null,
+          popTitle,
+          idList
         };
       }
     });
-    
+      let data = await Promise.all(promise);
       data = data.filter(
 			item => item !== null && item !== undefined && item !== ''
 		  )
@@ -235,7 +240,6 @@ export default {
       return data
     },
     getIncludedData(item, sentimentList, symbolList) {
-
       const url_1 = item.indicator_1_url
       const url_2 = item.indicator_2_url
       const typeAttribute = item.combine_type || 'indicator'
@@ -248,7 +252,7 @@ export default {
       const former = indicator_1 || symbol_1;
       const latter = indicator_2 || symbol_2;
       const former_url = indicator_1 || symbol_1_url;
-      const latter_url = indicator_1 || symbol_2_url;
+      const latter_url = indicator_2 || symbol_2_url;
       const maList = item.ma.split('_');
       const ma1 = maList[0] !== '1' ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
       const ma2 = maList[1] !== '1' ? ` Moving Average ${maList[1].includes('e') ? maList[1].toString().replace(/e$/, '') : maList[1]}` : '';
@@ -382,6 +386,17 @@ export default {
         }
       })
     },
+    async getRelated(item) {
+      const url = item.url
+      const res = await getRelatedBacktest(url)
+      console.log('res', res)
+      const count = res.data.count
+      if(count == 0) return {popTitle: `Confirm deletion of this custom indicator?`, idList: []}
+      const results = res?.data?.results
+      const names = results.map(ele => ele.name).join('\n,')
+      const idList = results.map(ele => ele.id)
+      return {popTitle: `Confirm deletion of this indicator and its related backtests?\n (${names})`, idList}
+    },
     async deleteIndicator(row) {
       this.loading = true
       let res = await delMyIndicator(row.url)
@@ -389,6 +404,10 @@ export default {
       if(code == 200) this.popUpMsgBox('The indicator has been removed from the list')
       if(code == 404) this.popUpMsgBox('The indicator is no longer in the list')
       if(code == 403) this.popUpMsgBox('Permission denied')
+      const list = row.idList
+      for (const id of list) {
+        await deleteBacktest(id);
+      }
       await this.getTableData(this.currentPage)
       this.loading = false
     },
