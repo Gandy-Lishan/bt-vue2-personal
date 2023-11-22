@@ -106,6 +106,8 @@ const routes = [
 			}
 		]
 	},
+	{ path: '/home/backtester', redirect: '/backtester' },
+	{ path: '/home/scannerai', redirect: '/scannerai' },
 	{
 		path: '/scannerai',
 		component: resolve =>
@@ -125,6 +127,7 @@ const routes = [
 			}
 		]
 	},
+	{ path: '/home/scannerai', component: resolve => require(['@/components/AIScanner/index.vue'], resolve), alias: '/scannerai' },
 	{
 		path: '/myindicator',
 		component: resolve =>
