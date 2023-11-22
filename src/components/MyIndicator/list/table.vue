@@ -113,17 +113,23 @@
 			</template>
       <el-table-column
       >
-				<template slot-scope="scope">
-          <el-popconfirm
-            confirm-button-text="yes"
-            cancel-button-text="no"
-            icon="el-icon-info"
-            icon-color="red"
-            @confirm="deleteIndicator(scope.row)"
-            :title="scope.row.popTitle"
-          >
-          <el-button class="delete-btn" slot="reference" round size="mini" type="primary" icon="el-icon-delete"></el-button>
-      </el-popconfirm>
+			<template slot-scope="scope">
+          <el-popover
+            placement="right"
+            width="400"
+            v-model="scope.row.visible"
+            >
+            <p>{{scope.row.popTitle}}</p>
+            <el-table :data="scope.row.BTList" v-if="scope.row.BTList.length != 0" style="margin-bottom: 10px;" size="mini">
+              <el-table-column property="date" label="Creation Time"></el-table-column>
+              <el-table-column property="name" label="Backtest Name"></el-table-column>
+            </el-table>
+            <el-row style="float: right;">
+              <el-button size="mini" round type="info" plain @click="showPopover(scope.row)">No</el-button>
+              <el-button size="mini" round type="warning" plain @click="deleteIndicator(scope.row)">Yes</el-button>
+            </el-row>
+          </el-popover>
+          <el-button class="delete-btn" slot="reference" round size="mini" type="primary" icon="el-icon-delete" @click="showPopover(scope.row)"></el-button>
         </template>
       </el-table-column>
 		</el-table>
@@ -176,6 +182,9 @@ export default {
     await this.getTableData(this.currentPage)
   },
   methods: {
+    showPopover(row) {
+        row.visible = !row.visible;
+  },
     async getTableData(page) {
       this.loading = true
       let listRes
@@ -194,7 +203,7 @@ export default {
       const symbolList = JSON.parse(localStorage.getItem('symbolList'))
 
       let promise = resData.map(async item => {
-      const {popTitle, idList} = await this.getRelated(item)
+      const {popTitle, BTList} = await this.getRelated(item)
       if (['ratio', 'spread'].includes(item.calculate)) {
         const {included, included_url, former, latter, former_url, latter_url, type} = this.getIncludedData(item, sentimentList, symbolList);
         return {
@@ -210,7 +219,8 @@ export default {
           time_frame: capitalizeFirstLetter(item.timeframe),
           type,
           popTitle,
-          idList
+          BTList,
+          visible: false
         };
       }
       if (item.calculate === 'weight_combination' && (item.indicator_weight && item.mul_indicator)) {
@@ -228,7 +238,8 @@ export default {
           weightData,
           type: null,
           popTitle,
-          idList
+          BTList,
+          visible: false
         };
       }
     });
@@ -391,11 +402,18 @@ export default {
       const res = await getRelatedBacktest(url)
       console.log('res', res)
       const count = res.data.count
-      if(count == 0) return {popTitle: `Confirm deletion of this custom indicator?`, idList: []}
+      if(count == 0) return {popTitle: `Confirm deletion of this custom indicator?`, BTList: []}
       const results = res?.data?.results
-      const names = results.map(ele => ele.name).join('\n,')
-      const idList = results.map(ele => ele.id)
-      return {popTitle: `Confirm deletion of this indicator and its related backtests?\n (${names})`, idList}
+      const BTList = results.map(ele => {
+        const dateString = ele.create_date
+        const dateTime = new Date(dateString)
+        const year = dateTime.getFullYear();
+        const month = String(dateTime.getMonth() + 1).padStart(2, '0')
+        const day = String(dateTime.getDate()).padStart(2, '0');
+        const extractedDate = `${year}-${month}-${day}`;
+        return{id:ele.id, name: ele.name, date: extractedDate}
+      })
+      return {popTitle: `Confirm deletion of this indicator and its related backtests?)`, BTList}
     },
     async deleteIndicator(row) {
       this.loading = true
@@ -404,11 +422,12 @@ export default {
       if(code == 200) this.popUpMsgBox('The indicator has been removed from the list')
       if(code == 404) this.popUpMsgBox('The indicator is no longer in the list')
       if(code == 403) this.popUpMsgBox('Permission denied')
-      const list = row.idList
-      for (const id of list) {
-        await deleteBacktest(id);
+      const list = row.BTList
+      for (const item of list) {
+        await deleteBacktest(item.id);
       }
       await this.getTableData(this.currentPage)
+      row.visible = false
       this.loading = false
     },
   }
@@ -440,5 +459,9 @@ export default {
 }
 .delete-btn:hover {
   background-color: rgb(251, 192, 92);
+}
+/deep/ .el-popover {
+  right: 100%;
+  bottom: 0;
 }
 </style>

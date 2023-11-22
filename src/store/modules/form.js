@@ -1,4 +1,4 @@
-import { timestampToTime } from '@/utils'
+import { timestampToTime, capitalizeFirstLetter } from '@/utils'
 
 const state = {
 	restoreFreq: '', //form
@@ -81,6 +81,7 @@ const state = {
 	frequencyArray: new Map(), //form
 	rowDataForDisplay: {}, // 用于保存BT运行结束后的数据,不包含 entry 和 exit
 	cachedBTBasicInfoData: {}, // 用于缓存BT基本信息
+	cachedScopedRowDataImmutable: {}, // 缓存 result 展示数据
 	isListLoading: false, // 控制 list 的loading 状态
 	setUpLoadingSetting: {
 		// 控制 setup 的loading 状态
@@ -113,6 +114,9 @@ const mutations = {
 
 	getBacktestSymbol(state, val) {
 		state.backtestSymbol = val
+		// 改变表单的 frequency
+		state.rowDataForDisplay.symbol = val
+		state.cachedBTBasicInfoData.symbol = val
 	},
 	// 重置vuex本地储存状态
 	// RESET_STORE: (state)=>{
@@ -133,6 +137,8 @@ const mutations = {
 	 */
 
 	setFreqency(state, val) {
+		state.rowDataForDisplay.frequency = capitalizeFirstLetter(val)
+		state.cachedBTBasicInfoData.frequency = capitalizeFirstLetter(val)
 		state.pairDataFreq = val
 	},
 	/**
@@ -648,6 +654,9 @@ const mutations = {
 		// 这是edit view之后保存的数据
 		state.backtestInfo.old_uuid = obj.id
 		state.backtestInfo.user_tag = obj.user_tag
+	},
+	CACHED_SCOPED_ROW_IMMUTABLE(state, obj) {
+		state.cachedScopedRowDataImmutable = obj
 	},
 	CACHED_BT_BASIC_INFO_DATA(state, obj) {
 		state.cachedBTBasicInfoData = obj
