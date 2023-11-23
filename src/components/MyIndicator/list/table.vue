@@ -125,11 +125,11 @@
               <el-table-column property="name" label="Backtest Name"></el-table-column>
             </el-table>
             <el-row style="float: right;">
-              <el-button size="mini" round type="info" plain @click="showPopover(scope.row)">No</el-button>
+              <el-button size="mini" round type="info" plain @click="scope.row.visible = !scope.row.visible">No</el-button>
               <el-button size="mini" round type="warning" plain @click="deleteIndicator(scope.row)">Yes</el-button>
             </el-row>
           </el-popover>
-          <el-button class="delete-btn" slot="reference" round size="mini" type="primary" icon="el-icon-delete" @click="showPopover(scope.row)"></el-button>
+          <el-button class="delete-btn" slot="reference" round size="mini" type="primary" icon="el-icon-delete" @click="showPopover(scope.row)" :loading="scope.row.btnLoading"></el-button>
         </template>
       </el-table-column>
 		</el-table>
@@ -182,11 +182,13 @@ export default {
     await this.getTableData(this.currentPage)
   },
   methods: {
-    showPopover(row) {
-        row.visible = !row.visible;
+    async showPopover(row) {
+        row.btnLoading = true
         const url = row.url
+        const {popTitle,BTList} = await this.getRelated(row)
+        row.visible = !row.visible;
         this.tableData = this.tableData.map((item) => {
-          return item.url != url ? {...item, visible: false} : {...item, visible: row.visible};
+          return item.url != url ? {...item, visible: false, popTitle, BTList, btnLoading: false} : {...item, visible: row.visible, popTitle, BTList, btnLoading: false};
         });
     },
     async getTableData(page) {
@@ -197,7 +199,6 @@ export default {
       } catch (error) {
         this.currentPage = 1; listRes = await getMyIndicatorsList(1)
       }
-      console.log('listRes', listRes)
       this.total = listRes.data.count
       this.tableData = await this.processRowData(listRes.data.results)
       this.loading = false
@@ -207,7 +208,6 @@ export default {
       const symbolList = JSON.parse(localStorage.getItem('symbolList'))
 
       let promise = resData.map(async item => {
-      const {popTitle, BTList} = await this.getRelated(item)
       if (['ratio', 'spread'].includes(item.calculate)) {
         const {included, included_url, former, latter, former_url, latter_url, type} = this.getIncludedData(item, sentimentList, symbolList);
         return {
@@ -222,9 +222,10 @@ export default {
           latter_url,
           time_frame: capitalizeFirstLetter(item.timeframe),
           type,
-          popTitle,
-          BTList,
-          visible: false
+          popTitle: 'Loading...',
+          BTList: [],
+          visible: false,
+          btnLoading: false,
         };
       }
       if (item.calculate === 'weight_combination' && (item.indicator_weight && item.mul_indicator)) {
@@ -241,9 +242,10 @@ export default {
           time_frame: capitalizeFirstLetter(item.timeframe),
           weightData,
           type: null,
-          popTitle,
-          BTList,
-          visible: false
+          popTitle: 'Loading...',
+          BTList: [],
+          visible: false,
+          btnLoading: false,
         };
       }
     });
