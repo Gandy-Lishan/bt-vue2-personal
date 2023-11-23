@@ -98,6 +98,7 @@ export default {
               res = await seeReport(id)
             } catch (error) {
               // 可能是没有交易，所以需要清除当前marker，防止保留上次回测的marker
+              if(error?.response?.status == 404) vm.popUpMsgBox(`The backtest has no results. Please readjust the parameters and run the backtest again`)
 
               vm.$store.dispatch('states/set_isMarkerShown_flag',false)
               console.error(error)
