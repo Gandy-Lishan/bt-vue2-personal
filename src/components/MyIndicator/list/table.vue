@@ -184,7 +184,11 @@ export default {
   methods: {
     showPopover(row) {
         row.visible = !row.visible;
-  },
+        const url = row.url
+        this.tableData = this.tableData.map((item) => {
+          return item.url != url ? {...item, visible: false} : {...item, visible: row.visible};
+        });
+    },
     async getTableData(page) {
       this.loading = true
       let listRes
