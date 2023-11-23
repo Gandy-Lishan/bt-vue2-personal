@@ -215,15 +215,18 @@
                 if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
             }
 
-            if((oldData.categories != newData.categories) && (oldData.categories.split(' ')[0] != newData.categories.split(' ')[0])){
-                // remove existing studies and series
-                for (var studyInstanceName in CIQ.stxx.layout.studies) { 
-                    var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
-                    CIQ.Studies.removeStudy(CIQ.stxx, sd); 
-                }
-                for(var s in CIQ.stxx.chart.series){
-                    var series=CIQ.stxx.chart.series[s];
-                    CIQ.stxx.removeSeries(series);
+            if(oldData.categories != newData.categories){
+                // 仅当大类切换（indicator->symbol->wic）才移除现存studies
+                if(oldData.categories.split(' ')[0] != newData.categories.split(' ')[0]){
+                    // remove existing studies and series
+                    for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+                        var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+                        CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+                    }
+                    for(var s in CIQ.stxx.chart.series){
+                        var series=CIQ.stxx.chart.series[s];
+                        CIQ.stxx.removeSeries(series);
+                    }
                 }
                 CIQ.hideCover()
                 CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
