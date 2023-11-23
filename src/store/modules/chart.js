@@ -260,7 +260,6 @@ const actions = {
 	},
 	set_miFormStateChange({ commit }, val) {
 		return new Promise(resolve => {
-		
 			const newVal = 	{
 				categories : val.categories,
 				indicator1 : {name:val.indicator_1,url:val.indicator_1_url},
@@ -272,10 +271,11 @@ const actions = {
 				indicator2 : state.miFormCategoriesIndicator2,
 			}
 
-			CIQ.updateUserOwnIndicator(newVal,oldVal)
-			
-			commit('miFormStateChange', val)
-			resolve()
+			CIQ.updateUserOwnIndicator(newVal,oldVal).then(()=>{
+				commit('miFormStateChange', val)
+				resolve()
+			})
+
 		})
 	},
 	Try(context, val) {
