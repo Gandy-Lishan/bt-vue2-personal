@@ -810,8 +810,10 @@ export default {
       console.log('当前最大的 timeframe 是', this.data.time_frame)
 
       // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
-      const checkInputRef = source=="indicator_1"?'ma1Form':'ma2Form'
-      this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,source=="indicator_1"?'ma1':'ma2',this.$refs[checkInputRef].showInput)
+      //const checkInputRef = source=="indicator_1"?'ma1Form':'ma2Form'
+      // 干脆同时刷新index0 和 1的stma，为了解决相同indicator情况下移除一个另一个的stma也被移除问题
+      this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
+      this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
     },
     findMaxFreq() {
       const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
