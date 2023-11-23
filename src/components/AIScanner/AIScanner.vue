@@ -62,9 +62,15 @@
 					<el-checkbox v-model="isPLSChecked" @change="PLSChecked"
 						>Only Show Profit Target > Stop Loss
 					</el-checkbox>
-					<el-checkbox v-model="isShowShortChecked" @change="ShowShortChecked"
+					<!-- <el-checkbox v-model="isShowShortChecked" @change="ShowShortChecked"
 						>Only Show Direction Is Short
-					</el-checkbox>
+					</el-checkbox> -->
+
+					<label for="radioGroup" class="direction">Direction: </label>
+					<el-radio-group id="radioGroup" v-model="isShowShortChecked" @change="ShowShortChecked">
+						<el-radio :label='false'>Long</el-radio>
+						<el-radio :label='true'>Short</el-radio>
+					</el-radio-group>
 				</div>
 			</div>
 		</div>
@@ -303,6 +309,11 @@ h4 {
 	margin-bottom: 20px;
 }
 
+.direction {
+	font-weight: 500;
+    color: #606266;
+    margin: 0 10px 0 20px;
+}
 
 // filter
 .table-header {
