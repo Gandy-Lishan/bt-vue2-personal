@@ -481,6 +481,7 @@ export default {
 		},
 		async displaySetUpForm(data) {
 			/* 填充和展示 Set Up 表单的数据 */
+			if(!data.id) return
 			let _this = this
 			_this.$refs['basicInfo'].setEditData(data)
 			/*
