@@ -417,7 +417,7 @@ export default {
         const extractedDate = `${year}-${month}-${day}`;
         return{id:ele.id, name: ele.name, date: extractedDate}
       })
-      return {popTitle: `Confirm deletion of this indicator and its related backtests?)`, BTList}
+      return {popTitle: `Confirm deletion of this indicator and its related backtests?`, BTList}
     },
     async deleteIndicator(row) {
       this.loading = true
