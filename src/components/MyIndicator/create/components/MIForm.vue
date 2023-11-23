@@ -1031,6 +1031,7 @@ export default {
       else {weight = ''}
       this.weightData.push({ weight, indicator: '', indicator_url: '', weightValidErrMsg: '' });
       */
+     if(this.weightData.length == 10) {this.popUpMsgBox(`Up to 10 rows can be added`); return}
       this.weightData.push({ weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: '' });
     },
     deleteRow(index) {
