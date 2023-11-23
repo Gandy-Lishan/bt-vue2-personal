@@ -204,98 +204,114 @@
 
 
     // 以下管理user's own indicator 图表函数
-    CIQ.updateUserOwnIndicator = function(newData,oldData){
-        CIQ.addCover()
-        CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
-
-        //编辑时对内容修改或者preview应该移除生成的indicator
-        for (var studyInstanceName in CIQ.stxx.layout.studies) { 
-            var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
-            if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
-        }
-
-        if((oldData.categories != newData.categories) && (oldData.categories.split(' ')[0] != newData.categories.split(' ')[0])){
-            // remove existing studies and series
+    CIQ.updateUserOwnIndicator = async function(newData,oldData){
+        await new Promise((resolve) => {
+            CIQ.addCover()
+            CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
+            //编辑时对内容修改或者preview应该移除生成的indicator
+            
             for (var studyInstanceName in CIQ.stxx.layout.studies) { 
                 var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
-                CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+                if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
             }
-            for(var s in CIQ.stxx.chart.series){
-                var series=CIQ.stxx.chart.series[s];
-                CIQ.stxx.removeSeries(series);
-            }
-            CIQ.hideCover()
-            CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
-            return
-        }
-        
-        if(newData.categories.includes('Symbol')){
-            if(oldData.indicator1.url != newData.indicator1.url){
-                CIQ.objIndicator = []
-                CIQ.stxx.loadChart({
-                    symbol: newData.indicator1.url,
-                    startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
-                    endDate:new Date(),
-                },()=>{
-                    CIQ.hideCover()
-                    CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
-                })
-            }
-            if(oldData.indicator2.url != newData.indicator2.url){
-                var series = CIQ.stxx.chart.series[oldData.indicator2.url];
-                // 移除旧的field的ma 
-                for (var studyInstanceName in CIQ.stxx.layout.studies) {
-                    if (
-                        CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == series.id &&
-                        CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'
-                    ) {
-                      // 直接判断是否为st ma
-                      CIQ.Studies.removeStudy(
-                        CIQ.stxx,
-                        CIQ.stxx.layout.studies[studyInstanceName]
-                      )
-                    }
-                  }
-                CIQ.stxx.removeSeries(series);
 
-                CIQ.stxx.addSeries(newData.indicator2.url, {
-                    display:newData.indicator2.name, 
-                    isComparison: false, 
-                    color: "#368DF0",
-                    //panel:newData.indicator2.url,
-                    // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
-                    yAxis:{ 
-                        position:"left",
-                        textStyle:"#FFBE00"
-                    },
-                    //shareYAxis: true
-                },()=>{
-                    CIQ.hideCover()
-                    CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
-                });
-            }
-        }
-        
-        if(newData.categories.includes('Indicator')){
-            if(oldData.indicator1.url != newData.indicator1.url){
-                for (var studyInstanceName in CIQ.stxx.layout.studies) {
+            if((oldData.categories != newData.categories) && (oldData.categories.split(' ')[0] != newData.categories.split(' ')[0])){
+                // remove existing studies and series
+                for (var studyInstanceName in CIQ.stxx.layout.studies) { 
                     var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
-                    if (sd.type== oldData.indicator1.url){
-                        CIQ.Studies.removeStudy(CIQ.stxx, sd); 
-                    }
+                    CIQ.Studies.removeStudy(CIQ.stxx, sd); 
                 }
-                addSingleIndicator([newData.indicator1.url,newData.indicator2.url],newData.indicator1.url);
-            }
-            if(oldData.indicator2.url != newData.indicator2.url){
-                for (var studyInstanceName in CIQ.stxx.layout.studies) {
-                    var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
-                    if (sd.type== oldData.indicator2.url){
-                        CIQ.Studies.removeStudy(CIQ.stxx, sd); 
-                    }
+                for(var s in CIQ.stxx.chart.series){
+                    var series=CIQ.stxx.chart.series[s];
+                    CIQ.stxx.removeSeries(series);
                 }
-                addSingleIndicator([newData.indicator1.url,newData.indicator2.url],newData.indicator2.url);
+                CIQ.hideCover()
+                CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+                resolve()
+                return
             }
-        }
+            
+            if(newData.categories.includes('Symbol')){
+                if(oldData.indicator1.url != newData.indicator1.url){
+                    CIQ.objIndicator = []
+                    CIQ.stxx.loadChart({
+                        symbol: newData.indicator1.url,
+                        startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
+                        endDate:new Date(),
+                    },()=>{
+                        CIQ.hideCover()
+                        CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+                    })
+                }
+                if(oldData.indicator2.url != newData.indicator2.url){
+                    var series = CIQ.stxx.chart.series[oldData.indicator2.url];
+                    // 移除旧的field的ma 
+                    for (var studyInstanceName in CIQ.stxx.layout.studies) {
+                        if (
+                            CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == series.id &&
+                            CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'
+                        ) {
+                        // 直接判断是否为st ma
+                        CIQ.Studies.removeStudy(
+                            CIQ.stxx,
+                            CIQ.stxx.layout.studies[studyInstanceName]
+                        )
+                        }
+                    }
+                    CIQ.stxx.removeSeries(series);
+
+                    CIQ.stxx.addSeries(newData.indicator2.url, {
+                        display:newData.indicator2.name, 
+                        isComparison: false, 
+                        color: "#368DF0",
+                        //panel:newData.indicator2.url,
+                        // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
+                        yAxis:{ 
+                            position:"left",
+                            textStyle:"#FFBE00"
+                        },
+                        //shareYAxis: true
+                    },()=>{
+                        CIQ.hideCover()
+                        CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+                    });
+                }
+                resolve()
+            }
+            
+            if(newData.categories.includes('Indicator')){
+                if(oldData.indicator1.url != newData.indicator1.url){
+                    for (var studyInstanceName in CIQ.stxx.layout.studies) {
+                        var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+
+                        if (sd.type == 'ST MA' && sd.parameters.index == 0) {
+                            // 直接判断是否为st ma
+                            CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+                        }
+                        if (sd.type == oldData.indicator1.url && sd.parameters.index == 0){
+                            CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+                        }
+                    }
+                    addSingleIndicator([newData.indicator1.url,newData.indicator2.url],newData.indicator1.url,null,null,0,()=>{resolve()});
+                }
+                if(oldData.indicator2.url != newData.indicator2.url){
+                    for (var studyInstanceName in CIQ.stxx.layout.studies) {
+                        var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+                        if (sd.type == 'ST MA' && sd.parameters.index == 1) {
+                            // 直接判断是否为st ma
+                            CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+                            console.log('index2 remove stma:', sd)
+                        }
+                        // 这个有个问题，存在两个相同indicator时移除一个另外一个stma也被移除
+                        if (sd.type== oldData.indicator2.url && sd.parameters.index == 1){
+                            CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+                            console.log('index2 remove sd:', sd)
+                        }
+                    }
+                    addSingleIndicator([newData.indicator1.url,newData.indicator2.url],newData.indicator2.url,null,null,1,()=>{resolve()});
+                }
+            }
+        })
     }
 
     // 预览生成的新indicator
@@ -354,9 +370,9 @@
         
         if(newData.categories == 'Indicator Spread' || newData.categories == 'Indicator Ratio'){
             // indicator
-            await getUserOwnIndicatorMatedata(newData.indicator1.url)
+            await getUserOwnIndicatorMatedata(newData.indicator1.url,null,0)
             // indicator2
-            await getUserOwnIndicatorMatedata(newData.indicator2.url)
+            await getUserOwnIndicatorMatedata(newData.indicator2.url,null,1)
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)
             CIQ.stxx.loadChart(	{ 
@@ -407,6 +423,7 @@
                 ma1_value,
                 ma1_type,
                 newData.indicator1.url,
+                0,
                 ma1_showInput,
                 newData.categories
             )
@@ -415,6 +432,7 @@
                 ma1_value,
                 ma1_type,
                 'field',
+                0,
                 ma1_showInput,
                 newData.categories
             )
@@ -425,6 +443,7 @@
             ma2_value,
             ma2_type,
             newData.indicator2.url,
+            1,
             ma2_showInput,
             newData.categories
         )
@@ -433,7 +452,7 @@
     // 第一个参数是默认值为SPX的symbol，own indicator quotefeed请求时为默认symbol，own symbol quotefeed请求时为表单第一个symbol
     // 第2个参数是给quotefeed请求提供的indicator列表，
     // 第3个是要加载的当前indicator
-    const addSingleIndicator = async function(indicatorList,indicator,symbol,extremeLines){
+    const addSingleIndicator = async function(indicatorList,indicator,symbol,extremeLines,index,callback){
         // remove redundant elements and empty string
         for(var i=0;i<indicatorList.length;i++){
         if(indicatorList[i]=='' || indicatorList[i]==undefined){
@@ -443,17 +462,18 @@
         }
 
         // fetch indicator information and add studies to chart
-        await getUserOwnIndicatorMatedata(indicator,extremeLines)
+        await getUserOwnIndicatorMatedata(indicator,extremeLines,index)
         CIQ.stxx.loadChart(	{ 
             symbol: symbol?symbol:'SPX', 
             indicator:indicatorList,
             startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
         },()=>{
+            if(callback) callback()
             CIQ.hideCover()
             CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
         }) 
     }
-    const getUserOwnIndicatorMatedata = async function(indicator,extremeLines){
+    const getUserOwnIndicatorMatedata = async function(indicator,extremeLines,index){
         var color = "#7257F2"
         return new Promise(resolve=>{
                 if(CIQ.isOwnIndicator(indicator)){
@@ -511,6 +531,7 @@
                                         studyOverBoughtColor: "#FF0000",
                                         studyOverSoldValue: newQuotes.pess_extreme?newQuotes.pess_extreme:NaN,
                                         studyOverSoldColor: "#00DD00",
+                                        index: index
                                     }},
                                     attributes:{
                                         studyOverBoughtValue:{"step":0.01},
@@ -536,20 +557,33 @@
 
     }
 
-    CIQ.addOwnIndicatorMAStudy = function(value,type,field,showInput,categories) {
+    CIQ.addOwnIndicatorMAStudy = function(value,type,field,index,showInput,categories) {
         // 更新ma前移除当前field的旧ma
+        let panel
         for (var studyInstanceName in CIQ.stxx.layout?.studies) {
+            let sd = CIQ.stxx.layout.studies[studyInstanceName]
             if (
-                CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == field &&
-                CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'
+                sd.inputs.Field == field &&
+                sd.type == 'ST MA'
+                && sd.parameters.index == index    // stma 加index是为了防止同名indicator下的stma移除时被误删
             ) {
               // 直接判断是否为st ma
               CIQ.Studies.removeStudy(
                 CIQ.stxx,
-                CIQ.stxx.layout.studies[studyInstanceName]
+                sd
               )
             }
+
+            // 找到对应indicator的panel name
+            if(
+                categories.includes('Indicator') &&
+                sd.type == field && 
+                sd.parameters.index == index
+            ) {
+                panel = sd.panel
+            }
           }
+
         if(!showInput || !field) return
         var stma_color = "#bfad94"
         CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
@@ -559,8 +593,8 @@
             Field: field
           }, 
           { MA: stma_color },
-          null,
-          categories.includes('Indicator')?null:field
+          { index: index },
+          panel?panel:field // indicator就显示在对应panel上，symbol则独立创建新的panel
         )
     }
     CIQ.editOwnIndicatorExtremeLines = function(value,field){
