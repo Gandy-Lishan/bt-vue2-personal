@@ -563,8 +563,11 @@ export default {
           this.$refs[formRef].saveData();
         }
       }
+      // 在名字后加上四位随机小数
+      const randomNumber = Math.round((Math.random()) * 10000) / 10000
+      const randomName = `${this.data.name}_${randomNumber}`
       const commonData = {
-        name: this.data.name,
+        name: randomName,
         indicator_1: this.data.indicator_1_url,
         indicator_2: this.data.indicator_2_url,
         time_frame: this.data.time_frame,
@@ -618,7 +621,7 @@ export default {
       let url = null
       if(status == 406) {
         url = res?.data?.data?.url
-        // 说明这条数据已经存在了,不让我新建,并且说明用户并没有该除名字外的内容, 直接请求数据
+        // 说明这条数据已经存在了,不让我新建,说明用户已经存在相同的组合, 直接请求数据
         const indicatorData = await getMyIndicatorData(url)
         // 暂存
         localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(indicatorData.data.data))
