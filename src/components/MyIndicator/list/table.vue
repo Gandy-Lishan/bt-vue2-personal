@@ -332,10 +332,11 @@ export default {
     },
     async handleQuery() {
       if(!this.searchKey) {this.getTableData(this.currentPage);return}
-      this.loading = true
-      console.log(this.searchKey)
+      const _this = this
+      _this.loading = true
+      console.log(_this.searchKey)
 
-      const inputString = this.searchKey.toLowerCase();
+      const inputString = _this.searchKey.toLowerCase();
       const keywords = {
         timeframe: ['daily', 'weekly', 'monthly'],
         calculate: ['ratio', 'spread'],
@@ -378,16 +379,17 @@ export default {
       const timeframe = extractedValues.timeframe
       try {
         const searchRes = await searchIndicator(name, calculate, combine_type, timeframe)
-        if(searchRes.status == 200) {this.tableData = this.processRowData(searchRes.data.results); this.total = searchRes.data.count; this.currentPage = 1}
-        if(searchRes.data.code == 406 || searchRes.data.code == 404) {this.tableData = [];this.total = 0; this.currentPage = 1}
+        console.log('searchRes', searchRes)
+        if(searchRes.data.count != 0) {_this.tableData = await _this.processRowData(searchRes.data.results); _this.total = searchRes.data.count; _this.currentPage = 1}
+        if(searchRes.data.code == 406 || searchRes.data.code == 404) {_this.tableData = [];_this.total = 0; _this.currentPage = 1}
       } catch (error) {
-        if(error?.response?.status == 404) this.popUpMsgBox('No results found')
-        this.tableData = []
-        this.total = 0
-        this.currentPage = 1
+        if(error?.response?.status == 404) _this.popUpMsgBox('No results found')
+        _this.tableData = []
+        _this.total = 0
+        _this.currentPage = 1
         console.log(error)
       }
-      this.loading = false
+      _this.loading = false
     },
     handleCreate() {
       this.$router.push('/myindicator/create')
