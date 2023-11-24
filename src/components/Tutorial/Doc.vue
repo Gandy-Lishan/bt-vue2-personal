@@ -2,7 +2,7 @@
 	<div class="doc-container">
 		<div class="header">
 			<div class="box">
-				<img src="../../assets/logo.png" />
+				<img src="../../assets/newLogo.png" />
 				<p style="color: rgb(0 50 60); font-weight: 500; font-size: 18px" class="betaNote">Tutorial</p>
 				<nav>
 					<el-menu
@@ -99,8 +99,8 @@ h1 {
 	padding: 0px 20px;
 }
 img {
-	width: 150px;
-	height: 40px;
+	width: 200px;
+	height: 35px;
 	margin-left: 20px;
 }
 
