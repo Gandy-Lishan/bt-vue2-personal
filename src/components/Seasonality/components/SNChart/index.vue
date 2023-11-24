@@ -119,6 +119,25 @@ export default {
                   fontFamily: 'Arial'
               }
           },
+          chart: {
+            events: {
+                load: function () {
+                    // After the chart is loaded, add the watermark image
+                    this.renderer.image('https://assets-global.website-files.com/650486dd4239644e595569c1/650486dd4239644e59556a01_ST%20Logo.png', 0, 0, 200, 35)
+                        .attr({
+                            zIndex: 5,
+                            opacity: 0.5,
+                        })
+                        .add()
+                        .align({
+                            align: 'left',
+                            verticalAlign: 'bottom',
+                            x: 0,
+                            y: -35,
+                        }, false, 'plotBox');
+                }
+            }
+        },
           subtitle: {
               text: subtitle
           },
@@ -257,18 +276,18 @@ export default {
       }));
 
       // 添加水印图片
-      H.renderer.image(logoPNG, 0, 0, 200, 50) // 请替换 'watermark.png' 为你的水印图片的路径
-        .attr({
-          zIndex: 5, // 确保水印显示在图表的顶层
-          opacity: 0.5, // 设置水印图片透明度
-        })
-        .add()
-        .align({
-          align: 'left',
-          verticalAlign: 'bottom',
-          x: 0, // 可以根据需要调整水印相对于左下角的位置
-          y: -50, // 可以根据需要调整水印相对于左下角的位置
-        }, false, 'plotBox');
+      // H.renderer.image(logoPNG, 0, 0, 200, 50) // 请替换 'watermark.png' 为你的水印图片的路径
+      //   .attr({
+      //     zIndex: 5, // 确保水印显示在图表的顶层
+      //     opacity: 0.5, // 设置水印图片透明度
+      //   })
+      //   .add()
+      //   .align({
+      //     align: 'left',
+      //     verticalAlign: 'bottom',
+      //     x: 0, // 可以根据需要调整水印相对于左下角的位置
+      //     y: -50, // 可以根据需要调整水印相对于左下角的位置
+      //   }, false, 'plotBox');
 
       H.addSeries({
           data: dataWithColor,

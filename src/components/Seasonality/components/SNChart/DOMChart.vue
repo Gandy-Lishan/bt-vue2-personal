@@ -34,7 +34,7 @@ export default {
                 const url = `/dev/seasonality/get_month_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}&month=${newVal.month}`
                 const {data: {data}} = await getSeasonalityData(url)
                 if(data?.length === 0) {this.popUpMsgBox('Not found: Adjust your search criteria for stock data')}
-                this.dataList = data.map(item => [parseFloat(item['Day']), parseFloat(item['Return'].toFixed(2)), parseFloat(item['Positive'].toFixed(2))])
+                this.dataList = data.map(item => [parseFloat(item['Day']), parseFloat((Math.round(item['Return'] * 100) / 100).toFixed(2)), parseFloat((Math.round(item['Positive'] * 100) / 100).toFixed(2))])
                 },
             deep: true,
             immediate: true,
