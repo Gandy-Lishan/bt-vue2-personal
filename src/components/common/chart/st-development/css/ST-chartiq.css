@@ -244,12 +244,13 @@ cq-indicators-lookup-input {
     .chartContainer .stLogo{
       background-size: 246px;
       background-repeat: no-repeat;
-      background-image: url(img/logo.png);
+      background-image: url(img/newLogo.png);
       opacity: 0.35;
       height: 71px;
       width: 300px;
       position: absolute;
-      bottom: 30px;
+      bottom: 10px;
+      left: 10px;
     }
 .ciq-lookup-icon {
   position: absolute;

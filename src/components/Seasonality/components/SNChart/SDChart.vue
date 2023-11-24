@@ -47,7 +47,7 @@ import { checkProperties } from "@/utils";
                 }
                 let {data: {data}} = await getSeasonalityData(url)
                 if(data?.length === 0 || !data) {this.popUpMsgBox('Not found: Adjust your search criteria for stock data'); data = []}
-                this.dataList = data.map(item => [parseFloat(item['period']), parseFloat((item['Return']).toFixed(2)), parseFloat(item['Positive'].toFixed(2))])
+                this.dataList = data.map(item => [parseFloat(item['period']), parseFloat((Math.round(item['Return'] * 100) / 100).toFixed(2)), parseFloat((Math.round(item['Positive'] * 100) / 100).toFixed(2)), ])
                 },
             deep: true,
             immediate: true,
