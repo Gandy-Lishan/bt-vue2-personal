@@ -356,7 +356,7 @@
         if(newData.categories == 'Symbol Spread' || newData.categories == 'Symbol Ratio'){
                 // indicator1,包括主symbol和new indicator
                 CIQ.objIndicator = []
-                await getUserOwnIndicatorMatedata(newData.url,extremeLines)
+                
                 CIQ.stxx.loadChart({
                     symbol: newData.indicator1.url, 
                     indicator:[newData.url],
@@ -383,6 +383,7 @@
                     });
                 }
                 displayOwnIndicatorMAStudies(newData)
+                await getUserOwnIndicatorMatedata(newData.url,extremeLines)
         }
         
         if(newData.categories == 'Indicator Spread' || newData.categories == 'Indicator Ratio'){
