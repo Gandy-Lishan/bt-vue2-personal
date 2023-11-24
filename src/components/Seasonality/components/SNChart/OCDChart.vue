@@ -55,16 +55,14 @@ import { checkProperties } from "@/utils";
                 console.log('data', data)
                 if(data?.length === 0) {this.popUpMsgBox('Not found: Adjust your search criteria for stock data')}
                 if([0, 1].includes(newVal.option)) {
-                  this.dataList = data.map(item => [item['Date'] || item['Month'], parseFloat((item['Return']).toFixed(2)), parseFloat(item['Positive'].toFixed(2))])
+                  this.dataList = data.map(item => [item['Date'] || item['Month'], parseFloat((Math.round(item['Return'] * 100) / 100).toFixed(2)), parseFloat((Math.round(item['Positive'] * 100) / 100).toFixed(2))])
                 }else {
                   this.dataList = data.map(obj => {
                     for (const key in obj) {
                       if (!isNaN(obj[key])) {
                           // 如果属性值是数字，使用 parseFloat 转换，然后保留两位小数
-                          obj[key] = parseFloat(obj[key]).toFixed(2);
-                          // 去掉多余的零
-                          obj[key] = parseFloat(obj[key]);
-                          
+                          const roundedNum = Math.round(obj[key] * 100) / 100
+                          obj[key] = parseFloat(roundedNum.toFixed(2));
                       }
                     }
                     return obj;
