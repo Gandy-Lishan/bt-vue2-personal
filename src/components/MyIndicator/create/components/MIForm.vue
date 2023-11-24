@@ -449,13 +449,19 @@ export default {
     },
     manageMAStudies(value,type,field,showInput) {
       let fieldName = 'field'
-      if(field == 'ma1'){
-        // 如果symbol则input1 的field为main panel的默认值
-        if(!this.data.categories.includes('Symbol')){
+      if(!this.data.categories.includes('Symbol')){
+        if(field == 'ma1'){
           fieldName = this.data.indicator_1_url
+        }else if(field == 'ma2'){
+          fieldName = this.data.indicator_2_url
         }
-      }else if(field == 'ma2'){
-        fieldName = this.data.indicator_2_url
+      }else{
+        if(field == 'ma1'){
+          // 如果symbol则input1 的field为main panel的默认值
+        }else if(field == 'ma2' && this.data.indicator_1_url != this.data.indicator_2_url){
+          // 如果左右indicator不同则field为indicator_url反之为main panel的默认值
+          fieldName = this.data.indicator_2_url
+        } 
       }
       CIQ.addOwnIndicatorMAStudy(
         value,
@@ -821,10 +827,8 @@ export default {
       console.log('当前最大的 timeframe 是', this.data.time_frame)
 
       // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
-      //const checkInputRef = source=="indicator_1"?'ma1Form':'ma2Form'
-      // 干脆同时刷新index0 和 1的stma，为了解决相同indicator情况下移除一个另一个的stma也被移除问题
-      this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
-      this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
+      const checkInputRef = source=="indicator_1"?'ma1Form':'ma2Form'
+      this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,source=="indicator_1"?'ma1':'ma2',this.$refs[checkInputRef].showInput)
     },
     findMaxFreq() {
       const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
