@@ -4,8 +4,8 @@
       <div class="logo_container" @click="$router.push('/backtester/sr/setup')">
         <span
           ><img
-            style="width: 190px; height: 50px"
-            src="../../../assets/logo.png"
+            style="width: 200px; height: 40px"
+            src="../../../assets/newLogo.png"
             alt="logo"
         /></span>
         <div class="betaNote">SentimenTech</div>
