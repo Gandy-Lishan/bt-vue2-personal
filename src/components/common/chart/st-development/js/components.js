@@ -8925,7 +8925,9 @@ if (!CIQ.Studies) {
 				for (var id in stx.layout.studies) {
 					var sd = stx.layout.studies[id];
 					// filter MA in studylist
-					if (sd.type == 'ST MA') continue;
+					
+					var series = CIQ.stxx.chart.series[sd.inputs.Field];	// myIndicator里面序列的stma有标题组件
+					if (sd.type == 'ST MA' && !series) continue;
 					if (sd.customLegend) continue;
 					if (customRemovalOnly && !sd.study.customRemoval) continue;
 					if (panelOnly && sd.panel != panelName) continue;

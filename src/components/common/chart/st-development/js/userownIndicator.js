@@ -585,13 +585,12 @@
         // 如果当前url是symbol序列，则显示在独立panel
         var series = CIQ.stxx.chart.series[field];
 
-
         if(!showInput || !field) return
         var stma_color = "#bfad94"
         CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
             Type: type == 'MA' ? 'simple' : 'exponential',
             Period: value,
-            display: 'ST MA',
+            display: 'Moving Average('+series?.display+')',
             Field: field
           }, 
           { MA: stma_color },
