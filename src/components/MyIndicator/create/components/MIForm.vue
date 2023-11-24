@@ -449,13 +449,19 @@ export default {
     },
     manageMAStudies(value,type,field,showInput) {
       let fieldName = 'field'
-      if(field == 'ma1'){
-        // 如果symbol则input1 的field为main panel的默认值
-        if(!this.data.categories.includes('Symbol')){
+      if(!this.data.categories.includes('Symbol')){
+        if(field == 'ma1'){
           fieldName = this.data.indicator_1_url
+        }else if(field == 'ma2'){
+          fieldName = this.data.indicator_2_url
         }
-      }else if(field == 'ma2'){
-        fieldName = this.data.indicator_2_url
+      }else{
+        if(field == 'ma1'){
+          // 如果symbol则input1 的field为main panel的默认值
+        }else if(field == 'ma2' && this.data.indicator_1_url != this.data.indicator_2_url){
+          // 如果左右indicator不同则field为indicator_url反之为main panel的默认值
+          fieldName = this.data.indicator_2_url
+        } 
       }
       CIQ.addOwnIndicatorMAStudy(
         value,
