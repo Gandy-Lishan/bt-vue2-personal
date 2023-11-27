@@ -10,20 +10,24 @@
         /></span>
         <div class="betaNote">SentimenTech</div>
       </div>
+      {{ activeIndex }}
       <el-menu
         :default-active="activeIndex"
         class="el-menu-demo menu"
         mode="horizontal"
         @select="handleSelect"
       >
-        <el-menu-item class="ai-link" v-if="activeIndex==3"
+        <!-- <el-menu-item class="ai-link" v-if="activeIndex==3"
           >AI Stock Scanner</el-menu-item
-        >
+        > -->
         <!-- <el-menu-item class="home-link" v-if="activeIndex==1"
           >BacktestEdge</el-menu-item
         > -->
         <el-menu-item class="home-link" index="1"
           >BacktestEdge</el-menu-item
+        >
+        <el-menu-item class="ai-link" index="3"
+          >AI Stock Scanner</el-menu-item
         >
         <el-menu-item class="my-indicator-link home-link" index="6"
           >My Indicator</el-menu-item
