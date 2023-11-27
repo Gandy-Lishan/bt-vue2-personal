@@ -269,6 +269,7 @@ export default {
 	min-width: 65vw;
 	background: #f9fafb;
 	padding: 50px 50px;
+	margin-bottom: 30px;
 }
 
 h4 {
