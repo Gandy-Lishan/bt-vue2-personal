@@ -748,6 +748,9 @@ export default {
 			extraIndicators.push(...this.$store.state.chart.indicators.extraIndicators)
       extraIndicators = extraIndicators.filter(x=>x!=item.url)
 			this.$store.commit('chart/getExtraIndicators',extraIndicators)
+  
+      // 如果是MA，则移除它的信息和位置
+      CIQ.removeMALayout(item.url, this.criteria, this.panelIndex)
 
       // lishn 判断需要小龙写
       CIQ.addIndicators()
@@ -826,6 +829,10 @@ export default {
         obj.url = item.url
         this.$emit('getIndicatorUrl', obj)
       }
+
+       // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
+       CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
+
       // avoid add indicator redundantly
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
         var sd = CIQ.stxx.layout.studies[studyInstanceName]
@@ -891,6 +898,9 @@ export default {
         this.$emit('getIndicatorUrl', indiUrlObj)
       }
 
+      // 如果是MA，则移除它的信息和位置
+      CIQ.removeMALayout('', this.criteria, this.panelIndex)
+
       // lishn 判断需要小龙写
       CIQ.addIndicators()
     },
@@ -952,6 +962,10 @@ export default {
         obj.url = item.label
         this.$emit('getIndicatorUrl', obj)
       }
+
+       // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
+       CIQ.setMALayout('', null, null, null, this.criteria, this.panelIndex)
+
       // avoid add indicator redundantly
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
         var sd = CIQ.stxx.layout.studies[studyInstanceName]
@@ -1168,6 +1182,8 @@ export default {
         this.$emit('getIndicatorUrl', indiUrlObj)
       }
 
+      // 如果是MA，则移除它的信息和位置
+      CIQ.removeMALayout('', this.criteria, this.panelIndex)
       // lishn 判断需要小龙写
       CIQ.addIndicators()
     },
@@ -1277,6 +1293,10 @@ export default {
         obj.url = indicatorUrl
         this.$emit('getIndicatorUrl', obj)
       }
+
+       // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
+       CIQ.setMALayout('', null, null, null, this.criteria, this.panelIndex)
+
       // avoid add indicator redundantly
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
         var sd = CIQ.stxx.layout.studies[studyInstanceName]

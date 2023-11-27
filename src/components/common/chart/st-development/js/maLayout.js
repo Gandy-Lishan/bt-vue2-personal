@@ -6,7 +6,16 @@ let __st_js_maLayout_ = (_exports) => {
     var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
     
     CIQ.setMALayout = function (url, period, type, field, criteria, index) {
-        if (url == 'ma') {
+        var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout
+
+        // remove current MA attached to an indicator
+        var MALayoutListIndex = activatedMALayoutList.findIndex(
+            (item) => item.criteria == criteria && item.index == index
+        )
+        if (MALayoutListIndex != -1) {
+            activatedMALayoutList.splice(MALayoutListIndex, 1)
+        }
+        if (url == 'ma'){
             // keep current MA
             var objMA = {
                 period: period ? period : 20,
@@ -15,18 +24,9 @@ let __st_js_maLayout_ = (_exports) => {
                 criteria: criteria,
                 index: index
             }
-            var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout
-
-            // remove current MA attached to an indicator
-            var MALayoutListIndex = activatedMALayoutList.findIndex(
-                (item) => item.criteria == criteria && item.index == index
-            )
-            if (MALayoutListIndex != -1) {
-                activatedMALayoutList.splice(MALayoutListIndex, 1)
-            }
             activatedMALayoutList.push(objMA)
-            CIQ.store.commit('chart/getMALayout', activatedMALayoutList)
         }
+        CIQ.store.commit('chart/getMALayout', activatedMALayoutList)
     }
     CIQ.removeMALayout = function (url, criteria, index) {
         if (url == 'ma') {
