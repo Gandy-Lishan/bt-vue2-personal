@@ -124,20 +124,23 @@ export default {
 					dataToUse.old_uuid = dataToUse.id
           await _this.displaySetUpForm(dataToUse)
         }
-				// 如果跳转携带 backtestID 则填充
-				const backtestID = LocalStorageUtil.get('backtestID')
+      }
+			_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')
+			CIQ.hideCover()
+    });
+  } else {
+    next(async _this => {
+			// 如果跳转携带 backtestID 则填充
+			const backtestID = LocalStorageUtil.get('backtestID')
 				if(backtestID) {
 					const res = await seeParams(backtestID)
 					res.data.commission = (res.data.commission * 100).toFixed(2)
 					await _this.displaySetUpForm(res.data)
 					LocalStorageUtil.remove('backtestID')
 				}
-      }
-			_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')
-			CIQ.hideCover()
-    });
-  } else {
-    next(_this => {_this.$store.state.form.rowDataForDisplay = {}; _this.$store.state.form.cachedBTBasicInfoData = {}});
+			_this.$store.state.form.rowDataForDisplay = {};
+			_this.$store.state.form.cachedBTBasicInfoData = {}
+		});
   }
 	},
 	// beforeRouteLeave(to, from, next) {

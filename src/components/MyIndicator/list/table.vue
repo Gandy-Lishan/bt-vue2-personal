@@ -120,7 +120,7 @@
             v-model="scope.row.visible"
             >
             <p>{{scope.row.popTitle}}</p>
-            <el-table :data="scope.row.BTList" v-if="scope.row.BTList.length != 0" style="margin-bottom: 10px;" size="mini">
+            <el-table :data="scope.row.BTList" v-if="scope.row.BTList.length != 0" style="margin-bottom: 10px;overflow-y: scroll; max-height: 300px;" size="mini">
               <el-table-column property="date" label="Creation Time"></el-table-column>
               <el-table-column property="name" label="Backtest Name"></el-table-column>
             </el-table>
@@ -471,5 +471,6 @@ export default {
 /deep/ .el-popover {
   right: 100%;
   bottom: 0;
+  z-index: 999;
 }
 </style>
