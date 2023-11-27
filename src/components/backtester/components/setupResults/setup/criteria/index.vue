@@ -563,7 +563,7 @@ export default {
 			}
 		},
     isRiskControlState(val) {
-			if(!val) {
+			if(!val && this.criteria == 'exit') {
 			this.relation = 1
 			this.changeRelation(this.relation)
 			}

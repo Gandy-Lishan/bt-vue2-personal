@@ -194,7 +194,7 @@ export default {
       this.$store.commit('initialBacktestInfo')
 			this.$refs['basicInfo'].clearForm()
 			this.$refs['entryChild'].clearForm()
-      this.$refs['exitChild'].resetForm()
+      this.$refs['exitChild'].clearForm()
 		},
 		setSetUpLoadingSetting(isSetupLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_SETUP_LOADING', {
