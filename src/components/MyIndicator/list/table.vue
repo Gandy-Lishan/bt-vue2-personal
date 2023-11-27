@@ -378,7 +378,7 @@ export default {
       const combine_type = extractedValues.combine_type
       const timeframe = extractedValues.timeframe
       try {
-        const searchRes = await searchIndicator(name, calculate, combine_type, timeframe)
+        const searchRes = await searchIndicator(this.searchKey)
         console.log('searchRes', searchRes)
         if(searchRes.data.results) {_this.tableData = await _this.processRowData(searchRes.data.results); _this.total = searchRes.data.count; _this.currentPage = 1}
         if(searchRes.data.code == 406 || searchRes.data.code == 404) {_this.tableData = [];_this.total = 0; _this.currentPage = 1}
