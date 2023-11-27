@@ -380,7 +380,7 @@ export default {
       try {
         const searchRes = await searchIndicator(name, calculate, combine_type, timeframe)
         console.log('searchRes', searchRes)
-        if(searchRes.data.count != 0) {_this.tableData = await _this.processRowData(searchRes.data.results); _this.total = searchRes.data.count; _this.currentPage = 1}
+        if(searchRes.data.results) {_this.tableData = await _this.processRowData(searchRes.data.results); _this.total = searchRes.data.count; _this.currentPage = 1}
         if(searchRes.data.code == 406 || searchRes.data.code == 404) {_this.tableData = [];_this.total = 0; _this.currentPage = 1}
       } catch (error) {
         if(error?.response?.status == 404) _this.popUpMsgBox('No results found')
