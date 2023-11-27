@@ -26,6 +26,7 @@
 </template>
 <script>
 import { Header, Footer, RecentUpdate, FloatBtns } from "@/components/common"
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 export default {
 	name: 'app',
 	data() {
@@ -41,6 +42,7 @@ export default {
 		FloatBtns
 	},
 	mounted() {
+		console.log('用户权限', getCookieData())
 		// 判断用户是否是首次进入
 		if (!localStorage.getItem("visited")) {
 		// 如果"visited"键不存在
