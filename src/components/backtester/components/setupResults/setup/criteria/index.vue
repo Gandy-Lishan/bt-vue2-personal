@@ -526,6 +526,9 @@ export default {
 			/* entry or exit */
 			return this.config['criteria']
 		},
+		isRiskControlState() {
+			return this.$store.state.form.riskControl
+		}
 	},
 	watch: {
 		isRiskControl(val) {
@@ -545,8 +548,8 @@ export default {
 			]
 			if (!val) {
 			this.signalOptions = options
-			this.relation = 1
-			this.changeRelation(this.relation)
+			// this.relation = 1
+			// this.changeRelation(this.relation)
 			}else {
 				this.signalOptions = [
           {
@@ -555,10 +558,16 @@ export default {
           },
           ...options
         ];
-				this.relation = 0
-				this.changeRelation(this.relation)
+				// this.relation = 0
+				// this.changeRelation(this.relation)
 			}
-		}
+		},
+    isRiskControlState(val) {
+			if(!val) {
+			this.relation = 1
+			this.changeRelation(this.relation)
+			}
+    },
 	},
 	created() {
 		/* 用于自动填充 user custom indicators file */
@@ -1221,7 +1230,6 @@ export default {
 				? data[criteria].signals_in_market
 				: 1
 			this.isUsePeriodLimit = Boolean(data[criteria].signals_in_market != 100000)
-			this.relation = data[criteria].relation ? data[criteria].relation : 1
 			// this.$emit('getExitRelation', this.relation)
 			let length = data[criteria].signals.length
 			this.tabIndex = length

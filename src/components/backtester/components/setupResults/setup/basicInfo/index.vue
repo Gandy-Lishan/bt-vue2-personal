@@ -1091,12 +1091,14 @@ export default {
     selectRiskControl(val) {
       if (!this.isRiskControl) {
         this.$emit('IsRiskControl', false)
+        this.$store.commit('form/isRiskControl', false)
       }
       if (
         this.isRiskControl &&
         (this.isTakeProfit || this.isTimeInMarket || this.isStopLoss)
       ) {
         this.$emit('IsRiskControl', true)
+        this.$store.commit('form/isRiskControl', true)
       }
       if (
         this.isRiskControl &&
@@ -1106,9 +1108,9 @@ export default {
         this.isStopLoss = true
         this.isTimeInMarket = true
         this.$emit('IsRiskControl', true)
+      this.$store.commit('form/isRiskControl', true)
       }
       this.generateRiskControl()
-      this.$store.commit('form/isRiskControl', val)
     },
     generateRiskControl() {
       this.bd.risk_control = this.isRiskControl ? `${this.isTakeProfit ? this.tp : ''}/${this.isStopLoss ? this.sl : ''}/${this.isTimeInMarket ? this.tim : ''}` : '//'
