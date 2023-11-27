@@ -522,10 +522,12 @@ export default {
 
 				if (displayData.exit.signals.length === 0 || displayData.exit.signals.includes(undefined)) {
 					displayData.exit.signals = [{ code: '' }];
+					_this.isRiskControl = true
 					_this.$nextTick(() => {
 						_this.$refs.exitChild.setRiskEditData(displayData);
 					});
 				} else {
+					_this.isRiskControl = false
 					let exitPanel = displayData.exit.signals.length;
 					let exitData = { exit: displayData.exit };
 					_this.$refs.exitChild.setEditPanel(exitPanel, exitData);

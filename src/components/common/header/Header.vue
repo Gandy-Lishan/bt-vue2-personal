@@ -10,7 +10,6 @@
         /></span>
         <div class="betaNote">SentimenTech</div>
       </div>
-      {{ activeIndex }}
       <el-menu
         :default-active="activeIndex"
         class="el-menu-demo menu"

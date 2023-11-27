@@ -831,7 +831,8 @@ export const CommonMethodsMixin = {
 			let timer = setPromiseInterval(async () => {
 				const res = await getStatus(id)
 				// CIQ.nprogress.inc()
-				if (percentage + 2 != 100) percentage += 2 // 在每次轮询中递增 2
+				const pullingAddVal = 1
+				if (percentage + pullingAddVal != 100) percentage += pullingAddVal // 在每次轮询中递增
 				_this.setSetUpLoadingSetting(true, true, percentage, coverText)
 				const status = res.data.status
 				const data = res.data
