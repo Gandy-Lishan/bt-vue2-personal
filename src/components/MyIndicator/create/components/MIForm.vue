@@ -498,13 +498,15 @@ export default {
       const validForm = this.validForm()
       const rowUrl = this.rowUrl
       if(!validForm) return
-      const nameLookupRes = await searchIndicator(this.data.name)
-      const count = nameLookupRes.data.count
-      const nameList = nameLookupRes.data.results
-      if(count != 0) {
-        const duplicateItem = nameList.filter(item => item.name == this.data.name)
-        console.log('duplicateItem', duplicateItem)
-        if(duplicateItem) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
+      if(!this.rowUrl) {
+        const nameLookupRes = await searchIndicator(this.data.name)
+        const count = nameLookupRes.data.count
+        const nameList = nameLookupRes.data.results
+        if(count != 0) {
+          const duplicateItem = nameList.filter(item => item.name == this.data.name)
+          console.log('duplicateItem', duplicateItem)
+          if(duplicateItem) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
+        }
       }
       let saveData = null;
       if(this.data.categories !== 'WIC') {
