@@ -85,16 +85,33 @@
 					</template>
 				</el-table-column>
         <el-table-column
-					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
           v-if="['Categories', 'Timeframe'].includes(l.label)"
 				>
+            <template #header>
+            <!-- 将表头内容替换成 el-select 组件 -->
+            <el-select v-model="categoriesFilter" @change="changeCategories" v-show="l.label == 'Categories'">
+              <el-option
+                v-for="item in categoriesOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+            <el-select v-model="timeframeFilter" @change="changeTimeframe" v-show="l.label == 'Timeframe'">
+              <el-option
+                v-for="item in timeframeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </template>
 					<template slot-scope="scope">
 						<p class="tableText">
 							{{ scope.row[l.value] }}
 						</p>
-            <!-- <el-link type="primary">主要链接</el-link> -->
 					</template>
 				</el-table-column>
         <el-table-column
@@ -175,6 +192,39 @@ export default {
       ],
       tableData: [],
       total: 0,
+      categoriesOptions: [
+        {
+          label: 'Categories',
+          value: 'categories'
+        },
+        {
+          label: 'Indicator Ratio',
+          value: 'indicator ratio'
+        },
+        {
+          label: 'Indicator Spread',
+          value: 'indicator spread'
+        },
+        {
+          label: 'Symbol Ratio',
+          value: 'symbol ratio'
+        },
+        {
+          label: 'Symbol Spread',
+          value: 'symbol spread'
+        }
+      ],
+      categoriesFilter: 'categories',
+      timeframeOptions: [
+        {
+          label: 'Timeframe',
+          value: 'time_frame'
+        },
+        { value: 'daily', label: 'Daily' },
+        { value: 'weekly', label: 'Weekly' },
+        { value: 'monthly', label: 'Monthly' }
+      ],
+      timeframeFilter: 'time_frame'
     }
   },
   async created() {
@@ -334,51 +384,11 @@ export default {
       if(!this.searchKey) {this.getTableData(this.currentPage);return}
       const _this = this
       _this.loading = true
-      console.log(_this.searchKey)
-
-      const inputString = _this.searchKey.toLowerCase();
-      const keywords = {
-        timeframe: ['daily', 'weekly', 'monthly'],
-        calculate: ['ratio', 'spread'],
-        combine_type: ['indicator', 'symbol']
-      };
-
-      let matchedStrings = [];
-
-      const regex = /(daily|weekly|monthly|ratio|spread|indicator|symbol)/gi;
-      let match;
-
-      while ((match = regex.exec(inputString)) !== null) {
-        matchedStrings.push(match[0]);
-      }
-
-      const extractedValues = {
-        timeframe: null,
-        calculate: null,
-        combine_type: null
-      };
-
-      matchedStrings.forEach(item => {
-        for (const key in keywords) {
-          if (keywords[key].includes(item)) {
-            extractedValues[key] = item;
-          }
-        }
-      });
-
-      const substringsToRemove = matchedStrings.join('|');
-      let name = inputString.replace(new RegExp(substringsToRemove, 'g'), '');
-      name = name.trim()
-
-      console.log('matchedStrings', matchedStrings);
-      console.log('Extracted Values:', extractedValues);
-      console.log('Name:', name);
-
-      const calculate = extractedValues.calculate
-      const combine_type = extractedValues.combine_type
-      const timeframe = extractedValues.timeframe
+      const { categoriesFilter, timeframeFilter } = _this
+      const [combineType, calculate] = categoriesFilter === 'categories' ? [null, null] : categoriesFilter.split(' ');
+      const timeframe = timeframeFilter === 'time_frame' ? null : timeframeFilter
       try {
-        const searchRes = await searchIndicator(this.searchKey)
+        const searchRes = await searchIndicator(this.searchKey, calculate, combineType, timeframe)
         console.log('searchRes', searchRes)
         if(searchRes.data.results) {_this.tableData = await _this.processRowData(searchRes.data.results); _this.total = searchRes.data.count; _this.currentPage = 1}
         if(searchRes.data.code == 406 || searchRes.data.code == 404) {_this.tableData = [];_this.total = 0; _this.currentPage = 1}
@@ -438,6 +448,33 @@ export default {
       row.visible = false
       this.loading = false
     },
+    async changeCategories(val) {
+        this.categoriesFilter = val;
+        const { timeframeFilter, searchKey } = this;
+        const [combineType, calculate] = val === 'categories' ? [null, null] : val.split(' ');
+        const searchRes = await searchIndicator(searchKey, calculate, combineType, timeframeFilter === 'time_frame' ? null : timeframeFilter);
+
+        this.handleSearchResult(searchRes);
+      },
+      async changeTimeframe(val) {
+        this.timeframeFilter = val;
+        const { categoriesFilter, searchKey } = this;
+        const [combineType, calculate] = categoriesFilter === 'categories' ? [null, null] : categoriesFilter.split(' ');
+        const searchRes = await searchIndicator(searchKey, calculate, combineType, val === 'time_frame' ? null : val);
+
+        this.handleSearchResult(searchRes);
+      },
+      async handleSearchResult(searchRes) {
+        if (searchRes.data.results) {
+          this.tableData = await this.processRowData(searchRes.data.results);
+          this.total = searchRes.data.count;
+          this.currentPage = 1;
+        } else {
+          this.tableData = [];
+          this.total = 0;
+          this.currentPage = 1;
+        }
+      },
   }
 }
 </script>
@@ -472,5 +509,10 @@ export default {
   right: 100%;
   bottom: 0;
   z-index: 999;
+}
+/deep/ .el-select .el-input__inner {
+  margin: 0;
+  font-weight: 500;
+  color: #909399;
 }
 </style>
