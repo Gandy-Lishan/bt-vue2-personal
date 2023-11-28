@@ -212,6 +212,10 @@ export default {
         {
           label: 'Symbol Spread',
           value: 'symbol spread'
+        },
+        {
+          label: 'Weighed Indicators Combination',
+          value: 'weight_combination'
         }
       ],
       categoriesFilter: 'categories',
@@ -381,11 +385,11 @@ export default {
       console.log(column, prop, order)
     },
     async handleQuery() {
-      if(!this.searchKey) {this.getTableData(this.currentPage);return}
       const _this = this
       _this.loading = true
       const { categoriesFilter, timeframeFilter } = _this
-      const [combineType, calculate] = categoriesFilter === 'categories' ? [null, null] : categoriesFilter.split(' ');
+      let [combineType, calculate] = categoriesFilter === 'categories' ? [null, null] : categoriesFilter.split(' ');
+      if(categoriesFilter == 'weight_combination') {combineType = null; calculate = categoriesFilter}
       const timeframe = timeframeFilter === 'time_frame' ? null : timeframeFilter
       try {
         const searchRes = await searchIndicator(this.searchKey, calculate, combineType, timeframe)
@@ -451,7 +455,8 @@ export default {
     async changeCategories(val) {
         this.categoriesFilter = val;
         const { timeframeFilter, searchKey } = this;
-        const [combineType, calculate] = val === 'categories' ? [null, null] : val.split(' ');
+        let [combineType, calculate] = val === 'categories' ? [null, null] : val.split(' ');
+        if(val == 'weight_combination') {combineType = null; calculate = val}
         const searchRes = await searchIndicator(searchKey, calculate, combineType, timeframeFilter === 'time_frame' ? null : timeframeFilter);
 
         this.handleSearchResult(searchRes);
@@ -459,7 +464,8 @@ export default {
       async changeTimeframe(val) {
         this.timeframeFilter = val;
         const { categoriesFilter, searchKey } = this;
-        const [combineType, calculate] = categoriesFilter === 'categories' ? [null, null] : categoriesFilter.split(' ');
+        let [combineType, calculate] = categoriesFilter === 'categories' ? [null, null] : categoriesFilter.split(' ');
+        if(categoriesFilter == 'weight_combination') {combineType = null; calculate = categoriesFilter}
         const searchRes = await searchIndicator(searchKey, calculate, combineType, val === 'time_frame' ? null : val);
 
         this.handleSearchResult(searchRes);
