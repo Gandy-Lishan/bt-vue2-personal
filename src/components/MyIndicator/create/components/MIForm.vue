@@ -532,7 +532,7 @@ export default {
         }
       } else {
         // if (this.weightValidErrMsg) return;
-        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(1));
+        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(2));
         const indicator_weight = percentageStrings.join('_');
 
         const mul_indicator = this.weightData.reduce((acc, item, index) => {
@@ -591,7 +591,7 @@ export default {
         }
       } else {
         // if (this.weightValidErrMsg) return;
-        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(1));
+        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(2));
         const indicator_weight = percentageStrings.join('_');
 
         const mul_indicator = this.weightData.reduce((acc, item, index) => {
