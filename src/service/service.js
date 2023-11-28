@@ -629,22 +629,17 @@ export function searchIndicator(name, calculate, combine_type, timeframe, page) 
 	let url = '/dev/my_indicator/get_records/?ordering=-create_date'
 	if (name) url += `&name=${name}`
 	if (calculate) {
-		if (name) url += `&`
-		url += `calculate=${calculate}`
+		url += `&calculate=${calculate}`
 	}
 	if (combine_type) {
-		if (name || calculate) url += `&`
-		url += `combine_type=${combine_type}`
+		url += `&combine_type=${combine_type}`
 	}
 	if (timeframe) {
-		if (name || calculate || combine_type) url += `&`
-		url += `timeframe=${timeframe}`
+		url += `&timeframe=${timeframe}`
 	}
 	if(page) {
-		if (name || calculate || combine_type || page) url += `&`
-		url += `page=${page}`
+		url += `&page=${page}`
 	}
-
 	return new Promise((resolve, reject) => {
 		axios
 			.get(url)
