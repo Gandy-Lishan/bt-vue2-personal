@@ -485,7 +485,7 @@
         }) 
     }
     const getUserOwnIndicatorMatedata = async function(indicator,extremeLines){
-        var color = "#7257F2"
+        var color = "#3582d8"
         return new Promise(resolve=>{
                 if(CIQ.isOwnIndicator(indicator)){
                 /********************lishan modify end*************************/

@@ -142,7 +142,7 @@ MarkersSample.prototype.showmMarker = function () {
 							panelName: panel,
 							x: xPosition,
 							label: "dot",
-							node: new CIQ.Marker.stPerformance({
+							node: new CIQ.Marker.STSimple({
 								type: "circle",
 								category: 'trade-buy',
 								displayCategory: false,
@@ -183,7 +183,7 @@ MarkersSample.prototype.showmMarker = function () {
 							panelName: panel,
 							x: xPosition,
 							label: "dot",
-							node: new CIQ.Marker.stPerformance({
+							node: new CIQ.Marker.STSimple({
 								type: "circle",
 								category: 'trade-sell',
 								displayCategory: false,
@@ -259,7 +259,7 @@ MarkersSample.prototype.showmDot = function () {
 							panelName: panel,
 							x: xPosition,
 							label: "dot",
-							node: new CIQ.Marker.stPerformance({
+							node: new CIQ.Marker.STSimple({
 								type: "circle",
 								category: 'trade-buy',
 								displayCategory: false,
@@ -276,7 +276,7 @@ MarkersSample.prototype.showmDot = function () {
 							panelName: panel,
 							x: xPosition,
 							label: "dot",
-							node: new CIQ.Marker.stPerformance({
+							node: new CIQ.Marker.STSimple({
 								type: "circle",
 								category: 'trade-sell',
 								displayCategory: false,
