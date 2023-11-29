@@ -27,6 +27,7 @@
 <script>
 import { Header, Footer, RecentUpdate, FloatBtns } from "@/components/common"
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
+import Cookies from 'vue-cookies'
 export default {
 	name: 'app',
 	data() {
@@ -41,8 +42,16 @@ export default {
 		RecentUpdate,
 		FloatBtns
 	},
-	mounted() {
+	async mounted() {
 		console.log('用户权限', getCookieData())
+		const email = getCookieData()?.username
+		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com']
+		const userID = Cookies.get('devbt2Userid')
+		if (allowedUserList.includes(email) || userID == 'analyst') {
+			this.$store.commit('user/SETUSERROLE', { 'is_admin': true, 'role': 'analyst', 'userID': email || userID })
+		}else if(userID == 'system'){
+			this.$store.commit('user/SETUSERROLE', { 'is_admin': true, 'role': 'system', 'userID': userID })
+		}
 		// 判断用户是否是首次进入
 		if (!localStorage.getItem("visited")) {
 		// 如果"visited"键不存在
