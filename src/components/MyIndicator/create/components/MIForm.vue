@@ -696,15 +696,10 @@ export default {
     },
     createFilter(queryString) {
       return (dropdownList) => {
-        const labelMatch =
-          dropdownList.label
-            .toLowerCase()
-            .indexOf(queryString.toLowerCase()) === 0
-        const urlMatch =
-          dropdownList.url.toLowerCase().indexOf(queryString.toLowerCase()) ===
-          0
-        return labelMatch || urlMatch
-      }
+        const labelMatch = dropdownList.label.toLowerCase().includes(queryString.toLowerCase());
+        const urlMatch = dropdownList.url.toLowerCase().includes(queryString.toLowerCase());
+        return labelMatch || urlMatch;
+      };
     },
     getList() {
       const data = this.data
