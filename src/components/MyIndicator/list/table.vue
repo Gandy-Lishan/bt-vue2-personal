@@ -516,7 +516,8 @@ export default {
   bottom: 0;
   z-index: 999;
 }
-/deep/ .el-select .el-input__inner {
+/deep/ .el-select .el-input__inner, .el-select {
+  width: 100%;
   margin: 0;
   font-weight: 500;
   color: #909399;
