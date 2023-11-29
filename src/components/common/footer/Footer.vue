@@ -55,7 +55,7 @@ export default {
 	},
 	watch: {
     '$route'(to, _) {
-			if (to.path.includes('/backtester') || to.path.includes('/myindicator')) {
+			if (to.path.includes('/backtester') || to.path.includes('/myindicator') || to.path.includes('/scannerai')) {
         this.isFixedAtBottom = false
       }else {
 				this.isFixedAtBottom = true
