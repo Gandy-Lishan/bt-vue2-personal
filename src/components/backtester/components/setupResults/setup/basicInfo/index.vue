@@ -317,6 +317,33 @@
                       <el-input v-else disabled v-model="bd.end_date"> </el-input>
                     </el-form-item>
                   </div>
+                  <el-form-item label="User Tag" prop="use_tag" v-if="is_admin">
+                  <template slot="label">
+                    <label>
+                      User Tag
+                      <el-tooltip effect="dark" placement="top">
+                        <span slot="content"
+                          >Choose the type of backtest you want to create.<br
+                        /></span>
+                        <i class="iconfont icon-wenhao"></i>
+                      </el-tooltip>
+                    </label>
+                  </template>
+									<div class="selectBox">
+										<el-select
+											v-model="bd.user_tag"
+											placeholder="— Select User Tag —"
+										>
+											<el-option
+												v-for="item in userTagOptions"
+												:key="item.value"
+												:label="item.label"
+												:value="item.value"
+											>
+											</el-option>
+										</el-select>
+									</div>
+								</el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item prop="slippage">
@@ -367,7 +394,7 @@
                       </el-select>
                     </el-form-item>
                   </div>
-                  <div class="excludeBox">
+                  <div class="excludeBox" :style="{ 'margin-bottom': isExcludeOO ? 'auto' : '17px' }">
                     <!-- <el-form-item prop="exclude_oo"> -->
                     <el-checkbox v-model="isExcludeOO" @change="changeExcludeOO"
                       >11. Exclude Overlapping Observations
@@ -399,6 +426,25 @@
                     </div>
                     <!-- </el-form-item> -->
                   </div>
+                  <el-form-item
+									label="Report URL"
+									prop="report_url"
+									size="mini"
+									v-if="bd.user_tag === 'analyst' && is_admin"
+								>
+                  <template slot="label">
+                    <label>
+                      Report URL
+                      <el-tooltip effect="dark" placement="top">
+                        <span slot="content"
+                          >Fill in the analyst's report url here.<br
+                        /></span>
+                        <i class="iconfont icon-wenhao"></i>
+                      </el-tooltip>
+                    </label>
+                  </template>
+									<el-input v-model="bd.report_url"></el-input>
+								</el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="20">
@@ -493,54 +539,8 @@
                   </div>
                 </el-col>
                 <el-col :span="6">
-                  <el-form-item label="User Tag" prop="use_tag" v-if="is_admin">
-                  <template slot="label">
-                    <label>
-                      User Tag
-                      <el-tooltip effect="dark" placement="top">
-                        <span slot="content"
-                          >Choose the type of backtest you want to create.<br
-                        /></span>
-                        <i class="iconfont icon-wenhao"></i>
-                      </el-tooltip>
-                    </label>
-                  </template>
-									<div class="selectBox">
-										<el-select
-											v-model="bd.user_tag"
-											placeholder="— Select User Tag —"
-										>
-											<el-option
-												v-for="item in userTagOptions"
-												:key="item.value"
-												:label="item.label"
-												:value="item.value"
-											>
-											</el-option>
-										</el-select>
-									</div>
-								</el-form-item>
                 </el-col>
                 <el-col :span="6">
-                  <el-form-item
-									label="Report URL"
-									prop="report_url"
-									size="mini"
-									v-if="bd.user_tag === 'analyst' && is_admin"
-								>
-                  <template slot="label">
-                    <label>
-                      Report URL
-                      <el-tooltip effect="dark" placement="top">
-                        <span slot="content"
-                          >Fill in the analyst's report url here.<br
-                        /></span>
-                        <i class="iconfont icon-wenhao"></i>
-                      </el-tooltip>
-                    </label>
-                  </template>
-									<el-input v-model="bd.report_url"></el-input>
-								</el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="20">
@@ -647,7 +647,6 @@
 </template>
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
-import Cookies from 'vue-cookies'
 import { timestampToTime, LocalStorageUtil } from '@/utils'
 import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule, createTPSLValidate, createPositiveIntegerValidate } from '@/utils/formValidate'
 import { mapGetters } from "vuex"
@@ -656,7 +655,6 @@ import {
   getStocksList,
   getBacktestName
 } from '@/service/service.js'
-import axios from "@/axios"
 import searchBar from "@/components/common/searchBar"
 
 const throttle = require('lodash/throttle')
@@ -825,7 +823,6 @@ export default {
           }
         ]
       },
-      is_admin: false,
       isExcludeOO: false,
       isToggle: false,
       tpValidErrMsg: '',
@@ -835,22 +832,7 @@ export default {
     }
   },
   async created() {
-    this.is_admin = this.$store.getters.getIsAdmin
     this.generateBTName()
-    const userid = Cookies.get('devbt2Userid')
-    if(!userid) return
-    try {
-      const res = await axios.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
-      this.is_admin = res.data.is_admin
-      if(res.status == 200) this.$store.commit('setUserRole', { 'is_admin': res.data.is_admin, 'role': res.data.userid })
-      if(res.status != 200) throw Error('Status code error')
-    } catch (error) {
-      console.error(error)
-      router.push({
-        path: '/404',
-        query: { mes: error?.response?.status } // 携带的参数
-      });
-    }
   },
   mounted() {
     this.$emit('IsRiskControl', true)
@@ -872,6 +854,12 @@ export default {
     isBTChartReady() {
       return this.$store.state.chart.isBTChartReady
     },
+    is_admin() {
+      return this.$store.state.user.is_admin
+    },
+    userRole() {
+      return this.$store.state.user.role
+    }
   },
   watch: {
     handleGetBacktestSymbol: {
@@ -918,6 +906,24 @@ export default {
       this.bd.symbol = symbol
       this.getSymbol(symbol)
       LocalStorageUtil.remove('symbol')
+    },
+    userRole: {
+      handler(role) {
+        console.log('用户角色', role)
+        if(this.is_admin && role == 'analyst') {
+          this.userTagOptions = [
+            { value: 'client', label: 'Client' },
+            { value: 'analyst', label: 'Analyst' }
+          ]
+        }else if(this.is_admin && role == 'system') {
+          this.userTagOptions = [
+            { value: 'client', label: 'Client' },
+            { value: 'system', label: 'System' }
+          ]
+        }
+      },
+      immediate: true,
+      deep: true
     },
   },
   methods: {

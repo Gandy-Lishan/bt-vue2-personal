@@ -1,12 +1,14 @@
 const state = {
 	is_admin: false,
 	role: '',
+	userID: ''
 }
 
 const mutations = {
 	SETUSERROLE(state, val){
 		state.is_admin = val.is_admin
 		state.role = val.role
+		state.userID = val.userID
 	},
 }
 

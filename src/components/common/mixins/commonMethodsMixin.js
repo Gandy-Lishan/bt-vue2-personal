@@ -89,25 +89,27 @@ export const CommonMethodsMixin = {
 				if (isDuplicate) {
 					this.popUpMsgBox('The backtest has been copied')
 				} else {
+					data = JSON.parse(JSON.stringify(data))
+					for (const key in data) {
+						if (data.hasOwnProperty(key)) {
+							if (data[key] !== null && (typeof data[key] === 'object' || Array.isArray(data[key]))) {
+								data[key] = JSON.stringify(data[key]);
+							}
+						}
+					}
 					// 获取参数并准备复制
-					const paramsRes = await seeParams(data.id)
 					const params = {
-						...paramsRes.data,
+						...data,
 						name: copyName,
 						favorites: false,
-						user_tag: 'client',
-						report_url: ''
-						// uuid: undefined,
-						// results: undefined,
-						// user_id: undefined,
-						// status: undefined,
-						// backtest_id: undefined
+						user_tag: 'client'
 					}
 					delete params.uuid
 					delete params.results
 					delete params.user_id
 					delete params.status
 					delete params.backtest_id
+					delete params.old_uuid
 
 					// 发起复制请求
 					await copyBacktest(this.$qs.stringify(params))
@@ -119,8 +121,6 @@ export const CommonMethodsMixin = {
 					}
 					if (['Sample', 'Favorites', 'Analyst'].includes(this.currentPage)) {
 						this.$router.push('/backtester/list/history')
-						this.queryInfo.page = 1
-						await this.getDataList(null)
 					}
 					this.popUpMsgBox('Copy successfully')
 				}
