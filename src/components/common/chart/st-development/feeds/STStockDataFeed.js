@@ -61,7 +61,6 @@ quoteFeedSimulator.sendReq = async function(symbol,start,end,new_str,freq,cb){
         if(CIQ.store.state.chart.favoriteSymbolList.length>0){
             favoriteSymbolList = CIQ.store.state.chart.favoriteSymbolList
         }else{
-            debugger
             const data = await CIQ.getFavorite()
             try{
                 favoriteSymbolList = JSON.parse(data.favorite_symbol)
