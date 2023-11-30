@@ -5,6 +5,12 @@
 import {CIQ} from "chartiq/js/standard.js"
 import {config} from "../feeds/STDataFeedAccessUrl.js"
 import {config as mostPopularItems} from "../feeds/mostPopularItems.js"
+import {
+	getBTV1FavIndicator,
+    getAllMyIndicatorsList,
+} from '@/service/service.js'
+
+import {maxNumOfStudy} from '@/utils'
 
 const collator = new Intl.Collator('en');
 function SortArray(x, y){
@@ -265,32 +271,51 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                     if(wholeWord)   results.unshift(wholeWord)
                     closure(results); 
                 }else if (filter == "MY FAVORITES"){  
-                    var results = []
+                    var loader = document.querySelector(".loaderSearch");
+                    if (loader) loader.show();  
                     //var resu = CIQ.store.state.chart.favoriteIndicatorList
                     var resu = []
                     const data = await CIQ.getFavorite()
                     try{
                         resu = JSON.parse(data.favorite_indicator)
-                    }catch{}
-                    try {
-                        resu.forEach(element => {
-                            var item = {
-                                symbol: element.url,
-                                name: element.name,
-                                updated: CIQ.findSentiIndicator(null,element.url).updated,
-                                exchDisp: ""
-                            }
 
-                            if (item.name.toUpperCase().indexOf(value.toUpperCase()) !== -1){
-                                results.push({
-                                    display: [item.name, item.updated],
-                                    data: item
-                                });
-                            }         
-                        });  
-                    } catch (e) {}
-                    results.sort(SortArray)
-                    closure(results);
+                        // resu 接入可缓存vuex的btv1 fav indicator
+                        let btvFavIndi = await getBTV1FavIndicator()
+                        resu.push(...btvFavIndi.data.data.map(item=>{return {name:item.chart_name[0],url:item.url[0]}}))
+                        // 去重
+                        resu = Array.from(new Set(resu.map(item => item.url))).map(url => {
+                            return resu.find(item => item.url === url);
+                        });
+                        
+                        // resu 接入可缓存vuex的myIndicator,每获取一页数据都过滤关键词并调用callback显示搜索结果
+                        await getAllMyIndicatorsList(1, (data) => {
+                            var results = []
+                            const list = data.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
+
+                            const concatenation = [...resu,...list]
+                            concatenation.forEach(element => {
+                                var item = {
+                                    symbol: element.url,
+                                    name: element.name,
+                                    updated: element.timeframe?element.timeframe:CIQ.findSentiIndicator(null,element.url).updated,
+                                    exchDisp: "",
+                                }
+    
+                                // 匹配关键词
+                                if (item.name.toUpperCase().indexOf(value.toUpperCase()) !== -1){
+                                    results.push({
+                                        display: [item.name, item.updated],
+                                        data: item
+                                    });
+                                }         
+                            }); 
+
+                            // fav动态加载，排序的话体验不好
+                           // results.sort(SortArray)
+                            closure(results);
+                          })
+                          loader.hide(); 
+                    }catch{}
                 }else if (filter == "MOST POPULAR"){
                     var results = []
                     let wholeWord = null
@@ -830,27 +855,11 @@ window.onclick = function(event) {
 	            // if (loader) loader.show();
                 CIQ.addCover()
                 CIQ.nprogress.start()
-                        // old version only
-                        var countExistIndicator = 0
-                        for (var studyInstanceName in CIQ.stxx.layout.studies) {
-                            if (CIQ.findBuiltinTechIndicator(null,CIQ.stxx.layout.studies[studyInstanceName].type)){
-                                countExistIndicator--
-                            }
-                            if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'){
-                                countExistIndicator--
-                            }
-                            countExistIndicator++
-                        } 
-                        //console.log("watch here!! ",CIQ.stxx.layout.studies.length)
-                        if(countExistIndicator>=10){
-                            // CIQ.hideCover()
-                            // CIQ.nprogress.done()
-                            // var loader = document.querySelector(".loaderMain");
-                            // if (loader) loader.hide();
-                            CIQ.description("Maximum 10 signals can be displayed on chart")
-                            return
-                        }
-                CIQ.store.commit("chart/setCurrentSenti",{url: data.url?data.url:data.symbol, name: data.name})
+
+                // 限制同屏显示个数
+                if(maxNumOfStudy()) return
+
+                CIQ.store.commit("chart/setCurrentSenti",{url: data.url?data.url:data.symbol, name: data.name, updated: data.updated})
                 
                 let extraIndicators = []
                 extraIndicators.push(...CIQ.store.state.chart.indicators.extraIndicators)
@@ -1004,6 +1013,7 @@ window.onclick = function(event) {
                     <cq-indicators-filter>MOST POPULAR</cq-indicators-filter>
                 </cq-indicators-lookup-filters>
                 <cq-indicators-scroll></cq-indicators-scroll>
+                <cq-loader class="loaderSearch"></cq-loader>
             </cq-indicators-lookup-results>
         `;
         CIQ.UI.addComponentDefinition("cq-indicators-lookup", IndicatorsLookup);
