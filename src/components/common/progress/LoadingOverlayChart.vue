@@ -14,7 +14,7 @@ export default {
   methods: {
   },
   mounted(){
-    //this.isLoading = true
+    // this.isLoading = true
   }
 };
 </script>
@@ -33,7 +33,7 @@ export default {
 	flex-direction: column;
   
 	position: absolute;
-	z-index: 1;
+	z-index: 5;
 	margin: 0;
 	top: 0;
 	right: 0;
