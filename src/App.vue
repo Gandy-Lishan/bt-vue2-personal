@@ -45,8 +45,8 @@ export default {
 	async mounted() {
 		console.log('用户权限', getCookieData())
 		const email = getCookieData()?.username
-		// const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com']
-		const allowedUserList = ['hao@sentimentrader.com']
+		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com']
+		// const allowedUserList = ['hao@sentimentrader.com']
 		const userID = Cookies.get('devbt2Userid')
 		if (allowedUserList.includes(email) || userID == 'analyst') {
 			this.$store.commit('user/SETUSERROLE', { 'is_admin': true, 'role': 'analyst', 'userID': email || userID })
