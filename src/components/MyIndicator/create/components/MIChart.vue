@@ -100,7 +100,7 @@ export default {
 			studies.style.visibility = 'hidden'
 			favBtnContainer.style.display = 'none'
 			timeframeBtn.style.display = 'none'
-			footer.style.display = 'none'
+			// footer.style.display = 'none'
 		}
 	}
 }
