@@ -450,9 +450,9 @@
                      panelHeight:indicatorHeight,
                      parameters: { init: {
                          studyOverZonesEnabled: false,
-                         studyOverBoughtValue: ownIndicatorInfo?ownIndicatorInfo.lower_extreme_value:999,
+                         studyOverBoughtValue: ownIndicatorInfo?Math.round(ownIndicatorInfo.lower_extreme_value*100)/100:999,
                          studyOverBoughtColor: "#FF0000",
-                         studyOverSoldValue: ownIndicatorInfo?ownIndicatorInfo.upper_extreme_value:-999,
+                         studyOverSoldValue: ownIndicatorInfo?Math.round(ownIndicatorInfo.upper_extreme_value*100)/100:-999,
                          studyOverSoldColor: "#00DD00",
                      }},
                      attributes:{
@@ -541,9 +541,9 @@
                          panelHeight:indicatorHeight,
                          parameters: { init: {
                              studyOverZonesEnabled: false,
-                             studyOverBoughtValue: newQuotes[i].opt_extreme?newQuotes[i].opt_extreme:NaN,
+                             studyOverBoughtValue: newQuotes[i].opt_extreme?Math.round(newQuotes[i].opt_extreme*100)/100:NaN,
                              studyOverBoughtColor: "#FF0000",
-                             studyOverSoldValue: newQuotes[i].pess_extreme?newQuotes[i].pess_extreme:NaN,
+                             studyOverSoldValue: newQuotes[i].pess_extreme?Math.round(newQuotes[i].pess_extreme*100)/100:NaN,
                              studyOverSoldColor: "#00DD00",
                          }},
                          attributes:{

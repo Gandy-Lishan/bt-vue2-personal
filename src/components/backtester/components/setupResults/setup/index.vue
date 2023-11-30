@@ -55,7 +55,7 @@
 				content="Complete the form filling, run the backtest, and view the results"
 				placement="bottom"
 			>
-				<el-button type="success" @click="runBacktest"
+				<el-button :disabled="isDisabled" type="success" @click="runBacktest"
 					>Run Backtest</el-button
 				></el-tooltip
 			>
@@ -96,7 +96,8 @@ export default {
 	mixins: [CommonMethodsMixin],
 	data() {
 		return {
-			isRiskControl: true
+			isRiskControl: true,
+			isDisabled: false,
 		}
 	},
 	beforeRouteEnter(to, from, next) {
@@ -179,12 +180,22 @@ export default {
       // 从 Vuex store 中获取全局 loading 状态
       return this.$store.state.form.setUpLoadingSetting
     },
+	chartLoadingSetting() {
+      // 从 Vuex store 中获取chart loading 状态
+      return this.$store.state.chart.chartLoadingSetting
+    },
   },
 	watch: {
     setUpLoadingSetting: {
       handler(newValue, _) {
         // 在对象属性发生变化时触发的处理逻辑
 				this.setUpLoadingSetting = newValue
+      },
+      deep: true, // 启用深度监听，监视对象属性的变化
+    },
+    chartLoadingSetting: {
+      handler(newValue, _) {
+		this.isDisabled = newValue.isChartLoading?true:false
       },
       deep: true, // 启用深度监听，监视对象属性的变化
     },
@@ -593,6 +604,7 @@ export default {
 		background-color: #409eff;
 	}
 }
+
 @media (min-width: 820px) and (max-width: 1279px) {
 	.criteria-container {
 		display: flex;

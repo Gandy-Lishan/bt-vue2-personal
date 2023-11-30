@@ -132,9 +132,9 @@
                             panelHeight:indicatorHeight,
                             parameters: { init: {
                                 studyOverZonesEnabled: false,
-                                studyOverBoughtValue: newQuotes[i].opt_extreme?newQuotes[i].opt_extreme:NaN,
+                                studyOverBoughtValue: newQuotes[i].opt_extreme?Math.round(newQuotes[i].opt_extreme*100)/100:NaN,
                                 studyOverBoughtColor: "#FF0000",
-                                studyOverSoldValue: newQuotes[i].pess_extreme?newQuotes[i].pess_extreme:NaN,
+                                studyOverSoldValue: newQuotes[i].pess_extreme?Math.round(newQuotes[i].pess_extreme*100)/100:NaN,
                                 studyOverSoldColor: "#00DD00",
                             }},
                             attributes:{
@@ -495,9 +495,9 @@
                         {indicatorClose:color,description: '',url:indicator},
                         parameters: { init: {
                             studyOverZonesEnabled: false,
-                            studyOverBoughtValue: extremeLines?extremeLines.op:NaN,
+                            studyOverBoughtValue: extremeLines?Math.round(extremeLines.op*100)/100:NaN,
                             studyOverBoughtColor: "#FF0000",
-                            studyOverSoldValue: extremeLines?extremeLines.ep:NaN,
+                            studyOverSoldValue: extremeLines?Math.round(extremeLines.ep*100)/100:NaN,
                             studyOverSoldColor: "#00DD00",
                         }},
                         attributes:{
@@ -538,9 +538,9 @@
                                     {indicatorClose:color,description: newQuotes.description,url:indicator},
                                     parameters: { init: {
                                         studyOverZonesEnabled: false,
-                                        studyOverBoughtValue: newQuotes.opt_extreme?newQuotes.opt_extreme:NaN,
+                                        studyOverBoughtValue: newQuotes.opt_extreme?Math.round(newQuotes.opt_extreme*100)/100:NaN,
                                         studyOverBoughtColor: "#FF0000",
-                                        studyOverSoldValue: newQuotes.pess_extreme?newQuotes.pess_extreme:NaN,
+                                        studyOverSoldValue: newQuotes.pess_extreme?Math.round(newQuotes.pess_extreme*100)/100:NaN,
                                         studyOverSoldColor: "#00DD00",
                                     }},
                                     attributes:{
