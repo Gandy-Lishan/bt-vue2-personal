@@ -398,8 +398,7 @@ export default {
       },
 			searchItem: '',
       currentSort: {}, // 当前的排序信息
-			searchItem: '',
-			isSystem: false
+			searchItem: ''
 		}
 	},
 	directives: {
@@ -413,7 +412,14 @@ export default {
     //   this.getDataList(null)
     // })
 		this.loading = false
-    this.isSystem = this.$store.state.form.role
+	},
+	computed: {
+		is_admin() {
+      return this.$store.state.user.is_admin
+    },
+		isSystem() {
+			return this.$store.state.form.role
+		}
 	},
 	methods: {
 		async getDataList(orderby) {

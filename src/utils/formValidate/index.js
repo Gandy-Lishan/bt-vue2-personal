@@ -64,10 +64,10 @@ export const createPositiveIntegerValidate = value => {
 // 用于分析师 URL 验证
 export const validateURLRule = (_, value, callback) => {
 	const pattern = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
-	if (value === '') {
-		callback(new Error('Please enter the url of the analyst report'))
-	}
-	if (!pattern.test(value)) {
+	// if (value === '') {
+	// 	callback(new Error('Please enter the url of the analyst report'))
+	// }
+	if (!pattern.test(value) && value != '') {
 		callback(new Error('Url address format error'))
 	}
 	callback()

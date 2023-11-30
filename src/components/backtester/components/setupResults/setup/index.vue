@@ -124,20 +124,28 @@ export default {
 					dataToUse.old_uuid = dataToUse.id
           await _this.displaySetUpForm(dataToUse)
         }
-				// 如果跳转携带 backtestID 则填充
-				const backtestID = LocalStorageUtil.get('backtestID')
-				if(backtestID) {
-					const res = await seeParams(backtestID)
-					res.data.commission = (res.data.commission * 100).toFixed(2)
-					await _this.displaySetUpForm(res.data)
-					LocalStorageUtil.remove('backtestID')
-				}
       }
 			_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')
 			CIQ.hideCover()
     });
   } else {
-    next(_this => {_this.$store.state.form.rowDataForDisplay = {}; _this.$store.state.form.cachedBTBasicInfoData = {}});
+    next(async _this => {
+			// 如果跳转携带 backtestID 则填充
+			const backtestID = LocalStorageUtil.get('backtestID')
+				if(backtestID) {
+					const res = await seeParams(backtestID)
+					res.data.commission = (res.data.commission * 100).toFixed(2)
+					res.data.user_tag = 'client'
+					_this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', res.data)
+					_this.$store.commit('form/CACHED_SCOPED_ROW_IMMUTABLE', res.data)
+					_this.$store.state.form.favoriteBacktestRowData.id = res.data.id
+					await _this.displaySetUpForm(res.data)
+					LocalStorageUtil.remove('backtestID')
+				}else {
+					_this.$store.state.form.rowDataForDisplay = {};
+					_this.$store.state.form.cachedBTBasicInfoData = {}
+				}
+		});
   }
 	},
 	// beforeRouteLeave(to, from, next) {
@@ -194,7 +202,7 @@ export default {
       this.$store.commit('initialBacktestInfo')
 			this.$refs['basicInfo'].clearForm()
 			this.$refs['entryChild'].clearForm()
-      this.$refs['exitChild'].resetForm()
+      this.$refs['exitChild'].clearForm()
 		},
 		setSetUpLoadingSetting(isSetupLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_SETUP_LOADING', {
@@ -522,10 +530,12 @@ export default {
 
 				if (displayData.exit.signals.length === 0 || displayData.exit.signals.includes(undefined)) {
 					displayData.exit.signals = [{ code: '' }];
+					_this.isRiskControl = true
 					_this.$nextTick(() => {
 						_this.$refs.exitChild.setRiskEditData(displayData);
 					});
 				} else {
+					_this.isRiskControl = false
 					let exitPanel = displayData.exit.signals.length;
 					let exitData = { exit: displayData.exit };
 					_this.$refs.exitChild.setEditPanel(exitPanel, exitData);

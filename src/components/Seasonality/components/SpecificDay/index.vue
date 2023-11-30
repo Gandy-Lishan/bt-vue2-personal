@@ -415,8 +415,8 @@ export default {
         const year = new Date().getFullYear()
         const todayDate = new Date(`${year}-${today}`)
         const selectDate = new Date(`${year}-${selectDay}`)
-        if (selectDate <= todayDate) return true
-        return false
+        if(selectDate > todayDate && this.data.period == 0) return false
+        return true
       }
       const today = `${new Date().getMonth() + 1}-${new Date().getDate()}`
       const result = compareDates(today, value);

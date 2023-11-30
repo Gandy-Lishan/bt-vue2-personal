@@ -69,7 +69,7 @@ const state = {
 	saveConditionFormdata: {}, //form
 
 	tabIndex: 0, //form
-	riskControl: 'true', //form
+	riskControl: true, //form
 	usersOwnEntryFileHash: Array(5).fill(''), //form
 	usersOwnExitFileHash: Array(5).fill(''), //form
 	userUploadFileContent: Array(5).fill({}), //form

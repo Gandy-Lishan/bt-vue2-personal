@@ -498,13 +498,15 @@ export default {
       const validForm = this.validForm()
       const rowUrl = this.rowUrl
       if(!validForm) return
-      const nameLookupRes = await searchIndicator(this.data.name)
-      const count = nameLookupRes.data.count
-      const nameList = nameLookupRes.data.results
-      if(count != 0) {
-        const duplicateItem = nameList.filter(item => item.name == this.data.name)
-        console.log('duplicateItem', duplicateItem)
-        if(duplicateItem) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
+      if(!this.rowUrl) {
+        const nameLookupRes = await searchIndicator(this.data.name)
+        const count = nameLookupRes.data.count
+        const nameList = nameLookupRes.data.results
+        if(count != 0) {
+          const duplicateItem = nameList.filter(item => item.name == this.data.name)
+          console.log('duplicateItem', duplicateItem)
+          if(duplicateItem) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
+        }
       }
       let saveData = null;
       if(this.data.categories !== 'WIC') {
@@ -530,7 +532,7 @@ export default {
         }
       } else {
         // if (this.weightValidErrMsg) return;
-        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(1));
+        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(2));
         const indicator_weight = percentageStrings.join('_');
 
         const mul_indicator = this.weightData.reduce((acc, item, index) => {
@@ -589,7 +591,7 @@ export default {
         }
       } else {
         // if (this.weightValidErrMsg) return;
-        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(1));
+        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(2));
         const indicator_weight = percentageStrings.join('_');
 
         const mul_indicator = this.weightData.reduce((acc, item, index) => {
@@ -694,15 +696,10 @@ export default {
     },
     createFilter(queryString) {
       return (dropdownList) => {
-        const labelMatch =
-          dropdownList.label
-            .toLowerCase()
-            .indexOf(queryString.toLowerCase()) === 0
-        const urlMatch =
-          dropdownList.url.toLowerCase().indexOf(queryString.toLowerCase()) ===
-          0
-        return labelMatch || urlMatch
-      }
+        const labelMatch = dropdownList.label.toLowerCase().includes(queryString.toLowerCase());
+        const urlMatch = dropdownList.url.toLowerCase().includes(queryString.toLowerCase());
+        return labelMatch || urlMatch;
+      };
     },
     getList() {
       const data = this.data
