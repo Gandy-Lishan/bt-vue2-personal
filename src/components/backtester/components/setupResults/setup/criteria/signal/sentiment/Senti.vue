@@ -584,7 +584,6 @@ export default {
       let indicator_url_with_ma = ''
       if (indicator_url) {
         // 如果当前indicator自带ma,indicator_url改为ma_url
-        console.log('CIQ.stxx.layout.studies', CIQ.stxx.layout.studies)
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
           if (
             CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url &&
@@ -599,6 +598,7 @@ export default {
         }
 
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
+          // 定位ROC study,首先field为indicator均线的肯定只有roc, 再就是判断field为indicator而且类型不为均线的study
           if (
             (CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url_with_ma ||
               (CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url &&
@@ -619,7 +619,23 @@ export default {
           [7, { name: 'MA Ratio', abbr: 'MA' }],
           [8, { name: 'Range Rank', abbr: 'RR' }],
         ])
-        var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+
+        // 判断是否已经存在完全一样条件的ROC
+        let sameCondExit = false
+        for (var studyInstanceName in CIQ.stxx.layout.studies) {
+          // 定位ROC study,首先field为indicator均线的肯定只有roc, 再就是判断field为indicator而且类型不为均线的study
+          if (
+            // 用indexOf查看是否包含而不是比较等于是因为需要匹配所有同stma的roc，但是同名stma显示名却不一样
+            (indicator_url_with_ma.indexOf(CIQ.stxx.layout.studies[studyInstanceName].inputs.Field) != -1 ||
+              (CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url &&
+                CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA')) &&
+            CIQ.stxx.layout.studies[studyInstanceName].inputs.period == this.senti.conditionPeriod &&
+            CIQ.stxx.layout.studies[studyInstanceName].inputs.condition == conditionMap.get(this.senti.newCondition).abbr
+          ) {
+            sameCondExit = true
+          }
+        }
+        if(!sameCondExit) CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           display: conditionMap.get(this.senti.newCondition).name,
           Field: indicator_url_with_ma ? indicator_url_with_ma : indicator_url,
           condition: conditionMap.get(this.senti.newCondition).abbr,
