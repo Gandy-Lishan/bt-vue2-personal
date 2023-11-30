@@ -132,9 +132,9 @@
                             panelHeight:indicatorHeight,
                             parameters: { init: {
                                 studyOverZonesEnabled: false,
-                                studyOverBoughtValue: newQuotes[i].opt_extreme?parseFloat(newQuotes[i].opt_extreme.toFixed(2)):NaN,
+                                studyOverBoughtValue: newQuotes[i].opt_extreme?Math.round(newQuotes[i].opt_extreme*100)/100:NaN,
                                 studyOverBoughtColor: "#FF0000",
-                                studyOverSoldValue: newQuotes[i].pess_extreme?parseFloat(newQuotes[i].pess_extreme.toFixed(2)):NaN,
+                                studyOverSoldValue: newQuotes[i].pess_extreme?Math.round(newQuotes[i].pess_extreme*100)/100:NaN,
                                 studyOverSoldColor: "#00DD00",
                             }},
                             attributes:{
@@ -495,9 +495,9 @@
                         {indicatorClose:color,description: '',url:indicator},
                         parameters: { init: {
                             studyOverZonesEnabled: false,
-                            studyOverBoughtValue: extremeLines?parseFloat(extremeLines.op.toFixed(2)):NaN,
+                            studyOverBoughtValue: extremeLines?Math.round(extremeLines.op*100)/100:NaN,
                             studyOverBoughtColor: "#FF0000",
-                            studyOverSoldValue: extremeLines?parseFloat(extremeLines.ep.toFixed(2)):NaN,
+                            studyOverSoldValue: extremeLines?Math.round(extremeLines.ep*100)/100:NaN,
                             studyOverSoldColor: "#00DD00",
                         }},
                         attributes:{
@@ -538,9 +538,9 @@
                                     {indicatorClose:color,description: newQuotes.description,url:indicator},
                                     parameters: { init: {
                                         studyOverZonesEnabled: false,
-                                        studyOverBoughtValue: newQuotes.opt_extreme?parseFloat(newQuotes.opt_extreme.toFixed(2)):NaN,
+                                        studyOverBoughtValue: newQuotes.opt_extreme?Math.round(newQuotes.opt_extreme*100)/100:NaN,
                                         studyOverBoughtColor: "#FF0000",
-                                        studyOverSoldValue: newQuotes.pess_extreme?parseFloat(newQuotes.pess_extreme.toFixed(2)):NaN,
+                                        studyOverSoldValue: newQuotes.pess_extreme?Math.round(newQuotes.pess_extreme*100)/100:NaN,
                                         studyOverSoldColor: "#00DD00",
                                     }},
                                     attributes:{
