@@ -21,9 +21,6 @@
 /* eslint-disable no-extra-parens */
 
 //import store from '../../../../stocksystemui/src/store/store.ts'
-import {
-	getBTV1FavIndicator,
-} from '@/service/service.js'
 import { CIQ } from 'chartiq/js/chartiq.js'
 import * as mqs from 'qs'
 var claims = []
@@ -3425,24 +3422,13 @@ CIQ.getFavorite = function() {
 					favoriteSymbolList = JSON.parse(res.data.favorite_symbol)
 					favoriteIndicatorList = JSON.parse(res.data.favorite_indicator)
 				} catch {}
+				CIQ.store.commit(
+					'chart/setFavoriteIndicatorList',
+					favoriteIndicatorList
+				)
+				CIQ.store.commit('chart/setFavoriteSymbolList', favoriteSymbolList)
 
-				// 每次请求收藏列表也从btv1中获取收藏的indicator并去重
-				getBTV1FavIndicator().then(favIndi=>{
-					favoriteIndicatorList.push(...favIndi.data.data.map(item=>{return {name:item.chart_name[0],url:item.url[0]}}))
-					favoriteIndicatorList = Array.from(new Set(favoriteIndicatorList.map(item => item.url))).map(url => {
-						return favoriteIndicatorList.find(item => item.url === url);
-					});
-
-					CIQ.store.commit(
-						'chart/setFavoriteIndicatorList',
-						favoriteIndicatorList
-					)
-					CIQ.store.commit('chart/setFavoriteSymbolList', favoriteSymbolList)
-
-					res.data["favorite_indicator"] = JSON.stringify(favoriteIndicatorList)
-					resolve(res.data)
-				})
-
+				resolve(res.data)
 			})
 		// .catch(err=>{
 		// 	// todo, 暂时用于进入backteser路由的权限控制
