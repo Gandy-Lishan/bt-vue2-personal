@@ -37,15 +37,41 @@ export function setRouterPermission(router) {
 		if (symbol) LocalStorageUtil.set('symbol', symbol)
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求
 	/* hao@sentimentrader.com */
+
 		// Cookies.set(
 		// 	'sentimen_session',
 		// 	'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FamVv8Nu+OjDeax6/BPemIRtLvxe/ttdcR7ljhLshELegopMNz+YDb73aumgbPJjL/N9dHtRcLmiQd4obvi/ZBgpyj6lX3zBFTA1oLIF7vZgAKOAsuoRHWZg/asNtL34ZUNswnMAUy6RQmkXiJ4OJLqXEs5kLemATonJ2JQf58AXOkQsWfVDfi9glN+sw1OPlHwandKE6qHzWxlibvTrUJsc2kxd2+VDYPK3pbGUDUbPdXJVZ2LMZqRWYtzXS2E74ywV98NoJOBfmgihgC4xxI5toN6zORyAhX1wt5EUPbBETOMPwECWJY7Rs6uLvOIWKKjDxd+d4wkQhC3QvQ/7J+JVIQKetRSgsp2G7YS6ugW3+ncSCcdQoCfcFYziACDCJ8Q=='
 		// )
+
 		/* erichuerichu003@gmail.com */
+
 		// Cookies.set(
 		// 	'sentimen_session',
 		// 	'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgvUwa2PVjPkzAS3Cz0RiOfAcWgdbigTrlPMz+1DPMqZHSm7Bdl9U+9skjq8uFG+9ZuaUSU2cw9b5fl3zG2qYLillioMh+Ulz6t0A+dyomkyUNJ6XNYMoabcQfANgH0a7eMNydR9q+MBrwrKdUPsSBrsxa7yWy7GjkPaKamQ1iBoLEaLpff7cjysFfFwKrMGmLst41vP91uvmWrOTWzTe6aYvYesQSMLyyQT9FI9l2zIpI3htq1+Qa/6nEA173jkQ4='
 		// )
+
+		/* jinjing@elixiroftechnology.com */
+		
+		// Cookies.set(
+		// 	'sentimen_session',
+		// 	'IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqd8Wla1zo7ruX/cgQVVp3cgiqt/9WkKuHREX8aSJJ7mIC5GdVbirl1MowfCqGmZZYzzI4zhAL3Tey6TKBM3fD8sQuB+8YvL4zUehmqhzcAjDFrvjhktk3srF6kAB1eQGEiittMsmMhei4TX0qrt3ikE+infhHI0oBeMXf2J2i4MGuYR9oHqqQdXsW7cP8mHT9hoXd/mPe4WcTSnfnn1EMOqqZ1DGIB+mkPCA7BHS101X0+7EhpzWwAhim49KNkKwWgittqf0Ajf1gZ6jpzeuonFlN3h7cvcnOxxdMvZ7z6YAJUfJEau0yk/rnUkZpgcrc2jSFQXro+DG3EJJw97+tc28+HDqkJTAcz/VHKF3tktUd+ptxMi7jqya/wCy5wSX9L0ZS2/UufwzXfwfNzG5dgcm4DxIjY+YvgmoBU7j8DibA=='
+		// )
+
+		
+		/* he+PB@sentimentrader.com */
+		
+		// Cookies.set(
+		// 	'sentimen_session',
+		// 	'IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdVL9w+9RqKgMsDueS5f+2BFVxWebii4op4cCMiPBV73opZm7ogud2q1OLV96pFi+2+qzE4/ILSnmDhqElkFHI9mmf8DAM5cVRNJpHMI+SAgSeYCrC1/ZAc/DA8PCWXfAHswmJVM3XAYt3b4R11bmMI5n6Oe8itQZrdJGhpScSBLKpvtC/NqBAqmJS64vRBjw3PSsocTeKkji+OWnUG6KTFfId4fRWpIj47FlICxoE7RlTeGfRB2V/0DX9ClNsjrConH9rNV/DYDrkV7ox9paOLt1OmTEJi9IRD4+m1XyegNNo/HfYmvnds6RrfnmiSVA0XRfVDUJ3AL85XnqbwFI5UzAFehCmLWvpBYFPC90z+y3p59/icLFt8cqDx93jum4YkxuSKBKnT0INUzBhSIfy5bnE9qbfh2NuqiGPTVBlitw=='
+		// )
+
+		/* jinjing@elixiroftechnology.com */
+
+		// Cookies.set(
+		// 	'sentimen_session',
+		// 	'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHhhO%2B65ptY8oR7y7M%2FpJ8xU36m3EyLuOrJr%2FALLnBJf0lgbQWWdLdd0Wv%2BcAjeN13qO%2FIZ4ifRX7V5OiD7gG4OoI4gNYu0rPJnWOFilqpB9nC7n36CeMNI%2BHVEIOu1VTV1kEZvcku30lgyE%2FmtKYbiBqW1e86SlvDZp9IHRs%2B320k6MnLj0JLfe7rVabhbVqNRIG5r5izjjRoQdsgngG7zLu866QkETfhWkAzRSlxtEWQIApWrhzBACdfQuSIockg%2B4CEOpbmRX6uhnR7LMtHm5lR8kRq7TKT%2BudSRmmBytzV2xBVSEvxkDNj4x%2F1cC6Q4bcyuhLXP8MNm9xNCFdp1l%2BWALb1ryZkuhMjQHhZfeWu1d5e5LWBVXPHGUA1TJZ7o%3D'
+		// )
+
 		if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
 			//set 10 sec as default,However, some time-consuming requests are processed separately
 			if (
