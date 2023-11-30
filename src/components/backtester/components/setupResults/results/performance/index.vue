@@ -69,9 +69,9 @@ export default {
       editBacktestID: null,
     }
   },
-  async created() {
-    await this.getResultData({ id: 0 })
-  },
+  // async created() {
+  //   await this.getResultData({ id: 0 })
+  // },
   methods: {
     clearForm() {
       Object.assign(this.$data, this.$options.data())
