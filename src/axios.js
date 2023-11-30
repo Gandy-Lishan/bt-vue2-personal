@@ -146,7 +146,7 @@ instance.interceptors.response.use(
 			// }
 			switch (err?.response?.status) {
 				case 401:
-					_this.popUpMsgBox('Sample backtest can only be viewed but not run')
+					_this.popUpMsgBox('You don\'t have permission to create')
 					break;
 				case 403:
 					_this.popUpMsgBox('Permission denied')
