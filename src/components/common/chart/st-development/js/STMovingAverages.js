@@ -443,7 +443,10 @@ if (!CIQ.Studies) {
 		var field = sd.inputs.Field;
 		var condition = sd.inputs.condition;
 		var period = sd.inputs.period;
-		const desc = ' '+sd.name.match(/\(([^)]+)\)/)[0];
+
+		const desc = sd.name.substring(sd.name.indexOf('(')); // 提取从第一个左括号开始的子字符串
+
+		//const desc = ' '+sd.name.match(/\(([^)]+)\)/)[0];
 		var showSupLine = (!sd.parameters.showSupLine && sd.parameters.showSupLine!=0)?null:sd.parameters.showSupLine
 
 		if (!field || field == "field") field = "Close";
@@ -866,7 +869,7 @@ if (!CIQ.Studies) {
             overlay: true,
             calculateFN: CIQ.Studies.calculateSTMovingAverage,
             inputs: { Period: 20, Field: "field", Type: "ma", Offset: 0 },
-            outputs: { MA: "#FF000" },
+			outputs: { MA: "#FF000" },
         },
 		"High Low": {
 			name: "High Low Bands",
