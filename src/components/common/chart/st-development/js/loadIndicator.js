@@ -5,6 +5,7 @@
  //import {CIQ} from "./STMask.js"
  import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
  import {config} from "../feeds/STDataFeedAccessUrl.js"
+ import {maxNumOfStudy} from '@/utils'
  //import "./STMovingAverages.js"
  import qs from 'querystring'
  import {
@@ -308,25 +309,8 @@
      }
      CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
    
-             // old version only
-             var countExistIndicator = 0
-             for (var studyInstanceName in CIQ.stxx.layout.studies) {
-                if (CIQ.findBuiltinTechIndicator(null,CIQ.stxx.layout.studies[studyInstanceName].type)){
-                    countExistIndicator--
-                }
-                if(CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA'){
-                    countExistIndicator--
-                }
-                countExistIndicator++          
-             } 
-             
-             if(countExistIndicator>=10){
-                 //loader.hide()
-                 CIQ.hideCover()
-                 CIQ.nprogress.done()
-                 CIQ.description("Maximum 10 signals can be displayed on chart")
-                 return
-             }
+      // 限制同屏显示个数
+      if(maxNumOfStudy()) return
  
      let count = 0
      for (var studyInstanceName in CIQ.stxx.layout.studies) {

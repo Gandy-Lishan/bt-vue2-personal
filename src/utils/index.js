@@ -1,3 +1,5 @@
+import { CIQ } from '@/components/common/chart/st-development/js'
+
 // 字符串首字母大写
 const capitalizeFirstLetter = str => {
 	return str.charAt(0).toUpperCase() + str.slice(1)
@@ -169,5 +171,27 @@ const checkProperties = (obj, properties) => {
   return true; // 如果所有属性都不为空，返回 true
 }
 
+// 限制同屏显示个数
+const maxNumOfStudy = () => {
+    var countExistIndicator = 0
+    for (var studyInstanceName in CIQ.stxx.layout.studies) {
+      if (CIQ.findBuiltinTechIndicator(null,CIQ.stxx.layout.studies[studyInstanceName].type)){
+        countExistIndicator--
+      }
+      if (CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
+        countExistIndicator--
+      }
+      countExistIndicator++
+    }
+    if (countExistIndicator >= 1) {
+      CIQ.description('Maximum 10 signals can be displayed on chart')
+      CIQ.hideCover()
+      CIQ.nprogress.done()
+      return true
+    }else{
+      return false
+    }
+}
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties}
+
+export {capitalizeFirstLetter, compareArrays, timestampToTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy}
