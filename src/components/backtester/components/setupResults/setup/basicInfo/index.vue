@@ -1183,7 +1183,7 @@ export default {
       if(!setUpValid){
         _this.popUpMsgBox('Kindly ensure that the form fields are filled correctly');
           return false }
-      debugger
+      //debugger
       // 首次创建, 或者点击按钮跳转过来
       const isClient = _this.getterBacktestInfo.hasOwnProperty('user_tag') && _this.getterBacktestInfo.user_tag == 'client'
       const isAdmin = _this.is_admin && ['analyst', 'system'].includes(_this.userRole) && ['analyst', 'system', 'client'].includes(_this.bd.user_tag)
