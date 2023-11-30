@@ -314,6 +314,9 @@ cq-indicators-lookup-results {
   -webkit-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+
+  /* long: */
+  position: relative; 
 }
 .stxMenuActive cq-indicators-lookup-results {
   opacity: 1;
