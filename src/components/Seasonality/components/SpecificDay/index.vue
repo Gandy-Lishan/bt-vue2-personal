@@ -200,6 +200,7 @@ export default {
         { label: 'Christmas Day', month: 12, day: 25, value: 7 },
         { label: 'Memorial Day', month: 5, day: 29, value: 8 },
         { label: 'Custom Time', value: 9 },
+        { label: 'FOMC Decision Day', month: 2, day: 1, value: 10 }
       ],
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
