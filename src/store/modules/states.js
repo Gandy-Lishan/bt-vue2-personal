@@ -78,7 +78,10 @@ const actions = {
 	set_isMarkerShown_flag({commit},val){
 		return new Promise(resolve=>{
 			// 判断marker是否加载
-			if(!val) CIQ.hideMarker()
+			if(!val){
+				CIQ.store.commit('chart/getTradesData', [])
+				CIQ.hideMarker()
+			} 
 			commit('SET_ISMARKERSHOWN_FLAG',val)
 			resolve();
 		})
