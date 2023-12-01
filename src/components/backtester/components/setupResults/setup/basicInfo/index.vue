@@ -1293,7 +1293,7 @@ export default {
         if(editData.risk_control === '//') this.isRiskControl = false
         if(editData.risk_control && editData.risk_control !== '//') this.isRiskControl = true
         this.$emit('IsRiskControl', this.isRiskControl)
-        this.$store.commit('form/isRiskControl', this.isRiskControl)
+        // this.$store.commit('form/isRiskControl', this.isRiskControl)
         
         // 还是用getFrequency因为无需edit后再次调用addIndicators()
         this.getFrequency(editData.frequency)
