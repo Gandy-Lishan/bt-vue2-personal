@@ -126,6 +126,7 @@ instance.interceptors.response.use(
 				store.commit('form/SET_LIST_LOADING', false);
 				store.commit('form/SET_SETUP_LOADING', {
 					isSetupLoading: false,
+					showProgress: false,
 					percentage: 0,
 					progressText: ''
 				})
