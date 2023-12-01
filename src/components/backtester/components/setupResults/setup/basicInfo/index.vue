@@ -763,11 +763,6 @@ export default {
         { value: 1, label: 'Next Close' },
         { value: 2, label: 'Current Close' },
       ],
-      userTagOptions: [
-        { value: 'client', label: 'Client' },
-        { value: 'analyst', label: 'Analyst' },
-        { value: 'system', label: 'System' }
-      ],
       directionOptions:  [
         { value: 'Long', label: 'Long' },
         { value: 'Short', label: 'Short' }
@@ -859,6 +854,23 @@ export default {
     },
     userRole() {
       return this.$store.state.user.role
+    },
+    userTagOptions() {
+      if(this.userRole == 'analyst') {
+        return [
+            { value: 'client', label: 'Client' },
+            { value: 'analyst', label: 'Analyst' }
+          ]
+      }else if(this.userRole == 'system') {
+        return [
+            { value: 'client', label: 'Client' },
+            { value: 'system', label: 'System' }
+          ]
+      }else {
+        return [
+            { value: 'client', label: 'Client' }
+          ]
+      }
     }
   },
   watch: {
@@ -1183,12 +1195,11 @@ export default {
       if(!setUpValid){
         _this.popUpMsgBox('Kindly ensure that the form fields are filled correctly');
           return false }
-      //debugger
       // 首次创建, 或者点击按钮跳转过来
       const isClient = _this.getterBacktestInfo.hasOwnProperty('user_tag') && _this.getterBacktestInfo.user_tag == 'client'
       const isAdmin = _this.is_admin && ['analyst', 'system'].includes(_this.userRole) && ['analyst', 'system', 'client'].includes(_this.bd.user_tag)
       // 编辑, 但是没有权限
-      if(!isClient || (!isClient && !isAdmin)) {
+      if(!isClient && !isAdmin) {
         _this.popUpMsgBox('Permission denied');
         return false
       }
