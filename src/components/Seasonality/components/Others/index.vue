@@ -249,8 +249,4 @@ export default {
   justify-content: space-between;
   width: 100%;
 }
-.seasonality-form-container .show-table {
-  margin: unset;
-  border-top: 2px solid #dbdbdb;
-}
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<div class="tim-container">
-		<p>
+		<p style="margin: 10px auto; width: 80%">
 			The results below provide a multiple timeframe view of the backtest of the
 			indicator and index that you have chosen. The 'Exit Criteria' selected for
 			the backtest is not used for the results below. Instead, we provide a look
@@ -13,13 +13,14 @@
 						<template>
 							<el-table
 								:data="backtestHistoryList"
+								:row-class-name="tableRowClassName"
 								stripe
-								style="width: 100%; height: 100%"
+								style="width: 80%; height: 100%; margin: 0 auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
-									<el-table-column :label="l" :prop="l" :key="index">
+									<el-table-column :label="l" :prop="l" :key="index" align="center">
 										<template slot-scope="scope">
-											<p class="tableText">
+											<p class="tableText" :class="getCellStyle(scope.row[l])">
 												{{ displayData(scope.row[l]) }}
 											</p>
 										</template>
@@ -32,6 +33,7 @@
 						</template>
 					</el-skeleton>
 				</div>
+				<hr style="height:2px;border:none;color:#333;background-color:#333;width: 80%">
 				<div class="zscore-container">
 					<el-skeleton :rows="2" :loading="loading" animated>
 						<template>
@@ -39,9 +41,9 @@
 								:data="result_quotes"
 								:show-header="false"
 								stripe
-								style="width: 100%; height: 100%"
+								style="width: 80%; height: 100%; margin: 0 auto"
 							>
-								<el-table-column prop="property" label="Property">
+								<el-table-column prop="property" label="Property"  align="center">
 								</el-table-column>
 
 								<template v-for="column in periods">
@@ -49,9 +51,10 @@
 										:key="column.period"
 										:label="column.period"
 										:prop="column.period"
+										align="center"
 									>
 										<template slot-scope="scope">
-											<p class="tableText">
+											<p class="tableText" :class="getCellStyle(scope.row[column.period])">
 												{{
 													!Number.isNaN(scope.row[column.period])
 														? typeof scope.row[column.period] == 'string'
@@ -69,21 +72,18 @@
 				</div>
 			</el-tab-pane>
 			<el-tab-pane label="Exit with Customized Time-In-Market" name="second">
-				<el-button type="primary" @click="showTableDialog" v-if="!showTable"
-					>Edit exit with different TIM</el-button
-				>
 				<div class="history-container">
 					<el-skeleton :rows="6" :loading="loading" animated>
 						<template>
 							<el-table
 								:data="TIMHistoryList"
 								stripe
-								style="width: 100%; height: 100%"
+								style="width: 80%; height: 100%; margin: 0 auto"
 							>
 								<template v-for="(l, index) in defaultTIMTableLabels">
-									<el-table-column :label="l" :prop="l" :key="index">
+									<el-table-column :label="l" :prop="l" :key="index" align="center">
 										<template slot-scope="scope">
-											<p class="tableText">
+											<p class="tableText" :class="getCellStyle(scope.row[l])">
 												{{ displayData(scope.row[l]) }}
 											</p>
 										</template>
@@ -96,6 +96,7 @@
 						</template>
 					</el-skeleton>
 				</div>
+				<hr style="height:2px;border:none;color:#333;background-color:#333;width: 80%">
 				<div class="zscore-container">
 					<el-skeleton :rows="2" :loading="loading" animated>
 						<template>
@@ -103,9 +104,9 @@
 								:data="TIMResult_quotes"
 								:show-header="false"
 								stripe
-								style="width: 100%; height: 100%"
+								style="width: 80%; height: 100%; margin: 0 auto"
 							>
-								<el-table-column prop="property" label="Property">
+								<el-table-column prop="property" label="Property" align="center">
 								</el-table-column>
 
 								<template v-for="column in periodsTIM">
@@ -113,9 +114,10 @@
 										:key="column.period"
 										:label="column.period"
 										:prop="column.period"
+										align="center"
 									>
 										<template slot-scope="scope">
-											<p class="tableText">
+											<p class="tableText" :class="getCellStyle(scope.row[column.period])">
 												{{
 													!Number.isNaN(scope.row[column.period])
 														? typeof scope.row[column.period] == 'string'
@@ -234,6 +236,9 @@
 				</el-dialog>
 			</el-tab-pane>
 		</el-tabs>
+					<div class="editWithCustomBtn">
+					<el-button icon="el-icon-document-add" type="primary" plain size="mini" @click="showTableDialog" v-if="!showTable">Edit exit with different TIM</el-button>
+				</div>
 	</div>
 </template>
 
@@ -1519,10 +1524,31 @@ export default {
 				}
 			}
 			return dataArr
-		}
+		},
+		 getCellStyle(value) {
+      // Check if the value is negative and return a class name accordingly
+      return {
+        'negative-value': value < 0,
+      };
+			},
+			tableRowClassName({row, rowIndex}) {
+			if (rowIndex%2 === 1) {
+			return 'darken-row';
+			}
+			return '';
+		},
 	}
 }
 </script>
 
 <style lang="less" scoped>
+.darken-row {
+	background-color: #f9f9f9;
+}
+.editWithCustomBtn{
+    z-index: 999;
+    position: absolute;
+    top: 12%;
+    left: 76%;
+}
 </style>

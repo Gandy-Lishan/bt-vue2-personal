@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my-indicator-list-container">
     <div class="search-box">
       <el-button type="primary" round @click="handleCreate">Create New Indicator</el-button>
       <el-input placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" 					clearable
@@ -18,7 +18,7 @@
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.8)"
       @sort-change="changeTableSort"
-			style="width: 100%; height: 100%"
+			style="width: 100%; height: 100%; margin: 0 auto;"
 		>
     
       <el-table-column
@@ -373,7 +373,7 @@ export default {
     },
     tableRowClassName({row, rowIndex}) {
 			if (rowIndex%2 === 1) {
-			return 'dark-row'
+			return 'darken-row'
 			}
 			return ''
 		},
@@ -498,6 +498,9 @@ export default {
 .my-indicator-table.el-table /deep/tr{
   cursor: pointer;
 }
+.my-indicator-table{
+  background-color: inherit;
+}
 .el-form-item{
   margin-bottom: 0;
   span {
@@ -521,5 +524,9 @@ export default {
   margin: 0;
   font-weight: 500;
   color: #909399;
+}
+.my-indicator-list-container{
+  width: 90%;
+  margin: 0 auto;
 }
 </style>

@@ -15,7 +15,7 @@
 						<div class="form-label">
 							<h2>Backtest Results</h2>
 							<div class="form-label-detail">
-								<span>Symbol: {{ rowData ? rowData.Symbol : '' }}</span>
+								Symbol: {{ rowData ? rowData.Symbol : '' }}
 							</div>
 						</div>
 						<el-skeleton :rows="6" :loading="loading" animated>
@@ -25,7 +25,7 @@
 									stripe
 									show-summary
 									:summary-method="getSummaries"
-									style="width: 100%; height: 100%"
+									style="width: 80%; height: 100%; margin: 0 auto"
 								>
 										<template v-for="(l, index) in defaultTableLabels">
 											<el-table-column
@@ -34,7 +34,7 @@
 												:key="index"
 											>
 												<template slot-scope="scope">
-													<p class="tableText">
+													<p class="tableText" :class="getCellStyle(scope.row[l])">
 														{{ scope.row[l] }}
 													</p>
 												</template>
@@ -50,7 +50,7 @@
 										:data="result_quotes"
 										:show-header="false"
 										stripe
-										style="width: 100%; height: 100%"
+										style="width: 80%; height: 100%; margin: 0 auto"
 									>
 
 										<template v-for="column in defaultTableLabels">
@@ -64,7 +64,7 @@
 												:prop="column"
 											>
 												<template slot-scope="scope">
-													<p class="tableText">
+													<p class="tableText" :class="getCellStyle(scope.row[column])">
 														{{
 															!Number.isNaN(scope.row[column])
 																? typeof scope.row[column] == 'string'
@@ -223,6 +223,11 @@ computed: {
 			})
 			return sums
 		},
+		getCellStyle(value) {
+			return {
+        'negative-value': value < 0,
+      };
+		}
 
 	},
 
@@ -257,10 +262,12 @@ computed: {
 }
 .form-label h2 {
 	color: black;
+	text-align: center;
+	margin-bottom: 5px;
 }
-.form-label-detail * {
-	margin-right: 20px;
+.form-label-detail {
 	font-size: 0.8rem;
+	text-align: center;
 }
 
 // mobile

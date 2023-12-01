@@ -2,7 +2,7 @@
   <div>
     <el-table
 			ref="MITable"
-			class="my-indicator-table other-table"
+			class="my-indicator-table other-table default-table-class"
 			:data="tableData"
 			:row-class-name="tableRowClassName"
       empty-text="No data"
@@ -11,7 +11,7 @@
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.8)"
       @sort-change="changeTableSort"
-			style="width: 100%; height: 100%"
+			style="width: 80%; height: 100%; margin: 0 auto"
       size="mini"
 		>
 			<template v-for="(l) in tableCol">
@@ -29,7 +29,7 @@
           "
 				>
 					<template slot-scope="scope">
-						<p class="tableText">
+						<p class="tableText" :class="getCellStyle(scope.row[l.value])">
               {{ scope.row[l.value] != undefined ? scope.row[l.value] : '' }}
 						</p>
 					</template>
@@ -44,7 +44,7 @@
           v-if="l.label != 'Month' && l.label != 'Day'"
 				>
 					<template slot-scope="scope">
-						<p class="tableText">
+						<p class="tableText" :class="getCellStyle(scope.row[l.value])">
               {{ scope.row[l.value] != undefined ? `${scope.row[l.value]} %` : '' }}
 						</p>
 					</template>
@@ -129,7 +129,7 @@ export default {
   methods: {
     tableRowClassName({row, rowIndex}) {
 			if (rowIndex%2 === 1) {
-			return 'dark-row'
+			return 'darken-row'
 			}
 			return ''
 		},
@@ -188,6 +188,12 @@ export default {
       this.loading = false
       console.log(searchRes)
     },
+    getCellStyle(value) {
+      // Check if the value is negative and return a class name accordingly
+      return {
+        'negative-value': value < 0,
+      };
+			},
   }
 }
 </script>
@@ -202,7 +208,24 @@ export default {
     color: #5b9bd1;
   }
 }
-.other-table{
-  width: 100%;
+.negative-value{
+  color: #dd3a13;
+}
+ .el-table .cell{
+    font-weight: 400;
+	font-size: 14px;
+  color: #333341;
+  font-family: "Open Sans",sans-serif;
+  text-align: center;
+ }
+.table thead tr th
+  {
+  font-weight: 600 !important;
+  color: #333341;
+}
+
+.el-table th.el-table__cell>.cell
+{
+  font-weight: 600 !important;
 }
 </style>
