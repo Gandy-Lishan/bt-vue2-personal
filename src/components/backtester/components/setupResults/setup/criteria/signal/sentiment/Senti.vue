@@ -352,6 +352,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val) {
+      //debugger
       this.isROCLike = 5 <= val && val <= 8
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
@@ -647,6 +648,8 @@ export default {
         })
 
         // 解决附属ma或者roc漂移问题
+        console.log(this.$route)
+        debugger
         CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
       }
     },
