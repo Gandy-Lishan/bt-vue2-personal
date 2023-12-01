@@ -139,7 +139,7 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 }
 .el-table td.el-table__cell,
 .el-table th.el-table__cell.is-leaf {
-  border-bottom: 2px solid #d6e5ec;
+  border-bottom: 2px solid #dddddd;
 }
 .el-table__cell.el-table__expanded-cell{
   padding: 12px;
@@ -501,4 +501,56 @@ input[type="time"] {
 
 .empty-senti-container {
   min-height: 142px;
+}
+.tim-container .el-table .cell,
+ .summaryContainer .el-table .cell,
+  .historyContainer .el-table .cell,
+   .history-container .el-table .cell,
+    .my-indicator-table .el-table .cell,
+    .default-table-class .el-table .cell
+    {
+  font-weight: 400;
+	font-size: 14px;
+  color: #333341;
+  font-family: "Open Sans",sans-serif;
+  text-align: center;
+}
+.tim-container .table thead tr th,
+ .historyContainer .table thead tr th,
+  .history-container .table thead tr th,
+  .my-indicator-table .table thead tr th,
+  .default-table-class .table thead tr th
+  {
+  font-weight: 600 !important;
+  color: #333341;
+}
+.tim-container .el-table th.el-table__cell>.cell, 
+.summaryContainer .el-table th.el-table__cell>.cell, 
+.historyContainer .el-table th.el-table__cell>.cell,  
+.history-container .el-table th.el-table__cell>.cell,
+.my-indicator-table .el-table th.el-table__cell>.cell,
+.default-table-class .el-table th.el-table__cell>.cell
+{
+  font-weight: 600 !important;
+}
+.tim-container .el-table .cell .negative-value,
+ .summaryContainer .el-table .cell .negative-value,
+  .historyContainer .el-table .cell .negative-value,
+  .history-container .el-table .cell .negative-value,
+  .default-table-class .el-table .cell .negative-value
+   {
+  color: #dd3a13;
+}
+.tim-container .el-input__inner, 
+.summaryContainer .el-input__inner
+ {
+  margin: 0;
+  padding: 0;
+}
+.summaryContainer .el-table__body, .el-table__footer, .el-table__header,
+ .historyContainer .el-table__body, .el-table__footer, .el-table__header,
+ .history-container .el-table__body, .el-table__footer, .el-table__header,
+ .default-table-class .el-table__body, .el-table__footer, .el-table__header
+ {
+  margin: 0 auto;
 }

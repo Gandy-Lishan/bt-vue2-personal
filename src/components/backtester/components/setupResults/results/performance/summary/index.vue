@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="summaryContainer">
-            <el-table :data="tableData" style="width: 100%">
+            <el-table :data="tableData" style="width: 80%; margin: 0 auto;  margin-top: 20px">
                 <el-table-column
                     prop="totalReturn"
                     show-overflow-tooltip
@@ -119,7 +119,7 @@
             <el-table
                 header-align="center"
                 :data="tableData"
-                style="width: 100%; margin-top: 20px"
+                style="width: 80%; margin: 0 auto; margin-top: 20px"
             >
                 <el-table-column
                     prop="winRate"
@@ -190,7 +190,7 @@
             <el-table
                 header-align="center"
                 :data="tableData"
-                style="width: 100%; margin-top: 20px"
+                style="width: 80%; margin: 0 auto; margin-top: 20px"
             >
                 <el-table-column
                     prop="totalTrades"

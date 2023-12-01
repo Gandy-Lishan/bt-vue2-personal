@@ -1,8 +1,8 @@
 <template>
-    <div class="trades-container">
+    <div class="trades-container history-container">
         <el-table
             :data="paginatedData"
-            style="width: 100%"
+            style="width: 80%; margin: 0 auto"
             border
             :span-method="objectSpanMethod"
         >
