@@ -447,8 +447,7 @@ if (!CIQ.Studies) {
 		const desc = sd.name.substring(sd.name.indexOf('(')); // 提取从第一个左括号开始的子字符串
 
 		//const desc = ' '+sd.name.match(/\(([^)]+)\)/)[0];
-		var showSupLine = (!sd.parameters.showSupLine && sd.parameters.showSupLine!=0)?null:sd.parameters.showSupLine
-
+		// var showSupLine = (!sd.parameters.showSupLine && sd.parameters.showSupLine!=0)?null:sd.parameters.showSupLine
 		if (!field || field == "field") field = "Close";
 
 		// 下面为计算 ROC, ROR, MAR 的具体公式。
@@ -629,11 +628,11 @@ if (!CIQ.Studies) {
 			}
 			
 			quote[sd.inputs.display+desc] = resArr[i];
-			quote['supLine'] = showSupLine;
+			// quote['supLine'] = showSupLine;
 		}
 
 		sd.outputMap[sd.inputs.display+desc] = "Line";
-		sd.outputMap['supLine'] = "supLine";
+		// sd.outputMap['supLine'] = "supLine";
 		
 		// 给上面函数用的工具函数
 		function getPeriodParam(dataSeries, paramType, period, add_bar) {
@@ -794,7 +793,8 @@ if (!CIQ.Studies) {
             name: "ROCLike Line",
             calculateFN: CIQ.Studies.calculateSTROCLike,
             inputs: { Field: "field",condition: "ROC",period: 5,overlay: false},
-			outputs: { Line: "auto",supLine:'#9a9a9a' },
+			// outputs: { Line: "auto",supLine:'#9a9a9a' },
+			outputs: { Line: "auto" },
         },
 		"Symbol Open": {
             name: "Symbol Open Line",

@@ -450,14 +450,14 @@
                      panelHeight:indicatorHeight,
                      parameters: { init: {
                          studyOverZonesEnabled: false,
-                         studyOverBoughtValue: ownIndicatorInfo?Math.round(ownIndicatorInfo.lower_extreme_value*100)/100:999,
+                         studyOverBoughtValue: ownIndicatorInfo?Math.round(ownIndicatorInfo.lower_extreme_value*1000)/1000:999,
                          studyOverBoughtColor: "#FF0000",
-                         studyOverSoldValue: ownIndicatorInfo?Math.round(ownIndicatorInfo.upper_extreme_value*100)/100:-999,
+                         studyOverSoldValue: ownIndicatorInfo?Math.round(ownIndicatorInfo.upper_extreme_value*1000)/1000:-999,
                          studyOverSoldColor: "#00DD00",
                      }},
                      attributes:{
-                         studyOverBoughtValue:{"step":0.01},
-                         studyOverSoldValue:{"step":0.01}
+                         studyOverBoughtValue:{"step":0.001},
+                         studyOverSoldValue:{"step":0.001}
                      }
                  }
                  
@@ -541,14 +541,14 @@
                          panelHeight:indicatorHeight,
                          parameters: { init: {
                              studyOverZonesEnabled: false,
-                             studyOverBoughtValue: newQuotes[i].opt_extreme?Math.round(newQuotes[i].opt_extreme*100)/100:NaN,
+                             studyOverBoughtValue: newQuotes[i].opt_extreme?Math.round(newQuotes[i].opt_extreme*1000)/1000:NaN,
                              studyOverBoughtColor: "#FF0000",
-                             studyOverSoldValue: newQuotes[i].pess_extreme?Math.round(newQuotes[i].pess_extreme*100)/100:NaN,
+                             studyOverSoldValue: newQuotes[i].pess_extreme?Math.round(newQuotes[i].pess_extreme*1000)/1000:NaN,
                              studyOverSoldColor: "#00DD00",
                          }},
                          attributes:{
-                             studyOverBoughtValue:{"step":0.01},
-                             studyOverSoldValue:{"step":0.01}
+                             studyOverBoughtValue:{"step":0.001},
+                             studyOverSoldValue:{"step":0.001}
                          }
                      }
                      
