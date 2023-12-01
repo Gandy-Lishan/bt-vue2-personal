@@ -246,10 +246,20 @@ export default {
       if (plotConfiguration.formatter) {
           H.tooltip.options.formatter = function () {
             var barColor = this.points[0].color;
-
-              return `<b>${DayOrMonthTag}: ` + this.x + '</b><br/>' +
+            if(this.points[0] && this.points[1]){
+               return `<b>${DayOrMonthTag}: ` + this.x + '</b><br/>' +
                   'Avg Return (%): ' + this.points[0].y + '<br/>' +
                   'Percent Positive (%) ' + this.points[1].y;
+            }
+            if(this.points[0]) {
+                return `<b>${DayOrMonthTag}: ` + this.x + '</b><br/>' +
+                  'Avg Return (%): ' + this.points[0].y + '<br/>'
+            }
+            if(this.points[1]) {
+                     return `<b>${DayOrMonthTag}: ` + this.x + '</b><br/>' +
+                  'Percent Positive (%) ' + this.points[1].y;
+            }
+
           };
       }
 
