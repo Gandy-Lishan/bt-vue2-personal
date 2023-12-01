@@ -338,7 +338,8 @@ export default {
           period: this.sym.conditionPeriod
         }, null, {
           criteria: this.criteria,
-          index: this.panelIndex
+          index: this.panelIndex,
+          //showSupLine:100
         })
         // 解决附属ma或者roc漂移问题
         CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
