@@ -8,7 +8,6 @@
 import Highcharts from "highcharts";
 import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
-import logoPNG from "@/assets/logo.png";
 
 
 export default {
@@ -81,7 +80,6 @@ export default {
       // const pList = dataList.map(item => (item[2]))
       const yAxis_1 = this.calculateTickPositions(Math.min(...tList), Math.max(...tList), 10)
       // const yAxis_2 = this.calculateTickPositions(Math.min(...pList), Math.max(...pList), 10)
-      console.log('y 轴左边刻度', yAxis_1)
       // 将上述 JavaScript 代码放在这里
       // 确保导入 Highcharts 库以使此代码正常工作
       // 传入的数据 dataList 和配置 plotConfiguration 作为参数
@@ -104,13 +102,15 @@ export default {
       const format_2 = plotConfiguration.scaleSettings.yAxis_2.format
       const DayOrMonthTag = plotConfiguration.option != 1 ? 'Day' : 'Month'
 
-
       for (const dataPoint of dataList) {
           categories.push(dataPoint[0]);
           tData.push(dataPoint[1]);
           pData.push(dataPoint[2]);
       }
-
+      // 如果 x 轴包含 0， 则提示
+      if (categories.includes(0) && DayOrMonthTag == 'Day') {
+        this.popUpMsgBox('Day 0 represents the selected day, when it is a trading day')
+      }
       const H = Highcharts.chart(id, {
           title: {
               text: title,
