@@ -1,5 +1,5 @@
 <template>
-	<div class="footer" :class="{'isFixedAtBottom': isFixedAtBottom }">
+	<div class="footer" :class="{'isFixedAtBottom': isFixedAtBottom }" v-if="isVisible">
 		<p>
 			Copyright © 2001 - 2023 Sundial Capital Research, Inc. All rights
 			reserved.
@@ -51,15 +51,19 @@
 export default {
   name: 'Footer',
 	data() {
-		return {isFixedAtBottom: false}
+		return {
+			isFixedAtBottom: false,
+			isVisible: true
+		}
 	},
 	watch: {
     '$route'(to, _) {
-			if (to.path.includes('/backtester') || to.path.includes('/myindicator') || to.path.includes('/scannerai')) {
+			if (to.path.includes('/backtester') || to.path.includes('/myindicator') || to.path.includes('/scannerai') || to.path.includes('/doc/home')) {
         this.isFixedAtBottom = false
       }else {
 				this.isFixedAtBottom = true
 			}
+			if(to.path.includes('/doc/guide')) this.isVisible = false
     }
   }
 }

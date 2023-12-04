@@ -1,16 +1,16 @@
 <template>
-    <div class="trades-container">
+    <div class="trades-container history-container">
         <el-table
             :data="paginatedData"
-            style="width: 100%"
+            style="width: 80%; margin: 0 auto"
             border
             :span-method="objectSpanMethod"
         >
             <el-table-column
                 prop="trade_number"
                 show-overflow-tooltip
-                label="Trade #"
-                width="150px"
+                label="#"
+                width="50px"
                 align="center"
             >
                 <template slot-scope="scope">
@@ -213,5 +213,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+.pagination-container {
+    width: 80%;
+    margin: 0 auto;
+}
 </style>

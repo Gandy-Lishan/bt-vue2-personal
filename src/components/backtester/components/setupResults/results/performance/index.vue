@@ -484,4 +484,8 @@ export default {
 .el-table /deep/ td {
 	text-align: center;
 }
+.perfprmance-container /deep/ .el-tabs__header.is-top {
+  width: 80%;
+  margin: 0 auto;
+}
 </style>
