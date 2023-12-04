@@ -57,7 +57,9 @@
           2.Date Range
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
-              >Select date range</span>
+              >Select the start and end dates for stock data. <br/>
+              For instance, the start date is 2020, and the end date is 2022. <br/>
+              The stock data will cover the period from January 1, 2020, to December 31, 2022.</span>
             <i class="iconfont icon-wenhao"></i>
           </el-tooltip>
         </label>
@@ -248,9 +250,5 @@ export default {
 .seasonality-form-container .startAndEndBox {
   justify-content: space-between;
   width: 100%;
-}
-.seasonality-form-container .show-table {
-  margin: unset;
-  border-top: 2px solid #dbdbdb;
 }
 </style>

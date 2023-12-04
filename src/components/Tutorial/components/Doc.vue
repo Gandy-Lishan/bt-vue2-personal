@@ -150,16 +150,16 @@
 				</div> -->
 			</div>
 		</div>
-		<Footer></Footer>
+		<!-- <Footer></Footer> -->
 	</div>
 </template>
 
 <script>
-import Footer from "@/components/BacktestEdge/Footer.vue";
+// import Footer from "@/components/BacktestEdge/Footer.vue";
 export default {
   name: 'DocHome',
   components: {
-    Footer
+    // Footer
   },
   methods: {
     skipUserUpload(id) {
@@ -270,12 +270,6 @@ export default {
 		line-height: 45px;
 		word-wrap: none;
 	}
-}
-.footer {
-	border: none;
-	margin-top: 1rem;
-	margin-bottom: 1.5rem;
-	border-radius: 20px;
 }
 hr {
 	border: 0;

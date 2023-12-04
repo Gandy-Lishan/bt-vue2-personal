@@ -1,7 +1,7 @@
 <template>
     <div class="SNChart-container">
       <SNChart :plotConfiguration="plotConfiguration" :dataList="dataList" :dynamicId="dynamicId" v-if="[0,1].includes(option)"></SNChart>
-      <Table :tableData="dataList" :option="option" v-else></Table>
+      <Table :tableData="dataList" :option="option" class="default-table-class" v-else></Table>
     </div>
   </template>
   

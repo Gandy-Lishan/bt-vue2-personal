@@ -7,12 +7,11 @@
 					<el-table
 						header-align="center"
 						:data="tableData"
-						style="width: 100%; margin-top: 20px">
+						style="width: 80%; margin: 0 auto; margin-top: 20px; ">
 						<el-table-column
 								show-overflow-tooltip
 								prop="CAGR"
 								label="ANNUAL RETURN % (CAGR)"
-
 								align="center"
 							>
 								<template slot-scope="scope">
@@ -20,7 +19,7 @@
 										scope.row.CAGR + ' %'
 									}}</span>
 									<span v-else-if="isNaN(scope.row.CAGR) || !scope.row.CAGR || scope.row.CAGR=='null' || scope.row.CAGR=='0'"></span>
-									<span v-else style="color: red">{{
+									<span v-else style="color: #dd3a13">{{
 										scope.row.CAGR + ' %'
 									}}</span>
 								</template>
@@ -29,7 +28,6 @@
 								show-overflow-tooltip
 								prop="medianReturn"
 								label="MEDIAN RETURN %"
-
 								align="center"
 						>
 								<template slot-scope="scope">
@@ -37,7 +35,7 @@
 										scope.row.medianReturn + ' %'
 									}}</span>
 									<span v-else-if="isNaN(scope.row.medianReturn) || !scope.row.medianReturn || scope.row.medianReturn=='null' || scope.row.medianReturn=='0'"></span>
-									<span v-else style="color: red">{{
+									<span v-else style="color: #dd3a13">{{
 										scope.row.medianReturn + ' %'
 									}}</span>
 								</template>
@@ -46,7 +44,6 @@
 							show-overflow-tooltip
 							prop="averageReturn"
 							label="AVERAGE RETURN %"
-
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -54,7 +51,7 @@
 									scope.row.averageReturn + ' %'
 								}}</span>
 								<span v-else-if="isNaN(scope.row.averageReturn) || !scope.row.averageReturn || scope.row.averageReturn=='null' || scope.row.averageReturn=='0'"></span>
-								<span v-else style="color: red">{{
+								<span v-else style="color: #dd3a13">{{
 									scope.row.averageReturn + ' %'
 								}}</span>
 							</template>
@@ -63,7 +60,6 @@
 							show-overflow-tooltip
 							prop="standardDeviation"
 							label="STD. DEV"
-
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -71,7 +67,7 @@
 									scope.row.standardDeviation
 								}}</span>
 								<span v-else-if="isNaN(scope.row.standardDeviation) || !scope.row.standardDeviation || scope.row.standardDeviation=='null' || scope.row.standardDeviation=='0'"></span>
-								<span v-else style="color: red">{{
+								<span v-else style="color: #dd3a13">{{
 									scope.row.standardDeviation
 								}}</span>
 							</template>
@@ -80,7 +76,6 @@
 							show-overflow-tooltip
 							prop="maxRisk"
 							label="MAX RISK %"
-
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -88,7 +83,7 @@
 									scope.row.maxRisk + ' %'
 								}}</span>
 								<span v-else-if="isNaN(scope.row.maxRisk) || !scope.row.maxRisk || scope.row.maxRisk=='null' || scope.row.maxRisk=='0'"></span>
-								<span v-else style="color: red">{{
+								<span v-else style="color: #dd3a13">{{
 									scope.row.maxRisk + ' %'
 								}}</span>
 							</template>
@@ -97,7 +92,7 @@
 					<el-table
 						header-align="center"
 						:data="tableData"
-						style="width: 100%; margin-top: 20px"
+						style="width: 80%; margin: 0 auto; margin-top: 20px"
 					>
 						<el-table-column
 							prop="winRate"
@@ -110,7 +105,7 @@
 									scope.row.winRate + '%'
 								}}</span>
 								<span v-else-if="isNaN(scope.row.winRate)">0</span>
-								<span v-else style="color: red">{{
+								<span v-else style="color: #dd3a13">{{
 									scope.row.winRate + '%'
 								}}</span>
 							</template>
@@ -126,7 +121,7 @@
 									scope.row.averageWin + '%'
 								}}</span>
 								<span v-else-if="isNaN(scope.row.averageWin)">0</span>
-								<span v-else style="color: red">{{
+								<span v-else style="color: #dd3a13">{{
 									scope.row.averageWin + '%'
 								}}</span>
 							</template>
@@ -135,7 +130,6 @@
 							show-overflow-tooltip
 							prop="averageLoss"
 							label="AVERAGE LOSS %"
-
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -143,7 +137,7 @@
 									scope.row.averageLoss + '%'
 								}}</span>
 								<span v-else-if="isNaN(scope.row.averageLoss)">0</span>
-								<span v-else style="color: red">{{
+								<span v-else style="color: #dd3a13">{{
 									scope.row.averageLoss + '%'
 								}}</span>
 							</template>
@@ -159,7 +153,7 @@
 									scope.row.drawDown + '%'
 								}}</span>
 								<span v-else-if="isNaN(scope.row.drawDown)">0</span>
-								<span v-else style="color: red">{{
+								<span v-else style="color: #dd3a13">{{
 									scope.row.drawDown + '%'
 								}}</span>
 							</template>
@@ -168,12 +162,11 @@
 					<el-table
 						header-align="center"
 						:data="tableData"
-						style="width: 100%; margin-top: 20px"
+						style="width: 80%; margin: 0 auto; margin-top: 20px; "
 					>
 						<el-table-column
 							prop="totalTrades"
 							label="TOTAL TRADES"
-
 							show-overflow-tooltip
 							align="center"
 						>
@@ -181,7 +174,7 @@
 								<span v-if="scope.row.totalTrades >= 0">{{
 									scope.row.totalTrades
 								}}</span>
-								<span v-else style="color: red">{{
+								<span v-else style="color: #dd3a13">{{
 									scope.row.totalTrades
 								}}</span>
 							</template>
@@ -190,14 +183,13 @@
 							show-overflow-tooltip
 							prop="totalPositive"
 							label="TOTAL POSITIVE"
-
 							align="center"
 						>
 							<template slot-scope="scope">
 								<span v-if="scope.row.totalPositive >= 0">{{
 									scope.row.totalPositive
 								}}</span>
-								<span v-else style="color: red">{{
+								<span v-else style="color: #dd3a13">{{
 									scope.row.totalPositive
 								}}</span>
 							</template>
@@ -206,14 +198,13 @@
 							prop="totalNegative"
 							show-overflow-tooltip
 							label="TOTAL NEGATIVE"
-
 							align="center"
 						>
 							<template slot-scope="scope">
 								<span v-if="scope.row.totalNegative >= 0">{{
 									scope.row.totalNegative
 								}}</span>
-								<span v-else style="color: red">{{
+								<span v-else style="color: #dd3a13">{{
 									scope.row.totalNegative
 								}}</span>
 							</template>
@@ -228,7 +219,7 @@
 								<span v-if="scope.row.timeInMarket >= 0">{{
 									scope.row.timeInMarket + '%'
 								}}</span>
-								<span v-else style="color: red">{{
+								<span v-else style="color: #dd3a13">{{
 									scope.row.timeInMarket + '%'
 								}}</span>
 							</template>
@@ -237,14 +228,14 @@
 				</div>
 			</template>
 		</el-skeleton>
-
 		<el-skeleton :rows="12" :loading="loading" animated>
 			<template>
 				<div class="historyContainer">
 					<el-table
 						header-align="center"
+						:row-class-name="tableRowClassName"
 						:data="historyData"
-						style="width: 100%; margin-top: 20px"
+						style="width: 80%; margin: 0 auto; margin-top: 20px; "
 						show-summary
 						:summary-method="getSummaries"
 					>
@@ -252,12 +243,12 @@
 							type="index"
 							show-overflow-tooltip
 							align="center"
-							width="50">
+							width="50"
+							>
 						</el-table-column>
 						<el-table-column
 							prop="entryDate"
 							label="ENTRY DATE"
-
 							show-overflow-tooltip
 							align="center"
 						>
@@ -270,7 +261,6 @@
 						<el-table-column
 							prop="exitDate"
 							label="EXIT DATE"
-
 							show-overflow-tooltip
 							align="center"
 						>
@@ -283,7 +273,6 @@
 						<el-table-column
 							prop="exitReason"
 							label="EXIT REASON"
-
 							show-overflow-tooltip
 							align="center"
 						>
@@ -296,12 +285,11 @@
 						<el-table-column
 							prop="eachReturn"
 							label="EACH RETURN"
-
 							show-overflow-tooltip
 							align="center"
 						>
 							<template slot-scope="scope">
-								<span>{{
+								<span  :class="getCellStyle(scope.row['eachReturn'])">{{
 									scope.row.eachReturn.toFixed(2) + ' %'
 								}}</span>
 							</template>
@@ -422,6 +410,19 @@ export default class PerformanceComponent extends Vue {
 		})
 		return sums
 	}
+	getCellStyle(value: any) {
+	// Check if the value is negative and return a class name accordingly
+	return {
+		'negative-value': value < 0,
+	}
+	}
+	tableRowClassName(obj: any) {
+		const {row, rowIndex} = obj
+			if (rowIndex%2 === 1) {
+			return 'darken-row';
+			}
+			return '';
+		}
 }
 </script>
 
@@ -448,6 +449,12 @@ export default class PerformanceComponent extends Vue {
 }
 .historyContainer{
 	margin: 50px 0 0 0;
+}
+.darken-row {
+	background-color: #f9f9f9;
+}
+.summaryContainer{
+	margin-top: 20px;
 }
 </style>
 

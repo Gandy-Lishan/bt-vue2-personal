@@ -33,13 +33,13 @@ export default {
           ]
         },
         { id: '1', title: 'How to create a new backtest', subsections: [
-            { id: '1-0', title: 'Create a single-signal entry/exit criteria new backtest' },
-            { id: '1-1', title: 'Use Risk Control at Exit' },
-            { id: '1-2', title: 'Set different backtest timeframe' },
-            { id: '1-3', title: 'Create a samebar multi-signal entry/exit criteria new backtest' },
-            { id: '1-4', title: 'Create a timeorder multi-signal entry/exit criteria new backtest' },
-            { id: '1-5', title: 'Set the value of delay of bars' },
-            { id: '1-6', title: 'Create a new backtest with custom indicator for entry/exit criteria' },
+            { id: '1-0', title: 'Creating a Single Conditional Backtest' },
+            { id: '1-1', title: 'Creating a SameBar Multi-Condition Sentiment Indicator Backtest' },
+            { id: '1-2', title: 'Creating a Single-Condition Technical Indicator Backtest' },
+            { id: '1-3', title: 'Creating a TimeOrder Multi-Condition Technical Indicator Backtest' },
+            { id: '1-4', title: 'Creating a Single-Condition Symbol OHLCV Backtest' },
+            { id: '1-5', title: 'Creating a User\'s Own Indicator Backtest' },
+            { id: '1-6', title: 'Creating a Combination of Sentiment and Technical Indicator Backtest' },
             { id: '1-7', title: 'Set the Trade Price for backtesting' },
             { id: '1-8', title: 'Exclude Overlapping Observations for Backtesting' },
           ] },
@@ -50,7 +50,7 @@ export default {
             ]
           },
           {
-            id: 'fls', title: 'Finding the Last Signal Using BacktestEdge', subsections: [
+            id: 'fls', title: 'Using the “Find Last Signal” Feature', subsections: [
               { id: 'fls-0', title: "Click the 'find last signal' button" },
               { id: 'fls-1', title: 'Wait for the backtest to finish' }
             ]
@@ -63,7 +63,7 @@ export default {
             { id: '4-0', title: 'Open the Backtest History tab' },
             { id: '4-1', title: 'Modify the current backtesting parameters' }
           ]},
-          { id: '5', title: 'Copy a sample backtest', subsections: [
+          { id: '5', title: 'Using sample backtests', subsections: [
             { id: '5-0', title: 'Open the Sample Backtests tab' },
             { id: '5-1', title: 'Edit and run a copied backtest' }
           ]},
