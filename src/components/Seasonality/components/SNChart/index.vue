@@ -108,9 +108,9 @@ export default {
           pData.push(dataPoint[2]);
       }
       // 如果 x 轴包含 0， 则提示
-      if (categories.includes(0) && DayOrMonthTag == 'Day') {
-        this.popUpMsgBox('Day 0 represents the selected day, when it is a trading day')
-      }
+      // if (categories.includes(0) && DayOrMonthTag == 'Day') {
+      //   this.popUpMsgBox('Day 0 represents the selected day, when it is a trading day')
+      // }
       const H = Highcharts.chart(id, {
           title: {
               text: title,

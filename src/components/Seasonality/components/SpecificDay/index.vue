@@ -48,20 +48,23 @@
 					</el-autocomplete>
       </el-form-item>
       <el-form-item
-        label="2.Period"
+        label="2.Date Range"
       >
       <template slot="label">
         <label>
-          2.Period
+          2.Date Range
           <el-tooltip effect="dark" placement="top">
-            <span slot="content"
-              >Select time period</span>
+            <span slot="content">
+              Select the start and end dates for stock data. <br/>
+              For instance, the start date is 2020, and the end date is 2022. <br/>
+              The stock data will cover the period from January 1, 2020, to December 31, 2022.
+            </span>
             <i class="iconfont icon-wenhao"></i>
           </el-tooltip>
         </label>
       </template>
         <div class="select-container">
-        <el-select v-model="data.period" @change="handlePeriodChange">
+        <!-- <el-select v-model="data.period" @change="handlePeriodChange">
           <el-option
             v-for="item in periodOptions"
             :key="item.value"
@@ -70,11 +73,10 @@
             :disabled="item.disabled"
           >
           </el-option>
-        </el-select>
+        </el-select> -->
         <div class="startAndEndBox">
           <el-date-picker
           ref="startDatePicker"
-          :disabled="data.period != 22"
           @change="pickStartDate"
           value-format="yyyy"
           v-model="data.start_date"
@@ -89,7 +91,6 @@
         <span>to</span>
         <el-date-picker
         ref="endDatePicker"
-          :disabled="data.period != 22"
           @change="pickEndDate"
           value-format="yyyy"
           v-model="data.end_date"
@@ -115,7 +116,7 @@
           3.Specific Days
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
-              >Choose specific days</span>
+              >Choose specific days(Day 0 represents the selected day, when it is a trading day)</span>
             <i class="iconfont icon-wenhao"></i>
           </el-tooltip>
         </label>
@@ -180,7 +181,7 @@ export default {
     return {
       data: {
         symbol: 'SPY',
-        period: 20,
+        // period: 20,
         dateRange: [],
         holidays: 0,
         start_date: (new Date().getFullYear() - 20).toString(),
@@ -282,20 +283,20 @@ export default {
     const month = new Date().getMonth() + 1; // 获取当前月份（0 到 11，需要加 1）
     const day = new Date().getDate(); // 获取当前日期（1 到 31）
     this.data.end_date = (currentYear) + ''
-    this.data.start_date = (currentYear - this.data.period) + ''
+    this.data.start_date = (currentYear - 20) + ''
     this.data.customizeDate = `${month}-${day}`
     this.previousCustomDateRef = this.data.customizeDate
 
-    // 生成动态标签数组
-    const years = [1,2,3,4,5,10,15,20]
-    const periodOptions = [{label: `Current Year (${currentYear})`, value: 0}, ...years.map(item => ({label: `${currentYear - item} -> ${currentYear}`, value: item}))]
+    // // 生成动态标签数组
+    // const years = [1,2,3,4,5,10,15,20]
+    // const periodOptions = [{label: `Current Year (${currentYear})`, value: 0}, ...years.map(item => ({label: `${currentYear - item} -> ${currentYear}`, value: item}))]
 
-    // 添加其他选项
-    periodOptions.push({ label: 'All History', value: currentYear - 2003 + 1 });
-    periodOptions.push({ label: 'Custom...', value: currentYear - 2003 + 2 });
+    // // 添加其他选项
+    // periodOptions.push({ label: 'All History', value: currentYear - 2003 + 1 });
+    // periodOptions.push({ label: 'Custom...', value: currentYear - 2003 + 2 });
 
-    // 输出生成的选项
-    this.periodOptions = periodOptions
+    // // 输出生成的选项
+    // this.periodOptions = periodOptions
     this.calculateHolidayDates()
   },
   mounted() {
@@ -332,8 +333,36 @@ export default {
       return time.getFullYear() > new Date().getFullYear() || time.getFullYear() < 1800  || time.getFullYear() < this.data.start_date;;
     },
     pickStartDate() {
+      this.changeOptions()
     },
     pickEndDate() {
+      this.changeOptions()
+    },
+    changeOptions() {
+      const currentYear = new Date().getFullYear()
+      if(this.data.start_date == currentYear && this.data.end_date == currentYear) {
+        let dateObjects = this.options.map(ele => {
+          if(ele.date) {
+            const month = new Date().getMonth();
+            const day = new Date().getDate();
+            const [_month, _day] = ele.date.split('-').map(Number);
+            const currentTime = new Date(currentYear, month, day)
+            const time = new Date(currentYear, _month - 1, _day)
+            if(time <= currentTime) {return ele}else{return {...ele, disabled: true}}
+          }else {return ele}
+        })
+        this.options = dateObjects
+        dateObjects = dateObjects.filter(ele => !ele.disabled)
+        const allowedOptions = dateObjects.map(item => item.value)
+        if(!allowedOptions.includes(this.data.holidays)) {
+          const holiday = this.options[this.data.holidays].label
+          const allowedHoliday = this.options[allowedOptions[0]].label
+          this.popUpMsgBox(`Not ${holiday} yet this year, automatically switched to ${allowedHoliday}`)
+          this.data.holidays = allowedOptions[0]
+        }
+      }else {
+        this.options = this.options.map(ele => ({...ele, disabled: false}))
+      }
     },
     querySearch(queryString, cb) {
       var dropdownList = this.dropdownList
@@ -400,12 +429,6 @@ export default {
       }else {
         this.options = this.options.map(ele => ({...ele, disabled: false}))
       }
-    },
-    pickStartDate(value) {
-      console.log(value)
-    },
-    pickEndDate(value) {
-      console.log(value)
     },
     pickCustomizeDate(value) {
       console.log(value)
@@ -493,9 +516,9 @@ export default {
   /deep/ input.el-input__inner{
     margin: 0;
   }
-  .el-date-editor.el-input.el-input--mini.el-input--prefix.el-input--suffix.el-date-editor--year {
-    width: 150px; // 不一样
-  }
+  // .el-date-editor.el-input.el-input--mini.el-input--prefix.el-input--suffix.el-date-editor--year {
+  //   width: 150px; // 不一样
+  // }
   /deep/ .el-autocomplete{
     width: 100%;
   }
