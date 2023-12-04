@@ -380,14 +380,14 @@
 				</h1>
 				<section>
 					<h2 id="1-0">
-						Create a single-condition entry/exit criteria new backtest
+						Creating a Single Conditional Backtest
 					</h2>
-				<!-- <div>
-					嵌入 youtobe 视频
-    			<iframe width="560" height="315" :src="videoUrl" frameborder="0" allowfullscreen></iframe>
-  			</div> -->
+					<p>
+						Learn how to create a backtesting strategy using a sentiment indicator tailored for SPY, suitable for both beginners and experienced traders. By the end, you'll grasp applying this indicator in backtesting strategies. 
+					</p>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/nkmWNIrRsfg?si=UCPSHKzb381Cgs2N" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 					<hr />
-					<h3 id="1-0-0">Fill in the basic parameters of the backtest</h3>
+					<!-- <h3 id="1-0-0">Fill in the basic parameters of the backtest</h3>
 					<p>
 						According to your own needs, fill in the relevant parameters of the
 						backtest, including Starting
@@ -453,10 +453,12 @@
 						:preview-src-list="path103List"
 						fit="fill"
 						lazy
-					></el-image>
-					<h2 id="1-1">Use Risk Control at Exit</h2>
+					></el-image> -->
+					<h2 id="1-1">Creating a SameBar Multi-Condition Sentiment Indicator Backtest</h2>
+					<p>Learn how to analyze and create multi-condition sentiment indicator backtests, empowering your trading decisions with comprehensive insights. </p>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/IhVu2W_WDPY?si=JWucN49jcRjEri10" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 					<hr />
-					<h3 id="1-1-0">Set Stop Loss/Take Profit</h3>
+					<!-- <h3 id="1-1-0">Set Stop Loss/Take Profit</h3>
 					<p>
 						To use stop/loss as an OR condition with exit criteria, check "Risk
 						Control at Exit" and then fill in value in the "Take Profit" and
@@ -499,10 +501,12 @@
 						:preview-src-list="path112List"
 						fit="fill"
 						lazy
-					></el-image>
-					<h2 id="1-2">Set different backtest timeframe</h2>
+					></el-image> -->
+					<h2 id="1-2">Creating a Single-Condition Technical Indicator Backtest</h2>
+					<p>Join us as we explore backtesting strategies with a single-condition technical indicator, focusing on SPY. Learn how to simplify the process of creating and analyzing technical indicator backtests. Gain insights and apply these techniques to your own analyses! </p>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/AbNJVpDQrBc?si=xPx9UhChFsCnxR3S" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 					<hr />
-					<h3 id="1-2-0">Set timeframe to Daily</h3>
+					<!-- <h3 id="1-2-0">Set timeframe to Daily</h3>
 					<p>
 						When the timeframe in Set up Backtest tab is set to Daily, the
 						sentiment indicators in the entry and exit criteria sections will
@@ -543,12 +547,14 @@
 						:preview-src-list="path122List"
 						fit="fill"
 						lazy
-					></el-image>
+					></el-image> -->
 					<h2 id="1-3">
-						Create a samebar multi-condition entry/exit criteria new backtest
+						Creating a TimeOrder Multi-Condition Technical Indicator Backtest
 					</h2>
+					<p>Join us as we explore complex backtesting strategies using TimeOrder Multi-Condition Technical Indicators, focusing on SPY. Learn to create and analyze multi-condition sentiment indicator backtests. Gain insights and apply these techniques to your analyses! </p>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/_pJ2urj_5yc?si=J7gHIABDn847Tabu" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 					<hr />
-					<h3 id="1-3-0">Fill in the basic information for the backtest</h3>
+					<!-- <h3 id="1-3-0">Fill in the basic information for the backtest</h3>
 					<p>
 						According to your own needs, fill in the relevant parameters of the
 						backtest, including Starting
@@ -628,12 +634,14 @@
 						lazy
 					></el-image>
 					<h3 id="1-3-4">Run Backtest and view results</h3>
-					<p>Click Run Backtest button to run the backtest and view results.</p>
+					<p>Click Run Backtest button to run the backtest and view results.</p> -->
 					<h2 id="1-4">
-						Create a timeorder multi-condition entry/exit criteria new backtest
+						Creating a Single-Condition Symbol OHLCV Backtest
 					</h2>
+					<p>Join us as we explore advanced backtesting strategies using Single-Condition Symbol OHLCV, focusing on SPY. Learn to create and analyze backtests based on Open, High, Low, Close, and Volume symbols. Gain insights and apply these techniques to your analyses! </p>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/_yY1x4w2pGo?si=q0xcKN8oR4RekqZ2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 					<hr />
-					<h3 id="1-4-0">Fill in the basic information for the backtest</h3>
+					<!-- <h3 id="1-4-0">Fill in the basic information for the backtest</h3>
 					<p>
 						According to your own needs, fill in the relevant parameters of the
 						backtest, including Starting
@@ -721,10 +729,12 @@
 						:preview-src-list="path144List"
 						fit="fill"
 						lazy
-					></el-image>
-					<h2 id="1-5">Set the value of delay of bars</h2>
+					></el-image> -->
+					<h2 id="1-5">Creating a User's Own Indicator Backtest</h2>
+					<p>Join us as we explore custom backtesting strategies using User’s Own Indicator files. Learn to tailor your strategies and create custom indicators. Gain comprehensive insights and start applying these techniques to your analyses! </p>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/_i9PQkjYXRU?si=1NP49iJCYA8s-uyD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 					<hr />
-					<h3 id="1-5-0">Set the value of delay of bars in entry criteria</h3>
+					<!-- <h3 id="1-5-0">Set the value of delay of bars in entry criteria</h3>
 					<p>
 						Check this option to delay the specified number of bars to enter
 						when the entry criteria is met. Set the value preferred.
@@ -749,11 +759,13 @@
 						:preview-src-list="path151List"
 						fit="fill"
 						lazy
-					></el-image>
+					></el-image> -->
 					<h2 id="1-6">
-						Create a new backtest with custom indicator for entry/exit criteria
+						Creating a Combination of Sentiment and Technical Indicator Backtest
 					</h2>
-					<h3 id="1-6-0">Fill in the basic information for the backtest</h3>
+					<p>Explore advanced backtesting strategies using a Combination of Sentiment and Technical Indicators, focusing on SPY. Learn to integrate these indicators for enhanced backtesting. Gain comprehensive insights and apply these techniques to your analyses! </p>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/bQygTY3p4I4?si=ZV8yS6wiR0FaZpf4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+					<!-- <h3 id="1-6-0">Fill in the basic information for the backtest</h3>
 					<p>
 						According to your own needs, fill in the relevant parameters of the
 						backtest, including Starting Capital, Commission, Benchmark,
@@ -927,7 +939,7 @@
 							>Create a samebar multi-condition entry/exit criteria new
 							backtest<i class="el-icon-top-right"></i
 						></el-link>
-					</p>
+					</p> -->
 					<h2 id="1-7">Set the Trade Price for backtesting</h2>
 					<hr />
 					<p>
@@ -1009,9 +1021,11 @@
 			</section>
 
 			<section v-else-if="id.includes('fls')">
-				<h1 id="fls">Finding the Last Signal Using BacktestEdge</h1>
+				<h1 id="fls">Using the “Find Last Signal” Feature</h1>
+				<p>Explore "Add to Favorites" and "Find Last Signal" features for efficient backtesting. Learn to streamline your analysis process and enhance trading strategies with organized tools. Whether you're new or want to optimize strategy analysis, these features offer valuable insights and convenience. </p>
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/oT7rUvGhGFg?si=aPfbjRHsEausQAQh" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 				<hr />
-				<h2 id="fls-0">Click the 'find last signal' button</h2>
+				<!-- <h2 id="fls-0">Click the 'find last signal' button</h2>
 				<p>
 					Enter the "My Favorites" list, where the user's saved backtests are
 					stored. In the top-right corner of the list, you will find a button
@@ -1070,7 +1084,7 @@
 					Ensure the accuracy of your backtest data and settings to obtain
 					precise backtest results and information about recent trade
 					timestamps.
-				</p>
+				</p> -->
 			</section>
 			<section v-else-if="id[0] == '3'">
 				<h1 id="3">Edit a created backtest</h1>
@@ -1135,9 +1149,11 @@
 				</section>
 			</section>
 			<section v-else-if="id[0] == '5'">
-				<h1 id="5">Copy a sample backtest</h1>
+				<h1 id="5">Using Sample Backtests</h1>
+				<p>Explore utilizing Sample Backtests for a quick start in backtesting strategies. Ideal for beginners or those seeking efficient ways to utilize sample backtests provided by the system. Learn how to navigate and leverage sample backtests effectively to save time and effort. </p>
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/ao-zJA8Shq8?si=8cL-yfWN0GlywMSI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 				<hr />
-				<section>
+				<!-- <section>
 					<h2 id="5-0">Open the Sample Backtests tab</h2>
 					<p>
 						Open the Sample Backtests tab and click the copy backtest button.
@@ -1165,7 +1181,7 @@
 						fit="fill"
 						lazy
 					></el-image>
-				</section>
+				</section> -->
 			</section>
 			<section v-else-if="id[0] == '6'">
 				<h1 id="6">How to view the description of the backtest</h1>
