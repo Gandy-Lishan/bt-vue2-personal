@@ -258,8 +258,9 @@ export default {
   },
   watch: {
     data: {
-    handler(newVal, _) {
+    handler(newVal, oldVal) {
       if(Object.keys(newVal).length == 0) return
+      if(this.changeOptions()) return
       let holidays = this.options.find(ele => ele.value == newVal.holidays).label
       if(holidays == 'Custom Time') holidays = this.data.customizeDate
       this.plotConfiguration = {
@@ -332,10 +333,10 @@ export default {
     handleDisabledEndDate(time) {
       return time.getFullYear() > new Date().getFullYear() || time.getFullYear() < 1800  || time.getFullYear() < this.data.start_date;;
     },
-    pickStartDate() {
+    pickStartDate(start_date) {
       this.changeOptions()
     },
-    pickEndDate() {
+    pickEndDate(end_date) {
       this.changeOptions()
     },
     changeOptions() {
@@ -378,6 +379,9 @@ export default {
       
       if(!result) {
         this.popUpMsgBox(`This year's date is not yet ${selectDay}. Please select another date`)
+        this.data.start_date = this.plotConfiguration.start_date
+        this.data.end_date = this.plotConfiguration.end_date
+        return true
         }
       }else {
         this.options = this.options.map(ele => ({...ele, disabled: false}))
