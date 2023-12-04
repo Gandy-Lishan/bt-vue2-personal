@@ -1,10 +1,13 @@
 <template>
 	<div class="tim-container">
-		<p style="margin: 10px auto; width: 80%">
+		<p style="margin: 10px auto; width: 80%; position: relative;">
 			The results below provide a multiple timeframe view of the backtest of the
 			indicator and index that you have chosen. The 'Exit Criteria' selected for
 			the backtest is not used for the results below. Instead, we provide a look
 			at various time-frames from 1-Week to 1-Year of returns.
+			<el-button class="editWithCustomBtn" icon="el-icon-document-add" type="primary" plain size="mini" @click="showTableDialog" v-if="!showTable && activeTIM == 'second'">
+				Edit exit with different TIM
+			</el-button>
 		</p>
 		<el-tabs v-model="activeTIM" type="card" v-loading="loading">
 			<el-tab-pane label="Exit With Default Time-In-Market" name="first">
@@ -236,9 +239,6 @@
 				</el-dialog>
 			</el-tab-pane>
 		</el-tabs>
-					<div class="editWithCustomBtn">
-					<el-button icon="el-icon-document-add" type="primary" plain size="mini" @click="showTableDialog" v-if="!showTable">Edit exit with different TIM</el-button>
-				</div>
 	</div>
 </template>
 
@@ -1548,7 +1548,7 @@ export default {
 .editWithCustomBtn{
     z-index: 999;
     position: absolute;
-    top: 12%;
-    left: 76%;
+    top: 100%;
+    left: 80%;
 }
 </style>

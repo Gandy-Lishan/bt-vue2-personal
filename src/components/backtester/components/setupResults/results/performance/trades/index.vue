@@ -9,8 +9,8 @@
             <el-table-column
                 prop="trade_number"
                 show-overflow-tooltip
-                label="Trade #"
-                width="150px"
+                label="#"
+                width="50px"
                 align="center"
             >
                 <template slot-scope="scope">
@@ -213,5 +213,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+.pagination-container {
+    width: 80%;
+    margin: 0 auto;
+}
 </style>

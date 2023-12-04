@@ -494,12 +494,6 @@
 							label="Exit with Customized Time-In-Market"
 							name="second"
 						>
-							<el-button
-								type="primary"
-								@click="showTableDialog"
-								v-if="!showTable"
-								>Edit exit with different TIM</el-button
-							>
 							<div class="history-container">
 								<el-skeleton :rows="6" :loading="loading" animated>
 									<template>
