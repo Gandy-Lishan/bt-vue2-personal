@@ -495,7 +495,9 @@ export const CommonMethodsMixin = {
 			const analysis = signals.analysis
 
 			if (!isROCLike) return
-
+			for (var p in CIQ.stxx.panels) {
+				CIQ.stxx.panels[p].hidden = false;
+			}
 			const conditionMap = new Map([
 				[5, { name: 'Rate Of Change', abbr: 'ROC' }],
 				[6, { name: '% of Previous Range', abbr: 'OPR' }],
@@ -509,7 +511,7 @@ export const CommonMethodsMixin = {
 				let signal = CIQ.findSentiIndicator(indicator)
 				indicator_url = signal.url
 			}
-			console.log('CIQ.stxx.layout.studies', CIQ.stxx.layout.studies)
+
 			if (indicator_url && analysis === 'Sentiment') {
 				for (const studyInstanceName in CIQ.stxx.layout.studies) {
 					if (
@@ -557,7 +559,50 @@ export const CommonMethodsMixin = {
 				}
 			}
 
-			const sd = CIQ.Studies.addStudy(
+        // 判断是否已经存在完全一样条件的ROC
+        for (var studyInstanceName in CIQ.stxx.layout.studies) {
+			// 如果当前填入的是数据源为indicator的ma，则判断是否存在此同条件ROC
+			const sd = CIQ.stxx.layout.studies
+			if(indicator_url_with_ma){
+			  if(
+				(indicator_url_with_ma.indexOf(sd[studyInstanceName].inputs.Field) == 0 || (sd[studyInstanceName].inputs.Field?sd[studyInstanceName].inputs.Field.indexOf(indicator_url_with_ma) == 0:false)) &&
+				sd[studyInstanceName].inputs.period == conditionPeriod &&
+				sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
+			  ){ 
+				for (var p in CIQ.stxx.panels) {
+				  if(CIQ.stxx.panels[p].name == studyInstanceName){
+					CIQ.stxx.panels[p].hidden = true;
+				  }
+				}
+			  }
+			}else if(fieldName){
+			  if ((sd[studyInstanceName].inputs.Field == fieldName && sd[studyInstanceName].type != 'ST MA') &&
+				sd[studyInstanceName].inputs.period == conditionPeriod &&
+				sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
+			  ) {
+				for (var p in CIQ.stxx.panels) {
+				  if(CIQ.stxx.panels[p].name == studyInstanceName){
+					CIQ.stxx.panels[p].hidden = true;
+				  }
+				}
+			  }
+			}
+			else{
+			// 如果当前填入的是数据源为indicator，则判断是否存在此同条件ROC
+			  if ((sd[studyInstanceName].inputs.Field == indicator_url && sd[studyInstanceName].type != 'ST MA') &&
+				sd[studyInstanceName].inputs.period == conditionPeriod &&
+				sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
+			  ) {
+				for (var p in CIQ.stxx.panels) {
+				  if(CIQ.stxx.panels[p].name == studyInstanceName){
+					CIQ.stxx.panels[p].hidden = true;
+				  }
+				}
+			  }
+			}
+		  }
+
+			CIQ.Studies.addStudy(
 				CIQ.stxx,
 				'ST ROCLike',
 				{

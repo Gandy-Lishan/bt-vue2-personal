@@ -451,63 +451,6 @@ if (!CIQ.Studies) {
 		if (!field || field == "field") field = "Close";
 
 		// 下面为计算 ROC, ROR, MAR 的具体公式。
-		// 备选公式
-		function calculateNewConditions1(){
-			//console.log(data_series)
-			const shiftBar = 2;
-		
-			const rocArr = [];
-			const minCloseArr = [];
-			const maxCloseArr = [];
-			const rorArr = [];
-			const maPeriod = 5;
-			const maArr = [];
-			const marArr = [];
-			
-			for (let i = 0; i < dataDF.length; i++) {
-				if (i < shiftBar) {
-				  rocArr.push(NaN);
-				  minCloseArr.push(NaN);
-				  maxCloseArr.push(NaN);
-				  rorArr.push(NaN);
-				} else {
-				  const close = dataDF[i].Close;
-				  const shiftBarClose = dataDF[i - shiftBar].Close;
-				  const roc = Number(((close / shiftBarClose - 1) * 100).toFixed(2));
-				  rocArr.push(roc);
-			  
-				  const minClose = getPeriodParam(dataDF.slice(0, i + 1).map(x => x.Close), "min", shiftBar)[i];
-				  minCloseArr.push(minClose);
-			  
-				  const maxClose = getPeriodParam(dataDF.slice(0, i + 1).map(x => x.Close), "max", shiftBar)[i];
-				  maxCloseArr.push(maxClose);
-			  
-				  const ror = Number(((close - minClose) / (maxClose - minClose) * 100).toFixed(2));
-				  rorArr.push(ror);
-				}
-			  
-				if (i < maPeriod - 1) {
-				  maArr.push(NaN);
-				  marArr.push(NaN);
-				} else {
-				  const ma = Number((dataDF.slice(i - maPeriod + 1, i + 1).map(x => x.Close).reduce((a, b) => a + b) / maPeriod).toFixed(2));
-				  maArr.push(ma);
-			  
-				  const mar = Number(((dataDF[i].Close / ma - 1) * 100).toFixed(2));
-				  marArr.push(mar);
-				}
-			  }
-			  
-			  dataDF.forEach((row, i) => {
-				row.ShiftBar = i >= shiftBar ? dataDF[i - shiftBar].Close : NaN;
-				row.ROC = rocArr[i];
-				row.ROR = rorArr[i];
-				console.log(maArr[i])
-				row.MA = maArr[i];
-				row.MAR = marArr[i];
-			  })
-			console.log(dataDF)
-		}
 		// 使用中公式
 		let resArr = []
 

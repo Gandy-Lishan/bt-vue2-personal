@@ -304,6 +304,9 @@ export default {
     },
     calculateNewConditions() {
       if (!this.isROCLike) return
+      for (var p in CIQ.stxx.panels) {
+        CIQ.stxx.panels[p].hidden = false;
+      }
       // 用symVal因为symUrl当前生命周期不存在
       if (this.symVal) {
         let symbolCond = CIQ.findSymbolIndicator(this.symVal,null)
@@ -330,8 +333,23 @@ export default {
           [8, { name: 'Range Rank', abbr: 'RR' }],
         ])
 
+        // 判断是否已经存在完全一样条件的ROC
+        for (var studyInstanceName in CIQ.stxx.layout.studies) {
+          const sd = CIQ.stxx.layout.studies
+          // 如果当前填入的是数据源为indicator，则判断是否存在此同条件ROC
+          if ((sd[studyInstanceName].inputs.Field == fieldName && sd[studyInstanceName].type != 'ST MA') &&
+            sd[studyInstanceName].inputs.period == this.sym.conditionPeriod &&
+            sd[studyInstanceName].inputs.condition == conditionMap.get(this.sym.newCondition).abbr
+          ) {
+            for (var p in CIQ.stxx.panels) {
+              if(CIQ.stxx.panels[p].name == studyInstanceName){
+                CIQ.stxx.panels[p].hidden = true;
+              }
+            }
+          }
+        }
 
-        var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+        CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           display: conditionMap.get(this.sym.newCondition).name,
           Field: fieldName,
           condition: conditionMap.get(this.sym.newCondition).abbr,
