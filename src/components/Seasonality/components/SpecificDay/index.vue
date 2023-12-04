@@ -442,7 +442,11 @@ export default {
         if(selectDate > todayDate && (this.data.start_date == year && this.data.end_date == year)) return false
         return true
       }
-      const today = `${new Date().getMonth() + 1}-${new Date().getDate()}`
+      const date = new Date();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const today = `${month}-${day}`;
+
       const result = compareDates(today, value);
       if(result) {
           _this.data.customizeDate = value
