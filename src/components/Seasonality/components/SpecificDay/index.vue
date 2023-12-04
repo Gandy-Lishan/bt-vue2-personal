@@ -355,10 +355,30 @@ export default {
         dateObjects = dateObjects.filter(ele => !ele.disabled)
         const allowedOptions = dateObjects.map(item => item.value)
         if(!allowedOptions.includes(this.data.holidays)) {
-          const holiday = this.options[this.data.holidays].label
+          const holiday = this.options.find(ele => ele.value == this.data.holidays).label
           const allowedHoliday = this.options[allowedOptions[0]].label
           this.popUpMsgBox(`Not ${holiday} yet this year, automatically switched to ${allowedHoliday}`)
           this.data.holidays = allowedOptions[0]
+        }
+
+
+      const compareDates = (today, selectDay) => {
+        const year = new Date().getFullYear()
+        const todayDate = new Date(`${year}-${today}`)
+        const selectDate = new Date(`${year}-${selectDay}`)
+        if(selectDate > todayDate && (this.data.start_date == year && this.data.end_date == year)) return false
+        return true
+      }
+      const date = new Date();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const today = `${month}-${day}`;
+      const selectDay = this.data.customizeDate
+      const result = compareDates(today, selectDay);
+      
+      if(!result) {
+        this.data.customizeDate = today
+        this.popUpMsgBox(`Not ${selectDay} yet this year, automatically switched to ${today}`)
         }
       }else {
         this.options = this.options.map(ele => ({...ele, disabled: false}))
