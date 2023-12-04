@@ -545,7 +545,7 @@ input[type="time"] {
 .summaryContainer .el-input__inner
  {
   margin: 0;
-  padding: 0;
+  padding: 5px;
 }
 .summaryContainer .el-table__body, .el-table__footer, .el-table__header,
  .historyContainer .el-table__body, .el-table__footer, .el-table__header,
