@@ -152,7 +152,7 @@ export default {
                     'printChart',
                     'downloadPNG',
                     'downloadJPEG',
-                    'downloadSVG',
+                    // 'downloadSVG',
                     'downloadPDF'
                     ]
                 }
