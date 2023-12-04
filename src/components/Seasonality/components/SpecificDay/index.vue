@@ -439,7 +439,7 @@ export default {
         const year = new Date().getFullYear()
         const todayDate = new Date(`${year}-${today}`)
         const selectDate = new Date(`${year}-${selectDay}`)
-        if(selectDate > todayDate && this.data.period == 0) return false
+        if(selectDate > todayDate && (this.data.start_date == year && this.data.end_date == year)) return false
         return true
       }
       const today = `${new Date().getMonth() + 1}-${new Date().getDate()}`
