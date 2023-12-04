@@ -580,7 +580,9 @@ export default {
     },
     calculateNewConditions() {
       if (!this.isROCLike) return
-
+      for (var p in CIQ.stxx.panels) {
+        CIQ.stxx.panels[p].hidden = false;
+      }
       let indicator_url = this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex]
       let indicator_url_with_ma = ''
       if (indicator_url) {
@@ -601,6 +603,7 @@ export default {
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
           // 定位ROC study,首先field为indicator均线的肯定只有roc, 再就是判断field为indicator而且类型不为均线的study
           if (
+            // 因为需要定位特定index和panel的roc，所以要求Field和indicator_url_with_ma全匹配
             (CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url_with_ma ||
               (CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url &&
                 CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA')) &&
@@ -620,23 +623,39 @@ export default {
           [7, { name: 'MA Ratio', abbr: 'MA' }],
           [8, { name: 'Range Rank', abbr: 'RR' }],
         ])
-
+        
         // 判断是否已经存在完全一样条件的ROC
-        let sameCondExit = false
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
-          // 定位ROC study,首先field为indicator均线的肯定只有roc, 再就是判断field为indicator而且类型不为均线的study
-          if (
-            // 用indexOf查看是否包含而不是比较等于是因为需要匹配所有同stma的roc，但是同名stma显示名却不一样
-            (indicator_url_with_ma.indexOf(CIQ.stxx.layout.studies[studyInstanceName].inputs.Field) != -1 ||
-              (CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url &&
-                CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA')) &&
-            CIQ.stxx.layout.studies[studyInstanceName].inputs.period == this.senti.conditionPeriod &&
-            CIQ.stxx.layout.studies[studyInstanceName].inputs.condition == conditionMap.get(this.senti.newCondition).abbr
-          ) {
-            sameCondExit = true
+          // 如果当前填入的是数据源为indicator的ma，则判断是否存在此同条件ROC
+          const sd = CIQ.stxx.layout.studies
+          if(indicator_url_with_ma){
+            if(
+              (indicator_url_with_ma.indexOf(sd[studyInstanceName].inputs.Field) == 0 || (sd[studyInstanceName].inputs.Field?sd[studyInstanceName].inputs.Field.indexOf(indicator_url_with_ma) == 0:false)) &&
+              sd[studyInstanceName].inputs.period == this.senti.conditionPeriod &&
+              sd[studyInstanceName].inputs.condition == conditionMap.get(this.senti.newCondition).abbr
+            ){ 
+              for (var p in CIQ.stxx.panels) {
+                if(CIQ.stxx.panels[p].name == studyInstanceName){
+                  CIQ.stxx.panels[p].hidden = true;
+                }
+              }
+            }
+          }else{
+          // 如果当前填入的是数据源为indicator，则判断是否存在此同条件ROC
+            if ((sd[studyInstanceName].inputs.Field == indicator_url && sd[studyInstanceName].type != 'ST MA') &&
+              sd[studyInstanceName].inputs.period == this.senti.conditionPeriod &&
+              sd[studyInstanceName].inputs.condition == conditionMap.get(this.senti.newCondition).abbr
+            ) {
+              for (var p in CIQ.stxx.panels) {
+                if(CIQ.stxx.panels[p].name == studyInstanceName){
+                  CIQ.stxx.panels[p].hidden = true;
+                }
+              }
+            }
           }
         }
-        if(!sameCondExit) CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+
+        CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           display: conditionMap.get(this.senti.newCondition).name,
           Field: indicator_url_with_ma ? indicator_url_with_ma : indicator_url,
           condition: conditionMap.get(this.senti.newCondition).abbr,
@@ -648,8 +667,6 @@ export default {
         })
 
         // 解决附属ma或者roc漂移问题
-        console.log(this.$route)
-        debugger
         CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
       }
     },
