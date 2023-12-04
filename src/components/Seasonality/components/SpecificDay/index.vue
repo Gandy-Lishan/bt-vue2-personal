@@ -377,8 +377,7 @@ export default {
       const result = compareDates(today, selectDay);
       
       if(!result) {
-        this.data.customizeDate = today
-        this.popUpMsgBox(`Not ${selectDay} yet this year, automatically switched to ${today}`)
+        this.popUpMsgBox(`This year's date is not yet ${selectDay}. Please select another date`)
         }
       }else {
         this.options = this.options.map(ele => ({...ele, disabled: false}))
