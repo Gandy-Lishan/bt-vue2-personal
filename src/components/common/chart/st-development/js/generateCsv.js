@@ -169,6 +169,8 @@ let __st_js_generateCsv_ = (_exports) => {
      if(!sd.type) return finalData
      var resultIndex = ''
      var categoryList = CIQ.technicalCategory
+
+     // todo, rerun获取conditionRadio
      var conditionRadio = CIQ.store.state.form.conditionRadio[criteria][indexNum]
      var formatSmallNum = function(num){
         //  if(num>-0.005 && num<0){return -0.01}
@@ -200,8 +202,6 @@ let __st_js_generateCsv_ = (_exports) => {
                      }
                      case("MACD_like"):{
                          //MACD ‌macd‌
-                         //var conditionRadio = CIQ.store.state.form.conditionRadio[criteria][indexNum]
-                         //console.log(conditionRadio)
                          for(var i in Object.keys(sd.outputMap)){
                              var keywordList = []
                              switch(conditionRadio){
@@ -241,7 +241,6 @@ let __st_js_generateCsv_ = (_exports) => {
                      case("BollingerBands_like"):{
                          // use Bottom Top Median in output map
                          //Use Indicator High/Medium/Low Band raw data whichever is chosen in the drop list. 
-                         //var conditionRadio = CIQ.store.state.form.conditionRadio[criteria][indexNum]
                          for(var i in Object.keys(sd.outputMap)){
                              var keywordList = []
                              switch(conditionRadio){
@@ -280,8 +279,6 @@ let __st_js_generateCsv_ = (_exports) => {
                      }
                      case("EFT_like"):{
                          var signalResultIndex = ''
-                         //var conditionRadio = CIQ.store.state.form.conditionRadio[criteria][indexNum]
-                         //console.log(conditionRadio)
                          for(var i in Object.keys(sd.outputMap)){
                              var keywordList = []
                              var signalKeywordList = []
@@ -339,8 +336,7 @@ let __st_js_generateCsv_ = (_exports) => {
                      case("Stochastics_like"):{
                          var resultIndexK = ''
                          var resultIndexD = ''
-                        // var conditionRadio = CIQ.store.state.form.conditionRadio[criteria][indexNum]
-                        
+
                          for(var i in Object.keys(sd.outputMap)){
                              var signalKeywordList = []
                              switch(conditionRadio){
@@ -398,8 +394,6 @@ let __st_js_generateCsv_ = (_exports) => {
                          break
                      }
                      case("ERI_like"):{
-                         //var conditionRadio = CIQ.store.state.form.conditionRadio[criteria][indexNum]
-                         //console.log(conditionRadio)
                          for(var i in Object.keys(sd.outputMap)){
                              switch(conditionRadio){
                                  case('Indicator hist1'):{
@@ -429,7 +423,6 @@ let __st_js_generateCsv_ = (_exports) => {
                          break
                      }
                      case("ADX_like"):{
-                         //var conditionRadio = CIQ.store.state.form.conditionRadio[criteria][indexNum]
                          for(var i in Object.keys(sd.outputMap)){
                              switch(conditionRadio){
                                  case('+DI ADX'):{             
