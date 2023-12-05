@@ -372,6 +372,8 @@ export const CommonMethodsMixin = {
 				start_date: backtestInfo.start_date.replace(/-/g, '') * 1000000000,
 				end_date: backtestInfo.end_date.replace(/-/g, '') * 1000000000
 			})
+			this.$store.commit('form/SET_TRADE_PRICE', backtestInfo.trade_price
+			)
 			const copyBacktestData = cloneDeep(backtestInfo)
 			copyBacktestData.currentdate = new Date().getTime()
 			backtestInfo.pk = UUID(JSON.stringify(copyBacktestData))
