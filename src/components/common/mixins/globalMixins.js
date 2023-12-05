@@ -8,7 +8,7 @@ export default {
     popUpMsgBox(msg, duration = 8000) {
       if (!this.isMessageBoxVisible) {
         this.isMessageBoxVisible = true;
-
+        const type = !msg.toLowerCase().includes('success') ? 'warning' : 'success'
         this.$message({
           message: `<strong>${msg}</strong>`,
           center: true,
@@ -16,7 +16,7 @@ export default {
           showClose: true,
           duration,
           customClass: 'no-icon',
-          type: 'warning',
+          type,
           onClose: () => {
             // 弹窗关闭时重置状态变量
             this.isMessageBoxVisible = false;
