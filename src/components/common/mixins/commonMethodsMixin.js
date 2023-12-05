@@ -19,6 +19,7 @@ import SignalCode from '@/utils/cryptoUtils/codeTool'
 import cloneDeep from 'lodash/cloneDeep'
 import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
 import { RefreshBus } from '@/components/backtester/components/list/EventBus/Bus'
+import { conditionRadioMap } from './conditionRadioMap'
 
 export const CommonMethodsMixin = {
 	data() {
@@ -474,6 +475,10 @@ export const CommonMethodsMixin = {
 			let { signals: exitSignals } = this.decodeCriteria(backtestInfo, 'exit')
 			// 循环计算出显示在 chartIQ 的数据,只有当 analysis 是 'Symbol' 'Sentiment' 'User' 才计算
 			exitSignals = exitSignals.filter(item => item) // 过滤出 exit 的 only use risk control
+			
+			// 写一个函数来map所有情况的condition radio
+			conditionRadioMap(entrySignals,exitSignals)
+
 			if (entrySignals.length !== 0)
 				entrySignals = entrySignals.filter(item =>
 					['Symbol', 'Sentiment', 'User'].includes(item.analysis)
@@ -482,6 +487,7 @@ export const CommonMethodsMixin = {
 				exitSignals = exitSignals.filter(item =>
 					['Symbol', 'Sentiment', 'User'].includes(item.analysis)
 				)
+
 			for (let index = 0; index < entrySignals.length; index++) {
 				await this.calculateNewConditions(entrySignals[index], 'entry', index)
 			}
@@ -489,6 +495,7 @@ export const CommonMethodsMixin = {
 				await this.calculateNewConditions(exitSignals[index], 'exit', index)
 			}
 		},
+
 		calculateNewConditions(signals, criteria, panelIndex) {
 			const isROCLike = signals.isROCLike
 			const indicator = signals.indicator
