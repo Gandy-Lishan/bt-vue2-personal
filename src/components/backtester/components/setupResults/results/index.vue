@@ -39,23 +39,28 @@ export default {
   if (to.path === '/backtester/sr/results' && from.path.includes('/backtester')) {
     next(async _this => {
 			_this.setResultsLoadingSetting(true, false, 0, 'Loading data...')
+      CIQ.addCover('the Marker is Loading')
       if(to.params.usedFor && to.params.usedFor === 'showBTResults'){
         console.log('说明是路由跳转过来携带参数的')
         // 说明是路由跳转过来携带参数的
         const { data } = to.params
         _this.backtestEditData = isJson(data) ? JSON.parse(data) : data
-        await _this.$refs.performanceChild.getResultData(_this.backtestEditData)
+        await _this.$refs.performanceChild.getResultData(_this.backtestEditData,()=>{
+          _this.setResultsLoadingSetting(false, false, 0, 'Loading data...')
+          CIQ.hideCover()
+        })
       }else {
         // 说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存
         console.log('说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存')
         const editData = _this.$store.state.form.cachedScopedRowDataImmutable
         if (Object.keys(editData).length !== 0) {
           _this.backtestEditData = isJson(editData) ? JSON.parse(editData) : editData
-          await _this.$refs.performanceChild.getResultData(editData)
+          await _this.$refs.performanceChild.getResultData(editData,()=>{
+          _this.setResultsLoadingSetting(false, false, 0, 'Loading data...')
+          CIQ.hideCover()
+        })
         }
       }
-			_this.setResultsLoadingSetting(false, false, 0, 'Loading data...')
-      CIQ.hideCover()
     });
     } else {
       next(_this => {_this.$store.state.form.cachedScopedRowDataImmutable = {}});

@@ -224,7 +224,7 @@ export default {
 	display: flex;
 	box-shadow: 0 1px 3px rgb(0 0 0 / 10%), 0 1px 2px rgb(0 0 0 / 6%);
 	position: fixed;
-	z-index: 3000;
+	z-index: 2001;
 	top: 0;
 	width: 100%;
 	background: #fff;
