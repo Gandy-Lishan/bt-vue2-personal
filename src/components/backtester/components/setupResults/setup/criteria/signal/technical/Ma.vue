@@ -319,7 +319,7 @@ export default {
 		clearFormValidate() {
 			this.$refs.maForm.clearValidate()
 		},
-		updateMAPeriod(val) {
+		updateMAPeriod(val, limit) {
 			// update MA period
 			
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -352,7 +352,7 @@ export default {
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
 
-					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
 				}
 			}			
 		},
@@ -565,7 +565,7 @@ export default {
 				}
 				this.$store.commit('form/saveDescription', desObj)
 		},
-		getMaPeriodValue(val) {
+		getMaPeriodValue(val, limit) {
 			
 			this.tech.ma_period = val
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -593,9 +593,8 @@ export default {
 						criteria: this.criteria,
 						index: this.panelIndex
 					})
-					
 					// 解决附属ma或者roc漂移问题
-					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
 				}
 			}
 			// keep current MA
@@ -620,14 +619,14 @@ export default {
 			this.$store.commit('chart/getMA', activatedMAList)
 			this.$store.commit('form/getStMaPeriod', val)
 		},
-		getSCvalue(val) {
+		getSCvalue(val, limit) {
 			if (this.tech.comparison !== 'MA') {
 				this.tech.period = val
 
-				this.updateMAPeriod(val)
+				this.updateMAPeriod(val, limit)
 		}
 		},
-		getMaValue: throttle(function (val) {
+		getMaValue: throttle(function (val, limit) {
 			
 			this.tech.maPeriod = val
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -659,8 +658,8 @@ export default {
 
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
-	
-					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+
+					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
 				}
 			}
 		}, 500),
@@ -727,12 +726,12 @@ export default {
 					this.radio = 'Moving Average'
 					this.tech.ma_period = obj.ma_period
 					this.tech.maPeriod = obj.period
-					this.getMaPeriodValue(obj.ma_period)
-					this.getMaValue(obj.period)
+					this.getMaPeriodValue(obj.ma_period,this.$store.getters.getIsMarkerShownFlagState)
+					this.getMaValue(obj.period,this.$store.getters.getIsMarkerShownFlagState)
 				} else {
 					this.radio = ' '
 					this.tech.period = obj.period
-					this.getSCvalue(this.tech.period)
+					this.getSCvalue(this.tech.period,this.$store.getters.getIsMarkerShownFlagState)
 				}
 				this.editTechVal = obj.indicator
 
