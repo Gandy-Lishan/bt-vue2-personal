@@ -1,41 +1,50 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
+let conditionRadio
 
 const conditionRadioMap = (entry, exit) => {
-  let conditionRadio
   for (var i in entry) {
-    if (entry[i].analysis == "Sentiment" || entry[i].analysis == "User") {
-      conditionRadio = 'Indicator Value'
-      if (entry[i].comparison === 'SVMA') {
-        conditionRadio = 'Indicator Moving Average'
-      }
-    }
-    if (entry[i].analysis == "Technical") {
-      switch (entry[i].ids) {
-        case "CCI": break;
-        case "MACD":
-          conditionRadio = conditionRadioMACD(entry[i]); break;
-        case "BLB":
-          conditionRadio = conditionRadioBLB(entry[i]); break;
-        case "EFT":
-          conditionRadio = conditionRadioEFT(entry[i]); break;
-        case "SMI":
-          conditionRadio = conditionRadioSMI(entry[i]); break;
-        case "ERI":
-          conditionRadio = conditionRadioERI(entry[i]); break;
-        case "LRF": break;
-        case "ADX":
-          conditionRadio = conditionRadioADX(entry[i]); break;
-        case "SMA":
-          conditionRadio = conditionRadioSMA(entry[i]); break;
-        case "ALLI":
-          conditionRadio = conditionRadioALLI(entry[i]); break;
-        case "TLS": break;
-        default: break;
-      }
-    }
+    criteriaConditionRadioMap(entry[i])
     var cr = CIQ.store.state.form.conditionRadio
     cr['entry'][i] = conditionRadio
     CIQ.store.commit('form/setConditionRadio', cr)
+  }
+  for (var i in exit) {
+    criteriaConditionRadioMap(exit[i])
+    var cr = CIQ.store.state.form.conditionRadio
+    cr['exit'][i] = conditionRadio
+    CIQ.store.commit('form/setConditionRadio', cr)
+  }
+}
+function criteriaConditionRadioMap(criteria_item){
+  if (criteria_item.analysis == "Sentiment" || criteria_item.analysis == "User") {
+    conditionRadio = 'Indicator Value'
+    if (criteria_item.comparison === 'SVMA') {
+      conditionRadio = 'Indicator Moving Average'
+    }
+  }
+  if (criteria_item.analysis == "Technical") {
+    switch (criteria_item.ids) {
+      case "CCI": break;
+      case "MACD":
+        conditionRadio = conditionRadioMACD(criteria_item); break;
+      case "BLB":
+        conditionRadio = conditionRadioBLB(criteria_item); break;
+      case "EFT":
+        conditionRadio = conditionRadioEFT(criteria_item); break;
+      case "SMI":
+        conditionRadio = conditionRadioSMI(criteria_item); break;
+      case "ERI":
+        conditionRadio = conditionRadioERI(criteria_item); break;
+      case "LRF": break;
+      case "ADX":
+        conditionRadio = conditionRadioADX(criteria_item); break;
+      case "SMA":
+        conditionRadio = conditionRadioSMA(criteria_item); break;
+      case "ALLI":
+        conditionRadio = conditionRadioALLI(criteria_item); break;
+      case "TLS": break;
+      default: break;
+    }
   }
 }
 function conditionRadioMACD(obj) {
