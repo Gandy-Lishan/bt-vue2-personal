@@ -251,4 +251,7 @@ export default {
   justify-content: space-between;
   width: 100%;
 }
+.show-table{
+  width: 100%;
+}
 </style>
