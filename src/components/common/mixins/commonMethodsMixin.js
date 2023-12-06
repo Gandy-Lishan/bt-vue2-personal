@@ -647,7 +647,7 @@ export const CommonMethodsMixin = {
 						isROCLike: 5 <= item.newCondition && item.newCondition <= 7
 					}
 				return null
-			})
+			})	
 			criteria.signals = criteria.signals.map((item, index) => {
 				if (
 					item.code ==
@@ -663,7 +663,7 @@ export const CommonMethodsMixin = {
 			const myFLSbg = document.querySelector('#myFLSbg')
 			myFLSbg.classList.add('activated')
 		},
-		restoreIndicatorLayoutView(data, freq, row, resData) {
+		async restoreIndicatorLayoutView(data, freq, row, resData) {
 			// 跳转 result 去查看回测结果
 			if (this.$store.getters.getIsBacktestRunningFlagState) {
 				this.$store.dispatch('states/set_isBacktestRunning_flag', false)
@@ -675,7 +675,7 @@ export const CommonMethodsMixin = {
 				this.loading = false
 			} else {
 				this.reloadData(data, freq)
-				CIQ.addIndicatorsFromBacktest(() => {
+				await CIQ.addIndicatorsFromBacktest(() => {
 					this.$store.commit('form/getRunBacktestData', row)
 					this.$router.push({
 						name: 'Results',
@@ -683,12 +683,13 @@ export const CommonMethodsMixin = {
 					})
 					this.loading = false
 				})
+				await this.loopCalculateNewConditions(row)
 			}
 		},
-		restoreIndicatorLayoutEdit(data, freq, row, resData) {
+		async restoreIndicatorLayoutEdit(data, freq, row, resData) {
 			const that = this
 			that.reloadData(data, freq)
-			CIQ.addIndicatorsFromBacktest(function() {
+			await CIQ.addIndicatorsFromBacktest(function() {
 				that.$store.commit('form/getRunBacktestData', row)
 				that.$router.push({
 					name: 'SetUp',
@@ -696,6 +697,8 @@ export const CommonMethodsMixin = {
 				})
 				that.loading = true
 			})
+			// long todo, 這一塊可以之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions
+			//await that.loopCalculateNewConditions(row)	
 		},
 		reloadData(data, freq) {
 			if (isJson(data)) data = JSON.parse(data)

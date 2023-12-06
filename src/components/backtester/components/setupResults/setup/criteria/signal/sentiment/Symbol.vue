@@ -159,7 +159,7 @@ export default {
     },
   },
   methods: {
-    ROCLikeChange(val) {
+    ROCLikeChange(val,limit) {
       this.isROCLike = 5 <= val && val <= 8
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
@@ -181,7 +181,7 @@ export default {
         }
       }
       // 开始计算数据并加载新的附属indicator
-      this.calculateNewConditions()
+      if(!limit) this.calculateNewConditions()
     },
     change(e) {
       this.$forceUpdate()
@@ -400,7 +400,11 @@ export default {
         this.sym.newCondition = Number(cond.newCondition) ? Number(cond.newCondition) : this.sym.condition
         this.sym.conditionPeriod = cond.conditionPeriod ? cond.conditionPeriod : ''
         this.editTechVal = obj.indicator
-        this.ROCLikeChange(this.sym.newCondition)
+
+        // long: ROC加载脱离了setup表单渲染的限制，在restoreIndicatorLayoutView外部调用loopCalculateNewConditions
+        // 之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions,這一塊隱藏
+        this.ROCLikeChange(this.sym.newCondition,this.$store.getters.getIsMarkerShownFlagState)
+
         this.clearFormValidate()
       }
     }

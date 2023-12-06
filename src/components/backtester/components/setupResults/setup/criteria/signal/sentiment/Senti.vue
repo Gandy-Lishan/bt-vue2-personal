@@ -351,7 +351,7 @@ export default {
     }
   },
   methods: {
-    ROCLikeChange(val) {
+    ROCLikeChange(val,limit) {
       //debugger
       this.isROCLike = 5 <= val && val <= 8
       // 如果不是ROC类型，则这两个condition值一致
@@ -391,8 +391,7 @@ export default {
           }
         }
       }
-      // 开始计算数据并加载新的附属indicator
-      this.calculateNewConditions()
+      if(!limit) this.calculateNewConditions()
     },
     change(e) {
       this.$forceUpdate()
@@ -802,7 +801,6 @@ export default {
       if (JSON.stringify(newVal) != '{}') {
         let obj = newVal[this.criteria].signals[this.panelIndex]
         // test在samebar(relation 2/3)的情况下
-
         // handle unexist property for old backtesters
         let cond
         if('cond' in newVal[this.criteria]){
@@ -835,7 +833,10 @@ export default {
           this.senti.maValue = this.senti.value
           this.senti.period = obj.period
         }
-        this.ROCLikeChange(this.senti.newCondition)
+
+        // long: ROC加载脱离了setup表单渲染的限制，在restoreIndicatorLayoutView外部调用loopCalculateNewConditions
+        // 之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions,這一塊隱藏
+        this.ROCLikeChange(this.senti.newCondition,this.$store.getters.getIsMarkerShownFlagState)
       }
     }
   }
