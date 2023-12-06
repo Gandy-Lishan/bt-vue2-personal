@@ -463,7 +463,7 @@ export const CommonMethodsMixin = {
 			await CIQ.addIndicatorsFromBacktest(() => {
 				// 展示 result 时要用
 				_this.$store.commit('form/getRunBacktestData', backtestInfo)
-				CIQ.hideCover()
+				//CIQ.hideCover()
 			})
 			await this.loopCalculateNewConditions(backtestInfo)
 			await CIQ.uploadCSVJSON(backtestInfo.pk, callback)

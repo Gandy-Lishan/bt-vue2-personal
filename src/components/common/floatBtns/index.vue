@@ -270,7 +270,7 @@ export default {
 button.createNew,
 .toTop {
 	// opacity: 0.4;
-	z-index: 999;
+	z-index: 9999;
 	border: unset;
 	position: fixed;
 	right: 60px;
