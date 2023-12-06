@@ -46,7 +46,7 @@ export default {
         const { data } = to.params
         _this.backtestEditData = isJson(data) ? JSON.parse(data) : data
         await _this.$refs.performanceChild.getResultData(_this.backtestEditData,()=>{
-          _this.setResultsLoadingSetting(false, false, 0, 'Loading data...')
+          _this.setResultsLoadingSetting(false, false, 0, 'Loading data...')  // 需要在result數據加載結束并marker加載結束後接觸遮罩層
           CIQ.hideCover()
         })
       }else {
@@ -59,6 +59,10 @@ export default {
           _this.setResultsLoadingSetting(false, false, 0, 'Loading data...')
           CIQ.hideCover()
         })
+        }else {
+          // 這總情況我遇見的就是在初始狀態下切換到result，也需要接觸遮罩層
+          _this.setResultsLoadingSetting(false, false, 0, 'Loading data...')
+          CIQ.hideCover()
         }
       }
     });
