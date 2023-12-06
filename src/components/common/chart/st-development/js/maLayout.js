@@ -6,7 +6,7 @@ let __st_js_maLayout_ = (_exports) => {
     var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
     
     CIQ.setMALayout = function (url, period, type, field, criteria, index) {
-        var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout
+        var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
 
         // remove current MA attached to an indicator
         var MALayoutListIndex = activatedMALayoutList.findIndex(
@@ -30,7 +30,8 @@ let __st_js_maLayout_ = (_exports) => {
     }
     CIQ.removeMALayout = function (url, criteria, index) {
         if (url == 'ma') {
-            var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout
+            // 對undefined的判斷處理只是爲了防止報錯，因爲btv1的遷移可能存在未知的錯誤
+            var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
 
             // remove current MA attached to an indicator
             var MALayoutListIndex = activatedMALayoutList.findIndex(
@@ -46,7 +47,7 @@ let __st_js_maLayout_ = (_exports) => {
     // 用于changeRelation relation==1
     CIQ.keepTheFirstMALayout = function (criteria) {
 
-        var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout
+        var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
 
         // 如tech是ma则保留第一个选项卡的ma信息
         var activatedMALayoutList = activatedMALayoutList.filter(
@@ -58,7 +59,7 @@ let __st_js_maLayout_ = (_exports) => {
     }
     // 用于changeRelation relation==0
     CIQ.removeExitMALayout = function () {
-        var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout
+        var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
 
         // 如tech是ma则保留第一个选项卡的ma信息
         var activatedMALayoutList = activatedMALayoutList.filter(
