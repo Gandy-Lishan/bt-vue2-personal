@@ -7786,7 +7786,6 @@ class Studies extends CIQ.UI.ContextTag {
 			CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
 
 			await CIQ.getIndicatorMatedata(indicatorsList)
-			console.log(indicatorsList)
 
 			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
 		}
