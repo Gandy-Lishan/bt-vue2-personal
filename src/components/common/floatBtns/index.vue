@@ -186,11 +186,7 @@ export default {
     },
 	refreshPageTemp(){
       //this.$router.go(0)
-	  this.$router.push('/backtester/').then(() => {
-        // 如果路由成功跳转，那么在 promise 的 resolve 回调中刷新页面
-          location.reload()
-        }
-      )
+	  this.$router.push('/backtester/').finally(()=>{location.reload()})
     },
 		updateDynamicClass() {
       // 根据当前路由或其他条件来计算动态类名 // SR or LIST
