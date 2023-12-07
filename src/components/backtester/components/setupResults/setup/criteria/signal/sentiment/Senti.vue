@@ -54,7 +54,7 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput period" v-show="isROCLike">
-					<el-form-item prop="value" size="mini">
+					<el-form-item prop="conditionPeriod" size="mini">
 						<el-input
 							@input="calculateNewConditions"
 							:disabled="!(conditionRadio === 'Indicator Value')"
@@ -131,7 +131,7 @@
 					</el-form-item>
 				</div>
 				<div class="conditionInput period" v-show="isROCLike">
-					<el-form-item prop="value">
+					<el-form-item prop="conditionPeriod">
 						<el-input
 							@input="calculateNewConditions"
 							:disabled="!(conditionRadio === 'Indicator Moving Average')"
@@ -211,6 +211,25 @@ export default {
         }
       }
     };
+    var validateConditionPeriod = (rule, value, callback) => {
+      if (value === '') {
+        return callback(new Error('Please input value'));
+      } else if (isNaN(value)) {
+        return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
+      } else {
+        // Convert ".X" to "0.X" format
+        if (typeof value === 'string' && value.startsWith('.') && value.length > 1) {
+          value = '0' + value;
+          this.senti.value = value
+        }
+        const pattern = /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/;
+        if (!pattern.test(value) && value != 0) {
+          return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
+        } else {
+          callback();
+        }
+      }
+    };
     var validateMaValue = (rule, value, callback) => {
       if (value === '') {
         return callback(new Error('Please input value'))
@@ -231,7 +250,6 @@ export default {
       }
     }
     var validatePeriod = (rule, value, callback) => {
-      console.log('period', value)
       if (value === 0 || value === '') {
         return callback(new Error('Please input period'))
       } else if (isNaN(value)) {
@@ -245,6 +263,7 @@ export default {
         }
       }
     }
+    
     return {
       isROCLike: false,
       //preload: false,
@@ -283,8 +302,9 @@ export default {
       editSentiVal: '',
       rules: {
         value: [{ validator: validateValue, trigger: 'blur' }],
+        conditionPeriod: [{ validator: validateConditionPeriod, trigger: 'blur' }],
         maValue: [{ validator: validateMaValue, trigger: 'blur' }],
-        period: [{ validator: validatePeriod, trigger: 'blur' }]
+        period: [{ validator: validatePeriod, trigger: 'blur' }],
       }
     }
   },
