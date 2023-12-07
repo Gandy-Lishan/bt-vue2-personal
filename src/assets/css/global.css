@@ -554,3 +554,8 @@ input[type="time"] {
  {
   margin: 0 auto;
 }
+
+.el-tooltip__popper {
+  /* 因爲遮罩層的z-index是1999 */
+  z-index: 1998 !important;
+}
