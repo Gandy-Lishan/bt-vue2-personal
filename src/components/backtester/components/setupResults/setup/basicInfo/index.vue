@@ -1287,6 +1287,14 @@ export default {
                 this.isTimeInMarket = true;
                 this.tim = value;
               }
+            }else {
+              if (index === 0) {
+                this.isTakeProfit = false;
+              } else if (index === 1) {
+                this.isStopLoss = false;
+              } else if (index === 2) {
+                this.isTimeInMarket = false;
+              }
             }
           });
         }
