@@ -479,14 +479,15 @@ export const CommonMethodsMixin = {
 			// 写一个函数来map所有情况的condition radio
 			conditionRadioMap(entrySignals,exitSignals)
 
-			if (entrySignals.length !== 0)
-				entrySignals = entrySignals.filter(item =>
-					['Symbol', 'Sentiment', 'User'].includes(item.analysis)
-				)
-			if (exitSignals.length !== 0)
-				exitSignals = exitSignals.filter(item =>
-					['Symbol', 'Sentiment', 'User'].includes(item.analysis)
-				)
+			// 把對tech類型的判斷放在calculateNewConditions，防止indicator的panelIndex不一致的bug
+			// if (entrySignals.length !== 0)
+			// 	entrySignals = entrySignals.filter(item =>
+			// 		['Symbol', 'Sentiment', 'User'].includes(item.analysis)
+			// 	)
+			// if (exitSignals.length !== 0)
+			// 	exitSignals = exitSignals.filter(item =>
+			// 		['Symbol', 'Sentiment', 'User'].includes(item.analysis)
+			// 	)
 
 			for (let index = 0; index < entrySignals.length; index++) {
 				await this.calculateNewConditions(entrySignals[index], 'entry', index)
@@ -497,6 +498,8 @@ export const CommonMethodsMixin = {
 		},
 
 		calculateNewConditions(signals, criteria, panelIndex) {
+			if( !['Symbol', 'Sentiment', 'User'].includes(signals.analysis) ) return
+
 			const isROCLike = signals.isROCLike
 			const indicator = signals.indicator
 			const newCondition = signals.newCondition
