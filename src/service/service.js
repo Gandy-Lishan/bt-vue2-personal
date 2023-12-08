@@ -180,7 +180,7 @@ export function getHistoryList(page, sort, name) {
 	}
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url + page, { withCredentials: true })
+			.get(url + page, { withCredentials: true,retry: null })
 			.then(res => {
 				resolve(res)
 			})
@@ -569,7 +569,9 @@ export function getAllMyIndicatorsList(page, callback) {
 
 		function fetchPageData(page) {
 			axios
-				.get(url + page)
+				.get(url + page,{
+					cache: true
+				})
 				.then(res => {
 					const data = res.data.results
 					console.log('响应数据', res)
@@ -762,7 +764,7 @@ export function getBTV1FavIndicator() {
 	return new Promise((resolve, reject) => {
 		axios
 			.get('/bt/my_indicator/get_btv1_favorite_indicators/', {
-				//cache: true,
+				cache: true,
 				withCredentials: true
 			})
 			.then(res => {
