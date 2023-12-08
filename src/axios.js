@@ -15,8 +15,10 @@ let instance = axios.create({
 //set 10 sec as default,However, some time-consuming requests are processed separately
 // instance.defaults.timeout = 15000;
 // //define the global retry count in main.js
-instance.defaults.retry = 4;
-instance.defaults.retryDelay = 1000;
+
+// 默认重试次数
+instance.defaults.retry = 2;
+// instance.defaults.retryDelay = 1000;
 
 // request interceptor
 instance.interceptors.request.use(
@@ -27,7 +29,7 @@ instance.interceptors.request.use(
 			username: 'sentimentrader_backtest_api',
 			password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
 		}
-		console.log('请求开始，打开遮罩层......', config.url)
+		console.log('请求开始，打开遮罩层......', config)
 		// 限制哪些请求需要打开遮罩层
 		// /dev/backtest /dev/analyst /dev/strategy
 		const allowedListUrl = ['backtest', 'analyst', 'strategy']
