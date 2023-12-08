@@ -663,7 +663,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setFrequencyArray', 'setFreqencyLP']),
+    ...mapMutations('form',['setFrequencyArray', 'setFreqencyLP']),
     /* 当用户选择indicator类别，进行搜索筛选*/
     selectCategory(e) {
       this.category = e.target.innerHTML
@@ -876,7 +876,9 @@ export default {
       freqObj.index = this.panelIndex
       freqObj.criteria = this.criteria
       freqObj.key = `${this.criteria}_${this.panelIndex}`
+
       this.setFrequencyArray(freqObj)
+
       this.$emit('getFreqArray', freqObj)
 
       //this.si.sentimentIndicator = item.value

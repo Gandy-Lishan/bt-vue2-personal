@@ -500,7 +500,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setFrequencyArray', 'setFreqencyLP']),
+    ...mapMutations('form', ['setFrequencyArray', 'setFreqencyLP']),
     myFunction() {
       this.$refs.myDropdown.classList.toggle('show')
     },

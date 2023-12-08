@@ -736,7 +736,7 @@ export default {
 				// 	this.signals_in_market = this.indicatorRadioArr.length
 				// }
 				//When removing a tab, remove the corresponding indicator from vuex to refresh the status
-				this.$store.commit('chart/getEntryIndicators', {
+				this.$store.commit(`chart/get${this.criteriaCapFirstL}Indicators`, {
 					index: absoluteIndex,
 					value: ''
 				})
@@ -847,6 +847,7 @@ export default {
 		},
 		changeRelation(val) {
 			if (val == 1) {
+				// single-condition， 只保留第一个condition
 				this.editableTabsValue = '1'
 				this.editableTabs = [
 				{
@@ -925,6 +926,8 @@ export default {
 			}
 			
 			if(val == 0) {
+					// only-risk-control， 移除所有退场condition
+
 					// 移除chartiq对应的extraIndicators
 					let extraIndicators = []
 					extraIndicators.push(...this.$store.state.chart.indicators.extraIndicators)

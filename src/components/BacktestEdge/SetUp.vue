@@ -728,7 +728,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['form', 'GET_END_DATE']), 
+    ...mapMutations('form',['GET_END_DATE']), 
     generateBTName() {
       const date = new Date()
       const year = date.getFullYear();
