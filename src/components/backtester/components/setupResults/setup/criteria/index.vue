@@ -976,8 +976,9 @@ export default {
 						console.log(error)
 					}
 				}
-			this.$emit(`get${this.criteria}Relation`, val)
-			this.$store.commit(`form/clear${this.criteria}SignalArr`)
+				
+			this.$emit(`get${this.criteriaCapFirstL}Relation`, val)
+			this.$store.commit(`form/clear${this.criteriaCapFirstL}SignalArr`)
 			this.$store.commit('form/saveRelation', {
 				criteria: this.criteria,
 				value: this.relation
