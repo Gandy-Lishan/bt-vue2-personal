@@ -503,6 +503,7 @@ export default {
 			if(!data.id) return
 			let _this = this
 			_this.$refs['basicInfo'].setEditData(data)
+
 			/*
 				data 中并没有 entry 和 exit
 				但是 view result 和 edit backtest 按钮拿到的 row 数据中有 entry 和 exit,
@@ -538,15 +539,14 @@ export default {
 				displayData.exit.signals = displayData.exit.signals
 					.filter(item => item.code && (item.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999'  && item.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'))
 					.map(value => signalCode.decode(value.code));
-
+			const riskValArr = data.risk_control.split('/');
+			_this.isRiskControl = !riskValArr.every(item => item === '');
 				if (displayData.exit.signals.length === 0 || displayData.exit.signals.includes(undefined)) {
 					displayData.exit.signals = [{ code: '' }];
-					_this.isRiskControl = true
 					_this.$nextTick(() => {
 						_this.$refs.exitChild.setRiskEditData(displayData);
 					});
 				} else {
-					_this.isRiskControl = false
 					let exitPanel = displayData.exit.signals.length;
 					let exitData = { exit: displayData.exit };
 					_this.$refs.exitChild.setEditPanel(exitPanel, exitData);
