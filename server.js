@@ -96,7 +96,8 @@ if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
         }
     }))
 
-    let url3= get_env("bt_url",'https://devbt2api.sentimentrader.com/')
+    // let url3= get_env("bt_url",'https://devbt2api.sentimentrader.com/')
+    let url3= get_env("bt_url",'https://bt2api.sentimentrader.com')
     app.use('/bt',proxy({
         target:url3,
         ws: true,
@@ -125,7 +126,8 @@ if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
         }
     }))
 
-    let url3= get_env("bt_url",'https://devbt2api.sentimentrader.com/')
+    // let url3= get_env("bt_url",'https://devbt2api.sentimentrader.com/')
+    let url3= get_env("bt_url",'https://bt2api.sentimentrader.com')
     app.use('/bt',proxy({
         target:url3,
         ws: true,
