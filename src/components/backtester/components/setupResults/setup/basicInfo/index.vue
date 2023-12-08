@@ -1407,11 +1407,11 @@ export default {
 	justify-content: center;
 	align-items: center;
   position: relative;
-  margin-right: 5px;
+  margin-right: 20px;
 }
 .risk-control-container {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
   margin-bottom: 18px;
 }
 
