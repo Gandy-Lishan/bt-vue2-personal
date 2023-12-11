@@ -614,14 +614,14 @@ export const CommonMethodsMixin = {
 			}
 		  }
 
+		  	const field = fieldName ||
+			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
 				'ST ROCLike',
 				{
-					display: conditionMap.get(newCondition).name,
-					Field:
-						fieldName ||
-						(indicator_url_with_ma ? indicator_url_with_ma : indicator_url),
+					display: `${conditionMap.get(newCondition).name}(${field})`,
+					Field: field,
 					condition: conditionMap.get(newCondition).abbr,
 					period: conditionPeriod
 				},
