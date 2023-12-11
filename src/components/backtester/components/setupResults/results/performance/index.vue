@@ -1,11 +1,24 @@
 // Summary & Trades
 <template>
 	<div class="perfprmance-container">
-		<p class="hint">
-			Hint: Markers on the chart point to the buy/sell trade dates on the open
-			<b>ONE</b> bar after entry/exit criteria met.
-		</p>
 		<el-tabs class="performance_tabs" v-model="activePerTag" type="card" v-loading="loading">
+    <div class="hint-btn-box">
+      <p class="hint">
+        Hint: Markers on the chart point to the buy/sell trade dates on the open
+        <b>ONE</b> bar after entry/exit criteria met.
+      </p>
+      <div class="downLoadCsvBtn">
+        <el-button
+          @click="handleDownloadCsv"
+          style="display: inline-block"
+          type="primary"
+          plain
+          size="mini"
+          icon="el-icon-download"
+          >Export Data</el-button
+        >
+      </div>
+    </div>
       <el-tab-pane label="Summary" name="first">
         <Summary 
           :tableData="tableData" 
@@ -29,18 +42,6 @@
 			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
 		</el-tabs>
-
-		<div class="downLoadCsvBtn">
-			<el-button
-				@click="handleDownloadCsv"
-				style="display: inline-block"
-				type="primary"
-				plain
-				size="mini"
-				icon="el-icon-download"
-				>Export Data</el-button
-			>
-		</div>
 	</div>
 </template>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
@@ -444,15 +445,19 @@ export default {
 	border-top: solid 3px #00000042 !important;
 }
 .hint {
-	position: absolute;
+	/* position: absolute; */
 	font-size: 0.8rem;
 	color: black !important;
-	right: 45px;
+	/* right: 243px; */
 	font-weight: 300;
 	margin: 0;
 }
 .perfprmance-container {
 	padding-bottom: 20px;
+}
+.performance_tabs {
+  width: 1140px;
+  margin: 0 auto;
 }
 .pagination-container {
 	display: flex;
@@ -465,9 +470,10 @@ export default {
 	font-size: 0.8rem;
 }
 .downLoadCsvBtn {
-	position: absolute;
+	/* position: absolute;
 	right: 28px;
-	top: 320px;
+	top: 320px; */
+  margin-left: 10px;
 	color: #333333;
 }
 .el-dialog .el-dialog__body .el-table /deep/.cell {
@@ -485,7 +491,11 @@ export default {
 	text-align: center;
 }
 .perfprmance-container /deep/ .el-tabs__header.is-top {
-  width: 80%;
-  margin: 0 auto;
+  padding-bottom: 1rem;
+}
+.hint-btn-box{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 </style>

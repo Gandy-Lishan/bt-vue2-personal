@@ -11,7 +11,6 @@
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.8)"
       @sort-change="changeTableSort"
-			style="width: 80%; height: 100%; margin: 0 auto"
       size="mini"
 		>
 			<template v-for="(l) in tableCol">
@@ -227,5 +226,10 @@ export default {
 .el-table th.el-table__cell>.cell
 {
   font-weight: 600 !important;
+}
+.other-table{
+  width: 1140px; 
+  height: 100%; 
+  margin: 0 auto
 }
 </style>

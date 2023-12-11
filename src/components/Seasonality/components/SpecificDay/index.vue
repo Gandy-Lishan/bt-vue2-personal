@@ -201,7 +201,12 @@ export default {
         { label: 'Christmas Day', month: 12, day: 25, value: 7 },
         { label: 'Memorial Day', month: 5, day: 29, value: 8 },
         { label: 'Custom Time', value: 9 },
-        { label: 'FOMC Decision Day', month: 2, day: 1, value: 10 }
+        { label: 'FOMC Decision Day', month: 2, day: 1, value: 10 },
+        { label: 'Monthly Option Expiration', month: 1, day: 20, value: 11 },
+        { label: 'March Quad Option Expiration', month: 3, day: 17, value: 12 },
+        { label: 'June Quad Option Expiration', month: 6, day: 16, value: 13 },
+        { label: 'September Quad Option Expiration', month: 9, day: 15, value: 14 },
+        { label: 'December Quad Option Expiration', month: 12, day: 15, value: 15 },
       ],
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
