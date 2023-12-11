@@ -25,7 +25,7 @@
 									stripe
 									show-summary
 									:summary-method="getSummaries"
-									style="width: 80%; height: 100%; margin: 0 auto"
+									class="aiResultsTable"
 								>
 										<template v-for="(l, index) in defaultTableLabels">
 											<el-table-column
@@ -50,7 +50,7 @@
 										:data="result_quotes"
 										:show-header="false"
 										stripe
-										style="width: 80%; height: 100%; margin: 0 auto"
+										class="aiResultsTable"
 									>
 
 										<template v-for="column in defaultTableLabels">
@@ -278,6 +278,11 @@ computed: {
 	.form-box {
 		margin: 0 50px 15px 15px;
 	}
+}
+.aiResultsTable{
+	width: 1140px; 
+	height: 100%; 
+	margin: 0 auto
 }
 </style>
 
