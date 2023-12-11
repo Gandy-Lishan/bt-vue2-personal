@@ -578,16 +578,18 @@ let __st_js_generateCsv_ = (_exports) => {
              s.parameters.index == indexNum
          ){
              //const substrings = ['Rate Of Change','% of Previous Range','MA Ratio']
-             const conditionMap = new Map([
-                 ['Rate Of Change','ROC'],
-                 ['% of Previous Range','OPR'],
-                 ['MA Ratio','MA'],
-                 ['Range Rank','RR']
-             ])
+            //  const conditionMap = new Map([
+            //      ['Rate Of Change','ROC'],
+            //      ['% of Previous Range','OPR'],
+            //      ['MA Ratio','MA'],
+            //      ['Range Rank','RR']
+            //  ])
              let matchedSubstring = '';
+             debugger
              for(var i in Object.keys(arrData[arrData.length-10])){
                  if(Object.keys(arrData[arrData.length-10])[i].indexOf(s.inputs.display) !== -1){
-                     matchedSubstring = conditionMap.get(s.inputs.display)
+                    //  matchedSubstring = conditionMap.get(s.inputs.display)
+                    matchedSubstring = s.inputs.condition
                  }
                  if(matchedSubstring &&
                      Object.keys(s.outputMap).indexOf(Object.keys(arrData[arrData.length-10])[i]) != -1){
