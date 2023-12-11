@@ -117,7 +117,8 @@ export default {
               style: {
                   fontWeight: 'bold',
                   fontFamily: 'Arial'
-              }
+              },
+              margin: 20 // 调整这里的值
           },
           chart: {
             events: {
@@ -213,7 +214,7 @@ export default {
               verticalAlign: 'top',
               align: 'right',
               x: -60,
-              y: 0,
+              y: 20,
               floating: true,
               backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
           },
