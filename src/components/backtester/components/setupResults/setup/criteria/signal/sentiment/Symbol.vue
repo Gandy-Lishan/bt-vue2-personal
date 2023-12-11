@@ -370,7 +370,7 @@ export default {
         }
 
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-          display: conditionMap.get(this.sym.newCondition).name,
+          display: `${conditionMap.get(this.sym.newCondition).name}(${fieldName})`,
           Field: fieldName,
           condition: conditionMap.get(this.sym.newCondition).abbr,
           period: this.sym.conditionPeriod
