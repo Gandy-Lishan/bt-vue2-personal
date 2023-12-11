@@ -184,7 +184,7 @@ instance.interceptors.response.use(
 
 let cache = new Cache(axios) // pass current axios to Cache
 cache.use({
-	expire: 3600000 * 24 * 7, // default timeout period, 7 days
+	expire: 3600000 * 1 * 1, // default timeout period, 7 days
 	storage: true,
 	instance,
 	requestConfigFn: config => {

@@ -570,11 +570,11 @@ if (!CIQ.Studies) {
 				//console.log('-Infinity',quote)
 			}
 			
-			quote[sd.inputs.display+desc] = resArr[i];
+			quote[sd.inputs.display] = resArr[i];
 			// quote['supLine'] = showSupLine;
 		}
 
-		sd.outputMap[sd.inputs.display+desc] = "Line";
+		sd.outputMap[sd.inputs.display] = "Line";
 		// sd.outputMap['supLine'] = "supLine";
 		
 		// 给上面函数用的工具函数

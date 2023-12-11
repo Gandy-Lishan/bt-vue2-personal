@@ -674,9 +674,10 @@ export default {
           }
         }
 
+        const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-          display: conditionMap.get(this.senti.newCondition).name,
-          Field: indicator_url_with_ma ? indicator_url_with_ma : indicator_url,
+          display: `${conditionMap.get(this.senti.newCondition).name}(${field})`,
+          Field: field,
           condition: conditionMap.get(this.senti.newCondition).abbr,
           period: this.senti.conditionPeriod
         }, null, {
