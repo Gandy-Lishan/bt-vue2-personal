@@ -2,7 +2,7 @@
     <div class="trades-container history-container">
         <el-table
             :data="paginatedData"
-            style="width: 80%; margin: 0 auto"
+            class="trades-table"
             border
             :span-method="objectSpanMethod"
         >
@@ -29,7 +29,7 @@
                 prop="TradeStatus"
                 label="Action"
                 align="center"
-                width="150px"
+                width="100px"
                 show-overflow-tooltip
             >
             </el-table-column>
@@ -48,14 +48,14 @@
             <el-table-column
                 prop="TradePrice"
                 label="Trade Price"
-                width="150px"
+                width="100px"
                 align="center"
             >
             </el-table-column>
 <el-table-column
                 prop="ExitReason"
                 label="Exit Reason"
-                width="150px"
+                width="100px"
                 align="center"
             >
             </el-table-column>
@@ -63,7 +63,7 @@
             <el-table-column
                 prop="TradeReturn"
                 label="Trade Return %"
-                width="150px"
+                width="120px"
                 align="center"
                 show-overflow-tooltip
             >
@@ -80,7 +80,7 @@
             <el-table-column
                 prop="Return"
                 label="Total Return %"
-                width="150px"
+                width="120px"
                 align="center"
                 show-overflow-tooltip
             >
@@ -213,8 +213,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.trades-container {
+    margin-bottom: 1rem;
+}
 .pagination-container {
-    width: 80%;
-    margin: 0 auto;
+    font-size: 12px;
+}
+.trades-table{
+    margin-top: 20px;
 }
 </style>

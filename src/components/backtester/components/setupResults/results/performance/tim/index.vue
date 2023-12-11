@@ -1,14 +1,14 @@
 <template>
 	<div class="tim-container">
-		<p style="margin: 10px auto; width: 80%; position: relative;">
+		<p style="margin: 10px auto; position: relative;">
 			The results below provide a multiple timeframe view of the backtest of the
 			indicator and index that you have chosen. The 'Exit Criteria' selected for
 			the backtest is not used for the results below. Instead, we provide a look
 			at various time-frames from 1-Week to 1-Year of returns.
+		</p>
 			<el-button class="editWithCustomBtn" icon="el-icon-document-add" type="primary" plain size="mini" @click="showTableDialog" v-if="!showTable && activeTIM == 'second'">
 				Edit exit with different TIM
 			</el-button>
-		</p>
 		<el-tabs v-model="activeTIM" type="card" v-loading="loading">
 			<el-tab-pane label="Exit With Default Time-In-Market" name="first">
 				<div class="history-container">
@@ -18,7 +18,7 @@
 								:data="backtestHistoryList"
 								:row-class-name="tableRowClassName"
 								stripe
-								style="width: 80%; height: 100%; margin: 0 auto"
+								style="height: 100%; margin: 0 auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
 									<el-table-column :label="l" :prop="l" :key="index" align="center">
@@ -36,7 +36,7 @@
 						</template>
 					</el-skeleton>
 				</div>
-				<hr style="height:2px;border:none;color:#333;background-color:#333;width: 80%">
+				<hr style="height:2px;border:none;color:#333;background-color:#333;">
 				<div class="zscore-container">
 					<el-skeleton :rows="2" :loading="loading" animated>
 						<template>
@@ -44,7 +44,7 @@
 								:data="result_quotes"
 								:show-header="false"
 								stripe
-								style="width: 80%; height: 100%; margin: 0 auto"
+								style="height: 100%; margin: 0 auto"
 							>
 								<el-table-column prop="property" label="Property"  align="center">
 								</el-table-column>
@@ -81,7 +81,7 @@
 							<el-table
 								:data="TIMHistoryList"
 								stripe
-								style="width: 80%; height: 100%; margin: 0 auto"
+								style="height: 100%; margin: 0 auto"
 							>
 								<template v-for="(l, index) in defaultTIMTableLabels">
 									<el-table-column :label="l" :prop="l" :key="index" align="center">
@@ -99,7 +99,7 @@
 						</template>
 					</el-skeleton>
 				</div>
-				<hr style="height:2px;border:none;color:#333;background-color:#333;width: 80%">
+				<hr style="height:2px;border:none;color:#333;background-color:#333;">
 				<div class="zscore-container">
 					<el-skeleton :rows="2" :loading="loading" animated>
 						<template>
@@ -107,7 +107,7 @@
 								:data="TIMResult_quotes"
 								:show-header="false"
 								stripe
-								style="width: 80%; height: 100%; margin: 0 auto"
+								style="height: 100%; margin: 0 auto"
 							>
 								<el-table-column prop="property" label="Property" align="center">
 								</el-table-column>
@@ -1548,7 +1548,7 @@ export default {
 .editWithCustomBtn{
     z-index: 999;
     position: absolute;
-    top: 100%;
-    left: 80%;
+    top: 100px;
+		right: 5px;
 }
 </style>

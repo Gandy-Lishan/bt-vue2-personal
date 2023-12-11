@@ -7,7 +7,7 @@
 					<el-table
 						header-align="center"
 						:data="tableData"
-						style="width: 80%; margin: 0 auto; margin-top: 20px; ">
+						class="aisummaryTable">
 						<el-table-column
 								show-overflow-tooltip
 								prop="CAGR"
@@ -92,7 +92,7 @@
 					<el-table
 						header-align="center"
 						:data="tableData"
-						style="width: 80%; margin: 0 auto; margin-top: 20px"
+						class="aisummaryTable"
 					>
 						<el-table-column
 							prop="winRate"
@@ -162,7 +162,7 @@
 					<el-table
 						header-align="center"
 						:data="tableData"
-						style="width: 80%; margin: 0 auto; margin-top: 20px; "
+						class="aisummaryTable"
 					>
 						<el-table-column
 							prop="totalTrades"
@@ -235,7 +235,7 @@
 						header-align="center"
 						:row-class-name="tableRowClassName"
 						:data="historyData"
-						style="width: 80%; margin: 0 auto; margin-top: 20px; "
+						class="aisummaryTable"
 						show-summary
 						:summary-method="getSummaries"
 					>
@@ -455,6 +455,11 @@ export default class PerformanceComponent extends Vue {
 }
 .summaryContainer{
 	margin-top: 20px;
+}
+.aisummaryTable{
+	width: 1140px; 
+	margin: 0 auto; 
+	margin-top: 20px; 
 }
 </style>
 
