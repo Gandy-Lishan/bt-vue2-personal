@@ -10,7 +10,7 @@ import {
     getAllMyIndicatorsList,
 } from '@/service/service.js'
 
-import {maxNumOfStudy} from '@/utils'
+import {maxNumOfStudy,timeframeTransform} from '@/utils'
 
 const collator = new Intl.Collator('en');
 function SortArray(x, y){
@@ -220,56 +220,132 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 
                 CIQ.symbols = []
                 if (filter == "ALL"){
-                    var results = []
-                    let list = CIQ.store.state.chart.indicatorsList
-                    let wholeWord = null
-                    for(var i=0;i<list.length;i++){
-                        var fields = list[i]
+                    // var results = []
+                    // let list = CIQ.store.state.chart.indicatorsList
+                    // let wholeWord = null
+                    // for(var i=0;i<list.length;i++){
+                    //     var fields = list[i]
                         
-                        var item = {
-                            name: fields.chart_name,
-                            url: fields.url,
-                            updated: fields.updated,
-                            category: fields.category
-                        };
+                    //     var item = {
+                    //         name: fields.chart_name,
+                    //         url: fields.url,
+                    //         updated: fields.updated,
+                    //         category: fields.category
+                    //     };
 
-                        if (this.currentCategory!=='all' && item.category!==this.currentCategory){ 
-                            continue;
-                        }
+                    //     if (this.currentCategory!=='all' && item.category!==this.currentCategory){ 
+                    //         continue;
+                    //     }
 
-                        if (item.updated.indexOf("Quarterly") !==-1){
-                            continue;
-                        }
+                    //     if (item.updated.indexOf("Quarterly") !==-1){
+                    //         continue;
+                    //     }
 
-                        if (item.name.indexOf("Seasonality") !==-1){
-                            continue;
-                        }
+                    //     if (item.name.indexOf("Seasonality") !==-1){
+                    //         continue;
+                    //     }
 
-                        if (CIQ.symbols.indexOf(item.name) !==-1){
-                            continue;
-                        }
+                    //     if (CIQ.symbols.indexOf(item.name) !==-1){
+                    //         continue;
+                    //     }
   
-                        if (item.name.toUpperCase().indexOf(value.toUpperCase()) === -1){
-                            continue;
-                        }
+                    //     if (item.name.toUpperCase().indexOf(value.toUpperCase()) === -1){
+                    //         continue;
+                    //     }
 
-                        if(item.name.toUpperCase() === value.toUpperCase()){
-                            wholeWord = {
-                                display: [item.name,item.updated],
-                                data: item
-                            }
-                            continue
-                        }
+                    //     if(item.name.toUpperCase() === value.toUpperCase()){
+                    //         wholeWord = {
+                    //             display: [item.name,item.updated],
+                    //             data: item
+                    //         }
+                    //         continue
+                    //     }
                         
-                        results.push({
-                            display:[item.name,item.updated],
-                            data:item
-                        })
-                    }
+                    //     results.push({
+                    //         display:[item.name,item.updated],
+                    //         data:item
+                    //     })
+                    // }
 
-                    results.sort(SortArray)
-                    if(wholeWord)   results.unshift(wholeWord)
-                    closure(results); 
+                    // results.sort(SortArray)
+                    // if(wholeWord)   results.unshift(wholeWord)
+                    // closure(results); 
+
+                    var loader = document.querySelector(".loaderSearch");
+                    if (loader) loader.show();  
+                    const list = CIQ.store.state.chart.indicatorsList
+                    let resu = list.map(item=>{return {
+                        name: item.chart_name,
+                        url: item.url,
+                        updated: item.updated,
+                        category: item.category
+                    }})
+                    let wholeWord = null
+                    try{
+                        // resu 接入可缓存vuex的btv1 fav indicator
+                        let btvFavIndi = await getBTV1FavIndicator()
+                        resu.push(...btvFavIndi.data.data.map(item=>{return {
+                            name:item.chart_name[0],
+                            url:item.url[0]}
+                        }))
+                        // 去重
+                        resu = Array.from(new Set(resu.map(item => item.url))).map(url => {
+                            return resu.find(item => item.url === url);
+                        });
+    
+                        // resu 接入可缓存vuex的myIndicator,每获取一页数据都过滤关键词并调用callback显示搜索结果
+                        await getAllMyIndicatorsList(1, (data) => {
+                            var results = []
+                            const list = data.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: timeframeTransform(item.timeframe)}))
+
+                            const concatenation = [...resu,...list]
+                            concatenation.forEach(element => {
+                                var item = {
+                                    name: element.name,
+                                    url: element.url,
+                                    updated: element.updated?element.updated:timeframeTransform(CIQ.findSentiIndicator(null,element.url).updated),
+                                }
+                           
+                                if (this.currentCategory!=='all' && item.category!==this.currentCategory){ 
+                                    return;
+                                }
+        
+                                if (item.updated.indexOf("Quarterly") !==-1){
+                                    return;
+                                }
+        
+                                if (item.name.indexOf("Seasonality") !==-1){
+                                    return;
+                                }
+        
+                                if (CIQ.symbols.indexOf(item.name) !==-1){
+                                    return;
+                                }
+          
+                                if (item.name.toUpperCase().indexOf(value.toUpperCase()) === -1){
+                                    return;
+                                }
+        
+                                if(item.name.toUpperCase() === value.toUpperCase()){
+                                    wholeWord = {
+                                        display: [item.name,item.updated],
+                                        data: item
+                                    }
+                                    return
+                                } 
+                                   
+                                results.push({
+                                    display:[item.name,item.updated],
+                                    data:item
+                                })    
+                            }); 
+
+                            // results.sort(SortArray)
+                            if(wholeWord)   results.unshift(wholeWord)
+                            closure(results); 
+                          })
+                          loader.hide(); 
+                    }catch{}
                 }else if (filter == "MY FAVORITES"){  
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  

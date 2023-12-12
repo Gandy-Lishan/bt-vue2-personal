@@ -193,5 +193,24 @@ const maxNumOfStudy = () => {
     }
 }
 
+const timeframeTransform = (val) => {
+  let freq = 'Daily'
+  switch(val){
+      case "monthly":{
+          freq = "Monthly"
+          break;
+      }
+      case "weekly":{
+          freq = "Weekly"
+          break;
+      }
+      case "daily":{
+          freq = "Daily"
+          break;
+      }
+      default:
+  }  
+  return freq
+}
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy}
+export {capitalizeFirstLetter, compareArrays, timestampToTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform}
