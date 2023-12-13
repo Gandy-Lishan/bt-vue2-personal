@@ -569,7 +569,6 @@ let __st_js_generateCsv_ = (_exports) => {
      for(var j in ciq_studies){
          var s = ciq_studies[j]
          if(!s) continue
- 
          // normal senti indicator with ROCLike or symbol ohlcv with ROCLike or STMA with ROCLIKE
          if(
              s.type == "ST ROCLike" && 
