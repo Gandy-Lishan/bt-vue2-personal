@@ -238,6 +238,7 @@
 						class="aisummaryTable"
 						show-summary
 						:summary-method="getSummaries"
+						border
 					>
 						<el-table-column
 							type="index"
