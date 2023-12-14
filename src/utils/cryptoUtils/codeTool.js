@@ -395,6 +395,7 @@ class SignalCode {
 			d2 = RegExp.$3
 			d3 = RegExp.$4
 			var indicator = this.backtest_dict[RegExp.$1](d1)
+
 			var ids = this.ids.decode(d2)
 			var sc = this.sc.decode(d3)
 			if (
