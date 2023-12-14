@@ -507,9 +507,7 @@ export const CommonMethodsMixin = {
 			const analysis = signals.analysis
 
 			if (!isROCLike) return
-			for (var p in CIQ.stxx.panels) {
-				CIQ.stxx.panels[p].hidden = false;
-			}
+
 			const conditionMap = new Map([
 				[5, { name: 'Rate Of Change', abbr: 'ROC' }],
 				[6, { name: '% of Previous Range', abbr: 'OPR' }],
@@ -572,47 +570,49 @@ export const CommonMethodsMixin = {
 			}
 
         // 判断是否已经存在完全一样条件的ROC
-        for (var studyInstanceName in CIQ.stxx.layout.studies) {
-			// 如果当前填入的是数据源为indicator的ma，则判断是否存在此同条件ROC
-			const sd = CIQ.stxx.layout.studies
-			if(indicator_url_with_ma){
-			  if(
-				(indicator_url_with_ma.indexOf(sd[studyInstanceName].inputs.Field) == 0 || (sd[studyInstanceName].inputs.Field?sd[studyInstanceName].inputs.Field.indexOf(indicator_url_with_ma) == 0:false)) &&
-				sd[studyInstanceName].inputs.period == conditionPeriod &&
-				sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
-			  ){ 
-				for (var p in CIQ.stxx.panels) {
-				  if(CIQ.stxx.panels[p].name == studyInstanceName){
-					CIQ.stxx.panels[p].hidden = true;
-				  }
-				}
-			  }
-			}else if(fieldName){
-			  if ((sd[studyInstanceName].inputs.Field == fieldName && sd[studyInstanceName].type != 'ST MA') &&
-				sd[studyInstanceName].inputs.period == conditionPeriod &&
-				sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
-			  ) {
-				for (var p in CIQ.stxx.panels) {
-				  if(CIQ.stxx.panels[p].name == studyInstanceName){
-					CIQ.stxx.panels[p].hidden = true;
-				  }
-				}
-			  }
-			}
-			else{
-			// 如果当前填入的是数据源为indicator，则判断是否存在此同条件ROC
-			  if ((sd[studyInstanceName].inputs.Field == indicator_url && sd[studyInstanceName].type != 'ST MA') &&
-				sd[studyInstanceName].inputs.period == conditionPeriod &&
-				sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
-			  ) {
-				for (var p in CIQ.stxx.panels) {
-				  if(CIQ.stxx.panels[p].name == studyInstanceName){
-					CIQ.stxx.panels[p].hidden = true;
-				  }
-				}
-			  }
-			}
-		  }
+        // for (var studyInstanceName in CIQ.stxx.layout.studies) {
+		// 	// 如果当前填入的是数据源为indicator的ma，则判断是否存在此同条件ROC
+		// 	const sd = CIQ.stxx.layout.studies
+		// 	if(indicator_url_with_ma){
+		// 	  if(
+		// 		(indicator_url_with_ma.indexOf(sd[studyInstanceName].inputs.Field) == 0 || (sd[studyInstanceName].inputs.Field?sd[studyInstanceName].inputs.Field.indexOf(indicator_url_with_ma) == 0:false)) &&
+		// 		sd[studyInstanceName].inputs.period == conditionPeriod &&
+		// 		sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
+		// 	  ){ 
+		// 		for (var p in CIQ.stxx.panels) {
+		// 		  if(CIQ.stxx.panels[p].name == studyInstanceName){
+		// 			CIQ.stxx.panels[p].hidden = true;
+		// 		  }
+		// 		}
+		// 	  }
+		// 	}else if(fieldName){
+		// 	  if ((sd[studyInstanceName].inputs.Field == fieldName && sd[studyInstanceName].type != 'ST MA') &&
+		// 		sd[studyInstanceName].inputs.period == conditionPeriod &&
+		// 		sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
+		// 	  ) {
+		// 		for (var p in CIQ.stxx.panels) {
+		// 		  if(CIQ.stxx.panels[p].name == studyInstanceName){
+		// 			CIQ.stxx.panels[p].hidden = true;
+		// 		  }
+		// 		}
+		// 	  }
+		// 	}
+		// 	else{
+		// 	// 如果当前填入的是数据源为indicator，则判断是否存在此同条件ROC
+		// 	  if ((sd[studyInstanceName].inputs.Field == indicator_url && sd[studyInstanceName].type != 'ST MA') &&
+		// 		sd[studyInstanceName].inputs.period == conditionPeriod &&
+		// 		sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
+		// 	  ) {
+		// 		for (var p in CIQ.stxx.panels) {
+		// 		  if(CIQ.stxx.panels[p].name == studyInstanceName){
+		// 			console.log(CIQ.stxx.panels[p].name)
+		// 			debugger
+		// 			CIQ.stxx.panels[p].hidden = true;
+		// 		  }
+		// 		}
+		// 	  }
+		// 	}
+		//   }
 
 		  	const field = fieldName ||
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
@@ -632,8 +632,44 @@ export const CommonMethodsMixin = {
 				}
 			)
 
+			this.hideDuplicateROC()
+
 			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
 		},
+
+		hideDuplicateROC(){
+			// 隐藏重复的ROC
+			for (var p in CIQ.stxx.panels) {
+				CIQ.stxx.panels[p].hidden = false;
+			}
+
+			// 创建一个辅助对象用于记录出现过的 Field ,period 和 condition 组合
+			const seen = {};
+			// 遍历对象的值
+			for (const key in CIQ.stxx.layout.studies) {
+			if (CIQ.stxx.layout.studies.hasOwnProperty(key)) {
+				const currentObject = CIQ.stxx.layout.studies[key];
+
+				if(currentObject.type != 'ST ROCLike') continue
+
+				const keyCombination = currentObject.inputs.Field + '|' + currentObject.inputs.period + '|' + currentObject.inputs.condition;
+
+				// 检查辅助对象中是否已经存在相同的 name 和 index 组合
+				if (seen[keyCombination]) {
+					for (var p in CIQ.stxx.panels) {
+						if(CIQ.stxx.panels[p].name == key){
+							CIQ.stxx.panels[p].hidden = true;
+						}
+					}
+				} else {
+					seen[keyCombination] = true; // 否则，在辅助对象中记录当前组合
+				}
+			}
+			}
+			CIQ.stxx.resizeChart();
+			CIQ.stxx.draw();
+		},
+
 		decodeCriteria(backtestInfo, criteriaStr) {
 			let signalCode = new SignalCode()
 			let criteria = isJson(backtestInfo[criteriaStr])
