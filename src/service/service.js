@@ -29,7 +29,7 @@ export function getIndicatorsList() {
 	const url = '/api/indicatorsList'
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url, { withCredentials: true })
+			.get(url, { cache: true,withCredentials: true })
 			.then(res => {
 				resolve(res)
 			})

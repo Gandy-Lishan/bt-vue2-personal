@@ -528,6 +528,7 @@ export default {
 					.filter(item => item.code) // 过滤掉没有 code 属性的元素
 					.map(value => signalCode.decode(value.code));
 			}
+			await this.transformOldName(displayData,'entry')
 
 			// 设置 entryChild 的编辑面板
 			let entryPanel = displayData.entry.signals.length;
@@ -547,12 +548,15 @@ export default {
 						_this.$refs.exitChild.setRiskEditData(displayData);
 					});
 				} else {
+					await this.transformOldName(displayData,'exit')
+
 					let exitPanel = displayData.exit.signals.length;
 					let exitData = { exit: displayData.exit };
 					_this.$refs.exitChild.setEditPanel(exitPanel, exitData);
 				}
 			}
 
+			
 			// this.$refs['entryChild'].setEditData()
 			// this.$refs['exitChild'].setEditData()
 		},

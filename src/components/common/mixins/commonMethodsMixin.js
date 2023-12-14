@@ -12,7 +12,8 @@ import {
 	runBacktest,
 	getStatus,
 	findLastSignalApi,
-	getBTV1Backtest
+	getBTV1Backtest,
+	getIndicatorsList
 } from '@/service/service.js'
 import UUID from '@/utils/cryptoUtils/uuid'
 import SignalCode from '@/utils/cryptoUtils/codeTool'
@@ -955,6 +956,19 @@ export const CommonMethodsMixin = {
 					// await _this.displaySetUpForm(data)
 				}
 			}, 1000)
+		},
+
+		async transformOldName(data,criteria){
+			const res = await getIndicatorsList()
+			const stockList = this.$store.state.chart.stocksList
+
+			data[criteria].signals.forEach(signal => {
+				const matchIndicatorsList = res.data.find(item=>item.chart_name == signal.indicator)
+				const matchStockList = stockList.find(item=>item.name == signal.indicator)
+				if(matchIndicatorsList && matchStockList){
+					signal.indicator = matchIndicatorsList.url + ' Optix'
+				}
+			  })
 		}
-	}
+	},
 }
