@@ -13,6 +13,7 @@
 				element-loading-background="rgba(0, 0, 0, 0.8)"
 			@sort-change="changeTableSort"
 			style="width: 100%; height: 100%"
+			border
 		>
 			<el-table-column type="expand">
 				<template slot-scope="props">

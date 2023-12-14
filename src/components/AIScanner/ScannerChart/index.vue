@@ -26,6 +26,7 @@
 									show-summary
 									:summary-method="getSummaries"
 									class="aiResultsTable"
+									border
 								>
 										<template v-for="(l, index) in defaultTableLabels">
 											<el-table-column
@@ -51,6 +52,7 @@
 										:show-header="false"
 										stripe
 										class="aiResultsTable"
+										border
 									>
 
 										<template v-for="column in defaultTableLabels">

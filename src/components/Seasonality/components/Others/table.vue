@@ -12,6 +12,7 @@
       element-loading-background="rgba(0, 0, 0, 0.8)"
       @sort-change="changeTableSort"
       size="mini"
+      border
 		>
 			<template v-for="(l) in tableCol">
         <el-table-column

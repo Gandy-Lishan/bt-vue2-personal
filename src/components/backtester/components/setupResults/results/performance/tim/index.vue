@@ -18,6 +18,7 @@
 								:data="backtestHistoryList"
 								:row-class-name="tableRowClassName"
 								stripe
+								border
 								style="height: 100%; margin: 0 auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
@@ -44,6 +45,7 @@
 								:data="result_quotes"
 								:show-header="false"
 								stripe
+								border
 								style="height: 100%; margin: 0 auto"
 							>
 								<el-table-column prop="property" label="Property"  align="center">
@@ -81,6 +83,7 @@
 							<el-table
 								:data="TIMHistoryList"
 								stripe
+								border
 								style="height: 100%; margin: 0 auto"
 							>
 								<template v-for="(l, index) in defaultTIMTableLabels">
@@ -107,6 +110,7 @@
 								:data="TIMResult_quotes"
 								:show-header="false"
 								stripe
+								border
 								style="height: 100%; margin: 0 auto"
 							>
 								<el-table-column prop="property" label="Property" align="center">

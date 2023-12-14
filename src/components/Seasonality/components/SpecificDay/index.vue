@@ -381,8 +381,9 @@ export default {
       const today = `${month}-${day}`;
       const selectDay = this.data.customizeDate
       const result = compareDates(today, selectDay);
-      
-      if(!result) {
+      const holiday = this.options.find(ele => ele.value == this.data.holidays).label
+
+      if(!result && holiday == 'Custom Time') {
         this.popUpMsgBox(`This year's date is not yet ${selectDay}. Please select another date`)
         this.data.start_date = this.plotConfiguration.start_date
         this.data.end_date = this.plotConfiguration.end_date
