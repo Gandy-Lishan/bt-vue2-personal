@@ -175,6 +175,7 @@
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapGetters } from 'vuex'
+import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 export default {
   name: 'senti',
   props: {
@@ -191,6 +192,7 @@ export default {
     indicatorRadio: String,
     isLimit: Boolean
   },
+  mixins: [CommonMethodsMixin],
   data() {
     var validateValue = (rule, value, callback) => {
       if (value === '') {
@@ -599,9 +601,7 @@ export default {
     },
     calculateNewConditions() {
       if (!this.isROCLike) return
-      for (var p in CIQ.stxx.panels) {
-        CIQ.stxx.panels[p].hidden = false;
-      }
+      
       let indicator_url = this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex]
       let indicator_url_with_ma = ''
       if (indicator_url) {
@@ -644,35 +644,36 @@ export default {
         ])
         
         // 判断是否已经存在完全一样条件的ROC
-        for (var studyInstanceName in CIQ.stxx.layout.studies) {
-          // 如果当前填入的是数据源为indicator的ma，则判断是否存在此同条件ROC
-          const sd = CIQ.stxx.layout.studies
-          if(indicator_url_with_ma){
-            if(
-              (indicator_url_with_ma.indexOf(sd[studyInstanceName].inputs.Field) == 0 || (sd[studyInstanceName].inputs.Field?sd[studyInstanceName].inputs.Field.indexOf(indicator_url_with_ma) == 0:false)) &&
-              sd[studyInstanceName].inputs.period == this.senti.conditionPeriod &&
-              sd[studyInstanceName].inputs.condition == conditionMap.get(this.senti.newCondition).abbr
-            ){ 
-              for (var p in CIQ.stxx.panels) {
-                if(CIQ.stxx.panels[p].name == studyInstanceName){
-                  CIQ.stxx.panels[p].hidden = true;
-                }
-              }
-            }
-          }else{
-          // 如果当前填入的是数据源为indicator，则判断是否存在此同条件ROC
-            if ((sd[studyInstanceName].inputs.Field == indicator_url && sd[studyInstanceName].type != 'ST MA') &&
-              sd[studyInstanceName].inputs.period == this.senti.conditionPeriod &&
-              sd[studyInstanceName].inputs.condition == conditionMap.get(this.senti.newCondition).abbr
-            ) {
-              for (var p in CIQ.stxx.panels) {
-                if(CIQ.stxx.panels[p].name == studyInstanceName){
-                  CIQ.stxx.panels[p].hidden = true;
-                }
-              }
-            }
-          }
-        }
+        // for (var studyInstanceName in CIQ.stxx.layout.studies) {
+        //   // 如果当前填入的是数据源为indicator的ma，则判断是否存在此同条件ROC
+        //   const sd = CIQ.stxx.layout.studies
+        //   if(indicator_url_with_ma){
+        //     if(
+        //       (indicator_url_with_ma.indexOf(sd[studyInstanceName].inputs.Field) == 0 || (sd[studyInstanceName].inputs.Field?sd[studyInstanceName].inputs.Field.indexOf(indicator_url_with_ma) == 0:false)) &&
+        //       sd[studyInstanceName].inputs.period == this.senti.conditionPeriod &&
+        //       sd[studyInstanceName].inputs.condition == conditionMap.get(this.senti.newCondition).abbr
+        //     ){ 
+        //       for (var p in CIQ.stxx.panels) {
+        //         if(CIQ.stxx.panels[p].name == studyInstanceName){
+        //           CIQ.stxx.panels[p].hidden = true;
+        //         }
+        //       }
+        //     }
+        //   }else{
+        //   // 如果当前填入的是数据源为indicator，则判断是否存在此同条件ROC
+        //     if ((sd[studyInstanceName].inputs.Field == indicator_url && sd[studyInstanceName].type != 'ST MA') &&
+        //       sd[studyInstanceName].inputs.period == this.senti.conditionPeriod &&
+        //       sd[studyInstanceName].inputs.condition == conditionMap.get(this.senti.newCondition).abbr
+        //     ) {
+        //       for (var p in CIQ.stxx.panels) {
+        //         if(CIQ.stxx.panels[p].name == studyInstanceName){
+        //           console.log(CIQ.stxx.panels[p].name)
+        //           CIQ.stxx.panels[p].hidden = true;
+        //         }
+        //       }
+        //     }
+        //   }
+        // }
 
         const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
@@ -685,6 +686,8 @@ export default {
           index: this.panelIndex,
           //showSupLine:100
         })
+
+        this.hideDuplicateROC()
 
         // 解决附属ma或者roc漂移问题
         CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
