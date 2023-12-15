@@ -621,7 +621,7 @@ export const CommonMethodsMixin = {
 				CIQ.stxx,
 				'ST ROCLike',
 				{
-					display: `${conditionMap.get(newCondition).name}(${field})`,
+					display: `${conditionMap.get(newCondition).name}(${field}, ${conditionPeriod})`,
 					Field: field,
 					condition: conditionMap.get(newCondition).abbr,
 					period: conditionPeriod
