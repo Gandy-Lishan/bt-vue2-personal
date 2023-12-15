@@ -232,8 +232,10 @@ export const CommonMethodsMixin = {
 				const item = this.favorite_array[i]
 				this.reloadData(item.indicator_layout, item.frequency)
 				await CIQ.addIndicatorsFromBacktest(() => {
-					this.uploadCSVWhileFLS(item)
+					
 				})
+				await this.loopCalculateNewConditions(item)
+				this.uploadCSVWhileFLS(item)
 			}
 			await this.findAllFavoritesSignal()
 			// 循环结束之后请求一次列表
