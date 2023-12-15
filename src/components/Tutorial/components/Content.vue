@@ -385,7 +385,7 @@
 					<p>
 						Learn how to create a backtesting strategy using a sentiment indicator tailored for SPY, suitable for both beginners and experienced traders. By the end, you'll grasp applying this indicator in backtesting strategies. 
 					</p>
-					<iframe width="560" height="315" src="https://www.youtube.com/embed/nkmWNIrRsfg?si=UCPSHKzb381Cgs2N" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/8mQNYLfZ9wQ?si=jFC78wfKDXVMzMEo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 					<hr />
 					<!-- <h3 id="1-0-0">Fill in the basic parameters of the backtest</h3>
 					<p>
@@ -456,7 +456,7 @@
 					></el-image> -->
 					<h2 id="1-1">Creating a SameBar Multi-Condition Sentiment Indicator Backtest</h2>
 					<p>Learn how to analyze and create multi-condition sentiment indicator backtests, empowering your trading decisions with comprehensive insights. </p>
-					<iframe width="560" height="315" src="https://www.youtube.com/embed/IhVu2W_WDPY?si=JWucN49jcRjEri10" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/6I3B-6RpuBI?si=cVhRehTWzl963Z4L" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 					<hr />
 					<!-- <h3 id="1-1-0">Set Stop Loss/Take Profit</h3>
 					<p>
@@ -504,7 +504,7 @@
 					></el-image> -->
 					<h2 id="1-2">Creating a Single-Condition Technical Indicator Backtest</h2>
 					<p>Join us as we explore backtesting strategies with a single-condition technical indicator, focusing on SPY. Learn how to simplify the process of creating and analyzing technical indicator backtests. Gain insights and apply these techniques to your own analyses! </p>
-					<iframe width="560" height="315" src="https://www.youtube.com/embed/AbNJVpDQrBc?si=xPx9UhChFsCnxR3S" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/pbu59UyJazM?si=vsZolit-RQiXauvk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 					<hr />
 					<!-- <h3 id="1-2-0">Set timeframe to Daily</h3>
 					<p>
@@ -552,7 +552,7 @@
 						Creating a TimeOrder Multi-Condition Technical Indicator Backtest
 					</h2>
 					<p>Join us as we explore complex backtesting strategies using TimeOrder Multi-Condition Technical Indicators, focusing on SPY. Learn to create and analyze multi-condition sentiment indicator backtests. Gain insights and apply these techniques to your analyses! </p>
-					<iframe width="560" height="315" src="https://www.youtube.com/embed/_pJ2urj_5yc?si=J7gHIABDn847Tabu" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/67G4zKZYwYQ?si=Hu6sfYyXSo9_6_7U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 					<hr />
 					<!-- <h3 id="1-3-0">Fill in the basic information for the backtest</h3>
 					<p>
@@ -639,7 +639,7 @@
 						Creating a Single-Condition Symbol OHLCV Backtest
 					</h2>
 					<p>Join us as we explore advanced backtesting strategies using Single-Condition Symbol OHLCV, focusing on SPY. Learn to create and analyze backtests based on Open, High, Low, Close, and Volume symbols. Gain insights and apply these techniques to your analyses! </p>
-					<iframe width="560" height="315" src="https://www.youtube.com/embed/_yY1x4w2pGo?si=q0xcKN8oR4RekqZ2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/KeIhNZ9r83s?si=AxUia5uN05RAxSYe" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 					<hr />
 					<!-- <h3 id="1-4-0">Fill in the basic information for the backtest</h3>
 					<p>
@@ -732,7 +732,7 @@
 					></el-image> -->
 					<h2 id="1-5">Creating a User's Own Indicator Backtest</h2>
 					<p>Join us as we explore custom backtesting strategies using User’s Own Indicator files. Learn to tailor your strategies and create custom indicators. Gain comprehensive insights and start applying these techniques to your analyses! </p>
-					<iframe width="560" height="315" src="https://www.youtube.com/embed/_i9PQkjYXRU?si=1NP49iJCYA8s-uyD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/vHPCnFYqLGo?si=wk3XgJjh5MNFaFx3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 					<hr />
 					<!-- <h3 id="1-5-0">Set the value of delay of bars in entry criteria</h3>
 					<p>
@@ -764,7 +764,7 @@
 						Creating a Combination of Sentiment and Technical Indicator Backtest
 					</h2>
 					<p>Explore advanced backtesting strategies using a Combination of Sentiment and Technical Indicators, focusing on SPY. Learn to integrate these indicators for enhanced backtesting. Gain comprehensive insights and apply these techniques to your analyses! </p>
-					<iframe width="560" height="315" src="https://www.youtube.com/embed/bQygTY3p4I4?si=ZV8yS6wiR0FaZpf4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/XYXj43XHk0M?si=i1zc1RbQ13XBITes" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 					<!-- <h3 id="1-6-0">Fill in the basic information for the backtest</h3>
 					<p>
 						According to your own needs, fill in the relevant parameters of the
@@ -1023,7 +1023,7 @@
 			<section v-else-if="id.includes('fls')">
 				<h1 id="fls">Using the “Find Last Signal” Feature</h1>
 				<p>Explore "Add to Favorites" and "Find Last Signal" features for efficient backtesting. Learn to streamline your analysis process and enhance trading strategies with organized tools. Whether you're new or want to optimize strategy analysis, these features offer valuable insights and convenience. </p>
-				<iframe width="560" height="315" src="https://www.youtube.com/embed/oT7rUvGhGFg?si=aPfbjRHsEausQAQh" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/oNDFG17j1OA?si=yQRHPOcD9PIlSwpD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 				<hr />
 				<!-- <h2 id="fls-0">Click the 'find last signal' button</h2>
 				<p>
@@ -1151,7 +1151,7 @@
 			<section v-else-if="id[0] == '5'">
 				<h1 id="5">Using Sample Backtests</h1>
 				<p>Explore utilizing Sample Backtests for a quick start in backtesting strategies. Ideal for beginners or those seeking efficient ways to utilize sample backtests provided by the system. Learn how to navigate and leverage sample backtests effectively to save time and effort. </p>
-				<iframe width="560" height="315" src="https://www.youtube.com/embed/ao-zJA8Shq8?si=8cL-yfWN0GlywMSI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/tu2JdQ8lwos?si=fBE5zaf017OSl2PT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 				<hr />
 				<!-- <section>
 					<h2 id="5-0">Open the Sample Backtests tab</h2>
