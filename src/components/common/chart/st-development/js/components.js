@@ -13269,6 +13269,7 @@ if (!Scroll) {
 import {__js_webcomponents_indicators_} from "../components/indicator.js"
 import {__js_webcomponents_studyContext_} from '../components/studyContext.js'
 import {__js_webcomponents_studyContextDefault_} from '../components/studyContextDefault.js'
+import {__js_webcomponents_studyContextMyindicator} from '../components/studyContextMyindicator.js'
 import {__js_webcomponents_DescriptionContext_} from "../components/descriptionDialog.js"
 import {__js_webcomponents_sentimentLookup_} from "../components/sentimentLookup.js"
 import {__js_webcomponents_favorites_} from "../components/favorites.js"
@@ -13341,6 +13342,7 @@ export {__js_webcomponents_sidePanel_ as sidePanel};
 export {__js_webcomponents_studies_ as studies};
 export {__js_webcomponents_studyContext_ as studyContext};
 export {__js_webcomponents_studyContextDefault_ as studyContextDefault};
+export {__js_webcomponents_studyContextMyindicator as studyContextMyindicator};
 export {__js_webcomponents_studyDialog_ as studyDialog};
 export {__js_webcomponents_studyInput_ as studyInput};
 export {__js_webcomponents_studyLegend_ as studyLegend};
@@ -13427,6 +13429,7 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__js_webcomponents_studies_,
 		__js_webcomponents_studyContext_,
 		__js_webcomponents_studyContextDefault_,
+		__js_webcomponents_studyContextMyindicator,
 		__js_webcomponents_studyDialog_,
 		__js_webcomponents_studyInput_,
 		__js_webcomponents_studyLegend_,
