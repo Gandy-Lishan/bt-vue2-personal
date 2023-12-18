@@ -56,7 +56,7 @@
 
       <div class="maskContent-loading" v-if="getAllSignalArray.length>0 && progressBarValALL < 100">
         <img src="@/assets/fls.gif"/>
-        <span>Runing all backtests</span> 
+        <span>Migrating backtests</span> 
         <progress-bar 
           class="progress-bar"
           bar-color="linear-gradient(to right,#A0E3EC, #66ACE5)" 
