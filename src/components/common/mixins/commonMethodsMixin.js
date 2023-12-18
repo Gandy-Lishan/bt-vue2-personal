@@ -207,7 +207,7 @@ export const CommonMethodsMixin = {
 					//this.favorite_array[i].name = this.favorite_array[i].name + ' (from btv1)test1';
 				}
 				// 先截取第一个结果看能不能跑
-				this.favorite_array = this.favorite_array.slice(0, 10)
+				//this.favorite_array = this.favorite_array.slice(0, 10)
 
 				this.$store.commit(
 					'form/SET_RUNALL_BACKTEST_ARRAY',
