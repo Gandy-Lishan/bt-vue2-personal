@@ -323,6 +323,9 @@
 			<cq-dialog class="description">
 				<cq-study-context-default></cq-study-context-default>
 			</cq-dialog>
+			<cq-dialog class="description">
+				<cq-study-context-myindicator></cq-study-context-myindicator>
+			</cq-dialog>
 		</cq-dialogs>
 
 		<cq-side-panel></cq-side-panel>

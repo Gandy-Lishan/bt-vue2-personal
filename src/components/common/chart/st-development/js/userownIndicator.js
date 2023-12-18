@@ -173,6 +173,7 @@
                     display:symbolList[i].indicator, 
                     isComparison: false, 
                     color: "#368DF0",
+                    permanent: true,
                     yAxis:{ 
                         position:"left",
                         textStyle:"#FFBE00"
@@ -262,6 +263,7 @@
                             display:newData.indicator2.name, 
                             isComparison: false, 
                             color: "#368DF0",
+                            permanent: true,
                             //panel:newData.indicator2.url,
                             // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
                             yAxis:{ 
@@ -373,6 +375,7 @@
                         display:newData.indicator2.name, 
                         isComparison: false, 
                         color: "#368DF0",
+                        permanent: true,
                         //panel:newData.indicator2.url,
                         // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
                         yAxis:{ 

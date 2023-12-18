@@ -3207,13 +3207,19 @@ CIQ.UI.StudyEdit = function(node, context) {
 	this.node = node ? node : context.topNode
 	this.contextDialog = []
 	this.contextDialogDefault = []
+	this.contextDialogMyindicator = []
 	var sc = document.querySelectorAll('cq-study-context')
 	var sc2 = document.querySelectorAll('cq-study-context-default')
+	var sc3 = document.querySelectorAll('cq-study-context-myindicator')
+	
 	for (var i = 0; i < sc.length; i++) {
 		this.contextDialog.push(sc[i])
 	}
 	for (var i = 0; i < sc2.length; i++) {
 		this.contextDialogDefault.push(sc2[i])
+	}
+	for (var i = 0; i < sc3.length; i++) {
+		this.contextDialogMyindicator.push(sc3[i])
 	}
 
 	context.advertiseAs(this, 'StudyEdit')
@@ -3400,6 +3406,10 @@ CIQ.UI.StudyEdit.prototype.remove = function() {
 		if (studyContextDefault.close) studyContextDefault.close()
 	})
 
+	this.contextDialogMyindicator.forEach(function(studyContextMyindicator) {
+		if (studyContextMyindicator.close) studyContextMyindicator.close()
+	})
+
 	// reload chart when removing a study
 	//CIQ.addIndicators()
 }
@@ -3482,8 +3492,10 @@ CIQ.UI.StudyEdit.prototype.updateOverlayEdit = async function() {
 		}
 	}
 	var node = document.getElementsByClassName('cookie')
-	node[0].innerHTML = 'Add To Favorite Indicators'
-	node[0].attributes.stxtap.nodeValue = 'StudyEdit.addIndicatorCookie()'
+	if(node[0]) {
+		node[0].innerHTML = 'Add To Favorite Indicators'
+		node[0].attributes.stxtap.nodeValue = 'StudyEdit.addIndicatorCookie()'
+	}
 }
 
 /**
@@ -3642,6 +3654,11 @@ CIQ.UI.StudyEdit.prototype.edit = function() {
 	this.contextDialogDefault.forEach(function(studyContextDefault) {
 		if (studyContextDefault.close) studyContextDefault.close()
 	})
+
+	this.contextDialogMyindicator.forEach(function(studyContextMyindicator) {
+		if (studyContextMyindicator.close) studyContextMyindicator.close()
+	})
+
 	this.editPanel(this.params)
 }
 /**
@@ -3686,6 +3703,15 @@ CIQ.UI.StudyEdit.prototype.editPanel = function(params) {
 CIQ.UI.StudyEdit.prototype.editOverlay = function(params) {
 	this.params = params
 	params.context = this.context
+	const pathname = window.location.pathname;
+	if(pathname.indexOf('myindicator') != -1){
+		this.contextDialogMyindicator.forEach(function(studyContextMyindicator) {
+			params.x = CIQ.ChartEngine.crosshairX
+			params.y = CIQ.ChartEngine.crosshairY
+			if (studyContextMyindicator.open) studyContextMyindicator.open(params)
+		})
+		return
+	}
 
 	if (params.forceEdit) {
 		this.editPanel(params)
