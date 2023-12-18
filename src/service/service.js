@@ -570,7 +570,7 @@ export function getAllMyIndicatorsList(page, callback) {
 		function fetchPageData(page) {
 			axios
 				.get(url + page,{
-					cache: true
+					// cache: true
 				})
 				.then(res => {
 					const data = res.data.results
@@ -764,7 +764,7 @@ export function getBTV1FavIndicator() {
 	return new Promise((resolve, reject) => {
 		axios
 			.get('/bt/my_indicator/get_btv1_favorite_indicators/', {
-				cache: true,
+				//cache: true,
 				withCredentials: true
 			})
 			.then(res => {
