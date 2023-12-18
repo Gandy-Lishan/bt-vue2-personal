@@ -135,6 +135,7 @@
             placement="right"
             width="400"
             v-model="scope.row.visible"
+            :class="{ 'isLastRow': isLastRow(scope.$index) }"
             >
             <p>{{scope.row.popTitle}}</p>
             <el-table :data="scope.row.BTList" v-if="scope.row.BTList.length != 0" style="margin-bottom: 10px;overflow-y: scroll; max-height: 300px;" size="mini">
@@ -236,6 +237,10 @@ export default {
     await this.getTableData(this.currentPage)
   },
   methods: {
+    isLastRow(index) {
+      // 判断是否为最后一行
+      return index === this.tableData.length - 1;
+    },
     async showPopover(row) {
         row.btnLoading = true
         const url = row.url
@@ -516,8 +521,9 @@ export default {
 }
 /deep/ .el-popover {
   right: 100%;
+}
+.isLastRow /deep/ .el-popover {
   bottom: 0;
-  z-index: 999;
 }
 /deep/ .el-select .el-input__inner, .el-select {
   width: 100%;
