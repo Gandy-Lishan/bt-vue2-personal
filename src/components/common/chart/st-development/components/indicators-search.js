@@ -146,6 +146,10 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 this.filterElements = null;
                 this.params = {};
                 this.currentCategory = 'all'
+
+                // store btvFavIndi and myIndicator list while envoking the search bar
+                this.btvFavIndi = []
+                this.myIndicator = []
             }
     
             /**
@@ -282,9 +286,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                     }})
                     let wholeWord = null
                     try{
-                        // resu 接入可缓存vuex的btv1 fav indicator
-                        let btvFavIndi = await getBTV1FavIndicator()
-                        resu.push(...btvFavIndi.data.data.map(item=>{return {
+                        resu.push(...this.btvFavIndi.data.data.map(item=>{return {
                             name:item.chart_name[0],
                             url:item.url[0]}
                         }))
@@ -293,13 +295,11 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                             return resu.find(item => item.url === url);
                         });
     
-                        // resu 接入可缓存vuex的myIndicator,每获取一页数据都过滤关键词并调用callback显示搜索结果
-                        await getAllMyIndicatorsList(1, (data) => {
                             var results = []
-                            const list = data.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: timeframeTransform(item.timeframe)}))
+                            const list = this.myIndicator.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: timeframeTransform(item.timeframe)}))
 
-                            const concatenation = [...resu,...list]
-                            concatenation.forEach(element => {
+                            resu.push(...list)
+                            resu.forEach(element => {
                                 var item = {
                                     name: element.name,
                                     url: element.url,
@@ -343,7 +343,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                             // results.sort(SortArray)
                             if(wholeWord)   results.unshift(wholeWord)
                             closure(results); 
-                          })
+
                           loader.hide(); 
                     }catch{}
                 }else if (filter == "MY FAVORITES"){  
@@ -352,24 +352,23 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                     //var resu = CIQ.store.state.chart.favoriteIndicatorList
                     var resu = []
                     const data = await CIQ.getFavorite()
-                    try{
+                   // try{
                         resu = JSON.parse(data.favorite_indicator)
 
-                        // resu 接入可缓存vuex的btv1 fav indicator
-                        let btvFavIndi = await getBTV1FavIndicator()
-                        resu.push(...btvFavIndi.data.data.map(item=>{return {name:item.chart_name[0],url:item.url[0]}}))
+                        resu.push(...this.btvFavIndi.data.data.map(item=>{return {
+                            name:item.chart_name[0],
+                            url:item.url[0]}
+                        }))
                         // 去重
                         resu = Array.from(new Set(resu.map(item => item.url))).map(url => {
                             return resu.find(item => item.url === url);
                         });
                         
-                        // resu 接入可缓存vuex的myIndicator,每获取一页数据都过滤关键词并调用callback显示搜索结果
-                        await getAllMyIndicatorsList(1, (data) => {
                             var results = []
-                            const list = data.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
+                            const list = this.myIndicator.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
 
-                            const concatenation = [...resu,...list]
-                            concatenation.forEach(element => {
+                            resu.push(...list)
+                            resu.forEach(element => {
                                 var item = {
                                     symbol: element.url,
                                     name: element.name,
@@ -389,10 +388,13 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                             // fav动态加载，排序的话体验不好
                            // results.sort(SortArray)
                             closure(results);
-                          })
+
                           loader.hide(); 
-                    }catch{}
+                    //}catch{}
                 }else if (filter == "MOST POPULAR"){
+                    var loader = document.querySelector(".loaderSearch");
+                    if (loader) loader.hide();  
+
                     var results = []
                     let wholeWord = null
                     for(var i=0;i<CIQ.store.state.chart.indicatorsList.length;i++){
@@ -472,51 +474,33 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 input.value = "";
             }
                 
-            async loadStocksList(){
-                let list = []
-                if (CIQ.store.state.chart.stocksList.length != 0) {
-                    list = CIQ.store.state.chart.stocksList
-                }else{               
-                    const res = await CIQ.axios.get(
-                        config.getStocks, {cache:true}
-                    )
-                    list = res.data
-                    CIQ.store.commit('chart/getStocksList',res.data);
-                }
-                return list
-            }
-            async loadIndexsList(){
-                let list = []
-                
-                if (CIQ.store.state.chart.indexsList.length != 0) {
-                    list = CIQ.store.state.chart.indexsList
-                }else{   
-                    const res = await CIQ.axios.get(
-                        config.getIndexes, {cache:true}
-                    )
-                    list = res.data
-                    CIQ.store.commit('chart/getIndexsList',res.data);  
-                }
-                return list
+            async updateFavIndicatorAndMyIndicator(){
+                var loader = document.querySelector(".loaderSearch");
+                    if (loader) loader.show();  
+
+                    var filters = this.querySelector("cq-indicators-lookup-filters");
+                    if (filters) var overlay = filters.querySelector(".overlay");
+                    overlay.style.display = 'block'
+                this.btvFavIndi = await getBTV1FavIndicator()
+                this.myIndicator = await getAllMyIndicatorsList(1,()=>{})
+
+                overlay.style.display = 'none'
             }
             initialize() {
-                //test
+                // Close the dropdown menu if the user clicks outside of it
+                window.onclick = function(event) {
+                if (!event.target.matches('.dropbtn')) {
 
-
-// Close the dropdown menu if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-}
+                    var dropdowns = document.getElementsByClassName("dropdown-content");
+                    var i;
+                    for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                    }
+                }
+                }
 
                 this.addDefaultMarkup();
                 var node = this.node;
@@ -547,17 +531,22 @@ window.onclick = function(event) {
                 
                 if (filters) {
                     var allFilters = filters.querySelectorAll("cq-indicators-filter");
-                    var lookupInput = this.querySelector("cq-indicators-lookup-input");
 
+                    var lookupInput = this.querySelector("cq-indicators-lookup-input");
                     CIQ.UI.stxtap(lookupInput, function () {
-                        allFilters.forEach(function (f) {
+                        if(document.querySelector('.ciq-indicators-search').active) return;
+                        allFilters.forEach(async function (f) {
+                            // 判断点击事件触发前是否激活了indicators-search
                             if(f.classList.contains("true")){
-                                //console.log("lookupInput",self.input.val())
+                                
+                                // 激活indicators-search bar前更新列表，之后的切换和搜索读vuex
+                                await self.updateFavIndicatorAndMyIndicator()
                                 self.acceptText(self.input.val(), f.innerHTML);
                             }
                         });
                     });
 
+                    
                     allFilters.forEach(function (filter) {   
                         // a dumb function to solve the display bug     
                         
@@ -574,7 +563,7 @@ window.onclick = function(event) {
                             } else {
                                 self.currentFilter = this.innerHTML;
                             }
-                            //console.log(self.input.val(),self.currentFilter)
+
                             self.acceptText(self.input.val(), self.currentFilter);
                         });
 
@@ -1087,6 +1076,7 @@ window.onclick = function(event) {
                     <cq-indicators-filter class="true">ALL</cq-indicators-filter>
                     <cq-indicators-filter>MY FAVORITES</cq-indicators-filter>
                     <cq-indicators-filter>MOST POPULAR</cq-indicators-filter>
+                    <div class="overlay"></div>
                 </cq-indicators-lookup-filters>
                 <cq-indicators-scroll></cq-indicators-scroll>
                 <cq-loader class="loaderSearch"></cq-loader>
