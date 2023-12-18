@@ -23,15 +23,19 @@
           >BacktestEdge</el-menu-item
         > -->
         <el-menu-item class="home-link" index="1"
+        v-if="access_level.includes('backtestedge') || activeIndex == 1"
           >BacktestEdge</el-menu-item
         >
         <el-menu-item class="ai-link" index="3"
+        v-if="access_level.includes('aiscanneredge') || activeIndex == 3"
           >AI Stock Scanner</el-menu-item
         >
         <el-menu-item class="my-indicator-link home-link" index="6"
+        v-if="access_level.includes('backtestedge')"
           >My Indicator</el-menu-item
         >
         <el-menu-item class="seasonality-link home-link" index="7"
+        v-if="access_level.includes('backtestedge')"
           >Seasonality</el-menu-item
         >
 
@@ -62,7 +66,8 @@
 	</div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
+
 export default {
   name: "Header",
   props: {
@@ -73,7 +78,8 @@ export default {
   },
   data() {
     return {
-      activeIndex: '1'
+      activeIndex: '1',
+      access_level: []
     }
   },
   computed: {
@@ -97,6 +103,8 @@ export default {
       }
   },
   mounted() {
+    console.log('h_用户权限', getCookieData())
+	  this.access_level = getCookieData()?.access_level
     if (this.$route.name == 'strategy') {
       this.activeIndex = '2'
     } else if (this.$route.name == 'backtester' || this.$route.name == 'Backtests') {
