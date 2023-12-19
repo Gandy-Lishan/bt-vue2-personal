@@ -240,6 +240,11 @@ export const CommonMethodsMixin = {
 			await this.findAllFavoritesSignal()
 			// 循环结束之后请求一次列表
 			await this.getDataList(null)
+			
+			if (!CIQ.Studies) return
+			this.$store.dispatch('chart/reset_chart_study_state')
+			this.$store.dispatch('form/reset_chart_config_state')
+			this.$store.commit('form/getFrequency', '')
 		},
 
 		uploadCSVWhileFLS(row) {
