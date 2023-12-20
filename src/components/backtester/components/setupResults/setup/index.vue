@@ -134,12 +134,20 @@ export default {
 			// 如果跳转携带 backtestID 则填充
 			const backtestID = LocalStorageUtil.get('backtestID')
 				if(backtestID) {
+					// const res = await seeParams(backtestID)
+					// res.data.commission = (res.data.commission * 100).toFixed(2)
+					// res.data.user_tag = 'client'
+					// _this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', res.data)
+					// _this.$store.commit('form/CACHED_SCOPED_ROW_IMMUTABLE', res.data)
+					// _this.$store.state.form.favoriteBacktestRowData.id = res.data.id
+					// await _this.displaySetUpForm(res.data)
+					// LocalStorageUtil.remove('backtestID')
+
 					const res = await seeParams(backtestID)
-					res.data.commission = (res.data.commission * 100).toFixed(2)
-					res.data.user_tag = 'client'
-					_this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', res.data)
-					_this.$store.commit('form/CACHED_SCOPED_ROW_IMMUTABLE', res.data)
 					_this.$store.state.form.favoriteBacktestRowData.id = res.data.id
+					res.data.user_tag = 'client'
+
+					_this.editBacktest(res.data)
 					await _this.displaySetUpForm(res.data)
 					LocalStorageUtil.remove('backtestID')
 				}else {

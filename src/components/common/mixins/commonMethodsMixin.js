@@ -738,10 +738,11 @@ export const CommonMethodsMixin = {
 			that.reloadData(data, freq)
 			await CIQ.addIndicatorsFromBacktest(function() {
 				that.$store.commit('form/getRunBacktestData', row)
+
 				that.$router.push({
 					name: 'SetUp',
 					params: { data: JSON.stringify(row), usedFor: 'showBTForm' }
-				})
+				},()=>{})
 				that.loading = true
 			})
 			// long todo, 這一塊可以之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions
