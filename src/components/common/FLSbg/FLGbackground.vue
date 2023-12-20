@@ -102,9 +102,9 @@
         getAllSignalArray.findIndex(x=>x.state==3) == 0
       ">
         <img src="@/assets/allclear.png"/>
-        <span>All Backtests From Old Version Have Been Migrated</span> 
+        <span>Backtests From Backtest Engine V1.0 Have Been Migrated to Backtest Engine V2.0</span> 
         <p>All of the tasks have been completed</p>
-        <el-button @click="viewSignal">View Signal</el-button>
+        <el-button @click="viewSignal">View List</el-button>
       </div>
     </div>
 </template>
@@ -345,6 +345,9 @@ export default {
         color: #5C9CD1;
         font-size: 1.1rem;
         font-weight: 500;
+
+        margin: 20px 210px 0 210px;
+        text-align: center;
       }
       .el-button{
         background: #EBF7FF;
