@@ -36,6 +36,7 @@
 		margin-right: 7px;
 		.strategy-link,
 		.home-link,
+		.help-link,
 		.ai-link {
 			margin: 0 28px;
 			height: 78px;
@@ -48,6 +49,9 @@
 			color: #5b9bd1;
 		}
 		.home-link:hover {
+			color: #5b9bd1;
+		}
+		.help-link:hover {
 			color: #5b9bd1;
 		}
 		.ai-link:hover {
