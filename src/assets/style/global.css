@@ -127,8 +127,11 @@
   border-color: #5b9bd1;
 }
 
-.el-menu--horizontal>.el-menu-item.is-active {
+.el-menu--horizontal>.el-menu-item.is-active, .help-link-active {
   border-bottom: 2px solid #5b9bd1;
+  color: #5b9bd1 !important;
+}
+.help-link-active .el-submenu__title{
   color: #5b9bd1 !important;
 }
 .el-menu--horizontal>.el-menu-item.news-icon.is-active {
