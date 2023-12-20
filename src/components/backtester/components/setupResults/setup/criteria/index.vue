@@ -564,8 +564,10 @@ export default {
 		},
     isRiskControlState(val) {
 			if(!val && this.criteria == 'exit') {
-			this.relation = 1
-			this.changeRelation(this.relation)
+				if(this.relation == 0) {
+				this.relation = 1
+				this.changeRelation(this.relation)
+				}
 			}
     },
 	},
