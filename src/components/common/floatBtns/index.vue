@@ -87,7 +87,7 @@
 			<el-tooltip
 				class="item"
 				effect="dark"
-				content="Back to the top"
+				content="Back To The Top"
 				placement="bottom"
 			>
 				<button class="toTop" @click="animationUp(0)">
@@ -122,7 +122,7 @@
 			<el-tooltip
 				class="item"
 				effect="dark"
-				content="Video Tutorial"
+				content="View Video Tutorial"
 				placement="bottom"
 			>
 				<button class="tutorial" @click="jumpToTutoiral">
@@ -165,7 +165,8 @@ export default {
   name: 'FloatBtns',
 	data() {
 		return {
-			isVisible: true
+			isVisible: true,
+			scroll: '',
 		}
 	},
 	computed: {
@@ -182,8 +183,42 @@ export default {
       }else {
 				this.isVisible = false
 			}
-    }
+    },
+    scroll: {
+      handler(val) {
+        try {
+          if (typeof val == 'string') val = 360
+          let toTop = document.getElementsByClassName('toTop')[0]
+          let maintabBtn = document.getElementsByClassName('maintabBtnContainer')[0]
+          if (val <= 600) {
+            toTop.style.visibility = 'hidden'
+          } else {
+            toTop.style.visibility = 'visible'
+          }
+          if (val <= 350) {
+            maintabBtn.style.visibility = 'hidden'
+          } else {
+            maintabBtn.style.visibility = 'visible'
+          }
+        } catch (err) { }
+      },
+      immediate: true,
+      deep: true
+    },
   },
+  	mounted() {
+		let toTop = document.getElementsByClassName('toTop')[0]
+		toTop.style.visibility = 'hidden'
+		let maintabBtn = document.getElementsByClassName('maintabBtnContainer')[0]
+		maintabBtn.style.visibility = 'hidden'
+		// When DOM renders data, set the height of the lower area to the height of the browser's visible area
+		// Listen for the resize event of the window. Set the height of the lower area when the browser window changes
+		const _this = this
+		window.onscroll = function scroll() {
+			_this.scroll =
+				document.documentElement.scrollTop || document.body.scrollTop
+		}
+	},
 	methods: {
 		switchMainTab(subUrl) {
 			// setup or list
