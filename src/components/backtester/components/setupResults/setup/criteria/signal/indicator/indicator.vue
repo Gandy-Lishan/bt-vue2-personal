@@ -926,13 +926,14 @@ export default {
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
        CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
 
-      // avoid add indicator redundantly
-      for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        var sd = CIQ.stxx.layout.studies[studyInstanceName]
-        if (sd.type == item.url) {
-          return
-        }
-      }
+       // 暂时禁用，防止同名indicator附带的条件也不刷新，或者被替换的indicator还不被移除
+      // // avoid add indicator redundantly
+      // for (var studyInstanceName in CIQ.stxx.layout.studies) {
+      //   var sd = CIQ.stxx.layout.studies[studyInstanceName]
+      //   if (sd.type == item.url) {
+      //     return
+      //   }
+      // }
       CIQ.addIndicators()
     },
     clearSymbolSelect() {
