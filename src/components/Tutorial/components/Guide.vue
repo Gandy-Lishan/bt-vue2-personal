@@ -51,8 +51,8 @@ export default {
           },
           {
             id: 'fls', title: 'Using the “Find Last Signal” Feature', subsections: [
-              { id: 'fls-0', title: "Click the 'find last signal' button" },
-              { id: 'fls-1', title: 'Wait for the backtest to finish' }
+              // { id: 'fls-0', title: "Click the 'find last signal' button" },
+              // { id: 'fls-1', title: 'Wait for the backtest to finish' }
             ]
           },
           { id: '3', title: 'Edit a created backtest', subsections: [
@@ -64,8 +64,8 @@ export default {
             { id: '4-1', title: 'Modify the current backtesting parameters' }
           ]},
           { id: '5', title: 'Using sample backtests', subsections: [
-            { id: '5-0', title: 'Open the Sample Backtests tab' },
-            { id: '5-1', title: 'Edit and run a copied backtest' }
+            // { id: '5-0', title: 'Open the Sample Backtests tab' },
+            // { id: '5-1', title: 'Edit and run a copied backtest' }
           ]},
           { id: '6', title: 'How to view the description of the backtest in the list', subsections: [
             { id: '6-0', title: 'Open any list page' },
