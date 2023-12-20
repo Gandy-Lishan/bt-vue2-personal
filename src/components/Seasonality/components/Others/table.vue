@@ -1,5 +1,99 @@
 <template>
-  <div>
+  <div class="table-sidebar-des">
+    <div class="sidebar-des">
+      <div class="thumbnail" v-if="option == 2">
+        <h4 style="text-align: center">Seasonality by Day of Month</h4>
+        <p>
+          If your browser is relatively new, you will be able to click each of the column headings and have the table sort in ascending and descending order (if you click twice). It may take the table a few seconds to sort since there are so many data points.
+        </p>
+        <p>
+          As an example, click on the "% Pos" heading once and the table will put the most negative days at the top of the table. When you do so, the 12th day of the 2nd month comes to the top. So, you now know that the 12th trading day in February has been the most negative for the S&P 500. Please note that this is NOT necessarily February 12th - it is the 12th trading day in February, which is likely a more reliable way of looking at the seasonal patterns than by the actual date.
+        </p> 
+        <p>
+          If you click on the "% Pos" heading once again, the table will re-sort and put the most positive days at the top of the table. Near the top is the 2nd day of the 1st month, meaning that the 2nd trading day in January is usually one of the most positive days out of any other day of any other month.
+        </p>
+        <el-divider></el-divider>
+        <h5>Table Description</h5>
+        <el-descriptions :column="1" :size="size" border>
+          <el-descriptions-item>
+            <template slot="label">
+              MONTH
+            </template>
+            The month of the year (e.g. "1" is January, "3" is March, etc.).
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              DAY
+            </template>
+            The trading day of the month.
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              AVG RET
+            </template>
+            The average amount that day rose or fell historically.
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              % POS
+            </template>
+            The percentage of time that day closed higher than the day before.
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              MAX
+            </template>
+            The largest gain on that day.
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              MIN
+            </template>
+            The largest loss on that day.
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+            <div class="thumbnail" v-else>
+        <h4 style="text-align: center">Seasonality by Day of Year</h4>
+        <p>
+          If your browser is relatively new, you will be able to click each of the column headings and have the table sort in ascending and descending order (if you click twice). It may take the table a few seconds to sort since there are so many data points.
+        </p>
+        <el-divider></el-divider>
+        <h5>Table Description</h5>
+        <el-descriptions :column="1" :size="size" border>
+          <el-descriptions-item>
+            <template slot="label">
+              DAY
+            </template>
+            The trading day of the year.
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              AVG RET
+            </template>
+            The average amount that day rose or fell historically.
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              % POS
+            </template>
+            The percentage of time that day closed higher than the day before.
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              MAX
+            </template>
+            The largest gain on that day.
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+             MIN
+            </template>
+            The largest loss on that day.
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+    </div>
     <el-table
 			ref="MITable"
 			class="my-indicator-table other-table default-table-class"
@@ -199,6 +293,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.table-sidebar-des {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  margin: 0 auto;
+  place-items: start center
+}
 .my-indicator-table.el-table /deep/tr{
   cursor: pointer;
 }
@@ -228,9 +328,22 @@ export default {
 {
   font-weight: 600 !important;
 }
-.other-table{
-  width: 1140px; 
-  height: 100%; 
-  margin: 0 auto
+.thumbnail
+{
+  display: block;
+  padding: 4px;
+  margin-right: 20px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  -webkit-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+  color: #333;
+  font-family: "Open Sans",sans-serif;
+}
+.default-table-class {
+  width: 1140px;
 }
 </style>

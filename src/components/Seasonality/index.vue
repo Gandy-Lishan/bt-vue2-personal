@@ -1,6 +1,17 @@
 <template>
   <div class="seasonality-container">
-    <div class="seasonality-top"></div>
+    <div class="seasonality-top">
+			<h2 class="page-title">Seasonality</h2>
+			<p>
+				Just as moon phases impact tidal activity, there are consistent forces at work in the equities markets. Not all of them are understood, but they include mutual fund flows, options activity, weekend exposure effects, etc.
+			</p>
+			<p>
+				Some of these seasonality biases occur with considerable consistency, and it pays to be aware of them. New charts and data will be added continuously, so please check back often. Scroll down to the bottom for external research on seasonal influences.
+			</p>
+			<p>
+				Click on the bias below to see the desired chart. Your browser must support frames to view some of them.
+			</p>
+		</div>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
     <el-tab-pane label="Performance by Day of Month" name="first">
       <DayOfMonth></DayOfMonth>
@@ -130,8 +141,17 @@ export default {
 
 <style lang="less" scoped>
 .seasonality-container{
-  margin-top: 80px;
 	margin-bottom: 50px;
+	font-family: "Open Sans",sans-serif;
+	.seasonality-top{
+		margin: 0 auto 20px auto;
+		width: 90%;
+		color: #333;
+		p{
+			font-weight: 400;
+			font-size: 16px;
+		}
+	}
 /deep/ .el-tabs__nav.is-top{
   width: 100%;
 }
