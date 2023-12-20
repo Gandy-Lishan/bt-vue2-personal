@@ -39,7 +39,7 @@
           >Seasonality</el-menu-item
         >
 
-        <el-submenu class="help-title" index="4">
+        <el-submenu class="help-title help-link" index="4" :class="{'help-link-active': activeIndex == '4'}">
           <template slot="title">
             <span>Help</span>
           </template>
@@ -95,6 +95,8 @@ export default {
         this.activeIndex = '1'
       } else if (to.path.includes('/scannerai') || to.name == 'scannerai_chart') {
         this.activeIndex = '3'
+      }else if(to.path.includes('/doc')){
+        this.activeIndex = '4'
       }else if(to.path.includes('/myindicator') || to.name ==  'MIList'){
         this.activeIndex = '6'
       }else if(to.path.includes('/seasonality') || to.name == 'seasonality'){
@@ -111,6 +113,8 @@ export default {
       this.activeIndex = '1'
     } else if (this.$route.name == 'scannerai' || this.$route.name == 'scannerai_chart') {
       this.activeIndex = '3'
+    } else if (this.$route.path.includes('/doc')) {
+      this.activeIndex = '4'
     } else if(this.$route.name == 'myindicator' || this.$route.name == 'MIList'){
       this.activeIndex = '6'
     } else if(this.$route.name == 'seasonality' || this.$route.name == 'seasonality'){
