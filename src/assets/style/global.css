@@ -100,6 +100,7 @@
 }
 .aiscanner-container .el-select .el-input {
   width: 106px;
+  padding-left: 22px;
 }
 
 /* 修改主题色 */

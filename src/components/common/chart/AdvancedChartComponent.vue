@@ -497,7 +497,6 @@ export default class AdvancedChartComponent extends Vue {
 		CIQ.store.dispatch('chart/reset_chart_study_state')
 		CIQ.store.dispatch('form/reset_chart_config_state')
 
-		CIQ.store.commit('chart/RESET_CHART_CONDIG_STATE')
 		// Destroy the ChartEngine instance when unloading the component.
 		// This will stop internal processes such as quotefeed polling.
 		CIQ.stxx.destroy()
