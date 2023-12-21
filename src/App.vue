@@ -28,6 +28,7 @@
 import { Header, Footer, RecentUpdate, FloatBtns } from "@/components/common"
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
 import Cookies from 'vue-cookies'
+import axios from "./axios";
 export default {
 	name: 'app',
 	data() {
@@ -43,6 +44,8 @@ export default {
 		FloatBtns
 	},
 	async mounted() {
+		const userRes = await axios.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
+		console.log('userRes', userRes)
 		console.log('用户权限', getCookieData())
 		const email = getCookieData()?.username
 		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com']
