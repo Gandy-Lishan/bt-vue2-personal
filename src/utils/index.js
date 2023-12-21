@@ -1,4 +1,5 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
 // 字符串首字母大写
 const capitalizeFirstLetter = str => {
@@ -213,4 +214,18 @@ const timeframeTransform = (val) => {
   return freq
 }
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform}
+const getTokenRole = () => {
+	// 0 为无权限， 1 为部分权限（backtester，无scannerai）, 2为全权限
+	const access_level = getCookieData().access_level
+	if(typeof access_level == 'string'){	// 新权限类型
+		if(access_level.includes('report')) return 0	// 当为report时禁止访问
+		if(access_level.includes('everything')) return 2	// 当为everything时全权限
+		return 1	// 不是everything也不是report时部分权限（无scannerai）
+	}else {	// 旧权限类型
+		if(access_level.includes('backtestedge') && access_level.includes('aiscanneredge')) return 2	// 当backtestedge和aiscanner都有时，全权限
+		if(access_level.includes('backtestedge') && !access_level.includes('aiscanneredge')) return 1	// 当没有aiscanner时，部分权限
+		if(!access_level.includes('backtestedge') && !access_level.includes('aiscanneredge')) return 0	// 当都没有时，无权限
+	}
+}
+
+export {capitalizeFirstLetter, compareArrays, timestampToTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole}

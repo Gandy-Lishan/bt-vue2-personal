@@ -6,7 +6,7 @@ import {
 	getIndexsList
 } from '@/service/service'
 import { getCurDate } from '@/service/ai'
-import { getQueryVariable, LocalStorageUtil } from '@/utils'
+import { getQueryVariable, LocalStorageUtil, getTokenRole } from '@/utils'
 import store from '../store'
 import { uniqueObjectArray } from '@/utils/formValidate'
 
@@ -38,10 +38,10 @@ export function setRouterPermission(router) {
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求
 	/* hao@sentimentrader.com */
 
-		// Cookies.set(
-		// 	'sentimen_session',
-		// 	'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FamVv8Nu+OjDeax6/BPemIRtLvxe/ttdcR7ljhLshELegopMNz+YDb73aumgbPJjL/N9dHtRcLmiQd4obvi/ZBgpyj6lX3zBFTA1oLIF7vZgAKOAsuoRHWZg/asNtL34ZUNswnMAUy6RQmkXiJ4OJLqXEs5kLemATonJ2JQf58AXOkQsWfVDfi9glN+sw1OPlHwandKE6qHzWxlibvTrUJsc2kxd2+VDYPK3pbGUDUbPdXJVZ2LMZqRWYtzXS2E74ywV98NoJOBfmgihgC4xxI5toN6zORyAhX1wt5EUPbBETOMPwECWJY7Rs6uLvOIWKKjDxd+d4wkQhC3QvQ/7J+JVIQKetRSgsp2G7YS6ugW3+ncSCcdQoCfcFYziACDCJ8Q=='
-		// )
+		Cookies.set(
+			'sentimen_session',
+			'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FamVv8Nu+OjDeax6/BPemIRtLvxe/ttdcR7ljhLshELegopMNz+YDb73aumgbPJjL/N9dHtRcLmiQd4obvi/ZBgpyj6lX3zBFTA1oLIF7vZgAKOAsuoRHWZg/asNtL34ZUNswnMAUy6RQmkXiJ4OJLqXEs5kLemATonJ2JQf58AXOkQsWfVDfi9glN+sw1OPlHwandKE6qHzWxlibvTrUJsc2kxd2+VDYPK3pbGUDUbPdXJVZ2LMZqRWYtzXS2E74ywV98NoJOBfmgihgC4xxI5toN6zORyAhX1wt5EUPbBETOMPwECWJY7Rs6uLvOIWKKjDxd+d4wkQhC3QvQ/7J+JVIQKetRSgsp2G7YS6ugW3+ncSCcdQoCfcFYziACDCJ8Q=='
+		)
 
 		/* erichuerichu003@gmail.com */
 
@@ -86,7 +86,9 @@ export function setRouterPermission(router) {
 				//next('/home')
 				next()
 			} else {
-				// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
+				// 放在这确保任何路由跳转都要先处理token保证权限先认证
+				if(getTokenRole() == 0) next({path: '/404'})
+
 				if (to.name == 'scannerai' || to.name == 'scannerai_chart') {
 					await initiateCurrentDate()
 					await initiateIndicatorList()
@@ -113,6 +115,7 @@ export function setRouterPermission(router) {
 		}
 	})
 }
+
 async function initiateCurrentDate() {
 	//现在外部实现一个获取当前日期并储存的功能，接触验证屏蔽后移到判断条件内部
 	//if(store.state.chart.curDate==''){
