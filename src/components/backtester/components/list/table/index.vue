@@ -495,6 +495,8 @@ export default {
       this.applySort()
     },
 		async onSortChange({ column, prop, order }) {
+			
+			if(this.queryInfo.page != 1) this.queryInfo.page = 1
 			/**
 		 * 表格排序事件处理函数
 		 * @param {object} {column,prop,order} 列数据|排序字段|排序方式
