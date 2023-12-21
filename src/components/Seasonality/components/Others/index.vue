@@ -16,11 +16,6 @@
         <template slot="label">
             <label>
               1.Symbol
-              <el-tooltip effect="dark" placement="top">
-                <span slot="content"
-                  >Enter stock symbol or name</span>
-                <i class="iconfont icon-wenhao"></i>
-              </el-tooltip>
             </label>
           </template>
         <el-autocomplete
@@ -102,11 +97,6 @@
       <template slot="label">
         <label>
           3.Category
-          <el-tooltip effect="dark" placement="top">
-            <span slot="content"
-              >Choose category</span>
-            <i class="iconfont icon-wenhao"></i>
-          </el-tooltip>
         </label>
       </template>
           <el-select v-model="data.category" placeholder="Please select category" @change="changeCategory">
