@@ -9,6 +9,7 @@ import { getCurDate } from '@/service/ai'
 import { getQueryVariable, LocalStorageUtil, getTokenRole } from '@/utils'
 import store from '../store'
 import { uniqueObjectArray } from '@/utils/formValidate'
+import axios from '../axios'
 
 export function setRouterPermission(router) {
 	router.beforeEach(async (to, from, next) => {
@@ -89,6 +90,7 @@ export function setRouterPermission(router) {
 			) {
 				window.location.href = location.origin
 			}
+			await axios.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
 			if (to.path == '/404') {
 				// todo 再加一层scannerAI或者backtester权限判断，用于在404页面跳转回网站，或者防止网站跳到404又无限循环
 				//next('/home')
