@@ -981,17 +981,17 @@ export default {
       }else {
         // 需要验证百分比总和，和每一列的indicator是否都在允许范围
         const data = this.weightData
-        // let totalWeight = 0
+        let totalWeight = 0
         let rowWeightValid = true
         let inAllowedList = true
         for (const row of data) {
-          // totalWeight += parseFloat(row.weight) || 0
+          totalWeight += parseFloat(row.weight) || 0
           row.weightValidErrMsg = validatePercentageRule(_, row.weight)
           if(row.weightValidErrMsg) rowWeightValid = false
           const isIn = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === row.indicator_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === row.indicator_url.toLocaleLowerCase()))?.label || false)
           if(!isIn) inAllowedList = false
         }
-        // if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
+        if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
         if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
         if(!inAllowedList) {this.popUpMsgBox('Please choose indicators from the dropdown.'); return false}
         if(data.length<=1) {this.popUpMsgBox('Please select at least 2 indicators.'); return false}
