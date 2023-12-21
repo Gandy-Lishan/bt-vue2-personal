@@ -977,7 +977,6 @@ export const CommonMethodsMixin = {
 					signal.indicator = matchIndicatorsList.url + ' Optix'
 				}
 			  })
-		},
-
+		}
 	},
 }
