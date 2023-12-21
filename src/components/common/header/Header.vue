@@ -23,19 +23,19 @@
           >BacktestEdge</el-menu-item
         > -->
         <el-menu-item class="home-link" index="1"
-        v-if="access_level.includes('backtestedge') || activeIndex == 1"
+        v-if="getTokenRole() != 0"
           >BacktestEdge</el-menu-item
         >
         <el-menu-item class="ai-link" index="3"
-        v-if="access_level.includes('aiscanneredge') || activeIndex == 3"
+        v-if="getTokenRole() == 2"
           >AI Stock Scanner</el-menu-item
         >
         <el-menu-item class="my-indicator-link home-link" index="6"
-        v-if="access_level.includes('backtestedge')"
+        v-if="getTokenRole() != 0"
           >My Indicator</el-menu-item
         >
         <el-menu-item class="seasonality-link home-link" index="7"
-        v-if="access_level.includes('backtestedge')"
+        v-if="getTokenRole() != 0"
           >Seasonality</el-menu-item
         >
 
@@ -66,7 +66,7 @@
 	</div>
 </template>
 <script>
-import { getCookieData } from "@/utils/cryptoUtils/cookie";
+import { getTokenRole } from '@/utils'
 
 export default {
   name: "Header",
@@ -78,8 +78,7 @@ export default {
   },
   data() {
     return {
-      activeIndex: '1',
-      access_level: []
+      activeIndex: '1'
     }
   },
   computed: {
@@ -105,8 +104,6 @@ export default {
       }
   },
   mounted() {
-    console.log('h_用户权限', getCookieData())
-	  this.access_level = getCookieData()?.access_level
     if (this.$route.name == 'strategy') {
       this.activeIndex = '2'
     } else if (this.$route.name == 'backtester' || this.$route.name == 'Backtests') {
@@ -122,6 +119,9 @@ export default {
     }
   },
   methods: {
+    getTokenRole() {
+      return getTokenRole()
+    },
     handleSelect(key, _) {
       let path = ''
       if (key == '1') {
