@@ -1,6 +1,6 @@
 <template>
   <div v-if="isVisible">
-    <div class="maintabBtnContainer">
+    <div class="maintabBtnContainer" v-if="showComp.maintab">
 				<div>
 					<button
 						class="sidebar"
@@ -89,6 +89,7 @@
 				effect="dark"
 				content="Back To The Top"
 				placement="bottom"
+				v-if="showComp.totop"
 			>
 				<button class="toTop" @click="animationUp(0)">
 					<svg
@@ -124,6 +125,7 @@
 				effect="dark"
 				content="View Video Tutorial"
 				placement="bottom"
+				v-if="showComp.tutorial"
 			>
 				<button class="tutorial" @click="jumpToTutoiral">
 					<svg width="12" height="12" viewBox="0 0 186 186" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -139,6 +141,7 @@
 				effect="dark"
 				content="Create New Backtest"
 				placement="bottom"
+				v-if="showComp.createnew"
 			>
 				<button class="createNew" @click="refreshPageTemp">
 					<svg
@@ -166,6 +169,7 @@ export default {
 	data() {
 		return {
 			isVisible: true,
+			showComp: {maintab:true,totop:true,tutorial:true,createnew:true},
 			scroll: '',
 		}
 	},
@@ -179,10 +183,15 @@ export default {
     '$route'(to, _) {
       this.updateDynamicClass();
 			if (to.path.includes('/backtester') || to.name == 'Backtests') {
-        this.isVisible = true
-      }else {
+				this.isVisible = true
+			} else if(to.path.includes('/myindicator') || to.name ==  'MIList') {
+				this.isVisible = true
+			} else {
 				this.isVisible = false
 			}
+
+			if(to.path.includes('/myindicator') || to.name ==  'MIList') this.showComp = {maintab:false,totop:false,tutorial:true,createnew:false}
+			else this.showComp = {maintab:true,totop:true,tutorial:true,createnew:true}
     },
     scroll: {
       handler(val) {
@@ -246,8 +255,8 @@ export default {
 			path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxPgRS4tQryQ-efk2cNFf0hb'
 		} else if (this.$route.name == 'scannerai' || this.$route.name == 'scannerai_chart') {
 
-		} else if(this.$route.name == 'myindicator' || this.$route.name == 'MIList'){
-
+		} else if(this.$route.path.includes('myindicator') || this.$route.path.includes('MIList')){
+			path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxNvxaxmrJmLlzizXe38Is_d'
 		} else if(this.$route.name == 'seasonality' || this.$route.name == 'seasonality'){
 
 		}
