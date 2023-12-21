@@ -7,7 +7,7 @@
           If your browser is relatively new, you will be able to click each of the column headings and have the table sort in ascending and descending order (if you click twice). It may take the table a few seconds to sort since there are so many data points.
         </p>
         <p>
-          As an example, click on the "% Pos" heading once and the table will put the most negative days at the top of the table. When you do so, the 12th day of the 2nd month comes to the top. So, you now know that the 12th trading day in February has been the most negative for the S&P 500. Please note that this is NOT necessarily February 12th - it is the 12th trading day in February, which is likely a more reliable way of looking at the seasonal patterns than by the actual date.
+          As an example, click on the "% Pos" heading once and the table will put the most negative days at the top of the table. When you do so, the 12th day of the 2nd month comes to the top. So, you now know that the 12th trading day in February has been the most negative for the selected symbol. Please note that this is NOT necessarily February 12th - it is the 12th trading day in February, which is likely a more reliable way of looking at the seasonal patterns than by the actual date.
         </p> 
         <p>
           If you click on the "% Pos" heading once again, the table will re-sort and put the most positive days at the top of the table. Near the top is the 2nd day of the 1st month, meaning that the 2nd trading day in January is usually one of the most positive days out of any other day of any other month.

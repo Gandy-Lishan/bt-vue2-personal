@@ -46,7 +46,7 @@ import { checkProperties } from "@/utils";
                   url = `/dev/seasonality/get_custom_day_data?name=${newVal.symbol}&start=${start_date}&end=${newVal.end_date}&month=${month}&day=${day}&shift=${shift}`
                 }
                 let {data: {data}} = await getSeasonalityData(url)
-                if(data?.length === 0 || !data) {this.popUpMsgBox('Not found: Adjust your search criteria for stock data'); data = []}
+                if(data?.length === 0 || !data) {this.popUpMsgBox('Not found: Adjust your search criteria for the selected symbol'); data = []}
                 this.dataList = data.map(item => [parseFloat(item['period']), parseFloat((Math.round(item['Return'] * 100) / 100).toFixed(2)), parseFloat((Math.round(item['Positive'] * 100) / 100).toFixed(2)), ])
                 },
             deep: true,
