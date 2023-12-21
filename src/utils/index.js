@@ -1,4 +1,5 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
 // 字符串首字母大写
 const capitalizeFirstLetter = str => {
@@ -213,4 +214,18 @@ const timeframeTransform = (val) => {
   return freq
 }
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform}
+const getTokenRole = () => {
+  const access_level = getCookieData()?.access_level
+  if(Array.isArray(access_level)) {
+    // 0 无权限; 1 部分权限, 无 scannerai; 2 全部权限
+    if(access_level.some(str => str.includes('everything'))) return 2;
+    if(access_level.some(str => str.includes('research'))) return 1;
+    if(access_level.some(str => str.includes('reports'))) return 0;
+    if(access_level.includes('backtestedge') && access_level.includes('aiscanneredge')) return 2;
+    if(access_level.includes('backtestedge') && !access_level.includes('aiscanneredge')) return 1;
+    if(!access_level.includes('backtestedge') && !access_level.includes('aiscanneredge')) return 0;
+  }
+  return 'None'
+}
+
+export {capitalizeFirstLetter, compareArrays, timestampToTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole}

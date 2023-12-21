@@ -15,6 +15,11 @@
         <template slot="label">
             <label>
               1.Symbol
+              <el-tooltip effect="dark" placement="top">
+                <span slot="content"
+                  >Choose a stock/index/ETF as symbol.(default:SPY)</span>
+                <i class="iconfont icon-wenhao"></i>
+              </el-tooltip>
             </label>
           </template>
         <el-autocomplete
@@ -50,9 +55,9 @@
           2.Date Range
           <el-tooltip effect="dark" placement="top">
             <span slot="content">
-              Select the start and end dates for stock data. <br/>
+              Select the start and end dates for the selected symbol data. <br/>
               For instance, the start date is 2020, and the end date is 2022. <br/>
-              The stock data will cover the period from January 1, 2020, to December 31, 2022.
+              The selected symbol data will cover the period from January 1, 2020, to December 31, 2022.
             </span>
             <i class="iconfont icon-wenhao"></i>
           </el-tooltip>
