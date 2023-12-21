@@ -6,7 +6,7 @@ import {
 	getIndexsList
 } from '@/service/service'
 import { getCurDate } from '@/service/ai'
-import { getQueryVariable, LocalStorageUtil } from '@/utils'
+import { getQueryVariable, LocalStorageUtil, getTokenRole } from '@/utils'
 import store from '../store'
 import { uniqueObjectArray } from '@/utils/formValidate'
 
@@ -37,10 +37,18 @@ export function setRouterPermission(router) {
 		if (symbol) LocalStorageUtil.set('symbol', symbol)
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求
 	/* hao@sentimentrader.com */
-
+	// reports-monthly
 		// Cookies.set(
 		// 	'sentimen_session',
-		// 	'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FamVv8Nu+OjDeax6/BPemIRtLvxe/ttdcR7ljhLshELegopMNz+YDb73aumgbPJjL/N9dHtRcLmiQd4obvi/ZBgpyj6lX3zBFTA1oLIF7vZgAKOAsuoRHWZg/asNtL34ZUNswnMAUy6RQmkXiJ4OJLqXEs5kLemATonJ2JQf58AXOkQsWfVDfi9glN+sw1OPlHwandKE6qHzWxlibvTrUJsc2kxd2+VDYPK3pbGUDUbPdXJVZ2LMZqRWYtzXS2E74ywV98NoJOBfmgihgC4xxI5toN6zORyAhX1wt5EUPbBETOMPwECWJY7Rs6uLvOIWKKjDxd+d4wkQhC3QvQ/7J+JVIQKetRSgsp2G7YS6ugW3+ncSCcdQoCfcFYziACDCJ8Q=='
+		// 	"IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqe0xVLzFYNMiu86tKXH7C5+B5xVGG/uUl69ZPEU8Z9BTH5ewNmfet0ELFuBdHRGMGy1Mwq6KUHSjMtktH9ssmOyQOLHo+tx7xbpszUWyYRsrGoNhFjbXQrzguZ9gTssdUq7xucBJDlAJaYqNAVyK2+sCFZ1xJn1aOgp8sheFLLf14eycM4GLD/BRF7umyie36QHU9hHKynKdSwXK0yP2JJNiGS6C/LvGorS/P6nHqROJwJUg/tix21iv9FuuI2vbXJ4r0xFKTBCap1UrAkwn9pyYV8Bwo4XdYiJYwnNRXqRyfCb/KZUj6VoBzf8piRdfqk="
+		// )
+		// research-monthly
+		// Cookies.set('sentimen_session',
+		// "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqf/sBFMX616yOW7YUN5zVebiJ7W1Qv1Oe5lhvonA3DqQTpvTm0BdvYrnHrJbQm8XdjDG75olOAHnLoIzuBhH95Q5hH2geqpB1exbtw/yYdP2Fm1fE94tHyj1HY0rUWymoni2nvMjjkiHN21/8Doic3cpu388+FNN7XBJOT5ENgs3L8uKgdlbkLT2Y4//mPb0oQkyAH8s59AbgjdO8PYJbohvHK9CGLWtA+KDrEGkPqVsIN0Yua3XiT8VmJA+DXGC6QEmrgSphk3Gv9uPCsqbz6yF0Ogf6SCvzDCG4cBGcxzv10uNgkfra92bDG9OCVeAu+SvHsF2e+LYyt5q6OCD44l3dI3QYk4dDgxyCnkwvS4KCjqYroGOyzv8AnQf1fRcJ/7HjtGBVk6lZWR0Wz/Gv9d"
+		// )
+		// everything
+		// Cookies.set('sentimen_session',
+		// "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqfBVkGCV4rpr1DK3aKxOc85wgqp0eI3LC2dkl7sQuuGwLgP5IovRDyZmwIXdFxicPaUl+bRg44d6PU1SnKcCGYLaXm+DCb/Y9/8PIUneOyeD+Z+jnvIrUGa3SRoaUnEgSxxls4Jem/UK+iJaEibfjd2aF3f5j3uFnE0p3559RDDqoVd4CyJJwQ/FvT/nd0Vb4yqb7QvzagQKpiUuuL0QY8NTRvwJwnjsfBHEeRVsXZ/EQQaOJKUNSeTgkZTZ+36WUZIw0wqaRKd8xXx7SQHKFrhctGlPBiU/NVN+tuzK4g32GxRQSx9d7iVZ1kJyW6rlkggYXmphC7Rl3QVAfytOp8hArFIVekxyQUKd9epvqDwX2Vb6J0ZjYwaKSoJcZhPHS4Q2yUFSbTs1vW/vY8JQHyx8Jv8plSPpWgHN/ymJF1+qQ=="
 		// )
 
 		/* erichuerichu003@gmail.com */
@@ -86,7 +94,14 @@ export function setRouterPermission(router) {
 				//next('/home')
 				next()
 			} else {
-				// 放在这确保任何路由跳转都要先处理user请求保证权限先认证
+				console.log('to', to)
+				// 放在这确保任何路由跳转都要先处理 token 请求保证权限先认证
+				if(getTokenRole() == 0 || (getTokenRole() !=2 && to.path.includes('/scannerai'))) {
+					const message = getTokenRole() == 0 ? 'Backtest Engine 2.0 and AI Stock Scanner' : 'AI Stock Scanner'
+					store.commit('states/setErrorMessage404',{status:410,message})
+					next({path: '/404'})
+				}
+
 				if (to.name == 'scannerai' || to.name == 'scannerai_chart') {
 					await initiateCurrentDate()
 					await initiateIndicatorList()

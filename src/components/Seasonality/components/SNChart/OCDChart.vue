@@ -53,7 +53,7 @@ import { checkProperties } from "@/utils";
 
                 const {data: {data}} = await getSeasonalityData(url)
                 console.log('data', data)
-                if(data?.length === 0) {this.popUpMsgBox('Not found: Adjust your search criteria for stock data')}
+                if(data?.length === 0) {this.popUpMsgBox('Not found: Adjust your search criteria for the selected symbol')}
                 if([0, 1].includes(newVal.option)) {
                   this.dataList = data.map(item => [item['Date'] || item['Month'], parseFloat((Math.round(item['Return'] * 100) / 100).toFixed(2)), parseFloat((Math.round(item['Positive'] * 100) / 100).toFixed(2))])
                 }else {
