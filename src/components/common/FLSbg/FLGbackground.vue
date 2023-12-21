@@ -79,9 +79,9 @@
         getAllSignalArray.findIndex(x=>x.state==3) == -1
       ">
         <img src="@/assets/allclear.png"/>
-        <span>Find Sucessfully</span> 
+        <span>Backtests From Backtest Engine V1.0 Have Been Migrated to Backtest Engine V2.0</span> 
         <p>All of the tasks have been completed</p>
-        <el-button @click="viewSignal">View Signal</el-button>
+        <el-button @click="viewSignal">View List</el-button>
       </div>
       <div class="maskContent-failed" v-if="
         getAllSignalArray.length>0 &&
