@@ -207,7 +207,7 @@ MarkersSample.prototype.showmDot = function () {
 	}
 	// 批量加载dot前清除所有已有dot,虽然下方study panel会自动移除，但是main panel的dot需要手动清空，
 	// 但是不用CIQ.hideMarker，因为它同时清除dot和marker,一般用于清空整个图表
-	//CIQ.removeDot()
+	CIQ.removeDot()
 
 	let { stx } = this;
 	console.log('mDataSet',mDataSet)
