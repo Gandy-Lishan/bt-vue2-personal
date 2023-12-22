@@ -189,6 +189,10 @@
 				].includes(item.label) ? 'custom' : false"
 				:sort-orders="['ascending', 'descending', item.field]"
 				>
+			<template slot-scope="scope">
+				<span v-if="item.label == 'Total Return'">{{scope.row[item.field] != 0 ? `${scope.row[item.field]}%` : scope.row[item.field]}}</span>
+				<span v-else>{{scope.row[item.field]}}</span>
+			</template>	
 			</el-table-column>
 
     </template>
