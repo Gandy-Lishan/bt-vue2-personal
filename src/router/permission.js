@@ -9,7 +9,6 @@ import { getCurDate } from '@/service/ai'
 import { getQueryVariable, LocalStorageUtil, getTokenRole } from '@/utils'
 import store from '../store'
 import { uniqueObjectArray } from '@/utils/formValidate'
-import axios from '../axios'
 
 export function setRouterPermission(router) {
 	router.beforeEach(async (to, from, next) => {
@@ -37,8 +36,8 @@ export function setRouterPermission(router) {
 		if (indicator) LocalStorageUtil.set('indicator', indicator)
 		if (symbol) LocalStorageUtil.set('symbol', symbol)
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求
-	/* hao@sentimentrader.com */
-	// reports-monthly
+		/* hao@sentimentrader.com */
+		// reports-monthly
 		// Cookies.set(
 		// 	'sentimen_session',
 		// 	"IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqe0xVLzFYNMiu86tKXH7C5+B5xVGG/uUl69ZPEU8Z9BTH5ewNmfet0ELFuBdHRGMGy1Mwq6KUHSjMtktH9ssmOyQOLHo+tx7xbpszUWyYRsrGoNhFjbXQrzguZ9gTssdUq7xucBJDlAJaYqNAVyK2+sCFZ1xJn1aOgp8sheFLLf14eycM4GLD/BRF7umyie36QHU9hHKynKdSwXK0yP2JJNiGS6C/LvGorS/P6nHqROJwJUg/tix21iv9FuuI2vbXJ4r0xFKTBCap1UrAkwn9pyYV8Bwo4XdYiJYwnNRXqRyfCb/KZUj6VoBzf8piRdfqk="
@@ -60,15 +59,14 @@ export function setRouterPermission(router) {
 		// )
 
 		/* jinjing@elixiroftechnology.com */
-		
+
 		// Cookies.set(
 		// 	'sentimen_session',
 		// 	'IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqd8Wla1zo7ruX/cgQVVp3cgiqt/9WkKuHREX8aSJJ7mIC5GdVbirl1MowfCqGmZZYzzI4zhAL3Tey6TKBM3fD8sQuB+8YvL4zUehmqhzcAjDFrvjhktk3srF6kAB1eQGEiittMsmMhei4TX0qrt3ikE+infhHI0oBeMXf2J2i4MGuYR9oHqqQdXsW7cP8mHT9hoXd/mPe4WcTSnfnn1EMOqqZ1DGIB+mkPCA7BHS101X0+7EhpzWwAhim49KNkKwWgittqf0Ajf1gZ6jpzeuonFlN3h7cvcnOxxdMvZ7z6YAJUfJEau0yk/rnUkZpgcrc2jSFQXro+DG3EJJw97+tc28+HDqkJTAcz/VHKF3tktUd+ptxMi7jqya/wCy5wSX9L0ZS2/UufwzXfwfNzG5dgcm4DxIjY+YvgmoBU7j8DibA=='
 		// )
 
-		
 		/* he+PB@sentimentrader.com */
-		
+
 		// Cookies.set(
 		// 	'sentimen_session',
 		// 	'IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdVL9w+9RqKgMsDueS5f+2BFVxWebii4op4cCMiPBV73opZm7ogud2q1OLV96pFi+2+qzE4/ILSnmDhqElkFHI9mmf8DAM5cVRNJpHMI+SAgSeYCrC1/ZAc/DA8PCWXfAHswmJVM3XAYt3b4R11bmMI5n6Oe8itQZrdJGhpScSBLKpvtC/NqBAqmJS64vRBjw3PSsocTeKkji+OWnUG6KTFfId4fRWpIj47FlICxoE7RlTeGfRB2V/0DX9ClNsjrConH9rNV/DYDrkV7ox9paOLt1OmTEJi9IRD4+m1XyegNNo/HfYmvnds6RrfnmiSVA0XRfVDUJ3AL85XnqbwFI5UzAFehCmLWvpBYFPC90z+y3p59/icLFt8cqDx93jum4YkxuSKBKnT0INUzBhSIfy5bnE9qbfh2NuqiGPTVBlitw=='
@@ -90,7 +88,6 @@ export function setRouterPermission(router) {
 			) {
 				window.location.href = location.origin
 			}
-			await axios.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
 			if (to.path == '/404') {
 				// todo 再加一层scannerAI或者backtester权限判断，用于在404页面跳转回网站，或者防止网站跳到404又无限循环
 				//next('/home')
@@ -98,10 +95,16 @@ export function setRouterPermission(router) {
 			} else {
 				console.log('to', to)
 				// 放在这确保任何路由跳转都要先处理 token 请求保证权限先认证
-				if(getTokenRole() == 0 || (getTokenRole() !=2 && to.path.includes('/scannerai'))) {
-					const message = getTokenRole() == 0 ? 'Backtest Engine 2.0 and AI Stock Scanner' : 'AI Stock Scanner'
-					store.commit('states/setErrorMessage404',{status:410,message})
-					next({path: '/404'})
+				if (
+					getTokenRole() == 0 ||
+					(getTokenRole() != 2 && to.path.includes('/scannerai'))
+				) {
+					const message =
+						getTokenRole() == 0
+							? 'Backtest Engine 2.0 and AI Stock Scanner'
+							: 'AI Stock Scanner'
+					store.commit('states/setErrorMessage404', { status: 410, message })
+					next({ path: '/404' })
 				}
 
 				if (to.name == 'scannerai' || to.name == 'scannerai_chart') {
@@ -120,7 +123,10 @@ export function setRouterPermission(router) {
 			// 这里是判断无cookie情况下进入登录界面，如果是从404
 
 			if (to.path != '/404') {
-				store.commit('states/setErrorMessage404',{status:401,message:null})
+				store.commit('states/setErrorMessage404', {
+					status: 401,
+					message: null
+				})
 				next({
 					path: '/404'
 				})
@@ -188,4 +194,3 @@ async function initiateIndicatorList() {
 		store.commit('chart/getIndicatorsList', newAllSymbolsList)
 	}
 }
-
