@@ -20,7 +20,12 @@ export const setCookieData = (data, isLocal) => {
 export const getCookieData = () => {
 	let string = Cookies.get('sentimen_session');
 	if(string.includes('%')) {
-	  string = decodeURIComponent(string);
+		let string = string.split('%').map(part => {
+				if (part.length > 2) {
+						return decodeURIComponent(`%${part}`);
+				}
+				return part;
+		}).join('');
 		Cookies.set('sentimen_session', string)
 	}
 	const key = CryptoJS.enc.Utf8.parse(COOKIE_HASH)
