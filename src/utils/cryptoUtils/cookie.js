@@ -38,6 +38,11 @@ export const setCookieData = (data, isLocal) => {
 
 export const getCookieData = (cookie = '') => {
 	let string = cookie || cookies.get('sentimen_session');
+	
+	if (!string) {
+		return null;
+	}
+	
 	if(string.includes('%')) {
 	  string = decodeURIComponent(string);
 		VueCookies.set('sentimen_session', string)
@@ -45,9 +50,6 @@ export const getCookieData = (cookie = '') => {
 
 	const key = CryptoJS.enc.Utf8.parse(COOKIE_HASH);
 
-	if (!string) {
-		return null;
-	}
 
 	const bytes = CryptoJS.AES.decrypt(string, key, {
 		mode: CryptoJS.mode.ECB,
