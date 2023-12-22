@@ -80,7 +80,7 @@
       ">
         <img src="@/assets/allclear.png"/>
         <span>Backtests From Backtest Engine V1.0 Have Been Migrated to Backtest Engine V2.0</span> 
-        <p>All of the tasks have been completed</p>
+        <!-- <p>All of the tasks have been completed</p> -->
         <el-button @click="viewSignal">View List</el-button>
       </div>
       <div class="maskContent-failed" v-if="
@@ -103,7 +103,7 @@
       ">
         <img src="@/assets/allclear.png"/>
         <span>No Backtests Need to be Migrated</span> 
-        <p>All of the tasks have been completed</p>
+        <!-- <p>All of the tasks have been completed</p> -->
         <el-button @click="viewSignal">View List</el-button>
       </div>
     </div>
