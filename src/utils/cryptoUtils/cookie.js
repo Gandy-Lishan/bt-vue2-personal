@@ -18,7 +18,11 @@ export const setCookieData = (data, isLocal) => {
 }
 
 export const getCookieData = () => {
-	const string = Cookies.get('sentimen_session')
+	let string = Cookies.get('sentimen_session');
+	if(string.includes('%')) {
+	  string = decodeURIComponent(string);
+		Cookies.set('sentimen_session', string)
+	}
 	const key = CryptoJS.enc.Utf8.parse(COOKIE_HASH)
 	if (!string) {
 		return null
