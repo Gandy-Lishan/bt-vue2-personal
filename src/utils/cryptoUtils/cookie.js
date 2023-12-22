@@ -20,7 +20,7 @@ export const setCookieData = (data, isLocal) => {
 export const getCookieData = () => {
 	let string = Cookies.get('sentimen_session');
 	if(string.includes('%')) {
-		let string = string.split('%').map(part => {
+		string = string.split('%').map(part => {
 				if (part.length > 2) {
 						return decodeURIComponent(`%${part}`);
 				}
