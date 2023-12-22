@@ -126,7 +126,7 @@ export function setRouterPermission(router) {
 			if (to.path != '/404') {
 				store.commit('states/setErrorMessage404', {
 					status: 401,
-					message: null
+					message: 'You have not logged in and do not have the access permission, Please sign in first'
 				})
 				next({
 					path: '/404'
