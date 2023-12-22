@@ -42,6 +42,16 @@ export default {
                 this.imgSrc = "410.png"
                 this.targetPath = 'https://sentimentrader.com/pricing';
                 break;
+            case 401:
+            case 403:
+            case 404:
+            case 500:
+            case 503:
+                this.mesContent = `${this.desc}`
+                this.btnContent = 'Sign in'
+                this.imgSrc = "401.png"
+                this.targetPath = 'https://sentimentrader.com/login';
+                break;
             default:
                 this.mesContent = 'You have not logged in and do not have the access permission, Please sign in first'
                 this.btnContent = 'Sign in'

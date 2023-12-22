@@ -44,11 +44,48 @@ export default {
 		FloatBtns
 	},
 	async mounted() {
-		if(Cookies.get('sentimen_session')){
-			const userRes = await axios.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
-			console.log('userRes', userRes)
-		}
 		console.log('用户权限', getCookieData())
+		const _this = this
+		if(Cookies.get('sentimen_session')){
+			try {
+				await axios.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
+			} catch (error) {
+				switch (error?.response?.status) {
+				case 401:
+				const errorMsg401 = 'No permission, please log in again'
+				_this.$store.commit('states/setErrorMessage404', {
+						status: 401,
+						message: `${errorMsg401}`
+					})
+					break;
+				case 403:
+				const errorMsg403 = 'Authentication expired, please log in again'
+				_this.$store.commit('states/setErrorMessage404', {
+						status: 403,
+						message: `${errorMsg403}`
+					})
+					break;
+				case 404:
+				const errorMsg404 = 'User does not exist, please log in again'
+				_this.$store.commit('states/setErrorMessage404', {
+						status: 404,
+						message: `${errorMsg404}`
+					})
+					break;
+				case 500:
+				case 503:
+				const errorMsg500 = 'The internal server is busy, please try again later'
+				_this.$store.commit('states/setErrorMessage404', {
+						status: 500,
+						message: `${errorMsg500}`
+					})
+					break;
+				default:
+					break;
+				}
+				_this.$router.push('/404')
+			}
+		}
 		const email = getCookieData()?.username
 		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com']
 		// const allowedUserList = ['hao@sentimentrader.com']

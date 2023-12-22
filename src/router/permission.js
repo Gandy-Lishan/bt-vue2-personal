@@ -37,10 +37,9 @@ export function setRouterPermission(router) {
 		if (symbol) LocalStorageUtil.set('symbol', symbol)
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求
 		/* hao@sentimentrader.com */
-		// reports-monthly
 		// Cookies.set(
 		// 	'sentimen_session',
-		// 	"IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqe0xVLzFYNMiu86tKXH7C5+B5xVGG/uUl69ZPEU8Z9BTH5ewNmfet0ELFuBdHRGMGy1Mwq6KUHSjMtktH9ssmOyQOLHo+tx7xbpszUWyYRsrGoNhFjbXQrzguZ9gTssdUq7xucBJDlAJaYqNAVyK2+sCFZ1xJn1aOgp8sheFLLf14eycM4GLD/BRF7umyie36QHU9hHKynKdSwXK0yP2JJNiGS6C/LvGorS/P6nHqROJwJUg/tix21iv9FuuI2vbXJ4r0xFKTBCap1UrAkwn9pyYV8Bwo4XdYiJYwnNRXqRyfCb/KZUj6VoBzf8piRdfqk="
+		// 	'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
 		// )
 		// research-monthly
 		// Cookies.set('sentimen_session',
@@ -127,7 +126,7 @@ export function setRouterPermission(router) {
 			if (to.path != '/404') {
 				store.commit('states/setErrorMessage404', {
 					status: 401,
-					message: null
+					message: 'You have not logged in and do not have the access permission, Please sign in first'
 				})
 				next({
 					path: '/404'

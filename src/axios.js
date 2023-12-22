@@ -120,7 +120,7 @@ instance.interceptors.response.use(
 		if (config.retryCount >= config.retry) {
 			// 达到最大重试次数，直接返回错误
 			console.log('报错了。。。。', err)
-			const url = err?.message?.data?.config?.url
+			const url = err?.config?.url
 			console.log('错误的URL：', url)
 			const allowedListUrl = ['backtest', 'analyst', 'strategy', 'upload', 'runbt']
 			const isAllowedUrl = allowedListUrl.some(item => url?.includes(item))
@@ -147,9 +147,11 @@ instance.interceptors.response.use(
 			// 	}
 			// 	return Promise.reject(err)
 			// }
+			// 如果用户接口报错, 直接返回错误
+			if(url.includes('/user')) return Promise.reject(err)
 			switch (err?.response?.status) {
 				case 401:
-					_this.popUpMsgBox('You don\'t have permission to create')
+					_this.popUpMsgBox('No permission')
 					break;
 				case 403:
 					_this.popUpMsgBox('Permission denied')
