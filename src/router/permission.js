@@ -105,6 +105,8 @@ export function setRouterPermission(router) {
 							: 'AI Stock Scanner'
 					store.commit('states/setErrorMessage404', { status: 410, message })
 					next({ path: '/404' })
+	
+					// window.location.href = 'https://sentimentrader.com/pricing'
 				}
 
 				if (to.name == 'scannerai' || to.name == 'scannerai_chart') {
