@@ -94,13 +94,16 @@
 .aiscanner-container .el-input-group__prepend {
   background-color: #fff;
 }
+.aiscanner-container .el-input-group__prepend .el-select {
+  margin: -10px 0px;
+}
 .aiscanner-container .el-input__inner {
   margin-left: 0;
   line-height: 25px;
 }
 .aiscanner-container .el-select .el-input {
   width: 106px;
-  padding-left: 22px;
+  /* padding-left: 22px; */
 }
 
 /* 修改主题色 */
