@@ -218,7 +218,7 @@ const getTokenRole = () => {
   const access_level = getCookieData()?.access_level
   if(Array.isArray(access_level)) {
     // 0 无权限; 1 部分权限, 无 scannerai; 2 全部权限
-    if(access_level.some(str => str.includes('everything'))) return 2;
+    if(access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium'))) return 2;
     if(access_level.some(str => str.includes('research'))) return 1;
     if(access_level.some(str => str.includes('reports'))) return 0;
     if(access_level.includes('backtestedge') && access_level.includes('aiscanneredge')) return 2;
