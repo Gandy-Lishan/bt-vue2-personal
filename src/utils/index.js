@@ -223,6 +223,7 @@ const getTokenRole = () => {
     if(access_level.some(str => str.includes('reports'))) return 0;
     if(access_level.includes('backtestedge') && access_level.includes('aiscanneredge')) return 2;
     if(access_level.includes('backtestedge') && !access_level.includes('aiscanneredge')) return 1;
+    if(access_level.includes('portfolioedge')) return 1
     if(!access_level.includes('backtestedge') && !access_level.includes('aiscanneredge')) return 0;
   }
   return 'None'
