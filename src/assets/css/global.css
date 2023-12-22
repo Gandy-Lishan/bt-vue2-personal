@@ -229,6 +229,7 @@ input[type="time"] {
 }
 .senti-container .el-form-item .el-form-item__content .el-form-item__error {
   width: 180px;
+  z-index: 999;
 }
 @media (min-width: 1024px) and (max-width: 1099px) {
   /* .backtest_container
