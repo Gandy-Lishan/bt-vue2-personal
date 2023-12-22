@@ -23,19 +23,19 @@
           >BacktestEdge</el-menu-item
         > -->
         <el-menu-item class="home-link" index="1"
-        v-if="getTokenRole() != 0"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >BacktestEdge</el-menu-item
         >
         <el-menu-item class="ai-link" index="3"
-        v-if="getTokenRole() == 2"
+        v-if="getTokenRole() == 2 && getTokenRole() != 'None'"
           >AI Stock Scanner</el-menu-item
         >
         <el-menu-item class="my-indicator-link home-link" index="6"
-        v-if="getTokenRole() != 0"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >My Indicator</el-menu-item
         >
         <el-menu-item class="seasonality-link home-link" index="7"
-        v-if="getTokenRole() != 0"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >Seasonality</el-menu-item
         >
 
@@ -120,6 +120,7 @@ export default {
   },
   methods: {
     getTokenRole() {
+      console.log('getTokenRole()', getTokenRole())
       return getTokenRole()
     },
     handleSelect(key, _) {
