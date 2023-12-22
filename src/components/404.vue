@@ -31,13 +31,13 @@ export default {
 
         switch(this.state){
             case 410:
-                this.mesContent = `You do not have the access permission for ${this.desc}, Please extend your plan`
+                this.mesContent = `You do not have the access permission for ${this.desc}, Please upgrade your plan`
                 this.btnContent = 'More Plans'
                 this.imgSrc = "410.png"
                 this.targetPath = 'https://sentimentrader.com/pricing';
                 break;
             case '410':
-                this.mesContent = `You do not have the access permission for ${this.desc}, Please extend your plan`
+                this.mesContent = `You do not have the access permission for ${this.desc}, Please upgrade your plan`
                 this.btnContent = 'More Plans'
                 this.imgSrc = "410.png"
                 this.targetPath = 'https://sentimentrader.com/pricing';
