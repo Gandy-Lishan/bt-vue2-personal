@@ -4,13 +4,16 @@
       <div class="thumbnail" v-if="option == 2">
         <h4 style="text-align: center">Seasonality by Day of Month</h4>
         <p>
-          If your browser is relatively new, you will be able to click each of the column headings and have the table sort in ascending and descending order (if you click twice). It may take the table a few seconds to sort since there are so many data points.
+          To get a better feel for what days of the month have been consistently profitable, this table outlines the historical performance of each day of the month for the symbol data you selected from the start year through the end year.
         </p>
         <p>
-          As an example, click on the "% Pos" heading once and the table will put the most negative days at the top of the table. When you do so, the 12th day of the 2nd month comes to the top. So, you now know that the 12th trading day in February has been the most negative for the selected symbol. Please note that this is NOT necessarily February 12th - it is the 12th trading day in February, which is likely a more reliable way of looking at the seasonal patterns than by the actual date.
+          If your browser is relatively new, you will be able to click each of the column headings and have the table sort in ascending and descending order (if you click twice). It may take the table a few seconds to sort since there are so many data points.
         </p> 
         <p>
-          If you click on the "% Pos" heading once again, the table will re-sort and put the most positive days at the top of the table. Near the top is the 2nd day of the 1st month, meaning that the 2nd trading day in January is usually one of the most positive days out of any other day of any other month.
+          Taking SPY, “Date Range” picks in 2003-2023 as an example, click on the "% Pos" heading once and the table will put the most negative days at the top of the table. When you do so, February 29th comes to the top. So, you now know that day in February has been the most negative for the SPY. 
+        </p>
+        <p>
+          If you click on the "% Pos" heading once again, the table will re-sort and put the most positive days at the top of the table. Near the top is the September 11th, meaning that day in September is usually one of the most positive days out of any other day of any other month.
         </p>
         <el-divider></el-divider>
         <h5>Table Description</h5>
@@ -25,7 +28,7 @@
             <template slot="label">
               DAY
             </template>
-            The trading day of the month.
+            The Calendar Day of the month.
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label">
@@ -55,6 +58,9 @@
       </div>
             <div class="thumbnail" v-else>
         <h4 style="text-align: center">Seasonality by Day of Year</h4>
+        <p>
+          To get a better feel for which days of the year have been consistently profitable, this table outlines the historical performance of each trading day of the year for the symbol data you selected from the start year through the end year.
+        </p>
         <p>
           If your browser is relatively new, you will be able to click each of the column headings and have the table sort in ascending and descending order (if you click twice). It may take the table a few seconds to sort since there are so many data points.
         </p>
