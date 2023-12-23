@@ -1541,6 +1541,9 @@ export default {
 			}
 			return '';
 		},
+		exportData() {
+			return {backtestHistoryList: this.backtestHistoryList, TIMHistoryList: this.TIMHistoryList, result_quotes: this.result_quotes, TIMResult_quotes: this.TIMResult_quotes};
+		}
 	}
 }
 </script>
