@@ -299,7 +299,6 @@ export default {
       this.$refs.timChild?.clearData()
     },
     handleDownloadCsv() {
-      debugger
       const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM} = this.$refs.timChild.exportData()
       if (
         !(
