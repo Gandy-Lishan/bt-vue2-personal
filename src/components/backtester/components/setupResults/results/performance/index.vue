@@ -299,7 +299,7 @@ export default {
       this.$refs.timChild?.clearData()
     },
     handleDownloadCsv() {
-      const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, defaultTIMTableLabels, activeTIM} = this.$refs.timChild.exportData()
+      const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, defaultTIMTableLabels} = this.$refs.timChild.exportData()
       
       if (
         !(
@@ -367,8 +367,10 @@ export default {
         obj['Total Return %'] = `${(item.Return * 100).toFixed(2)}%`
         tradeData.push(obj)
       })
-      const _backtestHistoryList = []
-      if(activeTIM == 'first') {
+      
+
+      // Exit with default Time Frame
+        const _backtestHistoryList = []
         backtestHistoryList.forEach((item) => {
           const obj = {}
           obj['Entry Date'] = item['Entry Date']
@@ -393,14 +395,15 @@ export default {
           zscore['1 Year [%]'] = item['1 Year']
           _backtestHistoryList.push(zscore)
         })
-      }else {
+      // Exit with Customized TIM
+        const _TIMHistoryList = []
         TIMHistoryList.forEach((item) => {
           const obj = {}
           obj['Entry Date'] = item['Entry Date']
           for(var i=1;i < defaultTIMTableLabels.length;i++ ){
             obj[defaultTIMTableLabels[i]] = item[defaultTIMTableLabels[i]]
           }
-          _backtestHistoryList.push(obj)
+          _TIMHistoryList.push(obj)
         })
         TIMResult_quotes.forEach(item => {
           const zscore = {}
@@ -408,15 +411,13 @@ export default {
           for(var i=1;i < defaultTIMTableLabels.length;i++ ){
             zscore[defaultTIMTableLabels[i]] = item[periodsTIM[i-1].period]
           }
-          _backtestHistoryList.push(zscore)
+          _TIMHistoryList.push(zscore)
         })
-      
-      }
       const dataList = [
         summary,
         tradeData,
         _backtestHistoryList,
-        TIMHistoryList
+        _TIMHistoryList
       ]
       const sheetNames = [
         'Summary',
