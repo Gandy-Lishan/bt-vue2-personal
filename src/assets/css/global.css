@@ -560,3 +560,7 @@ input[type="time"] {
   /* 因爲遮罩層的z-index是1999 */
   z-index: 1998 !important;
 }
+.result-container .el-input.is-disabled .el-input__inner{
+  color: #333;
+  font-size: 14px;
+}

@@ -300,7 +300,7 @@ export default {
     },
     handleDownloadCsv() {
       debugger
-      const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes} = this.$refs.timChild.exportData()
+      const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM} = this.$refs.timChild.exportData()
       if (
         !(
           this.tableData.length &&
@@ -377,8 +377,20 @@ export default {
         obj['2 Months [%]'] = item['2 Months [%]']
         obj['3 Months [%]'] = item['3 Months [%]']
         obj['6 Months [%]'] = item['6 Months [%]']
-        obj['12 Months [%]'] = item['12 Months [%]']
+        obj['1 Year [%]'] = item['1 Year [%]']
         _backtestHistoryList.push(obj)
+      })
+      result_quotes.forEach(item => {
+        const zscore = {}
+        zscore['Entry Date'] = item['property']
+        zscore['1 Week [%]'] = item['1 Week']
+        zscore['2 Weeks [%]'] = item['2 Weeks']
+        zscore['1 Month [%]'] = item['1 Month']
+        zscore['2 Months [%]'] = item['2 Months']
+        zscore['3 Months [%]'] = item['3 Months']
+        zscore['6 Months [%]'] = item['6 Months']
+        zscore['1 Year [%]'] = item['1 Year']
+        _backtestHistoryList.push(zscore)
       })
       const dataList = [
         summary,
