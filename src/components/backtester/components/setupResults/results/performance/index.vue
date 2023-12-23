@@ -299,7 +299,8 @@ export default {
       this.$refs.timChild?.clearData()
     },
     handleDownloadCsv() {
-      const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM} = this.$refs.timChild.exportData()
+      const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, defaultTIMTableLabels, activeTIM} = this.$refs.timChild.exportData()
+      
       if (
         !(
           this.tableData.length &&
@@ -367,30 +368,50 @@ export default {
         tradeData.push(obj)
       })
       const _backtestHistoryList = []
-      backtestHistoryList.forEach((item) => {
-        const obj = {}
-        obj['Entry Date'] = item['Entry Date']
-        obj['1 Week [%]'] = item['1 Week [%]']
-        obj['2 Weeks [%]'] = item['2 Weeks [%]']
-        obj['1 Month [%]'] = item['1 Month [%]']
-        obj['2 Months [%]'] = item['2 Months [%]']
-        obj['3 Months [%]'] = item['3 Months [%]']
-        obj['6 Months [%]'] = item['6 Months [%]']
-        obj['1 Year [%]'] = item['1 Year [%]']
-        _backtestHistoryList.push(obj)
-      })
-      result_quotes.forEach(item => {
-        const zscore = {}
-        zscore['Entry Date'] = item['property']
-        zscore['1 Week [%]'] = item['1 Week']
-        zscore['2 Weeks [%]'] = item['2 Weeks']
-        zscore['1 Month [%]'] = item['1 Month']
-        zscore['2 Months [%]'] = item['2 Months']
-        zscore['3 Months [%]'] = item['3 Months']
-        zscore['6 Months [%]'] = item['6 Months']
-        zscore['1 Year [%]'] = item['1 Year']
-        _backtestHistoryList.push(zscore)
-      })
+      if(activeTIM == 'first') {
+        backtestHistoryList.forEach((item) => {
+          const obj = {}
+          obj['Entry Date'] = item['Entry Date']
+          obj['1 Week [%]'] = item['1 Week [%]']
+          obj['2 Weeks [%]'] = item['2 Weeks [%]']
+          obj['1 Month [%]'] = item['1 Month [%]']
+          obj['2 Months [%]'] = item['2 Months [%]']
+          obj['3 Months [%]'] = item['3 Months [%]']
+          obj['6 Months [%]'] = item['6 Months [%]']
+          obj['1 Year [%]'] = item['1 Year [%]']
+          _backtestHistoryList.push(obj)
+        })
+        result_quotes.forEach(item => {
+          const zscore = {}
+          zscore['Entry Date'] = item['property']
+          zscore['1 Week [%]'] = item['1 Week']
+          zscore['2 Weeks [%]'] = item['2 Weeks']
+          zscore['1 Month [%]'] = item['1 Month']
+          zscore['2 Months [%]'] = item['2 Months']
+          zscore['3 Months [%]'] = item['3 Months']
+          zscore['6 Months [%]'] = item['6 Months']
+          zscore['1 Year [%]'] = item['1 Year']
+          _backtestHistoryList.push(zscore)
+        })
+      }else {
+        TIMHistoryList.forEach((item) => {
+          const obj = {}
+          obj['Entry Date'] = item['Entry Date']
+          for(var i=1;i < defaultTIMTableLabels.length;i++ ){
+            obj[defaultTIMTableLabels[i]] = item[defaultTIMTableLabels[i]]
+          }
+          _backtestHistoryList.push(obj)
+        })
+        TIMResult_quotes.forEach(item => {
+          const zscore = {}
+          zscore['Entry Date'] = item['property']
+          for(var i=1;i < defaultTIMTableLabels.length;i++ ){
+            zscore[defaultTIMTableLabels[i]] = item[periodsTIM[i-1].period]
+          }
+          _backtestHistoryList.push(zscore)
+        })
+      
+      }
       const dataList = [
         summary,
         tradeData,
