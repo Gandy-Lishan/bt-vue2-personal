@@ -299,11 +299,14 @@ export default {
       this.$refs.timChild?.clearData()
     },
     handleDownloadCsv() {
+      debugger
+      const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes} = this.$refs.timChild.exportData()
       if (
         !(
           this.tableData.length &&
           this.tradesData.length &&
-          this.backtestHistoryList.length
+          backtestHistoryList.length &&
+          TIMHistoryList.length
         )
       ) {
         this.popUpMsgBox('No data available for download')
@@ -364,8 +367,8 @@ export default {
         obj['Total Return %'] = `${(item.Return * 100).toFixed(2)}%`
         tradeData.push(obj)
       })
-      const backtestHistoryList = []
-      this.backtestHistoryList.forEach((item) => {
+      const _backtestHistoryList = []
+      backtestHistoryList.forEach((item) => {
         const obj = {}
         obj['Entry Date'] = item['Entry Date']
         obj['1 Week [%]'] = item['1 Week [%]']
@@ -375,13 +378,13 @@ export default {
         obj['3 Months [%]'] = item['3 Months [%]']
         obj['6 Months [%]'] = item['6 Months [%]']
         obj['12 Months [%]'] = item['12 Months [%]']
-        backtestHistoryList.push(obj)
+        _backtestHistoryList.push(obj)
       })
       const dataList = [
         summary,
         tradeData,
-        backtestHistoryList,
-        this.TIMHistoryList
+        _backtestHistoryList,
+        TIMHistoryList
       ]
       const sheetNames = [
         'Summary',
