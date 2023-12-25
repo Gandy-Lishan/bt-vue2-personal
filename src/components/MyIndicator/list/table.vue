@@ -153,6 +153,7 @@
 		</el-table>
 		<el-pagination
 		@current-change="handleCurrentChange"
+    :current-page="currentPage"
 		:page-size="pageSize"
 		:total="total"
 		layout="total, prev, pager, next, jumper"
@@ -254,7 +255,11 @@ export default {
       this.loading = true
       let listRes
       try {
-        listRes = await getMyIndicatorsList(page)
+        const { categoriesFilter, timeframeFilter } = this
+        let [combineType, calculate] = categoriesFilter === 'categories' ? [null, null] : categoriesFilter.split(' ');
+        if(categoriesFilter == 'weight_combination') {combineType = null; calculate = categoriesFilter}
+        const timeframe = timeframeFilter === 'time_frame' ? null : timeframeFilter
+        listRes = await searchIndicator(this.searchKey, calculate, combineType, timeframe, page)
       } catch (error) {
         this.currentPage = 1; listRes = await getMyIndicatorsList(1)
       }
@@ -392,6 +397,7 @@ export default {
     async handleQuery() {
       const _this = this
       _this.loading = true
+      _this.currentPage = 1
       const { categoriesFilter, timeframeFilter } = _this
       let [combineType, calculate] = categoriesFilter === 'categories' ? [null, null] : categoriesFilter.split(' ');
       if(categoriesFilter == 'weight_combination') {combineType = null; calculate = categoriesFilter}
@@ -399,13 +405,12 @@ export default {
       try {
         const searchRes = await searchIndicator(this.searchKey, calculate, combineType, timeframe)
         console.log('searchRes', searchRes)
-        if(searchRes.data.results) {_this.tableData = await _this.processRowData(searchRes.data.results); _this.total = searchRes.data.count; _this.currentPage = 1}
-        if(searchRes.data.code == 406 || searchRes.data.code == 404) {_this.tableData = [];_this.total = 0; _this.currentPage = 1}
+        if(searchRes.data.results) {_this.tableData = await _this.processRowData(searchRes.data.results); _this.total = searchRes.data.count;}
+        if(searchRes.data.code == 406 || searchRes.data.code == 404) {_this.tableData = [];_this.total = 0;}
       } catch (error) {
         if(error?.response?.status == 404) _this.popUpMsgBox('No results found')
         _this.tableData = []
         _this.total = 0
-        _this.currentPage = 1
         console.log(error)
       }
       _this.loading = false
@@ -472,7 +477,6 @@ export default {
         let [combineType, calculate] = categoriesFilter === 'categories' ? [null, null] : categoriesFilter.split(' ');
         if(categoriesFilter == 'weight_combination') {combineType = null; calculate = categoriesFilter}
         const searchRes = await searchIndicator(searchKey, calculate, combineType, val === 'time_frame' ? null : val);
-
         this.handleSearchResult(searchRes);
       },
       async handleSearchResult(searchRes) {
