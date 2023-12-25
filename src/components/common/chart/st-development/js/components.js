@@ -8384,9 +8384,9 @@ if (!CIQ.Studies) {
 						CIQ.store.commit('chart/studySettingMAChange',obj)
 						return
 					}
-					
-					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+
 					self.updateStudy(updates);
+					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
 				};
 			}
 			node.addEventListener("change", closure());
