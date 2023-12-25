@@ -769,7 +769,7 @@ export const CommonMethodsMixin = {
 			this.$store.commit('chart/getMALayout', data.activatedMALayout)
 
 			// 导入btv1时不调用这个
-			// this.$store.commit('chart/setTechSD', data.savedTechSD)
+			 this.$store.commit('chart/setTechSD', data.savedTechSD)
 
 			switch (freq) {
 				case 'Daily': {
