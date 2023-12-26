@@ -43,6 +43,7 @@ cq-indicators-lookup {
 }
 
 cq-dialog {
+  position: absolute;
   min-width: 320px;
 }
 /* 当初是为了把fav btn放置在cq-comparison-new里面并和symbol title并排，所以改成inline,现已移出并启用 */
