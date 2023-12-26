@@ -395,6 +395,9 @@ export default {
     },
     querySearch(queryString, cb) {
       var dropdownList = this.dropdownList
+      if(!dropdownList || dropdownList.length == 0) {
+        dropdownList = JSON.parse(localStorage.getItem('symbolList'))
+      }
       var results = queryString
         ? dropdownList.filter(this.createFilter(queryString))
         : dropdownList
