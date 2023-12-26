@@ -212,7 +212,11 @@ export default {
       return time.getFullYear() > new Date().getFullYear() || time.getFullYear() < 1800 || time.getFullYear() < this.data.start_date;
     },
     querySearch(queryString, cb) {
+      debugger
       var dropdownList = this.dropdownList
+      if(!dropdownList || dropdownList.length == 0) {
+        dropdownList = JSON.parse(localStorage.getItem('symbolList'))
+      }
       var results = queryString
         ? dropdownList.filter(this.createFilter(queryString))
         : dropdownList
