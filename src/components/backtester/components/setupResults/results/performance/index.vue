@@ -362,7 +362,7 @@ export default {
         obj['Trade #'] = index + 1
         obj['Trade Date'] = item.Date
         obj['Action'] = item.TradeStatus
-        obj['Indicator'] = item.Indicator.join(',')
+        obj['Indicator'] = item.Indicator.join(';')
         obj['Trade Price'] = item.TradePrice
         obj['Exit Reason'] = item.ExitReason
         obj['Trade Return %'] = `${item.TradeReturn}%`
@@ -380,11 +380,11 @@ export default {
         const formatExitDate = exitData['Trade Date'] ? new Date(exitData['Trade Date']).toLocaleDateString() : '';
         mergedData.push({
           'Entry Date': formatEntryDate,
-          Action: entryData.Action.toUpperCase(),
+          'Entry Action': entryData.Action.toUpperCase(),
           'Entry Price': entryData['Trade Price'],
           'Entry Indicator': entryData.Indicator || '',
           'Exit Date': formatExitDate,
-          Action: exitData.Action.toUpperCase(),
+          'Exit Action': exitData.Action.toUpperCase(),
           'Exit Price': exitData['Trade Price'] || '',
           'Trade Return': exitData['Trade Return %'] || '',
           'Total Return': exitData['Trade Return %'] || '',
