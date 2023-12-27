@@ -356,7 +356,6 @@ export default {
           : `${item.timeInMarket}%`
         summary.push(obj)
       })
-      debugger
       const tradeData = []
       this.tradesData.forEach((item, index) => {
         const obj = {}
