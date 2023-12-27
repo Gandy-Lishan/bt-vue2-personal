@@ -670,8 +670,8 @@ export default {
     return {
       bd: {
         name: '',
-        symbol: 'SPX',
-        benchmark: 'SPX',
+        symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
+        benchmark: process.env.VUE_APP_DEFAULT_SYMBOL,
         strategy: 'Signal',
         capital: 100000.0,
         capital_alloc: 1.0,

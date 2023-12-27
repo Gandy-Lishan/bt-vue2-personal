@@ -10,7 +10,7 @@
           If your browser is relatively new, you will be able to click each of the column headings and have the table sort in ascending and descending order (if you click twice). It may take the table a few seconds to sort since there are so many data points.
         </p> 
         <p>
-          Taking SPY, “Date Range” picks in 2003-2023 as an example, click on the "% Pos" heading once and the table will put the most negative days at the top of the table. When you do so, February 29th comes to the top. So, you now know that day in February has been the most negative for the SPY. 
+          Taking SPX, “Date Range” picks in 2003-2023 as an example, click on the "% Pos" heading once and the table will put the most negative days at the top of the table. When you do so, February 29th comes to the top. So, you now know that day in February has been the most negative for the SPX. 
         </p>
         <p>
           If you click on the "% Pos" heading once again, the table will re-sort and put the most positive days at the top of the table. Near the top is the September 11th, meaning that day in September is usually one of the most positive days out of any other day of any other month.
