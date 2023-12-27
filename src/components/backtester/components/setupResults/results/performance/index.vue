@@ -38,6 +38,7 @@
           :tradesData="tradesData"
           :tradePrice="tradePrice"
           :editBacktestID="editBacktestID"
+          :rowFrequency="rowFrequency"
         ></TIM>
 			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
@@ -68,6 +69,7 @@ export default {
       tradesData: [], 
       tradePrice: 'Close',
       editBacktestID: null,
+      rowFrequency: 'Daily'
     }
   },
   // async created() {
@@ -299,7 +301,7 @@ export default {
       this.$refs.timChild?.clearData()
     },
     handleDownloadCsv() {
-      const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, defaultTIMTableLabels} = this.$refs.timChild.exportData()
+      const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, periods, defaultTIMTableLabels, defaultTableLabels} = this.$refs.timChild.exportData()
       
       if (
         !(
@@ -354,6 +356,7 @@ export default {
           : `${item.timeInMarket}%`
         summary.push(obj)
       })
+      debugger
       const tradeData = []
       this.tradesData.forEach((item, index) => {
         const obj = {}
@@ -367,32 +370,47 @@ export default {
         obj['Total Return %'] = `${(item.Return * 100).toFixed(2)}%`
         tradeData.push(obj)
       })
-      
 
-      // Exit with default Time Frame
+      const mergedData = [];
+
+      for (let i = 0; i < tradeData.length; i += 2) {
+        const entryData = tradeData[i];
+        const exitData = tradeData[i + 1] || {}; // 确保后面有对象或使用一个空对象
+        // 转换日期格式
+        const formatEntryDate = new Date(entryData['Trade Date']).toLocaleDateString();
+        const formatExitDate = exitData['Trade Date'] ? new Date(exitData['Trade Date']).toLocaleDateString() : '';
+        mergedData.push({
+          'Entry Date': formatEntryDate,
+          Action: entryData.Action.toUpperCase(),
+          'Entry Price': entryData['Trade Price'],
+          'Entry Indicator': entryData.Indicator || '',
+          'Exit Date': formatExitDate,
+          Action: exitData.Action.toUpperCase(),
+          'Exit Price': exitData['Trade Price'] || '',
+          'Trade Return': exitData['Trade Return %'] || '',
+          'Total Return': exitData['Trade Return %'] || '',
+          'Exit Reason': exitData['Exit Reason'] || '',
+          'Exit Indicator': exitData.Indicator || ''
+        });
+      }
+
+      console.log(mergedData);
+        // Exit with default Time Frame
         const _backtestHistoryList = []
         backtestHistoryList.forEach((item) => {
           const obj = {}
           obj['Entry Date'] = item['Entry Date']
-          obj['1 Week [%]'] = item['1 Week [%]']
-          obj['2 Weeks [%]'] = item['2 Weeks [%]']
-          obj['1 Month [%]'] = item['1 Month [%]']
-          obj['2 Months [%]'] = item['2 Months [%]']
-          obj['3 Months [%]'] = item['3 Months [%]']
-          obj['6 Months [%]'] = item['6 Months [%]']
-          obj['1 Year [%]'] = item['1 Year [%]']
+          for(var i=1;i < defaultTableLabels.length;i++ ){
+            obj[defaultTableLabels[i]] = item[defaultTableLabels[i]]
+          }
           _backtestHistoryList.push(obj)
         })
         result_quotes.forEach(item => {
           const zscore = {}
           zscore['Entry Date'] = item['property']
-          zscore['1 Week [%]'] = item['1 Week']
-          zscore['2 Weeks [%]'] = item['2 Weeks']
-          zscore['1 Month [%]'] = item['1 Month']
-          zscore['2 Months [%]'] = item['2 Months']
-          zscore['3 Months [%]'] = item['3 Months']
-          zscore['6 Months [%]'] = item['6 Months']
-          zscore['1 Year [%]'] = item['1 Year']
+          for(var i=1;i < defaultTableLabels.length;i++ ){
+            zscore[defaultTableLabels[i]] = item[periods[i-1].period]
+          }
           _backtestHistoryList.push(zscore)
         })
       // Exit with Customized TIM
@@ -415,7 +433,7 @@ export default {
         })
       const dataList = [
         summary,
-        tradeData,
+        mergedData,
         _backtestHistoryList,
         _TIMHistoryList
       ]
