@@ -56,7 +56,7 @@
           </el-descriptions-item>
         </el-descriptions>
       </div>
-            <div class="thumbnail" v-else>
+      <div class="thumbnail" v-else>
         <h4 style="text-align: center">Seasonality by Day of Year</h4>
         <p>
           To get a better feel for which days of the year have been consistently profitable, this table outlines the historical performance of each trading day of the year for the symbol data you selected from the start year through the end year.
@@ -347,13 +347,18 @@ export default {
   -o-transition: all .2s ease-in-out;
   transition: all .2s ease-in-out;
   color: #333;
+  font-weight: 500;
   font-family: "Open Sans",sans-serif;
 }
 .default-table-class {
   width: 1140px;
 }
-th.el-descriptions-item__cell.el-descriptions-item__label.is-bordered-label{
+/deep/ th.el-descriptions-item__cell.el-descriptions-item__label.is-bordered-label{
   font-weight: 600;
+  color: #333;
+}
+/deep/ td.el-descriptions-item__cell.el-descriptions-item__content{
+  font-weight: 500;
   color: #333;
 }
 </style>
