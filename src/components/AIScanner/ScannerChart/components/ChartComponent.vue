@@ -6,7 +6,7 @@
 			<div class="back">
 				<router-link to="/scannerai"><i class="el-icon-arrow-left"></i><span>Back to the stock scanner list</span></router-link>
 			</div>
-			<chart :symbol="symbol" :onChartReady="onChartReady" width="100%" height="100%">
+			<chart :onChartReady="onChartReady" width="100%" height="100%">
         <LoadingOverlayChart
 						:isLoading="chartLoadingSetting.isChartLoading"
 						:progressText="chartLoadingSetting.progressText"
@@ -46,6 +46,7 @@ export default {
 	},
 	created() {
 		CIQ.addCover()
+    CIQ.symbol = this.symbol
 	},
 	beforeDestroy() {
 		// 防止跳转到backtester时保留了Hammer followed by a raise等marker
@@ -105,7 +106,9 @@ export default {
 			this.overrideStudyDef()
 			// 默认让indicator无法编辑
 			this.editStudies(false)
-			this.symbolUrl = CIQ.findSentiIndicator(null,CIQ.symbol)?CIQ.symbol:CIQ.findSentiIndicator(CIQ.symbol + ' Optix',null).url
+
+			this.symbolUrl = CIQ.findSentiIndicator(null,this.symbol)?this.symbol:CIQ.findSentiIndicator(this.symbol + ' Optix',null).url
+      
 			CIQ.initiateChart([this.symbolUrl],this.other['date'],()=>{
 				try{
 					this.hideComponents()

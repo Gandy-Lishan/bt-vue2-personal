@@ -3,7 +3,7 @@
 			<div class="back">
 				<router-link to="/myindicator"><i class="el-icon-arrow-left"></i><span>Back to my indicators list</span></router-link>
 			</div>
-			<chart width="100%" height="100%" :onChartReady="onChartReady">
+			<chart :symbol="defaultSymbol" width="100%" height="100%" :onChartReady="onChartReady">
 				<LoadingOverlayChart
 						:isLoading="chartLoadingSetting.isChartLoading"
 						:progressText="chartLoadingSetting.progressText"
@@ -26,7 +26,7 @@ export default {
 		return {
 			indicator : '',
 			trades : [],
-			symbolUrl: '',
+			defaultSymbol: ''
 		}
 	},
 	components: {
@@ -49,7 +49,7 @@ export default {
 		},
 	},
 	created() {
-		
+		this.defaultSymbol = this.chart_data.hasOwnProperty('name')?null:process.env.VUE_APP_DEFAULT_SYMBOL
 	},
 	beforeDestroy() {
 		// 清除预览和编辑产生的ownIndicator serie缓存
