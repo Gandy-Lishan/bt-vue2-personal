@@ -352,4 +352,8 @@ export default {
 .default-table-class {
   width: 1140px;
 }
+th.el-descriptions-item__cell.el-descriptions-item__label.is-bordered-label{
+  font-weight: 600;
+  color: #333;
+}
 </style>
