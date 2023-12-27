@@ -284,14 +284,14 @@ export default {
 
 			//Dialog: edit table
 			showTable: false,
-			editTIMData: [],
-			rowFrequency: 'Daily'
+			editTIMData: []
 		}
 	},
 	props: {
         tradesData: Array,
         tradePrice: String,
         editBacktestID: String,
+				rowFrequency: String
     },
 	created() {},
 	computed: {},
@@ -1542,7 +1542,7 @@ export default {
 			return '';
 		},
 		exportData() {
-			return {backtestHistoryList: this.backtestHistoryList, TIMHistoryList: this.TIMHistoryList, result_quotes: this.result_quotes, TIMResult_quotes: this.TIMResult_quotes, periodsTIM: this.periodsTIM, defaultTIMTableLabels: this.defaultTIMTableLabels};
+			return {backtestHistoryList: this.backtestHistoryList, TIMHistoryList: this.TIMHistoryList, result_quotes: this.result_quotes, TIMResult_quotes: this.TIMResult_quotes, periodsTIM: this.periodsTIM, periods: this.periods, defaultTIMTableLabels: this.defaultTIMTableLabels, defaultTableLabels: this.defaultTableLabels};
 		}
 	}
 }
