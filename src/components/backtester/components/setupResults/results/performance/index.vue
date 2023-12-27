@@ -387,7 +387,7 @@ export default {
           'Exit Action': exitData.Action.toUpperCase(),
           'Exit Price': exitData['Trade Price'] || '',
           'Trade Return': exitData['Trade Return %'] || '',
-          'Total Return': exitData['Trade Return %'] || '',
+          'Total Return': exitData['Total Return %'] || '',
           'Exit Reason': exitData['Exit Reason'] || '',
           'Exit Indicator': exitData.Indicator || ''
         });
