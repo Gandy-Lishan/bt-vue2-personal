@@ -346,7 +346,7 @@ button.createNew,
 .toTop,
 .tutorial {
 	// opacity: 0.4;
-	z-index: 1500;
+	z-index: 2001;
 	border: unset;
 	position: fixed;
 	right: 60px;
