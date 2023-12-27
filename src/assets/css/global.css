@@ -499,7 +499,12 @@ input[type="time"] {
   background-color: #303133;
   color: #fff;
 }
-
+.header-filter.el-popover{
+  background-color: #fff;
+}
+.header-filter .el-tooltip__popper.is-dark{
+  background-color: #fff;
+}
 .empty-senti-container {
   min-height: 142px;
 }
