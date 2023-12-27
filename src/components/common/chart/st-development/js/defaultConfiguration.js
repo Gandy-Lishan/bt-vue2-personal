@@ -33,7 +33,7 @@ import {CIQ} from "chartiq/js/chartiq.js";
 			// Symbol can be string or
 			// or an object containing property symbol of string type along with other properties
 			initialSymbol: {
-				symbol: "SPX",
+				symbol: 'SPX',
 				name: "S&P 500 (SPX)",
 				exchDisp: "NASDAQ"
 			},

@@ -17,7 +17,7 @@
               1.Symbol
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  >Choose a stock/index/ETF as symbol.(default:SPY)</span>
+                  >Choose a stock/index/ETF as symbol.(default:SPX)</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -180,7 +180,7 @@ export default {
   data() {
     return {
       data: {
-        symbol: 'SPY',
+        symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
         // period: 20,
         dateRange: [],
         holidays: 0,
@@ -233,10 +233,10 @@ export default {
       inputVisible: false,
       inputValue: '',
       previousCustomDateRef: null,
-      symbol: 'SPY',
+      symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
       plotConfiguration: {
         title: 'Performance Surrounding Independence Day',
-        subtitle: 'SPY, 1950-2011',
+        subtitle: 'SPX, 1950-2011',
         xAxisTitle: 'Days Surrounding the Selected Day',
         customScale: true, // 如果需要自定义刻度
         formatter: true, // 如果需要自定义数据提示
