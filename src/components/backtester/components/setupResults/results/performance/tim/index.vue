@@ -285,13 +285,14 @@ export default {
 			//Dialog: edit table
 			showTable: false,
 			editTIMData: [],
-			rowFrequency: 'Daily'
+			//rowFrequency: 'Daily'
 		}
 	},
 	props: {
         tradesData: Array,
         tradePrice: String,
         editBacktestID: String,
+		rowFrequency: String,
     },
 	created() {},
 	computed: {},

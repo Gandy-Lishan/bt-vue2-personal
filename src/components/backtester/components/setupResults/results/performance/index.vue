@@ -38,6 +38,7 @@
           :tradesData="tradesData"
           :tradePrice="tradePrice"
           :editBacktestID="editBacktestID"
+          :rowFrequency = "rowFrequency"
         ></TIM>
 			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
