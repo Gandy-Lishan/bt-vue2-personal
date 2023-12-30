@@ -59,9 +59,9 @@
               @clear="clearSentimentSelect"
 							highlight-first-item
 						></el-autocomplete>
-            <!-- <searchBar 
-              :id_name="'autocomplete-' + criteria + '-' + panelIndex" 
-              placeholder="Input the sentiment indicator" 
+            <!-- <searchBar
+              :id_name="'autocomplete-' + criteria + '-' + panelIndex"
+              placeholder="Input the sentiment indicator"
               :index="['indicatorList']"
               @select="handleSentimentSelect"
               display="chart_name"
@@ -150,7 +150,7 @@
               >
               </el-autocomplete>
             </div>
-            
+
             <el-upload
 							class="upload-demo"
 							:action="uploadUrl"
@@ -185,7 +185,7 @@
 						</el-upload>
         </el-form-item>
       </div>
-      
+
       <el-dialog :title="previewFileName" :visible.sync="previewVisible">
 							<el-table
 								:data="previewData"
@@ -658,7 +658,7 @@ export default {
       indicator = indicator.replace(/"/g, '')
       let ele = CIQ.findSentiIndicator(null, indicator)
       ele = {...ele, value: ele.chart_name}
-      if(this.criteria == 'entry') this.handleSentimentSelect(ele)
+      if(this.criteria == 'entry') {this.si.sentimentIndicator = ele.value;this.handleSentimentSelect(ele)}
       LocalStorageUtil.remove('indicator')
     }
   },
@@ -859,7 +859,7 @@ export default {
 			extraIndicators.push(...this.$store.state.chart.indicators.extraIndicators)
       extraIndicators = extraIndicators.filter(x=>x!=item.url)
 			this.$store.commit('chart/getExtraIndicators',extraIndicators)
-  
+
       // 如果是MA，则移除它的信息和位置
       CIQ.removeMALayout(item.url, this.criteria, this.panelIndex)
 
@@ -1109,7 +1109,7 @@ export default {
           value: ''
         })
       }
-      
+
       // 如果是MA，则移除它的信息和位置
       CIQ.removeMALayout(item.url, this.criteria, this.panelIndex)
       // lishn 判断需要小龙写
@@ -1250,7 +1250,7 @@ export default {
       // lishn 判断需要小龙写
       CIQ.addIndicators()
     },
-    handleUsersOwnIndicatorSelect(data) {         
+    handleUsersOwnIndicatorSelect(data) {
       // 限制同屏显示个数
       if(maxNumOfStudy()) return
 
@@ -1570,7 +1570,7 @@ export default {
           validForm = valid
         })
         if(CIQ.findBuiltinTechIndicator(this.si.technicalIndicator,null)) validName = true
-        
+
         if (validForm && validName) {
           let obj = {}
           obj.criteria = this.criteria
@@ -1670,7 +1670,7 @@ export default {
             let techIndicatorResult = CIQ.findBuiltinTechIndicator(vm.si.technicalIndicator,null)
             if(techIndicatorResult){
               let isFromEdit = true
-              vm.handleTechnicalSelect(techIndicatorResult, isFromEdit) 
+              vm.handleTechnicalSelect(techIndicatorResult, isFromEdit)
             }
           }
           if (newVal[this.criteria].signals[index].analysis === 'User') {
@@ -1791,7 +1791,7 @@ export default {
       // 创建 CancelToken 实例
       const cancelToken = axios.CancelToken.source()
 
-      // 保存取消令牌，以便在需要终止上传时使用      
+      // 保存取消令牌，以便在需要终止上传时使用
       // 保存取消令牌，以便在需要终止上传时使用
       self.cancelToken = cancelToken
       // 发送上传请求
