@@ -7,63 +7,78 @@
             :span-method="objectSpanMethod"
         >
             <el-table-column
-                prop="trade_number"
                 show-overflow-tooltip
+                prop="TradeNumber"
                 label="#"
                 width="50px"
                 align="center"
             >
-                <template slot-scope="scope">
-                    {{ Number(scope.row.trade_number) + 1 }}
-                </template>
+            <template slot-scope="scope">
+                {{ Number(scope.row.TradeNumber) + 1 }}
+            </template>
             </el-table-column>
             <el-table-column
-                prop="Date"
-                label="Trade Date"
-                align="center"
-                width="150px"
-                show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-                prop="TradeStatus"
-                label="Action"
+                prop="EntryDate"
+                label="Entry Date"
                 align="center"
                 width="100px"
                 show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
-                prop="Indicator"
-                label="Indicator"
+                prop="EntryAction"
+                label="Entry Action"
+                align="center"
+                width="100px"
+                show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+                prop="EntryPrice"
+                label="Entry Price"
+                width="80px"
+                align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                prop="EntryIndicator"
+                label="Entry Indicator"
                 align="center"
                 show-overflow-tooltip
             >
                 <template slot-scope="scope">
-                    <div v-for="(item, index) in scope.row.Indicator" :key="index">
+                    <div v-for="(item, index) in scope.row.EntryIndicator" :key="index">
                         <p>{{ item }}</p>
                     </div>
                 </template>
             </el-table-column>
             <el-table-column
-                prop="TradePrice"
-                label="Trade Price"
+                prop="ExitDate"
+                label="Exit Date"
+                align="center"
                 width="100px"
+                show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+                prop="ExitAction"
+                label="Exit Action"
+                align="center"
+                width="80px"
+                show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+                prop="ExitPrice"
+                label="Exit Price"
+                width="80px"
                 align="center"
             >
             </el-table-column>
-<el-table-column
-                prop="ExitReason"
-                label="Exit Reason"
-                width="100px"
-                align="center"
-            >
-            </el-table-column>
-
             <el-table-column
                 prop="TradeReturn"
                 label="Trade Return %"
-                width="120px"
+                width="100px"
                 align="center"
                 show-overflow-tooltip
             >
@@ -78,20 +93,39 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop="Return"
+                prop="TotalReturn"
                 label="Total Return %"
-                width="120px"
+                width="100px"
                 align="center"
                 show-overflow-tooltip
             >
                 <template slot-scope="scope">
-                    <span v-if="scope.row.Return == 'none'">{{ '' }}</span>
-                    <span v-else-if="scope.row.Return >= 0"
-                        >{{ (scope.row.Return * 100).toFixed(2) }}%</span
+                    <span v-if="scope.row.TotalReturn == 'none'">{{ '' }}</span>
+                    <span v-else-if="scope.row.TotalReturn >= 0"
+                        >{{ (scope.row.TotalReturn * 100).toFixed(2) }}%</span
                     >
                     <span v-else style="color: red"
-                        >{{ (scope.row.Return * 100).toFixed(2) }}%</span
+                        >{{ (scope.row.TotalReturn * 100).toFixed(2) }}%</span
                     >
+                </template>
+            </el-table-column>
+            <el-table-column
+                prop="ExitReason"
+                label="Exit Reason"
+                width="80px"
+                align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                prop="ExitIndicator"
+                label="Exit Indicator"
+                align="center"
+                show-overflow-tooltip
+            >
+                <template slot-scope="scope">
+                    <div v-for="(item, index) in scope.row.ExitIndicator" :key="index">
+                        <p>{{ item }}</p>
+                    </div>
                 </template>
             </el-table-column>
             <div slot="empty" style="text-align: left">
@@ -125,6 +159,7 @@ export default {
                 page: 1
             },
             totalTradesNumber: 0,
+            processedTradesData: []
 		}
 	},
 	props: {
@@ -135,7 +170,7 @@ export default {
     computed: {
 		// Filtered and paginated data to be displayed in the table
 		paginatedData() {
-			return this.tradesData.slice(
+			return this.processedTradesData.slice(
                 20 * (this.queryInfo.page - 1),
                 this.queryInfo.page * 20
             )
@@ -143,68 +178,92 @@ export default {
 	},
     watch: {
 		tradesData: {
-			handler(newValue, oldValue){
-                this.queryInfo.total = newValue.length
-                this.totalTradesNumber = newValue.length / 2
+			handler(newValue, _){
+                const mergedData = [];
+                debugger
+                for (let i = 0; i < newValue.length; i += 2) {
+                    const entryData = newValue[i];
+                    const exitData = newValue[i + 1] || {}; // 确保后面有对象或使用一个空对象
+                    // 转换日期格式
+                    const formatEntryDate = new Date(entryData['Date']).toLocaleDateString();
+                    const formatExitDate = exitData['Date'] ? new Date(exitData['Date']).toLocaleDateString() : '';
+                    mergedData.push({
+                    'EntryDate': formatEntryDate,
+                    'EntryAction': entryData.TradeStatus.toUpperCase(),
+                    'EntryPrice': entryData.TradePrice,
+                    'EntryIndicator': entryData.Indicator || '',
+                    'ExitDate': formatExitDate,
+                    'ExitAction': exitData.TradeStatus.toUpperCase(),
+                    'ExitPrice': exitData.TradePrice || '',
+                    'TradeReturn': exitData.TradeReturn || '',
+                    'TotalReturn': exitData.Return || '',
+                    'ExitReason': exitData.ExitReason || '',
+                    'ExitIndicator': exitData.Indicator || '',
+                    'TradeNumber': exitData.trade_number
+                    });
+                }
+                this.processedTradesData = mergedData
+                this.queryInfo.total = mergedData.length
+                this.totalTradesNumber = mergedData.length
 			},
 			deep: true
 		},
 	},
 	methods: {
-        objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-        if (columnIndex === 0) {
-            if (rowIndex % 2 === 0) {
-            return {
-                rowspan: 2,
-                colspan: 1
-            }
-            } else {
-            return {
-                rowspan: 0,
-                colspan: 0
-            }
-            }
-        }
-        if (columnIndex === 5) {
-            if (rowIndex % 2 === 0) {
-            return {
-                rowspan: 2,
-                colspan: 1
-            }
-            } else {
-            return {
-                rowspan: 0,
-                colspan: 0
-            }
-            }
-        }
-        if (columnIndex === 6) {
-            if (rowIndex % 2 === 0) {
-            return {
-                rowspan: 2,
-                colspan: 1
-            }
-            } else {
-            return {
-                rowspan: 0,
-                colspan: 0
-            }
-            }
-        }
-        if (columnIndex === 7) {
-            if (rowIndex % 2 === 0) {
-            return {
-                rowspan: 2,
-                colspan: 1
-            }
-            } else {
-            return {
-                rowspan: 0,
-                colspan: 0
-            }
-            }
-        }
-        },
+        // objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+        // if (columnIndex === 0) {
+        //     if (rowIndex % 2 === 0) {
+        //     return {
+        //         rowspan: 2,
+        //         colspan: 1
+        //     }
+        //     } else {
+        //     return {
+        //         rowspan: 0,
+        //         colspan: 0
+        //     }
+        //     }
+        // }
+        // if (columnIndex === 5) {
+        //     if (rowIndex % 2 === 0) {
+        //     return {
+        //         rowspan: 2,
+        //         colspan: 1
+        //     }
+        //     } else {
+        //     return {
+        //         rowspan: 0,
+        //         colspan: 0
+        //     }
+        //     }
+        // }
+        // if (columnIndex === 6) {
+        //     if (rowIndex % 2 === 0) {
+        //     return {
+        //         rowspan: 2,
+        //         colspan: 1
+        //     }
+        //     } else {
+        //     return {
+        //         rowspan: 0,
+        //         colspan: 0
+        //     }
+        //     }
+        // }
+        // if (columnIndex === 7) {
+        //     if (rowIndex % 2 === 0) {
+        //     return {
+        //         rowspan: 2,
+        //         colspan: 1
+        //     }
+        //     } else {
+        //     return {
+        //         rowspan: 0,
+        //         colspan: 0
+        //     }
+        //     }
+        // }
+        // },
         handleCurrentChange(page){
             this.queryInfo.page = page
         }
