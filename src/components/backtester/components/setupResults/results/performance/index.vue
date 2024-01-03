@@ -371,7 +371,7 @@ export default {
         obj['Exit Reason'] = item.ExitReason
         obj['Trade Return %'] = `${item.TradeReturn}%`
         obj['Total Return %'] = `${(item.Return * 100).toFixed(2)}%`
-        obj['Market Condition'] = item.MarketCondition.join(';')
+        // obj['Market Condition'] = item.MarketCondition.join(';')
         tradeData.push(obj)
       })
 
@@ -394,7 +394,7 @@ export default {
           'Trade Return': exitData['Trade Return %'] || '',
           'Total Return': exitData['Total Return %'] || '',
           'Exit Reason': exitData['Exit Reason'] || '',
-          'Market Condition': exitData.MarketCondition || '',
+          // 'Market Condition': exitData.MarketCondition || '',
           'Exit Indicator': exitData.Indicator || ''
         });
       }
