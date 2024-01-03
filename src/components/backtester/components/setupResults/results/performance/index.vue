@@ -121,6 +121,7 @@ export default {
 
               const tradeReturn = initalData['Each Return']
               const exitReason = initalData['Exit Reason'] ? initalData['Exit Reason'] : []
+              const marketCondition = initalData['Market Condition'] ? initalData['Market Condition'] : []
               data.uuid = initalData['UUID']
               data.symbol = initalData['Symbol']
               data.frequency = initalData['Frequency']
@@ -185,6 +186,9 @@ export default {
                   initalData['Trades'][i].ExitReason =
                     exitReason[initalData['Trades'][i].trade_number]
 
+                  initalData['Trades'][i].MarketCondition =
+                    marketCondition[initalData['Trades'][i].trade_number]
+                  
                   if (i % 2 !== 0) {
                     initalData['Trades'][i - 1].Return =
                       initalData['Trades'][i].Return
@@ -367,6 +371,7 @@ export default {
         obj['Exit Reason'] = item.ExitReason
         obj['Trade Return %'] = `${item.TradeReturn}%`
         obj['Total Return %'] = `${(item.Return * 100).toFixed(2)}%`
+        obj['Market Condition'] = item.MarketCondition.join(';')
         tradeData.push(obj)
       })
 
@@ -389,6 +394,7 @@ export default {
           'Trade Return': exitData['Trade Return %'] || '',
           'Total Return': exitData['Total Return %'] || '',
           'Exit Reason': exitData['Exit Reason'] || '',
+          'Market Condition': exitData.MarketCondition || '',
           'Exit Indicator': exitData.Indicator || ''
         });
       }
@@ -509,7 +515,7 @@ export default {
 	padding-bottom: 20px;
 }
 .performance_tabs {
-  width: 1140px;
+  width: 1200px;
   margin: 0 auto;
 }
 .pagination-container {

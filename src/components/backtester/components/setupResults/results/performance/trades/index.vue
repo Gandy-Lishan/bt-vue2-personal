@@ -4,7 +4,6 @@
             :data="paginatedData"
             class="trades-table"
             border
-            :span-method="objectSpanMethod"
         >
             <el-table-column
                 show-overflow-tooltip
@@ -21,7 +20,7 @@
                 prop="EntryDate"
                 label="Entry Date"
                 align="center"
-                width="100px"
+                width="90px"
                 show-overflow-tooltip
             >
             </el-table-column>
@@ -56,7 +55,7 @@
                 prop="ExitDate"
                 label="Exit Date"
                 align="center"
-                width="100px"
+                width="90px"
                 show-overflow-tooltip
             >
             </el-table-column>
@@ -78,7 +77,7 @@
             <el-table-column
                 prop="TradeReturn"
                 label="Trade Return %"
-                width="100px"
+                width="80px"
                 align="center"
                 show-overflow-tooltip
             >
@@ -95,7 +94,7 @@
             <el-table-column
                 prop="TotalReturn"
                 label="Total Return %"
-                width="100px"
+                width="80px"
                 align="center"
                 show-overflow-tooltip
             >
@@ -115,6 +114,26 @@
                 width="80px"
                 align="center"
             >
+            </el-table-column>
+            <el-table-column
+                prop="MarketCondition"
+                label="Market Condition"
+                width="100px"
+                align="center"
+            >
+            <template slot="header">
+                Market Condition
+                    <el-tooltip effect="dark" placement="top" style="diaplay: inline">
+                    <span slot="content" v-html="textContent['MarketCondition']">
+                    </span>
+                    <i class="iconfont icon-wenhao"></i>
+                </el-tooltip>
+            </template>
+            <template slot-scope="scope">
+                <div v-for="(item, index) in scope.row.MarketCondition" :key="index">
+                    <p>{{ item }}</p>
+                </div>
+            </template>
             </el-table-column>
             <el-table-column
                 prop="ExitIndicator"
@@ -159,7 +178,10 @@ export default {
                 page: 1
             },
             totalTradesNumber: 0,
-            processedTradesData: []
+            processedTradesData: [],
+            textContent: {
+                'MarketCondition': 'Indicates the market environment for this transaction:<br/> "Bear" stands for "Bear Market",<br/> "Rec" stands for "Recession", "Ease" refers to "FOMC Easing",<br/> and "Tight" represents "FOMC Tightening".'
+            }
 		}
 	},
 	props: {
@@ -180,7 +202,6 @@ export default {
 		tradesData: {
 			handler(newValue, _){
                 const mergedData = [];
-                debugger
                 for (let i = 0; i < newValue.length; i += 2) {
                     const entryData = newValue[i];
                     const exitData = newValue[i + 1] || {}; // 确保后面有对象或使用一个空对象
@@ -198,6 +219,7 @@ export default {
                     'TradeReturn': exitData.TradeReturn || '',
                     'TotalReturn': exitData.Return || '',
                     'ExitReason': exitData.ExitReason || '',
+                    'MarketCondition': exitData.MarketCondition || '',
                     'ExitIndicator': exitData.Indicator || '',
                     'TradeNumber': exitData.trade_number
                     });
@@ -210,60 +232,6 @@ export default {
 		},
 	},
 	methods: {
-        // objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-        // if (columnIndex === 0) {
-        //     if (rowIndex % 2 === 0) {
-        //     return {
-        //         rowspan: 2,
-        //         colspan: 1
-        //     }
-        //     } else {
-        //     return {
-        //         rowspan: 0,
-        //         colspan: 0
-        //     }
-        //     }
-        // }
-        // if (columnIndex === 5) {
-        //     if (rowIndex % 2 === 0) {
-        //     return {
-        //         rowspan: 2,
-        //         colspan: 1
-        //     }
-        //     } else {
-        //     return {
-        //         rowspan: 0,
-        //         colspan: 0
-        //     }
-        //     }
-        // }
-        // if (columnIndex === 6) {
-        //     if (rowIndex % 2 === 0) {
-        //     return {
-        //         rowspan: 2,
-        //         colspan: 1
-        //     }
-        //     } else {
-        //     return {
-        //         rowspan: 0,
-        //         colspan: 0
-        //     }
-        //     }
-        // }
-        // if (columnIndex === 7) {
-        //     if (rowIndex % 2 === 0) {
-        //     return {
-        //         rowspan: 2,
-        //         colspan: 1
-        //     }
-        //     } else {
-        //     return {
-        //         rowspan: 0,
-        //         colspan: 0
-        //     }
-        //     }
-        // }
-        // },
         handleCurrentChange(page){
             this.queryInfo.page = page
         }
