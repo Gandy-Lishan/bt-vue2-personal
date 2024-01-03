@@ -154,6 +154,25 @@ const routes = [
 			require(['@/components/Seasonality/index.vue'], resolve),
 	},
 	{
+		path: '/cpm',
+		component: resolve =>
+			require(['@/components/CPM/index.vue'], resolve),
+		children: [
+			{
+				path: '',
+				name: 'List',
+				component: resolve =>
+					require(['@/components/CPM/list/index.vue'], resolve)
+			},
+			{
+				path: 'create',
+				name: 'CreateCPM',
+				component: resolve =>
+					require(['@/components/CPM/create/index.vue'], resolve)
+			}
+		]
+	},
+	{
 		path: '/doc',
 		component: resolve => require(['@/components/Tutorial/Doc.vue'], resolve),
 		redirect: '/doc/home',
