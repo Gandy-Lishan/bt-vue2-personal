@@ -115,7 +115,7 @@
                 align="center"
             >
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
                 prop="MarketCondition"
                 label="Market Condition"
                 width="100px"
@@ -134,7 +134,7 @@
                     <p>{{ item }}</p>
                 </div>
             </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column
                 prop="ExitIndicator"
                 label="Exit Indicator"
