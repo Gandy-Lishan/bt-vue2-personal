@@ -121,7 +121,7 @@ export default {
 
               const tradeReturn = initalData['Each Return']
               const exitReason = initalData['Exit Reason'] ? initalData['Exit Reason'] : []
-              const marketCondition = initalData['Market Condition'] ? initalData['Market Condition'] : []
+              const marketCondition = initalData['MarketCondition'] ? initalData['MarketCondition'] : []
               data.uuid = initalData['UUID']
               data.symbol = initalData['Symbol']
               data.frequency = initalData['Frequency']
