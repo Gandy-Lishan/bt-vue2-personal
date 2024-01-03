@@ -306,7 +306,6 @@ export default {
     },
     handleDownloadCsv() {
       const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, periods, defaultTIMTableLabels, defaultTableLabels} = this.$refs.timChild.exportData()
-      
       if (
         !(
           this.tableData.length &&
@@ -411,13 +410,20 @@ export default {
           _backtestHistoryList.push(obj)
         })
         result_quotes.forEach(item => {
-          const zscore = {}
-          zscore['Entry Date'] = item['property']
-          for(var i=1;i < defaultTableLabels.length;i++ ){
-            zscore[defaultTableLabels[i]] = item[periods[i-1].period]
+          const zscore = {};
+          zscore['Entry Date'] = item['property'];
+          for (let i = 1; i < defaultTableLabels.length; i++) {
+            const value = item[periods[i - 1].period];
+            // 检查值是否有效
+            if (!isNaN(value) || (typeof value === 'string' && value.endsWith('%'))) {
+              zscore[defaultTableLabels[i]] = value;
+            } else {
+              zscore[defaultTableLabels[i]] = ''; // 或者您可以设置为其他默认值
+            }
           }
-          _backtestHistoryList.push(zscore)
-        })
+          _backtestHistoryList.push(zscore);
+        });
+
       // Exit with Customized TIM
         const _TIMHistoryList = []
         TIMHistoryList.forEach((item) => {
@@ -431,8 +437,14 @@ export default {
         TIMResult_quotes.forEach(item => {
           const zscore = {}
           zscore['Entry Date'] = item['property']
-          for(var i=1;i < defaultTIMTableLabels.length;i++ ){
-            zscore[defaultTIMTableLabels[i]] = item[periodsTIM[i-1].period]
+          for (let i = 1; i < defaultTIMTableLabels.length; i++) {
+            const value = item[periodsTIM[i - 1].period];
+            // 检查值是否有效
+            if (!isNaN(value) || (typeof value === 'string' && value.endsWith('%'))) {
+              zscore[defaultTIMTableLabels[i]] = value;
+            } else {
+              zscore[defaultTIMTableLabels[i]] = ''; // 或者您可以设置为其他默认值
+            }
           }
           _TIMHistoryList.push(zscore)
         })
