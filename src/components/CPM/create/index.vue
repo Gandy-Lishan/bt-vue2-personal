@@ -1,15 +1,13 @@
 <template>
-  <div class="create-indicator-container">
+  <div class="create-cpm-container">
     <div class="chart">
       <Chart :chart_data="chart_data"></Chart>
     </div>
     <div class="form">
+      <div class="form-header">
+        <h3 class="form-title">Backtest Parameters</h3>
+      </div>
       <Form :formConfig="formConfig" :formData="formData" ref="Form"></Form>
-      <!-- <div v-show="isCreateLoading">
-        <div class="loading">
-          <span class="progress-text"><i class="el-icon-loading"></i>{{progressText}}</span>
-        </div>
-      </div> -->
     </div>
   </div>
 
@@ -121,40 +119,30 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.create-indicator-container {
+.create-cpm-container {
   display: grid;
-  grid-template-rows: 1fr auto; /* 上下两行，上面占1份，下面占2份 */
-  grid-gap: 20px; /* 可选，设置上下两部分之间的间隔 */
-  // height: 100vh; /* 设置容器高度占满整个视口 */
-}
-
-.chart {
-  background-color: #f0f0f0; /* 图表部分的样式 */
-  padding: 20px;
+  grid-template-rows: 1fr auto;
+  grid-gap: 20px;
+  width: 80vw;
+  margin: 0 auto;
 }
 
 .form {
   background-color: #ffffff; /* 表单部分的样式 */
-  padding: 20px;
+  font-family: "Open Sans",sans-serif;
+  border: 1px solid #e0e0e0;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
-.loading {
-  background: rgba(0, 0, 0, 0.8);
-	border-radius: 5px;
-	height: 100vh;
-	/* opacity: 0.5; */
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 0 auto;
-	flex-direction: column;
-  .progress-text{
-	font-size: 12px;
-	color: #409eff;
-	margin-top: 10px;
-	i {
-		margin-right: 10px;
-	}
+.form-header {
+  padding: 10px 15px;
+  background-color: #c0c4cc5c;
+  border-bottom: 1px solid #e0e0e0;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  .form-title {
+    font-weight: 300;
+    font-size: 18px;
+  }
 }
-}
-
 </style>

@@ -79,7 +79,8 @@ import {
 	Message,
 	Notification,
 	Popconfirm,
-	Descriptions
+	Descriptions,
+	Statistic
 } from 'element-ui'
 
 Vue.use(Pagination)
@@ -157,6 +158,7 @@ Vue.use(PageHeader)
 Vue.use(Popconfirm)
 Vue.use(CascaderPanel)
 Vue.use(Descriptions)
+Vue.use(Statistic)
 //   Vue.use( ElementUI,{locale} )
 
 Vue.use(Loading.directive)
