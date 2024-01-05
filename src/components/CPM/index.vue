@@ -1,5 +1,5 @@
 <template>
-	<div class="my-inicator-container">
+	<div class="cpm-container">
 		<router-view></router-view>
 	</div>
 </template>
@@ -115,4 +115,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.cpm-container {
+	font-family: "Open Sans",sans-serif;
+}
 </style>

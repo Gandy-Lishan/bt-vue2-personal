@@ -1,16 +1,18 @@
 <template>
-		<div class="chart_box" id="chart_box">
-			<div class="back">
-				<router-link to="/cpm"><i class="el-icon-arrow-left"></i><span>Back to my indicators list</span></router-link>
-			</div>
-			<chart width="100%" height="100%" :onChartReady="onChartReady">
-				<LoadingOverlayChart
-						:isLoading="chartLoadingSetting.isChartLoading"
-						:progressText="chartLoadingSetting.progressText"
-					>
-				</LoadingOverlayChart>	
-			</chart>
+	<div>
+		<div class="back">
+			<router-link to="/cpm"><i class="el-icon-arrow-left"></i><span>Back to CPM list</span></router-link>
 		</div>
+			<div class="chart_box" id="chart_box">
+				<chart width="100%" height="100%" :onChartReady="onChartReady">
+					<LoadingOverlayChart
+							:isLoading="chartLoadingSetting.isChartLoading"
+							:progressText="chartLoadingSetting.progressText"
+						>
+					</LoadingOverlayChart>	
+				</chart>
+			</div>
+	</div>
 </template>
 
 <script>
@@ -108,9 +110,7 @@ export default {
 
 <style lang="less" scoped>
 .back {
-    position: absolute;
-    top: 109px;
-    left: 48px;
+	margin: 30px 0px 20px 0px;
 	font-size: 1.1rem;
 	i {
 		font-weight: bold;
@@ -122,8 +122,5 @@ export default {
 			color: #5b9bd1;
 		}
 	}
-}
-#chart_box {
-	margin-top: 80px
 }
 </style>

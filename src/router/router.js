@@ -169,6 +169,12 @@ const routes = [
 				name: 'CreateCPM',
 				component: resolve =>
 					require(['@/components/CPM/create/index.vue'], resolve)
+			},
+			{
+				path: 'results',
+				name: 'CPMResults',
+				component: resolve =>
+					require(['@/components/CPM/results/index.vue'], resolve)
 			}
 		]
 	},
