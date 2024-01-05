@@ -1,12 +1,29 @@
 <template>
   <div class="CPMResults-container">
     <el-collapse v-model="activeNames" @change="handleChange">
-      <el-collapse-item title="Backtest Summary" name="1">
+      <el-collapse-item name="1">
+        <template v-slot:title>
+          <div class="title">
+            <p @click.stop="test1">Backtest Summary</p>
+          </div>
+        </template>
         <CPMSummary></CPMSummary>
       </el-collapse-item>
-      <el-collapse-item title="反馈 Feedback" name="2">
-        <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
-        <div>页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。</div>
+      <el-collapse-item name="2">
+        <template v-slot:title>
+          <div class="title" :style="{ active: activeTab == 'results' }">
+            <p
+             @click.stop="activeTab = 'statistics'"
+             :style="{ active: activeTab == 'statistics' }"
+            >Backtest Statistics</p>
+            <p
+             @click.stop="activeTab = 'results'"
+             :style="{ active: activeTab == 'results' }"
+             >Multi-Timeframe Results</p>
+          </div>
+        </template>
+        <div>wwwwwww；</div>
+        <div>333333</div>
       </el-collapse-item>
     </el-collapse>
   </div>
@@ -18,7 +35,8 @@ export default {
   name: 'CPMResults',
   data() {
     return {
-      activeNames: ['1']
+      activeNames: ['1'],
+      activeTab: 'statistics'
     }
   },
   components: {
@@ -27,6 +45,9 @@ export default {
   methods: {
     handleChange(val) {
       console.log(val)
+    },
+    test1() {
+
     }
   }
 }
@@ -42,7 +63,6 @@ export default {
   background-color: #fff;
 }
 /deep/ .el-collapse-item__header {
-  padding: 10px 15px;
   background-color: #c0c4cc5c;
   border-bottom: 1px solid #e0e0e0;
   border-top-left-radius: 3px;
@@ -50,5 +70,23 @@ export default {
   font-size: 18px;
   font-weight: 300;
   color: #666;
+}
+.title {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 300;
+  color: #666;
+}
+.title p {
+  padding: 0 20px;
+  margin: 0;
+}
+.title p:hover {
+  color: #428bca;
+}
+.active {
+  background-color: #fff;
 }
 </style>
