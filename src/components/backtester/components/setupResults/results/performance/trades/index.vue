@@ -224,7 +224,6 @@ export default {
                     'TradeNumber': exitData.trade_number
                     });
                 }
-                debugger
                 this.processedTradesData = mergedData
                 this.queryInfo.total = mergedData.length
                 this.totalTradesNumber = mergedData.length
