@@ -187,7 +187,7 @@ export default {
                     exitReason[initalData['Trades'][i].trade_number]
 
                   initalData['Trades'][i].MarketCondition =
-                    marketCondition[initalData['Trades'][i].trade_number]
+                    marketCondition[initalData['Trades'][i].trade_number].length == 0 ? ['N\/A'] : marketCondition[initalData['Trades'][i].trade_number]
                   
                   if (i % 2 !== 0) {
                     initalData['Trades'][i - 1].Return =
@@ -370,10 +370,9 @@ export default {
         obj['Exit Reason'] = item.ExitReason
         obj['Trade Return %'] = `${item.TradeReturn}%`
         obj['Total Return %'] = `${(item.Return * 100).toFixed(2)}%`
-        // obj['Market Condition'] = item.MarketCondition.join(';')
+        obj['Market Condition'] = item.MarketCondition.join(';')
         tradeData.push(obj)
       })
-
       const mergedData = [];
 
       for (let i = 0; i < tradeData.length; i += 2) {
@@ -393,7 +392,7 @@ export default {
           'Trade Return': exitData['Trade Return %'] || '',
           'Total Return': exitData['Total Return %'] || '',
           'Exit Reason': exitData['Exit Reason'] || '',
-          // 'Market Condition': exitData.MarketCondition || '',
+          'Market Condition': exitData['Market Condition'] || 'N\/A',
           'Exit Indicator': exitData.Indicator || ''
         });
       }
