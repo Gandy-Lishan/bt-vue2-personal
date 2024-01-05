@@ -115,7 +115,7 @@
                 align="center"
             >
             </el-table-column>
-            <!-- <el-table-column
+            <el-table-column
                 prop="MarketCondition"
                 label="Market Condition"
                 width="100px"
@@ -134,7 +134,7 @@
                     <p>{{ item }}</p>
                 </div>
             </template>
-            </el-table-column> -->
+            </el-table-column>
             <el-table-column
                 prop="ExitIndicator"
                 label="Exit Indicator"
@@ -219,11 +219,12 @@ export default {
                     'TradeReturn': exitData.TradeReturn || '',
                     'TotalReturn': exitData.Return || '',
                     'ExitReason': exitData.ExitReason || '',
-                    'MarketCondition': exitData.MarketCondition || '',
+                    'MarketCondition': exitData.MarketCondition || ['N\/A'],
                     'ExitIndicator': exitData.Indicator || '',
                     'TradeNumber': exitData.trade_number
                     });
                 }
+                debugger
                 this.processedTradesData = mergedData
                 this.queryInfo.total = mergedData.length
                 this.totalTradesNumber = mergedData.length
