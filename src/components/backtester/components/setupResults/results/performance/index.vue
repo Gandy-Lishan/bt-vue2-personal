@@ -187,7 +187,7 @@ export default {
                     exitReason[initalData['Trades'][i].trade_number]
 
                   initalData['Trades'][i].MarketCondition =
-                    marketCondition[initalData['Trades'][i].trade_number].length == 0 ? ['N\/A'] : marketCondition[initalData['Trades'][i].trade_number]
+                    (!marketCondition[initalData['Trades'][i].trade_number] || marketCondition[initalData['Trades'][i].trade_number]?.length == 0) ? ['N\/A'] : marketCondition[initalData['Trades'][i].trade_number]
                   
                   if (i % 2 !== 0) {
                     initalData['Trades'][i - 1].Return =
