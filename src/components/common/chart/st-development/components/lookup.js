@@ -613,9 +613,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     CIQ.hideCover()
                     CIQ.nprogress.done()
 
-                    //CIQ.isMarkerShown = false
                     CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
-                    CIQ.store.commit('chart/getTradesData', [])
                     
                     //CIQ.stxx.layout.rangeSlider = true;
                     //CIQ.stxx.changeOccurred("layout");
