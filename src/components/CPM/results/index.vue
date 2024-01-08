@@ -1,29 +1,29 @@
 <template>
   <div class="CPMResults-container">
-    <el-collapse v-model="activeNames" @change="handleChange">
+    <el-collapse v-model="activeNames" @change="handleChange" :accordion="false">
       <el-collapse-item name="1">
         <template v-slot:title>
           <div class="title">
-            <p @click.stop="test1">Backtest Summary</p>
+            <p>Backtest Summary</p>
           </div>
         </template>
         <CPMSummary></CPMSummary>
       </el-collapse-item>
       <el-collapse-item name="2">
         <template v-slot:title>
-          <div class="title" :style="{ active: activeTab == 'results' }">
+          <div class="title">
             <p
-             @click.stop="activeTab = 'statistics'"
-             :style="{ active: activeTab == 'statistics' }"
+             @click.stop="() => {changeTab('statistics')}" :class="{ active: activeTab == 'statistics' || '' }"
             >Backtest Statistics</p>
             <p
-             @click.stop="activeTab = 'results'"
-             :style="{ active: activeTab == 'results' }"
+             @click.stop="() => {changeTab('results')}" :class="{ active: activeTab == 'results' || '' }"
              >Multi-Timeframe Results</p>
           </div>
         </template>
-        <div>wwwwwww；</div>
-        <div>333333</div>
+      <div class="content">
+          <Statistics v-show="activeTab == 'statistics'"></Statistics>
+          <TIM v-show="activeTab == 'results'"></TIM>
+        </div>
       </el-collapse-item>
     </el-collapse>
   </div>
@@ -31,23 +31,26 @@
 
 <script>
 import CPMSummary from "./components/summary";
+import Statistics from "./components/statistics";
+import TIM from "./components/tim";
 export default {
   name: 'CPMResults',
   data() {
     return {
-      activeNames: ['1'],
+      activeNames: ['1', '2'],
       activeTab: 'statistics'
     }
   },
   components: {
-    CPMSummary
+    CPMSummary,
+    Statistics,
+    TIM
   },
   methods: {
     handleChange(val) {
-      console.log(val)
     },
-    test1() {
-
+    changeTab(val) {
+      this.activeTab = val
     }
   }
 }
@@ -88,5 +91,7 @@ export default {
 }
 .active {
   background-color: #fff;
+  border: 1px solid #e0e0e0;
 }
+
 </style>
