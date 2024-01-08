@@ -7787,7 +7787,7 @@ class Studies extends CIQ.UI.ContextTag {
 
 			await CIQ.getIndicatorMatedata(indicatorsList)
 
-			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 		}
 
 		function pickStudy(node, studyName) {
@@ -8193,7 +8193,7 @@ if (!CIQ.Studies) {
 			if(_obj){
 				this.helper.outputs = [];
 			}
-			this.helper.outputs = this.helper.outputs.filter(x=>x.name != "supLine")
+			//this.helper.outputs = this.helper.outputs.filter(x=>x.name != "supLine")
 			var outputs = this.node.find("cq-study-outputs");
 			if (empty) outputs.empty();
 			for (var i = 0; i < this.helper.outputs.length; i++) {
@@ -8386,7 +8386,7 @@ if (!CIQ.Studies) {
 					}
 
 					self.updateStudy(updates);
-					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				};
 			}
 			node.addEventListener("change", closure());

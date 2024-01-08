@@ -153,20 +153,26 @@ MarkersSample.prototype.createAbstractMarker = function (abstractType) {
 MarkersSample.prototype.hideMarkers = function () {
 	var stx = this.stx;
 	//直接写死算了,event是hammer tag
-	this.activeLabels = ['dot','circle','events']
+	this.activeLabels = [
+		// 'circle',
+		// 'events',
+		'triangle_buy','triangle_sell','dot_buy','dot_sell'
+	]
 	this.activeLabels.forEach(function (label) {
 		CIQ.Marker.removeByLabel(stx, label);
 	});
 	this.activeLabels = [];
 };
-MarkersSample.prototype.hideDots = function () {
+// 仅用于setMarkerVisibility，和hideMarkers区分开
+MarkersSample.prototype.setMarkerInvisibe = function (markerVisibilityType) {
 	var stx = this.stx;
-	this.activeLabels = ['dot']
-	this.activeLabels.forEach(function (label) {
-		CIQ.Marker.removeByLabel(stx, label);
-	});
-	this.activeLabels = [];
+	const dotVisibilityType = markerVisibilityType=='triangle_buy'?'dot_buy':'dot_sell'
+	CIQ.Marker.removeByLabel(stx, markerVisibilityType);
+	CIQ.Marker.removeByLabel(stx, dotVisibilityType);
+	this.activeLabels = this.activeLabels.filter(item=>(item!=markerVisibilityType) && (item!=dotVisibilityType))
+
 };
+
 MarkersSample.prototype.showMarkers = function (type, renderType) {
 	// Remove any existing markers
 	if (!type) {
@@ -189,22 +195,13 @@ let marker = { MarkersSample };
 CIQ.loadChart = function(dataSet,callback){
 	CIQ.MarkersSample = new marker.MarkersSample(CIQ.stxx)
 	CIQ.MarkersSample.loadDataSet(dataSet)
+	CIQ.MarkersSample.hideMarkers()
+	// // 初始化markerVisibilityType为全部显示
+	CIQ.MarkersSample.setMarkerVisibilityType()
 	callback()
 }
 CIQ.addMarker = function(){
-	//CIQ.MarkersSample.showMarkers()
 	CIQ.MarkersSample.showMarkers('mMarker')
-	CIQ.addPrompt()
-}
-
-CIQ.addDot = function(){
-	//CIQ.MarkersSample.showMarkers()
-	CIQ.MarkersSample.showMarkers('mDot')
-}
-// 批量加载dot前清除所有已有dot,虽然下方study panel会自动移除，但是main panel的dot需要手动清空，
-// 但是不用CIQ.hideMarker，因为它同时清除dot和marker,一般用于清空整个图表
-CIQ.removeDot = function(){
-	CIQ.MarkersSample.hideDots()
 }
 
 // create and remove buy/sell icon on chart
@@ -248,7 +245,7 @@ CIQ.createOneTimeScannerMarkerHighLowLine = function(date,name,pionts){
 		if(item){
 			// 添加study panel对应的小点
 			let yAxis = item.PointType == 'High' ? quote['High'] : quote['Low']
-			let temp = new CIQ.Marker({
+			new CIQ.Marker({
 				stx: CIQ.stxx,
 				xPositioner: "date",
 				yPositioner: "value",
@@ -325,6 +322,17 @@ CIQ.createOneTimePatternMarker = function(date,content){
 		label: "events",
 		node: newNode
 	});
+}
+
+CIQ.setMarkerVisibility = function(type){
+	let markerVisibilityType = type=='buy'? "triangle_buy": "triangle_sell"
+
+	if(CIQ.MarkersSample) CIQ.MarkersSample.setMarkerVisibilityType(markerVisibilityType)
+	if(!CIQ.MarkersSample.activeLabels.includes(markerVisibilityType)){
+		CIQ.MarkersSample.showMarkers('mMarker')
+	}else{
+		CIQ.MarkersSample.setMarkerInvisibe(markerVisibilityType)
+	}
 }
 export {CIQ};
 export default marker;

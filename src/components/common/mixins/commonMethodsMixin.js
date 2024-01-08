@@ -649,7 +649,7 @@ export const CommonMethodsMixin = {
 
 			this.hideDuplicateROC()
 
-			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 		},
 
 		hideDuplicateROC(){

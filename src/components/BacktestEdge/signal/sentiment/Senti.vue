@@ -626,7 +626,7 @@ export default {
         })
 
         // 解决附属ma或者roc漂移问题
-        CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+        CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
       }
     },
     setPeriod(val) {
@@ -678,7 +678,7 @@ export default {
         index: this.panelIndex
       })
       // 解决附属ma或者roc漂移问题
-      CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+      CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 
       // keep current MA
       var objMA = {

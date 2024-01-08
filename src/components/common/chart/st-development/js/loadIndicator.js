@@ -236,7 +236,7 @@
  
              //CIQ.stxx.layout.rangeSlider = true;
              //CIQ.stxx.changeOccurred("layout");
-             CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+             CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
              
              if(callback){
                  callback()

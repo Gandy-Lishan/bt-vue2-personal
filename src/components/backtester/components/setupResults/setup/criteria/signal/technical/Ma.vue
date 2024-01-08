@@ -352,7 +352,7 @@ export default {
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
 
-					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				}
 			}			
 		},
@@ -453,7 +453,7 @@ export default {
 						index: this.panelIndex
 					})
 					// 解决附属ma或者roc漂移问题
-					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 					CIQ.store.commit('chart/getMAPeriod', val)
 
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
@@ -594,7 +594,7 @@ export default {
 						index: this.panelIndex
 					})
 					// 解决附属ma或者roc漂移问题
-					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				}
 			}
 			// keep current MA
@@ -659,7 +659,7 @@ export default {
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
 
-					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				}
 			}
 		}, 500),
