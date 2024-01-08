@@ -137,8 +137,18 @@ export default {
 		},
 		overrideStudyDef(){
 			CIQ.extend(CIQ.Studies.studyLibrary["rsi"], {
+        seriesFN: function (stx, sd, quotes) {
+          CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
+
+          var showSupLine = (!sd.parameters.showSupLine && sd.parameters.showSupLine!=0)?null:sd.parameters.showSupLine
+          var yAxis = CIQ.stxx.panels[sd.name].yAxis
+          CIQ.Studies.drawHorizontal(stx, sd, null, showSupLine, yAxis);
+        },
 				calculateFN: CIQ.Studies.calculateSTRSI,
-				outputs: { RSI: "auto",supLine:'#9a9a9a' }
+				outputs: { 
+          RSI: "auto",
+          //supLine:'#9a9a9a' 
+        }
 			});
 		},
 		editStudies(bool){
@@ -1176,7 +1186,7 @@ export default {
 						index: null
 					})
 			
-					CIQ.loadChart(this.trades.map(x=>{return {Date:x.DT,TradeStatus:x.Type}}), CIQ.addDot)
+					CIQ.loadChart(this.trades.map(x=>{return {Date:x.DT,TradeStatus:x.Type}}), CIQ.addMarker)
 				}
 			}
 		}	

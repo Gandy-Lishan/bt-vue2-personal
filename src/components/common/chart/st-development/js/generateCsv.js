@@ -583,7 +583,7 @@ let __st_js_generateCsv_ = (_exports) => {
                  }
                  if(matchedSubstring &&
                      Object.keys(s.outputMap).indexOf(Object.keys(arrData[arrData.length-10])[i]) != -1){
-                     if(Object.keys(arrData[arrData.length-10])[i] == 'supLine') continue
+                    //  if(Object.keys(arrData[arrData.length-10])[i] == 'supLine') continue
                      resultIndex = Object.keys(arrData[arrData.length-10])[i]
                  }
              }

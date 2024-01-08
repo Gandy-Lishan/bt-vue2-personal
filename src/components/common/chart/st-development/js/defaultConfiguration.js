@@ -648,6 +648,10 @@ import {CIQ} from "chartiq/js/chartiq.js";
 						{
 							"name": "Commodity Channel Index",
 							"url": "cci"
+						},
+						{
+							"name": "Opening Gap",
+							"url": "Opening Gap"
 						}
 					]
 				},
