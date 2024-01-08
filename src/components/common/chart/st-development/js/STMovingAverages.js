@@ -640,10 +640,9 @@ if (!CIQ.Studies) {
 
 	};
 	CIQ.Studies.calculateSTRSI = function (stx, sd) {
-		console.log('calculateSTRSI')
 		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
-		var showSupLine = sd.parameters.showSupLine?sd.parameters.showSupLine:null
+		//var showSupLine = sd.parameters.showSupLine?sd.parameters.showSupLine:null
 		if (!field || field == "field") field = "Close";
 
 		function computeRSI(avgGain, avgLoss) {
@@ -684,11 +683,11 @@ if (!CIQ.Studies) {
 			//intermediates
 			quote["_avgG " + sd.name] = avgGain;
 			quote["_avgL " + sd.name] = avgLoss;
-			quote['supLine'] = showSupLine
+			//quote['supLine'] = showSupLine
 		}
 		//sd.zoneOutput = "RSI";
 		sd.outputMap["RSI " + sd.name] = "RSI";
-		sd.outputMap['supLine'] = "supLine";
+		//sd.outputMap['supLine'] = "supLine";
 	};
 	CIQ.Studies.calculateSTCCI = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
@@ -713,6 +712,19 @@ if (!CIQ.Studies) {
 					(quote["hlc/3"] - quote["MA " + sd.name]) / (0.015 * md);
 		}
 	};
+	CIQ.Studies.calculateOpeningGap = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			if (!quote) continue;
+			var lastBar = quote
+			if(i >= 1) lastBar = quotes[i-1]
+			
+			quote[sd.inputs.display] = (quote["Open"] - lastBar["Close"])/lastBar["Close"];
+		}
+
+		sd.outputMap[sd.inputs.display] = "Line";
+	};
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		// 为了覆盖cci optix,用了小写的cci
 		cci: {
@@ -734,6 +746,13 @@ if (!CIQ.Studies) {
 		},
 		"ST ROCLike": {
             name: "ROCLike Line",
+			seriesFN: function (stx, sd, quotes) {
+				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
+
+				var showSupLine = (!sd.parameters.showSupLine && sd.parameters.showSupLine!=0)?null:sd.parameters.showSupLine
+				var yAxis = CIQ.stxx.panels[sd.name].yAxis
+				CIQ.Studies.drawHorizontal(stx, sd, null, showSupLine, yAxis);
+			},
             calculateFN: CIQ.Studies.calculateSTROCLike,
             inputs: { Field: "field",condition: "ROC",period: 5,overlay: false},
 			// outputs: { Line: "auto",supLine:'#9a9a9a' },
@@ -836,7 +855,13 @@ if (!CIQ.Studies) {
 			attributes: {
 				"Shift Percentage": { min: 0.1, step: 0.1 }
 			}
-		}
+		},
+		// new technical indicators in 2024
+		"Opening Gap": {
+            name: "Opening Gap",
+            calculateFN: CIQ.Studies.calculateOpeningGap,
+			outputs: { Line: "auto" },
+        },
 	});
 
 }
