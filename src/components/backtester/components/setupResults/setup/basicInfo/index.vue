@@ -1319,7 +1319,7 @@ export default {
           this.bd.start_date = str.join('-')
         }else if(this.bd.backtest_period == '21') {
           this.bd.start_date = ''
-        }else if(this.bd.backtestSymbol == '22') {
+        }else if(this.bd.backtest_period == '22') {
           this.bd.start_date = editData.start_date
           this.bd.end_date = editData.end_date
         }
