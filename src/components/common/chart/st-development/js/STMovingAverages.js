@@ -866,10 +866,12 @@ if (!CIQ.Studies) {
 		// new technical indicators in 2024
 		"Opening Gap": {
             name: "Opening Gap",
+			inputs: {},
             calculateFN: CIQ.Studies.calculateOpeningGap,
         },
 		"Day of Week": {
             name: "Day of Week",
+			inputs: {},
             calculateFN: CIQ.Studies.calculateDayofWeek,
         },
 	});
