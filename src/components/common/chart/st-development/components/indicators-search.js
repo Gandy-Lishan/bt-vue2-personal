@@ -994,8 +994,8 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                     //CIQ.stxx.changeOccurred("layout");
 
                     // 禁用indicator加载保留Marker功能，防止不同timeframe时marker吸附功能出现问题
-                    CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
-                    //CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
+                    //CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
+                    CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
                 })
             }
 
