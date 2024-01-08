@@ -404,6 +404,7 @@ export default class AdvancedChartComponent extends Vue {
 			// 默认为折线图
 			CIQ.stxx.setChartType("line"); 
 
+			// CIQ.ChartEngine.YAxis.prototype.decimalPlaces=6;
 			CIQ.ChartEngine.prototype.prepend("draw", function () {
 	
 			});
@@ -418,25 +419,25 @@ export default class AdvancedChartComponent extends Vue {
 
 			this.initializeToggle(uiContext.stx)
 			
-			CIQ.stxx.addEventListener("scroll", function(object: Record<string, any> = {}) {
+			// CIQ.stxx.addEventListener("scroll", function(object: Record<string, any> = {}) {
 
-				// an event handle for updating trade marker when dragging the chart
-				if(CIQ.store.getters.getIsMarkerShownFlagState){
-					let c_date = jutils.formatDate(object.stx.chart.xaxis[0].DT, 'YYYYMMDD');
-					if(CIQ.groups.slice(-1)[0]){
-						let m_date =
-								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
-								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
-								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
-						if(c_date<m_date){
-							let markers = CIQ.groups.pop()
+			// 	// an event handle for updating trade marker when dragging the chart
+			// 	if(CIQ.store.getters.getIsMarkerShownFlagState){
+			// 		let c_date = jutils.formatDate(object.stx.chart.xaxis[0].DT, 'YYYYMMDD');
+			// 		if(CIQ.groups.slice(-1)[0]){
+			// 			let m_date =
+			// 					CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
+			// 					CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
+			// 					CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
+			// 			if(c_date<m_date){
+			// 				let markers = CIQ.groups.pop()
 							
-							console.log("new pagnigation start",markers)
-							CIQ.loadChart(markers, CIQ.addMarker)
-						}
-					}
-				}
-			});
+			// 				console.log("new pagnigation start",markers)
+			// 				CIQ.loadChart(markers, CIQ.addMarker)
+			// 			}
+			// 		}
+			// 	}
+			// });
 		}, 0)			
 	}
 	// initiate lastPrice and grid button
@@ -518,21 +519,25 @@ export default class AdvancedChartComponent extends Vue {
 		});
 	}
 
+	// 工具栏按钮移除和显示marker功能，只影响显示
+	// 目前只能移除和显示当前分组的交易marker，所以先渲染全部，权衡到性能已被优化
 	changeMarkerVisibility(type) {
-		let markerClassName = type == 'buy'?'analysis':'dividend' 
-		let dotClassName = type == 'buy'?'trade-buy':'trade-sell' 
+		// let markerClassName = type == 'buy'?'analysis':'dividend' 
+		// let dotClassName = type == 'buy'?'trade-buy':'trade-sell' 
 		
-		let markers = document.getElementsByClassName(`stx-marker ${markerClassName}`)
-		let dots = document.getElementsByClassName(`stx-marker ${dotClassName}`)
+		// let markers = document.getElementsByClassName(`stx-marker ${markerClassName}`)
+		// let dots = document.getElementsByClassName(`stx-marker ${dotClassName}`)
 
-		let display = markers[0].style.display=='none'?'block':'none'
+		// let display = markers[0].style.display=='none'?'block':'none'
 
-		for(var ele of markers){ 
-			ele.style.display = display 
-		}
-		for(var ele of dots){ 
-			ele.style.display = display 
-		}
+		// for(var ele of markers){ 
+		// 	ele.style.display = display 
+		// }
+		// for(var ele of dots){ 
+		// 	ele.style.display = display 
+		// }
+
+		CIQ.setMarkerVisibility(type)
 	}
 }
 

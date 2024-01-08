@@ -81,6 +81,9 @@ const actions = {
 			if(!val){
 				CIQ.store.commit('chart/getTradesData', [])
 				CIQ.hideMarker()
+			}else {
+				// 初始化marker按钮显示样式
+				CIQ.addPrompt()
 			} 
 			commit('SET_ISMARKERSHOWN_FLAG',val)
 			resolve();
