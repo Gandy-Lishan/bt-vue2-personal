@@ -87,9 +87,9 @@
   </el-row>
   <el-row :gutter="20">
     <el-col :span="6">
-      <el-form-item prop="time_frame" label="5.Timeframe">
+      <el-form-item prop="timeframe" label="5.Timeframe">
         <el-select
-            v-model="data.time_frame"
+            v-model="data.timeframe"
             placeholder="— Select Timeframe —"
             @change="changeTimeframe"
           >
@@ -105,24 +105,21 @@
     </el-col>
     <el-col :span="6">
       <el-form-item
-				label="7.Threshold Left Margin"
-        prop="left_margin"
+				label="7.Correlation Percentage"
+        prop="corr_per"
 			>
         <template slot="label">
           <label>
-            7.Threshold Left Margin
+            7.Correlation Percentage
             <el-tooltip effect="dark" placement="top">
               <span slot="content">
-                Threshold Left Margin
+                Correlation Percentage
               </span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
         </template>
-				<el-input v-model="data.left_margin" placeholder="Enter threshold left margin" @blur="checkLeftMargin(data.left_margin)"></el-input>
-        <div class="error-message" v-if="leftValidErrMsg">
-        {{ leftValidErrMsg }}
-        </div>
+				<el-input v-model="data.corr_per" placeholder="Enter correlation percentage" @blur="checkLeftMargin(data.corr_per)"></el-input>
 			</el-form-item>
     </el-col>
     <el-col :span="6">
@@ -195,7 +192,7 @@
           <div class="selectBox historySelectBox">
             <el-select
               placeholder="- Select Lookback Period -"
-              v-model="data.backtest_period"
+              v-model="data.lookback_period"
             >
               <el-option
                 v-for="item in historyOptions"
@@ -213,7 +210,7 @@
       <el-form-item
 				label="11.Custom Duration"
         prop="year"
-        v-if="data.backtest_period == 22"
+        v-if="data.lookback_period == 22"
 			>
         <el-input
           v-model="data.year"
@@ -271,11 +268,11 @@ export default {
       data: {
         name: '',
         symbol: '',
-        time_frame: 'Daily',
+        timeframe: 'Daily',
         start_date: '',
         end_date: '',
-        backtest_period: 20,
-        left_margin: '',
+        lookback_period: 20,
+        corr_per: '',
         right_margin: '',
         tim: '',
         year: ''
@@ -376,6 +373,9 @@ export default {
         year: [
           { validator: createPositiveIntegerRule('custom years'), trigger: 'blur' }
         ],
+        corr_per: [
+          { validator:  createPositiveIntegerRule('correlation percentage', 100), trigger: 'blur'}
+        ]
       },
     }
   },
@@ -397,7 +397,7 @@ export default {
       return this.leftValidErrMsg
     },
     checkRightMargin(value) {
-      this.rightValidErrMsg = validateMarginRule(value, this.data.left_margin || -1, 1, 'Enter threshold right margin', `between ${this.data.left_margin || -1} and 1`);
+      this.rightValidErrMsg = validateMarginRule(value, this.data.corr_per || -1, 1, 'Enter threshold right margin', `between ${this.data.corr_per || -1} and 1`);
       return this.rightValidErrMsg
     },
     setBacktestHistory(val) {
@@ -487,7 +487,7 @@ export default {
         name: this.data.name,
         indicator_1: this.data.indicator_1_url,
         indicator_2: this.data.indicator_2_url,
-        time_frame: this.data.time_frame,
+        timeframe: this.data.timeframe,
         ma: `${this.data.ma1}_${this.data.ma2}_1`,
         calculate: this.data.categories === 'WIC' ? 'weight_combination' : this.data.categories.split(' ')[1].toLowerCase(),
         extreme_optimism: this.data.extreme_optimism,
@@ -546,7 +546,7 @@ export default {
         name: randomName,
         indicator_1: this.data.indicator_1_url,
         indicator_2: this.data.indicator_2_url,
-        time_frame: this.data.time_frame,
+        timeframe: this.data.timeframe,
         ma: `${this.data.ma1}_${this.data.ma2}_1`,
         calculate: this.data.categories === 'WIC' ? 'weight_combination' : this.data.categories.split(' ')[1].toLowerCase(),
         extreme_optimism: this.data.extreme_optimism,
@@ -661,9 +661,7 @@ export default {
         }
       })
       console.log('表单校验是否成功', formValid)
-      const leftErrMsg = this.checkLeftMargin(this.data.left_margin)
-      const rightErrMsg = this.checkRightMargin(this.data.right_margin)
-      if(!formValid || leftErrMsg || rightErrMsg) {
+      if(!formValid) {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.')
         return false
       }
