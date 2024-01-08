@@ -119,7 +119,7 @@
             </el-tooltip>
           </label>
         </template>
-				<el-input v-model="data.corr_per" placeholder="Enter correlation percentage" @blur="checkLeftMargin(data.corr_per)"></el-input>
+				<el-input v-model="data.corr_per" placeholder="Enter correlation percentage"></el-input>
 			</el-form-item>
     </el-col>
     <el-col :span="6">
@@ -200,7 +200,7 @@
     </el-col>
     <el-col :span="6">
     <div class="excludeBox">
-        <el-checkbox v-model="data.isExcludeOO" @change="changeExcludeOO"
+        <el-checkbox v-model="isExcludeOO"
           >Exclude Overlapping Observations
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
@@ -230,8 +230,8 @@
         <el-col :span="6"></el-col>
         <el-col :span="6">
           <div class="form-btn">
-            <el-button type="primary" class="delete-btn">Preview the found KLine</el-button>
-            <el-button type="primary" @click="validForm">Save and Run Backtest</el-button>
+            <!-- <el-button type="primary" class="delete-btn">Preview the found KLine</el-button> -->
+            <el-button type="primary" @click="submitForm">Save and Run Backtest</el-button>
           </div>
         </el-col>
       </el-row>
@@ -270,10 +270,11 @@ export default {
         timeframe: 'Daily',
         start_date: '',
         end_date: '',
-        lookback_period: 20,
+        lookback_period: 1,
         corr_per: '',
         tim: '',
-        year: ''
+        year: '',
+        exclude_overlap: false
       },
       dropdownList: [],
       frequencyOptions: [
@@ -347,6 +348,7 @@ export default {
       endPickerOptions: {
         disabledDate: this.handleDisabledEndDate
       },
+      isExcludeOO: false,
       rules: {
         name: [
           { required: true, message: 'Enter a name', trigger: 'blur' }
@@ -429,13 +431,12 @@ export default {
       this.data.symbol = item.url
     },
     async submitForm() {
-     const saveRes = await this.saveIndicator()
+     const saveRes = await this.saveCPM()
      console.log('saveRes', saveRes)
      if(!saveRes) return
      const code = saveRes.data.code
       if(code == 404) {this.popUpMsgBox('Permission denied')}
       if(code == 406) {
-        const url =  saveRes.data.data.url
         const name =  saveRes.data.data.name
         this.$notify({
           title: `Duplicate Indicator: ${name} Exists`,
@@ -446,196 +447,40 @@ export default {
         });
         // this.popUpMsgBox(`The same combination already exists. Please review and adjust your input. The existing combination is named: ${name}.`)
       }
-      if(saveRes.status == 201) {this.$router.push('/myindicator')}
+      if(saveRes.status == 201) {this.$router.push('/cpm/results')}
       // this.$store.commit('SET_CREACT_LOADING', false)
     },
-    async saveIndicator() {
-       // 保存数据之前先校验字段是否为空，特定字段是否从下拉框中选择 todo lishan
-      const validForm = this.validForm()
-      const rowUrl = this.rowUrl
-      if(!validForm) return
-      if(!this.rowUrl) {
-        const nameLookupRes = await searchIndicator(this.data.name)
+    async checkDuplicateNames(name) {
+        const nameLookupRes = await searchIndicator(name)
         const count = nameLookupRes.data.count
         const nameList = nameLookupRes.data.results
+        // 有重名
         if(count != 0) {
-          const duplicateItem = nameList.filter(item => item.name == this.data.name)
-          console.log('duplicateItem', duplicateItem)
-          if(duplicateItem) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
+          const duplicateItem = nameList.filter(item => item.name == name)
+          if(duplicateItem) return true
         }
-      }
-      let saveData = null;
-      if(this.data.categories !== 'WIC') {
-        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
-        for (const formRef of formsToSave) {
-          this.$refs[formRef].saveData();
-        }
-      }
-      const commonData = {
-        name: this.data.name,
-        indicator_1: this.data.indicator_1_url,
-        indicator_2: this.data.indicator_2_url,
-        timeframe: this.data.timeframe,
-        ma: `${this.data.ma1}_${this.data.ma2}_1`,
-        calculate: this.data.categories === 'WIC' ? 'weight_combination' : this.data.categories.split(' ')[1].toLowerCase(),
-        extreme_optimism: this.data.extreme_optimism,
-        extreme_pessimism: this.data.extreme_pessimism,
-        combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase() // combine_type : indicator or symbol
-      };
-      if(this.data.categories !== 'WIC') {
-        saveData = {
-          ...commonData
-        }
-      } else {
-        // if (this.weightValidErrMsg) return;
-        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(2));
-        const indicator_weight = percentageStrings.join('_');
+        // 不重名
+        return false
 
-        const mul_indicator = this.weightData.reduce((acc, item, index) => {
-          acc[`indicator_${index + 1}`] = item.indicator_url;
-          return acc;
-        }, {});
-        mul_indicator.combine_type = this.weightData.map(item => {
-          if(item.type == 'Indicator') return 'si'
-          if(item.type == 'Symbol') return 'sy'
-        }).join('_');
-
-        saveData = {
-          ...commonData,
-          calculate: 'weight_combination', // 存起来
-          indicator_weight,
-          mul_indicator: JSON.stringify(mul_indicator),
-          indicator_1: 'model_smart_money',
-          indicator_2: 'model_smart_money',
-          ma: '1_1_1',
-          extreme_optimism: 0,
-          extreme_pessimism: 0,
-          combine_type: 'indicator'
-        };
+    },
+    async saveCPM() {
+      const validForm = this.validForm()
+      const rowUrl = this.rowUrl
+      const name = this.data.name
+      if(!validForm) return
+      if(!rowUrl) {
+        // 不是编辑是新建
+        const nameChecked = this.checkDuplicateNames(name)
+        if(nameChecked) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
       }
+      const exclude_overlap = this.isExcludeOO ? 1 : 0
+      const saveData = {
+        ...this.data,
+        exclude_overlap
+      }
+
       if(rowUrl) return await editMyIndicators(saveData, rowUrl)
       return await saveMyIndicators(saveData);
-    },
-    async savePreviewIndicator() {
-       // preview 按钮直接走新建不走 update
-      const validForm = this.validForm()
-      if(!validForm) return
-      let saveData = null;
-      if(this.data.categories !== 'WIC') {
-        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
-        for (const formRef of formsToSave) {
-          this.$refs[formRef].saveData();
-        }
-      }
-      // 在名字后加上四位随机小数
-      const randomNumber = Math.round((Math.random()) * 10000) / 10000
-      const randomName = `${this.data.name}_${randomNumber}`
-      const commonData = {
-        name: randomName,
-        indicator_1: this.data.indicator_1_url,
-        indicator_2: this.data.indicator_2_url,
-        timeframe: this.data.timeframe,
-        ma: `${this.data.ma1}_${this.data.ma2}_1`,
-        calculate: this.data.categories === 'WIC' ? 'weight_combination' : this.data.categories.split(' ')[1].toLowerCase(),
-        extreme_optimism: this.data.extreme_optimism,
-        extreme_pessimism: this.data.extreme_pessimism,
-        combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase() // combine_type : indicator or symbol
-      };
-      if(this.data.categories !== 'WIC') {
-        saveData = {
-          ...commonData
-        }
-      } else {
-        // if (this.weightValidErrMsg) return;
-        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(2));
-        const indicator_weight = percentageStrings.join('_');
-
-        const mul_indicator = this.weightData.reduce((acc, item, index) => {
-          acc[`indicator_${index + 1}`] = item.indicator_url;
-          return acc;
-        }, {});
-        mul_indicator.combine_type = this.weightData.map(item => {
-          if(item.type == 'Indicator') return 'si'
-          if(item.type == 'Symbol') return 'sy'
-        }).join('_');
-
-        saveData = {
-          ...commonData,
-          calculate: 'weight_combination', // 存起来
-          indicator_weight,
-          mul_indicator: JSON.stringify(mul_indicator),
-          indicator_1: 'model_smart_money',
-          indicator_2: 'model_smart_money',
-          ma: '1_1_1',
-          extreme_optimism: 0,
-          extreme_pessimism: 0,
-          combine_type: 'indicator'
-        };
-      }
-      return await saveMyIndicators(saveData);
-    },
-    async previewIndicator() {
-      CIQ.addCover()
-      this.$store.commit('states/SET_MI_CREATE_LOADING', true)
-      // 先存名字
-      const previewName = this.data.name
-      const res = await this.savePreviewIndicator()
-      console.log('preview 响应', res)
-      const status = res?.data?.code || res?.status
-      let url = null
-      if(status == 406) {
-        url = res?.data?.data?.url
-        // 说明这条数据已经存在了,不让我新建,说明用户已经存在相同的组合, 直接请求数据
-        const indicatorData = await getMyIndicatorData(url)
-        // 暂存
-        localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(indicatorData.data.data))
-        // 修改名字为预览名字
-        this.data.name = previewName
-      }
-      if(status == 201) {
-        url = res.data.url
-        const indicatorData = await getMyIndicatorData(url)
-        // 更新 rowUrl
-        this.rowUrl = ''
-        // 暂存
-        localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(indicatorData.data.data))
-        const delRes = await delMyIndicator(url)
-      }
-      if(!res) {this.$store.commit('states/SET_MI_CREATE_LOADING', false);CIQ.hideCover();return}
-      // const url = res.data.url
-      // const indicatorData = await getMyIndicatorData(url)
-      // // 暂存
-      // localStorage.setItem('previewIndicatorData', JSON.stringify(indicatorData.data.data))
-      // // 先
-      // await delMyIndicator(url)
-      // this.rowUrl = ''
-      // console.log('indicatorData code', indicatorData.data.code)
-      // console.log('indicatorData res', indicatorData.data.data)
-      // // todo display the indicator on chartIQ
-
-      if(this.data.categories.includes('Symbol')){
-        CIQ.previewUserOwnIndicator(
-          [this.data.indicator_1_url,this.data.indicator_2_url,this.data.name+'CREATE'+url],
-          this.data.name+'CREATE'+url,
-          this.data.indicator_1_url,
-          {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism}
-        )
-      }else if(this.data.categories.includes('Indicator')){
-        CIQ.previewUserOwnIndicator(
-          [this.data.indicator_1_url,this.data.indicator_2_url,this.data.name+'CREATE'+url],
-          this.data.name+'CREATE'+url,
-          null,
-          {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism}
-        )
-      }else if(this.data.categories == 'WIC'){
-        CIQ.previewUserOwnIndicator(
-          [...this.weightData.map(item=>item.indicator_url),this.data.name+'CREATE'+url],
-          this.data.name+'CREATE'+url,
-          CIQ.stxx.chart.symbol
-        )
-      }
-      this.$store.commit('states/SET_MI_CREATE_LOADING', false)
-
     },
     validForm() {
       let formValid = null
