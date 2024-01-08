@@ -725,6 +725,17 @@ if (!CIQ.Studies) {
 
 		sd.outputMap[sd.inputs.display] = "Line";
 	};
+	CIQ.Studies.calculateDayofWeek = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			if (!quote) continue;
+			quote[sd.inputs.display] = quote['DT'].getDay();
+		}
+
+		sd.outputMap[sd.inputs.display] = "Line";
+	};
+	
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		// 为了覆盖cci optix,用了小写的cci
 		cci: {
@@ -860,6 +871,11 @@ if (!CIQ.Studies) {
 		"Opening Gap": {
             name: "Opening Gap",
             calculateFN: CIQ.Studies.calculateOpeningGap,
+			outputs: { Line: "auto" },
+        },
+		"Day of Week": {
+            name: "Day of Week",
+            calculateFN: CIQ.Studies.calculateDayofWeek,
 			outputs: { Line: "auto" },
         },
 	});
