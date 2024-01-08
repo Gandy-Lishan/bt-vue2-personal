@@ -830,5 +830,9 @@
     {
         "symbol": "USGG10YR",
         "name": "10 year yield "
+    },
+    {
+        "symbol": "SOXX",
+        "name": "SOXX"
     }
 ]

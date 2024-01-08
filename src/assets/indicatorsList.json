@@ -1860,11 +1860,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Align Technology",
-        "url": "ALGN",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Allegiant Travel",
         "url": "ALGT",
         "updated": "Daily"
@@ -2137,11 +2132,6 @@
     {
         "chart_name": "Baxter Intl Inc",
         "url": "BAX",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Bed Bath &Beyond",
-        "url": "BBBY",
         "updated": "Daily"
     },
     {
@@ -2925,11 +2915,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Ebay Inc",
-        "url": "EBAY",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Ebix Inc",
         "url": "EBIX",
         "updated": "Daily"
@@ -2982,11 +2967,6 @@
     {
         "chart_name": "Estee Lauder",
         "url": "EL",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Callaway Golf Co",
-        "url": "ELY",
         "updated": "Daily"
     },
     {
@@ -4007,11 +3987,6 @@
     {
         "chart_name": "Kohls Corp",
         "url": "KSS",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Kansas City Sout",
-        "url": "KSU",
         "updated": "Daily"
     },
     {
@@ -11300,11 +11275,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "RENEWABLE ENERGY GROUP INC",
-        "url": "REGI",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "ONESPAN INC",
         "url": "OSPN",
         "updated": "Daily"
@@ -13395,16 +13365,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Berkshire Hathaway Inc",
-        "url": "BRK_B",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Brown-Forman Corp",
-        "url": "BF_B",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Coterra Energy Inc",
         "url": "CTRA",
         "updated": "Daily"
@@ -13465,11 +13425,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Phillips Edison & Co Inc",
-        "url": "PECO",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Ormat Technologies Inc",
         "url": "ORA",
         "updated": "Daily"
@@ -13482,11 +13437,6 @@
     {
         "chart_name": "ON Semiconductor Corp",
         "url": "ON",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "BWX Technologies Inc",
-        "url": "BWXT",
         "updated": "Daily"
     },
     {
@@ -13535,18 +13485,8 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Planet Fitness Inc",
-        "url": "PLNT",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Arch Capital Group Ltd",
         "url": "ACGL",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Everest Group Ltd",
-        "url": "EG",
         "updated": "Daily"
     },
     {
@@ -13575,26 +13515,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Palo Alto Networks Inc",
-        "url": "PANW",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Enviri Corp",
-        "url": "NVRI",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "eXp World Holdings Inc",
-        "url": "EXPI",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Privia Health Group Inc",
-        "url": "PRVA",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Stellar Bancorp Inc",
         "url": "STEL",
         "updated": "Daily"
@@ -13602,11 +13522,6 @@
     {
         "chart_name": "Consensus Cloud Solutions Inc",
         "url": "CCSI",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Fortrea Holdings Inc",
-        "url": "FTRE",
         "updated": "Daily"
     },
     {
@@ -13632,21 +13547,6 @@
     {
         "chart_name": "Radian Group Inc",
         "url": "RDN",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Doximity Inc",
-        "url": "DOCS",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Berry Global Group Inc",
-        "url": "BERY",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Fiserv Inc",
-        "url": "FI",
         "updated": "Daily"
     },
     {
@@ -13692,11 +13592,6 @@
     {
         "chart_name": "Warner Bros Discovery Inc",
         "url": "WBD",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "California Resources Corp",
-        "url": "CRC",
         "updated": "Daily"
     },
     {
@@ -13780,18 +13675,8 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Dropbox Inc",
-        "url": "DBX",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Frontdoor Inc",
         "url": "FTDR",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Artisan Partners Asset Managem",
-        "url": "APAM",
         "updated": "Daily"
     },
     {
@@ -13810,16 +13695,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Schrodinger Inc/United States",
-        "url": "SDGR",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Phinia Inc",
-        "url": "PHIN",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Gogo Inc",
         "url": "GOGO",
         "updated": "Daily"
@@ -13835,16 +13710,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Crown Holdings Inc",
-        "url": "CCK",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "ZoomInfo Technologies Inc",
-        "url": "ZI",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Calix Inc",
         "url": "CALX",
         "updated": "Daily"
@@ -13855,18 +13720,8 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "World Kinect Corp",
-        "url": "WKC",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "MillerKnoll Inc",
         "url": "MLKN",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Equity LifeStyle Properties In",
-        "url": "ELS",
         "updated": "Daily"
     },
     {
@@ -13890,11 +13745,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Moog Inc",
-        "url": "MOG_A",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Regal Rexnord Corp",
         "url": "RRX",
         "updated": "Daily"
@@ -13902,11 +13752,6 @@
     {
         "chart_name": "Esab Corp",
         "url": "ESAB",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Ovintiv Inc",
-        "url": "OVV",
         "updated": "Daily"
     },
     {
@@ -13922,11 +13767,6 @@
     {
         "chart_name": "Wolfspeed Inc",
         "url": "WOLF",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "UFP Technologies Inc",
-        "url": "UFPT",
         "updated": "Daily"
     },
     {
@@ -13952,11 +13792,6 @@
     {
         "chart_name": "Certara Inc",
         "url": "CERT",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Moelis & Co",
-        "url": "MC",
         "updated": "Daily"
     },
     {
@@ -14007,11 +13842,6 @@
     {
         "chart_name": "Avantax Inc",
         "url": "AVTA",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Arbor Realty Trust Inc",
-        "url": "ABR",
         "updated": "Daily"
     },
     {
@@ -14120,11 +13950,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Knife River Corp",
-        "url": "KNF",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Alpha & Omega Semiconductor Lt",
         "url": "AOSL",
         "updated": "Daily"
@@ -14132,11 +13957,6 @@
     {
         "chart_name": "A10 Networks Inc",
         "url": "ATEN",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Graphic Packaging Holding Co",
-        "url": "GPK",
         "updated": "Daily"
     },
     {
@@ -14175,11 +13995,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "WESCO International Inc",
-        "url": "WCC",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "National Vision Holdings Inc",
         "url": "EYE",
         "updated": "Daily"
@@ -14187,11 +14002,6 @@
     {
         "chart_name": "Avid Technology Inc",
         "url": "AVID",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Cargurus Inc",
-        "url": "CARG",
         "updated": "Daily"
     },
     {
@@ -14305,11 +14115,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Palo Alto Networks Inc",
-        "url": "PANW",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Intel Corp",
         "url": "INTC",
         "updated": "Daily"
@@ -14335,16 +14140,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Align Technology Inc",
-        "url": "ALGN",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "eBay Inc",
-        "url": "EBAY",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Marvell Technology Inc",
         "url": "MRVL",
         "updated": "Daily"
@@ -14362,11 +14157,6 @@
     {
         "chart_name": "Illumina Inc",
         "url": "ILMN",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "JD.com Inc",
-        "url": "JD",
         "updated": "Daily"
     },
     {
@@ -14530,11 +14320,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Lucid Group Inc",
-        "url": "LCID",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Electronic Arts Inc",
         "url": "EA",
         "updated": "Daily"
@@ -14557,11 +14342,6 @@
     {
         "chart_name": "Gilead Sciences Inc",
         "url": "GILD",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Seagen Inc",
-        "url": "SGEN",
         "updated": "Daily"
     },
     {
@@ -14670,11 +14450,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Enphase Energy Inc",
-        "url": "ENPH",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "NXP Semiconductors NV",
         "url": "NXPI",
         "updated": "Daily"
@@ -14730,11 +14505,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Zoom Video Communications Inc",
-        "url": "ZM",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Fortinet Inc",
         "url": "FTNT",
         "updated": "Daily"
@@ -14753,5 +14523,365 @@
         "chart_name": "JK Employment",
         "url": "jk_employment",
         "updated": "Monthly"
+    },
+    {
+        "chart_name": "VIX Seasonality",
+        "url": "seasonality_vix",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "Employment-Population Ratio (EPR) Model",
+        "url": "epr_model",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "CCMP % Above Bband",
+        "url": "breadth_sector_ccmp_bbup",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP % Below Bband",
+        "url": "breadth_sector_ccmp_bbdown",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP % RSI 14-Day < 30",
+        "url": "breadth_sector_ccmp_rsi30",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP % RSI 14-Day > 70",
+        "url": "breadth_sector_ccmp_rsi70",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP 12 Week High %",
+        "url": "breadth_sector_ccmp_nh12",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP 12 Week Low %",
+        "url": "breadth_sector_ccmp_nl12",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP 4 Week High %",
+        "url": "breadth_sector_ccmp_nh4",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP 4 Week Low %",
+        "url": "breadth_sector_ccmp_nl4",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP Advance / Decline",
+        "url": "breadth_sector_ccmp_ad",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP Breadth (% > 10 Day Avg)",
+        "url": "breadth_sector_ccmp_10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP Breadth (% > 200 Day Avg)",
+        "url": "breadth_sector_ccmp_200",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP Breadth (% > 50 Day Avg)",
+        "url": "breadth_sector_ccmp_50",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP Cumulative A/D Line",
+        "url": "breadth_sector_ccmp_adline",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP McClellan Oscillator",
+        "url": "breadth_sector_ccmp_mcosc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP McClellan Summation",
+        "url": "breadth_sector_ccmp_mcsumm",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP New High %",
+        "url": "breadth_sector_ccmp_nh",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP New Low %",
+        "url": "breadth_sector_ccmp_nl",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IWM Net High-Low %",
+        "url": "breadth_sector_iwm_net_nhnl",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "QQQ Net High-Low %",
+        "url": "breadth_sector_qqq_net_nhnl",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPY Net High-Low %",
+        "url": "breadth_sector_spy_net_nhnl",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLB Net High-Low %",
+        "url": "breadth_sector_xlb_net_nhnl",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLE Net High-Low %",
+        "url": "breadth_sector_xle_net_nhnl",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLF Net High-Low %",
+        "url": "breadth_sector_xlf_net_nhnl",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLI Net High-Low %",
+        "url": "breadth_sector_xli_net_nhnl",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLK Net High-Low %",
+        "url": "breadth_sector_xlK_net_nhnl",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLP Net High-Low %",
+        "url": "breadth_sector_xlp_net_nhnl",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLV Net High-Low %",
+        "url": "breadth_sector_xlv_net_nhnl",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLY Net High-Low %",
+        "url": "breadth_sector_xly_net_nhnl",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Berkshire Hathaway Inc",
+        "url": "BRK_B",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Brown-Forman Corp",
+        "url": "BF_B",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cutera Inc",
+        "url": "CUTR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Big Lots Inc",
+        "url": "BIG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Inogen Inc",
+        "url": "INGN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fiserv Inc",
+        "url": "FISV",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "LivePerson Inc",
+        "url": "LPSN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "DMC Global Inc",
+        "url": "BOOM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Everest Re Group Ltd",
+        "url": "RE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Harsco Corp",
+        "url": "HSC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "HomeStreet Inc",
+        "url": "HMST",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rayonier Advanced Materials In",
+        "url": "RYAM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Heska Corp",
+        "url": "HSKA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Douglas Elliman Inc",
+        "url": "DOUG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "World Fuel Services Corp",
+        "url": "INT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tredegar Corp",
+        "url": "TG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Comtech Telecommunications Cor",
+        "url": "CMTL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Moog Inc",
+        "url": "MOG_A",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "LendingTree Inc",
+        "url": "TREE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Seneca Foods Corp",
+        "url": "SENEA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Life Storage Inc",
+        "url": "LSI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cara Therapeutics Inc",
+        "url": "CARA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FARO Technologies Inc",
+        "url": "FARO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ruths Hospitality Group Inc",
+        "url": "RUTH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Zumiez Inc",
+        "url": "ZUMZ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Eagle Pharmaceuticals Inc/DE",
+        "url": "EGRX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ranger Oil Corp",
+        "url": "ROCC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gannett Co Inc",
+        "url": "GCI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "El Pollo Loco Holdings Inc",
+        "url": "LOCO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CDW Corp/DE",
+        "url": "CDW",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Palo Alto Networks Inc",
+        "url": "PANW",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "DoorDash Inc",
+        "url": "DASH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MongoDB Inc",
+        "url": "MDB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Coca-Cola Europacific Partners",
+        "url": "CCEP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Splunk Inc",
+        "url": "SPLK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Take-Two Interactive Software",
+        "url": "TTWO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Roper Technologies Inc",
+        "url": "ROP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "eBay Inc",
+        "url": "EBAY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX Optix",
+        "url": "etf_soxx",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX Fund Flow",
+        "url": "etf_soxx_flow",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX Seasonality",
+        "url": "seasonality_soxx",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "SOXX  Outstanding Shares",
+        "url": "etf_soxx_shares",
+        "updated": "Daily"
     }
 ]
