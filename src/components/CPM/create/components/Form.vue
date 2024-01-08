@@ -105,12 +105,12 @@
     </el-col>
     <el-col :span="6">
       <el-form-item
-				label="7.Correlation Percentage"
+				label="6.Correlation Percentage"
         prop="corr_per"
 			>
         <template slot="label">
           <label>
-            7.Correlation Percentage
+            6.Correlation Percentage
             <el-tooltip effect="dark" placement="top">
               <span slot="content">
                 Correlation Percentage
@@ -124,35 +124,12 @@
     </el-col>
     <el-col :span="6">
       <el-form-item
-				label="8.Threshold Right Margin"
-        prop="right_margin"
-			>
-        <template slot="label">
-          <label>
-            8.Threshold Right Margin
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content">
-                Threshold Right Margin
-              </span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
-          </label>
-        </template>
-				<el-input v-model="data.right_margin" placeholder="Enter threshold right margin" @blur="checkRightMargin(data.right_margin)">
-        </el-input>
-        <div class="error-message" v-if="rightValidErrMsg">
-          {{ rightValidErrMsg }}
-          </div>
-			</el-form-item>
-    </el-col>
-    <el-col :span="6">
-      <el-form-item
-				label="9.Time In Market"
+				label="7.Time In Market"
         prop="tim"
 			>
         <template slot="label">
           <label>
-            9.Time In Market
+            7.Time In Market
             <el-tooltip effect="dark" placement="top">
               <span slot="content">
                 Input a value of bars to stay in market after entry.<br />Exit
@@ -172,43 +149,44 @@
           </template></el-input>
 			</el-form-item>
     </el-col>
+    <el-col :span="6">
+    <el-form-item prop="backtestHistory" label="8.Lookback Period(List)">
+        <template slot="label">
+          <label>
+            8.Lookback Period(List)
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >Specify the start and end date of the backtest.<br />Choose
+                'All History' to include all data since the inception of the
+                backtesting stock/index.<br
+              /></span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
+        <div class="selectBox historySelectBox">
+          <el-select
+            placeholder="- Select Lookback Period -"
+            v-model="data.lookback_period"
+          >
+            <el-option
+              v-for="item in historyOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </el-form-item>
+    </el-col>
   </el-row>
   <el-row :gutter="20">
     <el-col :span="6">
-      <el-form-item prop="backtestHistory" label="10.Lookback Period(List)">
-          <template slot="label">
-            <label>
-              10.Lookback Period(List)
-              <el-tooltip effect="dark" placement="top">
-                <span slot="content"
-                  >Specify the start and end date of the backtest.<br />Choose
-                  'All History' to include all data since the inception of the
-                  backtesting stock/index.<br
-                /></span>
-                <i class="iconfont icon-wenhao"></i>
-              </el-tooltip>
-            </label>
-          </template>
-          <div class="selectBox historySelectBox">
-            <el-select
-              placeholder="- Select Lookback Period -"
-              v-model="data.lookback_period"
-            >
-              <el-option
-                v-for="item in historyOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-        </el-form-item>
-        
     </el-col>
     <el-col :span="6">
       <el-form-item
-				label="11.Custom Duration"
+				label="9.Custom Duration"
         prop="year"
         v-if="data.lookback_period == 22"
 			>
@@ -221,6 +199,27 @@
 			</el-form-item>
     </el-col>
     <el-col :span="6">
+    <div class="excludeBox">
+        <el-checkbox v-model="data.isExcludeOO" @change="changeExcludeOO"
+          >Exclude Overlapping Observations
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content"
+              >Select this box if you want to exclude dates that are
+              clustered together.<br />
+              By selecting this option, the test will only allow one
+              trade at a time. <br />
+              For example, if you chose '10 days' in the Observation
+              Period,
+              <br />
+              then once the Indicator meets the Indicator Level you
+              specify,
+              <br />
+              the test will not allow another trade for the next 10
+              days.<br />
+            </span>
+            <i class="iconfont icon-wenhao"></i> </el-tooltip
+        ></el-checkbox>
+      </div>
     </el-col>
     <el-col :span="6"></el-col>
   </el-row>
@@ -273,7 +272,6 @@ export default {
         end_date: '',
         lookback_period: 20,
         corr_per: '',
-        right_margin: '',
         tim: '',
         year: ''
       },
@@ -341,8 +339,6 @@ export default {
           label: 'Custom...'
         }
       ],
-      leftValidErrMsg: '',
-      rightValidErrMsg: '',
       rowUrl: null,
       progressText: 'Loading...',
       startPickerOptions: {
@@ -392,14 +388,6 @@ export default {
     this.setBacktestHistory(1)
   },
   methods: {
-    checkLeftMargin(value) {
-      this.leftValidErrMsg = validateMarginRule(value, -1, this.data.right_margin || 1, 'Enter threshold left margin', `between -1 and ${this.data.right_margin || 1}`);
-      return this.leftValidErrMsg
-    },
-    checkRightMargin(value) {
-      this.rightValidErrMsg = validateMarginRule(value, this.data.corr_per || -1, 1, 'Enter threshold right margin', `between ${this.data.corr_per || -1} and 1`);
-      return this.rightValidErrMsg
-    },
     setBacktestHistory(val) {
       this.data.end_date = timestampToTime(new Date())
       const str = this.data.end_date.split('-')
@@ -750,5 +738,8 @@ export default {
 /deep/ .el-input.is-disabled .el-input__inner {
     background-color: #f5f7fa5c;
     color: #606266;
+}
+/deep/ .el-checkbox__label {
+  line-height: 32px;
 }
 </style>
