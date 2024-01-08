@@ -33,7 +33,7 @@
 			<el-form-item label="2.Categorie" v-model="data.categories">
         <template slot="label">
           <label>
-            2.Categorie
+            2.Categories
             <el-tooltip effect="dark" placement="top">
               <span slot="content">
                 Select the indicator calculation method
