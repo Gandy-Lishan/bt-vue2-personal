@@ -184,7 +184,6 @@ let __st_js_generateCsv_ = (_exports) => {
          for(var _study in studies){
              if(sd.type == studies[_study].url){
                  var category = categoryList[_class].class
-                 
                  switch(category){
                      case("CCI_like"):{
                          // output only indicator value 

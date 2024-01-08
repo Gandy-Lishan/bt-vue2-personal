@@ -720,20 +720,16 @@ if (!CIQ.Studies) {
 			var lastBar = quote
 			if(i >= 1) lastBar = quotes[i-1]
 			
-			quote[sd.inputs.display] = (quote["Open"] - lastBar["Close"])/lastBar["Close"];
+			quote["Result " + sd.name] = (quote["Open"] - lastBar["Close"])/lastBar["Close"];
 		}
-
-		sd.outputMap[sd.inputs.display] = "Line";
 	};
 	CIQ.Studies.calculateDayofWeek = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
 			if (!quote) continue;
-			quote[sd.inputs.display] = quote['DT'].getDay();
+			quote["Result " + sd.name] = quote['DT'].getDay();
 		}
-
-		sd.outputMap[sd.inputs.display] = "Line";
 	};
 	
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
@@ -871,12 +867,10 @@ if (!CIQ.Studies) {
 		"Opening Gap": {
             name: "Opening Gap",
             calculateFN: CIQ.Studies.calculateOpeningGap,
-			outputs: { Line: "auto" },
         },
 		"Day of Week": {
             name: "Day of Week",
             calculateFN: CIQ.Studies.calculateDayofWeek,
-			outputs: { Line: "auto" },
         },
 	});
 
