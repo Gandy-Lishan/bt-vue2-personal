@@ -318,7 +318,10 @@ export default {
     },
     direction() {
       return this.getterDirection
-    }
+    },
+    updateSettingROC() {
+			return this.$store.state.chart.studySettingROC
+		},
   },
   watch: {
     extremeValue: {
@@ -371,7 +374,13 @@ export default {
           this.senti.extreme_pessimism = ''
         }
       }
-    }
+    },
+    updateSettingROC(val) {
+			if(val['criteria'] == this.criteria && val['panelIndex'] == this.panelIndex){
+        this.senti.conditionPeriod = val['period']
+				this.calculateNewConditions()
+			}
+		},
   },
   methods: {
     ROCLikeChange(val,limit) {

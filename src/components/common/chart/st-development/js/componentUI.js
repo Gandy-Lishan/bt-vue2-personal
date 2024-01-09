@@ -3814,7 +3814,6 @@ CIQ.UI.Layout.prototype.reloadChart = function() {
 	// remove markers, prompt, recover timeframe dropdown
 	CIQ.removePrompt()
 
-	//CIQ.isMarkerShown = false
 	CIQ.store.dispatch('states/set_isMarkerShown_flag', false)
 	document.getElementsByClassName('ciq-period')[0].style.display = 'block'
 
