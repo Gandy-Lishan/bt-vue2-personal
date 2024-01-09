@@ -1,7 +1,7 @@
 <template>
-  <div class="my-indicator-list-container">
+  <div class="CPM-list-container">
     <div class="search-box">
-      <el-button type="primary" round @click="handleCreate">Create Pattern Match</el-button>
+      <el-button type="primary" round @click="handleCreate">Create Correlation Pattern Match</el-button>
       <el-input placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" 					clearable
 					@clear="handleQuery">
         <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
@@ -17,6 +17,7 @@
       v-loading="loading"
       :element-loading-text="loadTest"
       element-loading-spinner="el-icon-loading"
+			@sort-change="onSortChange"
       element-loading-background="rgba(0, 0, 0, 0.8)"
 			style="width: 100%; height: 100%; margin: 0 auto;"
 		>
@@ -96,6 +97,8 @@
 					:prop="l.value"
 					:key="l.key"
           v-if="['Symbol', 'Timeframe', 'Total Trades', 'Total Return'].includes(l.label)"
+          :sortable="['Total Trades', 'Total Return'].includes(l.label) ? 'custom' : false"
+				  :sort-orders="['ascending', 'descending', l.value]"
 				>
 					<template slot-scope="scope">
 						<p class="tableText">
@@ -195,7 +198,8 @@ export default {
           value: 'total_return'
         },
       ],
-      tableData: []
+      tableData: [],
+      currentSort: {}, // 当前的排序信息
     }
   },
   async created() {
@@ -221,6 +225,9 @@ export default {
     ]
   },
   methods: {
+    async getDataList(orderby) {
+      // 请求数据以及处理数据, 应该传递当前的页数，排序信息，搜索框名字搜索
+    },
     tableRowClassName({row, rowIndex}) {
 			if (rowIndex%2 === 1) {
 			return 'darken-row'
@@ -229,6 +236,30 @@ export default {
 		},
     async handleCurrentChange(currentPage) {
 			this.currentPage = currentPage;
+      await this.applySort()
+		},
+    async onSortChange({ column, prop, order }) {
+			
+			if(this.currentPage != 1) this.currentPage = 1
+      if (column.sortable !== 'custom') return
+      this.currentSort = {
+        prop: prop,
+        order: order,
+      };
+      await this.applySort()
+    },
+    async applySort() {
+      let { prop, order } = this.currentSort;
+      //  order: 升 'ascending' | 降'descending' | 取消升降 null | order: total_return 
+      if (order == null || order == prop) {
+        // 不排序
+        prop = null
+      }
+      if (order == 'ascending') {
+        // 升序排列
+        prop = `-${prop}`
+      }
+			await this.getDataList(prop)
 		},
     handleCreate() {
       this.$router.push('/cpm/create')
@@ -289,7 +320,7 @@ export default {
   font-weight: 500;
   color: #909399;
 }
-.my-indicator-list-container{
+.CPM-list-container{
   width: 90%;
   margin: 0 auto;
 }
