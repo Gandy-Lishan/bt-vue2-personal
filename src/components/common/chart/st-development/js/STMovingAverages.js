@@ -560,6 +560,30 @@ if (!CIQ.Studies) {
 					//CIQ.alert('There is no enough data for calculating the MA Ratio value, please change a value')
 				} 
 				break;
+			case 'DD':
+				// 公式：(Current close - Highest Close) / Highest Close
+				let indexDD = quotes.findIndex(row=> field in row &&  row[field]!=null)
+				quotes = quotes.slice(indexDD) 
+				const maxCloseArrDD = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
+				resArr = quotes.map((row, i) => {
+					if(field in quotes[i] &&  quotes[i][field]!=null){
+						if(i>=period){
+							// 如果分母为0，直接返回0
+							if(maxCloseArrDD[i] == 0) return 0
+
+							const change = parseFloat((100 * (maxCloseArrDD[i] - row[field]) / maxCloseArrDD[i]).toFixed(4))
+							
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+				break;
 			default:
 				console.error('no such condition')
 		}
@@ -719,8 +743,10 @@ if (!CIQ.Studies) {
 			if (!quote) continue;
 			var lastBar = quote
 			if(i >= 1) lastBar = quotes[i-1]
+
+			if(lastBar["Close"] == 0) return 0
 			
-			quote["Result " + sd.name] = (quote["Open"] - lastBar["Close"])/lastBar["Close"];
+			quote["Result " + sd.name] = parseFloat((100 * (quote["Open"] - lastBar["Close"]) / lastBar["Close"]).toFixed(4));
 		}
 	};
 	CIQ.Studies.calculateDayofWeek = function (stx, sd) {
@@ -730,6 +756,15 @@ if (!CIQ.Studies) {
 			if (!quote) continue;
 			quote["Result " + sd.name] = quote['DT'].getDay();
 		}
+	};
+	CIQ.Studies.calculateTypicalSentimentCycle = function (stx, sd) {
+		// todo
+		// var quotes = sd.chart.dataSet;
+		// for (var i = sd.startFrom; i < quotes.length; i++) {
+		// 	var quote = quotes[i];
+		// 	if (!quote) continue;
+		// 	quote["Result " + sd.name] = quote['DT'].getDay();
+		// }
 	};
 	
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
