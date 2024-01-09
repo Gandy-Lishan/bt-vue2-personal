@@ -7,7 +7,7 @@
             <p>Backtest Summary</p>
           </div>
         </template>
-        <CPMSummary></CPMSummary>
+        <CPMSummary ref="Summary"></CPMSummary>
       </el-collapse-item>
       <el-collapse-item name="2">
         <template v-slot:title>
@@ -21,8 +21,8 @@
           </div>
         </template>
       <div class="content">
-          <Statistics v-show="activeTab == 'statistics'"></Statistics>
-          <TIM v-show="activeTab == 'results'"></TIM>
+          <Statistics v-show="activeTab == 'statistics'" ref="Statistics"></Statistics>
+          <TIM v-show="activeTab == 'results'" ref="TIM" :tradeDate="tradeDate" :rowFrequency="rowFrequency" :tradePrice="tradePrice"></TIM>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -33,12 +33,17 @@
 import CPMSummary from "./components/summary";
 import Statistics from "./components/statistics";
 import TIM from "./components/tim";
+import {isJson} from '@/utils'
+
 export default {
   name: 'CPMResults',
   data() {
     return {
       activeNames: ['1', '2'],
-      activeTab: 'statistics'
+      activeTab: 'statistics',
+      tradeDate: {},
+      rowFrequency: 'Daily',
+      tradePrice: 'Open'
     }
   },
   components: {
@@ -46,6 +51,67 @@ export default {
     Statistics,
     TIM
   },
+    beforeRouteEnter(to, _, next) {
+		if (to.path === '/cpm/results') {
+			next((_this) => {
+				if (to.params.usedFor && to.params.usedFor === 'showCPMResults') {
+					const { data } = to.params
+					const _data = isJson(data) ? JSON.parse(data) : data
+          _this.chart_data = _data
+          const summary = {}
+          summary.symbol = _data.symbol
+          summary.timeframe = _data.timeframe
+          summary.lookback_period = _data.lookback_period
+          summary.exclude_overlapping = _data.exclude_overlapping == 1 ? 'True' : 'False'
+          summary.start_date = _data.start_date
+          summary.end_date = _data.end_date
+          _this.$refs['Summary'].displayData(summary)
+          const statistics = {}
+          statistics.totalReturn = _data.total_return
+          statistics.medianReturn = _data.median_return
+          statistics.averageReturn = _data.avg_return
+          // statistics.tzScore = _data.tzScore
+          // statistics.standardDeviation = _data.standardDeviation
+          // statistics.maxRisk = _data.maxRisk
+          statistics.buyHoldGain = _data.buy_and_hold
+          statistics.winRate = _data.win_rate
+          statistics.averageWin = _data.avg_win
+          statistics.averageLoss = _data.avg_loss
+          statistics.totalTrades = _data.total_trades
+          statistics.totalPositive = _data.total_positive
+          statistics.totalNegative = _data.total_negative
+          statistics.timeInMarket = _data.time_in_market
+
+          const result = _data.result
+          const transformedResult = [];
+          const TradeDateArray = [];
+          for (let i = 0; i < result['End Date'].length; i++) {
+            const tradeDate = result['End Date'][i];
+            const symbolClose = result['Symbol Close'][i];
+            const correlationPercentage = result['Correlation Percentage'][i];
+            const eachReturn = result['Each Return'][i];
+            transformedResult.push({
+              'TradeDate': tradeDate,
+              'SymbolClose': symbolClose,
+              'CorrelationPercentage': correlationPercentage,
+              'Return': eachReturn
+            });
+            TradeDateArray.push(
+              {'Date': tradeDate}
+            )
+          }
+          _this.$refs['Statistics'].displayData(statistics, transformedResult)
+          _this.tradeDate = TradeDateArray
+          _this.rowFrequency = _data.timeframe
+          const datatime = new Date(_data.start_date)
+          _this.$refs['TIM'].prepareData(_data.url, datatime)
+
+				}
+			})
+		} else {
+			next()
+		}
+	},
   methods: {
     handleChange(val) {
     },

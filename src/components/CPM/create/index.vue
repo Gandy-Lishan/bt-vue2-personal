@@ -7,7 +7,7 @@
       <div class="form-header">
         <h3 class="form-title">Backtest Parameters</h3>
       </div>
-      <Form :formConfig="formConfig" :formData="formData" ref="Form"></Form>
+      <Form ref="Form"></Form>
     </div>
   </div>
 
@@ -22,84 +22,13 @@ export default {
   name: "CreateCPM",
   data() {
     return {
-      chart_data: {},
-      formConfig: [
-        {
-          label: 'Name',
-          type: 'input',
-          filed: 'name'
-        },
-        {
-          label: 'Categories',
-          type: 'select',
-          filed: 'categories',
-          option: [
-            {
-              label: 'Indicator spread',
-              value: 'Indicator spread'
-            },
-            {
-              label: 'Indicator ratio',
-              value: 'Indicator ratio'
-            },
-            {
-              label: 'Symbol spread',
-              value: 'Symbol spread'
-            },
-            {
-              label: 'Symbol ratio',
-              value: 'Symbol ratio'
-            }
-          ]
-        },
-        {
-          type: 'autocomplete1',
-          filed: 'indicator1',
-        },
-        {
-          type: 'autocomplete2',
-          filed: 'indicator2',
-        },
-        {
-          type: 'inputWithCheckbox1',
-          label: 'Moving Average',
-          filed: 'ma1'
-        },
-        {
-          type: 'inputWithCheckbox2',
-          label: 'Moving Average',
-          filed: 'ma2'
-        },
-        {
-          type: 'EOInputWithCheckbox',
-          label: 'Extreme Optimism',
-          filed: 'extremeOptimism'
-        },
-        {
-          type: 'EPInputWithCheckbox',
-          label: 'Extreme Pessimism',
-          filed: 'extremePessimism'
-        }
-      ],
-      formData: {
-        name: '',
-        categories: '',
-        indicator1: '',
-        indicator2: '',
-        ma1: '',
-        ma2: '',
-        extremeOptimism: '',
-        extremePessimism: ''
-      },
-      progressText: 'Loading...'
+      chart_data: {}
     }
   },
   beforeRouteEnter(to, _, next) {
-		if (to.path === '/myindicator/create') {
+		if (to.path === '/cpm/create') {
 			next((_this) => {
-				if (to.params.usedFor && to.params.usedFor === 'showMyIndicators') {
-					console.log('说明是路由跳转过来携带参数的')
-					// 说明是路由跳转过来携带参数的
+				if (to.params.usedFor && to.params.usedFor === 'showCPMFormData') {
 					const { data } = to.params
 					const _data = isJson(data) ? JSON.parse(data) : data
           _this.chart_data = _data

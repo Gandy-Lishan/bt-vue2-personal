@@ -3,7 +3,7 @@
     <div class="CPM-summary">
       <el-table
         header-align="center"
-        :data="tableData">
+        :data="summaryData">
         <el-table-column
             prop="totalReturn"
             show-overflow-tooltip
@@ -102,7 +102,7 @@
 		  </el-table>
 					<el-table
 						header-align="center"
-						:data="tableData"
+						:data="summaryData"
 					>
 						<!-- <el-table-column
 							prop="drawDown"
@@ -123,7 +123,7 @@
 					</el-table>
 					<el-table
 						header-align="center"
-						:data="tableData"
+						:data="summaryData"
 					>
 						<el-table-column
 							prop="winRate"
@@ -192,7 +192,7 @@
 					</el-table>
           <el-table
 						header-align="center"
-						:data="tableData"
+						:data="summaryData"
 					>
 						<el-table-column
 							prop="totalTrades"
@@ -288,14 +288,14 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="IndicatorClose"
-          label="Indicator Close"
+          prop="CorrelationPercentage"
+          label="Correlation Percentage"
           show-overflow-tooltip
           align="center"
         >
           <template slot-scope="scope">
-            <span :style="scope.row.IndicatorClose >= 0 ? '' : 'color: #dd3a13'">{{
-              scope.row.IndicatorClose
+            <span :style="scope.row.CorrelationPercentage >= 0 ? '' : 'color: #dd3a13'">{{
+              scope.row.CorrelationPercentage
             }}</span>
           </template>
         </el-table-column>
@@ -321,8 +321,7 @@ export default {
   name: 'Statistics',
   data() {
     return {
-      tableData: [
-        {
+      summaryData: [{
           totalReturn: -30.3,
           medianReturn: -1.89,
           averageReturn: -2.33,
@@ -337,37 +336,36 @@ export default {
           totalPositive: 4,
           totalNegative: 9,
           timeInMarket: 7.2
-        }
-      ],
+      }],
       tradesData: [
         {
           TradeDate: '2013-07-06',
           SymbolClose: 103.22,
-          IndicatorClose: 1.06,
+          CorrelationPercentage: 1.06,
           Return: 3.24
         },
         {
           TradeDate: '2013-07-06',
           SymbolClose: -103.22,
-          IndicatorClose: -1.06,
+          CorrelationPercentage: -1.06,
           Return: -3.24
         },
         {
           TradeDate: '2013-07-06',
           SymbolClose: 103.22,
-          IndicatorClose: -1.06,
+          CorrelationPercentage: -1.06,
           Return: 3.24
         },
         {
           TradeDate: '2013-07-06',
           SymbolClose: 103.22,
-          IndicatorClose: 1.06,
+          CorrelationPercentage: 1.06,
           Return: -3.24
         },
         {
           TradeDate: '2013-07-06',
           SymbolClose: 103.22,
-          IndicatorClose: 1.06,
+          CorrelationPercentage: 1.06,
           Return: 3.24
         }
       ]
@@ -380,7 +378,15 @@ export default {
         return 'darken-row';
         }
         return '';
-	  }
+	  },
+		displayData(data, transformedResult) {
+			debugger
+      this.summaryData = [{
+        ...this.summaryData,
+        ...data
+      }]
+			this.tradesData = transformedResult
+    }
   }
 }
 </script>

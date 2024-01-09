@@ -248,17 +248,13 @@
 </template>
  <script>
  import { CIQ } from '@/components/common/chart/st-development/js/components'
-import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators, searchIndicator } from '@/service/service'
+import { saveCPM, getMyIndicatorData, delMyIndicator, editCPM, searchIndicator } from '@/service/service'
 import { createPositiveIntegerRule, createVerifyValueInListRule, validateMarginRule } from "@/utils/formValidate"
 import { LoadingOverlay } from "@/components/common"
 import { timestampToTime } from '@/utils'
 
 export default {
-  name: 'MIForm',
-  props: {
-    formConfig: Array,
-    formData: Object
-  },
+  name: 'Form',
   components: {
     LoadingOverlay
   },
@@ -270,9 +266,9 @@ export default {
         timeframe: 'Daily',
         start_date: '',
         end_date: '',
-        lookback_period: 1,
+        lookback_period: 20,
         corr_per: '',
-        tim: '',
+        tim: 21,
         year: '',
         exclude_overlap: false
       },
@@ -378,16 +374,13 @@ export default {
     }
   },
   computed: {
-    data() {
-      return this.formData
-    },
     isCreateLoading() {
       // 从 Vuex store 中获取全局 loading 状态
       return this.$store.state.states.isCreateLoading
     }
   },
   async mounted() {
-    this.setBacktestHistory(1)
+    this.setBacktestHistory(20)
   },
   methods: {
     setBacktestHistory(val) {
@@ -468,19 +461,21 @@ export default {
       const rowUrl = this.rowUrl
       const name = this.data.name
       if(!validForm) return
-      if(!rowUrl) {
-        // 不是编辑是新建
-        const nameChecked = this.checkDuplicateNames(name)
-        if(nameChecked) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
-      }
+      // if(!rowUrl) {
+      //   // 不是编辑是新建
+      //   const nameChecked = this.checkDuplicateNames(name)
+      //   if(nameChecked) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
+      // }
       const exclude_overlap = this.isExcludeOO ? 1 : 0
       const saveData = {
         ...this.data,
         exclude_overlap
       }
+      // 如果是自定义时间，删除 year 字段
+      if(this.lookback_period != 22) delete saveData.year
 
-      if(rowUrl) return await editMyIndicators(saveData, rowUrl)
-      return await saveMyIndicators(saveData);
+      if(rowUrl) return await editCPM(saveData, rowUrl)
+      return await saveCPM(saveData);
     },
     validForm() {
       let formValid = null
@@ -500,6 +495,17 @@ export default {
       }
       return true
     },
+    displayData(data) {
+      this.rowUrl = data.url
+      const target = this.data
+      for (const key in target) {
+        if(key == 'exclude_overlap') {
+          target[key] = data[key] == 1 ? true : false
+        }else {
+          target[key] = data[key]
+        }
+      }
+    }
   }
 }
 </script>
