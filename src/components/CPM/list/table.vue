@@ -22,7 +22,7 @@
 			style="width: 100%; height: 100%; margin: 0 auto;"
 		>
     
-      <el-table-column
+      <!-- <el-table-column
         align="center"
         type="expand">
         <template slot-scope="scope">
@@ -41,7 +41,7 @@
               </el-row>
               <el-row :span="4">
               <el-form-item label="Timeframe">
-                <span>{{ scope.row['time_frame']}}</span>
+                <span>{{ scope.row['timeframe']}}</span>
               </el-form-item>
               </el-row>
               <el-row :span="4">
@@ -54,13 +54,6 @@
               </el-col>
               <el-col :span="12">
               <el-row :span="4">
-                <el-form-item label="Threshold">
-                  [
-                  <template v-for="(item, index) in scope.row['threshold']">
-                    <span :key="index">{{ index === scope.row['threshold'].length - 1 ? item : `${item}, ` }}</span>
-                  </template>
-                  ]
-                </el-form-item>
               </el-row>
               <el-row :span="4">
               <el-form-item label="Total Trades">
@@ -76,7 +69,7 @@
             </el-row>
           </el-form>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 			<template v-for="(l) in tableCol">
 				<el-table-column
           align="center"
@@ -126,23 +119,11 @@
             </template>
 					</template>
 				</el-table-column>
-        <el-table-column
-          align="center"
-					:label="l.label"
-					:prop="l.value"
-					:key="l.key"
-          v-if="['Threshold'].includes(l.label)"
-				>
-					<template slot-scope="scope">
-            <template v-for="(item, index) in scope.row[l.value]">
-              <p :key="index">{{`${item}`}}</p>
-            </template>
-					</template>
-				</el-table-column>
 			</template>
       <el-table-column align="center">
 				<template slot-scope="scope">
-        <el-button class="delete-btn" slot="reference" round size="mini" type="primary" icon="el-icon-delete"></el-button>
+        <el-button type="primary" icon="el-icon-edit" round size="mini" @click="editCPMData(scope.row)"></el-button>
+        <el-button class="delete-btn" slot="reference" round size="mini" type="primary" icon="el-icon-delete" @click="deleteCPM(scope.row)"></el-button>
         </template>
       </el-table-column>
 		</el-table>
@@ -157,6 +138,8 @@
 </template>
 
 <script>
+import { delCPM, getCPMList } from '@/service/service'
+import {isJson} from '@/utils'
 
 export default {
   name: 'Table',
@@ -171,31 +154,33 @@ export default {
       tableCol: [
         {
           label: 'Name',
-          value: 'name'
+          value: 'name',
+          key: 'name'
         },
         {
           label: 'Symbol',
-          value: 'symbol'
+          value: 'symbol',
+          key: 'symbol'
         },
         {
           label: 'Timeframe',
-          value: 'time_frame'
+          value: 'timeframe',
+          key: 'timeframe'
         },
         {
           label: 'Period',
-          value: 'period'
-        },
-        {
-          label: 'Threshold',
-          value: 'threshold'
+          value: 'period',
+          key: 'period'
         },
         {
           label: 'Total Trades',
-          value: 'total_trades'
+          value: 'total_trades',
+          key: 'total_trades'
         },
         {
           label: 'Total Return',
-          value: 'total_return'
+          value: 'total_return',
+          key: 'total_return'
         },
       ],
       tableData: [],
@@ -203,55 +188,85 @@ export default {
     }
   },
   async created() {
-    this.tableData = [
-      {
-        name: 'CPM1',
-        symbol: 'SPY',
-        time_frame: 'Daily',
-        period: ['2013-12-01', '2013-12-10'],
-        threshold: [0.85, 0.99],
-        total_trades: 35,
-        total_return: '158.95%',
-        data: {
-          "CPM Infos": [
-            { StartDate: '2004-01-26', EndDate: '2004-02-11', Corr: 1.0, Close:  1157.76},
-            { StartDate: '2004-02-12', EndDate: '2004-02-27', Corr: 1.0, Close:  1157.76},
-            { StartDate: '2004-08-28', EndDate: '2004-08-13', Corr: 1.0, Close:  1157.76},
-          ],
-          Results:  {
-            'TOTAL RETURN': 21.28, 
-            'MEDIAN RETURN': 2.31, 
-            'AVERAGE RETURN': 2.13, 
-            'WIN RATE': 80.0, 
-            'AVERAGE WIN': 3.29, 
-            'AVERAGE LOSS': -2.52, 
-            'TOTAL TRADES': 10, 
-            'TOTAL POSITIVE': 8, 
-            'TOTAL NEGATIVE': 2, 
-            'BUY & HOLD': 259.15, 
-            'TIME IN MARKET': 8.35, 
-            'Each Return': [5.34, 1.19, 1.43, 2.33, 2.29, 3.7, -0.02, 5.25, -5.02, 4.79], 
-            'Start Date': ['2014-10-08', '2015-03-23', '2015-08-28', '2017-08-15', '2018-06-21', '2019-05-21', '2022-03-02', '2022-10-05', '2023-08-14', '2023-10-18'], 
-            'End Date': ['2014-10-24', '2015-04-09', '2015-09-16', '2017-08-31', '2018-07-10', '2019-06-07', '2022-03-18', '2022-10-21', '2023-08-30', '2023-11-03'], 
-            'Correlation': [0.8051, 0.8612, 0.8222, 0.825, 0.81, 0.8188, 0.8181, 0.8078, 0.8018, 0.8079], 
-            'Symbol Close': [1964.58, 2091.18, 1995.31, 2471.65, 2793.84, 2873.34, 4463.12, 3752.75, 4514.87, 4358.34]
-          }
-        }
-      },
-      {
-        name: 'CPM2',
-        symbol: 'AAPL',
-        time_frame: 'Weekly',
-        period: ['2013-12-01', '2013-12-28'],
-        threshold: [0.95, 1.0],
-        total_trades: 35,
-        total_return: '158.95%'
-      }
-    ]
+    // this.tableData = [
+    //   {
+    //     name: 'CPM1',
+    //     symbol: 'SPY',
+    //     timeframe: 'Daily',
+    //     period: ['2013-12-01', '2013-12-10'],
+    //     threshold: [0.85, 0.99],
+    //     total_trades: 35,
+    //     total_return: '158.95%',
+    //     data: {
+    //       "CPM Infos": [
+    //         { StartDate: '2004-01-26', EndDate: '2004-02-11', Corr: 1.0, Close:  1157.76},
+    //         { StartDate: '2004-02-12', EndDate: '2004-02-27', Corr: 1.0, Close:  1157.76},
+    //         { StartDate: '2004-08-28', EndDate: '2004-08-13', Corr: 1.0, Close:  1157.76},
+    //       ],
+    //       Results:  {
+    //         'TOTAL RETURN': 21.28, 
+    //         'MEDIAN RETURN': 2.31, 
+    //         'AVERAGE RETURN': 2.13, 
+    //         'WIN RATE': 80.0, 
+    //         'AVERAGE WIN': 3.29, 
+    //         'AVERAGE LOSS': -2.52, 
+    //         'TOTAL TRADES': 10, 
+    //         'TOTAL POSITIVE': 8, 
+    //         'TOTAL NEGATIVE': 2, 
+    //         'BUY & HOLD': 259.15, 
+    //         'TIME IN MARKET': 8.35, 
+    //         'Each Return': [5.34, 1.19, 1.43, 2.33, 2.29, 3.7, -0.02, 5.25, -5.02, 4.79], 
+    //         'Start Date': ['2014-10-08', '2015-03-23', '2015-08-28', '2017-08-15', '2018-06-21', '2019-05-21', '2022-03-02', '2022-10-05', '2023-08-14', '2023-10-18'], 
+    //         'End Date': ['2014-10-24', '2015-04-09', '2015-09-16', '2017-08-31', '2018-07-10', '2019-06-07', '2022-03-18', '2022-10-21', '2023-08-30', '2023-11-03'], 
+    //         'Correlation': [0.8051, 0.8612, 0.8222, 0.825, 0.81, 0.8188, 0.8181, 0.8078, 0.8018, 0.8079], 
+    //         'Symbol Close': [1964.58, 2091.18, 1995.31, 2471.65, 2793.84, 2873.34, 4463.12, 3752.75, 4514.87, 4358.34]
+    //       }
+    //     }
+    //   },
+    //   {
+    //     name: 'CPM2',
+    //     symbol: 'AAPL',
+    //     timeframe: 'Weekly',
+    //     period: ['2013-12-01', '2013-12-28'],
+    //     threshold: [0.95, 1.0],
+    //     total_trades: 35,
+    //     total_return: '158.95%'
+    //   }
+    // ]
+    await this.getDataList()
+    console.log('列表返回处理数据', this.tableData)
   },
   methods: {
     async getDataList(orderby) {
-      // 请求数据以及处理数据, 应该传递当前的页数，排序信息，搜索框名字搜索
+      this.loading = true
+      let res = null
+      const page = this.currentPage
+			try {
+				res = await getCPMList(page, orderby, this.searchItem)
+				if (res.status == 200) {
+					let data = res.data.results
+					data = data.map(item => {
+            item.result = isJson(item.result) ? JSON.parse(item.result) : item.result
+            item.period = [item.start_date, item.end_date]
+						return item
+					})
+					this.tableData = data
+					this.total = res.data.count
+				}
+			} catch(error) {
+				console.log('报错了', error)
+        if(error.response.status === 404) {
+          const newPage = page != 1 ? page - 1 : 1
+          this.handleCurrentChange(newPage)
+          return
+        }
+        this.currentPage = 1
+        this.total = 0
+        this.tableData = []
+        
+      } finally {
+        this.loading = false
+      }
     },
     tableRowClassName({row, rowIndex}) {
 			if (rowIndex%2 === 1) {
@@ -300,6 +315,24 @@ export default {
         }
       })
     },
+    editCPMData(row) {
+      const data = JSON.stringify(row)
+      this.$router.push({
+        name: 'CreateCPM',
+        params: {
+          data,
+          usedFor: 'showCPMFormData',
+        }
+      })
+    },
+    async deleteCPM(row) {
+      const { url } = row
+      this.loading = true
+			await delCPM(url)
+			await this.getDataList(null)
+			this.loading = false
+			this.popUpMsgBox('Successfully deleted')
+    }
   }
 }
 </script>

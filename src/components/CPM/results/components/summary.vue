@@ -146,6 +146,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'CPMSummary',
   data() {
@@ -169,6 +170,14 @@ export default {
       }
     };
   },
+  methods: {
+    displayData(data) {
+      this.summary = {
+        ...this.summary,
+        ...data
+      }
+    }
+  }
 }
 </script>
 
