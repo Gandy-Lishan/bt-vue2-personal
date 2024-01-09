@@ -899,8 +899,8 @@ if (!CIQ.Studies) {
 			}
 		},
 		// new technical indicators in 2024
-		"Opening Gap": {
-            name: "Opening Gap",
+		"% of Opening Gap": {
+            name: "% of Opening Gap",
 			inputs: {},
             calculateFN: CIQ.Studies.calculateOpeningGap,
         },

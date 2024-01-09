@@ -650,8 +650,8 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"url": "cci"
 						},
 						{
-							"name": "Opening Gap",
-							"url": "Opening Gap"
+							"name": "% of Opening Gap",
+							"url": "% of Opening Gap"
 						},
 						{
 							"name": "Day of Week",

@@ -163,7 +163,10 @@ export default {
     },
     direction() {
       return this.getterDirection
-    }
+    },
+    updateSettingROC() {
+			return this.$store.state.chart.studySettingROC
+		},
   },
   watch: {
     beforeCalculateNewConditions: {
@@ -180,6 +183,12 @@ export default {
       immediate: true,
       deep: true
     },
+    updateSettingROC(val) {
+			if(val['criteria'] == this.criteria && val['panelIndex'] == this.panelIndex){
+        this.sym.conditionPeriod = val['period']
+				this.calculateNewConditions()
+			}
+		},
   },
   methods: {
     ROCLikeChange(val,limit) {
