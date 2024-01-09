@@ -291,6 +291,7 @@ export default {
         { value: 6, label: '% of Previous Range' },
         { value: 7, label: 'MA Ratio' },
         { value: 8, label: 'Range Rank' },
+        { value: 9, label: 'DrawDown %' }
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -375,7 +376,7 @@ export default {
   methods: {
     ROCLikeChange(val,limit) {
       //debugger
-      this.isROCLike = 5 <= val && val <= 8
+      this.isROCLike = 5 <= val && val <= 9
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.senti.condition = this.senti.newCondition
@@ -514,6 +515,9 @@ export default {
           case "Range Rank":
             _newCondition = 'RR'
             break;
+          case "DrawDown %":
+            _newCondition = 'DD'
+            break;
           default:
             break;
         }
@@ -641,6 +645,7 @@ export default {
           [6, { name: '% of Previous Range', abbr: 'OPR' }],
           [7, { name: 'MA Ratio', abbr: 'MA' }],
           [8, { name: 'Range Rank', abbr: 'RR' }],
+          [9, { name:'DrawDown %', abbr: 'DD' }]
         ])
         
         // 判断是否已经存在完全一样条件的ROC

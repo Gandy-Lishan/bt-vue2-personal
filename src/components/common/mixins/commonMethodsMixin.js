@@ -527,7 +527,8 @@ export const CommonMethodsMixin = {
 				[5, { name: 'Rate Of Change', abbr: 'ROC' }],
 				[6, { name: '% of Previous Range', abbr: 'OPR' }],
 				[7, { name: 'MA Ratio', abbr: 'MA' }],
-				[8, { name: 'Range Rank', abbr: 'RR' }]
+				[8, { name: 'Range Rank', abbr: 'RR' }],
+				[9, { name: 'DrawDown %', abbr: 'DD' }]
 			])
 			let indicator_url = ''
 			let indicator_url_with_ma = ''
@@ -698,7 +699,7 @@ export const CommonMethodsMixin = {
 				if (item)
 					return {
 						...item,
-						isROCLike: 5 <= item.newCondition && item.newCondition <= 8
+						isROCLike: 5 <= item.newCondition && item.newCondition <= 9
 					}
 				return null
 			})	
