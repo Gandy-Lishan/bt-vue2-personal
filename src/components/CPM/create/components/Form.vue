@@ -188,7 +188,7 @@
       <el-form-item
 				label="9.Custom Duration"
         prop="year"
-        v-if="data.lookback_period == 22"
+        v-if="data.lookback_period == 'Custom'"
 			>
         <el-input
           v-model="data.year"
@@ -328,11 +328,11 @@ export default {
           label: '20 Year'
         },
         {
-          value: 21,
+          value: 'All',
           label: 'All History'
         },
         {
-          value: 22,
+          value: 'Custom',
           label: 'Custom...'
         }
       ],
@@ -471,8 +471,8 @@ export default {
         ...this.data,
         exclude_overlap
       }
-      // 如果是自定义时间，删除 year 字段
-      if(this.lookback_period != 22) delete saveData.year
+      if(saveData.lookback_period == 'Custom') saveData.lookback_period = saveData.year
+      delete saveData.year
 
       if(rowUrl) return await editCPM(saveData, rowUrl)
       return await saveCPM(saveData);
@@ -501,6 +501,11 @@ export default {
       for (const key in target) {
         if(key == 'exclude_overlap') {
           target[key] = data[key] == 1 ? true : false
+        }else if (key == 'lookback_period'){
+          const editPeriod = data[key]
+          const exists = historyOptions.some(option => option.value == editPeriod)
+          if(exists) target[key] = data[key]
+          if(!exists) { target[key] = 'Custom'; }
         }else {
           target[key] = data[key]
         }

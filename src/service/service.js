@@ -725,7 +725,7 @@ export function saveMyIndicators(data) {
 	})
 }
 export function saveCPM(data) {
-	const url = '/dev/cpm/run_cpm_bts'
+	const url = '/dev/cpm/run_cpm_bt'
 	const formData = new FormData()
 
 	// 将data对象的属性添加到FormData
