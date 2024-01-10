@@ -571,7 +571,31 @@ if (!CIQ.Studies) {
 							// 如果分母为0，直接返回0
 							if(maxCloseArrDD[i] == 0) return 0
 
-							const change = parseFloat((100 * (maxCloseArrDD[i] - row[field]) / maxCloseArrDD[i]).toFixed(4))
+							const change = parseFloat((100 * (row[field] - maxCloseArrDD[i]) / maxCloseArrDD[i]).toFixed(4))
+							
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+				break;
+			case 'DU':
+				// 公式：(Current close - Highest Close) / Highest Close
+				let indexDU = quotes.findIndex(row=> field in row &&  row[field]!=null)
+				quotes = quotes.slice(indexDU) 
+				const minCloseArrDU = getPeriodParam(quotes.map(row => row[field]), "min", period, 1);
+				resArr = quotes.map((row, i) => {
+					if(field in quotes[i] &&  quotes[i][field]!=null){
+						if(i>=period){
+							// 如果分母为0，直接返回0
+							if(minCloseArrDU[i] == 0) return 0
+
+							const change = parseFloat((100 * (row[field] - minCloseArrDU[i]) / minCloseArrDU[i]).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
 						}
