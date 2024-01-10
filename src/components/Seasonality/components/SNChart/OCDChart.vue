@@ -1,7 +1,7 @@
 <template>
     <div class="SNChart-container">
       <SNChart :plotConfiguration="plotConfiguration" :dataList="dataList" :dynamicId="dynamicId" v-if="[0,1].includes(option)"></SNChart>
-      <Table :tableData="dataList" :option="option" class="default-table-class" v-else></Table>
+      <Table :tableData="dataList" :option="option" class="default-table-class" :tradingIndex="tradingIndex" v-else></Table>
     </div>
   </template>
   
@@ -21,7 +21,8 @@ import { checkProperties } from "@/utils";
           return {
               dynamicId: 'OCDContainer',
               dataList: [],
-              option: 0
+              option: 0,
+              tradingIndex: null
           }
       },
       components: {
@@ -51,7 +52,8 @@ import { checkProperties } from "@/utils";
                   url = `/dev/seasonality/get_day_of_year_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}`
                 }
 
-                const {data: {data}} = await getSeasonalityData(url)
+                const {data: {data}, current_trading_index} = await getSeasonalityData(url)
+                this.tradingIndex = current_trading_index || 5
                 console.log('data', data)
                 if(data?.length === 0) {this.popUpMsgBox('Not found: Adjust your search criteria for the selected symbol')}
                 if([0, 1].includes(newVal.option)) {
