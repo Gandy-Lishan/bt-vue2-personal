@@ -53,7 +53,7 @@
 								}}</span>
 							</template>
 						</el-table-column>
-            <el-table-column
+            <!-- <el-table-column
                 prop="tzScore"
                 label="Z-SCORE"
                 align="center"
@@ -66,8 +66,8 @@
                     <span v-else-if="isNaN(scope.row.tzScore)">0</span>
                     <span v-else style="color: #dd3a13">{{ scope.row.tzScore }}</span>
                 </template>
-            </el-table-column>
-						<el-table-column
+            </el-table-column> -->
+						<!-- <el-table-column
 							show-overflow-tooltip
 							prop="standardDeviation"
 							label="STD. DEV"
@@ -82,7 +82,7 @@
 									scope.row.standardDeviation
 								}}</span>
 							</template>
-						</el-table-column>
+						</el-table-column> -->
             <el-table-column
                 show-overflow-tooltip
                 prop="buyHoldGain"
@@ -99,32 +99,6 @@
                     }}</span>
                 </template>
             </el-table-column>
-		  </el-table>
-					<el-table
-						header-align="center"
-						:data="summaryData"
-					>
-						<!-- <el-table-column
-							prop="drawDown"
-							label="MAX RISK %"
-							align="center"
-							show-overflow-tooltip
-						>
-							<template slot-scope="scope">
-								<span v-if="scope.row.drawDown >= 0">{{
-									scope.row.drawDown + '%'
-								}}</span>
-								<span v-else-if="isNaN(scope.row.drawDown)">0</span>
-								<span v-else style="color: #dd3a13">{{
-									scope.row.drawDown + '%'
-								}}</span>
-							</template>
-						</el-table-column> -->
-					</el-table>
-					<el-table
-						header-align="center"
-						:data="summaryData"
-					>
 						<el-table-column
 							prop="winRate"
 							label="WIN RATE %"
@@ -141,6 +115,16 @@
 								}}</span>
 							</template>
 						</el-table-column>
+		  </el-table>
+					<el-table
+						header-align="center"
+						:data="summaryData"
+					>
+					</el-table>
+					<el-table
+						header-align="center"
+						:data="summaryData"
+					>
 						<el-table-column
 							show-overflow-tooltip
 							prop="averageWin"
@@ -174,27 +158,6 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-							show-overflow-tooltip
-							prop="maxRisk"
-							label="MAX RISK %"
-							align="center"
-						>
-							<template slot-scope="scope">
-								<span v-if="scope.row.maxRisk >= 0">{{
-									scope.row.maxRisk + ' %'
-								}}</span>
-								<span v-else-if="isNaN(scope.row.maxRisk) || !scope.row.maxRisk || scope.row.maxRisk=='null' || scope.row.maxRisk=='0'"></span>
-								<span v-else style="color: #dd3a13">{{
-									scope.row.maxRisk + ' %'
-								}}</span>
-							</template>
-						</el-table-column>
-					</el-table>
-          <el-table
-						header-align="center"
-						:data="summaryData"
-					>
-						<el-table-column
 							prop="totalTrades"
 							label="TOTAL TRADES"
 							show-overflow-tooltip
@@ -209,6 +172,27 @@
 								}}</span>
 							</template>
 						</el-table-column>
+						<!-- <el-table-column
+							show-overflow-tooltip
+							prop="maxRisk"
+							label="MAX RISK %"
+							align="center"
+						>
+							<template slot-scope="scope">
+								<span v-if="scope.row.maxRisk >= 0">{{
+									scope.row.maxRisk + ' %'
+								}}</span>
+								<span v-else-if="isNaN(scope.row.maxRisk) || !scope.row.maxRisk || scope.row.maxRisk=='null' || scope.row.maxRisk=='0'"></span>
+								<span v-else style="color: #dd3a13">{{
+									scope.row.maxRisk + ' %'
+								}}</span>
+							</template>
+						</el-table-column> -->
+					</el-table>
+          <el-table
+						header-align="center"
+						:data="summaryData"
+					>
 						<el-table-column
 							show-overflow-tooltip
 							prop="totalPositive"

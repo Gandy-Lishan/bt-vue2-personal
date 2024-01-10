@@ -65,6 +65,23 @@ export default {
           summary.exclude_overlapping = _data.exclude_overlapping == 1 ? 'True' : 'False'
           summary.start_date = _data.start_date
           summary.end_date = _data.end_date
+          let timeframe = _data.timeframe
+          let period
+          switch (timeframe) {
+            case "Daily":
+                period = "Days"
+                break;
+            case "Weekly":
+                period = "Weeks"
+                break;
+            case "Monthly":
+                period = "Months"
+                break;
+            default:
+                console.error("Invalid timeframe value")
+                break;
+          }
+          summary.observation_period = `${_data.time_in_market} ${period}`
           _this.$refs['Summary'].displayData(summary)
           const statistics = {}
           statistics.totalReturn = _data.total_return

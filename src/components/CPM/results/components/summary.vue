@@ -2,7 +2,6 @@
   <div class="CPM-summary-container">
     <el-row :gutter="20">
       <el-col :span="6">
-        <div>
           <el-statistic
             title="Symbol"
           >
@@ -10,25 +9,13 @@
               <h3>{{ summary.symbol }}</h3>
           </template>
         </el-statistic>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div>
-          <el-statistic
-           title="Indicator"
-          >
-          <template slot="formatter">
-              <h3>{{ summary.indicator }}</h3>
-          </template>
-          </el-statistic>
-        </div>
       </el-col>
       <el-col :span="6">
         <el-statistic
           title="Lookback Period"
         >
         <template slot="formatter">
-              <h3>{{ summary.lookback_period }}</h3>
+              <h3>{{ summary.lookback_period }} Years</h3>
         </template>
         </el-statistic>
       </el-col>
@@ -41,29 +28,27 @@
         </template>
         </el-statistic>
       </el-col>
+      <el-col :span="6">
+        <el-statistic
+          title="exclude overlapping"
+        >
+        <template slot="formatter">
+              <h3>{{ summary.exclude_overlapping }}</h3>
+        </template>
+        </el-statistic>
+      </el-col>
     </el-row>
     <br>
     <el-row :gutter="20">
       <el-col :span="6">
         <div>
-          <el-statistic
+          <!-- <el-statistic
             title="index filter"
           >
           <template slot="formatter">
               {{ summary.index_filter }}
           </template>
-        </el-statistic>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div>
-          <el-statistic
-           title="indicator smoothing"
-          >
-          <template slot="formatter">
-              {{ summary.indicator_smoothing }}
-          </template>
-          </el-statistic>
+        </el-statistic> -->
         </div>
       </el-col>
       <el-col :span="6">
@@ -72,6 +57,15 @@
         >
         <template slot="formatter">
               {{ summary.start_date }}
+        </template>
+        </el-statistic>
+      </el-col>
+      <el-col :span="6">
+        <el-statistic
+          title="end date"
+        >
+        <template slot="formatter">
+              {{ summary.end_date }}
         </template>
         </el-statistic>
       </el-col>
@@ -89,56 +83,47 @@
     <el-row :gutter="20">
       <el-col :span="6">
         <div>
-          <el-statistic
+          <!-- <el-statistic
             title="index filter swap"
           >
           <template slot="formatter">
               {{ summary.index_filter_swap }}
           </template>
-        </el-statistic>
+        </el-statistic> -->
         </div>
       </el-col>
       <el-col :span="6">
         <div>
-          <el-statistic
+          <!-- <el-statistic
            title="indicator level"
           >
           <template slot="formatter">
               {{ summary.indicator_level }}
           </template>
-          </el-statistic>
+          </el-statistic> -->
         </div>
       </el-col>
       <el-col :span="6">
-        <el-statistic
-          title="end date"
-        >
-        <template slot="formatter">
-              {{ summary.end_date }}
-        </template>
-        </el-statistic>
-      </el-col>
-      <el-col :span="6">
-        <el-statistic
+        <!-- <el-statistic
           title="market environment"
         >
         <template slot="formatter">
               {{ summary.market_environment }}
         </template>
-        </el-statistic>
+        </el-statistic> -->
       </el-col>
     </el-row>
     <br>
     <el-row :gutter="20">
       <el-col :span="6">
         <div>
-          <el-statistic
+          <!-- <el-statistic
             title="index ma slope"
           >
           <template slot="formatter">
               {{ summary.index_ma_slope }}
           </template>
-        </el-statistic>
+        </el-statistic> -->
         </div>
       </el-col>
     </el-row>
@@ -156,8 +141,8 @@ export default {
         symbol: 'CRUDE',
         time_frame: 'Daily',
         indicator: 'MACD',
-        lookback_period: '15 Years',
-        observation_period: '15 Days',
+        lookback_period: '15',
+        observation_period: '15',
         index_filter: 'None',
         indicator_smoothing: 'None',
         exclude_overlapping: 'True',
