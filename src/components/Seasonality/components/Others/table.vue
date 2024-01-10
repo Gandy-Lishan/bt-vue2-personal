@@ -168,7 +168,8 @@ export default {
   name: 'Table',
   props: {
     tableData: Array,
-    option: Number
+    option: Number,
+    tradingIndex: [Number, String]
   },
   data() {
     return {
