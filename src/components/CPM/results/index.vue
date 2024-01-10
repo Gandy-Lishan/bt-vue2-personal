@@ -1,6 +1,9 @@
 <template>
   <div class="CPMResults-container">
     <el-collapse v-model="activeNames" @change="handleChange" :accordion="false">
+      <div class="chart">
+        <Chart :chart_data="chart_data" :breadcrumbTitle="breadcrumbTitle"></Chart>
+      </div>
       <el-collapse-item name="1">
         <template v-slot:title>
           <div class="title">
@@ -22,7 +25,7 @@
         </template>
       <div class="content">
           <Statistics v-show="activeTab == 'statistics'" ref="Statistics"></Statistics>
-          <TIM v-show="activeTab == 'results'" ref="TIM" :tradeDate="tradeDate" :rowFrequency="rowFrequency" :tradePrice="tradePrice"></TIM>
+          <TIM v-show="activeTab == 'results'" ref="TIM" :tradeDate="tradeDate" :rowFrequency="rowFrequency" :tradePrice="tradePrice" :direction="direction"></TIM>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -33,6 +36,7 @@
 import CPMSummary from "./components/summary";
 import Statistics from "./components/statistics";
 import TIM from "./components/tim";
+import Chart from "../create/components/Chart"
 import {isJson} from '@/utils'
 
 export default {
@@ -43,13 +47,17 @@ export default {
       activeTab: 'statistics',
       tradeDate: {},
       rowFrequency: 'Daily',
-      tradePrice: 'Open'
+      tradePrice: 'Close',
+      chart_data: {},
+      breadcrumbTitle: 'Back to CPM list',
+      direction: 'Long'
     }
   },
   components: {
     CPMSummary,
     Statistics,
-    TIM
+    TIM,
+    Chart
   },
     beforeRouteEnter(to, _, next) {
 		if (to.path === '/cpm/results') {
@@ -65,6 +73,7 @@ export default {
           summary.exclude_overlapping = _data.exclude_overlapping == 1 ? 'True' : 'False'
           summary.start_date = _data.start_date
           summary.end_date = _data.end_date
+          summary.direction = _data.direction || 'Long'
           let timeframe = _data.timeframe
           let period
           switch (timeframe) {
@@ -120,6 +129,7 @@ export default {
           _this.$refs['Statistics'].displayData(statistics, transformedResult)
           _this.tradeDate = TradeDateArray
           _this.rowFrequency = _data.timeframe
+          _this.direction = _data.direction || 'Long'
           const datatime = new Date(_data.start_date)
           _this.$refs['TIM'].prepareData(_data.url, datatime)
 
@@ -146,7 +156,6 @@ export default {
   grid-gap: 20px;
   width: 80vw;
   margin: 0 auto;
-  background-color: #fff;
 }
 /deep/ .el-collapse-item__header {
   background-color: #c0c4cc5c;
@@ -175,6 +184,14 @@ export default {
 .active {
   background-color: #fff;
   border: 1px solid #e0e0e0;
+}
+.chart {
+  background-color: inherit;
+  margin-bottom: 20px;
+}
+/deep/ .el-collapse {
+  border-top: unset;
+  border-bottom: unset;
 }
 
 </style>

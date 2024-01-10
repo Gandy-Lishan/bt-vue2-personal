@@ -71,10 +71,10 @@
       </el-col>
       <el-col :span="6">
         <el-statistic
-          title="exclude overlapping"
+          title="direction"
         >
         <template slot="formatter">
-              {{ summary.exclude_overlapping }}
+              {{ summary.direction }}
         </template>
         </el-statistic>
       </el-col>
@@ -152,6 +152,7 @@ export default {
         end_date: '2020-12-31',
         market_environment: 'All Market Environments',
         index_ma_slope: 'None',
+        direction: 'Long'
       }
     };
   },
@@ -168,7 +169,7 @@ export default {
 
 <style lang="less" scoped>
 .CPM-summary-container {
-  padding: 20px 0px;
+  padding: 20px 0px 0px 0px;
 }
   /deep/ .el-statistic .head .title {
     justify-content: center;

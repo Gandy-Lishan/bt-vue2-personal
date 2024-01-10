@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="back">
-			<router-link to="/cpm"><i class="el-icon-arrow-left"></i><span>Back to CPM list</span></router-link>
+			<router-link to="/cpm"><i class="el-icon-arrow-left"></i><span>{{breadcrumbTitle}}</span></router-link>
 		</div>
 			<div class="chart_box" id="chart_box">
 				<chart width="100%" height="100%" :onChartReady="onChartReady">
@@ -22,7 +22,8 @@ import { LoadingOverlayChart } from "@/components/common"
 export default {
 	name: 'MIChart',
 	props: {
-		chart_data: Object
+		chart_data: Object,
+		breadcrumbTitle: String
 	},
 	data() {
 		return {
