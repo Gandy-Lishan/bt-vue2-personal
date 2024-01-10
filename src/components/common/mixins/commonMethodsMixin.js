@@ -528,7 +528,8 @@ export const CommonMethodsMixin = {
 				[6, { name: '% of Previous Range', abbr: 'OPR' }],
 				[7, { name: 'MA Ratio', abbr: 'MA' }],
 				[8, { name: 'Range Rank', abbr: 'RR' }],
-				[9, { name: 'DrawDown %', abbr: 'DD' }]
+				[9, { name: 'DrawDown %', abbr: 'DD' }],
+				[10, { name:'DrawUp %', abbr: 'DU' }]
 			])
 			let indicator_url = ''
 			let indicator_url_with_ma = ''
