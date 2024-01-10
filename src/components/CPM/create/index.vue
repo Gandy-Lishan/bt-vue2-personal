@@ -1,7 +1,7 @@
 <template>
   <div class="create-cpm-container">
     <div class="chart">
-      <Chart :chart_data="chart_data"></Chart>
+      <Chart :chart_data="chart_data" :breadcrumbTitle="breadcrumbTitle"></Chart>
     </div>
     <div class="form">
       <div class="form-header">
@@ -22,7 +22,8 @@ export default {
   name: "CreateCPM",
   data() {
     return {
-      chart_data: {}
+      chart_data: {},
+      breadcrumbTitle: 'Back to CPM list'
     }
   },
   beforeRouteEnter(to, _, next) {

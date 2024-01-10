@@ -87,7 +87,23 @@
   </el-row>
   <el-row :gutter="20">
     <el-col :span="6">
-      <el-form-item prop="timeframe" label="5.Timeframe">
+      <el-form-item prop="direction" label="5.Direction">
+        <el-select
+            v-model="data.direction"
+            placeholder="— Select Direction —"
+          >
+            <el-option
+              v-for="item in directionOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+      </el-form-item>
+    </el-col>
+    <el-col :span="6">
+      <el-form-item prop="timeframe" label="6.Timeframe">
         <el-select
             v-model="data.timeframe"
             placeholder="— Select Timeframe —"
@@ -105,12 +121,12 @@
     </el-col>
     <el-col :span="6">
       <el-form-item
-				label="6.Correlation Percentage"
+				label="7.Correlation Percentage"
         prop="corr_per"
 			>
         <template slot="label">
           <label>
-            6.Correlation Percentage
+            7.Correlation Percentage
             <el-tooltip effect="dark" placement="top">
               <span slot="content">
                 Correlation Percentage
@@ -119,17 +135,21 @@
             </el-tooltip>
           </label>
         </template>
-				<el-input v-model="data.corr_per" placeholder="Enter correlation percentage"></el-input>
+				<el-input v-model="data.corr_per" placeholder="Enter correlation percentage">
+          <template v-slot:append>
+          (%)
+          </template>
+        </el-input>
 			</el-form-item>
     </el-col>
     <el-col :span="6">
       <el-form-item
-				label="7.Time In Market"
+				label="8.Time In Market"
         prop="tim"
 			>
         <template slot="label">
           <label>
-            7.Time In Market
+            8.Time In Market
             <el-tooltip effect="dark" placement="top">
               <span slot="content">
                 Input a value of bars to stay in market after entry.<br />Exit
@@ -149,11 +169,13 @@
           </template></el-input>
 			</el-form-item>
     </el-col>
+  </el-row>
+  <el-row :gutter="20">
     <el-col :span="6">
-    <el-form-item prop="backtestHistory" label="8.Lookback Period(List)">
+    <el-form-item prop="backtestHistory" label="9.Lookback Period(List)">
         <template slot="label">
           <label>
-            8.Lookback Period(List)
+            9.Lookback Period(List)
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >Specify the start and end date of the backtest.<br />Choose
@@ -180,13 +202,9 @@
         </div>
       </el-form-item>
     </el-col>
-  </el-row>
-  <el-row :gutter="20">
-    <el-col :span="6">
-    </el-col>
     <el-col :span="6">
       <el-form-item
-				label="9.Custom Duration"
+				label="10.Custom Duration"
         prop="year"
         v-if="data.lookback_period == 'Custom'"
 			>
@@ -270,13 +288,18 @@ export default {
         corr_per: '',
         tim: 21,
         year: '',
-        exclude_overlap: false
+        exclude_overlap: false,
+        direction: 'Long'
       },
       dropdownList: [],
       frequencyOptions: [
         { value: 'Daily', label: 'Daily' },
         { value: 'Weekly', label: 'Weekly' },
         { value: 'Monthly', label: 'Monthly' }
+      ],
+      directionOptions: [
+        { value: 'Long', label: 'Long' },
+        { value: 'Short', label: 'Short' }
       ],
       historyOptions: [
         {

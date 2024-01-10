@@ -78,12 +78,15 @@
 </template>
 
 <script>
+import { CIQ } from '@/components/common/chart/st-development/js/components'
+
 export default {
   name: 'TIM',
   props: {
     tradesData: Array,
     tradePrice: String,
-    rowFrequency: String
+    rowFrequency: String,
+		direction: String
   },
   data() {
     return {
@@ -189,7 +192,8 @@ export default {
       */
 			let period_dict = this.transformZScoreData(periodArray)
 			let quotes = CIQ.stxx.chart.masterData
-			const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
+			// const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
+			const direction = this.direction
 			for (var i in period_dict) {
 				quotes = this.generate_period_data(
 					period_dict[i].timeframe,
@@ -205,7 +209,7 @@ export default {
 			//鎶婁氦鏄撳垪琛ㄨ浆鎹㈡垚鏃堕棿鎴
 			let dataTimeList = []
 			for (var data in dataSet) {
-				if (dataSet[data].TradeStatus != 'BUY') continue
+				// if (dataSet[data].TradeStatus != 'BUY') continue
 				var datatime = new Date(dataSet[data].Date)
 				var offset = datatime.getTimezoneOffset() * 60 * 1000
 				var entryDate = new Date(
@@ -299,10 +303,9 @@ export default {
       periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
       */
 			let chartDataset = CIQ.stxx.chart.dataSet
-			const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
+			debugger
+			const direction = this.direction
 			const field = this.tradePrice
-			// dataSet = dataSet.filter((item) => item.TradeStatus == 'BUY')
-			dataSet = dataSet.filter((_, index) => index % 2 === 0)
 			let backtestResult = []
 
 			for (var data in dataSet) {
