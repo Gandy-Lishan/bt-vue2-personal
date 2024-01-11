@@ -130,8 +130,10 @@ export default {
           _this.tradeDate = TradeDateArray
           _this.rowFrequency = _data.timeframe
           _this.direction = _data.direction || 'Long'
-          const datatime = new Date(_data.start_date)
-          _this.$refs['TIM'].prepareData(_data.url, datatime)
+          _this.$nextTick(() => {
+            const datatime = new Date(_data.start_date)
+            _this.$refs['TIM'].prepareData(TradeDateArray, datatime)
+            });
 
 				}
 			})

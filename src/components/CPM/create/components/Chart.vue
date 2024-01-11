@@ -5,11 +5,12 @@
 		</div>
 			<div class="chart_box" id="chart_box">
 				<chart width="100%" height="100%" :onChartReady="onChartReady">
-					<LoadingOverlayChart
+					<!-- <LoadingOverlayChart
 							:isLoading="chartLoadingSetting.isChartLoading"
 							:progressText="chartLoadingSetting.progressText"
 						>
-					</LoadingOverlayChart>	
+					</LoadingOverlayChart>	 -->
+					
 				</chart>
 			</div>
 	</div>
@@ -85,8 +86,8 @@ export default {
 		onChartReady(){
 			this.hideComponents()	
 			//还原自定义indicator Layout
-			if(this.chart_data.name) CIQ.displayUserOwnIndicatorLayout(this.chart_data)
-			else CIQ.hideCover()
+			// if(this.chart_data.name) CIQ.displayUserOwnIndicatorLayout(this.chart_data)
+			// else CIQ.hideCover()
 
 			console.log('chart_data',this.chart_data)
 		},

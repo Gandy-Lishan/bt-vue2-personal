@@ -45,8 +45,9 @@
           </el-table>
         </template>
       </el-skeleton>
+    	</div>
     </div>
-    </div>
+    <hr style="height:2px;border:none;color:#333;background-color:#333;">
     <div class="CPM-ZScore">
       <el-skeleton :rows="6" :loading="loading" animated>
         <template>
@@ -56,6 +57,7 @@
             stripe
             border
             style="height: 100%; margin: 0 auto"
+						class="CPM-trades"
           >
             <template v-for="(l, index) in defaultTableLabels">
               <el-table-column :label="l" :prop="l" :key="index" align="center">
@@ -73,7 +75,6 @@
         </template>
       </el-skeleton>
     </div>
-    <hr style="height:2px;border:none;color:#333;background-color:#333;">
   </div>
 </template>
 
@@ -104,9 +105,24 @@ export default {
       //Exit With Default Time-In-Market/zscore-container
 			result_quotes: [],
 			periods: [],
+			start_date: null,
+			loading: false
     }
   },
   methods: {
+		getCellStyle(value) {
+      // Check if the value is negative and return a class name accordingly
+      return {
+        'negative-value': value < 0,
+      };
+			},
+		tableRowClassName(obj) {
+      const {row, rowIndex} = obj
+        if (rowIndex%2 === 1) {
+        return 'darken-row';
+        }
+        return '';
+	  },
     // Utility function to format an output
 		displayData(data) {
 			const numberRegex = /^-?\d+(\.\d+)?$/
@@ -121,12 +137,16 @@ export default {
 				return ''
 			}
 		},
-    async prepareData(rowID,datatime) {
+    async prepareData(tradesData,datatime) {
+			this.tradesData = tradesData
       const periodArray = this.getAllDefaultTableLabels()
+			console.log('periodArray', periodArray)
+			console.log('defaultTableLabels', this.defaultTableLabels)
       this.backtestHistoryList = this.calculateBacktestHistory(
           this.tradesData,
           periodArray
       )
+			console.log('this.backtestHistoryList', this.backtestHistoryList)
       var offset = datatime.getTimezoneOffset() * 60 * 1000
       this.start_date = new Date(
           datatime.setTime(datatime.getTime() + offset)
@@ -185,6 +205,309 @@ export default {
 					break
 			}
 			return periodArray
+		},
+		transformZScoreData(data) {
+			data = data.map((item) => {
+				if (item.period % 252 === 0 && item.timeframe === 'Day') {
+					return { period: item.period / 252, timeframe: 'Year' }
+				}
+				if (item.period % 21 === 0 && item.timeframe === 'Day') {
+					return { period: item.period / 21, timeframe: 'Month' }
+				}
+				// if (item.period % 5 === 0 && item.timeframe === 'Day') {
+				//   return { period: item.period / 5, timeframe: 'Week' }
+				// }
+				if (item.period % 52 === 0 && item.timeframe === 'Week') {
+					return { period: item.period / 52, timeframe: 'Year' }
+				}
+				// if (item.period % 4 === 0 && item.timeframe === 'Week') {
+				//   return { period: item.period / 4, timeframe: 'Month' }
+				// }
+				if (item.period % 12 === 0 && item.timeframe === 'Month') {
+					return { period: item.period / 12, timeframe: 'Year' }
+				}
+				return item
+			})
+			data = data.map((item) => {
+				let period = item.period
+				let timeframe = item.timeframe
+				if (this.rowFrequency === 'Daily') {
+					if (timeframe === 'Day') {
+						if (period % 5 === 0) {
+							period = period / 5
+							timeframe = 'Week'
+						}
+						if (period % 13 === 0 && timeframe.includes('Week')) {
+							period = (period / 13) * 3
+							timeframe = 'Month'
+						}
+						if (period % 12 === 0 && timeframe.includes('Month')) {
+							period = period / 12
+							timeframe = 'Year'
+						}
+					} else if (timeframe === 'Week') {
+						if (period % 13 === 0) {
+							period = (period / 13) * 3
+							timeframe = 'Month'
+						}
+						if (period % 12 === 0 && timeframe.includes('Month')) {
+							period = period / 12
+							timeframe = 'Year'
+						}
+					} else if (timeframe === 'Month') {
+						if (period % 12 === 0) {
+							period = period / 12
+							timeframe = 'Year'
+						}
+					}
+					return { period, timeframe }
+				} else if (this.rowFrequency === 'Weekly') {
+					if (timeframe === 'Week') {
+						// if(period % 4 === 0 && period <= 8) {
+						//   period = period / 4;
+						//   timeframe = 'Month';
+						// }else if(period % 13 === 0 && period > 8) {
+						//   period = (period / 13) * 3;
+						//   timeframe = 'Month';
+						// }
+						if ((period % 13) % 4 === 0) {
+							if (period % 13 === 12) {
+								// 不转
+								period = period
+								timeframe = 'Week'
+							} else {
+								let num = Math.trunc(period / 13)
+								let end = (period % 13) / 4
+								period = num * 3 + end
+								timeframe = 'Month'
+							}
+						}
+						if (period % 12 === 0 && timeframe.includes('Month')) {
+							period = period / 12
+							timeframe = 'Year'
+						}
+					} else if (timeframe === 'Month') {
+						if (period % 12 === 0) {
+							period = period / 12
+							timeframe = 'Year'
+						}
+					}
+					return { period, timeframe }
+				} else if (this.rowFrequency === 'Monthly') {
+					if (timeframe === 'Month') {
+						if (period % 12 === 0) {
+							period = period / 12
+						}
+					}
+					return { period, timeframe }
+				}
+			})
+			return data.map((item) => {
+				let timeframe =
+					item.period > 1
+						? `${item.period} ${item.timeframe}s`
+						: `${item.period} ${item.timeframe}`
+				let value
+				const frequency = this.rowFrequency
+				if (frequency == 'Daily') {
+					switch (item.timeframe) {
+						case 'Day':
+							value = Number(item.period)
+							break
+						case 'Week':
+							value = Number(item.period) * 5
+							break
+						case 'Month':
+							value = Number(item.period) * 21
+							break
+						case 'Year':
+							value = Number(item.period) * 252
+							break
+						default:
+							break
+					}
+				} else if (frequency == 'Weekly') {
+					switch (item.timeframe) {
+						case 'Week':
+							value = Number(item.period)
+							break
+						case 'Month':
+							const period = Number(item.period)
+							// if(period % 3 == 0) {
+							//   num_3 = Math.trunc(period / 3) // 去除小数点取整数
+							// }
+							// value = num_3 === null ? period * 4 : period * 4 + num_3
+							let num_3 = null
+							num_3 = Math.trunc(period / 3) // 去除小数点取整数
+							let end_3 = period % 3 // 余数
+							// value = num_3 === null ? period * 4 : period * 4 + num_3
+							value = num_3 * 13 + end_3 * 4
+							break
+						case 'Year':
+							value = Number(item.period) * 52
+							break
+						default:
+							break
+					}
+				} else if (frequency == 'Monthly') {
+					switch (item.timeframe) {
+						case 'Month':
+							value = Number(item.period)
+							break
+						case 'Year':
+							value = Number(item.period) * 12
+							break
+						default:
+							break
+					}
+				}
+
+				return { timeframe, period: item.period, value }
+			})
+		},
+		generate_period_data(name, quotes, period, direction) {
+			const field = this.tradePrice
+			quotes = quotes.map((row, i) => {
+				if (i < quotes.length - period) {
+					//const change = parseFloat((100 * (quotes[i + period][field] / row[field] - 1)).toFixed(1))
+					const change = parseFloat(
+						(
+							((direction == 'Short'
+								? row[field] - quotes[i + period][field]
+								: quotes[i + period][field] - row[field]) /
+								row[field]) *
+							100
+						).toFixed(1)
+					)
+					return {
+						...row,
+						[field + period]: quotes[i + period][field],
+						[name]: change == Infinity || change == -Infinity ? 0 : change
+					}
+				} else {
+					return {
+						...row,
+						[field + period]: NaN,
+						[name]: NaN
+					}
+				}
+			})
+			const minCloseArr = this.get_period_parm(
+				quotes.map((row) => row[field + period]),
+				'min',
+				period
+			)
+			const maxCloseArr = this.get_period_parm(
+				quotes.map((row) => row[field + period]),
+				'max',
+				period
+			)
+			quotes = quotes.map((row, i) => {
+				if (i >= period) {
+					const change = parseFloat(
+						(100 * (minCloseArr[i] / row[field] - 1)).toFixed(1)
+					)
+					return {
+						...row,
+						['MaxLoss' + period]:
+							change == Infinity || change == -Infinity ? 0 : change
+					}
+				} else {
+					return {
+						...row,
+						['MaxLoss' + period]: NaN
+					}
+				}
+			})
+			quotes = quotes.map((row, i) => {
+				if (i >= period) {
+					const change = parseFloat(
+						(100 * (maxCloseArr[i] / row[field] - 1)).toFixed(1)
+					)
+					return {
+						...row,
+						['MaxGain' + period]:
+							change == Infinity || change == -Infinity ? 0 : change
+					}
+				} else {
+					return {
+						...row,
+						['MaxGain' + period]: NaN
+					}
+				}
+			})
+
+			return quotes
+		},
+		calculate_win_rate(arr) {
+			arr = arr.filter(function (x) {
+				return !isNaN(x) // 鍓旈櫎NaN鍊約
+			})
+			if (arr.length == 0) return NaN
+
+			let return_series = arr.map((x) => (x > 0 ? 1 : 0))
+			return parseFloat(this.calculate_mean(return_series).toFixed(2))
+		},
+		calculate_mean(arr) {
+			if (arr.length == 0) return NaN
+			return arr.reduce((a, b) => a + b) / arr.length
+		},
+		calculate_std(arr) {
+			arr = arr.filter(function (x) {
+				return !isNaN(x) // 鍓旈櫎NaN鍊約
+			})
+			if (arr.length == 0) return NaN
+
+			const mean =
+				arr.reduce(function (a, b) {
+					return a + b
+				}) / arr.length // 璁＄畻骞冲潎鏁
+			const deviationArr = arr.map(function (x) {
+				return Math.pow(x - mean, 2)
+			})
+
+			const variance =
+				deviationArr.reduce(function (a, b) {
+					return a + b
+				}) /
+				(deviationArr.length - 1) // 璁＄畻鏂瑰樊锛屼娇鐢ㄨ嚜鐢卞害=1
+
+			const std = Math.sqrt(variance) // 璁＄畻鏍囧噯宸
+			return std
+		},
+		calculate_median(arr) {
+			arr = arr.filter((n) => !isNaN(n))
+			if (arr.length == 0) return NaN
+			const mid = Math.floor(arr.length / 2)
+			const nums = [...arr].sort((a, b) => a - b)
+			return parseFloat(
+				(arr.length % 2 !== 0
+					? nums[mid]
+					: (nums[mid - 1] + nums[mid]) / 2
+				).toFixed(1)
+			)
+		},
+		get_period_parm(dataSeries, paramType, period) {
+			const typeDict = {
+				max: Math.max,
+				min: Math.min,
+				mean: (arr) => arr.reduce((a, b) => a + b) / arr.length,
+				sum: (arr) => arr.reduce((a, b) => a + b)
+			}
+
+			const dataArr = []
+
+			for (let i = 0; i < dataSeries.length; i++) {
+				if (i >= period) {
+					const tmpData = typeDict[paramType](
+						...dataSeries.slice(i - period, i).filter((n) => !isNaN(n))
+					)
+					dataArr.push(Number(tmpData.toFixed(3)))
+				} else {
+					dataArr.push(NaN)
+				}
+			}
+			return dataArr
 		},
     calculateZScore(dataSet, periodArray) {
 			/*
