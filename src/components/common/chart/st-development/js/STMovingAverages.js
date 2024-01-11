@@ -488,15 +488,15 @@ if (!CIQ.Studies) {
 				const maxCloseArrOPR = getPeriodParam(quotes.map(row => row[field]), "max", period, 0);
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
-						if(i>=period){
+						//if(i>=period){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrOPR[i] - minCloseArrOPR[i] == 0) return 0
 
 							const change = parseFloat((100 * (row[field] - minCloseArrOPR[i]) / (maxCloseArrOPR[i] - minCloseArrOPR[i])).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
-						}
-						return NaN
+						//}
+						//return NaN
 					}else{
 						return NaN
 					}
@@ -514,15 +514,15 @@ if (!CIQ.Studies) {
 				const maxCloseArrRR = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
-						if(i>=period){
+						//if(i>=period){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrRR[i] - minCloseArrRR[i] == 0) return 0
 
 							const change = parseFloat((100 * (row[field] - minCloseArrRR[i]) / (maxCloseArrRR[i] - minCloseArrRR[i])).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
-						}
-						return NaN
+						//}
+						//return NaN
 					}else{
 						return NaN
 					}
@@ -567,15 +567,15 @@ if (!CIQ.Studies) {
 				const maxCloseArrDD = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
-						if(i>=period){
+						//if(i>=period){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrDD[i] == 0) return 0
 
 							const change = parseFloat((100 * (row[field] - maxCloseArrDD[i]) / maxCloseArrDD[i]).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
-						}
-						return NaN
+						//}
+						//return NaN
 					}else{
 						return NaN
 					}
@@ -591,15 +591,15 @@ if (!CIQ.Studies) {
 				const minCloseArrDU = getPeriodParam(quotes.map(row => row[field]), "min", period, 1);
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
-						if(i>=period){
+						// if(i>=period){
 							// 如果分母为0，直接返回0
 							if(minCloseArrDU[i] == 0) return 0
 
 							const change = parseFloat((100 * (row[field] - minCloseArrDU[i]) / minCloseArrDU[i]).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
-						}
-						return NaN
+						// }
+						// return NaN
 					}else{
 						return NaN
 					}
@@ -989,7 +989,7 @@ if (!CIQ.Studies) {
 					let p2 = 0
 					let minNum = arr[0]
 					for(var i in arr){
-						if(arr[i]>=minNum){
+						if(arr[i]>minNum){
 							p2++
 						}else{
 							minNum = arr[i]
@@ -1002,14 +1002,24 @@ if (!CIQ.Studies) {
 			  
 				const dataArr = [];
 			  
+				// for (let i = 0; i < dataSeries.length; i++) {
+				//   if (i >= period) {
+				// 	const tmpData = typeDict[paramType](dataSeries.slice(i - period + add_bar, i + add_bar));
+				// 	console.log(dataSeries.slice(i - period + add_bar, i + add_bar),tmpData)
+				// 	dataArr.push(Number(tmpData.toFixed(3)));
+				//   } else {
+				// 	dataArr.push(NaN);
+				//   }
+				// }
+
+				// 处理range rank, drawndown以及新加的ConsecutiveDays的计算时，
+				// 如果当前bar之前的交易日个数小于周期，按剩余天数算
 				for (let i = 0; i < dataSeries.length; i++) {
-				  if (i >= period) {
-					const tmpData = typeDict[paramType](dataSeries.slice(i - period + add_bar, i + add_bar));
-					console.log(dataSeries.slice(i - period + add_bar, i + add_bar),tmpData)
+					const sliceStart = i - period + add_bar
+					const sliceEnd = i + add_bar
+					const tmpData = typeDict[paramType](dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd));
+					//console.log(dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd),tmpData)
 					dataArr.push(Number(tmpData.toFixed(3)));
-				  } else {
-					dataArr.push(NaN);
-				  }
 				}
 			  
 				return dataArr;
