@@ -328,7 +328,11 @@ export default {
     async deleteCPM(row) {
       const { url } = row
       this.loading = true
-			await delCPM(url)
+			const res = await delCPM(url)
+      const code = res.data.code
+      if(code == 403) this.popUpMsgBox('Successfully delete')
+      if(code == 403) this.popUpMsgBox("Sorry, deleted item doesn't exist. Refresh the list")
+      if(code == 404) {this.popUpMsgBox('Permission denied')}
 			await this.getDataList(null)
 			this.loading = false
 			this.popUpMsgBox('Successfully deleted')
