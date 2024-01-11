@@ -349,6 +349,7 @@ import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 // import jutils from 'jutils-src'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
+const throttle = require('lodash/throttle')
 const jutils = require("jutils-src")
 
 @Component({})
@@ -402,7 +403,10 @@ export default class AdvancedChartComponent extends Vue {
 			}
 			
 			// 默认为折线图
-			CIQ.stxx.setChartType("line"); 
+			CIQ.stxx.setChartType("line");
+
+			// 防止Chartiq图表对主页面的鼠标滚轮事件产生冲突
+			//CIQ.stxx.captureMouseWheelEvents = false 
 
 			// CIQ.ChartEngine.YAxis.prototype.decimalPlaces=6;
 			CIQ.ChartEngine.prototype.prepend("draw", function () {
@@ -419,23 +423,51 @@ export default class AdvancedChartComponent extends Vue {
 
 			this.initializeToggle(uiContext.stx)
 			
-			// CIQ.stxx.addEventListener("scroll", function(object: Record<string, any> = {}) {
-
-			// 	// an event handle for updating trade marker when dragging the chart
-			// 	if(CIQ.store.getters.getIsMarkerShownFlagState){
-			// 		let c_date = jutils.formatDate(object.stx.chart.xaxis[0].DT, 'YYYYMMDD');
-			// 		if(CIQ.groups.slice(-1)[0]){
-			// 			let m_date =
-			// 					CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
-			// 					CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
-			// 					CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
-			// 			if(c_date<m_date){
-			// 				let markers = CIQ.groups.pop()
+			// var _this = this
+			// // 鼠标事件加入防抖节流
+			// CIQ.stxx.addEventListener("scroll", throttle(function(object: Record<string, any> = {}) {
+			// 	// // an event handle for updating trade marker when dragging the chart
+			// 	// if(CIQ.store.getters.getIsMarkerShownFlagState){
+			// 	// 	let c_date = jutils.formatDate(object.stx.chart.xaxis[0].DT, 'YYYYMMDD');
+			// 	// 	if(CIQ.groups.slice(-1)[0]){
+			// 	// 		let m_date =
+			// 	// 				CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
+			// 	// 				CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
+			// 	// 				CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
+			// 	// 		if(c_date<m_date){
+			// 	// 			let markers = CIQ.groups.pop()
 							
-			// 				console.log("new pagnigation start",markers)
-			// 				CIQ.loadChart(markers, CIQ.addMarker)
-			// 			}
-			// 		}
+			// 	// 			console.log("new pagnigation start",markers)
+			// 	// 			CIQ.loadChart(markers, CIQ.addMarker)
+			// 	// 		}
+			// 	// 	}
+			// 	// }
+			// 	_this.resizePatternMatch()
+			// },300));
+
+			// // 方案（layout事件里对y轴拖动检测不到）
+			// // 监听图表的Layout事件（针对zoomin  zoomout用于更新模式匹配Drawing）
+			// CIQ.stxx.addEventListener("layout", function (e) {
+			// 	console.log('监听图表的layout事件（zoomin',e)
+			// 	_this.resizePatternMatch()
+			// });
+
+			// // 方案（setter进不去）
+			// // // 获取原始的 Y 轴属性值
+			// var originalYAxisHigh = CIQ.stxx.chart.yAxis;
+			// // 定义一个 Y 轴属性的 setter 函数
+			
+			// Object.defineProperty(CIQ.stxx.chart.yAxis, 'zoom', {
+			// 	get: function() {
+			// 		return originalYAxisHigh;
+			// 	},
+			// 	set: function(newValue) {
+			// 		// 当 Y 轴属性变化时执行的操作
+			// 		console.log('Y 轴属性发生了变化:', newValue);
+			// 		originalYAxisHigh = newValue;
+			// 		// 可以在这里添加其他需要执行的操作
+
+			// 		_this.resizePatternMatch()
 			// 	}
 			// });
 		}, 0)			
@@ -538,6 +570,19 @@ export default class AdvancedChartComponent extends Vue {
 		// }
 
 		CIQ.setMarkerVisibility(type)
+	}
+
+	resizePatternMatch() {
+		const yAxis = CIQ.stxx.chart.yAxis	
+		console.log(yAxis)
+		const offset = (yAxis.high-yAxis.low)/4			// 依据Y轴长度设定的偏移量，以保证模式匹配阴影覆盖整个高度
+		for(var i=0;i<CIQ.stxx.drawingObjects.length;i++){
+			var myDrawing=CIQ.stxx.drawingObjects[i];
+			myDrawing.v0 = yAxis.high + offset
+			myDrawing.v1 = yAxis.low - offset
+			myDrawing.adjust()
+		}
+		CIQ.stxx.draw();
 	}
 }
 
