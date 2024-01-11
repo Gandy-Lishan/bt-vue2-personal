@@ -269,7 +269,7 @@
 import { saveCPM, getMyIndicatorData, delMyIndicator, editCPM, searchIndicator } from '@/service/service'
 import { createPositiveIntegerRule, createVerifyValueInListRule, validateMarginRule } from "@/utils/formValidate"
 import { LoadingOverlay } from "@/components/common"
-import { timestampToTime } from '@/utils'
+import { timestampToTime, isJson } from '@/utils'
 
 export default {
   name: 'Form',
@@ -463,7 +463,17 @@ export default {
         });
         // this.popUpMsgBox(`The same combination already exists. Please review and adjust your input. The existing combination is named: ${name}.`)
       }
-      if(saveRes.status == 201) {this.$router.push('/cpm/results')}
+      if(saveRes.status == 201) {
+        const result = saveRes.data.result
+        saveRes.data.result = isJson(result) ? JSON.parse(result) : result
+      const data = JSON.stringify(saveRes.data)
+      this.$router.push({
+        name: 'CPMResults',
+        params: {
+          data,
+          usedFor: 'showCPMResults',
+        }
+      })}
       // this.$store.commit('SET_CREACT_LOADING', false)
     },
     async checkDuplicateNames(name) {
@@ -526,9 +536,12 @@ export default {
           target[key] = data[key] == 1 ? true : false
         }else if (key == 'lookback_period'){
           const editPeriod = data[key]
-          const exists = historyOptions.some(option => option.value == editPeriod)
+          const exists = this.historyOptions.some(option => option.value == editPeriod)
           if(exists) target[key] = data[key]
-          if(!exists) { target[key] = 'Custom'; }
+          if(!exists) { target[key] = 'Custom'}
+        }else if(key == 'year'){
+          if(this.data.lookback_period == 'Custom') {target['year'] = data['lookback_period']}
+          else {target['year'] = ''}
         }else {
           target[key] = data[key]
         }
