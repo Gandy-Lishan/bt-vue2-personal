@@ -656,6 +656,18 @@ import {CIQ} from "chartiq/js/chartiq.js";
 						{
 							"name": "Day of Week",
 							"url": "Day of Week"
+						},
+						{
+							"name": "Month of Year",
+							"url": "Month of Year"
+						},
+						{
+							"name": "# of Consecutive Days since High",
+							"url": "# of Consecutive Days since High"
+						},
+						{
+							"name": "# of Consecutive Days since Low",
+							"url": "# of Consecutive Days since Low"
 						}
 					]
 				},

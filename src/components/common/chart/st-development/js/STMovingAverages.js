@@ -625,28 +625,7 @@ if (!CIQ.Studies) {
 		sd.outputMap[sd.inputs.display] = "Line";
 		// sd.outputMap['supLine'] = "supLine";
 		
-		// 给上面函数用的工具函数
-		function getPeriodParam(dataSeries, paramType, period, add_bar) {
-			const typeDict = {
-			  max: Math.max,
-			  min: Math.min,
-			  mean: arr => arr.reduce((a, b) => a + b) / arr.length,
-			  sum: arr => arr.reduce((a, b) => a + b),
-			};
-		  
-			const dataArr = [];
-		  
-			for (let i = 0; i < dataSeries.length; i++) {
-			  if (i >= period) {
-				const tmpData = typeDict[paramType](...dataSeries.slice(i - period + add_bar, i + add_bar));
-				dataArr.push(Number(tmpData.toFixed(3)));
-			  } else {
-				dataArr.push(NaN);
-			  }
-			}
-		  
-			return dataArr;
-		  }
+
 	};
 	CIQ.Studies.calculateSymbolOhlcv = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
@@ -779,6 +758,40 @@ if (!CIQ.Studies) {
 			var quote = quotes[i];
 			if (!quote) continue;
 			quote["Result " + sd.name] = quote['DT'].getDay();
+		}
+	};
+	CIQ.Studies.calculateMonthofYear = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			if (!quote) continue;
+			quote["Result " + sd.name] = quote['DT'].getMonth() + 1;
+		}
+	};
+	CIQ.Studies.calculateConsecutiveDaysHigh = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		var field = sd.inputs.Field;
+		var period = sd.inputs.period;
+
+		if (!field || field == "field") field = "Close";
+		const maxCloseIndexArr = getPeriodParam(quotes.map(row => row[field]), 'maxCount', period, 1);
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			if (!quote) continue;
+			quote["Result " + sd.name] = maxCloseIndexArr[i];
+		}
+	};
+	CIQ.Studies.calculateConsecutiveDaysLow = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		var field = sd.inputs.Field;
+		var period = sd.inputs.period;
+
+		if (!field || field == "field") field = "Close";
+		const minCloseIndexArr = getPeriodParam(quotes.map(row => row[field]), 'minCount', period, 1);
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			if (!quote) continue;
+			quote["Result " + sd.name] = minCloseIndexArr[i];
 		}
 	};
 	CIQ.Studies.calculateTypicalSentimentCycle = function (stx, sd) {
@@ -933,8 +946,74 @@ if (!CIQ.Studies) {
 			inputs: {},
             calculateFN: CIQ.Studies.calculateDayofWeek,
         },
+		"Month of Year": {
+            name: "Month of Year",
+			inputs: {},
+            calculateFN: CIQ.Studies.calculateMonthofYear,
+        },
+		"# of Consecutive Days since High": {
+            name: "# of Consecutive Days since High",
+			inputs: { period: 5,Field: "field" },
+            calculateFN: CIQ.Studies.calculateConsecutiveDaysHigh,
+        },
+		"# of Consecutive Days since Low": {
+            name: "# of Consecutive Days since Low",
+			inputs: { period: 5,Field: "field" },
+            calculateFN: CIQ.Studies.calculateConsecutiveDaysLow,
+        },
 	});
 
+			// 给上面函数用的工具函数
+			function getPeriodParam(dataSeries, paramType, period, add_bar) {
+				const typeDict = {
+				  max: arr => Math.max(...arr),
+				  min: arr => Math.min(...arr),
+				  mean: arr => arr.reduce((a, b) => a + b) / arr.length,
+				  sum: arr => arr.reduce((a, b) => a + b),
+				  maxCount: arr => {
+					let p1 = 0
+					let p2 = 0
+					let maxNum = arr[0]
+					for(var i in arr){
+						if(arr[i]<maxNum){
+							p2++
+						}else{
+							maxNum = arr[i]
+							p1 = p2
+						}
+					}
+					return p2-p1
+				  },
+				  minCount: arr => {
+					let p1 = 0
+					let p2 = 0
+					let minNum = arr[0]
+					for(var i in arr){
+						if(arr[i]>=minNum){
+							p2++
+						}else{
+							minNum = arr[i]
+							p1 = p2
+						}
+					}
+					return p2-p1
+				  }
+				};
+			  
+				const dataArr = [];
+			  
+				for (let i = 0; i < dataSeries.length; i++) {
+				  if (i >= period) {
+					const tmpData = typeDict[paramType](dataSeries.slice(i - period + add_bar, i + add_bar));
+					console.log(dataSeries.slice(i - period + add_bar, i + add_bar),tmpData)
+					dataArr.push(Number(tmpData.toFixed(3)));
+				  } else {
+					dataArr.push(NaN);
+				  }
+				}
+			  
+				return dataArr;
+			  }
 }
 
 };
