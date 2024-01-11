@@ -101,7 +101,7 @@
       </div>
     </div>
     <el-table
-			ref="MITable"
+			ref="CPMTable"
 			class="my-indicator-table other-table default-table-class"
 			:data="tableData"
 			:row-class-name="tableRowClassName"
@@ -115,7 +115,7 @@
       border
 		>
 			<template v-for="(l) in tableCol">
-        <el-table-column
+        <!-- <el-table-column
           align="center"
 					:label="l.label"
 					:prop="l.value"
@@ -133,7 +133,22 @@
               {{ scope.row[l.value] != undefined ? scope.row[l.value] : '' }}
 						</p>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
+        <el-table-column
+          align="center"
+          :label="l.label"
+          :prop="l.value"
+          :key="l.key"
+          sortable
+          :sort-orders="['ascending', 'descending']"
+          v-if="(l.label == 'Day' && option == 3) || (l.label == 'Day' && option == 2) || (l.label == 'Month' && option == 2)"
+        >
+          <template slot-scope="scope">
+            <p class="tableText" :class="getCellStyle(scope.row[l.value])">
+              {{ scope.row[l.value] !== undefined ? scope.row[l.value] : '' }}
+            </p>
+          </template>
+        </el-table-column>
         <el-table-column
           align="center"
 					:label="l.label"
@@ -216,22 +231,16 @@ export default {
   watch: {
     tableData: {
       handler(newVal) {
-        // this.loading = true
-        // const startIndex = (this.currentPage - 1) * this.pageSize;
-        // const endIndex = startIndex + this.pageSize;
-        // // 当checkbox未勾选时，返回原始数据
-        // this.loading = false
-        // this.paginatedData =  newVal.slice(startIndex, endIndex);
       },
       deep: true,
       immediate: true
     }
   },
+  mounted() {
+  },
   methods: {
     tableRowClassName({row, rowIndex}) {
-			if (rowIndex%2 === 1) {
-			return 'darken-row'
-			}
+      if(rowIndex == (this.tradingIndex-1) && this.option == 3) return 'highlighted'
 			return ''
 		},
     handleSizeChange(size) {
@@ -361,5 +370,11 @@ export default {
 /deep/ td.el-descriptions-item__cell.el-descriptions-item__content{
   font-weight: 500;
   color: #333;
+}
+.my-indicator-table.el-table /deep/ tr.highlighted{
+  background-color: yellow;
+}
+.my-indicator-table.el-table /deep/ tr.highlighted:hover{
+  background-color: yellow;
 }
 </style>
