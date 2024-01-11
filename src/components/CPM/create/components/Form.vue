@@ -451,17 +451,11 @@ export default {
      console.log('saveRes', saveRes)
      if(!saveRes) return
      const code = saveRes.data.code
-      if(code == 404) {this.popUpMsgBox('Permission denied')}
+      if(code == 401) {this.popUpMsgBox('Calculate error')}
+      if(code == 404 || code == 403) {this.popUpMsgBox('Permission denied')}
       if(code == 406) {
         const name =  saveRes.data.data.name
-        this.$notify({
-          title: `Duplicate Indicator: ${name} Exists`,
-          message: `The same combination indicator <strong>${name}</strong> already exists. Please adjust your input to avoid duplicates.`,
-          type: 'warning',
-          dangerouslyUseHTMLString: true,
-          duration: 6000
-        });
-        // this.popUpMsgBox(`The same combination already exists. Please review and adjust your input. The existing combination is named: ${name}.`)
+        this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another.`)
       }
       if(saveRes.status == 201) {
         const result = saveRes.data.result
