@@ -8086,6 +8086,7 @@ if (!CIQ.Studies) {
 		refreshInputs(empty) {
 			let _obj = CIQ.findSentiIndicator(null,this.helper.name)
 			let _obj2 = CIQ.findBuiltinTechIndicator(null,this.helper.name)
+			let _obj3 = CIQ.findSymbolIndicator(this.helper.name,null)
 			if(_obj){
 				this.helper.inputs = [];
 			}
@@ -8111,6 +8112,15 @@ if (!CIQ.Studies) {
 					}
 				}
 				//this.helper.inputs = [];
+			}
+			else if(_obj3){
+				var inputs = [];
+				for (var i = 0;i < this.helper.inputs.length; i++){
+					if (this.helper.inputs[i].heading != 'Field'){
+						inputs.push(this.helper.inputs[i])
+					}
+				}
+				this.helper.inputs = inputs;
 			}
 
 			var inputs = this.node.find("cq-study-inputs");
@@ -8158,6 +8168,12 @@ if (!CIQ.Studies) {
 						if (iAttr !== "hidden")
 							formField.setAttribute(iAttr, attributes[iAttr]);
 				} else if (input.type == "select") {
+					//  output的field menu里面不显示sentiment indicator的description
+					if(input.name == "Field"){
+						delete input.options.description
+						delete input.options.url
+					}
+
 					formField = this.makeMenu(
 						input.name,
 						input.value,
