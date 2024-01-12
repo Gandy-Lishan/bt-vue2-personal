@@ -372,11 +372,8 @@ export default {
   font-weight: 500;
   color: #333;
 }
-.my-indicator-table.el-table /deep/ tr.highlighted{
+.el-table /deep/ tr.highlighted{
   background-color: yellow;
-}
-.my-indicator-table.el-table /deep/ tr.highlighted:hover{
-  background-color: yellow !important;
 }
 .Hits {
   position: absolute;
