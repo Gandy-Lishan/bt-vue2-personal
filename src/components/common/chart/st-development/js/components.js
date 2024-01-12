@@ -8168,12 +8168,6 @@ if (!CIQ.Studies) {
 						if (iAttr !== "hidden")
 							formField.setAttribute(iAttr, attributes[iAttr]);
 				} else if (input.type == "select") {
-					//  output的field menu里面不显示sentiment indicator的description
-					if(input.name == "Field"){
-						delete input.options.description
-						delete input.options.url
-					}
-
 					formField = this.makeMenu(
 						input.name,
 						input.value,

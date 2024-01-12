@@ -664,6 +664,9 @@ CIQ.Studies.DialogHelper = function (params) {
 	for (var n in s) {
 		if (excludes.indexOf(s[n]) > -1) continue; // don't include its own fields or its dependents' fields
 		for (var actualOutput in s[n].outputMap) {
+			//  output的field menu里面不显示sentiment indicator的description
+			if(['description','url'].includes(actualOutput)) continue
+
 			actualOutputs.push(actualOutput);
 		}
 	}
@@ -708,22 +711,25 @@ CIQ.Studies.DialogHelper = function (params) {
 			} else if (acceptedData == "field") {
 				input.type = "select";
 				input.options = {};
+				//  output的field menu里面不显示中间量
 				var studyFields = [
 					"Open",
 					"High",
 					"Low",
 					"Close",
-					"Adj_Close",
-					"hl/2",
-					"hlc/3",
-					"hlcc/4",
-					"ohlc/4",
+					// "Adj_Close",
+					// "hl/2",
+					// "hlc/3",
+					// "hlcc/4",
+					// "ohlc/4",
 					chart.defaultPlotField
 				].concat(actualOutputs);
+
 				for (var field = 0; field < studyFields.length; field++) {
 					var fieldText = studyFields[field];
 					input.options[fieldText] = stx.translateIf(fieldText);
 				}
+
 				if (input.value == "field") {
 					input.value = "Close";
 				}
