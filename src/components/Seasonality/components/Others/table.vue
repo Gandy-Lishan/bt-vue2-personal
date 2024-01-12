@@ -100,6 +100,7 @@
         </el-descriptions>
       </div>
     </div>
+    <span v-if="option == 3" class="Hits">Highlighted rows indicate the current day.</span>
     <el-table
 			ref="CPMTable"
 			class="my-indicator-table other-table default-table-class"
@@ -375,6 +376,12 @@ export default {
   background-color: yellow;
 }
 .my-indicator-table.el-table /deep/ tr.highlighted:hover{
-  background-color: yellow;
+  background-color: yellow !important;
+}
+.Hits {
+  position: absolute;
+  top: 100px;
+  left: 510px;
+  font-size: 14px;
 }
 </style>

@@ -220,3 +220,6 @@
 .el-popover .popper__arrow::after{
   border-bottom-color: #303133 !important;
 }
+.my-indicator-table.el-table tr.highlighted:hover{
+  background-color: yellow !important;
+}
