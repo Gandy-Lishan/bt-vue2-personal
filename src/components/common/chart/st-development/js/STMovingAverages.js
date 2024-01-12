@@ -809,7 +809,7 @@ if (!CIQ.Studies) {
 		cci: {
 			name: "Commodity Channel Index",
 			calculateFN: CIQ.Studies.calculateSTCCI,
-			inputs: { Period: 20 },
+			inputs: { Period: 21 },
 			parameters: {
 				init: {
 					studyOverZonesEnabled: true,
@@ -833,7 +833,7 @@ if (!CIQ.Studies) {
 				CIQ.Studies.drawHorizontal(stx, sd, null, showSupLine, yAxis);
 			},
             calculateFN: CIQ.Studies.calculateSTROCLike,
-            inputs: { Field: "field",condition: "ROC",period: 5,overlay: false},
+            inputs: { Field: "field",condition: "ROC",period: 21,overlay: false},
 			// outputs: { Line: "auto",supLine:'#9a9a9a' },
 			outputs: { Line: "auto" },
         },
@@ -909,7 +909,7 @@ if (!CIQ.Studies) {
             name: "Moving Average ",
             overlay: true,
             calculateFN: CIQ.Studies.calculateSTMovingAverage,
-            inputs: { Period: 20, Field: "field", Type: "ma", Offset: 0 },
+            inputs: { Period: 21, Field: "field", Type: "ma", Offset: 0 },
 			outputs: { MA: "#FF000" },
         },
 		"High Low": {
@@ -953,12 +953,12 @@ if (!CIQ.Studies) {
         },
 		"# of Consecutive Days since High": {
             name: "# of Consecutive Days since High",
-			inputs: { period: 5,Field: "field" },
+			inputs: { period: 252,Field: "field" },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysHigh,
         },
 		"# of Consecutive Days since Low": {
             name: "# of Consecutive Days since Low",
-			inputs: { period: 5,Field: "field" },
+			inputs: { period: 252,Field: "field" },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysLow,
         },
 	});

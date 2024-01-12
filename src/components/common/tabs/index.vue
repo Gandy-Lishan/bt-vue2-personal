@@ -112,6 +112,7 @@ main .el-menu--horizontal>.el-menu-item.is-active {
   border-bottom: none;
 }
 .gradient {
+  position: relative;
 	padding-top: 88px;
 	background: linear-gradient(180deg, #dde0e4, rgba(249, 250, 251, 0));
 }
@@ -121,7 +122,7 @@ main .el-menu--horizontal>.el-menu-item.is-active {
   justify-content: right;
   position: absolute;
   right: 20px;
-  bottom: 20px;
+  top: 30px;
   button.createNew,
   .tutorial {
     border: unset;
@@ -149,15 +150,17 @@ main .el-menu--horizontal>.el-menu-item.is-active {
     }
   }
   .createNew {
-      background: #f59e0b;
+      background: #fbc05c;
       &:hover {
+        background: #f59e0b;
         box-shadow: 0 6px 20px #f59e0b;
       }
   }
   .tutorial {
       background: darksalmon;
       &:hover {
-        box-shadow: 0 6px 20px darksalmon;
+        background: rgb(233, 111, 70);
+        box-shadow: 0 6px 20px rgb(233, 111, 70);
       }
   }
 }

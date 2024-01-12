@@ -4555,7 +4555,7 @@ CIQ.extend(CIQ.Studies.studyLibrary, {
 		name: "Moving Average",
 		overlay: true,
 		calculateFN: CIQ.Studies.calculateMovingAverage,
-		inputs: { Period: 20, Field: "field", Type: "ma", Offset: 0 },
+		inputs: { Period: 21, Field: "field", Type: "ma", Offset: 0 },
 		outputs: { MA: "#FF0000" }
 	},
 	"MAGap": {
