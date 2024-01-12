@@ -564,3 +564,9 @@ input[type="time"] {
   color: #333;
   font-size: 14px;
 }
+.my-indicator-table.el-table tr.highlighted:hover{
+  background-color: yellow !important;
+}
+.el-table tr.highlighted:hover{
+  background-color: yellow !important;
+}
