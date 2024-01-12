@@ -564,3 +564,6 @@ input[type="time"] {
   color: #333;
   font-size: 14px;
 }
+.el-table tr.highlighted{
+  pointer-events: none;
+}
