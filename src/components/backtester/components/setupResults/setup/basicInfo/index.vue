@@ -783,7 +783,7 @@ export default {
       options: [],
       tp: 10,
       sl: 5,
-      tim: 20,
+      tim: 21,
       isRiskControl: true,
       isTakeProfit: false,
       isStopLoss: false,

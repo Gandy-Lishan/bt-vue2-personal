@@ -276,7 +276,7 @@ export default {
         condition: 3,
         newCondition: 3,
         value: '',
-        conditionPeriod: '5',
+        conditionPeriod: '21',
         period: '',
         maValue: '',
       },

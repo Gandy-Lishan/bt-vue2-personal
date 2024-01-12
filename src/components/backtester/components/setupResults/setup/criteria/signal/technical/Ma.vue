@@ -256,8 +256,8 @@ export default {
 				condition: 3,
 				comparison: 'SC',
 				ma_period: 5,
-				period: 20,
-				maPeriod: 20
+				period: 21,
+				maPeriod: 21
 			},
 			conditions: [
 				{ value: 0, label: '>' },

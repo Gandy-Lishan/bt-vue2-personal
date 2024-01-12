@@ -397,8 +397,8 @@ button.createNew,
 	box-shadow: 0 6px 20px #94989f;
 }
 .tutorial:hover {
-	background-color: darksalmon;
-	box-shadow: 0 6px 20px darksalmon;
+	background-color: rgb(233, 111, 70);
+	box-shadow: 0 6px 20px rgb(233, 111, 70);
 }
 .createNew_hint {
 	position: fixed;
