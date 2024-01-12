@@ -354,8 +354,8 @@ button.createNew,
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 40px;
-	height: 40px;
+	width: 42px;
+	height: 42px;
 	border-radius: 100%;
 	background-image: initial;
 	background-position-x: initial;
