@@ -22,7 +22,7 @@ import { checkProperties } from "@/utils";
               dynamicId: 'OCDContainer',
               dataList: [],
               option: 0,
-              tradingIndex: null
+              tradingIndex: 'empty'
           }
       },
       components: {
@@ -52,13 +52,12 @@ import { checkProperties } from "@/utils";
                   url = `/dev/seasonality/get_day_of_year_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}`
                 }
 
-                const {data: {data}, current_trading_index} = await getSeasonalityData(url)
-                this.tradingIndex = current_trading_index || 5
-                console.log('data', data)
+                const {data: {data, current_trading_index}} = await getSeasonalityData(url)
                 if(data?.length === 0) {this.popUpMsgBox('Not found: Adjust your search criteria for the selected symbol')}
                 if([0, 1].includes(newVal.option)) {
                   this.dataList = data.map(item => [item['Date'] || item['Month'], parseFloat((Math.round(item['Return'] * 100) / 100).toFixed(2)), parseFloat((Math.round(item['Positive'] * 100) / 100).toFixed(2))])
                 }else {
+                  this.tradingIndex = current_trading_index
                   this.dataList = data.map(obj => {
                     for (const key in obj) {
                       if (!isNaN(obj[key])) {
