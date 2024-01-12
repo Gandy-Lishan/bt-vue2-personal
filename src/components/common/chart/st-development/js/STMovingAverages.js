@@ -794,15 +794,6 @@ if (!CIQ.Studies) {
 			quote["Result " + sd.name] = minCloseIndexArr[i];
 		}
 	};
-	CIQ.Studies.calculateTypicalSentimentCycle = function (stx, sd) {
-		// todo
-		// var quotes = sd.chart.dataSet;
-		// for (var i = sd.startFrom; i < quotes.length; i++) {
-		// 	var quote = quotes[i];
-		// 	if (!quote) continue;
-		// 	quote["Result " + sd.name] = quote['DT'].getDay();
-		// }
-	};
 	
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		// 为了覆盖cci optix,用了小写的cci
@@ -833,7 +824,7 @@ if (!CIQ.Studies) {
 				CIQ.Studies.drawHorizontal(stx, sd, null, showSupLine, yAxis);
 			},
             calculateFN: CIQ.Studies.calculateSTROCLike,
-            inputs: { Field: "field",condition: "ROC",period: 21,overlay: false},
+            inputs: { condition: "ROC",period: 21,overlay: false},
 			// outputs: { Line: "auto",supLine:'#9a9a9a' },
 			outputs: { Line: "auto" },
         },
@@ -953,12 +944,12 @@ if (!CIQ.Studies) {
         },
 		"# of Consecutive Days since High": {
             name: "# of Consecutive Days since High",
-			inputs: { period: 252,Field: "field" },
+			inputs: { period: 252 },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysHigh,
         },
 		"# of Consecutive Days since Low": {
             name: "# of Consecutive Days since Low",
-			inputs: { period: 252,Field: "field" },
+			inputs: { period: 252 },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysLow,
         },
 	});
