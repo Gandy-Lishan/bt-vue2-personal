@@ -563,20 +563,21 @@ export function getMyIndicatorsList(page) {
 }
 export function getCPMList(page, sort, name) {
 	let url = null
-	url = '/dev/cpm/get_cpm_bts/?ordering=-create_date&page='
+	url = '/dev/cpm/get_cpm_bts/?ordering=-create_date'
 	// sort -> ,total_return
 	if (sort) {
-		url = `/dev/cpm/get_cpm_bts/?ordering=${sort}&page=`
+		url = `/dev/cpm/get_cpm_bts/?ordering=${sort}`
 	}
 	if (name) {
-		url = `/dev/cpm/get_cpm_bts/?name=${name}&page=`
+		url = `/dev/cpm/get_cpm_bts/?name=${name}`
 	}
 	if (name && sort) {
-		url = `/dev/cpm/get_cpm_bts/?ordering=${sort}&name=${name}&page=`
+		url = `/dev/cpm/get_cpm_bts/?ordering=${sort}&name=${name}`
 	}
+	if(page) {url = `${url}&page=${page}`}
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url + page, { withCredentials: true, retry: null })
+			.get(url, { withCredentials: true, retry: null })
 			.then(res => {
 				resolve(res)
 			})
