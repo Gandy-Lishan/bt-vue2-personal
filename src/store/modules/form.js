@@ -3,6 +3,7 @@ import { timestampToTime, capitalizeFirstLetter } from '@/utils'
 const state = {
 	restoreFreq: '', //form
 	backtestSymbol: process.env.VUE_APP_DEFAULT_SYMBOL, //form
+	myindicatorSymbol: '',
 	pairDataFreq: '', //form
 	exitFrequency: '', //form 考虑放到timeframe组件
 
@@ -117,6 +118,7 @@ const mutations = {
 		// 改变表单的 frequency
 		state.rowDataForDisplay.symbol = val
 		state.cachedBTBasicInfoData.symbol = val
+		state.myindicatorSymbol = val
 	},
 
 	RESET_CHART_CONDIG_STATE: state => {
