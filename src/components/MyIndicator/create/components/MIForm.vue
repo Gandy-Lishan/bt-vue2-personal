@@ -331,6 +331,7 @@ import CheckInput from './CheckInput.vue'
 import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators, searchIndicator } from '@/service/service'
 import {  validatePercentageRule } from "@/utils/formValidate"
 import { LoadingOverlay } from "@/components/common"
+import { mapGetters } from "vuex"
 
 export default {
   name: 'MIForm',
@@ -434,7 +435,23 @@ export default {
     isCreateLoading() {
       // 从 Vuex store 中获取全局 loading 状态
       return this.$store.state.states.isCreateLoading
-    }
+    },
+    ...mapGetters(['getMyindicatorSymbol']), // 监听chartiq和表单的symbol改动以双向响应
+    handleGetMyindicatorSymbol() {
+      return this.getMyindicatorSymbol
+    },
+  },
+  watch: {
+    handleGetMyindicatorSymbol: {
+      handler(newVal) {
+        if(this.data.categories.includes('Symbol')){    
+         this.data.indicator_1 = newVal
+         this.data.indicator_1_url = newVal
+        }
+      },
+      immediate: true,
+      deep: true
+    },
   },
   async mounted() {
     // 从localStorage获取数据
