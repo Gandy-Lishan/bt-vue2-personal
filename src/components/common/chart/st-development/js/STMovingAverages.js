@@ -771,27 +771,45 @@ if (!CIQ.Studies) {
 	CIQ.Studies.calculateConsecutiveDaysHigh = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
 		var field = sd.inputs.Field;
-		var period = sd.inputs.period;
+		// var period = sd.inputs.period;
 
 		if (!field || field == "field") field = "Close";
-		const maxCloseIndexArr = getPeriodParam(quotes.map(row => row[field]), 'maxCount', period, 1);
+		//const maxCloseIndexArr = getPeriodParam(quotes.map(row => row[field]), 'maxCount', period, 1);
+		// for (var i = sd.startFrom; i < quotes.length; i++) {
+		// 	var quote = quotes[i];
+		// 	if (!quote) continue;
+		// 	quote["Result " + sd.name] = maxCloseIndexArr[i];
+		// }
+		let num_max = quotes[sd.startFrom][field]
+		let indicator = 0
 		for (var i = sd.startFrom; i < quotes.length; i++) {
-			var quote = quotes[i];
-			if (!quote) continue;
-			quote["Result " + sd.name] = maxCloseIndexArr[i];
+			if (!quotes[i]) continue;
+			var temp_num = quotes[i][field];
+			if (temp_num >= num_max) {
+				num_max = temp_num
+				indicator = 0
+			}
+			quotes[i]["Result " + sd.name] = indicator;
+			indicator ++
 		}
 	};
 	CIQ.Studies.calculateConsecutiveDaysLow = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
 		var field = sd.inputs.Field;
-		var period = sd.inputs.period;
 
 		if (!field || field == "field") field = "Close";
-		const minCloseIndexArr = getPeriodParam(quotes.map(row => row[field]), 'minCount', period, 1);
+
+		let num_min = quotes[sd.startFrom][field]
+		let indicator = 0
 		for (var i = sd.startFrom; i < quotes.length; i++) {
-			var quote = quotes[i];
-			if (!quote) continue;
-			quote["Result " + sd.name] = minCloseIndexArr[i];
+			if (!quotes[i]) continue;
+			var temp_num = quotes[i][field];
+			if (temp_num <= num_min) {
+				num_min = temp_num
+				indicator = 0
+			}
+			quotes[i]["Result " + sd.name] = indicator;
+			indicator ++
 		}
 	};
 	
@@ -944,12 +962,12 @@ if (!CIQ.Studies) {
         },
 		"# of Consecutive Days since High": {
             name: "# of Consecutive Days since High",
-			inputs: { period: 252 },
+			inputs: {},
             calculateFN: CIQ.Studies.calculateConsecutiveDaysHigh,
         },
 		"# of Consecutive Days since Low": {
             name: "# of Consecutive Days since Low",
-			inputs: { period: 252 },
+			inputs: {},
             calculateFN: CIQ.Studies.calculateConsecutiveDaysLow,
         },
 	});
@@ -961,47 +979,37 @@ if (!CIQ.Studies) {
 				  min: arr => Math.min(...arr),
 				  mean: arr => arr.reduce((a, b) => a + b) / arr.length,
 				  sum: arr => arr.reduce((a, b) => a + b),
-				  maxCount: arr => {
-					let p1 = 0
-					let p2 = 0
-					let maxNum = arr[0]
-					for(var i in arr){
-						if(arr[i]<maxNum){
-							p2++
-						}else{
-							maxNum = arr[i]
-							p1 = p2
-						}
-					}
-					return p2-p1
-				  },
-				  minCount: arr => {
-					let p1 = 0
-					let p2 = 0
-					let minNum = arr[0]
-					for(var i in arr){
-						if(arr[i]>minNum){
-							p2++
-						}else{
-							minNum = arr[i]
-							p1 = p2
-						}
-					}
-					return p2-p1
-				  }
+				//   maxCount: arr => {
+				// 	let p1 = 0
+				// 	let p2 = 0
+				// 	let maxNum = arr[0]
+				// 	for(var i in arr){
+				// 		if(arr[i]<maxNum){
+				// 			p2++
+				// 		}else{
+				// 			maxNum = arr[i]
+				// 			p1 = p2
+				// 		}
+				// 	}
+				// 	return p2-p1
+				//   },
+				//   minCount: arr => {
+				// 	let p1 = 0
+				// 	let p2 = 0
+				// 	let minNum = arr[0]
+				// 	for(var i in arr){
+				// 		if(arr[i]>minNum){
+				// 			p2++
+				// 		}else{
+				// 			minNum = arr[i]
+				// 			p1 = p2
+				// 		}
+				// 	}
+				// 	return p2-p1
+				//   }
 				};
 			  
 				const dataArr = [];
-			  
-				// for (let i = 0; i < dataSeries.length; i++) {
-				//   if (i >= period) {
-				// 	const tmpData = typeDict[paramType](dataSeries.slice(i - period + add_bar, i + add_bar));
-				// 	console.log(dataSeries.slice(i - period + add_bar, i + add_bar),tmpData)
-				// 	dataArr.push(Number(tmpData.toFixed(3)));
-				//   } else {
-				// 	dataArr.push(NaN);
-				//   }
-				// }
 
 				// 处理range rank, drawndown以及新加的ConsecutiveDays的计算时，
 				// 如果当前bar之前的交易日个数小于周期，按剩余天数算
