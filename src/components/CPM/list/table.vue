@@ -242,7 +242,7 @@ export default {
       let res = null
       const page = this.currentPage
 			try {
-				res = await getCPMList(page, orderby, this.searchItem)
+				res = await getCPMList(page, orderby, this.searchKey)
 				if (res.status == 200) {
 					let data = res.data.results
 					data = data.map(item => {
@@ -336,6 +336,9 @@ export default {
 			await this.getDataList(null)
 			this.loading = false
 			this.popUpMsgBox('Successfully deleted')
+    },
+    async handleQuery() {
+      await this.applySort()
     }
   }
 }

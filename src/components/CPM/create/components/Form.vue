@@ -266,7 +266,7 @@
 </template>
  <script>
  import { CIQ } from '@/components/common/chart/st-development/js/components'
-import { saveCPM, getMyIndicatorData, delMyIndicator, editCPM, searchIndicator } from '@/service/service'
+import { saveCPM, getMyIndicatorData, delMyIndicator, editCPM, getCPMList } from '@/service/service'
 import { createPositiveIntegerRule, createVerifyValueInListRule, validateMarginRule } from "@/utils/formValidate"
 import { LoadingOverlay } from "@/components/common"
 import { timestampToTime, isJson } from '@/utils'
@@ -471,7 +471,7 @@ export default {
       // this.$store.commit('SET_CREACT_LOADING', false)
     },
     async checkDuplicateNames(name) {
-        const nameLookupRes = await searchIndicator(name)
+        const nameLookupRes = await getCPMList(null, null, name)
         const count = nameLookupRes.data.count
         const nameList = nameLookupRes.data.results
         // 有重名
@@ -488,11 +488,11 @@ export default {
       const rowUrl = this.rowUrl
       const name = this.data.name
       if(!validForm) return
-      // if(!rowUrl) {
-      //   // 不是编辑是新建
-      //   const nameChecked = this.checkDuplicateNames(name)
-      //   if(nameChecked) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
-      // }
+      if(!rowUrl) {
+        // 不是编辑是新建
+        const nameChecked = await this.checkDuplicateNames(name)
+        if(nameChecked) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
+      }
       const exclude_overlap = this.isExcludeOO ? 1 : 0
       const saveData = {
         ...this.data,
