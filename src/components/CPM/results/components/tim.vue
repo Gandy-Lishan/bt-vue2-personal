@@ -626,7 +626,6 @@ export default {
       periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
       */
 			let chartDataset = CIQ.stxx.chart.dataSet
-			debugger
 			const direction = this.direction
 			const field = this.tradePrice
 			let backtestResult = []

@@ -11932,28 +11932,28 @@ if (!Palette) {
 		// Handle keystroke event to activate drawing tools
 		// 暂时不用绘画功能
 		keyStroke(hub, key, e, keystroke) {
-			// let toolName = "";
-			// if (e.altKey && !e.ctrlKey && !e.shiftKey) {
-			// 	let selectedKey = String.fromCharCode(e.which).toUpperCase();
-			// 	let toolSelection = this.toolShortcuts[selectedKey];
+			let toolName = "";
+			if (e.altKey && !e.ctrlKey && !e.shiftKey) {
+				let selectedKey = String.fromCharCode(e.which).toUpperCase();
+				let toolSelection = this.toolShortcuts[selectedKey];
 
-			// 	if (toolSelection) {
-			// 		// Activate the drawing palette if it isn't already
-			// 		// this.context.stx.layout.drawing=true;
-			// 		const drawingChannel = this.channels
-			// 			? this.channels.drawing
-			// 			: "channel.drawing";
-			// 		this.channelWrite(drawingChannel, true);
+				if (toolSelection) {
+					// Activate the drawing palette if it isn't already
+					// this.context.stx.layout.drawing=true;
+					const drawingChannel = this.channels
+						? this.channels.drawing
+						: "channel.drawing";
+					this.channelWrite(drawingChannel, true);
 
-			// 		// Activate the tool. Pass a reference to the palette button so its activated state is changed.
-			// 		this.tool({ node: toolSelection.node }, toolSelection.toolName);
-			// 	}
-			// } else if (e.key === "Escape") {
-			// 	let notoolTool = this.context.topNode.querySelector(
-			// 		'*[cq-tool="notool"]'
-			// 	);
-			// 	if (notoolTool) this.noTool({ node: notoolTool });
-			// }
+					// Activate the tool. Pass a reference to the palette button so its activated state is changed.
+					this.tool({ node: toolSelection.node }, toolSelection.toolName);
+				}
+			} else if (e.key === "Escape") {
+				let notoolTool = this.context.topNode.querySelector(
+					'*[cq-tool="notool"]'
+				);
+				if (notoolTool) this.noTool({ node: notoolTool });
+			}
 		}
 
 		handleMessage(id, message) {
@@ -13288,6 +13288,7 @@ import {__st_js_generateCsv_} from "./generateCsv"
 import {__st_js_utils_} from "./utils"
 import {__st_js_maLayout_} from "./maLayout"
 import {__st_js_userownIndicator_} from "./userownIndicator"
+import {__st_js_drawing_} from "./STdrawing"
 
 let _exports = {CIQ};
 export {__js_webcomponents_indicators_ as indicators}
@@ -13386,6 +13387,7 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__st_js_utils_,
 		__st_js_maLayout_,
 		__st_js_userownIndicator_,
+		__st_js_drawing_,
 		// customized features above
 		__js_webcomponents_abstractMarker_,
 		__js_webcomponents_advertisement_,

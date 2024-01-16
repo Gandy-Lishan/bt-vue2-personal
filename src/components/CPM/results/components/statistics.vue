@@ -364,7 +364,6 @@ export default {
         return '';
 	  },
 		displayData(data, transformedResult) {
-			debugger
       this.summaryData = [{
         ...this.summaryData,
         ...data
