@@ -9,6 +9,27 @@
  /* global _CIQ, _timezoneJS, _SplinePlotter */
  
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
+    // CPM暂时放这
+    CIQ.displayCPMLayout = async function(chart_data){
+        let symbol =  chart_data.symbol
+        let timeframe = chart_data.timeframe
+
+        CIQ.addCover()
+        CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
+        CIQ.store.commit('form/getFrequency', timeframe) //考虑到addSeries必须写死timeframe
+        CIQ.stxx.loadChart({ 
+                symbol: symbol, 
+                // 这边先写死范围，防止其他indicator无法pagination
+                startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+            },
+            function () {
+                CIQ.createCorrelationPatternMatchDrawing(chart_data.result)
+
+                CIQ.hideCover()
+                CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+            }
+        ) 
+    }
     // user's own indicator的 weight indicator加载函数单独设定
     //var symbol
 

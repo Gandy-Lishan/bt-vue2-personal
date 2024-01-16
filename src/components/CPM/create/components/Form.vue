@@ -270,6 +270,7 @@ import { saveCPM, getMyIndicatorData, delMyIndicator, editCPM, getCPMList } from
 import { createPositiveIntegerRule, createVerifyValueInListRule, validateMarginRule } from "@/utils/formValidate"
 import { LoadingOverlay } from "@/components/common"
 import { timestampToTime, isJson } from '@/utils'
+import { mapGetters } from "vuex"
 
 export default {
   name: 'Form',
@@ -400,12 +401,29 @@ export default {
     isCreateLoading() {
       // 从 Vuex store 中获取全局 loading 状态
       return this.$store.state.states.isCreateLoading
-    }
+    },
+    ...mapGetters(['getBacktestSymbol']), // 监听chartiq和表单的symbol改动以双向响应
+    handleGetBacktestSymbol() {
+      return this.getBacktestSymbol
+    },
+  },
+  watch: {
+    handleGetBacktestSymbol: {
+      handler(newVal) {
+        this.data.symbol = newVal
+      },
+      immediate: true,
+      deep: true
+    },
   },
   async mounted() {
     this.setBacktestHistory(20)
   },
   methods: {
+    changeTimeframe(val) {
+      this.$store.commit('form/getFreqHighPriority', val)
+      CIQ.addIndicators()
+    },
     setBacktestHistory(val) {
       this.data.end_date = timestampToTime(new Date())
       const str = this.data.end_date.split('-')
@@ -445,6 +463,17 @@ export default {
     },
     handleSelect(item) {
       this.data.symbol = item.url
+
+      // CIQ.objIndicator = []
+      // CIQ.stxx.loadChart({
+      //     symbol: this.data.symbol,
+      //     startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
+      //     endDate:new Date(),
+      // },()=>{
+      //     CIQ.hideCover()
+      // })
+      this.$store.commit('form/getBacktestSymbol', this.data.symbol)
+      CIQ.addSymbol(this.data.symbol)
     },
     async submitForm() {
      const saveRes = await this.saveCPM()
