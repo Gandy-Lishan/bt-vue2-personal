@@ -436,13 +436,13 @@ export default {
       // 从 Vuex store 中获取全局 loading 状态
       return this.$store.state.states.isCreateLoading
     },
-    ...mapGetters(['getMyindicatorSymbol']), // 监听chartiq和表单的symbol改动以双向响应
-    handleGetMyindicatorSymbol() {
-      return this.getMyindicatorSymbol
+    ...mapGetters(['getBacktestSymbol']), // 监听chartiq和表单的symbol改动以双向响应
+    handleGetBacktestSymbol() {
+      return this.getBacktestSymbol
     },
   },
   watch: {
-    handleGetMyindicatorSymbol: {
+    handleGetBacktestSymbol: {
       handler(newVal) {
         if(this.data.categories.includes('Symbol')){    
          this.data.indicator_1 = newVal
