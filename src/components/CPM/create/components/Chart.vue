@@ -1,10 +1,11 @@
 <template>
 	<div>
+		{{ defaultSymbol }}
 		<div class="back">
 			<router-link to="/cpm"><i class="el-icon-arrow-left"></i><span>{{breadcrumbTitle}}</span></router-link>
 		</div>
 			<div class="chart_box" id="chart_box">
-				<chart width="100%" height="100%" :onChartReady="onChartReady">
+				<chart :symbol="defaultSymbol" width="100%" height="100%" :onChartReady="onChartReady">
 					<LoadingOverlayChart
 							:isLoading="chartLoadingSetting.isChartLoading"
 							:progressText="chartLoadingSetting.progressText"
@@ -31,6 +32,7 @@ export default {
 			indicator : '',
 			trades : [],
 			symbolUrl: '',
+			defaultSymbol: ''
 		}
 	},
 	components: {
@@ -51,9 +53,9 @@ export default {
 			},
 			deep: true, // 启用深度监听，监视对象属性的变化
 		},
-	},
-	created() {
-		
+		chart_data(newVal) {
+			this.defaultSymbol = newVal.hasOwnProperty('name')?null:process.env.VUE_APP_DEFAULT_SYMBOL
+		}
 	},
 	beforeDestroy() {
 	},
