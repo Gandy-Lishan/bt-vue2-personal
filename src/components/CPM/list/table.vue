@@ -1,0 +1,395 @@
+<template>
+  <div class="CPM-list-container">
+    <div class="search-box">
+      <el-button type="primary" round @click="handleCreate">Create Correlation Pattern Match</el-button>
+      <el-input placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" 					clearable
+					@clear="handleQuery">
+        <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
+      </el-input>
+    </div>
+    <el-table
+			ref="Table"
+			class="my-indicator-table"
+      header-align="center"
+			:data="tableData"
+			:row-class-name="tableRowClassName"
+      empty-text="No data"
+      v-loading="loading"
+      :element-loading-text="loadTest"
+      element-loading-spinner="el-icon-loading"
+			@sort-change="onSortChange"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
+			style="width: 100%; height: 100%; margin: 0 auto;"
+		>
+    
+      <!-- <el-table-column
+        align="center"
+        type="expand">
+        <template slot-scope="scope">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <el-row :gutter="20">
+              <el-col :span="12">
+              <el-row :span="4">
+              <el-form-item label="Name">
+                  <span>{{ scope.row['name']}}</span>
+              </el-form-item>
+              </el-row>
+              <el-row :span="4">
+              <el-form-item label="Symbol">
+                <span>{{ scope.row['symbol']}}</span>
+              </el-form-item>
+              </el-row>
+              <el-row :span="4">
+              <el-form-item label="Timeframe">
+                <span>{{ scope.row['timeframe']}}</span>
+              </el-form-item>
+              </el-row>
+              <el-row :span="4">
+                <el-form-item label="Period">
+                  <template v-for="(item, index) in scope.row['period']">
+                    <span :key="index">{{ index === scope.row['period'].length - 1 ? item : `${item} to ` }}</span>
+                  </template>
+                </el-form-item>
+              </el-row>
+              </el-col>
+              <el-col :span="12">
+              <el-row :span="4">
+              </el-row>
+              <el-row :span="4">
+              <el-form-item label="Total Trades">
+                  <span>{{ scope.row['total_trades']}}</span>
+              </el-form-item>
+              </el-row>
+              <el-row :span="4">
+              <el-form-item label="Total Return">
+                <span>{{ scope.row['total_return']}}</span>
+              </el-form-item>
+              </el-row>
+              </el-col>
+            </el-row>
+          </el-form>
+        </template>
+      </el-table-column> -->
+			<template v-for="(l) in tableCol">
+				<el-table-column
+          align="center"
+					:label="l.label"
+					:prop="l.value"
+					:key="l.key"
+          v-if="l.label == 'Name'"
+				>
+					<template slot-scope="scope">
+						<p class="tableText">
+            <el-button type="text" @click="handleRowClick(scope.row)">{{ scope.row[l.value] }}</el-button>
+						</p>
+					</template>
+				</el-table-column>
+        <el-table-column
+          align="center"
+					:label="l.label"
+					:prop="l.value"
+					:key="l.key"
+          v-if="['Symbol', 'Timeframe', 'Total Trades', 'Total Return'].includes(l.label)"
+          :sortable="['Total Trades', 'Total Return'].includes(l.label) ? 'custom' : false"
+				  :sort-orders="['ascending', 'descending', l.value]"
+				>
+					<template slot-scope="scope">
+						<p class="tableText">
+							{{ scope.row[l.value] }}
+						</p>
+					</template>
+				</el-table-column>
+        <el-table-column
+          align="center"
+					:label="l.label"
+					:prop="l.value"
+					:key="l.key"
+          v-if="['Period'].includes(l.label)"
+				>
+					<template slot-scope="scope">
+            <template v-for="(item, index) in scope.row[l.value]">
+              <div class="showDate" 
+              :key="index">
+              <el-button
+							size="mini"
+							type="info"
+							plain
+							>{{`${item}`}}</el-button>
+              </div>
+            </template>
+					</template>
+				</el-table-column>
+			</template>
+      <el-table-column align="center">
+				<template slot-scope="scope">
+        <el-button type="primary" icon="el-icon-edit" round size="mini" @click="editCPMData(scope.row)"></el-button>
+        <el-button class="delete-btn" slot="reference" round size="mini" type="primary" icon="el-icon-delete" @click="deleteCPM(scope.row)"></el-button>
+        </template>
+      </el-table-column>
+		</el-table>
+		<el-pagination
+		@current-change="handleCurrentChange"
+    :current-page="currentPage"
+		:page-size="pageSize"
+		:total="total"
+		layout="total, prev, pager, next, jumper"
+		></el-pagination>
+  </div>
+</template>
+
+<script>
+import { delCPM, getCPMList } from '@/service/service'
+import {isJson} from '@/utils'
+
+export default {
+  name: 'Table',
+  data() {
+    return {
+      loading: false,
+      pageSize: 10, // Default page size
+      currentPage: 1, // Default current page
+      total: 0,
+      loadTest: 'Loading...',
+      searchKey: '',
+      tableCol: [
+        {
+          label: 'Name',
+          value: 'name',
+          key: 'name'
+        },
+        {
+          label: 'Symbol',
+          value: 'symbol',
+          key: 'symbol'
+        },
+        {
+          label: 'Timeframe',
+          value: 'timeframe',
+          key: 'timeframe'
+        },
+        {
+          label: 'Period',
+          value: 'period',
+          key: 'period'
+        },
+        {
+          label: 'Total Trades',
+          value: 'total_trades',
+          key: 'total_trades'
+        },
+        {
+          label: 'Total Return',
+          value: 'total_return',
+          key: 'total_return'
+        },
+      ],
+      tableData: [],
+      currentSort: {}, // 当前的排序信息
+    }
+  },
+  async created() {
+    // this.tableData = [
+    //   {
+    //     name: 'CPM1',
+    //     symbol: 'SPY',
+    //     timeframe: 'Daily',
+    //     period: ['2013-12-01', '2013-12-10'],
+    //     threshold: [0.85, 0.99],
+    //     total_trades: 35,
+    //     total_return: '158.95%',
+    //     data: {
+    //       "CPM Infos": [
+    //         { StartDate: '2004-01-26', EndDate: '2004-02-11', Corr: 1.0, Close:  1157.76},
+    //         { StartDate: '2004-02-12', EndDate: '2004-02-27', Corr: 1.0, Close:  1157.76},
+    //         { StartDate: '2004-08-28', EndDate: '2004-08-13', Corr: 1.0, Close:  1157.76},
+    //       ],
+    //       Results:  {
+    //         'TOTAL RETURN': 21.28, 
+    //         'MEDIAN RETURN': 2.31, 
+    //         'AVERAGE RETURN': 2.13, 
+    //         'WIN RATE': 80.0, 
+    //         'AVERAGE WIN': 3.29, 
+    //         'AVERAGE LOSS': -2.52, 
+    //         'TOTAL TRADES': 10, 
+    //         'TOTAL POSITIVE': 8, 
+    //         'TOTAL NEGATIVE': 2, 
+    //         'BUY & HOLD': 259.15, 
+    //         'TIME IN MARKET': 8.35, 
+    //         'Each Return': [5.34, 1.19, 1.43, 2.33, 2.29, 3.7, -0.02, 5.25, -5.02, 4.79], 
+    //         'Start Date': ['2014-10-08', '2015-03-23', '2015-08-28', '2017-08-15', '2018-06-21', '2019-05-21', '2022-03-02', '2022-10-05', '2023-08-14', '2023-10-18'], 
+    //         'End Date': ['2014-10-24', '2015-04-09', '2015-09-16', '2017-08-31', '2018-07-10', '2019-06-07', '2022-03-18', '2022-10-21', '2023-08-30', '2023-11-03'], 
+    //         'Correlation': [0.8051, 0.8612, 0.8222, 0.825, 0.81, 0.8188, 0.8181, 0.8078, 0.8018, 0.8079], 
+    //         'Symbol Close': [1964.58, 2091.18, 1995.31, 2471.65, 2793.84, 2873.34, 4463.12, 3752.75, 4514.87, 4358.34]
+    //       }
+    //     }
+    //   },
+    //   {
+    //     name: 'CPM2',
+    //     symbol: 'AAPL',
+    //     timeframe: 'Weekly',
+    //     period: ['2013-12-01', '2013-12-28'],
+    //     threshold: [0.95, 1.0],
+    //     total_trades: 35,
+    //     total_return: '158.95%'
+    //   }
+    // ]
+    await this.getDataList()
+    console.log('列表返回处理数据', this.tableData)
+  },
+  methods: {
+    async getDataList(orderby) {
+      this.loading = true
+      let res = null
+      const page = this.currentPage
+			try {
+				res = await getCPMList(page, orderby, this.searchKey)
+				if (res.status == 200) {
+					let data = res.data.results
+					data = data.map(item => {
+            item.result = isJson(item.result) ? JSON.parse(item.result) : item.result
+            item.period = [item.start_date, item.end_date]
+						return item
+					})
+					this.tableData = data
+					this.total = res.data.count
+				}
+			} catch(error) {
+				console.log('报错了', error)
+        if(error.response.status === 404) {
+          const newPage = page != 1 ? page - 1 : 1
+          this.handleCurrentChange(newPage)
+          return
+        }
+        this.currentPage = 1
+        this.total = 0
+        this.tableData = []
+        
+      } finally {
+        this.loading = false
+      }
+    },
+    tableRowClassName({row, rowIndex}) {
+			if (rowIndex%2 === 1) {
+			return 'darken-row'
+			}
+			return ''
+		},
+    async handleCurrentChange(currentPage) {
+			this.currentPage = currentPage;
+      await this.applySort()
+		},
+    async onSortChange({ column, prop, order }) {
+			
+			if(this.currentPage != 1) this.currentPage = 1
+      if (column.sortable !== 'custom') return
+      this.currentSort = {
+        prop: prop,
+        order: order,
+      };
+      await this.applySort()
+    },
+    async applySort() {
+      let { prop, order } = this.currentSort;
+      //  order: 升 'ascending' | 降'descending' | 取消升降 null | order: total_return 
+      if (order == null || order == prop) {
+        // 不排序
+        prop = null
+      }
+      if (order == 'ascending') {
+        // 升序排列
+        prop = `-${prop}`
+      }
+			await this.getDataList(prop)
+		},
+    handleCreate() {
+      this.$router.push('/cpm/create')
+    },
+    handleRowClick(row) {
+      console.log(row)
+      const data = JSON.stringify(row)
+      this.$router.push({
+        name: 'CPMResults',
+        params: {
+          data,
+          usedFor: 'showCPMResults',
+        }
+      })
+    },
+    editCPMData(row) {
+      const data = JSON.stringify(row)
+      this.$router.push({
+        name: 'CreateCPM',
+        params: {
+          data,
+          usedFor: 'showCPMFormData',
+        }
+      })
+    },
+    async deleteCPM(row) {
+      const { url } = row
+      this.loading = true
+			const res = await delCPM(url)
+      const code = res.data.code
+      if(code == 403) this.popUpMsgBox('Successfully delete')
+      if(code == 403) this.popUpMsgBox("Sorry, deleted item doesn't exist. Refresh the list")
+      if(code == 404) {this.popUpMsgBox('Permission denied')}
+			await this.getDataList(null)
+			this.loading = false
+			this.popUpMsgBox('Successfully deleted')
+    },
+    async handleQuery() {
+      await this.applySort()
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.search-box{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0px;
+}
+.el-input-group{
+  width: 40%;
+}
+.my-indicator-table.el-table /deep/tr{
+  cursor: pointer;
+}
+.my-indicator-table{
+  background-color: inherit;
+}
+.el-form-item{
+  margin-bottom: 0;
+  span {
+    color: #5b9bd1;
+  }
+}
+.delete-btn {
+	background-color: #f59e0b;
+  border: unset;
+}
+.delete-btn:hover {
+  background-color: rgb(251, 192, 92);
+}
+/deep/ .el-popover {
+  right: 100%;
+}
+.isLastRow /deep/ .el-popover {
+  bottom: 0;
+}
+/deep/ .el-select .el-input__inner, .el-select {
+  width: 100%;
+  margin: 0;
+  font-weight: 500;
+  color: #909399;
+}
+.CPM-list-container{
+  width: 90%;
+  margin: 0 auto;
+}
+.showDate {
+  margin: 5px 0;
+}
+</style>

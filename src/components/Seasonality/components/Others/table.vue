@@ -61,9 +61,10 @@
         <p>
           To get a better feel for which days of the year have been consistently profitable, this table outlines the historical performance of each trading day of the year for the symbol data you selected from the start year through the end year.
         </p>
-        <p>
+        <p v-if="option == 3">
           If your browser is relatively new, you will be able to click each of the column headings and have the table sort in ascending and descending order (if you click twice). It may take the table a few seconds to sort since there are so many data points.
         </p>
+        <p>Highlighted rows represent the latest trading day of the year.</p>
         <el-divider></el-divider>
         <h5>Table Description</h5>
         <el-descriptions :column="1" :size="size" border>
@@ -100,7 +101,7 @@
         </el-descriptions>
       </div>
     </div>
-    <span v-if="option == 3" class="Hits">Highlighted rows indicate the current day.</span>
+    <!-- <span v-if="option == 3" class="Hits">Highlighted rows indicate the current day.</span> -->
     <el-table
 			ref="CPMTable"
 			class="my-indicator-table other-table default-table-class"
