@@ -514,6 +514,7 @@ export default {
       periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
       */
 			let period_dict = this.transformZScoreData(periodArray)
+			debugger
 			let quotes = CIQ.stxx.chart.masterData
 			// const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
 			const direction = this.direction
