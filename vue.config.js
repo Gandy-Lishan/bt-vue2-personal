@@ -273,11 +273,11 @@ const config = {
 		// })
 
 		//CDN代理挂载，打包忽略nodemoudle内的以下包
-		config.externals({
-			vue: 'Vue',
-			vuex: 'Vuex',
-			'vue-router': 'VueRouter'
-		})
+		// config.externals({
+		// 	vue: 'Vue',
+		// 	vuex: 'Vuex',
+		// 	'vue-router': 'VueRouter'
+		// })
 
 		// if(process.env.ST_ENV === "prod"){
 		// 	config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
