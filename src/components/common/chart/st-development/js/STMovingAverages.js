@@ -488,15 +488,15 @@ if (!CIQ.Studies) {
 				const maxCloseArrOPR = getPeriodParam(quotes.map(row => row[field]), "max", period, 0);
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
-						if(i>=period){
+						//if(i>=period){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrOPR[i] - minCloseArrOPR[i] == 0) return 0
 
 							const change = parseFloat((100 * (row[field] - minCloseArrOPR[i]) / (maxCloseArrOPR[i] - minCloseArrOPR[i])).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
-						}
-						return NaN
+						//}
+						//return NaN
 					}else{
 						return NaN
 					}
@@ -514,15 +514,15 @@ if (!CIQ.Studies) {
 				const maxCloseArrRR = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
-						if(i>=period){
+						//if(i>=period){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrRR[i] - minCloseArrRR[i] == 0) return 0
 
 							const change = parseFloat((100 * (row[field] - minCloseArrRR[i]) / (maxCloseArrRR[i] - minCloseArrRR[i])).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
-						}
-						return NaN
+						//}
+						//return NaN
 					}else{
 						return NaN
 					}
@@ -560,6 +560,54 @@ if (!CIQ.Studies) {
 					//CIQ.alert('There is no enough data for calculating the MA Ratio value, please change a value')
 				} 
 				break;
+			case 'DD':
+				// 公式：(Current close - Highest Close) / Highest Close
+				let indexDD = quotes.findIndex(row=> field in row &&  row[field]!=null)
+				quotes = quotes.slice(indexDD) 
+				const maxCloseArrDD = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
+				resArr = quotes.map((row, i) => {
+					if(field in quotes[i] &&  quotes[i][field]!=null){
+						//if(i>=period){
+							// 如果分母为0，直接返回0
+							if(maxCloseArrDD[i] == 0) return 0
+
+							const change = parseFloat((100 * (row[field] - maxCloseArrDD[i]) / maxCloseArrDD[i]).toFixed(4))
+							
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						//}
+						//return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+				break;
+			case 'DU':
+				// 公式：(Current close - Highest Close) / Highest Close
+				let indexDU = quotes.findIndex(row=> field in row &&  row[field]!=null)
+				quotes = quotes.slice(indexDU) 
+				const minCloseArrDU = getPeriodParam(quotes.map(row => row[field]), "min", period, 1);
+				resArr = quotes.map((row, i) => {
+					if(field in quotes[i] &&  quotes[i][field]!=null){
+						// if(i>=period){
+							// 如果分母为0，直接返回0
+							if(minCloseArrDU[i] == 0) return 0
+
+							const change = parseFloat((100 * (row[field] - minCloseArrDU[i]) / minCloseArrDU[i]).toFixed(4))
+							
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						// }
+						// return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+				break;
 			default:
 				console.error('no such condition')
 		}
@@ -577,28 +625,7 @@ if (!CIQ.Studies) {
 		sd.outputMap[sd.inputs.display] = "Line";
 		// sd.outputMap['supLine'] = "supLine";
 		
-		// 给上面函数用的工具函数
-		function getPeriodParam(dataSeries, paramType, period, add_bar) {
-			const typeDict = {
-			  max: Math.max,
-			  min: Math.min,
-			  mean: arr => arr.reduce((a, b) => a + b) / arr.length,
-			  sum: arr => arr.reduce((a, b) => a + b),
-			};
-		  
-			const dataArr = [];
-		  
-			for (let i = 0; i < dataSeries.length; i++) {
-			  if (i >= period) {
-				const tmpData = typeDict[paramType](...dataSeries.slice(i - period + add_bar, i + add_bar));
-				dataArr.push(Number(tmpData.toFixed(3)));
-			  } else {
-				dataArr.push(NaN);
-			  }
-			}
-		  
-			return dataArr;
-		  }
+
 	};
 	CIQ.Studies.calculateSymbolOhlcv = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
@@ -640,10 +667,9 @@ if (!CIQ.Studies) {
 
 	};
 	CIQ.Studies.calculateSTRSI = function (stx, sd) {
-		console.log('calculateSTRSI')
 		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
-		var showSupLine = sd.parameters.showSupLine?sd.parameters.showSupLine:null
+		//var showSupLine = sd.parameters.showSupLine?sd.parameters.showSupLine:null
 		if (!field || field == "field") field = "Close";
 
 		function computeRSI(avgGain, avgLoss) {
@@ -684,11 +710,11 @@ if (!CIQ.Studies) {
 			//intermediates
 			quote["_avgG " + sd.name] = avgGain;
 			quote["_avgL " + sd.name] = avgLoss;
-			quote['supLine'] = showSupLine
+			//quote['supLine'] = showSupLine
 		}
 		//sd.zoneOutput = "RSI";
 		sd.outputMap["RSI " + sd.name] = "RSI";
-		sd.outputMap['supLine'] = "supLine";
+		//sd.outputMap['supLine'] = "supLine";
 	};
 	CIQ.Studies.calculateSTCCI = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
@@ -713,12 +739,86 @@ if (!CIQ.Studies) {
 					(quote["hlc/3"] - quote["MA " + sd.name]) / (0.015 * md);
 		}
 	};
+	CIQ.Studies.calculateOpeningGap = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			if (!quote) continue;
+			var lastBar = quote
+			if(i >= 1) lastBar = quotes[i-1]
+
+			if(lastBar["Close"] == 0) return 0
+			
+			quote["Result " + sd.name] = parseFloat((100 * (quote["Open"] - lastBar["Close"]) / lastBar["Close"]).toFixed(4));
+		}
+	};
+	CIQ.Studies.calculateDayofWeek = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			if (!quote) continue;
+			quote["Result " + sd.name] = quote['DT'].getDay();
+		}
+	};
+	CIQ.Studies.calculateMonthofYear = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			if (!quote) continue;
+			quote["Result " + sd.name] = quote['DT'].getMonth() + 1;
+		}
+	};
+	CIQ.Studies.calculateConsecutiveDaysHigh = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		var field = sd.inputs.Field;
+		// var period = sd.inputs.period;
+
+		if (!field || field == "field") field = "Close";
+		//const maxCloseIndexArr = getPeriodParam(quotes.map(row => row[field]), 'maxCount', period, 1);
+		// for (var i = sd.startFrom; i < quotes.length; i++) {
+		// 	var quote = quotes[i];
+		// 	if (!quote) continue;
+		// 	quote["Result " + sd.name] = maxCloseIndexArr[i];
+		// }
+		let num_max = quotes[sd.startFrom][field]
+		let indicator = 0
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			if (!quotes[i]) continue;
+			var temp_num = quotes[i][field];
+			if (temp_num >= num_max) {
+				num_max = temp_num
+				indicator = 0
+			}
+			quotes[i]["Result " + sd.name] = indicator;
+			indicator ++
+		}
+	};
+	CIQ.Studies.calculateConsecutiveDaysLow = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		var field = sd.inputs.Field;
+
+		if (!field || field == "field") field = "Close";
+
+		let num_min = quotes[sd.startFrom][field]
+		let indicator = 0
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			if (!quotes[i]) continue;
+			var temp_num = quotes[i][field];
+			if (temp_num <= num_min) {
+				num_min = temp_num
+				indicator = 0
+			}
+			quotes[i]["Result " + sd.name] = indicator;
+			indicator ++
+		}
+	};
+	
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		// 为了覆盖cci optix,用了小写的cci
 		cci: {
 			name: "Commodity Channel Index",
 			calculateFN: CIQ.Studies.calculateSTCCI,
-			inputs: { Period: 20 },
+			inputs: { Period: 21 },
 			parameters: {
 				init: {
 					studyOverZonesEnabled: true,
@@ -734,8 +834,15 @@ if (!CIQ.Studies) {
 		},
 		"ST ROCLike": {
             name: "ROCLike Line",
+			seriesFN: function (stx, sd, quotes) {
+				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
+
+				var showSupLine = (!sd.parameters.showSupLine && sd.parameters.showSupLine!=0)?null:sd.parameters.showSupLine
+				var yAxis = CIQ.stxx.panels[sd.name].yAxis
+				CIQ.Studies.drawHorizontal(stx, sd, null, showSupLine, yAxis);
+			},
             calculateFN: CIQ.Studies.calculateSTROCLike,
-            inputs: { Field: "field",condition: "ROC",period: 5,overlay: false},
+            inputs: { condition: "ROC",period: 21,overlay: false},
 			// outputs: { Line: "auto",supLine:'#9a9a9a' },
 			outputs: { Line: "auto" },
         },
@@ -811,7 +918,7 @@ if (!CIQ.Studies) {
             name: "Moving Average ",
             overlay: true,
             calculateFN: CIQ.Studies.calculateSTMovingAverage,
-            inputs: { Period: 20, Field: "field", Type: "ma", Offset: 0 },
+            inputs: { Period: 21, Field: "field", Type: "ma", Offset: 0 },
 			outputs: { MA: "#FF000" },
         },
 		"High Low": {
@@ -836,9 +943,86 @@ if (!CIQ.Studies) {
 			attributes: {
 				"Shift Percentage": { min: 0.1, step: 0.1 }
 			}
-		}
+		},
+		// new technical indicators in 2024
+		"% of Opening Gap": {
+            name: "% of Opening Gap",
+			inputs: {},
+            calculateFN: CIQ.Studies.calculateOpeningGap,
+        },
+		"Day of Week": {
+            name: "Day of Week",
+			inputs: {},
+            calculateFN: CIQ.Studies.calculateDayofWeek,
+        },
+		"Month of Year": {
+            name: "Month of Year",
+			inputs: {},
+            calculateFN: CIQ.Studies.calculateMonthofYear,
+        },
+		"# of Consecutive Days since High": {
+            name: "# of Consecutive Days since High",
+			inputs: {},
+            calculateFN: CIQ.Studies.calculateConsecutiveDaysHigh,
+        },
+		"# of Consecutive Days since Low": {
+            name: "# of Consecutive Days since Low",
+			inputs: {},
+            calculateFN: CIQ.Studies.calculateConsecutiveDaysLow,
+        },
 	});
 
+			// 给上面函数用的工具函数
+			function getPeriodParam(dataSeries, paramType, period, add_bar) {
+				const typeDict = {
+				  max: arr => Math.max(...arr),
+				  min: arr => Math.min(...arr),
+				  mean: arr => arr.reduce((a, b) => a + b) / arr.length,
+				  sum: arr => arr.reduce((a, b) => a + b),
+				//   maxCount: arr => {
+				// 	let p1 = 0
+				// 	let p2 = 0
+				// 	let maxNum = arr[0]
+				// 	for(var i in arr){
+				// 		if(arr[i]<maxNum){
+				// 			p2++
+				// 		}else{
+				// 			maxNum = arr[i]
+				// 			p1 = p2
+				// 		}
+				// 	}
+				// 	return p2-p1
+				//   },
+				//   minCount: arr => {
+				// 	let p1 = 0
+				// 	let p2 = 0
+				// 	let minNum = arr[0]
+				// 	for(var i in arr){
+				// 		if(arr[i]>minNum){
+				// 			p2++
+				// 		}else{
+				// 			minNum = arr[i]
+				// 			p1 = p2
+				// 		}
+				// 	}
+				// 	return p2-p1
+				//   }
+				};
+			  
+				const dataArr = [];
+
+				// 处理range rank, drawndown以及新加的ConsecutiveDays的计算时，
+				// 如果当前bar之前的交易日个数小于周期，按剩余天数算
+				for (let i = 0; i < dataSeries.length; i++) {
+					const sliceStart = i - period + add_bar
+					const sliceEnd = i + add_bar
+					const tmpData = typeDict[paramType](dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd));
+					//console.log(dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd),tmpData)
+					dataArr.push(Number(tmpData.toFixed(3)));
+				}
+			  
+				return dataArr;
+			  }
 }
 
 };

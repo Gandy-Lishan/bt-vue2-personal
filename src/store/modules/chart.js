@@ -3,6 +3,7 @@ import { CIQ } from '@/components/common/chart/st-development/js'
 const state = {
 	curDate: '', //ai
 	studySettingMA: { period: '', criteria: '', panelIndex: '' }, //chartiq
+	studySettingROC: { period: '', criteria: '', panelIndex: '' }, 
 	favoriteIndicatorList: [], //chartiq
 	favoriteSymbolList: [], //chartiq
 	techSD: [], //chartiq
@@ -77,6 +78,9 @@ const mutations = {
 	 */
 	studySettingMAChange(state, obj) {
 		state.studySettingMA = obj
+	},
+	studySettingROCChange(state, obj) {
+		state.studySettingROC = obj
 	},
 	/**
 	 * Sets up a mutations to store favoriteIndicatorList that is originally read from API

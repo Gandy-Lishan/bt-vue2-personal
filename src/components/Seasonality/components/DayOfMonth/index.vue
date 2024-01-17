@@ -17,7 +17,7 @@
               1.Symbol
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  >Choose a stock/index/ETF as symbol.(default:SPY)</span>
+                  >Choose a stock/index/ETF as symbol.(default:SPX)</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -128,7 +128,7 @@ export default {
   data() {
     return {
       data: {
-        symbol: 'SPY',
+        symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
         start_date: (new Date().getFullYear() - 20).toString(),
         end_date:  new Date().getFullYear().toString(),
         monthSelection: 0
@@ -154,9 +154,9 @@ export default {
         endPickerOptions: {
           disabledDate: this.handleDisabledEndDate
         },
-        symbol: 'SPY',
+        symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
         plotConfiguration: {
-          title: 'Seasonality in the SPY',
+          title: 'Seasonality in the SPX',
           subtitle: 'Month of October',
           xAxisTitle: 'Day Of The Month',
           customScale: true, // 如果需要自定义刻度

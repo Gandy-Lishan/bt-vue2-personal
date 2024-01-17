@@ -276,7 +276,7 @@ export default {
         condition: 3,
         newCondition: 3,
         value: '',
-        conditionPeriod: '5',
+        conditionPeriod: '21',
         period: '',
         maValue: '',
       },
@@ -291,6 +291,8 @@ export default {
         { value: 6, label: '% of Previous Range' },
         { value: 7, label: 'MA Ratio' },
         { value: 8, label: 'Range Rank' },
+        { value: 9, label: 'DrawDown %' },
+        { value: 10, label: 'DrawUp %' }
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -317,7 +319,10 @@ export default {
     },
     direction() {
       return this.getterDirection
-    }
+    },
+    updateSettingROC() {
+			return this.$store.state.chart.studySettingROC
+		},
   },
   watch: {
     extremeValue: {
@@ -370,12 +375,18 @@ export default {
           this.senti.extreme_pessimism = ''
         }
       }
-    }
+    },
+    updateSettingROC(val) {
+			if(val['criteria'] == this.criteria && val['panelIndex'] == this.panelIndex){
+        this.senti.conditionPeriod = val['period']
+				this.calculateNewConditions()
+			}
+		},
   },
   methods: {
     ROCLikeChange(val,limit) {
       //debugger
-      this.isROCLike = 5 <= val && val <= 8
+      this.isROCLike = 5 <= val && val <= 10
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.senti.condition = this.senti.newCondition
@@ -514,6 +525,12 @@ export default {
           case "Range Rank":
             _newCondition = 'RR'
             break;
+          case "DrawDown %":
+            _newCondition = 'DD'
+            break;
+          case "DrawUp %":
+            _newCondition = 'DU'
+            break;
           default:
             break;
         }
@@ -641,6 +658,8 @@ export default {
           [6, { name: '% of Previous Range', abbr: 'OPR' }],
           [7, { name: 'MA Ratio', abbr: 'MA' }],
           [8, { name: 'Range Rank', abbr: 'RR' }],
+          [9, { name:'DrawDown %', abbr: 'DD' }],
+          [10, { name:'DrawUp %', abbr: 'DU' }]
         ])
         
         // 判断是否已经存在完全一样条件的ROC
@@ -684,13 +703,13 @@ export default {
         }, null, {
           criteria: this.criteria,
           index: this.panelIndex,
-          //showSupLine:100
+          showSupLine:100
         })
       
         this.hideDuplicateROC()
 
         // 解决附属ma或者roc漂移问题
-        CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+        CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
       }
     },
     setPeriod(val) {
@@ -742,7 +761,7 @@ export default {
         index: this.panelIndex
       })
       // 解决附属ma或者roc漂移问题
-      CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+      CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 
       // keep current MA
       var objMA = {

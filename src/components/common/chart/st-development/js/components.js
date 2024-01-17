@@ -7787,7 +7787,9 @@ class Studies extends CIQ.UI.ContextTag {
 
 			await CIQ.getIndicatorMatedata(indicatorsList)
 
-			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+			// 禁用indicator加载保留Marker功能，防止不同timeframe时marker吸附功能出现问题
+			//CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
+			CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
 		}
 
 		function pickStudy(node, studyName) {
@@ -8084,6 +8086,7 @@ if (!CIQ.Studies) {
 		refreshInputs(empty) {
 			let _obj = CIQ.findSentiIndicator(null,this.helper.name)
 			let _obj2 = CIQ.findBuiltinTechIndicator(null,this.helper.name)
+			let _obj3 = CIQ.findSymbolIndicator(this.helper.name,null)
 			if(_obj){
 				this.helper.inputs = [];
 			}
@@ -8109,6 +8112,15 @@ if (!CIQ.Studies) {
 					}
 				}
 				//this.helper.inputs = [];
+			}
+			else if(_obj3){
+				var inputs = [];
+				for (var i = 0;i < this.helper.inputs.length; i++){
+					if (this.helper.inputs[i].heading != 'Field'){
+						inputs.push(this.helper.inputs[i])
+					}
+				}
+				this.helper.inputs = inputs;
 			}
 
 			var inputs = this.node.find("cq-study-inputs");
@@ -8193,7 +8205,7 @@ if (!CIQ.Studies) {
 			if(_obj){
 				this.helper.outputs = [];
 			}
-			this.helper.outputs = this.helper.outputs.filter(x=>x.name != "supLine")
+			//this.helper.outputs = this.helper.outputs.filter(x=>x.name != "supLine")
 			var outputs = this.node.find("cq-study-outputs");
 			if (empty) outputs.empty();
 			for (var i = 0; i < this.helper.outputs.length; i++) {
@@ -8370,9 +8382,9 @@ if (!CIQ.Studies) {
 					}
 					// 如果MA（表单上加载的）修改了周期，用vuex同步状态到表单，在MA组件加载更新MA而不通过updateStudy
 					if (
-						self.helper.sd.type == 'ma' && 
+						
 						section == "inputs" && 
-						name == "Period" && 
+						(name == "Period" || name == "period") && 
 						self.helper.sd.parameters.criteria
 					) {
 						
@@ -8381,12 +8393,18 @@ if (!CIQ.Studies) {
 							panelIndex: self.helper.sd.parameters.index,
 							period: this.value
 						}
-						CIQ.store.commit('chart/studySettingMAChange',obj)
-						return
+						if(self.helper.sd.type == 'ma'){
+							CIQ.store.commit('chart/studySettingMAChange',obj)
+							return
+						}
+						if(self.helper.sd.type == 'ST ROCLike'){
+							CIQ.store.commit('chart/studySettingROCChange',obj)
+							return
+						}
 					}
 
 					self.updateStudy(updates);
-					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				};
 			}
 			node.addEventListener("change", closure());
