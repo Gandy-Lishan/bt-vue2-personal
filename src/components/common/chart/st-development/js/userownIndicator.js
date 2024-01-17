@@ -10,7 +10,7 @@
  
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
     // CPM暂时放这
-    CIQ.displayCPMLayout = async function(chart_data){
+    CIQ.displayCPMLayout = async function(chart_data,cb){
         let symbol =  chart_data.symbol
         let timeframe = chart_data.timeframe
 
@@ -24,7 +24,7 @@
             },
             function () {
                 CIQ.createCorrelationPatternMatchDrawing(chart_data.result)
-
+                cb()
                 CIQ.hideCover()
                 CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
             }

@@ -62,9 +62,11 @@ export default {
 			this.hideComponents()	
 			console.log('chart_data',this.chart_data)
 			//还原自定义indicator Layout
-			if(this.chart_data.name) CIQ.displayCPMLayout(this.chart_data)
+			if(this.chart_data.name) CIQ.displayCPMLayout(this.chart_data,()=>{
+				this.$emit('prepareData', this.chart_data)
+			})
 			else CIQ.hideCover()
-			this.$emit('prepareData', this.chart_data)
+			
 		},
 		hideComponents() {
 			let search = document.querySelector(".ciq-search")
