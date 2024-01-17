@@ -803,6 +803,7 @@ if (!CIQ.Studies) {
 	CIQ.Studies.calculateConsecutiveDaysLow = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
 		var field = sd.inputs.Field;
+		var period = sd.inputs.period;
 
 		if (!field || field == "field") field = "Close";
 
