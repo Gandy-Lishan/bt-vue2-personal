@@ -155,6 +155,7 @@ const routes = [
 	},
 	{
 		path: '/cpm',
+		name: 'CPM',
 		component: resolve =>
 			require(['@/components/CPM/index.vue'], resolve),
 		children: [
