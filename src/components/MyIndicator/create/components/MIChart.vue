@@ -47,9 +47,9 @@ export default {
 			},
 			deep: true, // 启用深度监听，监视对象属性的变化
 		},
-	},
-	created() {
-		this.defaultSymbol = this.chart_data.hasOwnProperty('name')?null:process.env.VUE_APP_DEFAULT_SYMBOL
+		chart_data(newVal) {
+			this.defaultSymbol = newVal.hasOwnProperty('name')?null:process.env.VUE_APP_DEFAULT_SYMBOL
+		}
 	},
 	beforeDestroy() {
 		this.$store.dispatch('chart/reset_miFormState')
