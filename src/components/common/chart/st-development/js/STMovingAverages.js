@@ -771,26 +771,33 @@ if (!CIQ.Studies) {
 	CIQ.Studies.calculateConsecutiveDaysHigh = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
 		var field = sd.inputs.Field;
-		// var period = sd.inputs.period;
+		var period = sd.inputs.period;
 
 		if (!field || field == "field") field = "Close";
-		//const maxCloseIndexArr = getPeriodParam(quotes.map(row => row[field]), 'maxCount', period, 1);
+		// const maxCloseIndexArr = getPeriodParam(quotes.map(row => row[field]), 'maxCount', period, 1);
 		// for (var i = sd.startFrom; i < quotes.length; i++) {
 		// 	var quote = quotes[i];
 		// 	if (!quote) continue;
 		// 	quote["Result " + sd.name] = maxCloseIndexArr[i];
 		// }
-		let num_max = quotes[sd.startFrom][field]
-		let indicator = 0
+		let indicator
 		for (var i = sd.startFrom; i < quotes.length; i++) {
-			if (!quotes[i]) continue;
-			var temp_num = quotes[i][field];
-			if (temp_num >= num_max) {
-				num_max = temp_num
-				indicator = 0
+			if(i+1>=period){
+				var quote = quotes[i]
+				if (!quotes[i]) continue;
+				const sliceStart = i + 1 - period
+				const sliceEnd = i + 1
+				if (quote[field] == Math.max(...(quotes.slice(sliceStart, sliceEnd).map(row => row[field])))) {
+					indicator = 0
+				}else {
+					if(indicator){
+						indicator++
+					}else{
+						indicator = 1
+					}
+				}
 			}
 			quotes[i]["Result " + sd.name] = indicator;
-			indicator ++
 		}
 	};
 	CIQ.Studies.calculateConsecutiveDaysLow = function (stx, sd) {
@@ -799,17 +806,37 @@ if (!CIQ.Studies) {
 
 		if (!field || field == "field") field = "Close";
 
-		let num_min = quotes[sd.startFrom][field]
-		let indicator = 0
+		// let num_min = quotes[sd.startFrom][field]
+		// let indicator = 0
+		// for (var i = sd.startFrom; i < quotes.length; i++) {
+		// 	if (!quotes[i]) continue;
+		// 	var temp_num = quotes[i][field];
+		// 	if (temp_num <= num_min) {
+		// 		num_min = temp_num
+		// 		indicator = 0
+		// 	}
+		// 	quotes[i]["Result " + sd.name] = indicator;
+		// 	indicator ++
+		// }
+
+		let indicator
 		for (var i = sd.startFrom; i < quotes.length; i++) {
-			if (!quotes[i]) continue;
-			var temp_num = quotes[i][field];
-			if (temp_num <= num_min) {
-				num_min = temp_num
-				indicator = 0
+			if(i+1>=period){
+				var quote = quotes[i]
+				if (!quotes[i]) continue;
+				const sliceStart = i + 1 - period
+				const sliceEnd = i + 1
+				if (quote[field] == Math.min(...(quotes.slice(sliceStart, sliceEnd).map(row => row[field])))) {
+					indicator = 0
+				}else {
+					if(indicator){
+						indicator++
+					}else{
+						indicator = 1
+					}
+				}
 			}
 			quotes[i]["Result " + sd.name] = indicator;
-			indicator ++
 		}
 	};
 	
@@ -962,12 +989,12 @@ if (!CIQ.Studies) {
         },
 		"# of Consecutive Days since High": {
             name: "# of Consecutive Days since High",
-			inputs: {},
+			inputs: { period: 252, },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysHigh,
         },
 		"# of Consecutive Days since Low": {
             name: "# of Consecutive Days since Low",
-			inputs: {},
+			inputs: { period: 252, },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysLow,
         },
 	});
@@ -979,34 +1006,34 @@ if (!CIQ.Studies) {
 				  min: arr => Math.min(...arr),
 				  mean: arr => arr.reduce((a, b) => a + b) / arr.length,
 				  sum: arr => arr.reduce((a, b) => a + b),
-				//   maxCount: arr => {
-				// 	let p1 = 0
-				// 	let p2 = 0
-				// 	let maxNum = arr[0]
-				// 	for(var i in arr){
-				// 		if(arr[i]<maxNum){
-				// 			p2++
-				// 		}else{
-				// 			maxNum = arr[i]
-				// 			p1 = p2
-				// 		}
-				// 	}
-				// 	return p2-p1
-				//   },
-				//   minCount: arr => {
-				// 	let p1 = 0
-				// 	let p2 = 0
-				// 	let minNum = arr[0]
-				// 	for(var i in arr){
-				// 		if(arr[i]>minNum){
-				// 			p2++
-				// 		}else{
-				// 			minNum = arr[i]
-				// 			p1 = p2
-				// 		}
-				// 	}
-				// 	return p2-p1
-				//   }
+				  maxCount: arr => {
+					let p1 = 0
+					let p2 = 0
+					let maxNum = arr[0]
+					for(var i in arr){
+						if(arr[i]<maxNum){
+							p2++
+						}else{
+							maxNum = arr[i]
+							p1 = p2
+						}
+					}
+					return p2-p1
+				  },
+				  minCount: arr => {
+					let p1 = 0
+					let p2 = 0
+					let minNum = arr[0]
+					for(var i in arr){
+						if(arr[i]>minNum){
+							p2++
+						}else{
+							minNum = arr[i]
+							p1 = p2
+						}
+					}
+					return p2-p1
+				  }
 				};
 			  
 				const dataArr = [];
@@ -1020,7 +1047,7 @@ if (!CIQ.Studies) {
 					//console.log(dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd),tmpData)
 					dataArr.push(Number(tmpData.toFixed(3)));
 				}
-			  
+
 				return dataArr;
 			  }
 }
