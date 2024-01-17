@@ -1,6 +1,5 @@
 <template>
 	<div>
-		{{ defaultSymbol }}
 		<div class="back">
 			<router-link to="/cpm"><i class="el-icon-arrow-left"></i><span>{{breadcrumbTitle}}</span></router-link>
 		</div>
