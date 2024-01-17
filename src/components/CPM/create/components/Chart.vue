@@ -52,8 +52,13 @@ export default {
 			},
 			deep: true, // 启用深度监听，监视对象属性的变化
 		},
-		chart_data(newVal) {
-			this.defaultSymbol = newVal.hasOwnProperty('name')?null:process.env.VUE_APP_DEFAULT_SYMBOL
+		chart_data: {
+			handler(newVal, _) {
+				// 在对象属性发生变化时触发的处理逻辑
+				this.defaultSymbol = newVal.hasOwnProperty('name')?null:process.env.VUE_APP_DEFAULT_SYMBOL
+			},
+			immediate: true,
+			deep: true, // 启用深度监听，监视对象属性的变化
 		}
 	},
 	beforeDestroy() {
