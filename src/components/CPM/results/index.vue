@@ -2,7 +2,7 @@
   <div class="CPMResults-container">
     <el-collapse v-model="activeNames" @change="handleChange" :accordion="false">
       <div class="chart">
-        <Chart :chart_data="chart_data" :breadcrumbTitle="breadcrumbTitle"></Chart>
+        <Chart :chart_data="chart_data" :breadcrumbTitle="breadcrumbTitle" @prepareData="prepareData"></Chart>
       </div>
       <el-collapse-item name="1">
         <template v-slot:title>
@@ -130,10 +130,10 @@ export default {
           _this.tradeDate = TradeDateArray
           _this.rowFrequency = _data.timeframe
           _this.direction = _data.direction || 'Long'
-          _this.$nextTick(() => {
-            const datatime = new Date(_data.start_date)
-            _this.$refs['TIM'].prepareData(TradeDateArray, datatime)
-            });
+          // _this.$nextTick(() => {
+          //   const datatime = new Date(_data.start_date)
+          //   _this.$refs['TIM'].prepareData(TradeDateArray, datatime)
+          // });
 
 				}
 			})
@@ -146,6 +146,14 @@ export default {
     },
     changeTab(val) {
       this.activeTab = val
+    },
+    prepareData(data) {
+      console.log('触发了')
+      const _this = this
+      _this.$nextTick(() => {
+          const datatime = new Date(data.start_date)
+          _this.$refs['TIM'].prepareData(_this.tradeDate, datatime)
+        });
     }
   }
 }
