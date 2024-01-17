@@ -184,7 +184,6 @@ let __st_js_generateCsv_ = (_exports) => {
          for(var _study in studies){
              if(sd.type == studies[_study].url){
                  var category = categoryList[_class].class
-                 
                  switch(category){
                      case("CCI_like"):{
                          // output only indicator value 
@@ -583,7 +582,7 @@ let __st_js_generateCsv_ = (_exports) => {
                  }
                  if(matchedSubstring &&
                      Object.keys(s.outputMap).indexOf(Object.keys(arrData[arrData.length-10])[i]) != -1){
-                     if(Object.keys(arrData[arrData.length-10])[i] == 'supLine') continue
+                    //  if(Object.keys(arrData[arrData.length-10])[i] == 'supLine') continue
                      resultIndex = Object.keys(arrData[arrData.length-10])[i]
                  }
              }

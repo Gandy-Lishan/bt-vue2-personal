@@ -121,6 +121,7 @@ export default {
 
               const tradeReturn = initalData['Each Return']
               const exitReason = initalData['Exit Reason'] ? initalData['Exit Reason'] : []
+              const marketCondition = initalData['MarketCondition'] ? initalData['MarketCondition'] : []
               data.uuid = initalData['UUID']
               data.symbol = initalData['Symbol']
               data.frequency = initalData['Frequency']
@@ -185,6 +186,9 @@ export default {
                   initalData['Trades'][i].ExitReason =
                     exitReason[initalData['Trades'][i].trade_number]
 
+                  initalData['Trades'][i].MarketCondition =
+                    (!marketCondition[initalData['Trades'][i].trade_number] || marketCondition[initalData['Trades'][i].trade_number]?.length == 0) ? ['N\/A'] : marketCondition[initalData['Trades'][i].trade_number]
+                  
                   if (i % 2 !== 0) {
                     initalData['Trades'][i - 1].Return =
                       initalData['Trades'][i].Return
@@ -265,15 +269,20 @@ export default {
     },
     group(data) {
       var result = []
-      var groupItem
-      for (var i = 0; i < data.length; i++) {
-        if (i % 500 == 0) {
-          groupItem != null && result.push(groupItem)
-          groupItem = []
-        }
-        groupItem.push(data[i])
-      }
-      result.push(groupItem)
+
+    // 交易数据分组
+      // var groupItem
+      // for (var i = 0; i < data.length; i++) {
+      //   if (i % 500 == 0) {
+      //     groupItem != null && result.push(groupItem)
+      //     groupItem = []
+      //   }
+      //   groupItem.push(data[i])
+      // }
+      // result.push(groupItem)
+    
+    // 不分组，一次性加载全部
+      result.push(data)
       return result
     },
     filterMarkerDate(start_date, end_date, markerSet) {
@@ -302,7 +311,6 @@ export default {
     },
     handleDownloadCsv() {
       const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, periods, defaultTIMTableLabels, defaultTableLabels} = this.$refs.timChild.exportData()
-      
       if (
         !(
           this.tableData.length &&
@@ -367,9 +375,9 @@ export default {
         obj['Exit Reason'] = item.ExitReason
         obj['Trade Return %'] = `${item.TradeReturn}%`
         obj['Total Return %'] = `${(item.Return * 100).toFixed(2)}%`
+        obj['Market Condition'] = item.MarketCondition.join(';')
         tradeData.push(obj)
       })
-
       const mergedData = [];
 
       for (let i = 0; i < tradeData.length; i += 2) {
@@ -389,6 +397,7 @@ export default {
           'Trade Return': exitData['Trade Return %'] || '',
           'Total Return': exitData['Total Return %'] || '',
           'Exit Reason': exitData['Exit Reason'] || '',
+          'Market Condition': exitData['Market Condition'] || 'N\/A',
           'Exit Indicator': exitData.Indicator || ''
         });
       }
@@ -405,13 +414,20 @@ export default {
           _backtestHistoryList.push(obj)
         })
         result_quotes.forEach(item => {
-          const zscore = {}
-          zscore['Entry Date'] = item['property']
-          for(var i=1;i < defaultTableLabels.length;i++ ){
-            zscore[defaultTableLabels[i]] = item[periods[i-1].period]
+          const zscore = {};
+          zscore['Entry Date'] = item['property'];
+          for (let i = 1; i < defaultTableLabels.length; i++) {
+            const value = item[periods[i - 1].period];
+            // 检查值是否有效
+            if (!isNaN(value) || (typeof value === 'string' && value.endsWith('%'))) {
+              zscore[defaultTableLabels[i]] = value;
+            } else {
+              zscore[defaultTableLabels[i]] = ''; // 或者您可以设置为其他默认值
+            }
           }
-          _backtestHistoryList.push(zscore)
-        })
+          _backtestHistoryList.push(zscore);
+        });
+
       // Exit with Customized TIM
         const _TIMHistoryList = []
         TIMHistoryList.forEach((item) => {
@@ -425,8 +441,14 @@ export default {
         TIMResult_quotes.forEach(item => {
           const zscore = {}
           zscore['Entry Date'] = item['property']
-          for(var i=1;i < defaultTIMTableLabels.length;i++ ){
-            zscore[defaultTIMTableLabels[i]] = item[periodsTIM[i-1].period]
+          for (let i = 1; i < defaultTIMTableLabels.length; i++) {
+            const value = item[periodsTIM[i - 1].period];
+            // 检查值是否有效
+            if (!isNaN(value) || (typeof value === 'string' && value.endsWith('%'))) {
+              zscore[defaultTIMTableLabels[i]] = value;
+            } else {
+              zscore[defaultTIMTableLabels[i]] = ''; // 或者您可以设置为其他默认值
+            }
           }
           _TIMHistoryList.push(zscore)
         })
@@ -509,7 +531,7 @@ export default {
 	padding-bottom: 20px;
 }
 .performance_tabs {
-  width: 1140px;
+  width: 1200px;
   margin: 0 auto;
 }
 .pagination-container {

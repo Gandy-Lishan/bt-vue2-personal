@@ -105,11 +105,9 @@ function getCustomConfig({
 	const config = getConfig()
 	// Update chart configuration by modifying default configuration
 	config.chartId = chartId || '_advanced-chart'
-	config.initialSymbol = symbol || {
-		symbol: "SPX",
-		name: "S&P 500 (SPX)",
-		exchDisp: 'NASDAQ'
-	}
+
+	config.initialSymbol = symbol
+
 	if (typeof restore == 'boolean') config.restore = restore
 
 	// config.quoteFeeds[0].behavior.refreshInterval = 0; // disables quotefeed refresh

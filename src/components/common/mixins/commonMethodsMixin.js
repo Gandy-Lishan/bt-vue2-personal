@@ -246,7 +246,20 @@ export const CommonMethodsMixin = {
 			this.$store.dispatch('form/reset_chart_config_state')
 			this.$store.commit('form/getFrequency', '')
 		},
+		async loopAllHistories() {
+			for (let i = 0; i < this.favorite_array.length; i++) {
+				await this.rerunThisBacktest(this.favorite_array[i])
+			}
+			// 循环结束之后请求一次列表
+			await this.getDataList(null)
 
+			if (!CIQ.Studies) return
+			this.$store.dispatch('chart/reset_chart_study_state')
+			this.$store.dispatch('form/reset_chart_config_state')
+			this.$store.commit('form/getFrequency', '')
+			CIQ.hideCover()
+		},
+		
 		uploadCSVWhileFLS(row) {
 			// lishan 在这里保存数据到 vuex favorite 中要用
 			this.$store.dispatch('chart/set_span_period', {
@@ -314,13 +327,7 @@ export const CommonMethodsMixin = {
 		async runBTV1Backtest() {
 			await this.runOrFindAndLoop('btv1')
 		},
-		async loopAllHistories() {
-			for (let i = 0; i < this.favorite_array.length; i++) {
-				await this.rerunThisBacktest(this.favorite_array[i])
-			}
-			// 循环结束之后请求一次列表
-			await this.getDataList(null)
-		},
+
 		async getAllHistoryListData(reqAfterPage) {
 			const res = await getAllHistoryList(reqAfterPage)
 			return res
@@ -520,7 +527,9 @@ export const CommonMethodsMixin = {
 				[5, { name: 'Rate Of Change', abbr: 'ROC' }],
 				[6, { name: '% of Previous Range', abbr: 'OPR' }],
 				[7, { name: 'MA Ratio', abbr: 'MA' }],
-				[8, { name: 'Range Rank', abbr: 'RR' }]
+				[8, { name: 'Range Rank', abbr: 'RR' }],
+				[9, { name: 'DrawDown %', abbr: 'DD' }],
+				[10, { name:'DrawUp %', abbr: 'DU' }]
 			])
 			let indicator_url = ''
 			let indicator_url_with_ma = ''
@@ -642,7 +651,7 @@ export const CommonMethodsMixin = {
 
 			this.hideDuplicateROC()
 
-			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 		},
 
 		hideDuplicateROC(){
@@ -691,7 +700,7 @@ export const CommonMethodsMixin = {
 				if (item)
 					return {
 						...item,
-						isROCLike: 5 <= item.newCondition && item.newCondition <= 8
+						isROCLike: 5 <= item.newCondition && item.newCondition <= 9
 					}
 				return null
 			})	

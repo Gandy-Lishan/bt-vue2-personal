@@ -600,7 +600,6 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     count++
                     //CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
                 }
-
                 CIQ.store.commit('form/getBacktestSymbol',data.symbol)
                 if(count>0){
                     await CIQ.getIndicatorMatedata(indicatorsList)
@@ -613,9 +612,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     CIQ.hideCover()
                     CIQ.nprogress.done()
 
-                    //CIQ.isMarkerShown = false
                     CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
-                    CIQ.store.commit('chart/getTradesData', [])
                     
                     //CIQ.stxx.layout.rangeSlider = true;
                     //CIQ.stxx.changeOccurred("layout");

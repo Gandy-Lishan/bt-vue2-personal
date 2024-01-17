@@ -527,9 +527,9 @@ if (!CIQ.Marker) {
                         }
                         /********************lishan modify end*************************/
                          // 为了给一些scanner ai的indicator加辅助线，但是又得隐藏这条线的tooltip显示
-                         else if (output == 'supLine') {
-                            continue
-                         }
+                        //  else if (output == 'supLine') {
+                        //    // continue
+                        //  }
                          else if (output && !dupMap[output]) {
                              fields.push({
                                  member: output,
@@ -602,7 +602,7 @@ if (!CIQ.Marker) {
                         }
                         if(labelDecimalPlaces == null){
                             // console.log('not found',fields,data,CIQ.stxx.layout.studies)
-                            labelDecimalPlaces = 2 
+                           labelDecimalPlaces = 2 
                         }
                      } else {
                          // If a chart panel, then always display at least the number of decimal places as calculated by masterData (panel.chart.decimalPlaces)
@@ -703,8 +703,9 @@ if (!CIQ.Marker) {
                                  labelDecimalPlaces
                              );
                          } else {
-                             if(dsField>-0.005 && dsField<0){dsField = -0.01}
-                             else if(dsField>0 && dsField<0.005){dsField = 0.01}
+                            // tooltip显示上不限制0.005的decimal places限制
+                            //  if(dsField>-0.005 && dsField<0){dsField = -0.01}
+                            //  else if(dsField>0 && dsField<0.005){dsField = 0.01}
                              fieldValue = this.formatYAxisPrice(
                                  dsField,
                                  panel,

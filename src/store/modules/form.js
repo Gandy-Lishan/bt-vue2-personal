@@ -2,7 +2,8 @@ import { timestampToTime, capitalizeFirstLetter } from '@/utils'
 
 const state = {
 	restoreFreq: '', //form
-	backtestSymbol: 'SPX', //form
+	backtestSymbol: process.env.VUE_APP_DEFAULT_SYMBOL, //form
+	myindicatorSymbol: '',
 	pairDataFreq: '', //form
 	exitFrequency: '', //form 考虑放到timeframe组件
 
@@ -117,19 +118,13 @@ const mutations = {
 		// 改变表单的 frequency
 		state.rowDataForDisplay.symbol = val
 		state.cachedBTBasicInfoData.symbol = val
+		state.myindicatorSymbol = val
 	},
-	// 重置vuex本地储存状态
-	// RESET_STORE: (state)=>{
-	// 	Object.keys(state).forEach(key => {
-	// 		state[key] = JSON.parse(JSON.stringify(window.SITE_CONFIG['storeState'][key]))
-	// 	})
-	// 	state.backtestSymbol = 'SPX'
-	// 	console.log('RESET_STORE',state)
-	// },
+
 	RESET_CHART_CONDIG_STATE: state => {
 		// 还原默认timeframe和symbol配置
 		state.pairDataFreq = ''
-		state.backtestSymbol = 'SPX'
+		state.backtestSymbol = process.env.VUE_APP_DEFAULT_SYMBOL
 		state.exitFrequency = ''
 	},
 	/**

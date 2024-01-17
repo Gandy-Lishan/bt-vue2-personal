@@ -670,8 +670,8 @@ export default {
     return {
       bd: {
         name: '',
-        symbol: 'SPX',
-        benchmark: 'SPX',
+        symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
+        benchmark: process.env.VUE_APP_DEFAULT_SYMBOL,
         strategy: 'Signal',
         capital: 100000.0,
         capital_alloc: 1.0,
@@ -783,7 +783,7 @@ export default {
       options: [],
       tp: 10,
       sl: 5,
-      tim: 20,
+      tim: 21,
       isRiskControl: true,
       isTakeProfit: false,
       isStopLoss: false,
@@ -1319,7 +1319,7 @@ export default {
           this.bd.start_date = str.join('-')
         }else if(this.bd.backtest_period == '21') {
           this.bd.start_date = ''
-        }else if(this.bd.backtestSymbol == '22') {
+        }else if(this.bd.backtest_period == '22') {
           this.bd.start_date = editData.start_date
           this.bd.end_date = editData.end_date
         }

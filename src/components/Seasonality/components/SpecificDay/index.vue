@@ -17,7 +17,7 @@
               1.Symbol
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  >Choose a stock/index/ETF as symbol.(default:SPY)</span>
+                  >Choose a stock/index/ETF as symbol.(default:SPX)</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -180,7 +180,7 @@ export default {
   data() {
     return {
       data: {
-        symbol: 'SPY',
+        symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
         // period: 20,
         dateRange: [],
         holidays: 0,
@@ -193,20 +193,20 @@ export default {
       options: [
         { label: "New Year's Day", month: 1, day: 1, value: 0 },
         { label: 'Independence Day', month: 7, day: 4, value: 1 },
-        { label: 'MLK Jr. Day', month: 1, day: 16, value: 2 },
-        { label: 'Labor Day', month: 9, day: 4, value: 3 },
-        { label: "President's Day", month: 2, day: 20, value: 4 },
-        { label: 'Thanksgiving Day', month: 11, day: 23, value: 5 },
-        { label: 'Good Friday', month: 4, day: 7, value: 6 },
+        { label: 'MLK Jr. Day', month: 1, day: 15, value: 2 },
+        { label: 'Labor Day', month: 9, day: 2, value: 3 },
+        { label: "President's Day", month: 2, day: 19, value: 4 },
+        { label: 'Thanksgiving Day', month: 11, day: 28, value: 5 },
+        { label: 'Good Friday', month: 4, day: 5, value: 6 },
         { label: 'Christmas Day', month: 12, day: 25, value: 7 },
-        { label: 'Memorial Day', month: 5, day: 29, value: 8 },
+        { label: 'Memorial Day', month: 5, day: 27, value: 8 },
         { label: 'Custom Time', value: 9 },
-        { label: 'FOMC Decision Day', month: 2, day: 1, value: 10 },
-        { label: 'Monthly Option Expiration', month: 1, day: 20, value: 11 },
-        { label: 'March Quad Option Expiration', month: 3, day: 17, value: 12 },
-        { label: 'June Quad Option Expiration', month: 6, day: 16, value: 13 },
-        { label: 'September Quad Option Expiration', month: 9, day: 15, value: 14 },
-        { label: 'December Quad Option Expiration', month: 12, day: 15, value: 15 },
+        { label: 'FOMC Decision Day', month: 1, day: 31, value: 10 },
+        { label: 'Monthly Option Expiration', month: 1, day: 19, value: 11 },
+        { label: 'March Quad Option Expiration', month: 3, day: 15, value: 12 },
+        { label: 'June Quad Option Expiration', month: 6, day: 21, value: 13 },
+        { label: 'September Quad Option Expiration', month: 9, day: 20, value: 14 },
+        { label: 'December Quad Option Expiration', month: 12, day: 20, value: 15 },
       ],
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
@@ -233,10 +233,10 @@ export default {
       inputVisible: false,
       inputValue: '',
       previousCustomDateRef: null,
-      symbol: 'SPY',
+      symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
       plotConfiguration: {
         title: 'Performance Surrounding Independence Day',
-        subtitle: 'SPY, 1950-2011',
+        subtitle: 'SPX, 1950-2011',
         xAxisTitle: 'Days Surrounding the Selected Day',
         customScale: true, // 如果需要自定义刻度
         formatter: true, // 如果需要自定义数据提示

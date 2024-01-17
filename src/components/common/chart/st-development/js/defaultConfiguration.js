@@ -33,7 +33,7 @@ import {CIQ} from "chartiq/js/chartiq.js";
 			// Symbol can be string or
 			// or an object containing property symbol of string type along with other properties
 			initialSymbol: {
-				symbol: "SPX",
+				symbol: 'SPX',
 				name: "S&P 500 (SPX)",
 				exchDisp: "NASDAQ"
 			},
@@ -648,6 +648,26 @@ import {CIQ} from "chartiq/js/chartiq.js";
 						{
 							"name": "Commodity Channel Index",
 							"url": "cci"
+						},
+						{
+							"name": "% of Opening Gap",
+							"url": "% of Opening Gap"
+						},
+						{
+							"name": "Day of Week",
+							"url": "Day of Week"
+						},
+						{
+							"name": "Month of Year",
+							"url": "Month of Year"
+						},
+						{
+							"name": "# of Consecutive Days since High",
+							"url": "# of Consecutive Days since High"
+						},
+						{
+							"name": "# of Consecutive Days since Low",
+							"url": "# of Consecutive Days since Low"
 						}
 					]
 				},

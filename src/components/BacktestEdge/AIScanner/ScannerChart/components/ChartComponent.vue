@@ -502,7 +502,7 @@ export default {
 						index: null
 					})
 			
-					CIQ.loadChart(this.trades.map(x=>{return {Date:x.DT,TradeStatus:x.Type}}), CIQ.addDot)
+					CIQ.loadChart(this.trades.map(x=>{return {Date:x.DT,TradeStatus:x.Type}}), CIQ.addMarker)
 				}
 			}
 		}	

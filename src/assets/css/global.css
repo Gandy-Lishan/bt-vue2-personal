@@ -557,8 +557,8 @@ input[type="time"] {
 }
 
 .el-tooltip__popper {
-  /* 因爲遮罩層的z-index是1999 */
-  z-index: 1998 !important;
+  /* button的z-index是2001,遮罩层的z-index是2000 */
+  z-index: 2002 !important;
 }
 .result-container .el-input.is-disabled .el-input__inner{
   color: #333;
@@ -566,4 +566,7 @@ input[type="time"] {
 }
 .CPM-trades .darken-row {
   background-color: #f9f9f9;
+}
+.el-table tr.highlighted{
+  pointer-events: none;
 }
