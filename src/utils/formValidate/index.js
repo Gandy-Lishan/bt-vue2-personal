@@ -4,7 +4,7 @@
    capital commission slippage 可公用
    createLimitedDecimalValueRule 简写至 createLDVRule
   */
-const createLDVRule = (minVal, maxVal, errorMsgEmpty, errorMsgGreater) => {
+export const createLDVRule = (minVal, maxVal, errorMsgEmpty, errorMsgGreater) => {
 	return (_, value, callback) => {
 		const pattern = /^\d+(\.\d{1,2})?$/
 		if (value === '') {
@@ -13,7 +13,7 @@ const createLDVRule = (minVal, maxVal, errorMsgEmpty, errorMsgGreater) => {
 		if (!pattern.test(value) && value !== 0) {
 			callback(
 				new Error(
-					`Enter a number ${errorMsgGreater}, rounded to two decimals at most.`
+					`Enter a number ${errorMsgGreater}, up to two decimal places`
 				)
 			)
 		}
@@ -30,6 +30,31 @@ const createLDVRule = (minVal, maxVal, errorMsgEmpty, errorMsgGreater) => {
 		callback()
 	}
 }
+export const createPositiveIntegerRule = (errorMsgEmpty, maxVal) => {
+	return (_, value, callback) => {
+		if(value === '') {
+			callback(new Error(`Enter ${errorMsgEmpty}`))
+		}
+		const pattern = /^\d+$/
+		const isPositiveInteger = isNaN(value) || value < 0 || !pattern.test(value)
+		if (isPositiveInteger) {
+			callback(new Error(`Enter positive integers only`))
+		}
+		if(maxVal && value > maxVal) callback(new Error(`Value should be ≤ ${maxVal}`))
+		callback()
+	}
+}
+
+export const createVerifyValueInListRule = (list, errorMsgEmpty, errorMsg) => {
+	return (_, value, callback) => {
+		if(!value) callback(new Error(errorMsgEmpty))
+		if(!list || !list.length) callback()
+		const inAllowedList = (list.find(ele => ele.url.toLocaleLowerCase() === value.toLocaleLowerCase()))?.label || false
+		if(!inAllowedList) callback(new Error(errorMsg))
+		callback()
+	}
+}
+
 export const createTPSLValidate = (minVal, value) => {
 	// 给 Stop Loss 和 Take Profit 用
 	const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
@@ -77,29 +102,31 @@ export const validatePercentageRule = (_, value, callback) => {
   if (value === '') {
     return 'Enter a number';
   }
-
   const numericValue = parseFloat(value);
-
   if (isNaN(numericValue)) {
     return 'Enter a valid number';
   }
-
   if (numericValue < 0) {
     return 'Enter a non-negative value';
   }
-
   // Uncomment the following block to restrict values to <= 100
   // if (numericValue > 100) {
   //   return 'Enter a value <= 100';
   // }
-
   const decimalPlaces = (numericValue.toString().split('.')[1] || '').length;
-
   if (decimalPlaces > 2) {
     return 'Limit to two decimal places';
   }
-
   return '';
+}
+
+export const validateMarginRule = (value, minVal, maxVal, errorMsgEmpty, errorMsgGreater) => {
+	if(value === '') return errorMsgEmpty
+	const pattern = /^-?\d+(\.\d{1,2})?$/
+	if (!pattern.test(value) && value !== 0) return `Enter a number ${errorMsgGreater}, up to two decimal places`
+	if (minVal !== undefined && value < minVal) return `Enter a number ${errorMsgGreater}, up to two decimal places`
+	if (maxVal !== undefined && value > maxVal) return `Enter a number ${errorMsgGreater}, up to two decimal places`
+	return ''
 }
 
 // 验证 indicator 不能为空
