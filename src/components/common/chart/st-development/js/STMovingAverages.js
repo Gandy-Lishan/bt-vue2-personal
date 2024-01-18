@@ -770,8 +770,12 @@ if (!CIQ.Studies) {
 	};
 	CIQ.Studies.calculateConsecutiveDaysHigh = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
 		var field = sd.inputs.Field;
-		var period = sd.inputs.period;
+		var period = sd.inputs.Period;
 
 		if (!field || field == "field") field = "Close";
 		// const maxCloseIndexArr = getPeriodParam(quotes.map(row => row[field]), 'maxCount', period, 1);
@@ -802,8 +806,12 @@ if (!CIQ.Studies) {
 	};
 	CIQ.Studies.calculateConsecutiveDaysLow = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
 		var field = sd.inputs.Field;
-		var period = sd.inputs.period;
+		var period = sd.inputs.Period;
 
 		if (!field || field == "field") field = "Close";
 
@@ -990,12 +998,12 @@ if (!CIQ.Studies) {
         },
 		"# of Consecutive Days since High": {
             name: "# of Consecutive Days since High",
-			inputs: { period: 252, },
+			inputs: { Period: 252, },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysHigh,
         },
 		"# of Consecutive Days since Low": {
             name: "# of Consecutive Days since Low",
-			inputs: { period: 252, },
+			inputs: { Period: 252, },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysLow,
         },
 	});
