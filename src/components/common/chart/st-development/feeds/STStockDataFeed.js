@@ -510,9 +510,9 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
     this.sendAjax(queryUrl,async function(status,response){
         if(status == 200){
             var newQuotes = await quoteFeedSimulator.formatChartData(response);
-            //console.log(suggestedStartDate.getTime(),parseInt(process.env.VUE_APP_START_DATE),suggestedStartDate.getTime() > parseInt(process.env.VUE_APP_START_DATE))
+           // console.log(suggestedStartDate,suggestedStartDate.getTime(),parseInt(process.env.VUE_APP_START_DATE),suggestedStartDate.getTime() > parseInt(process.env.VUE_APP_START_DATE))
             cb({
-                moreAvailable: suggestedStartDate.getTime() > parseInt(process.env.VUE_APP_START_DATE),
+                moreAvailable: (response.length > 1) && suggestedStartDate.getTime() > parseInt(process.env.VUE_APP_START_DATE),
                 quotes: newQuotes, 
                 upToDate: endDate.getTime() >=  Date.now()
             });     

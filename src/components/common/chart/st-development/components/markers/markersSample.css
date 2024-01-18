@@ -217,22 +217,22 @@
   
   /*  create some rudimentary styling for our tooltip class */
   .tooltip {
-	display: inline;
+	display: none;
 	position: relative;
   }
   
-  .hoverMarker:hover .tooltip:after {
-	background: #5B9BD1;
-	border-radius: 5px;
-	bottom: 14px;
-	color: #fff;
-	opacity: .8;
-	left: -116px;
-	padding: 5px 15px;
-	position: absolute;
-	z-index: 98;
-	width: 214px;
-	content: attr(title);
+  .hoverMarker:hover .tooltip {
+    background: #5B9BD1;
+    border-radius: 5px;
+    bottom: 44px;
+    color: #fff;
+    display: block;
+    opacity: .8;
+    left: -104px;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 214px;
   }
   
   .hoverMarker:hover .tooltip:before {
@@ -240,7 +240,7 @@
 	border-color: #5B9BD1 transparent;
 	opacity: .8;
 	border-width: 11px 6px 0 6px;
-	bottom: 4px;
+	bottom: -10px;
 	content: "";
 	left: 50%;
 	position: absolute;
