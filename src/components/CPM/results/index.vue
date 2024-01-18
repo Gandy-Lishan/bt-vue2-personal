@@ -70,10 +70,11 @@ export default {
           summary.symbol = _data.symbol
           summary.timeframe = _data.timeframe
           summary.lookback_period = _data.lookback_period
-          summary.exclude_overlapping = _data.exclude_overlapping == 1 ? 'True' : 'False'
+          summary.exclude_overlapping = _data.exclude_overlap == 1 ? 'True' : 'False'
           summary.start_date = _data.start_date
           summary.end_date = _data.end_date
           summary.direction = _data.direction || 'Long'
+          summary.corr_per = _data.corr_per
           let timeframe = _data.timeframe
           let period
           switch (timeframe) {

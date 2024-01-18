@@ -34,7 +34,9 @@ export default {
 					const _data = isJson(data) ? JSON.parse(data) : data
           _this.chart_data = _data
 					// 展示出 indicator 那一行的数据
-					_this.$refs['Form'].displayData(_data)
+					_this.$nextTick(() => {
+            _this.$refs['Form'].displayData(_data)
+          })
 				}
 			})
 		} else {
