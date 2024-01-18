@@ -15,7 +15,8 @@
           title="Lookback Period"
         >
         <template slot="formatter">
-              <h3>{{ summary.lookback_period }} Years</h3>
+              <h3 v-if="summary.lookback_period">{{ summary.lookback_period }} Years</h3>
+              <h3 v-else>{{ summary.lookback_period }}</h3>
         </template>
         </el-statistic>
       </el-col>
@@ -136,30 +137,13 @@ export default {
   name: 'CPMSummary',
   data() {
     return {
-      symbol: 'CRUDE',
       summary: {
-        symbol: 'CRUDE',
-        time_frame: 'Daily',
-        indicator: 'MACD',
-        lookback_period: '15',
-        observation_period: '15',
-        index_filter: 'None',
-        indicator_smoothing: 'None',
-        exclude_overlapping: 'True',
-        index_filter_swap: 'False',
-        indicator_level: 'Crossed Above 1.05',
-        start_date: '2020-01-01',
-        end_date: '2020-12-31',
-        market_environment: 'All Market Environments',
-        index_ma_slope: 'None',
-        direction: 'Long'
       }
     };
   },
   methods: {
     displayData(data) {
       this.summary = {
-        ...this.summary,
         ...data
       }
     }
