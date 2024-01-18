@@ -200,6 +200,15 @@ export default {
 						'2 Years [%]',
 						'3 Years [%]'
 					]
+					periodArray = [
+              { period: 1, timeframe: 'Month' },
+              { period: 3, timeframe: 'Month' },
+              { period: 6, timeframe: 'Month' },
+              { period: 9, timeframe: 'Month' },
+              { period: 1, timeframe: 'Year' },
+              { period: 2, timeframe: 'Year' },
+              { period: 3, timeframe: 'Year' }
+            ]
 					break
 				default:
 					break
