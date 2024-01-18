@@ -1901,7 +1901,8 @@ CIQ.Studies.displayError = function (stx, sd, params) {
 	var errorText =
 		sd.error === true
 			? stx.translateIf("Not enough data to compute ") +
-			  stx.translateIf(sd.study.name)
+			  stx.translateIf(sd.study.name) +
+			  '(Drag or zoom the chart to request more data)'
 			: stx.translateIf(sd.error);
 
 	// backwards compatability
