@@ -79,6 +79,16 @@
         </template>
         </el-statistic>
       </el-col>
+      <el-col :span="6">
+        <el-statistic
+          title="Correlation Percentage"
+        >
+        <template slot="formatter">
+          <span v-if="summary.corr_per">{{ summary.corr_per }} %</span>
+          <span v-else>{{ summary.corr_per }}</span>
+        </template>
+        </el-statistic>
+      </el-col>
     </el-row>
     <br>
     <el-row :gutter="20">
