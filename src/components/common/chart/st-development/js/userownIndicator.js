@@ -24,6 +24,7 @@
             },
             function () {
                 CIQ.createCorrelationPatternMatchDrawing(chart_data.result)
+                CIQ.createCPMMarker(chart_data.result)
                 cb()
                 CIQ.hideCover()
                 CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)

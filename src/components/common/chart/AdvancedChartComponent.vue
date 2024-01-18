@@ -386,6 +386,7 @@ export default class AdvancedChartComponent extends Vue {
 			// If your feed returns data already rolled up in monthly or weekly ticks, 
 			// you can override this behavior by setting stxx.dontRoll to true
 			CIQ.stxx.dontRoll = true
+			CIQ.stxx.maxDataSetSize = 0
 			CIQ.periodicity = {period:1, interval:1, timeUnit:'day'}
 
 			var iter = CIQ.stxx.chart.market.newIterator({
