@@ -249,7 +249,7 @@
         <el-col :span="6">
           <div class="form-btn">
             <!-- <el-button type="primary" class="delete-btn">Preview the found KLine</el-button> -->
-            <el-button type="primary" @click="submitForm">Save and Run Backtest</el-button>
+            <el-button type="primary" @click="submitForm" :loading="btnLoading">Save and Run Backtest</el-button>
           </div>
         </el-col>
       </el-row>
@@ -395,6 +395,7 @@ export default {
           { validator:  createPositiveIntegerRule('correlation percentage', 100), trigger: 'blur'}
         ]
       },
+      btnLoading: false
     }
   },
   computed: {
@@ -476,27 +477,31 @@ export default {
       CIQ.addSymbol(this.data.symbol)
     },
     async submitForm() {
+     this.btnLoading = true
      const saveRes = await this.saveCPM()
      console.log('saveRes', saveRes)
-     if(!saveRes) return
+     if(!saveRes) {this.btnLoading = false; return}
      const code = saveRes.data.code
-      if(code == 401) {this.popUpMsgBox('Calculate error')}
-      if(code == 404 || code == 403) {this.popUpMsgBox('Permission denied')}
+      if(code == 401) this.popUpMsgBox('Calculate error')
+      if(code == 404 || code == 403) this.popUpMsgBox('Permission denied')
       if(code == 406) {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another.`)
       }
+      if(code == 407) this.popUpMsgBox('No found match cpm')
+      this.btnLoading = false
       if(saveRes.status == 201) {
+        this.btnLoading = false
         const result = saveRes.data.result
         saveRes.data.result = isJson(result) ? JSON.parse(result) : result
-      const data = JSON.stringify(saveRes.data)
-      this.$router.push({
-        name: 'CPMResults',
-        params: {
-          data,
-          usedFor: 'showCPMResults',
-        }
-      })}
+        const data = JSON.stringify(saveRes.data)
+        this.$router.push({
+          name: 'CPMResults',
+          query: {
+            data,
+            usedFor: 'showCPMResults',
+          }
+        })}
       // this.$store.commit('SET_CREACT_LOADING', false)
     },
     async checkDuplicateNames(name) {

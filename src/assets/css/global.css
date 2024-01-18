@@ -141,6 +141,16 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 .el-table th.el-table__cell.is-leaf {
   border-bottom: 2px solid #dddddd;
 }
+.CPM-summary .el-table td.el-table__cell,
+.CPM-summary .el-table th.el-table__cell.is-leaf {
+  border: unset;
+}
+.CPM-summary .el-table td.el-table__cell, .CPM-summary .el-table th.el-table__cell.is-leaf{
+  border-bottom: unset;
+}
+.CPM-summary .el-table td.el-table__cell, .CPM-summary .el-table th.el-table__cell.is-leaf{
+  border-bottom: unset;
+}
 .el-table__cell.el-table__expanded-cell{
   padding: 12px;
 }
@@ -508,7 +518,9 @@ input[type="time"] {
   .historyContainer .el-table .cell,
    .history-container .el-table .cell,
     .my-indicator-table .el-table .cell,
-    .default-table-class .el-table .cell
+    .default-table-class .el-table .cell,
+    .CPM-trades .el-table .cell,
+    .CPM-TIM .el-table .cell
     {
   font-weight: 400;
 	font-size: 14px;
@@ -520,7 +532,9 @@ input[type="time"] {
  .historyContainer .table thead tr th,
   .history-container .table thead tr th,
   .my-indicator-table .table thead tr th,
-  .default-table-class .table thead tr th
+  .default-table-class .table thead tr th,
+  .CPM-trades .table thead tr th,
+  .CPM-TIM .table thead tr th
   {
   font-weight: 600 !important;
   color: #333341;
@@ -530,7 +544,9 @@ input[type="time"] {
 .historyContainer .el-table th.el-table__cell>.cell,  
 .history-container .el-table th.el-table__cell>.cell,
 .my-indicator-table .el-table th.el-table__cell>.cell,
-.default-table-class .el-table th.el-table__cell>.cell
+.default-table-class .el-table th.el-table__cell>.cell,
+.CPM-trades .el-table th.el-table__cell>.cell,
+.CPM-TIM .el-table th.el-table__cell>.cell
 {
   font-weight: 600 !important;
 }
@@ -538,7 +554,9 @@ input[type="time"] {
  .summaryContainer .el-table .cell .negative-value,
   .historyContainer .el-table .cell .negative-value,
   .history-container .el-table .cell .negative-value,
-  .default-table-class .el-table .cell .negative-value
+  .default-table-class .el-table .cell .negative-value,
+  .CPM-trades .el-table .cell .negative-value,
+  .CPM-TIM .el-table .cell .negative-value
    {
   color: #dd3a13;
 }
@@ -551,7 +569,9 @@ input[type="time"] {
 .summaryContainer .el-table__body, .el-table__footer, .el-table__header,
  .historyContainer .el-table__body, .el-table__footer, .el-table__header,
  .history-container .el-table__body, .el-table__footer, .el-table__header,
- .default-table-class .el-table__body, .el-table__footer, .el-table__header
+ .default-table-class .el-table__body, .el-table__footer, .el-table__header,
+ .CPM-trades .el-table__body, .el-table__footer, .el-table__header,
+ .CPM-TIM .el-table__body, .el-table__footer, .el-table__header
  {
   margin: 0 auto;
 }
@@ -569,4 +589,19 @@ input[type="time"] {
 }
 .el-table tr.highlighted{
   pointer-events: none;
+}
+.CPM-summary.el-table th.el-table__cell>.cell {
+  text-transform: uppercase;
+  color: #333;
+  font-size: 16px !important;
+  font-weight: 400;
+}
+.CPM-summary.el-table--enable-row-transition .el-table__body td.el-table__cell {
+  font-size: 20px !important;
+  font-weight: 350;
+}
+
+.CPM-ZScore.el-table--border .el-table__cell:first-child .cell {
+	font-weight: 600;
+  color: #333;
 }
