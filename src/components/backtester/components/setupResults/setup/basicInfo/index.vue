@@ -108,7 +108,6 @@
                     <div class="selectBox historySelectBox">
                       <el-select
                         @change="setBacktestHistory(bd.backtest_period)"
-                        @blur="setBacktestHistory(bd.backtest_period)"
                         v-model="bd.backtest_period"
                       >
                         <el-option
@@ -832,7 +831,7 @@ export default {
   mounted() {
     this.$emit('IsRiskControl', true)
     // 用于获取 start_date & end_date
-    this.getBTDate()
+    if(this.bd.backtest_period != 22) this.getBTDate()
   },
   computed: {
     ...mapGetters(['getBacktestSymbol']), // 监听chartiq和表单的symbol改动以双向响应
@@ -1252,7 +1251,7 @@ export default {
           'entry_description',
           'exit_description'
         ]
-        this.clearForm() // clear set up form before editting
+        //this.clearForm() // clear set up form before editting
         propertiesToDelete.forEach(property => {
           delete editData[property];
         })
