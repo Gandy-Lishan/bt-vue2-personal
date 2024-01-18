@@ -313,7 +313,9 @@ CIQ.createOneTimePatternMarker = function(date,content){
 
 	newNode = document.querySelector("#stxEventHover").cloneNode(true);
 	newNode.id = null;
-	newNode.querySelector(".tooltip").title = content;
+	newNode.querySelector(".tooltip").innerHTML = `
+		<div>${content}</div>
+	`
 	newNode.classList.add("hoverMarker");
 	new CIQ.Marker({
 		stx: CIQ.stxx,

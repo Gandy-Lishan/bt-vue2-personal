@@ -5,6 +5,46 @@ let __st_js_drawing_ = _exports => {
     var CIQ = typeof _CIQ !== 'undefined' ? _CIQ : _exports.CIQ
 
     CIQ.createCorrelationPatternMatchDrawing = function(dataSet){
+        // CIQ.Drawing.rectangle.prototype.intersected = function (tick, value, box) {
+        //     if (!this.p0 || !this.p1) return null; // in case invalid drawing (such as from panel that no longer exists)
+        //     var pointsToCheck = { 0: this.p0, 1: this.p1 };
+        //     for (var pt in pointsToCheck) {
+        //         if (
+        //             this.pointIntersection(pointsToCheck[pt][0], pointsToCheck[pt][1], box)
+        //         ) {
+        //             this.highlighted = "p" + pt;
+        //             return {
+        //                 action: "drag",
+        //                 point: "p" + pt
+        //             };
+        //         }
+        //     }
+        //     if (this.boxIntersection(tick, value, box)) {
+        //         this.highlighted = true;
+        //         var mSticky = CIQ.stxx.controls.mSticky;
+        //         var mStickyInterior = mSticky && mSticky.querySelector(".mStickyInterior");
+        //         if (mStickyInterior) {
+        //             // var lines = [];
+        //             // lines.push(stx.translateIf(CIQ.capitalize(this.name)));
+        //             // if (this.getYValue)
+        //             //     lines.push(
+        //             //         stx.translateIf(this.field || stx.defaultPlotField || "Close")
+        //             //     );
+        //             // lines.push(mStickyInterior.innerHTML);
+        //             mStickyInterior.innerHTML = `startDate: ${this.d0.slice(0,8)} </br>endDate: ${this.d1.slice(0,8)}`;
+        //         }
+        //         return {
+        //             action: "move",
+        //             p0: CIQ.clone(this.p0),
+        //             p1: CIQ.clone(this.p1),
+        //             tick: tick,
+        //             value: value
+        //         };
+        //     }
+        //     return null;
+        // };
+
+
         // Set all drawings to permanent
         CIQ.Drawing.prototype.permanent = true;    
         let quotes = pairDates(dataSet)
@@ -39,7 +79,7 @@ let __st_js_drawing_ = _exports => {
         // define or retrieve the parameters for the drawing
     
         //create factory for the drawing you want
-        quotes.forEach(item => {
+       quotes.forEach(item => { 
             var d0 = new Date(item[0])
             var d1 = new Date(item[1])
             var offset = d0.getTimezoneOffset() * 60 * 1000
@@ -72,23 +112,54 @@ let __st_js_drawing_ = _exports => {
         CIQ.stxx.changeOccurred("vector");
         // draw the chart to display it.
         CIQ.stxx.draw();
-        
-        function pairDates(obj) {
-            const startDateArr = obj['Start Date'];
-            const endDateArr = obj['End Date'];
-        
-            // 确保 Start Date 和 End Date 数组长度相同
-            if (startDateArr.length !== endDateArr.length) {
-                throw new Error('Start Date and End Date arrays must have the same length');
-            }
-        
-            // 创建新的配对数组
-            const pairArray = startDateArr.map((startDate, index) => {
-                return [startDate, endDateArr[index]];
+    }
+    
+    CIQ.createCPMMarker = function(dataSet){
+        let quotes = pairDates(dataSet)
+        quotes.forEach(item => { 
+            // 显示pattern标记
+            var newNode;
+            //hoverable marker
+            var datatime = new Date(item[1])
+            var offset = datatime.getTimezoneOffset() * 60 * 1000
+            const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+
+            newNode = document.querySelector("#stxEventHover").cloneNode(true);
+            newNode.id = null;
+            newNode.querySelector(".tooltip").innerHTML = `
+                <div>Start Date: ${item[0]}</div>
+                <div>End Date: ${item[1]}</div>
+                <div>Correlation: ${item[2]}</div>
+            `;
+            newNode.classList.add("hoverMarker");
+            new CIQ.Marker({
+                stx: CIQ.stxx,
+                xPositioner: "date",
+                x: standardDate,
+                label: "events",
+                node: newNode
             });
-        
-            return pairArray;
+        })
+
+    }
+
+    function pairDates(obj) {
+        const startDateArr = obj['Start Date'];
+        const endDateArr = obj['End Date'];
+        const corrArr = obj['Correlation Percentage']
+
+        // 确保 Start Date 和 End Date 数组长度相同
+        if (startDateArr.length !== endDateArr.length) {
+            throw new Error('Start Date and End Date arrays must have the same length');
         }
+
+        // 创建新的配对数组
+        const pairArray = startDateArr.map((startDate, index) => {
+            return [startDate, endDateArr[index], corrArr[index]];
+        });
+
+        return pairArray;
     }
 }
+
 export { __st_js_drawing_ }
