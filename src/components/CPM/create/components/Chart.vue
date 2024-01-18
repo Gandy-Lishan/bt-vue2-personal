@@ -21,7 +21,7 @@ import chart from '@/components/common/chart/index.vue'
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 import { LoadingOverlayChart } from "@/components/common"
 export default {
-	name: 'MIChart',
+	name: 'Chart',
 	props: {
 		chart_data: Object,
 		breadcrumbTitle: String
@@ -30,7 +30,6 @@ export default {
 		return {
 			indicator : '',
 			trades : [],
-			symbolUrl: '',
 			defaultSymbol: ''
 		}
 	},
@@ -72,6 +71,7 @@ export default {
 				this.$emit('prepareData', this.chart_data)
 			})
 			else CIQ.hideCover()
+			CIQ.hideCover()
 			
 		},
 		hideComponents() {
