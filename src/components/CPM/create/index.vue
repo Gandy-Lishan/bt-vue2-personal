@@ -53,7 +53,7 @@ export default {
   display: grid;
   grid-template-rows: 1fr auto;
   grid-gap: 20px;
-  width: 80vw;
+  width: 1200px;
   margin: 0 auto;
 }
 

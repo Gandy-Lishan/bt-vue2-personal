@@ -1,8 +1,9 @@
 <template>
   <div class="statistics-container">
-    <div class="CPM-summary">
+    <div>
       <el-table
         header-align="center"
+        class="CPM-summary"
         :data="summaryData">
         <el-table-column
             prop="totalReturn"
@@ -117,11 +118,13 @@
 						</el-table-column>
 		  </el-table>
 					<el-table
+        class="CPM-summary"
 						header-align="center"
 						:data="summaryData"
 					>
 					</el-table>
 					<el-table
+        class="CPM-summary"
 						header-align="center"
 						:data="summaryData"
 					>
@@ -190,6 +193,8 @@
 						</el-table-column> -->
 					</el-table>
           <el-table
+        class="CPM-summary"
+
 						header-align="center"
 						:data="summaryData"
 					>
@@ -233,6 +238,7 @@
 								<span v-if="scope.row.timeInMarket >= 0">{{
 									scope.row.timeInMarket + '%'
 								}}</span>
+                <span v-else-if="isNaN(scope.row.timeInMarket)">0</span>
 								<span v-else style="color: #dd3a13">{{
 									scope.row.timeInMarket + '%'
 								}}</span>
@@ -306,53 +312,8 @@ export default {
   data() {
     return {
       summaryData: [{
-          totalReturn: -30.3,
-          medianReturn: -1.89,
-          averageReturn: -2.33,
-          tzScore: -0.4,
-          standardDeviation: 6.6,
-          buyHoldGain: 84.2,
-          winRate: 31,
-          averageWin: 5.0,
-          averageLoss: -5.6,
-          maxRisk: -20.9,
-          totalTrades: 13,
-          totalPositive: 4,
-          totalNegative: 9,
-          timeInMarket: 7.2
       }],
-      tradesData: [
-        {
-          TradeDate: '2013-07-06',
-          SymbolClose: 103.22,
-          CorrelationPercentage: 1.06,
-          Return: 3.24
-        },
-        {
-          TradeDate: '2013-07-06',
-          SymbolClose: -103.22,
-          CorrelationPercentage: -1.06,
-          Return: -3.24
-        },
-        {
-          TradeDate: '2013-07-06',
-          SymbolClose: 103.22,
-          CorrelationPercentage: -1.06,
-          Return: 3.24
-        },
-        {
-          TradeDate: '2013-07-06',
-          SymbolClose: 103.22,
-          CorrelationPercentage: 1.06,
-          Return: -3.24
-        },
-        {
-          TradeDate: '2013-07-06',
-          SymbolClose: 103.22,
-          CorrelationPercentage: 1.06,
-          Return: 3.24
-        }
-      ]
+      tradesData: []
     }
   },
   methods: {
@@ -365,7 +326,6 @@ export default {
 	  },
 		displayData(data, transformedResult) {
       this.summaryData = [{
-        ...this.summaryData,
         ...data
       }]
 			this.tradesData = transformedResult
@@ -377,35 +337,5 @@ export default {
 <style lang="less" scoped>
 .CPM-summary {
   margin: 30px 0;
-}
-.CPM-summary .el-table /deep/ td.el-table__cell,
-.CPM-summary .el-table /deep/ th.el-table__cell.is-leaf {
-  border: unset;
-}
-.CPM-summary .el-table /deep/ td.el-table__cell, .el-table /deep/ th.el-table__cell.is-leaf {
-  border: unset;
-}
-.CPM-summary .el-table /deep/ th.el-table__cell>.cell {
-  text-transform: uppercase;
-  color: #333;
-  font-size: 16px;
-  font-weight: 400;
-}
-.CPM-summary .el-table--enable-row-transition /deep/ .el-table__body td.el-table__cell {
-  font-size: 20px;
-  font-weight: 350;
-  padding: 0px 0px 30px 0px;
-}
-.CPM-trades .el-table /deep/ th.el-table__cell.is-leaf {
-  border-bottom: 2px solid #dddddd;
-}
-.CPM-trades .el-table /deep/ th.el-table__cell>.cell {
-  font-size: 14px;
-  font-weight: 600;
-  color: #333333b8;
-}
-.CPM-trades .el-table--enable-row-transition /deep/ .el-table__body td.el-table__cell {
-  font-weight: 350;
-  padding: 8px;
 }
 </style>

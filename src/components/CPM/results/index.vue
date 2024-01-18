@@ -62,8 +62,8 @@ export default {
     beforeRouteEnter(to, _, next) {
 		if (to.path === '/cpm/results') {
 			next((_this) => {
-				if (to.params.usedFor && to.params.usedFor === 'showCPMResults') {
-					const { data } = to.params
+				if (to.query.usedFor && to.query.usedFor === 'showCPMResults') {
+					const { data } = to.query
 					const _data = isJson(data) ? JSON.parse(data) : data
           _this.chart_data = _data
           const summary = {}
@@ -148,7 +148,6 @@ export default {
       this.activeTab = val
     },
     prepareData(data) {
-      console.log('触发了')
       const _this = this
       _this.$nextTick(() => {
           const datatime = new Date(data.start_date)
@@ -164,7 +163,7 @@ export default {
   display: grid;
   grid-template-rows: 1fr auto;
   grid-gap: 20px;
-  width: 80vw;
+  width: 1200px;
   margin: 0 auto;
 }
 /deep/ .el-collapse-item__header {
