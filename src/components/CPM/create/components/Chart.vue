@@ -71,7 +71,6 @@ export default {
 				this.$emit('prepareData', this.chart_data)
 			})
 			else CIQ.hideCover()
-			CIQ.hideCover()
 			
 		},
 		hideComponents() {
