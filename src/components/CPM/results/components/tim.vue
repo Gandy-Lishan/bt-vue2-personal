@@ -8,8 +8,8 @@
         from 1-Week to 1-Year of returns. 
       </p>
     </div>
-    <div class="CPM-TIM">
-      <div class="zscore-container">
+    <div>
+      <div class="CPM-TIM">
       <el-skeleton :rows="2" :loading="loading" animated>
         <template>
           <el-table
@@ -18,6 +18,7 @@
             stripe
             border
             style="height: 100%; margin: 0 auto"
+						class="CPM-ZScore"
           >
             <el-table-column prop="property" label="Property"  align="center">
             </el-table-column>
@@ -30,7 +31,7 @@
                 align="center"
               >
                 <template slot-scope="scope">
-                  <p class="tableText" :class="getCellStyle(scope.row[column.period])">
+                  <span class="tableText" :class="getCellStyle(scope.row[column.period])">
                     {{
                       !Number.isNaN(scope.row[column.period])
                         ? typeof scope.row[column.period] == 'string'
@@ -38,7 +39,7 @@
                           : parseFloat(scope.row[column.period]).toFixed(1)
                         : null
                     }}
-                  </p>
+                  </span>
                 </template>
               </el-table-column>
             </template>
@@ -48,7 +49,7 @@
     	</div>
     </div>
     <hr style="height:2px;border:none;color:#333;background-color:#333;">
-    <div class="CPM-ZScore">
+    <div class="CPM-TIM">
       <el-skeleton :rows="6" :loading="loading" animated>
         <template>
           <el-table
@@ -57,14 +58,13 @@
             stripe
             border
             style="height: 100%; margin: 0 auto"
-						class="CPM-trades"
           >
             <template v-for="(l, index) in defaultTableLabels">
               <el-table-column :label="l" :prop="l" :key="index" align="center">
                 <template slot-scope="scope">
-                  <p class="tableText" :class="getCellStyle(scope.row[l])">
+                  <span class="tableText" :class="getCellStyle(scope.row[l])">
                     {{ displayData(scope.row[l]) }}
-                  </p>
+                  </span>
                 </template>
               </el-table-column>
             </template>
@@ -881,5 +881,8 @@ p {
   font-size: 16px;
   line-height: 1.5em;
   color: #333;
+}
+.negative-value{
+  color: #dd3a13;
 }
 </style>

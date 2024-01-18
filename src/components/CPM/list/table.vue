@@ -309,7 +309,7 @@ export default {
       const data = JSON.stringify(row)
       this.$router.push({
         name: 'CPMResults',
-        params: {
+        query: {
           data,
           usedFor: 'showCPMResults',
         }
