@@ -90,7 +90,7 @@ export default {
                 console.error("Invalid timeframe value")
                 break;
           }
-          summary.observation_period = `${_data.time_in_market} ${period}`
+          summary.observation_period = `${_data.tim} ${period}`
           _this.$refs['Summary'].displayData(summary)
           const statistics = {}
           statistics.totalReturn = _data.total_return
