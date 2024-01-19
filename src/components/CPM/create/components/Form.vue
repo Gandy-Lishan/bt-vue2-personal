@@ -10,7 +10,7 @@
   <el-row :gutter="20">
     <el-col :span="6">
       <el-form-item
-				label="1.CPM Name"
+				label="1. CPM Name"
         prop="name"
 			>
 				<el-input v-model="data.name" placeholder="Enter cpm name"></el-input>
@@ -20,7 +20,7 @@
       <el-form-item prop="symbol">
         <template slot="label">
             <label>
-              2.Symbol
+              2. Symbol
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
                   >Choose a stock/index/ETF as symbol.(default:SPX)</span>
@@ -61,7 +61,7 @@
 			>
       <template slot="label">
         <label>
-          3.Start Date
+          3. Start Date
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >"Start Date" denotes the commencement time of the candlestick pattern.</span>
@@ -86,7 +86,7 @@
 			>
       <template slot="label">
         <label>
-          4.End Date
+          4. End Date
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >"End Date" indicates the conclusion time of the candlestick pattern.</span>
@@ -107,7 +107,7 @@
   </el-row>
   <el-row :gutter="20">
     <el-col :span="6">
-      <el-form-item prop="direction" label="5.Direction">
+      <el-form-item prop="direction" label="5. Direction">
         <el-select
             v-model="data.direction"
             placeholder="— Select Direction —"
@@ -123,7 +123,7 @@
       </el-form-item>
     </el-col>
     <el-col :span="6">
-      <el-form-item prop="timeframe" label="6.Timeframe">
+      <el-form-item prop="timeframe" label="6. Timeframe">
         <el-select
             v-model="data.timeframe"
             placeholder="— Select Timeframe —"
@@ -141,12 +141,12 @@
     </el-col>
     <el-col :span="6">
       <el-form-item
-				label="7.Correlation Percentage"
+				label="7. Correlation Percentage"
         prop="corr_per"
 			>
         <template slot="label">
           <label>
-            7.Correlation Percentage
+            7. Correlation Percentage
             <el-tooltip effect="dark" placement="top">
               <span slot="content">
                 Correlation Percentage
@@ -164,12 +164,12 @@
     </el-col>
     <el-col :span="6">
       <el-form-item
-				label="8.Time In Market"
+				label="8. Time In Market"
         prop="tim"
 			>
         <template slot="label">
           <label>
-            8.Time In Market
+            8. Time In Market
             <el-tooltip effect="dark" placement="top">
               <span slot="content">
                 Input a value of bars to stay in market after entry.<br />Exit
@@ -192,10 +192,10 @@
   </el-row>
   <el-row :gutter="20">
     <el-col :span="6">
-    <el-form-item prop="backtestHistory" label="9.Lookback Period">
+    <el-form-item prop="backtestHistory" label="9. Lookback Period">
         <template slot="label">
           <label>
-            9.Lookback Period
+            9. Lookback Period
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >Specify the start and end date of the backtest. <br />
@@ -224,7 +224,7 @@
     </el-col>
     <el-col :span="6">
       <el-form-item
-				label="10.Custom Duration"
+				label="10. Custom Duration"
         prop="year"
         v-if="data.lookback_period == 'Custom'"
 			>

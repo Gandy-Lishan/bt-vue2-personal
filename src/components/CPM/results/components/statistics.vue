@@ -8,7 +8,7 @@
         <el-table-column
             prop="totalReturn"
             show-overflow-tooltip
-            label="TOTAL RETURN %"
+            label="TOTAL RETURN%"
             align="center"
             algin="center"
         >
@@ -25,32 +25,32 @@
 						<el-table-column
 								show-overflow-tooltip
 								prop="medianReturn"
-								label="MEDIAN RETURN %"
+								label="MEDIAN RETURN%"
 								align="center"
 						>
 								<template slot-scope="scope">
 									<span v-if="scope.row.medianReturn >= 0">{{
-										scope.row.medianReturn + ' %'
+										scope.row.medianReturn + '%'
 									}}</span>
 									<span v-else-if="isNaN(scope.row.medianReturn) || !scope.row.medianReturn || scope.row.medianReturn=='null' || scope.row.medianReturn=='0'"></span>
 									<span v-else style="color: #dd3a13">{{
-										scope.row.medianReturn + ' %'
+										scope.row.medianReturn + '%'
 									}}</span>
 								</template>
 						</el-table-column>
 						<el-table-column
 							show-overflow-tooltip
 							prop="averageReturn"
-							label="AVERAGE RETURN %"
+							label="AVERAGE RETURN%"
 							align="center"
 						>
 							<template slot-scope="scope">
 								<span v-if="scope.row.averageReturn >= 0">{{
-									scope.row.averageReturn + ' %'
+									scope.row.averageReturn + '%'
 								}}</span>
 								<span v-else-if="isNaN(scope.row.averageReturn) || !scope.row.averageReturn || scope.row.averageReturn=='null' || scope.row.averageReturn=='0'"></span>
 								<span v-else style="color: #dd3a13">{{
-									scope.row.averageReturn + ' %'
+									scope.row.averageReturn + '%'
 								}}</span>
 							</template>
 						</el-table-column>
@@ -87,7 +87,7 @@
             <el-table-column
                 show-overflow-tooltip
                 prop="buyHoldGain"
-                label="BUY & HOLD %"
+                label="BUY & HOLD%"
                 align="center"
             >
                 <template slot-scope="scope">
@@ -102,7 +102,7 @@
             </el-table-column>
 						<el-table-column
 							prop="winRate"
-							label="WIN RATE %"
+							label="WIN RATE%"
 							show-overflow-tooltip
 							align="center"
 						>
@@ -131,7 +131,7 @@
 						<el-table-column
 							show-overflow-tooltip
 							prop="averageWin"
-							label="AVERAGE WIN %"
+							label="AVERAGE WIN%"
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -147,7 +147,7 @@
 						<el-table-column
 							show-overflow-tooltip
 							prop="averageLoss"
-							label="AVERAGE LOSS %"
+							label="AVERAGE LOSS%"
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -178,16 +178,16 @@
 						<!-- <el-table-column
 							show-overflow-tooltip
 							prop="maxRisk"
-							label="MAX RISK %"
+							label="MAX RISK%"
 							align="center"
 						>
 							<template slot-scope="scope">
 								<span v-if="scope.row.maxRisk >= 0">{{
-									scope.row.maxRisk + ' %'
+									scope.row.maxRisk + '%'
 								}}</span>
 								<span v-else-if="isNaN(scope.row.maxRisk) || !scope.row.maxRisk || scope.row.maxRisk=='null' || scope.row.maxRisk=='0'"></span>
 								<span v-else style="color: #dd3a13">{{
-									scope.row.maxRisk + ' %'
+									scope.row.maxRisk + '%'
 								}}</span>
 							</template>
 						</el-table-column> -->
@@ -231,7 +231,7 @@
 						<el-table-column
 							prop="timeInMarket"
 							show-overflow-tooltip
-							label="TIME IN MARKET %"
+							label="TIME IN MARKET%"
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -286,7 +286,7 @@
           <template slot-scope="scope">
             <span :style="scope.row.CorrelationPercentage >= 0 ? '' : 'color: #dd3a13'">{{
               scope.row.CorrelationPercentage
-            }} %</span>
+            }}%</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -297,7 +297,7 @@
         >
           <template slot-scope="scope">
             <span :style="scope.row.Return >= 0 ? '' : 'color: #dd3a13'">{{
-              scope.row.Return.toFixed(2) + ' %'
+              scope.row.Return.toFixed(2) + '%'
             }}</span>
           </template>
         </el-table-column>
@@ -336,6 +336,6 @@ export default {
 
 <style lang="less" scoped>
 .CPM-summary {
-  margin: 30px 0;
+  margin: 5px 0;
 }
 </style>
