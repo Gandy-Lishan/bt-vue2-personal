@@ -1,10 +1,10 @@
 <template>
   <div class="CPMResults-container">
-    <el-collapse v-model="activeNames" @change="handleChange" :accordion="false">
+    <el-collapse v-model="activeNames" @change="handleChange" :accordion="false" class="CPMResults-content">
       <div class="chart">
         <Chart :chart_data="chart_data" :breadcrumbTitle="breadcrumbTitle" @prepareData="prepareData"></Chart>
       </div>
-      <el-collapse-item name="1">
+      <el-collapse-item name="1" class="form">
         <template v-slot:title>
           <div class="title">
             <p>Backtest Summary</p>
@@ -12,7 +12,7 @@
         </template>
         <CPMSummary ref="Summary"></CPMSummary>
       </el-collapse-item>
-      <el-collapse-item name="2">
+      <el-collapse-item name="2" class="form">
         <template v-slot:title>
           <div class="title">
             <p
@@ -164,8 +164,18 @@ export default {
   display: grid;
   grid-template-rows: 1fr auto;
   grid-gap: 20px;
-  width: 1200px;
   margin: 0 auto;
+  .CPMResults-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .chart {
+    width: 90%;
+  }
+  .form {
+    width: 1000px;
+  }
 }
 /deep/ .el-collapse-item__header {
   background-color: #c0c4cc5c;

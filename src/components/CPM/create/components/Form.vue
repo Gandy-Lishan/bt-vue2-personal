@@ -56,12 +56,12 @@
     </el-col>
     <el-col :span="6">
       <el-form-item
-				label="3.Start Date"
+				label="3.Pattern Start Date"
         prop="start_date"
 			>
       <template slot="label">
         <label>
-          3.Start Date
+          3.Pattern Start Date
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >"Start Date" denotes the commencement time of the candlestick pattern.</span>
@@ -81,12 +81,12 @@
     </el-col>
     <el-col :span="6">
       <el-form-item
-				label="4.End Date"
+				label="4.Pattern End Date"
         prop="end_date"
 			>
       <template slot="label">
         <label>
-          4.End Date
+          4.Pattern End Date
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >"End Date" indicates the conclusion time of the candlestick pattern.</span>
@@ -237,7 +237,7 @@
 			</el-form-item>
     </el-col>
     <el-col :span="6">
-    <div class="excludeBox">
+    <!-- <div class="excludeBox">
         <el-checkbox v-model="isExcludeOO"
           >Exclude Overlapping Observations
           <el-tooltip effect="dark" placement="top">
@@ -247,7 +247,7 @@
             </span>
             <i class="iconfont icon-wenhao"></i> </el-tooltip
         ></el-checkbox>
-      </div>
+      </div> -->
     </el-col>
     <el-col :span="6"></el-col>
   </el-row>
@@ -258,8 +258,8 @@
         <el-col :span="6"></el-col>
         <el-col :span="6">
           <div class="form-btn">
-            <!-- <el-button type="primary" class="delete-btn">Preview the found KLine</el-button> -->
-            <el-button type="primary" @click="submitForm" :loading="btnLoading" size="large">Save and Run Backtest</el-button>
+            <el-button type="primary" class="delete-btn" :loading="btnLoading" size="large">Preview Pattern</el-button>
+            <el-button type="primary" @click="submitForm" :loading="btnLoading" size="large">Backtest Pattern</el-button>
           </div>
         </el-col>
       </el-row>
@@ -402,7 +402,7 @@ export default {
           { validator: createPositiveIntegerRule('custom years'), trigger: 'blur' }
         ],
         corr_per: [
-          { validator:  createPositiveIntegerRule('correlation percentage', 100), trigger: 'blur'}
+          { validator:  createPositiveIntegerRule('correlation percentage', 75,100), trigger: 'blur'}
         ]
       },
       btnLoading: false
