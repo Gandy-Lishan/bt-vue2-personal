@@ -879,6 +879,9 @@ export default {
       }
       this.periods = columns
 		},
+	exportData() {
+		return {backtestHistoryList: this.backtestHistoryList, result_quotes: this.result_quotes, periods: this.periods, defaultTableLabels: this.defaultTableLabels};
+	}
   }
 }
 </script>
