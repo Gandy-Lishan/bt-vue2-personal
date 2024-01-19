@@ -51,14 +51,17 @@ export default {
 			},
 			deep: true, // 启用深度监听，监视对象属性的变化
 		},
-		chart_data: {
-			handler(newVal, _) {
-				// 在对象属性发生变化时触发的处理逻辑
-				this.defaultSymbol = newVal.hasOwnProperty('name')?null:process.env.VUE_APP_DEFAULT_SYMBOL
-			},
-			immediate: true,
-			deep: true, // 启用深度监听，监视对象属性的变化
-		}
+		// chart_data: {
+		// 	handler(newVal, _) {
+		// 		// 在对象属性发生变化时触发的处理逻辑
+		// 		this.defaultSymbol = newVal.hasOwnProperty('name')?null:process.env.VUE_APP_DEFAULT_SYMBOL
+		// 	},
+		// 	immediate: true,
+		// 	deep: true, // 启用深度监听，监视对象属性的变化
+		// }
+	},
+	created() {
+		this.defaultSymbol = this.$route.query.defaultSymbol
 	},
 	beforeDestroy() {
 	},
@@ -71,7 +74,6 @@ export default {
 				this.$emit('prepareData', this.chart_data)
 			})
 			else CIQ.hideCover()
-			
 		},
 		hideComponents() {
 			let search = document.querySelector(".ciq-search")
