@@ -84,7 +84,7 @@
           title="Correlation Percentage"
         >
         <template slot="formatter">
-          <span v-if="summary.corr_per">{{ summary.corr_per }} %</span>
+          <span v-if="summary.corr_per">{{ summary.corr_per }}%</span>
           <span v-else>{{ summary.corr_per }}</span>
         </template>
         </el-statistic>

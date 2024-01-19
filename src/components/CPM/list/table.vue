@@ -89,12 +89,30 @@
 					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
-          v-if="['Symbol', 'Timeframe', 'Total Trades', 'Total Return'].includes(l.label)"
-          :sortable="['Total Trades', 'Total Return'].includes(l.label) ? 'custom' : false"
+          v-if="['Symbol', 'Timeframe', 'Total Trades'].includes(l.label)"
+          :sortable="['Total Trades'].includes(l.label) ? 'custom' : false"
 				  :sort-orders="['ascending', 'descending', l.value]"
 				>
 					<template slot-scope="scope">
 						<p class="tableText">
+							{{ scope.row[l.value] }}
+						</p>
+					</template>
+				</el-table-column>
+        <el-table-column
+          align="center"
+					:label="l.label"
+					:prop="l.value"
+					:key="l.key"
+          v-if="['Total Return'].includes(l.label)"
+          :sortable="['Total Return'].includes(l.label) ? 'custom' : false"
+				  :sort-orders="['ascending', 'descending', l.value]"
+				>
+					<template slot-scope="scope">
+						<p class="tableText" v-if="!isNaN(scope.row[l.value])">
+							{{ scope.row[l.value] }}%
+						</p>
+            <p class="tableText" v-else>
 							{{ scope.row[l.value] }}
 						</p>
 					</template>
@@ -248,7 +266,6 @@ export default {
 					data = data.map(item => {
             item.result = isJson(item.result) ? JSON.parse(item.result) : item.result
             item.period = [item.start_date, item.end_date]
-            item.total_return = `${item.total_return} %`
 						return item
 					})
 					this.tableData = data
