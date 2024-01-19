@@ -8,7 +8,6 @@
         from 1-Week to 1-Year of returns. 
       </p>
     </div>
-    <div>
       <div class="CPM-TIM">
       <el-skeleton :rows="2" :loading="loading" animated>
         <template>
@@ -47,7 +46,6 @@
         </template>
       </el-skeleton>
     	</div>
-    </div>
     <hr style="height:2px;border:none;color:#333;background-color:#333;">
     <div class="CPM-TIM">
       <el-skeleton :rows="6" :loading="loading" animated>

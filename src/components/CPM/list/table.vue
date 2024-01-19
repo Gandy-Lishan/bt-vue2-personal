@@ -110,7 +110,7 @@
 				>
 					<template slot-scope="scope">
 						<p class="tableText" v-if="!isNaN(scope.row[l.value])">
-							{{ scope.row[l.value] }} %
+							{{ scope.row[l.value] }}%
 						</p>
             <p class="tableText" v-else>
 							{{ scope.row[l.value] }}
