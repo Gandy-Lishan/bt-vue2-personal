@@ -549,9 +549,10 @@ export default {
 				).getTime()
 				dataTimeList.push(entryDate)
 			}
-			let used_quotes = quotes.filter(
-				(x) => dataTimeList.indexOf(x.DT.getTime()) != -1
-			)
+			// let used_quotes = quotes.filter(
+			// 	(x) => dataTimeList.indexOf(x.DT.getTime()) != -1
+			// )
+			let used_quotes = quotes
 			//鏇挎崲NaN
 			quotes = quotes.map((quote) => {
 				const updatedQuote = {}

@@ -286,7 +286,7 @@
           <template slot-scope="scope">
             <span :style="scope.row.CorrelationPercentage >= 0 ? '' : 'color: #dd3a13'">{{
               scope.row.CorrelationPercentage
-            }}</span>
+            }} %</span>
           </template>
         </el-table-column>
         <el-table-column

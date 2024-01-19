@@ -500,7 +500,12 @@ export default {
     },
     async submitForm() {
      this.btnLoading = true
-     const saveRes = await this.saveCPM()
+     let saveRes = null
+     try {
+      saveRes = await this.saveCPM()
+     } catch (error) {
+      this.btnLoading = false; return
+     }
      console.log('saveRes', saveRes)
      if(!saveRes) {this.btnLoading = false; return}
      const code = saveRes.data.code
