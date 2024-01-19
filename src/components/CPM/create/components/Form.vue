@@ -10,10 +10,10 @@
   <el-row :gutter="20">
     <el-col :span="6">
       <el-form-item
-				label="1.Name"
+				label="1.CPM Name"
         prop="name"
 			>
-				<el-input v-model="data.name" placeholder="Enter indicator name"></el-input>
+				<el-input v-model="data.name" placeholder="Enter cpm name"></el-input>
 			</el-form-item>
     </el-col>
     <el-col :span="6">
@@ -23,7 +23,7 @@
               2.Symbol
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  >Choose a stock/index/ETF as symbol.(default:SPY)</span>
+                  >Choose a stock/index/ETF as symbol.(default:SPX)</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -59,6 +59,16 @@
 				label="3.Start Date"
         prop="start_date"
 			>
+      <template slot="label">
+        <label>
+          3.Start Date
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content"
+              >"Start Date" denotes the commencement time of the candlestick pattern.</span>
+            <i class="iconfont icon-wenhao"></i>
+          </el-tooltip>
+        </label>
+      </template>
         <el-date-picker
           v-model="data.start_date"
           type="date"
@@ -74,6 +84,16 @@
 				label="4.End Date"
         prop="end_date"
 			>
+      <template slot="label">
+        <label>
+          4.End Date
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content"
+              >"End Date" indicates the conclusion time of the candlestick pattern.</span>
+            <i class="iconfont icon-wenhao"></i>
+          </el-tooltip>
+        </label>
+      </template>
         <el-date-picker
           v-model="data.end_date"
           type="date"
@@ -154,7 +174,7 @@
               <span slot="content">
                 Input a value of bars to stay in market after entry.<br />Exit
                   position when the specified Time In Market is reached.
-                  (default: 20)<br
+                  (default: 21)<br
                 />
               </span>
               <i class="iconfont icon-wenhao"></i>
@@ -172,15 +192,15 @@
   </el-row>
   <el-row :gutter="20">
     <el-col :span="6">
-    <el-form-item prop="backtestHistory" label="9.Lookback Period(List)">
+    <el-form-item prop="backtestHistory" label="9.Lookback Period">
         <template slot="label">
           <label>
-            9.Lookback Period(List)
+            9.Lookback Period
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                >Specify the start and end date of the backtest.<br />Choose
-                'All History' to include all data since the inception of the
-                backtesting stock/index.<br
+                >Specify the start and end date of the backtest. <br />
+                Choose 'All History' to include all data since the inception of the backtesting stock/index. <br />
+                Additionally, select 'Custom' to input a custom year.<br
               /></span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
@@ -222,18 +242,8 @@
           >Exclude Overlapping Observations
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
-              >Select this box if you want to exclude dates that are
-              clustered together.<br />
-              By selecting this option, the test will only allow one
-              trade at a time. <br />
-              For example, if you chose '10 days' in the Observation
-              Period,
-              <br />
-              then once the Indicator meets the Indicator Level you
-              specify,
-              <br />
-              the test will not allow another trade for the next 10
-              days.<br />
+              >
+              After checking, ensure no signal overlap.
             </span>
             <i class="iconfont icon-wenhao"></i> </el-tooltip
         ></el-checkbox>
@@ -249,7 +259,7 @@
         <el-col :span="6">
           <div class="form-btn">
             <!-- <el-button type="primary" class="delete-btn">Preview the found KLine</el-button> -->
-            <el-button type="primary" @click="submitForm" :loading="btnLoading">Save and Run Backtest</el-button>
+            <el-button type="primary" @click="submitForm" :loading="btnLoading" size="large">Save and Run Backtest</el-button>
           </div>
         </el-col>
       </el-row>
@@ -286,7 +296,7 @@ export default {
         start_date: '',
         end_date: '',
         lookback_period: 20,
-        corr_per: '',
+        corr_per: 90,
         tim: 21,
         year: '',
         exclude_overlap: false,
@@ -368,7 +378,7 @@ export default {
       endPickerOptions: {
         disabledDate: this.handleDisabledEndDate
       },
-      isExcludeOO: false,
+      isExcludeOO: true,
       rules: {
         name: [
           { required: true, message: 'Enter a name', trigger: 'blur' }
@@ -418,18 +428,30 @@ export default {
     },
   },
   async mounted() {
-    this.setBacktestHistory(20)
+    this.setBacktestHistory(10)
+    this.generateCPMName()
   },
   methods: {
+    generateCPMName() {
+      const date = new Date()
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const hour = date.getHours();
+      const minute = date.getMinutes();
+      const second = date.getSeconds();
+      this.data.name = this.data.symbol + '  ' + year + '-' + month + '-' + day + '  ' + hour + ':' + minute + ':' + second
+    },
     changeTimeframe(val) {
       this.$store.commit('form/getFreqHighPriority', val)
       CIQ.addIndicators()
     },
     setBacktestHistory(val) {
-      this.data.end_date = timestampToTime(new Date())
-      const str = this.data.end_date.split('-')
-      str[0] = Number(str[0]) - Number(val) + ''
-      this.data.start_date = str.join('-')
+      this.data.end_date = timestampToTime(new Date());
+      const endDate = new Date(this.data.end_date);
+      const startDate = new Date(endDate);
+      startDate.setDate(endDate.getDate() - val);
+      this.data.start_date = timestampToTime(startDate);
     },
     handleDisabledStartDate(time) {
       const endDay = timestampToTime(new Date(this.data.end_date))
@@ -488,7 +510,7 @@ export default {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another.`)
       }
-      if(code == 407) this.popUpMsgBox('No found match cpm')
+      if(code == 407) this.popUpMsgBox('No CPM meeting the criteria found.')
       this.btnLoading = false
       if(saveRes.status == 201) {
         this.btnLoading = false
@@ -565,7 +587,7 @@ export default {
         }else if (key == 'lookback_period'){
           const editPeriod = data[key]
           const exists = this.historyOptions.some(option => option.value == editPeriod)
-          if(exists) target[key] = data[key]
+          if(exists) target[key] = Number(data[key])
           if(!exists) { target[key] = 'Custom'}
         }else if(key == 'year'){
           if(this.data.lookback_period == 'Custom') {target['year'] = data['lookback_period']}
@@ -574,6 +596,7 @@ export default {
           target[key] = data[key]
         }
       }
+      this.data = target
     }
   }
 }

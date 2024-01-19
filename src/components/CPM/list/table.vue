@@ -248,6 +248,7 @@ export default {
 					data = data.map(item => {
             item.result = isJson(item.result) ? JSON.parse(item.result) : item.result
             item.period = [item.start_date, item.end_date]
+            item.total_return = `${item.total_return} %`
 						return item
 					})
 					this.tableData = data
