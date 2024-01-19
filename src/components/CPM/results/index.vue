@@ -21,11 +21,15 @@
             <p
              @click.stop="() => {changeTab('results')}" :class="{ active: activeTab == 'results' || '' }"
              >Multi-Timeframe Results</p>
+             <p
+             @click.stop="() => {changeTab('corrInfo')}" :class="{ active: activeTab == 'corrInfo' || '' }"
+             >Correlation Info</p>
           </div>
         </template>
       <div class="content">
           <Statistics v-show="activeTab == 'statistics'" ref="Statistics"></Statistics>
           <TIM v-show="activeTab == 'results'" ref="TIM" :tradeDate="tradeDate" :rowFrequency="rowFrequency" :tradePrice="tradePrice" :direction="direction"></TIM>
+          <CorrInfo v-show="activeTab == 'corrInfo'" ref="CorrInfo"></CorrInfo>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -37,6 +41,7 @@ import CPMSummary from "./components/summary";
 import Statistics from "./components/statistics";
 import TIM from "./components/tim";
 import Chart from "../create/components/Chart"
+import CorrInfo from "./components/corrInfo";
 import {isJson} from '@/utils'
 
 export default {
@@ -50,14 +55,16 @@ export default {
       tradePrice: 'Close',
       chart_data: {},
       breadcrumbTitle: 'Back to CPM list',
-      direction: 'Long'
+      direction: 'Long',
+      StartEndDateArray: []
     }
   },
   components: {
     CPMSummary,
     Statistics,
     TIM,
-    Chart
+    Chart,
+    CorrInfo
   },
     beforeRouteEnter(to, _, next) {
 		if (to.path === '/cpm/results') {
@@ -112,11 +119,14 @@ export default {
           const result = _data.result
           const transformedResult = [];
           const TradeDateArray = [];
+          const StartEndDateArray = [];
           for (let i = 0; i < result['End Date'].length; i++) {
             const tradeDate = result['End Date'][i];
             const symbolClose = result['Symbol Close'][i];
             const correlationPercentage = result['Correlation Percentage'][i];
             const eachReturn = result['Each Return'][i];
+            const startDate = result['Start Date'][i];
+            const endDate = result['End Date'][i];
             transformedResult.push({
               'TradeDate': tradeDate,
               'SymbolClose': symbolClose,
@@ -126,14 +136,17 @@ export default {
             TradeDateArray.push(
               {'Date': tradeDate}
             )
+            StartEndDateArray.push(
+              {'StartDate': startDate, 'EndDate': endDate}
+            )
           }
           _this.$refs['Statistics'].displayData(statistics, transformedResult)
           _this.tradeDate = TradeDateArray
           _this.rowFrequency = _data.timeframe
           _this.direction = _data.direction || 'Long'
+          _this.StartEndDateArray = StartEndDateArray
           // _this.$nextTick(() => {
-          //   const datatime = new Date(_data.start_date)
-          //   _this.$refs['TIM'].prepareData(TradeDateArray, datatime)
+          //   _this.$refs['CorrInfo'].prepareData(StartEndDateArray)
           // });
 
 				}
@@ -153,6 +166,7 @@ export default {
       _this.$nextTick(() => {
           const datatime = new Date(data.start_date)
           _this.$refs['TIM'].prepareData(_this.tradeDate, datatime)
+            _this.$refs['CorrInfo'].prepareData(_this.StartEndDateArray)
         });
     }
   }

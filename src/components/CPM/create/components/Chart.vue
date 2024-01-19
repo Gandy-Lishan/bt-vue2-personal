@@ -10,7 +10,6 @@
 							:progressText="chartLoadingSetting.progressText"
 						>
 					</LoadingOverlayChart>	
-					
 				</chart>
 			</div>
 	</div>
