@@ -5,7 +5,7 @@
     </div>
     <div class="form">
       <div class="form-header">
-        <h3 class="form-title">Backtest Parameters</h3>
+        <h3 class="form-title">Correlation Pattern Match Parameters</h3>
       </div>
       <Form ref="Form"></Form>
     </div>
