@@ -75,6 +75,7 @@
           placeholder="- Select Start Date -"
           value-format="yyyy-MM-dd"
           :picker-options="startPickerOptions"
+          @change="calculateBarDistance"
         >
         </el-date-picker>
 			</el-form-item>
@@ -100,6 +101,7 @@
           placeholder="- Select End Date -"
           value-format="yyyy-MM-dd"
           :picker-options="endPickerOptions"
+          @change="calculateBarDistance"
         >
         </el-date-picker>
 			</el-form-item>
@@ -107,6 +109,7 @@
   </el-row>
   <el-row :gutter="20">
     <el-col :span="6">
+      {{barDistance}}
       <el-form-item prop="direction" label="5. Direction">
         <el-select
             v-model="data.direction"
@@ -405,7 +408,8 @@ export default {
           { validator:  createPositiveIntegerRule('correlation percentage', 75,100), trigger: 'blur'}
         ]
       },
-      btnLoading: false
+      btnLoading: false,
+      barDistance: 0,
     }
   },
   computed: {
@@ -432,6 +436,9 @@ export default {
     this.generateCPMName()
   },
   methods: {
+    calculateBarDistance() {
+      this.barDistance = CIQ.measureBarDistance(this.data.start_date,this.data.end_date)
+    },
     generateCPMName() {
       const date = new Date()
       const year = date.getFullYear();
@@ -602,7 +609,7 @@ export default {
         }
       }
       this.data = target
-    }
+    },
   }
 }
 </script>

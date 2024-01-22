@@ -2,7 +2,7 @@
   <div class="CPMResults-container">
     <el-collapse v-model="activeNames" @change="handleChange" :accordion="false" class="CPMResults-content">
       <div class="chart">
-        <Chart :chart_data="chart_data" :breadcrumbTitle="breadcrumbTitle" @prepareData="prepareData"></Chart>
+        <Chart :default_symbol='default_symbol' :chart_data="chart_data" :breadcrumbTitle="breadcrumbTitle" @prepareData="prepareData"></Chart>
       </div>
       <el-collapse-item name="1" class="form">
         <template v-slot:title>
@@ -68,7 +68,8 @@ export default {
       chart_data: {},
       breadcrumbTitle: 'Back to CPM list',
       direction: 'Long',
-      StartEndDateArray: []
+      StartEndDateArray: [],
+      default_symbol: ''
     }
   },
   components: {
@@ -167,6 +168,14 @@ export default {
 			next()
 		}
 	},
+  created() {
+    // 如果不携带表单参数则显示默认symbol并分段加载
+    if (this.$route.query.usedFor && this.$route.query.usedFor === 'showCPMResults'){
+      this.default_symbol = ''
+    }else{
+      this.default_symbol = process.env.VUE_APP_DEFAULT_SYMBOL
+    }
+  },
   methods: {
     handleChange(val) {
     },
