@@ -57,13 +57,17 @@ export default {
 		onChartReady(){
 			this.hideComponents()	
 
-			this.$emit('calculateBarDistance')
+			
 			console.log('chart_data',this.chart_data)
 			//还原自定义indicator Layout
 			if(this.chart_data.name) CIQ.displayCPMLayout(this.chart_data,()=>{
 				this.$emit('prepareData', this.chart_data)
+				this.$emit('calculateBarDistance')
 			})
-			else CIQ.hideCover()
+			else{
+				this.$emit('calculateBarDistance')
+				CIQ.hideCover()
+			}
 		},
 		hideComponents() {
 			//let search = document.querySelector(".ciq-search")
