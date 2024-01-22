@@ -64,14 +64,14 @@
     :rules="rules"
 	>
   <el-row :gutter="10">
-    <el-col :span="5">
+    <el-col :span="4">
       <el-form-item
-				label="3.Start Date"
+				label="3. Pattern Start Date"
         prop="start_date"
 			>
       <template slot="label">
         <label>
-          3. Start Date
+          3. Pattern Start Date
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >"Start Date" denotes the commencement time of the candlestick pattern.</span>
@@ -85,18 +85,19 @@
           placeholder="- Select Start Date -"
           value-format="yyyy-MM-dd"
           :picker-options="startPickerOptions"
+          @change="calculateBarDistance"
         >
         </el-date-picker>
 			</el-form-item>
     </el-col>
-    <el-col :span="5">
+    <el-col :span="4">
       <el-form-item
-				label="4.End Date"
+				label="4. Pattern End Date"
         prop="end_date"
 			>
       <template slot="label">
         <label>
-          4. End Date
+          4. Pattern End Date
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >"End Date" indicates the conclusion time of the candlestick pattern.</span>
@@ -110,12 +111,13 @@
           placeholder="- Select End Date -"
           value-format="yyyy-MM-dd"
           :picker-options="endPickerOptions"
+          @change="calculateBarDistance"
         >
         </el-date-picker>
 			</el-form-item>
     </el-col>
-    <el-col :span="5">
-      <el-form-item prop="timeframe" label="6. Timeframe">
+    <el-col :span="4">
+      <el-form-item prop="timeframe" label="5. Timeframe">
         <el-select
             v-model="data.timeframe"
             placeholder="— Select Timeframe —"
@@ -131,7 +133,14 @@
           </el-select>
       </el-form-item>
     </el-col>
-    <el-col :span="9">
+    <el-col :span="4">
+      <el-form-item
+        label="6. Number of Bars"
+      >
+        <el-input v-model="barDistance" :disabled="true"></el-input>
+      </el-form-item>
+    </el-col>
+    <el-col :span="8">
       <el-row :gutter="10">
         <el-col :span="14">
           <el-form-item
@@ -158,7 +167,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item class="CPM-btn" label=" ">
-            <el-button type="primary" @click="previewForm" size="small" class="delete-btn" :loading="previewBtnLoading">preview pattern</el-button>
+            <el-button type="primary" @click="previewForm" size="small" class="delete-btn" :loading="previewBtnLoading">Preview Pattern</el-button>
           </el-form-item>
         </el-col>
       </el-row>
@@ -174,7 +183,7 @@
 	>
   <el-row :gutter="10">
     <el-col :span="5">
-      <el-form-item prop="direction" label="5. Direction">
+      <el-form-item prop="direction" label="8. Direction">
         <el-select
             v-model="data.direction"
             placeholder="— Select Direction —"
@@ -191,12 +200,12 @@
     </el-col>
     <el-col :span="5">
       <el-form-item
-				label="8. Time In Market"
+				label="9. Time In Market"
         prop="tim"
 			>
         <template slot="label">
           <label>
-            8. Time In Market
+            9. Time In Market
             <el-tooltip effect="dark" placement="top">
               <span slot="content">
                 Input a value of bars to stay in market after entry.<br />Exit
@@ -217,10 +226,10 @@
 			</el-form-item>
     </el-col>
     <el-col :span="5">
-      <el-form-item prop="backtestHistory" label="9. Lookback Period">
+      <el-form-item prop="backtestHistory" label="10. Lookback Period">
         <template slot="label">
           <label>
-            9. Lookback Period
+            10. Lookback Period
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >Specify the start and end date of the backtest. <br />
@@ -251,7 +260,7 @@
       <el-row :gutter="10">
         <el-col :span="14">
           <el-form-item
-				label="10. Custom Duration"
+				label="11. Custom Duration"
         prop="year"
         v-if="data.lookback_period == 'Custom'"
 			>
@@ -282,7 +291,7 @@
         <el-col :span="8">
           <div class="form-btn">
             <!-- <el-button type="primary" class="delete-btn">Preview the found KLine</el-button> -->
-            <el-button type="primary" @click="submitForm" :loading="btnLoading">backtest pattern</el-button>
+            <el-button type="primary" @click="submitForm" :loading="btnLoading">Backtest Pattern</el-button>
           </div>
         </el-col>
         <el-col :span="8"></el-col>
@@ -363,6 +372,7 @@
           placeholder="- Select Start Date -"
           value-format="yyyy-MM-dd"
           :picker-options="startPickerOptions"
+          @change="calculateBarDistance"
         >
         </el-date-picker>
 			</el-form-item>
@@ -388,6 +398,7 @@
           placeholder="- Select End Date -"
           value-format="yyyy-MM-dd"
           :picker-options="endPickerOptions"
+          @change="calculateBarDistance"
         >
         </el-date-picker>
 			</el-form-item>
@@ -395,6 +406,7 @@
   </el-row>
   <el-row :gutter="20">
     <el-col :span="6">
+      {{barDistance}}
       <el-form-item prop="direction" label="5. Direction">
         <el-select
             v-model="data.direction"
@@ -694,6 +706,7 @@ export default {
         ]
       },
       btnLoading: false,
+      barDistance: 0,
       previewBtnLoading: false
     }
   },
@@ -721,6 +734,9 @@ export default {
     this.generateCPMName()
   },
   methods: {
+    calculateBarDistance() {
+      this.barDistance = CIQ.measureBarDistance(this.data.start_date,this.data.end_date)
+    },
     generateCPMName() {
       const date = new Date()
       const year = date.getFullYear();
@@ -733,7 +749,11 @@ export default {
     },
     changeTimeframe(val) {
       this.$store.commit('form/getFreqHighPriority', val)
-      CIQ.addIndicators()
+      CIQ.addIndicators(()=>{
+        this.calculateBarDistance()
+        CIQ.hideCover()
+        CIQ.nprogress.done()
+      })
     },
     setBacktestHistory(val) {
       this.data.end_date = timestampToTime(new Date());
@@ -785,7 +805,11 @@ export default {
       //     CIQ.hideCover()
       // })
       this.$store.commit('form/getBacktestSymbol', this.data.symbol)
-      CIQ.addSymbol(this.data.symbol)
+      CIQ.addSymbol(this.data.symbol,()=>{
+        this.calculateBarDistance()
+        CIQ.hideCover()
+        CIQ.nprogress.done()
+      })
     },
     async previewForm() {
       this.previewBtnLoading = true
@@ -934,7 +958,7 @@ export default {
         }
       }
       this.data = target
-    }
+    },
   }
 }
 </script>

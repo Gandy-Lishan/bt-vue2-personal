@@ -5,7 +5,7 @@
 			<router-link v-if="shouldShowLink" :to="{ path: '/cpm/create'}"><span>Edit this CPM</span><i class="el-icon-arrow-right"></i></router-link>
 		</div>
 			<div class="chart_box" id="chart_box">
-				<chart :symbol="defaultSymbol" width="100%" height="100%" :onChartReady="onChartReady">
+				<chart :symbol="default_symbol" width="100%" height="100%" :onChartReady="onChartReady">
 					<LoadingOverlayChart
 							:isLoading="chartLoadingSetting.isChartLoading"
 							:progressText="chartLoadingSetting.progressText"
@@ -23,6 +23,7 @@ import { LoadingOverlayChart } from "@/components/common"
 export default {
 	name: 'Chart',
 	props: {
+		default_symbol: String,
 		chart_data: Object,
 		breadcrumbTitle: String
 	},
@@ -30,7 +31,6 @@ export default {
 		return {
 			indicator : '',
 			trades : [],
-			defaultSymbol: ''
 		}
 	},
 	components: {
@@ -56,29 +56,24 @@ export default {
 			},
 			deep: true, // 启用深度监听，监视对象属性的变化
 		},
-		// chart_data: {
-		// 	handler(newVal, _) {
-		// 		// 在对象属性发生变化时触发的处理逻辑
-		// 		this.defaultSymbol = newVal.hasOwnProperty('name')?null:process.env.VUE_APP_DEFAULT_SYMBOL
-		// 	},
-		// 	immediate: true,
-		// 	deep: true, // 启用深度监听，监视对象属性的变化
-		// }
-	},
-	created() {
-		this.defaultSymbol = this.$route.query.defaultSymbol
 	},
 	beforeDestroy() {
 	},
 	methods:{
 		onChartReady(){
 			this.hideComponents()	
+
+			
 			console.log('chart_data',this.chart_data)
 			//还原自定义indicator Layout
 			if(this.chart_data.name) CIQ.displayCPMLayout(this.chart_data,()=>{
 				this.$emit('prepareData', this.chart_data)
+				this.$emit('calculateBarDistance')
 			})
-			else CIQ.hideCover()
+			else{
+				this.$emit('calculateBarDistance')
+				CIQ.hideCover()
+			}
 		},
 		hideComponents() {
 			//let search = document.querySelector(".ciq-search")

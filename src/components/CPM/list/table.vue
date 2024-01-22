@@ -302,9 +302,6 @@ export default {
       //this.$router.push('/cpm/create')
       this.$router.push({
         path: '/cpm/create',
-        query: {
-          defaultSymbol: process.env.VUE_APP_DEFAULT_SYMBOL
-        }
       })
     },
     handleRowClick(row) {
@@ -314,7 +311,6 @@ export default {
         name: 'CPMResults',
         query: {
           usedFor: 'showCPMResults',
-          defaultSymbol: ''
         }
       })
     },
@@ -325,7 +321,6 @@ export default {
         params: {
           data,
           usedFor: 'showCPMFormData',
-          defaultSymbol: ''
         }
       })
     },

@@ -104,5 +104,26 @@ let __st_js_utils_ = (_exports) => {
                         document.querySelector(".discription_div").innerHTML = ""
                     })
     }
+
+    CIQ.measureBarDistance = function(d1,d2) {
+        var quotes = CIQ.stxx.chart.dataSet;
+        var start = new Date(d1)
+        var end = new Date(d2)
+        var offset = start.getTimezoneOffset() * 60 * 1000
+        const standardStartDate = new Date(start.setTime(start.getTime() + offset))
+        const standardEndDate = new Date(end.setTime(end.getTime() + offset))
+
+        const subQuotes = quotes.filter(item => item.DT.getTime()>=standardStartDate.getTime() && item.DT.getTime()<=standardEndDate.getTime())
+        // var startIndex = quotes.findIndex(item => item.DT.getTime() == standardStartDate.getTime())
+        // var endIndex = quotes.findIndex(item => item.DT.getTime() == standardEndDate.getTime())
+        // if(startIndex == -1 && standardEndDate.getTime()>quotes[quotes.length-1].DT.getTime()){
+        //     startIndex = quotes.length-1
+        // }
+        // if(endIndex == -1 && standardEndDate.getTime()>quotes[quotes.length-1].DT.getTime()){
+        //     endIndex = quotes.length-1
+        // }
+
+        return subQuotes.length
+    }
 }
 export { __st_js_utils_ }
