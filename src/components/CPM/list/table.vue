@@ -174,6 +174,7 @@
 
 <script>
 import { delCPM, getCPMList } from '@/service/service'
+import { mapActions } from 'vuex';
 import {isJson} from '@/utils'
 
 export default {
@@ -228,55 +229,11 @@ export default {
     }
   },
   async created() {
-    // this.tableData = [
-    //   {
-    //     name: 'CPM1',
-    //     symbol: 'SPY',
-    //     timeframe: 'Daily',
-    //     period: ['2013-12-01', '2013-12-10'],
-    //     threshold: [0.85, 0.99],
-    //     total_trades: 35,
-    //     total_return: '158.95%',
-    //     data: {
-    //       "CPM Infos": [
-    //         { StartDate: '2004-01-26', EndDate: '2004-02-11', Corr: 1.0, Close:  1157.76},
-    //         { StartDate: '2004-02-12', EndDate: '2004-02-27', Corr: 1.0, Close:  1157.76},
-    //         { StartDate: '2004-08-28', EndDate: '2004-08-13', Corr: 1.0, Close:  1157.76},
-    //       ],
-    //       Results:  {
-    //         'TOTAL RETURN': 21.28, 
-    //         'MEDIAN RETURN': 2.31, 
-    //         'AVERAGE RETURN': 2.13, 
-    //         'WIN RATE': 80.0, 
-    //         'AVERAGE WIN': 3.29, 
-    //         'AVERAGE LOSS': -2.52, 
-    //         'TOTAL TRADES': 10, 
-    //         'TOTAL POSITIVE': 8, 
-    //         'TOTAL NEGATIVE': 2, 
-    //         'BUY & HOLD': 259.15, 
-    //         'TIME IN MARKET': 8.35, 
-    //         'Each Return': [5.34, 1.19, 1.43, 2.33, 2.29, 3.7, -0.02, 5.25, -5.02, 4.79], 
-    //         'Start Date': ['2014-10-08', '2015-03-23', '2015-08-28', '2017-08-15', '2018-06-21', '2019-05-21', '2022-03-02', '2022-10-05', '2023-08-14', '2023-10-18'], 
-    //         'End Date': ['2014-10-24', '2015-04-09', '2015-09-16', '2017-08-31', '2018-07-10', '2019-06-07', '2022-03-18', '2022-10-21', '2023-08-30', '2023-11-03'], 
-    //         'Correlation': [0.8051, 0.8612, 0.8222, 0.825, 0.81, 0.8188, 0.8181, 0.8078, 0.8018, 0.8079], 
-    //         'Symbol Close': [1964.58, 2091.18, 1995.31, 2471.65, 2793.84, 2873.34, 4463.12, 3752.75, 4514.87, 4358.34]
-    //       }
-    //     }
-    //   },
-    //   {
-    //     name: 'CPM2',
-    //     symbol: 'AAPL',
-    //     timeframe: 'Weekly',
-    //     period: ['2013-12-01', '2013-12-28'],
-    //     threshold: [0.95, 1.0],
-    //     total_trades: 35,
-    //     total_return: '158.95%'
-    //   }
-    // ]
     await this.getDataList()
     console.log('列表返回处理数据', this.tableData)
   },
   methods: {
+    ...mapActions('states', ['setCpmResultsData']),
     async getDataList(orderby) {
       this.loading = true
       let res = null
@@ -353,10 +310,10 @@ export default {
     handleRowClick(row) {
       console.log(row)
       const data = JSON.stringify(row)
+      this.setCpmResultsData(data);
       this.$router.push({
         name: 'CPMResults',
         query: {
-          data,
           usedFor: 'showCPMResults',
           defaultSymbol: ''
         }
