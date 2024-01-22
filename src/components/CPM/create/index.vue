@@ -1,7 +1,7 @@
 <template>
   <div class="create-cpm-container">
     <div class="chart">
-      <Chart :chart_data="chart_data" :breadcrumbTitle="breadcrumbTitle"></Chart>
+      <Chart :default_symbol="default_symbol" :chart_data="chart_data" :breadcrumbTitle="breadcrumbTitle" @calculateBarDistance="calculateBarDistance"></Chart>
     </div>
     <div class="form">
       <div class="form-header">
@@ -23,12 +23,13 @@ export default {
   data() {
     return {
       chart_data: {},
-      breadcrumbTitle: 'Back to CPM list'
+      breadcrumbTitle: 'Back to CPM list',
+      default_symbol: ''
     }
   },
   beforeRouteEnter(to, _, next) {
 		if (to.path === '/cpm/create') {
-			next((_this) => {
+			next((_this) => {  
 				if (to.params.usedFor && to.params.usedFor === 'showCPMFormData') {
 					const { data } = to.params
 					const _data = isJson(data) ? JSON.parse(data) : data
@@ -46,6 +47,22 @@ export default {
   components: {
     Form,
     Chart
+  },
+  created() {
+    // 如果不携带表单参数则显示默认symbol并分段加载
+    if (this.$route.params.usedFor && this.$route.params.usedFor === 'showCPMFormData'){
+      this.default_symbol = ''
+    }else{
+      this.default_symbol = process.env.VUE_APP_DEFAULT_SYMBOL
+    }
+  },
+  methods: {
+    calculateBarDistance() {
+      const _this = this
+      _this.$nextTick(() => {
+            _this.$refs['Form'].calculateBarDistance()
+          });
+      }
   }
 }
 </script>
