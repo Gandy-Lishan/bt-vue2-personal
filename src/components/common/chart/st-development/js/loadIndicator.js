@@ -264,7 +264,7 @@
      })
  }
  // change a symbol
- CIQ.addSymbol = async function(symbol){
+ CIQ.addSymbol = async function(symbol,callback){
      CIQ.addCover()
      CIQ.nprogress.start()
      let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
@@ -325,9 +325,12 @@
  
      CIQ.stxx.loadChart(	{ symbol: symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList},function () {
          // callback - your code to be executed after the chart is loaded
-         //if (loader) loader.hide();
-         CIQ.hideCover()
-         CIQ.nprogress.done()
+        if(callback){
+            callback()
+        }else{ 
+            CIQ.hideCover()
+            CIQ.nprogress.done()
+        }
 
          CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
 

@@ -10,7 +10,7 @@
 					</el-col>
 				</el-row> -->
 			<div class="chart_box" id="chart_box">
-        		<BTChart :symbol="defaultSymbol" width="100%" height="100%" :onChartReady="onChartReady">	
+        		<BTChart :symbol="default_symbol" width="100%" height="100%" :onChartReady="onChartReady">	
 					<LoadingOverlayChart
 						:isLoading="chartLoadingSetting.isChartLoading"
 						:progressText="chartLoadingSetting.progressText"
@@ -32,7 +32,7 @@ export default {
   name: 'BTHeader',
   data() {
 		return {
-			defaultSymbol : process.env.VUE_APP_DEFAULT_SYMBOL,
+			default_symbol : process.env.VUE_APP_DEFAULT_SYMBOL,
 		}
 	},
   components: {
