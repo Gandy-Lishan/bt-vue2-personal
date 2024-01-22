@@ -5,7 +5,7 @@
     </div>
     <div class="form">
       <div class="form-header">
-        <h3 class="form-title">Backtest Parameters</h3>
+        <h3 class="form-title">Correlation Pattern Match Parameters</h3>
       </div>
       <Form ref="Form"></Form>
     </div>
@@ -52,11 +52,17 @@ export default {
 
 <style lang="less" scoped>
 .create-cpm-container {
-  display: grid;
-  grid-template-rows: 1fr auto;
+  display: flex;
+  flex-direction: column;
   grid-gap: 20px;
-  width: 1200px;
   margin: 0 auto;
+  align-items: center;
+  .chart {
+    width: 90%;
+  }
+  .form {
+    width: 1200px;
+  }
 }
 
 .form {

@@ -30,7 +30,7 @@ export const createLDVRule = (minVal, maxVal, errorMsgEmpty, errorMsgGreater) =>
 		callback()
 	}
 }
-export const createPositiveIntegerRule = (errorMsgEmpty, maxVal) => {
+export const createPositiveIntegerRule = (errorMsgEmpty, minVal, maxVal) => {
 	return (_, value, callback) => {
 		if(value === '') {
 			callback(new Error(`Enter ${errorMsgEmpty}`))
@@ -40,7 +40,7 @@ export const createPositiveIntegerRule = (errorMsgEmpty, maxVal) => {
 		if (isPositiveInteger) {
 			callback(new Error(`Enter positive integers only`))
 		}
-		if(maxVal && value > maxVal) callback(new Error(`Value should be ≤ ${maxVal}`))
+		if(maxVal && minVal && (value > maxVal || value < minVal) ) callback(new Error(`Value should be between ${minVal} and ${maxVal}`))
 		callback()
 	}
 }

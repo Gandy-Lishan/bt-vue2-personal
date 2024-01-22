@@ -75,14 +75,14 @@ export default {
 			else CIQ.hideCover()
 		},
 		hideComponents() {
-			let search = document.querySelector(".ciq-search")
+			//let search = document.querySelector(".ciq-search")
 			let indicatorSearch = document.querySelector(".ciq-indicators-search")
 			let studies = document.querySelector(".ciq-studies")
 			let favBtnContainer = document.querySelector(".favBtnContainer")
 			let timeframeBtn = document.querySelector('.ciq-period')
-			let footer = document.querySelector('.ciq-footer')
+			//let footer = document.querySelector('.ciq-footer')
 
-			search.style.visibility = 'hidden'
+			//search.style.visibility = 'hidden'
 			indicatorSearch.style.visibility = 'hidden'
 			studies.style.visibility = 'hidden'
 			favBtnContainer.style.display = 'none'

@@ -129,7 +129,7 @@ let __st_js_drawing_ = _exports => {
             newNode.querySelector(".tooltip").innerHTML = `
                 <div>Start Date: ${item[0]}</div>
                 <div>End Date: ${item[1]}</div>
-                <div>Correlation: ${item[2]}</div>
+                <div>Correlation: ${item[2]}%</div>
             `;
             newNode.classList.add("hoverMarker");
             new CIQ.Marker({
