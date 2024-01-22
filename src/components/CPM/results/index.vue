@@ -82,8 +82,8 @@ export default {
 		if (to.path === '/cpm/results') {
 			next((_this) => {
 				if (to.query.usedFor && to.query.usedFor === 'showCPMResults') {
-					const { data } = to.query
-					const _data = isJson(data) ? JSON.parse(data) : data
+         const data = _this.$store.state.states.cpmResultsData;
+         const _data = isJson(data) ? JSON.parse(data) : data
           _this.chart_data = _data
           const summary = {}
           summary.symbol = _data.symbol
@@ -167,6 +167,10 @@ export default {
 			next()
 		}
 	},
+  created() {
+    // 在组件创建时从 sessionStorage 中初始化数据
+    this.setCpmResultsData(JSON.parse(sessionStorage.getItem('cpmResultsData')));
+  },
   methods: {
     handleChange(val) {
     },
