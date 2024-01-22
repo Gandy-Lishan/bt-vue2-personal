@@ -117,6 +117,16 @@
 			</el-form-item>
     </el-col>
     <el-col :span="4">
+      <el-form-item
+        label="5. Number of Bars"
+      >
+        <el-input v-model="barDistance" :disabled="true">
+          <template v-slot:append>
+              (≥4)
+          </template></el-input>
+      </el-form-item>
+    </el-col>
+    <el-col :span="4">
       <el-form-item prop="timeframe" label="5. Timeframe">
         <el-select
             v-model="data.timeframe"
@@ -131,13 +141,6 @@
             >
             </el-option>
           </el-select>
-      </el-form-item>
-    </el-col>
-    <el-col :span="4">
-      <el-form-item
-        label="6. Number of Bars"
-      >
-        <el-input v-model="barDistance" :disabled="true"></el-input>
       </el-form-item>
     </el-col>
     <el-col :span="8">
