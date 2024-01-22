@@ -752,6 +752,33 @@ export function saveCPM(data) {
 	})
 }
 
+export function previewCPM(data) {
+	const url = '/dev/cpm/preview_pattern'
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
 export function editMyIndicators(data, rowUrl) {
 	const url = `/dev/my_indicator/update_record?url=${rowUrl}`
 	const formData = new FormData()
