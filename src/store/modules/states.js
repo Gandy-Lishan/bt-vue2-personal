@@ -11,7 +11,8 @@ const state = {
     // a status before symbol is loaded as a study
 	beforeCalculateNewConditions: false,
 	cacheReRunData: {},
-	isCreateLoading: false
+	isCreateLoading: false,
+	cpmResultsData: JSON.parse(sessionStorage.getItem('cpmResultsData')) || null
 }
 
 const mutations = {
@@ -44,6 +45,10 @@ const mutations = {
 	},
 	SET_MI_CREATE_LOADING: (state,loading) => {
 		state.isCreateLoading = loading
+	},
+	SET_CPM_RESULTS_DATA(state, data) {
+		state.cpmResultsData = data
+		sessionStorage.setItem('cpmResultsData', JSON.stringify(data))
 	}
 }
 
@@ -102,7 +107,10 @@ const actions = {
 			commit('envokeBeforeCalculateNewConditions',val)
 			resolve();
 		})
-	}
+	},
+	setCpmResultsData({ commit }, data) {
+		commit('SET_CPM_RESULTS_DATA', data);
+	},
 }
 export default {
 	namespaced: true,

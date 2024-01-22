@@ -83,8 +83,8 @@ export default {
 		if (to.path === '/cpm/results') {
 			next((_this) => {
 				if (to.query.usedFor && to.query.usedFor === 'showCPMResults') {
-					const { data } = to.query
-					const _data = isJson(data) ? JSON.parse(data) : data
+         const data = _this.$store.state.states.cpmResultsData;
+         const _data = isJson(data) ? JSON.parse(data) : data
           _this.chart_data = _data
           const summary = {}
           summary.symbol = _data.symbol
@@ -175,6 +175,8 @@ export default {
     }else{
       this.default_symbol = process.env.VUE_APP_DEFAULT_SYMBOL
     }
+    // 在组件创建时从 sessionStorage 中初始化数据
+    this.setCpmResultsData(JSON.parse(sessionStorage.getItem('cpmResultsData')));
   },
   methods: {
     handleChange(val) {
@@ -362,7 +364,7 @@ export default {
     width: 90%;
   }
   .form {
-    width: 1000px;
+    width: 1200px;
   }
 }
 /deep/ .el-collapse-item__header {
