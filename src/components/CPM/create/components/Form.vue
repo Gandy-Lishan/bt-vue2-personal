@@ -344,12 +344,12 @@
     </el-col>
     <el-col :span="6">
       <el-form-item
-				label="3.Start Date"
+				label="3.Pattern Start Date"
         prop="start_date"
 			>
       <template slot="label">
         <label>
-          3. Start Date
+          3. Pattern Start Date
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >"Start Date" denotes the commencement time of the candlestick pattern.</span>
@@ -369,12 +369,12 @@
     </el-col>
     <el-col :span="6">
       <el-form-item
-				label="4.End Date"
+				label="4.Pattern End Date"
         prop="end_date"
 			>
       <template slot="label">
         <label>
-          4. End Date
+          4. Pattern End Date
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >"End Date" indicates the conclusion time of the candlestick pattern.</span>
@@ -546,7 +546,8 @@
         <el-col :span="6"></el-col>
         <el-col :span="6">
           <div class="form-btn">
-            <el-button type="primary" @click="submitForm" :loading="btnLoading" size="large">Save and Run Backtest</el-button>
+            <el-button type="primary" class="delete-btn" :loading="btnLoading" size="large">Preview Pattern</el-button>
+            <el-button type="primary" @click="submitForm" :loading="btnLoading" size="large">Backtest Pattern</el-button>
           </div>
         </el-col>
       </el-row>
@@ -689,7 +690,7 @@ export default {
           { validator: createPositiveIntegerRule('custom years'), trigger: 'blur' }
         ],
         corr_per: [
-          { validator:  createPositiveIntegerRule('correlation percentage', 100), trigger: 'blur'}
+          { validator:  createPositiveIntegerRule('correlation percentage', 75,100), trigger: 'blur'}
         ]
       },
       btnLoading: false,
@@ -857,7 +858,7 @@ export default {
     },
     async previewCPM() {
       this.$refs['BacktestForm'].clearValidate()
-      const validForm = await this._validForm(['BasicForm', 'PreviewForm'])
+      const validForm = await this.validForm(['BasicForm', 'PreviewForm'])
       if(!validForm) return
       console.log('表单是否验证成功', validForm)
       // 处理数据
@@ -874,7 +875,7 @@ export default {
     },
     async saveCPM() {
       // const validForm = this.validForm()
-      const validForm = await this._validForm(['BasicForm', 'PreviewForm', 'BacktestForm']);
+      const validForm = await this.validForm(['BasicForm', 'PreviewForm', 'BacktestForm']);
       console.log('表单是否验证成功', validForm)
       const rowUrl = this.rowUrl
       const name = this.data.name
@@ -895,7 +896,7 @@ export default {
       if(rowUrl) return await editCPM(saveData, rowUrl)
       return await saveCPM(saveData);
     },
-    async _validForm(formRefs) {
+    async validForm(formRefs) {
       const validateForm = async (formRef) => {
         return new Promise(resolve => {
           this.$refs[formRef].validate(valid => {
@@ -913,56 +914,6 @@ export default {
       }
 
       return isAllValid;
-    },
-    async validForm() {
-      let formValid = null
-      this.$refs['Form'].validate((valid) => {
-        if(valid) {
-          formValid = true
-        }else {
-          formValid = false
-          this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.')
-          return false
-        }
-      })
-      console.log('表单校验是否成功', formValid)
-      if(!formValid) {
-        this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.')
-        return false
-      }
-      return true
-
-       // 通过 Promise 包装表单校验
-    const validateBasicForm = () => {
-      return new Promise(resolve => {
-        this.$refs['BasicForm'].validate(basicValid => {
-          resolve(basicValid)
-        })
-      })
-    }
-
-    const validatePreviewForm = () => {
-      return new Promise(resolve => {
-        this.$refs['PreviewForm'].validate(previewValid => {
-          resolve(previewValid)
-        })
-      })
-    }
-
-    const validateBacktestForm = () => {
-      return new Promise(resolve => {
-        this.$refs['BacktestForm'].validate(backtestValid => {
-          resolve(backtestValid);
-        })
-      })
-    }
-
-    const basicValid = await validateBasicForm()
-    const previewValid = await validatePreviewForm()
-    const backtestValid = await validateBacktestForm()
-    const isAllValid = basicValid && previewValid && backtestValid
-    if(!isAllValid) this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.')
-    return isAllValid;
     },
     displayData(data) {
       this.rowUrl = data.url

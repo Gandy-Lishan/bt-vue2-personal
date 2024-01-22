@@ -32,7 +32,10 @@ export default {
       this.StartEndDateArray = data
       console.log('this.StartEndDateArray', this.StartEndDateArray)
      })
-    }
+    },
+    exportData() {
+			return {StartEndDateArray: this.StartEndDateArray};
+		}
   }
 }
 </script>
