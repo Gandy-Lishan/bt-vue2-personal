@@ -132,9 +132,26 @@
 							size="mini"
 							type="info"
 							plain
-							>{{`${item}`}}</el-button>
+							>
+              <span v-show="index == 0">Start: </span><span v-show="index == 1">End: </span>{{`${item}`}}</el-button>
               </div>
             </template>
+					</template>
+				</el-table-column>
+        <el-table-column
+          align="center"
+					:label="l.label"
+					:prop="l.value"
+					:key="l.key"
+          v-if="['Bars Number'].includes(l.label)"
+				>
+        <template slot-scope="scope">
+						<p class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
+							{{ scope.row[l.value] }}(Bars)
+						</p>
+            <p class="tableText" v-else>
+							{{ scope.row[l.value] }}
+						</p>
 					</template>
 				</el-table-column>
 			</template>
@@ -189,6 +206,11 @@ export default {
           label: 'Period',
           value: 'period',
           key: 'period'
+        },
+        {
+          label: 'Bars Number',
+          value: 'bars_num',
+          key: 'bars_num'
         },
         {
           label: 'Total Trades',
@@ -417,5 +439,8 @@ export default {
 }
 .showDate {
   margin: 5px 0;
+}
+.showDate .el-button--info.is-plain {
+  width: 125px;
 }
 </style>
