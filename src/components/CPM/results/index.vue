@@ -83,7 +83,7 @@ export default {
 			next((_this) => {
 				if (to.query.usedFor && to.query.usedFor === 'showCPMResults') {
          const data = _this.$store.state.states.cpmResultsData;
-         const _data = isJson(data) ? JSON.parse(data) : data
+         const _data = data
           _this.chart_data = _data
           const summary = {}
           summary.symbol = _data.symbol

@@ -2,6 +2,7 @@
 	<div>
 		<div class="back">
 			<router-link to="/cpm"><i class="el-icon-arrow-left"></i><span>{{breadcrumbTitle}}</span></router-link>
+			<router-link v-if="shouldShowLink" :to="{ path: '/cpm/create'}"><span>Edit this CPM</span><i class="el-icon-arrow-right"></i></router-link>
 		</div>
 			<div class="chart_box" id="chart_box">
 				<chart :symbol="defaultSymbol" width="100%" height="100%" :onChartReady="onChartReady">
@@ -33,7 +34,7 @@ export default {
 		}
 	},
 	components: {
-    	chart: chart,
+    chart: chart,
 		LoadingOverlayChart,
 	},
 	computed: {
@@ -41,6 +42,11 @@ export default {
 			// 从 Vuex store 中获取全局 loading 状态
 			return this.$store.state.chart.chartLoadingSetting
 		},
+    shouldShowLink() {
+      // 判断当前路由是否包含 '/cpm/results'
+      return this.$route.path.includes('/cpm/results');
+    }
+
 	},
 	watch: {
 		chartLoadingSetting: {
@@ -95,6 +101,9 @@ export default {
 
 <style lang="less" scoped>
 .back {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	margin: 30px 0px 20px 0px;
 	font-size: 1.1rem;
 	i {
