@@ -7,12 +7,20 @@
       <el-collapse-item name="1" class="form">
         <template v-slot:title>
           <div class="title">
+            <p>Correlation Pattern Match Parameters</p>
+          </div>
+        </template>
+        <Form ref="Form" @displayResultsData="displayResultsData"></Form>
+      </el-collapse-item>
+      <el-collapse-item name="2" class="form">
+        <template v-slot:title>
+          <div class="title">
             <p>Backtest Summary</p>
           </div>
         </template>
         <CPMSummary ref="Summary"></CPMSummary>
       </el-collapse-item>
-      <el-collapse-item name="2" class="form">
+      <el-collapse-item name="3" class="form">
         <template v-slot:title>
           <div class="title">
             <p
@@ -53,14 +61,14 @@ import Statistics from "./components/statistics";
 import TIM from "./components/tim";
 import Chart from "../create/components/Chart"
 import CorrInfo from "./components/corrInfo";
-import {isJson} from '@/utils'
+import Form from "../create/components/Form";
 const XLSX = require('xlsx');
 
 export default {
   name: 'CPMResults',
   data() {
     return {
-      activeNames: ['1', '2'],
+      activeNames: ['1', '2', '3'],
       activeTab: 'statistics',
       tradeDate: {},
       rowFrequency: 'Daily',
@@ -77,91 +85,16 @@ export default {
     Statistics,
     TIM,
     Chart,
-    CorrInfo
+    CorrInfo,
+    Form
   },
     beforeRouteEnter(to, _, next) {
 		if (to.path === '/cpm/results') {
 			next((_this) => {
-				if (to.query.usedFor && to.query.usedFor === 'showCPMResults') {
-         const data = _this.$store.state.states.cpmResultsData;
-         const _data = data
+				if (to.params.usedFor && to.params.usedFor === 'showCPMResults') {
+          const _data = to.params.data;
           _this.chart_data = _data
-          const summary = {}
-          summary.symbol = _data.symbol
-          summary.timeframe = _data.timeframe
-          summary.lookback_period = _data.lookback_period
-          summary.exclude_overlapping = _data.exclude_overlap == 1 ? 'True' : 'False'
-          summary.start_date = _data.start_date
-          summary.end_date = _data.end_date
-          summary.direction = _data.direction || 'Long'
-          summary.corr_per = _data.corr_per
-          let timeframe = _data.timeframe
-          let period
-          switch (timeframe) {
-            case "Daily":
-                period = "Days"
-                break;
-            case "Weekly":
-                period = "Weeks"
-                break;
-            case "Monthly":
-                period = "Months"
-                break;
-            default:
-                console.error("Invalid timeframe value")
-                break;
-          }
-          summary.observation_period = `${_data.tim} ${period}`
-          _this.$refs['Summary'].displayData(summary)
-          const statistics = {}
-          statistics.totalReturn = _data.total_return
-          statistics.medianReturn = _data.median_return
-          statistics.averageReturn = _data.avg_return
-          // statistics.tzScore = _data.tzScore
-          // statistics.standardDeviation = _data.standardDeviation
-          // statistics.maxRisk = _data.maxRisk
-          statistics.buyHoldGain = _data.buy_and_hold
-          statistics.winRate = _data.win_rate
-          statistics.averageWin = _data.avg_win
-          statistics.averageLoss = _data.avg_loss
-          statistics.totalTrades = _data.total_trades
-          statistics.totalPositive = _data.total_positive
-          statistics.totalNegative = _data.total_negative
-          statistics.timeInMarket = _data.time_in_market
-
-          const result = _data.result
-          const transformedResult = [];
-          const TradeDateArray = [];
-          const StartEndDateArray = [];
-          for (let i = 0; i < result['End Date'].length; i++) {
-            const tradeDate = result['End Date'][i];
-            const symbolClose = result['Symbol Close'][i];
-            const correlationPercentage = result['Correlation Percentage'][i];
-            const eachReturn = result['Each Return'][i];
-            const startDate = result['Start Date'][i];
-            const endDate = result['End Date'][i];
-            transformedResult.push({
-              'TradeDate': tradeDate,
-              'SymbolClose': symbolClose,
-              'CorrelationPercentage': correlationPercentage,
-              'Return': eachReturn
-            });
-            TradeDateArray.push(
-              {'Date': tradeDate}
-            )
-            StartEndDateArray.push(
-              {'StartDate': startDate, 'EndDate': endDate}
-            )
-          }
-          _this.$refs['Statistics'].displayData(statistics, transformedResult)
-          _this.tradeDate = TradeDateArray
-          _this.rowFrequency = _data.timeframe
-          _this.direction = _data.direction || 'Long'
-          _this.StartEndDateArray = StartEndDateArray
-          // _this.$nextTick(() => {
-          //   _this.$refs['CorrInfo'].prepareData(StartEndDateArray)
-          // });
-
+          _this.displayResultsData(_data)
 				}
 			})
 		} else {
@@ -175,8 +108,6 @@ export default {
     }else{
       this.default_symbol = process.env.VUE_APP_DEFAULT_SYMBOL
     }
-    // 在组件创建时从 sessionStorage 中初始化数据
-    this.setCpmResultsData(JSON.parse(sessionStorage.getItem('cpmResultsData')));
   },
   methods: {
     handleChange(val) {
@@ -191,6 +122,85 @@ export default {
           _this.$refs['TIM'].prepareData(_this.tradeDate, datatime)
             _this.$refs['CorrInfo'].prepareData(_this.StartEndDateArray)
         });
+    },
+    displayResultsData(_data) {
+      const _this = this
+      const summary = {}
+      summary.symbol = _data.symbol
+      summary.timeframe = _data.timeframe
+      summary.lookback_period = _data.lookback_period
+      summary.exclude_overlapping = _data.exclude_overlap == 1 ? 'True' : 'False'
+      summary.start_date = _data.start_date
+      summary.end_date = _data.end_date
+      summary.direction = _data.direction || 'Long'
+      summary.corr_per = _data.corr_per
+      let timeframe = _data.timeframe
+      let period
+      switch (timeframe) {
+        case "Daily":
+            period = "Days"
+            break;
+        case "Weekly":
+            period = "Weeks"
+            break;
+        case "Monthly":
+            period = "Months"
+            break;
+        default:
+            console.error("Invalid timeframe value")
+            break;
+      }
+      summary.observation_period = `${_data.tim} ${period}`
+      _this.$refs['Summary'].displayData(summary)
+      const statistics = {}
+      statistics.totalReturn = _data.total_return
+      statistics.medianReturn = _data.median_return
+      statistics.averageReturn = _data.avg_return
+      // statistics.tzScore = _data.tzScore
+      // statistics.standardDeviation = _data.standardDeviation
+      // statistics.maxRisk = _data.maxRisk
+      statistics.buyHoldGain = _data.buy_and_hold
+      statistics.winRate = _data.win_rate
+      statistics.averageWin = _data.avg_win
+      statistics.averageLoss = _data.avg_loss
+      statistics.totalTrades = _data.total_trades
+      statistics.totalPositive = _data.total_positive
+      statistics.totalNegative = _data.total_negative
+      statistics.timeInMarket = _data.time_in_market
+
+      const result = _data.result
+      const transformedResult = [];
+      const TradeDateArray = [];
+      const StartEndDateArray = [];
+      for (let i = 0; i < result['End Date'].length; i++) {
+        const tradeDate = result['End Date'][i];
+        const symbolClose = result['Symbol Close'][i];
+        const correlationPercentage = result['Correlation Percentage'][i];
+        const eachReturn = result['Each Return'][i];
+        const startDate = result['Start Date'][i];
+        const endDate = result['End Date'][i];
+        transformedResult.push({
+          'TradeDate': tradeDate,
+          'SymbolClose': symbolClose,
+          'CorrelationPercentage': correlationPercentage,
+          'Return': eachReturn
+        });
+        TradeDateArray.push(
+          {'Date': tradeDate}
+        )
+        StartEndDateArray.push(
+          {'StartDate': startDate, 'EndDate': endDate}
+        )
+      }
+      _this.$refs['Statistics'].displayData(statistics, transformedResult)
+      _this.tradeDate = TradeDateArray
+      _this.rowFrequency = _data.timeframe
+      _this.direction = _data.direction || 'Long'
+      _this.StartEndDateArray = StartEndDateArray
+      _this.$nextTick(() => {
+        _this.prepareData(_data)
+        _this.$refs['Form'].displayData(_data)
+      });
     },
     handleDownloadCsv() {
       const {backtestHistoryList, result_quotes, periods, defaultTableLabels} = this.$refs.TIM.exportData()
