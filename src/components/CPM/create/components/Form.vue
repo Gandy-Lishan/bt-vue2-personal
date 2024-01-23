@@ -119,10 +119,11 @@
     <el-col :span="4">
       <el-form-item
         label="5. Number of Bars"
+        prop="bars_num"
       >
-        <el-input v-model="data.bar_distance" :disabled="true">
+        <el-input v-model="data.bars_num" :disabled="true">
           <template v-slot:append>
-            (≥4)
+            (≥1 and ≤252)
           </template>
         </el-input>
       </el-form-item>
@@ -323,6 +324,13 @@ export default {
     LoadingOverlay
   },
   data() {
+    var validateBarsNum = (rule, value, callback) => {
+        if (value < 1 || value > 252) {
+          return callback(new Error('The number of bars should be between 1 and 252, please change your condition.'));
+        } else {
+          callback();
+        }
+    };
     return {
       data: {
         name: '',
@@ -336,7 +344,7 @@ export default {
         year: '',
         exclude_overlap: false,
         direction: 'Long',
-        bar_distance: 0,
+        bars_num: 0,
       },
       dropdownList: [],
       frequencyOptions: [
@@ -435,11 +443,14 @@ export default {
         { required: true, message: 'Select end date', trigger: 'change' }
         ],
         year: [
-          { validator: createPositiveIntegerRule('custom years'), trigger: 'blur' }
+          { validator: createPositiveIntegerRule('custom years',1,1000), trigger: 'blur' }
         ],
         corr_per: [
-          { validator:  createPositiveIntegerRule('correlation percentage', 75,100), trigger: 'blur'}
-        ]
+          { validator: createPositiveIntegerRule('correlation percentage', 75,100), trigger: 'blur'}
+        ],
+        bars_num: [
+          { validator: validateBarsNum, trigger: 'change' }
+        ],
       },
       btnLoading: false,
       previewBtnLoading: false
@@ -470,7 +481,7 @@ export default {
   },
   methods: {
     calculateBarDistance() {
-      this.data.bar_distance = CIQ.measureBarDistance(this.data.start_date,this.data.end_date)
+      this.data.bars_num = CIQ.measureBarDistance(this.data.start_date,this.data.end_date)
     },
     generateCPMName() {
       const date = new Date()
@@ -499,7 +510,12 @@ export default {
     },
     handleDisabledStartDate(time) {
       const endDay = timestampToTime(new Date(this.data.end_date))
-      return timestampToTime(time) > endDay
+      // 如果endDate取消选择，则startDate可以选择全部
+      if(this.data.end_date){
+        return timestampToTime(time) > endDay
+      }else{
+        return false
+      }
     },
     handleDisabledEndDate(time) {
       const today = timestampToTime(new Date())
