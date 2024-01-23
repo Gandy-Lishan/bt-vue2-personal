@@ -174,7 +174,6 @@
 
 <script>
 import { delCPM, getCPMList } from '@/service/service'
-import { mapActions } from 'vuex';
 import {isJson} from '@/utils'
 
 export default {
@@ -233,7 +232,6 @@ export default {
     console.log('列表返回处理数据', this.tableData)
   },
   methods: {
-    ...mapActions('states', ['setCpmResultsData']),
     async getDataList(orderby) {
       this.loading = true
       let res = null
@@ -301,25 +299,26 @@ export default {
     handleCreate() {
       //this.$router.push('/cpm/create')
       this.$router.push({
-        path: '/cpm/create',
+        name: 'CPMResults',
+        params: {
+          usedFor: 'createNewCPM',
+        }
       })
     },
     handleRowClick(row) {
-      console.log(row)
-      this.setCpmResultsData(row)
       this.$router.push({
         name: 'CPMResults',
-        query: {
+        params: {
+          data: row,
           usedFor: 'showCPMResults',
         }
       })
     },
     editCPMData(row) {
-      const data = JSON.stringify(row)
       this.$router.push({
         name: 'CreateCPM',
         params: {
-          data,
+          data: row,
           usedFor: 'showCPMFormData',
         }
       })

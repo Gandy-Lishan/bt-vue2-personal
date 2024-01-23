@@ -869,14 +869,17 @@ export default {
         this.changeLoadingStatus('backtest',false)
         const result = saveRes.data.result
         saveRes.data.result = isJson(result) ? JSON.parse(result) : result
-        const data = JSON.stringify(saveRes.data)
-        this.$router.push({
-          name: 'CPMResults',
-          query: {
-            data,
-            usedFor: 'showCPMResults',
-          }
-        })}
+        console.log('数据结果', saveRes.data)
+        this.$emit('displayResultsData', saveRes.data)
+        // const data = JSON.stringify(saveRes.data)
+        // this.$router.push({
+        //   name: 'CPMResults',
+        //   query: {
+        //     data,
+        //     usedFor: 'showCPMResults',
+        //   }
+        // })
+        }
       // this.$store.commit('SET_CREACT_LOADING', false)
     },
     async checkDuplicateNames(name) {
