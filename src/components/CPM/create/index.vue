@@ -27,7 +27,7 @@ export default {
       default_symbol: ''
     }
   },
-  beforeRouteEnter(to, _, next) {
+  beforeRouteEnter(to, from, next) {
 		if (to.path === '/cpm/create') {
 			next((_this) => {  
 				if (to.params.usedFor && to.params.usedFor === 'showCPMFormData') {
@@ -38,7 +38,17 @@ export default {
 					_this.$nextTick(() => {
             _this.$refs['Form'].displayData(_data)
           })
-				}
+				}else if(from.path.includes('/cpm/results')) {
+          try {
+            const data = JSON.parse(sessionStorage.getItem('cpmResultsData'))
+          _this.chart_data = data
+					_this.$nextTick(() => {
+            _this.$refs['Form'].displayData(data)
+          })
+          } catch (error) {
+            console.error('error', error)
+          }
+        }
 			})
 		} else {
 			next()
