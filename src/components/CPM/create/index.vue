@@ -27,33 +27,6 @@ export default {
       default_symbol: ''
     }
   },
-  beforeRouteEnter(to, from, next) {
-		if (to.path === '/cpm/create') {
-			next((_this) => {  
-				if (to.params.usedFor && to.params.usedFor === 'showCPMFormData') {
-					const { data } = to.params
-					const _data = isJson(data) ? JSON.parse(data) : data
-          _this.chart_data = _data
-					// 展示出 indicator 那一行的数据
-					_this.$nextTick(() => {
-            _this.$refs['Form'].displayData(_data)
-          })
-				}else if(from.path.includes('/cpm/results')) {
-          try {
-            const data = JSON.parse(sessionStorage.getItem('cpmResultsData'))
-          _this.chart_data = data
-					_this.$nextTick(() => {
-            _this.$refs['Form'].displayData(data)
-          })
-          } catch (error) {
-            console.error('error', error)
-          }
-        }
-			})
-		} else {
-			next()
-		}
-	},
   components: {
     Form,
     Chart
