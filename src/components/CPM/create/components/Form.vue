@@ -494,6 +494,7 @@ export default {
       this.data.name = this.data.symbol + '  ' + year + '-' + month + '-' + day + '  ' + hour + ':' + minute + ':' + second
     },
     changeTimeframe(val) {
+      CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
       this.$store.commit('form/getFreqHighPriority', val)
       CIQ.addIndicators(()=>{
         this.calculateBarDistance()
@@ -589,6 +590,8 @@ export default {
           timeframe: this.data.timeframe,
           result: JSON.parse(previewRes.data.data)
         }
+
+        CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
         CIQ.displayCPMLayout(CPMObj,()=>{
           this.calculateBarDistance()
           this.changeLoadingStatus('preview',false)
@@ -619,6 +622,18 @@ export default {
         const result = saveRes.data.result
         saveRes.data.result = isJson(result) ? JSON.parse(result) : result
         this.$emit('displayResultsData', saveRes.data)
+
+        //将数据显示在 chartIQ 上
+        let CPMObj = {
+          symbol: this.data.symbol,
+          timeframe: this.data.timeframe,
+          result: saveRes.data.result
+        }
+        CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
+        CIQ.displayCPMLayout(CPMObj,()=>{
+          this.calculateBarDistance()
+          this.changeLoadingStatus('preview',false)
+        })
       }
     },
     async checkDuplicateNames(name) {

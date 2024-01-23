@@ -1,8 +1,8 @@
 <template>
   <div class="CPMResults-container">
-    <el-collapse v-model="activeNames" @change="handleChange" :accordion="false" class="CPMResults-content">
+    <el-collapse v-model="activeNames" :accordion="false" class="CPMResults-content">
       <div class="chart">
-        <Chart :default_symbol='default_symbol' :chart_data="chart_data" :breadcrumbTitle="breadcrumbTitle" @prepareData="prepareData"></Chart>
+        <Chart :default_symbol='default_symbol' :chart_data="chart_data" :breadcrumbTitle="breadcrumbTitle" @prepareData="prepareData" @calculateBarDistance="calculateBarDistance"></Chart>
       </div>
       <el-collapse-item name="1" class="form">
         <template v-slot:title>
@@ -95,83 +95,6 @@ export default {
           const _data = to.params.data;
           _this.chart_data = _data
           _this.displayResultsData(_data)
-
-          // const summary = {}
-          // summary.symbol = _data.symbol
-          // summary.timeframe = _data.timeframe
-          // summary.lookback_period = _data.lookback_period
-          // summary.exclude_overlapping = _data.exclude_overlap == 1 ? 'True' : 'False'
-          // summary.start_date = _data.start_date
-          // summary.end_date = _data.end_date
-          // summary.direction = _data.direction || 'Long'
-          // summary.corr_per = _data.corr_per
-          // let timeframe = _data.timeframe
-          // let period
-          // switch (timeframe) {
-          //   case "Daily":
-          //       period = "Days"
-          //       break;
-          //   case "Weekly":
-          //       period = "Weeks"
-          //       break;
-          //   case "Monthly":
-          //       period = "Months"
-          //       break;
-          //   default:
-          //       console.error("Invalid timeframe value")
-          //       break;
-          // }
-          // summary.observation_period = `${_data.tim} ${period}`
-          // _this.$refs['Summary'].displayData(summary)
-          // const statistics = {}
-          // statistics.totalReturn = _data.total_return
-          // statistics.medianReturn = _data.median_return
-          // statistics.averageReturn = _data.avg_return
-          // // statistics.tzScore = _data.tzScore
-          // // statistics.standardDeviation = _data.standardDeviation
-          // // statistics.maxRisk = _data.maxRisk
-          // statistics.buyHoldGain = _data.buy_and_hold
-          // statistics.winRate = _data.win_rate
-          // statistics.averageWin = _data.avg_win
-          // statistics.averageLoss = _data.avg_loss
-          // statistics.totalTrades = _data.total_trades
-          // statistics.totalPositive = _data.total_positive
-          // statistics.totalNegative = _data.total_negative
-          // statistics.timeInMarket = _data.time_in_market
-
-          // const result = _data.result
-          // const transformedResult = [];
-          // const TradeDateArray = [];
-          // const StartEndDateArray = [];
-          // for (let i = 0; i < result['End Date'].length; i++) {
-          //   const tradeDate = result['End Date'][i];
-          //   const symbolClose = result['Symbol Close'][i];
-          //   const correlationPercentage = result['Correlation Percentage'][i];
-          //   const eachReturn = result['Each Return'][i];
-          //   const startDate = result['Start Date'][i];
-          //   const endDate = result['End Date'][i];
-          //   transformedResult.push({
-          //     'TradeDate': tradeDate,
-          //     'SymbolClose': symbolClose,
-          //     'CorrelationPercentage': correlationPercentage,
-          //     'Return': eachReturn
-          //   });
-          //   TradeDateArray.push(
-          //     {'Date': tradeDate}
-          //   )
-          //   StartEndDateArray.push(
-          //     {'StartDate': startDate, 'EndDate': endDate, 'CorrelationPercentage': correlationPercentage}
-          //   )
-          // }
-          // _this.$refs['Statistics'].displayData(statistics, transformedResult)
-          // _this.tradeDate = TradeDateArray
-          // _this.rowFrequency = _data.timeframe
-          // _this.direction = _data.direction || 'Long'
-          // _this.StartEndDateArray = StartEndDateArray
-          // // _this.$nextTick(() => {
-          //   _this.$refs['CorrInfo'].prepareData(StartEndDateArray)
-          // });
-
 				}
 			})
 		} else {
@@ -180,14 +103,19 @@ export default {
 	},
   created() {
     // 如果不携带表单参数则显示默认symbol并分段加载
-    if (this.$route.query.usedFor && this.$route.query.usedFor === 'showCPMResults'){
+    debugger
+    if (this.$route.params.usedFor && this.$route.params.usedFor === 'showCPMResults'){
       this.default_symbol = ''
     }else{
       this.default_symbol = process.env.VUE_APP_DEFAULT_SYMBOL
     }
   },
   methods: {
-    handleChange(val) {
+    calculateBarDistance() {
+      const _this = this
+      _this.$nextTick(() => {
+        _this.$refs['Form'].calculateBarDistance()
+      });
     },
     changeTab(val) {
       this.activeTab = val
@@ -266,7 +194,7 @@ export default {
           {'Date': tradeDate}
         )
         StartEndDateArray.push(
-          {'StartDate': startDate, 'EndDate': endDate}
+          {'StartDate': startDate, 'EndDate': endDate, 'CorrelationPercentage': correlationPercentage}
         )
       }
       _this.$refs['Statistics'].displayData(statistics, transformedResult)
@@ -275,7 +203,6 @@ export default {
       _this.direction = _data.direction || 'Long'
       _this.StartEndDateArray = StartEndDateArray
       _this.$nextTick(() => {
-        _this.prepareData(_data)
         _this.$refs['Form'].displayData(_data)
       });
     },
