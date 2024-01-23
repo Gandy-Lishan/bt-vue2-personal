@@ -204,6 +204,7 @@ export default {
       _this.StartEndDateArray = StartEndDateArray
       _this.$nextTick(() => {
         _this.$refs['Form'].displayData(_data)
+        this.prepareData(_data)
       });
     },
     handleDownloadCsv() {
