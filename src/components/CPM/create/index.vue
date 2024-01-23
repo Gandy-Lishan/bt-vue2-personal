@@ -88,7 +88,7 @@ export default {
     width: 90%;
   }
   .form {
-    width: 1200px;
+    width: 90%;
   }
 }
 
