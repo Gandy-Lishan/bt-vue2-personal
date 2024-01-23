@@ -114,15 +114,6 @@ let __st_js_utils_ = (_exports) => {
         const standardEndDate = new Date(end.setTime(end.getTime() + offset))
 
         const subQuotes = quotes.filter(item => item.DT.getTime()>=standardStartDate.getTime() && item.DT.getTime()<=standardEndDate.getTime())
-        // var startIndex = quotes.findIndex(item => item.DT.getTime() == standardStartDate.getTime())
-        // var endIndex = quotes.findIndex(item => item.DT.getTime() == standardEndDate.getTime())
-        // if(startIndex == -1 && standardEndDate.getTime()>quotes[quotes.length-1].DT.getTime()){
-        //     startIndex = quotes.length-1
-        // }
-        // if(endIndex == -1 && standardEndDate.getTime()>quotes[quotes.length-1].DT.getTime()){
-        //     endIndex = quotes.length-1
-        // }
-
         return subQuotes.length
     }
 }

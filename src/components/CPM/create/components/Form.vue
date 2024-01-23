@@ -117,7 +117,14 @@
 			</el-form-item>
     </el-col>
     <el-col :span="4">
-      <el-form-item prop="timeframe" label="5. Timeframe">
+      <el-form-item
+        label="5. Number of Bars"
+      >
+        <el-input v-model="data.bar_distance" :disabled="true"></el-input>
+      </el-form-item>
+    </el-col>
+    <el-col :span="4">
+      <el-form-item prop="timeframe" label="6. Timeframe">
         <el-select
             v-model="data.timeframe"
             placeholder="— Select Timeframe —"
@@ -131,13 +138,6 @@
             >
             </el-option>
           </el-select>
-      </el-form-item>
-    </el-col>
-    <el-col :span="4">
-      <el-form-item
-        label="6. Number of Bars"
-      >
-        <el-input v-model="barDistance" :disabled="true"></el-input>
       </el-form-item>
     </el-col>
     <el-col :span="8">
@@ -182,7 +182,7 @@
     :rules="rules"
 	>
   <el-row :gutter="10">
-    <el-col :span="5">
+    <el-col :span="6">
       <el-form-item prop="direction" label="8. Direction">
         <el-select
             v-model="data.direction"
@@ -198,7 +198,7 @@
           </el-select>
       </el-form-item>
     </el-col>
-    <el-col :span="5">
+    <el-col :span="6">
       <el-form-item
 				label="9. Time In Market"
         prop="tim"
@@ -225,7 +225,7 @@
           </template></el-input>
 			</el-form-item>
     </el-col>
-    <el-col :span="5">
+    <el-col :span="6">
       <el-form-item prop="backtestHistory" label="10. Lookback Period">
         <template slot="label">
           <label>
@@ -256,9 +256,9 @@
         </div>
       </el-form-item>
     </el-col>
-    <el-col :span="9">
+    <el-col :span="6">
       <el-row :gutter="10">
-        <el-col :span="14">
+        <el-col>
           <el-form-item
 				label="11. Custom Duration"
         prop="year"
@@ -271,8 +271,6 @@
           (years)
           </template></el-input>
 			</el-form-item>
-        </el-col>
-        <el-col :span="10">
         </el-col>
       </el-row>
     </el-col>
@@ -600,7 +598,8 @@ export default {
         tim: 21,
         year: '',
         exclude_overlap: false,
-        direction: 'Long'
+        direction: 'Long',
+        bar_distance: 0,
       },
       dropdownList: [],
       frequencyOptions: [
@@ -706,7 +705,6 @@ export default {
         ]
       },
       btnLoading: false,
-      barDistance: 0,
       previewBtnLoading: false
     }
   },
@@ -735,7 +733,7 @@ export default {
   },
   methods: {
     calculateBarDistance() {
-      this.barDistance = CIQ.measureBarDistance(this.data.start_date,this.data.end_date)
+      this.data.bar_distance = CIQ.measureBarDistance(this.data.start_date,this.data.end_date)
     },
     generateCPMName() {
       const date = new Date()
@@ -807,20 +805,21 @@ export default {
       this.$store.commit('form/getBacktestSymbol', this.data.symbol)
       CIQ.addSymbol(this.data.symbol,()=>{
         this.calculateBarDistance()
+        CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
         CIQ.hideCover()
         CIQ.nprogress.done()
       })
     },
     async previewForm() {
-      this.previewBtnLoading = true
+      this.changeLoadingStatus('preview',true)
       let previewRes = null
       try {
         previewRes = await this.previewCPM()
       } catch (error) {
-        this.previewBtnLoading = false; return
+        this.changeLoadingStatus('preview',false); return
       }
       console.log('previewRes', previewRes)
-      if(!previewRes) {this.previewBtnLoading = false; return}
+      if(!previewRes) {this.changeLoadingStatus('preview',false); return}
      const code = previewRes.data.code
       if(code == 401) this.popUpMsgBox('Calculate error')
       if(code == 404 || code == 403) this.popUpMsgBox('Permission denied')
@@ -829,21 +828,30 @@ export default {
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another.`)
       }
       if(code == 407) this.popUpMsgBox('No CPM meeting the criteria found.')
-      this.previewBtnLoading = false
-      if(previewRes.status == 201) {
-        // 将数据显示在 chartIQ 上
+      this.changeLoadingStatus('preview',false)
+      if(code == 200 && previewRes.status == 200) {
+        //将数据显示在 chartIQ 上
+        let CPMObj = {
+          symbol: this.data.symbol,
+          timeframe: this.data.timeframe,
+          result: JSON.parse(previewRes.data.data)
+        }
+        CIQ.displayCPMLayout(CPMObj,()=>{
+          this.calculateBarDistance()
+          this.changeLoadingStatus('preview',false)
+        })
       }
     },
     async submitForm() {
-     this.btnLoading = true
+     this.changeLoadingStatus('backtest',true)
      let saveRes = null
      try {
       saveRes = await this.saveCPM()
      } catch (error) {
-      this.btnLoading = false; return
+      this.changeLoadingStatus('backtest',false); return
      }
      console.log('saveRes', saveRes)
-     if(!saveRes) {this.btnLoading = false; return}
+     if(!saveRes) {this.changeLoadingStatus('backtest',false); return}
      const code = saveRes.data.code
       if(code == 401) this.popUpMsgBox('Calculate error')
       if(code == 404 || code == 403) this.popUpMsgBox('Permission denied')
@@ -852,9 +860,9 @@ export default {
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another.`)
       }
       if(code == 407) this.popUpMsgBox('No CPM meeting the criteria found.')
-      this.btnLoading = false
+      this.changeLoadingStatus('backtest',false)
       if(saveRes.status == 201) {
-        this.btnLoading = false
+        this.changeLoadingStatus('backtest',false)
         const result = saveRes.data.result
         saveRes.data.result = isJson(result) ? JSON.parse(result) : result
         const data = JSON.stringify(saveRes.data)
@@ -959,6 +967,15 @@ export default {
       }
       this.data = target
     },
+    changeLoadingStatus(type,state){
+      if(state){
+        if(type == 'preview') this.$store.commit('states/SET_MI_CREATE_LOADING', true);
+        CIQ.addCover();this.previewBtnLoading = true;this.btnLoading = true;
+      }else {
+        if(type == 'preview') this.$store.commit('states/SET_MI_CREATE_LOADING', false);
+        CIQ.hideCover();this.previewBtnLoading = false;this.btnLoading = false;
+      }
+    }
   }
 }
 </script>
