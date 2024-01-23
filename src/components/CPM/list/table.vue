@@ -306,8 +306,7 @@ export default {
     },
     handleRowClick(row) {
       console.log(row)
-      const data = JSON.stringify(row)
-      this.setCpmResultsData(data);
+      this.setCpmResultsData(row)
       this.$router.push({
         name: 'CPMResults',
         query: {
