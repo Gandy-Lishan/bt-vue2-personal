@@ -884,9 +884,10 @@ export default {
 
     },
     async previewCPM() {
+      if(this.barDistance < 4) {this.popUpMsgBox('Bars must be 4 or more. Adjust the Pattern Start and End Dates accordingly');return}
       this.$refs['BacktestForm'].clearValidate()
       const validForm = await this.validForm(['BasicForm', 'PreviewForm'])
-      if(!validForm) return
+      if(!validForm) {return}
       console.log('表单是否验证成功', validForm)
       // 处理数据
       const exclude_overlap = this.isExcludeOO ? 1 : 0
@@ -902,6 +903,7 @@ export default {
     },
     async saveCPM() {
       // const validForm = this.validForm()
+      if(this.barDistance < 4) {this.popUpMsgBox('Bars must be 4 or more. Adjust the Pattern Start and End Dates accordingly');return}
       const validForm = await this.validForm(['BasicForm', 'PreviewForm', 'BacktestForm']);
       console.log('表单是否验证成功', validForm)
       const rowUrl = this.rowUrl
