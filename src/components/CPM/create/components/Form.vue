@@ -120,7 +120,11 @@
       <el-form-item
         label="5. Number of Bars"
       >
-        <el-input v-model="data.bar_distance" :disabled="true"></el-input>
+        <el-input v-model="data.bar_distance" :disabled="true">
+          <template v-slot:append>
+            (≥4)
+          </template>
+        </el-input>
       </el-form-item>
     </el-col>
     <el-col :span="4">
