@@ -150,7 +150,7 @@ export default {
               {'Date': tradeDate}
             )
             StartEndDateArray.push(
-              {'StartDate': startDate, 'EndDate': endDate}
+              {'StartDate': startDate, 'EndDate': endDate, 'CorrelationPercentage': correlationPercentage}
             )
           }
           _this.$refs['Statistics'].displayData(statistics, transformedResult)
@@ -257,6 +257,7 @@ export default {
         const obj = {}
         obj['Start Date'] = item.StartDate
         obj['End Date'] = item.EndDate
+        obj['Correlation Percentage'] = `${item.CorrelationPercentage}%`
         correlationInfo.push(obj)
       })
 
@@ -364,7 +365,7 @@ export default {
     width: 90%;
   }
   .form {
-    width: 1200px;
+    width: 90%;
   }
 }
 /deep/ .el-collapse-item__header {

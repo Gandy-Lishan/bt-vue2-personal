@@ -119,10 +119,11 @@
     <el-col :span="4">
       <el-form-item
         label="5. Number of Bars"
+        prop="bars_num"
       >
-        <el-input v-model="data.bar_distance" :disabled="true">
+        <el-input v-model="data.bars_num" :disabled="true">
           <template v-slot:append>
-            (≥4)
+            (≥1 and ≤252)
           </template>
         </el-input>
       </el-form-item>
@@ -300,273 +301,6 @@
       </el-row>
     </el-form-item>
   </el-form>
-	<!-- <el-form
-		ref="Form"
-		:model="data"
-		label-position="top"
-		size="small"
-    :rules="rules"
-	>
-  <el-row :gutter="20">
-    <el-col :span="6">
-      <el-form-item
-				label="1. CPM Name"
-        prop="name"
-			>
-				<el-input v-model="data.name" placeholder="Enter cpm name"></el-input>
-			</el-form-item>
-    </el-col>
-    <el-col :span="6">
-      <el-form-item prop="symbol">
-        <template slot="label">
-            <label>
-              2. Symbol
-              <el-tooltip effect="dark" placement="top">
-                <span slot="content"
-                  >Choose a stock/index/ETF as symbol.(default:SPX)</span>
-                <i class="iconfont icon-wenhao"></i>
-              </el-tooltip>
-            </label>
-          </template>
-          <el-autocomplete
-              class="inline-input"
-              v-model="data.symbol"
-              :fetch-suggestions="querySearch"
-              placeholder="Select stock from the dropdown menu"
-              @select="
-                (item) => {
-                  handleSelect(item)
-                }
-              "
-            >
-						<i slot="prefix" class="el-input__icon el-icon-search"></i>
-						<template slot-scope="{ item }">
-							<div class="custom-option">
-								<span class="symbol-label">{{
-									item.url
-								}}</span>
-								<span class="symbol-url">{{
-									item.label
-								}}</span>
-							</div>
-						</template>
-					</el-autocomplete>
-      </el-form-item>
-    </el-col>
-    <el-col :span="6">
-      <el-form-item
-				label="3.Pattern Start Date"
-        prop="start_date"
-			>
-      <template slot="label">
-        <label>
-          3. Pattern Start Date
-          <el-tooltip effect="dark" placement="top">
-            <span slot="content"
-              >"Start Date" denotes the commencement time of the candlestick pattern.</span>
-            <i class="iconfont icon-wenhao"></i>
-          </el-tooltip>
-        </label>
-      </template>
-        <el-date-picker
-          v-model="data.start_date"
-          type="date"
-          placeholder="- Select Start Date -"
-          value-format="yyyy-MM-dd"
-          :picker-options="startPickerOptions"
-          @change="calculateBarDistance"
-        >
-        </el-date-picker>
-			</el-form-item>
-    </el-col>
-    <el-col :span="6">
-      <el-form-item
-				label="4.Pattern End Date"
-        prop="end_date"
-			>
-      <template slot="label">
-        <label>
-          4. Pattern End Date
-          <el-tooltip effect="dark" placement="top">
-            <span slot="content"
-              >"End Date" indicates the conclusion time of the candlestick pattern.</span>
-            <i class="iconfont icon-wenhao"></i>
-          </el-tooltip>
-        </label>
-      </template>
-        <el-date-picker
-          v-model="data.end_date"
-          type="date"
-          placeholder="- Select End Date -"
-          value-format="yyyy-MM-dd"
-          :picker-options="endPickerOptions"
-          @change="calculateBarDistance"
-        >
-        </el-date-picker>
-			</el-form-item>
-    </el-col>
-  </el-row>
-  <el-row :gutter="20">
-    <el-col :span="6">
-      {{barDistance}}
-      <el-form-item prop="direction" label="5. Direction">
-        <el-select
-            v-model="data.direction"
-            placeholder="— Select Direction —"
-          >
-            <el-option
-              v-for="item in directionOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-      </el-form-item>
-    </el-col>
-    <el-col :span="6">
-      <el-form-item prop="timeframe" label="6. Timeframe">
-        <el-select
-            v-model="data.timeframe"
-            placeholder="— Select Timeframe —"
-            @change="changeTimeframe"
-          >
-            <el-option
-              v-for="item in frequencyOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-      </el-form-item>
-    </el-col>
-    <el-col :span="6">
-      <el-form-item
-				label="7. Correlation Percentage"
-        prop="corr_per"
-			>
-        <template slot="label">
-          <label>
-            7. Correlation Percentage
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content">
-                Correlation Percentage
-              </span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
-          </label>
-        </template>
-				<el-input v-model="data.corr_per" placeholder="Enter correlation percentage">
-          <template v-slot:append>
-          (%)
-          </template>
-        </el-input>
-			</el-form-item>
-    </el-col>
-    <el-col :span="6">
-      <el-form-item
-				label="8. Time In Market"
-        prop="tim"
-			>
-        <template slot="label">
-          <label>
-            8. Time In Market
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content">
-                Input a value of bars to stay in market after entry.<br />Exit
-                  position when the specified Time In Market is reached.
-                  (default: 21)<br
-                />
-              </span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
-          </label>
-        </template>
-        <el-input
-          v-model="data.tim"
-          placeholder="Enter time in market"
-        ><template v-slot:append>
-          (bars)
-          </template></el-input>
-			</el-form-item>
-    </el-col>
-  </el-row>
-  <el-row :gutter="20">
-    <el-col :span="6">
-    <el-form-item prop="backtestHistory" label="9. Lookback Period">
-        <template slot="label">
-          <label>
-            9. Lookback Period
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content"
-                >Specify the start and end date of the backtest. <br />
-                Choose 'All History' to include all data since the inception of the backtesting stock/index. <br />
-                Additionally, select 'Custom' to input a custom year.<br
-              /></span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
-          </label>
-        </template>
-        <div class="selectBox historySelectBox">
-          <el-select
-            placeholder="- Select Lookback Period -"
-            v-model="data.lookback_period"
-          >
-            <el-option
-              v-for="item in historyOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </div>
-      </el-form-item>
-    </el-col>
-    <el-col :span="6">
-      <el-form-item
-				label="10. Custom Duration"
-        prop="year"
-        v-if="data.lookback_period == 'Custom'"
-			>
-        <el-input
-          v-model="data.year"
-          placeholder="Enter custom years"
-        ><template v-slot:append>
-          (years)
-          </template></el-input>
-			</el-form-item>
-    </el-col>
-    <el-col :span="6">
-    <div class="excludeBox">
-        <el-checkbox v-model="isExcludeOO"
-          >Exclude Overlapping Observations
-          <el-tooltip effect="dark" placement="top">
-            <span slot="content"
-              >
-              After checking, ensure no signal overlap.
-            </span>
-            <i class="iconfont icon-wenhao"></i> </el-tooltip
-        ></el-checkbox>
-      </div>
-    </el-col>
-    <el-col :span="6"></el-col>
-  </el-row>
-    <el-form-item>
-      <el-row :gutter="20" type="flex" justify="center">
-        <el-col :span="6"></el-col>
-        <el-col :span="6"></el-col>
-        <el-col :span="6"></el-col>
-        <el-col :span="6">
-          <div class="form-btn">
-            <el-button type="primary" class="delete-btn" :loading="btnLoading" size="large">Preview Pattern</el-button>
-            <el-button type="primary" @click="submitForm" :loading="btnLoading" size="large">Backtest Pattern</el-button>
-          </div>
-        </el-col>
-      </el-row>
-    </el-form-item>
-	</el-form> -->
   <LoadingOverlay
 			:isLoading="isCreateLoading"
 			:showProgress="false"
@@ -590,6 +324,13 @@ export default {
     LoadingOverlay
   },
   data() {
+    var validateBarsNum = (rule, value, callback) => {
+        if (value < 1 || value > 252) {
+          return callback(new Error('The number of bars should be between 1 and 252, please change your condition.'));
+        } else {
+          callback();
+        }
+    };
     return {
       data: {
         name: '',
@@ -603,7 +344,7 @@ export default {
         year: '',
         exclude_overlap: false,
         direction: 'Long',
-        bar_distance: 0,
+        bars_num: 0,
       },
       dropdownList: [],
       frequencyOptions: [
@@ -702,11 +443,14 @@ export default {
         { required: true, message: 'Select end date', trigger: 'change' }
         ],
         year: [
-          { validator: createPositiveIntegerRule('custom years'), trigger: 'blur' }
+          { validator: createPositiveIntegerRule('custom years',1,1000), trigger: 'blur' }
         ],
         corr_per: [
-          { validator:  createPositiveIntegerRule('correlation percentage', 75,100), trigger: 'blur'}
-        ]
+          { validator: createPositiveIntegerRule('correlation percentage', 75,100), trigger: 'blur'}
+        ],
+        bars_num: [
+          { validator: validateBarsNum, trigger: 'change' }
+        ],
       },
       btnLoading: false,
       previewBtnLoading: false
@@ -737,7 +481,7 @@ export default {
   },
   methods: {
     calculateBarDistance() {
-      this.data.bar_distance = CIQ.measureBarDistance(this.data.start_date,this.data.end_date)
+      this.data.bars_num = CIQ.measureBarDistance(this.data.start_date,this.data.end_date)
     },
     generateCPMName() {
       const date = new Date()
@@ -766,7 +510,12 @@ export default {
     },
     handleDisabledStartDate(time) {
       const endDay = timestampToTime(new Date(this.data.end_date))
-      return timestampToTime(time) > endDay
+      // 如果endDate取消选择，则startDate可以选择全部
+      if(this.data.end_date){
+        return timestampToTime(time) > endDay
+      }else{
+        return false
+      }
     },
     handleDisabledEndDate(time) {
       const today = timestampToTime(new Date())
