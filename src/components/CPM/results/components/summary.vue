@@ -34,7 +34,7 @@
           title="direction"
         >
         <template slot="formatter">
-              {{ summary.direction }}
+            <h3> {{ summary.direction }}</h3>
         </template>
         </el-statistic>
       </el-col>
