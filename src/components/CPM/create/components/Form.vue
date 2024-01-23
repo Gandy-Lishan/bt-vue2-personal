@@ -575,7 +575,7 @@ export default {
       if(!previewRes) {this.changeLoadingStatus('preview',false); return}
      const code = previewRes.data.code
       if(code == 401) this.popUpMsgBox('Calculate error')
-      if(code == 404 || code == 403) this.popUpMsgBox('Permission denied')
+      if(code == 404 || code == 403) this.popUpMsgBox('Save failed, Please try again')
       if(code == 406) {
         const name =  this.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another.`)
@@ -607,7 +607,7 @@ export default {
      if(!saveRes) {this.changeLoadingStatus('backtest',false); return}
      const code = saveRes.data.code
       if(code == 401) this.popUpMsgBox('Calculate error')
-      if(code == 404 || code == 403) this.popUpMsgBox('Permission denied')
+      if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again'); return}
       if(code == 406) {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another.`)
@@ -618,15 +618,8 @@ export default {
         this.changeLoadingStatus('backtest',false)
         const result = saveRes.data.result
         saveRes.data.result = isJson(result) ? JSON.parse(result) : result
-        const data = JSON.stringify(saveRes.data)
-        this.$router.push({
-          name: 'CPMResults',
-          query: {
-            data,
-            usedFor: 'showCPMResults',
-          }
-        })}
-      // this.$store.commit('SET_CREACT_LOADING', false)
+        this.$emit('displayResultsData', saveRes.data)
+      }
     },
     async checkDuplicateNames(name) {
         const nameLookupRes = await getCPMList(null, null, name)

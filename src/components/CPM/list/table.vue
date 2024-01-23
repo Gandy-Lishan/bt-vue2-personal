@@ -157,7 +157,6 @@
 			</template>
       <el-table-column align="center">
 				<template slot-scope="scope">
-        <el-button type="primary" icon="el-icon-edit" round size="mini" @click="editCPMData(scope.row)"></el-button>
         <el-button class="delete-btn" slot="reference" round size="mini" type="primary" icon="el-icon-delete" @click="deleteCPM(scope.row)"></el-button>
         </template>
       </el-table-column>
@@ -174,7 +173,6 @@
 
 <script>
 import { delCPM, getCPMList } from '@/service/service'
-import { mapActions } from 'vuex';
 import {isJson} from '@/utils'
 
 export default {
@@ -233,7 +231,6 @@ export default {
     console.log('列表返回处理数据', this.tableData)
   },
   methods: {
-    ...mapActions('states', ['setCpmResultsData']),
     async getDataList(orderby) {
       this.loading = true
       let res = null
@@ -299,28 +296,19 @@ export default {
 			await this.getDataList(prop)
 		},
     handleCreate() {
-      //this.$router.push('/cpm/create')
-      this.$router.push({
-        path: '/cpm/create',
-      })
-    },
-    handleRowClick(row) {
-      console.log(row)
-      this.setCpmResultsData(row)
       this.$router.push({
         name: 'CPMResults',
-        query: {
-          usedFor: 'showCPMResults',
+        params: {
+          usedFor: 'craeteNewCPM',
         }
       })
     },
-    editCPMData(row) {
-      const data = JSON.stringify(row)
+    handleRowClick(row) {
       this.$router.push({
-        name: 'CreateCPM',
+        name: 'CPMResults',
         params: {
-          data,
-          usedFor: 'showCPMFormData',
+          data: row,
+          usedFor: 'showCPMResults',
         }
       })
     },
