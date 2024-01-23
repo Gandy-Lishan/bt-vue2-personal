@@ -136,6 +136,7 @@ const config = {
 		config.optimization.splitChunks({
 			cacheGroups: {
 				vendors: {
+					//
 					// 自定义打包模块
 					name: 'chunk-vendors', // 打包后的文件名
 					test: /[\\/]node_modules[\\/]/, // 匹配对应文件
