@@ -62,6 +62,7 @@ export default {
 			console.log('chart_data',this.chart_data)
 			//还原自定义indicator Layout
 			if(this.chart_data.name) CIQ.displayCPMLayout(this.chart_data,()=>{
+				// backtest cpm后需要加载Chart后更新tim
 				this.$emit('prepareData', this.chart_data)
 				this.$emit('calculateBarDistance')
 			})

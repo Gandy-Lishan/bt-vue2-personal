@@ -133,7 +133,6 @@ let __js_webcomponents_favorites_ = (_exports) => {
 		postajax() {
 			return new Promise(resolve=>{
 				var server = new XMLHttpRequest();   
-				// url += (url.indexOf("?") === -1 ? "?" : "&") + new Date().getTime();
 				server.open("GET", config.getAllSymbols);
 				console.log("fav post")
 				server.setRequestHeader("Authorization", "Basic " + btoa(config.username+":"+config.password));  
