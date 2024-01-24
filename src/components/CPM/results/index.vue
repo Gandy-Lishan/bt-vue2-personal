@@ -103,7 +103,6 @@ export default {
 	},
   created() {
     // 如果不携带表单参数则显示默认symbol并分段加载
-    debugger
     if (this.$route.params.usedFor && this.$route.params.usedFor === 'showCPMResults'){
       this.default_symbol = ''
     }else{

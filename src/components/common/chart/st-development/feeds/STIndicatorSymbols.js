@@ -21,22 +21,6 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ = function (exchanges) {
 	this.requestCounter = 0; //used to invalidate old requests
 };
 
-// CIQ.postAjax = function (params, arg1, arg2, arg3, arg4) {
-//     //console.log("postajax")
-// 	var server = new XMLHttpRequest();   
-// 	// url += (url.indexOf("?") === -1 ? "?" : "&") + new Date().getTime();
-// 	server.open("GET", params.url);
-
-//     server.setRequestHeader("Authorization", "Basic " + btoa(config.username+":"+config.password));  
-
-// 	server.onload = function () {
-// 		params.cb(this.status, this.responseText,{results:params.results,text:params.text});
-// 	};
-// 	server.onerror = function () {
-// 		cb(500);
-// 	};
-// 	server.send();
-// };
 CIQ.inheritsFrom(
 	CIQ.ChartEngine.Driver.Lookup.ChartIQ,
 	CIQ.ChartEngine.Driver.Lookup

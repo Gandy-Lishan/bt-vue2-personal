@@ -290,7 +290,7 @@ import {
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
-import {compareArrays, LocalStorageUtil, maxNumOfStudy} from '@/utils'
+import {compareArrays, LocalStorageUtil, maxNumOfStudy, formatStandardTime} from '@/utils'
 import moment from 'moment'
 import { mapMutations } from 'vuex'
 
@@ -1712,7 +1712,7 @@ export default {
               let data = []
               try {
                 data = res.map((item) => ({
-                  Date: new Date(item.DT).toLocaleDateString('en-US', {
+                  Date: formatStandardTime(item.DT).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: '2-digit',
                     day: '2-digit'
@@ -2342,7 +2342,7 @@ export default {
       // 计算时间间隔
       const startDate = dateData[0]
       const endDate = dateData[dateData.length - 1]
-      const frequency = this.frequency.toLowerCase()
+      const frequency = this.$store.state.form.backtestInfo.frequency.toLowerCase()
       if (frequency !== 'daily') {
         this.$notify.warning({
           title: 'Tips',
@@ -2482,7 +2482,7 @@ export default {
       let fileData = []
       try {
         fileData = res.map((item) => ({
-          Date: new Date(item.DT).toLocaleDateString('en-US', {
+          Date: formatStandardTime(item.DT).toLocaleDateString('en-US', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit'
@@ -2522,7 +2522,7 @@ export default {
       if (res.status == 200) {
         const csv_content = res.data.csv_content
         this.previewData = csv_content.map((item) => ({
-          Date: new Date(item.DT).toLocaleDateString('en-US', {
+          Date: formatStandardTime(item.DT).toLocaleDateString('en-US', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit'
