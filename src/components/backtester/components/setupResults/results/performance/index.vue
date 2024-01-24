@@ -162,6 +162,7 @@ export default {
               data.annualReturnsImageUploaded =
                 initalData['Annual Returns Image Uploaded']
               data.annualReturnsFileURL = initalData['Annual Returns File URL']
+              data.equityCurveFileURL = initalData['Equity Curve File URL'] || null
               data.returnsheatmapImageUploadedURL =
                 initalData['Returns Heatmap Image Uploaded']
               data.returnsHeatmapFileURL =
