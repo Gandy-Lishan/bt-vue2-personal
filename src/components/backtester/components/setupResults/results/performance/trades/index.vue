@@ -206,8 +206,8 @@ export default {
                     const entryData = newValue[i];
                     const exitData = newValue[i + 1] || {}; // 确保后面有对象或使用一个空对象
                     // 转换日期格式
-                    const formatEntryDate = new Date(entryData['Date']).toLocaleDateString();
-                    const formatExitDate = exitData['Date'] ? new Date(exitData['Date']).toLocaleDateString() : '';
+                    const formatEntryDate = entryData['Date'].replaceAll('-','/')
+                    const formatExitDate = exitData['Date'] ? exitData['Date'].replaceAll('-','/') : '';
                     mergedData.push({
                     'EntryDate': formatEntryDate,
                     'EntryAction': entryData.TradeStatus.toUpperCase(),

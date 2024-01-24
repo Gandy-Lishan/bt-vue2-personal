@@ -2,7 +2,6 @@
 	<div>
 		<div class="back">
 			<router-link to="/cpm"><i class="el-icon-arrow-left"></i><span>{{breadcrumbTitle}}</span></router-link>
-			<router-link v-if="shouldShowLink" :to="{ path: '/cpm/create'}"><span>Edit this CPM</span><i class="el-icon-arrow-right"></i></router-link>
 		</div>
 			<div class="chart_box" id="chart_box">
 				<chart :symbol="default_symbol" width="100%" height="100%" :onChartReady="onChartReady">
@@ -41,11 +40,7 @@ export default {
 		chartLoadingSetting() {
 			// 从 Vuex store 中获取全局 loading 状态
 			return this.$store.state.chart.chartLoadingSetting
-		},
-    shouldShowLink() {
-      // 判断当前路由是否包含 '/cpm/results'
-      return this.$route.path.includes('/cpm/results');
-    }
+		}
 
 	},
 	watch: {
@@ -65,6 +60,7 @@ export default {
 			console.log('chart_data',this.chart_data)
 			//还原自定义indicator Layout
 			if(this.chart_data.name) CIQ.displayCPMLayout(this.chart_data,()=>{
+				// backtest cpm后需要加载Chart后更新tim
 				this.$emit('prepareData', this.chart_data)
 				this.$emit('calculateBarDistance')
 			})
@@ -74,14 +70,14 @@ export default {
 			}
 		},
 		hideComponents() {
-			let search = document.querySelector(".ciq-search")
+			// let search = document.querySelector(".ciq-search")
 			let indicatorSearch = document.querySelector(".ciq-indicators-search")
 			let studies = document.querySelector(".ciq-studies")
 			let favBtnContainer = document.querySelector(".favBtnContainer")
 			let timeframeBtn = document.querySelector('.ciq-period')
 			//let footer = document.querySelector('.ciq-footer')
 
-			if(this.$route.name == 'CPMResults') search.style.visibility = 'hidden'
+			// search.style.visibility = 'hidden'
 			indicatorSearch.style.visibility = 'hidden'
 			studies.style.visibility = 'hidden'
 			favBtnContainer.style.display = 'none'

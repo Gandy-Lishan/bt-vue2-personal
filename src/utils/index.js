@@ -28,6 +28,15 @@ const timestampToTime = (timestamp) => {
   return Y+M+D
 }
 
+// 后续把datatime.getTimezoneOffset() * 60 * 1000都封装在formatStandardTime
+const formatStandardTime = (date) => {
+  var datatime = new Date(date)
+  var offset = datatime.getTimezoneOffset() * 60 * 1000
+  return new Date(
+    datatime.setTime(datatime.getTime() + offset)
+  )
+}
+
 const getQueryVariable = (variable) => {
   //获取当前URL中的查询字符串部分（即问号后面的部分）
   var query = window.location.search.substring(1)
@@ -229,4 +238,4 @@ const getTokenRole = () => {
   return 'None'
 }
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole}
+export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole}
