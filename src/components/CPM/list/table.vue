@@ -299,7 +299,7 @@ export default {
       this.$router.push({
         name: 'CPMResults',
         params: {
-          usedFor: 'craeteNewCPM',
+          usedFor: 'createNewCPM',
         }
       })
     },
@@ -311,6 +311,7 @@ export default {
           usedFor: 'showCPMResults',
         }
       })
+    },
     },
     async deleteCPM(row) {
       const { url } = row

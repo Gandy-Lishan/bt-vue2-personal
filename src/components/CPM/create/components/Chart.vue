@@ -57,8 +57,6 @@ export default {
 	methods:{
 		onChartReady(){
 			this.hideComponents()	
-
-			
 			console.log('chart_data',this.chart_data)
 			//还原自定义indicator Layout
 			if(this.chart_data.name) CIQ.displayCPMLayout(this.chart_data,()=>{
