@@ -453,7 +453,6 @@ if (!CIQ.Studies) {
 		// 下面为计算 ROC, ROR, MAR 的具体公式。
 		// 使用中公式
 		let resArr = []
-
 		switch(condition){
 			case 'ROC':
 				// ROC
@@ -996,13 +995,13 @@ if (!CIQ.Studies) {
 			inputs: {},
             calculateFN: CIQ.Studies.calculateMonthofYear,
         },
-		"# of Consecutive Days since High (ATH)": {
-            name: "# of Consecutive Days since High (ATH)",
+		"# of Consecutive Days Since All Time High (ATH)": {
+            name: "# of Consecutive Days Since All Time High (ATH)",
 			inputs: { Period: 252, },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysHigh,
         },
-		"# of Consecutive Days since Low (ATL)": {
-            name: "# of Consecutive Days since Low (ATL)",
+		"# of Consecutive Days Since All Time Low (ATL)": {
+            name: "# of Consecutive Days Since All Time Low (ATL)",
 			inputs: { Period: 252, },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysLow,
         },
