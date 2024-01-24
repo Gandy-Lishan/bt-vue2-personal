@@ -124,7 +124,7 @@
 
 					<cq-menu class="ciq-menu ciq-studies collapse" cq-focus="input" @click="collapseStudies">
 						<span>Studies</span>
-						<cq-menu-dropdown style="width:330px;">
+						<cq-menu-dropdown style="width:400px;">
 							<cq-study-legend cq-no-close>
 								<cq-section-dynamic>
 									<cq-heading>Current Studies</cq-heading>

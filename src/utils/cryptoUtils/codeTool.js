@@ -344,7 +344,7 @@ class SignalCode {
 				}
 			} else if (val['indicator'] == 'Commodity Channel Index') {
 				re_str += 'CCIV/' + val['condition'] + '/' + val['value']
-			} else if (val['indicator'] == 'Relative Strength Index') {
+			} else if (val['indicator'] == 'Relative Strength Index (RSI)') {
 				re_str += 'RSIV/' + val['condition'] + '/' + val['value']
 			}
 		} else if (val['analysis'] === 'Exit') {

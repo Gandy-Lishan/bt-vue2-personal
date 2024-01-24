@@ -67,7 +67,7 @@ export default {
 		},
 		overrideStudyDef(){
 			CIQ.extend(CIQ.Studies.studyLibrary["rsi"], {
-				name: "Relative Strength Index",
+				name: "Relative Strength Index (RSI)",
 			});
 		},
 	}

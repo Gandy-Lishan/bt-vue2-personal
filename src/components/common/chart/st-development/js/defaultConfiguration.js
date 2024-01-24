@@ -554,7 +554,7 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"url": "LLV"
 						},
 						{
-							"name": "Relative Strength Index",
+							"name": "Relative Strength Index (RSI)",
 							"url": "rsi"
 						},
 						{
