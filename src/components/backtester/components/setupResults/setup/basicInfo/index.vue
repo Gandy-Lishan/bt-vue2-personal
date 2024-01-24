@@ -558,7 +558,7 @@
                             exit position.<br />
                             The specified methods will serve as first-come,
                             first-execute.<br />
-                            This option can be used combinedly as an OR condition with the <br/>
+                            This option will be used combinedly as an OR condition with the <br/>
                             Exit Criteria selection or be solely used in the Exit Criteria
                             "Only Use Risk Control".<br/>
                             Note: When short selling, to prevent unlimited additional margin, <br/>
