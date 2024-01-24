@@ -92,7 +92,7 @@ export default {
 		if (to.path === '/cpm/results') {
 			next((_this) => {
 				if (to.params.usedFor && to.params.usedFor === 'showCPMResults') {
-          const _data = to.params.data;
+          const _data = to.params.data
           _this.chart_data = _data
           _this.displayResultsData(_data)
 				}
@@ -122,10 +122,10 @@ export default {
     prepareData(data) {
       const _this = this
       _this.$nextTick(() => {
-          const datatime = new Date(data.start_date)
-          _this.$refs['TIM'].prepareData(_this.tradeDate, datatime)
-            _this.$refs['CorrInfo'].prepareData(_this.StartEndDateArray)
-        });
+        const datatime = new Date(data.start_date)
+        _this.$refs['TIM'].prepareData(_this.tradeDate, datatime)
+        _this.$refs['CorrInfo'].prepareData(_this.StartEndDateArray)
+      });
     },
     displayResultsData(_data) {
       const _this = this
@@ -203,7 +203,7 @@ export default {
       _this.StartEndDateArray = StartEndDateArray
       _this.$nextTick(() => {
         _this.$refs['Form'].displayData(_data)
-        this.prepareData(_data)
+        _this.prepareData(_data)
       });
     },
     handleDownloadCsv() {

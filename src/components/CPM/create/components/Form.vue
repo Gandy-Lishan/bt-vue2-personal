@@ -621,8 +621,6 @@ export default {
         this.changeLoadingStatus('backtest',false)
         const result = saveRes.data.result
         saveRes.data.result = isJson(result) ? JSON.parse(result) : result
-        
-
         //将数据显示在 chartIQ 上
         let CPMObj = {
           symbol: this.data.symbol,
