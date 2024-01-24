@@ -14,6 +14,9 @@
 						<el-table-column prop="EndDate" label="End Date" align="center">
               <template slot-scope="scope">{{scope.row.StartDate}}</template>
             </el-table-column>
+            <el-table-column prop="CorrelationPercentage" label="Correlation Percentage" align="center">
+              <template slot-scope="scope">{{scope.row.CorrelationPercentage}}%</template>
+            </el-table-column>
           </el-table>
 		</div>
   </div>

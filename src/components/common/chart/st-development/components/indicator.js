@@ -161,7 +161,6 @@ let __js_webcomponents_indicators_ = (_exports) => {
 		postajax() {
 			
 				var server = new XMLHttpRequest();   
-				// url += (url.indexOf("?") === -1 ? "?" : "&") + new Date().getTime();
 				server.open("GET", config.getAllSymbols,false);
 				//console.log("indicator")
 				server.setRequestHeader("Authorization", "Basic " + btoa(config.username+":"+config.password));  
@@ -197,7 +196,6 @@ let __js_webcomponents_indicators_ = (_exports) => {
 			"?indicator=" + indicator;
 
 			var server = new XMLHttpRequest();   
-				// url += (url.indexOf("?") === -1 ? "?" : "&") + new Date().getTime();
 				server.open("GET", queryUrl,false);
 			
 				server.setRequestHeader("Authorization", "Basic " + btoa(config.username+":"+config.password));  

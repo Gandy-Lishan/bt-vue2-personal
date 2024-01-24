@@ -6079,7 +6079,7 @@ class Chart {
 					.forEach(series => stx.removeSeries(series.id))
 			}
 			//这里是chartiq初始化后的第一次调用loadChart,如果是CPM则数据全部加载
-			if(window.location.pathname.includes('/cpm/create')){
+			if(window.location.pathname.includes('/cpm/results')){
 				data.startDate = new Date(parseInt(process.env.VUE_APP_START_DATE))
 			}
 			stx.loadChart(data, { masterData: data._masterData }, function(err) {

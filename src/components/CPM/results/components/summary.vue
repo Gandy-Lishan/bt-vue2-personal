@@ -31,10 +31,10 @@
       </el-col>
       <el-col :span="6">
         <el-statistic
-          title="exclude overlapping"
+          title="direction"
         >
         <template slot="formatter">
-              <h3>{{ summary.exclude_overlapping }}</h3>
+            <h3> {{ summary.direction }}</h3>
         </template>
         </el-statistic>
       </el-col>
@@ -67,15 +67,6 @@
         >
         <template slot="formatter">
               {{ summary.end_date }}
-        </template>
-        </el-statistic>
-      </el-col>
-      <el-col :span="6">
-        <el-statistic
-          title="direction"
-        >
-        <template slot="formatter">
-              {{ summary.direction }}
         </template>
         </el-statistic>
       </el-col>

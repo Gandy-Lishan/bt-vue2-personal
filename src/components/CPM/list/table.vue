@@ -157,7 +157,6 @@
 			</template>
       <el-table-column align="center">
 				<template slot-scope="scope">
-        <el-button type="primary" icon="el-icon-edit" round size="mini" @click="editCPMData(scope.row)"></el-button>
         <el-button class="delete-btn" slot="reference" round size="mini" type="primary" icon="el-icon-delete" @click="deleteCPM(scope.row)"></el-button>
         </template>
       </el-table-column>
@@ -297,7 +296,6 @@ export default {
 			await this.getDataList(prop)
 		},
     handleCreate() {
-      //this.$router.push('/cpm/create')
       this.$router.push({
         name: 'CPMResults',
         params: {
@@ -314,14 +312,6 @@ export default {
         }
       })
     },
-    editCPMData(row) {
-      this.$router.push({
-        name: 'CreateCPM',
-        params: {
-          data: row,
-          usedFor: 'showCPMFormData',
-        }
-      })
     },
     async deleteCPM(row) {
       const { url } = row
