@@ -919,9 +919,9 @@ export const CommonMethodsMixin = {
 						'Backtest data upload successful, backtest is in progress, please wait patiently for the results...'
 					if (start_date && end_date) {
 						const year = end_date.split('-')[0] - start_date.split('-')[0]
-						if (year >= 10)
+						if (year > 10)
 							coverText =
-								'In the case of backtesting exceeding 10 years, anticipate longer processing times. We appreciate your patience...'
+								'In the case of backtesting exceeding 10 years, anticipate longer processing time. We appreciate your patience...'
 					}
 					_this.setSetUpLoadingSetting(true, true, 50, coverText)
 

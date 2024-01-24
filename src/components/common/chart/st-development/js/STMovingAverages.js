@@ -996,13 +996,13 @@ if (!CIQ.Studies) {
 			inputs: {},
             calculateFN: CIQ.Studies.calculateMonthofYear,
         },
-		"# of Consecutive Days since High": {
-            name: "# of Consecutive Days since High",
+		"# of Consecutive Days since High (ATH)": {
+            name: "# of Consecutive Days since High (ATH)",
 			inputs: { Period: 252, },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysHigh,
         },
-		"# of Consecutive Days since Low": {
-            name: "# of Consecutive Days since Low",
+		"# of Consecutive Days since Low (ATL)": {
+            name: "# of Consecutive Days since Low (ATL)",
 			inputs: { Period: 252, },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysLow,
         },
