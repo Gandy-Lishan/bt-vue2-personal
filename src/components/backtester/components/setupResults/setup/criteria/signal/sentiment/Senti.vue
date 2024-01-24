@@ -695,7 +695,7 @@ export default {
         // }
 
         const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
-        let sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+        CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           display: `${conditionMap.get(this.senti.newCondition).name}(${field}, ${this.senti.conditionPeriod})`,
           Field: field,
           condition: conditionMap.get(this.senti.newCondition).abbr,

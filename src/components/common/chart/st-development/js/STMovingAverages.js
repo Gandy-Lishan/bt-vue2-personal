@@ -877,7 +877,7 @@ if (!CIQ.Studies) {
 				CIQ.Studies.drawHorizontal(stx, sd, null, showSupLine, yAxis);
 			},
             calculateFN: CIQ.Studies.calculateSTROCLike,
-            inputs: { condition: "ROC",period: 21,overlay: false},
+            inputs: { Field: "field", condition: "ROC",period: 21,overlay: false},
 			// outputs: { Line: "auto",supLine:'#9a9a9a' },
 			outputs: { Line: "auto" },
         },
