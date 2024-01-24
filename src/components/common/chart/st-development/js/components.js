@@ -7656,7 +7656,7 @@ class Studies extends CIQ.UI.ContextTag {
 				this.excludedStudies[sd.name] ||
 				sd.siqList !== undefined ||
 
-				CIQ.findSentiIndicator(null,sd.name)
+				CIQ.findSentiIndicator(null,sd.name) || CIQ.isUserIndicator(sd.name) || CIQ.isOwnIndicator(sd.name)
 			){
 				continue; // siqList = ScriptIQ entry
 			}

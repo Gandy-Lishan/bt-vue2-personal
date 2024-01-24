@@ -662,12 +662,12 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"url": "Month of Year"
 						},
 						{
-							"name": "# of Consecutive Days since High (ATH)",
-							"url": "# of Consecutive Days since High (ATH)"
+							"name": "# of Consecutive Days Since All Time High (ATH)",
+							"url": "# of Consecutive Days Since All Time High (ATH)"
 						},
 						{
-							"name": "# of Consecutive Days since Low (ATL)",
-							"url": "# of Consecutive Days since Low (ATL)"
+							"name": "# of Consecutive Days Since All Time Low (ATL)",
+							"url": "# of Consecutive Days Since All Time Low (ATL)"
 						}
 					]
 				},
