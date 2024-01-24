@@ -268,6 +268,9 @@
                 <el-empty image-size="80" description="No Data"></el-empty>
             </div>
             <div class="benchmarkReturnImg">
+                <img v-if="tableData[0].equityCurveFileURL" :src="tableData[0]?.equityCurveFileURL" alt="" width="100%" />
+            </div>
+            <div class="benchmarkReturnImg">
                 <img :src="tableData[0]?.returnsFileURL" alt="" width="100%" />
             </div>
             <div class="drawDownReturnImg">
