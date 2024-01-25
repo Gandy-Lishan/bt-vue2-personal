@@ -324,15 +324,18 @@ export default {
 
       // 触发tim clear form
       this.$refs.timChild?.clearData()
+      this.$refs.maxMinChild?.clearData()
     },
     handleDownloadCsv() {
       const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, periods, defaultTIMTableLabels, defaultTableLabels} = this.$refs.timChild.exportData()
+      const {maxMinData} = this.$refs.maxMinChild.exportData()
       if (
         !(
           this.tableData.length &&
           this.tradesData.length &&
           backtestHistoryList.length &&
-          TIMHistoryList.length
+          TIMHistoryList.length &&
+          maxMinData.length
         )
       ) {
         this.popUpMsgBox('No data available for download')
@@ -468,17 +471,35 @@ export default {
           }
           _TIMHistoryList.push(zscore)
         })
+        
+        const _maxMinData = maxMinData.map(item => {
+          const transformedItem = {
+            "Dates of 1 Signals": item["Dates of 1 Signals"],
+          };
+
+          Object.keys(item).forEach(key => {
+            if (key !== "Dates of 1 Signals" && key !== "Max Gain" && key !== "Min Loss") {
+              Object.keys(item[key]).forEach(subKey => {
+                transformedItem[`${key} - ${subKey}`] = item[key][subKey];
+              });
+            }
+          });
+
+          return transformedItem;
+        });
       const dataList = [
         summary,
         mergedData,
         _backtestHistoryList,
-        _TIMHistoryList
+        _TIMHistoryList,
+        _maxMinData
       ]
       const sheetNames = [
         'Summary',
         'Trades',
         'Exit with default Time Frame',
-        'Exit with Customized TIM'
+        'Exit with Customized TIM',
+        'Max Min'
       ]
       this.exportDataToCSV(dataList, sheetNames)
     },
