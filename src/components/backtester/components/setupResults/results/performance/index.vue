@@ -41,6 +41,18 @@
           :rowFrequency="rowFrequency"
         ></TIM>
 			</el-tab-pane>
+      <el-tab-pane
+				label="Max Gain and Loss"
+				name="forth"
+			>
+        <MaxMin
+          ref="maxMinChild"
+          :tradesData="tradesData"
+          :tradePrice="tradePrice"
+          :editBacktestID="editBacktestID"
+          :rowFrequency="rowFrequency"
+        ></MaxMin>
+			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
 		</el-tabs>
 	</div>
@@ -53,6 +65,7 @@ import { seeReport } from '@/service/service'
 import Summary from './summary'
 import Trades from './trades'
 import TIM from './tim'
+import MaxMin from './MaxMin'
 const XLSX = require('xlsx');
 
 export default {
@@ -61,6 +74,7 @@ export default {
     Summary,
     Trades,
     TIM,
+    MaxMin
   },
   data() {
     return {
@@ -207,6 +221,7 @@ export default {
                   // 这里访问prepareData，确保子组件内的tradesData已经更新
                   const datatime = new Date(initalData['basic']['start_date'])
                   this.$refs.timChild.prepareData(row.id,datatime)
+                  this.$refs.maxMinChild.prepareData(row.id,datatime)
                 });
               }
               // ------------------------------ end -----------------------------------
