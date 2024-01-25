@@ -222,4 +222,10 @@ body .ta_markers-ui {
 	background-color: rgb(216 30 6) !important;
 	background-position: -20px -20px !important;
 }
-
+.stx-marker.highlowline .stx-visual {
+	border-radius: 50% !important;
+	width: 8px !important;
+	height: 8px !important;
+	background-color: #5B9BD1 !important;
+	background-position: -16px -16px !important;
+}
