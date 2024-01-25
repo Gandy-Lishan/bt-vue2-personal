@@ -252,7 +252,7 @@ CIQ.createOneTimeScannerMarkerHighLowLine = function(date,name,pionts){
 				y:yAxis,
 				x: quote.DT,
 				label: "dot",
-				node: new CIQ.Marker.STSimple({
+				node: new CIQ.Marker.stPerformance({
 					type: "circle",
 					category: 'highlowline',
 					displayCategory: false,
