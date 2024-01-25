@@ -2158,6 +2158,15 @@ export default {
           self.file_hash = hash
           const rows = content.trim().split('\n')
           const headers = rows[0].trim().split(',')
+          const lines = content.split('\n')
+          // 获取 CSV 文件的字段顺序
+          const fieldOrder = lines[0].trim().split(',')
+          const isOrdered = this.validateCSVFieldOrder(fieldOrder)
+          if (!isOrdered) {
+            CIQ.hideCover()
+            CIQ.nprogress.done()
+            return reject(new Error('CSV field order is incorrect.'))
+          }
 
           // 判断表头和表内容是否都存在
           if (
@@ -2167,12 +2176,14 @@ export default {
             isNotEmpty = false
           }
           // 使用 PapaParse 解析 CSV 文件内容
+          const errorRow = []
           const result = Papa.parse(content, {
             header: true, // 指定是否将第一行作为字段名
             skipEmptyLines: true,
             trimHeaders: true, // 去除表头中每个字段的空格
             trimRows: true, // 去除数据行中每个字段的空格
             step: function (row) {
+              const error = {}
               const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/
               const dateColumnIndex = 'Date'
               for (const key in row.data) {
@@ -2182,21 +2193,28 @@ export default {
               }
               // const trimmedRow = row.data.map((value) => value.trim())
               const dateCell = row.data[dateColumnIndex]
-              const numFormatRegex = /^\d+(\.\d{1,})?$/
+              const numFormatRegex = /^-?\d+(\.\d{1,})?$/
               const numColumnIndex = 'Close' // Change this to the index of the column you want to check
               const numCell = row.data[numColumnIndex]
               if (!dateFormatRegex.test(dateCell)) {
                 console.log('日期格式校验失败', dateCell)
+                error.Date = dateCell
+                error.Close = numCell
                 isDateFormat = false
+                errorRow.push(error)
                 // parser.pause()
                 return
               }
               if (!numFormatRegex.test(numCell)) {
                 console.log('数字格式校验失败')
+                error.Date = dateCell
+                error.Close = numCell
+                errorRow.push(error)
                 isNumFormat = false
                 // parser.pause()
                 return
               }
+              errorRow.push(error)
               self.csvContent.push(row)
               // parser.resume()
             },
@@ -2207,14 +2225,8 @@ export default {
               reject(error)
             }
           })
-          // 获取解析结果
-          const data = result.data
           // 进行字段校验
-          const isVerified = this.validateFields(data)
-          const lines = content.split('\n')
-          // 获取 CSV 文件的字段顺序
-          const fieldOrder = lines[0].trim().split(',')
-          const isOrdered = this.validateCSVFieldOrder(fieldOrder)
+          const isVerified = this.validateFields(errorRow)
           if (
             isVerified &&
             isOrdered &&
@@ -2239,11 +2251,11 @@ export default {
             CIQ.nprogress.done()
             this.$notify.warning({
               title: 'Tips',
-              message: 'The uploaded CSV file is empty. Please check if the table header and table content are present.',
+              message: 'Uploaded CSV file is empty. Ensure table header and content are present.',
               duration: 0
             });
             return reject(
-              new Error('The uploaded CSV file is empty. Please check if the table header and table content are present.')
+              new Error('Uploaded CSV file is empty. Ensure table header and content are present.')
             )
           }
           if (!isVerified) {
@@ -2251,22 +2263,17 @@ export default {
             CIQ.nprogress.done()
             return reject(new Error('CSV field validation failed.'))
           }
-          if (!isOrdered) {
-            CIQ.hideCover()
-            CIQ.nprogress.done()
-            return reject(new Error('CSV field order is incorrect.'))
-          }
           if (!isDateFormat) {
             CIQ.hideCover()
             CIQ.nprogress.done()
             this.$notify.warning({
               title: 'Tips',
-              message: 'The Date column data format in the file is incorrect. It should be in yyyy-MM-dd format, for example: 2023-04-20.',
+              message: 'Date column in the file has an incorrect format. It should be in yyyy-MM-dd format, like 2023-04-20.',
               duration: 0
             });
             return reject(
               new Error(
-                `The Date column data format in the file is incorrect. It should be in yyyy-MM-dd format, for example: 2023-04-20.`
+                `Date column in the file has an incorrect format. It should be in yyyy-MM-dd format, like 2023-04-20.`
               )
             )
           }
@@ -2275,12 +2282,12 @@ export default {
             CIQ.nprogress.done()
             this.$notify.warning({
               title: 'Tips',
-              message: 'The Close column data format in the file is incorrect. It should be a number, for example: 45.55.',
+              message: 'Close column in the file has an incorrect format. It must be a numerical value, such as 45.55.',
               duration: 0
             });
             return reject(
               new Error(
-                `The Close column data format in the file is incorrect. It should be a number, for example: 45.55.`
+                `Close column in the file has an incorrect format. It must be a numerical value, such as 45.55.`
               )
             )
           }
@@ -2288,21 +2295,36 @@ export default {
         reader.readAsText(file)
       })
     },
-    validateFields(data) {
-      // 在这里进行字段校验
-      // 可以遍历解析后的数据对象数组，对每一行的字段进行校验
-      // 如果有错误，将错误信息存储到一个数组中，并返回
-      const errors = []
-      data.forEach((row, index) => {
-        if (!row.Date || !row.Close) {
-          errors.push(`Field validation failed for row ${index + 1}.`)
-        }
-      })
-      if (errors.length > 0) {
-        // 如果有错误，显示错误信息
+    validateFields(_data) {
+      const data = _data.filter(item => Object.keys(item).length)
+      if (data.length > 0) {
+        // 如果有错误，显示错误信息 生成表格行的 HTML
+        const tableRows = data.map(item => `
+          <tr>
+            <td>${item.Date}</td>
+            <td>${item.Close}</td>
+          </tr>
+        `).join('');
+
+        // 生成完整的 HTML 片段，包括表头和动态生成的行
+        const tableHTML = `
+          <div>
+            <p>Data format is wrong in these rows. Correct before re-uploading.</p>
+            <table border="1" style="width: 100%; text-align: center">
+              <tr>
+                <th>Date</th>
+                <th>Close</th>
+              </tr>
+              ${tableRows}
+            </table>
+          </div>
+        `;
+
+        // 使用 $message 显示 HTML
         this.$notify.warning({
-          title: 'Tips',
-          message: 'Field name validation failed.',
+          title: 'Incorrect Data Format in Rows',
+          dangerouslyUseHTMLString: true,
+          message: tableHTML,
           duration: 0
         });
         return false
@@ -2324,6 +2346,14 @@ export default {
           this.$notify.warning({
             title: 'Tips',
             message: 'Field order validation failed.',
+            duration: 0
+          });
+          return false
+        }
+        if(currentIndex == -1 || nextIndex == -1) {
+          this.$notify.warning({
+            title: 'Tips',
+            message: 'File header is missing or incorrect. It should be: [Date, Close].',
             duration: 0
           });
           return false
