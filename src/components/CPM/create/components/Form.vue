@@ -290,14 +290,14 @@
 	>
   <el-form-item>
       <el-row :gutter="20" type="flex" justify="center">
-        <el-col :span="8"></el-col>
-        <el-col :span="8">
+        <el-col :span="6"></el-col>
+        <el-col :span="12">
           <div class="form-btn">
-            <!-- <el-button type="primary" class="delete-btn">Preview the found KLine</el-button> -->
+            <el-button type="primary" class="delete-btn" @click="resetForm">Create New Backtest Pattern</el-button>
             <el-button type="primary" @click="submitForm" :loading="btnLoading">Backtest Pattern</el-button>
           </div>
         </el-col>
-        <el-col :span="8"></el-col>
+        <el-col :span="6"></el-col>
       </el-row>
     </el-form-item>
   </el-form>
@@ -342,7 +342,7 @@ export default {
         corr_per: 90,
         tim: 21,
         year: '',
-        exclude_overlap: false,
+        exclude_overlap: true,
         direction: 'Long',
         bars_num: 0,
       },
@@ -480,6 +480,28 @@ export default {
     this.generateCPMName()
   },
   methods: {
+    resetForm() {
+      const resetData = {
+        lookback_period: 20,
+        corr_per: 90,
+        direction: 'Long',
+        tim: 21,
+        symbol: 'SPX',
+        timeframe: 'Daily',
+      }
+      this.setBacktestHistory(10)
+      this.generateCPMName()
+      this.calculateBarDistance()
+      this.rowUrl = null
+      this.data = {
+        ...this.data,
+        ...resetData
+      }
+      const formRef = ['BasicForm', 'PreviewForm', 'BacktestForm']
+      formRef.forEach(ref => {
+      this.$refs[ref].clearValidate()
+      })
+    },
     calculateBarDistance() {
       this.data.bars_num = CIQ.measureBarDistance(this.data.start_date,this.data.end_date)
     },
@@ -804,9 +826,9 @@ export default {
   padding: 20px 20px 0px 20px;
 }
 .form-btn {
-  // display: flex;
-  // align-items: center;
-  // justify-content: flex-end;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-top: 16px;
 }
 .symbol-url{
