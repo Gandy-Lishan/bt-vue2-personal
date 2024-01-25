@@ -385,7 +385,7 @@ export default {
         const entryData = tradeData[i];
         const exitData = tradeData[i + 1] || {}; // 确保后面有对象或使用一个空对象
         // 转换日期格式
-        const formatEntryDate = new Date(entryData['Trade Date']).replaceAll('-','/')
+        const formatEntryDate = entryData['Trade Date'].replaceAll('-','/')
         const formatExitDate = exitData['Trade Date'] ? exitData['Trade Date'].replaceAll('-','/') : '';
         mergedData.push({
           'Entry Date': formatEntryDate,
