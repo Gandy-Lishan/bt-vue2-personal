@@ -80,7 +80,7 @@ export const createEOEPValidate = (value) => {
 export const createPositiveIntegerValidate = value => {
 	// 给 Time In Market 和 exclude 用
 	const pattern = /^\d+$/
-	const isPositiveInteger = isNaN(value) || value < 0 || !pattern.test(value)
+	const isPositiveInteger = isNaN(value) || value <= 0 || !pattern.test(value)
 	if (isPositiveInteger) {
 		return `Enter positive integers only.`
 	}
