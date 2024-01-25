@@ -109,7 +109,7 @@
 				  :sort-orders="['ascending', 'descending', l.value]"
 				>
 					<template slot-scope="scope">
-						<p class="tableText" v-if="!isNaN(scope.row[l.value])">
+						<p class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
 							{{ scope.row[l.value] }}%
 						</p>
             <p class="tableText" v-else>
@@ -329,7 +329,6 @@ export default {
       await this.applySort()
     }
   }
-}
 </script>
 
 <style lang="less" scoped>
