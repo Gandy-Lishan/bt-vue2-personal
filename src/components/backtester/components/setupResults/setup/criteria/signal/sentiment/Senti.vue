@@ -660,38 +660,6 @@ export default {
           [9, { name:'DrawDown %', abbr: 'DD' }],
           [10, { name:'DrawUp %', abbr: 'DU' }]
         ])
-        
-        // 判断是否已经存在完全一样条件的ROC
-        // for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        //   // 如果当前填入的是数据源为indicator的ma，则判断是否存在此同条件ROC
-        //   const sd = CIQ.stxx.layout.studies
-        //   if(indicator_url_with_ma){
-        //     if(
-        //       (indicator_url_with_ma.indexOf(sd[studyInstanceName].inputs.Field) == 0 || (sd[studyInstanceName].inputs.Field?sd[studyInstanceName].inputs.Field.indexOf(indicator_url_with_ma) == 0:false)) &&
-        //       sd[studyInstanceName].inputs.period == this.senti.conditionPeriod &&
-        //       sd[studyInstanceName].inputs.condition == conditionMap.get(this.senti.newCondition).abbr
-        //     ){ 
-        //       for (var p in CIQ.stxx.panels) {
-        //         if(CIQ.stxx.panels[p].name == studyInstanceName){
-        //           CIQ.stxx.panels[p].hidden = true;
-        //         }
-        //       }
-        //     }
-        //   }else{
-        //   // 如果当前填入的是数据源为indicator，则判断是否存在此同条件ROC
-        //     if ((sd[studyInstanceName].inputs.Field == indicator_url && sd[studyInstanceName].type != 'ST MA') &&
-        //       sd[studyInstanceName].inputs.period == this.senti.conditionPeriod &&
-        //       sd[studyInstanceName].inputs.condition == conditionMap.get(this.senti.newCondition).abbr
-        //     ) {
-        //       for (var p in CIQ.stxx.panels) {
-        //         if(CIQ.stxx.panels[p].name == studyInstanceName){
-        //           console.log(CIQ.stxx.panels[p].name)
-        //           CIQ.stxx.panels[p].hidden = true;
-        //         }
-        //       }
-        //     }
-        //   }
-        // }
 
         const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
@@ -714,9 +682,12 @@ export default {
     // 处理用户自定义indicator的显示名
     rocDisplayName(field) {
       let display = field
-      if(CIQ.isOwnIndicator(field) || CIQ.isUserIndicator(field)){
-        display = field.split(/CREATE/)[0]
-      }
+			if(CIQ.isOwnIndicator(field)){
+				display = field.split(/CREATE/)[0]
+			}
+			if(CIQ.isUserIndicator(field)){
+				display = field.split(/HASH/)[0]
+			}
       return display
     },
     setPeriod(val) {

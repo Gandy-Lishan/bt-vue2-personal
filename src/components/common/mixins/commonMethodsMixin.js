@@ -534,9 +534,11 @@ export const CommonMethodsMixin = {
 			let indicator_url = ''
 			let indicator_url_with_ma = ''
 			let fieldName = ''
-			if (analysis == 'Sentiment') {
+
+			if (analysis == 'Sentiment' || analysis == 'User') {
 				let signal = CIQ.findSentiIndicator(indicator)
-				indicator_url = signal.url
+				// 是senti则为senti url, 反之为User的name
+				indicator_url = signal?signal.url:indicator
 			}
 
 			if (indicator_url && analysis === 'Sentiment') {
@@ -557,22 +559,47 @@ export const CommonMethodsMixin = {
 						}
 					}
 				}
+			} else if (indicator_url && analysis === 'User') {
+				// 考虑到User自定义的indicator_url是name,所以需要和senti区分开判断
+				for (const studyInstanceName in CIQ.stxx.layout.studies) {
+					const url = CIQ.stxx.layout.studies[studyInstanceName].inputs.Field
+					let field
+					if(url && url.indexOf('CREATE') != -1) field = url.split(/CREATE/)[0]
+					if(url && url.indexOf('HASH') != -1) field = url.split(/HASH/)[0]
+					if (
+						field == indicator_url &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria ==
+							criteria &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.index ==
+							panelIndex
+					) {
+						if (CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
+							indicator_url_with_ma = Object.keys(
+								CIQ.stxx.layout.studies[studyInstanceName].outputMap
+							)[0]
+							break
+						}
+					}
+				}
 			} else if (indicator && analysis === 'Symbol') {
 				const symbolCond = CIQ.findSymbolIndicator(indicator, null)
 				fieldName = symbolCond ? symbolCond.field : ''
 			}
 
 			for (const studyInstanceName in CIQ.stxx.layout.studies) {
+				// 判断 senti,user
 				const f1 =
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field ==
 						indicator_url_with_ma ||
 					(CIQ.stxx.layout.studies[studyInstanceName].inputs.Field ==
 						indicator_url &&
 						CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA')
+				// 判断 symbol
 				const f2 =
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field ==
 						fieldName &&
 					CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA'
+				// 判断 condition
 				const fc =
 					CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria ==
 						criteria &&
@@ -586,58 +613,13 @@ export const CommonMethodsMixin = {
 				}
 			}
 
-        // 判断是否已经存在完全一样条件的ROC
-        // for (var studyInstanceName in CIQ.stxx.layout.studies) {
-		// 	// 如果当前填入的是数据源为indicator的ma，则判断是否存在此同条件ROC
-		// 	const sd = CIQ.stxx.layout.studies
-		// 	if(indicator_url_with_ma){
-		// 	  if(
-		// 		(indicator_url_with_ma.indexOf(sd[studyInstanceName].inputs.Field) == 0 || (sd[studyInstanceName].inputs.Field?sd[studyInstanceName].inputs.Field.indexOf(indicator_url_with_ma) == 0:false)) &&
-		// 		sd[studyInstanceName].inputs.period == conditionPeriod &&
-		// 		sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
-		// 	  ){ 
-		// 		for (var p in CIQ.stxx.panels) {
-		// 		  if(CIQ.stxx.panels[p].name == studyInstanceName){
-		// 			CIQ.stxx.panels[p].hidden = true;
-		// 		  }
-		// 		}
-		// 	  }
-		// 	}else if(fieldName){
-		// 	  if ((sd[studyInstanceName].inputs.Field == fieldName && sd[studyInstanceName].type != 'ST MA') &&
-		// 		sd[studyInstanceName].inputs.period == conditionPeriod &&
-		// 		sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
-		// 	  ) {
-		// 		for (var p in CIQ.stxx.panels) {
-		// 		  if(CIQ.stxx.panels[p].name == studyInstanceName){
-		// 			CIQ.stxx.panels[p].hidden = true;
-		// 		  }
-		// 		}
-		// 	  }
-		// 	}
-		// 	else{
-		// 	// 如果当前填入的是数据源为indicator，则判断是否存在此同条件ROC
-		// 	  if ((sd[studyInstanceName].inputs.Field == indicator_url && sd[studyInstanceName].type != 'ST MA') &&
-		// 		sd[studyInstanceName].inputs.period == conditionPeriod &&
-		// 		sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
-		// 	  ) {
-		// 		for (var p in CIQ.stxx.panels) {
-		// 		  if(CIQ.stxx.panels[p].name == studyInstanceName){
-		// 			console.log(CIQ.stxx.panels[p].name)
-		// 			debugger
-		// 			CIQ.stxx.panels[p].hidden = true;
-		// 		  }
-		// 		}
-		// 	  }
-		// 	}
-		//   }
-
 		  	const field = fieldName ||
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
 				'ST ROCLike',
 				{
-					display: `${conditionMap.get(newCondition).name}(${field}, ${conditionPeriod})`,
+					display: `${conditionMap.get(newCondition).name}(${this.rocDisplayName(field)}, ${conditionPeriod})`,
 					Field: field,
 					condition: conditionMap.get(newCondition).abbr,
 					period: conditionPeriod
@@ -648,12 +630,21 @@ export const CommonMethodsMixin = {
 					index: panelIndex
 				}
 			)
-
 			this.hideDuplicateROC()
 
 			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 		},
-
+		// 处理用户自定义indicator的显示名
+		rocDisplayName(field) {
+			let display = field
+			if(CIQ.isOwnIndicator(field)){
+				display = field.split(/CREATE/)[0]
+			}
+			if(CIQ.isUserIndicator(field)){
+				display = field.split(/HASH/)[0]
+			}
+			return display
+		},
 		hideDuplicateROC(){
 			// 隐藏重复的ROC
 			for (var p in CIQ.stxx.panels) {
@@ -700,7 +691,7 @@ export const CommonMethodsMixin = {
 				if (item)
 					return {
 						...item,
-						isROCLike: 5 <= item.newCondition && item.newCondition <= 9
+						isROCLike: 5 <= item.newCondition && item.newCondition <= 10
 					}
 				return null
 			})	
