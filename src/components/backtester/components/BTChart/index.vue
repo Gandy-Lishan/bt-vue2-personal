@@ -61,14 +61,8 @@ export default {
 	methods: {
     	...mapMutations('chart', ['SET_CHART_READY_STATE']),
 		async onChartReady() {
-			this.overrideStudyDef()
 			this.SET_CHART_READY_STATE(true)
 			CIQ.hideCover()
-		},
-		overrideStudyDef(){
-			CIQ.extend(CIQ.Studies.studyLibrary["rsi"], {
-				name: "Relative Strength Index (RSI)",
-			});
 		},
 	}
 }

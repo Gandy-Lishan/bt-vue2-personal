@@ -551,6 +551,9 @@ export default class AdvancedChartComponent extends Vue {
 			calculateFN: CIQ.Studies.calculateSTMADev,
 			inputs: { "Points Or Percent": ["Percent","Points"] },
 		});
+		CIQ.extend(CIQ.Studies.studyLibrary["rsi"], {
+			name: "Relative Strength Index (RSI)",
+		});
 	}
 
 	// 工具栏按钮移除和显示marker功能，只影响显示
