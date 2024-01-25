@@ -162,7 +162,7 @@
 				>
 					<template slot-scope="scope">
 						<p class="tableText" :class="getCellStyle(scope.row[l.value])">
-              {{ scope.row[l.value] != undefined ? `${scope.row[l.value]} %` : '' }}
+              {{ scope.row[l.value] != undefined ? `${scope.row[l.value]}%` : '' }}
 						</p>
 					</template>
 				</el-table-column>
