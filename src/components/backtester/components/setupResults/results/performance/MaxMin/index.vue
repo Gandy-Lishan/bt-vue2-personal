@@ -31,17 +31,17 @@
 										'Dates of 1 Signals',
 										'Max Gain',
 										'Min Loss'].includes(l)">
-										<el-table-column label="Max Gain" :prop="l" align="center">
+										<el-table-column label="Max Gain" align="center" width="80px">
 											<template slot-scope="scope">
-												<p class="tableText" :class="getCellStyle(scope.row['Max Gain'])">
-													{{ displayData(scope.row['Max Gain']) }}
+												<p class="tableText">
+													{{ scope.row[l]['Max Gain'] }}
 												</p>
 											</template>
 										</el-table-column>
-										<el-table-column label="Min Loss" :prop="l" align="center">
+										<el-table-column label="Min Loss" align="center" width="70px">
 											<template slot-scope="scope">
-												<p class="tableText" :class="getCellStyle(scope.row['Min Loss'])">
-													{{ displayData(scope.row['Min Loss']) }}
+												<p class="tableText">
+													{{ scope.row[l]['Min Loss'] }}
 												</p>
 												</template>
 										</el-table-column>
@@ -50,44 +50,6 @@
 								<div slot="empty" style="text-align: left">
 									<el-empty image-size="80" description="No Data"></el-empty>
 								</div>
-							</el-table>
-						</template>
-					</el-skeleton>
-				</div>
-				<hr style="height:2px;border:none;color:#333;background-color:#333;">
-				<div class="zscore-container">
-					<el-skeleton :rows="2" :loading="loading" animated>
-						<template>
-							<el-table
-								:data="result_quotes"
-								:show-header="false"
-								stripe
-								border
-								style="height: 100%; margin: 0 auto"
-							>
-								<el-table-column prop="property" label="Property"  align="center">
-								</el-table-column>
-
-								<template v-for="column in periods">
-									<el-table-column
-										:key="column.period"
-										:label="column.period"
-										:prop="column.period"
-										align="center"
-									>
-										<template slot-scope="scope">
-											<p class="tableText" :class="getCellStyle(scope.row[column.period])">
-												{{
-													!Number.isNaN(scope.row[column.period])
-														? typeof scope.row[column.period] == 'string'
-															? scope.row[column.period]
-															: parseFloat(scope.row[column.period]).toFixed(1)
-														: null
-												}}
-											</p>
-										</template>
-									</el-table-column>
-								</template>
 							</el-table>
 						</template>
 					</el-skeleton>
@@ -899,13 +861,13 @@ export default {
 			/*
       periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
       */
-      debugger
 			let chartDataset = CIQ.stxx.chart.dataSet
 			const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
 			const field = this.tradePrice
 			// dataSet = dataSet.filter((item) => item.TradeStatus == 'BUY')
 			dataSet = dataSet.filter((_, index) => index % 2 === 0)
 			let backtestResult = []
+			let returnResults = []
 
 			for (var data in dataSet) {
 				var datatime = new Date(dataSet[data].Date)
@@ -922,7 +884,6 @@ export default {
 					let entryPrice = chartDataset[res][field]
 					const transformData = this.transformData(periodArray)
 					transformData.sort((a, b) => a.value - b.value)
-					let obj = {}
 					transformData.map((item) => {
             let _timArray = []
             for (let i = 1; i <= item.value; i++) {
@@ -932,13 +893,14 @@ export default {
             const timArray = _timArray.filter(item => {
               return item !== null && item !== undefined && item !== '';
             });
-            console.log('timArray', timArray.filter(item => {return item[field]}))
+						const preTimArray = timArray.map(item => item[field])
+            console.log('timArray', timArray)
             
             const calculateReturn = (item, entryPrice) => {
-              const value = item[field];
+              const value = item;
               if (value !== undefined && value !== null) {
                 const percentageReturn = ((value / entryPrice - 1) * 100).toFixed(2);
-                return Math.max(0, parseFloat(percentageReturn)); // Ensure non-negative value
+                return parseFloat(percentageReturn) // Ensure non-negative value
               }
               return '';
             };
@@ -947,30 +909,55 @@ export default {
               return arr.reduce(comparator, arr[0]);
             };
 
-            const maxItem = findExtremeItem(timArray, (max, current) =>
-              current[field] > max[field] ? current : max
+            const maxItem = findExtremeItem(preTimArray, (max, current) =>
+              current > max ? current : max
             );
 
-            const minItem = findExtremeItem(timArray, (min, current) =>
-              current[field] < min[field] ? current : min
+            const minItem = findExtremeItem(preTimArray, (min, current) =>
+              current < min ? current : min
             );
 
-            console.log('最大的项', maxItem);
-            console.log('最小的项', minItem);
-
-            const maxReturn = calculateReturn(maxItem, entryPrice);
-            const minReturn = calculateReturn(minItem, entryPrice);
+            const maxReturn = maxItem < entryPrice ? 0 : calculateReturn(maxItem, entryPrice);
+            const minReturn = minItem > entryPrice ? 0 : calculateReturn(minItem, entryPrice);
 
             let [finalMaxReturn, finalMinReturn] = direction === 'Short' ? [-minReturn, -maxReturn] : [maxReturn, minReturn]
 
-						obj[`${item.timeframe}`] =  item.timeframe
-						obj[`Max Gain`] =  finalMaxReturn
-						obj[`Min Loss`] =  finalMinReturn
+						returnResults.push({
+							[`${item.timeframe}`]:item.timeframe,
+							'Max Gain':finalMaxReturn,
+							'Min Loss':finalMinReturn,
+							'Dates of 1 Signals': dataSet[data].Date
+						})
 					})
-					backtestResult.push({ 'Dates of 1 Signals': dataSet[data].Date, ...obj })
+					backtestResult.push({ 'Dates of 1 Signals': dataSet[data].Date })
 				}
 			}
-			return backtestResult
+			const mergedData = {};
+
+			returnResults.forEach(entry => {
+				const key = entry["Dates of 1 Signals"];
+
+				if (!mergedData[key]) {
+					mergedData[key] = { "Dates of 1 Signals": key };
+				}
+
+				Object.keys(entry).forEach(prop => {
+					if (prop !== "Dates of 1 Signals") {
+						if (!mergedData[key][prop]) {
+							mergedData[key][prop] = {};
+						}
+						mergedData[key][prop] = {
+							"Max Gain": entry["Max Gain"],
+							"Min Loss": entry["Min Loss"],
+						};
+					}
+				});
+			});
+
+			const finalData = Object.values(mergedData);
+
+			console.log('finalData', finalData);
+			return finalData
 		},
 		transformZScoreData(data) {
 			data = data.map((item) => {
