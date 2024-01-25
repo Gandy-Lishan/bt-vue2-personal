@@ -618,7 +618,6 @@ export default {
     },
     calculateNewConditions() {
       if (!this.isROCLike) return
-      
       let indicator_url = this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex]
       let indicator_url_with_ma = ''
       if (indicator_url) {
@@ -696,7 +695,7 @@ export default {
 
         const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-          display: `${conditionMap.get(this.senti.newCondition).name}(${field}, ${this.senti.conditionPeriod})`,
+          display: `${conditionMap.get(this.senti.newCondition).name}(${this.rocDisplayName(field)}, ${this.senti.conditionPeriod})`,
           Field: field,
           condition: conditionMap.get(this.senti.newCondition).abbr,
           period: this.senti.conditionPeriod
@@ -711,6 +710,14 @@ export default {
         // 解决附属ma或者roc漂移问题
         CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
       }
+    },
+    // 处理用户自定义indicator的显示名
+    rocDisplayName(field) {
+      let display = field
+      if(CIQ.isOwnIndicator(field) || CIQ.isUserIndicator(field)){
+        display = field.split(/CREATE/)[0]
+      }
+      return display
     },
     setPeriod(val) {
       var stma_color = ["#bfad94","#b07858","#a14516","#6f3516","#402818"]

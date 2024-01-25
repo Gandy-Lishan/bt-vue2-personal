@@ -8034,9 +8034,9 @@ if (!CIQ.Studies) {
 
 			let _obj = CIQ.findSentiIndicator(null,this.helper.name)
 			let _obj2 = CIQ.findBuiltinTechIndicator(null,this.helper.name)
-			// if(_obj2){	
-			// 	return
-			// }
+			let userIndicator = CIQ.isUserIndicator(this.helper.name)
+			let ownIndicator = CIQ.isOwnIndicator(this.helper.name)
+
 			// --------************----------
 			this.addDefaultMarkup();
 			this.selectTemplates();
@@ -8063,13 +8063,17 @@ if (!CIQ.Studies) {
 
 			var dialog = this.node;
 
+			// 根据indicator类型条件调整Title
 			if(_obj){		
 				dialog.find(".title").text(_obj.chart_name)		
 			}else if(_obj2){	
 				dialog.find(".title").text(_obj2.value);	
 			}else if(this.helper.name == "ST ROCLike"){		// 因为roc类型condition在study里面只注册了一个，所以需要判断显示title
 				dialog.find(".title").text(params.inputs.display);	
-			}else{
+			}else if(userIndicator || ownIndicator) {
+				dialog.find(".title").text(params.inputs.display);	
+			}
+			else{
 				dialog.find(".title").text(this.helper.title);
 			}
 
@@ -8084,10 +8088,13 @@ if (!CIQ.Studies) {
 		}
 
 		refreshInputs(empty) {
+			// 根据indicator类型条件隐藏对应输入框
 			let _obj = CIQ.findSentiIndicator(null,this.helper.name)
 			let _obj2 = CIQ.findBuiltinTechIndicator(null,this.helper.name)
 			let _obj3 = CIQ.findSymbolIndicator(this.helper.name,null)
-			if(_obj){
+			let userIndicator = CIQ.isUserIndicator(this.helper.name)
+			let ownIndicator = CIQ.isOwnIndicator(this.helper.name)
+			if(_obj || userIndicator || ownIndicator){
 				this.helper.inputs = [];
 			}
 			else if(_obj2){
@@ -8114,6 +8121,15 @@ if (!CIQ.Studies) {
 				//this.helper.inputs = [];
 			}
 			else if(_obj3){
+				var inputs = [];
+				for (var i = 0;i < this.helper.inputs.length; i++){
+					if (this.helper.inputs[i].heading != 'Field'){
+						inputs.push(this.helper.inputs[i])
+					}
+				}
+				this.helper.inputs = inputs;
+			}
+			else if(this.helper.name == "ST ROCLike"){
 				var inputs = [];
 				for (var i = 0;i < this.helper.inputs.length; i++){
 					if (this.helper.inputs[i].heading != 'Field'){
@@ -8201,8 +8217,11 @@ if (!CIQ.Studies) {
 		}
 
 		refreshOutputs(empty) {
+			// 根据indicator类型条件隐藏对应输出框
 			let _obj = CIQ.findSentiIndicator(null,this.helper.name)
-			if(_obj){
+			let userIndicator = CIQ.isUserIndicator(this.helper.name)
+			let ownIndicator = CIQ.isOwnIndicator(this.helper.name)
+			if(_obj || userIndicator || ownIndicator){
 				this.helper.outputs = [];
 			}
 			//this.helper.outputs = this.helper.outputs.filter(x=>x.name != "supLine")
