@@ -123,7 +123,7 @@
       >
         <el-input v-model="data.bars_num" :disabled="true">
           <template v-slot:append>
-            (≥1 and ≤252)
+            (≥3 and ≤252)
           </template>
         </el-input>
       </el-form-item>
@@ -134,6 +134,7 @@
             v-model="data.timeframe"
             placeholder="— Select Timeframe —"
             @change="changeTimeframe"
+            :disabled="previewBtnLoading || btnLoading"
           >
             <el-option
               v-for="item in frequencyOptions"
@@ -325,8 +326,8 @@ export default {
   },
   data() {
     var validateBarsNum = (rule, value, callback) => {
-        if (value < 1 || value > 252) {
-          return callback(new Error('The number of bars should be between 1 and 252, please change your condition.'));
+        if (value < 3 || value > 252) {
+          return callback(new Error('The number of bars should be between 3 and 252, please change your condition.'));
         } else {
           callback();
         }
@@ -432,7 +433,7 @@ export default {
           { validator: createVerifyValueInListRule(JSON.parse(localStorage.getItem('symbolList')), 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'change' },
         ],
         tim: [
-          { validator: createPositiveIntegerRule('time in market'), trigger: 'blur' }
+          { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' }
         ],
         start_date: [
         { required: true, message: 'Select start date', trigger: 'blur' },
@@ -545,12 +546,13 @@ export default {
       this.data.start_date = timestampToTime(startDate);
     },
     handleDisabledStartDate(time) {
+      const today = timestampToTime(new Date())
       const endDay = timestampToTime(new Date(this.data.end_date))
       // 如果endDate取消选择，则startDate可以选择全部
       if(this.data.end_date){
-        return timestampToTime(time) > endDay
+        return timestampToTime(time) >= endDay
       }else{
-        return false
+        return (timestampToTime(time) > today)
       }
     },
     handleDisabledEndDate(time) {
@@ -614,11 +616,12 @@ export default {
       if(code == 404 || code == 403) this.popUpMsgBox('Save failed, Please try again')
       if(code == 406) {
         const name =  this.data.name
-        this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another.`)
+        this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('No CPM meeting the criteria found.')
+      if(code == 407) this.popUpMsgBox('No CPM meeting the criteria found')
       this.changeLoadingStatus('preview',false)
       if(code == 200 && previewRes.status == 200) {
+        this.popUpMsgBox('Pattern preview successful.')
         //将数据显示在 chartIQ 上
         let CPMObj = {
           symbol: this.data.symbol,
@@ -648,12 +651,13 @@ export default {
       if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again'); return}
       if(code == 406) {
         const name =  saveRes.data.data.name
-        this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another.`)
+        this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('No CPM meeting the criteria found.')
+      if(code == 407) this.popUpMsgBox('No CPM meeting the criteria found')
       this.changeLoadingStatus('backtest',false)
       if(saveRes.status == 201) {
         this.changeLoadingStatus('backtest',false)
+        this.popUpMsgBox('Pattern backtest successful')
         const result = saveRes.data.result
         saveRes.data.result = isJson(result) ? JSON.parse(result) : result
         //将数据显示在 chartIQ 上
@@ -684,7 +688,7 @@ export default {
 
     },
     async previewCPM() {
-      if(this.barDistance < 4) {this.popUpMsgBox('Bars must be 4 or more. Adjust the Pattern Start and End Dates accordingly');return}
+      if(this.barDistance < 3) {this.popUpMsgBox('Bars must be 3 or more. Adjust the Pattern Start and End Dates accordingly');return}
       this.$refs['BacktestForm'].clearValidate()
       const validForm = await this.validForm(['BasicForm', 'PreviewForm'])
       if(!validForm) {return}
@@ -695,7 +699,7 @@ export default {
         ...this.data,
         exclude_overlap,
         direction: 'Long',
-        lookback_period: 'All',
+        lookback_period: 10,
         tim: 21
       }
       delete saveData.year
@@ -703,7 +707,7 @@ export default {
     },
     async saveCPM() {
       // const validForm = this.validForm()
-      if(this.barDistance < 4) {this.popUpMsgBox('Bars must be 4 or more. Adjust the Pattern Start and End Dates accordingly');return}
+      if(this.barDistance < 3) {this.popUpMsgBox('Bars must be 3 or more. Adjust the Pattern Start and End Dates accordingly');return}
       const validForm = await this.validForm(['BasicForm', 'PreviewForm', 'BacktestForm']);
       console.log('表单是否验证成功', validForm)
       const rowUrl = this.rowUrl
