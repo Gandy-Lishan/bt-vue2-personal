@@ -490,13 +490,13 @@ export default {
         symbol: 'SPX',
         timeframe: 'Daily',
       }
-      this.setBacktestHistory(10)
-      this.generateCPMName()
       this.rowUrl = null
       this.data = {
         ...this.data,
         ...resetData
       }
+      this.setBacktestHistory(10)
+      this.generateCPMName()
       const formRef = ['BasicForm', 'PreviewForm', 'BacktestForm']
       formRef.forEach(ref => {
       this.$refs[ref].clearValidate()

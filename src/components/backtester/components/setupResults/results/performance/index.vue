@@ -109,6 +109,7 @@ export default {
           let id = row.id
           vm.activePerTag = 'first'
           vm.rowFrequency = row.frequency
+          vm.tradePrice = row.trade_price == 0 ? 'Open' : 'Close'
           try {
             let res = null
             try {
@@ -131,7 +132,7 @@ export default {
               }
 
               // -------------------------------------  start ----------------
-              this.tradePrice = initalData['basic']['trade_price'] == 0 ? 'Open' : 'Close'// tim数据计算依赖backtester创建时选择的tradePrice类别，如Close/Open
+              // this.tradePrice = initalData['basic']['trade_price'] == 0 ? 'Open' : 'Close'// tim数据计算依赖backtester创建时选择的tradePrice类别，如Close/Open
 
               const tradeReturn = initalData['Each Return']
               const exitReason = initalData['Exit Reason'] ? initalData['Exit Reason'] : []
@@ -478,7 +479,7 @@ export default {
           };
 
           Object.keys(item).forEach(key => {
-            if (key !== "Dates of 1 Signals" && key !== "Max Gain" && key !== "Min Loss") {
+            if (key !== "Dates of 1 Signals" && key !== "Max Gain" && key !== "Max Loss") {
               Object.keys(item[key]).forEach(subKey => {
                 transformedItem[`${key} - ${subKey}`] = item[key][subKey];
               });
@@ -499,7 +500,7 @@ export default {
         'Trades',
         'Exit with default Time Frame',
         'Exit with Customized TIM',
-        'Max Min'
+        'Max Gain and Loss'
       ]
       this.exportDataToCSV(dataList, sheetNames)
     },
