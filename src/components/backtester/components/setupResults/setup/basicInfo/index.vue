@@ -988,6 +988,7 @@ export default {
     },
     getTradePrice(val) {
       this.$store.commit('form/SET_TRADE_PRICE', val)
+      this.$store.commit('form/SET_CACHED_SCOPED_ROW_IMMUTABLE_PROPS', {key: 'trade_price', value: val})
     },
     getSymbol(val) {
       this.$store.commit('form/getBacktestSymbol', val)
@@ -1003,6 +1004,7 @@ export default {
     getDirection(val) {
       // Set direction to vuex
       this.$store.commit('form/getDirection', val)
+      this.$store.commit('form/SET_CACHED_SCOPED_ROW_IMMUTABLE_PROPS', {key: 'direction', value: val})
       // Direction passed to entry and exit
     },
     setBacktestHistory(val) {

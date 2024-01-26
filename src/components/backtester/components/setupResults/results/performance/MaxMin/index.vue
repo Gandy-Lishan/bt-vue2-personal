@@ -406,6 +406,8 @@ export default {
               current < min ? current : min
             );
 
+						console.log('最大值 最小值', maxItem, minItem)
+
             const maxReturn = maxItem < entryPrice ? 0 : calculateReturn(maxItem, entryPrice);
             const minReturn = minItem > entryPrice ? 0 : calculateReturn(minItem, entryPrice);
 

@@ -651,6 +651,10 @@ const mutations = {
 	CACHED_SCOPED_ROW_IMMUTABLE(state, obj) {
 		state.cachedScopedRowDataImmutable = obj
 	},
+	SET_CACHED_SCOPED_ROW_IMMUTABLE_PROPS(state, obj) {
+		const {key, value} = obj
+		state.cachedScopedRowDataImmutable[key] = value
+	},
 	CACHED_BT_BASIC_INFO_DATA(state, obj) {
 		state.cachedBTBasicInfoData = obj
 		// 这是轮询之后保存的数据
