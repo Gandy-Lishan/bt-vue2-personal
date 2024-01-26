@@ -668,7 +668,20 @@ import {CIQ} from "chartiq/js/chartiq.js";
 						{
 							"name": "# of Consecutive Days Since All Time Low (ATL)",
 							"url": "# of Consecutive Days Since All Time Low (ATL)"
+						},
+						{
+							"name": "# of Consecutive Days Up",
+							"url": "# of Consecutive Days Up"
+						},
+						{
+							"name": "# of Consecutive Days Down",
+							"url": "# of Consecutive Days Down"
+						},
+						{
+							"name": "# of Consecutive Days Above a Moving Average",
+							"url": "# of Consecutive Days Above a Moving Average"
 						}
+						
 					]
 				},
 				{
