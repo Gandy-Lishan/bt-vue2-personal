@@ -550,6 +550,10 @@ input[type="time"] {
 {
   font-weight: 600 !important;
 }
+
+.history-container .el-table th.redHeader>.cell {
+  color: #dd3a13;
+}
 .tim-container .el-table .cell .negative-value,
  .summaryContainer .el-table .cell .negative-value,
   .historyContainer .el-table .cell .negative-value,

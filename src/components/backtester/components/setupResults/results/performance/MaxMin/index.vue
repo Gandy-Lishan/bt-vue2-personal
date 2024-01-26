@@ -19,20 +19,20 @@
 									<el-table-column :label="l"  :key="index" align="center" v-if="![
 										'Dates of 1 Signals',
 										'Max Gain',
-										'Min Loss'].includes(l)">
+										'Max Loss'].includes(l)">
+										<el-table-column label="Max Loss" align="center" width="70px" class-name="redHeader">
+											<template slot-scope="scope">
+												<p class="negative-value">
+													{{ scope.row[l]['Max Loss'] }}
+												</p>
+												</template>
+										</el-table-column>
 										<el-table-column label="Max Gain" align="center" width="80px">
 											<template slot-scope="scope">
 												<p class="tableText">
 													{{ scope.row[l]['Max Gain'] }}
 												</p>
 											</template>
-										</el-table-column>
-										<el-table-column label="Min Loss" align="center" width="70px">
-											<template slot-scope="scope">
-												<p class="tableText">
-													{{ scope.row[l]['Min Loss'] }}
-												</p>
-												</template>
 										</el-table-column>
 									</el-table-column>
 								</template>
@@ -69,7 +69,7 @@ export default {
 				'6 Months [%]',
 				'12 Months [%]',
 				'Max Gain',
-				'Min Loss'
+				'Max Loss'
 			]
 		}
 	},
@@ -131,7 +131,7 @@ export default {
 						'6 Months [%]',
 						'1 Year [%]',
 						'Max Gain',
-						'Min Loss'
+						'Max Loss'
 					]
 					break
 				case 'Weekly':
@@ -145,7 +145,7 @@ export default {
 						'6 Months [%]',
 						'1 Year [%]',
 						'Max Gain',
-						'Min Loss'
+						'Max Loss'
 					]
 					break
 				case 'Monthly':
@@ -159,7 +159,7 @@ export default {
 						'2 Years [%]',
 						'3 Years [%]',
 						'Max Gain',
-						'Min Loss'
+						'Max Loss'
 					]
 					periodArray = [
 						{ period: 1, timeframe: 'Month' },
@@ -413,8 +413,8 @@ export default {
 
 						returnResults.push({
 							[`${item.timeframe}`]:item.timeframe,
+							'Max Loss':finalMinReturn,
 							'Max Gain':finalMaxReturn,
-							'Min Loss':finalMinReturn,
 							'Dates of 1 Signals': dataSet[data].Date
 						})
 					})
@@ -435,8 +435,8 @@ export default {
 							mergedData[key][prop] = {};
 						}
 						mergedData[key][prop] = {
+							"Max Loss": entry["Max Loss"],
 							"Max Gain": entry["Max Gain"],
-							"Min Loss": entry["Min Loss"],
 						};
 					}
 				});
@@ -463,5 +463,8 @@ export default {
     position: absolute;
     top: 100px;
 		right: 5px;
+}
+.negative-value{
+  color: #dd3a13;
 }
 </style>
