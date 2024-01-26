@@ -83,6 +83,9 @@ export default {
 			favBtnContainer.style.display = 'none'
 			timeframeBtn.style.display = 'none'
 			// footer.style.display = 'none'
+
+			let menuYAxisPreferences = document.querySelector('[cq-name="menuYAxisPreferences"] :first-child')
+			menuYAxisPreferences.style.display = 'none'
 		},
 	}
 }
