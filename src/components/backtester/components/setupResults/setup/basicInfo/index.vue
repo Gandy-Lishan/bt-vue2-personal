@@ -953,12 +953,20 @@ export default {
       this.$refs.backtestSetupForm.clearValidate()
     },
     validateTP(value) {
-      this.tpValidErrMsg = createTPSLValidate(0, value)
-      return this.tpValidErrMsg
+      if(this.isTakeProfit){
+        this.tpValidErrMsg = createTPSLValidate(0, value)
+        return this.tpValidErrMsg
+      }
+      this.tpValidErrMsg = ''
+      return ''
     },
     validateSL(value) {
-      this.slValidErrMsg = createTPSLValidate(0, value)
-      return this.slValidErrMsg
+      if(this.isStopLoss){
+        this.slValidErrMsg = createTPSLValidate(0, value)
+        return this.slValidErrMsg
+      }
+      this.slValidErrMsg = ''
+      return ''
     },
     validateTIM(value) {
       this.timValidErrMsg = createPositiveIntegerValidate(value)
