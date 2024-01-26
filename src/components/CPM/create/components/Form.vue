@@ -492,7 +492,6 @@ export default {
       }
       this.setBacktestHistory(10)
       this.generateCPMName()
-      this.calculateBarDistance()
       this.rowUrl = null
       this.data = {
         ...this.data,
