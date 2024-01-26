@@ -619,7 +619,7 @@ export default {
 				Median: median_list[i],
 				'% Positive': isNaN(positive_list[i])
 					? ''
-					: Math.round(positive_list[i] * 100) + ' %',
+					: Math.round(positive_list[i] * 100) + '%',
 				'Avg Max Loss':
 					!median_list[i] && median_list[i] != 0 ? NaN : max_loss_list[i],
 				'Avg Max Gain':

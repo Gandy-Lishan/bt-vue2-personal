@@ -901,7 +901,7 @@ export default {
       const res = period_dict.map((val, i) => ({
         Period: val['timeframe'],
         Median: median_list[i],
-        '% Positive': isNaN(positive_list[i]) ? '' : Math.round(positive_list[i] * 100) + ' %',
+        '% Positive': isNaN(positive_list[i]) ? '' : Math.round(positive_list[i] * 100) + '%',
         'Avg Max Loss': median_list[i] ? max_loss_list[i] : NaN,
         'Avg Max Gain': median_list[i] ? max_gain_list[i] : NaN,
         'Z-Score': z_score_list[i]
