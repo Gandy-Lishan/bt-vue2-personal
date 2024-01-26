@@ -188,7 +188,7 @@
     :rules="rules"
 	>
   <el-row :gutter="10">
-    <el-col :span="6">
+    <el-col :span="5">
       <el-form-item prop="direction" label="8. Direction">
         <el-select
             v-model="data.direction"
@@ -204,7 +204,7 @@
           </el-select>
       </el-form-item>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="5">
       <el-form-item
 				label="9. Time In Market"
         prop="tim"
@@ -231,7 +231,7 @@
           </template></el-input>
 			</el-form-item>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="5">
       <el-form-item prop="backtestHistory" label="10. Lookback Period">
         <template slot="label">
           <label>
@@ -262,7 +262,7 @@
         </div>
       </el-form-item>
     </el-col>
-    <el-col :span="6">
+    <!-- <el-col :span="6">
       <el-row :gutter="10">
         <el-col>
           <el-form-item
@@ -277,6 +277,29 @@
           (years)
           </template></el-input>
 			</el-form-item>
+        </el-col>
+      </el-row>
+    </el-col> -->
+    <el-col :span="9">
+      <el-row :gutter="10">
+        <el-col :span="15">
+          <el-form-item
+            label="11. Custom Duration"
+            prop="year"
+            v-if="data.lookback_period == 'Custom'"
+          >
+            <el-input
+              v-model="data.year"
+              placeholder="Enter custom years"
+            ><template v-slot:append>
+              (years)
+              </template></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="9">
+          <el-form-item class="CPM-btn" label=" ">
+            <el-button type="primary" :loading="btnLoading" @click="submitForm">Backtest Pattern</el-button>
+          </el-form-item>
         </el-col>
       </el-row>
     </el-col>
@@ -294,8 +317,8 @@
         <el-col :span="6"></el-col>
         <el-col :span="12">
           <div class="form-btn">
-            <el-button type="primary" class="delete-btn" @click="resetForm">Create New Backtest Pattern</el-button>
-            <el-button type="primary" @click="submitForm" :loading="btnLoading">Backtest Pattern</el-button>
+            <!-- <el-button type="primary" class="delete-btn" @click="resetForm">Create New Correlation Backtest Pattern</el-button> -->
+            <!-- <el-button type="primary" @click="submitForm" :loading="btnLoading">Backtest Pattern</el-button> -->
           </div>
         </el-col>
         <el-col :span="6"></el-col>
@@ -873,5 +896,8 @@ export default {
 }
 .delete-btn:hover {
   background-color: rgb(251, 192, 92);
+}
+.CPM-btn {
+  width: 100%;
 }
 </style>

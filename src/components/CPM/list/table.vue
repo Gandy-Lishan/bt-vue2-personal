@@ -157,6 +157,7 @@
 			</template>
       <el-table-column align="center">
 				<template slot-scope="scope">
+        <el-button slot="reference" round size="mini" type="primary" icon="el-icon-edit" @click="handleRowClick(scope.row)"></el-button>
         <el-button class="delete-btn" slot="reference" round size="mini" type="primary" icon="el-icon-delete" @click="deleteCPM(scope.row)"></el-button>
         </template>
       </el-table-column>
