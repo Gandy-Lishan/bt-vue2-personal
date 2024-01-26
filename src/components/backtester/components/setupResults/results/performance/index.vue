@@ -478,7 +478,7 @@ export default {
           };
 
           Object.keys(item).forEach(key => {
-            if (key !== "Dates of 1 Signals" && key !== "Max Gain" && key !== "Min Loss") {
+            if (key !== "Dates of 1 Signals" && key !== "Max Gain" && key !== "Max Loss") {
               Object.keys(item[key]).forEach(subKey => {
                 transformedItem[`${key} - ${subKey}`] = item[key][subKey];
               });
@@ -499,7 +499,7 @@ export default {
         'Trades',
         'Exit with default Time Frame',
         'Exit with Customized TIM',
-        'Max Min'
+        'Max Gain and Loss'
       ]
       this.exportDataToCSV(dataList, sheetNames)
     },
