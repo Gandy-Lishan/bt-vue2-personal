@@ -71,7 +71,7 @@ export default {
 	width: 80%;
 }
 .progress-text{
-	font-size: 12px;
+	font-size: 16px;
 	color: #409eff;
 	margin-top: 10px;
 	i {

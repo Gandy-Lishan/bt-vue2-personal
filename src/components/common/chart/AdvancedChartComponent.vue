@@ -180,6 +180,7 @@
 								<cq-heading>Y-Axis Preferences</cq-heading>
 								<cq-menu-container
 									cq-name="menuYAxisPreferences"
+									ref="yAxisPreferencesMenu"
 								></cq-menu-container>
 								<cq-separator></cq-separator>
 							</cq-menu-dropdown-section>
@@ -423,7 +424,6 @@ export default class AdvancedChartComponent extends Vue {
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })		
 
 			this.initializeToggle(uiContext.stx)
-			
 			// var _this = this
 			// // 鼠标事件加入防抖节流
 			// CIQ.stxx.addEventListener("scroll", throttle(function(object: Record<string, any> = {}) {
