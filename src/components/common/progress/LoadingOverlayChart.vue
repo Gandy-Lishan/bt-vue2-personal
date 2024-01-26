@@ -42,7 +42,7 @@ export default {
 	transition: visibility .3s;
 }
 .progress-text{
-	font-size: 12px;
+	font-size: 16px;
 	color: #409eff;
 	margin-top: 10px;
 	i {
