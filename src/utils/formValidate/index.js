@@ -36,7 +36,7 @@ export const createPositiveIntegerRule = (errorMsgEmpty, minVal, maxVal) => {
 			callback(new Error(`Enter ${errorMsgEmpty}`))
 		}
 		const pattern = /^\d+$/
-		const isPositiveInteger = isNaN(value) || value < 0 || !pattern.test(value)
+		const isPositiveInteger = isNaN(value) || value <= 0 || !pattern.test(value)
 		if (isPositiveInteger) {
 			callback(new Error(`Enter positive integers only`))
 		}
