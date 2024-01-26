@@ -501,6 +501,8 @@ export default {
       formRef.forEach(ref => {
       this.$refs[ref].clearValidate()
       })
+
+      this.resetChart()
     },
     calculateBarDistance() {
       this.data.bars_num = CIQ.measureBarDistance(this.data.start_date,this.data.end_date)
@@ -515,8 +517,19 @@ export default {
       const second = date.getSeconds();
       this.data.name = this.data.symbol + '  ' + year + '-' + month + '-' + day + '  ' + hour + ':' + minute + ':' + second
     },
+    resetChart() {
+      CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
+      this.$store.commit('form/getFreqHighPriority', 'Daily')
+      this.$store.commit('form/getBacktestSymbol', "SPX")
+      CIQ.addIndicators(()=>{
+        this.calculateBarDistance()
+        CIQ.hideCover()
+        CIQ.nprogress.done()
+      })
+    },
     changeTimeframe(val) {
       CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
+      debugger
       this.$store.commit('form/getFreqHighPriority', val)
       CIQ.addIndicators(()=>{
         this.calculateBarDistance()
