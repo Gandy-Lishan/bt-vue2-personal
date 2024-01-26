@@ -58,8 +58,8 @@ export const createVerifyValueInListRule = (list, errorMsgEmpty, errorMsg) => {
 export const createTPSLValidate = (minVal, value) => {
 	// 给 Stop Loss 和 Take Profit 用
 	const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
-	const isLessThanMin = value < minVal
-	const isMatched = !pattern.test(value) && value != 0
+	const isLessThanMin = value <= minVal
+	const isMatched = !pattern.test(value)
 	if (isLessThanMin) {
 		return `Only positive numbers are allowed`
 	}

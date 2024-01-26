@@ -2613,7 +2613,7 @@ export default {
 	border-left: 1px solid #dcdfe6;
 	border-right: 1px solid #dcdfe6;
 	border-bottom: 1px solid #dcdfe6;
-	padding: 10px;
+	padding: 5px;
 }
 .indicator-form-item /deep/ .el-form-item__content {
 	line-height: 15px;

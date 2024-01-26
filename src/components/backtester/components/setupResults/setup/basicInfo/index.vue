@@ -953,12 +953,20 @@ export default {
       this.$refs.backtestSetupForm.clearValidate()
     },
     validateTP(value) {
-      this.tpValidErrMsg = createTPSLValidate(0, value)
-      return this.tpValidErrMsg
+      if(this.isTakeProfit){
+        this.tpValidErrMsg = createTPSLValidate(0, value)
+        return this.tpValidErrMsg
+      }
+      this.tpValidErrMsg = ''
+      return ''
     },
     validateSL(value) {
-      this.slValidErrMsg = createTPSLValidate(0, value)
-      return this.slValidErrMsg
+      if(this.isStopLoss){
+        this.slValidErrMsg = createTPSLValidate(0, value)
+        return this.slValidErrMsg
+      }
+      this.slValidErrMsg = ''
+      return ''
     },
     validateTIM(value) {
       this.timValidErrMsg = createPositiveIntegerValidate(value)
@@ -980,6 +988,7 @@ export default {
     },
     getTradePrice(val) {
       this.$store.commit('form/SET_TRADE_PRICE', val)
+      this.$store.commit('form/SET_CACHED_SCOPED_ROW_IMMUTABLE_PROPS', {key: 'trade_price', value: val})
     },
     getSymbol(val) {
       this.$store.commit('form/getBacktestSymbol', val)
@@ -995,6 +1004,7 @@ export default {
     getDirection(val) {
       // Set direction to vuex
       this.$store.commit('form/getDirection', val)
+      this.$store.commit('form/SET_CACHED_SCOPED_ROW_IMMUTABLE_PROPS', {key: 'direction', value: val})
       // Direction passed to entry and exit
     },
     setBacktestHistory(val) {
