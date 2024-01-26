@@ -777,12 +777,7 @@ if (!CIQ.Studies) {
 		var period = sd.inputs.Period;
 
 		if (!field || field == "field") field = "Close";
-		// const maxCloseIndexArr = getPeriodParam(quotes.map(row => row[field]), 'maxCount', period, 1);
-		// for (var i = sd.startFrom; i < quotes.length; i++) {
-		// 	var quote = quotes[i];
-		// 	if (!quote) continue;
-		// 	quote["Result " + sd.name] = maxCloseIndexArr[i];
-		// }
+
 		let indicator
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			if(i+1>=period){
@@ -814,19 +809,6 @@ if (!CIQ.Studies) {
 
 		if (!field || field == "field") field = "Close";
 
-		// let num_min = quotes[sd.startFrom][field]
-		// let indicator = 0
-		// for (var i = sd.startFrom; i < quotes.length; i++) {
-		// 	if (!quotes[i]) continue;
-		// 	var temp_num = quotes[i][field];
-		// 	if (temp_num <= num_min) {
-		// 		num_min = temp_num
-		// 		indicator = 0
-		// 	}
-		// 	quotes[i]["Result " + sd.name] = indicator;
-		// 	indicator ++
-		// }
-
 		let indicator
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			if(i+1>=period){
@@ -835,6 +817,103 @@ if (!CIQ.Studies) {
 				const sliceStart = i + 1 - period
 				const sliceEnd = i + 1
 				if (quote[field] == Math.min(...(quotes.slice(sliceStart, sliceEnd).map(row => row[field])))) {
+					indicator = 0
+				}else {
+					if(indicator){
+						indicator++
+					}else{
+						indicator = 1
+					}
+				}
+			}
+			quotes[i]["Result " + sd.name] = indicator;
+		}
+	};
+	CIQ.Studies.calculateConsecutiveDaysUp = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		var field = sd.inputs.Field;
+
+		if (!field || field == "field") field = "Close";
+
+		let indicator = 0
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i]
+			if (i==0 || !quotes[i]) continue;
+			// 如果当前天收盘价高于前一天
+			if (quote[field] > quotes[i-1][field]) {
+				indicator++
+			}else {
+				indicator = 0
+			}
+			quotes[i]["Result " + sd.name] = indicator;
+		}
+	};
+	CIQ.Studies.calculateConsecutiveDaysDown = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		var field = sd.inputs.Field;
+
+		if (!field || field == "field") field = "Close";
+
+		let indicator = 0
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i]
+			if (i==0 || !quotes[i]) continue;
+			// 如果当前天收盘价低于前一天
+			if (quote[field] < quotes[i-1][field]) {
+				indicator++
+			}else {
+				indicator = 0
+			}
+			quotes[i]["Result " + sd.name] = indicator;
+		}
+	};
+	CIQ.Studies.calculateConsecutiveDaysAboveMA = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+		var period = sd.inputs.Period;
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+		CIQ.Studies.MA(
+			sd.inputs["Moving Average Type"],
+			sd.days,
+			field,
+			0,
+			"_MA",
+			stx,
+			sd
+		);
+		
+		//var qMA = quote["_MA " + sd.name];
+		console.log("_MA " + sd.name,quotes,period)
+		let indicator
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			// 方案一
+			// // ma的252天周期加上自身252天周期偏移量
+			// if(i+1>=period*2-1){
+			// 	var quote = quotes[i]
+			// 	if (!quotes[i]) continue;
+			// 	const sliceStart = i + 1 - period
+			// 	const sliceEnd = i + 1
+			// 	if (quote["_MA " + sd.name] == Math.max(...(quotes.slice(sliceStart, sliceEnd).map(row => row["_MA " + sd.name])))) {
+			// 		indicator = 0
+			// 	}else {
+			// 		if(indicator){
+			// 			indicator++
+			// 		}else{
+			// 			indicator = 1
+			// 		}
+			// 	}
+			// }
+
+			// 方案二
+			// ma的252天偏移量
+			if(i+1>=period){
+				var quote = quotes[i]
+				if (!quotes[i]) continue;
+				if (quote[field] <= quote["_MA " + sd.name]) {
 					indicator = 0
 				}else {
 					if(indicator){
@@ -1004,6 +1083,21 @@ if (!CIQ.Studies) {
             name: "# of Consecutive Days Since All Time Low (ATL)",
 			inputs: { Period: 252, },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysLow,
+        },
+		"# of Consecutive Days Up": {
+            name: "# of Consecutive Days Up",
+			inputs: {},
+            calculateFN: CIQ.Studies.calculateConsecutiveDaysUp,
+        },
+		"# of Consecutive Days Down": {
+            name: "# of Consecutive Days Down",
+			inputs: {},
+            calculateFN: CIQ.Studies.calculateConsecutiveDaysDown,
+        },
+		"# of Consecutive Days Above a Moving Average": {
+            name: "# of Consecutive Days Above a Moving Average",
+			inputs: { Period: 252, },
+            calculateFN: CIQ.Studies.calculateConsecutiveDaysAboveMA,
         },
 	});
 
