@@ -15,7 +15,7 @@
             </p>
           </div>
         </template>
-        <Form ref="Form" @displayResultsData="displayResultsData"></Form>
+        <Form ref="Form" @displayResultsData="displayResultsData" @clearResults="clearResults"></Form>
       </el-collapse-item>
       <el-collapse-item name="2" class="form">
         <template v-slot:title>
@@ -210,6 +210,15 @@ export default {
         _this.$refs['Form'].displayData(_data)
         _this.prepareData(_data)
       });
+    },
+    clearResults(data) {
+      this.$nextTick(() => {
+        this.rowFrequency = data.timeframe
+        this.$refs['Summary'].displayData({})
+        this.$refs['Statistics'].displayData({}, [])
+        this.$refs['TIM'].clearData(data.timeframe)
+        this.StartEndDateArray = []
+      })
     },
     handleDownloadCsv() {
       const {backtestHistoryList, result_quotes, periods, defaultTableLabels} = this.$refs.TIM.exportData()

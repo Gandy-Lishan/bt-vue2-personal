@@ -108,12 +108,19 @@ export default {
     }
   },
   methods: {
+		clearData(timeframe) {
+			this.rowFrequency = timeframe
+			this.backtestHistoryList = []
+			this.result_quotes = []
+			this.periods = []
+			this.getAllDefaultTableLabels()
+		},
 		getCellStyle(value) {
       // Check if the value is negative and return a class name accordingly
       return {
         'negative-value': value < 0,
       };
-			},
+		},
 		tableRowClassName(obj) {
       const {row, rowIndex} = obj
         if (rowIndex%2 === 1) {

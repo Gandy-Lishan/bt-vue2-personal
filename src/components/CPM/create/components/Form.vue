@@ -644,6 +644,8 @@ export default {
       this.changeLoadingStatus('preview',false)
       if(code == 200 && previewRes.status == 200) {
         this.popUpMsgBox('Pattern preview successful.')
+        // 清空 results 数据
+        this.$emit('clearResults', this.data)
         //将数据显示在 chartIQ 上
         let CPMObj = {
           symbol: this.data.symbol,
@@ -727,7 +729,6 @@ export default {
       delete saveData.year
       const previewRes = await previewCPM(saveData)
       console.log('previewRes', previewRes)
-      debugger
       const code = previewRes.data.code
       const url = previewRes.data?.data
       if(code != 201) {this.popUpMsgBox('Pattern preview failed'); return}
