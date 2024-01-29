@@ -326,6 +326,11 @@ export default {
         }
       })
       }
+      if(code != 200) {
+        this.$router.push({
+          name: 'CPMResults'
+        })
+      }
     },
     async handleQuery() {
       if(this.currentPage != 1) this.currentPage = 1
