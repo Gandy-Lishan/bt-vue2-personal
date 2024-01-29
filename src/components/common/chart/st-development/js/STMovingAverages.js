@@ -873,6 +873,7 @@ if (!CIQ.Studies) {
 			sd.error = true;
 			return;
 		}
+
 		var period = sd.inputs.Period;
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
@@ -886,30 +887,9 @@ if (!CIQ.Studies) {
 			sd
 		);
 		
-		//var qMA = quote["_MA " + sd.name];
-		console.log("_MA " + sd.name,quotes,period)
 		let indicator
 		for (var i = sd.startFrom; i < quotes.length; i++) {
-			// 方案一
-			// // ma的252天周期加上自身252天周期偏移量
-			// if(i+1>=period*2-1){
-			// 	var quote = quotes[i]
-			// 	if (!quotes[i]) continue;
-			// 	const sliceStart = i + 1 - period
-			// 	const sliceEnd = i + 1
-			// 	if (quote["_MA " + sd.name] == Math.max(...(quotes.slice(sliceStart, sliceEnd).map(row => row["_MA " + sd.name])))) {
-			// 		indicator = 0
-			// 	}else {
-			// 		if(indicator){
-			// 			indicator++
-			// 		}else{
-			// 			indicator = 1
-			// 		}
-			// 	}
-			// }
-
-			// 方案二
-			// ma的252天偏移量
+			// ma with 252 bar offset
 			if(i+1>=period){
 				var quote = quotes[i]
 				if (!quotes[i]) continue;
@@ -1094,14 +1074,52 @@ if (!CIQ.Studies) {
 			inputs: {},
             calculateFN: CIQ.Studies.calculateConsecutiveDaysDown,
         },
+		// "# of Consecutive Days Above a Moving Average": {
+        //     name: "# of Consecutive Days Above a Moving Average",
+		// 	inputs: { Period: 252, },
+        //     calculateFN: CIQ.Studies.calculateConsecutiveDaysAboveMA,
+		// 	outputs: {
+		// 		"Result": "auto",
+		// 		"_MA": 'auto'
+		// 	},
+        // },
 		"# of Consecutive Days Above a Moving Average": {
             name: "# of Consecutive Days Above a Moving Average",
+			//overlay: true,
 			inputs: { Period: 252, },
-            calculateFN: CIQ.Studies.calculateConsecutiveDaysAboveMA,
+			// seriesFN: function(stx, sd, quotes) {
+			// 	var parameters = {
+			// 		topBand: "Close",
+			// 		bottomBand: "_MA " + sd.name,
+			// 		topColor: "green",
+			// 		bottomColor: "red",
+			// 	};
+			// 	CIQ.fillIntersecting(stx, 'chart', parameters);
+			// 	// CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
+
+			// 	if (!quotes.length) return;
+			// 	var panel = stx.panels[sd.panel];
+			// 	if (!panel || panel.hidden) return;
+
+			// 	for (var i in sd.outputMap) {
+			// 		if(sd.outputMap[i] == '_MA'){
+			// 			panel = stx.panels['chart']
+			// 		}
+			// 		console.log('panel',i,panel)
+			// 		CIQ.Studies.displayIndividualSeriesAsLine(stx, sd, panel, i, quotes);
+			// 	}
+			// },
+			calculateFN: function (stx, sd) {
+				CIQ.Studies.calculateConsecutiveDaysAboveMA(stx, sd);
+			},
+			outputs: {
+				"Result": "auto",
+				//"_MA": 'auto'
+			},
         },
 	});
 
-			// 给上面函数用的工具函数
+
 			function getPeriodParam(dataSeries, paramType, period, add_bar) {
 				const typeDict = {
 				  max: arr => Math.max(...arr),
