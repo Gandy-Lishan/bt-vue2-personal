@@ -666,6 +666,34 @@ export function delCPM(url) {
 			})
 	})
 }
+export function getCPMResults(url) {
+	const path = `/dev/cpm/run_cpm_bt/?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getCPMPreview(url) {
+	const path = `/dev/cpm/preview_pattern/?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 export function searchIndicator(
 	name,
 	calculate,

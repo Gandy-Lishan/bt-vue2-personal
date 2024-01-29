@@ -2,8 +2,7 @@
   <div class="CPM-list-container">
     <div class="search-box">
       <el-button type="primary" round @click="handleCreate">Create Correlation Pattern Match</el-button>
-      <el-input placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" 					clearable
-					@clear="handleQuery">
+      <el-input placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" clearable @clear="handleQuery">
         <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
       </el-input>
     </div>
@@ -157,7 +156,8 @@
 			</template>
       <el-table-column align="center">
 				<template slot-scope="scope">
-        <el-button class="delete-btn" slot="reference" round size="mini" type="primary" icon="el-icon-delete" @click="deleteCPM(scope.row)"></el-button>
+        <el-button round size="mini" type="primary" icon="el-icon-edit" @click="handleRowClick(scope.row)"></el-button>
+        <el-button class="delete-btn" round size="mini" type="primary" icon="el-icon-delete" @click="deleteCPM(scope.row)"></el-button>
         </template>
       </el-table-column>
 		</el-table>
@@ -172,7 +172,7 @@
 </template>
 
 <script>
-import { delCPM, getCPMList } from '@/service/service'
+import { delCPM, getCPMList, getCPMResults } from '@/service/service'
 import {isJson} from '@/utils'
 
 export default {
@@ -240,7 +240,6 @@ export default {
 				if (res.status == 200) {
 					let data = res.data.results
 					data = data.map(item => {
-            item.result = isJson(item.result) ? JSON.parse(item.result) : item.result
             item.period = [item.start_date, item.end_date]
 						return item
 					})
@@ -273,7 +272,6 @@ export default {
       await this.applySort()
 		},
     async onSortChange({ column, prop, order }) {
-			
 			if(this.currentPage != 1) this.currentPage = 1
       if (column.sortable !== 'custom') return
       this.currentSort = {
@@ -303,31 +301,37 @@ export default {
         }
       })
     },
-    handleRowClick(row) {
-      this.$router.push({
-        name: 'CPMResults',
-        params: {
-          data: row,
-          usedFor: 'showCPMResults',
-        }
-      })
-    },
-    },
     async deleteCPM(row) {
       const { url } = row
       this.loading = true
 			const res = await delCPM(url)
       const code = res.data.code
-      if(code == 403) this.popUpMsgBox('Successfully delete')
+      if(code == 204) this.popUpMsgBox('Successfully deleted')
       if(code == 403) this.popUpMsgBox("Sorry, deleted item doesn't exist. Refresh the list")
       if(code == 404) {this.popUpMsgBox('Permission denied')}
 			await this.getDataList(null)
 			this.loading = false
-			this.popUpMsgBox('Successfully deleted')
+    },
+    async handleRowClick(row) {
+      const {url} = row
+      const res = await getCPMResults(url)
+      const code = res.data.code
+      if(code == 403) {this.popUpMsgBox('Sorry, details not found. Possibly deleted or moved'); return}
+      if(code == 200) {
+        this.$router.push({
+        name: 'CPMResults',
+        params: {
+          data: res.data.data,
+          usedFor: 'showCPMResults',
+        }
+      })
+      }
     },
     async handleQuery() {
+      if(this.currentPage != 1) this.currentPage = 1
       await this.applySort()
     }
+    },
   }
 </script>
 

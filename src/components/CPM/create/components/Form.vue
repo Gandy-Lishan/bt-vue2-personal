@@ -188,7 +188,7 @@
     :rules="rules"
 	>
   <el-row :gutter="10">
-    <el-col :span="6">
+    <el-col :span="5">
       <el-form-item prop="direction" label="8. Direction">
         <el-select
             v-model="data.direction"
@@ -204,7 +204,7 @@
           </el-select>
       </el-form-item>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="5">
       <el-form-item
 				label="9. Time In Market"
         prop="tim"
@@ -231,7 +231,7 @@
           </template></el-input>
 			</el-form-item>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="5">
       <el-form-item prop="backtestHistory" label="10. Lookback Period">
         <template slot="label">
           <label>
@@ -262,7 +262,7 @@
         </div>
       </el-form-item>
     </el-col>
-    <el-col :span="6">
+    <!-- <el-col :span="6">
       <el-row :gutter="10">
         <el-col>
           <el-form-item
@@ -277,6 +277,29 @@
           (years)
           </template></el-input>
 			</el-form-item>
+        </el-col>
+      </el-row>
+    </el-col> -->
+    <el-col :span="9">
+      <el-row :gutter="10">
+        <el-col :span="15">
+          <el-form-item
+            label="11. Custom Duration"
+            prop="year"
+            v-if="data.lookback_period == 'Custom'"
+          >
+            <el-input
+              v-model="data.year"
+              placeholder="Enter custom years"
+            ><template v-slot:append>
+              (years)
+              </template></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="9">
+          <el-form-item class="CPM-btn" label=" ">
+            <el-button type="primary" :loading="btnLoading" @click="submitForm">Backtest Pattern</el-button>
+          </el-form-item>
         </el-col>
       </el-row>
     </el-col>
@@ -294,26 +317,26 @@
         <el-col :span="6"></el-col>
         <el-col :span="12">
           <div class="form-btn">
-            <el-button type="primary" class="delete-btn" @click="resetForm">Create New Backtest Pattern</el-button>
-            <el-button type="primary" @click="submitForm" :loading="btnLoading">Backtest Pattern</el-button>
+            <!-- <el-button type="primary" class="delete-btn" @click="resetForm">Create New Correlation Backtest Pattern</el-button> -->
+            <!-- <el-button type="primary" @click="submitForm" :loading="btnLoading">Backtest Pattern</el-button> -->
           </div>
         </el-col>
         <el-col :span="6"></el-col>
       </el-row>
     </el-form-item>
   </el-form>
-  <LoadingOverlay
+  <!-- <LoadingOverlay
 			:isLoading="isCreateLoading"
 			:showProgress="false"
 			:percentage="0"
 			:progressText="progressText"
 		>
-		</LoadingOverlay>
+		</LoadingOverlay> -->
   </div>
 </template>
  <script>
  import { CIQ } from '@/components/common/chart/st-development/js/components'
-import { saveCPM, previewCPM, editCPM, getCPMList } from '@/service/service'
+import { saveCPM, previewCPM, editCPM, getCPMList, getCPMResults, getCPMPreview } from '@/service/service'
 import { createPositiveIntegerRule, createVerifyValueInListRule, validateMarginRule } from "@/utils/formValidate"
 import { LoadingOverlay } from "@/components/common"
 import { timestampToTime, isJson } from '@/utils'
@@ -529,7 +552,6 @@ export default {
     },
     changeTimeframe(val) {
       CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
-      debugger
       this.$store.commit('form/getFreqHighPriority', val)
       CIQ.addIndicators(()=>{
         this.calculateBarDistance()
@@ -611,6 +633,7 @@ export default {
       console.log('previewRes', previewRes)
       if(!previewRes) {this.changeLoadingStatus('preview',false); return}
      const code = previewRes.data.code
+      if(code == 400) this.popUpMsgBox('Pattern preview failed')
       if(code == 401) this.popUpMsgBox('Calculate error')
       if(code == 404 || code == 403) this.popUpMsgBox('Save failed, Please try again')
       if(code == 406) {
@@ -621,6 +644,8 @@ export default {
       this.changeLoadingStatus('preview',false)
       if(code == 200 && previewRes.status == 200) {
         this.popUpMsgBox('Pattern preview successful.')
+        // 清空 results 数据
+        this.$emit('clearResults', this.data)
         //将数据显示在 chartIQ 上
         let CPMObj = {
           symbol: this.data.symbol,
@@ -643,9 +668,9 @@ export default {
      } catch (error) {
       this.changeLoadingStatus('backtest',false); return
      }
-     console.log('saveRes', saveRes)
      if(!saveRes) {this.changeLoadingStatus('backtest',false); return}
      const code = saveRes.data.code
+      if(code == 203) this.popUpMsgBox('The backtest pattern is running. You can wait or click the "+"" button to create a new pattern."')
       if(code == 401) this.popUpMsgBox('Calculate error')
       if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again'); return}
       if(code == 406) {
@@ -654,21 +679,21 @@ export default {
       }
       if(code == 407) this.popUpMsgBox('No CPM meeting the criteria found')
       this.changeLoadingStatus('backtest',false)
-      if(saveRes.status == 201) {
+      if(code == 200) {
         this.changeLoadingStatus('backtest',false)
         this.popUpMsgBox('Pattern backtest successful')
-        const result = saveRes.data.result
-        saveRes.data.result = isJson(result) ? JSON.parse(result) : result
+        let result = saveRes.data.data.result
+        saveRes.data.data.result = isJson(result) ? JSON.parse(result) : result
         //将数据显示在 chartIQ 上
         let CPMObj = {
           symbol: this.data.symbol,
           timeframe: this.data.timeframe,
-          result: saveRes.data.result
+          result:saveRes.data.data.result
         }
         CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
         CIQ.displayCPMLayout(CPMObj,()=>{
           this.calculateBarDistance()
-          this.$emit('displayResultsData', saveRes.data)
+          this.$emit('displayResultsData', saveRes.data.data)
           this.changeLoadingStatus('preview',false)
         })
       }
@@ -702,7 +727,22 @@ export default {
         tim: 21
       }
       delete saveData.year
-      return await previewCPM(saveData)
+      const previewRes = await previewCPM(saveData)
+      console.log('previewRes', previewRes)
+      const code = previewRes.data.code
+      const url = previewRes.data?.data
+      if(code != 201) {this.popUpMsgBox('Pattern preview failed'); return}
+      let pollingRes = null
+      do {
+        pollingRes = await getCPMPreview(url)
+        const code = pollingRes.data.code
+        if (code == 200) {
+          return pollingRes
+        }
+        if(code == 400 || code == 401 || code == 404 || code == 407) {return pollingRes}
+        // Add a delay here to avoid excessive polling, e.g., using setTimeout
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      } while (true); // Keep polling indefinitely
     },
     async saveCPM() {
       // const validForm = this.validForm()
@@ -724,9 +764,28 @@ export default {
       }
       if(saveData.lookback_period == 'Custom') saveData.lookback_period = saveData.year
       delete saveData.year
-
-      if(rowUrl) return await editCPM(saveData, rowUrl)
-      return await saveCPM(saveData);
+      
+      let saveRes
+      if(rowUrl) {saveRes = await editCPM(saveData, rowUrl)}
+      else{saveRes = await saveCPM(saveData)}
+      const code = saveRes.data?.code
+      const failedConditions = [203, 403, 404, 406]
+      if(failedConditions.includes(Number(code))) {
+        // 保存失败, 不进入轮询
+        return saveRes
+      }
+      let url = saveRes.data?.url
+      let pollingRes = null
+      do {
+        pollingRes = await getCPMResults(url)
+        const code = pollingRes.data.code
+        if (pollingRes.data.data?.status === 'finish' && code == 200) {
+          return pollingRes
+        }
+        if(code == 401 || code == 403 || code == 404 || code == 407) return pollingRes
+        // Add a delay here to avoid excessive polling, e.g., using setTimeout
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      } while (true); // Keep polling indefinitely
     },
     async validForm(formRefs) {
       const validateForm = async (formRef) => {
@@ -756,7 +815,7 @@ export default {
         }else if (key == 'lookback_period'){
           const editPeriod = data[key]
           const exists = this.historyOptions.some(option => option.value == editPeriod)
-          if(exists) target[key] = Number(data[key])
+          if(exists) target[key] = data[key] == 'All' ? data[key] : Number(data[key])
           if(!exists) { target[key] = 'Custom'}
         }else if(key == 'year'){
           if(this.data.lookback_period == 'Custom') {target['year'] = data['lookback_period']}
@@ -873,5 +932,8 @@ export default {
 }
 .delete-btn:hover {
   background-color: rgb(251, 192, 92);
+}
+.CPM-btn {
+  width: 100%;
 }
 </style>

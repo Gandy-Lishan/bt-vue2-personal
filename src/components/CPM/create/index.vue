@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       chart_data: {},
-      breadcrumbTitle: 'Back to CPM list',
+      breadcrumbTitle: 'Back to correlation pattern match list',
       default_symbol: ''
     }
   },
