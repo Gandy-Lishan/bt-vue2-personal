@@ -7,10 +7,15 @@
       <el-collapse-item name="1" class="form">
         <template v-slot:title>
           <div class="title">
-            <p>Correlation Pattern Match Parameters</p>
+            <p @click.stop>Correlation Pattern Match Parameters</p>
+            <p>
+              <el-tooltip class="item" effect="dark" content="Create New Correlation Backtest Pattern" placement="bottom-start">
+                <el-button  type="warning" plain class="delete-btn" @click.stop="resetForm" size="small" icon="el-icon-plus"></el-button>
+              </el-tooltip>
+            </p>
           </div>
         </template>
-        <Form ref="Form" @displayResultsData="displayResultsData"></Form>
+        <Form ref="Form" @displayResultsData="displayResultsData" @clearResults="clearResults"></Form>
       </el-collapse-item>
       <el-collapse-item name="2" class="form">
         <template v-slot:title>
@@ -74,7 +79,7 @@ export default {
       rowFrequency: 'Daily',
       tradePrice: 'Close',
       chart_data: {},
-      breadcrumbTitle: 'Back to CPM list',
+      breadcrumbTitle: 'Back to correlation pattern match list',
       direction: 'Long',
       StartEndDateArray: [],
       default_symbol: ''
@@ -205,6 +210,15 @@ export default {
         _this.$refs['Form'].displayData(_data)
         _this.prepareData(_data)
       });
+    },
+    clearResults(data) {
+      this.$nextTick(() => {
+        this.rowFrequency = data.timeframe
+        this.$refs['Summary'].displayData({})
+        this.$refs['Statistics'].displayData({}, [])
+        this.$refs['TIM'].clearData(data.timeframe)
+        this.StartEndDateArray = []
+      })
     },
     handleDownloadCsv() {
       const {backtestHistoryList, result_quotes, periods, defaultTableLabels} = this.$refs.TIM.exportData()
@@ -360,6 +374,9 @@ export default {
       }
       return buf;
     },
+    resetForm() {
+      this.$refs['Form'].resetForm()
+    }
   }
 }
 </script>
@@ -426,5 +443,11 @@ export default {
   margin-left: 10px;
 	color: #333333;
 }
-
+// .delete-btn {
+// 	background-color: #f59e0b;
+//   border: unset;
+// }
+// .delete-btn:hover {
+//   background-color: rgb(251, 192, 92);
+// }
 </style>
