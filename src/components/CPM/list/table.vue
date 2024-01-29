@@ -314,7 +314,15 @@ export default {
     },
     async handleRowClick(row) {
       const {url} = row
-      const res = await getCPMResults(url)
+      let res
+      try {
+        res = await getCPMResults(url)
+      } catch (error) {
+        this.$router.push({
+          name: 'CPMResults'
+        })
+        return
+      }
       const code = res.data.code
       if(code == 403) {this.popUpMsgBox('Sorry, details not found. Possibly deleted or moved'); return}
       if(code == 200) {
