@@ -188,79 +188,106 @@
     :rules="rules"
 	>
   <el-row :gutter="10">
-    <el-col :span="5">
-      <el-form-item prop="direction" label="8. Direction">
-        <el-select
-            v-model="data.direction"
-            placeholder="— Select Direction —"
-          >
-            <el-option
-              v-for="item in directionOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-      </el-form-item>
-    </el-col>
-    <el-col :span="5">
-      <el-form-item
-				label="9. Time In Market"
-        prop="tim"
-			>
-        <template slot="label">
-          <label>
-            9. Time In Market
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content">
-                Input a value of bars to stay in market after entry.<br />Exit
-                  position when the specified Time In Market is reached.
-                  (default: 21)<br
-                />
-              </span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
-          </label>
-        </template>
-        <el-input
-          v-model="data.tim"
-          placeholder="Enter time in market"
-        ><template v-slot:append>
-          (bars)
-          </template></el-input>
-			</el-form-item>
-    </el-col>
-    <el-col :span="5">
-      <el-form-item prop="backtestHistory" label="10. Lookback Period">
-        <template slot="label">
-          <label>
-            10. Lookback Period
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content"
-                >Specify the start and end date of the backtest. <br />
-                Choose 'All History' to include all data since the inception of the backtesting stock/index. <br />
-                Additionally, select 'Custom' to input a custom year.<br
-              /></span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
-          </label>
-        </template>
-        <div class="selectBox historySelectBox">
+    <el-col :span="12">
+      <el-row :gutter="10">
+        <el-col :span="12">
+        <el-form-item prop="direction" label="8. Direction">
           <el-select
-            placeholder="- Select Lookback Period -"
-            v-model="data.lookback_period"
-          >
-            <el-option
-              v-for="item in historyOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-model="data.direction"
+              placeholder="— Select Direction —"
             >
-            </el-option>
-          </el-select>
-        </div>
-      </el-form-item>
+              <el-option
+                v-for="item in directionOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+        </el-form-item>
+        </el-col>
+        <el-col :span="12">
+        <el-form-item
+          label="9. Time In Market"
+          prop="tim"
+        >
+          <template slot="label">
+            <label>
+              9. Time In Market
+              <el-tooltip effect="dark" placement="top">
+                <span slot="content">
+                  Input a value of bars to stay in market after entry.<br />Exit
+                    position when the specified Time In Market is reached.
+                    (default: 21)<br
+                  />
+                </span>
+                <i class="iconfont icon-wenhao"></i>
+              </el-tooltip>
+            </label>
+          </template>
+          <el-input
+            v-model="data.tim"
+            placeholder="Enter time in market"
+          ><template v-slot:append>
+            (bars)
+            </template></el-input>
+        </el-form-item>
+        </el-col>
+      </el-row>
+    </el-col>
+    <el-col :span="12">
+      <el-row :gutter="10">
+        <el-col :span="8">
+          <el-form-item prop="backtestHistory" label="10. Lookback Period">
+              <template slot="label">
+                <label>
+                  10. Lookback Period
+                  <el-tooltip effect="dark" placement="top">
+                    <span slot="content"
+                      >Specify the start and end date of the backtest. <br />
+                      Choose 'All History' to include all data since the inception of the backtesting stock/index. <br />
+                      Additionally, select 'Custom' to input a custom year.<br
+                    /></span>
+                    <i class="iconfont icon-wenhao"></i>
+                  </el-tooltip>
+                </label>
+              </template>
+              <div class="selectBox historySelectBox">
+                <el-select
+                  placeholder="- Select Lookback Period -"
+                  v-model="data.lookback_period"
+                >
+                  <el-option
+                    v-for="item in historyOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </div>
+          </el-form-item>
+        </el-col>
+        <el-col :span="9">
+          <el-form-item
+              label="11. Custom Duration"
+              prop="year"
+              v-if="data.lookback_period == 'Custom'"
+            >
+              <el-input
+                v-model="data.year"
+                placeholder="Enter custom years"
+              ><template v-slot:append>
+                (years)
+                </template></el-input>
+            </el-form-item>
+        </el-col>
+        <el-col :span="7">
+          <el-form-item class="CPM-btn" label=" ">
+            <el-button type="primary" :loading="btnLoading" @click="submitForm">Backtest Pattern</el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-col>
     <!-- <el-col :span="6">
       <el-row :gutter="10">
@@ -280,7 +307,7 @@
         </el-col>
       </el-row>
     </el-col> -->
-    <el-col :span="9">
+    <!-- <el-col :span="6">
       <el-row :gutter="10">
         <el-col :span="15">
           <el-form-item
@@ -302,7 +329,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-    </el-col>
+    </el-col> -->
   </el-row>
   </el-form>
   <el-form
