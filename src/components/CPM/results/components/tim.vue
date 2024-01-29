@@ -540,9 +540,9 @@ export default {
 				)
 			}
 			// 鏁版嵁鍒囩墖
-			quotes = quotes.filter((x) => {
-				return this.start_date.getTime() <= x.DT.getTime()
-			})
+			// quotes = quotes.filter((x) => {
+			// 	return this.start_date.getTime() <= x.DT.getTime()
+			// })
 			//鎶婁氦鏄撳垪琛ㄨ浆鎹㈡垚鏃堕棿鎴
 			let dataTimeList = []
 			for (var data in dataSet) {
@@ -554,10 +554,10 @@ export default {
 				).getTime()
 				dataTimeList.push(entryDate)
 			}
-			// let used_quotes = quotes.filter(
-			// 	(x) => dataTimeList.indexOf(x.DT.getTime()) != -1
-			// )
-			let used_quotes = quotes
+			let used_quotes = quotes.filter(
+				(x) => dataTimeList.indexOf(x.DT.getTime()) != -1
+			)
+			// let used_quotes = quotes
 			//鏇挎崲NaN
 			quotes = quotes.map((quote) => {
 				const updatedQuote = {}
