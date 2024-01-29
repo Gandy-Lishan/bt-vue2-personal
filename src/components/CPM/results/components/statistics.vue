@@ -13,7 +13,7 @@
 						<span v-if="scope.row.totalReturn >= 0">{{
 							scope.row.totalReturn + '%'
 						}}</span>
-						<span v-else-if="isNaN(scope.row.totalReturn)">0</span>
+						<span v-else-if="isNaN(scope.row.totalReturn)"></span>
 						<span v-else style="color: #dd3a13">{{
 							scope.row.totalReturn + '%'
 						}}</span>
@@ -105,7 +105,7 @@
 						<span v-if="scope.row.buyHoldGain >= 0">{{
 							scope.row.buyHoldGain + '%'
 						}}</span>
-						<span v-else-if="isNaN(scope.row.buyHoldGain)">0</span>
+						<span v-else-if="isNaN(scope.row.buyHoldGain)"></span>
 						<span v-else style="color: #dd3a13">{{
 							scope.row.buyHoldGain + '%'
 						}}</span>
@@ -121,7 +121,7 @@
 						<span v-if="scope.row.winRate >= 0">{{
 							scope.row.winRate + '%'
 						}}</span>
-						<span v-else-if="isNaN(scope.row.winRate)">0</span>
+						<span v-else-if="isNaN(scope.row.winRate)"></span>
 						<span v-else style="color: #dd3a13">{{
 							scope.row.winRate + '%'
 						}}</span>
@@ -141,7 +141,7 @@
 						<span v-if="scope.row.averageWin >= 0">{{
 							scope.row.averageWin + '%'
 						}}</span>
-						<span v-else-if="isNaN(scope.row.averageWin)">0</span>
+						<span v-else-if="isNaN(scope.row.averageWin)"></span>
 						<span v-else style="color: #dd3a13">{{
 							scope.row.averageWin + '%'
 						}}</span>
@@ -157,7 +157,7 @@
 						<span v-if="scope.row.averageLoss >= 0">{{
 							scope.row.averageLoss + '%'
 						}}</span>
-						<span v-else-if="isNaN(scope.row.averageLoss)">0</span>
+						<span v-else-if="isNaN(scope.row.averageLoss)"></span>
 						<span v-else style="color: #dd3a13">{{
 							scope.row.averageLoss + '%'
 						}}</span>
@@ -236,7 +236,7 @@
 						<span v-if="scope.row.timeInMarket >= 0">{{
 							scope.row.timeInMarket + '%'
 						}}</span>
-						<span v-else-if="isNaN(scope.row.timeInMarket)">0</span>
+						<span v-else-if="isNaN(scope.row.timeInMarket)"></span>
 						<span v-else style="color: #dd3a13">{{
 							scope.row.timeInMarket + '%'
 						}}</span>
