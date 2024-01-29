@@ -1044,6 +1044,7 @@ export default {
 			// dataSet = dataSet.filter((item) => item.TradeStatus == 'BUY')
 			dataSet = dataSet.filter((_, index) => index % 2 === 0)
 			let backtestResult = []
+			let noFound = []
 
 			for (var data in dataSet) {
 				var datatime = new Date(dataSet[data].Date)
@@ -1054,7 +1055,7 @@ export default {
 				let res = chartDataset.findIndex((x) => {
 					return entryDate.getTime() == x.DT.getTime()
 				})
-
+				if(res == -1) {noFound.push(dataSet[data].Date)}
 				if (res != -1) {
 					//鎷胯繘鍦轰环鏍煎拰鍓嶄竴澶╀綔姣旇緝
 					let entryPrice = chartDataset[res][field]
@@ -1076,6 +1077,7 @@ export default {
 					backtestResult.push({ 'Entry Date': dataSet[data].Date, ...obj })
 				}
 			}
+			console.log('找不到的日期', noFound)
 			return backtestResult
 		},
 		transformZScoreData(data) {

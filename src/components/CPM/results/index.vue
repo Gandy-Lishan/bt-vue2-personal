@@ -10,7 +10,7 @@
             <p @click.stop>Correlation Pattern Match Parameters</p>
             <p>
               <el-tooltip class="item" effect="dark" content="Create New Correlation Backtest Pattern" placement="bottom-start">
-                <el-button  type="warning" plain class="delete-btn" @click.stop="resetForm" size="small" icon="el-icon-plus"></el-button>
+                <el-button  type="warning" plain class="delete-btn" @click.stop="resetForm" size="small" icon="el-icon-plus">Create New</el-button>
               </el-tooltip>
             </p>
           </div>
@@ -376,6 +376,7 @@ export default {
     },
     resetForm() {
       this.$refs['Form'].resetForm()
+      this.clearResults('Daily')
     }
   }
 }

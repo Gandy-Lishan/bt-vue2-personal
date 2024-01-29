@@ -17,6 +17,7 @@
         CIQ.addCover()
         CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
         CIQ.store.commit('form/getFrequency', timeframe) //考虑到addSeries必须写死timeframe
+        CIQ.store.commit('form/getBacktestSymbol', symbol)
         CIQ.stxx.loadChart({ 
                 symbol: symbol, 
                 // 这边先写死范围，防止其他indicator无法pagination
