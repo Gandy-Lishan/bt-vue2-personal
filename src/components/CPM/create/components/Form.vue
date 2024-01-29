@@ -532,6 +532,8 @@ export default {
   },
   methods: {
     resetForm() {
+      // 如果当前在预览或者回测状态，不允许重置
+      if(this.previewBtnLoading || this.btnLoading) return true
       const resetData = {
         lookback_period: 20,
         corr_per: 90,

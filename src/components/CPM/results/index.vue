@@ -375,7 +375,8 @@ export default {
       return buf;
     },
     resetForm() {
-      this.$refs['Form'].resetForm()
+      const NoResetAllowed = this.$refs['Form'].resetForm()
+      if(NoResetAllowed) return
       this.clearResults('Daily')
     }
   }
