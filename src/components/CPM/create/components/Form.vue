@@ -10,7 +10,7 @@
   <el-row :gutter="10">
     <el-col :span="12">
       <el-form-item
-        label="1. CPM Name"
+        label="1. Correlation Pattern Match Name"
         prop="name"
       >
         <el-input v-model="data.name" placeholder="Enter cpm name"></el-input>
@@ -640,7 +640,7 @@ export default {
         const name =  this.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('No CPM meeting the criteria found')
+      if(code == 407) this.popUpMsgBox('No correlation pattern match meeting the criteria found')
       this.changeLoadingStatus('preview',false)
       if(code == 200 && previewRes.status == 200) {
         this.popUpMsgBox('Pattern preview successful.')
@@ -677,7 +677,7 @@ export default {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('No CPM meeting the criteria found')
+      if(code == 407) this.popUpMsgBox('No correlation pattern match meeting the criteria found')
       this.changeLoadingStatus('backtest',false)
       if(code == 200) {
         this.changeLoadingStatus('backtest',false)
