@@ -335,8 +335,13 @@ export default {
       })
       }
       if(code != 200) {
+        row.url = null
         this.$router.push({
-          name: 'CPMResults'
+          name: 'CPMResults',
+          params: {
+            data: row,
+            usedFor: 'emptyCPMResults',
+          }
         })
       }
     },
