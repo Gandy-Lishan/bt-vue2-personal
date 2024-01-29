@@ -38,8 +38,12 @@
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >Seasonality</el-menu-item
         >
-        <el-menu-item class="seasonality-link home-link" index="8"
+        <!-- <el-menu-item class="seasonality-link home-link" index="8"
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
+          >Correlation Pattern Match</el-menu-item
+        > -->
+        <el-menu-item class="seasonality-link home-link" index="8"
+        v-if="userRole == 'analyst'"
           >Correlation Pattern Match</el-menu-item
         >
 
@@ -86,7 +90,9 @@ export default {
     }
   },
   computed: {
-
+    userRole() {
+      return this.$store.state.user.role
+    }
   },
   watch: {
     '$route'(to, _) {
