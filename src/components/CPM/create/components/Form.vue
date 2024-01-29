@@ -815,7 +815,7 @@ export default {
         }else if (key == 'lookback_period'){
           const editPeriod = data[key]
           const exists = this.historyOptions.some(option => option.value == editPeriod)
-          if(exists) target[key] = Number(data[key])
+          if(exists) target[key] = data[key] == 'All' ? data[key] : Number(data[key])
           if(!exists) { target[key] = 'Custom'}
         }else if(key == 'year'){
           if(this.data.lookback_period == 'Custom') {target['year'] = data['lookback_period']}
