@@ -786,7 +786,7 @@ export default {
       if(!rowUrl) {
         // 不是编辑是新建
         const nameChecked = await this.checkDuplicateNames(name)
-        if(nameChecked) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
+        if(nameChecked) {this.popUpMsgBox(`The name already in use. Please choose another`); return}
       }
       const exclude_overlap = this.isExcludeOO ? 1 : 0
       const saveData = {
