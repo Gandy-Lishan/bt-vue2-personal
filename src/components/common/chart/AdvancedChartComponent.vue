@@ -388,6 +388,8 @@ export default class AdvancedChartComponent extends Vue {
 			// you can override this behavior by setting stxx.dontRoll to true
 			CIQ.stxx.dontRoll = true
 			CIQ.stxx.maxDataSetSize = 0
+			// Minimum candleWidth (in pixels) allowed when zooming out. Determines the maximum number of ticks to display on the chart.
+			CIQ.stxx.minimumCandleWidth = 0;
 			CIQ.periodicity = {period:1, interval:1, timeUnit:'day'}
 
 			var iter = CIQ.stxx.chart.market.newIterator({
