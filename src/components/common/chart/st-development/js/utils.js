@@ -116,5 +116,11 @@ let __st_js_utils_ = (_exports) => {
         const subQuotes = quotes.filter(item => item.DT.getTime()>=standardStartDate.getTime() && item.DT.getTime()<=standardEndDate.getTime())
         return subQuotes.length
     }
+    CIQ.getYearInverval = function() {
+        var quotes = CIQ.stxx.chart.dataSet;
+        var start = quotes[0].DT.getFullYear()
+        var end = quotes[quotes.length-1].DT.getFullYear()
+        return end - start
+    }
 }
 export { __st_js_utils_ }
