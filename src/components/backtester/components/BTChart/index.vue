@@ -103,8 +103,6 @@ header {
 }
 .chart_box {
 	padding: 10px 10px;
-	resize: auto;
-	overflow: hidden;
 	margin: 0 25px;
 }
 </style>
