@@ -354,7 +354,7 @@ export default {
       })
       }
       if(code != 200) {
-        row.url = null
+        // row.url = null
         this.$router.push({
           name: 'CPMResults',
           params: {
