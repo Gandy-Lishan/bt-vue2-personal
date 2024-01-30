@@ -439,8 +439,8 @@ export default {
           label: '7 Year'
         },
         {
-          value: 6,
-          label: '6 Year'
+          value: 8,
+          label: '8 Year'
         },
         {
           value: 9,
