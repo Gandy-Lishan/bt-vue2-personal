@@ -24,9 +24,13 @@
                 startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
             },
             function () {
-                CIQ.createCorrelationPatternMatchDrawing(chart_data.result)
-                CIQ.createCPMMarker(chart_data.result)
-                cb()
+                // 有result的情况下(success)执行此回调并计算TIM
+                if(chart_data.result){
+                    CIQ.createCorrelationPatternMatchDrawing(chart_data.result)
+                    CIQ.createCPMMarker(chart_data.result)
+                    cb()
+                }
+
                 CIQ.hideCover()
                 CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
             }
