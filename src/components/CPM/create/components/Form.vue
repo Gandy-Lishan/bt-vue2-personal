@@ -806,6 +806,7 @@ export default {
         return saveRes
       }
       let url = saveRes.data?.url
+      this.rowUrl = url
       let pollingRes = null
       do {
         pollingRes = await getCPMResults(url)
