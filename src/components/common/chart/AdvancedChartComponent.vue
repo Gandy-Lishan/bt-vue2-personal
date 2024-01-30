@@ -476,22 +476,23 @@ export default class AdvancedChartComponent extends Vue {
 	// initiate lastPrice and grid button
 	initializeToggle(stx: any) {
 		// a listener for observing tooltip button's action
-		const tooltip = document.getElementsByClassName("ciq-HU")[0] as HTMLButtonElement;
-		tooltip.onclick = function(){
-			tooltip.classList.remove("active");	
-			if (stx.layout.headsUp.floating == true){	
-				tooltip.classList.remove("activated");	
-				stx.layout.headsUp.floating = false	
-			}
-			else{
-				tooltip.classList.add("activated");
-				stx.layout.headsUp.floating = true
-			}
-		}
+		// const tooltip = document.getElementsByClassName("ciq-HU")[0] as HTMLButtonElement;
+		// tooltip.onclick = function(){
+		// 	tooltip.classList.remove("active");	
+		// 	if (stx.layout.headsUp.floating == true){	
+		// 		tooltip.classList.remove("activated");	
+		// 		stx.layout.headsUp.floating = false	
+		// 	}
+		// 	else{
+		// 		tooltip.classList.add("activated");
+		// 		stx.layout.headsUp.floating = true
+		// 	}
+		// }
 
-		stx.layout.headsUp = "floating";
-		var mNode = document.getElementsByClassName("ciq-HU")[0]
-		mNode.classList.add("activated");
+		stx.layout.headsUp={floating:true};
+		//stx.layout.headsUp = "floating";
+		// var mNode = document.getElementsByClassName("ciq-HU")[0]
+		// mNode.classList.add("activated");
 		
 		stx.layout.lastPriceLabel = false;
 		stx.chart.yAxis.drawCurrentPriceLabel = false;
