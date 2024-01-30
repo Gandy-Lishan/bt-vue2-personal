@@ -494,7 +494,7 @@ export default {
         { required: true, message: 'Select end date', trigger: 'change' }
         ],
         year: [
-          { validator: createPositiveIntegerRule('custom years',1,1000), trigger: 'blur' }
+          { validator: this.createYearLimitRule('custom years'), trigger: 'blur' }
         ],
         corr_per: [
           { validator: createPositiveIntegerRule('correlation percentage', 75,100), trigger: 'blur'}
@@ -504,7 +504,7 @@ export default {
         ],
       },
       btnLoading: false,
-      previewBtnLoading: false
+      previewBtnLoading: false,
     }
   },
   computed: {
@@ -531,6 +531,24 @@ export default {
     this.generateCPMName()
   },
   methods: {
+    createYearLimitRule(errorMsgEmpty) {
+      return (_, value, callback) => {
+        if(value === '') {
+          callback(new Error(`Enter ${errorMsgEmpty}`))
+        }
+        const pattern = /^\d+$/
+        const isPositiveInteger = isNaN(value) || value <= 0 || !pattern.test(value)
+        if (isPositiveInteger) {
+          callback(new Error(`Enter positive integers only`))
+        }
+        const customYearLimit = CIQ.getYearInverval()
+        if( customYearLimit < value){
+          this.data.year = customYearLimit
+          callback(new Error(`The Input Value Exceeds the Maximun Number of Years (${customYearLimit}) for This Symbol`))
+        }
+        callback()
+      }
+    },
     resetForm() {
       // 如果当前在预览或者回测状态，不允许重置
       if(this.previewBtnLoading || this.btnLoading) return true
@@ -557,6 +575,7 @@ export default {
       this.resetChart()
     },
     calculateBarDistance() {
+      // 计算区间内Bar Distance
       this.data.bars_num = CIQ.measureBarDistance(this.data.start_date,this.data.end_date)
     },
     generateCPMName() {
