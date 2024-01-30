@@ -190,7 +190,7 @@
   <el-row :gutter="10">
     <el-col :span="12">
       <el-row :gutter="10">
-        <el-col :span="12">
+        <el-col :span="8">
         <el-form-item prop="direction" label="8. Direction">
           <el-select
               v-model="data.direction"
@@ -206,7 +206,7 @@
             </el-select>
         </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="8">
         <el-form-item
           label="9. Time In Market"
           prop="tim"
@@ -233,10 +233,6 @@
             </template></el-input>
         </el-form-item>
         </el-col>
-      </el-row>
-    </el-col>
-    <el-col :span="12">
-      <el-row :gutter="10">
         <el-col :span="8">
           <el-form-item prop="backtestHistory" label="10. Lookback Period">
               <template slot="label">
@@ -266,9 +262,15 @@
                   </el-option>
                 </el-select>
               </div>
-          </el-form-item>
+            </el-form-item>
         </el-col>
-        <el-col :span="9">
+      </el-row>
+    </el-col>
+    <el-col :span="12">
+      <el-row :gutter="10">
+        <el-col :span="8">
+        </el-col>
+        <el-col :span="8">
           <el-form-item
               label="11. Custom Duration"
               prop="year"
@@ -282,7 +284,7 @@
                 </template></el-input>
             </el-form-item>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="8">
           <el-form-item class="CPM-btn" label=" ">
             <el-button type="primary" :loading="btnLoading" @click="submitForm">Backtest Pattern</el-button>
           </el-form-item>
@@ -389,7 +391,7 @@ export default {
         timeframe: 'Daily',
         start_date: '',
         end_date: '',
-        lookback_period: 20,
+        lookback_period: 10,
         corr_per: 90,
         tim: 21,
         year: '',
@@ -437,8 +439,8 @@ export default {
           label: '7 Year'
         },
         {
-          value: 6,
-          label: '6 Year'
+          value: 8,
+          label: '8 Year'
         },
         {
           value: 9,
@@ -553,7 +555,7 @@ export default {
       // 如果当前在预览或者回测状态，不允许重置
       if(this.previewBtnLoading || this.btnLoading) return true
       const resetData = {
-        lookback_period: 20,
+        lookback_period: 10,
         corr_per: 90,
         direction: 'Long',
         tim: 21,
@@ -803,7 +805,7 @@ export default {
       if(!rowUrl) {
         // 不是编辑是新建
         const nameChecked = await this.checkDuplicateNames(name)
-        if(nameChecked) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
+        if(nameChecked) {this.popUpMsgBox(`The name already in use. Please choose another`); return}
       }
       const exclude_overlap = this.isExcludeOO ? 1 : 0
       const saveData = {
@@ -823,6 +825,7 @@ export default {
         return saveRes
       }
       let url = saveRes.data?.url
+      this.rowUrl = url
       let pollingRes = null
       do {
         pollingRes = await getCPMResults(url)

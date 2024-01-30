@@ -38,7 +38,6 @@
 		.home-link,
 		.help-link,
 		.ai-link {
-			margin: 0 28px;
 			height: 78px;
 			display: flex;
 			align-items: center;
