@@ -58,13 +58,15 @@ export default {
 		onChartReady(){
 			this.hideComponents()	
 			console.log('chart_data',this.chart_data)
-			//还原自定义indicator Layout
+
 			if(this.chart_data.name) CIQ.displayCPMLayout(this.chart_data,()=>{
+				// 有result的情况下(success)执行此回调并计算TIM
 				// backtest cpm后需要加载Chart后更新tim
 				this.$emit('prepareData', this.chart_data)
 				this.$emit('calculateBarDistance')
 			})
 			else{
+				// 创建新CPM
 				this.$emit('calculateBarDistance')
 				CIQ.hideCover()
 			}
