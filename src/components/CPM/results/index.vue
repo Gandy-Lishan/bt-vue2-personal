@@ -220,7 +220,7 @@ export default {
         this.$refs['Summary'].displayData({})
         this.$refs['Statistics'].displayData({}, [])
         this.$refs['TIM'].clearData(data.timeframe)
-        this.StartEndDateArray = []
+        this.$refs['CorrInfo'].prepareData([])
       })
     },
     handleDownloadCsv() {

@@ -15,7 +15,8 @@
           title="Lookback Period"
         >
         <template slot="formatter">
-              <h3 v-if="summary.lookback_period">{{ summary.lookback_period }} Years</h3>
+              <h3 v-if="summary.lookback_period && summary.lookback_period != 'All'">{{ summary.lookback_period }} Years</h3>
+              <h3 v-else-if="summary.lookback_period && summary.lookback_period == 'All'">{{ summary.lookback_period }} History</h3>
               <h3 v-else>{{ summary.lookback_period }}</h3>
         </template>
         </el-statistic>

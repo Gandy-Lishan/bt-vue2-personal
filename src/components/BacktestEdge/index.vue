@@ -237,7 +237,6 @@ export default {
 		.strategy-link,
 		.home-link,
 		.ai-link {
-			margin: 0 28px;
 			height: 78px;
 			display: flex;
 			align-items: center;

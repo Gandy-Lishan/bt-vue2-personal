@@ -88,7 +88,9 @@ export default {
 				return parseFloat(data)
 			} else if (dateRegex.test(data)) {
 				return data
-			} else {
+			} else if(typeof data == 'string'){
+				return data
+			}else {
 				return ''
 			}
 		},
@@ -97,11 +99,34 @@ export default {
 		},
 		async prepareData(_,datatime) {
 				const periodArray = this.getAllDefaultTableLabels()
-				this.backtestHistoryList = this.calculateBacktestHistory(
+				const backtestHistoryList = this.calculateBacktestHistory(
 						this.tradesData,
 						periodArray
 				)
-				console.log('backtestHistoryList------', this.backtestHistoryList)
+				const defaultTableLabels = this.defaultTableLabels.filter(item => item != 'Dates of 1 Signals' && item != 'Max Gain' && item != 'Max Loss')
+				
+				const medianMaGainObj = {'Dates of 1 Signals': 'Median'}
+				defaultTableLabels.forEach(label => {
+					const monthData = backtestHistoryList.map(entry => entry[label])
+
+					const maGainValues = monthData.map(entry => entry["Max Gain"])
+					const maxLossValues = monthData.map(entry => entry["Max Loss"])
+
+					maGainValues.sort((a, b) => a - b)
+					maxLossValues.sort((a, b) => a - b)
+					// 计算中位数
+					const medianMaGain = maGainValues.length % 2 === 0
+						? ((maGainValues[maGainValues.length / 2 - 1] + maGainValues[maGainValues.length / 2]) / 2).toFixed(2)
+						: maGainValues[Math.floor(maGainValues.length / 2)]
+
+					const medianMaxLoss = maxLossValues.length % 2 === 0
+						? ((maxLossValues[maxLossValues.length / 2 - 1] + maxLossValues[maxLossValues.length / 2]) / 2).toFixed(2)
+						: maxLossValues[Math.floor(maxLossValues.length / 2)]
+						
+					medianMaGainObj[label] = {"Max Gain": medianMaGain, "Max Loss": medianMaxLoss}	
+				})
+				console.log('计算结果', medianMaGainObj)
+				this.backtestHistoryList = [...backtestHistoryList, medianMaGainObj]
 				var offset = datatime.getTimezoneOffset() * 60 * 1000
 				this.start_date = new Date(
 						datatime.setTime(datatime.getTime() + offset)
