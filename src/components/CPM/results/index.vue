@@ -79,7 +79,7 @@ export default {
       rowFrequency: 'Daily',
       tradePrice: 'Close',
       chart_data: {},
-      breadcrumbTitle: 'Back to correlation pattern match list',
+      breadcrumbTitle: 'Back to Correlation Pattern Match List',
       direction: 'Long',
       StartEndDateArray: [],
       default_symbol: ''

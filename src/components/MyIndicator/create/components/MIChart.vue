@@ -1,7 +1,7 @@
 <template>
 		<div class="chart_box" id="chart_box">
 			<div class="back">
-				<router-link to="/myindicator"><i class="el-icon-arrow-left"></i><span>Back to my indicators list</span></router-link>
+				<router-link to="/myindicator"><i class="el-icon-arrow-left"></i><span>Back to My Indicators List</span></router-link>
 			</div>
 			<chart :symbol="default_symbol" width="100%" height="100%" :onChartReady="onChartReady">
 				<LoadingOverlayChart
