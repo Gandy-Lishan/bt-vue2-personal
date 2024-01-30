@@ -142,6 +142,19 @@
 					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
+          v-if="['Status'].includes(l.label)"
+				>
+					<template slot-scope="scope">
+            <el-tag type="success" effect="plain" v-if="scope.row[l.value] == 'Finish'"><i class="el-icon-circle-check" style="margin-right: 2px;"></i>{{scope.row[l.value]}}</el-tag>
+            <el-tag type="info" effect="plain" v-if="scope.row[l.value] == 'Running'"><i class="el-icon-loading" style="margin-right: 2px;"></i>{{scope.row[l.value]}}</el-tag>
+            <el-tag type="danger" effect="plain" v-if="scope.row[l.value] == 'Fail'"><i class="el-icon-circle-close" style="margin-right: 2px;"></i>{{scope.row[l.value]}}</el-tag>
+					</template>
+				</el-table-column>
+        <el-table-column
+          align="center"
+					:label="l.label"
+					:prop="l.value"
+					:key="l.key"
           v-if="['Bars Number'].includes(l.label)"
 				>
         <template slot-scope="scope">
@@ -173,7 +186,7 @@
 
 <script>
 import { delCPM, getCPMList, getCPMResults } from '@/service/service'
-import {isJson} from '@/utils'
+import { capitalizeFirstLetter } from "@/utils"
 
 export default {
   name: 'Table',
@@ -207,6 +220,11 @@ export default {
           key: 'period'
         },
         {
+          label: 'Status',
+          value: 'status',
+          key: 'status'
+        },
+        {
           label: 'Bars Number',
           value: 'bars_num',
           key: 'bars_num'
@@ -220,7 +238,7 @@ export default {
           label: 'Total Return',
           value: 'total_return',
           key: 'total_return'
-        },
+        }
       ],
       tableData: [],
       currentSort: {}, // 当前的排序信息
@@ -240,6 +258,7 @@ export default {
 				if (res.status == 200) {
 					let data = res.data.results
 					data = data.map(item => {
+            item.status = capitalizeFirstLetter(item.status)
             item.period = [item.start_date, item.end_date]
 						return item
 					})
@@ -305,10 +324,10 @@ export default {
       const { url } = row
       this.loading = true
 			const res = await delCPM(url)
-      const code = res.data.code
+      const code = res.data.status
       if(code == 204) this.popUpMsgBox('Successfully deleted')
       if(code == 403) this.popUpMsgBox("Sorry, deleted item doesn't exist. Refresh the list")
-      if(code == 404) {this.popUpMsgBox('Permission denied')}
+      if(code == 404) {this.popUpMsgBox('Delete failed')}
 			await this.getDataList(null)
 			this.loading = false
     },
@@ -403,5 +422,13 @@ export default {
 }
 .showDate .el-button--info.is-plain {
   width: 125px;
+}
+.el-tag--plain.el-tag--success {
+  color: #289F6D;
+  border-color: #289F6D;
+}
+.el-tag--plain.el-tag--danger {
+  color: #dd3a13;
+  border-color: #dd3a13;
 }
 </style>
