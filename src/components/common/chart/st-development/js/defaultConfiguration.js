@@ -680,8 +680,11 @@ import {CIQ} from "chartiq/js/chartiq.js";
 						{
 							"name": "# of Consecutive Days Above a Moving Average",
 							"url": "# of Consecutive Days Above a Moving Average"
+						},
+						{
+							"name": "# of Consecutive Days Below a Moving Average",
+							"url": "# of Consecutive Days Below a Moving Average"
 						}
-						
 					]
 				},
 				{

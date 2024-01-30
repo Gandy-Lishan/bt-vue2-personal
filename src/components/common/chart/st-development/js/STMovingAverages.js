@@ -906,6 +906,45 @@ if (!CIQ.Studies) {
 			quotes[i]["Result " + sd.name] = indicator;
 		}
 	};
+	CIQ.Studies.calculateConsecutiveDaysBelowMA = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+
+		var period = sd.inputs.Period;
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+		CIQ.Studies.MA(
+			sd.inputs["Moving Average Type"],
+			sd.days,
+			field,
+			0,
+			"_MA",
+			stx,
+			sd
+		);
+		
+		let indicator
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			// ma with 252 bar offset
+			if(i+1>=period){
+				var quote = quotes[i]
+				if (!quotes[i]) continue;
+				if (quote[field] >= quote["_MA " + sd.name]) {
+					indicator = 0
+				}else {
+					if(indicator){
+						indicator++
+					}else{
+						indicator = 1
+					}
+				}
+			}
+			quotes[i]["Result " + sd.name] = indicator;
+		}
+	};
 	
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		// 为了覆盖cci optix,用了小写的cci
@@ -1115,6 +1154,16 @@ if (!CIQ.Studies) {
 			outputs: {
 				"Result": "auto",
 				//"_MA": 'auto'
+			},
+        },
+		"# of Consecutive Days Below a Moving Average": {
+            name: "# of Consecutive Days Below a Moving Average",
+			inputs: { Period: 252, },
+			calculateFN: function (stx, sd) {
+				CIQ.Studies.calculateConsecutiveDaysBelowMA(stx, sd);
+			},
+			outputs: {
+				"Result": "auto",
 			},
         },
 	});
