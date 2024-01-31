@@ -2673,5 +2673,7 @@ export default {
 
 .hint {
   margin-left: 146px;
+  font-size: 12px;
+  color: #333333;
 }
 </style>
