@@ -35,6 +35,9 @@
              @click.stop="() => {changeTab('results')}" :class="{ active: activeTab == 'results' || '' }"
              >Multi-Timeframe Results</p>
              <p
+             @click.stop="() => {changeTab('maxMin')}" :class="{ active: activeTab == 'maxMin' || '' }"
+             >Max Gain and Loss</p>
+             <p
              @click.stop="() => {changeTab('corrInfo')}" :class="{ active: activeTab == 'corrInfo' || '' }"
              >Correlation Info</p>
           </div>
@@ -54,6 +57,13 @@
           <Statistics v-show="activeTab == 'statistics'" ref="Statistics"></Statistics>
           <TIM v-show="activeTab == 'results'" ref="TIM" :tradeDate="tradeDate" :rowFrequency="rowFrequency" :tradePrice="tradePrice" :direction="direction"></TIM>
           <CorrInfo v-show="activeTab == 'corrInfo'" ref="CorrInfo"></CorrInfo>
+          <MaxMin
+            ref="maxMinChild"
+            v-show="activeTab == 'maxMin'"
+            :tradesData="tradeDate"
+            :tradePrice="tradePrice"
+            :rowFrequency="rowFrequency"
+          ></MaxMin>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -67,6 +77,7 @@ import TIM from "./components/tim";
 import Chart from "../create/components/Chart"
 import CorrInfo from "./components/corrInfo";
 import Form from "../create/components/Form";
+import MaxMin from "../results/components/MaxMin";
 const XLSX = require('xlsx');
 
 export default {
@@ -91,7 +102,8 @@ export default {
     TIM,
     Chart,
     CorrInfo,
-    Form
+    Form,
+    MaxMin
   },
     beforeRouteEnter(to, _, next) {
 		if (to.path === '/cpm/results') {
@@ -133,6 +145,7 @@ export default {
       _this.$nextTick(() => {
         const datatime = new Date(data.start_date)
         _this.$refs['TIM'].prepareData(_this.tradeDate, datatime)
+        _this.$refs['maxMinChild'].prepareData(_this.tradeDate, datatime)
         _this.$refs['CorrInfo'].prepareData(_this.StartEndDateArray)
       });
     },
@@ -221,6 +234,7 @@ export default {
         this.$refs['Summary'].displayData({})
         this.$refs['Statistics'].displayData({}, [])
         this.$refs['TIM'].clearData(data.timeframe)
+        this.$refs['maxMinChild'].clearData(data.timeframe)
         this.$refs['CorrInfo'].prepareData([])
       })
     },
@@ -228,12 +242,14 @@ export default {
       const {backtestHistoryList, result_quotes, periods, defaultTableLabels} = this.$refs.TIM.exportData()
       const {summaryData, tradesData} = this.$refs.Statistics.exportData()
       const {StartEndDateArray} = this.$refs.CorrInfo.exportData()
+      const {maxMinData} = this.$refs.maxMinChild.exportData()
       if (
         !(
           summaryData.length &&
           tradesData.length &&
           backtestHistoryList.length &&
-          StartEndDateArray.length
+          StartEndDateArray.length &&
+          maxMinData.length
         )
       ) {
         this.popUpMsgBox('No data available for download')
@@ -318,17 +334,35 @@ export default {
           _backtestHistoryList.push(zscore);
         });
 
+      const _maxMinData = maxMinData.map(item => {
+        const transformedItem = {
+          "Dates of 1 Signals": item["Dates of 1 Signals"],
+        };
+
+        Object.keys(item).forEach(key => {
+          if (key !== "Dates of 1 Signals" && key !== "Max Gain" && key !== "Max Loss") {
+            Object.keys(item[key]).forEach(subKey => {
+              transformedItem[`${key} - ${subKey}`] = item[key][subKey];
+            });
+          }
+        });
+
+        return transformedItem;
+      });
+
       const dataList = [
         summary,
         trade,
         correlationInfo,
         _backtestHistoryList,
+        _maxMinData,
       ]
       const sheetNames = [
         'Summary',
         'Trades',
         'Correlation Info',
         'Exit with default Time Frame',
+        'Max Gain and Loss'
       ]
       this.exportDataToCSV(dataList, sheetNames)
     },
