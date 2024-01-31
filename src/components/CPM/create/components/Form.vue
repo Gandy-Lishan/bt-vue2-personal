@@ -175,7 +175,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item class="CPM-btn" label=" ">
-            <el-button type="primary" @click="previewForm" size="small" class="delete-btn" :loading="previewBtnLoading" :disabled="previewBtnLoading || btnLoading">Preview Pattern</el-button>
+            <el-button type="warning" @click="previewForm" size="small" :loading="previewBtnLoading" :disabled="previewBtnLoading || btnLoading">Preview Pattern</el-button>
           </el-form-item>
         </el-col>
       </el-row>
@@ -917,12 +917,9 @@ export default {
   width: 100%;
   height: 100%;
 }
-.delete-btn {
-	background-color: #f59e0b;
-  border: unset;
-}
-.delete-btn:hover {
-  background-color: rgb(251, 192, 92);
+.el-button--warning {
+  width: 100%;
+  height: 100%;
 }
 .category-box {
   display: flex;
@@ -969,13 +966,6 @@ export default {
 }
 /deep/ .el-form-item.CPM-btn.el-form-item--small{
   margin-top: 19px;
-}
-.delete-btn {
-	background-color: #f59e0b;
-  border: unset;
-}
-.delete-btn:hover {
-  background-color: rgb(251, 192, 92);
 }
 .CPM-btn {
   width: 100%;
