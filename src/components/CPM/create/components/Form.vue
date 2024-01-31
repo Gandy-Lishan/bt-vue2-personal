@@ -74,7 +74,7 @@
           3. Pattern Start Date
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
-              >"Start Date" denotes the commencement time of the candlestick pattern.</span>
+              >The date on which you would like to start the price comparison.</span>
             <i class="iconfont icon-wenhao"></i>
           </el-tooltip>
         </label>
@@ -100,7 +100,7 @@
           4. Pattern End Date
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
-              >"End Date" indicates the conclusion time of the candlestick pattern.</span>
+              >The date on which you would like to stop the price comparison.</span>
             <i class="iconfont icon-wenhao"></i>
           </el-tooltip>
         </label>
@@ -158,7 +158,9 @@
                 7. Correlation Percentage
                 <el-tooltip effect="dark" placement="top">
                   <span slot="content">
-                    Correlation Percentage
+                    This is the minimum threshold required for matching patterns. <br />
+                    Only values between 75-100 are accepted. A value of "90", <br/>
+                    for example, means that only correlations above +0.90 will be shown.
                   </span>
                   <i class="iconfont icon-wenhao"></i>
                 </el-tooltip>
