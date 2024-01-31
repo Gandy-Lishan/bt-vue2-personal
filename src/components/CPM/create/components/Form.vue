@@ -386,7 +386,7 @@ export default {
         timeframe: 'Daily',
         start_date: '',
         end_date: '',
-        lookback_period: 10,
+        lookback_period: 'All',
         corr_per: 90,
         tim: 21,
         year: '',
@@ -546,7 +546,7 @@ export default {
       // 如果当前在预览或者回测状态，不允许重置
       if(this.previewBtnLoading || this.btnLoading) return true
       const resetData = {
-        lookback_period: 10,
+        lookback_period: 'All',
         corr_per: 90,
         direction: 'Long',
         tim: 21,
