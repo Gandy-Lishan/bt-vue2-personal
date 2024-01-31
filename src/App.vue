@@ -48,7 +48,8 @@ export default {
 		const _this = this
 		if(Cookies.get('sentimen_session')){
 			try {
-				await axios.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
+				const res = await axios.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
+				console.log('权限响应', res)
 			} catch (error) {
 				switch (error?.response?.status) {
 				case 401:
@@ -94,6 +95,8 @@ export default {
 			this.$store.commit('user/SETUSERROLE', { 'is_admin': true, 'role': 'analyst', 'userID': email || userID })
 		}else if(userID == 'system'){
 			this.$store.commit('user/SETUSERROLE', { 'is_admin': true, 'role': 'system', 'userID': userID })
+		}else {
+			this.$store.commit('user/SETUSERROLE', { 'is_admin': false, 'role': 'client', 'userID': email })
 		}
 		// // 判断用户是否是首次进入
 		// if (!localStorage.getItem("visited")) {
