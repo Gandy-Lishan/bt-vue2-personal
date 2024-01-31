@@ -98,7 +98,7 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin: 30px 0px 20px 0px;
+	margin: 20px 0px 20px 0px;
 	font-size: 1.1rem;
 	i {
 		font-weight: bold;

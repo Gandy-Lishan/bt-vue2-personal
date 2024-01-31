@@ -58,10 +58,10 @@ export default {
   margin: 0 auto;
   align-items: center;
   .chart {
-    width: 90%;
+    // width: 90%;
   }
   .form {
-    width: 90%;
+    // width: 90%;
   }
 }
 
