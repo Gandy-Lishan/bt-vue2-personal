@@ -5,7 +5,7 @@
 				<el-table-column
 					prop="totalReturn"
 					show-overflow-tooltip
-					label="TOTAL RETURN%"
+					label="TOTAL RETURN %"
 					align="center"
 					algin="center"
 				>
@@ -22,7 +22,7 @@
 				<el-table-column
 					show-overflow-tooltip
 					prop="medianReturn"
-					label="MEDIAN RETURN%"
+					label="MEDIAN RETURN %"
 					align="center"
 				>
 					<template slot-scope="scope">
@@ -45,7 +45,7 @@
 				<el-table-column
 					show-overflow-tooltip
 					prop="averageReturn"
-					label="AVERAGE RETURN%"
+					label="AVERAGE RETURN %"
 					align="center"
 				>
 					<template slot-scope="scope">
@@ -98,7 +98,7 @@
 				<el-table-column
 					show-overflow-tooltip
 					prop="buyHoldGain"
-					label="BUY & HOLD%"
+					label="BUY & HOLD %"
 					align="center"
 				>
 					<template slot-scope="scope">
@@ -113,7 +113,7 @@
 				</el-table-column>
 				<el-table-column
 					prop="winRate"
-					label="WIN RATE%"
+					label="WIN RATE %"
 					show-overflow-tooltip
 					align="center"
 				>
@@ -134,7 +134,7 @@
 				<el-table-column
 					show-overflow-tooltip
 					prop="averageWin"
-					label="AVERAGE WIN%"
+					label="AVERAGE WIN %"
 					align="center"
 				>
 					<template slot-scope="scope">
@@ -150,7 +150,7 @@
 				<el-table-column
 					show-overflow-tooltip
 					prop="averageLoss"
-					label="AVERAGE LOSS%"
+					label="AVERAGE LOSS %"
 					align="center"
 				>
 					<template slot-scope="scope">
@@ -229,7 +229,7 @@
 				<el-table-column
 					prop="timeInMarket"
 					show-overflow-tooltip
-					label="TIME IN MARKET%"
+					label="TIME IN MARKET %"
 					align="center"
 				>
 					<template slot-scope="scope">
