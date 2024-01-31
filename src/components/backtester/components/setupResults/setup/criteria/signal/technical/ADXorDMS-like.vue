@@ -1,9 +1,8 @@
 // ADX-Like input box
 <template>
-	<div class="senti-container">
+	<div class="senti-container">			
 		<el-form :model="tech" :rules="rules" ref="adxForm" size="mini">
 			<div class="condition-container">
-				<!-- <p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p> -->
 				<el-form-item class="indicator-alignment">
 					<el-radio
 						v-model="conditionRadio"
