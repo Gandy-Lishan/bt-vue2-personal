@@ -140,7 +140,7 @@ let __st_js_drawing_ = _exports => {
                 node: newNode
             });
         })
-
+        CIQ.stxx.draw()
     }
 
     function pairDates(obj) {
