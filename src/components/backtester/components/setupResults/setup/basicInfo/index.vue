@@ -1193,8 +1193,8 @@ export default {
       })
       /* 如果勾选了 risk control,则校验 stop loss, take profit, time in market */
       if(_this.isRiskControl) {
-        if(_this.isStopLoss) stopLossValid = _this.validateTP(_this.sl)
-        if(_this.isTakeProfit) takeProfitValid = _this.validateSL(_this.tp)
+        if(_this.isStopLoss) stopLossValid = _this.validateSL(_this.sl)
+        if(_this.isTakeProfit) takeProfitValid = _this.validateTP(_this.tp)
         if(_this.isTimeInMarket) timeInMarketValid = _this.validateTIM(_this.tim)
         riskControlValid = (_this.isStopLoss ? (stopLossValid == '') : true) && (_this.isTakeProfit ? (takeProfitValid == '') : true) && (_this.isTimeInMarket ? (timeInMarketValid == '') : true)
       }
