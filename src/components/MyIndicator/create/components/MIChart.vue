@@ -81,9 +81,10 @@ export default {
 
 <style lang="less" scoped>
 .back {
-    position: absolute;
-    top: 109px;
-    left: 48px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 30px 0px 20px 0px;
 	font-size: 1.1rem;
 	i {
 		font-weight: bold;
@@ -95,8 +96,5 @@ export default {
 			color: #5b9bd1;
 		}
 	}
-}
-#chart_box {
-	margin-top: 80px
 }
 </style>

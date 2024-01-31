@@ -117,6 +117,5 @@ export default {
 <style lang="less" scoped>
 .cpm-container {
 	font-family: "Open Sans",sans-serif;
-	margin-top: 30px;
 }
 </style>
