@@ -144,7 +144,7 @@ export default {
 	margin-bottom: 50px;
 	font-family: "Open Sans",sans-serif;
 	.seasonality-top{
-		margin: 0 auto 20px auto;
+		margin: 50px auto 20px auto;
 		width: 90%;
 		color: #333;
 		p{
