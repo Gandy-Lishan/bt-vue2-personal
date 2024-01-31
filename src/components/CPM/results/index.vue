@@ -353,16 +353,16 @@ export default {
       const dataList = [
         summary,
         trade,
-        correlationInfo,
         _backtestHistoryList,
         _maxMinData,
+        correlationInfo
       ]
       const sheetNames = [
         'Summary',
         'Trades',
-        'Correlation Info',
-        'Exit with default Time Frame',
-        'Max Gain and Loss'
+        'Multi-Timeframe Results',
+        'Max Gain and Loss',
+        'Correlation Info'
       ]
       this.exportDataToCSV(dataList, sheetNames)
     },
