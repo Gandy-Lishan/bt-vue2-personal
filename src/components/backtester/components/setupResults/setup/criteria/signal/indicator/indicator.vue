@@ -2,6 +2,7 @@
 <template>
 	<div class="indicator-box">
 		<el-form :model="si" ref="siForm" :rules="rules" label-position="left" size="mini">
+      
       <div class="labelWithSelectBox indicatorTypeBox">
         <el-form-item prop="indicatorRadio">
             <template slot="label">
@@ -32,6 +33,7 @@
             </div>
         </el-form-item>
       </div>
+      <div class="hint" v-show="indicatorRadio === 'Technical Indicator'">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</div>
       <el-divider></el-divider>
       <div class="labelWithSelectBox indicatorTypeBox" v-show="indicatorRadio === 'Sentiment Indicator'">
         <el-form-item prop="sentimentIndicator">
@@ -185,7 +187,7 @@
 						</el-upload>
         </el-form-item>
       </div>
-
+      
       <el-dialog :title="previewFileName" :visible.sync="previewVisible">
 							<el-table
 								:data="previewData"
@@ -2664,5 +2666,9 @@ export default {
 }
 .el-upload__tip {
   line-height: 15px;
+}
+
+.hint {
+  margin-left: 146px;
 }
 </style>
