@@ -173,7 +173,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item class="CPM-btn" label=" ">
-            <el-button type="primary" @click="previewForm" size="small" class="delete-btn" :loading="previewBtnLoading">Preview Pattern</el-button>
+            <el-button type="primary" @click="previewForm" size="small" class="delete-btn" :loading="previewBtnLoading" :disabled="previewBtnLoading || btnLoading">Preview Pattern</el-button>
           </el-form-item>
         </el-col>
       </el-row>
@@ -286,7 +286,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item class="CPM-btn" label=" ">
-            <el-button type="primary" :loading="btnLoading" @click="submitForm">Backtest Pattern</el-button>
+            <el-button type="primary" :loading="btnLoading" @click="submitForm" :disabled="previewBtnLoading || btnLoading">Backtest Pattern</el-button>
           </el-form-item>
         </el-col>
       </el-row>

@@ -1157,10 +1157,11 @@ export default {
 		},
     async saveData() {
       /* 校验表单字段 */
-      if(! await this.validateForm()) {
+      const valid = await this.validateForm()
+      if(!valid) {
         this.setSetUpLoadingSetting(false, false, 0, '');
         CIQ.hideCover()
-        return
+        return true
       }
       let bd = JSON.parse(JSON.stringify(this.bd))
       this.getTradePrice(bd.trade_price)
@@ -1195,7 +1196,7 @@ export default {
         if(_this.isStopLoss) stopLossValid = _this.validateTP(_this.sl)
         if(_this.isTakeProfit) takeProfitValid = _this.validateSL(_this.tp)
         if(_this.isTimeInMarket) timeInMarketValid = _this.validateTIM(_this.tim)
-        riskControlValid = (_this.isStopLoss ? (stopLossValid === '') : true) && (_this.isTakeProfit ? (takeProfitValid === '') : true) && (_this.isTimeInMarket ? (timeInMarketValid === '') : true)
+        riskControlValid = (_this.isStopLoss ? (stopLossValid == '') : true) && (_this.isTakeProfit ? (takeProfitValid == '') : true) && (_this.isTimeInMarket ? (timeInMarketValid == '') : true)
       }
       /* 如果勾选了 exclude overlapping observations,则校验 exclude overlapping observations */
       if(_this.isExcludeOO) excludeValid = (_this.validateExclude(_this.bd.exclude_oo) === '')
