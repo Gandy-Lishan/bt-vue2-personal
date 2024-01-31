@@ -75,6 +75,8 @@
 					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
+				  show-overflow-tooltip
+          min-width="200px"
           v-if="l.label == 'Name'"
 				>
 					<template slot-scope="scope">
@@ -414,8 +416,7 @@ export default {
   color: #909399;
 }
 .CPM-list-container{
-  width: 90%;
-  margin: 0 auto;
+  padding: 20px;
 }
 .showDate {
   margin: 5px 0;

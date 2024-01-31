@@ -431,10 +431,13 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 34px;
+    margin-top: 50px;
   }
   .chart {
     width: 90%;
+    background-color: #ffffff;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
   }
   .form {
     width: 90%;
