@@ -356,13 +356,6 @@
       </el-row>
     </el-form-item>
   </el-form>
-  <!-- <LoadingOverlay
-			:isLoading="isCreateLoading"
-			:showProgress="false"
-			:percentage="0"
-			:progressText="progressText"
-		>
-		</LoadingOverlay> -->
   </div>
 </template>
  <script>
@@ -512,10 +505,6 @@ export default {
     }
   },
   computed: {
-    isCreateLoading() {
-      // 从 Vuex store 中获取全局 loading 状态
-      return this.$store.state.states.isCreateLoading
-    },
     ...mapGetters(['getBacktestSymbol']), // 监听chartiq和表单的symbol改动以双向响应
     handleGetBacktestSymbol() {
       return this.getBacktestSymbol
@@ -881,11 +870,13 @@ export default {
     },
     changeLoadingStatus(type,state){
       if(state){
-        if(type == 'preview') this.$store.commit('states/SET_MI_CREATE_LOADING', true);
-        CIQ.addCover();this.previewBtnLoading = true;this.btnLoading = true;
+        if(type == 'preview') this.previewBtnLoading = true;
+        else this.btnLoading = true;
+        CIQ.addCover();
       }else {
-        if(type == 'preview') this.$store.commit('states/SET_MI_CREATE_LOADING', false);
-        CIQ.hideCover();this.previewBtnLoading = false;this.btnLoading = false;
+        if(type == 'preview') this.previewBtnLoading = false;
+        else this.btnLoading = false;
+        CIQ.hideCover();
       }
     }
   }
