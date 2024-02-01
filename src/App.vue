@@ -93,10 +93,13 @@ export default {
 		const userID = Cookies.get('devbt2Userid')
 		if (allowedUserList.includes(email) || userID == 'analyst') {
 			this.$store.commit('user/SETUSERROLE', { 'is_admin': true, 'role': 'analyst', 'userID': email || userID })
+			localStorage.setItem('role', 'analyst')
 		}else if(userID == 'system'){
 			this.$store.commit('user/SETUSERROLE', { 'is_admin': true, 'role': 'system', 'userID': userID })
+			localStorage.setItem('role', 'system')
 		}else {
 			this.$store.commit('user/SETUSERROLE', { 'is_admin': false, 'role': 'client', 'userID': email })
+			localStorage.setItem('role', 'client')
 		}
 		// // 判断用户是否是首次进入
 		// if (!localStorage.getItem("visited")) {
