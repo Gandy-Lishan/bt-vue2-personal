@@ -271,8 +271,6 @@
     <el-col :span="12">
       <el-row :gutter="10">
         <el-col :span="8">
-        </el-col>
-        <el-col :span="8">
           <el-form-item
               label="11. Custom Duration"
               prop="year"
@@ -291,70 +289,11 @@
             <el-button type="primary" :loading="btnLoading" @click="submitForm" :disabled="previewBtnLoading || btnLoading">Backtest Pattern</el-button>
           </el-form-item>
         </el-col>
+        <el-col :span="8">
+        </el-col>
       </el-row>
     </el-col>
-    <!-- <el-col :span="6">
-      <el-row :gutter="10">
-        <el-col>
-          <el-form-item
-				label="11. Custom Duration"
-        prop="year"
-        v-if="data.lookback_period == 'Custom'"
-			>
-        <el-input
-          v-model="data.year"
-          placeholder="Enter custom years"
-        ><template v-slot:append>
-          (years)
-          </template></el-input>
-			</el-form-item>
-        </el-col>
-      </el-row>
-    </el-col> -->
-    <!-- <el-col :span="6">
-      <el-row :gutter="10">
-        <el-col :span="15">
-          <el-form-item
-            label="11. Custom Duration"
-            prop="year"
-            v-if="data.lookback_period == 'Custom'"
-          >
-            <el-input
-              v-model="data.year"
-              placeholder="Enter custom years"
-            ><template v-slot:append>
-              (years)
-              </template></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="9">
-          <el-form-item class="CPM-btn" label=" ">
-            <el-button type="primary" :loading="btnLoading" @click="submitForm">Backtest Pattern</el-button>
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-col> -->
   </el-row>
-  </el-form>
-  <el-form
-		ref="Form"
-		:model="data"
-		label-position="top"
-		size="small"
-    :rules="rules"
-	>
-  <el-form-item>
-      <el-row :gutter="20" type="flex" justify="center">
-        <el-col :span="6"></el-col>
-        <el-col :span="12">
-          <div class="form-btn">
-            <!-- <el-button type="primary" class="delete-btn" @click="resetForm">Create New Correlation Backtest Pattern</el-button> -->
-            <!-- <el-button type="primary" @click="submitForm" :loading="btnLoading">Backtest Pattern</el-button> -->
-          </div>
-        </el-col>
-        <el-col :span="6"></el-col>
-      </el-row>
-    </el-form-item>
   </el-form>
   </div>
 </template>
@@ -463,7 +402,6 @@ export default {
         }
       ],
       rowUrl: null,
-      progressText: 'Loading...',
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
       },
@@ -764,10 +702,16 @@ export default {
         ...this.data,
         exclude_overlap,
         direction: 'Long',
-        lookback_period: 10,
         tim: 21
       }
       delete saveData.year
+      if(saveData.lookback_period > 10 || saveData.lookback_period == 'All') {
+        this.$notify.info({
+            title: 'Tips:',
+            message: 'In the case of backtesting exceeding 10 years, anticipate longer processing time. We appreciate your patience...',
+            duration: 8000
+        })
+      }
       const previewRes = await previewCPM(saveData)
       console.log('previewRes', previewRes)
       const code = previewRes.data.code
@@ -777,6 +721,7 @@ export default {
       do {
         pollingRes = await getCPMPreview(url)
         const code = pollingRes.data.code
+        console.log('轮训响应', pollingRes)
         if (code == 200) {
           return pollingRes
         }
@@ -805,7 +750,13 @@ export default {
       }
       if(saveData.lookback_period == 'Custom') saveData.lookback_period = saveData.year
       delete saveData.year
-      
+      if(saveData.lookback_period > 10 || saveData.lookback_period == 'All') {
+        this.$notify.info({
+          title: 'Tips:',
+          message: 'In the case of backtesting exceeding 10 years, anticipate longer processing time. We appreciate your patience...',
+          duration: 8000
+        })
+      }
       let saveRes
       if(rowUrl) {saveRes = await editCPM(saveData, rowUrl)}
       else{saveRes = await saveCPM(saveData)}
@@ -969,5 +920,15 @@ export default {
 }
 .CPM-btn {
   width: 100%;
+}
+.progressTextBox {
+  display: flex;
+  align-items: center;
+  .progressText {
+    margin: 0;
+    color: #7c8186c7;
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
