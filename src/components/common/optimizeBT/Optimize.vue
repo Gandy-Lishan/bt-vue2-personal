@@ -403,7 +403,7 @@ h1 {
   font-size: 30px;
 }
 #optimizeBT {
-	visibility: visible;
+	visibility: hidden;
 	display: flex;
 	align-items: center;
 	justify-content: center;

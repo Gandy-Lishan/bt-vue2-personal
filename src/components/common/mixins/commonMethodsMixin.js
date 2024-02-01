@@ -133,6 +133,8 @@ export const CommonMethodsMixin = {
 			}
 		},
 		async optimizeBacktest(data) {
+			const optimizeBT = document.querySelector('#optimizeBT')
+			optimizeBT.classList.add('activated')
 			return
 			try {
 				this.loading = true
