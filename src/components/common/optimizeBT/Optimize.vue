@@ -147,11 +147,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 
 export default {
 	name: 'Optimize',
 	components: {},
+  mixins: [CommonMethodsMixin],
 	data() {
 		return {
       dataList: [
@@ -394,6 +395,9 @@ export default {
 			}
 			return ''
 		},
+    optimization(data) {
+      this.optimizeBacktest(data)
+    }
 	}
 }
 </script>

@@ -382,6 +382,7 @@
 				:total="queryInfo.total"
 			>
 		</el-pagination>
+		<Optimize ref="OPT"></Optimize>
 	</div>
 </template>
 
@@ -397,9 +398,13 @@ import { throttle } from 'lodash'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 import { copy } from "@/components/common/directives/copyBacktestID"
 import { RefreshBus } from "../EventBus/Bus"
+import Optimize from "@/components/common/optimizeBT/Optimize.vue";
 
 export default {
 	name: 'Table',
+	components: {
+		Optimize
+	},
 	props: {
 		tableCol: Array,
 		currentPage: String,
@@ -441,6 +446,9 @@ export default {
 		}
 	},
 	methods: {
+		optimizeBacktest(data) {
+			this.$refs['OPT'].optimization(data)
+		},
 		async getDataList(orderby) {
 			let res = null
 			try {
