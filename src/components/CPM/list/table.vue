@@ -76,7 +76,7 @@
 					:prop="l.value"
 					:key="l.key"
 				  show-overflow-tooltip
-          min-width="200px"
+          min-width="100px"
           v-if="l.label == 'Name'"
 				>
 					<template slot-scope="scope">
@@ -257,6 +257,7 @@ export default {
       const page = this.currentPage
 			try {
 				res = await getCPMList(page, orderby, this.searchKey)
+        console.log('列表响应', res)
 				if (res.status == 200) {
 					let data = res.data.results
 					data = data.map(item => {
@@ -326,7 +327,7 @@ export default {
       const { url } = row
       this.loading = true
 			const res = await delCPM(url)
-      const code = res.data.status
+      const code = res.data.code
       if(code == 204) this.popUpMsgBox('Successfully deleted')
       if(code == 403) this.popUpMsgBox("Sorry, deleted item doesn't exist. Refresh the list")
       if(code == 404) {this.popUpMsgBox('Delete failed')}

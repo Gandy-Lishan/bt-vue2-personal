@@ -55,7 +55,7 @@
       </el-col>
       <el-col :span="6">
         <el-statistic
-          title="start date"
+          title="Pattern Start Date"
         >
         <template slot="formatter">
               {{ summary.start_date }}
@@ -64,7 +64,7 @@
       </el-col>
       <el-col :span="6">
         <el-statistic
-          title="end date"
+          title="Pattern End Date"
         >
         <template slot="formatter">
               {{ summary.end_date }}
