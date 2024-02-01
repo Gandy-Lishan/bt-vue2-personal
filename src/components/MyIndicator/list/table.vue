@@ -1,5 +1,5 @@
 <template>
-  <div class="my-indicator-list-container">
+  <div class="my-indicator-list">
     <div class="search-box">
       <el-button type="primary" round @click="handleCreate">Create New Indicator</el-button>
       <el-input placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" 					clearable
@@ -535,8 +535,8 @@ export default {
   font-weight: 500;
   color: #909399;
 }
-.my-indicator-list-container{
-  width: 90%;
+.my-indicator-list{
+  padding: 20px;
   margin: 0 auto;
 }
 </style>
