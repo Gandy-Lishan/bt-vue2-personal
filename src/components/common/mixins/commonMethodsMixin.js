@@ -135,21 +135,16 @@ export const CommonMethodsMixin = {
 		async optimizeBacktest(data) {
 			const optimizeBT = document.querySelector('#optimizeBT')
 			optimizeBT.classList.add('activated')
-			return
+
 			try {
-				this.loading = true
-				const copyName = `${data.name}(copy)`
+				//this.loading = true
+				const copyName = `${data.name}(opt)`
 
-				// 检查是否已经存在同名的 backtest
-				const nameLookUp = await getBacktestName(copyName)
-				const isDuplicate = nameLookUp.data.results.some(
-					item => item.name === copyName
-				)
-
-				if (isDuplicate) {
-					this.popUpMsgBox('The backtest has been copied')
-				} else {
 					data = JSON.parse(JSON.stringify(data))
+					debugger
+          let { signals: entrySignals } = this.decodeCriteria(data, 'entry')
+			let { signals: exitSignals } = this.decodeCriteria(data, 'exit')
+			
 					for (const key in data) {
 						if (data.hasOwnProperty(key)) {
 							if (data[key] !== null && (typeof data[key] === 'object' || Array.isArray(data[key]))) {
@@ -157,6 +152,7 @@ export const CommonMethodsMixin = {
 							}
 						}
 					}
+          debugger
 					// 获取参数并准备复制
 					const params = {
 						...data,
@@ -174,20 +170,20 @@ export const CommonMethodsMixin = {
 					// 发起复制请求
 					await copyBacktest(this.$qs.stringify(params))
 
-					// 重置查询页码并获取数据 History
-					if (this.currentPage === 'History') {
-						this.queryInfo.page = 1
-						await this.getDataList(null)
-					}
-					if (['Sample', 'Favorites', 'Analyst'].includes(this.currentPage)) {
-						this.$router.push('/backtester/list/history')
-					}
-					this.popUpMsgBox('Copy successfully')
-				}
-				this.loading = false
+					// // 重置查询页码并获取数据 History
+					// if (this.currentPage === 'History') {
+					// 	this.queryInfo.page = 1
+					// 	await this.getDataList(null)
+					// }
+					// if (['Sample', 'Favorites', 'Analyst'].includes(this.currentPage)) {
+					// 	this.$router.push('/backtester/list/history')
+					// }
+					// this.popUpMsgBox('Copy successfully')
+
+				//this.loading = false
 			} catch (error) {
 				console.error('An error occurred:', error)
-				this.loading = false
+				//this.loading = false
 			}
 		},
 		async deleteBacktest(id) {
