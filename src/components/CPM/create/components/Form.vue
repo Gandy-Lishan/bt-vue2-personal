@@ -708,7 +708,7 @@ export default {
       if(saveData.lookback_period > 10 || saveData.lookback_period == 'All') {
         this.$notify.info({
             title: 'Tips:',
-            message: 'In the case of backtesting exceeding 10 years, anticipate longer processing time. We appreciate your patience...',
+            message: 'In the case of preview exceeding 10 years, anticipate longer processing time. We appreciate your patience...',
             duration: 8000
         })
       }
