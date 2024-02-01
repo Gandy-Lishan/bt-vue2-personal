@@ -8,17 +8,20 @@
   >
   </Table>
   <FLGbg></FLGbg>
+  <Optimize></Optimize>
 </div>
 </template>
 
 <script>
 import FLGbg from "@/components/common/FLSbg/FLGbackground.vue";
+import Optimize from "@/components/common/optimizeBT/Optimize.vue";
 import Table from "../table"
 export default {
   name: 'Favorites',
   components: {
     Table,
-    FLGbg
+    FLGbg,
+    Optimize
   },
   data() {
     return {

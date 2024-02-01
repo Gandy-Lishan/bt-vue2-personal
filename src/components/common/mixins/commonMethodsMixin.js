@@ -132,6 +132,62 @@ export const CommonMethodsMixin = {
 				this.loading = false
 			}
 		},
+		async optimizeBacktest(data) {
+			return
+			try {
+				this.loading = true
+				const copyName = `${data.name}(copy)`
+
+				// 检查是否已经存在同名的 backtest
+				const nameLookUp = await getBacktestName(copyName)
+				const isDuplicate = nameLookUp.data.results.some(
+					item => item.name === copyName
+				)
+
+				if (isDuplicate) {
+					this.popUpMsgBox('The backtest has been copied')
+				} else {
+					data = JSON.parse(JSON.stringify(data))
+					for (const key in data) {
+						if (data.hasOwnProperty(key)) {
+							if (data[key] !== null && (typeof data[key] === 'object' || Array.isArray(data[key]))) {
+								data[key] = JSON.stringify(data[key]);
+							}
+						}
+					}
+					// 获取参数并准备复制
+					const params = {
+						...data,
+						name: copyName,
+						favorites: false,
+						user_tag: 'client'
+					}
+					delete params.uuid
+					delete params.results
+					delete params.user_id
+					delete params.status
+					delete params.backtest_id
+					delete params.old_uuid
+
+					// 发起复制请求
+					await copyBacktest(this.$qs.stringify(params))
+
+					// 重置查询页码并获取数据 History
+					if (this.currentPage === 'History') {
+						this.queryInfo.page = 1
+						await this.getDataList(null)
+					}
+					if (['Sample', 'Favorites', 'Analyst'].includes(this.currentPage)) {
+						this.$router.push('/backtester/list/history')
+					}
+					this.popUpMsgBox('Copy successfully')
+				}
+				this.loading = false
+			} catch (error) {
+				console.error('An error occurred:', error)
+				this.loading = false
+			}
+		},
 		async deleteBacktest(id) {
 			this.loading = true
 			await deleteBacktest(id)
