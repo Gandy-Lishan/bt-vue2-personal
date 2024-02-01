@@ -121,7 +121,7 @@
         label="5. Number of Bars"
         prop="bars_num"
       >
-        <el-input v-model="data.bars_num" :disabled="true">
+        <el-input v-model="data.bars_num" :disabled="false" @change="changeNumberOfBars">
           <template v-slot:append>
             (≥3 and ≤252)
           </template>
@@ -537,6 +537,9 @@ export default {
         CIQ.hideCover()
         CIQ.nprogress.done()
       })
+    },
+    changeNumberOfBars(val) {
+      if(val>=3 && val<=252) this.data.start_date = CIQ.getStartDateByNumberOfBars(this.data.end_date,Number(val))
     },
     setBacktestHistory(val) {
       this.data.end_date = timestampToTime(new Date());

@@ -487,15 +487,15 @@ if (!CIQ.Studies) {
 				const maxCloseArrOPR = getPeriodParam(quotes.map(row => row[field]), "max", period, 0);
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
-						//if(i>=period){
+						if(i>=period){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrOPR[i] - minCloseArrOPR[i] == 0) return 0
 
 							const change = parseFloat((100 * (row[field] - minCloseArrOPR[i]) / (maxCloseArrOPR[i] - minCloseArrOPR[i])).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
-						//}
-						//return NaN
+						}
+						return NaN
 					}else{
 						return NaN
 					}
@@ -513,15 +513,15 @@ if (!CIQ.Studies) {
 				const maxCloseArrRR = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
-						//if(i>=period){
+						if(i>=period - 1){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrRR[i] - minCloseArrRR[i] == 0) return 0
 
 							const change = parseFloat((100 * (row[field] - minCloseArrRR[i]) / (maxCloseArrRR[i] - minCloseArrRR[i])).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
-						//}
-						//return NaN
+						}
+						return NaN
 					}else{
 						return NaN
 					}
@@ -566,15 +566,15 @@ if (!CIQ.Studies) {
 				const maxCloseArrDD = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
-						//if(i>=period){
+						if(i>=period - 1){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrDD[i] == 0) return 0
 
 							const change = parseFloat((100 * (row[field] - maxCloseArrDD[i]) / maxCloseArrDD[i]).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
-						//}
-						//return NaN
+						}
+						return NaN
 					}else{
 						return NaN
 					}
@@ -590,15 +590,15 @@ if (!CIQ.Studies) {
 				const minCloseArrDU = getPeriodParam(quotes.map(row => row[field]), "min", period, 1);
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
-						// if(i>=period){
+						if(i>=period - 1){
 							// 如果分母为0，直接返回0
 							if(minCloseArrDU[i] == 0) return 0
 
 							const change = parseFloat((100 * (row[field] - minCloseArrDU[i]) / minCloseArrDU[i]).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
-						// }
-						// return NaN
+						}
+						return NaN
 					}else{
 						return NaN
 					}
