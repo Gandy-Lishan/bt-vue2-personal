@@ -513,7 +513,7 @@ if (!CIQ.Studies) {
 				const maxCloseArrRR = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
-						if(i>=period){
+						if(i>=period - 1){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrRR[i] - minCloseArrRR[i] == 0) return 0
 
@@ -566,7 +566,7 @@ if (!CIQ.Studies) {
 				const maxCloseArrDD = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
-						if(i>=period){
+						if(i>=period - 1){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrDD[i] == 0) return 0
 
@@ -590,7 +590,7 @@ if (!CIQ.Studies) {
 				const minCloseArrDU = getPeriodParam(quotes.map(row => row[field]), "min", period, 1);
 				resArr = quotes.map((row, i) => {
 					if(field in quotes[i] &&  quotes[i][field]!=null){
-						if(i>=period){
+						if(i>=period - 1){
 							// 如果分母为0，直接返回0
 							if(minCloseArrDU[i] == 0) return 0
 
