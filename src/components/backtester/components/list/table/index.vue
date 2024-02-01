@@ -338,6 +338,21 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
+									content="optimize backtest results"
+									placement="bottom-start"
+								>
+									<el-button
+										:disabled="false"
+										type="success"
+										icon="el-icon-data-analysis"
+										circle
+										size="mini"
+										@click="optimizeBacktest(scope.row)"
+									></el-button>
+								</el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="dark"
 									content="copy backtest link"
 									placement="bottom-start"
 								>
