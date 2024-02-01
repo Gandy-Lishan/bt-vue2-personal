@@ -116,6 +116,16 @@ let __st_js_utils_ = (_exports) => {
         const subQuotes = quotes.filter(item => item.DT.getTime()>=standardStartDate.getTime() && item.DT.getTime()<=standardEndDate.getTime())
         return subQuotes.length
     }
+    CIQ.getStartDateByNumberOfBars = function(d2,barDistance) {
+        var quotes = CIQ.stxx.chart.dataSet;
+        var end = new Date(d2)
+        var offset = end.getTimezoneOffset() * 60 * 1000
+        var standardEndDate = new Date(end.setTime(end.getTime() + offset))
+        if(standardEndDate.getTime()>quotes[quotes.length-1].DT.getTime()) standardEndDate = quotes[quotes.length-1].DT
+        const startDateIndex = quotes.findIndex(item => item.DT.getTime()==standardEndDate.getTime()) - barDistance + 1
+        const startDate = quotes[startDateIndex].Date
+        return startDate.slice(0,4)+ '-' + startDate.slice(4,6)+ '-' + startDate.slice(6,8)
+    }
     CIQ.getYearInverval = function() {
         var quotes = CIQ.stxx.chart.dataSet;
         var start = quotes[0].DT.getFullYear()
