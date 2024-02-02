@@ -447,7 +447,7 @@ export default {
 	},
 	methods: {
 		optimizeBacktest(data) {
-			this.$refs['OPT'].optimization(data)
+			this.$refs['OPT'].optimizeBacktest(data)
 		},
 		async getDataList(orderby) {
 			let res = null
