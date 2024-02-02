@@ -38,15 +38,14 @@
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >Seasonality</el-menu-item
         >
-        <!-- <el-menu-item class="seasonality-link home-link" index="8"
+        <el-menu-item class="seasonality-link home-link" index="8"
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >Correlation Pattern Match</el-menu-item
-        > -->
-        <el-menu-item class="seasonality-link home-link" index="8"
+        >
+        <!-- <el-menu-item class="seasonality-link home-link" index="8"
         v-if="userRole == 'analyst'"
           >Correlation Pattern Match</el-menu-item
-        >
-
+        > -->
         <el-submenu class="help-title help-link" index="4" :class="{'help-link-active': activeIndex == '4'}">
           <template slot="title">
             <span>Help</span>

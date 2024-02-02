@@ -9,19 +9,6 @@ import { getIndicatorsList, getStocksList, getIndexsList } from '@/service/servi
 import { uniqWith, isEqual } from "lodash"
 export default {
 	name: 'CPM',
-	beforeRouteEnter(to, _, next) {
-		if (to.path.includes('/cpm')) {
-			next((_this) => {
-				const role = localStorage.getItem('role')
-				console.log('用户角色', role)
-				if(role !== 'analyst') {
-					_this.$store.commit('states/setErrorMessage404', { status: 410, message: 'Correlation Pattern Match' })
-					next({ path: '/404' })}
-			})
-		} else {
-			next()
-		}
-	},
   async mounted() {
     await this.loadData()
   },
