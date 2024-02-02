@@ -704,8 +704,9 @@ quoteFeedSimulator.formatChartData = async function(response){
                     let sortedRows = datafeed.sort(
                         (a, b) => new Date(a.DT) - new Date(b.DT)
                     );
-            
-                    sortedRows = sortedRows.map(item => ({ ...item, indicator_Close: item.close, DT: item.DT + '.000Z' }));
+                    const appendStr = data[data.length-1].DT.indexOf('000Z') == -1 ? '.000' : '.000Z'
+                    sortedRows = sortedRows.map(item => ({ ...item, indicator_Close: item.close, DT: item.DT + appendStr }));
+                    
                     for (const i in sortedRows) {
                         const index = data.findIndex(item => item.DT == sortedRows[i].DT);
                         if (index == -1) {
@@ -714,8 +715,10 @@ quoteFeedSimulator.formatChartData = async function(response){
                         if (objIndicatorFirstDate[indicator] == null) {
                             objIndicatorFirstDate[indicator] = newQuotes[index].DT;
                         }
+                    
                         newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
                     }
+                    
                 }
             }
             /********************lishan modify end*************************/
