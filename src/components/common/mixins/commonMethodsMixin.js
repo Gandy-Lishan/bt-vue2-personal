@@ -1,5 +1,5 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { timestampToTime, isJson } from '@/utils'
+import {capitalizeFirstLetter, timestampToTime, isJson } from '@/utils'
 import {
 	getBacktestName,
 	seeParams,
@@ -715,13 +715,111 @@ export const CommonMethodsMixin = {
 			let criteria = isJson(backtestInfo[criteriaStr])
 				? JSON.parse(backtestInfo[criteriaStr])
 				: backtestInfo[criteriaStr]
-	
 			let decodeRes = signalCode.decode(criteria.signals[0].code)
 			decodeRes.value = value
-			criteria.signals[0].code = signalCode.encode(decodeRes)
+			criteria.signals[0].code = decodeRes
+			backtestInfo[criteriaStr] = criteria
+			encodeSignalsCond(backtestData,criteriaStr)
+			debugger
 			backtestInfo[criteriaStr] = JSON.stringify(criteria)
 	
-			return backtestInfo
+			return      
+		},
+
+		encodeSignalsCond(backtestData,criteria) {
+			const signalList = backtestData[criteria].signals
+			const isOnlyUseRiskControl = backtestData[criteria].relation == 0
+			const criteriaCapFirstL = capitalizeFirstLetter(criteria)
+			const signal_list = []
+			const b = new SignalCode()
+			const isHandleIndicator = criteria == 'entry' || (criteria == 'exit' && !isOnlyUseRiskControl)
+			if (isHandleIndicator) {
+				signalList.forEach((item) => {
+					// publicProperties 中的属性列表都应该保留
+					const publicProperties = [
+						'extreme_optimism',
+						'extreme_pessimism',
+						'comparison',
+						'condition',
+						'newCondition',
+						'value',
+						'conditionPeriod',
+						'period',
+						'ids',
+						'comparison',
+						'ma_period',
+						'take_profit',
+						'time_in_market',
+						'stop_loss'
+				]
+					const indicators = {
+						sentimentIndicator: {
+							indicator: item.sentimentIndicator,
+							analysis: 'Sentiment'
+						},
+						technicalIndicator: {
+							indicator: item.technicalIndicator,
+							analysis: 'Technical'
+						},
+						riskIndicator: { indicator: 'RC', analysis: 'Exit' },
+						symbolIndicator: {
+							indicator: item.symbolIndicator,
+							analysis: 'Symbol'
+						},
+						usersOwnIndicator: {
+							indicator: item.usersOwnIndicator,
+							analysis: 'User'
+						}
+					}
+
+					for (const [key, value] of Object.entries(indicators)) {
+						if (item[key] || publicProperties.includes(item[key])) {
+							item.indicator = value.indicator
+							item.analysis = value.analysis
+							for (const deleteKey of Object.keys(indicators)) {
+								delete item[deleteKey]
+							}
+						}
+					}
+				})
+			}
+			const findSignal = (item, index) => {
+				let signal = CIQ.findSentiIndicator(item.indicator, null)
+				if (!signal) {
+					signal = CIQ.findBuiltinTechIndicator(item.indicator, null)
+				}
+				// 在 symbol indicator list内检索url
+				if (!signal) {
+					if (CIQ.findSymbolIndicator(item.indicator, null)) {
+						return item.indicator
+					}
+				}
+
+				const usersOwnList = this.$store.state.form[`usersOwn${criteriaCapFirstL}FileHash`]
+				return usersOwnList[index] !== ''
+						? usersOwnList[index]
+						: signal?.url || ''
+			}
+
+			let signal = null
+			if(isHandleIndicator) signal = backtestData[criteria].signals.map(findSignal)
+
+			if (isOnlyUseRiskControl && criteria == 'exit') {
+				signal = ['']
+				signal_list.push({
+					code: 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999'
+				})
+			} else {
+				for (let i = 0; i < signalList.length; i++) {
+					console.log('未加密前的数据结构', signalList[i])
+					const code = b.encode(signalList[i])
+					signal_list.push({
+						code: code
+					})
+				}
+			}
+			delete backtestData[criteria].signals
+			return { signal_list, signal }
 		},
 		showFLSMASK() {
 			const myFLSbg = document.querySelector('#myFLSbg')

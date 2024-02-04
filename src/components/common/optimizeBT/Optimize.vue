@@ -149,195 +149,6 @@ export default {
 	data() {
 		return {
       dataList: [],
-//       [
-//     {
-//         "id": "21e85a32-3a20-3a29-2d7d-6b0680a07f85",
-//         "user": "04f7c8dc-93fb-4f38-b680-638b06e108b7",
-//         "name": "indicator ma with index below no value",
-//         "capital": 100000,
-//         "symbol": "XLU",
-//         "benchmark": "XLU",
-//         "entry": "{\"relation\": 1, \"score\": 1, \"delay_bars\": 0, \"signals_in_market\": 1, \"signals\": [{\"code\": \"SI:XLU Aggregated Put/Call Ratio;IDS:EO80/EP20;SC:SVMA100/0/1.0\"}], \"cond\": [{\"newCondition\": \"0\", \"conditionPeriod\": \"5\"}]}",
-//         "exit": "{\"score\":1,\"signals_in_market\":1,\"relation\":0,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999\"}],\"cond\":[null]}",
-//         "create_date": "2023-11-16T07:00:02.679267Z",
-//         "start_date": "1800-10-01",
-//         "end_date": "2023-11-16",
-//         "capital_alloc": "1.000000",
-//         "commission": "0.0010",
-//         "slippage": "0.1000",
-//         "frequency": "Daily",
-//         "win_rate": "0.0000",
-//         "risk_control": "//1",
-//         "user_tag": "client",
-//         "report_url": "",
-//         "direction": "Long",
-//         "favorites": true,
-//         "entry_description": [
-//             {
-//                 "commentDes": "E: Long; Single Condition XLU Aggregated Put/Call Ratio moving average 100 > 1.0;",
-//                 "rocCond": {
-//                     "newCondition": "0",
-//                     "conditionPeriod": "5"
-//                 }
-//             },
-//             {
-//                 "commentDes": "XLU Aggregated Put/Call Ratio moving average 100 > 1.0",
-//                 "rocCond": {
-//                     "newCondition": "0",
-//                     "conditionPeriod": "5"
-//                 }
-//             }
-//         ],
-//         "exit_description": [
-//             {
-//                 "commentDes": "X: Close:   Time In Market 1(Bars)",
-//                 "rocCond": null
-//             }
-//         ],
-//         "indicator_layout": "{\"formIndicators\": {\"entry\": [\"xlu_put_call_ratio\"], \"exit\": [\"\"]}, \"technicalIndicators\": [], \"savedTechSD\": [{\"type\": \"xlu_put_call_ratio\", \"inputs\": {\"Period\": 13, \"Overlay\": false, \"id\": \"$r001$xlu_put_call_ratio$r001$ (13,n)\", \"display\": \"$r001$xlu_put_call_ratio$r001$ (13,n)\"}, \"outputs\": {}, \"parameters\": {\"studyOverZonesEnabled\": false, \"studyOverBoughtValue\": 80, \"studyOverBoughtColor\": \"#FF0000\", \"studyOverSoldValue\": 20, \"studyOverSoldColor\": \"#00DD00\", \"chartName\": \"chart\", \"editMode\": true}, \"panel\": \"$r001$xlu_put_call_ratio$r001$ (13,n)\"}, {\"type\": \"ST MA\", \"inputs\": {\"Period\": \"100\", \"Field\": \"etf_thirty\", \"Type\": \"ma\", \"Offset\": 0, \"display\": \"ST MA\", \"id\": \"$r001$ST MA$r001$ (5,etf_thirty,ma,0)\"}, \"outputs\": {\"MA\": \"#FF000\"}, \"parameters\": {\"criteria\": \"entry\", \"index\": 0, \"chartName\": \"chart\", \"editMode\": true}, \"panel\": \"$r001$etf_thirty$r001$ (13,n)\"}], \"activatedMA\": [{\"period\": 21, \"url\": \"\"}, {\"period\": \"100\", \"url\": \"xlu_put_call_ratio\", \"criteria\": \"entry\", \"index\": 0}]}",
-//         "status": 2,
-//         "strategy": "Signal",
-//         "result": "{\"Total Trades\": 329, \"Total Return (%)\": -35.68}",
-//         "seconds": 23,
-//         "url_data": "",
-//         "backtest_period": "21",
-//         "trade_price": 2,
-//         "exclude_oo": 0,
-//         "total_trader": 329,
-//         "total_return": -35.68,
-//         "description": "backtest",
-//         "last_entry_signal_date": null,
-//         "last_exit_signal_date": null,
-//         "market_environment": 0,
-//         "index_moving_average_slope": 0
-//     },
-//     {
-//         "id": "793291f9-cb52-848c-83aa-78c87d123a12",
-//         "user": "04f7c8dc-93fb-4f38-b680-638b06e108b7",
-//         "name": "8-year_with_index_ma",
-//         "capital": 100000,
-//         "symbol": "HYG",
-//         "benchmark": "HYG",
-//         "entry": "{\"score\": 2, \"signals_in_market\": 1, \"relation\": 2, \"delay_bars\": 0, \"signals\": [{\"code\": \"SI:Analyst Price Changes;IDS:EO80/EP20;SC:SV/3/100.0\"}, {\"code\": \"TI:Moving Average;IDS:SMA;SC:SC/0/MA10\"}], \"cond\": [{\"newCondition\": \"3\", \"conditionPeriod\": \"5\"}, {\"newCondition\": 0, \"conditionPeriod\": \"5\"}, \"\"]}",
-//         "exit": "{\"score\":1,\"signals_in_market\":1,\"relation\":0,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999\"}],\"cond\":[null]}",
-//         "create_date": "2023-11-16T06:55:47.075872Z",
-//         "start_date": "2015-11-16",
-//         "end_date": "2023-11-16",
-//         "capital_alloc": "1.000000",
-//         "commission": "0.0010",
-//         "slippage": "0.1000",
-//         "frequency": "Daily",
-//         "win_rate": "0.0000",
-//         "risk_control": "//1",
-//         "user_tag": "client",
-//         "report_url": "",
-//         "direction": "Long",
-//         "favorites": true,
-//         "entry_description": [
-//             {
-//                 "commentDes": "E: Long; SameBar Multi Condition; Score: 2;  ",
-//                 "rocCond": {
-//                     "newCondition": "3",
-//                     "conditionPeriod": "5"
-//                 }
-//             },
-//             {
-//                 "commentDes": "Analyst Price Changes CrossAbove 100.0",
-//                 "rocCond": {
-//                     "newCondition": "3",
-//                     "conditionPeriod": "5"
-//                 }
-//             },
-//             {
-//                 "commentDes": "Symbol Close  > Moving Average 10",
-//                 "rocCond": null
-//             }
-//         ],
-//         "exit_description": [
-//             {
-//                 "commentDes": "X: Close:   Time In Market 1(Bars)",
-//                 "rocCond": null
-//             }
-//         ],
-//         "indicator_layout": "{\"formIndicators\": {\"entry\": [\"survey_analysts\", \"ma\"], \"exit\": [\"\"]}, \"technicalIndicators\": [\"ma\"], \"savedTechSD\": [{\"type\": \"ma\", \"inputs\": {\"Period\": \"10\", \"Field\": \"Close\", \"Type\": \"simple\", \"Offset\": 0, \"id\": \"$r001$ma$r001$ (10,C,ma,0)\", \"display\": \"$r001$ma$r001$ (10,C,ma,0)\"}, \"outputs\": {\"MA\": \"#FF0000\"}, \"parameters\": {\"criteria\": \"entry\", \"index\": 1, \"chartName\": \"chart\", \"editMode\": true}, \"panel\": \"chart\"}], \"activatedMA\": [], \"activatedMALayout\": [{\"period\": \"10\", \"type\": \"simple\", \"field\": \"Close\", \"criteria\": \"entry\", \"index\": 1}]}",
-//         "status": 2,
-//         "strategy": "Signal",
-//         "result": "{\"Total Trades\": 15, \"Total Return (%)\": -2.89}",
-//         "seconds": 9,
-//         "url_data": "",
-//         "backtest_period": "8",
-//         "trade_price": 2,
-//         "exclude_oo": 0,
-//         "total_trader": 15,
-//         "total_return": -2.89,
-//         "description": "backtest",
-//         "last_entry_signal_date": null,
-//         "last_exit_signal_date": null,
-//         "market_environment": 0,
-//         "index_moving_average_slope": 0
-//     },
-//     {
-//         "id": "43f16e4c-db94-28f0-31a9-183159a9d42e",
-//         "user": "04f7c8dc-93fb-4f38-b680-638b06e108b7",
-//         "name": "Yearly test",
-//         "capital": 100000,
-//         "symbol": "XLU",
-//         "benchmark": "XLU",
-//         "entry": "{\"relation\": 1, \"score\": 1, \"delay_bars\": 0, \"signals_in_market\": 1, \"signals\": [{\"code\": \"SI:XLU Aggregated Put/Call Ratio;IDS:EO80/EP20;SC:SV/0/2.0\"}], \"cond\": [{\"newCondition\": \"0\", \"conditionPeriod\": \"5\"}]}",
-//         "exit": "{\"score\":1,\"signals_in_market\":1,\"relation\":0,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999\"}],\"cond\":[null]}",
-//         "create_date": "2023-11-16T02:02:36.405059Z",
-//         "start_date": "1800-10-01",
-//         "end_date": "2023-11-16",
-//         "capital_alloc": "1.000000",
-//         "commission": "0.0010",
-//         "slippage": "0.1000",
-//         "frequency": "Monthly",
-//         "win_rate": "0.0000",
-//         "risk_control": "//1",
-//         "user_tag": "client",
-//         "report_url": "",
-//         "direction": "Long",
-//         "favorites": true,
-//         "entry_description": [
-//             {
-//                 "commentDes": "E: Long; Single Condition XLU Aggregated Put/Call Ratio > 2.0;",
-//                 "rocCond": {
-//                     "newCondition": "0",
-//                     "conditionPeriod": "5"
-//                 }
-//             },
-//             {
-//                 "commentDes": "XLU Aggregated Put/Call Ratio > 2.0",
-//                 "rocCond": {
-//                     "newCondition": "0",
-//                     "conditionPeriod": "5"
-//                 }
-//             }
-//         ],
-//         "exit_description": [
-//             {
-//                 "commentDes": "X: Close:   Time In Market 1(Bars)",
-//                 "rocCond": null
-//             }
-//         ],
-//         "indicator_layout": "{\"formIndicators\": {\"entry\": [\"xlu_put_call_ratio\"], \"exit\": [\"\"]}, \"technicalIndicators\": [], \"savedTechSD\": [{\"type\": \"xlu_put_call_ratio\", \"inputs\": {\"Period\": 13, \"Overlay\": false, \"id\": \"$r001$xlu_put_call_ratio$r001$ (13,n)\", \"display\": \"$r001$sxlu_put_call_ratio$r001$ (13,n)\"}, \"outputs\": {}, \"parameters\": {\"studyOverZonesEnabled\": false, \"studyOverBoughtValue\": 70, \"studyOverBoughtColor\": \"#FF0000\", \"studyOverSoldValue\": null, \"studyOverSoldColor\": \"#00DD00\", \"chartName\": \"chart\", \"editMode\": true}, \"panel\": \"$r001$xlu_put_call_ratio$r001$ (13,n)\"}], \"activatedMA\": []}",
-//         "status": 2,
-//         "strategy": "Signal",
-//         "result": "{\"Total Trades\": 1, \"Total Return (%)\": 3.93}",
-//         "seconds": 7,
-//         "url_data": "",
-//         "backtest_period": "21",
-//         "trade_price": 2,
-//         "exclude_oo": 0,
-//         "total_trader": 1,
-//         "total_return": 3.93,
-//         "description": "backtest",
-//         "last_entry_signal_date": null,
-//         "last_exit_signal_date": null,
-//         "market_environment": 0,
-//         "index_moving_average_slope": 0
-//     },
-// ],
       tableCol: [
         {
           label: 'Name',
@@ -438,23 +249,63 @@ export default {
 			}
 			return ''
 		},
-		async optimizeBacktest(data) {
+		async optimizeBacktest(data) {                                                                              
+		let _data = {
+    "id": "7e7c8921-e38e-9207-f384-236978f13d88",
+    "user": "04f7c8dc-93fb-4f38-b680-638b06e108b7",
+    "name": "2.2 test c(copy)",
+    "capital": 100000,
+    "symbol": "SPX",
+    "benchmark": "SPX",
+    "entry": "{\"score\":1,\"signals_in_market\":1,\"relation\":1,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:% Showing Excess Optimism;IDS:EO0.3/EPnull;SC:SV/3/0.32\"}],\"cond\":[{\"newCondition\":3,\"conditionPeriod\":\"21\"}]}",
+    "exit": "{\"score\":1,\"signals_in_market\":1,\"relation\":0,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999\"}],\"cond\":[null]}",
+    "create_date": "2024-02-02T06:56:34.967408Z",
+    "start_date": "2019-02-02",
+    "end_date": "2024-02-02",
+    "capital_alloc": "1.000000",
+    "commission": "0.0010",
+    "slippage": "0.0000",
+    "frequency": "Daily",
+    "win_rate": "0.0000",
+    "risk_control": "//21",
+    "user_tag": "client",
+    "report_url": "",
+    "direction": "Long",
+    "favorites": false,
+    "entry_description": "[{\"commentDes\":\"E: Long; Single Condition   % Showing Excess Optimism   CrossAbove 0.32\",\"rocCond\":{\"newCondition\":3,\"conditionPeriod\":\"21\"}}]",
+    "exit_description": "[{\"commentDes\":\"X: Close: Time In Marke 21(Bars)\",\"rocCond\":null}]",
+    "indicator_layout": "{\"technicalIndicators\":[],\"savedTechSD\":[{\"type\":\"model_percent_bearish\",\"inputs\":{\"Period\":13,\"Overlay\":false,\"id\":\"$r001$model_percent_bearish$r001$ (13,n)\",\"display\":\"$r001$model_percent_bearish$r001$ (13,n)\"},\"outputs\":{},\"parameters\":{\"studyOverZonesEnabled\":false,\"studyOverBoughtValue\":0.3,\"studyOverBoughtColor\":\"#FF0000\",\"studyOverSoldValue\":null,\"studyOverSoldColor\":\"#00DD00\",\"chartName\":\"chart\",\"editMode\":true,\"panelName\":\"$r001$model_percent_bearish$r001$ (13,n)\"},\"panel\":\"$r001$model_percent_bearish$r001$ (13,n)\"}],\"activatedMA\":[{\"period\":21,\"url\":\"\"}],\"activatedMALayout\":[],\"formIndicators\":{\"entry\":[\"model_percent_bearish\"],\"exit\":[\"\"]}}",
+    "status": 2,
+    "strategy": "Signal",
+    "result": "{\"Total Trades\": 21, \"Total Return (%)\": 2.14}",
+    "seconds": 19,
+    "url_data": "",
+    "backtest_period": "5",
+    "trade_price": 2,
+    "exclude_oo": 0,
+    "total_trader": 21,
+    "total_return": 2.14,
+    "description": "{\"Introduction\":\"\",\"Rules\":\"\"}",
+    "last_entry_signal_date": null,
+    "last_exit_signal_date": null,
+    "market_environment": 0,
+    "index_moving_average_slope": 0
+}
 			const optimizeBT = document.querySelector('#optimizeBT')
 			optimizeBT.classList.add('activated')
 this.loading = true
-      let response = await runOPT(data.id)
+      let response = await runOPT(_data.id)
       if(response.data.status == 200) {
         // 根据轮询结果返回的值修改指定回测的值并copy
-        const OPTResults = await this.pollingOPTResults(data)
+        const OPTResults = await this.pollingOPTResults(_data)
         this.dataList = OPTResults.map(item=> {
           const optimizedValue = item['Optimized_values']
           let signalCond 
-          debugger
           signalCond = this.editSignalsCond(data, 'entry', optimizedValue[0])
           if(optimizedValue.length >=2){
             signalCond = this.editSignalsCond(data, 'exit', optimizedValue[1])
           }
-           debugger
+           
           return {
             data: signalCond,
             improved_returns: item['Improved returns'],
