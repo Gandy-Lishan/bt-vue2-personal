@@ -202,7 +202,7 @@ export default {
         const tradeDate = result['End Date'][i];
         const symbolClose = result['Symbol Close'][i];
         const correlationPercentage = result['Correlation Percentage'][i];
-        const marketCondition = result.hasOwnProperty('Market Condition') ? result['Market Condition'][i] : null
+        const marketCondition = result.hasOwnProperty('Market Condition') ? result['Market Condition'][i].join(', ') : null
         const eachReturn = result['Each Return'][i];
         const startDate = result['Start Date'][i];
         const endDate = result['End Date'][i];
@@ -300,6 +300,7 @@ export default {
         obj['Symbol Close'] = item.SymbolClose
         obj['Correlation Percentage'] = `${item.CorrelationPercentage}%`
         obj['Return'] = item.Return.toFixed(2) + '%'
+        obj['Market Condition'] = item.MarketCondition
         trade.push(obj)
       })
       const correlationInfo = []

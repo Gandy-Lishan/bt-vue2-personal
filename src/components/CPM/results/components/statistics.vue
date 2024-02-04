@@ -314,9 +314,8 @@
                 </el-tooltip>
             </template>
             <template slot-scope="scope">
-                <div v-for="(item, index) in scope.row.MarketCondition" :key="index">
-                    <p>{{ item }}</p>
-                </div>
+							<span v-if="scope.row.MarketCondition">{{scope.row.MarketCondition}}</span>
+							<span v-else></span>
             </template>
         </el-table-column>
 			</el-table>
