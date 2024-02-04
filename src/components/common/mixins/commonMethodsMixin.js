@@ -711,78 +711,34 @@ export const CommonMethodsMixin = {
 
 		editSignalsCond(backtestInfo, criteriaStr, value) {
 			let signalCode = new SignalCode()
-
+			debugger
 			let criteria = isJson(backtestInfo[criteriaStr])
 				? JSON.parse(backtestInfo[criteriaStr])
 				: backtestInfo[criteriaStr]
 			let decodeRes = signalCode.decode(criteria.signals[0].code)
 			decodeRes.value = value
+			decodeRes.sc.value = value
 			criteria.signals[0].code = decodeRes
 			backtestInfo[criteriaStr] = criteria
-			encodeSignalsCond(backtestData,criteriaStr)
+			const {signal_list, signal} = this.encodeSignalsCond(backtestInfo,criteriaStr)
 			debugger
 			backtestInfo[criteriaStr] = JSON.stringify(criteria)
-	
 			return      
 		},
-
 		encodeSignalsCond(backtestData,criteria) {
+			debugger
 			const signalList = backtestData[criteria].signals
 			const isOnlyUseRiskControl = backtestData[criteria].relation == 0
 			const criteriaCapFirstL = capitalizeFirstLetter(criteria)
 			const signal_list = []
 			const b = new SignalCode()
+			/*
+			lishan:
+			isHandleIndicator 需要你去判断退场是否是 isOnlyUseRiskControl 判断条件是看 code 是否等于
+			SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999
+			如果是 isOnlyUseRiskControl 且 criteria 是 exit 则不需要处理编码和解码
+			*/
 			const isHandleIndicator = criteria == 'entry' || (criteria == 'exit' && !isOnlyUseRiskControl)
-			if (isHandleIndicator) {
-				signalList.forEach((item) => {
-					// publicProperties 中的属性列表都应该保留
-					const publicProperties = [
-						'extreme_optimism',
-						'extreme_pessimism',
-						'comparison',
-						'condition',
-						'newCondition',
-						'value',
-						'conditionPeriod',
-						'period',
-						'ids',
-						'comparison',
-						'ma_period',
-						'take_profit',
-						'time_in_market',
-						'stop_loss'
-				]
-					const indicators = {
-						sentimentIndicator: {
-							indicator: item.sentimentIndicator,
-							analysis: 'Sentiment'
-						},
-						technicalIndicator: {
-							indicator: item.technicalIndicator,
-							analysis: 'Technical'
-						},
-						riskIndicator: { indicator: 'RC', analysis: 'Exit' },
-						symbolIndicator: {
-							indicator: item.symbolIndicator,
-							analysis: 'Symbol'
-						},
-						usersOwnIndicator: {
-							indicator: item.usersOwnIndicator,
-							analysis: 'User'
-						}
-					}
-
-					for (const [key, value] of Object.entries(indicators)) {
-						if (item[key] || publicProperties.includes(item[key])) {
-							item.indicator = value.indicator
-							item.analysis = value.analysis
-							for (const deleteKey of Object.keys(indicators)) {
-								delete item[deleteKey]
-							}
-						}
-					}
-				})
-			}
 			const findSignal = (item, index) => {
 				let signal = CIQ.findSentiIndicator(item.indicator, null)
 				if (!signal) {
@@ -802,7 +758,7 @@ export const CommonMethodsMixin = {
 			}
 
 			let signal = null
-			if(isHandleIndicator) signal = backtestData[criteria].signals.map(findSignal)
+			if(isHandleIndicator) signal = backtestData[criteria].signals.map(item => item.code).map(findSignal)
 
 			if (isOnlyUseRiskControl && criteria == 'exit') {
 				signal = ['']
@@ -812,7 +768,12 @@ export const CommonMethodsMixin = {
 			} else {
 				for (let i = 0; i < signalList.length; i++) {
 					console.log('未加密前的数据结构', signalList[i])
-					const code = b.encode(signalList[i])
+					const _code = signalList[i].code
+					// 在此之前找出 sentiment indicator 的极值 lishan
+					_code.extreme_optimism = '20'
+					_code.extreme_pessimism = '80'
+					delete _code.sc
+					const code = b.encode(_code)
 					signal_list.push({
 						code: code
 					})
