@@ -202,7 +202,7 @@ export default {
         const tradeDate = result['End Date'][i];
         const symbolClose = result['Symbol Close'][i];
         const correlationPercentage = result['Correlation Percentage'][i];
-        const marketCondition = result['Market Condition'][i]
+        const marketCondition = result.hasOwnProperty('Market Condition') ? result['Market Condition'][i] : null
         const eachReturn = result['Each Return'][i];
         const startDate = result['Start Date'][i];
         const endDate = result['End Date'][i];

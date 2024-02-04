@@ -303,7 +303,6 @@
 				<el-table-column
                 prop="MarketCondition"
                 label="Market Condition"
-                width="100px"
                 align="center"
             >
             <template slot="header">
