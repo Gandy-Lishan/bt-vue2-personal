@@ -876,6 +876,36 @@ export function getRelatedBacktest(url) {
 	})
 }
 
+export function runOPT(pk) {
+	let path = `/dev/bt_opt/run_bt_opt?pk=${pk}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+export function getOPTStatus(pk) {
+	let path = `/dev/bt_opt/get_bt_opt_results?pk=${pk}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
 export function getSeasonalityData(url) {
 	return new Promise((resolve, reject) => {
 		axios

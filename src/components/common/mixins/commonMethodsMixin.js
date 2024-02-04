@@ -13,7 +13,8 @@ import {
 	getStatus,
 	findLastSignalApi,
 	getBTV1Backtest,
-	getIndicatorsList
+	getIndicatorsList,
+	getOPTStatus
 } from '@/service/service.js'
 import UUID from '@/utils/cryptoUtils/uuid'
 import SignalCode from '@/utils/cryptoUtils/codeTool'
@@ -707,6 +708,21 @@ export const CommonMethodsMixin = {
 			})
 			return criteria
 		},
+
+		editSignalsCond(backtestInfo, criteriaStr, value) {
+			let signalCode = new SignalCode()
+
+			let criteria = isJson(backtestInfo[criteriaStr])
+				? JSON.parse(backtestInfo[criteriaStr])
+				: backtestInfo[criteriaStr]
+	
+			let decodeRes = signalCode.decode(criteria.signals[0].code)
+			decodeRes.value = value
+			criteria.signals[0].code = signalCode.encode(decodeRes)
+			backtestInfo[criteriaStr] = JSON.stringify(criteria)
+	
+			return backtestInfo
+		},
 		showFLSMASK() {
 			const myFLSbg = document.querySelector('#myFLSbg')
 			myFLSbg.classList.add('activated')
@@ -967,6 +983,38 @@ export const CommonMethodsMixin = {
 			}, 1000)
 		},
 
+		async pollingOPTResults(data) {
+			/*
+				根据 id 轮询回测结果
+				todo lishan
+			*/
+			const _this = this
+			return new Promise(async (resolve, reject) => {
+				const { id, name } = data
+				console.log('进入轮询')
+				_this.clearInterval = clearPromiseInterval
+				let timer = await setPromiseInterval(async () => {
+					try{
+						const res = await getOPTStatus(id)
+						// CIQ.nprogress.inc()
+						const status = res.data.opt_status
+						console.log('回测状态', status)
+						const response = res.data.data
+						if (status == 1) {
+							console.log('结束轮询')
+							resolve(response) // 解决 Promise 表示轮询完成
+							await clearPromiseInterval(timer) // 使用 await 等待清除计时器
+						}
+					}catch(err){
+						console.log('轮询出现错误')
+						reject(err); // 如果错误是无法处理的，可以在这里调用 reject 并传递错误信息
+						await clearPromiseInterval(timer) // 使用 await 等待清除计时器
+					}finally{
+						
+					}
+				}, 1000)
+			})
+		},
 		async transformOldName(data,criteria){
 			const res = await getIndicatorsList()
 			const stockList = this.$store.state.chart.stocksList
