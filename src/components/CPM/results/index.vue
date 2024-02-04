@@ -202,6 +202,7 @@ export default {
         const tradeDate = result['End Date'][i];
         const symbolClose = result['Symbol Close'][i];
         const correlationPercentage = result['Correlation Percentage'][i];
+        const marketCondition = result['Market Condition'][i]
         const eachReturn = result['Each Return'][i];
         const startDate = result['Start Date'][i];
         const endDate = result['End Date'][i];
@@ -209,7 +210,8 @@ export default {
           'TradeDate': tradeDate,
           'SymbolClose': symbolClose,
           'CorrelationPercentage': correlationPercentage,
-          'Return': eachReturn
+          'Return': eachReturn,
+          'MarketCondition': marketCondition
         });
         TradeDateArray.push(
           {'Date': tradeDate}

@@ -123,7 +123,7 @@
       >
         <el-input v-model="data.bars_num" :disabled="false" @change="changeNumberOfBars">
           <template v-slot:append>
-            (≥3 and ≤252)
+            (≥3 and ≤63)
           </template>
         </el-input>
       </el-form-item>
@@ -159,8 +159,8 @@
                 <el-tooltip effect="dark" placement="top">
                   <span slot="content">
                     This is the minimum threshold required for matching patterns. <br />
-                    Only values between 75-100 are accepted. A value of "90", <br/>
-                    for example, means that only correlations above +0.90 will be shown.
+                    Only values between 75-100 are accepted. A value of "80", <br/>
+                    for example, means that only correlations above +0.80 will be shown.
                   </span>
                   <i class="iconfont icon-wenhao"></i>
                 </el-tooltip>
@@ -312,8 +312,8 @@ export default {
   },
   data() {
     var validateBarsNum = (rule, value, callback) => {
-        if (value < 3 || value > 252) {
-          return callback(new Error('The number of bars should be between 3 and 252, please change your condition.'));
+        if (value < 3 || value > 63) {
+          return callback(new Error('The number of bars should be between 3 and 63, please change your condition.'));
         } else {
           callback();
         }
@@ -326,7 +326,7 @@ export default {
         start_date: '',
         end_date: '',
         lookback_period: 'All',
-        corr_per: 90,
+        corr_per: 80,
         tim: 21,
         year: '',
         exclude_overlap: true,
@@ -485,7 +485,7 @@ export default {
       if(this.previewBtnLoading || this.btnLoading) return true
       const resetData = {
         lookback_period: 'All',
-        corr_per: 90,
+        corr_per: 80,
         direction: 'Long',
         tim: 21,
         symbol: 'SPX',
@@ -539,7 +539,7 @@ export default {
       })
     },
     changeNumberOfBars(val) {
-      if(val>=3 && val<=252) this.data.start_date = CIQ.getStartDateByNumberOfBars(this.data.end_date,Number(val))
+      if(val>=3 && val<=63) this.data.start_date = CIQ.getStartDateByNumberOfBars(this.data.end_date,Number(val))
     },
     setBacktestHistory(val) {
       this.data.end_date = timestampToTime(new Date());
