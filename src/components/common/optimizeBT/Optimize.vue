@@ -186,92 +186,17 @@ export default {
 	},
 	computed: {},
 	watch: {},
-	// 	mounted() {
-	// 				let _data = {
-	//     "id": "7e7c8921-e38e-9207-f384-236978f13d88",
-	//     "user": "04f7c8dc-93fb-4f38-b680-638b06e108b7",
-	//     "name": "2.2 test c(copy)",
-	//     "capital": 100000,
-	//     "symbol": "SPX",
-	//     "benchmark": "SPX",
-	//     "entry": "{\"score\":1,\"signals_in_market\":1,\"relation\":1,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:% Showing Excess Optimism;IDS:EO0.3/EPnull;SC:SV/3/0.32\"}],\"cond\":[{\"newCondition\":3,\"conditionPeriod\":\"21\"}]}",
-	//     "exit": "{\"score\":1,\"signals_in_market\":1,\"relation\":0,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999\"}],\"cond\":[null]}",
-	//     "create_date": "2024-02-02T06:56:34.967408Z",
-	//     "start_date": "2019-02-02",
-	//     "end_date": "2024-02-02",
-	//     "capital_alloc": "1.000000",
-	//     "commission": "0.0010",
-	//     "slippage": "0.0000",
-	//     "frequency": "Daily",
-	//     "win_rate": "0.0000",
-	//     "risk_control": "//21",
-	//     "user_tag": "client",
-	//     "report_url": "",
-	//     "direction": "Long",
-	//     "favorites": false,
-	//     "entry_description": "[{\"commentDes\":\"E: Long; Single Condition   % Showing Excess Optimism   CrossAbove 0.32\",\"rocCond\":{\"newCondition\":3,\"conditionPeriod\":\"21\"}}]",
-	//     "exit_description": "[{\"commentDes\":\"X: Close: Time In Marke 21(Bars)\",\"rocCond\":null}]",
-	//     "indicator_layout": "{\"technicalIndicators\":[],\"savedTechSD\":[{\"type\":\"model_percent_bearish\",\"inputs\":{\"Period\":13,\"Overlay\":false,\"id\":\"$r001$model_percent_bearish$r001$ (13,n)\",\"display\":\"$r001$model_percent_bearish$r001$ (13,n)\"},\"outputs\":{},\"parameters\":{\"studyOverZonesEnabled\":false,\"studyOverBoughtValue\":0.3,\"studyOverBoughtColor\":\"#FF0000\",\"studyOverSoldValue\":null,\"studyOverSoldColor\":\"#00DD00\",\"chartName\":\"chart\",\"editMode\":true,\"panelName\":\"$r001$model_percent_bearish$r001$ (13,n)\"},\"panel\":\"$r001$model_percent_bearish$r001$ (13,n)\"}],\"activatedMA\":[{\"period\":21,\"url\":\"\"}],\"activatedMALayout\":[],\"formIndicators\":{\"entry\":[\"model_percent_bearish\"],\"exit\":[\"\"]}}",
-	//     "status": 2,
-	//     "strategy": "Signal",
-	//     "result": "{\"Total Trades\": 21, \"Total Return (%)\": 2.14}",
-	//     "seconds": 19,
-	//     "url_data": "",
-	//     "backtest_period": "5",
-	//     "trade_price": 2,
-	//     "exclude_oo": 0,
-	//     "total_trader": 21,
-	//     "total_return": 2.14,
-	//     "description": "{\"Introduction\":\"\",\"Rules\":\"\"}",
-	//     "last_entry_signal_date": null,
-	//     "last_exit_signal_date": null,
-	//     "market_environment": 0,
-	//     "index_moving_average_slope": 0
-	// }
-	//         // 根据轮询结果返回的值修改指定回测的值并copy
-	//         //const OPTResults = await this.pollingOPTResults(_data)
-	// 		const OPTResults = [
-	//         {
-	//             "Profit": -1.24,
-	//             "Optimized_values": [
-	//                 0.39
-	//             ],
-	//             "Improved returns": 14.24
-	//         },
-	//         {
-	//             "Profit": -3.03,
-	//             "Optimized_values": [
-	//                 0.15
-	//             ],
-	//             "Improved returns": 12.45
-	//         }]
-
-	//         this.dataList = OPTResults.map(item=> {
-	//           const optimizedValue = item['Optimized_values']
-	//           let signalCond
-	//           signalCond = this.editSignalsCond(_data, 'entry', optimizedValue[0])
-	//           if(optimizedValue.length >=2){
-	//             signalCond = this.editSignalsCond(_data, 'exit', optimizedValue[1])
-	//           }
-	//           return {
-	//             data: signalCond,
-	//             improved_returns: item['Improved returns'],
-	//             profit: item['Profit']
-	//           }
-	//         })
-	// 		debugger
-	//         this.loading = false
-
-	// 	},
+	
 	methods: {
 		handleSelectionChange(val) {
 			this.multipleSelection = val
 		},
-		selectBT(val) {
-			debugger
-		},
 		cancel() {
 			// this.$router.push('/backtester/list/favorites')
+			// todo 还考虑中断轮询
+			this.close()
+		},
+		close() {
 			const optimizeBT = document.querySelector('#optimizeBT')
 			optimizeBT.classList.remove('activated')
 		},
@@ -315,11 +240,11 @@ export default {
 					this.$emit('refreshList')
 
 					this.loading = false
-					const optimizeBT = document.querySelector('#optimizeBT')
-					optimizeBT.classList.remove('activated')
+					this.close()
 				} catch (error) {
 					console.error('An error occurred:', error)
 					this.loading = false
+					this.close()
 				}
 			}
 			
@@ -379,39 +304,39 @@ export default {
 			let response = await runOPT(data.id)
 			if (response.data.status == 200) {
 				//根据轮询结果返回的值修改指定回测的值并copy
-				const OPTResults = await this.pollingOPTResults(data)
-				// const OPTResults = [
-				// {
-				//     "Profit": -1.24,
-				//     "Optimized_values": [
-				//         0.39
-				//     ],
-				//     "Improved returns": 14.24
-				// },
-				// {
-				//     "Profit": -3.03,
-				//     "Optimized_values": [
-				//         0.15
-				//     ],
-				//     "Improved returns": 12.45
-				// }]
-				this.dataList = OPTResults.map((item) => {
-					let _data = JSON.parse(JSON.stringify(data))
-					const optimizedValue = item['Optimized_values']
-					let signalCond
-					signalCond = this.editSignalsCond(_data, 'entry', optimizedValue[0])
-					if (optimizedValue.length >= 2) {
-						signalCond = this.editSignalsCond(signalCond, 'exit', optimizedValue[1])
-					}
+					const OPTResults = await this.pollingOPTResults(data)
+					// const OPTResults = [
+					// {
+					//     "Profit": -1.24,
+					//     "Optimized_values": [
+					//         0.39
+					//     ],
+					//     "Improved returns": 14.24
+					// },
+					// {
+					//     "Profit": -3.03,
+					//     "Optimized_values": [
+					//         0.15
+					//     ],
+					//     "Improved returns": 12.45
+					// }]
+					this.dataList = OPTResults.map((item) => {
+						let _data = JSON.parse(JSON.stringify(data))
+						const optimizedValue = item['Optimized_values']
+						let signalCond
+						signalCond = this.editSignalsCond(_data, 'entry', optimizedValue[0])
+						if (optimizedValue.length >= 2) {
+							signalCond = this.editSignalsCond(signalCond, 'exit', optimizedValue[1])
+						}
 
-					return {
-						data: signalCond,
-						improved_returns: item['Improved returns'],
-						profit: item['Profit']
-					}
-				})
-				console.log('轮询结果', this.dataList)
-				this.loading = false
+						return {
+							data: signalCond,
+							improved_returns: item['Improved returns'],
+							profit: item['Profit']
+						}
+					})
+					console.log('轮询结果', this.dataList)
+					this.loading = false
 			}
 		}
 	}
@@ -444,7 +369,7 @@ h1 {
 		padding: 35px;
 		background: white;
 		display: grid;
-		grid-template-rows: 1fr 3fr 1fr;
+		//grid-template-rows: 1fr 3fr 1fr;
 		align-items: center;
 		.header {
 			text-align: center;

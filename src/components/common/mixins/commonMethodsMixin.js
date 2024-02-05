@@ -718,8 +718,10 @@ export const CommonMethodsMixin = {
 			let desc = isJson(_backtestInfo[criteriaDesc])
 				? JSON.parse(_backtestInfo[criteriaDesc])
 				: _backtestInfo[criteriaDesc]
-			const regex = /\b\d+(\.\d+)?\b/;
-			desc[0]['commentDes'] = desc[0]['commentDes'].replace(regex, value);
+			
+				const words = desc[0]['commentDes'].split(' ');
+				words[words.length - 1] = value;
+			desc[0]['commentDes'] = words.join(' ');
 			_backtestInfo[criteriaDesc] = desc
 
 			// 修改value
@@ -1075,11 +1077,36 @@ export const CommonMethodsMixin = {
 						const response = res.data.data
 						if (status == 1) {
 							console.log('结束轮询')
+
+							let errMsg = ''
+							switch(res.data.status){
+								case 500:
+									errMsg = 'Optimizing error occur'
+									break;
+								case 431:
+									errMsg = res.data.msg
+									break;
+								case 432:
+									errMsg = res.data.msg
+									break;
+								case 204:
+									errMsg = res.data.data
+									break;
+								default:
+							}	
+							if(errMsg){
+								this.loading = false
+								this.close()
+								this.$emit('handleError',errMsg)
+							}	
+
 							resolve(response) // 解决 Promise 表示轮询完成
 							await clearPromiseInterval(timer) // 使用 await 等待清除计时器
 						}
 					}catch(err){
 						console.log('轮询出现错误')
+						this.loading = false
+						this.close()
 						reject(err); // 如果错误是无法处理的，可以在这里调用 reject 并传递错误信息
 						await clearPromiseInterval(timer) // 使用 await 等待清除计时器
 					}finally{
