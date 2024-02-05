@@ -342,6 +342,7 @@
 									placement="bottom-start"
 								>
 									<el-button
+										v-if="['History', 'Favorites'].includes(currentPage)"
 										:disabled="false"
 										type="success"
 										icon="el-icon-data-analysis"
