@@ -708,7 +708,6 @@ export const CommonMethodsMixin = {
 			})
 			return criteria
 		},
-
 		editSignalsCond(backtestInfo, criteriaStr, value) {
 			const criteriaDesc = criteriaStr=='entry'?'entry_description':'exit_description'
 			let _backtestInfo = JSON.parse(JSON.stringify(backtestInfo))

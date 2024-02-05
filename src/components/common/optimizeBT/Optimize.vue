@@ -13,7 +13,6 @@
 					:element-loading-text="loadTest"
 					:default-expand-all="false"
 					element-loading-spinner="el-icon-loading"
-					style="width: 100%; height: 100%"
 					:row-class-name="tableRowClassName"
 					element-loading-background="rgba(0, 0, 0, 0.8)"
 					@selection-change="handleSelectionChange"
@@ -45,7 +44,6 @@
 							:label="item.label"
 							:key="item.label"
 							:prop="item.field"
-							:width="item.width"
 							show-overflow-tooltip
 							align="center"
 						>
@@ -103,7 +101,6 @@
 							v-if="['Improved returns', 'Profit'].includes(item.label)"
 							:label="item.label"
 							:key="item.label"
-							:width="item.width"
 							:prop="item.field"
 							show-overflow-tooltip
 							align="center"
@@ -124,7 +121,6 @@
 					</div>
 				</el-table>
 			</div>
-
 			<div class="btn-group">
 				<button class="cancel" @click="cancel">
 					<span>Cancel</span>
@@ -236,7 +232,6 @@ export default {
 
 					// 发起复制请求
 					await copyBacktest(this.$qs.stringify(params))
-
 					this.$emit('refreshList')
 
 					this.loading = false
@@ -365,7 +360,6 @@ h1 {
 		visibility: visible;
 	}
 	.optimize-panel {
-		width: 60vw;
 		padding: 35px;
 		background: white;
 		display: grid;
@@ -376,7 +370,7 @@ h1 {
 		}
 		.table {
 			background: yellowgreen;
-			height: 100%;
+			width: 60vw;
 		}
 		.btn-group {
 			display: flex;
