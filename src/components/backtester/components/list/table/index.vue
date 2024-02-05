@@ -338,6 +338,21 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
+									content="optimize backtest results"
+									placement="bottom-start"
+								>
+									<el-button
+										:disabled="false"
+										type="success"
+										icon="el-icon-data-analysis"
+										circle
+										size="mini"
+										@click="optimizeBacktest(scope.row)"
+									></el-button>
+								</el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="dark"
 									content="copy backtest link"
 									placement="bottom-start"
 								>
@@ -367,6 +382,7 @@
 				:total="queryInfo.total"
 			>
 		</el-pagination>
+		<Optimize ref="OPT" @refreshList="refreshList" @handleError="handleError"></Optimize>
 	</div>
 </template>
 
@@ -382,9 +398,13 @@ import { throttle } from 'lodash'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 import { copy } from "@/components/common/directives/copyBacktestID"
 import { RefreshBus } from "../EventBus/Bus"
+import Optimize from "@/components/common/optimizeBT/Optimize.vue";
 
 export default {
 	name: 'Table',
+	components: {
+		Optimize
+	},
 	props: {
 		tableCol: Array,
 		currentPage: String,
@@ -426,6 +446,23 @@ export default {
 		}
 	},
 	methods: {
+		handleError(errMsg) {
+			this.popUpMsgBox(errMsg)
+		},
+		async refreshList() {
+			// 重置查询页码并获取数据 History
+			if (this.currentPage === 'History') {
+				this.queryInfo.page = 1
+				await this.getDataList(null)
+			}
+			if (['Sample', 'Favorites', 'Analyst'].includes(this.currentPage)) {
+				this.$router.push('/backtester/list/history')
+			}
+			this.popUpMsgBox('Optimize successfully')
+		},
+		optimizeBacktest(data) {
+			this.$refs['OPT'].optimizeBacktest(data)
+		},
 		async getDataList(orderby) {
 			let res = null
 			try {
