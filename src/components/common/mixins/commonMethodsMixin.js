@@ -710,23 +710,30 @@ export const CommonMethodsMixin = {
 		},
 
 		editSignalsCond(backtestInfo, criteriaStr, value) {
+			const criteriaDesc = criteriaStr=='entry'?'entry_description':'exit_description'
+			let _backtestInfo = JSON.parse(JSON.stringify(backtestInfo))
 			let signalCode = new SignalCode()
-			debugger
-			let criteria = isJson(backtestInfo[criteriaStr])
-				? JSON.parse(backtestInfo[criteriaStr])
-				: backtestInfo[criteriaStr]
+			
+			// long: todo修改description
+			// let desc = isJson(_backtestInfo[criteriaDesc])
+			// 	? JSON.parse(_backtestInfo[criteriaDesc])
+			// 	: _backtestInfo[criteriaDesc]
+			// const regex = /\b\d+(\.\d+)?\b/;
+			// desc[0]['commentDes'] = desc[0]['commentDes'].replace(regex, value);
+			// _backtestInfo[criteriaDesc] = desc
+
+			// 修改value
+			let criteria = isJson(_backtestInfo[criteriaStr])
+				? JSON.parse(_backtestInfo[criteriaStr])
+				: _backtestInfo[criteriaStr]
 			let decodeRes = signalCode.decode(criteria.signals[0].code)
 			decodeRes.value = value
 			decodeRes.sc.value = value
 			criteria.signals[0].code = decodeRes
-			backtestInfo[criteriaStr] = criteria
-			const {signal_list, signal} = this.encodeSignalsCond(backtestInfo,criteriaStr)
-			debugger
-			backtestInfo[criteriaStr] = JSON.stringify(criteria)
-			return      
+			_backtestInfo[criteriaStr] = criteria
+			return this.encodeSignalsCond(_backtestInfo,criteriaStr)      
 		},
 		encodeSignalsCond(backtestData,criteria) {
-			debugger
 			const signalList = backtestData[criteria].signals
 			const isOnlyUseRiskControl = backtestData[criteria].relation == 0
 			const criteriaCapFirstL = capitalizeFirstLetter(criteria)
@@ -770,17 +777,24 @@ export const CommonMethodsMixin = {
 					console.log('未加密前的数据结构', signalList[i])
 					const _code = signalList[i].code
 					// 在此之前找出 sentiment indicator 的极值 lishan
-					_code.extreme_optimism = '20'
-					_code.extreme_pessimism = '80'
+					if(typeof _code.ids == 'string'){
+						const regex = /EO([^\/]+)\/EP([^\/]+)/;
+						const match = _code.ids.match(regex);
+						_code.extreme_optimism = match[1]
+						_code.extreme_pessimism = match[2]
+					}
+
 					delete _code.sc
+					delete _code.ids
 					const code = b.encode(_code)
 					signal_list.push({
 						code: code
 					})
 				}
 			}
-			delete backtestData[criteria].signals
-			return { signal_list, signal }
+			backtestData[criteria].signals = signal_list
+			backtestData[criteria] = JSON.stringify(backtestData[criteria])
+			return backtestData
 		},
 		showFLSMASK() {
 			const myFLSbg = document.querySelector('#myFLSbg')
