@@ -13,11 +13,12 @@
 					:element-loading-text="loadTest"
 					:default-expand-all="false"
 					element-loading-spinner="el-icon-loading"
-					style="width: 100%; height: 100%"
 					:row-class-name="tableRowClassName"
 					element-loading-background="rgba(0, 0, 0, 0.8)"
+					@selection-change="handleSelectionChange"
 				>
-        <el-table-column
+					<el-table-column type="selection" width="55"> </el-table-column>
+					<!-- <el-table-column
           width="50px"
           align="center"
 				>
@@ -31,7 +32,7 @@
 							"
 						></el-checkbox>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
 					<el-table-column type="index" align="center">
 						<template scope="scope">
 							<span>{{ scope.$index + 1 }}</span>
@@ -42,12 +43,11 @@
 							v-if="['Name', 'Symbol'].includes(item.label)"
 							:label="item.label"
 							:key="item.label"
-              :prop="item.field"
-							:width="item.width"
+							:prop="item.field"
 							show-overflow-tooltip
 							align="center"
 						>
-            	<template slot-scope="scope">
+							<template slot-scope="scope">
 								{{ scope.row.data[item.field] }}
 							</template>
 						</el-table-column>
@@ -101,7 +101,6 @@
 							v-if="['Improved returns', 'Profit'].includes(item.label)"
 							:label="item.label"
 							:key="item.label"
-							:width="item.width"
 							:prop="item.field"
 							show-overflow-tooltip
 							align="center"
@@ -122,100 +121,181 @@
 					</div>
 				</el-table>
 			</div>
-      <div class="btn-group">
-      <button class="cancel" @click="cancel">
-          <span>Cancel</span>
+			<div class="btn-group">
+				<button class="cancel" @click="cancel">
+					<span>Cancel</span>
 				</button>
-        <button class="add-to-list" @click="addToList">
-          <span>Add to List</span>
+				<button class="add-to-list" @click="addToList">
+					<span>Add to List</span>
 				</button>
-    </div>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
-import {
-	copyBacktest,
-  runOPT,
-} from '@/service/service.js'
+import { CommonMethodsMixin } from '@/components/common/mixins/commonMethodsMixin'
+import { copyBacktest, runOPT } from '@/service/service.js'
 import factory from 'highcharts/modules/exporting'
 
 export default {
 	name: 'Optimize',
 	components: {},
-  mixins: [CommonMethodsMixin],
+	mixins: [CommonMethodsMixin],
 	data() {
 		return {
-      dataList: [],
-      tableCol: [
-        {
-          label: 'Name',
-          field: 'name',
-          width: '250px'
-        },
-        {
-          label: 'Symbol',
-          field: 'symbol',
-          width: '70px'
-        },
-        {
-          label: 'DesExpand',
-          type: 'expand'
-        },
-        {
-          label: 'Entry & Exit',
-        },
-        {
-          label: 'Improved returns',
-          field: 'improved_returns',
-          width: '125px'
-        },
-        {
-          label: 'Profit',
-          field: 'profit',
-          width: '125px'
-        }
-      ],
-      loading: false,
-      loadTest: 'Generating optimization solutions...',
-    }
+			dataList: [],
+			tableCol: [
+				{
+					label: 'Name',
+					field: 'name',
+					width: '250px'
+				},
+				{
+					label: 'Symbol',
+					field: 'symbol',
+					width: '70px'
+				},
+				{
+					label: 'DesExpand',
+					type: 'expand'
+				},
+				{
+					label: 'Entry & Exit'
+				},
+				{
+					label: 'Improved returns',
+					field: 'improved_returns',
+					width: '125px'
+				},
+				{
+					label: 'Profit',
+					field: 'profit',
+					width: '125px'
+				}
+			],
+			loading: false,
+			loadTest: 'Generating optimization solutions...',
+			multipleSelection: []
+		}
 	},
 	computed: {},
 	watch: {},
+	// 	mounted() {
+	// 				let _data = {
+	//     "id": "7e7c8921-e38e-9207-f384-236978f13d88",
+	//     "user": "04f7c8dc-93fb-4f38-b680-638b06e108b7",
+	//     "name": "2.2 test c(copy)",
+	//     "capital": 100000,
+	//     "symbol": "SPX",
+	//     "benchmark": "SPX",
+	//     "entry": "{\"score\":1,\"signals_in_market\":1,\"relation\":1,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:% Showing Excess Optimism;IDS:EO0.3/EPnull;SC:SV/3/0.32\"}],\"cond\":[{\"newCondition\":3,\"conditionPeriod\":\"21\"}]}",
+	//     "exit": "{\"score\":1,\"signals_in_market\":1,\"relation\":0,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999\"}],\"cond\":[null]}",
+	//     "create_date": "2024-02-02T06:56:34.967408Z",
+	//     "start_date": "2019-02-02",
+	//     "end_date": "2024-02-02",
+	//     "capital_alloc": "1.000000",
+	//     "commission": "0.0010",
+	//     "slippage": "0.0000",
+	//     "frequency": "Daily",
+	//     "win_rate": "0.0000",
+	//     "risk_control": "//21",
+	//     "user_tag": "client",
+	//     "report_url": "",
+	//     "direction": "Long",
+	//     "favorites": false,
+	//     "entry_description": "[{\"commentDes\":\"E: Long; Single Condition   % Showing Excess Optimism   CrossAbove 0.32\",\"rocCond\":{\"newCondition\":3,\"conditionPeriod\":\"21\"}}]",
+	//     "exit_description": "[{\"commentDes\":\"X: Close: Time In Marke 21(Bars)\",\"rocCond\":null}]",
+	//     "indicator_layout": "{\"technicalIndicators\":[],\"savedTechSD\":[{\"type\":\"model_percent_bearish\",\"inputs\":{\"Period\":13,\"Overlay\":false,\"id\":\"$r001$model_percent_bearish$r001$ (13,n)\",\"display\":\"$r001$model_percent_bearish$r001$ (13,n)\"},\"outputs\":{},\"parameters\":{\"studyOverZonesEnabled\":false,\"studyOverBoughtValue\":0.3,\"studyOverBoughtColor\":\"#FF0000\",\"studyOverSoldValue\":null,\"studyOverSoldColor\":\"#00DD00\",\"chartName\":\"chart\",\"editMode\":true,\"panelName\":\"$r001$model_percent_bearish$r001$ (13,n)\"},\"panel\":\"$r001$model_percent_bearish$r001$ (13,n)\"}],\"activatedMA\":[{\"period\":21,\"url\":\"\"}],\"activatedMALayout\":[],\"formIndicators\":{\"entry\":[\"model_percent_bearish\"],\"exit\":[\"\"]}}",
+	//     "status": 2,
+	//     "strategy": "Signal",
+	//     "result": "{\"Total Trades\": 21, \"Total Return (%)\": 2.14}",
+	//     "seconds": 19,
+	//     "url_data": "",
+	//     "backtest_period": "5",
+	//     "trade_price": 2,
+	//     "exclude_oo": 0,
+	//     "total_trader": 21,
+	//     "total_return": 2.14,
+	//     "description": "{\"Introduction\":\"\",\"Rules\":\"\"}",
+	//     "last_entry_signal_date": null,
+	//     "last_exit_signal_date": null,
+	//     "market_environment": 0,
+	//     "index_moving_average_slope": 0
+	// }
+	//         // 根据轮询结果返回的值修改指定回测的值并copy
+	//         //const OPTResults = await this.pollingOPTResults(_data)
+	// 		const OPTResults = [
+	//         {
+	//             "Profit": -1.24,
+	//             "Optimized_values": [
+	//                 0.39
+	//             ],
+	//             "Improved returns": 14.24
+	//         },
+	//         {
+	//             "Profit": -3.03,
+	//             "Optimized_values": [
+	//                 0.15
+	//             ],
+	//             "Improved returns": 12.45
+	//         }]
+
+	//         this.dataList = OPTResults.map(item=> {
+	//           const optimizedValue = item['Optimized_values']
+	//           let signalCond
+	//           signalCond = this.editSignalsCond(_data, 'entry', optimizedValue[0])
+	//           if(optimizedValue.length >=2){
+	//             signalCond = this.editSignalsCond(_data, 'exit', optimizedValue[1])
+	//           }
+	//           return {
+	//             data: signalCond,
+	//             improved_returns: item['Improved returns'],
+	//             profit: item['Profit']
+	//           }
+	//         })
+	// 		debugger
+	//         this.loading = false
+
+	// 	},
 	methods: {
-    selectBT(val) {
-      debugger
-    },
+		handleSelectionChange(val) {
+			this.multipleSelection = val
+		},
+		selectBT(val) {
+			debugger
+		},
 		cancel() {
 			// this.$router.push('/backtester/list/favorites')
 			const optimizeBT = document.querySelector('#optimizeBT')
 			optimizeBT.classList.remove('activated')
 		},
-    async addToList() {
-			try {
-				this.loading = true
-				const copyName = `${data.name}(opt)`
+		async addToList() {
+			//this.loading = true
+			for (var i in this.multipleSelection) {
+				try {
+					let _data = JSON.parse(JSON.stringify(this.multipleSelection[i].data))
+					const copyName = `${_data.name}(opt ${i})`
 
-					data = JSON.parse(JSON.stringify(data))
-	
-          // data = this.editSignalsCond(data, 'entry', 10)
-
-					for (const key in data) {
-						if (data.hasOwnProperty(key)) {
-							if (data[key] !== null && (typeof data[key] === 'object' || Array.isArray(data[key]))) {
-								data[key] = JSON.stringify(data[key]);
+					for (const key in _data) {
+						if (_data.hasOwnProperty(key)) {
+							if (
+								_data[key] !== null &&
+								(typeof _data[key] === 'object' || Array.isArray(_data[key]))
+							) {
+								_data[key] = JSON.stringify(_data[key])
 							}
 						}
 					}
 
 					// 获取参数并准备复制
 					const params = {
-						...data,
+						..._data,
 						name: copyName,
 						favorites: false,
-						user_tag: 'client'
+						user_tag: 'client',
+						total_trader: 0,
+						total_return: 0
 					}
 					delete params.uuid
 					delete params.results
@@ -236,92 +316,111 @@ export default {
 					// 	this.$router.push('/backtester/list/history')
 					// }
 					// this.popUpMsgBox('Copy successfully')
-
-				//this.loading = false
-			} catch (error) {
-				console.error('An error occurred:', error)
-				//this.loading = false
+					//this.loading = false
+				} catch (error) {
+					console.error('An error occurred:', error)
+					//this.loading = false
+				}
 			}
-    },
-    tableRowClassName({row, rowIndex}) {
-			if (rowIndex%2 === 0) {
-			return 'dark-row'
+			debugger
+		},
+		tableRowClassName({ row, rowIndex }) {
+			if (rowIndex % 2 === 0) {
+				return 'dark-row'
 			}
 			return ''
 		},
-		async optimizeBacktest(data) {                                                                              
-		let _data = {
-    "id": "7e7c8921-e38e-9207-f384-236978f13d88",
-    "user": "04f7c8dc-93fb-4f38-b680-638b06e108b7",
-    "name": "2.2 test c(copy)",
-    "capital": 100000,
-    "symbol": "SPX",
-    "benchmark": "SPX",
-    "entry": "{\"score\":1,\"signals_in_market\":1,\"relation\":1,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:% Showing Excess Optimism;IDS:EO0.3/EPnull;SC:SV/3/0.32\"}],\"cond\":[{\"newCondition\":3,\"conditionPeriod\":\"21\"}]}",
-    "exit": "{\"score\":1,\"signals_in_market\":1,\"relation\":0,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999\"}],\"cond\":[null]}",
-    "create_date": "2024-02-02T06:56:34.967408Z",
-    "start_date": "2019-02-02",
-    "end_date": "2024-02-02",
-    "capital_alloc": "1.000000",
-    "commission": "0.0010",
-    "slippage": "0.0000",
-    "frequency": "Daily",
-    "win_rate": "0.0000",
-    "risk_control": "//21",
-    "user_tag": "client",
-    "report_url": "",
-    "direction": "Long",
-    "favorites": false,
-    "entry_description": "[{\"commentDes\":\"E: Long; Single Condition   % Showing Excess Optimism   CrossAbove 0.32\",\"rocCond\":{\"newCondition\":3,\"conditionPeriod\":\"21\"}}]",
-    "exit_description": "[{\"commentDes\":\"X: Close: Time In Marke 21(Bars)\",\"rocCond\":null}]",
-    "indicator_layout": "{\"technicalIndicators\":[],\"savedTechSD\":[{\"type\":\"model_percent_bearish\",\"inputs\":{\"Period\":13,\"Overlay\":false,\"id\":\"$r001$model_percent_bearish$r001$ (13,n)\",\"display\":\"$r001$model_percent_bearish$r001$ (13,n)\"},\"outputs\":{},\"parameters\":{\"studyOverZonesEnabled\":false,\"studyOverBoughtValue\":0.3,\"studyOverBoughtColor\":\"#FF0000\",\"studyOverSoldValue\":null,\"studyOverSoldColor\":\"#00DD00\",\"chartName\":\"chart\",\"editMode\":true,\"panelName\":\"$r001$model_percent_bearish$r001$ (13,n)\"},\"panel\":\"$r001$model_percent_bearish$r001$ (13,n)\"}],\"activatedMA\":[{\"period\":21,\"url\":\"\"}],\"activatedMALayout\":[],\"formIndicators\":{\"entry\":[\"model_percent_bearish\"],\"exit\":[\"\"]}}",
-    "status": 2,
-    "strategy": "Signal",
-    "result": "{\"Total Trades\": 21, \"Total Return (%)\": 2.14}",
-    "seconds": 19,
-    "url_data": "",
-    "backtest_period": "5",
-    "trade_price": 2,
-    "exclude_oo": 0,
-    "total_trader": 21,
-    "total_return": 2.14,
-    "description": "{\"Introduction\":\"\",\"Rules\":\"\"}",
-    "last_entry_signal_date": null,
-    "last_exit_signal_date": null,
-    "market_environment": 0,
-    "index_moving_average_slope": 0
-}
+		async optimizeBacktest(data) {
+			
+			// 		let data = {
+			//     "id": "7e7c8921-e38e-9207-f384-236978f13d88",
+			//     "user": "04f7c8dc-93fb-4f38-b680-638b06e108b7",
+			//     "name": "2.2 test c(copy)",
+			//     "capital": 100000,
+			//     "symbol": "SPX",
+			//     "benchmark": "SPX",
+			//     "entry": "{\"score\":1,\"signals_in_market\":1,\"relation\":1,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:% Showing Excess Optimism;IDS:EO0.3/EPnull;SC:SV/3/0.32\"}],\"cond\":[{\"newCondition\":3,\"conditionPeriod\":\"21\"}]}",
+			//     "exit": "{\"score\":1,\"signals_in_market\":1,\"relation\":0,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999\"}],\"cond\":[null]}",
+			//     "create_date": "2024-02-02T06:56:34.967408Z",
+			//     "start_date": "2019-02-02",
+			//     "end_date": "2024-02-02",
+			//     "capital_alloc": "1.000000",
+			//     "commission": "0.0010",
+			//     "slippage": "0.0000",
+			//     "frequency": "Daily",
+			//     "win_rate": "0.0000",
+			//     "risk_control": "//21",
+			//     "user_tag": "client",
+			//     "report_url": "",
+			//     "direction": "Long",
+			//     "favorites": false,
+			//     "entry_description": "[{\"commentDes\":\"E: Long; Single Condition   % Showing Excess Optimism   CrossAbove 0.32\",\"rocCond\":{\"newCondition\":3,\"conditionPeriod\":\"21\"}}]",
+			//     "exit_description": "[{\"commentDes\":\"X: Close: Time In Marke 21(Bars)\",\"rocCond\":null}]",
+			//     "indicator_layout": "{\"technicalIndicators\":[],\"savedTechSD\":[{\"type\":\"model_percent_bearish\",\"inputs\":{\"Period\":13,\"Overlay\":false,\"id\":\"$r001$model_percent_bearish$r001$ (13,n)\",\"display\":\"$r001$model_percent_bearish$r001$ (13,n)\"},\"outputs\":{},\"parameters\":{\"studyOverZonesEnabled\":false,\"studyOverBoughtValue\":0.3,\"studyOverBoughtColor\":\"#FF0000\",\"studyOverSoldValue\":null,\"studyOverSoldColor\":\"#00DD00\",\"chartName\":\"chart\",\"editMode\":true,\"panelName\":\"$r001$model_percent_bearish$r001$ (13,n)\"},\"panel\":\"$r001$model_percent_bearish$r001$ (13,n)\"}],\"activatedMA\":[{\"period\":21,\"url\":\"\"}],\"activatedMALayout\":[],\"formIndicators\":{\"entry\":[\"model_percent_bearish\"],\"exit\":[\"\"]}}",
+			//     "status": 2,
+			//     "strategy": "Signal",
+			//     "result": "{\"Total Trades\": 21, \"Total Return (%)\": 2.14}",
+			//     "seconds": 19,
+			//     "url_data": "",
+			//     "backtest_period": "5",
+			//     "trade_price": 2,
+			//     "exclude_oo": 0,
+			//     "total_trader": 21,
+			//     "total_return": 2.14,
+			//     "description": "{\"Introduction\":\"\",\"Rules\":\"\"}",
+			//     "last_entry_signal_date": null,
+			//     "last_exit_signal_date": null,
+			//     "market_environment": 0,
+			//     "index_moving_average_slope": 0
+			// }
 			const optimizeBT = document.querySelector('#optimizeBT')
 			optimizeBT.classList.add('activated')
-this.loading = true
-      let response = await runOPT(_data.id)
-      if(response.data.status == 200) {
-        // 根据轮询结果返回的值修改指定回测的值并copy
-        const OPTResults = await this.pollingOPTResults(_data)
-        this.dataList = OPTResults.map(item=> {
-          const optimizedValue = item['Optimized_values']
-          let signalCond 
-          signalCond = this.editSignalsCond(data, 'entry', optimizedValue[0])
-          if(optimizedValue.length >=2){
-            signalCond = this.editSignalsCond(data, 'exit', optimizedValue[1])
-          }
-           
-          return {
-            data: signalCond,
-            improved_returns: item['Improved returns'],
-            profit: item['Profit']
-          } 
-        })
-        this.loading = false
-      }
-		},
+			this.loading = true
+			let response = await runOPT(data.id)
+			if (response.data.status == 200) {
+				//根据轮询结果返回的值修改指定回测的值并copy
+				const OPTResults = await this.pollingOPTResults(data)
+				// const OPTResults = [
+				// {
+				//     "Profit": -1.24,
+				//     "Optimized_values": [
+				//         0.39
+				//     ],
+				//     "Improved returns": 14.24
+				// },
+				// {
+				//     "Profit": -3.03,
+				//     "Optimized_values": [
+				//         0.15
+				//     ],
+				//     "Improved returns": 12.45
+				// }]
+				this.dataList = OPTResults.map((item) => {
+					let _data = JSON.parse(JSON.stringify(data))
+					const optimizedValue = item['Optimized_values']
+					let signalCond
+					signalCond = this.editSignalsCond(_data, 'entry', optimizedValue[0])
+					if (optimizedValue.length >= 2) {
+						signalCond = this.editSignalsCond(signalCond, 'exit', optimizedValue[1])
+					}
+
+					return {
+						data: signalCond,
+						improved_returns: item['Improved returns'],
+						profit: item['Profit']
+					}
+				})
+				console.log('轮询结果', this.dataList)
+				this.loading = false
+			}
+		}
 	}
 }
 </script>
 
 <style lang="less" scoped>
 h1 {
-  font-size: 30px;
+	font-size: 30px;
 }
 #optimizeBT {
 	visibility: hidden;
@@ -341,8 +440,7 @@ h1 {
 		visibility: visible;
 	}
 	.optimize-panel {
-		width: 60vw;
-    padding: 35px;
+		padding: 35px;
 		background: white;
 		display: grid;
 		grid-template-rows: 1fr 3fr 1fr;
@@ -352,41 +450,41 @@ h1 {
 		}
 		.table {
 			background: yellowgreen;
-      height: 100%;
+			width: 60vw;
 		}
-    .btn-group {
-  display: flex;
-  justify-content: center;
-  button.add-to-list,
-  .cancel {
-    border: unset;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 200px;
-    height: 42px;
-    border-radius: 10px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    margin: 0 10px 10px 0;
-    span {
-      color: #ffffff;
-    }
-  }
-  .cancel {
-      background: #fbc05c;
-      &:hover {
-        background: #f59e0b;
-        box-shadow: 0 6px 20px #f59e0b;
-      }
-  }
-  .add-to-list {
-      background: #5b9bd1;
-      &:hover {
-        background: #3787c9;
-        box-shadow: 0 6px 20px #3787c9;
-      }
-  }
-}
+		.btn-group {
+			display: flex;
+			justify-content: center;
+			button.add-to-list,
+			.cancel {
+				border: unset;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 200px;
+				height: 42px;
+				border-radius: 10px;
+				box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+				margin: 0 10px 10px 0;
+				span {
+					color: #ffffff;
+				}
+			}
+			.cancel {
+				background: #fbc05c;
+				&:hover {
+					background: #f59e0b;
+					box-shadow: 0 6px 20px #f59e0b;
+				}
+			}
+			.add-to-list {
+				background: #5b9bd1;
+				&:hover {
+					background: #3787c9;
+					box-shadow: 0 6px 20px #3787c9;
+				}
+			}
+		}
 	}
 }
 
