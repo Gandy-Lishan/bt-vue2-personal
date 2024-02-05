@@ -382,7 +382,7 @@
 				:total="queryInfo.total"
 			>
 		</el-pagination>
-		<Optimize ref="OPT"></Optimize>
+		<Optimize ref="OPT" @refreshList="refreshList"></Optimize>
 	</div>
 </template>
 
@@ -446,6 +446,18 @@ export default {
 		}
 	},
 	methods: {
+		async refreshList() {
+			debugger
+			// 重置查询页码并获取数据 History
+			if (this.currentPage === 'History') {
+				this.queryInfo.page = 1
+				await this.getDataList(null)
+			}
+			if (['Sample', 'Favorites', 'Analyst'].includes(this.currentPage)) {
+				this.$router.push('/backtester/list/history')
+			}
+			this.popUpMsgBox('Optimize successfully')
+		},
 		optimizeBacktest(data) {
 			this.$refs['OPT'].optimizeBacktest(data)
 		},
