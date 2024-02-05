@@ -137,6 +137,7 @@
 import { CommonMethodsMixin } from '@/components/common/mixins/commonMethodsMixin'
 import { copyBacktest, runOPT } from '@/service/service.js'
 import factory from 'highcharts/modules/exporting'
+import { emit } from 'process'
 
 export default {
 	name: 'Optimize',
@@ -271,7 +272,7 @@ export default {
 			optimizeBT.classList.remove('activated')
 		},
 		async addToList() {
-			//this.loading = true
+			this.loading = true
 			for (var i in this.multipleSelection) {
 				try {
 					let _data = JSON.parse(JSON.stringify(this.multipleSelection[i].data))
@@ -306,23 +307,17 @@ export default {
 
 					// 发起复制请求
 					await copyBacktest(this.$qs.stringify(params))
+					this.$emit('refreshList')
 
-					// // 重置查询页码并获取数据 History
-					// if (this.currentPage === 'History') {
-					// 	this.queryInfo.page = 1
-					// 	await this.getDataList(null)
-					// }
-					// if (['Sample', 'Favorites', 'Analyst'].includes(this.currentPage)) {
-					// 	this.$router.push('/backtester/list/history')
-					// }
-					// this.popUpMsgBox('Copy successfully')
-					//this.loading = false
+					this.loading = false
+					const optimizeBT = document.querySelector('#optimizeBT')
+					optimizeBT.classList.remove('activated')
 				} catch (error) {
 					console.error('An error occurred:', error)
-					//this.loading = false
+					this.loading = false
 				}
 			}
-			debugger
+			
 		},
 		tableRowClassName({ row, rowIndex }) {
 			if (rowIndex % 2 === 0) {

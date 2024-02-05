@@ -714,12 +714,12 @@ export const CommonMethodsMixin = {
 			let signalCode = new SignalCode()
 			
 			// long: todo修改description
-			// let desc = isJson(_backtestInfo[criteriaDesc])
-			// 	? JSON.parse(_backtestInfo[criteriaDesc])
-			// 	: _backtestInfo[criteriaDesc]
-			// const regex = /\b\d+(\.\d+)?\b/;
-			// desc[0]['commentDes'] = desc[0]['commentDes'].replace(regex, value);
-			// _backtestInfo[criteriaDesc] = desc
+			let desc = isJson(_backtestInfo[criteriaDesc])
+				? JSON.parse(_backtestInfo[criteriaDesc])
+				: _backtestInfo[criteriaDesc]
+			const regex = /\b\d+(\.\d+)?\b/;
+			desc[0]['commentDes'] = desc[0]['commentDes'].replace(regex, value);
+			_backtestInfo[criteriaDesc] = desc
 
 			// 修改value
 			let criteria = isJson(_backtestInfo[criteriaStr])
