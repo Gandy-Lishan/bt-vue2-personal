@@ -340,7 +340,6 @@
 									effect="dark"
 									content="optimize backtest results"
 									placement="bottom-start"
-									v-if="isButtonVisible"
 								>
 									<el-button
 										v-if="['History', 'Favorites'].includes(currentPage)"

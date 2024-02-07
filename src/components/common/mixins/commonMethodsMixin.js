@@ -991,7 +991,18 @@ export const CommonMethodsMixin = {
 						file_data: backtestParams
 					})
 					await uploadS3(S3DataStr)
-					const res = await runBacktest(backtestDataStr)
+					let res 
+					try {
+						res = await runBacktest(backtestDataStr)
+					} catch (error) {
+						if (error.response?.status == 403) {
+							_this.popUpMsgBox('The backtest name already exists')
+							_this.setSetUpLoadingSetting(false, false, 0, '')
+							CIQ.hideCover()
+							CIQ.nprogress.done()
+							return
+						}
+					}
 					if (res.status != 201) return
 					_this.$store.dispatch('states/set_isBacktestRunning_flag', true)
 					//After saving successfully, clear the backtestinfo back to the original state
