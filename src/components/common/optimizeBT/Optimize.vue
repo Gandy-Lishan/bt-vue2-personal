@@ -125,7 +125,7 @@
 				<button class="cancel" @click="cancel">
 					<span>Cancel</span>
 				</button>
-				<button class="add-to-list" @click="addToList">
+				<button class="add-to-list" @click="addToList" :disabled="multipleSelection.length == 0">
 					<span>Add to List</span>
 				</button>
 			</div>
@@ -136,8 +136,6 @@
 <script>
 import { CommonMethodsMixin } from '@/components/common/mixins/commonMethodsMixin'
 import { copyBacktest, runOPT } from '@/service/service.js'
-import factory from 'highcharts/modules/exporting'
-import { emit } from 'process'
 
 export default {
 	name: 'Optimize',
@@ -402,6 +400,14 @@ h1 {
 				&:hover {
 					background: #3787c9;
 					box-shadow: 0 6px 20px #3787c9;
+				}
+			}
+
+			button[disabled] {
+				background: #9e9e9e;
+				&:hover {
+					background: #9e9e9e;
+					box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 				}
 			}
 		}
