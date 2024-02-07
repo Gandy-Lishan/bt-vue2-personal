@@ -1,5 +1,5 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { timestampToTime, isJson } from '@/utils'
+import {capitalizeFirstLetter, timestampToTime, isJson } from '@/utils'
 import {
 	getBacktestName,
 	seeParams,
@@ -13,7 +13,8 @@ import {
 	getStatus,
 	findLastSignalApi,
 	getBTV1Backtest,
-	getIndicatorsList
+	getIndicatorsList,
+	getOPTStatus
 } from '@/service/service.js'
 import UUID from '@/utils/cryptoUtils/uuid'
 import SignalCode from '@/utils/cryptoUtils/codeTool'
@@ -132,6 +133,7 @@ export const CommonMethodsMixin = {
 				this.loading = false
 			}
 		},
+
 		async deleteBacktest(id) {
 			this.loading = true
 			await deleteBacktest(id)
@@ -706,6 +708,95 @@ export const CommonMethodsMixin = {
 			})
 			return criteria
 		},
+		editSignalsCond(backtestInfo, criteriaStr, value) {
+			const criteriaDesc = criteriaStr=='entry'?'entry_description':'exit_description'
+			let _backtestInfo = JSON.parse(JSON.stringify(backtestInfo))
+			let signalCode = new SignalCode()
+			
+			// long: todo修改description
+			let desc = isJson(_backtestInfo[criteriaDesc])
+				? JSON.parse(_backtestInfo[criteriaDesc])
+				: _backtestInfo[criteriaDesc]
+			
+				const words = desc[0]['commentDes'].split(' ');
+				words[words.length - 1] = value;
+			desc[0]['commentDes'] = words.join(' ');
+			_backtestInfo[criteriaDesc] = desc
+
+			// 修改value
+			let criteria = isJson(_backtestInfo[criteriaStr])
+				? JSON.parse(_backtestInfo[criteriaStr])
+				: _backtestInfo[criteriaStr]
+			let decodeRes = signalCode.decode(criteria.signals[0].code)
+			decodeRes.value = value
+			decodeRes.sc.value = value
+			criteria.signals[0].code = decodeRes
+			_backtestInfo[criteriaStr] = criteria
+			return this.encodeSignalsCond(_backtestInfo,criteriaStr)      
+		},
+		encodeSignalsCond(backtestData,criteria) {
+			const signalList = backtestData[criteria].signals
+			const isOnlyUseRiskControl = backtestData[criteria].relation == 0
+			const criteriaCapFirstL = capitalizeFirstLetter(criteria)
+			const signal_list = []
+			const b = new SignalCode()
+			/*
+			lishan:
+			isHandleIndicator 需要你去判断退场是否是 isOnlyUseRiskControl 判断条件是看 code 是否等于
+			SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999
+			如果是 isOnlyUseRiskControl 且 criteria 是 exit 则不需要处理编码和解码
+			*/
+			const isHandleIndicator = criteria == 'entry' || (criteria == 'exit' && !isOnlyUseRiskControl)
+			const findSignal = (item, index) => {
+				let signal = CIQ.findSentiIndicator(item.indicator, null)
+				if (!signal) {
+					signal = CIQ.findBuiltinTechIndicator(item.indicator, null)
+				}
+				// 在 symbol indicator list内检索url
+				if (!signal) {
+					if (CIQ.findSymbolIndicator(item.indicator, null)) {
+						return item.indicator
+					}
+				}
+
+				const usersOwnList = this.$store.state.form[`usersOwn${criteriaCapFirstL}FileHash`]
+				return usersOwnList[index] !== ''
+						? usersOwnList[index]
+						: signal?.url || ''
+			}
+
+			let signal = null
+			if(isHandleIndicator) signal = backtestData[criteria].signals.map(item => item.code).map(findSignal)
+
+			if (isOnlyUseRiskControl && criteria == 'exit') {
+				signal = ['']
+				signal_list.push({
+					code: 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999'
+				})
+			} else {
+				for (let i = 0; i < signalList.length; i++) {
+					console.log('未加密前的数据结构', signalList[i])
+					const _code = signalList[i].code
+					// 在此之前找出 sentiment indicator 的极值 lishan
+					if(typeof _code.ids == 'string'){
+						const regex = /EO([^\/]+)\/EP([^\/]+)/;
+						const match = _code.ids.match(regex);
+						_code.extreme_optimism = match[1]
+						_code.extreme_pessimism = match[2]
+					}
+
+					delete _code.sc
+					delete _code.ids
+					const code = b.encode(_code)
+					signal_list.push({
+						code: code
+					})
+				}
+			}
+			backtestData[criteria].signals = signal_list
+			backtestData[criteria] = JSON.stringify(backtestData[criteria])
+			return backtestData
+		},
 		showFLSMASK() {
 			const myFLSbg = document.querySelector('#myFLSbg')
 			myFLSbg.classList.add('activated')
@@ -966,6 +1057,63 @@ export const CommonMethodsMixin = {
 			}, 1000)
 		},
 
+		async pollingOPTResults(data) {
+			/*
+				根据 id 轮询回测结果
+				todo lishan
+			*/
+			const _this = this
+			return new Promise(async (resolve, reject) => {
+				const { id, name } = data
+				console.log('进入轮询')
+				_this.clearInterval = clearPromiseInterval
+				let timer = await setPromiseInterval(async () => {
+					try{
+						const res = await getOPTStatus(id)
+						// CIQ.nprogress.inc()
+						const status = res.data.opt_status
+						console.log('回测状态', status)
+						const response = res.data.data
+						if (status == 1) {
+							console.log('结束轮询')
+
+							let errMsg = ''
+							switch(res.data.status){
+								case 500:
+									errMsg = 'Optimizing error occur'
+									break;
+								case 431:
+									errMsg = res.data.msg
+									break;
+								case 432:
+									errMsg = res.data.msg
+									break;
+								case 204:
+									errMsg = res.data.data
+									break;
+								default:
+							}	
+							if(errMsg){
+								this.loading = false
+								this.close()
+								this.$emit('handleError',errMsg)
+							}	
+
+							resolve(response) // 解决 Promise 表示轮询完成
+							await clearPromiseInterval(timer) // 使用 await 等待清除计时器
+						}
+					}catch(err){
+						console.log('轮询出现错误')
+						this.loading = false
+						this.close()
+						reject(err); // 如果错误是无法处理的，可以在这里调用 reject 并传递错误信息
+						await clearPromiseInterval(timer) // 使用 await 等待清除计时器
+					}finally{
+						
+					}
+				}, 1000)
+			})
+		},
 		async transformOldName(data,criteria){
 			const res = await getIndicatorsList()
 			const stockList = this.$store.state.chart.stocksList

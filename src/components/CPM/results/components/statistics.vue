@@ -299,7 +299,25 @@
 							scope.row.Return.toFixed(2) + '%'
 						}}</span>
 					</template>
-				</el-table-column>
+				</el-table-column>	
+				<el-table-column
+                prop="MarketCondition"
+                label="Market Condition"
+                align="center"
+            >
+            <template slot="header">
+                Market Condition
+                    <el-tooltip effect="dark" placement="top" style="diaplay: inline">
+                    <span slot="content" v-html="textContent['MarketCondition']">
+                    </span>
+                    <i class="iconfont icon-wenhao"></i>
+                </el-tooltip>
+            </template>
+            <template slot-scope="scope">
+							<span v-if="scope.row.MarketCondition">{{scope.row.MarketCondition}}</span>
+							<span v-else></span>
+            </template>
+        </el-table-column>
 			</el-table>
 		</div>
 	</div>
@@ -311,7 +329,8 @@ export default {
 	data() {
 		return {
 			summaryData: [{}],
-			tradesData: []
+			tradesData: [],
+      textContent: {'MarketCondition': 'Indicates the market environment for this transaction:<br/> "Bear" stands for "Bear Market",<br/> "Bull" stands for "Bull Market",<br/> "Rec" stands for "Recession", "Ease" refers to "FOMC Easing",<br/> and "Tight" represents "FOMC Tightening".'}
 		}
 	},
 	methods: {

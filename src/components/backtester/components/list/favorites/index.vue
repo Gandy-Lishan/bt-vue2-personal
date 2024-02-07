@@ -18,7 +18,7 @@ export default {
   name: 'Favorites',
   components: {
     Table,
-    FLGbg
+    FLGbg,
   },
   data() {
     return {
