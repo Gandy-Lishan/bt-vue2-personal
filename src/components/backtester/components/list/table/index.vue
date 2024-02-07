@@ -343,7 +343,7 @@
 								>
 									<el-button
 										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible"
-										:disabled="false"
+										:disabled="isOptRuning"
 										type="success"
 										icon="el-icon-data-analysis"
 										circle
@@ -452,6 +452,9 @@ export default {
     },
 		isSystem() {
 			return this.$store.state.form.role
+		},
+		isOptRuning() {
+			return this.$refs['OPT'].optimizeState
 		}
 	},
 	methods: {

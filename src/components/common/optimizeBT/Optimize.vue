@@ -1,6 +1,22 @@
 <template>
 	<div id="optimizeBT">
 		<div class="optimize-panel">
+			<div class="toolbar">
+					<el-button
+						type="primary"
+						icon="el-icon-close"
+						circle
+						size="mini"
+						@click="cancel"
+					></el-button>
+					<el-button
+						type="primary"
+						icon="el-icon-minus"
+						circle
+						size="mini"
+						@click="close"
+					></el-button>
+			</div>
 			<div class="header">
 				<h2>Backtest Optimization Result</h2>
 				<h4>The best condition in 20 backtests</h4>
@@ -176,7 +192,8 @@ export default {
 			loading: false,
 			loadTest: 'Generating optimization solutions...',
 			multipleSelection: [],
-			pollingState: true,
+			pollingState: true, // 控制手动中断轮询，
+			optimizeState: false,
 		}
 	},
 	computed: {},
@@ -295,6 +312,8 @@ export default {
 			// }
 			// 如果上次取消的话，再次优化会重设为true
 			this.pollingState = true
+			// 进入优化模式
+			this.optimizeState = true
 
 			const optimizeBT = document.querySelector('#optimizeBT')
 			optimizeBT.classList.add('activated')
@@ -304,6 +323,7 @@ export default {
 				//根据轮询结果返回的值修改指定回测的值并copy
 					
 					const OPTResults = await this.pollingOPTResults(data)
+					this.optimizeState = false	// 轮询结束，优化模式结束
 					if(OPTResults.length <=0) {
 						// 空结果或者取消优化
 						this.loading = false;
@@ -328,6 +348,10 @@ export default {
 					console.log('轮询结果', this.dataList,OPTResults)
 					this.popUpMsgBox('Optimization solution gennerated')
 					this.loading = false
+			}else {
+				console.error('bad runOPT request')
+				this.loading = false
+				this.optimizeState = false	// 请求异常，优化模式结束
 			}
 		}
 	}
@@ -356,11 +380,16 @@ h1 {
 		visibility: visible;
 	}
 	.optimize-panel {
-		padding: 35px;
+		padding: 10px 35px;
 		background: white;
 		display: grid;
 		//grid-template-rows: 1fr 3fr 1fr;
 		align-items: center;
+		.toolbar {
+			button {
+				float: right;
+			}
+		}
 		.header {
 			text-align: center;
 		}
