@@ -159,8 +159,8 @@
                 <el-tooltip effect="dark" placement="top">
                   <span slot="content">
                     This is the minimum threshold required for matching patterns. <br />
-                    Only values between 75-100 are accepted. A value of "80", <br/>
-                    for example, means that only correlations above +0.80 will be shown.
+                    Only values between 75-100 are accepted. A value of "90", <br/>
+                    for example, means that only correlations above +0.90 will be shown.
                   </span>
                   <i class="iconfont icon-wenhao"></i>
                 </el-tooltip>
@@ -326,7 +326,7 @@ export default {
         start_date: '',
         end_date: '',
         lookback_period: 'All',
-        corr_per: 80,
+        corr_per: 90,
         tim: 21,
         year: '',
         exclude_overlap: true,
@@ -485,7 +485,7 @@ export default {
       if(this.previewBtnLoading || this.btnLoading) return true
       const resetData = {
         lookback_period: 'All',
-        corr_per: 80,
+        corr_per: 90,
         direction: 'Long',
         tim: 21,
         symbol: 'SPX',

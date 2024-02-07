@@ -340,6 +340,7 @@
 									effect="dark"
 									content="optimize backtest results"
 									placement="bottom-start"
+									v-if="isButtonVisible"
 								>
 									<el-button
 										v-if="['History', 'Favorites'].includes(currentPage)"
@@ -418,12 +419,13 @@ export default {
 			dataList: [],
 			loadTest: 'Loading...',
 			queryInfo: {
-        page: 1,
-        total: 0
-      },
+				page: 1,
+				total: 0
+     		},
 			searchItem: '',
-      currentSort: {}, // 当前的排序信息
-			searchItem: ''
+     		currentSort: {}, // 当前的排序信息
+			searchItem: '',
+			isButtonVisible: false
 		}
 	},
 	directives: {
@@ -437,6 +439,14 @@ export default {
     //   this.getDataList(null)
     // })
 		this.loading = false
+
+		// 获取当前的域名
+		const currentDomain = window.location.hostname;
+		console.log('当前域名', currentDomain)
+		// 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
+		if (currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost') {
+			this.isButtonVisible = true;
+		}
 	},
 	computed: {
 		is_admin() {
