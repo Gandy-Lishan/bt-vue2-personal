@@ -200,11 +200,6 @@ const routes = [
 					require(['@/components/Tutorial/components/AIScanner.vue'], resolve)
 			},
 			{
-				path: '/doc/old',
-				component: resolve =>
-					require(['@/components/Tutorial/old_doc.vue'], resolve)
-			},
-			{
 				path: '/doc/disclaimer',
 				component: resolve =>
 					require(['@/components/Tutorial/components/Disclaimer.vue'], resolve)

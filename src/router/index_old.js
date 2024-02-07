@@ -75,7 +75,6 @@ const router = new Router({
         {path: '/doc/home',  component: resolve => require(['@/components/Menu/components/Doc.vue'], resolve)},
         {path: '/doc/guide/:id',  component: resolve => require(['@/components/Menu/components/Guide.vue'], resolve)},
         {path: '/doc/scanner',  component: resolve => require(['@/components/Menu/components/AIScanner.vue'], resolve)},
-        { path: '/doc/old', component: resolve => require(['@/components/Menu/old_doc.vue'], resolve) },
 				{path: '/doc/disclaimer', component: resolve => require(['@/components/Menu/components/Disclaimer.vue'], resolve) }
       ]},
 	  { path: '/404', component: resolve => require(['@/components/404.vue'], resolve)},
