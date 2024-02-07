@@ -1074,9 +1074,11 @@ export const CommonMethodsMixin = {
 						const status = res.data.opt_status
 						console.log('回测状态', status)
 						const response = res.data.data
-						if (status == 1) {
+						// pollingState控制手动中断轮询请求
+						if (status == 1 || this.pollingState == false) {
 							console.log('结束轮询')
 
+							// 处理轮询结果的异常情况
 							let errMsg = ''
 							switch(res.data.status){
 								case 500:
@@ -1086,6 +1088,9 @@ export const CommonMethodsMixin = {
 									errMsg = res.data.msg
 									break;
 								case 432:
+									errMsg = res.data.msg
+									break;
+								case 435:
 									errMsg = res.data.msg
 									break;
 								case 204:

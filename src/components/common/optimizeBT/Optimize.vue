@@ -175,7 +175,8 @@ export default {
 			],
 			loading: false,
 			loadTest: 'Generating optimization solutions...',
-			multipleSelection: []
+			multipleSelection: [],
+			pollingState: true,
 		}
 	},
 	computed: {},
@@ -188,6 +189,7 @@ export default {
 		cancel() {
 			// this.$router.push('/backtester/list/favorites')
 			// todo 还考虑中断轮询
+			this.pollingState = false
 			this.close()
 		},
 		close() {
@@ -291,12 +293,16 @@ export default {
 			//     "market_environment": 0,
 			//     "index_moving_average_slope": 0
 			// }
+			// 如果上次取消的话，再次优化会重设为true
+			this.pollingState = true
+
 			const optimizeBT = document.querySelector('#optimizeBT')
 			optimizeBT.classList.add('activated')
 			this.loading = true
 			let response = await runOPT(data.id)
 			if (response.data.status == 200) {
 				//根据轮询结果返回的值修改指定回测的值并copy
+					
 					const OPTResults = await this.pollingOPTResults(data)
 					// const OPTResults = [
 					// {
@@ -313,6 +319,7 @@ export default {
 					//     ],
 					//     "Improved returns": 12.45
 					// }]
+					
 					this.dataList = OPTResults.map((item) => {
 						let _data = JSON.parse(JSON.stringify(data))
 						const optimizedValue = item['Optimized_values']
@@ -328,7 +335,8 @@ export default {
 							profit: item['Profit']
 						}
 					})
-					console.log('轮询结果', this.dataList)
+					console.log('轮询结果', this.dataList,OPTResults)
+					this.popUpMsgBox('Optimization solution gennerated')
 					this.loading = false
 			}
 		}
