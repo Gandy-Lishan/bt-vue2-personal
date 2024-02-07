@@ -383,7 +383,7 @@
 				:total="queryInfo.total"
 			>
 		</el-pagination>
-		<Optimize ref="OPT" @refreshList="refreshList" @handleError="handleError"></Optimize>
+		<Optimize ref="OPT" @refreshList="refreshList"></Optimize>
 	</div>
 </template>
 
@@ -455,9 +455,6 @@ export default {
 		}
 	},
 	methods: {
-		handleError(errMsg) {
-			this.popUpMsgBox(errMsg)
-		},
 		async refreshList() {
 			// 重置查询页码并获取数据 History
 			if (this.currentPage === 'History') {

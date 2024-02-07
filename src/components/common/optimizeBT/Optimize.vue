@@ -304,21 +304,11 @@ export default {
 				//根据轮询结果返回的值修改指定回测的值并copy
 					
 					const OPTResults = await this.pollingOPTResults(data)
-					// const OPTResults = [
-					// {
-					//     "Profit": -1.24,
-					//     "Optimized_values": [
-					//         0.39
-					//     ],
-					//     "Improved returns": 14.24
-					// },
-					// {
-					//     "Profit": -3.03,
-					//     "Optimized_values": [
-					//         0.15
-					//     ],
-					//     "Improved returns": 12.45
-					// }]
+					if(OPTResults.length <=0) {
+						// 空结果或者取消优化
+						this.loading = false;
+						return;
+					}
 					
 					this.dataList = OPTResults.map((item) => {
 						let _data = JSON.parse(JSON.stringify(data))
