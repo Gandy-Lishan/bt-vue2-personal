@@ -340,10 +340,9 @@
 									effect="dark"
 									content="optimize backtest results"
 									placement="bottom-start"
-									v-if="isButtonVisible"
 								>
 									<el-button
-										v-if="['History', 'Favorites'].includes(currentPage)"
+										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible"
 										:disabled="false"
 										type="success"
 										icon="el-icon-data-analysis"
@@ -432,14 +431,6 @@ export default {
 		copy
 	},
 	async created() {
-		await this.getDataList(null)
-	// 监听事件总线中的 refresh-list 事件
-  	// RefreshBus.$on(`refresh-list`, (_) => {
-    //   // 在这里执行刷新列表的操作，重新获取数据
-    //   this.getDataList(null)
-    // })
-		this.loading = false
-
 		// 获取当前的域名
 		const currentDomain = window.location.hostname;
 		console.log('当前域名', currentDomain)
@@ -447,6 +438,13 @@ export default {
 		if (currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost') {
 			this.isButtonVisible = true;
 		}
+		await this.getDataList(null)
+	// 监听事件总线中的 refresh-list 事件
+  	// RefreshBus.$on(`refresh-list`, (_) => {
+    //   // 在这里执行刷新列表的操作，重新获取数据
+    //   this.getDataList(null)
+    // })
+		this.loading = false
 	},
 	computed: {
 		is_admin() {

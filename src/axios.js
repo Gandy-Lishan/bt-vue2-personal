@@ -154,7 +154,7 @@ instance.interceptors.response.use(
 					_this.popUpMsgBox('No permission')
 					break;
 				case 403:
-					_this.popUpMsgBox('Permission denied')
+					_this.popUpMsgBox('Save failed: Duplicate name or insufficient permissions')
 					break;
 				case 404:
 					console.log('url 找不到,独自处理')

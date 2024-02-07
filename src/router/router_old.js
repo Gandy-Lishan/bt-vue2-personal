@@ -92,11 +92,6 @@ const routes = [
 					require(['@/components/Menu/components/AIScanner.vue'], resolve)
 			},
 			{
-				path: '/doc/old',
-				component: resolve =>
-					require(['@/components/Menu/old_doc.vue'], resolve)
-			},
-			{
 				path: '/doc/disclaimer',
 				component: resolve =>
 					require(['@/components/Menu/components/Disclaimer.vue'], resolve)
