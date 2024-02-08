@@ -36,7 +36,7 @@ import { checkProperties } from "@/utils";
                 let shift = newVal.shift.length > 1 ? newVal.shift.join(',') : newVal.shift[0]
                 let start_date = newVal.start_date
                 if(start_date == '_') start_date = '1800'
-                if(newVal.holidays != 'Custom Time'){
+                if(newVal.holidays != 'Custom Date'){
                   const propertiesToCheck = ['holidays']
                   if (!checkProperties(newVal, propertiesToCheck)) {console.log('holidays 为空'); return}
                   url = `/dev/seasonality/get_holiday_data?name=${newVal.symbol}&start=${start_date}&end=${newVal.end_date}&holiday=${newVal.holidays}&shift=${shift}`

@@ -108,7 +108,6 @@
       <el-form-item
           label="3.Specific Days"
           prop="holidays"
-          placeholder="Please input the name of your custom indicator"
           class="holidays-box"
         >
       <template slot="label">
@@ -116,7 +115,7 @@
           3.Specific Days
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
-              >Choose specific days(Day 0 represents the selected day, when it is a trading day)</span>
+              >To define a custom date please scroll down to choose "Custom Date"</span>
             <i class="iconfont icon-wenhao"></i>
           </el-tooltip>
         </label>
@@ -200,7 +199,7 @@ export default {
         { label: 'Good Friday', month: 4, day: 5, value: 6 },
         { label: 'Christmas Day', month: 12, day: 25, value: 7 },
         { label: 'Memorial Day', month: 5, day: 27, value: 8 },
-        { label: 'Custom Time', value: 9 },
+        { label: 'Custom Date', value: 9 },
         { label: 'FOMC Decision Day', month: 1, day: 31, value: 10 },
         { label: 'Monthly Option Expiration', month: 1, day: 19, value: 11 },
         { label: 'March Quad Option Expiration', month: 3, day: 15, value: 12 },
@@ -267,7 +266,7 @@ export default {
       if(Object.keys(newVal).length == 0) return
       if(this.changeOptions()) return
       let holidays = this.options.find(ele => ele.value == newVal.holidays).label
-      if(holidays == 'Custom Time') holidays = this.data.customizeDate
+      if(holidays == 'Custom Date') holidays = this.data.customizeDate
       this.plotConfiguration = {
         ...this.plotConfiguration,
         title: `Performance Surrounding ${holidays}`,
@@ -320,7 +319,7 @@ export default {
       const holidayDates = this.options.map((holiday) => {
         let date = null
         if(holiday.month && holiday.day) {date = new Date(year, holiday.month - 1, holiday.day); return { ...holiday, date: format(date, 'MM-dd') }}
-        else {return {label: 'Custom Time', value: 9}}
+        else {return {label: 'Custom Date', value: 9}}
       })
       // 先按照月份从小到大排序，再按照日期从小到大排序
       holidayDates.sort((a, b) => {
@@ -383,7 +382,7 @@ export default {
       const result = compareDates(today, selectDay);
       const holiday = this.options.find(ele => ele.value == this.data.holidays).label
 
-      if(!result && holiday == 'Custom Time') {
+      if(!result && holiday == 'Custom Date') {
         this.popUpMsgBox(`This year's date is not yet ${selectDay}. Please select another date`)
         this.data.start_date = this.plotConfiguration.start_date
         this.data.end_date = this.plotConfiguration.end_date
