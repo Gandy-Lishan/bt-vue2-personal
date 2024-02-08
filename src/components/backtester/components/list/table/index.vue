@@ -343,7 +343,7 @@
 								>
 									<el-button
 										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible"
-										:disabled="false"
+										:disabled="isOptRuning"
 										type="success"
 										icon="el-icon-data-analysis"
 										circle
@@ -383,7 +383,7 @@
 				:total="queryInfo.total"
 			>
 		</el-pagination>
-		<Optimize ref="OPT" @refreshList="refreshList" @handleError="handleError"></Optimize>
+		<Optimize ref="OPT" @refreshList="refreshList"></Optimize>
 	</div>
 </template>
 
@@ -452,12 +452,12 @@ export default {
     },
 		isSystem() {
 			return this.$store.state.form.role
+		},
+		isOptRuning() {
+			return this.$refs['OPT'].optimizeState
 		}
 	},
 	methods: {
-		handleError(errMsg) {
-			this.popUpMsgBox(errMsg)
-		},
 		async refreshList() {
 			// 重置查询页码并获取数据 History
 			if (this.currentPage === 'History') {

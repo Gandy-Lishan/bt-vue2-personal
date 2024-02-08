@@ -1080,14 +1080,22 @@ export const CommonMethodsMixin = {
 				_this.clearInterval = clearPromiseInterval
 				let timer = await setPromiseInterval(async () => {
 					try{
+						if(this.pollingState == false) {
+							this.popUpMsgBox('Optimization canceled')
+							resolve([])
+							await clearPromiseInterval(timer)
+						}
+
 						const res = await getOPTStatus(id)
 						// CIQ.nprogress.inc()
 						const status = res.data.opt_status
 						console.log('回测状态', status)
 						const response = res.data.data
+						// pollingState控制手动中断轮询请求
 						if (status == 1) {
 							console.log('结束轮询')
 
+							// 处理轮询结果的异常情况
 							let errMsg = ''
 							switch(res.data.status){
 								case 500:
@@ -1099,6 +1107,9 @@ export const CommonMethodsMixin = {
 								case 432:
 									errMsg = res.data.msg
 									break;
+								case 435:
+									errMsg = res.data.msg
+									break;
 								case 204:
 									errMsg = res.data.data
 									break;
@@ -1107,7 +1118,7 @@ export const CommonMethodsMixin = {
 							if(errMsg){
 								this.loading = false
 								this.close()
-								this.$emit('handleError',errMsg)
+								this.popUpMsgBox(errMsg)
 							}	
 
 							resolve(response) // 解决 Promise 表示轮询完成
