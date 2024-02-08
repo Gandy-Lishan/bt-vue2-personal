@@ -115,7 +115,7 @@
           3.Specific Days
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
-              >To define a custom date please scroll down to choose "Custom Date"</span>
+              >Choose specific days(Day 0 represents the selected day, when it is a trading day). <br/>To define a custom date please scroll down to choose "Custom Date"</span>
             <i class="iconfont icon-wenhao"></i>
           </el-tooltip>
         </label>
