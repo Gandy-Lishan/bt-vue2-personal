@@ -443,13 +443,39 @@ export default {
   },
   watch: {
     handleGetBacktestSymbol: {
-      handler(newVal) {
+      async handler(newVal) {
+        if(this.data.categories.includes('Indicator')){ 
+          if(!this.data.indicator_1 && !this.data.indicator_2) return //如果是空图标切换，则跳过还原表单indicator条件
+          // 清空miFormState状态
+          let _data = JSON.parse(JSON.stringify(this.data))
+          _data.indicator_1 = ''
+          _data.indicator_2 = ''
+          _data.indicator_1_url  = ''
+          _data.indicator_2_url = ''
+          await this.$store.dispatch('chart/set_miFormStateChange',_data)
+          await this.$store.dispatch('chart/set_miFormStateChange',this.data)
+
+          this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
+          this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
+        }
         if(this.data.categories.includes('Symbol')){    
          this.data.indicator_1 = newVal
          this.data.indicator_1_url = newVal
         }
+        if(this.data.categories.includes('WIC')){  
+         const _index = this.weightData.findIndex(item=>item.type=='Symbol')
+         this.weightData[_index].indicator = newVal
+         this.weightData[_index].indicator_url = newVal
+
+          this.$store.dispatch('chart/set_miFormWeightedListChange',{data:
+      [
+        {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
+      ],url:null})
+         this.$store.dispatch('chart/set_miFormWeightedListChange',{data:this.weightData,url:null})
+        }
+       
       },
-      immediate: true,
+      //immediate: true,
       deep: true
     },
   },

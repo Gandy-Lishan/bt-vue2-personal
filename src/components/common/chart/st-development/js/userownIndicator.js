@@ -71,7 +71,7 @@
         CIQ.store.commit('form/getFrequency', findTimeFrame(indicatorList)) //考虑到addSeries必须写死timeframe
         await addIndicatorStudy(addedItems.map(item=>item.indicator_url))
         CIQ.stxx.loadChart({ 
-                symbol: symbolList.length?symbolList[0].indicator_url:process.env.VUE_APP_DEFAULT_SYMBOL, 
+                symbol: symbolList.length?symbolList[0].indicator_url:CIQ.stxx.chart.symbol, 
                 indicator:[...indicatorList.map(item=>item.indicator_url),combinedStudy] ,
                 // 这边先写死范围，防止其他indicator无法pagination
                 startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
@@ -505,7 +505,7 @@
         // fetch indicator information and add studies to chart
         await getUserOwnIndicatorMatedata(indicator,extremeLines)
         CIQ.stxx.loadChart(	{ 
-            symbol: symbol?symbol:process.env.VUE_APP_DEFAULT_SYMBOL, 
+            symbol: symbol?symbol:CIQ.stxx.chart.symbol, 
             indicator:indicatorList,
             startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
         },()=>{
