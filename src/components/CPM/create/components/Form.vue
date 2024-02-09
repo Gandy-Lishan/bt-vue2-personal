@@ -123,7 +123,7 @@
       >
         <el-input v-model="data.bars_num" :disabled="false" @change="changeNumberOfBars">
           <template v-slot:append>
-            (≥3 and ≤63)
+            (≥3 and ≤252)
           </template>
         </el-input>
       </el-form-item>
@@ -312,8 +312,8 @@ export default {
   },
   data() {
     var validateBarsNum = (rule, value, callback) => {
-        if (value < 3 || value > 63) {
-          return callback(new Error('The number of bars should be between 3 and 63, please change your condition.'));
+        if (value < 3 || value > 252) {
+          return callback(new Error('The number of bars should be between 3 and 252, please change your condition.'));
         } else {
           callback();
         }
@@ -539,7 +539,7 @@ export default {
       })
     },
     changeNumberOfBars(val) {
-      if(val>=3 && val<=63) this.data.start_date = CIQ.getStartDateByNumberOfBars(this.data.end_date,Number(val))
+      if(val>=3 && val<=252) this.data.start_date = CIQ.getStartDateByNumberOfBars(this.data.end_date,Number(val))
     },
     setBacktestHistory(val) {
       this.data.end_date = timestampToTime(new Date());
