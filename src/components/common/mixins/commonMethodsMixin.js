@@ -708,6 +708,27 @@ export const CommonMethodsMixin = {
 			})
 			return criteria
 		},
+
+		/* backtest opt*/
+		validateSignalsType(backtestInfo) {
+			let _backtestInfo = JSON.parse(JSON.stringify(backtestInfo))
+			let signalCode = new SignalCode()
+			
+			let entry_criteria = isJson(_backtestInfo['entry'])
+				? JSON.parse(_backtestInfo['entry'])
+				: _backtestInfo['entry']
+			let exit_criteria = isJson(_backtestInfo['exit'])
+				? JSON.parse(_backtestInfo['exit'])
+				: _backtestInfo['exit']
+
+			if(
+				signalCode.decode(entry_criteria.signals[0].code).analysis != "Sentiment" ||
+				signalCode.decode(exit_criteria.signals[0].code).analysis != "Sentiment"
+			) {
+				return false
+			}
+			return true
+		},
 		editSignalsCond(backtestInfo, criteriaStr, value) {
 			const criteriaDesc = criteriaStr=='entry'?'entry_description':'exit_description'
 			let _backtestInfo = JSON.parse(JSON.stringify(backtestInfo))
@@ -797,6 +818,76 @@ export const CommonMethodsMixin = {
 			backtestData[criteria] = JSON.stringify(backtestData[criteria])
 			return backtestData
 		},
+		async pollingOPTResults(data) {
+			/*
+				根据 id 轮询回测结果
+				todo lishan
+			*/
+			const _this = this
+			return new Promise(async (resolve, reject) => {
+				const { id, name } = data
+				console.log('进入轮询')
+				_this.clearInterval = clearPromiseInterval
+				let timer = await setPromiseInterval(async () => {
+					try{
+						if(this.pollingState == false) {
+							this.popUpMsgBox('Optimization canceled')
+							resolve([])
+							await clearPromiseInterval(timer)
+						}
+
+						const res = await getOPTStatus(id)
+						// CIQ.nprogress.inc()
+						const status = res.data.opt_status
+						console.log('回测状态', status)
+						const response = res.data.data
+						// pollingState控制手动中断轮询请求
+						if (status == 1) {
+							console.log('结束轮询')
+
+							// 处理轮询结果的异常情况
+							let errMsg = ''
+							switch(res.data.status){
+								case 500:
+									errMsg = 'Optimizing error occur'
+									break;
+								case 431:
+									errMsg = res.data.msg
+									break;
+								case 432:
+									errMsg = res.data.msg
+									break;
+								case 435:
+									errMsg = res.data.msg
+									break;
+								case 204:
+									errMsg = res.data.data
+									break;
+								default:
+							}	
+							if(errMsg){
+								this.loading = false
+								this.close()
+								this.popUpMsgBox(errMsg)
+							}	
+
+							resolve(response) // 解决 Promise 表示轮询完成
+							await clearPromiseInterval(timer) // 使用 await 等待清除计时器
+						}
+					}catch(err){
+						console.log('轮询出现错误')
+						this.loading = false
+						this.close()
+						reject(err); // 如果错误是无法处理的，可以在这里调用 reject 并传递错误信息
+						await clearPromiseInterval(timer) // 使用 await 等待清除计时器
+					}finally{
+						
+					}
+				}, 1000)
+			})
+		},
+		/* backtest opt*/
+
 		showFLSMASK() {
 			const myFLSbg = document.querySelector('#myFLSbg')
 			myFLSbg.classList.add('activated')
@@ -1068,74 +1159,7 @@ export const CommonMethodsMixin = {
 			}, 1000)
 		},
 
-		async pollingOPTResults(data) {
-			/*
-				根据 id 轮询回测结果
-				todo lishan
-			*/
-			const _this = this
-			return new Promise(async (resolve, reject) => {
-				const { id, name } = data
-				console.log('进入轮询')
-				_this.clearInterval = clearPromiseInterval
-				let timer = await setPromiseInterval(async () => {
-					try{
-						if(this.pollingState == false) {
-							this.popUpMsgBox('Optimization canceled')
-							resolve([])
-							await clearPromiseInterval(timer)
-						}
 
-						const res = await getOPTStatus(id)
-						// CIQ.nprogress.inc()
-						const status = res.data.opt_status
-						console.log('回测状态', status)
-						const response = res.data.data
-						// pollingState控制手动中断轮询请求
-						if (status == 1) {
-							console.log('结束轮询')
-
-							// 处理轮询结果的异常情况
-							let errMsg = ''
-							switch(res.data.status){
-								case 500:
-									errMsg = 'Optimizing error occur'
-									break;
-								case 431:
-									errMsg = res.data.msg
-									break;
-								case 432:
-									errMsg = res.data.msg
-									break;
-								case 435:
-									errMsg = res.data.msg
-									break;
-								case 204:
-									errMsg = res.data.data
-									break;
-								default:
-							}	
-							if(errMsg){
-								this.loading = false
-								this.close()
-								this.popUpMsgBox(errMsg)
-							}	
-
-							resolve(response) // 解决 Promise 表示轮询完成
-							await clearPromiseInterval(timer) // 使用 await 等待清除计时器
-						}
-					}catch(err){
-						console.log('轮询出现错误')
-						this.loading = false
-						this.close()
-						reject(err); // 如果错误是无法处理的，可以在这里调用 reject 并传递错误信息
-						await clearPromiseInterval(timer) // 使用 await 等待清除计时器
-					}finally{
-						
-					}
-				}, 1000)
-			})
-		},
 		async transformOldName(data,criteria){
 			const res = await getIndicatorsList()
 			const stockList = this.$store.state.chart.stocksList

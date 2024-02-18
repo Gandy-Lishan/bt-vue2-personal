@@ -9,13 +9,13 @@
 						size="mini"
 						@click="cancel"
 					></el-button>
-					<el-button
+					<!-- <el-button
 						type="primary"
 						icon="el-icon-minus"
 						circle
 						size="mini"
 						@click="close"
-					></el-button>
+					></el-button> -->
 			</div>
 			<div class="header">
 				<h2>Backtest Optimization Result</h2>
@@ -237,8 +237,8 @@ export default {
 						name: copyName,
 						favorites: false,
 						user_tag: 'client',
-						total_trader: 0,
-						total_return: 0
+						total_trader: this.multipleSelection.total_trades,
+						total_return: this.multipleSelection.improved_returns
 					}
 					delete params.uuid
 					delete params.results
@@ -268,48 +268,12 @@ export default {
 			return ''
 		},
 		async optimizeBacktest(data) {
-			
-			// 		let data = {
-			//     "id": "7e7c8921-e38e-9207-f384-236978f13d88",
-			//     "user": "04f7c8dc-93fb-4f38-b680-638b06e108b7",
-			//     "name": "2.2 test c(copy)",
-			//     "capital": 100000,
-			//     "symbol": "SPX",
-			//     "benchmark": "SPX",
-			//     "entry": "{\"score\":1,\"signals_in_market\":1,\"relation\":1,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:% Showing Excess Optimism;IDS:EO0.3/EPnull;SC:SV/3/0.32\"}],\"cond\":[{\"newCondition\":3,\"conditionPeriod\":\"21\"}]}",
-			//     "exit": "{\"score\":1,\"signals_in_market\":1,\"relation\":0,\"delay_bars\":0,\"signals\":[{\"code\":\"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999\"}],\"cond\":[null]}",
-			//     "create_date": "2024-02-02T06:56:34.967408Z",
-			//     "start_date": "2019-02-02",
-			//     "end_date": "2024-02-02",
-			//     "capital_alloc": "1.000000",
-			//     "commission": "0.0010",
-			//     "slippage": "0.0000",
-			//     "frequency": "Daily",
-			//     "win_rate": "0.0000",
-			//     "risk_control": "//21",
-			//     "user_tag": "client",
-			//     "report_url": "",
-			//     "direction": "Long",
-			//     "favorites": false,
-			//     "entry_description": "[{\"commentDes\":\"E: Long; Single Condition   % Showing Excess Optimism   CrossAbove 0.32\",\"rocCond\":{\"newCondition\":3,\"conditionPeriod\":\"21\"}}]",
-			//     "exit_description": "[{\"commentDes\":\"X: Close: Time In Marke 21(Bars)\",\"rocCond\":null}]",
-			//     "indicator_layout": "{\"technicalIndicators\":[],\"savedTechSD\":[{\"type\":\"model_percent_bearish\",\"inputs\":{\"Period\":13,\"Overlay\":false,\"id\":\"$r001$model_percent_bearish$r001$ (13,n)\",\"display\":\"$r001$model_percent_bearish$r001$ (13,n)\"},\"outputs\":{},\"parameters\":{\"studyOverZonesEnabled\":false,\"studyOverBoughtValue\":0.3,\"studyOverBoughtColor\":\"#FF0000\",\"studyOverSoldValue\":null,\"studyOverSoldColor\":\"#00DD00\",\"chartName\":\"chart\",\"editMode\":true,\"panelName\":\"$r001$model_percent_bearish$r001$ (13,n)\"},\"panel\":\"$r001$model_percent_bearish$r001$ (13,n)\"}],\"activatedMA\":[{\"period\":21,\"url\":\"\"}],\"activatedMALayout\":[],\"formIndicators\":{\"entry\":[\"model_percent_bearish\"],\"exit\":[\"\"]}}",
-			//     "status": 2,
-			//     "strategy": "Signal",
-			//     "result": "{\"Total Trades\": 21, \"Total Return (%)\": 2.14}",
-			//     "seconds": 19,
-			//     "url_data": "",
-			//     "backtest_period": "5",
-			//     "trade_price": 2,
-			//     "exclude_oo": 0,
-			//     "total_trader": 21,
-			//     "total_return": 2.14,
-			//     "description": "{\"Introduction\":\"\",\"Rules\":\"\"}",
-			//     "last_entry_signal_date": null,
-			//     "last_exit_signal_date": null,
-			//     "market_environment": 0,
-			//     "index_moving_average_slope": 0
-			// }
+			// 在优化前先验证是否为sentiment indicator或者用户自定义
+			if(!this.validateSignalsType(data)) {
+				this.popUpMsgBox('Backtest with Sentiment Indicator Only')
+				return
+			}
+
 			// 如果上次取消的话，再次优化会重设为true
 			this.pollingState = true
 			// 进入优化模式
@@ -342,7 +306,8 @@ export default {
 						return {
 							data: signalCond,
 							improved_returns: item['Improved returns'],
-							profit: item['Profit']
+							profit: item['Profit'],
+							total_trades: item['Total trades'],
 						}
 					})
 					console.log('轮询结果', this.dataList,OPTResults)

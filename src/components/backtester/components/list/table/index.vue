@@ -196,7 +196,7 @@
 			</el-table-column>
 
     </template>
-		<el-table-column align="center" width="250px">
+		<el-table-column align="center" width="280px">
 						<template slot-scope="scope">
 							<el-row>
 								<el-tooltip
