@@ -215,6 +215,15 @@ export default {
 		},
 		async addToList() {
 			this.loading = true
+
+			// 用fav请求来更新opted状态为1
+			const optParams = {
+				opted: 1
+			}
+			debugger
+			// id就直接从复制的优化回测对象里拿，都一样
+			await favoriteBacktest(this.multipleSelection[0].data.id, this.$qs.stringify(optParams))
+
 			for (var i in this.multipleSelection) {
 				try {
 					let _data = JSON.parse(JSON.stringify(this.multipleSelection[i].data))
@@ -247,12 +256,6 @@ export default {
 					delete params.backtest_id
 					delete params.old_uuid
 
-					// 用fav请求来更新opted状态为1
-					const optParams = {
-						opted: 1
-					}
-					debugger
-					await favoriteBacktest(params.id, this.$qs.stringify(optParams))
 					// 发起复制请求
 					await copyBacktest(this.$qs.stringify(params))
 					this.$emit('refreshList')
