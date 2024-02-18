@@ -105,6 +105,9 @@
   width: 106px;
   /* padding-left: 22px; */
 }
+.aiscanner-container .scanner-form .el-select .el-input {
+  width: 100%;
+}
 
 /* 修改主题色 */
 .el-radio__input.is-checked .el-radio__inner {
@@ -219,12 +222,6 @@
 }
 .el-popover .popper__arrow::after{
   border-bottom-color: #303133 !important;
-}
-.header-filter.el-popover .popper__arrow{
-  border-bottom-color: #fff !important;
-}
-.header-filter.el-popover .popper__arrow::after{
-  border-bottom-color: #fff !important;
 }
 .my-indicator-table.el-table tr.highlighted:hover{
   background-color: yellow !important;

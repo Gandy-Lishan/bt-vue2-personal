@@ -13,6 +13,12 @@
 			<div>•	In addition to the default display of key metrics, there's a dropdown menu for each stock that displays additional metrics.</div>
 			<div>•	By clicking on the stock symbol, the system will direct you to detailed historical backtest results and a summary of key metrics for that stock. These backtest results ensure the reliability and accuracy of the "Signal-for-Action" list displayed by our system.</div>
 		</el-collapse-item>
+		<el-collapse-item>
+			<template slot="title">
+			Select Condition<i class="header-icon el-icon-info"></i>
+			</template>
+			<ScannerForm></ScannerForm>
+		</el-collapse-item>
 		</el-collapse>
 		<div class="table-header">
 			<div class='header-part1'>
@@ -30,119 +36,7 @@
 						@change="selectDate"
 						value-format="yyyy-MM-dd"
 					>
-					</el-date-picker>		
-					<div class="header-filter">
-						<el-popover
-							popper-class="header-filter"
-							placement="right"
-							trigger="click">
-							<el-form ref="form" :model="filterForm" label-width="110px" size="mini" label-position="left">
-								<el-form-item label="Date Range">
-								<el-date-picker
-						v-model="filterForm.dateRange"
-						class="aiscanner-date"
-						type="daterange"
-						unlink-panels
-						range-separator="to"
-						start-placeholder="Start date"
-						end-placeholder="End date"
-						:picker-options="pickerOptions"
-						@change="selectDate"
-						value-format="yyyy-MM-dd"
-					>
-					</el-date-picker>	
-							</el-form-item>
-							<el-form-item label="Type">
-								<el-select v-model="filterForm.type" placeholder="Select Type">
-									<el-option label="Stock" value="stock"></el-option>
-									<el-option label="ETF" value="etf"></el-option>
-								</el-select>
-							</el-form-item>
-							<el-form-item label="活动时间">
-								<el-col :span="11">
-									<el-date-picker type="date" placeholder="选择日期" v-model="filterForm.date1" style="width: 100%;"></el-date-picker>
-								</el-col>
-								<el-col class="line" :span="2">-</el-col>
-								<el-col :span="11">
-									<el-time-picker placeholder="选择时间" v-model="filterForm.date2" style="width: 100%;"></el-time-picker>
-								</el-col>
-							</el-form-item>
-							<el-form-item label="活动性质">
-								<el-checkbox-group v-model="filterForm.type">
-									<el-checkbox-button label="美食/餐厅线上活动" name="type"></el-checkbox-button>
-									<el-checkbox-button label="地推活动" name="type"></el-checkbox-button>
-									<el-checkbox-button label="线下主题活动" name="type"></el-checkbox-button>
-								</el-checkbox-group>
-							</el-form-item>
-							<el-form-item label="Strategy Choice">
-								<el-col :span="11">
-								<el-select v-model="filterForm.choice" placeholder="Select Strategy Choice" style="width: 100%;">
-									<el-option label="Kelly Formula" value="kelly"></el-option>
-									<el-option label="All In" value="allin"></el-option>
-								</el-select>
-								</el-col>
-								<el-col class="line" :span="2">-</el-col>
-								<el-col :span="11">
-									<el-input placeholder="Input Value" v-model="filterData.value" style="width: 100%;"></el-input>
-								</el-col>
-							</el-form-item>
-							<el-form-item label="Long / Short">
-								<el-col :span="11">
-									<el-input placeholder="Input Value" v-model="filterData.long" style="width: 100%;"></el-input>
-								</el-col>
-								<el-col class="longShortLine" :span="2"> / </el-col>
-								<el-col :span="11">
-									<el-input placeholder="Input Value" v-model="filterData.short" style="width: 100%;"></el-input>
-								</el-col>
-							</el-form-item>
-							<el-form-item label="Stop Loss">
-								<el-col :span="11">
-								<el-select v-model="filterForm.condition" placeholder="Select Strategy Choice" style="width: 100%;">
-									<el-option label=">" value=">"></el-option>
-									<el-option label="<" value="<"></el-option>
-									<el-option label="=" value="="></el-option>
-								</el-select>
-								</el-col>
-								<el-col class="line" :span="2">-</el-col>
-								<el-col :span="11">
-									<el-input placeholder="Input Value" v-model="filterData.value" style="width: 100%;"></el-input>
-								</el-col>
-							</el-form-item>
-							<el-form-item label="Take Profit">
-								<el-col :span="11">
-								<el-select v-model="filterForm.takeProfit" placeholder="Select Strategy Choice" style="width: 100%;">
-									<el-option label=">" value=">"></el-option>
-									<el-option label="<" value="<"></el-option>
-									<el-option label="=" value="="></el-option>
-								</el-select>
-								</el-col>
-								<el-col class="line" :span="2">-</el-col>
-								<el-col :span="11">
-									<el-input placeholder="Input Value" v-model="filterData.value" style="width: 100%;"></el-input>
-								</el-col>
-							</el-form-item>
-							
-							<el-form-item label="Time In Market">
-								<el-col :span="11">
-								<el-select v-model="filterForm.tim" placeholder="Select Strategy Choice" style="width: 100%;">
-									<el-option label=">" value=">"></el-option>
-									<el-option label="<" value="<"></el-option>
-									<el-option label="=" value="="></el-option>
-								</el-select>
-								</el-col>
-								<el-col class="line" :span="2">-</el-col>
-								<el-col :span="11">
-									<el-input placeholder="Input Value" v-model="filterData.value" style="width: 100%;"></el-input>
-								</el-col>
-							</el-form-item>
-							<el-form-item size="large">
-								<el-button type="primary" @click="onSubmit">立即创建</el-button>
-								<el-button>取消</el-button>
-							</el-form-item>
-							</el-form>
-						<el-button slot="reference" @click="scannerBacktest" type="primary" round size="mini" style="float: right; margin-top: 20px;"><i class="el-icon-arrow-left el-icon-s-marketing" style="margin-right: 5px;"></i>Scanner Backtest</el-button>
-						</el-popover>
-					</div>
+					</el-date-picker>
 				</div>
 
 				<div class="searchBox">
@@ -205,11 +99,13 @@ import { getAIPick } from '@/service/ai'
 import { timestampToTime } from '@/utils'
 
 import Table from "./Table.vue";
+import ScannerForm from "./ScannerForm";
 
 export default {
   name: 'scannerai',
 	components: {
-		Table
+		Table,
+		ScannerForm
 	},
   data() {
     return {
@@ -235,8 +131,7 @@ export default {
 	},
 	isPLSChecked: false,
 	isShowShortChecked: false,
-	loading: false,
-	filterForm:{}
+	loading: false
     }
   },
   async created(){	
@@ -272,8 +167,6 @@ export default {
 		}
 	},
   methods: {
-	scannerBacktest() {
-	},
 	// table filter*********
 	disabledDate(time) {
 		let dis = timestampToTime(time) > this.curDate || (time.getDay() === 0 || time.getDay() === 6)
@@ -483,14 +376,6 @@ h4 {
 }
 .el-popper[x-placement^=right] .popper__arrow::after{
 	border-right-color: aqua;
-}
-.header-filter .el-input--mini /deep/ .el-input__inner{
-	margin: 0;
-	width: 100%;
-}
-.header-filter .el-select /deep/ .el-input__inner{
-	margin: 0;
-	width: 100%;
 }
 /deep/ .el-range-editor.el-input__inner{
 	margin: 0;
