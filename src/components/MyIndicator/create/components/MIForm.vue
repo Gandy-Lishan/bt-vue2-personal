@@ -461,17 +461,20 @@ export default {
         if(this.data.categories.includes('Symbol')){    
          this.data.indicator_1 = newVal
          this.data.indicator_1_url = newVal
+
+         this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
+          this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
         }
         if(this.data.categories.includes('WIC')){  
          const _index = this.weightData.findIndex(item=>item.type=='Symbol')
          this.weightData[_index].indicator = newVal
          this.weightData[_index].indicator_url = newVal
 
-          this.$store.dispatch('chart/set_miFormWeightedListChange',{data:
+         await this.$store.dispatch('chart/set_miFormWeightedListChange',{data:
       [
         {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
       ],url:null})
-         this.$store.dispatch('chart/set_miFormWeightedListChange',{data:this.weightData,url:null})
+         await this.$store.dispatch('chart/set_miFormWeightedListChange',{data:this.weightData,url:null})
         }
        
       },
