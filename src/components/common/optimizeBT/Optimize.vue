@@ -151,7 +151,7 @@
 
 <script>
 import { CommonMethodsMixin } from '@/components/common/mixins/commonMethodsMixin'
-import { copyBacktest, runOPT, favoriteBacktest } from '@/service/service.js'
+import { copyBacktest, runOPT } from '@/service/service.js'
 
 export default {
 	name: 'Optimize',
@@ -221,14 +221,6 @@ export default {
 		async addToList() {
 			this.loading = true
 
-			// 用fav请求来更新opted状态为1
-			const optParams = {
-				opted: 1
-			}
-			debugger
-			// id就直接从复制的优化回测对象里拿，都一样
-			await favoriteBacktest(this.multipleSelection[0].data.id, this.$qs.stringify(optParams))
-
 			for (var i in this.multipleSelection) {
 				try {
 					let _data = JSON.parse(JSON.stringify(this.multipleSelection[i].data))
@@ -252,7 +244,8 @@ export default {
 						favorites: false,
 						user_tag: 'client',
 						total_trader: this.multipleSelection[i].total_trades,
-						total_return: this.multipleSelection[i].total_return
+						total_return: this.multipleSelection[i].total_return,
+						opted: 1	// 新字段isOpted防止重复优化
 					}
 					delete params.uuid
 					delete params.results
