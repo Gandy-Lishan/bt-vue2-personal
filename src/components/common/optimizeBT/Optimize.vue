@@ -151,7 +151,7 @@
 
 <script>
 import { CommonMethodsMixin } from '@/components/common/mixins/commonMethodsMixin'
-import { copyBacktest, runOPT } from '@/service/service.js'
+import { copyBacktest, runOPT, favoriteBacktest } from '@/service/service.js'
 
 export default {
 	name: 'Optimize',
@@ -246,7 +246,13 @@ export default {
 					delete params.status
 					delete params.backtest_id
 					delete params.old_uuid
-debugger
+
+					// 用fav请求来更新opted状态为1
+					const optParams = {
+						opted: 1
+					}
+					debugger
+					await favoriteBacktest(params.id, this.$qs.stringify(optParams))
 					// 发起复制请求
 					await copyBacktest(this.$qs.stringify(params))
 					this.$emit('refreshList')

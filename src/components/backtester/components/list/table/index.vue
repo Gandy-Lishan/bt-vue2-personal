@@ -342,7 +342,7 @@
 									placement="bottom-start"
 								>
 									<el-button
-										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible"
+										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible && scope.row.opted == 0"
 										:disabled="isOptRuning"
 										type="success"
 										icon="el-icon-data-analysis"
