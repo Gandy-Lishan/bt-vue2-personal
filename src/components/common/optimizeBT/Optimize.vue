@@ -237,8 +237,8 @@ export default {
 						name: copyName,
 						favorites: false,
 						user_tag: 'client',
-						total_trader: this.multipleSelection.total_trades,
-						total_return: this.multipleSelection.improved_returns
+						total_trader: this.multipleSelection[i].total_trades,
+						total_return: this.multipleSelection[i].improved_returns
 					}
 					delete params.uuid
 					delete params.results
@@ -246,7 +246,7 @@ export default {
 					delete params.status
 					delete params.backtest_id
 					delete params.old_uuid
-
+debugger
 					// 发起复制请求
 					await copyBacktest(this.$qs.stringify(params))
 					this.$emit('refreshList')
