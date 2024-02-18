@@ -114,14 +114,14 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-							v-if="['Improved returns', 'Profit'].includes(item.label)"
+							v-if="['Improved return', 'Total return', 'Total trades'].includes(item.label)"
 							:label="item.label"
 							:key="item.label"
 							:prop="item.field"
 							show-overflow-tooltip
 							align="center"
 							:sortable="
-								['Improved returns', 'Profit'].includes(item.label)
+								['Improved return', 'Total return', 'Total trades'].includes(item.label)
 									? 'custom'
 									: false
 							"
@@ -179,13 +179,18 @@ export default {
 					label: 'Entry & Exit'
 				},
 				{
-					label: 'Improved returns',
-					field: 'improved_returns',
+					label: 'Improved return',
+					field: 'improved_return',
 					width: '125px'
 				},
 				{
-					label: 'Profit',
-					field: 'profit',
+					label: 'Total return',
+					field: 'total_return',
+					width: '125px'
+				},
+				{
+					label: 'Total trades',
+					field: 'total_trades',
 					width: '125px'
 				}
 			],
@@ -247,7 +252,7 @@ export default {
 						favorites: false,
 						user_tag: 'client',
 						total_trader: this.multipleSelection[i].total_trades,
-						total_return: this.multipleSelection[i].improved_returns
+						total_return: this.multipleSelection[i].total_return
 					}
 					delete params.uuid
 					delete params.results
@@ -314,8 +319,8 @@ export default {
 
 						return {
 							data: signalCond,
-							improved_returns: item['Improved returns'],
-							profit: item['Profit'],
+							improved_return: item['Improved returns'],
+							total_return: item['Profit'],
 							total_trades: item['Total trades'],
 						}
 					})
