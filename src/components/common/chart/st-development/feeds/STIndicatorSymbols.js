@@ -92,12 +92,15 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                 exchDisp: ""
             };
 
-            if (item.symbol.indexOf(text) === -1 && item.symbol.indexOf(text.toUpperCase()) === -1)
+            if (
+                item.symbol.indexOf(text) === -1 && item.symbol.toUpperCase().indexOf(text.toUpperCase()) === -1 &&
+                item.name.indexOf(text) === -1 && item.name.toUpperCase().indexOf(text.toUpperCase()) === -1
+            )
             {
                 continue
             }
 
-            if(item.symbol.toUpperCase() === text.toUpperCase()){
+            if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
                 wholeWord = {
                     display: [item.symbol, item.name, item.exchDisp],
                     data: item
@@ -121,12 +124,15 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                 name: fields.name,
                 exchDisp: " "
             };
-            if (item.symbol.indexOf(text) === -1 && item.symbol.indexOf(text.toUpperCase()) === -1)
+            if (
+                item.symbol.indexOf(text) === -1 && item.symbol.toUpperCase().indexOf(text.toUpperCase()) === -1 &&
+                item.name.indexOf(text) === -1 && item.name.toUpperCase().indexOf(text.toUpperCase()) === -1
+            )
             {
                 continue
             }
 
-            if(item.symbol.toUpperCase() === text.toUpperCase()){
+            if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
                 wholeWord = {
                     display: [item.symbol, item.name, item.exchDisp],
                     data: item
@@ -157,12 +163,15 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                     exchDisp: ""
                 };
 
-                if (item.symbol.indexOf(text) === -1 && item.symbol.indexOf(text.toUpperCase()) === -1)
+                if (
+                    item.symbol.indexOf(text) === -1 && item.symbol.toUpperCase().indexOf(text.toUpperCase()) === -1 &&
+                    item.name.indexOf(text) === -1 && item.name.toUpperCase().indexOf(text.toUpperCase()) === -1
+                )
                 {
                     continue
                 }
-
-                if(item.symbol.toUpperCase() === text.toUpperCase()){
+    
+                if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
                     wholeWord = {
                         display: [item.symbol, item.name, item.exchDisp],
                         data: item
@@ -189,12 +198,15 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                 name: fields.name,
                 exchDisp: " "
             };
-            if (item.symbol.indexOf(text) === -1 && item.symbol.indexOf(text.toUpperCase()) === -1)
+            if (
+                item.symbol.indexOf(text) === -1 && item.symbol.toUpperCase().indexOf(text.toUpperCase()) === -1 &&
+                item.name.indexOf(text) === -1 && item.name.toUpperCase().indexOf(text.toUpperCase()) === -1
+            )
             {
                 continue
             }
 
-            if(item.symbol.toUpperCase() === text.toUpperCase()){
+            if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
                 wholeWord = {
                     display: [item.symbol, item.name, item.exchDisp],
                     data: item
@@ -265,7 +277,10 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                         exchDisp: ""
                     }
                     
-                    if (item.symbol.toUpperCase().indexOf(text.toUpperCase()) !== -1){
+                    if (
+                        item.symbol.toUpperCase().indexOf(text.toUpperCase()) !== -1 ||
+                        item.name.toUpperCase().indexOf(text.toUpperCase()) !== -1
+                    ){
                         results.push({
                             display: [item.symbol, item.name, item.exchDisp],
                             data: item

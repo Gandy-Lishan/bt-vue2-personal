@@ -322,11 +322,11 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                                     return;
                                 }
           
-                                if (item.name.toUpperCase().indexOf(value.toUpperCase()) === -1){
+                                if (item.name.toUpperCase().indexOf(value.toUpperCase()) === -1 && item.url.toUpperCase().indexOf(value.toUpperCase()) === -1){
                                     return;
                                 }
         
-                                if(item.name.toUpperCase() === value.toUpperCase()){
+                                if(item.name.toUpperCase() === value.toUpperCase() || item.url.toUpperCase() === value.toUpperCase()){
                                     wholeWord = {
                                         display: [item.name,item.updated],
                                         data: item
@@ -377,7 +377,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                                 }
     
                                 // 匹配关键词
-                                if (item.name.toUpperCase().indexOf(value.toUpperCase()) !== -1){
+                                if (item.name.toUpperCase().indexOf(value.toUpperCase()) !== -1 || item.symbol.toUpperCase().indexOf(value.toUpperCase()) === -1){
                                     results.push({
                                         display: [item.name, item.updated],
                                         data: item
@@ -426,11 +426,11 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         if (CIQ.symbols.indexOf(item.name) !==-1){
                             continue;
                         }
-                        if (item.name.toUpperCase().indexOf(value.toUpperCase()) === -1){
+                        if (item.name.toUpperCase().indexOf(value.toUpperCase()) === -1 && item.url.toUpperCase().indexOf(value.toUpperCase()) === -1){
                             continue;
                         }
 
-                        if(item.name.toUpperCase() === value.toUpperCase()){
+                        if(item.name.toUpperCase() === value.toUpperCase() || item.url.toUpperCase() === value.toUpperCase()){
                             wholeWord = {
                                 display: [item.name,item.updated],
                                 data: item
