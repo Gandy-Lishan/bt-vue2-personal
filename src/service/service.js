@@ -29,7 +29,7 @@ export function getIndicatorsList() {
 	const url = '/api/indicatorsList'
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url, { cache: true,withCredentials: true })
+			.get(url, { cache: true, withCredentials: true })
 			.then(res => {
 				resolve(res)
 			})
@@ -180,7 +180,7 @@ export function getHistoryList(page, sort, name) {
 	}
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url + page, { withCredentials: true,retry: null })
+			.get(url + page, { withCredentials: true, retry: null })
 			.then(res => {
 				resolve(res)
 			})
@@ -561,6 +561,31 @@ export function getMyIndicatorsList(page) {
 			})
 	})
 }
+export function getCPMList(page, sort, name) {
+	let url = null
+	url = '/dev/cpm/get_cpm_bts/?ordering=-create_date'
+	// sort -> ,total_return
+	if (sort) {
+		url = `/dev/cpm/get_cpm_bts/?ordering=${sort}`
+	}
+	if (name) {
+		url = `/dev/cpm/get_cpm_bts/?name=${name}`
+	}
+	if (name && sort) {
+		url = `/dev/cpm/get_cpm_bts/?ordering=${sort}&name=${name}`
+	}
+	if(page) {url = `${url}&page=${page}`}
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true, retry: null })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 export function getAllMyIndicatorsList(page, callback) {
 	const url = `/dev/my_indicator/get_records/?ordering=-create_date&page=`
 
@@ -569,7 +594,7 @@ export function getAllMyIndicatorsList(page, callback) {
 
 		function fetchPageData(page) {
 			axios
-				.get(url + page,{
+				.get(url + page, {
 					// cache: true
 				})
 				.then(res => {
@@ -627,7 +652,55 @@ export function delMyIndicator(url) {
 			})
 	})
 }
-export function searchIndicator(name, calculate, combine_type, timeframe, page) {
+export function delCPM(url) {
+	const path = `/dev/cpm/remove_cpm_bt/?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.delete(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getCPMResults(url) {
+	const path = `/dev/cpm/run_cpm_bt/?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getCPMPreview(url) {
+	const path = `/dev/cpm/preview_pattern/?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function searchIndicator(
+	name,
+	calculate,
+	combine_type,
+	timeframe,
+	page
+) {
 	let url = '/dev/my_indicator/get_records/?ordering=-create_date'
 	if (name) url += `&name=${name}`
 	if (calculate) {
@@ -639,7 +712,7 @@ export function searchIndicator(name, calculate, combine_type, timeframe, page) 
 	if (timeframe) {
 		url += `&timeframe=${timeframe}`
 	}
-	if(page) {
+	if (page) {
 		url += `&page=${page}`
 	}
 	return new Promise((resolve, reject) => {
@@ -656,6 +729,59 @@ export function searchIndicator(name, calculate, combine_type, timeframe, page) 
 
 export function saveMyIndicators(data) {
 	const url = '/dev/my_indicator/add_record'
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function saveCPM(data) {
+	const url = '/dev/cpm/run_cpm_bt'
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+export function previewCPM(data) {
+	const url = '/dev/cpm/preview_pattern'
 	const formData = new FormData()
 
 	// 将data对象的属性添加到FormData
@@ -708,8 +834,65 @@ export function editMyIndicators(data, rowUrl) {
 	})
 }
 
+export function editCPM(data, rowUrl) {
+	const url = `/dev/cpm/update_cpm_bt?url=${rowUrl}`
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.put(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
 export function getRelatedBacktest(url) {
 	let path = `/dev/my_indicator/relate_backtests/?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+export function runOPT(pk) {
+	let path = `/dev/bt_opt/run_bt_opt?pk=${pk}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+export function getOPTStatus(pk) {
+	let path = `/dev/bt_opt/get_bt_opt_results?pk=${pk}`
 
 	return new Promise((resolve, reject) => {
 		axios

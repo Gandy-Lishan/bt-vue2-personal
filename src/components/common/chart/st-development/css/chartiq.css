@@ -1332,7 +1332,7 @@ cq-study-legend {
       display: none; }
 
 cq-study-legend cq-label.click-to-edit {
-  width: 140px; }
+  width: 314px; }
   .break-sm cq-study-legend cq-label.click-to-edit {
     width: 190px; }
 
@@ -2574,17 +2574,7 @@ html:not([ciq-last-interaction='touch']) .stx-marker.callout .stx-marker-content
   right: -5px;
   border: 5px solid #000; }
 
-.stx-performance-marker.stx-marker-expand {
-  background: rgba(255, 255, 255, 0.75);
-  max-width: 200px;
-  max-height: 200px;
-  padding: 11px;
-  opacity: 1;
-  color: #000;
-  display: block;
-  outline: 1px solid rgba(255, 255, 255, 0.3);
-  overflow: auto;
-  position: absolute; }
+
 
 /* --------------------------------------------------------- CHART AREA ELEMENTS --------------------------------------------------------- */
 .stx-panel-control {

@@ -21,6 +21,7 @@ export default {
 <style lang="less" scoped>
 .my-indicator-list-container {
   min-height: 74vh;
-  padding: 1rem;
+  margin: 50px 50px 0px 50px;
+  background-color: #ffffff;
 }
 </style>

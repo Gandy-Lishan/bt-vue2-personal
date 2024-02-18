@@ -1,7 +1,7 @@
 <template>
     <div class="SNChart-container">
       <SNChart :plotConfiguration="plotConfiguration" :dataList="dataList" :dynamicId="dynamicId" v-if="[0,1].includes(option)"></SNChart>
-      <Table :tableData="dataList" :option="option" class="default-table-class" v-else></Table>
+      <Table :tableData="dataList" :option="option" class="default-table-class" :tradingIndex="tradingIndex" v-else></Table>
     </div>
   </template>
   
@@ -21,7 +21,8 @@ import { checkProperties } from "@/utils";
           return {
               dynamicId: 'OCDContainer',
               dataList: [],
-              option: 0
+              option: 0,
+              tradingIndex: 'empty'
           }
       },
       components: {
@@ -51,12 +52,12 @@ import { checkProperties } from "@/utils";
                   url = `/dev/seasonality/get_day_of_year_data?name=${newVal.symbol}&start=${newVal.start_date}&end=${newVal.end_date}`
                 }
 
-                const {data: {data}} = await getSeasonalityData(url)
-                console.log('data', data)
+                const {data: {data, current_trading_index}} = await getSeasonalityData(url)
                 if(data?.length === 0) {this.popUpMsgBox('Not found: Adjust your search criteria for the selected symbol')}
                 if([0, 1].includes(newVal.option)) {
                   this.dataList = data.map(item => [item['Date'] || item['Month'], parseFloat((Math.round(item['Return'] * 100) / 100).toFixed(2)), parseFloat((Math.round(item['Positive'] * 100) / 100).toFixed(2))])
                 }else {
+                  this.tradingIndex = current_trading_index
                   this.dataList = data.map(obj => {
                     for (const key in obj) {
                       if (!isNaN(obj[key])) {

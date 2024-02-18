@@ -1,7 +1,7 @@
 <template>
   <div class="seasonality-container">
     <div class="seasonality-top">
-			<h2 class="page-title">Seasonality</h2>
+			<h2 class="page-title" style="margin-top: 0px">Seasonality</h2>
 			<p>
 				Just as moon phases impact tidal activity, there are consistent forces at work in the equities markets. Not all of them are understood, but they include mutual fund flows, options activity, weekend exposure effects, etc.
 			</p>
@@ -141,11 +141,11 @@ export default {
 
 <style lang="less" scoped>
 .seasonality-container{
-	margin-bottom: 50px;
+	margin: 50px;
+	padding: 20px;
+	background-color: #ffffff;
 	font-family: "Open Sans",sans-serif;
 	.seasonality-top{
-		margin: 0 auto 20px auto;
-		width: 90%;
 		color: #333;
 		p{
 			font-weight: 400;
@@ -159,5 +159,8 @@ export default {
   width: 33.33%;
   text-align: center;
 }
+}
+.el-tabs {
+	padding: 0
 }
 </style>

@@ -14,7 +14,7 @@
                             scope.row.totalReturn + '%'
                         }}</span>
                         <span v-else-if="isNaN(scope.row.totalReturn)">0</span>
-                        <span v-else style="color: red">{{
+                        <span v-else style="color: #dd3a13">{{
                             scope.row.totalReturn + '%'
                         }}</span>
                     </template>
@@ -31,7 +31,7 @@
                             scope.row.CAGR + '%'
                         }}</span>
                         <span v-else-if="isNaN(scope.row.CAGR)">0</span>
-                        <span v-else style="color: red">{{
+                        <span v-else style="color: #dd3a13">{{
                             scope.row.CAGR + '%'
                         }}</span>
                     </template>
@@ -47,7 +47,7 @@
                             scope.row.medianReturn + '%'
                         }}</span>
                         <span v-else-if="isNaN(scope.row.medianReturn)">0</span>
-                        <span v-else style="color: red">{{
+                        <span v-else style="color: #dd3a13">{{
                             scope.row.medianReturn + '%'
                         }}</span>
                     </template>
@@ -63,7 +63,7 @@
                             scope.row.averageReturn + '%'
                         }}</span>
                         <span v-else-if="isNaN(scope.row.averageReturn)">0</span>
-                        <span v-else style="color: red">{{
+                        <span v-else style="color: #dd3a13">{{
                             scope.row.averageReturn + '%'
                         }}</span>
                     </template>
@@ -79,7 +79,7 @@
                             scope.row.tzScore
                         }}</span>
                         <span v-else-if="isNaN(scope.row.tzScore)">0</span>
-                        <span v-else style="color: red">{{ scope.row.tzScore }}</span>
+                        <span v-else style="color: #dd3a13">{{ scope.row.tzScore }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -93,7 +93,7 @@
                             scope.row.standardDeviation
                         }}</span>
                         <span v-else-if="isNaN(scope.row.standardDeviation)">0</span>
-                        <span v-else style="color: red">{{
+                        <span v-else style="color: #dd3a13">{{
                             scope.row.standardDeviation
                         }}</span>
                     </template>
@@ -109,7 +109,7 @@
                             scope.row.buyHoldGain + '%'
                         }}</span>
                         <span v-else-if="isNaN(scope.row.buyHoldGain)">0</span>
-                        <span v-else style="color: red">{{
+                        <span v-else style="color: #dd3a13">{{
                             scope.row.buyHoldGain + '%'
                         }}</span>
                     </template>
@@ -133,7 +133,7 @@
                             scope.row.winRate + '%'
                         }}</span>
                         <span v-else-if="isNaN(scope.row.winRate)">0</span>
-                        <span v-else style="color: red">{{
+                        <span v-else style="color: #dd3a13">{{
                             scope.row.winRate + '%'
                         }}</span>
                     </template>
@@ -149,7 +149,7 @@
                             scope.row.averageWin + '%'
                         }}</span>
                         <span v-else-if="isNaN(scope.row.averageWin)">0</span>
-                        <span v-else style="color: red">{{
+                        <span v-else style="color: #dd3a13">{{
                             scope.row.averageWin + '%'
                         }}</span>
                     </template>
@@ -165,7 +165,7 @@
                             scope.row.averageLoss + '%'
                         }}</span>
                         <span v-else-if="isNaN(scope.row.averageLoss)">0</span>
-                        <span v-else style="color: red">{{
+                        <span v-else style="color: #dd3a13">{{
                             scope.row.averageLoss + '%'
                         }}</span>
                     </template>
@@ -181,7 +181,7 @@
                             scope.row.drawDown + '%'
                         }}</span>
                         <span v-else-if="isNaN(scope.row.drawDown)">0</span>
-                        <span v-else style="color: red">{{
+                        <span v-else style="color: #dd3a13">{{
                             scope.row.drawDown + '%'
                         }}</span>
                     </template>
@@ -203,7 +203,7 @@
                         <span v-if="scope.row.totalTrades >= 0">{{
                             scope.row.totalTrades
                         }}</span>
-                        <span v-else style="color: red">{{
+                        <span v-else style="color: #dd3a13">{{
                             scope.row.totalTrades
                         }}</span>
                     </template>
@@ -218,7 +218,7 @@
                         <span v-if="scope.row.totalPositive >= 0">{{
                             scope.row.totalPositive
                         }}</span>
-                        <span v-else style="color: red">{{
+                        <span v-else style="color: #dd3a13">{{
                             scope.row.totalPositive
                         }}</span>
                     </template>
@@ -233,7 +233,7 @@
                         <span v-if="scope.row.totalNegative >= 0">{{
                             scope.row.totalNegative
                         }}</span>
-                        <span v-else style="color: red">{{
+                        <span v-else style="color: #dd3a13">{{
                             scope.row.totalNegative
                         }}</span>
                     </template>
@@ -248,7 +248,7 @@
                         <span v-if="scope.row.timeInMarket >= 0">{{
                             scope.row.timeInMarket + '%'
                         }}</span>
-                        <span v-else style="color: red">{{
+                        <span v-else style="color: #dd3a13">{{
                             scope.row.timeInMarket + '%'
                         }}</span>
                     </template>
@@ -266,6 +266,9 @@
                 style="text-align: left"
             >
                 <el-empty image-size="80" description="No Data"></el-empty>
+            </div>
+            <div class="benchmarkReturnImg">
+                <img v-if="tableData[0]?.equityCurveFileURL" :src="tableData[0]?.equityCurveFileURL" alt="" width="100%" />
             </div>
             <div class="benchmarkReturnImg">
                 <img :src="tableData[0]?.returnsFileURL" alt="" width="100%" />

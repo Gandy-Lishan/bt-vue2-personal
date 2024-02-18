@@ -154,6 +154,32 @@ const routes = [
 			require(['@/components/Seasonality/index.vue'], resolve),
 	},
 	{
+		path: '/cpm',
+		name: 'CPM',
+		component: resolve =>
+			require(['@/components/CPM/index.vue'], resolve),
+		children: [
+			{
+				path: '',
+				name: 'List',
+				component: resolve =>
+					require(['@/components/CPM/list/index.vue'], resolve)
+			},
+			{
+				path: 'create',
+				name: 'CreateCPM',
+				component: resolve =>
+					require(['@/components/CPM/create/index.vue'], resolve)
+			},
+			{
+				path: 'results',
+				name: 'CPMResults',
+				component: resolve =>
+					require(['@/components/CPM/results/index.vue'], resolve)
+			}
+		]
+	},
+	{
 		path: '/doc',
 		component: resolve => require(['@/components/Tutorial/Doc.vue'], resolve),
 		redirect: '/doc/home',
@@ -172,11 +198,6 @@ const routes = [
 				path: '/doc/scanner',
 				component: resolve =>
 					require(['@/components/Tutorial/components/AIScanner.vue'], resolve)
-			},
-			{
-				path: '/doc/old',
-				component: resolve =>
-					require(['@/components/Tutorial/old_doc.vue'], resolve)
 			},
 			{
 				path: '/doc/disclaimer',

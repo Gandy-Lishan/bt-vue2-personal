@@ -7656,7 +7656,7 @@ class Studies extends CIQ.UI.ContextTag {
 				this.excludedStudies[sd.name] ||
 				sd.siqList !== undefined ||
 
-				CIQ.findSentiIndicator(null,sd.name)
+				CIQ.findSentiIndicator(null,sd.name) || CIQ.isUserIndicator(sd.name) || CIQ.isOwnIndicator(sd.name)
 			){
 				continue; // siqList = ScriptIQ entry
 			}
@@ -7787,7 +7787,9 @@ class Studies extends CIQ.UI.ContextTag {
 
 			await CIQ.getIndicatorMatedata(indicatorsList)
 
-			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+			// 禁用indicator加载保留Marker功能，防止不同timeframe时marker吸附功能出现问题
+			//CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
+			CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
 		}
 
 		function pickStudy(node, studyName) {
@@ -8032,9 +8034,9 @@ if (!CIQ.Studies) {
 
 			let _obj = CIQ.findSentiIndicator(null,this.helper.name)
 			let _obj2 = CIQ.findBuiltinTechIndicator(null,this.helper.name)
-			// if(_obj2){	
-			// 	return
-			// }
+			let userIndicator = CIQ.isUserIndicator(this.helper.name)
+			let ownIndicator = CIQ.isOwnIndicator(this.helper.name)
+
 			// --------************----------
 			this.addDefaultMarkup();
 			this.selectTemplates();
@@ -8061,13 +8063,17 @@ if (!CIQ.Studies) {
 
 			var dialog = this.node;
 
+			// 根据indicator类型条件调整Title
 			if(_obj){		
 				dialog.find(".title").text(_obj.chart_name)		
 			}else if(_obj2){	
 				dialog.find(".title").text(_obj2.value);	
 			}else if(this.helper.name == "ST ROCLike"){		// 因为roc类型condition在study里面只注册了一个，所以需要判断显示title
 				dialog.find(".title").text(params.inputs.display);	
-			}else{
+			}else if(userIndicator || ownIndicator) {
+				dialog.find(".title").text(params.inputs.display);	
+			}
+			else{
 				dialog.find(".title").text(this.helper.title);
 			}
 
@@ -8082,9 +8088,13 @@ if (!CIQ.Studies) {
 		}
 
 		refreshInputs(empty) {
+			// 根据indicator类型条件隐藏对应输入框
 			let _obj = CIQ.findSentiIndicator(null,this.helper.name)
 			let _obj2 = CIQ.findBuiltinTechIndicator(null,this.helper.name)
-			if(_obj){
+			let _obj3 = CIQ.findSymbolIndicator(this.helper.name,null)
+			let userIndicator = CIQ.isUserIndicator(this.helper.name)
+			let ownIndicator = CIQ.isOwnIndicator(this.helper.name)
+			if(_obj || userIndicator || ownIndicator){
 				this.helper.inputs = [];
 			}
 			else if(_obj2){
@@ -8109,6 +8119,24 @@ if (!CIQ.Studies) {
 					}
 				}
 				//this.helper.inputs = [];
+			}
+			else if(_obj3){
+				var inputs = [];
+				for (var i = 0;i < this.helper.inputs.length; i++){
+					if (this.helper.inputs[i].heading != 'Field'){
+						inputs.push(this.helper.inputs[i])
+					}
+				}
+				this.helper.inputs = inputs;
+			}
+			else if(this.helper.name == "ST ROCLike"){
+				var inputs = [];
+				for (var i = 0;i < this.helper.inputs.length; i++){
+					if (this.helper.inputs[i].heading != 'Field'){
+						inputs.push(this.helper.inputs[i])
+					}
+				}
+				this.helper.inputs = inputs;
 			}
 
 			var inputs = this.node.find("cq-study-inputs");
@@ -8189,11 +8217,14 @@ if (!CIQ.Studies) {
 		}
 
 		refreshOutputs(empty) {
+			// 根据indicator类型条件隐藏对应输出框
 			let _obj = CIQ.findSentiIndicator(null,this.helper.name)
-			if(_obj){
+			let userIndicator = CIQ.isUserIndicator(this.helper.name)
+			let ownIndicator = CIQ.isOwnIndicator(this.helper.name)
+			if(_obj || userIndicator || ownIndicator){
 				this.helper.outputs = [];
 			}
-			this.helper.outputs = this.helper.outputs.filter(x=>x.name != "supLine")
+			//this.helper.outputs = this.helper.outputs.filter(x=>x.name != "supLine")
 			var outputs = this.node.find("cq-study-outputs");
 			if (empty) outputs.empty();
 			for (var i = 0; i < this.helper.outputs.length; i++) {
@@ -8370,9 +8401,9 @@ if (!CIQ.Studies) {
 					}
 					// 如果MA（表单上加载的）修改了周期，用vuex同步状态到表单，在MA组件加载更新MA而不通过updateStudy
 					if (
-						self.helper.sd.type == 'ma' && 
+						
 						section == "inputs" && 
-						name == "Period" && 
+						(name == "Period" || name == "period") && 
 						self.helper.sd.parameters.criteria
 					) {
 						
@@ -8381,12 +8412,18 @@ if (!CIQ.Studies) {
 							panelIndex: self.helper.sd.parameters.index,
 							period: this.value
 						}
-						CIQ.store.commit('chart/studySettingMAChange',obj)
-						return
+						if(self.helper.sd.type == 'ma'){
+							CIQ.store.commit('chart/studySettingMAChange',obj)
+							return
+						}
+						if(self.helper.sd.type == 'ST ROCLike'){
+							CIQ.store.commit('chart/studySettingROCChange',obj)
+							return
+						}
 					}
 
 					self.updateStudy(updates);
-					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				};
 			}
 			node.addEventListener("change", closure());
@@ -11932,28 +11969,28 @@ if (!Palette) {
 		// Handle keystroke event to activate drawing tools
 		// 暂时不用绘画功能
 		keyStroke(hub, key, e, keystroke) {
-			// let toolName = "";
-			// if (e.altKey && !e.ctrlKey && !e.shiftKey) {
-			// 	let selectedKey = String.fromCharCode(e.which).toUpperCase();
-			// 	let toolSelection = this.toolShortcuts[selectedKey];
+			let toolName = "";
+			if (e.altKey && !e.ctrlKey && !e.shiftKey) {
+				let selectedKey = String.fromCharCode(e.which).toUpperCase();
+				let toolSelection = this.toolShortcuts[selectedKey];
 
-			// 	if (toolSelection) {
-			// 		// Activate the drawing palette if it isn't already
-			// 		// this.context.stx.layout.drawing=true;
-			// 		const drawingChannel = this.channels
-			// 			? this.channels.drawing
-			// 			: "channel.drawing";
-			// 		this.channelWrite(drawingChannel, true);
+				if (toolSelection) {
+					// Activate the drawing palette if it isn't already
+					// this.context.stx.layout.drawing=true;
+					const drawingChannel = this.channels
+						? this.channels.drawing
+						: "channel.drawing";
+					this.channelWrite(drawingChannel, true);
 
-			// 		// Activate the tool. Pass a reference to the palette button so its activated state is changed.
-			// 		this.tool({ node: toolSelection.node }, toolSelection.toolName);
-			// 	}
-			// } else if (e.key === "Escape") {
-			// 	let notoolTool = this.context.topNode.querySelector(
-			// 		'*[cq-tool="notool"]'
-			// 	);
-			// 	if (notoolTool) this.noTool({ node: notoolTool });
-			// }
+					// Activate the tool. Pass a reference to the palette button so its activated state is changed.
+					this.tool({ node: toolSelection.node }, toolSelection.toolName);
+				}
+			} else if (e.key === "Escape") {
+				let notoolTool = this.context.topNode.querySelector(
+					'*[cq-tool="notool"]'
+				);
+				if (notoolTool) this.noTool({ node: notoolTool });
+			}
 		}
 
 		handleMessage(id, message) {
@@ -13288,6 +13325,7 @@ import {__st_js_generateCsv_} from "./generateCsv"
 import {__st_js_utils_} from "./utils"
 import {__st_js_maLayout_} from "./maLayout"
 import {__st_js_userownIndicator_} from "./userownIndicator"
+import {__st_js_drawing_} from "./STdrawing"
 
 let _exports = {CIQ};
 export {__js_webcomponents_indicators_ as indicators}
@@ -13386,6 +13424,7 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__st_js_utils_,
 		__st_js_maLayout_,
 		__st_js_userownIndicator_,
+		__st_js_drawing_,
 		// customized features above
 		__js_webcomponents_abstractMarker_,
 		__js_webcomponents_advertisement_,

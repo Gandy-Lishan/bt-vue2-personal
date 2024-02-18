@@ -173,6 +173,7 @@ function removeStorage() {
  
 // Set cache
 function setStorage(key, cache) {
+  if(key == 'visited') return
   localStorage.setItem(key, JSON.stringify(cache))
 }
  

@@ -346,7 +346,7 @@ button.createNew,
 .toTop,
 .tutorial {
 	// opacity: 0.4;
-	z-index: 1500;
+	z-index: 2001;
 	border: unset;
 	position: fixed;
 	right: 60px;
@@ -354,8 +354,8 @@ button.createNew,
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 40px;
-	height: 40px;
+	width: 42px;
+	height: 42px;
 	border-radius: 100%;
 	background-image: initial;
 	background-position-x: initial;
@@ -397,8 +397,8 @@ button.createNew,
 	box-shadow: 0 6px 20px #94989f;
 }
 .tutorial:hover {
-	background-color: darksalmon;
-	box-shadow: 0 6px 20px darksalmon;
+	background-color: rgb(233, 111, 70);
+	box-shadow: 0 6px 20px rgb(233, 111, 70);
 }
 .createNew_hint {
 	position: fixed;

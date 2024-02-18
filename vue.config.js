@@ -136,6 +136,7 @@ const config = {
 		config.optimization.splitChunks({
 			cacheGroups: {
 				vendors: {
+					//
 					// 自定义打包模块
 					name: 'chunk-vendors', // 打包后的文件名
 					test: /[\\/]node_modules[\\/]/, // 匹配对应文件
@@ -273,11 +274,11 @@ const config = {
 		// })
 
 		//CDN代理挂载，打包忽略nodemoudle内的以下包
-		config.externals({
-			vue: 'Vue',
-			vuex: 'Vuex',
-			'vue-router': 'VueRouter'
-		})
+		// config.externals({
+		// 	vue: 'Vue',
+		// 	vuex: 'Vuex',
+		// 	'vue-router': 'VueRouter'
+		// })
 
 		// if(process.env.ST_ENV === "prod"){
 		// 	config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
@@ -303,8 +304,8 @@ const config = {
 		proxy: {
 			'/dev': {
 				//target: "http://10.131.9.217:8000",
-				// target: 'https://devbt2api.sentimentrader.com/',
-				target: "https://bt2api.sentimentrader.com",
+				target: 'https://devbt2api.sentimentrader.com/',
+				//target: "https://bt2api.sentimentrader.com",
 				// ws:true,
 				changeOrigin: true,
 				pathRewrite: {

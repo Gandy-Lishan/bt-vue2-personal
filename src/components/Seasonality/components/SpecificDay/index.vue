@@ -17,7 +17,7 @@
               1.Symbol
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  >Choose a stock/index/ETF as symbol.(default:SPY)</span>
+                  >Choose a stock/index/ETF as symbol.(default:SPX)</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -108,7 +108,6 @@
       <el-form-item
           label="3.Specific Days"
           prop="holidays"
-          placeholder="Please input the name of your custom indicator"
           class="holidays-box"
         >
       <template slot="label">
@@ -116,7 +115,7 @@
           3.Specific Days
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
-              >Choose specific days(Day 0 represents the selected day, when it is a trading day)</span>
+              >Choose specific days(Day 0 represents the selected day, when it is a trading day). <br/>To define a custom date please scroll down to choose "Custom Date"</span>
             <i class="iconfont icon-wenhao"></i>
           </el-tooltip>
         </label>
@@ -180,7 +179,7 @@ export default {
   data() {
     return {
       data: {
-        symbol: 'SPY',
+        symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
         // period: 20,
         dateRange: [],
         holidays: 0,
@@ -193,20 +192,20 @@ export default {
       options: [
         { label: "New Year's Day", month: 1, day: 1, value: 0 },
         { label: 'Independence Day', month: 7, day: 4, value: 1 },
-        { label: 'MLK Jr. Day', month: 1, day: 16, value: 2 },
-        { label: 'Labor Day', month: 9, day: 4, value: 3 },
-        { label: "President's Day", month: 2, day: 20, value: 4 },
-        { label: 'Thanksgiving Day', month: 11, day: 23, value: 5 },
-        { label: 'Good Friday', month: 4, day: 7, value: 6 },
+        { label: 'MLK Jr. Day', month: 1, day: 15, value: 2 },
+        { label: 'Labor Day', month: 9, day: 2, value: 3 },
+        { label: "President's Day", month: 2, day: 19, value: 4 },
+        { label: 'Thanksgiving Day', month: 11, day: 28, value: 5 },
+        { label: 'Good Friday', month: 4, day: 5, value: 6 },
         { label: 'Christmas Day', month: 12, day: 25, value: 7 },
-        { label: 'Memorial Day', month: 5, day: 29, value: 8 },
-        { label: 'Custom Time', value: 9 },
-        { label: 'FOMC Decision Day', month: 2, day: 1, value: 10 },
-        { label: 'Monthly Option Expiration', month: 1, day: 20, value: 11 },
-        { label: 'March Quad Option Expiration', month: 3, day: 17, value: 12 },
-        { label: 'June Quad Option Expiration', month: 6, day: 16, value: 13 },
-        { label: 'September Quad Option Expiration', month: 9, day: 15, value: 14 },
-        { label: 'December Quad Option Expiration', month: 12, day: 15, value: 15 },
+        { label: 'Memorial Day', month: 5, day: 27, value: 8 },
+        { label: 'Custom Date', value: 9 },
+        { label: 'FOMC Decision Day', month: 1, day: 31, value: 10 },
+        { label: 'Monthly Option Expiration', month: 1, day: 19, value: 11 },
+        { label: 'March Quad Option Expiration', month: 3, day: 15, value: 12 },
+        { label: 'June Quad Option Expiration', month: 6, day: 21, value: 13 },
+        { label: 'September Quad Option Expiration', month: 9, day: 20, value: 14 },
+        { label: 'December Quad Option Expiration', month: 12, day: 20, value: 15 },
       ],
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
@@ -233,10 +232,10 @@ export default {
       inputVisible: false,
       inputValue: '',
       previousCustomDateRef: null,
-      symbol: 'SPY',
+      symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
       plotConfiguration: {
         title: 'Performance Surrounding Independence Day',
-        subtitle: 'SPY, 1950-2011',
+        subtitle: 'SPX, 1950-2011',
         xAxisTitle: 'Days Surrounding the Selected Day',
         customScale: true, // 如果需要自定义刻度
         formatter: true, // 如果需要自定义数据提示
@@ -267,7 +266,7 @@ export default {
       if(Object.keys(newVal).length == 0) return
       if(this.changeOptions()) return
       let holidays = this.options.find(ele => ele.value == newVal.holidays).label
-      if(holidays == 'Custom Time') holidays = this.data.customizeDate
+      if(holidays == 'Custom Date') holidays = this.data.customizeDate
       this.plotConfiguration = {
         ...this.plotConfiguration,
         title: `Performance Surrounding ${holidays}`,
@@ -320,7 +319,7 @@ export default {
       const holidayDates = this.options.map((holiday) => {
         let date = null
         if(holiday.month && holiday.day) {date = new Date(year, holiday.month - 1, holiday.day); return { ...holiday, date: format(date, 'MM-dd') }}
-        else {return {label: 'Custom Time', value: 9}}
+        else {return {label: 'Custom Date', value: 9}}
       })
       // 先按照月份从小到大排序，再按照日期从小到大排序
       holidayDates.sort((a, b) => {
@@ -383,7 +382,7 @@ export default {
       const result = compareDates(today, selectDay);
       const holiday = this.options.find(ele => ele.value == this.data.holidays).label
 
-      if(!result && holiday == 'Custom Time') {
+      if(!result && holiday == 'Custom Date') {
         this.popUpMsgBox(`This year's date is not yet ${selectDay}. Please select another date`)
         this.data.start_date = this.plotConfiguration.start_date
         this.data.end_date = this.plotConfiguration.end_date

@@ -276,7 +276,7 @@ export default {
         condition: 3,
         newCondition: 3,
         value: '',
-        conditionPeriod: '5',
+        conditionPeriod: '21',
         period: '',
         maValue: '',
       },
@@ -291,6 +291,8 @@ export default {
         { value: 6, label: '% of Previous Range' },
         { value: 7, label: 'MA Ratio' },
         { value: 8, label: 'Range Rank' },
+        { value: 9, label: 'DrawDown %' },
+        { value: 10, label: 'DrawUp %' }
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -317,7 +319,10 @@ export default {
     },
     direction() {
       return this.getterDirection
-    }
+    },
+    updateSettingROC() {
+			return this.$store.state.chart.studySettingROC
+		},
   },
   watch: {
     extremeValue: {
@@ -370,12 +375,18 @@ export default {
           this.senti.extreme_pessimism = ''
         }
       }
-    }
+    },
+    updateSettingROC(val) {
+			if(val['criteria'] == this.criteria && val['panelIndex'] == this.panelIndex){
+        this.senti.conditionPeriod = val['period']
+				this.calculateNewConditions()
+			}
+		},
   },
   methods: {
     ROCLikeChange(val,limit) {
       //debugger
-      this.isROCLike = 5 <= val && val <= 8
+      this.isROCLike = 5 <= val && val <= 10
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.senti.condition = this.senti.newCondition
@@ -514,6 +525,12 @@ export default {
           case "Range Rank":
             _newCondition = 'RR'
             break;
+          case "DrawDown %":
+            _newCondition = 'DD'
+            break;
+          case "DrawUp %":
+            _newCondition = 'DU'
+            break;
           default:
             break;
         }
@@ -601,7 +618,6 @@ export default {
     },
     calculateNewConditions() {
       if (!this.isROCLike) return
-      
       let indicator_url = this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex]
       let indicator_url_with_ma = ''
       if (indicator_url) {
@@ -641,57 +657,38 @@ export default {
           [6, { name: '% of Previous Range', abbr: 'OPR' }],
           [7, { name: 'MA Ratio', abbr: 'MA' }],
           [8, { name: 'Range Rank', abbr: 'RR' }],
+          [9, { name:'DrawDown %', abbr: 'DD' }],
+          [10, { name:'DrawUp %', abbr: 'DU' }]
         ])
-        
-        // 判断是否已经存在完全一样条件的ROC
-        // for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        //   // 如果当前填入的是数据源为indicator的ma，则判断是否存在此同条件ROC
-        //   const sd = CIQ.stxx.layout.studies
-        //   if(indicator_url_with_ma){
-        //     if(
-        //       (indicator_url_with_ma.indexOf(sd[studyInstanceName].inputs.Field) == 0 || (sd[studyInstanceName].inputs.Field?sd[studyInstanceName].inputs.Field.indexOf(indicator_url_with_ma) == 0:false)) &&
-        //       sd[studyInstanceName].inputs.period == this.senti.conditionPeriod &&
-        //       sd[studyInstanceName].inputs.condition == conditionMap.get(this.senti.newCondition).abbr
-        //     ){ 
-        //       for (var p in CIQ.stxx.panels) {
-        //         if(CIQ.stxx.panels[p].name == studyInstanceName){
-        //           CIQ.stxx.panels[p].hidden = true;
-        //         }
-        //       }
-        //     }
-        //   }else{
-        //   // 如果当前填入的是数据源为indicator，则判断是否存在此同条件ROC
-        //     if ((sd[studyInstanceName].inputs.Field == indicator_url && sd[studyInstanceName].type != 'ST MA') &&
-        //       sd[studyInstanceName].inputs.period == this.senti.conditionPeriod &&
-        //       sd[studyInstanceName].inputs.condition == conditionMap.get(this.senti.newCondition).abbr
-        //     ) {
-        //       for (var p in CIQ.stxx.panels) {
-        //         if(CIQ.stxx.panels[p].name == studyInstanceName){
-        //           console.log(CIQ.stxx.panels[p].name)
-        //           CIQ.stxx.panels[p].hidden = true;
-        //         }
-        //       }
-        //     }
-        //   }
-        // }
 
         const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
-        let sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-          display: `${conditionMap.get(this.senti.newCondition).name}(${field}, ${this.senti.conditionPeriod})`,
+        CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+          display: `${conditionMap.get(this.senti.newCondition).name}(${this.rocDisplayName(field)}, ${this.senti.conditionPeriod})`,
           Field: field,
           condition: conditionMap.get(this.senti.newCondition).abbr,
           period: this.senti.conditionPeriod
         }, null, {
           criteria: this.criteria,
           index: this.panelIndex,
-          //showSupLine:100
+          showSupLine:100
         })
       
         this.hideDuplicateROC()
 
         // 解决附属ma或者roc漂移问题
-        CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+        CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
       }
+    },
+    // 处理用户自定义indicator的显示名
+    rocDisplayName(field) {
+      let display = field
+			if(CIQ.isOwnIndicator(field)){
+				display = field.split(/CREATE/)[0]
+			}
+			if(CIQ.isUserIndicator(field)){
+				display = field.split(/HASH/)[0]
+			}
+      return display
     },
     setPeriod(val) {
       var stma_color = ["#bfad94","#b07858","#a14516","#6f3516","#402818"]
@@ -742,7 +739,7 @@ export default {
         index: this.panelIndex
       })
       // 解决附属ma或者roc漂移问题
-      CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+      CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 
       // keep current MA
       var objMA = {

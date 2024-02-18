@@ -108,7 +108,6 @@
                     <div class="selectBox historySelectBox">
                       <el-select
                         @change="setBacktestHistory(bd.backtest_period)"
-                        @blur="setBacktestHistory(bd.backtest_period)"
                         v-model="bd.backtest_period"
                       >
                         <el-option
@@ -559,7 +558,7 @@
                             exit position.<br />
                             The specified methods will serve as first-come,
                             first-execute.<br />
-                            This option can be used combinedly as an OR condition with the <br/>
+                            This option will be used combinedly as an OR condition with the <br/>
                             Exit Criteria selection or be solely used in the Exit Criteria
                             "Only Use Risk Control".<br/>
                             Note: When short selling, to prevent unlimited additional margin, <br/>
@@ -670,8 +669,8 @@ export default {
     return {
       bd: {
         name: '',
-        symbol: 'SPX',
-        benchmark: 'SPX',
+        symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
+        benchmark: process.env.VUE_APP_DEFAULT_SYMBOL,
         strategy: 'Signal',
         capital: 100000.0,
         capital_alloc: 1.0,
@@ -783,7 +782,7 @@ export default {
       options: [],
       tp: 10,
       sl: 5,
-      tim: 20,
+      tim: 21,
       isRiskControl: true,
       isTakeProfit: false,
       isStopLoss: false,
@@ -832,7 +831,7 @@ export default {
   mounted() {
     this.$emit('IsRiskControl', true)
     // 用于获取 start_date & end_date
-    this.getBTDate()
+    if(this.bd.backtest_period != 22) this.getBTDate()
   },
   computed: {
     ...mapGetters(['getBacktestSymbol']), // 监听chartiq和表单的symbol改动以双向响应
@@ -954,12 +953,20 @@ export default {
       this.$refs.backtestSetupForm.clearValidate()
     },
     validateTP(value) {
-      this.tpValidErrMsg = createTPSLValidate(0, value)
-      return this.tpValidErrMsg
+      if(this.isTakeProfit){
+        this.tpValidErrMsg = createTPSLValidate(0, value)
+        return this.tpValidErrMsg
+      }
+      this.tpValidErrMsg = ''
+      return ''
     },
     validateSL(value) {
-      this.slValidErrMsg = createTPSLValidate(0, value)
-      return this.slValidErrMsg
+      if(this.isStopLoss){
+        this.slValidErrMsg = createTPSLValidate(0, value)
+        return this.slValidErrMsg
+      }
+      this.slValidErrMsg = ''
+      return ''
     },
     validateTIM(value) {
       this.timValidErrMsg = createPositiveIntegerValidate(value)
@@ -981,6 +988,7 @@ export default {
     },
     getTradePrice(val) {
       this.$store.commit('form/SET_TRADE_PRICE', val)
+      this.$store.commit('form/SET_CACHED_SCOPED_ROW_IMMUTABLE_PROPS', {key: 'trade_price', value: val})
     },
     getSymbol(val) {
       this.$store.commit('form/getBacktestSymbol', val)
@@ -996,6 +1004,7 @@ export default {
     getDirection(val) {
       // Set direction to vuex
       this.$store.commit('form/getDirection', val)
+      this.$store.commit('form/SET_CACHED_SCOPED_ROW_IMMUTABLE_PROPS', {key: 'direction', value: val})
       // Direction passed to entry and exit
     },
     setBacktestHistory(val) {
@@ -1148,10 +1157,11 @@ export default {
 		},
     async saveData() {
       /* 校验表单字段 */
-      if(! await this.validateForm()) {
+      const valid = await this.validateForm()
+      if(!valid) {
         this.setSetUpLoadingSetting(false, false, 0, '');
         CIQ.hideCover()
-        return
+        return true
       }
       let bd = JSON.parse(JSON.stringify(this.bd))
       this.getTradePrice(bd.trade_price)
@@ -1183,10 +1193,10 @@ export default {
       })
       /* 如果勾选了 risk control,则校验 stop loss, take profit, time in market */
       if(_this.isRiskControl) {
-        if(_this.isStopLoss) stopLossValid = _this.validateTP(_this.sl)
-        if(_this.isTakeProfit) takeProfitValid = _this.validateSL(_this.tp)
+        if(_this.isStopLoss) stopLossValid = _this.validateSL(_this.sl)
+        if(_this.isTakeProfit) takeProfitValid = _this.validateTP(_this.tp)
         if(_this.isTimeInMarket) timeInMarketValid = _this.validateTIM(_this.tim)
-        riskControlValid = (_this.isStopLoss ? (stopLossValid === '') : true) && (_this.isTakeProfit ? (takeProfitValid === '') : true) && (_this.isTimeInMarket ? (timeInMarketValid === '') : true)
+        riskControlValid = (_this.isStopLoss ? (stopLossValid == '') : true) && (_this.isTakeProfit ? (takeProfitValid == '') : true) && (_this.isTimeInMarket ? (timeInMarketValid == '') : true)
       }
       /* 如果勾选了 exclude overlapping observations,则校验 exclude overlapping observations */
       if(_this.isExcludeOO) excludeValid = (_this.validateExclude(_this.bd.exclude_oo) === '')
@@ -1216,7 +1226,9 @@ export default {
           nameValid = true
         }
       /* 重名且编辑 没名字是编辑 没名字是新建 */
-      nameValidPass = (!nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && _this.getterBacktestInfo.old_uuid) || (nameValid) && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && _this.getterBacktestInfo.old_uuid || (nameValid) && !_this.getterBacktestInfo.hasOwnProperty('old_uuid')
+      nameValidPass = (!nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && _this.getterBacktestInfo.old_uuid) ||
+      (nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && _this.getterBacktestInfo.old_uuid) || 
+      (nameValid && !_this.getterBacktestInfo.hasOwnProperty('old_uuid'))
       if(!nameValidPass) {
         _this.popUpMsgBox('The backtest name already exists');
         return false}
@@ -1252,7 +1264,7 @@ export default {
           'entry_description',
           'exit_description'
         ]
-        this.clearForm() // clear set up form before editting
+        //this.clearForm() // clear set up form before editting
         propertiesToDelete.forEach(property => {
           delete editData[property];
         })
@@ -1319,7 +1331,7 @@ export default {
           this.bd.start_date = str.join('-')
         }else if(this.bd.backtest_period == '21') {
           this.bd.start_date = ''
-        }else if(this.bd.backtestSymbol == '22') {
+        }else if(this.bd.backtest_period == '22') {
           this.bd.start_date = editData.start_date
           this.bd.end_date = editData.end_date
         }

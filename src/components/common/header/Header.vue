@@ -38,7 +38,14 @@
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >Seasonality</el-menu-item
         >
-
+        <el-menu-item class="seasonality-link home-link" index="8"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
+          >Correlation Pattern Match</el-menu-item
+        >
+        <!-- <el-menu-item class="seasonality-link home-link" index="8"
+        v-if="userRole == 'analyst'"
+          >Correlation Pattern Match</el-menu-item
+        > -->
         <el-submenu class="help-title help-link" index="4" :class="{'help-link-active': activeIndex == '4'}">
           <template slot="title">
             <span>Help</span>
@@ -82,7 +89,9 @@ export default {
     }
   },
   computed: {
-
+    userRole() {
+      return this.$store.state.user.role
+    }
   },
   watch: {
     '$route'(to, _) {
@@ -100,6 +109,8 @@ export default {
         this.activeIndex = '6'
       }else if(to.path.includes('/seasonality') || to.name == 'seasonality'){
         this.activeIndex = '7'
+      }else if(to.path.includes('/cpm') || to.name == 'CPM'){
+        this.activeIndex = '8'
       }
       }
   },
@@ -116,6 +127,8 @@ export default {
       this.activeIndex = '6'
     } else if(this.$route.name == 'seasonality' || this.$route.name == 'seasonality'){
       this.activeIndex = '7'
+    }else if(this.$route.name == 'CPM' || this.$route.name == 'CPM'){
+      this.activeIndex = '8'
     }
   },
   methods: {
@@ -157,6 +170,11 @@ export default {
       } else if (key == '7') {
         path = this.$router.resolve({
           path: '/seasonality'
+        }).href
+        this.$router.push(path)
+      } else if (key == '8') {
+        path = this.$router.resolve({
+          path: '/cpm'
         }).href
         this.$router.push(path)
       }

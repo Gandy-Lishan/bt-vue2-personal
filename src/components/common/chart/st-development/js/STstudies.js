@@ -664,6 +664,9 @@ CIQ.Studies.DialogHelper = function (params) {
 	for (var n in s) {
 		if (excludes.indexOf(s[n]) > -1) continue; // don't include its own fields or its dependents' fields
 		for (var actualOutput in s[n].outputMap) {
+			//  output的field menu里面不显示sentiment indicator的description
+			if(['description','url'].includes(actualOutput)) continue
+
 			actualOutputs.push(actualOutput);
 		}
 	}
@@ -708,22 +711,25 @@ CIQ.Studies.DialogHelper = function (params) {
 			} else if (acceptedData == "field") {
 				input.type = "select";
 				input.options = {};
+				//  output的field menu里面不显示中间量
 				var studyFields = [
 					"Open",
 					"High",
 					"Low",
 					"Close",
-					"Adj_Close",
-					"hl/2",
-					"hlc/3",
-					"hlcc/4",
-					"ohlc/4",
+					// "Adj_Close",
+					// "hl/2",
+					// "hlc/3",
+					// "hlcc/4",
+					// "ohlc/4",
 					chart.defaultPlotField
 				].concat(actualOutputs);
+
 				for (var field = 0; field < studyFields.length; field++) {
 					var fieldText = studyFields[field];
 					input.options[fieldText] = stx.translateIf(fieldText);
 				}
+
 				if (input.value == "field") {
 					input.value = "Close";
 				}
@@ -1895,7 +1901,8 @@ CIQ.Studies.displayError = function (stx, sd, params) {
 	var errorText =
 		sd.error === true
 			? stx.translateIf("Not enough data to compute ") +
-			  stx.translateIf(sd.study.name)
+			  stx.translateIf(sd.study.name) +
+			  '(Drag or zoom the chart to request more data)'
 			: stx.translateIf(sd.error);
 
 	// backwards compatability
@@ -4555,7 +4562,7 @@ CIQ.extend(CIQ.Studies.studyLibrary, {
 		name: "Moving Average",
 		overlay: true,
 		calculateFN: CIQ.Studies.calculateMovingAverage,
-		inputs: { Period: 20, Field: "field", Type: "ma", Offset: 0 },
+		inputs: { Period: 21, Field: "field", Type: "ma", Offset: 0 },
 		outputs: { MA: "#FF0000" }
 	},
 	"MAGap": {

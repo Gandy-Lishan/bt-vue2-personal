@@ -1748,99 +1748,6 @@
 </template>
 <script>
 import Tabs from "./Tabs.vue"
-import chartPath from "../img/chart.jpeg";
-import path010 from "../img/1.1.1.jpg";
-import path011 from "../img/1.1.2.jpg";
-import path012 from "../img/1.1.3.jpg";
-import path013 from "../img/1.1.4.jpg";
-import path014 from "../img/1.1.5.jpg";
-import path015 from "../img/1.1.6.jpg";
-import path016 from "../img/1.1.7.jpg";
-import path017 from "../img/1.1.8.jpg";
-import path018 from "../img/1.1.9.jpg";
-import path019 from "../img/1.1.10.jpg";
-import path0110 from "../img/1.1.11.jpg";
-import path0111 from "../img/1.1.12.jpg";
-import path0112 from "../img/1.1.13.jpg";
-import path0113 from "../img/1.1.14.jpg";
-import path0114 from "../img/1.1.15.jpg";
-import path0115 from "../img/1.1.16.jpg";
-import path0116 from "../img/1.1.17.jpg";
-import path0117 from '../img/1.1.18.jpg'
-import path01 from "../img/1.2.jpg";
-import path100 from "../img/2.1.1.jpg";
-import path101 from "../img/2.1.2.jpg";
-import path102 from "../img/2.1.3.jpg";
-import path103 from "../img/2.1.4.jpg";
-import path110 from "../img/2.2.1.jpg";
-import path111 from "../img/2.2.2.jpg";
-import path112 from "../img/2.2.3.jpg";
-import path120 from "../img/2.3.1.jpg";
-import path121 from "../img/2.3.2.jpg";
-import path122 from "../img/2.3.3.jpg";
-import path130 from "../img/2.4.1.jpg";
-import path131 from "../img/2.4.2.jpg";
-import path132 from "../img/2.4.3.jpg";
-import path133 from "../img/2.4.4.jpg";
-import path140 from "../img/2.5.1.jpg";
-import path141 from "../img/2.5.2.jpg";
-import path142 from "../img/2.5.3.jpg";
-import path143 from "../img/2.5.4.jpg";
-import path144 from "../img/2.5.5.jpg";
-import path150 from "../img/2.6.1.jpg";
-import path151 from "../img/2.6.2.jpg";
-import path160 from "../img/2.7.1.jpg";
-import path161 from "../img/2.7.2.jpg";
-import path162 from "../img/2.7.3.jpg";
-import path163 from "../img/2.7.4.jpg";
-import path164 from "../img/2.7.5.jpg";
-import path165 from "../img/2.7.6.jpg";
-import path166 from "../img/2.7.7.jpg";
-import path167 from "../img/2.7.8.jpg";
-import path168 from "../img/2.7.9.jpg";
-import path169 from "../img/2.7.10.jpg";
-import path1610 from "../img/2.7.11.jpg";
-import path171 from "../img/2.8.1.jpg";
-import path181 from "../img/2.9.1.jpg";
-import path20 from "../img/3.1.jpg";
-import path21 from "../img/3.2.jpg";
-import path30 from "../img/4.1.jpg";
-import path31 from "../img/4.2.jpg";
-import path40 from "../img/5.1.jpg";
-import path50 from "../img/6.1.jpg";
-import path51 from "../img/6.2.jpg";
-import path60 from "../img/7.1.jpg";
-import path61 from "../img/7.2.jpg";
-import path71 from "../img/8.1.jpg";
-import path72 from "../img/8.2.jpg";
-import path73 from "../img/8.3.jpg";
-import path74 from "../img/8.4.jpg";
-import path811 from "../img/9.1.1.jpg";
-import path812 from "../img/9.1.2.jpg";
-import path82 from "../img/9.2.jpg";
-import path831 from "../img/9.3.1.jpg";
-import path832 from "../img/9.3.2.jpg";
-import path833 from "../img/9.3.3.jpg";
-import pathai1 from "../img/ai1.jpg";
-import pathai2 from "../img/ai2.jpg";
-// import pathai3 from "../img/ai3.jpg";
-import pathai311 from "../img/ai3.1.1.jpg";
-import pathai312 from "../img/ai3.1.2.jpg";
-import pathai32 from "../img/ai3.2.jpg";
-import pathai33 from "../img/ai3.3.jpg";
-import pathai34 from "../img/ai3.4.jpg";
-import pathai35 from "../img/ai3.5.jpg";
-import pathai41 from "../img/ai4.1.jpg";
-import pathai42 from "../img/ai4.2.jpg";
-import pathai43 from "../img/ai4.3.jpg";
-import pathai44 from "../img/ai4.4.jpg";
-import pathai510 from "../img/ai5.1.jpg";
-import pathai511 from "../img/ai5.2.jpg";
-import pathai512 from "../img/ai5.3.jpg";
-import pathfls11 from "../img/fls1.1.jpg";
-import pathfls12 from "../img/fls1.2.jpg";
-import pathfls21 from "../img/fls2.1.jpg";
-import pathfls22 from "../img/fls2.2.jpg";
 import RightMenu from "./RightMenu.vue";
 export default {
   props: {
@@ -1853,183 +1760,183 @@ export default {
     return {
       menuItems: [],
       isToggle: false,
-      chartPath: chartPath,
-      chartPreList: [chartPath],
-      path010: path010,
-      path010List: [path010],
-      path011: path011,
-      path011List: [path011],
-      path012: path012,
-      path012List: [path012],
-      path013: path013,
-      path013List: [path013],
-      path014: path014,
-      path014List: [path014],
-      path015: path015,
-      path015List: [path015],
-      path016: path016,
-      path016List: [path016],
-      path017: path017,
-      path017List: [path017],
-      path018: path018,
-      path018List: [path018],
-      path019: path019,
-      path019List: [path019],
-      path0110: path0110,
-      path0110List: [path0110],
-      path0111: path0111,
-      path0111List: [path0111],
-      path0112: path0112,
-      path0112List: [path0112],
-      path0113: path0113,
-      path0113List: [path0113],
-      path0114: path0114,
-      path0114List: [path0114],
-      path0115: path0115,
-      path0115List: [path0115],
-      path0116: path0116,
-      path0116List: [path0116],
-      path0117: path0117,
-      path0117List: [path0117],
-      path01: path01,
-      path01List: [path01],
-      path100: path100,
-      path100List: [path100],
-      path101: path101,
-      path101List: [path101],
-      path102: path102,
-      path102List: [path102],
-      path103: path103,
-      path103List: [path103],
-      path110: path110,
-      path110List: [path110],
-      path111: path111,
-      path111List: [path111],
-      path112: path112,
-      path112List: [path112],
-      path120: path120,
-      path120List: [path120],
-      path121: path121,
-      path121List: [path121],
-      path122: path122,
-      path122List: [path122],
-      path130: path130,
-      path130List: [path130],
-      path131: path131,
-      path131List: [path131],
-      path132: path132,
-      path132List: [path132],
-      path133: path133,
-      path133List: [path133],
-      path140: path140,
-      path140List: [path140],
-      path141: path141,
-      path141List: [path141],
-      path142: path142,
-      path142List: [path142],
-      path143: path143,
-      path143List: [path143],
-      path144: path144,
-      path144List: [path144],
-      path150: path150,
-      path150List: [path150],
-      path151: path151,
-      path151List: [path151],
-      path160: path160,
-      path160List: [path160],
-      path161: path161,
-      path161List: [path161],
-      path162: path162,
-      path162List: [path162],
-      path163: path163,
-      path163List: [path163],
-      path164: path164,
-      path164List: [path164],
-      path165: path165,
-      path165List: [path165],
-      path166: path166,
-      path166List: [path166],
-      path167: path167,
-      path167List: [path167],
-      path168: path168,
-      path168List: [path168],
-      path169: path169,
-      path1610: path1610,
-      path1610List: [path169, path1610],
-      path171: path171,
-      path171List: [path171],
-      path181: path181,
-      path181List: [path181],
-      path20: path20,
-      path20List: [path20],
-      path21: path21,
-      path21List: [path21],
-      path30: path30,
-      path30List: [path30],
-      path31: path31,
-      path31List: [path31],
-      path40: path40,
-      path40List: [path40],
-      path50: path50,
-      path50List: [path50],
-      path51: path51,
-      path51List: [path51],
-      path60: path60,
-      path60List: [path60],
-      path61: path61,
-      path61List: [path61],
-      path71: path71,
-      path71List: [path71],
-      path72: path72,
-      path73: path73,
-      path74: path74,
-      path72List: [path72, path73, path74],
-      path811: path811,
-      path181List: [path811],
-      path812: path812,
-      path812List: [path812],
-      path82: path82,
-      path82List: [path82],
-      path831: path831,
-      path832: path832,
-      path833: path833,
-      path83List: [path831, path832, path833],
-      pathai1: pathai1,
-      pathai1List: [pathai1],
-      pathai2: pathai2,
-      pathai2List: [pathai2],
+      chartPath: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/chart.jpeg',
+      chartPreList: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/chart.jpeg'],
+      path010: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.1.jpg',
+      path010List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.1.jpg'],
+      path011: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.2.jpg',
+      path011List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.2.jpg'],
+      path012: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.3.jpg',
+      path012List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.3.jpg'],
+      path013: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.4.jpg',
+      path013List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.4.jpg'],
+      path014: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.5.jpg',
+      path014List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.5.jpg'],
+      path015: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.6.jpg',
+      path015List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.6.jpg'],
+      path016: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.7.jpg',
+      path016List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.7.jpg'],
+      path017: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.8.jpg',
+      path017List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.8.jpg'],
+      path018: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.9.jpg',
+      path018List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.9.jpg'],
+      path019: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.10.jpg',
+      path019List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.10.jpg'],
+      path0110: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.11.jpg',
+      path0110List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.11.jpg'],
+      path0111: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.12.jpg',
+      path0111List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.12.jpg'],
+      path0112: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.13.jpg',
+      path0112List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.13.jpg'],
+      path0113: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.14.jpg',
+      path0113List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.14.jpg'],
+      path0114: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.15.jpg',
+      path0114List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.15.jpg'],
+      path0115: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.16.jpg',
+      path0115List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.16.jpg'],
+      path0116: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.17.jpg',
+      path0116List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.17.jpg'],
+      path0117: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.18.jpg',
+      path0117List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.1.18.jpg'],
+      path01: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.2.jpg',
+      path01List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/1.2.jpg'],
+      path100: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.1.1.jpg',
+      path100List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.1.1.jpg'],
+      path101: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.1.2.jpg',
+      path101List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.1.2.jpg'],
+      path102: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.1.3.jpg',
+      path102List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.1.3.jpg'],
+      path103: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.1.4.jpg',
+      path103List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.1.4.jpg'],
+      path110: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.2.1.jpg',
+      path110List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.2.1.jpg'],
+      path111: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.2.2.jpg',
+      path111List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.2.2.jpg'],
+      path112: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.2.3.jpg',
+      path112List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.2.3.jpg'],
+      path120: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.3.1.jpg',
+      path120List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.3.1.jpg'],
+      path121: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.3.2.jpg',
+      path121List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.3.2.jpg'],
+      path122: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.3.3.jpg',
+      path122List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.3.3.jpg'],
+      path130: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.4.1.jpg',
+      path130List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.4.1.jpg'],
+      path131: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.4.2.jpg',
+      path131List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.4.2.jpg'],
+      path132: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.4.3.jpg',
+      path132List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.4.3.jpg'],
+      path133: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.4.4.jpg',
+      path133List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.4.4.jpg'],
+      path140: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.5.1.jpg',
+      path140List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.5.1.jpg'],
+      path141: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.5.2.jpg',
+      path141List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.5.2.jpg'],
+      path142: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.5.3.jpg',
+      path142List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.5.3.jpg'],
+      path143: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.5.4.jpg',
+      path143List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.5.4.jpg'],
+      path144: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.5.5.jpg',
+      path144List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.5.5.jpg'],
+      path150: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.6.1.jpg',
+      path150List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.6.1.jpg'],
+      path151: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.6.2.jpg',
+      path151List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.6.2.jpg'],
+      path160: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.1.jpg',
+      path160List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.1.jpg'],
+      path161: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.2.jpg',
+      path161List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.2.jpg'],
+      path162: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.3.jpg',
+      path162List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.3.jpg'],
+      path163: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.4.jpg',
+      path163List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.4.jpg'],
+      path164: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.5.jpg',
+      path164List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.5.jpg'],
+      path165: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.6.jpg',
+      path165List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.6.jpg'],
+      path166: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.7.jpg',
+      path166List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.7.jpg'],
+      path167: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.8.jpg',
+      path167List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.8.jpg'],
+      path168: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.9.jpg',
+      path168List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.9.jpg'],
+      path169: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.10.jpg',
+      path1610: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.11.jpg',
+      path1610List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.10.jpg', 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.7.11.jpg'],
+      path171: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.8.1.jpg',
+      path171List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.8.1.jpg'],
+      path181: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.9.1.jpg',
+      path181List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/2.9.1.jpg'],
+      path20: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/3.1.jpg',
+      path20List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/3.1.jpg'],
+      path21: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/3.2.jpg',
+      path21List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/3.2.jpg'],
+      path30: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/4.1.jpg',
+      path30List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/4.1.jpg'],
+      path31: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/4.2.jpg',
+      path31List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/4.2.jpg'],
+      path40: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/5.1.jpg',
+      path40List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/5.1.jpg'],
+      path50: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/6.1.jpg',
+      path50List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/6.1.jpg'],
+      path51: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/6.2.jpg',
+      path51List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/6.2.jpg'],
+      path60: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/7.1.jpg',
+      path60List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/7.1.jpg'],
+      path61: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/7.2.jpg',
+      path61List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/7.2.jpg'],
+      path71: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/8.1.jpg',
+      path71List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/8.1.jpg'],
+      path72: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/8.2.jpg',
+      path73: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/8.3.jpg',
+      path74: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/8.4.jpg',
+      path72List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/8.2.jpg', 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/8.3.jpg', 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/8.4.jpg'],
+      path811: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/9.1.1.jpg',
+      path181List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/9.1.1.jpg'],
+      path812: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/9.1.2.jpg',
+      path812List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/9.1.2.jpg'],
+      path82: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/9.2.jpg',
+      path82List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/9.2.jpg'],
+      path831: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/9.3.1.jpg',
+      path832: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/9.3.2.jpg',
+      path833: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/9.3.3.jpg',
+      path83List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/9.3.1.jpg', 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/9.3.2.jpg', 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/9.3.3.jpg'],
+      pathai1: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai1.jpg',
+      pathai1List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai1.jpg'],
+      pathai2: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai2.jpg',
+      pathai2List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai2.jpg'],
       // pathai3: pathai3,
       // pathai3List: [pathai3],
-      pathai311: pathai311,
-      pathai311List: [pathai311, pathai312],
-      pathai312: pathai312,
-      pathai32: pathai32,
-      pathai32List: [pathai32],
-      pathai33: pathai33,
-      pathai33List: [pathai33],
-      pathai34: pathai34,
-      pathai35: pathai35,
-      pathai35List: [pathai34, pathai35],
-      pathai41: pathai41,
-      pathai41List: [pathai41],
-      pathai42: pathai42,
-      pathai42List: [pathai42],
-      pathai43: pathai43,
-      pathai43List: [pathai43],
-      pathai44: pathai44,
-      pathai44List: [pathai44],
-      pathai510: pathai510,
-      pathai510List: [pathai510],
-      pathai511: pathai511,
-      pathai511List: [pathai511],
-      pathai512: pathai512,
-      pathai512List: [pathai512],
-      pathfls11: pathfls11,
-      pathfls12: pathfls12,
-      pathfls21: pathfls21,
-      pathfls22: pathfls22,
-      pathfls22List: [pathfls11, pathfls12, pathfls21, pathfls22],
-			videoUrl: 'https://www.youtube.com/embed/GR9VbSXxouM'
+      pathai311: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai3.1.1.jpg',
+      pathai311List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai3.1.1.jpg', 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai3.1.2.jpg'],
+      pathai312: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai3.1.2.jpg',
+      pathai32: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai3.2.jpg',
+      pathai32List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai3.2.jpg'],
+      pathai33: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai3.3.jpg',
+      pathai33List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai3.3.jpg'],
+      pathai34: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai3.4.jpg',
+      pathai35: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai3.5.jpg',
+      pathai35List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai3.4.jpg', 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai3.5.jpg'],
+      pathai41: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai4.1.jpg',
+      pathai41List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai4.1.jpg'],
+      pathai42: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai4.2.jpg',
+      pathai42List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai4.2.jpg'],
+      pathai43: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai4.3.jpg',
+      pathai43List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai4.3.jpg'],
+      pathai44: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai4.4.jpg',
+      pathai44List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai4.4.jpg'],
+      pathai510: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai5.1.jpg',
+      pathai510List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai5.1.jpg'],
+      pathai511: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai5.2.jpg',
+      pathai511List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai5.2.jpg'],
+      pathai512: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai5.3.jpg',
+      pathai512List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/ai5.3.jpg'],
+      pathfls11: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/fls1.1.jpg',
+      pathfls12: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/fls1.2.jpg',
+      pathfls21: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/fls2.1.jpg',
+      pathfls22: 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/fls2.2.jpg',
+      pathfls22List: ['https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/fls1.1.jpg', 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/fls1.2.jpg', 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/fls2.1.jpg', 'https://sentimentrader-backtest.s3.amazonaws.com/Tutorial/img/fls2.2.jpg'],
+	  videoUrl: 'https://www.youtube.com/embed/GR9VbSXxouM'
     }
   },
   components: {

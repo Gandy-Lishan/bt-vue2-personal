@@ -10,7 +10,7 @@
 					</el-col>
 				</el-row> -->
 			<div class="chart_box" id="chart_box">
-        		<BTChart width="100%" height="100%" :onChartReady="onChartReady">	
+        		<BTChart :symbol="default_symbol" width="100%" height="100%" :onChartReady="onChartReady">	
 					<LoadingOverlayChart
 						:isLoading="chartLoadingSetting.isChartLoading"
 						:progressText="chartLoadingSetting.progressText"
@@ -30,6 +30,11 @@ import { LoadingOverlayChart } from "@/components/common"
 
 export default {
   name: 'BTHeader',
+  data() {
+		return {
+			default_symbol : process.env.VUE_APP_DEFAULT_SYMBOL,
+		}
+	},
   components: {
     BTChart,
 	LoadingOverlayChart,
@@ -50,9 +55,8 @@ export default {
 		},
 	},
 	mounted() {
-		const chartBox = document.getElementsByClassName('chart_box')[0]
-		console.log('chartBox', chartBox)   
-    if (chartBox) chartBox.style.width = ''
+		const chartBox = document.getElementsByClassName('chart_box')[0] 
+   		 if (chartBox) chartBox.style.width = ''
 	},
 	methods: {
     	...mapMutations('chart', ['SET_CHART_READY_STATE']),
@@ -75,7 +79,7 @@ header {
 		width: 100%;
 	}
 	p {
-		margin: 1rem 2rem 0rem 0rem;
+		margin: 50px 2rem 0rem 0rem;
 		font-style: italic;
 		color: #6c6c6c;
 	}
@@ -99,8 +103,6 @@ header {
 }
 .chart_box {
 	padding: 10px 10px;
-	resize: auto;
-	overflow: hidden;
 	margin: 0 25px;
 }
 </style>
