@@ -56,7 +56,7 @@
 					</el-table-column>
 					<template v-for="item in tableCol">
 						<el-table-column
-							v-if="['Name', 'Symbol'].includes(item.label)"
+							v-if="['Name', 'Symbol', 'Total trades'].includes(item.label)"
 							:label="item.label"
 							:key="item.label"
 							:prop="item.field"
@@ -114,14 +114,14 @@
 							</template>
 						</el-table-column>
 						<el-table-column
-							v-if="['Improved return', 'Total return', 'Total trades'].includes(item.label)"
+							v-if="['Improved return', 'Total return'].includes(item.label)"
 							:label="item.label"
 							:key="item.label"
 							:prop="item.field"
 							show-overflow-tooltip
 							align="center"
 							:sortable="
-								['Improved return', 'Total return', 'Total trades'].includes(item.label)
+								['Improved return', 'Total return'].includes(item.label)
 									? 'custom'
 									: false
 							"
