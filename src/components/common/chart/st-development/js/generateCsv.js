@@ -602,7 +602,7 @@ let __st_js_generateCsv_ = (_exports) => {
          for(var i in ciq_studies){
              if(ciq_studies[i].type == "ST ROCLike") findROC = true
          }
-         // normal senti indicator with MA Line
+         // normal senti indicator with MA Line(the second sentiment indicator condition)
          if(
              s.type == "ST MA" && 
              s.inputs.Field == sd.type && 
@@ -627,6 +627,34 @@ let __st_js_generateCsv_ = (_exports) => {
              labelOption[criteria=='entry'?indexNum:indexNum+5] = '_ma' + s.days
              return finalData
          }
+
+         // normal senti indicator with MA Line(the third sentiment indicator condition)
+         if(
+            s.type == "ST MA" && 
+            s.inputs.Field == sd.type && 
+            conditionRadio == 'Indicator Value ' &&
+            s.parameters.criteria == criteria &&
+            s.parameters.index == indexNum &&
+            !findROC 
+        ){
+            for(var i in Object.keys(arrData[arrData.length-10])){
+                if(Object.keys(arrData[arrData.length-10])[i].indexOf(s.name) != -1){
+                    resultIndex = Object.keys(arrData[arrData.length-10])[i]
+                }
+            }
+            
+            // load a value of this study to dataframe(important note: the value of correspond resultIndex is caculated differently)
+            for(var item in arrData){
+                let maValue = formatSmallNum(arrData[item][resultIndex])
+                let sentiValue = formatSmallNum(arrData[item][sd.type])
+                let result = sentiValue-maValue
+                finalData[item][index] = result || result==0
+                ?parseFloat(result.toFixed(CIQ.countDecimalPlaces(result)))
+                :null;
+            }
+            labelOption[criteria=='entry'?indexNum:indexNum+5] = '_minus_ma' + s.days
+            return finalData
+        }
  
          // MovingAverage-Like with MA Line
          if(
