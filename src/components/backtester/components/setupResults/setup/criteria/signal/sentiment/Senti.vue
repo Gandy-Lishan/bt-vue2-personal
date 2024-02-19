@@ -37,7 +37,7 @@
 					<el-form-item size="mini">
 						<el-select
 							:disabled="!(conditionRadio === 'Indicator Value')"
-							v-model="senti.condition"
+							v-model="senti.newCondition"
 							class="newCond"
 							filterable
 							placeholder="Please select condition"
@@ -665,6 +665,7 @@ export default {
       }
       if(val === 'Indicator Value ') {
         this.senti.comparison = 'SV'
+        this.senti.value = ''
         this.setPeriod(this.periodTemp)
       }
     },
