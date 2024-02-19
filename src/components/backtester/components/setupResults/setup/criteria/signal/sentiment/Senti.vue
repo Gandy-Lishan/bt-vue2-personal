@@ -37,7 +37,7 @@
 					<el-form-item size="mini">
 						<el-select
 							:disabled="!(conditionRadio === 'Indicator Value')"
-							v-model="senti.newCondition"
+							v-model="senti.condition"
 							class="newCond"
 							filterable
 							placeholder="Please select condition"
@@ -169,6 +169,51 @@
 					</el-form-item>
 				</div>
 			</div>
+      <div class="condition-container">
+        <el-form-item class="indicator-alignment">
+					<el-radio
+						class="condition-radio"
+						v-model="conditionRadio"
+						label="Indicator Value "
+						@change="getConditionRadio"
+					>
+					</el-radio>
+				</el-form-item>
+        <div class="conditionSelect">
+					<el-form-item size="mini">
+						<el-select
+							:disabled="!(conditionRadio === 'Indicator Value ')"
+							v-model="senti.condition"
+							@change="ROCLikeChange"
+							filterable
+							placeholder="Please select condition"
+						>
+							<el-option
+								v-for="item in conditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</div>
+        <div class="conditionInput">
+					<el-form-item>
+						<el-link type="info" :underline="false" class="ISL-text">Indicator Moving Average </el-link>
+					</el-form-item>
+				</div>
+				<div class="conditionInput">
+					<el-form-item prop="period" size="mini">
+						<el-input
+							:disabled="!(conditionRadio === 'Indicator Value ')"
+							v-model="senti.period"
+							placeholder="Input Period"
+              @input="setPeriod"
+						></el-input>
+					</el-form-item>
+				</div>
+			</div>
 		</el-form>
 	</div>
 </template>
@@ -278,7 +323,7 @@ export default {
         value: '',
         conditionPeriod: '21',
         period: '',
-        maValue: '',
+        maValue: ''
       },
       periodTemp: '',
       newConditions: [
@@ -329,7 +374,7 @@ export default {
       handler(newVal) {
         let vm = this
         // To solve the problem that Ma cannot be saved after selecting Ma and then indicator
-        if (this.conditionRadio == 'Indicator Moving Average') {
+        if (this.conditionRadio == 'Indicator Moving Average' || this.conditionRadio === 'Indicator Value ') {
           this.setPeriod(this.senti.period)
         }
         this.calculateNewConditions()
@@ -385,11 +430,11 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
-      //debugger
+      debugger
       this.isROCLike = 5 <= val && val <= 10
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
-        this.senti.condition = this.senti.newCondition
+        if(this.conditionRadio !== 'Indicator Value ') this.senti.condition = this.senti.newCondition
 
         let indicator_url = this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex]
         let indicator_url_with_ma = ''
@@ -440,6 +485,7 @@ export default {
       this.$refs.sentiForm.clearValidate()
     },
     setDesciption(index) {
+      debugger
       let rocCond = {
         'newCondition': this.senti.newCondition,
         'conditionPeriod': this.senti.conditionPeriod,
@@ -509,6 +555,7 @@ export default {
           ? this.senti.value
           : this.senti.maValue
       this.description = `${sentiVal} ${ma} ${period} ${condition} ${value}`
+      if(this.conditionRadio == 'Indicator Value ') this.description = `${sentiVal} ${condition} Moving Average ${period}`
       if (this.isROCLike) {
         let _newCondition = this.newConditions[this.senti.newCondition].label
         const _condition = this.conditions[this.senti.condition].label
@@ -540,7 +587,8 @@ export default {
         const _maValue = this.senti.maValue
         const _description1 = `${sentiVal} ${ma} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
         const _description2 = `${sentiVal} ${ma} ${_period} ${_newCondition}${_conditionPeriod} ${_condition} ${_maValue}`
-        this.description = this.conditionRadio === 'Indicator Value' ? _description1 : _description2
+        if(this.conditionRadio === 'Indicator Value') {this.description = _description1}
+        else if(this.conditionRadio === 'Indicator Moving Average'){this.description = _description2}
       }
       let desObj = {}
       desObj.criteria = this.criteria
@@ -613,6 +661,10 @@ export default {
       if (val === 'Indicator Moving Average') {
         this.senti.comparison = 'SVMA'
         // Ma is loaded when the default radio is switched to moving average radio
+        this.setPeriod(this.periodTemp)
+      }
+      if(val === 'Indicator Value ') {
+        this.senti.comparison = 'SV'
         this.setPeriod(this.periodTemp)
       }
     },
@@ -696,7 +748,7 @@ export default {
       if (!_val) {
         _val = 5
       }
-      if (this.conditionRadio === 'Indicator Moving Average') {
+      if (this.conditionRadio === 'Indicator Moving Average' || this.conditionRadio === 'Indicator Value ') {
         this.senti.period = _val
       } else {
         this.senti.period = ''
@@ -787,6 +839,27 @@ export default {
           return checked
         }
       }
+      if (this.conditionRadio === 'Indicator Value ' && !this.isRiskControl) {
+        let validPeriod = false
+        this.$refs['sentiForm'].validateField(['period'], (errorMsg) => {
+          if (!errorMsg) {
+            validPeriod = true
+          }
+        })
+        if (validPeriod) {
+          let senti = JSON.parse(JSON.stringify(this.senti))
+          senti.value = 'SVMA'
+          delete senti.maValue
+          senti.criteria = this.criteria
+          senti.index = index
+          // 定义一个 vuex 新事件用于保存 condition数据
+          this.$store.commit('form/saveCondition', senti)
+          return checked
+        } else {
+          checked = false
+          return checked
+        }
+      }
       if (this.conditionRadio === 'Indicator Moving Average' && !this.isRiskControl) {
         let validMaValue = false
         let validatePeriod = false
@@ -854,6 +927,11 @@ export default {
           this.senti.maValue = this.senti.value
           this.senti.period = obj.period
         }
+        if(this.senti.comparison == 'SV' && this.senti.value === 'SVMA') {
+          this.conditionRadio = 'Indicator Value '
+          this.senti.period = obj.period
+          this.senti.value = ''
+        }
 
         // long: ROC加载脱离了setup表单渲染的限制，在restoreIndicatorLayoutView外部调用loopCalculateNewConditions
         // 之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions,這一塊隱藏
@@ -886,5 +964,13 @@ export default {
 }
 .indicator-alignment /deep/ label.el-radio.condition-radio {
   width: 135px;
+}
+.ISL-text {
+	cursor: auto;
+	font-size: 12px;
+	margin-right: 5px;
+}
+.ISL-text:hover {
+	color: #909399;
 }
 </style>
