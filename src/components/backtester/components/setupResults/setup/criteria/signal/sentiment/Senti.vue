@@ -821,6 +821,7 @@ export default {
     setEditData(newVal) {
       if (JSON.stringify(newVal) != '{}') {
         let obj = newVal[this.criteria].signals[this.panelIndex]
+        if(typeof obj == 'string') return
         // test在samebar(relation 2/3)的情况下
         // handle unexist property for old backtesters
         let cond
