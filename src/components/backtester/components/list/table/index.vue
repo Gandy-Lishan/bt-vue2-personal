@@ -343,7 +343,7 @@
 								>
 									<el-button
 										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible"
-										:disabled="isOptRuning || scope.row.opted == 1"
+										:disabled="isOptRuning || scope.row.opted == 1 || scope.row.status == 0 || scope.row.status == 3"
 										type="success"
 										icon="el-icon-data-analysis"
 										circle
