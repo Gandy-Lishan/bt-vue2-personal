@@ -25,7 +25,9 @@
                         </el-tooltip>
                       </label>
                     </template>
+                    
                     <div class="enterSymbolBox">
+                      
                       <el-select
                         v-model="bd.symbol"
                         id="symbolName"
@@ -36,6 +38,7 @@
                         @change="getSymbol(bd.symbol)"
                         placeholder="enter keywords"
                         :remote-method="remoteMethod"
+                        @visible-change="remoteMethod"
                         :loading="loading"
                       >
                         <el-option
@@ -79,6 +82,7 @@
                         automatic-dropdown
                         placeholder="enter keywords"
                         :remote-method="remoteMethod"
+                        @visible-change="remoteMethod"
                         :loading="loading"
                       >
                         <el-option
@@ -1041,12 +1045,12 @@ export default {
         let vm = this
         if (vm.$store.state.chart.indexsList.length != 0) {
           vm.indexList = vm.$store.state.chart.indexsList.map((item) => {
-            return { value: `${item.symbol}`, label: `${item.symbol}` }
+            return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}` }
           })
         } else {
           let res = await getIndexsList()
           vm.indexList = res.data.map((item) => {
-            return { value: `${item.symbol}`, label: `${item.symbol}` }
+            return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}` }
           })
           vm.loading = false
         }
@@ -1057,16 +1061,15 @@ export default {
     },
     async getStocksList() {
       let vm = this
-
       if (vm.$store.state.chart.stocksList.length != 0) {
         vm.symbolList = vm.$store.state.chart.stocksList.map((item) => {
-          return { value: `${item.stock}`, label: `${item.stock}` }
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}` }
         })
       } else {
         try {
           let res = await getStocksList()
           vm.symbolList = res.data.map((item) => {
-            return { value: `${item.stock}`, label: `${item.stock}` }
+            return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}` }
           })
         } catch (error) {
           console.warn(error)
@@ -1074,9 +1077,18 @@ export default {
         }
       }
     },
-    async remoteMethod(query) {
+    remoteMethod: throttle(async function(query) {
       let vm = this
-      if (query !== '') {
+      if (typeof query == 'boolean' && query){ // 点击搜索栏初始化列表
+        vm.loading = true
+        if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
+          await vm.getStocksList()
+          await vm.getIndexsList()
+        }
+        this.options = vm.symbolList.concat(vm.indexList)
+        vm.loading = false
+      }
+      else if (query !== '') {
         vm.loading = true
         if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
           await vm.getStocksList()
@@ -1086,22 +1098,24 @@ export default {
         var symbolListTemp = vm.symbolList.filter((item) => {
           return (
             item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-            item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
+            item.label.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+            item.name.toLowerCase().indexOf(query.toLowerCase()) > -1
           )
         })
         var IndexListTemp = vm.indexList.filter((item) => {
           return (
             item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-            item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
+            item.label.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+            item.name.toLowerCase().indexOf(query.toLowerCase()) > -1
           )
         })
-
         let options = symbolListTemp.concat(IndexListTemp)
         // keyword全匹配
         for (var item of options) {
           if (
             item.value.toLowerCase() === query.toLowerCase() ||
-            item.label.toLowerCase() === query.toLowerCase()
+            item.label.toLowerCase() === query.toLowerCase() ||
+            item.name.toLowerCase() === query.toLowerCase()
           ) {
             options.unshift(item)
             break
@@ -1114,7 +1128,7 @@ export default {
       } else {
         this.options = []
       }
-    },
+    }, 500),
     selectRiskControl(val) {
       if (!this.isRiskControl) {
         this.$emit('IsRiskControl', false)
