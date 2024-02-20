@@ -725,7 +725,7 @@ export const CommonMethodsMixin = {
 				signalCode.decode(entry_criteria.signals[0].code).analysis != "Sentiment" ||
 				signalCode.decode(exit_criteria.signals[0].code).analysis != "Sentiment"
 			) {
-				return false
+				return false	
 			}
 
 			if(
@@ -734,6 +734,13 @@ export const CommonMethodsMixin = {
 			) {
 				return false
 			}
+
+			if(
+				_backtestInfo["risk_control"] == "//"
+			) {
+				return false
+			}
+			
 			return true
 		},
 		editSignalsCond(backtestInfo, criteriaStr, value) {

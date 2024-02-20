@@ -277,7 +277,7 @@ export default {
 		async optimizeBacktest(data) {
 			// 在优化前先验证是否为sentiment indicator或者用户自定义
 			if(!this.validateSignalsType(data)) {
-				this.popUpMsgBox('We Only Support Single Condition Backtests or Backtests with Sentiment Indicator')
+				this.popUpMsgBox('We Only Support Single Condition Backtests and Backtests with Sentiment Indicator')
 				return
 			}
 
