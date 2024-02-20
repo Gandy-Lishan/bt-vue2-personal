@@ -39,6 +39,7 @@
                         placeholder="enter keywords"
                         :remote-method="remoteMethod"
                         @visible-change="remoteMethod"
+                        :value-key="'key'"
                         :loading="loading"
                       >
                         <el-option
@@ -83,6 +84,7 @@
                         placeholder="enter keywords"
                         :remote-method="remoteMethod"
                         @visible-change="remoteMethod"
+                        :value-key="'key'"
                         :loading="loading"
                       >
                         <el-option
@@ -1044,13 +1046,13 @@ export default {
       try {
         let vm = this
         if (vm.$store.state.chart.indexsList.length != 0) {
-          vm.indexList = vm.$store.state.chart.indexsList.map((item) => {
-            return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}` }
+          vm.indexList = vm.$store.state.chart.indexsList.map((item, index) => {
+            return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
           })
         } else {
           let res = await getIndexsList()
-          vm.indexList = res.data.map((item) => {
-            return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}` }
+          vm.indexList = res.data.map((item, index) => {
+            return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
           })
           vm.loading = false
         }
@@ -1062,14 +1064,14 @@ export default {
     async getStocksList() {
       let vm = this
       if (vm.$store.state.chart.stocksList.length != 0) {
-        vm.symbolList = vm.$store.state.chart.stocksList.map((item) => {
-          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}` }
+        vm.symbolList = vm.$store.state.chart.stocksList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
         })
       } else {
         try {
           let res = await getStocksList()
-          vm.symbolList = res.data.map((item) => {
-            return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}` }
+          vm.symbolList = res.data.map((item, index) => {
+            return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
           })
         } catch (error) {
           console.warn(error)
