@@ -84,14 +84,18 @@ class SignalDecodeSC {
 	}
 	si_condition_value(val) {
 		var re = /^SV\/(-?0?\d*?\.?\d*?)\/(-?0?\d*?\.?\d*?)$/
-		if (val.search(re) == -1)
+		var re_ma = /^SV\/(-?0?\d*?\.?\d*?)\/SVMA(-?0?\d*?\.?\d*?)$/
+		if (val.search(re) == -1 && val.search(re_ma) == -1)
 			return 'The input parameters of the Signal Condition maybe error!'
 		// var array = val.match(re)
-		var data = {
+		if(val.search(re) != -1) return {
 			condition: RegExp.$1,
 			value: RegExp.$2
 		}
-		return data
+		if(val.search(re_ma) != -1) return {
+			condition: RegExp.$1,
+			value: RegExp.$2
+		}
 	}
 	si_period_condition_value(val) {
 		var re = /^SVMA(-?0?\d*?\.?\d*?)\/(-?0?\d*?\.?\d*?)\/(-?0?\d*?\.?\d*?)$/
@@ -478,16 +482,22 @@ class DecodeSC {
 	}
 	si_condition_value(val) {
 		var re = /^SV\/(-?0?\d*?\.?\d*?)\/(-?0?\d*?\.?\d*?)$/
-		if (val.search(re) == -1)
+		var re_ma = /^SV\/(-?0?\d*?\.?\d*?)\/SVMA(-?0?\d*?\.?\d*?)$/
+		if (val.search(re) == -1 && val.search(re_ma) == -1)
 			return 'The input parameters of the Signal Condition maybe error!'
 		// var array = val.match(re)
-		var data = {
+		if(val.search(re) != -1) return {
 			comparison: 'SV',
 			condition: RegExp.$1,
 			value: RegExp.$2,
 			period: 1
 		}
-		return data
+		if(val.search(re_ma) != -1) return {
+			comparison: 'SV',
+			condition: RegExp.$1,
+			value: 'SVMA',
+			period: RegExp.$2
+		}
 	}
 	sy_condition_value(val) {
 		var re = /^SV\/(-?0?\d*?\.?\d*?)\/(-?0?\d*?\.?\d*?)$/
@@ -733,7 +743,7 @@ class EncodeSI {
 				'/' +
 				obj['value']
 			)
-		else if (keys.indexOf('period') !== -1)
+		else if (keys.indexOf('period') !== -1 && obj['value'] !== 'SVMA')
 			return (
 				'SI:' +
 				obj['indicator'] +
@@ -749,6 +759,22 @@ class EncodeSI {
 				'/' +
 				obj['value']
 			)
+		else if (obj['value'] === 'SVMA') 
+				return (
+					'SI:' +
+					obj['indicator'] +
+					';IDS:EO' +
+					obj['extreme_optimism'] +
+					'/EP' +
+					obj['extreme_pessimism'] +
+					';SC:' +
+					obj['comparison'] +
+					'/' +
+					obj['condition'] +
+					'/' +
+					obj['value'] +
+					obj['period']
+				)
 	}
 	check(obj) {
 		var keys = Object.keys(obj)
@@ -1189,6 +1215,7 @@ class Code {
 // console.log(a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SVMA20/3/20"))
 // console.log(a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SV/3/20"))
 // console.log(a.decode("TI:Moving Average;IDS:SMA;SC:SC/3/MA20"))
+// console.log(a.decode("SI:Smart Money Confidence;IDS:EO20/EP80;SC:SV/3/SVMA20"))
 // console.log(a.decode("TI:Moving Average;IDS:SMA;SC:MA5/3/MA20"))
 // console.log(a.decode("TI:MACD;IDS:MACD;SC:MACD/3/0"))
 // console.log(a.decode("TI:MACD;IDS:MACD;SC:MACD/3/SL"))
@@ -1223,17 +1250,22 @@ class Code {
 // console.log(a.decode("Exit:Risk Control;IDS:;SC:PTE30/LSE/TIM180"))
 // console.log(a.decode("Exit:Risk Control;IDS:;SC:PTE20/LSE/TIM180"))
 
-// tmp = [
-	// 	{
-	// 		'analysis': 'Sentiment',
-	// 		'indicator': 'Smart Money Confidence',
-	// 		'extreme_optimism': '20',
-	// 		'extreme_pessimism': '80',
-	// 		'period': '20',
-	// 		"comparison": 'SVMA',
-	// 		'condition': '3',
-	// 		'value': '20'
-	// 	}, {
+// var tmp = [
+// 		{
+// 			'analysis': 'Sentiment',
+// 			'indicator': 'Smart Money Confidence',
+// 			'extreme_optimism': '20',
+// 			'extreme_pessimism': '80',
+// 			'period': '20',
+// 			"comparison": 'SV',
+// 			'condition': '3',
+// 			'value': 'SVMA'
+// 		}, 
+// 	]
+// 	for (var i in tmp) {
+// 	console.log(a.encode(tmp[i]))
+// 	}
+	// {
 	// 		'analysis': 'Sentiment',
 	// 		'indicator': 'Smart Money Confidence',
 	// 		'extreme_optimism': '20',

@@ -21,6 +21,9 @@ function criteriaConditionRadioMap(criteria_item){
     if (criteria_item.comparison === 'SVMA') {
       conditionRadio = 'Indicator Moving Average'
     }
+    if(criteria_item.comparison == 'SV' && criteria_item.value === 'SVMA') {
+      conditionRadio = 'Indicator Value '
+    }
   }
   if (criteria_item.analysis == "Technical") {
     switch (criteria_item.ids) {
