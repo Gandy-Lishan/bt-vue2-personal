@@ -713,7 +713,7 @@ export const CommonMethodsMixin = {
 		validateSignalsType(backtestInfo) {
 			let _backtestInfo = JSON.parse(JSON.stringify(backtestInfo))
 			let signalCode = new SignalCode()
-			
+			debugger
 			let entry_criteria = isJson(_backtestInfo['entry'])
 				? JSON.parse(_backtestInfo['entry'])
 				: _backtestInfo['entry']
@@ -724,6 +724,13 @@ export const CommonMethodsMixin = {
 			if(
 				signalCode.decode(entry_criteria.signals[0].code).analysis != "Sentiment" ||
 				signalCode.decode(exit_criteria.signals[0].code).analysis != "Sentiment"
+			) {
+				return false
+			}
+
+			if(
+				entry_criteria.signals.length > 1 ||
+				exit_criteria.signals.length > 1
 			) {
 				return false
 			}
