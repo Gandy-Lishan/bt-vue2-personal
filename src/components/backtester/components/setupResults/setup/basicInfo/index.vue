@@ -25,7 +25,9 @@
                         </el-tooltip>
                       </label>
                     </template>
+                    
                     <div class="enterSymbolBox">
+                      
                       <el-select
                         v-model="bd.symbol"
                         id="symbolName"
@@ -36,6 +38,7 @@
                         @change="getSymbol(bd.symbol)"
                         placeholder="enter keywords"
                         :remote-method="remoteMethod"
+                        @visible-change="remoteMethod"
                         :loading="loading"
                       >
                         <el-option
@@ -79,6 +82,7 @@
                         automatic-dropdown
                         placeholder="enter keywords"
                         :remote-method="remoteMethod"
+                        @visible-change="remoteMethod"
                         :loading="loading"
                       >
                         <el-option
@@ -1076,7 +1080,16 @@ export default {
     },
     async remoteMethod(query) {
       let vm = this
-      if (query !== '') {
+      if (typeof query == 'boolean' && query){ // 点击搜索栏初始化列表
+        vm.loading = true
+        if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
+          await vm.getStocksList()
+          await vm.getIndexsList()
+        }
+        this.options = vm.symbolList.concat(vm.indexList)
+        vm.loading = false
+      }
+      else if (query !== '') {
         vm.loading = true
         if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
           await vm.getStocksList()
