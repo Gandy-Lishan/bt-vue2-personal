@@ -489,7 +489,6 @@ export default {
       this.$refs.sentiForm.clearValidate()
     },
     setDesciption(index) {
-      debugger
       let rocCond = {
         'newCondition': this.senti.newCondition,
         'conditionPeriod': this.senti.conditionPeriod,
