@@ -41,7 +41,7 @@
 							class="newCond"
 							filterable
 							placeholder="Please select condition"
-							@change="ROCLikeChange"
+				@change="ROCLikeChange"	
 						>
 							<el-option
 								v-for="item in newConditions"
@@ -118,7 +118,7 @@
 							class="newCond"
 							filterable
 							placeholder="Please select condition"
-							@change="ROCLikeChange"
+			@change="ROCLikeChange"	
 						>
 							<el-option
 								v-for="item in newConditions"
@@ -183,8 +183,8 @@
 					<el-form-item size="mini">
 						<el-select
 							:disabled="!(conditionRadio === 'Indicator Value ')"
-							v-model="senti.condition"
-							@change="ROCLikeChange"
+							v-model="senti.newCondition"
+@change="ROCLikeChange"
 							filterable
 							placeholder="Please select condition"
 						>
@@ -427,14 +427,17 @@ export default {
 				this.calculateNewConditions()
 			}
 		},
+    // "senti.newCondition"(newVal, oldVal) {
+    //   // 但是担心在切换radio或者切换cond时，roclikechange的第二个参数是空的，导致位置问题
+    //   this.ROCLikeChange(newVal,this.$store.getters.getIsMarkerShownFlagState)
+    // }
   },
   methods: {
     ROCLikeChange(val,limit) {
-      debugger
       this.isROCLike = 5 <= val && val <= 10
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
-        if(this.conditionRadio !== 'Indicator Value ') this.senti.condition = this.senti.newCondition
+        this.senti.condition = this.senti.newCondition
 
         let indicator_url = this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex]
         let indicator_url_with_ma = ''
@@ -469,6 +472,7 @@ export default {
           }
         }
       }
+      
       if(!limit) this.calculateNewConditions()
     },
     change(e) {
@@ -666,7 +670,9 @@ export default {
       if(val === 'Indicator Value ') {
         this.senti.comparison = 'SV'
         this.senti.value = ''
-        this.setPeriod(this.periodTemp)
+        this.senti.newCondition = 3 //  初始化单选框值
+        this.ROCLikeChange(this.senti.newCondition)
+        this.setPeriod(this.periodTemp)    
       }
     },
     calculateNewConditions() {
@@ -936,8 +942,8 @@ export default {
 
         // long: ROC加载脱离了setup表单渲染的限制，在restoreIndicatorLayoutView外部调用loopCalculateNewConditions
         // 之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions,這一塊隱藏
-        this.ROCLikeChange(this.senti.newCondition,this.$store.getters.getIsMarkerShownFlagState)
-      }
+  this.ROCLikeChange(this.senti.newCondition,this.$store.getters.getIsMarkerShownFlagState)
+  }
     }
   }
 }
