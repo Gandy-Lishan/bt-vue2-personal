@@ -377,7 +377,6 @@ delay_bars: [String, Number],
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
-				debugger
 				this.clearFormValidate()
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
