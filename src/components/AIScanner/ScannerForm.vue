@@ -1,7 +1,7 @@
 <template>
   <div class="scanner-form">
     <el-form
-      ref="BasicForm"
+      ref="Form"
       :model="data"
       label-position="top"
       size="small"
@@ -59,9 +59,9 @@
 			</el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item prop="type" label="3. Type">
+        <el-form-item prop="find_type" label="3. Type">
         <el-select
-            v-model="data.type"
+            v-model="data.find_type"
             placeholder="— Select type —"
           >
             <el-option
@@ -94,9 +94,7 @@
       </el-row>
       <el-row :gutter="10">
         <el-col :span="6">
-          <el-form-item
-          prop="long_short"
-          >
+         <el-form-item prop="long_short_ratio">
           <template slot="label">
             <label>
               5. Long / Short
@@ -107,16 +105,21 @@
               </el-tooltip>
             </label>
           </template>
-          <div class="conditionBox">
-          <el-input v-model="data.value" placeholder="Input Value"></el-input>
-          &nbsp;/&nbsp;
-          <el-input v-model="data.value" placeholder="Input Value"></el-input>
+          <div class="_conditionBox">
+              <el-form-item prop="long_ratio" label-width="0px">
+                <el-input v-model="data.long_ratio" placeholder="Input Ratio">
+                </el-input>
+              </el-form-item>
+              <span>&nbsp;/&nbsp;</span>
+              <el-form-item prop="short_ratio" label-width="0px">
+                <el-input v-model="data.short_ratio" placeholder="Input Ratio"></el-input>
+              </el-form-item>
           </div>
-         </el-form-item>
+          </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item
-          prop="stop_loss"
+          prop="risk_control_filter"
           >
           <template slot="label">
             <label>
@@ -128,9 +131,9 @@
               </el-tooltip>
             </label>
           </template>
-          <div class="conditionBox">
+          <div class="_conditionBox">
             <el-select
-              v-model="data.condition"
+              v-model="data.stop_loss_condition"
               placeholder="— Select Condition —"
           >
             <el-option
@@ -141,14 +144,18 @@
             >
             </el-option>
           </el-select>
-          &nbsp;
-          <el-input v-model="data.value" placeholder="Input Value"></el-input>
+              <span>&nbsp;</span>
+              <el-form-item prop="stop_loss" label-width="0px">
+              <el-input v-model="data.stop_loss" placeholder="Input Number">
+                <template v-slot:append>(%)</template>
+              </el-input>
+              </el-form-item>
           </div>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item
-          prop="take_profit"
+          prop="risk_control_filter"
           >
           <template slot="label">
             <label>
@@ -160,9 +167,9 @@
               </el-tooltip>
             </label>
           </template>
-          <div class="conditionBox">
+          <div class="_conditionBox">
             <el-select
-              v-model="data.condition"
+              v-model="data.take_profit_condition"
               placeholder="— Select Condition —"
           >
             <el-option
@@ -173,14 +180,18 @@
             >
             </el-option>
           </el-select>
-          &nbsp;
-          <el-input v-model="data.value" placeholder="Input Value"></el-input>
+          <span>&nbsp;</span>
+          <el-form-item prop="take_profit" label-width="0px">
+          <el-input v-model="data.take_profit" placeholder="Input Number">
+            <template v-slot:append>(%)</template>
+          </el-input>
+          </el-form-item>
           </div>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item
-          prop="time_in_market"
+          prop="risk_control_filter"
           >
           <template slot="label">
             <label>
@@ -192,9 +203,9 @@
               </el-tooltip>
             </label>
           </template>
-          <div class="conditionBox">
+          <div class="_conditionBox">
             <el-select
-              v-model="data.condition"
+              v-model="data.time_in_market_condition"
               placeholder="— Select Condition —"
           >
             <el-option
@@ -205,8 +216,12 @@
             >
             </el-option>
           </el-select>
-          &nbsp;
-          <el-input v-model="data.value" placeholder="Input Value"></el-input>
+          <span>&nbsp;</span>
+          <el-form-item prop="time_in_market" label-width="0px">
+          <el-input v-model="data.time_in_market" placeholder="Input Bars">
+            <template v-slot:append>(bars)</template>
+          </el-input>
+          </el-form-item>
           </div>
           </el-form-item>
         </el-col>
@@ -243,7 +258,7 @@
               </el-tooltip>
             </label>
           </template>
-          <el-input v-model="data.value"></el-input>
+          <el-input v-model="data.total_capital"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -260,35 +275,63 @@
             </el-tooltip>
           </label>
         </template>
-          <el-input v-model="data.commission"></el-input>
+          <el-input v-model="data.commission"><template v-slot:append>(%)</template></el-input>
         </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item
-          prop="daily_stock_nums"
-          >
+        <el-form-item prop="capital_allocate">
           <template slot="label">
           <label>
-            12. Daily Stock Nums
+            12. Capital Allocate
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 ></span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
-          </template>
-            <el-input v-model="data.daily_stock_nums"></el-input>
-          </el-form-item>
+        </template>
+        <el-select
+            v-model="data.capital_allocate"
+            placeholder="— Select type —"
+          >
+            <el-option
+              v-for="item in AllocateOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="10">
+        <el-col :span="6">
+        <el-form-item
+        prop="daily_limit"
+        >
+        <template slot="label">
+        <label>
+          13. Daily Stock Nums
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content"
+              ></span>
+            <i class="iconfont icon-wenhao"></i>
+          </el-tooltip>
+        </label>
+        </template>
+          <el-input v-model="data.daily_limit">
+            <template v-slot:append>(1~5)</template>
+          </el-input>
+        </el-form-item>
+        </el-col>
         <el-col :span="6">
           <el-form-item
           prop="rank_condition"
           >
           <template slot="label">
           <label>
-            13. Rank Condition
+            14. Rank Condition
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 ></span>
@@ -301,12 +344,12 @@
         </el-col>
       </el-row>
       <el-row :gutter="10" type="flex" class="row-bg" justify="end">
-        <el-col :span="12"></el-col>
-        <el-col :span="6">
-            <el-button type="warning" :loading="btnLoading" size="small" @click="submitForm" :disabled="previewBtnLoading || btnLoading">View List</el-button>
+        <el-col :span="16"></el-col>
+        <el-col :span="4">
+            <el-button type="warning" size="small">View List</el-button>
         </el-col>
-        <el-col :span="6">
-            <el-button type="primary" :loading="btnLoading" size="small" @click="submitForm" :disabled="previewBtnLoading || btnLoading">Run Backtest</el-button>
+        <el-col :span="4">
+            <el-button type="primary" size="small" @click="submitForm">Run Backtest</el-button>
         </el-col>
         </el-row>
     </el-form>
@@ -316,6 +359,7 @@
 <script>
 import { timestampToTime } from '@/utils'
 import SelectCheck from "./SelectCheck";
+import { validateCapitalRule, validateCommissionRule, validateSlippageRule } from '@/utils/formValidate'
 
 export default {
   name: 'ScannerForm',
@@ -326,7 +370,21 @@ export default {
     return {
       data: {
         start_date: '',
-        end_date: ''
+        end_date: '',
+        find_type: 'stock/etf',
+        long_ratio: 0.8,
+        short_ratio: 0.2,
+        stop_loss_condition: '>',
+        take_profit_condition: '>',
+        time_in_market_condition: '>',
+        stop_loss: 5,
+        take_profit: 10,
+        time_in_market: 21,
+        name: '',
+        total_capital: 100000,
+        commission: 0.1,
+        capital_allocate: 'Kelly',
+        daily_limit: 3,
       },
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
@@ -335,12 +393,20 @@ export default {
         disabledDate: this.handleDisabledEndDate
       },
       typeOptions: [
-        { value: 'Stock', label: 'Stock' },
-        { value: 'ETF', label: 'ETF' }
+        { value: 'stock', label: 'Stock' },
+        { value: 'etf', label: 'ETF' },
+        { value: 'stock/etf', label: 'Stock/ETF' },
       ],
       conditionOptions: [
-        { value: 0, label: '>' },
-        { value: 1, label: '<' },
+        { value: '>', label: '>' },
+        { value: '<', label: '<' },
+      ],
+      AllocateOptions: [
+        { value: 'Kelly', label: 'Kelly'},
+        { value: 'WinRate', label: 'WinRate'},
+        { value: 'Z_Score', label: 'Z_Score'},
+        { value: 'StdDev', label: 'StdDev'},
+        { value: 'Expected Return(%)', label: 'Expected Return(%)'},
       ],
       options: [
         {
@@ -429,7 +495,27 @@ export default {
           check: true
         },
       ],
+      rules: {
+        long_ratio: [
+          {
+            validator: validateSlippageRule,
+            trigger: 'blur'
+          }
+        ],
+        short_ratio: [
+          {
+            validator: validateSlippageRule,
+            trigger: 'blur'
+          }
+        ],
+        name: [
+          { required: true, message: 'Enter a name', trigger: 'blur' }
+        ],
+      }
     }
+  },
+  mounted() {
+    this.setBacktestHistory(10)
   },
   methods: {
     handleDisabledStartDate(time) {
@@ -446,6 +532,13 @@ export default {
       const today = timestampToTime(new Date())
       const startDay = timestampToTime(new Date(this.data.start_date))
       return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
+    },
+    setBacktestHistory(val) {
+      this.data.end_date = timestampToTime(new Date());
+      const endDate = new Date(this.data.end_date);
+      const startDate = new Date(endDate);
+      startDate.setDate(endDate.getDate() - val);
+      this.data.start_date = timestampToTime(startDate);
     },
     selected(value){
       console.log(value);
@@ -466,5 +559,17 @@ export default {
 }
 .scanner-form .el-button--primary, .scanner-form .el-button--warning {
   width: 100%;
+}
+._conditionBox {
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 0px;
+    width: 100%;
+  }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.scanner-form /deep/ .el-input-group__append, .scanner-form /deep/ .el-input-group__prepend {
+  padding: 0 5px;
 }
 </style>
