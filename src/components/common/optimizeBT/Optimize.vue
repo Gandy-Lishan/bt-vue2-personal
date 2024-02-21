@@ -322,7 +322,7 @@ export default {
 						}
 					})
 					console.log('轮询结果', this.dataList,OPTResults)
-					this.popUpMsgBox('Optimization solution gennerated')
+					//this.popUpMsgBox('Optimization solution gennerated')
 					this.loading = false
 			}else {
 				console.error('bad runOPT request')
