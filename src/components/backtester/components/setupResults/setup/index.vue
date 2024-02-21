@@ -441,6 +441,7 @@ export default {
 			return indicatorLayout
 		},
 		reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout) {
+			debugger
 			const backtestInfo = cloneDeep(this.$store.state.form.backtestInfo)
 			backtestInfo.indicator_layout = JSON.stringify(indicatorLayout).replaceAll('\u200c', '$r001$')
 			backtestInfo.description = JSON.stringify(backtestInfo.description)

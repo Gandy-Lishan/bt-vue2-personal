@@ -224,7 +224,7 @@ export default {
 			for (var i in this.multipleSelection) {
 				try {
 					let _data = JSON.parse(JSON.stringify(this.multipleSelection[i].data))
-					const copyName = `${_data.name}(opt ${i})`
+					const copyName = `${_data.name}(opt ${i + 1})`
 
 					for (const key in _data) {
 						if (_data.hasOwnProperty(key)) {
@@ -277,9 +277,13 @@ export default {
 		async optimizeBacktest(data) {
 			// 在优化前先验证是否为sentiment indicator或者用户自定义
 			if(!this.validateSignalsType(data)) {
-				this.popUpMsgBox('We Only Support Single Condition Backtests and Backtests with Sentiment Indicator')
+				this.popUpMsgBox('We Only Support Single Condition Backtests with Sentiment Indicator')
 				return
 			}
+
+			// 打开优化页面时初始化结果列表
+			this.dataList = []
+			this.multipleSelection = []
 
 			// 如果上次取消的话，再次优化会重设为true
 			this.pollingState = true
