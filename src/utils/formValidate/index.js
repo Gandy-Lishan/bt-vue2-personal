@@ -165,12 +165,20 @@ export const validateSlippageRule = createLDVRule(
 export const uniqueObjectArray = objectArray => {
 	// 辅助对象用于跟踪已经出现过的url值
 	var urlMap = {}
+	var urlKey = ''
+	if(Object.keys(objectArray[0]).indexOf('url') != -1){
+		urlKey = 'url'
+	}else if(Object.keys(objectArray[0]).indexOf('symbol') != -1){
+		urlKey = 'symbol'
+	}else {
+		urlKey = 'stock'
+	}
 
 	// 使用filter方法进行去重
 	var uniqueArray = objectArray.filter(function(obj) {
-		if (!urlMap[obj.url]) {
+		if (!urlMap[obj[urlKey]]) {
 			// 如果urlMap中不存在当前url值，将其添加到urlMap中，并返回true以保留该对象
-			urlMap[obj.url] = true
+			urlMap[obj[urlKey]] = true
 			return true
 		}
 		// 如果urlMap中已经存在当前url值，返回false以过滤该对象

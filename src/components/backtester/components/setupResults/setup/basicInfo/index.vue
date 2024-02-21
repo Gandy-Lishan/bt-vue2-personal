@@ -1090,7 +1090,7 @@ export default {
         this.options = vm.symbolList.concat(vm.indexList)
         vm.loading = false
       }
-      else if (query !== '') {
+      else if (typeof query != 'boolean' && query !== '') {
         vm.loading = true
         if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
           await vm.getStocksList()

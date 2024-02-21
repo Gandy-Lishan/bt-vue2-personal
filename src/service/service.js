@@ -1,6 +1,5 @@
 import axios from '../axios'
-
-// import axios_new from 'axios'
+import { uniqueObjectArray } from '@/utils/formValidate'
 
 function get_env(name, value) {
 	if (process.env[name] === undefined) {
@@ -31,6 +30,7 @@ export function getIndicatorsList() {
 		axios
 			.get(url, { cache: true, withCredentials: true })
 			.then(res => {
+				res.data = uniqueObjectArray(res.data)
 				resolve(res)
 			})
 			.catch(err => {
@@ -55,6 +55,7 @@ export function getIndexsList() {
 		axios
 			.get(url, { withCredentials: true })
 			.then(res => {
+				res.data = uniqueObjectArray(res.data)
 				resolve(res)
 			})
 			.catch(err => {
@@ -79,6 +80,7 @@ export function getStocksList() {
 		axios
 			.get(url, { withCredentials: true })
 			.then(res => {
+				res.data = uniqueObjectArray(res.data)
 				resolve(res)
 			})
 			.catch(err => {
