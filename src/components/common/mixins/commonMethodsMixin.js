@@ -419,7 +419,8 @@ export const CommonMethodsMixin = {
 				'exclude_oo',
 				'description',
 				'market_environment',
-				'index_moving_average_slope'
+				'index_moving_average_slope',
+				'opted'
 			]
 			const backtestInfoSelectedProps = [
 				'entry_description',
@@ -452,7 +453,8 @@ export const CommonMethodsMixin = {
 				'old_uuid',
 				'results',
 				'market_environment',
-				'index_moving_average_slope'
+				'index_moving_average_slope',
+				'opted'
 			]
 			let backtestParams = Object.assign(
 				{},
@@ -713,7 +715,6 @@ export const CommonMethodsMixin = {
 		validateSignalsType(backtestInfo) {
 			let _backtestInfo = JSON.parse(JSON.stringify(backtestInfo))
 			let signalCode = new SignalCode()
-			debugger
 			let entry_criteria = isJson(_backtestInfo['entry'])
 				? JSON.parse(_backtestInfo['entry'])
 				: _backtestInfo['entry']

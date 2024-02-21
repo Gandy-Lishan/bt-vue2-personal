@@ -441,7 +441,6 @@ export default {
 			return indicatorLayout
 		},
 		reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout) {
-			debugger
 			const backtestInfo = cloneDeep(this.$store.state.form.backtestInfo)
 			backtestInfo.indicator_layout = JSON.stringify(indicatorLayout).replaceAll('\u200c', '$r001$')
 			backtestInfo.description = JSON.stringify(backtestInfo.description)
@@ -490,7 +489,8 @@ export default {
 				'exclude_oo',
 				'description',
 				'market_environment',
-				'index_moving_average_slope'
+				'index_moving_average_slope',
+				'opted'
 			]
 			console.log('backtestInfo', backtestInfo)
 			let backtestParams = Object.assign(
