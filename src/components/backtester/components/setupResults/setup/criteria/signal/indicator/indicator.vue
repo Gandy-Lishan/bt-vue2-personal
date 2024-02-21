@@ -348,7 +348,8 @@ export default {
       if (!_value && this.indicatorRadio == "Users' Own Indicator") {
         callback(new Error('Name cannot be empty.'))
       } else if (!reg.test(_value)) {
-        callback(new Error('It must start with a letter and can only contain letters, numbers, spaces, and underscores.'))
+        //callback(new Error('It must start with a letter and can only contain letters, numbers, spaces, and underscores.'))
+        callback()
       } else {
         callback()
       }
