@@ -375,7 +375,7 @@ export default {
         let vm = this
         // To solve the problem that Ma cannot be saved after selecting Ma and then indicator
         if (this.conditionRadio == 'Indicator Moving Average' || this.conditionRadio === 'Indicator Value ') {
-          this.setPeriod(this.senti.period)
+          this.setPeriod(this.senti.period || 5)
         }
         this.calculateNewConditions()
 
@@ -664,14 +664,14 @@ export default {
       if (val === 'Indicator Moving Average') {
         this.senti.comparison = 'SVMA'
         // Ma is loaded when the default radio is switched to moving average radio
-        this.setPeriod(this.periodTemp)
+        this.setPeriod(this.periodTemp || 5)
       }
       if(val === 'Indicator Value ') {
         this.senti.comparison = 'SV'
         this.senti.value = ''
         this.senti.newCondition = 3 //  初始化单选框值
         this.ROCLikeChange(this.senti.newCondition)
-        this.setPeriod(this.periodTemp)    
+        this.setPeriod(this.periodTemp || 5)    
       }
     },
     calculateNewConditions() {
@@ -751,9 +751,9 @@ export default {
     setPeriod(val) {
       var stma_color = ["#bfad94","#b07858","#a14516","#6f3516","#402818"]
       let _val = val
-      if (!_val) {
-        _val = 5
-      }
+      // if (!_val) {
+      //   _val = 5
+      // }
       if (this.conditionRadio === 'Indicator Moving Average' || this.conditionRadio === 'Indicator Value ') {
         this.senti.period = _val
       } else {
