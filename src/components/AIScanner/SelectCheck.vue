@@ -4,13 +4,13 @@
       :value="selected"
       :class="{ all: optionsAll }"
       multiple
-      placeholder="请选择"
+      placeholder="- Select Signal -"
       :popper-append-to-body="false"
       size="small"
     >
-      <el-option :value="''" label="全部" class="multiple">
+      <el-option :value="''" label="All" class="multiple">
         <el-checkbox v-model="optionsAll" @change="handleoptionsAllChange">
-          全部
+          All
         </el-checkbox>
       </el-option>
       <el-option
@@ -170,8 +170,11 @@ export default {
     height: 25px;
     line-height: 25px;
   }
-  .el-scrollbar {
-    overflow-y: scroll;
+  .el-select {
+    width: 100%;
+  }
+  .el-select-dropdown__wrap {
+    max-height: 370px;
   }
 }
 </style>

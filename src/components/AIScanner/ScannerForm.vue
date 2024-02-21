@@ -35,12 +35,11 @@
       </el-col>
       <el-col :span="6">
         <el-form-item
-				label="4. End Date"
         prop="end_date"
 			  >
         <template slot="label">
           <label>
-            4. End Date
+            2. End Date
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 ></span>
@@ -76,37 +75,21 @@
         </el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item
-				label="4. Strategy Chioce"
-        prop="strategy_chioce"
-        >
-        <template slot="label">
+          <el-form-item
+          prop="signals"
+          >
+          <template slot="label">
           <label>
-            4. Strategy Chioce
+            4. Signals
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 ></span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
-        </template>
-        <div class="conditionBox">
-          <el-select
-            v-model="data.type"
-            placeholder="— Select Condition —"
-        >
-          <el-option
-            v-for="item in conditionOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-        &nbsp;
-        <el-input v-model="data.value" placeholder="Input Value"></el-input>
-        </div>
-        </el-form-item>
+          </template>
+            <SelectCheck :options="options" @selected="selected"/>
+          </el-form-item>
       </el-col>
       </el-row>
       <el-row :gutter="10">
@@ -248,11 +231,28 @@
         </el-col>
         <el-col :span="6">
           <el-form-item
+          prop="total_capital"
+          >
+          <template slot="label">
+            <label>
+              10. Total Capital
+              <el-tooltip effect="dark" placement="top">
+                <span slot="content"
+                  ></span>
+                <i class="iconfont icon-wenhao"></i>
+              </el-tooltip>
+            </label>
+          </template>
+          <el-input v-model="data.value"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item
           prop="Commission"
           >
           <template slot="label">
           <label>
-            10. Commission
+            11. Commission
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 ></span>
@@ -269,7 +269,7 @@
           >
           <template slot="label">
           <label>
-            11. Daily Stock Nums
+            12. Daily Stock Nums
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 ></span>
@@ -280,13 +280,15 @@
             <el-input v-model="data.daily_stock_nums"></el-input>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row :gutter="10">
         <el-col :span="6">
           <el-form-item
           prop="rank_condition"
           >
           <template slot="label">
           <label>
-            12. Rank Condition
+            13. Rank Condition
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 ></span>
@@ -298,29 +300,14 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="10">
+      <el-row :gutter="10" type="flex" class="row-bg" justify="end">
+        <el-col :span="12"></el-col>
         <el-col :span="6">
-          <el-form-item
-          prop="signals"
-          >
-          <template slot="label">
-          <label>
-            13. Signals
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content"
-                ></span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
-          </label>
-          </template>
-            <SelectCheck :options="options" @selected="selected"/>
-          </el-form-item>
+            <el-button type="warning" :loading="btnLoading" size="small" @click="submitForm" :disabled="previewBtnLoading || btnLoading">View List</el-button>
         </el-col>
-      </el-row>
-      <el-row :span="6">
-          <el-form-item class="CPM-btn" label=" ">
-            <el-button type="primary" :loading="btnLoading" @click="submitForm" :disabled="previewBtnLoading || btnLoading">Backtest Pattern</el-button>
-          </el-form-item>
+        <el-col :span="6">
+            <el-button type="primary" :loading="btnLoading" size="small" @click="submitForm" :disabled="previewBtnLoading || btnLoading">Run Backtest</el-button>
+        </el-col>
         </el-row>
     </el-form>
   </div>
@@ -348,41 +335,99 @@ export default {
         disabledDate: this.handleDisabledEndDate
       },
       typeOptions: [
-        { value: 'Daily', label: 'Daily' },
-        { value: 'Weekly', label: 'Weekly' },
-        { value: 'Monthly', label: 'Monthly' }
+        { value: 'Stock', label: 'Stock' },
+        { value: 'ETF', label: 'ETF' }
       ],
       conditionOptions: [
         { value: 0, label: '>' },
-        { value: 1, label: '=' },
-        { value: 2, label: '<' },
+        { value: 1, label: '<' },
       ],
       options: [
         {
-          value: '001',
-          label: '黄金糕',
+          value: 'MA',
+          label: 'MA',
           check: true
         },
         {
-          value: '002',
-          label: '双皮奶',
+          value: 'MAGap',
+          label: 'MAGap',
           check: true
         },
         {
-          value: '003',
-          label: '蚵仔煎',
+          value: 'MACDHist',
+          label: 'MACDHist',
           check: true
         },
         {
-          value: '004',
-          label: '龙须面',
+          value: 'MACDHistGap',
+          label: 'MACDHistGap',
           check: true
         },
         {
-          value: '005',
-          label: '北京烤鸭',
+          value: 'Hammer followed by a raise',
+          label: 'Hammer followed by a raise',
           check: true
-        }
+        },
+        {
+          value: 'Shooting Star followed by a fall',
+          label: 'Shooting Star followed by a fall',
+          check: true
+        },
+        {
+          value: 'UpTrend Pattern',
+          label: 'UpTrend Pattern',
+          check: true
+        },
+        {
+          value: 'DownTrend Pattern',
+          label: 'DownTrend Pattern',
+          check: true
+        },
+        {
+          value: 'Optix #1',
+          label: 'Optix #1',
+          check: true
+        },
+        {
+          value: 'Optix #2',
+          label: 'Optix #2',
+          check: true
+        },
+        {
+          value: 'Optix #3',
+          label: 'Optix #3',
+          check: true
+        },
+        {
+          value: 'Optix #4',
+          label: 'Optix #4',
+          check: true
+        },
+        {
+          value: 'PriceBreakout',
+          label: 'PriceBreakout',
+          check: true
+        },
+        {
+          value: 'HighPoints',
+          label: 'HighPoints',
+          check: true
+        },
+        {
+          value: 'LowPoints',
+          label: 'LowPoints',
+          check: true
+        },
+        {
+          value: 'RSI',
+          label: 'RSI',
+          check: true
+        },
+        {
+          value: 'ExpectedReturn',
+          label: 'ExpectedReturn',
+          check: true
+        },
       ],
     }
   },
@@ -417,6 +462,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+}
+.scanner-form .el-button--primary, .scanner-form .el-button--warning {
   width: 100%;
 }
 </style>
