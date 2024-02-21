@@ -726,23 +726,32 @@ export const CommonMethodsMixin = {
 				signalCode.decode(entry_criteria.signals[0].code).analysis != "Sentiment" ||
 				signalCode.decode(exit_criteria.signals[0].code).analysis != "Sentiment"
 			) {
-				return false	
+				return 'We Only Support Single Condition Backtests with Sentiment Indicator.'	
+			}
+
+			if(
+				(signalCode.decode(entry_criteria.signals[0].code).comparison == "SV" &&
+				signalCode.decode(entry_criteria.signals[0].code).value == "SVMA") ||
+				(signalCode.decode(exit_criteria.signals[0].code).comparison == "SV" &&
+				signalCode.decode(exit_criteria.signals[0].code).value == "SVMA")
+			) {
+				return 'Sorry, this type of optimization is currently not supported.'	
 			}
 
 			if(
 				entry_criteria.signals.length > 1 ||
 				exit_criteria.signals.length > 1
 			) {
-				return false
+				return 'We Only Support Single Condition Backtests with Sentiment Indicator.'
 			}
 
-			if(
-				_backtestInfo["risk_control"] == "//"
-			) {
-				return false
-			}
+			// if(
+			// 	_backtestInfo["risk_control"] == "//"
+			// ) {
+			// 	return false
+			// }
 			
-			return true
+			return ''
 		},
 		editSignalsCond(backtestInfo, criteriaStr, value) {
 			const criteriaDesc = criteriaStr=='entry'?'entry_description':'exit_description'
