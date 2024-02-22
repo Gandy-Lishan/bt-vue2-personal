@@ -224,7 +224,7 @@ export default {
 			for (var i in this.multipleSelection) {
 				try {
 					let _data = JSON.parse(JSON.stringify(this.multipleSelection[i].data))
-					const copyName = `${_data.name}(opt ${this.multipleSelection[i].index + 1})`
+					const copyName = `${_data.name}(opt ${Number(this.multipleSelection[i].index)+1})`
 
 					for (const key in _data) {
 						if (_data.hasOwnProperty(key)) {
