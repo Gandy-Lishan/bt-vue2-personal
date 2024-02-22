@@ -621,7 +621,7 @@ export default {
       if (val === 'Indicator Value') {
         // Clear moving average before switching back to the default senti radio
         this.periodTemp = this.senti.period
-        this.senti.period = ''
+        // this.senti.period = ''
         this.senti.comparison = 'SV'
         let result = CIQ.findSentiIndicator(null,this.sentiUrl)
         if (!result) {
@@ -664,14 +664,14 @@ export default {
       if (val === 'Indicator Moving Average') {
         this.senti.comparison = 'SVMA'
         // Ma is loaded when the default radio is switched to moving average radio
-        this.setPeriod(this.periodTemp || 5)
+        this.setPeriod(this.senti.period)
       }
       if(val === 'Indicator Value ') {
         this.senti.comparison = 'SV'
         this.senti.value = ''
         this.senti.newCondition = 3 //  初始化单选框值
         this.ROCLikeChange(this.senti.newCondition)
-        this.setPeriod(this.periodTemp || 5)    
+        this.setPeriod(this.senti.period)    
       }
     },
     calculateNewConditions() {
