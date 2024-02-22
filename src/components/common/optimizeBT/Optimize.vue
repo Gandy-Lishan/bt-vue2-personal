@@ -224,7 +224,7 @@ export default {
 			for (var i in this.multipleSelection) {
 				try {
 					let _data = JSON.parse(JSON.stringify(this.multipleSelection[i].data))
-					const copyName = `${_data.name}(opt ${i + 1})`
+					const copyName = `${_data.name}(opt ${this.multipleSelection[i].index + 1})`
 
 					for (const key in _data) {
 						if (_data.hasOwnProperty(key)) {
@@ -306,7 +306,7 @@ export default {
 						return;
 					}
 					
-					this.dataList = OPTResults.map((item) => {
+					this.dataList = OPTResults.map((item, index) => {
 						let _data = JSON.parse(JSON.stringify(data))
 						const optimizedValue = item['Optimized_values']
 						let signalCond
@@ -316,6 +316,7 @@ export default {
 						}
 
 						return {
+							index: index,
 							data: signalCond,
 							improved_return: item['Improved returns'],
 							total_return: item['Profit'],
