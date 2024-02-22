@@ -19,7 +19,6 @@
 			</div>
 			<div class="header">
 				<h2>Backtest Optimization Result</h2>
-				<h4>The best condition in 20 backtests</h4>
 			</div>
 			<div class="table">
 				<el-table
