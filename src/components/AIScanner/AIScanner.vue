@@ -13,12 +13,6 @@
 			<div>•	In addition to the default display of key metrics, there's a dropdown menu for each stock that displays additional metrics.</div>
 			<div>•	By clicking on the stock symbol, the system will direct you to detailed historical backtest results and a summary of key metrics for that stock. These backtest results ensure the reliability and accuracy of the "Signal-for-Action" list displayed by our system.</div>
 		</el-collapse-item>
-		<el-collapse-item>
-			<template slot="title">
-			Select Condition<i class="header-icon el-icon-info"></i>
-			</template>
-			<ScannerForm></ScannerForm>
-		</el-collapse-item>
 		</el-collapse>
 		<div class="table-header">
 			<div class='header-part1'>
@@ -99,13 +93,11 @@ import { getAIPick } from '@/service/ai'
 import { timestampToTime } from '@/utils'
 
 import Table from "./Table.vue";
-import ScannerForm from "./ScannerForm";
 
 export default {
   name: 'scannerai',
 	components: {
-		Table,
-		ScannerForm
+		Table
 	},
   data() {
     return {

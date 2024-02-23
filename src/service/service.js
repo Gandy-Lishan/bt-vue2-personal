@@ -586,6 +586,31 @@ export function getCPMList(page, sort, name) {
 			})
 	})
 }
+export function getScannerBTList(page, sort, name) {
+	let url = null
+	url = '/dev/scanner_trader/get_scanner_bt_records/?ordering=-create_date'
+	// sort -> ,total_return
+	if (sort) {
+		url = `/dev/scanner_trader/get_scanner_bt_records/?ordering=${sort}`
+	}
+	if (name) {
+		url = `/dev/scanner_trader/get_scanner_bt_records/?name=${name}`
+	}
+	if (name && sort) {
+		url = `/dev/scanner_trader/get_scanner_bt_records/?ordering=${sort}&name=${name}`
+	}
+	if(page) {url = `${url}&page=${page}`}
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true, retry: null })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 export function getAllMyIndicatorsList(page, callback) {
 	const url = `/dev/my_indicator/get_records/?ordering=-create_date&page=`
 
@@ -666,8 +691,36 @@ export function delCPM(url) {
 			})
 	})
 }
+export function delScannerBT(url) {
+	const path = `/dev/scanner_trader/delete_scanner_bt/?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.delete(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 export function getCPMResults(url) {
 	const path = `/dev/cpm/run_cpm_bt/?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getScannerBTResults(url) {
+	const path = `/dev/scanner_trader/run_scanner_bt/?url=${url}`
 
 	return new Promise((resolve, reject) => {
 		axios
@@ -755,6 +808,32 @@ export function saveMyIndicators(data) {
 }
 export function saveCPM(data) {
 	const url = '/dev/cpm/run_cpm_bt'
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function saveScannerForm(data) {
+	const url = '/dev/scanner_trader/run_scanner_bt'
 	const formData = new FormData()
 
 	// 将data对象的属性添加到FormData
