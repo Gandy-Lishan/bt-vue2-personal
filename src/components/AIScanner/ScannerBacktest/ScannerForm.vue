@@ -347,13 +347,24 @@
       <el-row :gutter="10" type="flex" class="row-bg" justify="end">
         <el-col :span="16"></el-col>
         <el-col :span="4">
-            <el-button type="warning" size="small">View List</el-button>
+            <el-button type="warning" size="small" @click="previewList">View List</el-button>
         </el-col>
         <el-col :span="4">
             <el-button type="primary" size="small" @click="submitForm">Run Backtest</el-button>
         </el-col>
         </el-row>
     </el-form>
+    <el-dialog
+      title="Preview Scanner Backtest List"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -361,7 +372,7 @@
 import { isJson, timestampToTime } from '@/utils'
 import SelectCheck from "./SelectCheck";
 import { validateCapitalRule, validateCommissionRule, createPositiveIntegerRule, createTPSLValidateRule } from '@/utils/formValidate'
-import { saveScannerForm, getScannerBTList, getScannerBTResults } from '@/service/service'
+import { saveScannerForm, editScannerForm, getScannerBTList, getScannerBTResults, perviewScannerForm } from '@/service/service'
 
 export default {
   name: 'ScannerForm',
@@ -429,6 +440,8 @@ export default {
         capital_allocate: 'Kelly',
         signals: ['All']
       },
+      rowUrl: null,
+      dialogVisible: false,
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
       },
@@ -626,6 +639,15 @@ export default {
       startDate.setDate(endDate.getDate() - val);
       this.data.start_date = timestampToTime(startDate);
     },
+    resetForm() {
+      // 如果当前在回测状态，不允许重置
+      if(this.previewBtnLoading || this.btnLoading) return true
+      this.$refs['SelectCheck'].handleoptionsAllChange(true)
+			Object.assign(this.$data, this.$options.data())
+      this.data.signals = ['All']
+      this.setBacktestHistory(10)
+      this.$refs['Form'].clearValidate()
+    },
     selected(signals){
       console.log('触发了', signals)
       this.data.signals = signals
@@ -653,6 +675,41 @@ export default {
       };
       return await validateForm(formName)
     },
+    async previewSCList() {
+      debugger
+      if(this.data.signals.length === 0) {this.popUpMsgBox('Please select at least one signal');return}
+      const validForm = await this.validForm('Form')
+      if(!validForm) {
+        this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
+        return
+      }
+      const {
+        long_ratio, short_ratio, 
+        stop_loss, take_profit, time_in_market,
+        stop_loss_condition, take_profit_condition, time_in_market_condition,
+        commission,
+        signals
+      } = this.data
+      const saveData = {
+        ...this.data,
+        long_short_ratio: `${(long_ratio / 100).toFixed(2)}/${(short_ratio / 100).toFixed(2)}`,
+        risk_control_filter_number: `${stop_loss}/${take_profit}/${time_in_market}`,
+        risk_control_filter_condition: `${stop_loss_condition}/${take_profit_condition}/${time_in_market_condition}`,
+        commission: (commission / 100).toFixed(3),
+        signals: JSON.stringify(signals.length !== 16 ? signals : ['All'])
+      }
+      const removeProperties = (obj, properties) => {
+          properties.forEach(property => {
+            if (obj.hasOwnProperty(property)) {
+              delete obj[property]
+            }
+          })
+      }
+      // 要删除的属性列表
+      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition']
+      removeProperties(saveData, propertiesToRemove)
+      return await perviewScannerForm(saveData)
+    },
     async saveFormData() {
       if(this.data.signals.length === 0) {this.popUpMsgBox('Please select at least one signal');return}
       const validForm = await this.validForm('Form')
@@ -660,9 +717,12 @@ export default {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
         return
       }
-      // 这里要判断是编辑还是新建(暂时不判断)
-      const nameChecked = await this.checkDuplicateNames(name)
-      if(nameChecked){this.popUpMsgBox(`The Name already exists`); return}
+      const rowUrl = this.rowUrl
+      const name = this.data.name
+      if(!rowUrl) {
+        const nameChecked = await this.checkDuplicateNames(name)
+        if(nameChecked){this.popUpMsgBox(`The Name already exists`); return}
+      }
       const {
         long_ratio, short_ratio, 
         stop_loss, take_profit, time_in_market,
@@ -689,7 +749,8 @@ export default {
       const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition']
       removeProperties(saveData, propertiesToRemove)
       let saveRes
-      saveRes = await saveScannerForm(saveData)
+      if(rowUrl) {saveRes = await editScannerForm(saveData, rowUrl)}
+      else{saveRes = await saveScannerForm(saveData)}
       const code = saveRes.data?.code
       const failedConditions = [203, 403, 404, 406]
       if(failedConditions.includes(Number(code))) {
@@ -729,7 +790,7 @@ export default {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('No Backtest match meeting the criteria found')
+      if(code == 407) this.popUpMsgBox('Empty backtest list. Please adjust "Select Condition" and run again')
       if(code == 200) {
         let result = saveRes.data.data.result
         console.log('结果', result)
@@ -780,6 +841,41 @@ export default {
       }
       this.data = target
     },
+    async previewList() {
+      let previewRes = null
+      this.previewBtnLoading = true
+      try {
+        previewRes = await this.previewSCList()
+      } catch (error) {
+        this.previewBtnLoading = false
+      }
+      debugger
+      console.log('previewRes', previewRes)
+      if(!previewRes) {this.previewBtnLoading = false; return}
+     const code = previewRes.data.code
+      if(code == 400) this.popUpMsgBox('Scanner Backtest List preview failed')
+      if(code == 401) this.popUpMsgBox('Calculate error')
+      if(code == 404 || code == 403) this.popUpMsgBox('Preview failed, Please try again')
+      if(code == 406) {
+        const name =  this.data.name
+        this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
+      }
+      if(code == 407) this.popUpMsgBox('Empty preview list. Please adjust "Select Condition" and run again')
+      if(code == 200 && previewRes.status == 200) {
+        this.popUpMsgBox('Preview successful.')
+        const previewData = JSON.parse(previewRes.data.data)
+        console.log('previewData', previewData)
+        // 清空 results 数据
+        // this.$emit('clearResults', this.data)
+      }
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
+    }
   }
 }
 </script>

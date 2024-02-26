@@ -885,6 +885,32 @@ export function previewCPM(data) {
 			})
 	})
 }
+export function perviewScannerForm(data) {
+	const url = '/dev/scanner_trader/view_filter_list'
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 
 export function editMyIndicators(data, rowUrl) {
 	const url = `/dev/my_indicator/update_record?url=${rowUrl}`
@@ -915,6 +941,32 @@ export function editMyIndicators(data, rowUrl) {
 
 export function editCPM(data, rowUrl) {
 	const url = `/dev/cpm/update_cpm_bt?url=${rowUrl}`
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.put(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function editScannerForm(data, rowUrl) {
+	const url = `/dev/scanner_trader/update_scanner_bt?url=${rowUrl}`
 	const formData = new FormData()
 
 	// 将data对象的属性添加到FormData

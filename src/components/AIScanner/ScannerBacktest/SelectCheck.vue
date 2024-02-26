@@ -80,6 +80,7 @@ export default {
         })
         this.selectedOptions = []
       }
+      this.optionsAll = isAll
       this.$emit('selected',this.selectedOptions)
     },
     handleTaskItemChange(item) {

@@ -23,13 +23,11 @@
         </template>
         <!-- <CPMSummary ref="Summary"></CPMSummary> -->
         <div class="content">
-          <div v-if="activeSecondTab == 'list'">
-            <ScannerBTTable @displayResultsData="displayResultsData"></ScannerBTTable>
-          </div>
-          <div v-if="activeSecondTab == 'summary'">summary</div>
+            <ScannerBTTable v-if="activeSecondTab == 'list'" @displayResultsData="displayResultsData"></ScannerBTTable>
+            <SCBTSummary v-if="activeSecondTab == 'summary'" ref="Summary"></SCBTSummary>
         </div>
       </el-collapse-item>
-      <el-collapse-item name="3" class="form">
+      <el-collapse-item name="3" class="form" v-if="activeSecondTab == 'summary'">
         <template v-slot:title>
           <div class="title">
             <p
@@ -75,7 +73,7 @@
 </template>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 <script>
-// import CPMSummary from "./components/summary";
+import SCBTSummary from "./summary";
 // import Statistics from "./components/statistics";
 // import TIM from "./components/tim";
 // import CorrInfo from "./components/corrInfo";
@@ -103,7 +101,8 @@ export default {
   },
   components: {
     ScannerForm,
-    ScannerBTTable
+    ScannerBTTable,
+    SCBTSummary
   },
   methods: {
     changeTab(val) {
@@ -124,6 +123,9 @@ export default {
     displayResultsData(_data) {
       debugger
       const _this = this
+      // const _summary = {}
+
+      // _this.$refs['Summary'].displayData(_summary)
       _this.$nextTick(() => {
         _this.$refs['ScannerForm'].displayData(_data)
         // _this.prepareData(_data)
@@ -394,9 +396,11 @@ export default {
       return buf;
     },
     resetForm() {
-      const NoResetAllowed = this.$refs['Form'].resetForm()
-      if(NoResetAllowed) return
-      this.clearResults('Daily')
+      this.$nextTick(() => {
+        const NoResetAllowed = this.$refs['ScannerForm'].resetForm()
+        if(NoResetAllowed) return
+      })
+      // this.clearResults('Daily')
     }
   }
 }
