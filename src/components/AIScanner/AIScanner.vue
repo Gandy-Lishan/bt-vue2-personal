@@ -101,7 +101,7 @@ export default {
 	},
   data() {
     return {
-      originData: {},
+    originData: {},
 	  tableData: {},
 	  curDate: '',
 	  
@@ -159,6 +159,8 @@ export default {
 		}
 	},
   methods: {
+	scannerBacktest() {
+	},
 	// table filter*********
 	disabledDate(time) {
 		let dis = timestampToTime(time) > this.curDate || (time.getDay() === 0 || time.getDay() === 6)
