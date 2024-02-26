@@ -1,5 +1,5 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { timestampToTime, isJson } from '@/utils'
+import {capitalizeFirstLetter, timestampToTime, isJson } from '@/utils'
 import {
 	getBacktestName,
 	seeParams,
@@ -13,7 +13,8 @@ import {
 	getStatus,
 	findLastSignalApi,
 	getBTV1Backtest,
-	getIndicatorsList
+	getIndicatorsList,
+	getOPTStatus
 } from '@/service/service.js'
 import UUID from '@/utils/cryptoUtils/uuid'
 import SignalCode from '@/utils/cryptoUtils/codeTool'
@@ -132,6 +133,7 @@ export const CommonMethodsMixin = {
 				this.loading = false
 			}
 		},
+
 		async deleteBacktest(id) {
 			this.loading = true
 			await deleteBacktest(id)
@@ -246,7 +248,20 @@ export const CommonMethodsMixin = {
 			this.$store.dispatch('form/reset_chart_config_state')
 			this.$store.commit('form/getFrequency', '')
 		},
+		async loopAllHistories() {
+			for (let i = 0; i < this.favorite_array.length; i++) {
+				await this.rerunThisBacktest(this.favorite_array[i])
+			}
+			// 循环结束之后请求一次列表
+			await this.getDataList(null)
 
+			if (!CIQ.Studies) return
+			this.$store.dispatch('chart/reset_chart_study_state')
+			this.$store.dispatch('form/reset_chart_config_state')
+			this.$store.commit('form/getFrequency', '')
+			CIQ.hideCover()
+		},
+		
 		uploadCSVWhileFLS(row) {
 			// lishan 在这里保存数据到 vuex favorite 中要用
 			this.$store.dispatch('chart/set_span_period', {
@@ -314,13 +329,7 @@ export const CommonMethodsMixin = {
 		async runBTV1Backtest() {
 			await this.runOrFindAndLoop('btv1')
 		},
-		async loopAllHistories() {
-			for (let i = 0; i < this.favorite_array.length; i++) {
-				await this.rerunThisBacktest(this.favorite_array[i])
-			}
-			// 循环结束之后请求一次列表
-			await this.getDataList(null)
-		},
+
 		async getAllHistoryListData(reqAfterPage) {
 			const res = await getAllHistoryList(reqAfterPage)
 			return res
@@ -520,14 +529,18 @@ export const CommonMethodsMixin = {
 				[5, { name: 'Rate Of Change', abbr: 'ROC' }],
 				[6, { name: '% of Previous Range', abbr: 'OPR' }],
 				[7, { name: 'MA Ratio', abbr: 'MA' }],
-				[8, { name: 'Range Rank', abbr: 'RR' }]
+				[8, { name: 'Range Rank', abbr: 'RR' }],
+				[9, { name: 'DrawDown %', abbr: 'DD' }],
+				[10, { name:'DrawUp %', abbr: 'DU' }]
 			])
 			let indicator_url = ''
 			let indicator_url_with_ma = ''
 			let fieldName = ''
-			if (analysis == 'Sentiment') {
+
+			if (analysis == 'Sentiment' || analysis == 'User') {
 				let signal = CIQ.findSentiIndicator(indicator)
-				indicator_url = signal.url
+				// 是senti则为senti url, 反之为User的name
+				indicator_url = signal?signal.url:indicator
 			}
 
 			if (indicator_url && analysis === 'Sentiment') {
@@ -548,22 +561,47 @@ export const CommonMethodsMixin = {
 						}
 					}
 				}
+			} else if (indicator_url && analysis === 'User') {
+				// 考虑到User自定义的indicator_url是name,所以需要和senti区分开判断
+				for (const studyInstanceName in CIQ.stxx.layout.studies) {
+					const url = CIQ.stxx.layout.studies[studyInstanceName].inputs.Field
+					let field
+					if(url && url.indexOf('CREATE') != -1) field = url.split(/CREATE/)[0]
+					if(url && url.indexOf('HASH') != -1) field = url.split(/HASH/)[0]
+					if (
+						field == indicator_url &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria ==
+							criteria &&
+						CIQ.stxx.layout.studies[studyInstanceName].parameters.index ==
+							panelIndex
+					) {
+						if (CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
+							indicator_url_with_ma = Object.keys(
+								CIQ.stxx.layout.studies[studyInstanceName].outputMap
+							)[0]
+							break
+						}
+					}
+				}
 			} else if (indicator && analysis === 'Symbol') {
 				const symbolCond = CIQ.findSymbolIndicator(indicator, null)
 				fieldName = symbolCond ? symbolCond.field : ''
 			}
 
 			for (const studyInstanceName in CIQ.stxx.layout.studies) {
+				// 判断 senti,user
 				const f1 =
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field ==
 						indicator_url_with_ma ||
 					(CIQ.stxx.layout.studies[studyInstanceName].inputs.Field ==
 						indicator_url &&
 						CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA')
+				// 判断 symbol
 				const f2 =
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field ==
 						fieldName &&
 					CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA'
+				// 判断 condition
 				const fc =
 					CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria ==
 						criteria &&
@@ -577,58 +615,13 @@ export const CommonMethodsMixin = {
 				}
 			}
 
-        // 判断是否已经存在完全一样条件的ROC
-        // for (var studyInstanceName in CIQ.stxx.layout.studies) {
-		// 	// 如果当前填入的是数据源为indicator的ma，则判断是否存在此同条件ROC
-		// 	const sd = CIQ.stxx.layout.studies
-		// 	if(indicator_url_with_ma){
-		// 	  if(
-		// 		(indicator_url_with_ma.indexOf(sd[studyInstanceName].inputs.Field) == 0 || (sd[studyInstanceName].inputs.Field?sd[studyInstanceName].inputs.Field.indexOf(indicator_url_with_ma) == 0:false)) &&
-		// 		sd[studyInstanceName].inputs.period == conditionPeriod &&
-		// 		sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
-		// 	  ){ 
-		// 		for (var p in CIQ.stxx.panels) {
-		// 		  if(CIQ.stxx.panels[p].name == studyInstanceName){
-		// 			CIQ.stxx.panels[p].hidden = true;
-		// 		  }
-		// 		}
-		// 	  }
-		// 	}else if(fieldName){
-		// 	  if ((sd[studyInstanceName].inputs.Field == fieldName && sd[studyInstanceName].type != 'ST MA') &&
-		// 		sd[studyInstanceName].inputs.period == conditionPeriod &&
-		// 		sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
-		// 	  ) {
-		// 		for (var p in CIQ.stxx.panels) {
-		// 		  if(CIQ.stxx.panels[p].name == studyInstanceName){
-		// 			CIQ.stxx.panels[p].hidden = true;
-		// 		  }
-		// 		}
-		// 	  }
-		// 	}
-		// 	else{
-		// 	// 如果当前填入的是数据源为indicator，则判断是否存在此同条件ROC
-		// 	  if ((sd[studyInstanceName].inputs.Field == indicator_url && sd[studyInstanceName].type != 'ST MA') &&
-		// 		sd[studyInstanceName].inputs.period == conditionPeriod &&
-		// 		sd[studyInstanceName].inputs.condition == conditionMap.get(newCondition).abbr
-		// 	  ) {
-		// 		for (var p in CIQ.stxx.panels) {
-		// 		  if(CIQ.stxx.panels[p].name == studyInstanceName){
-		// 			console.log(CIQ.stxx.panels[p].name)
-		// 			debugger
-		// 			CIQ.stxx.panels[p].hidden = true;
-		// 		  }
-		// 		}
-		// 	  }
-		// 	}
-		//   }
-
 		  	const field = fieldName ||
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
 				'ST ROCLike',
 				{
-					display: `${conditionMap.get(newCondition).name}(${field}, ${conditionPeriod})`,
+					display: `${conditionMap.get(newCondition).name}(${this.rocDisplayName(field)}, ${conditionPeriod})`,
 					Field: field,
 					condition: conditionMap.get(newCondition).abbr,
 					period: conditionPeriod
@@ -639,12 +632,21 @@ export const CommonMethodsMixin = {
 					index: panelIndex
 				}
 			)
-
 			this.hideDuplicateROC()
 
-			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addDot)
+			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 		},
-
+		// 处理用户自定义indicator的显示名
+		rocDisplayName(field) {
+			let display = field
+			if(CIQ.isOwnIndicator(field)){
+				display = field.split(/CREATE/)[0]
+			}
+			if(CIQ.isUserIndicator(field)){
+				display = field.split(/HASH/)[0]
+			}
+			return display
+		},
 		hideDuplicateROC(){
 			// 隐藏重复的ROC
 			for (var p in CIQ.stxx.panels) {
@@ -691,7 +693,7 @@ export const CommonMethodsMixin = {
 				if (item)
 					return {
 						...item,
-						isROCLike: 5 <= item.newCondition && item.newCondition <= 8
+						isROCLike: 5 <= item.newCondition && item.newCondition <= 10
 					}
 				return null
 			})	
@@ -705,6 +707,95 @@ export const CommonMethodsMixin = {
 				return { ...signalCode.decode(item.code), ...criteria.cond[index] }
 			})
 			return criteria
+		},
+		editSignalsCond(backtestInfo, criteriaStr, value) {
+			const criteriaDesc = criteriaStr=='entry'?'entry_description':'exit_description'
+			let _backtestInfo = JSON.parse(JSON.stringify(backtestInfo))
+			let signalCode = new SignalCode()
+			
+			// long: todo修改description
+			let desc = isJson(_backtestInfo[criteriaDesc])
+				? JSON.parse(_backtestInfo[criteriaDesc])
+				: _backtestInfo[criteriaDesc]
+			
+				const words = desc[0]['commentDes'].split(' ');
+				words[words.length - 1] = value;
+			desc[0]['commentDes'] = words.join(' ');
+			_backtestInfo[criteriaDesc] = desc
+
+			// 修改value
+			let criteria = isJson(_backtestInfo[criteriaStr])
+				? JSON.parse(_backtestInfo[criteriaStr])
+				: _backtestInfo[criteriaStr]
+			let decodeRes = signalCode.decode(criteria.signals[0].code)
+			decodeRes.value = value
+			decodeRes.sc.value = value
+			criteria.signals[0].code = decodeRes
+			_backtestInfo[criteriaStr] = criteria
+			return this.encodeSignalsCond(_backtestInfo,criteriaStr)      
+		},
+		encodeSignalsCond(backtestData,criteria) {
+			const signalList = backtestData[criteria].signals
+			const isOnlyUseRiskControl = backtestData[criteria].relation == 0
+			const criteriaCapFirstL = capitalizeFirstLetter(criteria)
+			const signal_list = []
+			const b = new SignalCode()
+			/*
+			lishan:
+			isHandleIndicator 需要你去判断退场是否是 isOnlyUseRiskControl 判断条件是看 code 是否等于
+			SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999
+			如果是 isOnlyUseRiskControl 且 criteria 是 exit 则不需要处理编码和解码
+			*/
+			const isHandleIndicator = criteria == 'entry' || (criteria == 'exit' && !isOnlyUseRiskControl)
+			const findSignal = (item, index) => {
+				let signal = CIQ.findSentiIndicator(item.indicator, null)
+				if (!signal) {
+					signal = CIQ.findBuiltinTechIndicator(item.indicator, null)
+				}
+				// 在 symbol indicator list内检索url
+				if (!signal) {
+					if (CIQ.findSymbolIndicator(item.indicator, null)) {
+						return item.indicator
+					}
+				}
+
+				const usersOwnList = this.$store.state.form[`usersOwn${criteriaCapFirstL}FileHash`]
+				return usersOwnList[index] !== ''
+						? usersOwnList[index]
+						: signal?.url || ''
+			}
+
+			let signal = null
+			if(isHandleIndicator) signal = backtestData[criteria].signals.map(item => item.code).map(findSignal)
+
+			if (isOnlyUseRiskControl && criteria == 'exit') {
+				signal = ['']
+				signal_list.push({
+					code: 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999'
+				})
+			} else {
+				for (let i = 0; i < signalList.length; i++) {
+					console.log('未加密前的数据结构', signalList[i])
+					const _code = signalList[i].code
+					// 在此之前找出 sentiment indicator 的极值 lishan
+					if(typeof _code.ids == 'string'){
+						const regex = /EO([^\/]+)\/EP([^\/]+)/;
+						const match = _code.ids.match(regex);
+						_code.extreme_optimism = match[1]
+						_code.extreme_pessimism = match[2]
+					}
+
+					delete _code.sc
+					delete _code.ids
+					const code = b.encode(_code)
+					signal_list.push({
+						code: code
+					})
+				}
+			}
+			backtestData[criteria].signals = signal_list
+			backtestData[criteria] = JSON.stringify(backtestData[criteria])
+			return backtestData
 		},
 		showFLSMASK() {
 			const myFLSbg = document.querySelector('#myFLSbg')
@@ -900,7 +991,18 @@ export const CommonMethodsMixin = {
 						file_data: backtestParams
 					})
 					await uploadS3(S3DataStr)
-					const res = await runBacktest(backtestDataStr)
+					let res 
+					try {
+						res = await runBacktest(backtestDataStr)
+					} catch (error) {
+						if (error.response?.status == 403) {
+							_this.popUpMsgBox('The backtest name already exists')
+							_this.setSetUpLoadingSetting(false, false, 0, '')
+							CIQ.hideCover()
+							CIQ.nprogress.done()
+							return
+						}
+					}
 					if (res.status != 201) return
 					_this.$store.dispatch('states/set_isBacktestRunning_flag', true)
 					//After saving successfully, clear the backtestinfo back to the original state
@@ -910,9 +1012,9 @@ export const CommonMethodsMixin = {
 						'Backtest data upload successful, backtest is in progress, please wait patiently for the results...'
 					if (start_date && end_date) {
 						const year = end_date.split('-')[0] - start_date.split('-')[0]
-						if (year >= 10)
+						if (year > 10)
 							coverText =
-								'In the case of backtesting exceeding 10 years, anticipate longer processing times. We appreciate your patience...'
+								'In the case of backtesting exceeding 10 years, anticipate longer processing time. We appreciate your patience...'
 					}
 					_this.setSetUpLoadingSetting(true, true, 50, coverText)
 
@@ -966,6 +1068,74 @@ export const CommonMethodsMixin = {
 			}, 1000)
 		},
 
+		async pollingOPTResults(data) {
+			/*
+				根据 id 轮询回测结果
+				todo lishan
+			*/
+			const _this = this
+			return new Promise(async (resolve, reject) => {
+				const { id, name } = data
+				console.log('进入轮询')
+				_this.clearInterval = clearPromiseInterval
+				let timer = await setPromiseInterval(async () => {
+					try{
+						if(this.pollingState == false) {
+							this.popUpMsgBox('Optimization canceled')
+							resolve([])
+							await clearPromiseInterval(timer)
+						}
+
+						const res = await getOPTStatus(id)
+						// CIQ.nprogress.inc()
+						const status = res.data.opt_status
+						console.log('回测状态', status)
+						const response = res.data.data
+						// pollingState控制手动中断轮询请求
+						if (status == 1) {
+							console.log('结束轮询')
+
+							// 处理轮询结果的异常情况
+							let errMsg = ''
+							switch(res.data.status){
+								case 500:
+									errMsg = 'Optimizing error occur'
+									break;
+								case 431:
+									errMsg = res.data.msg
+									break;
+								case 432:
+									errMsg = res.data.msg
+									break;
+								case 435:
+									errMsg = res.data.msg
+									break;
+								case 204:
+									errMsg = res.data.data
+									break;
+								default:
+							}	
+							if(errMsg){
+								this.loading = false
+								this.close()
+								this.popUpMsgBox(errMsg)
+							}	
+
+							resolve(response) // 解决 Promise 表示轮询完成
+							await clearPromiseInterval(timer) // 使用 await 等待清除计时器
+						}
+					}catch(err){
+						console.log('轮询出现错误')
+						this.loading = false
+						this.close()
+						reject(err); // 如果错误是无法处理的，可以在这里调用 reject 并传递错误信息
+						await clearPromiseInterval(timer) // 使用 await 等待清除计时器
+					}finally{
+						
+					}
+				}, 1000)
+			})
+		},
 		async transformOldName(data,criteria){
 			const res = await getIndicatorsList()
 			const stockList = this.$store.state.chart.stocksList

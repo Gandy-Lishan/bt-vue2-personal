@@ -69,7 +69,7 @@
 			</div>
 			<div class="condition-container">
 				<el-form-item>
-					<el-form-item>
+					<el-form-item class="secondCondition">
 						<el-radio
 							v-model="radio"
 							@change="setRadio"
@@ -445,5 +445,8 @@ delay_bars: [String, Number],
 }
 .el-radio, /deep/ .el-form-item__label {
   margin-right: 5px;
+}
+.secondCondition.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+	margin-bottom: 0;
 }
 </style>

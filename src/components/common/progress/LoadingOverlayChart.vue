@@ -33,7 +33,7 @@ export default {
 	flex-direction: column;
   
 	position: absolute;
-	z-index: 1999;
+	z-index: 2000;
 	margin: 0;
 	top: 0;
 	right: 0;
@@ -42,7 +42,7 @@ export default {
 	transition: visibility .3s;
 }
 .progress-text{
-	font-size: 12px;
+	font-size: 16px;
 	color: #409eff;
 	margin-top: 10px;
 	i {

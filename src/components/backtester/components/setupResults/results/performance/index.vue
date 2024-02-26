@@ -41,6 +41,18 @@
           :rowFrequency="rowFrequency"
         ></TIM>
 			</el-tab-pane>
+      <el-tab-pane
+				label="Max Gain and Loss"
+				name="forth"
+			>
+        <MaxMin
+          ref="maxMinChild"
+          :tradesData="tradesData"
+          :tradePrice="tradePrice"
+          :editBacktestID="editBacktestID"
+          :rowFrequency="rowFrequency"
+        ></MaxMin>
+			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
 		</el-tabs>
 	</div>
@@ -53,6 +65,7 @@ import { seeReport } from '@/service/service'
 import Summary from './summary'
 import Trades from './trades'
 import TIM from './tim'
+import MaxMin from './MaxMin'
 const XLSX = require('xlsx');
 
 export default {
@@ -61,6 +74,7 @@ export default {
     Summary,
     Trades,
     TIM,
+    MaxMin
   },
   data() {
     return {
@@ -95,6 +109,7 @@ export default {
           let id = row.id
           vm.activePerTag = 'first'
           vm.rowFrequency = row.frequency
+          vm.tradePrice = row.trade_price == 0 ? 'Open' : 'Close'
           try {
             let res = null
             try {
@@ -117,10 +132,11 @@ export default {
               }
 
               // -------------------------------------  start ----------------
-              this.tradePrice = initalData['basic']['trade_price'] == 0 ? 'Open' : 'Close'// tim数据计算依赖backtester创建时选择的tradePrice类别，如Close/Open
+              // this.tradePrice = initalData['basic']['trade_price'] == 0 ? 'Open' : 'Close'// tim数据计算依赖backtester创建时选择的tradePrice类别，如Close/Open
 
               const tradeReturn = initalData['Each Return']
               const exitReason = initalData['Exit Reason'] ? initalData['Exit Reason'] : []
+              const marketCondition = initalData['MarketCondition'] ? initalData['MarketCondition'] : []
               data.uuid = initalData['UUID']
               data.symbol = initalData['Symbol']
               data.frequency = initalData['Frequency']
@@ -161,6 +177,7 @@ export default {
               data.annualReturnsImageUploaded =
                 initalData['Annual Returns Image Uploaded']
               data.annualReturnsFileURL = initalData['Annual Returns File URL']
+              data.equityCurveFileURL = initalData['Equity Curve File URL'] || null
               data.returnsheatmapImageUploadedURL =
                 initalData['Returns Heatmap Image Uploaded']
               data.returnsHeatmapFileURL =
@@ -185,6 +202,9 @@ export default {
                   initalData['Trades'][i].ExitReason =
                     exitReason[initalData['Trades'][i].trade_number]
 
+                  initalData['Trades'][i].MarketCondition =
+                    (!marketCondition[initalData['Trades'][i].trade_number] || marketCondition[initalData['Trades'][i].trade_number]?.length == 0) ? ['N\/A'] : marketCondition[initalData['Trades'][i].trade_number]
+                  
                   if (i % 2 !== 0) {
                     initalData['Trades'][i - 1].Return =
                       initalData['Trades'][i].Return
@@ -202,6 +222,7 @@ export default {
                   // 这里访问prepareData，确保子组件内的tradesData已经更新
                   const datatime = new Date(initalData['basic']['start_date'])
                   this.$refs.timChild.prepareData(row.id,datatime)
+                  this.$refs.maxMinChild.prepareData(row.id,datatime)
                 });
               }
               // ------------------------------ end -----------------------------------
@@ -265,15 +286,20 @@ export default {
     },
     group(data) {
       var result = []
-      var groupItem
-      for (var i = 0; i < data.length; i++) {
-        if (i % 500 == 0) {
-          groupItem != null && result.push(groupItem)
-          groupItem = []
-        }
-        groupItem.push(data[i])
-      }
-      result.push(groupItem)
+
+    // 交易数据分组
+      // var groupItem
+      // for (var i = 0; i < data.length; i++) {
+      //   if (i % 500 == 0) {
+      //     groupItem != null && result.push(groupItem)
+      //     groupItem = []
+      //   }
+      //   groupItem.push(data[i])
+      // }
+      // result.push(groupItem)
+    
+    // 不分组，一次性加载全部
+      result.push(data)
       return result
     },
     filterMarkerDate(start_date, end_date, markerSet) {
@@ -299,16 +325,18 @@ export default {
 
       // 触发tim clear form
       this.$refs.timChild?.clearData()
+      this.$refs.maxMinChild?.clearData()
     },
     handleDownloadCsv() {
       const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, periods, defaultTIMTableLabels, defaultTableLabels} = this.$refs.timChild.exportData()
-      
+      const {maxMinData} = this.$refs.maxMinChild.exportData()
       if (
         !(
           this.tableData.length &&
           this.tradesData.length &&
           backtestHistoryList.length &&
-          TIMHistoryList.length
+          TIMHistoryList.length &&
+          maxMinData.length
         )
       ) {
         this.popUpMsgBox('No data available for download')
@@ -362,33 +390,34 @@ export default {
         obj['Trade #'] = index + 1
         obj['Trade Date'] = item.Date
         obj['Action'] = item.TradeStatus
-        obj['Indicator'] = item.Indicator.join(',')
+        obj['Indicator'] = item.Indicator.join(';')
         obj['Trade Price'] = item.TradePrice
         obj['Exit Reason'] = item.ExitReason
         obj['Trade Return %'] = `${item.TradeReturn}%`
         obj['Total Return %'] = `${(item.Return * 100).toFixed(2)}%`
+        obj['Market Condition'] = item.MarketCondition.join(';')
         tradeData.push(obj)
       })
-
       const mergedData = [];
 
       for (let i = 0; i < tradeData.length; i += 2) {
         const entryData = tradeData[i];
         const exitData = tradeData[i + 1] || {}; // 确保后面有对象或使用一个空对象
         // 转换日期格式
-        const formatEntryDate = new Date(entryData['Trade Date']).toLocaleDateString();
-        const formatExitDate = exitData['Trade Date'] ? new Date(exitData['Trade Date']).toLocaleDateString() : '';
+        const formatEntryDate = entryData['Trade Date'].replaceAll('-','/')
+        const formatExitDate = exitData['Trade Date'] ? exitData['Trade Date'].replaceAll('-','/') : '';
         mergedData.push({
           'Entry Date': formatEntryDate,
-          Action: entryData.Action.toUpperCase(),
+          'Entry Action': entryData.Action.toUpperCase(),
           'Entry Price': entryData['Trade Price'],
           'Entry Indicator': entryData.Indicator || '',
           'Exit Date': formatExitDate,
-          Action: exitData.Action.toUpperCase(),
+          'Exit Action': exitData.Action.toUpperCase(),
           'Exit Price': exitData['Trade Price'] || '',
           'Trade Return': exitData['Trade Return %'] || '',
-          'Total Return': exitData['Trade Return %'] || '',
+          'Total Return': exitData['Total Return %'] || '',
           'Exit Reason': exitData['Exit Reason'] || '',
+          'Market Condition': exitData['Market Condition'] || 'N\/A',
           'Exit Indicator': exitData.Indicator || ''
         });
       }
@@ -405,13 +434,20 @@ export default {
           _backtestHistoryList.push(obj)
         })
         result_quotes.forEach(item => {
-          const zscore = {}
-          zscore['Entry Date'] = item['property']
-          for(var i=1;i < defaultTableLabels.length;i++ ){
-            zscore[defaultTableLabels[i]] = item[periods[i-1].period]
+          const zscore = {};
+          zscore['Entry Date'] = item['property'];
+          for (let i = 1; i < defaultTableLabels.length; i++) {
+            const value = item[periods[i - 1].period];
+            // 检查值是否有效
+            if (!isNaN(value) || (typeof value === 'string' && value.endsWith('%'))) {
+              zscore[defaultTableLabels[i]] = value;
+            } else {
+              zscore[defaultTableLabels[i]] = ''; // 或者您可以设置为其他默认值
+            }
           }
-          _backtestHistoryList.push(zscore)
-        })
+          _backtestHistoryList.push(zscore);
+        });
+
       // Exit with Customized TIM
         const _TIMHistoryList = []
         TIMHistoryList.forEach((item) => {
@@ -425,22 +461,46 @@ export default {
         TIMResult_quotes.forEach(item => {
           const zscore = {}
           zscore['Entry Date'] = item['property']
-          for(var i=1;i < defaultTIMTableLabels.length;i++ ){
-            zscore[defaultTIMTableLabels[i]] = item[periodsTIM[i-1].period]
+          for (let i = 1; i < defaultTIMTableLabels.length; i++) {
+            const value = item[periodsTIM[i - 1].period];
+            // 检查值是否有效
+            if (!isNaN(value) || (typeof value === 'string' && value.endsWith('%'))) {
+              zscore[defaultTIMTableLabels[i]] = value;
+            } else {
+              zscore[defaultTIMTableLabels[i]] = ''; // 或者您可以设置为其他默认值
+            }
           }
           _TIMHistoryList.push(zscore)
         })
+        
+        const _maxMinData = maxMinData.map(item => {
+          const transformedItem = {
+            "Dates of 1 Signals": item["Dates of 1 Signals"],
+          };
+
+          Object.keys(item).forEach(key => {
+            if (key !== "Dates of 1 Signals" && key !== "Max Gain" && key !== "Max Loss") {
+              Object.keys(item[key]).forEach(subKey => {
+                transformedItem[`${key} - ${subKey}`] = item[key][subKey];
+              });
+            }
+          });
+
+          return transformedItem;
+        });
       const dataList = [
         summary,
         mergedData,
         _backtestHistoryList,
-        _TIMHistoryList
+        _TIMHistoryList,
+        _maxMinData
       ]
       const sheetNames = [
         'Summary',
         'Trades',
         'Exit with default Time Frame',
-        'Exit with Customized TIM'
+        'Exit with Customized TIM',
+        'Max Gain and Loss'
       ]
       this.exportDataToCSV(dataList, sheetNames)
     },
@@ -509,7 +569,7 @@ export default {
 	padding-bottom: 20px;
 }
 .performance_tabs {
-  width: 1140px;
+  width: 1200px;
   margin: 0 auto;
 }
 .pagination-container {

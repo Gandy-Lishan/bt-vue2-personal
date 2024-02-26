@@ -1,7 +1,7 @@
 <template>
   <div class="create-indicator-container">
     <div class="chart">
-      <MIChart :chart_data="chart_data"></MIChart>
+      <MIChart :default_symbol='default_symbol' :chart_data="chart_data"></MIChart>
     </div>
     <div class="form">
       <MIForm :formConfig="formConfig" :formData="formData" ref="MIForm"></MIForm>
@@ -113,10 +113,18 @@ export default {
 			next()
 		}
 	},
+  created() {
+    // 如果不携带表单参数则显示默认symbol并分段加载
+    if (this.$route.params.usedFor && this.$route.params.usedFor === 'showMyIndicators'){
+      this.default_symbol = ''
+    }else{
+      this.default_symbol = process.env.VUE_APP_DEFAULT_SYMBOL
+    }
+  },
   components: {
     MIForm,
     MIChart
-  }
+  },
 }
 </script>
 
@@ -130,7 +138,7 @@ export default {
 
 .chart {
   background-color: #f0f0f0; /* 图表部分的样式 */
-  padding: 20px;
+  margin: 20px;
 }
 
 .form {
@@ -148,7 +156,7 @@ export default {
 	margin: 0 auto;
 	flex-direction: column;
   .progress-text{
-	font-size: 12px;
+	font-size: 16px;
 	color: #409eff;
 	margin-top: 10px;
 	i {

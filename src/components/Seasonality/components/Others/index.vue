@@ -18,7 +18,7 @@
               1.Symbol   
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  >Choose a stock/index/ETF as symbol.(default:SPY)</span>
+                  >Choose a stock/index/ETF as symbol.(default:SPX)</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -128,7 +128,7 @@ export default {
   data() {
     return {
       data: {
-        symbol: 'SPY',
+        symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
         category: 0,
         start_date: (new Date().getFullYear() - 20).toString(),
         end_date:  new Date().getFullYear().toString(),
@@ -146,7 +146,7 @@ export default {
         endPickerOptions: {
           disabledDate: this.handleDisabledEndDate
         },
-        symbol: 'SPY',
+        symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
         plotConfiguration: {
           title: 'Nasdaq Composite Avg Return Month',
           subtitle: '1971-2011',

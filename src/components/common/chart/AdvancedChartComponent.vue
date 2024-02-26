@@ -124,7 +124,7 @@
 
 					<cq-menu class="ciq-menu ciq-studies collapse" cq-focus="input" @click="collapseStudies">
 						<span>Studies</span>
-						<cq-menu-dropdown>
+						<cq-menu-dropdown style="width:400px;">
 							<cq-study-legend cq-no-close>
 								<cq-section-dynamic>
 									<cq-heading>Current Studies</cq-heading>
@@ -180,6 +180,7 @@
 								<cq-heading>Y-Axis Preferences</cq-heading>
 								<cq-menu-container
 									cq-name="menuYAxisPreferences"
+									ref="yAxisPreferencesMenu"
 								></cq-menu-container>
 								<cq-separator></cq-separator>
 							</cq-menu-dropdown-section>
@@ -349,6 +350,7 @@ import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 // import jutils from 'jutils-src'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
+const throttle = require('lodash/throttle')
 const jutils = require("jutils-src")
 
 @Component({})
@@ -385,14 +387,17 @@ export default class AdvancedChartComponent extends Vue {
 			// If your feed returns data already rolled up in monthly or weekly ticks, 
 			// you can override this behavior by setting stxx.dontRoll to true
 			CIQ.stxx.dontRoll = true
+			CIQ.stxx.maxDataSetSize = 0
+			// Minimum candleWidth (in pixels) allowed when zooming out. Determines the maximum number of ticks to display on the chart.
+			CIQ.stxx.minimumCandleWidth = 0.06;
 			CIQ.periodicity = {period:1, interval:1, timeUnit:'day'}
 
 			var iter = CIQ.stxx.chart.market.newIterator({
-			interval: CIQ.stxx.layout.interval,
-			periodicity: CIQ.stxx.layout.periodicity,
-			timeUnit: CIQ.stxx.layout.timeUnit,
-			inZone: CIQ.stxx.dataZone,
-			outZone: CIQ.stxx.displayZone,
+				interval: CIQ.stxx.layout.interval,
+				periodicity: CIQ.stxx.layout.periodicity,
+				timeUnit: CIQ.stxx.layout.timeUnit,
+				inZone: CIQ.stxx.dataZone,
+				outZone: CIQ.stxx.displayZone,
 			});
 			
 			CIQ.studys = []
@@ -402,8 +407,12 @@ export default class AdvancedChartComponent extends Vue {
 			}
 			
 			// 默认为折线图
-			CIQ.stxx.setChartType("line"); 
+			CIQ.stxx.setChartType("line");
 
+			// 防止Chartiq图表对主页面的鼠标滚轮事件产生冲突
+			//CIQ.stxx.captureMouseWheelEvents = false 
+
+			// CIQ.ChartEngine.YAxis.prototype.decimalPlaces=6;
 			CIQ.ChartEngine.prototype.prepend("draw", function () {
 	
 			});
@@ -417,47 +426,75 @@ export default class AdvancedChartComponent extends Vue {
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })		
 
 			this.initializeToggle(uiContext.stx)
-			
-			CIQ.stxx.addEventListener("scroll", function(object: Record<string, any> = {}) {
-
-				// an event handle for updating trade marker when dragging the chart
-				if(CIQ.store.getters.getIsMarkerShownFlagState){
-					let c_date = jutils.formatDate(object.stx.chart.xaxis[0].DT, 'YYYYMMDD');
-					if(CIQ.groups.slice(-1)[0]){
-						let m_date =
-								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
-								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
-								CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
-						if(c_date<m_date){
-							let markers = CIQ.groups.pop()
+			// var _this = this
+			// // 鼠标事件加入防抖节流
+			// CIQ.stxx.addEventListener("scroll", throttle(function(object: Record<string, any> = {}) {
+			// 	// // an event handle for updating trade marker when dragging the chart
+			// 	// if(CIQ.store.getters.getIsMarkerShownFlagState){
+			// 	// 	let c_date = jutils.formatDate(object.stx.chart.xaxis[0].DT, 'YYYYMMDD');
+			// 	// 	if(CIQ.groups.slice(-1)[0]){
+			// 	// 		let m_date =
+			// 	// 				CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
+			// 	// 				CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
+			// 	// 				CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
+			// 	// 		if(c_date<m_date){
+			// 	// 			let markers = CIQ.groups.pop()
 							
-							console.log("new pagnigation start",markers)
-							CIQ.loadChart(markers, CIQ.addMarker)
-						}
-					}
-				}
-			});
+			// 	// 			console.log("new pagnigation start",markers)
+			// 	// 			CIQ.loadChart(markers, CIQ.addMarker)
+			// 	// 		}
+			// 	// 	}
+			// 	// }
+			// 	_this.resizePatternMatch()
+			// },300));
+
+			// // 方案（layout事件里对y轴拖动检测不到）
+			// // 监听图表的Layout事件（针对zoomin  zoomout用于更新模式匹配Drawing）
+			// CIQ.stxx.addEventListener("layout", function (e) {
+			// 	console.log('监听图表的layout事件（zoomin',e)
+			// 	_this.resizePatternMatch()
+			// });
+
+			// // 方案（setter进不去）
+			// // // 获取原始的 Y 轴属性值
+			// var originalYAxisHigh = CIQ.stxx.chart.yAxis;
+			// // 定义一个 Y 轴属性的 setter 函数
+			
+			// Object.defineProperty(CIQ.stxx.chart.yAxis, 'zoom', {
+			// 	get: function() {
+			// 		return originalYAxisHigh;
+			// 	},
+			// 	set: function(newValue) {
+			// 		// 当 Y 轴属性变化时执行的操作
+			// 		console.log('Y 轴属性发生了变化:', newValue);
+			// 		originalYAxisHigh = newValue;
+			// 		// 可以在这里添加其他需要执行的操作
+
+			// 		_this.resizePatternMatch()
+			// 	}
+			// });
 		}, 0)			
 	}
 	// initiate lastPrice and grid button
 	initializeToggle(stx: any) {
 		// a listener for observing tooltip button's action
-		const tooltip = document.getElementsByClassName("ciq-HU")[0] as HTMLButtonElement;
-		tooltip.onclick = function(){
-			tooltip.classList.remove("active");	
-			if (stx.layout.headsUp.floating == true){	
-				tooltip.classList.remove("activated");	
-				stx.layout.headsUp.floating = false	
-			}
-			else{
-				tooltip.classList.add("activated");
-				stx.layout.headsUp.floating = true
-			}
-		}
+		// const tooltip = document.getElementsByClassName("ciq-HU")[0] as HTMLButtonElement;
+		// tooltip.onclick = function(){
+		// 	tooltip.classList.remove("active");	
+		// 	if (stx.layout.headsUp.floating == true){	
+		// 		tooltip.classList.remove("activated");	
+		// 		stx.layout.headsUp.floating = false	
+		// 	}
+		// 	else{
+		// 		tooltip.classList.add("activated");
+		// 		stx.layout.headsUp.floating = true
+		// 	}
+		// }
 
-		stx.layout.headsUp = "floating";
-		var mNode = document.getElementsByClassName("ciq-HU")[0]
-		mNode.classList.add("activated");
+		stx.layout.headsUp={floating:true};
+		//stx.layout.headsUp = "floating";
+		// var mNode = document.getElementsByClassName("ciq-HU")[0]
+		// mNode.classList.add("activated");
 		
 		stx.layout.lastPriceLabel = false;
 		stx.chart.yAxis.drawCurrentPriceLabel = false;
@@ -494,6 +531,7 @@ export default class AdvancedChartComponent extends Vue {
 		});
 		
 		// 防止跳转到backtester时保留了Hammer followed by a raise等marker
+		CIQ.objIndicator = []
 		CIQ.store.dispatch('chart/reset_chart_study_state')
 		CIQ.store.dispatch('form/reset_chart_config_state')
 
@@ -516,23 +554,43 @@ export default class AdvancedChartComponent extends Vue {
 			calculateFN: CIQ.Studies.calculateSTMADev,
 			inputs: { "Points Or Percent": ["Percent","Points"] },
 		});
+		CIQ.extend(CIQ.Studies.studyLibrary["rsi"], {
+			name: "Relative Strength Index (RSI)",
+		});
 	}
 
+	// 工具栏按钮移除和显示marker功能，只影响显示
+	// 目前只能移除和显示当前分组的交易marker，所以先渲染全部，权衡到性能已被优化
 	changeMarkerVisibility(type) {
-		let markerClassName = type == 'buy'?'analysis':'dividend' 
-		let dotClassName = type == 'buy'?'trade-buy':'trade-sell' 
+		// let markerClassName = type == 'buy'?'analysis':'dividend' 
+		// let dotClassName = type == 'buy'?'trade-buy':'trade-sell' 
 		
-		let markers = document.getElementsByClassName(`stx-marker ${markerClassName}`)
-		let dots = document.getElementsByClassName(`stx-marker ${dotClassName}`)
+		// let markers = document.getElementsByClassName(`stx-marker ${markerClassName}`)
+		// let dots = document.getElementsByClassName(`stx-marker ${dotClassName}`)
 
-		let display = markers[0].style.display=='none'?'block':'none'
+		// let display = markers[0].style.display=='none'?'block':'none'
 
-		for(var ele of markers){ 
-			ele.style.display = display 
+		// for(var ele of markers){ 
+		// 	ele.style.display = display 
+		// }
+		// for(var ele of dots){ 
+		// 	ele.style.display = display 
+		// }
+
+		CIQ.setMarkerVisibility(type)
+	}
+
+	resizePatternMatch() {
+		const yAxis = CIQ.stxx.chart.yAxis	
+		console.log(yAxis)
+		const offset = (yAxis.high-yAxis.low)/4			// 依据Y轴长度设定的偏移量，以保证模式匹配阴影覆盖整个高度
+		for(var i=0;i<CIQ.stxx.drawingObjects.length;i++){
+			var myDrawing=CIQ.stxx.drawingObjects[i];
+			myDrawing.v0 = yAxis.high + offset
+			myDrawing.v1 = yAxis.low - offset
+			myDrawing.adjust()
 		}
-		for(var ele of dots){ 
-			ele.style.display = display 
-		}
+		CIQ.stxx.draw();
 	}
 }
 

@@ -33,7 +33,7 @@ import {CIQ} from "chartiq/js/chartiq.js";
 			// Symbol can be string or
 			// or an object containing property symbol of string type along with other properties
 			initialSymbol: {
-				symbol: "SPX",
+				symbol: 'SPX',
 				name: "S&P 500 (SPX)",
 				exchDisp: "NASDAQ"
 			},
@@ -554,7 +554,7 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"url": "LLV"
 						},
 						{
-							"name": "Relative Strength Index",
+							"name": "Relative Strength Index (RSI)",
 							"url": "rsi"
 						},
 						{
@@ -648,6 +648,42 @@ import {CIQ} from "chartiq/js/chartiq.js";
 						{
 							"name": "Commodity Channel Index",
 							"url": "cci"
+						},
+						{
+							"name": "% of Opening Gap",
+							"url": "% of Opening Gap"
+						},
+						{
+							"name": "Day of Week",
+							"url": "Day of Week"
+						},
+						{
+							"name": "Month of Year",
+							"url": "Month of Year"
+						},
+						{
+							"name": "# of Consecutive Days Since an N-Day High",
+							"url": "# of Consecutive Days Since an N-Day High"
+						},
+						{
+							"name": "# of Consecutive Days Since an N-Day Low",
+							"url": "# of Consecutive Days Since an N-Day Low"
+						},
+						{
+							"name": "# of Consecutive Days Up",
+							"url": "# of Consecutive Days Up"
+						},
+						{
+							"name": "# of Consecutive Days Down",
+							"url": "# of Consecutive Days Down"
+						},
+						{
+							"name": "# of Consecutive Days Above a Moving Average",
+							"url": "# of Consecutive Days Above a Moving Average"
+						},
+						{
+							"name": "# of Consecutive Days Below a Moving Average",
+							"url": "# of Consecutive Days Below a Moving Average"
 						}
 					]
 				},

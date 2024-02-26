@@ -10,7 +10,7 @@
           If your browser is relatively new, you will be able to click each of the column headings and have the table sort in ascending and descending order (if you click twice). It may take the table a few seconds to sort since there are so many data points.
         </p> 
         <p>
-          Taking SPY, “Date Range” picks in 2003-2023 as an example, click on the "% Pos" heading once and the table will put the most negative days at the top of the table. When you do so, February 29th comes to the top. So, you now know that day in February has been the most negative for the SPY. 
+          Taking SPX, “Date Range” picks in 2003-2023 as an example, click on the "% Pos" heading once and the table will put the most negative days at the top of the table. When you do so, February 29th comes to the top. So, you now know that day in February has been the most negative for the SPX. 
         </p>
         <p>
           If you click on the "% Pos" heading once again, the table will re-sort and put the most positive days at the top of the table. Near the top is the September 11th, meaning that day in September is usually one of the most positive days out of any other day of any other month.
@@ -56,14 +56,15 @@
           </el-descriptions-item>
         </el-descriptions>
       </div>
-            <div class="thumbnail" v-else>
+      <div class="thumbnail" v-else>
         <h4 style="text-align: center">Seasonality by Day of Year</h4>
         <p>
           To get a better feel for which days of the year have been consistently profitable, this table outlines the historical performance of each trading day of the year for the symbol data you selected from the start year through the end year.
         </p>
-        <p>
+        <p v-if="option == 3">
           If your browser is relatively new, you will be able to click each of the column headings and have the table sort in ascending and descending order (if you click twice). It may take the table a few seconds to sort since there are so many data points.
         </p>
+        <p>Highlighted rows represent the latest trading day of the year.</p>
         <el-divider></el-divider>
         <h5>Table Description</h5>
         <el-descriptions :column="1" :size="size" border>
@@ -100,8 +101,9 @@
         </el-descriptions>
       </div>
     </div>
+    <!-- <span v-if="option == 3" class="Hits">Highlighted rows indicate the current day.</span> -->
     <el-table
-			ref="MITable"
+			ref="CPMTable"
 			class="my-indicator-table other-table default-table-class"
 			:data="tableData"
 			:row-class-name="tableRowClassName"
@@ -115,7 +117,7 @@
       border
 		>
 			<template v-for="(l) in tableCol">
-        <el-table-column
+        <!-- <el-table-column
           align="center"
 					:label="l.label"
 					:prop="l.value"
@@ -133,7 +135,22 @@
               {{ scope.row[l.value] != undefined ? scope.row[l.value] : '' }}
 						</p>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
+        <el-table-column
+          align="center"
+          :label="l.label"
+          :prop="l.value"
+          :key="l.key"
+          sortable
+          :sort-orders="['ascending', 'descending']"
+          v-if="(l.label == 'Day' && option == 3) || (l.label == 'Day' && option == 2) || (l.label == 'Month' && option == 2)"
+        >
+          <template slot-scope="scope">
+            <p class="tableText" :class="getCellStyle(scope.row[l.value])">
+              {{ scope.row[l.value] !== undefined ? scope.row[l.value] : '' }}
+            </p>
+          </template>
+        </el-table-column>
         <el-table-column
           align="center"
 					:label="l.label"
@@ -145,7 +162,7 @@
 				>
 					<template slot-scope="scope">
 						<p class="tableText" :class="getCellStyle(scope.row[l.value])">
-              {{ scope.row[l.value] != undefined ? `${scope.row[l.value]} %` : '' }}
+              {{ scope.row[l.value] != undefined ? `${scope.row[l.value]}%` : '' }}
 						</p>
 					</template>
 				</el-table-column>
@@ -168,7 +185,8 @@ export default {
   name: 'Table',
   props: {
     tableData: Array,
-    option: Number
+    option: Number,
+    tradingIndex: [Number, String]
   },
   data() {
     return {
@@ -215,22 +233,16 @@ export default {
   watch: {
     tableData: {
       handler(newVal) {
-        // this.loading = true
-        // const startIndex = (this.currentPage - 1) * this.pageSize;
-        // const endIndex = startIndex + this.pageSize;
-        // // 当checkbox未勾选时，返回原始数据
-        // this.loading = false
-        // this.paginatedData =  newVal.slice(startIndex, endIndex);
       },
       deep: true,
       immediate: true
     }
   },
+  mounted() {
+  },
   methods: {
     tableRowClassName({row, rowIndex}) {
-			if (rowIndex%2 === 1) {
-			return 'darken-row'
-			}
+      if(rowIndex == (this.tradingIndex-1) && this.option == 3) return 'highlighted'
 			return ''
 		},
     handleSizeChange(size) {
@@ -347,13 +359,27 @@ export default {
   -o-transition: all .2s ease-in-out;
   transition: all .2s ease-in-out;
   color: #333;
+  font-weight: 500;
   font-family: "Open Sans",sans-serif;
 }
 .default-table-class {
-  width: 1140px;
+  width: 1200px;
 }
-th.el-descriptions-item__cell.el-descriptions-item__label.is-bordered-label{
+/deep/ th.el-descriptions-item__cell.el-descriptions-item__label.is-bordered-label{
   font-weight: 600;
   color: #333;
+}
+/deep/ td.el-descriptions-item__cell.el-descriptions-item__content{
+  font-weight: 500;
+  color: #333;
+}
+.el-table /deep/ tr.highlighted{
+  background-color: yellow;
+}
+.Hits {
+  position: absolute;
+  top: 100px;
+  left: 510px;
+  font-size: 14px;
 }
 </style>

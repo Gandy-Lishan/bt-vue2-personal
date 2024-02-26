@@ -9,6 +9,33 @@
  /* global _CIQ, _timezoneJS, _SplinePlotter */
  
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
+    // CPM暂时放这
+    CIQ.displayCPMLayout = async function(chart_data,cb){
+        let symbol =  chart_data.symbol
+        let timeframe = chart_data.timeframe
+
+        CIQ.addCover()
+        CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
+        CIQ.store.commit('form/getFrequency', timeframe) //考虑到addSeries必须写死timeframe
+        CIQ.store.commit('form/getBacktestSymbol', symbol)
+        CIQ.stxx.loadChart({ 
+                symbol: symbol, 
+                // 这边先写死范围，防止其他indicator无法pagination
+                startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+            },
+            function () {
+                // 有result的情况下(success)执行此回调并计算TIM
+                if(chart_data.result){
+                    CIQ.createCorrelationPatternMatchDrawing(chart_data.result)
+                    CIQ.createCPMMarker(chart_data.result)
+                    cb()
+                }
+
+                CIQ.hideCover()
+                CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+            }
+        ) 
+    }
     // user's own indicator的 weight indicator加载函数单独设定
     //var symbol
 
@@ -44,7 +71,7 @@
         CIQ.store.commit('form/getFrequency', findTimeFrame(indicatorList)) //考虑到addSeries必须写死timeframe
         await addIndicatorStudy(addedItems.map(item=>item.indicator_url))
         CIQ.stxx.loadChart({ 
-                symbol: symbolList.length?symbolList[0].indicator_url:'SPX', 
+                symbol: symbolList.length?symbolList[0].indicator_url:CIQ.stxx.chart.symbol, 
                 indicator:[...indicatorList.map(item=>item.indicator_url),combinedStudy] ,
                 // 这边先写死范围，防止其他indicator无法pagination
                 startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
@@ -401,7 +428,7 @@
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)
             CIQ.stxx.loadChart(	{ 
-                symbol: 'SPX', 
+                symbol: process.env.VUE_APP_DEFAULT_SYMBOL, 
                 indicator:[newData.indicator1.url,newData.indicator2.url,newData.url],
                 startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
             }, function(){
@@ -478,7 +505,7 @@
         // fetch indicator information and add studies to chart
         await getUserOwnIndicatorMatedata(indicator,extremeLines)
         CIQ.stxx.loadChart(	{ 
-            symbol: symbol?symbol:'SPX', 
+            symbol: symbol?symbol:CIQ.stxx.chart.symbol, 
             indicator:indicatorList,
             startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
         },()=>{

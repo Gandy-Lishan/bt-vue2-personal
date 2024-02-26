@@ -18,7 +18,7 @@ let __st_js_maLayout_ = (_exports) => {
         if (url == 'ma'){
             // keep current MA
             var objMA = {
-                period: period ? period : 20,
+                period: period ? period : 21,
                 type: type ? type : 'simple',
                 field: field ? field : 'Close',
                 criteria: criteria,

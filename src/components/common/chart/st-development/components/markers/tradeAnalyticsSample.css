@@ -6,6 +6,7 @@ body .ta_markers-ui {
 .stx-marker {
 	/* transform: translateX(10px); */
 }
+/* 设定传统marker和dot样式 */
 .stx-marker.analysis .stx-visual {
 	width: 0 !important;
     height: 0 !important;
@@ -24,16 +25,16 @@ body .ta_markers-ui {
 .stx-marker.dividend .stx-visual {
 	width: 0 !important;
     height: 0 !important;
-	border-top: 21px #d81e06 solid;
-    border-left: 12px solid transparent;
-    border-right: 12px solid transparent;
+	border-top: 21px #d81e06 solid !important;
+    border-left: 12px solid transparent !important;
+    border-right: 12px solid transparent !important;
 	background-color: transparent !important;
 
-	position: relative;
-    bottom: 25px;
-	right: 0px;
-	transform-style: preserve-3d;
-	z-index: 2;
+	position: relative !important;
+    bottom: 25px !important;
+	right: 0px !important;
+	transform-style: preserve-3d !important;
+	z-index: 2 !important;
 }
 
 .dividend .stx-stem {
@@ -58,21 +59,6 @@ body .ta_markers-ui {
 	border-left: 1px dotted rgb(26 250 41); 
 	position: relative;
 	z-index: 1;
-}
-
-.stx-marker.trade-buy .stx-visual{
-	border-radius: 50% !important ;
-	width: 10px !important;
-	height: 10px !important;
-	background-color: rgb(26 250 41) !important;
-	background-position: -20px -20px !important;
-}
-.stx-marker.trade-sell .stx-visual{
-	border-radius: 50% !important;
-	width: 10px !important;
-	height: 10px !important;
-	background-color: rgb(216 30 6) !important;
-	background-position: -20px -20px !important;
 }
 
 .ciq-night .stx-marker.dividend .stx-visual:after {
@@ -180,12 +166,66 @@ body .ta_markers-ui {
 	transform: translateZ(-1px);
 }
 
-.stx-performance-marker.stx-marker-expand h4 {
+/* 性能模式marker & dot */
+.stx-performance-marker.stx-marker-expand {
+	background: rgba(255, 255, 255, 0.75);
+	width: 200px;
+	max-height: 200px;
+	padding: 11px;
+	opacity: 1;
+	color: #000;
 	display: block;
+	outline: 1px solid rgba(0, 0, 0, 0.15);
+	overflow: auto;
+	position: relative; 
+	bottom: 135px;
+	left: 30px;
+	text-align: left;
 }
+.stx-performance-marker.stx-marker-expand p,
+.stx-performance-marker.stx-marker-expand h4{
+	display: block;
+  	margin: 0; 
+}
+
 
 .stx-marker.analysis p {
 	text-align: left;
 	white-space: pre-line;
 }
 
+.stx-marker.sell .stx-visual {
+	width: 10px !important;
+    height: 10px !important;
+	background-color: #d81e06 !important;
+}
+.stx-marker.buy .stx-visual {
+	width: 10px !important;
+    height: 10px !important;
+	background-color: #1afa29 !important;
+}
+.stx-marker .stx-stem {
+	/* 这里统一设定高度，但是其他样式比如颜色和y轴偏移量不能改，在js内修改 */
+	height: 22px;
+}
+.stx-marker.trade-buy .stx-visual{
+	border-radius: 50% !important ;
+	width: 10px !important;
+	height: 10px !important;
+	background-color: rgb(26 250 41) !important;
+	background-position: -20px -20px !important;
+}
+.stx-marker.trade-sell .stx-visual{
+	border-radius: 50% !important;
+	width: 10px !important;
+	height: 10px !important;
+	background-color: rgb(216 30 6) !important;
+	background-position: -20px -20px !important;
+}
+.stx-marker.highlowline .stx-visual {
+	border-radius: 50% !important;
+	width: 8px !important;
+	height: 8px !important;
+	background-color: #5B9BD1 !important;
+	background-position: -16px -16px !important;
+}

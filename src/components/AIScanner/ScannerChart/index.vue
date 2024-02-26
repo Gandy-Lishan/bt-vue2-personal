@@ -282,7 +282,7 @@ computed: {
 	}
 }
 .aiResultsTable{
-	width: 1140px; 
+	width: 1200px; 
 	height: 100%; 
 	margin: 0 auto
 }

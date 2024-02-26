@@ -3814,7 +3814,6 @@ CIQ.UI.Layout.prototype.reloadChart = function() {
 	// remove markers, prompt, recover timeframe dropdown
 	CIQ.removePrompt()
 
-	//CIQ.isMarkerShown = false
 	CIQ.store.dispatch('states/set_isMarkerShown_flag', false)
 	document.getElementsByClassName('ciq-period')[0].style.display = 'block'
 
@@ -6066,7 +6065,6 @@ class Chart {
 		this.initKeystrokeHub(uiContext)
 		uiContext.changeSymbol = function(data, cb) {
 			const { stx, loader, node } = uiContext
-
 			console.log('before createChartAndUI: ')
 			// to replace the useless loader
 			var loaderMain = document.querySelector('.loaderMain')
@@ -6079,6 +6077,10 @@ class Chart {
 				Object.values(stx.chart.series)
 					.filter(removeSeries)
 					.forEach(series => stx.removeSeries(series.id))
+			}
+			//这里是chartiq初始化后的第一次调用loadChart,如果是CPM则数据全部加载
+			if(window.location.pathname.includes('/cpm/results')){
+				data.startDate = new Date(parseInt(process.env.VUE_APP_START_DATE))
 			}
 			stx.loadChart(data, { masterData: data._masterData }, function(err) {
 				// don't add mask when initiating a chart
@@ -6315,7 +6317,6 @@ class Chart {
 			} = {},
 			loader
 		} = uiContext
-
 		// 初始化chartiq加遮罩层
 		CIQ.addCover()
 		if (loader) loader.show()

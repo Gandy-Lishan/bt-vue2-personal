@@ -377,6 +377,7 @@ delay_bars: [String, Number],
 		},
 		setEditData(newVal) {
 			if (JSON.stringify(newVal) != '{}') {
+				debugger
 				this.clearFormValidate()
 				let obj = newVal[this.criteria].signals[this.panelIndex]
 				this.tech.ids = obj.ids
@@ -389,6 +390,7 @@ delay_bars: [String, Number],
 				if (this.tech.comparison === 'MACDH') {
 					this.radio = 'Indicator Hist'
 					this.histCondition = Number(obj.condition)
+					this.tech.histValue = obj.value
 				}
 				if (this.tech.value !== 'SL' && this.tech.comparison === 'MACD') {
 					this.radio = 'Indicator Value'

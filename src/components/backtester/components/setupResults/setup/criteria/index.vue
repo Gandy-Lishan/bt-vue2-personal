@@ -1023,7 +1023,7 @@ export default {
 			}
 			return true
 		},
-		saveData(index) {
+		async saveData(index) {
 			let checked = true
 			// Save the selected indicator to vuex
 			let _this = this
@@ -1042,6 +1042,8 @@ export default {
 			}
 
 			let indi = this.$refs.indiChild[index].saveIndicator(index)
+			const indiChecked = await indi
+			if(!indiChecked) return false
 			return indi.then((val) => {
 				if (val) {
 					if (_this.indicatorRadioArr[index] === 'sentiment' || _this.indicatorRadioArr[index] === 'user') {

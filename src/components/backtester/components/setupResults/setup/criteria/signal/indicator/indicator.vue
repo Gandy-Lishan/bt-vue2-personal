@@ -2,6 +2,7 @@
 <template>
 	<div class="indicator-box">
 		<el-form :model="si" ref="siForm" :rules="rules" label-position="left" size="mini">
+      
       <div class="labelWithSelectBox indicatorTypeBox">
         <el-form-item prop="indicatorRadio">
             <template slot="label">
@@ -32,6 +33,7 @@
             </div>
         </el-form-item>
       </div>
+      <div class="hint" v-show="indicatorRadio === 'Technical Indicator'">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</div>
       <el-divider></el-divider>
       <div class="labelWithSelectBox indicatorTypeBox" v-show="indicatorRadio === 'Sentiment Indicator'">
         <el-form-item prop="sentimentIndicator">
@@ -59,9 +61,9 @@
               @clear="clearSentimentSelect"
 							highlight-first-item
 						></el-autocomplete>
-            <!-- <searchBar 
-              :id_name="'autocomplete-' + criteria + '-' + panelIndex" 
-              placeholder="Input the sentiment indicator" 
+            <!-- <searchBar
+              :id_name="'autocomplete-' + criteria + '-' + panelIndex"
+              placeholder="Input the sentiment indicator"
               :index="['indicatorList']"
               @select="handleSentimentSelect"
               display="chart_name"
@@ -76,6 +78,7 @@
                 Indicator
                 <el-tooltip effect="dark" placement="top">
                   <span slot="content">
+                    Here, you have access to multiple indicators, which you can select from a dropdown menu based on your preferences.
                   </span>
                   <i class="iconfont icon-wenhao"></i>
                 </el-tooltip>
@@ -103,6 +106,7 @@
                 Indicator
                 <el-tooltip effect="dark" placement="top">
                   <span slot="content">
+                    Here, you have access to multiple indicators, which you can select from a dropdown menu based on your preferences.
                   </span>
                   <i class="iconfont icon-wenhao"></i>
                 </el-tooltip>
@@ -132,6 +136,7 @@
                 Indicator
                 <el-tooltip effect="dark" placement="top">
                   <span slot="content">
+                    Here, you have access to multiple indicators, which you can select from a dropdown menu based on your preferences.
                   </span>
                   <i class="iconfont icon-wenhao"></i>
                 </el-tooltip>
@@ -150,7 +155,7 @@
               >
               </el-autocomplete>
             </div>
-            
+
             <el-upload
 							class="upload-demo"
 							:action="uploadUrl"
@@ -290,7 +295,7 @@ import {
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
-import {compareArrays, LocalStorageUtil, maxNumOfStudy} from '@/utils'
+import {compareArrays, LocalStorageUtil, maxNumOfStudy, formatStandardTime} from '@/utils'
 import moment from 'moment'
 import { mapMutations } from 'vuex'
 
@@ -658,7 +663,7 @@ export default {
       indicator = indicator.replace(/"/g, '')
       let ele = CIQ.findSentiIndicator(null, indicator)
       ele = {...ele, value: ele.chart_name}
-      if(this.criteria == 'entry') this.handleSentimentSelect(ele)
+      if(this.criteria == 'entry') {this.si.sentimentIndicator = ele.value;this.handleSentimentSelect(ele)}
       LocalStorageUtil.remove('indicator')
     }
   },
@@ -859,7 +864,7 @@ export default {
 			extraIndicators.push(...this.$store.state.chart.indicators.extraIndicators)
       extraIndicators = extraIndicators.filter(x=>x!=item.url)
 			this.$store.commit('chart/getExtraIndicators',extraIndicators)
-  
+
       // 如果是MA，则移除它的信息和位置
       CIQ.removeMALayout(item.url, this.criteria, this.panelIndex)
 
@@ -1109,7 +1114,7 @@ export default {
           value: ''
         })
       }
-      
+
       // 如果是MA，则移除它的信息和位置
       CIQ.removeMALayout(item.url, this.criteria, this.panelIndex)
       // lishn 判断需要小龙写
@@ -1250,7 +1255,7 @@ export default {
       // lishn 判断需要小龙写
       CIQ.addIndicators()
     },
-    handleUsersOwnIndicatorSelect(data) {         
+    handleUsersOwnIndicatorSelect(data) {
       // 限制同屏显示个数
       if(maxNumOfStudy()) return
 
@@ -1570,7 +1575,7 @@ export default {
           validForm = valid
         })
         if(CIQ.findBuiltinTechIndicator(this.si.technicalIndicator,null)) validName = true
-        
+
         if (validForm && validName) {
           let obj = {}
           obj.criteria = this.criteria
@@ -1670,7 +1675,7 @@ export default {
             let techIndicatorResult = CIQ.findBuiltinTechIndicator(vm.si.technicalIndicator,null)
             if(techIndicatorResult){
               let isFromEdit = true
-              vm.handleTechnicalSelect(techIndicatorResult, isFromEdit) 
+              vm.handleTechnicalSelect(techIndicatorResult, isFromEdit)
             }
           }
           if (newVal[this.criteria].signals[index].analysis === 'User') {
@@ -1712,7 +1717,7 @@ export default {
               let data = []
               try {
                 data = res.map((item) => ({
-                  Date: new Date(item.DT).toLocaleDateString('en-US', {
+                  Date: formatStandardTime(item.DT).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: '2-digit',
                     day: '2-digit'
@@ -1791,7 +1796,7 @@ export default {
       // 创建 CancelToken 实例
       const cancelToken = axios.CancelToken.source()
 
-      // 保存取消令牌，以便在需要终止上传时使用      
+      // 保存取消令牌，以便在需要终止上传时使用
       // 保存取消令牌，以便在需要终止上传时使用
       self.cancelToken = cancelToken
       // 发送上传请求
@@ -2158,6 +2163,15 @@ export default {
           self.file_hash = hash
           const rows = content.trim().split('\n')
           const headers = rows[0].trim().split(',')
+          const lines = content.split('\n')
+          // 获取 CSV 文件的字段顺序
+          const fieldOrder = lines[0].trim().split(',')
+          const isOrdered = this.validateCSVFieldOrder(fieldOrder)
+          if (!isOrdered) {
+            CIQ.hideCover()
+            CIQ.nprogress.done()
+            return reject(new Error('CSV field order is incorrect.'))
+          }
 
           // 判断表头和表内容是否都存在
           if (
@@ -2167,12 +2181,14 @@ export default {
             isNotEmpty = false
           }
           // 使用 PapaParse 解析 CSV 文件内容
+          const errorRow = []
           const result = Papa.parse(content, {
             header: true, // 指定是否将第一行作为字段名
             skipEmptyLines: true,
             trimHeaders: true, // 去除表头中每个字段的空格
             trimRows: true, // 去除数据行中每个字段的空格
             step: function (row) {
+              const error = {}
               const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/
               const dateColumnIndex = 'Date'
               for (const key in row.data) {
@@ -2182,21 +2198,28 @@ export default {
               }
               // const trimmedRow = row.data.map((value) => value.trim())
               const dateCell = row.data[dateColumnIndex]
-              const numFormatRegex = /^\d+(\.\d{1,})?$/
+              const numFormatRegex = /^-?\d+(\.\d{1,})?$/
               const numColumnIndex = 'Close' // Change this to the index of the column you want to check
               const numCell = row.data[numColumnIndex]
               if (!dateFormatRegex.test(dateCell)) {
                 console.log('日期格式校验失败', dateCell)
+                error.Date = dateCell
+                error.Close = numCell
                 isDateFormat = false
+                errorRow.push(error)
                 // parser.pause()
                 return
               }
               if (!numFormatRegex.test(numCell)) {
                 console.log('数字格式校验失败')
+                error.Date = dateCell
+                error.Close = numCell
+                errorRow.push(error)
                 isNumFormat = false
                 // parser.pause()
                 return
               }
+              errorRow.push(error)
               self.csvContent.push(row)
               // parser.resume()
             },
@@ -2207,14 +2230,8 @@ export default {
               reject(error)
             }
           })
-          // 获取解析结果
-          const data = result.data
           // 进行字段校验
-          const isVerified = this.validateFields(data)
-          const lines = content.split('\n')
-          // 获取 CSV 文件的字段顺序
-          const fieldOrder = lines[0].trim().split(',')
-          const isOrdered = this.validateCSVFieldOrder(fieldOrder)
+          const isVerified = this.validateFields(errorRow)
           if (
             isVerified &&
             isOrdered &&
@@ -2239,11 +2256,11 @@ export default {
             CIQ.nprogress.done()
             this.$notify.warning({
               title: 'Tips',
-              message: 'The uploaded CSV file is empty. Please check if the table header and table content are present.',
+              message: 'Uploaded CSV file is empty. Ensure table header and content are present.',
               duration: 0
             });
             return reject(
-              new Error('The uploaded CSV file is empty. Please check if the table header and table content are present.')
+              new Error('Uploaded CSV file is empty. Ensure table header and content are present.')
             )
           }
           if (!isVerified) {
@@ -2251,22 +2268,17 @@ export default {
             CIQ.nprogress.done()
             return reject(new Error('CSV field validation failed.'))
           }
-          if (!isOrdered) {
-            CIQ.hideCover()
-            CIQ.nprogress.done()
-            return reject(new Error('CSV field order is incorrect.'))
-          }
           if (!isDateFormat) {
             CIQ.hideCover()
             CIQ.nprogress.done()
             this.$notify.warning({
               title: 'Tips',
-              message: 'The Date column data format in the file is incorrect. It should be in yyyy-MM-dd format, for example: 2023-04-20.',
+              message: 'Date column in the file has an incorrect format. It should be in yyyy-MM-dd format, like 2023-04-20.',
               duration: 0
             });
             return reject(
               new Error(
-                `The Date column data format in the file is incorrect. It should be in yyyy-MM-dd format, for example: 2023-04-20.`
+                `Date column in the file has an incorrect format. It should be in yyyy-MM-dd format, like 2023-04-20.`
               )
             )
           }
@@ -2275,12 +2287,12 @@ export default {
             CIQ.nprogress.done()
             this.$notify.warning({
               title: 'Tips',
-              message: 'The Close column data format in the file is incorrect. It should be a number, for example: 45.55.',
+              message: 'Close column in the file has an incorrect format. It must be a numerical value, such as 45.55.',
               duration: 0
             });
             return reject(
               new Error(
-                `The Close column data format in the file is incorrect. It should be a number, for example: 45.55.`
+                `Close column in the file has an incorrect format. It must be a numerical value, such as 45.55.`
               )
             )
           }
@@ -2288,21 +2300,36 @@ export default {
         reader.readAsText(file)
       })
     },
-    validateFields(data) {
-      // 在这里进行字段校验
-      // 可以遍历解析后的数据对象数组，对每一行的字段进行校验
-      // 如果有错误，将错误信息存储到一个数组中，并返回
-      const errors = []
-      data.forEach((row, index) => {
-        if (!row.Date || !row.Close) {
-          errors.push(`Field validation failed for row ${index + 1}.`)
-        }
-      })
-      if (errors.length > 0) {
-        // 如果有错误，显示错误信息
+    validateFields(_data) {
+      const data = _data.filter(item => Object.keys(item).length)
+      if (data.length > 0) {
+        // 如果有错误，显示错误信息 生成表格行的 HTML
+        const tableRows = data.map(item => `
+          <tr>
+            <td>${item.Date}</td>
+            <td>${item.Close}</td>
+          </tr>
+        `).join('');
+
+        // 生成完整的 HTML 片段，包括表头和动态生成的行
+        const tableHTML = `
+          <div>
+            <p>Data format is wrong in these rows. Correct before re-uploading.</p>
+            <table border="1" style="width: 100%; text-align: center">
+              <tr>
+                <th>Date</th>
+                <th>Close</th>
+              </tr>
+              ${tableRows}
+            </table>
+          </div>
+        `;
+
+        // 使用 $message 显示 HTML
         this.$notify.warning({
-          title: 'Tips',
-          message: 'Field name validation failed.',
+          title: 'Incorrect Data Format in Rows',
+          dangerouslyUseHTMLString: true,
+          message: tableHTML,
           duration: 0
         });
         return false
@@ -2328,6 +2355,14 @@ export default {
           });
           return false
         }
+        if(currentIndex == -1 || nextIndex == -1) {
+          this.$notify.warning({
+            title: 'Tips',
+            message: 'File header is missing or incorrect. It should be: [Date, Close].',
+            duration: 0
+          });
+          return false
+        }
       }
       return true
     },
@@ -2342,7 +2377,7 @@ export default {
       // 计算时间间隔
       const startDate = dateData[0]
       const endDate = dateData[dateData.length - 1]
-      const frequency = this.frequency.toLowerCase()
+      const frequency = this.$store.state.form.backtestInfo.frequency.toLowerCase()
       if (frequency !== 'daily') {
         this.$notify.warning({
           title: 'Tips',
@@ -2353,7 +2388,7 @@ export default {
           `Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
         )
       }
-      const symbol = this.$store.state.form.backtestSymbol || 'SPX'
+      const symbol = this.$store.state.form.backtestSymbol || process.env.VUE_APP_DEFAULT_SYMBOL
       const res = await getPairData(startDate, endDate, frequency, symbol)
       const pairDataDate = res.data.map((item) => {
         const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
@@ -2482,7 +2517,7 @@ export default {
       let fileData = []
       try {
         fileData = res.map((item) => ({
-          Date: new Date(item.DT).toLocaleDateString('en-US', {
+          Date: formatStandardTime(item.DT).toLocaleDateString('en-US', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit'
@@ -2522,7 +2557,7 @@ export default {
       if (res.status == 200) {
         const csv_content = res.data.csv_content
         this.previewData = csv_content.map((item) => ({
-          Date: new Date(item.DT).toLocaleDateString('en-US', {
+          Date: formatStandardTime(item.DT).toLocaleDateString('en-US', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit'
@@ -2583,7 +2618,7 @@ export default {
 	border-left: 1px solid #dcdfe6;
 	border-right: 1px solid #dcdfe6;
 	border-bottom: 1px solid #dcdfe6;
-	padding: 10px;
+	padding: 5px;
 }
 .indicator-form-item /deep/ .el-form-item__content {
 	line-height: 15px;
@@ -2634,5 +2669,11 @@ export default {
 }
 .el-upload__tip {
   line-height: 15px;
+}
+
+.hint {
+  margin-left: 146px;
+  font-size: 12px;
+  color: #333333;
 }
 </style>

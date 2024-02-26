@@ -291,14 +291,18 @@ if (!CIQ.Marker) {
 		CIQ.extend(this.params, params);
 		var template = (this.template = document.createElement("TEMPLATE"));
 		template.innerHTML =
+			// '<div class="stx-marker highlight">' +
+			// '<div class="stx-visual">' +
+			// '<div class="stx-marker-content">' +
+			// '<div class="stx-performance-marker stx-marker-expand"><h4></h4><p></p></div>' +
+			// "</div>" +
+			// "</div>" +
+			// '<div class="stx-stem"></div>' +
+			// "</div>";
 			'<div class="stx-marker highlight">' +
-			
-			'<div class="stx-visual">' +
-			'<div class="stx-marker-content">' +
-			'<div class="stx-marker stx-performance-marker stx-marker-expand"><h4></h4><p></p></div>' +
-			"</div>" +
-			"</div>" +
-			'<div class="stx-stem"></div>' +
+				'<div class="stx-stem"></div>' +
+				'<div class="stx-visual"></div>' +
+				'<div class="stx-performance-marker stx-marker-expand"><h4></h4><p></p></div>' +
 			"</div>";
 		var n = this.template.content.cloneNode(true);
 		var marker = n.querySelector(".stx-marker", template);
@@ -308,7 +312,7 @@ if (!CIQ.Marker) {
 		var expand = n.querySelector(".stx-marker-expand");
 		var header = n.querySelector("h4", template);
 		var text = n.querySelector("p", template);
-		// var stem = n.querySelector(".stx-stem", template);
+		//var stem = n.querySelector(".stx-stem", template);
 		// stem.style.float = 'none'
 		// stem.style.marginLeft = '12px'
 		header.innerText = this.params.headline;
@@ -496,6 +500,63 @@ if (!CIQ.Marker) {
 		}
 	};
 
+	CIQ.Marker.stPerformance.drawTriangleMarker = function (marker, style, params) {
+		var stx = marker.params.stx,
+			chart = stx.chart,
+			ctx = chart.context;
+		var x = params.x,
+			y = params.y,
+			size = params.size*4,
+			category = params.category;
+		var color = params.color ? params.color : style.backgroundColor;
+	
+		ctx.fillStyle = color;
+		ctx.strokeStyle = color;
+		ctx.lineWidth = 1;
+		ctx.beginPath();
+		// Calculate triangle vertices
+		const height = (Math.sqrt(3) / 2) * size; // Height of an equilateral triangle formula
+		const halfSide = size / 2;
+
+		if(category == 'buy'){
+			ctx.moveTo(x, y - height / 3); // 以 (x, y) 为中心点
+			ctx.lineTo(x - halfSide, y + (2 * height) / 3);
+			ctx.lineTo(x + halfSide, y + (2 * height) / 3);
+		}else {
+			ctx.moveTo(x, y + height / 3); // 以 (x, y) 为中心点
+			ctx.lineTo(x - halfSide, y - (2 * height) / 3);
+			ctx.lineTo(x + halfSide, y - (2 * height) / 3);	
+		}
+		ctx.closePath();
+		ctx.fill();
+		ctx.stroke();
+	
+
+	
+		if (marker.highlight || marker.active) {
+			// Highlight or active state
+			size = size * 1.5
+			
+			const height = (Math.sqrt(3) / 2) * size; // Height of an equilateral triangle formula
+			const halfSide = size / 2;
+
+			if(category == 'buy'){
+				y = y + 1.6
+				ctx.moveTo(x, y - height / 2);
+				ctx.lineTo(x - halfSide, y + height / 2);
+				ctx.lineTo(x + halfSide, y + height / 2);
+			}else {
+				y = y - 1.6
+				ctx.moveTo(x, y + height / 2);
+				ctx.lineTo(x - halfSide, y - height / 2);
+				ctx.lineTo(x + halfSide, y - height / 2);
+			}
+
+			ctx.closePath();
+			ctx.stroke();
+		}
+	};
+
 	/**
 	 * Draws square canvas markers based on the styles for {@link CIQ.Marker.stPerformance} markers.
 	 *
@@ -657,11 +718,20 @@ if (!CIQ.Marker) {
 		var markerStyle = (marker.style = stx.styles[style]),
 			stemStyle = stx.styles.stx_marker_stem;
 
+		if(nParams.category == 'buy'){
+			stemStyle.borderLeftColor = '#1afa29'
+			stemStyle.marginBottom = '-10px'
+		}else {
+			stemStyle.borderLeftColor = '#d81e06'
+			stemStyle.marginBottom = '0px'
+		}
+
 		var halfSide = parseInt(markerStyle.height, 10) / 2,
 			halfWidth = parseInt(markerStyle.width, 10) / 2;
 		var stemHeight = nParams.displayStem
 			? parseInt(stemStyle.height, 10) + parseInt(stemStyle.marginBottom, 10)
 			: 0;
+
 		var markerHeight = stemHeight + parseInt(markerStyle.height, 10);
 		var stemOffset = stemHeight ? stemHeight + halfSide : 0;
 
@@ -715,6 +785,14 @@ if (!CIQ.Marker) {
 				half: halfSide,
 				midWidth: halfWidth,
 				headline: headline,
+				color: color
+			});
+		} else if (type === "triangle") {
+			CIQ.Marker.stPerformance.drawTriangleMarker(marker, markerStyle, {
+				x: x,
+				y: y,
+				size: halfSide,
+				category: nParams.category,
 				color: color
 			});
 		} else {
