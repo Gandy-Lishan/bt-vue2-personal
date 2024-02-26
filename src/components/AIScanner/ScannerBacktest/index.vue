@@ -17,15 +17,15 @@
       <el-collapse-item name="2" class="form">
         <template v-slot:title>
           <div class="title">
+            <p @click.stop="() => {changeSecondTab('filter')}" :class="{ secondActive: activeSecondTab == 'filter' || '' }">Filter List</p>
             <p @click.stop="() => {changeSecondTab('list')}" :class="{ secondActive: activeSecondTab == 'list' || '' }">Scanner Backtest List</p>
             <p @click.stop="() => {changeSecondTab('summary')}" :class="{ secondActive: activeSecondTab == 'summary' || '' }">Backtest Summary</p>
           </div>
         </template>
         <!-- <CPMSummary ref="Summary"></CPMSummary> -->
         <div class="content">
-          <div v-if="activeSecondTab == 'list'">
-            <ScannerBTTable @displayResultsData="displayResultsData"></ScannerBTTable>
-          </div>
+          <FilterTable v-if="activeSecondTab == 'filter'"></FilterTable>
+          <ScannerBTTable v-if="activeSecondTab == 'list'" @displayResultsData="displayResultsData"></ScannerBTTable>
           <div v-if="activeSecondTab == 'summary'">summary</div>
         </div>
       </el-collapse-item>
@@ -82,6 +82,7 @@
 import ScannerForm from "./ScannerForm";
 // import MaxMin from "../results/components/MaxMin";
 import ScannerBTTable from "./Table";
+import FilterTable from "./FilterTable";
 const XLSX = require('xlsx');
 
 export default {
@@ -90,7 +91,7 @@ export default {
     return {
       activeNames: ['1', '2', '3'],
       activeTab: 'statistics',
-      activeSecondTab: 'list',
+      activeSecondTab: 'filter',
       tradeDate: {},
       rowFrequency: 'Daily',
       tradePrice: 'Close',
@@ -103,7 +104,8 @@ export default {
   },
   components: {
     ScannerForm,
-    ScannerBTTable
+    ScannerBTTable,
+    FilterTable
   },
   methods: {
     changeTab(val) {
