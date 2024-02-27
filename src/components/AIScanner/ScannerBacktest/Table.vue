@@ -1,8 +1,8 @@
 <template>
   <div class="CPM-list-container ScannerBTTable">
     <div class="search-box">
-      <el-input placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" size="middle">
-        <el-button slot="append" icon="el-icon-search" @click="handleQuery" size="middle"></el-button>
+      <el-input placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" size="small">
+        <el-button slot="append" icon="el-icon-search" @click="handleQuery" size="small"></el-button>
       </el-input>
     </div>
     <el-table
@@ -125,12 +125,7 @@
           v-if="['Period'].includes(l.label)"
 				>
 					<template slot-scope="scope">
-            <template v-for="(item, index) in scope.row[l.value]">
-              <div class="showDate" 
-              :key="index">
-              <span v-show="index == 0">Start: </span><span v-show="index == 1">End: </span>{{`${item}`}}
-              </div>
-            </template>
+            <span class="showDate">{{scope.row[l.value][0]}} to {{scope.row[l.value][1]}}</span>
 					</template>
 				</el-table-column>
         <el-table-column
@@ -264,7 +259,7 @@ export default {
     },
     tableRowClassName({row, rowIndex}) {
 			if (rowIndex%2 === 1) {
-			return 'darken-row'
+			return 'dark-row'
 			}
 			return ''
 		},
@@ -352,7 +347,7 @@ export default {
   width: 20%;
 }
 .CPM-list-container{
-  padding: 20px;
+  padding: 20px 20px 20px 0px;
 }
 .showDate {
   margin: 5px 0;

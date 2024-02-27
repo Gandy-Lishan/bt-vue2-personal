@@ -4,79 +4,51 @@
       <el-collapse-item name="1" class="form">
         <template v-slot:title>
           <div class="title">
+            <p @click.stop>Scanner Backtest List</p>
+          </div>
+        </template>
+        <div class="content">
+            <ScannerBTTable ref="ScannerBTTable" @displayResultsData="displayResultsData"></ScannerBTTable>
+        </div>
+      </el-collapse-item>
+      <el-collapse-item name="2" class="form">
+        <template v-slot:title>
+          <div class="title">
             <p @click.stop>Select Condition</p>
             <p>
-              <el-tooltip class="item" effect="dark" content="Create New Correlation Backtest Pattern" placement="bottom-start">
+              <el-tooltip class="item" effect="dark" content="Create New Scanner Backtest" placement="bottom-start">
                 <el-button  type="warning" plain class="delete-btn" @click.stop="resetForm" size="small" icon="el-icon-plus">Create New</el-button>
               </el-tooltip>
             </p>
           </div>
         </template>
-        <ScannerForm ref="ScannerForm"></ScannerForm>
+        <ScannerForm ref="ScannerForm" @changeSecondTab="changeSecondTab" @displayPreviewList="displayPreviewList" 
+            @displayResultsAndFilter="displayResultsAndFilter" @refreshBTList="refreshBTList"></ScannerForm>
       </el-collapse-item>
-      <el-collapse-item name="2" class="form">
+      <el-collapse-item name="3" class="form">
         <template v-slot:title>
           <div class="title">
-            <p @click.stop="() => {changeSecondTab('filter')}" :class="{ secondActive: activeSecondTab == 'filter' || '' }">Filter List</p>
-            <p @click.stop="() => {changeSecondTab('list')}" :class="{ secondActive: activeSecondTab == 'list' || '' }">Scanner Backtest List</p>
+            <p @click.stop="() => {changeSecondTab('filter')}" :class="{ secondActive: activeSecondTab == 'filter' || '' }">Preview Filter List</p>
             <p @click.stop="() => {changeSecondTab('summary')}" :class="{ secondActive: activeSecondTab == 'summary' || '' }">Backtest Summary</p>
           </div>
         </template>
         <!-- <CPMSummary ref="Summary"></CPMSummary> -->
         <div class="content">
-          <FilterTable v-if="activeSecondTab == 'filter'"></FilterTable>
-          <ScannerBTTable v-if="activeSecondTab == 'list'" @displayResultsData="displayResultsData"></ScannerBTTable>
-          <div v-if="activeSecondTab == 'summary'">summary</div>
+            <FilterTable v-show="activeSecondTab == 'filter'" ref="filterTable"
+            :data="filterTableData" 
+            :label="filterTableData.label" 
+            :tableCol="filterTableData.tableCol" 
+            :loading="loading"
+            ></FilterTable>
+            <Statistics v-show="activeSecondTab == 'summary'" ref="Statistics"></Statistics>
         </div>
-      </el-collapse-item>
-      <el-collapse-item name="3" class="form">
-        <template v-slot:title>
-          <div class="title">
-            <p
-             @click.stop="() => {changeTab('statistics')}" :class="{ active: activeTab == 'statistics' || '' }"
-            >Backtest Statistics</p>
-            <p
-             @click.stop="() => {changeTab('results')}" :class="{ active: activeTab == 'results' || '' }"
-             >Multi-Timeframe Results</p>
-             <p
-             @click.stop="() => {changeTab('maxMin')}" :class="{ active: activeTab == 'maxMin' || '' }"
-             >Max Gain and Loss</p>
-             <p
-             @click.stop="() => {changeTab('corrInfo')}" :class="{ active: activeTab == 'corrInfo' || '' }"
-             >Correlation Info</p>
-          </div>
-          <div class="downLoadCsvBtn">
-              <el-button
-                @click.stop="() => {handleDownloadCsv()}"
-                style="display: inline-block"
-                type="primary"
-                plain
-                size="mini"
-                icon="el-icon-download"
-                >Export Data</el-button
-              >
-          </div>
-        </template>
-      <!-- <div class="content">
-          <Statistics v-show="activeTab == 'statistics'" ref="Statistics"></Statistics>
-          <TIM v-show="activeTab == 'results'" ref="TIM" :tradeDate="tradeDate" :rowFrequency="rowFrequency" :tradePrice="tradePrice" :direction="direction"></TIM>
-          <CorrInfo v-show="activeTab == 'corrInfo'" ref="CorrInfo"></CorrInfo>
-          <MaxMin
-            ref="maxMinChild"
-            v-show="activeTab == 'maxMin'"
-            :tradesData="tradeDate"
-            :tradePrice="tradePrice"
-            :rowFrequency="rowFrequency"
-          ></MaxMin>
-        </div> -->
       </el-collapse-item>
     </el-collapse>
   </div>
 </template>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 <script>
-// import CPMSummary from "./components/summary";
-// import Statistics from "./components/statistics";
+import Statistics from "./Statistics";
 // import TIM from "./components/tim";
 // import CorrInfo from "./components/corrInfo";
 import ScannerForm from "./ScannerForm";
@@ -93,19 +65,40 @@ export default {
       activeTab: 'statistics',
       activeSecondTab: 'filter',
       tradeDate: {},
-      rowFrequency: 'Daily',
       tradePrice: 'Close',
       chart_data: {},
       breadcrumbTitle: 'Back to Correlation Pattern Match List',
       direction: 'Long',
       StartEndDateArray: [],
-      default_symbol: ''
+      default_symbol: '',
+      loading: false,
+      filterTableData: {
+        content: [],
+        label:'Filter Condition Preview',
+        title: 'Filter Condition Preview',
+        tableCol: [
+          {label:'Date',value:'Date'},
+          {label:'Symbol',value:'Symbol'},
+          {label:'Close',value:'Close'},
+          // {label:'Trend',value:'Market'},
+          {label:'Direction',value:'Direction'},
+          {label:'Signal',value:'_Signal'},
+          {label:'Win Rate(%)',value:'WinRate'},
+          {label:'Stop Loss(%)',value:'StopLoss'},
+          {label:'Profit Target(%)',value:'ProfitTarget'},
+          {label:'Best Time In Market(Bars)',value:'TimeInMarket'},
+          //{label:'Cash Alloc(%)',value:'Alloc'},//'Cash Alloc(%)'
+          {label:'Expected Return(%)',value:'ExpectedReturn'},
+          // {label:'Z-Score',value:'Z_Score'},
+        ]
+      }
     }
   },
   components: {
     ScannerForm,
     ScannerBTTable,
-    FilterTable
+    FilterTable,
+    Statistics
   },
   methods: {
     changeTab(val) {
@@ -114,111 +107,97 @@ export default {
     changeSecondTab(val) {
       this.activeSecondTab = val
     },
-    prepareData(data) {
-      const _this = this
-      _this.$nextTick(() => {
-        const datatime = new Date(data.start_date)
-        _this.$refs['TIM'].prepareData(_this.tradeDate, datatime)
-        _this.$refs['maxMinChild'].prepareData(_this.tradeDate, datatime)
-        _this.$refs['CorrInfo'].prepareData(_this.StartEndDateArray)
-      });
+    displayResultsAndFilter(data) {
+      debugger
+      // 至展示 filter 和 result 不重新赋值 form
+      const result = data.result.result
+      this.activeSecondTab = 'summary'
+      this.displaySummary(result)
     },
     displayResultsData(_data) {
       debugger
-      const _this = this
-      _this.$nextTick(() => {
-        _this.$refs['ScannerForm'].displayData(_data)
-        // _this.prepareData(_data)
-      });
-      return
-      const summary = {}
-      summary.symbol = _data.symbol
-      summary.timeframe = _data.timeframe
-      summary.lookback_period = _data.lookback_period
-      summary.exclude_overlapping = _data.exclude_overlap == 1 ? 'True' : 'False'
-      summary.start_date = _data.start_date
-      summary.end_date = _data.end_date
-      summary.direction = _data.direction || 'Long'
-      summary.corr_per = _data.corr_per
-      let timeframe = _data.timeframe
-      let period
-      switch (timeframe) {
-        case "Daily":
-            period = "Days"
-            break;
-        case "Weekly":
-            period = "Weeks"
-            break;
-        case "Monthly":
-            period = "Months"
-            break;
-        default:
-            console.error("Invalid timeframe value")
-            break;
-      }
-      summary.observation_period = `${_data.tim} ${period}`
-      _this.$refs['Summary'].displayData(summary)
+      this.$refs['ScannerForm'].displayData(_data)
+      this.activeSecondTab = 'summary'
+      const status = _data.status
+      if(status !== 'finish') return
+      const result = _data.result.result
+      const list = JSON.parse(_data['TRADE LIST'])
+      this.displaySummary(result)
+      this.displayPreviewList(list)
+    },
+    displaySummary(result) {
       const statistics = {}
-      statistics.totalReturn = _data.total_return
-      statistics.medianReturn = _data.median_return
-      statistics.averageReturn = _data.avg_return
-      // statistics.tzScore = _data.tzScore
+      statistics.totalReturn = result['TOTAL RETURN']
+      statistics.medianReturn = result['MEDIAN RETURN']
+      statistics.averageReturn = result['AVERAGE RETURN']
+      statistics.tzScore = result['Z-SCORE']
       // statistics.standardDeviation = _data.standardDeviation
       // statistics.maxRisk = _data.maxRisk
-      statistics.buyHoldGain = _data.buy_and_hold
-      statistics.winRate = _data.win_rate
-      statistics.averageWin = _data.avg_win
-      statistics.averageLoss = _data.avg_loss
-      statistics.totalTrades = _data.total_trades
-      statistics.totalPositive = _data.total_positive
-      statistics.totalNegative = _data.total_negative
-      statistics.timeInMarket = _data.time_in_market
-
-      const result = _data.result
+      // statistics.buyHoldGain = _data.buy_and_hold 缺少
+      // MDD + STD.DEV 我没加进去的
+      statistics.winRate = result['WIN RATE']
+      statistics.averageWin = result['AVERAGE WIN']
+      statistics.averageLoss = result['AVERAGE LOSS']
+      statistics.totalTrades = result['TOTAL TRADES']
+      statistics.totalPositive = result['TOTAL POSITIVE']
+      statistics.totalNegative = result['TOTAL NEGATIVE']
+      statistics.timeInMarket = result['TIME IN MARKET']
       const transformedResult = [];
-      const TradeDateArray = [];
-      const StartEndDateArray = [];
-      for (let i = 0; i < result['End Date'].length; i++) {
-        const tradeDate = result['End Date'][i];
-        const symbolClose = result['Symbol Close'][i];
-        const correlationPercentage = result['Correlation Percentage'][i];
-        const marketCondition = result.hasOwnProperty('Market Condition') ? result['Market Condition'][i].join(', ') : null
-        const eachReturn = result['Each Return'][i];
-        const startDate = result['Start Date'][i];
-        const endDate = result['End Date'][i];
+      for (let i = 0; i < result['Start Date'].length; i++) {
+        const tradeDate = result['Start Date'][i];
+        const Close = result['Close'][i];
+        const Action = result['Action'][i];
+        const DailyProfit = result['DailyProfit'][i];
+        const Direction = result['Direction'][i];
+        const FloatProfit = result['FloatProfit'][i];
         transformedResult.push({
           'TradeDate': tradeDate,
-          'SymbolClose': symbolClose,
-          'CorrelationPercentage': correlationPercentage,
-          'Return': eachReturn,
-          'MarketCondition': marketCondition
+          'Close': Close,
+          'Action': Action,
+          'DailyProfit': DailyProfit,
+          'Direction': Direction
         });
-        TradeDateArray.push(
-          {'Date': tradeDate}
-        )
-        StartEndDateArray.push(
-          {'StartDate': startDate, 'EndDate': endDate, 'CorrelationPercentage': correlationPercentage}
-        )
       }
-      _this.$refs['Statistics'].displayData(statistics, transformedResult)
-      _this.tradeDate = TradeDateArray
-      _this.rowFrequency = _data.timeframe
-      _this.direction = _data.direction || 'Long'
-      _this.StartEndDateArray = StartEndDateArray
-      _this.$nextTick(() => {
-        _this.$refs['Form'].displayData(_data)
-        _this.prepareData(_data)
-      });
-    },
-    clearResults(data) {
       this.$nextTick(() => {
-        this.rowFrequency = data.timeframe
-        this.$refs['Summary'].displayData({})
-        this.$refs['Statistics'].displayData({}, [])
-        this.$refs['TIM'].clearData(data.timeframe)
-        this.$refs['maxMinChild'].clearData(data.timeframe)
-        this.$refs['CorrInfo'].prepareData([])
+        this.$refs['Statistics'].displayData(statistics, transformedResult)
       })
+    },
+    displayPreviewList(content) {
+      debugger
+		  this.loading = true
+      const formattedDate = (timestamp) => {
+        // timestamp 例如：时间戳为 1672704000000
+        const offset = new Date(timestamp).getTimezoneOffset() * 60 * 1000;
+        const adjustedTimestamp = timestamp + offset;
+        const adjustedDate = new Date(adjustedTimestamp);
+        const year = adjustedDate.getFullYear();
+        const month = (adjustedDate.getMonth() + 1).toString().padStart(2, '0');
+        const day = adjustedDate.getDate().toString().padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        return formattedDate
+        //输出: "2011-01-01"
+      }
+      // 把数据处理成所需格式
+       content.forEach(x => {
+        x['Close'] = x['Close'].toFixed(2)
+		  	// x['Alloc'] = (x['Alloc']*100).toFixed(0)
+			  x['StopLoss'] = Number(x['StopLoss']).toFixed(2)
+			  x['ProfitTarget'] = Number(x['ProfitTarget']).toFixed(2)
+			  x['WinRate'] = Number(x['WinRate']).toFixed(2)
+			  x['ExpectedReturn'] = Number(x['Expected Return(%)']).toFixed(2)
+			  x['_Signal'] = x['Signal']
+        x['Date'] = formattedDate(x['Date'])
+       })
+        this.filterTableData = {
+          ...this.filterTableData,
+          content
+        }
+		    this.loading = false
+    },
+    clearResults() {
+        this.activeSecondTab = 'filter'
+        this.displayPreviewList([])
+        this.$refs['Statistics'].displayData({}, [])
     },
     handleDownloadCsv() {
       const {backtestHistoryList, result_quotes, periods, defaultTableLabels} = this.$refs.TIM.exportData()
@@ -396,9 +375,14 @@ export default {
       return buf;
     },
     resetForm() {
-      const NoResetAllowed = this.$refs['Form'].resetForm()
-      if(NoResetAllowed) return
-      this.clearResults('Daily')
+      this.$nextTick(() => {
+        const NoResetAllowed = this.$refs['ScannerForm'].resetForm()
+        if(NoResetAllowed) return     
+        this.clearResults()
+      })
+    },
+    async refreshBTList() {
+      await this.$refs['ScannerBTTable'].getDataList()
     }
   }
 }

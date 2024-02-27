@@ -717,7 +717,7 @@ export default {
       }
       const previewRes = await previewCPM(saveData)
       console.log('previewRes', previewRes)
-      const code = previewRes.data.code
+      const code = previewRes.data?.code
       const url = previewRes.data?.data
       if(code != 201) {this.popUpMsgBox('Pattern preview failed'); return}
       let pollingRes = null

@@ -343,14 +343,19 @@
             <el-input v-model="data.capital_allocate" placeholder="Enter 'Kelly' or a number between 0 and 1"></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="12">
+          <div class="processTipsBox">
+            <span v-html="processTips"></span><small v-if="processTips.includes('patiently')"><strong>Won't wait? </strong><button type="button" @click="checkResLater" id="checkResBtn" title=" No need to wait for the backtest to finish. Check the results in 'Scanner Backtest List' later!">Check results later</button></small>
+          </div>
+        </el-col>
       </el-row>
       <el-row :gutter="10" type="flex" class="row-bg" justify="end">
         <el-col :span="16"></el-col>
         <el-col :span="4">
-            <el-button type="warning" size="small">View List</el-button>
+            <el-button type="warning" size="small" @click="previewList" :loading="previewBtnLoading" :disabled="btnLoading || previewBtnLoading">View List</el-button>
         </el-col>
         <el-col :span="4">
-            <el-button type="primary" size="small" @click="submitForm">Run Backtest</el-button>
+            <el-button type="primary" size="small" @click="submitForm" :loading="btnLoading" :disabled="btnLoading || previewBtnLoading">Run Backtest</el-button>
         </el-col>
         </el-row>
     </el-form>
@@ -361,7 +366,7 @@
 import { isJson, timestampToTime } from '@/utils'
 import SelectCheck from "./SelectCheck";
 import { validateCapitalRule, validateCommissionRule, createPositiveIntegerRule, createTPSLValidateRule } from '@/utils/formValidate'
-import { saveScannerForm, getScannerBTList, getScannerBTResults } from '@/service/service'
+import { saveScannerForm, editScannerForm, getScannerBTList, getScannerBTResults, perviewScannerForm } from '@/service/service'
 
 export default {
   name: 'ScannerForm',
@@ -429,6 +434,10 @@ export default {
         capital_allocate: 'Kelly',
         signals: ['All']
       },
+      rowUrl: null,
+      btnLoading: false,
+      previewBtnLoading: false,
+      processTips: '',
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
       },
@@ -626,6 +635,15 @@ export default {
       startDate.setDate(endDate.getDate() - val);
       this.data.start_date = timestampToTime(startDate);
     },
+    resetForm() {
+      // 如果当前在回测状态，不允许重置
+      if(this.previewBtnLoading || this.btnLoading) return true
+      this.$refs['SelectCheck'].handleoptionsAllChange(true)
+			Object.assign(this.$data, this.$options.data())
+      this.data.signals = ['All']
+      this.setBacktestHistory(10)
+      this.$refs['Form'].clearValidate()
+    },
     selected(signals){
       console.log('触发了', signals)
       this.data.signals = signals
@@ -653,16 +671,14 @@ export default {
       };
       return await validateForm(formName)
     },
-    async saveFormData() {
+    async previewSCList() {
+      debugger
       if(this.data.signals.length === 0) {this.popUpMsgBox('Please select at least one signal');return}
       const validForm = await this.validForm('Form')
       if(!validForm) {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
         return
       }
-      // 这里要判断是编辑还是新建(暂时不判断)
-      const nameChecked = await this.checkDuplicateNames(name)
-      if(nameChecked){this.popUpMsgBox(`The Name already exists`); return}
       const {
         long_ratio, short_ratio, 
         stop_loss, take_profit, time_in_market,
@@ -688,14 +704,70 @@ export default {
       // 要删除的属性列表
       const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition']
       removeProperties(saveData, propertiesToRemove)
-      let saveRes
-      saveRes = await saveScannerForm(saveData)
+      return await perviewScannerForm(saveData)
+    },
+    async saveFormData() {
+      if(this.data.signals.length === 0) {this.popUpMsgBox('Please select at least one signal');return}
+      const validForm = await this.validForm('Form')
+      if(!validForm) {
+        this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
+        return
+      }
+      this.processTips = `Tips: Based on your conditions, the Scanner is screening stocks...`
+      const rowUrl = this.rowUrl
+      const name = this.data.name
+      if(!rowUrl) {
+        const nameChecked = await this.checkDuplicateNames(name)
+        if(nameChecked){this.popUpMsgBox(`The Name already exists`); return}
+      }
+      const {
+        long_ratio, short_ratio, 
+        stop_loss, take_profit, time_in_market,
+        stop_loss_condition, take_profit_condition, time_in_market_condition,
+        commission,
+        signals
+      } = this.data
+      const saveData = {
+        ...this.data,
+        long_short_ratio: `${(long_ratio / 100).toFixed(2)}/${(short_ratio / 100).toFixed(2)}`,
+        risk_control_filter_number: `${stop_loss}/${take_profit}/${time_in_market}`,
+        risk_control_filter_condition: `${stop_loss_condition}/${take_profit_condition}/${time_in_market_condition}`,
+        commission: (commission / 100).toFixed(3),
+        signals: JSON.stringify(signals.length !== 16 ? signals : ['All'])
+      }
+      const removeProperties = (obj, properties) => {
+          properties.forEach(property => {
+            if (obj.hasOwnProperty(property)) {
+              delete obj[property]
+            }
+          })
+      }
+      // 要删除的属性列表
+      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition']
+      removeProperties(saveData, propertiesToRemove)
+      let saveRes, previewRes
+      if(rowUrl) {saveRes = await editScannerForm(saveData, rowUrl)}
+      else{saveRes = await saveScannerForm(saveData)}
+      // 这里要发请求拿到预推荐列表
+      try {
+        previewRes = await perviewScannerForm(saveData)
+      } catch (error) {
+        // 预览失败, 设置状态码为 408
+        previewRes = {
+          data: {
+            code: 408
+          }
+        }
+      }
+      // 刷新Backtest列表
+      this.$emit('refreshBTList')
       const code = saveRes.data?.code
       const failedConditions = [203, 403, 404, 406]
       if(failedConditions.includes(Number(code))) {
         // 保存失败, 不进入轮询
         return saveRes
       }
+      this.processTips = 'Tips: Backtesting selected stocks. Please wait patiently...'
       saveRes.data.data = isJson(saveRes.data.data)?JSON.parse(saveRes.data.data):saveRes.data.data
       let url = saveRes.data.data?.url
       this.rowUrl = url
@@ -704,6 +776,8 @@ export default {
         pollingRes = await getScannerBTResults(url)
         const code = pollingRes.data.code
         if (pollingRes.data.data?.status === 'finish' && code == 200) {
+          const previewCode = previewRes.data?.code
+          if(previewCode == 200) pollingRes['TRADE LIST'] = previewRes.data.data
           return pollingRes
         }
         if(code == 401 || code == 403 || code == 404 || code == 407) return pollingRes
@@ -718,9 +792,10 @@ export default {
         saveRes = await this.saveFormData()
       } catch (error) {
         this.btnLoading = false
+        this.processTips = ''
       }
       debugger
-     if(!saveRes) {this.btnLoading = false; return}
+     if(!saveRes) {this.btnLoading = false; this.processTips = ''; return}
      const code = saveRes.data.code
      if(code == 203) this.popUpMsgBox('The backtest is running. You can wait or click the "+"" button to create a new backtest.')
      if(code == 401) this.popUpMsgBox('Calculate error')
@@ -729,11 +804,15 @@ export default {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('No Backtest match meeting the criteria found')
+      if(code == 407) this.popUpMsgBox('Empty backtest list. Please adjust "Select Condition" and run again')
       if(code == 200) {
-        let result = saveRes.data.data.result
-        console.log('结果', result)
+        this.popUpMsgBox('Backtest successfully completed')
+        this.$emit('displayResultsAndFilter', saveRes.data.data)
+        // 这里展示过滤列表
+        const list = saveRes['TRADE LIST']
+        if(list) this.$emit('displayPreviewList', JSON.parse(list))
       }
+      this.processTips = ''
     },
     displayData(data) {
       const {url, long_short_ratio, risk_control_filter_number, risk_control_filter_condition, commission, signals} = data
@@ -780,6 +859,42 @@ export default {
       }
       this.data = target
     },
+    async previewList() {
+      let previewRes = null
+      this.previewBtnLoading = true
+      try {
+        previewRes = await this.previewSCList()
+      } catch (error) {
+        this.previewBtnLoading = false
+      }
+      debugger
+      console.log('previewRes', previewRes)
+      if(!previewRes) {this.previewBtnLoading = false; return}
+     const code = previewRes.data.code
+      if(code == 400) this.popUpMsgBox('Scanner Backtest List preview failed')
+      if(code == 401) this.popUpMsgBox('Calculate error')
+      if(code == 404 || code == 403) this.popUpMsgBox('Preview failed, Please try again')
+      if(code == 406) {
+        const name =  this.data.name
+        this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
+      }
+      if(code == 407) this.popUpMsgBox('Empty preview list. Please adjust "Select Condition" and run again')
+      if(code == 200 && previewRes.status == 200) {
+        this.popUpMsgBox('Preview successful')
+        const previewData = JSON.parse(previewRes.data.data)
+        console.log('previewData', previewData)
+        this.$emit('changeSecondTab', 'filter')
+        this.$emit('displayPreviewList', previewData)
+        // 清空 results 数据
+        // this.$emit('clearResults', this.data)
+      }
+    },
+    checkResLater() {
+      //清空 rowUrl
+      this.rowUrl = null
+      this.btnLoading = false
+      this.processTips = ''
+    }
   }
 }
 </script>
@@ -813,6 +928,14 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+  .processTipsBox {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 46px 0px 0px 0px;
   }
 }
 </style>

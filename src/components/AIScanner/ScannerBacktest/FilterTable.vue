@@ -1,349 +1,474 @@
 <template>
-  <div class="CPM-list-container ScannerBTTable">
-    <el-table
-			ref="Table"
+	<div class="CPM-list-container ScannerBTTable">
+		<!-- <link rel="stylesheet" href="../../../../assets/font/iconfont.css"></link> -->
+    <p class="filterTableDes">
+      After completing the filter criteria above and clicking the <span class="strongSpan">"View List"</span> button, the system will automatically pre-filter and generate a scanner list for backtesting. If satisfied with the pre-filtered list, simply click <span class="strongSpan">"Run Backtest"</span> to initiate the backtesting process using the current selection.
+    </p>
+		<el-table
+			ref="tableREF"
 			class="ScannerBTTable"
-      header-align="center"
-			:data="tableData"
+			:data="paginatedData"
 			:row-class-name="tableRowClassName"
-      empty-text="No data"
+			empty-text="Empty filter condition preview list"
       v-loading="loading"
       :element-loading-text="loadTest"
       element-loading-spinner="el-icon-loading"
-			@sort-change="onSortChange"
       element-loading-background="rgba(0, 0, 0, 0.8)"
+			@sort-change="changeTableSort"
+			style="width: 100%; height: 100%"
       size="small"
-			style="width: 100%; height: 100%; margin: 0 auto;"
 		>
-    <el-table-column type="expand">
-				<template slot-scope="props">
-					<el-form label-position="left" inline class="demo-table-expand">
-						<el-form-item label="AVERAGE WIN %">
-							<span>{{ props.row['avg_win']}}	</span>
-						</el-form-item>
-            <el-form-item label="MAX RISK %">
-							<span>{{ props.row['max_risk']}}	</span>
-						</el-form-item>
-						<el-form-item label="AVERAGE LOSS %">
-							<span>{{ props.row['avg_loss']}}	</span>
-						</el-form-item>
-						<el-form-item label="MEDIAN RETURN %">
-							<span>{{ props.row['median_return'] }}</span>
-						</el-form-item>
-						<el-form-item label="TOTAL TRADES">
-							<span>{{ props.row['total_trades']}}</span>
-						</el-form-item>
-
-						<el-form-item label="ANNUAL RETURN % (CAGR)">
-							<span>{{ props.row['annual_return'] }}</span>
-						</el-form-item>
-						<el-form-item label="TOTAL POSITIVE">
-							<span>{{ props.row['total_positive'] }}</span>
-						</el-form-item>
-						<el-form-item label="AVERAGE RETURN %">
-							<span>{{ props.row['avg_return'] }}</span>
-						</el-form-item>
-						<el-form-item label="TOTAL NEGATIVE">
-							<span>{{ props.row['total_negative'] }}</span>
-						</el-form-item>
-						<el-form-item label="STD. DEV">
-							<span>{{ props.row['StdDev'] }}</span>
-						</el-form-item>
-            <el-form-item label="TIME IN MARKET %">
-							<span>{{ props.row['time_in_market'] }}</span>
-						</el-form-item>
-					</el-form>
-				</template>
-			</el-table-column>
-    <el-table-column align="center" width="50px">
-				<template slot-scope="scope">
-          <el-button-group>
-            <el-button type="text" icon="el-icon-caret-right" @click="handleRowClick(scope.row)"></el-button>
-            <el-button type="text" icon="el-icon-close" @click="deleteSCBT(scope.row)"></el-button>
-          </el-button-group>
-        </template>
-      </el-table-column>
-			<template v-for="(l) in tableCol">
+			<!-- :min-width="90" -->
+			<template v-for="(l, index) in tableCol">
+				<!-- :min-width="130" -->
 				<el-table-column
-          align="center"
+					v-if="l.label == 'Select'"
 					:label="l.label"
 					:prop="l.value"
-					:key="l.key"
-				  show-overflow-tooltip
-          min-width="100px"
-          v-if="l.label == 'Name'"
+					:key="index"
+				>
+					<template slot-scope="scope">
+						<el-checkbox
+							v-model="scope.row.Subscribe"
+							@change="
+								selectSymbol(
+									scope.row.id,
+									scope.row.Symbol,
+									scope.row.Subscribe,
+									scope.row['ProfitTarget'],
+									scope.row['StopLoss'],
+									scope.row['WinRate'],
+									scope.row['ExpectedReturn'],
+									scope.$index
+								)
+							"
+						></el-checkbox>
+					</template>
+				</el-table-column>
+				<el-table-column		
+					v-if="l.label == 'Symbol'"
+					:label="l.label"
+					:prop="l.value"
+					:key="index"
+					min-width="70"
+				>
+					<template slot-scope="scope">
+            {{ scope.row[l.value] }}
+					</template>
+				</el-table-column>
+				<el-table-column		
+					v-if="l.label == 'Trend'"
+					:label="l.label"
+					:prop="l.value"
+					:key="index"
+					min-width="90"
+					:sortable="
+						[
+							'Trend'
+						].indexOf(l.label) !== -1
+							? 'custom'
+							: false
+					"
+				>
+						<template slot="header">
+							Trend
+							<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+							<span slot="content" v-html="textContent['Trend']">
+							</span>
+							<i class="iconfont icon-wenhao"></i>
+						</el-tooltip>
+					</template>
+				</el-table-column>
+				<el-table-column		
+					v-if="l.label == 'Signal'"
+					:label="l.label"
+					:prop="l.value"
+					:key="index"
+					min-width="100"
+					:sortable="
+						[
+							'Signal'
+						].indexOf(l.label) !== -1
+							? 'custom'
+							: false
+					"
+				>
+					<template slot-scope="scope">
+						<!-- {{ scope.row.Signal }} -->
+						<span>{{midTermMap[scope.row[l.value]]?midTermMap[scope.row[l.value]]:scope.row[l.value]}}</span>
+						<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+							<span slot="content" v-html="textContent[scope.row[l.value]]">
+							</span>
+							<i class="iconfont icon-wenhao"></i>
+						</el-tooltip>
+					</template>
+				</el-table-column>
+				<el-table-column		
+					v-if="l.label == 'Expected Return(%)'"
+					:label="l.label"
+					:prop="l.value"
+					:key="index"
+					min-width="90"
+					:sortable="
+						[
+							'Expected Return(%)'
+						].indexOf(l.label) !== -1
+							? 'custom'
+							: false
+					"
+				>
+						<template slot="header">
+							Expected Return(%)
+							<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+							<span slot="content" v-html="textContent['ExpectedReturn']">
+							</span>
+							<i class="iconfont icon-wenhao"></i>
+						</el-tooltip>
+					</template>
+          <template slot-scope="scope">
+						<span class="tableText">
+							{{ `${scope.row[l.value]}${l.label.includes('%') ? '%' : ''}` }}
+						</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+					v-if="
+						l.label != 'Symbol' &&
+						l.label != 'Select' &&
+						l.label != 'Signal' &&
+						l.label != 'Trend' &&
+						l.label != 'Expected Return(%)'
+					"
+					:sortable="
+						[
+							'Stop Loss(%)',
+							'Win Rate(%)',
+							'Best Time In Market(Bars)',
+							'Time In Market(Bars)',
+							'Profit Target(%)',
+							'Date',
+							'Z-Score',
+							'Expected Return(%)',
+							'Close','Direction'
+						].indexOf(l.label) !== -1
+							? 'custom'
+							: false
+					"
+					:label="l.label"
+					:prop="l.value"
+					:key="index"
+					:min-width="[
+							'Best Time In Market(Bars)',
+							'Time In Market(Bars)',
+							'Expected Return(%)'
+						].indexOf(l.label) !== -1 ? '90' : '80'"
 				>
 					<template slot-scope="scope">
 						<span class="tableText">
-              {{ scope.row[l.value] }}
-						</span>
-					</template>
-				</el-table-column>
-        <el-table-column
-          align="center"
-					:label="l.label"
-					:prop="l.value"
-					:key="l.key"
-          v-if="['Total Trades'].includes(l.label)"
-          :sortable="['Total Trades'].includes(l.label) ? 'custom' : false"
-				  :sort-orders="['ascending', 'descending', l.value]"
-				>
-					<template slot-scope="scope">
-						<span class="tableText">
-							{{ scope.row[l.value] }}
-						</span>
-					</template>
-				</el-table-column>
-        <el-table-column
-          align="center"
-					:label="l.label"
-					:prop="l.value"
-					:key="l.key"
-          v-if="['Total Return %', 'Win Rate %'].includes(l.label)"
-          :sortable="['Total Return %', 'Win Rate %'].includes(l.label) ? 'custom' : false"
-				  :sort-orders="['ascending', 'descending', l.value]"
-				>
-					<template slot-scope="scope">
-						<span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
-							{{ scope.row[l.value] }}%
-						</span>
-            <span class="tableText" v-else>
-							{{ scope.row[l.value] }}
-						</span>
-					</template>
-				</el-table-column>
-        <el-table-column
-          align="center"
-					:label="l.label"
-					:prop="l.value"
-					:key="l.key"
-          v-if="['Period'].includes(l.label)"
-				>
-					<template slot-scope="scope">
-            <template v-for="(item, index) in scope.row[l.value]">
-              <div class="showDate" 
-              :key="index">
-              <span v-show="index == 0">Start: </span><span v-show="index == 1">End: </span>{{`${item}`}}
-              </div>
-            </template>
-					</template>
-				</el-table-column>
-        <el-table-column
-          align="center"
-					:label="l.label"
-					:prop="l.value"
-					:key="l.key"
-          v-if="['Status'].includes(l.label)"
-				>
-					<template slot-scope="scope">
-            <span v-if="scope.row[l.value] == 'Finish'">{{scope.row[l.value]}}</span>
-            <span v-if="scope.row[l.value] == 'Running'">{{scope.row[l.value]}}</span>
-            <span v-if="scope.row[l.value] == 'Fail'">{{scope.row[l.value]}}</span>
-					</template>
-				</el-table-column>
-        <el-table-column
-          align="center"
-					:label="l.label"
-					:prop="l.value"
-					:key="l.key"
-          v-if="['Bars Number'].includes(l.label)"
-				>
-        <template slot-scope="scope">
-						<span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
-							{{ scope.row[l.value] }}(Bars)
-						</span>
-            <span class="tableText" v-else>
-							{{ scope.row[l.value] }}
+							{{ `${scope.row[l.value]}${l.label.includes('%') ? '%' : ''}` }}
 						</span>
 					</template>
 				</el-table-column>
 			</template>
 		</el-table>
 		<el-pagination
+		@size-change="handleSizeChange"
 		@current-change="handleCurrentChange"
-    :current-page="currentPage"
+		:page-sizes="[10, 30, 50, 100, 200]"
 		:page-size="pageSize"
-		:total="total"
-		layout="total, prev, pager, next, jumper"
+		:total="data.content.length"
+		layout="total, sizes, prev, pager, next, jumper"
 		></el-pagination>
-  </div>
+	</div>
 </template>
 
 <script>
-import { delScannerBT, getScannerBTList, getScannerBTResults } from '@/service/service'
-import { capitalizeFirstLetter, isJson } from "@/utils"
 
 export default {
-  name: 'FilterTable',
-  data() {
-    return {
-      loading: false,
-      pageSize: 10, // Default page size
-      currentPage: 1, // Default current page
-      total: 0,
-      loadTest: 'Loading...',
-      searchKey: '',
-      tableCol: [
-        {
-          label: 'Name',
-          value: 'name',
-          key: 'name'
-        },
-        {
-          label: 'Status',
-          value: 'status',
-          key: 'status'
-        },
-        {
-          label: 'Period',
-          value: 'period',
-          key: 'period'
-        },
-        {
-          label: 'Total Trades',
-          value: 'total_trades',
-          key: 'total_trades'
-        },
-        {
-          label: 'Win Rate %',
-          value: 'win_rate',
-          key: 'win_rate'
-        },
-        {
-          label: 'Total Return %',
-          value: 'total_return',
-          key: 'total_return'
-        }
-      ],
-      tableData: [],
-      currentSort: {}, // 当前的排序信息
-    }
-  },
-  async created() {
-    await this.getDataList()
-    console.log('列表返回处理数据', this.tableData)
-  },
-  methods: {
-    async getDataList(orderby) {
-      this.loading = true
-      let res = null
-      const page = this.currentPage
-			try {
-				res = await getScannerBTList(page, orderby, this.searchKey)
-        console.log('列表响应', res)
-				if (res.status == 200) {
-					let data = res.data.results
-					data = data.map(item => {
-            item.status = capitalizeFirstLetter(item.status)
-            item.period = [item.start_date, item.end_date]
-            item.signals = isJson(item.signals) ? JSON.parse(item.signals) : item.signals
-						return item
-					})
-					this.tableData = data
-					this.total = res.data.count
-				}
-			} catch(error) {
-				console.log('报错了', error)
-        if(error.response.status === 404) {
-          const newPage = page != 1 ? page - 1 : 1
-          this.handleCurrentChange(newPage)
-          return
-        }
-        this.currentPage = 1
-        this.total = 0
-        this.tableData = []
-        
-      } finally {
-        this.loading = false
-      }
-    },
-    tableRowClassName({row, rowIndex}) {
-			if (rowIndex%2 === 1) {
-			return 'darken-row'
+	name: 'FilterTable',
+	props: {
+		data: Object,
+		tableCol :Array,
+		currTabPage: String,
+		loading: Boolean,
+	},
+	data() {
+		return {
+				btnLoading: false,
+				btInfo: [],
+				
+				checkboxGroupState: {},
+				selectedStopLosses: [],
+				selectedProfitTargets: [],
+				selectedWinRates: [],
+
+				activeSignal: [],
+
+				popupVisible: false, // 弹窗可见性
+    			popupContent: '', // 弹窗内容
+				hoveredItem: null, // 悬停的元素
+
+				loadTest: 'Loading...',
+				
+				textContent: {
+					'MA':"This strategy utilizes the crossover of closing prices and moving averages as trading signals.<br/>It can further specify the direction of trades and operating rules,<br/>such as determining long signals after a golden cross and short signals after a death cross.",
+					'MAGap':"This strategy determines trading signals by comparing the difference between the moving average of the current day and the previous day.<br/>It can further specify the direction of trades and operating rules,<br/>such as determining long signals after a golden cross and short signals after a death cross.",
+					'MACDHist':"This strategy uses the crossover signals of the MACD histogram as trading signals.<br/>It can further specify the direction of trades and operating rules,<br/>such as determining long signals after a golden cross and short signals after a death cross.",
+					'MACDHistGap':"This strategy determines trading signals by comparing the difference between the MACDHist and the previous day's value.<br/>It can further specify the direction of trades and operating rules,<br/>such as determining long signals after a golden cross and short signals after a death cross.",
+					'Hammer followed by a raise':"If the previous day's candlestick shows a long lower shadow,<br/>indicating support at the bottom,<br/>a long signal is generated when the price rises above a certain threshold after the opening.",
+					'Shooting Star followed by a fall':"If the previous day's candlestick shows a long upper shadow,<br/>indicating resistance at the top,<br/>a short signal is generated when the price falls below a certain threshold after the opening.",
+					'UpTrend Pattern':"When the price surpasses the upward trendline connecting the peak points of an uptrend,<br/>it indicates a potential future rise and generates a long signal.",
+					'DownTrend Pattern':"When the price falls below the downward trendline connecting the trough points of a downtrend,<br/>it indicates a potential future decline and generates a short signal.",
+					'Symbol Close > its\' MA200 and Optix MA5 < 35':"stocks that are above their 200-day moving average with an Optix 5-day moving average less than 35.",
+					'Symbol Close > its\' MA200 and Optix < 30':"stocks that are above their 200-day moving average with an Optix less than 30.",
+					'Optix #4':"stocks that Optix crossbelow 0.5.",
+					'Optix MA10 < 30 and Optix < 20':"Optix indicators with a 10-day moving average less than 30 and that day's Optix value is less than 20.",
+					'PriceBreakout':"When the closing price of a stock ranks above 0 in relation to the closing prices of the past 21 trading days, <br/>a golden cross occurs, indicating an upward breakout and generating a long signal. <br/>This suggests that the stock's price has entered a breakout phase and is likely to continue rising.",
+					'HighPoints':"When the highest price of a stock ranks above 100 in relation to the highest prices of the<br/> past 13 trading days (higher stock prices correspond to higher rankings), <br/>it forms a 13-day new high and generates a long signal. This indicates that <br/>the stock is experiencing a positive breakthrough and is in an upward trend.",
+					'LowPoints':"When the lowest price of a stock ranks below 0 in relation to the lowest prices of the past 13 trading days, <br/>it forms a 13-day new low and generates a short signal. <br/>This indicates that the stock is in a downtrend and can be shorted.",
+					'RSI':"When the RSI indicator forms a golden cross above 40, it suggests that the indicator is about to<br/>recover from an oversold state to the midpoint, indicating a potential long signal. <br/>RSI can reflect whether a stock is in an overbought or oversold condition <br />but should be used in conjunction with the trend analysis.",
+					'Trend': 'Closing price above the 252-day moving average is considered as Uptrend.<br/>Closing price below the 252-day moving average is considered as Downtrend.<br/>The whole backtest period is considered as ALL.',
+					'ExpectedReturn': 'ExpectedReturn = (WinRate * ProfitTarget - (100.0 - WinRate) * StopLoss) / 100.0'
+				},
+				midTermMap: {
+					'Symbol Close > its\' MA200 and Optix MA5 < 35':'Optix #1',
+					'Symbol Close > its\' MA200 and Optix < 30':'Optix #2',
+					'Optix MA10 < 30 and Optix < 20':'Optix #3'
+				},
+				pageSize: 10, // Default page size
+      			currentPage: 1, // Default current page
+
+		}
+	},
+	computed: {
+		// Filtered and paginated data to be displayed in the table
+		paginatedData() {
+			const startIndex = (this.currentPage - 1) * this.pageSize;
+			const endIndex = startIndex + this.pageSize;
+			// 当checkbox未勾选时，返回原始数据
+			return this.data.content?.slice(startIndex, endIndex);
+		},
+	},
+	watch: {
+		checkboxGroupState: {
+			handler(newValue, oldValue){
+				this.data.content.map((item)=>{
+					if(this.checkboxGroupState[item.id]){
+						this.selectedStopLosses.push(item['StopLoss'])
+						this.selectedProfitTargets.push(item['ProfitTarget'])
+						this.selectedWinRates.push(item['WinRate'])
+						this.selectedWinRates.push(item['ExpectedReturn'])
+					}
+				})
+				this.calculateAlloc()
+			},
+			deep: true
+		},
+	},
+	directives: {
+		'hover-popup': {
+			bind(el, binding, vnode) {
+			el.addEventListener('mouseover', () => {
+				// 显示弹窗
+				vnode.context.showPopup(binding.value.item);
+			});
+
+			el.addEventListener('mouseleave', () => {
+				// 隐藏弹窗
+				vnode.context.hidePopup();
+			});
+					const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Symbol Close > its\' MA200 and Optix MA5 < 35', 'Symbol Close > its\' MA200 and Optix < 30', 'Optix MA10 < 30 and Optix < 20', 'PriceBreakout', 'HighPoints', 'LowPoints', 'RSI']
+					if (!signalArr.includes(binding.value.item)) {
+				// 隐藏元素
+				el.style.display = 'none';
 			}
-			return ''
+			}
+		}
+	},
+	mounted() {
+		// this.data.content.map((item,index)=>{
+		// 		item['Alloc'] = ''
+		// })	
+	},
+	methods: {
+		handleSizeChange(size) {
+			this.pageSize = size;
+			this.currentPage = 1; // Reset to the first page when the page size changes
 		},
-    async handleCurrentChange(currentPage) {
+		pageReset(){
+			this.currentPage = 1; // Reset to the first page when the filter query sent
+		},
+		handleCurrentChange(currentPage) {
 			this.currentPage = currentPage;
-      await this.applySort()
 		},
-    async onSortChange({ column, prop, order }) {
-			if(this.currentPage != 1) this.currentPage = 1
-      if (column.sortable !== 'custom') return
-      this.currentSort = {
-        prop: prop,
-        order: order,
-      };
-      await this.applySort()
-    },
-    async applySort() {
-      let { prop, order } = this.currentSort;
-      //  order: 升 'ascending' | 降'descending' | 取消升降 null | order: total_return 
-      if (order == null || order == prop) {
-        // 不排序
-        prop = null
-      }
-      if (order == 'ascending') {
-        // 升序排列
-        prop = `-${prop}`
-      }
-			await this.getDataList(prop)
+
+		selectSymbol(id, Symbol, subscribe, pt,sl,wr,rowIndex) {
+			
+			/* 
+			只是起模拟作用，后续要上接口
+			*/
+			// subscribe = !subscribe
+			if(subscribe) {
+				this.selectedStopLosses.push(sl)
+				this.selectedProfitTargets.push(pt)
+				this.selectedWinRates.push(wr)
+			}else {
+				this.selectedStopLosses.pop(sl)
+				this.selectedProfitTargets.pop(pt)
+				this.selectedWinRates.pop(wr)
+			}
+			this.checkboxGroupState[id] = subscribe
+			
+			this.calculateAlloc()
 		},
-    handleCreate() {
-      this.$router.push({
-        name: 'CPMResults',
-        params: {
-          usedFor: 'createNewCPM',
-        }
-      })
-    },
-    async deleteSCBT(row) {
+		tableRowClassName({row, rowIndex}) {
+			if (rowIndex%2 === 1) {
+			return 'dark-row';
+			}
+			return '';
+		},
+		changeTableSort(column){
       debugger
-      const { url } = row
-      this.loading = true
-			const res = await delScannerBT(url)
-      const code = res.data.code
-      if(code == 204) this.popUpMsgBox('Successfully deleted')
-      if(code == 403) this.popUpMsgBox("Sorry, deleted item doesn't exist. Refresh the list")
-      if(code == 404) {this.popUpMsgBox('Delete failed')}
-			await this.getDataList(null)
-			this.loading = false
-    },
-    async handleRowClick(row) {
-      const {url} = row
-      let res
-      try {
-        debugger
-        res = await getScannerBTResults(url)
-      } catch (error) {
-        console.error('error', error)
-        return
-      }
-      const code = res.data?.code
-      if(code == 403) {this.popUpMsgBox('Sorry, details not found. Possibly deleted or moved'); return}
-      if(code == 200) {
-        const data = res.data.data
-        this.$emit('displayResultsData', data)
-      }
-      if(code != 200) this.$emit('displayResultsData', row)
-    },
-    async handleQuery() {
-      if(this.currentPage != 1) this.currentPage = 1
-      await this.applySort()
-    }
-    },
-  }
+			var sortingOrder = column.order
+			var colName = column.prop
+			// 数字字符串转数字类型排序
+			if(['StopLoss','TimeInMarket','ProfitTarget'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.data.content.sort((a,b) => {
+            b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
+            a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
+						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
+						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
+						return _b - _a
+					})
+				}else if(sortingOrder == 'descending'){
+					this.data.content.sort((a,b) => {
+            b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
+            a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
+						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
+						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
+						return _a - _b
+					})
+				}else{
+				}
+			}
+			// 数字类型排序
+			if(['WinRate', 'ExpectedReturn', 'Z_Score', 'Close'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.data.content.sort((a,b) => {
+						return b[colName] - a[colName]
+					})
+				}else if(sortingOrder == 'descending'){
+					this.data.content.sort((a,b) => {
+						return a[colName] - b[colName]
+					})
+				}else{
+				}
+			}
+			// 日期类型排序
+			if(['Date'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.data.content.sort((a,b) => {
+						return new Date(b[colName]) - new Date(a[colName])
+					})
+				}else if(sortingOrder == 'descending'){
+					this.data.content.sort((a,b) => {
+						return new Date(a[colName]) - new Date(b[colName])
+					})
+				}else{
+				}
+			}
+			// 字符串类型排序
+			if(['Market','_Signal','Direction'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.data.content.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
+				}else if(sortingOrder == 'descending'){
+					this.data.content.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
+				}else{
+				}
+			}
+		},
+
+		scrollListner(){
+			var outDiv = document.getElementsByClassName('el-table__body-wrapper');  
+			
+			for(let item of outDiv){
+			item.onwheel = function(event){  
+				
+				//禁止事件默认行为（此处禁止鼠标滚轮行为关联到"屏幕滚动条上下移动"行为）  
+				event.preventDefault();  
+				//设置鼠标滚轮滚动时屏幕滚动条的移动步长  
+				var step = 50;  
+				if(event.deltaY < 0){  
+					//向上滚动鼠标滚轮，屏幕滚动条左移  
+					this.scrollLeft -= step;  
+				} else {  
+					//向下滚动鼠标滚轮，屏幕滚动条右移  
+					this.scrollLeft += step;  
+				}  
+			}
+			}
+		},
+		calculateAlloc(){			
+			let slMean = this.selectedStopLosses.reduce((sum,value)=>{return Number(sum)+Number(value)},0)/this.selectedStopLosses.length
+			let ptMean = this.selectedProfitTargets.reduce((sum,value)=>{return Number(sum)+Number(value)},0)/this.selectedProfitTargets.length
+			let wrMean = this.selectedWinRates.reduce((sum,value)=>{return Number(sum)+Number(value)},0)/this.selectedWinRates.length*0.01
+
+			let kellyTotal = ((ptMean+slMean)*wrMean-slMean)/ptMean
+			this.data.content.map((item,index)=>{
+				if(this.checkboxGroupState[item.id]){
+					let kelly = kellyTotal*(item['WinRate']/Array.from(this.selectedWinRates).reduce((sum,value)=>{return Number(sum)+Number(value)},0))
+					item['Alloc'] = (kelly*100).toFixed(2)
+				}else{
+					item['Alloc'] = ''
+				}
+			})
+		},
+		showPopup(item) {
+			// 设置当前悬停的项
+				const signalArr = ['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Symbol Close > its\' MA200 and Optix MA5 < 35', 'Symbol Close > its\' MA200 and Optix < 30', 'Optix MA10 < 30 and Optix < 20', 'PriceBreakout', 'HighPoints', 'LowPoints', 'RSI']
+				if(signalArr.includes(item)) {
+					this.currentItem = item;
+					// 显示弹窗
+					this.popupVisible = true;
+				}else {
+					this.popupVisible = false;
+				}
+		},
+		hidePopup() {
+			// 隐藏弹窗
+			this.popupVisible = false;
+		},
+	}
+};
 </script>
 
-<style lang="less" scoped>
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="less">
+.iconfont {
+	font-family: 'iconfont' !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+.table-label {
+	margin: 20px 0;
+}
+.el-table /deep/ thead .iconfont{
+	color: #606266;
+}
+.filterTableDes {
+  padding: 0px 0px 20px 0px;
+  margin: 0px;
+  font-size: 16px;
+  border-bottom: 2px solid #dddddd;
+  .strongSpan {
+    font-weight: 500;
+  }
+}
 .CPM-list-container{
   padding: 20px;
-}
-.showDate {
-  margin: 5px 0;
-}
-.ScannerBTTable .el-button i {
-  font-size: 16px;
 }
 .ScannerBTTable .demo-table-expand .el-form-item {
     margin-right: 0;
