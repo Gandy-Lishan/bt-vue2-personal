@@ -14,5 +14,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-
+.aiscanner-container {font-family: "Open Sans",sans-serif;}
 </style>
