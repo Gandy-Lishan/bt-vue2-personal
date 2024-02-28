@@ -14,7 +14,7 @@
       <el-collapse-item name="2" class="form">
         <template v-slot:title>
           <div class="title">
-            <p @click.stop>Select Condition</p>
+            <p @click.stop>Filter Criteria</p>
             <p>
               <el-tooltip class="item" effect="dark" content="Create New Scanner Backtest" placement="bottom-start">
                 <el-button  type="warning" plain class="delete-btn" @click.stop="resetForm" size="small" icon="el-icon-plus">Create New</el-button>
@@ -135,7 +135,7 @@ export default {
       statistics.totalReturn = result['TOTAL RETURN']
       statistics.medianReturn = result['MEDIAN RETURN']
       statistics.averageReturn = result['AVERAGE RETURN']
-      // statistics.tzScore = result['Z-SCORE'] // 缺少
+      statistics.tzScore = result['Z-SCORE'] 
       // statistics.standardDeviation = _data.standardDeviation
       // statistics.maxRisk = _data.maxRisk
       // statistics.buyHoldGain = _data.buy_and_hold 缺少

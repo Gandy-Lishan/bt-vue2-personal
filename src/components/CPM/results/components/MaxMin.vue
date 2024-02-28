@@ -76,7 +76,8 @@ export default {
 	props: {
 			tradesData: Array,
 			tradePrice: String,
-			rowFrequency: String
+			rowFrequency: String,
+			direction: String
   },
 	methods: {
 		clearData(timeframe) {
@@ -99,10 +100,8 @@ export default {
 				return ''
 			}
 		},
-		clearData() {
-				this.backtestHistoryList = []
-		},
 		async prepareData(_,datatime) {
+			debugger
 				const periodArray = this.getAllDefaultTableLabels()
 				const backtestHistoryList = this.calculateBacktestHistory(
 						this.tradesData,
@@ -382,10 +381,8 @@ export default {
       periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
       */
 			let chartDataset = CIQ.stxx.chart.dataSet
-			const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
+			const direction = this.direction
 			const field = this.tradePrice
-			// dataSet = dataSet.filter((item) => item.TradeStatus == 'BUY')
-			dataSet = dataSet.filter((_, index) => index % 2 === 0)
 			let returnResults = []
 
 			for (var data in dataSet) {

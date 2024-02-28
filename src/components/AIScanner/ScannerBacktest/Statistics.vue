@@ -106,22 +106,20 @@
 								}}</span>
 							</template>
 						</el-table-column> -->
-				<el-table-column
-					show-overflow-tooltip
-					prop="buyHoldGain"
-					label="BUY & HOLD %"
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span v-if="scope.row.buyHoldGain >= 0">{{
-							scope.row.buyHoldGain + '%'
-						}}</span>
-						<span v-else-if="isNaN(scope.row.buyHoldGain)"></span>
-						<span v-else style="color: #dd3a13">{{
-							scope.row.buyHoldGain + '%'
-						}}</span>
-					</template>
-				</el-table-column>
+						<el-table-column
+                prop="tzScore"
+                label="Z-SCORE"
+                align="center"
+                show-overflow-tooltip
+            >
+                <template slot-scope="scope">
+                    <span v-if="scope.row.tzScore >= 0">{{
+                        scope.row.tzScore
+                    }}</span>
+                    <span v-else-if="isNaN(scope.row.tzScore)">0</span>
+                    <span v-else style="color: #dd3a13">{{ scope.row.tzScore }}</span>
+                </template>
+            </el-table-column>
 				<el-table-column
 					prop="winRate"
 					label="WIN RATE %"
@@ -459,7 +457,7 @@ export default {
         obj['AVERAGE RETURN %'] = isNaN(item.averageReturn)
           ? 0
           : `${item.averageReturn}%`
-        obj['BUY & HOLD %'] = isNaN(item.buyHoldGain)
+        obj['Z-SCORE'] = isNaN(item.tzScore)
           ? 0
           : `${item.buyHoldGain}%`
         obj['WIN RATE %'] = isNaN(item.winRate) ? 0 : `${item.winRate}%`
