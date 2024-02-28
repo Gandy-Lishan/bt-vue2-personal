@@ -729,14 +729,14 @@ export const CommonMethodsMixin = {
 				return 'We Only Support Single Condition Backtests with Sentiment Indicator.'	
 			}
 
-			if(
-				(signalCode.decode(entry_criteria.signals[0].code).comparison == "SV" &&
-				signalCode.decode(entry_criteria.signals[0].code).value == "SVMA") ||
-				(signalCode.decode(exit_criteria.signals[0].code).comparison == "SV" &&
-				signalCode.decode(exit_criteria.signals[0].code).value == "SVMA")
-			) {
-				return 'Sorry, this type of optimization is currently not supported.'	
-			}
+			// if(
+			// 	(signalCode.decode(entry_criteria.signals[0].code).comparison == "SV" &&
+			// 	signalCode.decode(entry_criteria.signals[0].code).value == "SVMA") ||
+			// 	(signalCode.decode(exit_criteria.signals[0].code).comparison == "SV" &&
+			// 	signalCode.decode(exit_criteria.signals[0].code).value == "SVMA")
+			// ) {
+			// 	return 'Sorry, this type of optimization is currently not supported.'	
+			// }
 
 			if(
 				entry_criteria.signals.length > 1 ||
