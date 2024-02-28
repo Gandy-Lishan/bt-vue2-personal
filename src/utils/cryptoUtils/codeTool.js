@@ -728,7 +728,7 @@ class EncodeSI {
 	encode(obj) {
 		var keys = Object.keys(obj)
 		if (!this.check(obj)) return false
-		if (obj['period'] == 1)
+		if (obj['comparison'] === 'SV' && obj['value'] !== 'SVMA')
 			return (
 				'SI:' +
 				obj['indicator'] +
@@ -743,7 +743,7 @@ class EncodeSI {
 				'/' +
 				obj['value']
 			)
-		else if (keys.indexOf('period') !== -1 && obj['value'] !== 'SVMA')
+		else if (obj['comparison'] === 'SVMA' && obj['value'] !== 'SVMA')
 			return (
 				'SI:' +
 				obj['indicator'] +
@@ -759,7 +759,7 @@ class EncodeSI {
 				'/' +
 				obj['value']
 			)
-		else if (obj['value'] === 'SVMA') 
+		else if (obj['comparison'] === 'SV' && obj['value'] === 'SVMA') 
 				return (
 					'SI:' +
 					obj['indicator'] +
@@ -1120,10 +1120,13 @@ class Code {
 //     'indicator': 'Smart Money Confidence',
 //     'extreme_optimism': '20',
 //     'extreme_pessimism': '80',
-//     'period': '20',
+//     'period': '1',
 //     'condition': '3',
-//     'value': '20'
-// },{
+//     'value': '20',
+// 		'comparison': 'SVMA'
+// },
+// ]
+//{
 //     'analysis': 'Sentiment',
 //     'indicator': 'Smart Money Confidence',
 //     'extreme_optimism': '20',
