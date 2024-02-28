@@ -24,29 +24,29 @@
 				<template slot-scope="props">
 					<el-form label-position="left" inline class="demo-table-expand">
 						<el-form-item label="AVERAGE WIN %">
-							<span>{{ props.row['avg_win']}}	</span>
+							<span>{{ props.row['avg_win'] ? `${props.row['avg_win']}%` : props.row['avg_win'] }}</span>
 						</el-form-item>
             <el-form-item label="MAX RISK %">
-							<span>{{ props.row['max_risk']}}	</span>
+							<span>{{ props.row['max_draw_down'] ? `${props.row['max_draw_down']}%` : props.row['max_draw_down'] }}</span>
 						</el-form-item>
 						<el-form-item label="AVERAGE LOSS %">
-							<span>{{ props.row['avg_loss']}}	</span>
+							<span>{{ props.row['avg_loss'] ? `${props.row['avg_loss']}%` : props.row['avg_loss'] }}</span>
 						</el-form-item>
 						<el-form-item label="MEDIAN RETURN %">
-							<span>{{ props.row['median_return'] }}</span>
+							<span>{{ props.row['median_return'] ? `${props.row['median_return']}%` : props.row['median_return'] }}</span>
 						</el-form-item>
 						<el-form-item label="TOTAL TRADES">
 							<span>{{ props.row['total_trades']}}</span>
 						</el-form-item>
 
-						<el-form-item label="ANNUAL RETURN % (CAGR)">
+						<!-- <el-form-item label="ANNUAL RETURN % (CAGR)">
 							<span>{{ props.row['annual_return'] }}</span>
-						</el-form-item>
+						</el-form-item> -->
 						<el-form-item label="TOTAL POSITIVE">
 							<span>{{ props.row['total_positive'] }}</span>
 						</el-form-item>
 						<el-form-item label="AVERAGE RETURN %">
-							<span>{{ props.row['avg_return'] }}</span>
+							<span>{{ props.row['avg_return'] ? `${props.row['avg_return']}%` : props.row['avg_return'] }}</span>
 						</el-form-item>
 						<el-form-item label="TOTAL NEGATIVE">
 							<span>{{ props.row['total_negative'] }}</span>
@@ -55,7 +55,7 @@
 							<span>{{ props.row['StdDev'] }}</span>
 						</el-form-item>
             <el-form-item label="TIME IN MARKET %">
-							<span>{{ props.row['time_in_market'] }}</span>
+							<span>{{ props.row['time_in_market'] ? `${props.row['time_in_market']}%` : props.row['time_in_market'] }}</span>
 						</el-form-item>
 					</el-form>
 				</template>
@@ -67,8 +67,8 @@
       </template>
 				<template slot-scope="scope">
           <el-button-group>
-            <el-button type="text" icon="el-icon-caret-right" @click="handleRowClick(scope.row)" title="View Backtest Details" :loading="viewLoading"></el-button>
-            <el-button type="text" icon="el-icon-close" @click="deleteSCBT(scope.row)" title="Delete Backtest" :loading="deleteLoading" element-loading-spinner="el-icon-right"></el-button>
+            <el-button type="text" icon="el-icon-caret-right" @click="handleRowClick(scope.row)" title="View Backtest Details" :loading="scope.row.viewLoading"></el-button>
+            <el-button type="text" icon="el-icon-close" @click="deleteSCBT(scope.row)" title="Delete Backtest" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -221,8 +221,6 @@ export default {
       ],
       tableData: [],
       currentSort: {}, // 当前的排序信息
-      viewLoading: false,
-      deleteLoading: false
     }
   },
   async created() {
@@ -243,6 +241,8 @@ export default {
             item.status = capitalizeFirstLetter(item.status)
             item.period = [item.start_date, item.end_date]
             item.signals = isJson(item.signals) ? JSON.parse(item.signals) : item.signals
+            item.viewLoading = false
+            item.deleteLoading = false
 						return item
 					})
 					this.tableData = data
@@ -299,17 +299,17 @@ export default {
     },
     async deleteSCBT(row) {
       const { url } = row
-      this.deleteLoading = true
+      row.deleteLoading = true
 			const res = await delScannerBT(url)
       const code = res.data.code
       if(code == 204) this.popUpMsgBox('Successfully deleted')
       if(code == 403) this.popUpMsgBox("Sorry, deleted item doesn't exist. Refresh the list")
       if(code == 404) {this.popUpMsgBox('Delete failed')}
-			this.deleteLoading = false
+			row.deleteLoading = false
 			await this.getDataList(null)
     },
     async handleRowClick(row) {
-      this.viewLoading = true
+      row.viewLoading = true
       const {url} = row
       let res, listRes
       try {
@@ -319,7 +319,7 @@ export default {
       } catch (error) {
         console.error('error', error)
         this.popUpMsgBox('Details Not Found')
-        this.viewLoading = false
+        row.viewLoading = false
         return
       }
       const code = res.data?.code
@@ -330,7 +330,7 @@ export default {
         this.$emit('displayResultsData', data)
       }
       if(code != 200) this.$emit('displayResultsData', row)
-      this.viewLoading = false
+      row.viewLoading = false
     },
     async handleQuery() {
       if(this.currentPage != 1) this.currentPage = 1
