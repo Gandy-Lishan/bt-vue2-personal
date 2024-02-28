@@ -8,7 +8,6 @@
 			ref="tableREF"
 			class="ScannerBTTable"
 			:data="paginatedData"
-			:row-class-name="tableRowClassName"
 			empty-text="Empty filter condition preview list"
       v-loading="loading"
       :element-loading-text="loadTest"
@@ -17,6 +16,7 @@
 			@sort-change="changeTableSort"
 			style="width: 100%; height: 100%"
       size="small"
+      stripe
 		>
 			<!-- :min-width="90" -->
 			<template v-for="(l, index) in tableCol">
@@ -320,12 +320,6 @@ export default {
 			this.checkboxGroupState[id] = subscribe
 			
 			this.calculateAlloc()
-		},
-		tableRowClassName({row, rowIndex}) {
-			if (rowIndex%2 === 1) {
-			return 'dark-row';
-			}
-			return '';
 		},
 		changeTableSort(column){
       debugger

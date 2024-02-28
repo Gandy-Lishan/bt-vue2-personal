@@ -733,6 +733,20 @@ export function getScannerBTResults(url) {
 			})
 	})
 }
+export function getScannerBTResultsList(url) {
+	const path = `/dev/scanner_trader/run_scanner_bt/?url=${url}&return_trade_list=1`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 export function getCPMPreview(url) {
 	const path = `/dev/cpm/preview_pattern/?url=${url}`
 

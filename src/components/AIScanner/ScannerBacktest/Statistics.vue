@@ -1,8 +1,18 @@
 <template>
 	<div class="statistics-container">
-		<div class="statistics-title"></div>
+		<div class="statistics-title">
+			<el-button
+					@click="handleDownloadCsv"
+					style="display: inline-block"
+					type="primary"
+					plain
+					size="mini"
+					icon="el-icon-download"
+					>Export Data</el-button
+				>
+		</div>
 		<div>
-			<el-table header-align="center" class="CPM-summary" :data="summaryData">
+			<el-table header-align="center" class="CPM-summary" :data="summaryData" size="small">
 				<el-table-column
 					prop="totalReturn"
 					show-overflow-tooltip
@@ -129,9 +139,9 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-table class="CPM-summary" header-align="center" :data="summaryData">
+			<el-table class="CPM-summary" header-align="center" :data="summaryData" size="small">
 			</el-table>
-			<el-table class="CPM-summary" header-align="center" :data="summaryData">
+			<el-table class="CPM-summary" header-align="center" :data="summaryData" size="small">
 				<el-table-column
 					show-overflow-tooltip
 					prop="averageWin"
@@ -247,112 +257,304 @@
 		</div>
 		<div class="CPM-trades">
 			<el-table
-				header-align="center"
-				:row-class-name="tableRowClassName"
-				:data="tradesData"
-				border
-			>
-				<el-table-column
-					prop="TradeDate"
-					label="Trade Date"
-					show-overflow-tooltip
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span>{{ scope.row.TradeDate }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-					prop="SymbolClose"
-					label="Symbol Close"
-					show-overflow-tooltip
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span :style="scope.row.SymbolClose >= 0 ? '' : 'color: #dd3a13'">{{
-							scope.row.SymbolClose
-						}}</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-					prop="CorrelationPercentage"
-					label="Correlation Percentage"
-					show-overflow-tooltip
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span
-							:style="
-								scope.row.CorrelationPercentage >= 0 ? '' : 'color: #dd3a13'
-							"
-							>{{ scope.row.CorrelationPercentage }}%</span
-						>
-					</template>
-				</el-table-column>
-				<el-table-column
-					prop="Return"
-					label="Return"
-					show-overflow-tooltip
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span :style="scope.row.Return >= 0 ? '' : 'color: #dd3a13'">{{
-							scope.row.Return.toFixed(2) + '%'
-						}}</span>
-					</template>
-				</el-table-column>	
-				<el-table-column
-                prop="MarketCondition"
-                label="Market Condition"
+					:data="paginatedData"
+					class="trades-table ScannerBTTable"
+					size="small"
+					stripe
+        >
+            <el-table-column
+                show-overflow-tooltip
+                prop="TradeNumber"
+                label="#"
+                width="50px"
                 align="center"
             >
-            <template slot="header">
-                Market Condition
-                    <el-tooltip effect="dark" placement="top" style="diaplay: inline">
-                    <span slot="content" v-html="textContent['MarketCondition']">
-                    </span>
-                    <i class="iconfont icon-wenhao"></i>
-                </el-tooltip>
-            </template>
             <template slot-scope="scope">
-							<span v-if="scope.row.MarketCondition">{{scope.row.MarketCondition}}</span>
-							<span v-else></span>
+                {{ Number(scope.row.TradeNumber) + 1 }}
             </template>
-        </el-table-column>
-			</el-table>
+            </el-table-column>
+						<el-table-column
+							prop="Symbol"
+							label="Symbol"
+							align="center"
+							width="100px"
+							show-overflow-tooltip
+            >
+						</el-table-column>
+						<el-table-column
+							prop="Signal"
+							label="Signal"
+							align="center"
+							show-overflow-tooltip
+            >
+            </el-table-column>
+						<el-table-column
+							prop="Direction"
+							label="Direction"
+							align="center"
+							width="100px"
+							show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+                prop="EntryDate"
+                label="Entry Date"
+                align="center"
+								width="120px"
+                show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+                prop="EntryAction"
+                label="Entry Action"
+								width="120px"
+                align="center"
+                show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+                prop="EntryPrice"
+                label="Entry Price"
+                align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                prop="ExitDate"
+                label="Exit Date"
+                align="center"
+								width="120px"
+                show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+                prop="ExitAction"
+                label="Exit Action"
+                align="center"
+								width="120px"
+                show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+                prop="ExitPrice"
+                label="Exit Price"
+                align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                prop="FloatProfit"
+                label="Float Profit %"
+                align="center"
+                show-overflow-tooltip
+            >
+                <template slot-scope="scope">
+                    <span v-if="scope.row.FloatProfit >= 0"
+                        >{{ scope.row.FloatProfit }}%</span
+                    >
+                    <span v-else-if="scope.row.FloatProfit < 0" style="color: #dd3a13"
+                        >{{ scope.row.FloatProfit }}%</span
+                    >
+                    <span v-else>{{ '' }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                prop="ExitReason"
+                label="Exit Reason"
+                align="center"
+            >
+            </el-table-column>
+            <div slot="empty" style="text-align: left">
+                <el-empty image-size="80" description="No Data"></el-empty>
+            </div>
+        </el-table>
+        <div class="pagination-container">
+            <span style="font-size: 13px; font-weight: 400; margin-right: 10px"
+                >Total {{ totalTradesNumber }}</span
+            >
+            <el-pagination
+                @current-change="handleCurrentChange"
+                :current-page="queryInfo.page"
+                :page-size="20"
+                layout="prev, pager, next,slot"
+                :total="queryInfo.total"
+            >
+            </el-pagination>
+        </div>
 		</div>
 	</div>
 </template>
-
 <script>
+const XLSX = require('xlsx')
+
 export default {
 	name: 'Statistics',
+	props: {
+		tradesData: Array,
+	},
 	data() {
 		return {
 			summaryData: [{}],
 			tradesData: [],
+			queryInfo: {
+				total: 0,
+				page: 1
+			},
+			totalTradesNumber: 0,
+			processedTradesData: [],
+			textContent: {
+					'MarketCondition': 'Indicates the market environment for this transaction:<br/> "Bear" stands for "Bear Market",<br/> "Bull" stands for "Bull Market",<br/> "Rec" stands for "Recession", "Ease" refers to "FOMC Easing",<br/> and "Tight" represents "FOMC Tightening".'
+			},
       textContent: {'MarketCondition': 'Indicates the market environment for this transaction:<br/> "Bear" stands for "Bear Market",<br/> "Bull" stands for "Bull Market",<br/> "Rec" stands for "Recession", "Ease" refers to "FOMC Easing",<br/> and "Tight" represents "FOMC Tightening".'}
 		}
 	},
-	methods: {
-		tableRowClassName(obj) {
-			const { row, rowIndex } = obj
-			if (rowIndex % 2 === 1) {
-				return 'darken-row'
-			}
-			return ''
+	computed: {
+		// Filtered and paginated data to be displayed in the table
+		paginatedData() {
+			return this.processedTradesData.slice(
+					20 * (this.queryInfo.page - 1),
+					this.queryInfo.page * 20
+			)
 		},
-		displayData(data, transformedResult) {
+	},
+	watch: {
+		tradesData: {
+			handler(newValue, _){
+				this.processedTradesData = newValue
+				this.queryInfo.total = newValue.length
+				this.totalTradesNumber = newValue.length
+			},
+			deep: true
+		},
+	},
+	methods: {
+		displayData(data) {
 			this.summaryData = [
 				{
 					...data
 				}
 			]
-			this.tradesData = transformedResult
 		},
-		exportData() {
-			return {summaryData: this.summaryData, tradesData: this.tradesData};
-		}
+		handleCurrentChange(page){
+				this.queryInfo.page = page
+		},
+		handleDownloadCsv() {
+      const {summaryData, processedTradesData:tradesData} = this
+      if (
+        !(
+          summaryData.length &&
+          tradesData.length
+        )
+      ) {
+        this.popUpMsgBox('No data available for download')
+        return
+      }
+      const summary = []
+      summaryData.forEach((item, index) => {
+        const obj = {}
+        obj['TOTAL RETURN %'] = isNaN(item.totalReturn)
+          ? 0
+          : `${item.totalReturn}%`
+        obj['MEDIAN RETURN %'] = isNaN(item.medianReturn)
+          ? 0
+          : `${item.medianReturn}%`
+        obj['AVERAGE RETURN %'] = isNaN(item.averageReturn)
+          ? 0
+          : `${item.averageReturn}%`
+        obj['BUY & HOLD %'] = isNaN(item.buyHoldGain)
+          ? 0
+          : `${item.buyHoldGain}%`
+        obj['WIN RATE %'] = isNaN(item.winRate) ? 0 : `${item.winRate}%`
+        obj['AVERAGE WIN %'] = isNaN(item.averageWin)
+          ? 0
+          : `${item.averageWin}%`
+        obj['AVERAGE LOSS %'] = isNaN(item.averageLoss)
+          ? 0
+          : `${item.averageLoss}%`
+        obj['TOTAL TRADES'] = isNaN(item.totalTrades)
+          ? 0
+          : `${item.totalTrades}`
+        obj['TOTAL POSITIVE'] = isNaN(item.totalPositive)
+          ? 0
+          : `${item.totalPositive}`
+        obj['TOTAL NEGATIVE'] = isNaN(item.totalNegative)
+          ? 0
+          : `${item.totalNegative}`
+        obj['TIME IN MARKET %'] = isNaN(item.timeInMarket)
+          ? 0
+          : `${item.timeInMarket}%`
+        summary.push(obj)
+      })
+      const trade = []
+      tradesData.forEach((item, index) => {
+        const obj = {}
+        obj['#'] = item.TradeNumber
+        obj['Symbol'] = item.Symbol
+        obj['Signal'] = item.Signal
+        obj['Direction'] = item.Direction
+        obj['Entry Date'] = item.EntryDate
+        obj['Entry Action'] = item.EntryAction
+        obj['Entry Price'] = item.EntryPrice
+        obj['Exit Date'] = item.ExitDate
+        obj['Exit Action'] = item.ExitAction
+        obj['Exit Price'] = item.ExitPrice
+        obj['Float Profit %'] = item.FloatProfit ? `${item.FloatProfit}%` : ''
+        obj['Exit Reason'] = item.ExitReason
+        trade.push(obj)
+      })
+      const dataList = [
+        summary,
+        trade
+      ]
+      const sheetNames = [
+        'Summary',
+        'Trades'
+      ]
+      this.exportDataToCSV(dataList, sheetNames)
+    },
+		exportDataToCSV(dataList, sheetNames) {
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new()
+
+      for (let i = 0; i < dataList.length; i++) {
+        // Convert the data to a worksheet
+        const worksheet = XLSX.utils.json_to_sheet(dataList[i])
+
+        // Add the worksheet to the workbook with the given name
+        XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i])
+      }
+
+      // Convert the workbook to a binary string
+      const workbookBinaryString = XLSX.write(workbook, {
+        type: 'binary',
+        bookType: 'xlsx'
+      })
+      // Create a Blob from the binary string
+      const blob = new Blob([this.s2ab(workbookBinaryString)], {
+        type: 'application/octet-stream'
+      })
+
+      // Create a download URL for the Blob
+      const url = URL.createObjectURL(blob)
+
+      // Create a link element for downloading the CSV file
+      const link = document.createElement('a')
+      link.style.display = 'none'
+      link.setAttribute('href', url)
+      link.setAttribute('download', 'Results.xlsx')
+      link.innerHTML = 'Download XLSX'
+      // Append the link element to the document body
+      document.body.appendChild(link)
+
+      // Trigger the download
+      link.click()
+    },
+		s2ab(s) {
+      const buf = new ArrayBuffer(s.length);
+      const view = new Uint8Array(buf);
+      for (let i = 0; i < s.length; i++) {
+        view[i] = s.charCodeAt(i) & 0xff;
+      }
+      return buf;
+    },
 	}
 }
 </script>
@@ -367,5 +569,14 @@ export default {
 }
 .CPM-summary {
 	margin: 5px 0;
+}
+.CPM-trades {
+	margin-top: 40px;
+	border-top: 2px solid #dddddd;
+}
+.statistics-title {
+	align-items: center;
+	justify-content: flex-end;
+	display: flex;
 }
 </style>

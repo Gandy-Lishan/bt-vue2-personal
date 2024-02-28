@@ -10,7 +10,6 @@
 			class="ScannerBTTable"
       header-align="center"
 			:data="tableData"
-			:row-class-name="tableRowClassName"
       empty-text="No data"
       v-loading="loading"
       :element-loading-text="loadTest"
@@ -19,6 +18,7 @@
       element-loading-background="rgba(0, 0, 0, 0.8)"
       size="small"
 			style="width: 100%; height: 100%; margin: 0 auto;"
+      stripe
 		>
     <el-table-column type="expand">
 				<template slot-scope="props">
@@ -61,10 +61,14 @@
 				</template>
 			</el-table-column>
     <el-table-column align="center" width="50px">
+      <template #header>
+        <!-- 将表头内容替换成 -->
+        <el-button type="text" icon="el-icon-refresh" title="Refresh List" @click="getDataList"></el-button>
+      </template>
 				<template slot-scope="scope">
           <el-button-group>
-            <el-button type="text" icon="el-icon-caret-right" @click="handleRowClick(scope.row)"></el-button>
-            <el-button type="text" icon="el-icon-close" @click="deleteSCBT(scope.row)"></el-button>
+            <el-button type="text" icon="el-icon-caret-right" @click="handleRowClick(scope.row)" title="View Backtest Details" :loading="viewLoading"></el-button>
+            <el-button type="text" icon="el-icon-close" @click="deleteSCBT(scope.row)" title="Delete Backtest" :loading="deleteLoading" element-loading-spinner="el-icon-right"></el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -170,7 +174,7 @@
 </template>
 
 <script>
-import { delScannerBT, getScannerBTList, getScannerBTResults } from '@/service/service'
+import { delScannerBT, getScannerBTList, getScannerBTResults, getScannerBTResultsList } from '@/service/service'
 import { capitalizeFirstLetter, isJson } from "@/utils"
 
 export default {
@@ -217,6 +221,8 @@ export default {
       ],
       tableData: [],
       currentSort: {}, // 当前的排序信息
+      viewLoading: false,
+      deleteLoading: false
     }
   },
   async created() {
@@ -257,12 +263,6 @@ export default {
         this.loading = false
       }
     },
-    tableRowClassName({row, rowIndex}) {
-			if (rowIndex%2 === 1) {
-			return 'dark-row'
-			}
-			return ''
-		},
     async handleCurrentChange(currentPage) {
 			this.currentPage = currentPage;
       await this.applySort()
@@ -298,34 +298,39 @@ export default {
       })
     },
     async deleteSCBT(row) {
-      debugger
       const { url } = row
-      this.loading = true
+      this.deleteLoading = true
 			const res = await delScannerBT(url)
       const code = res.data.code
       if(code == 204) this.popUpMsgBox('Successfully deleted')
       if(code == 403) this.popUpMsgBox("Sorry, deleted item doesn't exist. Refresh the list")
       if(code == 404) {this.popUpMsgBox('Delete failed')}
+			this.deleteLoading = false
 			await this.getDataList(null)
-			this.loading = false
     },
     async handleRowClick(row) {
+      this.viewLoading = true
       const {url} = row
-      let res
+      let res, listRes
       try {
         debugger
         res = await getScannerBTResults(url)
+        listRes = await getScannerBTResultsList(url)
       } catch (error) {
         console.error('error', error)
+        this.popUpMsgBox('Details Not Found')
+        this.viewLoading = false
         return
       }
       const code = res.data?.code
       if(code == 403) {this.popUpMsgBox('Sorry, details not found. Possibly deleted or moved'); return}
       if(code == 200) {
         const data = res.data.data
+        data['TRADE LIST'] = listRes.data.data 
         this.$emit('displayResultsData', data)
       }
       if(code != 200) this.$emit('displayResultsData', row)
+      this.viewLoading = false
     },
     async handleQuery() {
       if(this.currentPage != 1) this.currentPage = 1

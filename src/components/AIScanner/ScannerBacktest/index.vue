@@ -40,7 +40,7 @@
             :tableCol="filterTableData.tableCol" 
             :loading="loading"
             ></FilterTable>
-            <Statistics v-show="activeSecondTab == 'summary'" ref="Statistics"></Statistics>
+            <Statistics v-show="activeSecondTab == 'summary'" ref="Statistics" :tradesData="tradesData"></Statistics>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -72,6 +72,7 @@ export default {
       StartEndDateArray: [],
       default_symbol: '',
       loading: false,
+      tradesData: [],
       filterTableData: {
         content: [],
         label:'Filter Condition Preview',
@@ -114,23 +115,27 @@ export default {
       this.activeSecondTab = 'summary'
       this.displaySummary(result)
     },
-    displayResultsData(_data) {
+    displayResultsData(data) {
       debugger
-      this.$refs['ScannerForm'].displayData(_data)
+      this.$refs['ScannerForm'].displayData(data)
       this.activeSecondTab = 'summary'
-      const status = _data.status
-      if(status !== 'finish') return
-      const result = _data.result.result
-      const list = JSON.parse(_data['TRADE LIST'])
+      const status = data.status
+      if(status !== 'finish' && status !== 'Finish') {
+        this.clearResults()
+        return
+      }
+      const result = data.result
+      const list = JSON.parse(data['TRADE LIST'])
       this.displaySummary(result)
       this.displayPreviewList(list)
     },
     displaySummary(result) {
+      debugger
       const statistics = {}
       statistics.totalReturn = result['TOTAL RETURN']
       statistics.medianReturn = result['MEDIAN RETURN']
       statistics.averageReturn = result['AVERAGE RETURN']
-      statistics.tzScore = result['Z-SCORE']
+      // statistics.tzScore = result['Z-SCORE'] // 缺少
       // statistics.standardDeviation = _data.standardDeviation
       // statistics.maxRisk = _data.maxRisk
       // statistics.buyHoldGain = _data.buy_and_hold 缺少
@@ -142,24 +147,62 @@ export default {
       statistics.totalPositive = result['TOTAL POSITIVE']
       statistics.totalNegative = result['TOTAL NEGATIVE']
       statistics.timeInMarket = result['TIME IN MARKET']
-      const transformedResult = [];
-      for (let i = 0; i < result['Start Date'].length; i++) {
-        const tradeDate = result['Start Date'][i];
-        const Close = result['Close'][i];
-        const Action = result['Action'][i];
-        const DailyProfit = result['DailyProfit'][i];
-        const Direction = result['Direction'][i];
-        const FloatProfit = result['FloatProfit'][i];
-        transformedResult.push({
-          'TradeDate': tradeDate,
-          'Close': Close,
-          'Action': Action,
-          'DailyProfit': DailyProfit,
-          'Direction': Direction
-        });
+      const transformedResult = []
+      const _result = result.result
+      const ID = _result['ID']
+      const indexMap = {}
+      ID.forEach((id, index) => {
+        if (!(id in indexMap)) {
+          indexMap[id] = []
+        }
+        indexMap[id].push(index)
+      })
+      const _ID = Object.values(indexMap) //输出: [[0, 2], [1, 3]] 这里没有考虑传入数据总数的奇偶问题
+
+      for (let i = 0; i < _ID.length; i++) {
+        // ID[i] => [0, 2]
+        const direction = _result['Direction'][_ID[i][0]]
+        const action = _result['Action'][_ID[i][0]]
+        const nextAction = _result['Action'][_ID[i][1]]
+        let dataSource // (0 第一行 1 第二行)
+        if(direction == 'Long') {
+          // 如果等于 Direction 等于 Long, 找出 Action 等于 SELL 的
+          // if(action == 'SELL') {
+          //   dataSource = 0
+          // }else if(nextAction == 'SELL'){
+          //   dataSource = 1
+          // }
+          dataSource = 0
+        }else if(direction == 'Short'){
+          // 如果等于 Direction 等于 Short, 找出 Action 等于 BUY 的
+          // if(action == 'BUY') {
+          //   dataSource = 0
+          // }else if(nextAction == 'BUY'){
+          //   dataSource = 1
+          // }
+          dataSource = 1
+        }
+        const oppositeDataSource = 1 - dataSource
+        debugger
+        const data = {
+          Symbol: _result['Symbol'][_ID[i][dataSource]],
+          Signal: _result['Signal'][_ID[i][dataSource]],
+          Direction: _result['Direction'][_ID[i][dataSource]],
+          EntryDate: _result['Start Date'][_ID[i][dataSource]],
+          EntryAction: _result['Action'][_ID[i][dataSource]],
+          EntryPrice: _result['Price'][_ID[i][dataSource]],
+          ExitDate: _result['Start Date'][_ID[i][oppositeDataSource]],
+          ExitAction: _result['Action'][_ID[i][oppositeDataSource]],
+          ExitPrice: _result['Close'][_ID[i][dataSource]],
+          FloatProfit: _result['ProfitTarget'][_ID[i][dataSource]],
+          ExitReason: _result['OrderStatus'][_ID[i][dataSource]],
+          TradeNumber: i
+        }
+        transformedResult.push(data)
       }
+      this.tradesData = transformedResult
       this.$nextTick(() => {
-        this.$refs['Statistics'].displayData(statistics, transformedResult)
+        this.$refs['Statistics'].displayData(statistics)
       })
     },
     displayPreviewList(content) {
@@ -197,7 +240,8 @@ export default {
     clearResults() {
         this.activeSecondTab = 'filter'
         this.displayPreviewList([])
-        this.$refs['Statistics'].displayData({}, [])
+        this.$refs['Statistics'].displayData({})
+        this.tradesData = []
     },
     handleDownloadCsv() {
       const {backtestHistoryList, result_quotes, periods, defaultTableLabels} = this.$refs.TIM.exportData()
