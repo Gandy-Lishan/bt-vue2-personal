@@ -52,7 +52,7 @@
 							<span>{{ props.row['total_negative'] }}</span>
 						</el-form-item>
 						<el-form-item label="STD. DEV">
-							<span>{{ props.row['StdDev'] }}</span>
+							<span>{{ props.row['std_dev'] }}</span>
 						</el-form-item>
             <el-form-item label="TIME IN MARKET %">
 							<span>{{ props.row['time_in_market'] ? `${props.row['time_in_market']}%` : props.row['time_in_market'] }}</span>

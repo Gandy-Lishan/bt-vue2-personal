@@ -213,18 +213,6 @@ export default {
     displayPreviewList(content) {
       debugger
 		  this.loading = true
-      const formattedDate = (timestamp) => {
-        // timestamp 例如：时间戳为 1672704000000
-        const offset = new Date(timestamp).getTimezoneOffset() * 60 * 1000;
-        const adjustedTimestamp = timestamp + offset;
-        const adjustedDate = new Date(adjustedTimestamp);
-        const year = adjustedDate.getFullYear();
-        const month = (adjustedDate.getMonth() + 1).toString().padStart(2, '0');
-        const day = adjustedDate.getDate().toString().padStart(2, '0');
-        const formattedDate = `${year}-${month}-${day}`;
-        return formattedDate
-        //输出: "2011-01-01"
-      }
       // 把数据处理成所需格式
        content.forEach(x => {
         x['Close'] = x['Close'].toFixed(2)
@@ -234,7 +222,6 @@ export default {
 			  x['WinRate'] = Number(x['WinRate']).toFixed(2)
 			  x['ExpectedReturn'] = Number(x['Expected Return(%)']).toFixed(2)
 			  x['_Signal'] = x['Signal']
-        x['Date'] = formattedDate(x['Date'])
        })
         this.filterTableData = {
           ...this.filterTableData,

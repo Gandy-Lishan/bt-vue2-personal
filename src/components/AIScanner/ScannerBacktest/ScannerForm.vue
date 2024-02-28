@@ -888,6 +888,7 @@ export default {
         // 清空 results 数据
         // this.$emit('clearResults', this.data)
       }
+      this.previewBtnLoading = false
     },
     checkResLater() {
       //清空 rowUrl
