@@ -13,18 +13,18 @@ export const createLDVRule = (minVal, maxVal, errorMsgEmpty, errorMsgGreater) =>
 		if (!pattern.test(value) && value !== 0) {
 			callback(
 				new Error(
-					`Enter a number ${errorMsgGreater}, up to two decimal places`
+					`Enter a positive number ${errorMsgGreater}, with up to two decimals`
 				)
 			)
 		}
 		if (minVal !== undefined && value < minVal) {
 			callback(
-				new Error(`Enter a number ${errorMsgGreater}, up to two decimal places`)
+				new Error(`Enter a positive number ${errorMsgGreater}, with up to two decimals`)
 			)
 		}
 		if (maxVal !== undefined && value > maxVal) {
 			callback(
-				new Error(`Enter a number ${errorMsgGreater}, up to two decimal places`)
+				new Error(`Enter a positive number ${errorMsgGreater}, with up to two decimals`)
 			)
 		}
 		callback()
@@ -54,7 +54,17 @@ export const createVerifyValueInListRule = (list, errorMsgEmpty, errorMsg) => {
 		callback()
 	}
 }
-
+export const createTPSLValidateRule = (minVal) => {
+	return (_, value, callback) => {
+		// 给 Stop Loss 和 Take Profit 用
+		const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
+		const isLessThanMin = value <= minVal
+		const isMatched = !pattern.test(value)
+		if (isLessThanMin) callback(new Error('Only positive numbers are allowed'))
+		if (isMatched) callback(new Error('Numeric input with two decimal places.'))
+		callback()
+	}
+}
 export const createTPSLValidate = (minVal, value) => {
 	// 给 Stop Loss 和 Take Profit 用
 	const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
@@ -147,19 +157,19 @@ export const validateCapitalRule = createLDVRule(
 	1000,
 	undefined,
 	'starting capital',
-	'greater than 1000'
+	'over 1000'
 )
 export const validateCommissionRule = createLDVRule(
-	undefined,
+	0,
 	50,
 	'commission',
-	'less than 50'
+	'under 50'
 )
 export const validateSlippageRule = createLDVRule(
 	0,
 	undefined,
 	'slippage',
-	'greater than 0'
+	'over 0'
 )
 
 export const uniqueObjectArray = objectArray => {

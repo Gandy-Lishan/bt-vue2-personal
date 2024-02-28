@@ -105,6 +105,9 @@
   width: 106px;
   /* padding-left: 22px; */
 }
+.aiscanner-container .scanner-form .el-select .el-input {
+  width: 100%;
+}
 
 /* 修改主题色 */
 .el-radio__input.is-checked .el-radio__inner {
@@ -223,7 +226,6 @@
 .my-indicator-table.el-table tr.highlighted:hover{
   background-color: yellow !important;
 }
-
 .el-loading-spinner .el-loading-text {
   font-size: 16px !important;
 }

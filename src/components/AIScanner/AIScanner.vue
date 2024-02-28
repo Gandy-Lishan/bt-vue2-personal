@@ -101,7 +101,7 @@ export default {
 	},
   data() {
     return {
-      originData: {},
+    originData: {},
 	  tableData: {},
 	  curDate: '',
 	  
@@ -109,7 +109,7 @@ export default {
 	// date selector
 	  date: [],
 	  pickerOptions: {
-		disabledDate: this.disabledDate
+		disabledDate: this.disabledDate,
 	  },
 	// search bar
 	  searchItem: '', // 搜索关键词
@@ -123,7 +123,7 @@ export default {
 	},
 	isPLSChecked: false,
 	isShowShortChecked: false,
-	loading: false,
+	loading: false
     }
   },
   async created(){	
@@ -159,6 +159,8 @@ export default {
 		}
 	},
   methods: {
+	scannerBacktest() {
+	},
 	// table filter*********
 	disabledDate(time) {
 		let dis = timestampToTime(time) > this.curDate || (time.getDay() === 0 || time.getDay() === 6)
@@ -263,7 +265,7 @@ export default {
 			{label:'Expected Return(%)',value:'ExpectedReturn'},
 			{label:'Z-Score',value:'Z_Score'}, // 数据有误，先不显示	
 		]
-
+		debugger
 		// 测试
 		//AIPickObj['tableCol'].unshift("Select")
 		AIPickObj['content'] = AIPickContent
@@ -365,5 +367,17 @@ h4 {
 			}
 		}
 	}
+}
+.el-popper[x-placement^=right] .popper__arrow::after{
+	border-right-color: aqua;
+}
+/deep/ .el-range-editor.el-input__inner{
+	margin: 0;
+	width: 100%;
+}
+.longShortLine{
+	text-align: center;
+	color: #606266;
+	font-weight: 600;
 }
 </style>

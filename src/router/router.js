@@ -124,7 +124,13 @@ const routes = [
 				name: 'scannerai_chart',
 				component: resolve =>
 					require(['@/components/AIScanner/ScannerChart/index.vue'], resolve)
-			}
+			},
+			{
+				path: 'backtest',
+				name: 'scannerai_backtest',
+				component: resolve =>
+					require(['@/components/AIScanner/ScannerBacktest/index.vue'], resolve)
+			},
 		]
 	},
 	{ path: '/home/scannerai', component: resolve => require(['@/components/AIScanner/index.vue'], resolve), alias: '/scannerai' },
