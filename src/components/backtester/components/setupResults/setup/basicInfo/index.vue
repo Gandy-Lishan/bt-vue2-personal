@@ -1019,6 +1019,17 @@ export default {
         const str = this.bd.end_date.split('-')
         str[0] = Number(str[0]) - Number(this.bd.backtest_period) + ''
         this.bd.start_date = str.join('-')
+          // 检查日期是否是闰年的2月29号
+        const isLeapYearFeb29 = (date) => {
+          const year = date.getFullYear();
+          return ((year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0)) && (date.getMonth() === 1 && date.getDate() === 29 )
+        };
+        // 如果是不是闰年并且是 2-29 号， 那么往前推一天
+        console.log('是不是闰年2-29', isLeapYearFeb29(new Date(this.bd.start_date)))
+        if (!isLeapYearFeb29(new Date(this.bd.start_date))) {
+          this.bd.start_date = timestampToTime(new Date(this.bd.start_date).setDate(new Date(this.bd.start_date).getDate() + 1))
+        }
+        console.log('最新修改的日期', this.bd.start_date)
       }
       if (val == '21') {
         this.bd.start_date = ''
