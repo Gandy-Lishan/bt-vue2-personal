@@ -27,7 +27,7 @@
       </el-collapse-item>
       <el-collapse-item name="3" class="form">
         <template v-slot:title>
-          <div class="title">
+          <div class="title" ref="scrollTarget">
             <p @click.stop="() => {changeSecondTab('filter')}" :class="{ secondActive: activeSecondTab == 'filter' || '' }">Preview Filter List</p>
             <p @click.stop="() => {changeSecondTab('summary')}" :class="{ secondActive: activeSecondTab == 'summary' || '' }">Backtest Summary</p>
           </div>
@@ -108,12 +108,18 @@ export default {
     changeSecondTab(val) {
       this.activeSecondTab = val
     },
+    scrollToTarget() {
+      this.$nextTick(() => {
+        this.$refs.scrollTarget.scrollIntoView({ behavior: 'smooth' });
+      })
+    },
     displayResultsAndFilter(data) {
       debugger
       // 至展示 filter 和 result 不重新赋值 form
       const result = data.result.result
       this.activeSecondTab = 'summary'
       this.displaySummary(result)
+      this.scrollToTarget()
     },
     displayResultsData(data) {
       debugger
@@ -128,6 +134,7 @@ export default {
       const list = JSON.parse(data['TRADE LIST'])
       this.displaySummary(result)
       this.displayPreviewList(list)
+      this.scrollToTarget()
     },
     displaySummary(result) {
       debugger
@@ -213,18 +220,6 @@ export default {
     displayPreviewList(content) {
       debugger
 		  this.loading = true
-      const formattedDate = (timestamp) => {
-        // timestamp 例如：时间戳为 1672704000000
-        const offset = new Date(timestamp).getTimezoneOffset() * 60 * 1000;
-        const adjustedTimestamp = timestamp + offset;
-        const adjustedDate = new Date(adjustedTimestamp);
-        const year = adjustedDate.getFullYear();
-        const month = (adjustedDate.getMonth() + 1).toString().padStart(2, '0');
-        const day = adjustedDate.getDate().toString().padStart(2, '0');
-        const formattedDate = `${year}-${month}-${day}`;
-        return formattedDate
-        //输出: "2011-01-01"
-      }
       // 把数据处理成所需格式
        content.forEach(x => {
         x['Close'] = x['Close'].toFixed(2)
@@ -234,7 +229,6 @@ export default {
 			  x['WinRate'] = Number(x['WinRate']).toFixed(2)
 			  x['ExpectedReturn'] = Number(x['Expected Return(%)']).toFixed(2)
 			  x['_Signal'] = x['Signal']
-        x['Date'] = formattedDate(x['Date'])
        })
         this.filterTableData = {
           ...this.filterTableData,

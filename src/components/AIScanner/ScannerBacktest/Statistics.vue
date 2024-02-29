@@ -116,8 +116,8 @@
                     <span v-if="scope.row.tzScore >= 0">{{
                         scope.row.tzScore
                     }}</span>
-                    <span v-else-if="isNaN(scope.row.tzScore)">0</span>
-                    <span v-else style="color: #dd3a13">{{ scope.row.tzScore }}</span>
+                    <span v-else-if="scope.row.tzScore < 0" style="color: #dd3a13">{{ scope.row.tzScore }}</span>
+                    <span v-else></span>
                 </template>
             </el-table-column>
 				<el-table-column
@@ -484,7 +484,7 @@ export default {
       const trade = []
       tradesData.forEach((item, index) => {
         const obj = {}
-        obj['#'] = item.TradeNumber
+        obj['#'] = item.TradeNumber + 1
         obj['Symbol'] = item.Symbol
         obj['Signal'] = item.Signal
         obj['Direction'] = item.Direction

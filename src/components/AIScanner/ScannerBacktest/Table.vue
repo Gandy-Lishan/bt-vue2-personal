@@ -52,7 +52,7 @@
 							<span>{{ props.row['total_negative'] }}</span>
 						</el-form-item>
 						<el-form-item label="STD. DEV">
-							<span>{{ props.row['StdDev'] }}</span>
+							<span>{{ props.row['std_dev'] }}</span>
 						</el-form-item>
             <el-form-item label="TIME IN MARKET %">
 							<span>{{ props.row['time_in_market'] ? `${props.row['time_in_market']}%` : props.row['time_in_market'] }}</span>
@@ -63,7 +63,7 @@
     <el-table-column align="center" width="50px">
       <template #header>
         <!-- 将表头内容替换成 -->
-        <el-button type="text" icon="el-icon-refresh" title="Refresh List" @click="getDataList"></el-button>
+        <el-button type="text" icon="el-icon-refresh" title="Refresh List" @click="() => {currentPage = 1;getDataList(null)}"></el-button>
       </template>
 				<template slot-scope="scope">
           <el-button-group>

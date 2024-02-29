@@ -611,8 +611,19 @@ export default {
   },
   mounted() {
     this.setBacktestHistory(10)
+    this.generateCPMName()
   },
   methods: {
+    generateCPMName() {
+      const date = new Date()
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const hour = date.getHours();
+      const minute = date.getMinutes();
+      const second = date.getSeconds();
+      this.data.name = `ScannerAI Backtest ${year}-${month}-${day} ${hour}:${minute}:${second}`
+    },
     handleDisabledStartDate(time) {
       const today = timestampToTime(new Date())
       const endDay = timestampToTime(new Date(this.data.end_date))
@@ -641,6 +652,7 @@ export default {
       this.$refs['SelectCheck'].handleoptionsAllChange(true)
 			Object.assign(this.$data, this.$options.data())
       this.data.signals = ['All']
+      this.generateCPMName()
       this.setBacktestHistory(10)
       this.$refs['Form'].clearValidate()
     },
@@ -797,7 +809,9 @@ export default {
       debugger
      if(!saveRes) {this.btnLoading = false; this.processTips = ''; return}
      const code = saveRes.data.code
-     if(code == 203) this.popUpMsgBox('The backtest is running. You can wait or click the "+"" button to create a new backtest.')
+     const name = saveRes.data?.data?.name
+     const _name = typeof name === 'string' && name ? name : ''
+     if(code == 203) this.popUpMsgBox(`The "${_name}" backtest is running. You can wait or click the "+" button to create a new backtest`)
      if(code == 401) this.popUpMsgBox('Calculate error')
      if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again'); return}
      if(code == 406) {
@@ -806,13 +820,15 @@ export default {
       }
       if(code == 407) this.popUpMsgBox('Empty backtest list. Please adjust "Select Condition" and run again')
       if(code == 200) {
-        this.popUpMsgBox('Backtest successfully completed')
+        this.popUpMsgBox(`The "${_name}" backtest is completed successfully`)
         this.$emit('displayResultsAndFilter', saveRes.data.data)
         // 这里展示过滤列表
         const list = saveRes['TRADE LIST']
         if(list) this.$emit('displayPreviewList', JSON.parse(list))
       }
-      this.processTips = ''
+     // 运行成或者失败后刷新列表
+     this.$emit('refreshBTList')
+    this.processTips = ''
     },
     displayData(data) {
       const {url, long_short_ratio, risk_control_filter_number, risk_control_filter_condition, commission, signals} = data
@@ -888,12 +904,14 @@ export default {
         // 清空 results 数据
         // this.$emit('clearResults', this.data)
       }
+      this.previewBtnLoading = false
     },
     checkResLater() {
       //清空 rowUrl
       this.rowUrl = null
       this.btnLoading = false
       this.processTips = ''
+      this.generateCPMName()
     }
   }
 }
