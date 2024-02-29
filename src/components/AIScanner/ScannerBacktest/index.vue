@@ -27,7 +27,7 @@
       </el-collapse-item>
       <el-collapse-item name="3" class="form">
         <template v-slot:title>
-          <div class="title">
+          <div class="title" ref="scrollTarget">
             <p @click.stop="() => {changeSecondTab('filter')}" :class="{ secondActive: activeSecondTab == 'filter' || '' }">Preview Filter List</p>
             <p @click.stop="() => {changeSecondTab('summary')}" :class="{ secondActive: activeSecondTab == 'summary' || '' }">Backtest Summary</p>
           </div>
@@ -108,12 +108,18 @@ export default {
     changeSecondTab(val) {
       this.activeSecondTab = val
     },
+    scrollToTarget() {
+      this.$nextTick(() => {
+        this.$refs.scrollTarget.scrollIntoView({ behavior: 'smooth' });
+      })
+    },
     displayResultsAndFilter(data) {
       debugger
       // 至展示 filter 和 result 不重新赋值 form
       const result = data.result.result
       this.activeSecondTab = 'summary'
       this.displaySummary(result)
+      this.scrollToTarget()
     },
     displayResultsData(data) {
       debugger
@@ -128,6 +134,7 @@ export default {
       const list = JSON.parse(data['TRADE LIST'])
       this.displaySummary(result)
       this.displayPreviewList(list)
+      this.scrollToTarget()
     },
     displaySummary(result) {
       debugger

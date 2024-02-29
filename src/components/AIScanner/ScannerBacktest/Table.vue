@@ -63,7 +63,7 @@
     <el-table-column align="center" width="50px">
       <template #header>
         <!-- 将表头内容替换成 -->
-        <el-button type="text" icon="el-icon-refresh" title="Refresh List" @click="getDataList"></el-button>
+        <el-button type="text" icon="el-icon-refresh" title="Refresh List" @click="() => {currentPage = 1;getDataList(null)}"></el-button>
       </template>
 				<template slot-scope="scope">
           <el-button-group>
