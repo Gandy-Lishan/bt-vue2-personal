@@ -5920,364 +5920,56 @@
         "stock": "MELI"
     },
     {
-        "name": "Mondelez International Inc",
-        "stock": "MDLZ"
-    },
-    {
-        "name": "Copart Inc",
-        "stock": "CPRT"
-    },
-    {
-        "name": "Amazon.com Inc",
-        "stock": "AMZN"
-    },
-    {
         "name": "Datadog Inc",
         "stock": "DDOG"
-    },
-    {
-        "name": "Alphabet Inc",
-        "stock": "GOOG"
-    },
-    {
-        "name": "IDEXX Laboratories Inc",
-        "stock": "IDXX"
     },
     {
         "name": "Airbnb Inc",
         "stock": "ABNB"
     },
     {
-        "name": "CoStar Group Inc",
-        "stock": "CSGP"
-    },
-    {
-        "name": "Charter Communications Inc",
-        "stock": "CHTR"
-    },
-    {
         "name": "Atlassian Corp",
         "stock": "TEAM"
-    },
-    {
-        "name": "Cisco Systems Inc",
-        "stock": "CSCO"
-    },
-    {
-        "name": "Intel Corp",
-        "stock": "INTC"
-    },
-    {
-        "name": "Microsoft Corp",
-        "stock": "MSFT"
-    },
-    {
-        "name": "NVIDIA Corp",
-        "stock": "NVDA"
-    },
-    {
-        "name": "Cognizant Technology Solutions",
-        "stock": "CTSH"
-    },
-    {
-        "name": "Intuitive Surgical Inc",
-        "stock": "ISRG"
     },
     {
         "name": "Marvell Technology Inc",
         "stock": "MRVL"
     },
     {
-        "name": "Booking Holdings Inc",
-        "stock": "BKNG"
-    },
-    {
-        "name": "Baker Hughes Co",
-        "stock": "BKR"
-    },
-    {
-        "name": "Illumina Inc",
-        "stock": "ILMN"
-    },
-    {
-        "name": "Texas Instruments Inc",
-        "stock": "TXN"
-    },
-    {
-        "name": "Kraft Heinz Co/The",
-        "stock": "KHC"
-    },
-    {
-        "name": "Alphabet Inc",
-        "stock": "GOOGL"
-    },
-    {
-        "name": "Netflix Inc",
-        "stock": "NFLX"
-    },
-    {
-        "name": "Keurig Dr Pepper Inc",
-        "stock": "KDP"
-    },
-    {
-        "name": "Automatic Data Processing Inc",
-        "stock": "ADP"
-    },
-    {
-        "name": "Xcel Energy Inc",
-        "stock": "XEL"
-    },
-    {
         "name": "Crowdstrike Holdings Inc",
         "stock": "CRWD"
-    },
-    {
-        "name": "Walgreens Boots Alliance Inc",
-        "stock": "WBA"
     },
     {
         "name": "PDD Holdings Inc",
         "stock": "PDD"
     },
     {
-        "name": "Advanced Micro Devices Inc",
-        "stock": "AMD"
-    },
-    {
-        "name": "Old Dominion Freight Line Inc",
-        "stock": "ODFL"
-    },
-    {
-        "name": "Adobe Inc",
-        "stock": "ADBE"
-    },
-    {
-        "name": "Amgen Inc",
-        "stock": "AMGN"
-    },
-    {
-        "name": "CSX Corp",
-        "stock": "CSX"
-    },
-    {
-        "name": "Autodesk Inc",
-        "stock": "ADSK"
-    },
-    {
-        "name": "Cintas Corp",
-        "stock": "CTAS"
-    },
-    {
-        "name": "Comcast Corp",
-        "stock": "CMCSA"
-    },
-    {
-        "name": "Constellation Energy Corp",
-        "stock": "CEG"
-    },
-    {
-        "name": "American Electric Power Co Inc",
-        "stock": "AEP"
-    },
-    {
-        "name": "KLA Corp",
-        "stock": "KLAC"
-    },
-    {
-        "name": "Broadcom Inc",
-        "stock": "AVGO"
-    },
-    {
-        "name": "Cadence Design Systems Inc",
-        "stock": "CDNS"
-    },
-    {
-        "name": "PACCAR Inc",
-        "stock": "PCAR"
-    },
-    {
-        "name": "Costco Wholesale Corp",
-        "stock": "COST"
-    },
-    {
-        "name": "Regeneron Pharmaceuticals Inc",
-        "stock": "REGN"
-    },
-    {
         "name": "Zscaler Inc",
         "stock": "ZS"
-    },
-    {
-        "name": "Applied Materials Inc",
-        "stock": "AMAT"
     },
     {
         "name": "Lululemon Athletica Inc",
         "stock": "LULU"
     },
     {
-        "name": "GE HealthCare Technologies Inc",
-        "stock": "GEHC"
-    },
-    {
-        "name": "Synopsys Inc",
-        "stock": "SNPS"
-    },
-    {
-        "name": "Electronic Arts Inc",
-        "stock": "EA"
-    },
-    {
-        "name": "Fastenal Co",
-        "stock": "FAST"
-    },
-    {
-        "name": "ANSYS Inc",
-        "stock": "ANSS"
-    },
-    {
-        "name": "Meta Platforms Inc",
-        "stock": "META"
-    },
-    {
-        "name": "Gilead Sciences Inc",
-        "stock": "GILD"
-    },
-    {
-        "name": "Exelon Corp",
-        "stock": "EXC"
-    },
-    {
-        "name": "Lam Research Corp",
-        "stock": "LRCX"
-    },
-    {
-        "name": "Biogen Inc",
-        "stock": "BIIB"
-    },
-    {
         "name": "GLOBALFOUNDRIES Inc",
         "stock": "GFS"
-    },
-    {
-        "name": "Vertex Pharmaceuticals Inc",
-        "stock": "VRTX"
-    },
-    {
-        "name": "ON Semiconductor Corp",
-        "stock": "ON"
-    },
-    {
-        "name": "Paychex Inc",
-        "stock": "PAYX"
-    },
-    {
-        "name": "Analog Devices Inc",
-        "stock": "ADI"
-    },
-    {
-        "name": "PayPal Holdings Inc",
-        "stock": "PYPL"
-    },
-    {
-        "name": "QUALCOMM Inc",
-        "stock": "QCOM"
-    },
-    {
-        "name": "Marriott International Inc/MD",
-        "stock": "MAR"
-    },
-    {
-        "name": "Ross Stores Inc",
-        "stock": "ROST"
-    },
-    {
-        "name": "Starbucks Corp",
-        "stock": "SBUX"
-    },
-    {
-        "name": "PepsiCo Inc",
-        "stock": "PEP"
-    },
-    {
-        "name": "Intuit Inc",
-        "stock": "INTU"
-    },
-    {
-        "name": "Microchip Technology Inc",
-        "stock": "MCHP"
-    },
-    {
-        "name": "Monster Beverage Corp",
-        "stock": "MNST"
     },
     {
         "name": "Workday Inc",
         "stock": "WDAY"
     },
     {
-        "name": "OReilly Automotive Inc",
-        "stock": "ORLY"
-    },
-    {
-        "name": "Tesla Inc",
-        "stock": "TSLA"
-    },
-    {
         "name": "ASML Holding NV",
         "stock": "ASML"
-    },
-    {
-        "name": "NXP Semiconductors NV",
-        "stock": "NXPI"
-    },
-    {
-        "name": "Honeywell International Inc",
-        "stock": "HON"
     },
     {
         "name": "AstraZeneca PLC",
         "stock": "AZN"
     },
     {
-        "name": "Moderna Inc",
-        "stock": "MRNA"
-    },
-    {
         "name": "Sirius XM Holdings Inc",
         "stock": "SIRI"
-    },
-    {
-        "name": "Micron Technology Inc",
-        "stock": "MU"
-    },
-    {
-        "name": "Warner Bros Discovery Inc",
-        "stock": "WBD"
-    },
-    {
-        "name": "T-Mobile US Inc",
-        "stock": "TMUS"
-    },
-    {
-        "name": "Verisk Analytics Inc",
-        "stock": "VRSK"
-    },
-    {
-        "name": "Dollar Tree Inc",
-        "stock": "DLTR"
-    },
-    {
-        "name": "Diamondback Energy Inc",
-        "stock": "FANG"
-    },
-    {
-        "name": "Fortinet Inc",
-        "stock": "FTNT"
-    },
-    {
-        "name": "Dexcom Inc",
-        "stock": "DXCM"
     },
     {
         "name": "Trade Desk Inc/The",
@@ -6400,10 +6092,6 @@
         "stock": "LOCO"
     },
     {
-        "name": "CDW Corp/DE",
-        "stock": "CDW"
-    },
-    {
         "name": "Palo Alto Networks Inc",
         "stock": "PANW"
     },
@@ -6422,14 +6110,6 @@
     {
         "name": "Splunk Inc",
         "stock": "SPLK"
-    },
-    {
-        "name": "Take-Two Interactive Software",
-        "stock": "TTWO"
-    },
-    {
-        "name": "Roper Technologies Inc",
-        "stock": "ROP"
     },
     {
         "name": "eBay Inc",
