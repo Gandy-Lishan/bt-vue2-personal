@@ -794,7 +794,7 @@ export default {
      const _name = typeof name === 'string' && name ? name : ''
      if(code == 203) this.popUpMsgBox(`The "${_name}" backtest is running. You can wait or click the "+" button to create a new backtest`)
      if(code == 401) this.popUpMsgBox('Calculate error')
-     if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again'); return}
+     if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again')}
      if(code == 406) {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
