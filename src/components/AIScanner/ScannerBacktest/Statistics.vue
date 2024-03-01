@@ -449,37 +449,17 @@ export default {
       const summary = []
       summaryData.forEach((item, index) => {
         const obj = {}
-        obj['TOTAL RETURN %'] = isNaN(item.totalReturn)
-          ? 0
-          : `${item.totalReturn}%`
-        obj['MEDIAN RETURN %'] = isNaN(item.medianReturn)
-          ? 0
-          : `${item.medianReturn}%`
-        obj['AVERAGE RETURN %'] = isNaN(item.averageReturn)
-          ? 0
-          : `${item.averageReturn}%`
-        obj['Z-SCORE'] = isNaN(item.tzScore)
-          ? 0
-          : `${item.buyHoldGain}%`
-        obj['WIN RATE %'] = isNaN(item.winRate) ? 0 : `${item.winRate}%`
-        obj['AVERAGE WIN %'] = isNaN(item.averageWin)
-          ? 0
-          : `${item.averageWin}%`
-        obj['AVERAGE LOSS %'] = isNaN(item.averageLoss)
-          ? 0
-          : `${item.averageLoss}%`
-        obj['TOTAL TRADES'] = isNaN(item.totalTrades)
-          ? 0
-          : `${item.totalTrades}`
-        obj['TOTAL POSITIVE'] = isNaN(item.totalPositive)
-          ? 0
-          : `${item.totalPositive}`
-        obj['TOTAL NEGATIVE'] = isNaN(item.totalNegative)
-          ? 0
-          : `${item.totalNegative}`
-        obj['TIME IN MARKET %'] = isNaN(item.timeInMarket)
-          ? 0
-          : `${item.timeInMarket}%`
+        obj['TOTAL RETURN %'] = `${item.totalReturn}%`
+        obj['MEDIAN RETURN %'] = `${item.medianReturn}%`
+        obj['AVERAGE RETURN %'] = `${item.averageReturn}%`
+        obj['Z-SCORE'] = item.tzScore
+        obj['WIN RATE %'] = `${item.winRate}%`
+        obj['AVERAGE WIN %'] = `${item.averageWin}%`
+        obj['AVERAGE LOSS %'] =  `${item.averageLoss}%`
+        obj['TOTAL TRADES'] =  `${item.totalTrades}`
+        obj['TOTAL POSITIVE'] = `${item.totalPositive}`
+        obj['TOTAL NEGATIVE'] =`${item.totalNegative}`
+        obj['TIME IN MARKET %'] = `${item.timeInMarket}%`
         summary.push(obj)
       })
       const trade = []

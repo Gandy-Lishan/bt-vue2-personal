@@ -226,6 +226,7 @@ export default {
 			  x['WinRate'] = Number(x['WinRate']).toFixed(2)
 			  x['ExpectedReturn'] = Number(x['Expected Return(%)']).toFixed(2)
 			  x['_Signal'] = x['Signal']
+			  x['TimeInMarket'] = x['TimeInMarket']
        })
         this.filterTableData = {
           ...this.filterTableData,
