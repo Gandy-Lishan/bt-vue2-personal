@@ -323,13 +323,19 @@ export default {
         return
       }
       const code = res.data?.code
+      debugger
+      const status = res.data?.data?.status || row?.status
       if(code == 403) {this.popUpMsgBox('Sorry, details not found. Possibly deleted or moved'); return}
       if(code == 200) {
+        this.popUpMsgBox('Backtest details viewed successfully')
         const data = res.data.data
-        data['TRADE LIST'] = listRes.data.data 
+        data['TRADE LIST'] = listRes.data.data
         this.$emit('displayResultsData', data)
+        if(status === 'Finish' || status === 'finish') await this.getDataList(null) // 成功后刷新列表
       }
-      if(code != 200) this.$emit('displayResultsData', row)
+      if(status === 'Fail' || status === 'fail') this.popUpMsgBox('Backtest failed. Adjust filters and rerun')
+      if(code == 203) {row.viewLoading = false; this.popUpMsgBox('Backtest in progress. Details and editing are unavailable');return}
+      if(code != 200) {this.$emit('displayResultsData', row)}
       row.viewLoading = false
     },
     async handleQuery() {

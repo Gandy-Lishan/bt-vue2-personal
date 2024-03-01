@@ -133,19 +133,12 @@
             </label>
           </template>
           <div class="_conditionBox">
-            <el-select
-              v-model="data.stop_loss_condition"
-              placeholder="— Select Condition —"
-          >
-            <el-option
-              v-for="item in stopLossConditionOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-              <span>&nbsp;</span>
+            <el-form-item prop="stop_loss_condition" label-width="0px">
+                <el-input v-model="data.stop_loss_condition" placeholder="Enter number">
+                  <template v-slot:append>(%)</template>
+                </el-input>
+            </el-form-item>
+              <span>&nbsp;to&nbsp;</span>
               <el-form-item prop="stop_loss" label-width="0px">
               <el-input v-model="data.stop_loss" placeholder="Enter number">
                 <template v-slot:append>(%)</template>
@@ -169,19 +162,12 @@
             </label>
           </template>
           <div class="_conditionBox">
-            <el-select
-              v-model="data.take_profit_condition"
-              placeholder="— Select Condition —"
-          >
-            <el-option
-              v-for="item in takeProfitConditionOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-          <span>&nbsp;</span>
+          <el-form-item prop="take_profit_condition" label-width="0px">
+              <el-input v-model="data.take_profit_condition" placeholder="Enter number">
+                <template v-slot:append>(%)</template>
+              </el-input>
+          </el-form-item>
+            <span>&nbsp;to&nbsp;</span>
           <el-form-item prop="take_profit" label-width="0px">
           <el-input v-model="data.take_profit" placeholder="Enter number">
             <template v-slot:append>(%)</template>
@@ -205,19 +191,12 @@
             </label>
           </template>
           <div class="_conditionBox">
-            <el-select
-              v-model="data.time_in_market_condition"
-              placeholder="— Select Condition —"
-          >
-            <el-option
-              v-for="item in timeInMarketonditionOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-          <span>&nbsp;</span>
+          <el-form-item prop="time_in_market_condition" label-width="0px">
+              <el-input v-model="data.time_in_market_condition" placeholder="Enter number">
+                <template v-slot:append>(bars)</template>
+              </el-input>
+          </el-form-item>
+            <span>&nbsp;to&nbsp;</span>
           <el-form-item prop="time_in_market" label-width="0px">
           <el-input v-model="data.time_in_market" placeholder="Enter bars">
             <template v-slot:append>(bars)</template>
@@ -296,7 +275,7 @@
             placeholder="— Select type —"
           >
             <el-option
-              v-for="item in AllocateOptions"
+              v-for="item in RankCondition"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -365,7 +344,7 @@
 <script>
 import { isJson, timestampToTime } from '@/utils'
 import SelectCheck from "./SelectCheck";
-import { validateCapitalRule, validateCommissionRule, createPositiveIntegerRule, createTPSLValidateRule } from '@/utils/formValidate'
+import { validateCapitalRule, validateCommissionRule, createPositiveScopeIntegerRule, createTPSLScopeValidateRule, createPositiveIntegerRule   } from '@/utils/formValidate'
 import { saveScannerForm, editScannerForm, getScannerBTList, getScannerBTResults, perviewScannerForm } from '@/service/service'
 
 export default {
@@ -420,9 +399,9 @@ export default {
         find_type: 'stock/etf',
         long_ratio: 80,
         short_ratio: 20,
-        stop_loss_condition: '<',
-        take_profit_condition: '>',
-        time_in_market_condition: '>',
+        stop_loss_condition: 0,
+        take_profit_condition: 0,
+        time_in_market_condition: 0,
         stop_loss: 5,
         take_profit: 10,
         time_in_market: 21,
@@ -449,21 +428,11 @@ export default {
         { value: 'etf', label: 'ETF' },
         { value: 'stock/etf', label: 'Stock/ETF' },
       ],
-      stopLossConditionOptions: [
-        { value: '<', label: '<' }
-      ],
-      takeProfitConditionOptions: [
-        { value: '>', label: '>' }
-      ],
-      timeInMarketonditionOptions: [
-        { value: '>', label: '>' },
-        { value: '<', label: '<' },
-      ],
-      AllocateOptions: [
+      RankCondition: [
         { value: 'Kelly', label: 'Kelly'},
-        { value: 'WinRate', label: 'WinRate'},
-        { value: 'Z_Score', label: 'Z_Score'},
-        { value: 'StdDev', label: 'StdDev'},
+        { value: 'WinRate', label: 'Win Rate(%)'},
+        { value: 'Z_Score', label: 'Z-Score'},
+        { value: 'StdDev', label: 'STD.DEV'},
         { value: 'Expected Return(%)', label: 'Expected Return(%)'},
       ],
       options: [
@@ -573,17 +542,29 @@ export default {
         { required: true, message: 'Select end date', trigger: 'blur' },
         { required: true, message: 'Select end date', trigger: 'change' }
         ],
+        time_in_market_condition: [
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market)(rule, value, callback), trigger: 'change' }
+        ],
         time_in_market: [
-          { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' },
-          { validator: createPositiveIntegerRule('time in market', 0), trigger: 'change' }
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'change' }
+        ],
+        stop_loss_condition: [
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss)(rule, value, callback), trigger: 'change' }
         ],
         stop_loss: [
-        { validator: createTPSLValidateRule(0), trigger: 'blur' },
-        { validator: createTPSLValidateRule(0), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition)(rule, value, callback), trigger: 'change' }
+        ],
+        take_profit_condition: [
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit)(rule, value, callback), trigger: 'change' }
         ],
         take_profit: [
-        { validator: createTPSLValidateRule(0), trigger: 'blur' },
-        { validator: createTPSLValidateRule(0), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition)(rule, value, callback), trigger: 'change' }
         ],
         commission: [
           { validator: validateCommissionRule, trigger: 'blur' },
@@ -901,6 +882,7 @@ export default {
         console.log('previewData', previewData)
         this.$emit('changeSecondTab', 'filter')
         this.$emit('displayPreviewList', previewData)
+        this.$emit('scrollToTarget', 'scrollTarget')
         // 清空 results 数据
         // this.$emit('clearResults', this.data)
       }

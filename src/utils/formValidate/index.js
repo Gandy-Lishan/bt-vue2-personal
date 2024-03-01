@@ -40,7 +40,22 @@ export const createPositiveIntegerRule = (errorMsgEmpty, minVal, maxVal) => {
 		if (isPositiveInteger) {
 			callback(new Error(`Enter positive integers only`))
 		}
-		if(maxVal && minVal && (value > maxVal || value < minVal) ) callback(new Error(`Value should be between ${minVal} and ${maxVal}`))
+		if((maxVal && (minVal !== undefined || minVal !== null)) && (value > maxVal || value < minVal)) {callback(new Error(`Value should be between ${minVal} and ${maxVal}`))}
+		callback()
+	}
+}
+
+export const createPositiveScopeIntegerRule = (errorMsgEmpty, minVal, maxVal) => {
+	return (_, value, callback) => {
+		if(value === '') {
+			callback(new Error(`Enter ${errorMsgEmpty}`))
+		}
+		const pattern = /^\d+$/
+		const isPositiveInteger = isNaN(value) || value < 0 || !pattern.test(value)
+		if (isPositiveInteger) {
+			callback(new Error(`Enter positive integers only`))
+		}
+		if((maxVal && (minVal !== undefined || minVal !== null)) && (value > maxVal || value < minVal)) {callback(new Error(`Value should be between ${minVal} and ${maxVal}`))}
 		callback()
 	}
 }
@@ -61,7 +76,19 @@ export const createTPSLValidateRule = (minVal) => {
 		const isLessThanMin = value <= minVal
 		const isMatched = !pattern.test(value)
 		if (isLessThanMin) callback(new Error('Only positive numbers are allowed'))
-		if (isMatched) callback(new Error('Numeric input with two decimal places.'))
+		if (isMatched) callback(new Error('Numeric input with two decimal places'))
+		callback()
+	}
+}
+export const createTPSLScopeValidateRule = (minVal, maxVal) => {
+	return (_, value, callback) => {
+		// 给 Stop Loss 和 Take Profit 用
+		const pattern = /^(([1-9][0-9]*)|([0](\.\d{1,2})?|[1-9][0-9]*\.\d{1,2}))$/
+		const isLessThanMin = value < minVal
+		const isMatched = !pattern.test(value)
+		if (isLessThanMin) callback(new Error('Only positive numbers are allowed'))
+		if (isMatched) callback(new Error('Numeric input with two decimal places'))
+		if((maxVal && (minVal !== undefined || minVal !== null)) && (value > maxVal || value < minVal)) {callback(new Error(`Value should be between ${minVal} and ${maxVal}`))}
 		callback()
 	}
 }

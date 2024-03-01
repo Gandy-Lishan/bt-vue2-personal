@@ -433,6 +433,26 @@ export default {
 			// 隐藏弹窗
 			this.popupVisible = false;
 		},
+		exportTable() {
+			console.log('this.data.content', this.data.content)
+			const data = this.data.content
+			debugger
+			const processedData = data.map(item => {
+				return {
+					'Date': item.Date,
+					'Symbol': item.Symbol,
+					'Close': item.Close,
+					'Direction': item.Direction,
+					'Signal': this.midTermMap[item._Signal] || item._Signal,
+					'Win Rate(%)': isNaN(item.WinRate) ? `${item.WinRate}%` : '',
+					'Stop Loss(%)': isNaN(item.StopLoss) ? `${item.StopLoss}%` : '',
+					'Profit Target(%)': isNaN(item.ProfitTarget) ? `${item.ProfitTarget}%` : '',
+					'Best Time In Market(Bars)': item.TimeInMarket,
+					'Expected Return(%)': isNaN(item.ExpectedReturn) ? `${item.ExpectedReturn}%` : '',
+				}
+			})
+			return processedData
+		}
 	}
 };
 </script>
