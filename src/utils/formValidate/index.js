@@ -51,9 +51,9 @@ export const createPositiveScopeIntegerRule = (errorMsgEmpty, minVal, maxVal) =>
 			callback(new Error(`Enter ${errorMsgEmpty}`))
 		}
 		const pattern = /^\d+$/
-		const isLessThanMin = value <= minVal
+		const isLessThanMin = Number(value) <= Number(minVal)
 		if (isLessThanMin) callback(new Error(`Only positive integers > ${minVal} allowed`))
-		const isPositiveInteger = isNaN(value) || value <= 0 || !pattern.test(value)
+		const isPositiveInteger = isNaN(value) || Number(value) <= 0 || !pattern.test(value)
 		if (isPositiveInteger) {
 			callback(new Error(`Enter positive integers only`))
 		}
@@ -87,7 +87,7 @@ export const createTPSLScopeValidateRule = (minVal, maxVal) => {
 		// 给 Stop Loss 和 Take Profit 用
 		debugger
 		const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
-		const isLessThanMin = value <= minVal
+		const isLessThanMin = Number(value) <= Number(minVal)
 		const isMatched = !pattern.test(value)
 		if (isLessThanMin) callback(new Error(`Only positive numbers > ${minVal} allowed`))
 		if (isMatched) callback(new Error('Numeric input with two decimal places'))
