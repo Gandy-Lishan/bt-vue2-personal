@@ -684,10 +684,6 @@
         "name": "COW"
     },
     {
-        "symbol": "MLPI",
-        "name": "UBS Alerian MLP (MLPI)"
-    },
-    {
         "symbol": "ICLN",
         "name": "Clean Energy (ICLN)"
     },
@@ -732,10 +728,6 @@
         "name": "Invesco Solar (TAN)"
     },
     {
-        "symbol": "IYT",
-        "name": "iShares US Trans (IYT)"
-    },
-    {
         "symbol": "XBI",
         "name": "S&P Biotech (XBI)"
     },
@@ -757,43 +749,43 @@
     },
     {
         "symbol": "KWEB",
-        "name": "KWEB"
+        "name": "China Internet (KWEB)"
     },
     {
         "symbol": "XLRE",
-        "name": "XLRE"
+        "name": "The Real Estate (XLRE)"
     },
     {
         "symbol": "PUTW",
-        "name": "PUTW"
+        "name": "Strategy Fund (PUTW)"
     },
     {
         "symbol": "XLC",
-        "name": "XLC"
+        "name": "Communication Services (XLC)"
     },
     {
         "symbol": "KRE",
-        "name": "KRE"
+        "name": "Regional Banking (KRE)"
     },
     {
         "symbol": "KBE",
-        "name": "KBE"
+        "name": "S&P Bank (KBE)"
     },
     {
         "symbol": "KRBN",
-        "name": "KRBN"
+        "name": "Global Carbon (KRBN)"
     },
     {
         "symbol": "ITB",
-        "name": "ITB"
+        "name": "Home Construction (ITB)"
     },
     {
         "symbol": "COPX",
-        "name": "COPX"
+        "name": "Copper Miners (COPX)"
     },
     {
         "symbol": "REMX",
-        "name": "REMX"
+        "name": "Rare Earth/Strategic Metals (REMX)"
     },
     {
         "symbol": "EFNL",
@@ -833,6 +825,10 @@
     },
     {
         "symbol": "SOXX",
-        "name": "SOXX"
+        "name": "Semiconductor (SOXX)"
+    },
+    {
+        "symbol": "ETHEREUM",
+        "name": "ETHEREUM"
     }
 ]

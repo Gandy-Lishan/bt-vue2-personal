@@ -14055,23 +14055,18 @@
         "updated": "Daily"
     },
     {
+        "chart_name": "BITCOIN Seasonality",
+        "url": "seasonality_bitcoin",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "BCOMSP Seasonality",
+        "url": "seasonality_bcomsp",
+        "updated": "Monthly"
+    },
+    {
         "chart_name": "MercadoLibre Inc",
         "url": "MELI",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Mondelez International Inc",
-        "url": "MDLZ",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Copart Inc",
-        "url": "CPRT",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Amazon.com Inc",
-        "url": "AMZN",
         "updated": "Daily"
     },
     {
@@ -14080,28 +14075,8 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Alphabet Inc",
-        "url": "GOOG",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "IDEXX Laboratories Inc",
-        "url": "IDXX",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Airbnb Inc",
         "url": "ABNB",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "CoStar Group Inc",
-        "url": "CSGP",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Charter Communications Inc",
-        "url": "CHTR",
         "updated": "Daily"
     },
     {
@@ -14110,88 +14085,8 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Cisco Systems Inc",
-        "url": "CSCO",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Intel Corp",
-        "url": "INTC",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Microsoft Corp",
-        "url": "MSFT",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "NVIDIA Corp",
-        "url": "NVDA",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Cognizant Technology Solutions",
-        "url": "CTSH",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Intuitive Surgical Inc",
-        "url": "ISRG",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Marvell Technology Inc",
         "url": "MRVL",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Booking Holdings Inc",
-        "url": "BKNG",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Baker Hughes Co",
-        "url": "BKR",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Illumina Inc",
-        "url": "ILMN",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Texas Instruments Inc",
-        "url": "TXN",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Kraft Heinz Co/The",
-        "url": "KHC",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Alphabet Inc",
-        "url": "GOOGL",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Netflix Inc",
-        "url": "NFLX",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Keurig Dr Pepper Inc",
-        "url": "KDP",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Automatic Data Processing Inc",
-        "url": "ADP",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Xcel Energy Inc",
-        "url": "XEL",
         "updated": "Daily"
     },
     {
@@ -14200,98 +14095,8 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Walgreens Boots Alliance Inc",
-        "url": "WBA",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "PDD Holdings Inc",
         "url": "PDD",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Advanced Micro Devices Inc",
-        "url": "AMD",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Old Dominion Freight Line Inc",
-        "url": "ODFL",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Adobe Inc",
-        "url": "ADBE",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Amgen Inc",
-        "url": "AMGN",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "CSX Corp",
-        "url": "CSX",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Apple Inc",
-        "url": "AAPL",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Autodesk Inc",
-        "url": "ADSK",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Cintas Corp",
-        "url": "CTAS",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Comcast Corp",
-        "url": "CMCSA",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Constellation Energy Corp",
-        "url": "CEG",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "American Electric Power Co Inc",
-        "url": "AEP",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "KLA Corp",
-        "url": "KLAC",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Broadcom Inc",
-        "url": "AVGO",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Cadence Design Systems Inc",
-        "url": "CDNS",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "PACCAR Inc",
-        "url": "PCAR",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Costco Wholesale Corp",
-        "url": "COST",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Regeneron Pharmaceuticals Inc",
-        "url": "REGN",
         "updated": "Daily"
     },
     {
@@ -14300,63 +14105,8 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Applied Materials Inc",
-        "url": "AMAT",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Lululemon Athletica Inc",
         "url": "LULU",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "GE HealthCare Technologies Inc",
-        "url": "GEHC",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Synopsys Inc",
-        "url": "SNPS",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Electronic Arts Inc",
-        "url": "EA",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Fastenal Co",
-        "url": "FAST",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "ANSYS Inc",
-        "url": "ANSS",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Meta Platforms Inc",
-        "url": "META",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Gilead Sciences Inc",
-        "url": "GILD",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Exelon Corp",
-        "url": "EXC",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Lam Research Corp",
-        "url": "LRCX",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Biogen Inc",
-        "url": "BIIB",
         "updated": "Daily"
     },
     {
@@ -14365,83 +14115,8 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Vertex Pharmaceuticals Inc",
-        "url": "VRTX",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "ON Semiconductor Corp",
-        "url": "ON",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Paychex Inc",
-        "url": "PAYX",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Analog Devices Inc",
-        "url": "ADI",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "PayPal Holdings Inc",
-        "url": "PYPL",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "QUALCOMM Inc",
-        "url": "QCOM",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Marriott International Inc/MD",
-        "url": "MAR",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Ross Stores Inc",
-        "url": "ROST",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Starbucks Corp",
-        "url": "SBUX",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "PepsiCo Inc",
-        "url": "PEP",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Intuit Inc",
-        "url": "INTU",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Microchip Technology Inc",
-        "url": "MCHP",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Monster Beverage Corp",
-        "url": "MNST",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Workday Inc",
         "url": "WDAY",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "OReilly Automotive Inc",
-        "url": "ORLY",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Tesla Inc",
-        "url": "TSLA",
         "updated": "Daily"
     },
     {
@@ -14450,68 +14125,13 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "NXP Semiconductors NV",
-        "url": "NXPI",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Honeywell International Inc",
-        "url": "HON",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "AstraZeneca PLC",
         "url": "AZN",
         "updated": "Daily"
     },
     {
-        "chart_name": "Moderna Inc",
-        "url": "MRNA",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Sirius XM Holdings Inc",
         "url": "SIRI",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Micron Technology Inc",
-        "url": "MU",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Warner Bros Discovery Inc",
-        "url": "WBD",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "T-Mobile US Inc",
-        "url": "TMUS",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Verisk Analytics Inc",
-        "url": "VRSK",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Dollar Tree Inc",
-        "url": "DLTR",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Diamondback Energy Inc",
-        "url": "FANG",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Fortinet Inc",
-        "url": "FTNT",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Dexcom Inc",
-        "url": "DXCM",
         "updated": "Daily"
     },
     {
@@ -14820,11 +14440,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "CDW Corp/DE",
-        "url": "CDW",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Palo Alto Networks Inc",
         "url": "PANW",
         "updated": "Daily"
@@ -14850,16 +14465,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Take-Two Interactive Software",
-        "url": "TTWO",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Roper Technologies Inc",
-        "url": "ROP",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "eBay Inc",
         "url": "EBAY",
         "updated": "Daily"
@@ -14882,6 +14487,486 @@
     {
         "chart_name": "SOXX  Outstanding Shares",
         "url": "etf_soxx_shares",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sentiment Cycle Returning Confidence",
+        "url": "sentiment_cycle_returning_confidence",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sentiment Cycle Enthusiasm",
+        "url": "sentiment_cycle_enthusiasm",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sentiment Cycle Panic",
+        "url": "sentiment_cycle_panic",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sentiment Cycle Discouragement",
+        "url": "sentiment_cycle_discouragement",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AMJ Seasonality",
+        "url": "seasonality_amj",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "AMLP Seasonality",
+        "url": "seasonality_amlp",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "ARGT Seasonality",
+        "url": "seasonality_argt",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "BLOK Seasonality",
+        "url": "seasonality_blok",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "BND Seasonality",
+        "url": "seasonality_bnd",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "COPX Seasonality",
+        "url": "seasonality_copx",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "ECH Seasonality",
+        "url": "seasonality_ech",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EDEN Seasonality",
+        "url": "seasonality_eden",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EFA Seasonality",
+        "url": "seasonality_efa",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EFNL Seasonality",
+        "url": "seasonality_efnl",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EGPT Seasonality",
+        "url": "seasonality_egpt",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EIDO Seasonality",
+        "url": "seasonality_eido",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EIRL Seasonality",
+        "url": "seasonality_eirl",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EIS Seasonality",
+        "url": "seasonality_eis",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EMQQ Seasonality",
+        "url": "seasonality_emqq",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "ENZL Seasonality",
+        "url": "seasonality_enzl",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EPHE Seasonality",
+        "url": "seasonality_ephe",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EPOL Seasonality",
+        "url": "seasonality_epol",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EPU Seasonality",
+        "url": "seasonality_epu",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EWD Seasonality",
+        "url": "seasonality_ewd",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EWH Seasonality",
+        "url": "seasonality_ewh",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EWK Seasonality",
+        "url": "seasonality_ewk",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EWL Seasonality",
+        "url": "seasonality_ewl",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EWM Seasonality",
+        "url": "seasonality_ewm",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EWN Seasonality",
+        "url": "seasonality_ewn",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EWO Seasonality",
+        "url": "seasonality_ewo",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EWS Seasonality",
+        "url": "seasonality_ews",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EWT Seasonality",
+        "url": "seasonality_ewt",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EWY Seasonality",
+        "url": "seasonality_ewy",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "EZA Seasonality",
+        "url": "seasonality_eza",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "GREK Seasonality",
+        "url": "seasonality_grek",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "GXG Seasonality",
+        "url": "seasonality_gxg",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "IBUY Seasonality",
+        "url": "seasonality_ibuy",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "ICLN Seasonality",
+        "url": "seasonality_icln",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "IDX Seasonality",
+        "url": "seasonality_idx",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "INDA Seasonality",
+        "url": "seasonality_inda",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "ITB Seasonality",
+        "url": "seasonality_itb",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "IYT Seasonality",
+        "url": "seasonality_iyt",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "KBE Seasonality",
+        "url": "seasonality_kbe",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "KRBN Seasonality",
+        "url": "seasonality_krbn",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "KRE Seasonality",
+        "url": "seasonality_kre",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "KSA Seasonality",
+        "url": "seasonality_ksa",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "KWEB Seasonality",
+        "url": "seasonality_kweb",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "LIT Seasonality",
+        "url": "seasonality_lit",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "MJ Seasonality",
+        "url": "seasonality_mj",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "NGE Seasonality",
+        "url": "seasonality_nge",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "NORW Seasonality",
+        "url": "seasonality_norw",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "OIH Seasonality",
+        "url": "seasonality_oih",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "PAK Seasonality",
+        "url": "seasonality_pak",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "PGAL Seasonality",
+        "url": "seasonality_pgal",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "PUTW Seasonality",
+        "url": "seasonality_putw",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "QAT Seasonality",
+        "url": "seasonality_qat",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "REMX Seasonality",
+        "url": "seasonality_remx",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "TAN Seasonality",
+        "url": "seasonality_tan",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "THD Seasonality",
+        "url": "seasonality_thd",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "TUR Seasonality",
+        "url": "seasonality_tur",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "UAE Seasonality",
+        "url": "seasonality_uae",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "UNG Seasonality",
+        "url": "seasonality_ung",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "USO Seasonality",
+        "url": "seasonality_uso",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "VNM Seasonality",
+        "url": "seasonality_vnm",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "WCLD Seasonality",
+        "url": "seasonality_wcld",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "XBI Seasonality",
+        "url": "seasonality_xbi",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "XLC Seasonality",
+        "url": "seasonality_xlc",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "XLRE Seasonality",
+        "url": "seasonality_xlre",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "DIA Panic Breadth Composite",
+        "url": "breadth_sector_dia_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLB Panic Breadth Composite",
+        "url": "breadth_sector_xlb_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TSX Panic Breadth Composite",
+        "url": "breadth_sector_tsx_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "HSI Panic Breadth Composite",
+        "url": "breadth_sector_hsi_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLK Panic Breadth Composite",
+        "url": "breadth_sector_xlk_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLE Panic Breadth Composite",
+        "url": "breadth_sector_xle_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLU Panic Breadth Composite",
+        "url": "breadth_sector_xlu_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP Panic Breadth Composite",
+        "url": "breadth_sector_ccmp_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MEXBOL Panic Breadth Composite",
+        "url": "breadth_sector_mexbol_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SMI Panic Breadth Composite",
+        "url": "breadth_sector_smi_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NKY Panic Breadth Composite",
+        "url": "breadth_sector_nky_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPY Panic Breadth Composite",
+        "url": "breadth_sector_spy_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLF Panic Breadth Composite",
+        "url": "breadth_sector_xlf_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "QQQ Panic Breadth Composite",
+        "url": "breadth_sector_qqq_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IBOV Panic Breadth Composite",
+        "url": "breadth_sector_ibov_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MXEF Panic Breadth Composite",
+        "url": "breadth_sector_mxef_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SENSEX Panic Breadth Composite",
+        "url": "breadth_sector_sensex_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FTSE Panic Breadth Composite",
+        "url": "breadth_sector_ftse_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "DAX Panic Breadth Composite",
+        "url": "breadth_sector_dax_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLP Panic Breadth Composite",
+        "url": "breadth_sector_xlp_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NIFTY Panic Breadth Composite",
+        "url": "breadth_sector_nifty_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "KOSPI Panic Breadth Composite",
+        "url": "breadth_sector_kospi_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CAC Panic Breadth Composite",
+        "url": "breadth_sector_cac_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLI Panic Breadth Composite",
+        "url": "breadth_sector_xli_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IWM Panic Breadth Composite",
+        "url": "breadth_sector_iwm_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SHCOMP Panic Breadth Composite",
+        "url": "breadth_sector_shcomp_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLY Panic Breadth Composite",
+        "url": "breadth_sector_xly_panic_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLV Panic Breadth Composite",
+        "url": "breadth_sector_xlv_panic_composite",
         "updated": "Daily"
     }
 ]
