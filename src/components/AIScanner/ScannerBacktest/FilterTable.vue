@@ -10,9 +10,6 @@
 			:data="paginatedData"
 			empty-text="Empty filter condition preview list"
       v-loading="loading"
-      :element-loading-text="loadTest"
-      element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(0, 0, 0, 0.8)"
 			@sort-change="changeTableSort"
 			style="width: 100%; height: 100%"
       size="small"
@@ -207,8 +204,6 @@ export default {
 				popupVisible: false, // 弹窗可见性
     			popupContent: '', // 弹窗内容
 				hoveredItem: null, // 悬停的元素
-
-				loadTest: 'Loading...',
 				
 				textContent: {
 					'MA':"This strategy utilizes the crossover of closing prices and moving averages as trading signals.<br/>It can further specify the direction of trades and operating rules,<br/>such as determining long signals after a golden cross and short signals after a death cross.",
@@ -444,11 +439,11 @@ export default {
 					'Close': item.Close,
 					'Direction': item.Direction,
 					'Signal': this.midTermMap[item._Signal] || item._Signal,
-					'Win Rate(%)': isNaN(item.WinRate) ? `${item.WinRate}%` : '',
-					'Stop Loss(%)': isNaN(item.StopLoss) ? `${item.StopLoss}%` : '',
-					'Profit Target(%)': isNaN(item.ProfitTarget) ? `${item.ProfitTarget}%` : '',
+					'Win Rate(%)': `${item.WinRate}%`,
+					'Stop Loss(%)': `${item.StopLoss}%`,
+					'Profit Target(%)': `${item.ProfitTarget}%`,
 					'Best Time In Market(Bars)': item.TimeInMarket,
-					'Expected Return(%)': isNaN(item.ExpectedReturn) ? `${item.ExpectedReturn}%` : '',
+					'Expected Return(%)': `${item.ExpectedReturn}%`,
 				}
 			})
 			return processedData

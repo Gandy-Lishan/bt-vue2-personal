@@ -133,7 +133,7 @@ export default {
     displayResultsAndFilter(data) {
       debugger
       // 至展示 filter 和 result 不重新赋值 form
-      const result = data.result.result
+      const result = data.result
       this.activeSecondTab = 'summary'
       this.displaySummary(result)
       this.scrollToTarget('scrollTarget')

@@ -445,7 +445,7 @@ export default {
 			}
 		},
 		handleDownloadCsv() {
-      const {summaryData, processedTradesData:tradesData} = this
+      const {summaryData, tradesData} = this
       const summary = []
       summaryData.forEach((item, index) => {
         const obj = {}

@@ -809,6 +809,7 @@ export default {
       }
      // 运行成或者失败后刷新列表
      this.$emit('refreshBTList')
+     this.btnLoading = false
     this.processTips = ''
     },
     displayData(data) {

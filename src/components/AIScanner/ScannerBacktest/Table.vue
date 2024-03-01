@@ -12,10 +12,7 @@
 			:data="tableData"
       empty-text="No data"
       v-loading="loading"
-      :element-loading-text="loadTest"
-      element-loading-spinner="el-icon-loading"
 			@sort-change="onSortChange"
-      element-loading-background="rgba(0, 0, 0, 0.8)"
       size="small"
 			style="width: 100%; height: 100%; margin: 0 auto;"
       stripe
@@ -185,7 +182,6 @@ export default {
       pageSize: 10, // Default page size
       currentPage: 1, // Default current page
       total: 0,
-      loadTest: 'Loading...',
       searchKey: '',
       tableCol: [
         {
