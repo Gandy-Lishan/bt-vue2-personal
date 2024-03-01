@@ -799,7 +799,7 @@ export default {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('Empty backtest list. Please adjust "Select Condition" and run again')
+      if(code == 407) this.popUpMsgBox('Empty backtest list. Please adjust "Filter Criteria" and run again')
       if(code == 200) {
         this.popUpMsgBox(`The "${_name}" backtest is completed successfully`)
         this.$emit('displayResultsAndFilter', saveRes.data.data)
@@ -876,7 +876,7 @@ export default {
         const name =  this.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('Empty preview list. Please adjust "Select Condition" and run again')
+      if(code == 407) this.popUpMsgBox('Empty preview list. Please adjust "Filter Criteria" and run again')
       if(code == 200 && previewRes.status == 200) {
         this.popUpMsgBox('Preview successful')
         const previewData = JSON.parse(previewRes.data.data)
