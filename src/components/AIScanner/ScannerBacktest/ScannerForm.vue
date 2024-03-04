@@ -349,6 +349,7 @@ import { saveScannerForm, editScannerForm, getScannerBTList, getScannerBTResults
 
 export default {
   name: 'ScannerForm',
+  props: ['parentContext'],
   components: {
     SelectCheck
   },
@@ -416,6 +417,7 @@ export default {
       rowUrl: null,
       btnLoading: false,
       previewBtnLoading: false,
+      isPolling: false,
       processTips: '',
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
@@ -629,7 +631,8 @@ export default {
     },
     resetForm() {
       // 如果当前在回测状态，不允许重置
-      if(this.previewBtnLoading || this.btnLoading) return true
+      debugger
+      if((!this.isPolling) || this.previewBtnLoading) return true
       this.$refs['SelectCheck'].handleoptionsAllChange(true)
 			Object.assign(this.$data, this.$options.data())
       this.data.signals = ['All']
@@ -743,6 +746,7 @@ export default {
       else{saveRes = await saveScannerForm(saveData)}
       // 这里要发请求拿到预推荐列表
       try {
+        this.isPolling = true
         previewRes = await perviewScannerForm(saveData)
       } catch (error) {
         // 预览失败, 设置状态码为 408
@@ -784,11 +788,12 @@ export default {
       try {
         saveRes = await this.saveFormData()
       } catch (error) {
+        this.$emit('clearResults')
         this.btnLoading = false
         this.processTips = ''
       }
       debugger
-     if(!saveRes) {this.btnLoading = false; this.processTips = ''; return}
+     if(!saveRes) {this.$emit('clearResults'); this.btnLoading = false; this.processTips = ''; return}
      const code = saveRes.data.code
      const name = saveRes.data?.data?.name
      const _name = typeof name === 'string' && name ? name : ''
@@ -807,10 +812,12 @@ export default {
         const list = saveRes['TRADE LIST']
         if(list) this.$emit('displayPreviewList', JSON.parse(list))
       }
-     // 运行成或者失败后刷新列表
-     this.$emit('refreshBTList')
-     this.btnLoading = false
-    this.processTips = ''
+      // 只要是错误状态码都要清空 filterList 和 result 数据
+      if([400, 401, 404, 403, 406, 407].includes(code)) this.$emit('clearResults')
+      // 运行成或者失败后刷新列表
+      this.$emit('refreshBTList')
+      this.btnLoading = false
+      this.processTips = ''
     },
     displayData(data) {
       const {url, long_short_ratio, risk_control_filter_number, risk_control_filter_condition, commission, signals} = data
@@ -863,11 +870,12 @@ export default {
       try {
         previewRes = await this.previewSCList()
       } catch (error) {
+        this.$emit('clearResults')
         this.previewBtnLoading = false
       }
       debugger
       console.log('previewRes', previewRes)
-      if(!previewRes) {this.previewBtnLoading = false; return}
+      if(!previewRes) {this.previewBtnLoading = false; this.$emit('clearResults'); return}
      const code = previewRes.data.code
       if(code == 400) this.popUpMsgBox('Scanner Backtest List preview failed')
       if(code == 401) this.popUpMsgBox('Calculate error')
@@ -884,9 +892,12 @@ export default {
         this.$emit('changeSecondTab', 'filter')
         this.$emit('displayPreviewList', previewData)
         this.$emit('scrollToTarget', 'scrollTarget')
-        // 清空 results 数据
-        // this.$emit('clearResults', this.data)
+        // 只清空 results 数据
+        this.parentContext.tradesData = []
+        this.parentContext.$refs['Statistics'].displayData({})
       }
+      // 只要是错误状态码都要清空 filterList 和 result 数据
+      if([400, 401, 404, 403, 406, 407].includes(code)) this.$emit('clearResults')
       this.previewBtnLoading = false
     },
     checkResLater() {
