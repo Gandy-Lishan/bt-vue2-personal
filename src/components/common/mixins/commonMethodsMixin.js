@@ -485,6 +485,7 @@ export const CommonMethodsMixin = {
 				//CIQ.hideCover()
 			})
 			await this.loopCalculateNewConditions(backtestInfo)
+			debugger
 			await CIQ.uploadCSVJSON(backtestInfo.pk, callback)
 			// await CIQ.outputSignalsResult(backtestInfo.pk, callback)
 			// await this.executeOutputSignalsResult(backtestInfo.pk, callback);
@@ -768,15 +769,47 @@ export const CommonMethodsMixin = {
 			desc[0]['commentDes'] = words.join(' ');
 			_backtestInfo[criteriaDesc] = desc
 
-			// 修改value
+			
 			let criteria = isJson(_backtestInfo[criteriaStr])
 				? JSON.parse(_backtestInfo[criteriaStr])
 				: _backtestInfo[criteriaStr]
 			let decodeRes = signalCode.decode(criteria.signals[0].code)
-			decodeRes.value = value
-			decodeRes.sc.value = value
+
+			// 修改值，如果是前两种条件则替换value和sc.value, 第三种情况替换period和sc.period 并替换indicator_layout
+			if(
+				decodeRes.comparison == "SV" &&
+				decodeRes.value == "SVMA"
+			){
+				decodeRes.period = value
+				decodeRes.sc.period = value
+			}else {
+				decodeRes.value = value
+				decodeRes.sc.value = value
+			}
 			criteria.signals[0].code = decodeRes
 			_backtestInfo[criteriaStr] = criteria
+
+			// 如果是第三个条件，则需要修改layout
+			if(
+				decodeRes.comparison == "SV" &&
+				decodeRes.value == "SVMA"
+			){
+				let parsedIndicatorLayout =
+				typeof _backtestInfo['indicator_layout'] === 'string'
+					? JSON.parse(_backtestInfo['indicator_layout'].replaceAll('$r001$', '\u200c'))
+					: _backtestInfo['indicator_layout']
+				
+					//savedTechSD
+				parsedIndicatorLayout['savedTechSD'] = []
+					// activatedMA
+				for (let i = 0; i < parsedIndicatorLayout['activatedMA'].length; i++) {
+					if (parsedIndicatorLayout['activatedMA'][i]["criteria"] === criteriaStr && parsedIndicatorLayout['activatedMA'][i]["index"] === 0) {
+						parsedIndicatorLayout['activatedMA'][i]["period"] = value;
+					}
+				}
+				_backtestInfo['indicator_layout'] = JSON.stringify(parsedIndicatorLayout).replaceAll('\u200c', '$r001$')
+			}
+
 			return this.encodeSignalsCond(_backtestInfo,criteriaStr)      
 		},
 		encodeSignalsCond(backtestData,criteria) {

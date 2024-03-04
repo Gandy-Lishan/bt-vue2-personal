@@ -80,19 +80,19 @@
         "name": "20-Year Treasuries (TLT)"
     },
     {
-        "symbol": "thirty",
+        "symbol": "THIRTY",
         "name": "30-Year Treasury"
     },
     {
-        "symbol": "ten",
+        "symbol": "TEN",
         "name": "10-Year Treasury"
     },
     {
-        "symbol": "two",
+        "symbol": "TWO",
         "name": "2-Year Treasury"
     },
     {
-        "symbol": "five",
+        "symbol": "FIVE",
         "name": "5-Year Treasury"
     },
     {
@@ -112,35 +112,35 @@
         "name": "Total Bond (BND)"
     },
     {
-        "symbol": "aussie",
+        "symbol": "Aussie",
         "name": "Aussie Dollar"
     },
     {
-        "symbol": "pound",
+        "symbol": "Pound",
         "name": "British Pound"
     },
     {
-        "symbol": "canada",
+        "symbol": "CANADA",
         "name": "Canadian Dollar"
     },
     {
-        "symbol": "euro",
+        "symbol": "Euro",
         "name": "Euro"
     },
     {
-        "symbol": "peso",
+        "symbol": "Peso",
         "name": "Mexican Peso"
     },
     {
-        "symbol": "franc",
+        "symbol": "Franc",
         "name": "Swiss Franc"
     },
     {
-        "symbol": "dollar",
+        "symbol": "Dollar",
         "name": "US Dollar"
     },
     {
-        "symbol": "crude",
+        "symbol": "Crude",
         "name": "Crude Oil"
     },
     {
@@ -148,19 +148,19 @@
         "name": "Crude Oil (USO)"
     },
     {
-        "symbol": "gold",
+        "symbol": "Gold",
         "name": "Gold"
     },
     {
-        "symbol": "copper",
+        "symbol": "Copper",
         "name": "Copper"
     },
     {
-        "symbol": "unleaded",
+        "symbol": "Unleaded",
         "name": "Unleaded Gas"
     },
     {
-        "symbol": "heating",
+        "symbol": "Heating",
         "name": "Heating Oil"
     },
     {
@@ -176,59 +176,59 @@
         "name": "Gold Miners - Junior (GDXJ)"
     },
     {
-        "symbol": "palladium",
+        "symbol": "Palladium",
         "name": "Palladium"
     },
     {
-        "symbol": "platinum",
+        "symbol": "Platinum",
         "name": "Platinum"
     },
     {
-        "symbol": "silver",
+        "symbol": "Silver",
         "name": "Silver"
     },
     {
-        "symbol": "corn",
+        "symbol": "Corn",
         "name": "Corn"
     },
     {
-        "symbol": "soybeans",
+        "symbol": "Soybeans",
         "name": "Soybeans"
     },
     {
-        "symbol": "wheat",
+        "symbol": "Wheat",
         "name": "Wheat"
     },
     {
-        "symbol": "coffee",
+        "symbol": "Coffee",
         "name": "Coffee"
     },
     {
-        "symbol": "cotton",
+        "symbol": "Cotton",
         "name": "Cotton"
     },
     {
-        "symbol": "cocoa",
+        "symbol": "Cocoa",
         "name": "Cocoa"
     },
     {
-        "symbol": "lumber",
+        "symbol": "Lumber",
         "name": "Lumber"
     },
     {
-        "symbol": "oj",
+        "symbol": "OJ",
         "name": "Orange Juice"
     },
     {
-        "symbol": "sugar",
+        "symbol": "Sugar",
         "name": "Sugar"
     },
     {
-        "symbol": "cattle",
+        "symbol": "Cattle",
         "name": "Cattle"
     },
     {
-        "symbol": "hogs",
+        "symbol": "Hogs",
         "name": "Hogs"
     },
     {
@@ -280,67 +280,67 @@
         "name": "Gold Bugs Index (HUI)"
     },
     {
-        "symbol": "ewa",
+        "symbol": "EWA",
         "name": "Australia (EWA)"
     },
     {
-        "symbol": "ewz",
+        "symbol": "EWZ",
         "name": "Brazil (EWZ)"
     },
     {
-        "symbol": "ewc",
+        "symbol": "EWC",
         "name": "Canada (EWC)"
     },
     {
-        "symbol": "fxi",
+        "symbol": "FXI",
         "name": "China (FXI)"
     },
     {
-        "symbol": "ewq",
+        "symbol": "EWQ",
         "name": "France (EWQ)"
     },
     {
-        "symbol": "ewg",
+        "symbol": "EWG",
         "name": "Germany (EWG)"
     },
     {
-        "symbol": "pin",
+        "symbol": "PIN",
         "name": "India (PIN)"
     },
     {
-        "symbol": "ewi",
+        "symbol": "EWI",
         "name": "Italy (EWI)"
     },
     {
-        "symbol": "ewj",
+        "symbol": "EWJ",
         "name": "Japan (EWJ)"
     },
     {
-        "symbol": "eww",
+        "symbol": "EWW",
         "name": "Mexico (EWW)"
     },
     {
-        "symbol": "rsx",
+        "symbol": "RSX",
         "name": "Russia (RSX)"
     },
     {
-        "symbol": "ewp",
+        "symbol": "EWP",
         "name": "Spain (EWP)"
     },
     {
-        "symbol": "ewu",
+        "symbol": "EWU",
         "name": "United Kingdom (EWU)"
     },
     {
-        "symbol": "yen",
+        "symbol": "Yen",
         "name": "Japanese Yen"
     },
     {
-        "symbol": "crb",
+        "symbol": "CRB",
         "name": "CRB Index"
     },
     {
-        "symbol": "dba",
+        "symbol": "DBA",
         "name": "PowerShares Agriculture (DBA)"
     },
     {
@@ -352,15 +352,15 @@
         "name": "Dow Jones Industrial (DIA)"
     },
     {
-        "symbol": "natural",
+        "symbol": "Natural",
         "name": "Natural Gas"
     },
     {
-        "symbol": "oats",
+        "symbol": "Oats",
         "name": "Oats"
     },
     {
-        "symbol": "eurodollar",
+        "symbol": "Eurodollar",
         "name": "Eurodollar"
     },
     {
@@ -388,19 +388,19 @@
         "name": "Toronto Stock Exchange (TSX)"
     },
     {
-        "symbol": "eurostoxx",
+        "symbol": "EUROSTOXX",
         "name": "Euro Stocks 50 (EUROSTOXX)"
     },
     {
-        "symbol": "ftse",
+        "symbol": "FTSE",
         "name": "FTSE 100 (FTSE)"
     },
     {
-        "symbol": "cac",
+        "symbol": "CAC",
         "name": "CAC 40 (CAC)"
     },
     {
-        "symbol": "dax",
+        "symbol": "DAX",
         "name": "DAX (DAX)"
     },
     {
@@ -408,19 +408,19 @@
         "name": "Swiss Market Index (SMI)"
     },
     {
-        "symbol": "nky",
+        "symbol": "NKY",
         "name": "Nikkei 225 (NKY)"
     },
     {
-        "symbol": "hsi",
+        "symbol": "HSI",
         "name": "Hang Seng (HSI)"
     },
     {
-        "symbol": "shcomp",
+        "symbol": "SHCOMP",
         "name": "Shanghai (SHCOMP)"
     },
     {
-        "symbol": "bitcoin",
+        "symbol": "Bitcoin",
         "name": "Bitcoin"
     },
     {
@@ -564,23 +564,23 @@
         "name": "UBS Alerian MLP (MLPI)"
     },
     {
-        "symbol": "pak",
+        "symbol": "PAK",
         "name": "Pakistan (PAK)"
     },
     {
-        "symbol": "inda",
+        "symbol": "INDA",
         "name": "India (INDA)"
     },
     {
-        "symbol": "epol",
+        "symbol": "EPOL",
         "name": "Poland (EPOL)"
     },
     {
-        "symbol": "eido",
+        "symbol": "EIDO",
         "name": "Indonesia (EIDO)"
     },
     {
-        "symbol": "ibov",
+        "symbol": "IBOV",
         "name": "Brazil Stock Index (IBOV)"
     },
     {
@@ -800,7 +800,7 @@
         "name": "Bloomberg Spot Index "
     },
     {
-        "symbol": "lumber_future",
+        "symbol": "LUMBER_FUTURE",
         "name": "Lumber Future"
     },
     {
@@ -826,9 +826,5 @@
     {
         "symbol": "SOXX",
         "name": "Semiconductor (SOXX)"
-    },
-    {
-        "symbol": "ETHEREUM",
-        "name": "ETHEREUM"
     }
 ]
