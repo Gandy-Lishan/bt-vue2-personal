@@ -375,6 +375,7 @@ h1 {
 		.table {
 			background: yellowgreen;
 			width: 60vw;
+			margin-bottom: 20px;
 		}
 		.btn-group {
 			display: flex;
