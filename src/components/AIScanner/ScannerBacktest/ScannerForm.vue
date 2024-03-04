@@ -133,19 +133,12 @@
             </label>
           </template>
           <div class="_conditionBox">
-            <el-select
-              v-model="data.stop_loss_condition"
-              placeholder="— Select Condition —"
-          >
-            <el-option
-              v-for="item in stopLossConditionOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-              <span>&nbsp;</span>
+            <el-form-item prop="stop_loss_condition" label-width="0px">
+                <el-input v-model="data.stop_loss_condition" placeholder="Enter number">
+                  <template v-slot:append>(%)</template>
+                </el-input>
+            </el-form-item>
+              <span>&nbsp;to&nbsp;</span>
               <el-form-item prop="stop_loss" label-width="0px">
               <el-input v-model="data.stop_loss" placeholder="Enter number">
                 <template v-slot:append>(%)</template>
@@ -169,19 +162,12 @@
             </label>
           </template>
           <div class="_conditionBox">
-            <el-select
-              v-model="data.take_profit_condition"
-              placeholder="— Select Condition —"
-          >
-            <el-option
-              v-for="item in takeProfitConditionOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-          <span>&nbsp;</span>
+          <el-form-item prop="take_profit_condition" label-width="0px">
+              <el-input v-model="data.take_profit_condition" placeholder="Enter number">
+                <template v-slot:append>(%)</template>
+              </el-input>
+          </el-form-item>
+            <span>&nbsp;to&nbsp;</span>
           <el-form-item prop="take_profit" label-width="0px">
           <el-input v-model="data.take_profit" placeholder="Enter number">
             <template v-slot:append>(%)</template>
@@ -205,19 +191,12 @@
             </label>
           </template>
           <div class="_conditionBox">
-            <el-select
-              v-model="data.time_in_market_condition"
-              placeholder="— Select Condition —"
-          >
-            <el-option
-              v-for="item in timeInMarketonditionOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-          <span>&nbsp;</span>
+          <el-form-item prop="time_in_market_condition" label-width="0px">
+              <el-input v-model="data.time_in_market_condition" placeholder="Enter number">
+                <template v-slot:append>(bars)</template>
+              </el-input>
+          </el-form-item>
+            <span>&nbsp;to&nbsp;</span>
           <el-form-item prop="time_in_market" label-width="0px">
           <el-input v-model="data.time_in_market" placeholder="Enter bars">
             <template v-slot:append>(bars)</template>
@@ -296,7 +275,7 @@
             placeholder="— Select type —"
           >
             <el-option
-              v-for="item in AllocateOptions"
+              v-for="item in RankCondition"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -365,11 +344,12 @@
 <script>
 import { isJson, timestampToTime } from '@/utils'
 import SelectCheck from "./SelectCheck";
-import { validateCapitalRule, validateCommissionRule, createPositiveIntegerRule, createTPSLValidateRule } from '@/utils/formValidate'
+import { validateCapitalRule, validateCommissionRule, createPositiveScopeIntegerRule, createTPSLScopeValidateRule, createPositiveIntegerRule   } from '@/utils/formValidate'
 import { saveScannerForm, editScannerForm, getScannerBTList, getScannerBTResults, perviewScannerForm } from '@/service/service'
 
 export default {
   name: 'ScannerForm',
+  props: ['parentContext'],
   components: {
     SelectCheck
   },
@@ -420,11 +400,11 @@ export default {
         find_type: 'stock/etf',
         long_ratio: 80,
         short_ratio: 20,
-        stop_loss_condition: '<',
-        take_profit_condition: '>',
-        time_in_market_condition: '>',
-        stop_loss: 5,
-        take_profit: 10,
+        stop_loss_condition: 5,
+        take_profit_condition: 5,
+        time_in_market_condition: 5,
+        stop_loss: 20,
+        take_profit: 30,
         time_in_market: 21,
         name: '',
         total_capital: 1000000,
@@ -437,6 +417,7 @@ export default {
       rowUrl: null,
       btnLoading: false,
       previewBtnLoading: false,
+      isPolling: false,
       processTips: '',
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
@@ -449,21 +430,11 @@ export default {
         { value: 'etf', label: 'ETF' },
         { value: 'stock/etf', label: 'Stock/ETF' },
       ],
-      stopLossConditionOptions: [
-        { value: '<', label: '<' }
-      ],
-      takeProfitConditionOptions: [
-        { value: '>', label: '>' }
-      ],
-      timeInMarketonditionOptions: [
-        { value: '>', label: '>' },
-        { value: '<', label: '<' },
-      ],
-      AllocateOptions: [
+      RankCondition: [
         { value: 'Kelly', label: 'Kelly'},
-        { value: 'WinRate', label: 'WinRate'},
-        { value: 'Z_Score', label: 'Z_Score'},
-        { value: 'StdDev', label: 'StdDev'},
+        { value: 'WinRate', label: 'Win Rate(%)'},
+        { value: 'Z_Score', label: 'Z-Score'},
+        { value: 'StdDev', label: 'STD.DEV'},
         { value: 'Expected Return(%)', label: 'Expected Return(%)'},
       ],
       options: [
@@ -573,17 +544,29 @@ export default {
         { required: true, message: 'Select end date', trigger: 'blur' },
         { required: true, message: 'Select end date', trigger: 'change' }
         ],
+        time_in_market_condition: [
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market)(rule, value, callback), trigger: 'change' }
+        ],
         time_in_market: [
-          { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' },
-          { validator: createPositiveIntegerRule('time in market', 0), trigger: 'change' }
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'change' }
+        ],
+        stop_loss_condition: [
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss)(rule, value, callback), trigger: 'change' }
         ],
         stop_loss: [
-        { validator: createTPSLValidateRule(0), trigger: 'blur' },
-        { validator: createTPSLValidateRule(0), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition)(rule, value, callback), trigger: 'change' }
+        ],
+        take_profit_condition: [
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit)(rule, value, callback), trigger: 'change' }
         ],
         take_profit: [
-        { validator: createTPSLValidateRule(0), trigger: 'blur' },
-        { validator: createTPSLValidateRule(0), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition)(rule, value, callback), trigger: 'change' }
         ],
         commission: [
           { validator: validateCommissionRule, trigger: 'blur' },
@@ -648,7 +631,8 @@ export default {
     },
     resetForm() {
       // 如果当前在回测状态，不允许重置
-      if(this.previewBtnLoading || this.btnLoading) return true
+      debugger
+      if((!this.isPolling) || this.previewBtnLoading) return true
       this.$refs['SelectCheck'].handleoptionsAllChange(true)
 			Object.assign(this.$data, this.$options.data())
       this.data.signals = ['All']
@@ -762,6 +746,7 @@ export default {
       else{saveRes = await saveScannerForm(saveData)}
       // 这里要发请求拿到预推荐列表
       try {
+        this.isPolling = true
         previewRes = await perviewScannerForm(saveData)
       } catch (error) {
         // 预览失败, 设置状态码为 408
@@ -803,22 +788,23 @@ export default {
       try {
         saveRes = await this.saveFormData()
       } catch (error) {
+        this.$emit('clearResults')
         this.btnLoading = false
         this.processTips = ''
       }
       debugger
-     if(!saveRes) {this.btnLoading = false; this.processTips = ''; return}
+     if(!saveRes) {this.$emit('clearResults'); this.btnLoading = false; this.processTips = ''; return}
      const code = saveRes.data.code
      const name = saveRes.data?.data?.name
      const _name = typeof name === 'string' && name ? name : ''
      if(code == 203) this.popUpMsgBox(`The "${_name}" backtest is running. You can wait or click the "+" button to create a new backtest`)
      if(code == 401) this.popUpMsgBox('Calculate error')
-     if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again'); return}
+     if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again')}
      if(code == 406) {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('Empty backtest list. Please adjust "Select Condition" and run again')
+      if(code == 407) this.popUpMsgBox('Empty backtest list. Please adjust "Filter Criteria" and run again')
       if(code == 200) {
         this.popUpMsgBox(`The "${_name}" backtest is completed successfully`)
         this.$emit('displayResultsAndFilter', saveRes.data.data)
@@ -826,9 +812,12 @@ export default {
         const list = saveRes['TRADE LIST']
         if(list) this.$emit('displayPreviewList', JSON.parse(list))
       }
-     // 运行成或者失败后刷新列表
-     this.$emit('refreshBTList')
-    this.processTips = ''
+      // 只要是错误状态码都要清空 filterList 和 result 数据
+      if([400, 401, 404, 403, 406, 407].includes(code)) this.$emit('clearResults')
+      // 运行成或者失败后刷新列表
+      this.$emit('refreshBTList')
+      this.btnLoading = false
+      this.processTips = ''
     },
     displayData(data) {
       const {url, long_short_ratio, risk_control_filter_number, risk_control_filter_condition, commission, signals} = data
@@ -881,11 +870,12 @@ export default {
       try {
         previewRes = await this.previewSCList()
       } catch (error) {
+        this.$emit('clearResults')
         this.previewBtnLoading = false
       }
       debugger
       console.log('previewRes', previewRes)
-      if(!previewRes) {this.previewBtnLoading = false; return}
+      if(!previewRes) {this.previewBtnLoading = false; this.$emit('clearResults'); return}
      const code = previewRes.data.code
       if(code == 400) this.popUpMsgBox('Scanner Backtest List preview failed')
       if(code == 401) this.popUpMsgBox('Calculate error')
@@ -894,16 +884,20 @@ export default {
         const name =  this.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('Empty preview list. Please adjust "Select Condition" and run again')
+      if(code == 407) this.popUpMsgBox('Empty preview list. Please adjust "Filter Criteria" and run again')
       if(code == 200 && previewRes.status == 200) {
         this.popUpMsgBox('Preview successful')
         const previewData = JSON.parse(previewRes.data.data)
         console.log('previewData', previewData)
         this.$emit('changeSecondTab', 'filter')
         this.$emit('displayPreviewList', previewData)
-        // 清空 results 数据
-        // this.$emit('clearResults', this.data)
+        this.$emit('scrollToTarget', 'scrollTarget')
+        // 只清空 results 数据
+        this.parentContext.tradesData = []
+        this.parentContext.$refs['Statistics'].displayData({})
       }
+      // 只要是错误状态码都要清空 filterList 和 result 数据
+      if([400, 401, 404, 403, 406, 407].includes(code)) this.$emit('clearResults')
       this.previewBtnLoading = false
     },
     checkResLater() {

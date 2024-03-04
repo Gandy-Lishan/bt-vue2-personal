@@ -13,7 +13,7 @@
       </el-collapse-item>
       <el-collapse-item name="2" class="form">
         <template v-slot:title>
-          <div class="title">
+          <div class="title" ref="formTarget">
             <p @click.stop>Filter Criteria</p>
             <p>
               <el-tooltip class="item" effect="dark" content="Create New Scanner Backtest" placement="bottom-start">
@@ -22,14 +22,33 @@
             </p>
           </div>
         </template>
-        <ScannerForm ref="ScannerForm" @changeSecondTab="changeSecondTab" @displayPreviewList="displayPreviewList" 
-            @displayResultsAndFilter="displayResultsAndFilter" @refreshBTList="refreshBTList"></ScannerForm>
+        <ScannerForm
+         ref="ScannerForm"
+         :parent-context="this"
+         @changeSecondTab="changeSecondTab"
+         @displayPreviewList="displayPreviewList" 
+         @displayResultsAndFilter="displayResultsAndFilter" 
+         @refreshBTList="refreshBTList" 
+         @scrollToTarget="scrollToTarget" 
+         @clearResults="clearResults">
+        </ScannerForm>
       </el-collapse-item>
       <el-collapse-item name="3" class="form">
         <template v-slot:title>
           <div class="title" ref="scrollTarget">
             <p @click.stop="() => {changeSecondTab('filter')}" :class="{ secondActive: activeSecondTab == 'filter' || '' }">Preview Filter List</p>
             <p @click.stop="() => {changeSecondTab('summary')}" :class="{ secondActive: activeSecondTab == 'summary' || '' }">Backtest Summary</p>
+          </div>
+          <div class="downLoadCsvBtn">
+              <el-button
+                @click.stop="() => {handleDownloadCsv()}"
+                style="display: inline-block"
+                type="primary"
+                plain
+                size="mini"
+                icon="el-icon-download"
+                >Export Data</el-button
+              >
           </div>
         </template>
         <!-- <CPMSummary ref="Summary"></CPMSummary> -->
@@ -69,7 +88,6 @@ export default {
       chart_data: {},
       breadcrumbTitle: 'Back to Correlation Pattern Match List',
       direction: 'Long',
-      StartEndDateArray: [],
       default_symbol: '',
       loading: false,
       tradesData: [],
@@ -108,18 +126,25 @@ export default {
     changeSecondTab(val) {
       this.activeSecondTab = val
     },
-    scrollToTarget() {
+    scrollToTarget(refName, height=-80) {
       this.$nextTick(() => {
-        this.$refs.scrollTarget.scrollIntoView({ behavior: 'smooth' });
-      })
+          const element = this.$refs[refName];
+          const rect = element.getBoundingClientRect();
+          const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+          const offset = rect.top + scrollPosition + height; // 往上滚动 200px
+          window.scrollTo({
+            top: offset,
+            behavior: 'smooth'
+          });
+        });
     },
     displayResultsAndFilter(data) {
       debugger
       // 至展示 filter 和 result 不重新赋值 form
-      const result = data.result.result
+      const result = data.result
       this.activeSecondTab = 'summary'
       this.displaySummary(result)
-      this.scrollToTarget()
+      this.scrollToTarget('scrollTarget')
     },
     displayResultsData(data) {
       debugger
@@ -127,6 +152,7 @@ export default {
       this.activeSecondTab = 'summary'
       const status = data.status
       if(status !== 'finish' && status !== 'Finish') {
+        this.scrollToTarget('formTarget', -200)
         this.clearResults()
         return
       }
@@ -134,7 +160,7 @@ export default {
       const list = JSON.parse(data['TRADE LIST'])
       this.displaySummary(result)
       this.displayPreviewList(list)
-      this.scrollToTarget()
+      this.scrollToTarget('scrollTarget')
     },
     displaySummary(result) {
       debugger
@@ -167,43 +193,22 @@ export default {
       const _ID = Object.values(indexMap) //输出: [[0, 2], [1, 3]] 这里没有考虑传入数据总数的奇偶问题
 
       for (let i = 0; i < _ID.length; i++) {
-        // ID[i] => [0, 2]
-        const direction = _result['Direction'][_ID[i][0]]
-        const action = _result['Action'][_ID[i][0]]
-        const nextAction = _result['Action'][_ID[i][1]]
-        let dataSource // (0 第一行 1 第二行)
-        if(direction == 'Long') {
-          // 如果等于 Direction 等于 Long, 找出 Action 等于 SELL 的
-          // if(action == 'SELL') {
-          //   dataSource = 0
-          // }else if(nextAction == 'SELL'){
-          //   dataSource = 1
-          // }
-          dataSource = 0
-        }else if(direction == 'Short'){
-          // 如果等于 Direction 等于 Short, 找出 Action 等于 BUY 的
-          // if(action == 'BUY') {
-          //   dataSource = 0
-          // }else if(nextAction == 'BUY'){
-          //   dataSource = 1
-          // }
-          dataSource = 1
-        }
-        const oppositeDataSource = 1 - dataSource
+        const dataSource = 1
+        const oppositeDataSource = 0
         debugger
         const data = {
           Symbol: _result['Symbol'][_ID[i][dataSource]],
           Signal: _result['Signal'][_ID[i][dataSource]],
           Direction: _result['Direction'][_ID[i][dataSource]],
-          EntryDate: _result['Start Date'][_ID[i][dataSource]],
-          EntryAction: _result['Action'][_ID[i][dataSource]],
-          EntryPrice: _result['Price'][_ID[i][dataSource]],
-          ExitDate: _result['Start Date'][_ID[i][oppositeDataSource]],
-          ExitAction: _result['Action'][_ID[i][oppositeDataSource]],
+          EntryDate: _result['Start Date'][_ID[i][oppositeDataSource]],
+          EntryAction: _result['Action'][_ID[i][oppositeDataSource]],
+          EntryPrice: _result['Close'][_ID[i][oppositeDataSource]],
+          ExitDate: _result['Start Date'][_ID[i][dataSource]],
+          ExitAction: _result['Action'][_ID[i][dataSource]],
           ExitPrice: _result['Close'][_ID[i][dataSource]],
-          FloatProfit: _result['ProfitTarget'][_ID[i][dataSource]],
+          FloatProfit: _result['FloatProfit'][_ID[i][dataSource]],
           ExitReason: _result['OrderStatus'][_ID[i][dataSource]],
-          TradeNumber: i
+          TradeNumber: i + 1
         }
         transformedResult.push(data)
       }
@@ -229,6 +234,7 @@ export default {
 			  x['WinRate'] = Number(x['WinRate']).toFixed(2)
 			  x['ExpectedReturn'] = Number(x['Expected Return(%)']).toFixed(2)
 			  x['_Signal'] = x['Signal']
+			  x['TimeInMarket'] = x['TimeInMarket']
        })
         this.filterTableData = {
           ...this.filterTableData,
@@ -251,7 +257,78 @@ export default {
     },
     async refreshBTList() {
       await this.$refs['ScannerBTTable'].getDataList()
-    }
+    },
+    handleDownloadCsv() {
+      const {summary, trade} = this.$refs.Statistics.handleDownloadCsv()
+      const filterList = this.$refs.filterTable.exportTable()
+      if (
+        !(
+          summary.length &&
+          trade.length &
+          filterList.length
+        )
+      ) {
+        this.popUpMsgBox('No data available for download')
+        return
+      }
+      const dataList = [ 
+        filterList,
+        summary,
+        trade
+      ]
+      const sheetNames = [
+        'Preview Filter List',
+        'Summary',
+        'Trades'
+      ]
+      this.exportDataToCSV(dataList, sheetNames)
+    },
+    exportDataToCSV(dataList, sheetNames) {
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new()
+
+      for (let i = 0; i < dataList.length; i++) {
+        // Convert the data to a worksheet
+        const worksheet = XLSX.utils.json_to_sheet(dataList[i])
+
+        // Add the worksheet to the workbook with the given name
+        XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i])
+      }
+
+      // Convert the workbook to a binary string
+      const workbookBinaryString = XLSX.write(workbook, {
+        type: 'binary',
+        bookType: 'xlsx'
+      })
+      // Create a Blob from the binary string
+      const blob = new Blob([this.s2ab(workbookBinaryString)], {
+        type: 'application/octet-stream'
+      })
+
+      // Create a download URL for the Blob
+      const url = URL.createObjectURL(blob)
+
+      // Create a link element for downloading the CSV file
+      const link = document.createElement('a')
+      link.style.display = 'none'
+      link.setAttribute('href', url)
+      link.setAttribute('download', 'Results.xlsx')
+      link.innerHTML = 'Download XLSX'
+      // Append the link element to the document body
+      document.body.appendChild(link)
+
+      // Trigger the download
+      link.click()
+    },
+    // Utility function to convert a string to an ArrayBuffer
+    s2ab(s) {
+      const buf = new ArrayBuffer(s.length);
+      const view = new Uint8Array(buf);
+      for (let i = 0; i < s.length; i++) {
+        view[i] = s.charCodeAt(i) & 0xff;
+      }
+      return buf;
+    },
   }
 }
 </script>

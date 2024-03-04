@@ -12,10 +12,7 @@
 			:data="tableData"
       empty-text="No data"
       v-loading="loading"
-      :element-loading-text="loadTest"
-      element-loading-spinner="el-icon-loading"
 			@sort-change="onSortChange"
-      element-loading-background="rgba(0, 0, 0, 0.8)"
       size="small"
 			style="width: 100%; height: 100%; margin: 0 auto;"
       stripe
@@ -185,7 +182,6 @@ export default {
       pageSize: 10, // Default page size
       currentPage: 1, // Default current page
       total: 0,
-      loadTest: 'Loading...',
       searchKey: '',
       tableCol: [
         {
@@ -299,18 +295,20 @@ export default {
     },
     async deleteSCBT(row) {
       const { url } = row
+      const _this = this
       row.deleteLoading = true
 			const res = await delScannerBT(url)
       const code = res.data.code
-      if(code == 204) this.popUpMsgBox('Successfully deleted')
-      if(code == 403) this.popUpMsgBox("Sorry, deleted item doesn't exist. Refresh the list")
-      if(code == 404) {this.popUpMsgBox('Delete failed')}
+      if(code == 204) _this.popUpMsgBox('Successfully deleted')
+      if(code == 403) _this.popUpMsgBox("Sorry, deleted item doesn't exist. Refresh the list")
+      if(code == 404) {_this.popUpMsgBox('Delete failed')}
 			row.deleteLoading = false
-			await this.getDataList(null)
+			await _this.getDataList(null)
     },
     async handleRowClick(row) {
       row.viewLoading = true
       const {url} = row
+      const _this = this
       let res, listRes
       try {
         debugger
@@ -318,18 +316,24 @@ export default {
         listRes = await getScannerBTResultsList(url)
       } catch (error) {
         console.error('error', error)
-        this.popUpMsgBox('Details Not Found')
+        _this.popUpMsgBox('Details Not Found')
         row.viewLoading = false
         return
       }
       const code = res.data?.code
-      if(code == 403) {this.popUpMsgBox('Sorry, details not found. Possibly deleted or moved'); return}
+      debugger
+      const status = res.data?.data?.status || row?.status
+      if(code == 403) {_this.popUpMsgBox('Sorry, details not found. Possibly deleted or moved'); return}
       if(code == 200) {
+        _this.popUpMsgBox('Backtest details viewed successfully')
         const data = res.data.data
-        data['TRADE LIST'] = listRes.data.data 
-        this.$emit('displayResultsData', data)
+        data['TRADE LIST'] = listRes.data.data
+        _this.$emit('displayResultsData', data)
+        if(status === 'Finish' || status === 'finish') await _this.getDataList(null) // 成功后刷新列表
       }
-      if(code != 200) this.$emit('displayResultsData', row)
+      if(status === 'Fail' || status === 'fail') _this.popUpMsgBox('Backtest failed. Adjust filters and rerun')
+      if(code == 203) {row.viewLoading = false; _this.popUpMsgBox('Backtest in progress. Details and editing are unavailable');return}
+      if(code != 200) {_this.$emit('displayResultsData', row)}
       row.viewLoading = false
     },
     async handleQuery() {

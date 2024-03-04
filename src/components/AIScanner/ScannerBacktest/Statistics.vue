@@ -1,15 +1,6 @@
 <template>
 	<div class="statistics-container">
 		<div class="statistics-title">
-			<el-button
-					@click="handleDownloadCsv"
-					style="display: inline-block"
-					type="primary"
-					plain
-					size="mini"
-					icon="el-icon-download"
-					>Export Data</el-button
-				>
 		</div>
 		<div>
 			<el-table header-align="center" class="CPM-summary" :data="summaryData" size="small">
@@ -76,36 +67,6 @@
 						}}</span>
 					</template>
 				</el-table-column>
-				<!-- <el-table-column
-                prop="tzScore"
-                label="Z-SCORE"
-                align="center"
-                show-overflow-tooltip
-            >
-                <template slot-scope="scope">
-                    <span v-if="scope.row.tzScore >= 0">{{
-                        scope.row.tzScore
-                    }}</span>
-                    <span v-else-if="isNaN(scope.row.tzScore)">0</span>
-                    <span v-else style="color: #dd3a13">{{ scope.row.tzScore }}</span>
-                </template>
-            </el-table-column> -->
-				<!-- <el-table-column
-							show-overflow-tooltip
-							prop="standardDeviation"
-							label="STD. DEV"
-							align="center"
-						>
-							<template slot-scope="scope">
-								<span v-if="scope.row.standardDeviation >= 0">{{
-									scope.row.standardDeviation
-								}}</span>
-								<span v-else-if="isNaN(scope.row.standardDeviation) || !scope.row.standardDeviation || scope.row.standardDeviation=='null' || scope.row.standardDeviation=='0'"></span>
-								<span v-else style="color: #dd3a13">{{
-									scope.row.standardDeviation
-								}}</span>
-							</template>
-						</el-table-column> -->
 						<el-table-column
                 prop="tzScore"
                 label="Z-SCORE"
@@ -258,108 +219,54 @@
 					:data="paginatedData"
 					class="trades-table ScannerBTTable"
 					size="small"
+					@sort-change="changeTableSort"
 					stripe
         >
-            <el-table-column
-                show-overflow-tooltip
-                prop="TradeNumber"
-                label="#"
-                width="50px"
-                align="center"
-            >
-            <template slot-scope="scope">
-                {{ Number(scope.row.TradeNumber) + 1 }}
-            </template>
-            </el-table-column>
-						<el-table-column
-							prop="Symbol"
-							label="Symbol"
-							align="center"
-							width="100px"
-							show-overflow-tooltip
-            >
-						</el-table-column>
-						<el-table-column
-							prop="Signal"
-							label="Signal"
-							align="center"
-							show-overflow-tooltip
-            >
-            </el-table-column>
-						<el-table-column
-							prop="Direction"
-							label="Direction"
-							align="center"
-							width="100px"
-							show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-                prop="EntryDate"
-                label="Entry Date"
-                align="center"
-								width="120px"
-                show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-                prop="EntryAction"
-                label="Entry Action"
-								width="120px"
-                align="center"
-                show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-                prop="EntryPrice"
-                label="Entry Price"
-                align="center"
-            >
-            </el-table-column>
-            <el-table-column
-                prop="ExitDate"
-                label="Exit Date"
-                align="center"
-								width="120px"
-                show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-                prop="ExitAction"
-                label="Exit Action"
-                align="center"
-								width="120px"
-                show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-                prop="ExitPrice"
-                label="Exit Price"
-                align="center"
-            >
-            </el-table-column>
-            <el-table-column
-                prop="FloatProfit"
-                label="Float Profit %"
-                align="center"
-                show-overflow-tooltip
-            >
-                <template slot-scope="scope">
-                    <span v-if="scope.row.FloatProfit >= 0"
-                        >{{ scope.row.FloatProfit }}%</span
-                    >
-                    <span v-else-if="scope.row.FloatProfit < 0" style="color: #dd3a13"
-                        >{{ scope.row.FloatProfit }}%</span
-                    >
-                    <span v-else>{{ '' }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                prop="ExitReason"
-                label="Exit Reason"
-                align="center"
-            >
-            </el-table-column>
+			<template v-for="(l, index) in tableCol">
+				<el-table-column
+					v-if="['#', 'Symbol', 'Signal', 'Direction', 
+					'Entry Date', 'Entry Action', 'Entry Price',
+					'Exit Date', 'Exit Action', 'Exit Price',
+					'Exit Reason'
+					].includes(l.label)"
+					show-overflow-tooltip
+					:prop="l.value"
+					:label="l.label"
+					:width="l.width"
+					align="center"
+					:key="index"
+					:sortable="
+						[
+							'Symbol', 'Signal', 'Entry Date', 'Exit Date', 'Exit Reason'
+						].includes(l.label)
+							? 'custom'
+							: false
+					"
+					>
+          </el-table-column>
+					<el-table-column
+					v-if="l.label == 'Float Profit %'"
+					show-overflow-tooltip
+					:prop="l.value"
+					:label="l.label"
+					:width="l.width"
+					align="center"
+					:key="index"
+					:sortable="
+					l.label === 'Float Profit %' ? 'custom' : false
+					"
+					>
+					<template slot-scope="scope">
+							<span v-if="scope.row.FloatProfit >= 0"
+									>{{ scope.row.FloatProfit }}%</span
+							>
+							<span v-else-if="scope.row.FloatProfit < 0" style="color: #dd3a13"
+									>{{ scope.row.FloatProfit }}%</span
+							>
+							<span v-else>{{ '' }}</span>
+						</template>
+          </el-table-column>
+			</template>
             <div slot="empty" style="text-align: left">
                 <el-empty image-size="80" description="No Data"></el-empty>
             </div>
@@ -381,8 +288,6 @@
 	</div>
 </template>
 <script>
-const XLSX = require('xlsx')
-
 export default {
 	name: 'Statistics',
 	props: {
@@ -398,10 +303,75 @@ export default {
 			},
 			totalTradesNumber: 0,
 			processedTradesData: [],
-			textContent: {
-					'MarketCondition': 'Indicates the market environment for this transaction:<br/> "Bear" stands for "Bear Market",<br/> "Bull" stands for "Bull Market",<br/> "Rec" stands for "Recession", "Ease" refers to "FOMC Easing",<br/> and "Tight" represents "FOMC Tightening".'
-			},
-      textContent: {'MarketCondition': 'Indicates the market environment for this transaction:<br/> "Bear" stands for "Bear Market",<br/> "Bull" stands for "Bull Market",<br/> "Rec" stands for "Recession", "Ease" refers to "FOMC Easing",<br/> and "Tight" represents "FOMC Tightening".'}
+			tableCol: [
+        {
+          label: '#',
+          value: 'TradeNumber',
+          key: 'TradeNumber',
+					width: '50px'
+        },
+        {
+          label: 'Symbol',
+          value: 'Symbol',
+          key: 'Symbol',
+					width: '100px'
+        },
+        {
+          label: 'Signal',
+          value: 'Signal',
+          key: 'Signal'
+        },
+        {
+          label: 'Direction',
+          value: 'Direction',
+          key: 'Direction',
+					width: '100px'
+        },
+        {
+          label: 'Entry Date',
+          value: 'EntryDate',
+          key: 'EntryDate',
+					width: '120px'
+        },
+        {
+          label: 'Entry Action',
+          value: 'EntryAction',
+          key: 'EntryAction',
+					width: '120px'
+        },
+				{
+          label: 'Entry Price',
+          value: 'EntryPrice',
+          key: 'EntryPrice'
+        },
+				{
+          label: 'Exit Date',
+          value: 'ExitDate',
+          key: 'ExitDate',
+					width: '120px'
+        },
+				{
+          label: 'Exit Action',
+          value: 'ExitAction',
+          key: 'ExitAction',
+					width: '120px'
+        },
+				{
+          label: 'Exit Price',
+          value: 'ExitPrice',
+          key: 'ExitPrice'
+        },
+				{
+          label: 'Float Profit %',
+          value: 'FloatProfit',
+          key: 'FloatProfit'
+        },
+				{
+          label: 'Exit Reason',
+          value: 'ExitReason',
+          key: 'ExitReason'
+        }
+      ],
 		}
 	},
 	computed: {
@@ -434,57 +404,68 @@ export default {
 		handleCurrentChange(page){
 				this.queryInfo.page = page
 		},
+		changeTableSort(column){
+			debugger
+			var sortingOrder = column.order
+			var colName = column.prop
+			// 数字类型排序
+			if(['FloatProfit'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.processedTradesData.sort((a,b) => {
+						return b[colName] - a[colName]
+					})
+				}else if(sortingOrder == 'descending'){
+					this.processedTradesData.sort((a,b) => {
+						return a[colName] - b[colName]
+					})
+				}else{
+				}
+			}
+			// 日期类型排序
+			if(['EntryDate', 'ExitDate'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.processedTradesData.sort((a,b) => {
+						return new Date(b[colName]) - new Date(a[colName])
+					})
+				}else if(sortingOrder == 'descending'){
+					this.processedTradesData.sort((a,b) => {
+						return new Date(a[colName]) - new Date(b[colName])
+					})
+				}else{
+				}
+			}
+			// 字符串类型排序
+			if(['Symbol','Signal','ExitReason', 'Direction'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.processedTradesData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
+				}else if(sortingOrder == 'descending'){
+					this.processedTradesData.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
+				}else{
+				}
+			}
+		},
 		handleDownloadCsv() {
-      const {summaryData, processedTradesData:tradesData} = this
-      if (
-        !(
-          summaryData.length &&
-          tradesData.length
-        )
-      ) {
-        this.popUpMsgBox('No data available for download')
-        return
-      }
+      const {summaryData, tradesData} = this
       const summary = []
       summaryData.forEach((item, index) => {
         const obj = {}
-        obj['TOTAL RETURN %'] = isNaN(item.totalReturn)
-          ? 0
-          : `${item.totalReturn}%`
-        obj['MEDIAN RETURN %'] = isNaN(item.medianReturn)
-          ? 0
-          : `${item.medianReturn}%`
-        obj['AVERAGE RETURN %'] = isNaN(item.averageReturn)
-          ? 0
-          : `${item.averageReturn}%`
-        obj['Z-SCORE'] = isNaN(item.tzScore)
-          ? 0
-          : `${item.buyHoldGain}%`
-        obj['WIN RATE %'] = isNaN(item.winRate) ? 0 : `${item.winRate}%`
-        obj['AVERAGE WIN %'] = isNaN(item.averageWin)
-          ? 0
-          : `${item.averageWin}%`
-        obj['AVERAGE LOSS %'] = isNaN(item.averageLoss)
-          ? 0
-          : `${item.averageLoss}%`
-        obj['TOTAL TRADES'] = isNaN(item.totalTrades)
-          ? 0
-          : `${item.totalTrades}`
-        obj['TOTAL POSITIVE'] = isNaN(item.totalPositive)
-          ? 0
-          : `${item.totalPositive}`
-        obj['TOTAL NEGATIVE'] = isNaN(item.totalNegative)
-          ? 0
-          : `${item.totalNegative}`
-        obj['TIME IN MARKET %'] = isNaN(item.timeInMarket)
-          ? 0
-          : `${item.timeInMarket}%`
+        obj['TOTAL RETURN %'] = `${item.totalReturn}%`
+        obj['MEDIAN RETURN %'] = `${item.medianReturn}%`
+        obj['AVERAGE RETURN %'] = `${item.averageReturn}%`
+        obj['Z-SCORE'] = item.tzScore
+        obj['WIN RATE %'] = `${item.winRate}%`
+        obj['AVERAGE WIN %'] = `${item.averageWin}%`
+        obj['AVERAGE LOSS %'] =  `${item.averageLoss}%`
+        obj['TOTAL TRADES'] =  `${item.totalTrades}`
+        obj['TOTAL POSITIVE'] = `${item.totalPositive}`
+        obj['TOTAL NEGATIVE'] =`${item.totalNegative}`
+        obj['TIME IN MARKET %'] = `${item.timeInMarket}%`
         summary.push(obj)
       })
       const trade = []
       tradesData.forEach((item, index) => {
         const obj = {}
-        obj['#'] = item.TradeNumber + 1
+        obj['#'] = item.TradeNumber
         obj['Symbol'] = item.Symbol
         obj['Signal'] = item.Signal
         obj['Direction'] = item.Direction
@@ -498,61 +479,11 @@ export default {
         obj['Exit Reason'] = item.ExitReason
         trade.push(obj)
       })
-      const dataList = [
-        summary,
-        trade
-      ]
-      const sheetNames = [
-        'Summary',
-        'Trades'
-      ]
-      this.exportDataToCSV(dataList, sheetNames)
-    },
-		exportDataToCSV(dataList, sheetNames) {
-      // Create a new workbook
-      const workbook = XLSX.utils.book_new()
-
-      for (let i = 0; i < dataList.length; i++) {
-        // Convert the data to a worksheet
-        const worksheet = XLSX.utils.json_to_sheet(dataList[i])
-
-        // Add the worksheet to the workbook with the given name
-        XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i])
-      }
-
-      // Convert the workbook to a binary string
-      const workbookBinaryString = XLSX.write(workbook, {
-        type: 'binary',
-        bookType: 'xlsx'
-      })
-      // Create a Blob from the binary string
-      const blob = new Blob([this.s2ab(workbookBinaryString)], {
-        type: 'application/octet-stream'
-      })
-
-      // Create a download URL for the Blob
-      const url = URL.createObjectURL(blob)
-
-      // Create a link element for downloading the CSV file
-      const link = document.createElement('a')
-      link.style.display = 'none'
-      link.setAttribute('href', url)
-      link.setAttribute('download', 'Results.xlsx')
-      link.innerHTML = 'Download XLSX'
-      // Append the link element to the document body
-      document.body.appendChild(link)
-
-      // Trigger the download
-      link.click()
-    },
-		s2ab(s) {
-      const buf = new ArrayBuffer(s.length);
-      const view = new Uint8Array(buf);
-      for (let i = 0; i < s.length; i++) {
-        view[i] = s.charCodeAt(i) & 0xff;
-      }
-      return buf;
-    },
+			return {
+				summary,
+				trade
+			}
+		}
 	}
 }
 </script>
@@ -561,7 +492,7 @@ export default {
 .statistics-container {
 	padding: 20px;
 	.statistics-title {
-		padding: 20px 0px 20px 0px;
+		padding: 30px 0px 30px 0px;
 		border-bottom: 2px solid #dddddd;
 	}
 }
