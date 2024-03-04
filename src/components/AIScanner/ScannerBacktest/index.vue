@@ -142,6 +142,8 @@ export default {
       debugger
       // 至展示 filter 和 result 不重新赋值 form
       const result = data.result
+      const list = JSON.parse(data['TRADE LIST'])
+      this.displayPreviewList(list)
       this.activeSecondTab = 'summary'
       this.displaySummary(result)
       this.scrollToTarget('scrollTarget')
@@ -195,7 +197,6 @@ export default {
       for (let i = 0; i < _ID.length; i++) {
         const dataSource = 1
         const oppositeDataSource = 0
-        debugger
         const data = {
           Symbol: _result['Symbol'][_ID[i][dataSource]],
           Signal: _result['Signal'][_ID[i][dataSource]],
@@ -224,6 +225,7 @@ export default {
     },
     displayPreviewList(content) {
       debugger
+      if(!content) return
 		  this.loading = true
       // 把数据处理成所需格式
        content.forEach(x => {
