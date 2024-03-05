@@ -342,7 +342,7 @@
 </template>
 
 <script>
-import { isJson, timestampToTime } from '@/utils'
+import { isJson, timestampToTime, trimTrailingZeros } from '@/utils'
 import SelectCheck from "./SelectCheck";
 import { validateCapitalRule, validateCommissionRule, createPositiveScopeIntegerRule, createTPSLScopeValidateRule, createPositiveIntegerRule   } from '@/utils/formValidate'
 import { saveScannerForm, editScannerForm, getScannerBTList, getScannerBTResults, perviewScannerForm } from '@/service/service'
@@ -831,12 +831,12 @@ export default {
         stop_loss,
         take_profit,
         time_in_market,
-        long_ratio: (long_ratio * 100).toFixed(2).toString(),
-        short_ratio: (short_ratio * 100).toFixed(2).toString(),
+        long_ratio: trimTrailingZeros(Number((long_ratio * 100).toFixed(2))),
+        short_ratio: trimTrailingZeros(Number((short_ratio * 100).toFixed(2))),
         stop_loss_condition,
         take_profit_condition,
         time_in_market_condition,
-        commission: (commission * 100).toFixed(2).toString(),
+        commission: trimTrailingZeros(Number((commission * 100).toFixed(2))),
         signals: isJson(signals) ? JSON.parse(signals) : signals
       }
       debugger

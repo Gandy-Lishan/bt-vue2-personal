@@ -27,6 +27,15 @@ const timestampToTime = (timestamp) => {
   var s = date.getSeconds() < 10 ? '0'+date.getSeconds():date.getSeconds()
   return Y+M+D
 }
+const trimTrailingZeros = (val) => {
+  // 如果commission是0，则直接返回"0"
+  if (parseFloat(val) == 0) {
+      return "0";
+  }
+  // 否则进行格式化，先转换为字符串，然后使用正则表达式去除多余的零
+  const formatted = (val * 100).toFixed(2).toString();
+  return formatted.replace(/\.?0+$/, ''); // 使用正则表达式去除多余的零
+}
 
 // 后续把datatime.getTimezoneOffset() * 60 * 1000都封装在formatStandardTime
 const formatStandardTime = (date) => {
@@ -238,4 +247,4 @@ const getTokenRole = () => {
   return 'None'
 }
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole}
+export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros}
