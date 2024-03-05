@@ -230,6 +230,7 @@
 		:page-sizes="[10, 30, 50, 100, 200]"
 		:page-size="pageSize"
 		:total="data.content.length"
+		:current-page="currentPage"
 		layout="total, sizes, prev, pager, next, jumper"
 		></el-pagination>
 	</div>

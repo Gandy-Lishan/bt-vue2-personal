@@ -227,6 +227,7 @@ export default {
       debugger
       if(!content) return
 		  this.loading = true
+      this.$refs.filterTable.handleSizeChange(10)
       // 把数据处理成所需格式
        content.forEach(x => {
         x['Close'] = x['Close'].toFixed(2)

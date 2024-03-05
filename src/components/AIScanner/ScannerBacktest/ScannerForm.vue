@@ -401,10 +401,10 @@ export default {
         long_ratio: 80,
         short_ratio: 20,
         stop_loss_condition: 5,
-        take_profit_condition: 5,
-        time_in_market_condition: 5,
-        stop_loss: 20,
-        take_profit: 30,
+        take_profit_condition: 10,
+        time_in_market_condition: 13,
+        stop_loss: 10,
+        take_profit: 20,
         time_in_market: 21,
         name: '',
         total_capital: 1000000,
@@ -630,9 +630,9 @@ export default {
       this.data.start_date = timestampToTime(startDate);
     },
     resetForm() {
-      // 如果当前在回测状态，不允许重置
+      // 如果当前在预览状态，不允许重置; 运行但是没进入轮询: isPolling: false; btnLoading: true
       debugger
-      if((!this.isPolling) || this.previewBtnLoading) return true
+      if((!this.isPolling && this.btnLoading) || this.previewBtnLoading) return true
       this.$refs['SelectCheck'].handleoptionsAllChange(true)
 			Object.assign(this.$data, this.$options.data())
       this.data.signals = ['All']
