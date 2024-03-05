@@ -33,8 +33,7 @@ const trimTrailingZeros = (val) => {
       return "0";
   }
   // 否则进行格式化，先转换为字符串，然后使用正则表达式去除多余的零
-  const formatted = (val * 100).toFixed(2).toString();
-  return formatted.replace(/\.?0+$/, ''); // 使用正则表达式去除多余的零
+  return val.replace(/\.?0+$/, ''); // 使用正则表达式去除多余的零
 }
 
 // 后续把datatime.getTimezoneOffset() * 60 * 1000都封装在formatStandardTime

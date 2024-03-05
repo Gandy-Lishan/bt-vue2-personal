@@ -831,12 +831,12 @@ export default {
         stop_loss,
         take_profit,
         time_in_market,
-        long_ratio: trimTrailingZeros(Number((long_ratio * 100).toFixed(2))),
-        short_ratio: trimTrailingZeros(Number((short_ratio * 100).toFixed(2))),
+        long_ratio: trimTrailingZeros((long_ratio * 100).toFixed(2)),
+        short_ratio: trimTrailingZeros((short_ratio * 100).toFixed(2)),
         stop_loss_condition,
         take_profit_condition,
         time_in_market_condition,
-        commission: trimTrailingZeros(Number((commission * 100).toFixed(2))),
+        commission: trimTrailingZeros((commission * 100).toFixed(2)),
         signals: isJson(signals) ? JSON.parse(signals) : signals
       }
       debugger
